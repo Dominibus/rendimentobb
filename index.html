@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>B&B Revenue & Profit Simulator</title>
+  <title>B&B Investment & Profit Analyzer</title>
 
   <style>
     body {
@@ -21,7 +21,7 @@
       background: #1e293b;
       padding: 30px;
       border-radius: 15px;
-      width: 380px;
+      width: 420px;
       box-shadow: 0 0 30px rgba(0,0,0,0.4);
     }
 
@@ -29,6 +29,13 @@
       text-align: center;
       margin-bottom: 20px;
       font-size: 22px;
+    }
+
+    h3 {
+      margin-top: 25px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #94a3b8;
     }
 
     .lang-switch {
@@ -76,6 +83,11 @@
       cursor: pointer;
     }
 
+    .divider {
+      margin: 20px 0;
+      border: 1px solid #334155;
+    }
+
     .result {
       margin-top: 20px;
       font-size: 14px;
@@ -104,6 +116,8 @@
 
     <h1 id="title"></h1>
 
+    <!-- BASE SIMULATION -->
+
     <label id="priceLabel"></label>
     <input type="number" id="price" placeholder="90">
 
@@ -118,6 +132,27 @@
 
     <label id="taxLabel"></label>
     <input type="number" id="tax" placeholder="21">
+
+    <hr class="divider">
+
+    <!-- PRO INVESTMENT SECTION -->
+
+    <h3>PRO Investment Analysis</h3>
+
+    <label>Property price (€)</label>
+    <input type="number" id="propertyPrice" placeholder="180000">
+
+    <label>Equity invested (€)</label>
+    <input type="number" id="equity" placeholder="50000">
+
+    <label>Loan amount (€)</label>
+    <input type="number" id="loanAmount" placeholder="130000">
+
+    <label>Loan interest rate (%)</label>
+    <input type="number" id="loanRate" placeholder="3">
+
+    <label>Loan duration (years)</label>
+    <input type="number" id="loanYears" placeholder="20">
 
     <button id="calculateBtn" class="calculate" onclick="calculate()"></button>
 
