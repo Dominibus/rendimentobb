@@ -55,7 +55,7 @@ function calculate() {
     return;
   }
 
-  // ================= BASE =================
+  // ================= BASE BUSINESS =================
 
   const nights = 30 * (occupancy / 100);
   const gross = price * nights;
@@ -103,7 +103,7 @@ function calculate() {
 
   if (isProUnlocked) {
 
-    // ========== STRESS TEST ==========
+    // ================= STRESS TEST =================
 
     const stressedOccupancy = occupancy + (occupancy * (stressOccupancy || 0) / 100);
     const stressedExpenses = expenses + (expenses * (stressExpenses || 0) / 100);
@@ -129,57 +129,58 @@ function calculate() {
 
     const stressedCashflow = stressedNetYearly - (stressedMonthlyLoan * 12);
 
-    // ========== IMPACT ==========
+    // ================= IMPACT ON FAMILY =================
 
     let incomeImpact = 0;
     if (!isNaN(familyIncome) && familyIncome > 0) {
       incomeImpact = Math.abs(stressedCashflow / (familyIncome * 12)) * 100;
     }
 
-    // ========== RATING BANCARIO ==========
+    // ================= ZONA SICUREZZA =================
 
-    let rating = "A";
+    let securityZone = "SICURA";
+    let securityClass = "positive";
+    let explanation = "";
 
-    if (realYearlyCashflow < 0 || stressedCashflow < 0) rating = "E";
-    else if (roi < 4 || incomeImpact > 25) rating = "D";
-    else if (roi < TARGET_ROI) rating = "C";
-    else if (roi >= TARGET_ROI && incomeImpact < 15) rating = "B";
-    else rating = "A";
-
-    // ========== ALERT INTELLIGENTI ==========
-
-    let alertMessage = "";
-
-    if (realYearlyCashflow < 0) {
-      alertMessage = "⚠ Cashflow negativo: potresti dover coprire il mutuo con il tuo stipendio.";
-    } else if (incomeImpact > 20) {
-      alertMessage = "⚠ Impatto elevato sul reddito familiare.";
-    } else if (breakEvenYears > 20) {
-      alertMessage = "⚠ Recupero investimento molto lungo.";
+    if (realYearlyCashflow < 0 || stressedCashflow < 0) {
+      securityZone = "PERICOLOSA";
+      securityClass = "negative";
+      explanation = "Cashflow negativo in scenario reale o critico.";
+    } else if (incomeImpact > 20 || roi < TARGET_ROI) {
+      securityZone = "ATTENZIONE";
+      securityClass = "negative";
+      explanation = "Margini deboli o impatto elevato sul reddito familiare.";
     } else {
-      alertMessage = "✔ Investimento finanziariamente sostenibile.";
+      explanation = "Investimento finanziariamente sostenibile anche in scenario prudenziale.";
     }
 
     proOutput = `
       <br>
       <div>ROI: ${roi.toFixed(2)} %</div>
-      <div>Rating investimento: <strong>${rating}</strong></div>
-      <div>${alertMessage}</div>
-
-      <hr style="margin:15px 0; border:1px solid #334155;">
-
-      <div>Stress test cashflow: ${formatCurrency(stressedCashflow)}</div>
-      <div>Impatto reddito: ${incomeImpact.toFixed(1)} %</div>
-
-      <hr style="margin:15px 0; border:1px solid #334155;">
-
       <div>Break-even: ${breakEvenYears > 0 ? breakEvenYears.toFixed(1) + " anni" : "-"}</div>
+
+      <hr style="margin:15px 0; border:1px solid #334155;">
+
+      <div><strong>Stress Test</strong></div>
+      <div>Cashflow scenario critico: ${formatCurrency(stressedCashflow)}</div>
+      <div>Impatto su reddito familiare: ${incomeImpact.toFixed(1)} %</div>
+
+      <hr style="margin:15px 0; border:1px solid #334155;">
+
+      <div class="${securityClass}">
+        <strong>Zona Sicurezza Investimento: ${securityZone}</strong>
+      </div>
+
+      <div style="margin-top:5px;">
+        ${explanation}
+      </div>
     `;
   } else {
+
     proOutput = `
       <br>
       <div style="color:#94a3b8;">
-        Sblocca PRO per rating bancario, stress test avanzato e analisi rischio reale.
+        Sblocca PRO per stress test avanzato e zona sicurezza investimento.
       </div>
       <br>
       <button onclick="unlockPro()" class="calculate">
