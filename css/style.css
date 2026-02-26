@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f172a, #0b1b34);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.container {
+  background-color: #1e293b;
+  padding: 30px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.language-toggle {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.language-toggle button {
+  background: none;
+  border: 1px solid #475569;
+  color: white;
+  padding: 4px 8px;
+  margin-left: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.language-toggle button.active {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 5px;
+}
+
+button.calculate {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background-color: #22c55e;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.calculate:hover {
+  background-color: #16a34a;
+}
+
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.section-divider {
+  margin-top: 20px;
+  border-top: 1px solid #334155;
+  padding-top: 15px;
+}
