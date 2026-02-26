@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>B&B Investment & Profit Analyzer</title>
+  <title>B&B Investment Risk Analyzer</title>
 
   <style>
     body {
@@ -21,7 +21,7 @@
       background: #1e293b;
       padding: 30px;
       border-radius: 15px;
-      width: 440px;
+      width: 460px;
       box-shadow: 0 0 30px rgba(0,0,0,0.4);
     }
 
@@ -33,15 +33,15 @@
 
     h3 {
       margin-top: 25px;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       font-size: 16px;
       color: #94a3b8;
     }
 
-    h4 {
-      margin-top: 20px;
-      font-size: 14px;
+    .step-desc {
+      font-size: 13px;
       color: #cbd5e1;
+      margin-bottom: 10px;
     }
 
     .lang-switch {
@@ -87,6 +87,7 @@
       color: black;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     .divider {
@@ -100,18 +101,8 @@
       line-height: 1.6;
     }
 
-    .positive {
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .negative {
-      color: #ef4444;
-      font-weight: bold;
-    }
-
     .pro-info {
-      margin-top: 15px;
+      margin-top: 20px;
       padding: 12px;
       background: #0f172a;
       border-radius: 8px;
@@ -130,59 +121,87 @@
       <button id="btn-en" onclick="setLanguage('en')">EN</button>
     </div>
 
-    <h1 id="title"></h1>
+    <h1 id="title">Analizzatore Rischio Investimento B&B</h1>
 
-    <!-- BASE SIMULATION -->
+    <!-- STEP 1 -->
 
-    <label id="priceLabel"></label>
+    <h3>🪜 STEP 1 – Come funzionerà il tuo B&B?</h3>
+    <div class="step-desc">
+      Inserisci le stime realistiche della tua attività.
+    </div>
+
+    <label>Prezzo medio a notte (€)</label>
     <input type="number" id="price" placeholder="90">
 
-    <label id="occupancyLabel"></label>
+    <label>Occupazione media (%)</label>
     <input type="number" id="occupancy" placeholder="70">
 
-    <label id="expensesLabel"></label>
+    <label>Spese mensili (€)</label>
     <input type="number" id="expenses" placeholder="800">
 
-    <label id="commissionLabel"></label>
+    <label>Commissioni piattaforme (%)</label>
     <input type="number" id="commission" placeholder="15">
 
-    <label id="taxLabel"></label>
+    <label>Tasse (%)</label>
     <input type="number" id="tax" placeholder="21">
 
     <hr class="divider">
 
-    <!-- PRO INVESTMENT SECTION -->
+    <!-- STEP 2 -->
 
-    <h3 id="proTitle"></h3>
+    <h3>🏠 STEP 2 – Quanto costa l’immobile?</h3>
+    <div class="step-desc">
+      Inserisci il prezzo totale della casa che vuoi acquistare.
+    </div>
 
-    <label id="propertyPriceLabel"></label>
     <input type="number" id="propertyPrice" placeholder="180000">
 
-    <label id="equityLabel"></label>
+    <h3>💰 STEP 3 – Quanto investi di tasca tua?</h3>
+    <div class="step-desc">
+      Somma che puoi utilizzare senza chiedere un mutuo.
+    </div>
+
     <input type="number" id="equity" placeholder="50000">
 
-    <label id="loanAmountLabel"></label>
+    <h3>🏦 STEP 4 – Simulazione Mutuo</h3>
+    <div class="step-desc">
+      Se non sai l’importo del mutuo, fai: Prezzo immobile - capitale proprio.
+    </div>
+
+    <label>Importo mutuo (€)</label>
     <input type="number" id="loanAmount" placeholder="130000">
 
-    <label id="loanRateLabel"></label>
+    <label>Tasso mutuo (%)</label>
     <input type="number" id="loanRate" placeholder="3">
 
-    <label id="loanYearsLabel"></label>
+    <label>Durata mutuo (anni)</label>
     <input type="number" id="loanYears" placeholder="20">
 
     <hr class="divider">
 
-    <!-- ADVANCED PRO ANALYSIS -->
+    <!-- STEP 5 -->
 
-    <h4>Reddito familiare mensile (€)</h4>
+    <h3>📊 STEP 5 – Situazione personale</h3>
+    <div class="step-desc">
+      Serve per capire se l’investimento è sostenibile per te.
+    </div>
+
+    <label>Reddito familiare mensile (€)</label>
     <input type="number" id="familyIncome" placeholder="3500">
 
-    <h4>ROI target (%)</h4>
+    <label>ROI target desiderato (%)</label>
     <input type="number" id="roiTarget" value="8">
 
-    <h4>Scenario Pessimistico</h4>
+    <hr class="divider">
 
-    <label>Variazione occupazione (%)</label>
+    <!-- STRESS TEST -->
+
+    <h3>⚠️ STEP 6 – Scenario Pessimistico</h3>
+    <div class="step-desc">
+      Simuliamo cosa succede se le cose vanno peggio del previsto.
+    </div>
+
+    <label>Riduzione occupazione (%)</label>
     <input type="number" id="stressOccupancy" value="-15">
 
     <label>Aumento spese (%)</label>
@@ -191,17 +210,16 @@
     <label>Aumento tasso mutuo (%)</label>
     <input type="number" id="stressRate" value="1">
 
-    <button id="calculateBtn" class="calculate" onclick="calculate()"></button>
+    <button class="calculate" onclick="calculate()">Analizza Rischio Investimento</button>
 
     <div class="result" id="results"></div>
 
     <div class="pro-info">
-      🔒 PRO include:
-      <br>• Stress test personalizzato
-      <br>• Impatto reale sul reddito familiare
-      <br>• Prezzo massimo immobile consigliato
-      <br>• Indicatore solidità investimento
-      <br>• Confronto benchmark settore
+      🔒 Questo strumento ti aiuta a:
+      <br>• Evitare investimenti rischiosi
+      <br>• Capire l’impatto reale sul tuo reddito
+      <br>• Stimare la solidità finanziaria
+      <br>• Simulare scenari negativi
     </div>
 
   </div>
