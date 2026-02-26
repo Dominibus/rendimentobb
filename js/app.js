@@ -1,3 +1,10 @@
+function formatCurrency(value) {
+  return new Intl.NumberFormat(currentLang === "it" ? "it-IT" : "en-US", {
+    style: "currency",
+    currency: "EUR"
+  }).format(value);
+}
+
 function calculate() {
   const price = parseFloat(document.getElementById("price").value);
   const occupancy = parseFloat(document.getElementById("occupancy").value);
@@ -14,7 +21,7 @@ function calculate() {
     isNaN(commission) ||
     isNaN(tax)
   ) {
-    resultsDiv.innerHTML = "Inserisci valori validi";
+    resultsDiv.innerHTML = translations[currentLang].invalidValues;
     return;
   }
 
@@ -26,12 +33,39 @@ function calculate() {
   const netMonthly = profitBeforeTax - taxes;
   const netYearly = netMonthly * 12;
 
+  const netClass = netMonthly >= 0 ? "positive" : "negative";
+
   resultsDiv.innerHTML = `
-    Fatturato lordo mensile: € ${gross.toFixed(2)} <br>
-    Commissioni piattaforme: € ${platformFees.toFixed(2)} <br>
-    Utile prima delle tasse: € ${profitBeforeTax.toFixed(2)} <br>
-    Tasse: € ${taxes.toFixed(2)} <br><br>
-    <strong>Guadagno netto mensile: € ${netMonthly.toFixed(2)}</strong><br>
-    <strong>Guadagno netto annuale: € ${netYearly.toFixed(2)}</strong>
+    <div>
+      ${currentLang === "it" ? "Fatturato lordo mensile:" : "Monthly gross revenue:"}
+      ${formatCurrency(gross)}
+    </div>
+
+    <div>
+      ${currentLang === "it" ? "Commissioni piattaforme:" : "Platform fees:"}
+      ${formatCurrency(platformFees)}
+    </div>
+
+    <div>
+      ${currentLang === "it" ? "Utile prima delle tasse:" : "Profit before taxes:"}
+      ${formatCurrency(profitBeforeTax)}
+    </div>
+
+    <div>
+      ${currentLang === "it" ? "Tasse:" : "Taxes:"}
+      ${formatCurrency(taxes)}
+    </div>
+
+    <br>
+
+    <div class="${netClass}">
+      ${currentLang === "it" ? "Guadagno netto mensile:" : "Net monthly profit:"}
+      ${formatCurrency(netMonthly)}
+    </div>
+
+    <div class="${netClass}">
+      ${currentLang === "it" ? "Guadagno netto annuale:" : "Net yearly profit:"}
+      ${formatCurrency(netYearly)}
+    </div>
   `;
 }
