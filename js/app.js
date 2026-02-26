@@ -21,10 +21,7 @@ function unlockPro() {
 function formatCurrency(value) {
   return new Intl.NumberFormat(
     currentLang === "it" ? "it-IT" : "en-US",
-    {
-      style: "currency",
-      currency: "EUR"
-    }
+    { style: "currency", currency: "EUR" }
   ).format(value);
 }
 
@@ -58,9 +55,7 @@ function calculate() {
     return;
   }
 
-  // =====================
-  // BASE CALCULATION
-  // =====================
+  // ================= BASE =================
 
   const nights = 30 * (occupancy / 100);
   const gross = price * nights;
@@ -70,9 +65,7 @@ function calculate() {
   const netMonthly = profitBeforeTax - taxes;
   const netYearly = netMonthly * 12;
 
-  // =====================
-  // LOAN
-  // =====================
+  // ================= LOAN =================
 
   let monthlyLoanPayment = 0;
 
@@ -99,10 +92,6 @@ function calculate() {
     }
   }
 
-  // =====================
-  // BASE OUTPUT
-  // =====================
-
   let baseOutput = `
     <div>
       ${currentLang === "it" ? "Guadagno netto annuale:" : "Net yearly profit:"}
@@ -114,9 +103,7 @@ function calculate() {
 
   if (isProUnlocked) {
 
-    // =====================
-    // STRESS TEST
-    // =====================
+    // ========== STRESS TEST ==========
 
     const stressedOccupancy = occupancy + (occupancy * (stressOccupancy || 0) / 100);
     const stressedExpenses = expenses + (expenses * (stressExpenses || 0) / 100);
@@ -125,9 +112,9 @@ function calculate() {
     const stressedNights = 30 * (stressedOccupancy / 100);
     const stressedGross = price * stressedNights;
     const stressedFees = stressedGross * (commission / 100);
-    const stressedProfitBeforeTax = stressedGross - stressedExpenses - stressedFees;
-    const stressedTaxes = stressedProfitBeforeTax > 0 ? stressedProfitBeforeTax * (tax / 100) : 0;
-    const stressedNetYearly = (stressedProfitBeforeTax - stressedTaxes) * 12;
+    const stressedProfit = stressedGross - stressedExpenses - stressedFees;
+    const stressedTaxes = stressedProfit > 0 ? stressedProfit * (tax / 100) : 0;
+    const stressedNetYearly = (stressedProfit - stressedTaxes) * 12;
 
     let stressedMonthlyLoan = 0;
 
@@ -142,110 +129,61 @@ function calculate() {
 
     const stressedCashflow = stressedNetYearly - (stressedMonthlyLoan * 12);
 
-    // =====================
-    // IMPACT ON FAMILY INCOME
-    // =====================
+    // ========== IMPACT ==========
 
     let incomeImpact = 0;
     if (!isNaN(familyIncome) && familyIncome > 0) {
       incomeImpact = Math.abs(stressedCashflow / (familyIncome * 12)) * 100;
     }
 
-    // =====================
-    // SOLIDITY SCORE (0–100)
-    // =====================
+    // ========== RATING BANCARIO ==========
 
-    let solidity = 100;
+    let rating = "A";
 
-    if (realYearlyCashflow < 0) solidity -= 40;
-    if (roi < TARGET_ROI) solidity -= 20;
-    if (breakEvenYears > 20) solidity -= 15;
-    if (incomeImpact > 20) solidity -= 15;
-    if (stressedCashflow < 0) solidity -= 10;
+    if (realYearlyCashflow < 0 || stressedCashflow < 0) rating = "E";
+    else if (roi < 4 || incomeImpact > 25) rating = "D";
+    else if (roi < TARGET_ROI) rating = "C";
+    else if (roi >= TARGET_ROI && incomeImpact < 15) rating = "B";
+    else rating = "A";
 
-    if (solidity < 0) solidity = 0;
+    // ========== ALERT INTELLIGENTI ==========
 
-    let solidityClass = "positive";
-    if (solidity < 50) solidityClass = "negative";
+    let alertMessage = "";
 
-    // =====================
-    // TARGET ANALYSIS
-    // =====================
-
-    const targetYearlyReturn = (equity * TARGET_ROI) / 100;
-    const neededNetYearly = targetYearlyReturn + yearlyLoanCost;
-    const neededNetMonthly = neededNetYearly / 12;
-
-    const neededGrossMonthly =
-      (neededNetMonthly + expenses) /
-      (1 - commission / 100) /
-      (1 - tax / 100);
-
-    const neededPrice = nights > 0 ? neededGrossMonthly / nights : 0;
-
-    // =====================
-    // OUTPUT
-    // =====================
+    if (realYearlyCashflow < 0) {
+      alertMessage = "⚠ Cashflow negativo: potresti dover coprire il mutuo con il tuo stipendio.";
+    } else if (incomeImpact > 20) {
+      alertMessage = "⚠ Impatto elevato sul reddito familiare.";
+    } else if (breakEvenYears > 20) {
+      alertMessage = "⚠ Recupero investimento molto lungo.";
+    } else {
+      alertMessage = "✔ Investimento finanziariamente sostenibile.";
+    }
 
     proOutput = `
       <br>
-
-      <div>${currentLang === "it" ? "Rata mutuo mensile:" : "Monthly loan payment:"}
-        ${formatCurrency(monthlyLoanPayment)}</div>
-
-      <div>${currentLang === "it" ? "Cashflow reale annuo:" : "Real yearly cashflow:"}
-        ${formatCurrency(realYearlyCashflow)}</div>
-
       <div>ROI: ${roi.toFixed(2)} %</div>
-
-      <div>${currentLang === "it" ? "Anni per rientrare:" : "Break-even years:"}
-        ${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}</div>
-
-      <hr style="margin:15px 0; border:1px solid #334155;">
-
-      <div style="font-weight:bold;">
-        ${currentLang === "it" ? "Stress Test (Scenario Pessimistico)" : "Stress Test (Worst Scenario)"}
-      </div>
-
-      <div>${currentLang === "it" ? "Cashflow scenario critico:" : "Worst case cashflow:"}
-        ${formatCurrency(stressedCashflow)}</div>
-
-      <div>${currentLang === "it" ? "Impatto su reddito familiare:" : "Impact on family income:"}
-        ${incomeImpact.toFixed(1)} %</div>
+      <div>Rating investimento: <strong>${rating}</strong></div>
+      <div>${alertMessage}</div>
 
       <hr style="margin:15px 0; border:1px solid #334155;">
 
-      <div style="font-weight:bold;">
-        ${currentLang === "it" ? "Analisi target" : "Target analysis"}
-      </div>
-
-      <div>${currentLang === "it" ? "Prezzo minimo consigliato:" : "Recommended nightly price:"}
-        ${formatCurrency(neededPrice)}</div>
+      <div>Stress test cashflow: ${formatCurrency(stressedCashflow)}</div>
+      <div>Impatto reddito: ${incomeImpact.toFixed(1)} %</div>
 
       <hr style="margin:15px 0; border:1px solid #334155;">
 
-      <div class="${solidityClass}">
-        <strong>
-        ${currentLang === "it" ? "Indice solidità investimento:" : "Investment solidity score:"}
-        ${solidity}/100
-        </strong>
-      </div>
+      <div>Break-even: ${breakEvenYears > 0 ? breakEvenYears.toFixed(1) + " anni" : "-"}</div>
     `;
-
   } else {
-
     proOutput = `
       <br>
       <div style="color:#94a3b8;">
-        ${currentLang === "it"
-          ? "Sblocca PRO per stress test, impatto reddito e indice solidità."
-          : "Unlock PRO for stress test, income impact and solidity index."}
+        Sblocca PRO per rating bancario, stress test avanzato e analisi rischio reale.
       </div>
       <br>
       <button onclick="unlockPro()" class="calculate">
-        ${currentLang === "it"
-          ? "Sblocca PRO (€19)"
-          : "Unlock PRO (€19)"}
+        Sblocca PRO (€19)
       </button>
     `;
   }
