@@ -30,15 +30,26 @@ let currentLang = "it";
 function setLanguage(lang) {
   currentLang = lang;
 
-  document.getElementById("title").innerText = translations[lang].title;
-  document.getElementById("priceLabel").innerText = translations[lang].priceLabel;
-  document.getElementById("occupancyLabel").innerText = translations[lang].occupancyLabel;
-  document.getElementById("expensesLabel").innerText = translations[lang].expensesLabel;
-  document.getElementById("feesLabel").innerText = translations[lang].feesLabel;
-  document.getElementById("taxesLabel").innerText = translations[lang].taxesLabel;
-  document.getElementById("calculateBtn").innerText = translations[lang].calculate;
+  const t = translations[lang];
 
-  document.getElementById("btn-it").classList.remove("active");
-  document.getElementById("btn-en").classList.remove("active");
-  document.getElementById("btn-" + lang).classList.add("active");
+  if (document.getElementById("title"))
+    document.getElementById("title").innerText = t.title;
+
+  if (document.getElementById("priceLabel"))
+    document.getElementById("priceLabel").innerText = t.priceLabel;
+
+  if (document.getElementById("occupancyLabel"))
+    document.getElementById("occupancyLabel").innerText = t.occupancyLabel;
+
+  if (document.getElementById("calculateBtn"))
+    document.getElementById("calculateBtn").innerText = t.calculate;
+
+  if (document.getElementById("btn-it"))
+    document.getElementById("btn-it").classList.remove("active");
+
+  if (document.getElementById("btn-en"))
+    document.getElementById("btn-en").classList.remove("active");
+
+  if (document.getElementById("btn-" + lang))
+    document.getElementById("btn-" + lang).classList.add("active");
 }
