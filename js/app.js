@@ -1,4 +1,5 @@
 let isProUnlocked = false;
+const TARGET_ROI = 8; // benchmark realistico
 
 function unlockPro() {
   const code = prompt(currentLang === "it"
@@ -29,7 +30,6 @@ function formatCurrency(value) {
 
 function calculate() {
 
-  // ===== BASE INPUT =====
   const price = parseFloat(document.getElementById("price").value);
   const occupancy = parseFloat(document.getElementById("occupancy").value);
   const expenses = parseFloat(document.getElementById("expenses").value);
@@ -43,7 +43,6 @@ function calculate() {
     return;
   }
 
-  // ===== BASE CALCULATION =====
   const nights = 30 * (occupancy / 100);
   const gross = price * nights;
   const platformFees = gross * (commission / 100);
@@ -52,7 +51,6 @@ function calculate() {
   const netMonthly = profitBeforeTax - taxes;
   const netYearly = netMonthly * 12;
 
-  // ===== INVESTMENT INPUT =====
   const equity = parseFloat(document.getElementById("equity").value);
   const loanAmount = parseFloat(document.getElementById("loanAmount").value);
   const loanRate = parseFloat(document.getElementById("loanRate").value);
@@ -83,7 +81,6 @@ function calculate() {
       : 0;
   }
 
-  // ===== BASE OUTPUT =====
   let baseOutput = `
     <div>
       ${currentLang === "it" ? "Guadagno netto annuale:" : "Net yearly profit:"}
@@ -91,38 +88,49 @@ function calculate() {
     </div>
   `;
 
-  // ===== PRO SECTION =====
   let proOutput = "";
 
   if (isProUnlocked) {
 
+    // ===== TARGET ANALYSIS =====
+
+    const targetYearlyReturn = (equity * TARGET_ROI) / 100;
+    const neededCashflow = targetYearlyReturn;
+
+    // prezzo necessario per ROI target
+    const neededNetYearly = neededCashflow + yearlyLoanCost;
+    const neededNetMonthly = neededNetYearly / 12;
+
+    const neededGrossMonthly =
+      (neededNetMonthly + expenses) /
+      (1 - commission / 100) /
+      (1 - tax / 100);
+
+    const neededPrice =
+      neededGrossMonthly / nights;
+
+    // occupazione necessaria
+    const neededOccupancy =
+      (neededGrossMonthly / price) / 30 * 100;
+
     let verdict = "";
     let verdictClass = "";
 
-    // ===== SMART VERDICT =====
-    if (roi > 12) {
+    if (roi >= TARGET_ROI) {
       verdictClass = "positive";
       verdict = currentLang === "it"
-        ? "🟢 Ottimo investimento! Potresti rientrare in tempi interessanti."
-        : "🟢 Excellent investment! Payback time looks attractive.";
-    }
-    else if (roi > 6) {
-      verdictClass = "positive";
-      verdict = currentLang === "it"
-        ? "🟡 Investimento discreto. Valuta bene rischi e mercato."
-        : "🟡 Decent investment. Evaluate risks and local demand.";
-    }
-    else if (roi > 0) {
+        ? "🟢 Investimento in linea con il target."
+        : "🟢 Investment meets target return.";
+    } else if (roi > 0) {
       verdictClass = "negative";
       verdict = currentLang === "it"
-        ? "⚠️ Investimento rischioso. Margine di sicurezza basso."
-        : "⚠️ Risky investment. Low safety margin.";
-    }
-    else {
+        ? "⚠️ Investimento sotto target. Valuta negoziazione prezzo."
+        : "⚠️ Below target ROI. Consider negotiating property price.";
+    } else {
       verdictClass = "negative";
       verdict = currentLang === "it"
-        ? "🔴 Non conveniente. Potresti non rientrare dell’investimento."
-        : "🔴 Not convenient. You may not recover your investment.";
+        ? "🔴 Non conveniente. Rischio elevato."
+        : "🔴 Not convenient. High risk.";
     }
 
     proOutput = `
@@ -138,35 +146,48 @@ function calculate() {
         ${formatCurrency(realYearlyCashflow)}
       </div>
 
-      <div>
-        ROI: ${roi.toFixed(2)} %
-      </div>
+      <div>ROI: ${roi.toFixed(2)} %</div>
 
       <div>
         ${currentLang === "it" ? "Anni per rientrare:" : "Break-even years:"}
         ${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}
       </div>
 
-      <br>
-      <div class="${verdictClass}" style="margin-top:10px;">
-        <strong>${verdict}</strong>
+      <hr style="margin:15px 0; border:1px solid #334155;">
+
+      <div style="font-weight:bold; margin-bottom:5px;">
+        ${currentLang === "it"
+          ? "Analisi target (ROI 8%)"
+          : "Target analysis (8% ROI)"}
+      </div>
+
+      <div>
+        ${currentLang === "it"
+          ? "Prezzo minimo consigliato a notte:"
+          : "Recommended minimum nightly price:"}
+        ${formatCurrency(neededPrice)}
+      </div>
+
+      <div>
+        ${currentLang === "it"
+          ? "Occupazione minima necessaria:"
+          : "Required minimum occupancy:"}
+        ${neededOccupancy.toFixed(1)} %
       </div>
 
       <br>
-      <div style="font-size:13px; color:#94a3b8;">
-        ${currentLang === "it"
-          ? "Vuoi un’analisi professionale personalizzata? Contattami."
-          : "Want a personalized professional investment analysis? Contact me."}
+
+      <div class="${verdictClass}">
+        <strong>${verdict}</strong>
       </div>
     `;
-  }
-  else {
+  } else {
     proOutput = `
       <br>
       <div style="color:#94a3b8;">
         ${currentLang === "it"
-          ? "Vuoi sapere se l'investimento è davvero profittevole? Sblocca l’analisi avanzata."
-          : "Want to know if your investment is truly profitable? Unlock advanced analysis."}
+          ? "Sblocca PRO per vedere analisi ROI avanzata e target strategico."
+          : "Unlock PRO to see advanced ROI and strategic target analysis."}
       </div>
       <br>
       <button onclick="unlockPro()" class="calculate">
