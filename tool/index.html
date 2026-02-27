@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulatore Rendimento B&B</title>
+<title>RendimentoBB – Analisi Strategica Investimento B&B</title>
 <link rel="stylesheet" href="../css/style.css">
 
-<!-- Chart.js (necessario per grafici PRO) -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- PDF Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 
@@ -23,77 +27,69 @@
       <button id="btn-en" onclick="setLanguage('en')">EN</button>
     </div>
 
-    <h1 data-it="📊 Simulatore Rendimento B&B"
-        data-en="📊 B&B Investment Simulator"></h1>
+    <h1>RendimentoBB</h1>
 
-    <p data-it="Inserisci dati realistici e scopri se il tuo investimento è sostenibile."
-       data-en="Enter realistic data and discover if your investment is sustainable."></p>
+    <p>
+      Sistema di Analisi Strategica per Investimenti B&B.
+      Evita errori costosi e valuta con metodo professionale.
+    </p>
+
   </div>
 
   <!-- FORM -->
   <div class="tool-card">
 
-    <h3 data-it="💰 Investimento"
-        data-en="💰 Investment"></h3>
+    <h3>💰 Investimento</h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label data-it="Prezzo immobile (€)"
-               data-en="Property price (€)"></label>
+        <label>Prezzo immobile (€)</label>
         <input type="number" id="propertyPrice" placeholder="Es. 100000">
       </div>
 
       <div class="input-group">
-        <label data-it="Capitale proprio investito (€)"
-               data-en="Own capital invested (€)"></label>
+        <label>Capitale proprio investito (€)</label>
         <input type="number" id="equity" placeholder="Es. 40000">
       </div>
 
     </div>
 
-    <h3 style="margin-top:30px"
-        data-it="🏨 Operatività"
-        data-en="🏨 Operations"></h3>
+    <h3 style="margin-top:30px">🏨 Operatività</h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label data-it="Prezzo medio notte (€)"
-               data-en="Average price per night (€)"></label>
+        <label>Prezzo medio notte (€)</label>
         <input type="number" id="price" placeholder="Es. 120">
       </div>
 
       <div class="input-group">
-        <label data-it="Occupazione media (%)"
-               data-en="Average occupancy (%)"></label>
+        <label>Occupazione media (%)</label>
         <input type="number" id="occupancy" placeholder="Es. 70">
       </div>
 
       <div class="input-group">
-        <label data-it="Spese mensili (€)"
-               data-en="Monthly expenses (€)"></label>
+        <label>Spese mensili (€)</label>
         <input type="number" id="expenses" placeholder="Es. 1500">
       </div>
 
       <div class="input-group">
-        <label data-it="Commissioni piattaforme (%)"
-               data-en="Platform commissions (%)"></label>
+        <label>Commissioni piattaforme (%)</label>
         <input type="number" id="commission" placeholder="Es. 15">
       </div>
 
       <div class="input-group">
-        <label data-it="Tasse (%)"
-               data-en="Taxes (%)"></label>
+        <label>Tasse (%)</label>
         <input type="number" id="tax" placeholder="Es. 21">
       </div>
 
     </div>
 
     <div class="action-area">
-      <button onclick="calculate()" class="btn-primary"
-              data-it="Analizza investimento"
-              data-en="Analyze investment"></button>
+      <button onclick="calculate()" class="btn-primary">
+        Analizza Investimento
+      </button>
     </div>
 
   </div>
@@ -103,30 +99,31 @@
 
   <!-- PRO BLOCK -->
   <div id="proBlock" class="pro-lock">
-    <h2 data-it="🔓 Vuoi l’analisi avanzata?"
-        data-en="🔓 Want advanced analysis?"></h2>
 
-    <p data-it="Sblocca:"
-       data-en="Unlock:"></p>
+    <h2>🔓 Versione PRO – Analisi Strategica Completa</h2>
 
-    <ul style="text-align:left; max-width:400px; margin:15px auto;">
-      <li data-it="Simulazione mutuo completa"
-          data-en="Full mortgage simulation"></li>
-      <li data-it="Stress test pessimistico"
-          data-en="Pessimistic stress test"></li>
-      <li data-it="ROI a 5 anni"
-          data-en="5-year ROI"></li>
-      <li data-it="Indice rischio 0–100"
-          data-en="Risk index 0–100"></li>
-      <li data-it="Grafico cashflow 5 anni"
-          data-en="5-year cashflow chart"></li>
-      <li data-it="Analisi professionale dettagliata"
-          data-en="Detailed professional analysis"></li>
+    <p>
+      Strumento professionale per decisioni immobiliari consapevoli.
+    </p>
+
+    <ul style="text-align:left; max-width:500px; margin:20px auto; line-height:1.8;">
+      <li>✔ Simulazione 5 anni con grafico cumulativo</li>
+      <li>✔ Indice rischio professionale 0–100</li>
+      <li>✔ Break-even reale capitale</li>
+      <li>✔ Scenario stress realistico</li>
+      <li>✔ Diagnosi automatica investimento</li>
+      <li>✔ Generazione Report PDF professionale</li>
+      <li>✔ Aggiornamenti futuri inclusi</li>
     </ul>
 
-    <button onclick="unlockPro()" class="btn-secondary"
-            data-it="Sblocca versione PRO – 19€"
-            data-en="Unlock PRO version – €19"></button>
+    <button onclick="unlockPro()" class="btn-secondary">
+      Sblocca Analisi PRO – 19€
+    </button>
+
+    <div style="margin-top:10px; font-size:12px; color:#94a3b8;">
+      Pagamento una tantum • Nessun abbonamento • Garanzia 7 giorni
+    </div>
+
   </div>
 
   <!-- BACK -->
@@ -135,6 +132,24 @@
   </div>
 
 </div>
+
+
+<!-- PDF REPORT TEMPLATE (NASCOSTO) -->
+<div id="pdfReport" style="display:none; background:white; color:#111; padding:50px; font-family:Arial;">
+
+  <h1 style="margin-bottom:5px;">RendimentoBB</h1>
+  <h2 style="margin-top:0;">Report di Valutazione Investimento B&B</h2>
+
+  <hr style="margin:20px 0;">
+
+  <div id="pdfContent"></div>
+
+  <div style="margin-top:40px; font-size:12px; color:#666;">
+    Documento generato automaticamente da RendimentoBB – Analisi Strategica Investimenti B&B
+  </div>
+
+</div>
+
 
 <script src="../js/lang.js"></script>
 <script src="../js/app.js"></script>
