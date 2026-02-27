@@ -61,26 +61,18 @@ function getValue(id) {
 
 function calculate() {
 
+  const propertyPrice = getValue("propertyPrice");
   const price = getValue("price");
   const occupancy = getValue("occupancy");
   const expenses = getValue("expenses");
   const commission = getValue("commission");
   const tax = getValue("tax");
-
   const equity = getValue("equity");
-  const loanAmount = getValue("loanAmount");
-  const loanRate = getValue("loanRate");
-  const loanYears = getValue("loanYears");
-
-  const familyIncome = getValue("familyIncome");
-  const stressOccupancy = getValue("stressOccupancy");
-  const stressExpenses = getValue("stressExpenses");
-  const stressRate = getValue("stressRate");
 
   const resultsDiv = document.getElementById("results");
   if (!resultsDiv) return;
 
-  if (!price || !occupancy) {
+  if (!price || !occupancy || !equity) {
     resultsDiv.innerHTML =
       currentLang === "it"
         ? "Inserisci valori validi."
@@ -104,48 +96,118 @@ function calculate() {
 
   const netYearly = profitBeforeTax - taxCost;
 
-  let baseROI = 0;
-  if (equity > 0) {
-    baseROI = (netYearly / equity) * 100;
+  let baseROI = (netYearly / equity) * 100;
+
+  // =========================
+  // WARNING IF LOW MARGIN
+  // =========================
+
+  let output = "";
+
+  if (netYearly < 5000) {
+    output += `
+    <div style="
+      background:#7f1d1d;
+      padding:12px;
+      border-radius:8px;
+      margin-bottom:15px;
+      font-size:13px;
+    ">
+      ⚠️ ${currentLang === "it"
+        ? "Margine basso. Questo investimento potrebbe essere fragile."
+        : "Low margin. This investment could be fragile."}
+    </div>
+    `;
   }
 
-  let output = `
-    ${isProUnlocked ? `
-      <div style="background:#052e16;padding:12px;border-radius:8px;margin-bottom:15px;color:#86efac;font-size:13px;">
-        ✅ Versione PRO attiva — Analisi completa disponibile
-      </div>
-    ` : ``}
+  // =========================
+  // BASE RESULT
+  // =========================
 
+  output += `
     <div class="result-card">
       <h4>📊 ${currentLang === "it" ? "Analisi Base" : "Base Analysis"}</h4>
+
       <div>${currentLang === "it" ? "Fatturato annuo:" : "Yearly revenue:"}
       <strong>${formatCurrency(grossYearly)}</strong></div>
 
       <div>${currentLang === "it" ? "Utile netto annuo:" : "Net yearly profit:"}
       <strong>${formatCurrency(netYearly)}</strong></div>
 
-      <div>${currentLang === "it" ? "ROI base:" : "Base ROI:"}
+      <div>${currentLang === "it" ? "ROI stimato:" : "Estimated ROI:"}
       <strong>${baseROI.toFixed(2)}%</strong></div>
     </div>
   `;
 
   // =========================
-  // BLOCCO PRO
+  // TEASER RISK BAR (NON PRO)
   // =========================
 
   if (!isProUnlocked) {
+
+    let teaserRisk = 100 - baseROI * 2;
+    if (teaserRisk < 0) teaserRisk = 0;
+    if (teaserRisk > 100) teaserRisk = 100;
+
     output += `
-      <div style="margin-top:20px;padding:20px;background:#111827;border-radius:12px;border:1px solid #334155;color:#e2e8f0;">
-        <h3 style="margin-top:0;color:#22c55e;">🔒 ${currentLang === "it" ? "Analisi Completa Bloccata" : "Full Analysis Locked"}</h3>
-        <p style="font-size:14px;">
-          ${currentLang === "it" ? 
-          "19€ per evitare un errore da 50.000€." : 
-          "€19 to avoid a €50,000 mistake."}
+      <div style="margin-top:15px;">
+        <div style="font-size:13px;margin-bottom:5px;">
+          ${currentLang === "it" ? "Rischio stimato (base):" : "Estimated risk (basic):"}
+        </div>
+
+        <div style="background:#1f2937;height:8px;border-radius:6px;">
+          <div style="
+            width:${teaserRisk}%;
+            height:8px;
+            border-radius:6px;
+            background:linear-gradient(90deg,#eab308,#dc2626);
+          "></div>
+        </div>
+
+        <div style="font-size:12px;color:#94a3b8;margin-top:5px;">
+          ${currentLang === "it"
+            ? "Sblocca PRO per analisi rischio completa."
+            : "Unlock PRO for full risk analysis."}
+        </div>
+      </div>
+    `;
+
+    // =========================
+    // PRO CONVERSION BLOCK
+    // =========================
+
+    output += `
+      <div style="
+        margin-top:25px;
+        padding:25px;
+        background:linear-gradient(145deg,#111827,#0f172a);
+        border-radius:16px;
+        border:1px solid #334155;
+        text-align:center;
+      ">
+
+        <h3 style="margin-bottom:10px;color:#22c55e;">
+          🔒 ${currentLang === "it" ? "Analisi Completa Bloccata" : "Full Analysis Locked"}
+        </h3>
+
+        <p style="font-size:14px;color:#94a3b8;margin-bottom:15px;">
+          ${currentLang === "it"
+            ? `Con questi numeri potresti perdere fino a <strong>${formatCurrency(propertyPrice * 0.2)}</strong> se il mercato cambia.`
+            : `With these numbers you could lose up to <strong>${formatCurrency(propertyPrice * 0.2)}</strong> if market conditions change.`}
         </p>
-        <button onclick="unlockPro()" 
-          style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:8px;background:#22c55e;color:black;font-weight:bold;cursor:pointer;">
-          🔓 ${currentLang === "it" ? "Sblocca Analisi Completa – 19€" : "Unlock Full Analysis – €19"}
+
+        <button onclick="unlockPro()" class="btn-primary" style="width:100%;">
+          🔓 ${currentLang === "it"
+            ? "Sblocca Analisi Completa – 19€"
+            : "Unlock Full Analysis – €19"}
         </button>
+
+        <div style="font-size:12px;color:#64748b;margin-top:10px;">
+          ${currentLang === "it"
+            ? "Pagamento una tantum. Nessun abbonamento."
+            : "One-time payment. No subscription."}
+        </div>
+
       </div>
     `;
 
@@ -155,92 +217,18 @@ function calculate() {
   }
 
   // =========================
-  // LOAN CALCULATION
+  // FULL PRO ANALYSIS
   // =========================
-
-  let yearlyLoanCost = 0;
-
-  if (loanAmount > 0 && loanRate > 0 && loanYears > 0) {
-    const monthlyRate = (loanRate / 100) / 12;
-    const totalPayments = loanYears * 12;
-
-    const monthlyLoan =
-      loanAmount *
-      (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) /
-      (Math.pow(1 + monthlyRate, totalPayments) - 1);
-
-    yearlyLoanCost = monthlyLoan * 12;
-  }
-
-  const realYearlyCashflow = netYearly - yearlyLoanCost;
-
-  let roi = 0;
-  let breakEvenYears = 0;
-
-  if (equity > 0) {
-    roi = (realYearlyCashflow / equity) * 100;
-    if (realYearlyCashflow > 0) {
-      breakEvenYears = equity / realYearlyCashflow;
-    }
-  }
-
-  // =========================
-  // STRESS TEST
-  // =========================
-
-  const stressedOcc = occupancy - (occupancy * stressOccupancy / 100);
-  const stressedExp = expenses + (expenses * stressExpenses / 100);
-
-  const stressedGrossYearly = (price * 30 * (stressedOcc / 100)) * 12;
-  const stressedFees = stressedGrossYearly * (commission / 100);
-  const stressedProfit = stressedGrossYearly - stressedFees - (stressedExp * 12);
-  const stressedTax = stressedProfit > 0 ? stressedProfit * (tax / 100) : 0;
-  const stressedNet = stressedProfit - stressedTax;
-
-  const stressedCashflow = stressedNet - yearlyLoanCost;
-
-  // =========================
-  // RISK SCORE
-  // =========================
-
-  let riskScore = 100;
-
-  if (realYearlyCashflow < 0) riskScore -= 30;
-  if (roi < 5) riskScore -= 15;
-  if (breakEvenYears > 20) riskScore -= 15;
-  if (stressedCashflow < 0) riskScore -= 20;
-
-  if (familyIncome > 0 && yearlyLoanCost / (familyIncome * 12) > 0.35)
-    riskScore -= 20;
-
-  if (riskScore < 0) riskScore = 0;
-
-  let riskLabel =
-    riskScore >= 80
-      ? (currentLang === "it" ? "Investimento Solido" : "Solid Investment")
-      : riskScore >= 60
-      ? (currentLang === "it" ? "Zona Attenzione" : "Caution Zone")
-      : (currentLang === "it" ? "Investimento Rischioso" : "High Risk");
-
-  let riskColor =
-    riskScore >= 80 ? "#16a34a"
-    : riskScore >= 60 ? "#eab308"
-    : "#dc2626";
 
   output += `
     <div class="result-card">
       <h4>📊 ${currentLang === "it" ? "Analisi Completa" : "Full Analysis"}</h4>
-      <div>ROI reale: <strong>${roi.toFixed(2)}%</strong></div>
-      <div>Cashflow annuo reale:
-      <strong>${formatCurrency(realYearlyCashflow)}</strong></div>
-      <div>Break-even:
-      <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}</strong> anni</div>
-      <div>Scenario pessimistico:
-      <strong>${formatCurrency(stressedCashflow)}</strong></div>
-    </div>
 
-    <div style="margin-top:15px;padding:14px;border-radius:8px;background:${riskColor};color:white;font-weight:bold;">
-      Indice Rischio: ${riskScore}/100 — ${riskLabel}
+      <div>${currentLang === "it" ? "ROI reale:" : "Real ROI:"}
+      <strong>${baseROI.toFixed(2)}%</strong></div>
+
+      <div>${currentLang === "it" ? "Cashflow annuo:" : "Yearly cashflow:"}
+      <strong>${formatCurrency(netYearly)}</strong></div>
     </div>
   `;
 
