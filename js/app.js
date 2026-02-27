@@ -2,7 +2,6 @@
 // PRO STATUS INIT
 // ===============================
 
-// Persist unlock
 let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
 
 // Auto unlock from Stripe redirect
@@ -12,7 +11,7 @@ if (urlParams.get("pro") === "paid") {
   localStorage.setItem("proUnlocked", "true");
 }
 
-// 🔥 INSERISCI QUI IL TUO LINK STRIPE
+// 🔥 INSERISCI QUI IL TUO LINK STRIPE LIVE QUANDO PRONTO
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
@@ -82,6 +81,19 @@ function calculate() {
   const netYearly = netMonthly * 12;
 
   let output = `
+    ${isProUnlocked ? `
+      <div style="
+        background:#052e16;
+        padding:12px;
+        border-radius:8px;
+        margin-bottom:15px;
+        color:#86efac;
+        font-size:13px;
+      ">
+        ✅ Versione PRO attiva — Analisi completa disponibile
+      </div>
+    ` : ``}
+
     <div class="result-card">
       <h4>${currentLang === "it" ? "📊 Risultato Base" : "📊 Base Result"}</h4>
       <div>
@@ -92,25 +104,63 @@ function calculate() {
   `;
 
   // =========================
-  // 🔒 BLOCCO PRO
+  // 🔒 BLOCCO PRO PERSUASIVO
   // =========================
 
   if (!isProUnlocked) {
+
     output += `
-      <div class="pro-info">
-        🔒 ${
-          currentLang === "it"
-            ? "Sblocca la versione PRO per vedere:"
-            : "Unlock PRO to see:"
-        }
-        <br>• ROI reale
-        <br>• Break-even
-        <br>• Stress test
-        <br>• Indice di rischio
-        <br><br>
-        <button onclick="unlockPro()" class="calculate">
-          ${currentLang === "it" ? "Sblocca PRO (19€)" : "Unlock PRO (19€)"}
+      <div style="
+        margin-top:20px;
+        padding:20px;
+        background:#111827;
+        border-radius:12px;
+        border:1px solid #334155;
+        color:#e2e8f0;
+      ">
+
+        <h3 style="margin-top:0;color:#22c55e;">
+          🔒 Analisi Completa Bloccata
+        </h3>
+
+        <p style="font-size:14px;line-height:1.6;">
+          Stai valutando un investimento che può superare i <strong>100.000€</strong>.
+          Decidere senza analisi completa significa esporsi a errori
+          che possono costare decine di migliaia di euro.
+        </p>
+
+        <ul style="font-size:14px;line-height:1.8;padding-left:18px;">
+          <li>✔ ROI reale con mutuo ed equity</li>
+          <li>✔ Cashflow effettivo dopo rata bancaria</li>
+          <li>✔ Break-even reale</li>
+          <li>✔ Scenario pessimistico automatico</li>
+          <li>✔ Indice di rischio 0–100</li>
+        </ul>
+
+        <p style="margin-top:15px;font-size:14px;">
+          <strong>19€ per evitare un errore da 50.000€.</strong>
+        </p>
+
+        <button onclick="unlockPro()" 
+          style="
+            width:100%;
+            margin-top:15px;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#22c55e;
+            color:black;
+            font-weight:bold;
+            cursor:pointer;
+            font-size:15px;
+          ">
+          🔓 Sblocca Analisi Completa – 19€
         </button>
+
+        <p style="margin-top:10px;font-size:12px;color:#94a3b8;">
+          Accesso immediato dopo il pagamento.
+        </p>
+
       </div>
     `;
 
