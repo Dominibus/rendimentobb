@@ -20,10 +20,6 @@ if (urlParams.get("pro") === "paid") {
   window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-// ===============================
-// STRIPE LINK
-// ===============================
-
 const STRIPE_PAYMENT_LINK =
   "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
@@ -83,10 +79,8 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 // ===============================
 
 function calculate() {
-
   const resultsDiv = document.getElementById("results");
   if (!resultsDiv) return;
-
   runRealCalculation();
 }
 
@@ -98,11 +92,9 @@ function runRealCalculation() {
 
   const propertyPrice = getValue("propertyPrice");
   const equity = getValue("equity");
-
   const loanAmount = getValue("loanAmount");
   const interestRate = getValue("interestRate");
   const loanYears = getValue("loanYears");
-
   const price = getValue("price");
   const occupancy = getValue("occupancy");
   const expenses = getValue("expenses");
@@ -131,27 +123,11 @@ function runRealCalculation() {
   let baseROI = (netAfterMortgage / equity) * 100;
   if (!isFinite(baseROI)) baseROI = 0;
 
-  let output = `
-    <div class="result-card">
-      <h4>📊 Analisi Base</h4>
-      <div>Fatturato annuo: <strong>${formatCurrency(grossYearly)}</strong></div>
-      <div>Utile netto operativo: <strong>${formatCurrency(netYearly)}</strong></div>
-      <div>Rata annua mutuo: <strong>${formatCurrency(mortgage.yearlyPayment)}</strong></div>
-      <div>Utile netto dopo mutuo: <strong>${formatCurrency(netAfterMortgage)}</strong></div>
-      <div>ROI con leva finanziaria: <strong>${baseROI.toFixed(2)}%</strong></div>
-    </div>
-  `;
-
-  if (!isProUnlocked) {
-    resultsDiv.innerHTML = output;
-    return;
-  }
-
   const roi5Years = baseROI * 5;
   const breakEvenYears = netAfterMortgage > 0 ? equity / netAfterMortgage : 0;
 
   // ===============================
-  // RISK SCORE ENGINE
+  // RISK ENGINE
   // ===============================
 
   const loanRatio = propertyPrice ? (loanAmount / propertyPrice) * 100 : 0;
@@ -171,15 +147,9 @@ function runRealCalculation() {
   else if (occupancy < 65) riskPoints += 1;
 
   let riskLabel = "LOW";
-  let riskColor = "#22c55e";
 
-  if (riskPoints >= 6) {
-    riskLabel = "HIGH";
-    riskColor = "#ef4444";
-  } else if (riskPoints >= 3) {
-    riskLabel = "MEDIUM";
-    riskColor = "#f59e0b";
-  }
+  if (riskPoints >= 6) riskLabel = "HIGH";
+  else if (riskPoints >= 3) riskLabel = "MEDIUM";
 
   lastAnalysisData = {
     propertyPrice,
@@ -197,32 +167,14 @@ function runRealCalculation() {
     riskLabel
   };
 
-  output += `
+  let output = `
     <div class="result-card">
       <h4>📊 Analisi Strategica PRO</h4>
-      <div>ROI 5 anni: <strong>${roi5Years.toFixed(2)}%</strong></div>
-      <div>Break-even reale: <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
-
-      <div style="
-        margin-top:18px;
-        padding:14px;
-        border-radius:12px;
-        background:rgba(255,255,255,0.03);
-        border:1px solid rgba(255,255,255,0.08);
-      ">
-        <div style="font-size:13px; opacity:0.7;">Investment Risk Score</div>
-        <div style="
-          font-size:22px;
-          font-weight:700;
-          color:${riskColor};
-          margin-top:6px;
-        ">
-          ${riskLabel}
-        </div>
-      </div>
-
+      <div>ROI annuo: <strong>${baseROI.toFixed(2)}%</strong></div>
+      <div>Break-even: <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
+      <div>Investment Risk Score: <strong>${riskLabel}</strong></div>
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
-        📄 Genera Report PDF Professionale
+        📄 Genera Report PDF Executive
       </button>
     </div>
   `;
@@ -231,7 +183,7 @@ function runRealCalculation() {
 }
 
 // ===============================
-// GENERAZIONE PDF
+// GENERAZIONE PDF EXECUTIVE
 // ===============================
 
 async function generatePDF() {
@@ -246,35 +198,59 @@ async function generatePDF() {
 
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(18);
-  pdf.text("RendimentoBB - Report Professionale", margin, y);
+  pdf.text("RendimentoBB - Executive Investment Report", margin, y);
 
-  y += 12;
+  y += 15;
 
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
 
-  const lines = [
-    `Prezzo immobile: ${formatCurrency(lastAnalysisData.propertyPrice)}`,
-    `Capitale proprio: ${formatCurrency(lastAnalysisData.equity)}`,
-    `Importo mutuo: ${formatCurrency(lastAnalysisData.loanAmount)}`,
-    `Tasso: ${lastAnalysisData.interestRate}%`,
-    `Durata: ${lastAnalysisData.loanYears} anni`,
-    "",
-    `Fatturato annuo: ${formatCurrency(lastAnalysisData.grossYearly)}`,
-    `Utile netto operativo: ${formatCurrency(lastAnalysisData.netYearly)}`,
-    `Utile netto dopo mutuo: ${formatCurrency(lastAnalysisData.netAfterMortgage)}`,
-    "",
-    `ROI con leva: ${lastAnalysisData.baseROI.toFixed(2)}%`,
-    `ROI 5 anni: ${lastAnalysisData.roi5Years.toFixed(2)}%`,
-    `Break-even: ${lastAnalysisData.breakEvenYears ? lastAnalysisData.breakEvenYears.toFixed(1) : "-"} anni`,
-    "",
-    `Investment Risk Score: ${lastAnalysisData.riskLabel}`
+  const d = lastAnalysisData;
+
+  const verdict =
+    d.riskLabel === "LOW"
+      ? "L'investimento appare solido e bilanciato."
+      : d.riskLabel === "MEDIUM"
+      ? "L'investimento è sostenibile ma sensibile a variazioni operative."
+      : "L'investimento presenta criticità e richiede revisione dei parametri.";
+
+  const summary = `
+Sintesi dell'investimento:
+
+Prezzo immobile: ${formatCurrency(d.propertyPrice)}
+Capitale proprio investito: ${formatCurrency(d.equity)}
+Mutuo richiesto: ${formatCurrency(d.loanAmount)}
+
+L'investimento genera un ROI annuo stimato del ${d.baseROI.toFixed(2)}%.
+Il capitale investito verrebbe recuperato in circa ${d.breakEvenYears ? d.breakEvenYears.toFixed(1) : "-"} anni.
+
+Il livello di rischio stimato è ${d.riskLabel}.
+
+${verdict}
+`;
+
+  const lines = pdf.splitTextToSize(summary, 170);
+  pdf.text(lines, margin, y);
+
+  y += lines.length * 6 + 10;
+
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Dettaglio Finanziario", margin, y);
+
+  y += 8;
+  pdf.setFont("helvetica", "normal");
+
+  const details = [
+    `Fatturato annuo stimato: ${formatCurrency(d.grossYearly)}`,
+    `Utile netto operativo: ${formatCurrency(d.netYearly)}`,
+    `Rata annua mutuo: ${formatCurrency(d.mortgageYearly)}`,
+    `Utile netto dopo mutuo: ${formatCurrency(d.netAfterMortgage)}`
   ];
 
-  lines.forEach(line => {
+  details.forEach(line => {
     pdf.text(line, margin, y);
     y += 7;
   });
 
-  pdf.save("Report_RendimentoBB_Pro.pdf");
+  pdf.save("Executive_Report_RendimentoBB.pdf");
 }
