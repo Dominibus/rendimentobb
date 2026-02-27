@@ -20,7 +20,7 @@ if (urlParams.get("pro") === "paid") {
   window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-// 🔥 METTI QUI IL TUO LINK STRIPE LIVE
+// 🔥 STRIPE LINK
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
@@ -89,13 +89,16 @@ function calculate() {
   // BASE CALCULATION
   // =========================
 
-  const nights = 30 * (occupancy / 100);
-  const grossYearly = price * nights * 12;
-  const fees = grossYearly * (commission / 100);
+  const nightsPerMonth = 30 * (occupancy / 100);
+  const grossMonthly = price * nightsPerMonth;
+  const grossYearly = grossMonthly * 12;
+
+  const yearlyFees = grossYearly * (commission / 100);
   const yearlyExpenses = expenses * 12;
 
-  const profitBeforeTax = grossYearly - fees - yearlyExpenses;
+  const profitBeforeTax = grossYearly - yearlyFees - yearlyExpenses;
   const taxCost = profitBeforeTax > 0 ? profitBeforeTax * (tax / 100) : 0;
+
   const netYearly = profitBeforeTax - taxCost;
 
   let baseROI = (netYearly / equity) * 100;
@@ -111,13 +114,13 @@ function calculate() {
     <div class="result-card">
       <h4>📊 ${currentLang === "it" ? "Analisi Base" : "Base Analysis"}</h4>
 
-      <div>${currentLang === "it" ? "Fatturato annuo:" : "Yearly revenue:"}
+      <div>Fatturato annuo:
       <strong>${formatCurrency(grossYearly)}</strong></div>
 
-      <div>${currentLang === "it" ? "Utile netto annuo:" : "Net yearly profit:"}
+      <div>Utile netto annuo:
       <strong>${formatCurrency(netYearly)}</strong></div>
 
-      <div>${currentLang === "it" ? "ROI stimato:" : "Estimated ROI:"}
+      <div>ROI stimato:
       <strong>${baseROI.toFixed(2)}%</strong></div>
     </div>
   `;
@@ -131,30 +134,18 @@ function calculate() {
     const potentialLoss = Math.max(propertyPrice * 0.2, equity);
 
     output += `
-      <div style="margin-top:20px;padding:25px;background:linear-gradient(145deg,#111827,#0f172a);border-radius:16px;border:1px solid #334155;text-align:center;">
-        
-        <h3 style="margin-bottom:10px;color:#22c55e;">
-          🔒 ${currentLang === "it" ? "Analisi Completa Bloccata" : "Full Analysis Locked"}
-        </h3>
-
-        <p style="font-size:14px;color:#94a3b8;margin-bottom:15px;">
-          ${currentLang === "it"
-            ? `Potresti perdere fino a <strong>${formatCurrency(potentialLoss)}</strong> in uno scenario negativo.`
-            : `You could lose up to <strong>${formatCurrency(potentialLoss)}</strong> in a negative scenario.`}
+      <div style="margin-top:25px;padding:25px;background:linear-gradient(145deg,#111827,#0f172a);border-radius:16px;border:1px solid #334155;text-align:center;">
+        <h3 style="color:#22c55e;">🔒 Analisi Avanzata Bloccata</h3>
+        <p style="color:#94a3b8;">
+        Potresti perdere fino a <strong>${formatCurrency(potentialLoss)}</strong>
+        in uno scenario negativo.
         </p>
-
         <button onclick="unlockPro()" class="btn-primary" style="width:100%;">
-          🔓 ${currentLang === "it"
-            ? "Sblocca Analisi Completa – 19€"
-            : "Unlock Full Analysis – €19"}
+        🔓 Sblocca Analisi Completa – 19€
         </button>
-
         <div style="font-size:12px;color:#64748b;margin-top:8px;">
-          ${currentLang === "it"
-            ? "Pagamento una tantum. Garanzia 7 giorni."
-            : "One-time payment. 7-day money-back guarantee."}
+        Pagamento una tantum. Garanzia 7 giorni.
         </div>
-
       </div>
     `;
 
@@ -164,22 +155,38 @@ function calculate() {
   }
 
   // =========================
-  // PRO VERSION CALCULATION
+  // PRO ANALYSIS
   // =========================
 
   const roi5Years = baseROI * 5;
   const breakEvenYears = netYearly > 0 ? equity / netYearly : 0;
 
-  const stressedOccupancy = occupancy * 0.75;
-  const stressedGross = price * 30 * (stressedOccupancy / 100) * 12;
-  const stressedNet = stressedGross - fees - yearlyExpenses;
-  const stressedCashflow = stressedNet > 0 ? stressedNet * 0.8 : stressedNet;
+  const breakEvenNights =
+    (yearlyExpenses + yearlyFees) / (price * 12);
 
+  const marginPercentage =
+    grossYearly > 0 ? (netYearly / grossYearly) * 100 : 0;
+
+  // Stress Test serio
+  const stressedOccupancy = occupancy * 0.8;
+  const stressedExpenses = yearlyExpenses * 1.1;
+
+  const stressedGross =
+    price * 30 * (stressedOccupancy / 100) * 12;
+
+  const stressedProfit =
+    stressedGross - yearlyFees - stressedExpenses;
+
+  const stressedCashflow =
+    stressedProfit > 0 ? stressedProfit * 0.85 : stressedProfit;
+
+  // RISK SCORE AVANZATO
   let riskScore = 100;
+
   if (baseROI < 5) riskScore -= 25;
   if (breakEvenYears > 15) riskScore -= 20;
+  if (marginPercentage < 20) riskScore -= 20;
   if (stressedCashflow < 0) riskScore -= 25;
-  if (netYearly < 5000) riskScore -= 20;
 
   riskScore = Math.max(0, Math.min(100, riskScore));
 
@@ -190,26 +197,38 @@ function calculate() {
 
   output += `
     <div class="result-card">
-      <h4>📊 ${currentLang === "it" ? "Analisi Completa PRO" : "Full PRO Analysis"}</h4>
+      <h4>📊 Analisi Professionale</h4>
 
       <div>ROI 5 anni:
       <strong>${roi5Years.toFixed(2)}%</strong></div>
 
-      <div>${currentLang === "it" ? "Break-even:" : "Break-even:"}
+      <div>Break-even capitale:
       <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
 
-      <div>${currentLang === "it" ? "Scenario pessimistico:" : "Pessimistic scenario:"}
+      <div>Break-even operativo:
+      <strong>${breakEvenNights.toFixed(1)} notti/mese</strong></div>
+
+      <div>Margine operativo:
+      <strong>${marginPercentage.toFixed(1)}%</strong></div>
+
+      <div>Scenario pessimistico:
       <strong>${formatCurrency(stressedCashflow)}</strong></div>
     </div>
 
     <div style="margin-top:15px;padding:14px;border-radius:8px;background:${riskColor};color:white;font-weight:bold;text-align:center;">
-      ${currentLang === "it" ? "Indice di rischio:" : "Risk index:"} ${riskScore}/100
+      Indice di rischio: ${riskScore}/100
+    </div>
+
+    <div style="margin-top:15px;padding:12px;border-radius:8px;background:#0f172a;border:1px solid #334155;font-size:13px;color:#94a3b8;">
+      Analisi calcolata su:
+      • 360 giorni operativi
+      • Scenario stress -20% occupazione
+      • Aumento costi +10%
+      • Simulazione fiscale indicativa
     </div>
 
     <div style="margin-top:15px;padding:12px;border-radius:8px;background:#052e16;color:#86efac;font-size:13px;text-align:center;">
-      ✅ ${currentLang === "it"
-        ? "Versione PRO attiva — Analisi completa disponibile."
-        : "PRO version active — Full analysis unlocked."}
+      ✅ Versione PRO attiva — Analisi completa disponibile.
     </div>
   `;
 
