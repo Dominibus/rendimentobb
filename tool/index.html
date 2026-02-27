@@ -9,34 +9,68 @@
 
 <body>
 
-<div class="container">
-  <h1>📊 Simulatore Rendimento B&B</h1>
+<div class="tool-wrapper">
 
-  <label>Prezzo medio notte (€)</label>
-  <input type="number" id="price">
+  <div class="tool-header">
+    <h1>📊 Simulatore Rendimento B&B</h1>
+    <p>Inserisci i dati reali del tuo investimento per calcolare redditività e rischio.</p>
+  </div>
 
-  <label>Occupazione media (%)</label>
-  <input type="number" id="occupancy">
+  <div class="tool-card">
 
-  <label>Spese mensili (€)</label>
-  <input type="number" id="expenses">
+    <div class="form-grid">
 
-  <label>Commissioni piattaforme (%)</label>
-  <input type="number" id="commission">
+      <div class="input-group">
+        <label>Prezzo medio notte (€)</label>
+        <input type="number" id="price" placeholder="Es. 120">
+      </div>
 
-  <label>Tasse (%)</label>
-  <input type="number" id="tax">
+      <div class="input-group">
+        <label>Occupazione media (%)</label>
+        <input type="number" id="occupancy" placeholder="Es. 70">
+      </div>
 
-  <br><br>
+      <div class="input-group">
+        <label>Spese mensili (€)</label>
+        <input type="number" id="expenses" placeholder="Es. 1500">
+      </div>
 
-  <button onclick="calculate()" class="btn-primary">
-    Analizza investimento
-  </button>
+      <div class="input-group">
+        <label>Commissioni piattaforme (%)</label>
+        <input type="number" id="commission" placeholder="Es. 15">
+      </div>
 
-  <div id="results" style="margin-top:30px;"></div>
+      <div class="input-group">
+        <label>Tasse (%)</label>
+        <input type="number" id="tax" placeholder="Es. 21">
+      </div>
 
-  <br>
-  <a href="/" style="text-decoration:none;">← Torna alla homepage</a>
+    </div>
+
+    <div class="action-area">
+      <button onclick="calculate()" class="btn-primary">
+        Analizza investimento
+      </button>
+    </div>
+
+  </div>
+
+  <!-- RISULTATI -->
+  <div id="results" class="results-card"></div>
+
+  <!-- BLOCCO PRO -->
+  <div class="pro-lock">
+    <h2>🔓 Vuoi l'analisi completa?</h2>
+    <p>
+      Sblocca stress test, simulazione mutuo e indice di rischio avanzato.
+    </p>
+    <a href="/" class="btn-secondary">Passa alla versione PRO – 19€</a>
+  </div>
+
+  <div class="back-link">
+    <a href="/">← Torna alla homepage</a>
+  </div>
+
 </div>
 
 <script src="../js/lang.js"></script>
