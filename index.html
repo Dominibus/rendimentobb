@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RendimentoBB – Analisi Investimento B&B</title>
+<title>RendimentoBB – Analisi Professionale Investimento B&B</title>
 
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
@@ -30,7 +30,7 @@ body {
 }
 
 .logo {
-  font-weight:700;
+  font-weight:800;
   font-size:20px;
 }
 
@@ -44,33 +44,37 @@ body {
 /* HERO */
 .hero {
   text-align:center;
-  padding:100px 20px 80px;
+  padding:110px 20px 90px;
 }
 
 .hero h1 {
-  font-size:42px;
-  margin-bottom:20px;
+  font-size:44px;
+  margin-bottom:25px;
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .hero p {
   font-size:20px;
   color:#475569;
-  max-width:750px;
+  max-width:800px;
   margin:20px auto;
 }
 
 .cta {
-  margin-top:40px;
+  margin-top:50px;
 }
 
 .cta a {
   text-decoration:none;
-  padding:16px 28px;
-  border-radius:10px;
-  font-weight:700;
+  padding:18px 32px;
+  border-radius:12px;
+  font-weight:800;
   margin:10px;
   display:inline-block;
   transition:0.25s ease;
+  font-size:16px;
 }
 
 .btn-primary {
@@ -80,7 +84,7 @@ body {
 
 .btn-primary:hover {
   transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(34,197,94,0.4);
+  box-shadow:0 12px 30px rgba(34,197,94,0.4);
 }
 
 .btn-secondary {
@@ -90,18 +94,18 @@ body {
 
 .btn-secondary:hover {
   transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  box-shadow:0 12px 30px rgba(0,0,0,0.25);
 }
 
 /* SECTION */
 .section {
-  padding:80px 20px;
+  padding:90px 20px;
 }
 
 .section h2 {
   text-align:center;
-  margin-bottom:50px;
-  font-size:30px;
+  margin-bottom:60px;
+  font-size:32px;
 }
 
 .features {
@@ -112,9 +116,9 @@ body {
 
 .feature {
   background:white;
-  padding:30px;
-  border-radius:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.05);
+  padding:35px;
+  border-radius:16px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.05);
   transition:0.25s;
 }
 
@@ -127,12 +131,17 @@ body {
   font-size:20px;
 }
 
-/* PROBLEM SECTION */
+/* PROBLEM */
 .problem {
   background:#0f172a;
   color:white;
   text-align:center;
-  padding:90px 20px;
+  padding:100px 20px;
+}
+
+.problem h2 {
+  font-size:34px;
+  margin-bottom:20px;
 }
 
 .problem p {
@@ -142,21 +151,47 @@ body {
   color:#cbd5e1;
 }
 
-/* PRICE */
-.price-box {
-  text-align:center;
+/* PRO SECTION */
+.pro-section {
   background:white;
-  padding:90px 20px;
+  padding:100px 20px;
+  text-align:center;
 }
 
-.price-box h2 {
+.pro-section h2 {
   font-size:36px;
-  margin-bottom:15px;
+  margin-bottom:20px;
 }
 
-.price-box p {
+.pro-list {
+  max-width:800px;
+  margin:40px auto;
+  text-align:left;
+}
+
+.pro-list li {
+  margin-bottom:15px;
   font-size:18px;
-  color:#475569;
+}
+
+/* FAQ */
+.faq {
+  padding:90px 20px;
+  background:#f1f5f9;
+}
+
+.faq h2 {
+  text-align:center;
+  margin-bottom:50px;
+}
+
+.faq-item {
+  max-width:800px;
+  margin:20px auto;
+}
+
+.faq-item h4 {
+  margin-bottom:10px;
 }
 
 /* FOOTER */
@@ -174,62 +209,108 @@ body {
 <div class="header container">
   <div class="logo">RendimentoBB</div>
   <div class="nav">
-    <a href="/tool/">Simulazione</a>
-    <a href="/tool/">Versione PRO</a>
+    <a href="/tool/">Analisi</a>
+    <a href="/tool/">Accesso PRO</a>
   </div>
 </div>
 
 <div class="hero container">
-  <h1>Stai per investire oltre 100.000€ in un B&B?</h1>
+  <h1>Prima di investire 100.000€ in un B&B, verifica questi numeri.</h1>
   <p>
-    La maggior parte degli investitori calcola solo il prezzo di acquisto.
-    I veri rischi arrivano dopo: tasse, commissioni, tassi, bassa occupazione.
+    Un errore di valutazione può costarti decine di migliaia di euro nei primi anni.
+    La maggior parte dei nuovi host sottovaluta tasse, commissioni, stagionalità e impatto del mutuo.
   </p>
 
   <div class="cta">
-    <a href="/tool/" class="btn-primary">🔎 Prova la simulazione gratuita</a>
-    <a href="/tool/" class="btn-secondary">🔓 Sblocca versione PRO – 19€</a>
+    <a href="/tool/" class="btn-primary">🔎 Avvia analisi gratuita</a>
+    <a href="/tool/" class="btn-secondary">🛡 Proteggi il tuo investimento – 19€</a>
   </div>
 </div>
 
 <div class="section container">
-  <h2>Cosa calcola davvero RendimentoBB</h2>
+  <h2>Perché la maggior parte dei nuovi B&B sbaglia i calcoli</h2>
   <div class="features">
     <div class="feature">
-      <h3>ROI reale</h3>
-      <p>Calcolo preciso basato su occupazione reale, tasse, commissioni e costi nascosti.</p>
+      <h3>Sovrastima occupazione</h3>
+      <p>I numeri teorici non riflettono stagionalità reale e concorrenza locale.</p>
     </div>
 
     <div class="feature">
-      <h3>Simulazione mutuo</h3>
-      <p>Valuta l'impatto reale della rata bancaria sul tuo cashflow mensile.</p>
+      <h3>Sottovaluta costi</h3>
+      <p>Commissioni piattaforme, tasse, pulizie e imprevisti riducono il margine reale.</p>
     </div>
 
     <div class="feature">
-      <h3>Stress test automatico</h3>
-      <p>Simula calo prenotazioni, aumento tassi e incremento spese improvvise.</p>
+      <h3>Nessuno scenario pessimistico</h3>
+      <p>Pochi simulano calo prenotazioni o aumento tassi bancari.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section container">
+  <h2>Cosa analizza davvero RendimentoBB</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>ROI netto reale</h3>
+      <p>Calcolo preciso dopo tasse, commissioni e costi nascosti.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Cashflow mensile</h3>
+      <p>Verifica sostenibilità finanziaria mese per mese.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Break-even</h3>
+      <p>Scopri in quanti mesi rientri dell’investimento.</p>
     </div>
 
     <div class="feature">
       <h3>Indice di rischio 0–100</h3>
-      <p>Capisci subito se l’investimento è solido o potenzialmente pericoloso.</p>
+      <p>Capisci subito se l’investimento è solido o pericoloso.</p>
     </div>
   </div>
 </div>
 
 <div class="problem">
-  <h2>Un errore di valutazione può costarti 50.000€.</h2>
+  <h2>Un errore può costarti 50.000€.</h2>
   <p>
-    Prima di firmare un mutuo o un compromesso, verifica numeri reali.
-    Bastano 2 minuti per evitare anni di stress finanziario.
+    Questo strumento ti costa meno di una cena.
+    Prima di firmare un mutuo o un compromesso, verifica i numeri reali.
   </p>
 </div>
 
-<div class="price-box">
-  <h2>Accesso completo: 19€</h2>
-  <p>Una cifra simbolica per proteggere un investimento a sei cifre.</p>
-  <br><br>
-  <a href="/tool/" class="btn-primary">Accedi al tool</a>
+<div class="pro-section">
+  <h2>Accesso completo PRO – 19€</h2>
+
+  <ul class="pro-list">
+    <li>✔ Simulazione mutuo dettagliata</li>
+    <li>✔ Stress test automatico</li>
+    <li>✔ Scenario prudente e pessimistico</li>
+    <li>✔ Analisi cashflow reale</li>
+    <li>✔ Indice rischio investimento</li>
+  </ul>
+
+  <a href="/tool/" class="btn-secondary">Sblocca accesso completo</a>
+</div>
+
+<div class="faq">
+  <h2>Domande frequenti</h2>
+
+  <div class="faq-item">
+    <h4>È adatto anche a chi è all’inizio?</h4>
+    <p>Sì. È progettato proprio per chi sta valutando se aprire un B&B.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4>Serve esperienza tecnica?</h4>
+    <p>No. Inserisci i dati e ottieni analisi immediata.</p>
+  </div>
+
+  <div class="faq-item">
+    <h4>Posso simulare più scenari?</h4>
+    <p>Sì. Puoi modificare occupazione, costi e condizioni per testare diverse ipotesi.</p>
+  </div>
 </div>
 
 <div class="footer">
