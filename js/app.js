@@ -1,28 +1,31 @@
-let isProUnlocked = false;
+// ===============================
+// PRO STATUS INIT
+// ===============================
+
+// Persist unlock
+let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
+
+// Auto unlock from Stripe redirect
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get("pro") === "paid") {
+  isProUnlocked = true;
+  localStorage.setItem("proUnlocked", "true");
+}
+
+// 🔥 INSERISCI QUI IL TUO LINK STRIPE
+const STRIPE_PAYMENT_LINK = "INSERISCI_LINK_STRIPE";
+
+// ===============================
+// UNLOCK PRO (Redirect to Stripe)
+// ===============================
 
 function unlockPro() {
-  const code = prompt(
-    currentLang === "it"
-      ? "Inserisci il codice di accesso PRO:"
-      : "Enter PRO access code:"
-  );
-
-  if (code === "BBPRO2025") {
-    isProUnlocked = true;
-    alert(
-      currentLang === "it"
-        ? "PRO sbloccato con successo!"
-        : "PRO unlocked successfully!"
-    );
-    calculate();
-  } else {
-    alert(
-      currentLang === "it"
-        ? "Codice non valido."
-        : "Invalid code."
-    );
-  }
+  window.location.href = STRIPE_PAYMENT_LINK;
 }
+
+// ===============================
+// FORMAT CURRENCY
+// ===============================
 
 function formatCurrency(value) {
   return new Intl.NumberFormat(
@@ -33,6 +36,10 @@ function formatCurrency(value) {
     }
   ).format(value);
 }
+
+// ===============================
+// CALCULATE
+// ===============================
 
 function calculate() {
 
@@ -102,7 +109,7 @@ function calculate() {
         <br>• Indice di rischio
         <br><br>
         <button onclick="unlockPro()" class="calculate">
-          ${currentLang === "it" ? "Sblocca PRO" : "Unlock PRO"}
+          ${currentLang === "it" ? "Sblocca PRO (19€)" : "Unlock PRO (19€)"}
         </button>
       </div>
     `;
