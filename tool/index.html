@@ -11,11 +11,21 @@
 
 <div class="tool-wrapper">
 
+  <!-- HEADER -->
   <div class="tool-header">
+
+    <div class="lang-switch">
+      <button id="btn-it" onclick="setLanguage('it')" class="active">IT</button>
+      <button id="btn-en" onclick="setLanguage('en')">EN</button>
+    </div>
+
     <h1>📊 Simulatore Rendimento B&B</h1>
-    <p>Inserisci i dati reali del tuo investimento per calcolare redditività e rischio.</p>
+    <p>
+      Inserisci pochi dati reali e scopri se il tuo investimento è davvero sostenibile.
+    </p>
   </div>
 
+  <!-- FORM -->
   <div class="tool-card">
 
     <div class="form-grid">
@@ -58,15 +68,23 @@
   <!-- RISULTATI -->
   <div id="results" class="results-card"></div>
 
-  <!-- BLOCCO PRO -->
+  <!-- PRO BLOCK -->
   <div class="pro-lock">
-    <h2>🔓 Vuoi l'analisi completa?</h2>
+    <h2>🔓 Vuoi l’analisi avanzata?</h2>
     <p>
-      Sblocca stress test, simulazione mutuo e indice di rischio avanzato.
+      Sblocca:
+      <br>• Simulazione mutuo completa
+      <br>• Stress test pessimistico
+      <br>• ROI dettagliato
+      <br>• Indice di rischio avanzato
     </p>
-    <a href="/" class="btn-secondary">Passa alla versione PRO – 19€</a>
+
+    <button onclick="unlockPro()" class="btn-secondary">
+      Sblocca versione PRO – 19€
+    </button>
   </div>
 
+  <!-- BACK -->
   <div class="back-link">
     <a href="/">← Torna alla homepage</a>
   </div>
