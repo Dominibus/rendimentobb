@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>RendimentoBB – Analisi Professionale Investimento B&B</title>
+
+<meta name="description" content="Simula ROI, cashflow e rischio prima di investire in un B&B. Evita errori da 50.000€ con un'analisi professionale.">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -16,21 +19,31 @@ body{
 .container{max-width:1100px;margin:auto;padding:40px 20px;}
 .header{display:flex;justify-content:space-between;align-items:center;padding:20px;}
 .logo{font-weight:800;font-size:20px;}
+
 .nav a{text-decoration:none;margin-left:20px;font-weight:600;color:#0f172a;}
+
 .lang-switch button{
-  margin-left:10px;
+  margin-left:8px;
   padding:6px 12px;
   border-radius:8px;
-  border:none;
+  border:1px solid #cbd5e1;
   cursor:pointer;
   font-weight:600;
-  background:#e2e8f0;
+  background:white;
+  transition:0.2s;
 }
+
+.lang-switch button.active{
+  background:#0f172a;
+  color:white;
+}
+
 .hero{text-align:center;padding:110px 20px 90px;}
 .hero h1{font-size:44px;margin-bottom:25px;max-width:900px;margin:auto;}
 .hero p{font-size:20px;color:#475569;max-width:800px;margin:20px auto;}
 .sub-hero{margin-top:25px;font-size:16px;color:#64748b;}
 .cta{margin-top:50px;}
+
 .cta a{
   text-decoration:none;
   padding:18px 32px;
@@ -41,30 +54,39 @@ body{
   transition:.25s ease;
   font-size:16px;
 }
+
 .btn-primary{background:#22c55e;color:black;}
 .btn-secondary{background:#0f172a;color:white;}
+
 .btn-primary:hover,.btn-secondary:hover{
   transform:translateY(-3px);
   box-shadow:0 12px 30px rgba(0,0,0,0.2);
 }
+
 .trust{margin-top:20px;font-size:14px;color:#64748b;}
+
 .problem{
   background:#0f172a;
   color:white;
   text-align:center;
   padding:100px 20px;
 }
+
 .problem h2{font-size:34px;margin-bottom:20px;}
 .problem p{max-width:800px;margin:20px auto;font-size:20px;color:#cbd5e1;}
+
 .pro-section{
   background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 100%);
   padding:100px 20px;
   text-align:center;
 }
+
 .pro-section h2{font-size:36px;margin-bottom:20px;}
 .pro-list{max-width:800px;margin:40px auto;text-align:left;}
 .pro-list li{margin-bottom:15px;font-size:18px;}
+
 .price-highlight{font-size:22px;font-weight:800;margin-bottom:20px;}
+
 .footer{
   text-align:center;
   padding:40px 20px;
@@ -84,14 +106,16 @@ body{
          data-it="Analisi"
          data-en="Analysis">Analisi</a>
     </div>
+
     <div class="lang-switch" style="display:inline-block;">
-      <button onclick="setLang('it')">IT</button>
-      <button onclick="setLang('en')">EN</button>
+      <button id="btn-it" onclick="setLang('it')">IT</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </div>
 
 <div class="hero container">
+
   <h1 data-it="Prima di investire 100.000€ in un B&B, verifica questi numeri."
       data-en="Before investing €100,000 in a B&B, verify these numbers.">
   </h1>
@@ -122,17 +146,21 @@ body{
        data-it="✔ Pagamento sicuro con Stripe · ✔ Accesso immediato · ✔ Nessun abbonamento"
        data-en="✔ Secure Stripe payment · ✔ Instant access · ✔ No subscription">
   </div>
+
 </div>
 
 <div class="problem">
+
   <h2 data-it="Un errore può costarti 50.000€."
       data-en="One mistake can cost you €50,000."></h2>
 
   <p data-it="Questo strumento ti costa meno di una cena."
      data-en="This tool costs less than a dinner."></p>
+
 </div>
 
 <div class="pro-section">
+
   <h2 data-it="Accesso completo PRO"
       data-en="Full PRO Access"></h2>
 
@@ -163,6 +191,7 @@ body{
      data-it="🔓 Attiva accesso PRO – 19€"
      data-en="🔓 Activate PRO Access – €19">
   </a>
+
 </div>
 
 <div class="footer"
@@ -171,13 +200,46 @@ body{
 </div>
 
 <script>
+
 function setLang(lang){
+
   document.documentElement.lang = lang;
+
   document.querySelectorAll("[data-it]").forEach(el=>{
-    el.innerText = el.getAttribute("data-"+lang);
+    const text = el.getAttribute("data-"+lang);
+    if(text){
+      el.textContent = text;
+    }
   });
+
+  document.getElementById("btn-it").classList.remove("active");
+  document.getElementById("btn-en").classList.remove("active");
+  document.getElementById("btn-"+lang).classList.add("active");
+
+  localStorage.setItem("lang", lang);
+
+  // Meta description dinamica
+  if(lang === "en"){
+    document.querySelector("meta[name='description']")
+      .setAttribute("content","Simulate ROI, cashflow and risk before investing in a B&B. Avoid €50,000 mistakes with a professional analysis.");
+  } else {
+    document.querySelector("meta[name='description']")
+      .setAttribute("content","Simula ROI, cashflow e rischio prima di investire in un B&B. Evita errori da 50.000€ con un'analisi professionale.");
+  }
 }
-setLang("it"); // lingua iniziale
+
+function initLang(){
+  const saved = localStorage.getItem("lang");
+  if(saved){
+    setLang(saved);
+  } else {
+    const browserLang = navigator.language.startsWith("en") ? "en" : "it";
+    setLang(browserLang);
+  }
+}
+
+initLang();
+
 </script>
 
 </body>
