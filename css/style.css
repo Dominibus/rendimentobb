@@ -1,114 +1,82 @@
 /* ===================== */
-/* BASE */
+/* BASE RESET */
 /* ===================== */
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 body {
   background: radial-gradient(circle at top, #0f172a 0%, #0b1220 60%, #080f1c 100%);
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 40px 20px;
   color: white;
+}
+
+/* ===================== */
+/* WRAPPER */
+/* ===================== */
+
+.tool-wrapper {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* ===================== */
+/* HEADER */
+/* ===================== */
+
+.tool-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.tool-header h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.tool-header p {
+  color: #94a3b8;
+  font-size: 15px;
 }
 
 /* ===================== */
 /* MAIN CARD */
 /* ===================== */
 
-.container,
-.card {
+.tool-card {
   background: linear-gradient(145deg, #1e293b, #162132);
-  padding: 30px;
+  padding: 35px;
   border-radius: 18px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 
+  box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.6),
     inset 0 0 0 1px rgba(255,255,255,0.03);
-  transition: 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
+  margin-bottom: 30px;
 }
 
 /* ===================== */
-/* TITLES */
+/* GRID */
 /* ===================== */
 
-h1 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
 }
 
-h3 {
-  margin-top: 30px;
-  margin-bottom: 8px;
-  font-size: 15px;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.step-desc {
-  font-size: 13px;
-  color: #cbd5e1;
-  margin-bottom: 12px;
-  opacity: 0.8;
-}
-
-/* ===================== */
-/* LANGUAGE SWITCH */
-/* ===================== */
-
-.lang-switch,
-.language-toggle {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.lang-switch button,
-.language-toggle button {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #334155;
-  background: #0f172a;
-  color: #cbd5e1;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.lang-switch button.active {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: black;
-  border-color: #22c55e;
-}
-
-/* ===================== */
-/* INPUTS */
-/* ===================== */
-
-label {
+.input-group label {
   display: block;
-  margin-top: 18px;
   margin-bottom: 6px;
   font-size: 13px;
   color: #cbd5e1;
 }
 
-input {
+.input-group input {
   width: 100%;
   padding: 11px;
   border-radius: 10px;
@@ -118,20 +86,23 @@ input {
   transition: all 0.2s ease;
 }
 
-input:focus {
+.input-group input:focus {
   outline: none;
   border-color: #22c55e;
   box-shadow: 0 0 0 2px rgba(34,197,94,0.2);
 }
 
 /* ===================== */
-/* BUTTON */
+/* BUTTONS */
 /* ===================== */
 
-button.calculate {
-  width: 100%;
-  margin-top: 25px;
-  padding: 14px;
+.action-area {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.btn-primary {
+  padding: 14px 28px;
   border-radius: 12px;
   border: none;
   background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -143,22 +114,38 @@ button.calculate {
   box-shadow: 0 5px 15px rgba(34,197,94,0.3);
 }
 
-button.calculate:hover {
+.btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(34,197,94,0.5);
+  box-shadow: 0 10px 30px rgba(34,197,94,0.5);
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: #0f172a;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid #334155;
+  transition: 0.25s ease;
+}
+
+.btn-secondary:hover {
+  background: #1e293b;
 }
 
 /* ===================== */
-/* RESULT CARDS */
+/* RESULTS */
 /* ===================== */
 
-.result {
-  margin-top: 30px;
+.results-card {
+  margin-top: 25px;
 }
 
 .result-card {
   background: #0b1220;
-  padding: 18px;
+  padding: 20px;
   border-radius: 14px;
   margin-bottom: 18px;
   border: 1px solid #1f2937;
@@ -166,7 +153,7 @@ button.calculate:hover {
 
 .result-card h4 {
   margin-bottom: 12px;
-  font-size: 14px;
+  font-size: 15px;
   color: #94a3b8;
 }
 
@@ -176,76 +163,76 @@ button.calculate:hover {
 }
 
 /* ===================== */
-/* RISK BAR */
+/* PRO LOCK */
 /* ===================== */
 
-.risk-bar-container {
-  margin-top: 15px;
-  height: 10px;
-  width: 100%;
-  background: #1f2937;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.risk-bar {
-  height: 100%;
-  width: 0%;
-  transition: width 0.8s ease;
-}
-
-/* ===================== */
-/* SECURITY BADGE */
-/* ===================== */
-
-.security-badge {
-  margin-top: 15px;
-  padding: 14px;
-  border-radius: 14px;
+.pro-lock {
+  margin-top: 40px;
+  padding: 30px;
+  background: linear-gradient(145deg, #111827, #0f172a);
+  border-radius: 16px;
+  border: 1px solid #1f2937;
   text-align: center;
-  font-weight: 600;
+}
+
+.pro-lock h2 {
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.pro-lock p {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* ===================== */
+/* BACK LINK */
+/* ===================== */
+
+.back-link {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.back-link a {
+  text-decoration: none;
+  color: #94a3b8;
   font-size: 14px;
 }
 
-.security-safe {
-  background-color: rgba(34, 197, 94, 0.15);
-  border: 1px solid #22c55e;
-  color: #22c55e;
-}
-
-.security-warning {
-  background-color: rgba(234, 179, 8, 0.15);
-  border: 1px solid #eab308;
-  color: #eab308;
-}
-
-.security-danger {
-  background-color: rgba(239, 68, 68, 0.15);
-  border: 1px solid #ef4444;
-  color: #ef4444;
+.back-link a:hover {
+  color: white;
 }
 
 /* ===================== */
-/* PRO BLOCK */
+/* RISK BOX */
 /* ===================== */
 
-.pro-info {
-  margin-top: 25px;
-  padding: 16px;
-  background: #0b1220;
-  border-radius: 14px;
-  border: 1px solid #1f2937;
-  font-size: 13px;
-  color: #94a3b8;
+.risk-box {
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
 }
 
 /* ===================== */
 /* RESPONSIVE */
 /* ===================== */
 
-@media (max-width: 500px) {
-  .container,
-  .card {
+@media (max-width: 768px) {
+
+  body {
     padding: 20px;
   }
+
+  .tool-card {
+    padding: 25px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
