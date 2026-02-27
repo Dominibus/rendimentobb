@@ -1,206 +1,155 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>B&B Investment Risk Analyzer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RendimentoBB – Analisi Investimento B&B</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 30px;
-      border-radius: 15px;
-      width: 460px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.4);
-    }
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 20px;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 22px;
-    }
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
 
-    h3 {
-      margin-top: 25px;
-      margin-bottom: 5px;
-      font-size: 16px;
-      color: #94a3b8;
-    }
+.hero h1 {
+  font-size: 38px;
+  margin-bottom: 20px;
+}
 
-    .step-desc {
-      font-size: 13px;
-      color: #cbd5e1;
-      margin-bottom: 10px;
-    }
+.hero p {
+  font-size: 18px;
+  color: #475569;
+  max-width: 700px;
+  margin: auto;
+}
 
-    .lang-switch {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+.cta {
+  margin-top: 30px;
+}
 
-    .lang-switch button {
-      flex: 1;
-      padding: 6px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      background: #334155;
-      color: white;
-    }
+.cta a {
+  text-decoration: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  margin: 10px;
+  display: inline-block;
+}
 
-    .lang-switch button.active {
-      background: #22c55e;
-      color: black;
-    }
+.btn-primary {
+  background: #22c55e;
+  color: black;
+}
 
-    label {
-      font-size: 14px;
-    }
+.btn-secondary {
+  background: #0f172a;
+  color: white;
+}
 
-    input {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0 15px 0;
-      border-radius: 6px;
-      border: none;
-    }
+.section {
+  padding: 60px 20px;
+}
 
-    button.calculate {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      background: #22c55e;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+.section h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 28px;
+}
 
-    .divider {
-      margin: 20px 0;
-      border: 1px solid #334155;
-    }
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
 
-    .result {
-      margin-top: 20px;
-      font-size: 14px;
-      line-height: 1.6;
-    }
+.feature {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
 
-    .pro-info {
-      margin-top: 20px;
-      padding: 12px;
-      background: #0f172a;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #94a3b8;
-    }
-  </style>
+.price-box {
+  text-align: center;
+  background: #0f172a;
+  color: white;
+  padding: 60px 20px;
+}
+
+.price-box h2 {
+  font-size: 32px;
+}
+
+.footer {
+  text-align: center;
+  padding: 30px;
+  font-size: 14px;
+  color: #64748b;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="card">
+<div class="hero container">
+  <h1>Stai per investire oltre 100.000€ in un B&B?</h1>
+  <p>Calcola il rischio prima di firmare. RendimentoBB analizza ROI, cashflow reale e scenario pessimistico in meno di 2 minuti.</p>
 
-    <div class="lang-switch">
-      <button id="btn-it" onclick="setLanguage('it')" class="active">IT</button>
-      <button id="btn-en" onclick="setLanguage('en')">EN</button>
+  <div class="cta">
+    <a href="tool.html" class="btn-primary">🔎 Prova la simulazione</a>
+    <a href="tool.html" class="btn-secondary">🔓 Sblocca versione PRO – 19€</a>
+  </div>
+</div>
+
+<div class="section container">
+  <h2>Perché serve davvero?</h2>
+
+  <div class="features">
+    <div class="feature">
+      <h3>ROI reale</h3>
+      <p>Calcolo preciso basato su occupazione, tasse e commissioni.</p>
     </div>
 
-    <h1 data-translate="title"></h1>
+    <div class="feature">
+      <h3>Simulazione mutuo</h3>
+      <p>Valuta l'impatto reale della rata sul cashflow.</p>
+    </div>
 
-    <!-- STEP 1 -->
+    <div class="feature">
+      <h3>Stress test automatico</h3>
+      <p>Simula calo prenotazioni, aumento spese e tassi.</p>
+    </div>
 
-    <h3 data-translate="step1Title"></h3>
-    <div class="step-desc" data-translate="step1Desc"></div>
-
-    <label data-translate="priceLabel"></label>
-    <input type="number" id="price" placeholder="90">
-
-    <label data-translate="occupancyLabel"></label>
-    <input type="number" id="occupancy" placeholder="70">
-
-    <label data-translate="expensesLabel"></label>
-    <input type="number" id="expenses" placeholder="800">
-
-    <label data-translate="commissionLabel"></label>
-    <input type="number" id="commission" placeholder="15">
-
-    <label data-translate="taxLabel"></label>
-    <input type="number" id="tax" placeholder="21">
-
-    <hr class="divider">
-
-    <!-- STEP 2 -->
-
-    <h3 data-translate="step2Title"></h3>
-    <div class="step-desc" data-translate="step2Desc"></div>
-    <input type="number" id="propertyPrice" placeholder="180000">
-
-    <h3 data-translate="step3Title"></h3>
-    <div class="step-desc" data-translate="step3Desc"></div>
-    <input type="number" id="equity" placeholder="50000">
-
-    <h3 data-translate="step4Title"></h3>
-    <div class="step-desc" data-translate="step4Desc"></div>
-
-    <label data-translate="loanAmountLabel"></label>
-    <input type="number" id="loanAmount" placeholder="130000">
-
-    <label data-translate="loanRateLabel"></label>
-    <input type="number" id="loanRate" placeholder="3">
-
-    <label data-translate="loanYearsLabel"></label>
-    <input type="number" id="loanYears" placeholder="20">
-
-    <hr class="divider">
-
-    <h3 data-translate="step5Title"></h3>
-    <div class="step-desc" data-translate="step5Desc"></div>
-
-    <label data-translate="familyIncomeLabel"></label>
-    <input type="number" id="familyIncome" placeholder="3500">
-
-    <label data-translate="roiTargetLabel"></label>
-    <input type="number" id="roiTarget" value="8">
-
-    <hr class="divider">
-
-    <h3 data-translate="step6Title"></h3>
-    <div class="step-desc" data-translate="step6Desc"></div>
-
-    <label data-translate="stressOccLabel"></label>
-    <input type="number" id="stressOccupancy" value="-15">
-
-    <label data-translate="stressExpLabel"></label>
-    <input type="number" id="stressExpenses" value="10">
-
-    <label data-translate="stressRateLabel"></label>
-    <input type="number" id="stressRate" value="1">
-
-    <button class="calculate" onclick="calculate()" data-translate="analyzeBtn"></button>
-
-    <div class="result" id="results"></div>
-
-    <div class="pro-info" data-translate="proInfo"></div>
-
+    <div class="feature">
+      <h3>Indice di rischio 0–100</h3>
+      <p>Capisci subito se l’investimento è solido o pericoloso.</p>
+    </div>
   </div>
+</div>
 
-  <script src="js/lang.js"></script>
-  <script src="js/app.js"></script>
+<div class="price-box">
+  <h2>Solo 19€</h2>
+  <p>Per evitare un errore da 50.000€.</p>
+  <br>
+  <a href="tool.html" class="btn-primary">Accedi al tool</a>
+</div>
+
+<div class="footer">
+  © 2026 RendimentoBB – Analisi investimento immobiliare turistico
+</div>
 
 </body>
 </html>
