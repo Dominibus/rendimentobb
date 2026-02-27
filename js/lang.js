@@ -1,3 +1,7 @@
+// ===============================
+// RENDIMENTOBB – LANGUAGE SYSTEM
+// ===============================
+
 const translations = {
   it: {
     title: "Analizzatore Rischio Investimento B&B",
@@ -100,21 +104,49 @@ const translations = {
 
 let currentLang = "it";
 
+// ===============================
+// SET LANGUAGE
+// ===============================
+
 function setLanguage(lang) {
+  if (!translations[lang]) return;
+
   currentLang = lang;
+  localStorage.setItem("rb_lang", lang);
 
   document.querySelectorAll("[data-translate]").forEach(el => {
     const key = el.getAttribute("data-translate");
-    if (translations[lang][key]) {
-      el.innerHTML = translations[lang][key];
+    const translation = translations[lang][key];
+
+    if (!translation) return;
+
+    // Se contiene HTML usa innerHTML
+    if (translation.includes("<br>")) {
+      el.innerHTML = translation;
+    } else {
+      el.textContent = translation;
     }
   });
 
+  // Gestione bottoni lingua (se presenti)
   document.getElementById("btn-it")?.classList.remove("active");
   document.getElementById("btn-en")?.classList.remove("active");
   document.getElementById("btn-" + lang)?.classList.add("active");
 }
 
+// ===============================
+// AUTO LOAD LANGUAGE
+// ===============================
+
 window.addEventListener("DOMContentLoaded", () => {
-  setLanguage("it");
+
+  const savedLang = localStorage.getItem("rb_lang");
+
+  if (savedLang && translations[savedLang]) {
+    setLanguage(savedLang);
+  } else {
+    const browserLang = navigator.language.startsWith("en") ? "en" : "it";
+    setLanguage(browserLang);
+  }
+
 });
