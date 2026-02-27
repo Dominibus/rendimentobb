@@ -79,65 +79,15 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 }
 
 // ===============================
-// CALCULATE (SAFE VERSION)
+// CALCULATE
 // ===============================
 
 function calculate() {
 
-  const loader = document.getElementById("analysisLoader");
-  const progress = document.getElementById("loaderProgress");
-  const text = document.getElementById("loaderText");
   const resultsDiv = document.getElementById("results");
-
   if (!resultsDiv) return;
 
-  // Se loader NON esiste → calcolo diretto
-  if (!loader) {
-    runRealCalculation();
-    return;
-  }
-
-  resultsDiv.style.display = "none";
-  loader.style.display = "block";
-
-  if (progress) progress.style.width = "0%";
-
-  const steps = [
-    "Analyzing investment structure...",
-    "Simulating revenue projections...",
-    "Calculating mortgage amortization...",
-    "Evaluating financial leverage...",
-    "Generating professional output..."
-  ];
-
-  let current = 0;
-
-  const interval = setInterval(() => {
-
-    if (progress) {
-      progress.style.width = ((current + 1) * 20) + "%";
-    }
-
-    if (text) {
-      text.innerText = steps[current];
-    }
-
-    current++;
-
-    if (current === steps.length) {
-
-      clearInterval(interval);
-
-      setTimeout(() => {
-
-        loader.style.display = "none";
-        resultsDiv.style.display = "block";
-        runRealCalculation();
-
-      }, 600);
-    }
-
-  }, 400);
+  runRealCalculation();
 }
 
 // ===============================
@@ -200,6 +150,37 @@ function runRealCalculation() {
   const roi5Years = baseROI * 5;
   const breakEvenYears = netAfterMortgage > 0 ? equity / netAfterMortgage : 0;
 
+  // ===============================
+  // RISK SCORE ENGINE
+  // ===============================
+
+  const loanRatio = propertyPrice ? (loanAmount / propertyPrice) * 100 : 0;
+
+  let riskPoints = 0;
+
+  if (baseROI < 8) riskPoints += 2;
+  else if (baseROI < 15) riskPoints += 1;
+
+  if (breakEvenYears > 10) riskPoints += 2;
+  else if (breakEvenYears > 6) riskPoints += 1;
+
+  if (loanRatio > 85) riskPoints += 2;
+  else if (loanRatio > 70) riskPoints += 1;
+
+  if (occupancy < 55) riskPoints += 2;
+  else if (occupancy < 65) riskPoints += 1;
+
+  let riskLabel = "LOW";
+  let riskColor = "#22c55e";
+
+  if (riskPoints >= 6) {
+    riskLabel = "HIGH";
+    riskColor = "#ef4444";
+  } else if (riskPoints >= 3) {
+    riskLabel = "MEDIUM";
+    riskColor = "#f59e0b";
+  }
+
   lastAnalysisData = {
     propertyPrice,
     equity,
@@ -212,7 +193,8 @@ function runRealCalculation() {
     netAfterMortgage,
     baseROI,
     roi5Years,
-    breakEvenYears
+    breakEvenYears,
+    riskLabel
   };
 
   output += `
@@ -220,6 +202,25 @@ function runRealCalculation() {
       <h4>📊 Analisi Strategica PRO</h4>
       <div>ROI 5 anni: <strong>${roi5Years.toFixed(2)}%</strong></div>
       <div>Break-even reale: <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
+
+      <div style="
+        margin-top:18px;
+        padding:14px;
+        border-radius:12px;
+        background:rgba(255,255,255,0.03);
+        border:1px solid rgba(255,255,255,0.08);
+      ">
+        <div style="font-size:13px; opacity:0.7;">Investment Risk Score</div>
+        <div style="
+          font-size:22px;
+          font-weight:700;
+          color:${riskColor};
+          margin-top:6px;
+        ">
+          ${riskLabel}
+        </div>
+      </div>
+
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
         📄 Genera Report PDF Professionale
       </button>
@@ -227,4 +228,53 @@ function runRealCalculation() {
   `;
 
   resultsDiv.innerHTML = output;
+}
+
+// ===============================
+// GENERAZIONE PDF
+// ===============================
+
+async function generatePDF() {
+
+  if (!lastAnalysisData) return;
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const margin = 20;
+  let y = 25;
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text("RendimentoBB - Report Professionale", margin, y);
+
+  y += 12;
+
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(11);
+
+  const lines = [
+    `Prezzo immobile: ${formatCurrency(lastAnalysisData.propertyPrice)}`,
+    `Capitale proprio: ${formatCurrency(lastAnalysisData.equity)}`,
+    `Importo mutuo: ${formatCurrency(lastAnalysisData.loanAmount)}`,
+    `Tasso: ${lastAnalysisData.interestRate}%`,
+    `Durata: ${lastAnalysisData.loanYears} anni`,
+    "",
+    `Fatturato annuo: ${formatCurrency(lastAnalysisData.grossYearly)}`,
+    `Utile netto operativo: ${formatCurrency(lastAnalysisData.netYearly)}`,
+    `Utile netto dopo mutuo: ${formatCurrency(lastAnalysisData.netAfterMortgage)}`,
+    "",
+    `ROI con leva: ${lastAnalysisData.baseROI.toFixed(2)}%`,
+    `ROI 5 anni: ${lastAnalysisData.roi5Years.toFixed(2)}%`,
+    `Break-even: ${lastAnalysisData.breakEvenYears ? lastAnalysisData.breakEvenYears.toFixed(1) : "-"} anni`,
+    "",
+    `Investment Risk Score: ${lastAnalysisData.riskLabel}`
+  ];
+
+  lines.forEach(line => {
+    pdf.text(line, margin, y);
+    y += 7;
+  });
+
+  pdf.save("Report_RendimentoBB_Pro.pdf");
 }
