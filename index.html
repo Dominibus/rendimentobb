@@ -109,7 +109,6 @@
       font-size: 13px;
       color: #94a3b8;
     }
-
   </style>
 </head>
 <body>
@@ -121,106 +120,82 @@
       <button id="btn-en" onclick="setLanguage('en')">EN</button>
     </div>
 
-    <h1 id="title">Analizzatore Rischio Investimento B&B</h1>
+    <h1 data-translate="title"></h1>
 
     <!-- STEP 1 -->
 
-    <h3>🪜 STEP 1 – Come funzionerà il tuo B&B?</h3>
-    <div class="step-desc">
-      Inserisci le stime realistiche della tua attività.
-    </div>
+    <h3 data-translate="step1Title"></h3>
+    <div class="step-desc" data-translate="step1Desc"></div>
 
-    <label>Prezzo medio a notte (€)</label>
+    <label data-translate="priceLabel"></label>
     <input type="number" id="price" placeholder="90">
 
-    <label>Occupazione media (%)</label>
+    <label data-translate="occupancyLabel"></label>
     <input type="number" id="occupancy" placeholder="70">
 
-    <label>Spese mensili (€)</label>
+    <label data-translate="expensesLabel"></label>
     <input type="number" id="expenses" placeholder="800">
 
-    <label>Commissioni piattaforme (%)</label>
+    <label data-translate="commissionLabel"></label>
     <input type="number" id="commission" placeholder="15">
 
-    <label>Tasse (%)</label>
+    <label data-translate="taxLabel"></label>
     <input type="number" id="tax" placeholder="21">
 
     <hr class="divider">
 
     <!-- STEP 2 -->
 
-    <h3>🏠 STEP 2 – Quanto costa l’immobile?</h3>
-    <div class="step-desc">
-      Inserisci il prezzo totale della casa che vuoi acquistare.
-    </div>
-
+    <h3 data-translate="step2Title"></h3>
+    <div class="step-desc" data-translate="step2Desc"></div>
     <input type="number" id="propertyPrice" placeholder="180000">
 
-    <h3>💰 STEP 3 – Quanto investi di tasca tua?</h3>
-    <div class="step-desc">
-      Somma che puoi utilizzare senza chiedere un mutuo.
-    </div>
-
+    <h3 data-translate="step3Title"></h3>
+    <div class="step-desc" data-translate="step3Desc"></div>
     <input type="number" id="equity" placeholder="50000">
 
-    <h3>🏦 STEP 4 – Simulazione Mutuo</h3>
-    <div class="step-desc">
-      Se non sai l’importo del mutuo, fai: Prezzo immobile - capitale proprio.
-    </div>
+    <h3 data-translate="step4Title"></h3>
+    <div class="step-desc" data-translate="step4Desc"></div>
 
-    <label>Importo mutuo (€)</label>
+    <label data-translate="loanAmountLabel"></label>
     <input type="number" id="loanAmount" placeholder="130000">
 
-    <label>Tasso mutuo (%)</label>
+    <label data-translate="loanRateLabel"></label>
     <input type="number" id="loanRate" placeholder="3">
 
-    <label>Durata mutuo (anni)</label>
+    <label data-translate="loanYearsLabel"></label>
     <input type="number" id="loanYears" placeholder="20">
 
     <hr class="divider">
 
-    <!-- STEP 5 -->
+    <h3 data-translate="step5Title"></h3>
+    <div class="step-desc" data-translate="step5Desc"></div>
 
-    <h3>📊 STEP 5 – Situazione personale</h3>
-    <div class="step-desc">
-      Serve per capire se l’investimento è sostenibile per te.
-    </div>
-
-    <label>Reddito familiare mensile (€)</label>
+    <label data-translate="familyIncomeLabel"></label>
     <input type="number" id="familyIncome" placeholder="3500">
 
-    <label>ROI target desiderato (%)</label>
+    <label data-translate="roiTargetLabel"></label>
     <input type="number" id="roiTarget" value="8">
 
     <hr class="divider">
 
-    <!-- STRESS TEST -->
+    <h3 data-translate="step6Title"></h3>
+    <div class="step-desc" data-translate="step6Desc"></div>
 
-    <h3>⚠️ STEP 6 – Scenario Pessimistico</h3>
-    <div class="step-desc">
-      Simuliamo cosa succede se le cose vanno peggio del previsto.
-    </div>
-
-    <label>Riduzione occupazione (%)</label>
+    <label data-translate="stressOccLabel"></label>
     <input type="number" id="stressOccupancy" value="-15">
 
-    <label>Aumento spese (%)</label>
+    <label data-translate="stressExpLabel"></label>
     <input type="number" id="stressExpenses" value="10">
 
-    <label>Aumento tasso mutuo (%)</label>
+    <label data-translate="stressRateLabel"></label>
     <input type="number" id="stressRate" value="1">
 
-    <button class="calculate" onclick="calculate()">Analizza Rischio Investimento</button>
+    <button class="calculate" onclick="calculate()" data-translate="analyzeBtn"></button>
 
     <div class="result" id="results"></div>
 
-    <div class="pro-info">
-      🔒 Questo strumento ti aiuta a:
-      <br>• Evitare investimenti rischiosi
-      <br>• Capire l’impatto reale sul tuo reddito
-      <br>• Stimare la solidità finanziaria
-      <br>• Simulare scenari negativi
-    </div>
+    <div class="pro-info" data-translate="proInfo"></div>
 
   </div>
 
