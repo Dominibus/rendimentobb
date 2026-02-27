@@ -20,7 +20,7 @@ if (urlParams.get("pro") === "paid") {
   window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-// 🔥 STRIPE LINK
+// STRIPE LINK
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
@@ -59,6 +59,12 @@ function getValue(id) {
   const val = parseFloat(el.value);
   return isNaN(val) ? 0 : val;
 }
+
+// ===============================
+// GLOBAL CHART INSTANCE
+// ===============================
+
+let cashflowChartInstance = null;
 
 // ===============================
 // CALCULATE
@@ -112,14 +118,11 @@ function calculate() {
 
   output += `
     <div class="result-card">
-      <h4>📊 ${currentLang === "it" ? "Analisi Base" : "Base Analysis"}</h4>
-
+      <h4>📊 Analisi Base</h4>
       <div>Fatturato annuo:
       <strong>${formatCurrency(grossYearly)}</strong></div>
-
       <div>Utile netto annuo:
       <strong>${formatCurrency(netYearly)}</strong></div>
-
       <div>ROI stimato:
       <strong>${baseROI.toFixed(2)}%</strong></div>
     </div>
@@ -155,7 +158,7 @@ function calculate() {
   }
 
   // =========================
-  // PRO ANALYSIS
+  // PRO CALCULATIONS
   // =========================
 
   const roi5Years = baseROI * 5;
@@ -167,7 +170,6 @@ function calculate() {
   const marginPercentage =
     grossYearly > 0 ? (netYearly / grossYearly) * 100 : 0;
 
-  // Stress Test serio
   const stressedOccupancy = occupancy * 0.8;
   const stressedExpenses = yearlyExpenses * 1.1;
 
@@ -180,7 +182,6 @@ function calculate() {
   const stressedCashflow =
     stressedProfit > 0 ? stressedProfit * 0.85 : stressedProfit;
 
-  // RISK SCORE AVANZATO
   let riskScore = 100;
 
   if (baseROI < 5) riskScore -= 25;
@@ -194,6 +195,10 @@ function calculate() {
     riskScore > 75 ? "#16a34a"
     : riskScore > 50 ? "#eab308"
     : "#dc2626";
+
+  // =========================
+  // PRO OUTPUT
+  // =========================
 
   output += `
     <div class="result-card">
@@ -219,12 +224,8 @@ function calculate() {
       Indice di rischio: ${riskScore}/100
     </div>
 
-    <div style="margin-top:15px;padding:12px;border-radius:8px;background:#0f172a;border:1px solid #334155;font-size:13px;color:#94a3b8;">
-      Analisi calcolata su:
-      • 360 giorni operativi
-      • Scenario stress -20% occupazione
-      • Aumento costi +10%
-      • Simulazione fiscale indicativa
+    <div style="margin-top:25px;">
+      <canvas id="cashflowChart"></canvas>
     </div>
 
     <div style="margin-top:15px;padding:12px;border-radius:8px;background:#052e16;color:#86efac;font-size:13px;text-align:center;">
@@ -234,4 +235,70 @@ function calculate() {
 
   resultsDiv.innerHTML = output;
   resultsDiv.scrollIntoView({ behavior: "smooth" });
+
+  // =========================
+  // RENDER CHART
+  // =========================
+
+  const ctx = document.getElementById("cashflowChart");
+
+  if (ctx) {
+
+    if (cashflowChartInstance) {
+      cashflowChartInstance.destroy();
+    }
+
+    const years = [1,2,3,4,5];
+    const cumulative = [];
+    let total = 0;
+
+    for (let i = 1; i <= 5; i++) {
+      total += netYearly;
+      cumulative.push(total);
+    }
+
+    cashflowChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: years.map(y => "Anno " + y),
+        datasets: [
+          {
+            label: 'Cashflow cumulativo',
+            data: cumulative,
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34,197,94,0.15)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: 'Capitale investito',
+            data: Array(5).fill(equity),
+            borderColor: '#dc2626',
+            borderDash: [6,6],
+            tension: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#ffffff'
+            }
+          }
+        },
+        scales: {
+          y: {
+            ticks: { color: '#94a3b8' },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          },
+          x: {
+            ticks: { color: '#94a3b8' },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          }
+        }
+      }
+    });
+  }
 }
