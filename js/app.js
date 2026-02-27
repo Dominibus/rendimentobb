@@ -77,7 +77,9 @@ function runRealCalculation() {
   const chartCanvas = document.getElementById("roiChart");
 
   if (!price || !occupancy || !equity) {
-    resultsDiv.innerHTML = "Inserisci valori validi.";
+    resultsDiv.innerHTML = currentLang === "it"
+      ? "Inserisci valori validi."
+      : "Please enter valid values.";
     return;
   }
 
@@ -96,8 +98,20 @@ function runRealCalculation() {
   let baseROI = (netAfterMortgage / equity) * 100;
   if (!isFinite(baseROI)) baseROI = 0;
 
-  // Scenario pessimistico
-  const pessimisticROI = baseROI - 5;
+  // Scenario realistico: -10% occupazione
+  const pessimisticOccupancy = occupancy * 0.9;
+  const pessimisticNights = 30 * (pessimisticOccupancy / 100);
+  const pessimisticGross = price * pessimisticNights * 12;
+  const pessimisticFees = pessimisticGross * (commission / 100);
+  const pessimisticProfit = pessimisticGross - pessimisticFees - yearlyExpenses;
+  const pessimisticTax = pessimisticProfit > 0 ? pessimisticProfit * (tax / 100) : 0;
+  const pessimisticNet = pessimisticProfit - pessimisticTax - mortgage.yearlyPayment;
+  const pessimisticROI = (pessimisticNet / equity) * 100;
+
+  // Risk semplice
+  let riskLabel = "LOW";
+  if (baseROI < 6) riskLabel = "HIGH";
+  else if (baseROI < 12) riskLabel = "MEDIUM";
 
   lastAnalysisData = {
     propertyPrice,
@@ -106,16 +120,18 @@ function runRealCalculation() {
     netYearly,
     netAfterMortgage,
     baseROI,
-    pessimisticROI
+    pessimisticROI,
+    riskLabel
   };
 
   resultsDiv.innerHTML = `
     <div class="result-card">
-      <h4>📊 Analisi Strategica</h4>
-      <div>ROI attuale: <strong>${baseROI.toFixed(2)}%</strong></div>
-      <div>Scenario pessimistico: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
+      <h4>📊 ${currentLang === "it" ? "Analisi Strategica" : "Strategic Analysis"}</h4>
+      <div>ROI: <strong>${baseROI.toFixed(2)}%</strong></div>
+      <div>${currentLang === "it" ? "Scenario pessimistico" : "Pessimistic scenario"}: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
+      <div>Risk: <strong>${riskLabel}</strong></div>
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
-        📄 Genera Report Strategico
+        📄 ${currentLang === "it" ? "Genera Report Strategico" : "Generate Strategic Report"}
       </button>
     </div>
   `;
@@ -123,6 +139,8 @@ function runRealCalculation() {
   // ===============================
   // GRAFICO ROI
   // ===============================
+
+  if (!chartCanvas) return;
 
   chartCanvas.style.display = "block";
 
@@ -133,7 +151,9 @@ function runRealCalculation() {
   roiChartInstance = new Chart(chartCanvas, {
     type: 'bar',
     data: {
-      labels: ['ROI Attuale', 'Scenario Pessimistico'],
+      labels: currentLang === "it"
+        ? ['ROI Attuale', 'Scenario Pessimistico']
+        : ['Current ROI', 'Pessimistic Scenario'],
       datasets: [{
         label: 'ROI %',
         data: [baseROI, pessimisticROI],
@@ -142,15 +162,13 @@ function runRealCalculation() {
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { display: false }
-      }
+      plugins: { legend: { display: false } }
     }
   });
 }
 
 // ===============================
-// PDF CON GRAFICO
+// PDF PROFESSIONALE BILINGUE
 // ===============================
 
 async function generatePDF() {
@@ -160,24 +178,71 @@ async function generatePDF() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "mm", "a4");
 
+  const d = lastAnalysisData;
+  const isIT = currentLang === "it";
+
   let y = 20;
 
-  pdf.setFontSize(18);
-  pdf.text("RendimentoBB - Strategic Report", 20, y);
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(20);
+  pdf.text(
+    isIT
+      ? "RendimentoBB - Report Strategico"
+      : "RendimentoBB - Strategic Investment Report",
+    20,
+    y
+  );
 
-  y += 15;
-  pdf.setFontSize(12);
+  y += 12;
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(11);
 
-  pdf.text(`ROI Attuale: ${lastAnalysisData.baseROI.toFixed(2)}%`, 20, y);
-  y += 8;
-  pdf.text(`Scenario Pessimistico: ${lastAnalysisData.pessimisticROI.toFixed(2)}%`, 20, y);
+  const interpretation =
+    d.baseROI < 6
+      ? isIT
+        ? "Il rendimento è basso e l'operazione presenta elevata sensibilità operativa."
+        : "Return is low and the operation shows high operational sensitivity."
+      : d.baseROI < 12
+      ? isIT
+        ? "Il rendimento è bilanciato ma dipende dalla stabilità dell'occupazione."
+        : "Return is balanced but dependent on occupancy stability."
+      : isIT
+        ? "Il rendimento è elevato ma potrebbe implicare maggiore rischio."
+        : "Return is strong but may imply higher risk exposure.";
 
-  y += 15;
+  const summary = isIT
+    ? `
+EXECUTIVE SUMMARY
 
-  // Inserimento grafico nel PDF
+ROI annuo stimato: ${d.baseROI.toFixed(2)}%.
+Scenario pessimistico (-10% occupazione): ${d.pessimisticROI.toFixed(2)}%.
+
+${interpretation}
+
+Livello di rischio: ${d.riskLabel}.
+`
+    : `
+EXECUTIVE SUMMARY
+
+Estimated annual ROI: ${d.baseROI.toFixed(2)}%.
+Pessimistic scenario (-10% occupancy): ${d.pessimisticROI.toFixed(2)}%.
+
+${interpretation}
+
+Risk level: ${d.riskLabel}.
+`;
+
+  const lines = pdf.splitTextToSize(summary, 170);
+  pdf.text(lines, 20, y);
+
+  y += lines.length * 6 + 10;
+
+  // GRAFICO
   const chartCanvas = document.getElementById("roiChart");
-  const chartImage = chartCanvas.toDataURL("image/png", 1.0);
-  pdf.addImage(chartImage, 'PNG', 20, y, 170, 80);
+  if (chartCanvas) {
+    const chartImage = chartCanvas.toDataURL("image/png", 1.0);
+    pdf.addImage(chartImage, 'PNG', 20, y, 170, 80);
+  }
 
   pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
