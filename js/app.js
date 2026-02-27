@@ -1,28 +1,10 @@
-let isProUnlocked = false;
-const DEFAULT_TARGET_ROI = 8;
-
-function unlockPro() {
-  const code = prompt(currentLang === "it"
-    ? "Inserisci il codice di accesso PRO:"
-    : "Enter PRO access code:");
-
-  if (code === "BBPRO2025") {
-    isProUnlocked = true;
-    alert(currentLang === "it"
-      ? "PRO sbloccato con successo!"
-      : "PRO unlocked successfully!");
-  } else {
-    alert(currentLang === "it"
-      ? "Codice non valido."
-      : "Invalid code.");
-  }
-}
+let isProUnlocked = true; // lasciamo attivo per ora
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat(
-    currentLang === "it" ? "it-IT" : "en-US",
-    { style: "currency", currency: "EUR" }
-  ).format(value);
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR"
+  }).format(value);
 }
 
 function calculate() {
@@ -33,29 +15,29 @@ function calculate() {
   const commission = parseFloat(document.getElementById("commission").value);
   const tax = parseFloat(document.getElementById("tax").value);
 
+  const propertyPrice = parseFloat(document.getElementById("propertyPrice").value);
   const equity = parseFloat(document.getElementById("equity").value);
   const loanAmount = parseFloat(document.getElementById("loanAmount").value);
   const loanRate = parseFloat(document.getElementById("loanRate").value);
   const loanYears = parseFloat(document.getElementById("loanYears").value);
 
-  const familyIncome = parseFloat(document.getElementById("familyIncome")?.value);
-  const stressOccupancy = parseFloat(document.getElementById("stressOccupancy")?.value);
-  const stressExpenses = parseFloat(document.getElementById("stressExpenses")?.value);
-  const stressRate = parseFloat(document.getElementById("stressRate")?.value);
+  const familyIncome = parseFloat(document.getElementById("familyIncome").value);
+  const roiTarget = parseFloat(document.getElementById("roiTarget").value);
 
-  const roiTargetInput = document.getElementById("roiTarget");
-  const TARGET_ROI = roiTargetInput && roiTargetInput.value
-    ? parseFloat(roiTargetInput.value)
-    : DEFAULT_TARGET_ROI;
+  const stressOccupancy = parseFloat(document.getElementById("stressOccupancy").value);
+  const stressExpenses = parseFloat(document.getElementById("stressExpenses").value);
+  const stressRate = parseFloat(document.getElementById("stressRate").value);
 
   const resultsDiv = document.getElementById("results");
 
   if (isNaN(price) || isNaN(occupancy) || isNaN(expenses) || isNaN(commission) || isNaN(tax)) {
-    resultsDiv.innerHTML = translations[currentLang].invalidValues;
+    resultsDiv.innerHTML = "Inserisci valori validi.";
     return;
   }
 
-  // ================= BASE BUSINESS =================
+  // =========================
+  // BASE BUSINESS
+  // =========================
 
   const nights = 30 * (occupancy / 100);
   const gross = price * nights;
@@ -65,7 +47,9 @@ function calculate() {
   const netMonthly = profitBeforeTax - taxes;
   const netYearly = netMonthly * 12;
 
-  // ================= LOAN =================
+  // =========================
+  // MUTUO
+  // =========================
 
   let monthlyLoanPayment = 0;
 
@@ -79,8 +63,7 @@ function calculate() {
       (Math.pow(1 + monthlyRate, totalPayments) - 1);
   }
 
-  const yearlyLoanCost = monthlyLoanPayment * 12;
-  const realYearlyCashflow = netYearly - yearlyLoanCost;
+  const realYearlyCashflow = netYearly - (monthlyLoanPayment * 12);
 
   let roi = 0;
   let breakEvenYears = -1;
@@ -92,102 +75,99 @@ function calculate() {
     }
   }
 
-  let baseOutput = `
-    <div>
-      ${currentLang === "it" ? "Guadagno netto annuale:" : "Net yearly profit:"}
-      <strong>${formatCurrency(netYearly)}</strong>
-    </div>
-  `;
+  // =========================
+  // STRESS TEST
+  // =========================
 
-  let proOutput = "";
+  const stressedOcc = occupancy + (occupancy * stressOccupancy / 100);
+  const stressedExp = expenses + (expenses * stressExpenses / 100);
+  const stressedRate = loanRate + stressRate;
 
-  if (isProUnlocked) {
+  const stressedNights = 30 * (stressedOcc / 100);
+  const stressedGross = price * stressedNights;
+  const stressedFees = stressedGross * (commission / 100);
+  const stressedProfit = stressedGross - stressedExp - stressedFees;
+  const stressedTaxes = stressedProfit > 0 ? stressedProfit * (tax / 100) : 0;
+  const stressedNetYearly = (stressedProfit - stressedTaxes) * 12;
 
-    // ================= STRESS TEST =================
+  let stressedLoan = 0;
 
-    const stressedOccupancy = occupancy + (occupancy * (stressOccupancy || 0) / 100);
-    const stressedExpenses = expenses + (expenses * (stressExpenses || 0) / 100);
-    const stressedRate = loanRate + (stressRate || 0);
-
-    const stressedNights = 30 * (stressedOccupancy / 100);
-    const stressedGross = price * stressedNights;
-    const stressedFees = stressedGross * (commission / 100);
-    const stressedProfit = stressedGross - stressedExpenses - stressedFees;
-    const stressedTaxes = stressedProfit > 0 ? stressedProfit * (tax / 100) : 0;
-    const stressedNetYearly = (stressedProfit - stressedTaxes) * 12;
-
-    let stressedMonthlyLoan = 0;
-
-    if (loanAmount && stressedRate > 0 && loanYears > 0) {
-      const mRate = (stressedRate / 100) / 12;
-      const totalPayments = loanYears * 12;
-      stressedMonthlyLoan =
-        loanAmount *
-        (mRate * Math.pow(1 + mRate, totalPayments)) /
-        (Math.pow(1 + mRate, totalPayments) - 1);
-    }
-
-    const stressedCashflow = stressedNetYearly - (stressedMonthlyLoan * 12);
-
-    // ================= IMPACT ON FAMILY =================
-
-    let incomeImpact = 0;
-    if (!isNaN(familyIncome) && familyIncome > 0) {
-      incomeImpact = Math.abs(stressedCashflow / (familyIncome * 12)) * 100;
-    }
-
-    // ================= ZONA SICUREZZA =================
-
-    let securityZone = "SICURA";
-    let securityClass = "positive";
-    let explanation = "";
-
-    if (realYearlyCashflow < 0 || stressedCashflow < 0) {
-      securityZone = "PERICOLOSA";
-      securityClass = "negative";
-      explanation = "Cashflow negativo in scenario reale o critico.";
-    } else if (incomeImpact > 20 || roi < TARGET_ROI) {
-      securityZone = "ATTENZIONE";
-      securityClass = "negative";
-      explanation = "Margini deboli o impatto elevato sul reddito familiare.";
-    } else {
-      explanation = "Investimento finanziariamente sostenibile anche in scenario prudenziale.";
-    }
-
-    proOutput = `
-      <br>
-      <div>ROI: ${roi.toFixed(2)} %</div>
-      <div>Break-even: ${breakEvenYears > 0 ? breakEvenYears.toFixed(1) + " anni" : "-"}</div>
-
-      <hr style="margin:15px 0; border:1px solid #334155;">
-
-      <div><strong>Stress Test</strong></div>
-      <div>Cashflow scenario critico: ${formatCurrency(stressedCashflow)}</div>
-      <div>Impatto su reddito familiare: ${incomeImpact.toFixed(1)} %</div>
-
-      <hr style="margin:15px 0; border:1px solid #334155;">
-
-      <div class="${securityClass}">
-        <strong>Zona Sicurezza Investimento: ${securityZone}</strong>
-      </div>
-
-      <div style="margin-top:5px;">
-        ${explanation}
-      </div>
-    `;
-  } else {
-
-    proOutput = `
-      <br>
-      <div style="color:#94a3b8;">
-        Sblocca PRO per stress test avanzato e zona sicurezza investimento.
-      </div>
-      <br>
-      <button onclick="unlockPro()" class="calculate">
-        Sblocca PRO (€19)
-      </button>
-    `;
+  if (loanAmount && stressedRate > 0 && loanYears > 0) {
+    const mRate = (stressedRate / 100) / 12;
+    const totalPayments = loanYears * 12;
+    stressedLoan =
+      loanAmount *
+      (mRate * Math.pow(1 + mRate, totalPayments)) /
+      (Math.pow(1 + mRate, totalPayments) - 1);
   }
 
-  resultsDiv.innerHTML = baseOutput + proOutput;
+  const stressedCashflow = stressedNetYearly - (stressedLoan * 12);
+
+  // =========================
+  // INDICE RISCHIO
+  // =========================
+
+  let riskScore = 100;
+
+  if (realYearlyCashflow < 0) riskScore -= 30;
+
+  if (roi < 0) {
+    riskScore -= 25;
+  } else if (roi < 5) {
+    riskScore -= 15;
+  }
+
+  if (breakEvenYears > 20) riskScore -= 15;
+
+  if (stressedCashflow < 0) riskScore -= 20;
+
+  if (familyIncome > 0 && monthlyLoanPayment / familyIncome > 0.35) {
+    riskScore -= 20;
+  }
+
+  if (riskScore < 0) riskScore = 0;
+
+  let riskLabel = "";
+  let riskColor = "";
+
+  if (riskScore >= 80) {
+    riskLabel = "🟢 Investimento Solido";
+    riskColor = "#22c55e";
+  } else if (riskScore >= 60) {
+    riskLabel = "🟡 Zona Attenzione";
+    riskColor = "#eab308";
+  } else if (riskScore >= 40) {
+    riskLabel = "🟠 Investimento Rischioso";
+    riskColor = "#f97316";
+  } else {
+    riskLabel = "🔴 Investimento Pericoloso";
+    riskColor = "#ef4444";
+  }
+
+  // =========================
+  // OUTPUT
+  // =========================
+
+  resultsDiv.innerHTML = `
+    <hr>
+    <h3>📊 Risultato Analisi</h3>
+
+    <div>Guadagno netto annuo: <strong>${formatCurrency(netYearly)}</strong></div>
+    <div>Cashflow reale annuo: <strong>${formatCurrency(realYearlyCashflow)}</strong></div>
+    <div>ROI: <strong>${roi.toFixed(2)} %</strong></div>
+    <div>Break-even: <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) + " anni" : "-"}</strong></div>
+
+    <hr>
+
+    <div>Cashflow scenario pessimistico: <strong>${formatCurrency(stressedCashflow)}</strong></div>
+
+    <hr>
+
+    <div style="font-size:18px; margin-top:10px; color:${riskColor};">
+      <strong>Indice Rischio: ${riskScore}/100</strong>
+    </div>
+    <div style="font-weight:bold; color:${riskColor};">
+      ${riskLabel}
+    </div>
+  `;
 }
