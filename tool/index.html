@@ -19,48 +19,77 @@
       <button id="btn-en" onclick="setLanguage('en')">EN</button>
     </div>
 
-    <h1>📊 Simulatore Rendimento B&B</h1>
-    <p>
-      Inserisci pochi dati reali e scopri se il tuo investimento è davvero sostenibile.
-    </p>
+    <h1 data-it="📊 Simulatore Rendimento B&B"
+        data-en="📊 B&B Investment Simulator"></h1>
+
+    <p data-it="Inserisci dati realistici e scopri se il tuo investimento è sostenibile."
+       data-en="Enter realistic data and discover if your investment is sustainable."></p>
   </div>
 
   <!-- FORM -->
   <div class="tool-card">
 
+    <h3 data-it="💰 Investimento"
+        data-en="💰 Investment"></h3>
+
     <div class="form-grid">
 
       <div class="input-group">
-        <label>Prezzo medio notte (€)</label>
+        <label data-it="Prezzo immobile (€)"
+               data-en="Property price (€)"></label>
+        <input type="number" id="propertyPrice" placeholder="Es. 100000">
+      </div>
+
+      <div class="input-group">
+        <label data-it="Capitale proprio investito (€)"
+               data-en="Own capital invested (€)"></label>
+        <input type="number" id="equity" placeholder="Es. 40000">
+      </div>
+
+    </div>
+
+    <h3 style="margin-top:30px"
+        data-it="🏨 Operatività"
+        data-en="🏨 Operations"></h3>
+
+    <div class="form-grid">
+
+      <div class="input-group">
+        <label data-it="Prezzo medio notte (€)"
+               data-en="Average price per night (€)"></label>
         <input type="number" id="price" placeholder="Es. 120">
       </div>
 
       <div class="input-group">
-        <label>Occupazione media (%)</label>
+        <label data-it="Occupazione media (%)"
+               data-en="Average occupancy (%)"></label>
         <input type="number" id="occupancy" placeholder="Es. 70">
       </div>
 
       <div class="input-group">
-        <label>Spese mensili (€)</label>
+        <label data-it="Spese mensili (€)"
+               data-en="Monthly expenses (€)"></label>
         <input type="number" id="expenses" placeholder="Es. 1500">
       </div>
 
       <div class="input-group">
-        <label>Commissioni piattaforme (%)</label>
+        <label data-it="Commissioni piattaforme (%)"
+               data-en="Platform commissions (%)"></label>
         <input type="number" id="commission" placeholder="Es. 15">
       </div>
 
       <div class="input-group">
-        <label>Tasse (%)</label>
+        <label data-it="Tasse (%)"
+               data-en="Taxes (%)"></label>
         <input type="number" id="tax" placeholder="Es. 21">
       </div>
 
     </div>
 
     <div class="action-area">
-      <button onclick="calculate()" class="btn-primary">
-        Analizza investimento
-      </button>
+      <button onclick="calculate()" class="btn-primary"
+              data-it="Analizza investimento"
+              data-en="Analyze investment"></button>
     </div>
 
   </div>
@@ -69,19 +98,27 @@
   <div id="results" class="results-card"></div>
 
   <!-- PRO BLOCK -->
-  <div class="pro-lock">
-    <h2>🔓 Vuoi l’analisi avanzata?</h2>
-    <p>
-      Sblocca:
-      <br>• Simulazione mutuo completa
-      <br>• Stress test pessimistico
-      <br>• ROI dettagliato
-      <br>• Indice di rischio avanzato
-    </p>
+  <div id="proBlock" class="pro-lock">
+    <h2 data-it="🔓 Vuoi l’analisi avanzata?"
+        data-en="🔓 Want advanced analysis?"></h2>
 
-    <button onclick="unlockPro()" class="btn-secondary">
-      Sblocca versione PRO – 19€
-    </button>
+    <p data-it="Sblocca:"
+       data-en="Unlock:"></p>
+
+    <ul style="text-align:left; max-width:400px; margin:15px auto;">
+      <li data-it="Simulazione mutuo completa"
+          data-en="Full mortgage simulation"></li>
+      <li data-it="Stress test pessimistico"
+          data-en="Pessimistic stress test"></li>
+      <li data-it="ROI a 5 anni"
+          data-en="5-year ROI"></li>
+      <li data-it="Indice rischio 0–100"
+          data-en="Risk index 0–100"></li>
+    </ul>
+
+    <button onclick="unlockPro()" class="btn-secondary"
+            data-it="Sblocca versione PRO – 19€"
+            data-en="Unlock PRO version – €19"></button>
   </div>
 
   <!-- BACK -->
