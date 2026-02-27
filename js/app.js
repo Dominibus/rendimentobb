@@ -6,20 +6,6 @@ if (typeof currentLang === "undefined") {
   currentLang = "it";
 }
 
-// ===============================
-// PRO STATUS INIT
-// ===============================
-
-let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
-
-const urlParams = new URLSearchParams(window.location.search);
-
-if (urlParams.get("pro") === "paid") {
-  isProUnlocked = true;
-  localStorage.setItem("proUnlocked", "true");
-  window.history.replaceState({}, document.title, window.location.pathname);
-}
-
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
   return new Intl.NumberFormat("it-IT", {
@@ -36,6 +22,7 @@ function getValue(id) {
 }
 
 let lastAnalysisData = null;
+let roiChartInstance = null;
 
 // ===============================
 // CALCOLO MUTUO
@@ -87,6 +74,7 @@ function runRealCalculation() {
   const tax = getValue("tax");
 
   const resultsDiv = document.getElementById("results");
+  const chartCanvas = document.getElementById("roiChart");
 
   if (!price || !occupancy || !equity) {
     resultsDiv.innerHTML = "Inserisci valori validi.";
@@ -108,78 +96,61 @@ function runRealCalculation() {
   let baseROI = (netAfterMortgage / equity) * 100;
   if (!isFinite(baseROI)) baseROI = 0;
 
-  const roi5Years = baseROI * 5;
-  const breakEvenYears = netAfterMortgage > 0 ? equity / netAfterMortgage : 0;
-
-  // ===============================
-  // SCENARIO PESSIMISTICO (-10% occupazione)
-  // ===============================
-
-  const pessimisticOccupancy = occupancy * 0.9;
-  const pessimisticNights = 30 * (pessimisticOccupancy / 100);
-  const pessimisticGross = price * pessimisticNights * 12;
-  const pessimisticFees = pessimisticGross * (commission / 100);
-  const pessimisticProfit = pessimisticGross - pessimisticFees - yearlyExpenses;
-  const pessimisticTax = pessimisticProfit > 0 ? pessimisticProfit * (tax / 100) : 0;
-  const pessimisticNet = pessimisticProfit - pessimisticTax - mortgage.yearlyPayment;
-  const pessimisticROI = (pessimisticNet / equity) * 100;
-
-  // ===============================
-  // RISK ENGINE
-  // ===============================
-
-  const loanRatio = propertyPrice ? (loanAmount / propertyPrice) * 100 : 0;
-  let riskPoints = 0;
-
-  if (baseROI < 8) riskPoints += 2;
-  else if (baseROI < 15) riskPoints += 1;
-
-  if (breakEvenYears > 10) riskPoints += 2;
-  else if (breakEvenYears > 6) riskPoints += 1;
-
-  if (loanRatio > 85) riskPoints += 2;
-  else if (loanRatio > 70) riskPoints += 1;
-
-  if (occupancy < 55) riskPoints += 2;
-  else if (occupancy < 65) riskPoints += 1;
-
-  let riskLabel = "LOW";
-  if (riskPoints >= 6) riskLabel = "HIGH";
-  else if (riskPoints >= 3) riskLabel = "MEDIUM";
+  // Scenario pessimistico
+  const pessimisticROI = baseROI - 5;
 
   lastAnalysisData = {
     propertyPrice,
     equity,
-    loanAmount,
-    interestRate,
-    loanYears,
     grossYearly,
     netYearly,
-    mortgageYearly: mortgage.yearlyPayment,
     netAfterMortgage,
     baseROI,
-    roi5Years,
-    breakEvenYears,
-    pessimisticROI,
-    riskLabel
+    pessimisticROI
   };
 
   resultsDiv.innerHTML = `
     <div class="result-card">
-      <h4>📊 Analisi Strategica PRO</h4>
-      <div>ROI annuo: <strong>${baseROI.toFixed(2)}%</strong></div>
-      <div>Break-even: <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
-      <div>Scenario pessimistico ROI: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
-      <div>Risk Score: <strong>${riskLabel}</strong></div>
+      <h4>📊 Analisi Strategica</h4>
+      <div>ROI attuale: <strong>${baseROI.toFixed(2)}%</strong></div>
+      <div>Scenario pessimistico: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
-        📄 Genera Report Strategico Completo
+        📄 Genera Report Strategico
       </button>
     </div>
   `;
+
+  // ===============================
+  // GRAFICO ROI
+  // ===============================
+
+  chartCanvas.style.display = "block";
+
+  if (roiChartInstance) {
+    roiChartInstance.destroy();
+  }
+
+  roiChartInstance = new Chart(chartCanvas, {
+    type: 'bar',
+    data: {
+      labels: ['ROI Attuale', 'Scenario Pessimistico'],
+      datasets: [{
+        label: 'ROI %',
+        data: [baseROI, pessimisticROI],
+        backgroundColor: ['#22c55e', '#ef4444']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
 }
 
 // ===============================
-// GENERAZIONE PDF STRATEGICO
+// PDF CON GRAFICO
 // ===============================
 
 async function generatePDF() {
@@ -189,64 +160,24 @@ async function generatePDF() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "mm", "a4");
 
-  const margin = 20;
   let y = 20;
 
-  pdf.setFont("helvetica", "bold");
   pdf.setFontSize(18);
-  pdf.text("RendimentoBB - Strategic Investment Report", margin, y);
+  pdf.text("RendimentoBB - Strategic Report", 20, y);
 
-  y += 12;
-  pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(11);
+  y += 15;
+  pdf.setFontSize(12);
 
-  const d = lastAnalysisData;
-
-  const verdict =
-    d.riskLabel === "LOW"
-      ? "Operazione prudente con buona sostenibilità finanziaria."
-      : d.riskLabel === "MEDIUM"
-      ? "Operazione bilanciata ma sensibile a variazioni operative."
-      : "Operazione speculativa con elevata esposizione al rischio.";
-
-  const summaryText = `
-EXECUTIVE SUMMARY
-
-L'investimento analizzato genera un ROI annuo stimato del ${d.baseROI.toFixed(2)}%.
-Il capitale investito verrebbe recuperato in circa ${d.breakEvenYears ? d.breakEvenYears.toFixed(1) : "-"} anni.
-
-In uno scenario pessimistico (-10% occupazione), il ROI scenderebbe al ${d.pessimisticROI.toFixed(2)}%.
-
-Livello di rischio stimato: ${d.riskLabel}
-
-VERDETTO STRATEGICO:
-${verdict}
-`;
-
-  const lines = pdf.splitTextToSize(summaryText, 170);
-  pdf.text(lines, margin, y);
-
-  y += lines.length * 6 + 10;
-
-  pdf.setFont("helvetica", "bold");
-  pdf.text("Dettaglio Finanziario", margin, y);
-
+  pdf.text(`ROI Attuale: ${lastAnalysisData.baseROI.toFixed(2)}%`, 20, y);
   y += 8;
-  pdf.setFont("helvetica", "normal");
+  pdf.text(`Scenario Pessimistico: ${lastAnalysisData.pessimisticROI.toFixed(2)}%`, 20, y);
 
-  const details = [
-    `Prezzo immobile: ${formatCurrency(d.propertyPrice)}`,
-    `Capitale proprio: ${formatCurrency(d.equity)}`,
-    `Mutuo: ${formatCurrency(d.loanAmount)}`,
-    `Fatturato annuo: ${formatCurrency(d.grossYearly)}`,
-    `Utile netto operativo: ${formatCurrency(d.netYearly)}`,
-    `Utile netto dopo mutuo: ${formatCurrency(d.netAfterMortgage)}`
-  ];
+  y += 15;
 
-  details.forEach(line => {
-    pdf.text(line, margin, y);
-    y += 7;
-  });
+  // Inserimento grafico nel PDF
+  const chartCanvas = document.getElementById("roiChart");
+  const chartImage = chartCanvas.toDataURL("image/png", 1.0);
+  pdf.addImage(chartImage, 'PNG', 20, y, 170, 80);
 
   pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
