@@ -14,6 +14,7 @@ function unlockPro() {
         ? "PRO sbloccato con successo!"
         : "PRO unlocked successfully!"
     );
+    calculate();
   } else {
     alert(
       currentLang === "it"
@@ -41,7 +42,6 @@ function calculate() {
   const commission = parseFloat(document.getElementById("commission").value);
   const tax = parseFloat(document.getElementById("tax").value);
 
-  const propertyPrice = parseFloat(document.getElementById("propertyPrice").value);
   const equity = parseFloat(document.getElementById("equity").value);
   const loanAmount = parseFloat(document.getElementById("loanAmount").value);
   const loanRate = parseFloat(document.getElementById("loanRate").value);
@@ -74,7 +74,7 @@ function calculate() {
   const netMonthly = profitBeforeTax - taxes;
   const netYearly = netMonthly * 12;
 
-  let baseOutput = `
+  let output = `
     <hr>
     <h3>${currentLang === "it" ? "📊 Risultato Base" : "📊 Base Result"}</h3>
     <div>
@@ -82,26 +82,6 @@ function calculate() {
       <strong>${formatCurrency(netYearly)}</strong>
     </div>
   `;
-
-  if (!isProUnlocked) {
-    resultsDiv.innerHTML =
-      baseOutput +
-      `
-      <hr>
-      <div style="margin-top:10px; color:#94a3b8;">
-        ${
-          currentLang === "it"
-            ? "🔒 Sblocca PRO per vedere analisi rischio completa, ROI reale e stress test."
-            : "🔒 Unlock PRO to see full risk analysis, real ROI and stress test."
-        }
-      </div>
-      <br>
-      <button onclick="unlockPro()" class="calculate">
-        ${currentLang === "it" ? "Sblocca PRO" : "Unlock PRO"}
-      </button>
-    `;
-    return;
-  }
 
   // =========================
   // LOAN
@@ -176,8 +156,8 @@ function calculate() {
 
   if (riskScore < 0) riskScore = 0;
 
-  let riskLabel = "";
-  let riskColor = "";
+  let riskLabel;
+  let riskColor;
 
   if (riskScore >= 80) {
     riskLabel = currentLang === "it" ? "🟢 Investimento Solido" : "🟢 Solid Investment";
@@ -193,9 +173,7 @@ function calculate() {
     riskColor = "#ef4444";
   }
 
-  resultsDiv.innerHTML =
-    baseOutput +
-    `
+  output += `
     <hr>
     <h3>${currentLang === "it" ? "📊 Analisi Completa" : "📊 Full Analysis"}</h3>
 
@@ -222,4 +200,6 @@ function calculate() {
       ${riskLabel}
     </div>
   `;
+
+  resultsDiv.innerHTML = output;
 }
