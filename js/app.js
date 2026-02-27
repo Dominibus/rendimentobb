@@ -1,9 +1,9 @@
 // ===============================
-// SAFE LANGUAGE INIT
+// SAFE LANGUAGE INIT (NO REDECLARE)
 // ===============================
 
 if (typeof currentLang === "undefined") {
-  var currentLang = "it";
+  currentLang = "it";
 }
 
 // ===============================
@@ -168,7 +168,7 @@ function calculate() {
   }
 
   // =========================
-  // STRESS TEST (corretto)
+  // STRESS TEST
   // =========================
 
   const stressedOcc = occupancy - (occupancy * stressOccupancy / 100);
@@ -225,10 +225,6 @@ function calculate() {
       : riskScore >= 60
       ? "#eab308"
       : "#dc2626";
-
-  // =========================
-  // OUTPUT COMPLETO
-  // =========================
 
   output += `
     <div class="result-card">
