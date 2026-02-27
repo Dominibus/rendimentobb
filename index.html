@@ -41,6 +41,15 @@ body {
   color:#0f172a;
 }
 
+.lang-switch button{
+  margin-left:10px;
+  padding:6px 12px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
 /* HERO */
 .hero {
   text-align:center;
@@ -208,27 +217,50 @@ body {
 
 <div class="header container">
   <div class="logo">RendimentoBB</div>
-  <div class="nav">
-    <a href="/tool/">Analisi</a>
-    <a href="/tool/">Accesso PRO</a>
+  <div>
+    <div class="nav" style="display:inline-block;">
+      <a href="/tool/">Analisi</a>
+    </div>
+    <div class="lang-switch" style="display:inline-block;">
+      <button onclick="setLang('it')">IT</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
   </div>
 </div>
 
 <div class="hero container">
-  <h1>Prima di investire 100.000€ in un B&B, verifica questi numeri.</h1>
-  <p>
-    Un errore di valutazione può costarti decine di migliaia di euro nei primi anni.
-    La maggior parte dei nuovi host sottovaluta tasse, commissioni, stagionalità e impatto del mutuo.
+  <h1 data-it="Prima di investire 100.000€ in un B&B, verifica questi numeri."
+      data-en="Before investing €100,000 in a B&B, verify these numbers.">
+      Prima di investire 100.000€ in un B&B, verifica questi numeri.
+  </h1>
+
+  <p data-it="Un errore di valutazione può costarti decine di migliaia di euro nei primi anni."
+     data-en="A miscalculation can cost you tens of thousands in the first years.">
+     Un errore di valutazione può costarti decine di migliaia di euro nei primi anni.
   </p>
 
   <div class="cta">
-    <a href="/tool/" class="btn-primary">🔎 Avvia analisi gratuita</a>
-    <a href="/tool/" class="btn-secondary">🛡 Proteggi il tuo investimento – 19€</a>
+    <a href="/tool/" class="btn-primary"
+       data-it="🔎 Avvia analisi gratuita"
+       data-en="🔎 Start free analysis">
+       🔎 Avvia analisi gratuita
+    </a>
+
+    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+       class="btn-secondary"
+       data-it="🛡 Proteggi il mio investimento – 19€"
+       data-en="🛡 Protect my investment – €19">
+       🛡 Proteggi il mio investimento – 19€
+    </a>
   </div>
 </div>
 
 <div class="section container">
-  <h2>Perché la maggior parte dei nuovi B&B sbaglia i calcoli</h2>
+  <h2 data-it="Perché la maggior parte dei nuovi B&B sbaglia i calcoli"
+      data-en="Why most new B&B owners miscalculate their investment">
+      Perché la maggior parte dei nuovi B&B sbaglia i calcoli
+  </h2>
+
   <div class="features">
     <div class="feature">
       <h3>Sovrastima occupazione</h3>
@@ -237,7 +269,7 @@ body {
 
     <div class="feature">
       <h3>Sottovaluta costi</h3>
-      <p>Commissioni piattaforme, tasse, pulizie e imprevisti riducono il margine reale.</p>
+      <p>Commissioni piattaforme, tasse e imprevisti riducono il margine reale.</p>
     </div>
 
     <div class="feature">
@@ -247,36 +279,14 @@ body {
   </div>
 </div>
 
-<div class="section container">
-  <h2>Cosa analizza davvero RendimentoBB</h2>
-  <div class="features">
-    <div class="feature">
-      <h3>ROI netto reale</h3>
-      <p>Calcolo preciso dopo tasse, commissioni e costi nascosti.</p>
-    </div>
-
-    <div class="feature">
-      <h3>Cashflow mensile</h3>
-      <p>Verifica sostenibilità finanziaria mese per mese.</p>
-    </div>
-
-    <div class="feature">
-      <h3>Break-even</h3>
-      <p>Scopri in quanti mesi rientri dell’investimento.</p>
-    </div>
-
-    <div class="feature">
-      <h3>Indice di rischio 0–100</h3>
-      <p>Capisci subito se l’investimento è solido o pericoloso.</p>
-    </div>
-  </div>
-</div>
-
 <div class="problem">
-  <h2>Un errore può costarti 50.000€.</h2>
-  <p>
-    Questo strumento ti costa meno di una cena.
-    Prima di firmare un mutuo o un compromesso, verifica i numeri reali.
+  <h2 data-it="Un errore può costarti 50.000€."
+      data-en="One mistake can cost you €50,000.">
+      Un errore può costarti 50.000€.
+  </h2>
+  <p data-it="Questo strumento ti costa meno di una cena."
+     data-en="This tool costs less than a dinner.">
+     Questo strumento ti costa meno di una cena.
   </p>
 </div>
 
@@ -291,7 +301,11 @@ body {
     <li>✔ Indice rischio investimento</li>
   </ul>
 
-  <a href="/tool/" class="btn-secondary">Sblocca accesso completo</a>
+  <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+     class="btn-secondary"
+     style="font-size:18px;padding:20px 40px;">
+     🔓 Proteggi il mio investimento ora – 19€
+  </a>
 </div>
 
 <div class="faq">
@@ -309,13 +323,21 @@ body {
 
   <div class="faq-item">
     <h4>Posso simulare più scenari?</h4>
-    <p>Sì. Puoi modificare occupazione, costi e condizioni per testare diverse ipotesi.</p>
+    <p>Sì. Puoi modificare occupazione e costi per testare diverse ipotesi.</p>
   </div>
 </div>
 
 <div class="footer">
   © 2026 RendimentoBB – Tutti i diritti riservati
 </div>
+
+<script>
+function setLang(lang){
+  document.querySelectorAll("[data-it]").forEach(el=>{
+    el.innerText = el.getAttribute("data-"+lang);
+  });
+}
+</script>
 
 </body>
 </html>
