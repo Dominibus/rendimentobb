@@ -106,7 +106,6 @@ body{
          data-it="Analisi"
          data-en="Analysis">Analisi</a>
     </div>
-
     <div class="lang-switch" style="display:inline-block;">
       <button id="btn-it" onclick="setLang('it')">IT</button>
       <button id="btn-en" onclick="setLang('en')">EN</button>
@@ -115,7 +114,6 @@ body{
 </div>
 
 <div class="hero container">
-
   <h1 data-it="Prima di investire 100.000€ in un B&B, verifica questi numeri."
       data-en="Before investing €100,000 in a B&B, verify these numbers.">
   </h1>
@@ -146,21 +144,17 @@ body{
        data-it="✔ Pagamento sicuro con Stripe · ✔ Accesso immediato · ✔ Nessun abbonamento"
        data-en="✔ Secure Stripe payment · ✔ Instant access · ✔ No subscription">
   </div>
-
 </div>
 
 <div class="problem">
-
   <h2 data-it="Un errore può costarti 50.000€."
       data-en="One mistake can cost you €50,000."></h2>
 
   <p data-it="Questo strumento ti costa meno di una cena."
      data-en="This tool costs less than a dinner."></p>
-
 </div>
 
 <div class="pro-section">
-
   <h2 data-it="Accesso completo PRO"
       data-en="Full PRO Access"></h2>
 
@@ -169,29 +163,33 @@ body{
        data-en="€19 one-time payment"></div>
 
   <ul class="pro-list">
-    <li data-it="✔ Simulazione mutuo dettagliata"
-        data-en="✔ Detailed mortgage simulation"></li>
+    <li data-it="✔ Simulazione mutuo dettagliata con piano ammortamento"
+        data-en="✔ Detailed mortgage simulation with amortization plan"></li>
 
-    <li data-it="✔ Stress test automatico"
-        data-en="✔ Automatic stress test"></li>
+    <li data-it="✔ Stress test su calo occupazione e aumento tassi"
+        data-en="✔ Stress test for occupancy drop and rate increases"></li>
 
-    <li data-it="✔ Scenario prudente e pessimistico"
-        data-en="✔ Conservative and pessimistic scenarios"></li>
+    <li data-it="✔ Scenario prudente, realistico e pessimistico"
+        data-en="✔ Conservative, realistic and pessimistic scenarios"></li>
 
-    <li data-it="✔ Analisi cashflow reale"
-        data-en="✔ Real cashflow analysis"></li>
+    <li data-it="✔ Analisi cashflow mese per mese"
+        data-en="✔ Month-by-month cashflow analysis"></li>
 
-    <li data-it="✔ Indice rischio investimento"
-        data-en="✔ Investment risk index"></li>
+    <li data-it="✔ Indice rischio investimento 0–100"
+        data-en="✔ Investment risk index 0–100"></li>
   </ul>
 
   <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
      class="btn-secondary"
-     style="font-size:18px;padding:20px 40px;"
-     data-it="🔓 Attiva accesso PRO – 19€"
-     data-en="🔓 Activate PRO Access – €19">
+     style="font-size:18px;padding:20px 40px;margin-top:30px;"
+     data-it="🔓 Attiva accesso PRO ora – 19€"
+     data-en="🔓 Activate PRO Access now – €19">
   </a>
 
+  <div style="margin-top:25px;font-size:14px;color:#64748b;"
+       data-it="Accesso immediato. Nessun abbonamento. Nessun rinnovo automatico."
+       data-en="Instant access. No subscription. No recurring charges.">
+  </div>
 </div>
 
 <div class="footer"
@@ -200,7 +198,6 @@ body{
 </div>
 
 <script>
-
 function setLang(lang){
 
   document.documentElement.lang = lang;
@@ -218,7 +215,6 @@ function setLang(lang){
 
   localStorage.setItem("lang", lang);
 
-  // Meta description dinamica
   if(lang === "en"){
     document.querySelector("meta[name='description']")
       .setAttribute("content","Simulate ROI, cashflow and risk before investing in a B&B. Avoid €50,000 mistakes with a professional analysis.");
@@ -239,7 +235,6 @@ function initLang(){
 }
 
 initLang();
-
 </script>
 
 </body>
