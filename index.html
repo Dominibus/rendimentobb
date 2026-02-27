@@ -15,249 +15,122 @@ body{
   background:#f8fafc;
   color:#0f172a;
   line-height:1.6;
-  -webkit-font-smoothing:antialiased;
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:40px 20px;
-}
+.container{max-width:1100px;margin:auto;padding:40px 20px}
 
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 0;
-}
+.header{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
 
-.logo{
-  font-weight:800;
-  font-size:20px;
-}
+.logo{font-weight:800;font-size:20px}
 
-.nav a{
-  text-decoration:none;
-  margin-right:20px;
-  font-weight:600;
-  color:#0f172a;
-}
+.nav a{text-decoration:none;margin-right:20px;font-weight:600;color:#0f172a}
 
 .lang-switch button{
-  margin-left:6px;
-  padding:6px 12px;
-  border-radius:8px;
-  border:1px solid #e2e8f0;
-  background:white;
-  cursor:pointer;
-  font-weight:600;
-  transition:.2s;
+  margin-left:6px;padding:6px 12px;border-radius:8px;
+  border:1px solid #e2e8f0;background:white;cursor:pointer;
+  font-weight:600;transition:.2s;
 }
+.lang-switch button.active{background:#0f172a;color:white}
 
-.lang-switch button.active{
-  background:#0f172a;
-  color:white;
-}
-
-/* HERO */
-
-.hero{
-  text-align:center;
-  padding:110px 20px 80px;
-}
+.hero{text-align:center;padding:110px 20px 90px}
 
 .badge{
-  display:inline-block;
-  background:#e2e8f0;
-  padding:8px 16px;
-  border-radius:999px;
-  font-size:13px;
-  margin-bottom:25px;
+  display:inline-block;background:#e2e8f0;padding:8px 16px;
+  border-radius:999px;font-size:13px;margin-bottom:25px
 }
 
 .hero h1{
-  font-size:48px;
-  line-height:1.1;
-  max-width:900px;
-  margin:0 auto 25px;
+  font-size:48px;line-height:1.1;max-width:900px;
+  margin:0 auto 25px;font-weight:800
 }
 
 .hero p{
-  font-size:20px;
-  color:#475569;
-  max-width:750px;
-  margin:0 auto 40px;
+  font-size:20px;color:#475569;
+  max-width:760px;margin:0 auto 45px
 }
 
 .cta a{
-  text-decoration:none;
-  padding:18px 42px;
-  border-radius:12px;
-  font-weight:700;
-  margin:10px;
-  display:inline-block;
-  font-size:17px;
-  transition:.25s;
+  text-decoration:none;padding:18px 44px;border-radius:12px;
+  font-weight:700;margin:10px;display:inline-block;
+  font-size:17px;transition:.25s
 }
 
-.btn-primary{
-  background:#22c55e;
-  color:black;
-}
-
-.btn-secondary{
-  background:#0f172a;
-  color:white;
-}
+.btn-primary{background:#22c55e;color:black}
+.btn-secondary{background:#0f172a;color:white}
 
 .btn-primary:hover,.btn-secondary:hover{
   transform:translateY(-3px);
-  box-shadow:0 15px 35px rgba(0,0,0,0.12);
+  box-shadow:0 15px 35px rgba(0,0,0,0.12)
 }
 
-.trust{
-  margin-top:25px;
-  font-size:14px;
-  color:#64748b;
-}
+.trust{margin-top:25px;font-size:14px;color:#64748b}
 
-/* SECTIONS */
-
-.section{
-  padding:100px 20px;
-}
-
-.section-title{
-  text-align:center;
-  font-size:34px;
-  margin-bottom:60px;
-}
-
-/* GRID */
+.section{padding:100px 20px}
+.section-title{text-align:center;font-size:34px;margin-bottom:60px}
 
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px;
-  max-width:950px;
-  margin:auto;
+  gap:30px;max-width:950px;margin:auto
 }
 
 .card{
-  background:white;
-  padding:30px;
-  border-radius:16px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.05);
+  background:white;padding:30px;border-radius:16px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.05)
 }
 
-.card h3{
-  margin-bottom:12px;
-}
-
-/* COMPARISON */
-
-.compare{
-  background:#ffffff;
-}
-
+.compare{background:white}
 .compare-table{
-  max-width:900px;
-  margin:auto;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 25px 60px rgba(15,23,42,.08);
+  max-width:900px;margin:auto;border-radius:20px;
+  overflow:hidden;box-shadow:0 25px 60px rgba(15,23,42,.08)
 }
 
 .compare-row{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
-  padding:20px;
-  border-bottom:1px solid #e2e8f0;
+  padding:20px;border-bottom:1px solid #e2e8f0
 }
 
 .compare-row.header{
-  background:#0f172a;
-  color:white;
-  font-weight:700;
+  background:#0f172a;color:white;font-weight:700
 }
-
-.compare-row:last-child{
-  border-bottom:none;
-}
-
-/* HIGHLIGHT */
 
 .highlight{
-  background:#0f172a;
-  color:white;
-  text-align:center;
-  padding:100px 20px;
+  background:#0f172a;color:white;
+  text-align:center;padding:100px 20px
 }
 
-.highlight h2{
-  font-size:36px;
-  margin-bottom:15px;
-}
-
-.highlight p{
-  color:#cbd5e1;
-}
-
-/* PRICING */
+.highlight h2{font-size:36px;margin-bottom:15px}
+.highlight p{color:#cbd5e1}
 
 .pricing{
   background:linear-gradient(180deg,#ffffff 0%,#eef2f7 100%);
-  padding:120px 20px;
-  text-align:center;
+  padding:120px 20px;text-align:center
 }
 
 .price-card{
-  background:white;
-  max-width:650px;
-  margin:40px auto 0;
-  padding:60px;
-  border-radius:24px;
-  box-shadow:0 30px 80px rgba(15,23,42,.1);
+  background:white;max-width:650px;margin:40px auto 0;
+  padding:60px;border-radius:24px;
+  box-shadow:0 30px 80px rgba(15,23,42,.1)
 }
 
-.price{
-  font-size:42px;
-  font-weight:800;
-  margin-bottom:30px;
-}
+.price{font-size:42px;font-weight:800;margin-bottom:30px}
 
-.features{
-  text-align:left;
-  margin-bottom:40px;
-}
-
-.features li{
-  margin-bottom:14px;
-  font-size:17px;
-}
+.features{text-align:left;margin-bottom:40px}
+.features li{margin-bottom:14px;font-size:17px}
 
 .price-card a{
-  display:inline-block;
-  background:#0f172a;
-  color:white;
-  padding:18px 42px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:700;
-  transition:.2s;
+  display:inline-block;background:#0f172a;color:white;
+  padding:18px 42px;border-radius:12px;
+  text-decoration:none;font-weight:700;transition:.2s
 }
 
 .price-card a:hover{
   transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15)
 }
 
-.footer{
-  text-align:center;
-  padding:60px 20px;
-  font-size:14px;
-  color:#64748b;
-}
+.footer{text-align:center;padding:60px 20px;font-size:14px;color:#64748b}
 </style>
 </head>
 
@@ -267,80 +140,83 @@ body{
   <div class="logo">RendimentoBB</div>
   <div>
     <span class="nav">
-      <a href="/tool/">Analisi</a>
+      <a href="/tool/" data-it="Analisi" data-en="Analysis"></a>
+    </span>
+    <span class="lang-switch">
+      <button id="btn-it" onclick="setLang('it')">IT</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
     </span>
   </div>
 </div>
 
 <div class="hero container">
 
-  <div class="badge">Strumento professionale per investitori immobiliari</div>
+  <div class="badge"
+       data-it="Strumento professionale per investitori immobiliari"
+       data-en="Professional tool for real estate investors"></div>
 
-  <h1>
-    Prima di investire 100.000€ in un B&B,
-    verifica numeri che nessuno ti fa vedere.
-  </h1>
+  <h1
+      data-it="Prima di investire 100.000€ in un B&B, verifica numeri che nessuno ti fa vedere."
+      data-en="Before investing €100,000 in a B&B, verify numbers no one shows you."></h1>
 
-  <p>
-    ROI reale, simulazione mutuo, scenari pessimistici e cashflow a 5 anni.
-    Evita errori che possono costarti 50.000€.
-  </p>
+  <p
+     data-it="ROI reale, simulazione mutuo, scenari pessimistici e cashflow a 5 anni. Evita errori che possono costarti 50.000€."
+     data-en="Real ROI, mortgage simulation, pessimistic scenarios and 5-year cashflow. Avoid mistakes that can cost you €50,000."></p>
 
   <div class="cta">
-    <a href="/tool/" class="btn-primary">
-      Avvia analisi gratuita
-    </a>
+    <a href="/tool/" class="btn-primary"
+       data-it="Avvia analisi gratuita"
+       data-en="Start free analysis"></a>
 
     <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
-       class="btn-secondary">
-      Sblocca versione PRO – 19€
-    </a>
+       class="btn-secondary"
+       data-it="Sblocca versione PRO – 19€"
+       data-en="Unlock PRO version – €19"></a>
   </div>
 
-  <div class="trust">
-    Accesso immediato · Nessun abbonamento · Garanzia 7 giorni
-  </div>
-
+  <div class="trust"
+       data-it="Accesso immediato · Nessun abbonamento · Garanzia 7 giorni"
+       data-en="Instant access · No subscription · 7-day guarantee"></div>
 </div>
 
-<!-- PROBLEMI -->
-
+<!-- SEZIONE PROBLEMA -->
 <div class="section">
-  <div class="section-title">
-    Perché molti nuovi B&B sbagliano investimento
-  </div>
+  <div class="section-title"
+       data-it="Perché molti nuovi B&B sbagliano investimento"
+       data-en="Why many new B&B investors fail"></div>
 
   <div class="grid">
     <div class="card">
-      <h3>Sovrastima occupazione</h3>
-      <p>Previsioni ottimistiche senza dati realistici.</p>
+      <h3 data-it="Sovrastima occupazione" data-en="Overestimated occupancy"></h3>
+      <p data-it="Previsioni ottimistiche senza dati realistici."
+         data-en="Optimistic projections without realistic data."></p>
     </div>
 
     <div class="card">
-      <h3>Costi nascosti</h3>
-      <p>Tasse, manutenzione e commissioni sottovalutate.</p>
+      <h3 data-it="Costi nascosti" data-en="Hidden costs"></h3>
+      <p data-it="Tasse, manutenzione e commissioni sottovalutate."
+         data-en="Underestimated taxes, maintenance and fees."></p>
     </div>
 
     <div class="card">
-      <h3>Nessuno stress test</h3>
-      <p>Nessuna simulazione in caso di calo domanda o aumento costi.</p>
+      <h3 data-it="Nessuno stress test" data-en="No stress test"></h3>
+      <p data-it="Nessuna simulazione in caso di calo domanda o aumento costi."
+         data-en="No simulation for downturns or rising costs."></p>
     </div>
   </div>
 </div>
 
 <!-- COMPARAZIONE -->
-
 <div class="section compare">
-  <div class="section-title">
-    Investire alla cieca o con analisi professionale?
-  </div>
+  <div class="section-title"
+       data-it="Investire alla cieca o con analisi professionale?"
+       data-en="Invest blindly or with professional analysis?"></div>
 
   <div class="compare-table">
-
     <div class="compare-row header">
       <div></div>
-      <div>Senza RendimentoBB</div>
-      <div>Con RendimentoBB</div>
+      <div data-it="Senza RendimentoBB" data-en="Without RendimentoBB"></div>
+      <div data-it="Con RendimentoBB" data-en="With RendimentoBB"></div>
     </div>
 
     <div class="compare-row">
@@ -360,57 +236,73 @@ body{
       <div>❌ Stima superficiale</div>
       <div>✔ Analisi cumulativa dettagliata</div>
     </div>
-
-    <div class="compare-row">
-      <div>Decisione finale</div>
-      <div>Intuizione</div>
-      <div>Dati concreti</div>
-    </div>
-
   </div>
 </div>
 
 <!-- HIGHLIGHT -->
-
 <div class="highlight">
-  <h2>Un errore può costarti 50.000€.</h2>
-  <p>Questo strumento costa meno di una cena.</p>
+  <h2 data-it="Un errore può costarti 50.000€."
+      data-en="One mistake can cost you €50,000."></h2>
+  <p data-it="Questo strumento costa meno di una cena."
+     data-en="This tool costs less than a dinner."></p>
 </div>
 
 <!-- PRICING -->
-
 <div class="pricing">
-
-  <h2>Accesso completo PRO</h2>
+  <h2 data-it="Accesso completo PRO" data-en="Full PRO Access"></h2>
 
   <div class="price-card">
-
-    <div class="price">19€ una tantum</div>
+    <div class="price"
+         data-it="19€ una tantum"
+         data-en="€19 one-time"></div>
 
     <ul class="features">
-      <li>✔ Simulazione mutuo dettagliata</li>
-      <li>✔ Confronto mutui 15/20/25 anni</li>
-      <li>✔ Stress test automatico</li>
-      <li>✔ Analisi cashflow reale</li>
-      <li>✔ Indice rischio professionale</li>
-      <li>✔ Report PDF bancario</li>
+      <li data-it="✔ Simulazione mutuo dettagliata"
+          data-en="✔ Detailed mortgage simulation"></li>
+      <li data-it="✔ Confronto mutui 15/20/25 anni"
+          data-en="✔ Compare 15/20/25 year mortgages"></li>
+      <li data-it="✔ Stress test automatico"
+          data-en="✔ Automatic stress test"></li>
+      <li data-it="✔ Report PDF bancario"
+          data-en="✔ Professional PDF report"></li>
     </ul>
 
-    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200">
-      Attiva accesso PRO ora
-    </a>
+    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+       data-it="Attiva accesso PRO ora"
+       data-en="Activate PRO Access"></a>
 
-    <div style="margin-top:20px;font-size:13px;color:#64748b;">
-      Accesso immediato · Nessun rinnovo automatico · Garanzia 7 giorni
-    </div>
-
+    <div style="margin-top:20px;font-size:13px;color:#64748b;"
+         data-it="Accesso immediato · Nessun rinnovo automatico · Garanzia 7 giorni"
+         data-en="Instant access · No recurring charges · 7-day guarantee"></div>
   </div>
-
 </div>
 
-<div class="footer">
-© 2026 RendimentoBB – Tutti i diritti riservati
-</div>
+<div class="footer"
+     data-it="© 2026 RendimentoBB – Tutti i diritti riservati"
+     data-en="© 2026 RendimentoBB – All rights reserved"></div>
+
+<script>
+function setLang(lang){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-it]").forEach(el=>{
+    el.textContent = el.getAttribute("data-"+lang);
+  });
+  document.getElementById("btn-it").classList.remove("active");
+  document.getElementById("btn-en").classList.remove("active");
+  document.getElementById("btn-"+lang).classList.add("active");
+  localStorage.setItem("lang", lang);
+}
+
+function initLang(){
+  const saved = localStorage.getItem("lang");
+  if(saved){ setLang(saved); }
+  else{
+    const browserLang = navigator.language.startsWith("en") ? "en" : "it";
+    setLang(browserLang);
+  }
+}
+initLang();
+</script>
 
 </body>
 </html>
