@@ -5,11 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>RendimentoBB – Analisi Professionale Investimento B&B</title>
-
 <meta name="description" content="Simula ROI, cashflow e rischio prima di investire in un B&B. Evita errori da 50.000€ con un'analisi professionale.">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -29,13 +28,13 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:20px;
+  padding:20px 0;
 }
 
 .logo{
   font-weight:800;
   font-size:20px;
-  letter-spacing:.5px;
+  letter-spacing:.3px;
 }
 
 .nav a{
@@ -49,7 +48,7 @@ body{
   margin-left:6px;
   padding:6px 12px;
   border-radius:8px;
-  border:1px solid #cbd5e1;
+  border:1px solid #e2e8f0;
   background:white;
   cursor:pointer;
   font-weight:600;
@@ -63,21 +62,7 @@ body{
 
 .hero{
   text-align:center;
-  padding:120px 20px 90px;
-}
-
-.hero h1{
-  font-size:48px;
-  max-width:900px;
-  margin:0 auto 30px;
-  line-height:1.15;
-}
-
-.hero p{
-  font-size:20px;
-  color:#475569;
-  max-width:800px;
-  margin:20px auto;
+  padding:100px 20px 80px;
 }
 
 .badge{
@@ -85,23 +70,33 @@ body{
   background:#e2e8f0;
   padding:8px 16px;
   border-radius:999px;
-  font-size:14px;
+  font-size:13px;
   margin-bottom:25px;
 }
 
-.cta{
-  margin-top:50px;
+.hero h1{
+  font-size:48px;
+  line-height:1.15;
+  max-width:900px;
+  margin:0 auto 25px;
+}
+
+.hero p{
+  font-size:20px;
+  color:#475569;
+  max-width:750px;
+  margin:0 auto 40px;
 }
 
 .cta a{
   text-decoration:none;
-  padding:18px 34px;
+  padding:18px 36px;
   border-radius:12px;
-  font-weight:800;
-  margin:10px;
+  font-weight:700;
+  margin:8px;
   display:inline-block;
   font-size:16px;
-  transition:.25s ease;
+  transition:.25s;
 }
 
 .btn-primary{
@@ -116,85 +111,95 @@ body{
 
 .btn-primary:hover,.btn-secondary:hover{
   transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+  box-shadow:0 15px 35px rgba(0,0,0,0.12);
 }
 
 .trust{
-  margin-top:20px;
+  margin-top:25px;
   font-size:14px;
   color:#64748b;
 }
 
-.problem-grid{
+.section{
   padding:100px 20px;
-  background:white;
 }
 
-.problem-grid h2{
+.section-title{
   text-align:center;
-  font-size:36px;
+  font-size:34px;
   margin-bottom:60px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:30px;
   max-width:1000px;
   margin:auto;
 }
 
 .card{
-  background:#f1f5f9;
+  background:white;
   padding:30px;
   border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.05);
 }
 
 .card h3{
   margin-bottom:10px;
 }
 
-.problem{
+.highlight{
   background:#0f172a;
   color:white;
   text-align:center;
-  padding:110px 20px;
+  padding:90px 20px;
 }
 
-.problem h2{
+.highlight h2{
   font-size:36px;
-  margin-bottom:20px;
+  margin-bottom:15px;
 }
 
-.problem p{
-  font-size:20px;
+.highlight p{
   color:#cbd5e1;
+  font-size:18px;
 }
 
-.pro-section{
+.pricing{
   background:linear-gradient(180deg,#ffffff 0%,#eef2f7 100%);
   padding:120px 20px;
   text-align:center;
 }
 
-.pro-card{
-  max-width:700px;
-  margin:40px auto 0;
+.price-card{
   background:white;
-  padding:50px;
+  max-width:650px;
+  margin:40px auto 0;
+  padding:60px;
   border-radius:20px;
-  box-shadow:0 20px 50px rgba(15,23,42,.08);
-  text-align:left;
+  box-shadow:0 25px 60px rgba(15,23,42,.08);
 }
 
-.pro-list li{
-  margin-bottom:16px;
-  font-size:18px;
+.price{
+  font-size:40px;
+  font-weight:800;
+  margin:10px 0 30px;
+}
+
+.features{
+  text-align:left;
+  margin-bottom:40px;
+}
+
+.features li{
+  margin-bottom:14px;
+  font-size:17px;
 }
 
 .footer{
   text-align:center;
-  padding:50px 20px;
+  padding:60px 20px;
   font-size:14px;
   color:#64748b;
 }
@@ -203,16 +208,16 @@ body{
 
 <body>
 
-<div class="header container">
+<div class="container header">
   <div class="logo">RendimentoBB</div>
   <div>
-    <div class="nav" style="display:inline-block;">
+    <span class="nav">
       <a href="/tool/" data-it="Analisi" data-en="Analysis">Analisi</a>
-    </div>
-    <div class="lang-switch" style="display:inline-block;">
+    </span>
+    <span class="lang-switch">
       <button id="btn-it" onclick="setLang('it')">IT</button>
       <button id="btn-en" onclick="setLang('en')">EN</button>
-    </div>
+    </span>
   </div>
 </div>
 
@@ -229,23 +234,24 @@ body{
 
   <div class="cta">
     <a href="/tool/" class="btn-primary"
-       data-it="🔎 Avvia analisi gratuita"
-       data-en="🔎 Start free analysis"></a>
+       data-it="Avvia analisi gratuita"
+       data-en="Start free analysis"></a>
 
     <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
        class="btn-secondary"
-       data-it="🛡 Proteggi il tuo investimento – 19€"
-       data-en="🛡 Protect your investment – €19"></a>
+       data-it="Proteggi il tuo investimento – 19€"
+       data-en="Protect your investment – €19"></a>
   </div>
 
   <div class="trust"
-       data-it="✔ Pagamento sicuro · ✔ Accesso immediato · ✔ Nessun abbonamento"
-       data-en="✔ Secure payment · ✔ Instant access · ✔ No subscription"></div>
+       data-it="Pagamento sicuro · Accesso immediato · Nessun abbonamento"
+       data-en="Secure payment · Instant access · No subscription"></div>
 </div>
 
-<div class="problem-grid">
-  <h2 data-it="Perché molti nuovi B&B sbagliano investimento"
-      data-en="Why many new B&B investors fail"></h2>
+<div class="section">
+  <div class="section-title"
+       data-it="Perché molti nuovi B&B sbagliano investimento"
+       data-en="Why many new B&B investors fail"></div>
 
   <div class="grid">
     <div class="card">
@@ -259,19 +265,19 @@ body{
       <h3 data-it="Costi nascosti"
           data-en="Hidden costs"></h3>
       <p data-it="Tasse, manutenzione e imprevisti sottovalutati."
-         data-en="Taxes, maintenance and unexpected expenses underestimated."></p>
+         data-en="Underestimated taxes and maintenance."></p>
     </div>
 
     <div class="card">
       <h3 data-it="Nessuno scenario pessimistico"
           data-en="No pessimistic scenario"></h3>
       <p data-it="Non viene simulato un calo di domanda."
-         data-en="No simulation of demand downturn."></p>
+         data-en="No downturn simulation."></p>
     </div>
   </div>
 </div>
 
-<div class="problem">
+<div class="highlight">
   <h2 data-it="Un errore può costarti 50.000€."
       data-en="One mistake can cost you €50,000."></h2>
 
@@ -279,16 +285,16 @@ body{
      data-en="This tool costs less than a dinner."></p>
 </div>
 
-<div class="pro-section">
+<div class="pricing">
   <h2 data-it="Accesso completo PRO"
       data-en="Full PRO Access"></h2>
 
-  <p style="font-weight:800;margin-top:10px;"
-     data-it="19€ una tantum"
-     data-en="€19 one-time payment"></p>
+  <div class="price-card">
+    <div class="price"
+         data-it="19€ una tantum"
+         data-en="€19 one-time"></div>
 
-  <div class="pro-card">
-    <ul class="pro-list">
+    <ul class="features">
       <li data-it="✔ Simulazione mutuo dettagliata"
           data-en="✔ Detailed mortgage simulation"></li>
       <li data-it="✔ Stress test automatico"
@@ -299,12 +305,14 @@ body{
           data-en="✔ Investment risk index"></li>
     </ul>
 
-    <div style="text-align:center;margin-top:40px;">
-      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
-         class="btn-secondary"
-         data-it="🔓 Attiva accesso PRO ora – 19€"
-         data-en="🔓 Activate PRO Access now – €19"></a>
-    </div>
+    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+       class="btn-secondary"
+       data-it="Attiva accesso PRO ora"
+       data-en="Activate PRO Access"></a>
+
+    <div style="margin-top:15px;font-size:13px;color:#64748b;"
+         data-it="Accesso immediato. Nessun rinnovo automatico."
+         data-en="Instant access. No recurring charges."></div>
   </div>
 </div>
 
@@ -316,8 +324,7 @@ body{
 function setLang(lang){
   document.documentElement.lang = lang;
   document.querySelectorAll("[data-it]").forEach(el=>{
-    const text = el.getAttribute("data-"+lang);
-    if(text){ el.textContent = text; }
+    el.textContent = el.getAttribute("data-"+lang);
   });
   document.getElementById("btn-it").classList.remove("active");
   document.getElementById("btn-en").classList.remove("active");
@@ -327,9 +334,8 @@ function setLang(lang){
 
 function initLang(){
   const saved = localStorage.getItem("lang");
-  if(saved){
-    setLang(saved);
-  } else {
+  if(saved){ setLang(saved); }
+  else{
     const browserLang = navigator.language.startsWith("en") ? "en" : "it";
     setLang(browserLang);
   }
