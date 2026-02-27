@@ -12,7 +12,7 @@
 body {
   background: radial-gradient(circle at top, #0f172a 0%, #0b1220 60%, #080f1c 100%);
   min-height: 100vh;
-  padding: 40px 20px;
+  padding: 60px 20px;
   color: white;
 }
 
@@ -21,7 +21,7 @@ body {
 /* ===================== */
 
 .tool-wrapper {
-  max-width: 950px;
+  max-width: 1050px;
   margin: auto;
 }
 
@@ -31,18 +31,22 @@ body {
 
 .tool-header {
   text-align: center;
-  margin-bottom: 35px;
+  margin-bottom: 45px;
 }
 
 .tool-header h1 {
-  font-size: 30px;
-  margin-bottom: 10px;
+  font-size: 34px;
+  margin-bottom: 14px;
   font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
 .tool-header p {
   color: #94a3b8;
   font-size: 15px;
+  max-width: 600px;
+  margin: auto;
+  line-height: 1.6;
 }
 
 /* ===================== */
@@ -50,13 +54,14 @@ body {
 /* ===================== */
 
 .tool-card {
-  background: linear-gradient(145deg, #1e293b, #162132);
-  padding: 35px;
-  border-radius: 20px;
+  background: linear-gradient(160deg, #1e293b, #141c2b);
+  padding: 45px;
+  border-radius: 24px;
   box-shadow:
-    0 25px 60px rgba(0, 0, 0, 0.7),
-    inset 0 0 0 1px rgba(255,255,255,0.03);
-  margin-bottom: 30px;
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+  margin-bottom: 35px;
+  backdrop-filter: blur(6px);
 }
 
 /* ===================== */
@@ -66,31 +71,32 @@ body {
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  gap: 22px;
 }
 
 .input-group label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-size: 13px;
   color: #cbd5e1;
+  font-weight: 500;
 }
 
 .input-group input {
   width: 100%;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 14px;
+  border-radius: 14px;
   border: 1px solid #1f2937;
   background-color: #0f172a;
   color: white;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   font-size: 14px;
 }
 
 .input-group input:focus {
   outline: none;
   border-color: #22c55e;
-  box-shadow: 0 0 0 2px rgba(34,197,94,0.25);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
 }
 
 /* ===================== */
@@ -98,43 +104,44 @@ body {
 /* ===================== */
 
 .action-area {
-  margin-top: 35px;
+  margin-top: 45px;
   text-align: center;
 }
 
 .btn-primary {
-  padding: 15px 32px;
-  border-radius: 14px;
+  padding: 16px 36px;
+  border-radius: 16px;
   border: none;
   background: linear-gradient(135deg, #22c55e, #16a34a);
   color: black;
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 8px 25px rgba(34,197,94,0.35);
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 35px rgba(34,197,94,0.35);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(34,197,94,0.55);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(34,197,94,0.55);
 }
 
 .btn-secondary {
   display: inline-block;
-  padding: 13px 24px;
-  border-radius: 12px;
+  padding: 14px 28px;
+  border-radius: 14px;
   background: #0f172a;
   color: white;
   text-decoration: none;
   font-weight: 600;
   border: 1px solid #334155;
-  transition: 0.25s ease;
+  transition: 0.3s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover {
   background: #1e293b;
+  transform: translateY(-3px);
 }
 
 /* ===================== */
@@ -142,27 +149,28 @@ body {
 /* ===================== */
 
 .results-card {
-  margin-top: 30px;
-  padding: 28px;
-  border-radius: 18px;
+  margin-top: 35px;
+  padding: 35px;
+  border-radius: 22px;
   background: linear-gradient(145deg,#0f172a,#111827);
   border: 1px solid #1f2937;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  min-height: 120px;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+  min-height: 140px;
 }
 
 .result-card {
-  margin-bottom: 22px;
+  margin-bottom: 28px;
 }
 
 .result-card h4 {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   font-size: 16px;
   color: #94a3b8;
+  font-weight: 500;
 }
 
 .result-card div {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 15px;
 }
 
@@ -176,12 +184,13 @@ body {
 /* ===================== */
 
 .risk-box {
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 14px;
+  margin-top: 25px;
+  padding: 22px;
+  border-radius: 16px;
   font-weight: 700;
   text-align: center;
   font-size: 15px;
+  letter-spacing: 0.5px;
 }
 
 /* ===================== */
@@ -189,24 +198,25 @@ body {
 /* ===================== */
 
 .pro-lock {
-  margin-top: 45px;
-  padding: 35px;
-  background: linear-gradient(145deg, #111827, #0f172a);
-  border-radius: 20px;
+  margin-top: 55px;
+  padding: 45px;
+  background: linear-gradient(160deg, #111827, #0f172a);
+  border-radius: 24px;
   border: 1px solid #1f2937;
   text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.7);
 }
 
 .pro-lock h2 {
-  margin-bottom: 14px;
-  font-size: 20px;
+  margin-bottom: 18px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .pro-lock p {
   font-size: 14px;
   color: #94a3b8;
-  margin-bottom: 25px;
+  margin-bottom: 28px;
   line-height: 1.6;
 }
 
@@ -215,7 +225,7 @@ body {
 /* ===================== */
 
 .back-link {
-  margin-top: 35px;
+  margin-top: 45px;
   text-align: center;
 }
 
@@ -223,6 +233,7 @@ body {
   text-decoration: none;
   color: #94a3b8;
   font-size: 14px;
+  transition: 0.2s;
 }
 
 .back-link a:hover {
@@ -235,18 +246,19 @@ body {
 
 .lang-switch {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .lang-switch button {
-  padding: 6px 12px;
-  margin: 0 4px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  margin: 0 6px;
+  border-radius: 8px;
   border: 1px solid #334155;
   background: #0f172a;
   color: white;
   cursor: pointer;
   font-size: 12px;
+  transition: 0.2s;
 }
 
 .lang-switch button.active {
@@ -262,18 +274,19 @@ body {
 @media (max-width: 768px) {
 
   body {
-    padding: 20px;
+    padding: 30px 15px;
   }
 
   .tool-card {
-    padding: 25px;
+    padding: 28px;
   }
 
   .form-grid {
     grid-template-columns: 1fr;
   }
 
-  .btn-primary {
+  .btn-primary,
+  .btn-secondary {
     width: 100%;
   }
 
