@@ -98,7 +98,11 @@ function runRealCalculation() {
   let baseROI = (netAfterMortgage / equity) * 100;
   if (!isFinite(baseROI)) baseROI = 0;
 
-  // Scenario realistico: -10% occupazione
+  const breakEvenYears = netAfterMortgage > 0
+    ? equity / netAfterMortgage
+    : 99;
+
+  // Scenario realistico -10%
   const pessimisticOccupancy = occupancy * 0.9;
   const pessimisticNights = 30 * (pessimisticOccupancy / 100);
   const pessimisticGross = price * pessimisticNights * 12;
@@ -108,10 +112,45 @@ function runRealCalculation() {
   const pessimisticNet = pessimisticProfit - pessimisticTax - mortgage.yearlyPayment;
   const pessimisticROI = (pessimisticNet / equity) * 100;
 
-  // Risk semplice
-  let riskLabel = "LOW";
-  if (baseROI < 6) riskLabel = "HIGH";
-  else if (baseROI < 12) riskLabel = "MEDIUM";
+  // ===============================
+  // INVESTMENT SCORE 0–100
+  // ===============================
+
+  const loanRatio = propertyPrice ? (loanAmount / propertyPrice) * 100 : 0;
+  const safetyMargin = mortgage.yearlyPayment > 0
+    ? (netYearly - mortgage.yearlyPayment) / mortgage.yearlyPayment
+    : 1;
+
+  let roiScore = baseROI >= 15 ? 30 :
+                 baseROI >= 10 ? 22 :
+                 baseROI >= 6 ? 15 :
+                 baseROI >= 3 ? 8 : 3;
+
+  let breakScore = breakEvenYears <= 6 ? 20 :
+                   breakEvenYears <= 10 ? 15 :
+                   breakEvenYears <= 15 ? 10 : 5;
+
+  let leverageScore = loanRatio <= 60 ? 15 :
+                      loanRatio <= 75 ? 10 :
+                      loanRatio <= 85 ? 6 : 3;
+
+  let marginScore = safetyMargin >= 1 ? 20 :
+                    safetyMargin >= 0.5 ? 14 :
+                    safetyMargin >= 0.2 ? 8 : 3;
+
+  let stressScore = pessimisticROI >= 8 ? 15 :
+                    pessimisticROI >= 4 ? 10 :
+                    pessimisticROI >= 0 ? 6 : 2;
+
+  const investmentScore =
+    roiScore + breakScore + leverageScore + marginScore + stressScore;
+
+  let rating = "D";
+  if (investmentScore >= 85) rating = "A+";
+  else if (investmentScore >= 75) rating = "A";
+  else if (investmentScore >= 65) rating = "B+";
+  else if (investmentScore >= 55) rating = "B";
+  else if (investmentScore >= 45) rating = "C";
 
   lastAnalysisData = {
     propertyPrice,
@@ -121,54 +160,60 @@ function runRealCalculation() {
     netAfterMortgage,
     baseROI,
     pessimisticROI,
-    riskLabel
+    breakEvenYears,
+    investmentScore,
+    rating
   };
 
   resultsDiv.innerHTML = `
     <div class="result-card">
-      <h4>📊 ${currentLang === "it" ? "Analisi Strategica" : "Strategic Analysis"}</h4>
+      <h4>📊 ${currentLang === "it" ? "Analisi Strategica Professionale" : "Professional Strategic Analysis"}</h4>
       <div>ROI: <strong>${baseROI.toFixed(2)}%</strong></div>
+      <div>${currentLang === "it" ? "Break-even" : "Break-even"}: <strong>${breakEvenYears.toFixed(1)} anni</strong></div>
       <div>${currentLang === "it" ? "Scenario pessimistico" : "Pessimistic scenario"}: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
-      <div>Risk: <strong>${riskLabel}</strong></div>
+      <div style="margin-top:12px;font-size:18px;">
+        Investment Score: <strong>${investmentScore}/100</strong>
+      </div>
+      <div style="font-size:16px;">
+        Rating: <strong>${rating}</strong>
+      </div>
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
-        📄 ${currentLang === "it" ? "Genera Report Strategico" : "Generate Strategic Report"}
+        📄 ${currentLang === "it" ? "Genera Report Strategico Completo" : "Generate Full Strategic Report"}
       </button>
     </div>
   `;
-
-  // ===============================
-  // GRAFICO ROI
-  // ===============================
 
   if (!chartCanvas) return;
 
   chartCanvas.style.display = "block";
 
-  if (roiChartInstance) {
-    roiChartInstance.destroy();
-  }
+  if (roiChartInstance) roiChartInstance.destroy();
 
   roiChartInstance = new Chart(chartCanvas, {
-    type: 'bar',
+    type: 'line',
     data: {
-      labels: currentLang === "it"
-        ? ['ROI Attuale', 'Scenario Pessimistico']
-        : ['Current ROI', 'Pessimistic Scenario'],
+      labels: ['Year 1','Year 2','Year 3','Year 4','Year 5'],
       datasets: [{
-        label: 'ROI %',
-        data: [baseROI, pessimisticROI],
-        backgroundColor: ['#22c55e', '#ef4444']
+        label: 'Cumulative Net',
+        data: [
+          netAfterMortgage,
+          netAfterMortgage*2,
+          netAfterMortgage*3,
+          netAfterMortgage*4,
+          netAfterMortgage*5
+        ],
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.2)',
+        tension: 0.3,
+        fill: true
       }]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } }
-    }
+    options: { responsive: true }
   });
 }
 
 // ===============================
-// PDF PROFESSIONALE BILINGUE
+// PDF PROFESSIONALE COMPLETO
 // ===============================
 
 async function generatePDF() {
@@ -183,66 +228,37 @@ async function generatePDF() {
 
   let y = 20;
 
-  pdf.setFont("helvetica", "bold");
   pdf.setFontSize(20);
-  pdf.text(
-    isIT
-      ? "RendimentoBB - Report Strategico"
-      : "RendimentoBB - Strategic Investment Report",
-    20,
-    y
-  );
+  pdf.text("RendimentoBB", 20, y);
 
-  y += 12;
-  pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(11);
+  y += 15;
+  pdf.setFontSize(14);
+  pdf.text(`Investment Score: ${d.investmentScore}/100`, 20, y);
 
-  const interpretation =
-    d.baseROI < 6
-      ? isIT
-        ? "Il rendimento è basso e l'operazione presenta elevata sensibilità operativa."
-        : "Return is low and the operation shows high operational sensitivity."
-      : d.baseROI < 12
-      ? isIT
-        ? "Il rendimento è bilanciato ma dipende dalla stabilità dell'occupazione."
-        : "Return is balanced but dependent on occupancy stability."
-      : isIT
-        ? "Il rendimento è elevato ma potrebbe implicare maggiore rischio."
-        : "Return is strong but may imply higher risk exposure.";
+  y += 8;
+  pdf.text(`Rating: ${d.rating}`, 20, y);
+
+  y += 15;
+  pdf.setFontSize(12);
 
   const summary = isIT
-    ? `
-EXECUTIVE SUMMARY
-
-ROI annuo stimato: ${d.baseROI.toFixed(2)}%.
-Scenario pessimistico (-10% occupazione): ${d.pessimisticROI.toFixed(2)}%.
-
-${interpretation}
-
-Livello di rischio: ${d.riskLabel}.
-`
-    : `
-EXECUTIVE SUMMARY
-
-Estimated annual ROI: ${d.baseROI.toFixed(2)}%.
-Pessimistic scenario (-10% occupancy): ${d.pessimisticROI.toFixed(2)}%.
-
-${interpretation}
-
-Risk level: ${d.riskLabel}.
-`;
+    ? `Questo investimento genera un ROI del ${d.baseROI.toFixed(2)}% con recupero capitale stimato in ${d.breakEvenYears.toFixed(1)} anni.
+Lo scenario pessimistico scende a ${d.pessimisticROI.toFixed(2)}%.
+Il punteggio ${d.investmentScore}/100 indica un profilo ${d.rating}.`
+    : `This investment generates a ${d.baseROI.toFixed(2)}% ROI with capital recovery in approximately ${d.breakEvenYears.toFixed(1)} years.
+Pessimistic scenario drops to ${d.pessimisticROI.toFixed(2)}%.
+Score ${d.investmentScore}/100 indicates rating ${d.rating}.`;
 
   const lines = pdf.splitTextToSize(summary, 170);
   pdf.text(lines, 20, y);
 
   y += lines.length * 6 + 10;
 
-  // GRAFICO
   const chartCanvas = document.getElementById("roiChart");
   if (chartCanvas) {
     const chartImage = chartCanvas.toDataURL("image/png", 1.0);
     pdf.addImage(chartImage, 'PNG', 20, y, 170, 80);
   }
 
-  pdf.save("RendimentoBB_Strategic_Report.pdf");
+  pdf.save("RendimentoBB_Professional_Report.pdf");
 }
