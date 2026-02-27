@@ -13,7 +13,7 @@ if (urlParams.get("pro") === "paid") {
 }
 
 // 🔥 INSERISCI QUI IL TUO LINK STRIPE
-const STRIPE_PAYMENT_LINK = "INSERISCI_LINK_STRIPE";
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
 // UNLOCK PRO (Redirect to Stripe)
