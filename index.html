@@ -9,7 +9,7 @@
 * { box-sizing:border-box; margin:0; padding:0; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   background:#f8fafc;
   color:#0f172a;
   line-height:1.6;
@@ -29,10 +29,7 @@ body {
   padding:20px;
 }
 
-.logo {
-  font-weight:800;
-  font-size:20px;
-}
+.logo { font-weight:800; font-size:20px; }
 
 .nav a {
   text-decoration:none;
@@ -48,6 +45,7 @@ body {
   border:none;
   cursor:pointer;
   font-weight:600;
+  background:#e2e8f0;
 }
 
 /* HERO */
@@ -60,8 +58,7 @@ body {
   font-size:44px;
   margin-bottom:25px;
   max-width:900px;
-  margin-left:auto;
-  margin-right:auto;
+  margin:auto;
 }
 
 .hero p {
@@ -71,9 +68,13 @@ body {
   margin:20px auto;
 }
 
-.cta {
-  margin-top:50px;
+.sub-hero {
+  margin-top:25px;
+  font-size:16px;
+  color:#64748b;
 }
+
+.cta { margin-top:50px; }
 
 .cta a {
   text-decoration:none;
@@ -106,10 +107,15 @@ body {
   box-shadow:0 12px 30px rgba(0,0,0,0.25);
 }
 
-/* SECTION */
-.section {
-  padding:90px 20px;
+/* TRUST */
+.trust {
+  margin-top:20px;
+  font-size:14px;
+  color:#64748b;
 }
+
+/* SECTION */
+.section { padding:90px 20px; }
 
 .section h2 {
   text-align:center;
@@ -131,14 +137,9 @@ body {
   transition:0.25s;
 }
 
-.feature:hover {
-  transform:translateY(-6px);
-}
+.feature:hover { transform:translateY(-6px); }
 
-.feature h3 {
-  margin-bottom:15px;
-  font-size:20px;
-}
+.feature h3 { margin-bottom:15px; font-size:20px; }
 
 /* PROBLEM */
 .problem {
@@ -148,10 +149,7 @@ body {
   padding:100px 20px;
 }
 
-.problem h2 {
-  font-size:34px;
-  margin-bottom:20px;
-}
+.problem h2 { font-size:34px; margin-bottom:20px; }
 
 .problem p {
   max-width:800px;
@@ -162,7 +160,7 @@ body {
 
 /* PRO SECTION */
 .pro-section {
-  background:white;
+  background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 100%);
   padding:100px 20px;
   text-align:center;
 }
@@ -183,27 +181,23 @@ body {
   font-size:18px;
 }
 
+.price-highlight {
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:20px;
+  color:#0f172a;
+}
+
 /* FAQ */
 .faq {
   padding:90px 20px;
   background:#f1f5f9;
 }
 
-.faq h2 {
-  text-align:center;
-  margin-bottom:50px;
-}
+.faq h2 { text-align:center; margin-bottom:50px; }
 
-.faq-item {
-  max-width:800px;
-  margin:20px auto;
-}
+.faq-item { max-width:800px; margin:20px auto; }
 
-.faq-item h4 {
-  margin-bottom:10px;
-}
-
-/* FOOTER */
 .footer {
   text-align:center;
   padding:40px 20px;
@@ -239,6 +233,12 @@ body {
      Un errore di valutazione può costarti decine di migliaia di euro nei primi anni.
   </p>
 
+  <div class="sub-hero"
+       data-it="Strumento professionale di simulazione ROI, cashflow e rischio."
+       data-en="Professional ROI, cashflow and risk simulation tool.">
+       Strumento professionale di simulazione ROI, cashflow e rischio.
+  </div>
+
   <div class="cta">
     <a href="/tool/" class="btn-primary"
        data-it="🔎 Avvia analisi gratuita"
@@ -248,34 +248,14 @@ body {
 
     <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
        class="btn-secondary"
-       data-it="🛡 Proteggi il mio investimento – 19€"
-       data-en="🛡 Protect my investment – €19">
-       🛡 Proteggi il mio investimento – 19€
+       data-it="🛡 Proteggi il tuo investimento – 19€"
+       data-en="🛡 Protect your investment – €19">
+       🛡 Proteggi il tuo investimento – 19€
     </a>
   </div>
-</div>
 
-<div class="section container">
-  <h2 data-it="Perché la maggior parte dei nuovi B&B sbaglia i calcoli"
-      data-en="Why most new B&B owners miscalculate their investment">
-      Perché la maggior parte dei nuovi B&B sbaglia i calcoli
-  </h2>
-
-  <div class="features">
-    <div class="feature">
-      <h3>Sovrastima occupazione</h3>
-      <p>I numeri teorici non riflettono stagionalità reale e concorrenza locale.</p>
-    </div>
-
-    <div class="feature">
-      <h3>Sottovaluta costi</h3>
-      <p>Commissioni piattaforme, tasse e imprevisti riducono il margine reale.</p>
-    </div>
-
-    <div class="feature">
-      <h3>Nessuno scenario pessimistico</h3>
-      <p>Pochi simulano calo prenotazioni o aumento tassi bancari.</p>
-    </div>
+  <div class="trust">
+    ✔ Pagamento sicuro con Stripe · ✔ Accesso immediato · ✔ Nessun abbonamento
   </div>
 </div>
 
@@ -291,7 +271,8 @@ body {
 </div>
 
 <div class="pro-section">
-  <h2>Accesso completo PRO – 19€</h2>
+  <h2>Accesso completo PRO</h2>
+  <div class="price-highlight">19€ una tantum</div>
 
   <ul class="pro-list">
     <li>✔ Simulazione mutuo dettagliata</li>
@@ -304,27 +285,8 @@ body {
   <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
      class="btn-secondary"
      style="font-size:18px;padding:20px 40px;">
-     🔓 Proteggi il mio investimento ora – 19€
+     🔓 Attiva accesso PRO – 19€
   </a>
-</div>
-
-<div class="faq">
-  <h2>Domande frequenti</h2>
-
-  <div class="faq-item">
-    <h4>È adatto anche a chi è all’inizio?</h4>
-    <p>Sì. È progettato proprio per chi sta valutando se aprire un B&B.</p>
-  </div>
-
-  <div class="faq-item">
-    <h4>Serve esperienza tecnica?</h4>
-    <p>No. Inserisci i dati e ottieni analisi immediata.</p>
-  </div>
-
-  <div class="faq-item">
-    <h4>Posso simulare più scenari?</h4>
-    <p>Sì. Puoi modificare occupazione e costi per testare diverse ipotesi.</p>
-  </div>
 </div>
 
 <div class="footer">
