@@ -13,11 +13,24 @@ if (typeof currentLang === "undefined") {
 let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
 
 const urlParams = new URLSearchParams(window.location.search);
+
 if (urlParams.get("pro") === "paid") {
   isProUnlocked = true;
   localStorage.setItem("proUnlocked", "true");
+
+  // Pulizia URL (rimuove ?pro=paid)
+  window.history.replaceState({}, document.title, window.location.pathname);
+
+  setTimeout(() => {
+    alert(
+      currentLang === "it"
+        ? "✅ Versione PRO attivata con successo!"
+        : "✅ PRO version successfully activated!"
+    );
+  }, 300);
 }
 
+// 🔥 METTI QUI IL TUO LINK STRIPE LIVE QUANDO VAI ONLINE
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
@@ -25,7 +38,13 @@ const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200
 // ===============================
 
 function unlockPro() {
-  window.location.href = STRIPE_PAYMENT_LINK;
+  const locale = currentLang === "it" ? "it" : "en";
+  window.location.href =
+    STRIPE_PAYMENT_LINK +
+    "?locale=" +
+    locale +
+    "&success_url=" +
+    encodeURIComponent("https://rendimentobb.com/tool/?pro=paid");
 }
 
 // ===============================
@@ -81,7 +100,7 @@ function calculate() {
   }
 
   // =========================
-  // BASE BUSINESS CALCULATION
+  // BASE CALCULATION
   // =========================
 
   const nightsPerMonth = 30 * (occupancy / 100);
@@ -95,14 +114,13 @@ function calculate() {
   const taxCost = profitBeforeTax > 0 ? profitBeforeTax * (tax / 100) : 0;
 
   const netYearly = profitBeforeTax - taxCost;
-
   let baseROI = (netYearly / equity) * 100;
 
-  // =========================
-  // WARNING IF LOW MARGIN
-  // =========================
-
   let output = "";
+
+  // =========================
+  // LOW MARGIN WARNING
+  // =========================
 
   if (netYearly < 5000) {
     output += `
@@ -114,8 +132,8 @@ function calculate() {
       font-size:13px;
     ">
       ⚠️ ${currentLang === "it"
-        ? "Margine basso. Questo investimento potrebbe essere fragile."
-        : "Low margin. This investment could be fragile."}
+        ? "Margine basso. Potrebbe essere un investimento fragile."
+        : "Low margin. This investment may be fragile."}
     </div>
     `;
   }
@@ -140,14 +158,13 @@ function calculate() {
   `;
 
   // =========================
-  // TEASER RISK BAR (NON PRO)
+  // NON PRO BLOCK
   // =========================
 
   if (!isProUnlocked) {
 
     let teaserRisk = 100 - baseROI * 2;
-    if (teaserRisk < 0) teaserRisk = 0;
-    if (teaserRisk > 100) teaserRisk = 100;
+    teaserRisk = Math.max(0, Math.min(100, teaserRisk));
 
     output += `
       <div style="margin-top:15px;">
@@ -166,15 +183,11 @@ function calculate() {
 
         <div style="font-size:12px;color:#94a3b8;margin-top:5px;">
           ${currentLang === "it"
-            ? "Sblocca PRO per analisi rischio completa."
-            : "Unlock PRO for full risk analysis."}
+            ? "Analisi completa disponibile nella versione PRO."
+            : "Full risk analysis available in PRO version."}
         </div>
       </div>
     `;
-
-    // =========================
-    // PRO CONVERSION BLOCK
-    // =========================
 
     output += `
       <div style="
@@ -217,7 +230,7 @@ function calculate() {
   }
 
   // =========================
-  // FULL PRO ANALYSIS
+  // PRO ANALYSIS
   // =========================
 
   output += `
@@ -229,6 +242,19 @@ function calculate() {
 
       <div>${currentLang === "it" ? "Cashflow annuo:" : "Yearly cashflow:"}
       <strong>${formatCurrency(netYearly)}</strong></div>
+    </div>
+
+    <div style="
+      margin-top:15px;
+      padding:12px;
+      border-radius:8px;
+      background:#052e16;
+      color:#86efac;
+      font-size:13px;
+    ">
+      ✅ ${currentLang === "it"
+        ? "Versione PRO attiva — Analisi completa disponibile."
+        : "PRO version active — Full analysis unlocked."}
     </div>
   `;
 
