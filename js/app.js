@@ -1,10 +1,17 @@
 // ===============================
+// SAFE LANGUAGE INIT
+// ===============================
+
+if (typeof currentLang === "undefined") {
+  var currentLang = "it";
+}
+
+// ===============================
 // PRO STATUS INIT
 // ===============================
 
 let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
 
-// Auto unlock from Stripe redirect
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get("pro") === "paid") {
   isProUnlocked = true;
@@ -15,7 +22,7 @@ if (urlParams.get("pro") === "paid") {
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
-// UNLOCK PRO (Redirect to Stripe)
+// UNLOCK PRO
 // ===============================
 
 function unlockPro() {
@@ -37,30 +44,43 @@ function formatCurrency(value) {
 }
 
 // ===============================
+// SAFE VALUE GETTER
+// ===============================
+
+function getValue(id) {
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  const val = parseFloat(el.value);
+  return isNaN(val) ? 0 : val;
+}
+
+// ===============================
 // CALCULATE
 // ===============================
 
 function calculate() {
 
-  const price = parseFloat(document.getElementById("price").value);
-  const occupancy = parseFloat(document.getElementById("occupancy").value);
-  const expenses = parseFloat(document.getElementById("expenses").value);
-  const commission = parseFloat(document.getElementById("commission").value);
-  const tax = parseFloat(document.getElementById("tax").value);
+  const price = getValue("price");
+  const occupancy = getValue("occupancy");
+  const expenses = getValue("expenses");
+  const commission = getValue("commission");
+  const tax = getValue("tax");
 
-  const equity = parseFloat(document.getElementById("equity").value);
-  const loanAmount = parseFloat(document.getElementById("loanAmount").value);
-  const loanRate = parseFloat(document.getElementById("loanRate").value);
-  const loanYears = parseFloat(document.getElementById("loanYears").value);
+  const equity = getValue("equity");
+  const loanAmount = getValue("loanAmount");
+  const loanRate = getValue("loanRate");
+  const loanYears = getValue("loanYears");
 
-  const familyIncome = parseFloat(document.getElementById("familyIncome").value);
-  const stressOccupancy = parseFloat(document.getElementById("stressOccupancy").value);
-  const stressExpenses = parseFloat(document.getElementById("stressExpenses").value);
-  const stressRate = parseFloat(document.getElementById("stressRate").value);
+  const familyIncome = getValue("familyIncome");
+  const stressOccupancy = getValue("stressOccupancy");
+  const stressExpenses = getValue("stressExpenses");
+  const stressRate = getValue("stressRate");
 
   const resultsDiv = document.getElementById("results");
 
-  if (isNaN(price) || isNaN(occupancy) || isNaN(expenses) || isNaN(commission) || isNaN(tax)) {
+  if (!resultsDiv) return;
+
+  if (!price || !occupancy) {
     resultsDiv.innerHTML =
       currentLang === "it"
         ? "Inserisci valori validi."
@@ -82,14 +102,7 @@ function calculate() {
 
   let output = `
     ${isProUnlocked ? `
-      <div style="
-        background:#052e16;
-        padding:12px;
-        border-radius:8px;
-        margin-bottom:15px;
-        color:#86efac;
-        font-size:13px;
-      ">
+      <div style="background:#052e16;padding:12px;border-radius:8px;margin-bottom:15px;color:#86efac;font-size:13px;">
         ✅ Versione PRO attiva — Analisi completa disponibile
       </div>
     ` : ``}
@@ -104,63 +117,21 @@ function calculate() {
   `;
 
   // =========================
-  // 🔒 BLOCCO PRO PERSUASIVO
+  // BLOCCO PRO
   // =========================
 
   if (!isProUnlocked) {
 
     output += `
-      <div style="
-        margin-top:20px;
-        padding:20px;
-        background:#111827;
-        border-radius:12px;
-        border:1px solid #334155;
-        color:#e2e8f0;
-      ">
-
-        <h3 style="margin-top:0;color:#22c55e;">
-          🔒 Analisi Completa Bloccata
-        </h3>
-
+      <div style="margin-top:20px;padding:20px;background:#111827;border-radius:12px;border:1px solid #334155;color:#e2e8f0;">
+        <h3 style="margin-top:0;color:#22c55e;">🔒 Analisi Completa Bloccata</h3>
         <p style="font-size:14px;line-height:1.6;">
-          Stai valutando un investimento che può superare i <strong>100.000€</strong>.
-          Decidere senza analisi completa significa esporsi a errori
-          che possono costare decine di migliaia di euro.
+          19€ per evitare un errore da 50.000€.
         </p>
-
-        <ul style="font-size:14px;line-height:1.8;padding-left:18px;">
-          <li>✔ ROI reale con mutuo ed equity</li>
-          <li>✔ Cashflow effettivo dopo rata bancaria</li>
-          <li>✔ Break-even reale</li>
-          <li>✔ Scenario pessimistico automatico</li>
-          <li>✔ Indice di rischio 0–100</li>
-        </ul>
-
-        <p style="margin-top:15px;font-size:14px;">
-          <strong>19€ per evitare un errore da 50.000€.</strong>
-        </p>
-
         <button onclick="unlockPro()" 
-          style="
-            width:100%;
-            margin-top:15px;
-            padding:12px;
-            border:none;
-            border-radius:8px;
-            background:#22c55e;
-            color:black;
-            font-weight:bold;
-            cursor:pointer;
-            font-size:15px;
-          ">
+          style="width:100%;margin-top:15px;padding:12px;border:none;border-radius:8px;background:#22c55e;color:black;font-weight:bold;cursor:pointer;">
           🔓 Sblocca Analisi Completa – 19€
         </button>
-
-        <p style="margin-top:10px;font-size:12px;color:#94a3b8;">
-          Accesso immediato dopo il pagamento.
-        </p>
-
       </div>
     `;
 
@@ -169,12 +140,12 @@ function calculate() {
   }
 
   // =========================
-  // LOAN
+  // LOAN CALCULATION
   // =========================
 
   let monthlyLoanPayment = 0;
 
-  if (!isNaN(loanAmount) && !isNaN(loanRate) && !isNaN(loanYears) && loanRate > 0) {
+  if (loanAmount > 0 && loanRate > 0 && loanYears > 0) {
     const monthlyRate = (loanRate / 100) / 12;
     const totalPayments = loanYears * 12;
 
@@ -189,7 +160,7 @@ function calculate() {
   let roi = 0;
   let breakEvenYears = -1;
 
-  if (!isNaN(equity) && equity > 0) {
+  if (equity > 0) {
     roi = (realYearlyCashflow / equity) * 100;
     if (realYearlyCashflow > 0) {
       breakEvenYears = equity / realYearlyCashflow;
@@ -213,7 +184,7 @@ function calculate() {
 
   let stressedLoan = 0;
 
-  if (loanAmount && stressedRate > 0 && loanYears > 0) {
+  if (loanAmount > 0 && stressedRate > 0 && loanYears > 0) {
     const mRate = (stressedRate / 100) / 12;
     const totalPayments = loanYears * 12;
     stressedLoan =
@@ -240,35 +211,27 @@ function calculate() {
 
   if (riskScore < 0) riskScore = 0;
 
-  let badgeClass =
-    riskScore >= 80
-      ? "security-safe"
-      : riskScore >= 60
-      ? "security-warning"
-      : "security-danger";
-
   let riskLabel =
     riskScore >= 80
-      ? (currentLang === "it" ? "Investimento Solido" : "Solid Investment")
+      ? "Investimento Solido"
       : riskScore >= 60
-      ? (currentLang === "it" ? "Zona Attenzione" : "Attention Zone")
-      : (currentLang === "it" ? "Investimento Rischioso" : "Risky Investment");
+      ? "Zona Attenzione"
+      : "Investimento Rischioso";
 
   output += `
     <div class="result-card">
-      <h4>${currentLang === "it" ? "📊 Analisi Completa" : "📊 Full Analysis"}</h4>
+      <h4>📊 Analisi Completa</h4>
       <div>ROI: <strong>${roi.toFixed(2)}%</strong></div>
-      <div>${currentLang === "it" ? "Cashflow reale annuo:" : "Real yearly cashflow:"}
+      <div>Cashflow reale annuo:
       <strong>${formatCurrency(realYearlyCashflow)}</strong></div>
-      <div>${currentLang === "it" ? "Break-even (anni):" : "Break-even (years):"}
+      <div>Break-even (anni):
       <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}</strong></div>
-      <div>${currentLang === "it" ? "Scenario pessimistico:" : "Pessimistic scenario:"}
+      <div>Scenario pessimistico:
       <strong>${formatCurrency(stressedCashflow)}</strong></div>
     </div>
 
-    <div class="security-badge ${badgeClass}">
-      ${currentLang === "it" ? "Indice Rischio:" : "Risk Index:"}
-      ${riskScore}/100 — ${riskLabel}
+    <div style="margin-top:15px;padding:12px;border-radius:8px;background:#1e293b;color:white;">
+      Indice Rischio: ${riskScore}/100 — ${riskLabel}
     </div>
   `;
 
