@@ -77,13 +77,11 @@ function calculate() {
   let baseOutput = `
     <hr>
     <h3>${currentLang === "it" ? "📊 Risultato Base" : "📊 Base Result"}</h3>
-    <div>${currentLang === "it" ? "Guadagno netto annuo:" : "Net yearly profit:"}
-    <strong>${formatCurrency(netYearly)}</strong></div>
+    <div>
+      ${currentLang === "it" ? "Guadagno netto annuo:" : "Net yearly profit:"}
+      <strong>${formatCurrency(netYearly)}</strong>
+    </div>
   `;
-
-  // =========================
-  // SE NON PRO → BLOCCO
-  // =========================
 
   if (!isProUnlocked) {
     resultsDiv.innerHTML =
@@ -91,22 +89,22 @@ function calculate() {
       `
       <hr>
       <div style="margin-top:10px; color:#94a3b8;">
-        ${currentLang === "it"
-          ? "🔒 Sblocca PRO per vedere analisi rischio completa, ROI reale e stress test."
-          : "🔒 Unlock PRO to see full risk analysis, real ROI and stress test."}
+        ${
+          currentLang === "it"
+            ? "🔒 Sblocca PRO per vedere analisi rischio completa, ROI reale e stress test."
+            : "🔒 Unlock PRO to see full risk analysis, real ROI and stress test."
+        }
       </div>
       <br>
       <button onclick="unlockPro()" class="calculate">
-        ${currentLang === "it"
-          ? "Sblocca PRO"
-          : "Unlock PRO"}
+        ${currentLang === "it" ? "Sblocca PRO" : "Unlock PRO"}
       </button>
     `;
     return;
   }
 
   // =========================
-  // MUTUO
+  // LOAN
   // =========================
 
   let monthlyLoanPayment = 0;
@@ -162,16 +160,14 @@ function calculate() {
   const stressedCashflow = stressedNetYearly - (stressedLoan * 12);
 
   // =========================
-  // INDICE RISCHIO
+  // RISK SCORE
   // =========================
 
   let riskScore = 100;
 
   if (realYearlyCashflow < 0) riskScore -= 30;
-
   if (roi < 0) riskScore -= 25;
   else if (roi < 5) riskScore -= 15;
-
   if (breakEvenYears > 20) riskScore -= 15;
   if (stressedCashflow < 0) riskScore -= 20;
 
@@ -197,19 +193,19 @@ function calculate() {
     riskColor = "#ef4444";
   }
 
-  // =========================
-  // OUTPUT PRO
-  // =========================
-
   resultsDiv.innerHTML =
     baseOutput +
     `
     <hr>
     <h3>${currentLang === "it" ? "📊 Analisi Completa" : "📊 Full Analysis"}</h3>
 
-    <div>Cashflow reale annuo: <strong>${formatCurrency(realYearlyCashflow)}</strong></div>
+    <div>${currentLang === "it" ? "Cashflow reale annuo:" : "Real yearly cashflow:"}
+    <strong>${formatCurrency(realYearlyCashflow)}</strong></div>
+
     <div>ROI: <strong>${roi.toFixed(2)}%</strong></div>
-    <div>Break-even: <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}</strong></div>
+
+    <div>${currentLang === "it" ? "Break-even (anni):" : "Break-even (years):"}
+    <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}</strong></div>
 
     <hr>
 
@@ -221,6 +217,7 @@ function calculate() {
     <div style="font-size:18px; color:${riskColor};">
       <strong>${currentLang === "it" ? "Indice Rischio:" : "Risk Index:"} ${riskScore}/100</strong>
     </div>
+
     <div style="color:${riskColor}; font-weight:bold;">
       ${riskLabel}
     </div>
