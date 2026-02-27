@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RendimentoBB – Analisi Strategica Investimento B&B</title>
+
 <link rel="stylesheet" href="../css/style.css">
 
+<!-- Librerie -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -39,7 +41,6 @@
     <h3>💰 Investimento</h3>
 
     <div class="form-grid">
-
       <div class="input-group">
         <label>Prezzo immobile (€)</label>
         <input type="number" id="propertyPrice" placeholder="Es. 100000">
@@ -49,14 +50,12 @@
         <label>Capitale proprio investito (€)</label>
         <input type="number" id="equity" placeholder="Es. 40000">
       </div>
-
     </div>
 
-    <!-- MODULO MUTUO -->
+    <!-- MUTUO -->
     <h3 style="margin-top:30px">🏦 Mutuo (Opzionale)</h3>
 
     <div class="form-grid">
-
       <div class="input-group">
         <label>Importo finanziato (€)</label>
         <input type="number" id="loanAmount" placeholder="Es. 60000">
@@ -71,13 +70,11 @@
         <label>Durata (anni)</label>
         <input type="number" id="loanYears" placeholder="Es. 20">
       </div>
-
     </div>
 
     <h3 style="margin-top:30px">🏨 Operatività</h3>
 
     <div class="form-grid">
-
       <div class="input-group">
         <label>Prezzo medio notte (€)</label>
         <input type="number" id="price" placeholder="Es. 120">
@@ -102,7 +99,6 @@
         <label>Tasse (%)</label>
         <input type="number" id="tax" placeholder="Es. 21">
       </div>
-
     </div>
 
     <div class="action-area">
@@ -115,6 +111,11 @@
 
   <!-- RISULTATI -->
   <div id="results" class="results-card"></div>
+
+  <!-- GRAFICO ROI -->
+  <div class="results-card" style="margin-top:20px;">
+    <canvas id="roiChart" height="120"></canvas>
+  </div>
 
   <!-- PRO BLOCK -->
   <div id="proBlock" class="pro-lock">
@@ -145,7 +146,6 @@
 
   </div>
 
-  <!-- BACK -->
   <div class="back-link">
     <a href="/">← Torna alla homepage</a>
   </div>
