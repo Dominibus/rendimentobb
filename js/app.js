@@ -38,10 +38,10 @@ function unlockPro() {
 
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
-  return new Intl.NumberFormat(
-    currentLang === "it" ? "it-IT" : "en-US",
-    { style: "currency", currency: "EUR" }
-  ).format(value);
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR"
+  }).format(value);
 }
 
 function getValue(id) {
@@ -52,6 +52,11 @@ function getValue(id) {
 }
 
 let cashflowChartInstance = null;
+let lastAnalysisData = null;
+
+// ===============================
+// CALCULATE
+// ===============================
 
 function calculate() {
 
@@ -102,25 +107,14 @@ function calculate() {
 
     output += `
       <div style="margin-top:25px;padding:30px;background:linear-gradient(145deg,#111827,#0f172a);border-radius:18px;border:1px solid #334155;text-align:center;">
-        <h3 style="color:#22c55e;font-size:20px;">🔒 Analisi Professionale Bloccata</h3>
-        <p style="color:#94a3b8;margin-top:10px;">
-        Senza analisi avanzata potresti sottovalutare rischi fino a 
-        <strong>${formatCurrency(potentialLoss)}</strong>
-        nei primi anni.
+        <h3 style="color:#22c55e;">🔒 Analisi Strategica Bloccata</h3>
+        <p style="color:#94a3b8;">
+        Potenziale rischio stimato fino a <strong>${formatCurrency(potentialLoss)}</strong>
+        in caso di scenario negativo.
         </p>
-        <div style="margin-top:20px;font-size:14px;color:#64748b;">
-        ✔ Stress test realistico<br>
-        ✔ Indice rischio professionale<br>
-        ✔ Simulazione 5 anni<br>
-        ✔ Break-even operativo reale<br>
-        ✔ Confronto scenari negativi
-        </div>
         <button onclick="unlockPro()" class="btn-primary" style="width:100%;margin-top:20px;">
-        🔓 Sblocca Analisi PRO – 19€
+        🔓 Sblocca Versione PRO – 19€
         </button>
-        <div style="font-size:12px;color:#64748b;margin-top:10px;">
-        Pagamento una tantum • Garanzia 7 giorni
-        </div>
       </div>
     `;
 
@@ -136,7 +130,6 @@ function calculate() {
   const marginPercentage =
     grossYearly > 0 ? (netYearly / grossYearly) * 100 : 0;
 
-  // Stress realistico
   const stressedOccupancy = occupancy * 0.85;
   const stressedExpenses = yearlyExpenses * 1.15;
 
@@ -144,21 +137,12 @@ function calculate() {
     (price * 30 * (stressedOccupancy / 100) * 12) -
     yearlyFees - stressedExpenses;
 
-  // Scenario ulteriore
-  const severeOccupancy = occupancy * 0.70;
-  const severeNet =
-    (price * 30 * (severeOccupancy / 100) * 12) -
-    yearlyFees - stressedExpenses;
-
-  // ================= RISK SCORE =================
-
   let riskScore = 100;
 
   if (baseROI < 6) riskScore -= 25;
   if (breakEvenYears > 12) riskScore -= 20;
   if (marginPercentage < 18) riskScore -= 20;
   if (stressedNet < 0) riskScore -= 20;
-  if (severeNet < 0) riskScore -= 15;
 
   riskScore = Math.max(0, Math.min(100, riskScore));
 
@@ -176,8 +160,6 @@ function calculate() {
     statusColor = "#dc2626";
   }
 
-  // ================= DIAGNOSI =================
-
   let diagnosis = "";
 
   if (marginPercentage < 20)
@@ -187,108 +169,98 @@ function calculate() {
     diagnosis += "Recupero capitale lento. ";
 
   if (stressedNet < 0)
-    diagnosis += "Alta sensibilità a calo occupazione. ";
+    diagnosis += "Elevata sensibilità a variazioni di occupazione. ";
 
   if (diagnosis === "")
     diagnosis = "Parametri finanziari equilibrati e sostenibili.";
 
-  // ================= GRAFICO =================
-
-  const years = [1,2,3,4,5];
-  let cumulative = [];
-  let cumulativeStress = [];
-  let total = 0;
-  let totalStress = 0;
-
-  for (let i = 1; i <= 5; i++) {
-    total += netYearly;
-    totalStress += stressedNet;
-    cumulative.push(total);
-    cumulativeStress.push(totalStress);
-  }
+  // Salvataggio per PDF
+  lastAnalysisData = {
+    propertyPrice,
+    equity,
+    grossYearly,
+    netYearly,
+    baseROI,
+    roi5Years,
+    breakEvenYears,
+    marginPercentage,
+    stressedNet,
+    riskScore,
+    statusText,
+    diagnosis
+  };
 
   output += `
     <div class="result-card">
-      <h4>📊 Analisi Professionale</h4>
+      <h4>📊 Analisi Strategica PRO</h4>
 
       <div style="font-weight:bold;color:${statusColor};margin-bottom:10px;">
         ${statusText}
       </div>
 
       <div>ROI 5 anni: <strong>${roi5Years.toFixed(2)}%</strong></div>
-      <div>Break-even capitale: 
-      <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
-      <div>Margine operativo: 
-      <strong>${marginPercentage.toFixed(1)}%</strong></div>
-      <div>Scenario pessimistico: 
-      <strong>${formatCurrency(stressedNet)}</strong></div>
+      <div>Break-even capitale: <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
+      <div>Margine operativo: <strong>${marginPercentage.toFixed(1)}%</strong></div>
+      <div>Scenario pessimistico: <strong>${formatCurrency(stressedNet)}</strong></div>
 
       <div style="margin-top:15px;padding:12px;border-radius:8px;background:#0f172a;border:1px solid #334155;font-size:13px;color:#94a3b8;">
-        🔎 Diagnosi automatica:<br>${diagnosis}
+        🔎 Diagnosi professionale:<br>${diagnosis}
       </div>
-    </div>
 
-    <div style="margin-top:25px;">
-      <canvas id="cashflowChart"></canvas>
-    </div>
-
-    <div style="margin-top:20px;padding:14px;border-radius:8px;background:#052e16;color:#86efac;text-align:center;">
-      ✅ Versione PRO attiva — Analisi completa disponibile.
+      <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
+        📄 Genera Report PDF Professionale
+      </button>
     </div>
   `;
 
   resultsDiv.innerHTML = output;
+}
 
-  const ctx = document.getElementById("cashflowChart");
+// ===============================
+// GENERAZIONE PDF PROFESSIONALE
+// ===============================
 
-  if (cashflowChartInstance) {
-    cashflowChartInstance.destroy();
-  }
+async function generatePDF() {
 
-  cashflowChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: years.map(y => "Anno " + y),
-      datasets: [
-        {
-          label: 'Cashflow cumulativo',
-          data: cumulative,
-          borderColor: '#22c55e',
-          backgroundColor: 'rgba(34,197,94,0.15)',
-          fill: true,
-          tension: 0.3
-        },
-        {
-          label: 'Scenario stress',
-          data: cumulativeStress,
-          borderColor: '#f59e0b',
-          tension: 0.3
-        },
-        {
-          label: 'Capitale investito',
-          data: Array(5).fill(equity),
-          borderColor: '#dc2626',
-          borderDash: [6,6]
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          labels: { color: '#ffffff' }
-        }
-      },
-      scales: {
-        y: {
-          ticks: { color: '#94a3b8' },
-          grid: { color: 'rgba(255,255,255,0.05)' }
-        },
-        x: {
-          ticks: { color: '#94a3b8' },
-          grid: { color: 'rgba(255,255,255,0.05)' }
-        }
-      }
-    }
-  });
+  if (!lastAnalysisData) return;
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text("RendimentoBB", 20, 20);
+
+  pdf.setFontSize(14);
+  pdf.text("Report di Valutazione Investimento B&B", 20, 30);
+
+  pdf.setFontSize(11);
+  pdf.setFont("helvetica", "normal");
+
+  let y = 45;
+
+  pdf.text("Executive Summary:", 20, y);
+  y += 8;
+
+  pdf.text(`Valutazione: ${lastAnalysisData.statusText}`, 20, y);
+  y += 8;
+
+  pdf.text(`ROI 5 anni: ${lastAnalysisData.roi5Years.toFixed(2)}%`, 20, y);
+  y += 8;
+
+  pdf.text(`Break-even: ${lastAnalysisData.breakEvenYears ? lastAnalysisData.breakEvenYears.toFixed(1) : "-"} anni`, 20, y);
+  y += 8;
+
+  pdf.text(`Margine operativo: ${lastAnalysisData.marginPercentage.toFixed(1)}%`, 20, y);
+  y += 8;
+
+  pdf.text(`Scenario stress: ${formatCurrency(lastAnalysisData.stressedNet)}`, 20, y);
+  y += 12;
+
+  pdf.text("Diagnosi:", 20, y);
+  y += 8;
+
+  pdf.text(lastAnalysisData.diagnosis, 20, y);
+
+  pdf.save("Report_RendimentoBB.pdf");
 }
