@@ -6,10 +6,7 @@
 <title>RendimentoBB – Analisi Strategica Investimento B&B</title>
 <link rel="stylesheet" href="../css/style.css">
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- PDF Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -51,6 +48,28 @@
       <div class="input-group">
         <label>Capitale proprio investito (€)</label>
         <input type="number" id="equity" placeholder="Es. 40000">
+      </div>
+
+    </div>
+
+    <!-- MODULO MUTUO -->
+    <h3 style="margin-top:30px">🏦 Mutuo (Opzionale)</h3>
+
+    <div class="form-grid">
+
+      <div class="input-group">
+        <label>Importo finanziato (€)</label>
+        <input type="number" id="loanAmount" placeholder="Es. 60000">
+      </div>
+
+      <div class="input-group">
+        <label>Tasso annuo (%)</label>
+        <input type="number" id="interestRate" placeholder="Es. 3.5">
+      </div>
+
+      <div class="input-group">
+        <label>Durata (anni)</label>
+        <input type="number" id="loanYears" placeholder="Es. 20">
       </div>
 
     </div>
@@ -111,7 +130,7 @@
       <li>✔ Indice rischio professionale 0–100</li>
       <li>✔ Break-even reale capitale</li>
       <li>✔ Scenario stress realistico</li>
-      <li>✔ Diagnosi automatica investimento</li>
+      <li>✔ Analisi leva finanziaria mutuo</li>
       <li>✔ Generazione Report PDF professionale</li>
       <li>✔ Aggiornamenti futuri inclusi</li>
     </ul>
@@ -132,24 +151,6 @@
   </div>
 
 </div>
-
-
-<!-- PDF REPORT TEMPLATE (NASCOSTO) -->
-<div id="pdfReport" style="display:none; background:white; color:#111; padding:50px; font-family:Arial;">
-
-  <h1 style="margin-bottom:5px;">RendimentoBB</h1>
-  <h2 style="margin-top:0;">Report di Valutazione Investimento B&B</h2>
-
-  <hr style="margin:20px 0;">
-
-  <div id="pdfContent"></div>
-
-  <div style="margin-top:40px; font-size:12px; color:#666;">
-    Documento generato automaticamente da RendimentoBB – Analisi Strategica Investimenti B&B
-  </div>
-
-</div>
-
 
 <script src="../js/lang.js"></script>
 <script src="../js/app.js"></script>
