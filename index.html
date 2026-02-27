@@ -10,27 +10,50 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
+
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   background:#f8fafc;
   color:#0f172a;
   line-height:1.6;
+  -webkit-font-smoothing:antialiased;
 }
-.container{max-width:1100px;margin:auto;padding:40px 20px;}
-.header{display:flex;justify-content:space-between;align-items:center;padding:20px;}
-.logo{font-weight:800;font-size:20px;}
 
-.nav a{text-decoration:none;margin-left:20px;font-weight:600;color:#0f172a;}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+}
+
+.logo{
+  font-weight:800;
+  font-size:20px;
+  letter-spacing:.5px;
+}
+
+.nav a{
+  text-decoration:none;
+  margin-right:20px;
+  font-weight:600;
+  color:#0f172a;
+}
 
 .lang-switch button{
-  margin-left:8px;
+  margin-left:6px;
   padding:6px 12px;
   border-radius:8px;
   border:1px solid #cbd5e1;
+  background:white;
   cursor:pointer;
   font-weight:600;
-  background:white;
-  transition:0.2s;
+  transition:.2s;
 }
 
 .lang-switch button.active{
@@ -38,58 +61,124 @@ body{
   color:white;
 }
 
-.hero{text-align:center;padding:110px 20px 90px;}
-.hero h1{font-size:44px;margin-bottom:25px;max-width:900px;margin:auto;}
-.hero p{font-size:20px;color:#475569;max-width:800px;margin:20px auto;}
-.sub-hero{margin-top:25px;font-size:16px;color:#64748b;}
-.cta{margin-top:50px;}
+.hero{
+  text-align:center;
+  padding:120px 20px 100px;
+}
+
+.hero h1{
+  font-size:46px;
+  max-width:900px;
+  margin:0 auto 30px;
+  line-height:1.2;
+}
+
+.hero p{
+  font-size:20px;
+  color:#475569;
+  max-width:800px;
+  margin:20px auto;
+}
+
+.sub-hero{
+  margin-top:15px;
+  font-size:16px;
+  color:#64748b;
+}
+
+.cta{
+  margin-top:50px;
+}
 
 .cta a{
   text-decoration:none;
-  padding:18px 32px;
+  padding:18px 34px;
   border-radius:12px;
   font-weight:800;
   margin:10px;
   display:inline-block;
-  transition:.25s ease;
   font-size:16px;
+  transition:.25s ease;
 }
 
-.btn-primary{background:#22c55e;color:black;}
-.btn-secondary{background:#0f172a;color:white;}
+.btn-primary{
+  background:#22c55e;
+  color:black;
+}
+
+.btn-secondary{
+  background:#0f172a;
+  color:white;
+}
 
 .btn-primary:hover,.btn-secondary:hover{
   transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(0,0,0,0.2);
+  box-shadow:0 12px 30px rgba(0,0,0,0.15);
 }
 
-.trust{margin-top:20px;font-size:14px;color:#64748b;}
+.trust{
+  margin-top:25px;
+  font-size:14px;
+  color:#64748b;
+}
 
 .problem{
-  background:#0f172a;
+  background:linear-gradient(90deg,#0f172a,#111827);
   color:white;
   text-align:center;
-  padding:100px 20px;
+  padding:110px 20px;
 }
 
-.problem h2{font-size:34px;margin-bottom:20px;}
-.problem p{max-width:800px;margin:20px auto;font-size:20px;color:#cbd5e1;}
+.problem h2{
+  font-size:36px;
+  margin-bottom:20px;
+}
+
+.problem p{
+  font-size:20px;
+  color:#cbd5e1;
+}
 
 .pro-section{
-  background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 100%);
-  padding:100px 20px;
+  background:linear-gradient(180deg,#ffffff 0%,#eef2f7 100%);
+  padding:120px 20px;
   text-align:center;
 }
 
-.pro-section h2{font-size:36px;margin-bottom:20px;}
-.pro-list{max-width:800px;margin:40px auto;text-align:left;}
-.pro-list li{margin-bottom:15px;font-size:18px;}
+.pro-section h2{
+  font-size:38px;
+  margin-bottom:10px;
+}
 
-.price-highlight{font-size:22px;font-weight:800;margin-bottom:20px;}
+.price-highlight{
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:40px;
+}
+
+.pro-card{
+  max-width:700px;
+  margin:0 auto;
+  background:white;
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(15,23,42,.08);
+  text-align:left;
+}
+
+.pro-list li{
+  margin-bottom:16px;
+  font-size:18px;
+}
+
+.pro-cta{
+  text-align:center;
+  margin-top:40px;
+}
 
 .footer{
   text-align:center;
-  padding:40px 20px;
+  padding:50px 20px;
   font-size:14px;
   color:#64748b;
 }
@@ -102,9 +191,7 @@ body{
   <div class="logo">RendimentoBB</div>
   <div>
     <div class="nav" style="display:inline-block;">
-      <a href="/tool/"
-         data-it="Analisi"
-         data-en="Analysis">Analisi</a>
+      <a href="/tool/" data-it="Analisi" data-en="Analysis">Analisi</a>
     </div>
     <div class="lang-switch" style="display:inline-block;">
       <button id="btn-it" onclick="setLang('it')">IT</button>
@@ -115,35 +202,29 @@ body{
 
 <div class="hero container">
   <h1 data-it="Prima di investire 100.000€ in un B&B, verifica questi numeri."
-      data-en="Before investing €100,000 in a B&B, verify these numbers.">
-  </h1>
+      data-en="Before investing €100,000 in a B&B, verify these numbers."></h1>
 
   <p data-it="Un errore di valutazione può costarti decine di migliaia di euro nei primi anni."
-     data-en="A miscalculation can cost you tens of thousands in the first years.">
-  </p>
+     data-en="A miscalculation can cost you tens of thousands in the first years."></p>
 
   <div class="sub-hero"
        data-it="Strumento professionale di simulazione ROI, cashflow e rischio."
-       data-en="Professional ROI, cashflow and risk simulation tool.">
-  </div>
+       data-en="Professional ROI, cashflow and risk simulation tool."></div>
 
   <div class="cta">
     <a href="/tool/" class="btn-primary"
        data-it="🔎 Avvia analisi gratuita"
-       data-en="🔎 Start free analysis">
-    </a>
+       data-en="🔎 Start free analysis"></a>
 
     <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
        class="btn-secondary"
        data-it="🛡 Proteggi il tuo investimento – 19€"
-       data-en="🛡 Protect your investment – €19">
-    </a>
+       data-en="🛡 Protect your investment – €19"></a>
   </div>
 
   <div class="trust"
        data-it="✔ Pagamento sicuro con Stripe · ✔ Accesso immediato · ✔ Nessun abbonamento"
-       data-en="✔ Secure Stripe payment · ✔ Instant access · ✔ No subscription">
-  </div>
+       data-en="✔ Secure Stripe payment · ✔ Instant access · ✔ No subscription"></div>
 </div>
 
 <div class="problem">
@@ -162,51 +243,48 @@ body{
        data-it="19€ una tantum"
        data-en="€19 one-time payment"></div>
 
-  <ul class="pro-list">
-    <li data-it="✔ Simulazione mutuo dettagliata con piano ammortamento"
-        data-en="✔ Detailed mortgage simulation with amortization plan"></li>
+  <div class="pro-card">
+    <ul class="pro-list">
+      <li data-it="✔ Simulazione mutuo dettagliata con piano ammortamento"
+          data-en="✔ Detailed mortgage simulation with amortization plan"></li>
 
-    <li data-it="✔ Stress test su calo occupazione e aumento tassi"
-        data-en="✔ Stress test for occupancy drop and rate increases"></li>
+      <li data-it="✔ Stress test su calo occupazione e aumento tassi"
+          data-en="✔ Stress test for occupancy drop and rate increases"></li>
 
-    <li data-it="✔ Scenario prudente, realistico e pessimistico"
-        data-en="✔ Conservative, realistic and pessimistic scenarios"></li>
+      <li data-it="✔ Scenario prudente, realistico e pessimistico"
+          data-en="✔ Conservative, realistic and pessimistic scenarios"></li>
 
-    <li data-it="✔ Analisi cashflow mese per mese"
-        data-en="✔ Month-by-month cashflow analysis"></li>
+      <li data-it="✔ Analisi cashflow mese per mese"
+          data-en="✔ Month-by-month cashflow analysis"></li>
 
-    <li data-it="✔ Indice rischio investimento 0–100"
-        data-en="✔ Investment risk index 0–100"></li>
-  </ul>
+      <li data-it="✔ Indice rischio investimento 0–100"
+          data-en="✔ Investment risk index 0–100"></li>
+    </ul>
 
-  <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
-     class="btn-secondary"
-     style="font-size:18px;padding:20px 40px;margin-top:30px;"
-     data-it="🔓 Attiva accesso PRO ora – 19€"
-     data-en="🔓 Activate PRO Access now – €19">
-  </a>
+    <div class="pro-cta">
+      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+         class="btn-secondary"
+         data-it="🔓 Attiva accesso PRO ora – 19€"
+         data-en="🔓 Activate PRO Access now – €19"></a>
 
-  <div style="margin-top:25px;font-size:14px;color:#64748b;"
-       data-it="Accesso immediato. Nessun abbonamento. Nessun rinnovo automatico."
-       data-en="Instant access. No subscription. No recurring charges.">
+      <div style="margin-top:15px;font-size:14px;color:#64748b;"
+           data-it="Accesso immediato. Nessun abbonamento. Nessun rinnovo automatico."
+           data-en="Instant access. No subscription. No recurring charges."></div>
+    </div>
   </div>
 </div>
 
 <div class="footer"
      data-it="© 2026 RendimentoBB – Tutti i diritti riservati"
-     data-en="© 2026 RendimentoBB – All rights reserved">
-</div>
+     data-en="© 2026 RendimentoBB – All rights reserved"></div>
 
 <script>
 function setLang(lang){
-
   document.documentElement.lang = lang;
 
   document.querySelectorAll("[data-it]").forEach(el=>{
     const text = el.getAttribute("data-"+lang);
-    if(text){
-      el.textContent = text;
-    }
+    if(text){ el.textContent = text; }
   });
 
   document.getElementById("btn-it").classList.remove("active");
@@ -214,14 +292,6 @@ function setLang(lang){
   document.getElementById("btn-"+lang).classList.add("active");
 
   localStorage.setItem("lang", lang);
-
-  if(lang === "en"){
-    document.querySelector("meta[name='description']")
-      .setAttribute("content","Simulate ROI, cashflow and risk before investing in a B&B. Avoid €50,000 mistakes with a professional analysis.");
-  } else {
-    document.querySelector("meta[name='description']")
-      .setAttribute("content","Simula ROI, cashflow e rischio prima di investire in un B&B. Evita errori da 50.000€ con un'analisi professionale.");
-  }
 }
 
 function initLang(){
