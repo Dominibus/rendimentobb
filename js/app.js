@@ -79,10 +79,60 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 }
 
 // ===============================
-// CALCULATE
+// CALCULATE (PROFESSIONAL FLOW)
 // ===============================
 
 function calculate() {
+
+  const loader = document.getElementById("analysisLoader");
+  const progress = document.getElementById("loaderProgress");
+  const text = document.getElementById("loaderText");
+  const resultsDiv = document.getElementById("results");
+
+  if (!resultsDiv) return;
+
+  resultsDiv.style.display = "none";
+  loader.style.display = "block";
+  progress.style.width = "0%";
+
+  const steps = [
+    "Analyzing investment structure...",
+    "Simulating revenue projections...",
+    "Calculating mortgage amortization...",
+    "Evaluating financial leverage...",
+    "Generating professional output..."
+  ];
+
+  let current = 0;
+
+  const interval = setInterval(() => {
+
+    progress.style.width = ((current + 1) * 20) + "%";
+    text.innerText = steps[current];
+
+    current++;
+
+    if (current === steps.length) {
+
+      clearInterval(interval);
+
+      setTimeout(() => {
+
+        loader.style.display = "none";
+        resultsDiv.style.display = "block";
+        runRealCalculation();
+
+      }, 600);
+    }
+
+  }, 450);
+}
+
+// ===============================
+// REAL CALCULATION LOGIC
+// ===============================
+
+function runRealCalculation() {
 
   const propertyPrice = getValue("propertyPrice");
   const equity = getValue("equity");
@@ -98,7 +148,6 @@ function calculate() {
   const tax = getValue("tax");
 
   const resultsDiv = document.getElementById("results");
-  if (!resultsDiv) return;
 
   if (!price || !occupancy || !equity) {
     resultsDiv.innerHTML = "Inserisci valori validi.";
@@ -113,8 +162,6 @@ function calculate() {
   const profitBeforeTax = grossYearly - yearlyFees - yearlyExpenses;
   const taxCost = profitBeforeTax > 0 ? profitBeforeTax * (tax / 100) : 0;
   let netYearly = profitBeforeTax - taxCost;
-
-  // ================= MUTUO =================
 
   const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
   const netAfterMortgage = netYearly - mortgage.yearlyPayment;
