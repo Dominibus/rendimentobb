@@ -18,7 +18,7 @@ if (urlParams.get("pro") === "paid") {
   localStorage.setItem("proUnlocked", "true");
 }
 
-// 🔥 INSERISCI QUI IL TUO LINK STRIPE LIVE QUANDO PRONTO
+// 🔥 INSERISCI QUI IL TUO LINK STRIPE LIVE
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
 
 // ===============================
@@ -34,6 +34,8 @@ function unlockPro() {
 // ===============================
 
 function formatCurrency(value) {
+  if (!isFinite(value)) value = 0;
+
   return new Intl.NumberFormat(
     currentLang === "it" ? "it-IT" : "en-US",
     {
@@ -77,7 +79,6 @@ function calculate() {
   const stressRate = getValue("stressRate");
 
   const resultsDiv = document.getElementById("results");
-
   if (!resultsDiv) return;
 
   if (!price || !occupancy) {
@@ -121,11 +122,10 @@ function calculate() {
   // =========================
 
   if (!isProUnlocked) {
-
     output += `
       <div style="margin-top:20px;padding:20px;background:#111827;border-radius:12px;border:1px solid #334155;color:#e2e8f0;">
         <h3 style="margin-top:0;color:#22c55e;">🔒 Analisi Completa Bloccata</h3>
-        <p style="font-size:14px;line-height:1.6;">
+        <p style="font-size:14px;">
           19€ per evitare un errore da 50.000€.
         </p>
         <button onclick="unlockPro()" 
@@ -158,7 +158,7 @@ function calculate() {
   const realYearlyCashflow = netYearly - (monthlyLoanPayment * 12);
 
   let roi = 0;
-  let breakEvenYears = -1;
+  let breakEvenYears = 0;
 
   if (equity > 0) {
     roi = (realYearlyCashflow / equity) * 100;
@@ -168,10 +168,10 @@ function calculate() {
   }
 
   // =========================
-  // STRESS TEST
+  // STRESS TEST (corretto)
   // =========================
 
-  const stressedOcc = occupancy + (occupancy * stressOccupancy / 100);
+  const stressedOcc = occupancy - (occupancy * stressOccupancy / 100);
   const stressedExp = expenses + (expenses * stressExpenses / 100);
   const stressedRate = loanRate + stressRate;
 
@@ -187,6 +187,7 @@ function calculate() {
   if (loanAmount > 0 && stressedRate > 0 && loanYears > 0) {
     const mRate = (stressedRate / 100) / 12;
     const totalPayments = loanYears * 12;
+
     stressedLoan =
       loanAmount *
       (mRate * Math.pow(1 + mRate, totalPayments)) /
@@ -218,6 +219,17 @@ function calculate() {
       ? "Zona Attenzione"
       : "Investimento Rischioso";
 
+  let riskColor =
+    riskScore >= 80
+      ? "#16a34a"
+      : riskScore >= 60
+      ? "#eab308"
+      : "#dc2626";
+
+  // =========================
+  // OUTPUT COMPLETO
+  // =========================
+
   output += `
     <div class="result-card">
       <h4>📊 Analisi Completa</h4>
@@ -230,7 +242,7 @@ function calculate() {
       <strong>${formatCurrency(stressedCashflow)}</strong></div>
     </div>
 
-    <div style="margin-top:15px;padding:12px;border-radius:8px;background:#1e293b;color:white;">
+    <div style="margin-top:15px;padding:14px;border-radius:8px;background:${riskColor};color:white;font-weight:bold;">
       Indice Rischio: ${riskScore}/100 — ${riskLabel}
     </div>
   `;
