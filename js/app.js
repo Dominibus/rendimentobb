@@ -1,10 +1,36 @@
-let isProUnlocked = true; // lasciamo attivo per ora
+let isProUnlocked = false;
+
+function unlockPro() {
+  const code = prompt(
+    currentLang === "it"
+      ? "Inserisci il codice di accesso PRO:"
+      : "Enter PRO access code:"
+  );
+
+  if (code === "BBPRO2025") {
+    isProUnlocked = true;
+    alert(
+      currentLang === "it"
+        ? "PRO sbloccato con successo!"
+        : "PRO unlocked successfully!"
+    );
+  } else {
+    alert(
+      currentLang === "it"
+        ? "Codice non valido."
+        : "Invalid code."
+    );
+  }
+}
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat("it-IT", {
-    style: "currency",
-    currency: "EUR"
-  }).format(value);
+  return new Intl.NumberFormat(
+    currentLang === "it" ? "it-IT" : "en-US",
+    {
+      style: "currency",
+      currency: "EUR"
+    }
+  ).format(value);
 }
 
 function calculate() {
@@ -22,8 +48,6 @@ function calculate() {
   const loanYears = parseFloat(document.getElementById("loanYears").value);
 
   const familyIncome = parseFloat(document.getElementById("familyIncome").value);
-  const roiTarget = parseFloat(document.getElementById("roiTarget").value);
-
   const stressOccupancy = parseFloat(document.getElementById("stressOccupancy").value);
   const stressExpenses = parseFloat(document.getElementById("stressExpenses").value);
   const stressRate = parseFloat(document.getElementById("stressRate").value);
@@ -31,7 +55,10 @@ function calculate() {
   const resultsDiv = document.getElementById("results");
 
   if (isNaN(price) || isNaN(occupancy) || isNaN(expenses) || isNaN(commission) || isNaN(tax)) {
-    resultsDiv.innerHTML = "Inserisci valori validi.";
+    resultsDiv.innerHTML =
+      currentLang === "it"
+        ? "Inserisci valori validi."
+        : "Please enter valid values.";
     return;
   }
 
@@ -46,6 +73,37 @@ function calculate() {
   const taxes = profitBeforeTax > 0 ? profitBeforeTax * (tax / 100) : 0;
   const netMonthly = profitBeforeTax - taxes;
   const netYearly = netMonthly * 12;
+
+  let baseOutput = `
+    <hr>
+    <h3>${currentLang === "it" ? "📊 Risultato Base" : "📊 Base Result"}</h3>
+    <div>${currentLang === "it" ? "Guadagno netto annuo:" : "Net yearly profit:"}
+    <strong>${formatCurrency(netYearly)}</strong></div>
+  `;
+
+  // =========================
+  // SE NON PRO → BLOCCO
+  // =========================
+
+  if (!isProUnlocked) {
+    resultsDiv.innerHTML =
+      baseOutput +
+      `
+      <hr>
+      <div style="margin-top:10px; color:#94a3b8;">
+        ${currentLang === "it"
+          ? "🔒 Sblocca PRO per vedere analisi rischio completa, ROI reale e stress test."
+          : "🔒 Unlock PRO to see full risk analysis, real ROI and stress test."}
+      </div>
+      <br>
+      <button onclick="unlockPro()" class="calculate">
+        ${currentLang === "it"
+          ? "Sblocca PRO"
+          : "Unlock PRO"}
+      </button>
+    `;
+    return;
+  }
 
   // =========================
   // MUTUO
@@ -111,19 +169,14 @@ function calculate() {
 
   if (realYearlyCashflow < 0) riskScore -= 30;
 
-  if (roi < 0) {
-    riskScore -= 25;
-  } else if (roi < 5) {
-    riskScore -= 15;
-  }
+  if (roi < 0) riskScore -= 25;
+  else if (roi < 5) riskScore -= 15;
 
   if (breakEvenYears > 20) riskScore -= 15;
-
   if (stressedCashflow < 0) riskScore -= 20;
 
-  if (familyIncome > 0 && monthlyLoanPayment / familyIncome > 0.35) {
+  if (familyIncome > 0 && monthlyLoanPayment / familyIncome > 0.35)
     riskScore -= 20;
-  }
 
   if (riskScore < 0) riskScore = 0;
 
@@ -131,42 +184,44 @@ function calculate() {
   let riskColor = "";
 
   if (riskScore >= 80) {
-    riskLabel = "🟢 Investimento Solido";
+    riskLabel = currentLang === "it" ? "🟢 Investimento Solido" : "🟢 Solid Investment";
     riskColor = "#22c55e";
   } else if (riskScore >= 60) {
-    riskLabel = "🟡 Zona Attenzione";
+    riskLabel = currentLang === "it" ? "🟡 Zona Attenzione" : "🟡 Attention Zone";
     riskColor = "#eab308";
   } else if (riskScore >= 40) {
-    riskLabel = "🟠 Investimento Rischioso";
+    riskLabel = currentLang === "it" ? "🟠 Investimento Rischioso" : "🟠 Risky Investment";
     riskColor = "#f97316";
   } else {
-    riskLabel = "🔴 Investimento Pericoloso";
+    riskLabel = currentLang === "it" ? "🔴 Investimento Pericoloso" : "🔴 Dangerous Investment";
     riskColor = "#ef4444";
   }
 
   // =========================
-  // OUTPUT
+  // OUTPUT PRO
   // =========================
 
-  resultsDiv.innerHTML = `
+  resultsDiv.innerHTML =
+    baseOutput +
+    `
     <hr>
-    <h3>📊 Risultato Analisi</h3>
+    <h3>${currentLang === "it" ? "📊 Analisi Completa" : "📊 Full Analysis"}</h3>
 
-    <div>Guadagno netto annuo: <strong>${formatCurrency(netYearly)}</strong></div>
     <div>Cashflow reale annuo: <strong>${formatCurrency(realYearlyCashflow)}</strong></div>
-    <div>ROI: <strong>${roi.toFixed(2)} %</strong></div>
-    <div>Break-even: <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) + " anni" : "-"}</strong></div>
+    <div>ROI: <strong>${roi.toFixed(2)}%</strong></div>
+    <div>Break-even: <strong>${breakEvenYears > 0 ? breakEvenYears.toFixed(1) : "-"}</strong></div>
 
     <hr>
 
-    <div>Cashflow scenario pessimistico: <strong>${formatCurrency(stressedCashflow)}</strong></div>
+    <div>${currentLang === "it" ? "Cashflow scenario pessimistico:" : "Pessimistic scenario cashflow:"}
+    <strong>${formatCurrency(stressedCashflow)}</strong></div>
 
     <hr>
 
-    <div style="font-size:18px; margin-top:10px; color:${riskColor};">
-      <strong>Indice Rischio: ${riskScore}/100</strong>
+    <div style="font-size:18px; color:${riskColor};">
+      <strong>${currentLang === "it" ? "Indice Rischio:" : "Risk Index:"} ${riskScore}/100</strong>
     </div>
-    <div style="font-weight:bold; color:${riskColor};">
+    <div style="color:${riskColor}; font-weight:bold;">
       ${riskLabel}
     </div>
   `;
