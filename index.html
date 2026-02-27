@@ -6,54 +6,234 @@
 <title>RendimentoBB – Analisi Investimento B&B</title>
 
 <style>
-body { margin:0; font-family:Arial; background:#f8fafc; color:#0f172a; }
-.container { max-width:1000px; margin:auto; padding:40px 20px; }
-.hero { text-align:center; padding:80px 20px; }
-.hero h1 { font-size:38px; margin-bottom:20px; }
-.hero p { font-size:18px; color:#475569; max-width:700px; margin:auto; }
-.cta { margin-top:30px; }
-.cta a { text-decoration:none; padding:14px 24px; border-radius:8px; font-weight:bold; margin:10px; display:inline-block; }
-.btn-primary { background:#22c55e; color:black; }
-.btn-secondary { background:#0f172a; color:white; }
-.section { padding:60px 20px; }
-.section h2 { text-align:center; margin-bottom:40px; font-size:28px; }
-.features { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
-.feature { background:white; padding:20px; border-radius:12px; box-shadow:0 5px 20px rgba(0,0,0,0.05); }
-.price-box { text-align:center; background:#0f172a; color:white; padding:60px 20px; }
-.footer { text-align:center; padding:30px; font-size:14px; color:#64748b; }
+* { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background:#f8fafc;
+  color:#0f172a;
+  line-height:1.6;
+}
+
+.container {
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+/* HEADER */
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+}
+
+.logo {
+  font-weight:700;
+  font-size:20px;
+}
+
+.nav a {
+  text-decoration:none;
+  margin-left:20px;
+  font-weight:600;
+  color:#0f172a;
+}
+
+/* HERO */
+.hero {
+  text-align:center;
+  padding:100px 20px 80px;
+}
+
+.hero h1 {
+  font-size:42px;
+  margin-bottom:20px;
+}
+
+.hero p {
+  font-size:20px;
+  color:#475569;
+  max-width:750px;
+  margin:20px auto;
+}
+
+.cta {
+  margin-top:40px;
+}
+
+.cta a {
+  text-decoration:none;
+  padding:16px 28px;
+  border-radius:10px;
+  font-weight:700;
+  margin:10px;
+  display:inline-block;
+  transition:0.25s ease;
+}
+
+.btn-primary {
+  background:#22c55e;
+  color:black;
+}
+
+.btn-primary:hover {
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(34,197,94,0.4);
+}
+
+.btn-secondary {
+  background:#0f172a;
+  color:white;
+}
+
+.btn-secondary:hover {
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* SECTION */
+.section {
+  padding:80px 20px;
+}
+
+.section h2 {
+  text-align:center;
+  margin-bottom:50px;
+  font-size:30px;
+}
+
+.features {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+
+.feature {
+  background:white;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.05);
+  transition:0.25s;
+}
+
+.feature:hover {
+  transform:translateY(-6px);
+}
+
+.feature h3 {
+  margin-bottom:15px;
+  font-size:20px;
+}
+
+/* PROBLEM SECTION */
+.problem {
+  background:#0f172a;
+  color:white;
+  text-align:center;
+  padding:90px 20px;
+}
+
+.problem p {
+  max-width:800px;
+  margin:20px auto;
+  font-size:20px;
+  color:#cbd5e1;
+}
+
+/* PRICE */
+.price-box {
+  text-align:center;
+  background:white;
+  padding:90px 20px;
+}
+
+.price-box h2 {
+  font-size:36px;
+  margin-bottom:15px;
+}
+
+.price-box p {
+  font-size:18px;
+  color:#475569;
+}
+
+/* FOOTER */
+.footer {
+  text-align:center;
+  padding:40px 20px;
+  font-size:14px;
+  color:#64748b;
+}
 </style>
 </head>
 
 <body>
 
-<div class="hero container">
-<h1>Stai per investire oltre 100.000€ in un B&B?</h1>
-<p>Calcola il rischio prima di firmare. Analizza ROI, cashflow reale e scenario pessimistico in meno di 2 minuti.</p>
-<div class="cta">
-<a href="/tool/" class="btn-primary">🔎 Prova la simulazione</a>
-<a href="/tool/" class="btn-secondary">🔓 Sblocca versione PRO – 19€</a>
+<div class="header container">
+  <div class="logo">RendimentoBB</div>
+  <div class="nav">
+    <a href="/tool/">Simulazione</a>
+    <a href="/tool/">Versione PRO</a>
+  </div>
 </div>
+
+<div class="hero container">
+  <h1>Stai per investire oltre 100.000€ in un B&B?</h1>
+  <p>
+    La maggior parte degli investitori calcola solo il prezzo di acquisto.
+    I veri rischi arrivano dopo: tasse, commissioni, tassi, bassa occupazione.
+  </p>
+
+  <div class="cta">
+    <a href="/tool/" class="btn-primary">🔎 Prova la simulazione gratuita</a>
+    <a href="/tool/" class="btn-secondary">🔓 Sblocca versione PRO – 19€</a>
+  </div>
 </div>
 
 <div class="section container">
-<h2>Perché serve davvero?</h2>
-<div class="features">
-<div class="feature"><h3>ROI reale</h3><p>Calcolo preciso basato su occupazione, tasse e commissioni.</p></div>
-<div class="feature"><h3>Simulazione mutuo</h3><p>Valuta l'impatto reale della rata sul cashflow.</p></div>
-<div class="feature"><h3>Stress test automatico</h3><p>Simula calo prenotazioni, aumento spese e tassi.</p></div>
-<div class="feature"><h3>Indice di rischio 0–100</h3><p>Capisci subito se l’investimento è solido o pericoloso.</p></div>
+  <h2>Cosa calcola davvero RendimentoBB</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>ROI reale</h3>
+      <p>Calcolo preciso basato su occupazione reale, tasse, commissioni e costi nascosti.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Simulazione mutuo</h3>
+      <p>Valuta l'impatto reale della rata bancaria sul tuo cashflow mensile.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Stress test automatico</h3>
+      <p>Simula calo prenotazioni, aumento tassi e incremento spese improvvise.</p>
+    </div>
+
+    <div class="feature">
+      <h3>Indice di rischio 0–100</h3>
+      <p>Capisci subito se l’investimento è solido o potenzialmente pericoloso.</p>
+    </div>
+  </div>
 </div>
+
+<div class="problem">
+  <h2>Un errore di valutazione può costarti 50.000€.</h2>
+  <p>
+    Prima di firmare un mutuo o un compromesso, verifica numeri reali.
+    Bastano 2 minuti per evitare anni di stress finanziario.
+  </p>
 </div>
 
 <div class="price-box">
-<h2>Solo 19€</h2>
-<p>Per evitare un errore da 50.000€.</p>
-<br>
-<a href="/tool/" class="btn-primary">Accedi al tool</a>
+  <h2>Accesso completo: 19€</h2>
+  <p>Una cifra simbolica per proteggere un investimento a sei cifre.</p>
+  <br><br>
+  <a href="/tool/" class="btn-primary">Accedi al tool</a>
 </div>
 
 <div class="footer">
-© 2026 RendimentoBB
+  © 2026 RendimentoBB – Tutti i diritti riservati
 </div>
 
 </body>
