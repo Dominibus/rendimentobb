@@ -63,14 +63,14 @@ body{
 
 .hero{
   text-align:center;
-  padding:120px 20px 100px;
+  padding:120px 20px 90px;
 }
 
 .hero h1{
-  font-size:46px;
+  font-size:48px;
   max-width:900px;
   margin:0 auto 30px;
-  line-height:1.2;
+  line-height:1.15;
 }
 
 .hero p{
@@ -80,10 +80,13 @@ body{
   margin:20px auto;
 }
 
-.sub-hero{
-  margin-top:15px;
-  font-size:16px;
-  color:#64748b;
+.badge{
+  display:inline-block;
+  background:#e2e8f0;
+  padding:8px 16px;
+  border-radius:999px;
+  font-size:14px;
+  margin-bottom:25px;
 }
 
 .cta{
@@ -117,13 +120,42 @@ body{
 }
 
 .trust{
-  margin-top:25px;
+  margin-top:20px;
   font-size:14px;
   color:#64748b;
 }
 
+.problem-grid{
+  padding:100px 20px;
+  background:white;
+}
+
+.problem-grid h2{
+  text-align:center;
+  font-size:36px;
+  margin-bottom:60px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+  max-width:1000px;
+  margin:auto;
+}
+
+.card{
+  background:#f1f5f9;
+  padding:30px;
+  border-radius:16px;
+}
+
+.card h3{
+  margin-bottom:10px;
+}
+
 .problem{
-  background:linear-gradient(90deg,#0f172a,#111827);
+  background:#0f172a;
   color:white;
   text-align:center;
   padding:110px 20px;
@@ -145,20 +177,9 @@ body{
   text-align:center;
 }
 
-.pro-section h2{
-  font-size:38px;
-  margin-bottom:10px;
-}
-
-.price-highlight{
-  font-size:22px;
-  font-weight:800;
-  margin-bottom:40px;
-}
-
 .pro-card{
   max-width:700px;
-  margin:0 auto;
+  margin:40px auto 0;
   background:white;
   padding:50px;
   border-radius:20px;
@@ -169,11 +190,6 @@ body{
 .pro-list li{
   margin-bottom:16px;
   font-size:18px;
-}
-
-.pro-cta{
-  text-align:center;
-  margin-top:40px;
 }
 
 .footer{
@@ -201,15 +217,15 @@ body{
 </div>
 
 <div class="hero container">
+  <div class="badge"
+       data-it="Strumento professionale per investitori immobiliari"
+       data-en="Professional tool for real estate investors"></div>
+
   <h1 data-it="Prima di investire 100.000€ in un B&B, verifica questi numeri."
       data-en="Before investing €100,000 in a B&B, verify these numbers."></h1>
 
   <p data-it="Un errore di valutazione può costarti decine di migliaia di euro nei primi anni."
      data-en="A miscalculation can cost you tens of thousands in the first years."></p>
-
-  <div class="sub-hero"
-       data-it="Strumento professionale di simulazione ROI, cashflow e rischio."
-       data-en="Professional ROI, cashflow and risk simulation tool."></div>
 
   <div class="cta">
     <a href="/tool/" class="btn-primary"
@@ -223,8 +239,36 @@ body{
   </div>
 
   <div class="trust"
-       data-it="✔ Pagamento sicuro con Stripe · ✔ Accesso immediato · ✔ Nessun abbonamento"
-       data-en="✔ Secure Stripe payment · ✔ Instant access · ✔ No subscription"></div>
+       data-it="✔ Pagamento sicuro · ✔ Accesso immediato · ✔ Nessun abbonamento"
+       data-en="✔ Secure payment · ✔ Instant access · ✔ No subscription"></div>
+</div>
+
+<div class="problem-grid">
+  <h2 data-it="Perché molti nuovi B&B sbagliano investimento"
+      data-en="Why many new B&B investors fail"></h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3 data-it="Sovrastima occupazione"
+          data-en="Overestimated occupancy"></h3>
+      <p data-it="Ipotesi troppo ottimistiche sui tassi di riempimento."
+         data-en="Unrealistic occupancy expectations."></p>
+    </div>
+
+    <div class="card">
+      <h3 data-it="Costi nascosti"
+          data-en="Hidden costs"></h3>
+      <p data-it="Tasse, manutenzione e imprevisti sottovalutati."
+         data-en="Taxes, maintenance and unexpected expenses underestimated."></p>
+    </div>
+
+    <div class="card">
+      <h3 data-it="Nessuno scenario pessimistico"
+          data-en="No pessimistic scenario"></h3>
+      <p data-it="Non viene simulato un calo di domanda."
+         data-en="No simulation of demand downturn."></p>
+    </div>
+  </div>
 </div>
 
 <div class="problem">
@@ -239,37 +283,27 @@ body{
   <h2 data-it="Accesso completo PRO"
       data-en="Full PRO Access"></h2>
 
-  <div class="price-highlight"
-       data-it="19€ una tantum"
-       data-en="€19 one-time payment"></div>
+  <p style="font-weight:800;margin-top:10px;"
+     data-it="19€ una tantum"
+     data-en="€19 one-time payment"></p>
 
   <div class="pro-card">
     <ul class="pro-list">
-      <li data-it="✔ Simulazione mutuo dettagliata con piano ammortamento"
-          data-en="✔ Detailed mortgage simulation with amortization plan"></li>
-
-      <li data-it="✔ Stress test su calo occupazione e aumento tassi"
-          data-en="✔ Stress test for occupancy drop and rate increases"></li>
-
-      <li data-it="✔ Scenario prudente, realistico e pessimistico"
-          data-en="✔ Conservative, realistic and pessimistic scenarios"></li>
-
-      <li data-it="✔ Analisi cashflow mese per mese"
-          data-en="✔ Month-by-month cashflow analysis"></li>
-
-      <li data-it="✔ Indice rischio investimento 0–100"
-          data-en="✔ Investment risk index 0–100"></li>
+      <li data-it="✔ Simulazione mutuo dettagliata"
+          data-en="✔ Detailed mortgage simulation"></li>
+      <li data-it="✔ Stress test automatico"
+          data-en="✔ Automatic stress test"></li>
+      <li data-it="✔ Analisi cashflow reale"
+          data-en="✔ Real cashflow analysis"></li>
+      <li data-it="✔ Indice rischio investimento"
+          data-en="✔ Investment risk index"></li>
     </ul>
 
-    <div class="pro-cta">
+    <div style="text-align:center;margin-top:40px;">
       <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
          class="btn-secondary"
          data-it="🔓 Attiva accesso PRO ora – 19€"
          data-en="🔓 Activate PRO Access now – €19"></a>
-
-      <div style="margin-top:15px;font-size:14px;color:#64748b;"
-           data-it="Accesso immediato. Nessun abbonamento. Nessun rinnovo automatico."
-           data-en="Instant access. No subscription. No recurring charges."></div>
     </div>
   </div>
 </div>
@@ -281,16 +315,13 @@ body{
 <script>
 function setLang(lang){
   document.documentElement.lang = lang;
-
   document.querySelectorAll("[data-it]").forEach(el=>{
     const text = el.getAttribute("data-"+lang);
     if(text){ el.textContent = text; }
   });
-
   document.getElementById("btn-it").classList.remove("active");
   document.getElementById("btn-en").classList.remove("active");
   document.getElementById("btn-"+lang).classList.add("active");
-
   localStorage.setItem("lang", lang);
 }
 
@@ -303,7 +334,6 @@ function initLang(){
     setLang(browserLang);
   }
 }
-
 initLang();
 </script>
 
