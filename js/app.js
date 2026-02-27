@@ -20,19 +20,6 @@ if (urlParams.get("pro") === "paid") {
   window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-const STRIPE_PAYMENT_LINK =
-  "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200";
-
-function unlockPro() {
-  const locale = currentLang === "it" ? "it" : "en";
-  window.location.href =
-    STRIPE_PAYMENT_LINK +
-    "?locale=" +
-    locale +
-    "&success_url=" +
-    encodeURIComponent("https://rendimentobb.com/tool/?pro=paid");
-}
-
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
   return new Intl.NumberFormat("it-IT", {
@@ -79,8 +66,6 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 // ===============================
 
 function calculate() {
-  const resultsDiv = document.getElementById("results");
-  if (!resultsDiv) return;
   runRealCalculation();
 }
 
@@ -115,7 +100,7 @@ function runRealCalculation() {
 
   const profitBeforeTax = grossYearly - yearlyFees - yearlyExpenses;
   const taxCost = profitBeforeTax > 0 ? profitBeforeTax * (tax / 100) : 0;
-  let netYearly = profitBeforeTax - taxCost;
+  const netYearly = profitBeforeTax - taxCost;
 
   const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
   const netAfterMortgage = netYearly - mortgage.yearlyPayment;
@@ -127,11 +112,23 @@ function runRealCalculation() {
   const breakEvenYears = netAfterMortgage > 0 ? equity / netAfterMortgage : 0;
 
   // ===============================
+  // SCENARIO PESSIMISTICO (-10% occupazione)
+  // ===============================
+
+  const pessimisticOccupancy = occupancy * 0.9;
+  const pessimisticNights = 30 * (pessimisticOccupancy / 100);
+  const pessimisticGross = price * pessimisticNights * 12;
+  const pessimisticFees = pessimisticGross * (commission / 100);
+  const pessimisticProfit = pessimisticGross - pessimisticFees - yearlyExpenses;
+  const pessimisticTax = pessimisticProfit > 0 ? pessimisticProfit * (tax / 100) : 0;
+  const pessimisticNet = pessimisticProfit - pessimisticTax - mortgage.yearlyPayment;
+  const pessimisticROI = (pessimisticNet / equity) * 100;
+
+  // ===============================
   // RISK ENGINE
   // ===============================
 
   const loanRatio = propertyPrice ? (loanAmount / propertyPrice) * 100 : 0;
-
   let riskPoints = 0;
 
   if (baseROI < 8) riskPoints += 2;
@@ -147,7 +144,6 @@ function runRealCalculation() {
   else if (occupancy < 65) riskPoints += 1;
 
   let riskLabel = "LOW";
-
   if (riskPoints >= 6) riskLabel = "HIGH";
   else if (riskPoints >= 3) riskLabel = "MEDIUM";
 
@@ -164,26 +160,26 @@ function runRealCalculation() {
     baseROI,
     roi5Years,
     breakEvenYears,
+    pessimisticROI,
     riskLabel
   };
 
-  let output = `
+  resultsDiv.innerHTML = `
     <div class="result-card">
       <h4>📊 Analisi Strategica PRO</h4>
       <div>ROI annuo: <strong>${baseROI.toFixed(2)}%</strong></div>
       <div>Break-even: <strong>${breakEvenYears ? breakEvenYears.toFixed(1) : "-"} anni</strong></div>
-      <div>Investment Risk Score: <strong>${riskLabel}</strong></div>
+      <div>Scenario pessimistico ROI: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
+      <div>Risk Score: <strong>${riskLabel}</strong></div>
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
-        📄 Genera Report PDF Executive
+        📄 Genera Report Strategico Completo
       </button>
     </div>
   `;
-
-  resultsDiv.innerHTML = output;
 }
 
 // ===============================
-// GENERAZIONE PDF EXECUTIVE
+// GENERAZIONE PDF STRATEGICO
 // ===============================
 
 async function generatePDF() {
@@ -194,14 +190,13 @@ async function generatePDF() {
   const pdf = new jsPDF("p", "mm", "a4");
 
   const margin = 20;
-  let y = 25;
+  let y = 20;
 
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(18);
-  pdf.text("RendimentoBB - Executive Investment Report", margin, y);
+  pdf.text("RendimentoBB - Strategic Investment Report", margin, y);
 
-  y += 15;
-
+  y += 12;
   pdf.setFont("helvetica", "normal");
   pdf.setFontSize(11);
 
@@ -209,27 +204,26 @@ async function generatePDF() {
 
   const verdict =
     d.riskLabel === "LOW"
-      ? "L'investimento appare solido e bilanciato."
+      ? "Operazione prudente con buona sostenibilità finanziaria."
       : d.riskLabel === "MEDIUM"
-      ? "L'investimento è sostenibile ma sensibile a variazioni operative."
-      : "L'investimento presenta criticità e richiede revisione dei parametri.";
+      ? "Operazione bilanciata ma sensibile a variazioni operative."
+      : "Operazione speculativa con elevata esposizione al rischio.";
 
-  const summary = `
-Sintesi dell'investimento:
+  const summaryText = `
+EXECUTIVE SUMMARY
 
-Prezzo immobile: ${formatCurrency(d.propertyPrice)}
-Capitale proprio investito: ${formatCurrency(d.equity)}
-Mutuo richiesto: ${formatCurrency(d.loanAmount)}
-
-L'investimento genera un ROI annuo stimato del ${d.baseROI.toFixed(2)}%.
+L'investimento analizzato genera un ROI annuo stimato del ${d.baseROI.toFixed(2)}%.
 Il capitale investito verrebbe recuperato in circa ${d.breakEvenYears ? d.breakEvenYears.toFixed(1) : "-"} anni.
 
-Il livello di rischio stimato è ${d.riskLabel}.
+In uno scenario pessimistico (-10% occupazione), il ROI scenderebbe al ${d.pessimisticROI.toFixed(2)}%.
 
+Livello di rischio stimato: ${d.riskLabel}
+
+VERDETTO STRATEGICO:
 ${verdict}
 `;
 
-  const lines = pdf.splitTextToSize(summary, 170);
+  const lines = pdf.splitTextToSize(summaryText, 170);
   pdf.text(lines, margin, y);
 
   y += lines.length * 6 + 10;
@@ -241,9 +235,11 @@ ${verdict}
   pdf.setFont("helvetica", "normal");
 
   const details = [
-    `Fatturato annuo stimato: ${formatCurrency(d.grossYearly)}`,
+    `Prezzo immobile: ${formatCurrency(d.propertyPrice)}`,
+    `Capitale proprio: ${formatCurrency(d.equity)}`,
+    `Mutuo: ${formatCurrency(d.loanAmount)}`,
+    `Fatturato annuo: ${formatCurrency(d.grossYearly)}`,
     `Utile netto operativo: ${formatCurrency(d.netYearly)}`,
-    `Rata annua mutuo: ${formatCurrency(d.mortgageYearly)}`,
     `Utile netto dopo mutuo: ${formatCurrency(d.netAfterMortgage)}`
   ];
 
@@ -252,5 +248,5 @@ ${verdict}
     y += 7;
   });
 
-  pdf.save("Executive_Report_RendimentoBB.pdf");
+  pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
