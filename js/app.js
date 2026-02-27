@@ -55,7 +55,7 @@ function getValue(id) {
 let lastAnalysisData = null;
 
 // ===============================
-// CALCOLO RATA MUTUO
+// CALCOLO MUTUO
 // ===============================
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
@@ -79,7 +79,7 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 }
 
 // ===============================
-// CALCULATE (PROFESSIONAL FLOW)
+// CALCULATE (SAFE VERSION)
 // ===============================
 
 function calculate() {
@@ -91,9 +91,16 @@ function calculate() {
 
   if (!resultsDiv) return;
 
+  // Se loader NON esiste → calcolo diretto
+  if (!loader) {
+    runRealCalculation();
+    return;
+  }
+
   resultsDiv.style.display = "none";
   loader.style.display = "block";
-  progress.style.width = "0%";
+
+  if (progress) progress.style.width = "0%";
 
   const steps = [
     "Analyzing investment structure...",
@@ -107,8 +114,13 @@ function calculate() {
 
   const interval = setInterval(() => {
 
-    progress.style.width = ((current + 1) * 20) + "%";
-    text.innerText = steps[current];
+    if (progress) {
+      progress.style.width = ((current + 1) * 20) + "%";
+    }
+
+    if (text) {
+      text.innerText = steps[current];
+    }
 
     current++;
 
@@ -125,11 +137,11 @@ function calculate() {
       }, 600);
     }
 
-  }, 450);
+  }, 400);
 }
 
 // ===============================
-// REAL CALCULATION LOGIC
+// REAL CALCULATION
 // ===============================
 
 function runRealCalculation() {
@@ -215,53 +227,4 @@ function runRealCalculation() {
   `;
 
   resultsDiv.innerHTML = output;
-}
-
-// ===============================
-// GENERAZIONE PDF PROFESSIONALE
-// ===============================
-
-async function generatePDF() {
-
-  if (!lastAnalysisData) return;
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  const margin = 20;
-  let y = 25;
-
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(18);
-  pdf.text("RendimentoBB", margin, y);
-
-  y += 10;
-
-  pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(11);
-
-  const lines = [
-    `Prezzo immobile: ${formatCurrency(lastAnalysisData.propertyPrice)}`,
-    `Capitale proprio: ${formatCurrency(lastAnalysisData.equity)}`,
-    "",
-    `Importo mutuo: ${formatCurrency(lastAnalysisData.loanAmount)}`,
-    `Tasso: ${lastAnalysisData.interestRate}%`,
-    `Durata: ${lastAnalysisData.loanYears} anni`,
-    `Rata annua: ${formatCurrency(lastAnalysisData.mortgageYearly)}`,
-    "",
-    `Fatturato annuo: ${formatCurrency(lastAnalysisData.grossYearly)}`,
-    `Utile netto operativo: ${formatCurrency(lastAnalysisData.netYearly)}`,
-    `Utile netto dopo mutuo: ${formatCurrency(lastAnalysisData.netAfterMortgage)}`,
-    "",
-    `ROI con leva: ${lastAnalysisData.baseROI.toFixed(2)}%`,
-    `ROI 5 anni: ${lastAnalysisData.roi5Years.toFixed(2)}%`,
-    `Break-even: ${lastAnalysisData.breakEvenYears ? lastAnalysisData.breakEvenYears.toFixed(1) : "-"} anni`
-  ];
-
-  lines.forEach(line => {
-    pdf.text(line, margin, y);
-    y += 7;
-  });
-
-  pdf.save("Report_RendimentoBB_Pro.pdf");
 }
