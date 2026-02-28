@@ -1,22 +1,32 @@
 // ===============================
-// SAFE LANGUAGE INIT
+// RENDIMENTOBB – APP CORE SYSTEM
+// VERSIONE DEFINITIVA BILINGUE
 // ===============================
 
-if (typeof currentLang === "undefined") {
-  currentLang = "it";
+// Usa sempre la lingua globale
+if (!window.currentLang) {
+  window.currentLang = localStorage.getItem("rb_lang") || "it";
 }
+
+// ===============================
+// FORMAT CURRENCY
+// ===============================
 
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
 
   return new Intl.NumberFormat(
-    currentLang === "it" ? "it-IT" : "en-US",
+    window.currentLang === "it" ? "it-IT" : "en-US",
     {
       style: "currency",
       currency: "EUR"
     }
   ).format(value);
 }
+
+// ===============================
+// GET INPUT VALUE
+// ===============================
 
 function getValue(id) {
   const el = document.getElementById(id);
@@ -25,11 +35,11 @@ function getValue(id) {
   return isNaN(val) ? 0 : val;
 }
 
-let lastAnalysisData = null;
+window.lastAnalysisData = null;
 let roiChartInstance = null;
 
 // ===============================
-// MORTGAGE
+// MORTGAGE CALCULATION
 // ===============================
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
@@ -52,6 +62,10 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
   };
 }
 
+// ===============================
+// MAIN CALCULATION
+// ===============================
+
 function calculate() {
   runRealCalculation();
 }
@@ -73,7 +87,7 @@ function runRealCalculation() {
 
   if (!price || !occupancy || !equity) {
     resultsDiv.innerHTML =
-      currentLang === "it"
+      window.currentLang === "it"
         ? "Inserisci valori validi."
         : "Please enter valid values.";
     return;
@@ -98,9 +112,17 @@ function runRealCalculation() {
     ? equity / netAfterMortgage
     : 99;
 
-  const pessimisticROI = baseROI - 5;
+  // Stress test realistico (-10% occupazione)
+  const pessimisticOccupancy = occupancy * 0.9;
+  const pessimisticNights = 30 * (pessimisticOccupancy / 100);
+  const pessimisticGross = price * pessimisticNights * 12;
+  const pessimisticFees = pessimisticGross * (commission / 100);
+  const pessimisticProfit = pessimisticGross - pessimisticFees - yearlyExpenses;
+  const pessimisticTax = pessimisticProfit > 0 ? pessimisticProfit * (tax / 100) : 0;
+  const pessimisticNet = pessimisticProfit - pessimisticTax - mortgage.yearlyPayment;
+  const pessimisticROI = (pessimisticNet / equity) * 100;
 
-  lastAnalysisData = {
+  window.lastAnalysisData = {
     baseROI,
     pessimisticROI,
     breakEvenYears,
@@ -110,24 +132,24 @@ function runRealCalculation() {
   resultsDiv.innerHTML = `
     <div class="result-card">
       <h4>📊 ${
-        currentLang === "it"
+        window.currentLang === "it"
           ? "Analisi Strategica Professionale"
           : "Professional Strategic Analysis"
       }</h4>
       <div>ROI: <strong>${baseROI.toFixed(2)}%</strong></div>
       <div>${
-        currentLang === "it" ? "Break-even" : "Break-even"
+        window.currentLang === "it" ? "Break-even" : "Break-even"
       }: <strong>${breakEvenYears.toFixed(1)} ${
-        currentLang === "it" ? "anni" : "years"
+        window.currentLang === "it" ? "anni" : "years"
       }</strong></div>
       <div>${
-        currentLang === "it"
+        window.currentLang === "it"
           ? "Scenario pessimistico"
           : "Pessimistic scenario"
       }: <strong>${pessimisticROI.toFixed(2)}%</strong></div>
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
         📄 ${
-          currentLang === "it"
+          window.currentLang === "it"
             ? "Genera Report Strategico Completo"
             : "Generate Full Strategic Report"
         }
@@ -136,19 +158,18 @@ function runRealCalculation() {
   `;
 
   if (!chartCanvas) return;
-
   if (roiChartInstance) roiChartInstance.destroy();
 
   roiChartInstance = new Chart(chartCanvas, {
     type: 'line',
     data: {
       labels:
-        currentLang === "it"
+        window.currentLang === "it"
           ? ['Anno 1','Anno 2','Anno 3','Anno 4','Anno 5']
           : ['Year 1','Year 2','Year 3','Year 4','Year 5'],
       datasets: [{
         label:
-          currentLang === "it"
+          window.currentLang === "it"
             ? 'Utile cumulativo'
             : 'Cumulative net profit',
         data: [
@@ -174,67 +195,77 @@ function runRealCalculation() {
 }
 
 // ===============================
-// PDF BILINGUE COMPLETO
+// PROFESSIONAL BILINGUAL PDF
 // ===============================
 
 async function generatePDF() {
 
-  if (!lastAnalysisData) return;
+  if (!window.lastAnalysisData) return;
 
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "mm", "a4");
 
-  const d = lastAnalysisData;
-  const isIT = currentLang === "it";
+  const d = window.lastAnalysisData;
+  const isIT = window.currentLang === "it";
 
   let y = 20;
 
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(22);
+  pdf.setFontSize(20);
   pdf.text(
     isIT
-      ? "RendimentoBB - Report Esecutivo Investimento"
+      ? "RendimentoBB - Executive Investment Report"
       : "RendimentoBB - Executive Investment Report",
     20,
     y
   );
 
-  y += 12;
+  y += 10;
 
   pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(11);
+  pdf.setFontSize(10);
 
   const fiveYearTotal = d.netAfterMortgage * 5;
 
-  const executiveText = isIT
+  const summary = isIT
     ? `
 Questo investimento genera un rendimento annuo stimato del ${d.baseROI.toFixed(2)}%.
 
-Il capitale iniziale verrebbe recuperato in circa ${d.breakEvenYears.toFixed(1)} anni.
+Significa che ogni 100€ investiti producono circa ${d.baseROI.toFixed(2)}€ l'anno.
 
 L'utile netto stimato annuale è ${formatCurrency(d.netAfterMortgage)}.
 
-In uno scenario prudente (calo occupazione del 10%), il rendimento scenderebbe al ${d.pessimisticROI.toFixed(2)}%.
+Il capitale iniziale verrebbe recuperato in circa ${d.breakEvenYears.toFixed(1)} anni.
+
+In uno scenario prudente (-10% occupazione),
+il rendimento scenderebbe al ${d.pessimisticROI.toFixed(2)}%.
+
+Proiezione utile netto a 5 anni: ${formatCurrency(fiveYearTotal)}.
 `
     : `
 This investment generates an estimated annual return of ${d.baseROI.toFixed(2)}%.
 
-Initial capital would be recovered in approximately ${d.breakEvenYears.toFixed(1)} years.
+This means every €100 invested may generate about €${d.baseROI.toFixed(2)} per year.
 
 Estimated annual net profit is ${formatCurrency(d.netAfterMortgage)}.
 
-Under a conservative scenario (-10% occupancy), ROI would decrease to ${d.pessimisticROI.toFixed(2)}%.
+Initial capital would be recovered in approximately ${d.breakEvenYears.toFixed(1)} years.
+
+Under a conservative scenario (-10% occupancy),
+ROI would decrease to ${d.pessimisticROI.toFixed(2)}%.
+
+Projected 5-year cumulative profit: ${formatCurrency(fiveYearTotal)}.
 `;
 
-  const lines = pdf.splitTextToSize(executiveText, 170);
+  const lines = pdf.splitTextToSize(summary, 170);
   pdf.text(lines, 20, y);
 
-  y += lines.length * 6 + 12;
+  y += lines.length * 6 + 10;
 
   const chartCanvas = document.getElementById("roiChart");
   if (chartCanvas) {
-    const highResImage = chartCanvas.toDataURL("image/png", 1.0);
-    pdf.addImage(highResImage, 'PNG', 20, y, 170, 90);
+    const img = chartCanvas.toDataURL("image/png", 1.0);
+    pdf.addImage(img, 'PNG', 20, y, 170, 90);
   }
 
   pdf.setFontSize(8);
@@ -246,5 +277,9 @@ Under a conservative scenario (-10% occupancy), ROI would decrease to ${d.pessim
     285
   );
 
-  pdf.save("RendimentoBB_Report.pdf");
+  pdf.save(
+    isIT
+      ? "RendimentoBB_Report_IT.pdf"
+      : "RendimentoBB_Report_EN.pdf"
+  );
 }
