@@ -1,24 +1,26 @@
 // ===============================
 // RENDIMENTOBB – LANGUAGE SYSTEM
-// Compatibile con data-it / data-en
+// VERSIONE SINCRONIZZATA GLOBALE
 // ===============================
 
-let currentLang = localStorage.getItem("rb_lang") || "it";
+// Usa variabile globale condivisa
+window.currentLang = localStorage.getItem("rb_lang") || "it";
 
 // ===============================
 // SET LANGUAGE
 // ===============================
 
 function setLanguage(lang) {
-  currentLang = lang;
+
+  window.currentLang = lang;
   localStorage.setItem("rb_lang", lang);
 
-  // Traduce tutti gli elementi con data-it / data-en
+  // Traduzione elementi HTML
   document.querySelectorAll("[data-it]").forEach(el => {
+
     const text = el.getAttribute("data-" + lang);
     if (!text) return;
 
-    // Se contiene HTML usa innerHTML
     if (text.includes("<br>") || text.includes("<li>")) {
       el.innerHTML = text;
     } else {
@@ -30,6 +32,11 @@ function setLanguage(lang) {
   document.getElementById("btn-it")?.classList.remove("active");
   document.getElementById("btn-en")?.classList.remove("active");
   document.getElementById("btn-" + lang)?.classList.add("active");
+
+  // 🔥 Se esiste un'analisi già fatta, la ricalcola nella nuova lingua
+  if (typeof runRealCalculation === "function" && window.lastAnalysisData) {
+    runRealCalculation();
+  }
 }
 
 // ===============================
