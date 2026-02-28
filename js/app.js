@@ -156,7 +156,7 @@ function runRealCalculation() {
 }
 
 // ===============================
-// PDF PROFESSIONALE AVANZATO
+// PDF PROFESSIONALE PREMIUM
 // ===============================
 
 async function generatePDF() {
@@ -171,27 +171,43 @@ async function generatePDF() {
   let y = 20;
 
   // ===============================
-  // TITOLO
+  // HEADER
   // ===============================
 
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(22);
   pdf.text("RendimentoBB - Executive Investment Report", 20, y);
 
-  y += 12;
+  y += 10;
 
   pdf.setFont("helvetica", "normal");
-  pdf.setFontSize(10);
-  pdf.text("Analisi strategica professionale per investimenti B&B", 20, y);
+  pdf.setFontSize(9);
+  pdf.text("Sistema di analisi strategica per investimenti B&B", 20, y);
 
   y += 15;
+
+  // ===============================
+  // INDICATORE SINTETICO
+  // ===============================
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(14);
+
+  let profileLabel = "Profilo Moderato";
+  if (d.baseROI < 4) profileLabel = "Profilo Debole";
+  else if (d.baseROI < 8) profileLabel = "Profilo Prudente";
+  else if (d.baseROI < 15) profileLabel = "Profilo Buono";
+  else profileLabel = "Profilo Elevato";
+
+  pdf.text(`Valutazione sintetica: ${profileLabel}`, 20, y);
+
+  y += 12;
 
   // ===============================
   // EXECUTIVE SUMMARY
   // ===============================
 
   pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(14);
   pdf.text("EXECUTIVE SUMMARY", 20, y);
 
   y += 8;
@@ -202,20 +218,20 @@ async function generatePDF() {
   const executiveText = `
 Questo investimento genera un rendimento annuo stimato del ${d.baseROI.toFixed(2)}%.
 
-Significa che ogni 100€ investiti, il sistema stima un ritorno di circa ${d.baseROI.toFixed(2)}€ l'anno.
+In termini semplici: per ogni 100€ investiti, il sistema prevede un ritorno di circa ${d.baseROI.toFixed(2)}€ l'anno.
 
 Il capitale iniziale verrebbe recuperato in circa ${d.breakEvenYears.toFixed(1)} anni.
 
-In uno scenario più prudente (calo occupazione del 10%), il rendimento scenderebbe al ${d.pessimisticROI.toFixed(2)}%.
+In uno scenario prudente (calo occupazione del 10%), il rendimento scenderebbe al ${d.pessimisticROI.toFixed(2)}%.
 `;
 
   const execLines = pdf.splitTextToSize(executiveText, 170);
   pdf.text(execLines, 20, y);
 
-  y += execLines.length * 6 + 10;
+  y += execLines.length * 6 + 12;
 
   // ===============================
-  // RIEPILOGO ECONOMICO CHIARO
+  // RIEPILOGO NUMERICO CHIARO
   // ===============================
 
   pdf.setFont("helvetica", "bold");
@@ -227,98 +243,83 @@ In uno scenario più prudente (calo occupazione del 10%), il rendimento scendere
 
   const fiveYearTotal = d.netAfterMortgage * 5;
 
-  pdf.text(`Utile netto stimato annuale: ${formatCurrency(d.netAfterMortgage)}`, 20, y);
+  pdf.text(`Utile netto annuo stimato: ${formatCurrency(d.netAfterMortgage)}`, 20, y);
   y += 7;
 
   pdf.text(`Proiezione utile netto a 5 anni: ${formatCurrency(fiveYearTotal)}`, 20, y);
   y += 7;
 
-  pdf.text(`Tempo recupero capitale: ${d.breakEvenYears.toFixed(1)} anni`, 20, y);
+  pdf.text(`Tempo stimato recupero capitale: ${d.breakEvenYears.toFixed(1)} anni`, 20, y);
 
   y += 12;
 
   // ===============================
-  // IN PAROLE SEMPLICI
+  // SPIEGAZIONE INTUITIVA
   // ===============================
 
   pdf.setFont("helvetica", "bold");
-  pdf.text("IN PAROLE SEMPLICI", 20, y);
+  pdf.text("INTERPRETAZIONE FACILE", 20, y);
 
   y += 8;
 
   pdf.setFont("helvetica", "normal");
 
   const simpleText = `
-Se l'immobile mantiene l'attuale tasso di occupazione, l'investimento è sostenibile.
+Se l'immobile mantiene l'attuale livello di occupazione,
+l'investimento può generare un flusso di cassa positivo.
 
-Il punto critico principale è la stabilità dell'occupazione.
-Un calo significativo potrebbe ridurre drasticamente il margine.
+Il principale fattore di rischio è la stabilità dell'occupazione:
+una riduzione significativa potrebbe comprimere i margini.
 
-Maggiore è il controllo dei costi e della gestione, maggiore sarà la sicurezza del rendimento.
+L'investimento non è ad alto rendimento speculativo,
+ma può diventare stabile nel medio-lungo periodo.
 `;
 
   const simpleLines = pdf.splitTextToSize(simpleText, 170);
   pdf.text(simpleLines, 20, y);
 
-  y += simpleLines.length * 6 + 10;
+  y += simpleLines.length * 6 + 12;
 
   // ===============================
-  // PUNTI DI FORZA E RISCHI
-  // ===============================
-
-  pdf.setFont("helvetica", "bold");
-  pdf.text("PUNTI DI FORZA", 20, y);
-
-  y += 7;
-  pdf.setFont("helvetica", "normal");
-  pdf.text("• Genera flusso di cassa positivo annuale", 22, y);
-  y += 6;
-  pdf.text("• Proiezione positiva a 5 anni", 22, y);
-  y += 6;
-  pdf.text("• Rendimento coerente con mercato medio B&B", 22, y);
-
-  y += 10;
-
-  pdf.setFont("helvetica", "bold");
-  pdf.text("PUNTI DI ATTENZIONE", 20, y);
-
-  y += 7;
-  pdf.setFont("helvetica", "normal");
-  pdf.text("• Sensibile al tasso di occupazione", 22, y);
-  y += 6;
-  pdf.text("• Break-even superiore ai 10 anni", 22, y);
-  y += 6;
-  pdf.text("• Scenario stress riduce fortemente la redditività", 22, y);
-
-  y += 12;
-
-  // ===============================
-  // CONCLUSIONE FINALE
+  // VALUTAZIONE FINALE FORTE
   // ===============================
 
   pdf.setFont("helvetica", "bold");
-  pdf.text("CONCLUSIONE STRATEGICA", 20, y);
+  pdf.text("VERDETTO STRATEGICO", 20, y);
 
   y += 8;
 
   pdf.setFont("helvetica", "normal");
 
-  const conclusionText = `
-L'investimento è sostenibile ma richiede gestione attenta.
+  let finalVerdict = `
+Operazione sostenibile ma con recupero capitale medio-lungo termine.
 
-Non è un'operazione speculativa ad alto rendimento, ma può diventare stabile
-se la struttura mantiene un'occupazione costante e controllo dei costi.
-
-Decisione consigliata solo se l'investitore accetta un recupero capitale medio-lungo termine.
+Adatta a investitori che cercano stabilità più che rendimento rapido.
 `;
 
-  const conclusionLines = pdf.splitTextToSize(conclusionText, 170);
-  pdf.text(conclusionLines, 20, y);
+  if (d.baseROI >= 8) {
+    finalVerdict = `
+Operazione con buon equilibrio tra rischio e rendimento.
 
-  y += conclusionLines.length * 6 + 10;
+Adatta a investitori orientati alla crescita stabile.
+`;
+  }
+
+  if (d.baseROI < 4) {
+    finalVerdict = `
+Operazione con rendimento limitato.
+
+Richiede forte ottimizzazione gestionale per risultare interessante.
+`;
+  }
+
+  const verdictLines = pdf.splitTextToSize(finalVerdict, 170);
+  pdf.text(verdictLines, 20, y);
+
+  y += verdictLines.length * 6 + 12;
 
   // ===============================
-  // GRAFICO HD
+  // GRAFICO
   // ===============================
 
   const chartCanvas = document.getElementById("roiChart");
@@ -326,6 +327,19 @@ Decisione consigliata solo se l'investitore accetta un recupero capitale medio-l
     const highResImage = chartCanvas.toDataURL("image/png", 1.0);
     pdf.addImage(highResImage, 'PNG', 20, y, 170, 90);
   }
+
+  y += 95;
+
+  // ===============================
+  // FOOTER AUTOREVOLE
+  // ===============================
+
+  pdf.setFontSize(8);
+  pdf.text(
+    "Report generato automaticamente dal sistema RendimentoBB. Analisi basata sui dati inseriti dall'utente.",
+    20,
+    285
+  );
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
