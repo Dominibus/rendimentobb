@@ -121,13 +121,11 @@ body::before{
   display:inline-block;
   font-size:17px;
   transition:.3s;
-  position:relative;
 }
 
 .btn-primary{
   background:#22c55e;
   color:black;
-  box-shadow:0 0 0px #22c55e;
 }
 
 .btn-primary:hover{
@@ -152,7 +150,26 @@ body::before{
   color:#64748b
 }
 
-/* HOW IT WORKS */
+/* EXECUTIVE SUMMARY */
+
+.summary{
+  padding:120px 20px;
+  text-align:center;
+}
+
+.summary-box{
+  max-width:900px;
+  margin:40px auto 0;
+  background:white;
+  padding:60px;
+  border-radius:24px;
+  box-shadow:0 30px 80px rgba(15,23,42,.08);
+  text-align:left;
+  font-size:18px;
+  line-height:1.8;
+}
+
+/* HOW */
 
 .how{
   padding:100px 20px;
@@ -179,6 +196,32 @@ body::before{
   transform:translateY(-6px);
 }
 
+/* MORTGAGE COMPARE */
+
+.mortgage-compare{
+  padding:120px 20px;
+  text-align:center;
+}
+
+.compare-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+  margin-top:60px;
+}
+
+.compare-card{
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 25px 60px rgba(15,23,42,.08);
+  transition:.3s;
+}
+
+.compare-card:hover{
+  transform:translateY(-6px);
+}
+
 /* PRICING */
 
 .pricing{
@@ -188,7 +231,7 @@ body::before{
 
 .price-card{
   background:white;
-  max-width:600px;
+  max-width:650px;
   margin:40px auto 0;
   padding:70px;
   border-radius:28px;
@@ -210,7 +253,7 @@ body::before{
 }
 
 .price{
-  font-size:48px;
+  font-size:44px;
   font-weight:800;
   margin-bottom:30px
 }
@@ -225,21 +268,22 @@ body::before{
   font-size:17px
 }
 
-.price-card a{
-  display:inline-block;
-  background:#0f172a;
-  color:white;
-  padding:18px 42px;
-  border-radius:14px;
-  text-decoration:none;
-  font-weight:700;
-  transition:.3s
+/* PARTNERS */
+
+.partners{
+  padding:120px 20px;
+  text-align:center;
 }
 
-.price-card a:hover{
-  transform:translateY(-3px);
-  box-shadow:0 15px 35px rgba(0,0,0,0.15)
+/* AI */
+
+.ai-section{
+  padding:120px 20px;
+  text-align:center;
+  max-width:800px;
 }
+
+/* FOOTER */
 
 .footer{
   text-align:center;
@@ -259,6 +303,8 @@ body::before{
       <button id="btn-en" onclick="setLang('en')">EN</button>
   </div>
 </div>
+
+<!-- HERO -->
 
 <div class="hero container">
 
@@ -285,8 +331,8 @@ body::before{
 
     <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
        class="btn-secondary"
-       data-it="Sblocca analisi PRO – 19€ una tantum"
-       data-en="Unlock PRO analysis – €19 one-time"></a>
+       data-it="Sblocca analisi PRO – 19€"
+       data-en="Unlock PRO analysis – €19"></a>
   </div>
 
   <div class="trust"
@@ -295,66 +341,139 @@ body::before{
 
 </div>
 
-<div class="how">
-  <h2 data-it="Come funziona"
-      data-en="How it works"></h2>
+<!-- EXECUTIVE SUMMARY -->
 
-  <div class="how-grid">
+<div class="summary container">
+  <h2 data-it="Executive Summary"
+      data-en="Executive Summary"></h2>
 
-    <div class="how-card">
-      <h3 data-it="1. Inserisci i dati"
-          data-en="1. Enter your data"></h3>
-      <p data-it="Prezzo, mutuo, occupazione e costi operativi."
-         data-en="Price, mortgage, occupancy and operating costs."></p>
-    </div>
+  <div class="summary-box">
+    <p data-it="RendimentoBB è uno strumento strategico progettato per analizzare la sostenibilità reale di un investimento B&B prima dell’acquisto."
+       data-en="RendimentoBB is a strategic tool designed to analyze the real sustainability of a B&B investment before purchase."></p>
 
-    <div class="how-card">
-      <h3 data-it="2. Simulazione strutturata"
-          data-en="2. Structured simulation"></h3>
-      <p data-it="Calcolo ROI reale, cashflow e break-even."
-         data-en="Real ROI, cashflow and break-even calculation."></p>
-    </div>
+    <p data-it="Integra ROI, simulazione mutuo, cashflow mensile e stress test su scenari realistici."
+       data-en="It integrates ROI, mortgage simulation, monthly cashflow and stress testing."></p>
 
-    <div class="how-card">
-      <h3 data-it="3. Decisione consapevole"
-          data-en="3. Make an informed decision"></h3>
-      <p data-it="Valuta rischi e sostenibilità del capitale."
-         data-en="Evaluate risk and capital sustainability."></p>
-    </div>
-
+    <p data-it="L’obiettivo è prevenire errori finanziari strutturali e proteggere il capitale."
+       data-en="The objective is to prevent structural financial mistakes and protect capital."></p>
   </div>
 </div>
 
+<!-- HOW -->
+
+<div class="how">
+  <h2 data-it="Metodo operativo"
+      data-en="Operational Method"></h2>
+
+  <div class="how-grid">
+    <div class="how-card">
+      <h3>1</h3>
+      <p data-it="Inserisci dati finanziari e ipotesi operative."
+         data-en="Enter financial data and operational assumptions."></p>
+    </div>
+
+    <div class="how-card">
+      <h3>2</h3>
+      <p data-it="Ottieni analisi multi-scenario."
+         data-en="Receive multi-scenario analysis."></p>
+    </div>
+
+    <div class="how-card">
+      <h3>3</h3>
+      <p data-it="Valuta sostenibilità e rischio."
+         data-en="Evaluate sustainability and risk."></p>
+    </div>
+  </div>
+</div>
+
+<!-- MORTGAGE COMPARE -->
+
+<div class="mortgage-compare container">
+  <h2 data-it="Confronto Mutui Strategico"
+      data-en="Strategic Mortgage Comparison"></h2>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h3 data-it="Conservativo" data-en="Conservative"></h3>
+      <p data-it="Tasso alto · Occupazione prudente · Break-even lento"
+         data-en="Higher rate · Conservative occupancy · Slower break-even"></p>
+    </div>
+
+    <div class="compare-card">
+      <h3 data-it="Realistico" data-en="Realistic"></h3>
+      <p data-it="Scenario medio · Cashflow sostenibile"
+         data-en="Average scenario · Sustainable cashflow"></p>
+    </div>
+
+    <div class="compare-card">
+      <h3 data-it="Ottimista" data-en="Optimistic"></h3>
+      <p data-it="Tasso favorevole · ROI accelerato"
+         data-en="Favorable rate · Accelerated ROI"></p>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+
 <div class="pricing">
-  <h2 data-it="Accesso completo PRO"
-      data-en="Full PRO Access"></h2>
+  <h2 data-it="Investment Analysis Suite"
+      data-en="Investment Analysis Suite"></h2>
 
   <div class="price-card">
-
     <div class="badge-pro"
          data-it="Consigliato"
          data-en="Recommended"></div>
 
     <div class="price"
-         data-it="19€ una tantum"
-         data-en="€19 one-time"></div>
+         data-it="19€ – Licenza Strategica"
+         data-en="€19 – Strategic License"></div>
 
     <ul class="features">
       <li data-it="✔ Simulazione mutuo dettagliata"
           data-en="✔ Detailed mortgage simulation"></li>
-      <li data-it="✔ Stress test automatico"
-          data-en="✔ Automatic stress test"></li>
+      <li data-it="✔ Analisi multi-scenario"
+          data-en="✔ Multi-scenario analysis"></li>
       <li data-it="✔ Break-even reale"
-          data-en="✔ Real break-even calculation"></li>
-      <li data-it="✔ Report PDF professionale"
-          data-en="✔ Professional PDF report"></li>
+          data-en="✔ Real break-even"></li>
+      <li data-it="✔ PDF consulenziale professionale"
+          data-en="✔ Consultant-grade PDF report"></li>
     </ul>
 
     <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
-       data-it="Attiva accesso PRO ora"
-       data-en="Activate PRO Access"></a>
-
+       class="btn-secondary"
+       data-it="Attiva accesso ora"
+       data-en="Activate Access"></a>
   </div>
+</div>
+
+<!-- PARTNERS -->
+
+<div class="partners container">
+  <h2 data-it="Prossimo passo"
+      data-en="Next Step"></h2>
+
+  <p data-it="Accedi a immobili selezionati e soluzioni mutuo tramite partner verificati."
+     data-en="Access selected properties and mortgage solutions via verified partners."></p>
+
+  <div class="cta">
+    <a href="#" class="btn-primary"
+       data-it="Immobili selezionati"
+       data-en="Selected properties"></a>
+
+    <a href="#" class="btn-secondary"
+       data-it="Confronta mutui"
+       data-en="Compare mortgages"></a>
+  </div>
+</div>
+
+<!-- AI -->
+
+<div class="ai-section container">
+  <h2 data-it="AI Investment Assistant (in arrivo)"
+      data-en="AI Investment Assistant (coming soon)"></h2>
+
+  <p data-it="Un assistente intelligente analizzerà i tuoi dati e suggerirà ottimizzazioni su prezzo, mutuo e struttura costi."
+     data-en="An intelligent assistant will analyze your data and suggest pricing, mortgage and cost optimizations."></p>
 </div>
 
 <div class="footer"
