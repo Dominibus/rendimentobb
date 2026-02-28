@@ -5,113 +5,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>RendimentoBB – Analisi Strategica Investimento B&B</title>
-<meta name="description" content="Simula ROI, mutuo, cashflow e scenari realistici prima di investire in un B&B. Evita errori finanziari con un'analisi professionale.">
+<meta name="description" content="Analizza ROI, mutuo e sostenibilità reale prima di investire in un B&B.">
 
 <link rel="stylesheet" href="/css/style.css">
-
 </head>
 
 <body>
 
 <div class="tool-wrapper">
 
-    <!-- HEADER -->
+<!-- HEADER + HERO -->
 
-    <div class="tool-header">
-        <div class="lang-switch">
-            <button id="btn-it" onclick="setLang('it')">IT</button>
-            <button id="btn-en" onclick="setLang('en')">EN</button>
-        </div>
+<div class="tool-header">
 
-        <h1
-            data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
-            data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital.">
-        </h1>
-
-        <p
-            data-it="Simulazione ROI reale, mutuo completo, stress test e recupero capitale in meno di 60 secondi."
-            data-en="Real ROI simulation, full mortgage analysis, stress testing and capital recovery in under 60 seconds.">
-        </p>
+    <div class="lang-switch">
+        <button id="btn-it" onclick="setLang('it')">IT</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
     </div>
 
+    <h1 data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
+        data-en="Before investing €100,000 in a B&B, verify real capital sustainability.">
+    </h1>
 
-    <!-- MAIN TOOL CARD -->
+    <p data-it="Simulazione ROI reale, mutuo completo e stress test finanziario."
+       data-en="Real ROI simulation, full mortgage analysis and financial stress test.">
+    </p>
 
-    <div class="tool-card">
+</div>
 
-        <div class="form-grid">
+<!-- EXECUTIVE SUMMARY -->
 
-            <div class="input-group">
-                <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
-                <input type="number" id="price" placeholder="150000">
-            </div>
+<div class="tool-card">
 
-            <div class="input-group">
-                <label data-it="Capitale proprio (€)" data-en="Own capital (€)"></label>
-                <input type="number" id="capital" placeholder="30000">
-            </div>
+    <h2 style="margin-bottom:25px;"
+        data-it="Executive Summary"
+        data-en="Executive Summary">
+    </h2>
 
-            <div class="input-group">
-                <label data-it="Tasso mutuo (%)" data-en="Mortgage rate (%)"></label>
-                <input type="number" id="rate" placeholder="3.5">
-            </div>
+    <p style="color:#64748b; line-height:1.8;">
+        RendimentoBB è uno strumento strategico progettato per analizzare la sostenibilità reale di un investimento B&B prima dell'acquisto.
+        Integra ROI, simulazione mutuo, cashflow mensile e stress test su scenari realistici.
+    </p>
 
-            <div class="input-group">
-                <label data-it="Durata mutuo (anni)" data-en="Mortgage duration (years)"></label>
-                <input type="number" id="years" placeholder="20">
-            </div>
+</div>
 
-            <div class="input-group">
-                <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)"></label>
-                <input type="number" id="nightPrice" placeholder="90">
-            </div>
+<!-- METODO -->
 
-            <div class="input-group">
-                <label data-it="Occupazione media (%)" data-en="Average occupancy (%)"></label>
-                <input type="number" id="occupancy" placeholder="65">
-            </div>
+<div class="tool-card">
 
-            <div class="input-group">
-                <label data-it="Costi operativi mensili (€)" data-en="Monthly operating costs (€)"></label>
-                <input type="number" id="costs" placeholder="1200">
-            </div>
+    <h2 style="margin-bottom:40px; text-align:center;"
+        data-it="Metodo operativo"
+        data-en="Operational Method">
+    </h2>
 
+    <div class="form-grid">
+
+        <div class="input-group">
+            <label>1</label>
+            <p style="color:#64748b;">Inserisci dati finanziari</p>
         </div>
 
-        <div class="action-area">
-            <button class="btn-primary" onclick="calculate()"
-                data-it="Calcola Analisi"
-                data-en="Run Analysis">
-            </button>
+        <div class="input-group">
+            <label>2</label>
+            <p style="color:#64748b;">Analisi multi-scenario</p>
+        </div>
+
+        <div class="input-group">
+            <label>3</label>
+            <p style="color:#64748b;">Valuta rischio e sostenibilità</p>
         </div>
 
     </div>
 
+</div>
 
-    <!-- RESULTS -->
+<!-- TOOL SIMULATORE -->
 
-    <div id="results" class="results-card" style="display:none;"></div>
+<div class="tool-card">
 
+    <h2 style="margin-bottom:40px; text-align:center;"
+        data-it="Simulatore Strategico"
+        data-en="Strategic Simulator">
+    </h2>
 
-    <!-- PRO LOCK -->
+    <div class="form-grid">
 
-    <div class="pro-lock">
-        <h2
-            data-it="Sblocca Analisi PRO"
-            data-en="Unlock PRO Analysis">
-        </h2>
+        <div class="input-group">
+            <label>Prezzo immobile (€)</label>
+            <input type="number" id="price" placeholder="150000">
+        </div>
 
-        <p
-            data-it="Accedi a simulazione mutuo avanzata, stress test automatico e report PDF consulenziale."
-            data-en="Access advanced mortgage simulation, automatic stress testing and consultant-grade PDF report.">
-        </p>
+        <div class="input-group">
+            <label>Capitale proprio (€)</label>
+            <input type="number" id="capital" placeholder="30000">
+        </div>
 
-        <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
-           class="btn-primary"
-           data-it="Attiva Licenza Strategica – 19€"
-           data-en="Activate Strategic License – €19">
-        </a>
+        <div class="input-group">
+            <label>Tasso mutuo (%)</label>
+            <input type="number" id="rate" placeholder="3.5">
+        </div>
+
+        <div class="input-group">
+            <label>Durata mutuo (anni)</label>
+            <input type="number" id="years" placeholder="20">
+        </div>
+
+        <div class="input-group">
+            <label>Prezzo medio notte (€)</label>
+            <input type="number" id="nightPrice" placeholder="90">
+        </div>
+
+        <div class="input-group">
+            <label>Occupazione media (%)</label>
+            <input type="number" id="occupancy" placeholder="65">
+        </div>
+
+        <div class="input-group">
+            <label>Costi operativi mensili (€)</label>
+            <input type="number" id="costs" placeholder="1200">
+        </div>
+
     </div>
+
+    <div class="action-area">
+        <button class="btn-primary" onclick="calculate()">Calcola Analisi</button>
+    </div>
+
+</div>
+
+<!-- RESULTS -->
+
+<div id="results" class="results-card" style="display:none;"></div>
+
+<!-- PRO LOCK -->
+
+<div class="pro-lock">
+
+    <h2>Sblocca Analisi PRO</h2>
+
+    <p>
+        Accedi a simulazione mutuo avanzata, stress test automatico e report PDF consulenziale.
+    </p>
+
+    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+       class="btn-primary">
+       Attiva Licenza Strategica – 19€
+    </a>
+
+</div>
 
 </div>
 
@@ -127,14 +168,7 @@ function setLang(lang){
   document.getElementById("btn-it").classList.remove("active");
   document.getElementById("btn-en").classList.remove("active");
   document.getElementById("btn-"+lang).classList.add("active");
-  localStorage.setItem("lang", lang);
 }
-
-window.addEventListener("DOMContentLoaded",()=>{
-  const saved = localStorage.getItem("lang");
-  const browserLang = navigator.language.startsWith("en") ? "en" : "it";
-  setLang(saved || browserLang);
-});
 </script>
 
 </body>
