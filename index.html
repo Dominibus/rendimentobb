@@ -15,6 +15,26 @@ body{
   background:#f3f6fb;
   color:#0f172a;
   line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ---------- GLOW BACKGROUND ---------- */
+
+body::before{
+  content:"";
+  position:fixed;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,#22c55e33 0%, transparent 70%);
+  top:-200px;
+  right:-200px;
+  z-index:-1;
+  animation:glowMove 8s ease-in-out infinite alternate;
+}
+
+@keyframes glowMove{
+  from{transform:translate(0,0)}
+  to{transform:translate(-40px,40px)}
 }
 
 .container{max-width:1100px;margin:auto;padding:40px 20px}
@@ -27,13 +47,6 @@ body{
 }
 
 .logo{font-weight:800;font-size:20px}
-
-.nav a{
-  text-decoration:none;
-  margin-right:20px;
-  font-weight:600;
-  color:#0f172a
-}
 
 .lang-switch button{
   margin-left:6px;
@@ -54,7 +67,13 @@ body{
 
 .hero{
   text-align:center;
-  padding:120px 20px 80px
+  padding:120px 20px 80px;
+  animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 .badge{
@@ -68,8 +87,8 @@ body{
 }
 
 .hero h1{
-  font-size:50px;
-  line-height:1.15;
+  font-size:52px;
+  line-height:1.1;
   max-width:900px;
   margin:0 auto 25px;
   font-weight:800
@@ -79,7 +98,7 @@ body{
   font-size:20px;
   color:#475569;
   max-width:760px;
-  margin:0 auto 25px
+  margin:0 auto 20px
 }
 
 .hero small{
@@ -90,34 +109,41 @@ body{
 }
 
 .cta{
-  margin-top:35px
+  margin-top:40px
 }
 
 .cta a{
   text-decoration:none;
   padding:18px 44px;
-  border-radius:12px;
+  border-radius:14px;
   font-weight:700;
   margin:10px;
   display:inline-block;
   font-size:17px;
-  transition:.25s
+  transition:.3s;
+  position:relative;
 }
 
 .btn-primary{
   background:#22c55e;
-  color:black
+  color:black;
+  box-shadow:0 0 0px #22c55e;
+}
+
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 35px #22c55e66;
 }
 
 .btn-secondary{
   background:#0f172a;
-  color:white
+  color:white;
+  border:1px solid #1e293b;
 }
 
-.btn-primary:hover,
 .btn-secondary:hover{
   transform:translateY(-3px);
-  box-shadow:0 15px 35px rgba(0,0,0,0.12)
+  box-shadow:0 10px 35px rgba(15,23,42,.3);
 }
 
 .trust{
@@ -126,116 +152,65 @@ body{
   color:#64748b
 }
 
-/* PREVIEW */
+/* HOW IT WORKS */
 
-.preview-box{
-  background:white;
-  max-width:780px;
-  margin:70px auto 0;
-  padding:50px;
-  border-radius:22px;
-  box-shadow:0 30px 70px rgba(15,23,42,.08);
-  text-align:left;
-}
-
-.preview-box h3{
-  font-size:22px;
-  margin-bottom:20px
-}
-
-.preview-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-
-.preview-item{
-  background:#f1f5f9;
-  padding:22px;
-  border-radius:16px;
-}
-
-.preview-item strong{
-  display:block;
-  font-size:22px;
-  margin-bottom:6px;
-}
-
-/* SECTION */
-
-.section{
-  padding:120px 20px
-}
-
-.section-title{
+.how{
+  padding:100px 20px;
   text-align:center;
-  font-size:36px;
-  margin-bottom:60px;
-  font-weight:800;
 }
 
-.compare-table{
+.how-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
   max-width:900px;
-  margin:auto;
+  margin:60px auto 0;
+}
+
+.how-card{
+  background:white;
+  padding:40px;
   border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 25px 60px rgba(15,23,42,.08)
+  box-shadow:0 25px 60px rgba(15,23,42,.08);
+  transition:.3s;
 }
 
-.compare-row{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  padding:22px;
-  border-bottom:1px solid #e2e8f0
-}
-
-.compare-row.header{
-  background:#0f172a;
-  color:white;
-  font-weight:700
-}
-
-.compare-row:nth-child(even){
-  background:#f8fafc;
-}
-
-/* HIGHLIGHT */
-
-.highlight{
-  background:#0f172a;
-  color:white;
-  text-align:center;
-  padding:120px 20px
-}
-
-.highlight h2{
-  font-size:40px;
-  margin-bottom:15px
-}
-
-.highlight p{
-  color:#cbd5e1
+.how-card:hover{
+  transform:translateY(-6px);
 }
 
 /* PRICING */
 
 .pricing{
-  background:linear-gradient(180deg,#ffffff 0%,#eef2f7 100%);
-  padding:140px 20px;
-  text-align:center
+  padding:120px 20px;
+  text-align:center;
 }
 
 .price-card{
   background:white;
-  max-width:650px;
+  max-width:600px;
   margin:40px auto 0;
   padding:70px;
   border-radius:28px;
-  box-shadow:0 35px 90px rgba(15,23,42,.12)
+  box-shadow:0 35px 90px rgba(15,23,42,.12);
+  position:relative;
+}
+
+.badge-pro{
+  position:absolute;
+  top:-15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#22c55e;
+  color:black;
+  font-weight:700;
+  padding:6px 16px;
+  border-radius:999px;
+  font-size:13px;
 }
 
 .price{
-  font-size:50px;
+  font-size:48px;
   font-weight:800;
   margin-bottom:30px
 }
@@ -255,15 +230,15 @@ body{
   background:#0f172a;
   color:white;
   padding:18px 42px;
-  border-radius:12px;
+  border-radius:14px;
   text-decoration:none;
   font-weight:700;
-  transition:.2s
+  transition:.3s
 }
 
 .price-card a:hover{
   transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.15)
+  box-shadow:0 15px 35px rgba(0,0,0,0.15)
 }
 
 .footer{
@@ -279,14 +254,9 @@ body{
 
 <div class="container header">
   <div class="logo">RendimentoBB</div>
-  <div>
-    <span class="nav">
-      <a href="/tool/" data-it="Analisi" data-en="Analysis"></a>
-    </span>
-    <span class="lang-switch">
+  <div class="lang-switch">
       <button id="btn-it" onclick="setLang('it')">IT</button>
       <button id="btn-en" onclick="setLang('en')">EN</button>
-    </span>
   </div>
 </div>
 
@@ -297,16 +267,16 @@ body{
        data-en="Strategic analysis for real estate investments"></div>
 
   <h1
-      data-it="Prima di investire 100.000€ in un B&B, verifica i numeri che determinano se guadagni o perdi."
-      data-en="Before investing €100,000 in a B&B, verify the numbers that determine whether you win or lose."></h1>
+      data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
+      data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital."></h1>
 
   <p
-     data-it="Simulazione reale ROI, mutuo completo, stress test e recupero capitale in meno di 60 secondi."
-     data-en="Real ROI simulation, full mortgage analysis, stress test and capital recovery in under 60 seconds."></p>
+     data-it="Simulazione ROI reale, mutuo completo, stress test e recupero capitale in meno di 60 secondi."
+     data-en="Real ROI simulation, full mortgage analysis, stress testing and capital recovery in under 60 seconds."></p>
 
   <small
-     data-it="Metodo progettato per valutazioni immobiliari consapevoli."
-     data-en="Method designed for informed real estate evaluations."></small>
+     data-it="Metodo progettato per investitori immobiliari disciplinati."
+     data-en="Method designed for disciplined real estate investors."></small>
 
   <div class="cta">
     <a href="/tool/" class="btn-primary"
@@ -325,7 +295,71 @@ body{
 
 </div>
 
-<!-- ALTRE SEZIONI RESTANO IDENTICHE -->
+<div class="how">
+  <h2 data-it="Come funziona"
+      data-en="How it works"></h2>
+
+  <div class="how-grid">
+
+    <div class="how-card">
+      <h3 data-it="1. Inserisci i dati"
+          data-en="1. Enter your data"></h3>
+      <p data-it="Prezzo, mutuo, occupazione e costi operativi."
+         data-en="Price, mortgage, occupancy and operating costs."></p>
+    </div>
+
+    <div class="how-card">
+      <h3 data-it="2. Simulazione strutturata"
+          data-en="2. Structured simulation"></h3>
+      <p data-it="Calcolo ROI reale, cashflow e break-even."
+         data-en="Real ROI, cashflow and break-even calculation."></p>
+    </div>
+
+    <div class="how-card">
+      <h3 data-it="3. Decisione consapevole"
+          data-en="3. Make an informed decision"></h3>
+      <p data-it="Valuta rischi e sostenibilità del capitale."
+         data-en="Evaluate risk and capital sustainability."></p>
+    </div>
+
+  </div>
+</div>
+
+<div class="pricing">
+  <h2 data-it="Accesso completo PRO"
+      data-en="Full PRO Access"></h2>
+
+  <div class="price-card">
+
+    <div class="badge-pro"
+         data-it="Consigliato"
+         data-en="Recommended"></div>
+
+    <div class="price"
+         data-it="19€ una tantum"
+         data-en="€19 one-time"></div>
+
+    <ul class="features">
+      <li data-it="✔ Simulazione mutuo dettagliata"
+          data-en="✔ Detailed mortgage simulation"></li>
+      <li data-it="✔ Stress test automatico"
+          data-en="✔ Automatic stress test"></li>
+      <li data-it="✔ Break-even reale"
+          data-en="✔ Real break-even calculation"></li>
+      <li data-it="✔ Report PDF professionale"
+          data-en="✔ Professional PDF report"></li>
+    </ul>
+
+    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+       data-it="Attiva accesso PRO ora"
+       data-en="Activate PRO Access"></a>
+
+  </div>
+</div>
+
+<div class="footer"
+     data-it="© 2026 RendimentoBB – Tutti i diritti riservati"
+     data-en="© 2026 RendimentoBB – All rights reserved"></div>
 
 <script>
 function setLang(lang){
