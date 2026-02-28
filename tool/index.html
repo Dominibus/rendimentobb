@@ -11,13 +11,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-
-/* HERO MINI */
-
 .tool-intro{
   text-align:center;
   margin-bottom:50px;
-  animation:fadeUp 0.8s ease;
 }
 
 .tool-intro h2{
@@ -32,15 +28,11 @@
   color:#64748b;
 }
 
-/* Helper text */
-
 .helper{
   font-size:12px;
   color:#94a3b8;
   margin-top:6px;
 }
-
-/* Section divider */
 
 .section-divider{
   margin:50px 0 20px;
@@ -48,22 +40,17 @@
   border-bottom:1px solid #e2e8f0;
 }
 
-/* Chart title */
-
 .chart-title{
   font-weight:600;
   margin-bottom:20px;
   color:#475569;
 }
 
-/* Results intro */
-
 .results-intro{
   margin-bottom:20px;
   font-size:14px;
   color:#64748b;
 }
-
 </style>
 
 </head>
@@ -72,7 +59,6 @@
 
 <div class="tool-wrapper">
 
-  <!-- HEADER -->
   <div class="tool-header">
 
     <div class="lang-switch">
@@ -83,10 +69,16 @@
     <h1>RendimentoBB</h1>
 
     <div class="tool-intro">
-      <h2>Analisi Strategica Professionale</h2>
-      <p>
-        Inserisci i dati dell’investimento per ottenere una simulazione strutturata
-        di ROI, sostenibilità del capitale e rischio operativo.
+      <h2 
+        data-it="Analisi Strategica Professionale"
+        data-en="Professional Strategic Analysis">
+        Analisi Strategica Professionale
+      </h2>
+
+      <p
+        data-it="Inserisci i dati dell’investimento per ottenere una simulazione strutturata di ROI, sostenibilità del capitale e rischio operativo."
+        data-en="Enter your investment data to receive a structured simulation of ROI, capital sustainability and operational risk.">
+        Inserisci i dati dell’investimento.
       </p>
     </div>
 
@@ -95,78 +87,124 @@
   <!-- FORM -->
   <div class="tool-card">
 
-    <h3 class="section-divider">💰 Investimento</h3>
+    <h3 class="section-divider"
+        data-it="💰 Investimento"
+        data-en="💰 Investment">💰 Investimento</h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label>Prezzo immobile (€)</label>
-        <input type="number" id="propertyPrice" placeholder="es. 150000">
-        <div class="helper">Prezzo totale di acquisto dell'immobile.</div>
+        <label 
+          data-it="Prezzo immobile (€)"
+          data-en="Property price (€)">Prezzo immobile (€)</label>
+
+        <input type="number" id="propertyPrice"
+          placeholder="150000">
+
+        <div class="helper"
+          data-it="Prezzo totale di acquisto dell'immobile."
+          data-en="Total acquisition cost of the property.">
+          Prezzo totale di acquisto.
+        </div>
       </div>
 
       <div class="input-group">
-        <label>Capitale proprio investito (€)</label>
-        <input type="number" id="equity" placeholder="es. 30000">
-        <div class="helper">Liquidità personale che utilizzi nell'operazione.</div>
+        <label
+          data-it="Capitale proprio investito (€)"
+          data-en="Own capital invested (€)">Capitale proprio investito (€)</label>
+
+        <input type="number" id="equity"
+          placeholder="30000">
+
+        <div class="helper"
+          data-it="Liquidità personale che utilizzi nell'operazione."
+          data-en="Personal liquidity used in the investment.">
+          Liquidità personale.
+        </div>
       </div>
 
     </div>
 
-    <h3 class="section-divider">🏦 Mutuo (Opzionale)</h3>
+    <h3 class="section-divider"
+        data-it="🏦 Mutuo (Opzionale)"
+        data-en="🏦 Mortgage (Optional)">
+        🏦 Mutuo (Opzionale)
+    </h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label>Importo finanziato (€)</label>
-        <input type="number" id="loanAmount" placeholder="es. 120000">
+        <label data-it="Importo finanziato (€)" data-en="Loan amount (€)">
+          Importo finanziato (€)
+        </label>
+        <input type="number" id="loanAmount" placeholder="120000">
       </div>
 
       <div class="input-group">
-        <label>Tasso annuo (%)</label>
-        <input type="number" id="interestRate" placeholder="es. 3.5">
+        <label data-it="Tasso annuo (%)" data-en="Annual interest rate (%)">
+          Tasso annuo (%)
+        </label>
+        <input type="number" id="interestRate" placeholder="3.5">
       </div>
 
       <div class="input-group">
-        <label>Durata (anni)</label>
-        <input type="number" id="loanYears" placeholder="es. 20">
+        <label data-it="Durata (anni)" data-en="Duration (years)">
+          Durata (anni)
+        </label>
+        <input type="number" id="loanYears" placeholder="20">
       </div>
 
     </div>
 
-    <h3 class="section-divider">🏨 Operatività</h3>
+    <h3 class="section-divider"
+        data-it="🏨 Operatività"
+        data-en="🏨 Operations">
+        🏨 Operatività
+    </h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label>Prezzo medio notte (€)</label>
-        <input type="number" id="price" placeholder="es. 120">
+        <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)">
+          Prezzo medio notte (€)
+        </label>
+        <input type="number" id="price" placeholder="120">
       </div>
 
       <div class="input-group">
-        <label>Occupazione media (%)</label>
-        <input type="number" id="occupancy" placeholder="es. 70">
+        <label data-it="Occupazione media (%)" data-en="Average occupancy (%)">
+          Occupazione media (%)
+        </label>
+        <input type="number" id="occupancy" placeholder="70">
       </div>
 
       <div class="input-group">
-        <label>Spese mensili (€)</label>
-        <input type="number" id="expenses" placeholder="es. 1500">
+        <label data-it="Spese mensili (€)" data-en="Monthly expenses (€)">
+          Spese mensili (€)
+        </label>
+        <input type="number" id="expenses" placeholder="1500">
       </div>
 
       <div class="input-group">
-        <label>Commissioni piattaforme (%)</label>
-        <input type="number" id="commission" placeholder="es. 15">
+        <label data-it="Commissioni piattaforme (%)" data-en="Platform commissions (%)">
+          Commissioni piattaforme (%)
+        </label>
+        <input type="number" id="commission" placeholder="15">
       </div>
 
       <div class="input-group">
-        <label>Tasse (%)</label>
-        <input type="number" id="tax" placeholder="es. 24">
+        <label data-it="Tasse (%)" data-en="Taxes (%)">
+          Tasse (%)
+        </label>
+        <input type="number" id="tax" placeholder="24">
       </div>
 
     </div>
 
     <div class="action-area">
-      <button onclick="calculate()" class="btn-primary">
+      <button onclick="calculate()" class="btn-primary"
+        data-it="Analizza Investimento"
+        data-en="Analyze Investment">
         Analizza Investimento
       </button>
     </div>
@@ -175,41 +213,61 @@
 
   <!-- RISULTATI -->
   <div id="results" class="results-card">
-    <div class="results-intro">
-      Qui verrà mostrata la valutazione strategica dell'investimento.
+    <div class="results-intro"
+      data-it="Qui verrà mostrata la valutazione strategica dell'investimento."
+      data-en="The strategic investment evaluation will appear here.">
+      Qui verrà mostrata la valutazione strategica.
     </div>
   </div>
 
   <!-- GRAFICO -->
   <div class="results-card" style="margin-top:25px;">
-    <div class="chart-title">Proiezione Cashflow 5 anni</div>
+    <div class="chart-title"
+      data-it="Proiezione Cashflow 5 anni"
+      data-en="5-Year Cashflow Projection">
+      Proiezione Cashflow 5 anni
+    </div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
-  <!-- BLOCCO PRO -->
+  <!-- PRO -->
   <div id="proBlock" class="pro-lock">
 
-    <h2>🔓 Versione PRO – Analisi Strategica Completa</h2>
+    <h2
+      data-it="🔓 Versione PRO – Analisi Strategica Completa"
+      data-en="🔓 PRO Version – Complete Strategic Analysis">
+      🔓 Versione PRO – Analisi Strategica Completa
+    </h2>
 
-    <p>
-      Strumento avanzato per investitori che vogliono decisioni basate su dati,
-      simulazioni multi-scenario e report professionali.
+    <p
+      data-it="Strumento avanzato per investitori che vogliono decisioni basate su dati."
+      data-en="Advanced tool for investors who want data-driven decisions.">
+      Strumento avanzato.
     </p>
 
     <ul style="text-align:left; max-width:500px; margin:30px auto; line-height:1.8;">
-      <li>✔ Simulazione 5 anni con grafico cumulativo</li>
-      <li>✔ Indice rischio professionale 0–100</li>
-      <li>✔ Generazione Report PDF professionale</li>
+      <li data-it="✔ Simulazione 5 anni con grafico cumulativo"
+          data-en="✔ 5-year cumulative projection with chart"></li>
+
+      <li data-it="✔ Indice rischio professionale 0–100"
+          data-en="✔ Professional risk index 0–100"></li>
+
+      <li data-it="✔ Generazione Report PDF professionale"
+          data-en="✔ Professional PDF report generation"></li>
     </ul>
 
-    <button class="btn-secondary">
+    <button class="btn-secondary"
+      data-it="Sblocca Analisi PRO – 19€"
+      data-en="Unlock PRO Analysis – €19">
       Sblocca Analisi PRO – 19€
     </button>
 
   </div>
 
   <div class="back-link">
-    <a href="/">← Torna alla homepage</a>
+    <a href="/"
+      data-it="← Torna alla homepage"
+      data-en="← Back to homepage"></a>
   </div>
 
 </div>
