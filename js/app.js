@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – PROFESSIONAL CORE
-// VERSIONE CON SUGGERIMENTI ATTIVI
+// RENDIMENTOBB – EXECUTIVE ENGINE
+// VERSIONE CONSULENZIALE PREMIUM
 // ===============================
 
 if (!window.currentLang) {
@@ -9,7 +9,6 @@ if (!window.currentLang) {
 
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
-
   return new Intl.NumberFormat(
     window.currentLang === "it" ? "it-IT" : "en-US",
     { style: "currency", currency: "EUR" }
@@ -99,37 +98,46 @@ function runRealCalculation() {
     ? equity / netAfterMortgage
     : 99;
 
-  const pessimisticROI = baseROI * 0.9;
+  const pessimisticROI = baseROI * 0.85;
   const fiveYearProjection = netAfterMortgage * 5;
 
   // ===============================
-  // SUGGERIMENTI DINAMICI
+  // PROFESSIONAL RISK SCORE 0–100
   // ===============================
 
-  let suggestion = "";
-  let badgeColor = "#22c55e";
-  let riskLevel = "";
+  let riskScore = 50;
 
-  if (baseROI < 4) {
-    suggestion = window.currentLang === "it"
-      ? "ROI basso. Valuta aumento prezzo medio o riduzione costi."
-      : "Low ROI. Consider increasing nightly rate or reducing costs.";
+  if (baseROI < 4) riskScore += 25;
+  if (baseROI > 12) riskScore -= 20;
+  if (breakEvenYears > 15) riskScore += 20;
+  if (breakEvenYears < 8) riskScore -= 15;
+  if (occupancy < 55) riskScore += 15;
+  if (occupancy > 75) riskScore -= 10;
+
+  riskScore = Math.max(0, Math.min(100, riskScore));
+
+  let riskLabel, badgeColor, strategicComment;
+
+  if (riskScore >= 70) {
+    riskLabel = window.currentLang === "it" ? "ALTO RISCHIO" : "HIGH RISK";
     badgeColor = "#ef4444";
-    riskLevel = window.currentLang === "it" ? "ALTO RISCHIO" : "HIGH RISK";
+    strategicComment = window.currentLang === "it"
+      ? "Investimento con elevata esposizione a variabili operative. Richiede revisione strategica."
+      : "High exposure to operational volatility. Strategic review recommended.";
   }
-  else if (baseROI < 8) {
-    suggestion = window.currentLang === "it"
-      ? "Investimento prudente. Stabilità legata all’occupazione."
-      : "Prudent investment. Stability depends on occupancy.";
+  else if (riskScore >= 40) {
+    riskLabel = window.currentLang === "it" ? "RISCHIO MODERATO" : "MODERATE RISK";
     badgeColor = "#f59e0b";
-    riskLevel = window.currentLang === "it" ? "RISCHIO MEDIO" : "MEDIUM RISK";
+    strategicComment = window.currentLang === "it"
+      ? "Investimento sostenibile ma sensibile a variazioni di mercato."
+      : "Sustainable but sensitive to market fluctuations.";
   }
   else {
-    suggestion = window.currentLang === "it"
-      ? "Ottimo equilibrio tra rischio e rendimento."
-      : "Strong balance between risk and return.";
-    badgeColor = "#22c55e";
-    riskLevel = window.currentLang === "it" ? "BASSO RISCHIO" : "LOW RISK";
+    riskLabel = window.currentLang === "it" ? "BASSO RISCHIO" : "LOW RISK";
+    badgeColor = "#10b981";
+    strategicComment = window.currentLang === "it"
+      ? "Struttura finanziaria solida con buona resilienza."
+      : "Strong financial structure with good resilience.";
   }
 
   window.lastAnalysisData = {
@@ -137,60 +145,60 @@ function runRealCalculation() {
     pessimisticROI,
     breakEvenYears,
     netAfterMortgage,
-    fiveYearProjection
+    fiveYearProjection,
+    riskScore,
+    riskLabel,
+    strategicComment
   };
 
   // ===============================
-  // RENDER RISULTATI COMPLETI
+  // RENDER EXECUTIVE SUMMARY
   // ===============================
 
   resultsDiv.innerHTML = `
     <div class="result-card">
 
-      <h4>📊 ${window.currentLang === "it"
-        ? "Analisi Strategica Professionale"
-        : "Professional Strategic Analysis"}</h4>
+      <h4>📊 Executive Investment Summary</h4>
 
-      <div style="margin:10px 0;">
+      <div style="margin:12px 0;">
         <span style="
-          padding:6px 12px;
+          padding:6px 14px;
           border-radius:20px;
           font-size:12px;
           background:${badgeColor};
           color:#fff;
-          font-weight:bold;">
-          ${riskLevel}
+          font-weight:600;">
+          ${riskLabel}
         </span>
       </div>
 
-      <div style="margin-top:10px; line-height:1.8;">
+      <div style="margin-top:15px; line-height:1.9; font-size:15px;">
         <div><strong>ROI:</strong> ${baseROI.toFixed(2)}%</div>
         <div><strong>Break-even:</strong> ${breakEvenYears.toFixed(1)} ${window.currentLang === "it" ? "anni" : "years"}</div>
-        <div><strong>${window.currentLang === "it" ? "Scenario stress" : "Stress scenario"}:</strong> ${pessimisticROI.toFixed(2)}%</div>
+        <div><strong>Stress ROI:</strong> ${pessimisticROI.toFixed(2)}%</div>
+        <div><strong>Risk Index:</strong> ${riskScore}/100</div>
       </div>
 
       <div style="
-        margin-top:15px;
-        padding:12px;
-        border-radius:8px;
-        background:rgba(255,255,255,0.05);
-        border-left:4px solid ${badgeColor};
+        margin-top:18px;
+        padding:14px;
+        border-radius:12px;
+        background:#f1f5f9;
         font-size:14px;">
-        ${suggestion}
+        ${strategicComment}
       </div>
 
-      <div style="margin-top:15px; font-size:14px; opacity:0.8;">
-        ${window.currentLang === "it"
-          ? `Utile netto annuo stimato: ${formatCurrency(netAfterMortgage)}<br>
-             Proiezione 5 anni: ${formatCurrency(fiveYearProjection)}`
-          : `Estimated annual net profit: ${formatCurrency(netAfterMortgage)}<br>
-             5-year projection: ${formatCurrency(fiveYearProjection)}`}
+      <div style="margin-top:18px; font-size:14px;">
+        <strong>${window.currentLang === "it" ? "Utile netto annuo:" : "Annual net profit:"}</strong>
+        ${formatCurrency(netAfterMortgage)}<br>
+        <strong>${window.currentLang === "it" ? "Proiezione 5 anni:" : "5-year projection:"}</strong>
+        ${formatCurrency(fiveYearProjection)}
       </div>
 
-      <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
+      <button onclick="generatePDF()" class="btn-primary" style="margin-top:22px;">
         📄 ${window.currentLang === "it"
-          ? "Genera Report Strategico Completo"
-          : "Generate Full Strategic Report"}
+          ? "Scarica Executive Report"
+          : "Download Executive Report"}
       </button>
 
     </div>
@@ -202,9 +210,7 @@ function runRealCalculation() {
   roiChartInstance = new Chart(chartCanvas, {
     type: 'line',
     data: {
-      labels: window.currentLang === "it"
-        ? ['Anno 1','Anno 2','Anno 3','Anno 4','Anno 5']
-        : ['Year 1','Year 2','Year 3','Year 4','Year 5'],
+      labels: ['Year 1','Year 2','Year 3','Year 4','Year 5'],
       datasets: [{
         data: [
           netAfterMortgage,
@@ -213,22 +219,23 @@ function runRealCalculation() {
           netAfterMortgage*4,
           netAfterMortgage*5
         ],
-        borderColor: '#22c55e',
-        backgroundColor: 'rgba(34,197,94,0.15)',
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16,185,129,0.12)',
         borderWidth: 3,
-        tension: 0.3,
+        tension: 0.35,
         fill: true
       }]
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: false } }
+      plugins: { legend: { display: false } },
+      animation: { duration: 800 }
     }
   });
 }
 
 // ===============================
-// PDF
+// EXECUTIVE PDF
 // ===============================
 
 function generatePDF() {
@@ -244,32 +251,27 @@ function generatePDF() {
   let y = 20;
 
   pdf.setFontSize(18);
-  pdf.text("RendimentoBB - Executive Report", 20, y);
+  pdf.text("RendimentoBB – Executive Investment Report", 20, y);
 
-  y += 12;
+  y += 15;
+  pdf.setFontSize(12);
 
-  pdf.setFontSize(11);
+  const lines = [
+    `ROI: ${d.baseROI.toFixed(2)}%`,
+    `Break-even: ${d.breakEvenYears.toFixed(1)} ${isIT ? "anni" : "years"}`,
+    `Stress ROI: ${d.pessimisticROI.toFixed(2)}%`,
+    `Risk Index: ${d.riskScore}/100`,
+    "",
+    `${isIT ? "Utile netto annuo:" : "Annual net profit:"} ${formatCurrency(d.netAfterMortgage)}`,
+    `${isIT ? "Proiezione 5 anni:" : "5-year projection:"} ${formatCurrency(d.fiveYearProjection)}`,
+    "",
+    d.strategicComment
+  ];
 
-  const text = isIT
-    ? `
-ROI: ${d.baseROI.toFixed(2)}%
-Break-even: ${d.breakEvenYears.toFixed(1)} anni
-Scenario stress: ${d.pessimisticROI.toFixed(2)}%
+  lines.forEach(line => {
+    pdf.text(line, 20, y);
+    y += 8;
+  });
 
-Utile netto annuo: ${formatCurrency(d.netAfterMortgage)}
-Proiezione 5 anni: ${formatCurrency(d.fiveYearProjection)}
-`
-    : `
-ROI: ${d.baseROI.toFixed(2)}%
-Break-even: ${d.breakEvenYears.toFixed(1)} years
-Stress scenario: ${d.pessimisticROI.toFixed(2)}%
-
-Annual net profit: ${formatCurrency(d.netAfterMortgage)}
-5-year projection: ${formatCurrency(d.fiveYearProjection)}
-`;
-
-  const lines = pdf.splitTextToSize(text, 170);
-  pdf.text(lines, 20, y);
-
-  pdf.save(isIT ? "RendimentoBB_IT.pdf" : "RendimentoBB_EN.pdf");
+  pdf.save(isIT ? "Executive_Report_IT.pdf" : "Executive_Report_EN.pdf");
 }
