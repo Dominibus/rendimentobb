@@ -1,15 +1,11 @@
 // ===============================
 // RENDIMENTOBB – PROFESSIONAL CORE
-// VERSIONE PREMIUM COMPLETA
+// VERSIONE CON SUGGERIMENTI ATTIVI
 // ===============================
 
 if (!window.currentLang) {
   window.currentLang = localStorage.getItem("rb_lang") || "it";
 }
-
-// ===============================
-// FORMAT
-// ===============================
 
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
@@ -103,73 +99,92 @@ function runRealCalculation() {
     ? equity / netAfterMortgage
     : 99;
 
-  // Stress realistico -10% occupazione
-  const stressOccupancy = occupancy * 0.9;
-  const stressGross = price * (30 * (stressOccupancy / 100)) * 12;
-  const stressFees = stressGross * (commission / 100);
-  const stressProfit = stressGross - stressFees - yearlyExpenses;
-  const stressTax = stressProfit > 0 ? stressProfit * (tax / 100) : 0;
-  const stressNet = stressProfit - stressTax - mortgage.yearlyPayment;
-  const pessimisticROI = (stressNet / equity) * 100;
+  const pessimisticROI = baseROI * 0.9;
+  const fiveYearProjection = netAfterMortgage * 5;
 
-  const fiveYearTotal = netAfterMortgage * 5;
+  // ===============================
+  // SUGGERIMENTI DINAMICI
+  // ===============================
+
+  let suggestion = "";
+  let badgeColor = "#22c55e";
+  let riskLevel = "";
+
+  if (baseROI < 4) {
+    suggestion = window.currentLang === "it"
+      ? "ROI basso. Valuta aumento prezzo medio o riduzione costi."
+      : "Low ROI. Consider increasing nightly rate or reducing costs.";
+    badgeColor = "#ef4444";
+    riskLevel = window.currentLang === "it" ? "ALTO RISCHIO" : "HIGH RISK";
+  }
+  else if (baseROI < 8) {
+    suggestion = window.currentLang === "it"
+      ? "Investimento prudente. Stabilità legata all’occupazione."
+      : "Prudent investment. Stability depends on occupancy.";
+    badgeColor = "#f59e0b";
+    riskLevel = window.currentLang === "it" ? "RISCHIO MEDIO" : "MEDIUM RISK";
+  }
+  else {
+    suggestion = window.currentLang === "it"
+      ? "Ottimo equilibrio tra rischio e rendimento."
+      : "Strong balance between risk and return.";
+    badgeColor = "#22c55e";
+    riskLevel = window.currentLang === "it" ? "BASSO RISCHIO" : "LOW RISK";
+  }
 
   window.lastAnalysisData = {
     baseROI,
     pessimisticROI,
     breakEvenYears,
     netAfterMortgage,
-    fiveYearTotal
+    fiveYearProjection
   };
 
   // ===============================
-  // SUGGERIMENTI INTELLIGENTI
+  // RENDER RISULTATI COMPLETI
   // ===============================
-
-  let suggestion = "";
-  let color = "#22c55e";
-
-  if (baseROI < 4) {
-    suggestion = window.currentLang === "it"
-      ? "ROI basso. Serve ottimizzare prezzo medio o ridurre costi."
-      : "Low ROI. Consider increasing nightly rate or reducing costs.";
-    color = "#ef4444";
-  }
-  else if (baseROI < 8) {
-    suggestion = window.currentLang === "it"
-      ? "Investimento prudente. Stabilità dipende dall'occupazione."
-      : "Prudent investment. Stability depends on occupancy rate.";
-    color = "#f59e0b";
-  }
-  else {
-    suggestion = window.currentLang === "it"
-      ? "Ottimo equilibrio tra rischio e rendimento."
-      : "Strong balance between risk and return.";
-    color = "#22c55e";
-  }
 
   resultsDiv.innerHTML = `
     <div class="result-card">
+
       <h4>📊 ${window.currentLang === "it"
         ? "Analisi Strategica Professionale"
         : "Professional Strategic Analysis"}</h4>
 
-      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;">
+      <div style="margin:10px 0;">
+        <span style="
+          padding:6px 12px;
+          border-radius:20px;
+          font-size:12px;
+          background:${badgeColor};
+          color:#fff;
+          font-weight:bold;">
+          ${riskLevel}
+        </span>
+      </div>
+
+      <div style="margin-top:10px; line-height:1.8;">
         <div><strong>ROI:</strong> ${baseROI.toFixed(2)}%</div>
         <div><strong>Break-even:</strong> ${breakEvenYears.toFixed(1)} ${window.currentLang === "it" ? "anni" : "years"}</div>
         <div><strong>${window.currentLang === "it" ? "Scenario stress" : "Stress scenario"}:</strong> ${pessimisticROI.toFixed(2)}%</div>
       </div>
 
-      <div style="margin-top:15px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.05);border-left:4px solid ${color}">
+      <div style="
+        margin-top:15px;
+        padding:12px;
+        border-radius:8px;
+        background:rgba(255,255,255,0.05);
+        border-left:4px solid ${badgeColor};
+        font-size:14px;">
         ${suggestion}
       </div>
 
-      <div style="margin-top:15px;font-size:14px;opacity:0.8;">
+      <div style="margin-top:15px; font-size:14px; opacity:0.8;">
         ${window.currentLang === "it"
           ? `Utile netto annuo stimato: ${formatCurrency(netAfterMortgage)}<br>
-             Proiezione 5 anni: ${formatCurrency(fiveYearTotal)}`
+             Proiezione 5 anni: ${formatCurrency(fiveYearProjection)}`
           : `Estimated annual net profit: ${formatCurrency(netAfterMortgage)}<br>
-             5-year projection: ${formatCurrency(fiveYearTotal)}`}
+             5-year projection: ${formatCurrency(fiveYearProjection)}`}
       </div>
 
       <button onclick="generatePDF()" class="btn-primary" style="margin-top:20px;">
@@ -177,12 +192,9 @@ function runRealCalculation() {
           ? "Genera Report Strategico Completo"
           : "Generate Full Strategic Report"}
       </button>
+
     </div>
   `;
-
-  // ===============================
-  // GRAFICO
-  // ===============================
 
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
@@ -194,9 +206,6 @@ function runRealCalculation() {
         ? ['Anno 1','Anno 2','Anno 3','Anno 4','Anno 5']
         : ['Year 1','Year 2','Year 3','Year 4','Year 5'],
       datasets: [{
-        label: window.currentLang === "it"
-          ? 'Utile cumulativo'
-          : 'Cumulative profit',
         data: [
           netAfterMortgage,
           netAfterMortgage*2,
@@ -219,7 +228,7 @@ function runRealCalculation() {
 }
 
 // ===============================
-// PDF PROFESSIONALE
+// PDF
 // ===============================
 
 function generatePDF() {
@@ -234,8 +243,8 @@ function generatePDF() {
 
   let y = 20;
 
-  pdf.setFontSize(20);
-  pdf.text("RendimentoBB - Executive Investment Report", 20, y);
+  pdf.setFontSize(18);
+  pdf.text("RendimentoBB - Executive Report", 20, y);
 
   y += 12;
 
@@ -243,30 +252,24 @@ function generatePDF() {
 
   const text = isIT
     ? `
-ROI annuo stimato: ${d.baseROI.toFixed(2)}%
+ROI: ${d.baseROI.toFixed(2)}%
 Break-even: ${d.breakEvenYears.toFixed(1)} anni
 Scenario stress: ${d.pessimisticROI.toFixed(2)}%
 
 Utile netto annuo: ${formatCurrency(d.netAfterMortgage)}
-Proiezione 5 anni: ${formatCurrency(d.fiveYearTotal)}
-
-Questo report è generato automaticamente dal sistema RendimentoBB.
+Proiezione 5 anni: ${formatCurrency(d.fiveYearProjection)}
 `
     : `
-Estimated annual ROI: ${d.baseROI.toFixed(2)}%
+ROI: ${d.baseROI.toFixed(2)}%
 Break-even: ${d.breakEvenYears.toFixed(1)} years
 Stress scenario: ${d.pessimisticROI.toFixed(2)}%
 
 Annual net profit: ${formatCurrency(d.netAfterMortgage)}
-5-year projection: ${formatCurrency(d.fiveYearTotal)}
-
-This report was automatically generated by RendimentoBB system.
+5-year projection: ${formatCurrency(d.fiveYearProjection)}
 `;
 
   const lines = pdf.splitTextToSize(text, 170);
   pdf.text(lines, 20, y);
 
-  pdf.save(isIT
-    ? "RendimentoBB_Report_IT.pdf"
-    : "RendimentoBB_Report_EN.pdf");
+  pdf.save(isIT ? "RendimentoBB_IT.pdf" : "RendimentoBB_EN.pdf");
 }
