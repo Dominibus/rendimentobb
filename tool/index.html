@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RendimentoBB – Analisi Strategica Investimento B&B</title>
+<title>RendimentoBB – Strategic B&B Investment Analysis</title>
 
 <link rel="stylesheet" href="../css/style.css">
 
-<!-- Librerie -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
@@ -28,7 +26,9 @@
 
     <h1>RendimentoBB</h1>
 
-    <p>
+    <p
+      data-it="Sistema di Analisi Strategica per Investimenti B&B. Evita errori costosi e valuta con metodo professionale."
+      data-en="Strategic Analysis System for B&B Investments. Avoid costly mistakes and evaluate with professional methodology.">
       Sistema di Analisi Strategica per Investimenti B&B.
       Evita errori costosi e valuta con metodo professionale.
     </p>
@@ -38,71 +38,80 @@
   <!-- FORM -->
   <div class="tool-card">
 
-    <h3>💰 Investimento</h3>
+    <h3 data-it="💰 Investimento" data-en="💰 Investment">💰 Investimento</h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label>Prezzo immobile (€)</label>
-        <input type="number" id="propertyPrice" placeholder="Es. 100000">
+        <label data-it="Prezzo immobile (€)" data-en="Property price (€)">Prezzo immobile (€)</label>
+        <input type="number" id="propertyPrice" placeholder="100000">
       </div>
 
       <div class="input-group">
-        <label>Capitale proprio investito (€)</label>
-        <input type="number" id="equity" placeholder="Es. 40000">
+        <label data-it="Capitale proprio investito (€)" data-en="Own capital invested (€)">Capitale proprio investito (€)</label>
+        <input type="number" id="equity" placeholder="40000">
       </div>
     </div>
 
-    <!-- MUTUO -->
-    <h3 style="margin-top:30px">🏦 Mutuo (Opzionale)</h3>
+    <h3 style="margin-top:30px"
+        data-it="🏦 Mutuo (Opzionale)"
+        data-en="🏦 Mortgage (Optional)">
+        🏦 Mutuo (Opzionale)
+    </h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label>Importo finanziato (€)</label>
-        <input type="number" id="loanAmount" placeholder="Es. 60000">
+        <label data-it="Importo finanziato (€)" data-en="Loan amount (€)">Importo finanziato (€)</label>
+        <input type="number" id="loanAmount" placeholder="60000">
       </div>
 
       <div class="input-group">
-        <label>Tasso annuo (%)</label>
-        <input type="number" id="interestRate" placeholder="Es. 3.5">
+        <label data-it="Tasso annuo (%)" data-en="Annual interest rate (%)">Tasso annuo (%)</label>
+        <input type="number" id="interestRate" placeholder="3.5">
       </div>
 
       <div class="input-group">
-        <label>Durata (anni)</label>
-        <input type="number" id="loanYears" placeholder="Es. 20">
+        <label data-it="Durata (anni)" data-en="Duration (years)">Durata (anni)</label>
+        <input type="number" id="loanYears" placeholder="20">
       </div>
     </div>
 
-    <h3 style="margin-top:30px">🏨 Operatività</h3>
+    <h3 style="margin-top:30px"
+        data-it="🏨 Operatività"
+        data-en="🏨 Operations">
+        🏨 Operatività
+    </h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label>Prezzo medio notte (€)</label>
-        <input type="number" id="price" placeholder="Es. 120">
+        <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)">Prezzo medio notte (€)</label>
+        <input type="number" id="price" placeholder="120">
       </div>
 
       <div class="input-group">
-        <label>Occupazione media (%)</label>
-        <input type="number" id="occupancy" placeholder="Es. 70">
+        <label data-it="Occupazione media (%)" data-en="Average occupancy (%)">Occupazione media (%)</label>
+        <input type="number" id="occupancy" placeholder="70">
       </div>
 
       <div class="input-group">
-        <label>Spese mensili (€)</label>
-        <input type="number" id="expenses" placeholder="Es. 1500">
+        <label data-it="Spese mensili (€)" data-en="Monthly expenses (€)">Spese mensili (€)</label>
+        <input type="number" id="expenses" placeholder="1500">
       </div>
 
       <div class="input-group">
-        <label>Commissioni piattaforme (%)</label>
-        <input type="number" id="commission" placeholder="Es. 15">
+        <label data-it="Commissioni piattaforme (%)" data-en="Platform commissions (%)">Commissioni piattaforme (%)</label>
+        <input type="number" id="commission" placeholder="15">
       </div>
 
       <div class="input-group">
-        <label>Tasse (%)</label>
-        <input type="number" id="tax" placeholder="Es. 21">
+        <label data-it="Tasse (%)" data-en="Taxes (%)">Tasse (%)</label>
+        <input type="number" id="tax" placeholder="21">
       </div>
     </div>
 
     <div class="action-area">
-      <button onclick="calculate()" class="btn-primary">
+      <button onclick="calculate()" class="btn-primary"
+        data-it="Analizza Investimento"
+        data-en="Analyze Investment">
         Analizza Investimento
       </button>
     </div>
@@ -112,42 +121,17 @@
   <!-- RISULTATI -->
   <div id="results" class="results-card"></div>
 
-  <!-- GRAFICO ROI -->
+  <!-- GRAFICO -->
   <div class="results-card" style="margin-top:20px;">
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
-  <!-- PRO BLOCK -->
-  <div id="proBlock" class="pro-lock">
-
-    <h2>🔓 Versione PRO – Analisi Strategica Completa</h2>
-
-    <p>
-      Strumento professionale per decisioni immobiliari consapevoli.
-    </p>
-
-    <ul style="text-align:left; max-width:500px; margin:20px auto; line-height:1.8;">
-      <li>✔ Simulazione 5 anni con grafico cumulativo</li>
-      <li>✔ Indice rischio professionale 0–100</li>
-      <li>✔ Break-even reale capitale</li>
-      <li>✔ Scenario stress realistico</li>
-      <li>✔ Analisi leva finanziaria mutuo</li>
-      <li>✔ Generazione Report PDF professionale</li>
-      <li>✔ Aggiornamenti futuri inclusi</li>
-    </ul>
-
-    <button onclick="unlockPro()" class="btn-secondary">
-      Sblocca Analisi PRO – 19€
-    </button>
-
-    <div style="margin-top:10px; font-size:12px; color:#94a3b8;">
-      Pagamento una tantum • Nessun abbonamento • Garanzia 7 giorni
-    </div>
-
-  </div>
-
   <div class="back-link">
-    <a href="/">← Torna alla homepage</a>
+    <a href="/"
+       data-it="← Torna alla homepage"
+       data-en="← Back to homepage">
+       ← Torna alla homepage
+    </a>
   </div>
 
 </div>
