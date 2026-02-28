@@ -22,60 +22,46 @@
 
 .tool-intro h2{
   font-size:22px;
-  color:#94a3b8;
   margin-bottom:12px;
 }
 
 .tool-intro p{
   font-size:15px;
-  color:#64748b;
   max-width:600px;
   margin:auto;
+  color:#64748b;
 }
 
-/* SECTION TITLE STYLE */
+/* Helper text */
+
+.helper{
+  font-size:12px;
+  color:#94a3b8;
+  margin-top:6px;
+}
+
+/* Section divider */
 
 .section-divider{
   margin:50px 0 20px;
   padding-bottom:10px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
+  border-bottom:1px solid #e2e8f0;
 }
 
-/* PRO BLOCK ENHANCED */
+/* Chart title */
 
-.pro-lock{
-  margin-top:80px;
-  padding:80px;
-  border-radius:34px;
-  position:relative;
-  overflow:hidden;
+.chart-title{
+  font-weight:600;
+  margin-bottom:20px;
+  color:#475569;
 }
 
-.pro-lock::before{
-  content:"";
-  position:absolute;
-  width:600px;
-  height:600px;
-  background:radial-gradient(circle,rgba(34,197,94,0.15),transparent 60%);
-  top:-200px;
-  right:-200px;
-  filter:blur(80px);
-}
+/* Results intro */
 
-.pro-lock button{
-  margin-top:20px;
-  animation:proPulse 3s ease-in-out infinite;
-}
-
-@keyframes proPulse{
-  0%{box-shadow:0 0 0px rgba(34,197,94,0.0)}
-  50%{box-shadow:0 0 25px rgba(34,197,94,0.4)}
-  100%{box-shadow:0 0 0px rgba(34,197,94,0.0)}
-}
-
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(30px)}
-  to{opacity:1; transform:translateY(0)}
+.results-intro{
+  margin-bottom:20px;
+  font-size:14px;
+  color:#64748b;
 }
 
 </style>
@@ -97,14 +83,10 @@
     <h1>RendimentoBB</h1>
 
     <div class="tool-intro">
-      <h2 data-it="Analisi Strategica Professionale"
-          data-en="Professional Strategic Analysis">
-          Analisi Strategica Professionale
-      </h2>
-
-      <p data-it="Inserisci i dati dell’investimento e ottieni una simulazione strutturata di ROI, mutuo, cashflow e rischio."
-         data-en="Enter your investment data and receive a structured simulation of ROI, mortgage, cashflow and risk.">
-         Inserisci i dati dell’investimento.
+      <h2>Analisi Strategica Professionale</h2>
+      <p>
+        Inserisci i dati dell’investimento per ottenere una simulazione strutturata
+        di ROI, sostenibilità del capitale e rischio operativo.
       </p>
     </div>
 
@@ -113,82 +95,78 @@
   <!-- FORM -->
   <div class="tool-card">
 
-    <h3 class="section-divider"
-        data-it="💰 Investimento"
-        data-en="💰 Investment">💰 Investimento</h3>
+    <h3 class="section-divider">💰 Investimento</h3>
 
     <div class="form-grid">
+
       <div class="input-group">
-        <label data-it="Prezzo immobile (€)" data-en="Property price (€)">Prezzo immobile (€)</label>
-        <input type="number" id="propertyPrice">
+        <label>Prezzo immobile (€)</label>
+        <input type="number" id="propertyPrice" placeholder="es. 150000">
+        <div class="helper">Prezzo totale di acquisto dell'immobile.</div>
       </div>
 
       <div class="input-group">
-        <label data-it="Capitale proprio investito (€)" data-en="Own capital invested (€)">Capitale proprio investito (€)</label>
-        <input type="number" id="equity">
+        <label>Capitale proprio investito (€)</label>
+        <input type="number" id="equity" placeholder="es. 30000">
+        <div class="helper">Liquidità personale che utilizzi nell'operazione.</div>
       </div>
+
     </div>
 
-    <h3 class="section-divider"
-        data-it="🏦 Mutuo (Opzionale)"
-        data-en="🏦 Mortgage (Optional)">
-        🏦 Mutuo (Opzionale)
-    </h3>
+    <h3 class="section-divider">🏦 Mutuo (Opzionale)</h3>
 
     <div class="form-grid">
+
       <div class="input-group">
-        <label data-it="Importo finanziato (€)" data-en="Loan amount (€)">Importo finanziato (€)</label>
-        <input type="number" id="loanAmount">
+        <label>Importo finanziato (€)</label>
+        <input type="number" id="loanAmount" placeholder="es. 120000">
       </div>
 
       <div class="input-group">
-        <label data-it="Tasso annuo (%)" data-en="Annual interest rate (%)">Tasso annuo (%)</label>
-        <input type="number" id="interestRate">
+        <label>Tasso annuo (%)</label>
+        <input type="number" id="interestRate" placeholder="es. 3.5">
       </div>
 
       <div class="input-group">
-        <label data-it="Durata (anni)" data-en="Duration (years)">Durata (anni)</label>
-        <input type="number" id="loanYears">
+        <label>Durata (anni)</label>
+        <input type="number" id="loanYears" placeholder="es. 20">
       </div>
+
     </div>
 
-    <h3 class="section-divider"
-        data-it="🏨 Operatività"
-        data-en="🏨 Operations">
-        🏨 Operatività
-    </h3>
+    <h3 class="section-divider">🏨 Operatività</h3>
 
     <div class="form-grid">
+
       <div class="input-group">
-        <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)">Prezzo medio notte (€)</label>
-        <input type="number" id="price">
+        <label>Prezzo medio notte (€)</label>
+        <input type="number" id="price" placeholder="es. 120">
       </div>
 
       <div class="input-group">
-        <label data-it="Occupazione media (%)" data-en="Average occupancy (%)">Occupazione media (%)</label>
-        <input type="number" id="occupancy">
+        <label>Occupazione media (%)</label>
+        <input type="number" id="occupancy" placeholder="es. 70">
       </div>
 
       <div class="input-group">
-        <label data-it="Spese mensili (€)" data-en="Monthly expenses (€)">Spese mensili (€)</label>
-        <input type="number" id="expenses">
+        <label>Spese mensili (€)</label>
+        <input type="number" id="expenses" placeholder="es. 1500">
       </div>
 
       <div class="input-group">
-        <label data-it="Commissioni piattaforme (%)" data-en="Platform commissions (%)">Commissioni piattaforme (%)</label>
-        <input type="number" id="commission">
+        <label>Commissioni piattaforme (%)</label>
+        <input type="number" id="commission" placeholder="es. 15">
       </div>
 
       <div class="input-group">
-        <label data-it="Tasse (%)" data-en="Taxes (%)">Tasse (%)</label>
-        <input type="number" id="tax">
+        <label>Tasse (%)</label>
+        <input type="number" id="tax" placeholder="es. 24">
       </div>
+
     </div>
 
     <div class="action-area">
-      <button onclick="calculate()" class="btn-primary"
-        data-it="Analizza Investimento"
-        data-en="Analyze Investment">
+      <button onclick="calculate()" class="btn-primary">
         Analizza Investimento
       </button>
     </div>
@@ -196,49 +174,42 @@
   </div>
 
   <!-- RISULTATI -->
-  <div id="results" class="results-card"></div>
+  <div id="results" class="results-card">
+    <div class="results-intro">
+      Qui verrà mostrata la valutazione strategica dell'investimento.
+    </div>
+  </div>
 
   <!-- GRAFICO -->
   <div class="results-card" style="margin-top:25px;">
+    <div class="chart-title">Proiezione Cashflow 5 anni</div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
   <!-- BLOCCO PRO -->
   <div id="proBlock" class="pro-lock">
 
-    <h2 data-it="🔓 Versione PRO – Analisi Strategica Completa"
-        data-en="🔓 PRO Version – Complete Strategic Analysis">
-        🔓 Versione PRO – Analisi Strategica Completa
-    </h2>
+    <h2>🔓 Versione PRO – Analisi Strategica Completa</h2>
 
-    <p data-it="Strumento avanzato per investitori che vogliono decisioni basate su dati."
-       data-en="Advanced tool for investors who want data-driven decisions.">
-       Strumento avanzato per investitori.
+    <p>
+      Strumento avanzato per investitori che vogliono decisioni basate su dati,
+      simulazioni multi-scenario e report professionali.
     </p>
 
     <ul style="text-align:left; max-width:500px; margin:30px auto; line-height:1.8;">
-      <li data-it="✔ Simulazione 5 anni con grafico cumulativo"
-          data-en="✔ 5-year cumulative projection with chart"></li>
-
-      <li data-it="✔ Indice rischio professionale 0–100"
-          data-en="✔ Professional risk index 0–100"></li>
-
-      <li data-it="✔ Generazione Report PDF professionale"
-          data-en="✔ Professional PDF report generation"></li>
+      <li>✔ Simulazione 5 anni con grafico cumulativo</li>
+      <li>✔ Indice rischio professionale 0–100</li>
+      <li>✔ Generazione Report PDF professionale</li>
     </ul>
 
-    <button class="btn-secondary"
-      data-it="Sblocca Analisi PRO – 19€"
-      data-en="Unlock PRO Analysis – €19">
+    <button class="btn-secondary">
       Sblocca Analisi PRO – 19€
     </button>
 
   </div>
 
   <div class="back-link">
-    <a href="/"
-       data-it="← Torna alla homepage"
-       data-en="← Back to homepage"></a>
+    <a href="/">← Torna alla homepage</a>
   </div>
 
 </div>
