@@ -10,6 +10,76 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<style>
+
+/* HERO MINI */
+
+.tool-intro{
+  text-align:center;
+  margin-bottom:50px;
+  animation:fadeUp 0.8s ease;
+}
+
+.tool-intro h2{
+  font-size:22px;
+  color:#94a3b8;
+  margin-bottom:12px;
+}
+
+.tool-intro p{
+  font-size:15px;
+  color:#64748b;
+  max-width:600px;
+  margin:auto;
+}
+
+/* SECTION TITLE STYLE */
+
+.section-divider{
+  margin:50px 0 20px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+/* PRO BLOCK ENHANCED */
+
+.pro-lock{
+  margin-top:80px;
+  padding:80px;
+  border-radius:34px;
+  position:relative;
+  overflow:hidden;
+}
+
+.pro-lock::before{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,rgba(34,197,94,0.15),transparent 60%);
+  top:-200px;
+  right:-200px;
+  filter:blur(80px);
+}
+
+.pro-lock button{
+  margin-top:20px;
+  animation:proPulse 3s ease-in-out infinite;
+}
+
+@keyframes proPulse{
+  0%{box-shadow:0 0 0px rgba(34,197,94,0.0)}
+  50%{box-shadow:0 0 25px rgba(34,197,94,0.4)}
+  100%{box-shadow:0 0 0px rgba(34,197,94,0.0)}
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(30px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+</style>
+
 </head>
 
 <body>
@@ -26,18 +96,26 @@
 
     <h1>RendimentoBB</h1>
 
-    <p
-      data-it="Sistema di Analisi Strategica per Investimenti B&B. Evita errori costosi e valuta con metodo professionale."
-      data-en="Strategic Analysis System for B&B Investments. Avoid costly mistakes and evaluate with professional methodology.">
-      Sistema di Analisi Strategica per Investimenti B&B.
-    </p>
+    <div class="tool-intro">
+      <h2 data-it="Analisi Strategica Professionale"
+          data-en="Professional Strategic Analysis">
+          Analisi Strategica Professionale
+      </h2>
+
+      <p data-it="Inserisci i dati dell’investimento e ottieni una simulazione strutturata di ROI, mutuo, cashflow e rischio."
+         data-en="Enter your investment data and receive a structured simulation of ROI, mortgage, cashflow and risk.">
+         Inserisci i dati dell’investimento.
+      </p>
+    </div>
 
   </div>
 
   <!-- FORM -->
   <div class="tool-card">
 
-    <h3 data-it="💰 Investimento" data-en="💰 Investment">💰 Investimento</h3>
+    <h3 class="section-divider"
+        data-it="💰 Investimento"
+        data-en="💰 Investment">💰 Investimento</h3>
 
     <div class="form-grid">
       <div class="input-group">
@@ -51,7 +129,7 @@
       </div>
     </div>
 
-    <h3 style="margin-top:30px"
+    <h3 class="section-divider"
         data-it="🏦 Mutuo (Opzionale)"
         data-en="🏦 Mortgage (Optional)">
         🏦 Mutuo (Opzionale)
@@ -74,7 +152,7 @@
       </div>
     </div>
 
-    <h3 style="margin-top:30px"
+    <h3 class="section-divider"
         data-it="🏨 Operatività"
         data-en="🏨 Operations">
         🏨 Operatività
@@ -121,37 +199,32 @@
   <div id="results" class="results-card"></div>
 
   <!-- GRAFICO -->
-  <div class="results-card" style="margin-top:20px;">
+  <div class="results-card" style="margin-top:25px;">
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
   <!-- BLOCCO PRO -->
   <div id="proBlock" class="pro-lock">
 
-    <h2
-      data-it="🔓 Versione PRO – Analisi Strategica Completa"
-      data-en="🔓 PRO Version – Complete Strategic Analysis">
-      🔓 Versione PRO – Analisi Strategica Completa
+    <h2 data-it="🔓 Versione PRO – Analisi Strategica Completa"
+        data-en="🔓 PRO Version – Complete Strategic Analysis">
+        🔓 Versione PRO – Analisi Strategica Completa
     </h2>
 
-    <p
-      data-it="Strumento professionale per decisioni immobiliari consapevoli."
-      data-en="Professional tool for informed real estate decisions.">
-      Strumento professionale per decisioni immobiliari consapevoli.
+    <p data-it="Strumento avanzato per investitori che vogliono decisioni basate su dati."
+       data-en="Advanced tool for investors who want data-driven decisions.">
+       Strumento avanzato per investitori.
     </p>
 
-    <ul style="text-align:left; max-width:500px; margin:20px auto; line-height:1.8;">
+    <ul style="text-align:left; max-width:500px; margin:30px auto; line-height:1.8;">
       <li data-it="✔ Simulazione 5 anni con grafico cumulativo"
-          data-en="✔ 5-year cumulative projection with chart">
-          ✔ Simulazione 5 anni con grafico cumulativo</li>
+          data-en="✔ 5-year cumulative projection with chart"></li>
 
       <li data-it="✔ Indice rischio professionale 0–100"
-          data-en="✔ Professional risk index 0–100">
-          ✔ Indice rischio professionale 0–100</li>
+          data-en="✔ Professional risk index 0–100"></li>
 
       <li data-it="✔ Generazione Report PDF professionale"
-          data-en="✔ Professional PDF report generation">
-          ✔ Generazione Report PDF professionale</li>
+          data-en="✔ Professional PDF report generation"></li>
     </ul>
 
     <button class="btn-secondary"
@@ -165,9 +238,7 @@
   <div class="back-link">
     <a href="/"
        data-it="← Torna alla homepage"
-       data-en="← Back to homepage">
-       ← Torna alla homepage
-    </a>
+       data-en="← Back to homepage"></a>
   </div>
 
 </div>
