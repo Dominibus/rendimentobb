@@ -421,6 +421,40 @@ function generatePDF() {
   pdf.setFont(undefined, "normal");
   pdf.text(d.strategicComment, 25, y + 4, { maxWidth: 160 });
 
+  // ===============================
+// EXECUTIVE VERDICT
+// ===============================
+
+y += 35;
+
+pdf.setFontSize(14);
+pdf.setFont(undefined, "bold");
+pdf.text("Executive Verdict", 20, y);
+
+y += 10;
+
+let recommendation;
+
+if (d.riskScore < 30) {
+  recommendation = "Investment structure solid. Proceed with confidence.";
+}
+else if (d.riskScore < 50) {
+  recommendation = "Acceptable risk profile. Monitor operational variables.";
+}
+else if (d.riskScore < 70) {
+  recommendation = "Speculative structure. Requires optimization before execution.";
+}
+else {
+  recommendation = "High-risk profile. Investment not advisable under current assumptions.";
+}
+
+pdf.setFillColor(240, 240, 240);
+pdf.roundedRect(20, y - 6, 170, 25, 4, 4, "F");
+
+pdf.setFontSize(11);
+pdf.setFont(undefined, "normal");
+pdf.text(recommendation, 25, y + 4, { maxWidth: 160 });
+  
   // FOOTER
   pdf.setFontSize(9);
   pdf.setTextColor(120);
