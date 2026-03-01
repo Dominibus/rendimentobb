@@ -1,6 +1,6 @@
 // ===============================
 // RENDIMENTOBB – EXECUTIVE ENGINE
-// VERSIONE CONSULENZIALE PREMIUM
+// VERSIONE CONSULENZIALE PRO UI
 // ===============================
 
 if (!window.currentLang) {
@@ -73,11 +73,17 @@ function runRealCalculation() {
 
   if (!price || !occupancy || !equity) {
     resultsDiv.innerHTML =
-      window.currentLang === "it"
-        ? "Inserisci valori validi."
-        : "Please enter valid values.";
+      `<div style="padding:20px;">
+        ${window.currentLang === "it"
+          ? "Inserisci valori validi."
+          : "Please enter valid values."}
+      </div>`;
     return;
   }
+
+  // ===============================
+  // CORE FINANCIALS
+  // ===============================
 
   const nightsPerMonth = 30 * (occupancy / 100);
   const grossYearly = price * nightsPerMonth * 12;
@@ -102,7 +108,7 @@ function runRealCalculation() {
   const fiveYearProjection = netAfterMortgage * 5;
 
   // ===============================
-  // PROFESSIONAL RISK SCORE 0–100
+  // RISK SCORE
   // ===============================
 
   let riskScore = 50;
@@ -122,22 +128,22 @@ function runRealCalculation() {
     riskLabel = window.currentLang === "it" ? "ALTO RISCHIO" : "HIGH RISK";
     badgeColor = "#ef4444";
     strategicComment = window.currentLang === "it"
-      ? "Investimento con elevata esposizione a variabili operative. Richiede revisione strategica."
+      ? "Elevata esposizione a variabili operative. Revisione strategica consigliata."
       : "High exposure to operational volatility. Strategic review recommended.";
   }
   else if (riskScore >= 40) {
     riskLabel = window.currentLang === "it" ? "RISCHIO MODERATO" : "MODERATE RISK";
     badgeColor = "#f59e0b";
     strategicComment = window.currentLang === "it"
-      ? "Investimento sostenibile ma sensibile a variazioni di mercato."
+      ? "Struttura sostenibile ma sensibile a variazioni di mercato."
       : "Sustainable but sensitive to market fluctuations.";
   }
   else {
     riskLabel = window.currentLang === "it" ? "BASSO RISCHIO" : "LOW RISK";
     badgeColor = "#10b981";
     strategicComment = window.currentLang === "it"
-      ? "Struttura finanziaria solida con buona resilienza."
-      : "Strong financial structure with good resilience.";
+      ? "Struttura finanziaria solida e resiliente."
+      : "Strong and resilient financial structure.";
   }
 
   window.lastAnalysisData = {
@@ -152,50 +158,62 @@ function runRealCalculation() {
   };
 
   // ===============================
-  // RENDER EXECUTIVE SUMMARY
+  // DASHBOARD RENDER
   // ===============================
 
   resultsDiv.innerHTML = `
-    <div class="result-card">
+    <div style="display:grid; gap:25px;">
 
-      <h4>📊 Executive Investment Summary</h4>
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;">
 
-      <div style="margin:12px 0;">
+        <h3 style="margin:0;">📊 Executive Investment Summary</h3>
+
         <span style="
-          padding:6px 14px;
-          border-radius:20px;
-          font-size:12px;
+          padding:8px 18px;
+          border-radius:999px;
           background:${badgeColor};
-          color:#fff;
-          font-weight:600;">
+          color:white;
+          font-size:12px;
+          font-weight:700;">
           ${riskLabel}
         </span>
       </div>
 
-      <div style="margin-top:15px; line-height:1.9; font-size:15px;">
-        <div><strong>ROI:</strong> ${baseROI.toFixed(2)}%</div>
-        <div><strong>Break-even:</strong> ${breakEvenYears.toFixed(1)} ${window.currentLang === "it" ? "anni" : "years"}</div>
-        <div><strong>Stress ROI:</strong> ${pessimisticROI.toFixed(2)}%</div>
-        <div><strong>Risk Index:</strong> ${riskScore}/100</div>
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+        gap:20px;">
+
+        ${kpiCard("ROI", baseROI.toFixed(2) + "%")}
+        ${kpiCard(
+          window.currentLang === "it" ? "Break-even" : "Break-even",
+          breakEvenYears.toFixed(1) + (window.currentLang === "it" ? " anni" : " years")
+        )}
+        ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
+        ${kpiCard("Risk Index", riskScore + "/100")}
+
       </div>
 
       <div style="
-        margin-top:18px;
-        padding:14px;
-        border-radius:12px;
+        padding:18px;
+        border-radius:14px;
         background:#f1f5f9;
         font-size:14px;">
         ${strategicComment}
       </div>
 
-      <div style="margin-top:18px; font-size:14px;">
+      <div style="font-size:14px; line-height:1.8;">
         <strong>${window.currentLang === "it" ? "Utile netto annuo:" : "Annual net profit:"}</strong>
         ${formatCurrency(netAfterMortgage)}<br>
         <strong>${window.currentLang === "it" ? "Proiezione 5 anni:" : "5-year projection:"}</strong>
         ${formatCurrency(fiveYearProjection)}
       </div>
 
-      <button onclick="generatePDF()" class="btn-primary" style="margin-top:22px;">
+      <button onclick="generatePDF()" class="btn-primary">
         📄 ${window.currentLang === "it"
           ? "Scarica Executive Report"
           : "Download Executive Report"}
@@ -203,6 +221,10 @@ function runRealCalculation() {
 
     </div>
   `;
+
+  // ===============================
+  // CHART
+  // ===============================
 
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
@@ -235,7 +257,34 @@ function runRealCalculation() {
 }
 
 // ===============================
-// EXECUTIVE PDF
+// KPI CARD
+// ===============================
+
+function kpiCard(label, value) {
+  return `
+    <div style="
+      padding:20px;
+      border-radius:18px;
+      background:white;
+      box-shadow:0 15px 40px rgba(15,23,42,.06);">
+
+      <div style="font-size:12px; color:#64748b;">
+        ${label}
+      </div>
+
+      <div style="
+        font-size:22px;
+        font-weight:700;
+        margin-top:6px;">
+        ${value}
+      </div>
+
+    </div>
+  `;
+}
+
+// ===============================
+// EXECUTIVE PDF – PROFESSIONAL
 // ===============================
 
 function generatePDF() {
@@ -256,22 +305,25 @@ function generatePDF() {
   y += 15;
   pdf.setFontSize(12);
 
-  const lines = [
-    `ROI: ${d.baseROI.toFixed(2)}%`,
-    `Break-even: ${d.breakEvenYears.toFixed(1)} ${isIT ? "anni" : "years"}`,
-    `Stress ROI: ${d.pessimisticROI.toFixed(2)}%`,
-    `Risk Index: ${d.riskScore}/100`,
-    "",
-    `${isIT ? "Utile netto annuo:" : "Annual net profit:"} ${formatCurrency(d.netAfterMortgage)}`,
-    `${isIT ? "Proiezione 5 anni:" : "5-year projection:"} ${formatCurrency(d.fiveYearProjection)}`,
-    "",
-    d.strategicComment
-  ];
+  pdf.text(`ROI: ${d.baseROI.toFixed(2)}%`, 20, y); y+=8;
+  pdf.text(`Break-even: ${d.breakEvenYears.toFixed(1)} ${isIT ? "anni" : "years"}`, 20, y); y+=8;
+  pdf.text(`Stress ROI: ${d.pessimisticROI.toFixed(2)}%`, 20, y); y+=8;
+  pdf.text(`Risk Index: ${d.riskScore}/100`, 20, y); y+=12;
 
-  lines.forEach(line => {
-    pdf.text(line, 20, y);
-    y += 8;
-  });
+  pdf.text(
+    `${isIT ? "Utile netto annuo:" : "Annual net profit:"} ${formatCurrency(d.netAfterMortgage)}`,
+    20,
+    y
+  ); y+=8;
+
+  pdf.text(
+    `${isIT ? "Proiezione 5 anni:" : "5-year projection:"} ${formatCurrency(d.fiveYearProjection)}`,
+    20,
+    y
+  ); y+=12;
+
+  pdf.setFontSize(11);
+  pdf.text(d.strategicComment, 20, y, { maxWidth: 170 });
 
   pdf.save(isIT ? "Executive_Report_IT.pdf" : "Executive_Report_EN.pdf");
 }
