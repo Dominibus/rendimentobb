@@ -296,108 +296,142 @@ function generatePDF() {
 
   const d = window.lastAnalysisData;
   const isIT = window.currentLang === "it";
-
   const today = new Date().toLocaleDateString(
     isIT ? "it-IT" : "en-US"
   );
 
-  // ===============================
-  // COLOR PALETTE
-  // ===============================
-
-  const primary = [16, 185, 129]; // green
   const dark = [15, 23, 42];
+  const green = [16, 185, 129];
+  const red = [239, 68, 68];
   const lightGray = [241, 245, 249];
 
   let y = 0;
 
   // ===============================
-  // COVER HEADER BAND
+  // HEADER BAND
   // ===============================
 
   pdf.setFillColor(...dark);
-  pdf.rect(0, 0, 210, 35, "F");
+  pdf.rect(0, 0, 210, 40, "F");
 
   pdf.setTextColor(255, 255, 255);
   pdf.setFontSize(22);
   pdf.setFont(undefined, "bold");
-  pdf.text("RendimentoBB", 20, 22);
+  pdf.text("RendimentoBB", 20, 24);
 
   pdf.setFontSize(11);
-  pdf.text("Executive Investment Report", 20, 30);
+  pdf.text("Executive Investment Report", 20, 33);
 
   pdf.setTextColor(0, 0, 0);
 
-  y = 55;
+  y = 60;
 
   // ===============================
-  // EXECUTIVE OVERVIEW
+  // ROI HERO BLOCK
   // ===============================
 
-  pdf.setFontSize(14);
+  pdf.setFontSize(12);
+  pdf.setFont(undefined, "normal");
+  pdf.text("Return on Investment (ROI)", 20, y);
+
+  y += 10;
+
+  pdf.setFontSize(32);
   pdf.setFont(undefined, "bold");
-  pdf.text(isIT ? "Executive Overview" : "Executive Overview", 20, y);
 
-  y += 12;
+  if (d.baseROI >= 0) {
+    pdf.setTextColor(...green);
+  } else {
+    pdf.setTextColor(...red);
+  }
+
+  pdf.text(d.baseROI.toFixed(2) + "%", 20, y);
+
+  pdf.setTextColor(0, 0, 0);
+
+  y += 20;
+
+  // ===============================
+  // KPI GRID
+  // ===============================
+
+  pdf.setFillColor(...lightGray);
+  pdf.roundedRect(20, y - 8, 170, 32, 4, 4, "F");
 
   pdf.setFontSize(11);
   pdf.setFont(undefined, "normal");
 
-  // KPI BOX
-  pdf.setFillColor(...lightGray);
-  pdf.roundedRect(20, y - 6, 170, 32, 4, 4, "F");
-
-  pdf.text(`ROI: ${d.baseROI.toFixed(2)}%`, 25, y);
   pdf.text(
     `Break-even: ${d.breakEvenYears.toFixed(1)} ${isIT ? "anni" : "years"}`,
     25,
-    y + 8
+    y
   );
-  pdf.text(`Stress ROI: ${d.pessimisticROI.toFixed(2)}%`, 110, y);
-  pdf.text(`Risk Index: ${d.riskScore}/100`, 110, y + 8);
+
+  pdf.text(
+    `Stress ROI: ${d.pessimisticROI.toFixed(2)}%`,
+    110,
+    y
+  );
+
+  pdf.text(
+    `Annual Net: ${formatCurrency(d.netAfterMortgage)}`,
+    25,
+    y + 10
+  );
+
+  pdf.text(
+    `5-Year Projection: ${formatCurrency(d.fiveYearProjection)}`,
+    110,
+    y + 10
+  );
 
   y += 45;
 
   // ===============================
-  // FINANCIAL OUTLOOK
+  // RISK BAR
   // ===============================
 
-  pdf.setFontSize(14);
+  pdf.setFontSize(12);
   pdf.setFont(undefined, "bold");
-  pdf.text(isIT ? "Financial Outlook" : "Financial Outlook", 20, y);
+  pdf.text("Risk Index", 20, y);
 
-  y += 12;
+  y += 10;
 
-  pdf.setFontSize(11);
-  pdf.setFont(undefined, "normal");
+  // Background bar
+  pdf.setFillColor(230, 230, 230);
+  pdf.rect(20, y, 170, 8, "F");
 
-  pdf.text(
-    `${isIT ? "Utile netto annuo:" : "Annual net profit:"} ${formatCurrency(d.netAfterMortgage)}`,
-    20,
-    y
-  );
-  y += 8;
+  // Filled bar
+  const barWidth = (d.riskScore / 100) * 170;
 
-  pdf.text(
-    `${isIT ? "Proiezione 5 anni:" : "5-year projection:"} ${formatCurrency(d.fiveYearProjection)}`,
-    20,
-    y
-  );
+  if (d.riskScore < 40) {
+    pdf.setFillColor(...green);
+  } else if (d.riskScore < 70) {
+    pdf.setFillColor(245, 158, 11);
+  } else {
+    pdf.setFillColor(...red);
+  }
 
-  y += 18;
+  pdf.rect(20, y, barWidth, 8, "F");
+
+  pdf.setFontSize(10);
+  pdf.setTextColor(0);
+  pdf.text(d.riskScore + "/100", 195 - 20, y + 6);
+
+  y += 20;
 
   // ===============================
-  // STRATEGIC ASSESSMENT BOX
+  // STRATEGIC COMMENT
   // ===============================
 
-  pdf.setFontSize(14);
+  pdf.setFontSize(12);
   pdf.setFont(undefined, "bold");
-  pdf.text(isIT ? "Strategic Assessment" : "Strategic Assessment", 20, y);
+  pdf.text("Strategic Assessment", 20, y);
 
   y += 10;
 
   pdf.setFillColor(255, 245, 245);
-  pdf.roundedRect(20, y - 6, 170, 28, 4, 4, "F");
+  pdf.roundedRect(20, y - 6, 170, 25, 4, 4, "F");
 
   pdf.setFontSize(11);
   pdf.setFont(undefined, "normal");
@@ -411,7 +445,7 @@ function generatePDF() {
   // ===============================
 
   pdf.setFontSize(9);
-  pdf.setTextColor(100);
+  pdf.setTextColor(120);
   pdf.text(
     `Generated on ${today} • RendimentoBB Strategic Analysis Engine`,
     20,
