@@ -302,15 +302,13 @@ function generatePDF() {
 
   const dark = [15, 23, 42];
   const green = [16, 185, 129];
+  const yellow = [245, 158, 11];
   const red = [239, 68, 68];
   const lightGray = [241, 245, 249];
 
   let y = 0;
 
-  // ===============================
-  // HEADER BAND
-  // ===============================
-
+  // HEADER
   pdf.setFillColor(...dark);
   pdf.rect(0, 0, 210, 40, "F");
 
@@ -326,17 +324,13 @@ function generatePDF() {
 
   y = 60;
 
-  // ===============================
-  // ROI HERO BLOCK
-  // ===============================
-
+  // ROI HERO
   pdf.setFontSize(12);
-  pdf.setFont(undefined, "normal");
   pdf.text("Return on Investment (ROI)", 20, y);
 
   y += 10;
 
-  pdf.setFontSize(32);
+  pdf.setFontSize(34);
   pdf.setFont(undefined, "bold");
 
   if (d.baseROI >= 0) {
@@ -349,81 +343,71 @@ function generatePDF() {
 
   pdf.setTextColor(0, 0, 0);
 
-  y += 20;
+  y += 22;
 
-  // ===============================
-  // KPI GRID
-  // ===============================
-
+  // KPI BOX
   pdf.setFillColor(...lightGray);
-  pdf.roundedRect(20, y - 8, 170, 32, 4, 4, "F");
+  pdf.roundedRect(20, y - 8, 170, 34, 4, 4, "F");
 
   pdf.setFontSize(11);
   pdf.setFont(undefined, "normal");
 
-  pdf.text(
-    `Break-even: ${d.breakEvenYears.toFixed(1)} ${isIT ? "anni" : "years"}`,
-    25,
-    y
-  );
+  pdf.text(`Break-even: ${d.breakEvenYears.toFixed(1)} ${isIT ? "anni" : "years"}`, 25, y);
+  pdf.text(`Stress ROI: ${d.pessimisticROI.toFixed(2)}%`, 110, y);
+  pdf.text(`Annual Net: ${formatCurrency(d.netAfterMortgage)}`, 25, y + 12);
+  pdf.text(`5-Year Projection: ${formatCurrency(d.fiveYearProjection)}`, 110, y + 12);
 
-  pdf.text(
-    `Stress ROI: ${d.pessimisticROI.toFixed(2)}%`,
-    110,
-    y
-  );
+  y += 50;
 
-  pdf.text(
-    `Annual Net: ${formatCurrency(d.netAfterMortgage)}`,
-    25,
-    y + 10
-  );
-
-  pdf.text(
-    `5-Year Projection: ${formatCurrency(d.fiveYearProjection)}`,
-    110,
-    y + 10
-  );
-
-  y += 45;
-
-  // ===============================
-  // RISK BAR
-  // ===============================
-
+  // RISK SCALE BAR (GRADIENT STYLE)
   pdf.setFontSize(12);
   pdf.setFont(undefined, "bold");
   pdf.text("Risk Index", 20, y);
 
-  y += 10;
+  y += 12;
 
-  // Background bar
-  pdf.setFillColor(230, 230, 230);
-  pdf.rect(20, y, 170, 8, "F");
+  // Green zone
+  pdf.setFillColor(...green);
+  pdf.rect(20, y, 55, 8, "F");
 
-  // Filled bar
-  const barWidth = (d.riskScore / 100) * 170;
+  // Yellow zone
+  pdf.setFillColor(...yellow);
+  pdf.rect(75, y, 55, 8, "F");
 
-  if (d.riskScore < 40) {
-    pdf.setFillColor(...green);
-  } else if (d.riskScore < 70) {
-    pdf.setFillColor(245, 158, 11);
-  } else {
-    pdf.setFillColor(...red);
-  }
+  // Red zone
+  pdf.setFillColor(...red);
+  pdf.rect(130, y, 60, 8, "F");
 
-  pdf.rect(20, y, barWidth, 8, "F");
+  // Indicator line
+  const indicatorX = 20 + (d.riskScore / 100) * 170;
+  pdf.setDrawColor(0);
+  pdf.setLineWidth(1);
+  pdf.line(indicatorX, y - 2, indicatorX, y + 10);
 
   pdf.setFontSize(10);
-  pdf.setTextColor(0);
   pdf.text(d.riskScore + "/100", 195 - 20, y + 6);
+
+  y += 22;
+
+  // INVESTMENT GRADE
+  let grade, gradeLabel;
+
+  if (d.riskScore < 30) { grade = "A"; gradeLabel = "Strong"; }
+  else if (d.riskScore < 50) { grade = "B"; gradeLabel = "Stable"; }
+  else if (d.riskScore < 70) { grade = "C"; gradeLabel = "Speculative"; }
+  else { grade = "D"; gradeLabel = "High Risk"; }
+
+  pdf.setFontSize(14);
+  pdf.setFont(undefined, "bold");
+  pdf.text("Investment Grade: " + grade, 20, y);
+
+  pdf.setFontSize(11);
+  pdf.setFont(undefined, "normal");
+  pdf.text("Classification: " + gradeLabel, 20, y + 8);
 
   y += 20;
 
-  // ===============================
   // STRATEGIC COMMENT
-  // ===============================
-
   pdf.setFontSize(12);
   pdf.setFont(undefined, "bold");
   pdf.text("Strategic Assessment", 20, y);
@@ -431,19 +415,13 @@ function generatePDF() {
   y += 10;
 
   pdf.setFillColor(255, 245, 245);
-  pdf.roundedRect(20, y - 6, 170, 25, 4, 4, "F");
+  pdf.roundedRect(20, y - 6, 170, 28, 4, 4, "F");
 
   pdf.setFontSize(11);
   pdf.setFont(undefined, "normal");
+  pdf.text(d.strategicComment, 25, y + 4, { maxWidth: 160 });
 
-  pdf.text(d.strategicComment, 25, y + 4, {
-    maxWidth: 160
-  });
-
-  // ===============================
   // FOOTER
-  // ===============================
-
   pdf.setFontSize(9);
   pdf.setTextColor(120);
   pdf.text(
