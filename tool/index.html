@@ -11,21 +11,66 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-.tool-intro{
+
+/* ===== TOOL LAYOUT ENHANCED ===== */
+
+.tool-wrapper{
+  max-width:1100px;
+  margin:auto;
+  padding:60px 20px 100px;
+}
+
+.tool-header{
   text-align:center;
-  margin-bottom:50px;
+  margin-bottom:60px;
+}
+
+.tool-header h1{
+  font-size:34px;
+  margin-bottom:10px;
 }
 
 .tool-intro h2{
-  font-size:22px;
+  font-size:20px;
   margin-bottom:12px;
+  font-weight:700;
 }
 
 .tool-intro p{
   font-size:15px;
-  max-width:600px;
+  max-width:700px;
   margin:auto;
   color:#64748b;
+}
+
+.tool-card{
+  background:white;
+  padding:50px;
+  border-radius:24px;
+  box-shadow:0 30px 80px rgba(15,23,42,.08);
+  margin-bottom:40px;
+}
+
+.section-divider{
+  margin:45px 0 20px;
+  padding-bottom:10px;
+  border-bottom:1px solid #e2e8f0;
+  font-size:18px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+}
+
+.input-group label{
+  font-weight:600;
+  font-size:14px;
+}
+
+.input-group input{
+  margin-top:6px;
 }
 
 .helper{
@@ -34,23 +79,68 @@
   margin-top:6px;
 }
 
-.section-divider{
-  margin:50px 0 20px;
-  padding-bottom:10px;
-  border-bottom:1px solid #e2e8f0;
+.action-area{
+  margin-top:40px;
+  text-align:center;
 }
 
-.chart-title{
-  font-weight:600;
-  margin-bottom:20px;
-  color:#475569;
+.results-card{
+  background:white;
+  padding:40px;
+  border-radius:22px;
+  box-shadow:0 25px 60px rgba(15,23,42,.08);
+  margin-top:25px;
 }
 
 .results-intro{
-  margin-bottom:20px;
   font-size:14px;
   color:#64748b;
+  margin-bottom:15px;
 }
+
+.chart-title{
+  font-weight:700;
+  margin-bottom:25px;
+  font-size:16px;
+}
+
+.pro-lock{
+  margin-top:60px;
+  padding:60px 40px;
+  border-radius:26px;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+  text-align:center;
+  box-shadow:0 40px 100px rgba(15,23,42,.25);
+}
+
+.pro-lock h2{
+  font-size:22px;
+  margin-bottom:10px;
+}
+
+.pro-lock p{
+  color:#cbd5e1;
+  max-width:600px;
+  margin:auto;
+}
+
+.pro-lock ul{
+  margin:35px auto;
+  max-width:500px;
+  text-align:left;
+  line-height:1.9;
+}
+
+.pro-lock .btn-secondary{
+  margin-top:10px;
+}
+
+.back-link{
+  text-align:center;
+  margin-top:40px;
+}
+
 </style>
 
 </head>
@@ -59,6 +149,7 @@
 
 <div class="tool-wrapper">
 
+  <!-- HEADER -->
   <div class="tool-header">
 
     <div class="lang-switch">
@@ -78,7 +169,6 @@
       <p
         data-it="Inserisci i dati dell’investimento per ottenere una simulazione strutturata di ROI, sostenibilità del capitale e rischio operativo."
         data-en="Enter your investment data to receive a structured simulation of ROI, capital sustainability and operational risk.">
-        Inserisci i dati dell’investimento.
       </p>
     </div>
 
@@ -94,63 +184,41 @@
     <div class="form-grid">
 
       <div class="input-group">
-        <label 
-          data-it="Prezzo immobile (€)"
-          data-en="Property price (€)">Prezzo immobile (€)</label>
-
-        <input type="number" id="propertyPrice"
-          placeholder="150000">
-
+        <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+        <input type="number" id="propertyPrice" placeholder="150000">
         <div class="helper"
           data-it="Prezzo totale di acquisto dell'immobile."
-          data-en="Total acquisition cost of the property.">
-          Prezzo totale di acquisto.
-        </div>
+          data-en="Total acquisition cost of the property."></div>
       </div>
 
       <div class="input-group">
-        <label
-          data-it="Capitale proprio investito (€)"
-          data-en="Own capital invested (€)">Capitale proprio investito (€)</label>
-
-        <input type="number" id="equity"
-          placeholder="30000">
-
+        <label data-it="Capitale proprio investito (€)" data-en="Own capital invested (€)"></label>
+        <input type="number" id="equity" placeholder="30000">
         <div class="helper"
           data-it="Liquidità personale che utilizzi nell'operazione."
-          data-en="Personal liquidity used in the investment.">
-          Liquidità personale.
-        </div>
+          data-en="Personal liquidity used in the investment."></div>
       </div>
 
     </div>
 
     <h3 class="section-divider"
         data-it="🏦 Mutuo (Opzionale)"
-        data-en="🏦 Mortgage (Optional)">
-        🏦 Mutuo (Opzionale)
-    </h3>
+        data-en="🏦 Mortgage (Optional)"></h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label data-it="Importo finanziato (€)" data-en="Loan amount (€)">
-          Importo finanziato (€)
-        </label>
+        <label data-it="Importo finanziato (€)" data-en="Loan amount (€)"></label>
         <input type="number" id="loanAmount" placeholder="120000">
       </div>
 
       <div class="input-group">
-        <label data-it="Tasso annuo (%)" data-en="Annual interest rate (%)">
-          Tasso annuo (%)
-        </label>
+        <label data-it="Tasso annuo (%)" data-en="Annual interest rate (%)"></label>
         <input type="number" id="interestRate" placeholder="3.5">
       </div>
 
       <div class="input-group">
-        <label data-it="Durata (anni)" data-en="Duration (years)">
-          Durata (anni)
-        </label>
+        <label data-it="Durata (anni)" data-en="Duration (years)"></label>
         <input type="number" id="loanYears" placeholder="20">
       </div>
 
@@ -158,44 +226,32 @@
 
     <h3 class="section-divider"
         data-it="🏨 Operatività"
-        data-en="🏨 Operations">
-        🏨 Operatività
-    </h3>
+        data-en="🏨 Operations"></h3>
 
     <div class="form-grid">
 
       <div class="input-group">
-        <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)">
-          Prezzo medio notte (€)
-        </label>
+        <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)"></label>
         <input type="number" id="price" placeholder="120">
       </div>
 
       <div class="input-group">
-        <label data-it="Occupazione media (%)" data-en="Average occupancy (%)">
-          Occupazione media (%)
-        </label>
+        <label data-it="Occupazione media (%)" data-en="Average occupancy (%)"></label>
         <input type="number" id="occupancy" placeholder="70">
       </div>
 
       <div class="input-group">
-        <label data-it="Spese mensili (€)" data-en="Monthly expenses (€)">
-          Spese mensili (€)
-        </label>
+        <label data-it="Spese mensili (€)" data-en="Monthly expenses (€)"></label>
         <input type="number" id="expenses" placeholder="1500">
       </div>
 
       <div class="input-group">
-        <label data-it="Commissioni piattaforme (%)" data-en="Platform commissions (%)">
-          Commissioni piattaforme (%)
-        </label>
+        <label data-it="Commissioni piattaforme (%)" data-en="Platform commissions (%)"></label>
         <input type="number" id="commission" placeholder="15">
       </div>
 
       <div class="input-group">
-        <label data-it="Tasse (%)" data-en="Taxes (%)">
-          Tasse (%)
-        </label>
+        <label data-it="Tasse (%)" data-en="Taxes (%)"></label>
         <input type="number" id="tax" placeholder="24">
       </div>
 
@@ -204,29 +260,23 @@
     <div class="action-area">
       <button onclick="calculate()" class="btn-primary"
         data-it="Analizza Investimento"
-        data-en="Analyze Investment">
-        Analizza Investimento
-      </button>
+        data-en="Analyze Investment"></button>
     </div>
 
   </div>
 
-  <!-- RISULTATI -->
+  <!-- RESULTS -->
   <div id="results" class="results-card">
     <div class="results-intro"
       data-it="Qui verrà mostrata la valutazione strategica dell'investimento."
-      data-en="The strategic investment evaluation will appear here.">
-      Qui verrà mostrata la valutazione strategica.
-    </div>
+      data-en="The strategic investment evaluation will appear here."></div>
   </div>
 
-  <!-- GRAFICO -->
-  <div class="results-card" style="margin-top:25px;">
+  <!-- CHART -->
+  <div class="results-card">
     <div class="chart-title"
       data-it="Proiezione Cashflow 5 anni"
-      data-en="5-Year Cashflow Projection">
-      Proiezione Cashflow 5 anni
-    </div>
+      data-en="5-Year Cashflow Projection"></div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
@@ -235,17 +285,13 @@
 
     <h2
       data-it="🔓 Versione PRO – Analisi Strategica Completa"
-      data-en="🔓 PRO Version – Complete Strategic Analysis">
-      🔓 Versione PRO – Analisi Strategica Completa
-    </h2>
+      data-en="🔓 PRO Version – Complete Strategic Analysis"></h2>
 
     <p
       data-it="Strumento avanzato per investitori che vogliono decisioni basate su dati."
-      data-en="Advanced tool for investors who want data-driven decisions.">
-      Strumento avanzato.
-    </p>
+      data-en="Advanced tool for investors who want data-driven decisions."></p>
 
-    <ul style="text-align:left; max-width:500px; margin:30px auto; line-height:1.8;">
+    <ul>
       <li data-it="✔ Simulazione 5 anni con grafico cumulativo"
           data-en="✔ 5-year cumulative projection with chart"></li>
 
@@ -258,9 +304,7 @@
 
     <button class="btn-secondary"
       data-it="Sblocca Analisi PRO – 19€"
-      data-en="Unlock PRO Analysis – €19">
-      Sblocca Analisi PRO – 19€
-    </button>
+      data-en="Unlock PRO Analysis – €19"></button>
 
   </div>
 
