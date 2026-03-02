@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.3 STABLE
-// FULL VERSION RESTORED + CLEAN ROI + PDF TRANSLATION
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.3 STABLE FINAL
+// FULL VERSION RESTORED + PDF WORKING
 // ===============================
 
 if (!window.currentLang) {
@@ -24,6 +24,23 @@ function getValue(id) {
 
 window.lastAnalysisData = null;
 let roiChartInstance = null;
+
+// ===============================
+// KPI CARD (DEFINITA PRIMA)
+// ===============================
+
+function kpiCard(label, value) {
+  return `
+    <div style="
+      background:white;
+      padding:20px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);">
+      <div style="font-size:12px;color:#64748b;">${label}</div>
+      <div style="font-size:22px;font-weight:700;margin-top:6px;">${value}</div>
+    </div>
+  `;
+}
 
 // ===============================
 // MORTGAGE
@@ -89,8 +106,6 @@ function runRealCalculation() {
   const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
   const netAfterMortgage = netYearly - mortgage.yearlyPayment;
 
-  // ===== ROI REAL CLEAN (NO CAP) =====
-
   let baseROI = (netAfterMortgage / equity) * 100;
   if (!isFinite(baseROI)) baseROI = 0;
 
@@ -137,36 +152,32 @@ function runRealCalculation() {
     grade
   };
 
-  // ===== RESULTS =====
-
   resultsDiv.innerHTML = `
     <div style="margin-bottom:20px;">
-      <h3 style="font-size:18px;">
-        ${window.currentLang === "it" ? "Sintesi Investimento" : "Executive Investment Summary"}
-      </h3>
+      <h3 style="font-size:18px;">Executive Investment Summary</h3>
     </div>
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:20px; margin-bottom:25px;">
       ${kpiCard("ROI", baseROI.toFixed(2) + "%")}
-      ${kpiCard(window.currentLang === "it" ? "Rientro" : "Break-even", breakEvenYears.toFixed(1) + " yrs")}
+      ${kpiCard("Break-even", breakEvenYears.toFixed(1) + " yrs")}
       ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
       ${kpiCard("Grade", grade)}
     </div>
 
     <div style="margin-bottom:20px;">
-      <strong>${window.currentLang === "it" ? "Utile Annuo" : "Annual Net"}:</strong> ${formatCurrency(netAfterMortgage)}<br>
+      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
       <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
     </div>
 
     <div style="margin-bottom:20px;">
-      <strong>${window.currentLang === "it" ? "Indice di Rischio" : "Risk Index"}:</strong> ${riskScore}/100
+      <strong>Risk Index:</strong> ${riskScore}/100
       <div style="height:8px;background:#e5e7eb;border-radius:4px;margin-top:6px;">
         <div style="width:${riskScore}%;background:${riskColor};height:8px;border-radius:4px;"></div>
       </div>
     </div>
 
     <button onclick="generatePDF()" class="btn-primary">
-      📄 ${window.currentLang === "it" ? "Scarica Report" : "Download Executive Report"}
+      📄 Download Executive Report
     </button>
   `;
 
@@ -200,7 +211,7 @@ function runRealCalculation() {
 }
 
 // ===============================
-// PDF (TRANSLATED)
+// PDF
 // ===============================
 
 function generatePDF() {
@@ -210,7 +221,11 @@ function generatePDF() {
     return;
   }
 
-  const lang = window.currentLang;
+  if (!window.jspdf) {
+    alert("jsPDF not loaded.");
+    return;
+  }
+
   const jsPDF = window.jspdf.jsPDF;
   const pdf = new jsPDF("p","mm","a4");
   const d = window.lastAnalysisData;
@@ -226,57 +241,23 @@ function generatePDF() {
   pdf.text("RendimentoBB", margin, 20);
 
   pdf.setFontSize(11);
-  pdf.text(
-    lang === "it" ? "Report Strategico Investimento" : "Strategic Investment Report",
-    margin, 28
-  );
+  pdf.text("Strategic Investment Report", margin, 28);
 
   pdf.setTextColor(0,0,0);
   pdf.setFontSize(14);
-  pdf.text(
-    lang === "it" ? "Rendimento Capitale Investito (ROI)" : "Cash-on-Cash Return (Equity ROI)",
-    margin, y
-  );
+  pdf.text("Cash-on-Cash Return (Equity ROI)", margin, y);
 
   y += 12;
 
   pdf.setFontSize(34);
   pdf.text(d.baseROI.toFixed(2) + "%", margin, y);
 
-  y += 18;
-
-  pdf.setFillColor(240,243,247);
-  pdf.roundedRect(margin, y, 170, 36, 4, 4, "F");
+  y += 20;
 
   pdf.setFontSize(11);
-  pdf.setTextColor(0,0,0);
-
-  pdf.text(
-    (lang === "it" ? "Rientro: " : "Break-even: ") + d.breakEvenYears.toFixed(1) + " yrs",
-    margin+8, y+12
-  );
-
-  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin+95, y+12);
-
-  pdf.text(
-    (lang === "it" ? "Utile Annuo: " : "Annual Net: ") +
-    formatCurrency(d.netAfterMortgage),
-    margin+8, y+24
-  );
-
-  pdf.text(
-    "5Y Projection: " + formatCurrency(d.fiveYearProjection),
-    margin+95, y+24
-  );
-
-  pdf.setFontSize(8);
-  pdf.setTextColor(120,120,120);
-  pdf.text(
-    (lang === "it" ? "Generato il " : "Generated on ") +
-    new Date().toLocaleDateString(),
-    margin,
-    285
-  );
+  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " yrs", margin, y);
+  y += 8;
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin, y);
 
   pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
