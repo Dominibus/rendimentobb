@@ -17,8 +17,8 @@
     <div class="logo">RendimentoBB</div>
 
     <div class="lang-toggle">
-      <button id="btn-it" onclick="setLang('it')" class="lang-btn">IT</button>
-      <button id="btn-en" onclick="setLang('en')" class="lang-btn">EN</button>
+      <button id="btn-it" onclick="setLanguage('it')" class="lang-btn">IT</button>
+      <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
       <div class="lang-indicator"></div>
     </div>
   </div>
@@ -64,9 +64,14 @@
       <div class="dashboard-card">
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-          <span style="font-size:14px; font-weight:600;">Executive Snapshot</span>
-          <span style="background:#10b981; color:white; font-size:11px; padding:5px 12px; border-radius:999px;">
-            LIVE
+          <span style="font-size:14px; font-weight:600;"
+                data-it="Executive Snapshot"
+                data-en="Executive Snapshot">
+          </span>
+
+          <span style="background:#10b981; color:white; font-size:11px; padding:5px 12px; border-radius:999px;"
+                data-it="LIVE"
+                data-en="LIVE">
           </span>
         </div>
 
@@ -198,31 +203,7 @@
  data-en="© 2026 RendimentoBB – All rights reserved">
 </footer>
 
-<script>
-function setLang(lang){
-  document.documentElement.lang = lang;
-
-  document.querySelectorAll("[data-it]").forEach(el=>{
-    const text = el.getAttribute("data-"+lang);
-    if(text) el.innerText = text;
-  });
-
-  document.getElementById("btn-it").classList.remove("active");
-  document.getElementById("btn-en").classList.remove("active");
-  document.getElementById("btn-"+lang).classList.add("active");
-
-  const indicator = document.querySelector(".lang-indicator");
-  indicator.style.transform = lang === "en" ? "translateX(100%)" : "translateX(0%)";
-
-  localStorage.setItem("lang", lang);
-}
-
-window.addEventListener("DOMContentLoaded",()=>{
-  const saved = localStorage.getItem("lang");
-  const browserLang = navigator.language.startsWith("en") ? "en" : "it";
-  setLang(saved || browserLang);
-});
-</script>
+<script src="/js/lang.js"></script>
 
 </body>
 </html>
