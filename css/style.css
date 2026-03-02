@@ -25,7 +25,7 @@ body {
 /* ===================== */
 
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -74,7 +74,6 @@ header {
   font-weight: 600;
   cursor: pointer;
   border-radius: 999px;
-  transition: all .2s ease;
   color: #334155;
 }
 
@@ -99,7 +98,19 @@ header {
 
 .hero {
   padding: 140px 0 120px 0;
-  animation: fadeUp .6s ease;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  opacity: .6;
+  margin-bottom: 16px;
+  font-size: 14px;
 }
 
 .hero h1 {
@@ -107,26 +118,113 @@ header {
   line-height: 1.05;
   letter-spacing: -1.2px;
   margin-bottom: 24px;
-  max-width: 900px;
 }
 
 .hero p {
   font-size: clamp(18px,2.5vw,22px);
-  max-width: 720px;
   margin-bottom: 40px;
   opacity: .9;
   line-height: 1.6;
 }
 
-.hero small {
-  display: block;
+.micro-note {
   margin-top: 16px;
   font-size: 13px;
   opacity: .6;
 }
 
 /* ===================== */
-/* BUTTONS */
+/* DASHBOARD MOCK */
+/* ===================== */
+
+.dashboard-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 40px 120px rgba(15,23,42,.12);
+  border: 1px solid #e2e8f0;
+  animation: fadeUp .6s ease;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+.metric strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.risk-low strong {
+  color: #10b981;
+}
+
+.mini-chart {
+  margin-top: 30px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 80px;
+}
+
+.bar {
+  flex: 1;
+  background: linear-gradient(180deg,#10b981,#059669);
+  border-radius: 6px;
+  transition: .3s ease;
+}
+
+/* ===================== */
+/* SECTIONS */
+/* ===================== */
+
+section {
+  padding: 110px 0;
+}
+
+.section-alt {
+  background: white;
+}
+
+h2 {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: -0.5px;
+}
+
+/* ===================== */
+/* WHY GRID */
+/* ===================== */
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 40px;
+}
+
+.why-card {
+  background: #f8fafc;
+  padding: 40px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  transition: .3s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px rgba(15,23,42,.08);
+}
+
+.why-card h3 {
+  margin-bottom: 16px;
+}
+
+/* ===================== */
+/* BUTTON */
 /* ===================== */
 
 .btn {
@@ -150,72 +248,45 @@ header {
 }
 
 /* ===================== */
-/* SECTIONS */
-/* ===================== */
-
-section {
-  padding: 110px 0;
-}
-
-.section-alt {
-  background: white;
-}
-
-/* ===================== */
-/* HEADINGS */
-/* ===================== */
-
-h2 {
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 32px;
-  letter-spacing: -0.5px;
-}
-
-/* ===================== */
-/* SUMMARY TEXT */
-/* ===================== */
-
-.section-alt p,
-section p {
-  max-width: 760px;
-  line-height: 1.8;
-  margin-bottom: 18px;
-  color: #475569;
-}
-
-/* ===================== */
-/* METHOD LIST */
-/* ===================== */
-
-ol {
-  padding-left: 20px;
-  max-width: 600px;
-}
-
-ol li {
-  margin-bottom: 12px;
-  line-height: 1.7;
-  color: #475569;
-}
-
-/* ===================== */
 /* PRICING */
 /* ===================== */
 
+.pricing-center {
+  text-align: center;
+}
+
 .price-card {
   background: white;
-  padding: 65px;
-  border-radius: 22px;
-  box-shadow: 0 30px 90px rgba(15,23,42,.08);
-  max-width: 540px;
-  transition: all .3s ease;
+  padding: 70px;
+  border-radius: 26px;
+  box-shadow: 0 40px 120px rgba(15,23,42,.10);
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  transition: .3s ease;
   border: 1px solid #e2e8f0;
 }
 
+.price-card.featured {
+  transform: scale(1.05);
+}
+
 .price-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 45px 120px rgba(15,23,42,.15);
+  transform: scale(1.08);
+  box-shadow: 0 60px 160px rgba(15,23,42,.18);
+}
+
+.badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .price {
@@ -226,6 +297,7 @@ ol li {
 
 .features {
   margin-bottom: 30px;
+  text-align: left;
 }
 
 .features li {
@@ -238,7 +310,7 @@ ol li {
 /* ===================== */
 
 footer {
-  padding: 70px 0;
+  padding: 80px 0;
   text-align: center;
   font-size: 14px;
   opacity: .5;
@@ -249,13 +321,27 @@ footer {
 /* ===================== */
 
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(25px); }
+  from { opacity:0; transform:translateY(30px); }
   to { opacity:1; transform:translateY(0); }
 }
 
 /* ===================== */
 /* RESPONSIVE */
 /* ===================== */
+
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .price-card.featured {
+    transform: none;
+  }
+}
 
 @media (max-width: 768px) {
 
