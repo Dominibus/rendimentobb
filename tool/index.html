@@ -9,198 +9,68 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<style>
-
-/* ===== TOOL LAYOUT ENHANCED ===== */
-
-.tool-wrapper{
-  max-width:1100px;
-  margin:auto;
-  padding:60px 20px 100px;
-}
-
-.tool-header{
-  text-align:center;
-  margin-bottom:60px;
-}
-
-.tool-header h1{
-  font-size:34px;
-  margin-bottom:10px;
-}
-
-.tool-intro h2{
-  font-size:20px;
-  margin-bottom:12px;
-  font-weight:700;
-}
-
-.tool-intro p{
-  font-size:15px;
-  max-width:700px;
-  margin:auto;
-  color:#64748b;
-}
-
-.tool-card{
-  background:white;
-  padding:50px;
-  border-radius:24px;
-  box-shadow:0 30px 80px rgba(15,23,42,.08);
-  margin-bottom:40px;
-}
-
-.section-divider{
-  margin:45px 0 20px;
-  padding-bottom:10px;
-  border-bottom:1px solid #e2e8f0;
-  font-size:18px;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:30px;
-}
-
-.input-group label{
-  font-weight:600;
-  font-size:14px;
-}
-
-.input-group input{
-  margin-top:6px;
-}
-
-.helper{
-  font-size:12px;
-  color:#94a3b8;
-  margin-top:6px;
-}
-
-.action-area{
-  margin-top:40px;
-  text-align:center;
-}
-
-.results-card{
-  background:white;
-  padding:40px;
-  border-radius:22px;
-  box-shadow:0 25px 60px rgba(15,23,42,.08);
-  margin-top:25px;
-}
-
-.results-intro{
-  font-size:14px;
-  color:#64748b;
-  margin-bottom:15px;
-}
-
-.chart-title{
-  font-weight:700;
-  margin-bottom:25px;
-  font-size:16px;
-}
-
-.pro-lock{
-  margin-top:60px;
-  padding:60px 40px;
-  border-radius:26px;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:white;
-  text-align:center;
-  box-shadow:0 40px 100px rgba(15,23,42,.25);
-}
-
-.pro-lock h2{
-  font-size:22px;
-  margin-bottom:10px;
-}
-
-.pro-lock p{
-  color:#cbd5e1;
-  max-width:600px;
-  margin:auto;
-}
-
-.pro-lock ul{
-  margin:35px auto;
-  max-width:500px;
-  text-align:left;
-  line-height:1.9;
-}
-
-.pro-lock .btn-secondary{
-  margin-top:10px;
-}
-
-.back-link{
-  text-align:center;
-  margin-top:40px;
-}
-
-</style>
-
 </head>
 
 <body>
 
-<div class="tool-wrapper">
+<!-- HEADER COERENTE CON HOMEPAGE -->
 
-  <!-- HEADER -->
-  <div class="tool-header">
+<header class="container">
+  <div class="nav">
+    <div class="logo">RendimentoBB</div>
 
-    <div class="lang-switch">
-      <button id="btn-it" onclick="setLanguage('it')" class="active">IT</button>
-      <button id="btn-en" onclick="setLanguage('en')">EN</button>
+    <div class="lang-toggle">
+      <button id="btn-it" onclick="setLanguage('it')" class="lang-btn active">IT</button>
+      <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
+      <div class="lang-indicator"></div>
     </div>
+  </div>
+</header>
 
-    <h1>RendimentoBB</h1>
+<div class="container" style="padding-top:80px; padding-bottom:120px;">
 
-    <div class="tool-intro">
-      <h2 
+  <!-- TOOL INTRO -->
+
+  <div style="text-align:center; margin-bottom:70px;">
+
+    <h1 style="font-size:34px; margin-bottom:12px;">RendimentoBB</h1>
+
+    <h2 style="font-size:20px; font-weight:700; margin-bottom:14px;"
         data-it="Analisi Strategica Professionale"
         data-en="Professional Strategic Analysis">
-        Analisi Strategica Professionale
-      </h2>
+    </h2>
 
-      <p
-        data-it="Inserisci i dati dell’investimento per ottenere una simulazione strutturata di ROI, sostenibilità del capitale e rischio operativo."
-        data-en="Enter your investment data to receive a structured simulation of ROI, capital sustainability and operational risk.">
-      </p>
-    </div>
+    <p style="max-width:750px; margin:auto; color:#64748b;"
+       data-it="Inserisci i dati dell’investimento per ottenere una simulazione strutturata di ROI, sostenibilità del capitale e rischio operativo."
+       data-en="Enter your investment data to receive a structured simulation of ROI, capital sustainability and operational risk.">
+    </p>
 
   </div>
 
-  <!-- FORM -->
+  <!-- FORM CARD -->
+
   <div class="tool-card">
 
+    <!-- INVESTMENT -->
     <h3 class="section-divider"
         data-it="💰 Investimento"
-        data-en="💰 Investment">💰 Investimento</h3>
+        data-en="💰 Investment"></h3>
 
     <div class="form-grid">
 
       <div class="input-group">
         <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
         <input type="number" id="propertyPrice" placeholder="150000">
-        <div class="helper"
-          data-it="Prezzo totale di acquisto dell'immobile."
-          data-en="Total acquisition cost of the property."></div>
       </div>
 
       <div class="input-group">
         <label data-it="Capitale proprio investito (€)" data-en="Own capital invested (€)"></label>
         <input type="number" id="equity" placeholder="30000">
-        <div class="helper"
-          data-it="Liquidità personale che utilizzi nell'operazione."
-          data-en="Personal liquidity used in the investment."></div>
       </div>
 
     </div>
 
+    <!-- MORTGAGE -->
     <h3 class="section-divider"
         data-it="🏦 Mutuo (Opzionale)"
         data-en="🏦 Mortgage (Optional)"></h3>
@@ -224,6 +94,7 @@
 
     </div>
 
+    <!-- OPERATIONS -->
     <h3 class="section-divider"
         data-it="🏨 Operatività"
         data-en="🏨 Operations"></h3>
@@ -258,7 +129,7 @@
     </div>
 
     <div class="action-area">
-      <button onclick="calculate()" class="btn-primary"
+      <button onclick="calculate()" class="btn btn-primary"
         data-it="Analizza Investimento"
         data-en="Analyze Investment"></button>
     </div>
@@ -266,6 +137,7 @@
   </div>
 
   <!-- RESULTS -->
+
   <div id="results" class="results-card">
     <div class="results-intro"
       data-it="Qui verrà mostrata la valutazione strategica dell'investimento."
@@ -273,14 +145,16 @@
   </div>
 
   <!-- CHART -->
-  <div class="results-card">
+
+  <div class="results-card" style="margin-top:35px;">
     <div class="chart-title"
       data-it="Proiezione Cashflow 5 anni"
       data-en="5-Year Cashflow Projection"></div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
-  <!-- PRO -->
+  <!-- PRO SECTION -->
+
   <div id="proBlock" class="pro-lock">
 
     <h2
@@ -302,13 +176,13 @@
           data-en="✔ Professional PDF report generation"></li>
     </ul>
 
-    <button class="btn-secondary"
+    <button class="btn btn-secondary"
       data-it="Sblocca Analisi PRO – 19€"
       data-en="Unlock PRO Analysis – €19"></button>
 
   </div>
 
-  <div class="back-link">
+  <div style="text-align:center; margin-top:60px;">
     <a href="/"
       data-it="← Torna alla homepage"
       data-en="← Back to homepage"></a>
@@ -316,7 +190,33 @@
 
 </div>
 
-<script src="../js/lang.js"></script>
+<script>
+function setLanguage(lang){
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll("[data-it]").forEach(el=>{
+    const text = el.getAttribute("data-"+lang);
+    if(text) el.innerText = text;
+  });
+
+  document.getElementById("btn-it").classList.remove("active");
+  document.getElementById("btn-en").classList.remove("active");
+
+  document.getElementById("btn-"+lang).classList.add("active");
+
+  const indicator = document.querySelector(".lang-indicator");
+  indicator.style.transform = lang === "en" ? "translateX(100%)" : "translateX(0%)";
+
+  localStorage.setItem("lang", lang);
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  const saved = localStorage.getItem("lang");
+  const browserLang = navigator.language.startsWith("en") ? "en" : "it";
+  setLanguage(saved || browserLang);
+});
+</script>
+
 <script src="../js/app.js"></script>
 
 </body>
