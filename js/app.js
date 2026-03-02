@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.3 STABLE FINAL
-// FULL VERSION RESTORED + PDF WORKING
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.3 PROFESSIONAL
+// FULL RESTORED + REAL ROI + FULL EXECUTIVE PDF
 // ===============================
 
 if (!window.currentLang) {
@@ -26,7 +26,7 @@ window.lastAnalysisData = null;
 let roiChartInstance = null;
 
 // ===============================
-// KPI CARD (DEFINITA PRIMA)
+// KPI CARD
 // ===============================
 
 function kpiCard(label, value) {
@@ -48,8 +48,13 @@ function kpiCard(label, value) {
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
 
-  if (!loanAmount || !interestRate || !loanYears) {
+  if (!loanAmount || !loanYears) {
     return { monthlyPayment: 0, yearlyPayment: 0 };
+  }
+
+  if (interestRate === 0) {
+    const yearly = loanAmount / loanYears;
+    return { monthlyPayment: yearly/12, yearlyPayment: yearly };
   }
 
   const monthlyRate = (interestRate / 100) / 12;
@@ -94,7 +99,7 @@ function runRealCalculation() {
     return;
   }
 
-  const nightsPerMonth = 30 * (occupancy / 100);
+  const nightsPerMonth = 30.42 * (occupancy / 100);
   const grossYearly = price * nightsPerMonth * 12;
   const yearlyFees = grossYearly * (commission / 100);
   const yearlyExpenses = expenses * 12;
@@ -112,10 +117,18 @@ function runRealCalculation() {
   let breakEvenYears = 99;
   if (netAfterMortgage > 0) {
     breakEvenYears = equity / netAfterMortgage;
-    if (breakEvenYears < 0.1) breakEvenYears = 0.1;
   }
 
-  let pessimisticROI = baseROI * 0.85;
+  // ===== STRESS TEST REAL =====
+  const stressOccupancy = occupancy * 0.85;
+  const stressNights = 30.42 * (stressOccupancy / 100);
+  const stressGross = price * stressNights * 12;
+  const stressFees = stressGross * (commission / 100);
+  const stressProfit = stressGross - stressFees - yearlyExpenses;
+  const stressTax = stressProfit > 0 ? stressProfit * (tax / 100) : 0;
+  const stressNet = stressProfit - stressTax - mortgage.yearlyPayment;
+
+  let pessimisticROI = (stressNet / equity) * 100;
   if (!isFinite(pessimisticROI)) pessimisticROI = 0;
 
   const fiveYearProjection = netAfterMortgage * 5;
@@ -123,7 +136,7 @@ function runRealCalculation() {
   let riskScore = 50;
 
   if (baseROI < 4) riskScore += 25;
-  if (baseROI > 12) riskScore -= 20;
+  if (baseROI > 15) riskScore -= 20;
   if (breakEvenYears > 15) riskScore += 20;
   if (breakEvenYears < 8) riskScore -= 15;
   if (occupancy < 55) riskScore += 15;
@@ -203,26 +216,18 @@ function runRealCalculation() {
         fill: true
       }]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } }
-    }
+    options: { responsive: true, plugins: { legend: { display: false } } }
   });
 }
 
 // ===============================
-// PDF
+// FULL EXECUTIVE PDF
 // ===============================
 
 function generatePDF() {
 
   if (!window.lastAnalysisData) {
     alert("Run analysis first.");
-    return;
-  }
-
-  if (!window.jspdf) {
-    alert("jsPDF not loaded.");
     return;
   }
 
@@ -239,25 +244,26 @@ function generatePDF() {
   pdf.setTextColor(255,255,255);
   pdf.setFontSize(20);
   pdf.text("RendimentoBB", margin, 20);
-
   pdf.setFontSize(11);
   pdf.text("Strategic Investment Report", margin, 28);
 
   pdf.setTextColor(0,0,0);
   pdf.setFontSize(14);
   pdf.text("Cash-on-Cash Return (Equity ROI)", margin, y);
-
   y += 12;
 
   pdf.setFontSize(34);
   pdf.text(d.baseROI.toFixed(2) + "%", margin, y);
+  y += 18;
 
-  y += 20;
-
+  pdf.setFillColor(240,243,247);
+  pdf.roundedRect(margin, y, 170, 32, 4, 4, "F");
   pdf.setFontSize(11);
-  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " yrs", margin, y);
-  y += 8;
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin, y);
+
+  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " yrs", margin+8, y+10);
+  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin+95, y+10);
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin+8, y+22);
+  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), margin+95, y+22);
 
   pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
