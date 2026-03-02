@@ -83,6 +83,71 @@ header {
 }
 
 .lang-indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: calc(100% - 8px);
+  width: 50%;
+  background: #0f172a;
+  border-radius: 999px;
+  transition: transform .25s ease;
+}
+
+/* ===================== */
+/* HERO */
+/* ===================== */
+
+.hero {
+  padding: 150px 0 150px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  font-size: 14px;
+  opacity: .6;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-size: clamp(42px,6vw,64px);
+  line-height: 1.08;
+  letter-spacing: -1.2px;
+  margin-bottom: 25px;
+  max-width: 650px;
+}
+
+.hero p {
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 35px;
+  max-width: 600px;
+  opacity: .85;
+}
+
+.micro-note {
+  margin-top: 15px;
+  font-size: 13px;
+  opacity: .55;
+}
+
+/* ===================== */
+/* DASHBOARD */
+/* ===================== */
+
+.dashboard-card {
+  background: linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+  padding: 45px;
+  border-radius: 26px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 60px 160px rgba(15,23,42,.18);
+  width: 100%;
+}
 
 .metric {
   display: flex;
@@ -206,6 +271,8 @@ header {
 .features {
   margin-bottom: 45px;
   text-align: left;
+  list-style: none;
+  padding: 0;
 }
 
 .features li {
@@ -230,18 +297,6 @@ header {
 .tool-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 80px 200px rgba(15,23,42,.18);
-}
-
-/* ===================== */
-/* SECTION TITLES */
-/* ===================== */
-
-.section-divider {
-  margin: 50px 0 25px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 18px;
-  font-weight: 700;
 }
 
 /* ===================== */
@@ -302,39 +357,6 @@ header {
   box-shadow: 0 35px 90px rgba(16,185,129,.55);
 }
 
-.btn-secondary {
-  background: white;
-  color: #0f172a;
-  border: 1px solid #e2e8f0;
-}
-
-.btn-secondary:hover {
-  background: #f1f5f9;
-}
-
-/* ===================== */
-/* RESULTS CARD */
-/* ===================== */
-
-.results-card {
-  background: linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
-  padding: 45px;
-  border-radius: 24px;
-  box-shadow: 0 40px 120px rgba(15,23,42,.10);
-  border: 1px solid #e2e8f0;
-  margin-bottom: 35px;
-}
-
-.results-intro {
-  font-size: 14px;
-  color: #64748b;
-}
-
-.chart-title {
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
 /* ===================== */
 /* PRO SECTION */
 /* ===================== */
@@ -347,28 +369,6 @@ header {
   color: white;
   text-align: center;
   box-shadow: 0 80px 200px rgba(15,23,42,.35);
-}
-
-.pro-lock h2 {
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-
-.pro-lock p {
-  color: #cbd5e1;
-  max-width: 600px;
-  margin: 0 auto 30px;
-}
-
-.pro-lock ul {
-  max-width: 500px;
-  margin: 0 auto 35px;
-  text-align: left;
-  line-height: 1.8;
-}
-
-.pro-lock li {
-  margin-bottom: 10px;
 }
 
 /* ===================== */
@@ -394,25 +394,4 @@ footer {
   .why-grid {
     grid-template-columns: 1fr;
   }
-
-  .tool-card {
-    padding: 40px;
-  }
-}
-
-@media (max-width: 768px) {
-
-  .tool-card {
-    padding: 30px;
-  }
-
-  .btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .pro-lock {
-    padding: 50px 30px;
-  }
-
 }
