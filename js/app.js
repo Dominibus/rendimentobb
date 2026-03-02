@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 2.0
-// PREMIUM STRATEGIC VERSION
+// RENDIMENTOBB – EXECUTIVE ENGINE 2.1
+// FULL VERSION (ENGINE + PDF)
 // ===============================
 
 if (!window.currentLang) {
@@ -26,10 +26,11 @@ window.lastAnalysisData = null;
 let roiChartInstance = null;
 
 // ===============================
-// MORTGAGE CALCULATION
+// MORTGAGE
 // ===============================
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
+
   if (!loanAmount || !interestRate || !loanYears) {
     return { monthlyPayment: 0, yearlyPayment: 0 };
   }
@@ -72,18 +73,9 @@ function runRealCalculation() {
   const chartCanvas = document.getElementById("roiChart");
 
   if (!price || !occupancy || !equity) {
-    resultsDiv.innerHTML =
-      `<div style="padding:20px;">
-        ${window.currentLang === "it"
-          ? "Inserisci valori validi."
-          : "Please enter valid values."}
-      </div>`;
+    resultsDiv.innerHTML = "Please enter valid values.";
     return;
   }
-
-  // ===============================
-  // CORE FINANCIALS
-  // ===============================
 
   const nightsPerMonth = 30 * (occupancy / 100);
   const grossYearly = price * nightsPerMonth * 12;
@@ -107,12 +99,9 @@ function runRealCalculation() {
   const pessimisticROI = baseROI * 0.85;
   const fiveYearProjection = netAfterMortgage * 5;
 
-  // ===============================
-  // RISK SCORE ENGINE
-  // ===============================
+  // RISK
 
   let riskScore = 50;
-
   if (baseROI < 4) riskScore += 25;
   if (baseROI > 12) riskScore -= 20;
   if (breakEvenYears > 15) riskScore += 20;
@@ -122,101 +111,32 @@ function runRealCalculation() {
 
   riskScore = Math.max(0, Math.min(100, riskScore));
 
-  let riskLabel, badgeColor;
-
-  if (riskScore >= 70) {
-    riskLabel = "HIGH RISK";
-    badgeColor = "#ef4444";
-  }
-  else if (riskScore >= 40) {
-    riskLabel = "MODERATE";
-    badgeColor = "#f59e0b";
-  }
-  else {
-    riskLabel = "LOW RISK";
-    badgeColor = "#10b981";
-  }
-
-  // INVESTMENT GRADE
-
-  let grade;
-  if (riskScore < 30) grade = "A";
-  else if (riskScore < 50) grade = "B";
-  else if (riskScore < 70) grade = "C";
-  else grade = "D";
-
   window.lastAnalysisData = {
     baseROI,
-    pessimisticROI,
     breakEvenYears,
-    netAfterMortgage,
+    pessimisticROI,
     fiveYearProjection,
-    riskScore,
-    riskLabel,
-    grade
+    netAfterMortgage,
+    riskScore
   };
 
-  // ===============================
-  // PREMIUM DASHBOARD RENDER
-  // ===============================
+  // RENDER
 
   resultsDiv.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-      <h3 style="font-size:18px;">Executive Investment Summary</h3>
-      <span style="
-        background:${badgeColor};
-        color:white;
-        padding:6px 16px;
-        border-radius:999px;
-        font-size:12px;
-        font-weight:700;">
-        ${riskLabel}
-      </span>
+    <h3>Executive Investment Summary</h3>
+
+    <div style="margin:20px 0;">
+      <strong>ROI:</strong> ${baseROI.toFixed(2)}%<br>
+      <strong>Break-even:</strong> ${breakEvenYears.toFixed(1)} years<br>
+      <strong>Risk Index:</strong> ${riskScore}/100
     </div>
 
-    <div style="
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:20px;
-      margin-bottom:25px;">
-
-      ${kpiCard("ROI", baseROI.toFixed(2) + "%", baseROI)}
-      ${kpiCard("Break-even", breakEvenYears.toFixed(1) + " yrs")}
-      ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
-      ${kpiCard("Grade", grade)}
-
-    </div>
-
-    <div style="margin-bottom:20px;">
-      <div style="font-size:13px; margin-bottom:8px;">Risk Index ${riskScore}/100</div>
-      <div style="
-        height:10px;
-        background:linear-gradient(90deg,#10b981,#f59e0b,#ef4444);
-        border-radius:6px;
-        position:relative;">
-        <div style="
-          position:absolute;
-          left:${riskScore}%;
-          top:-4px;
-          width:2px;
-          height:18px;
-          background:black;"></div>
-      </div>
-    </div>
-
-    <div style="font-size:14px; line-height:1.8;">
-      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
-      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
-    </div>
-
-    <button onclick="generatePDF()" class="btn-primary" style="margin-top:25px;">
+    <button onclick="generatePDF()" class="btn-primary">
       📄 Download Executive Report
     </button>
   `;
 
-  // ===============================
   // CHART
-  // ===============================
 
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
@@ -235,50 +155,39 @@ function runRealCalculation() {
         ],
         borderColor: '#10b981',
         backgroundColor: 'rgba(16,185,129,0.12)',
-        borderWidth: 3,
-        tension: 0.35,
         fill: true
       }]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      animation: { duration: 800 }
-    }
+    options: { responsive: true }
   });
+
 }
 
 // ===============================
-// KPI CARD
+// PDF
 // ===============================
 
-function kpiCard(label, value, roiValue = null) {
+function generatePDF() {
 
-  let color = "#0f172a";
-
-  if (roiValue !== null) {
-    if (roiValue < 0) color = "#ef4444";
-    else if (roiValue > 10) color = "#10b981";
+  if (!window.lastAnalysisData) {
+    alert("Run analysis first.");
+    return;
   }
 
-  return `
-    <div style="
-      background:white;
-      padding:22px;
-      border-radius:20px;
-      box-shadow:0 20px 50px rgba(15,23,42,.08);">
+  const jsPDF = window.jspdf.jsPDF;
+  const pdf = new jsPDF();
 
-      <div style="font-size:12px; color:#64748b;">
-        ${label}
-      </div>
+  const d = window.lastAnalysisData;
 
-      <div style="
-        font-size:24px;
-        font-weight:800;
-        margin-top:6px;
-        color:${color};">
-        ${value}
-      </div>
-    </div>
-  `;
+  pdf.setFontSize(20);
+  pdf.text("RendimentoBB Executive Report", 20, 20);
+
+  pdf.setFontSize(12);
+  pdf.text("ROI: " + d.baseROI.toFixed(2) + "%", 20, 40);
+  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " years", 20, 50);
+  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", 20, 60);
+  pdf.text("Risk Score: " + d.riskScore + "/100", 20, 70);
+  pdf.text("5-Year Projection: " + formatCurrency(d.fiveYearProjection), 20, 80);
+
+  pdf.save("RendimentoBB_Report.pdf");
 }
