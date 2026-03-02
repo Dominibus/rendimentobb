@@ -1,24 +1,19 @@
 // ===============================
-// RENDIMENTOBB – LANGUAGE SYSTEM
-// VERSIONE SINCRONIZZATA GLOBALE
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 2.0
+// Sincronizzato Homepage + Tool + PDF
 // ===============================
 
-// Usa variabile globale condivisa
 window.currentLang = localStorage.getItem("rb_lang") || "it";
 
 // ===============================
-// SET LANGUAGE
+// APPLY TRANSLATIONS
 // ===============================
 
-function setLanguage(lang) {
+function applyTranslations() {
 
-  window.currentLang = lang;
-  localStorage.setItem("rb_lang", lang);
-
-  // Traduzione elementi HTML
   document.querySelectorAll("[data-it]").forEach(el => {
 
-    const text = el.getAttribute("data-" + lang);
+    const text = el.getAttribute("data-" + window.currentLang);
     if (!text) return;
 
     if (text.includes("<br>") || text.includes("<li>")) {
@@ -26,32 +21,73 @@ function setLanguage(lang) {
     } else {
       el.textContent = text;
     }
+
   });
 
-  // Attiva bottone lingua
-  document.getElementById("btn-it")?.classList.remove("active");
-  document.getElementById("btn-en")?.classList.remove("active");
-  document.getElementById("btn-" + lang)?.classList.add("active");
-
-  // 🔥 Se esiste un'analisi già fatta, la ricalcola nella nuova lingua
-  if (typeof runRealCalculation === "function" && window.lastAnalysisData) {
-    runRealCalculation();
-  }
 }
 
 // ===============================
-// AUTO LOAD LANGUAGE
+// UPDATE LANGUAGE UI
+// ===============================
+
+function updateLanguageUI() {
+
+  // HTML lang attribute (SEO + consistency)
+  document.documentElement.setAttribute("lang", window.currentLang);
+
+  // Toggle buttons
+  document.getElementById("btn-it")?.classList.remove("active");
+  document.getElementById("btn-en")?.classList.remove("active");
+  document.getElementById("btn-" + window.currentLang)?.classList.add("active");
+
+  // Premium indicator slider (homepage style)
+  const indicator = document.querySelector(".lang-indicator");
+  if (indicator) {
+    indicator.style.transform =
+      window.currentLang === "en"
+        ? "translateX(100%)"
+        : "translateX(0%)";
+  }
+
+}
+
+// ===============================
+// SET LANGUAGE
+// ===============================
+
+function setLanguage(lang) {
+
+  if (lang !== "it" && lang !== "en") return;
+
+  window.currentLang = lang;
+  localStorage.setItem("rb_lang", lang);
+
+  applyTranslations();
+  updateLanguageUI();
+
+  // 🔄 Se esiste analisi già fatta, re-render
+  if (typeof runRealCalculation === "function" && window.lastAnalysisData) {
+    runRealCalculation();
+  }
+
+}
+
+// ===============================
+// AUTO INIT
 // ===============================
 
 window.addEventListener("DOMContentLoaded", () => {
 
   const savedLang = localStorage.getItem("rb_lang");
 
-  if (savedLang === "en" || savedLang === "it") {
-    setLanguage(savedLang);
+  if (savedLang === "it" || savedLang === "en") {
+    window.currentLang = savedLang;
   } else {
-    const browserLang = navigator.language.startsWith("en") ? "en" : "it";
-    setLanguage(browserLang);
+    window.currentLang =
+      navigator.language.startsWith("en") ? "en" : "it";
   }
+
+  applyTranslations();
+  updateLanguageUI();
 
 });
