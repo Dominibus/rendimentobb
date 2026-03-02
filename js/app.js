@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.3 PROFESSIONAL
-// FULL RESTORED + REAL ROI + FULL EXECUTIVE PDF
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.4 PROFESSIONAL RESTORED
+// REAL SCALE FIX + FULL EXECUTIVE PDF
 // ===============================
 
 if (!window.currentLang) {
@@ -24,10 +24,6 @@ function getValue(id) {
 
 window.lastAnalysisData = null;
 let roiChartInstance = null;
-
-// ===============================
-// KPI CARD
-// ===============================
 
 function kpiCard(label, value) {
   return `
@@ -99,8 +95,15 @@ function runRealCalculation() {
     return;
   }
 
+  // ===== SCALE PROTECTION =====
+  if (price > 2000) {
+    alert("Prezzo notte fuori scala.");
+    return;
+  }
+
   const nightsPerMonth = 30.42 * (occupancy / 100);
   const grossYearly = price * nightsPerMonth * 12;
+
   const yearlyFees = grossYearly * (commission / 100);
   const yearlyExpenses = expenses * 12;
 
@@ -114,22 +117,12 @@ function runRealCalculation() {
   let baseROI = (netAfterMortgage / equity) * 100;
   if (!isFinite(baseROI)) baseROI = 0;
 
-  let breakEvenYears = 99;
-  if (netAfterMortgage > 0) {
-    breakEvenYears = equity / netAfterMortgage;
-  }
+  let breakEvenYears = netAfterMortgage > 0
+    ? equity / netAfterMortgage
+    : 99;
 
-  // ===== STRESS TEST REAL =====
-  const stressOccupancy = occupancy * 0.85;
-  const stressNights = 30.42 * (stressOccupancy / 100);
-  const stressGross = price * stressNights * 12;
-  const stressFees = stressGross * (commission / 100);
-  const stressProfit = stressGross - stressFees - yearlyExpenses;
-  const stressTax = stressProfit > 0 ? stressProfit * (tax / 100) : 0;
-  const stressNet = stressProfit - stressTax - mortgage.yearlyPayment;
-
+  const stressNet = netAfterMortgage * 0.85;
   let pessimisticROI = (stressNet / equity) * 100;
-  if (!isFinite(pessimisticROI)) pessimisticROI = 0;
 
   const fiveYearProjection = netAfterMortgage * 5;
 
@@ -150,10 +143,11 @@ function runRealCalculation() {
   else if (riskScore < 70) grade = "C";
   else grade = "D";
 
-  let riskColor =
-    riskScore < 40 ? "#10b981" :
-    riskScore < 70 ? "#f59e0b" :
-    "#ef4444";
+  let classification =
+    grade === "A" ? "Low Risk" :
+    grade === "B" ? "Moderate Risk" :
+    grade === "C" ? "Elevated Risk" :
+    "High Risk";
 
   window.lastAnalysisData = {
     baseROI,
@@ -162,7 +156,8 @@ function runRealCalculation() {
     netAfterMortgage,
     fiveYearProjection,
     riskScore,
-    grade
+    grade,
+    classification
   };
 
   resultsDiv.innerHTML = `
@@ -176,48 +171,7 @@ function runRealCalculation() {
       ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
       ${kpiCard("Grade", grade)}
     </div>
-
-    <div style="margin-bottom:20px;">
-      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
-      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
-    </div>
-
-    <div style="margin-bottom:20px;">
-      <strong>Risk Index:</strong> ${riskScore}/100
-      <div style="height:8px;background:#e5e7eb;border-radius:4px;margin-top:6px;">
-        <div style="width:${riskScore}%;background:${riskColor};height:8px;border-radius:4px;"></div>
-      </div>
-    </div>
-
-    <button onclick="generatePDF()" class="btn-primary">
-      📄 Download Executive Report
-    </button>
   `;
-
-  if (!chartCanvas) return;
-  if (roiChartInstance) roiChartInstance.destroy();
-
-  roiChartInstance = new Chart(chartCanvas, {
-    type: 'line',
-    data: {
-      labels: ['Year 1','Year 2','Year 3','Year 4','Year 5'],
-      datasets: [{
-        data: [
-          netAfterMortgage,
-          netAfterMortgage*2,
-          netAfterMortgage*3,
-          netAfterMortgage*4,
-          netAfterMortgage*5
-        ],
-        borderColor: '#10b981',
-        backgroundColor: 'rgba(16,185,129,0.12)',
-        borderWidth: 3,
-        tension: 0.35,
-        fill: true
-      }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } } }
-  });
 }
 
 // ===============================
@@ -245,16 +199,17 @@ function generatePDF() {
   pdf.setFontSize(20);
   pdf.text("RendimentoBB", margin, 20);
   pdf.setFontSize(11);
-  pdf.text("Strategic Investment Report", margin, 28);
+  pdf.text("Executive Investment Report", margin, 28);
 
   pdf.setTextColor(0,0,0);
   pdf.setFontSize(14);
-  pdf.text("Cash-on-Cash Return (Equity ROI)", margin, y);
+  pdf.text("Return on Investment (ROI)", margin, y);
   y += 12;
 
   pdf.setFontSize(34);
+  pdf.setTextColor(d.baseROI >= 0 ? 0 : 200, 0, 0);
   pdf.text(d.baseROI.toFixed(2) + "%", margin, y);
-  y += 18;
+  y += 20;
 
   pdf.setFillColor(240,243,247);
   pdf.roundedRect(margin, y, 170, 32, 4, 4, "F");
@@ -264,6 +219,31 @@ function generatePDF() {
   pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin+95, y+10);
   pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin+8, y+22);
   pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), margin+95, y+22);
+
+  y += 45;
+
+  pdf.setFontSize(13);
+  pdf.text("Risk Index", margin, y);
+  y += 10;
+
+  pdf.setFillColor(16,185,129);
+  pdf.rect(margin, y, 55, 6, "F");
+  pdf.setFillColor(245,158,11);
+  pdf.rect(margin+55, y, 55, 6, "F");
+  pdf.setFillColor(239,68,68);
+  pdf.rect(margin+110, y, 55, 6, "F");
+
+  const indicatorX = margin + (d.riskScore * 1.65);
+  pdf.setDrawColor(0,0,0);
+  pdf.line(indicatorX, y-2, indicatorX, y+8);
+
+  y += 20;
+
+  pdf.setFontSize(14);
+  pdf.text("Investment Grade: " + d.grade, margin, y);
+  y += 8;
+  pdf.setFontSize(11);
+  pdf.text("Classification: " + d.classification, margin, y);
 
   pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
