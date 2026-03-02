@@ -8,76 +8,6 @@
 <meta name="description" content="Simula ROI, mutuo e cashflow prima di investire in un B&B. Analisi professionale per proteggere il capitale.">
 
 <link rel="stylesheet" href="/css/style.css">
-
-<style>
-
-/* ===== PRICING FIX PROFESSIONALE ===== */
-
-.pricing-section{
-  padding:120px 0 140px 0;
-  background:linear-gradient(to bottom,#f1f5f9 0%, #e2e8f0 100%);
-  text-align:center;
-}
-
-.pricing-section h2{
-  margin-bottom:60px;
-}
-
-.price-card{
-  position:relative;
-  background:white;
-  padding:70px 45px 55px 45px;
-  border-radius:22px;
-  box-shadow:0 30px 80px rgba(0,0,0,0.08);
-  max-width:500px;
-  margin:0 auto;
-  text-align:center;
-  transition:all .25s ease;
-}
-
-.price-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 35px 90px rgba(0,0,0,0.12);
-}
-
-.price-card .badge{
-  position:absolute;
-  top:-18px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#0f172a;
-  color:white;
-  font-size:12px;
-  font-weight:600;
-  padding:7px 18px;
-  border-radius:999px;
-  letter-spacing:.4px;
-  white-space:nowrap;
-}
-
-.price-card .price{
-  font-size:34px;
-  font-weight:800;
-  margin-bottom:30px;
-}
-
-.features{
-  list-style:none;
-  padding:0;
-  margin:0 0 40px 0;
-}
-
-.features li{
-  margin-bottom:14px;
-  font-size:15px;
-}
-
-.section-spacing{
-  padding:100px 0;
-}
-
-</style>
-
 </head>
 
 <body>
@@ -99,31 +29,83 @@
 <section class="hero container">
   <div class="hero-grid">
 
+    <!-- COLONNA SINISTRA -->
     <div>
+
       <div class="hero-eyebrow"
            data-it="Analisi strategica per investimenti immobiliari"
-           data-en="Strategic analysis for real estate investments"></div>
+           data-en="Strategic analysis for real estate investments">
+      </div>
 
       <h1
         data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
-        data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital."></h1>
+        data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital.">
+      </h1>
 
       <p
         data-it="ROI reale, simulazione mutuo completa e stress test operativo in meno di 60 secondi."
-        data-en="Real ROI, full mortgage simulation and operational stress test in under 60 seconds."></p>
+        data-en="Real ROI, full mortgage simulation and operational stress test in under 60 seconds.">
+      </p>
 
       <a href="/tool/" class="btn btn-primary"
          data-it="Avvia analisi gratuita"
-         data-en="Start free analysis"></a>
+         data-en="Start free analysis">
+      </a>
 
       <div class="micro-note"
            data-it="Simulazione gratuita · Nessun abbonamento · Accesso immediato"
-           data-en="Free simulation · No subscription · Instant access"></div>
+           data-en="Free simulation · No subscription · Instant access">
+      </div>
+
     </div>
 
+    <!-- COLONNA DESTRA -->
     <div>
       <div class="dashboard-card">
-        <!-- dashboard invariata -->
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+          <span style="font-size:14px; font-weight:600;">Executive Snapshot</span>
+          <span style="background:#10b981; color:white; font-size:11px; padding:5px 12px; border-radius:999px;">
+            LIVE
+          </span>
+        </div>
+
+        <div class="metric">
+          <span>ROI</span>
+          <strong style="color:#10b981;">18.4%</strong>
+        </div>
+
+        <div class="metric">
+          <span data-it="Cashflow Mensile" data-en="Monthly Cashflow"></span>
+          <strong>€1.280</strong>
+        </div>
+
+        <div class="metric">
+          <span data-it="Break-even" data-en="Break-even"></span>
+          <strong>6.2 anni</strong>
+        </div>
+
+        <div class="metric">
+          <span data-it="Risk Score" data-en="Risk Score"></span>
+          <strong style="color:#10b981;"
+                  data-it="Basso"
+                  data-en="Low">
+          </strong>
+        </div>
+
+        <div style="margin-top:30px; font-size:12px; opacity:.6;"
+             data-it="Proiezione cumulativa 5 anni"
+             data-en="5-year cumulative projection">
+        </div>
+
+        <div class="mini-chart">
+          <div class="bar" style="height:30%"></div>
+          <div class="bar" style="height:45%"></div>
+          <div class="bar" style="height:60%"></div>
+          <div class="bar" style="height:75%"></div>
+          <div class="bar" style="height:90%"></div>
+        </div>
+
       </div>
     </div>
 
@@ -132,11 +114,12 @@
 
 <!-- WHY SECTION -->
 
-<section class="section-spacing section-alt">
+<section class="section-alt">
   <div class="container">
 
     <h2 data-it="Perché RendimentoBB"
-        data-en="Why RendimentoBB"></h2>
+        data-en="Why RendimentoBB">
+    </h2>
 
     <div class="why-grid">
 
@@ -166,24 +149,26 @@
   </div>
 </section>
 
-<!-- PRICING SECTION MIGLIORATA -->
+<!-- PRICING -->
 
-<section class="pricing-section">
-
+<section class="pricing-center">
   <div class="container">
 
     <h2 data-it="Investment Analysis Suite"
-        data-en="Investment Analysis Suite"></h2>
+        data-en="Investment Analysis Suite">
+    </h2>
 
     <div class="price-card">
 
       <div class="badge"
            data-it="Consigliato"
-           data-en="Recommended"></div>
+           data-en="Recommended">
+      </div>
 
       <div class="price"
            data-it="19€ – Licenza Strategica"
-           data-en="€19 – Strategic License"></div>
+           data-en="€19 – Strategic License">
+      </div>
 
       <ul class="features">
         <li data-it="✔ Simulazione mutuo dettagliata"
@@ -200,12 +185,12 @@
          class="btn btn-primary"
          target="_blank"
          data-it="Attiva accesso ora"
-         data-en="Activate Access"></a>
+         data-en="Activate Access">
+      </a>
 
     </div>
 
   </div>
-
 </section>
 
 <footer
@@ -216,6 +201,7 @@
 <script>
 function setLang(lang){
   document.documentElement.lang = lang;
+
   document.querySelectorAll("[data-it]").forEach(el=>{
     const text = el.getAttribute("data-"+lang);
     if(text) el.innerText = text;
@@ -227,6 +213,7 @@ function setLang(lang){
 
   const indicator = document.querySelector(".lang-indicator");
   indicator.style.transform = lang === "en" ? "translateX(100%)" : "translateX(0%)";
+
   localStorage.setItem("lang", lang);
 }
 
