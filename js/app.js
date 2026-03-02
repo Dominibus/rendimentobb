@@ -203,29 +203,28 @@ function generatePDF() {
   const jsPDF = window.jspdf.jsPDF;
   const pdf = new jsPDF("p","mm","a4");
   const d = window.lastAnalysisData;
-
   const isIT = window.currentLang === "it";
 
   // ===== HEADER =====
-  pdf.setFillColor(15,23,42);
-  pdf.rect(0,0,210,30,"F");
+  pdf.setFillColor(10,20,40);
+  pdf.rect(0,0,210,28,"F");
 
   pdf.setTextColor(255,255,255);
   pdf.setFontSize(18);
-  pdf.text("RendimentoBB", 20, 18);
+  pdf.text("RendimentoBB", 20, 17);
 
-  pdf.setFontSize(10);
+  pdf.setFontSize(9);
   pdf.text(
     isIT ? "Report Strategico di Investimento"
          : "Strategic Investment Report",
     20,
-    25
+    23
   );
 
-  pdf.setTextColor(0,0,0);
+  pdf.setTextColor(0);
 
-  // ===== ROI TITLE =====
-  pdf.setFontSize(12);
+  // ===== ROI SECTION =====
+  pdf.setFontSize(11);
   pdf.text(
     isIT
       ? "Cash-on-Cash Return (ROI su Equity)"
@@ -234,23 +233,23 @@ function generatePDF() {
     45
   );
 
-  pdf.setFontSize(30);
-  pdf.text(d.roi.toFixed(2) + "%", 20, 60);
+  pdf.setFontSize(38);
+  pdf.text(d.roi.toFixed(2) + "%", 20, 63);
 
-  pdf.setFontSize(9);
-  pdf.setTextColor(100);
+  pdf.setFontSize(8);
+  pdf.setTextColor(120);
   pdf.text(
     isIT ? "Basato sul capitale proprio investito"
          : "Based on invested equity only",
     20,
-    68
+    70
   );
 
   pdf.setTextColor(0);
 
-  // ===== METRICS BOX =====
-  pdf.setFillColor(240,242,245);
-  pdf.roundedRect(20, 75, 170, 25, 4, 4, "F");
+  // ===== KPI BOX =====
+  pdf.setFillColor(242,244,247);
+  pdf.roundedRect(20, 78, 170, 30, 5, 5, "F");
 
   pdf.setFontSize(10);
 
@@ -258,66 +257,63 @@ function generatePDF() {
     (isIT ? "Break-even: " : "Break-even: ") +
     d.breakEven.toFixed(1) +
     (isIT ? " anni" : " yrs"),
-    25,
-    85
+    28,
+    90
   );
 
   pdf.text(
     (isIT ? "Stress ROI: " : "Stress ROI: ") +
     d.stressROI.toFixed(2) + "%",
     110,
-    85
+    90
   );
 
   pdf.text(
     (isIT ? "Netto Annuo: " : "Annual Net: ") +
     formatCurrency(d.netAfterMortgage),
-    25,
-    95
+    28,
+    102
   );
 
   pdf.text(
     (isIT ? "Proiezione 5 Anni: " : "5Y Projection: ") +
     formatCurrency(d.fiveYearProjection),
     110,
-    95
+    102
   );
 
-  // ===== RISK BAR =====
+  // ===== RISK INDEX =====
   pdf.setFontSize(12);
-  pdf.text(isIT ? "Indice di Rischio" : "Risk Index", 20, 115);
+  pdf.text(isIT ? "Indice di Rischio" : "Risk Index", 20, 125);
 
   const riskX = 20;
-  const riskY = 120;
+  const riskY = 130;
   const riskWidth = 170;
   const riskHeight = 8;
 
-  // Green
   pdf.setFillColor(34,197,94);
   pdf.rect(riskX, riskY, riskWidth * 0.33, riskHeight, "F");
 
-  // Orange
   pdf.setFillColor(245,158,11);
   pdf.rect(riskX + riskWidth * 0.33, riskY, riskWidth * 0.34, riskHeight, "F");
 
-  // Red
   pdf.setFillColor(239,68,68);
   pdf.rect(riskX + riskWidth * 0.67, riskY, riskWidth * 0.33, riskHeight, "F");
 
-  // Indicator
   const indicatorPos = riskX + (riskWidth * d.risk / 100);
   pdf.setDrawColor(0);
+  pdf.setLineWidth(0.7);
   pdf.line(indicatorPos, riskY - 2, indicatorPos, riskY + riskHeight + 2);
 
-  pdf.setFontSize(9);
-  pdf.text(d.risk.toFixed(0) + "/100", indicatorPos - 5, riskY + 15);
+  pdf.setFontSize(8);
+  pdf.text(d.risk.toFixed(0) + "/100", indicatorPos - 5, riskY + 14);
 
   // ===== GRADE =====
   pdf.setFontSize(12);
   pdf.text(
     (isIT ? "Classe Investimento: " : "Investment Grade: ") + d.grade,
     20,
-    145
+    150
   );
 
   // ===== STRATEGIC ASSESSMENT =====
@@ -325,11 +321,11 @@ function generatePDF() {
   pdf.text(
     isIT ? "Valutazione Strategica" : "Strategic Assessment",
     20,
-    160
+    165
   );
 
   pdf.setFillColor(245,247,250);
-  pdf.roundedRect(20,165,170,20,4,4,"F");
+  pdf.roundedRect(20,170,170,20,4,4,"F");
 
   pdf.setFontSize(9);
   pdf.text(
@@ -349,7 +345,7 @@ function generatePDF() {
           ? "Profilo ad alto rischio con debolezza strutturale."
           : "High-risk profile with structural weakness."),
     25,
-    178
+    183
   );
 
   // ===== EXECUTIVE VERDICT =====
