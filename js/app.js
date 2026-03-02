@@ -233,7 +233,7 @@ function generatePDF() {
   let y = 45;
 
   // ===== HEADER =====
-  pdf.setFillColor(12,18,35);
+  pdf.setFillColor(15,23,42);
   pdf.rect(0,0,210,35,"F");
 
   pdf.setTextColor(255,255,255);
@@ -241,37 +241,43 @@ function generatePDF() {
   pdf.text("RendimentoBB", margin, 20);
 
   pdf.setFontSize(11);
-  pdf.text("Executive Investment Report", margin, 28);
+  pdf.text("Strategic Investment Report", margin, 28);
 
   // ===== ROI SECTION =====
   pdf.setTextColor(0,0,0);
   pdf.setFontSize(14);
-  pdf.text("Return on Investment (ROI)", margin, y);
+  pdf.text("Cash-on-Cash Return (Equity ROI)", margin, y);
 
   y += 12;
 
-  pdf.setFontSize(36);
+  pdf.setFontSize(34);
   pdf.setTextColor(d.baseROI >= 0 ? 0 : 200, 0, 0);
   pdf.text(d.baseROI.toFixed(2) + "%", margin, y);
+
+  y += 10;
+
+  pdf.setFontSize(10);
+  pdf.setTextColor(100,100,100);
+  pdf.text("Based on invested equity only", margin, y);
 
   y += 18;
 
   // ===== KPI BOX =====
   pdf.setFillColor(240,243,247);
-  pdf.roundedRect(margin, y, 170, 28, 4, 4, "F");
+  pdf.roundedRect(margin, y, 170, 32, 4, 4, "F");
 
   pdf.setFontSize(11);
   pdf.setTextColor(0,0,0);
 
   pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " yrs", margin+8, y+10);
-  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin+90, y+10);
+  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin+95, y+10);
 
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin+8, y+20);
-  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), margin+90, y+20);
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin+8, y+22);
+  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), margin+95, y+22);
 
   y += 45;
 
-  // ===== RISK BAR =====
+  // ===== RISK SECTION =====
   pdf.setFontSize(13);
   pdf.text("Risk Index", margin, y);
 
@@ -297,6 +303,7 @@ function generatePDF() {
 
   // ===== GRADE =====
   pdf.setFontSize(14);
+  pdf.setTextColor(0,0,0);
   pdf.text("Investment Grade: " + d.grade, margin, y);
 
   y += 15;
@@ -308,19 +315,19 @@ function generatePDF() {
   y += 8;
 
   pdf.setFillColor(248,250,252);
-  pdf.roundedRect(margin, y, 170, 25, 4, 4, "F");
+  pdf.roundedRect(margin, y, 170, 28, 4, 4, "F");
 
   pdf.setFontSize(11);
 
   const assessment =
     d.riskScore >= 70
-      ? "High exposure to operational volatility. Strategic review recommended."
+      ? "High exposure to operational volatility. Cashflow sustainability under pressure."
       : d.riskScore >= 40
-      ? "Sustainable but sensitive to market fluctuations."
-      : "Strong and resilient financial structure.";
+      ? "Moderate risk profile. Performance sensitive to occupancy and cost control."
+      : "Strong and resilient financial structure with controlled exposure.";
 
   const assessLines = pdf.splitTextToSize(assessment, 160);
-  pdf.text(assessLines, margin+6, y+12);
+  pdf.text(assessLines, margin+6, y+14);
 
   y += 40;
 
@@ -330,8 +337,8 @@ function generatePDF() {
 
   y += 8;
 
-  pdf.setFillColor(235,240,245);
-  pdf.roundedRect(margin, y, 170, 25, 4, 4, "F");
+  pdf.setFillColor(230,236,242);
+  pdf.roundedRect(margin, y, 170, 28, 4, 4, "F");
 
   pdf.setFontSize(11);
 
@@ -339,11 +346,11 @@ function generatePDF() {
     d.riskScore >= 70
       ? "High-risk profile. Investment not advisable under current assumptions."
       : d.riskScore >= 40
-      ? "Moderate risk profile. Scenario dependent on operational discipline."
+      ? "Balanced profile. Requires operational discipline and scenario monitoring."
       : "Low-risk profile. Structurally sound under current assumptions.";
 
   const verdictLines = pdf.splitTextToSize(verdict, 160);
-  pdf.text(verdictLines, margin+6, y+12);
+  pdf.text(verdictLines, margin+6, y+14);
 
   // ===== FOOTER =====
   pdf.setFontSize(8);
@@ -355,5 +362,5 @@ function generatePDF() {
     285
   );
 
-  pdf.save("RendimentoBB_Executive_Report.pdf");
+  pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
