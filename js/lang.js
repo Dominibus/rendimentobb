@@ -1,13 +1,13 @@
-// ===============================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 2.0
-// Sincronizzato Homepage + Tool + PDF
-// ===============================
+// ===============================================
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 3.0
+// Homepage + Tool + PDF Ready
+// ===============================================
 
 window.currentLang = localStorage.getItem("rb_lang") || "it";
 
-// ===============================
+// ===============================================
 // APPLY TRANSLATIONS
-// ===============================
+// ===============================================
 
 function applyTranslations() {
 
@@ -16,6 +16,7 @@ function applyTranslations() {
     const text = el.getAttribute("data-" + window.currentLang);
     if (!text) return;
 
+    // Support HTML content
     if (text.includes("<br>") || text.includes("<li>")) {
       el.innerHTML = text;
     } else {
@@ -24,23 +25,26 @@ function applyTranslations() {
 
   });
 
+  // Placeholder support (future ready)
+  document.querySelectorAll("[data-placeholder-it]").forEach(el => {
+    const ph = el.getAttribute("data-placeholder-" + window.currentLang);
+    if (ph) el.setAttribute("placeholder", ph);
+  });
+
 }
 
-// ===============================
+// ===============================================
 // UPDATE LANGUAGE UI
-// ===============================
+// ===============================================
 
 function updateLanguageUI() {
 
-  // HTML lang attribute (SEO + consistency)
   document.documentElement.setAttribute("lang", window.currentLang);
 
-  // Toggle buttons
   document.getElementById("btn-it")?.classList.remove("active");
   document.getElementById("btn-en")?.classList.remove("active");
   document.getElementById("btn-" + window.currentLang)?.classList.add("active");
 
-  // Premium indicator slider (homepage style)
   const indicator = document.querySelector(".lang-indicator");
   if (indicator) {
     indicator.style.transform =
@@ -51,9 +55,9 @@ function updateLanguageUI() {
 
 }
 
-// ===============================
+// ===============================================
 // SET LANGUAGE
-// ===============================
+// ===============================================
 
 function setLanguage(lang) {
 
@@ -65,23 +69,23 @@ function setLanguage(lang) {
   applyTranslations();
   updateLanguageUI();
 
-  // 🔄 Se esiste analisi già fatta, re-render
+  // Re-render analysis if already calculated
   if (typeof runRealCalculation === "function" && window.lastAnalysisData) {
     runRealCalculation();
   }
 
 }
 
-// ===============================
+// ===============================================
 // AUTO INIT
-// ===============================
+// ===============================================
 
 window.addEventListener("DOMContentLoaded", () => {
 
-  const savedLang = localStorage.getItem("rb_lang");
+  const saved = localStorage.getItem("rb_lang");
 
-  if (savedLang === "it" || savedLang === "en") {
-    window.currentLang = savedLang;
+  if (saved === "it" || saved === "en") {
+    window.currentLang = saved;
   } else {
     window.currentLang =
       navigator.language.startsWith("en") ? "en" : "it";
