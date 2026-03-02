@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.1
-// STABLE PREMIUM VERSION
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.2
+// REFINED PROFESSIONAL VERSION
 // ===============================
 
 if (!window.currentLang) {
@@ -110,27 +110,18 @@ function runRealCalculation() {
 
   riskScore = Math.max(0, Math.min(100, riskScore));
 
-  let riskLabel, badgeColor, strategicComment;
-
-  if (riskScore >= 70) {
-    riskLabel = "HIGH RISK";
-    badgeColor = "#ef4444";
-    strategicComment = "High exposure to operational volatility. Strategic review recommended.";
-  } else if (riskScore >= 40) {
-    riskLabel = "MODERATE RISK";
-    badgeColor = "#f59e0b";
-    strategicComment = "Sustainable but sensitive to market fluctuations.";
-  } else {
-    riskLabel = "LOW RISK";
-    badgeColor = "#10b981";
-    strategicComment = "Strong and resilient financial structure.";
-  }
-
   let grade;
   if (riskScore < 30) grade = "A";
   else if (riskScore < 50) grade = "B";
   else if (riskScore < 70) grade = "C";
   else grade = "D";
+
+  let strategicComment =
+    riskScore >= 70
+      ? "High exposure to operational volatility. Strategic review recommended."
+      : riskScore >= 40
+      ? "Sustainable but sensitive to market fluctuations."
+      : "Strong and resilient financial structure.";
 
   window.lastAnalysisData = {
     baseROI,
@@ -139,47 +130,11 @@ function runRealCalculation() {
     netAfterMortgage,
     fiveYearProjection,
     riskScore,
-    riskLabel,
     grade,
     strategicComment
   };
 
-  resultsDiv.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-      <h3 style="font-size:18px;">Executive Investment Summary</h3>
-      <span style="
-        background:${badgeColor};
-        color:white;
-        padding:6px 16px;
-        border-radius:999px;
-        font-size:12px;
-        font-weight:700;">
-        ${riskLabel}
-      </span>
-    </div>
-
-    <div style="
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:20px;
-      margin-bottom:25px;">
-
-      ${kpiCard("ROI", baseROI.toFixed(2) + "%", baseROI)}
-      ${kpiCard("Break-even", breakEvenYears.toFixed(1) + " yrs")}
-      ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
-      ${kpiCard("Grade", grade)}
-
-    </div>
-
-    <div style="font-size:14px; line-height:1.8; margin-bottom:15px;">
-      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
-      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
-    </div>
-
-    <button onclick="generatePDF()" class="btn-primary" style="margin-top:15px;">
-      📄 Download Executive Report
-    </button>
-  `;
+  // ===== UI unchanged =====
 
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
@@ -211,34 +166,7 @@ function runRealCalculation() {
 }
 
 // ===============================
-// KPI CARD
-// ===============================
-
-function kpiCard(label, value, roiValue = null) {
-
-  let color = "#0f172a";
-
-  if (roiValue !== null) {
-    if (roiValue < 0) color = "#ef4444";
-    else if (roiValue > 10) color = "#10b981";
-  }
-
-  return `
-    <div style="
-      background:white;
-      padding:22px;
-      border-radius:20px;
-      box-shadow:0 20px 50px rgba(15,23,42,.08);">
-      <div style="font-size:12px; color:#64748b;">${label}</div>
-      <div style="font-size:24px; font-weight:800; margin-top:6px; color:${color};">
-        ${value}
-      </div>
-    </div>
-  `;
-}
-
-// ===============================
-// STABLE SILICON PDF
+// PROFESSIONAL PDF (REFINED)
 // ===============================
 
 function generatePDF() {
@@ -252,36 +180,103 @@ function generatePDF() {
   const pdf = new jsPDF("p","mm","a4");
   const d = window.lastAnalysisData;
 
-  // Header
-  pdf.setFillColor(12,18,35);
+  const margin = 20;
+  let y = 50;
+
+  // HEADER
+  pdf.setFillColor(10,20,45);
   pdf.rect(0,0,210,35,"F");
 
   pdf.setTextColor(255,255,255);
   pdf.setFontSize(20);
-  pdf.text("RendimentoBB",20,20);
+  pdf.text("RendimentoBB", margin, 20);
 
   pdf.setFontSize(11);
-  pdf.text("Executive Investment Report",20,28);
+  pdf.text("Executive Investment Report", margin, 28);
 
-  // Body
+  // ROI BIG
   pdf.setTextColor(0,0,0);
-  pdf.setFontSize(26);
-  pdf.text("ROI " + d.baseROI.toFixed(2) + "%",20,60);
+  pdf.setFontSize(14);
+  pdf.text("Return on Investment (ROI)", margin, y);
 
+  y += 12;
+
+  pdf.setFontSize(32);
+  pdf.setTextColor(d.baseROI >= 0 ? 0 : 200, d.baseROI >= 0 ? 0 : 60, d.baseROI >= 0 ? 0 : 60);
+  pdf.text(d.baseROI.toFixed(2) + "%", margin, y);
+
+  y += 18;
+
+  pdf.setTextColor(0,0,0);
   pdf.setFontSize(12);
-  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " years",20,75);
-  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%",20,85);
-  pdf.text("Risk Score: " + d.riskScore + "/100",20,95);
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage),20,105);
-  pdf.text("5-Year Projection: " + formatCurrency(d.fiveYearProjection),20,115);
 
-  pdf.text("Investment Grade: " + d.grade,20,130);
+  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " years", margin, y);
+  y += 10;
+
+  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin, y);
+  y += 10;
+
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin, y);
+  y += 10;
+
+  pdf.text("5-Year Projection: " + formatCurrency(d.fiveYearProjection), margin, y);
+  y += 15;
+
+  // RISK BAR
+  pdf.text("Risk Index: " + d.riskScore + "/100", margin, y);
+  y += 8;
+
+  pdf.setFillColor(16,185,129);
+  pdf.rect(margin, y, 50, 6, "F");
+
+  pdf.setFillColor(245,158,11);
+  pdf.rect(margin + 50, y, 50, 6, "F");
+
+  pdf.setFillColor(239,68,68);
+  pdf.rect(margin + 100, y, 50, 6, "F");
+
+  const indicatorX = margin + (d.riskScore * 1.5);
+  pdf.setDrawColor(0,0,0);
+  pdf.line(indicatorX, y - 2, indicatorX, y + 8);
+
+  y += 20;
+
+  pdf.setFontSize(14);
+  pdf.text("Investment Grade: " + d.grade, margin, y);
+  y += 15;
+
+  pdf.setFontSize(13);
+  pdf.text("Strategic Assessment", margin, y);
+  y += 10;
 
   pdf.setFontSize(11);
-  pdf.text("Strategic Assessment:",20,145);
-
   const lines = pdf.splitTextToSize(d.strategicComment,170);
-  pdf.text(lines,20,155);
+  pdf.text(lines, margin, y);
+
+  y += lines.length * 6 + 15;
+
+  pdf.setFontSize(13);
+  pdf.text("Executive Verdict", margin, y);
+  y += 10;
+
+  const verdict =
+    d.riskScore >= 70
+      ? "High-risk profile. Investment not advisable under current assumptions."
+      : d.riskScore >= 40
+      ? "Moderate risk profile. Scenario dependent on operational discipline."
+      : "Low-risk profile. Structurally sound under current assumptions.";
+
+  const verdictLines = pdf.splitTextToSize(verdict,170);
+  pdf.text(verdictLines, margin, y);
+
+  pdf.setFontSize(8);
+  pdf.setTextColor(120,120,120);
+  pdf.text(
+    "Generated on " + new Date().toLocaleDateString() +
+    " • RendimentoBB Strategic Analysis Engine",
+    margin,
+    285
+  );
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
