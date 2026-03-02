@@ -30,6 +30,7 @@
 
   <div class="hero-grid">
 
+    <!-- LEFT SIDE -->
     <div class="hero-left">
 
       <div class="hero-eyebrow"
@@ -37,39 +38,74 @@
            data-en="Strategic analysis for real estate investments"></div>
 
       <h1
-        data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
-        data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital.">
+        data-it="Investi con metodo. Non con speranza."
+        data-en="Invest with method. Not hope.">
       </h1>
 
       <p
-        data-it="Simulazione ROI reale, mutuo completo e stress test in meno di 60 secondi."
-        data-en="Real ROI simulation, full mortgage analysis and stress testing in under 60 seconds.">
+        data-it="Simula ROI reale, mutuo, stress test e rischio operativo prima di impegnare il tuo capitale."
+        data-en="Simulate real ROI, mortgage, stress testing and operational risk before committing capital.">
       </p>
 
       <a href="/tool/" class="btn btn-primary"
-         data-it="Avvia analisi gratuita"
-         data-en="Start free analysis"></a>
+         data-it="Avvia Analisi Strategica"
+         data-en="Start Strategic Analysis"></a>
 
       <div class="micro-note"
-           data-it="Upgrade PRO disponibile dopo l'analisi · Nessun abbonamento · Accesso immediato"
-           data-en="PRO upgrade available after analysis · No subscription · Instant access"></div>
+           data-it="Simulazione gratuita · Nessun abbonamento · Accesso immediato"
+           data-en="Free simulation · No subscription · Instant access"></div>
+
+      <!-- MINI METRICS STRIP -->
+      <div style="margin-top:40px; display:flex; gap:40px; flex-wrap:wrap; font-size:14px;">
+
+        <div>
+          <strong>+5</strong><br>
+          <span data-it="Scenari analizzati"
+                data-en="Scenarios analyzed"></span>
+        </div>
+
+        <div>
+          <strong>0–100</strong><br>
+          <span data-it="Indice rischio"
+                data-en="Risk index"></span>
+        </div>
+
+        <div>
+          <strong>5Y</strong><br>
+          <span data-it="Proiezione cashflow"
+                data-en="Cashflow projection"></span>
+        </div>
+
+      </div>
 
     </div>
 
-    <!-- DASHBOARD MOCK -->
+    <!-- RIGHT SIDE – DASHBOARD MOCK -->
 
     <div class="hero-right">
 
       <div class="dashboard-card">
 
+        <div style="display:flex; justify-content:space-between; margin-bottom:18px;">
+          <span style="font-size:13px; opacity:.6;">Executive Snapshot</span>
+          <span style="font-size:12px; background:#10b981; color:white; padding:4px 10px; border-radius:999px;">
+            LIVE
+          </span>
+        </div>
+
         <div class="metric">
           <span>ROI</span>
-          <strong>18.4%</strong>
+          <strong style="color:#10b981;">18.4%</strong>
         </div>
 
         <div class="metric">
           <span data-it="Cashflow Mensile" data-en="Monthly Cashflow"></span>
           <strong>€1.280</strong>
+        </div>
+
+        <div class="metric">
+          <span data-it="Break-even" data-en="Break-even"></span>
+          <strong>6.2y</strong>
         </div>
 
         <div class="metric risk-low">
@@ -79,10 +115,10 @@
 
         <div class="mini-chart">
           <div class="bar" style="height:40%"></div>
-          <div class="bar" style="height:65%"></div>
           <div class="bar" style="height:55%"></div>
-          <div class="bar" style="height:80%"></div>
-          <div class="bar" style="height:70%"></div>
+          <div class="bar" style="height:65%"></div>
+          <div class="bar" style="height:75%"></div>
+          <div class="bar" style="height:85%"></div>
         </div>
 
       </div>
@@ -105,21 +141,24 @@
     <div class="why-grid">
 
       <div class="why-card">
-        <h3 data-it="Riduce il rischio" data-en="Reduce risk"></h3>
-        <p data-it="Simula scenari realistici prima di impegnare capitale."
-           data-en="Simulate realistic scenarios before committing capital."></p>
+        <h3 data-it="Decisioni basate su dati"
+            data-en="Data-driven decisions"></h3>
+        <p data-it="Analizza ROI reale prima di impegnare capitale."
+           data-en="Analyze real ROI before committing capital."></p>
       </div>
 
       <div class="why-card">
-        <h3 data-it="Ottimizza il mutuo" data-en="Optimize mortgage"></h3>
-        <p data-it="Valuta impatto tassi, durata e cashflow reale."
-           data-en="Evaluate rates, duration and real cashflow impact."></p>
+        <h3 data-it="Gestione del rischio"
+            data-en="Risk management"></h3>
+        <p data-it="Valuta sostenibilità e volatilità operativa."
+           data-en="Evaluate sustainability and operational volatility."></p>
       </div>
 
       <div class="why-card">
-        <h3 data-it="Protegge il capitale" data-en="Protect capital"></h3>
-        <p data-it="Previene errori finanziari strutturali prima dell'acquisto."
-           data-en="Prevent structural financial mistakes before purchase."></p>
+        <h3 data-it="Visione strategica"
+            data-en="Strategic vision"></h3>
+        <p data-it="Simula scenari a 5 anni prima dell’acquisto."
+           data-en="Simulate 5-year scenarios before purchase."></p>
       </div>
 
     </div>
@@ -159,6 +198,7 @@
 
       <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
          class="btn btn-primary"
+         target="_blank"
          data-it="Attiva accesso ora"
          data-en="Activate Access"></a>
 
@@ -183,7 +223,6 @@ function setLang(lang){
 
   document.getElementById("btn-it").classList.remove("active");
   document.getElementById("btn-en").classList.remove("active");
-
   document.getElementById("btn-"+lang).classList.add("active");
 
   const indicator = document.querySelector(".lang-indicator");
