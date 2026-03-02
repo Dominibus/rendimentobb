@@ -20,43 +20,91 @@ body{
 .container{
   max-width:1100px;
   margin:0 auto;
-  padding:0 20px;
+  padding:0 24px;
 }
 
-section{
-  padding:100px 0;
-}
+/* HEADER */
 
 header{
-  padding:30px 0;
+  padding:28px 0;
+}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .logo{
   font-weight:700;
   font-size:18px;
+  letter-spacing:-0.3px;
 }
+
+/* Language Toggle Premium */
+
+.lang-toggle{
+  position:relative;
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(12px);
+  border-radius:999px;
+  padding:4px;
+  display:flex;
+}
+
+.lang-btn{
+  position:relative;
+  z-index:2;
+  border:none;
+  background:transparent;
+  padding:6px 16px;
+  font-weight:600;
+  cursor:pointer;
+  border-radius:999px;
+  color:#0f172a;
+}
+
+.lang-btn.active{
+  color:white;
+}
+
+.lang-indicator{
+  position:absolute;
+  top:4px;
+  left:4px;
+  height:calc(100% - 8px);
+  width:50%;
+  background:#0f172a;
+  border-radius:999px;
+  transition:transform .25s ease;
+}
+
+/* HERO */
 
 .hero{
   padding:140px 0 120px 0;
 }
 
 .hero h1{
-  font-size:clamp(36px,6vw,64px);
+  font-size:clamp(40px,6vw,64px);
   line-height:1.1;
   letter-spacing:-1px;
-  margin-bottom:25px;
+  margin-bottom:24px;
 }
 
 .hero p{
-  font-size:clamp(16px,2.5vw,22px);
-  max-width:700px;
-  margin-bottom:35px;
+  font-size:clamp(18px,2.5vw,22px);
+  max-width:720px;
+  margin-bottom:40px;
+  opacity:0.9;
 }
+
+/* BUTTON */
 
 .btn{
   display:inline-block;
-  padding:16px 30px;
-  border-radius:10px;
+  padding:16px 34px;
+  border-radius:12px;
   font-weight:600;
   text-decoration:none;
   transition:all .2s ease;
@@ -65,11 +113,17 @@ header{
 .btn-primary{
   background:#0f8f5f;
   color:#fff;
-  box-shadow:0 10px 25px rgba(15,143,95,0.3);
+  box-shadow:0 12px 30px rgba(15,143,95,0.35);
 }
 
 .btn-primary:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
+}
+
+/* SECTIONS */
+
+section{
+  padding:100px 0;
 }
 
 .section-alt{
@@ -78,26 +132,35 @@ header{
 
 h2{
   font-size:32px;
-  margin-bottom:30px;
+  margin-bottom:32px;
 }
+
+/* PRICING */
 
 .price-card{
   background:#ffffff;
-  padding:50px;
-  border-radius:16px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  padding:60px;
+  border-radius:20px;
+  box-shadow:0 25px 80px rgba(0,0,0,0.08);
   max-width:520px;
+  transition:transform .25s ease;
+}
+
+.price-card:hover{
+  transform:translateY(-5px);
 }
 
 .price{
   font-size:48px;
   font-weight:700;
-  margin:20px 0;
+  margin:24px 0;
 }
 
 .features li{
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
+
+/* FOOTER */
 
 footer{
   padding:60px 0;
@@ -122,11 +185,13 @@ footer{
 <body>
 
 <header class="container">
-  <div style="display:flex;justify-content:space-between;align-items:center;">
+  <div class="nav">
     <div class="logo">RendimentoBB</div>
-    <div>
-      <button id="btn-it" onclick="setLang('it')">IT</button>
-      <button id="btn-en" onclick="setLang('en')">EN</button>
+
+    <div class="lang-toggle">
+      <button id="btn-it" onclick="setLang('it')" class="lang-btn">IT</button>
+      <button id="btn-en" onclick="setLang('en')" class="lang-btn">EN</button>
+      <div class="lang-indicator"></div>
     </div>
   </div>
 </header>
@@ -149,7 +214,7 @@ footer{
    data-it="Avvia analisi gratuita"
    data-en="Start free analysis"></a>
 
-<div style="margin-top:15px;font-size:13px;opacity:.6;"
+<div style="margin-top:16px;font-size:13px;opacity:.6;"
      data-it="Upgrade PRO disponibile dopo l'analisi · Nessun abbonamento"
      data-en="PRO upgrade available after analysis · No subscription"></div>
 
@@ -241,13 +306,20 @@ footer{
 <script>
 function setLang(lang){
   document.documentElement.lang = lang;
+
   document.querySelectorAll("[data-it]").forEach(el=>{
     const text = el.getAttribute("data-"+lang);
     if(text) el.innerText = text;
   });
+
   document.getElementById("btn-it").classList.remove("active");
   document.getElementById("btn-en").classList.remove("active");
+
   document.getElementById("btn-"+lang).classList.add("active");
+
+  const indicator = document.querySelector(".lang-indicator");
+  indicator.style.transform = lang === "en" ? "translateX(100%)" : "translateX(0%)";
+
   localStorage.setItem("lang", lang);
 }
 
