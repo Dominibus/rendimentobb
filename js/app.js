@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.4 PROFESSIONAL RESTORED
-// REAL SCALE FIX + FULL EXECUTIVE PDF
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.5 FINAL STABLE
+// FULL PROFESSIONAL VERSION + COMPLETE EXECUTIVE PDF
 // ===============================
 
 if (!window.currentLang) {
@@ -24,6 +24,10 @@ function getValue(id) {
 
 window.lastAnalysisData = null;
 let roiChartInstance = null;
+
+// ===============================
+// KPI CARD
+// ===============================
 
 function kpiCard(label, value) {
   return `
@@ -78,7 +82,7 @@ function calculate() {
 function runRealCalculation() {
 
   const equity = getValue("equity");
-  const price = getValue("price");
+  const priceNight = getValue("price"); // prezzo medio notte
   const occupancy = getValue("occupancy");
   const expenses = getValue("expenses");
   const commission = getValue("commission");
@@ -90,19 +94,13 @@ function runRealCalculation() {
   const resultsDiv = document.getElementById("results");
   const chartCanvas = document.getElementById("roiChart");
 
-  if (!price || !occupancy || equity <= 0) {
+  if (!priceNight || !occupancy || equity <= 0) {
     resultsDiv.innerHTML = "Insert valid values.";
     return;
   }
 
-  // ===== SCALE PROTECTION =====
-  if (price > 2000) {
-    alert("Prezzo notte fuori scala.");
-    return;
-  }
-
   const nightsPerMonth = 30.42 * (occupancy / 100);
-  const grossYearly = price * nightsPerMonth * 12;
+  const grossYearly = priceNight * nightsPerMonth * 12;
 
   const yearlyFees = grossYearly * (commission / 100);
   const yearlyExpenses = expenses * 12;
@@ -121,11 +119,21 @@ function runRealCalculation() {
     ? equity / netAfterMortgage
     : 99;
 
-  const stressNet = netAfterMortgage * 0.85;
+  // ===== REAL STRESS TEST (-15% occupancy) =====
+  const stressOccupancy = occupancy * 0.85;
+  const stressNights = 30.42 * (stressOccupancy / 100);
+  const stressGross = priceNight * stressNights * 12;
+  const stressFees = stressGross * (commission / 100);
+  const stressProfit = stressGross - stressFees - yearlyExpenses;
+  const stressTax = stressProfit > 0 ? stressProfit * (tax / 100) : 0;
+  const stressNet = stressProfit - stressTax - mortgage.yearlyPayment;
+
   let pessimisticROI = (stressNet / equity) * 100;
+  if (!isFinite(pessimisticROI)) pessimisticROI = 0;
 
   const fiveYearProjection = netAfterMortgage * 5;
 
+  // ===== RISK ENGINE =====
   let riskScore = 50;
 
   if (baseROI < 4) riskScore += 25;
@@ -149,6 +157,18 @@ function runRealCalculation() {
     grade === "C" ? "Elevated Risk" :
     "High Risk";
 
+  let strategicText =
+    grade === "A" ? "Strong financial fundamentals. Attractive risk-adjusted return profile." :
+    grade === "B" ? "Balanced opportunity with moderate exposure." :
+    grade === "C" ? "Elevated operational sensitivity. Careful monitoring required." :
+    "High exposure to operational volatility. Strategic review recommended.";
+
+  let verdictText =
+    grade === "A" ? "Investment profile solid under current assumptions." :
+    grade === "B" ? "Viable opportunity with controlled leverage." :
+    grade === "C" ? "Proceed only with active management strategy." :
+    "Investment not advisable under current assumptions.";
+
   window.lastAnalysisData = {
     baseROI,
     pessimisticROI,
@@ -157,7 +177,9 @@ function runRealCalculation() {
     fiveYearProjection,
     riskScore,
     grade,
-    classification
+    classification,
+    strategicText,
+    verdictText
   };
 
   resultsDiv.innerHTML = `
@@ -170,6 +192,11 @@ function runRealCalculation() {
       ${kpiCard("Break-even", breakEvenYears.toFixed(1) + " yrs")}
       ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
       ${kpiCard("Grade", grade)}
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
+      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
     </div>
   `;
 }
@@ -222,28 +249,34 @@ function generatePDF() {
 
   y += 45;
 
-  pdf.setFontSize(13);
-  pdf.text("Risk Index", margin, y);
-  y += 10;
-
-  pdf.setFillColor(16,185,129);
-  pdf.rect(margin, y, 55, 6, "F");
-  pdf.setFillColor(245,158,11);
-  pdf.rect(margin+55, y, 55, 6, "F");
-  pdf.setFillColor(239,68,68);
-  pdf.rect(margin+110, y, 55, 6, "F");
-
-  const indicatorX = margin + (d.riskScore * 1.65);
-  pdf.setDrawColor(0,0,0);
-  pdf.line(indicatorX, y-2, indicatorX, y+8);
-
-  y += 20;
-
   pdf.setFontSize(14);
   pdf.text("Investment Grade: " + d.grade, margin, y);
   y += 8;
   pdf.setFontSize(11);
   pdf.text("Classification: " + d.classification, margin, y);
+
+  y += 15;
+  pdf.setFontSize(12);
+  pdf.text("Strategic Assessment", margin, y);
+  y += 8;
+  pdf.setFontSize(10);
+  pdf.text(d.strategicText, margin, y, { maxWidth: 170 });
+
+  y += 18;
+  pdf.setFontSize(12);
+  pdf.text("Executive Verdict", margin, y);
+  y += 8;
+  pdf.setFontSize(10);
+  pdf.text(d.verdictText, margin, y, { maxWidth: 170 });
+
+  pdf.setFontSize(8);
+  pdf.setTextColor(120,120,120);
+  pdf.text(
+    "Generated on " + new Date().toLocaleDateString() +
+    " • RendimentoBB Strategic Analysis Engine 3.5",
+    margin,
+    285
+  );
 
   pdf.save("RendimentoBB_Strategic_Report.pdf");
 }
