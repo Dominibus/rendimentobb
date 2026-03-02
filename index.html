@@ -8,178 +8,6 @@
 <meta name="description" content="Simula ROI, mutuo e cashflow prima di investire in un B&B. Analisi professionale per proteggere il capitale.">
 
 <link rel="stylesheet" href="/css/style.css">
-
-<style>
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:linear-gradient(135deg,#eef3f7,#dce5ec);
-  color:#0f172a;
-}
-
-.container{
-  max-width:1100px;
-  margin:0 auto;
-  padding:0 24px;
-}
-
-/* HEADER */
-
-header{
-  padding:28px 0;
-}
-
-.nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-weight:700;
-  font-size:18px;
-  letter-spacing:-0.3px;
-}
-
-/* Language Toggle Premium */
-
-.lang-toggle{
-  position:relative;
-  background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(12px);
-  border-radius:999px;
-  padding:4px;
-  display:flex;
-}
-
-.lang-btn{
-  position:relative;
-  z-index:2;
-  border:none;
-  background:transparent;
-  padding:6px 16px;
-  font-weight:600;
-  cursor:pointer;
-  border-radius:999px;
-  color:#0f172a;
-}
-
-.lang-btn.active{
-  color:white;
-}
-
-.lang-indicator{
-  position:absolute;
-  top:4px;
-  left:4px;
-  height:calc(100% - 8px);
-  width:50%;
-  background:#0f172a;
-  border-radius:999px;
-  transition:transform .25s ease;
-}
-
-/* HERO */
-
-.hero{
-  padding:140px 0 120px 0;
-}
-
-.hero h1{
-  font-size:clamp(40px,6vw,64px);
-  line-height:1.1;
-  letter-spacing:-1px;
-  margin-bottom:24px;
-}
-
-.hero p{
-  font-size:clamp(18px,2.5vw,22px);
-  max-width:720px;
-  margin-bottom:40px;
-  opacity:0.9;
-}
-
-/* BUTTON */
-
-.btn{
-  display:inline-block;
-  padding:16px 34px;
-  border-radius:12px;
-  font-weight:600;
-  text-decoration:none;
-  transition:all .2s ease;
-}
-
-.btn-primary{
-  background:#0f8f5f;
-  color:#fff;
-  box-shadow:0 12px 30px rgba(15,143,95,0.35);
-}
-
-.btn-primary:hover{
-  transform:translateY(-3px);
-}
-
-/* SECTIONS */
-
-section{
-  padding:100px 0;
-}
-
-.section-alt{
-  background:#ffffff;
-}
-
-h2{
-  font-size:32px;
-  margin-bottom:32px;
-}
-
-/* PRICING */
-
-.price-card{
-  background:#ffffff;
-  padding:60px;
-  border-radius:20px;
-  box-shadow:0 25px 80px rgba(0,0,0,0.08);
-  max-width:520px;
-  transition:transform .25s ease;
-}
-
-.price-card:hover{
-  transform:translateY(-5px);
-}
-
-.price{
-  font-size:48px;
-  font-weight:700;
-  margin:24px 0;
-}
-
-.features li{
-  margin-bottom:14px;
-}
-
-/* FOOTER */
-
-footer{
-  padding:60px 0;
-  text-align:center;
-  font-size:14px;
-  opacity:0.6;
-}
-
-@media(max-width:768px){
-  section{
-    padding:70px 0;
-  }
-  .btn{
-    width:100%;
-    text-align:center;
-  }
-}
-</style>
-
 </head>
 
 <body>
@@ -196,112 +24,143 @@ footer{
   </div>
 </header>
 
-<!-- HERO -->
+<!-- HERO WITH MOCK DASHBOARD -->
 
 <section class="hero container">
 
-<div style="opacity:.6;margin-bottom:15px;"
-     data-it="Analisi strategica per investimenti immobiliari"
-     data-en="Strategic analysis for real estate investments"></div>
+  <div class="hero-grid">
 
-<h1 data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
-    data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital."></h1>
+    <div class="hero-left">
 
-<p data-it="Simulazione ROI reale, mutuo completo e stress test in meno di 60 secondi."
-   data-en="Real ROI simulation, full mortgage analysis and stress testing in under 60 seconds."></p>
+      <div class="hero-eyebrow"
+           data-it="Analisi strategica per investimenti immobiliari"
+           data-en="Strategic analysis for real estate investments"></div>
 
-<a href="/tool/" class="btn btn-primary"
-   data-it="Avvia analisi gratuita"
-   data-en="Start free analysis"></a>
+      <h1
+        data-it="Prima di investire 100.000€ in un B&B, verifica la sostenibilità reale del capitale."
+        data-en="Before investing €100,000 in a B&B, verify the real sustainability of your capital.">
+      </h1>
 
-<div style="margin-top:16px;font-size:13px;opacity:.6;"
-     data-it="Upgrade PRO disponibile dopo l'analisi · Nessun abbonamento"
-     data-en="PRO upgrade available after analysis · No subscription"></div>
+      <p
+        data-it="Simulazione ROI reale, mutuo completo e stress test in meno di 60 secondi."
+        data-en="Real ROI simulation, full mortgage analysis and stress testing in under 60 seconds.">
+      </p>
+
+      <a href="/tool/" class="btn btn-primary"
+         data-it="Avvia analisi gratuita"
+         data-en="Start free analysis"></a>
+
+      <div class="micro-note"
+           data-it="Upgrade PRO disponibile dopo l'analisi · Nessun abbonamento"
+           data-en="PRO upgrade available after analysis · No subscription"></div>
+
+    </div>
+
+    <!-- MOCK DASHBOARD -->
+    <div class="hero-right">
+
+      <div class="dashboard-card">
+
+        <div class="metric">
+          <span>ROI</span>
+          <strong>18.4%</strong>
+        </div>
+
+        <div class="metric">
+          <span>Cashflow Mensile</span>
+          <strong>€1.280</strong>
+        </div>
+
+        <div class="metric risk-low">
+          <span>Risk Score</span>
+          <strong>Basso</strong>
+        </div>
+
+        <div class="mini-chart">
+          <div class="bar" style="height:40%"></div>
+          <div class="bar" style="height:65%"></div>
+          <div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:80%"></div>
+          <div class="bar" style="height:70%"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
-<!-- SUMMARY -->
+<!-- WHY SECTION -->
 
 <section class="section-alt">
-<div class="container">
+  <div class="container">
 
-<h2 data-it="Executive Summary"
-    data-en="Executive Summary"></h2>
+    <h2
+      data-it="Perché RendimentoBB"
+      data-en="Why RendimentoBB"></h2>
 
-<p data-it="RendimentoBB è uno strumento strategico progettato per analizzare la sostenibilità reale di un investimento B&B prima dell’acquisto."
-   data-en="RendimentoBB is a strategic tool designed to analyze the real sustainability of a B&B investment before purchase."></p>
+    <div class="why-grid">
 
-<p data-it="Integra ROI, simulazione mutuo, cashflow mensile e stress test su scenari realistici."
-   data-en="It integrates ROI, mortgage simulation, monthly cashflow and stress testing."></p>
+      <div class="why-card">
+        <h3>Riduce il rischio</h3>
+        <p>Simula scenari realistici prima di impegnare capitale.</p>
+      </div>
 
-<p data-it="Previene errori finanziari strutturali e protegge il capitale."
-   data-en="Prevents structural financial mistakes and protects capital."></p>
+      <div class="why-card">
+        <h3>Ottimizza il mutuo</h3>
+        <p>Valuta impatto tassi, durata e cashflow reale.</p>
+      </div>
 
-</div>
+      <div class="why-card">
+        <h3>Protegge il capitale</h3>
+        <p>Previene errori finanziari strutturali prima dell'acquisto.</p>
+      </div>
+
+    </div>
+
+  </div>
 </section>
 
-<!-- METHOD -->
+<!-- PRICING CENTERED -->
 
 <section>
-<div class="container">
+  <div class="container pricing-center">
 
-<h2 data-it="Metodo operativo"
-    data-en="Operational Method"></h2>
+    <h2
+      data-it="Investment Analysis Suite"
+      data-en="Investment Analysis Suite"></h2>
 
-<ol>
-<li data-it="Inserisci dati finanziari e ipotesi operative."
-    data-en="Enter financial data and operational assumptions."></li>
-<li data-it="Ottieni analisi multi-scenario."
-    data-en="Receive multi-scenario analysis."></li>
-<li data-it="Valuta sostenibilità e rischio."
-    data-en="Evaluate sustainability and risk."></li>
-</ol>
+    <div class="price-card featured">
 
-</div>
-</section>
+      <div class="badge">Recommended</div>
 
-<!-- PRICING -->
+      <div class="price"
+           data-it="19€ – Licenza Strategica"
+           data-en="€19 – Strategic License"></div>
 
-<section class="section-alt">
-<div class="container">
+      <ul class="features">
+        <li>✔ Simulazione mutuo dettagliata</li>
+        <li>✔ Analisi multi-scenario</li>
+        <li>✔ Break-even reale</li>
+        <li>✔ PDF consulenziale professionale</li>
+      </ul>
 
-<h2 data-it="Investment Analysis Suite"
-    data-en="Investment Analysis Suite"></h2>
+      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+         class="btn btn-primary"
+         data-it="Attiva accesso ora"
+         data-en="Activate Access"></a>
 
-<div class="price-card">
+    </div>
 
-<div style="font-weight:600;margin-bottom:10px;"
-     data-it="Consigliato"
-     data-en="Recommended"></div>
-
-<div class="price"
-     data-it="19€ – Licenza Strategica"
-     data-en="€19 – Strategic License"></div>
-
-<ul class="features">
-<li data-it="✔ Simulazione mutuo dettagliata"
-    data-en="✔ Detailed mortgage simulation"></li>
-<li data-it="✔ Analisi multi-scenario"
-    data-en="✔ Multi-scenario analysis"></li>
-<li data-it="✔ Break-even reale"
-    data-en="✔ Real break-even"></li>
-<li data-it="✔ PDF consulenziale professionale"
-    data-en="✔ Consultant-grade PDF report"></li>
-</ul>
-
-<a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
-   class="btn btn-primary"
-   data-it="Attiva accesso ora"
-   data-en="Activate Access"></a>
-
-</div>
-
-</div>
+  </div>
 </section>
 
 <footer
  data-it="© 2026 RendimentoBB – Tutti i diritti riservati"
- data-en="© 2026 RendimentoBB – All rights reserved"></footer>
+ data-en="© 2026 RendimentoBB – All rights reserved">
+</footer>
 
 <script>
 function setLang(lang){
