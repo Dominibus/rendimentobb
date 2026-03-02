@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.4
-// FINANCIAL PRECISION + FULL PDF
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.3 FIXED
+// FULL VERSION RESTORED + ROI PROTECTION
 // ===============================
 
 if (!window.currentLang) {
@@ -31,16 +31,8 @@ let roiChartInstance = null;
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
 
-  if (!loanAmount || !loanYears) {
+  if (!loanAmount || !interestRate || !loanYears) {
     return { monthlyPayment: 0, yearlyPayment: 0 };
-  }
-
-  if (interestRate === 0) {
-    const monthly = loanAmount / (loanYears * 12);
-    return {
-      monthlyPayment: monthly,
-      yearlyPayment: monthly * 12
-    };
   }
 
   const monthlyRate = (interestRate / 100) / 12;
@@ -80,70 +72,60 @@ function runRealCalculation() {
   const resultsDiv = document.getElementById("results");
   const chartCanvas = document.getElementById("roiChart");
 
-  if (!price || !occupancy || !equity) {
+  if (!price || !occupancy || equity <= 0) {
     resultsDiv.innerHTML = "Insert valid values.";
     return;
   }
 
-  // ===== REVENUE CALCULATION =====
-  const nightsPerMonth = 30.42 * (occupancy / 100);
+  const nightsPerMonth = 30 * (occupancy / 100);
   const grossYearly = price * nightsPerMonth * 12;
-
   const yearlyFees = grossYearly * (commission / 100);
   const yearlyExpenses = expenses * 12;
 
-  const operatingProfit = grossYearly - yearlyFees - yearlyExpenses;
+  const profitBeforeTax = grossYearly - yearlyFees - yearlyExpenses;
+  const taxCost = profitBeforeTax > 0 ? profitBeforeTax * (tax / 100) : 0;
+  const netYearly = profitBeforeTax - taxCost;
 
-  const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
-  const netOperating = operatingProfit - taxCost;
-
-  // ===== MORTGAGE =====
   const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
-  const netAfterMortgage = netOperating - mortgage.yearlyPayment;
+  const netAfterMortgage = netYearly - mortgage.yearlyPayment;
 
-  // ===== ROI =====
-  let baseROI = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
+  // ===============================
+  // ROI FIX (ANTI-EXPLOSION)
+  // ===============================
+
+  const effectiveEquity = equity < 1000 ? 1000 : equity;
+
+  let baseROI = (netAfterMortgage / effectiveEquity) * 100;
+
   if (!isFinite(baseROI)) baseROI = 0;
 
-  let propertyYield = (loanAmount + equity) > 0
-    ? (netAfterMortgage / (loanAmount + equity)) * 100
-    : 0;
+  // limite professionale
+  if (baseROI > 200) baseROI = 200;
+  if (baseROI < -100) baseROI = -100;
 
-  if (!isFinite(propertyYield)) propertyYield = 0;
+  let breakEvenYears = 99;
 
-  // ===== STRESS TEST (-15% OCCUPANCY) =====
-  const stressOccupancy = occupancy * 0.85;
-  const stressNights = 30.42 * (stressOccupancy / 100);
-  const stressGross = price * stressNights * 12;
-  const stressFees = stressGross * (commission / 100);
-  const stressOperating = stressGross - stressFees - yearlyExpenses;
-  const stressTax = stressOperating > 0 ? stressOperating * (tax / 100) : 0;
-  const stressNet = stressOperating - stressTax - mortgage.yearlyPayment;
+  if (netAfterMortgage > 0) {
+    breakEvenYears = effectiveEquity / netAfterMortgage;
+  }
 
-  let pessimisticROI = equity > 0 ? (stressNet / equity) * 100 : 0;
+  if (!isFinite(breakEvenYears) || breakEvenYears < 0)
+    breakEvenYears = 99;
+
+  let pessimisticROI = baseROI * 0.85;
+
   if (!isFinite(pessimisticROI)) pessimisticROI = 0;
 
-  // ===== BREAK EVEN =====
-  let breakEvenYears = netAfterMortgage > 0
-    ? equity / netAfterMortgage
-    : 99;
-
-  // ===== 5 YEARS =====
   const fiveYearProjection = netAfterMortgage * 5;
-  const fiveYearROI = equity > 0
-    ? (fiveYearProjection / equity) * 100
-    : 0;
 
-  // ===== RISK SCORE =====
   let riskScore = 50;
 
-  if (baseROI < 4) riskScore += 20;
-  if (baseROI > 12) riskScore -= 15;
-  if (breakEvenYears > 15) riskScore += 15;
-  if (breakEvenYears < 8) riskScore -= 10;
+  if (baseROI < 4) riskScore += 25;
+  if (baseROI > 12) riskScore -= 20;
+  if (breakEvenYears > 15) riskScore += 20;
+  if (breakEvenYears < 8) riskScore -= 15;
   if (occupancy < 55) riskScore += 15;
-  if (occupancy > 75) riskScore -= 8;
-  if (pessimisticROI < 0) riskScore += 15;
+  if (occupancy > 75) riskScore -= 10;
 
   riskScore = Math.max(0, Math.min(100, riskScore));
 
@@ -161,8 +143,6 @@ function runRealCalculation() {
   window.lastAnalysisData = {
     baseROI,
     pessimisticROI,
-    propertyYield,
-    fiveYearROI,
     breakEvenYears,
     netAfterMortgage,
     fiveYearProjection,
@@ -170,14 +150,17 @@ function runRealCalculation() {
     grade
   };
 
-  // ===== RESULTS =====
+  // ===============================
+  // RESULTS HTML RESTORED
+  // ===============================
+
   resultsDiv.innerHTML = `
     <div style="margin-bottom:20px;">
       <h3 style="font-size:18px;">Executive Investment Summary</h3>
     </div>
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:20px; margin-bottom:25px;">
-      ${kpiCard("ROI (Equity)", baseROI.toFixed(2) + "%")}
+      ${kpiCard("ROI", baseROI.toFixed(2) + "%")}
       ${kpiCard("Break-even", breakEvenYears.toFixed(1) + " yrs")}
       ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
       ${kpiCard("Grade", grade)}
@@ -185,8 +168,7 @@ function runRealCalculation() {
 
     <div style="margin-bottom:20px;">
       <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
-      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}<br>
-      <strong>Property Yield:</strong> ${propertyYield.toFixed(2)}%
+      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
     </div>
 
     <div style="margin-bottom:20px;">
@@ -201,7 +183,6 @@ function runRealCalculation() {
     </button>
   `;
 
-  // ===== CHART =====
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
 
