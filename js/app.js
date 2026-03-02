@@ -1,7 +1,7 @@
-// ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 4.0 CLEAN FINAL
-// CORRECT FIELD MAPPING + STABLE ROI + FULL PDF
-// ===============================
+// ===============================================
+// RENDIMENTOBB – EXECUTIVE ENGINE 5.0 STABLE
+// CORRECT FIELD MAPPING + REAL ROI + PRO PDF
+// ===============================================
 
 if (!window.currentLang) {
   window.currentLang = localStorage.getItem("rb_lang") || "it";
@@ -24,9 +24,9 @@ function getValue(id) {
 
 window.lastAnalysisData = null;
 
-// ===============================
+// ===============================================
 // MORTGAGE
-// ===============================
+// ===============================================
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
 
@@ -35,20 +35,20 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
   if (interestRate === 0)
     return loanAmount / loanYears;
 
-  const monthlyRate = (interestRate / 100) / 12;
-  const totalPayments = loanYears * 12;
+  const yearlyRate = interestRate / 100;
+  const n = loanYears;
 
-  const monthly =
+  const yearly =
     loanAmount *
-    (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) /
-    (Math.pow(1 + monthlyRate, totalPayments) - 1);
+    (yearlyRate * Math.pow(1 + yearlyRate, n)) /
+    (Math.pow(1 + yearlyRate, n) - 1);
 
-  return monthly * 12;
+  return yearly;
 }
 
-// ===============================
+// ===============================================
 // MAIN CALCULATION
-// ===============================
+// ===============================================
 
 function calculate() {
   runRealCalculation();
@@ -56,8 +56,11 @@ function calculate() {
 
 function runRealCalculation() {
 
+  // ===== CORRECT FIELD MAPPING =====
+  const propertyPrice = getValue("price");
   const equity = getValue("equity");
-  const priceNight = getValue("price");          // PREZZO MEDIO NOTTE
+
+  const priceNight = getValue("priceNight"); // ✔ corretto
   const occupancy = getValue("occupancy");
   const expenses = getValue("expenses");
   const commission = getValue("commission");
@@ -98,45 +101,58 @@ function runRealCalculation() {
   const netAfterMortgage = netOperating - mortgageYearly;
 
   // ===== ROI =====
-  let roi = (netAfterMortgage / equity) * 100;
+  let roi = equity > 0
+    ? (netAfterMortgage / equity) * 100
+    : 0;
+
   if (!isFinite(roi)) roi = 0;
 
-  let breakEven = netAfterMortgage > 0
-    ? equity / netAfterMortgage
-    : 99;
+  // ===== BREAK EVEN =====
+  let breakEven =
+    netAfterMortgage > 0
+      ? equity / netAfterMortgage
+      : 99;
 
   // ===== STRESS TEST (-15% occupancy)
   const stressOccupancy = occupancy * 0.85;
   const stressNights = 365 * (stressOccupancy / 100);
   const stressGross = priceNight * stressNights;
+
   const stressFees = stressGross * (commission / 100);
   const stressProfit = stressGross - stressFees - yearlyExpenses;
-  const stressTax = stressProfit > 0
-    ? stressProfit * (tax / 100)
-    : 0;
+
+  const stressTax =
+    stressProfit > 0
+      ? stressProfit * (tax / 100)
+      : 0;
 
   const stressNet =
     stressProfit - stressTax - mortgageYearly;
 
-  let stressROI = (stressNet / equity) * 100;
+  let stressROI =
+    equity > 0
+      ? (stressNet / equity) * 100
+      : 0;
+
   if (!isFinite(stressROI)) stressROI = 0;
 
   const fiveYearProjection = netAfterMortgage * 5;
 
-  // ===== RISK SCORE =====
-  let risk = 50;
+  // ===== RISK ENGINE 2.0 =====
+  let risk = 40;
 
   if (roi < 5) risk += 20;
   if (roi > 20) risk -= 15;
   if (breakEven > 15) risk += 20;
   if (occupancy < 55) risk += 15;
+  if (loanAmount > equity * 3) risk += 10;
 
   risk = Math.max(0, Math.min(100, risk));
 
   let grade =
-    risk < 30 ? "A" :
-    risk < 50 ? "B" :
-    risk < 70 ? "C" : "D";
+    risk < 25 ? "A" :
+    risk < 45 ? "B" :
+    risk < 65 ? "C" : "D";
 
   window.lastAnalysisData = {
     roi,
@@ -148,33 +164,34 @@ function runRealCalculation() {
     grade
   };
 
+  // ===== OUTPUT =====
   resultsDiv.innerHTML = `
-    <div style="margin-bottom:20px;">
+    <div style="margin-bottom:25px;">
       <h3>Executive Investment Summary</h3>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;margin-bottom:20px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;margin-bottom:25px;">
       <div><strong>ROI:</strong> ${roi.toFixed(2)}%</div>
       <div><strong>Break-even:</strong> ${breakEven.toFixed(1)} yrs</div>
       <div><strong>Stress ROI:</strong> ${stressROI.toFixed(2)}%</div>
       <div><strong>Grade:</strong> ${grade}</div>
     </div>
 
-    <div style="margin-bottom:15px;">
+    <div style="margin-bottom:20px;">
       <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
       <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
     </div>
 
     <button onclick="generatePDF()" 
-      style="background:#0f172a;color:#fff;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;">
+      style="background:#0f172a;color:#fff;padding:12px 20px;border:none;border-radius:10px;cursor:pointer;">
       📄 Download Executive PDF
     </button>
   `;
 }
 
-// ===============================
-// PDF
-// ===============================
+// ===============================================
+// PDF GENERATION – PROFESSIONAL STRUCTURE
+// ===============================================
 
 function generatePDF() {
 
@@ -187,27 +204,40 @@ function generatePDF() {
   const pdf = new jsPDF("p","mm","a4");
   const d = window.lastAnalysisData;
 
+  // Header
   pdf.setFillColor(15,23,42);
-  pdf.rect(0,0,210,35,"F");
+  pdf.rect(0,0,210,30,"F");
 
   pdf.setTextColor(255,255,255);
-  pdf.setFontSize(20);
-  pdf.text("RendimentoBB", 20, 20);
-  pdf.setFontSize(11);
-  pdf.text("Executive Investment Report", 20, 28);
+  pdf.setFontSize(18);
+  pdf.text("RendimentoBB", 20, 18);
+
+  pdf.setFontSize(10);
+  pdf.text("Strategic Investment Report", 20, 25);
 
   pdf.setTextColor(0,0,0);
-  pdf.setFontSize(14);
-  pdf.text("Return on Investment (ROI)", 20, 50);
-
-  pdf.setFontSize(34);
-  pdf.text(d.roi.toFixed(2) + "%", 20, 65);
 
   pdf.setFontSize(12);
-  pdf.text("Break-even: " + d.breakEven.toFixed(1) + " yrs", 20, 85);
-  pdf.text("Stress ROI: " + d.stressROI.toFixed(2) + "%", 20, 95);
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), 20, 105);
-  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), 20, 115);
+  pdf.text("Cash-on-Cash Return (Equity ROI)", 20, 45);
+
+  pdf.setFontSize(28);
+  pdf.text(d.roi.toFixed(2) + "%", 20, 60);
+
+  pdf.setFontSize(11);
+  pdf.text("Break-even: " + d.breakEven.toFixed(1) + " yrs", 20, 75);
+  pdf.text("Stress ROI: " + d.stressROI.toFixed(2) + "%", 20, 83);
+
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), 20, 95);
+  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), 20, 103);
+
+  pdf.text("Investment Grade: " + d.grade, 20, 115);
+
+  pdf.setFontSize(8);
+  pdf.text(
+    "Generated by RendimentoBB Strategic Analysis Engine",
+    20,
+    285
+  );
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
