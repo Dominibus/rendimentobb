@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RendimentoBB – Strategic B&B Investment Analysis</title>
+
+<title data-it="RendimentoBB – Analisi Strategica B&B"
+        data-en="RendimentoBB – Strategic B&B Investment Analysis">
+RendimentoBB – Strategic B&B Investment Analysis
+</title>
 
 <link rel="stylesheet" href="../css/style.css">
 
@@ -18,7 +22,7 @@
     <div class="logo">RendimentoBB</div>
 
     <div class="lang-toggle">
-      <button id="btn-it" onclick="setLanguage('it')" class="lang-btn active">IT</button>
+      <button id="btn-it" onclick="setLanguage('it')" class="lang-btn">IT</button>
       <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
       <div class="lang-indicator"></div>
     </div>
@@ -32,15 +36,18 @@
 
     <div style="font-size:14px; opacity:.6; margin-bottom:18px;"
          data-it="Strumento di valutazione strategica"
-         data-en="Strategic evaluation tool"></div>
+         data-en="Strategic evaluation tool">
+    </div>
 
     <h1 style="font-size:42px; line-height:1.15; margin-bottom:22px;"
         data-it="Analisi completa investimento B&B"
-        data-en="Complete B&B Investment Analysis"></h1>
+        data-en="Complete B&B Investment Analysis">
+    </h1>
 
     <p style="color:#64748b; font-size:18px; line-height:1.6;"
        data-it="Inserisci i dati dell’operazione per ottenere ROI reale, break-even, indice di rischio e proiezione cashflow a 5 anni."
-       data-en="Enter the investment data to generate real ROI, break-even, risk index and 5-year cashflow projection."></p>
+       data-en="Enter the investment data to generate real ROI, break-even, risk index and 5-year cashflow projection.">
+    </p>
 
   </div>
 
@@ -129,7 +136,8 @@
   <div id="results" class="results-card" style="margin-top:70px;">
     <div class="results-intro"
       data-it="Qui verrà mostrato l'Executive Summary dell'investimento."
-      data-en="The Executive Summary will appear here."></div>
+      data-en="The Executive Summary will appear here.">
+    </div>
   </div>
 
   <!-- CHART -->
@@ -154,10 +162,8 @@
     <ul>
       <li data-it="✔ Report PDF strutturato per investitori"
           data-en="✔ Structured PDF investor report"></li>
-
       <li data-it="✔ Analisi rischio multi-scenario"
           data-en="✔ Multi-scenario risk analysis"></li>
-
       <li data-it="✔ Supporto decisionale avanzato"
           data-en="✔ Advanced decision support"></li>
     </ul>
@@ -179,32 +185,10 @@
 
 </div>
 
-<script>
-function setLanguage(lang){
-  document.documentElement.lang = lang;
+<!-- LANGUAGE ENGINE -->
+<script src="../js/lang.js"></script>
 
-  document.querySelectorAll("[data-it]").forEach(el=>{
-    const text = el.getAttribute("data-"+lang);
-    if(text) el.innerText = text;
-  });
-
-  document.getElementById("btn-it").classList.remove("active");
-  document.getElementById("btn-en").classList.remove("active");
-  document.getElementById("btn-"+lang).classList.add("active");
-
-  const indicator = document.querySelector(".lang-indicator");
-  indicator.style.transform = lang === "en" ? "translateX(100%)" : "translateX(0%)";
-
-  localStorage.setItem("rb_lang", lang);
-}
-
-window.addEventListener("DOMContentLoaded",()=>{
-  const saved = localStorage.getItem("rb_lang");
-  const browserLang = navigator.language.startsWith("en") ? "en" : "it";
-  setLanguage(saved || browserLang);
-});
-</script>
-
+<!-- CALCULATION ENGINE -->
 <script src="../js/app.js"></script>
 
 </body>
