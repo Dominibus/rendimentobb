@@ -13,8 +13,6 @@
 
 <body>
 
-<!-- HEADER COERENTE CON HOMEPAGE -->
-
 <header class="container">
   <div class="nav">
     <div class="logo">RendimentoBB</div>
@@ -29,54 +27,43 @@
 
 <div class="container" style="padding-top:80px; padding-bottom:120px;">
 
-  <!-- TOOL INTRO -->
-
+  <!-- INTRO -->
   <div style="text-align:center; margin-bottom:70px;">
-
     <h1 style="font-size:34px; margin-bottom:12px;">RendimentoBB</h1>
 
     <h2 style="font-size:20px; font-weight:700; margin-bottom:14px;"
         data-it="Analisi Strategica Professionale"
-        data-en="Professional Strategic Analysis">
-    </h2>
+        data-en="Professional Strategic Analysis"></h2>
 
     <p style="max-width:750px; margin:auto; color:#64748b;"
        data-it="Inserisci i dati dell’investimento per ottenere una simulazione strutturata di ROI, sostenibilità del capitale e rischio operativo."
-       data-en="Enter your investment data to receive a structured simulation of ROI, capital sustainability and operational risk.">
-    </p>
-
+       data-en="Enter your investment data to receive a structured simulation of ROI, capital sustainability and operational risk."></p>
   </div>
 
-  <!-- FORM CARD -->
-
+  <!-- FORM -->
   <div class="tool-card">
 
-    <!-- INVESTMENT -->
     <h3 class="section-divider"
         data-it="💰 Investimento"
         data-en="💰 Investment"></h3>
 
     <div class="form-grid">
-
       <div class="input-group">
         <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
-        <input type="number" id="propertyPrice" placeholder="150000">
+        <input type="number" id="price" placeholder="150000">
       </div>
 
       <div class="input-group">
         <label data-it="Capitale proprio investito (€)" data-en="Own capital invested (€)"></label>
         <input type="number" id="equity" placeholder="30000">
       </div>
-
     </div>
 
-    <!-- MORTGAGE -->
     <h3 class="section-divider"
         data-it="🏦 Mutuo (Opzionale)"
         data-en="🏦 Mortgage (Optional)"></h3>
 
     <div class="form-grid">
-
       <div class="input-group">
         <label data-it="Importo finanziato (€)" data-en="Loan amount (€)"></label>
         <input type="number" id="loanAmount" placeholder="120000">
@@ -91,19 +78,16 @@
         <label data-it="Durata (anni)" data-en="Duration (years)"></label>
         <input type="number" id="loanYears" placeholder="20">
       </div>
-
     </div>
 
-    <!-- OPERATIONS -->
     <h3 class="section-divider"
         data-it="🏨 Operatività"
         data-en="🏨 Operations"></h3>
 
     <div class="form-grid">
-
       <div class="input-group">
         <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)"></label>
-        <input type="number" id="price" placeholder="120">
+        <input type="number" id="priceNight" placeholder="120">
       </div>
 
       <div class="input-group">
@@ -125,7 +109,6 @@
         <label data-it="Tasse (%)" data-en="Taxes (%)"></label>
         <input type="number" id="tax" placeholder="24">
       </div>
-
     </div>
 
     <div class="action-area">
@@ -137,7 +120,6 @@
   </div>
 
   <!-- RESULTS -->
-
   <div id="results" class="results-card">
     <div class="results-intro"
       data-it="Qui verrà mostrata la valutazione strategica dell'investimento."
@@ -145,7 +127,6 @@
   </div>
 
   <!-- CHART -->
-
   <div class="results-card" style="margin-top:35px;">
     <div class="chart-title"
       data-it="Proiezione Cashflow 5 anni"
@@ -153,9 +134,8 @@
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
-  <!-- PRO SECTION -->
-
-  <div id="proBlock" class="pro-lock">
+  <!-- PRO BLOCK -->
+  <div class="pro-lock">
 
     <h2
       data-it="🔓 Versione PRO – Analisi Strategica Completa"
@@ -176,9 +156,13 @@
           data-en="✔ Professional PDF report generation"></li>
     </ul>
 
-    <button class="btn btn-secondary"
-      data-it="Sblocca Analisi PRO – 19€"
-      data-en="Unlock PRO Analysis – €19"></button>
+    <!-- STRIPE LINK DIRETTO STABILE -->
+    <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200"
+       target="_blank"
+       class="btn btn-secondary"
+       style="margin-top:20px; display:inline-block;"
+       data-it="Sblocca Analisi PRO – 19€"
+       data-en="Unlock PRO Analysis – €19"></a>
 
   </div>
 
@@ -201,17 +185,16 @@ function setLanguage(lang){
 
   document.getElementById("btn-it").classList.remove("active");
   document.getElementById("btn-en").classList.remove("active");
-
   document.getElementById("btn-"+lang).classList.add("active");
 
   const indicator = document.querySelector(".lang-indicator");
   indicator.style.transform = lang === "en" ? "translateX(100%)" : "translateX(0%)";
 
-  localStorage.setItem("lang", lang);
+  localStorage.setItem("rb_lang", lang);
 }
 
 window.addEventListener("DOMContentLoaded",()=>{
-  const saved = localStorage.getItem("lang");
+  const saved = localStorage.getItem("rb_lang");
   const browserLang = navigator.language.startsWith("en") ? "en" : "it";
   setLanguage(saved || browserLang);
 });
