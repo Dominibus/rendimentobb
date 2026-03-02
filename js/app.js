@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.0
-// PREMIUM STRATEGIC VERSION
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.1
+// STABLE PREMIUM VERSION
 // ===============================
 
 if (!window.currentLang) {
@@ -77,10 +77,6 @@ function runRealCalculation() {
     return;
   }
 
-  // ===============================
-  // CORE FINANCIALS
-  // ===============================
-
   const nightsPerMonth = 30 * (occupancy / 100);
   const grossYearly = price * nightsPerMonth * 12;
   const yearlyFees = grossYearly * (commission / 100);
@@ -103,10 +99,6 @@ function runRealCalculation() {
   const pessimisticROI = baseROI * 0.85;
   const fiveYearProjection = netAfterMortgage * 5;
 
-  // ===============================
-  // RISK SCORE
-  // ===============================
-
   let riskScore = 50;
 
   if (baseROI < 4) riskScore += 25;
@@ -124,13 +116,11 @@ function runRealCalculation() {
     riskLabel = "HIGH RISK";
     badgeColor = "#ef4444";
     strategicComment = "High exposure to operational volatility. Strategic review recommended.";
-  }
-  else if (riskScore >= 40) {
+  } else if (riskScore >= 40) {
     riskLabel = "MODERATE RISK";
     badgeColor = "#f59e0b";
     strategicComment = "Sustainable but sensitive to market fluctuations.";
-  }
-  else {
+  } else {
     riskLabel = "LOW RISK";
     badgeColor = "#10b981";
     strategicComment = "Strong and resilient financial structure.";
@@ -153,10 +143,6 @@ function runRealCalculation() {
     grade,
     strategicComment
   };
-
-  // ===============================
-  // PREMIUM DASHBOARD
-  // ===============================
 
   resultsDiv.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
@@ -185,45 +171,15 @@ function runRealCalculation() {
 
     </div>
 
-    <div style="margin-bottom:20px;">
-      <div style="font-size:13px; margin-bottom:8px;">Risk Index ${riskScore}/100</div>
-      <div style="
-        height:10px;
-        background:linear-gradient(90deg,#10b981,#f59e0b,#ef4444);
-        border-radius:6px;
-        position:relative;">
-        <div style="
-          position:absolute;
-          left:${riskScore}%;
-          top:-4px;
-          width:2px;
-          height:18px;
-          background:black;"></div>
-      </div>
-    </div>
-
-    <div style="
-      padding:15px;
-      background:#f1f5f9;
-      border-radius:14px;
-      font-size:14px;
-      margin-bottom:20px;">
-      ${strategicComment}
-    </div>
-
-    <div style="font-size:14px; line-height:1.8;">
+    <div style="font-size:14px; line-height:1.8; margin-bottom:15px;">
       <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
       <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
     </div>
 
-    <button onclick="generatePDF()" class="btn-primary" style="margin-top:25px;">
+    <button onclick="generatePDF()" class="btn-primary" style="margin-top:15px;">
       📄 Download Executive Report
     </button>
   `;
-
-  // ===============================
-  // CHART
-  // ===============================
 
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
@@ -252,7 +208,6 @@ function runRealCalculation() {
       plugins: { legend: { display: false } }
     }
   });
-
 }
 
 // ===============================
@@ -274,146 +229,59 @@ function kpiCard(label, value, roiValue = null) {
       padding:22px;
       border-radius:20px;
       box-shadow:0 20px 50px rgba(15,23,42,.08);">
-
-      <div style="font-size:12px; color:#64748b;">
-        ${label}
-      </div>
-
-      <div style="
-        font-size:24px;
-        font-weight:800;
-        margin-top:6px;
-        color:${color};">
+      <div style="font-size:12px; color:#64748b;">${label}</div>
+      <div style="font-size:24px; font-weight:800; margin-top:6px; color:${color};">
         ${value}
       </div>
     </div>
   `;
 }
 
+// ===============================
+// STABLE SILICON PDF
+// ===============================
+
+function generatePDF() {
+
+  if (!window.lastAnalysisData) {
+    alert("Run analysis first.");
+    return;
+  }
+
+  const jsPDF = window.jspdf.jsPDF;
+  const pdf = new jsPDF("p","mm","a4");
+  const d = window.lastAnalysisData;
+
+  // Header
+  pdf.setFillColor(12,18,35);
+  pdf.rect(0,0,210,35,"F");
+
+  pdf.setTextColor(255,255,255);
+  pdf.setFontSize(20);
+  pdf.text("RendimentoBB",20,20);
+
+  pdf.setFontSize(11);
+  pdf.text("Executive Investment Report",20,28);
+
+  // Body
+  pdf.setTextColor(0,0,0);
+  pdf.setFontSize(26);
+  pdf.text("ROI " + d.baseROI.toFixed(2) + "%",20,60);
 
   pdf.setFontSize(12);
-  pdf.setFont(undefined,"normal");
-  pdf.text("Return on Investment (ROI)", margin, y + 8);
+  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " years",20,75);
+  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%",20,85);
+  pdf.text("Risk Score: " + d.riskScore + "/100",20,95);
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage),20,105);
+  pdf.text("5-Year Projection: " + formatCurrency(d.fiveYearProjection),20,115);
 
-  y += 25;
-
-  // Divider
-  pdf.setDrawColor(220,220,220);
-  pdf.line(margin, y, pageWidth - margin, y);
-  y += 12;
-
-  // ===============================
-  // EXECUTIVE METRICS GRID
-  // ===============================
-
-  const leftCol = margin;
-  const rightCol = 110;
+  pdf.text("Investment Grade: " + d.grade,20,130);
 
   pdf.setFontSize(11);
+  pdf.text("Strategic Assessment:",20,145);
 
-  pdf.text("Break-even", leftCol, y);
-  pdf.text(d.breakEvenYears.toFixed(1) + " years", leftCol, y + 7);
-
-  pdf.text("Stress ROI", rightCol, y);
-  pdf.text(d.pessimisticROI.toFixed(2) + "%", rightCol, y + 7);
-
-  y += 20;
-
-  pdf.text("Risk Score", leftCol, y);
-  pdf.text(d.riskScore + " / 100", leftCol, y + 7);
-
-  pdf.text("Investment Grade", rightCol, y);
-  pdf.text(d.grade, rightCol, y + 7);
-
-  y += 25;
-
-  pdf.text("Annual Net Cashflow", leftCol, y);
-  pdf.text(formatCurrency(d.netAfterMortgage), leftCol, y + 7);
-
-  pdf.text("5-Year Projection", rightCol, y);
-  pdf.text(formatCurrency(d.fiveYearProjection), rightCol, y + 7);
-
-  y += 25;
-
-  // Divider
-  pdf.line(margin, y, pageWidth - margin, y);
-  y += 15;
-
-  // ===============================
-  // RISK VISUAL BAR
-  // ===============================
-
-  pdf.setFontSize(11);
-  pdf.text("Risk Index", margin, y);
-
-  y += 8;
-
-  // Gradient simulation
-  pdf.setFillColor(16,185,129);
-  pdf.rect(margin, y, 50, 6, "F");
-
-  pdf.setFillColor(245,158,11);
-  pdf.rect(margin + 50, y, 50, 6, "F");
-
-  pdf.setFillColor(239,68,68);
-  pdf.rect(margin + 100, y, 50, 6, "F");
-
-  // Indicator line
-  const indicatorX = margin + (d.riskScore * 1.5);
-  pdf.setDrawColor(0,0,0);
-  pdf.line(indicatorX, y - 2, indicatorX, y + 8);
-
-  y += 20;
-
-  // ===============================
-  // STRATEGIC ASSESSMENT
-  // ===============================
-
-  pdf.setFont(undefined,"bold");
-  pdf.text("Strategic Assessment", margin, y);
-
-  y += 10;
-
-  pdf.setFont(undefined,"normal");
-  pdf.setFontSize(11);
-
-  const wrappedText = pdf.splitTextToSize(d.strategicComment, 170);
-  pdf.text(wrappedText, margin, y);
-
-  y += wrappedText.length * 6 + 15;
-
-  // ===============================
-  // INTERPRETATION BLOCK
-  // ===============================
-
-  pdf.setFillColor(245,247,250);
-  pdf.rect(margin, y, 170, 25, "F");
-
-  pdf.setFontSize(10);
-  pdf.setTextColor(60,60,60);
-
-  const interpretation =
-    "This investment scenario reflects a projected annual net cashflow of " +
-    formatCurrency(d.netAfterMortgage) +
-    " with a break-even period of " +
-    d.breakEvenYears.toFixed(1) +
-    " years. Risk exposure is quantified through a structured scoring model.";
-
-  const wrappedInterpretation = pdf.splitTextToSize(interpretation, 160);
-
-  pdf.text(wrappedInterpretation, margin + 5, y + 8);
-
-  // ===============================
-  // FOOTER
-  // ===============================
-
-  pdf.setTextColor(120,120,120);
-  pdf.setFontSize(8);
-  pdf.text(
-    "Confidential – Generated by RendimentoBB Strategic Engine",
-    margin,
-    285
-  );
+  const lines = pdf.splitTextToSize(d.strategicComment,170);
+  pdf.text(lines,20,155);
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
