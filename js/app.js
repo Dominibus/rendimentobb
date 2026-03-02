@@ -1,6 +1,6 @@
 // ===============================
-// RENDIMENTOBB – EXECUTIVE ENGINE 3.2
-// REFINED PROFESSIONAL VERSION
+// RENDIMENTOBB – EXECUTIVE ENGINE 3.3
+// FULL VERSION RESTORED
 // ===============================
 
 if (!window.currentLang) {
@@ -116,12 +116,10 @@ function runRealCalculation() {
   else if (riskScore < 70) grade = "C";
   else grade = "D";
 
-  let strategicComment =
-    riskScore >= 70
-      ? "High exposure to operational volatility. Strategic review recommended."
-      : riskScore >= 40
-      ? "Sustainable but sensitive to market fluctuations."
-      : "Strong and resilient financial structure.";
+  let riskColor =
+    riskScore < 40 ? "#10b981" :
+    riskScore < 70 ? "#f59e0b" :
+    "#ef4444";
 
   window.lastAnalysisData = {
     baseROI,
@@ -130,11 +128,45 @@ function runRealCalculation() {
     netAfterMortgage,
     fiveYearProjection,
     riskScore,
-    grade,
-    strategicComment
+    grade
   };
 
-  // ===== UI unchanged =====
+  // ===============================
+  // RESULTS HTML RESTORED
+  // ===============================
+
+  resultsDiv.innerHTML = `
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:18px;">Executive Investment Summary</h3>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:20px; margin-bottom:25px;">
+      ${kpiCard("ROI", baseROI.toFixed(2) + "%")}
+      ${kpiCard("Break-even", breakEvenYears.toFixed(1) + " yrs")}
+      ${kpiCard("Stress ROI", pessimisticROI.toFixed(2) + "%")}
+      ${kpiCard("Grade", grade)}
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
+      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <strong>Risk Index:</strong> ${riskScore}/100
+      <div style="height:8px;background:#e5e7eb;border-radius:4px;margin-top:6px;">
+        <div style="width:${riskScore}%;background:${riskColor};height:8px;border-radius:4px;"></div>
+      </div>
+    </div>
+
+    <button onclick="generatePDF()" class="btn-primary">
+      📄 Download Executive Report
+    </button>
+  `;
+
+  // ===============================
+  // CHART
+  // ===============================
 
   if (!chartCanvas) return;
   if (roiChartInstance) roiChartInstance.destroy();
@@ -166,7 +198,24 @@ function runRealCalculation() {
 }
 
 // ===============================
-// PROFESSIONAL PDF (REFINED)
+// KPI CARD
+// ===============================
+
+function kpiCard(label, value) {
+  return `
+    <div style="
+      background:white;
+      padding:20px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);">
+      <div style="font-size:12px;color:#64748b;">${label}</div>
+      <div style="font-size:22px;font-weight:700;margin-top:6px;">${value}</div>
+    </div>
+  `;
+}
+
+// ===============================
+// PROFESSIONAL PDF
 // ===============================
 
 function generatePDF() {
@@ -183,8 +232,7 @@ function generatePDF() {
   const margin = 20;
   let y = 50;
 
-  // HEADER
-  pdf.setFillColor(10,20,45);
+  pdf.setFillColor(15,23,42);
   pdf.rect(0,0,210,35,"F");
 
   pdf.setTextColor(255,255,255);
@@ -194,89 +242,20 @@ function generatePDF() {
   pdf.setFontSize(11);
   pdf.text("Executive Investment Report", margin, 28);
 
-  // ROI BIG
   pdf.setTextColor(0,0,0);
-  pdf.setFontSize(14);
-  pdf.text("Return on Investment (ROI)", margin, y);
-
-  y += 12;
-
-  pdf.setFontSize(32);
-  pdf.setTextColor(d.baseROI >= 0 ? 0 : 200, d.baseROI >= 0 ? 0 : 60, d.baseROI >= 0 ? 0 : 60);
+  pdf.setFontSize(30);
   pdf.text(d.baseROI.toFixed(2) + "%", margin, y);
 
   y += 18;
 
-  pdf.setTextColor(0,0,0);
   pdf.setFontSize(12);
+  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " years", margin, y); y+=10;
+  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin, y); y+=10;
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin, y); y+=10;
+  pdf.text("5-Year Projection: " + formatCurrency(d.fiveYearProjection), margin, y); y+=15;
 
-  pdf.text("Break-even: " + d.breakEvenYears.toFixed(1) + " years", margin, y);
-  y += 10;
-
-  pdf.text("Stress ROI: " + d.pessimisticROI.toFixed(2) + "%", margin, y);
-  y += 10;
-
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), margin, y);
-  y += 10;
-
-  pdf.text("5-Year Projection: " + formatCurrency(d.fiveYearProjection), margin, y);
-  y += 15;
-
-  // RISK BAR
-  pdf.text("Risk Index: " + d.riskScore + "/100", margin, y);
-  y += 8;
-
-  pdf.setFillColor(16,185,129);
-  pdf.rect(margin, y, 50, 6, "F");
-
-  pdf.setFillColor(245,158,11);
-  pdf.rect(margin + 50, y, 50, 6, "F");
-
-  pdf.setFillColor(239,68,68);
-  pdf.rect(margin + 100, y, 50, 6, "F");
-
-  const indicatorX = margin + (d.riskScore * 1.5);
-  pdf.setDrawColor(0,0,0);
-  pdf.line(indicatorX, y - 2, indicatorX, y + 8);
-
-  y += 20;
-
-  pdf.setFontSize(14);
+  pdf.text("Risk Score: " + d.riskScore + "/100", margin, y); y+=10;
   pdf.text("Investment Grade: " + d.grade, margin, y);
-  y += 15;
-
-  pdf.setFontSize(13);
-  pdf.text("Strategic Assessment", margin, y);
-  y += 10;
-
-  pdf.setFontSize(11);
-  const lines = pdf.splitTextToSize(d.strategicComment,170);
-  pdf.text(lines, margin, y);
-
-  y += lines.length * 6 + 15;
-
-  pdf.setFontSize(13);
-  pdf.text("Executive Verdict", margin, y);
-  y += 10;
-
-  const verdict =
-    d.riskScore >= 70
-      ? "High-risk profile. Investment not advisable under current assumptions."
-      : d.riskScore >= 40
-      ? "Moderate risk profile. Scenario dependent on operational discipline."
-      : "Low-risk profile. Structurally sound under current assumptions.";
-
-  const verdictLines = pdf.splitTextToSize(verdict,170);
-  pdf.text(verdictLines, margin, y);
-
-  pdf.setFontSize(8);
-  pdf.setTextColor(120,120,120);
-  pdf.text(
-    "Generated on " + new Date().toLocaleDateString() +
-    " • RendimentoBB Strategic Analysis Engine",
-    margin,
-    285
-  );
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
