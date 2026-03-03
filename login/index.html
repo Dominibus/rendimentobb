@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – RendimentoBB</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<style>
+body {
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+}
+
+.login-card {
+  background:white;
+  padding:50px;
+  border-radius:20px;
+  width:360px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.25);
+  text-align:center;
+}
+
+.login-card h2 {
+  margin-bottom:30px;
+}
+
+.login-card input {
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:1px solid #cbd5e1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+<h2>Accesso</h2>
+
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button id="loginBtn" class="btn btn-primary" style="width:100%;margin-bottom:10px;">
+Login
+</button>
+
+<button id="registerBtn" class="btn btn-secondary" style="width:100%;">
+Registrati
+</button>
+
+<div style="margin-top:20px;font-size:13px;">
+<a href="/">← Torna alla Home</a>
+</div>
+
+</div>
+
+<script type="module" src="/js/firebase-init.js"></script>
+
+<script type="module">
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    await signInWithEmailAndPassword(auth,email,password);
+    window.location.href="/tool/";
+  } catch(e){
+    alert(e.message);
+  }
+};
+
+document.getElementById("registerBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    await createUserWithEmailAndPassword(auth,email,password);
+    window.location.href="/tool/";
+  } catch(e){
+    alert(e.message);
+  }
+};
+</script>
+
+</body>
+</html>
