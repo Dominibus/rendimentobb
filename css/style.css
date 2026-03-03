@@ -291,15 +291,15 @@ header {
 }
 
 /* ===================== */
-/* FOOTER */
+/* GLOBAL FOOTER */
 /* ===================== */
 
-footer {
-  text-align: center;
-  padding: 40px 0;
-  font-size: 13px;
-  color: #64748b;
-  margin-top: 60px;
+.global-footer {
+  margin-top:120px;
+  text-align:center;
+  padding:40px 0;
+  color:#64748b;
+  font-size:13px;
 }
 
 /* ===================== */
