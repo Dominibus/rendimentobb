@@ -13,62 +13,73 @@
 <body>
 
 <header class="container">
-  <div class="nav">
-    <div class="logo">RendimentoBB</div>
+  <div class="nav" style="display:flex; justify-content:space-between; align-items:center;">
 
-    <div class="lang-toggle">
-      <button id="btn-it" onclick="setLanguage('it')" class="lang-btn">IT</button>
-      <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
-      <div class="lang-indicator"></div>
+    <div class="logo" style="font-weight:700;">RendimentoBB</div>
+
+    <div style="display:flex; align-items:center; gap:20px;">
+
+      <div id="user-area">
+        <button id="login-btn" class="btn btn-secondary" style="padding:8px 16px;">
+          Accedi
+        </button>
+      </div>
+
+      <div class="lang-toggle">
+        <button id="btn-it" onclick="setLanguage('it')" class="lang-btn">IT</button>
+        <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
+        <div class="lang-indicator"></div>
+      </div>
+
     </div>
   </div>
 </header>
 
 <!-- HERO -->
 
-<section class="hero container">
+<section class="hero container" style="padding-top:80px;">
   <div class="hero-grid">
 
     <div>
 
       <div class="hero-eyebrow"
-           data-it="Strumento decisionale per futuri imprenditori B&B"
-           data-en="Decision tool for future B&B entrepreneurs">
+           data-it="Decisioni immobiliari basate su dati, non su entusiasmo"
+           data-en="Real estate decisions based on data, not emotion">
       </div>
 
-      <h1
-        data-it="Prima di investire decine di migliaia di euro, verifica se il tuo B&B è realmente sostenibile."
-        data-en="Before investing tens of thousands of euros, verify if your B&B is truly sustainable.">
+      <h1 style="font-size:42px; line-height:1.15; margin-top:20px;"
+        data-it="Verifica la sostenibilità reale del tuo investimento B&B prima di firmare."
+        data-en="Verify the real sustainability of your B&B investment before signing.">
       </h1>
 
-      <p
-        data-it="Simula ROI reale, mutuo, break-even e indice di rischio. Prendi decisioni strategiche prima di impegnare il capitale."
-        data-en="Simulate real ROI, mortgage impact, break-even and risk index. Make strategic decisions before committing capital.">
+      <p style="margin-top:20px; font-size:18px; max-width:600px;"
+         data-it="Simula ROI reale, impatto mutuo, break-even, rischio finanziario e resilienza del progetto."
+         data-en="Simulate real ROI, mortgage impact, break-even, financial risk and long-term resilience.">
       </p>
 
-      <a href="/tool/" class="btn btn-primary"
-         data-it="Avvia Analisi Gratuita"
-         data-en="Start Free Analysis">
-      </a>
+      <div style="margin-top:35px; display:flex; gap:15px; flex-wrap:wrap;">
+        <button id="start-analysis" class="btn btn-primary">
+          Avvia Analisi Gratuita
+        </button>
 
-      <div class="micro-note"
-           data-it="Nessun abbonamento · Accesso immediato · Strumento professionale"
-           data-en="No subscription · Instant access · Professional-grade tool">
+        <a href="/tool/" class="btn btn-secondary">
+          Visualizza Demo
+        </a>
+      </div>
+
+      <div class="micro-note" style="margin-top:15px;">
+        Nessun abbonamento · Accesso immediato · Strumento professionale
       </div>
 
     </div>
 
-    <!-- SNAPSHOT -->
+    <!-- SNAPSHOT CARD -->
     <div>
-      <div class="dashboard-card">
+      <div class="dashboard-card" style="box-shadow:0 20px 60px rgba(0,0,0,0.08);">
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-          <span style="font-size:14px; font-weight:600;"
-                data-it="Esempio Executive Snapshot"
-                data-en="Example Executive Snapshot">
-          </span>
-
-          <span style="background:#0f172a; color:white; font-size:11px; padding:5px 12px; border-radius:999px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:25px;">
+          <strong>Executive Snapshot</strong>
+          <span style="background:#111827; color:white; font-size:11px; padding:5px 12px; border-radius:999px;">
             DEMO
           </span>
         </div>
@@ -79,23 +90,18 @@
         </div>
 
         <div class="metric">
-          <span data-it="Break-even" data-en="Break-even"></span>
+          <span>Break-even</span>
           <strong>6.2 anni</strong>
         </div>
 
         <div class="metric">
-          <span data-it="Indice Rischio" data-en="Risk Index"></span>
+          <span>Indice Rischio</span>
           <strong style="color:#10b981;">32/100</strong>
         </div>
 
         <div class="metric">
-          <span data-it="Classe Investimento" data-en="Investment Grade"></span>
+          <span>Classe Investimento</span>
           <strong>A</strong>
-        </div>
-
-        <div style="margin-top:30px; font-size:12px; opacity:.6;"
-             data-it="Simulazione puramente dimostrativa"
-             data-en="Demonstration simulation only">
         </div>
 
       </div>
@@ -104,36 +110,28 @@
   </div>
 </section>
 
-<!-- VALUE SECTION -->
+<!-- VALUE -->
 
 <section class="section-alt">
   <div class="container">
 
-    <h2 data-it="Perché utilizzare RendimentoBB"
-        data-en="Why use RendimentoBB">
-    </h2>
+    <h2 style="margin-bottom:50px;">Perché utilizzare RendimentoBB</h2>
 
     <div class="why-grid">
 
       <div class="why-card">
-        <h3 data-it="Evita errori strutturali"
-            data-en="Avoid structural mistakes"></h3>
-        <p data-it="Molti investimenti immobiliari falliscono per calcoli errati o sottostima del rischio."
-           data-en="Many real estate investments fail due to incorrect calculations or underestimated risk."></p>
+        <h3>Evita errori strutturali</h3>
+        <p>Molti investimenti immobiliari falliscono per calcoli errati o sottostima del rischio.</p>
       </div>
 
       <div class="why-card">
-        <h3 data-it="Valuta il mutuo prima di firmare"
-            data-en="Evaluate mortgage before signing"></h3>
-        <p data-it="Comprendi l’impatto reale del finanziamento sul cashflow annuo."
-           data-en="Understand the real impact of financing on annual cashflow."></p>
+        <h3>Valuta il mutuo prima di firmare</h3>
+        <p>Comprendi l’impatto reale del finanziamento sul cashflow annuo.</p>
       </div>
 
       <div class="why-card">
-        <h3 data-it="Proteggi il capitale"
-            data-en="Protect your capital"></h3>
-        <p data-it="Decisioni basate su dati reali, non su entusiasmo o supposizioni."
-           data-en="Make decisions based on data, not enthusiasm or assumptions."></p>
+        <h3>Proteggi il capitale</h3>
+        <p>Decisioni basate su dati reali, non su supposizioni.</p>
       </div>
 
     </div>
@@ -141,56 +139,94 @@
   </div>
 </section>
 
-<!-- PRICING -->
+<!-- PRO SECTION -->
 
 <section class="pricing-center">
   <div class="container">
 
-    <h2 data-it="Versione PRO – Analisi Esecutiva Completa"
-        data-en="PRO Version – Full Executive Analysis">
-    </h2>
+    <h2 style="margin-bottom:40px;">Versione PRO – Analisi Esecutiva Completa</h2>
 
-    <div class="price-card">
+    <div class="price-card" style="box-shadow:0 25px 70px rgba(0,0,0,0.08);">
 
-      <div class="badge"
-           data-it="Per decisioni serie"
-           data-en="For serious decisions">
-      </div>
+      <div class="badge">Per decisioni serie</div>
 
-      <div class="price"
-           data-it="19€ – Licenza Strategica"
-           data-en="€19 – Strategic License">
+      <div class="price" style="margin:20px 0;">
+        19€ – Licenza Strategica
       </div>
 
       <ul class="features">
-        <li data-it="✔ Stress test multi-scenario"
-            data-en="✔ Multi-scenario stress testing"></li>
-        <li data-it="✔ Sensitivity tassi di interesse"
-            data-en="✔ Interest rate sensitivity analysis"></li>
-        <li data-it="✔ Analisi rischio avanzata"
-            data-en="✔ Advanced risk assessment"></li>
-        <li data-it="✔ Report PDF professionale"
-            data-en="✔ Professional executive PDF report"></li>
+        <li>✔ Stress test multi-scenario</li>
+        <li>✔ Sensitivity tassi di interesse</li>
+        <li>✔ Analisi rischio avanzata</li>
+        <li>✔ Report PDF professionale</li>
       </ul>
 
-      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
-         class="btn btn-primary"
-         target="_blank"
-         data-it="Sblocca Versione PRO"
-         data-en="Unlock PRO Version">
-      </a>
+      <button id="pro-btn" class="btn btn-primary" style="margin-top:25px;">
+        Sblocca Versione PRO
+      </button>
 
     </div>
 
   </div>
 </section>
 
-<footer
- data-it="© 2026 RendimentoBB – Strumento strategico per investimenti B&B"
- data-en="© 2026 RendimentoBB – Strategic B&B investment tool">
+<footer>
+© 2026 RendimentoBB – Strumento strategico per investimenti B&B
 </footer>
 
+<!-- AUTH MODAL -->
+<div id="auth-modal" class="hidden" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;">
+
+  <div style="background:white; padding:40px; border-radius:12px; width:320px; text-align:center;">
+
+    <h3 style="margin-bottom:20px;">Accesso</h3>
+
+    <input id="auth-email" type="email" placeholder="Email"
+      style="width:100%; padding:10px; margin-bottom:10px;">
+
+    <input id="auth-password" type="password" placeholder="Password"
+      style="width:100%; padding:10px; margin-bottom:20px;">
+
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button id="login-action" class="btn btn-primary">Login</button>
+      <button id="register-action" class="btn btn-secondary">Registrati</button>
+    </div>
+
+    <div style="margin-top:15px;">
+      <button id="close-auth" style="font-size:12px;">Chiudi</button>
+    </div>
+
+  </div>
+</div>
+
 <script src="/js/lang.js"></script>
+<script type="module" src="/js/firebase-init.js"></script>
+
+<script type="module">
+import { getAuth } 
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+document.getElementById("start-analysis")
+?.addEventListener("click", () => {
+  if (auth.currentUser) {
+    window.location.href = "/tool/";
+  } else {
+    document.getElementById("auth-modal").classList.remove("hidden");
+  }
+});
+</script>
 
 </body>
 </html>
