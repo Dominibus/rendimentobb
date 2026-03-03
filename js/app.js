@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 12.2
-// FULL INTERNATIONAL VERSION + EXECUTIVE SCORE
+// RENDIMENTOBB – EXECUTIVE ENGINE 12.3
+// FULL INTERNATIONAL VERSION + ALERT ENGINE
 // ===============================================
 
 
@@ -15,7 +15,6 @@ if (urlParams.get("pro") === "paid") {
   localStorage.setItem("proUnlocked", "true");
   window.history.replaceState({}, document.title, window.location.pathname);
 }
-
 
 // ================= LANGUAGE =================
 
@@ -41,9 +40,10 @@ const TEXT = {
     proDesc: "L'integrazione del mutuo nel ROI è disponibile solo in modalità PRO.",
     insertMortgageData: "Inserisci importo e durata.",
     executiveScore: "Executive Investment Score",
-    grade: "Investment Grade",
+    grade: "Classe Investimento",
     risk: "Livello di Rischio",
-    payback: "Payback Stimato"
+    payback: "Payback Stimato",
+    alerts: "📌 Segnali Strategici di Rischio"
   },
   en: {
     stability: "📊 Stability Matrix",
@@ -64,14 +64,14 @@ const TEXT = {
     executiveScore: "Executive Investment Score",
     grade: "Investment Grade",
     risk: "Risk Level",
-    payback: "Estimated Payback"
+    payback: "Estimated Payback",
+    alerts: "📌 Strategic Risk Signals"
   }
 };
 
 function t(key) {
   return TEXT[window.currentLang || "it"][key];
 }
-
 
 // ================= UTIL =================
 
@@ -92,8 +92,7 @@ function getValue(id) {
 
 let roiChartInstance = null;
 
-
-// ================= BASE MORTGAGE =================
+// ================= MORTGAGE =================
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
 
@@ -110,8 +109,7 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
     (Math.pow(1 + r, n) - 1);
 }
 
-
-// ================= SCENARIO ENGINE =================
+// ================= SCENARIO =================
 
 function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageYearly, equity) {
 
@@ -137,31 +135,26 @@ function scenarioLabel(roi) {
   return { text: t("unsustainable"), class: "kpi-danger" };
 }
 
-
 // ================= EXECUTIVE SCORE =================
 
 function calculateExecutiveScore(baseROI, roi60, netOperating, mortgageYearly, equity, netAfterMortgage) {
 
   let score = 0;
 
-  // PROFITABILITY (30)
   if (baseROI > 15) score += 30;
   else if (baseROI > 10) score += 24;
   else if (baseROI > 5) score += 18;
   else if (baseROI > 0) score += 10;
 
-  // STABILITY (25)
   if (roi60 > 8) score += 25;
   else if (roi60 > 3) score += 18;
   else if (roi60 > 0) score += 10;
 
-  // DSCR (25)
   let dscr = mortgageYearly > 0 ? netOperating / mortgageYearly : 2;
   if (dscr > 1.5) score += 25;
   else if (dscr > 1.2) score += 18;
   else if (dscr > 1) score += 10;
 
-  // PAYBACK (20)
   let payback = netAfterMortgage > 0 ? equity / netAfterMortgage : 99;
   if (payback < 5) score += 20;
   else if (payback < 8) score += 15;
@@ -172,20 +165,40 @@ function calculateExecutiveScore(baseROI, roi60, netOperating, mortgageYearly, e
   else if (score >= 70) grade = "B";
   else if (score >= 55) grade = "C";
 
-  let risk = "";
-  if (score > 80) risk = window.currentLang === "it" ? "Basso" : "Low";
-  else if (score > 60) risk = window.currentLang === "it" ? "Medio" : "Medium";
-  else if (score > 40) risk = window.currentLang === "it" ? "Alto" : "High";
-  else risk = window.currentLang === "it" ? "Critico" : "Critical";
+  let risk = score > 80
+    ? (window.currentLang === "it" ? "Basso" : "Low")
+    : score > 60
+    ? (window.currentLang === "it" ? "Medio" : "Medium")
+    : score > 40
+    ? (window.currentLang === "it" ? "Alto" : "High")
+    : (window.currentLang === "it" ? "Critico" : "Critical");
 
-  return {
-    score,
-    grade,
-    risk,
-    payback: payback.toFixed(1)
-  };
+  return { score, grade, risk, payback: payback.toFixed(1), dscr };
 }
 
+// ================= ALERT ENGINE =================
+
+function generateAlerts(baseROI, occupancy, commission, executive, mortgageYearly, netOperating) {
+
+  const alerts = [];
+
+  if (baseROI < 0)
+    alerts.push("❌ ROI negativo: modello non sostenibile.");
+
+  if (occupancy > 85)
+    alerts.push("⚠️ Occupazione superiore all'85%: possibile sovrastima.");
+
+  if (commission > 18)
+    alerts.push("⚠️ Commissioni elevate: margine operativo ridotto.");
+
+  if (executive.payback > 10)
+    alerts.push("⚠️ Payback superiore a 10 anni: recupero capitale lento.");
+
+  if (mortgageYearly > 0 && netOperating / mortgageYearly < 1.1)
+    alerts.push("❌ DSCR critico: rischio finanziario elevato.");
+
+  return alerts;
+}
 
 // ================= MAIN =================
 
@@ -227,6 +240,15 @@ function calculate() {
     mortgageYearly,
     equity,
     base.netAfterMortgage
+  );
+
+  const alerts = generateAlerts(
+    base.roi,
+    occupancy,
+    commission,
+    executive,
+    mortgageYearly,
+    base.netOperating
   );
 
   const kpiContainer = document.getElementById("executive-kpi");
@@ -277,168 +299,18 @@ function calculate() {
         </div>
       `;
     }).join("")}
+
+    <div style="grid-column:1/-1;margin-top:30px;">
+      <strong>${t("alerts")}</strong>
+      <div style="margin-top:10px;">
+        ${alerts.length === 0
+          ? "<div style='color:#10b981;'>✔ Nessun segnale critico rilevato.</div>"
+          : alerts.map(a=>`<div style="margin-bottom:6px;">${a}</div>`).join("")
+        }
+      </div>
+    </div>
   `;
 
   renderChart(base.netAfterMortgage);
   renderStrategicInsight(base.roi);
-}
-
-// ================= STRATEGIC =================
-
-function renderStrategicInsight(baseROI) {
-
-  const insightBox = document.getElementById("strategic-insight");
-
-  if (!isProUnlocked) {
-    insightBox.innerHTML = `
-      <strong>${t("strategicLocked")}</strong>
-      <div style="margin-top:10px;">
-        <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
-           class="btn btn-primary">
-           ${t("unlock")}
-        </a>
-      </div>
-    `;
-    return;
-  }
-
-  let message =
-    baseROI > 12
-      ? "The investment shows structural resilience."
-      : baseROI > 6
-      ? "Moderately viable. Requires optimization."
-      : "Structurally fragile. Review pricing or financing.";
-
-  insightBox.innerHTML = `
-    <strong>${t("strategicTitle")}</strong>
-    <p style="margin-top:10px;">${message}</p>
-  `;
-}
-
-
-// ================= CHART =================
-
-function renderChart(yearlyNet) {
-
-  const ctx = document.getElementById("roiChart");
-
-  if (roiChartInstance) roiChartInstance.destroy();
-
-  roiChartInstance = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
-      datasets: [{
-        data: [
-          yearlyNet,
-          yearlyNet * 2,
-          yearlyNet * 3,
-          yearlyNet * 4,
-          yearlyNet * 5
-        ],
-        borderWidth: 2,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } }
-    }
-  });
-}
-
-
-// ================= MORTGAGE COMPARATOR =================
-
-function mortgageSimulation(amount, rate, years) {
-
-  if (!amount || !rate || !years) return null;
-
-  const r = rate / 100;
-  const n = years;
-
-  const yearlyPayment =
-    amount *
-    (r * Math.pow(1 + r, n)) /
-    (Math.pow(1 + r, n) - 1);
-
-  const totalPaid = yearlyPayment * n;
-  const totalInterest = totalPaid - amount;
-
-  return { yearlyPayment, totalPaid, totalInterest };
-}
-
-function compareMortgages() {
-
-  const amount = getValue("mortgageAmount");
-  const years = getValue("mortgageYears");
-
-  const rateA = getValue("rateA");
-  const rateB = getValue("rateB");
-  const rateC = getValue("rateC");
-
-  const resultDiv = document.getElementById("mortgage-results");
-
-  if (!amount || !years) {
-    resultDiv.innerHTML = t("insertMortgageData");
-    return;
-  }
-
-  const banks = [
-    { name: "Bank A", rate: rateA, data: mortgageSimulation(amount, rateA, years) },
-    { name: "Bank B", rate: rateB, data: mortgageSimulation(amount, rateB, years) },
-    { name: "Bank C", rate: rateC, data: mortgageSimulation(amount, rateC, years) }
-  ];
-
-  banks.sort((a, b) => a.data.totalPaid - b.data.totalPaid);
-
-  const best = banks[0];
-
-  resultDiv.innerHTML = `
-    <h4 style="margin-bottom:20px;">${t("bestSolution")}: ${best.name}</h4>
-
-    <div class="kpi-grid">
-      ${banks.map(bank => `
-        <div class="kpi-box">
-          <strong>${bank.name}</strong><br>
-          Rate: ${bank.rate}%<br>
-          Yearly Payment: ${formatCurrency(bank.data.yearlyPayment)}<br>
-          Total Interest: ${formatCurrency(bank.data.totalInterest)}
-        </div>
-      `).join("")}
-    </div>
-
-    <div style="margin-top:30px;text-align:center;">
-      <button onclick="applyBestMortgage(${best.data.yearlyPayment})"
-        class="btn btn-primary">
-        ${t("applyMortgage")}
-      </button>
-    </div>
-  `;
-}
-
-function applyBestMortgage(yearlyPayment) {
-
-  if (!isProUnlocked) {
-
-    const resultDiv = document.getElementById("mortgage-results");
-
-    resultDiv.innerHTML += `
-      <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:10px;">
-        <strong>${t("proOnly")}</strong><br>
-        ${t("proDesc")}
-        <div style="margin-top:10px;">
-          <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
-             class="btn btn-primary">
-             ${t("unlock")}
-          </a>
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
-  overrideMortgage = yearlyPayment;
-  calculate();
 }
