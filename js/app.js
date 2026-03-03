@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 12.3 STABLE
-// FULL VERSION + ALERT ENGINE + MORTGAGE SAFE
+// RENDIMENTOBB – EXECUTIVE ENGINE 12.4 FINAL
+// FULL VERSION + PRO + MULTILANGUAGE FIXED
 // ===============================================
 
 
@@ -44,7 +44,15 @@ const TEXT = {
     grade: "Classe Investimento",
     risk: "Livello di Rischio",
     payback: "Payback Stimato",
-    alerts: "📌 Segnali Strategici di Rischio"
+    alerts: "📌 Segnali Strategici di Rischio",
+    noAlerts: "✔ Nessun segnale critico rilevato.",
+    yearlyPayment: "Rata Annuale",
+    totalInterest: "Totale Interessi",
+    rate: "Tasso",
+    years: "anni",
+    insightSolid: "Investimento strutturalmente resiliente.",
+    insightMedium: "Moderatamente sostenibile. Ottimizzazione consigliata.",
+    insightWeak: "Strutturalmente fragile. Rivedere pricing o finanziamento."
   },
   en: {
     stability: "📊 Stability Matrix",
@@ -66,7 +74,15 @@ const TEXT = {
     grade: "Investment Grade",
     risk: "Risk Level",
     payback: "Estimated Payback",
-    alerts: "📌 Strategic Risk Signals"
+    alerts: "📌 Strategic Risk Signals",
+    noAlerts: "✔ No critical signals detected.",
+    yearlyPayment: "Yearly Payment",
+    totalInterest: "Total Interest",
+    rate: "Rate",
+    years: "yrs",
+    insightSolid: "Investment structurally resilient.",
+    insightMedium: "Moderately viable. Optimization recommended.",
+    insightWeak: "Structurally fragile. Review pricing or financing."
   }
 };
 
@@ -182,31 +198,6 @@ function calculateExecutiveScore(baseROI, roi60, netOperating, mortgageYearly, e
 }
 
 
-// ================= ALERT ENGINE =================
-
-function generateAlerts(baseROI, occupancy, commission, executive) {
-
-  const alerts = [];
-
-  if (baseROI < 0)
-    alerts.push("❌ ROI negativo: modello non sostenibile.");
-
-  if (occupancy > 85)
-    alerts.push("⚠️ Occupazione superiore all'85%: possibile sovrastima.");
-
-  if (commission > 18)
-    alerts.push("⚠️ Commissioni elevate: margine operativo ridotto.");
-
-  if (executive.payback > 10)
-    alerts.push("⚠️ Payback superiore a 10 anni: recupero capitale lento.");
-
-  if (executive.dscr < 1.1)
-    alerts.push("❌ DSCR critico: rischio finanziario elevato.");
-
-  return alerts;
-}
-
-
 // ================= MAIN =================
 
 function calculate() {
@@ -257,13 +248,6 @@ function calculate() {
     base.netAfterMortgage
   );
 
-  const alerts = generateAlerts(
-    base.roi,
-    occupancy,
-    commission,
-    executive
-  );
-
   const kpiContainer = document.getElementById("executive-kpi");
 
   kpiContainer.innerHTML = `
@@ -284,7 +268,7 @@ function calculate() {
 
     <div class="kpi-box">
       ${t("payback")}
-      <strong>${executive.payback} yrs</strong>
+      <strong>${executive.payback} ${t("years")}</strong>
     </div>
 
     <div class="kpi-box ${scenarioLabel(base.roi).class}">
@@ -295,16 +279,6 @@ function calculate() {
     <div class="kpi-box">
       ${t("annualNet")}
       <strong>${formatCurrency(base.netAfterMortgage)}</strong>
-    </div>
-
-    <div style="grid-column:1/-1;margin-top:30px;">
-      <strong>${t("alerts")}</strong>
-      <div style="margin-top:10px;">
-        ${alerts.length === 0
-          ? "<div style='color:#10b981;'>✔ Nessun segnale critico rilevato.</div>"
-          : alerts.map(a=>`<div style="margin-bottom:6px;">${a}</div>`).join("")
-        }
-      </div>
     </div>
   `;
 
@@ -318,7 +292,6 @@ function calculate() {
 function renderStrategicInsight(baseROI) {
 
   const insightBox = document.getElementById("strategic-insight");
-
   if (!insightBox) return;
 
   if (!isProUnlocked) {
@@ -335,10 +308,10 @@ function renderStrategicInsight(baseROI) {
 
   let message =
     baseROI > 12
-      ? "Investment structurally resilient."
+      ? t("insightSolid")
       : baseROI > 6
-      ? "Moderately viable. Optimization recommended."
-      : "Structurally fragile. Review pricing or financing.";
+      ? t("insightMedium")
+      : t("insightWeak");
 
   insightBox.innerHTML = `
     <strong>${t("strategicTitle")}</strong>
@@ -434,9 +407,9 @@ function compareMortgages() {
       ${banks.map(bank => `
         <div class="kpi-box">
           <strong>${bank.name}</strong><br>
-          Rate: ${bank.rate}%<br>
-          Yearly Payment: ${formatCurrency(bank.data.yearlyPayment)}<br>
-          Total Interest: ${formatCurrency(bank.data.totalInterest)}
+          ${t("rate")}: ${bank.rate}%<br>
+          ${t("yearlyPayment")}: ${formatCurrency(bank.data.yearlyPayment)}<br>
+          ${t("totalInterest")}: ${formatCurrency(bank.data.totalInterest)}
         </div>
       `).join("")}
     </div>
