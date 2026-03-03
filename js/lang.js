@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 5.0
-// Full Static + SEO + Dynamic Sync
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 5.1
+// Full Static + SEO + Dynamic Sync (Stable Fix)
 // ===============================================
 
 (function(){
@@ -52,19 +52,19 @@
 
 
     // -----------------------------
-    // TITLE support
+    // TITLE support (FIXED)
     // -----------------------------
     const titleEl = document.querySelector("title");
     if(titleEl){
       const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
       if(titleText){
-        titleEl.textContent = titleText;
+        document.title = titleText;   // 🔥 Stable update
       }
     }
 
 
     // -----------------------------
-    // META DESCRIPTION support
+    // META DESCRIPTION support (HARDENED)
     // -----------------------------
     const metaDesc = document.querySelector("meta[name='description']");
     if(metaDesc){
