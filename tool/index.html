@@ -13,7 +13,6 @@ RendimentoBB – Strategic B&B Investment Analysis
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script type="module" src="../js/firebase-init.js"></script>
 </head>
 
@@ -21,20 +20,25 @@ RendimentoBB – Strategic B&B Investment Analysis
 
 <header class="container">
   <div class="nav">
-    <div class="logo">RendimentoBB</div>
+    
+    <!-- LOGO COERENTE CON HOMEPAGE -->
+    <div class="logo">
+      Rendimento<span>BB</span>
+    </div>
 
     <div style="display:flex; align-items:center; gap:20px;">
 
+      <!-- LANGUAGE (STESSO STILE HOMEPAGE) -->
+      <div class="lang-switch">
+        <button class="lang-btn" onclick="setLanguage('it')" id="btn-it">IT</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+      </div>
+
+      <!-- USER AREA -->
       <div id="user-area">
         <button id="login-btn" class="btn btn-secondary" style="padding:8px 18px; font-size:13px;">
           Accedi
         </button>
-      </div>
-
-      <div class="lang-toggle">
-        <button id="btn-it" onclick="setLanguage('it')" class="lang-btn">IT</button>
-        <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
-        <div class="lang-indicator"></div>
       </div>
 
     </div>
@@ -154,7 +158,6 @@ RendimentoBB – Strategic B&B Investment Analysis
 
     <div id="executive-kpi" class="kpi-grid"></div>
 
-    <!-- Strategic Insight (convertitore PRO) -->
     <div id="strategic-insight" class="lock-box" style="margin-top:40px;">
       <strong data-it="🔎 Insight Strategico"
               data-en="🔎 Strategic Insight"></strong>
