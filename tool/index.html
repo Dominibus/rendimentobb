@@ -71,35 +71,6 @@ RendimentoBB – Strategic B&B Investment Analysis
 @media (max-width:1024px){
   .portal-nav{ display:none; }
 }
-
-.auth-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.auth-modal.hidden {
-  display: none;
-}
-
-.auth-box {
-  background: white;
-  padding: 40px;
-  border-radius: 16px;
-  width: 360px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-}
-
-.auth-box input {
-  width: 100%;
-  margin-top: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
 </style>
 </head>
 
@@ -234,7 +205,58 @@ RendimentoBB – Strategic B&B Investment Analysis
   </div>
 
 
-  <!-- RESULTS -->
+  <!-- COMPARATORE MUTUI -->
+  <div class="tool-card" style="margin-top:60px;">
+
+    <h3 class="section-divider"
+        data-it="🏦 Comparatore Mutui"
+        data-en="🏦 Mortgage Comparator"></h3>
+
+    <div class="form-grid">
+      <div class="input-group">
+        <label data-it="Importo Mutuo (€)"
+               data-en="Mortgage amount (€)"></label>
+        <input type="number" id="mortgageAmount" placeholder="120000">
+      </div>
+
+      <div class="input-group">
+        <label data-it="Durata (anni)"
+               data-en="Duration (years)"></label>
+        <input type="number" id="mortgageYears" placeholder="20">
+      </div>
+
+      <div class="input-group">
+        <label data-it="Tasso Banca A (%)"
+               data-en="Bank A rate (%)"></label>
+        <input type="number" id="rateA" placeholder="3.2">
+      </div>
+
+      <div class="input-group">
+        <label data-it="Tasso Banca B (%)"
+               data-en="Bank B rate (%)"></label>
+        <input type="number" id="rateB" placeholder="3.6">
+      </div>
+
+      <div class="input-group">
+        <label data-it="Tasso Banca C (%)"
+               data-en="Bank C rate (%)"></label>
+        <input type="number" id="rateC" placeholder="4.1">
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <button onclick="compareMortgages()" class="btn btn-primary"
+              data-it="Confronta Mutui"
+              data-en="Compare Mortgages">
+      </button>
+    </div>
+
+    <div id="mortgage-results" style="margin-top:40px;"></div>
+
+  </div>
+
+
+  <!-- RISULTATI -->
   <div id="results" class="results-card" style="margin-top:70px;">
     <h3 data-it="Sintesi Investimento"
         data-en="Executive Investment Summary"></h3>
