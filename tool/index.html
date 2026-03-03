@@ -10,11 +10,11 @@
 RendimentoBB – Strategic B&B Investment Analysis
 </title>
 
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script type="module" src="../js/firebase-init.js"></script>
+<script type="module" src="/js/firebase-init.js"></script>
 
 <style>
 .portal-header {
@@ -26,40 +26,16 @@ RendimentoBB – Strategic B&B Investment Analysis
   border-bottom: 1px solid #e2e8f0;
 }
 
-.lang-switch {
-  display: flex;
-  background: #f1f5f9;
-  border-radius: 999px;
-  padding: 4px;
-}
-
-.lang-btn {
-  border: none;
-  background: transparent;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 999px;
-  cursor: pointer;
-  color: #475569;
-}
-
-.lang-btn.active {
-  background: #0f172a;
-  color: white;
-}
-
 .portal-nav {
   margin-left: 40px;
   display: flex;
   gap: 25px;
   font-size: 13px;
-  color: #475569;
 }
 
 .portal-nav a {
   text-decoration: none;
-  color: inherit;
+  color: #475569;
   font-weight: 500;
   opacity: .7;
 }
@@ -88,9 +64,9 @@ RendimentoBB – Strategic B&B Investment Analysis
 
       <div class="portal-nav">
         <a href="/tool/">Tool</a>
-        <a href="#">Mutui</a>
+        <a href="/tool/#mortgage">Mutui</a>
         <a href="#">Immobili</a>
-        <a href="#">Academy</a>
+        <a href="/academy/">Academy</a>
       </div>
     </div>
 
@@ -112,13 +88,26 @@ RendimentoBB – Strategic B&B Investment Analysis
 </header>
 
 
-<div class="container" style="padding-top:120px; padding-bottom:140px;">
+<main>
+
+<div class="container" style="padding-top:80px; padding-bottom:120px;">
+
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <h1
+      data-it="Analisi Strategica Investimento B&B"
+      data-en="Strategic B&B Investment Analysis">
+    </h1>
+    <p
+      data-it="Simula ROI, rischio e sostenibilità finanziaria prima di investire."
+      data-en="Simulate ROI, risk and financial sustainability before investing.">
+    </p>
+  </div>
 
   <!-- INVESTMENT FORM -->
   <div class="tool-card">
 
-    <h3 class="section-divider"
-        data-it="💰 Struttura Investimento"
+    <h3 data-it="💰 Struttura Investimento"
         data-en="💰 Investment Structure"></h3>
 
     <div class="form-grid">
@@ -135,7 +124,7 @@ RendimentoBB – Strategic B&B Investment Analysis
       </div>
     </div>
 
-    <h3 class="section-divider"
+    <h3 style="margin-top:50px;"
         data-it="🏦 Struttura Finanziamento"
         data-en="🏦 Financing Structure"></h3>
 
@@ -159,7 +148,7 @@ RendimentoBB – Strategic B&B Investment Analysis
       </div>
     </div>
 
-    <h3 class="section-divider"
+    <h3 style="margin-top:50px;"
         data-it="🏨 Parametri Operativi"
         data-en="🏨 Operating Parameters"></h3>
 
@@ -206,10 +195,9 @@ RendimentoBB – Strategic B&B Investment Analysis
 
 
   <!-- COMPARATORE MUTUI -->
-  <div class="tool-card" style="margin-top:60px;">
+  <div id="mortgage" class="tool-card" style="margin-top:60px;">
 
-    <h3 class="section-divider"
-        data-it="🏦 Comparatore Mutui"
+    <h3 data-it="🏦 Comparatore Mutui"
         data-en="🏦 Mortgage Comparator"></h3>
 
     <div class="form-grid">
@@ -273,15 +261,17 @@ RendimentoBB – Strategic B&B Investment Analysis
 
 </div>
 
-<footer style="margin-top:120px;text-align:center;padding:40px 0;color:#64748b;">
+</main>
+
+<footer class="global-footer">
   <span
     data-it="© 2026 RendimentoBB – Motore Decisionale Investimenti B&B"
     data-en="© 2026 RendimentoBB – Strategic B&B Investment Decision Engine">
   </span>
 </footer>
 
-<script src="../js/lang.js"></script>
-<script src="../js/app.js"></script>
+<script src="/js/lang.js"></script>
+<script src="/js/app.js"></script>
 
 </body>
 </html>
