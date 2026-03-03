@@ -286,6 +286,27 @@ function compareMortgages() {
 }
 
 function applyBestMortgage(yearlyPayment) {
+
+  if (!isProUnlocked) {
+
+    const resultDiv = document.getElementById("mortgage-results");
+
+    resultDiv.innerHTML += `
+      <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:10px;">
+        <strong>🔒 Funzione PRO</strong><br>
+        L'integrazione del mutuo nel ROI è disponibile solo in modalità PRO.
+        <div style="margin-top:10px;">
+          <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
+             class="btn btn-primary">
+             Sblocca PRO – 19€
+          </a>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
   overrideMortgage = yearlyPayment;
   calculate();
 }
