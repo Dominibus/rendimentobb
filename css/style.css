@@ -9,15 +9,31 @@
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
+
   background:
     radial-gradient(circle at 15% 10%, rgba(16,185,129,0.15), transparent 40%),
     radial-gradient(circle at 85% 90%, rgba(59,130,246,0.12), transparent 45%),
     linear-gradient(180deg,#f4f7fb 0%,#e9eef5 100%);
+
   min-height: 100vh;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/* ===================== */
+/* MAIN WRAPPER */
+/* ===================== */
+
+main {
+  flex: 1;
 }
 
 /* ===================== */
@@ -55,23 +71,27 @@ header {
 }
 
 /* ===================== */
-/* HERO TITLE */
+/* UNIFORM PAGE TITLE */
 /* ===================== */
 
 .page-title {
   text-align: center;
-  margin-bottom: 50px;
+  margin: 70px 0 60px 0;
 }
 
 .page-title h1 {
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 800;
-  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+  color: #0f172a;
 }
 
 .page-title p {
   color: #475569;
-  font-size: 16px;
+  font-size: 17px;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 /* ===================== */
@@ -147,7 +167,9 @@ header {
   font-weight: 700;
 }
 
+/* ===================== */
 /* KPI GRID */
+/* ===================== */
 
 .kpi-grid {
   display: grid;
@@ -171,7 +193,9 @@ header {
   margin-top: 8px;
 }
 
+/* ===================== */
 /* STATUS COLORS */
+/* ===================== */
 
 .kpi-positive {
   border-left: 4px solid #10b981;
@@ -183,75 +207,6 @@ header {
 
 .kpi-danger {
   border-left: 4px solid #ef4444;
-}
-
-/* SCORE BADGE */
-
-.score-badge {
-  display: inline-block;
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 13px;
-  margin-top: 10px;
-}
-
-.score-high {
-  background: rgba(16,185,129,.15);
-  color: #047857;
-}
-
-.score-mid {
-  background: rgba(245,158,11,.15);
-  color: #b45309;
-}
-
-.score-low {
-  background: rgba(239,68,68,.15);
-  color: #b91c1c;
-}
-
-/* ===================== */
-/* SCENARIO SECTION */
-/* ===================== */
-
-.scenario-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.scenario-box {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #e2e8f0;
-}
-
-/* ===================== */
-/* LOCK BLOCK */
-/* ===================== */
-
-.lock-box {
-  margin-top: 35px;
-  padding: 35px;
-  background: linear-gradient(135deg,#f8fafc,#eef2f7);
-  border-radius: 18px;
-  border: 1px solid #e2e8f0;
-  text-align: center;
-}
-
-.lock-box strong {
-  display: block;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.lock-box p {
-  font-size: 14px;
-  margin-bottom: 18px;
-  color: #475569;
 }
 
 /* ===================== */
@@ -295,11 +250,11 @@ header {
 /* ===================== */
 
 .global-footer {
-  margin-top:120px;
-  text-align:center;
-  padding:40px 0;
-  color:#64748b;
-  font-size:13px;
+  margin-top: auto;
+  text-align: center;
+  padding: 40px 0;
+  color: #64748b;
+  font-size: 13px;
 }
 
 /* ===================== */
@@ -307,11 +262,17 @@ header {
 /* ===================== */
 
 @media (max-width: 1024px) {
+
   .tool-card {
     padding: 40px;
   }
 
   .page-title h1 {
-    font-size: 26px;
+    font-size: 28px;
   }
+
+  .page-title p {
+    font-size: 15px;
+  }
+
 }
