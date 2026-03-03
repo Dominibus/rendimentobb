@@ -10,29 +10,26 @@
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-.page-hero {
-  padding:120px 0 80px;
-  text-align:center;
+.portal-nav {
+  margin-left: 40px;
+  display: flex;
+  gap: 25px;
+  font-size: 13px;
 }
 
-.page-hero h1 {
-  font-size:42px;
-  font-weight:800;
-  max-width:800px;
-  margin:0 auto;
+.portal-nav a {
+  text-decoration: none;
+  color: #475569;
+  font-weight: 500;
+  opacity: .7;
 }
 
-.page-hero p {
-  margin-top:20px;
-  font-size:18px;
-  color:#475569;
-  max-width:700px;
-  margin-left:auto;
-  margin-right:auto;
+.portal-nav a:hover {
+  opacity: 1;
 }
 
 .content-section {
-  margin-top:80px;
+  margin-top:60px;
 }
 
 .content-card {
@@ -79,11 +76,20 @@
 
 <body>
 
-<header class="container nav" style="padding:25px 0;">
-  <div class="logo">Rendimento<span>BB</span></div>
+<header class="container nav" style="padding:25px 0; display:flex; justify-content:space-between; align-items:center;">
+
+  <div style="display:flex; align-items:center; gap:40px;">
+    <div class="logo">Rendimento<span>BB</span></div>
+
+    <nav class="portal-nav">
+      <a href="/tool/">Tool</a>
+      <a href="/tool/#mortgage">Mutui</a>
+      <a href="#">Immobili</a>
+      <a href="/academy/">Academy</a>
+    </nav>
+  </div>
 
   <div style="display:flex;gap:20px;align-items:center;">
-
     <div class="lang-switch">
       <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
       <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
@@ -96,68 +102,73 @@
     <button onclick="window.location.href='/tool/'" class="btn btn-secondary" data-i18n="tool">
       Tool
     </button>
-
   </div>
+
 </header>
 
-<section class="page-hero container">
-  <h1 data-i18n="academy_title">
-    Academy Strategica per Investimenti B&B
-  </h1>
-  <p data-i18n="academy_sub">
-    Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire.
-  </p>
-</section>
 
-<section class="container content-section">
+<main>
 
-  <div class="content-card">
-    <h3 data-i18n="roi_title">📊 Come interpretare il ROI</h3>
-    <p data-i18n="roi_text">
-      Un ROI superiore al 10% indica buona redditività. Tuttavia è fondamentale
-      analizzare la resilienza dell'investimento in scenari di occupazione ridotta.
-      La stabilità del flusso di cassa è più importante del ROI nominale.
+<div class="container" style="padding-top:80px; padding-bottom:120px;">
+
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <h1 data-i18n="academy_title">
+      Academy Strategica per Investimenti B&B
+    </h1>
+    <p data-i18n="academy_sub">
+      Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire.
     </p>
   </div>
 
-  <div class="content-card">
-    <h3 data-i18n="mortgage_title">🏦 Quando il mutuo è sostenibile</h3>
-    <p data-i18n="mortgage_text">
-      Il flusso operativo deve coprire il debito con margine.
-      Se il cashflow è negativo già al 70% di occupazione,
-      l'investimento è strutturalmente fragile.
-    </p>
-  </div>
 
-  <div class="content-card">
-    <h3 data-i18n="errors_title">⚠️ Errori comuni negli investimenti B&B</h3>
-    <p data-i18n="errors_text">
-      Sovrastimare l'occupazione media, ignorare la stagionalità
-      e sottovalutare le spese operative sono errori frequenti.
-      I numeri devono essere realistici e prudenziali.
-    </p>
-  </div>
+  <section class="content-section">
 
-  <div class="content-card">
-    <h3 data-i18n="improve_title">📈 Come migliorare la sostenibilità</h3>
-    <p data-i18n="improve_text">
-      Ottimizzare il prezzo medio notte, migliorare recensioni,
-      ridurre costi fissi e negoziare un tasso mutuo competitivo
-      può cambiare radicalmente il profilo di rischio.
-    </p>
-  </div>
+    <div class="content-card">
+      <h3 data-i18n="roi_title">📊 Come interpretare il ROI</h3>
+      <p data-i18n="roi_text">
+        Un ROI superiore al 10% indica buona redditività...
+      </p>
+    </div>
 
-  <div style="text-align:center;margin-top:80px;">
-    <button onclick="window.location.href='/tool/'" class="btn btn-primary" data-i18n="start_analysis">
-      Avvia Analisi Strategica
-    </button>
-  </div>
+    <div class="content-card">
+      <h3 data-i18n="mortgage_title">🏦 Quando il mutuo è sostenibile</h3>
+      <p data-i18n="mortgage_text">
+        Il flusso operativo deve coprire il debito...
+      </p>
+    </div>
 
-</section>
+    <div class="content-card">
+      <h3 data-i18n="errors_title">⚠️ Errori comuni negli investimenti B&B</h3>
+      <p data-i18n="errors_text">
+        Sovrastimare l'occupazione media...
+      </p>
+    </div>
 
-<footer style="margin-top:120px;text-align:center;padding:40px 0;color:#64748b;">
+    <div class="content-card">
+      <h3 data-i18n="improve_title">📈 Come migliorare la sostenibilità</h3>
+      <p data-i18n="improve_text">
+        Ottimizzare il prezzo medio notte...
+      </p>
+    </div>
+
+    <div style="text-align:center;margin-top:60px;">
+      <button onclick="window.location.href='/tool/'" class="btn btn-primary" data-i18n="start_analysis">
+        Avvia Analisi Strategica
+      </button>
+    </div>
+
+  </section>
+
+</div>
+
+</main>
+
+
+<footer class="global-footer">
 © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
+
 
 <script>
 const translations = {
@@ -200,6 +211,7 @@ function setLang(lang) {
 
 function applyLang(lang) {
   document.documentElement.lang = lang;
+
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
     if (translations[lang][key]) {
@@ -211,8 +223,7 @@ function applyLang(lang) {
   document.getElementById("btn-en").classList.toggle("active", lang === "en");
 }
 
-const savedLang = localStorage.getItem("rb_lang") || "it";
-applyLang(savedLang);
+applyLang(localStorage.getItem("rb_lang") || "it");
 </script>
 
 </body>
