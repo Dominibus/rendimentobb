@@ -21,7 +21,7 @@ import {
 
 // 🔐 CONFIGURAZIONE REALE
 const firebaseConfig = {
-  apiKey: "AIzaSyDu-2G2FHB8VCdCJ9P0m07bD5JShRGScc",
+  apiKey: "AIzaSyDu-2G2FHB8VCdCJ9P0m07bD5JShRGscc",
   authDomain: "rendimento-bb.firebaseapp.com",
   projectId: "rendimento-bb",
   storageBucket: "rendimento-bb.firebasestorage.app",
