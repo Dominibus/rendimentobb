@@ -14,27 +14,106 @@ RendimentoBB – Strategic B&B Investment Analysis
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module" src="../js/firebase-init.js"></script>
+
+<style>
+
+/* ===== HEADER IMPROVEMENTS ===== */
+
+.portal-header {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Toggle stile homepage */
+.lang-switch {
+  position: relative;
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.lang-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .2s ease;
+  color: #475569;
+}
+
+.lang-btn.active {
+  background: #0f172a;
+  color: white;
+}
+
+/* Ecosystem navigation */
+.portal-nav {
+  margin-left: 40px;
+  display: flex;
+  gap: 25px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.portal-nav a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  opacity: .7;
+  transition: .2s ease;
+}
+
+.portal-nav a:hover {
+  opacity: 1;
+}
+
+@media (max-width: 1024px) {
+  .portal-nav {
+    display: none;
+  }
+}
+
+</style>
 </head>
 
 <body>
 
-<header class="container">
-  <div class="nav">
-    
-    <!-- LOGO COERENTE CON HOMEPAGE -->
-    <div class="logo">
-      Rendimento<span>BB</span>
+<header class="portal-header">
+  <div class="container nav" style="padding:20px 0;">
+
+    <div style="display:flex; align-items:center;">
+
+      <div class="logo">
+        Rendimento<span>BB</span>
+      </div>
+
+      <!-- NAV FUTURA PORTALE -->
+      <div class="portal-nav">
+        <a href="#">Tool</a>
+        <a href="#">Mutui</a>
+        <a href="#">Immobili</a>
+        <a href="#">Academy</a>
+      </div>
+
     </div>
 
     <div style="display:flex; align-items:center; gap:20px;">
 
-      <!-- LANGUAGE (STESSO STILE HOMEPAGE) -->
+      <!-- LANGUAGE SWITCH UPGRADE -->
       <div class="lang-switch">
         <button class="lang-btn" onclick="setLanguage('it')" id="btn-it">IT</button>
         <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
       </div>
 
-      <!-- USER AREA -->
+      <!-- USER AREA CLEAN -->
       <div id="user-area">
         <button id="login-btn" class="btn btn-secondary" style="padding:8px 18px; font-size:13px;">
           Accedi
@@ -42,10 +121,11 @@ RendimentoBB – Strategic B&B Investment Analysis
       </div>
 
     </div>
+
   </div>
 </header>
 
-<div class="container" style="padding-top:140px; padding-bottom:140px;">
+<div class="container" style="padding-top:120px; padding-bottom:140px;">
 
   <!-- INTRO -->
   <div style="text-align:center; margin-bottom:100px; max-width:820px; margin-left:auto; margin-right:auto;">
@@ -70,79 +150,72 @@ RendimentoBB – Strategic B&B Investment Analysis
   <!-- FORM -->
   <div class="tool-card">
 
-    <h3 class="section-divider"
-        data-it="💰 Struttura Investimento"
-        data-en="💰 Investment Structure"></h3>
+    <h3 class="section-divider">💰 Struttura Investimento</h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+        <label>Prezzo immobile (€)</label>
         <input type="number" id="price" placeholder="150000">
       </div>
 
       <div class="input-group">
-        <label data-it="Capitale proprio investito (€)" data-en="Own capital invested (€)"></label>
+        <label>Capitale proprio investito (€)</label>
         <input type="number" id="equity" placeholder="30000">
       </div>
     </div>
 
-    <h3 class="section-divider"
-        data-it="🏦 Struttura Finanziamento"
-        data-en="🏦 Financing Structure"></h3>
+    <h3 class="section-divider">🏦 Struttura Finanziamento</h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label data-it="Importo finanziato (€)" data-en="Loan amount (€)"></label>
+        <label>Importo finanziato (€)</label>
         <input type="number" id="loanAmount" placeholder="120000">
       </div>
 
       <div class="input-group">
-        <label data-it="Tasso annuo (%)" data-en="Annual interest rate (%)"></label>
+        <label>Tasso annuo (%)</label>
         <input type="number" id="interestRate" placeholder="3.5">
       </div>
 
       <div class="input-group">
-        <label data-it="Durata (anni)" data-en="Duration (years)"></label>
+        <label>Durata (anni)</label>
         <input type="number" id="loanYears" placeholder="20">
       </div>
     </div>
 
-    <h3 class="section-divider"
-        data-it="🏨 Parametri Operativi"
-        data-en="🏨 Operational Parameters"></h3>
+    <h3 class="section-divider">🏨 Parametri Operativi</h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label data-it="Prezzo medio notte (€)" data-en="Average nightly price (€)"></label>
+        <label>Prezzo medio notte (€)</label>
         <input type="number" id="priceNight" placeholder="120">
       </div>
 
       <div class="input-group">
-        <label data-it="Occupazione media (%)" data-en="Average occupancy (%)"></label>
+        <label>Occupazione media (%)</label>
         <input type="number" id="occupancy" placeholder="70">
       </div>
 
       <div class="input-group">
-        <label data-it="Spese mensili (€)" data-en="Monthly expenses (€)"></label>
+        <label>Spese mensili (€)</label>
         <input type="number" id="expenses" placeholder="1500">
       </div>
 
       <div class="input-group">
-        <label data-it="Commissioni piattaforme (%)" data-en="Platform commissions (%)"></label>
+        <label>Commissioni piattaforme (%)</label>
         <input type="number" id="commission" placeholder="15">
       </div>
 
       <div class="input-group">
-        <label data-it="Tassazione stimata (%)" data-en="Estimated taxes (%)"></label>
+        <label>Tassazione stimata (%)</label>
         <input type="number" id="tax" placeholder="24">
       </div>
     </div>
 
     <div style="text-align:center; margin-top:60px;">
       <button onclick="calculate()" class="btn btn-primary"
-        style="padding:20px 50px; font-size:16px;"
-        data-it="Genera Analisi Strategica"
-        data-en="Generate Strategic Analysis">
+        style="padding:20px 50px; font-size:16px;">
+        Genera Analisi Strategica
       </button>
     </div>
 
@@ -150,63 +223,46 @@ RendimentoBB – Strategic B&B Investment Analysis
 
   <!-- RESULTS -->
   <div id="results" class="results-card" style="margin-top:70px;">
-
-    <h3 style="margin-bottom:25px;"
-      data-it="Executive Investment Summary"
-      data-en="Executive Investment Summary">
-    </h3>
-
+    <h3 style="margin-bottom:25px;">Executive Investment Summary</h3>
     <div id="executive-kpi" class="kpi-grid"></div>
 
     <div id="strategic-insight" class="lock-box" style="margin-top:40px;">
-      <strong data-it="🔎 Insight Strategico"
-              data-en="🔎 Strategic Insight"></strong>
-
-      <p
-        data-it="Analisi qualitativa avanzata e raccomandazione strategica disponibile in modalità PRO."
-        data-en="Advanced qualitative analysis and strategic recommendation available in PRO mode.">
-      </p>
-
+      <strong>🔎 Insight Strategico</strong>
+      <p>Analisi qualitativa avanzata disponibile in modalità PRO.</p>
       <button id="pro-btn-2" class="btn btn-primary">
         Sblocca Analisi Completa
       </button>
     </div>
-
   </div>
 
   <!-- CHART -->
   <div class="results-card">
-    <div class="chart-title"
-      data-it="Proiezione Cashflow 5 anni"
-      data-en="5-Year Cashflow Projection"></div>
+    <div class="chart-title">Proiezione Cashflow 5 anni</div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
   <!-- PRO BLOCK -->
   <div class="pro-lock">
 
-    <h2
-      data-it="Modalità Executive PRO"
-      data-en="Executive PRO Mode"></h2>
+    <h2>Modalità Executive PRO</h2>
 
-    <p
-      data-it="Sblocca stress test avanzati, analisi sensibilità tassi e report PDF professionale per decisioni ad alto impatto."
-      data-en="Unlock advanced stress testing, interest rate sensitivity analysis and professional executive PDF report for high-impact decisions."></p>
+    <p>
+      Sblocca stress test avanzati, analisi sensibilità tassi,
+      report PDF professionale e accesso ai moduli Mutui & Immobili.
+    </p>
 
     <ul>
       <li>✔ Stress test multi-scenario</li>
-      <li>✔ Sensitivity tassi di interesse</li>
+      <li>✔ Sensitivity tassi</li>
       <li>✔ Report PDF consulenziale</li>
+      <li>✔ Accesso comparatore mutui</li>
+      <li>✔ Accesso marketplace immobili</li>
     </ul>
 
     <button id="pro-btn" class="btn btn-primary">
        Sblocca PRO – 19€
     </button>
 
-  </div>
-
-  <div style="text-align:center; margin-top:80px;">
-    <a href="/">← Torna alla homepage</a>
   </div>
 
 </div>
