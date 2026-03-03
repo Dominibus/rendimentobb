@@ -1,19 +1,24 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 12.4 FINAL
-// FULL VERSION + PRO + MULTILANGUAGE FIXED
+// RENDIMENTOBB – EXECUTIVE ENGINE 13.0
+// PRO collegato a Firebase (no localStorage)
 // ===============================================
 
 
-// ================= PRO SYSTEM =================
+// ================= PRO SYSTEM (FIREBASE) =================
 
-let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
+let isProUnlocked = false;
 let overrideMortgage = null;
 
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get("pro") === "paid") {
+// 🔥 ascolta quando Firebase carica il piano utente
+document.addEventListener("rb_plan_loaded", (e) => {
+  const plan = e.detail.plan;
+  isProUnlocked = (plan === "pro");
+  calculate(); // ricalcola tutto quando cambia piano
+});
+
+// fallback iniziale
+if (window.currentPlan === "pro") {
   isProUnlocked = true;
-  localStorage.setItem("proUnlocked", "true");
-  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
 
@@ -25,27 +30,22 @@ if (!window.currentLang) {
 
 const TEXT = {
   it: {
-    stability: "📊 Matrice Stabilità",
     solid: "SOLIDO",
     marginal: "MARGINALE",
     unsustainable: "NON SOSTENIBILE",
     annualNet: "Netto Annuale",
     roi: "ROI",
-    occ: "Occupazione",
     strategicLocked: "🔒 Interpretazione Strategica Bloccata",
-    unlock: "Sblocca PRO – 19€",
+    unlock: "Upgrade a PRO",
     strategicTitle: "🔎 Interpretazione Strategica",
     bestSolution: "🏆 Miglior Soluzione",
     applyMortgage: "Applica miglior mutuo al ROI",
-    proOnly: "🔒 Funzione PRO",
-    proDesc: "L'integrazione del mutuo nel ROI è disponibile solo in modalità PRO.",
+    proDesc: "Funzione disponibile solo in modalità PRO.",
     insertMortgageData: "Inserisci importo e durata.",
     executiveScore: "Executive Investment Score",
     grade: "Classe Investimento",
     risk: "Livello di Rischio",
     payback: "Payback Stimato",
-    alerts: "📌 Segnali Strategici di Rischio",
-    noAlerts: "✔ Nessun segnale critico rilevato.",
     yearlyPayment: "Rata Annuale",
     totalInterest: "Totale Interessi",
     rate: "Tasso",
@@ -55,27 +55,22 @@ const TEXT = {
     insightWeak: "Strutturalmente fragile. Rivedere pricing o finanziamento."
   },
   en: {
-    stability: "📊 Stability Matrix",
     solid: "SOLID",
     marginal: "MARGINAL",
     unsustainable: "NOT SUSTAINABLE",
     annualNet: "Annual Net",
     roi: "ROI",
-    occ: "Occupancy",
     strategicLocked: "🔒 Strategic Interpretation Locked",
-    unlock: "Unlock PRO – 19€",
+    unlock: "Upgrade to PRO",
     strategicTitle: "🔎 Strategic Interpretation",
     bestSolution: "🏆 Best Solution",
     applyMortgage: "Apply best mortgage to ROI",
-    proOnly: "🔒 PRO Feature",
-    proDesc: "Mortgage integration into ROI is available only in PRO mode.",
+    proDesc: "Feature available only in PRO mode.",
     insertMortgageData: "Insert amount and duration.",
     executiveScore: "Executive Investment Score",
     grade: "Investment Grade",
     risk: "Risk Level",
     payback: "Estimated Payback",
-    alerts: "📌 Strategic Risk Signals",
-    noAlerts: "✔ No critical signals detected.",
     yearlyPayment: "Yearly Payment",
     totalInterest: "Total Interest",
     rate: "Rate",
@@ -156,48 +151,6 @@ function scenarioLabel(roi) {
 }
 
 
-// ================= EXECUTIVE SCORE =================
-
-function calculateExecutiveScore(baseROI, roi60, netOperating, mortgageYearly, equity, netAfterMortgage) {
-
-  let score = 0;
-
-  if (baseROI > 15) score += 30;
-  else if (baseROI > 10) score += 24;
-  else if (baseROI > 5) score += 18;
-  else if (baseROI > 0) score += 10;
-
-  if (roi60 > 8) score += 25;
-  else if (roi60 > 3) score += 18;
-  else if (roi60 > 0) score += 10;
-
-  let dscr = mortgageYearly > 0 ? netOperating / mortgageYearly : 2;
-
-  if (dscr > 1.5) score += 25;
-  else if (dscr > 1.2) score += 18;
-  else if (dscr > 1) score += 10;
-
-  let payback = netAfterMortgage > 0 ? equity / netAfterMortgage : 99;
-
-  if (payback < 5) score += 20;
-  else if (payback < 8) score += 15;
-  else if (payback < 12) score += 8;
-
-  let grade = "D";
-  if (score >= 85) grade = "A";
-  else if (score >= 70) grade = "B";
-  else if (score >= 55) grade = "C";
-
-  let risk =
-    score > 80 ? (window.currentLang === "it" ? "Basso" : "Low")
-    : score > 60 ? (window.currentLang === "it" ? "Medio" : "Medium")
-    : score > 40 ? (window.currentLang === "it" ? "Alto" : "High")
-    : (window.currentLang === "it" ? "Critico" : "Critical");
-
-  return { score, grade, risk, payback: payback.toFixed(1), dscr };
-}
-
-
 // ================= MAIN =================
 
 function calculate() {
@@ -229,48 +182,9 @@ function calculate() {
     equity
   );
 
-  const s60 = calculateScenario(
-    60,
-    priceNight,
-    commission,
-    tax,
-    expenses,
-    mortgageYearly,
-    equity
-  );
-
-  const executive = calculateExecutiveScore(
-    base.roi,
-    s60.roi,
-    base.netOperating,
-    mortgageYearly,
-    equity,
-    base.netAfterMortgage
-  );
-
   const kpiContainer = document.getElementById("executive-kpi");
 
   kpiContainer.innerHTML = `
-    <div class="kpi-box">
-      ${t("executiveScore")}
-      <strong>${executive.score}/100</strong>
-    </div>
-
-    <div class="kpi-box">
-      ${t("grade")}
-      <strong>${executive.grade}</strong>
-    </div>
-
-    <div class="kpi-box">
-      ${t("risk")}
-      <strong>${executive.risk}</strong>
-    </div>
-
-    <div class="kpi-box">
-      ${t("payback")}
-      <strong>${executive.payback} ${t("years")}</strong>
-    </div>
-
     <div class="kpi-box ${scenarioLabel(base.roi).class}">
       ${t("roi")}
       <strong>${base.roi.toFixed(2)}%</strong>
@@ -298,9 +212,9 @@ function renderStrategicInsight(baseROI) {
     insightBox.innerHTML = `
       <strong>${t("strategicLocked")}</strong>
       <div style="margin-top:10px;">
-        <a href="?pro=paid" class="btn btn-primary">
+        <button class="btn btn-primary" onclick="alert('Effettua upgrade dalla dashboard')">
            ${t("unlock")}
-        </a>
+        </button>
       </div>
     `;
     return;
@@ -355,24 +269,6 @@ function renderChart(yearlyNet) {
 
 // ================= MORTGAGE COMPARATOR =================
 
-function mortgageSimulation(amount, rate, years) {
-
-  if (!amount || !rate || !years) return null;
-
-  const r = rate / 100;
-  const n = years;
-
-  const yearlyPayment =
-    amount *
-    (r * Math.pow(1 + r, n)) /
-    (Math.pow(1 + r, n) - 1);
-
-  const totalPaid = yearlyPayment * n;
-  const totalInterest = totalPaid - amount;
-
-  return { yearlyPayment, totalPaid, totalInterest };
-}
-
 function compareMortgages() {
 
   const amount = getValue("mortgageAmount");
@@ -402,24 +298,6 @@ function compareMortgages() {
 
   resultDiv.innerHTML = `
     <h4 style="margin-bottom:20px;">${t("bestSolution")}: ${best.name}</h4>
-
-    <div class="kpi-grid">
-      ${banks.map(bank => `
-        <div class="kpi-box">
-          <strong>${bank.name}</strong><br>
-          ${t("rate")}: ${bank.rate}%<br>
-          ${t("yearlyPayment")}: ${formatCurrency(bank.data.yearlyPayment)}<br>
-          ${t("totalInterest")}: ${formatCurrency(bank.data.totalInterest)}
-        </div>
-      `).join("")}
-    </div>
-
-    <div style="margin-top:30px;text-align:center;">
-      <button onclick="applyBestMortgage(${best.data.yearlyPayment})"
-        class="btn btn-primary">
-        ${t("applyMortgage")}
-      </button>
-    </div>
   `;
 }
 
