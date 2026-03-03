@@ -4,63 +4,119 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RendimentoBB – Analisi Strategica Investimento B&B</title>
-<meta name="description" content="Analizza ROI, mutuo e rischio prima di aprire un B&B. Decisioni immobiliari basate su dati reali.">
+<title>RendimentoBB – Decision Engine per Investimenti B&B</title>
+<meta name="description" content="RendimentoBB è il sistema decisionale per investimenti B&B. Analizza ROI, mutuo, rischio e sostenibilità prima di firmare.">
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-body {
-  background: linear-gradient(135deg,#f8fafc,#eef2f7);
-}
 
+/* HERO */
 .hero {
-  padding:120px 0 80px;
+  padding: 140px 0 100px;
 }
 
 .hero h1 {
-  font-size:48px;
-  line-height:1.1;
-  font-weight:700;
-  max-width:720px;
+  font-size: 54px;
+  line-height: 1.05;
+  font-weight: 800;
+  max-width: 800px;
 }
 
 .hero p {
-  font-size:20px;
-  margin-top:25px;
-  max-width:600px;
-  color:#475569;
+  font-size: 20px;
+  margin-top: 25px;
+  max-width: 650px;
+  color: #475569;
 }
 
 .cta-group {
-  margin-top:40px;
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
+  margin-top: 45px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.dashboard-card {
-  background:white;
-  padding:40px;
-  border-radius:20px;
-  box-shadow:0 40px 80px rgba(0,0,0,0.06);
+/* SNAPSHOT */
+.snapshot-card {
+  background: white;
+  padding: 50px;
+  border-radius: 28px;
+  box-shadow: 0 50px 120px rgba(15,23,42,.08);
+  border: 1px solid #e2e8f0;
 }
 
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 30px;
+}
+
+.metric {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.metric span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.metric strong {
+  display: block;
+  font-size: 24px;
+  margin-top: 8px;
+}
+
+/* BENEFITS */
+.benefits {
+  margin-top: 140px;
+  text-align: center;
+}
+
+.benefit-grid {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+  gap: 40px;
+}
+
+.benefit-box {
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(15,23,42,.06);
+  border: 1px solid #e2e8f0;
+}
+
+/* PRICING */
 .price-card {
-  background:white;
-  padding:50px;
-  border-radius:20px;
-  box-shadow:0 40px 80px rgba(0,0,0,0.06);
-  text-align:center;
+  background: white;
+  padding: 60px;
+  border-radius: 28px;
+  box-shadow: 0 60px 140px rgba(15,23,42,.10);
+  border: 1px solid #e2e8f0;
+  text-align: center;
 }
+
+.price-card ul {
+  margin-top: 35px;
+  text-align: left;
+  display: inline-block;
+  line-height: 1.9;
+}
+
 </style>
 </head>
 
 <body>
 
-<header class="container" style="display:flex;justify-content:space-between;align-items:center;padding:25px 0;">
-  <div style="font-weight:700;font-size:20px;">RendimentoBB</div>
-  <div style="display:flex;gap:20px;align-items:center;">
+<header class="container nav">
+  <div class="logo">Rendimento<span>BB</span></div>
+
+  <div>
     <button onclick="window.location.href='/login/'" class="btn btn-secondary">
       Accedi
     </button>
@@ -70,60 +126,120 @@ body {
 <section class="hero container">
 
   <h1>
-    Verifica la sostenibilità reale del tuo investimento B&B prima di firmare.
+    Il sistema decisionale per investimenti B&B.
   </h1>
 
   <p>
-    Simula ROI, impatto mutuo, break-even e indice di rischio.
-    Prendi decisioni immobiliari basate su dati reali.
+    Analizza ROI, mutuo, rischio e sostenibilità prima di impegnare capitale.
+    Trasforma un’idea immobiliare in una decisione strategica.
   </p>
 
   <div class="cta-group">
     <button onclick="window.location.href='/login/'" class="btn btn-primary">
-      Avvia Analisi
+      Avvia Analisi Strategica
     </button>
 
-    <button onclick="window.location.href='/tool/'" class="btn btn-secondary">
+    <button onclick="window.location.href='/tool/'" class="btn btn-outline">
       Visualizza Demo
     </button>
   </div>
 
 </section>
 
-<section class="container" style="margin-top:80px;">
-  <div class="dashboard-card">
-    <h3 style="margin-bottom:30px;">Esempio Executive Snapshot</h3>
+<section class="container" style="margin-top:100px;">
+  <div class="snapshot-card">
 
-    <div class="metric"><span>ROI</span><strong style="color:#10b981;">18.4%</strong></div>
-    <div class="metric"><span>Break-even</span><strong>6.2 anni</strong></div>
-    <div class="metric"><span>Indice Rischio</span><strong style="color:#10b981;">32/100</strong></div>
-    <div class="metric"><span>Classe Investimento</span><strong>A</strong></div>
+    <h3 style="margin-bottom:35px;font-size:22px;">
+      Executive Investment Snapshot
+    </h3>
+
+    <div class="snapshot-grid">
+      <div class="metric">
+        <span>ROI</span>
+        <strong style="color:#10b981;">18.4%</strong>
+      </div>
+
+      <div class="metric">
+        <span>Break-even</span>
+        <strong>6.2 anni</strong>
+      </div>
+
+      <div class="metric">
+        <span>Risk Score</span>
+        <strong style="color:#10b981;">32/100</strong>
+      </div>
+
+      <div class="metric">
+        <span>Investment Grade</span>
+        <strong>A</strong>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<section class="container" style="margin-top:120px;">
+<section class="benefits container">
+
+  <h2 style="font-size:32px;font-weight:800;">
+    Perché RendimentoBB
+  </h2>
+
+  <div class="benefit-grid">
+
+    <div class="benefit-box">
+      <h3>Decisioni Basate su Dati</h3>
+      <p style="margin-top:15px;color:#475569;">
+        Calcoli reali di ROI, cashflow e break-even prima di firmare qualsiasi contratto.
+      </p>
+    </div>
+
+    <div class="benefit-box">
+      <h3>Analisi del Rischio</h3>
+      <p style="margin-top:15px;color:#475569;">
+        Identifica investimenti fragili prima che diventino problemi finanziari.
+      </p>
+    </div>
+
+    <div class="benefit-box">
+      <h3>Proiezioni Strategiche</h3>
+      <p style="margin-top:15px;color:#475569;">
+        Simulazioni multi-scenario e stress test per investitori seri.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="container" style="margin-top:160px;">
   <div class="price-card">
-    <h2>Versione PRO – Analisi Esecutiva Completa</h2>
 
-    <p style="margin-top:20px;font-size:22px;font-weight:600;">19€ – Licenza Strategica</p>
+    <h2 style="font-size:28px;font-weight:800;">
+      Versione PRO – Analisi Esecutiva Completa
+    </h2>
 
-    <ul style="margin-top:30px;text-align:left;display:inline-block;">
+    <p style="margin-top:20px;font-size:24px;font-weight:700;">
+      19€ – Licenza Strategica
+    </p>
+
+    <ul>
       <li>✔ Stress test multi-scenario</li>
       <li>✔ Sensitivity tassi di interesse</li>
       <li>✔ Analisi rischio avanzata</li>
       <li>✔ Report PDF professionale</li>
     </ul>
 
-    <div style="margin-top:40px;">
+    <div style="margin-top:45px;">
       <button onclick="window.location.href='/login/'" class="btn btn-primary">
         Sblocca Versione PRO
       </button>
     </div>
+
   </div>
 </section>
 
-<footer style="margin-top:120px;text-align:center;padding:40px 0;color:#64748b;">
-© 2026 RendimentoBB – Strategic B&B investment tool
+<footer>
+  © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
 </body>
