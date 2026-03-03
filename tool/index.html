@@ -17,69 +17,102 @@ RendimentoBB – Strategic B&B Investment Analysis
 <script type="module" src="/js/firebase-init.js"></script>
 
 <style>
-.portal-header {
-  position: sticky;
-  top: 0;
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(10px);
-  z-index: 100;
-  border-bottom: 1px solid #e2e8f0;
+
+/* HEADER IDENTICO ALLA HOME */
+
+.portal-header{
+  padding:25px 0;
+  position:sticky;
+  top:0;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  z-index:100;
+  border-bottom:1px solid #e2e8f0;
 }
 
-.portal-nav {
-  margin-left: 40px;
-  display: flex;
-  gap: 25px;
-  font-size: 13px;
+.portal-header-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.portal-nav a {
-  text-decoration: none;
-  color: #475569;
-  font-weight: 500;
-  opacity: .7;
+.portal-nav{
+  display:flex;
+  gap:28px;
+  font-size:14px;
 }
 
-.portal-nav a:hover {
-  opacity: 1;
+.portal-nav a{
+  text-decoration:none;
+  color:#475569;
+  font-weight:500;
+  transition:.2s ease;
 }
 
-@media (max-width:1024px){
+.portal-nav a:hover{
+  color:#0f172a;
+}
+
+.right-controls{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.lang-switch{
+  display:flex;
+  gap:8px;
+}
+
+.lang-btn{
+  padding:6px 14px;
+  border-radius:999px;
+  border:1px solid #cbd5e1;
+  background:white;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.lang-btn.active{
+  background:#0f172a;
+  color:white;
+}
+
+@media(max-width:1024px){
   .portal-nav{ display:none; }
 }
+
 </style>
 </head>
 
 <body>
 
 <header class="portal-header">
-  <div class="container nav" style="padding:20px 0; display:flex; justify-content:space-between; align-items:center;">
+  <div class="container portal-header-inner">
 
-    <div style="display:flex; align-items:center;">
+    <div style="display:flex; align-items:center; gap:40px;">
       <a href="/" style="text-decoration:none;">
-        <div class="logo">
-          Rendimento<span>BB</span>
-        </div>
+        <div class="logo">Rendimento<span>BB</span></div>
       </a>
 
-      <div class="portal-nav">
+      <nav class="portal-nav">
         <a href="/tool/">Tool</a>
-        <a href="/tool/#mortgage">Mutui</a>
+        <a href="#mortgage">Mutui</a>
         <a href="#">Immobili</a>
         <a href="/academy/">Academy</a>
-      </div>
+      </nav>
     </div>
 
-    <div style="display:flex; align-items:center; gap:20px;">
+    <div class="right-controls">
       <div class="lang-switch">
-        <button class="lang-btn" onclick="setLanguage('it')" id="btn-it">IT</button>
-        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
       </div>
 
       <button onclick="window.location.href='/'"
-              class="btn btn-secondary"
-              data-it="Home"
-              data-en="Home">
+              class="btn btn-secondary">
         Home
       </button>
     </div>
@@ -104,7 +137,7 @@ RendimentoBB – Strategic B&B Investment Analysis
     </p>
   </div>
 
-  <!-- INVESTMENT FORM -->
+  <!-- FORM PRINCIPALE -->
   <div class="tool-card">
 
     <h3 data-it="💰 Struttura Investimento"
@@ -193,8 +226,7 @@ RendimentoBB – Strategic B&B Investment Analysis
 
   </div>
 
-
-  <!-- COMPARATORE MUTUI -->
+  <!-- MUTUI -->
   <div id="mortgage" class="tool-card" style="margin-top:60px;">
 
     <h3 data-it="🏦 Comparatore Mutui"
@@ -243,7 +275,6 @@ RendimentoBB – Strategic B&B Investment Analysis
 
   </div>
 
-
   <!-- RISULTATI -->
   <div id="results" class="results-card" style="margin-top:70px;">
     <h3 data-it="Sintesi Investimento"
@@ -264,10 +295,7 @@ RendimentoBB – Strategic B&B Investment Analysis
 </main>
 
 <footer class="global-footer">
-  <span
-    data-it="© 2026 RendimentoBB – Motore Decisionale Investimenti B&B"
-    data-en="© 2026 RendimentoBB – Strategic B&B Investment Decision Engine">
-  </span>
+© 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
 <script src="/js/lang.js"></script>
