@@ -1,6 +1,6 @@
 // ===============================
 // FIREBASE INIT – RENDIMENTOBB
-// VERSIONE COMPLETA OPERATIVA
+// VERSIONE PRO REALE COLLEGATA A FIRESTORE
 // ===============================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -16,10 +16,11 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// 🔐 CONFIGURAZIONE REALE
+// 🔐 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyCGg0ffpwnD0VXkxFgXxyj0ZrAoVZJHdKU",
   authDomain: "rendimento-bb.firebaseapp.com",
@@ -30,7 +31,6 @@ const firebaseConfig = {
   measurementId: "G-749B8PW4ST"
 };
 
-// 🚀 INIT
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -38,11 +38,16 @@ const db = getFirestore(app);
 let currentUser = null;
 let currentPlan = "free";
 
+// 🔥 GLOBAL EXPORT PER TOOL
+window.currentPlan = "free";
+
+
 // ===============================
 // REGISTRAZIONE
 // ===============================
 
 async function registerUser(email, password) {
+
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
 
@@ -55,6 +60,7 @@ async function registerUser(email, password) {
   return user;
 }
 
+
 // ===============================
 // LOGIN
 // ===============================
@@ -64,6 +70,7 @@ async function loginUser(email, password) {
   return userCredential.user;
 }
 
+
 // ===============================
 // LOGOUT
 // ===============================
@@ -72,11 +79,13 @@ async function logoutUser() {
   await signOut(auth);
 }
 
+
 // ===============================
 // CARICA PIANO UTENTE
 // ===============================
 
 async function loadUserPlan(uid) {
+
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
 
@@ -86,14 +95,38 @@ async function loadUserPlan(uid) {
     currentPlan = "free";
   }
 
+  window.currentPlan = currentPlan;
+
+  // 🔥 Notifica tool che piano è cambiato
+  document.dispatchEvent(
+    new CustomEvent("rb_plan_loaded", {
+      detail: { plan: currentPlan }
+    })
+  );
+
   updateProVisibility();
 }
+
+
+// ===============================
+// AGGIORNA A PRO (per test manuale)
+// ===============================
+
+async function upgradeToPro(uid) {
+  await updateDoc(doc(db, "users", uid), {
+    plan: "pro"
+  });
+
+  await loadUserPlan(uid);
+}
+
 
 // ===============================
 // UI NAVBAR
 // ===============================
 
 function updateUserUI(user) {
+
   const userArea = document.getElementById("user-area");
   if (!userArea) return;
 
@@ -107,7 +140,8 @@ function updateUserUI(user) {
       </div>
     `;
 
-    document.getElementById("logout-btn").addEventListener("click", logoutUser);
+    document.getElementById("logout-btn")
+      .addEventListener("click", logoutUser);
 
   } else {
     userArea.innerHTML = `
@@ -116,15 +150,18 @@ function updateUserUI(user) {
       </button>
     `;
 
-    document.getElementById("login-btn").addEventListener("click", openAuthModal);
+    document.getElementById("login-btn")
+      .addEventListener("click", openAuthModal);
   }
 }
 
+
 // ===============================
-// PRO VISIBILITY
+// PRO VISIBILITY NAVBAR
 // ===============================
 
 function updateProVisibility() {
+
   const proBtn = document.getElementById("pro-btn");
   if (!proBtn) return;
 
@@ -134,6 +171,7 @@ function updateProVisibility() {
     proBtn.style.opacity = 0.6;
   }
 }
+
 
 // ===============================
 // MODAL
@@ -147,8 +185,9 @@ function closeAuthModal() {
   document.getElementById("auth-modal").classList.add("hidden");
 }
 
+
 // ===============================
-// EVENTI DOM
+// DOM EVENTS
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -162,6 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (registerAction) {
     registerAction.addEventListener("click", async () => {
+
       const email = document.getElementById("auth-email").value;
       const password = document.getElementById("auth-password").value;
 
@@ -176,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (loginAction) {
     loginAction.addEventListener("click", async () => {
+
       const email = document.getElementById("auth-email").value;
       const password = document.getElementById("auth-password").value;
 
@@ -189,26 +230,35 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (proBtn) {
-    proBtn.addEventListener("click", () => {
+    proBtn.addEventListener("click", async () => {
+
       if (!currentUser) {
         openAuthModal();
         return;
       }
 
-      window.location.href = "https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid";
+      // 🔥 Per ora test manuale
+      await upgradeToPro(currentUser.uid);
+      alert("Account aggiornato a PRO (test)");
     });
   }
+
 });
+
 
 // ===============================
 // AUTH OBSERVER
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
+
   currentUser = user;
   updateUserUI(user);
 
   if (user) {
     await loadUserPlan(user.uid);
+  } else {
+    window.currentPlan = "free";
   }
+
 });
