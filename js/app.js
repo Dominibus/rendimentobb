@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 8.0
-// BREAK-EVEN OCCUPANCY + STATUS BADGE
+// RENDIMENTOBB – EXECUTIVE ENGINE 9.0
+// SCENARIO MULTIPLE + BREAK EVEN + STATUS
 // ===============================================
 
 
@@ -59,11 +59,30 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 }
 
 
-// ================= MAIN =================
+// ================= CORE ENGINE =================
 
 function calculate() {
   runRealCalculation();
 }
+
+function calculateScenarioROI(occ, priceNight, commission, tax, expenses, mortgageYearly, equity) {
+
+  const nights = 365 * (occ / 100);
+  const gross = priceNight * nights;
+  const fees = gross * (commission / 100);
+  const yearlyExpenses = expenses * 12;
+
+  const operatingProfit = gross - fees - yearlyExpenses;
+  const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
+  const netOperating = operatingProfit - taxCost;
+  const netAfterMortgage = netOperating - mortgageYearly;
+
+  let roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
+  if (!isFinite(roi)) roi = 0;
+
+  return roi;
+}
+
 
 function runRealCalculation() {
 
@@ -84,114 +103,49 @@ function runRealCalculation() {
     return;
   }
 
-  // ===== BASE CALCULATION =====
+  const mortgageYearly = calculateMortgage(loanAmount, interestRate, loanYears);
+
+  const baseROI = calculateScenarioROI(
+    occupancy,
+    priceNight,
+    commission,
+    tax,
+    expenses,
+    mortgageYearly,
+    equity
+  );
 
   const nightsPerYear = 365 * (occupancy / 100);
   const grossYearly = priceNight * nightsPerYear;
-
   const platformFees = grossYearly * (commission / 100);
   const yearlyExpenses = expenses * 12;
 
   const operatingProfit = grossYearly - platformFees - yearlyExpenses;
   const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
-
   const netOperating = operatingProfit - taxCost;
-  const mortgageYearly = calculateMortgage(loanAmount, interestRate, loanYears);
   const netAfterMortgage = netOperating - mortgageYearly;
-
-  let roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
-  if (!isFinite(roi)) roi = 0;
 
   let breakEven = netAfterMortgage > 0 ? equity / netAfterMortgage : 99;
   const fiveYearProjection = netAfterMortgage * 5;
 
-  // ===== BREAK-EVEN OCCUPANCY =====
+  // ===== SCENARIO MULTIPLI =====
 
-  const fixedCosts = yearlyExpenses + mortgageYearly;
+  const scenario60 = calculateScenarioROI(60, priceNight, commission, tax, expenses, mortgageYearly, equity);
+  const scenario75 = calculateScenarioROI(75, priceNight, commission, tax, expenses, mortgageYearly, equity);
+  const scenario85 = calculateScenarioROI(85, priceNight, commission, tax, expenses, mortgageYearly, equity);
 
-  const netPerOccupiedNight =
-    priceNight *
-    (1 - commission / 100) *
-    (1 - tax / 100);
-
-  let breakEvenOccupancy = 0;
-
-  if (netPerOccupiedNight > 0) {
-    breakEvenOccupancy =
-      (fixedCosts / (netPerOccupiedNight * 365)) * 100;
+  function roiClass(value) {
+    if (value > 15) return "kpi-positive";
+    if (value > 8) return "kpi-warning";
+    return "kpi-danger";
   }
 
-  breakEvenOccupancy = Math.max(0, Math.min(100, breakEvenOccupancy));
-
-
-  // ===== RISK ENGINE =====
-
-  let risk = 40;
-  if (roi < 5) risk += 20;
-  if (breakEven > 15) risk += 20;
-  if (occupancy < 55) risk += 15;
-  if (loanAmount > equity * 3) risk += 10;
-
-  risk = Math.max(0, Math.min(100, risk));
-
-  let grade =
-    risk < 25 ? "A" :
-    risk < 45 ? "B" :
-    risk < 65 ? "C" : "D";
-
-  // ===== SCORE ENGINE =====
-
-  let score = 100 - risk;
-
-  if (roi < 0) score -= 20;
-  if (breakEven > 20) score -= 15;
-
-  score = Math.max(0, Math.min(100, score));
-
-
-  // ===== STATUS BADGE =====
-
-  let statusText = "";
-  let statusClass = "";
-
-  if (score > 70 && roi > 10) {
-    statusText = "STRUCTURALLY SOLID";
-    statusClass = "kpi-positive";
-  } else if (score > 45) {
-    statusText = "MODERATE STRUCTURE";
-    statusClass = "kpi-warning";
-  } else {
-    statusText = "HIGH STRUCTURAL RISK";
-    statusClass = "kpi-danger";
-  }
-
-
-  // ===== STORE =====
-
-  window.lastAnalysisData = {
-    roi,
-    breakEven,
-    netAfterMortgage,
-    fiveYearProjection,
-    risk,
-    grade,
-    score,
-    breakEvenOccupancy,
-    statusText
-  };
-
-
-  // ===== RENDER KPI =====
+  // ===== RENDER =====
 
   kpiContainer.innerHTML = `
-    <div class="kpi-box ${statusClass}">
-      Investment Status
-      <strong>${statusText}</strong>
-    </div>
-
-    <div class="kpi-box">
+    <div class="kpi-box ${roiClass(baseROI)}">
       ROI
-      <strong>${roi.toFixed(2)}%</strong>
+      <strong>${baseROI.toFixed(2)}%</strong>
     </div>
 
     <div class="kpi-box">
@@ -200,21 +154,34 @@ function runRealCalculation() {
     </div>
 
     <div class="kpi-box">
-      Min Occupancy Needed
-      <strong>${breakEvenOccupancy.toFixed(1)}%</strong>
+      5Y Projection
+      <strong>${formatCurrency(fiveYearProjection)}</strong>
     </div>
 
     <div class="kpi-box">
-      Risk Score
-      <strong>${risk}/100</strong>
+      Annual Net
+      <strong>${formatCurrency(netAfterMortgage)}</strong>
     </div>
 
-    <div class="kpi-box">
-      RendimentoBB Score™
-      <strong>${score}/100</strong>
+    <div style="grid-column: 1 / -1; margin-top:25px;">
+      <strong>📊 Scenario Comparison</strong>
+    </div>
+
+    <div class="kpi-box ${roiClass(scenario60)}">
+      60% Occupancy
+      <strong>${scenario60.toFixed(2)}%</strong>
+    </div>
+
+    <div class="kpi-box ${roiClass(scenario75)}">
+      75% Occupancy
+      <strong>${scenario75.toFixed(2)}%</strong>
+    </div>
+
+    <div class="kpi-box ${roiClass(scenario85)}">
+      85% Occupancy
+      <strong>${scenario85.toFixed(2)}%</strong>
     </div>
   `;
-
 
   renderChart(netAfterMortgage);
 }
@@ -254,49 +221,4 @@ function renderChart(yearlyNet) {
       }
     }
   });
-}
-
-
-// ================= PDF =================
-
-function generatePDF() {
-
-  if (!isProUnlocked) {
-    alert("PRO required.");
-    return;
-  }
-
-  if (!window.lastAnalysisData) {
-    alert("Run analysis first.");
-    return;
-  }
-
-  const jsPDF = window.jspdf.jsPDF;
-  const pdf = new jsPDF("p","mm","a4");
-  const d = window.lastAnalysisData;
-
-  pdf.setFillColor(10,20,40);
-  pdf.rect(0,0,210,28,"F");
-
-  pdf.setTextColor(255,255,255);
-  pdf.setFontSize(18);
-  pdf.text("RendimentoBB", 20, 17);
-
-  pdf.setTextColor(0);
-  pdf.setFontSize(14);
-  pdf.text("Executive Investment Report", 20, 50);
-
-  pdf.setFontSize(28);
-  pdf.text(d.roi.toFixed(2) + "% ROI", 20, 70);
-
-  pdf.setFontSize(12);
-  pdf.text("Break-even: " + d.breakEven.toFixed(1) + " yrs", 20, 90);
-  pdf.text("Min Occupancy: " + d.breakEvenOccupancy.toFixed(1) + "%", 20, 100);
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), 20, 110);
-  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), 20, 120);
-  pdf.text("Risk Score: " + d.risk + "/100", 20, 130);
-  pdf.text("Score: " + d.score + "/100", 20, 140);
-  pdf.text("Status: " + d.statusText, 20, 150);
-
-  pdf.save("RendimentoBB_Executive_Report.pdf");
 }
