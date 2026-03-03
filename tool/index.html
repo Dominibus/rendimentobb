@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title data-it="RendimentoBB – Analisi Strategica B&B"
-        data-en="RendimentoBB – Strategic B&B Investment Analysis">
-RendimentoBB – Strategic B&B Investment Analysis
-</title>
+<title>RendimentoBB – Analisi Strategica B&B</title>
 
 <link rel="stylesheet" href="../css/style.css">
 
@@ -17,20 +14,18 @@ RendimentoBB – Strategic B&B Investment Analysis
 
 <style>
 
-/* ===== HEADER IMPROVEMENTS ===== */
+/* ===== HEADER ===== */
 
 .portal-header {
   position: sticky;
   top: 0;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
   z-index: 100;
   border-bottom: 1px solid #e2e8f0;
 }
 
-/* Toggle stile homepage */
 .lang-switch {
-  position: relative;
   display: flex;
   background: #f1f5f9;
   border-radius: 999px;
@@ -45,7 +40,6 @@ RendimentoBB – Strategic B&B Investment Analysis
   font-weight: 600;
   border-radius: 999px;
   cursor: pointer;
-  transition: .2s ease;
   color: #475569;
 }
 
@@ -54,7 +48,6 @@ RendimentoBB – Strategic B&B Investment Analysis
   color: white;
 }
 
-/* Ecosystem navigation */
 .portal-nav {
   margin-left: 40px;
   display: flex;
@@ -68,17 +61,45 @@ RendimentoBB – Strategic B&B Investment Analysis
   color: inherit;
   font-weight: 500;
   opacity: .7;
-  transition: .2s ease;
 }
 
 .portal-nav a:hover {
   opacity: 1;
 }
 
-@media (max-width: 1024px) {
-  .portal-nav {
-    display: none;
-  }
+@media (max-width:1024px){
+  .portal-nav{ display:none; }
+}
+
+/* ===== LOGIN MODAL CLEAN ===== */
+
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-modal.hidden {
+  display: none;
+}
+
+.auth-box {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  width: 360px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+}
+
+.auth-box input {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
 }
 
 </style>
@@ -87,67 +108,41 @@ RendimentoBB – Strategic B&B Investment Analysis
 <body>
 
 <header class="portal-header">
-  <div class="container nav" style="padding:20px 0;">
+  <div class="container nav" style="padding:20px 0; display:flex; justify-content:space-between; align-items:center;">
 
     <div style="display:flex; align-items:center;">
-
       <div class="logo">
         Rendimento<span>BB</span>
       </div>
 
-      <!-- NAV FUTURA PORTALE -->
       <div class="portal-nav">
         <a href="#">Tool</a>
         <a href="#">Mutui</a>
         <a href="#">Immobili</a>
         <a href="#">Academy</a>
       </div>
-
     </div>
 
     <div style="display:flex; align-items:center; gap:20px;">
-
-      <!-- LANGUAGE SWITCH UPGRADE -->
       <div class="lang-switch">
         <button class="lang-btn" onclick="setLanguage('it')" id="btn-it">IT</button>
         <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
       </div>
 
-      <!-- USER AREA CLEAN -->
       <div id="user-area">
-        <button id="login-btn" class="btn btn-secondary" style="padding:8px 18px; font-size:13px;">
+        <button id="login-btn" class="btn btn-secondary">
           Accedi
         </button>
       </div>
-
     </div>
 
   </div>
 </header>
 
+
 <div class="container" style="padding-top:120px; padding-bottom:140px;">
 
-  <!-- INTRO -->
-  <div style="text-align:center; margin-bottom:100px; max-width:820px; margin-left:auto; margin-right:auto;">
-
-    <div style="font-size:14px; opacity:.6; margin-bottom:18px;"
-         data-it="Sistema decisionale di sostenibilità finanziaria"
-         data-en="Financial sustainability decision engine">
-    </div>
-
-    <h1 style="font-size:42px; line-height:1.15; margin-bottom:22px;"
-        data-it="Analisi professionale investimento B&B"
-        data-en="Professional B&B Investment Analysis">
-    </h1>
-
-    <p style="color:#64748b; font-size:18px; line-height:1.6;"
-       data-it="Compila i dati per valutare ROI reale, break-even, rischio finanziario e sostenibilità nel tempo."
-       data-en="Enter data to evaluate real ROI, break-even, financial risk and long-term sustainability.">
-    </p>
-
-  </div>
-
-  <!-- FORM -->
+  <!-- FORM INVESTIMENTO -->
   <div class="tool-card">
 
     <h3 class="section-divider">💰 Struttura Investimento</h3>
@@ -157,7 +152,6 @@ RendimentoBB – Strategic B&B Investment Analysis
         <label>Prezzo immobile (€)</label>
         <input type="number" id="price" placeholder="150000">
       </div>
-
       <div class="input-group">
         <label>Capitale proprio investito (€)</label>
         <input type="number" id="equity" placeholder="30000">
@@ -171,12 +165,10 @@ RendimentoBB – Strategic B&B Investment Analysis
         <label>Importo finanziato (€)</label>
         <input type="number" id="loanAmount" placeholder="120000">
       </div>
-
       <div class="input-group">
         <label>Tasso annuo (%)</label>
         <input type="number" id="interestRate" placeholder="3.5">
       </div>
-
       <div class="input-group">
         <label>Durata (anni)</label>
         <input type="number" id="loanYears" placeholder="20">
@@ -190,22 +182,18 @@ RendimentoBB – Strategic B&B Investment Analysis
         <label>Prezzo medio notte (€)</label>
         <input type="number" id="priceNight" placeholder="120">
       </div>
-
       <div class="input-group">
         <label>Occupazione media (%)</label>
         <input type="number" id="occupancy" placeholder="70">
       </div>
-
       <div class="input-group">
         <label>Spese mensili (€)</label>
         <input type="number" id="expenses" placeholder="1500">
       </div>
-
       <div class="input-group">
         <label>Commissioni piattaforme (%)</label>
         <input type="number" id="commission" placeholder="15">
       </div>
-
       <div class="input-group">
         <label>Tassazione stimata (%)</label>
         <input type="number" id="tax" placeholder="24">
@@ -213,59 +201,68 @@ RendimentoBB – Strategic B&B Investment Analysis
     </div>
 
     <div style="text-align:center; margin-top:60px;">
-      <button onclick="calculate()" class="btn btn-primary"
-        style="padding:20px 50px; font-size:16px;">
+      <button onclick="calculate()" class="btn btn-primary">
         Genera Analisi Strategica
       </button>
     </div>
 
   </div>
 
-  <!-- RESULTS -->
-  <div id="results" class="results-card" style="margin-top:70px;">
-    <h3 style="margin-bottom:25px;">Executive Investment Summary</h3>
-    <div id="executive-kpi" class="kpi-grid"></div>
 
-    <div id="strategic-insight" class="lock-box" style="margin-top:40px;">
-      <strong>🔎 Insight Strategico</strong>
-      <p>Analisi qualitativa avanzata disponibile in modalità PRO.</p>
-      <button id="pro-btn-2" class="btn btn-primary">
-        Sblocca Analisi Completa
+  <!-- COMPARATORE MUTUI -->
+  <div class="tool-card" style="margin-top:60px;">
+
+    <h3 class="section-divider">🏦 Comparatore Mutui</h3>
+
+    <div class="form-grid">
+      <div class="input-group">
+        <label>Importo Mutuo (€)</label>
+        <input type="number" id="mortgageAmount" placeholder="120000">
+      </div>
+      <div class="input-group">
+        <label>Durata (anni)</label>
+        <input type="number" id="mortgageYears" placeholder="20">
+      </div>
+      <div class="input-group">
+        <label>Tasso Banca A (%)</label>
+        <input type="number" id="rateA" placeholder="3.2">
+      </div>
+      <div class="input-group">
+        <label>Tasso Banca B (%)</label>
+        <input type="number" id="rateB" placeholder="3.6">
+      </div>
+      <div class="input-group">
+        <label>Tasso Banca C (%)</label>
+        <input type="number" id="rateC" placeholder="4.1">
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:40px;">
+      <button onclick="compareMortgages()" class="btn btn-primary">
+        Confronta Mutui
       </button>
     </div>
+
+    <div id="mortgage-results" style="margin-top:40px;"></div>
+
   </div>
 
-  <!-- CHART -->
+
+  <!-- RISULTATI -->
+  <div id="results" class="results-card" style="margin-top:70px;">
+    <h3>Executive Investment Summary</h3>
+    <div id="executive-kpi" class="kpi-grid"></div>
+
+    <div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
+  </div>
+
   <div class="results-card">
     <div class="chart-title">Proiezione Cashflow 5 anni</div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
-  <!-- PRO BLOCK -->
-  <div class="pro-lock">
-
-    <h2>Modalità Executive PRO</h2>
-
-    <p>
-      Sblocca stress test avanzati, analisi sensibilità tassi,
-      report PDF professionale e accesso ai moduli Mutui & Immobili.
-    </p>
-
-    <ul>
-      <li>✔ Stress test multi-scenario</li>
-      <li>✔ Sensitivity tassi</li>
-      <li>✔ Report PDF consulenziale</li>
-      <li>✔ Accesso comparatore mutui</li>
-      <li>✔ Accesso marketplace immobili</li>
-    </ul>
-
-    <button id="pro-btn" class="btn btn-primary">
-       Sblocca PRO – 19€
-    </button>
-
-  </div>
-
 </div>
+
 
 <!-- LOGIN MODAL -->
 <div id="auth-modal" class="auth-modal hidden">
