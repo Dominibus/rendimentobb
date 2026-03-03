@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 12.1
-// FULL INTERNATIONAL VERSION
+// RENDIMENTOBB – EXECUTIVE ENGINE 12.2
+// FULL INTERNATIONAL VERSION + EXECUTIVE SCORE
 // ===============================================
 
 
@@ -39,7 +39,11 @@ const TEXT = {
     applyMortgage: "Applica miglior mutuo al ROI",
     proOnly: "🔒 Funzione PRO",
     proDesc: "L'integrazione del mutuo nel ROI è disponibile solo in modalità PRO.",
-    insertMortgageData: "Inserisci importo e durata."
+    insertMortgageData: "Inserisci importo e durata.",
+    executiveScore: "Executive Investment Score",
+    grade: "Investment Grade",
+    risk: "Livello di Rischio",
+    payback: "Payback Stimato"
   },
   en: {
     stability: "📊 Stability Matrix",
@@ -56,7 +60,11 @@ const TEXT = {
     applyMortgage: "Apply best mortgage to ROI",
     proOnly: "🔒 PRO Feature",
     proDesc: "Mortgage integration into ROI is available only in PRO mode.",
-    insertMortgageData: "Insert amount and duration."
+    insertMortgageData: "Insert amount and duration.",
+    executiveScore: "Executive Investment Score",
+    grade: "Investment Grade",
+    risk: "Risk Level",
+    payback: "Estimated Payback"
   }
 };
 
@@ -120,13 +128,62 @@ function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageY
   let roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
   if (!isFinite(roi)) roi = 0;
 
-  return { roi, netAfterMortgage };
+  return { roi, netAfterMortgage, netOperating };
 }
 
 function scenarioLabel(roi) {
   if (roi > 12) return { text: t("solid"), class: "kpi-positive" };
   if (roi > 0) return { text: t("marginal"), class: "kpi-warning" };
   return { text: t("unsustainable"), class: "kpi-danger" };
+}
+
+
+// ================= EXECUTIVE SCORE =================
+
+function calculateExecutiveScore(baseROI, roi60, netOperating, mortgageYearly, equity, netAfterMortgage) {
+
+  let score = 0;
+
+  // PROFITABILITY (30)
+  if (baseROI > 15) score += 30;
+  else if (baseROI > 10) score += 24;
+  else if (baseROI > 5) score += 18;
+  else if (baseROI > 0) score += 10;
+
+  // STABILITY (25)
+  if (roi60 > 8) score += 25;
+  else if (roi60 > 3) score += 18;
+  else if (roi60 > 0) score += 10;
+
+  // DSCR (25)
+  let dscr = mortgageYearly > 0 ? netOperating / mortgageYearly : 2;
+  if (dscr > 1.5) score += 25;
+  else if (dscr > 1.2) score += 18;
+  else if (dscr > 1) score += 10;
+
+  // PAYBACK (20)
+  let payback = netAfterMortgage > 0 ? equity / netAfterMortgage : 99;
+  if (payback < 5) score += 20;
+  else if (payback < 8) score += 15;
+  else if (payback < 12) score += 8;
+
+  let grade = "D";
+  if (score >= 85) grade = "A";
+  else if (score >= 70) grade = "B";
+  else if (score >= 55) grade = "C";
+
+  let risk = "";
+  if (score > 80) risk = window.currentLang === "it" ? "Basso" : "Low";
+  else if (score > 60) risk = window.currentLang === "it" ? "Medio" : "Medium";
+  else if (score > 40) risk = window.currentLang === "it" ? "Alto" : "High";
+  else risk = window.currentLang === "it" ? "Critico" : "Critical";
+
+  return {
+    score,
+    grade,
+    risk,
+    payback: payback.toFixed(1)
+  };
 }
 
 
@@ -161,9 +218,40 @@ function calculate() {
     equity
   );
 
+  const s60 = calculateScenario(60, priceNight, commission, tax, expenses, mortgageYearly, equity);
+
+  const executive = calculateExecutiveScore(
+    base.roi,
+    s60.roi,
+    base.netOperating,
+    mortgageYearly,
+    equity,
+    base.netAfterMortgage
+  );
+
   const kpiContainer = document.getElementById("executive-kpi");
 
   kpiContainer.innerHTML = `
+    <div class="kpi-box">
+      ${t("executiveScore")}
+      <strong>${executive.score}/100</strong>
+    </div>
+
+    <div class="kpi-box">
+      ${t("grade")}
+      <strong>${executive.grade}</strong>
+    </div>
+
+    <div class="kpi-box">
+      ${t("risk")}
+      <strong>${executive.risk}</strong>
+    </div>
+
+    <div class="kpi-box">
+      ${t("payback")}
+      <strong>${executive.payback} yrs</strong>
+    </div>
+
     <div class="kpi-box ${scenarioLabel(base.roi).class}">
       ${t("roi")}
       <strong>${base.roi.toFixed(2)}%</strong>
@@ -194,7 +282,6 @@ function calculate() {
   renderChart(base.netAfterMortgage);
   renderStrategicInsight(base.roi);
 }
-
 
 // ================= STRATEGIC =================
 
