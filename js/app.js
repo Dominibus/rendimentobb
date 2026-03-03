@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 10.0
-// STABILITY MATRIX + STRATEGIC LAYER
+// RENDIMENTOBB – EXECUTIVE ENGINE 11.0
+// STABILITY MATRIX + STRATEGIC LAYER + MORTGAGE COMPARATOR
 // ===============================================
 
 
@@ -40,7 +40,7 @@ function getValue(id) {
 let roiChartInstance = null;
 
 
-// ================= MORTGAGE =================
+// ================= BASE MORTGAGE =================
 
 function calculateMortgage(loanAmount, interestRate, loanYears) {
 
@@ -81,22 +81,14 @@ function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageY
   };
 }
 
-
 function scenarioLabel(roi) {
-
-  if (roi > 12) {
-    return { text: "SOLIDO", class: "kpi-positive" };
-  }
-
-  if (roi > 0) {
-    return { text: "MARGINALE", class: "kpi-warning" };
-  }
-
+  if (roi > 12) return { text: "SOLIDO", class: "kpi-positive" };
+  if (roi > 0) return { text: "MARGINALE", class: "kpi-warning" };
   return { text: "NON SOSTENIBILE", class: "kpi-danger" };
 }
 
 
-// ================= MAIN =================
+// ================= MAIN CALCULATION =================
 
 function calculate() {
 
@@ -111,9 +103,7 @@ function calculate() {
   const interestRate = getValue("interestRate");
   const loanYears = getValue("loanYears");
 
-  if (!priceNight || !occupancy || equity <= 0) {
-    return;
-  }
+  if (!priceNight || !occupancy || equity <= 0) return;
 
   const mortgageYearly = calculateMortgage(loanAmount, interestRate, loanYears);
 
@@ -131,10 +121,6 @@ function calculate() {
   const s75 = calculateScenario(75, priceNight, commission, tax, expenses, mortgageYearly, equity);
   const s85 = calculateScenario(85, priceNight, commission, tax, expenses, mortgageYearly, equity);
 
-  const l60 = scenarioLabel(s60.roi);
-  const l75 = scenarioLabel(s75.roi);
-  const l85 = scenarioLabel(s85.roi);
-
   const kpiContainer = document.getElementById("executive-kpi");
 
   kpiContainer.innerHTML = `
@@ -148,49 +134,38 @@ function calculate() {
       <strong>${formatCurrency(base.netAfterMortgage)}</strong>
     </div>
 
-    <div style="grid-column: 1 / -1; margin-top:30px;">
+    <div style="grid-column:1/-1;margin-top:30px;">
       <strong>📊 Stability Matrix</strong>
     </div>
 
-    <div class="kpi-box ${l60.class}">
-      60% Occupancy
-      <strong>${s60.roi.toFixed(2)}%</strong>
-      <div style="margin-top:6px;font-size:12px;">${l60.text}</div>
-    </div>
-
-    <div class="kpi-box ${l75.class}">
-      75% Occupancy
-      <strong>${s75.roi.toFixed(2)}%</strong>
-      <div style="margin-top:6px;font-size:12px;">${l75.text}</div>
-    </div>
-
-    <div class="kpi-box ${l85.class}">
-      85% Occupancy
-      <strong>${s85.roi.toFixed(2)}%</strong>
-      <div style="margin-top:6px;font-size:12px;">${l85.text}</div>
-    </div>
+    ${[60,75,85].map(o=>{
+      const s = calculateScenario(o, priceNight, commission, tax, expenses, mortgageYearly, equity);
+      const l = scenarioLabel(s.roi);
+      return `
+        <div class="kpi-box ${l.class}">
+          ${o}% Occupancy
+          <strong>${s.roi.toFixed(2)}%</strong>
+          <div style="margin-top:6px;font-size:12px;">${l.text}</div>
+        </div>
+      `;
+    }).join("")}
   `;
 
   renderChart(base.netAfterMortgage);
-
-  renderStrategicInsight(base.roi, s60.roi, s75.roi, s85.roi);
+  renderStrategicInsight(base.roi);
 }
 
 
 // ================= STRATEGIC INSIGHT =================
 
-function renderStrategicInsight(baseROI, r60, r75, r85) {
+function renderStrategicInsight(baseROI) {
 
   const insightBox = document.getElementById("strategic-insight");
 
   if (!isProUnlocked) {
-
     insightBox.innerHTML = `
       <strong>🔒 Strategic Interpretation Locked</strong>
-      <p>
-        Unlock structural interpretation, correction suggestions
-        and strategic adjustment simulation.
-      </p>
+      <p>Unlock structural interpretation and strategic simulation.</p>
       <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
          class="btn btn-primary">
          Unlock PRO – 19€
@@ -199,21 +174,16 @@ function renderStrategicInsight(baseROI, r60, r75, r85) {
     return;
   }
 
-  let message = "";
-
-  if (baseROI > 12 && r60 > 0) {
-    message = "The investment shows structural resilience even under conservative occupancy scenarios.";
-  } else if (baseROI > 6) {
-    message = "The project is moderately viable but depends heavily on occupancy optimization.";
-  } else {
-    message = "The investment presents structural fragility. Review pricing strategy or financing structure.";
-  }
+  let message =
+    baseROI > 12
+      ? "The investment shows structural resilience."
+      : baseROI > 6
+      ? "Moderately viable. Requires optimization."
+      : "Structurally fragile. Review pricing or financing.";
 
   insightBox.innerHTML = `
     <strong>🔎 Strategic Interpretation</strong>
-    <p style="margin-top:10px;">
-      ${message}
-    </p>
+    <p style="margin-top:10px;">${message}</p>
   `;
 }
 
@@ -224,16 +194,13 @@ function renderChart(yearlyNet) {
 
   const ctx = document.getElementById("roiChart");
 
-  if (roiChartInstance) {
-    roiChartInstance.destroy();
-  }
+  if (roiChartInstance) roiChartInstance.destroy();
 
   roiChartInstance = new Chart(ctx, {
     type: "line",
     data: {
       labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
       datasets: [{
-        label: "Net Projection",
         data: [
           yearlyNet,
           yearlyNet * 2,
@@ -247,9 +214,67 @@ function renderChart(yearlyNet) {
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { display: false }
-      }
+      plugins: { legend: { display: false } }
     }
   });
+}
+
+
+// ================= MORTGAGE COMPARATOR =================
+
+function mortgageSimulation(amount, rate, years) {
+
+  if (!amount || !rate || !years) return null;
+
+  const r = rate / 100;
+  const n = years;
+
+  const yearlyPayment =
+    amount *
+    (r * Math.pow(1 + r, n)) /
+    (Math.pow(1 + r, n) - 1);
+
+  const totalPaid = yearlyPayment * n;
+  const totalInterest = totalPaid - amount;
+
+  return { yearlyPayment, totalPaid, totalInterest };
+}
+
+function compareMortgages() {
+
+  const amount = getValue("mortgageAmount");
+  const years = getValue("mortgageYears");
+
+  const rateA = getValue("rateA");
+  const rateB = getValue("rateB");
+  const rateC = getValue("rateC");
+
+  const resultDiv = document.getElementById("mortgage-results");
+
+  if (!amount || !years) {
+    resultDiv.innerHTML = "Inserisci importo e durata.";
+    return;
+  }
+
+  const banks = [
+    { name: "Banca A", rate: rateA, data: mortgageSimulation(amount, rateA, years) },
+    { name: "Banca B", rate: rateB, data: mortgageSimulation(amount, rateB, years) },
+    { name: "Banca C", rate: rateC, data: mortgageSimulation(amount, rateC, years) }
+  ];
+
+  banks.sort((a, b) => a.data.totalPaid - b.data.totalPaid);
+
+  resultDiv.innerHTML = `
+    <h4 style="margin-bottom:20px;">🏆 Miglior Soluzione: ${banks[0].name}</h4>
+    <div class="kpi-grid">
+      ${banks.map(bank => `
+        <div class="kpi-box">
+          <strong>${bank.name}</strong><br>
+          Tasso: ${bank.rate}%<br>
+          Rata annua: ${formatCurrency(bank.data.yearlyPayment)}<br>
+          Interessi totali: ${formatCurrency(bank.data.totalInterest)}
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
