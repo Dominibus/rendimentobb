@@ -5,228 +5,126 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>RendimentoBB – Analisi Strategica Investimento B&B</title>
-<meta name="description" content="Evita di bruciare capitale prima di aprire un B&B. Analisi ROI, mutuo, rischio e sostenibilità reale dell’investimento.">
+<meta name="description" content="Analizza ROI, mutuo e rischio prima di aprire un B&B. Decisioni immobiliari basate su dati reali.">
 
 <link rel="stylesheet" href="/css/style.css">
+
+<style>
+body {
+  background: linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.hero {
+  padding:120px 0 80px;
+}
+
+.hero h1 {
+  font-size:48px;
+  line-height:1.1;
+  font-weight:700;
+  max-width:720px;
+}
+
+.hero p {
+  font-size:20px;
+  margin-top:25px;
+  max-width:600px;
+  color:#475569;
+}
+
+.cta-group {
+  margin-top:40px;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.dashboard-card {
+  background:white;
+  padding:40px;
+  border-radius:20px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.06);
+}
+
+.price-card {
+  background:white;
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.06);
+  text-align:center;
+}
+</style>
 </head>
 
 <body>
 
-<header class="container">
-  <div class="nav" style="display:flex; justify-content:space-between; align-items:center;">
-
-    <div class="logo" style="font-weight:700;">RendimentoBB</div>
-
-    <div style="display:flex; align-items:center; gap:20px;">
-
-      <div id="user-area">
-        <button id="login-btn" class="btn btn-secondary" style="padding:8px 16px;">
-          Accedi
-        </button>
-      </div>
-
-      <div class="lang-toggle">
-        <button id="btn-it" onclick="setLanguage('it')" class="lang-btn">IT</button>
-        <button id="btn-en" onclick="setLanguage('en')" class="lang-btn">EN</button>
-        <div class="lang-indicator"></div>
-      </div>
-
-    </div>
+<header class="container" style="display:flex;justify-content:space-between;align-items:center;padding:25px 0;">
+  <div style="font-weight:700;font-size:20px;">RendimentoBB</div>
+  <div style="display:flex;gap:20px;align-items:center;">
+    <button onclick="window.location.href='/login/'" class="btn btn-secondary">
+      Accedi
+    </button>
   </div>
 </header>
 
-<!-- HERO -->
+<section class="hero container">
 
-<section class="hero container" style="padding-top:80px;">
-  <div class="hero-grid">
+  <h1>
+    Verifica la sostenibilità reale del tuo investimento B&B prima di firmare.
+  </h1>
 
-    <div>
+  <p>
+    Simula ROI, impatto mutuo, break-even e indice di rischio.
+    Prendi decisioni immobiliari basate su dati reali.
+  </p>
 
-      <div class="hero-eyebrow"
-           data-it="Decisioni immobiliari basate su dati, non su entusiasmo"
-           data-en="Real estate decisions based on data, not emotion">
-      </div>
+  <div class="cta-group">
+    <button onclick="window.location.href='/login/'" class="btn btn-primary">
+      Avvia Analisi
+    </button>
 
-      <h1 style="font-size:42px; line-height:1.15; margin-top:20px;"
-        data-it="Verifica la sostenibilità reale del tuo investimento B&B prima di firmare."
-        data-en="Verify the real sustainability of your B&B investment before signing.">
-      </h1>
+    <button onclick="window.location.href='/tool/'" class="btn btn-secondary">
+      Visualizza Demo
+    </button>
+  </div>
 
-      <p style="margin-top:20px; font-size:18px; max-width:600px;"
-         data-it="Simula ROI reale, impatto mutuo, break-even, rischio finanziario e resilienza del progetto."
-         data-en="Simulate real ROI, mortgage impact, break-even, financial risk and long-term resilience.">
-      </p>
+</section>
 
-      <div style="margin-top:35px; display:flex; gap:15px; flex-wrap:wrap;">
-        <button id="start-analysis" class="btn btn-primary">
-          Avvia Analisi Gratuita
-        </button>
+<section class="container" style="margin-top:80px;">
+  <div class="dashboard-card">
+    <h3 style="margin-bottom:30px;">Esempio Executive Snapshot</h3>
 
-        <a href="/tool/" class="btn btn-secondary">
-          Visualizza Demo
-        </a>
-      </div>
-
-      <div class="micro-note" style="margin-top:15px;">
-        Nessun abbonamento · Accesso immediato · Strumento professionale
-      </div>
-
-    </div>
-
-    <!-- SNAPSHOT CARD -->
-    <div>
-      <div class="dashboard-card" style="box-shadow:0 20px 60px rgba(0,0,0,0.08);">
-
-        <div style="display:flex; justify-content:space-between; margin-bottom:25px;">
-          <strong>Executive Snapshot</strong>
-          <span style="background:#111827; color:white; font-size:11px; padding:5px 12px; border-radius:999px;">
-            DEMO
-          </span>
-        </div>
-
-        <div class="metric">
-          <span>ROI</span>
-          <strong style="color:#10b981;">18.4%</strong>
-        </div>
-
-        <div class="metric">
-          <span>Break-even</span>
-          <strong>6.2 anni</strong>
-        </div>
-
-        <div class="metric">
-          <span>Indice Rischio</span>
-          <strong style="color:#10b981;">32/100</strong>
-        </div>
-
-        <div class="metric">
-          <span>Classe Investimento</span>
-          <strong>A</strong>
-        </div>
-
-      </div>
-    </div>
-
+    <div class="metric"><span>ROI</span><strong style="color:#10b981;">18.4%</strong></div>
+    <div class="metric"><span>Break-even</span><strong>6.2 anni</strong></div>
+    <div class="metric"><span>Indice Rischio</span><strong style="color:#10b981;">32/100</strong></div>
+    <div class="metric"><span>Classe Investimento</span><strong>A</strong></div>
   </div>
 </section>
 
-<!-- VALUE -->
+<section class="container" style="margin-top:120px;">
+  <div class="price-card">
+    <h2>Versione PRO – Analisi Esecutiva Completa</h2>
 
-<section class="section-alt">
-  <div class="container">
+    <p style="margin-top:20px;font-size:22px;font-weight:600;">19€ – Licenza Strategica</p>
 
-    <h2 style="margin-bottom:50px;">Perché utilizzare RendimentoBB</h2>
+    <ul style="margin-top:30px;text-align:left;display:inline-block;">
+      <li>✔ Stress test multi-scenario</li>
+      <li>✔ Sensitivity tassi di interesse</li>
+      <li>✔ Analisi rischio avanzata</li>
+      <li>✔ Report PDF professionale</li>
+    </ul>
 
-    <div class="why-grid">
-
-      <div class="why-card">
-        <h3>Evita errori strutturali</h3>
-        <p>Molti investimenti immobiliari falliscono per calcoli errati o sottostima del rischio.</p>
-      </div>
-
-      <div class="why-card">
-        <h3>Valuta il mutuo prima di firmare</h3>
-        <p>Comprendi l’impatto reale del finanziamento sul cashflow annuo.</p>
-      </div>
-
-      <div class="why-card">
-        <h3>Proteggi il capitale</h3>
-        <p>Decisioni basate su dati reali, non su supposizioni.</p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-<!-- PRO SECTION -->
-
-<section class="pricing-center">
-  <div class="container">
-
-    <h2 style="margin-bottom:40px;">Versione PRO – Analisi Esecutiva Completa</h2>
-
-    <div class="price-card" style="box-shadow:0 25px 70px rgba(0,0,0,0.08);">
-
-      <div class="badge">Per decisioni serie</div>
-
-      <div class="price" style="margin:20px 0;">
-        19€ – Licenza Strategica
-      </div>
-
-      <ul class="features">
-        <li>✔ Stress test multi-scenario</li>
-        <li>✔ Sensitivity tassi di interesse</li>
-        <li>✔ Analisi rischio avanzata</li>
-        <li>✔ Report PDF professionale</li>
-      </ul>
-
-      <button id="pro-btn" class="btn btn-primary" style="margin-top:25px;">
+    <div style="margin-top:40px;">
+      <button onclick="window.location.href='/login/'" class="btn btn-primary">
         Sblocca Versione PRO
       </button>
-
     </div>
-
   </div>
 </section>
 
-<footer>
-© 2026 RendimentoBB – Strumento strategico per investimenti B&B
+<footer style="margin-top:120px;text-align:center;padding:40px 0;color:#64748b;">
+© 2026 RendimentoBB – Strategic B&B investment tool
 </footer>
-
-<!-- AUTH MODAL -->
-<div id="auth-modal" class="hidden" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;">
-
-  <div style="background:white; padding:40px; border-radius:12px; width:320px; text-align:center;">
-
-    <h3 style="margin-bottom:20px;">Accesso</h3>
-
-    <input id="auth-email" type="email" placeholder="Email"
-      style="width:100%; padding:10px; margin-bottom:10px;">
-
-    <input id="auth-password" type="password" placeholder="Password"
-      style="width:100%; padding:10px; margin-bottom:20px;">
-
-    <div style="display:flex; gap:10px; justify-content:center;">
-      <button id="login-action" class="btn btn-primary">Login</button>
-      <button id="register-action" class="btn btn-secondary">Registrati</button>
-    </div>
-
-    <div style="margin-top:15px;">
-      <button id="close-auth" style="font-size:12px;">Chiudi</button>
-    </div>
-
-  </div>
-</div>
-
-<script src="/js/lang.js"></script>
-<script type="module" src="/js/firebase-init.js"></script>
-
-<script type="module">
-import { getAuth } 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-const auth = getAuth();
-
-document.getElementById("start-analysis")
-?.addEventListener("click", () => {
-  if (auth.currentUser) {
-    window.location.href = "/tool/";
-  } else {
-    document.getElementById("auth-modal").classList.remove("hidden");
-  }
-});
-</script>
 
 </body>
 </html>
