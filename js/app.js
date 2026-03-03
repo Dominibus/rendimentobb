@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 6.0 CONVERSION READY
-// FREE + PRO STRUCTURE + EXECUTIVE UI
+// RENDIMENTOBB – EXECUTIVE ENGINE 7.0
+// CONVERSION OPTIMIZED + SCORE SYSTEM
 // ===============================================
 
 
@@ -38,6 +38,7 @@ function getValue(id) {
 }
 
 window.lastAnalysisData = null;
+let roiChartInstance = null;
 
 
 // ================= MORTGAGE =================
@@ -78,6 +79,7 @@ function runRealCalculation() {
   const loanYears = getValue("loanYears");
 
   const resultsDiv = document.getElementById("results");
+  const kpiContainer = document.getElementById("executive-kpi");
 
   if (!priceNight || !occupancy || equity <= 0) {
     resultsDiv.innerHTML = "Insert valid values.";
@@ -120,6 +122,16 @@ function runRealCalculation() {
     risk < 45 ? "B" :
     risk < 65 ? "C" : "D";
 
+  // ===== SCORE ENGINE =====
+
+  let score = 100 - risk;
+
+  if (roi < 0) score -= 20;
+  if (breakEven > 20) score -= 15;
+
+  score = Math.max(0, Math.min(100, score));
+
+  // ===== STORE =====
 
   window.lastAnalysisData = {
     roi,
@@ -127,105 +139,134 @@ function runRealCalculation() {
     netAfterMortgage,
     fiveYearProjection,
     risk,
-    grade
+    grade,
+    score
   };
 
+  // ===== KPI COLOR LOGIC =====
 
-  // ================= OUTPUT FREE =================
+  function roiClass() {
+    if (roi > 15) return "kpi-positive";
+    if (roi > 8) return "kpi-warning";
+    return "kpi-danger";
+  }
 
-  let html = `
-    <h3>Executive Investment Summary</h3>
+  function riskClass() {
+    if (risk < 35) return "kpi-positive";
+    if (risk < 60) return "kpi-warning";
+    return "kpi-danger";
+  }
 
-    <div class="kpi-grid">
-      <div class="kpi-box">
-        ROI
-        <strong>${roi.toFixed(2)}%</strong>
-      </div>
+  // ===== RENDER KPI =====
 
-      <div class="kpi-box">
-        Break-even
-        <strong>${breakEven.toFixed(1)} yrs</strong>
-      </div>
-
-      <div class="kpi-box">
-        Risk Score
-        <strong>${risk}/100</strong>
-      </div>
-
-      <div class="kpi-box">
-        Grade
-        <strong>${grade}</strong>
-      </div>
+  kpiContainer.innerHTML = `
+    <div class="kpi-box ${roiClass()}">
+      ROI
+      <strong>${roi.toFixed(2)}%</strong>
     </div>
 
-    <div style="margin-bottom:20px;">
-      <strong>Annual Net:</strong> ${formatCurrency(netAfterMortgage)}<br>
-      <strong>5-Year Projection:</strong> ${formatCurrency(fiveYearProjection)}
+    <div class="kpi-box">
+      Break-even
+      <strong>${breakEven.toFixed(1)} yrs</strong>
+    </div>
+
+    <div class="kpi-box ${riskClass()}">
+      Risk Score
+      <strong>${risk}/100</strong>
+    </div>
+
+    <div class="kpi-box">
+      Grade
+      <strong>${grade}</strong>
+    </div>
+
+    <div class="kpi-box">
+      RendimentoBB Score™
+      <strong>${score}/100</strong>
     </div>
   `;
 
+  // ===== STRATEGIC INSIGHT =====
 
-  // ================= PRO SECTION =================
+  const insightBox = document.getElementById("strategic-insight");
 
   if (isProUnlocked) {
 
-    // Advanced Stress Analysis
-    const stressLevels = [0.9, 0.8, 0.7];
+    let recommendation =
+      roi > 12 && risk < 40
+        ? "Investment appears structurally solid."
+        : roi > 6
+        ? "Moderate investment. Requires stress scenario validation."
+        : "High risk profile. Strategic revision recommended.";
 
-    html += `
-      <div class="advanced-section">
-        <h4>Executive Advanced Risk Analysis</h4>
-    `;
-
-    stressLevels.forEach(factor => {
-
-      const stressOcc = occupancy * factor;
-      const stressGross = priceNight * 365 * (stressOcc / 100);
-      const stressFees = stressGross * (commission / 100);
-      const stressProfit = stressGross - stressFees - yearlyExpenses;
-      const stressTax = stressProfit > 0 ? stressProfit * (tax / 100) : 0;
-      const stressNet = stressProfit - stressTax - mortgageYearly;
-      const stressROI = equity > 0 ? (stressNet / equity) * 100 : 0;
-
-      html += `
-        <div class="advanced-item">
-          Occupancy ${stressOcc.toFixed(0)}% → ROI ${stressROI.toFixed(2)}%
-        </div>
-      `;
-    });
-
-    html += `
-        <div style="margin-top:20px;">
-          <button onclick="generatePDF()" class="btn btn-primary">
-            Download Executive PDF
-          </button>
-        </div>
+    insightBox.innerHTML = `
+      <strong>🔎 Strategic Insight</strong>
+      <p style="margin-top:10px;">
+        ${recommendation}
+      </p>
+      <div style="margin-top:20px;">
+        <button onclick="generatePDF()" class="btn btn-primary">
+          Download Executive PDF
+        </button>
       </div>
     `;
 
   } else {
 
-    html += `
-      <div class="lock-box">
-        <strong>🔒 Executive Analysis Locked</strong>
-        <p>
-          Unlock stress tests, sensitivity analysis and professional
-          strategic investment report.
-        </p>
-        <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
-           class="btn btn-primary">
-           Unlock PRO – 19€
-        </a>
-      </div>
+    insightBox.innerHTML = `
+      <strong>🔒 Strategic Insight Locked</strong>
+      <p>
+        Unlock advanced recommendation, stress scenarios and executive PDF.
+      </p>
+      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
+         class="btn btn-primary">
+         Unlock PRO – 19€
+      </a>
     `;
   }
 
-  resultsDiv.innerHTML = html;
+  renderChart(netAfterMortgage);
 }
 
 
+// ================= CHART =================
 
-// ================= PDF (PRO ONLY) =================
+function renderChart(yearlyNet) {
+
+  const ctx = document.getElementById("roiChart");
+
+  if (roiChartInstance) {
+    roiChartInstance.destroy();
+  }
+
+  roiChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
+      datasets: [{
+        label: "Net Projection",
+        data: [
+          yearlyNet,
+          yearlyNet * 2,
+          yearlyNet * 3,
+          yearlyNet * 4,
+          yearlyNet * 5
+        ],
+        borderWidth: 2,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+
+// ================= PDF =================
 
 function generatePDF() {
 
@@ -254,7 +295,7 @@ function generatePDF() {
   pdf.setFontSize(14);
   pdf.text("Executive Investment Report", 20, 50);
 
-  pdf.setFontSize(32);
+  pdf.setFontSize(30);
   pdf.text(d.roi.toFixed(2) + "% ROI", 20, 70);
 
   pdf.setFontSize(12);
@@ -263,6 +304,7 @@ function generatePDF() {
   pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), 20, 110);
   pdf.text("Risk Score: " + d.risk + "/100", 20, 120);
   pdf.text("Grade: " + d.grade, 20, 130);
+  pdf.text("RendimentoBB Score: " + d.score + "/100", 20, 140);
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
