@@ -60,14 +60,23 @@ header {
   align-items: center;
 }
 
+/* 🔥 LOGO UNIFORM FIX */
+
 .logo {
   font-weight: 800;
   font-size: 19px;
   letter-spacing: -0.4px;
+  color: #0f172a !important; /* forza colore principale */
 }
 
 .logo span {
-  color: #10b981;
+  color: #10b981 !important; /* verde brand fisso */
+}
+
+/* rimuove eventuali override da link */
+a .logo,
+a.logo {
+  color: #0f172a !important;
 }
 
 /* ===================== */
