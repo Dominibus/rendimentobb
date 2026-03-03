@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 7.0
-// CONVERSION OPTIMIZED + SCORE SYSTEM
+// RENDIMENTOBB – EXECUTIVE ENGINE 8.0
+// BREAK-EVEN OCCUPANCY + STATUS BADGE
 // ===============================================
 
 
@@ -78,11 +78,9 @@ function runRealCalculation() {
   const interestRate = getValue("interestRate");
   const loanYears = getValue("loanYears");
 
-  const resultsDiv = document.getElementById("results");
   const kpiContainer = document.getElementById("executive-kpi");
 
   if (!priceNight || !occupancy || equity <= 0) {
-    resultsDiv.innerHTML = "Insert valid values.";
     return;
   }
 
@@ -106,6 +104,25 @@ function runRealCalculation() {
 
   let breakEven = netAfterMortgage > 0 ? equity / netAfterMortgage : 99;
   const fiveYearProjection = netAfterMortgage * 5;
+
+  // ===== BREAK-EVEN OCCUPANCY =====
+
+  const fixedCosts = yearlyExpenses + mortgageYearly;
+
+  const netPerOccupiedNight =
+    priceNight *
+    (1 - commission / 100) *
+    (1 - tax / 100);
+
+  let breakEvenOccupancy = 0;
+
+  if (netPerOccupiedNight > 0) {
+    breakEvenOccupancy =
+      (fixedCosts / (netPerOccupiedNight * 365)) * 100;
+  }
+
+  breakEvenOccupancy = Math.max(0, Math.min(100, breakEvenOccupancy));
+
 
   // ===== RISK ENGINE =====
 
@@ -131,6 +148,24 @@ function runRealCalculation() {
 
   score = Math.max(0, Math.min(100, score));
 
+
+  // ===== STATUS BADGE =====
+
+  let statusText = "";
+  let statusClass = "";
+
+  if (score > 70 && roi > 10) {
+    statusText = "STRUCTURALLY SOLID";
+    statusClass = "kpi-positive";
+  } else if (score > 45) {
+    statusText = "MODERATE STRUCTURE";
+    statusClass = "kpi-warning";
+  } else {
+    statusText = "HIGH STRUCTURAL RISK";
+    statusClass = "kpi-danger";
+  }
+
+
   // ===== STORE =====
 
   window.lastAnalysisData = {
@@ -140,27 +175,21 @@ function runRealCalculation() {
     fiveYearProjection,
     risk,
     grade,
-    score
+    score,
+    breakEvenOccupancy,
+    statusText
   };
 
-  // ===== KPI COLOR LOGIC =====
-
-  function roiClass() {
-    if (roi > 15) return "kpi-positive";
-    if (roi > 8) return "kpi-warning";
-    return "kpi-danger";
-  }
-
-  function riskClass() {
-    if (risk < 35) return "kpi-positive";
-    if (risk < 60) return "kpi-warning";
-    return "kpi-danger";
-  }
 
   // ===== RENDER KPI =====
 
   kpiContainer.innerHTML = `
-    <div class="kpi-box ${roiClass()}">
+    <div class="kpi-box ${statusClass}">
+      Investment Status
+      <strong>${statusText}</strong>
+    </div>
+
+    <div class="kpi-box">
       ROI
       <strong>${roi.toFixed(2)}%</strong>
     </div>
@@ -170,14 +199,14 @@ function runRealCalculation() {
       <strong>${breakEven.toFixed(1)} yrs</strong>
     </div>
 
-    <div class="kpi-box ${riskClass()}">
-      Risk Score
-      <strong>${risk}/100</strong>
+    <div class="kpi-box">
+      Min Occupancy Needed
+      <strong>${breakEvenOccupancy.toFixed(1)}%</strong>
     </div>
 
     <div class="kpi-box">
-      Grade
-      <strong>${grade}</strong>
+      Risk Score
+      <strong>${risk}/100</strong>
     </div>
 
     <div class="kpi-box">
@@ -186,44 +215,6 @@ function runRealCalculation() {
     </div>
   `;
 
-  // ===== STRATEGIC INSIGHT =====
-
-  const insightBox = document.getElementById("strategic-insight");
-
-  if (isProUnlocked) {
-
-    let recommendation =
-      roi > 12 && risk < 40
-        ? "Investment appears structurally solid."
-        : roi > 6
-        ? "Moderate investment. Requires stress scenario validation."
-        : "High risk profile. Strategic revision recommended.";
-
-    insightBox.innerHTML = `
-      <strong>🔎 Strategic Insight</strong>
-      <p style="margin-top:10px;">
-        ${recommendation}
-      </p>
-      <div style="margin-top:20px;">
-        <button onclick="generatePDF()" class="btn btn-primary">
-          Download Executive PDF
-        </button>
-      </div>
-    `;
-
-  } else {
-
-    insightBox.innerHTML = `
-      <strong>🔒 Strategic Insight Locked</strong>
-      <p>
-        Unlock advanced recommendation, stress scenarios and executive PDF.
-      </p>
-      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
-         class="btn btn-primary">
-         Unlock PRO – 19€
-      </a>
-    `;
-  }
 
   renderChart(netAfterMortgage);
 }
@@ -295,16 +286,17 @@ function generatePDF() {
   pdf.setFontSize(14);
   pdf.text("Executive Investment Report", 20, 50);
 
-  pdf.setFontSize(30);
+  pdf.setFontSize(28);
   pdf.text(d.roi.toFixed(2) + "% ROI", 20, 70);
 
   pdf.setFontSize(12);
   pdf.text("Break-even: " + d.breakEven.toFixed(1) + " yrs", 20, 90);
-  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), 20, 100);
-  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), 20, 110);
-  pdf.text("Risk Score: " + d.risk + "/100", 20, 120);
-  pdf.text("Grade: " + d.grade, 20, 130);
-  pdf.text("RendimentoBB Score: " + d.score + "/100", 20, 140);
+  pdf.text("Min Occupancy: " + d.breakEvenOccupancy.toFixed(1) + "%", 20, 100);
+  pdf.text("Annual Net: " + formatCurrency(d.netAfterMortgage), 20, 110);
+  pdf.text("5Y Projection: " + formatCurrency(d.fiveYearProjection), 20, 120);
+  pdf.text("Risk Score: " + d.risk + "/100", 20, 130);
+  pdf.text("Score: " + d.score + "/100", 20, 140);
+  pdf.text("Status: " + d.statusText, 20, 150);
 
   pdf.save("RendimentoBB_Executive_Report.pdf");
 }
