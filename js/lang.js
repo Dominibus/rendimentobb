@@ -1,12 +1,13 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 3.0
-// Homepage + Tool + PDF Ready
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 3.1
+// Homepage + Tool + Dynamic JS Sync
 // ===============================================
 
 window.currentLang = localStorage.getItem("rb_lang") || "it";
 
+
 // ===============================================
-// APPLY TRANSLATIONS
+// APPLY TRANSLATIONS (STATIC HTML)
 // ===============================================
 
 function applyTranslations() {
@@ -16,7 +17,6 @@ function applyTranslations() {
     const text = el.getAttribute("data-" + window.currentLang);
     if (!text) return;
 
-    // Support HTML content
     if (text.includes("<br>") || text.includes("<li>")) {
       el.innerHTML = text;
     } else {
@@ -25,13 +25,14 @@ function applyTranslations() {
 
   });
 
-  // Placeholder support (future ready)
+  // Placeholder support
   document.querySelectorAll("[data-placeholder-it]").forEach(el => {
     const ph = el.getAttribute("data-placeholder-" + window.currentLang);
     if (ph) el.setAttribute("placeholder", ph);
   });
 
 }
+
 
 // ===============================================
 // UPDATE LANGUAGE UI
@@ -55,6 +56,26 @@ function updateLanguageUI() {
 
 }
 
+
+// ===============================================
+// FORCE DYNAMIC RE-RENDER
+// ===============================================
+
+function rerenderDynamicContent() {
+
+  // New Engine 12.x
+  if (typeof calculate === "function") {
+    calculate();
+  }
+
+  // Legacy engine fallback (if present)
+  if (typeof runRealCalculation === "function") {
+    runRealCalculation();
+  }
+
+}
+
+
 // ===============================================
 // SET LANGUAGE
 // ===============================================
@@ -69,12 +90,10 @@ function setLanguage(lang) {
   applyTranslations();
   updateLanguageUI();
 
-  // Re-render analysis if already calculated
-  if (typeof runRealCalculation === "function" && window.lastAnalysisData) {
-    runRealCalculation();
-  }
-
+  // 🔥 This fixes your issue
+  rerenderDynamicContent();
 }
+
 
 // ===============================================
 // AUTO INIT
