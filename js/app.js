@@ -1,12 +1,13 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 11.0
-// STABILITY MATRIX + STRATEGIC LAYER + MORTGAGE COMPARATOR
+// RENDIMENTOBB – EXECUTIVE ENGINE 12.0
+// STABILITY MATRIX + STRATEGIC LAYER + SMART MORTGAGE LINK
 // ===============================================
 
 
 // ================= PRO SYSTEM =================
 
 let isProUnlocked = localStorage.getItem("proUnlocked") === "true";
+let overrideMortgage = null;
 
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get("pro") === "paid") {
@@ -75,10 +76,7 @@ function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageY
   let roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
   if (!isFinite(roi)) roi = 0;
 
-  return {
-    roi,
-    netAfterMortgage
-  };
+  return { roi, netAfterMortgage };
 }
 
 function scenarioLabel(roi) {
@@ -105,7 +103,9 @@ function calculate() {
 
   if (!priceNight || !occupancy || equity <= 0) return;
 
-  const mortgageYearly = calculateMortgage(loanAmount, interestRate, loanYears);
+  const mortgageYearly = overrideMortgage !== null
+    ? overrideMortgage
+    : calculateMortgage(loanAmount, interestRate, loanYears);
 
   const base = calculateScenario(
     occupancy,
@@ -116,10 +116,6 @@ function calculate() {
     mortgageYearly,
     equity
   );
-
-  const s60 = calculateScenario(60, priceNight, commission, tax, expenses, mortgageYearly, equity);
-  const s75 = calculateScenario(75, priceNight, commission, tax, expenses, mortgageYearly, equity);
-  const s85 = calculateScenario(85, priceNight, commission, tax, expenses, mortgageYearly, equity);
 
   const kpiContainer = document.getElementById("executive-kpi");
 
@@ -264,8 +260,11 @@ function compareMortgages() {
 
   banks.sort((a, b) => a.data.totalPaid - b.data.totalPaid);
 
+  const best = banks[0];
+
   resultDiv.innerHTML = `
-    <h4 style="margin-bottom:20px;">🏆 Miglior Soluzione: ${banks[0].name}</h4>
+    <h4 style="margin-bottom:20px;">🏆 Miglior Soluzione: ${best.name}</h4>
+
     <div class="kpi-grid">
       ${banks.map(bank => `
         <div class="kpi-box">
@@ -276,5 +275,17 @@ function compareMortgages() {
         </div>
       `).join("")}
     </div>
+
+    <div style="margin-top:30px;text-align:center;">
+      <button onclick="applyBestMortgage(${best.data.yearlyPayment})"
+        class="btn btn-primary">
+        Applica miglior mutuo al ROI
+      </button>
+    </div>
   `;
+}
+
+function applyBestMortgage(yearlyPayment) {
+  overrideMortgage = yearlyPayment;
+  calculate();
 }
