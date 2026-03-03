@@ -10,65 +10,48 @@
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-.portal-nav {
+
+/* HEADER DEFINITIVO */
+
+.portal-header{
+  padding:25px 0;
+}
+
+.portal-header-inner{
   display:flex;
-  gap:30px;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.portal-nav{
+  display:flex;
+  gap:28px;
   font-size:14px;
 }
 
-.portal-nav a {
+.portal-nav a{
   text-decoration:none;
   color:#475569;
   font-weight:500;
+  transition:.2s ease;
 }
 
-.portal-nav a:hover {
+.portal-nav a:hover{
   color:#0f172a;
 }
 
-.hero {
-  padding:100px 0 60px;
-}
-
-.hero .cta-group {
-  margin-top:40px;
+.right-controls{
   display:flex;
-  gap:20px;
-  flex-wrap:wrap;
+  align-items:center;
+  gap:18px;
 }
 
-.snapshot-card,
-.price-card {
-  background:white;
-  padding:50px;
-  border-radius:24px;
-  box-shadow:0 40px 100px rgba(0,0,0,0.06);
-  border:1px solid #e2e8f0;
-}
-
-.snapshot-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:25px;
-}
-
-.metric span {
-  font-size:13px;
-  color:#64748b;
-}
-
-.metric strong {
-  display:block;
-  font-size:22px;
-  margin-top:6px;
-}
-
-.lang-switch {
+.lang-switch{
   display:flex;
   gap:8px;
 }
 
-.lang-btn {
+.lang-btn{
   padding:6px 14px;
   border-radius:999px;
   border:1px solid #cbd5e1;
@@ -76,47 +59,93 @@
   cursor:pointer;
   font-size:13px;
   font-weight:600;
+  transition:.2s ease;
 }
 
-.lang-btn.active {
+.lang-btn.active{
   background:#0f172a;
   color:white;
 }
+
+/* HERO */
+
+.hero{
+  padding:100px 0 60px;
+}
+
+.hero .cta-group{
+  margin-top:40px;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+/* CARDS */
+
+.snapshot-card,
+.price-card{
+  background:white;
+  padding:50px;
+  border-radius:24px;
+  box-shadow:0 40px 100px rgba(0,0,0,0.06);
+  border:1px solid #e2e8f0;
+}
+
+.snapshot-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+}
+
+.metric span{
+  font-size:13px;
+  color:#64748b;
+}
+
+.metric strong{
+  display:block;
+  font-size:22px;
+  margin-top:6px;
+}
+
 </style>
 </head>
 
 <body>
 
-<header class="container nav">
+<header class="portal-header">
+  <div class="container portal-header-inner">
 
-  <div style="display:flex; align-items:center; gap:40px;">
-    <div class="logo">Rendimento<span>BB</span></div>
+    <div style="display:flex; align-items:center; gap:40px;">
+      <div class="logo">Rendimento<span>BB</span></div>
 
-    <nav class="portal-nav">
-      <a href="/tool/">Tool</a>
-      <a href="/tool/#mortgage">Mutui</a>
-      <a href="#">Immobili</a>
-      <a href="/academy/">Academy</a>
-    </nav>
-  </div>
-
-  <div style="display:flex;gap:20px;align-items:center;">
-    <div class="lang-switch">
-      <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      <nav class="portal-nav">
+        <a href="/tool/">Tool</a>
+        <a href="/tool/#mortgage">Mutui</a>
+        <a href="#">Immobili</a>
+        <a href="/academy/">Academy</a>
+      </nav>
     </div>
 
-    <button onclick="window.location.href='/login/'" class="btn btn-secondary" data-i18n="login">
-      Accedi
-    </button>
-  </div>
+    <div class="right-controls">
+      <div class="lang-switch">
+        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      </div>
 
+      <button onclick="window.location.href='/login/'"
+              class="btn btn-secondary"
+              data-i18n="login">
+        Accedi
+      </button>
+    </div>
+
+  </div>
 </header>
 
 
 <main>
 
-<!-- HERO -->
 <section class="hero container">
 
   <div class="page-title">
@@ -131,11 +160,15 @@
   </div>
 
   <div class="cta-group">
-    <button onclick="window.location.href='/login/'" class="btn btn-primary" data-i18n="start">
+    <button onclick="window.location.href='/login/'"
+            class="btn btn-primary"
+            data-i18n="start">
       Avvia Analisi
     </button>
 
-    <button onclick="window.location.href='/tool/'" class="btn btn-outline" data-i18n="demo">
+    <button onclick="window.location.href='/tool/'"
+            class="btn btn-outline"
+            data-i18n="demo">
       Visualizza Demo
     </button>
   </div>
@@ -143,7 +176,6 @@
 </section>
 
 
-<!-- SNAPSHOT -->
 <section class="container" style="margin-top:80px;">
   <div class="snapshot-card">
 
@@ -177,7 +209,6 @@
 </section>
 
 
-<!-- PRO -->
 <section class="container" style="margin-top:120px;">
   <div class="price-card">
 
@@ -197,7 +228,9 @@
     </ul>
 
     <div style="margin-top:40px;">
-      <button onclick="window.location.href='/login/'" class="btn btn-primary" data-i18n="unlock">
+      <button onclick="window.location.href='/login/'"
+              class="btn btn-primary"
+              data-i18n="unlock">
         Sblocca Versione PRO
       </button>
     </div>
@@ -253,23 +286,23 @@ const translations = {
   }
 };
 
-function setLang(lang) {
+function setLang(lang){
   localStorage.setItem("rb_lang", lang);
   applyLang(lang);
 }
 
-function applyLang(lang) {
+function applyLang(lang){
   document.documentElement.lang = lang;
 
-  document.querySelectorAll("[data-i18n]").forEach(el => {
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
     const key = el.getAttribute("data-i18n");
-    if (translations[lang][key]) {
+    if(translations[lang][key]){
       el.textContent = translations[lang][key];
     }
   });
 
-  document.getElementById("btn-it").classList.toggle("active", lang === "it");
-  document.getElementById("btn-en").classList.toggle("active", lang === "en");
+  document.getElementById("btn-it").classList.toggle("active", lang==="it");
+  document.getElementById("btn-en").classList.toggle("active", lang==="en");
 }
 
 applyLang(localStorage.getItem("rb_lang") || "it");
