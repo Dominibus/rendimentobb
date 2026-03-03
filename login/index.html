@@ -10,14 +10,20 @@
 <style>
 body {
   background: linear-gradient(135deg,#0f172a,#1e293b);
+  color: white;
+}
+
+.login-wrapper {
+  min-height: 100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  height:100vh;
+  padding:40px 20px;
 }
 
 .login-card {
   background:white;
+  color:#0f172a;
   padding:50px;
   border-radius:20px;
   width:360px;
@@ -27,40 +33,70 @@ body {
 
 .login-card h2 {
   margin-bottom:30px;
+  font-weight:800;
 }
 
 .login-card input {
   width:100%;
-  padding:12px;
+  padding:14px;
   margin-bottom:15px;
-  border-radius:8px;
+  border-radius:10px;
   border:1px solid #cbd5e1;
+  font-size:14px;
+}
+
+.login-card input:focus {
+  outline:none;
+  border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.2);
+}
+
+.back-link {
+  margin-top:20px;
+  font-size:13px;
+}
+
+.back-link a {
+  color:#64748b;
+  text-decoration:none;
+}
+
+.back-link a:hover {
+  color:#0f172a;
 }
 </style>
 </head>
 
 <body>
 
-<div class="login-card">
+<main class="login-wrapper">
 
-<h2>Accesso</h2>
+  <div class="login-card">
 
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+    <h2>Accesso</h2>
 
-<button id="loginBtn" class="btn btn-primary" style="width:100%;margin-bottom:10px;">
-Login
-</button>
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
 
-<button id="registerBtn" class="btn btn-secondary" style="width:100%;">
-Registrati
-</button>
+    <button id="loginBtn" class="btn btn-primary" style="width:100%;margin-bottom:12px;">
+      Login
+    </button>
 
-<div style="margin-top:20px;font-size:13px;">
-<a href="/">← Torna alla Home</a>
-</div>
+    <button id="registerBtn" class="btn btn-secondary" style="width:100%;">
+      Registrati
+    </button>
 
-</div>
+    <div class="back-link">
+      <a href="/">← Torna alla Home</a>
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="global-footer" style="background:#0f172a; color:#94a3b8;">
+  © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
+</footer>
 
 <script type="module" src="/js/firebase-init.js"></script>
 
