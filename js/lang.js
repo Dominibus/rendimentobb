@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 4.0 (SaaS Ready)
-// Single Source of Truth for ALL Pages
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 5.0
+// Full Static + SEO + Dynamic Sync
 // ===============================================
 
 (function(){
@@ -21,13 +21,15 @@
 
   function applyStaticTranslations(){
 
+    // -----------------------------
     // Standard data-it / data-en
+    // -----------------------------
     document.querySelectorAll("[data-it]").forEach(el => {
 
       const text = el.getAttribute("data-" + RB_LANG.current);
       if(!text) return;
 
-      if(text.includes("<") ){
+      if(text.includes("<")){
         el.innerHTML = text;
       } else {
         el.textContent = text;
@@ -35,7 +37,10 @@
 
     });
 
+
+    // -----------------------------
     // Placeholder support
+    // -----------------------------
     document.querySelectorAll("[data-placeholder-it]").forEach(el => {
 
       const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
@@ -45,11 +50,35 @@
 
     });
 
+
+    // -----------------------------
+    // TITLE support
+    // -----------------------------
+    const titleEl = document.querySelector("title");
+    if(titleEl){
+      const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
+      if(titleText){
+        titleEl.textContent = titleText;
+      }
+    }
+
+
+    // -----------------------------
+    // META DESCRIPTION support
+    // -----------------------------
+    const metaDesc = document.querySelector("meta[name='description']");
+    if(metaDesc){
+      const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
+      if(descText){
+        metaDesc.setAttribute("content", descText);
+      }
+    }
+
   }
 
 
   // ===============================
-  // UPDATE UI BUTTONS
+  // UPDATE LANGUAGE UI
   // ===============================
 
   function updateLanguageUI(){
@@ -74,12 +103,10 @@
 
   function rerenderDynamic(){
 
-    // Tool engine 12.x
     if(typeof calculate === "function"){
       calculate();
     }
 
-    // Legacy fallback
     if(typeof runRealCalculation === "function"){
       runRealCalculation();
     }
