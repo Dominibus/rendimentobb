@@ -11,7 +11,7 @@
 
 <style>
 
-/* HEADER IDENTICO A TOOL & HOME */
+/* HEADER IDENTICO A HOME & TOOL */
 
 .portal-header{
   padding:25px 0;
@@ -124,12 +124,14 @@
 
     <div class="right-controls">
       <div class="lang-switch">
-        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+        <button class="lang-btn" onclick="setLanguage('it')" id="btn-it">IT</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
       </div>
 
       <button onclick="window.location.href='/'"
-              class="btn btn-secondary">
+              class="btn btn-secondary"
+              data-it="Home"
+              data-en="Home">
         Home
       </button>
     </div>
@@ -143,11 +145,14 @@
 <div class="container" style="padding-top:80px; padding-bottom:120px;">
 
   <div class="page-title">
-    <h1 data-i18n="academy_title">
-      Academy Strategica per Investimenti B&B
+    <h1
+      data-it="Academy Strategica per Investimenti B&B"
+      data-en="Strategic Academy for B&B Investments">
     </h1>
-    <p data-i18n="academy_sub">
-      Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire.
+
+    <p
+      data-it="Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire."
+      data-en="Understand ROI, risk, sustainability and optimization levers before investing.">
     </p>
   </div>
 
@@ -155,29 +160,62 @@
   <section class="content-section">
 
     <div class="content-card">
-      <h3 data-i18n="roi_title">📊 Come interpretare il ROI</h3>
-      <p data-i18n="roi_text"></p>
+      <h3
+        data-it="📊 Come interpretare il ROI"
+        data-en="📊 How to interpret ROI">
+      </h3>
+
+      <p
+        data-it="Un ROI superiore al 10% indica buona redditività. Tuttavia è fondamentale analizzare la resilienza dell'investimento in scenari di occupazione ridotta. La stabilità del flusso di cassa è più importante del ROI nominale."
+        data-en="An ROI above 10% indicates good profitability. However, resilience under lower occupancy scenarios is crucial. Cash flow stability matters more than nominal ROI.">
+      </p>
     </div>
 
-    <div class="content-card">
-      <h3 data-i18n="mortgage_title">🏦 Quando il mutuo è sostenibile</h3>
-      <p data-i18n="mortgage_text"></p>
-    </div>
 
     <div class="content-card">
-      <h3 data-i18n="errors_title">⚠️ Errori comuni negli investimenti B&B</h3>
-      <p data-i18n="errors_text"></p>
+      <h3
+        data-it="🏦 Quando il mutuo è sostenibile"
+        data-en="🏦 When a mortgage is sustainable">
+      </h3>
+
+      <p
+        data-it="Il flusso operativo deve coprire il debito con margine. Se il cashflow è negativo già al 70% di occupazione, l'investimento è strutturalmente fragile."
+        data-en="Operating cash flow must cover debt with margin. If cash flow turns negative at 70% occupancy, the investment is structurally fragile.">
+      </p>
     </div>
 
+
     <div class="content-card">
-      <h3 data-i18n="improve_title">📈 Come migliorare la sostenibilità</h3>
-      <p data-i18n="improve_text"></p>
+      <h3
+        data-it="⚠️ Errori comuni negli investimenti B&B"
+        data-en="⚠️ Common B&B investment mistakes">
+      </h3>
+
+      <p
+        data-it="Sovrastimare l'occupazione media, ignorare la stagionalità e sottovalutare le spese operative sono errori frequenti. I numeri devono essere realistici e prudenziali."
+        data-en="Overestimating occupancy, ignoring seasonality and underestimating operating costs are common mistakes. Numbers must be realistic and conservative.">
+      </p>
     </div>
+
+
+    <div class="content-card">
+      <h3
+        data-it="📈 Come migliorare la sostenibilità"
+        data-en="📈 How to improve sustainability">
+      </h3>
+
+      <p
+        data-it="Ottimizzare il prezzo medio notte, migliorare recensioni, ridurre costi fissi e negoziare un tasso mutuo competitivo può cambiare radicalmente il profilo di rischio."
+        data-en="Optimizing nightly pricing, improving reviews, reducing fixed costs and negotiating competitive loan rates can radically improve the risk profile.">
+      </p>
+    </div>
+
 
     <div style="text-align:center;margin-top:60px;">
       <button onclick="window.location.href='/tool/'"
               class="btn btn-primary"
-              data-i18n="start_analysis">
+              data-it="Avvia Analisi Strategica"
+              data-en="Start Strategic Analysis">
       </button>
     </div>
 
@@ -192,57 +230,8 @@
 </footer>
 
 
-<script>
-const translations = {
-  it: {
-    academy_title: "Academy Strategica per Investimenti B&B",
-    academy_sub: "Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire.",
-    roi_title: "📊 Come interpretare il ROI",
-    roi_text: "Un ROI superiore al 10% indica buona redditività. Tuttavia è fondamentale analizzare la resilienza dell'investimento in scenari di occupazione ridotta. La stabilità del flusso di cassa è più importante del ROI nominale.",
-    mortgage_title: "🏦 Quando il mutuo è sostenibile",
-    mortgage_text: "Il flusso operativo deve coprire il debito con margine. Se il cashflow è negativo già al 70% di occupazione, l'investimento è strutturalmente fragile.",
-    errors_title: "⚠️ Errori comuni negli investimenti B&B",
-    errors_text: "Sovrastimare l'occupazione media, ignorare la stagionalità e sottovalutare le spese operative sono errori frequenti. I numeri devono essere realistici e prudenziali.",
-    improve_title: "📈 Come migliorare la sostenibilità",
-    improve_text: "Ottimizzare il prezzo medio notte, migliorare recensioni, ridurre costi fissi e negoziare un tasso mutuo competitivo può cambiare radicalmente il profilo di rischio.",
-    start_analysis: "Avvia Analisi Strategica"
-  },
-  en: {
-    academy_title: "Strategic Academy for B&B Investments",
-    academy_sub: "Understand ROI, risk, sustainability and optimization levers before investing.",
-    roi_title: "📊 How to interpret ROI",
-    roi_text: "An ROI above 10% indicates good profitability. However, resilience under lower occupancy scenarios is crucial. Cash flow stability matters more than nominal ROI.",
-    mortgage_title: "🏦 When a mortgage is sustainable",
-    mortgage_text: "Operating cash flow must cover debt with margin. If cash flow turns negative at 70% occupancy, the investment is structurally fragile.",
-    errors_title: "⚠️ Common B&B investment mistakes",
-    errors_text: "Overestimating occupancy, ignoring seasonality and underestimating operating costs are common mistakes. Numbers must be realistic and conservative.",
-    improve_title: "📈 How to improve sustainability",
-    improve_text: "Optimizing nightly pricing, improving reviews, reducing fixed costs and negotiating competitive loan rates can radically improve the risk profile.",
-    start_analysis: "Start Strategic Analysis"
-  }
-};
-
-function setLang(lang){
-  localStorage.setItem("rb_lang", lang);
-  applyLang(lang);
-}
-
-function applyLang(lang){
-  document.documentElement.lang = lang;
-
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    const key = el.getAttribute("data-i18n");
-    if(translations[lang][key]){
-      el.textContent = translations[lang][key];
-    }
-  });
-
-  document.getElementById("btn-it").classList.toggle("active", lang==="it");
-  document.getElementById("btn-en").classList.toggle("active", lang==="en");
-}
-
-applyLang(localStorage.getItem("rb_lang") || "it");
-</script>
+<!-- 🔥 SINGLE GLOBAL LANGUAGE ENGINE -->
+<script src="/js/lang.js"></script>
 
 </body>
 </html>
