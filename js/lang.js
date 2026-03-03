@@ -1,116 +1,128 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 3.1
-// Homepage + Tool + Dynamic JS Sync
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 4.0 (SaaS Ready)
+// Single Source of Truth for ALL Pages
 // ===============================================
 
-window.currentLang = localStorage.getItem("rb_lang") || "it";
+(function(){
+
+  // ===============================
+  // GLOBAL STATE
+  // ===============================
+
+  window.RB_LANG = {
+    current: localStorage.getItem("rb_lang") || "it",
+    supported: ["it", "en"]
+  };
 
 
-// ===============================================
-// APPLY TRANSLATIONS (STATIC HTML)
-// ===============================================
+  // ===============================
+  // APPLY STATIC TRANSLATIONS
+  // ===============================
 
-function applyTranslations() {
+  function applyStaticTranslations(){
 
-  document.querySelectorAll("[data-it]").forEach(el => {
+    // Standard data-it / data-en
+    document.querySelectorAll("[data-it]").forEach(el => {
 
-    const text = el.getAttribute("data-" + window.currentLang);
-    if (!text) return;
+      const text = el.getAttribute("data-" + RB_LANG.current);
+      if(!text) return;
 
-    if (text.includes("<br>") || text.includes("<li>")) {
-      el.innerHTML = text;
-    } else {
-      el.textContent = text;
+      if(text.includes("<") ){
+        el.innerHTML = text;
+      } else {
+        el.textContent = text;
+      }
+
+    });
+
+    // Placeholder support
+    document.querySelectorAll("[data-placeholder-it]").forEach(el => {
+
+      const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
+      if(ph){
+        el.setAttribute("placeholder", ph);
+      }
+
+    });
+
+  }
+
+
+  // ===============================
+  // UPDATE UI BUTTONS
+  // ===============================
+
+  function updateLanguageUI(){
+
+    document.documentElement.setAttribute("lang", RB_LANG.current);
+
+    document.querySelectorAll("[id^='btn-']").forEach(btn=>{
+      btn.classList.remove("active");
+    });
+
+    const activeBtn = document.getElementById("btn-" + RB_LANG.current);
+    if(activeBtn){
+      activeBtn.classList.add("active");
     }
 
+  }
+
+
+  // ===============================
+  // RERENDER DYNAMIC CONTENT
+  // ===============================
+
+  function rerenderDynamic(){
+
+    // Tool engine 12.x
+    if(typeof calculate === "function"){
+      calculate();
+    }
+
+    // Legacy fallback
+    if(typeof runRealCalculation === "function"){
+      runRealCalculation();
+    }
+
+  }
+
+
+  // ===============================
+  // PUBLIC SET LANGUAGE
+  // ===============================
+
+  window.setLang = function(lang){
+
+    if(!RB_LANG.supported.includes(lang)) return;
+
+    RB_LANG.current = lang;
+    localStorage.setItem("rb_lang", lang);
+
+    applyStaticTranslations();
+    updateLanguageUI();
+    rerenderDynamic();
+
+  };
+
+
+  // ===============================
+  // AUTO INIT
+  // ===============================
+
+  window.addEventListener("DOMContentLoaded", ()=>{
+
+    const saved = localStorage.getItem("rb_lang");
+
+    if(saved && RB_LANG.supported.includes(saved)){
+      RB_LANG.current = saved;
+    } else {
+      RB_LANG.current =
+        navigator.language.startsWith("en") ? "en" : "it";
+    }
+
+    applyStaticTranslations();
+    updateLanguageUI();
+
   });
 
-  // Placeholder support
-  document.querySelectorAll("[data-placeholder-it]").forEach(el => {
-    const ph = el.getAttribute("data-placeholder-" + window.currentLang);
-    if (ph) el.setAttribute("placeholder", ph);
-  });
-
-}
-
-
-// ===============================================
-// UPDATE LANGUAGE UI
-// ===============================================
-
-function updateLanguageUI() {
-
-  document.documentElement.setAttribute("lang", window.currentLang);
-
-  document.getElementById("btn-it")?.classList.remove("active");
-  document.getElementById("btn-en")?.classList.remove("active");
-  document.getElementById("btn-" + window.currentLang)?.classList.add("active");
-
-  const indicator = document.querySelector(".lang-indicator");
-  if (indicator) {
-    indicator.style.transform =
-      window.currentLang === "en"
-        ? "translateX(100%)"
-        : "translateX(0%)";
-  }
-
-}
-
-
-// ===============================================
-// FORCE DYNAMIC RE-RENDER
-// ===============================================
-
-function rerenderDynamicContent() {
-
-  // New Engine 12.x
-  if (typeof calculate === "function") {
-    calculate();
-  }
-
-  // Legacy engine fallback (if present)
-  if (typeof runRealCalculation === "function") {
-    runRealCalculation();
-  }
-
-}
-
-
-// ===============================================
-// SET LANGUAGE
-// ===============================================
-
-function setLanguage(lang) {
-
-  if (lang !== "it" && lang !== "en") return;
-
-  window.currentLang = lang;
-  localStorage.setItem("rb_lang", lang);
-
-  applyTranslations();
-  updateLanguageUI();
-
-  // 🔥 This fixes your issue
-  rerenderDynamicContent();
-}
-
-
-// ===============================================
-// AUTO INIT
-// ===============================================
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  const saved = localStorage.getItem("rb_lang");
-
-  if (saved === "it" || saved === "en") {
-    window.currentLang = saved;
-  } else {
-    window.currentLang =
-      navigator.language.startsWith("en") ? "en" : "it";
-  }
-
-  applyTranslations();
-  updateLanguageUI();
-
-});
+})();
