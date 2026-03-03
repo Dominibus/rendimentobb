@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 12.0
-// STABILITY MATRIX + STRATEGIC LAYER + SMART MORTGAGE LINK
+// RENDIMENTOBB – EXECUTIVE ENGINE 12.1
+// FULL INTERNATIONAL VERSION
 // ===============================================
 
 
@@ -17,11 +17,55 @@ if (urlParams.get("pro") === "paid") {
 }
 
 
-// ================= UTIL =================
+// ================= LANGUAGE =================
 
 if (!window.currentLang) {
   window.currentLang = localStorage.getItem("rb_lang") || "it";
 }
+
+const TEXT = {
+  it: {
+    stability: "📊 Matrice Stabilità",
+    solid: "SOLIDO",
+    marginal: "MARGINALE",
+    unsustainable: "NON SOSTENIBILE",
+    annualNet: "Netto Annuale",
+    roi: "ROI",
+    occ: "Occupazione",
+    strategicLocked: "🔒 Interpretazione Strategica Bloccata",
+    unlock: "Sblocca PRO – 19€",
+    strategicTitle: "🔎 Interpretazione Strategica",
+    bestSolution: "🏆 Miglior Soluzione",
+    applyMortgage: "Applica miglior mutuo al ROI",
+    proOnly: "🔒 Funzione PRO",
+    proDesc: "L'integrazione del mutuo nel ROI è disponibile solo in modalità PRO.",
+    insertMortgageData: "Inserisci importo e durata."
+  },
+  en: {
+    stability: "📊 Stability Matrix",
+    solid: "SOLID",
+    marginal: "MARGINAL",
+    unsustainable: "NOT SUSTAINABLE",
+    annualNet: "Annual Net",
+    roi: "ROI",
+    occ: "Occupancy",
+    strategicLocked: "🔒 Strategic Interpretation Locked",
+    unlock: "Unlock PRO – 19€",
+    strategicTitle: "🔎 Strategic Interpretation",
+    bestSolution: "🏆 Best Solution",
+    applyMortgage: "Apply best mortgage to ROI",
+    proOnly: "🔒 PRO Feature",
+    proDesc: "Mortgage integration into ROI is available only in PRO mode.",
+    insertMortgageData: "Insert amount and duration."
+  }
+};
+
+function t(key) {
+  return TEXT[window.currentLang || "it"][key];
+}
+
+
+// ================= UTIL =================
 
 function formatCurrency(value) {
   if (!isFinite(value)) value = 0;
@@ -80,13 +124,13 @@ function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageY
 }
 
 function scenarioLabel(roi) {
-  if (roi > 12) return { text: "SOLIDO", class: "kpi-positive" };
-  if (roi > 0) return { text: "MARGINALE", class: "kpi-warning" };
-  return { text: "NON SOSTENIBILE", class: "kpi-danger" };
+  if (roi > 12) return { text: t("solid"), class: "kpi-positive" };
+  if (roi > 0) return { text: t("marginal"), class: "kpi-warning" };
+  return { text: t("unsustainable"), class: "kpi-danger" };
 }
 
 
-// ================= MAIN CALCULATION =================
+// ================= MAIN =================
 
 function calculate() {
 
@@ -121,17 +165,17 @@ function calculate() {
 
   kpiContainer.innerHTML = `
     <div class="kpi-box ${scenarioLabel(base.roi).class}">
-      ROI
+      ${t("roi")}
       <strong>${base.roi.toFixed(2)}%</strong>
     </div>
 
     <div class="kpi-box">
-      Annual Net
+      ${t("annualNet")}
       <strong>${formatCurrency(base.netAfterMortgage)}</strong>
     </div>
 
     <div style="grid-column:1/-1;margin-top:30px;">
-      <strong>📊 Stability Matrix</strong>
+      <strong>${t("stability")}</strong>
     </div>
 
     ${[60,75,85].map(o=>{
@@ -139,7 +183,7 @@ function calculate() {
       const l = scenarioLabel(s.roi);
       return `
         <div class="kpi-box ${l.class}">
-          ${o}% Occupancy
+          ${o}% ${t("occ")}
           <strong>${s.roi.toFixed(2)}%</strong>
           <div style="margin-top:6px;font-size:12px;">${l.text}</div>
         </div>
@@ -152,7 +196,7 @@ function calculate() {
 }
 
 
-// ================= STRATEGIC INSIGHT =================
+// ================= STRATEGIC =================
 
 function renderStrategicInsight(baseROI) {
 
@@ -160,12 +204,13 @@ function renderStrategicInsight(baseROI) {
 
   if (!isProUnlocked) {
     insightBox.innerHTML = `
-      <strong>🔒 Strategic Interpretation Locked</strong>
-      <p>Unlock structural interpretation and strategic simulation.</p>
-      <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
-         class="btn btn-primary">
-         Unlock PRO – 19€
-      </a>
+      <strong>${t("strategicLocked")}</strong>
+      <div style="margin-top:10px;">
+        <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
+           class="btn btn-primary">
+           ${t("unlock")}
+        </a>
+      </div>
     `;
     return;
   }
@@ -178,7 +223,7 @@ function renderStrategicInsight(baseROI) {
       : "Structurally fragile. Review pricing or financing.";
 
   insightBox.innerHTML = `
-    <strong>🔎 Strategic Interpretation</strong>
+    <strong>${t("strategicTitle")}</strong>
     <p style="margin-top:10px;">${message}</p>
   `;
 }
@@ -248,14 +293,14 @@ function compareMortgages() {
   const resultDiv = document.getElementById("mortgage-results");
 
   if (!amount || !years) {
-    resultDiv.innerHTML = "Inserisci importo e durata.";
+    resultDiv.innerHTML = t("insertMortgageData");
     return;
   }
 
   const banks = [
-    { name: "Banca A", rate: rateA, data: mortgageSimulation(amount, rateA, years) },
-    { name: "Banca B", rate: rateB, data: mortgageSimulation(amount, rateB, years) },
-    { name: "Banca C", rate: rateC, data: mortgageSimulation(amount, rateC, years) }
+    { name: "Bank A", rate: rateA, data: mortgageSimulation(amount, rateA, years) },
+    { name: "Bank B", rate: rateB, data: mortgageSimulation(amount, rateB, years) },
+    { name: "Bank C", rate: rateC, data: mortgageSimulation(amount, rateC, years) }
   ];
 
   banks.sort((a, b) => a.data.totalPaid - b.data.totalPaid);
@@ -263,15 +308,15 @@ function compareMortgages() {
   const best = banks[0];
 
   resultDiv.innerHTML = `
-    <h4 style="margin-bottom:20px;">🏆 Miglior Soluzione: ${best.name}</h4>
+    <h4 style="margin-bottom:20px;">${t("bestSolution")}: ${best.name}</h4>
 
     <div class="kpi-grid">
       ${banks.map(bank => `
         <div class="kpi-box">
           <strong>${bank.name}</strong><br>
-          Tasso: ${bank.rate}%<br>
-          Rata annua: ${formatCurrency(bank.data.yearlyPayment)}<br>
-          Interessi totali: ${formatCurrency(bank.data.totalInterest)}
+          Rate: ${bank.rate}%<br>
+          Yearly Payment: ${formatCurrency(bank.data.yearlyPayment)}<br>
+          Total Interest: ${formatCurrency(bank.data.totalInterest)}
         </div>
       `).join("")}
     </div>
@@ -279,7 +324,7 @@ function compareMortgages() {
     <div style="margin-top:30px;text-align:center;">
       <button onclick="applyBestMortgage(${best.data.yearlyPayment})"
         class="btn btn-primary">
-        Applica miglior mutuo al ROI
+        ${t("applyMortgage")}
       </button>
     </div>
   `;
@@ -293,12 +338,12 @@ function applyBestMortgage(yearlyPayment) {
 
     resultDiv.innerHTML += `
       <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:10px;">
-        <strong>🔒 Funzione PRO</strong><br>
-        L'integrazione del mutuo nel ROI è disponibile solo in modalità PRO.
+        <strong>${t("proOnly")}</strong><br>
+        ${t("proDesc")}
         <div style="margin-top:10px;">
           <a href="https://buy.stripe.com/test_dRmeVcdNBefv7Njf6w8N200?pro=paid"
              class="btn btn-primary">
-             Sblocca PRO – 19€
+             ${t("unlock")}
           </a>
         </div>
       </div>
