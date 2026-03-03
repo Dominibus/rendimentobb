@@ -10,6 +10,32 @@
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
+.logo {
+  font-weight:800;
+  font-size:20px;
+  color:#0f172a;
+}
+
+.logo span {
+  color:#10b981;
+}
+
+.portal-nav {
+  display:flex;
+  gap:30px;
+  font-size:14px;
+}
+
+.portal-nav a {
+  text-decoration:none;
+  color:#475569;
+  font-weight:500;
+}
+
+.portal-nav a:hover {
+  color:#0f172a;
+}
+
 .hero {
   padding:120px 0 80px;
 }
@@ -85,10 +111,23 @@
 
 <body>
 
-<header class="container nav" style="padding:25px 0;">
-  <div class="logo">Rendimento<span>BB</span></div>
+<header class="container nav" style="padding:25px 0; display:flex; justify-content:space-between; align-items:center;">
+
+  <div style="display:flex; align-items:center; gap:40px;">
+
+    <div class="logo">Rendimento<span>BB</span></div>
+
+    <nav class="portal-nav">
+      <a href="/tool/">Tool</a>
+      <a href="/tool/#mortgage">Mutui</a>
+      <a href="#">Immobili</a>
+      <a href="/academy/">Academy</a>
+    </nav>
+
+  </div>
 
   <div style="display:flex;gap:20px;align-items:center;">
+
     <div class="lang-switch">
       <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
       <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
@@ -97,8 +136,11 @@
     <button onclick="window.location.href='/login/'" class="btn btn-secondary" data-i18n="login">
       Accedi
     </button>
+
   </div>
+
 </header>
+
 
 <section class="hero container">
 
