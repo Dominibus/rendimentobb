@@ -4,7 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RendimentoBB – Analisi Strategica B&B</title>
+<title
+  data-it="RendimentoBB – Analisi Strategica B&B"
+  data-en="RendimentoBB – Strategic B&B Investment Analysis">
+RendimentoBB – Strategic B&B Investment Analysis
+</title>
 
 <link rel="stylesheet" href="../css/style.css">
 
@@ -13,9 +17,6 @@
 <script type="module" src="../js/firebase-init.js"></script>
 
 <style>
-
-/* ===== HEADER ===== */
-
 .portal-header {
   position: sticky;
   top: 0;
@@ -71,8 +72,6 @@
   .portal-nav{ display:none; }
 }
 
-/* ===== LOGIN MODAL CLEAN ===== */
-
 .auth-modal {
   position: fixed;
   inset: 0;
@@ -101,7 +100,6 @@
   border-radius: 8px;
   border: 1px solid #e2e8f0;
 }
-
 </style>
 </head>
 
@@ -111,12 +109,14 @@
   <div class="container nav" style="padding:20px 0; display:flex; justify-content:space-between; align-items:center;">
 
     <div style="display:flex; align-items:center;">
-      <div class="logo">
-        Rendimento<span>BB</span>
-      </div>
+      <a href="/" style="text-decoration:none;">
+        <div class="logo">
+          Rendimento<span>BB</span>
+        </div>
+      </a>
 
       <div class="portal-nav">
-        <a href="#">Tool</a>
+        <a href="/tool/">Tool</a>
         <a href="#">Mutui</a>
         <a href="#">Immobili</a>
         <a href="#">Academy</a>
@@ -129,11 +129,12 @@
         <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
       </div>
 
-      <div id="user-area">
-        <button id="login-btn" class="btn btn-secondary">
-          Accedi
-        </button>
-      </div>
+      <button onclick="window.location.href='/'"
+              class="btn btn-secondary"
+              data-it="Home"
+              data-en="Home">
+        Home
+      </button>
     </div>
 
   </div>
@@ -142,143 +143,120 @@
 
 <div class="container" style="padding-top:120px; padding-bottom:140px;">
 
-  <!-- FORM INVESTIMENTO -->
+  <!-- INVESTMENT FORM -->
   <div class="tool-card">
 
-    <h3 class="section-divider">💰 Struttura Investimento</h3>
+    <h3 class="section-divider"
+        data-it="💰 Struttura Investimento"
+        data-en="💰 Investment Structure"></h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label>Prezzo immobile (€)</label>
+        <label data-it="Prezzo immobile (€)"
+               data-en="Property price (€)"></label>
         <input type="number" id="price" placeholder="150000">
       </div>
+
       <div class="input-group">
-        <label>Capitale proprio investito (€)</label>
+        <label data-it="Capitale proprio investito (€)"
+               data-en="Equity invested (€)"></label>
         <input type="number" id="equity" placeholder="30000">
       </div>
     </div>
 
-    <h3 class="section-divider">🏦 Struttura Finanziamento</h3>
+    <h3 class="section-divider"
+        data-it="🏦 Struttura Finanziamento"
+        data-en="🏦 Financing Structure"></h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label>Importo finanziato (€)</label>
+        <label data-it="Importo finanziato (€)"
+               data-en="Loan amount (€)"></label>
         <input type="number" id="loanAmount" placeholder="120000">
       </div>
+
       <div class="input-group">
-        <label>Tasso annuo (%)</label>
+        <label data-it="Tasso annuo (%)"
+               data-en="Annual interest rate (%)"></label>
         <input type="number" id="interestRate" placeholder="3.5">
       </div>
+
       <div class="input-group">
-        <label>Durata (anni)</label>
+        <label data-it="Durata (anni)"
+               data-en="Duration (years)"></label>
         <input type="number" id="loanYears" placeholder="20">
       </div>
     </div>
 
-    <h3 class="section-divider">🏨 Parametri Operativi</h3>
+    <h3 class="section-divider"
+        data-it="🏨 Parametri Operativi"
+        data-en="🏨 Operating Parameters"></h3>
 
     <div class="form-grid">
       <div class="input-group">
-        <label>Prezzo medio notte (€)</label>
+        <label data-it="Prezzo medio notte (€)"
+               data-en="Average nightly price (€)"></label>
         <input type="number" id="priceNight" placeholder="120">
       </div>
+
       <div class="input-group">
-        <label>Occupazione media (%)</label>
+        <label data-it="Occupazione media (%)"
+               data-en="Average occupancy (%)"></label>
         <input type="number" id="occupancy" placeholder="70">
       </div>
+
       <div class="input-group">
-        <label>Spese mensili (€)</label>
+        <label data-it="Spese mensili (€)"
+               data-en="Monthly expenses (€)"></label>
         <input type="number" id="expenses" placeholder="1500">
       </div>
+
       <div class="input-group">
-        <label>Commissioni piattaforme (%)</label>
+        <label data-it="Commissioni piattaforme (%)"
+               data-en="Platform commissions (%)"></label>
         <input type="number" id="commission" placeholder="15">
       </div>
+
       <div class="input-group">
-        <label>Tassazione stimata (%)</label>
+        <label data-it="Tassazione stimata (%)"
+               data-en="Estimated tax rate (%)"></label>
         <input type="number" id="tax" placeholder="24">
       </div>
     </div>
 
     <div style="text-align:center; margin-top:60px;">
-      <button onclick="calculate()" class="btn btn-primary">
-        Genera Analisi Strategica
+      <button onclick="calculate()" class="btn btn-primary"
+              data-it="Genera Analisi Strategica"
+              data-en="Generate Strategic Analysis">
       </button>
     </div>
 
   </div>
 
 
-  <!-- COMPARATORE MUTUI -->
-  <div class="tool-card" style="margin-top:60px;">
-
-    <h3 class="section-divider">🏦 Comparatore Mutui</h3>
-
-    <div class="form-grid">
-      <div class="input-group">
-        <label>Importo Mutuo (€)</label>
-        <input type="number" id="mortgageAmount" placeholder="120000">
-      </div>
-      <div class="input-group">
-        <label>Durata (anni)</label>
-        <input type="number" id="mortgageYears" placeholder="20">
-      </div>
-      <div class="input-group">
-        <label>Tasso Banca A (%)</label>
-        <input type="number" id="rateA" placeholder="3.2">
-      </div>
-      <div class="input-group">
-        <label>Tasso Banca B (%)</label>
-        <input type="number" id="rateB" placeholder="3.6">
-      </div>
-      <div class="input-group">
-        <label>Tasso Banca C (%)</label>
-        <input type="number" id="rateC" placeholder="4.1">
-      </div>
-    </div>
-
-    <div style="text-align:center; margin-top:40px;">
-      <button onclick="compareMortgages()" class="btn btn-primary">
-        Confronta Mutui
-      </button>
-    </div>
-
-    <div id="mortgage-results" style="margin-top:40px;"></div>
-
-  </div>
-
-
-  <!-- RISULTATI -->
+  <!-- RESULTS -->
   <div id="results" class="results-card" style="margin-top:70px;">
-    <h3>Executive Investment Summary</h3>
+    <h3 data-it="Sintesi Investimento"
+        data-en="Executive Investment Summary"></h3>
     <div id="executive-kpi" class="kpi-grid"></div>
-
     <div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
   </div>
 
   <div class="results-card">
-    <div class="chart-title">Proiezione Cashflow 5 anni</div>
+    <div class="chart-title"
+         data-it="Proiezione Cashflow 5 anni"
+         data-en="5-Year Cashflow Projection"></div>
     <canvas id="roiChart" height="120"></canvas>
   </div>
 
 </div>
 
-
-<!-- LOGIN MODAL -->
-<div id="auth-modal" class="auth-modal hidden">
-  <div class="auth-box">
-    <h3>Accedi o Registrati</h3>
-    <input type="email" id="auth-email" placeholder="Email">
-    <input type="password" id="auth-password" placeholder="Password">
-    <div style="display:flex; gap:10px; margin-top:20px;">
-      <button id="register-action" class="btn btn-secondary">Registrati</button>
-      <button id="login-action" class="btn btn-primary">Accedi</button>
-    </div>
-    <div style="margin-top:20px; text-align:center;">
-      <button id="close-auth" style="background:none; border:none; color:#64748b;">Chiudi</button>
-    </div>
-  </div>
-</div>
+<footer style="margin-top:120px;text-align:center;padding:40px 0;color:#64748b;">
+  <span
+    data-it="© 2026 RendimentoBB – Motore Decisionale Investimenti B&B"
+    data-en="© 2026 RendimentoBB – Strategic B&B Investment Decision Engine">
+  </span>
+</footer>
 
 <script src="../js/lang.js"></script>
 <script src="../js/app.js"></script>
