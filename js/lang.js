@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 5.1
-// Full Static + SEO + Dynamic Sync (Stable Fix)
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 6.0
+// FULL SYNC STATIC + DYNAMIC + TOOL FIX
 // ===============================================
 
 (function(){
@@ -14,6 +14,9 @@
     supported: ["it", "en"]
   };
 
+  // 🔥 HARD SYNC WITH APP.JS
+  window.currentLang = window.RB_LANG.current;
+
 
   // ===============================
   // APPLY STATIC TRANSLATIONS
@@ -21,9 +24,6 @@
 
   function applyStaticTranslations(){
 
-    // -----------------------------
-    // Standard data-it / data-en
-    // -----------------------------
     document.querySelectorAll("[data-it]").forEach(el => {
 
       const text = el.getAttribute("data-" + RB_LANG.current);
@@ -37,10 +37,6 @@
 
     });
 
-
-    // -----------------------------
-    // Placeholder support
-    // -----------------------------
     document.querySelectorAll("[data-placeholder-it]").forEach(el => {
 
       const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
@@ -50,22 +46,14 @@
 
     });
 
-
-    // -----------------------------
-    // TITLE support (FIXED)
-    // -----------------------------
     const titleEl = document.querySelector("title");
     if(titleEl){
       const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
       if(titleText){
-        document.title = titleText;   // 🔥 Stable update
+        document.title = titleText;
       }
     }
 
-
-    // -----------------------------
-    // META DESCRIPTION support (HARDENED)
-    // -----------------------------
     const metaDesc = document.querySelector("meta[name='description']");
     if(metaDesc){
       const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
@@ -103,6 +91,9 @@
 
   function rerenderDynamic(){
 
+    // 🔥 Sync with app.js every time
+    window.currentLang = RB_LANG.current;
+
     if(typeof calculate === "function"){
       calculate();
     }
@@ -111,6 +102,16 @@
       runRealCalculation();
     }
 
+    if(typeof compareMortgages === "function"){
+      compareMortgages();
+    }
+
+    // 🔥 Dispatch global event (future-proof)
+    document.dispatchEvent(
+      new CustomEvent("rb_language_changed", {
+        detail: { lang: RB_LANG.current }
+      })
+    );
   }
 
 
@@ -123,12 +124,13 @@
     if(!RB_LANG.supported.includes(lang)) return;
 
     RB_LANG.current = lang;
+    window.currentLang = lang; // 🔥 CRITICAL FIX
+
     localStorage.setItem("rb_lang", lang);
 
     applyStaticTranslations();
     updateLanguageUI();
     rerenderDynamic();
-
   };
 
 
@@ -147,8 +149,11 @@
         navigator.language.startsWith("en") ? "en" : "it";
     }
 
+    window.currentLang = RB_LANG.current;
+
     applyStaticTranslations();
     updateLanguageUI();
+    rerenderDynamic();
 
   });
 
