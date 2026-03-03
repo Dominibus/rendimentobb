@@ -21,12 +21,12 @@ import {
 
 // 🔐 CONFIGURAZIONE REALE
 const firebaseConfig = {
-  apiKey: "AIzaSyDu-2G2FHB8VCdCJ9P0m07bD5JShRGscc",
+  apiKey: "AIzaSyDu-2G2FPHH8BVCdCJ9P0m07bD5JShRGsc",
   authDomain: "rendimento-bb.firebaseapp.com",
   projectId: "rendimento-bb",
   storageBucket: "rendimento-bb.firebasestorage.app",
-  messagingSenderId: "14445254362",
-  appId: "1:14445254362:web:829e08d7b1703137b16a03",
+  messagingSenderId: "144452546362",
+  appId: "1:144452546362:web:829e08d7b1703137b16a03",
   measurementId: "G-749B8PW4ST"
 };
 
