@@ -10,29 +10,74 @@
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-.portal-nav {
-  margin-left: 40px;
-  display: flex;
-  gap: 25px;
-  font-size: 13px;
+
+/* HEADER IDENTICO A TOOL & HOME */
+
+.portal-header{
+  padding:25px 0;
+  position:sticky;
+  top:0;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  z-index:100;
+  border-bottom:1px solid #e2e8f0;
 }
 
-.portal-nav a {
-  text-decoration: none;
-  color: #475569;
-  font-weight: 500;
-  opacity: .7;
+.portal-header-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.portal-nav a:hover {
-  opacity: 1;
+.portal-nav{
+  display:flex;
+  gap:28px;
+  font-size:14px;
 }
 
-.content-section {
+.portal-nav a{
+  text-decoration:none;
+  color:#475569;
+  font-weight:500;
+  transition:.2s ease;
+}
+
+.portal-nav a:hover{
+  color:#0f172a;
+}
+
+.right-controls{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.lang-switch{
+  display:flex;
+  gap:8px;
+}
+
+.lang-btn{
+  padding:6px 14px;
+  border-radius:999px;
+  border:1px solid #cbd5e1;
+  background:white;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.lang-btn.active{
+  background:#0f172a;
+  color:white;
+}
+
+.content-section{
   margin-top:60px;
 }
 
-.content-card {
+.content-card{
   background:white;
   padding:50px;
   border-radius:24px;
@@ -41,69 +86,55 @@
   margin-bottom:60px;
 }
 
-.content-card h3 {
+.content-card h3{
   margin-bottom:20px;
   font-size:22px;
 }
 
-.content-card p {
+.content-card p{
   color:#475569;
   line-height:1.7;
   font-size:16px;
 }
 
-.lang-switch {
-  display:flex;
-  gap:8px;
+@media(max-width:1024px){
+  .portal-nav{ display:none; }
 }
 
-.lang-btn {
-  padding:6px 14px;
-  border-radius:999px;
-  border:1px solid #cbd5e1;
-  background:white;
-  cursor:pointer;
-  font-size:13px;
-  font-weight:600;
-}
-
-.lang-btn.active {
-  background:#0f172a;
-  color:white;
-}
 </style>
 </head>
 
 <body>
 
-<header class="container nav" style="padding:25px 0; display:flex; justify-content:space-between; align-items:center;">
+<header class="portal-header">
+  <div class="container portal-header-inner">
 
-  <div style="display:flex; align-items:center; gap:40px;">
-    <div class="logo">Rendimento<span>BB</span></div>
+    <div style="display:flex; align-items:center; gap:40px;">
+      <a href="/" style="text-decoration:none;">
+        <div class="logo">Rendimento<span>BB</span></div>
+      </a>
 
-    <nav class="portal-nav">
-      <a href="/tool/">Tool</a>
-      <a href="/tool/#mortgage">Mutui</a>
-      <a href="#">Immobili</a>
-      <a href="/academy/">Academy</a>
-    </nav>
-  </div>
-
-  <div style="display:flex;gap:20px;align-items:center;">
-    <div class="lang-switch">
-      <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-      <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      <nav class="portal-nav">
+        <a href="/tool/">Tool</a>
+        <a href="/tool/#mortgage">Mutui</a>
+        <a href="#">Immobili</a>
+        <a href="/academy/">Academy</a>
+      </nav>
     </div>
 
-    <button onclick="window.location.href='/'" class="btn btn-outline" data-i18n="home">
-      Home
-    </button>
+    <div class="right-controls">
+      <div class="lang-switch">
+        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      </div>
 
-    <button onclick="window.location.href='/tool/'" class="btn btn-secondary" data-i18n="tool">
-      Tool
-    </button>
+      <button onclick="window.location.href='/'"
+              class="btn btn-secondary">
+        Home
+      </button>
+    </div>
+
   </div>
-
 </header>
 
 
@@ -111,7 +142,6 @@
 
 <div class="container" style="padding-top:80px; padding-bottom:120px;">
 
-  <!-- PAGE TITLE -->
   <div class="page-title">
     <h1 data-i18n="academy_title">
       Academy Strategica per Investimenti B&B
@@ -126,35 +156,28 @@
 
     <div class="content-card">
       <h3 data-i18n="roi_title">📊 Come interpretare il ROI</h3>
-      <p data-i18n="roi_text">
-        Un ROI superiore al 10% indica buona redditività...
-      </p>
+      <p data-i18n="roi_text"></p>
     </div>
 
     <div class="content-card">
       <h3 data-i18n="mortgage_title">🏦 Quando il mutuo è sostenibile</h3>
-      <p data-i18n="mortgage_text">
-        Il flusso operativo deve coprire il debito...
-      </p>
+      <p data-i18n="mortgage_text"></p>
     </div>
 
     <div class="content-card">
       <h3 data-i18n="errors_title">⚠️ Errori comuni negli investimenti B&B</h3>
-      <p data-i18n="errors_text">
-        Sovrastimare l'occupazione media...
-      </p>
+      <p data-i18n="errors_text"></p>
     </div>
 
     <div class="content-card">
       <h3 data-i18n="improve_title">📈 Come migliorare la sostenibilità</h3>
-      <p data-i18n="improve_text">
-        Ottimizzare il prezzo medio notte...
-      </p>
+      <p data-i18n="improve_text"></p>
     </div>
 
     <div style="text-align:center;margin-top:60px;">
-      <button onclick="window.location.href='/tool/'" class="btn btn-primary" data-i18n="start_analysis">
-        Avvia Analisi Strategica
+      <button onclick="window.location.href='/tool/'"
+              class="btn btn-primary"
+              data-i18n="start_analysis">
       </button>
     </div>
 
@@ -164,7 +187,6 @@
 
 </main>
 
-
 <footer class="global-footer">
 © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
@@ -173,8 +195,6 @@
 <script>
 const translations = {
   it: {
-    home: "Home",
-    tool: "Tool",
     academy_title: "Academy Strategica per Investimenti B&B",
     academy_sub: "Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire.",
     roi_title: "📊 Come interpretare il ROI",
@@ -188,8 +208,6 @@ const translations = {
     start_analysis: "Avvia Analisi Strategica"
   },
   en: {
-    home: "Home",
-    tool: "Tool",
     academy_title: "Strategic Academy for B&B Investments",
     academy_sub: "Understand ROI, risk, sustainability and optimization levers before investing.",
     roi_title: "📊 How to interpret ROI",
@@ -204,23 +222,23 @@ const translations = {
   }
 };
 
-function setLang(lang) {
+function setLang(lang){
   localStorage.setItem("rb_lang", lang);
   applyLang(lang);
 }
 
-function applyLang(lang) {
+function applyLang(lang){
   document.documentElement.lang = lang;
 
-  document.querySelectorAll("[data-i18n]").forEach(el => {
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
     const key = el.getAttribute("data-i18n");
-    if (translations[lang][key]) {
+    if(translations[lang][key]){
       el.textContent = translations[lang][key];
     }
   });
 
-  document.getElementById("btn-it").classList.toggle("active", lang === "it");
-  document.getElementById("btn-en").classList.toggle("active", lang === "en");
+  document.getElementById("btn-it").classList.toggle("active", lang==="it");
+  document.getElementById("btn-en").classList.toggle("active", lang==="en");
 }
 
 applyLang(localStorage.getItem("rb_lang") || "it");
