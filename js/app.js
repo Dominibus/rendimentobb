@@ -695,7 +695,10 @@ y
   
 y += 10;
 
-doc.text("Property Price: "+formatCurrency(data.price),20,y);
+doc.text(
+(window.currentLang==="it"?"Prezzo immobile: ":"Property Price: ")
++ formatCurrency(data.price),
+20,y);
 y += 8;
 
 doc.text("Equity Invested: "+formatCurrency(data.equity),20,y);
@@ -752,7 +755,7 @@ y
 y += 8;
 
 doc.text(insight,20,y,{maxWidth:170});
-y += 20;
+y += 15;
 
 doc.setFontSize(10);
 doc.text(
@@ -786,11 +789,28 @@ window.calculate = function(){
   const priceNight = getValue("priceNight");
   const occupancy = getValue("occupancy");
   const loanAmount = getValue("loanAmount");
+  const expenses = getValue("expenses");
 
   const nights = 365 * (occupancy / 100);
   const revenue = priceNight * nights;
 
+  const profit = revenue - (expenses * 12);
+
+  const roi = equity > 0 ? (profit / equity) * 100 : 0;
+
   window.lastAnalysisData = {
+
+  price: getValue("price"),
+  equity: equity,
+  loan: loanAmount,
+  revenue: revenue,
+  profit: profit,
+  roi: roi,
+  risk: 0
+
+ };
+
+};
 
   price: getValue("price"),
   equity: equity,
