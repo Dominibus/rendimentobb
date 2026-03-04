@@ -326,20 +326,6 @@ tax,
 mortgage,
 equity
 ){
-
-// ================= STORE LAST ANALYSIS =================
-
-window.lastAnalysisData = {
-
-price: getValue("price"),
-equity: equity,
-loan: loanAmount,
-revenue: gross,
-profit: netAfterMortgage,
-roi: roi,
-risk: riskScore
-
-};  
   
 const container = document.getElementById("occupancy-sensitivity");
 if(!container) return;
@@ -389,6 +375,20 @@ container.innerHTML = `
 `;
 
 }
+
+// ================= STORE LAST ANALYSIS =================
+
+window.lastAnalysisData = {
+
+price: getValue("price"),
+equity: equity,
+loan: loanAmount,
+revenue: gross,
+profit: netAfterMortgage,
+roi: roi,
+risk: riskScore
+
+};
 
 
 // ================= INVESTMENT SCORE =================
@@ -732,13 +732,6 @@ doc.save("RendimentoBB-Investment-Report.pdf");
 window.calculate = calculate;
 window.compareMortgages = compareMortgages;
 window.generateExecutivePDF = generateExecutivePDF;
-
-// ===============================================
-// EXECUTIVE PDF ENGINE UPGRADE
-// collegato ai risultati dell'analisi
-// ===============================================
-
-window.lastAnalysisData = null;
 
 
 // ================= CAPTURE LAST ANALYSIS =================
