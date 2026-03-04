@@ -222,6 +222,64 @@ function renderMarketBenchmark(cityKey){
 
 }
 
+// ================= MARKET COMPARISON =================
+
+function renderMarketComparison(userRevenue, cityKey){
+
+  if(!window.getMarketBenchmark) return;
+
+  const market = window.getMarketBenchmark(cityKey);
+
+  if(!market) return;
+
+  const container = document.getElementById("market-comparison");
+
+  if(!container) return;
+
+  const marketRevenue = market.estimatedRevenue;
+
+  let message = "";
+  let color = "#ef4444";
+
+  if(userRevenue > marketRevenue){
+
+    message =
+      window.currentLang === "it"
+      ? "✓ Performance superiore al mercato"
+      : "✓ Outperforming market";
+
+    color = "#10b981";
+
+  }else{
+
+    message =
+      window.currentLang === "it"
+      ? "⚠ Performance sotto media mercato"
+      : "⚠ Underperforming market";
+
+  }
+
+  container.innerHTML = `
+
+  <div class="kpi-box">
+  <span>${window.currentLang==="it"?"Ricavo stimato":"Your estimated revenue"}</span>
+  <strong>${formatCurrency(userRevenue)}</strong>
+  </div>
+
+  <div class="kpi-box">
+  <span>${window.currentLang==="it"?"Media mercato":"Market average"}</span>
+  <strong>${formatCurrency(marketRevenue)}</strong>
+  </div>
+
+  <div class="kpi-box">
+  <span>${window.currentLang==="it"?"Valutazione":"Assessment"}</span>
+  <strong style="color:${color}">${message}</strong>
+  </div>
+
+  `;
+
+}
+
 // ================= REVENUE FORECAST =================
 
 function renderRevenueForecast(baseRevenue){
