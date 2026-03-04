@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 13.0
-// PRO collegato a Firebase (no localStorage)
+// RENDIMENTOBB – EXECUTIVE ENGINE 13.2 STABLE
+// PRO collegato a Firebase + bug fix
 // ===============================================
 
 
@@ -9,17 +9,19 @@
 let isProUnlocked = false;
 let overrideMortgage = null;
 
-// 🔥 ascolta quando Firebase carica il piano utente
-document.addEventListener("rb_plan_loaded", (e) => {
-  const plan = e.detail.plan;
-  isProUnlocked = (plan === "pro");
-  calculate(); // ricalcola tutto quando cambia piano
+// 🔥 funzione aggiorna stato PRO
+function updateProStatus() {
+  isProUnlocked = (window.currentPlan === "pro");
+}
+
+// ascolta evento Firebase
+document.addEventListener("rb_plan_loaded", () => {
+  updateProStatus();
+  calculate();
 });
 
 // fallback iniziale
-if (window.currentPlan === "pro") {
-  isProUnlocked = true;
-}
+updateProStatus();
 
 
 // ================= LANGUAGE =================
@@ -124,6 +126,26 @@ function calculateMortgage(loanAmount, interestRate, loanYears) {
 }
 
 
+// 🔥 FIX ERRORE CONSOLE
+function mortgageSimulation(amount, rate, years) {
+
+  if (!amount || !rate || !years) return null;
+
+  const r = rate / 100;
+  const n = years;
+
+  const yearlyPayment =
+    amount *
+    (r * Math.pow(1 + r, n)) /
+    (Math.pow(1 + r, n) - 1);
+
+  const totalPaid = yearlyPayment * n;
+  const totalInterest = totalPaid - amount;
+
+  return { yearlyPayment, totalPaid, totalInterest };
+}
+
+
 // ================= SCENARIO =================
 
 function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageYearly, equity) {
@@ -144,16 +166,12 @@ function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageY
   return { roi, netAfterMortgage, netOperating };
 }
 
-function scenarioLabel(roi) {
-  if (roi > 12) return { text: t("solid"), class: "kpi-positive" };
-  if (roi > 0) return { text: t("marginal"), class: "kpi-warning" };
-  return { text: t("unsustainable"), class: "kpi-danger" };
-}
-
 
 // ================= MAIN =================
 
 function calculate() {
+
+  updateProStatus();
 
   const equity = getValue("equity");
   const priceNight = getValue("priceNight");
@@ -182,20 +200,6 @@ function calculate() {
     equity
   );
 
-  const kpiContainer = document.getElementById("executive-kpi");
-
-  kpiContainer.innerHTML = `
-    <div class="kpi-box ${scenarioLabel(base.roi).class}">
-      ${t("roi")}
-      <strong>${base.roi.toFixed(2)}%</strong>
-    </div>
-
-    <div class="kpi-box">
-      ${t("annualNet")}
-      <strong>${formatCurrency(base.netAfterMortgage)}</strong>
-    </div>
-  `;
-
   renderChart(base.netAfterMortgage);
   renderStrategicInsight(base.roi);
 }
@@ -212,7 +216,7 @@ function renderStrategicInsight(baseROI) {
     insightBox.innerHTML = `
       <strong>${t("strategicLocked")}</strong>
       <div style="margin-top:10px;">
-        <button class="btn btn-primary" onclick="alert('Effettua upgrade dalla dashboard')">
+        <button class="btn btn-primary">
            ${t("unlock")}
         </button>
       </div>
@@ -264,50 +268,4 @@ function renderChart(yearlyNet) {
       plugins: { legend: { display: false } }
     }
   });
-}
-
-
-// ================= MORTGAGE COMPARATOR =================
-
-function compareMortgages() {
-
-  const amount = getValue("mortgageAmount");
-  const years = getValue("mortgageYears");
-
-  const rateA = getValue("rateA");
-  const rateB = getValue("rateB");
-  const rateC = getValue("rateC");
-
-  const resultDiv = document.getElementById("mortgage-results");
-  if (!resultDiv) return;
-
-  if (!amount || !years) {
-    resultDiv.innerHTML = t("insertMortgageData");
-    return;
-  }
-
-  const banks = [
-    { name: "Bank A", rate: rateA, data: mortgageSimulation(amount, rateA, years) },
-    { name: "Bank B", rate: rateB, data: mortgageSimulation(amount, rateB, years) },
-    { name: "Bank C", rate: rateC, data: mortgageSimulation(amount, rateC, years) }
-  ];
-
-  banks.sort((a, b) => a.data.totalPaid - b.data.totalPaid);
-
-  const best = banks[0];
-
-  resultDiv.innerHTML = `
-    <h4 style="margin-bottom:20px;">${t("bestSolution")}: ${best.name}</h4>
-  `;
-}
-
-function applyBestMortgage(yearlyPayment) {
-
-  if (!isProUnlocked) {
-    alert(t("proDesc"));
-    return;
-  }
-
-  overrideMortgage = yearlyPayment;
-  calculate();
 }
