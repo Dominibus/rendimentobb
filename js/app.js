@@ -737,12 +737,16 @@ window.calculate = function(){
 
   window.lastAnalysisData = {
 
-    price: getValue("price"),
-    equity: equity,
-    loan: loanAmount,
-    revenue: revenue
+  price: getValue("price"),
+  equity: equity,
+  loan: loanAmount,
+  revenue: revenue,
 
-  };
+  profit: revenue - (getValue("expenses") * 12),
+  roi: 0,
+  risk: 0
+
+ };
 
 };
 
