@@ -697,3 +697,4 @@ doc.save("rendimentoBB-report.pdf");
 
 window.calculate = calculate;
 window.compareMortgages = compareMortgages;
+window.generateExecutivePDF = generateExecutivePDF;
