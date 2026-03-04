@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – DASHBOARD ENGINE 2.0
-// Improved Layout + Stats + UX
+// RENDIMENTOBB – DASHBOARD ENGINE 3.0
+// Full Translation Support + Live Language Refresh
 // ===============================================
 
 import {
@@ -124,7 +124,7 @@ header.innerHTML=`
 <div class="left">
 
 <h2>
-${t("Benvenuto","Welcome")} 
+${t("Benvenuto","Welcome")}
 <strong>${window.currentUser.email}</strong>
 </h2>
 
@@ -210,6 +210,21 @@ ${avgROI}%
 }
 
 
+// ================= LANGUAGE REFRESH =================
+
+function reloadDashboardLanguage(){
+
+if(!window.currentUser) return;
+
+loadDashboard();
+
+}
+
+
 // ================= INIT =================
 
 document.addEventListener("rb_plan_loaded",loadDashboard);
+
+/* aggiorna automaticamente quando cambi lingua */
+
+document.addEventListener("languageChanged",reloadDashboardLanguage);
