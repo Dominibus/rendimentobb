@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 13.5 FINAL
-// PRO Firebase + Mortgage Comparator + SAVE ANALYSIS FIX
+// RENDIMENTOBB – EXECUTIVE ENGINE 14.0
+// PRO Firebase + Mortgage Comparator + Forecast Engine
 // ===============================================
 
 
@@ -85,7 +85,10 @@ const TEXT = {
     rate: "Tasso",
     insightSolid: "Investimento strutturalmente resiliente.",
     insightMedium: "Moderatamente sostenibile.",
-    insightWeak: "Strutturalmente fragile."
+    insightWeak: "Strutturalmente fragile.",
+    lowScenario: "Scenario prudente",
+    baseScenario: "Scenario base",
+    highScenario: "Scenario ottimistico"
   },
   en: {
     roi: "ROI",
@@ -102,7 +105,10 @@ const TEXT = {
     rate: "Rate",
     insightSolid: "Structurally resilient investment.",
     insightMedium: "Moderately viable.",
-    insightWeak: "Structurally fragile."
+    insightWeak: "Structurally fragile.",
+    lowScenario: "Low scenario",
+    baseScenario: "Base scenario",
+    highScenario: "High scenario"
   }
 };
 
@@ -160,6 +166,38 @@ function mortgageSimulation(amount, rate, years) {
 }
 
 
+// ================= REVENUE FORECAST =================
+
+function renderRevenueForecast(baseRevenue){
+
+  const container = document.getElementById("revenue-forecast");
+  if(!container) return;
+
+  const low = baseRevenue * 0.8;
+  const mid = baseRevenue;
+  const high = baseRevenue * 1.2;
+
+  container.innerHTML = `
+
+  <div class="kpi-box">
+    <span>${t("lowScenario")}</span>
+    <strong>${formatCurrency(low)}</strong>
+  </div>
+
+  <div class="kpi-box">
+    <span>${t("baseScenario")}</span>
+    <strong>${formatCurrency(mid)}</strong>
+  </div>
+
+  <div class="kpi-box">
+    <span>${t("highScenario")}</span>
+    <strong>${formatCurrency(high)}</strong>
+  </div>
+
+  `;
+}
+
+
 // ================= MAIN CALC =================
 
 function calculate() {
@@ -201,6 +239,8 @@ function calculate() {
 
   renderChart(netAfterMortgage);
   renderStrategicInsight(roi);
+
+  renderRevenueForecast(gross);
 
   saveAnalysis({
     price: getValue("price"),
@@ -318,7 +358,7 @@ function renderChart(net) {
 }
 
 
-// ================= EXPORT GLOBAL FUNCTIONS =================
+// ================= EXPORT GLOBAL =================
 
 window.calculate = calculate;
 window.compareMortgages = compareMortgages;
