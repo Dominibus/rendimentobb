@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 15.0
-// PRO Firebase + Mortgage Comparator + Forecast + Investment Score
+// RENDIMENTOBB – EXECUTIVE ENGINE 16.0
+// PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 
 
@@ -26,13 +26,10 @@ async function saveAnalysis(data){
     await addDoc(collection(db,"analyses"),{
 
       uid: window.currentUser.uid,
-
       propertyPrice: data.price,
       equity: data.equity,
-
       roi: data.roi,
       risk: data.risk,
-
       createdAt: new Date()
 
     });
@@ -72,7 +69,6 @@ if (!window.currentLang) {
 const TEXT = {
 
   it: {
-
     roi: "ROI",
     annualNet: "Netto Annuale",
 
@@ -82,8 +78,6 @@ const TEXT = {
 
     bestSolution: "🏆 Miglior Soluzione",
 
-    applyMortgage: "Applica miglior mutuo al ROI",
-    proDesc: "Funzione disponibile solo in modalità PRO.",
     insertMortgageData: "Inserisci importo e durata.",
 
     yearlyPayment: "Rata Annuale",
@@ -101,11 +95,9 @@ const TEXT = {
     grade: "Investment Grade",
     riskScore: "Risk Score",
     recommendation: "Raccomandazione"
-
   },
 
   en: {
-
     roi: "ROI",
     annualNet: "Annual Net",
 
@@ -115,8 +107,6 @@ const TEXT = {
 
     bestSolution: "🏆 Best Solution",
 
-    applyMortgage: "Apply best mortgage to ROI",
-    proDesc: "Feature available only in PRO mode.",
     insertMortgageData: "Insert amount and duration.",
 
     yearlyPayment: "Yearly Payment",
@@ -134,7 +124,6 @@ const TEXT = {
     grade: "Investment Grade",
     riskScore: "Risk Score",
     recommendation: "Recommendation"
-
   }
 
 };
@@ -235,48 +224,106 @@ function renderRevenueForecast(baseRevenue){
 }
 
 
+// ================= OCCUPANCY SENSITIVITY =================
+
+function renderOccupancySensitivity(
+priceNight,
+occupancy,
+expenses,
+commission,
+tax,
+mortgage,
+equity
+){
+
+const container = document.getElementById("occupancy-sensitivity");
+if(!container) return;
+
+function simulate(occ){
+
+const nights = 365 * (occ/100);
+const gross = priceNight * nights;
+
+const fees = gross * (commission/100);
+const yearlyExpenses = expenses * 12;
+
+const operatingProfit = gross - fees - yearlyExpenses;
+
+const taxCost =
+operatingProfit > 0 ? operatingProfit*(tax/100) : 0;
+
+const net = operatingProfit - taxCost - mortgage;
+
+const roi = equity > 0 ? (net/equity)*100 : 0;
+
+return roi.toFixed(1);
+
+}
+
+const low = simulate(occupancy*0.9);
+const base = simulate(occupancy);
+const high = simulate(occupancy*1.1);
+
+container.innerHTML = `
+
+<div class="kpi-box">
+<span>Occupazione -10%</span>
+<strong>${low}% ROI</strong>
+</div>
+
+<div class="kpi-box">
+<span>Occupazione Base</span>
+<strong>${base}% ROI</strong>
+</div>
+
+<div class="kpi-box">
+<span>Occupazione +10%</span>
+<strong>${high}% ROI</strong>
+</div>
+
+`;
+
+}
+
+
 // ================= INVESTMENT SCORE =================
 
 function renderInvestmentScore(roi, riskScore){
 
-  const container = document.getElementById("investment-score");
-  if(!container) return;
+const container = document.getElementById("investment-score");
+if(!container) return;
 
-  let grade = "C";
-  let recommendation = "High Risk";
+let grade = "C";
+let recommendation = "High Risk";
 
-  if(roi > 12){
+if(roi > 12){
+grade = "A";
+recommendation = "SAFE INVESTMENT";
+}
 
-    grade = "A";
-    recommendation = "SAFE INVESTMENT";
+else if(roi > 6){
+grade = "B";
+recommendation = "MODERATE RETURN";
+}
 
-  }
+container.innerHTML = `
 
-  else if(roi > 6){
+<div class="kpi-box">
+<span>${t("grade")}</span>
+<strong>${grade}</strong>
+</div>
 
-    grade = "B";
-    recommendation = "MODERATE RETURN";
+<div class="kpi-box">
+<span>${t("riskScore")}</span>
+<strong>${riskScore} / 100</strong>
+</div>
 
-  }
+<div class="kpi-box">
+<span>${t("recommendation")}</span>
+<strong>${recommendation}</strong>
+</div>
 
-  container.innerHTML = `
-
-  <div class="kpi-box">
-  <span>${t("grade")}</span>
-  <strong>${grade}</strong>
-  </div>
-
-  <div class="kpi-box">
-  <span>${t("riskScore")}</span>
-  <strong>${riskScore} / 100</strong>
-  </div>
-
-  <div class="kpi-box">
-  <span>${t("recommendation")}</span>
-  <strong>${recommendation}</strong>
-  </div>
-
-  `;
+`;
 
 }
 
@@ -285,59 +332,67 @@ function renderInvestmentScore(roi, riskScore){
 
 function calculate() {
 
-  updateProStatus();
+updateProStatus();
 
-  const equity = getValue("equity");
-  const priceNight = getValue("priceNight");
-  const occupancy = getValue("occupancy");
-  const expenses = getValue("expenses");
-  const commission = getValue("commission");
-  const tax = getValue("tax");
+const equity = getValue("equity");
+const priceNight = getValue("priceNight");
+const occupancy = getValue("occupancy");
+const expenses = getValue("expenses");
+const commission = getValue("commission");
+const tax = getValue("tax");
 
-  const loanAmount = getValue("loanAmount");
-  const interestRate = getValue("interestRate");
-  const loanYears = getValue("loanYears");
+const loanAmount = getValue("loanAmount");
+const interestRate = getValue("interestRate");
+const loanYears = getValue("loanYears");
 
-  if (!priceNight || !occupancy || equity <= 0) return;
+if (!priceNight || !occupancy || equity <= 0) return;
 
-  const mortgageYearly = overrideMortgage !== null
-    ? overrideMortgage
-    : calculateMortgage(loanAmount, interestRate, loanYears);
+const mortgageYearly = overrideMortgage !== null
+? overrideMortgage
+: calculateMortgage(loanAmount, interestRate, loanYears);
 
-  const nights = 365 * (occupancy / 100);
-  const gross = priceNight * nights;
-  const fees = gross * (commission / 100);
-  const yearlyExpenses = expenses * 12;
+const nights = 365 * (occupancy / 100);
+const gross = priceNight * nights;
+const fees = gross * (commission / 100);
+const yearlyExpenses = expenses * 12;
 
-  const operatingProfit = gross - fees - yearlyExpenses;
+const operatingProfit = gross - fees - yearlyExpenses;
 
-  const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
+const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
 
-  const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
+const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
 
-  const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
+const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
 
-  const riskScore =
-    roi > 12 ? 30 :
-    roi > 6 ? 55 :
-    75;
+const riskScore =
+roi > 12 ? 30 :
+roi > 6 ? 55 :
+75;
 
-  renderChart(netAfterMortgage);
+renderChart(netAfterMortgage);
 
-  renderStrategicInsight(roi);
+renderStrategicInsight(roi);
 
-  renderRevenueForecast(gross);
+renderRevenueForecast(gross);
 
-  renderInvestmentScore(roi, riskScore);
+renderInvestmentScore(roi, riskScore);
 
-  saveAnalysis({
+renderOccupancySensitivity(
+priceNight,
+occupancy,
+expenses,
+commission,
+tax,
+mortgageYearly,
+equity
+);
 
-    price: getValue("price"),
-    equity: equity,
-    roi: roi,
-    risk: riskScore
-
-  });
+saveAnalysis({
+price: getValue("price"),
+equity: equity,
+roi: roi,
+risk: riskScore
+});
 
 }
 
@@ -346,32 +401,32 @@ function calculate() {
 
 function renderStrategicInsight(roi) {
 
-  const box = document.getElementById("strategic-insight");
+const box = document.getElementById("strategic-insight");
 
-  if (!box) return;
+if (!box) return;
 
-  if (!isProUnlocked) {
+if (!isProUnlocked) {
 
-    box.innerHTML = `
-      <strong>${t("strategicLocked")}</strong>
-      <div style="margin-top:10px;">
-        <button class="btn btn-primary">${t("unlock")}</button>
-      </div>
-    `;
+box.innerHTML = `
+<strong>${t("strategicLocked")}</strong>
+<div style="margin-top:10px;">
+<button class="btn btn-primary">${t("unlock")}</button>
+</div>
+`;
 
-    return;
+return;
 
-  }
+}
 
-  let message =
-    roi > 12 ? t("insightSolid")
-    : roi > 6 ? t("insightMedium")
-    : t("insightWeak");
+let message =
+roi > 12 ? t("insightSolid")
+: roi > 6 ? t("insightMedium")
+: t("insightWeak");
 
-  box.innerHTML = `
-    <strong>${t("strategicTitle")}</strong>
-    <p style="margin-top:10px;">${message}</p>
-  `;
+box.innerHTML = `
+<strong>${t("strategicTitle")}</strong>
+<p style="margin-top:10px;">${message}</p>
+`;
 
 }
 
@@ -380,66 +435,63 @@ function renderStrategicInsight(roi) {
 
 function compareMortgages() {
 
-  const amount = getValue("mortgageAmount");
-  const years = getValue("mortgageYears");
+const amount = getValue("mortgageAmount");
+const years = getValue("mortgageYears");
 
-  const rateA = getValue("rateA");
-  const rateB = getValue("rateB");
-  const rateC = getValue("rateC");
+const rateA = getValue("rateA");
+const rateB = getValue("rateB");
+const rateC = getValue("rateC");
 
-  const resultDiv = document.getElementById("mortgage-results");
+const resultDiv = document.getElementById("mortgage-results");
 
-  if (!resultDiv) return;
+if (!resultDiv) return;
 
-  if (!amount || !years) {
+if (!amount || !years) {
 
-    resultDiv.innerHTML = t("insertMortgageData");
+resultDiv.innerHTML = t("insertMortgageData");
+return;
 
-    return;
+}
 
-  }
+const banks = [
+{ name: "Bank A", rate: rateA },
+{ name: "Bank B", rate: rateB },
+{ name: "Bank C", rate: rateC }
+];
 
-  const banks = [
+const results = banks.map(bank => {
 
-    { name: "Bank A", rate: rateA },
-    { name: "Bank B", rate: rateB },
-    { name: "Bank C", rate: rateC }
+const data = mortgageSimulation(amount, bank.rate, years);
 
-  ];
+return { ...bank, ...data };
 
-  const results = banks.map(bank => {
+});
 
-    const data = mortgageSimulation(amount, bank.rate, years);
+results.sort((a, b) => a.totalPaid - b.totalPaid);
 
-    return { ...bank, ...data };
+const best = results[0];
 
-  });
+resultDiv.innerHTML = `
 
-  results.sort((a, b) => a.totalPaid - b.totalPaid);
+<h4>${t("bestSolution")}: ${best.name}</h4>
 
-  const best = results[0];
+${results.map(r => `
 
-  resultDiv.innerHTML = `
+<div class="kpi-box" style="margin-top:15px;">
 
-  <h4>${t("bestSolution")}: ${best.name}</h4>
+<strong>${r.name}</strong><br>
 
-  ${results.map(r => `
+${t("rate")}: ${r.rate}%<br>
 
-  <div class="kpi-box" style="margin-top:15px;">
+${t("yearlyPayment")}: ${formatCurrency(r.yearlyPayment)}<br>
 
-  <strong>${r.name}</strong><br>
+${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
 
-  ${t("rate")}: ${r.rate}%<br>
+</div>
 
-  ${t("yearlyPayment")}: ${formatCurrency(r.yearlyPayment)}<br>
+`).join("")}
 
-  ${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
-
-  </div>
-
-  `).join("")}
-
-  `;
+`;
 
 }
 
@@ -448,36 +500,34 @@ function compareMortgages() {
 
 function renderChart(net) {
 
-  const ctx = document.getElementById("roiChart");
+const ctx = document.getElementById("roiChart");
 
-  if (!ctx || typeof Chart === "undefined") return;
+if (!ctx || typeof Chart === "undefined") return;
 
-  if (roiChartInstance) roiChartInstance.destroy();
+if (roiChartInstance) roiChartInstance.destroy();
 
-  roiChartInstance = new Chart(ctx, {
+roiChartInstance = new Chart(ctx, {
 
-    type: "line",
+type: "line",
 
-    data: {
+data: {
 
-      labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
+labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
 
-      datasets: [{
-        data: [net, net*2, net*3, net*4, net*5],
-        borderWidth: 2,
-        tension: 0.3
-      }]
+datasets: [{
+data: [net, net*2, net*3, net*4, net*5],
+borderWidth: 2,
+tension: 0.3
+}]
 
-    },
+},
 
-    options: {
+options: {
+responsive: true,
+plugins: { legend: { display: false } }
+}
 
-      responsive: true,
-      plugins: { legend: { display: false } }
-
-    }
-
-  });
+});
 
 }
 
