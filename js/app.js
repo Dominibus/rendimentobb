@@ -1,26 +1,23 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 13.2 STABLE
-// PRO collegato a Firebase + bug fix
+// RENDIMENTOBB – EXECUTIVE ENGINE 13.3 FINAL
+// PRO Firebase + Mortgage Comparator FIX
 // ===============================================
 
 
-// ================= PRO SYSTEM (FIREBASE) =================
+// ================= PRO SYSTEM =================
 
 let isProUnlocked = false;
 let overrideMortgage = null;
 
-// 🔥 funzione aggiorna stato PRO
 function updateProStatus() {
   isProUnlocked = (window.currentPlan === "pro");
 }
 
-// ascolta evento Firebase
 document.addEventListener("rb_plan_loaded", () => {
   updateProStatus();
   calculate();
 });
 
-// fallback iniziale
 updateProStatus();
 
 
@@ -32,11 +29,8 @@ if (!window.currentLang) {
 
 const TEXT = {
   it: {
-    solid: "SOLIDO",
-    marginal: "MARGINALE",
-    unsustainable: "NON SOSTENIBILE",
-    annualNet: "Netto Annuale",
     roi: "ROI",
+    annualNet: "Netto Annuale",
     strategicLocked: "🔒 Interpretazione Strategica Bloccata",
     unlock: "Upgrade a PRO",
     strategicTitle: "🔎 Interpretazione Strategica",
@@ -44,24 +38,16 @@ const TEXT = {
     applyMortgage: "Applica miglior mutuo al ROI",
     proDesc: "Funzione disponibile solo in modalità PRO.",
     insertMortgageData: "Inserisci importo e durata.",
-    executiveScore: "Executive Investment Score",
-    grade: "Classe Investimento",
-    risk: "Livello di Rischio",
-    payback: "Payback Stimato",
     yearlyPayment: "Rata Annuale",
     totalInterest: "Totale Interessi",
     rate: "Tasso",
-    years: "anni",
     insightSolid: "Investimento strutturalmente resiliente.",
-    insightMedium: "Moderatamente sostenibile. Ottimizzazione consigliata.",
-    insightWeak: "Strutturalmente fragile. Rivedere pricing o finanziamento."
+    insightMedium: "Moderatamente sostenibile.",
+    insightWeak: "Strutturalmente fragile."
   },
   en: {
-    solid: "SOLID",
-    marginal: "MARGINAL",
-    unsustainable: "NOT SUSTAINABLE",
-    annualNet: "Annual Net",
     roi: "ROI",
+    annualNet: "Annual Net",
     strategicLocked: "🔒 Strategic Interpretation Locked",
     unlock: "Upgrade to PRO",
     strategicTitle: "🔎 Strategic Interpretation",
@@ -69,17 +55,12 @@ const TEXT = {
     applyMortgage: "Apply best mortgage to ROI",
     proDesc: "Feature available only in PRO mode.",
     insertMortgageData: "Insert amount and duration.",
-    executiveScore: "Executive Investment Score",
-    grade: "Investment Grade",
-    risk: "Risk Level",
-    payback: "Estimated Payback",
     yearlyPayment: "Yearly Payment",
     totalInterest: "Total Interest",
     rate: "Rate",
-    years: "yrs",
-    insightSolid: "Investment structurally resilient.",
-    insightMedium: "Moderately viable. Optimization recommended.",
-    insightWeak: "Structurally fragile. Review pricing or financing."
+    insightSolid: "Structurally resilient investment.",
+    insightMedium: "Moderately viable.",
+    insightWeak: "Structurally fragile."
   }
 };
 
@@ -110,64 +91,34 @@ let roiChartInstance = null;
 
 // ================= MORTGAGE =================
 
-function calculateMortgage(loanAmount, interestRate, loanYears) {
+function calculateMortgage(amount, rate, years) {
 
-  if (!loanAmount || !loanYears) return 0;
+  if (!amount || !years) return 0;
 
-  if (interestRate === 0)
-    return loanAmount / loanYears;
-
-  const r = interestRate / 100;
-  const n = loanYears;
-
-  return loanAmount *
-    (r * Math.pow(1 + r, n)) /
-    (Math.pow(1 + r, n) - 1);
-}
-
-
-// 🔥 FIX ERRORE CONSOLE
-function mortgageSimulation(amount, rate, years) {
-
-  if (!amount || !rate || !years) return null;
+  if (rate === 0)
+    return amount / years;
 
   const r = rate / 100;
   const n = years;
 
-  const yearlyPayment =
-    amount *
+  return amount *
     (r * Math.pow(1 + r, n)) /
     (Math.pow(1 + r, n) - 1);
+}
 
-  const totalPaid = yearlyPayment * n;
+function mortgageSimulation(amount, rate, years) {
+
+  if (!amount || !rate || !years) return null;
+
+  const yearlyPayment = calculateMortgage(amount, rate, years);
+  const totalPaid = yearlyPayment * years;
   const totalInterest = totalPaid - amount;
 
   return { yearlyPayment, totalPaid, totalInterest };
 }
 
 
-// ================= SCENARIO =================
-
-function calculateScenario(occ, priceNight, commission, tax, expenses, mortgageYearly, equity) {
-
-  const nights = 365 * (occ / 100);
-  const gross = priceNight * nights;
-  const fees = gross * (commission / 100);
-  const yearlyExpenses = expenses * 12;
-
-  const operatingProfit = gross - fees - yearlyExpenses;
-  const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
-  const netOperating = operatingProfit - taxCost;
-  const netAfterMortgage = netOperating - mortgageYearly;
-
-  let roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
-  if (!isFinite(roi)) roi = 0;
-
-  return { roi, netAfterMortgage, netOperating };
-}
-
-
-// ================= MAIN =================
+// ================= MAIN CALC =================
 
 function calculate() {
 
@@ -190,57 +141,102 @@ function calculate() {
     ? overrideMortgage
     : calculateMortgage(loanAmount, interestRate, loanYears);
 
-  const base = calculateScenario(
-    occupancy,
-    priceNight,
-    commission,
-    tax,
-    expenses,
-    mortgageYearly,
-    equity
-  );
+  const nights = 365 * (occupancy / 100);
+  const gross = priceNight * nights;
+  const fees = gross * (commission / 100);
+  const yearlyExpenses = expenses * 12;
 
-  renderChart(base.netAfterMortgage);
-  renderStrategicInsight(base.roi);
+  const operatingProfit = gross - fees - yearlyExpenses;
+  const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
+  const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
+
+  const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
+
+  renderChart(netAfterMortgage);
+  renderStrategicInsight(roi);
 }
 
 
 // ================= STRATEGIC =================
 
-function renderStrategicInsight(baseROI) {
+function renderStrategicInsight(roi) {
 
-  const insightBox = document.getElementById("strategic-insight");
-  if (!insightBox) return;
+  const box = document.getElementById("strategic-insight");
+  if (!box) return;
 
   if (!isProUnlocked) {
-    insightBox.innerHTML = `
+    box.innerHTML = `
       <strong>${t("strategicLocked")}</strong>
       <div style="margin-top:10px;">
-        <button class="btn btn-primary">
-           ${t("unlock")}
-        </button>
+        <button class="btn btn-primary">${t("unlock")}</button>
       </div>
     `;
     return;
   }
 
   let message =
-    baseROI > 12
-      ? t("insightSolid")
-      : baseROI > 6
-      ? t("insightMedium")
-      : t("insightWeak");
+    roi > 12 ? t("insightSolid")
+    : roi > 6 ? t("insightMedium")
+    : t("insightWeak");
 
-  insightBox.innerHTML = `
+  box.innerHTML = `
     <strong>${t("strategicTitle")}</strong>
     <p style="margin-top:10px;">${message}</p>
   `;
 }
 
 
+// ================= MORTGAGE COMPARATOR =================
+
+function compareMortgages() {
+
+  const amount = getValue("mortgageAmount");
+  const years = getValue("mortgageYears");
+
+  const rateA = getValue("rateA");
+  const rateB = getValue("rateB");
+  const rateC = getValue("rateC");
+
+  const resultDiv = document.getElementById("mortgage-results");
+  if (!resultDiv) return;
+
+  if (!amount || !years) {
+    resultDiv.innerHTML = t("insertMortgageData");
+    return;
+  }
+
+  const banks = [
+    { name: "Bank A", rate: rateA },
+    { name: "Bank B", rate: rateB },
+    { name: "Bank C", rate: rateC }
+  ];
+
+  const results = banks.map(bank => {
+    const data = mortgageSimulation(amount, bank.rate, years);
+    return { ...bank, ...data };
+  });
+
+  results.sort((a, b) => a.totalPaid - b.totalPaid);
+
+  const best = results[0];
+
+  resultDiv.innerHTML = `
+    <h4>${t("bestSolution")}: ${best.name}</h4>
+    ${results.map(r => `
+      <div class="kpi-box" style="margin-top:15px;">
+        <strong>${r.name}</strong><br>
+        ${t("rate")}: ${r.rate}%<br>
+        ${t("yearlyPayment")}: ${formatCurrency(r.yearlyPayment)}<br>
+        ${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
+      </div>
+    `).join("")}
+  `;
+}
+
+
 // ================= CHART =================
 
-function renderChart(yearlyNet) {
+function renderChart(net) {
 
   const ctx = document.getElementById("roiChart");
   if (!ctx || typeof Chart === "undefined") return;
@@ -252,13 +248,7 @@ function renderChart(yearlyNet) {
     data: {
       labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
       datasets: [{
-        data: [
-          yearlyNet,
-          yearlyNet * 2,
-          yearlyNet * 3,
-          yearlyNet * 4,
-          yearlyNet * 5
-        ],
+        data: [net, net*2, net*3, net*4, net*5],
         borderWidth: 2,
         tension: 0.3
       }]
