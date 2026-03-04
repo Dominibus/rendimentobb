@@ -660,7 +660,6 @@ return;
 }
 
 const { jsPDF } = window.jspdf;
-
 const data = window.lastAnalysisData;
 
 const doc = new jsPDF();
@@ -671,10 +670,10 @@ let y = 20;
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,15,"F");
+doc.rect(0,0,210,16,"F");
 
 doc.setTextColor(255,255,255);
-doc.setFontSize(14);
+doc.setFontSize(13);
 doc.text("RendimentoBB Strategic Engine",20,10);
 
 doc.setTextColor(0,0,0);
@@ -694,7 +693,7 @@ window.currentLang==="it"
 y
 );
 
-y += 12;
+y += 10;
 
 doc.setFontSize(11);
 
@@ -707,13 +706,28 @@ y,
 {maxWidth:170}
 );
 
-y += 18;
+y += 10;
+
+
+// ================= REPORT DATE =================
+
+const reportDate = new Date().toLocaleDateString();
+
+doc.setFontSize(9);
+
+doc.text(
+(window.currentLang==="it"?"Data report: ":"Report date: ")
++ reportDate,
+20,
+y
+);
+
+y += 15;
 
 
 // ================= INVESTMENT STRUCTURE =================
 
 doc.setFontSize(14);
-
 doc.setTextColor(16,185,129);
 
 doc.text(
@@ -728,6 +742,8 @@ doc.setTextColor(0,0,0);
 
 y += 10;
 
+const ltv = ((data.loan / data.price) * 100).toFixed(0);
+
 doc.setFontSize(11);
 
 doc.text(
@@ -736,7 +752,7 @@ doc.text(
 20,y
 );
 
-y += 8;
+y += 7;
 
 doc.text(
 (window.currentLang==="it"?"Capitale investito: ":"Equity invested: ")
@@ -744,7 +760,7 @@ doc.text(
 20,y
 );
 
-y += 8;
+y += 7;
 
 doc.text(
 (window.currentLang==="it"?"Importo mutuo: ":"Loan amount: ")
@@ -752,47 +768,48 @@ doc.text(
 20,y
 );
 
+y += 7;
+
+doc.text(
+(window.currentLang==="it"?"Loan to Value: ":"Loan to Value: ")
++ ltv + "%",
+20,y
+);
+
 y += 15;
 
 
-// ================= FINANCIAL PERFORMANCE =================
+// ================= KPI BOXES =================
 
-doc.setFontSize(14);
-
-doc.setTextColor(16,185,129);
-
-doc.text(
-window.currentLang==="it"
-? "Performance Finanziaria"
-: "Financial Performance",
-20,
-y
-);
-
-doc.setTextColor(0,0,0);
-
-y += 10;
+doc.setFillColor(240,248,245);
+doc.roundedRect(20,y,170,18,3,3,"F");
 
 doc.setFontSize(11);
 
 doc.text(
-(window.currentLang==="it"?"Ricavi annui stimati: ":"Estimated annual revenue: ")
+(window.currentLang==="it"?"Ricavi stimati: ":"Estimated revenue: ")
 + formatCurrency(data.revenue),
-20,y
+25,
+y+7
 );
-
-y += 8;
 
 doc.text(
-(window.currentLang==="it"?"Profitto netto annuo: ":"Annual net profit: ")
+(window.currentLang==="it"?"Profitto netto: ":"Net profit: ")
 + formatCurrency(data.profit),
-20,y
+90,
+y+7
 );
 
-y += 8;
+doc.text(
+"ROI: " + data.roi.toFixed(2) + "%",
+150,
+y+7
+);
+
+y += 30;
 
 
-// ================= ROI =================
+// ================= ROI COLOR =================
 
 let roiColor = [239,68,68];
 
@@ -801,13 +818,13 @@ else if(data.roi > 6) roiColor = [245,158,11];
 
 doc.setTextColor(...roiColor);
 
-doc.setFontSize(16);
+doc.setFontSize(18);
 
 doc.text(
 (window.currentLang==="it"?"ROI investimento: ":"Investment ROI: ")
 + data.roi.toFixed(2) + "%",
 20,
-y+5
+y
 );
 
 doc.setTextColor(0,0,0);
@@ -834,7 +851,6 @@ risk = window.currentLang==="it"?"Rischio medio":"Medium risk";
 }
 
 doc.setFontSize(14);
-
 doc.setTextColor(16,185,129);
 
 doc.text(
@@ -851,18 +867,15 @@ y += 10;
 
 doc.setFontSize(11);
 
-doc.text(
-(window.currentLang==="it"?"Investment Grade: ":"Investment Grade: ")
-+ grade,
-20,y
-);
+doc.text("Grade: " + grade,20,y);
 
-y += 8;
+y += 7;
 
 doc.text(
 (window.currentLang==="it"?"Profilo di rischio: ":"Risk profile: ")
 + risk,
-20,y
+20,
+y
 );
 
 y += 15;
@@ -871,7 +884,6 @@ y += 15;
 // ================= STRATEGIC INSIGHT =================
 
 doc.setFontSize(14);
-
 doc.setTextColor(16,185,129);
 
 doc.text(
@@ -917,7 +929,50 @@ doc.setFontSize(11);
 
 doc.text(insight,20,y,{maxWidth:170});
 
-y += 25;
+y += 20;
+
+
+// ================= ROI GRAPH =================
+
+doc.setFontSize(14);
+doc.setTextColor(16,185,129);
+
+doc.text(
+window.currentLang==="it"
+? "Proiezione ROI (5 anni)"
+: "ROI Projection (5 years)",
+20,
+y
+);
+
+doc.setTextColor(0,0,0);
+
+y += 10;
+
+let startX = 20;
+let startY = y;
+
+let values = [
+data.profit,
+data.profit*2,
+data.profit*3,
+data.profit*4,
+data.profit*5
+];
+
+for(let i=0;i<values.length-1;i++){
+
+let x1 = startX + (i*30);
+let y1 = startY - values[i]/5000;
+
+let x2 = startX + ((i+1)*30);
+let y2 = startY - values[i+1]/5000;
+
+doc.line(x1,y1,x2,y2);
+
+}
+
+y += 30;
 
 
 // ================= FOOTER =================
@@ -928,7 +983,6 @@ doc.line(20,y,190,y);
 y += 8;
 
 doc.setFontSize(9);
-
 doc.setTextColor(120);
 
 doc.text(
@@ -942,48 +996,4 @@ y
 doc.save("RendimentoBB-Investment-Report.pdf");
 
 }
-
-
-
-// ================= EXPORT GLOBAL =================
-
-window.calculate = calculate;
-window.compareMortgages = compareMortgages;
-window.generateExecutivePDF = generateExecutivePDF;
-
-
-// ================= CAPTURE LAST ANALYSIS =================
-
-const originalCalculate = window.calculate;
-
-window.calculate = function(){
-
-originalCalculate();
-
-const equity = getValue("equity");
-const priceNight = getValue("priceNight");
-const occupancy = getValue("occupancy");
-const loanAmount = getValue("loanAmount");
-const expenses = getValue("expenses");
-
-const nights = 365 * (occupancy / 100);
-const revenue = priceNight * nights;
-
-const profit = revenue - (expenses * 12);
-
-const roi = equity > 0 ? (profit / equity) * 100 : 0;
-
-window.lastAnalysisData = {
-
-price: getValue("price"),
-equity: equity,
-loan: loanAmount,
-revenue: revenue,
-profit: profit,
-roi: roi,
-risk: 0
-
-};
-
-};
 
