@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 14.0
-// PRO Firebase + Mortgage Comparator + Forecast Engine
+// RENDIMENTOBB – EXECUTIVE ENGINE 15.0
+// PRO Firebase + Mortgage Comparator + Forecast + Investment Score
 // ===============================================
 
 
@@ -70,46 +70,73 @@ if (!window.currentLang) {
 }
 
 const TEXT = {
+
   it: {
+
     roi: "ROI",
     annualNet: "Netto Annuale",
+
     strategicLocked: "🔒 Interpretazione Strategica Bloccata",
     unlock: "Upgrade a PRO",
     strategicTitle: "🔎 Interpretazione Strategica",
+
     bestSolution: "🏆 Miglior Soluzione",
+
     applyMortgage: "Applica miglior mutuo al ROI",
     proDesc: "Funzione disponibile solo in modalità PRO.",
     insertMortgageData: "Inserisci importo e durata.",
+
     yearlyPayment: "Rata Annuale",
     totalInterest: "Totale Interessi",
     rate: "Tasso",
+
     insightSolid: "Investimento strutturalmente resiliente.",
     insightMedium: "Moderatamente sostenibile.",
     insightWeak: "Strutturalmente fragile.",
+
     lowScenario: "Scenario prudente",
     baseScenario: "Scenario base",
-    highScenario: "Scenario ottimistico"
+    highScenario: "Scenario ottimistico",
+
+    grade: "Investment Grade",
+    riskScore: "Risk Score",
+    recommendation: "Raccomandazione"
+
   },
+
   en: {
+
     roi: "ROI",
     annualNet: "Annual Net",
+
     strategicLocked: "🔒 Strategic Interpretation Locked",
     unlock: "Upgrade to PRO",
     strategicTitle: "🔎 Strategic Interpretation",
+
     bestSolution: "🏆 Best Solution",
+
     applyMortgage: "Apply best mortgage to ROI",
     proDesc: "Feature available only in PRO mode.",
     insertMortgageData: "Insert amount and duration.",
+
     yearlyPayment: "Yearly Payment",
     totalInterest: "Total Interest",
     rate: "Rate",
+
     insightSolid: "Structurally resilient investment.",
     insightMedium: "Moderately viable.",
     insightWeak: "Structurally fragile.",
+
     lowScenario: "Low scenario",
     baseScenario: "Base scenario",
-    highScenario: "High scenario"
+    highScenario: "High scenario",
+
+    grade: "Investment Grade",
+    riskScore: "Risk Score",
+    recommendation: "Recommendation"
+
   }
+
 };
 
 function t(key) {
@@ -120,18 +147,26 @@ function t(key) {
 // ================= UTIL =================
 
 function formatCurrency(value) {
+
   if (!isFinite(value)) value = 0;
+
   return new Intl.NumberFormat(
     window.currentLang === "it" ? "it-IT" : "en-US",
     { style: "currency", currency: "EUR" }
   ).format(value);
+
 }
 
 function getValue(id) {
+
   const el = document.getElementById(id);
+
   if (!el) return 0;
+
   const val = parseFloat(el.value.replace(",", "."));
+
   return isNaN(val) ? 0 : val;
+
 }
 
 let roiChartInstance = null;
@@ -143,8 +178,7 @@ function calculateMortgage(amount, rate, years) {
 
   if (!amount || !years) return 0;
 
-  if (rate === 0)
-    return amount / years;
+  if (rate === 0) return amount / years;
 
   const r = rate / 100;
   const n = years;
@@ -152,6 +186,7 @@ function calculateMortgage(amount, rate, years) {
   return amount *
     (r * Math.pow(1 + r, n)) /
     (Math.pow(1 + r, n) - 1);
+
 }
 
 function mortgageSimulation(amount, rate, years) {
@@ -163,6 +198,7 @@ function mortgageSimulation(amount, rate, years) {
   const totalInterest = totalPaid - amount;
 
   return { yearlyPayment, totalPaid, totalInterest };
+
 }
 
 
@@ -195,6 +231,53 @@ function renderRevenueForecast(baseRevenue){
   </div>
 
   `;
+
+}
+
+
+// ================= INVESTMENT SCORE =================
+
+function renderInvestmentScore(roi, riskScore){
+
+  const container = document.getElementById("investment-score");
+  if(!container) return;
+
+  let grade = "C";
+  let recommendation = "High Risk";
+
+  if(roi > 12){
+
+    grade = "A";
+    recommendation = "SAFE INVESTMENT";
+
+  }
+
+  else if(roi > 6){
+
+    grade = "B";
+    recommendation = "MODERATE RETURN";
+
+  }
+
+  container.innerHTML = `
+
+  <div class="kpi-box">
+  <span>${t("grade")}</span>
+  <strong>${grade}</strong>
+  </div>
+
+  <div class="kpi-box">
+  <span>${t("riskScore")}</span>
+  <strong>${riskScore} / 100</strong>
+  </div>
+
+  <div class="kpi-box">
+  <span>${t("recommendation")}</span>
+  <strong>${recommendation}</strong>
+  </div>
+
+  `;
+
 }
 
 
@@ -227,7 +310,9 @@ function calculate() {
   const yearlyExpenses = expenses * 12;
 
   const operatingProfit = gross - fees - yearlyExpenses;
+
   const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
+
   const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
 
   const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
@@ -238,15 +323,20 @@ function calculate() {
     75;
 
   renderChart(netAfterMortgage);
+
   renderStrategicInsight(roi);
 
   renderRevenueForecast(gross);
 
+  renderInvestmentScore(roi, riskScore);
+
   saveAnalysis({
+
     price: getValue("price"),
     equity: equity,
     roi: roi,
     risk: riskScore
+
   });
 
 }
@@ -257,16 +347,20 @@ function calculate() {
 function renderStrategicInsight(roi) {
 
   const box = document.getElementById("strategic-insight");
+
   if (!box) return;
 
   if (!isProUnlocked) {
+
     box.innerHTML = `
       <strong>${t("strategicLocked")}</strong>
       <div style="margin-top:10px;">
         <button class="btn btn-primary">${t("unlock")}</button>
       </div>
     `;
+
     return;
+
   }
 
   let message =
@@ -278,6 +372,7 @@ function renderStrategicInsight(roi) {
     <strong>${t("strategicTitle")}</strong>
     <p style="margin-top:10px;">${message}</p>
   `;
+
 }
 
 
@@ -293,22 +388,31 @@ function compareMortgages() {
   const rateC = getValue("rateC");
 
   const resultDiv = document.getElementById("mortgage-results");
+
   if (!resultDiv) return;
 
   if (!amount || !years) {
+
     resultDiv.innerHTML = t("insertMortgageData");
+
     return;
+
   }
 
   const banks = [
+
     { name: "Bank A", rate: rateA },
     { name: "Bank B", rate: rateB },
     { name: "Bank C", rate: rateC }
+
   ];
 
   const results = banks.map(bank => {
+
     const data = mortgageSimulation(amount, bank.rate, years);
+
     return { ...bank, ...data };
+
   });
 
   results.sort((a, b) => a.totalPaid - b.totalPaid);
@@ -316,15 +420,25 @@ function compareMortgages() {
   const best = results[0];
 
   resultDiv.innerHTML = `
-    <h4>${t("bestSolution")}: ${best.name}</h4>
-    ${results.map(r => `
-      <div class="kpi-box" style="margin-top:15px;">
-        <strong>${r.name}</strong><br>
-        ${t("rate")}: ${r.rate}%<br>
-        ${t("yearlyPayment")}: ${formatCurrency(r.yearlyPayment)}<br>
-        ${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
-      </div>
-    `).join("")}
+
+  <h4>${t("bestSolution")}: ${best.name}</h4>
+
+  ${results.map(r => `
+
+  <div class="kpi-box" style="margin-top:15px;">
+
+  <strong>${r.name}</strong><br>
+
+  ${t("rate")}: ${r.rate}%<br>
+
+  ${t("yearlyPayment")}: ${formatCurrency(r.yearlyPayment)}<br>
+
+  ${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
+
+  </div>
+
+  `).join("")}
+
   `;
 
 }
@@ -335,24 +449,34 @@ function compareMortgages() {
 function renderChart(net) {
 
   const ctx = document.getElementById("roiChart");
+
   if (!ctx || typeof Chart === "undefined") return;
 
   if (roiChartInstance) roiChartInstance.destroy();
 
   roiChartInstance = new Chart(ctx, {
+
     type: "line",
+
     data: {
+
       labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
+
       datasets: [{
         data: [net, net*2, net*3, net*4, net*5],
         borderWidth: 2,
         tension: 0.3
       }]
+
     },
+
     options: {
+
       responsive: true,
       plugins: { legend: { display: false } }
+
     }
+
   });
 
 }
