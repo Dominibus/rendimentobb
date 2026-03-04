@@ -692,13 +692,14 @@ window.currentLang==="it"
 20,
 y
 );
-  
+
 y += 10;
 
 doc.text(
 (window.currentLang==="it"?"Prezzo immobile: ":"Property Price: ")
 + formatCurrency(data.price),
-20,y);
+20,y
+);
 y += 8;
 
 doc.text(
@@ -706,12 +707,15 @@ doc.text(
 + formatCurrency(data.equity),
 20,y
 );
+y += 8;
 
 doc.text(
 (window.currentLang==="it"?"Importo mutuo: ":"Loan amount: ")
 + formatCurrency(data.loan),
 20,y
 );
+
+y += 15;
 
 doc.text(
 window.currentLang==="it"
@@ -720,16 +724,28 @@ window.currentLang==="it"
 20,y
 );
 
+y += 10;
+
 doc.text(
 (window.currentLang==="it"?"Ricavi annui stimati: ":"Estimated Annual Revenue: ")
 + formatCurrency(data.revenue),
 20,y
 );
-
-doc.text("Annual Profit: "+formatCurrency(data.profit),20,y);
 y += 8;
 
-doc.text("ROI: "+data.roi.toFixed(2)+"%",20,y);
+doc.text(
+(window.currentLang==="it"?"Profitto annuo: ":"Annual Profit: ")
++ formatCurrency(data.profit),
+20,y
+);
+y += 8;
+
+doc.text(
+(window.currentLang==="it"?"ROI investimento: ":"Investment ROI: ")
++ data.roi.toFixed(2) + "%",
+20,y
+);
+
 y += 15;
 
 let insight;
@@ -767,7 +783,8 @@ y
 y += 8;
 
 doc.text(insight,20,y,{maxWidth:170});
-y += 15;
+
+y += 20;
 
 doc.setFontSize(10);
 doc.text(
@@ -781,6 +798,7 @@ y
 doc.save("RendimentoBB-Investment-Report.pdf");
 
 }
+
 
 // ================= EXPORT GLOBAL =================
 
