@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 13.4 FINAL
-// PRO Firebase + Mortgage Comparator + SAVE ANALYSIS
+// RENDIMENTOBB – EXECUTIVE ENGINE 13.5 FINAL
+// PRO Firebase + Mortgage Comparator + SAVE ANALYSIS FIX
 // ===============================================
 
 
@@ -202,8 +202,6 @@ function calculate() {
   renderChart(netAfterMortgage);
   renderStrategicInsight(roi);
 
-  // ================= SAVE ANALYSIS =================
-
   saveAnalysis({
     price: getValue("price"),
     equity: equity,
@@ -288,6 +286,7 @@ function compareMortgages() {
       </div>
     `).join("")}
   `;
+
 }
 
 
@@ -315,4 +314,11 @@ function renderChart(net) {
       plugins: { legend: { display: false } }
     }
   });
+
 }
+
+
+// ================= EXPORT GLOBAL FUNCTIONS =================
+
+window.calculate = calculate;
+window.compareMortgages = compareMortgages;
