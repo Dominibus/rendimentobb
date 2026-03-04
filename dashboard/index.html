@@ -201,17 +201,21 @@ Le tue analisi investimento
 
 <script>
 
-function refreshDashboardLang(){
+document.addEventListener("rb_language_changed", function(){
 
-if(typeof loadDashboard === "function"){
-loadDashboard();
-}
+const oldScript = document.querySelector("script[src='/js/dashboard.js']");
 
-}
+if(!oldScript) return;
 
-/* EVENTO CORRETTO DEL TUO LANG ENGINE */
+const newScript = document.createElement("script");
 
-document.addEventListener("rb_language_changed", refreshDashboardLang);
+newScript.type = "module";
+newScript.src = "/js/dashboard.js?v=" + Date.now();
+
+oldScript.remove();
+document.body.appendChild(newScript);
+
+});
 
 </script>
 
