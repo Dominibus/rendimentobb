@@ -701,15 +701,24 @@ doc.text(
 20,y);
 y += 8;
 
-doc.text("Equity Invested: "+formatCurrency(data.equity),20,y);
-y += 8;
+doc.text(
+(window.currentLang==="it"?"Capitale investito: ":"Equity invested: ")
++ formatCurrency(data.equity),
+20,y
+);
 
-doc.text("Loan Amount: "+formatCurrency(data.loan),20,y);
+doc.text(
+(window.currentLang==="it"?"Importo mutuo: ":"Loan amount: ")
++ formatCurrency(data.loan),
+20,y
+);
 
-y += 15;
-
-doc.text("Investment KPIs",20,y);
-y += 10;
+doc.text(
+window.currentLang==="it"
+? "Indicatori Investimento"
+: "Investment KPIs",
+20,y
+);
 
 doc.text("Estimated Annual Revenue: "+formatCurrency(data.revenue),20,y);
 y += 8;
@@ -798,30 +807,36 @@ window.calculate = function(){
 
   const roi = equity > 0 ? (profit / equity) * 100 : 0;
 
+const originalCalculate = window.calculate;
+
+window.calculate = function(){
+
+  originalCalculate();
+
+  const equity = getValue("equity");
+  const priceNight = getValue("priceNight");
+  const occupancy = getValue("occupancy");
+  const loanAmount = getValue("loanAmount");
+  const expenses = getValue("expenses");
+
+  const nights = 365 * (occupancy / 100);
+  const revenue = priceNight * nights;
+
+  const profit = revenue - (expenses * 12);
+
+  const roi = equity > 0 ? (profit / equity) * 100 : 0;
+
   window.lastAnalysisData = {
 
-  price: getValue("price"),
-  equity: equity,
-  loan: loanAmount,
-  revenue: revenue,
-  profit: profit,
-  roi: roi,
-  risk: 0
+    price: getValue("price"),
+    equity: equity,
+    loan: loanAmount,
+    revenue: revenue,
+    profit: profit,
+    roi: roi,
+    risk: 0
 
- };
-
-};
-
-  price: getValue("price"),
-  equity: equity,
-  loan: loanAmount,
-  revenue: revenue,
-
-  profit: revenue - (getValue("expenses") * 12),
-  roi: 0,
-  risk: 0
-
- };
+  };
 
 };
 
