@@ -1,9 +1,10 @@
 // ===============================
 // FIREBASE INIT – RENDIMENTOBB
-// VERSIONE PRO REALE COLLEGATA A FIRESTORE
+// VERSIONE SAAS MULTI PAGINA STABILE
 // ===============================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
 import { 
   getAuth,
   createUserWithEmailAndPassword,
@@ -20,7 +21,11 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// 🔐 CONFIG
+
+// ===============================
+// CONFIG
+// ===============================
+
 const firebaseConfig = {
   apiKey: "AIzaSyCGg0ffpwnD0VXkxFgXxyj0ZrAoVZJHdKU",
   authDomain: "rendimento-bb.firebaseapp.com",
@@ -35,10 +40,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+
+// ===============================
+// GLOBAL STATE
+// ===============================
+
 let currentUser = null;
 let currentPlan = "free";
 
-// 🔥 GLOBAL EXPORT PER TOOL
+window.currentUser = null;
 window.currentPlan = "free";
 
 
@@ -97,7 +107,6 @@ async function loadUserPlan(uid) {
 
   window.currentPlan = currentPlan;
 
-  // 🔥 Notifica tool che piano è cambiato
   document.dispatchEvent(
     new CustomEvent("rb_plan_loaded", {
       detail: { plan: currentPlan }
@@ -109,10 +118,11 @@ async function loadUserPlan(uid) {
 
 
 // ===============================
-// AGGIORNA A PRO (per test manuale)
+// AGGIORNA PRO (TEST)
 // ===============================
 
 async function upgradeToPro(uid) {
+
   await updateDoc(doc(db, "users", uid), {
     plan: "pro"
   });
@@ -122,7 +132,7 @@ async function upgradeToPro(uid) {
 
 
 // ===============================
-// UI NAVBAR
+// UI USER NAVBAR
 // ===============================
 
 function updateUserUI(user) {
@@ -131,133 +141,6 @@ function updateUserUI(user) {
   if (!userArea) return;
 
   if (user) {
-    userArea.innerHTML = `
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span style="font-size:13px;">${user.email}</span>
-        <button id="logout-btn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
-          Logout
-        </button>
-      </div>
-    `;
-
-    document.getElementById("logout-btn")
-      .addEventListener("click", logoutUser);
-
-  } else {
-    userArea.innerHTML = `
-      <button id="login-btn" class="btn btn-secondary" style="padding:8px 18px; font-size:13px;">
-        Accedi
-      </button>
-    `;
-
-    document.getElementById("login-btn")
-      .addEventListener("click", openAuthModal);
-  }
-}
-
-
-// ===============================
-// PRO VISIBILITY NAVBAR
-// ===============================
-
-function updateProVisibility() {
-
-  const proBtn = document.getElementById("pro-btn");
-  if (!proBtn) return;
-
-  if (currentPlan === "pro") {
-    proBtn.textContent = "PRO Attivo";
-    proBtn.disabled = true;
-    proBtn.style.opacity = 0.6;
-  }
-}
-
-
-// ===============================
-// MODAL
-// ===============================
-
-function openAuthModal() {
-  document.getElementById("auth-modal").classList.remove("hidden");
-}
-
-function closeAuthModal() {
-  document.getElementById("auth-modal").classList.add("hidden");
-}
-
-
-// ===============================
-// DOM EVENTS
-// ===============================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const closeBtn = document.getElementById("close-auth");
-  const registerAction = document.getElementById("register-action");
-  const loginAction = document.getElementById("login-action");
-  const proBtn = document.getElementById("pro-btn");
-
-  if (closeBtn) closeBtn.addEventListener("click", closeAuthModal);
-
-  if (registerAction) {
-    registerAction.addEventListener("click", async () => {
-
-      const email = document.getElementById("auth-email").value;
-      const password = document.getElementById("auth-password").value;
-
-      try {
-        await registerUser(email, password);
-        closeAuthModal();
-      } catch (err) {
-        alert(err.message);
-      }
-    });
-  }
-
-  if (loginAction) {
-    loginAction.addEventListener("click", async () => {
-
-      const email = document.getElementById("auth-email").value;
-      const password = document.getElementById("auth-password").value;
-
-      try {
-        await loginUser(email, password);
-        closeAuthModal();
-      } catch (err) {
-        alert(err.message);
-      }
-    });
-  }
-
-  if (proBtn) {
-    proBtn.addEventListener("click", async () => {
-
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
-
-      // 🔥 Per ora test manuale
-      await upgradeToPro(currentUser.uid);
-      alert("Account aggiornato a PRO (test)");
-    });
-  }
-
-});
-
-
-// ===============================
-// AUTH OBSERVER
-// ===============================
-
-onAuthStateChanged(auth, async (user) => {
-  currentUser = user;
-
-  const userArea = document.getElementById("user-area");
-  if (!userArea) return;
-
-  if (user) {
-    await loadUserPlan(user.uid);
 
     const name = user.email.split("@")[0];
 
@@ -267,18 +150,21 @@ onAuthStateChanged(auth, async (user) => {
           👤 Benvenuto <strong>${name}</strong>
           ${currentPlan === "pro" ? '<span style="color:#00c896; font-weight:bold;"> PRO</span>' : ''}
         </span>
+
         <button id="logout-btn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
           Logout
         </button>
       </div>
     `;
 
-    document.getElementById("logout-btn").addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.reload();
-    });
+    document.getElementById("logout-btn")
+      .addEventListener("click", async () => {
+        await logoutUser();
+        window.location.reload();
+      });
 
   } else {
+
     userArea.innerHTML = `
       <button onclick="window.location.href='/login/'" 
         class="btn btn-secondary" 
@@ -287,4 +173,116 @@ onAuthStateChanged(auth, async (user) => {
       </button>
     `;
   }
+}
+
+
+// ===============================
+// PRO BUTTON
+// ===============================
+
+function updateProVisibility() {
+
+  const proBtn = document.getElementById("pro-btn");
+  if (!proBtn) return;
+
+  if (currentPlan === "pro") {
+
+    proBtn.textContent = "PRO Attivo";
+    proBtn.disabled = true;
+    proBtn.style.opacity = 0.6;
+  }
+}
+
+
+// ===============================
+// AUTH OBSERVER
+// ===============================
+
+onAuthStateChanged(auth, async (user) => {
+
+  currentUser = user;
+  window.currentUser = user;
+
+  if (user) {
+
+    await loadUserPlan(user.uid);
+
+  }
+
+  updateUserUI(user);
+
+});
+
+
+// ===============================
+// DOM EVENTS
+// ===============================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const registerAction = document.getElementById("register-action");
+  const loginAction = document.getElementById("login-action");
+  const proBtn = document.getElementById("pro-btn");
+
+  if (registerAction) {
+
+    registerAction.addEventListener("click", async () => {
+
+      const email = document.getElementById("auth-email").value;
+      const password = document.getElementById("auth-password").value;
+
+      try {
+
+        await registerUser(email, password);
+
+      } catch (err) {
+
+        alert(err.message);
+
+      }
+
+    });
+
+  }
+
+  if (loginAction) {
+
+    loginAction.addEventListener("click", async () => {
+
+      const email = document.getElementById("auth-email").value;
+      const password = document.getElementById("auth-password").value;
+
+      try {
+
+        await loginUser(email, password);
+
+      } catch (err) {
+
+        alert(err.message);
+
+      }
+
+    });
+
+  }
+
+  if (proBtn) {
+
+    proBtn.addEventListener("click", async () => {
+
+      if (!currentUser) {
+
+        window.location.href = "/login/";
+        return;
+
+      }
+
+      await upgradeToPro(currentUser.uid);
+
+      alert("Account aggiornato a PRO (test)");
+
+    });
+
+  }
+
 });
