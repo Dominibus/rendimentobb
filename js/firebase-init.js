@@ -251,14 +251,40 @@ document.addEventListener("DOMContentLoaded", () => {
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
-
   currentUser = user;
-  updateUserUI(user);
+
+  const userArea = document.getElementById("user-area");
+  if (!userArea) return;
 
   if (user) {
     await loadUserPlan(user.uid);
-  } else {
-    window.currentPlan = "free";
-  }
 
+    const name = user.email.split("@")[0];
+
+    userArea.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:13px;">
+          👤 Benvenuto <strong>${name}</strong>
+          ${currentPlan === "pro" ? '<span style="color:#00c896; font-weight:bold;"> PRO</span>' : ''}
+        </span>
+        <button id="logout-btn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
+          Logout
+        </button>
+      </div>
+    `;
+
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.reload();
+    });
+
+  } else {
+    userArea.innerHTML = `
+      <button onclick="window.location.href='/login/'" 
+        class="btn btn-secondary" 
+        style="padding:8px 18px; font-size:13px;">
+        Accedi
+      </button>
+    `;
+  }
 });
