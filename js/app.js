@@ -956,11 +956,15 @@ window.currentLang==="it"
 y
 );
 
-doc.save("RendimentoBB-Investment-Report.pdf");
+// ================= FILE NAME =================
+
+const fileName = window.currentLang === "it"
+? "RendimentoBB-Report-Investimento.pdf"
+: "RendimentoBB-Investment-Report.pdf";
+
+doc.save(fileName);
 
 }
-
-
 
 // ================= EXPORT GLOBAL =================
 
