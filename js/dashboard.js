@@ -223,8 +223,14 @@ loadDashboard();
 
 // ================= INIT =================
 
-document.addEventListener("rb_plan_loaded",loadDashboard);
+document.addEventListener("rb_plan_loaded", loadDashboard);
 
 /* aggiorna automaticamente quando cambi lingua */
 
-document.addEventListener("languageChanged",reloadDashboardLanguage);
+document.addEventListener("rb_language_changed", () => {
+
+if(!window.currentUser) return;
+
+loadDashboard();
+
+});
