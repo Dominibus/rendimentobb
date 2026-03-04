@@ -416,13 +416,6 @@ container.innerHTML = `
 
 }
 
-// MARKET BENCHMARK
-const citySelect = document.querySelector(".market-select");
-
-if(citySelect && citySelect.value){
-  renderMarketBenchmark(citySelect.value);
-}
-
 // ================= MAIN CALC =================
 
 function calculate() {
@@ -472,6 +465,18 @@ renderRevenueForecast(gross);
 
 renderInvestmentScore(roi, riskScore);
 
+// MARKET BENCHMARK + COMPARISON
+
+const citySelect = document.querySelector(".market-select");
+
+if(citySelect && citySelect.value){
+
+  renderMarketBenchmark(citySelect.value);
+
+  renderMarketComparison(gross, citySelect.value);
+
+}  
+
 renderOccupancySensitivity(
 priceNight,
 occupancy,
@@ -489,13 +494,6 @@ roi: roi,
 risk: riskScore
 });
 
-}
-
-// MARKET COMPARISON
-const citySelect = document.querySelector(".market-select");
-
-if(citySelect && citySelect.value){
-  renderMarketComparison(gross, citySelect.value);
 }
 
 // ================= STRATEGIC =================
