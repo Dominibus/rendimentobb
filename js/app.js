@@ -671,7 +671,7 @@ let y = 20;
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,15,"F");
+doc.rect(0,0,210,16,"F");
 
 doc.setTextColor(255,255,255);
 doc.setFontSize(14);
@@ -694,7 +694,7 @@ window.currentLang==="it"
 y
 );
 
-y += 12;
+y += 10;
 
 doc.setFontSize(11);
 
@@ -707,13 +707,28 @@ y,
 {maxWidth:170}
 );
 
-y += 18;
+y += 8;
+
+
+// ================= REPORT DATE =================
+
+const reportDate = new Date().toLocaleDateString();
+
+doc.setFontSize(9);
+
+doc.text(
+(window.currentLang==="it"?"Data report: ":"Report date: ")
++ reportDate,
+20,
+y
+);
+
+y += 15;
 
 
 // ================= INVESTMENT STRUCTURE =================
 
 doc.setFontSize(14);
-
 doc.setTextColor(16,185,129);
 
 doc.text(
@@ -728,6 +743,10 @@ doc.setTextColor(0,0,0);
 
 y += 10;
 
+const ltv = data.price > 0
+? ((data.loan / data.price) * 100).toFixed(0)
+: 0;
+
 doc.setFontSize(11);
 
 doc.text(
@@ -736,7 +755,7 @@ doc.text(
 20,y
 );
 
-y += 8;
+y += 7;
 
 doc.text(
 (window.currentLang==="it"?"Capitale investito: ":"Equity invested: ")
@@ -744,7 +763,7 @@ doc.text(
 20,y
 );
 
-y += 8;
+y += 7;
 
 doc.text(
 (window.currentLang==="it"?"Importo mutuo: ":"Loan amount: ")
@@ -752,44 +771,45 @@ doc.text(
 20,y
 );
 
+y += 7;
+
+doc.text(
+(window.currentLang==="it"?"Loan to Value: ":"Loan to Value: ")
++ ltv + "%",
+20,y
+);
+
 y += 15;
 
 
-// ================= FINANCIAL PERFORMANCE =================
+// ================= KPI BOX =================
 
-doc.setFontSize(14);
-
-doc.setTextColor(16,185,129);
-
-doc.text(
-window.currentLang==="it"
-? "Performance Finanziaria"
-: "Financial Performance",
-20,
-y
-);
-
-doc.setTextColor(0,0,0);
-
-y += 10;
+doc.setFillColor(240,248,245);
+doc.roundedRect(20,y,170,18,3,3,"F");
 
 doc.setFontSize(11);
 
 doc.text(
-(window.currentLang==="it"?"Ricavi annui stimati: ":"Estimated annual revenue: ")
+(window.currentLang==="it"?"Ricavi stimati: ":"Estimated revenue: ")
 + formatCurrency(data.revenue),
-20,y
+25,
+y+7
 );
-
-y += 8;
 
 doc.text(
-(window.currentLang==="it"?"Profitto netto annuo: ":"Annual net profit: ")
+(window.currentLang==="it"?"Profitto netto: ":"Net profit: ")
 + formatCurrency(data.profit),
-20,y
+95,
+y+7
 );
 
-y += 8;
+doc.text(
+"ROI: " + data.roi.toFixed(2) + "%",
+150,
+y+7
+);
+
+y += 28;
 
 
 // ================= ROI =================
@@ -807,18 +827,18 @@ doc.text(
 (window.currentLang==="it"?"ROI investimento: ":"Investment ROI: ")
 + data.roi.toFixed(2) + "%",
 20,
-y+5
+y
 );
 
 doc.setTextColor(0,0,0);
 
-y += 20;
+y += 18;
 
 
 // ================= INVESTMENT GRADE =================
 
 let grade = "C";
-let risk = "High Risk";
+let risk = window.currentLang==="it"?"Rischio elevato":"High Risk";
 
 if(data.roi > 12){
 
@@ -834,7 +854,6 @@ risk = window.currentLang==="it"?"Rischio medio":"Medium risk";
 }
 
 doc.setFontSize(14);
-
 doc.setTextColor(16,185,129);
 
 doc.text(
@@ -857,7 +876,7 @@ doc.text(
 20,y
 );
 
-y += 8;
+y += 7;
 
 doc.text(
 (window.currentLang==="it"?"Profilo di rischio: ":"Risk profile: ")
@@ -871,7 +890,6 @@ y += 15;
 // ================= STRATEGIC INSIGHT =================
 
 doc.setFontSize(14);
-
 doc.setTextColor(16,185,129);
 
 doc.text(
@@ -928,7 +946,6 @@ doc.line(20,y,190,y);
 y += 8;
 
 doc.setFontSize(9);
-
 doc.setTextColor(120);
 
 doc.text(
