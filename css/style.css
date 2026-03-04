@@ -84,6 +84,39 @@ font-size:14px;
 
 }
 
+.header-actions{
+
+display:flex;
+align-items:center;
+gap:16px;
+
+}
+
+.lang-switch{
+
+display:flex;
+gap:6px;
+
+}
+
+.lang-switch button{
+
+border:1px solid #e2e8f0;
+background:white;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+
+}
+
+.lang-switch button.active{
+
+background:#0f172a;
+color:white;
+
+}
+
 /* ===================== */
 /* LOGO */
 /* ===================== */
