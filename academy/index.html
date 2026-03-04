@@ -73,13 +73,14 @@ RendimentoBB – Academy Strategica B&B
   cursor:pointer;
   font-size:13px;
   font-weight:600;
-  transition:.2s ease;
 }
 
 .lang-btn.active{
   background:#0f172a;
   color:white;
 }
+
+/* CONTENUTI */
 
 .content-section{
   margin-top:60px;
@@ -131,18 +132,15 @@ RendimentoBB – Academy Strategica B&B
     </div>
 
     <div class="right-controls">
+
       <div class="lang-switch">
-        <!-- ✅ FIX QUI -->
         <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
         <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
       </div>
 
-      <button onclick="window.location.href='/'"
-              class="btn btn-secondary"
-              data-it="Home"
-              data-en="Home">
-        Home
-      </button>
+      <!-- 🔥 AREA UTENTE FIREBASE -->
+      <div id="user-area"></div>
+
     </div>
 
   </div>
@@ -166,79 +164,82 @@ RendimentoBB – Academy Strategica B&B
   </div>
 
 
-  <section class="content-section">
+<section class="content-section">
 
-    <div class="content-card">
-      <h3
-        data-it="📊 Come interpretare il ROI"
-        data-en="📊 How to interpret ROI">
-      </h3>
+<div class="content-card">
+<h3
+data-it="📊 Come interpretare il ROI"
+data-en="📊 How to interpret ROI">
+</h3>
 
-      <p
-        data-it="Un ROI superiore al 10% indica buona redditività. Tuttavia è fondamentale analizzare la resilienza dell'investimento in scenari di occupazione ridotta. La stabilità del flusso di cassa è più importante del ROI nominale."
-        data-en="An ROI above 10% indicates good profitability. However, resilience under lower occupancy scenarios is crucial. Cash flow stability matters more than nominal ROI.">
-      </p>
-    </div>
-
-
-    <div class="content-card">
-      <h3
-        data-it="🏦 Quando il mutuo è sostenibile"
-        data-en="🏦 When a mortgage is sustainable">
-      </h3>
-
-      <p
-        data-it="Il flusso operativo deve coprire il debito con margine. Se il cashflow è negativo già al 70% di occupazione, l'investimento è strutturalmente fragile."
-        data-en="Operating cash flow must cover debt with margin. If cash flow turns negative at 70% occupancy, the investment is structurally fragile.">
-      </p>
-    </div>
+<p
+data-it="Un ROI superiore al 10% indica buona redditività. Tuttavia è fondamentale analizzare la resilienza dell'investimento in scenari di occupazione ridotta. La stabilità del flusso di cassa è più importante del ROI nominale."
+data-en="An ROI above 10% indicates good profitability. However, resilience under lower occupancy scenarios is crucial. Cash flow stability matters more than nominal ROI.">
+</p>
+</div>
 
 
-    <div class="content-card">
-      <h3
-        data-it="⚠️ Errori comuni negli investimenti B&B"
-        data-en="⚠️ Common B&B investment mistakes">
-      </h3>
+<div class="content-card">
+<h3
+data-it="🏦 Quando il mutuo è sostenibile"
+data-en="🏦 When a mortgage is sustainable">
+</h3>
 
-      <p
-        data-it="Sovrastimare l'occupazione media, ignorare la stagionalità e sottovalutare le spese operative sono errori frequenti. I numeri devono essere realistici e prudenziali."
-        data-en="Overestimating occupancy, ignoring seasonality and underestimating operating costs are common mistakes. Numbers must be realistic and conservative.">
-      </p>
-    </div>
-
-
-    <div class="content-card">
-      <h3
-        data-it="📈 Come migliorare la sostenibilità"
-        data-en="📈 How to improve sustainability">
-      </h3>
-
-      <p
-        data-it="Ottimizzare il prezzo medio notte, migliorare recensioni, ridurre costi fissi e negoziare un tasso mutuo competitivo può cambiare radicalmente il profilo di rischio."
-        data-en="Optimizing nightly pricing, improving reviews, reducing fixed costs and negotiating competitive loan rates can radically improve the risk profile.">
-      </p>
-    </div>
+<p
+data-it="Il flusso operativo deve coprire il debito con margine. Se il cashflow è negativo già al 70% di occupazione, l'investimento è strutturalmente fragile."
+data-en="Operating cash flow must cover debt with margin. If cash flow turns negative at 70% occupancy, the investment is structurally fragile.">
+</p>
+</div>
 
 
-    <div style="text-align:center;margin-top:60px;">
-      <button onclick="window.location.href='/tool/'"
-              class="btn btn-primary"
-              data-it="Avvia Analisi Strategica"
-              data-en="Start Strategic Analysis">
-      </button>
-    </div>
+<div class="content-card">
+<h3
+data-it="⚠️ Errori comuni negli investimenti B&B"
+data-en="⚠️ Common B&B investment mistakes">
+</h3>
 
-  </section>
+<p
+data-it="Sovrastimare l'occupazione media, ignorare la stagionalità e sottovalutare le spese operative sono errori frequenti. I numeri devono essere realistici e prudenziali."
+data-en="Overestimating occupancy, ignoring seasonality and underestimating operating costs are common mistakes. Numbers must be realistic and conservative.">
+</p>
+</div>
+
+
+<div class="content-card">
+<h3
+data-it="📈 Come migliorare la sostenibilità"
+data-en="📈 How to improve sustainability">
+</h3>
+
+<p
+data-it="Ottimizzare il prezzo medio notte, migliorare recensioni, ridurre costi fissi e negoziare un tasso mutuo competitivo può cambiare radicalmente il profilo di rischio."
+data-en="Optimizing nightly pricing, improving reviews, reducing fixed costs and negotiating competitive loan rates can radically improve the risk profile.">
+</p>
+</div>
+
+
+<div style="text-align:center;margin-top:60px;">
+<button onclick="window.location.href='/tool/'"
+class="btn btn-primary"
+data-it="Avvia Analisi Strategica"
+data-en="Start Strategic Analysis">
+</button>
+</div>
+
+</section>
 
 </div>
 
 </main>
 
+
 <footer class="global-footer">
 © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
+
 <script src="/js/lang.js"></script>
+<script type="module" src="/js/firebase-init.js"></script>
 
 </body>
 </html>
