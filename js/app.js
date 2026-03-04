@@ -635,10 +635,12 @@ plugins: { legend: { display: false } }
 
 async function generateExecutivePDF(){
 
+const lang = window.RB_LANG?.current || window.currentLang || "it";
+
 if(!isProUnlocked){
 
 alert(
-window.currentLang==="it"
+lang==="it"
 ? "La generazione PDF è disponibile solo nella versione PRO"
 : "PDF generation available only in PRO version"
 );
@@ -650,7 +652,7 @@ return;
 if(!window.lastAnalysisData){
 
 alert(
-window.currentLang==="it"
+lang==="it"
 ? "Genera prima l'analisi investimento"
 : "Run the analysis first"
 );
@@ -687,7 +689,7 @@ y = 30;
 doc.setFontSize(22);
 
 doc.text(
-window.currentLang==="it"
+lang==="it"
 ? "Report Strategico Investimento B&B"
 : "Strategic B&B Investment Report",
 20,
@@ -699,7 +701,7 @@ y += 10;
 doc.setFontSize(11);
 
 doc.text(
-window.currentLang==="it"
+lang==="it"
 ? "Analisi professionale della sostenibilità economica di un investimento in struttura ricettiva."
 : "Professional financial analysis of a short-term rental investment.",
 20,
@@ -717,7 +719,7 @@ const reportDate = new Date().toLocaleDateString();
 doc.setFontSize(9);
 
 doc.text(
-(window.currentLang==="it"?"Data report: ":"Report date: ")
+(lang==="it"?"Data report: ":"Report date: ")
 + reportDate,
 20,
 y
@@ -732,7 +734,7 @@ doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
 doc.text(
-window.currentLang==="it"
+lang==="it"
 ? "Struttura Investimento"
 : "Investment Structure",
 20,
@@ -750,7 +752,7 @@ const ltv = data.price > 0
 doc.setFontSize(11);
 
 doc.text(
-(window.currentLang==="it"?"Prezzo immobile: ":"Property price: ")
+(lang==="it"?"Prezzo immobile: ":"Property price: ")
 + formatCurrency(data.price),
 20,y
 );
@@ -758,7 +760,7 @@ doc.text(
 y += 7;
 
 doc.text(
-(window.currentLang==="it"?"Capitale investito: ":"Equity invested: ")
+(lang==="it"?"Capitale investito: ":"Equity invested: ")
 + formatCurrency(data.equity),
 20,y
 );
@@ -766,7 +768,7 @@ doc.text(
 y += 7;
 
 doc.text(
-(window.currentLang==="it"?"Importo mutuo: ":"Loan amount: ")
+(lang==="it"?"Importo mutuo: ":"Loan amount: ")
 + formatCurrency(data.loan),
 20,y
 );
@@ -774,7 +776,7 @@ doc.text(
 y += 7;
 
 doc.text(
-(window.currentLang==="it"?"Loan to Value: ":"Loan to Value: ")
+(lang==="it"?"Loan to Value: ":"Loan to Value: ")
 + ltv + "%",
 20,y
 );
@@ -790,14 +792,14 @@ doc.roundedRect(20,y,170,18,3,3,"F");
 doc.setFontSize(11);
 
 doc.text(
-(window.currentLang==="it"?"Ricavi stimati: ":"Estimated revenue: ")
+(lang==="it"?"Ricavi stimati: ":"Estimated revenue: ")
 + formatCurrency(data.revenue),
 25,
 y+7
 );
 
 doc.text(
-(window.currentLang==="it"?"Profitto netto: ":"Net profit: ")
+(lang==="it"?"Profitto netto: ":"Net profit: ")
 + formatCurrency(data.profit),
 95,
 y+7
@@ -824,7 +826,7 @@ doc.setTextColor(...roiColor);
 doc.setFontSize(16);
 
 doc.text(
-(window.currentLang==="it"?"ROI investimento: ":"Investment ROI: ")
+(lang==="it"?"ROI investimento: ":"Investment ROI: ")
 + data.roi.toFixed(2) + "%",
 20,
 y
@@ -838,18 +840,18 @@ y += 18;
 // ================= INVESTMENT GRADE =================
 
 let grade = "C";
-let risk = window.currentLang==="it"?"Rischio elevato":"High Risk";
+let risk = lang==="it"?"Rischio elevato":"High Risk";
 
 if(data.roi > 12){
 
 grade = "A";
-risk = window.currentLang==="it"?"Rischio moderato":"Moderate risk";
+risk = lang==="it"?"Rischio moderato":"Moderate risk";
 
 }
 else if(data.roi > 6){
 
 grade = "B";
-risk = window.currentLang==="it"?"Rischio medio":"Medium risk";
+risk = lang==="it"?"Rischio medio":"Medium risk";
 
 }
 
@@ -857,7 +859,7 @@ doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
 doc.text(
-window.currentLang==="it"
+lang==="it"
 ? "Valutazione Investimento"
 : "Investment Grade",
 20,
@@ -871,7 +873,7 @@ y += 10;
 doc.setFontSize(11);
 
 doc.text(
-(window.currentLang==="it"?"Investment Grade: ":"Investment Grade: ")
+(lang==="it"?"Investment Grade: ":"Investment Grade: ")
 + grade,
 20,y
 );
@@ -879,7 +881,7 @@ doc.text(
 y += 7;
 
 doc.text(
-(window.currentLang==="it"?"Profilo di rischio: ":"Risk profile: ")
+(lang==="it"?"Profilo di rischio: ":"Risk profile: ")
 + risk,
 20,y
 );
@@ -893,7 +895,7 @@ doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
 doc.text(
-window.currentLang==="it"
+lang==="it"
 ? "Interpretazione Strategica"
 : "Strategic Insight",
 20,
@@ -909,7 +911,7 @@ let insight;
 if(data.roi > 12){
 
 insight =
-window.currentLang==="it"
+lang==="it"
 ? "L'investimento mostra una redditività molto elevata rispetto al capitale investito. La leva finanziaria amplifica il ritorno sull'equity mantenendo una struttura economica sostenibile."
 : "The investment shows strong profitability relative to the invested equity. Financial leverage enhances returns while maintaining a sustainable structure.";
 
@@ -917,7 +919,7 @@ window.currentLang==="it"
 else if(data.roi > 6){
 
 insight =
-window.currentLang==="it"
+lang==="it"
 ? "L'investimento appare sostenibile ma con margini più contenuti. La redditività dipenderà fortemente dal mantenimento di livelli di occupazione stabili."
 : "The investment appears viable but returns depend heavily on maintaining stable occupancy levels.";
 
@@ -925,7 +927,7 @@ window.currentLang==="it"
 else{
 
 insight =
-window.currentLang==="it"
+lang==="it"
 ? "La redditività prevista risulta limitata. Per migliorare la sostenibilità dell'investimento è consigliabile ottimizzare il prezzo medio o ridurre i costi operativi."
 : "Projected profitability is weak. Improving pricing strategy or reducing operating costs could enhance sustainability.";
 
@@ -949,22 +951,24 @@ doc.setFontSize(9);
 doc.setTextColor(120);
 
 doc.text(
-window.currentLang==="it"
+lang==="it"
 ? "Report generato da RendimentoBB Strategic Engine"
 : "Report generated by RendimentoBB Strategic Engine",
 20,
 y
 );
 
+
 // ================= FILE NAME =================
 
-const fileName = window.currentLang === "it"
+const fileName = lang==="it"
 ? "RendimentoBB-Report-Investimento.pdf"
 : "RendimentoBB-Investment-Report.pdf";
 
 doc.save(fileName);
 
 }
+
 
 // ================= EXPORT GLOBAL =================
 
