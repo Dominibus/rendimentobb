@@ -667,12 +667,25 @@ const doc = new jsPDF();
 
 let y = 20;
 
-doc.setFontSize(20);
-doc.text("RendimentoBB",20,y);
 
-y += 10;
+// ================= HEADER =================
 
+doc.setFillColor(16,185,129);
+doc.rect(0,0,210,15,"F");
+
+doc.setTextColor(255,255,255);
 doc.setFontSize(14);
+doc.text("RendimentoBB Strategic Engine",20,10);
+
+doc.setTextColor(0,0,0);
+
+y = 30;
+
+
+// ================= TITLE =================
+
+doc.setFontSize(22);
+
 doc.text(
 window.currentLang==="it"
 ? "Report Strategico Investimento B&B"
@@ -681,25 +694,48 @@ window.currentLang==="it"
 y
 );
 
-y += 20;
+y += 12;
 
-doc.setFontSize(12);
+doc.setFontSize(11);
 
 doc.text(
 window.currentLang==="it"
-? "Sintesi Strategica"
-: "Executive Summary",
+? "Analisi professionale della sostenibilità economica di un investimento in struttura ricettiva."
+: "Professional financial analysis of a short-term rental investment.",
+20,
+y,
+{maxWidth:170}
+);
+
+y += 18;
+
+
+// ================= INVESTMENT STRUCTURE =================
+
+doc.setFontSize(14);
+
+doc.setTextColor(16,185,129);
+
+doc.text(
+window.currentLang==="it"
+? "Struttura Investimento"
+: "Investment Structure",
 20,
 y
 );
 
+doc.setTextColor(0,0,0);
+
 y += 10;
 
+doc.setFontSize(11);
+
 doc.text(
-(window.currentLang==="it"?"Prezzo immobile: ":"Property Price: ")
+(window.currentLang==="it"?"Prezzo immobile: ":"Property price: ")
 + formatCurrency(data.price),
 20,y
 );
+
 y += 8;
 
 doc.text(
@@ -707,6 +743,7 @@ doc.text(
 + formatCurrency(data.equity),
 20,y
 );
+
 y += 8;
 
 doc.text(
@@ -717,80 +754,187 @@ doc.text(
 
 y += 15;
 
+
+// ================= FINANCIAL PERFORMANCE =================
+
+doc.setFontSize(14);
+
+doc.setTextColor(16,185,129);
+
 doc.text(
 window.currentLang==="it"
-? "Indicatori Investimento"
-: "Investment KPIs",
-20,y
+? "Performance Finanziaria"
+: "Financial Performance",
+20,
+y
 );
+
+doc.setTextColor(0,0,0);
 
 y += 10;
 
+doc.setFontSize(11);
+
 doc.text(
-(window.currentLang==="it"?"Ricavi annui stimati: ":"Estimated Annual Revenue: ")
+(window.currentLang==="it"?"Ricavi annui stimati: ":"Estimated annual revenue: ")
 + formatCurrency(data.revenue),
 20,y
 );
+
 y += 8;
 
 doc.text(
-(window.currentLang==="it"?"Profitto annuo: ":"Annual Profit: ")
+(window.currentLang==="it"?"Profitto netto annuo: ":"Annual net profit: ")
 + formatCurrency(data.profit),
 20,y
 );
+
 y += 8;
+
+
+// ================= ROI =================
+
+let roiColor = [239,68,68];
+
+if(data.roi > 12) roiColor = [16,185,129];
+else if(data.roi > 6) roiColor = [245,158,11];
+
+doc.setTextColor(...roiColor);
+
+doc.setFontSize(16);
 
 doc.text(
 (window.currentLang==="it"?"ROI investimento: ":"Investment ROI: ")
 + data.roi.toFixed(2) + "%",
+20,
+y+5
+);
+
+doc.setTextColor(0,0,0);
+
+y += 20;
+
+
+// ================= INVESTMENT GRADE =================
+
+let grade = "C";
+let risk = "High Risk";
+
+if(data.roi > 12){
+
+grade = "A";
+risk = window.currentLang==="it"?"Rischio moderato":"Moderate risk";
+
+}
+else if(data.roi > 6){
+
+grade = "B";
+risk = window.currentLang==="it"?"Rischio medio":"Medium risk";
+
+}
+
+doc.setFontSize(14);
+
+doc.setTextColor(16,185,129);
+
+doc.text(
+window.currentLang==="it"
+? "Valutazione Investimento"
+: "Investment Grade",
+20,
+y
+);
+
+doc.setTextColor(0,0,0);
+
+y += 10;
+
+doc.setFontSize(11);
+
+doc.text(
+(window.currentLang==="it"?"Investment Grade: ":"Investment Grade: ")
++ grade,
+20,y
+);
+
+y += 8;
+
+doc.text(
+(window.currentLang==="it"?"Profilo di rischio: ":"Risk profile: ")
++ risk,
 20,y
 );
 
 y += 15;
 
-let insight;
 
-if(data.roi > 12){
+// ================= STRATEGIC INSIGHT =================
 
-insight = window.currentLang==="it"
-? "L'investimento mostra una redditività elevata e una struttura finanziaria solida."
-: "The investment shows strong profitability and a solid financial structure.";
+doc.setFontSize(14);
 
-}
-else if(data.roi > 6){
-
-insight = window.currentLang==="it"
-? "L'investimento è moderatamente sostenibile ma richiede una gestione attenta."
-: "The investment appears moderately viable but requires careful management.";
-
-}
-else{
-
-insight = window.currentLang==="it"
-? "La redditività prevista è bassa e l'investimento presenta rischi strutturali."
-: "The projected profitability is weak and the investment carries structural risks.";
-
-}
+doc.setTextColor(16,185,129);
 
 doc.text(
 window.currentLang==="it"
-? "Valutazione Strategica:"
-: "Strategic Assessment:",
+? "Interpretazione Strategica"
+: "Strategic Insight",
 20,
 y
 );
 
-y += 8;
+doc.setTextColor(0,0,0);
+
+y += 10;
+
+let insight;
+
+if(data.roi > 12){
+
+insight =
+window.currentLang==="it"
+? "L'investimento mostra una redditività molto elevata rispetto al capitale investito. La leva finanziaria amplifica il ritorno sull'equity mantenendo una struttura economica sostenibile."
+: "The investment shows strong profitability relative to the invested equity. Financial leverage enhances returns while maintaining a sustainable structure.";
+
+}
+else if(data.roi > 6){
+
+insight =
+window.currentLang==="it"
+? "L'investimento appare sostenibile ma con margini più contenuti. La redditività dipenderà fortemente dal mantenimento di livelli di occupazione stabili."
+: "The investment appears viable but returns depend heavily on maintaining stable occupancy levels.";
+
+}
+else{
+
+insight =
+window.currentLang==="it"
+? "La redditività prevista risulta limitata. Per migliorare la sostenibilità dell'investimento è consigliabile ottimizzare il prezzo medio o ridurre i costi operativi."
+: "Projected profitability is weak. Improving pricing strategy or reducing operating costs could enhance sustainability.";
+
+}
+
+doc.setFontSize(11);
 
 doc.text(insight,20,y,{maxWidth:170});
 
-y += 20;
+y += 25;
 
-doc.setFontSize(10);
+
+// ================= FOOTER =================
+
+doc.setDrawColor(200);
+doc.line(20,y,190,y);
+
+y += 8;
+
+doc.setFontSize(9);
+
+doc.setTextColor(120);
+
 doc.text(
 window.currentLang==="it"
-? "Generato da RendimentoBB Strategic Engine"
-: "Generated by RendimentoBB Strategic Engine",
+? "Report generato da RendimentoBB Strategic Engine"
+: "Report generated by RendimentoBB Strategic Engine",
 20,
 y
 );
@@ -798,6 +942,7 @@ y
 doc.save("RendimentoBB-Investment-Report.pdf");
 
 }
+
 
 
 // ================= EXPORT GLOBAL =================
@@ -813,32 +958,32 @@ const originalCalculate = window.calculate;
 
 window.calculate = function(){
 
-  originalCalculate();
+originalCalculate();
 
-  const equity = getValue("equity");
-  const priceNight = getValue("priceNight");
-  const occupancy = getValue("occupancy");
-  const loanAmount = getValue("loanAmount");
-  const expenses = getValue("expenses");
+const equity = getValue("equity");
+const priceNight = getValue("priceNight");
+const occupancy = getValue("occupancy");
+const loanAmount = getValue("loanAmount");
+const expenses = getValue("expenses");
 
-  const nights = 365 * (occupancy / 100);
-  const revenue = priceNight * nights;
+const nights = 365 * (occupancy / 100);
+const revenue = priceNight * nights;
 
-  const profit = revenue - (expenses * 12);
+const profit = revenue - (expenses * 12);
 
-  const roi = equity > 0 ? (profit / equity) * 100 : 0;
+const roi = equity > 0 ? (profit / equity) * 100 : 0;
 
-  window.lastAnalysisData = {
+window.lastAnalysisData = {
 
-    price: getValue("price"),
-    equity: equity,
-    loan: loanAmount,
-    revenue: revenue,
-    profit: profit,
-    roi: roi,
-    risk: 0
+price: getValue("price"),
+equity: equity,
+loan: loanAmount,
+revenue: revenue,
+profit: profit,
+roi: roi,
+risk: 0
 
-  };
+};
 
 };
 
