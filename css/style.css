@@ -29,7 +29,7 @@ body {
 }
 
 /* ===================== */
-/* MAIN WRAPPER */
+/* MAIN */
 /* ===================== */
 
 main {
@@ -50,37 +50,44 @@ main {
 /* HEADER */
 /* ===================== */
 
-header {
-  padding: 34px 0;
+.portal-header{
+  padding:28px 0;
 }
 
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.portal-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
-/* 🔥 LOGO UNIFORM FIX */
+.portal-nav{
+  display:flex;
+  gap:28px;
+}
+
+.portal-nav a{
+  text-decoration:none;
+  color:#0f172a;
+  font-weight:500;
+}
+
+/* ===================== */
+/* LOGO */
+/* ===================== */
 
 .logo {
   font-weight: 800;
   font-size: 19px;
   letter-spacing: -0.4px;
-  color: #0f172a !important; /* forza colore principale */
-}
-
-.logo span {
-  color: #10b981 !important; /* verde brand fisso */
-}
-
-/* rimuove eventuali override da link */
-a .logo,
-a.logo {
   color: #0f172a !important;
 }
 
+.logo span {
+  color: #10b981 !important;
+}
+
 /* ===================== */
-/* UNIFORM PAGE TITLE */
+/* PAGE TITLE */
 /* ===================== */
 
 .page-title {
@@ -193,29 +200,12 @@ a.logo {
   border-radius: 18px;
   padding: 22px;
   box-shadow: 0 10px 35px rgba(15,23,42,.05);
-  position: relative;
 }
 
 .kpi-box strong {
   display: block;
   font-size: 22px;
   margin-top: 8px;
-}
-
-/* ===================== */
-/* STATUS COLORS */
-/* ===================== */
-
-.kpi-positive {
-  border-left: 4px solid #10b981;
-}
-
-.kpi-warning {
-  border-left: 4px solid #f59e0b;
-}
-
-.kpi-danger {
-  border-left: 4px solid #ef4444;
 }
 
 /* ===================== */
@@ -240,22 +230,111 @@ a.logo {
 
 .btn-primary:hover {
   transform: translateY(-4px);
-  box-shadow: 0 35px 90px rgba(16,185,129,.55);
-}
-
-.btn-secondary {
-  background: #0f172a;
-  color: white;
-}
-
-.btn-outline {
-  border: 2px solid #0f172a;
-  color: #0f172a;
-  background: transparent;
 }
 
 /* ===================== */
-/* GLOBAL FOOTER */
+/* DASHBOARD */
+/* ===================== */
+
+.dashboard-container{
+
+  max-width:1200px;
+  margin:auto;
+  padding:100px 24px 80px 24px;
+
+}
+
+/* welcome */
+
+.dashboard-welcome{
+
+margin-bottom:40px;
+
+}
+
+.dashboard-welcome h1{
+
+font-size:30px;
+font-weight:700;
+
+}
+
+/* quick buttons */
+
+.dashboard-actions{
+
+margin-top:18px;
+display:flex;
+gap:12px;
+
+}
+
+.btn-dashboard{
+
+padding:10px 18px;
+border-radius:10px;
+font-size:13px;
+background:#0f172a;
+color:white;
+text-decoration:none;
+
+}
+
+/* stats */
+
+.stats-grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+margin-bottom:50px;
+
+}
+
+/* analyses */
+
+.analysis-grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:30px;
+margin-top:30px;
+
+}
+
+.analysis-card{
+
+background: linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+padding:28px;
+border-radius:18px;
+border:1px solid #e2e8f0;
+box-shadow:0 20px 60px rgba(15,23,42,.08);
+
+}
+
+.analysis-card h3{
+
+font-size:18px;
+margin-bottom:12px;
+
+}
+
+.metric{
+
+font-size:14px;
+margin-top:8px;
+color:#475569;
+
+}
+
+.metric strong{
+
+color:#0f172a;
+
+}
+
+/* ===================== */
+/* FOOTER */
 /* ===================== */
 
 .global-footer {
@@ -278,10 +357,6 @@ a.logo {
 
   .page-title h1 {
     font-size: 28px;
-  }
-
-  .page-title p {
-    font-size: 15px;
   }
 
 }
