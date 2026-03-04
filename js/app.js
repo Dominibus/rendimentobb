@@ -720,8 +720,11 @@ window.currentLang==="it"
 20,y
 );
 
-doc.text("Estimated Annual Revenue: "+formatCurrency(data.revenue),20,y);
-y += 8;
+doc.text(
+(window.currentLang==="it"?"Ricavi annui stimati: ":"Estimated Annual Revenue: ")
++ formatCurrency(data.revenue),
+20,y
+);
 
 doc.text("Annual Profit: "+formatCurrency(data.profit),20,y);
 y += 8;
@@ -787,25 +790,6 @@ window.generateExecutivePDF = generateExecutivePDF;
 
 
 // ================= CAPTURE LAST ANALYSIS =================
-
-const originalCalculate = window.calculate;
-
-window.calculate = function(){
-
-  originalCalculate();
-
-  const equity = getValue("equity");
-  const priceNight = getValue("priceNight");
-  const occupancy = getValue("occupancy");
-  const loanAmount = getValue("loanAmount");
-  const expenses = getValue("expenses");
-
-  const nights = 365 * (occupancy / 100);
-  const revenue = priceNight * nights;
-
-  const profit = revenue - (expenses * 12);
-
-  const roi = equity > 0 ? (profit / equity) * 100 : 0;
 
 const originalCalculate = window.calculate;
 
