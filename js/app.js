@@ -1,7 +1,49 @@
 // ===============================================
-// RENDIMENTOBB – EXECUTIVE ENGINE 13.3 FINAL
-// PRO Firebase + Mortgage Comparator FIX
+// RENDIMENTOBB – EXECUTIVE ENGINE 13.4 FINAL
+// PRO Firebase + Mortgage Comparator + SAVE ANALYSIS
 // ===============================================
+
+
+// ================= FIRESTORE =================
+
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const db = getFirestore();
+
+
+// ================= SAVE ANALYSIS =================
+
+async function saveAnalysis(data){
+
+  if(!window.currentUser) return;
+
+  try{
+
+    await addDoc(collection(db,"analyses"),{
+
+      uid: window.currentUser.uid,
+
+      propertyPrice: data.price,
+      equity: data.equity,
+
+      roi: data.roi,
+      risk: data.risk,
+
+      createdAt: new Date()
+
+    });
+
+  }catch(e){
+
+    console.error("Errore salvataggio analisi:",e);
+
+  }
+
+}
 
 
 // ================= PRO SYSTEM =================
@@ -152,8 +194,23 @@ function calculate() {
 
   const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
 
+  const riskScore =
+    roi > 12 ? 30 :
+    roi > 6 ? 55 :
+    75;
+
   renderChart(netAfterMortgage);
   renderStrategicInsight(roi);
+
+  // ================= SAVE ANALYSIS =================
+
+  saveAnalysis({
+    price: getValue("price"),
+    equity: equity,
+    roi: roi,
+    risk: riskScore
+  });
+
 }
 
 
