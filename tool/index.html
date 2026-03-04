@@ -20,12 +20,9 @@ RendimentoBB – Strategic B&B Investment Analysis
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<!-- FIREBASE -->
 <script type="module" src="/js/firebase-init.js"></script>
 
 <style>
-
-/* HEADER IDENTICO ALLA HOME */
 
 .portal-header{
   padding:25px 0;
@@ -79,7 +76,6 @@ RendimentoBB – Strategic B&B Investment Analysis
   cursor:pointer;
   font-size:13px;
   font-weight:600;
-  transition:.2s ease;
 }
 
 .lang-btn.active{
@@ -91,222 +87,264 @@ RendimentoBB – Strategic B&B Investment Analysis
   .portal-nav{ display:none; }
 }
 
+.market-select{
+  margin-top:15px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  width:100%;
+  font-size:14px;
+}
+
 </style>
 </head>
 
 <body>
 
 <header class="portal-header">
-  <div class="container portal-header-inner">
+<div class="container portal-header-inner">
 
-    <div style="display:flex; align-items:center; gap:40px;">
-      <a href="/" style="text-decoration:none;">
-        <div class="logo">Rendimento<span>BB</span></div>
-      </a>
+<div style="display:flex; align-items:center; gap:40px;">
+<a href="/" style="text-decoration:none;">
+<div class="logo">Rendimento<span>BB</span></div>
+</a>
 
-      <nav class="portal-nav">
-        <a href="/tool/">Tool</a>
-        <a href="#mortgage">Mutui</a>
-        <a href="#">Immobili</a>
-        <a href="/academy/">Academy</a>
-        <a href="/dashboard/">Dashboard</a>
-      </nav>
-    </div>
+<nav class="portal-nav">
+<a href="/tool/">Tool</a>
+<a href="#mortgage">Mutui</a>
+<a href="#">Immobili</a>
+<a href="/academy/">Academy</a>
+<a href="/dashboard/">Dashboard</a>
+</nav>
+</div>
 
-    <div class="right-controls">
+<div class="right-controls">
 
-      <div class="lang-switch">
-        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-      </div>
+<div class="lang-switch">
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
 
-      <!-- AREA UTENTE (MOSTRA BENVENUTO E LOGOUT) -->
-      <div id="user-area"></div>
+<div id="user-area"></div>
 
-      <button onclick="window.location.href='/'"
-              class="btn btn-secondary"
-              data-it="Home"
-              data-en="Home">
-        Home
-      </button>
+<button onclick="window.location.href='/'"
+class="btn btn-secondary"
+data-it="Home"
+data-en="Home">
+Home
+</button>
 
-    </div>
-
-  </div>
+</div>
+</div>
 </header>
-
 
 <main>
 
 <div class="container" style="padding-top:80px; padding-bottom:120px;">
 
-  <div class="page-title">
-    <h1
-      data-it="Analisi Strategica Investimento B&B"
-      data-en="Strategic B&B Investment Analysis">
-    </h1>
+<div class="page-title">
 
-    <p
-      data-it="Simula ROI, rischio e sostenibilità finanziaria prima di investire."
-      data-en="Simulate ROI, risk and financial sustainability before investing.">
-    </p>
-  </div>
+<h1
+data-it="Analisi Strategica Investimento B&B"
+data-en="Strategic B&B Investment Analysis">
+</h1>
 
+<p
+data-it="Simula ROI, rischio e sostenibilità finanziaria prima di investire."
+data-en="Simulate ROI, risk and financial sustainability before investing.">
+</p>
 
-  <!-- FORM PRINCIPALE -->
-  <div class="tool-card">
+</div>
 
-    <h3 data-it="💰 Struttura Investimento"
-        data-en="💰 Investment Structure"></h3>
+<div class="tool-card">
 
-    <div class="form-grid">
-      <div class="input-group">
-        <label data-it="Prezzo immobile (€)"
-               data-en="Property price (€)"></label>
-        <input type="number" id="price" placeholder="150000">
-      </div>
+<h3
+data-it="📊 Dati di Mercato"
+data-en="📊 Market Data">
+</h3>
 
-      <div class="input-group">
-        <label data-it="Capitale proprio investito (€)"
-               data-en="Equity invested (€)"></label>
-        <input type="number" id="equity" placeholder="30000">
-      </div>
-    </div>
+<select class="market-select"
+onchange="applyMarketData(this.value)">
 
-    <h3 style="margin-top:50px;"
-        data-it="🏦 Struttura Finanziamento"
-        data-en="🏦 Financing Structure"></h3>
+<option value=""
+data-it="Seleziona città"
+data-en="Select city">
+</option>
 
-    <div class="form-grid">
-      <div class="input-group">
-        <label data-it="Importo finanziato (€)"
-               data-en="Loan amount (€)"></label>
-        <input type="number" id="loanAmount" placeholder="120000">
-      </div>
+<option value="napoli">Napoli</option>
+<option value="roma">Roma</option>
+<option value="milano">Milano</option>
+<option value="firenze">Firenze</option>
 
-      <div class="input-group">
-        <label data-it="Tasso annuo (%)"
-               data-en="Annual interest rate (%)"></label>
-        <input type="number" id="interestRate" placeholder="3.5">
-      </div>
+</select>
 
-      <div class="input-group">
-        <label data-it="Durata (anni)"
-               data-en="Duration (years)"></label>
-        <input type="number" id="loanYears" placeholder="20">
-      </div>
-    </div>
+</div>
 
-    <h3 style="margin-top:50px;"
-        data-it="🏨 Parametri Operativi"
-        data-en="🏨 Operating Parameters"></h3>
+<div class="tool-card">
 
-    <div class="form-grid">
-      <div class="input-group">
-        <label data-it="Prezzo medio notte (€)"
-               data-en="Average nightly price (€)"></label>
-        <input type="number" id="priceNight" placeholder="120">
-      </div>
+<h3 data-it="💰 Struttura Investimento"
+data-en="💰 Investment Structure"></h3>
 
-      <div class="input-group">
-        <label data-it="Occupazione media (%)"
-               data-en="Average occupancy (%)"></label>
-        <input type="number" id="occupancy" placeholder="70">
-      </div>
+<div class="form-grid">
 
-      <div class="input-group">
-        <label data-it="Spese mensili (€)"
-               data-en="Monthly expenses (€)"></label>
-        <input type="number" id="expenses" placeholder="1500">
-      </div>
+<div class="input-group">
+<label data-it="Prezzo immobile (€)"
+data-en="Property price (€)"></label>
+<input type="number" id="price" placeholder="150000">
+</div>
 
-      <div class="input-group">
-        <label data-it="Commissioni piattaforme (%)"
-               data-en="Platform commissions (%)"></label>
-        <input type="number" id="commission" placeholder="15">
-      </div>
+<div class="input-group">
+<label data-it="Capitale proprio investito (€)"
+data-en="Equity invested (€)"></label>
+<input type="number" id="equity" placeholder="30000">
+</div>
 
-      <div class="input-group">
-        <label data-it="Tassazione stimata (%)"
-               data-en="Estimated tax rate (%)"></label>
-        <input type="number" id="tax" placeholder="24">
-      </div>
-    </div>
+</div>
 
-    <div style="text-align:center; margin-top:60px;">
-      <button onclick="calculate()" class="btn btn-primary"
-              data-it="Genera Analisi Strategica"
-              data-en="Generate Strategic Analysis">
-      </button>
-    </div>
+<h3 style="margin-top:50px;"
+data-it="🏦 Struttura Finanziamento"
+data-en="🏦 Financing Structure"></h3>
 
-  </div>
+<div class="form-grid">
 
+<div class="input-group">
+<label data-it="Importo finanziato (€)"
+data-en="Loan amount (€)"></label>
+<input type="number" id="loanAmount" placeholder="120000">
+</div>
 
-  <!-- MUTUI -->
-  <div id="mortgage" class="tool-card" style="margin-top:60px;">
+<div class="input-group">
+<label data-it="Tasso annuo (%)"
+data-en="Annual interest rate (%)"></label>
+<input type="number" id="interestRate" placeholder="3.5">
+</div>
 
-    <h3 data-it="🏦 Comparatore Mutui"
-        data-en="🏦 Mortgage Comparator"></h3>
+<div class="input-group">
+<label data-it="Durata (anni)"
+data-en="Duration (years)"></label>
+<input type="number" id="loanYears" placeholder="20">
+</div>
 
-    <div class="form-grid">
-      <div class="input-group">
-        <label data-it="Importo Mutuo (€)"
-               data-en="Mortgage amount (€)"></label>
-        <input type="number" id="mortgageAmount" placeholder="120000">
-      </div>
+</div>
 
-      <div class="input-group">
-        <label data-it="Durata (anni)"
-               data-en="Duration (years)"></label>
-        <input type="number" id="mortgageYears" placeholder="20">
-      </div>
+<h3 style="margin-top:50px;"
+data-it="🏨 Parametri Operativi"
+data-en="🏨 Operating Parameters"></h3>
 
-      <div class="input-group">
-        <label data-it="Tasso Banca A (%)"
-               data-en="Bank A rate (%)"></label>
-        <input type="number" id="rateA" placeholder="3.2">
-      </div>
+<div class="form-grid">
 
-      <div class="input-group">
-        <label data-it="Tasso Banca B (%)"
-               data-en="Bank B rate (%)"></label>
-        <input type="number" id="rateB" placeholder="3.6">
-      </div>
+<div class="input-group">
+<label data-it="Prezzo medio notte (€)"
+data-en="Average nightly price (€)"></label>
+<input type="number" id="priceNight" placeholder="120">
+</div>
 
-      <div class="input-group">
-        <label data-it="Tasso Banca C (%)"
-               data-en="Bank C rate (%)"></label>
-        <input type="number" id="rateC" placeholder="4.1">
-      </div>
-    </div>
+<div class="input-group">
+<label data-it="Occupazione media (%)"
+data-en="Average occupancy (%)"></label>
+<input type="number" id="occupancy" placeholder="70">
+</div>
 
-    <div style="text-align:center; margin-top:40px;">
-      <button onclick="compareMortgages()" class="btn btn-primary"
-              data-it="Confronta Mutui"
-              data-en="Compare Mortgages">
-      </button>
-    </div>
+<div class="input-group">
+<label data-it="Spese mensili (€)"
+data-en="Monthly expenses (€)"></label>
+<input type="number" id="expenses" placeholder="1500">
+</div>
 
-    <div id="mortgage-results" style="margin-top:40px;"></div>
+<div class="input-group">
+<label data-it="Commissioni piattaforme (%)"
+data-en="Platform commissions (%)"></label>
+<input type="number" id="commission" placeholder="15">
+</div>
 
-  </div>
+<div class="input-group">
+<label data-it="Tassazione stimata (%)"
+data-en="Estimated tax rate (%)"></label>
+<input type="number" id="tax" placeholder="24">
+</div>
 
+</div>
 
-  <!-- RISULTATI -->
-  <div id="results" class="results-card" style="margin-top:70px;">
-    <h3 data-it="Sintesi Investimento"
-        data-en="Executive Investment Summary"></h3>
-    <div id="executive-kpi" class="kpi-grid"></div>
-    <div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
-  </div>
+<div style="text-align:center; margin-top:60px;">
 
-  <div class="results-card">
-    <div class="chart-title"
-         data-it="Proiezione Cashflow 5 anni"
-         data-en="5-Year Cashflow Projection"></div>
-    <canvas id="roiChart" height="120"></canvas>
-  </div>
+<button onclick="calculate()" class="btn btn-primary"
+data-it="Genera Analisi Strategica"
+data-en="Generate Strategic Analysis">
+</button>
+
+</div>
+
+</div>
+
+<div id="mortgage" class="tool-card" style="margin-top:60px;">
+
+<h3 data-it="🏦 Comparatore Mutui"
+data-en="🏦 Mortgage Comparator"></h3>
+
+<div class="form-grid">
+
+<div class="input-group">
+<label data-it="Importo Mutuo (€)"
+data-en="Mortgage amount (€)"></label>
+<input type="number" id="mortgageAmount" placeholder="120000">
+</div>
+
+<div class="input-group">
+<label data-it="Durata (anni)"
+data-en="Duration (years)"></label>
+<input type="number" id="mortgageYears" placeholder="20">
+</div>
+
+<div class="input-group">
+<label data-it="Tasso Banca A (%)"
+data-en="Bank A rate (%)"></label>
+<input type="number" id="rateA" placeholder="3.2">
+</div>
+
+<div class="input-group">
+<label data-it="Tasso Banca B (%)"
+data-en="Bank B rate (%)"></label>
+<input type="number" id="rateB" placeholder="3.6">
+</div>
+
+<div class="input-group">
+<label data-it="Tasso Banca C (%)"
+data-en="Bank C rate (%)"></label>
+<input type="number" id="rateC" placeholder="4.1">
+</div>
+
+</div>
+
+<div style="text-align:center; margin-top:40px;">
+<button onclick="compareMortgages()" class="btn btn-primary"
+data-it="Confronta Mutui"
+data-en="Compare Mortgages">
+</button>
+</div>
+
+<div id="mortgage-results" style="margin-top:40px;"></div>
+
+</div>
+
+<div id="results" class="results-card" style="margin-top:70px;">
+<h3 data-it="Sintesi Investimento"
+data-en="Executive Investment Summary"></h3>
+
+<div id="executive-kpi" class="kpi-grid"></div>
+<div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
+
+</div>
+
+<div class="results-card">
+
+<div class="chart-title"
+data-it="Proiezione Cashflow 5 anni"
+data-en="5-Year Cashflow Projection">
+</div>
+
+<canvas id="roiChart" height="120"></canvas>
+
+</div>
 
 </div>
 
@@ -317,6 +355,7 @@ RendimentoBB – Strategic B&B Investment Analysis
 </footer>
 
 <script src="/js/lang.js"></script>
+<script src="/js/market-data.js"></script>
 <script type="module" src="/js/app.js"></script>
 
 <script type="module">
@@ -328,9 +367,9 @@ const auth = getAuth();
 
 onAuthStateChanged(auth, (user) => {
 
-  if (!user) {
-    window.location.href = "/login/";
-  }
+if (!user) {
+window.location.href = "/login/";
+}
 
 });
 
