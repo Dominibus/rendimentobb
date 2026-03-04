@@ -1,3 +1,8 @@
+// ===============================================
+// RENDIMENTOBB – DASHBOARD ENGINE 2.0
+// Improved Layout + Stats + UX
+// ===============================================
+
 import {
 getFirestore,
 collection,
@@ -8,6 +13,9 @@ orderBy
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const db = getFirestore();
+
+
+// ================= UTIL =================
 
 function formatCurrency(value){
 
@@ -23,6 +31,8 @@ return window.currentLang === "en" ? en : it;
 }
 
 
+// ================= LOAD DASHBOARD =================
+
 async function loadDashboard(){
 
 if(!window.currentUser){
@@ -31,6 +41,8 @@ window.location.href="/login/";
 return;
 
 }
+
+renderHeader();
 
 const q = query(
 collection(db,"analyses"),
@@ -54,6 +66,8 @@ const data = doc.data();
 totalROI += data.roi;
 count++;
 
+const roiColor = data.roi >= 0 ? "#10b981" : "#ef4444";
+
 const card = document.createElement("div");
 
 card.className="analysis-card";
@@ -74,7 +88,9 @@ ${t("Equity investita","Equity invested")}:
 
 <div class="metric">
 ROI:
-<strong style="color:#10b981">${data.roi.toFixed(1)}%</strong>
+<strong style="color:${roiColor}">
+${data.roi.toFixed(1)}%
+</strong>
 </div>
 
 <div class="metric">
@@ -88,58 +104,112 @@ list.appendChild(card);
 
 });
 
-
 renderStats(count,totalROI);
 
 }
 
 
-function renderStats(count,totalROI){
+// ================= HEADER =================
 
-const container = document.querySelector(".dashboard-container");
+function renderHeader(){
 
-const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+const header = document.querySelector(".dashboard-header");
 
-const stats = document.createElement("div");
+if(!header) return;
 
-stats.style.marginTop="40px";
-stats.style.display="grid";
-stats.style.gridTemplateColumns="repeat(auto-fit,minmax(200px,1fr))";
-stats.style.gap="20px";
+header.innerHTML=`
 
-stats.innerHTML=`
+<div class="dashboard-topbar">
 
-<div class="analysis-card">
-<h3>${t("Account","Account")}</h3>
-<div class="metric">
-${t("Utente","User")}:
+<div class="left">
+
+<h2>
+${t("Benvenuto","Welcome")} 
 <strong>${window.currentUser.email}</strong>
-</div>
-<div class="metric">
-${t("Piano","Plan")}:
-<strong>${window.currentPlan.toUpperCase()}</strong>
-</div>
+</h2>
+
 </div>
 
-<div class="analysis-card">
-<h3>${t("Analisi salvate","Saved analyses")}</h3>
-<div class="metric">
-<strong>${count}</strong>
-</div>
+<div class="right">
+
+<a href="/" class="btn-home">
+${t("Home","Home")}
+</a>
+
+<a href="/tool/" class="btn-home">
+Tool
+</a>
+
 </div>
 
-<div class="analysis-card">
-<h3>${t("ROI medio","Average ROI")}</h3>
-<div class="metric">
-<strong style="color:#10b981">${avgROI}%</strong>
-</div>
 </div>
 
 `;
 
-container.prepend(stats);
+}
+
+
+// ================= STATS =================
+
+function renderStats(count,totalROI){
+
+const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+
+const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
+
+const statsContainer = document.getElementById("dashboard-stats");
+
+statsContainer.innerHTML=`
+
+<div class="analysis-card">
+
+<h3>${t("Account","Account")}</h3>
+
+<div class="metric">
+${t("Utente","User")}:
+<strong>${window.currentUser.email}</strong>
+</div>
+
+<div class="metric">
+${t("Piano","Plan")}:
+<strong>${window.currentPlan.toUpperCase()}</strong>
+</div>
+
+</div>
+
+
+<div class="analysis-card">
+
+<h3>${t("Analisi salvate","Saved analyses")}</h3>
+
+<div class="metric">
+<strong style="font-size:22px">
+${count}
+</strong>
+</div>
+
+</div>
+
+
+<div class="analysis-card">
+
+<h3>${t("ROI medio","Average ROI")}</h3>
+
+<div class="metric">
+
+<strong style="font-size:22px;color:${roiColor}">
+${avgROI}%
+</strong>
+
+</div>
+
+</div>
+
+`;
 
 }
 
+
+// ================= INIT =================
 
 document.addEventListener("rb_plan_loaded",loadDashboard);
