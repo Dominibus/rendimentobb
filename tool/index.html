@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-  data-it="RendimentoBB – Analisi Strategica Investimento B&B"
-  data-en="RendimentoBB – Strategic B&B Investment Analysis">
+data-it="RendimentoBB – Analisi Strategica Investimento B&B"
+data-en="RendimentoBB – Strategic B&B Investment Analysis">
 RendimentoBB – Strategic B&B Investment Analysis
 </title>
 
 <meta name="description"
-      data-it="Simula ROI, struttura finanziaria, sostenibilità e rischio prima di investire in un B&B."
-      data-en="Simulate ROI, financial structure, sustainability and risk before investing in a B&B."
-      content="Simulate ROI, financial structure, sustainability and risk before investing in a B&B.">
+data-it="Simula ROI, struttura finanziaria, sostenibilità e rischio prima di investire in un B&B."
+data-en="Simulate ROI, financial structure, sustainability and risk before investing in a B&B."
+content="Simulate ROI, financial structure, sustainability and risk before investing in a B&B.">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -25,75 +25,75 @@ RendimentoBB – Strategic B&B Investment Analysis
 <style>
 
 .portal-header{
-  padding:25px 0;
-  position:sticky;
-  top:0;
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-  z-index:100;
-  border-bottom:1px solid #e2e8f0;
+padding:25px 0;
+position:sticky;
+top:0;
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+z-index:100;
+border-bottom:1px solid #e2e8f0;
 }
 
 .portal-header-inner{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .portal-nav{
-  display:flex;
-  gap:28px;
-  font-size:14px;
+display:flex;
+gap:28px;
+font-size:14px;
 }
 
 .portal-nav a{
-  text-decoration:none;
-  color:#475569;
-  font-weight:500;
-  transition:.2s ease;
+text-decoration:none;
+color:#475569;
+font-weight:500;
+transition:.2s ease;
 }
 
 .portal-nav a:hover{
-  color:#0f172a;
+color:#0f172a;
 }
 
 .right-controls{
-  display:flex;
-  align-items:center;
-  gap:18px;
+display:flex;
+align-items:center;
+gap:18px;
 }
 
 .lang-switch{
-  display:flex;
-  gap:8px;
+display:flex;
+gap:8px;
 }
 
 .lang-btn{
-  padding:6px 14px;
-  border-radius:999px;
-  border:1px solid #cbd5e1;
-  background:white;
-  cursor:pointer;
-  font-size:13px;
-  font-weight:600;
+padding:6px 14px;
+border-radius:999px;
+border:1px solid #cbd5e1;
+background:white;
+cursor:pointer;
+font-size:13px;
+font-weight:600;
 }
 
 .lang-btn.active{
-  background:#0f172a;
-  color:white;
+background:#0f172a;
+color:white;
 }
 
 @media(max-width:1024px){
-  .portal-nav{ display:none; }
+.portal-nav{ display:none; }
 }
 
 .market-select{
-  margin-top:15px;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #e2e8f0;
-  width:100%;
-  font-size:14px;
+margin-top:15px;
+padding:12px;
+border-radius:12px;
+border:1px solid #e2e8f0;
+width:100%;
+font-size:14px;
 }
 
 </style>
@@ -138,6 +138,7 @@ Home
 </div>
 </header>
 
+
 <main>
 
 <div class="container" style="padding-top:80px; padding-bottom:120px;">
@@ -155,6 +156,9 @@ data-en="Simulate ROI, risk and financial sustainability before investing.">
 </p>
 
 </div>
+
+
+<!-- MARKET DATA -->
 
 <div class="tool-card">
 
@@ -180,6 +184,9 @@ data-en="Select city">
 
 </div>
 
+
+<!-- INVESTMENT STRUCTURE -->
+
 <div class="tool-card">
 
 <h3 data-it="💰 Struttura Investimento"
@@ -200,6 +207,7 @@ data-en="Equity invested (€)"></label>
 </div>
 
 </div>
+
 
 <h3 style="margin-top:50px;"
 data-it="🏦 Struttura Finanziamento"
@@ -226,6 +234,7 @@ data-en="Duration (years)"></label>
 </div>
 
 </div>
+
 
 <h3 style="margin-top:50px;"
 data-it="🏨 Parametri Operativi"
@@ -266,15 +275,16 @@ data-en="Estimated tax rate (%)"></label>
 </div>
 
 <div style="text-align:center; margin-top:60px;">
-
 <button onclick="calculate()" class="btn btn-primary"
 data-it="Genera Analisi Strategica"
 data-en="Generate Strategic Analysis">
 </button>
-
 </div>
 
 </div>
+
+
+<!-- MORTGAGE COMPARATOR -->
 
 <div id="mortgage" class="tool-card" style="margin-top:60px;">
 
@@ -326,14 +336,36 @@ data-en="Compare Mortgages">
 
 </div>
 
+
+<!-- RESULTS -->
+
 <div id="results" class="results-card" style="margin-top:70px;">
+
 <h3 data-it="Sintesi Investimento"
 data-en="Executive Investment Summary"></h3>
 
 <div id="executive-kpi" class="kpi-grid"></div>
+
 <div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
 
 </div>
+
+
+<!-- MARKET FORECAST -->
+
+<div class="results-card">
+
+<h3
+data-it="Previsione Ricavi Mercato"
+data-en="Market Revenue Forecast">
+</h3>
+
+<div id="revenue-forecast" class="kpi-grid"></div>
+
+</div>
+
+
+<!-- CASHFLOW CHART -->
 
 <div class="results-card">
 
@@ -350,13 +382,16 @@ data-en="5-Year Cashflow Projection">
 
 </main>
 
+
 <footer class="global-footer">
 © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
+
 <script src="/js/lang.js"></script>
 <script src="/js/market-data.js"></script>
 <script type="module" src="/js/app.js"></script>
+
 
 <script type="module">
 
