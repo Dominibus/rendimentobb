@@ -67,7 +67,6 @@ RendimentoBB – Strategic B&B Investment Decision Engine
   cursor:pointer;
   font-size:13px;
   font-weight:600;
-  transition:.2s ease;
 }
 
 .lang-btn.active{
@@ -137,15 +136,15 @@ RendimentoBB – Strategic B&B Investment Decision Engine
 
     <div class="right-controls">
 
-    <div class="lang-switch">
-     <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-     <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      <div class="lang-switch">
+        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+      </div>
+
+      <!-- FIREBASE USER AREA -->
+      <div id="user-area"></div>
+
     </div>
-
-  <!-- 🔥 QUI FIREBASE SCRIVE LOGIN / LOGOUT -->
-  <div id="user-area"></div>
-
-</div>
 
   </div>
 </header>
@@ -168,7 +167,7 @@ RendimentoBB – Strategic B&B Investment Decision Engine
   </div>
 
   <div class="cta-group">
-    <button onclick="window.location.href='/login/'"
+    <button onclick="startAnalysis()"
             class="btn btn-primary"
             data-it="Avvia Analisi"
             data-en="Start Strategic Analysis">
@@ -243,7 +242,7 @@ RendimentoBB – Strategic B&B Investment Decision Engine
     </ul>
 
     <div style="margin-top:40px;">
-      <button onclick="window.location.href='/login/'"
+      <button onclick="unlockPro()"
               class="btn btn-primary"
               data-it="Sblocca Versione PRO"
               data-en="Unlock PRO Version">
@@ -261,9 +260,36 @@ RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
 
-<!-- 🔥 SINGLE GLOBAL LANGUAGE ENGINE -->
 <script src="/js/lang.js"></script>
-  <script type="module" src="/js/firebase-init.js"></script>
+<script type="module" src="/js/firebase-init.js"></script>
+
+<script type="module">
+
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+window.startAnalysis = function(){
+
+  if(auth.currentUser){
+    window.location.href="/tool/";
+  }else{
+    window.location.href="/login/";
+  }
+
+}
+
+window.unlockPro = function(){
+
+  if(auth.currentUser){
+    window.location.href="/tool/#pro";
+  }else{
+    window.location.href="/login/";
+  }
+
+}
+
+</script>
 
 </body>
 </html>
