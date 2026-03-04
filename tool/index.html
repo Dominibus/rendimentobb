@@ -19,6 +19,8 @@ RendimentoBB – Strategic B&B Investment Analysis
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- FIREBASE -->
 <script type="module" src="/js/firebase-init.js"></script>
 
 <style>
@@ -111,10 +113,14 @@ RendimentoBB – Strategic B&B Investment Analysis
     </div>
 
     <div class="right-controls">
+
       <div class="lang-switch">
         <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
         <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
       </div>
+
+      <!-- AREA UTENTE (MOSTRA BENVENUTO E LOGOUT) -->
+      <div id="user-area"></div>
 
       <button onclick="window.location.href='/'"
               class="btn btn-secondary"
@@ -122,6 +128,7 @@ RendimentoBB – Strategic B&B Investment Analysis
               data-en="Home">
         Home
       </button>
+
     </div>
 
   </div>
@@ -308,9 +315,9 @@ RendimentoBB – Strategic B&B Investment Analysis
 © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
-<script type="module" src="/js/firebase-init.js"></script>  
 <script src="/js/lang.js"></script>
 <script src="/js/app.js"></script>
+
 <script type="module">
 
 import { getAuth, onAuthStateChanged }
@@ -327,6 +334,6 @@ onAuthStateChanged(auth, (user) => {
 });
 
 </script>
-  
+
 </body>
 </html>
