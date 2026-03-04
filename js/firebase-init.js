@@ -53,6 +53,22 @@ window.currentPlan = "free";
 
 
 // ===============================
+// HELPER – CURRENT LANGUAGE
+// ===============================
+
+function getCurrentLang(){
+
+  if(window.currentLang) return window.currentLang;
+
+  const saved = localStorage.getItem("rb_lang");
+  if(saved) return saved;
+
+  return "it";
+
+}
+
+
+// ===============================
 // REGISTRAZIONE
 // ===============================
 
@@ -140,6 +156,18 @@ function updateUserUI(user) {
   const userArea = document.getElementById("user-area");
   if (!userArea) return;
 
+  const lang = getCurrentLang();
+
+  const welcomeText =
+    lang === "en"
+      ? "Welcome"
+      : "Benvenuto";
+
+  const loginText =
+    lang === "en"
+      ? "Login"
+      : "Accedi";
+
   if (user) {
 
     const name = user.email.split("@")[0];
@@ -147,7 +175,7 @@ function updateUserUI(user) {
     userArea.innerHTML = `
       <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:13px;">
-          👤 Benvenuto <strong>${name}</strong>
+          👤 ${welcomeText} <strong>${name}</strong>
           ${currentPlan === "pro" ? '<span style="color:#00c896; font-weight:bold;"> PRO</span>' : ''}
         </span>
 
@@ -157,11 +185,14 @@ function updateUserUI(user) {
       </div>
     `;
 
-    document.getElementById("logout-btn")
-      .addEventListener("click", async () => {
+    const logoutBtn = document.getElementById("logout-btn");
+
+    if(logoutBtn){
+      logoutBtn.addEventListener("click", async () => {
         await logoutUser();
         window.location.reload();
       });
+    }
 
   } else {
 
@@ -169,7 +200,7 @@ function updateUserUI(user) {
       <button onclick="window.location.href='/login/'" 
         class="btn btn-secondary" 
         style="padding:8px 18px; font-size:13px;">
-        Accedi
+        ${loginText}
       </button>
     `;
   }
@@ -204,12 +235,21 @@ onAuthStateChanged(auth, async (user) => {
   window.currentUser = user;
 
   if (user) {
-
     await loadUserPlan(user.uid);
-
   }
 
   updateUserUI(user);
+
+});
+
+
+// ===============================
+// LANGUAGE CHANGE LISTENER
+// ===============================
+
+document.addEventListener("rb_language_changed", () => {
+
+  updateUserUI(currentUser);
 
 });
 
