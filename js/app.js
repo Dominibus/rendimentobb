@@ -630,6 +630,68 @@ plugins: { legend: { display: false } }
 
 }
 
+// ================= EXECUTIVE PDF =================
+
+async function generateExecutivePDF(){
+
+if(!isProUnlocked){
+
+alert(
+window.currentLang==="it"
+? "La generazione PDF è disponibile solo nella versione PRO"
+: "PDF generation available only in PRO version"
+);
+
+return;
+
+}
+
+const { jsPDF } = window.jspdf;
+
+const doc = new jsPDF();
+
+const equity = getValue("equity");
+const priceNight = getValue("priceNight");
+const occupancy = getValue("occupancy");
+
+const revenue =
+priceNight * (365 * (occupancy/100));
+
+doc.setFontSize(18);
+
+doc.text(
+"RendimentoBB Strategic Investment Report",
+20,
+20
+);
+
+doc.setFontSize(12);
+
+doc.text("Executive Summary",20,40);
+
+doc.text(
+"Estimated annual revenue: " +
+formatCurrency(revenue),
+20,
+55
+);
+
+doc.text(
+"Equity invested: " +
+formatCurrency(equity),
+20,
+65
+);
+
+doc.text(
+"Generated with RendimentoBB Strategic Engine",
+20,
+90
+);
+
+doc.save("rendimentoBB-report.pdf");
+
+}
 
 // ================= EXPORT GLOBAL =================
 
