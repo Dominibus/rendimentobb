@@ -358,6 +358,12 @@ container.innerHTML = `
 
 }
 
+// MARKET BENCHMARK
+const citySelect = document.querySelector(".market-select");
+
+if(citySelect && citySelect.value){
+  renderMarketBenchmark(citySelect.value);
+}
 
 // ================= MAIN CALC =================
 
