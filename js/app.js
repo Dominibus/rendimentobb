@@ -491,6 +491,12 @@ risk: riskScore
 
 }
 
+// MARKET COMPARISON
+const citySelect = document.querySelector(".market-select");
+
+if(citySelect && citySelect.value){
+  renderMarketComparison(gross, citySelect.value);
+}
 
 // ================= STRATEGIC =================
 
