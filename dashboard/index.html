@@ -24,6 +24,8 @@ margin:auto;
 padding:100px 24px 80px 24px;
 }
 
+/* welcome */
+
 .dashboard-welcome{
 margin-bottom:40px;
 }
@@ -32,6 +34,8 @@ margin-bottom:40px;
 font-size:28px;
 font-weight:600;
 }
+
+/* quick actions */
 
 .dashboard-actions{
 margin-top:15px;
@@ -48,12 +52,16 @@ color:white;
 text-decoration:none;
 }
 
+/* stats */
+
 .stats-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:22px;
 margin-bottom:50px;
 }
+
+/* analysis cards */
 
 .analysis-grid{
 display:grid;
@@ -125,6 +133,8 @@ color:#0f172a;
 
 <div class="dashboard-container">
 
+<!-- WELCOME -->
+
 <div class="dashboard-welcome">
 
 <h1
@@ -151,13 +161,22 @@ Home
 
 </div>
 
+
+<!-- STATS -->
+
 <div id="dashboard-stats" class="stats-grid"></div>
+
+
+<!-- ANALYSIS TITLE -->
 
 <h2
 data-it="Le tue analisi investimento"
 data-en="Your investment analyses">
 Le tue analisi investimento
 </h2>
+
+
+<!-- ANALYSIS LIST -->
 
 <div id="analysis-list" class="analysis-grid"></div>
 
@@ -178,15 +197,24 @@ Le tue analisi investimento
 <script type="module" src="/js/dashboard.js"></script>
 
 
+<!-- ================= LANGUAGE LIVE REFRESH ================= -->
+
 <script>
 
-document.addEventListener("rb_language_changed", function(){
+function refreshDashboardLang(){
 
-location.reload();
+if(typeof loadDashboard === "function"){
+loadDashboard();
+}
 
-});
+}
+
+/* EVENTO CORRETTO DEL TUO LANG ENGINE */
+
+document.addEventListener("rb_language_changed", refreshDashboardLang);
 
 </script>
+
 
 </body>
 
