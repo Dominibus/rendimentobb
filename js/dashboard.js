@@ -439,7 +439,7 @@ ${investmentScore}/100
 ${decisionText}
 </div>
 
-<div style="font-size:13px;color:#64748b;margin-top:4px">
+<div style="font-size:14px;color:#475569;margin-top:6px">
 ${decisionDesc}
 </div>
 
