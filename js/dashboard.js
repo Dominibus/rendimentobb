@@ -201,8 +201,56 @@ list.appendChild(card);
 });
 
 renderStats(count,totalROI,totalCapital);
+renderBestInvestment(analyses);
+renderChart(); 
 
-renderChart();  
+}
+
+// ================= BEST INVESTMENT =================
+
+function renderBestInvestment(analyses){
+
+if(!analyses || analyses.length === 0) return;
+
+const best = analyses[0];
+
+const container = document.getElementById("best-investment");
+
+if(!container) return;
+
+const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
+
+container.innerHTML = `
+
+<div class="analysis-card">
+
+<h3>🏆 ${t("Miglior investimento","Best investment")}</h3>
+
+<div class="metric">
+<span>${t("Prezzo immobile","Property price")}</span>
+<strong>${formatCurrency(best.price)}</strong>
+</div>
+
+<div class="metric">
+<span>${t("Equity investita","Equity invested")}</span>
+<strong>${formatCurrency(best.equity)}</strong>
+</div>
+
+<div class="metric">
+<span>ROI</span>
+<strong style="color:${roiColor}">
+${best.roi.toFixed(1)}%
+</strong>
+</div>
+
+<div class="metric">
+<span>${t("Indice rischio","Risk score")}</span>
+<strong>${best.risk}/100</strong>
+</div>
+
+</div>
+
+`;
 
 }
 
