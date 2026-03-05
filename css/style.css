@@ -536,6 +536,73 @@ line-height:1.5;
 }
 
 /* ===================== */
+/* TOOL PREVIEW */
+/* ===================== */
+
+.tool-preview{
+text-align:center;
+margin-top:80px;
+margin-bottom:80px;
+}
+
+.tool-preview h2{
+font-size:28px;
+margin-bottom:10px;
+}
+
+.tool-preview p{
+color:#64748b;
+margin-bottom:40px;
+}
+
+.preview-card{
+background:white;
+border-radius:20px;
+padding:40px;
+border:1px solid #e2e8f0;
+box-shadow:0 30px 80px rgba(0,0,0,0.06);
+max-width:700px;
+margin:auto;
+}
+
+.preview-metrics{
+display:flex;
+justify-content:space-between;
+margin-bottom:30px;
+}
+
+.preview-metrics span{
+font-size:13px;
+color:#64748b;
+}
+
+.preview-metrics strong{
+display:block;
+font-size:22px;
+color:#10b981;
+margin-top:5px;
+}
+
+.preview-bar{
+height:10px;
+background:#e2e8f0;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:15px;
+}
+
+.preview-bar-fill{
+width:72%;
+height:100%;
+background:linear-gradient(90deg,#10b981,#22c55e);
+}
+
+.preview-note{
+font-size:14px;
+color:#334155;
+}
+
+/* ===================== */
 /* TRUST BAR */
 /* ===================== */
 
