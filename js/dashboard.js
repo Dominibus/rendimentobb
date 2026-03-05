@@ -322,7 +322,10 @@ loadDashboard();
 
 function renderChart(){
 
-const ctx = document.getElementById("roiChart");
+const canvas = document.getElementById("roiChart");
+if(!canvas) return;
+
+const ctx = canvas.getContext("2d");
 
 if(!ctx) return;
 
