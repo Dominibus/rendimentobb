@@ -76,56 +76,6 @@ return Math.round(score);
 }
 
 // ===============================
-// MARKET BENCHMARK
-// ===============================
-
-const marketROI = 8.4;
-const userROI = avgROI;
-
-const performanceEl = document.getElementById("market-performance");
-
-if(performanceEl){
-
-if(userROI >= marketROI){
-
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sopra la media di mercato"
-: "Above market average";
-
-performanceEl.style.color = "#10b981";
-
-}else{
-
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sotto la media di mercato"
-: "Below market average";
-
-performanceEl.style.color = "#ef4444";
-
-}
-  const userRoiEl = document.getElementById("user-roi-benchmark");
-
-if(userRoiEl){
-
-userRoiEl.textContent = avgROI.toFixed(1) + "%";
-
-if(avgROI >= marketROI){
-
-userRoiEl.style.color = "#10b981";
-
-}else{
-
-userRoiEl.style.color = "#ef4444";
-
-}
-
-}
-
-}
-
-// ===============================
 // ROI CHART
 // ===============================
 
@@ -451,6 +401,53 @@ Tool
 function renderStats(count,totalROI,totalCapital){
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+
+  // ================= MARKET BENCHMARK =================
+
+const marketROI = 8.4;
+
+const performanceEl = document.getElementById("market-performance");
+const userRoiEl = document.getElementById("user-roi-benchmark");
+
+if(userRoiEl){
+
+userRoiEl.textContent = avgROI + "%";
+
+if(avgROI >= marketROI){
+
+userRoiEl.style.color = "#10b981";
+
+}else{
+
+userRoiEl.style.color = "#ef4444";
+
+}
+
+}
+
+if(performanceEl){
+
+if(avgROI >= marketROI){
+
+performanceEl.textContent =
+window.currentLang === "it"
+? "Sopra la media di mercato"
+: "Above market average";
+
+performanceEl.style.color = "#10b981";
+
+}else{
+
+performanceEl.textContent =
+window.currentLang === "it"
+? "Sotto la media di mercato"
+: "Below market average";
+
+performanceEl.style.color = "#ef4444";
+
+}
+
+}
 
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
 let scoreColor = "#ef4444";
