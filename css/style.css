@@ -536,6 +536,38 @@ line-height:1.5;
 }
 
 /* ===================== */
+/* MARKET SECTION */
+/* ===================== */
+
+.market-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+margin-top:40px;
+}
+
+.market-card{
+background:white;
+padding:40px;
+border-radius:20px;
+border:1px solid #e2e8f0;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+text-align:center;
+}
+
+.market-card strong{
+display:block;
+font-size:32px;
+color:#10b981;
+margin-bottom:10px;
+}
+
+.market-card p{
+font-size:14px;
+color:#64748b;
+}  
+
+/* ===================== */
 /* RESPONSIVE */
 /* ===================== */
 
@@ -626,37 +658,5 @@ grid-template-columns:1fr;
 .stats-grid{
 grid-template-columns:1fr;
 }
-
-/* ===================== */
-/* MARKET SECTION */
-/* ===================== */
-
-.market-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
-margin-top:40px;
-}
-
-.market-card{
-background:white;
-padding:40px;
-border-radius:20px;
-border:1px solid #e2e8f0;
-box-shadow:0 20px 60px rgba(0,0,0,0.05);
-text-align:center;
-}
-
-.market-card strong{
-display:block;
-font-size:32px;
-color:#10b981;
-margin-bottom:10px;
-}
-
-.market-card p{
-font-size:14px;
-color:#64748b;
-}  
 
 }
