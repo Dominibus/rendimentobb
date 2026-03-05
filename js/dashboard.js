@@ -237,7 +237,7 @@ statsContainer.innerHTML=`
 
 <div class="metric">
 <span>${t("Utente","User")}</span>
-<strong class="account-email">
+<strong class="account-email" title="${window.currentUser.email}">
 ${window.currentUser.email}
 </strong>
 </div>
