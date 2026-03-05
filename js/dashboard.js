@@ -203,7 +203,8 @@ list.appendChild(card);
 
 renderStats(count,totalROI,totalCapital);
 renderBestInvestment(analyses);
-renderChart(); 
+renderChart();
+renderCashflowChart();
 
 }
 
