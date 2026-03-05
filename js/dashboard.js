@@ -402,7 +402,7 @@ function renderStats(count,totalROI,totalCapital){
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 
-  // ================= MARKET BENCHMARK =================
+// ================= MARKET BENCHMARK =================
 
 const marketROI = 8.4;
 
@@ -414,12 +414,32 @@ if(userRoiEl){
 userRoiEl.textContent = avgROI + "%";
 
 if(avgROI >= marketROI){
-
 userRoiEl.style.color = "#10b981";
+}else{
+userRoiEl.style.color = "#ef4444";
+}
+
+}
+
+if(performanceEl){
+
+if(avgROI >= marketROI){
+
+performanceEl.textContent =
+window.currentLang === "it"
+? "Sopra la media di mercato"
+: "Above market average";
+
+performanceEl.style.color = "#10b981";
 
 }else{
 
-userRoiEl.style.color = "#ef4444";
+performanceEl.textContent =
+window.currentLang === "it"
+? "Sotto la media di mercato"
+: "Below market average";
+
+performanceEl.style.color = "#ef4444";
 
 }
 
