@@ -72,20 +72,51 @@ let totalROI = 0;
 let totalCapital = 0;
 let count = 0;
 
+let analyses = [];
+
 querySnapshot.forEach(doc=>{
 
 const data = doc.data();
 
-const roi = data.roi || 0;
-const price = data.propertyPrice || 0;
-const equity = data.equity || 0;
+analyses.push({
+id:doc.id,
+roi:data.roi || 0,
+price:data.propertyPrice || 0,
+equity:data.equity || 0,
+risk:data.risk || 0,
+createdAt:data.createdAt
+});
+
+});
+
+
+// ================= SORT BY ROI =================
+
+analyses.sort((a,b)=> b.roi - a.roi);
+
+
+// ================= LIMIT RESULTS =================
+
+const visibleAnalyses = analyses.slice(0,12);
+
+
+// ================= RENDER CARDS =================
+
+visibleAnalyses.forEach((data,index)=>{
+
+const roi = data.roi;
+const price = data.price;
+const equity = data.equity;
 
 totalROI += roi;
 totalCapital += price;
-
 count++;
 
-const roiColor = roi >= 0 ? "#10b981" : "#ef4444";
+const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
+
+const badge = index === 0
+? `<div style="font-size:12px;color:#10b981;margin-bottom:6px;font-weight:600;">🏆 Best ROI</div>`
+: "";
 
 const card = document.createElement("div");
 
@@ -93,32 +124,34 @@ card.className="analysis-card";
 
 card.innerHTML=`
 
+${badge}
+
 <h3>${t("Analisi investimento","Investment analysis")}</h3>
 
 <div class="metric">
-${t("Prezzo immobile","Property price")}:
+<span>${t("Prezzo immobile","Property price")}</span>
 <strong>${formatCurrency(price)}</strong>
 </div>
 
 <div class="metric">
-${t("Equity investita","Equity invested")}:
+<span>${t("Equity investita","Equity invested")}</span>
 <strong>${formatCurrency(equity)}</strong>
 </div>
 
 <div class="metric">
-ROI:
-<strong style="color:${roiColor}">
+<span>ROI</span>
+<strong class="${roiClass}">
 ${roi.toFixed(1)}%
 </strong>
 </div>
 
 <div class="metric">
-${t("Indice rischio","Risk score")}:
-<strong>${data.risk || 0}/100</strong>
+<span>${t("Indice rischio","Risk score")}</span>
+<strong>${data.risk}/100</strong>
 </div>
 
 <div class="metric">
-${t("Data analisi","Analysis date")}:
+<span>${t("Data analisi","Analysis date")}</span>
 <strong>${formatDate(data.createdAt)}</strong>
 </div>
 
