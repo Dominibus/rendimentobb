@@ -105,6 +105,23 @@ window.currentLang === "it"
 performanceEl.style.color = "#ef4444";
 
 }
+  const userRoiEl = document.getElementById("user-roi-benchmark");
+
+if(userRoiEl){
+
+userRoiEl.textContent = avgROI.toFixed(1) + "%";
+
+if(avgROI >= marketROI){
+
+userRoiEl.style.color = "#10b981";
+
+}else{
+
+userRoiEl.style.color = "#ef4444";
+
+}
+
+}
 
 }
 
