@@ -322,6 +322,23 @@ color:white;
 }
 
 /* ===================== */
+/* MARKET BENCHMARK */
+/* ===================== */
+
+.market-benchmark{
+
+background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+border:1px solid #e2e8f0;
+
+}
+
+.market-benchmark strong{
+
+font-size:18px;
+
+}
+
+/* ===================== */
 /* DASHBOARD */
 /* ===================== */
 
