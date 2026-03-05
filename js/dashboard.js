@@ -336,7 +336,7 @@ ${formatCurrency(totalCapital)}
 
 <div class="analysis-card">
 
-<h3>Investment Score</h3>
+<h3>${t("Indice investimento","Investment Score")}</h3>
 
 <div class="metric">
 
