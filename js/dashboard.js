@@ -361,6 +361,11 @@ decisionDesc = t(
 
 const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
 
+// ================= PROFIT ESTIMATION =================
+
+const yearlyProfit = (totalCapital * avgROI) / 100;
+const monthlyProfit = yearlyProfit / 12;  
+
 const statsContainer = document.getElementById("dashboard-stats");
 
 statsContainer.innerHTML=`
