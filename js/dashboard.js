@@ -572,15 +572,13 @@ let cashflowChartInstance = null;
 function renderCashflowChart(){
 
 const container = document.getElementById("cashflow-chart-container");
-
 if(!container) return;
 
-/* ricrea sempre il canvas */
+/* ricrea sempre canvas */
 
 container.innerHTML = '<canvas id="cashflowChart"></canvas>';
 
 const canvas = document.getElementById("cashflowChart");
-
 const ctx = canvas.getContext("2d");
 
 /* distrugge grafico precedente */
@@ -590,6 +588,8 @@ cashflowChartInstance.destroy();
 cashflowChartInstance = null;
 }
 
+/* esempio cashflow */
+
 const yearlyCashflow = [
 -13860,
 -8200,
@@ -598,6 +598,16 @@ const yearlyCashflow = [
 8200
 ];
 
+/* colori profitto/perdita */
+
+const colors = yearlyCashflow.map(v =>
+v >= 0 ? "#10b981" : "#ef4444"
+);
+
+/* break-even line */
+
+const breakEvenLine = new Array(yearlyCashflow.length).fill(0);
+
 cashflowChartInstance = new Chart(ctx,{
 
 type:"line",
@@ -605,16 +615,30 @@ type:"line",
 data:{
 labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
 
-datasets:[{
+datasets:[
+
+{
 label:"Cashflow €",
 data:yearlyCashflow,
 borderColor:"#2563eb",
 backgroundColor:"rgba(37,99,235,0.15)",
+pointBackgroundColor:colors,
+pointBorderColor:"#fff",
+pointRadius:6,
+pointHoverRadius:8,
 tension:0.35,
-fill:true,
-pointRadius:5,
-pointHoverRadius:7
-}]
+fill:true
+},
+
+{
+label:"Break-even",
+data:breakEvenLine,
+borderColor:"#94a3b8",
+borderDash:[6,6],
+pointRadius:0
+}
+
+]
 
 },
 
@@ -624,19 +648,29 @@ maintainAspectRatio:false,
 
 plugins:{
 legend:{display:false},
+
 tooltip:{
 callbacks:{
 label:(ctx)=> ctx.raw + " €"
 }
 }
+
 },
 
 scales:{
+
 y:{
 ticks:{
 callback:(v)=> v + " €"
 }
+},
+
+x:{
+grid:{
+display:false
 }
+}
+
 }
 
 }
