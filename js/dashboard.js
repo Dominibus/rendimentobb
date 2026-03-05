@@ -75,6 +75,106 @@ return Math.round(score);
 
 }
 
+// ===============================
+// ROI CHART
+// ===============================
+
+function renderChart(){
+
+const container = document.getElementById("roi-chart-container");
+if(!container) return;
+
+container.innerHTML = '<canvas id="roiChart"></canvas>';
+
+const canvas = document.getElementById("roiChart");
+const ctx = canvas.getContext("2d");
+
+if(roiChartInstance){
+roiChartInstance.destroy();
+roiChartInstance = null;
+}
+
+const avgROI =
+roiValues.reduce((a,b)=>a+b,0) / (roiValues.length || 1);
+
+const avgLine =
+new Array(roiValues.length).fill(avgROI);
+
+const gradient = ctx.createLinearGradient(0,0,0,300);
+gradient.addColorStop(0,"rgba(16,185,129,0.35)");
+gradient.addColorStop(1,"rgba(16,185,129,0.05)");
+
+roiChartInstance = new Chart(ctx,{
+
+type:"line",
+
+data:{
+labels:labels,
+
+datasets:[
+
+{
+label:"ROI %",
+data:roiValues,
+borderColor:"#10b981",
+backgroundColor:gradient,
+pointBackgroundColor:"#10b981",
+pointBorderColor:"#fff",
+pointRadius:5,
+pointHoverRadius:7,
+tension:0.35,
+fill:true
+},
+
+{
+label:"Average ROI",
+data:avgLine,
+borderColor:"#94a3b8",
+borderDash:[6,6],
+pointRadius:0
+}
+
+]
+
+},
+
+options:{
+
+responsive:true,
+maintainAspectRatio:false,
+
+plugins:{
+legend:{display:false},
+
+tooltip:{
+callbacks:{
+label:(ctx)=> ctx.raw.toFixed(1) + " %"
+}
+}
+
+},
+
+scales:{
+
+y:{
+ticks:{
+callback:(v)=> v + " %"
+}
+},
+
+x:{
+grid:{
+display:false
+}
+}
+
+}
+
+}
+
+});
+
+}
 
 // ================= LOAD DASHBOARD =================
 
