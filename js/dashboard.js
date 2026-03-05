@@ -435,7 +435,7 @@ ${formatCurrency(totalCapital)}
 ${investmentScore}/100
 </div>
 
-<div style="margin-top:10px;font-weight:600;color:${scoreColor}">
+<div style="margin-top:14px;font-weight:700;font-size:16px;color:${scoreColor}">
 ${decisionText}
 </div>
 
