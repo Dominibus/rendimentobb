@@ -465,6 +465,14 @@ const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
 const yearlyProfit = (totalCapital * avgROI) / 100;
 const monthlyProfit = yearlyProfit / 12;  
 
+// ================= BREAK EVEN =================
+
+let breakEvenYears = "-";
+
+if(yearlyProfit > 0){
+breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
+}  
+
 const statsContainer = document.getElementById("dashboard-stats");
 
 statsContainer.innerHTML=`
@@ -568,6 +576,13 @@ ${formatCurrency(yearlyProfit)}
 <span>${t("Profitto mensile stimato","Estimated monthly profit")}</span>
 <strong style="color:${roiColor}">
 ${formatCurrency(monthlyProfit)}
+</strong>
+</div>
+
+<div class="metric">
+<span>${t("Break-even stimato","Estimated break-even")}</span>
+<strong>
+${breakEvenYears} ${t("anni","years")}
 </strong>
 </div>
 
