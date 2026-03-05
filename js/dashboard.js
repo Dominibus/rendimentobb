@@ -336,18 +336,20 @@ ${formatCurrency(totalCapital)}
 
 <div class="analysis-card">
 
+<div class="analysis-card" style="grid-column: span 2">
+
 <h3>${t("Indice investimento","Investment Score")}</h3>
 
-<div class="metric">
-
-<strong style="font-size:28px;color:${scoreColor}">
+<div style="font-size:34px;font-weight:700;color:${scoreColor}">
 ${investmentScore}/100
-</strong>
-
 </div>
 
-<div style="font-size:13px;color:#64748b;margin-top:6px">
+<div style="font-size:14px;color:#64748b;margin-top:6px">
 ${scoreLabel}
+</div>
+
+<div style="margin-top:10px;height:8px;background:#e2e8f0;border-radius:6px;overflow:hidden">
+<div style="width:${investmentScore}%;background:${scoreColor};height:100%"></div>
 </div>
 
 </div>
