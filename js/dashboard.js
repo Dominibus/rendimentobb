@@ -236,17 +236,20 @@ statsContainer.innerHTML=`
 <h3>${t("Account","Account")}</h3>
 
 <div class="metric">
-${t("Utente","User")}:
-<strong>${window.currentUser.email}</strong>
+<span>${t("Utente","User")}</span>
+<strong class="account-email">
+${window.currentUser.email}
+</strong>
 </div>
 
 <div class="metric">
-${t("Piano","Plan")}:
-<strong>${window.currentPlan.toUpperCase()}</strong>
+<span>${t("Piano","Plan")}</span>
+<strong>
+${window.currentPlan.toUpperCase()}
+</strong>
 </div>
 
 </div>
-
 
 <div class="analysis-card">
 
