@@ -254,6 +254,12 @@ Calcola ROI
 
 <div class="quick-roi-result">
 
+<p class="roi-disclaimer"
+data-it="Stima indicativa basata su parametri medi di mercato."
+data-en="Indicative estimate based on average market parameters.">
+Stima indicativa basata su parametri medi di mercato.
+</p>  
+
 <div>
 <span>ROI</span>
 <strong id="qr_roi">--</strong>
@@ -617,6 +623,31 @@ data-it="Il mercato dei B&B in Italia"
 data-en="The B&B Market in Italy">
 </h2>
 
+<section class="container" style="margin-top:100px;">
+
+<h2>ROI medio B&B nelle principali città</h2>
+
+<div class="market-grid">
+
+<div class="market-card">
+<strong>Roma</strong>
+<p>ROI medio stimato 10-14%</p>
+</div>
+
+<div class="market-card">
+<strong>Napoli</strong>
+<p>ROI medio stimato 12-16%</p>
+</div>
+
+<div class="market-card">
+<strong>Firenze</strong>
+<p>ROI medio stimato 9-13%</p>
+</div>
+
+</div>
+
+</section>  
+
 <div class="market-grid">
 
 <div class="market-card">
@@ -712,8 +743,13 @@ const occ = parseFloat(document.getElementById("qr_occ").value);
 if(!price || !night || !occ) return;
 
 const annualRevenue = night * 365 * (occ/100);
-const roi = (annualRevenue * 0.6) / price * 100;
-const breakEven = price / (annualRevenue * 0.6);
+
+/* cost structure realistica B&B */
+const operatingCosts = annualRevenue * 0.35;
+const netIncome = annualRevenue - operatingCosts;
+
+const roi = (netIncome / price) * 100;
+const breakEven = price / netIncome;
 
 const lang = window.currentLang || "it";
 
