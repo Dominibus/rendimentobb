@@ -536,6 +536,44 @@ line-height:1.5;
 }
 
 /* ===================== */
+/* TRUST BAR */
+/* ===================== */
+
+.trust-bar{
+margin-top:60px;
+margin-bottom:40px;
+}
+
+.trust-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+text-align:center;
+}
+
+.trust-item{
+background:white;
+border:1px solid #e2e8f0;
+border-radius:16px;
+padding:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.04);
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+}
+
+.trust-icon{
+font-size:18px;
+color:#10b981;
+}
+
+.trust-item p{
+font-size:14px;
+color:#475569;
+}
+
+/* ===================== */
 /* MARKET SECTION */
 /* ===================== */
 
