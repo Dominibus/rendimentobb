@@ -456,6 +456,24 @@ ${investmentScore >= 80 ? "🟢" : investmentScore >= 60 ? "🟡" : "🔴"} ${sc
 <div style="width:${investmentScore}%;background:${scoreColor};height:100%"></div>
 </div>
 
+<div style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:12px">
+
+<div class="metric">
+<span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
+<strong style="color:${roiColor}">
+${formatCurrency(yearlyProfit)}
+</strong>
+</div>
+
+<div class="metric">
+<span>${t("Profitto mensile stimato","Estimated monthly profit")}</span>
+<strong style="color:${roiColor}">
+${formatCurrency(monthlyProfit)}
+</strong>
+</div>
+
+</div>
+
 </div>
 `;
 
