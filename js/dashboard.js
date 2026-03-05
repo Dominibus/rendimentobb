@@ -579,9 +579,15 @@ let cashflowChartInstance = null;
 
 function renderCashflowChart(){
 
-const canvas = document.getElementById("cashflowChart");
+const container = document.getElementById("cashflow-chart-container");
 
-if(!canvas) return;
+if(!container) return;
+
+/* ricrea sempre il canvas */
+
+container.innerHTML = '<canvas id="cashflowChart"></canvas>';
+
+const canvas = document.getElementById("cashflowChart");
 
 const ctx = canvas.getContext("2d");
 
@@ -592,10 +598,6 @@ cashflowChartInstance.destroy();
 cashflowChartInstance = null;
 }
 
-/* reset canvas */
-
-canvas.width = canvas.width;
-
 const yearlyCashflow = [
 -13860,
 -8200,
@@ -605,33 +607,46 @@ const yearlyCashflow = [
 ];
 
 cashflowChartInstance = new Chart(ctx,{
+
 type:"line",
 
 data:{
 labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
+
 datasets:[{
 label:"Cashflow €",
 data:yearlyCashflow,
 borderColor:"#2563eb",
 backgroundColor:"rgba(37,99,235,0.15)",
 tension:0.35,
-fill:true
+fill:true,
+pointRadius:5,
+pointHoverRadius:7
 }]
+
 },
 
 options:{
 responsive:true,
 maintainAspectRatio:false,
+
 plugins:{
-legend:{display:false}
+legend:{display:false},
+tooltip:{
+callbacks:{
+label:(ctx)=> ctx.raw + " €"
+}
+}
 },
+
 scales:{
 y:{
 ticks:{
-callback:(v)=> v + "€"
+callback:(v)=> v + " €"
 }
 }
 }
+
 }
 
 });
