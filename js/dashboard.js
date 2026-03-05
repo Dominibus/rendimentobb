@@ -581,16 +581,20 @@ function renderCashflowChart(){
 
 const canvas = document.getElementById("cashflowChart");
 
-if(!canvas){
-console.log("Cashflow canvas not found");
-return;
-}
+if(!canvas) return;
 
 const ctx = canvas.getContext("2d");
 
+/* distrugge grafico precedente */
+
 if(cashflowChartInstance){
 cashflowChartInstance.destroy();
+cashflowChartInstance = null;
 }
+
+/* reset canvas */
+
+canvas.width = canvas.width;
 
 const yearlyCashflow = [
 -13860,
