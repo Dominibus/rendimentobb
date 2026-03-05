@@ -47,6 +47,34 @@ function t(it,en){
 return window.currentLang === "en" ? en : it;
 }
 
+// ================= INVESTMENT SCORE =================
+
+function calculateInvestmentScore(avgROI,totalCapital,count){
+
+if(count === 0) return 0;
+
+let score = 50;
+
+/* ROI influence */
+
+if(avgROI > 15) score += 30;
+else if(avgROI > 8) score += 20;
+else if(avgROI > 3) score += 10;
+else if(avgROI < 0) score -= 20;
+
+/* capital diversification */
+
+if(totalCapital > 500000) score += 10;
+
+/* clamp */
+
+if(score > 100) score = 100;
+if(score < 0) score = 0;
+
+return Math.round(score);
+
+}
+
 
 // ================= LOAD DASHBOARD =================
 
@@ -225,6 +253,19 @@ function renderStats(count,totalROI,totalCapital){
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 
+const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
+let scoreColor = "#ef4444";
+let scoreLabel = t("Alto rischio","High risk");
+
+if(investmentScore >= 80){
+scoreColor = "#10b981";
+scoreLabel = t("Investimento sicuro","Safe investment");
+}
+else if(investmentScore >= 60){
+scoreColor = "#f59e0b";
+scoreLabel = t("Rischio medio","Medium risk");
+}  
+
 const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
 
 const statsContainer = document.getElementById("dashboard-stats");
@@ -278,7 +319,6 @@ ${avgROI}%
 
 </div>
 
-
 <div class="analysis-card">
 
 <h3>${t("Capitale analizzato","Analyzed capital")}</h3>
@@ -293,6 +333,24 @@ ${formatCurrency(totalCapital)}
 
 </div>
 
+
+<div class="analysis-card">
+
+<h3>Investment Score</h3>
+
+<div class="metric">
+
+<strong style="font-size:28px;color:${scoreColor}">
+${investmentScore}/100
+</strong>
+
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-top:6px">
+${scoreLabel}
+</div>
+
+</div>
 `;
 
 }
