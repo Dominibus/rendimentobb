@@ -84,6 +84,7 @@ if(!window.currentUser){
 
 window.location.href="/login/";
 return;
+    renderCashflowChart();
 
 }
 
