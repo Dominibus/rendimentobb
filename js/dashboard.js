@@ -18,6 +18,7 @@ const db = getFirestore();
 
 let roiValues = [];
 let labels = [];
+let roiChartInstance = null;
 
 // ================= UTIL =================
 
@@ -325,7 +326,15 @@ const ctx = document.getElementById("roiChart");
 
 if(!ctx) return;
 
-new Chart(ctx,{
+/* distrugge il grafico precedente */
+
+if(roiChartInstance){
+roiChartInstance.destroy();
+}
+
+/* crea nuovo grafico */
+
+roiChartInstance = new Chart(ctx,{
 
 type:"line",
 
@@ -342,6 +351,7 @@ fill:true
 },
 
 options:{
+responsive:true,
 plugins:{
 legend:{display:false}
 },
