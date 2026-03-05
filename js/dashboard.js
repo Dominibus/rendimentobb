@@ -14,6 +14,10 @@ orderBy
 
 const db = getFirestore();
 
+// ================= CHART DATA =================
+
+let roiValues = [];
+let labels = [];
 
 // ================= UTIL =================
 
@@ -68,14 +72,14 @@ const list = document.getElementById("analysis-list");
 
 list.innerHTML="";
 
+roiValues = [];
+labels = [];  
+
 let totalROI = 0;
 let totalCapital = 0;
 let count = 0;
 
-let analyses = [];
-
-let roiValues = [];
-let labels = [];  
+let analyses = [];  
 
 querySnapshot.forEach(doc=>{
 
