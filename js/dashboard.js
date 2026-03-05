@@ -521,7 +521,7 @@ container.innerHTML = '<canvas id="cashflowChart"></canvas>';
 const canvas = document.getElementById("cashflowChart");
 const ctx = canvas.getContext("2d");
 
-/* dati esempio */
+/* dati demo */
 
 const yearlyCashflow = [
 -13860,
@@ -531,13 +531,13 @@ const yearlyCashflow = [
 8200
 ];
 
-/* colori profitto/perdita */
+/* colori positivo/negativo */
 
 const colors = yearlyCashflow.map(v =>
 v >= 0 ? "#10b981" : "#ef4444"
 );
 
-/* linea break-even */
+/* linea break even */
 
 const breakEven = new Array(yearlyCashflow.length).fill(0);
 
