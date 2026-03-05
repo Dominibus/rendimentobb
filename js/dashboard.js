@@ -1,6 +1,6 @@
 // ===============================================
-// RENDIMENTOBB – DASHBOARD ENGINE 3.0
-// Full Translation Support + Live Language Refresh
+// RENDIMENTOBB – DASHBOARD ENGINE 4.0
+// Safe Data Handling + Capital Stats + Date Display
 // ===============================================
 
 import {
@@ -22,7 +22,19 @@ function formatCurrency(value){
 return new Intl.NumberFormat(
 window.currentLang === "it" ? "it-IT" : "en-US",
 { style:"currency", currency:"EUR"}
-).format(value);
+).format(value || 0);
+
+}
+
+function formatDate(timestamp){
+
+if(!timestamp) return "-";
+
+const date = new Date(timestamp.seconds * 1000);
+
+return date.toLocaleDateString(
+window.currentLang === "it" ? "it-IT" : "en-US"
+);
 
 }
 
@@ -57,16 +69,23 @@ const list = document.getElementById("analysis-list");
 list.innerHTML="";
 
 let totalROI = 0;
+let totalCapital = 0;
 let count = 0;
 
 querySnapshot.forEach(doc=>{
 
 const data = doc.data();
 
-totalROI += data.roi;
+const roi = data.roi || 0;
+const price = data.propertyPrice || 0;
+const equity = data.equity || 0;
+
+totalROI += roi;
+totalCapital += price;
+
 count++;
 
-const roiColor = data.roi >= 0 ? "#10b981" : "#ef4444";
+const roiColor = roi >= 0 ? "#10b981" : "#ef4444";
 
 const card = document.createElement("div");
 
@@ -78,24 +97,29 @@ card.innerHTML=`
 
 <div class="metric">
 ${t("Prezzo immobile","Property price")}:
-<strong>${formatCurrency(data.propertyPrice)}</strong>
+<strong>${formatCurrency(price)}</strong>
 </div>
 
 <div class="metric">
 ${t("Equity investita","Equity invested")}:
-<strong>${formatCurrency(data.equity)}</strong>
+<strong>${formatCurrency(equity)}</strong>
 </div>
 
 <div class="metric">
 ROI:
 <strong style="color:${roiColor}">
-${data.roi.toFixed(1)}%
+${roi.toFixed(1)}%
 </strong>
 </div>
 
 <div class="metric">
 ${t("Indice rischio","Risk score")}:
-<strong>${data.risk}/100</strong>
+<strong>${data.risk || 0}/100</strong>
+</div>
+
+<div class="metric">
+${t("Data analisi","Analysis date")}:
+<strong>${formatDate(data.createdAt)}</strong>
 </div>
 
 `;
@@ -104,7 +128,7 @@ list.appendChild(card);
 
 });
 
-renderStats(count,totalROI);
+renderStats(count,totalROI,totalCapital);
 
 }
 
@@ -151,7 +175,7 @@ Tool
 
 // ================= STATS =================
 
-function renderStats(count,totalROI){
+function renderStats(count,totalROI,totalCapital){
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 
@@ -199,6 +223,21 @@ ${count}
 
 <strong style="font-size:22px;color:${roiColor}">
 ${avgROI}%
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="analysis-card">
+
+<h3>${t("Capitale analizzato","Analyzed capital")}</h3>
+
+<div class="metric">
+
+<strong style="font-size:22px">
+${formatCurrency(totalCapital)}
 </strong>
 
 </div>
