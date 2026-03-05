@@ -751,7 +751,7 @@ const netIncome = annualRevenue - operatingCosts;
 const roi = (netIncome / price) * 100;
 const breakEven = price / netIncome;
 
-const lang = window.currentLang || "it";
+const lang = localStorage.getItem("rb_lang") || "it";
 
 document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%";
 
@@ -761,6 +761,10 @@ document.getElementById("qr_break").innerText =
 }
 
 document.addEventListener("DOMContentLoaded", function(){
+  quickROI();
+});  
+
+document.addEventListener("languageChanged", function(){
   quickROI();
 });  
 
