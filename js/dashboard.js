@@ -561,4 +561,66 @@ callback:(v)=> v + "%"
 
 });
 
+// ===============================
+// CASHFLOW PROJECTION CHART
+// ===============================
+
+let cashflowChartInstance = null;
+
+function renderCashflowChart() {
+
+const canvas = document.getElementById("cashflowChart");
+if(!canvas) return;
+
+const ctx = canvas.getContext("2d");
+
+if(cashflowChartInstance){
+cashflowChartInstance.destroy();
+}
+
+const yearlyCashflow = [
+-13860,
+-8200,
+-2500,
+3200,
+8200
+];
+
+cashflowChartInstance = new Chart(ctx,{
+
+type:"line",
+
+data:{
+labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
+
+datasets:[{
+label:"Cashflow €",
+data:yearlyCashflow,
+borderColor:"#2563eb",
+backgroundColor:"rgba(37,99,235,0.15)",
+tension:0.35,
+fill:true
+}]
+
+},
+
+options:{
+responsive:true,
+maintainAspectRatio:false,
+plugins:{
+legend:{display:false}
+},
+scales:{
+y:{
+ticks:{
+callback:(value)=> value + "€"
+}
+}
+}
+}
+
+});
+
+}  
+
 }
