@@ -76,6 +76,39 @@ return Math.round(score);
 }
 
 // ===============================
+// MARKET BENCHMARK
+// ===============================
+
+const marketROI = 8.4;
+const userROI = avgROI;
+
+const performanceEl = document.getElementById("market-performance");
+
+if(performanceEl){
+
+if(userROI >= marketROI){
+
+performanceEl.textContent =
+window.currentLang === "it"
+? "Sopra la media di mercato"
+: "Above market average";
+
+performanceEl.style.color = "#10b981";
+
+}else{
+
+performanceEl.textContent =
+window.currentLang === "it"
+? "Sotto la media di mercato"
+: "Below market average";
+
+performanceEl.style.color = "#ef4444";
+
+}
+
+}
+
+// ===============================
 // ROI CHART
 // ===============================
 
