@@ -223,7 +223,9 @@ header.innerHTML=`
 
 <h2>
 ${t("Benvenuto","Welcome")}
-<strong>${window.currentUser.email}</strong>
+<strong class="account-email">
+${window.currentUser.email}
+</strong>
 </h2>
 
 </div>
