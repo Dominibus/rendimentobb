@@ -169,6 +169,8 @@ list.appendChild(card);
 
 renderStats(count,totalROI,totalCapital);
 
+renderChart();  
+
 }
 
 
