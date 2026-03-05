@@ -316,6 +316,49 @@ scoreColor = "#f59e0b";
 scoreLabel = t("Rischio medio","Medium risk");
 }  
 
+let decisionText = "";
+let decisionDesc = "";
+
+if(investmentScore >= 80){
+
+decisionText = t(
+"Ottima opportunità di investimento",
+"Strong investment opportunity"
+);
+
+decisionDesc = t(
+"Questo investimento mostra un buon potenziale di redditività.",
+"This investment shows solid profitability potential."
+);
+
+}
+else if(investmentScore >= 60){
+
+decisionText = t(
+"Investimento moderato",
+"Moderate investment"
+);
+
+decisionDesc = t(
+"Potrebbe essere interessante ma richiede ulteriori valutazioni.",
+"This investment could work but requires deeper analysis."
+);
+
+}
+else{
+
+decisionText = t(
+"Investimento sconsigliato",
+"Avoid this investment"
+);
+
+decisionDesc = t(
+"La redditività prevista è bassa o negativa rispetto al rischio.",
+"The projected profitability is too low compared to the risk."
+);
+
+}  
+
 const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
 
 const statsContainer = document.getElementById("dashboard-stats");
@@ -390,6 +433,14 @@ ${formatCurrency(totalCapital)}
 
 <div style="font-size:34px;font-weight:700;color:${scoreColor}">
 ${investmentScore}/100
+</div>
+
+<div style="margin-top:10px;font-weight:600;color:${scoreColor}">
+${decisionText}
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-top:4px">
+${decisionDesc}
 </div>
 
 <div style="font-size:14px;color:#64748b;margin-top:6px">
