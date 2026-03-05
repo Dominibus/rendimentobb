@@ -323,19 +323,23 @@ loadDashboard();
 function renderChart(){
 
 const canvas = document.getElementById("roiChart");
+
 if(!canvas) return;
 
-const ctx = canvas.getContext("2d");
-
-if(!ctx) return;
-
-/* distrugge il grafico precedente */
+/* se esiste già un grafico lo distrugge */
 
 if(roiChartInstance){
 roiChartInstance.destroy();
+roiChartInstance = null;
 }
 
-/* crea nuovo grafico */
+/* reset canvas (fix definitivo Chart.js) */
+
+canvas.width = canvas.width;
+
+const ctx = canvas.getContext("2d");
+
+/* crea grafico */
 
 roiChartInstance = new Chart(ctx,{
 
@@ -355,6 +359,7 @@ fill:true
 
 options:{
 responsive:true,
+maintainAspectRatio:false,
 plugins:{
 legend:{display:false}
 },
