@@ -74,6 +74,9 @@ let count = 0;
 
 let analyses = [];
 
+let roiValues = [];
+let labels = [];  
+
 querySnapshot.forEach(doc=>{
 
 const data = doc.data();
@@ -103,6 +106,9 @@ const visibleAnalyses = analyses.slice(0,12);
 // ================= RENDER CARDS =================
 
 visibleAnalyses.forEach((data,index)=>{
+
+roiValues.push(data.roi);
+labels.push("Inv " + (index+1));  
 
 const roi = data.roi;
 const price = data.price;
@@ -306,3 +312,42 @@ if(!window.currentUser) return;
 loadDashboard();
 
 });
+
+function renderChart(){
+
+const ctx = document.getElementById("roiChart");
+
+if(!ctx) return;
+
+new Chart(ctx,{
+
+type:"line",
+
+data:{
+labels:labels,
+datasets:[{
+label:"ROI %",
+data:roiValues,
+borderColor:"#10b981",
+backgroundColor:"rgba(16,185,129,0.15)",
+tension:0.3,
+fill:true
+}]
+},
+
+options:{
+plugins:{
+legend:{display:false}
+},
+scales:{
+y:{
+ticks:{
+callback:(v)=>v+"%"
+}
+}
+}
+}
+
+});
+
+}
