@@ -326,17 +326,20 @@ const container = document.getElementById("roi-chart-container");
 
 if(!container) return;
 
-/* elimina canvas precedente */
+/* ricrea sempre il canvas */
 
-container.innerHTML = `
-<div id="roi-chart-container">
-<canvas id="roiChart"></canvas>
-</div>
-`;
+container.innerHTML = '<canvas id="roiChart"></canvas>';
 
 const canvas = document.getElementById("roiChart");
 
 const ctx = canvas.getContext("2d");
+
+/* distrugge eventuale grafico precedente */
+
+if(roiChartInstance){
+roiChartInstance.destroy();
+roiChartInstance = null;
+}
 
 /* crea grafico */
 
@@ -365,7 +368,7 @@ legend:{display:false}
 scales:{
 y:{
 ticks:{
-callback:(v)=>v+"%"
+callback:(v)=> v + "%"
 }
 }
 }
