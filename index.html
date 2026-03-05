@@ -706,45 +706,5 @@ document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
 
 </script>
 
-window.unlockPro = function(){
-
-  if(auth.currentUser){
-    window.location.href="/tool/#pro";
-  }else{
-    window.location.href="/login/";
-  }
-
-}
-
-window.quickROI = function(){
-
-const price = parseFloat(document.getElementById("qr_price").value);
-const night = parseFloat(document.getElementById("qr_night").value);
-const occ = parseFloat(document.getElementById("qr_occ").value);
-
-if(!price || !night || !occ) return;
-
-const annualRevenue = night * 365 * (occ/100);
-const roi = (annualRevenue * 0.6) / price * 100;
-
-const breakEven = price / (annualRevenue * 0.6);
-
-document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%";
-document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
-
-}  
-
-window.unlockPro = function(){
-
-  if(auth.currentUser){
-    window.location.href="/tool/#pro";
-  }else{
-    window.location.href="/login/";
-  }
-
-}
-
-</script>
-
 </body>
 </html>
