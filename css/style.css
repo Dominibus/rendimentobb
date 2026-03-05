@@ -506,3 +506,37 @@ font-size:14px;
 }
 
 }
+
+/* ===================== */
+/* MOBILE UI IMPROVEMENT */
+/* ===================== */
+
+@media (max-width:768px){
+
+.tool-card{
+padding:30px;
+}
+
+.results-card{
+padding:30px;
+}
+
+.btn{
+width:100%;
+text-align:center;
+padding:14px;
+}
+
+.dashboard-actions{
+flex-direction:column;
+}
+
+.analysis-grid{
+grid-template-columns:1fr;
+}
+
+.stats-grid{
+grid-template-columns:1fr;
+}
+
+}
