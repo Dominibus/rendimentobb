@@ -504,64 +504,6 @@ loadDashboard();
 
 });
 
-function renderChart(){
-
-const container = document.getElementById("roi-chart-container");
-
-if(!container) return;
-
-/* ricrea sempre il canvas */
-
-container.innerHTML = '<canvas id="roiChart"></canvas>';
-
-const canvas = document.getElementById("roiChart");
-
-const ctx = canvas.getContext("2d");
-
-/* distrugge eventuale grafico precedente */
-
-if(roiChartInstance){
-roiChartInstance.destroy();
-roiChartInstance = null;
-}
-
-/* crea grafico */
-
-roiChartInstance = new Chart(ctx,{
-
-type:"line",
-
-data:{
-labels:labels,
-datasets:[{
-label:"ROI %",
-data:roiValues,
-borderColor:"#10b981",
-backgroundColor:"rgba(16,185,129,0.15)",
-tension:0.3,
-fill:true
-}]
-},
-
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{
-legend:{display:false}
-},
-scales:{
-y:{
-ticks:{
-callback:(v)=> v + "%"
-}
-}
-}
-}
-
-});
-
-}
-
 
 // ===============================
 // CASHFLOW PROJECTION CHART
