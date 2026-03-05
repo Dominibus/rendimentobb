@@ -81,11 +81,8 @@ return Math.round(score);
 async function loadDashboard(){
 
 if(!window.currentUser){
-
 window.location.href="/login/";
 return;
-    renderCashflowChart();
-
 }
 
 renderHeader();
@@ -204,12 +201,7 @@ list.appendChild(card);
 renderStats(count,totalROI,totalCapital);
 renderBestInvestment(analyses);
 renderChart();
-
-/* render cashflow dopo il DOM */
-
-setTimeout(()=>{
 renderCashflowChart();
-},100);
 
 }
 
