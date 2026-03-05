@@ -334,8 +334,6 @@ ${formatCurrency(totalCapital)}
 </div>
 
 
-<div class="analysis-card">
-
 <div class="analysis-card" style="grid-column: span 2">
 
 <h3>${t("Indice investimento","Investment Score")}</h3>
