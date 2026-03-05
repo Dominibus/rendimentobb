@@ -322,20 +322,17 @@ loadDashboard();
 
 function renderChart(){
 
+const container = document.getElementById("roi-chart-container");
+
+if(!container) return;
+
+/* elimina canvas precedente */
+
+container.innerHTML = `
+<canvas id="roiChart"></canvas>
+`;
+
 const canvas = document.getElementById("roiChart");
-
-if(!canvas) return;
-
-/* se esiste già un grafico lo distrugge */
-
-if(roiChartInstance){
-roiChartInstance.destroy();
-roiChartInstance = null;
-}
-
-/* reset canvas (fix definitivo Chart.js) */
-
-canvas.width = canvas.width;
 
 const ctx = canvas.getContext("2d");
 
