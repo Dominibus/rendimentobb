@@ -204,7 +204,12 @@ list.appendChild(card);
 renderStats(count,totalROI,totalCapital);
 renderBestInvestment(analyses);
 renderChart();
+
+/* render cashflow dopo il DOM */
+
+setTimeout(()=>{
 renderCashflowChart();
+},100);
 
 }
 
@@ -566,7 +571,6 @@ callback:(v)=> v + "%"
 }
 
 
-
 // ===============================
 // CASHFLOW PROJECTION CHART
 // ===============================
@@ -576,7 +580,11 @@ let cashflowChartInstance = null;
 function renderCashflowChart(){
 
 const canvas = document.getElementById("cashflowChart");
-if(!canvas) return;
+
+if(!canvas){
+console.log("Cashflow canvas not found");
+return;
+}
 
 const ctx = canvas.getContext("2d");
 
@@ -593,12 +601,10 @@ const yearlyCashflow = [
 ];
 
 cashflowChartInstance = new Chart(ctx,{
-
 type:"line",
 
 data:{
 labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
-
 datasets:[{
 label:"Cashflow €",
 data:yearlyCashflow,
@@ -618,7 +624,7 @@ legend:{display:false}
 scales:{
 y:{
 ticks:{
-callback:(value)=> value + "€"
+callback:(v)=> v + "€"
 }
 }
 }
