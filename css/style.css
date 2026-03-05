@@ -375,12 +375,10 @@ text-decoration:none;
 /* stats */
 
 .stats-grid{
-
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;
-margin:30px 0 45px 0;
-
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:22px;
+margin-bottom:50px;
 }
 
 /* analyses */
