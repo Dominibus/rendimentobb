@@ -228,17 +228,17 @@ data-en="Based on average short-term rental revenue model.">
 
 <div class="quick-input">
 <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
-<input type="number" id="qr_price" placeholder="250000">
+<input type="number" id="qr_price" value="250000">
 </div>
 
 <div class="quick-input">
 <label data-it="Prezzo medio notte (€)" data-en="Average night price (€)"></label>
-<input type="number" id="qr_night" placeholder="110">
+<input type="number" id="qr_night" value="110">
 </div>
 
 <div class="quick-input">
 <label data-it="Occupazione (%)" data-en="Occupancy rate (%)"></label>
-<input type="number" id="qr_occ" placeholder="65">
+<input type="number" id="qr_occ" value="65">
 </div>
 
 <button class="btn btn-primary" onclick="quickROI()"
@@ -719,6 +719,10 @@ document.getElementById("qr_break").innerText =
   breakEven.toFixed(1) + (lang === "it" ? " anni" : " years");
 
 }
+
+document.addEventListener("DOMContentLoaded", function(){
+  quickROI();
+});  
 
 </script>
 
