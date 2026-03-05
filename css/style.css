@@ -392,12 +392,10 @@ margin-bottom:50px;
 /* analyses */
 
 .analysis-grid{
-
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:28px;
-margin-top:25px;
-
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:32px;
+margin-top:30px;
 }
 
 .analysis-card{
