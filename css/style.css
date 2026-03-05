@@ -579,6 +579,26 @@ font-size:14px;
 color:#475569;
 }
 
+.micro-trust{
+display:flex;
+justify-content:center;
+gap:60px;
+margin-top:25px;
+margin-bottom:30px;
+text-align:center;
+}
+
+.micro-trust strong{
+display:block;
+font-size:22px;
+color:#10b981;
+}
+
+.micro-trust p{
+font-size:13px;
+color:#64748b;
+}
+
 /* ===================== */
 /* MARKET SECTION */
 /* ===================== */
