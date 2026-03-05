@@ -815,30 +815,46 @@ font-size:15px;
 }
 
 /* ===================== */
-/* MOBILE FIX */
+/* GLOBAL MOBILE FIX */
 /* ===================== */
 
 @media (max-width:768px){
 
+/* HEADER */
+
 .portal-header-inner{
 flex-direction:column;
 align-items:center;
-gap:18px;
+gap:16px;
+text-align:center;
 }
 
 .portal-nav{
 flex-wrap:wrap;
 justify-content:center;
-gap:16px;
+gap:14px;
 }
 
 .portal-nav a{
 font-size:13px;
 }
 
+.header-actions{
+flex-direction:column;
+gap:10px;
+}
+
+/* CONTAINER */
+
 .container{
 padding:0 18px;
 }
+
+.dashboard-container{
+padding:60px 18px;
+}
+
+/* TITLES */
 
 .page-title{
 margin:50px 0 40px 0;
@@ -852,13 +868,7 @@ font-size:24px;
 font-size:14px;
 }
 
-}
-
-/* ===================== */
-/* MOBILE UI IMPROVEMENT */
-/* ===================== */
-
-@media (max-width:768px){
+/* CARDS */
 
 .tool-card{
 padding:30px;
@@ -868,6 +878,12 @@ padding:30px;
 padding:30px;
 }
 
+.analysis-card{
+padding:22px;
+}
+
+/* BUTTONS */
+
 .btn{
 width:100%;
 text-align:center;
@@ -876,14 +892,55 @@ padding:14px;
 
 .dashboard-actions{
 flex-direction:column;
+gap:10px;
 }
+
+/* GRIDS */
 
 .analysis-grid{
 grid-template-columns:1fr;
+gap:20px;
 }
 
 .stats-grid{
 grid-template-columns:1fr;
+gap:18px;
+}
+
+.form-grid{
+grid-template-columns:1fr;
+}
+
+/* METRICS */
+
+.metric{
+font-size:13px;
+}
+
+.metric strong{
+font-size:18px;
+}
+
+/* CHART */
+
+#roi-chart-container{
+height:220px;
+}
+
+/* TRUST / MARKET */
+
+.trust-grid{
+grid-template-columns:1fr;
+}
+
+.market-grid{
+grid-template-columns:1fr;
+}
+
+.quick-roi-grid{
+grid-template-columns:1fr;
+}
+
 }
 
 }
