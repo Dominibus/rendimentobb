@@ -345,7 +345,7 @@ ${investmentScore}/100
 </div>
 
 <div style="font-size:14px;color:#64748b;margin-top:6px">
-${scoreLabel}
+${investmentScore >= 80 ? "🟢" : investmentScore >= 60 ? "🟡" : "🔴"} ${scoreLabel}
 </div>
 
 <div style="margin-top:10px;height:8px;background:#e2e8f0;border-radius:6px;overflow:hidden">
