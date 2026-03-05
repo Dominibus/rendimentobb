@@ -509,68 +509,62 @@ loadDashboard();
 // CASHFLOW PROJECTION CHART
 // ===============================
 
-let cashflowChartInstance = null;
+function renderCashflowChart(){
 
-function renderChart(){
-
-const container = document.getElementById("roi-chart-container");
+const container = document.getElementById("cashflow-chart-container");
 if(!container) return;
 
 /* ricrea canvas */
 
-container.innerHTML = '<canvas id="roiChart"></canvas>';
+container.innerHTML = '<canvas id="cashflowChart"></canvas>';
 
-const canvas = document.getElementById("roiChart");
+const canvas = document.getElementById("cashflowChart");
 const ctx = canvas.getContext("2d");
 
-/* distrugge grafico precedente */
+/* dati esempio */
 
-if(roiChartInstance){
-roiChartInstance.destroy();
-roiChartInstance = null;
-}
+const yearlyCashflow = [
+-13860,
+-8200,
+-2500,
+3200,
+8200
+];
 
-/* calcola ROI medio */
+/* colori profitto/perdita */
 
-const avgROI =
-roiValues.reduce((a,b)=>a+b,0) / (roiValues.length || 1);
+const colors = yearlyCashflow.map(v =>
+v >= 0 ? "#10b981" : "#ef4444"
+);
 
-/* linea media */
+/* linea break-even */
 
-const avgLine =
-new Array(roiValues.length).fill(avgROI);
+const breakEven = new Array(yearlyCashflow.length).fill(0);
 
-/* gradient */
-
-const gradient = ctx.createLinearGradient(0,0,0,300);
-gradient.addColorStop(0,"rgba(16,185,129,0.35)");
-gradient.addColorStop(1,"rgba(16,185,129,0.05)");
-
-roiChartInstance = new Chart(ctx,{
+new Chart(ctx,{
 
 type:"line",
 
 data:{
-labels:labels,
+labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
 
 datasets:[
 
 {
-label:"ROI %",
-data:roiValues,
-borderColor:"#10b981",
-backgroundColor:gradient,
-pointBackgroundColor:"#10b981",
-pointBorderColor:"#fff",
-pointRadius:5,
-pointHoverRadius:7,
+label:"Cashflow €",
+data:yearlyCashflow,
+borderColor:"#2563eb",
+backgroundColor:"rgba(37,99,235,0.15)",
+pointBackgroundColor:colors,
+pointRadius:6,
+pointHoverRadius:8,
 tension:0.35,
 fill:true
 },
 
 {
-label:"Average ROI",
-data:avgLine,
+label:"Break even",
+data:breakEven,
 borderColor:"#94a3b8",
 borderDash:[6,6],
 pointRadius:0
@@ -581,7 +575,6 @@ pointRadius:0
 },
 
 options:{
-
 responsive:true,
 maintainAspectRatio:false,
 
@@ -590,17 +583,16 @@ legend:{display:false},
 
 tooltip:{
 callbacks:{
-label:(ctx)=> ctx.raw.toFixed(1) + " %"
+label:(ctx)=> ctx.raw + " €"
 }
 }
 
 },
 
 scales:{
-
 y:{
 ticks:{
-callback:(v)=> v + " %"
+callback:(v)=> v + " €"
 }
 },
 
