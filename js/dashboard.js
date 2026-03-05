@@ -569,70 +569,66 @@ callback:(v)=> v + "%"
 
 let cashflowChartInstance = null;
 
-function renderCashflowChart(){
+function renderChart(){
 
-const container = document.getElementById("cashflow-chart-container");
+const container = document.getElementById("roi-chart-container");
 if(!container) return;
 
-/* ricrea sempre canvas */
+/* ricrea canvas */
 
-container.innerHTML = '<canvas id="cashflowChart"></canvas>';
+container.innerHTML = '<canvas id="roiChart"></canvas>';
 
-const canvas = document.getElementById("cashflowChart");
+const canvas = document.getElementById("roiChart");
 const ctx = canvas.getContext("2d");
 
 /* distrugge grafico precedente */
 
-if(cashflowChartInstance){
-cashflowChartInstance.destroy();
-cashflowChartInstance = null;
+if(roiChartInstance){
+roiChartInstance.destroy();
+roiChartInstance = null;
 }
 
-/* esempio cashflow */
+/* calcola ROI medio */
 
-const yearlyCashflow = [
--13860,
--8200,
--2500,
-3200,
-8200
-];
+const avgROI =
+roiValues.reduce((a,b)=>a+b,0) / (roiValues.length || 1);
 
-/* colori profitto/perdita */
+/* linea media */
 
-const colors = yearlyCashflow.map(v =>
-v >= 0 ? "#10b981" : "#ef4444"
-);
+const avgLine =
+new Array(roiValues.length).fill(avgROI);
 
-/* break-even line */
+/* gradient */
 
-const breakEvenLine = new Array(yearlyCashflow.length).fill(0);
+const gradient = ctx.createLinearGradient(0,0,0,300);
+gradient.addColorStop(0,"rgba(16,185,129,0.35)");
+gradient.addColorStop(1,"rgba(16,185,129,0.05)");
 
-cashflowChartInstance = new Chart(ctx,{
+roiChartInstance = new Chart(ctx,{
 
 type:"line",
 
 data:{
-labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
+labels:labels,
 
 datasets:[
 
 {
-label:"Cashflow €",
-data:yearlyCashflow,
-borderColor:"#2563eb",
-backgroundColor:"rgba(37,99,235,0.15)",
-pointBackgroundColor:colors,
+label:"ROI %",
+data:roiValues,
+borderColor:"#10b981",
+backgroundColor:gradient,
+pointBackgroundColor:"#10b981",
 pointBorderColor:"#fff",
-pointRadius:6,
-pointHoverRadius:8,
+pointRadius:5,
+pointHoverRadius:7,
 tension:0.35,
 fill:true
 },
 
 {
-label:"Break-even",
-data:breakEvenLine,
+label:"Average ROI",
+data:avgLine,
 borderColor:"#94a3b8",
 borderDash:[6,6],
 pointRadius:0
@@ -643,6 +639,7 @@ pointRadius:0
 },
 
 options:{
+
 responsive:true,
 maintainAspectRatio:false,
 
@@ -651,7 +648,7 @@ legend:{display:false},
 
 tooltip:{
 callbacks:{
-label:(ctx)=> ctx.raw + " €"
+label:(ctx)=> ctx.raw.toFixed(1) + " %"
 }
 }
 
@@ -661,7 +658,7 @@ scales:{
 
 y:{
 ticks:{
-callback:(v)=> v + " €"
+callback:(v)=> v + " %"
 }
 },
 
