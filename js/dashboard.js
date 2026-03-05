@@ -329,7 +329,9 @@ if(!container) return;
 /* elimina canvas precedente */
 
 container.innerHTML = `
+<div id="roi-chart-container">
 <canvas id="roiChart"></canvas>
+</div>
 `;
 
 const canvas = document.getElementById("roiChart");
