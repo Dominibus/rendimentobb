@@ -328,11 +328,9 @@ color:white;
 /* ===================== */
 
 .dashboard-container{
-
-max-width:1300px;
+max-width:1500px;
 margin:0 auto;
-padding:80px 28px 80px 28px;
-
+padding:80px 32px;
 }
 
 /* BEST INVESTMENT CARD */
