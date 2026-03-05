@@ -562,13 +562,17 @@ callback:(v)=> v + "%"
 
 });
 
+}
+
+
+
 // ===============================
 // CASHFLOW PROJECTION CHART
 // ===============================
 
 let cashflowChartInstance = null;
 
-function renderCashflowChart() {
+function renderCashflowChart(){
 
 const canvas = document.getElementById("cashflowChart");
 if(!canvas) return;
@@ -602,7 +606,6 @@ backgroundColor:"rgba(37,99,235,0.15)",
 tension:0.35,
 fill:true
 }]
-
 },
 
 options:{
@@ -621,7 +624,5 @@ callback:(value)=> value + "€"
 }
 
 });
-
-}  
 
 }
