@@ -168,6 +168,11 @@ margin:0 auto;
 /* TOOL CARD */
 /* ===================== */
 
+.pro-card{
+max-width:420px;
+margin:auto;
+}
+
 .tool-card{
 
 background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
