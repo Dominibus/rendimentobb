@@ -734,6 +734,13 @@ color:#334155;
 /* TRUST BAR */
 /* ===================== */
 
+.pro-trust{
+font-size:13px;
+color:#475569;
+margin-top:10px;
+line-height:1.6;
+}
+
 .trust-bar{
 margin-top:60px;
 margin-bottom:40px;
