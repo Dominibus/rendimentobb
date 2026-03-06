@@ -696,8 +696,11 @@ ${window.currentUser.email}
 
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
-<strong>
-${window.currentPlan.toUpperCase()}
+<strong style="
+color:${window.currentPlan === 'pro' ? '#10b981' : '#64748b'};
+font-weight:700;
+">
+${window.currentPlan === "pro" ? "PRO" : "FREE"}
 </strong>
 </div>
 
