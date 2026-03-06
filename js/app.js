@@ -434,6 +434,52 @@ container.innerHTML = `
 
 }
 
+// ================= SMART PAYWALL =================
+
+function showUpgradePopup(roi){
+
+if(window.isProUser && window.isProUser()) return;
+
+const lang = window.currentLang || "it";
+
+const message = lang === "it"
+? `Questo investimento sembra interessante.
+
+ROI stimato: ${roi.toFixed(1)}%
+
+Scopri:
+• rischio reale
+• comparatore mutui
+• scenari mercato
+• simulazioni occupazione
+• report professionale
+
+Sblocca l'analisi completa.`
+: `This investment looks promising.
+
+Estimated ROI: ${roi.toFixed(1)}%
+
+Unlock:
+• risk score
+• mortgage comparator
+• market scenarios
+• occupancy simulations
+• professional report`;
+
+if(roi > 10){
+
+setTimeout(()=>{
+
+if(confirm(message)){
+window.buyPro();
+}
+
+},1500);
+
+}
+
+}
+
 // ================= MAIN CALC =================
 
 function calculate() {
@@ -469,6 +515,8 @@ const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
 const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
 
 const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
+  
+showUpgradePopup(roi);
 
 const riskScore =
 roi > 12 ? 30 :
