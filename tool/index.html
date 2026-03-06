@@ -410,6 +410,16 @@ data-en="Executive Investment Summary"></h3>
 
 <div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
 
+<div style="text-align:center;margin-top:20px;">
+
+<button onclick="buyPro()" class="btn btn-primary">
+
+🔓 Sblocca versione PRO
+
+</button>
+
+</div>  
+
 </div>
 
 
@@ -560,6 +570,23 @@ window.location.href = "/login/";
 }
 
 });
+
+<script type="module">
+
+import { auth } from "/js/firebase-init.js";
+
+window.buyPro = function(){
+
+const uid = auth.currentUser.uid;
+
+const stripeUrl =
+"https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
+
+window.location.href = stripeUrl;
+
+}
+
+</script>  
 
 </script>
 
