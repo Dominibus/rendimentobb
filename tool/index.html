@@ -597,5 +597,72 @@ window.buyPro = function(){
 
 }
 
+<script>
+
+function applyPaywall(){
+
+  if(window.isProUser && window.isProUser()){
+    return;
+  }
+
+  const proSections = [
+    "mortgage",
+    "revenue-forecast",
+    "market-benchmark",
+    "market-comparison",
+    "occupancy-sensitivity",
+    "roiChart"
+  ];
+
+  proSections.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    const card = el.closest(".results-card, .tool-card");
+
+    if(card){
+
+      card.style.opacity = "0.4";
+      card.style.pointerEvents = "none";
+      card.style.position = "relative";
+
+      const lock = document.createElement("div");
+
+      lock.innerHTML = `
+      <div style="
+        position:absolute;
+        inset:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        gap:15px;
+        background:rgba(255,255,255,0.85);
+        backdrop-filter:blur(4px);
+        border-radius:16px;
+      ">
+        <div style="font-weight:600;font-size:16px;">
+        🔒 Funzione PRO
+        </div>
+
+        <button onclick="buyPro()" class="btn btn-primary">
+        Sblocca versione PRO – 29€
+        </button>
+      </div>
+      `;
+
+      card.appendChild(lock);
+
+    }
+
+  });
+
+}
+
+document.addEventListener("rb_plan_loaded", applyPaywall);
+document.addEventListener("DOMContentLoaded", applyPaywall);
+
+</script>  
+
 </body>
 </html>
