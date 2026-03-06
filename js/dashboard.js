@@ -256,6 +256,8 @@ const revenueNeeded = Math.round(
 adr * occupancy * 365 / 100
 );  
 
+const yearlyProfit = (price * roi) / 100;  
+
 totalROI += roi;
 totalCapital += price;
 count++;
@@ -306,6 +308,11 @@ ${roi.toFixed(1)}%
 <div class="metric">
 <span>${t("Ricavo annuo necessario","Required yearly revenue")}</span>
 <strong>${formatCurrency(revenueNeeded)}</strong>
+</div>
+
+<div class="metric">
+<span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
+<strong>${formatCurrency(yearlyProfit)}</strong>
 </div>
 
 `;
