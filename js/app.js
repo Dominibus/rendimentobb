@@ -786,6 +786,13 @@ doc.text(
 
 y += 15;
 
+doc.text(
+(lang==="it" ? "ROI investimento: " : "Investment ROI: ")
++ data.roi.toFixed(2) + "%",
+150,
+y+7
+);
+
 
 // ================= KPI BOX =================
 
