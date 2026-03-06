@@ -1,8 +1,12 @@
-import { upgradeToPro } from "/js/firebase-init.js";
+import { auth } from "/js/firebase-init.js";
 
-const params = new URLSearchParams(window.location.search);
-const uid = params.get("uid");
+function buyPro(){
 
-if(uid){
-  upgradeToPro(uid);
+  const uid = auth.currentUser.uid;
+
+  const stripeUrl =
+  "https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
+
+  window.location.href = stripeUrl;
+
 }
