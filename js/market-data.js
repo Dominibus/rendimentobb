@@ -175,6 +175,44 @@ window.applyMarketData = function(city){
 
 };
 
+// ===============================
+// B&B MARKET DATA
+// ===============================
+
+export const marketData = {
+
+italy:{
+roi:8.4,
+occupancy:62,
+adr:118
+},
+
+rome:{
+roi:9.8,
+occupancy:69,
+adr:142
+},
+
+naples:{
+roi:10.2,
+occupancy:66,
+adr:134
+},
+
+milan:{
+roi:8.9,
+occupancy:71,
+adr:156
+},
+
+florence:{
+roi:11.1,
+occupancy:73,
+adr:168
+}
+
+};
+
 
 // ================================
 // GET MARKET BENCHMARK
