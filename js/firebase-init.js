@@ -50,6 +50,7 @@ let currentPlan = "free";
 
 window.currentUser = null;
 window.currentPlan = "free";
+window.isProUser = () => window.currentPlan === "pro";
 
 
 // ===============================
