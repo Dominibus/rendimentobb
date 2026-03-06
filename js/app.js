@@ -23,7 +23,8 @@ async function saveAnalysis(data){
 
   try{
 
-    await addDoc(collection(db,"analyses"),{
+  await addDoc(collection(db,"analyses"),{
+    uid: window.currentUser.uid || "anonymous",
 
       uid: window.currentUser.uid,
       propertyPrice: data.price,
