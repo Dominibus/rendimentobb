@@ -489,8 +489,6 @@ performanceEl.style.color = "#ef4444";
 } 
 /* MARKET GAP */
 
-const marketROI = marketData[selectedCity].roi;
-
 const marketGap = (avgROI - marketROI).toFixed(1);
 
 let marketLabel = "";
