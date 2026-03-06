@@ -407,7 +407,10 @@ const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 
 // ================= MARKET BENCHMARK =================
 
-const marketROI = 8.4;
+const selectedCity =
+document.getElementById("city-select")?.value || "italy";
+
+const marketROI = marketData[selectedCity].roi;
 
 const performanceEl = document.getElementById("market-performance");
 const userRoiEl = document.getElementById("user-roi-benchmark");
@@ -930,3 +933,17 @@ ${t(
 `;
 
 }
+
+// ===============================
+// CITY MARKET CHANGE
+// ===============================
+
+document.addEventListener("change", (e)=>{
+
+if(e.target.id === "city-select"){
+
+loadDashboard();
+
+}
+
+});
