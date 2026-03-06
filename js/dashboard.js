@@ -299,6 +299,7 @@ list.appendChild(card);
 });
 
 renderStats(count,totalROI,totalCapital);
+renderInsight(count,totalROI,totalCapital);
 renderBestInvestment(analyses);
 renderChart();
 renderCashflowChart();
@@ -765,5 +766,98 @@ display:false
 }
 
 });
+
+// ===============================
+// INVESTMENT INSIGHT ENGINE
+// ===============================
+
+function renderInsight(count,totalROI,totalCapital){
+
+const container = document.getElementById("investment-insight");
+
+if(!container) return;
+
+const avgROI = count ? (totalROI/count) : 0;
+
+const marketROI = 8.4;
+
+let title = "";
+let text = "";
+
+// ROI insight
+
+if(avgROI >= marketROI){
+
+title = t(
+"📊 Ottima performance",
+"📊 Strong performance"
+);
+
+text = t(
+"Il tuo portafoglio B&B ha un ROI superiore alla media nazionale. Questo indica una buona selezione degli investimenti.",
+"Your B&B portfolio ROI is above the national average, indicating strong investment choices."
+);
+
+}else if(avgROI > 0){
+
+title = t(
+"📊 Performance moderata",
+"📊 Moderate performance"
+);
+
+text = t(
+"Il tuo ROI è positivo ma sotto la media nazionale. Potresti migliorarlo ottimizzando occupazione o prezzo medio notte.",
+"Your ROI is positive but below the national average. Consider improving occupancy or nightly rate."
+);
+
+}else{
+
+title = t(
+"⚠️ Investimento rischioso",
+"⚠️ Risky investment"
+);
+
+text = t(
+"Il ROI medio del tuo portafoglio è negativo. Valuta immobili con maggiore domanda turistica o costi più bassi.",
+"Your portfolio ROI is negative. Consider properties with higher tourism demand or lower costs."
+);
+
+}
+
+// capitale insight
+
+let capitalText = "";
+
+if(totalCapital > 500000){
+
+capitalText = t(
+"Hai analizzato un capitale significativo. Diversificare tra più proprietà può ridurre il rischio.",
+"You analyzed significant capital. Diversifying across properties may reduce risk."
+);
+
+}else{
+
+capitalText = t(
+"Analizzare più investimenti può aiutarti a identificare opportunità migliori.",
+"Analyzing more investments can help identify stronger opportunities."
+);
+
+}
+
+container.innerHTML = `
+
+<h3>${title}</h3>
+
+<p style="margin-top:10px;color:#475569;font-size:14px">
+${text}
+</p>
+
+<p style="margin-top:8px;color:#64748b;font-size:13px">
+${capitalText}
+</p>
+
+`;
+
+}  
 
 }
