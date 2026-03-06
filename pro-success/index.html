@@ -6,7 +6,15 @@ const params = new URLSearchParams(window.location.search);
 const uid = params.get("client_reference_id");
 
 if(uid){
-    upgradeToPro(uid);
+
+  upgradeToPro(uid)
+  .then(()=>{
+    console.log("PRO attivato");
+  })
+  .catch(err=>{
+    console.error("Errore upgrade PRO:", err);
+  });
+
 }
 
 </script>
@@ -14,4 +22,4 @@ if(uid){
 <h1>Pagamento completato</h1>
 <p>Il tuo account PRO è stato attivato.</p>
 
-<a href="/dashboard">Vai alla dashboard</a>
+<a href="/dashboard/">Vai alla dashboard</a>
