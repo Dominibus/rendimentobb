@@ -201,7 +201,15 @@ function renderMarketBenchmark(cityKey){
 
   const data = window.RB_MARKET_DATA[cityKey];
 
-  if(!data) return;
+  if(!data){
+
+  priceEl.innerHTML = "—";
+  occEl.innerHTML = "—";
+  revEl.innerHTML = "—";
+
+  return;
+
+}
 
   const priceEl = document.getElementById("benchmark-price");
   const occEl = document.getElementById("benchmark-occupancy");
