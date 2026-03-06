@@ -476,15 +476,17 @@ renderInvestmentScore(roi, riskScore);
 
 // MARKET BENCHMARK + COMPARISON
 
-const citySelect = document.querySelector(".market-select");
+const citySelect =
+  document.querySelector(".market-select") ||
+  document.getElementById("market-city") ||
+  document.getElementById("city");
 
 if(citySelect && citySelect.value){
 
   renderMarketBenchmark(citySelect.value);
-
   renderMarketComparison(gross, citySelect.value);
 
-}  
+}
 
 renderOccupancySensitivity(
 priceNight,
