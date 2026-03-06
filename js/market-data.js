@@ -3,7 +3,7 @@
 // Expanded Italian Cities + Benchmark Ready
 // ============================================
 
-const RB_MARKET_DATA = {
+window.RB_MARKET_DATA = {
 
   napoli: {
     city: "Napoli",
