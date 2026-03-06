@@ -561,6 +561,8 @@ const banks = [
 
 const results = banks.map(bank => {
 
+if(!bank.rate) return null;
+
 const data = mortgageSimulation(amount, bank.rate, years);
 
 return { ...bank, ...data };
@@ -994,7 +996,22 @@ const expenses = getValue("expenses");
 const nights = 365 * (occupancy / 100);
 const revenue = priceNight * nights;
 
-const profit = revenue - (expenses * 12);
+const commission = getValue("commission");
+const tax = getValue("tax");
+const interestRate = getValue("interestRate");
+const loanYears = getValue("loanYears");
+
+const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
+
+const fees = revenue * (commission / 100);
+
+const operatingProfit = revenue - fees - (expenses * 12);
+
+const taxCost = operatingProfit > 0
+  ? operatingProfit * (tax / 100)
+  : 0;
+
+const profit = operatingProfit - taxCost - mortgage;
 
 const roi = equity > 0 ? (profit / equity) * 100 : 0;
 
