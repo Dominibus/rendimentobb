@@ -767,7 +767,7 @@ display:false
 
 });
 
-  }
+}
 
 // ===============================
 // INVESTMENT INSIGHT ENGINE
