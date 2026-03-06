@@ -158,8 +158,8 @@ window.applyMarketData = function(city){
 
   if(!data) return;
 
-  const priceInput = document.getElementById("avg-night-price");
-  const occInput = document.getElementById("occupancy-rate");
+  const priceInput = document.getElementById("priceNight");
+  const occInput = document.getElementById("occupancy");
 
   if(priceInput){
     priceInput.value = data.price;
