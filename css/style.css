@@ -489,6 +489,31 @@ margin-bottom:8px;
 }
 
 /* ===================== */
+/* BACK HOME LINK */
+/* ===================== */
+
+.back-home{
+
+display:inline-block;
+margin-top:15px;
+margin-bottom:30px;
+
+font-size:14px;
+color:#0f172a;
+
+text-decoration:none;
+opacity:0.7;
+
+}
+
+.back-home:hover{
+
+opacity:1;
+text-decoration:underline;
+
+}
+
+/* ===================== */
 /* FOOTER */
 /* ===================== */
 
