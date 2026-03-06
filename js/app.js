@@ -199,23 +199,22 @@ function renderMarketBenchmark(cityKey){
 
   if(!window.RB_MARKET_DATA) return;
 
-  const data = window.RB_MARKET_DATA[cityKey];
-
-  if(!data){
-
-  priceEl.innerHTML = "—";
-  occEl.innerHTML = "—";
-  revEl.innerHTML = "—";
-
-  return;
-
-}
-
   const priceEl = document.getElementById("benchmark-price");
   const occEl = document.getElementById("benchmark-occupancy");
   const revEl = document.getElementById("benchmark-revenue");
 
   if(!priceEl || !occEl || !revEl) return;
+
+  const data = window.RB_MARKET_DATA[cityKey];
+
+  if(!data){
+
+    priceEl.innerHTML = "—";
+    occEl.innerHTML = "—";
+    revEl.innerHTML = "—";
+
+    return;
+  }
 
   const price = data.price;
   const occupancy = data.occupancy;
