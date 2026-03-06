@@ -338,6 +338,14 @@ if(!analyses || analyses.length === 0) return;
 
 const best = analyses[0];
 
+/* break even calculation */
+
+let breakEvenYears = "-";
+
+if(best.roi > 0){
+breakEvenYears = (100 / best.roi).toFixed(1);
+} 
+
 const container = document.getElementById("best-investment");
 
 if(!container) return;
@@ -370,6 +378,13 @@ ${best.roi.toFixed(1)}%
 <div class="metric">
 <span>${t("Indice rischio","Risk score")}</span>
 <strong>${best.risk}/100</strong>
+</div>
+
+<div class="metric">
+<span>${t("Break-even investimento","Investment break-even")}</span>
+<strong>
+${breakEvenYears} ${t("anni","years")}
+</strong>
 </div>
 
 </div>
