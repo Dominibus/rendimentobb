@@ -100,7 +100,7 @@ roiValues.reduce((a,b)=>a+b,0) / (roiValues.length || 1);
 const avgLine =
 new Array(roiValues.length).fill(avgROI);
 
-const gradient = ctx.createLinearGradient(0,0,0,300);
+const gradient = ctx.createLinearGradient(0,0,0,400);
 gradient.addColorStop(0,"rgba(16,185,129,0.35)");
 gradient.addColorStop(1,"rgba(16,185,129,0.05)");
 
@@ -122,7 +122,7 @@ pointBackgroundColor:"#10b981",
 pointBorderColor:"#fff",
 pointRadius:5,
 pointHoverRadius:7,
-tension:0.35,
+tension:0.45,
 fill:true
 },
 
