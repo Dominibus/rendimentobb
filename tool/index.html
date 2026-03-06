@@ -17,7 +17,7 @@ content="Simulate ROI, financial structure, sustainability and risk before inves
 
 <link rel="stylesheet" href="/css/style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script type="module" src="/js/firebase-init.js"></script>
@@ -413,7 +413,7 @@ data-en="Executive Investment Summary"></h3>
 <div style="text-align:center;margin-top:20px;">
 
 <button id="pro-btn" onclick="buyPro()" class="btn btn-primary">
-🔓 Sblocca versione PRO
+🔓 Sblocca versione PRO – 29€
 </button>
 
 </div>  
@@ -561,14 +561,17 @@ from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import { auth } from "/js/firebase-init.js";
 
-const firebaseAuth = getAuth();
+const firebaseAuth = auth;
 
 /* protezione pagina */
 
 onAuthStateChanged(firebaseAuth, (user) => {
 
   if (!user) {
-    window.location.href = "/login/";
+
+    window.location.replace("/login/");
+    return;
+
   }
 
 });
@@ -577,7 +580,24 @@ onAuthStateChanged(firebaseAuth, (user) => {
 
 window.buyPro = function(){
 
-  const uid = firebaseAuth.currentUser.uid;
+  window.buyPro = function(){
+
+  const user = firebaseAuth.currentUser;
+
+  if(!user){
+    alert("Devi effettuare il login.");
+    window.location.href = "/login/";
+    return;
+  }
+
+  const uid = user.uid;
+
+  const stripeUrl =
+  "https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
+
+  window.location.href = stripeUrl;
+
+}
 
   const stripeUrl =
   "https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
