@@ -445,30 +445,6 @@ performanceEl.style.color = "#ef4444";
 
 }
 
-if(performanceEl){
-
-if(avgROI >= marketROI){
-
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sopra la media di mercato"
-: "Above market average";
-
-performanceEl.style.color = "#10b981";
-
-}else{
-
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sotto la media di mercato"
-: "Below market average";
-
-performanceEl.style.color = "#ef4444";
-
-}
-
-}
-
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
 let scoreColor = "#ef4444";
 let scoreLabel = t("Alto rischio","High risk");
@@ -480,7 +456,7 @@ scoreLabel = t("Investimento sicuro","Safe investment");
 else if(investmentScore >= 60){
 scoreColor = "#f59e0b";
 scoreLabel = t("Rischio medio","Medium risk");
-}  
+}
 
 let decisionText = "";
 let decisionDesc = "";
@@ -523,7 +499,7 @@ decisionDesc = t(
 "The projected profitability is too low compared to the risk."
 );
 
-}  
+}
 
 const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
 
