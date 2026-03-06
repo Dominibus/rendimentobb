@@ -325,6 +325,7 @@ renderStats(count,totalROI,totalCapital);
 renderInsight(count,totalROI,totalCapital);
 renderROIOptimizer(count,totalROI,totalCapital);
 renderBestInvestment(analyses);
+ renderInvestmentRanking(analyses);
 renderChart();
 renderCashflowChart();
 
@@ -418,6 +419,55 @@ ${t(
 </div>
 
 `;
+
+}
+
+// ===============================
+// INVESTMENT RANKING
+// ===============================
+
+function renderInvestmentRanking(analyses){
+
+const container = document.getElementById("investment-ranking");
+if(!container) return;
+
+if(!analyses || analyses.length === 0){
+container.innerHTML = "";
+return;
+}
+
+/* top 3 ROI */
+
+const top = [...analyses]
+.sort((a,b)=> b.roi - a.roi)
+.slice(0,3);
+
+let html = `<h3>🏆 ${t("Migliori investimenti","Top investments")}</h3>`;
+
+top.forEach((inv,index)=>{
+
+const medal =
+index === 0 ? "🥇" :
+index === 1 ? "🥈" :
+"🥉";
+
+const roiColor =
+inv.roi >= 0 ? "#10b981" : "#ef4444";
+
+html += `
+
+<div class="metric">
+<span>${medal} ${t("Investimento","Investment")} ${index+1}</span>
+<strong style="color:${roiColor}">
+${inv.roi.toFixed(1)}%
+</strong>
+</div>
+
+`;
+
+});
+
+container.innerHTML = html;
 
 }
 
