@@ -918,25 +918,7 @@ occupancyNeeded = Math.min(85, Math.round(65 + gap * 1.5));
 adrNeeded = Math.round(120 + gap * 5);
 priceReduction = Math.min(20, Math.round(gap * 2));
 
-let occupancyNeeded = 65;
-let adrNeeded = 120;
-let priceReduction = 0;
-
-if(avgROI < marketROI){
-
-const gap = marketROI - avgROI;
-
-occupancyNeeded = Math.min(85, Math.round(65 + gap * 1.5));
-adrNeeded = Math.round(120 + gap * 5);
-priceReduction = Math.min(20, Math.round(gap * 2));
-}  
-
-const revenueNeeded = Math.round(
-adrNeeded * occupancyNeeded * 365 / 100
-);  
-
 }
- 
 
 /* revenue needed */
 
