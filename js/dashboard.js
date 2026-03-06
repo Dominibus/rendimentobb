@@ -300,6 +300,7 @@ list.appendChild(card);
 
 renderStats(count,totalROI,totalCapital);
 renderInsight(count,totalROI,totalCapital);
+renderROIOptimizer(count,totalROI,totalCapital);
 renderBestInvestment(analyses);
 renderChart();
 renderCashflowChart();
@@ -859,6 +860,71 @@ ${text}
 <p style="margin-top:8px;color:#64748b;font-size:13px">
 ${capitalText}
 </p>
+
+`;
+
+}
+
+// ===============================
+// ROI OPTIMIZER ENGINE
+// ===============================
+
+function renderROIOptimizer(count,totalROI,totalCapital){
+
+const container = document.getElementById("roi-optimizer");
+if(!container) return;
+
+const avgROI = count ? (totalROI/count) : 0;
+
+const marketROI = 8.4;
+
+/* simulazioni semplici */
+
+let occupancyNeeded = 65;
+let adrNeeded = 120;
+let priceReduction = 0;
+
+if(avgROI < marketROI){
+
+const gap = marketROI - avgROI;
+
+occupancyNeeded = Math.min(85, Math.round(65 + gap * 1.5));
+adrNeeded = Math.round(120 + gap * 5);
+priceReduction = Math.min(20, Math.round(gap * 2));
+
+}
+
+container.innerHTML = `
+
+<h3>💡 ${t("Ottimizzazione investimento","Investment optimization")}</h3>
+
+<p style="margin-top:10px;color:#475569;font-size:14px">
+${t(
+"Per raggiungere la redditività media del mercato B&B:",
+"To reach average B&B market profitability:"
+)}
+</p>
+
+<div class="metric">
+<span>${t("Occupazione minima richiesta","Minimum occupancy")}</span>
+<strong>${occupancyNeeded}%</strong>
+</div>
+
+<div class="metric">
+<span>${t("Prezzo medio notte necessario","Required nightly rate")}</span>
+<strong>€${adrNeeded}</strong>
+</div>
+
+<div style="margin-top:12px;color:#64748b;font-size:13px">
+
+${t(
+"Oppure ridurre il prezzo dell'immobile di circa",
+"Or reduce property price by about"
+)}
+
+<strong>${priceReduction}%</strong>
+
+</div>
 
 `;
 
