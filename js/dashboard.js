@@ -121,6 +121,7 @@ borderColor:"#10b981",
 backgroundColor:gradient,
 pointBackgroundColor:"#10b981",
 pointBorderColor:"#fff",
+pointBorderWidth:2,  
 pointRadius:5,
 pointHoverRadius:7,
 tension:0.45,
@@ -291,6 +292,11 @@ ${roi.toFixed(1)}%
 <div class="metric">
 <span>${t("Data analisi","Analysis date")}</span>
 <strong>${formatDate(data.createdAt)}</strong>
+</div>
+
+<div class="metric">
+<span>${t("Ricavo annuo necessario","Required yearly revenue")}</span>
+<strong>${formatCurrency(revenueNeeded)}</strong>
 </div>
 
 `;
@@ -822,8 +828,8 @@ text = t(
 }else{
 
 title = t(
-"⚠️ Investimento rischioso",
-"⚠️ Risky investment"
+"⚠️ AI Analisi degli investimenti",
+"⚠️ AI Investment Analysis"
 );
 
 text = t(
@@ -874,6 +880,8 @@ ${capitalText}
 // ===============================
 
 function renderROIOptimizer(count,totalROI,totalCapital){
+
+const revenueNeeded = Math.round(adrNeeded * occupancyNeeded * 365 / 100);  
 
 const container = document.getElementById("roi-optimizer");
 if(!container) return;
