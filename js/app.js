@@ -19,17 +19,17 @@ const db = getFirestore();
 
 async function saveAnalysis(data){
 
-  if(!window.currentUser) return;
+  if(!window.currentUser || !window.currentUser.uid) return;
 
   try{
 
   await addDoc(collection(db,"analyses"),{
-     uid: window.currentUser.uid,
+    uid: window.currentUser.uid,
     propertyPrice: data.price,
     equity: data.equity,
     roi: data.roi,
     risk: data.risk,
-  createdAt: new Date()
+    createdAt: new Date()
 });
 
   }catch(e){
@@ -47,7 +47,7 @@ let isProUnlocked = false;
 let overrideMortgage = null;
 
 function updateProStatus() {
-  isProUnlocked = (window.currentPlan === "pro");
+  isProUnlocked = window.isProUser ? window.isProUser() : false;
 }
 
 document.addEventListener("rb_plan_loaded", () => {
