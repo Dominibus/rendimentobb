@@ -471,6 +471,23 @@ performanceEl.style.color = "#ef4444";
 
 }
 
+} 
+/* MARKET GAP */
+
+const marketROI = marketData[selectedCity].roi;
+
+const marketGap = (avgROI - marketROI).toFixed(1);
+
+let marketLabel = "";
+let marketColor = "#ef4444";
+
+if(marketGap >= 0){
+marketLabel = t("Sopra il mercato","Above market");
+marketColor = "#10b981";
+}else{
+marketLabel = t("Sotto il mercato","Below market");
+marketColor = "#ef4444";
+ 
 }
 
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
@@ -628,6 +645,13 @@ ${decisionDesc}
 
 <div style="font-size:14px;color:#64748b;margin-top:6px">
 ${investmentScore >= 80 ? "🟢" : investmentScore >= 60 ? "🟡" : "🔴"} ${scoreLabel}
+</div>
+
+<div class="metric">
+<span>${t("Differenza dal mercato","Market difference")}</span>
+<strong style="color:${marketColor}">
+${marketGap}% (${marketLabel})
+</strong>
 </div>
 
 <div style="margin-top:10px;height:8px;background:#e2e8f0;border-radius:6px;overflow:hidden">
