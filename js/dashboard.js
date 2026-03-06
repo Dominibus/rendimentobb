@@ -504,6 +504,29 @@ marketColor = "#ef4444";
 }
 
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
+/* MARKET OPPORTUNITY SCORE */
+
+const occupancy = marketData[selectedCity].occupancy;
+const adr = marketData[selectedCity].adr;
+
+let opportunityScore = 50;
+
+/* ROI influence */
+
+if(marketROI > 10) opportunityScore += 20;
+else if(marketROI > 7) opportunityScore += 10;
+
+/* occupancy */
+
+if(occupancy > 70) opportunityScore += 20;
+else if(occupancy > 60) opportunityScore += 10;
+
+/* ADR */
+
+if(adr > 150) opportunityScore += 10;
+
+if(opportunityScore > 100) opportunityScore = 100;
+ 
 let scoreColor = "#ef4444";
 let scoreLabel = t("Alto rischio","High risk");
 
@@ -635,6 +658,21 @@ ${avgROI}%
 ${formatCurrency(totalCapital)}
 </strong>
 
+</div>
+
+</div>
+
+<div class="analysis-card">
+
+<h3>${t("Opportunità mercato","Market opportunity")}</h3>
+
+<div style="font-size:26px;font-weight:700;color:#2563eb">
+${opportunityScore}/100
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-top:6px">
+${t("Basato su ROI mercato, occupazione e ADR",
+"Based on market ROI, occupancy and ADR")}
 </div>
 
 </div>
