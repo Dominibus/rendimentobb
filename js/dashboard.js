@@ -247,6 +247,15 @@ const roi = data.roi;
 const price = data.price;
 const equity = data.equity;
 
+/* revenue estimate */
+
+const occupancy = 65;
+const adr = 120;
+
+const revenueNeeded = Math.round(
+adr * occupancy * 365 / 100
+);  
+
 totalROI += roi;
 totalCapital += price;
 count++;
@@ -879,9 +888,7 @@ ${capitalText}
 // ROI OPTIMIZER ENGINE
 // ===============================
 
-function renderROIOptimizer(count,totalROI,totalCapital){
-
-const revenueNeeded = Math.round(adrNeeded * occupancyNeeded * 365 / 100);  
+function renderROIOptimizer(count,totalROI,totalCapital){  
 
 const container = document.getElementById("roi-optimizer");
 if(!container) return;
@@ -905,6 +912,12 @@ adrNeeded = Math.round(120 + gap * 5);
 priceReduction = Math.min(20, Math.round(gap * 2));
 
 }
+
+/* revenue needed */
+
+const revenueNeeded = Math.round(
+adrNeeded * occupancyNeeded * 365 / 100
+);  
 
 container.innerHTML = `
 
