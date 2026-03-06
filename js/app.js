@@ -823,7 +823,8 @@ y+7
 );
 
 doc.text(
-"ROI: " + data.roi.toFixed(2) + "%",
+(lang==="it" ? "ROI: " : "ROI: ")
++ data.roi.toFixed(2) + "%",
 150,
 y+7
 );
