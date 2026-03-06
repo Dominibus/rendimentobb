@@ -324,6 +324,7 @@ list.appendChild(card);
 renderStats(count,totalROI,totalCapital);
 renderInsight(count,totalROI,totalCapital);
 renderROIOptimizer(count,totalROI,totalCapital);
+renderROITargetCalculator(analyses); 
 renderBestInvestment(analyses);
  renderInvestmentRanking(analyses);
 renderChart();
@@ -1133,3 +1134,52 @@ loadDashboard();
 }
 
 });
+
+// ===============================
+// ROI TARGET CALCULATOR
+// ===============================
+
+function renderROITargetCalculator(analyses){
+
+const container = document.getElementById("roi-target-calculator");
+if(!container) return;
+
+if(!analyses || analyses.length === 0){
+container.innerHTML="";
+return;
+}
+
+const best = analyses[0];
+
+/* ROI target */
+
+const targetROI = 10;
+
+/* calcolo prezzo massimo */
+
+let maxPrice = best.price;
+
+if(best.roi !== 0){
+
+maxPrice = (best.price * best.roi) / targetROI;
+
+}
+
+container.innerHTML = `
+
+<h3>🎯 ${t("Prezzo massimo immobile","Maximum property price")}</h3>
+
+<div style="font-size:26px;font-weight:700;color:#2563eb">
+${formatCurrency(maxPrice)}
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-top:6px">
+${t(
+"per raggiungere ROI target",
+"to reach target ROI"
+)} ${targetROI}%
+</div>
+
+`;
+
+}
