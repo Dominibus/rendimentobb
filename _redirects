@@ -1,2 +1,8 @@
 https://rendimentobb.it/*     https://rendimentobb.com/:splat     301!
 https://www.rendimentobb.it/* https://rendimentobb.com/:splat     301!
+
+/dashboard/*   /dashboard/index.html   200
+/login/*       /login/index.html       200
+/tool/*        /tool/index.html        200
+/pro-success/* /pro-success/index.html 200
+/academy/*     /academy/index.html     200
