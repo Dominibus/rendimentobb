@@ -1,5 +1,15 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+const admin = require("firebase-admin");
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault()
+  });
+}
+
+const db = admin.firestore();
+
 exports.handler = async (event, context) => {
 
   try {
@@ -14,8 +24,21 @@ exports.handler = async (event, context) => {
 
       console.log("Pagamento completato per UID:", uid);
 
-      // qui aggiorneremo Firebase
-      // (step successivo)
+      if (uid) {
+
+        await db.collection("users")
+          .doc(uid)
+          .set(
+            {
+              plan: "pro",
+              proActivatedAt: new Date()
+            },
+            { merge: true }
+          );
+
+        console.log("Utente aggiornato a PRO");
+
+      }
 
     }
 
