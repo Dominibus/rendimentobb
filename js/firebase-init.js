@@ -306,23 +306,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  if (proBtn) {
+   if (proBtn) {
 
-    proBtn.addEventListener("click", async () => {
+      proBtn.addEventListener("click", async () => {
 
-      if (!currentUser) {
+   if (!currentUser) {
 
-        window.location.href = "/login/";
-        return;
+      window.location.href = "/login/";
+      return;
 
-      }
+    }
 
-      await upgradeToPro(currentUser.uid);
+    const uid = currentUser.uid;
 
-      alert("Account aggiornato a PRO (test)");
+    window.location.href =
+      "https://checkout.stripe.com/c/pay/YOUR_STRIPE_LINK?client_reference_id=" + uid;
 
-    });
+  });
 
-  }
+}
 
 });
