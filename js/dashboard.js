@@ -1183,3 +1183,66 @@ ${t(
 `;
 
 }
+
+// ===============================
+// REVENUE SIMULATOR
+// ===============================
+
+function renderRevenueSimulator(){
+
+const container = document.getElementById("revenue-simulator");
+if(!container) return;
+
+container.innerHTML = `
+
+<h3>📈 ${t("Simulatore ricavi B&B","B&B Revenue Simulator")}</h3>
+
+<div style="margin-top:12px">
+
+<label style="font-size:13px">${t("Occupazione","Occupancy")}</label>
+<input type="range" id="occ-slider" min="30" max="90" value="65" style="width:100%">
+<div id="occ-value">65%</div>
+
+</div>
+
+<div style="margin-top:12px">
+
+<label style="font-size:13px">${t("Prezzo medio notte","Average nightly rate")}</label>
+<input type="range" id="adr-slider" min="50" max="300" value="120" style="width:100%">
+<div id="adr-value">€120</div>
+
+</div>
+
+<div style="margin-top:16px;font-size:20px;font-weight:700;color:#2563eb">
+
+<span id="revenue-result">€0</span>
+
+</div>
+
+<div style="font-size:12px;color:#64748b">
+${t("Ricavo annuo stimato","Estimated yearly revenue")}
+</div>
+
+`;
+
+updateRevenue();
+
+document.getElementById("occ-slider").addEventListener("input", updateRevenue);
+document.getElementById("adr-slider").addEventListener("input", updateRevenue);
+
+}
+
+function updateRevenue(){
+
+const occ = document.getElementById("occ-slider").value;
+const adr = document.getElementById("adr-slider").value;
+
+document.getElementById("occ-value").textContent = occ + "%";
+document.getElementById("adr-value").textContent = "€" + adr;
+
+const revenue = Math.round(adr * occ * 365 / 100);
+
+document.getElementById("revenue-result").textContent =
+formatCurrency(revenue);
+
+}
