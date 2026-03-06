@@ -918,7 +918,25 @@ occupancyNeeded = Math.min(85, Math.round(65 + gap * 1.5));
 adrNeeded = Math.round(120 + gap * 5);
 priceReduction = Math.min(20, Math.round(gap * 2));
 
+let occupancyNeeded = 65;
+let adrNeeded = 120;
+let priceReduction = 0;
+
+if(avgROI < marketROI){
+
+const gap = marketROI - avgROI;
+
+occupancyNeeded = Math.min(85, Math.round(65 + gap * 1.5));
+adrNeeded = Math.round(120 + gap * 5);
+priceReduction = Math.min(20, Math.round(gap * 2));
+}  
+
+const revenueNeeded = Math.round(
+adrNeeded * occupancyNeeded * 365 / 100
+);  
+
 }
+ 
 
 /* revenue needed */
 
@@ -945,6 +963,11 @@ ${t(
 <div class="metric">
 <span>${t("Prezzo medio notte necessario","Required nightly rate")}</span>
 <strong>€${adrNeeded}</strong>
+</div>
+
+<div class="metric">
+<span>${t("Ricavo annuo target","Target yearly revenue")}</span>
+<strong>${formatCurrency(revenueNeeded)}</strong>
 </div>
 
 <div style="margin-top:12px;color:#64748b;font-size:13px">
