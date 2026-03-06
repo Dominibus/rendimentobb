@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const uid = currentUser.uid;
 
     window.location.href =
-      "https://checkout.stripe.com/c/pay/YOUR_STRIPE_LINK?client_reference_id=" + uid;
+      https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
 
   });
 
