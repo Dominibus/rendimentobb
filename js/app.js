@@ -24,16 +24,13 @@ async function saveAnalysis(data){
   try{
 
   await addDoc(collection(db,"analyses"),{
-    uid: window.currentUser.uid || "anonymous",
-
-      uid: window.currentUser.uid,
-      propertyPrice: data.price,
-      equity: data.equity,
-      roi: data.roi,
-      risk: data.risk,
-      createdAt: new Date()
-
-    });
+     uid: window.currentUser.uid,
+    propertyPrice: data.price,
+    equity: data.equity,
+    roi: data.roi,
+    risk: data.risk,
+  createdAt: new Date()
+});
 
   }catch(e){
 
