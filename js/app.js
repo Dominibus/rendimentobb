@@ -46,15 +46,27 @@ async function saveAnalysis(data){
 let isProUnlocked = false;
 let overrideMortgage = null;
 
-function updateProStatus() {
-  isProUnlocked = window.isProUser ? window.isProUser() : false;
+function updateProStatus(){
+
+  if(window.userPlan === "pro"){
+    isProUnlocked = true;
+  }else{
+    isProUnlocked = false;
+  }
+
 }
 
+// evento quando firebase carica il piano
 document.addEventListener("rb_plan_loaded", () => {
+
   updateProStatus();
+
+  // aggiorna UI
   calculate();
+
 });
 
+// primo check
 updateProStatus();
 
 
