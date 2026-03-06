@@ -341,6 +341,8 @@ if(!analyses || analyses.length === 0) return;
 
 const best = analyses[0];
 
+window.bestInvestmentData = best;
+
 /* suggested property price */
 
 const marketROI = 8.4;
@@ -1247,3 +1249,36 @@ document.getElementById("revenue-result").textContent =
 formatCurrency(revenue);
 
 }
+
+// ===============================
+// DOWNLOAD PDF REPORT
+// ===============================
+
+document.addEventListener("click",(e)=>{
+
+if(e.target.id === "download-report"){
+
+if(!window.bestInvestmentData){
+alert("Nessuna analisi disponibile");
+return;
+}
+
+/* reindirizza al tool con parametri */
+
+const data = window.bestInvestmentData;
+
+const params = new URLSearchParams({
+
+price:data.price,
+roi:data.roi,
+equity:data.equity,
+risk:data.risk
+
+});
+
+window.location.href =
+"/tool/?report=1&" + params.toString();
+
+}
+
+});
