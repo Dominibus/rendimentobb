@@ -561,32 +561,32 @@ data-en="📄 Download Executive Report PDF">
 import { getAuth, onAuthStateChanged }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-const auth = getAuth();
+import { auth } from "/js/firebase-init.js";
 
-onAuthStateChanged(auth, (user) => {
+const firebaseAuth = getAuth();
 
-if (!user) {
-window.location.href = "/login/";
-}
+/* protezione pagina */
+
+onAuthStateChanged(firebaseAuth, (user) => {
+
+  if (!user) {
+    window.location.href = "/login/";
+  }
 
 });
 
-<script type="module">
-
-import { auth } from "/js/firebase-init.js";
+/* checkout stripe */
 
 window.buyPro = function(){
 
-const uid = auth.currentUser.uid;
+  const uid = firebaseAuth.currentUser.uid;
 
-const stripeUrl =
-"https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
+  const stripeUrl =
+  "https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
 
-window.location.href = stripeUrl;
+  window.location.href = stripeUrl;
 
 }
-
-</script>  
 
 </script>
 
