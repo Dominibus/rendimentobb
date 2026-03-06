@@ -325,8 +325,9 @@ renderStats(count,totalROI,totalCapital);
 renderInsight(count,totalROI,totalCapital);
 renderROIOptimizer(count,totalROI,totalCapital);
 renderROITargetCalculator(analyses); 
+renderRevenueSimulator(); 
 renderBestInvestment(analyses);
- renderInvestmentRanking(analyses);
+renderInvestmentRanking(analyses);
 renderChart();
 renderCashflowChart();
 
