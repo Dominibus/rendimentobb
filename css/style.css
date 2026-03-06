@@ -431,8 +431,8 @@ transition:0.25s ease;
 
 .analysis-card:hover{
 
-transform:translateY(-3px);
-box-shadow:0 30px 80px rgba(15,23,42,.12);
+transform:translateY(-4px) scale(1.01);
+box-shadow:0 35px 90px rgba(15,23,42,.12);
 
 }
 
@@ -451,9 +451,41 @@ color:#475569;
 }
 
 .metric strong{
-font-size:22px;
-font-weight:700;
+font-size:16px;
+font-weight:600;
 color:#0f172a;
+}
+
+/* ROI COLORS */
+
+.roi-positive{
+color:#10b981;
+font-weight:700;
+}
+
+.roi-negative{
+color:#ef4444;
+font-weight:700;
+}
+
+/* ===================== */
+/* INVESTMENT INSIGHT */
+/* ===================== */
+
+#investment-insight{
+
+background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+border:1px solid #e2e8f0;
+box-shadow:0 20px 60px rgba(15,23,42,0.08);
+
+}
+
+#investment-insight h3{
+
+font-size:20px;
+font-weight:700;
+margin-bottom:8px;
+
 }
 
 /* ===================== */
@@ -944,7 +976,7 @@ font-size:18px;
 
 #roi-chart-container,
 #cashflow-chart-container{
-height:260px;
+height:320px;
 }
 
 /* TRUST / MARKET */
