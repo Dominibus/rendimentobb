@@ -3,7 +3,10 @@
 import { upgradeToPro } from "/js/firebase-init.js";
 
 const params = new URLSearchParams(window.location.search);
-const uid = params.get("client_reference_id");
+
+const uid =
+params.get("client_reference_id") ||
+params.get("uid");
 
 if(uid){
 
@@ -14,6 +17,10 @@ if(uid){
   .catch(err=>{
     console.error("Errore upgrade PRO:", err);
   });
+
+}else{
+
+  console.warn("UID non trovato nell'URL");
 
 }
 
