@@ -338,6 +338,20 @@ if(!analyses || analyses.length === 0) return;
 
 const best = analyses[0];
 
+/* suggested property price */
+
+const marketROI = 8.4;
+
+let suggestedPrice = best.price;
+
+if(best.roi < marketROI && best.roi !== 0){
+
+const roiRatio = marketROI / best.roi;
+
+suggestedPrice = best.price / roiRatio;
+
+} 
+
 /* break even calculation */
 
 let breakEvenYears = "-";
@@ -387,6 +401,20 @@ ${breakEvenYears} ${t("anni","years")}
 </strong>
 </div>
 
+</div>
+
+<div class="metric">
+<span>${t("Prezzo immobile consigliato","Suggested property price")}</span>
+<strong>
+${formatCurrency(suggestedPrice)}
+</strong>
+</div>
+
+<div style="font-size:12px;color:#64748b;margin-top:4px">
+${t(
+"per raggiungere il ROI medio di mercato",
+"to reach average market ROI"
+)} (${marketROI}%)
 </div>
 
 `;
