@@ -1,12 +1,17 @@
-import { auth } from "/js/firebase-init.js";
+<script type="module">
 
-function buyPro(){
+import { upgradeToPro } from "/js/firebase-init.js";
 
-  const uid = auth.currentUser.uid;
+const params = new URLSearchParams(window.location.search);
+const uid = params.get("client_reference_id");
 
-  const stripeUrl =
-  "https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
-
-  window.location.href = stripeUrl;
-
+if(uid){
+    upgradeToPro(uid);
 }
+
+</script>
+
+<h1>Pagamento completato</h1>
+<p>Il tuo account PRO è stato attivato.</p>
+
+<a href="/dashboard">Vai alla dashboard</a>
