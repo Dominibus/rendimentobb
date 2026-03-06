@@ -580,9 +580,7 @@ onAuthStateChanged(firebaseAuth, (user) => {
 
 window.buyPro = function(){
 
-  window.buyPro = function(){
-
-  const user = firebaseAuth.currentUser;
+  const user = window.currentUser;
 
   if(!user){
     alert("Devi effettuare il login.");
@@ -598,15 +596,6 @@ window.buyPro = function(){
   window.location.href = stripeUrl;
 
 }
-
-  const stripeUrl =
-  "https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
-
-  window.location.href = stripeUrl;
-
-}
-
-</script>
 
 </body>
 </html>
