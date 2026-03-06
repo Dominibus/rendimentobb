@@ -6,3 +6,4 @@ https://www.rendimentobb.it/* https://rendimentobb.com/:splat     301!
 /tool/*        /tool/index.html        200
 /pro-success/* /pro-success/index.html 200
 /academy/*     /academy/index.html     200
+/* /index.html 200
