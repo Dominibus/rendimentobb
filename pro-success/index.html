@@ -1,0 +1,8 @@
+import { upgradeToPro } from "/js/firebase-init.js";
+
+const params = new URLSearchParams(window.location.search);
+const uid = params.get("uid");
+
+if(uid){
+  upgradeToPro(uid);
+}
