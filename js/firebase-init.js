@@ -138,7 +138,7 @@ async function loadUserPlan(uid) {
 // AGGIORNA PRO (TEST)
 // ===============================
 
-async function upgradeToPro(uid) {
+export async function upgradeToPro(uid) {
 
   await updateDoc(doc(db, "users", uid), {
     plan: "pro"
