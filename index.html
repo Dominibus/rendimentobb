@@ -218,6 +218,31 @@ data-en="View Demo">
 <span>✓ Nessuna carta di credito</span>
 <span>✓ Analisi in 30 secondi</span>
 <span>✓ Report professionale</span>
+  
+<div class="quick-roi-box" style="margin-top:40px;background:white;padding:25px;border-radius:16px;border:1px solid #e2e8f0;box-shadow:0 20px 60px rgba(0,0,0,0.05);max-width:420px;">
+
+<h3 style="margin-bottom:15px;font-size:18px;"
+data-it="Simula ROI veloce"
+data-en="Quick ROI Simulation">
+Simula ROI veloce
+</h3>
+
+<input id="qr_price" placeholder="Prezzo immobile (€)" style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #cbd5e1;">
+
+<input id="qr_night" placeholder="Prezzo medio notte (€)" style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #cbd5e1;">
+
+<input id="qr_occ" placeholder="Occupazione (%)" style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #cbd5e1;">
+
+<button onclick="quickROI()" class="btn btn-primary" style="width:100%;margin-top:10px;">
+Calcola ROI
+</button>
+
+<div style="margin-top:15px;font-size:14px;color:#475569;">
+ROI stimato: <strong id="qr_roi">--</strong><br>
+Break-even: <strong id="qr_break">--</strong>
+</div>
+
+</div>
 
 </div>
 
@@ -236,6 +261,18 @@ data-en="View Demo">
 </section>  
 
 <!-- TRUST BAR -->
+
+<section style="background:#0f172a;color:white;padding:35px 0;margin-top:40px;">
+<div class="container" style="text-align:center;font-size:20px;font-weight:600;">
+
+<span
+data-it="Un B&B ben ottimizzato può generare 10-18% ROI annuo."
+data-en="A well optimized B&B can generate 10-18% annual ROI.">
+Un B&B ben ottimizzato può generare 10-18% ROI annuo.
+</span>
+
+</div>
+</section>  
 
 <!-- TOOL PREVIEW -->
 
@@ -532,6 +569,26 @@ data-en="Avoid wrong real estate investments by analyzing sustainability before 
 </div>
 
 </section>  
+
+<section class="container" style="margin-top:120px;text-align:center;">
+
+<h2
+data-it="Prendi decisioni immobiliari con dati reali"
+data-en="Make real estate decisions with real data">
+Prendi decisioni immobiliari con dati reali
+</h2>
+
+<p style="color:#64748b;margin-top:10px;">
+Simula ROI, rischio e sostenibilità prima di investire.
+</p>
+
+<button onclick="startAnalysis()"
+class="btn btn-primary"
+style="margin-top:25px;">
+Avvia Analisi Gratuita
+</button>
+
+</section>    
 
 <div class="pro-card">
 
