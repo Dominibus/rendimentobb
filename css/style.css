@@ -413,6 +413,11 @@ gap:22px;
 margin-bottom:50px;
 }
 
+.stats-grid > *{
+min-width:0;
+overflow:hidden;
+}
+
 /* dashboard top layout */
 
 .dashboard-top-grid{
@@ -1033,6 +1038,10 @@ padding:22px;
 border-radius:18px;
 }
 
+.analysis-card{
+word-break:break-word;
+}  
+
 /* BUTTONS */
 
 .btn{
@@ -1079,6 +1088,10 @@ font-size:20px;
 display:block;
 margin-top:4px;
 }
+
+.metric strong{
+word-break:break-word;
+}  
 
 /* CHART */
 
