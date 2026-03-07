@@ -1117,6 +1117,18 @@ padding:16px;
 font-size:15px;
 }
 
+/* chart mobile fix */
+
+#roi-chart-container,
+#cashflow-chart-container{
+height:240px;
+}
+
+canvas{
+max-width:100%;
+height:auto !important;
+}  
+
 @media (max-width:768px){
 
 .btn{
@@ -1130,6 +1142,24 @@ padding:16px;
 .analysis-card{
 border-radius:20px;
 }
+
+/* ===================== */
+/* CHART FIX MOBILE */
+/* ===================== */
+
+#roi-chart,
+#cashflow-chart{
+width:100% !important;
+height:auto !important;
+}
+
+#roi-chart-container,
+#cashflow-chart-container{
+position:relative;
+width:100%;
+max-width:100%;
+overflow:hidden;
+}  
 
 }  
 
