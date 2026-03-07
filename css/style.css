@@ -1129,4 +1129,40 @@ grid-template-columns:1fr;
 grid-template-columns:1fr;
 }
 
+/* ===================== */
+/* MOBILE OVERFLOW FIX */
+/* ===================== */
+
+html,body{
+overflow-x:hidden;
+max-width:100%;
+}
+
+.dashboard-container{
+max-width:100%;
+overflow-x:hidden;
+}
+
+.stats-grid,
+.analysis-grid,
+.dashboard-top-grid{
+width:100%;
+max-width:100%;
+}
+
+.analysis-card,
+.kpi-box{
+width:100%;
+max-width:100%;
+}
+
+/* PREVENT CARD OVERFLOW */
+
+.metric strong,
+.analysis-card,
+.kpi-box{
+word-break:break-word;
+overflow-wrap:break-word;
+}  
+
 }
