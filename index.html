@@ -274,6 +274,12 @@ Stima indicativa basata su parametri medi di mercato.
 <strong id="qr_break">--</strong>
 </div>
 
+<div style="margin-top:20px;">
+<button onclick="shareAnalysis()" class="btn btn-outline">
+Condividi analisi
+</button>
+</div>
+
 </div>
 
 </div>
@@ -818,6 +824,35 @@ document.addEventListener("DOMContentLoaded", function(){
 document.addEventListener("rb_language_changed", function(){
   quickROI();
 }); 
+
+window.shareAnalysis = function(){
+
+const roi = document.getElementById("qr_roi").innerText;
+const breakEven = document.getElementById("qr_break").innerText;
+
+const text =
+"Ho simulato un investimento B&B su RendimentoBB\n\n" +
+"ROI stimato: " + roi + "\n" +
+"Break-even: " + breakEven + "\n\n" +
+"Scopri se il tuo investimento è sostenibile:\n" +
+"https://rendimentobb.com";
+
+if(navigator.share){
+
+navigator.share({
+title:"RendimentoBB",
+text:text,
+url:"https://rendimentobb.com"
+});
+
+}else{
+
+navigator.clipboard.writeText(text);
+alert("Analisi copiata negli appunti");
+
+}
+
+}  
 
 </script>
 
