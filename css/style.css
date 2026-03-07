@@ -1036,9 +1036,6 @@ border-radius:18px;
 .analysis-card{
 padding:22px;
 border-radius:18px;
-}
-
-.analysis-card{
 word-break:break-word;
 }  
 
@@ -1087,9 +1084,6 @@ margin-bottom:6px;
 font-size:20px;
 display:block;
 margin-top:4px;
-}
-
-.metric strong{
 word-break:break-word;
 }  
 
@@ -1133,11 +1127,6 @@ grid-template-columns:1fr;
 /* MOBILE OVERFLOW FIX */
 /* ===================== */
 
-html,body{
-overflow-x:hidden;
-max-width:100%;
-}
-
 .dashboard-container{
 max-width:100%;
 overflow-x:hidden;
@@ -1163,6 +1152,11 @@ max-width:100%;
 .kpi-box{
 word-break:break-word;
 overflow-wrap:break-word;
+}  
+
+html,body{
+overflow-x:hidden;
+max-width:100%;
 }  
 
 }
