@@ -177,110 +177,56 @@ RendimentoBB – Strategic B&B Investment Decision Engine
 
 <section class="hero">
 
-<div class="container">
+<div class="container hero-grid">
+
+<div class="hero-left">
 
 <div class="page-title">
 
 <h1
 data-it="Scopri se un B&B è davvero un investimento profittevole prima di comprarlo."
 data-en="Find out if a B&B is truly a profitable investment before you buy."
+>
 </h1>
 
 <p
 data-it="Analizza ROI, sostenibilità finanziaria e rischio reale. Prendi decisioni immobiliari basate su dati concreti."
-data-en="Analyze ROI, financial sustainability and real risk. Make real estate decisions based on concrete data.">
+data-en="Analyze ROI, financial sustainability and real risk. Make real estate decisions based on concrete data."
+>
 </p>
 
 </div>
 
-  <div class="cta-group">
-    <button onclick="startAnalysis()"
-            class="btn btn-primary"
-            data-it="Avvia Analisi"
-            data-en="Start B&B Profitability Analysis">
-    </button>
+<div class="cta-group">
 
-    <button onclick="window.location.href='/tool/'"
-            class="btn btn-outline"
-            data-it="Visualizza Demo"
-            data-en="View Demo">
-    </button>
-  </div>
+<button onclick="startAnalysis()"
+class="btn btn-primary"
+data-it="Avvia Analisi Gratuita"
+data-en="Start Free Analysis">
+</button>
 
-</div>
-</section>
-
-<!-- ROI QUICK CALCULATOR -->
-
-<section class="quick-roi container">
-
-<h2
-data-it="Simula rapidamente il rendimento"
-data-en="Quick ROI Simulation">
-Simula rapidamente il rendimento
-</h2>
-
-<p
-data-it="Inserisci alcuni parametri base per stimare il rendimento di un potenziale B&B."
-data-en="Enter a few parameters to estimate the profitability of a potential B&B.">
-Inserisci alcuni parametri base per stimare il rendimento di un potenziale B&B.
-</p>
-
-<p class="roi-note"
-data-it="Basato su modello medio di rendimento degli affitti brevi."
-data-en="Based on average short-term rental revenue model.">
-Basato su modello medio di rendimento degli affitti brevi.
-</p> 
-
-<div class="quick-roi-card">
-
-<div class="quick-roi-grid">
-
-<div class="quick-input">
-<label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
-<input type="number" id="qr_price" value="250000">
-</div>
-
-<div class="quick-input">
-<label data-it="Prezzo medio notte (€)" data-en="Average night price (€)"></label>
-<input type="number" id="qr_night" value="110">
-</div>
-
-<div class="quick-input">
-<label data-it="Occupazione (%)" data-en="Occupancy rate (%)"></label>
-<input type="number" id="qr_occ" value="65">
-</div>
-
-<button class="btn btn-primary" onclick="quickROI()"
-data-it="Calcola ROI"
-data-en="Calculate ROI">
-Calcola ROI
+<button onclick="window.location.href='/tool/'"
+class="btn btn-outline"
+data-it="Visualizza Demo"
+data-en="View Demo">
 </button>
 
 </div>
 
-<div class="quick-roi-result">
+<div class="hero-trust">
 
-<p class="roi-disclaimer"
-data-it="Stima indicativa basata su parametri medi di mercato."
-data-en="Indicative estimate based on average market parameters.">
-Stima indicativa basata su parametri medi di mercato.
-</p>  
+<span>✓ Nessuna carta di credito</span>
+<span>✓ Analisi in 30 secondi</span>
+<span>✓ Report professionale</span>
 
-<div>
-<span>ROI</span>
-<strong id="qr_roi">--</strong>
 </div>
 
-<div>
-<span data-it="Break-even" data-en="Break-even"></span>
-<strong id="qr_break">--</strong>
 </div>
 
-<div style="margin-top:20px;">
-<button onclick="shareAnalysis()" class="btn btn-outline">
-Condividi analisi
-</button>
+<div class="hero-right">
+
+<img src="/img/dashboard-preview.png" alt="RendimentoBB dashboard">
+
 </div>
 
 </div>
