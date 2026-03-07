@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/favicon.ico">
+
+<meta name="google-site-verification" content="cnmRDdm4nfpymLCQ9bDRoW_V3AIdcK9-v0mbA5YwSkk" />
+
+<link rel="canonical" href="https://rendimentobb.com">
+<meta property="og:image" content="https://rendimentobb.com/og-image.jpg">
+
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="RendimentoBB – Motore Decisionale per Investimenti B&B">
+<meta property="og:description" content="Simula ROI, mutuo e rischio prima di aprire un B&B. Decisioni immobiliari basate su dati reali.">
+<meta property="og:url" content="https://rendimentobb.com">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RendimentoBB">
+
+<title
+data-it="RendimentoBB – Motore Decisionale per Investimenti B&B"
+data-en="RendimentoBB – Strategic B&B Investment Decision Engine">
+RendimentoBB – Strategic B&B Investment Decision Engine
+</title>
+
+<meta name="description"
+data-it="Analizza ROI, mutuo e rischio prima di aprire un B&B. Decisioni immobiliari basate su dati reali."
+data-en="Analyze ROI, mortgage impact and risk before launching a B&B. Make data-driven real estate decisions."
+content="Analyze ROI, mortgage impact and risk before launching a B&B. Make data-driven real estate decisions.">
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<header class="portal-header">
+<div class="container portal-header-inner">
+
+<div style="display:flex; align-items:center; gap:40px;">
+<div class="logo">Rendimento<span>BB</span></div>
+
+<nav class="portal-nav">
+<a href="/tool/">Tool</a>
+<a href="/tool/#mortgage">Mutui</a>
+<a href="#">Immobili</a>
+<a href="/academy/">Academy</a>
+<a href="/dashboard/">Dashboard</a>
+<a href="/privacy.html">Privacy</a>
+<a href="/terms.html">Terms</a>
+<a href="/contact.html">Contact</a>
+</nav>
+</div>
+
+<div class="right-controls">
+
+<div class="lang-switch">
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div id="user-area"></div>
+
+</div>
+</div>
+</header>
+
+<main>
+
+<section class="hero">
+
+<div class="container hero-grid">
+
+<div class="hero-left">
+
+<div class="page-title">
+
+<h1
+data-it="Scopri se un B&B può generare il 10-18% di ROI prima di comprarlo."
+data-en="Discover if a B&B can generate 10-18% ROI before buying.">
+Scopri se un B&B può generare il 10-18% di ROI prima di comprarlo
+</h1>
+
+<p
+data-it="Analizza ROI, sostenibilità finanziaria e rischio reale."
+data-en="Analyze ROI, financial sustainability and real risk.">
+Analizza ROI, sostenibilità finanziaria e rischio reale.
+</p>
+
+</div>
+
+<div class="cta-group">
+
+<button onclick="startAnalysis()" class="btn btn-primary">
+Avvia Analisi Gratuita
+</button>
+
+<button onclick="window.location.href='/tool/'" class="btn btn-outline">
+Visualizza Demo
+</button>
+
+</div>
+
+<div class="hero-trust">
+<span>✓ Nessuna carta di credito</span>
+<span>✓ Analisi in 30 secondi</span>
+<span>✓ Report professionale</span>
+</div>
+
+<div class="quick-roi-box">
+
+<h3>Simula ROI veloce</h3>
+
+<input id="qr_price" placeholder="Prezzo immobile (€)">
+<input id="qr_night" placeholder="Prezzo medio notte (€)">
+<input id="qr_occ" placeholder="Occupazione (%)">
+
+<button onclick="quickROI()" class="btn btn-primary">
+Calcola ROI
+</button>
+
+<div style="margin-top:15px">
+ROI stimato: <strong id="qr_roi">--</strong><br>
+Break-even: <strong id="qr_break">--</strong>
+</div>
+
+</div>
+
+</div>
+
+<div class="hero-right">
+<img src="/img/dashboard-preview.png" alt="RendimentoBB dashboard">
+</div>
+
+</div>
+
+</section>
+
+<section class="trust-bar">
+
+<div class="container trust-grid">
+
+<div class="trust-item">
+<div class="trust-icon">✔</div>
+<p>Simulazioni basate su modelli finanziari reali</p>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">📊</div>
+<p>Analisi ROI e sostenibilità finanziaria in pochi secondi</p>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">🧠</div>
+<p>Progettato per aspiranti host e investitori B&B</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="container">
+
+<div class="snapshot-card">
+
+<h3>Executive Snapshot</h3>
+
+<div class="snapshot-grid">
+
+<div class="metric">
+<span>ROI</span>
+<strong style="color:#10b981;">18.4%</strong>
+</div>
+
+<div class="metric">
+<span>Break-even</span>
+<strong>6.2 anni</strong>
+</div>
+
+<div class="metric">
+<span>Indice rischio</span>
+<strong>32/100</strong>
+</div>
+
+<div class="metric">
+<span>Classe investimento</span>
+<strong>A</strong>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer class="global-footer">
+
+<p>
+© 2026 RendimentoBB – Motore decisionale per investimenti B&B
+</p>
+
+<div class="footer-links">
+<a href="/privacy.html">Privacy</a>
+<a href="/terms.html">Terms</a>
+<a href="/contact.html">Contact</a>
+</div>
+
+</footer>
+
+<script src="/js/lang.js"></script>
+<script type="module" src="/js/firebase-init.js"></script>
+
+<script type="module">
+
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+window.startAnalysis = function(){
+if(auth.currentUser){
+window.location.href="/tool/";
+}else{
+window.location.href="/login/";
+}
+}
+
+window.quickROI = function(){
+
+const price = parseFloat(document.getElementById("qr_price").value);
+const night = parseFloat(document.getElementById("qr_night").value);
+const occ = parseFloat(document.getElementById("qr_occ").value);
+
+if(!price || !night || !occ) return;
+
+const annualRevenue = night * 365 * (occ/100);
+const operatingCosts = annualRevenue * 0.35;
+const netIncome = annualRevenue - operatingCosts;
+
+const roi = (netIncome / price) * 100;
+const breakEven = price / netIncome;
+
+document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%";
+document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
+
+}
+
+</script>
+
+</body>
+</html>
