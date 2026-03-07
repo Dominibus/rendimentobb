@@ -34,6 +34,27 @@ data-it="Analizza ROI, mutuo e rischio prima di aprire un B&B. Decisioni immobil
 data-en="Analyze ROI, mortgage impact and risk before launching a B&B. Make data-driven real estate decisions."
 content="Analyze ROI, mortgage impact and risk before launching a B&B. Make data-driven real estate decisions.">
 
+<meta name="keywords" content="ROI B&B, rendimento bed and breakfast, investimento B&B Italia, calcolo ROI affitti brevi, aprire B&B investimento">
+
+<meta property="og:title" content="RendimentoBB – Calcola il ROI di un B&B prima di investire">
+<meta property="og:description" content="Simula rendimento, rischio e sostenibilità di un B&B. Scopri se un immobile può generare il 10-18% di ROI.">
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "SoftwareApplication",
+ "name": "RendimentoBB",
+ "applicationCategory": "BusinessApplication",
+ "operatingSystem": "Web",
+ "description": "Simulatore professionale di rendimento per investimenti B&B e affitti brevi",
+ "offers": {
+   "@type": "Offer",
+   "price": "29",
+   "priceCurrency": "EUR"
+ }
+}
+</script>  
+
 <link rel="stylesheet" href="/css/style.css">
 
 </head>
@@ -234,11 +255,23 @@ window.location.href="/login/";
 
 window.quickROI = function(){
 
-const price = parseFloat(document.getElementById("qr_price").value);
-const night = parseFloat(document.getElementById("qr_night").value);
-const occ = parseFloat(document.getElementById("qr_occ").value);
+let price = parseFloat(document.getElementById("qr_price").value);
+let night = parseFloat(document.getElementById("qr_night").value);
+let occ = parseFloat(document.getElementById("qr_occ").value);
 
-if(!price || !night || !occ) return;
+/* se i campi sono vuoti inserisce valori esempio */
+
+if(!price || !night || !occ){
+
+price = 250000;
+night = 110;
+occ = 65;
+
+document.getElementById("qr_price").value = price;
+document.getElementById("qr_night").value = night;
+document.getElementById("qr_occ").value = occ;
+
+}
 
 const annualRevenue = night * 365 * (occ/100);
 const operatingCosts = annualRevenue * 0.35;
