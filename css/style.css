@@ -152,8 +152,7 @@ margin:70px 0 60px 0;
 }
 
 .page-title h1{
-
-font-size:38px;
+font-size:42px;
 font-weight:800;
 letter-spacing:-0.5px;
 margin-bottom:14px;
@@ -358,9 +357,8 @@ box-shadow:0 25px 70px rgba(16,185,129,.45);
 }
 
 .btn-primary:hover{
-
 transform:translateY(-4px);
-
+box-shadow:0 35px 90px rgba(16,185,129,.55);
 }
 
 .btn-secondary{
@@ -920,6 +918,14 @@ border:1px solid #e2e8f0;
 box-shadow:0 40px 100px rgba(0,0,0,0.06);
 max-width:800px;
 margin:auto;
+}
+
+transition:0.25s ease;
+}
+
+.quick-roi-card:hover{
+transform:translateY(-4px);
+box-shadow:0 60px 140px rgba(0,0,0,0.08);
 }
 
 .quick-roi-grid{
