@@ -1020,14 +1020,17 @@ font-size:14px;
 
 .tool-card{
 padding:30px;
+border-radius:18px;
 }
 
 .results-card{
 padding:30px;
+border-radius:18px;
 }
 
 .analysis-card{
 padding:22px;
+border-radius:18px;
 }
 
 /* BUTTONS */
@@ -1035,7 +1038,8 @@ padding:22px;
 .btn{
 width:100%;
 text-align:center;
-padding:14px;
+padding:16px;
+font-size:15px;
 }
 
 .dashboard-actions{
@@ -1051,13 +1055,13 @@ gap:20px;
 }
 
 .stats-grid{
-grid-template-columns:1fr 1fr;
-gap:14px;
+grid-template-columns:1fr;
+gap:16px;
 }
 
 .dashboard-top-grid{
 grid-template-columns:1fr;
-}  
+}
 
 .form-grid{
 grid-template-columns:1fr;
@@ -1065,7 +1069,6 @@ grid-template-columns:1fr;
 
 /* METRICS */
 
-.metric{
 .metric{
 font-size:14px;
 margin-bottom:6px;
@@ -1082,6 +1085,21 @@ margin-top:4px;
 #roi-chart-container,
 #cashflow-chart-container{
 height:240px;
+position:relative;
+width:100%;
+max-width:100%;
+overflow:hidden;
+}
+
+#roi-chart,
+#cashflow-chart{
+width:100% !important;
+height:auto !important;
+}
+
+canvas{
+max-width:100%;
+height:auto !important;
 }
 
 /* TRUST / MARKET */
@@ -1097,70 +1115,5 @@ grid-template-columns:1fr;
 .quick-roi-grid{
 grid-template-columns:1fr;
 }
-
-canvas{
-max-width:100%;
-}
-
-/* MOBILE CARD POLISH */
-
-@media (max-width:768px){
-
-.tool-card,
-.results-card,
-.analysis-card{
-border-radius:18px;
-}
-
-.btn{
-padding:16px;
-font-size:15px;
-}
-
-/* chart mobile fix */
-
-#roi-chart-container,
-#cashflow-chart-container{
-height:240px;
-}
-
-canvas{
-max-width:100%;
-height:auto !important;
-}  
-
-@media (max-width:768px){
-
-.btn{
-width:100%;
-font-size:15px;
-padding:16px;
-}
-
-.tool-card,
-.results-card,
-.analysis-card{
-border-radius:20px;
-}
-
-/* ===================== */
-/* CHART FIX MOBILE */
-/* ===================== */
-
-#roi-chart,
-#cashflow-chart{
-width:100% !important;
-height:auto !important;
-}
-
-#roi-chart-container,
-#cashflow-chart-container{
-position:relative;
-width:100%;
-max-width:100%;
-overflow:hidden;
-}  
-
-}  
 
 }
