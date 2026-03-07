@@ -1197,4 +1197,19 @@ overflow-x:hidden;
 max-width:100%;
 }  
 
+/* HERO MOBILE */
+
+.hero-grid{
+grid-template-columns:1fr;
+text-align:center;
+}
+
+.hero-left{
+text-align:center;
+}
+
+.hero-trust{
+justify-content:center;
+}  
+
 }
