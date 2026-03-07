@@ -171,6 +171,44 @@ margin:0 auto;
 }
 
 /* ===================== */
+/* HERO GRID */
+/* ===================== */
+
+.hero-grid{
+display:grid;
+grid-template-columns:1.1fr 1fr;
+gap:60px;
+align-items:center;
+}
+
+.hero-left{
+text-align:left;
+}
+
+.hero-right{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.hero-right img,
+#hero-roi-chart{
+width:100%;
+max-width:520px;
+border-radius:20px;
+box-shadow:0 40px 120px rgba(0,0,0,0.12);
+}
+
+.hero-trust{
+margin-top:18px;
+display:flex;
+gap:20px;
+font-size:14px;
+color:#64748b;
+flex-wrap:wrap;
+}
+
+/* ===================== */
 /* TOOL CARD */
 /* ===================== */
 
