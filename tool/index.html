@@ -556,12 +556,45 @@ data-en="📄 Download Executive Report PDF">
 
 <script type="module">
 
+import { getFirestore, doc, getDoc } 
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
+
 import { getAuth, onAuthStateChanged }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import { auth } from "/js/firebase-init.js";
 
+const auth = getAuth();
+const db = getFirestore();
+  
 const firebaseAuth = auth;
+
+onAuthStateChanged(auth, async (user)=>{
+
+if(!user) return;
+
+const uid = user.uid;
+
+const userDoc = await getDoc(doc(db,"users",uid));
+
+if(userDoc.exists()){
+
+const data = userDoc.data();
+
+if(data.plan === "pro"){
+window.isPro = true;
+console.log("Utente PRO");
+}else{
+window.isPro = false;
+console.log("Utente FREE");
+}
+
+}
+
+});  
 
 /* protezione pagina */
 
