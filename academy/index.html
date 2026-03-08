@@ -267,21 +267,19 @@ onAuthStateChanged(auth, async (user)=>{
 
   const userDoc = await getDoc(doc(db,"users",uid));
 
-  if(!userDoc.exists()){
-    window.location.href="/tool/?upgrade=true";
-    return;
-  }
+if(!userDoc.exists()){
+  window.location.href="/tool/?upgrade=academy";
+  return;
+}
 
-  const data = userDoc.data();
+const data = userDoc.data();
 
-  if(data.plan !== "pro"){
+if(data.plan !== "pro"){
 
-    /* FREE → redirect al tool con popup upgrade */
+  window.location.href="/tool/?upgrade=academy";
+  return;
 
-    window.location.href="/tool/?upgrade=true";
-    return;
-
-  }
+}
 
   /* SOLO PRO VEDE ACADEMY */
 
