@@ -46,6 +46,18 @@ margin-bottom:15px;
 
 <header class="portal-header">
 
+<div class="lang-switch">
+
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">
+IT
+</button>
+
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">
+EN
+</button>
+
+</div>  
+
 <div class="container portal-header-inner">
 
 <div class="logo">Rendimento<span>BB</span></div>
@@ -69,32 +81,72 @@ margin-bottom:15px;
 
 <div class="container" style="padding-top:100px">
 
-<h1>📍 Analisi mercato immobili B&B</h1>
+<h1
+data-it="📍 Analisi mercato immobili B&B"
+data-en="📍 B&B Property Market Analysis">
+</h1>
 
-<p style="margin-top:10px;color:#64748b">
-Scopri i rendimenti medi delle principali città turistiche italiane.
+<p
+data-it="Scopri i rendimenti medi delle principali città turistiche italiane."
+data-en="Discover the average returns of the main Italian tourist cities.">
 </p>
 
 <div class="property-grid">
 
 <a href="/roi-bnb/napoli.html" class="property-card">
-<h3>Napoli</h3>
-<p>Analisi ROI B&B Napoli</p>
-</a>
 
-<a href="/roi-bnb/roma.html" class="property-card">
-<h3>Roma</h3>
-<p>Analisi ROI B&B Roma</p>
+<h3
+data-it="Napoli"
+data-en="Naples">
+</h3>
+
+<p
+data-it="Analisi ROI B&B Napoli"
+data-en="B&B ROI Analysis Naples">
+</p>
+
 </a>
 
 <a href="/roi-bnb/milano.html" class="property-card">
-<h3>Milano</h3>
-<p>Analisi ROI B&B Milano</p>
+
+<h3
+data-it="Milano"
+data-en="Milan">
+</h3>
+
+<p
+data-it="Analisi ROI B&B Milano"
+data-en="B&B ROI Analysis Milan">
+</p>
+
+</a>
+
+<a href="/roi-bnb/roma.html" class="property-card">
+
+<h3
+data-it="Roma"
+data-en="Rome">
+</h3>
+
+<p
+data-it="Analisi ROI B&B Roma"
+data-en="B&B ROI Analysis Rome">
+</p>
+
 </a>
 
 <a href="/roi-bnb/firenze.html" class="property-card">
-<h3>Firenze</h3>
-<p>Analisi ROI B&B Firenze</p>
+
+<h3
+data-it="Firenze"
+data-en="Florence">
+</h3>
+
+<p
+data-it="Analisi ROI B&B Firenze"
+data-en="B&B ROI Analysis Florence">
+</p>
+
 </a>
 
 </div>
@@ -102,6 +154,8 @@ Scopri i rendimenti medi delle principali città turistiche italiane.
 </div>
 
 </main>
+
+<script src="/js/lang.js"></script>  
 
 </body>
 </html>
