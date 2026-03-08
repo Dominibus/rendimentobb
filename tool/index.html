@@ -557,10 +557,7 @@ data-en="📄 Download Executive Report PDF">
 <script type="module">
 
 import { getFirestore, doc, getDoc } 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import { getAuth, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";  
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"; 
 
 import { getAuth, onAuthStateChanged }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
@@ -575,6 +572,8 @@ const firebaseAuth = auth;
 onAuthStateChanged(auth, async (user)=>{
 
 if(!user) return;
+
+window.currentUser = user;  
 
 const uid = user.uid;
 
@@ -591,6 +590,8 @@ console.log("Utente PRO");
 window.isPro = false;
 console.log("Utente FREE");
 }
+
+document.dispatchEvent(new Event("rb_plan_loaded"));  
 
 }
 
@@ -632,7 +633,7 @@ window.buyPro = function(){
 
 function applyPaywall(){
 
-  if(window.isProUser && window.isProUser()){
+  if(window.isPro){
     return;
   }
 
