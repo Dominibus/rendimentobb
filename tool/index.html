@@ -713,18 +713,35 @@ document.addEventListener("rb_plan_loaded", applyPaywall);
 <script>
 
 const params = new URLSearchParams(window.location.search);
+const upgrade = params.get("upgrade");
 
-if(params.get("upgrade") === "true"){
+if(upgrade){
 
   setTimeout(()=>{
 
-    alert("🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.");
+    let message = "";
+
+    if(upgrade === "dashboard"){
+      message = "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
+    }
+
+    if(upgrade === "academy"){
+      message = "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
+    }
+
+    if(upgrade === "true"){
+      message = "🔒 Funzione disponibile solo nella versione PRO.";
+    }
+
+    if(message){
+      alert(message);
+    }
 
   },400);
 
 }
 
-</script>  
+</script>
 
 </body>
 </html>
