@@ -35,6 +35,8 @@ data-en="Analyze ROI, mortgage impact and risk before launching a B&B. Make data
 content="Analyze ROI, mortgage impact and risk before launching a B&B. Make data-driven real estate decisions.">
 
 <meta name="keywords" content="ROI B&B, rendimento bed and breakfast, investimento B&B Italia, calcolo ROI affitti brevi, aprire B&B investimento">
+<meta name="application-name" content="RendimentoBB">
+<meta name="apple-mobile-web-app-title" content="RendimentoBB"> 
 
 <meta property="og:title" content="RendimentoBB – Calcola il ROI di un B&B prima di investire">
 <meta property="og:description" content="Simula rendimento, rischio e sostenibilità di un B&B. Scopri se un immobile può generare il 10-18% di ROI.">
@@ -285,6 +287,9 @@ document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
 
 }
 
+document.addEventListener("DOMContentLoaded", function(){
+  quickROI();
+}); 
 </script>
 
 </body>
