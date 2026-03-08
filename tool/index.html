@@ -632,9 +632,20 @@ window.buyPro = function(){
 
 function applyPaywall(){
 
-  // se utente PRO non applicare nessun blocco
+  // se utente PRO rimuove eventuali blocchi
   if(window.isPro === true){
+
     console.log("Utente PRO - paywall disattivato");
+
+    document.querySelectorAll("[data-locked]").forEach(el=>{
+      el.remove();
+    });
+
+    document.querySelectorAll(".results-card, .tool-card").forEach(card=>{
+      card.style.opacity = "";
+      card.style.pointerEvents = "";
+    });
+
     return;
   }
 
@@ -665,6 +676,7 @@ function applyPaywall(){
     card.style.position = "relative";
 
     const lock = document.createElement("div");
+    lock.setAttribute("data-locked","true");
 
     lock.innerHTML = `
     <div style="
