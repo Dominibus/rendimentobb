@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RendimentoBB – Opportunità immobili B&B</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<style>
+
+.property-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+margin-top:50px;
+}
+
+.property-card{
+background:white;
+padding:40px;
+border-radius:18px;
+border:1px solid #e2e8f0;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+text-align:center;
+transition:.25s;
+}
+
+.property-card:hover{
+transform:translateY(-4px);
+box-shadow:0 25px 70px rgba(0,0,0,0.08);
+}
+
+.property-card h3{
+margin-bottom:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="portal-header">
+
+<div class="container portal-header-inner">
+
+<div class="logo">Rendimento<span>BB</span></div>
+
+<nav class="portal-nav">
+
+<a href="/tool/">Tool</a>
+<a href="/tool/#mortgage">Mutui</a>
+<a href="/immobili/">Immobili</a>
+<a href="/academy/">Academy</a>
+<a href="/dashboard/">Dashboard</a>
+
+</nav>
+
+</div>
+
+</header>
+
+
+<main>
+
+<div class="container" style="padding-top:100px">
+
+<h1>📍 Analisi mercato immobili B&B</h1>
+
+<p style="margin-top:10px;color:#64748b">
+Scopri i rendimenti medi delle principali città turistiche italiane.
+</p>
+
+<div class="property-grid">
+
+<a href="/roi-bnb/napoli.html" class="property-card">
+<h3>Napoli</h3>
+<p>Analisi ROI B&B Napoli</p>
+</a>
+
+<a href="/roi-bnb/roma.html" class="property-card">
+<h3>Roma</h3>
+<p>Analisi ROI B&B Roma</p>
+</a>
+
+<a href="/roi-bnb/milano.html" class="property-card">
+<h3>Milano</h3>
+<p>Analisi ROI B&B Milano</p>
+</a>
+
+<a href="/roi-bnb/firenze.html" class="property-card">
+<h3>Firenze</h3>
+<p>Analisi ROI B&B Firenze</p>
+</a>
+
+</div>
+
+</div>
+
+</main>
+
+</body>
+</html>
