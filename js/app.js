@@ -48,7 +48,7 @@ let overrideMortgage = null;
 
 function updateProStatus(){
 
-  if(window.userPlan === "pro"){
+  if(window.isPro === true){
     isProUnlocked = true;
   }else{
     isProUnlocked = false;
