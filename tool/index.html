@@ -632,7 +632,9 @@ window.buyPro = function(){
 
 function applyPaywall(){
 
-  if(window.isPro){
+  // se utente PRO non applicare nessun blocco
+  if(window.isPro === true){
+    console.log("Utente PRO - paywall disattivato");
     return;
   }
 
@@ -645,46 +647,49 @@ function applyPaywall(){
     "roiChart"
   ];
 
-  proSections.forEach(id=>{
+  proSections.forEach(id => {
+
     const el = document.getElementById(id);
     if(!el) return;
 
     const card = el.closest(".results-card, .tool-card");
+    if(!card) return;
 
-    if(card){
+    // evita di applicare il lock più volte
+    if(card.dataset.locked === "true") return;
 
-      card.style.opacity = "0.4";
-      card.style.pointerEvents = "none";
-      card.style.position = "relative";
+    card.dataset.locked = "true";
 
-      const lock = document.createElement("div");
+    card.style.opacity = "0.4";
+    card.style.pointerEvents = "none";
+    card.style.position = "relative";
 
-      lock.innerHTML = `
-      <div style="
-        position:absolute;
-        inset:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        gap:15px;
-        background:rgba(255,255,255,0.85);
-        backdrop-filter:blur(4px);
-        border-radius:16px;
-      ">
-        <div style="font-weight:600;font-size:16px;">
-        🔒 Funzione PRO
-        </div>
+    const lock = document.createElement("div");
 
-        <button onclick="buyPro()" class="btn btn-primary">
-        Sblocca versione PRO – 29€
-        </button>
+    lock.innerHTML = `
+    <div style="
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:15px;
+      background:rgba(255,255,255,0.85);
+      backdrop-filter:blur(4px);
+      border-radius:16px;
+    ">
+      <div style="font-weight:600;font-size:16px;">
+      🔒 Funzione PRO
       </div>
-      `;
 
-      card.appendChild(lock);
+      <button onclick="buyPro()" class="btn btn-primary">
+      Sblocca versione PRO – 29€
+      </button>
+    </div>
+    `;
 
-    }
+    card.appendChild(lock);
 
   });
 
