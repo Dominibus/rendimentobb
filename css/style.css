@@ -181,6 +181,19 @@ align-items:center;
 margin-top:40px;
 }
 
+.portal-nav a:hover{
+
+color:#10b981;
+
+}
+
+.portal-nav a.active{
+
+color:#10b981;
+font-weight:600;
+
+}
+
 .hero-left{
 text-align:left;
 }
@@ -210,13 +223,6 @@ flex-wrap:wrap;
 /* ===================== */
 /* HERO GRID */
 /* ===================== */
-
-.hero-grid{
-display:grid;
-grid-template-columns:1.1fr 1fr;
-gap:60px;
-align-items:center;
-}
 
 .hero-left{
 text-align:left;
@@ -475,6 +481,16 @@ font-size:13px;
 background:#0f172a;
 color:white;
 text-decoration:none;
+
+}
+
+transition:0.2s ease;
+}
+
+.btn-dashboard:hover{
+
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 }
 
@@ -949,6 +965,7 @@ margin-bottom:40px;
 }
 
 .quick-roi-card{
+
 background:white;
 padding:50px;
 border-radius:24px;
@@ -956,6 +973,8 @@ border:1px solid #e2e8f0;
 box-shadow:0 40px 100px rgba(0,0,0,0.06);
 max-width:800px;
 margin:auto;
+transition:0.25s ease;
+
 }
 
 transition:0.25s ease;
@@ -1119,6 +1138,16 @@ border-radius:18px;
 padding:22px;
 border-radius:18px;
 word-break:break-word;
+}  
+
+.card{
+
+background:white;
+padding:30px;
+border-radius:20px;
+border:1px solid #e2e8f0;
+box-shadow:0 25px 70px rgba(15,23,42,.08);
+
 }  
 
 /* BUTTONS */
@@ -1302,6 +1331,28 @@ font-size:14px;
 outline:none;
 border-color:#10b981;
 box-shadow:0 0 0 2px rgba(16,185,129,0.2);
+}  
+
+/* ===================== */
+/* GENERIC SECTION */
+/* ===================== */
+
+.section{
+
+padding:100px 0;
+
+}
+
+.section-light{
+
+background:white;
+
+}
+
+.section-soft{
+
+background:rgba(255,255,255,0.6);
+
 }  
 
 }
