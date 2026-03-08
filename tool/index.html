@@ -710,5 +710,21 @@ document.addEventListener("rb_plan_loaded", applyPaywall);
 
 </script>  
 
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("upgrade") === "true"){
+
+  setTimeout(()=>{
+
+    alert("🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.");
+
+  },400);
+
+}
+
+</script>  
+
 </body>
 </html>
