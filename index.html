@@ -182,9 +182,9 @@ Ristrutturazione (€)
 
 <div class="roi-field">
 <label
-data-it="Ristrutturazione (€)"
-data-en="Renovation (€)">
-Ristrutturazione (€)
+data-it="Prezzo medio notte (€)"
+data-en="Average nightly price (€)">
+Prezzo medio notte (€)
 </label>
 <input id="qr_night" type="number" placeholder="110">
 </div>
@@ -216,22 +216,26 @@ Calcola ROI
 </button>
 
 <div style="margin-top:15px">
-<span
-data-it="ROI stimato:"
-data-en="Estimated ROI:">
+
+<span data-it="ROI stimato:" data-en="Estimated ROI:">
 ROI stimato:
 </span>
+<strong id="qr_roi"></strong>
 
-<span
-data-it="Break-even:"
-data-en="Break-even:">
+<br>
+
+<span data-it="Break-even:" data-en="Break-even:">
 Break-even:
 </span>
-<span
-data-it="Ricavo annuo:"
-data-en="Yearly revenue:">
+<strong id="qr_break"></strong>
+
+<br>
+
+<span data-it="Ricavo annuo:" data-en="Yearly revenue:">
 Ricavo annuo:
 </span>
+<strong id="qr_rev"></strong>
+
 </div>
 
 </div>
@@ -311,8 +315,6 @@ Classe investimento
 </span>
 <strong>A</strong>
 </div>
-<strong>A</strong>
-</div>
 
 </div>
 
@@ -375,12 +377,11 @@ Report professionale per analizzare il potenziale dell'immobile.
 
 <div style="margin-top:50px">
 
-<button onclick="buyPro()" class="btn btn-primary" style="font-size:18px;padding:14px 30px">
 <button onclick="buyPro()" class="btn btn-primary"
+style="font-size:18px;padding:14px 30px"
 data-it="🔓 Sblocca versione PRO – 29€"
 data-en="🔓 Unlock PRO version – €29">
 🔓 Sblocca versione PRO – 29€
-</button>
 </button>
 
 <p style="margin-top:10px;color:#64748b;font-size:14px">
@@ -435,12 +436,11 @@ data-en="Want to know if your B&B will actually be profitable?">
 Vuoi sapere se il tuo B&B sarà davvero profittevole?
 </h2>
 
-<p style="margin-top:10px;color:#64748b;font-size:18px">
 <p
+style="margin-top:10px;color:#64748b;font-size:18px"
 data-it="Analizza ROI, rischio e sostenibilità finanziaria prima di acquistare."
 data-en="Analyze ROI, risk and financial sustainability before buying.">
 Analizza ROI, rischio e sostenibilità finanziaria prima di acquistare.
-</p>
 </p>
 
 <div style="margin-top:40px">
@@ -459,14 +459,30 @@ Avvia Analisi Gratuita
 
 <footer class="global-footer">
 
-<p>
+<p
+data-it="© 2026 RendimentoBB – Motore decisionale per investimenti B&B"
+data-en="© 2026 RendimentoBB – B&B investment decision engine">
 © 2026 RendimentoBB – Motore decisionale per investimenti B&B
 </p>
 
 <div class="footer-links">
-<a href="/privacy.html">Privacy</a>
-<a href="/terms.html">Terms</a>
-<a href="/contact.html">Contact</a>
+<a href="/privacy.html"
+data-it="Privacy"
+data-en="Privacy">
+Privacy
+</a>
+
+<a href="/terms.html"
+data-it="Termini"
+data-en="Terms">
+Terms
+</a>
+
+<a href="/contact.html"
+data-it="Contatti"
+data-en="Contact">
+Contact
+</a>
 </div>
 
 </footer>
