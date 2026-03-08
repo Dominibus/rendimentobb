@@ -383,6 +383,29 @@ container.innerHTML = `
 
 }
 
+// ================= EXECUTIVE KPI =================
+
+function renderExecutiveKPI(roi, net){
+
+const container = document.getElementById("executive-kpi");
+if(!container) return;
+
+container.innerHTML = `
+
+<div class="kpi-box">
+<span>${t("roi")}</span>
+<strong>${roi.toFixed(2)}%</strong>
+</div>
+
+<div class="kpi-box">
+<span>${t("annualNet")}</span>
+<strong>${formatCurrency(net)}</strong>
+</div>
+
+`;
+
+}
+
 // ================= INVESTMENT SCORE =================
 
 function renderInvestmentScore(roi, riskScore){
@@ -428,7 +451,7 @@ container.innerHTML = `
 
 function showUpgradePopup(roi){
 
-if(window.isProUser && window.isProUser()) return;
+if(isProUnlocked()) return;
 
 const lang = window.currentLang || "it";
 
@@ -510,6 +533,8 @@ const riskScore =
 roi > 12 ? 30 :
 roi > 6 ? 55 :
 75;
+
+renderExecutiveKPI(roi, netAfterMortgage);
 
 renderChart(netAfterMortgage);
 
