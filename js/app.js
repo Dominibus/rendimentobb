@@ -43,17 +43,10 @@ async function saveAnalysis(data){
 
 // ================= PRO SYSTEM =================
 
-let isProUnlocked = false;
 let overrideMortgage = null;
 
-function updateProStatus(){
-
-  if(window.isPro === true){
-    isProUnlocked = true;
-  }else{
-    isProUnlocked = false;
-  }
-
+function isProUnlocked(){
+  return window.isPro === true;
 }
 
 // evento quando firebase carica il piano
@@ -572,7 +565,7 @@ const box = document.getElementById("strategic-insight");
 
 if (!box) return;
 
-if (!isProUnlocked) {
+if (!isProUnlocked()) {
 
 box.innerHTML = `
 <strong>${t("strategicLocked")}</strong>
@@ -706,7 +699,7 @@ async function generateExecutivePDF(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-if(!isProUnlocked){
+if(!isProUnlocked()){
 
 alert(
 lang==="it"
