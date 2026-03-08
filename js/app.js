@@ -52,15 +52,12 @@ function isProUnlocked(){
 // evento quando firebase carica il piano
 document.addEventListener("rb_plan_loaded", () => {
 
-  updateProStatus();
+  console.log("Piano utente caricato:", window.isPro);
 
-  // aggiorna UI
+  // ricalcola quando firebase ha caricato il piano
   calculate();
 
 });
-
-// primo check
-updateProStatus();
 
 
 // ================= LANGUAGE =================
@@ -476,8 +473,6 @@ window.buyPro();
 // ================= MAIN CALC =================
 
 function calculate() {
-
-updateProStatus();
 
 const equity = getValue("equity");
 const priceNight = getValue("priceNight");
