@@ -484,21 +484,19 @@ onAuthStateChanged(auth, async (user)=>{
 
   const userDoc = await getDoc(doc(db,"users",uid));
 
-  if(!userDoc.exists()){
-    window.location.href="/tool/?upgrade=true";
-    return;
-  }
+if(!userDoc.exists()){
+  window.location.href="/tool/?upgrade=dashboard";
+  return;
+}
 
-  const data = userDoc.data();
+const data = userDoc.data();
 
-  if(data.plan !== "pro"){
+if(data.plan !== "pro"){
 
-    /* FREE → torna al tool */
+  window.location.href="/tool/?upgrade=dashboard";
+  return;
 
-    window.location.href="/tool/?upgrade=true";
-    return;
-
-  }
+}
 
   /* SOLO PRO VEDE LA DASHBOARD */
 
