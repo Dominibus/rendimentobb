@@ -17,7 +17,13 @@ data-it="Scopri il ROI medio dei B&B a Roma e simula il rendimento di un investi
 data-en="Discover the average ROI of B&Bs in Rome and simulate the return of a short-term rental real estate investment."
 content="Scopri il ROI medio dei B&B a Roma e simula il rendimento di un investimento immobiliare negli affitti brevi.">
 
-<link rel="canonical" href="https://rendimentobb.com/roi-bnb/roma">
+<link rel="canonical" href="https://rendimentobb.com/roi-bnb/roma.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROI B&B Roma – Conviene investire in affitti brevi?">
+<meta property="og:description" content="Scopri il ROI medio dei B&B a Roma e simula il rendimento di un investimento immobiliare negli affitti brevi.">
+<meta property="og:image" content="https://rendimentobb.com/og-dashboard.jpg">
+<meta property="og:url" content="https://rendimentobb.com/roi-bnb/roma">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -26,29 +32,64 @@ content="Scopri il ROI medio dei B&B a Roma e simula il rendimento di un investi
 <body>
 
 <header class="portal-header">
+
 <div class="container portal-header-inner">
 
 <div class="logo">Rendimento<span>BB</span></div>
 
 <nav class="portal-nav">
-<a href="/">Home</a>
-<a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-<a href="/academy/">Academy</a>
+
+<a href="/tool/"
+data-it="Simulatore"
+data-en="Simulator">
+Simulatore
+</a>
+
+<a href="/tool/#mortgage"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
+
+<a href="/immobili/"
+data-it="Immobili"
+data-en="Properties">
+Immobili
+</a>
+
+<a href="/academy/"
+data-it="Academy"
+data-en="Academy">
+Academy
+</a>
+
+<a href="/dashboard/"
+data-it="Dashboard"
+data-en="Dashboard">
+Dashboard
+</a>
+
+<a href="/contact.html"
+data-it="Contatti"
+data-en="Contact">
+Contatti
+</a>
+
 </nav>
 
+<div class="right-controls">
+
 <div class="lang-switch">
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
 
-<button class="lang-btn" onclick="setLang('it')" id="btn-it">
-IT
-</button>
-
-<button class="lang-btn" onclick="setLang('en')" id="btn-en">
-EN
-</button>
+<div id="user-area"></div>
 
 </div>
 
 </div>
+
 </header>
 
 
@@ -63,7 +104,7 @@ ROI B&B a Roma: quanto rende davvero un affitto breve?
 <p
 data-it="Roma è una delle città europee con la maggiore domanda turistica. Questo rende gli affitti brevi e i B&B una delle opportunità di investimento più interessanti nel mercato immobiliare italiano."
 data-en="Rome is one of the European cities with the highest tourism demand. This makes short-term rentals and B&Bs one of the most attractive investment opportunities in the Italian real estate market.">
-Roma è una delle città europee con la maggiore domanda turistica.
+Roma è una delle città europee con la maggiore domanda turistica.  
 Questo rende gli affitti brevi e i B&B una delle opportunità di investimento
 più interessanti nel mercato immobiliare italiano.
 </p>
@@ -77,9 +118,9 @@ ROI medio di un B&B a Roma
 <ul>
 
 <li
-data-it="ROI medio: 10-14%"
-data-en="Average ROI: 10–14%">
-ROI medio: 10-14%
+data-it="ROI medio stimato: 10-14%"
+data-en="Estimated average ROI: 10–14%">
+ROI medio stimato: 10-14%
 </li>
 
 <li
@@ -97,21 +138,35 @@ Prezzo medio notte: 110-160€
 </ul>
 
 <p
-data-it="Naturalmente il rendimento reale dipende da molti fattori: posizione, prezzo dell'immobile, gestione e costi operativi."
-data-en="Of course the real return depends on many factors: location, property price, management quality and operating costs.">
-Naturalmente il rendimento reale dipende da molti fattori:
-posizione, prezzo dell'immobile, gestione e costi operativi.
+data-it="Il rendimento reale dipende da molti fattori: posizione dell'immobile, prezzo di acquisto, gestione operativa e stagionalità turistica."
+data-en="Real profitability depends on many factors: property location, purchase price, operational management and tourism seasonality.">
+Il rendimento reale dipende da molti fattori: posizione dell'immobile,
+prezzo di acquisto, gestione operativa e stagionalità turistica.
+</p>
+
+<h2
+data-it="Quartieri migliori per aprire un B&B a Roma"
+data-en="Best areas to open a B&B in Rome">
+Quartieri migliori per aprire un B&B a Roma
+</h2>
+
+<p
+data-it="Le zone con maggiore domanda turistica sono Centro Storico, Trastevere, Prati, Vaticano e Colosseo. La vicinanza ai monumenti e alle principali attrazioni turistiche permette prezzi medi per notte più elevati."
+data-en="Areas with the highest tourist demand include the Historic Center, Trastevere, Prati, Vatican and Colosseum areas. Proximity to major landmarks allows higher nightly rates.">
+Le zone con maggiore domanda turistica sono Centro Storico,
+Trastevere, Prati, Vaticano e Colosseo. La vicinanza ai monumenti
+e alle principali attrazioni turistiche permette prezzi medi per notte più elevati.
 </p>
 
 <h2
 data-it="Simula il ROI del tuo investimento"
-data-en="Simulate the ROI of your investment">
+data-en="Simulate your investment ROI">
 Simula il ROI del tuo investimento
 </h2>
 
 <p
 data-it="Puoi stimare rapidamente il rendimento del tuo investimento utilizzando il simulatore professionale di RendimentoBB."
-data-en="You can quickly estimate the return of your investment using the professional RendimentoBB simulator.">
+data-en="You can quickly estimate your investment return using the professional RendimentoBB simulator.">
 Puoi stimare rapidamente il rendimento del tuo investimento
 utilizzando il simulatore professionale di RendimentoBB.
 </p>
@@ -124,9 +179,22 @@ Simula il ROI del tuo B&B
 
 </main>
 
+
 <footer class="global-footer">
 
-<p>© 2026 RendimentoBB</p>
+<p
+data-it="© 2026 RendimentoBB – Motore decisionale per investimenti B&B"
+data-en="© 2026 RendimentoBB – B&B investment decision engine">
+© 2026 RendimentoBB – Motore decisionale per investimenti B&B
+</p>
+
+<div class="footer-links">
+
+<a href="/privacy.html">Privacy</a>
+<a href="/terms.html">Terms</a>
+<a href="/contact.html">Contact</a>
+
+</div>
 
 </footer>
 
