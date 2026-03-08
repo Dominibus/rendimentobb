@@ -76,7 +76,7 @@ content="Analyze ROI, mortgage impact and risk before launching a B&B. Make data
 <a href="/tool/#mortgage">Mutui</a>
 <a href="#">Immobili</a>
 <a href="/academy/">Academy</a>
-<a href="/dashboard/">Dashboard</a>
+<a href="/dashboard/" id="nav-dashboard" style="display:none;">Dashboard</a>
 <a href="/privacy.html">Privacy</a>
 <a href="/terms.html">Terms</a>
 <a href="/contact.html">Contact</a>
@@ -143,8 +143,10 @@ Visualizza Demo
 <h3>Simula ROI veloce</h3>
 
 <input id="qr_price" placeholder="Prezzo immobile (€)">
+<input id="qr_reno" placeholder="Ristrutturazione (€)">
 <input id="qr_night" placeholder="Prezzo medio notte (€)">
 <input id="qr_occ" placeholder="Occupazione (%)">
+<input id="qr_cost" placeholder="Costi operativi (%)">
 
 <button onclick="quickROI()" class="btn btn-primary">
 Calcola ROI
@@ -152,7 +154,8 @@ Calcola ROI
 
 <div style="margin-top:15px">
 ROI stimato: <strong id="qr_roi">--</strong><br>
-Break-even: <strong id="qr_break">--</strong>
+Break-even: <strong id="qr_break">--</strong><br>
+Ricavo annuo: <strong id="qr_rev">--</strong>
 </div>
 
 </div>
@@ -370,6 +373,18 @@ window.location.href="/login/";
 }
 }
 
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user)=>{
+
+const dash = document.getElementById("nav-dashboard");
+
+if(user){
+dash.style.display="inline";
+}
+
+}); 
+
 window.buyPro = function(){
 
 const user = auth.currentUser;
@@ -392,32 +407,42 @@ window.location.href = stripeUrl;
 window.quickROI = function(){
 
 let price = parseFloat(document.getElementById("qr_price").value);
+let reno = parseFloat(document.getElementById("qr_reno").value);
 let night = parseFloat(document.getElementById("qr_night").value);
 let occ = parseFloat(document.getElementById("qr_occ").value);
-
-/* se i campi sono vuoti inserisce valori esempio */
+let cost = parseFloat(document.getElementById("qr_cost").value);
 
 if(!price || !night || !occ){
 
 price = 250000;
+reno = 30000;
 night = 110;
 occ = 65;
+cost = 35;
 
 document.getElementById("qr_price").value = price;
+document.getElementById("qr_reno").value = reno;
 document.getElementById("qr_night").value = night;
 document.getElementById("qr_occ").value = occ;
+document.getElementById("qr_cost").value = cost;
 
 }
 
-const annualRevenue = night * 365 * (occ/100);
-const operatingCosts = annualRevenue * 0.35;
-const netIncome = annualRevenue - operatingCosts;
+const investment = price + reno;
 
-const roi = (netIncome / price) * 100;
-const breakEven = price / netIncome;
+const revenue = night * 365 * (occ/100);
+
+const operatingCosts = revenue * (cost/100);
+
+const netIncome = revenue - operatingCosts;
+
+const roi = (netIncome / investment) * 100;
+
+const breakEven = investment / netIncome;
 
 document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%";
 document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
+document.getElementById("qr_rev").innerText = Math.round(revenue) + " € / anno";
 
 }
 
