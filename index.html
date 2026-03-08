@@ -224,6 +224,59 @@ Break-even: <strong id="qr_break">--</strong>
 
 </section>
 
+<section style="margin-top:100px;padding:80px 0;background:white;">
+
+<div class="container" style="text-align:center">
+
+<h2 style="font-size:32px;font-weight:700;">
+Sblocca l'analisi professionale
+</h2>
+
+<p style="margin-top:10px;color:#64748b;font-size:18px;">
+La versione PRO di RendimentoBB offre strumenti avanzati per valutare investimenti B&B con maggiore precisione.
+</p>
+
+<div style="display:flex;gap:30px;justify-content:center;margin-top:50px;flex-wrap:wrap">
+
+<div style="background:#f8fafc;padding:30px;border-radius:16px;width:260px">
+<h3>Analisi avanzata</h3>
+<p style="margin-top:10px;color:#64748b">
+ROI dettagliato con scenari realistici di occupazione e prezzi.
+</p>
+</div>
+
+<div style="background:#f8fafc;padding:30px;border-radius:16px;width:260px">
+<h3>Simulazione mutuo</h3>
+<p style="margin-top:10px;color:#64748b">
+Calcola l'impatto del finanziamento sulla sostenibilità dell'investimento.
+</p>
+</div>
+
+<div style="background:#f8fafc;padding:30px;border-radius:16px;width:260px">
+<h3>Executive Report</h3>
+<p style="margin-top:10px;color:#64748b">
+Report professionale per analizzare il potenziale dell'immobile.
+</p>
+</div>
+
+</div>
+
+<div style="margin-top:50px">
+
+<button onclick="buyPro()" class="btn btn-primary" style="font-size:18px;padding:14px 30px">
+🔓 Sblocca versione PRO – 29€
+</button>
+
+<p style="margin-top:10px;color:#64748b;font-size:14px">
+Pagamento una tantum. Accesso immediato.
+</p>
+
+</div>
+
+</div>
+
+</section> 
+
 <section style="margin-top:100px;padding:60px 0;background:rgba(255,255,255,0.6);">
 
 <div class="container" style="text-align:center">
@@ -291,6 +344,25 @@ window.location.href="/login/";
 }
 }
 
+window.buyPro = function(){
+
+const user = auth.currentUser;
+
+if(!user){
+alert("Devi effettuare il login.");
+window.location.href="/login/";
+return;
+}
+
+const uid = user.uid;
+
+const stripeUrl =
+"https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
+
+window.location.href = stripeUrl;
+
+}  
+
 window.quickROI = function(){
 
 let price = parseFloat(document.getElementById("qr_price").value);
@@ -326,6 +398,7 @@ document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
 document.addEventListener("DOMContentLoaded", function(){
   quickROI();
 }); 
+
 </script>
 
 </body>
