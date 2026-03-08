@@ -404,7 +404,11 @@ dash.style.display="inline";
 
 }); 
 
-window.buyPro = function(){
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const db = getFirestore();
+
+window.buyPro = async function(){
 
 const user = auth.currentUser;
 
@@ -415,6 +419,20 @@ return;
 }
 
 const uid = user.uid;
+
+const userDoc = await getDoc(doc(db,"users",uid));
+
+if(userDoc.exists()){
+
+const data = userDoc.data();
+
+if(data.plan === "pro"){
+alert("Hai già la versione PRO.");
+window.location.href="/dashboard/";
+return;
+}
+
+}
 
 const stripeUrl =
 "https://buy.stripe.com/aFa6c9vedBwfts5Cc0gW00?client_reference_id=" + uid;
