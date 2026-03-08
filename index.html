@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link rel="alternate" hreflang="it" href="https://rendimentobb.com">
+<link rel="alternate" hreflang="en" href="https://rendimentobb.com?lang=en">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="apple-touch-icon" href="/favicon.ico">
 
@@ -121,57 +123,112 @@ Analizza ROI, sostenibilità finanziaria e rischio reale.
 
 <div class="cta-group">
 
-<button onclick="startAnalysis()" class="btn btn-primary">
+<button onclick="startAnalysis()" class="btn btn-primary"
+data-it="Avvia Analisi Gratuita"
+data-en="Start Free Analysis">
+Avvia Analisi Gratuita
+</button>
 
 </div>
 
 <div class="hero-trust">
-<span>✓ Nessuna carta di credito</span>
-<span>✓ Analisi in 30 secondi</span>
-<span>✓ Report professionale</span>
+
+<span
+data-it="✓ Nessuna carta di credito"
+data-en="✓ No credit card required">
+✓ Nessuna carta di credito
+</span>
+
+<span
+data-it="✓ Analisi in 30 secondi"
+data-en="✓ Analysis in 30 seconds">
+✓ Analisi in 30 secondi
+</span>
+
+<span
+data-it="✓ Report professionale"
+data-en="✓ Professional report">
+✓ Report professionale
+</span>
+
 </div>
 
 <div class="quick-roi-box">
 
-<h3>Simula ROI veloce</h3>
+<h3
+data-it="Simula ROI veloce"
+data-en="Quick ROI simulation">
+Simula ROI veloce
+</h3>
 
 <div class="roi-grid">
 
 <div class="roi-field">
-<label>Prezzo immobile (€)</label>
+Prezzo immobile
 <input id="qr_price" type="number" placeholder="250000">
 </div>
 
 <div class="roi-field">
-<label>Ristrutturazione (€)</label>
+<label
+data-it="Ristrutturazione (€)"
+data-en="Renovation (€)">
+Ristrutturazione (€)
+</label>
 <input id="qr_reno" type="number" placeholder="30000">
 </div>
 
 <div class="roi-field">
-<label>Prezzo medio notte (€)</label>
+<label
+data-it="Ristrutturazione (€)"
+data-en="Renovation (€)">
+Ristrutturazione (€)
+</label>
 <input id="qr_night" type="number" placeholder="110">
 </div>
 
 <div class="roi-field">
-<label>Occupazione (%)</label>
+<label
+data-it="Occupazione (%)"
+data-en="Occupancy (%)">
+Occupazione (%)
+</label>
 <input id="qr_occ" type="number" placeholder="65">
 </div>
 
 <div class="roi-field">
-<label>Costi operativi (%)</label>
+<label
+data-it="Costi operativi (%)"
+data-en="Operating costs (%)">
+Costi operativi (%)
+</label>
 <input id="qr_cost" type="number" placeholder="35">
 </div>
 
 </div>
 
-<button onclick="quickROI()" class="btn btn-primary">
+<button onclick="quickROI()" class="btn btn-primary"
+data-it="Calcola ROI"
+data-en="Calculate ROI">
 Calcola ROI
 </button>
 
 <div style="margin-top:15px">
-ROI stimato: <strong id="qr_roi">--</strong><br>
-Break-even: <strong id="qr_break">--</strong><br>
-Ricavo annuo: <strong id="qr_rev">--</strong>
+<span
+data-it="ROI stimato:"
+data-en="Estimated ROI:">
+ROI stimato:
+</span>
+
+<span
+data-it="Break-even:"
+data-en="Break-even:">
+Break-even:
+</span>
+<span
+data-it="Ricavo annuo:"
+data-en="Yearly revenue:">
+Ricavo annuo:
+</span>
 </div>
 
 </div>
@@ -244,12 +301,13 @@ Executive Snapshot
 </div>
 
 <div class="metric">
-<span data-it="Classe investimento" data-en="Investment class">Classe investimento</span>
-<strong>32/100</strong>
+<span
+data-it="Classe investimento"
+data-en="Investment class">
+Classe investimento
+</span>
+<strong>A</strong>
 </div>
-
-<div class="metric">
-<span>Classe investimento</span>
 <strong>A</strong>
 </div>
 
@@ -278,21 +336,33 @@ La versione PRO di RendimentoBB offre strumenti avanzati per valutare investimen
 <div style="display:flex;gap:30px;justify-content:center;margin-top:50px;flex-wrap:wrap">
 
 <div style="background:#f8fafc;padding:30px;border-radius:16px;width:260px">
-<h3>Analisi avanzata</h3>
+<h3
+data-it="Analisi avanzata"
+data-en="Advanced analysis">
+Analisi avanzata
+</h3>
 <p style="margin-top:10px;color:#64748b">
 ROI dettagliato con scenari realistici di occupazione e prezzi.
 </p>
 </div>
 
 <div style="background:#f8fafc;padding:30px;border-radius:16px;width:260px">
-<h3>Simulazione mutuo</h3>
+<h3
+data-it="Analisi avanzata"
+data-en="Advanced analysis">
+Analisi avanzata
+</h3>
 <p style="margin-top:10px;color:#64748b">
 Calcola l'impatto del finanziamento sulla sostenibilità dell'investimento.
 </p>
 </div>
 
 <div style="background:#f8fafc;padding:30px;border-radius:16px;width:260px">
-<h3>Executive Report</h3>
+<h3
+data-it="Executive Report"
+data-en="Executive report">
+Executive Report
+</h3>
 <p style="margin-top:10px;color:#64748b">
 Report professionale per analizzare il potenziale dell'immobile.
 </p>
@@ -303,7 +373,11 @@ Report professionale per analizzare il potenziale dell'immobile.
 <div style="margin-top:50px">
 
 <button onclick="buyPro()" class="btn btn-primary" style="font-size:18px;padding:14px 30px">
+<button onclick="buyPro()" class="btn btn-primary"
+data-it="🔓 Sblocca versione PRO – 29€"
+data-en="🔓 Unlock PRO version – €29">
 🔓 Sblocca versione PRO – 29€
+</button>
 </button>
 
 <p style="margin-top:10px;color:#64748b;font-size:14px">
@@ -359,7 +433,11 @@ Vuoi sapere se il tuo B&B sarà davvero profittevole?
 </h2>
 
 <p style="margin-top:10px;color:#64748b;font-size:18px">
+<p
+data-it="Analizza ROI, rischio e sostenibilità finanziaria prima di acquistare."
+data-en="Analyze ROI, risk and financial sustainability before buying.">
 Analizza ROI, rischio e sostenibilità finanziaria prima di acquistare.
+</p>
 </p>
 
 <div style="margin-top:40px">
