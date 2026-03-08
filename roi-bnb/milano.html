@@ -17,7 +17,13 @@ data-it="Scopri il rendimento medio dei B&B a Milano e simula il ROI di un inves
 data-en="Discover the average return of B&Bs in Milan and simulate the ROI of a short-term rental investment."
 content="Scopri il rendimento medio dei B&B a Milano e simula il ROI di un investimento negli affitti brevi.">
 
-<link rel="canonical" href="https://rendimentobb.com/roi-bnb/milano">
+<link rel="canonical" href="https://rendimentobb.com/roi-bnb/milano.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROI B&B Milano – Investire negli affitti brevi conviene?">
+<meta property="og:description" content="Scopri il rendimento medio dei B&B a Milano e simula il ROI di un investimento negli affitti brevi.">
+<meta property="og:image" content="https://rendimentobb.com/og-dashboard.jpg">
+<meta property="og:url" content="https://rendimentobb.com/roi-bnb/milano">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -26,30 +32,66 @@ content="Scopri il rendimento medio dei B&B a Milano e simula il ROI di un inves
 <body>
 
 <header class="portal-header">
+
 <div class="container portal-header-inner">
 
 <div class="logo">Rendimento<span>BB</span></div>
 
 <nav class="portal-nav">
-<a href="/">Home</a>
-<a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-<a href="/academy/">Academy</a>
+
+<a href="/tool/"
+data-it="Simulatore"
+data-en="Simulator">
+Simulatore
+</a>
+
+<a href="/tool/#mortgage"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
+
+<a href="/immobili/"
+data-it="Immobili"
+data-en="Properties">
+Immobili
+</a>
+
+<a href="/academy/"
+data-it="Academy"
+data-en="Academy">
+Academy
+</a>
+
+<a href="/dashboard/"
+data-it="Dashboard"
+data-en="Dashboard">
+Dashboard
+</a>
+
+<a href="/contact.html"
+data-it="Contatti"
+data-en="Contact">
+Contatti
+</a>
+
 </nav>
 
+<div class="right-controls">
+
 <div class="lang-switch">
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
 
-<button class="lang-btn" onclick="setLang('it')" id="btn-it">
-IT
-</button>
-
-<button class="lang-btn" onclick="setLang('en')" id="btn-en">
-EN
-</button>
+<div id="user-area"></div>
 
 </div>
 
 </div>
+
 </header>
+
 
 <main class="container" style="padding-top:100px;max-width:900px;">
 
@@ -62,9 +104,7 @@ ROI B&B a Milano: quanto rende un affitto breve?
 <p
 data-it="Milano è il principale hub economico italiano e ospita eventi internazionali come il Salone del Mobile e la Fashion Week. Questo mantiene alta la domanda di affitti brevi durante tutto l'anno."
 data-en="Milan is Italy's main economic hub and hosts international events such as the Salone del Mobile and Fashion Week. This keeps short-term rental demand high throughout the year.">
-Milano è il principale hub economico italiano e ospita eventi
-internazionali come il Salone del Mobile e la Fashion Week.
-Questo mantiene alta la domanda di affitti brevi durante tutto l'anno.
+Milano è il principale hub economico italiano e ospita eventi internazionali come il Salone del Mobile e la Fashion Week. Questo mantiene alta la domanda di affitti brevi durante tutto l'anno.
 </p>
 
 <h2
@@ -76,9 +116,9 @@ Dati medi del mercato B&B a Milano
 <ul>
 
 <li
-data-it="ROI medio: 8-12%"
-data-en="Average ROI: 8–12%">
-ROI medio: 8-12%
+data-it="ROI medio stimato: 8-12%"
+data-en="Estimated average ROI: 8–12%">
+ROI medio stimato: 8-12%
 </li>
 
 <li
@@ -96,22 +136,60 @@ Prezzo medio notte: 120-190€
 </ul>
 
 <p
-data-it="Le zone con maggiore domanda includono Porta Venezia, Navigli, Duomo e Porta Romana."
-data-en="Areas with the highest demand include Porta Venezia, Navigli, Duomo and Porta Romana.">
-Le zone con maggiore domanda includono Porta Venezia,
-Navigli, Duomo e Porta Romana.
+data-it="Il rendimento reale dipende da prezzo dell'immobile, posizione, gestione operativa e domanda turistica."
+data-en="Actual profitability depends on property price, location, operational management and tourism demand.">
+Il rendimento reale dipende da prezzo dell'immobile, posizione, gestione operativa e domanda turistica.
+</p>
+
+<h2
+data-it="Quartieri migliori per aprire un B&B a Milano"
+data-en="Best areas to open a B&B in Milan">
+Quartieri migliori per aprire un B&B a Milano
+</h2>
+
+<p
+data-it="Le zone con maggiore domanda turistica includono Duomo, Brera, Navigli, Porta Venezia e Porta Romana. La vicinanza a metropolitana e attrazioni turistiche permette tassi di occupazione più elevati."
+data-en="Areas with the highest tourist demand include Duomo, Brera, Navigli, Porta Venezia and Porta Romana. Proximity to metro lines and attractions allows higher occupancy rates.">
+Le zone con maggiore domanda turistica includono Duomo, Brera, Navigli, Porta Venezia e Porta Romana. La vicinanza alla metropolitana e alle principali attrazioni turistiche permette tassi di occupazione più elevati.
+</p>
+
+<h2
+data-it="Simula il ROI del tuo investimento"
+data-en="Simulate your investment ROI">
+Simula il ROI del tuo investimento
+</h2>
+
+<p
+data-it="Puoi stimare rapidamente il rendimento del tuo investimento utilizzando il simulatore professionale di RendimentoBB."
+data-en="You can quickly estimate your investment return using the professional RendimentoBB simulator.">
+Puoi stimare rapidamente il rendimento del tuo investimento utilizzando il simulatore professionale di RendimentoBB.
 </p>
 
 <a href="/tool/" class="btn btn-primary"
-data-it="Calcola il rendimento del tuo B&B"
-data-en="Calculate the return of your B&B">
-Calcola il rendimento del tuo B&B
+data-it="Simula il ROI del tuo B&B"
+data-en="Simulate your B&B ROI">
+Simula il ROI del tuo B&B
 </a>
 
 </main>
 
+
 <footer class="global-footer">
-<p>© 2026 RendimentoBB</p>
+
+<p
+data-it="© 2026 RendimentoBB – Motore decisionale per investimenti B&B"
+data-en="© 2026 RendimentoBB – B&B investment decision engine">
+© 2026 RendimentoBB – Motore decisionale per investimenti B&B
+</p>
+
+<div class="footer-links">
+
+<a href="/privacy.html">Privacy</a>
+<a href="/terms.html">Terms</a>
+<a href="/contact.html">Contact</a>
+
+</div>
+
 </footer>
 
 <script src="/js/lang.js"></script>
