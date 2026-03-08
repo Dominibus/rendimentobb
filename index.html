@@ -142,11 +142,34 @@ Visualizza Demo
 
 <h3>Simula ROI veloce</h3>
 
-<input id="qr_price" placeholder="Prezzo immobile (€)">
-<input id="qr_reno" placeholder="Ristrutturazione (€)">
-<input id="qr_night" placeholder="Prezzo medio notte (€)">
-<input id="qr_occ" placeholder="Occupazione (%)">
-<input id="qr_cost" placeholder="Costi operativi (%)">
+<div class="roi-grid">
+
+<div class="roi-field">
+<label>Prezzo immobile (€)</label>
+<input id="qr_price" type="number" placeholder="250000">
+</div>
+
+<div class="roi-field">
+<label>Ristrutturazione (€)</label>
+<input id="qr_reno" type="number" placeholder="30000">
+</div>
+
+<div class="roi-field">
+<label>Prezzo medio notte (€)</label>
+<input id="qr_night" type="number" placeholder="110">
+</div>
+
+<div class="roi-field">
+<label>Occupazione (%)</label>
+<input id="qr_occ" type="number" placeholder="65">
+</div>
+
+<div class="roi-field">
+<label>Costi operativi (%)</label>
+<input id="qr_cost" type="number" placeholder="35">
+</div>
+
+</div>
 
 <button onclick="quickROI()" class="btn btn-primary">
 Calcola ROI
