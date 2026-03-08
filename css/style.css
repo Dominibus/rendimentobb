@@ -192,10 +192,10 @@ align-items:center;
 }
 
 .hero-right img{
+max-width:720px;
 width:100%;
-max-width:520px;
 border-radius:20px;
-box-shadow:0 40px 120px rgba(0,0,0,0.12);
+box-shadow:0 20px 60px rgba(0,0,0,0.15);
 }
 
 .hero-trust{
