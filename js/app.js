@@ -504,6 +504,19 @@ const expenses = getValue("expenses");
 const commission = getValue("commission");
 const tax = getValue("tax");
 
+if(!window.currentUser){
+
+alert(
+window.currentLang === "it"
+? "Per analizzare questo immobile devi creare un account gratuito.\n\n✓ Salva le tue analisi\n✓ Confronta investimenti\n✓ Accedi alla dashboard"
+: "Create a free account to analyze this property.\n\n✓ Save your analyses\n✓ Compare investments\n✓ Access your dashboard"
+);
+
+window.location.href="/login/";
+return;
+
+}  
+
 const loanAmount = getValue("loanAmount");
 const interestRate = getValue("interestRate");
 const loanYears = getValue("loanYears");
