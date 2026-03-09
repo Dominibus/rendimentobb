@@ -5,109 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-  data-it="RendimentoBB – Academy Strategica B&B"
-  data-en="RendimentoBB – Strategic B&B Academy">
+data-it="RendimentoBB – Academy Strategica B&B"
+data-en="RendimentoBB – Strategic B&B Investment Academy">
 RendimentoBB – Academy Strategica B&B
 </title>
 
 <meta name="description"
-  data-it="Guida strategica per comprendere ROI, rischio e sostenibilità di un investimento B&B."
-  data-en="Strategic guide to understand ROI, risk and sustainability of a B&B investment."
-  content="Guida strategica per comprendere ROI, rischio e sostenibilità di un investimento B&B.">
+data-it="Academy strategica per investimenti B&B: ROI, rischio, sostenibilità finanziaria e strategie per trasformare un immobile in un business turistico redditizio."
+data-en="Strategic academy for B&B investments: ROI analysis, risk, financial sustainability and strategies to turn a property into a profitable hospitality business."
+content="RendimentoBB Academy">
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
 
-/* HEADER IDENTICO A HOME & TOOL */
-
 .portal-header{
-  padding:25px 0;
-  position:sticky;
-  top:0;
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-  z-index:100;
-  border-bottom:1px solid #e2e8f0;
+padding:25px 0;
+position:sticky;
+top:0;
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+z-index:100;
+border-bottom:1px solid #e2e8f0;
 }
 
 .portal-header-inner{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .portal-nav{
-  display:flex;
-  gap:28px;
-  font-size:14px;
+display:flex;
+gap:28px;
+font-size:14px;
 }
 
 .portal-nav a{
-  text-decoration:none;
-  color:#475569;
-  font-weight:500;
-  transition:.2s ease;
+text-decoration:none;
+color:#475569;
+font-weight:500;
+transition:.2s ease;
 }
 
 .portal-nav a:hover{
-  color:#0f172a;
+color:#0f172a;
 }
 
 .right-controls{
-  display:flex;
-  align-items:center;
-  gap:18px;
+display:flex;
+align-items:center;
+gap:18px;
 }
 
 .lang-switch{
-  display:flex;
-  gap:8px;
+display:flex;
+gap:8px;
 }
 
 .lang-btn{
-  padding:6px 14px;
-  border-radius:999px;
-  border:1px solid #cbd5e1;
-  background:white;
-  cursor:pointer;
-  font-size:13px;
-  font-weight:600;
+padding:6px 14px;
+border-radius:999px;
+border:1px solid #cbd5e1;
+background:white;
+cursor:pointer;
+font-size:13px;
+font-weight:600;
 }
 
 .lang-btn.active{
-  background:#0f172a;
-  color:white;
+background:#0f172a;
+color:white;
 }
 
-/* CONTENUTI */
-
 .content-section{
-  margin-top:60px;
+margin-top:60px;
 }
 
 .content-card{
-  background:white;
-  padding:50px;
-  border-radius:24px;
-  box-shadow:0 40px 100px rgba(0,0,0,0.06);
-  border:1px solid #e2e8f0;
-  margin-bottom:60px;
+background:white;
+padding:50px;
+border-radius:24px;
+box-shadow:0 40px 100px rgba(0,0,0,0.06);
+border:1px solid #e2e8f0;
+margin-bottom:50px;
 }
 
-.content-card h3{
-  margin-bottom:20px;
-  font-size:22px;
+.content-card h2{
+margin-bottom:18px;
+font-size:22px;
 }
 
 .content-card p{
-  color:#475569;
-  line-height:1.7;
-  font-size:16px;
+color:#475569;
+line-height:1.7;
+font-size:16px;
+}
+
+.intro-text{
+font-size:18px;
+line-height:1.8;
+color:#475569;
+max-width:900px;
+margin:auto;
+text-align:center;
+margin-top:25px;
+}
+
+.cta-box{
+text-align:center;
+margin-top:60px;
 }
 
 @media(max-width:1024px){
-  .portal-nav{ display:none; }
+.portal-nav{display:none;}
 }
 
 </style>
@@ -116,116 +127,134 @@ RendimentoBB – Academy Strategica B&B
 <body>
 
 <header class="portal-header">
-  <div class="container portal-header-inner">
+<div class="container portal-header-inner">
 
-    <div style="display:flex; align-items:center; gap:40px;">
-      <a href="/" style="text-decoration:none;">
-        <div class="logo">Rendimento<span>BB</span></div>
-      </a>
+<div style="display:flex; align-items:center; gap:40px;">
+<a href="/" style="text-decoration:none;">
+<div class="logo">Rendimento<span>BB</span></div>
+</a>
 
-      <nav class="portal-nav">
-        <a href="/tool/">Tool</a>
-        <a href="/tool/#mortgage">Mutui</a>
-        <a href="#">Immobili</a>
-        <a href="/academy/">Academy</a>
-        <a href="/dashboard/">Dashboard</a>
-      </nav>
-    </div>
+<nav class="portal-nav">
+<a href="/tool/">Tool</a>
+<a href="/tool/#mortgage">Mutui</a>
+<a href="#">Immobili</a>
+<a href="/academy/">Academy</a>
+<a href="/dashboard/">Dashboard</a>
+</nav>
+</div>
 
-    <div class="right-controls">
+<div class="right-controls">
 
-      <div class="lang-switch">
-        <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-      </div>
+<div class="lang-switch">
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
 
-      <!-- AREA UTENTE FIREBASE -->
-      <div id="user-area"></div>
+<div id="user-area"></div>
 
-    </div>
-
-  </div>
+</div>
+</div>
 </header>
 
 
 <main>
 
-<div class="container" style="padding-top:80px; padding-bottom:120px;">
+<div class="container" style="padding-top:90px;padding-bottom:120px;">
 
-  <div class="page-title">
-    <h1
-      data-it="Academy Strategica per Investimenti B&B"
-      data-en="Strategic Academy for B&B Investments">
-    </h1>
+<div class="page-title">
 
-    <p
-      data-it="Comprendi ROI, rischio, sostenibilità e leve di miglioramento prima di investire."
-      data-en="Understand ROI, risk, sustainability and optimization levers before investing.">
-    </p>
-  </div>
+<h1
+data-it="Academy Strategica per Investimenti B&B"
+data-en="Strategic Academy for B&B Investments">
+</h1>
+
+<p class="intro-text"
+
+data-it="L'Academy RendimentoBB è una guida strategica per chi desidera aprire o investire in un Bed & Breakfast. Analizziamo redditività, ROI, sostenibilità finanziaria e rischi reali del business degli affitti turistici. Il nostro obiettivo è aiutarti a trasformare un immobile in un investimento sostenibile e profittevole."
+data-en="The RendimentoBB Academy is a strategic guide for anyone looking to open or invest in a Bed & Breakfast. We analyze profitability, ROI, financial sustainability and real risks of the short-term rental business. Our goal is to help you turn a property into a sustainable and profitable hospitality investment.">
+</p>
+
+</div>
 
 
 <section class="content-section">
 
+
 <div class="content-card">
-<h3
-data-it="📊 Come interpretare il ROI"
-data-en="📊 How to interpret ROI">
-</h3>
+
+<h2
+data-it="📊 Come interpretare il ROI di un B&B"
+data-en="📊 How to interpret B&B ROI">
+</h2>
 
 <p
-data-it="Un ROI superiore al 10% indica buona redditività. Tuttavia è fondamentale analizzare la resilienza dell'investimento in scenari di occupazione ridotta. La stabilità del flusso di cassa è più importante del ROI nominale."
-data-en="An ROI above 10% indicates good profitability. However, resilience under lower occupancy scenarios is crucial. Cash flow stability matters more than nominal ROI.">
+data-it="Il Return on Investment è uno degli indicatori principali per valutare un investimento immobiliare turistico. Un ROI superiore al 10% indica generalmente una buona redditività, ma è fondamentale analizzare anche la stabilità del flusso di cassa, la stagionalità e la resilienza dell'investimento in scenari meno favorevoli."
+data-en="Return on Investment is one of the key indicators when evaluating a hospitality property. An ROI above 10% generally indicates strong profitability, but investors should also analyze cash flow stability, seasonality and how resilient the investment remains under lower occupancy scenarios.">
 </p>
+
 </div>
 
 
+
 <div class="content-card">
-<h3
+
+<h2
 data-it="🏦 Quando il mutuo è sostenibile"
-data-en="🏦 When a mortgage is sustainable">
-</h3>
+data-en="🏦 When a mortgage becomes sustainable">
+</h2>
 
 <p
-data-it="Il flusso operativo deve coprire il debito con margine. Se il cashflow è negativo già al 70% di occupazione, l'investimento è strutturalmente fragile."
-data-en="Operating cash flow must cover debt with margin. If cash flow turns negative at 70% occupancy, the investment is structurally fragile.">
+data-it="Un investimento B&B è sostenibile quando il flusso operativo riesce a coprire il debito con un margine di sicurezza. Se il cashflow diventa negativo con livelli di occupazione realistici, significa che l'investimento è fragile e altamente esposto al rischio."
+data-en="A B&B investment is sustainable when operating cash flow comfortably covers debt payments. If realistic occupancy scenarios produce negative cash flow, the investment becomes fragile and highly exposed to financial risk.">
 </p>
+
 </div>
 
 
+
 <div class="content-card">
-<h3
+
+<h2
 data-it="⚠️ Errori comuni negli investimenti B&B"
-data-en="⚠️ Common B&B investment mistakes">
-</h3>
+data-en="⚠️ Common mistakes in B&B investments">
+</h2>
 
 <p
-data-it="Sovrastimare l'occupazione media, ignorare la stagionalità e sottovalutare le spese operative sono errori frequenti. I numeri devono essere realistici e prudenziali."
-data-en="Overestimating occupancy, ignoring seasonality and underestimating operating costs are common mistakes. Numbers must be realistic and conservative.">
+data-it="Molti investitori sovrastimano l'occupazione media, ignorano la stagionalità e sottovalutano i costi operativi. Questi errori portano spesso a valutazioni troppo ottimistiche del rendimento. Un'analisi prudenziale e basata sui dati è fondamentale."
+data-en="Many investors overestimate occupancy rates, ignore seasonality and underestimate operational costs. These mistakes often lead to unrealistic profit expectations. A data-driven and conservative analysis is essential.">
 </p>
+
 </div>
+
 
 
 <div class="content-card">
-<h3
-data-it="📈 Come migliorare la sostenibilità"
-data-en="📈 How to improve sustainability">
-</h3>
+
+<h2
+data-it="📈 Come migliorare il rendimento di un B&B"
+data-en="📈 How to improve B&B profitability">
+</h2>
 
 <p
-data-it="Ottimizzare il prezzo medio notte, migliorare recensioni, ridurre costi fissi e negoziare un tasso mutuo competitivo può cambiare radicalmente il profilo di rischio."
-data-en="Optimizing nightly pricing, improving reviews, reducing fixed costs and negotiating competitive loan rates can radically improve the risk profile.">
+data-it="Strategie come ottimizzare il prezzo medio notte, migliorare recensioni online, ridurre i costi operativi e negoziare condizioni finanziarie migliori possono cambiare radicalmente la redditività di un investimento."
+data-en="Strategies such as optimizing nightly pricing, improving guest reviews, reducing operational costs and negotiating better financing terms can significantly improve the profitability of a hospitality investment.">
 </p>
+
 </div>
 
 
-<div style="text-align:center;margin-top:60px;">
-<button onclick="window.location.href='/tool/'"
+
+<div class="cta-box">
+
+<button
+onclick="window.location.href='/tool/'"
 class="btn btn-primary"
-data-it="Avvia Analisi Strategica"
-data-en="Start Strategic Analysis">
+data-it="Simula il rendimento del tuo B&B"
+data-en="Simulate your B&B investment">
 </button>
+
 </div>
+
 
 </section>
 
@@ -237,7 +266,6 @@ data-en="Start Strategic Analysis">
 <footer class="global-footer">
 © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
-
 
 <script src="/js/lang.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
