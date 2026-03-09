@@ -1175,6 +1175,22 @@ if(!link) return;
 console.log("Analisi immobile da link:", link);
 
 
+// AUTOCOMPILA PREZZO SE PROVIENE DALLO SCANNER
+
+const savedPrice = localStorage.getItem("property_price");
+
+if(savedPrice){
+
+const priceField =
+document.querySelector("#price, #property-price");
+
+if(priceField){
+priceField.value = savedPrice;
+}
+
+}
+
+
 // ================= AUTOFILL PREZZO =================
 
 const priceField =
