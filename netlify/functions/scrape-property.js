@@ -13,7 +13,8 @@ try{
 
 const response = await fetch(url,{
 headers:{
-"User-Agent":"Mozilla/5.0"
+"User-Agent":"Mozilla/5.0",
+"Accept-Language":"it-IT,it;q=0.9"
 }
 });
 
@@ -22,44 +23,42 @@ const html = await response.text();
 let price = null;
 
 
-// ===== PATTERN 1 (Idealista JSON) =====
+// ===== METHOD 1 (Idealista structured JSON) =====
 
-let match = html.match(/"price":\s*([0-9]+)/);
+let jsonMatch = html.match(/"price"\s*:\s*([0-9]+)/);
 
-if(match){
-price = parseInt(match[1]);
+if(jsonMatch){
+price = parseInt(jsonMatch[1]);
 }
 
 
-// ===== PATTERN 2 (meta property price) =====
+// ===== METHOD 2 (schema.org structured data) =====
 
 if(!price){
 
-match = html.match(/content="([0-9]{5,7})"\s*itemprop="price"/);
+let schemaMatch = html.match(/"@type":"Offer".*?"price":"?([0-9]+)"?/);
 
-if(match){
-price = parseInt(match[1]);
+if(schemaMatch){
+price = parseInt(schemaMatch[1]);
 }
 
 }
 
 
-// ===== PATTERN 3 (fallback € format) =====
+// ===== METHOD 3 (visual price fallback) =====
 
 if(!price){
 
-match = html.match(/([0-9]{2,3}\.?[0-9]{3})\s?€/);
+let euroMatch = html.match(/([0-9]{2,3}\.?[0-9]{3})\s?€/);
 
-if(match){
-price = parseInt(match[1].replace(".",""));
+if(euroMatch){
+price = parseInt(euroMatch[1].replace(".",""));
 }
 
 }
 
 
-// ===== DEBUG =====
-
-console.log("Price extracted:",price);
+console.log("Extracted price:",price);
 
 
 return {
