@@ -27,29 +27,31 @@ let price = null;
 let match;
 
 
-// ===== PATTERN JSON PRICE =====
+// ===== JSON LD PRICE =====
 
-match = html.match(/"price"\s*:\s*([0-9]+)/);
+match = html.match(/"price"\s*:\s*"([0-9\.]+)"/);
 
 if(match){
-price = parseInt(match[1]);
+price = match[1].replace(/\./g,"");
+price = parseInt(price);
 }
 
 
-// ===== PATTERN MAIN PRICE =====
+// ===== OFFERS PRICE =====
 
 if(!price){
 
-match = html.match(/"mainPrice"\s*:\s*"([0-9]+)"/);
+match = html.match(/"offers":\s*{[^}]*"price"\s*:\s*"([0-9\.]+)"/);
 
 if(match){
-price = parseInt(match[1]);
+price = match[1].replace(/\./g,"");
+price = parseInt(price);
 }
 
 }
 
 
-// ===== FALLBACK HTML =====
+// ===== HTML FALLBACK =====
 
 if(!price){
 
@@ -68,11 +70,16 @@ price = parseInt(price);
 
 }
 
+
 console.log("Extracted price:",price);
 
 return {
 
 statusCode:200,
+
+headers:{
+"Access-Control-Allow-Origin":"*"
+},
 
 body: JSON.stringify({
 price: price
