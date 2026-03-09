@@ -1,4 +1,4 @@
-export async function handler(event) {
+exports.handler = async (event) => {
 
 const url = event.queryStringParameters.url;
 
@@ -23,9 +23,9 @@ const html = await response.text();
 let price = null;
 
 
-// ===== METHOD 1 JSON NEXT DATA =====
+// ===== PARSE NEXT DATA JSON =====
 
-const jsonMatch = html.match(/<script id="__NEXT_DATA__".*?>(.*?)<\/script>/);
+const jsonMatch = html.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/);
 
 if(jsonMatch){
 
@@ -39,7 +39,7 @@ null;
 }
 
 
-// ===== METHOD 2 FALLBACK =====
+// ===== FALLBACK =====
 
 if(!price){
 
@@ -52,8 +52,15 @@ price = parseInt(match[1]);
 }
 
 return {
+
 statusCode:200,
+
+headers:{
+"Access-Control-Allow-Origin":"*"
+},
+
 body: JSON.stringify({price})
+
 };
 
 }catch(e){
@@ -65,4 +72,4 @@ body: JSON.stringify({error:"scrape error"})
 
 }
 
-}
+};
