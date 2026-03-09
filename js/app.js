@@ -1136,6 +1136,8 @@ profit: profit,
 roi: roi,
 risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
+}; 
+
 };
 
 // ================= PROPERTY LINK PARSER =================
@@ -1187,6 +1189,4 @@ renderMarketBenchmark(city);
 
 }  
 
-document.addEventListener("DOMContentLoaded", loadPropertyFromLink);  
-
-};
+document.addEventListener("DOMContentLoaded", loadPropertyFromLink); 
