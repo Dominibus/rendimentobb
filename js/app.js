@@ -1142,7 +1142,7 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 // ================= PROPERTY LINK PARSER =================
 
-function loadPropertyFromLink(){
+async function loadPropertyFromLink(){
 
 const link = localStorage.getItem("property_link");
 
@@ -1150,24 +1150,30 @@ if(!link) return;
 
 console.log("Analisi immobile da link:", link);
 
-// prova a estrarre prezzo dal link
-const priceMatch = link.match(/([0-9]{5,7})/);
+try{
 
-if(priceMatch){
+const response = await fetch(
+"/.netlify/functions/scrape-property?url=" + encodeURIComponent(link)
+);
 
-const price = parseInt(priceMatch[0]);
+const data = await response.json();
+
+console.log("Dati estratti:", data);
+
+// prezzo reale estratto dalla pagina
+if(data.price){
 
 const priceInput = document.getElementById("price");
 
 if(priceInput){
 
-priceInput.value = price;
+priceInput.value = data.price;
 
 }
 
 }
 
-// stima città dal link
+// stima città dal link (fallback)
 
 let city = null;
 
@@ -1182,11 +1188,16 @@ if(city && citySelect){
 
 citySelect.value = city;
 
-// carica benchmark
 renderMarketBenchmark(city);
 
 }
 
-}  
+}catch(e){
 
-document.addEventListener("DOMContentLoaded", loadPropertyFromLink); 
+console.error("Errore analisi immobile:", e);
+
+}
+
+}
+
+document.addEventListener("DOMContentLoaded", loadPropertyFromLink);
