@@ -639,8 +639,6 @@ const banks = [
 { name: "Bank C", rate: rateC }
 ];
 
-const results = banks.map(bank => {
-
 const results = banks
 .map(bank => {
 
