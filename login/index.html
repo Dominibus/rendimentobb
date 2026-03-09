@@ -1,130 +1,128 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Login – RendimentoBB</title>
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-body {
-  background: linear-gradient(135deg,#0f172a,#1e293b);
-  color: white;
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
 }
 
-.login-wrapper {
-  min-height: 100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:40px 20px;
+.login-wrapper{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:40px 20px;
 }
 
-.login-card {
-  background:white;
-  color:#0f172a;
-  padding:50px;
-  border-radius:20px;
-  width:360px;
-  box-shadow:0 40px 80px rgba(0,0,0,0.25);
-  text-align:center;
+.login-card{
+background:white;
+color:#0f172a;
+padding:50px;
+border-radius:20px;
+width:360px;
+box-shadow:0 40px 80px rgba(0,0,0,0.25);
+text-align:center;
 }
 
-.login-card h2 {
-  margin-bottom:30px;
-  font-weight:800;
+.login-card h2{
+margin-bottom:30px;
+font-weight:800;
 }
 
-.login-card input {
-  width:100%;
-  padding:14px;
-  margin-bottom:15px;
-  border-radius:10px;
-  border:1px solid #cbd5e1;
-  font-size:14px;
+.login-card input{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+font-size:14px;
 }
 
-.login-card input:focus {
-  outline:none;
-  border-color:#10b981;
-  box-shadow:0 0 0 3px rgba(16,185,129,.2);
+.login-card input:focus{
+outline:none;
+border-color:#10b981;
+box-shadow:0 0 0 3px rgba(16,185,129,.2);
 }
 
-.back-link {
-  margin-top:20px;
-  font-size:13px;
+.back-link{
+margin-top:20px;
+font-size:13px;
 }
 
-.back-link a {
-  color:#64748b;
-  text-decoration:none;
+.back-link a{
+color:#64748b;
+text-decoration:none;
 }
 
-.back-link a:hover {
-  color:#0f172a;
+.back-link a:hover{
+color:#0f172a;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
 <main class="login-wrapper">
 
-  <div class="login-card">
+<div class="login-card">
 
-    <h2>Accesso</h2>
-    <div id="login-message" style="font-size:14px;color:#475569;margin-bottom:15px;"></div>
+<h2>Accesso</h2>
 
-    <input id="email" type="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
+<div id="login-message" style="font-size:14px;color:#475569;margin-bottom:15px;"></div>
 
-    <button id="loginBtn" class="btn btn-primary" style="width:100%;margin-bottom:12px;">
-      Login
-    </button>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
 
-    <button id="registerBtn" class="btn btn-secondary" style="width:100%;">
-      Registrati
-    </button>
+<button id="loginBtn" class="btn btn-primary" style="width:100%;margin-bottom:12px;">
+Login
+</button>
 
-    <div class="back-link">
-      <a href="/">← Torna alla Home</a>
-    </div>
+<button id="registerBtn" class="btn btn-secondary" style="width:100%;">
+Registrati
+</button>
 
-    <script>
+<div class="back-link">
+<a href="/">← Torna alla Home</a>
+</div>
 
-const params = new URLSearchParams(window.location.search);
-
-if(params.get("source") === "analysis"){
-
-document.getElementById("login-message").innerHTML = `
-Per analizzare questo immobile devi creare un account gratuito.<br><br>
-✓ Salva le tue analisi<br>
-✓ Confronta investimenti<br>
-✓ Accedi alla dashboard
-`;
-
-}
-
-</script>
-
-  </div>
+</div>
 
 </main>
 
-<footer class="global-footer" style="background:#0f172a; color:#94a3b8;">
-  © 2026 RendimentoBB – Strategic B&B Investment Decision Engine
+
+<footer class="global-footer" style="background:#0f172a;color:#94a3b8;">
+© 2026 RendimentoBB – Strategic B&B Investment Decision Engine
 </footer>
 
+
+<!-- FIREBASE INIT -->
+
 <script type="module" src="/js/firebase-init.js"></script>
+
+
+<!-- LOGIN MESSAGE -->
 
 <script>
 
 const params = new URLSearchParams(window.location.search);
 
-if(params.get("source") === "analysis"){
+if(params.get("source")==="analysis"){
 
-document.getElementById("login-message").innerHTML = `
+document.getElementById("login-message").innerHTML=`
 Per analizzare questo immobile devi creare un account gratuito.<br><br>
 ✓ Salva le tue analisi<br>
 ✓ Confronta investimenti<br>
@@ -135,52 +133,60 @@ Per analizzare questo immobile devi creare un account gratuito.<br><br>
 
 </script>
 
+
+<!-- FIREBASE AUTH -->
+
 <script type="module">
 
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword }
+import {
+getAuth,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword
+}
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-const auth = getAuth();
+const auth=getAuth();
 
-document.getElementById("loginBtn").onclick = async () => {
+document.getElementById("loginBtn").onclick=async()=>{
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
 
-  try{
+try{
 
-    await signInWithEmailAndPassword(auth,email,password);
+await signInWithEmailAndPassword(auth,email,password);
 
-    window.location.href="/tool/";
+window.location.href="/tool/";
 
-  }catch(e){
+}catch(e){
 
-    alert(e.message);
+alert(e.message);
 
-  }
+}
 
 };
 
-document.getElementById("registerBtn").onclick = async () => {
+document.getElementById("registerBtn").onclick=async()=>{
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
 
-  try{
+try{
 
-    await createUserWithEmailAndPassword(auth,email,password);
+await createUserWithEmailAndPassword(auth,email,password);
 
-    window.location.href="/tool/";
+window.location.href="/tool/";
 
-  }catch(e){
+}catch(e){
 
-    alert(e.message);
+alert(e.message);
 
-  }
+}
 
 };
 
 </script>
+
 
 </body>
 </html>
