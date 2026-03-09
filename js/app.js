@@ -612,6 +612,11 @@ roi: roi,
 risk: riskScore
 });
 
+// SCROLL AUTOMATICO AI RISULTATI
+document.getElementById("results").scrollIntoView({
+behavior: "smooth"
+});  
+
 }
 
 // ================= STRATEGIC =================
