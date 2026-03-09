@@ -400,7 +400,9 @@ container.innerHTML = `
 
 <div class="kpi-box">
 <span>${t("roi")}</span>
-<strong>${roi.toFixed(2)}%</strong>
+<strong class="${roi >= 0 ? 'roi-positive' : 'roi-negative'}">
+${roi.toFixed(2)}%
+</strong>
 </div>
 
 <div class="kpi-box">
