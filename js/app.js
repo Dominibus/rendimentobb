@@ -1198,23 +1198,6 @@ if(link.includes("milano")) city = "milano";
 if(link.includes("roma")) city = "roma";
 if(link.includes("firenze")) city = "firenze";
 
-const citySelect = document.getElementById("city");
-
-if(city && citySelect){
-
-citySelect.value = city;
-
-renderMarketBenchmark(city);
-
-}  
-
-let city = null;
-
-if(link.includes("napoli")) city = "napoli";
-if(link.includes("milano")) city = "milano";
-if(link.includes("roma")) city = "roma";
-if(link.includes("firenze")) city = "firenze";
-
 
 const citySelect = document.getElementById("city");
 
