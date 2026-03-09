@@ -1140,6 +1140,44 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 };
 
+// ================= IDEALISTA SCRAPER (BROWSER) =================
+
+async function scrapeIdealistaFromBrowser(url){
+
+try{
+
+const response = await fetch(url);
+const html = await response.text();
+
+let price = null;
+
+// cerca prezzo tipo 740.000 €
+const match = html.match(/([0-9\.]{4,12})\s?€/);
+
+if(match){
+
+price = match[1]
+.replace(/\./g,"")
+.replace(",",".")
+.trim();
+
+price = parseInt(price);
+
+}
+
+console.log("Prezzo trovato da browser:", price);
+
+return { price };
+
+}catch(e){
+
+console.error("Errore scraping browser:", e);
+return { price:null };
+
+}
+
+}
+
 // ================= PROPERTY LINK PARSER =================
 
 async function loadPropertyFromLink(){
@@ -1152,11 +1190,7 @@ console.log("Analisi immobile da link:", link);
 
 try{
 
-const response = await fetch(
-"/.netlify/functions/scrape-property?url=" + encodeURIComponent(link)
-);
-
-const data = await response.json();
+const data = await scrapeIdealistaFromBrowser(link);
 
 console.log("Dati estratti:", data);
 
