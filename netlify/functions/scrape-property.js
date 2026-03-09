@@ -21,36 +21,66 @@ const html = await response.text();
 
 let price = null;
 
-// Idealista JSON
-const priceMatch = html.match(/"price":\s*([0-9]+)/);
 
-if(priceMatch){
-price = parseInt(priceMatch[1]);
+// ===== PATTERN 1 (Idealista JSON) =====
+
+let match = html.match(/"price":\s*([0-9]+)/);
+
+if(match){
+price = parseInt(match[1]);
 }
 
-// fallback prezzo
+
+// ===== PATTERN 2 (meta property price) =====
+
 if(!price){
 
-const altMatch = html.match(/([0-9]{2,3}\.?[0-9]{3})\s*€/);
+match = html.match(/content="([0-9]{5,7})"\s*itemprop="price"/);
 
-if(altMatch){
-price = parseInt(altMatch[1].replace(".",""));
+if(match){
+price = parseInt(match[1]);
 }
 
 }
+
+
+// ===== PATTERN 3 (fallback € format) =====
+
+if(!price){
+
+match = html.match(/([0-9]{2,3}\.?[0-9]{3})\s?€/);
+
+if(match){
+price = parseInt(match[1].replace(".",""));
+}
+
+}
+
+
+// ===== DEBUG =====
+
+console.log("Price extracted:",price);
+
 
 return {
+
 statusCode:200,
+
 body: JSON.stringify({
-price: price || null
+price: price
 })
+
 };
 
 }catch(e){
 
+console.log("SCRAPE ERROR",e);
+
 return {
+
 statusCode:500,
 body: JSON.stringify({error:"scrape error"})
+
 };
 
 }
