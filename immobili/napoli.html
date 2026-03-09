@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title
+data-it="Immobili investimento B&B Napoli – RendimentoBB"
+data-en="Naples B&B Investment Properties – RendimentoBB">
+Immobili investimento B&B Napoli – RendimentoBB
+</title>
+
+<meta name="description"
+data-it="Esempi di immobili a Napoli con analisi di rendimento per B&B: ROI stimato, prezzo medio notte e occupazione."
+data-en="Sample properties in Naples analyzed for B&B investment with ROI estimate, nightly rate and occupancy."
+content="B&B investment Naples">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<style>
+
+.property-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+margin-top:50px;
+}
+
+.property-card{
+background:white;
+padding:35px;
+border-radius:18px;
+border:1px solid #e2e8f0;
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+transition:.25s;
+}
+
+.property-card:hover{
+transform:translateY(-5px);
+box-shadow:0 30px 70px rgba(0,0,0,0.08);
+}
+
+.property-title{
+font-size:18px;
+font-weight:600;
+margin-bottom:10px;
+}
+
+.property-data{
+margin-top:10px;
+color:#64748b;
+font-size:14px;
+}
+
+.property-roi{
+font-size:22px;
+color:#10b981;
+font-weight:600;
+margin-top:12px;
+}
+
+.analyze-btn{
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="portal-header">
+
+<div class="container portal-header-inner">
+
+<div class="logo">Rendimento<span>BB</span></div>
+
+<nav class="portal-nav">
+
+<a href="/tool/"
+data-it="Simulatore"
+data-en="Simulator">
+Simulatore
+</a>
+
+<a href="/tool/#mortgage"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
+
+<a href="/immobili/"
+data-it="Immobili"
+data-en="Properties">
+Immobili
+</a>
+
+<a href="/academy/"
+data-it="Academy"
+data-en="Academy">
+Academy
+</a>
+
+<a href="/dashboard/"
+data-it="Dashboard"
+data-en="Dashboard">
+Dashboard
+</a>
+
+<a href="/contact.html"
+data-it="Contatti"
+data-en="Contact">
+Contatti
+</a>
+
+</nav>
+
+<div class="right-controls">
+
+<div class="lang-switch">
+
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+
+</div>
+
+<div id="user-area"></div>
+
+</div>
+
+</div>
+
+</header>
+
+<main>
+
+<div class="container" style="padding-top:100px">
+
+<h1
+data-it="Immobili analizzati per investimento B&B a Napoli"
+data-en="Analyzed B&B investment properties in Naples">
+Immobili analizzati per investimento B&B a Napoli
+</h1>
+
+<p style="margin-top:10px;color:#64748b"
+data-it="Esempi di immobili a Napoli con analisi del rendimento stimato per affitti brevi."
+data-en="Examples of properties in Naples analyzed for short term rental profitability.">
+Esempi di immobili con ROI stimato per affitti brevi.
+</p>
+
+
+<div class="property-grid">
+
+
+<div class="property-card">
+
+<div class="property-title">Centro Storico – Bilocale 60mq</div>
+
+<div class="property-data"
+data-it="Prezzo immobile: 210000€"
+data-en="Property price: 210000€">
+Prezzo immobile: 210000€
+</div>
+
+<div class="property-data"
+data-it="Prezzo medio notte: 110€"
+data-en="Average nightly price: 110€">
+Prezzo medio notte: 110€
+</div>
+
+<div class="property-data"
+data-it="Occupazione stimata: 72%"
+data-en="Estimated occupancy: 72%">
+Occupazione stimata: 72%
+</div>
+
+<div class="property-roi">
+ROI stimato: 16.4%
+</div>
+
+<div class="analyze-btn">
+<a href="/tool/" class="btn btn-primary"
+data-it="Analizza investimento"
+data-en="Analyze investment">
+Analizza investimento
+</a>
+</div>
+
+</div>
+
+
+<div class="property-card">
+
+<div class="property-title">Chiaia – Trilocale 80mq</div>
+
+<div class="property-data"
+data-it="Prezzo immobile: 320000€"
+data-en="Property price: 320000€">
+Prezzo immobile: 320000€
+</div>
+
+<div class="property-data"
+data-it="Prezzo medio notte: 145€"
+data-en="Average nightly price: 145€">
+Prezzo medio notte: 145€
+</div>
+
+<div class="property-data"
+data-it="Occupazione stimata: 70%"
+data-en="Estimated occupancy: 70%">
+Occupazione stimata: 70%
+</div>
+
+<div class="property-roi">
+ROI stimato: 15.1%
+</div>
+
+<div class="analyze-btn">
+<a href="/tool/" class="btn btn-primary"
+data-it="Analizza investimento"
+data-en="Analyze investment">
+Analizza investimento
+</a>
+</div>
+
+</div>
+
+
+<div class="property-card">
+
+<div class="property-title">Vomero – Bilocale 55mq</div>
+
+<div class="property-data"
+data-it="Prezzo immobile: 250000€"
+data-en="Property price: 250000€">
+Prezzo immobile: 250000€
+</div>
+
+<div class="property-data"
+data-it="Prezzo medio notte: 120€"
+data-en="Average nightly price: 120€">
+Prezzo medio notte: 120€
+</div>
+
+<div class="property-data"
+data-it="Occupazione stimata: 68%"
+data-en="Estimated occupancy: 68%">
+Occupazione stimata: 68%
+</div>
+
+<div class="property-roi">
+ROI stimato: 14.2%
+</div>
+
+<div class="analyze-btn">
+<a href="/tool/" class="btn btn-primary"
+data-it="Analizza investimento"
+data-en="Analyze investment">
+Analizza investimento
+</a>
+</div>
+
+</div>
+
+</div>
+
+
+<section style="margin-top:80px;text-align:center">
+
+<h2
+data-it="Vuoi analizzare un immobile specifico?"
+data-en="Want to analyze a specific property?">
+Vuoi analizzare un immobile specifico?
+</h2>
+
+<p style="color:#64748b;margin-top:10px"
+data-it="Usa il simulatore RendimentoBB per calcolare ROI, mutuo e sostenibilità finanziaria."
+data-en="Use the RendimentoBB simulator to calculate ROI, mortgage impact and financial sustainability.">
+Usa il simulatore professionale di RendimentoBB.
+</p>
+
+<br>
+
+<a href="/tool/" class="btn btn-primary"
+data-it="Avvia simulazione"
+data-en="Start analysis">
+Avvia simulazione
+</a>
+
+</section>
+
+</div>
+
+</main>
+
+<footer class="global-footer">
+
+<p
+data-it="© 2026 RendimentoBB – Motore decisionale per investimenti B&B"
+data-en="© 2026 RendimentoBB – B&B investment decision engine">
+© 2026 RendimentoBB
+</p>
+
+</footer>
+
+<script src="/js/lang.js"></script>
+
+</body>
+</html>
