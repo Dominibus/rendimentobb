@@ -289,6 +289,8 @@ data-en="© 2026 RendimentoBB – B&B investment decision engine">
 
 <script>
 
+<script>
+
 function analyzeProperty(){
 
 const link = document.getElementById("property-link").value;
@@ -298,13 +300,37 @@ alert("Inserisci un link immobile");
 return;
 }
 
+let portal = "Portale immobiliare";
+let id = "";
+
+if(link.includes("idealista")){
+portal = "Idealista";
+id = link.split("/").pop();
+}
+
+if(link.includes("immobiliare.it")){
+portal = "Immobiliare.it";
+id = link.split("/").pop();
+}
+
+document.getElementById("property-preview").innerHTML = `
+<div style="background:#f1f5f9;padding:10px;border-radius:8px;margin-top:10px;">
+<strong>📍 Immobile rilevato</strong><br>
+Portale: ${portal}<br>
+ID annuncio: ${id}<br>
+<a href="${link}" target="_blank">Apri annuncio</a>
+</div>
+`;
+
 localStorage.setItem("property_link", link);
 
-window.location.href = "/tool/";
+setTimeout(()=>{
+window.location.href="/tool/";
+},1000);
 
 }
 
-</script>  
+</script>
 
 </body>
 </html>
