@@ -284,7 +284,25 @@ data-en="© 2026 RendimentoBB – B&B investment decision engine">
 <script src="/js/lang.js"></script>
 
 <script type="module" src="/js/firebase-init.js"></script>
-<script type="module" src="/js/app.js"></script>
+
+<script>
+
+function analyzeProperty(){
+
+const link = document.getElementById("property-link").value;
+
+if(!link){
+alert("Inserisci un link immobile");
+return;
+}
+
+localStorage.setItem("property_link", link);
+
+window.location.href = "/tool/";
+
+}
+
+</script>  
 
 </body>
 </html>
