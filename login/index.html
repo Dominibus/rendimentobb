@@ -118,35 +118,6 @@ Per analizzare questo immobile devi creare un account gratuito.<br><br>
 
 <script type="module" src="/js/firebase-init.js"></script>
 
-<script type="module">
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-const auth = getAuth();
-
-document.getElementById("loginBtn").onclick = async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  try {
-    await signInWithEmailAndPassword(auth,email,password);
-    window.location.href="/tool/";
-  } catch(e){
-    alert(e.message);
-  }
-};
-
-document.getElementById("registerBtn").onclick = async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  try {
-    await createUserWithEmailAndPassword(auth,email,password);
-    window.location.href="/tool/";
-  } catch(e){
-    alert(e.message);
-  }
-};
 <script>
 
 const params = new URLSearchParams(window.location.search);
@@ -161,6 +132,53 @@ Per analizzare questo immobile devi creare un account gratuito.<br><br>
 `;
 
 }
+
+</script>
+
+<script type="module">
+
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+document.getElementById("loginBtn").onclick = async () => {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try{
+
+    await signInWithEmailAndPassword(auth,email,password);
+
+    window.location.href="/tool/";
+
+  }catch(e){
+
+    alert(e.message);
+
+  }
+
+};
+
+document.getElementById("registerBtn").onclick = async () => {
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try{
+
+    await createUserWithEmailAndPassword(auth,email,password);
+
+    window.location.href="/tool/";
+
+  }catch(e){
+
+    alert(e.message);
+
+  }
+
+};
 
 </script>
 
