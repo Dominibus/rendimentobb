@@ -386,10 +386,15 @@ container.innerHTML = `
 
 // ================= EXECUTIVE KPI =================
 
-function renderExecutiveKPI(roi, net){
+function renderExecutiveKPI(roi, net, revenue, equity){
 
 const container = document.getElementById("executive-kpi");
 if(!container) return;
+
+const payback =
+equity > 0 && net > 0
+? (equity / net).toFixed(1)
+: "—";
 
 container.innerHTML = `
 
@@ -401,6 +406,16 @@ container.innerHTML = `
 <div class="kpi-box">
 <span>${t("annualNet")}</span>
 <strong>${formatCurrency(net)}</strong>
+</div>
+
+<div class="kpi-box">
+<span>${window.currentLang==="it"?"Ricavi annui":"Estimated revenue"}</span>
+<strong>${formatCurrency(revenue)}</strong>
+</div>
+
+<div class="kpi-box">
+<span>${window.currentLang==="it"?"Payback":"Payback period"}</span>
+<strong>${payback} yrs</strong>
 </div>
 
 `;
@@ -554,7 +569,7 @@ roi > 12 ? 30 :
 roi > 6 ? 55 :
 75;
 
-renderExecutiveKPI(roi, netAfterMortgage);
+renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
 
 renderChart(netAfterMortgage);
 
