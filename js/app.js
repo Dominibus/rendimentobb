@@ -641,6 +641,18 @@ const banks = [
 
 const results = banks.map(bank => {
 
+const results = banks
+.map(bank => {
+
+if(!bank.rate) return null;
+
+const data = mortgageSimulation(amount, bank.rate, years);
+
+return { ...bank, ...data };
+
+})
+.filter(Boolean);  
+
 if(!bank.rate) return null;
 
 const data = mortgageSimulation(amount, bank.rate, years);
@@ -1077,8 +1089,6 @@ return;
 
 localStorage.setItem("property_link",link);
 
-const propertyLink = localStorage.getItem("property_link");  
-
 window.location.href="/tool/";
 
 }  
@@ -1122,7 +1132,7 @@ const roi = equity > 0 ? (profit / equity) * 100 : 0;
 
 window.lastAnalysisData = {
 
-price: getValue("price"),
+price: getValue("price") || 0,
 equity: equity,
 loan: loanAmount,
 revenue: revenue,
