@@ -465,6 +465,45 @@ container.innerHTML = `
 
 }
 
+// ================= INVESTMENT RANKING =================
+
+function renderInvestmentRanking(roi){
+
+const container = document.getElementById("investment-ranking");
+if(!container) return;
+
+let percentile = 50;
+let label = "Average investment";
+
+if(roi > 15){
+percentile = 90;
+label = "Top investment opportunity";
+}
+else if(roi > 10){
+percentile = 75;
+label = "Strong investment";
+}
+else if(roi > 6){
+percentile = 60;
+label = "Moderate opportunity";
+}
+
+container.innerHTML = `
+
+<div class="kpi-box">
+<span>Investment Ranking</span>
+<strong>Top ${100-percentile}%</strong>
+</div>
+
+<div class="kpi-box">
+<span>Market Position</span>
+<strong>${label}</strong>
+</div>
+
+`;
+
+}
+
 // ================= SMART PAYWALL =================
 
 function showUpgradePopup(roi){
@@ -580,6 +619,7 @@ renderStrategicInsight(roi);
 renderRevenueForecast(gross);
 
 renderInvestmentScore(roi, riskScore);
+renderInvestmentRanking(roi);  
 
 // MARKET BENCHMARK + COMPARISON
 
