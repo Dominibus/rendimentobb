@@ -651,17 +651,12 @@ return { ...bank, ...data };
 })
 .filter(Boolean);
 
-results.sort((a, b) => a.totalPaid - b.totalPaid);
+if(results.length === 0){
 
-const best = results[0];
+resultDiv.innerHTML = "No mortgage data";
+return;
 
-if(!bank.rate) return null;
-
-const data = mortgageSimulation(amount, bank.rate, years);
-
-return { ...bank, ...data };
-
-});
+}
 
 results.sort((a, b) => a.totalPaid - b.totalPaid);
 
@@ -690,7 +685,6 @@ ${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
 `;
 
 }
-
 
 // ================= CHART =================
 
