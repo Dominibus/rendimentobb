@@ -24,29 +24,25 @@ headers:{
 const html = await response.text();
 
 let price = null;
-let match;
 
 
-// ===== JSON LD PRICE =====
+// ===== JSON-LD PARSER =====
 
-match = html.match(/"price"\s*:\s*"([0-9\.]+)"/);
+const jsonMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
 
-if(match){
-price = match[1].replace(/\./g,"");
-price = parseInt(price);
+if(jsonMatch){
+
+try{
+
+const json = JSON.parse(jsonMatch[1]);
+
+if(json.offers && json.offers.price){
+
+price = parseInt(json.offers.price);
+
 }
 
-
-// ===== OFFERS PRICE =====
-
-if(!price){
-
-match = html.match(/"offers":\s*{[^}]*"price"\s*:\s*"([0-9\.]+)"/);
-
-if(match){
-price = match[1].replace(/\./g,"");
-price = parseInt(price);
-}
+}catch(e){}
 
 }
 
@@ -55,7 +51,7 @@ price = parseInt(price);
 
 if(!price){
 
-match = html.match(/([0-9\.]{4,12})\s?€/);
+const match = html.match(/([0-9\.]{4,12})\s?€/);
 
 if(match){
 
@@ -69,7 +65,6 @@ price = parseInt(price);
 }
 
 }
-
 
 console.log("Extracted price:",price);
 
