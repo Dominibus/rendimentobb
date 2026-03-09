@@ -1066,6 +1066,23 @@ window.calculate = calculate;
 window.compareMortgages = compareMortgages;
 window.generateExecutivePDF = generateExecutivePDF;
 
+function analyzeProperty(){
+
+const link = document.getElementById("property-link").value;
+
+if(!link){
+alert("Inserisci un link immobile");
+return;
+}
+
+localStorage.setItem("property_link",link);
+
+const propertyLink = localStorage.getItem("property_link");  
+
+window.location.href="/tool/";
+
+}  
+
 
 // ================= CAPTURE LAST ANALYSIS =================
 
@@ -1111,23 +1128,8 @@ loan: loanAmount,
 revenue: revenue,
 profit: profit,
 roi: roi,
-risk: 0
+risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 };
-
-function analyzeProperty(){
-
-const link = document.getElementById("property-link").value;
-
-if(!link){
-alert("Inserisci un link immobile");
-return;
-}
-
-localStorage.setItem("property_link",link);
-
-window.location.href="/tool/";
-
-}  
 
 };
