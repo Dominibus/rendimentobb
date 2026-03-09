@@ -310,7 +310,7 @@ data-en="© 2026 RendimentoBB – B&B investment decision engine">
 <script type="module" src="/js/firebase-init.js"></script>
 
 <script>
-
+  
 function analyzeProperty(){
 
 const link = document.getElementById("property-link").value;
@@ -322,23 +322,35 @@ return;
 
 let portal = "Portale immobiliare";
 let id = "";
+let estimatedPrice = "";
 
 if(link.includes("idealista")){
 portal = "Idealista";
-id = link.split("/").pop();
+id = link.split("/").filter(Boolean).pop();
 }
 
 if(link.includes("immobiliare.it")){
 portal = "Immobiliare.it";
-id = link.split("/").pop();
+id = link.split("/").filter(Boolean).pop();
+}
+
+// Simulazione prezzo stimato (solo UX)
+if(id){
+estimatedPrice = (Math.floor(Math.random()*200)+80) * 1000;
 }
 
 document.getElementById("property-preview").innerHTML = `
-<div style="background:#f1f5f9;padding:10px;border-radius:8px;margin-top:10px;">
+<div style="background:#f1f5f9;padding:14px;border-radius:10px;margin-top:12px;text-align:left">
+
 <strong>📍 Immobile rilevato</strong><br>
+
 Portale: ${portal}<br>
 ID annuncio: ${id}<br>
+
+${estimatedPrice ? `💰 Prezzo stimato: <strong>${estimatedPrice.toLocaleString()} €</strong><br>` : ""}
+
 <a href="${link}" target="_blank">Apri annuncio</a>
+
 </div>
 `;
 
@@ -346,10 +358,9 @@ localStorage.setItem("property_link", link);
 
 setTimeout(()=>{
 window.location.href="/tool/";
-},1000);
+},1200);
 
 }
-
 </script>
 
 </body>
