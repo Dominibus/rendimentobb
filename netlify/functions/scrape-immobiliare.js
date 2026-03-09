@@ -26,7 +26,7 @@ const html = await response.text();
 let price = null;
 
 
-// ===== JSON-LD PARSER =====
+// ===== METHOD 1 JSON-LD =====
 
 const jsonMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
 
@@ -47,7 +47,22 @@ price = parseInt(json.offers.price);
 }
 
 
-// ===== HTML FALLBACK =====
+// ===== METHOD 2 IMMOBILIARE JSON =====
+
+if(!price){
+
+const match = html.match(/"price":\s*([0-9]+)/);
+
+if(match){
+
+price = parseInt(match[1]);
+
+}
+
+}
+
+
+// ===== METHOD 3 HTML FALLBACK =====
 
 if(!price){
 
