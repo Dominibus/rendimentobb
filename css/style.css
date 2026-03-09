@@ -1045,6 +1045,21 @@ margin-top:4px;
 }
 
 /* ===================== */
+/* BENEFIT LIST */
+/* ===================== */
+
+.benefit-list{
+list-style:none;
+padding:0;
+margin-top:15px;
+color:#334155;
+}
+
+.benefit-list li{
+margin:6px 0;
+}
+
+/* ===================== */
 /* RESPONSIVE */
 /* ===================== */
 
