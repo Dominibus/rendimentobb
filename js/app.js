@@ -649,7 +649,11 @@ const data = mortgageSimulation(amount, bank.rate, years);
 return { ...bank, ...data };
 
 })
-.filter(Boolean);  
+.filter(Boolean);
+
+results.sort((a, b) => a.totalPaid - b.totalPaid);
+
+const best = results[0];
 
 if(!bank.rate) return null;
 
