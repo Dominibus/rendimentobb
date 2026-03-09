@@ -376,6 +376,11 @@ margin-top:8px;
 
 }
 
+#investment-ranking .kpi-box{
+background:linear-gradient(180deg,#ecfdf5,#ffffff);
+border:1px solid #10b981;
+}
+
 /* ===================== */
 /* BUTTONS */
 /* ===================== */
