@@ -1138,4 +1138,55 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 };
 
+// ================= PROPERTY LINK PARSER =================
+
+function loadPropertyFromLink(){
+
+const link = localStorage.getItem("property_link");
+
+if(!link) return;
+
+console.log("Analisi immobile da link:", link);
+
+// prova a estrarre prezzo dal link
+const priceMatch = link.match(/([0-9]{5,7})/);
+
+if(priceMatch){
+
+const price = parseInt(priceMatch[0]);
+
+const priceInput = document.getElementById("price");
+
+if(priceInput){
+
+priceInput.value = price;
+
+}
+
+}
+
+// stima città dal link
+
+let city = null;
+
+if(link.includes("napoli")) city = "napoli";
+if(link.includes("milano")) city = "milano";
+if(link.includes("roma")) city = "roma";
+if(link.includes("firenze")) city = "firenze";
+
+const citySelect = document.getElementById("city");
+
+if(city && citySelect){
+
+citySelect.value = city;
+
+// carica benchmark
+renderMarketBenchmark(city);
+
+}
+
+}  
+
+document.addEventListener("DOMContentLoaded", loadPropertyFromLink);  
+
 };
