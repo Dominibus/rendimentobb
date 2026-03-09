@@ -50,6 +50,8 @@ let currentPlan = "free";
 
 window.currentUser = null;
 window.currentPlan = "free";
+window.firebaseReady = false;
+
 window.isProUser = () => window.currentPlan === "pro";
 
 
