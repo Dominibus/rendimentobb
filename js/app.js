@@ -512,7 +512,7 @@ window.currentLang === "it"
 : "Create a free account to analyze this property.\n\n✓ Save your analyses\n✓ Compare investments\n✓ Access your dashboard"
 );
 
-window.location.href="/login/?source=analysis";
+window.location.href="/login?source=analysis";
 return;
 
 }  
