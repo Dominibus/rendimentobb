@@ -1190,7 +1190,11 @@ console.log("Analisi immobile da link:", link);
 
 try{
 
-const data = await scrapeIdealistaFromBrowser(link);
+const response = await fetch(
+"/.netlify/functions/scrape-idealista?url=" + encodeURIComponent(link)
+);
+
+const data = await response.json();
 
 console.log("Dati estratti:", data);
 
