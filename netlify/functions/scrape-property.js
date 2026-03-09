@@ -14,21 +14,25 @@ try{
 const response = await fetch(url,{
 headers:{
 "User-Agent":
-"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
 "Accept":
 "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-"Accept-Language":"it-IT,it;q=0.9,en;q=0.8"
+"Accept-Language":"it-IT,it;q=0.9,en;q=0.8",
+"Cache-Control":"no-cache",
+"Pragma":"no-cache",
+"Upgrade-Insecure-Requests":"1"
 }
 });
 
 const html = await response.text();
 
 let price = null;
+let match = null;
 
 
-// ===== PATTERN 1 JSON-LD =====
+// ===== PATTERN 1 JSON PRICE =====
 
-let match = html.match(/"price"\s*:\s*"?(\\d+)"?/);
+match = html.match(/"price"\s*:\s*"?(\\d+)"?/);
 
 if(match){
 price = parseInt(match[1]);
@@ -65,14 +69,14 @@ price = parseInt(match[1]);
 
 if(!price){
 
-match = html.match(/([0-9\\.]{4,12})\\s?€/);
+match = html.match(/([0-9\.]{4,12})\s?€/);
 
 if(match){
 
 price = match[1]
-.replace(/\\./g,"")
+.replace(/\./g,"")
 .replace(",",".")
-.replace(/\\s/g,"");
+.replace(/\s/g,"");
 
 price = parseInt(price);
 
