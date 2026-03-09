@@ -1175,6 +1175,19 @@ if(!link) return;
 console.log("Analisi immobile da link:", link);
 
 
+// ================= AUTOFILL PREZZO =================
+
+const priceField =
+document.querySelector('input[name="propertyPrice"], #property-price, #price');
+
+if(priceField){
+
+// prezzo simulato per velocizzare l'analisi
+priceField.value = 150000;
+
+}
+
+
 // mostra il link analizzato
 
 const linkBox = document.getElementById("property-source");
