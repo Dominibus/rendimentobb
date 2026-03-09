@@ -235,6 +235,9 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   window.currentUser = user;
 
+  // firebase pronto
+  window.firebaseReady = true;
+
   if (user) {
     await loadUserPlan(user.uid);
   }
