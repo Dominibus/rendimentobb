@@ -1085,11 +1085,11 @@ alert("Inserisci un link immobile");
 return;
 }
 
-localStorage.setItem("property_link",link);
+localStorage.setItem("property_link", link);
 
-window.location.href="/tool/";
+window.location.href = "/tool/";
 
-}  
+};
 
 
 // ================= CAPTURE LAST ANALYSIS =================
