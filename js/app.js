@@ -1174,30 +1174,21 @@ if(!link) return;
 
 console.log("Analisi immobile da link:", link);
 
-try{
 
-const response = await fetch(
-"/.netlify/functions/scrape-idealista?url=" + encodeURIComponent(link)
-);
+// mostra il link analizzato
 
-const data = await response.json();
+const linkBox = document.getElementById("property-source");
 
-console.log("Dati estratti:", data);
+if(linkBox){
 
-// prezzo reale estratto dalla pagina
-if(data.price){
-
-const priceInput = document.getElementById("price");
-
-if(priceInput){
-
-priceInput.value = data.price;
+linkBox.innerHTML =
+`<strong>Immobile analizzato:</strong><br>
+<a href="${link}" target="_blank">${link}</a>`;
 
 }
 
-}
 
-// stima città dal link (fallback)
+// ===== rileva città dal link =====
 
 let city = null;
 
@@ -1206,6 +1197,7 @@ if(link.includes("milano")) city = "milano";
 if(link.includes("roma")) city = "roma";
 if(link.includes("firenze")) city = "firenze";
 
+
 const citySelect = document.getElementById("city");
 
 if(city && citySelect){
@@ -1213,12 +1205,6 @@ if(city && citySelect){
 citySelect.value = city;
 
 renderMarketBenchmark(city);
-
-}
-
-}catch(e){
-
-console.error("Errore analisi immobile:", e);
 
 }
 
