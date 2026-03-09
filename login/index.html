@@ -156,7 +156,7 @@ try{
 
 await signInWithEmailAndPassword(auth,email,password);
 
-window.location.href="/tool/";
+window.location.href=document.referrer || "/tool/";
 
 }catch(e){
 
