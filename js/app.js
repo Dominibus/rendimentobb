@@ -1115,4 +1115,19 @@ risk: 0
 
 };
 
+function analyzeProperty(){
+
+const link = document.getElementById("property-link").value;
+
+if(!link){
+alert("Inserisci un link immobile");
+return;
+}
+
+localStorage.setItem("property_link",link);
+
+window.location.href="/tool/";
+
+}  
+
 };
