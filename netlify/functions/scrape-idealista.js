@@ -14,36 +14,33 @@ try{
 const response = await fetch(url,{
 headers:{
 "User-Agent":
-"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
 "Accept":
 "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-"Accept-Language":"it-IT,it;q=0.9,en;q=0.8",
-"Cache-Control":"no-cache",
-"Pragma":"no-cache",
-"Upgrade-Insecure-Requests":"1"
+"Accept-Language":"it-IT,it;q=0.9,en;q=0.8"
 }
 });
 
 const html = await response.text();
 
 let price = null;
-let match = null;
+let match;
 
 
-// ===== PATTERN 1 JSON PRICE =====
+// ===== PATTERN JSON PRICE =====
 
-match = html.match(/"price"\s*:\s*"?(\\d+)"?/);
+match = html.match(/"price"\s*:\s*([0-9]+)/);
 
 if(match){
 price = parseInt(match[1]);
 }
 
 
-// ===== PATTERN 2 PRICE VALUE =====
+// ===== PATTERN MAIN PRICE =====
 
 if(!price){
 
-match = html.match(/"priceValue"\s*:\s*"?(\\d+)"?/);
+match = html.match(/"mainPrice"\s*:\s*"([0-9]+)"/);
 
 if(match){
 price = parseInt(match[1]);
@@ -52,20 +49,7 @@ price = parseInt(match[1]);
 }
 
 
-// ===== PATTERN 3 MAIN PRICE =====
-
-if(!price){
-
-match = html.match(/"mainPrice"\s*:\s*"?(\\d+)"?/);
-
-if(match){
-price = parseInt(match[1]);
-}
-
-}
-
-
-// ===== PATTERN 4 HTML PRICE =====
+// ===== FALLBACK HTML =====
 
 if(!price){
 
@@ -76,7 +60,7 @@ if(match){
 price = match[1]
 .replace(/\./g,"")
 .replace(",",".")
-.replace(/\s/g,"");
+.trim();
 
 price = parseInt(price);
 
@@ -84,13 +68,7 @@ price = parseInt(price);
 
 }
 
-
-// ===== DEBUG =====
-
 console.log("Extracted price:",price);
-
-
-// ===== RESPONSE =====
 
 return {
 
