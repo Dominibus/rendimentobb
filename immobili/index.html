@@ -355,6 +355,7 @@ ${estimatedPrice ? `💰 Prezzo stimato: <strong>${estimatedPrice.toLocaleString
 `;
 
 localStorage.setItem("property_link", link);
+localStorage.setItem("property_price", estimatedPrice);  
 
 setTimeout(()=>{
 window.location.href="/tool/";
