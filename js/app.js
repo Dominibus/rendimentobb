@@ -1146,38 +1146,24 @@ async function scrapeIdealistaFromBrowser(url){
 
 try{
 
-const response = await fetch(url);
-const html = await response.text();
+const response = await fetch(
+"/.netlify/functions/scrape-idealista?url=" + encodeURIComponent(url)
+);
 
-let price = null;
+const data = await response.json();
 
-// cerca prezzo tipo 740.000 €
-const match = html.match(/([0-9\.]{4,12})\s?€/);
+console.log("Prezzo trovato via Netlify:", data.price);
 
-if(match){
-
-price = match[1]
-.replace(/\./g,"")
-.replace(",",".")
-.trim();
-
-price = parseInt(price);
-
-}
-
-console.log("Prezzo trovato da browser:", price);
-
-return { price };
+return data;
 
 }catch(e){
 
-console.error("Errore scraping browser:", e);
+console.error("Errore scraping Netlify:", e);
 return { price:null };
 
 }
 
 }
-
 // ================= PROPERTY LINK PARSER =================
 
 async function loadPropertyFromLink(){
