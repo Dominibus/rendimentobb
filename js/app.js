@@ -13,6 +13,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const db = getFirestore();
+let firebaseReady = false;
 
 
 // ================= SAVE ANALYSIS =================
@@ -506,6 +507,12 @@ const tax = getValue("tax");
 
 if(!window.currentUser){
 
+// se firebase non ha ancora caricato l'utente aspettiamo
+if(!firebaseReady){
+console.log("Firebase auth loading...");
+return;
+}
+
 alert(
 window.currentLang === "it"
 ? "Per analizzare questo immobile devi creare un account gratuito.\n\n✓ Salva le tue analisi\n✓ Confronta investimenti\n✓ Accedi alla dashboard"
@@ -515,7 +522,7 @@ window.currentLang === "it"
 window.location.href="/login?source=analysis";
 return;
 
-}  
+} 
 
 const loanAmount = getValue("loanAmount");
 const interestRate = getValue("interestRate");
