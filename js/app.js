@@ -1076,7 +1076,7 @@ window.calculate = calculate;
 window.compareMortgages = compareMortgages;
 window.generateExecutivePDF = generateExecutivePDF;
 
-function analyzeProperty(){
+window.analyzeProperty = function(){
 
 const link = document.getElementById("property-link").value;
 
