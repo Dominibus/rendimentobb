@@ -26,40 +26,53 @@ const html = await response.text();
 let price = null;
 
 
-// ===== PATTERN 1 JSON =====
+// ===== PATTERN 1 JSON-LD =====
 
-let match = html.match(/"price"\s*:\s*([0-9]+)/);
-
-if(match){
-price = parseInt(match[1]);
-}
-
-
-// ===== PATTERN 2 Idealista =====
-
-if(!price){
-
-match = html.match(/"mainPrice"\s*:\s*"?([0-9]+)"?/);
+let match = html.match(/"price"\s*:\s*"?(\\d+)"?/);
 
 if(match){
 price = parseInt(match[1]);
 }
 
-}
 
-
-// ===== PATTERN 3 HTML PRICE =====
+// ===== PATTERN 2 PRICE VALUE =====
 
 if(!price){
 
-match = html.match(/([0-9\.\,]{4,12})\s?€/);
+match = html.match(/"priceValue"\s*:\s*"?(\\d+)"?/);
+
+if(match){
+price = parseInt(match[1]);
+}
+
+}
+
+
+// ===== PATTERN 3 MAIN PRICE =====
+
+if(!price){
+
+match = html.match(/"mainPrice"\s*:\s*"?(\\d+)"?/);
+
+if(match){
+price = parseInt(match[1]);
+}
+
+}
+
+
+// ===== PATTERN 4 HTML PRICE =====
+
+if(!price){
+
+match = html.match(/([0-9\\.]{4,12})\\s?€/);
 
 if(match){
 
 price = match[1]
-.replace(/\./g,"")
+.replace(/\\./g,"")
 .replace(",",".")
-.replace(/\s/g,"");
+.replace(/\\s/g,"");
 
 price = parseInt(price);
 
