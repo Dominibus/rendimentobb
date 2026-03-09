@@ -74,6 +74,7 @@ body {
   <div class="login-card">
 
     <h2>Accesso</h2>
+    <div id="login-message" style="font-size:14px;color:#475569;margin-bottom:15px;"></div>
 
     <input id="email" type="email" placeholder="Email">
     <input id="password" type="password" placeholder="Password">
@@ -89,6 +90,23 @@ body {
     <div class="back-link">
       <a href="/">← Torna alla Home</a>
     </div>
+
+    <script>
+
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("source") === "analysis"){
+
+document.getElementById("login-message").innerHTML = `
+Per analizzare questo immobile devi creare un account gratuito.<br><br>
+✓ Salva le tue analisi<br>
+✓ Confronta investimenti<br>
+✓ Accedi alla dashboard
+`;
+
+}
+
+</script>
 
   </div>
 
@@ -129,6 +147,21 @@ document.getElementById("registerBtn").onclick = async () => {
     alert(e.message);
   }
 };
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("source") === "analysis"){
+
+document.getElementById("login-message").innerHTML = `
+Per analizzare questo immobile devi creare un account gratuito.<br><br>
+✓ Salva le tue analisi<br>
+✓ Confronta investimenti<br>
+✓ Accedi alla dashboard
+`;
+
+}
+
 </script>
 
 </body>
