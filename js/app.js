@@ -1181,9 +1181,10 @@ const linkBox = document.getElementById("property-source");
 
 if(linkBox){
 
-linkBox.innerHTML =
-`<strong>Immobile analizzato:</strong><br>
-<a href="${link}" target="_blank">${link}</a>`;
+linkBox.innerHTML = `
+<strong>📍 Immobile analizzato</strong><br>
+<a href="${link}" target="_blank">${link}</a>
+`;
 
 }
 
