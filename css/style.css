@@ -183,7 +183,7 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:620px 1fr;
 gap:80px;
 align-items:center;
 
