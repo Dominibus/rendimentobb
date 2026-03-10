@@ -784,6 +784,68 @@ line-height:1.5;
 }
 
 /* ===================== */
+/* GUIDE GRID */
+/* ===================== */
+
+.guide-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:25px;
+
+margin-top:30px;
+
+}
+
+.guide-card{
+
+background:white;
+
+padding:25px;
+
+border-radius:16px;
+
+border:1px solid #e2e8f0;
+
+box-shadow:0 15px 40px rgba(0,0,0,0.05);
+
+text-decoration:none;
+
+color:#0f172a;
+
+transition:all .25s ease;
+
+}
+
+.guide-card:hover{
+
+transform:translateY(-6px);
+
+border-color:#10b981;
+
+box-shadow:0 30px 80px rgba(0,0,0,0.10);
+
+}
+
+.guide-card h3{
+
+font-size:16px;
+
+margin-bottom:6px;
+
+}
+
+.guide-card p{
+
+font-size:13px;
+
+color:#64748b;
+
+}
+
+/* ===================== */
 /* TOOL PREVIEW */
 /* ===================== */
 
@@ -963,6 +1025,32 @@ color:#64748b;
 /* QUICK ROI */
 /* ===================== */
 
+.quick-roi-card{
+
+background:white;
+padding:50px;
+border-radius:24px;
+border:1px solid #e2e8f0;
+
+box-shadow:0 40px 100px rgba(0,0,0,0.06);
+
+max-width:800px;
+margin:auto;
+
+transition:all .25s ease;
+
+}
+
+.quick-roi-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 60px 140px rgba(0,0,0,0.10);
+
+border-color:#10b981;
+
+}
+
 .quick-roi{
 text-align:center;
 margin-top:100px;
@@ -1014,11 +1102,33 @@ color:#64748b;
 }
 
 .quick-input input{
+
 width:100%;
+
 padding:14px;
-border-radius:12px;
+
+border-radius:10px;
+
 border:1px solid #e2e8f0;
+
 background:#f8fafc;
+
+font-size:14px;
+
+transition:all .2s ease;
+
+}
+
+.quick-input input:focus{
+
+outline:none;
+
+border-color:#10b981;
+
+background:white;
+
+box-shadow:0 0 0 3px rgba(16,185,129,.15);
+
 }
 
 .quick-roi-result{
@@ -1071,6 +1181,36 @@ color:#334155;
 
 .benefit-list li{
 margin:6px 0;
+}
+
+/* ===================== */
+/* FEATURE CARD (GLOBAL) */
+/* ===================== */
+
+.feature-card{
+
+background:white;
+padding:30px;
+border-radius:18px;
+border:1px solid #e2e8f0;
+
+transition:
+transform .25s ease,
+box-shadow .25s ease,
+border-color .25s ease;
+
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+
+}
+
+.feature-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 40px 100px rgba(0,0,0,0.10);
+
+border-color:#10b981;
+
 }
 
 /* ===================== */
