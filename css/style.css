@@ -990,6 +990,39 @@ color:#64748b;
 }
 
 /* ===================== */
+/* FEATURE CARD HOVER */
+/* ===================== */
+
+.feature-card{
+
+background:white;
+
+padding:30px;
+
+border-radius:18px;
+
+border:1px solid #e2e8f0;
+
+transition:
+transform .25s ease,
+box-shadow .25s ease,
+border-color .25s ease;
+
+box-shadow:0 20px 60px rgba(0,0,0,0.05);
+
+}
+
+.feature-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 40px 100px rgba(0,0,0,0.10);
+
+border-color:#10b981;
+
+}
+
+/* ===================== */
 /* MARKET SECTION */
 /* ===================== */
 
