@@ -183,9 +183,9 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:620px 1fr;
+grid-template-columns:620px 520px;
 gap:80px;
-align-items:center;
+align-items:start;
 
 max-width:1200px;
 margin:60px auto;
@@ -1543,7 +1543,7 @@ border-radius:18px;
 box-shadow:0 20px 60px rgba(0,0,0,0.08);
 border:1px solid #e2e8f0;
 
-max-width:480px;
+max-width:420px;
 width:100%;  
 
 margin-top:25px;  
