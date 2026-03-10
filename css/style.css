@@ -1684,4 +1684,66 @@ transform:translateY(-2px);
 box-shadow:0 6px 20px rgba(0,0,0,0.06);
 }  
 
+.investment-panel{
+margin-top:25px;
+background:white;
+border-radius:14px;
+padding:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.06);
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+align-items:center;
+}
+
+.investment-score{
+text-align:center;
+min-width:120px;
+}
+
+.score-circle{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#10b981;
+color:white;
+font-size:28px;
+font-weight:700;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+}
+
+.score-label{
+margin-top:8px;
+font-size:13px;
+color:#64748b;
+}
+
+.investment-metrics{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:14px;
+flex:1;
+}
+
+.metric-card{
+background:#f8fafc;
+border-radius:10px;
+padding:12px;
+text-align:center;
+border:1px solid #e2e8f0;
+}
+
+.metric-card span{
+font-size:12px;
+color:#64748b;
+display:block;
+}
+
+.metric-card strong{
+font-size:18px;
+}  
+
 }
