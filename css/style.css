@@ -182,13 +182,13 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:minmax(0,560px) 1fr;
-gap:80px;
+grid-template-columns:560px 1fr;
+gap:60px;
 align-items:center;
 
 max-width:1100px;
-margin:0 auto;
-padding-top:40px;
+margin:40px auto;
+width:100%;
 }
 
 .portal-nav a:hover{
@@ -206,9 +206,7 @@ font-weight:600;
 
 .hero-left{
 text-align:left;
-max-width:560px;
 width:100%;
-margin:0 auto;
 }
 
 .hero-right img{
@@ -1310,8 +1308,8 @@ padding:60px 18px;
 /* TITLES */
 
 .page-title{
-margin:0 0 30px 0;
 text-align:left;
+margin-bottom:25px;
 }
 
 .page-title h1{
