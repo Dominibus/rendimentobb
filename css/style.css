@@ -1078,9 +1078,6 @@ transition:0.25s ease;
 
 }
 
-transition:0.25s ease;
-}
-
 .quick-roi-card:hover{
 transform:translateY(-4px);
 box-shadow:0 60px 140px rgba(0,0,0,0.08);
