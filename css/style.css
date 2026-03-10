@@ -1074,6 +1074,29 @@ margin:6px 0;
 }
 
 /* ===================== */
+/* PROPERTY MARKET EXTRA */
+/* ===================== */
+
+.market-label{
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+}
+
+.market-extra{
+margin-top:10px;
+font-size:13px;
+color:#475569;
+}
+
+.market-link{
+margin-top:16px;
+font-size:13px;
+font-weight:600;
+color:#10b981;
+}
+
+/* ===================== */
 /* RESPONSIVE */
 /* ===================== */
 
