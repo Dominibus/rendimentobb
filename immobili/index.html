@@ -21,13 +21,6 @@ content="Analyze real estate investment opportunities for B&B properties in Ital
 
 <style>
 
-.property-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;
-margin-top:50px;
-}
-
 .property-card{
 background:white;
 padding:40px;
@@ -35,14 +28,21 @@ border-radius:18px;
 border:1px solid #e2e8f0;
 box-shadow:0 20px 60px rgba(0,0,0,0.05);
 text-align:center;
-transition:.25s;
 text-decoration:none;
 color:inherit;
+
+cursor:pointer;
+
+transition:
+transform .25s ease,
+box-shadow .25s ease,
+border-color .25s ease;
 }
 
 .property-card:hover{
-transform:translateY(-6px);
-box-shadow:0 30px 80px rgba(0,0,0,0.08);
+transform:translateY(-8px);
+box-shadow:0 40px 100px rgba(0,0,0,0.10);
+border-color:#10b981;
 }
 
 .property-card h3{
