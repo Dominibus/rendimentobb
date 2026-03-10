@@ -1459,6 +1459,8 @@ max-width:100%;
 
 /* HERO MOBILE */
 
+@media (max-width:768px){
+
 .hero-grid{
 grid-template-columns:1fr;
 text-align:center;
@@ -1466,20 +1468,15 @@ text-align:center;
 
 .hero-left{
 text-align:center;
-}
-
-.hero-left{
 max-width:560px;
-}  
+margin:auto;
+}
 
 .hero-trust{
 justify-content:center;
-}  
+}
 
-.hero{
-display:flex;
-justify-content:center;
-}  
+} 
 
 /* ROI QUICK SIMULATOR */
 
