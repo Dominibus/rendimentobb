@@ -183,12 +183,12 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:1fr 1fr;
-gap:60px;
+grid-template-columns:620px 1fr;
+gap:80px;
 align-items:center;
 
 max-width:1200px;
-margin:60px auto;
+margin:80px auto;
 width:100%;
 }
 
@@ -221,11 +221,15 @@ display:flex;
 justify-content:center;
 }
 
+.hero-right{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
 .hero-right img{
-max-width:560px;
+max-width:640px;
 width:100%;
-border-radius:18px;
-box-shadow:0 30px 90px rgba(0,0,0,0.15);
 }
 
 .hero-trust{
@@ -1548,7 +1552,7 @@ border-radius:18px;
 box-shadow:0 20px 60px rgba(0,0,0,0.08);
 border:1px solid #e2e8f0;
 
-max-width:420px;
+max-width:620px;
 width:100%;  
 
 margin-top:25px;  
@@ -1565,12 +1569,10 @@ box-shadow:0 30px 80px rgba(0,0,0,0.12);
 }
 
 .roi-grid{
-
 display:grid;
-grid-template-columns:1fr 1fr;
-gap:16px;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
 margin-top:20px;
-
 }
 
 .roi-field{
