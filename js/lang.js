@@ -19,51 +19,64 @@
 
 
   // ===============================
-  // APPLY STATIC TRANSLATIONS
-  // ===============================
+// APPLY STATIC TRANSLATIONS
+// ===============================
 
-  function applyStaticTranslations(){
+function applyStaticTranslations(){
 
-    document.querySelectorAll("[data-it]").forEach(el => {
+  // TEXT TRANSLATION
+  document.querySelectorAll("[data-it]").forEach(el => {
 
-      const text = el.getAttribute("data-" + RB_LANG.current);
-      if(!text) return;
+    const text = el.getAttribute("data-" + RB_LANG.current);
+    if(!text) return;
 
-      if(text.includes("<")){
-        el.innerHTML = text;
-      } else {
-        el.textContent = text;
-      }
-
-    });
-
-    document.querySelectorAll("[data-placeholder-it]").forEach(el => {
-
-      const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
-      if(ph){
-        el.setAttribute("placeholder", ph);
-      }
-
-    });
-
-    const titleEl = document.querySelector("title");
-    if(titleEl){
-      const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
-      if(titleText){
-        document.title = titleText;
-      }
+    if(text.includes("<")){
+      el.innerHTML = text;
+    } else {
+      el.textContent = text;
     }
 
-    const metaDesc = document.querySelector("meta[name='description']");
-    if(metaDesc){
-      const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
-      if(descText){
-        metaDesc.setAttribute("content", descText);
-      }
+  });
+
+  // PLACEHOLDER SYSTEM (STANDARD)
+  document.querySelectorAll("[data-placeholder-it]").forEach(el => {
+
+    const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
+    if(ph){
+      el.setAttribute("placeholder", ph);
     }
 
+  });
+
+  // PLACEHOLDER SYSTEM (NEW FORMAT SUPPORT)
+  document.querySelectorAll("[data-it-placeholder]").forEach(el => {
+
+    const ph = el.getAttribute("data-" + RB_LANG.current + "-placeholder");
+    if(ph){
+      el.setAttribute("placeholder", ph);
+    }
+
+  });
+
+  // TITLE TRANSLATION
+  const titleEl = document.querySelector("title");
+  if(titleEl){
+    const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
+    if(titleText){
+      document.title = titleText;
+    }
   }
 
+  // META DESCRIPTION TRANSLATION
+  const metaDesc = document.querySelector("meta[name='description']");
+  if(metaDesc){
+    const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
+    if(descText){
+      metaDesc.setAttribute("content", descText);
+    }
+  }
+
+}
 
   // ===============================
   // UPDATE LANGUAGE UI
