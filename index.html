@@ -194,6 +194,39 @@ data-en="✓ Professional report">
 
 </div>
 
+<div class="property-analyzer" style="margin-top:25px;margin-bottom:25px">
+
+<h3
+data-it="Analizza immobile da annuncio"
+data-en="Analyze property from listing">
+Analizza immobile da annuncio
+</h3>
+
+<p
+style="margin-top:6px;font-size:14px;color:#64748b"
+data-it="Incolla il link di un annuncio Idealista o Immobiliare.it per stimare il rendimento."
+data-en="Paste an Idealista or Immobiliare listing to estimate profitability.">
+Incolla il link di un annuncio Idealista o Immobiliare.it per stimare il rendimento.
+</p>
+
+<div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+
+<input
+id="listing_url"
+type="text"
+placeholder="https://www.idealista.it/..."
+style="flex:1;padding:12px;border-radius:10px;border:1px solid #e2e8f0;min-width:250px">
+
+<button onclick="analyzeListing()" class="btn btn-secondary"
+data-it="Analizza immobile"
+data-en="Analyze property">
+Analizza immobile
+</button>
+
+</div>
+
+</div> 
+
 <div class="quick-roi-box">
 
 <h3
@@ -813,6 +846,41 @@ document.getElementById("qr_rev").innerText = Math.round(revenue) + " € / anno
 document.addEventListener("DOMContentLoaded", function(){
   quickROI();
 }); 
+
+window.analyzeListing = async function(){
+
+const url = document.getElementById("listing_url").value;
+
+if(!url){
+alert("Inserisci il link dell'annuncio.");
+return;
+}
+
+try{
+
+const response = await fetch("/.netlify/functions/scrape?url=" + encodeURIComponent(url));
+
+const data = await response.json();
+
+if(!data.price){
+alert("Impossibile leggere il prezzo dall'annuncio.");
+return;
+}
+
+document.getElementById("qr_price").value = data.price;
+
+quickROI();
+
+alert("Prezzo immobile rilevato: " + data.price + " €");
+
+}catch(e){
+
+console.error(e);
+alert("Errore durante l'analisi dell'annuncio.");
+
+}
+
+} 
 
 </script>
 
