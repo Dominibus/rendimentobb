@@ -1461,8 +1461,6 @@ max-width:100%;
 
 /* HERO MOBILE */
 
-@media (max-width:768px){
-
 .hero-grid{
 grid-template-columns:1fr;
 text-align:center;
