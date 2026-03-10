@@ -183,7 +183,7 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:560px 1fr;
+grid-template-columns:1fr 1fr;
 gap:80px;
 align-items:center;
 
@@ -1030,19 +1030,14 @@ color:#64748b;
 /* ===================== */
 
 .quick-roi-card{
-
 background:white;
 padding:50px;
 border-radius:24px;
 border:1px solid #e2e8f0;
-
 box-shadow:0 40px 100px rgba(0,0,0,0.06);
-
 max-width:800px;
 margin:auto;
-
-transition:all .25s ease;
-
+transition:0.25s ease;
 }
 
 .quick-roi-card:hover{
