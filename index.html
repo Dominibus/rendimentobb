@@ -321,7 +321,19 @@ Ricavo lordo annuo:
 </span>
 <strong id="qr_rev"></strong>
 
-</div>
+<br>
+
+<span data-it="Profitto netto annuo:" data-en="Estimated yearly profit:">
+Profitto netto annuo:
+</span>
+<strong id="qr_profit"></strong>
+
+<br>
+
+<span data-it="Profitto netto mensile:" data-en="Estimated monthly profit:">
+Profitto netto mensile:
+</span>
+<strong id="qr_month"></strong>
 
 </div>
 
@@ -837,9 +849,23 @@ const roi = (netIncome / investment) * 100;
 
 const breakEven = investment / netIncome;
 
+const monthlyProfit = netIncome / 12;
+
+
+// risultati base
+
 document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%";
+
 document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " anni";
+
 document.getElementById("qr_rev").innerText = Math.round(revenue) + " € / anno";
+
+
+// nuovi risultati
+
+document.getElementById("qr_profit").innerText = Math.round(netIncome) + " € / anno";
+
+document.getElementById("qr_month").innerText = Math.round(monthlyProfit) + " € / mese";
 
 }
 
