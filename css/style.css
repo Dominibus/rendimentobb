@@ -184,9 +184,10 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:1fr 1fr;
-gap:60px;
+grid-template-columns:520px 1fr;
+gap:80px;
 align-items:center;
+justify-content:center;
 margin-top:40px;
 }
 
@@ -205,6 +206,8 @@ font-weight:600;
 
 .hero-left{
 text-align:left;
+max-width:520px;
+margin:auto;
 }
 
 .hero-right{
@@ -1558,52 +1561,53 @@ background:rgba(255,255,255,0.6);
 .roi-card{
 
 background:white;
+padding:32px;
+border-radius:18px;
+box-shadow:0 20px 60px rgba(0,0,0,0.08);
+border:1px solid #e2e8f0;
 
-padding:28px;
-
-border-radius:14px;
-
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-
-max-width:420px;
-
+max-width:480px;
 margin-top:25px;
+
+transition:all .25s ease;
+
+}
+
+.roi-card:hover{
+
+transform:translateY(-4px);
+box-shadow:0 30px 80px rgba(0,0,0,0.12);
 
 }
 
 .roi-grid{
 
 display:grid;
-
 grid-template-columns:1fr 1fr;
-
-gap:12px;
-
-margin-top:15px;
+gap:16px;
+margin-top:20px;
 
 }
 
 .roi-field{
 
 display:flex;
-
 flex-direction:column;
-
-font-size:14px;
+font-size:13px;
+color:#475569;
 
 }
 
 .roi-field input{
 
-margin-top:5px;
-
-padding:10px;
-
-border-radius:8px;
-
+margin-top:6px;
+padding:12px;
+border-radius:10px;
 border:1px solid #e2e8f0;
-
 font-size:14px;
+background:#f8fafc;
+
+transition:all .2s ease;
 
 }
 
@@ -1675,17 +1679,23 @@ min-width:120px;
 }
 
 .score-circle{
-width:70px;
-height:70px;
+width:74px;
+height:74px;
 border-radius:50%;
-background:#10b981;
+
+background:linear-gradient(135deg,#10b981,#047857);
+
 color:white;
-font-size:28px;
-font-weight:700;
+font-size:30px;
+font-weight:800;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 margin:auto;
+
+box-shadow:0 10px 30px rgba(16,185,129,0.4);
 }
 
 .score-label{
@@ -1703,10 +1713,19 @@ flex:1;
 
 .metric-card{
 background:#f8fafc;
-border-radius:10px;
-padding:12px;
+border-radius:12px;
+padding:14px;
 text-align:center;
 border:1px solid #e2e8f0;
+
+transition:.2s ease;
+}
+
+.metric-card:hover{
+
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,0.06);
+
 }
 
 .metric-card span{
@@ -1716,7 +1735,9 @@ display:block;
 }
 
 .metric-card strong{
-font-size:18px;
-}  
+font-size:20px;
+font-weight:700;
+color:#0f172a;
+}
 
 }
