@@ -183,9 +183,13 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:minmax(0,620px) 1fr;
+grid-template-columns:1fr 1fr;
 gap:80px;
 align-items:center;
+
+max-width:1200px;
+margin:60px auto;
+width:100%;
 }
 
 .portal-nav a:hover{
@@ -202,10 +206,10 @@ font-weight:600;
 }
 
 .hero-left{
-max-width:620px;
-width:100%;  
-margin-right:auto;  
 text-align:left;
+width:100%;
+max-width:620px;
+margin:0;
 }
 
 .hero-right img{
