@@ -224,6 +224,65 @@ function mortgageSimulation(amount, rate, years) {
 
 }
 
+
+// ================= MORTGAGE COMPARATOR =================
+
+window.compareMortgages = function(){
+
+if(!window.currentUser){
+alert("Funzione disponibile solo per utenti PRO.");
+return;
+}
+
+if(!window.isProUser || !window.isProUser()){
+alert("Questa funzione è disponibile solo nella versione PRO.");
+return;
+}
+
+const amount = parseFloat(document.getElementById("mortgageAmount").value);
+const years = parseFloat(document.getElementById("mortgageYears").value);
+
+const rateA = parseFloat(document.getElementById("rateA").value)/100/12;
+const rateB = parseFloat(document.getElementById("rateB").value)/100/12;
+const rateC = parseFloat(document.getElementById("rateC").value)/100/12;
+
+const months = years*12;
+
+function calc(rate){
+return amount*rate/(1-Math.pow(1+rate,-months));
+}
+
+const a = calc(rateA);
+const b = calc(rateB);
+const c = calc(rateC);
+
+const resultDiv = document.getElementById("mortgage-results");
+
+if(!resultDiv) return;
+
+resultDiv.innerHTML = `
+<div class="results-grid">
+
+<div class="metric-card">
+<span>Banca A</span>
+<strong>${a.toFixed(0)} €/mese</strong>
+</div>
+
+<div class="metric-card">
+<span>Banca B</span>
+<strong>${b.toFixed(0)} €/mese</strong>
+</div>
+
+<div class="metric-card">
+<span>Banca C</span>
+<strong>${c.toFixed(0)} €/mese</strong>
+</div>
+
+</div>
+`;
+
+}
+
 // ================= MARKET BENCHMARK =================
 
 function renderMarketBenchmark(cityKey){
