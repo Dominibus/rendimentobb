@@ -1323,3 +1323,68 @@ renderMarketBenchmark(city);
 }
 
 document.addEventListener("DOMContentLoaded", loadPropertyFromLink);
+
+window.compareMortgages = function(){
+
+const amount = parseFloat(document.getElementById("mortgageAmount").value);
+const years = parseFloat(document.getElementById("mortgageYears").value);
+
+const rateA = parseFloat(document.getElementById("rateA").value);
+const rateB = parseFloat(document.getElementById("rateB").value);
+const rateC = parseFloat(document.getElementById("rateC").value);
+
+if(!amount || !years){
+alert("Inserisci importo e durata.");
+return;
+}
+
+function calcMortgage(rate){
+
+const monthlyRate = rate / 100 / 12;
+const months = years * 12;
+
+const payment =
+amount *
+(monthlyRate * Math.pow(1 + monthlyRate, months)) /
+(Math.pow(1 + monthlyRate, months) - 1);
+
+const total = payment * months;
+
+return {
+monthly: payment,
+total: total
+};
+
+}
+
+const a = calcMortgage(rateA);
+const b = calcMortgage(rateB);
+const c = calcMortgage(rateC);
+
+function card(bank,data){
+
+return `
+<div class="kpi-box">
+
+<div class="kpi-label">${bank}</div>
+
+<div class="kpi-value">
+${data.monthly.toFixed(0)} € / mese
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-top:6px;">
+Costo totale: ${data.total.toFixed(0)} €
+</div>
+
+</div>
+`;
+
+}
+
+document.getElementById("mortgage-results").innerHTML =
+
+card("Banca A",a) +
+card("Banca B",b) +
+card("Banca C",c);
+
+};
