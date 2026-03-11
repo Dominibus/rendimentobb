@@ -14,7 +14,6 @@ height:100%;
 }
 
 body{
-
 display:flex;
 flex-direction:column;
 
@@ -26,8 +25,9 @@ linear-gradient(180deg,#f4f7fb 0%,#e9eef5 100%);
 min-height:100vh;
 color:#0f172a;
 -webkit-font-smoothing:antialiased;
-overflow-x:hidden;
 
+/* FIX MOBILE */
+overflow-x:auto;
 }
 
 /* ===================== */
@@ -1305,8 +1305,8 @@ max-width:100%;
 
 html,body{
 max-width:100%;
-overflow-x:hidden;
-}  
+overflow-x:auto;
+} 
 
 /* HEADER */
 
