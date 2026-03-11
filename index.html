@@ -785,11 +785,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth
 const auth = getAuth();
 
 window.startAnalysis = function(){
-if(auth.currentUser){
 window.location.href="/tool/";
-}else{
-window.location.href="/login/";
-}
 }
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
@@ -882,7 +878,7 @@ const monthlyProfit = netIncome / 12;
 
 // risultati base
 
-const lang = localStorage.getItem("lang") || "it";
+const lang = localStorage.getItem("rb_lang") || "it";
 
 const yearWord = lang === "en" ? "years" : "anni";
 const yearLabel = lang === "en" ? "€ / year" : "€ / anno";
