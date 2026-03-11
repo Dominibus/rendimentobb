@@ -63,41 +63,37 @@ margin:auto;
 /* ===================== */
 
 .portal-header{
-
 padding:28px 0;
-
+width:100%;
+max-width:100%;
 }
 
 .portal-header-inner{
-
 display:flex;
 align-items:center;
 justify-content:space-between;
 
+width:100%;
+max-width:100%;
 }
 
 .portal-nav{
-
 display:flex;
 gap:26px;
-
+flex-wrap:wrap;
 }
 
 .portal-nav a{
-
 text-decoration:none;
 color:#0f172a;
 font-weight:500;
 font-size:14px;
-
 }
 
 .header-actions{
-
 display:flex;
 align-items:center;
 gap:16px;
-
 }
 
 .right-controls{
@@ -107,28 +103,22 @@ gap:18px;
 }
 
 .lang-switch{
-
 display:flex;
 gap:6px;
-
 }
 
 .lang-switch button{
-
 border:1px solid #e2e8f0;
 background:white;
 padding:6px 10px;
 border-radius:8px;
 font-size:12px;
 cursor:pointer;
-
 }
 
 .lang-switch button.active{
-
 background:#0f172a;
 color:white;
-
 }
 
 /* ===================== */
@@ -1258,6 +1248,53 @@ justify-content:center;
 display:none;
 }  
 
+/* ===================== */
+/* MOBILE OVERFLOW FIX */
+/* ===================== */
+
+.portal-header{
+width:100%;
+max-width:100%;
+}
+
+.portal-header-inner{
+width:100%;
+max-width:100%;
+overflow:hidden;
+}
+
+.portal-nav{
+width:100%;
+max-width:100%;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.dashboard-container{
+max-width:100%;
+overflow-x:hidden;
+}
+
+.stats-grid,
+.analysis-grid,
+.dashboard-top-grid{
+width:100%;
+max-width:100%;
+}
+
+.analysis-card,
+.kpi-box{
+width:100%;
+max-width:100%;
+}
+
+/* sicurezza extra contro overflow mobile */
+
+html,body{
+max-width:100%;
+overflow-x:hidden;
+}  
+
 /* HEADER */
 
 .portal-header-inner{
@@ -1428,39 +1465,6 @@ grid-template-columns:1fr;
 
 .quick-roi-grid{
 grid-template-columns:1fr;
-}
-
-/* ===================== */
-/* MOBILE OVERFLOW FIX */
-/* ===================== */
-
-.portal-header,
-.portal-header-inner{
-max-width:100%;
-overflow:hidden;
-}
-
-.portal-nav{
-max-width:100%;
-flex-wrap:wrap;
-}
-
-.dashboard-container{
-max-width:100%;
-overflow-x:hidden;
-}
-
-.stats-grid,
-.analysis-grid,
-.dashboard-top-grid{
-width:100%;
-max-width:100%;
-}
-
-.analysis-card,
-.kpi-box{
-width:100%;
-max-width:100%;
 }
 
 /* PREVENT CARD OVERFLOW */
