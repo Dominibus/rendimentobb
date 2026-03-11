@@ -1238,12 +1238,16 @@ font-size:15px;
 .hero-grid{
 grid-template-columns:1fr;
 text-align:center;
+
+gap:30px;
+margin:40px auto;
 }
 
 .hero-left{
 text-align:center;
-max-width:560px;
+max-width:520px;
 margin:auto;
+padding:0 6px;
 }
 
 .hero-trust{
