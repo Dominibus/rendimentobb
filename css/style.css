@@ -173,13 +173,14 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:minmax(0,1fr) 1fr;
+grid-template-columns:1fr 1fr;
 gap:60px;
 align-items:center;
 
 max-width:1200px;
 margin:80px auto;
 width:100%;
+min-width:0;  
 }
 
 .portal-nav a:hover{
