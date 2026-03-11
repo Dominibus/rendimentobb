@@ -1,45 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Comparatore Mutui – RendimentoBB</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<header class="portal-header">
+<div class="container portal-header-inner">
+
+<a href="/" class="logo">
+Rendimento<span>BB</span>
+</a>
+
+<nav class="portal-nav">
+
+<a href="/tool/">Simulatore</a>
+<a href="/mutui/">Mutui</a>
+<a href="/immobili/">Immobili</a>
+<a href="/academy/">Academy</a>
+<a href="/dashboard/">Dashboard</a>
+<a href="/contact.html">Contatti</a>
+
+</nav>
+
+</div>
+</header>
+
+
+<main>
+
+<div class="container" style="padding-top:80px;padding-bottom:120px;">
+
+
+<h1 style="text-align:center;margin-bottom:40px;">
+Comparatore Mutui
+</h1>
+
+
 <!-- MORTGAGE COMPARATOR -->
 
-<div id="mortgage" class="tool-card" style="margin-top:60px;">
+<div id="mortgage" class="tool-card">
 
-<h3 data-it="🏦 Comparatore Mutui"
-data-en="🏦 Mortgage Comparator"></h3>
+<h3>🏦 Comparatore Mutui</h3>
 
 <div class="form-grid">
 
 <div class="input-group">
-<label data-it="Importo Mutuo (€)"
-data-en="Mortgage amount (€)"></label>
+<label>Importo Mutuo (€)</label>
 <input type="number" id="mortgageAmount" value="120000">
 </div>
 
 <div class="input-group">
-<label data-it="Durata (anni)"
-data-en="Duration (years)"></label>
+<label>Durata (anni)</label>
 <input type="number" id="mortgageYears" value="20">
 </div>
 
 <div class="input-group">
-<label data-it="Tasso Banca A (%)"
-data-en="Bank A rate (%)"></label>
+<label>Tasso Banca A (%)</label>
 <input type="number" id="rateA" value="3.2" step="0.1">
 </div>
 
 <div class="input-group">
-<label data-it="Tasso Banca B (%)"
-data-en="Bank B rate (%)"></label>
+<label>Tasso Banca B (%)</label>
 <input type="number" id="rateB" value="3.6">
 </div>
 
 <div class="input-group">
-<label data-it="Tasso Banca C (%)"
-data-en="Bank C rate (%)"></label>
+<label>Tasso Banca C (%)</label>
 <input type="number" id="rateC" value="4.1">
 </div>
 
 </div>
 
-<div style="text-align:center; margin-top:40px;">
+
+<div style="text-align:center;margin-top:40px;">
 <button onclick="compareMortgages()" class="btn btn-primary">
 Confronta Mutui
 </button>
@@ -49,4 +92,16 @@ Confronta Mutui
 
 </div>
 
+</div>
+
+</main>
+
+
+<footer class="global-footer">
+© 2026 RendimentoBB
+</footer>
+
 <script type="module" src="/js/app.js"></script>
+
+</body>
+</html>
