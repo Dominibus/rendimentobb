@@ -222,10 +222,16 @@ height:auto;
 .hero-trust{
 margin-top:18px;
 display:flex;
-gap:20px;
+gap:14px;
 font-size:14px;
 color:#64748b;
 flex-wrap:wrap;
+justify-content:center;
+}
+
+.hero-trust > *{
+flex:1 1 100%;
+max-width:100%;
 }
 
 /* ===================== */
