@@ -49,6 +49,16 @@ padding:0 24px;
 width:100%;
 }
 
+/* FIX MOBILE CONTAINER */
+@media (max-width:768px){
+
+.container{
+max-width:100%;
+padding:0 16px;
+}
+
+}
+
 /* ===================== */
 /* PAGE WIDTH FIX */
 /* ===================== */
@@ -1247,9 +1257,8 @@ margin:40px auto;
 
 .hero-left{
 text-align:center;
-max-width:520px;
-margin:auto;
-padding:0 6px;
+max-width:100%;
+width:100%;  
 }
 
 .hero-trust{
