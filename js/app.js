@@ -962,8 +962,6 @@ const lang = window.RB_LANG?.current || window.currentLang || "it";
 
 if(!requirePro("pdf report")) return;
 
-}
-
 if(!window.lastAnalysisData){
 
 alert(
@@ -983,7 +981,6 @@ const data = window.lastAnalysisData;
 const doc = new jsPDF();
 
 let y = 20;
-
 
 // ================= HEADER =================
 
