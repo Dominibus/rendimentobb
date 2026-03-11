@@ -230,7 +230,7 @@ function mortgageSimulation(amount, rate, years) {
 window.compareMortgages = function(){
 
 if(!window.currentUser){
-alert("Funzione disponibile solo per utenti PRO.");
+alert("Devi effettuare il login.");
 return;
 }
 
@@ -246,10 +246,10 @@ const rateA = parseFloat(document.getElementById("rateA").value)/100/12;
 const rateB = parseFloat(document.getElementById("rateB").value)/100/12;
 const rateC = parseFloat(document.getElementById("rateC").value)/100/12;
 
-const months = years*12;
+const months = years * 12;
 
 function calc(rate){
-return amount*rate/(1-Math.pow(1+rate,-months));
+return amount * rate / (1 - Math.pow(1 + rate, -months));
 }
 
 const a = calc(rateA);
@@ -282,7 +282,6 @@ resultDiv.innerHTML = `
 `;
 
 }
-
 // ================= MARKET BENCHMARK =================
 
 function renderMarketBenchmark(cityKey){
