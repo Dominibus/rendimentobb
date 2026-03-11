@@ -1287,6 +1287,14 @@ font-size:15px;
 
 @media (max-width:768px){
 
+.hamburger{
+display:block;
+}
+
+}
+
+@media (max-width:768px){
+
 .right-controls{
 
 display:flex;
@@ -1357,12 +1365,9 @@ gap:8px;
 /* ===================== */
 
 .hamburger{
-display:block;
+display:none;
 font-size:26px;
 cursor:pointer;
-position:absolute;
-right:20px;
-top:18px;
 }
 
 .portal-nav{
@@ -1432,6 +1437,13 @@ max-width:100%;
 }
 
 /* sicurezza extra contro overflow mobile */
+
+.header-left{
+display:flex;
+align-items:center;
+justify-content:space-between;
+width:100%;
+}  
 
 /* HEADER */
 
