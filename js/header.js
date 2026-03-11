@@ -6,13 +6,16 @@ const header = `
 
 <div class="container portal-header-inner">
 
-<div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+<div class="header-left">
 
 <a href="/" style="text-decoration:none">
 <div class="logo">Rendimento<span>BB</span></div>
 </a>
 
 <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+</div>
+
 <nav class="portal-nav">
 
 <a href="/tool/"
