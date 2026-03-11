@@ -12,6 +12,7 @@ const header = `
 <div class="logo">Rendimento<span>BB</span></div>
 </a>
 
+<div class="hamburger" onclick="toggleMenu()">☰</div>
 <nav class="portal-nav">
 
 <a href="/tool/"
@@ -89,3 +90,11 @@ EN
 document.body.insertAdjacentHTML("afterbegin", header);
 
 });
+
+window.toggleMenu = function(){
+
+const nav = document.querySelector(".portal-nav");
+
+nav.classList.toggle("open");
+
+}
