@@ -31,52 +31,6 @@ content="Scopri il ROI medio dei B&B a Roma e simula il rendimento di un investi
 
 <body>
 
-<header class="portal-header">
-<div class="container portal-header-inner">
-
-<div style="display:flex; align-items:center; gap:40px;">
-
-<a href="/" style="text-decoration:none;">
-<div class="logo">Rendimento<span>BB</span></div>
-</a>
-
-<nav class="portal-nav">
-
-<a href="/tool/">Simulatore</a>
-
-<a href="/mutui/">Mutui</a>
-
-<a href="/immobili/">Immobili</a>
-
-<a href="/academy/">Academy</a>
-
-<a href="/dashboard/">Dashboard</a>
-
-<a href="/contact.html">Contatti</a>
-
-</nav>
-
-</div>
-
-<div class="right-controls">
-
-<div class="lang-switch">
-<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-</div>
-
-<div id="user-area"></div>
-
-<button onclick="window.location.href='/'" class="btn btn-secondary">
-Home
-</button>
-
-</div>
-
-</div>
-</header>
-
-
 <main class="container" style="padding-top:100px;max-width:900px;">
 
 <h1
@@ -163,64 +117,9 @@ Simula il ROI del tuo B&B
 
 </main>
 
-
-<footer class="global-footer">
-
-<p
-data-it="© 2026 RendimentoBB – Motore decisionale per investimenti B&B"
-data-en="© 2026 RendimentoBB – B&B investment decision engine">
-© 2026 RendimentoBB – Motore decisionale per investimenti B&B
-</p>
-
-<div class="footer-links">
-
-<a href="/aprire-bnb-conviene/"
-data-it="Aprire un B&B conviene?"
-data-en="Is opening a B&B profitable?">
-Aprire un B&B conviene?
-</a>
-
-<a href="/quanto-guadagna-bnb/"
-data-it="Quanto guadagna un B&B?"
-data-en="How much does a B&B earn?">
-Quanto guadagna un B&B?
-</a>
-
-<a href="/costi-aprire-bnb/"
-data-it="Costi per aprire un B&B"
-data-en="Costs to open a B&B">
-Costi per aprire un B&B
-</a> 
-
-<a href="/roi-bnb/"
-data-it="ROI di un B&B"
-data-en="B&B ROI">
-ROI di un B&B
-</a> 
-
-<a href="/privacy.html"
-data-it="Privacy"
-data-en="Privacy">
-Privacy
-</a>
-
-<a href="/terms.html"
-data-it="Termini"
-data-en="Terms">
-Termini
-</a>
-
-<a href="/contact.html"
-data-it="Contatti"
-data-en="Contact">
-Contatti
-</a>
-
-</div>
-
-</footer>
-
-<script src="/js/lang.js"></script>
+<script src="/js/lang.js" defer></script>
+<script src="/js/header.js" defer></script>
+<script src="/js/footer.js" defer></script>
 
 </body>
 </html>
