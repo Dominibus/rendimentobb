@@ -1372,7 +1372,10 @@ cursor:pointer;
 
 .portal-nav{
 
-display:none;
+max-height:0;
+overflow:hidden;
+
+display:flex;
 flex-direction:column;
 align-items:center;
 
@@ -1381,19 +1384,26 @@ gap:14px;
 background:white;
 
 width:100%;
-padding:20px 0;
 
 border-top:1px solid #e2e8f0;
+
+transition:max-height .35s ease;
 
 }
 
 .portal-nav.open{
-display:flex;
-}
 
 .portal-nav a{
 font-size:16px;
 padding:8px 0;
+}  
+
+.hamburger{
+transition:transform .25s ease;
+}
+
+.portal-nav.open + .hamburger{
+transform:rotate(90deg);
 }  
 
 .portal-nav a{
