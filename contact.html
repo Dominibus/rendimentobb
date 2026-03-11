@@ -21,22 +21,48 @@ Contatti – RendimentoBB
 <body>
 
 <header class="portal-header">
-
 <div class="container portal-header-inner">
+
+<div style="display:flex; align-items:center; gap:40px;">
 
 <a href="/" style="text-decoration:none;">
 <div class="logo">Rendimento<span>BB</span></div>
 </a>
 
 <nav class="portal-nav">
-<a href="/">Home</a>
-<a href="/tool/">Tool</a>
+
+<a href="/tool/">Simulatore</a>
+
+<a href="/mutui/">Mutui</a>
+
+<a href="/immobili/">Immobili</a>
+
 <a href="/academy/">Academy</a>
+
 <a href="/dashboard/">Dashboard</a>
+
+<a href="/contact.html">Contatti</a>
+
 </nav>
 
 </div>
 
+<div class="right-controls">
+
+<div class="lang-switch">
+<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
+<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div id="user-area"></div>
+
+<button onclick="window.location.href='/'" class="btn btn-secondary">
+Home
+</button>
+
+</div>
+
+</div>
 </header>
 
 <main>
