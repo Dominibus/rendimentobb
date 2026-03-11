@@ -1118,7 +1118,12 @@ box-shadow:0 0 0 3px rgba(16,185,129,.15);
 .quick-roi-result{
 display:flex;
 justify-content:center;
-gap:60px;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.quick-roi-result > *{
+min-width:0;
 }
 
 .quick-roi-result span{
@@ -1302,11 +1307,6 @@ max-width:100%;
 }
 
 /* sicurezza extra contro overflow mobile */
-
-html,body{
-max-width:100%;
-overflow-x:auto;
-} 
 
 /* HEADER */
 
