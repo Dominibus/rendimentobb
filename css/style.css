@@ -655,8 +655,10 @@ line-height:1.7;
 
 .legal-container h1{
 
-font-size:34px;
-margin-bottom:20px;
+font-size:38px;
+font-weight:800;
+margin-bottom:24px;
+letter-spacing:-0.4px;
 
 }
 
