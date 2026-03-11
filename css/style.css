@@ -1748,4 +1748,24 @@ color:#0f172a;
 outline:1px solid red;
 }  
 
+/* FORCE MOBILE SAFE LAYOUT */
+
+.roi-card,
+.investment-panel,
+.investment-metrics,
+.metric-card{
+max-width:100%;
+min-width:0;
+}
+
+.roi-grid{
+grid-template-columns:1fr 1fr;
+}
+
+@media (max-width:768px){
+.roi-grid{
+grid-template-columns:1fr;
+}
+}  
+
 }
