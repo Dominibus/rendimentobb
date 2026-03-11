@@ -602,19 +602,6 @@ document.dispatchEvent(new Event("rb_plan_loaded"));
 
 });  
 
-/* protezione pagina */
-
-onAuthStateChanged(firebaseAuth, (user) => {
-
-  if (!user) {
-
-    window.location.replace("/login/");
-    return;
-
-  }
-
-});
-
 /* checkout stripe */
 
 window.buyPro = function(){
