@@ -605,9 +605,8 @@ const loanYears = getValue("loanYears");
 
 if (!priceNight || !occupancy || equity <= 0) return;
 
-const mortgageYearly = overrideMortgage !== null
-? overrideMortgage
-: calculateMortgage(loanAmount, interestRate, loanYears);
+const mortgageYearly =
+calculateMortgage(loanAmount, interestRate, loanYears);
 
 const nights = 365 * (occupancy / 100);
 const gross = priceNight * nights;
@@ -721,9 +720,6 @@ if (!resultDiv) return;
 
 
 // ================= PRO CHECK =================
-
-const resultDiv = document.getElementById("mortgage-results");
-if (!resultDiv) return;
 
 if(!window.currentUser){
 
@@ -907,14 +903,6 @@ async function generateExecutivePDF(){
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
 if(!requirePro("pdf report")) return;
-
-alert(
-lang==="it"
-? "La generazione PDF è disponibile solo nella versione PRO"
-: "PDF generation available only in PRO version"
-);
-
-return;
 
 }
 
