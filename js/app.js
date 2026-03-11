@@ -697,6 +697,39 @@ box.innerHTML = `
 
 function compareMortgages() {
 
+const resultDiv = document.getElementById("mortgage-results");
+if (!resultDiv) return;
+
+
+// ================= PRO CHECK =================
+
+if (!window.isPro) {
+
+resultDiv.innerHTML = `
+
+<div class="results-card" style="text-align:center;">
+
+<h3>🔒 Funzione PRO</h3>
+
+<p>
+La comparazione mutui completa è disponibile solo per utenti PRO.
+</p>
+
+<button onclick="buyPro()" class="btn btn-primary">
+🔓 Sblocca versione PRO – 29€
+</button>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+// ================= INPUT =================
+
 const amount = getValue("mortgageAmount");
 const years = getValue("mortgageYears");
 
@@ -704,9 +737,6 @@ const rateA = getValue("rateA");
 const rateB = getValue("rateB");
 const rateC = getValue("rateC");
 
-const resultDiv = document.getElementById("mortgage-results");
-
-if (!resultDiv) return;
 
 if (!amount || !years) {
 
@@ -715,11 +745,17 @@ return;
 
 }
 
+
+// ================= BANK LIST =================
+
 const banks = [
 { name: "Bank A", rate: rateA },
 { name: "Bank B", rate: rateB },
 { name: "Bank C", rate: rateC }
 ];
+
+
+// ================= CALCULATIONS =================
 
 const results = banks
 .map(bank => {
@@ -733,6 +769,7 @@ return { ...bank, ...data };
 })
 .filter(Boolean);
 
+
 if(results.length === 0){
 
 resultDiv.innerHTML = "No mortgage data";
@@ -740,19 +777,31 @@ return;
 
 }
 
+
+// ================= SORT BEST =================
+
 results.sort((a, b) => a.totalPaid - b.totalPaid);
 
 const best = results[0];
 
+
+// ================= RESULTS UI =================
+
 resultDiv.innerHTML = `
 
-<h4>${t("bestSolution")}: ${best.name}</h4>
+<h4 style="margin-bottom:20px;">
+🏆 ${t("bestSolution")}: <strong>${best.name}</strong>
+</h4>
+
+<div class="kpi-grid">
 
 ${results.map(r => `
 
-<div class="kpi-box" style="margin-top:15px;">
+<div class="kpi-box" style="
+${r.name === best.name ? "border:2px solid #10b981;background:#ecfdf5;" : ""}
+">
 
-<strong>${r.name}</strong><br>
+<strong>${r.name}</strong><br><br>
 
 ${t("rate")}: ${r.rate}%<br>
 
@@ -763,6 +812,8 @@ ${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
 </div>
 
 `).join("")}
+
+</div>
 
 `;
 
