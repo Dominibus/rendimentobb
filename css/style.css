@@ -1365,7 +1365,7 @@ gap:8px;
 /* ===================== */
 
 .hamburger{
-display:none;
+display:block;
 font-size:26px;
 cursor:pointer;
 }
