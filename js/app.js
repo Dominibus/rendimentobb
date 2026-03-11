@@ -594,22 +594,10 @@ const tax = getValue("tax");
 
 if(!window.currentUser){
 
-showUpgradePopup(roi);
-
-return;
+// utente non loggato può comunque fare simulazione
+console.log("Utente non loggato – analisi solo locale");
 
 }
-
-alert(
-window.currentLang === "it"
-? "Per analizzare questo immobile devi creare un account gratuito.\n\n✓ Salva le tue analisi\n✓ Confronta investimenti\n✓ Accedi alla dashboard"
-: "Create a free account to analyze this property.\n\n✓ Save your analyses\n✓ Compare investments\n✓ Access your dashboard"
-);
-
-window.location.href="/login?source=analysis";
-return;
-
-} 
 
 const loanAmount = getValue("loanAmount");
 const interestRate = getValue("interestRate");
@@ -734,7 +722,34 @@ if (!resultDiv) return;
 
 // ================= PRO CHECK =================
 
-if(!requirePro("mortgage comparator")) return;
+const resultDiv = document.getElementById("mortgage-results");
+if (!resultDiv) return;
+
+if(!window.currentUser){
+
+resultDiv.innerHTML = `
+
+<div class="results-card" style="text-align:center;">
+
+<h3>🔒 Accesso richiesto</h3>
+
+<p>
+Per confrontare i mutui devi creare un account gratuito.
+</p>
+
+<button onclick="window.location.href='/login'" class="btn btn-primary">
+Accedi o Registrati
+</button>
+
+</div>
+
+`;
+
+return;
+
+}
+
+if(!window.isPro){
 
 resultDiv.innerHTML = `
 
@@ -743,7 +758,7 @@ resultDiv.innerHTML = `
 <h3>🔒 Funzione PRO</h3>
 
 <p>
-La comparazione mutui completa è disponibile solo per utenti PRO.
+Il comparatore mutui completo è disponibile nella versione PRO.
 </p>
 
 <button onclick="buyPro()" class="btn btn-primary">
