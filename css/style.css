@@ -1249,7 +1249,13 @@ padding:0 6px;
 }
 
 .hero-trust{
-justify-content:center;
+flex-direction:column;
+align-items:center;
+gap:14px;
+}
+
+.hero-trust > *{
+width:100%;
 }
 
 .hero-right{
