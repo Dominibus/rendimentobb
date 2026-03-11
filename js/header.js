@@ -64,8 +64,6 @@ Contatti
 
 </nav>
 
-</div>
-
 <div class="right-controls">
 
 <div class="lang-switch">
@@ -98,6 +96,8 @@ window.toggleMenu = function(){
 
 const nav = document.querySelector(".portal-nav");
 
+if(nav){
 nav.classList.toggle("open");
+}
 
 }
