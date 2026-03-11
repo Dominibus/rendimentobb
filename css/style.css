@@ -27,7 +27,7 @@ color:#0f172a;
 -webkit-font-smoothing:antialiased;
 
 /* FIX MOBILE */
-overflow-x:auto;
+overflow-x:hidden;
 }
 
 /* ===================== */
@@ -1490,9 +1490,9 @@ overflow-wrap:break-word;
 }  
 
 html,body{
-overflow-x:hidden;
 max-width:100%;
-}  
+overflow-x:hidden;
+} 
 
 /* ROI QUICK SIMULATOR */
 
