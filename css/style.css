@@ -81,9 +81,19 @@ margin:auto;
 /* ===================== */
 
 .portal-header{
-padding:28px 0;
+padding:22px 0;
+
 width:100%;
 max-width:100%;
+
+background:rgba(255,255,255,0.85);
+backdrop-filter:blur(10px);
+
+border-bottom:1px solid #e2e8f0;
+
+position:sticky;
+top:0;
+z-index:1000;
 }
 
 .portal-header-inner{
@@ -95,15 +105,23 @@ align-items:center;
 .portal-nav{
 display:flex;
 justify-content:center;
-gap:32px;
+gap:18px;
 font-size:14px;
 }
 
 .portal-nav a{
+
 text-decoration:none;
-color:#0f172a;
+color:#334155;
+
 font-weight:500;
 font-size:14px;
+
+padding:8px 14px;
+border-radius:10px;
+
+transition:all .25s ease;
+
 }
 
 .header-actions{
@@ -197,14 +215,17 @@ min-width:0;
 
 .portal-nav a:hover{
 
+background:#f1f5f9;
 color:#10b981;
+
+transform:translateY(-1px);
 
 }
 
 .portal-nav a.active{
 
-color:#10b981;
-font-weight:600;
+background:#10b981;
+color:white;
 
 }
 
@@ -1263,6 +1284,10 @@ font-size:15px;
 
 @media (max-width:768px){
 
+.right-controls{
+margin-top:6px;
+}  
+
 /* HERO MOBILE */
 
 .hero-grid{
@@ -1362,7 +1387,8 @@ margin:auto;
 
 .portal-nav a{
 font-size:12px;
-padding:4px 6px;
+padding:6px 8px;
+border-radius:8px;
 }
 
 .header-actions{
