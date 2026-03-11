@@ -1743,11 +1743,6 @@ font-weight:700;
 color:#0f172a;
 }
 
-/* DEBUG MOBILE OVERFLOW */
-*{
-outline:1px solid red;
-}  
-
 /* FORCE MOBILE SAFE LAYOUT */
 
 .roi-card,
