@@ -87,18 +87,16 @@ max-width:100%;
 }
 
 .portal-header-inner{
-display:flex;
+display:grid;
+grid-template-columns:auto 1fr auto;
 align-items:center;
-justify-content:space-between;
-
-width:100%;
-max-width:100%;
 }
 
 .portal-nav{
 display:flex;
-gap:26px;
-flex-wrap:wrap;
+justify-content:center;
+gap:32px;
+font-size:14px;
 }
 
 .portal-nav a{
