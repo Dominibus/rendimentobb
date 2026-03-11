@@ -1288,8 +1288,15 @@ font-size:15px;
 @media (max-width:768px){
 
 .right-controls{
+
+display:flex;
+justify-content:center;
+
+gap:10px;
+
 margin-top:6px;
-}  
+
+}
 
 /* HERO MOBILE */
 
@@ -1331,18 +1338,42 @@ max-width:100%;
 }
 
 .portal-header-inner{
+
+display:flex;
+flex-direction:column;
+align-items:center;
+
 width:100%;
 max-width:100%;
+
 overflow:hidden;
+
+gap:8px;
+
 }
 
 .portal-nav{
-width:100%;
-max-width:100%;
-flex-wrap:wrap;
+
+display:grid;
+grid-template-columns:repeat(2,auto);
+
 justify-content:center;
+
+gap:10px 24px;
+
+margin-top:6px;
+
 }
 
+.portal-nav a{
+
+font-size:13px;
+padding:6px 6px;
+
+white-space:nowrap;
+
+}
+  
 .dashboard-container{
 max-width:100%;
 overflow-x:hidden;
