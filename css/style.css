@@ -173,8 +173,8 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:minmax(0,620px) 1fr;
-gap:80px;
+grid-template-columns:minmax(0,1fr) 1fr;
+gap:60px;
 align-items:center;
 
 max-width:1200px;
@@ -1560,13 +1560,6 @@ transition:all .25s ease;
 transform:translateY(-4px);
 box-shadow:0 30px 80px rgba(0,0,0,0.12);
 
-}
-
-.roi-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-margin-top:20px;
 }
 
 .roi-field{
