@@ -173,7 +173,7 @@ margin:0 auto;
 
 .hero-grid{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:minmax(0,1fr) minmax(0,1fr);
 gap:60px;
 align-items:center;
 
@@ -214,8 +214,9 @@ align-items:center;
 }
 
 .hero-right img{
-max-width:640px;
+max-width:100%;
 width:100%;
+height:auto;
 }
 
 .hero-trust{
