@@ -44,10 +44,41 @@ async function saveAnalysis(data){
 
 // ================= PRO SYSTEM =================
 
-let overrideMortgage = null;
-
 function isProUnlocked(){
   return window.isPro === true;
+}
+
+function requirePro(feature="premium feature"){
+
+if(!window.currentUser){
+
+alert(
+window.currentLang==="it"
+? "Per utilizzare questa funzione devi creare un account gratuito."
+: "Create a free account to use this feature."
+);
+
+window.location.href="/login";
+return false;
+
+}
+
+if(!window.isPro){
+
+if(confirm(
+window.currentLang==="it"
+? "Questa funzione è disponibile solo nella versione PRO.\n\nVuoi sbloccarla?"
+: "This feature is available only in PRO version.\n\nUnlock now?"
+)){
+window.buyPro();
+}
+
+return false;
+
+}
+
+return true;
+
 }
 
 // evento quando firebase carica il piano
@@ -563,10 +594,10 @@ const tax = getValue("tax");
 
 if(!window.currentUser){
 
-// se firebase non ha ancora caricato l'utente aspettiamo
-if(!firebaseReady){
-console.log("Firebase auth loading...");
+showUpgradePopup(roi);
+
 return;
+
 }
 
 alert(
@@ -667,7 +698,7 @@ const box = document.getElementById("strategic-insight");
 
 if (!box) return;
 
-if (!isProUnlocked()) {
+if(!window.isPro){
 
 box.innerHTML = `
 <strong>${t("strategicLocked")}</strong>
@@ -703,7 +734,7 @@ if (!resultDiv) return;
 
 // ================= PRO CHECK =================
 
-if (!window.isPro) {
+if(!requirePro("mortgage comparator")) return;
 
 resultDiv.innerHTML = `
 
@@ -860,7 +891,7 @@ async function generateExecutivePDF(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-if(!isProUnlocked()){
+if(!requirePro("pdf report")) return;
 
 alert(
 lang==="it"
@@ -1374,68 +1405,3 @@ renderMarketBenchmark(city);
 }
 
 document.addEventListener("DOMContentLoaded", loadPropertyFromLink);
-
-window.compareMortgages = function(){
-
-const amount = parseFloat(document.getElementById("mortgageAmount").value);
-const years = parseFloat(document.getElementById("mortgageYears").value);
-
-const rateA = parseFloat(document.getElementById("rateA").value);
-const rateB = parseFloat(document.getElementById("rateB").value);
-const rateC = parseFloat(document.getElementById("rateC").value);
-
-if(!amount || !years){
-alert("Inserisci importo e durata.");
-return;
-}
-
-function calcMortgage(rate){
-
-const monthlyRate = rate / 100 / 12;
-const months = years * 12;
-
-const payment =
-amount *
-(monthlyRate * Math.pow(1 + monthlyRate, months)) /
-(Math.pow(1 + monthlyRate, months) - 1);
-
-const total = payment * months;
-
-return {
-monthly: payment,
-total: total
-};
-
-}
-
-const a = calcMortgage(rateA);
-const b = calcMortgage(rateB);
-const c = calcMortgage(rateC);
-
-function card(bank,data){
-
-return `
-<div class="kpi-box">
-
-<div class="kpi-label">${bank}</div>
-
-<div class="kpi-value">
-${data.monthly.toFixed(0)} € / mese
-</div>
-
-<div style="font-size:13px;color:#64748b;margin-top:6px;">
-Costo totale: ${data.total.toFixed(0)} €
-</div>
-
-</div>
-`;
-
-}
-
-document.getElementById("mortgage-results").innerHTML =
-
-card("Banca A",a) +
-card("Banca B",b) +
-card("Banca C",c);
-
-};
