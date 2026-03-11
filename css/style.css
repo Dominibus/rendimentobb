@@ -1263,16 +1263,23 @@ display:none;
 .portal-header-inner{
 flex-direction:column;
 align-items:center;
-gap:8px;
+gap:10px;
 text-align:center;
 padding-bottom:6px;
+
+width:100%;
+max-width:100%;
 }
 
 .portal-nav{
+display:flex;
 flex-wrap:wrap;
 justify-content:center;
 gap:10px;
-max-width:320px;
+
+width:100%;
+max-width:100%;
+
 margin:auto;
 }
 
@@ -1426,6 +1433,17 @@ grid-template-columns:1fr;
 /* ===================== */
 /* MOBILE OVERFLOW FIX */
 /* ===================== */
+
+.portal-header,
+.portal-header-inner{
+max-width:100%;
+overflow:hidden;
+}
+
+.portal-nav{
+max-width:100%;
+flex-wrap:wrap;
+}
 
 .dashboard-container{
 max-width:100%;
