@@ -1469,19 +1469,23 @@ linkBox.innerHTML = `
 
 let city = null;
 
-if(link.includes("napoli")) city = "napoli";
-if(link.includes("milano")) city = "milano";
-if(link.includes("roma")) city = "roma";
-if(link.includes("firenze")) city = "firenze";
+const cityMap = {
+napoli: "napoli",
+roma: "roma",
+milano: "milano",
+firenze: "firenze",
+torino: "torino",
+bologna: "bologna",
+venezia: "venezia",
+genova: "genova",
+palermo: "palermo"
+};
 
-const citySelect = document.getElementById("city");
+for(const key in cityMap){
 
-if(city && citySelect){
-
-citySelect.value = city;
-
-renderMarketBenchmark(city);
-
+if(link.toLowerCase().includes(key)){
+city = cityMap[key];
+break;
 }
 
 }
