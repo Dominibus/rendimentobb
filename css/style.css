@@ -1287,14 +1287,6 @@ font-size:15px;
 
 @media (max-width:768px){
 
-.hamburger{
-display:block;
-}
-
-}
-
-@media (max-width:768px){
-
 .right-controls{
 
 display:flex;
@@ -1368,6 +1360,8 @@ gap:8px;
 display:block;
 font-size:26px;
 cursor:pointer;
+z-index:1100;
+transition:transform .25s ease;
 }
 
 .portal-nav{
@@ -1394,7 +1388,7 @@ transition:max-height .35s ease;
 }
 
 .portal-nav.open{
-max-height:500px;
+max-height:80vh;
 }
 
 .portal-nav a{
@@ -1402,14 +1396,6 @@ font-size:16px;
 padding:8px 0;
 white-space:nowrap;  
 }  
-
-.hamburger{
-transition:transform .25s ease;
-display:block;
-font-size:26px;
-cursor:pointer;
-z-index:1100;  
-} 
   
 .dashboard-container{
 max-width:100%;
