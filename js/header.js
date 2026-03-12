@@ -123,3 +123,5 @@ document.querySelectorAll(".portal-nav a").forEach(link => {
   }
 
 });
+
+});  
