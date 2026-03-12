@@ -1905,7 +1905,8 @@ break;
 }
 
 } // <-- qui chiude loadPropertyFromLink()
-
+  
+}
 // ================= AUTO LOAD PROPERTY =================
 
 document.addEventListener("DOMContentLoaded", () => {
