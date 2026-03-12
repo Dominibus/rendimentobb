@@ -415,8 +415,6 @@ ${breakEvenYears} ${t("anni","years")}
 </strong>
 </div>
 
-</div>
-
 <div class="metric">
 <span>${t("Prezzo immobile consigliato","Suggested property price")}</span>
 <strong>
@@ -429,6 +427,8 @@ ${t(
 "per raggiungere il ROI medio di mercato",
 "to reach average market ROI"
 )} (${marketROI}%)
+</div>
+
 </div>
 
 `;
