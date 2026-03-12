@@ -1,0 +1,8 @@
+{
+  "name": "rendimentobb",
+  "version": "1.0.0",
+  "description": "RendimentoBB SaaS",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}
