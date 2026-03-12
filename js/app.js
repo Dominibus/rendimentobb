@@ -13,7 +13,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const db = getFirestore();
-let firebaseReady = false;
 
 
 // ================= SAVE ANALYSIS =================
@@ -45,7 +44,7 @@ async function saveAnalysis(data){
 // ================= PRO SYSTEM =================
 
 function isProUnlocked(){
-  return window.isPro === true;
+  return window.isProUser && window.isProUser();
 }
 
 function requirePro(feature="premium feature"){
@@ -63,7 +62,7 @@ return false;
 
 }
 
-if(!window.isPro){
+if(!window.isProUser || !window.isProUser()){
 
 if(confirm(
 window.currentLang==="it"
@@ -84,10 +83,11 @@ return true;
 // evento quando firebase carica il piano
 document.addEventListener("rb_plan_loaded", () => {
 
-  console.log("Piano utente caricato:", window.isPro);
+  console.log("Piano utente caricato:", window.currentPlan);
 
-  // ricalcola quando firebase ha caricato il piano
-  calculate();
+  if(typeof calculate === "function"){
+    calculate();
+  }
 
 });
 
@@ -743,7 +743,7 @@ const box = document.getElementById("strategic-insight");
 
 if (!box) return;
 
-if(!window.isPro){
+if(!window.isProUser || !window.isProUser()){
 
 box.innerHTML = `
 <strong>${t("strategicLocked")}</strong>
@@ -803,7 +803,7 @@ return;
 
 }
 
-if(!window.isPro){
+if(!window.isProUser || !window.isProUser()){
 
 resultDiv.innerHTML = `
 
