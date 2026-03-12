@@ -240,7 +240,8 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     await loadUserPlan(user.uid);
   }else{
-  window.currentPlan = "free";
+currentPlan = "free";
+window.currentPlan = "free";
 }
 
   updateUserUI(user);
