@@ -13,8 +13,13 @@ try{
 
 const response = await fetch(url,{
 headers:{
-"User-Agent":"Mozilla/5.0",
-"Accept":"text/html"
+"User-Agent":
+"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
+"Accept":
+"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+"Accept-Language":"it-IT,it;q=0.9,en;q=0.8",
+"Cache-Control":"no-cache",
+"Pragma":"no-cache"
 }
 });
 
@@ -39,7 +44,7 @@ null;
 }
 
 
-// ===== FALLBACK =====
+// ===== FALLBACK 1 =====
 
 if(!price){
 
@@ -47,6 +52,25 @@ const match = html.match(/"price":\s*([0-9]+)/);
 
 if(match){
 price = parseInt(match[1]);
+}
+
+}
+
+// ===== FALLBACK 2 (HTML) =====
+
+if(!price){
+
+const match = html.match(/([0-9\.]{4,12})\s?€/);
+
+if(match){
+
+price = match[1]
+.replace(/\./g,"")
+.replace(",",".")
+.trim();
+
+price = parseInt(price);
+
 }
 
 }
