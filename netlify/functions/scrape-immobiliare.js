@@ -68,22 +68,37 @@ price = parseInt(match[1]);
 
 if(!price){
 
-const match = html.match(/([0-9\.\s]{4,15})\s?€/);
+// prezzo singolo
+let match = html.match(/€\s*([0-9\.\,]+)/);
 
 if(match){
 
 price = match[1]
 .replace(/\./g,"")
-.replace(/\s/g,"")
+.replace(",",".")
 .trim();
 
-price = parseInt(price);
+price = parseFloat(price);
+
+}
+
+// range prezzo (es: €255.000 – €900.000)
+if(!price){
+
+let range = html.match(/€\s*([0-9\.\,]+)\s*–\s*€\s*([0-9\.\,]+)/);
+
+if(range){
+
+let min = range[1].replace(/\./g,"");
+let max = range[2].replace(/\./g,"");
+
+price = Math.round((parseInt(min) + parseInt(max)) / 2);
 
 }
 
 }
 
-console.log("Extracted price:", price);
+}
 
 // ================= CITY EXTRACTION =================
 
