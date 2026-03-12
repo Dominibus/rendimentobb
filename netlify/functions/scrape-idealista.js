@@ -17,9 +17,7 @@ headers:{
 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
 "Accept":
 "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-"Accept-Language":"it-IT,it;q=0.9,en;q=0.8",
-"Cache-Control":"no-cache",
-"Pragma":"no-cache"
+"Accept-Language":"it-IT,it;q=0.9,en;q=0.8"
 }
 });
 
@@ -34,7 +32,7 @@ const jsonMatch = html.match(/<script id="__NEXT_DATA__" type="application\/json
 
 if(jsonMatch){
 
-let json = null;
+let json;
 
 try{
 json = JSON.parse(jsonMatch[1]);
@@ -42,15 +40,21 @@ json = JSON.parse(jsonMatch[1]);
 json = null;
 }
 
+if(json){
+
 price =
 json?.props?.pageProps?.ad?.price?.amount ||
+json?.props?.pageProps?.initialProps?.ad?.price?.amount ||
+json?.props?.pageProps?.property?.price?.amount ||
 json?.props?.pageProps?.listing?.price ||
 null;
 
 }
 
+}
 
-// ================= FALLBACK 1 (JSON STRING) =================
+
+// ================= FALLBACK JSON PRICE =================
 
 if(!price){
 
@@ -63,7 +67,7 @@ price = parseInt(match[1]);
 }
 
 
-// ================= FALLBACK 2 (HTML €) =================
+// ================= HTML FALLBACK =================
 
 if(!price){
 
@@ -83,7 +87,7 @@ price = parseInt(price);
 }
 
 
-// ================= RETURN =================
+console.log("Extracted price:", price);
 
 return {
 
