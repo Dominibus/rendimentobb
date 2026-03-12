@@ -807,6 +807,64 @@ window.buyPro();
 
 }
 
+// ================= SMART INVESTMENT ALERT =================
+
+function renderSmartInvestmentAlert(roi){
+
+const container = document.getElementById("smart-investment-alert");
+if(!container) return;
+
+if(window.currentPlan === "pro"){
+container.innerHTML = "";
+return;
+}
+
+if(roi < 10){
+container.innerHTML = "";
+return;
+}
+
+container.innerHTML = `
+
+<div style="
+margin-top:20px;
+padding:20px;
+border-radius:14px;
+background:#ecfdf5;
+border:1px solid #10b981;
+text-align:center;
+">
+
+<strong style="font-size:16px;">
+🔥 Questo investimento sembra molto interessante
+</strong>
+
+<p style="margin-top:8px;font-size:14px;">
+ROI stimato: <strong>${roi.toFixed(1)}%</strong>
+</p>
+
+<p style="margin-top:10px;font-size:14px;">
+Scopri nella versione PRO:
+<br>
+• rischio reale
+<br>
+• simulazioni mercato
+<br>
+• scenari occupazione
+<br>
+• report professionale
+</p>
+
+<button onclick="buyPro()" class="btn btn-primary" style="margin-top:10px;">
+🔓 Sblocca versione PRO – 29€
+</button>
+
+</div>
+
+`;
+
+}
+
 // ================= MAIN CALC =================
 
 function calculate() {
@@ -882,6 +940,7 @@ renderRevenueForecast(gross);
 
 renderInvestmentScore(roi, riskScore);
 renderInvestmentRanking(roi);  
+renderSmartInvestmentAlert(roi);  
 const payback =
 equity > 0 && netAfterMortgage > 0
 ? (equity / netAfterMortgage)
