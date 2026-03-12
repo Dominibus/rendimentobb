@@ -1776,33 +1776,59 @@ async function scrapePropertyFromBrowser(url){
 
 try{
 
-let endpoint = "";
+// proxy CORS per leggere la pagina
+const proxy =
+"https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
 
-if(url.includes("idealista")){
-endpoint = "/.netlify/functions/scrape-idealista";
+const response = await fetch(proxy);
+
+const html = await response.text();
+
+console.log("HTML loaded");
+
+// ===== PRICE =====
+
+let price = null;
+
+let match = html.match(/€\s*([0-9\.\,]+)/);
+
+if(match){
+
+price = match[1]
+.replace(/\./g,"")
+.replace(",",".")
+.trim();
+
+price = parseFloat(price);
+
 }
-else if(url.includes("immobiliare")){
-endpoint = "/.netlify/functions/scrape-immobiliare";
+
+// ===== CITY =====
+
+let city = null;
+
+const cityMatch = html.match(/([A-Z][a-z]+)\s?(?:\(|\-)\s?(?:NA|RM|MI|FI)/);
+
+if(cityMatch){
+city = cityMatch[1];
 }
-else{
-console.warn("Sito non supportato");
-return { price:null };
-}
 
-const response = await fetch(
-endpoint + "?url=" + encodeURIComponent(url)
-);
+console.log("Extracted price:", price);
+console.log("Extracted city:", city);
 
-const data = await response.json();
-
-console.log("Prezzo trovato:", data.price);
-
-return data;
+return {
+price: price || 0,
+city: city || null
+};
 
 }catch(e){
 
-console.error("Errore scraping Netlify:", e);
-return { price:null };
+console.error("Scraping error:", e);
+
+return {
+price:0,
+city:null
+};
 
 }
 
