@@ -66,6 +66,18 @@ price = parseInt(match[1]);
 
 }
 
+// ================= METHOD 3 IMMOBILIARE JSON =================
+
+if(!price){
+
+const match = html.match(/"priceValue":\s*([0-9]+)/);
+
+if(match){
+price = parseInt(match[1]);
+}
+
+}  
+
 
 // ================= METHOD 3 HTML FALLBACK =================
 
