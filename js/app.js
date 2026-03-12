@@ -708,6 +708,64 @@ container.innerHTML = `
 
 }
 
+// ================= RISK METER =================
+
+function renderRiskMeter(riskScore){
+
+const container = document.getElementById("investment-risk-meter");
+if(!container) return;
+
+let color = "#ef4444";
+let icon = "🔴";
+let labelIT = "Rischio elevato";
+let labelEN = "High risk";
+
+if(riskScore < 40){
+color = "#10b981";
+icon = "🟢";
+labelIT = "Rischio basso";
+labelEN = "Low risk";
+}
+
+else if(riskScore < 65){
+color = "#f59e0b";
+icon = "🟠";
+labelIT = "Rischio medio";
+labelEN = "Medium risk";
+}
+
+const label =
+window.currentLang === "it"
+? labelIT
+: labelEN;
+
+container.innerHTML = `
+
+<div style="
+padding:18px;
+border-radius:12px;
+background:#f8fafc;
+border-left:6px solid ${color};
+">
+
+<strong style="font-size:16px;">
+${icon} ${label}
+</strong>
+
+<p style="margin-top:6px;font-size:13px;color:#64748b">
+
+${window.currentLang==="it"
+? "Valutazione del rischio basata su ROI e sostenibilità finanziaria."
+: "Risk evaluation based on ROI and financial sustainability."}
+
+</p>
+
+</div>
+
+`;
+
+}
+
 // ================= INVESTMENT VERDICT =================
 
 function renderInvestmentVerdict(roi, payback){
@@ -939,7 +997,8 @@ renderStrategicInsight(roi);
 renderRevenueForecast(gross);
 
 renderInvestmentScore(roi, riskScore);
-renderInvestmentRanking(roi);  
+renderInvestmentRanking(roi); 
+renderRiskMeter(riskScore);  
 renderSmartInvestmentAlert(roi);  
 const payback =
 equity > 0 && netAfterMortgage > 0
