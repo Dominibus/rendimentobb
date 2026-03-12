@@ -220,6 +220,7 @@ roi:data.roi || 0,
 price:data.propertyPrice || 0,
 equity:data.equity || 0,
 risk:data.risk || 0,
+city:data.city || "italy",
 createdAt:data.createdAt
 });
 
@@ -276,7 +277,14 @@ card.innerHTML=`
 
 ${badge}
 
-<h3>${t("Analisi investimento","Investment analysis")}</h3>
+<h3>
+${t("Analisi investimento","Investment analysis")}
+</h3>
+
+<div class="metric">
+<span>${t("Città","City")}</span>
+<strong>${data.city}</strong>
+</div>
 
 <div class="metric">
 <span>${t("Prezzo immobile","Property price")}</span>
