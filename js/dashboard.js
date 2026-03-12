@@ -210,6 +210,8 @@ let count = 0;
 
 let analyses = [];  
 
+let cityDistribution = {}; 
+
 querySnapshot.forEach(doc=>{
 
 const data = doc.data();
@@ -223,6 +225,14 @@ risk:data.risk || 0,
 city:data.city || "italy",
 createdAt:data.createdAt
 });
+
+const city = data.city || "italy";
+
+if(!cityDistribution[city]){
+cityDistribution[city] = 0;
+}
+
+cityDistribution[city]++; 
 
 });
 
@@ -338,6 +348,7 @@ renderBestInvestment(analyses);
 renderInvestmentRanking(analyses);
 renderChart();
 renderCashflowChart();
+renderCityDistribution(); 
 
 }
 
@@ -858,6 +869,51 @@ loadDashboard();
 
 });
 
+function renderCityDistribution(){
+
+const container =
+document.getElementById("city-distribution-chart");
+
+if(!container) return;
+
+container.innerHTML =
+'<canvas id="cityChart"></canvas>';
+
+const ctx =
+document.getElementById("cityChart").getContext("2d");
+
+const labels = Object.keys(cityDistribution);
+const values = Object.values(cityDistribution);
+
+new Chart(ctx,{
+
+type:"bar",
+
+data:{
+labels:labels,
+
+datasets:[{
+
+label:"Investments",
+
+data:values,
+
+backgroundColor:"#10b981"
+
+}]
+
+},
+
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+}
+}
+
+});
+
+}
 
 // ===============================
 // CASHFLOW PROJECTION CHART
