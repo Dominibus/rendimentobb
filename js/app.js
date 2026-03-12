@@ -379,6 +379,57 @@ function renderMarketComparison(userRevenue, cityKey){
 
 }
 
+// ================= ROI VS MARKET =================
+
+function renderROIMarketComparison(roi, cityKey){
+
+if(!window.RB_MARKET_DATA) return;
+
+const container = document.getElementById("roi-market-comparison");
+if(!container) return;
+
+const market = window.RB_MARKET_DATA[cityKey];
+if(!market) return;
+
+const marketROI = market.roi || 10;
+
+let message = "";
+let color = "#ef4444";
+
+if(roi > marketROI){
+
+message = "✓ ROI above city average";
+color = "#10b981";
+
+}else{
+
+message = "⚠ ROI below city average";
+
+}
+
+container.innerHTML = `
+
+<div class="kpi-box">
+<span>Your ROI</span>
+<strong>${roi.toFixed(1)}%</strong>
+</div>
+
+<div class="kpi-box">
+<span>${cityKey} average ROI</span>
+<strong>${marketROI}%</strong>
+</div>
+
+<div class="kpi-box">
+<span>Market comparison</span>
+<strong style="color:${color}">
+${message}
+</strong>
+</div>
+
+`;
+
+}
+
 // ================= REVENUE FORECAST =================
 
 function renderRevenueForecast(baseRevenue){
@@ -849,6 +900,7 @@ if(citySelect && citySelect.value){
 
   renderMarketBenchmark(citySelect.value);
   renderMarketComparison(gross, citySelect.value);
+  renderROIMarketComparison(roi, citySelect.value);
 
 }
 
