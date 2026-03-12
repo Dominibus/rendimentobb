@@ -8,11 +8,13 @@ const header = `
 
 <div class="header-left">
 
-<a href="/" style="text-decoration:none">
+<a href="/" class="logo-link">
 <div class="logo">Rendimento<span>BB</span></div>
 </a>
 
-<div class="hamburger">☰</div>
+<button class="hamburger" aria-label="Menu">
+☰
+</button>
 
 </div>
 
@@ -66,6 +68,8 @@ Contatti
 
 <div class="right-controls">
 
+<div id="user-area"></div>
+
 <div class="lang-switch">
 
 <button class="lang-btn" onclick="setLang('it')" id="btn-it">
@@ -77,8 +81,6 @@ EN
 </button>
 
 </div>
-
-<div id="user-area"></div>
 
 </div>
 
@@ -116,11 +118,11 @@ const currentPath = window.location.pathname;
 
 document.querySelectorAll(".portal-nav a").forEach(link => {
 
-  const href = link.getAttribute("href");
+const href = link.getAttribute("href");
 
-  if(currentPath.startsWith(href)){
-    link.classList.add("active");
-  }
+if(currentPath === href){
+link.classList.add("active");
+}
 
 });
 
