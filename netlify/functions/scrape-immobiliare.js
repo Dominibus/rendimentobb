@@ -24,7 +24,7 @@ headers:{
 const html = await response.text();
 
 let price = null;
-
+let city = null;  
 
 // ================= METHOD 1 JSON-LD =================
 
@@ -85,6 +85,32 @@ price = parseInt(price);
 
 console.log("Extracted price:", price);
 
+// ================= CITY EXTRACTION =================
+
+if(!city){
+
+// metodo 1 – address JSON
+const cityMatch = html.match(/"addressLocality":"([^"]+)"/);
+
+if(cityMatch){
+city = cityMatch[1];
+}
+
+}
+
+// fallback semplice
+if(!city){
+
+const cityFallback = html.match(/([A-Z][a-z]+)\s?(?:\(|\-)\s?(?:NA|RM|MI|FI)/);
+
+if(cityFallback){
+city = cityFallback[1];
+}
+
+}
+
+console.log("Extracted city:", city);  
+
 
 // ================= RETURN =================
 
@@ -97,7 +123,8 @@ headers:{
 },
 
 body: JSON.stringify({
-price: price || 0
+price: price || 0,
+city: city || null
 })
 
 };
@@ -114,7 +141,10 @@ headers:{
 "Access-Control-Allow-Origin":"*"
 },
 
-body: JSON.stringify({price:0})
+body: JSON.stringify({
+price:0,
+city:null
+})
 
 };
 
