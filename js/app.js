@@ -554,6 +554,28 @@ container.innerHTML = `
 
 }
 
+/* ===============================
+PREVIEW PANEL UPDATE
+=============================== */
+
+const gradeCircle = document.getElementById("score-circle");
+const roiPreview = document.getElementById("roi-preview");
+const riskPreview = document.getElementById("risk-preview");
+
+if(gradeCircle && roiPreview && riskPreview){
+
+roiPreview.textContent = roi.toFixed(1) + "%";
+riskPreview.textContent = riskScore + " / 100";
+
+let grade = "C";
+
+if(roi > 12) grade = "A";
+else if(roi > 6) grade = "B";
+
+gradeCircle.textContent = grade;
+
+}
+
 // ================= INVESTMENT RANKING =================
 
 function renderInvestmentRanking(roi){
