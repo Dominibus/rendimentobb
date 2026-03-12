@@ -513,6 +513,70 @@ ${roi.toFixed(2)}%
 
 }
 
+// ================= BREAK EVEN OCCUPANCY =================
+
+function renderBreakEvenOccupancy(
+priceNight,
+expenses,
+commission,
+tax,
+mortgage
+){
+
+const container = document.getElementById("break-even-kpi");
+if(!container) return;
+
+const yearlyExpenses = expenses * 12;
+
+const costBase = yearlyExpenses + mortgage;
+
+const revenuePerNight =
+priceNight * (1 - commission/100) * (1 - tax/100);
+
+if(revenuePerNight <= 0){
+
+container.innerHTML = `
+<div class="kpi-box">
+<span>Break-even occupancy</span>
+<strong>—</strong>
+</div>
+`;
+
+return;
+
+}
+
+const nightsNeeded = costBase / revenuePerNight;
+
+const occupancy = (nightsNeeded / 365) * 100;
+
+const occRounded = Math.min(100, Math.max(0, occupancy));
+
+let color = "#ef4444";
+
+if(occRounded < 60) color = "#10b981";
+else if(occRounded < 75) color = "#f59e0b";
+
+container.innerHTML = `
+
+<div class="kpi-box">
+<span>Break-even occupancy</span>
+<strong style="color:${color}">
+${occRounded.toFixed(1)}%
+</strong>
+</div>
+
+<div class="kpi-box">
+<span>Notti minime</span>
+<strong>
+${Math.round(nightsNeeded)}
+</strong>
+</div>
+
+`;
+
+}
+
 // ================= INVESTMENT SCORE =================
 
 function renderInvestmentScore(roi, riskScore){
@@ -697,6 +761,14 @@ const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
 updateInvestmentScore(investmentScore);  
 
 renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
+
+renderBreakEvenOccupancy(
+priceNight,
+expenses,
+commission,
+tax,
+mortgageYearly
+);  
 
 renderChart(netAfterMortgage);
 
