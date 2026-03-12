@@ -1090,6 +1090,34 @@ document.getElementById("market-city")?.value ||
 document.getElementById("city")?.value ||
 "italy";
 
+const propertyLink = localStorage.getItem("property_link") || "";
+
+function extractCity(url){
+
+const cities = [
+"napoli",
+"roma",
+"milano",
+"torino",
+"bologna",
+"firenze",
+"venezia",
+"genova",
+"palermo"
+];
+
+for(const city of cities){
+if(url.toLowerCase().includes(city)){
+return city;
+}
+}
+
+return "italy";
+
+}
+
+const city = extractCity(propertyLink);
+
 saveAnalysis({
 price: getValue("price"),
 equity: equity,
