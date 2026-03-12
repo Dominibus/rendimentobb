@@ -1240,8 +1240,13 @@ document.getElementById("adr-slider").addEventListener("input", updateRevenue);
 
 function updateRevenue(){
 
-const occ = document.getElementById("occ-slider").value;
-const adr = document.getElementById("adr-slider").value;
+const occSlider = document.getElementById("occ-slider");
+const adrSlider = document.getElementById("adr-slider");
+
+if(!occSlider || !adrSlider) return;
+
+const occ = occSlider.value;
+const adr = adrSlider.value;
 
 document.getElementById("occ-value").textContent = occ + "%";
 document.getElementById("adr-value").textContent = "€" + adr;
