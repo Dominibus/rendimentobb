@@ -252,7 +252,7 @@ const visibleAnalyses = analyses.slice(0,12);
 visibleAnalyses.forEach((data,index)=>{
 
 roiValues.push(data.roi);
-labels.push("Inv " + (index+1));  
+labels.push(formatDate(data.createdAt));  
 
 const roi = data.roi;
 const price = data.price;
@@ -346,9 +346,9 @@ renderROITargetCalculator(analyses);
 renderRevenueSimulator(); 
 renderBestInvestment(analyses);
 renderInvestmentRanking(analyses);
+renderCityDistribution(analyses); 
 renderChart();
 renderCashflowChart();
-renderCityDistribution(); 
 
 }
 
@@ -1352,5 +1352,58 @@ window.location.href =
 "/tool/?report=1&" + params.toString();
 
 }
+
+function renderCityDistribution(analyses){
+
+const container = document.getElementById("city-distribution-chart");
+if(!container) return;
+
+if(!analyses || analyses.length === 0){
+container.innerHTML = "";
+return;
+}
+
+const cityCount = {};
+
+analyses.forEach(a=>{
+
+const city = a.city || "italy";
+
+if(!cityCount[city]){
+cityCount[city] = 0;
+}
+
+cityCount[city]++;
+
+});
+
+const labels = Object.keys(cityCount);
+const values = Object.values(cityCount);
+
+container.innerHTML = '<canvas id="cityChart"></canvas>';
+
+const ctx = document.getElementById("cityChart").getContext("2d");
+
+new Chart(ctx,{
+
+type:"doughnut",
+
+data:{
+labels:labels,
+datasets:[{
+data:values
+}]
+},
+
+options:{
+responsive:true,
+plugins:{
+legend:{position:"bottom"}
+}
+}
+
+});
+
+} 
 
 });
