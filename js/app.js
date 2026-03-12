@@ -672,8 +672,6 @@ let gradeColor = "#ef4444";
 if(grade === "A") gradeColor = "#10b981";
 else if(grade === "B") gradeColor = "#f59e0b";
 
-let gradeColor = "#ef4444";
-
 if(grade === "A") gradeColor = "#10b981";
 else if(grade === "B") gradeColor = "#f59e0b";
 
@@ -1107,49 +1105,24 @@ const cities = [
 "palermo"
 ];
 
-for(const city of cities){
-if(url.toLowerCase().includes(city)){
-return city;
+for(const c of cities){
+if(url.toLowerCase().includes(c)){
+return c;
 }
 }
 
 return null;
-
 }
 
-// se non è stata selezionata città manualmente la prendiamo dal link
+// se non è stata scelta manualmente
 if(!city && propertyLink){
 city = extractCity(propertyLink);
 }
 
-// fallback finale
+// fallback
 if(!city){
 city = "italy";
 }
-
-const cities = [
-"napoli",
-"roma",
-"milano",
-"torino",
-"bologna",
-"firenze",
-"venezia",
-"genova",
-"palermo"
-];
-
-for(const city of cities){
-if(url.toLowerCase().includes(city)){
-return city;
-}
-}
-
-return "italy";
-
-}
-
-const city = extractCity(propertyLink);
 
 saveAnalysis({
 price: getValue("price"),
