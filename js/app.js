@@ -1362,19 +1362,32 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 };
 
-// ================= IDEALISTA SCRAPER (BROWSER) =================
+// ================= PROPERTY SCRAPER =================
 
-async function scrapeIdealistaFromBrowser(url){
+async function scrapePropertyFromBrowser(url){
 
 try{
 
+let endpoint = "";
+
+if(url.includes("idealista")){
+endpoint = "/.netlify/functions/scrape-idealista";
+}
+else if(url.includes("immobiliare")){
+endpoint = "/.netlify/functions/scrape-immobiliare";
+}
+else{
+console.warn("Sito non supportato");
+return { price:null };
+}
+
 const response = await fetch(
-"/.netlify/functions/scrape-idealista?url=" + encodeURIComponent(url)
+endpoint + "?url=" + encodeURIComponent(url)
 );
 
 const data = await response.json();
 
-console.log("Prezzo trovato via Netlify:", data.price);
+console.log("Prezzo trovato:", data.price);
 
 return data;
 
@@ -1386,6 +1399,7 @@ return { price:null };
 }
 
 }
+
 // ================= PROPERTY LINK PARSER =================
 
 async function loadPropertyFromLink(){
@@ -1397,36 +1411,47 @@ if(!link) return;
 console.log("Analisi immobile da link:", link);
 
 
-// AUTOCOMPILA PREZZO SE PROVIENE DALLO SCANNER
-
-const savedPrice = localStorage.getItem("property_price");
-
-if(savedPrice){
+// ===== AUTOFILL PREZZO DA SCANNER =====
 
 const priceField =
 document.querySelector("#price, #property-price");
 
 if(priceField){
-priceField.value = savedPrice;
+
+try{
+
+const data = await scrapePropertyFromBrowser(link);
+
+if(data && data.price){
+
+priceField.value = data.price;
+
+// salva prezzo per eventuale uso successivo
+localStorage.setItem("property_price", data.price);
+
+setTimeout(()=>{
+if(typeof calculate === "function"){
+calculate();
+}
+},300);  
+
+}else{
+
+alert("Errore durante l'analisi dell'annuncio.");
+
+}
+
+}catch(e){
+
+console.error("Errore analisi immobile:", e);
+alert("Errore durante l'analisi dell'annuncio.");
+
 }
 
 }
 
 
-// ================= AUTOFILL PREZZO =================
-
-const priceField =
-document.querySelector('input[name="propertyPrice"], #property-price, #price');
-
-if(priceField){
-
-// prezzo simulato per velocizzare l'analisi
-priceField.value = 150000;
-
-}
-
-
-// mostra il link analizzato
+// ===== MOSTRA LINK ANALIZZATO =====
 
 const linkBox = document.getElementById("property-source");
 
@@ -1440,7 +1465,7 @@ linkBox.innerHTML = `
 }
 
 
-// ===== rileva città dal link =====
+// ===== RILEVA CITTÀ DAL LINK =====
 
 let city = null;
 
@@ -1448,7 +1473,6 @@ if(link.includes("napoli")) city = "napoli";
 if(link.includes("milano")) city = "milano";
 if(link.includes("roma")) city = "roma";
 if(link.includes("firenze")) city = "firenze";
-
 
 const citySelect = document.getElementById("city");
 
