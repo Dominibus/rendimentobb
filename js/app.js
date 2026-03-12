@@ -537,7 +537,7 @@ if(revenuePerNight <= 0){
 
 container.innerHTML = `
 <div class="kpi-box">
-<span>Break-even occupancy</span>
+<span>Break-even occupancy (min)</span>
 <strong>—</strong>
 </div>
 `;
