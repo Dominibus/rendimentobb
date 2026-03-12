@@ -1838,27 +1838,28 @@ priceField.value = data.price;
 if(data.city){
 window.currentCity = data.city;
 console.log("Città rilevata:", data.city);
-}  
+}
 
-// salva prezzo per eventuale uso successivo
+// salva prezzo
 localStorage.setItem("property_price", data.price);
 
 setTimeout(()=>{
 if(typeof calculate === "function"){
 calculate();
 }
-},300);  
+},300);
 
 }else{
 
-alert("Errore durante l'analisi dell'annuncio.");
+// niente errore: inserimento manuale
+console.log("Prezzo non rilevato - inserimento manuale");
 
 }
 
 }catch(e){
 
 console.error("Errore analisi immobile:", e);
-alert("Errore durante l'analisi dell'annuncio.");
+// nessun popup: utente inserirà i dati manualmente
 
 }
 
