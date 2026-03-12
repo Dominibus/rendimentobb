@@ -224,8 +224,10 @@ transform:translateY(-1px);
 
 .portal-nav a.active{
 
-background:#10b981;
-color:white;
+background:#ecfdf5;
+color:#10b981;
+font-weight:600;
+border:1px solid #10b981;
 
 }
 
@@ -1288,14 +1290,10 @@ font-size:15px;
 @media (max-width:768px){
 
 .right-controls{
-
 display:flex;
 justify-content:center;
-
 gap:10px;
-
 margin-top:6px;
-
 }
 
 /* HERO MOBILE */
@@ -1303,7 +1301,6 @@ margin-top:6px;
 .hero-grid{
 grid-template-columns:1fr;
 text-align:center;
-
 gap:30px;
 margin:40px auto;
 }
@@ -1364,6 +1361,16 @@ z-index:1100;
 transition:transform .25s ease;
 }
 
+/* animazione hamburger */
+
+.hamburger.active{
+transform:rotate(90deg);
+}
+
+/* ===================== */
+/* MOBILE NAV */
+/* ===================== */
+
 .portal-nav{
 
 max-height:0;
@@ -1372,6 +1379,7 @@ overflow:hidden;
 display:flex;
 flex-direction:column;
 align-items:center;
+
 position:relative;
 z-index:1050;  
 
@@ -1387,16 +1395,25 @@ transition:max-height .35s ease;
 
 }
 
+/* apertura menu */
+
 .portal-nav.open{
 max-height:80vh;
+padding:15px 0;
 }
 
 .portal-nav a{
 font-size:16px;
-padding:8px 0;
-white-space:nowrap;  
-}  
-  
+padding:10px 0;
+white-space:nowrap;
+width:100%;
+text-align:center;
+}
+
+/* ===================== */
+/* DASHBOARD FIX */
+/* ===================== */
+
 .dashboard-container{
 max-width:100%;
 overflow-x:hidden;
@@ -1415,14 +1432,18 @@ width:100%;
 max-width:100%;
 }
 
-/* sicurezza extra contro overflow mobile */
+/* ===================== */
+/* HEADER SAFE MOBILE */
+/* ===================== */
 
 .header-left{
 display:flex;
 align-items:center;
 justify-content:space-between;
 width:100%;
-}  
+}
+
+}
 
 /* HEADER */
 
