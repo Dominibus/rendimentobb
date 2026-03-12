@@ -1107,7 +1107,7 @@ border-color:#10b981;
 
 .quick-roi{
 text-align:center;
-margin-top:100px;
+margin-top:60px;
 }
 
 .quick-roi h2{
@@ -1313,6 +1313,23 @@ gap:30px;
 margin:40px auto;
 }
 
+.hero-left h1{
+font-size:30px;
+line-height:1.3;
+}
+
+.hero-left p{
+font-size:16px;
+max-width:420px;
+margin:auto;
+}  
+
+.hero-left .btn{
+width:100%;
+max-width:320px;
+margin:auto;
+}  
+
 .hero-left{
 text-align:center;
 max-width:100%;
@@ -1331,6 +1348,11 @@ width:100%;
 
 .hero-right{
 display:none;
+}  
+
+.hero-right img{
+max-width:420px;
+margin:auto;
 }  
 
 /* ===================== */
@@ -1507,7 +1529,7 @@ font-size:14px;
 /* CARDS */
 
 .tool-card{
-padding:30px;
+padding:32px 24px;
 border-radius:18px;
 }
 
