@@ -1875,9 +1875,11 @@ if(linkBox){
 linkBox.innerHTML = `
 <strong>📍 Immobile analizzato</strong><br>
 <a href="${link}" target="_blank">${link}</a>
-`;
 
-}
+<div style="margin-top:6px;font-size:13px;color:#64748b;">
+Inserisci i dati dell'annuncio per simulare il rendimento.
+</div>
+`;
 
 let detectedCity = null;
 
