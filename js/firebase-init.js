@@ -237,17 +237,25 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   window.currentUser = user;
 
-  // firebase pronto
-  window.firebaseReady = true;
-
   if (user) {
     await loadUserPlan(user.uid);
   }
 
   updateUserUI(user);
 
-});
+  // FIREBASE READY
+  window.firebaseReady = true;
 
+  document.dispatchEvent(
+    new CustomEvent("rb_auth_ready", {
+      detail: {
+        user: user,
+        plan: window.currentPlan
+      }
+    })
+  );
+
+});
 
 // ===============================
 // LANGUAGE CHANGE LISTENER
@@ -323,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    const uid = currentUser.uid;
+    const uid = window.currentUser.uid;
 
     window.location.href =
       "https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
