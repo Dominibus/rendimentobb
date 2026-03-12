@@ -108,4 +108,18 @@ nav.classList.toggle("open");
 
 }
 
+/* ===================== */
+/* ACTIVE PAGE */
+/* ===================== */
+
+const currentPath = window.location.pathname;
+
+document.querySelectorAll(".portal-nav a").forEach(link => {
+
+  const href = link.getAttribute("href");
+
+  if(currentPath.startsWith(href)){
+    link.classList.add("active");
+  }
+
 });
