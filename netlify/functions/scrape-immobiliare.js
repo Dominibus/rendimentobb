@@ -23,8 +23,11 @@ headers:{
 
 const html = await response.text();
 
+// DEBUG: mostra cosa riceve davvero Netlify
+console.log(html.substring(0,2000));
+
 let price = null;
-let city = null;  
+let city = null; 
 
 // ================= METHOD 1 JSON-LD =================
 
