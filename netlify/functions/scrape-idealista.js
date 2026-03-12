@@ -83,15 +83,26 @@ headers:{
 "Access-Control-Allow-Origin":"*"
 },
 
-body: JSON.stringify({price})
+body: JSON.stringify({
+price: price || 0
+})
 
 };
 
-}catch(e){
+catch(e){
+
+console.log("SCRAPE ERROR", e);
 
 return {
-statusCode:500,
-body: JSON.stringify({error:"scrape error"})
+
+statusCode:200,
+
+headers:{
+"Access-Control-Allow-Origin":"*"
+},
+
+body: JSON.stringify({price:0})
+
 };
 
 }
