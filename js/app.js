@@ -657,6 +657,59 @@ container.innerHTML = `
 
 }
 
+// ================= INVESTMENT VERDICT =================
+
+function renderInvestmentVerdict(roi, payback){
+
+const box = document.getElementById("investment-verdict");
+if(!box) return;
+
+let color = "#ef4444";
+let icon = "🔴";
+let title = "High risk investment";
+let message = "The expected return is low compared to the invested capital.";
+
+if(roi > 12){
+
+color = "#10b981";
+icon = "🟢";
+title = "Strong investment opportunity";
+message = "ROI is well above market average and financial structure is solid.";
+
+}
+
+else if(roi > 6){
+
+color = "#f59e0b";
+icon = "🟠";
+title = "Moderate investment";
+message = "Returns are acceptable but depend strongly on occupancy stability.";
+
+}
+
+box.innerHTML = `
+
+<div style="
+padding:18px;
+border-radius:12px;
+background:#f8fafc;
+border-left:6px solid ${color};
+">
+
+<strong style="font-size:16px;">
+${icon} ${title}
+</strong>
+
+<p style="margin-top:8px;font-size:14px;">
+${message}
+</p>
+
+</div>
+
+`;
+
+}
+
 // ================= SMART PAYWALL =================
 
 function showUpgradePopup(roi){
@@ -778,6 +831,12 @@ renderRevenueForecast(gross);
 
 renderInvestmentScore(roi, riskScore);
 renderInvestmentRanking(roi);  
+const payback =
+equity > 0 && netAfterMortgage > 0
+? (equity / netAfterMortgage)
+: null;
+
+renderInvestmentVerdict(roi, payback);  
 
 // MARKET BENCHMARK + COMPARISON
 
