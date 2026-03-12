@@ -554,28 +554,6 @@ container.innerHTML = `
 
 }
 
-/* ===============================
-PREVIEW PANEL UPDATE
-=============================== */
-
-const gradeCircle = document.getElementById("score-circle");
-const roiPreview = document.getElementById("roi-preview");
-const riskPreview = document.getElementById("risk-preview");
-
-if(gradeCircle && roiPreview && riskPreview){
-
-roiPreview.textContent = roi.toFixed(1) + "%";
-riskPreview.textContent = riskScore + " / 100";
-
-let grade = "C";
-
-if(roi > 12) grade = "A";
-else if(roi > 6) grade = "B";
-
-gradeCircle.textContent = grade;
-
-}
-
 // ================= INVESTMENT RANKING =================
 
 function renderInvestmentRanking(roi){
@@ -703,10 +681,20 @@ const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
   
 showUpgradePopup(roi);
 
+window.lastROI = roi;  
+
 const riskScore =
 roi > 12 ? 30 :
 roi > 6 ? 55 :
 75;
+
+// ================= PREVIEW PANEL =================
+
+updatePreviewMetrics(roi.toFixed(1), riskScore);
+
+const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
+
+updateInvestmentScore(investmentScore);  
 
 renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
 
