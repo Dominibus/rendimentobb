@@ -28,13 +28,19 @@ const html = await response.text();
 let price = null;
 
 
-// ===== PARSE NEXT DATA JSON =====
+// ================= NEXT DATA JSON =================
 
 const jsonMatch = html.match(/<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/);
 
 if(jsonMatch){
 
-const json = JSON.parse(jsonMatch[1]);
+let json = null;
+
+try{
+json = JSON.parse(jsonMatch[1]);
+}catch(e){
+json = null;
+}
 
 price =
 json?.props?.pageProps?.ad?.price?.amount ||
@@ -44,7 +50,7 @@ null;
 }
 
 
-// ===== FALLBACK 1 =====
+// ================= FALLBACK 1 (JSON STRING) =================
 
 if(!price){
 
@@ -56,17 +62,18 @@ price = parseInt(match[1]);
 
 }
 
-// ===== FALLBACK 2 (HTML) =====
+
+// ================= FALLBACK 2 (HTML €) =================
 
 if(!price){
 
-const match = html.match(/([0-9\.]{4,12})\s?€/);
+const match = html.match(/([0-9\.\s]{4,15})\s?€/);
 
 if(match){
 
 price = match[1]
 .replace(/\./g,"")
-.replace(",",".")
+.replace(/\s/g,"")
 .trim();
 
 price = parseInt(price);
@@ -74,6 +81,9 @@ price = parseInt(price);
 }
 
 }
+
+
+// ================= RETURN =================
 
 return {
 
@@ -89,7 +99,7 @@ price: price || 0
 
 };
 
-catch(e){
+}catch(e){
 
 console.log("SCRAPE ERROR", e);
 
