@@ -12,21 +12,25 @@ body: JSON.stringify({error:"Missing URL"})
 try{
 
 const response = await fetch(url,{
+method:"GET",
+redirect:"follow",
 headers:{
 "User-Agent":
 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36",
 
 "Accept":
-"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 
 "Accept-Language":
 "it-IT,it;q=0.9,en;q=0.8",
 
 "Referer":
-"https://www.google.com/",
+"https://www.immobiliare.it/",
 
-"Cache-Control":
-"no-cache"
+"Connection":
+"keep-alive",
+
+"Upgrade-Insecure-Requests":"1"
 }
 });
 
