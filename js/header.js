@@ -12,7 +12,7 @@ const header = `
 <div class="logo">Rendimento<span>BB</span></div>
 </a>
 
-<div class="hamburger" onclick="toggleMenu()">☰</div>
+<div class="hamburger">☰</div>
 
 </div>
 
@@ -90,14 +90,22 @@ EN
 
 document.body.insertAdjacentHTML("afterbegin", header);
 
-});
 
-window.toggleMenu = function(){
+/* ===================== */
+/* HAMBURGER MENU */
+/* ===================== */
 
+const hamburger = document.querySelector(".hamburger");
 const nav = document.querySelector(".portal-nav");
 
-if(nav){
+if(hamburger && nav){
+
+hamburger.addEventListener("click", () => {
+
 nav.classList.toggle("open");
-}
+
+});
 
 }
+
+});
