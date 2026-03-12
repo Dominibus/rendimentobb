@@ -1085,11 +1085,17 @@ mortgageYearly,
 equity
 );
 
+const city =
+document.getElementById("market-city")?.value ||
+document.getElementById("city")?.value ||
+"italy";
+
 saveAnalysis({
 price: getValue("price"),
 equity: equity,
 roi: roi,
-risk: riskScore
+risk: riskScore,
+city: city
 });
 
 // SCROLL AUTOMATICO AI RISULTATI
