@@ -239,7 +239,9 @@ onAuthStateChanged(auth, async (user) => {
 
   if (user) {
     await loadUserPlan(user.uid);
-  }
+  }else{
+  window.currentPlan = "free";
+}
 
   updateUserUI(user);
 
@@ -319,25 +321,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   }
-
-   if (proBtn) {
-
-      proBtn.addEventListener("click", async () => {
-
-   if (!currentUser) {
-
-      window.location.href = "/login/";
-      return;
-
-    }
-
-    const uid = window.currentUser.uid;
-
-    window.location.href =
-      "https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
-
-  });
-
-}
 
 });
