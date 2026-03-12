@@ -506,17 +506,17 @@ const high = simulate(occupancy*1.1);
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>Occupazione -10%</span>
+<span>${window.currentLang==="it"?"Occupazione -10%":"Occupancy -10%"}</span>
 <strong>${low}% ROI</strong>
 </div>
 
 <div class="kpi-box">
-<span>Occupazione Base</span>
+<span>${window.currentLang==="it"?"Occupazione Base":"Base Occupancy"}</span>
 <strong>${base}% ROI</strong>
 </div>
 
 <div class="kpi-box">
-<span>Occupazione +10%</span>
+<span>${window.currentLang==="it"?"Occupazione +10%":"Occupancy +10%"}</span>
 <strong>${high}% ROI</strong>
 </div>
 
@@ -648,11 +648,23 @@ grade = "B";
 recommendation = "MODERATE RETURN";
 }
 
+let gradeColor = "#ef4444";
+
+if(grade === "A") gradeColor = "#10b981";
+else if(grade === "B") gradeColor = "#f59e0b";
+
+let gradeColor = "#ef4444";
+
+if(grade === "A") gradeColor = "#10b981";
+else if(grade === "B") gradeColor = "#f59e0b";
+
 container.innerHTML = `
 
 <div class="kpi-box">
 <span>${t("grade")}</span>
-<strong>${grade}</strong>
+<strong style="color:${gradeColor};font-size:22px;">
+${grade}
+</strong>
 </div>
 
 <div class="kpi-box">
@@ -877,12 +889,35 @@ container.innerHTML = "";
 return;
 }
 
+let badge = "";
+
+if(roi > 12){
+
+badge = `
+<div style="
+margin-bottom:12px;
+padding:10px;
+border-radius:10px;
+background:#fef3c7;
+border:1px solid #f59e0b;
+font-weight:600;
+">
+
+${window.currentLang==="it"
+? "🔥 Investimento ad alto rendimento"
+: "🔥 High Yield Investment"}
+
+</div>
+`;
+
+}  
+
 if(roi < 10){
 container.innerHTML = "";
 return;
 }
 
-container.innerHTML = `
+container.innerHTML = badge + `
 
 <div style="
 margin-top:20px;
@@ -1040,9 +1075,13 @@ risk: riskScore
 });
 
 // SCROLL AUTOMATICO AI RISULTATI
-document.getElementById("results").scrollIntoView({
+const resultsSection = document.getElementById("results");
+
+if(resultsSection){
+resultsSection.scrollIntoView({
 behavior: "smooth"
-});  
+});
+}
 
 }
 
