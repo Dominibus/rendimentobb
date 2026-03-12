@@ -24,13 +24,14 @@ async function saveAnalysis(data){
   try{
 
   await addDoc(collection(db,"analyses"),{
-    uid: window.currentUser.uid,
-    propertyPrice: data.price,
-    equity: data.equity,
-    roi: data.roi,
-    risk: data.risk,
-    createdAt: new Date()
-});
+  uid: window.currentUser.uid,
+  propertyPrice: data.price,
+  equity: data.equity,
+  roi: data.roi,
+  risk: data.risk,
+  city: data.city || window.currentCity || null,
+  createdAt: new Date()
+  });
 
   }catch(e){
 
@@ -1085,14 +1086,46 @@ mortgageYearly,
 equity
 );
 
-const city =
+let city =
 document.getElementById("market-city")?.value ||
 document.getElementById("city")?.value ||
-"italy";
+null;
 
 const propertyLink = localStorage.getItem("property_link") || "";
 
 function extractCity(url){
+
+const cities = [
+"napoli",
+"roma",
+"milano",
+"torino",
+"bologna",
+"firenze",
+"venezia",
+"genova",
+"palermo"
+];
+
+for(const city of cities){
+if(url.toLowerCase().includes(city)){
+return city;
+}
+}
+
+return null;
+
+}
+
+// se non è stata selezionata città manualmente la prendiamo dal link
+if(!city && propertyLink){
+city = extractCity(propertyLink);
+}
+
+// fallback finale
+if(!city){
+city = "italy";
+}
 
 const cities = [
 "napoli",
@@ -1827,6 +1860,12 @@ const data = await scrapePropertyFromBrowser(link);
 if(data && data.price){
 
 priceField.value = data.price;
+
+// salva città rilevata dallo scraper
+if(data.city){
+window.currentCity = data.city;
+console.log("Città rilevata:", data.city);
+}  
 
 // salva prezzo per eventuale uso successivo
 localStorage.setItem("property_price", data.price);
