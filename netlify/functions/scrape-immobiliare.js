@@ -34,7 +34,11 @@ if(jsonMatch){
 
 try{
 
-const json = JSON.parse(jsonMatch[1]);
+let json = JSON.parse(jsonMatch[1]);
+
+if(Array.isArray(json)){
+json = json[0];
+}
 
 if(json.offers && json.offers.price){
 
@@ -92,7 +96,7 @@ headers:{
 },
 
 body: JSON.stringify({
-price: price
+price: price || 0
 })
 
 };
