@@ -1878,7 +1878,7 @@ linkBox.innerHTML = `
 
 }
 
-let city = null;
+let detectedCity = null;
 
 const cityMap = {
 napoli: "napoli",
@@ -1895,7 +1895,7 @@ palermo: "palermo"
 for(const key in cityMap){
 
 if(link.toLowerCase().includes(key)){
-city = cityMap[key];
+detectedCity = cityMap[key];
 break;
 }
 
