@@ -1878,34 +1878,6 @@ linkBox.innerHTML = `
 
 }
 
-
-// ===== RILEVA CITTÀ DAL LINK =====
-
-let city = null;
-
-const cityMap = {
-napoli: "napoli",
-roma: "roma",
-milano: "milano",
-firenze: "firenze",
-torino: "torino",
-bologna: "bologna",
-venezia: "venezia",
-genova: "genova",
-palermo: "palermo"
-};
-
-for(const key in cityMap){
-
-if(link.toLowerCase().includes(key)){
-city = cityMap[key];
-break;
-}
-
-}
-
-// ===== RILEVA CITTÀ DAL LINK =====
-
 let city = null;
 
 const cityMap = {
