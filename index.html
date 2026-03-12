@@ -833,7 +833,7 @@ document.addEventListener("DOMContentLoaded", function(){
   quickROI();
 }); 
 
-window.analyzeListing = async function(){
+window.analyzeListing = function(){
 
 const url = document.getElementById("listing_url").value;
 
@@ -842,31 +842,13 @@ alert("Inserisci il link dell'annuncio.");
 return;
 }
 
-try{
+// salva il link
+localStorage.setItem("property_link", url);
 
-const response = await fetch("/.netlify/functions/scrape?url=" + encodeURIComponent(url));
-
-const data = await response.json();
-
-if(!data.price){
-alert("Impossibile leggere il prezzo dall'annuncio.");
-return;
-}
-
-document.getElementById("qr_price").value = data.price;
-
-quickROI();
-
-alert("Prezzo immobile rilevato: " + data.price + " €");
-
-}catch(e){
-
-console.error(e);
-alert("Errore durante l'analisi dell'annuncio.");
+// apri il tool
+window.location.href = "/tool/";
 
 }
-
-} 
 
 </script>
 
