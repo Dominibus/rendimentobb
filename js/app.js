@@ -1490,4 +1490,12 @@ break;
 
 }
 
-document.addEventListener("DOMContentLoaded", loadPropertyFromLink);
+// ================= AUTO LOAD PROPERTY =================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+if(typeof loadPropertyFromLink === "function"){
+loadPropertyFromLink();
+}
+
+});
