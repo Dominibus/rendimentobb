@@ -816,6 +816,8 @@ const lang = localStorage.getItem("rb_lang") || "it";
 const yearWord = lang === "en" ? "years" : "anni";
 const yearLabel = lang === "en" ? "€ / year" : "€ / anno";
 const monthLabel = lang === "en" ? "€ / month" : "€ / mese";
+ 
+document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%"; 
 
 document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " " + yearWord;
 
