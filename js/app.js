@@ -395,11 +395,29 @@ const marketROI = market.roi || 10;
 
 let message = "";
 let color = "#ef4444";
+let badge = "";
 
 if(roi > marketROI){
 
 message = "✓ ROI above city average";
 color = "#10b981";
+
+badge = `
+<div style="
+margin-bottom:12px;
+padding:12px;
+border-radius:10px;
+background:#ecfdf5;
+border:1px solid #10b981;
+font-weight:600;
+">
+
+${window.currentLang==="it"
+? "🏆 ROI sopra la media della città"
+: "🏆 ROI above city average"}
+
+</div>
+`;
 
 }else{
 
@@ -407,7 +425,7 @@ message = "⚠ ROI below city average";
 
 }
 
-container.innerHTML = `
+container.innerHTML = badge + `
 
 <div class="kpi-box">
 <span>Your ROI</span>
