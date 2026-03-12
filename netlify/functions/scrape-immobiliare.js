@@ -26,7 +26,7 @@ const html = await response.text();
 let price = null;
 
 
-// ===== METHOD 1 JSON-LD =====
+// ================= METHOD 1 JSON-LD =================
 
 const jsonMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
 
@@ -40,43 +40,41 @@ if(Array.isArray(json)){
 json = json[0];
 }
 
-if(json.offers && json.offers.price){
-
+if(json?.offers?.price){
 price = parseInt(json.offers.price);
+}
+
+}catch(e){
+console.log("JSON parse error");
+}
 
 }
 
-}catch(e){}
 
-}
-
-
-// ===== METHOD 2 IMMOBILIARE JSON =====
+// ================= METHOD 2 JSON PRICE =================
 
 if(!price){
 
 const match = html.match(/"price":\s*([0-9]+)/);
 
 if(match){
-
 price = parseInt(match[1]);
-
 }
 
 }
 
 
-// ===== METHOD 3 HTML FALLBACK =====
+// ================= METHOD 3 HTML FALLBACK =================
 
 if(!price){
 
-const match = html.match(/([0-9\.]{4,12})\s?€/);
+const match = html.match(/([0-9\.\s]{4,15})\s?€/);
 
 if(match){
 
 price = match[1]
 .replace(/\./g,"")
-.replace(",",".")
+.replace(/\s/g,"")
 .trim();
 
 price = parseInt(price);
@@ -85,7 +83,10 @@ price = parseInt(price);
 
 }
 
-console.log("Extracted price:",price);
+console.log("Extracted price:", price);
+
+
+// ================= RETURN =================
 
 return {
 
@@ -103,12 +104,18 @@ price: price || 0
 
 }catch(e){
 
-console.log("SCRAPE ERROR",e);
+console.log("SCRAPE ERROR", e);
 
 return {
 
-statusCode:500,
-body: JSON.stringify({error:"scrape error"})
+statusCode:200,
+
+headers:{
+"Access-Control-Allow-Origin":"*"
+},
+
+body: JSON.stringify({price:0})
+
 };
 
 }
