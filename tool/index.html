@@ -95,6 +95,66 @@ font-size:16px;
 
 }
 
+/* ============================= */
+/* INVESTMENT SCORE VISUAL */
+/* ============================= */
+
+.score-circle{
+width:90px;
+height:90px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+font-weight:700;
+margin:auto;
+background:#e2e8f0;
+color:#0f172a;
+transition:0.3s;
+}
+
+.score-good{
+background:#10b981;
+color:white;
+}
+
+.score-medium{
+background:#f59e0b;
+color:white;
+}
+
+.score-bad{
+background:#ef4444;
+color:white;
+}
+
+.investment-panel{
+display:grid;
+grid-template-columns:220px 1fr;
+gap:30px;
+align-items:center;
+margin-top:20px;
+}
+
+.metric-card{
+background:#f8fafc;
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
+
+.metric-card span{
+display:block;
+font-size:13px;
+color:#64748b;
+margin-bottom:6px;
+}
+
+.metric-card strong{
+font-size:18px;
+}  
+
 </style>
 </head>
 
@@ -502,6 +562,42 @@ Contatti
 <script src="/js/lang.js"></script>
 <script type="module" src="/js/market-data.js"></script>
 <script type="module" src="/js/app.js"></script>
+
+<script>
+
+function updateInvestmentScore(score){
+
+const circle = document.getElementById("score-circle");
+
+circle.innerText = score;
+
+circle.classList.remove("score-good","score-medium","score-bad");
+
+if(score >= 75){
+circle.classList.add("score-good");
+}
+
+else if(score >= 50){
+circle.classList.add("score-medium");
+}
+
+else{
+circle.classList.add("score-bad");
+}
+
+}
+
+function updatePreviewMetrics(roi,risk){
+
+const roiEl = document.getElementById("roi-preview");
+const riskEl = document.getElementById("risk-preview");
+
+if(roiEl) roiEl.innerText = roi + "%";
+if(riskEl) riskEl.innerText = risk + "/100";
+
+}
+
+</script>  
 
 
 <script type="module">
