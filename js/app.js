@@ -1904,14 +1904,42 @@ break;
 
 }
 
+// ===== RILEVA CITTÀ DAL LINK =====
+
+let city = null;
+
+const cityMap = {
+napoli: "napoli",
+roma: "roma",
+milano: "milano",
+firenze: "firenze",
+torino: "torino",
+bologna: "bologna",
+venezia: "venezia",
+genova: "genova",
+palermo: "palermo"
+};
+
+for(const key in cityMap){
+
+if(link.toLowerCase().includes(key)){
+city = cityMap[key];
+break;
+}
+
+}
+
+} // <-- qui chiude loadPropertyFromLink()
+
 // ================= AUTO LOAD PROPERTY =================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-if(typeof loadPropertyFromLink === "function"){
+const link = localStorage.getItem("property_link");
+
+if(link){
+console.log("Analisi immobile da link:", link);
 loadPropertyFromLink();
 }
 
 });
-
-} 
