@@ -608,7 +608,9 @@ if(riskEl) riskEl.innerText = risk + "/100";
 
 }
 
-</script>  
+</script>
+
+<script>
 
 /* checkout stripe */
 
@@ -713,6 +715,8 @@ function applyPaywall(){
 }
 
 document.addEventListener("rb_plan_loaded", applyPaywall);
+  
+</script>
 
 // applica comunque il paywall se utente non loggato
 document.addEventListener("DOMContentLoaded", () => {
