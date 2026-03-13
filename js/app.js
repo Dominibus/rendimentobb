@@ -12,7 +12,8 @@ import {
   addDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-const db = getFirestore();
+import { app } from "./firebase-init.js";
+const db = getFirestore(app);
 
 
 // ================= SAVE ANALYSIS =================
@@ -1373,6 +1374,10 @@ box.innerHTML = `
 
 function compareMortgages() {
 
+  if(!document.getElementById("mortgage")){
+return;
+}
+
 const resultDiv = document.getElementById("mortgage-results");
 if (!resultDiv) return;
 
@@ -1447,6 +1452,17 @@ return;
 
 
 // ================= BANK LIST =================
+
+if(!window.RB_MORTGAGE_RATES){
+
+resultDiv.innerHTML =
+window.currentLang==="it"
+? "Dati banche non disponibili."
+: "Bank data not available.";
+
+return;
+
+}
 
 const banks = Object.values(window.RB_MORTGAGE_RATES).map(bank => ({
 
@@ -2172,7 +2188,7 @@ genova: "genova",
 palermo: "palermo"
 };
 
-const link = localStorage.getItem("property_link") || "";
+const propertyLink = localStorage.getItem("property_link") || "";
 
 for(const key in cityMap){
 
