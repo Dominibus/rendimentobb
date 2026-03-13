@@ -50,7 +50,7 @@ it:"Banco BPM",
 en:"Banco BPM"
 },
 rate:3.55
-}
+},
 
 mediolanum:{
 name:{
@@ -66,10 +66,9 @@ it:"CheBanca!",
 en:"CheBanca!"
 },
 rate:3.52
-}  
+}
 
 };
-
 
 // ================= LOAD =================
 
