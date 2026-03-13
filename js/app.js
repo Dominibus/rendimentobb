@@ -1126,7 +1126,7 @@ return;
 if(!window.currentUser){
 
 let freeRuns =
-parseInt(localStorage.getItem("rb_free_runs") || "0");
+parseInt(localStorage.setItem("rb_free_runs",0) || "0");
 
 if(freeRuns >= 3){
 
@@ -1141,8 +1141,17 @@ return;
 
 }
 
+// incrementa solo dopo simulazione reale
+setTimeout(()=>{
+
+let freeRuns =
+parseInt(localStorage.getItem("rb_free_runs") || "0");
+
 freeRuns++;
+
 localStorage.setItem("rb_free_runs", freeRuns);
+
+},0);
 
 }  
 
