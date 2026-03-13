@@ -677,9 +677,6 @@ let gradeColor = "#ef4444";
 if(grade === "A") gradeColor = "#10b981";
 else if(grade === "B") gradeColor = "#f59e0b";
 
-if(grade === "A") gradeColor = "#10b981";
-else if(grade === "B") gradeColor = "#f59e0b";
-
 container.innerHTML = `
 
 <div class="kpi-box">
@@ -920,7 +917,7 @@ if(roi > 8){
 setTimeout(()=>{
 
 if(confirm(message)){
-buyPlan("investor");
+window.buyPlan("investor");
 }
 
 },1500);
@@ -981,7 +978,7 @@ text-align:center;
 ">
 
 <strong style="font-size:16px;">
-🔥 Questo investimento sembra molto interessante
+${t("highYield")}
 </strong>
 
 <p style="margin-top:8px;font-size:14px;">
@@ -989,15 +986,7 @@ ROI stimato: <strong>${roi.toFixed(1)}%</strong>
 </p>
 
 <p style="margin-top:10px;font-size:14px;">
-Scopri nella versione PRO:
-<br>
-• rischio reale
-<br>
-• simulazioni mercato
-<br>
-• scenari occupazione
-<br>
-• report professionale
+${t("highYieldDesc")}
 </p>
 
 <button onclick="buyPlan('investor')" class="btn btn-primary">
@@ -1884,6 +1873,21 @@ async function loadPropertyFromLink(){
 
 const link = localStorage.getItem("property_link");
 
+// ===== MOSTRA LINK ANALIZZATO =====
+
+const linkBox = document.getElementById("property-source");
+
+if(linkBox && link){
+
+linkBox.innerHTML = `
+<strong>📍 Immobile analizzato</strong><br>
+<a href="${link}" target="_blank">${link}</a>
+
+<div style="margin-top:6px;font-size:13px;color:#64748b;">
+Inserisci i dati dell'annuncio per simulare il rendimento.
+</div>
+`; 
+
 if(!link) return;
 
 console.log("Analisi immobile da link:", link);
@@ -1935,21 +1939,53 @@ console.error("Errore analisi immobile:", e);
 
 }
 
+// ================= STRIPE SUBSCRIPTION =================
 
-// ===== MOSTRA LINK ANALIZZATO =====
+window.buyPlan = function(plan){
 
-const linkBox = document.getElementById("property-source");
+const user = firebaseAuth.currentUser;
 
-if(linkBox){
+if(!user){
 
-linkBox.innerHTML = `
-<strong>📍 Immobile analizzato</strong><br>
-<a href="${link}" target="_blank">${link}</a>
+alert(
+window.currentLang==="it"
+? "Devi effettuare il login."
+: "You must login first."
+);
 
-<div style="margin-top:6px;font-size:13px;color:#64748b;">
-Inserisci i dati dell'annuncio per simulare il rendimento.
-</div>
-`;
+window.location.href = "/login/";
+return;
+
+}
+
+const uid = user.uid;
+
+let stripeUrl = "";
+
+// PLAN ROUTING
+
+if(plan === "starter"){
+stripeUrl =
+"https://buy.stripe.com/STARTER_LINK?client_reference_id=" + uid;
+}
+
+if(plan === "investor"){
+stripeUrl =
+"https://buy.stripe.com/INVESTOR_LINK?client_reference_id=" + uid;
+}
+
+if(plan === "pro"){
+stripeUrl =
+"https://buy.stripe.com/PRO_LINK?client_reference_id=" + uid;
+}
+
+if(!stripeUrl){
+console.error("Stripe plan non valido:", plan);
+return;
+}
+
+window.location.href = stripeUrl;
+}  
 
 let detectedCity = null;
 
@@ -1972,6 +2008,11 @@ detectedCity = cityMap[key];
 break;
 }
 
+}
+
+if(detectedCity){
+window.currentCity = detectedCity;
+console.log("Città rilevata da link:", detectedCity);
 }
 
 } // <-- qui chiude loadPropertyFromLink()
