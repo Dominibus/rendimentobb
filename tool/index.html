@@ -652,10 +652,8 @@ function applyPaywall(){
 
   const proSections = [
     "revenue-forecast",
-    "market-benchmark",
     "market-comparison",
-    "occupancy-sensitivity",
-    "roiChart"
+    "occupancy-sensitivity"
   ];
 
   proSections.forEach(id => {
@@ -672,7 +670,7 @@ function applyPaywall(){
     card.dataset.locked = "true";
 
     card.style.opacity = "0.4";
-    card.style.pointerEvents = "none";
+    card.style.pointerEvents = "auto";
     card.style.position = "relative";
 
     const lock = document.createElement("div");
