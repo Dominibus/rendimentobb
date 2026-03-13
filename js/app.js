@@ -1519,25 +1519,61 @@ const best = results[0];
 
 resultDiv.innerHTML = `
 
-<h4 style="margin-bottom:20px;">
+<h4 style="margin-bottom:25px;">
 🏆 ${t("bestMortgage")}: <strong>${best.name}</strong>
 </h4>
 
-<div class="kpi-grid">
+<div class="mortgage-grid">
 
-${results.map(r => `
+${results.map((r,index) => `
 
-<div class="kpi-box" style="
-${r.name === best.name ? "border:2px solid #10b981;background:#ecfdf5;" : ""}
-">
+<div class="mortgage-card ${r.name === best.name ? "best-mortgage" : ""}">
 
-<strong>🏦 ${t("bank")}: ${r.name}</strong><br><br>
+<div class="mortgage-header">
 
-${t("rate")}: ${r.rate}%<br>
+<div class="mortgage-bank">
+🏦 ${r.name}
+</div>
 
-${t("yearlyPayment")}: ${formatCurrency(r.yearlyPayment)}<br>
+${r.name === best.name ? `
+<div class="mortgage-badge">
+🏆 ${t("bestMortgage")}
+</div>
+` : ""}
 
-${t("totalInterest")}: ${formatCurrency(r.totalInterest)}
+</div>
+
+<div class="mortgage-main">
+
+<div class="mortgage-rate">
+<span>${t("rate")}</span>
+<strong>${r.rate}%</strong>
+</div>
+
+<div class="mortgage-payment">
+<span>${t("yearlyPayment")}</span>
+<strong>${formatCurrency(r.yearlyPayment)}</strong>
+</div>
+
+</div>
+
+<div class="mortgage-footer">
+
+<div class="mortgage-interest">
+<span>${t("totalInterest")}</span>
+<strong>${formatCurrency(r.totalInterest)}</strong>
+</div>
+
+<button class="mortgage-roi-btn"
+onclick="document.getElementById('interestRate').value=${r.rate};window.calculate();">
+
+${window.currentLang==="it"
+? "Simula ROI con questo mutuo"
+: "Simulate ROI with this mortgage"}
+
+</button>
+
+</div>
 
 </div>
 
