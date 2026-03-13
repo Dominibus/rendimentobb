@@ -1006,6 +1006,18 @@ Accesso a tutte le simulazioni professionali
 // ================= MAIN CALC =================
 
 function calculate() {
+  // attende che Firebase sia pronto
+if(!window.firebaseReady){
+
+console.log("Firebase non pronto, attendo auth...");
+
+document.addEventListener("rb_auth_ready", () => {
+calculate();
+},{ once:true });
+
+return;
+
+}
 
 // ================= FREE LIMIT =================
 
