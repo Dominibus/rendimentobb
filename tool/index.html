@@ -677,23 +677,25 @@ function applyPaywall(){
 
     lock.innerHTML = `
     <div style="
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
+       position:absolute;
+       inset:0;
+       display:flex;
+       align-items:center;
+       justify-content:center;
+       flex-direction:column;
       gap:15px;
       background:rgba(255,255,255,0.85);
       backdrop-filter:blur(4px);
       border-radius:16px;
-    ">
+      pointer-events:none;
+   ">
       <div style="font-weight:600;font-size:16px;"
       data-it="🔒 Funzione PRO"
       data-en="🔒 PRO Feature">
       </div>
 
       <button onclick="buyPro()" class="btn btn-primary"
+      style="pointer-events:auto" 
       data-it="🔓 Sblocca versione PRO – 29€"
       data-en="🔓 Unlock PRO version – €29">
       </button>
