@@ -1213,11 +1213,15 @@ roi > 6 ? 55 :
 
 // ================= PREVIEW PANEL =================
 
+if(typeof updatePreviewMetrics === "function"){
 updatePreviewMetrics(roi.toFixed(1), riskScore);
+}
 
 const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
 
-updateInvestmentScore(investmentScore);  
+if(typeof updateInvestmentScore === "function"){
+updateInvestmentScore(investmentScore);
+}  
 
 renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
 
