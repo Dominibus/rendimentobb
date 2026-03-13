@@ -1833,13 +1833,21 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 window.buyPlan = function(plan){
 
-// sicurezza firebase
-if(!window.firebaseAuth){
-console.error("Firebase Auth non caricato");
-return;
-}
+// utente già gestito globalmente dal sistema
+const user = window.currentUser;
 
-const user = window.firebaseAuth.currentUser;
+if(!user){
+
+alert(
+window.currentLang==="it"
+? "Devi effettuare il login."
+: "You must login first."
+);
+
+window.location.href = "/login/";
+return;
+
+}
 
 if(!user){
 
