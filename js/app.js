@@ -120,8 +120,33 @@ const TEXT = {
     roi: "ROI",
     annualNet: "Netto Annuale",
 
+    estimatedRevenue: "Ricavi annui",
+    marketAverage: "Media mercato",
+    assessment: "Valutazione",
+
+    roiAboveCity: "🏆 ROI sopra la media della città",
+    roiBelowCity: "⚠ ROI sotto la media della città",
+
+    breakEvenOcc: "Occupazione break-even",
+    minimumNights: "Notti minime",
+
+    investmentRanking: "Ranking investimento",
+    marketPosition: "Posizione mercato",
+
+    highYield: "🔥 Investimento ad alto rendimento",
+    highYieldDesc: "Questo investimento sembra molto interessante",
+
+    loginRequired: "🔒 Accesso richiesto",
+    createAccountMortgage: "Per confrontare i mutui devi creare un account gratuito.",
+    loginRegister: "Accedi o Registrati",
+
+    proFeature: "🔒 Funzione PRO",
+    mortgageProDesc: "Il comparatore mutui completo è disponibile nella versione PRO.",
+
+    insertPropertyLink: "Inserisci un link immobile"
+
     strategicLocked: "🔒 Interpretazione Strategica Bloccata",
-    unlock: "Upgrade a PRO",
+    unlock: "Sblocca versione PRO",
     strategicTitle: "🔎 Interpretazione Strategica",
 
     bestSolution: "🏆 Miglior Soluzione",
@@ -149,8 +174,33 @@ const TEXT = {
     roi: "ROI",
     annualNet: "Annual Net",
 
+    estimatedRevenue: "Estimated revenue",
+    marketAverage: "Market average",
+    assessment: "Assessment",
+
+    roiAboveCity: "🏆 ROI above city average",
+    roiBelowCity: "⚠ ROI below city average",
+
+    breakEvenOcc: "Break-even occupancy",
+    minimumNights: "Minimum nights",
+
+    investmentRanking: "Investment ranking",
+    marketPosition: "Market position",
+
+    highYield: "🔥 High Yield Investment",
+    highYieldDesc: "This investment looks very interesting",
+
+    loginRequired: "🔒 Login required",
+    createAccountMortgage: "Create a free account to compare mortgages.",
+    loginRegister: "Login or Register",
+
+    proFeature: "🔒 PRO Feature",
+    mortgageProDesc: "Full mortgage comparator available in PRO.",
+
+    insertPropertyLink: "Insert property link"  
+
     strategicLocked: "🔒 Strategic Interpretation Locked",
-    unlock: "Upgrade to PRO",
+    unlock: "Unlock PRO version",
     strategicTitle: "🔎 Strategic Interpretation",
 
     bestSolution: "🏆 Best Solution",
@@ -324,12 +374,12 @@ function renderMarketComparison(userRevenue, cityKey){
   </div>
 
   <div class="kpi-box">
-  <span>${window.currentLang==="it"?"Media mercato":"Market average"}</span>
+  <span>${t("marketAverage")}</span>
   <strong>${formatCurrency(marketRevenue)}</strong>
   </div>
 
   <div class="kpi-box">
-  <span>${window.currentLang==="it"?"Valutazione":"Assessment"}</span>
+  <span>${t("assessment")}</span>
   <strong style="color:${color}">${message}</strong>
   </div>
 
@@ -370,9 +420,7 @@ border:1px solid #10b981;
 font-weight:600;
 ">
 
-${window.currentLang==="it"
-? "🏆 ROI sopra la media della città"
-: "🏆 ROI above city average"}
+${t("roiAboveCity")}
 
 </div>
 `;
@@ -527,7 +575,7 @@ ${roi.toFixed(2)}%
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Ricavi annui":"Estimated revenue"}</span>
+<span>${t("estimatedRevenue")}</span>
 <strong>${formatCurrency(revenue)}</strong>
 </div>
 
@@ -587,14 +635,14 @@ else if(occRounded < 75) color = "#f59e0b";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Occupazione break-even":"Break-even occupancy"}</span>
+<span>${t("breakEvenOcc")}</span>
 <strong style="color:${color}">
 ${occRounded.toFixed(1)}%
 </strong>
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Notti minime":"Minimum nights"}</span>
+<span>${t("minimumNights")}</span>
 <strong>
 ${Math.round(nightsNeeded)}
 </strong>
@@ -698,7 +746,7 @@ container.innerHTML = `
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Posizione mercato":"Market position"}</span>
+<span>${t("investmentRanking")}</span>
 <strong>${label}</strong>
 </div>
 
@@ -1213,16 +1261,15 @@ resultDiv.innerHTML = `
 
 <div class="results-card" style="text-align:center;">
 
-<h3>${window.currentLang==="it"?"🔒 Accesso richiesto":"🔒 Login required"}</h3>
+<h3>${t("loginRequired")}</h3>
 
 <p>
 ${window.currentLang==="it"
-?"Per confrontare i mutui devi creare un account gratuito."
-:"Create a free account to compare mortgages."}
+${t("createAccountMortgage")}
 </p>
 
 <button onclick="window.location.href='/login'" class="btn btn-primary">
-Accedi o Registrati
+${t("loginRegister")}
 </button>
 
 </div>
@@ -1239,10 +1286,10 @@ resultDiv.innerHTML = `
 
 <div class="results-card" style="text-align:center;">
 
-<h3>🔒 Funzione PRO</h3>
+<h3>${t("proFeature")}</h3>
 
 <p>
-Il comparatore mutui completo è disponibile nella versione PRO.
+${t("mortgageProDesc")}
 </p>
 
 <button onclick="buyPlan('investor')" class="btn btn-primary">
@@ -1733,7 +1780,7 @@ window.analyzeProperty = function(){
 const link = document.getElementById("property-link").value;
 
 if(!link){
-alert("Inserisci un link immobile");
+alert(t("insertPropertyLink"));
 return;
 }
 
