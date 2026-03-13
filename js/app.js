@@ -163,6 +163,10 @@ const TEXT = {
     totalInterest: "Totale Interessi",
     rate: "Tasso",
 
+    mortgageComparison:"Confronto mutui",
+    bestMortgage:"Miglior mutuo",
+    bank:"Banca",
+
     insightSolid: "Investimento strutturalmente resiliente.",
     insightMedium: "Moderatamente sostenibile.",
     insightWeak: "Strutturalmente fragile.",
@@ -216,6 +220,10 @@ const TEXT = {
     yearlyPayment: "Yearly Payment",
     totalInterest: "Total Interest",
     rate: "Rate",
+    
+    mortgageComparison:"Confronto mutui",
+    bestMortgage:"Miglior mutuo",
+    bank:"Banca",
 
     insightSolid: "Structurally resilient investment.",
     insightMedium: "Moderately viable.",
@@ -1440,12 +1448,18 @@ return;
 
 // ================= BANK LIST =================
 
-const banks = [
-{ name: "Bank A", rate: rateA },
-{ name: "Bank B", rate: rateB },
-{ name: "Bank C", rate: rateC }
-];
+const banks = Object.values(window.RB_MORTGAGE_RATES).map(bank => ({
 
+name:
+bank.name[
+window.RB_LANG?.current ||
+window.currentLang ||
+"it"
+],
+
+rate: bank.rate
+
+}));
 
 // ================= CALCULATIONS =================
 
@@ -1482,7 +1496,7 @@ const best = results[0];
 resultDiv.innerHTML = `
 
 <h4 style="margin-bottom:20px;">
-🏆 ${t("bestSolution")}: <strong>${best.name}</strong>
+🏆 ${t("bestMortgage")}: <strong>${best.name}</strong>
 </h4>
 
 <div class="kpi-grid">
@@ -1493,7 +1507,7 @@ ${results.map(r => `
 ${r.name === best.name ? "border:2px solid #10b981;background:#ecfdf5;" : ""}
 ">
 
-<strong>${r.name}</strong><br><br>
+<strong>🏦 ${r.name}</strong><br><br>
 
 ${t("rate")}: ${r.rate}%<br>
 
