@@ -411,7 +411,11 @@ function analyzeProperty(){
 const link = document.getElementById("property-link").value;
 
 if(!link){
-alert("Inserisci un link immobile");
+alert(
+window.currentLang==="en"
+? "Please paste a property link"
+: "Inserisci un link immobile"
+);
 return;
 }
 
@@ -461,11 +465,15 @@ window.location.href="/tool/";
 
 function searchProperties(){
 
-const city = document.getElementById("searchCity").value || "Italia";
+const city = document.getElementById("searchCity").value ||
+(window.currentLang==="en" ? "Italy" : "Italia");
 
 const container = document.getElementById("property-search-results");
 
-container.innerHTML = "Ricerca immobili...";
+container.innerHTML =
+window.currentLang === "en"
+? "Searching properties..."
+: "Ricerca immobili...";
 
 setTimeout(()=>{
 
@@ -477,36 +485,62 @@ const price2 = 240000;
 const sqm2 = 85;
 const roi2 = ((18000 / price2) * 100).toFixed(1);
 
+const badge1 = roi1 > 8
+? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
+: "";
+
+const badge2 = roi2 > 8
+? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
+: "";
+
 container.innerHTML = `
 
 <div class="property-grid">
 
 <div class="property-card">
-<h3>Bilocale investimento</h3>
+
+<h3>${window.currentLang==="en"?"Investment apartment":"Bilocale investimento"}</h3>
+
 <div class="property-roi">€${price1.toLocaleString()}</div>
+
 <div>${sqm1} m² · ${city}</div>
+
 <div style="margin-top:10px;color:#10b981;font-weight:600">
-ROI stimato ${roi1}%
+${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi1}%
 </div>
+
+${badge1 ? `<div style="margin-top:6px;color:#f59e0b;font-weight:600">${badge1}</div>` : ""}
 
 <button class="btn btn-primary"
 onclick="openInvestment(${price1})">
-Analizza ROI
+
+${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
+
 </button>
 
 </div>
 
+
+
 <div class="property-card">
-<h3>Trilocale ristrutturato</h3>
+
+<h3>${window.currentLang==="en"?"Renovated apartment":"Trilocale ristrutturato"}</h3>
+
 <div class="property-roi">€${price2.toLocaleString()}</div>
+
 <div>${sqm2} m² · ${city}</div>
+
 <div style="margin-top:10px;color:#10b981;font-weight:600">
-ROI stimato ${roi2}%
+${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi2}%
 </div>
+
+${badge2 ? `<div style="margin-top:6px;color:#f59e0b;font-weight:600">${badge2}</div>` : ""}
 
 <button class="btn btn-primary"
 onclick="openInvestment(${price2})">
-Analizza ROI
+
+${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
+
 </button>
 
 </div>
