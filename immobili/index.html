@@ -469,22 +469,46 @@ container.innerHTML = "Ricerca immobili...";
 
 setTimeout(()=>{
 
+const price1 = 180000;
+const sqm1 = 65;
+const roi1 = ((15000 / price1) * 100).toFixed(1);
+
+const price2 = 240000;
+const sqm2 = 85;
+const roi2 = ((18000 / price2) * 100).toFixed(1);
+
 container.innerHTML = `
 
 <div class="property-grid">
 
 <div class="property-card">
 <h3>Bilocale investimento</h3>
-<div class="property-roi">€180.000</div>
-<div>65 m² · ${city}</div>
-<button class="btn btn-primary" onclick="analyzeProperty()">Analizza ROI</button>
+<div class="property-roi">€${price1.toLocaleString()}</div>
+<div>${sqm1} m² · ${city}</div>
+<div style="margin-top:10px;color:#10b981;font-weight:600">
+ROI stimato ${roi1}%
+</div>
+
+<button class="btn btn-primary"
+onclick="openInvestment(${price1})">
+Analizza ROI
+</button>
+
 </div>
 
 <div class="property-card">
 <h3>Trilocale ristrutturato</h3>
-<div class="property-roi">€240.000</div>
-<div>85 m² · ${city}</div>
-<button class="btn btn-primary" onclick="analyzeProperty()">Analizza ROI</button>
+<div class="property-roi">€${price2.toLocaleString()}</div>
+<div>${sqm2} m² · ${city}</div>
+<div style="margin-top:10px;color:#10b981;font-weight:600">
+ROI stimato ${roi2}%
+</div>
+
+<button class="btn btn-primary"
+onclick="openInvestment(${price2})">
+Analizza ROI
+</button>
+
 </div>
 
 </div>
@@ -494,6 +518,14 @@ container.innerHTML = `
 },600);
 
 }
+
+function openInvestment(price){
+
+localStorage.setItem("property_price", price);
+
+window.location.href="/tool/";
+
+}  
 
 </script>
 
