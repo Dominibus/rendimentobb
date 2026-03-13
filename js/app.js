@@ -1173,7 +1173,7 @@ const loanAmount = getValue("loanAmount");
 const interestRate = getValue("interestRate");
 const loanYears = getValue("loanYears");
 
-if (equity <= 0) return;
+if (equity < 0) return;
 
 const mortgageYearly =
 calculateMortgage(loanAmount, interestRate, loanYears);
