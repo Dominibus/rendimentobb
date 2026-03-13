@@ -1162,10 +1162,6 @@ return;
 }
 
 // incrementa solo dopo simulazione reale
-
-let freeRuns =
-parseInt(localStorage.getItem("rb_free_runs") || "0");
-
 freeRuns++;
 
 localStorage.setItem("rb_free_runs", freeRuns);
