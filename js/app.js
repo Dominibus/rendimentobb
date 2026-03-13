@@ -1850,12 +1850,6 @@ const user = window.currentUser;
 
 if(!user){
 
-alert(
-window.currentLang==="it"
-? "Devi effettuare il login."
-: "You must login first."
-);
-
 window.location.href = "/login/";
 return;
 
