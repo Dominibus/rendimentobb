@@ -916,9 +916,7 @@ if(roi > 8){
 
 setTimeout(()=>{
 
-if(confirm(message)){
-window.buyPlan("investor");
-}
+showUpgradeModal(roi);
 
 },1500);
 
@@ -995,6 +993,110 @@ ${t("highYieldDesc")}
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
 Accesso a tutte le simulazioni professionali
+</div>
+
+</div>
+
+`;
+
+}
+
+// ================= UPGRADE MODAL =================
+
+function showUpgradeModal(roi){
+
+const container = document.getElementById("smart-investment-alert");
+
+if(!container) return;
+
+const lang = window.currentLang || "it";
+
+const title =
+lang === "it"
+? "🔥 Investimento promettente"
+: "🔥 Promising investment";
+
+const discover =
+lang === "it"
+? "Scopri l'analisi completa"
+: "Discover the full analysis";
+
+const risk =
+lang === "it"
+? "rischio reale"
+: "real risk";
+
+const benchmark =
+lang === "it"
+? "benchmark mercato"
+: "market benchmark";
+
+const occupancy =
+lang === "it"
+? "simulazione occupazione"
+: "occupancy simulation";
+
+const mortgage =
+lang === "it"
+? "comparatore mutui"
+: "mortgage comparator";
+
+const report =
+lang === "it"
+? "report professionale"
+: "professional report";
+
+const unlock =
+lang === "it"
+? "🔓 Sblocca analisi completa – 19€/mese"
+: "🔓 Unlock full analysis – €19/month";
+
+const roiText =
+lang === "it"
+? "ROI stimato"
+: "Estimated ROI";
+
+container.innerHTML = `
+
+<div style="
+margin-top:20px;
+padding:24px;
+border-radius:14px;
+background:#ecfdf5;
+border:1px solid #10b981;
+text-align:center;
+">
+
+<h3 style="margin-bottom:10px;">
+${title}
+</h3>
+
+<p>
+${roiText}: <strong>${roi.toFixed(1)}%</strong>
+</p>
+
+<p style="margin-top:10px;font-size:14px;">
+${discover}:
+<br>
+• ${risk}
+<br>
+• ${benchmark}
+<br>
+• ${occupancy}
+<br>
+• ${mortgage}
+<br>
+• ${report}
+</p>
+
+<button onclick="buyPlan('investor')" class="btn btn-primary">
+${unlock}
+</button>
+
+<div style="margin-top:8px;font-size:12px;color:#64748b;">
+${lang === "it"
+? "Accesso completo a tutte le simulazioni professionali"
+: "Full access to all professional simulations"}
 </div>
 
 </div>
@@ -1080,7 +1182,7 @@ const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
 
 const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
   
-showUpgradePopup(roi);
+showUpgradeModal(roi);
 
 window.lastROI = roi;  
 
