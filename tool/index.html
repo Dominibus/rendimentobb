@@ -633,6 +633,8 @@ window.buyPro = function(){
 
 }
 
+<script>
+
 function applyPaywall(){
 
   if(window.currentPlan === "pro"){
@@ -644,7 +646,7 @@ function applyPaywall(){
     });
 
     document.querySelectorAll(
-    "#revenue-forecast, #market-comparison, #occupancy-sensitivity, #strategic-insight"
+      "#revenue-forecast, #market-comparison, #occupancy-sensitivity, #strategic-insight"
     ).forEach(card=>{
       card.dataset.locked = "";
       card.style.opacity = "";
@@ -679,27 +681,27 @@ function applyPaywall(){
 
     lock.innerHTML = `
     <div style="
-       position:absolute;
-       inset:0;
-       display:flex;
-       align-items:center;
-       justify-content:center;
-       flex-direction:column;
-       gap:15px;
-       background:rgba(255,255,255,0.85);
-       backdrop-filter:blur(4px);
-       border-radius:16px;
-       pointer-events:none;
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:15px;
+      background:rgba(255,255,255,0.85);
+      backdrop-filter:blur(4px);
+      border-radius:16px;
+      pointer-events:none;
     ">
       <div style="font-weight:600;font-size:16px;"
-      data-it="🔒 Funzione PRO"
-      data-en="🔒 PRO Feature">
+        data-it="🔒 Funzione PRO"
+        data-en="🔒 PRO Feature">
       </div>
 
       <button onclick="buyPro()" class="btn btn-primary"
-      style="pointer-events:auto"
-      data-it="🔓 Sblocca versione PRO – 29€"
-      data-en="🔓 Unlock PRO version – €29">
+        style="pointer-events:auto"
+        data-it="🔓 Sblocca versione PRO – 29€"
+        data-en="🔓 Unlock PRO version – €29">
       </button>
     </div>
     `;
@@ -714,21 +716,10 @@ function applyPaywall(){
 
 }
 
+
+// quando Firebase carica il piano
 document.addEventListener("rb_plan_loaded", applyPaywall);
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  if(!window.currentUser){
-    window.currentPlan = "free";
-    applyPaywall();
-  }
-
-});
-
-}
-
-document.addEventListener("rb_plan_loaded", applyPaywall);
-  
 
 // applica comunque il paywall se utente non loggato
 document.addEventListener("DOMContentLoaded", () => {
@@ -740,7 +731,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-</script>  
+</script>
 
 <script>
 
