@@ -1037,7 +1037,7 @@ buyPlan(plan);
 };
 
 <button onclick="startPlanPurchase('investor')" class="btn btn-primary">
-🔓 Sblocca analisi completa – 19€/mese
+🔓 Accedi gratis per vedere l'analisi completa – 19€/mese
 </button>
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
