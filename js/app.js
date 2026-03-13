@@ -1150,7 +1150,7 @@ return;
 let freeRuns =
 parseInt(localStorage.getItem("rb_free_runs") || "0");
 
-if(freeRuns >= 3){
+if(!window.currentUser && freeRuns >= 3){
 
 alert(
 window.currentLang==="it"
@@ -1164,9 +1164,10 @@ return;
 }
 
 // incrementa solo dopo simulazione reale
+if(!window.currentUser){
 freeRuns++;
-
 localStorage.setItem("rb_free_runs", freeRuns);
+}
 
 const equity = getValue("equity");
 const priceNight = getValue("priceNight");
