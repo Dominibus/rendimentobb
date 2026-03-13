@@ -42,35 +42,50 @@ async function saveAnalysis(data){
 }
 
 
-// ================= PRO SYSTEM =================
+// ================= PLAN SYSTEM =================
 
-function isProUnlocked(){
-  return window.isProUser && window.isProUser();
+function getUserPlan(){
+  return window.currentPlan || "free";
 }
 
-function requirePro(feature="premium feature"){
+function hasPlan(requiredPlan){
+
+const plans = {
+free:0,
+starter:1,
+investor:2,
+pro:3
+};
+
+const userPlan = getUserPlan();
+
+return plans[userPlan] >= plans[requiredPlan];
+
+}
+
+function requirePlan(requiredPlan){
 
 if(!window.currentUser){
 
 alert(
 window.currentLang==="it"
-? "Per utilizzare questa funzione devi creare un account gratuito."
+? "Per usare questa funzione devi creare un account gratuito."
 : "Create a free account to use this feature."
 );
 
-window.location.href="/login";
+window.location.href="/login/";
 return false;
 
 }
 
-if(!window.isProUser || !window.isProUser()){
+if(!hasPlan(requiredPlan)){
 
 if(confirm(
 window.currentLang==="it"
-? "Questa funzione è disponibile solo nella versione PRO.\n\nVuoi sbloccarla?"
-: "This feature is available only in PRO version.\n\nUnlock now?"
+? "Questa funzione richiede un piano superiore."
+: "This feature requires a higher plan."
 )){
-window.buyPro();
+window.location.href="/pricing/";
 }
 
 return false;
@@ -225,72 +240,6 @@ function mortgageSimulation(amount, rate, years) {
 
 }
 
-
-// ================= MORTGAGE COMPARATOR =================
-
-window.compareMortgages = function(){
-
-if(!window.currentUser){
-alert(
-window.currentLang==="it"
-? "Devi effettuare il login."
-: "You must login first."
-);
-return;
-}
-
-if(!window.isProUser || !window.isProUser()){
-alert(
-window.currentLang==="it"
-? "Questa funzione è disponibile solo nella versione PRO."
-: "This feature is available only in the PRO version."
-);
-return;
-}
-
-const amount = parseFloat(document.getElementById("mortgageAmount").value);
-const years = parseFloat(document.getElementById("mortgageYears").value);
-
-const rateA = parseFloat(document.getElementById("rateA").value)/100/12;
-const rateB = parseFloat(document.getElementById("rateB").value)/100/12;
-const rateC = parseFloat(document.getElementById("rateC").value)/100/12;
-
-const months = years * 12;
-
-function calc(rate){
-return amount * rate / (1 - Math.pow(1 + rate, -months));
-}
-
-const a = calc(rateA);
-const b = calc(rateB);
-const c = calc(rateC);
-
-const resultDiv = document.getElementById("mortgage-results");
-
-if(!resultDiv) return;
-
-resultDiv.innerHTML = `
-<div class="results-grid">
-
-<div class="metric-card">
-<span>Banca A</span>
-<strong>${a.toFixed(0)} €/mese</strong>
-</div>
-
-<div class="metric-card">
-<span>Banca B</span>
-<strong>${b.toFixed(0)} €/mese</strong>
-</div>
-
-<div class="metric-card">
-<span>Banca C</span>
-<strong>${c.toFixed(0)} €/mese</strong>
-</div>
-
-</div>
-`;
-
-}
 // ================= MARKET BENCHMARK =================
 
 function renderMarketBenchmark(cityKey){
@@ -890,7 +839,7 @@ ${message}
 
 function showUpgradePopup(roi){
 
-if(isProUnlocked()) return;
+if(hasPlan("investor")) return;
 
 const lang = window.currentLang || "it";
 
@@ -923,7 +872,7 @@ if(roi > 8){
 setTimeout(()=>{
 
 if(confirm(message)){
-window.buyPro();
+buyPlan("investor");
 }
 
 },1500);
@@ -1003,8 +952,8 @@ Scopri nella versione PRO:
 • report professionale
 </p>
 
-<button onclick="buyPro()" class="btn btn-primary" style="margin-top:10px;font-size:16px;padding:12px 18px;">
-🔓 Sblocca analisi completa – 29€
+<button onclick="buyPlan('investor')" class="btn btn-primary">
+🔓 Sblocca analisi completa – 19€/mese
 </button>
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
@@ -1222,7 +1171,7 @@ const box = document.getElementById("strategic-insight");
 
 if (!box) return;
 
-if(!window.isProUser || !window.isProUser()){
+if(!hasPlan("investor")){
 
 box.innerHTML = `
 <strong>${t("strategicLocked")}</strong>
@@ -1284,7 +1233,7 @@ return;
 
 }
 
-if(!window.isProUser || !window.isProUser()){
+if(!hasPlan("investor")){
 
 resultDiv.innerHTML = `
 
@@ -1296,8 +1245,8 @@ resultDiv.innerHTML = `
 Il comparatore mutui completo è disponibile nella versione PRO.
 </p>
 
-<button onclick="buyPro()" class="btn btn-primary">
-🔓 Sblocca versione PRO – 29€
+<button onclick="buyPlan('investor')" class="btn btn-primary">
+🔓 Sblocca analisi completa – 19€/mese
 </button>
 
 </div>
@@ -1443,7 +1392,7 @@ async function generateExecutivePDF(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-if(!requirePro("pdf report")) return;
+if(!requirePlan("pro")) return;
 
 if(!window.lastAnalysisData){
 
