@@ -40,6 +40,9 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const db = getFirestore(app);
 
+// rende Firebase Auth globale per tutto il sito
+window.firebaseAuth = auth;
+
 
 // ===============================
 // GLOBAL STATE
