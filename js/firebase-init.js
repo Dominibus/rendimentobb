@@ -243,8 +243,16 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     await loadUserPlan(user.uid);
   }else{
+
 currentPlan = "free";
 window.currentPlan = "free";
+
+document.dispatchEvent(
+  new CustomEvent("rb_plan_loaded", {
+    detail:{ plan:"free" }
+  })
+);
+
 }
 
   updateUserUI(user);
