@@ -1915,6 +1915,8 @@ box-shadow:0 14px 28px rgba(0,0,0,0.08);
 .best-mortgage{
 border:2px solid #10b981;
 background:#ecfdf5;
+box-shadow:0 12px 26px rgba(16,185,129,0.2);
+transform:scale(1.03);
 }
 
 .mortgage-header{
