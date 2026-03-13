@@ -258,6 +258,64 @@ Analizza mercato →
 </div>
 
 
+<!-- RICERCA IMMOBILI -->
+
+<section style="margin-top:120px">
+
+<h2 style="text-align:center"
+data-it="Trova immobili da analizzare"
+data-en="Find properties to analyze">
+Trova immobili da analizzare
+</h2>
+
+<p style="text-align:center;color:#64748b;margin-top:10px"
+data-it="Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B."
+data-en="Search properties by price and size and instantly analyze B&B profitability">
+
+Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B.
+
+</p>
+
+<div style="max-width:800px;margin:auto;margin-top:40px">
+
+<div class="form-grid">
+
+<div class="input-group">
+<label data-it="Città" data-en="City">Città</label>
+<input id="searchCity" placeholder="Napoli">
+</div>
+
+<div class="input-group">
+<label data-it="Prezzo massimo" data-en="Max price">Prezzo massimo</label>
+<input id="searchPrice">
+</div>
+
+<div class="input-group">
+<label data-it="Metri quadri min" data-en="Min sqm">Metri quadri min</label>
+<input id="searchSqm">
+</div>
+
+</div>
+
+<div style="text-align:center;margin-top:20px">
+
+<button onclick="searchProperties()" class="btn btn-primary"
+data-it="Cerca immobili"
+data-en="Search properties">
+
+Cerca immobili
+
+</button>
+
+</div>
+
+</div>
+
+<div id="property-search-results" style="margin-top:50px"></div>
+
+</section>
+
+
 
 <!-- ANALIZZA IMMOBILE -->
 
@@ -272,90 +330,10 @@ Analizza un immobile reale
 <p
 data-it="Incolla il link di un immobile da Idealista, Immobiliare.it o altri portali per stimare il rendimento B&B."
 data-en="Paste a property link from Idealista, Immobiliare.it or other portals to estimate the B&B investment return.">
+
 Incolla il link di un immobile da Idealista, Immobiliare.it o altri portali per stimare il rendimento B&B.
-</p>
 
-<div style="margin-top:30px;max-width:600px;margin-left:auto;margin-right:auto">
-
-<input
-id="property-link"
-type="text"
-placeholder="https://idealista.it/... | https://immobiliare.it/..."
-data-it-placeholder="Incolla link immobile Idealista o Immobiliare.it"
-data-en-placeholder="Paste a property link from Idealista or Immobiliare.it"
-style="width:100%;padding:14px;border-radius:10px;border:1px solid #cbd5e1">
-
-</div>
-
-<div class="analysis-steps">
-
-<p data-it="Cosa succede dopo l'analisi:"
-   data-en="What happens after the analysis:">
-Cosa succede dopo l'analisi:
-</p>
-
-<ul>
-
-<li data-it="Il sistema riconosce il portale immobiliare"
-    data-en="The system detects the property portal">
-Il sistema riconosce il portale immobiliare
-</li>
-
-<li data-it="Simula automaticamente il rendimento B&B"
-    data-en="Automatically simulates B&B profitability">
-Simula automaticamente il rendimento B&B
-</li>
-
-<li data-it="Confronta i dati con il mercato turistico locale"
-    data-en="Compares results with the local tourism market">
-Confronta i dati con il mercato turistico locale
-</li>
-
-<li data-it="Mostra ROI, rischio e sostenibilità finanziaria"
-    data-en="Shows ROI, risk and financial sustainability">
-Mostra ROI, rischio e sostenibilità finanziaria
-</li>
-
-</ul>
-
-</div>  
-
-<ul class="benefit-list">
-
-<li
-data-it="✓ Calcolo ROI investimento"
-data-en="✓ Investment ROI calculation">
-✓ Calcolo ROI investimento
-</li>
-
-<li
-data-it="✓ Simulazione mutuo e sostenibilità finanziaria"
-data-en="✓ Mortgage simulation and financial sustainability">
-✓ Simulazione mutuo e sostenibilità finanziaria
-</li>
-
-<li
-data-it="✓ Confronto con mercato turistico locale"
-data-en="✓ Comparison with local tourism market">
-✓ Confronto con mercato turistico locale
-</li>
-
-</ul>  
-
-<div id="property-preview" style="margin-top:12px;font-size:14px;color:#334155;"></div>  
-
-<div style="margin-top:20px">
-
-<button onclick="analyzeProperty()" class="btn btn-primary"
-data-it="Analizza immobile"
-data-en="Analyze property">
-Analizza immobile
-</button>
-
-</div>
-
-</section>
-
+</p>   
 
 
 <!-- INFO -->
@@ -398,7 +376,7 @@ Simula investimento
 <script type="module" src="/js/firebase-init.js"></script>
 
 <script>
-  
+
 function analyzeProperty(){
 
 const link = document.getElementById("property-link").value;
@@ -422,7 +400,6 @@ portal = "Immobiliare.it";
 id = link.split("/").filter(Boolean).pop();
 }
 
-// Simulazione prezzo stimato (solo UX)
 if(id){
 estimatedPrice = (Math.floor(Math.random()*200)+80) * 1000;
 }
@@ -450,6 +427,45 @@ window.location.href="/tool/";
 },1200);
 
 }
+
+
+
+function searchProperties(){
+
+const city = document.getElementById("searchCity").value || "Italia";
+
+const container = document.getElementById("property-search-results");
+
+container.innerHTML = "Ricerca immobili...";
+
+setTimeout(()=>{
+
+container.innerHTML = `
+
+<div class="property-grid">
+
+<div class="property-card">
+<h3>Bilocale investimento</h3>
+<div class="property-roi">€180.000</div>
+<div>65 m² · ${city}</div>
+<button class="btn btn-primary" onclick="analyzeProperty()">Analizza ROI</button>
+</div>
+
+<div class="property-card">
+<h3>Trilocale ristrutturato</h3>
+<div class="property-roi">€240.000</div>
+<div>85 m² · ${city}</div>
+<button class="btn btn-primary" onclick="analyzeProperty()">Analizza ROI</button>
+</div>
+
+</div>
+
+`;
+
+},600);
+
+}
+
 </script>
 
 </body>
