@@ -92,6 +92,10 @@ EN
 
 document.body.insertAdjacentHTML("afterbegin", header);
 
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
+}  
+
 
 /* ===================== */
 /* HAMBURGER MENU */
@@ -122,6 +126,14 @@ const href = link.getAttribute("href");
 
 if(currentPath === href){
 link.classList.add("active");
+}
+
+});
+
+  document.addEventListener("rb_language_changed", () => {
+
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
 }
 
 });
