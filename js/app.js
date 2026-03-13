@@ -1833,7 +1833,13 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 window.buyPlan = function(plan){
 
-const user = window.firebaseAuth?.currentUser;
+// sicurezza firebase
+if(!window.firebaseAuth){
+console.error("Firebase Auth non caricato");
+return;
+}
+
+const user = window.firebaseAuth.currentUser;
 
 if(!user){
 
