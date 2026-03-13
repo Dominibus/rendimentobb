@@ -1181,8 +1181,6 @@ const taxCost = operatingProfit > 0 ? operatingProfit * (tax / 100) : 0;
 const netAfterMortgage = operatingProfit - taxCost - mortgageYearly;
 
 const roi = equity > 0 ? (netAfterMortgage / equity) * 100 : 0;
-  
-showUpgradeModal(roi);
 
 window.lastROI = roi;  
 
@@ -1225,6 +1223,8 @@ equity > 0 && netAfterMortgage > 0
 : null;
 
 renderInvestmentVerdict(roi, payback);  
+  
+showUpgradePopup(roi);
 
 // MARKET BENCHMARK + COMPARISON
 
