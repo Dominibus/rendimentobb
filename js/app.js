@@ -96,36 +96,27 @@ return true;
 
 }
 
-// evento quando firebase carica il piano
-document.addEventListener("rb_plan_loaded", () => {
+// ================= LANGUAGE EVENT =================
 
-  // aggiornamento lingua dinamico
 document.addEventListener("rb_language_changed", () => {
 
 window.currentLang =
 window.RB_LANG?.current ||
-window.currentLang ||
+localStorage.getItem("rb_lang") ||
 "it";
 
-});
-
-  console.log("Piano utente caricato:", window.currentPlan);
-
-  if(typeof renderExecutiveKPI === "function"){
-     calculate();
-  }
+// aggiorna chart se presente
+if(window.lastROI && typeof renderChart === "function"){
+renderChart(window.lastROI);
+}
 
 });
-
-
-// ================= LANGUAGE =================
 
 // ================= LANGUAGE SYNC =================
 
-// usa sempre il motore lang.js se presente
+// lingua iniziale sincronizzata con lang.js
 window.currentLang =
 window.RB_LANG?.current ||
-window.currentLang ||
 localStorage.getItem("rb_lang") ||
 "it";
 
@@ -248,7 +239,7 @@ window.RB_LANG?.current ||
 window.currentLang ||
 "it";
 
-return TEXT[lang][key] || key;
+return TEXT[lang]?.[key] || TEXT["en"]?.[key] || key;
 
 }
 
@@ -1009,35 +1000,10 @@ ROI stimato: <strong>${roi.toFixed(1)}%</strong>
 ${t("highYieldDesc")}
 </p>
 
-// ================= SAFE PLAN BUY =================
-
-window.startPlanPurchase = function(plan){
-
-const user = window.currentUser;
-
-if(!user){
-
-const goLogin = confirm(
-window.currentLang==="it"
-? "Per sbloccare l'analisi devi prima effettuare il login."
-: "You must login before purchasing this plan."
-);
-
-if(goLogin){
-window.location.href="/login/";
-}
-
-return;
-
-}
-
-// utente loggato → continua
-buyPlan(plan);
-
-};
-
 <button onclick="startPlanPurchase('investor')" class="btn btn-primary">
-🔓 Accedi gratis per vedere l'analisi completa – 19€/mese
+${window.currentLang==="it"
+? "🔓 Accedi gratis per vedere l'analisi completa – 19€/mese"
+: "🔓 Login to unlock full analysis – €19/month"}
 </button>
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
@@ -1923,6 +1889,7 @@ doc.save(fileName);
 window.calculate = calculate;
 window.compareMortgages = compareMortgages;
 window.generateExecutivePDF = generateExecutivePDF;
+window.startPlanPurchase = window.startPlanPurchase;
 
 window.analyzeProperty = function(){
 
@@ -1990,6 +1957,39 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 };
 
+// ================= SAFE PLAN BUY =================
+
+window.startPlanPurchase = function(plan){
+
+const user = window.currentUser;
+
+if(!user){
+
+const goLogin = confirm(
+window.currentLang==="it"
+? "Devi effettuare il login prima di acquistare il piano."
+: "You must login before purchasing the plan."
+);
+
+if(goLogin){
+window.location.href="/login/";
+}
+
+return;
+
+}
+
+// sicurezza piano
+if(!plan){
+console.error("Piano non specificato");
+return;
+}
+
+// utente loggato → Stripe
+window.buyPlan(plan);
+
+};
+
 // ================= STRIPE SUBSCRIPTION =================
 
 window.buyPlan = function(plan){
@@ -2004,7 +2004,7 @@ return;
 
 const uid = user.uid;
 
-let stripeUrl = "";
+let stripeUrl = null;
 
 // PLAN ROUTING
 
