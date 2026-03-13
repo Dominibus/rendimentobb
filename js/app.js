@@ -1829,6 +1829,54 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 };
 
+// ================= STRIPE SUBSCRIPTION =================
+
+window.buyPlan = function(plan){
+
+const user = firebaseAuth.currentUser;
+
+if(!user){
+
+alert(
+window.currentLang==="it"
+? "Devi effettuare il login."
+: "You must login first."
+);
+
+window.location.href = "/login/";
+return;
+
+}
+
+const uid = user.uid;
+
+let stripeUrl = "";
+
+// PLAN ROUTING
+
+if(plan === "starter"){
+stripeUrl =
+"https://buy.stripe.com/STARTER_LINK?client_reference_id=" + uid;
+}
+
+if(plan === "investor"){
+stripeUrl =
+"https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01?client_reference_id=" + uid;
+}
+
+if(plan === "pro"){
+stripeUrl =
+"https://buy.stripe.com/PRO_LINK?client_reference_id=" + uid;
+}
+
+if(!stripeUrl){
+console.error("Stripe plan non valido:", plan);
+return;
+}
+
+window.location.href = stripeUrl;
+} 
+
 // ================= PROPERTY SCRAPER =================
 
 async function scrapePropertyFromBrowser(url){
@@ -1937,55 +1985,7 @@ console.error("Errore analisi immobile:", e);
 
 }
 
-}
-
-// ================= STRIPE SUBSCRIPTION =================
-
-window.buyPlan = function(plan){
-
-const user = firebaseAuth.currentUser;
-
-if(!user){
-
-alert(
-window.currentLang==="it"
-? "Devi effettuare il login."
-: "You must login first."
-);
-
-window.location.href = "/login/";
-return;
-
-}
-
-const uid = user.uid;
-
-let stripeUrl = "";
-
-// PLAN ROUTING
-
-if(plan === "starter"){
-stripeUrl =
-"https://buy.stripe.com/STARTER_LINK?client_reference_id=" + uid;
-}
-
-if(plan === "investor"){
-stripeUrl =
-"https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01?client_reference_id=" + uid;
-}
-
-if(plan === "pro"){
-stripeUrl =
-"https://buy.stripe.com/PRO_LINK?client_reference_id=" + uid;
-}
-
-if(!stripeUrl){
-console.error("Stripe plan non valido:", plan);
-return;
-}
-
-window.location.href = stripeUrl;
-}  
+} 
 
 let detectedCity = null;
 
