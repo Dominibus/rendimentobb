@@ -99,6 +99,16 @@ return true;
 // evento quando firebase carica il piano
 document.addEventListener("rb_plan_loaded", () => {
 
+  // aggiornamento lingua dinamico
+document.addEventListener("rb_language_changed", () => {
+
+window.currentLang =
+window.RB_LANG?.current ||
+window.currentLang ||
+"it";
+
+});
+
   console.log("Piano utente caricato:", window.currentPlan);
 
   if(typeof renderExecutiveKPI === "function"){
@@ -110,9 +120,14 @@ document.addEventListener("rb_plan_loaded", () => {
 
 // ================= LANGUAGE =================
 
-if (!window.currentLang) {
-  window.currentLang = localStorage.getItem("rb_lang") || "it";
-}
+// ================= LANGUAGE SYNC =================
+
+// usa sempre il motore lang.js se presente
+window.currentLang =
+window.RB_LANG?.current ||
+window.currentLang ||
+localStorage.getItem("rb_lang") ||
+"it";
 
 const TEXT = {
 
@@ -226,8 +241,15 @@ const TEXT = {
 
 };
 
-function t(key) {
-  return TEXT[window.currentLang || "it"][key];
+function t(key){
+
+const lang =
+window.RB_LANG?.current ||
+window.currentLang ||
+"it";
+
+return TEXT[lang][key] || key;
+
 }
 
 
@@ -1123,10 +1145,8 @@ return;
 
 // ================= FREE LIMIT =================
 
-if(!window.currentUser){
-
 let freeRuns =
-parseInt(localStorage.setItem("rb_free_runs",0) || "0");
+parseInt(localStorage.getItem("rb_free_runs") || "0");
 
 if(freeRuns >= 3){
 
@@ -1150,8 +1170,6 @@ parseInt(localStorage.getItem("rb_free_runs") || "0");
 freeRuns++;
 
 localStorage.setItem("rb_free_runs", freeRuns);
-
-},0);
 
 }  
 
@@ -1959,25 +1977,7 @@ window.buyPlan = function(plan){
 // utente già gestito globalmente dal sistema
 const user = window.currentUser;
 
-if(!user){
-
 window.location.href = "/login/";
-return;
-
-}
-
-if(!user){
-
-alert(
-window.currentLang==="it"
-? "Devi effettuare il login."
-: "You must login first."
-);
-
-window.location.href = "/login/";
-return;
-
-}
 
 const uid = user.uid;
 
