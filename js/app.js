@@ -1833,7 +1833,7 @@ risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
 
 window.buyPlan = function(plan){
 
-const user = firebaseAuth.currentUser;
+const user = window.firebaseAuth?.currentUser;
 
 if(!user){
 
