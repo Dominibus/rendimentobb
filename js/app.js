@@ -221,9 +221,9 @@ const TEXT = {
     totalInterest: "Total Interest",
     rate: "Rate",
     
-    mortgageComparison:"Confronto mutui",
-    bestMortgage:"Miglior mutuo",
-    bank:"Banca",
+    mortgageComparison:"Mortgage comparison",
+    bestMortgage:"Best mortgage",
+    bank:"Bank",
 
     insightSolid: "Structurally resilient investment.",
     insightMedium: "Moderately viable.",
@@ -1478,7 +1478,10 @@ return { ...bank, ...data };
 
 if(results.length === 0){
 
-resultDiv.innerHTML = "No mortgage data";
+resultDiv.innerHTML =
+window.currentLang==="it"
+? "Nessun dato mutuo disponibile"
+: "No mortgage data available";
 return;
 
 }
@@ -1507,7 +1510,7 @@ ${results.map(r => `
 ${r.name === best.name ? "border:2px solid #10b981;background:#ecfdf5;" : ""}
 ">
 
-<strong>🏦 ${r.name}</strong><br><br>
+<strong>🏦 ${t("bank")}: ${r.name}</strong><br><br>
 
 ${t("rate")}: ${r.rate}%<br>
 
@@ -2188,6 +2191,42 @@ console.log("Città rilevata da link:", detectedCity);
 } // <-- qui chiude loadPropertyFromLink()
   
 }
+
+// ================= MORTGAGE RATE AUTO UPDATE =================
+
+function checkMortgageRateUpdate(){
+
+const lastUpdate =
+parseInt(localStorage.getItem("rb_mortgage_rates_update") || "0");
+
+const now = Date.now();
+
+const days =
+(now - lastUpdate) / (1000*60*60*24);
+
+if(days > 7){
+
+console.log("Aggiornamento tassi mutuo");
+
+if(window.RB_MORTGAGE_RATES){
+
+localStorage.setItem(
+"rb_mortgage_rates_update",
+Date.now()
+);
+
+}
+
+}
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+checkMortgageRateUpdate();
+
+});
+
 // ================= AUTO LOAD PROPERTY =================
 
 document.addEventListener("DOMContentLoaded", () => {
