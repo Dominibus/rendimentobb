@@ -143,7 +143,7 @@ const TEXT = {
     proFeature: "🔒 Funzione PRO",
     mortgageProDesc: "Il comparatore mutui completo è disponibile nella versione PRO.",
 
-    insertPropertyLink: "Inserisci un link immobile"
+    insertPropertyLink: "Inserisci un link immobile",
 
     strategicLocked: "🔒 Interpretazione Strategica Bloccata",
     unlock: "Sblocca versione PRO",
@@ -197,7 +197,7 @@ const TEXT = {
     proFeature: "🔒 PRO Feature",
     mortgageProDesc: "Full mortgage comparator available in PRO.",
 
-    insertPropertyLink: "Insert property link"  
+    insertPropertyLink: "Insert property link",
 
     strategicLocked: "🔒 Strategic Interpretation Locked",
     unlock: "Unlock PRO version",
@@ -369,7 +369,7 @@ function renderMarketComparison(userRevenue, cityKey){
   container.innerHTML = `
 
   <div class="kpi-box">
-  <span>${window.currentLang==="it"?"Ricavi annui":"Estimated revenue"}</span>
+  <span>${t("estimatedRevenue")}</span>
   <strong>${formatCurrency(userRevenue)}</strong>
   </div>
 
@@ -1264,7 +1264,6 @@ resultDiv.innerHTML = `
 <h3>${t("loginRequired")}</h3>
 
 <p>
-${window.currentLang==="it"
 ${t("createAccountMortgage")}
 </p>
 
