@@ -62,4 +62,11 @@ Contatti
 
 document.body.insertAdjacentHTML("beforeend", footer);
 
+
+/* 🔥 RIAPPLICA TRADUZIONI */
+
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
+}
+
 });
