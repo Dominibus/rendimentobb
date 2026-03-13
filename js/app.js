@@ -1971,7 +1971,7 @@ stripeUrl =
 
 if(plan === "investor"){
 stripeUrl =
-"https://buy.stripe.com/INVESTOR_LINK?client_reference_id=" + uid;
+"https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01?client_reference_id=" + uid;
 }
 
 if(plan === "pro"){
