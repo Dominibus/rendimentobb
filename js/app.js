@@ -1531,6 +1531,10 @@ ${results.map((r,index) => `
 
 <div class="mortgage-header">
 
+<div class="mortgage-rank">
+#${index+1}
+</div>
+
 <div class="mortgage-bank">
 🏦 ${r.name}
 </div>
