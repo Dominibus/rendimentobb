@@ -52,6 +52,22 @@ en:"Banco BPM"
 rate:3.55
 }
 
+mediolanum:{
+name:{
+it:"Banca Mediolanum",
+en:"Mediolanum Bank"
+},
+rate:3.48
+},
+
+chebanca:{
+name:{
+it:"CheBanca!",
+en:"CheBanca!"
+},
+rate:3.52
+}  
+
 };
 
 
