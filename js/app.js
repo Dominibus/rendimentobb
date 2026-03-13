@@ -1009,7 +1009,34 @@ ROI stimato: <strong>${roi.toFixed(1)}%</strong>
 ${t("highYieldDesc")}
 </p>
 
-<button onclick="buyPlan('investor')" class="btn btn-primary">
+// ================= SAFE PLAN BUY =================
+
+window.startPlanPurchase = function(plan){
+
+const user = window.currentUser;
+
+if(!user){
+
+const goLogin = confirm(
+window.currentLang==="it"
+? "Per sbloccare l'analisi devi prima effettuare il login."
+: "You must login before purchasing this plan."
+);
+
+if(goLogin){
+window.location.href="/login/";
+}
+
+return;
+
+}
+
+// utente loggato → continua
+buyPlan(plan);
+
+};
+
+<button onclick="startPlanPurchase('investor')" class="btn btn-primary">
 🔓 Sblocca analisi completa – 19€/mese
 </button>
 
@@ -1111,7 +1138,7 @@ ${discover}:
 • ${report}
 </p>
 
-<button onclick="buyPlan('investor')" class="btn btn-primary">
+<button onclick="startPlanPurchase('investor')" class="btn btn-primary">
 ${unlock}
 </button>
 
@@ -1414,7 +1441,7 @@ resultDiv.innerHTML = `
 ${t("mortgageProDesc")}
 </p>
 
-<button onclick="buyPlan('investor')" class="btn btn-primary">
+<button onclick="startPlanPurchase('investor')" class="btn btn-primary">
 🔓 Sblocca analisi completa – 19€/mese
 </button>
 
