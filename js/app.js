@@ -2001,6 +2001,8 @@ genova: "genova",
 palermo: "palermo"
 };
 
+const link = localStorage.getItem("property_link") || "";
+
 for(const key in cityMap){
 
 if(link.toLowerCase().includes(key)){
