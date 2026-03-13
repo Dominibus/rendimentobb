@@ -231,12 +231,20 @@ function mortgageSimulation(amount, rate, years) {
 window.compareMortgages = function(){
 
 if(!window.currentUser){
-alert("Devi effettuare il login.");
+alert(
+window.currentLang==="it"
+? "Devi effettuare il login."
+: "You must login first."
+);
 return;
 }
 
 if(!window.isProUser || !window.isProUser()){
-alert("Questa funzione è disponibile solo nella versione PRO.");
+alert(
+window.currentLang==="it"
+? "Questa funzione è disponibile solo nella versione PRO."
+: "This feature is available only in the PRO version."
+);
 return;
 }
 
@@ -706,19 +714,31 @@ const container = document.getElementById("investment-ranking");
 if(!container) return;
 
 let percentile = 50;
-let label = "Average investment";
+let label =
+window.currentLang==="it"
+? "Investimento medio"
+: "Average investment";
 
 if(roi > 15){
 percentile = 90;
-label = "Top investment opportunity";
+label =
+window.currentLang==="it"
+? "Investimento eccellente"
+: "Top investment opportunity";
 }
 else if(roi > 10){
 percentile = 75;
-label = "Strong investment";
+label =
+window.currentLang==="it"
+? "Investimento forte"
+: "Strong investment";
 }
 else if(roi > 6){
 percentile = 60;
-label = "Moderate opportunity";
+label =
+window.currentLang==="it"
+? "Opportunità moderata"
+: "Moderate opportunity";
 }
 
 container.innerHTML = `
@@ -808,7 +828,10 @@ let title =
 window.currentLang==="it"
 ? "Investimento ad alto rischio"
 : "High risk investment";
-let message = "The expected return is low compared to the invested capital.";
+let message =
+window.currentLang==="it"
+? "Il rendimento atteso è basso rispetto al capitale investito."
+: "The expected return is low compared to the invested capital.";
 
 if(roi > 12){
 
@@ -818,7 +841,10 @@ title =
 window.currentLang==="it"
 ? "Ottima opportunità investimento"
 : "Strong investment opportunity";
-message = "ROI is well above market average and financial structure is solid.";
+message =
+window.currentLang==="it"
+? "Il ROI è molto superiore alla media del mercato e la struttura finanziaria è solida."
+: "ROI is well above market average and financial structure is solid.";
 
 }
 
@@ -830,7 +856,10 @@ title =
 window.currentLang==="it"
 ? "Investimento moderato"
 : "Moderate investment";
-message = "Returns are acceptable but depend strongly on occupancy stability.";
+message =
+window.currentLang==="it"
+? "Il rendimento è accettabile ma dipende molto dalla stabilità dell'occupazione."
+: "Returns are acceptable but depend strongly on occupancy stability.";
 
 }
 
@@ -1387,7 +1416,9 @@ type: "line",
 
 data: {
 
-labels: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
+labels: window.currentLang==="it"
+? ["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"]
+: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
 
 datasets: [{
 data: [net, net*2, net*3, net*4, net*5],
