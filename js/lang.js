@@ -25,7 +25,7 @@
 function applyStaticTranslations(){
 
   // TEXT TRANSLATION
-  document.querySelectorAll("[data-it]").forEach(el => {
+  document.querySelectorAll("[data-it], [data-en]").forEach(el => {
 
     const text = el.getAttribute("data-" + RB_LANG.current);
     if(!text) return;
