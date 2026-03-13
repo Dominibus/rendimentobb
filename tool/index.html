@@ -661,8 +661,7 @@ function applyPaywall(){
     const el = document.getElementById(id);
     if(!el) return;
 
-    const card = el.closest(".results-card, .tool-card");
-    if(!card) return;
+    const card = el;
 
     // evita di applicare il lock più volte
     if(card.dataset.locked === "true") return;
