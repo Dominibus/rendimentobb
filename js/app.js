@@ -362,7 +362,7 @@ function renderMarketComparison(userRevenue, cityKey){
   container.innerHTML = `
 
   <div class="kpi-box">
-  <span>${window.currentLang==="it"?"Ricavo stimato":"Your estimated revenue"}</span>
+  <span>${window.currentLang==="it"?"Ricavi annui":"Estimated revenue"}</span>
   <strong>${formatCurrency(userRevenue)}</strong>
   </div>
 
@@ -429,7 +429,7 @@ message = "⚠ ROI below city average";
 container.innerHTML = badge + `
 
 <div class="kpi-box">
-<span>Your ROI</span>
+<span>${window.currentLang==="it"?"ROI investimento":"Your ROI"}</span>
 <strong>${roi.toFixed(1)}%</strong>
 </div>
 
@@ -439,7 +439,7 @@ container.innerHTML = badge + `
 </div>
 
 <div class="kpi-box">
-<span>Market comparison</span>
+<span>${window.currentLang==="it"?"Confronto mercato":"Market comparison"}</span>
 <strong style="color:${color}">
 ${message}
 </strong>
@@ -630,14 +630,14 @@ else if(occRounded < 75) color = "#f59e0b";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>Break-even occupancy</span>
+<span>${window.currentLang==="it"?"Occupazione break-even":"Break-even occupancy"}</span>
 <strong style="color:${color}">
 ${occRounded.toFixed(1)}%
 </strong>
 </div>
 
 <div class="kpi-box">
-<span>Notti minime</span>
+<span>${window.currentLang==="it"?"Notti minime":"Minimum nights"}</span>
 <strong>
 ${Math.round(nightsNeeded)}
 </strong>
@@ -724,12 +724,12 @@ label = "Moderate opportunity";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>Investment Ranking</span>
+<span>${window.currentLang==="it"?"Ranking investimento":"Investment ranking"}</span>
 <strong>Top ${100-percentile}%</strong>
 </div>
 
 <div class="kpi-box">
-<span>Market Position</span>
+<span>${window.currentLang==="it"?"Posizione mercato":"Market position"}</span>
 <strong>${label}</strong>
 </div>
 
@@ -804,14 +804,20 @@ if(!box) return;
 
 let color = "#ef4444";
 let icon = "🔴";
-let title = "High risk investment";
+let title =
+window.currentLang==="it"
+? "Investimento ad alto rischio"
+: "High risk investment";
 let message = "The expected return is low compared to the invested capital.";
 
 if(roi > 12){
 
 color = "#10b981";
 icon = "🟢";
-title = "Strong investment opportunity";
+title =
+window.currentLang==="it"
+? "Ottima opportunità investimento"
+: "Strong investment opportunity";
 message = "ROI is well above market average and financial structure is solid.";
 
 }
@@ -820,7 +826,10 @@ else if(roi > 6){
 
 color = "#f59e0b";
 icon = "🟠";
-title = "Moderate investment";
+title =
+window.currentLang==="it"
+? "Investimento moderato"
+: "Moderate investment";
 message = "Returns are acceptable but depend strongly on occupancy stability.";
 
 }
@@ -1154,6 +1163,7 @@ city = "italy";
 }
 
 if(window.currentUser){
+
 saveAnalysis({
 price: getValue("price"),
 equity: equity,
@@ -1162,8 +1172,7 @@ risk: riskScore,
 city: city
 });
 
-});
-}  
+} 
 
 // SCROLL AUTOMATICO AI RISULTATI
 const resultsSection = document.getElementById("results");
@@ -1226,10 +1235,12 @@ resultDiv.innerHTML = `
 
 <div class="results-card" style="text-align:center;">
 
-<h3>🔒 Accesso richiesto</h3>
+<h3>${window.currentLang==="it"?"🔒 Accesso richiesto":"🔒 Login required"}</h3>
 
 <p>
-Per confrontare i mutui devi creare un account gratuito.
+${window.currentLang==="it"
+?"Per confrontare i mutui devi creare un account gratuito."
+:"Create a free account to compare mortgages."}
 </p>
 
 <button onclick="window.location.href='/login'" class="btn btn-primary">
