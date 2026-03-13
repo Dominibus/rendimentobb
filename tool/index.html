@@ -635,7 +635,6 @@ window.buyPro = function(){
 
 function applyPaywall(){
 
-  // se utente PRO rimuove eventuali blocchi
   if(window.currentPlan === "pro"){
 
     console.log("Utente PRO - paywall disattivato");
@@ -644,7 +643,10 @@ function applyPaywall(){
       el.remove();
     });
 
-    document.querySelectorAll(".results-card, .tool-card").forEach(card=>{
+    document.querySelectorAll(
+    "#revenue-forecast, #market-comparison, #occupancy-sensitivity, #strategic-insight"
+    ).forEach(card=>{
+      card.dataset.locked = "";
       card.style.opacity = "";
       card.style.pointerEvents = "";
     });
@@ -655,23 +657,21 @@ function applyPaywall(){
   const proSections = [
     "revenue-forecast",
     "market-comparison",
-    "occupancy-sensitivity"
+    "occupancy-sensitivity",
+    "strategic-insight"
   ];
 
   proSections.forEach(id => {
 
-    const el = document.getElementById(id);
-    if(!el) return;
+    const card = document.getElementById(id);
+    if(!card) return;
 
-    const card = el;
-
-    // evita di applicare il lock più volte
     if(card.dataset.locked === "true") return;
 
     card.dataset.locked = "true";
 
     card.style.opacity = "0.4";
-    card.style.pointerEvents = "auto";
+    card.style.pointerEvents = "none";
     card.style.position = "relative";
 
     const lock = document.createElement("div");
@@ -685,32 +685,45 @@ function applyPaywall(){
        align-items:center;
        justify-content:center;
        flex-direction:column;
-      gap:15px;
-      background:rgba(255,255,255,0.85);
-      backdrop-filter:blur(4px);
-      border-radius:16px;
-      pointer-events:none;
-   ">
+       gap:15px;
+       background:rgba(255,255,255,0.85);
+       backdrop-filter:blur(4px);
+       border-radius:16px;
+       pointer-events:none;
+    ">
       <div style="font-weight:600;font-size:16px;"
       data-it="🔒 Funzione PRO"
       data-en="🔒 PRO Feature">
       </div>
 
       <button onclick="buyPro()" class="btn btn-primary"
-      style="pointer-events:auto" 
+      style="pointer-events:auto"
       data-it="🔓 Sblocca versione PRO – 29€"
       data-en="🔓 Unlock PRO version – €29">
       </button>
-      </div>
-     `;
+    </div>
+    `;
 
     card.appendChild(lock);
 
     if(typeof applyLanguage === "function"){
-    applyLanguage();
-  }
+      applyLanguage();
+    }
 
   });
+
+}
+
+document.addEventListener("rb_plan_loaded", applyPaywall);
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  if(!window.currentUser){
+    window.currentPlan = "free";
+    applyPaywall();
+  }
+
+});
 
 }
 
