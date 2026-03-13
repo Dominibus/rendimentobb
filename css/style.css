@@ -1884,6 +1884,99 @@ font-weight:700;
 color:#0f172a;
 }
 
+/* =============================
+MORTGAGE COMPARATOR FINTECH UI
+============================= */
+
+.mortgage-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:18px;
+margin-top:20px;
+}
+
+.mortgage-card{
+background:white;
+border-radius:14px;
+padding:18px;
+box-shadow:0 10px 22px rgba(0,0,0,0.05);
+border:1px solid #e6edf5;
+display:flex;
+flex-direction:column;
+gap:14px;
+transition:0.2s;
+}
+
+.mortgage-card:hover{
+transform:translateY(-3px);
+box-shadow:0 14px 28px rgba(0,0,0,0.08);
+}
+
+.best-mortgage{
+border:2px solid #10b981;
+background:#ecfdf5;
+}
+
+.mortgage-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-weight:600;
+font-size:14px;
+}
+
+.mortgage-badge{
+background:#10b981;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.mortgage-main{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.mortgage-rate span,
+.mortgage-payment span,
+.mortgage-interest span{
+font-size:12px;
+color:#64748b;
+}
+
+.mortgage-rate strong{
+font-size:16px;
+}
+
+.mortgage-payment strong{
+font-size:22px;
+color:#0f172a;
+}
+
+.mortgage-footer{
+display:flex;
+flex-direction:column;
+gap:10px;
+font-size:13px;
+}
+
+.mortgage-roi-btn{
+background:#0f172a;
+color:white;
+border:none;
+padding:8px;
+border-radius:8px;
+font-size:13px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.mortgage-roi-btn:hover{
+background:#10b981;
+}
+
 /* FORCE MOBILE SAFE LAYOUT */
 
 .roi-card,
