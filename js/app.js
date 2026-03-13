@@ -575,7 +575,7 @@ ${roi.toFixed(2)}%
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Payback":"Payback period"}</span>
+<span>${window.currentLang==="it"?"Payback investimento":"Investment payback"}</span>
 <strong>${payback} yrs</strong>
 </div>
 
@@ -880,7 +880,7 @@ Unlock:
 • occupancy simulations
 • professional report`;
 
-if(roi > 10){
+if(roi > 8){
 
 setTimeout(()=>{
 
@@ -965,9 +965,13 @@ Scopri nella versione PRO:
 • report professionale
 </p>
 
-<button onclick="buyPro()" class="btn btn-primary" style="margin-top:10px;">
-🔓 Sblocca versione PRO – 29€
+<button onclick="buyPro()" class="btn btn-primary" style="margin-top:10px;font-size:16px;padding:12px 18px;">
+🔓 Sblocca analisi completa – 29€
 </button>
+
+<div style="margin-top:6px;font-size:12px;color:#64748b;">
+Accesso a tutte le simulazioni professionali
+</div>
 
 </div>
 
@@ -978,6 +982,31 @@ Scopri nella versione PRO:
 // ================= MAIN CALC =================
 
 function calculate() {
+
+// ================= FREE LIMIT =================
+
+if(!window.currentUser){
+
+let freeRuns =
+parseInt(localStorage.getItem("rb_free_runs") || "0");
+
+if(freeRuns >= 3){
+
+alert(
+window.currentLang==="it"
+? "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare."
+: "You reached the free simulation limit. Create a free account to continue."
+);
+
+window.location.href="/login/";
+return;
+
+}
+
+freeRuns++;
+localStorage.setItem("rb_free_runs", freeRuns);
+
+}  
 
 const equity = getValue("equity");
 const priceNight = getValue("priceNight");
@@ -1124,6 +1153,7 @@ if(!city){
 city = "italy";
 }
 
+if(window.currentUser){
 saveAnalysis({
 price: getValue("price"),
 equity: equity,
@@ -1131,6 +1161,9 @@ roi: roi,
 risk: riskScore,
 city: city
 });
+
+});
+}  
 
 // SCROLL AUTOMATICO AI RISULTATI
 const resultsSection = document.getElementById("results");
