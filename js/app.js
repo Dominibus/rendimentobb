@@ -101,8 +101,8 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("Piano utente caricato:", window.currentPlan);
 
-  if(typeof calculate === "function"){
-    calculate();
+  if(typeof renderExecutiveKPI === "function"){
+     calculate();
   }
 
 });
