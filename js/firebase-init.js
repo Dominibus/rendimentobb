@@ -55,7 +55,9 @@ window.currentUser = null;
 window.currentPlan = "free";
 window.firebaseReady = false;
 
-window.isProUser = () => window.currentPlan === "pro";
+window.isProUser = () =>
+window.currentPlan === "pro" ||
+window.currentPlan === "investor";
 
 
 // ===============================
@@ -143,15 +145,31 @@ async function loadUserPlan(uid) {
 // AGGIORNA PRO (TEST)
 // ===============================
 
-export async function upgradeToPro(uid) {
+// ===============================
+// AGGIORNA PIANO UTENTE
+// ===============================
 
-  await updateDoc(doc(db, "users", uid), {
-    plan: "pro"
-  });
+export async function upgradeToPro(uid){
 
-  await loadUserPlan(uid);
+await updateDoc(doc(db,"users",uid),{
+plan:"pro",
+updatedAt:new Date()
+});
+
+await loadUserPlan(uid);
+
 }
 
+export async function upgradeToInvestor(uid){
+
+await updateDoc(doc(db,"users",uid),{
+plan:"investor",
+updatedAt:new Date()
+});
+
+await loadUserPlan(uid);
+
+}
 
 // ===============================
 // UI USER NAVBAR
@@ -182,7 +200,9 @@ function updateUserUI(user) {
       <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:13px;">
           👤 ${welcomeText} <strong>${name}</strong>
-          ${currentPlan === "pro" ? '<span style="color:#00c896; font-weight:bold;"> PRO</span>' : ''}
+          ${currentPlan !== "free"
+          ? `<span style="color:#00c896; font-weight:bold;"> ${currentPlan.toUpperCase()}</span>`
+          : ''}
         </span>
 
         <button id="logout-btn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
@@ -272,8 +292,36 @@ document.dispatchEvent(
 });
 
 // ===============================
-// LANGUAGE CHANGE LISTENER
+// STRIPE PLAN ACTIVATION
 // ===============================
+
+document.addEventListener("rb_stripe_return", async (e)=>{
+
+if(!window.currentUser) return;
+
+try{
+
+await updateDoc(doc(db,"users",window.currentUser.uid),{
+plan:"investor",
+stripeSession:e.detail.session,
+updatedAt:new Date()
+});
+
+await loadUserPlan(window.currentUser.uid);
+
+alert(
+getCurrentLang()==="it"
+? "Pagamento completato! Piano Investor attivo."
+: "Payment successful! Investor plan activated."
+);
+
+}catch(err){
+
+console.error("Errore attivazione piano:",err);
+
+}
+
+});
 
 document.addEventListener("rb_language_changed", () => {
 
@@ -287,6 +335,27 @@ document.addEventListener("rb_language_changed", () => {
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ===============================
+// STRIPE RETURN CHECK
+// ===============================
+
+const params = new URLSearchParams(window.location.search);
+const stripeSession = params.get("session_id");
+
+if(stripeSession){
+
+console.log("Stripe session rilevata:", stripeSession);
+
+document.dispatchEvent(
+  new CustomEvent("rb_stripe_return",{
+    detail:{ session: stripeSession }
+  })
+);
+
+  params.delete("session_id");
+  history.replaceState({}, document.title, window.location.pathname);  
+
+}
 
   const registerAction = document.getElementById("register-action");
   const loginAction = document.getElementById("login-action");
