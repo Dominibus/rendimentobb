@@ -380,7 +380,7 @@ Investment Grade
 
 <div style="text-align:center;margin-top:20px;">
 
-<button id="pro-btn" onclick="buyPlan('pro')" class="btn btn-primary"
+<button id="pro-btn" onclick="buyPro()" class="btn btn-primary"
 data-it="🔓 Sblocca versione PRO – 29€"
 data-en="🔓 Unlock PRO version – €29">
 </button>
@@ -696,11 +696,12 @@ function applyPaywall(){
       data-en="🔒 PRO Feature">
       </div>
 
-      <button onclick="buyPro()" class="btn btn-primary">
-      Sblocca versione PRO – 29€
+      <button onclick="buyPro()" class="btn btn-primary"
+      data-it="🔓 Sblocca versione PRO – 29€"
+      data-en="🔓 Unlock PRO version – €29">
       </button>
-    </div>
-    `;
+      </div>
+     `;
 
     card.appendChild(lock);
 
