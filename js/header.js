@@ -9,7 +9,7 @@ const header = `
 <div class="header-left">
 
 <a href="/" class="logo-link">
-<div class="logo">Rendimento<span>BB</span></div>
+<img src="/img/logo-main.png" alt="RendimentoBB" class="logo-img">
 </a>
 
 <button class="hamburger" aria-label="Menu">
