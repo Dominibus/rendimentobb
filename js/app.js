@@ -16,6 +16,7 @@ if(select){
 
 select.value = selectedCity;
 applyMarketData(selectedCity);
+changeCityBackground(selectedCity);  
 
 // ================= CITY BACKGROUND =================
 
@@ -116,7 +117,7 @@ function requirePlan(requiredPlan){
 if(!window.currentUser){
 
 alert(
-window.currentLang==="it"
+window.RB_LANG?.current
 ? "Per usare questa funzione devi creare un account gratuito."
 : "Create a free account to use this feature."
 );
@@ -306,7 +307,7 @@ return TEXT[lang]?.[key] || TEXT["en"]?.[key] || key;
 
 function changeCityBackground(city){
 
-const hero = document.querySelector(".hero");
+const hero = document.querySelector(".tool-hero");
 
 if(!hero) return;
 
@@ -2246,6 +2247,8 @@ return { price:null };
 }
 
 // ================= AUTO PRICE =================
+
+const price = localStorage.getItem("property_price");
 
 if(price && price > 0){
 
