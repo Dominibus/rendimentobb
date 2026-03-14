@@ -170,7 +170,15 @@ text-decoration:none;
 .logo-img{
 height:60px;
 width:auto;
-display:block;
+max-width:none;
+flex-shrink:0;
+}
+
+.header-left{
+display:flex;
+align-items:center;
+gap:12px;
+flex-shrink:0;
 }
 
 /* ===================== */
@@ -1635,10 +1643,10 @@ margin:auto;
 /* MOBILE */
 /* ===================== */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
 .logo-img{
-height:44px;
+height:48px;
 }
 
 }
