@@ -369,9 +369,9 @@ transition:all .25s ease;
 
 background:#10b981;
 color:white;
+transform:translateY(-2px);
 
 }
-
 .city-btn.active{
 background:#10b981;
 color:white;
