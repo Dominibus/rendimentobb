@@ -2,6 +2,53 @@
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
+// ================= CITY FROM HOMEPAGE =================
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+const selectedCity = localStorage.getItem("selected_city");
+
+if(!selectedCity) return;
+
+const select = document.querySelector(".market-select");
+
+if(select){
+
+select.value = selectedCity;
+applyMarketData(selectedCity);
+
+// ================= CITY BACKGROUND =================
+
+function updateCityBackground(city){
+
+const hero = document.querySelector(".tool-hero");
+
+if(!hero) return;
+
+const images = {
+
+roma:"/img/rome-bg.jpg",
+napoli:"/img/naples-bg.jpg",
+milano:"/img/milan-bg.jpg",
+firenze:"/img/florence-bg.jpg"
+
+};
+
+if(images[city]){
+
+hero.style.background =
+"linear-gradient(rgba(255,255,255,0.7),rgba(255,255,255,0.85)),url('" + images[city] + "')";
+
+hero.style.backgroundSize="cover";
+hero.style.backgroundPosition="center";
+
+}
+
+}  
+
+}
+
+});
 
 
 // ================= FIRESTORE =================
@@ -1168,6 +1215,30 @@ document.addEventListener("rb_auth_ready", () => {
 calculate();
 },{ once:true });
 
+document.getElementById("executive-kpi").innerHTML = `
+
+<div class="kpi-box">
+<div class="kpi-label">ROI</div>
+<div class="kpi-value">${roi.toFixed(1)}%</div>
+</div>
+
+<div class="kpi-box">
+<div class="kpi-label">Netto Annuale</div>
+<div class="kpi-value">${netIncome.toFixed(0)} €</div>
+</div>
+
+<div class="kpi-box">
+<div class="kpi-label">Ricavi annui</div>
+<div class="kpi-value">${revenue.toFixed(0)} €</div>
+</div>
+
+<div class="kpi-box">
+<div class="kpi-label">Payback</div>
+<div class="kpi-value">${breakEven.toFixed(1)} anni</div>
+</div>
+
+`;  
+
 return;
 
 }
@@ -2170,6 +2241,18 @@ return data;
 console.error("Errore scraping Netlify:", e);
 return { price:null };
 
+}
+
+}
+
+// ================= AUTO PRICE =================
+
+if(price && price > 0){
+
+const priceField = document.getElementById("price");
+
+if(priceField){
+priceField.value = price;
 }
 
 }
