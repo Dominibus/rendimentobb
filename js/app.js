@@ -2438,7 +2438,6 @@ console.log("Città rilevata da link:", detectedCity);
 
 } // <-- qui chiude loadPropertyFromLink()
   
-}
 
 // ================= MORTGAGE RATE AUTO UPDATE =================
 
