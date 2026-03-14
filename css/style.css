@@ -207,16 +207,18 @@ position:relative;
 
 background:
 linear-gradient(
-rgba(255,255,255,0.65),
+rgba(255,255,255,0.55),
 rgba(255,255,255,0.75)
 ),
 url("/img/rome-bg.jpg");
 
 background-size:cover;
-background-position:center;
+background-position:center center;
 background-repeat:no-repeat;
 
-padding:110px 0 140px 0;
+padding:120px 0 150px 0;
+
+transition:background 0.6s ease;
 
 }
 
