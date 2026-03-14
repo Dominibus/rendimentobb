@@ -1121,18 +1121,18 @@ color:#64748b;
 
 background:
 linear-gradient(
-rgba(255,255,255,0.60),
-rgba(255,255,255,0.80)
+rgba(255,255,255,0.65),
+rgba(255,255,255,0.85)
 ),
 url("/img/naples-bg.jpg");
 
 background-size:cover;
-background-position:center center;
-background-repeat:no-repeat;
+background-position:center;
 
 min-height:100vh;
 
-transition:background 0.6s ease;
+display:flex;
+align-items:center;
 
 }
 
@@ -2405,3 +2405,5 @@ text-align:center;
 font-weight:600;
 margin-top:6px;
 }
+
+/* SIMULATOR HERO PROFESSIONAL */
