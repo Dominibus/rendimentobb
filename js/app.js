@@ -255,6 +255,33 @@ return TEXT[lang]?.[key] || TEXT["en"]?.[key] || key;
 
 // ================= UTIL =================
 
+// ================= HERO CITY BACKGROUND =================
+
+function changeCityBackground(city){
+
+const hero = document.querySelector(".hero");
+
+if(!hero) return;
+
+const images = {
+rome: "/img/rome-bg.jpg",
+naples: "/img/naples-bg.jpg",
+florence: "/img/florence-bg.jpg",
+milan: "/img/milan-bg.jpg"
+};
+
+if(!images[city]) return;
+
+hero.style.background =
+"linear-gradient(rgba(255,255,255,0.55),rgba(255,255,255,0.75)), url('" +
+images[city] +
+"')";
+
+hero.style.backgroundSize = "cover";
+hero.style.backgroundPosition = "center";
+
+}
+
 function formatCurrency(value) {
 
   if (!isFinite(value)) value = 0;
