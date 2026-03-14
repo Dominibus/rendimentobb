@@ -80,7 +80,7 @@ margin:auto;
 /* ===================== */
 
 .portal-header{
-padding:22px 0;
+padding:10px 0;
 
 width:100%;
 max-width:100%;
@@ -167,7 +167,7 @@ flex-shrink:0;
 }
 
 .logo-img{
-height:90px;
+height:120px;
 width:auto;
 max-width:none;
 flex-shrink:0;
@@ -1793,7 +1793,7 @@ border-radius:18px;
 }
 
 .results-card{
-padding:30px;
+padding:26px;
 border-radius:18px;
 }
 
@@ -2279,9 +2279,10 @@ width:100%;
 
 .simulator-grid{
 display:grid;
-grid-template-columns:360px 1fr;
-gap:40px;
-align-items:start;
+grid-template-columns:320px 1fr;
+gap:30px;
+max-width:1200px;
+margin:auto;
 }
 
 .simulator-left{
@@ -2290,7 +2291,7 @@ top:110px;
 }
 
 .simulator-left .tool-card{
-padding:30px;
+padding:20px;
 border-radius:18px;
 background:white;
 box-shadow:0 20px 60px rgba(0,0,0,0.08);
