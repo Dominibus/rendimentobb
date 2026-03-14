@@ -2437,6 +2437,8 @@ window.currentCity = detectedCity;
 console.log("Città rilevata da link:", detectedCity);
 } 
 
+}
+
 // ================= MORTGAGE RATE AUTO UPDATE =================
 
 function checkMortgageRateUpdate(){
