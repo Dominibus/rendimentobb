@@ -2288,53 +2288,39 @@ width:100%;
 }  
 
 /* ============================= */
-/* SIMULATOR PROFESSIONAL LAYOUT */
+/* SIMULATOR DASHBOARD LAYOUT */
 /* ============================= */
 
-.simulator-layout{
-
+.simulator-grid{
 display:grid;
-grid-template-columns:520px 1fr;
-gap:40px;
+grid-template-columns:420px 1fr;
+gap:60px;
 align-items:start;
-
 }
 
-/* FORM */
-
-.simulator-layout .tool-card{
-
+.simulator-left{
 position:sticky;
-top:100px;
-
+top:110px;
 }
 
-/* RESULTS */
-
-.simulator-results{
-
-margin-top:0;
-
+.simulator-left .tool-card{
+padding:30px;
+border-radius:18px;
+background:white;
+box-shadow:0 20px 60px rgba(0,0,0,0.08);
 }
-
-/* MOBILE */
 
 @media(max-width:1024px){
 
-.simulator-layout{
-
+.simulator-grid{
 grid-template-columns:1fr;
-
 }
 
-.simulator-layout .tool-card{
-
+.simulator-left{
 position:relative;
 top:0;
-
 }
 
-}
 }
 
 /* ============================= */
@@ -2346,6 +2332,14 @@ display:grid;
 grid-template-columns:420px 1fr;
 gap:60px;
 align-items:start;
+}
+
+@media(max-width:1024px){
+
+.simulator-grid{
+grid-template-columns:1fr;
+}
+
 }
 
 .simulator-left .tool-card{
