@@ -161,15 +161,16 @@ color:white;
 /* LOGO */
 /* ===================== */
 
-.logo-img{
-height:52px;
-width:auto;
-display:block;
-}
-
 .logo-link{
 display:flex;
 align-items:center;
+text-decoration:none;
+}
+
+.logo-img{
+height:60px;
+width:auto;
+display:block;
 }
 
 /* ===================== */
@@ -1631,16 +1632,13 @@ margin:auto;
 }  
 
 /* ===================== */
-/* MOBILE OVERFLOW FIX */
+/* MOBILE */
 /* ===================== */
 
-.portal-header{
-width:100%;
-max-width:100%;
-}
+@media(max-width:768px){
 
 .logo-img{
-height:42px;
+height:44px;
 }
 
 }
