@@ -2424,7 +2424,7 @@ const propertyLink = localStorage.getItem("property_link") || "";
 
 for(const key in cityMap){
 
-if(link.toLowerCase().includes(key)){
+if(propertyLink.toLowerCase().includes(key)){
 detectedCity = cityMap[key];
 break;
 }
@@ -2434,10 +2434,7 @@ break;
 if(detectedCity){
 window.currentCity = detectedCity;
 console.log("Città rilevata da link:", detectedCity);
-}
-
-} // <-- qui chiude loadPropertyFromLink()
-  
+} 
 
 // ================= MORTGAGE RATE AUTO UPDATE =================
 
