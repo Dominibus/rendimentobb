@@ -84,7 +84,7 @@ content="Analyze ROI, mortgage impact and risk before launching a B&B. Make data
 <div class="page-title">
 
 <h1
-data-it="Scopri se un B&B può generare il 10-18% di ROI prima di comprarlo."
+data-it="Scopri se un B&B può generare il 10-18% di ROI prima di comprarlo"
 data-en="Discover if a B&B can generate 10-18% ROI before buying.">
 Scopri se un B&B può generare il 10-18% di ROI prima di comprarlo
 </h1>
@@ -99,20 +99,45 @@ Analizza ROI, mercato e sostenibilità finanziaria in pochi secondi.
 
 <div class="city-search-box">
 
+<div class="city-input-wrapper">
+
+<span class="city-search-icon">🔍</span>
+
 <input 
-type="text" 
+type="text"
+class="city-search-input"
+data-it-placeholder="Cerca città o zona"
+data-en-placeholder="Search city or area"
 placeholder="Cerca città o zona"
-class="city-search-input">
+autocomplete="off">
+
+</div>
 
 <div class="city-quick">
 
-<button onclick="openCity('roma')" class="city-btn">Roma</button>
+<button onclick="openCity('roma')" class="city-btn"
+data-it="Roma"
+data-en="Rome">
+Roma
+</button>
 
-<button onclick="openCity('napoli')" class="city-btn">Napoli</button>
+<button onclick="openCity('napoli')" class="city-btn"
+data-it="Napoli"
+data-en="Naples">
+Napoli
+</button>
 
-<button onclick="openCity('firenze')" class="city-btn">Firenze</button>
+<button onclick="openCity('firenze')" class="city-btn"
+data-it="Firenze"
+data-en="Florence">
+Firenze
+</button>
 
-<button onclick="openCity('milano')" class="city-btn">Milano</button>
+<button onclick="openCity('milano')" class="city-btn"
+data-it="Milano"
+data-en="Milan">
+Milano
+</button>
 
 </div>
 
@@ -175,7 +200,61 @@ data-en="✓ Professional executive report">
 
 </div>
 
-<div class="property-analyzer" style="margin-top:25px;margin-bottom:25px">
+ <div class="market-stats">
+
+<div class="market-stat">
+
+<strong
+data-it="ROI medio città"
+data-en="Average city ROI">
+ROI medio città
+</strong>
+
+<span>8–18%</span>
+
+</div>
+
+<div class="market-stat">
+
+<strong
+data-it="Occupazione"
+data-en="Occupancy">
+Occupazione
+</strong>
+
+<span>60–75%</span>
+
+</div>
+
+<div class="market-stat">
+
+<strong
+data-it="Break-even"
+data-en="Break-even">
+Break-even
+</strong>
+
+<span
+data-it="6–9 anni"
+data-en="6–9 years">
+6–9 anni
+</span>
+
+</div>
+
+</div>
+
+<div class="hero-divider">
+
+<span
+data-it="oppure"
+data-en="or">
+oppure
+</span>
+
+</div> 
+
+<div class="property-analyzer hero-property-box" style="margin-top:25px;margin-bottom:25px">
 
 <h3
 data-it="Analizza immobile da annuncio"
@@ -195,6 +274,8 @@ Incolla il link di un annuncio Idealista o Immobiliare.it per stimare il rendime
 <input
 id="listing_url"
 type="text"
+data-it-placeholder="https://www.idealista.it/..."
+data-en-placeholder="https://www.idealista.it/..."
 placeholder="https://www.idealista.it/..."
 style="flex:1;padding:12px;border-radius:10px;border:1px solid #e2e8f0;min-width:0">
 
@@ -739,7 +820,12 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth
 const auth = getAuth();
 
 window.startAnalysis = function(){
-window.location.href="/tool/";
+  window.location.href="/tool/";
+}
+
+window.openCity = function(city){
+  localStorage.setItem("selected_city", city);
+  window.location.href="/tool/";
 }
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
