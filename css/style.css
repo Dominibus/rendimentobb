@@ -1117,6 +1117,15 @@ color:#64748b;
 
 }
 
+.tool-hero{
+background:
+linear-gradient(rgba(255,255,255,0.7),rgba(255,255,255,0.85)),
+url("/img/naples-bg.jpg");
+background-size:cover;
+background-position:center;
+min-height:100vh;
+}
+
 /* ===================== */
 /* TOOL PREVIEW */
 /* ===================== */
