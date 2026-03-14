@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title data-it="RendimentoBB – Analisi Strategica Investimento B&B" data-en="RendimentoBB – Strategic B&B Investment Analysis">
+<title id="page-title"
+data-it="RendimentoBB – Analisi Strategica Investimento B&B"
+data-en="RendimentoBB – Strategic B&B Investment Analysis">
 RendimentoBB – Strategic B&B Investment Analysis
 </title>
 
@@ -186,11 +188,13 @@ margin:auto;
 <h1
 data-it="Analisi Strategica Investimento B&B"
 data-en="Strategic B&B Investment Analysis">
+Analisi Strategica Investimento B&B
 </h1>
 
 <p
 data-it="Simula ROI, rischio e sostenibilità finanziaria prima di investire."
 data-en="Simulate ROI, risk and financial sustainability before investing.">
+Simula ROI, rischio e sostenibilità finanziaria prima di investire.
 </p>
 
 </div>
@@ -213,10 +217,21 @@ data-it="Seleziona città"
 data-en="Select city">
 </option>
 
-<option value="napoli">Napoli</option>
-<option value="roma">Roma</option>
-<option value="milano">Milano</option>
-<option value="firenze">Firenze</option>
+<option value="napoli"
+data-it="Napoli"
+data-en="Naples">Napoli</option>
+
+<option value="roma"
+data-it="Roma"
+data-en="Rome">Roma</option>
+
+<option value="milano"
+data-it="Milano"
+data-en="Milan">Milano</option>
+
+<option value="firenze"
+data-it="Firenze"
+data-en="Florence">Firenze</option>
 
 </select>
 
@@ -462,7 +477,11 @@ data-en="Performance vs Market">
 
 <div class="results-card">
 
-<h3>Simulazione Occupazione</h3>
+<h3
+data-it="Simulazione Occupazione"
+data-en="Occupancy Simulation">
+Simulazione Occupazione
+</h3>
 
 <div id="occupancy-sensitivity" class="kpi-grid"></div>
 
@@ -575,8 +594,8 @@ Contatti
 
 </footer>
 
-<script src="/js/header.js"></script>
-<script src="/js/lang.js"></script>
+<script defer src="/js/header.js"></script>
+<script defer src="/js/lang.js"></script>
 <script type="module" src="/js/market-data.js"></script>
 <script type="module" src="/js/app.js"></script>
 
@@ -625,7 +644,11 @@ window.buyPro = function(){
   const user = window.currentUser;
 
   if(!user){
-    alert("Devi effettuare il login.");
+    alert(
+window.currentLang === "en"
+? "You must login first."
+: "Devi effettuare il login."
+);
     window.location.href = "/login/";
     return;
   }
@@ -753,16 +776,28 @@ if(upgrade){
     let message = "";
 
     if(upgrade === "dashboard"){
-      message = "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
-    }
 
-    if(upgrade === "academy"){
-      message = "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
-    }
+  message = lang === "en"
+  ? "🔒 The Dashboard is available only for PRO users.\n\nUnlock the PRO version to access it."
+  : "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
 
-    if(upgrade === "true"){
-      message = "🔒 Funzione disponibile solo nella versione PRO.";
-    }
+}
+
+if(upgrade === "academy"){
+
+  message = lang === "en"
+  ? "🎓 The Academy is available only for PRO users.\n\nUnlock the PRO version to access strategic content."
+  : "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
+
+}
+
+if(upgrade === "true"){
+
+  message = lang === "en"
+  ? "🔒 This feature is available only in the PRO version."
+  : "🔒 Funzione disponibile solo nella versione PRO.";
+
+}
 
     if(message){
       alert(message);
