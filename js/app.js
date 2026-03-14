@@ -2,6 +2,17 @@
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
+// ================= FIRESTORE =================
+
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import { app } from "./firebase-init.js";
+const db = getFirestore(app);
+
 // ================= CITY FROM HOMEPAGE =================
 
 document.addEventListener("DOMContentLoaded",()=>{
@@ -16,19 +27,11 @@ if(select){
 
 select.value = selectedCity;
 applyMarketData(selectedCity);
-changeCityBackground(selectedCity);  
+changeCityBackground(selectedCity);
 
-// ================= FIRESTORE =================
+}
 
-import {
-  getFirestore,
-  collection,
-  addDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import { app } from "./firebase-init.js";
-const db = getFirestore(app);
-
+});
 
 // ================= SAVE ANALYSIS =================
 
@@ -83,7 +86,7 @@ function requirePlan(requiredPlan){
 if(!window.currentUser){
 
 alert(
-window.RB_LANG?.current
+window.currentLang === "it"
 ? "Per usare questa funzione devi creare un account gratuito."
 : "Create a free account to use this feature."
 );
@@ -1429,10 +1432,6 @@ box.innerHTML = `
 
 function compareMortgages() {
 
-  if(!document.getElementById("mortgage")){
-return;
-}
-
 const resultDiv = document.getElementById("mortgage-results");
 if (!resultDiv) return;
 
@@ -2017,7 +2016,6 @@ doc.save(fileName);
 window.calculate = calculate;
 window.compareMortgages = compareMortgages;
 window.generateExecutivePDF = generateExecutivePDF;
-window.startPlanPurchase = window.startPlanPurchase;
 
 window.analyzeProperty = function(){
 
