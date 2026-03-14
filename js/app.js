@@ -2361,4 +2361,17 @@ console.log("Analisi immobile da link:", link);
 loadPropertyFromLink();
 }
 
+  const occ = document.getElementById("occupancy");
+const occValue = document.getElementById("occ-value");
+
+if(occ && occValue){
+
+occ.addEventListener("input",()=>{
+
+occValue.innerText = occ.value + "%";
+
+});
+
+}
+
 });
