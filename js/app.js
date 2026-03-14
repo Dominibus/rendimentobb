@@ -1680,7 +1680,9 @@ borderColor:"#ef4444",
 backgroundColor:"rgba(239,68,68,0.1)",
 tension:0.35,
 borderWidth:2,
-fill:true
+fill:true,
+pointRadius:2,
+pointHoverRadius:5
 },
 
 {
@@ -1690,7 +1692,9 @@ borderColor:"#3b82f6",
 backgroundColor:"rgba(59,130,246,0.15)",
 tension:0.35,
 borderWidth:3,
-fill:true
+fill:true,
+pointRadius:2,
+pointHoverRadius:5
 },
 
 {
@@ -1700,7 +1704,9 @@ borderColor:"#10b981",
 backgroundColor:"rgba(16,185,129,0.15)",
 tension:0.35,
 borderWidth:2,
-fill:true
+fill:true,
+pointRadius:2,
+pointHoverRadius:5
 }
 
 ]
