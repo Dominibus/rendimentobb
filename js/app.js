@@ -1679,8 +1679,8 @@ data: conservative,
 borderColor:"#ef4444",
 backgroundColor:"rgba(239,68,68,0.1)",
 tension:0.35,
-borderWidth:2
-fill:true  
+borderWidth:2,
+fill:true
 },
 
 {
@@ -1689,8 +1689,8 @@ data: base,
 borderColor:"#3b82f6",
 backgroundColor:"rgba(59,130,246,0.15)",
 tension:0.35,
-borderWidth:3
-fill:true  
+borderWidth:3,
+fill:true
 },
 
 {
@@ -1699,8 +1699,8 @@ data: optimistic,
 borderColor:"#10b981",
 backgroundColor:"rgba(16,185,129,0.15)",
 tension:0.35,
-borderWidth:2
-fill:true  
+borderWidth:2,
+fill:true
 }
 
 ]
