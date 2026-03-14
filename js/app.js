@@ -1645,6 +1645,8 @@ ${window.currentLang==="it"
 // ================= CHART =================
 
 function renderChart(net){
+  
+const annualProfit = net;
 
 const ctx = document.getElementById("roiChart");
 
