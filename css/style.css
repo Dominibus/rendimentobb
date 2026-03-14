@@ -162,19 +162,9 @@ color:white;
 /* ===================== */
 
 .logo-img{
-height:64px;
+height:48px;
+width:auto;
 display:block;
-}
-
-.logo{
-font-weight:700;
-font-size:20px;
-letter-spacing:-0.3px;
-color:#0f172a;
-}
-
-.logo span{
-color:#10b981;
 }
 
 .logo-link{
@@ -1545,10 +1535,6 @@ color:#10b981;
 /* HAMBURGER DESKTOP FIX */
 /* ===================== */
 
-.hamburger{
-display:none;
-}
-
 /* ===================== */
 /* RESPONSIVE */
 /* ===================== */
@@ -1584,10 +1570,6 @@ padding-bottom:6px;
 
 width:100%;
 max-width:100%;
-}  
-
-.logo-img{
-height:34px;
 }  
 
 .right-controls{
@@ -1658,7 +1640,7 @@ max-width:100%;
 }
 
 .logo-img{
-height:40px;
+height:42px;
 }
 
 }
@@ -1668,11 +1650,19 @@ height:40px;
 /* ===================== */
 
 .hamburger{
+display:none;
+}
+
+@media (max-width:768px){
+
+.hamburger{
 display:block;
 font-size:26px;
 cursor:pointer;
 z-index:1100;
 transition:transform .25s ease;
+}
+
 }
 
 /* animazione hamburger */
@@ -1684,6 +1674,7 @@ transform:rotate(90deg);
 /* ===================== */
 /* MOBILE NAV */
 /* ===================== */
+@media (max-width:768px){  
 
 .portal-nav{
 
@@ -1695,7 +1686,7 @@ flex-direction:column;
 align-items:center;
 
 position:relative;
-z-index:1050;  
+z-index:1050;
 
 gap:14px;
 
@@ -1707,8 +1698,8 @@ border-top:1px solid #e2e8f0;
 
 transition:max-height .35s ease;
 
+ }
 }
-
 /* apertura menu */
 
 .portal-nav.open{
@@ -1760,12 +1751,6 @@ width:100%;
 }
 
 /* HEADER */
-
-.portal-nav a{
-font-size:12px;
-padding:6px 8px;
-border-radius:8px;
-}
 
 .header-actions{
 flex-direction:column;
@@ -2321,32 +2306,6 @@ position:relative;
 top:0;
 }
 
-}
-
-/* ============================= */
-/* ROI DASHBOARD NEW LAYOUT */
-/* ============================= */
-
-.simulator-grid{
-display:grid;
-grid-template-columns:420px 1fr;
-gap:60px;
-align-items:start;
-}
-
-@media(max-width:1024px){
-
-.simulator-grid{
-grid-template-columns:1fr;
-}
-
-}
-
-.simulator-left .tool-card{
-padding:30px;
-border-radius:18px;
-background:white;
-box-shadow:0 20px 60px rgba(0,0,0,0.08);
 }
 
 .simulator-btn{
