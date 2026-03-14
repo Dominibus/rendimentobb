@@ -5,9 +5,11 @@ const logos = document.querySelectorAll(".rb-logo");
 logos.forEach(el => {
 
 el.innerHTML = `
-<img src="/img/logo-report.png"
+<a href="/" class="logo-link">
+<img src="/img/logo-main.png"
 alt="RendimentoBB"
-style="height:32px;">
+style="height:34px;">
+</a>
 `;
 
 });
