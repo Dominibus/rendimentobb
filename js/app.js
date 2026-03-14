@@ -18,40 +18,6 @@ select.value = selectedCity;
 applyMarketData(selectedCity);
 changeCityBackground(selectedCity);  
 
-// ================= CITY BACKGROUND =================
-
-function updateCityBackground(city){
-
-const hero = document.querySelector(".tool-hero");
-
-if(!hero) return;
-
-const images = {
-
-roma:"/img/rome-bg.jpg",
-napoli:"/img/naples-bg.jpg",
-milano:"/img/milan-bg.jpg",
-firenze:"/img/florence-bg.jpg"
-
-};
-
-if(images[city]){
-
-hero.style.background =
-"linear-gradient(rgba(255,255,255,0.7),rgba(255,255,255,0.85)),url('" + images[city] + "')";
-
-hero.style.backgroundSize="cover";
-hero.style.backgroundPosition="center";
-
-}
-
-}  
-
-}
-
-});
-
-
 // ================= FIRESTORE =================
 
 import {
@@ -312,10 +278,12 @@ const hero = document.querySelector(".tool-hero");
 if(!hero) return;
 
 const images = {
-rome: "/img/rome-bg.jpg",
-naples: "/img/naples-bg.jpg",
-florence: "/img/florence-bg.jpg",
-milan: "/img/milan-bg.jpg"
+
+roma: "/img/rome-bg.jpg",
+napoli: "/img/naples-bg.jpg",
+milano: "/img/milan-bg.jpg",
+firenze: "/img/florence-bg.jpg"
+
 };
 
 if(!images[city]) return;
@@ -1217,28 +1185,11 @@ calculate();
 },{ once:true });
 
 document.getElementById("executive-kpi").innerHTML = `
-
 <div class="kpi-box">
-<div class="kpi-label">ROI</div>
-<div class="kpi-value">${roi.toFixed(1)}%</div>
+<span>Loading...</span>
+<strong>...</strong>
 </div>
-
-<div class="kpi-box">
-<div class="kpi-label">Netto Annuale</div>
-<div class="kpi-value">${netIncome.toFixed(0)} €</div>
-</div>
-
-<div class="kpi-box">
-<div class="kpi-label">Ricavi annui</div>
-<div class="kpi-value">${revenue.toFixed(0)} €</div>
-</div>
-
-<div class="kpi-box">
-<div class="kpi-label">Payback</div>
-<div class="kpi-value">${breakEven.toFixed(1)} anni</div>
-</div>
-
-`;  
+`;
 
 return;
 
