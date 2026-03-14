@@ -158,6 +158,11 @@ color:white;
 /* LOGO */
 /* ===================== */
 
+.logo-img{
+height:34px;
+display:block;
+}
+
 .logo{
 font-weight:700;
 font-size:20px;
