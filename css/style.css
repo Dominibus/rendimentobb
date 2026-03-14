@@ -2279,4 +2279,53 @@ grid-template-columns:1fr;
 width:100%;
 }  
 
+/* ============================= */
+/* SIMULATOR PROFESSIONAL LAYOUT */
+/* ============================= */
+
+.simulator-layout{
+
+display:grid;
+grid-template-columns:520px 1fr;
+gap:40px;
+align-items:start;
+
+}
+
+/* FORM */
+
+.simulator-layout .tool-card{
+
+position:sticky;
+top:100px;
+
+}
+
+/* RESULTS */
+
+.simulator-results{
+
+margin-top:0;
+
+}
+
+/* MOBILE */
+
+@media(max-width:1024px){
+
+.simulator-layout{
+
+grid-template-columns:1fr;
+
+}
+
+.simulator-layout .tool-card{
+
+position:relative;
+top:0;
+
+}
+
+}
+
 }
