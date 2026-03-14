@@ -1643,7 +1643,9 @@ margin:auto;
 /* MOBILE */
 /* ===================== */
 
-@media (max-width:768px){
+}
+
+@media(max-width:768px){
 
 .logo-img{
 height:48px;
