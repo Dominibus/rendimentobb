@@ -1709,7 +1709,7 @@ pointRadius:2,
 pointHoverRadius:5
 }
 
-]
+],
 
 options:{
 
