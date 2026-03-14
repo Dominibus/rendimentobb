@@ -1711,8 +1711,6 @@ pointHoverRadius:5
 
 ]
 
-},
-
 options:{
 
 responsive:true,
