@@ -507,7 +507,11 @@ container.innerHTML = badge + `
 </div>
 
 <div class="kpi-box">
-<span>${cityKey} average ROI</span>
+<span>
+${window.currentLang==="it"
+? "ROI medio " + cityKey
+: cityKey + " average ROI"}
+</span>
 <strong>${marketROI}%</strong>
 </div>
 
@@ -1640,35 +1644,101 @@ ${window.currentLang==="it"
 
 // ================= CHART =================
 
-function renderChart(net) {
+function renderChart(net){
 
 const ctx = document.getElementById("roiChart");
 
-if (!ctx || typeof Chart === "undefined") return;
+if(!ctx || typeof Chart === "undefined") return;
 
-if (roiChartInstance) roiChartInstance.destroy();
+if(roiChartInstance) roiChartInstance.destroy();
 
-roiChartInstance = new Chart(ctx, {
+// anni simulazione
+const years = [1,2,3,4,5,6,7,8,9,10];
 
-type: "line",
+// scenari
+const conservative = years.map(y => net * y * 0.8);
+const base = years.map(y => net * y);
+const optimistic = years.map(y => net * y * 1.2);
 
-data: {
+roiChartInstance = new Chart(ctx,{
 
+type:"line",
+
+data:{
 labels: window.currentLang==="it"
-? ["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"]
-: ["Year 1","Year 2","Year 3","Year 4","Year 5"],
+? years.map(y=>"Anno "+y)
+: years.map(y=>"Year "+y),
 
-datasets: [{
-data: [net, net*2, net*3, net*4, net*5],
-borderWidth: 2,
-tension: 0.3
-}]
+datasets:[
+
+{
+label: t("lowScenario"),
+data: conservative,
+borderColor:"#ef4444",
+backgroundColor:"rgba(239,68,68,0.1)",
+tension:0.35,
+borderWidth:2
+fill:true  
+},
+
+{
+label: t("baseScenario"),
+data: base,
+borderColor:"#3b82f6",
+backgroundColor:"rgba(59,130,246,0.15)",
+tension:0.35,
+borderWidth:3
+fill:true  
+},
+
+{
+label: t("highScenario"),
+data: optimistic,
+borderColor:"#10b981",
+backgroundColor:"rgba(16,185,129,0.15)",
+tension:0.35,
+borderWidth:2
+fill:true  
+}
+
+]
 
 },
 
-options: {
-responsive: true,
-plugins: { legend: { display: false } }
+options:{
+
+responsive:true,
+
+interaction:{
+mode:"index",
+intersect:false
+},
+
+plugins:{
+
+legend:{
+display:true,
+position:"bottom"
+},
+
+tooltip:{
+callbacks:{
+label:(ctx)=>formatCurrency(ctx.raw)
+}
+}
+
+},
+
+scales:{
+
+y:{
+ticks:{
+callback:(v)=>formatCurrency(v)
+}
+}
+
+}
+
 }
 
 });
@@ -1720,6 +1790,7 @@ y = 30;
 // ================= TITLE =================
 
 doc.setFontSize(22);
+doc.addImage("/img/logo-report.png","PNG",160,4,30,8)  
 
 doc.text(
 lang==="it"
@@ -1876,6 +1947,53 @@ y
 doc.setTextColor(0,0,0);
 
 y += 18;
+
+// ================= SCENARIO FORECAST =================
+
+doc.setFontSize(14);
+doc.setTextColor(16,185,129);
+
+doc.text(
+lang==="it"
+? "Scenario Ricavi"
+: "Revenue Scenarios",
+20,
+y
+);
+
+doc.setTextColor(0,0,0);
+
+y += 10;
+
+const low = data.revenue * 0.8;
+const base = data.revenue;
+const high = data.revenue * 1.2;
+
+doc.setFontSize(11);
+
+doc.text(
+(lang==="it"?"Scenario prudente: ":"Conservative scenario: ")
++ formatCurrency(low),
+20,y
+);
+
+y += 7;
+
+doc.text(
+(lang==="it"?"Scenario base: ":"Base scenario: ")
++ formatCurrency(base),
+20,y
+);
+
+y += 7;
+
+doc.text(
+(lang==="it"?"Scenario ottimistico: ":"Optimistic scenario: ")
++ formatCurrency(high),
+20,y
+);
+
+y += 18;  
 
 
 // ================= INVESTMENT GRADE =================
@@ -2219,7 +2337,9 @@ const link = localStorage.getItem("property_link");
 
 const linkBox = document.getElementById("property-source");
 
-if(linkBox && link){
+if(!link) return;
+
+if(linkBox){
 
 linkBox.innerHTML = `
 <strong>📍 Immobile analizzato</strong><br>
@@ -2228,9 +2348,8 @@ linkBox.innerHTML = `
 <div style="margin-top:6px;font-size:13px;color:#64748b;">
 Inserisci i dati dell'annuncio per simulare il rendimento.
 </div>
-`; 
-
-if(!link) return;
+`;
+}
 
 console.log("Analisi immobile da link:", link);
 
