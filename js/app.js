@@ -1318,31 +1318,6 @@ rate: bank.rate
 
 }));
 
-// ================= CALCULATIONS =================
-
-const results = banks
-.map(bank => {
-
-if(!bank.rate) return null;
-
-const data = mortgageSimulation(amount, bank.rate, years);
-
-return { ...bank, ...data };
-
-})
-.filter(Boolean);
-
-
-if(results.length === 0){
-
-resultDiv.innerHTML =
-window.currentLang==="it"
-? "Nessun dato mutuo disponibile"
-: "No mortgage data available";
-return;
-
-}
-
 
 // ================= SORT BEST =================
 
