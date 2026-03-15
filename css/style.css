@@ -1938,7 +1938,9 @@ text-align:center;
 /* ===================== */
 
 .dashboard-container{
-max-width:100%;
+max-width:1600px;
+margin:auto;
+padding:90px 40px 80px 40px;
 overflow-x:hidden;
 }
 
