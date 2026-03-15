@@ -1802,7 +1802,7 @@ doc.line(0,18,210,18);
 const logo = new Image();
 logo.src = "/img/logo-report.png";
 
-await new Promise(resolve => {
+await new Promise(resolve=>{
 logo.onload = resolve;
 });
 
@@ -1825,7 +1825,7 @@ y
 doc.setDrawColor(235);
 doc.line(20,y+2,190,y+2);
 
-y += 10;
+y+=10;
 
 doc.setFontSize(11);
 
@@ -1838,7 +1838,7 @@ y,
 {maxWidth:170}
 );
 
-y += 8;
+y+=8;
 
 
 // ================= REPORT DATE =================
@@ -1852,7 +1852,7 @@ doc.text(
 y
 );
 
-y += 15;
+y+=15;
 
 
 // ================= EXECUTIVE SUMMARY =================
@@ -1860,29 +1860,25 @@ y += 15;
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it" ? "Executive Summary" : "Executive Summary",
-20,
-y
-);
+doc.text("Executive Summary",20,y);
 
 doc.setDrawColor(235);
 doc.line(20,y+2,190,y+2);
 
-y += 10;
+y+=10;
 
 doc.setTextColor(0,0,0);
 
 let verdict;
 
-if(data.roi > 12){
+if(data.roi>12){
 
 verdict = lang==="it"
 ? "Investimento ad alto potenziale con rendimento superiore alla media del mercato."
 : "High potential investment with above-market return.";
 
 }
-else if(data.roi > 6){
+else if(data.roi>6){
 
 verdict = lang==="it"
 ? "Investimento sostenibile con rendimento moderato."
@@ -1900,7 +1896,7 @@ verdict = lang==="it"
 doc.setFontSize(11);
 doc.text(verdict,20,y,{maxWidth:170});
 
-y += 15;
+y+=15;
 
 
 // ================= INVESTMENT STRUCTURE =================
@@ -1917,13 +1913,13 @@ y
 doc.setDrawColor(235);
 doc.line(20,y+2,190,y+2);
 
-y += 10;
+y+=10;
 
 doc.setTextColor(0,0,0);
 
-const ltv = data.price > 0
-? ((data.loan / data.price) * 100).toFixed(0)
-: 0;
+const ltv = data.price>0
+? ((data.loan/data.price)*100).toFixed(0)
+:0;
 
 doc.setFontSize(11);
 
@@ -1948,12 +1944,13 @@ doc.text((lang==="it"?"Ricavi stimati: ":"Estimated revenue: ")+formatCurrency(d
 doc.text((lang==="it"?"Profitto netto: ":"Net profit: ")+formatCurrency(data.profit),95,y+9);
 doc.text("ROI: "+data.roi.toFixed(2)+"%",150,y+9);
 
-y += 28;
+y+=28;
 
 
 // ================= ROI HIGHLIGHT =================
 
 let roiColor=[239,68,68];
+
 if(data.roi>12) roiColor=[16,185,129];
 else if(data.roi>6) roiColor=[245,158,11];
 
@@ -1962,7 +1959,8 @@ doc.setFontSize(22);
 doc.setFont(undefined,"bold");
 
 doc.text(
-(lang==="it"?"ROI investimento: ":"Investment ROI: ")+data.roi.toFixed(2)+"%",
+(lang==="it"?"ROI investimento: ":"Investment ROI: ")
++data.roi.toFixed(2)+"%",
 20,
 y
 );
@@ -2004,7 +2002,7 @@ y+=18;
 
 const chartCanvas=document.getElementById("roiChart");
 
-if(chartCanvas && chartCanvas.width > 0){
+if(chartCanvas && chartCanvas.width>0){
 
 const scale=4;
 
@@ -2185,7 +2183,6 @@ const fileName = lang==="it"
 doc.save(fileName);
 
 }
-
 
 // ================= EXPORT GLOBAL =================
 
