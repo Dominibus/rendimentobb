@@ -3,6 +3,33 @@
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE =================
+import { calculateROI } from "./roi-engine.js";
+
+import {
+renderMarketBenchmark,
+renderMarketComparison,
+renderROIMarketComparison,
+renderRevenueForecast,
+renderOccupancySensitivity
+} from "./market-engine.js";
+
+import {
+renderExecutiveKPI,
+renderBreakEvenOccupancy,
+renderInvestmentScore,
+renderInvestmentRanking,
+renderRiskMeter,
+renderInvestmentVerdict,
+renderSmartInvestmentAlert,
+renderStrategicInsight,
+renderChart
+} from "./ui-engine.js";
+
+import {
+calculateMortgage,
+compareMortgages
+} from "./mortgage-engine.js";
+
 
 import {
   getFirestore,
