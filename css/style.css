@@ -807,6 +807,11 @@ gap:32px;
 align-items:start;
 }
 
+.dashboard-side{
+position:sticky;
+top:110px;
+}
+
 /* colonne */
 
 .dashboard-main{
