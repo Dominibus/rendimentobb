@@ -2562,6 +2562,7 @@ citySelector.addEventListener("change",()=>{
 const city = citySelector.value;
 
 window.currentCity = city;
+localStorage.setItem("selected_city", city);
 
 renderMarketBenchmark(city);
 changeCityBackground(city);
@@ -2571,6 +2572,8 @@ calculate();
 }
 
 });
+
+}
 
 
 const city = citySelector.value;
