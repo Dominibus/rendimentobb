@@ -1305,65 +1305,6 @@ box.innerHTML = `
 }
 
 
-// ================= MORTGAGE COMPARATOR =================
-
-function compareMortgages() {
-
-const resultDiv = document.getElementById("mortgage-results");
-if (!resultDiv) return;
-
-
-// ================= PRO CHECK =================
-
-if(!window.currentUser){
-
-resultDiv.innerHTML = `
-
-<div class="results-card" style="text-align:center;">
-
-<h3>${t("loginRequired")}</h3>
-
-<p>
-${t("createAccountMortgage")}
-</p>
-
-<button onclick="window.location.href='/login'" class="btn btn-primary">
-${t("loginRegister")}
-</button>
-
-</div>
-
-`;
-
-return;
-
-}
-
-if(!hasPlan("investor")){
-
-resultDiv.innerHTML = `
-
-<div class="results-card" style="text-align:center;">
-
-<h3>${t("proFeature")}</h3>
-
-<p>
-${t("mortgageProDesc")}
-</p>
-
-<button onclick="startPlanPurchase('investor')" class="btn btn-primary">
-🔓 Sblocca analisi completa – 19€/mese
-</button>
-
-</div>
-
-`;
-
-return;
-
-}
-
-
 // ================= INPUT =================
 
 const amount = getValue("mortgageAmount");
