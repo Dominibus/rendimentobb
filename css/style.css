@@ -1577,20 +1577,18 @@ font-size:15px;
 @media (max-width:768px){
 
 .portal-header-inner{
-flex-direction:column;
-align-items:center;
-gap:10px;
-text-align:center;
-padding-bottom:6px;
+grid-template-columns:1fr;
+justify-items:center;
+gap:8px;
+}
 
-width:100%;
-max-width:100%;
-}  
+}
 
 .right-controls{
 display:flex;
+flex-wrap:wrap; 
 justify-content:center;
-gap:10px;
+gap:8px;
 margin-top:6px;
 }
 
@@ -1654,7 +1652,8 @@ margin:auto;
 @media(max-width:768px){
 
 .logo-img{
-height:48px;
+height:54px;
+max-width:200px;
 }
 
 }
@@ -1699,8 +1698,10 @@ display:flex;
 flex-direction:column;
 align-items:center;
 
-position:relative;
-z-index:1050;
+position:absolute;
+top:100%;
+left:0;
+z-index:2000;
 
 gap:14px;
 
