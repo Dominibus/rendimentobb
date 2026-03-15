@@ -124,7 +124,7 @@ document.querySelectorAll(".portal-nav a").forEach(link => {
 
 const href = link.getAttribute("href");
 
-if(currentPath === href){
+if(currentPath.startsWith(href)){
 link.classList.add("active");
 }
 
