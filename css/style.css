@@ -779,14 +779,21 @@ font-size:18px;
 
 }
 
-/* ===================== */
-/* DASHBOARD */
-/* ===================== */
+/* DASHBOARD CONTAINER */
 
 .dashboard-container{
 max-width:1600px;
 margin:auto;
 padding:90px 40px 80px 40px;
+overflow-x:hidden;
+}
+
+@media (max-width:768px){
+
+.dashboard-container{
+padding:60px 18px;
+}
+
 }
 
 /* ===================== */
@@ -1937,13 +1944,6 @@ text-align:center;
 /* DASHBOARD FIX */
 /* ===================== */
 
-.dashboard-container{
-max-width:1600px;
-margin:auto;
-padding:90px 40px 80px 40px;
-overflow-x:hidden;
-}
-
 .stats-grid,
 .analysis-grid,
 .dashboard-top-grid{
@@ -1981,10 +1981,6 @@ gap:10px;
 
 .container{
 padding:0 18px;
-}
-
-.dashboard-container{
-padding:60px 18px;
 }
 
 /* TITLES */
