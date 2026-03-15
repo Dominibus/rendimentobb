@@ -2123,6 +2123,38 @@ doc.text((lang==="it"?"Profilo rischio: ":"Risk profile: ")+risk,20,y);
 
 y+=15;
 
+// ================= INVESTMENT SCORE =================
+
+doc.setFontSize(16);
+doc.setTextColor(16,185,129);
+
+doc.text(
+lang==="it"
+?"Investment Score"
+:"Investment Score",
+20,
+y
+);
+
+y+=10;
+
+let score = Math.min(100, Math.round(data.roi * 3));
+
+doc.setFontSize(28);
+
+doc.setTextColor(
+score > 80 ? 16 : score > 60 ? 245 : 239,
+score > 80 ? 185 : score > 60 ? 158 : 68,
+score > 80 ? 129 : score > 60 ? 11 : 68
+);
+
+doc.text(score + "/100",20,y);
+
+doc.setTextColor(0,0,0);
+
+y+=18;
+  
+
 
 // ================= STRATEGIC =================
 
