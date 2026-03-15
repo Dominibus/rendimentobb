@@ -814,6 +814,7 @@ align-items:start;
 display:flex;
 flex-direction:column;
 gap:28px;
+min-width:0; 
 
 }
 
@@ -2042,7 +2043,9 @@ flex-direction:column;
 gap:10px;
 }
 
-/* GRIDS */
+@media (max-width:768px){
+
+/* GRIDS MOBILE */
 
 .analysis-grid{
 grid-template-columns:1fr;
@@ -2060,6 +2063,8 @@ grid-template-columns:1fr;
 
 .form-grid{
 grid-template-columns:1fr;
+}
+
 }
 
 /* METRICS */
