@@ -546,45 +546,6 @@ container.innerHTML = `
 
 }
 
-// ================= EXECUTIVE KPI =================
-
-function renderExecutiveKPI(roi, net, revenue, equity){
-
-const container = document.getElementById("executive-kpi");
-if(!container) return;
-
-const payback =
-equity > 0 && net > 0
-? (equity / net).toFixed(1)
-: "—";
-
-container.innerHTML = `
-
-<div class="kpi-box">
-<span>${t("roi")}</span>
-<strong class="${roi >= 0 ? 'roi-positive' : 'roi-negative'}">
-${roi.toFixed(2)}%
-</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("annualNet")}</span>
-<strong>${formatCurrency(net)}</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("estimatedRevenue")}</span>
-<strong>${formatCurrency(revenue)}</strong>
-</div>
-
-<div class="kpi-box">
-<span>${window.currentLang==="it"?"Payback investimento":"Investment payback"}</span>
-<strong>${payback} yrs</strong>
-</div>
-
-`;
-
-}
 
 // ================= BREAK EVEN OCCUPANCY =================
 
