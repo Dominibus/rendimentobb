@@ -832,27 +832,21 @@ gap:20px;
 /* ===================== */
 
 .opportunity{
-
 display:flex;
-
 gap:12px;
-
 align-items:center;
-
 margin-top:12px;
-
 padding:10px;
-
 border-radius:10px;
-
 transition:0.2s ease;
-
+text-decoration:none;
+color:inherit;
 }
 
 .opportunity:hover{
-
 background:#f8fafc;
-
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
 
 .opportunity img{
