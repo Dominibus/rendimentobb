@@ -189,9 +189,36 @@ window.applyMarketData = function(city){
     occInput.value = Math.round(data.occupancy * 100);
   }
 
-  if(typeof calculate === "function"){
-    calculate();
-  }
+ window.applyMarketData = function(city){
+
+const data = RB_MARKET_DATA[city];
+if(!data) return;
+
+const priceInput = document.getElementById("priceNight");
+const occInput = document.getElementById("occupancy");
+
+if(priceInput){
+priceInput.value = data.price;
+}
+
+if(occInput){
+occInput.value = Math.round(data.occupancy * 100);
+}
+
+const occLabel = document.getElementById("occ-value");
+if(occLabel){
+occLabel.innerText = Math.round(data.occupancy * 100) + "%";
+}
+
+// forza il calcolo
+setTimeout(()=>{
+if(typeof calculate === "function"){
+calculate();
+}
+},100);
+
+};
+
 
 };
 
