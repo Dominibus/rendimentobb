@@ -589,8 +589,6 @@ ${investmentScore}/100
 
 } 
 
-const avgROI = count ? (totalROI/count).toFixed(1) : 0;
-
 // ================= MARKET BENCHMARK =================
 
 const selectedCity =
@@ -652,7 +650,6 @@ marketColor = "#ef4444";
  
 }
 
-const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
 /* MARKET OPPORTUNITY SCORE */
 
 const occupancy = marketData[selectedCity].occupancy;
