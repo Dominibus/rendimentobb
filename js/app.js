@@ -2577,13 +2577,22 @@ const city = citySelector.value;
 window.currentCity = city;
 localStorage.setItem("selected_city", city);
 
+// aggiorna benchmark
 renderMarketBenchmark(city);
+
+// aggiorna sfondo hero
+changeCityBackground(city);
 
 });
 
 }
 const selectedCity = localStorage.getItem("selected_city");
 if(citySelector && selectedCity){
+
 citySelector.value = selectedCity;
+
+changeCityBackground(selectedCity);
+
 citySelector.dispatchEvent(new Event("change"));
+
 }
