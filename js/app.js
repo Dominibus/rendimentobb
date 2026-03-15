@@ -1778,15 +1778,26 @@ let y = 20;
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,16,"F");
+doc.rect(0,0,210,18,"F");
 
+doc.setFontSize(13);
 doc.setTextColor(255,255,255);
-doc.setFontSize(14);
-doc.text("RendimentoBB Strategic Engine",20,10);
 
-doc.setTextColor(0,0,0);
+doc.text(
+"RendimentoBB Strategic Engine",
+20,
+11
+);
 
-y = 30;
+doc.setFontSize(9);
+
+doc.text(
+lang==="it"
+? "Investment Intelligence Report"
+: "Investment Intelligence Report",
+20,
+15
+);
 
 
 // ================= TITLE =================
@@ -1949,6 +1960,8 @@ y += 15;
 // ================= KPI BOX =================
 
 doc.setFillColor(240,248,245);
+doc.setDrawColor(220,230,225);
+  
 doc.roundedRect(20,y,170,22,3,3,"F");
 
 doc.setFontSize(11);
@@ -1986,7 +1999,8 @@ else if(data.roi > 6) roiColor = [245,158,11];
 
 doc.setTextColor(...roiColor);
 
-doc.setFontSize(16);
+doc.setFontSize(22);
+doc.setFont(undefined,"bold");
 
 doc.text(
 (lang==="it"?"ROI investimento: ":"Investment ROI: ")
@@ -2052,7 +2066,18 @@ const chartCanvas = document.getElementById("roiChart");
 
 if(chartCanvas){
 
-const chartImage = chartCanvas.toDataURL("image/png",1.0);
+const scale = 3;
+
+const exportCanvas = document.createElement("canvas");
+exportCanvas.width = chartCanvas.width * scale;
+exportCanvas.height = chartCanvas.height * scale;
+
+const ctx = exportCanvas.getContext("2d");
+
+ctx.scale(scale,scale);
+ctx.drawImage(chartCanvas,0,0);
+
+const chartImage = exportCanvas.toDataURL("image/png",1.0);
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
@@ -2075,16 +2100,12 @@ chartImage,
 15,
 y,
 180,
-85
+90
 );
 
-y += 80;
+y += 95;
 
 }
-if(y > 150){
-doc.addPage();
-y = 20;
-} 
 
 
 // ================= INVESTMENT GRADE =================
@@ -2207,6 +2228,24 @@ lang==="it"
 20,
 y
 );
+
+const pageCount = doc.internal.getNumberOfPages();
+
+for(let i=1;i<=pageCount;i++){
+
+doc.setPage(i);
+
+doc.setFontSize(8);
+doc.setTextColor(120);
+
+doc.text(
+"Page " + i + " / " + pageCount,
+180,
+290
+);
+
+}
+  
 
 
 // ================= FILE NAME =================
