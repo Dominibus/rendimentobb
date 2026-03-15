@@ -64,20 +64,27 @@ totalInterest
 
 export function compareMortgages(amount, years, rates){
 
+if(!amount || !years) return [];
+
+if(!Array.isArray(rates) || rates.length === 0){
+console.warn("Mortgage rates non disponibili");
+return [];
+}
+
 const results = [];
 
 rates.forEach(rate => {
 
-const yearlyCost =
-calculateMortgage(amount, rate, years);
+const r = typeof rate === "object" ? rate.rate : rate;
+
+if(!r) return;
+
+const yearlyCost = calculateMortgage(amount, r, years);
 
 results.push({
-rate,
+rate: r,
 yearlyCost
 });
 
 });
 
-return results;
-
-}
