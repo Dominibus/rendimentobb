@@ -6,23 +6,11 @@
 import { calculateROI } from "./roi-engine.js";
 
 import {
-renderMarketBenchmark,
-renderMarketComparison,
-renderROIMarketComparison,
-renderRevenueForecast,
-renderOccupancySensitivity
+renderMarketBenchmark
 } from "./market-engine.js";
 
 import {
-renderExecutiveKPI,
-renderBreakEvenOccupancy,
-renderInvestmentScore,
-renderInvestmentRanking,
-renderRiskMeter,
-renderInvestmentVerdict,
-renderSmartInvestmentAlert,
-renderStrategicInsight,
-renderChart
+renderExecutiveKPI
 } from "./ui-engine.js";
 
 import {
