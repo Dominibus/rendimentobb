@@ -26,6 +26,40 @@ margin:auto;
 padding:90px 24px 80px 24px;
 }
 
+/* ================= DASHBOARD LAYOUT ================= */
+
+.dashboard-layout{
+
+display:grid;
+
+grid-template-columns: 1fr 340px;
+
+gap:28px;
+
+align-items:start;
+
+}
+
+.dashboard-main{
+display:flex;
+flex-direction:column;
+gap:28px;
+}
+
+.dashboard-side{
+display:flex;
+flex-direction:column;
+gap:20px;
+}  
+
+@media (max-width:1024px){
+
+.dashboard-layout{
+grid-template-columns:1fr;
+}
+
+}  
+
 /* welcome */
 
 .dashboard-welcome{
@@ -242,6 +276,9 @@ color:#0f172a;
 <main>
 
 <div class="dashboard-container">
+<div class="dashboard-layout">
+
+<div class="dashboard-main">  
 
 <!-- WELCOME -->
 
@@ -280,7 +317,7 @@ Home
 <div class="analysis-card" style="margin-bottom:40px;padding:0;overflow:hidden">
 
 <div id="market-hero-bg" style="
-background-image:url('/img/naples-bg.jpg');
+background-image:url('/img/napoli-dashboard.jpg');
 background-size:cover;
 background-position:center;
 height:220px;
@@ -545,6 +582,57 @@ data-en="ROI Trend">
 </div>
   
 <div id="analysis-list" class="analysis-grid"></div>
+</div>
+
+<div class="dashboard-side">
+
+<div class="analysis-card">
+
+<h3>Opportunità investimento</h3>
+
+<div class="opportunity">
+
+<img src="/img/napoli-dashboard.jpg">
+
+<div class="opportunity-info">
+<strong>Napoli – Centro Storico</strong>
+<div class="opportunity-price">€260.000</div>
+</div>
+
+<button class="btn-analyze">Analizza</button>
+
+</div>
+
+<div class="opportunity">
+
+<img src="/img/roma-dashboard.jpg">
+
+<div class="opportunity-info">
+<strong>Roma – Trastevere</strong>
+<div class="opportunity-price">€360.000</div>
+</div>
+
+<button class="btn-analyze">Analizza</button>
+
+</div>
+
+<div class="opportunity">
+
+<img src="/img/firenze-dashboard.jpg">
+
+<div class="opportunity-info">
+<strong>Firenze – Centro</strong>
+<div class="opportunity-price">€340.000</div>
+</div>
+
+<button class="btn-analyze">Analizza</button>
+
+</div>
+
+</div>
+
+</div>
+  </div>
 
 </div>
 
