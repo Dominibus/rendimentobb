@@ -1416,10 +1416,10 @@ if(!hero) return;
 
 const images = {
 
-rome:"/img/rome-bg.jpg",
-naples:"/img/naples-bg.jpg",
-milan:"/img/milan-bg.jpg",
-florence:"/img/florence-bg.jpg"
+rome:"/img/roma-dashboard.jpg",
+naples:"/img/napoli-dashboard.jpg",
+milan:"/img/milano-dashboard.jpg",
+florence:"/img/firenze-dashboard.jpg"
 
 };
 
@@ -1431,6 +1431,11 @@ const keys = Object.keys(images);
 city = keys[Math.floor(Math.random()*keys.length)];
 
 }
+
+/* cambia classe per CSS */
+
+hero.classList.remove("rome","milan","florence","naples");
+hero.classList.add(city);
 
 /* cambia immagine */
 
