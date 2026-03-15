@@ -810,20 +810,10 @@ align-items:start;
 /* colonne */
 
 .dashboard-main{
-
 display:flex;
 flex-direction:column;
 gap:28px;
-min-width:0; 
-
-}
-
-.dashboard-side{
-
-display:flex;
-flex-direction:column;
-gap:20px;
-
+min-width:0;
 }
 
 .dashboard-charts{
