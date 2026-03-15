@@ -1890,22 +1890,19 @@ word-break:break-word;
 
 #roi-chart-container,
 #cashflow-chart-container{
-height:240px;
 position:relative;
 width:100%;
-max-width:100%;
-overflow:hidden;
+height:260px;
 }
 
 #roi-chart,
 #cashflow-chart{
 width:100% !important;
-height:auto !important;
+height:100% !important;
 }
 
 canvas{
 max-width:100%;
-height:auto !important;
 }
 
 /* TRUST / MARKET */
