@@ -470,8 +470,14 @@ let badge = "";
 
 if(roi > marketROI){
 
-message = "✓ ROI above city average";
+message = t("roiAboveCity");
 color = "#10b981";
+
+}else{
+
+message = t("roiBelowCity");
+
+}
 
 badge = `
 <div style="
@@ -487,10 +493,6 @@ ${t("roiAboveCity")}
 
 </div>
 `;
-
-}else{
-
-message = "⚠ ROI below city average";
 
 }
 
@@ -1644,7 +1646,10 @@ const ctx = document.getElementById("roiChart");
 
 if(!ctx || typeof Chart === "undefined") return;
 
-if(roiChartInstance) roiChartInstance.destroy();
+if(roiChartInstance){
+roiChartInstance.destroy();
+roiChartInstance = null;
+}
 
 // anni simulazione
 const years = [1,2,3,4,5,6,7,8,9,10];
@@ -1892,7 +1897,7 @@ y+=10;
 doc.setTextColor(0,0,0);
 doc.setFontSize(11);
 
-const ltv = data.price>0
+const ltv = data.price>0 && data.loan
 ? ((data.loan/data.price)*100).toFixed(0)
 :0;
 
@@ -2346,9 +2351,9 @@ let stripeUrl = null;
 
 // PLAN ROUTING
 
-if(plan === "starter"){
-stripeUrl =
-"https://buy.stripe.com/STARTER_LINK?client_reference_id=" + uid;
+if(!["starter","investor","pro"].includes(plan)){
+console.error("Piano non valido:", plan);
+return;
 }
 
 if(plan === "investor"){
