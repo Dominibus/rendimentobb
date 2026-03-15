@@ -1305,28 +1305,6 @@ box.innerHTML = `
 }
 
 
-const banks = Object.values(window.RB_MORTGAGE_RATES).map(bank => ({
-
-name:
-bank.name[
-window.RB_LANG?.current ||
-window.currentLang ||
-"it"
-],
-
-rate: bank.rate
-
-}));
-
-
-// ================= SORT BEST =================
-
-results.sort((a, b) => a.totalPaid - b.totalPaid);
-
-const best = results[0];
-
-
-
 // ================= CHART =================
 
 function renderChart(net){
