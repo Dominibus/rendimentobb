@@ -50,9 +50,9 @@ flex:1;
 
 .container{
 width:100%;
-max-width:1200px;
+max-width:1400px;
 margin:auto;
-padding:0 20px;
+padding:0 24px;
 box-sizing:border-box;
 }
 
@@ -108,7 +108,8 @@ display:flex;
 align-items:center;
 gap:18px;
 font-size:14px;
-margin:auto;
+margin-left:auto;
+margin-right:auto;
 }
 
 .portal-nav a{
@@ -168,7 +169,7 @@ flex-shrink:0;
 }
 
 .logo-img{
-height:52px;
+height:70px;
 width:auto;
 max-width:none;
 flex-shrink:0;
@@ -2280,10 +2281,11 @@ width:100%;
 
 .simulator-grid{
 display:grid;
-grid-template-columns:320px 1fr;
-gap:30px;
-max-width:1200px;
+grid-template-columns:360px 1fr;
+gap:40px;
+max-width:1400px;
 margin:auto;
+padding:20px;
 }
 
 .simulator-left{
@@ -2320,9 +2322,10 @@ font-size:16px;
 
 .roi-dashboard{
 background:white;
-padding:26px;
+padding:30px;
 border-radius:22px;
 box-shadow:0 30px 80px rgba(0,0,0,0.12);
+min-height:520px;
 }
 
 .roi-main{
