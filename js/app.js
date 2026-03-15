@@ -447,7 +447,7 @@ if(!container) return;
 const market = window.RB_MARKET_DATA[cityKey];
 if(!market) return;
 
-const marketROI = market.roi || 10;
+const marketROI = market.roi;
 
 let message = "";
 let color = "#ef4444";
