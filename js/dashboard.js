@@ -531,6 +531,64 @@ Tool
 
 function renderStats(count,totalROI,totalCapital){
 
+// ================= KPI HEADER =================
+
+const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
+
+const kpiContainer = document.getElementById("dashboard-kpi");
+
+if(kpiContainer){
+
+kpiContainer.innerHTML = `
+
+<div class="analysis-card">
+
+<h3>${t("Capitale portfolio","Portfolio capital")}</h3>
+
+<div style="font-size:28px;font-weight:700">
+${formatCurrency(totalCapital)}
+</div>
+
+</div>
+
+
+<div class="analysis-card">
+
+<h3>${t("ROI medio","Average ROI")}</h3>
+
+<div style="font-size:28px;font-weight:700;color:#10b981">
+${avgROI}%
+</div>
+
+</div>
+
+
+<div class="analysis-card">
+
+<h3>${t("Analisi salvate","Saved analyses")}</h3>
+
+<div style="font-size:28px;font-weight:700">
+${count}
+</div>
+
+</div>
+
+
+<div class="analysis-card">
+
+<h3>${t("Investment Score","Investment Score")}</h3>
+
+<div style="font-size:28px;font-weight:700;color:#2563eb">
+${investmentScore}/100
+</div>
+
+</div>
+
+`;
+
+} 
+
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 
 // ================= MARKET BENCHMARK =================
