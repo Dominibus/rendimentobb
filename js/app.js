@@ -1305,19 +1305,6 @@ box.innerHTML = `
 }
 
 
-// ================= BANK LIST =================
-
-if(!window.RB_MORTGAGE_RATES){
-
-resultDiv.innerHTML =
-window.currentLang==="it"
-? "Dati banche non disponibili."
-: "Bank data not available.";
-
-return;
-
-}
-
 const banks = Object.values(window.RB_MORTGAGE_RATES).map(bank => ({
 
 name:
