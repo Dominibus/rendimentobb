@@ -118,10 +118,7 @@ return true;
 
 document.addEventListener("rb_language_changed", () => {
 
-window.currentLang =
-window.RB_LANG?.current ||
-localStorage.getItem("rb_lang") ||
-"it";
+window.currentLang = getLang();
 
 // aggiorna chart se presente
 if(window.lastROI && typeof renderChart === "function"){
@@ -133,10 +130,11 @@ renderChart(window.lastROI);
 // ================= LANGUAGE SYNC =================
 
 // lingua iniziale sincronizzata con lang.js
-window.currentLang =
-window.RB_LANG?.current ||
-localStorage.getItem("rb_lang") ||
-"it";
+function getLang(){
+return window.RB_LANG?.current || localStorage.getItem("rb_lang") || "it";
+}
+
+window.currentLang = getLang();
 
 const TEXT = {
 
@@ -260,11 +258,8 @@ const TEXT = {
 
 function t(key){
 
-const lang =
-window.RB_LANG?.current ||
-window.currentLang ||
-"it";
-
+const lang = getLang();
+  
 return TEXT[lang]?.[key] || TEXT["en"]?.[key] || key;
 
 }
@@ -1797,7 +1792,14 @@ y = 30;
 // ================= TITLE =================
 
 doc.setFontSize(22);
-doc.addImage("/img/logo-report.png","PNG",160,4,30,8)  
+const logo = new Image();
+logo.src = "/img/logo-report.png";
+
+await new Promise(resolve => {
+logo.onload = resolve;
+});
+
+doc.addImage(logo,"PNG",160,4,30,8);  
 
 doc.text(
 lang==="it"
@@ -1840,6 +1842,53 @@ y += 15;
 
 
 // ================= INVESTMENT STRUCTURE =================
+// ================= EXECUTIVE SUMMARY =================
+
+doc.setFontSize(14);
+doc.setTextColor(16,185,129);
+
+doc.text(
+lang==="it"
+? "Executive Summary"
+: "Executive Summary",
+20,
+y
+);
+
+doc.setTextColor(0,0,0);
+
+y += 10;
+
+let verdict;
+
+if(data.roi > 12){
+
+verdict = lang==="it"
+? "Investimento ad alto potenziale con rendimento superiore alla media del mercato."
+: "High potential investment with above-market return.";
+
+}
+else if(data.roi > 6){
+
+verdict = lang==="it"
+? "Investimento moderatamente sostenibile con rendimento accettabile."
+: "Moderately sustainable investment with acceptable return.";
+
+}
+else{
+
+verdict = lang==="it"
+? "Investimento a rendimento limitato con rischio operativo elevato."
+: "Low return investment with elevated operational risk.";
+
+}
+
+doc.setFontSize(11);
+
+doc.text(verdict,20,y,{maxWidth:170});
+
+y += 15;
+
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
@@ -2001,6 +2050,46 @@ doc.text(
 );
 
 y += 18;  
+
+// ================= ROI CHART =================
+
+const chartCanvas = document.getElementById("roiChart");
+
+if(chartCanvas){
+
+const chartImage = chartCanvas.toDataURL("image/png",1.0);
+
+doc.setFontSize(14);
+doc.setTextColor(16,185,129);
+
+doc.text(
+lang==="it"
+? "Proiezione Crescita Profitto"
+: "Profit Growth Projection",
+20,
+y
+);
+
+doc.setTextColor(0,0,0);
+
+y += 10;
+
+doc.addImage(
+chartImage,
+"PNG",
+20,
+y,
+170,
+70
+);
+
+y += 80;
+
+}
+if(y > 180){
+doc.addPage();
+y = 20;
+}  
 
 
 // ================= INVESTMENT GRADE =================
