@@ -1954,6 +1954,51 @@ y+9
 
 y+=30;
 
+// ================= ADVANCED KPI =================
+
+const payback =
+data.profit > 0 && data.equity > 0
+? (data.equity / data.profit)
+: null;
+
+doc.setDrawColor(220);
+doc.roundedRect(20,y,170,26,3,3);
+
+doc.setFontSize(11);
+
+doc.text(
+(lang==="it"?"Payback investimento: ":"Investment payback: "),
+25,
+y+10
+);
+
+doc.text(
+payback
+? payback.toFixed(1) + (lang==="it"?" anni":" yrs")
+: "—",
+85,
+y+10
+);
+
+doc.text(
+(lang==="it"?"Margine profitto: ":"Profit margin: "),
+110,
+y+10
+);
+
+const margin =
+data.revenue > 0
+? ((data.profit/data.revenue)*100)
+:0;
+
+doc.text(
+margin.toFixed(1)+"%",
+150,
+y+10
+);
+
+y+=34;  
+
 
 // ================= ROI =================
 
