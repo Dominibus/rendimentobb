@@ -1772,58 +1772,50 @@ const data = window.lastAnalysisData;
 
 const doc = new jsPDF();
 
-let y = 20;
+let y = 35;
 
 
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,18,"F");
+doc.rect(0,0,210,24,"F");
 
 doc.setTextColor(255,255,255);
-doc.setFontSize(13);
+doc.setFontSize(12);
 
-doc.text("RendimentoBB Strategic Engine",20,11);
+doc.text("RendimentoBB Strategic Engine",20,15);
 
 doc.setFontSize(9);
 
 doc.text(
 "Investment Intelligence Report",
 20,
-15
+20
 );
-
-doc.setDrawColor(210);
-doc.line(0,18,210,18);
 
 
 // ================= LOGO =================
 
 const logo = new Image();
-logo.src = "/img/logo-report.png";
+logo.src="/img/logo-report.png";
 
-await new Promise(resolve=>{
-logo.onload = resolve;
-});
+await new Promise(resolve=>logo.onload=resolve);
 
-doc.addImage(logo,"PNG",138,2,60,16);
+doc.addImage(logo,"PNG",150,4,40,14);
 
 
 // ================= TITLE =================
 
-doc.setFontSize(22);
 doc.setTextColor(0,0,0);
+doc.setFontSize(22);
 
 doc.text(
 lang==="it"
-? "Report Strategico Investimento B&B"
-: "Strategic B&B Investment Report",
+?"Report Strategico Investimento B&B"
+:"Strategic B&B Investment Report",
 20,
 y
 );
-
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
 
 y+=10;
 
@@ -1831,14 +1823,14 @@ doc.setFontSize(11);
 
 doc.text(
 lang==="it"
-? "Analisi professionale della sostenibilità economica di un investimento in struttura ricettiva."
-: "Professional financial analysis of a short-term rental investment.",
+?"Analisi professionale della sostenibilità economica di un investimento in struttura ricettiva."
+:"Professional financial analysis of a short-term rental investment.",
 20,
 y,
 {maxWidth:170}
 );
 
-y+=8;
+y+=10;
 
 
 // ================= REPORT DATE =================
@@ -1862,35 +1854,20 @@ doc.setTextColor(16,185,129);
 
 doc.text("Executive Summary",20,y);
 
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
-
-y+=10;
+y+=8;
 
 doc.setTextColor(0,0,0);
 
 let verdict;
 
 if(data.roi>12){
-
-verdict = lang==="it"
-? "Investimento ad alto potenziale con rendimento superiore alla media del mercato."
-: "High potential investment with above-market return.";
-
+verdict="High potential investment with above-market return.";
 }
 else if(data.roi>6){
-
-verdict = lang==="it"
-? "Investimento sostenibile con rendimento moderato."
-: "Moderately sustainable investment.";
-
+verdict="Moderately sustainable investment.";
 }
 else{
-
-verdict = lang==="it"
-? "Investimento con rendimento limitato e rischio operativo."
-: "Low return investment with operational risk.";
-
+verdict="Low return investment with operational risk.";
 }
 
 doc.setFontSize(11);
@@ -1904,28 +1881,18 @@ y+=15;
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it"?"Struttura Investimento":"Investment Structure",
-20,
-y
-);
-
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
+doc.text("Investment Structure",20,y);
 
 y+=10;
 
 doc.setTextColor(0,0,0);
-
-const ltv = data.price>0
-? ((data.loan/data.price)*100).toFixed(0)
-:0;
-
 doc.setFontSize(11);
 
-doc.text((lang==="it"?"Prezzo immobile: ":"Property price: ")+formatCurrency(data.price),20,y); y+=7;
-doc.text((lang==="it"?"Capitale investito: ":"Equity invested: ")+formatCurrency(data.equity),20,y); y+=7;
-doc.text((lang==="it"?"Importo mutuo: ":"Loan amount: ")+formatCurrency(data.loan),20,y); y+=7;
+const ltv=data.price>0?((data.loan/data.price)*100).toFixed(0):0;
+
+doc.text("Property price: "+formatCurrency(data.price),20,y); y+=7;
+doc.text("Equity invested: "+formatCurrency(data.equity),20,y); y+=7;
+doc.text("Loan amount: "+formatCurrency(data.loan),20,y); y+=7;
 doc.text("Loan to Value: "+ltv+"%",20,y);
 
 y+=15;
@@ -1933,240 +1900,157 @@ y+=15;
 
 // ================= KPI BOX =================
 
-doc.setFillColor(255,255,255);
-doc.setDrawColor(230);
-
-doc.roundedRect(20,y,170,22,4,4,"FD");
+doc.setDrawColor(220);
+doc.roundedRect(20,y,170,22,3,3);
 
 doc.setFontSize(11);
 
-doc.text((lang==="it"?"Ricavi stimati: ":"Estimated revenue: ")+formatCurrency(data.revenue),25,y+9);
-doc.text((lang==="it"?"Profitto netto: ":"Net profit: ")+formatCurrency(data.profit),95,y+9);
+doc.text("Revenue: "+formatCurrency(data.revenue),25,y+9);
+doc.text("Profit: "+formatCurrency(data.profit),90,y+9);
 doc.text("ROI: "+data.roi.toFixed(2)+"%",150,y+9);
 
 y+=28;
 
 
-// ================= ROI HIGHLIGHT =================
+// ================= ROI =================
 
-let roiColor=[239,68,68];
-
-if(data.roi>12) roiColor=[16,185,129];
-else if(data.roi>6) roiColor=[245,158,11];
-
-doc.setTextColor(...roiColor);
-doc.setFontSize(22);
-doc.setFont(undefined,"bold");
+doc.setFontSize(20);
+doc.setTextColor(16,185,129);
 
 doc.text(
-(lang==="it"?"ROI investimento: ":"Investment ROI: ")
-+data.roi.toFixed(2)+"%",
+"ROI: "+data.roi.toFixed(2)+"%",
 20,
 y
 );
 
-doc.setFont(undefined,"normal");
 doc.setTextColor(0,0,0);
 
 y+=18;
 
 
-// ================= SCENARIO FORECAST =================
+// ================= SCENARIOS =================
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text(lang==="it"?"Scenario Ricavi":"Revenue Scenarios",20,y);
-
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
+doc.text("Revenue Scenarios",20,y);
 
 y+=10;
 
+doc.setFontSize(11);
 doc.setTextColor(0,0,0);
 
 const low=data.revenue*0.8;
 const base=data.revenue;
 const high=data.revenue*1.2;
 
-doc.setFontSize(11);
+doc.text("Conservative: "+formatCurrency(low),20,y); y+=7;
+doc.text("Base: "+formatCurrency(base),20,y); y+=7;
+doc.text("Optimistic: "+formatCurrency(high),20,y);
 
-doc.text((lang==="it"?"Scenario prudente: ":"Conservative scenario: ")+formatCurrency(low),20,y); y+=7;
-doc.text((lang==="it"?"Scenario base: ":"Base scenario: ")+formatCurrency(base),20,y); y+=7;
-doc.text((lang==="it"?"Scenario ottimistico: ":"Optimistic scenario: ")+formatCurrency(high),20,y);
-
-y+=18;
+y+=15;
 
 
-// ================= ROI CHART =================
+// ================= CHART =================
 
 const chartCanvas=document.getElementById("roiChart");
 
-if(chartCanvas && chartCanvas.width>0){
+if(chartCanvas){
 
-const scale=4;
+const img=chartCanvas.toDataURL("image/png",1.0);
 
-const exportCanvas=document.createElement("canvas");
-exportCanvas.width=chartCanvas.width*scale;
-exportCanvas.height=chartCanvas.height*scale;
+doc.addImage(img,"PNG",20,y,170,90);
 
-const ctx=exportCanvas.getContext("2d");
-
-ctx.scale(scale,scale);
-ctx.drawImage(chartCanvas,0,0);
-
-const chartImage=exportCanvas.toDataURL("image/png",1.0);
-
-doc.setFontSize(14);
-doc.setTextColor(16,185,129);
-
-doc.text(
-lang==="it"?"Proiezione Crescita Profitto":"Profit Growth Projection",
-20,
-y
-);
-
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
-
-doc.setTextColor(0,0,0);
-
-y+=10;
-
-doc.addImage(chartImage,"PNG",15,y,180,95);
-
-y+=105;
+y+=95;
 
 }
 
 
 // ================= PAGE BREAK =================
 
-if(y>250){
 doc.addPage();
-y=20;
-}
+y=30;
 
 
 // ================= INVESTMENT GRADE =================
 
+doc.setFontSize(16);
+doc.setTextColor(16,185,129);
+
+doc.text("Investment Grade",20,y);
+
+y+=12;
+
 let grade="C";
-let risk=lang==="it"?"Rischio elevato":"High Risk";
+let risk="High Risk";
 
 if(data.roi>12){
 grade="A";
-risk=lang==="it"?"Rischio moderato":"Moderate risk";
+risk="Moderate Risk";
 }
 else if(data.roi>6){
 grade="B";
-risk=lang==="it"?"Rischio medio":"Medium risk";
+risk="Medium Risk";
 }
 
-doc.setFontSize(14);
-doc.setTextColor(16,185,129);
-
-doc.text(lang==="it"?"Valutazione Investimento":"Investment Grade",20,y);
-
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
-
-y+=10;
-
+doc.setFontSize(12);
 doc.setTextColor(0,0,0);
 
-doc.setFontSize(11);
-
-doc.text("Investment Grade: "+grade,20,y); y+=7;
-doc.text((lang==="it"?"Profilo di rischio: ":"Risk profile: ")+risk,20,y);
+doc.text("Grade: "+grade,20,y); y+=7;
+doc.text("Risk profile: "+risk,20,y);
 
 y+=15;
 
 
 // ================= STRATEGIC INSIGHT =================
 
-doc.setFontSize(14);
+doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text(lang==="it"?"Interpretazione Strategica":"Strategic Insight",20,y);
-
-doc.setDrawColor(235);
-doc.line(20,y+2,190,y+2);
+doc.text("Strategic Insight",20,y);
 
 y+=10;
 
+doc.setFontSize(11);
 doc.setTextColor(0,0,0);
 
-let insight;
+doc.text(
+"Investment profitability is strongly influenced by occupancy rates and pricing strategy. Proper management and market positioning can significantly improve returns.",
+20,
+y,
+{maxWidth:170}
+);
 
-if(data.roi>12){
-
-insight=
-lang==="it"
-?"Investimento con elevata redditività rispetto al capitale investito."
-:"Investment shows strong profitability.";
-
-}
-else if(data.roi>6){
-
-insight=
-lang==="it"
-?"Investimento sostenibile ma dipendente dal tasso di occupazione."
-:"Investment viable but dependent on occupancy.";
-
-}
-else{
-
-insight=
-lang==="it"
-?"Investimento con margini ridotti."
-:"Low margin investment.";
-
-}
-
-doc.setFontSize(11);
-doc.text(insight,20,y,{maxWidth:170});
-
-y+=25;
+y+=20;
 
 
 // ================= FOOTER =================
 
 doc.setDrawColor(220);
-doc.line(20,y,190,y);
-
-y+=8;
+doc.line(20,270,190,270);
 
 doc.setFontSize(9);
 doc.setTextColor(120);
 
 doc.text(
-lang==="it"
-?"Report generato automaticamente da RendimentoBB Strategic Engine – Analisi indicativa."
-:"Report generated automatically by RendimentoBB Strategic Engine – Indicative analysis.",
+"Report generated by RendimentoBB Strategic Engine – Informational purpose only.",
 20,
-y
-);
-
-doc.text(
-"Generated: "+new Date().toLocaleString(),
-20,
-y+4
+278
 );
 
 
 // ================= PAGE NUMBERS =================
 
-const pageCount=doc.internal.getNumberOfPages();
+const pages=doc.internal.getNumberOfPages();
 
-for(let i=1;i<=pageCount;i++){
+for(let i=1;i<=pages;i++){
 
 doc.setPage(i);
 
 doc.setFontSize(8);
-doc.setTextColor(120);
 
 doc.text(
-"Page "+i+" / "+pageCount,
+"Page "+i+" / "+pages,
 180,
 290
 );
@@ -2176,11 +2060,7 @@ doc.text(
 
 // ================= SAVE =================
 
-const fileName = lang==="it"
-? "RendimentoBB-Report-Investimento.pdf"
-: "RendimentoBB-Investment-Report.pdf";
-
-doc.save(fileName);
+doc.save("RendimentoBB-Investment-Report.pdf");
 
 }
 
