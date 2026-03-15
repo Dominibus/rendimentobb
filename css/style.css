@@ -166,13 +166,12 @@ color:white;
 .rb-logo{
 display:flex;
 align-items:center;
-min-width:220px;
+flex-shrink:0;
 }
 
 .logo-img{
-height:64px;
+height:56px;
 width:auto;
-max-width:none;
 display:block;
 }
 
