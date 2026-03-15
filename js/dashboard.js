@@ -182,57 +182,71 @@ display:false
 // CITY ROI CHART
 // ===============================
 
-function renderCityROIChart(){
+function renderCityROIChart(analyses){
 
-const ctx = document.getElementById("city-roi-chart");
+const container = document.getElementById("city-roi-chart");
+if(!container) return;
 
-if(!ctx || typeof Chart === "undefined") return;
+if(!analyses || analyses.length === 0){
+container.innerHTML="";
+return;
+}
+
+/* conta investimenti per città */
+
+const cityCount = {};
+
+analyses.forEach(a=>{
+
+const city = a.city || "italy";
+
+if(!cityCount[city]){
+cityCount[city] = 0;
+}
+
+cityCount[city]++;
+
+});
+
+const labels = Object.keys(cityCount);
+const values = Object.values(cityCount);
+
+/* ricrea canvas */
+
+container.innerHTML = '<canvas id="cityChart"></canvas>';
+
+const ctx = document.getElementById("cityChart").getContext("2d");
 
 new Chart(ctx,{
 
 type:"doughnut",
 
 data:{
-labels:[
-"Napoli",
-"Roma",
-"Firenze",
-"Milano"
-],
-
+labels:labels,
 datasets:[{
-data:[
-16.7,
-14.2,
-12.9,
-10.5
-],
-
+data:values,
 backgroundColor:[
 "#10b981",
 "#3b82f6",
 "#f59e0b",
-"#6366f1"
+"#6366f1",
+"#ef4444"
 ],
-
 borderWidth:0
 }]
 },
 
 options:{
+responsive:true,
 plugins:{
-legend:{
-position:"bottom"
-}
+legend:{position:"bottom"}
 },
-cutout:"65%",
-responsive:true
+cutout:"65%"
 }
 
 });
 
 }
-
 // ================= LOAD DASHBOARD =================
 
 async function loadDashboard(){
