@@ -1,0 +1,20 @@
+renderExecutiveKPI
+renderBreakEvenOccupancy
+renderInvestmentScore
+renderInvestmentRanking
+renderRiskMeter
+renderInvestmentVerdict
+renderSmartInvestmentAlert
+renderStrategicInsight
+renderChart
+export {
+renderExecutiveKPI,
+renderBreakEvenOccupancy,
+renderInvestmentScore,
+renderInvestmentRanking,
+renderRiskMeter,
+renderInvestmentVerdict,
+renderSmartInvestmentAlert,
+renderStrategicInsight,
+renderChart
+}
