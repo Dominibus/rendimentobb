@@ -1801,7 +1801,7 @@ logo.src="/img/logo-report.png";
 
 await new Promise(resolve=>logo.onload=resolve);
 
-doc.addImage(logo,"PNG",150,4,40,14);
+doc.addImage(logo,"PNG",140,3,55,18);
 
 
 // ================= TITLE =================
@@ -1953,17 +1953,49 @@ y+=15;
 
 // ================= CHART =================
 
-const chartCanvas=document.getElementById("roiChart");
+const chartCanvas = document.getElementById("roiChart");
 
 if(chartCanvas){
 
-const img=chartCanvas.toDataURL("image/png",1.0);
+const scale = 4;
 
-doc.addImage(img,"PNG",20,y,170,90);
+const exportCanvas = document.createElement("canvas");
+exportCanvas.width = chartCanvas.width * scale;
+exportCanvas.height = chartCanvas.height * scale;
 
-y+=95;
+const ctx = exportCanvas.getContext("2d");
+
+ctx.scale(scale,scale);
+ctx.drawImage(chartCanvas,0,0);
+
+const img = exportCanvas.toDataURL("image/png",1.0);
+
+// dimensione grafico PDF
+const chartWidth = 170;
+const chartHeight = 80;
+
+// se non entra nella pagina
+if(y + chartHeight > 260){
+doc.addPage();
+y = 30;
+}
+
+// centrato
+const chartX = (210 - chartWidth) / 2;
+
+doc.addImage(
+img,
+"PNG",
+chartX,
+y,
+chartWidth,
+chartHeight
+);
+
+y += chartHeight + 10;
 
 }
+
 
 
 // ================= PAGE BREAK =================
