@@ -8,7 +8,7 @@ const header = `
 
 <div class="header-left">
 
-<a href="/" class="logo-link">
+<a href="/" class="logo-link rb-logo">
 <img src="/img/logo-main.png" alt="RendimentoBB" class="logo-img">
 </a>
 
