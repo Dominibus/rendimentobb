@@ -408,7 +408,7 @@ renderInvestmentRanking(analyses);
 renderCityDistribution(analyses); 
 renderChart();
 renderCashflowChart();
-renderCityROIChart();
+renderCityROIChart(analyses);
 
 }
 
