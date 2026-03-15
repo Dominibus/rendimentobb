@@ -1,49 +1,23 @@
-export function calculateROI({
-priceNight,
-occupancy,
-expenses,
-commission,
-tax,
-equity,
-loanAmount,
-interestRate,
-loanYears,
-calculateMortgage
-}){
+export function calculateROI(data){
 
-const nights = 365 * (occupancy / 100)
+const nights = 365 * (data.occupancy / 100)
 
-const gross = priceNight * nights
+const gross = data.priceNight * nights
 
-const fees = gross * (commission / 100)
+const yearlyExpenses = data.expenses * 12
 
-const yearlyExpenses = expenses * 12
-
-const mortgage = calculateMortgage(
-loanAmount,
-interestRate,
-loanYears
-)
-
-const operatingProfit = gross - fees - yearlyExpenses
-
-const taxCost =
-operatingProfit > 0
-? operatingProfit * (tax/100)
-: 0
-
-const net = operatingProfit - taxCost - mortgage
+const operatingProfit = gross - yearlyExpenses
 
 const roi =
-equity > 0
-? (net/equity)*100
+data.equity > 0
+? (operatingProfit/data.equity)*100
 : 0
 
 return {
 gross,
-net,
-roi,
-mortgage
+net:operatingProfit,
+roi
 }
 
 }
+
