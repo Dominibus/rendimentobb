@@ -96,11 +96,15 @@ z-index:1000;
 }
 
 .portal-header-inner{
+
 display:flex;
 align-items:center;
 justify-content:space-between;
+
 gap:30px;
-min-height:90px;
+
+min-height:80px;
+
 }
 
 .portal-nav{
@@ -108,8 +112,6 @@ display:flex;
 align-items:center;
 gap:14px;
 font-size:14px;
-margin-left:auto;
-margin-right:auto;
 }
 
 .portal-nav a{
@@ -162,35 +164,26 @@ color:white;
 /* LOGO FIX */
 /* ===================== */
 
-/* CONTAINER LOGO HEADER */
-
 .rb-logo{
 display:flex;
 align-items:center;
-min-width:180px;
-}
-
-/* LOGO */
-
-.logo-img{
-height:70px;
-width:auto;
-display:block;
+flex-shrink:0;
 }
 
 .logo-link{
 display:flex;
 align-items:center;
-flex-shrink:0;
 }
 
 .logo-img{
-height:70px;
-width:auto;
-max-width:none;
-flex-shrink:0;
-}
 
+height:56px;
+width:auto;
+
+max-width:none;      /* IMPORTANTISSIMO */
+object-fit:contain;
+
+}
 
 /* ===================== */
 /* PAGE TITLE */
@@ -1154,8 +1147,8 @@ background-position:center;
 
 min-height:100vh;
 
-display:flex;
-align-items:center;
+display:block;
+padding-top:60px;
 
 }
 
