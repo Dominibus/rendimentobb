@@ -1163,20 +1163,7 @@ function calculate() {
   // attende che Firebase sia pronto
 if(!window.firebaseReady){
 
-console.log("Firebase non pronto, attendo auth...");
-
-document.addEventListener("rb_auth_ready", () => {
-calculate();
-},{ once:true });
-
-document.getElementById("executive-kpi").innerHTML = `
-<div class="kpi-box">
-<span>Loading...</span>
-<strong>...</strong>
-</div>
-`;
-
-return;
+console.log("Firebase non pronto, continuo comunque il calcolo");
 
 }
 
@@ -2571,6 +2558,20 @@ occValue.innerText = occ.value + "%";
 if(citySelector){
 
 citySelector.addEventListener("change",()=>{
+
+const city = citySelector.value;
+
+window.currentCity = city;
+
+renderMarketBenchmark(city);
+changeCityBackground(city);
+
+if(typeof calculate === "function"){
+calculate();
+}
+
+});
+
 
 const city = citySelector.value;
 
