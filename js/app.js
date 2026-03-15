@@ -17,6 +17,12 @@ const db = getFirestore(app);
 
 document.addEventListener("DOMContentLoaded",()=>{
 
+const citySelector = document.getElementById("market-city");
+
+if(citySelector){
+citySelector.value = selectedCity;
+}  
+
 const selectedCity = localStorage.getItem("selected_city");
 
 if(!selectedCity) return;
@@ -473,12 +479,6 @@ if(roi > marketROI){
 message = t("roiAboveCity");
 color = "#10b981";
 
-}else{
-
-message = t("roiBelowCity");
-
-}
-
 badge = `
 <div style="
 margin-bottom:12px;
@@ -488,11 +488,13 @@ background:#ecfdf5;
 border:1px solid #10b981;
 font-weight:600;
 ">
-
 ${t("roiAboveCity")}
-
 </div>
 `;
+
+}else{
+
+message = t("roiBelowCity");
 
 }
 
