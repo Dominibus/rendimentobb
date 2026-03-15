@@ -802,14 +802,18 @@ padding:60px 18px;
 
 .dashboard-layout{
 display:grid;
-grid-template-columns:minmax(0,1fr) 340px;
-gap:32px;
+grid-template-columns:1fr 320px;
+gap:40px;
 align-items:start;
+max-width:1200px;
+margin:auto;
 }
 
 .dashboard-side{
 position:sticky;
 top:110px;
+align-self:start;
+height:fit-content;
 }
 
 /* colonne */
