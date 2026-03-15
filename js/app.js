@@ -1332,11 +1332,6 @@ mortgageYearly,
 equity
 );
 
-let city =
-document.getElementById("market-city")?.value ||
-document.getElementById("city")?.value ||
-null;
-
 const propertyLink = localStorage.getItem("property_link") || "";
 
 function extractCity(url){
@@ -2276,7 +2271,7 @@ const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
 
 const fees = revenue * (commission / 100);
 
-const operatingProfit = revenue - fees - expenses;
+const operatingProfit = revenue - fees - (expenses * 12);
 
 const taxCost = operatingProfit > 0
   ? operatingProfit * (tax / 100)
