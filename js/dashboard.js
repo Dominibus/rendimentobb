@@ -1405,4 +1405,48 @@ window.location.href =
 
 }
 
+// ================= HERO MARKET BACKGROUND =================
+
+function updateMarketHero(city){
+
+const hero = document.getElementById("market-hero-bg");
+const title = document.getElementById("market-hero-title");
+
+if(!hero) return;
+
+const images = {
+
+rome:"/img/rome-bg.jpg",
+naples:"/img/naples-bg.jpg",
+milan:"/img/milan-bg.jpg",
+florence:"/img/florence-bg.jpg"
+
+};
+
+/* ITALIA -> random */
+
+if(city === "italy"){
+
+const keys = Object.keys(images);
+city = keys[Math.floor(Math.random()*keys.length)];
+
+}
+
+/* cambia immagine */
+
+hero.style.backgroundImage = `url('${images[city]}')`;
+
+/* cambia titolo */
+
+const names = {
+rome:"Roma",
+naples:"Napoli",
+milan:"Milano",
+florence:"Firenze"
+};
+
+title.innerText = "Investire in un B&B a " + names[city];
+
+} 
+
 });
