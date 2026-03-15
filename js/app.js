@@ -1768,43 +1768,37 @@ return;
 }
 
 const { jsPDF } = window.jspdf;
-
 const data = window.lastAnalysisData;
 
 const doc = new jsPDF();
 
 let y = 20;
 
+
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
 doc.rect(0,0,210,18,"F");
 
-doc.setFontSize(13);
 doc.setTextColor(255,255,255);
+doc.setFontSize(13);
 
-doc.text(
-"RendimentoBB Strategic Engine",
-20,
-11
-);
+doc.text("RendimentoBB Strategic Engine",20,11);
 
 doc.setFontSize(9);
 
 doc.text(
-lang==="it"
-? "Investment Intelligence Report"
-: "Investment Intelligence Report",
+"Investment Intelligence Report",
 20,
 15
 );
 
+doc.setDrawColor(210);
+doc.line(0,18,210,18);
 
-// ================= TITLE =================
 
-doc.setDrawColor(220);
-doc.line(20,y+2,190,y+2);  
-doc.setFontSize(22);
+// ================= LOGO =================
+
 const logo = new Image();
 logo.src = "/img/logo-report.png";
 
@@ -1812,7 +1806,13 @@ await new Promise(resolve => {
 logo.onload = resolve;
 });
 
-doc.addImage(logo,"PNG",145,3,45,14);
+doc.addImage(logo,"PNG",138,2,60,16);
+
+
+// ================= TITLE =================
+
+doc.setFontSize(22);
+doc.setTextColor(0,0,0);
 
 doc.text(
 lang==="it"
@@ -1821,6 +1821,9 @@ lang==="it"
 20,
 y
 );
+
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
 
 y += 10;
 
@@ -1840,13 +1843,11 @@ y += 8;
 
 // ================= REPORT DATE =================
 
-const reportDate = new Date().toLocaleDateString();
-
 doc.setFontSize(9);
 
 doc.text(
 (lang==="it"?"Data report: ":"Report date: ")
-+ reportDate,
++ new Date().toLocaleDateString(),
 20,
 y
 );
@@ -1854,23 +1855,23 @@ y
 y += 15;
 
 
-// ================= INVESTMENT STRUCTURE =================
 // ================= EXECUTIVE SUMMARY =================
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
 doc.text(
-lang==="it"
-? "Executive Summary"
-: "Executive Summary",
+lang==="it" ? "Executive Summary" : "Executive Summary",
 20,
 y
 );
 
-doc.setTextColor(0,0,0);
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
 
 y += 10;
+
+doc.setTextColor(0,0,0);
 
 let verdict;
 
@@ -1884,39 +1885,41 @@ verdict = lang==="it"
 else if(data.roi > 6){
 
 verdict = lang==="it"
-? "Investimento moderatamente sostenibile con rendimento accettabile."
-: "Moderately sustainable investment with acceptable return.";
+? "Investimento sostenibile con rendimento moderato."
+: "Moderately sustainable investment.";
 
 }
 else{
 
 verdict = lang==="it"
-? "Investimento a rendimento limitato con rischio operativo elevato."
-: "Low return investment with elevated operational risk.";
+? "Investimento con rendimento limitato e rischio operativo."
+: "Low return investment with operational risk.";
 
 }
 
 doc.setFontSize(11);
-
 doc.text(verdict,20,y,{maxWidth:170});
 
 y += 15;
 
 
+// ================= INVESTMENT STRUCTURE =================
+
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
 doc.text(
-lang==="it"
-? "Struttura Investimento"
-: "Investment Structure",
+lang==="it"?"Struttura Investimento":"Investment Structure",
 20,
 y
 );
 
-doc.setTextColor(0,0,0);
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
 
 y += 10;
+
+doc.setTextColor(0,0,0);
 
 const ltv = data.price > 0
 ? ((data.loan / data.price) * 100).toFixed(0)
@@ -1924,240 +1927,161 @@ const ltv = data.price > 0
 
 doc.setFontSize(11);
 
-doc.text(
-(lang==="it"?"Prezzo immobile: ":"Property price: ")
-+ formatCurrency(data.price),
-20,y
-);
+doc.text((lang==="it"?"Prezzo immobile: ":"Property price: ")+formatCurrency(data.price),20,y); y+=7;
+doc.text((lang==="it"?"Capitale investito: ":"Equity invested: ")+formatCurrency(data.equity),20,y); y+=7;
+doc.text((lang==="it"?"Importo mutuo: ":"Loan amount: ")+formatCurrency(data.loan),20,y); y+=7;
+doc.text("Loan to Value: "+ltv+"%",20,y);
 
-y += 7;
-
-doc.text(
-(lang==="it"?"Capitale investito: ":"Equity invested: ")
-+ formatCurrency(data.equity),
-20,y
-);
-
-y += 7;
-
-doc.text(
-(lang==="it"?"Importo mutuo: ":"Loan amount: ")
-+ formatCurrency(data.loan),
-20,y
-);
-
-y += 7;
-
-doc.text(
-(lang==="it"?"Loan to Value: ":"Loan to Value: ")
-+ ltv + "%",
-20,y
-);
-
-y += 15;
+y+=15;
 
 
 // ================= KPI BOX =================
 
-doc.setFillColor(240,248,245);
-doc.setDrawColor(220,230,225);
-  
-doc.roundedRect(20,y,170,22,3,3,"F");
+doc.setFillColor(255,255,255);
+doc.setDrawColor(230);
+
+doc.roundedRect(20,y,170,22,4,4,"FD");
 
 doc.setFontSize(11);
 
-doc.text(
-(lang==="it"?"Ricavi stimati: ":"Estimated revenue: ")
-+ formatCurrency(data.revenue),
-25,
-y+9
-);
-
-doc.text(
-(lang==="it"?"Profitto netto: ":"Net profit: ")
-+ formatCurrency(data.profit),
-95,
-y+9
-);
-
-doc.text(
-(lang==="it" ? "ROI: " : "ROI: ")
-+ data.roi.toFixed(2) + "%",
-150,
-y+9
-);
+doc.text((lang==="it"?"Ricavi stimati: ":"Estimated revenue: ")+formatCurrency(data.revenue),25,y+9);
+doc.text((lang==="it"?"Profitto netto: ":"Net profit: ")+formatCurrency(data.profit),95,y+9);
+doc.text("ROI: "+data.roi.toFixed(2)+"%",150,y+9);
 
 y += 28;
 
 
-// ================= ROI =================
+// ================= ROI HIGHLIGHT =================
 
-let roiColor = [239,68,68];
-
-if(data.roi > 12) roiColor = [16,185,129];
-else if(data.roi > 6) roiColor = [245,158,11];
+let roiColor=[239,68,68];
+if(data.roi>12) roiColor=[16,185,129];
+else if(data.roi>6) roiColor=[245,158,11];
 
 doc.setTextColor(...roiColor);
-
 doc.setFontSize(22);
 doc.setFont(undefined,"bold");
 
 doc.text(
-(lang==="it"?"ROI investimento: ":"Investment ROI: ")
-+ data.roi.toFixed(2) + "%",
+(lang==="it"?"ROI investimento: ":"Investment ROI: ")+data.roi.toFixed(2)+"%",
 20,
 y
 );
 
+doc.setFont(undefined,"normal");
 doc.setTextColor(0,0,0);
 
-y += 18;
+y+=18;
+
 
 // ================= SCENARIO FORECAST =================
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it"
-? "Scenario Ricavi"
-: "Revenue Scenarios",
-20,
-y
-);
+doc.text(lang==="it"?"Scenario Ricavi":"Revenue Scenarios",20,y);
+
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
+
+y+=10;
 
 doc.setTextColor(0,0,0);
 
-y += 10;
-
-const low = data.revenue * 0.8;
-const base = data.revenue;
-const high = data.revenue * 1.2;
+const low=data.revenue*0.8;
+const base=data.revenue;
+const high=data.revenue*1.2;
 
 doc.setFontSize(11);
 
-doc.text(
-(lang==="it"?"Scenario prudente: ":"Conservative scenario: ")
-+ formatCurrency(low),
-20,y
-);
+doc.text((lang==="it"?"Scenario prudente: ":"Conservative scenario: ")+formatCurrency(low),20,y); y+=7;
+doc.text((lang==="it"?"Scenario base: ":"Base scenario: ")+formatCurrency(base),20,y); y+=7;
+doc.text((lang==="it"?"Scenario ottimistico: ":"Optimistic scenario: ")+formatCurrency(high),20,y);
 
-y += 7;
+y+=18;
 
-doc.text(
-(lang==="it"?"Scenario base: ":"Base scenario: ")
-+ formatCurrency(base),
-20,y
-);
-
-y += 7;
-
-doc.text(
-(lang==="it"?"Scenario ottimistico: ":"Optimistic scenario: ")
-+ formatCurrency(high),
-20,y
-);
-
-y += 18;  
 
 // ================= ROI CHART =================
 
-const chartCanvas = document.getElementById("roiChart");
+const chartCanvas=document.getElementById("roiChart");
 
 if(chartCanvas){
 
-const scale = 3;
+const scale=4;
 
-const exportCanvas = document.createElement("canvas");
-exportCanvas.width = chartCanvas.width * scale;
-exportCanvas.height = chartCanvas.height * scale;
+const exportCanvas=document.createElement("canvas");
+exportCanvas.width=chartCanvas.width*scale;
+exportCanvas.height=chartCanvas.height*scale;
 
-const ctx = exportCanvas.getContext("2d");
+const ctx=exportCanvas.getContext("2d");
 
 ctx.scale(scale,scale);
 ctx.drawImage(chartCanvas,0,0);
 
-const chartImage = exportCanvas.toDataURL("image/png",1.0);
+const chartImage=exportCanvas.toDataURL("image/png",1.0);
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
 doc.text(
-lang==="it"
-? "Proiezione Crescita Profitto"
-: "Profit Growth Projection",
+lang==="it"?"Proiezione Crescita Profitto":"Profit Growth Projection",
 20,
 y
 );
 
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
+
 doc.setTextColor(0,0,0);
 
-y += 10;
+y+=10;
 
-doc.addImage(
-chartImage,
-"PNG",
-15,
-y,
-180,
-90
-);
+doc.addImage(chartImage,"PNG",15,y,180,95);
 
-y += 95;
+y+=105;
 
+}
+
+
+// ================= PAGE BREAK =================
+
+if(y>250){
+doc.addPage();
+y=20;
 }
 
 
 // ================= INVESTMENT GRADE =================
 
-let grade = "C";
-let risk = lang==="it"?"Rischio elevato":"High Risk";
+let grade="C";
+let risk=lang==="it"?"Rischio elevato":"High Risk";
 
-if(data.roi > 12){
-
-grade = "A";
-risk = lang==="it"?"Rischio moderato":"Moderate risk";
-
+if(data.roi>12){
+grade="A";
+risk=lang==="it"?"Rischio moderato":"Moderate risk";
 }
-else if(data.roi > 6){
-
-grade = "B";
-risk = lang==="it"?"Rischio medio":"Medium risk";
-
+else if(data.roi>6){
+grade="B";
+risk=lang==="it"?"Rischio medio":"Medium risk";
 }
 
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it"
-? "Valutazione Investimento"
-: "Investment Grade",
-20,
-y
-);
+doc.text(lang==="it"?"Valutazione Investimento":"Investment Grade",20,y);
+
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
+
+y+=10;
 
 doc.setTextColor(0,0,0);
 
-y += 10;
-
 doc.setFontSize(11);
 
-doc.text(
-(lang==="it"?"Investment Grade: ":"Investment Grade: ")
-+ grade,
-20,y
-);
+doc.text("Investment Grade: "+grade,20,y); y+=7;
+doc.text((lang==="it"?"Profilo di rischio: ":"Risk profile: ")+risk,20,y);
 
-y += 7;
-
-doc.text(
-(lang==="it"?"Profilo di rischio: ":"Risk profile: ")
-+ risk,
-20,y
-);
-
-y += 15;
+y+=15;
 
 
 // ================= STRATEGIC INSIGHT =================
@@ -2165,71 +2089,76 @@ y += 15;
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it"
-? "Interpretazione Strategica"
-: "Strategic Insight",
-20,
-y
-);
+doc.text(lang==="it"?"Interpretazione Strategica":"Strategic Insight",20,y);
+
+doc.setDrawColor(235);
+doc.line(20,y+2,190,y+2);
+
+y+=10;
 
 doc.setTextColor(0,0,0);
 
-y += 10;
-
 let insight;
 
-if(data.roi > 12){
+if(data.roi>12){
 
-insight =
+insight=
 lang==="it"
-? "L'investimento mostra una redditività molto elevata rispetto al capitale investito. La leva finanziaria amplifica il ritorno sull'equity mantenendo una struttura economica sostenibile."
-: "The investment shows strong profitability relative to the invested equity. Financial leverage enhances returns while maintaining a sustainable structure.";
+?"Investimento con elevata redditività rispetto al capitale investito."
+:"Investment shows strong profitability.";
 
 }
-else if(data.roi > 6){
+else if(data.roi>6){
 
-insight =
+insight=
 lang==="it"
-? "L'investimento appare sostenibile ma con margini più contenuti. La redditività dipenderà fortemente dal mantenimento di livelli di occupazione stabili."
-: "The investment appears viable but returns depend heavily on maintaining stable occupancy levels.";
+?"Investimento sostenibile ma dipendente dal tasso di occupazione."
+:"Investment viable but dependent on occupancy.";
 
 }
 else{
 
-insight =
+insight=
 lang==="it"
-? "La redditività prevista risulta limitata. Per migliorare la sostenibilità dell'investimento è consigliabile ottimizzare il prezzo medio o ridurre i costi operativi."
-: "Projected profitability is weak. Improving pricing strategy or reducing operating costs could enhance sustainability.";
+?"Investimento con margini ridotti."
+:"Low margin investment.";
 
 }
 
 doc.setFontSize(11);
-
 doc.text(insight,20,y,{maxWidth:170});
 
-y += 25;
+y+=25;
 
 
 // ================= FOOTER =================
 
-doc.setDrawColor(200);
+doc.setDrawColor(220);
 doc.line(20,y,190,y);
 
-y += 8;
+y+=8;
 
 doc.setFontSize(9);
 doc.setTextColor(120);
 
 doc.text(
 lang==="it"
-? "Report generato automaticamente da RendimentoBB Strategic Engine – Analisi indicativa non costituisce consulenza finanziaria."
-: "Report automatically generated by RendimentoBB Strategic Engine – Indicative analysis does not constitute financial advice.",
+?"Report generato automaticamente da RendimentoBB Strategic Engine – Analisi indicativa."
+:"Report generated automatically by RendimentoBB Strategic Engine – Indicative analysis.",
 20,
 y
 );
 
-const pageCount = doc.internal.getNumberOfPages();
+doc.text(
+"Generated: "+new Date().toLocaleString(),
+20,
+y+4
+);
+
+
+// ================= PAGE NUMBERS =================
+
+const pageCount=doc.internal.getNumberOfPages();
 
 for(let i=1;i<=pageCount;i++){
 
@@ -2239,13 +2168,19 @@ doc.setFontSize(8);
 doc.setTextColor(120);
 
 doc.text(
-"Page " + i + " / " + pageCount,
+"Page "+i+" / "+pageCount,
 180,
 290
 );
 
 }
-  
+
+
+// ================= SAVE =================
+
+doc.save("RendimentoBB-Investment-Report.pdf");
+
+}
 
 
 // ================= FILE NAME =================
