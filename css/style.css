@@ -2625,4 +2625,76 @@ font-weight:600;
 margin-top:6px;
 }
 
+/* ===================== */
+/* INVESTMENT OPPORTUNITIES */
+/* ===================== */
+
+.opportunity{
+
+display:flex;
+gap:12px;
+align-items:center;
+
+margin-top:12px;
+padding:10px;
+
+border-radius:10px;
+
+transition:0.2s ease;
+
+}
+
+.opportunity:hover{
+background:#f8fafc;
+}
+
+.opportunity img{
+
+width:90px;
+height:70px;
+
+object-fit:cover;
+
+border-radius:8px;
+
+}
+
+.opportunity-info{
+flex:1;
+}
+
+.opportunity-info strong{
+
+font-size:14px;
+display:block;
+
+}
+
+.opportunity-price{
+
+color:#10b981;
+font-weight:600;
+
+font-size:14px;
+margin-top:2px;
+
+}
+
+.btn-analyze{
+
+background:#10b981;
+color:white;
+
+border:none;
+
+padding:6px 10px;
+
+border-radius:6px;
+
+font-size:12px;
+
+cursor:pointer;
+
+}
+
 /* SIMULATOR HERO PROFESSIONAL */
