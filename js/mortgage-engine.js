@@ -1,8 +1,83 @@
-calculateMortgage
-mortgageSimulation
-compareMortgages
-export {
-calculateMortgage,
-mortgageSimulation,
-compareMortgages
+// ===============================================
+// RENDIMENTOBB – MORTGAGE ENGINE
+// Calcolo rata mutuo + costo annuale
+// ===============================================
+
+
+// ================================
+// CALCOLO RATA MUTUO
+// ================================
+
+export function calculateMortgage(amount, rate, years){
+
+if(!amount || !rate || !years) return 0;
+
+const monthlyRate = rate / 100 / 12;
+const months = years * 12;
+
+const monthlyPayment =
+amount *
+(monthlyRate * Math.pow(1 + monthlyRate, months)) /
+(Math.pow(1 + monthlyRate, months) - 1);
+
+const yearlyCost = monthlyPayment * 12;
+
+return yearlyCost;
+
+}
+
+
+// ================================
+// DETTAGLIO MUTUO
+// ================================
+
+export function mortgageSimulation(amount, rate, years){
+
+if(!amount || !rate || !years) return null;
+
+const monthlyRate = rate / 100 / 12;
+const months = years * 12;
+
+const monthlyPayment =
+amount *
+(monthlyRate * Math.pow(1 + monthlyRate, months)) /
+(Math.pow(1 + monthlyRate, months) - 1);
+
+const totalPaid = monthlyPayment * months;
+
+const totalInterest = totalPaid - amount;
+
+return {
+
+monthlyPayment,
+totalPaid,
+totalInterest
+
+};
+
+}
+
+
+// ================================
+// CONFRONTO MUTUI
+// ================================
+
+export function compareMortgages(amount, years, rates){
+
+const results = [];
+
+rates.forEach(rate => {
+
+const yearlyCost =
+calculateMortgage(amount, rate, years);
+
+results.push({
+rate,
+yearlyCost
+});
+
+});
+
+return results;
+
 }
