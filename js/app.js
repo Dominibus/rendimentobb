@@ -2004,7 +2004,7 @@ y+=18;
 
 const chartCanvas=document.getElementById("roiChart");
 
-if(chartCanvas){
+if(chartCanvas && chartCanvas.width > 0){
 
 const scale=4;
 
@@ -2177,13 +2177,6 @@ doc.text(
 
 
 // ================= SAVE =================
-
-doc.save("RendimentoBB-Investment-Report.pdf");
-
-}
-
-
-// ================= FILE NAME =================
 
 const fileName = lang==="it"
 ? "RendimentoBB-Report-Investimento.pdf"
