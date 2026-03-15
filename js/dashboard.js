@@ -178,6 +178,61 @@ display:false
 
 }
 
+// ===============================
+// CITY ROI CHART
+// ===============================
+
+function renderCityROIChart(){
+
+const ctx = document.getElementById("city-roi-chart");
+
+if(!ctx || typeof Chart === "undefined") return;
+
+new Chart(ctx,{
+
+type:"doughnut",
+
+data:{
+labels:[
+"Napoli",
+"Roma",
+"Firenze",
+"Milano"
+],
+
+datasets:[{
+data:[
+16.7,
+14.2,
+12.9,
+10.5
+],
+
+backgroundColor:[
+"#10b981",
+"#3b82f6",
+"#f59e0b",
+"#6366f1"
+],
+
+borderWidth:0
+}]
+},
+
+options:{
+plugins:{
+legend:{
+position:"bottom"
+}
+},
+cutout:"65%",
+responsive:true
+}
+
+});
+
+}
+
 // ================= LOAD DASHBOARD =================
 
 async function loadDashboard(){
@@ -339,6 +394,7 @@ renderInvestmentRanking(analyses);
 renderCityDistribution(analyses); 
 renderChart();
 renderCashflowChart();
+renderCityROIChart();
 
 }
 
