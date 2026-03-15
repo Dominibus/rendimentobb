@@ -1305,24 +1305,6 @@ box.innerHTML = `
 }
 
 
-// ================= INPUT =================
-
-const amount = getValue("mortgageAmount");
-const years = getValue("mortgageYears");
-
-const rateA = getValue("rateA");
-const rateB = getValue("rateB");
-const rateC = getValue("rateC");
-
-
-if (!amount || !years) {
-
-resultDiv.innerHTML = t("insertMortgageData");
-return;
-
-}
-
-
 // ================= BANK LIST =================
 
 if(!window.RB_MORTGAGE_RATES){
