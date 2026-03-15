@@ -2296,11 +2296,13 @@ width:100%;
 /* ============================= */
 
 .simulator-grid{
+display:grid;
 grid-template-columns:340px 1fr;
 gap:28px;
 max-width:1200px;
 margin:auto;
 padding:10px 20px;
+align-items:start;
 }
 
 .tool-hero:before{
@@ -2324,6 +2326,7 @@ pointer-events:none;
 .simulator-left{
 position:sticky;
 top:110px;
+align-self:start;
 }
 
 .simulator-left .tool-card{
@@ -2369,6 +2372,16 @@ border:1px solid rgba(255,255,255,0.6);
 
 min-height:360px;
 
+}
+
+.simulator-right{
+position:relative;
+z-index:1;
+}
+
+.roi-chart{
+position:relative;
+z-index:1;
 }
 
 .roi-main{
