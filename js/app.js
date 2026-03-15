@@ -2281,6 +2281,8 @@ calculate();
 
 }
 
+// ================= RESTORE CITY =================
+
 const selectedCity = localStorage.getItem("selected_city");
 
 if(citySelector && selectedCity){
@@ -2292,13 +2294,4 @@ changeCityBackground(selectedCity);
 citySelector.dispatchEvent(new Event("change"));
 
 }
-const selectedCity = localStorage.getItem("selected_city");
-if(citySelector && selectedCity){
 
-citySelector.value = selectedCity;
-
-changeCityBackground(selectedCity);
-
-citySelector.dispatchEvent(new Event("change"));
-
-}
