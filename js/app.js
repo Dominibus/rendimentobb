@@ -15,28 +15,7 @@ const db = getFirestore(app);
 
 // ================= CITY FROM HOMEPAGE =================
 
-document.addEventListener("DOMContentLoaded",()=>{
-
 const citySelector = document.getElementById("market-city");
-
-if(citySelector){
-citySelector.value = selectedCity;
-}  
-
-const selectedCity = localStorage.getItem("selected_city");
-
-if(!selectedCity) return;
-
-// salva città globale
-window.currentCity = selectedCity;
-
-// aggiorna benchmark
-renderMarketBenchmark(selectedCity);
-
-// cambia background
-changeCityBackground(selectedCity);
-
-});
 
 
 // ================= SAVE ANALYSIS =================
@@ -1311,12 +1290,7 @@ showUpgradePopup(roi);
 
 // MARKET BENCHMARK + COMPARISON
 
-let city =
-window.currentCity ||
-document.getElementById("market-city")?.value ||
-document.getElementById("city")?.value ||
-localStorage.getItem("selected_city") ||
-null;
+let city = window.currentCity || citySelector?.value || null;
 
 if(city){
 
@@ -2593,3 +2567,23 @@ occValue.innerText = occ.value + "%";
 }
 
 });
+
+if(citySelector){
+
+citySelector.addEventListener("change",()=>{
+
+const city = citySelector.value;
+
+window.currentCity = city;
+localStorage.setItem("selected_city", city);
+
+renderMarketBenchmark(city);
+
+});
+
+}
+const selectedCity = localStorage.getItem("selected_city");
+if(citySelector && selectedCity){
+citySelector.value = selectedCity;
+citySelector.dispatchEvent(new Event("change"));
+}
