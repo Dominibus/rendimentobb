@@ -832,7 +832,7 @@ gap:28px;
 margin-bottom:40px;
 }
 
-@media (max-width:1024px){
+@media (max-width:900px){
 .dashboard-charts{
 grid-template-columns:1fr;
 }
