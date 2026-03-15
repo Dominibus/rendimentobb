@@ -195,11 +195,33 @@ margin:auto;
 <h3 data-it="💰 Struttura Investimento"
 data-en="💰 Investment Structure"></h3>
 
+
+<div class="input-group">
+
+<label data-it="Città mercato"
+data-en="City Market"></label>
+
+<select id="market-city" class="market-select" onchange="calculate()">
+
+<option value="roma">Roma</option>
+<option value="napoli">Napoli</option>
+<option value="milano">Milano</option>
+<option value="firenze">Firenze</option>
+<option value="torino">Torino</option>
+<option value="bologna">Bologna</option>
+<option value="venezia">Venezia</option>
+
+</select>
+
+</div>
+
+
 <div class="input-group">
 <label data-it="Prezzo immobile (€)"
 data-en="Property price (€)"></label>
 <input type="number" id="price" placeholder="150000">
 </div>
+
 
 <div class="input-group">
 <label data-it="Capitale proprio investito (€)"
@@ -462,7 +484,7 @@ data-it="Proiezione Cashflow 5 anni"
 data-en="5-Year Cashflow Projection">
 </div>
 
-<canvas id="roiChart" height="120"></canvas>
+<canvas id="roiChartProjection" height="120"></canvas>
 
 </div>
 
