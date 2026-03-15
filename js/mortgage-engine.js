@@ -88,3 +88,8 @@ yearlyCost
 
 });
 
+return results;
+
+}
+
+
