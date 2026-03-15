@@ -324,44 +324,6 @@ let roiChartInstance = null;
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
 
-// ================= MARKET BENCHMARK =================
-
-function renderMarketBenchmark(cityKey){
-
-  if(!window.RB_MARKET_DATA) return;
-
-  const priceEl = document.getElementById("benchmark-price");
-  const occEl = document.getElementById("benchmark-occupancy");
-  const revEl = document.getElementById("benchmark-revenue");
-
-  if(!priceEl || !occEl || !revEl) return;
-
-  const data = window.RB_MARKET_DATA[cityKey];
-
-  if(!data){
-
-    priceEl.innerHTML = "—";
-    occEl.innerHTML = "—";
-    revEl.innerHTML = "—";
-
-    return;
-  }
-
-  const price = data.price;
-  const occupancy = data.occupancy;
-
-  const nights = 365 * occupancy;
-  const revenue = price * nights;
-
-  priceEl.innerHTML = formatCurrency(price);
-
-  occEl.innerHTML =
-    Math.round(occupancy * 100) + "%";
-
-  revEl.innerHTML =
-    formatCurrency(revenue);
-
-}
 
 // ================= MARKET COMPARISON =================
 
