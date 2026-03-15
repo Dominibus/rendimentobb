@@ -1764,7 +1764,6 @@ lang==="it"
 );
 
 return;
-
 }
 
 const { jsPDF } = window.jspdf;
@@ -1772,23 +1771,25 @@ const data = window.lastAnalysisData;
 
 const doc = new jsPDF();
 
-let y = 35;
+let y = 34;
 
 
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,24,"F");
+doc.rect(0,0,210,26,"F");
 
 doc.setTextColor(255,255,255);
 doc.setFontSize(12);
 
-doc.text("RendimentoBB Strategic Engine",20,15);
+doc.text("RendimentoBB Strategic Engine",20,14);
 
 doc.setFontSize(9);
 
 doc.text(
-"Investment Intelligence Report",
+lang==="it"
+? "Report Intelligence Investimenti"
+: "Investment Intelligence Report",
 20,
 20
 );
@@ -1833,7 +1834,7 @@ y,
 y+=10;
 
 
-// ================= REPORT DATE =================
+// ================= DATE =================
 
 doc.setFontSize(9);
 
@@ -1844,7 +1845,7 @@ doc.text(
 y
 );
 
-y+=15;
+y+=14;
 
 
 // ================= EXECUTIVE SUMMARY =================
@@ -1861,13 +1862,13 @@ doc.setTextColor(0,0,0);
 let verdict;
 
 if(data.roi>12){
-verdict="High potential investment with above-market return.";
+verdict = t("insightSolid");
 }
 else if(data.roi>6){
-verdict="Moderately sustainable investment.";
+verdict = t("insightMedium");
 }
 else{
-verdict="Low return investment with operational risk.";
+verdict = t("insightWeak");
 }
 
 doc.setFontSize(11);
@@ -1881,21 +1882,47 @@ y+=15;
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text("Investment Structure",20,y);
+doc.text(
+lang==="it"
+?"Struttura Investimento"
+:"Investment Structure",
+20,
+y
+);
 
 y+=10;
 
 doc.setTextColor(0,0,0);
 doc.setFontSize(11);
 
-const ltv=data.price>0?((data.loan/data.price)*100).toFixed(0):0;
+const ltv = data.price>0
+? ((data.loan/data.price)*100).toFixed(0)
+:0;
 
-doc.text("Property price: "+formatCurrency(data.price),20,y); y+=7;
-doc.text("Equity invested: "+formatCurrency(data.equity),20,y); y+=7;
-doc.text("Loan amount: "+formatCurrency(data.loan),20,y); y+=7;
+doc.text(
+(lang==="it"?"Prezzo immobile: ":"Property price: ")
++ formatCurrency(data.price),
+20,
+y
+); y+=7;
+
+doc.text(
+(lang==="it"?"Capitale investito: ":"Equity invested: ")
++ formatCurrency(data.equity),
+20,
+y
+); y+=7;
+
+doc.text(
+(lang==="it"?"Importo mutuo: ":"Loan amount: ")
++ formatCurrency(data.loan),
+20,
+y
+); y+=7;
+
 doc.text("Loan to Value: "+ltv+"%",20,y);
 
-y+=15;
+y+=14;
 
 
 // ================= KPI BOX =================
@@ -1905,20 +1932,36 @@ doc.roundedRect(20,y,170,22,3,3);
 
 doc.setFontSize(11);
 
-doc.text("Revenue: "+formatCurrency(data.revenue),25,y+9);
-doc.text("Profit: "+formatCurrency(data.profit),90,y+9);
-doc.text("ROI: "+data.roi.toFixed(2)+"%",150,y+9);
+doc.text(
+(lang==="it"?"Ricavi: ":"Revenue: ")
++ formatCurrency(data.revenue),
+25,
+y+9
+);
 
-y+=28;
+doc.text(
+(lang==="it"?"Profitto: ":"Profit: ")
++ formatCurrency(data.profit),
+90,
+y+9
+);
+
+doc.text(
+t("roi")+": "+data.roi.toFixed(2)+"%",
+150,
+y+9
+);
+
+y+=30;
 
 
 // ================= ROI =================
 
-doc.setFontSize(20);
+doc.setFontSize(22);
 doc.setTextColor(16,185,129);
 
 doc.text(
-"ROI: "+data.roi.toFixed(2)+"%",
+t("roi")+": "+data.roi.toFixed(2)+"%",
 20,
 y
 );
@@ -1933,7 +1976,13 @@ y+=18;
 doc.setFontSize(14);
 doc.setTextColor(16,185,129);
 
-doc.text("Revenue Scenarios",20,y);
+doc.text(
+lang==="it"
+?"Scenario Ricavi"
+:"Revenue Scenarios",
+20,
+y
+);
 
 y+=10;
 
@@ -1944,9 +1993,9 @@ const low=data.revenue*0.8;
 const base=data.revenue;
 const high=data.revenue*1.2;
 
-doc.text("Conservative: "+formatCurrency(low),20,y); y+=7;
-doc.text("Base: "+formatCurrency(base),20,y); y+=7;
-doc.text("Optimistic: "+formatCurrency(high),20,y);
+doc.text(t("lowScenario")+": "+formatCurrency(low),20,y); y+=7;
+doc.text(t("baseScenario")+": "+formatCurrency(base),20,y); y+=7;
+doc.text(t("highScenario")+": "+formatCurrency(high),20,y);
 
 y+=15;
 
@@ -1970,18 +2019,15 @@ ctx.drawImage(chartCanvas,0,0);
 
 const img = exportCanvas.toDataURL("image/png",1.0);
 
-// dimensione grafico PDF
 const chartWidth = 170;
-const chartHeight = 80;
+const chartHeight = 75;
 
-// se non entra nella pagina
 if(y + chartHeight > 260){
 doc.addPage();
 y = 30;
 }
 
-// centrato
-const chartX = (210 - chartWidth) / 2;
+const chartX = (210 - chartWidth)/2;
 
 doc.addImage(
 img,
@@ -1997,8 +2043,7 @@ y += chartHeight + 10;
 }
 
 
-
-// ================= PAGE BREAK =================
+// ================= PAGE 2 =================
 
 doc.addPage();
 y=30;
@@ -2009,7 +2054,7 @@ y=30;
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text("Investment Grade",20,y);
+doc.text(t("grade"),20,y);
 
 y+=12;
 
@@ -2018,40 +2063,41 @@ let risk="High Risk";
 
 if(data.roi>12){
 grade="A";
-risk="Moderate Risk";
+risk=lang==="it"?"Rischio moderato":"Moderate Risk";
 }
 else if(data.roi>6){
 grade="B";
-risk="Medium Risk";
+risk=lang==="it"?"Rischio medio":"Medium Risk";
 }
 
 doc.setFontSize(12);
 doc.setTextColor(0,0,0);
 
 doc.text("Grade: "+grade,20,y); y+=7;
-doc.text("Risk profile: "+risk,20,y);
+doc.text((lang==="it"?"Profilo rischio: ":"Risk profile: ")+risk,20,y);
 
 y+=15;
 
 
-// ================= STRATEGIC INSIGHT =================
+// ================= STRATEGIC =================
 
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text("Strategic Insight",20,y);
+doc.text(
+lang==="it"
+?"Interpretazione Strategica"
+:"Strategic Insight",
+20,
+y
+);
 
 y+=10;
 
 doc.setFontSize(11);
 doc.setTextColor(0,0,0);
 
-doc.text(
-"Investment profitability is strongly influenced by occupancy rates and pricing strategy. Proper management and market positioning can significantly improve returns.",
-20,
-y,
-{maxWidth:170}
-);
+doc.text(verdict,20,y,{maxWidth:170});
 
 y+=20;
 
@@ -2065,7 +2111,9 @@ doc.setFontSize(9);
 doc.setTextColor(120);
 
 doc.text(
-"Report generated by RendimentoBB Strategic Engine – Informational purpose only.",
+lang==="it"
+?"Report generato automaticamente da RendimentoBB Strategic Engine – Analisi indicativa."
+:"Report generated by RendimentoBB Strategic Engine – Informational purpose only.",
 20,
 278
 );
@@ -2073,7 +2121,7 @@ doc.text(
 
 // ================= PAGE NUMBERS =================
 
-const pages=doc.internal.getNumberOfPages();
+const pages = doc.internal.getNumberOfPages();
 
 for(let i=1;i<=pages;i++){
 
@@ -2092,9 +2140,14 @@ doc.text(
 
 // ================= SAVE =================
 
-doc.save("RendimentoBB-Investment-Report.pdf");
+doc.save(
+lang==="it"
+? "RendimentoBB-Report-Investimento.pdf"
+: "RendimentoBB-Investment-Report.pdf"
+);
 
 }
+
 
 // ================= EXPORT GLOBAL =================
 
