@@ -238,9 +238,22 @@ transition:background 0.6s ease;
 
 }
 
+.hero.rome{
+background-position:center 50%;
+}
+
 .hero.naples{
 background-position:center 65%;
 }
+
+.hero.milan{
+background-position:center 45%;
+}
+
+.hero.florence{
+background-position:center 55%;
+}
+
 /* HERO CITY POSITION FIX */
 
 .hero.rome{
