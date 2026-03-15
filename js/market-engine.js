@@ -1,0 +1,12 @@
+renderMarketBenchmark
+renderMarketComparison
+renderROIMarketComparison
+renderRevenueForecast
+renderOccupancySensitivity
+export {
+renderMarketBenchmark,
+renderMarketComparison,
+renderROIMarketComparison,
+renderRevenueForecast,
+renderOccupancySensitivity
+}
