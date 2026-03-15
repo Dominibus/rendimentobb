@@ -2281,19 +2281,15 @@ calculate();
 
 }
 
+const selectedCity = localStorage.getItem("selected_city");
 
-const city = citySelector.value;
+if(citySelector && selectedCity){
 
-window.currentCity = city;
-localStorage.setItem("selected_city", city);
+citySelector.value = selectedCity;
 
-// aggiorna benchmark
-renderMarketBenchmark(city);
+changeCityBackground(selectedCity);
 
-// aggiorna sfondo hero
-changeCityBackground(city);
-
-});
+citySelector.dispatchEvent(new Event("change"));
 
 }
 const selectedCity = localStorage.getItem("selected_city");
