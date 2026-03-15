@@ -201,7 +201,7 @@ data-en="💰 Investment Structure"></h3>
 <label data-it="Città mercato"
 data-en="City Market"></label>
 
-<select id="market-city" class="market-select" onchange="calculate()">
+<select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
 
 <option value="">Seleziona città</option>
 
@@ -768,6 +768,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const citySelect = document.getElementById("market-city");
+const savedCity = localStorage.getItem("selected_city");
+
+if(citySelect && savedCity){
+
+citySelect.value = savedCity;
+applyMarketData(savedCity);
+
+}
+
+});  
 
 </script>
 
