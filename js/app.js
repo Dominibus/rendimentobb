@@ -2232,7 +2232,7 @@ const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
 
 const fees = revenue * (commission / 100);
 
-const operatingProfit = revenue - fees - (expenses * 12);
+const operatingProfit = revenue - fees - expenses;
 
 const taxCost = operatingProfit > 0
   ? operatingProfit * (tax / 100)
