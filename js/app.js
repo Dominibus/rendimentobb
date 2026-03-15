@@ -21,17 +21,17 @@ const selectedCity = localStorage.getItem("selected_city");
 
 if(!selectedCity) return;
 
-const select = document.querySelector(".market-select");
+// salva città globale
+window.currentCity = selectedCity;
 
-if(select){
+// aggiorna benchmark
+renderMarketBenchmark(selectedCity);
 
-select.value = selectedCity;
-applyMarketData(selectedCity);
+// cambia background
 changeCityBackground(selectedCity);
 
-}
-
 });
+
 
 // ================= SAVE ANALYSIS =================
 
@@ -1307,16 +1307,18 @@ showUpgradePopup(roi);
 
 // MARKET BENCHMARK + COMPARISON
 
-const citySelect =
-  document.querySelector(".market-select") ||
-  document.getElementById("market-city") ||
-  document.getElementById("city");
+let city =
+window.currentCity ||
+document.getElementById("market-city")?.value ||
+document.getElementById("city")?.value ||
+localStorage.getItem("selected_city") ||
+null;
 
-if(citySelect && citySelect.value){
+if(city){
 
-  renderMarketBenchmark(citySelect.value);
-  renderMarketComparison(gross, citySelect.value);
-  renderROIMarketComparison(roi, citySelect.value);
+renderMarketBenchmark(city);
+renderMarketComparison(gross, city);
+renderROIMarketComparison(roi, city);
 
 }
 
