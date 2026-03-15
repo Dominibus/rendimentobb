@@ -324,35 +324,6 @@ let roiChartInstance = null;
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
 
-// ================= MORTGAGE =================
-
-function calculateMortgage(amount, rate, years) {
-
-  if (!amount || !years) return 0;
-
-  if (rate === 0) return amount / years;
-
-  const r = rate / 100;
-  const n = years;
-
-  return amount *
-    (r * Math.pow(1 + r, n)) /
-    (Math.pow(1 + r, n) - 1);
-
-}
-
-function mortgageSimulation(amount, rate, years) {
-
-  if (!amount || !rate || !years) return null;
-
-  const yearlyPayment = calculateMortgage(amount, rate, years);
-  const totalPaid = yearlyPayment * years;
-  const totalInterest = totalPaid - amount;
-
-  return { yearlyPayment, totalPaid, totalInterest };
-
-}
-
 // ================= MARKET BENCHMARK =================
 
 function renderMarketBenchmark(cityKey){
