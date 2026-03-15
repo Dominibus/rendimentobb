@@ -51,7 +51,7 @@ genova: {
   occupancy: 0.67,
   annualRevenue: 25700,
   roi: 8.1
-}
+},
 
 roma: {
   city: "Roma",
@@ -83,7 +83,7 @@ bologna: {
   occupancy: 0.70,
   annualRevenue: 31900,
   roi: 9.0
-}
+},
 
 napoli: {
   city: "Napoli",
@@ -115,7 +115,7 @@ matera: {
   occupancy: 0.70,
   annualRevenue: 30600,
   roi: 10.4
-}
+},
 
 palermo: {
   city: "Palermo",
@@ -139,7 +139,7 @@ taormina: {
   occupancy: 0.73,
   annualRevenue: 49200,
   roi: 12.3
-}
+},
 
 venezia: {
   city: "Venezia",
