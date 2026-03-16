@@ -1999,7 +1999,9 @@ window.location.href = "/tool/";
 
 const originalCalculate = window.calculate;
 
-window.calculate = function(){
+window.calculate = function(force = false){
+
+originalCalculate(force);
 
 originalCalculate();
 
