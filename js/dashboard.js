@@ -612,7 +612,7 @@ if(kpiContainer){
 
 kpiContainer.innerHTML = `
 
-<div class="analysis-card">
+<div class="stats-card">
 
 <h3>${t("Capitale portfolio","Portfolio capital")}</h3>
 
@@ -623,7 +623,7 @@ ${formatCurrency(totalCapital)}
 </div>
 
 
-<div class="analysis-card">
+<div class="stats-card">
 
 <h3>${t("ROI medio","Average ROI")}</h3>
 
@@ -634,7 +634,7 @@ ${avgROI}%
 </div>
 
 
-<div class="analysis-card">
+<div class="stats-card">
 
 <h3>${t("Analisi salvate","Saved analyses")}</h3>
 
@@ -645,7 +645,7 @@ ${count}
 </div>
 
 
-<div class="analysis-card">
+<div class="stats-card">
 
 <h3>${t("Investment Score","Investment Score")}</h3>
 
@@ -817,7 +817,7 @@ const statsContainer = document.getElementById("dashboard-stats");
 
 statsContainer.innerHTML=`
 
-<div class="analysis-card">
+<div class="stats-card">
 
 <h3>${t("Account","Account")}</h3>
 
