@@ -1611,4 +1611,3 @@ title.innerText = "Investire in un B&B a " + names[city];
 
 } 
 
-});
