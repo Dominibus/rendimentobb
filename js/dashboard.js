@@ -1513,6 +1513,15 @@ if(!confirmDelete) return;
 
 try{
 
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+if(!auth.currentUser){
+alert("Sessione non valida. Ricarica la pagina.");
+return;
+}
+
 await deleteDoc(doc(db,"analyses",id));
 
 btn.closest(".analysis-card")?.remove();
