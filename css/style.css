@@ -1024,26 +1024,26 @@ overflow:hidden;
 @media (max-width:768px){
 
 .stats-grid{
-grid-template-columns:1fr;
+display:grid;
+grid-template-columns:1fr !important;
 gap:18px;
 }
 
-}
-/* dashboard top layout */
-
 .dashboard-top-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:30px;
-margin-bottom:40px;
-}
-
-@media (max-width:768px){
-
-.dashboard-top-grid{
 grid-template-columns:1fr;
 gap:20px;
 }
+
+.analysis-grid{
+display:grid;
+grid-template-columns:1fr;
+gap:20px;
+}
+
+.stats-grid > *{
+width:100%;
+} 
 
 }
 
