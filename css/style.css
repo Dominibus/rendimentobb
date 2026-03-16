@@ -809,6 +809,8 @@ max-width:1200px;
 margin:auto;
 }
 
+/* MOBILE FIX */
+
 @media (max-width:900px){
 
 .dashboard-layout{
@@ -1006,7 +1008,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 .stats-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 gap:22px;
 margin-bottom:50px;
 width:100%;
