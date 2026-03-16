@@ -822,6 +822,14 @@ position:relative;
 top:auto;
 }
 
+.dashboard-main{
+width:100%;
+}
+
+.stats-grid{
+grid-template-columns:1fr !important;
+} 
+
 }
 
 /* colonne */
@@ -831,6 +839,7 @@ display:flex;
 flex-direction:column;
 gap:28px;
 min-width:0;
+width:100%;
 }
 
 .dashboard-charts{
@@ -1026,7 +1035,13 @@ overflow:hidden;
 .stats-grid{
 display:grid;
 grid-template-columns:1fr !important;
-gap:18px;
+gap:22px;
+width:100%;
+}
+
+.stats-grid > *{
+width:100%;
+max-width:100%;
 }
 
 .dashboard-top-grid{
@@ -1040,10 +1055,6 @@ display:grid;
 grid-template-columns:1fr;
 gap:20px;
 }
-
-.stats-grid > *{
-width:100%;
-} 
 
 }
 
