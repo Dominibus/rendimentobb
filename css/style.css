@@ -809,11 +809,17 @@ max-width:1200px;
 margin:auto;
 }
 
+@media (max-width:900px){
+
+.dashboard-layout{
+grid-template-columns:1fr;
+}
+
 .dashboard-side{
-position:sticky;
-top:110px;
-align-self:start;
-height:fit-content;
+position:relative;
+top:auto;
+}
+
 }
 
 /* colonne */
