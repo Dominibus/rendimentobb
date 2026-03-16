@@ -394,6 +394,25 @@ ${roi.toFixed(1)}%
 <strong>${formatCurrency(yearlyProfit)}</strong>
 </div>
 
+<div style="margin-top:12px;text-align:right">
+
+<button 
+class="delete-analysis" 
+data-id="${data.id}"
+style="
+background:#ef4444;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+font-size:12px;
+cursor:pointer;
+">
+🗑 ${t("Elimina","Delete")}
+</button>
+
+</div>
+
 `;
 
 list.appendChild(card);
@@ -1484,6 +1503,41 @@ if(!window.bestInvestmentData){
 alert("Nessuna analisi disponibile");
 return;
 }
+
+// ================= DELETE ANALYSIS =================
+
+import {
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+document.addEventListener("click", async (e)=>{
+
+if(!e.target.classList.contains("delete-analysis")) return;
+
+const id = e.target.dataset.id;
+
+const confirmDelete = confirm(
+window.currentLang === "en"
+? "Delete this analysis?"
+: "Eliminare questa analisi?"
+);
+
+if(!confirmDelete) return;
+
+try{
+
+await deleteDoc(doc(db,"analyses",id));
+
+loadDashboard(); // ricarica dati senza refresh pagina
+
+}catch(err){
+
+console.error("Delete error",err);
+
+}
+
+}); 
 
 /* reindirizza al tool con parametri */
 
