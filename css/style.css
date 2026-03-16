@@ -2702,4 +2702,24 @@ font-weight:600;
 margin-top:6px;
 }
 
+/* ===================== */
+/* FINAL MOBILE OVERRIDE */
+/* ===================== */
+
+@media (max-width:768px){
+
+.stats-grid{
+grid-template-columns:1fr !important;
+}
+
+.analysis-grid{
+grid-template-columns:1fr !important;
+}
+
+.dashboard-charts{
+grid-template-columns:1fr !important;
+}
+
+}
+
 /* SIMULATOR HERO PROFESSIONAL */
