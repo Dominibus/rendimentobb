@@ -1550,10 +1550,8 @@ window.location.href =
 
 document.addEventListener("click",(e)=>{
 
-const deleteBtn = e.target.closest(".delete-analysis");
-
-if(deleteBtn){
-deleteAnalysis({ ...e, target: deleteBtn });
+if(e.target.closest(".delete-analysis")){
+deleteAnalysis(e);
 }
 
 if(e.target.id === "download-report"){
