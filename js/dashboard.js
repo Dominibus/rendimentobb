@@ -1500,6 +1500,8 @@ document.addEventListener("click", async (e)=>{
 const btn = e.target.closest(".delete-analysis");
 if(!btn) return;
 
+e.stopPropagation();
+
 const id = btn.dataset.id;
 
 const confirmDelete = confirm(
