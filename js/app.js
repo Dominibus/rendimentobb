@@ -1985,6 +1985,8 @@ return;
 
 localStorage.setItem("property_link", link);
 
+sessionStorage.setItem("from_property_page", true);  
+
 window.location.href = "/tool/";
 
 };
@@ -2308,9 +2310,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const link = localStorage.getItem("property_link");
 
-if(link){
-console.log("Analisi immobile da link:", link);
+// carica solo se l'utente arriva dalla pagina immobile
+if(link && sessionStorage.getItem("from_property_page")){
 loadPropertyFromLink();
+sessionStorage.removeItem("from_property_page");
 }
 
   const occ = document.getElementById("occupancy");
