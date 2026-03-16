@@ -40,7 +40,14 @@ async function saveAnalysis(data){
   // salva solo se la simulazione è stata eseguita
   if(!window.simulationExecuted) return;
 
-  if(!window.currentUser || !window.currentUser.uid) return;
+  // blocco anti-duplicazione
+  if(window.analysisSaving) return;
+  window.analysisSaving = true;
+
+  if(!window.currentUser || !window.currentUser.uid){
+    window.analysisSaving = false;
+    return;
+  }
 
 try{
 
@@ -54,14 +61,18 @@ try{
   createdAt: new Date()
   });
 
-  }catch(e){
+}catch(e){
 
-    console.error("Errore salvataggio analisi:",e);
+  console.error("Errore salvataggio analisi:",e);
 
-  }
+}finally{
+
+  // sblocca per la prossima simulazione
+  window.analysisSaving = false;
 
 }
 
+}
 
 // ================= PLAN SYSTEM =================
 
