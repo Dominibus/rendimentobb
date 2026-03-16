@@ -1835,7 +1835,16 @@ color:#10b981;
 @media (max-width:1024px){
 
 .dashboard-layout{
-grid-template-columns:1fr;
+display:flex;
+flex-direction:column;
+}
+
+.dashboard-main{
+order:1;
+}
+
+.dashboard-side{
+order:2;
 }
 
 .tool-card{
