@@ -846,6 +846,7 @@ grid-template-columns:1fr;
 display:flex;
 gap:12px;
 align-items:center;
+flex-wrap:wrap; 
 margin-top:12px;
 padding:10px;
 border-radius:10px;
@@ -897,6 +898,20 @@ font-weight:600;
 font-size:14px;
 
 margin-top:2px;
+
+}
+
+@media (max-width:768px){
+
+.opportunity{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.opportunity img{
+width:100%;
+height:160px;
+}
 
 }
 
@@ -993,6 +1008,14 @@ margin-bottom:50px;
 .stats-grid > *{
 min-width:0;
 overflow:hidden;
+}
+
+@media (max-width:768px){
+
+.stats-grid{
+grid-template-columns:1fr;
+}
+
 }
 
 /* dashboard top layout */
@@ -1788,8 +1811,8 @@ font-size:15px;
 
 .portal-header-inner{
 grid-template-columns:1fr;
-justify-items:center;
-gap:8px;
+text-align:center;
+gap:10px;
 }
 
 .right-controls{
@@ -2097,6 +2120,7 @@ height:100% !important;
 
 canvas{
 max-width:100%;
+height:auto !important;
 }
 
 /* TRUST / MARKET */
@@ -2619,6 +2643,8 @@ color:#64748b;
 
 .metric strong{
 font-size:20px;
+word-break:break-word;
+overflow-wrap:anywhere;
 }
 
 .range-value{
