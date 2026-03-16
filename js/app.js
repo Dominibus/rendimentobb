@@ -2217,11 +2217,7 @@ console.log("Città rilevata:", data.city);
 // salva prezzo
 localStorage.setItem("property_price", data.price);
 
-setTimeout(()=>{
-if(typeof calculate === "function"){
-calculate();
-}
-},300);
+// calcolo manuale solo quando l'utente clicca "Calcola ROI"
 
 }else{
 
@@ -2344,9 +2340,8 @@ localStorage.setItem("selected_city", city);
 renderMarketBenchmark(city);
 changeCityBackground(city);
 
-if(typeof calculate === "function"){
-calculate();
-}
+// non avviare automaticamente la simulazione
+// calculate();
 
 });
 
@@ -2362,7 +2357,7 @@ citySelector.value = selectedCity;
 
 changeCityBackground(selectedCity);
 
-citySelector.dispatchEvent(new Event("change"));
+// citySelector.dispatchEvent(new Event("change"));
 
 }
 
