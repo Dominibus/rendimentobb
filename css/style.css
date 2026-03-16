@@ -2151,12 +2151,16 @@ grid-template-columns:1fr;
 
 /* PREVENT CARD OVERFLOW */
 
-.metric strong,
-.analysis-card,
-.kpi-box{
-word-break:break-word;
-overflow-wrap:break-word;
-}  
+.analysis-card{
+word-break:normal;
+overflow-wrap:normal;
+}
+
+.metric strong{
+white-space:nowrap;
+word-break:normal;
+overflow-wrap:normal;
+}
 
 html,body{
 max-width:100%;
@@ -2654,9 +2658,11 @@ color:#64748b;
 }
 
 .metric strong{
-font-size:20px;
-word-break:break-word;
-overflow-wrap:anywhere;
+font-size:22px;
+font-weight:700;
+display:block;
+margin-top:6px;
+white-space:nowrap;
 }
 
 .range-value{
