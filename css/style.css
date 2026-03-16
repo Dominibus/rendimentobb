@@ -1017,6 +1017,10 @@ overflow:hidden;
 grid-template-columns:1fr;
 }
 
+.analysis-card{
+overflow:hidden;
+} 
+
 }
 
 /* dashboard top layout */
@@ -1060,6 +1064,9 @@ box-shadow:0 35px 90px rgba(15,23,42,.12);
 margin-bottom:16px;
 font-size:18px;
 font-weight:600;
+white-space:normal;
+word-break:normal;
+line-height:1.3; 
 }
 
 .metric{
@@ -2098,10 +2105,14 @@ margin-bottom:6px;
 }
 
 .metric strong{
-font-size:20px;
+font-size:22px;
+font-weight:700;
 display:block;
-margin-top:4px;
-white-space:nowrap;
+margin-top:6px;
+line-height:1.2;
+white-space:normal;
+word-break:break-word;
+overflow-wrap:anywhere;
 }
 
 /* CHART */
