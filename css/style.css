@@ -784,14 +784,14 @@ font-size:18px;
 .dashboard-container{
 max-width:1600px;
 margin:auto;
-padding:90px 40px 80px 40px;
+padding:90px 24px 80px 24px;
 overflow-x:hidden;
 }
 
 @media (max-width:768px){
 
 .dashboard-container{
-padding:60px 18px;
+padding:60px 12px;
 }
 
 }
