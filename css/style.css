@@ -2101,8 +2101,8 @@ margin-bottom:6px;
 font-size:20px;
 display:block;
 margin-top:4px;
-word-break:break-word;
-}  
+white-space:nowrap;
+}
 
 /* CHART */
 
