@@ -2737,4 +2737,37 @@ grid-template-columns:1fr !important;
 
 }
 
+/* ============================= */
+/* DASHBOARD KPI MOBILE FIX */
+/* ============================= */
+
+@media (max-width:768px){
+
+.stats-grid{
+display:grid !important;
+grid-template-columns:1fr !important;
+gap:18px;
+}
+
+.dashboard-top-grid{
+display:grid !important;
+grid-template-columns:1fr !important;
+}
+
+.dashboard-charts{
+grid-template-columns:1fr !important;
+}
+
+.analysis-grid{
+grid-template-columns:1fr !important;
+}
+
+.stats-card,
+.analysis-card{
+width:100%;
+max-width:100%;
+}
+
+}
+
 /* SIMULATOR HERO PROFESSIONAL */
