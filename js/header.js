@@ -121,25 +121,6 @@ images[city] +
 };
 
 /* ===================== */
-/* HEADER LOAD */
-/* ===================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-const header = `
-
-<header class="portal-header">
-...
-</header>
-
-`;
-
-document.body.insertAdjacentHTML("afterbegin", header);
-
-...
-});
-
-/* ===================== */
 /* HAMBURGER MENU */
 /* ===================== */
 
