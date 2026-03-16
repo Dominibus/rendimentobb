@@ -1500,7 +1500,8 @@ document.addEventListener("click", async (e)=>{
 const btn = e.target.closest(".delete-analysis");
 if(!btn) return;
 
-e.stopPropagation();
+e.preventDefault();
+e.stopImmediatePropagation();
 
 const id = btn.dataset.id;
 
@@ -1516,11 +1517,11 @@ try{
 
 await deleteDoc(doc(db,"analyses",id));
 
-btn.closest(".analysis-card").remove();
+btn.closest(".analysis-card")?.remove();
 
 }catch(err){
 
-console.error("Delete error",err);
+console.error("Delete error:",err);
 
 }
 
@@ -1539,17 +1540,13 @@ alert("Nessuna analisi disponibile");
 return;
 }
 
-/* reindirizza al tool con parametri */
-
 const data = window.bestInvestmentData;
 
 const params = new URLSearchParams({
-
 price:data.price,
 roi:data.roi,
 equity:data.equity,
 risk:data.risk
-
 });
 
 window.location.href =
@@ -1557,32 +1554,7 @@ window.location.href =
 
 }
 
-document.addEventListener("click",(e)=>{
-
-if(e.target.id === "download-report"){
-
-if(!window.bestInvestmentData){
-alert("Nessuna analisi disponibile");
-return;
-}
-
-const data = window.bestInvestmentData;
-
-const params = new URLSearchParams({
-
-price:data.price,
-roi:data.roi,
-equity:data.equity,
-risk:data.risk
-
 });
-
-window.location.href =
-"/tool/?report=1&" + params.toString();
-
-}
-
-});  
 
 // ================= HERO MARKET BACKGROUND =================
 
