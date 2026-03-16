@@ -9,7 +9,9 @@ collection,
 query,
 where,
 getDocs,
-orderBy
+orderBy,
+deleteDoc,
+doc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { marketData } from "./market-data.js";
 
@@ -1505,11 +1507,6 @@ return;
 }
 
 // ================= DELETE ANALYSIS =================
-
-import {
-deleteDoc,
-doc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 document.addEventListener("click", async (e)=>{
 
