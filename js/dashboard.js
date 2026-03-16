@@ -1516,7 +1516,7 @@ try{
 
 await deleteDoc(doc(db,"analyses",id));
 
-loadDashboard();
+btn.closest(".analysis-card").remove();
 
 }catch(err){
 
@@ -1556,6 +1556,33 @@ window.location.href =
 "/tool/?report=1&" + params.toString();
 
 }
+
+document.addEventListener("click",(e)=>{
+
+if(e.target.id === "download-report"){
+
+if(!window.bestInvestmentData){
+alert("Nessuna analisi disponibile");
+return;
+}
+
+const data = window.bestInvestmentData;
+
+const params = new URLSearchParams({
+
+price:data.price,
+roi:data.roi,
+equity:data.equity,
+risk:data.risk
+
+});
+
+window.location.href =
+"/tool/?report=1&" + params.toString();
+
+}
+
+});  
 
 // ================= HERO MARKET BACKGROUND =================
 
