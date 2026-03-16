@@ -37,9 +37,12 @@ const citySelector = document.getElementById("market-city");
 
 async function saveAnalysis(data){
 
+  // salva solo se la simulazione è stata eseguita
+  if(!window.simulationExecuted) return;
+
   if(!window.currentUser || !window.currentUser.uid) return;
 
-  try{
+try{
 
   await addDoc(collection(db,"analyses"),{
   uid: window.currentUser.uid,
@@ -323,7 +326,7 @@ let roiChartInstance = null;
 
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
-
+window.simulationExecuted = false;
 
 // ================= MARKET COMPARISON =================
 
@@ -1069,6 +1072,8 @@ ${lang === "it"
 // ================= MAIN CALC =================
 
 function calculate() {
+
+window.simulationExecuted = true;  
 
 // attende che Firebase sia pronto
 if(window.firebaseReady === false){
