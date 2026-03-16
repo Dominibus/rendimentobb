@@ -1497,7 +1497,10 @@ formatCurrency(revenue);
 
 document.addEventListener("click", async (e)=>{
 
-if(!e.target.classList.contains("delete-analysis")) return;
+const btn = e.target.closest(".delete-analysis");
+if(!btn) return;
+
+const id = btn.dataset.id;
 
 const id = e.target.dataset.id;
 
