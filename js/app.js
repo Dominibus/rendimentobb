@@ -1069,10 +1069,17 @@ ${lang === "it"
 // ================= MAIN CALC =================
 
 function calculate() {
-  // attende che Firebase sia pronto
-if(!window.firebaseReady){
 
-console.log("Firebase non pronto, continuo comunque il calcolo");
+// attende che Firebase sia pronto
+if(window.firebaseReady === false){
+
+console.log("Firebase non pronto, attendo...");
+
+setTimeout(()=>{
+calculate();
+},300);
+
+return;
 
 }
 
