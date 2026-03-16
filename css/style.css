@@ -2781,4 +2781,35 @@ max-width:100%;
 
 }
 
+/* ===================== */
+/* PORTFOLIO PERFORMANCE */
+/* ===================== */
+
+.portfolio-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:18px;
+margin-top:18px;
+}
+
+.portfolio-stat{
+background:#f8fafc;
+padding:18px;
+border-radius:12px;
+text-align:center;
+border:1px solid #e2e8f0;
+}
+
+.portfolio-stat span{
+font-size:26px;
+font-weight:700;
+color:#10b981;
+}
+
+.portfolio-stat p{
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+}
+
 /* SIMULATOR HERO PROFESSIONAL */
