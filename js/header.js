@@ -102,10 +102,6 @@ applyStaticTranslations();
 
 window.applyCityBackground = function(city){
 
-const hero = document.querySelector(".hero");
-
-if(!hero) return;
-
 const images = {
 
 rome: "/img/rome-bg.jpg",
@@ -117,15 +113,31 @@ milan: "/img/milan-bg.jpg"
 
 if(!images[city]) return;
 
-hero.style.background =
-"linear-gradient(rgba(255,255,255,0.55),rgba(255,255,255,0.75)), url('" +
+document.body.style.background =
+"linear-gradient(rgba(255,255,255,0.85),rgba(255,255,255,0.95)), url('" +
 images[city] +
-"')";
+"') center/cover fixed";
 
-hero.style.backgroundSize = "cover";
-hero.style.backgroundPosition = "center";
+};
 
-}
+/* ===================== */
+/* HEADER LOAD */
+/* ===================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const header = `
+
+<header class="portal-header">
+...
+</header>
+
+`;
+
+document.body.insertAdjacentHTML("afterbegin", header);
+
+...
+});
 
 /* ===================== */
 /* HAMBURGER MENU */
