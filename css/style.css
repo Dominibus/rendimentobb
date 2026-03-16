@@ -842,6 +842,15 @@ min-width:0;
 width:100%;
 }
 
+/* DASHBOARD TOP KPI */
+
+.dashboard-top-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:22px;
+margin-bottom:30px;
+}
+
 .dashboard-charts{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -850,9 +859,15 @@ margin-bottom:40px;
 }
 
 @media (max-width:900px){
+
 .dashboard-charts{
 grid-template-columns:1fr;
 }
+
+.dashboard-top-grid{
+grid-template-columns:1fr;
+}
+
 }
 
 /* ===================== */
