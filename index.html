@@ -13,13 +13,15 @@
 <meta name="google-site-verification" content="cnmRDdm4nfpymLCQ9bDRoW_V3AIdcK9-v0mbA5YwSkk" />
 
 <link rel="canonical" href="https://rendimentobb.com">
-<meta property="og:title"
-data-it="RendimentoBB – Calcola il ROI di un B&B prima di investire"
-data-en="RendimentoBB – Calculate B&B ROI before investing"> 
 <meta property="og:image" content="https://rendimentobb.com/og-dashboard.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/jpeg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RendimentoBB – Calcola il ROI di un B&B prima di investire">
+<meta name="twitter:description" content="Simula rendimento, rischio e sostenibilità di un B&B prima di acquistare.">
+<meta name="twitter:image" content="https://rendimentobb.com/og-dashboard.jpg"> 
 
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
@@ -855,17 +857,11 @@ hero.style.backgroundPosition = "center";
 
 window.openCity = function(city){
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+localStorage.setItem("selected_city", city);
 
-onAuthStateChanged(auth, (user)=>{
+window.location.href = "/tool/?city=" + city;
 
-const dash = document.getElementById("nav-dashboard");
-
-if(user){
-dash.style.display="inline";
 }
-
-}); 
 
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
