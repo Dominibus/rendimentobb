@@ -1493,15 +1493,13 @@ formatCurrency(revenue);
 
 }
 
-// ================= DELETE ANALYSIS =================
-
-document.addEventListener("click", async (e)=>{
+async function deleteAnalysis(e){
 
 const btn = e.target.closest(".delete-analysis");
 if(!btn) return;
 
 e.preventDefault();
-e.stopImmediatePropagation();
+e.stopPropagation();
 
 const id = btn.dataset.id;
 
@@ -1525,15 +1523,9 @@ console.error("Delete error:",err);
 
 }
 
-});
+}
 
-// ===============================
-// DOWNLOAD PDF REPORT
-// ===============================
-
-document.addEventListener("click",(e)=>{
-
-if(e.target.id === "download-report"){
+function downloadReport(){
 
 if(!window.bestInvestmentData){
 alert("Nessuna analisi disponibile");
@@ -1543,15 +1535,29 @@ return;
 const data = window.bestInvestmentData;
 
 const params = new URLSearchParams({
+
 price:data.price,
 roi:data.roi,
 equity:data.equity,
 risk:data.risk
+
 });
 
 window.location.href =
 "/tool/?report=1&" + params.toString();
 
+}
+
+document.addEventListener("click",(e)=>{
+
+const deleteBtn = e.target.closest(".delete-analysis");
+
+if(deleteBtn){
+deleteAnalysis({ ...e, target: deleteBtn });
+}
+
+if(e.target.id === "download-report"){
+downloadReport();
 }
 
 });
