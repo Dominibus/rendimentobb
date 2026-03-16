@@ -94,8 +94,38 @@ document.body.insertAdjacentHTML("afterbegin", header);
 
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
-}  
+}
 
+/* ===================== */
+/* GLOBAL CITY BACKGROUND */
+/* ===================== */
+
+window.applyCityBackground = function(city){
+
+const hero = document.querySelector(".hero");
+
+if(!hero) return;
+
+const images = {
+
+rome: "/img/rome-bg.jpg",
+naples: "/img/naples-bg.jpg",
+florence: "/img/florence-bg.jpg",
+milan: "/img/milan-bg.jpg"
+
+};
+
+if(!images[city]) return;
+
+hero.style.background =
+"linear-gradient(rgba(255,255,255,0.55),rgba(255,255,255,0.75)), url('" +
+images[city] +
+"')";
+
+hero.style.backgroundSize = "cover";
+hero.style.backgroundPosition = "center";
+
+}
 
 /* ===================== */
 /* HAMBURGER MENU */
@@ -130,7 +160,11 @@ link.classList.add("active");
 
 });
 
-  document.addEventListener("rb_language_changed", () => {
+/* ===================== */
+/* LANGUAGE UPDATE */
+/* ===================== */
+
+document.addEventListener("rb_language_changed", () => {
 
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
@@ -138,4 +172,4 @@ applyStaticTranslations();
 
 });
 
-});  
+});
