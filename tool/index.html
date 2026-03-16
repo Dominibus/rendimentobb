@@ -781,7 +781,32 @@ applyMarketData(savedCity);
 
 }
 
-});  
+});
+
+
+// ================= CITY FROM URL (HOME → SIMULATORE) =================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const params = new URLSearchParams(window.location.search);
+const city = params.get("city");
+
+if(!city) return;
+
+window.currentCity = city;
+
+// salva città selezionata
+localStorage.setItem("selected_city", city);
+
+// seleziona nel dropdown
+const citySelect = document.getElementById("market-city");
+
+if(citySelect){
+citySelect.value = city;
+applyMarketData(city);
+}
+
+});
 
 </script>
 
