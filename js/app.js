@@ -1069,11 +1069,14 @@ ${lang === "it"
 
 }
 
-// ================= MAIN CALC =================
+function calculate(force = false) {
 
-function calculate() {
+// blocca esecuzioni automatiche
+if(!force && !window.simulationExecuted){
+return;
+}
 
-window.simulationExecuted = true;  
+window.simulationExecuted = true;
 
 // attende che Firebase sia pronto
 if(window.firebaseReady === false){
@@ -1081,7 +1084,7 @@ if(window.firebaseReady === false){
 console.log("Firebase non pronto, attendo...");
 
 setTimeout(()=>{
-calculate();
+calculate(force);
 },300);
 
 return;
