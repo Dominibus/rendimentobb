@@ -1045,8 +1045,8 @@ gap:20px;
 
 .analysis-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-gap:32px;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:24px;
 margin-top:30px;
 }
 
@@ -2086,21 +2086,28 @@ gap:10px;
 
 /* GRIDS MOBILE */
 
+@media (max-width:768px){
+
 .analysis-grid{
+display:grid;
 grid-template-columns:1fr;
 gap:20px;
 }
 
 .stats-grid{
+display:grid;
 grid-template-columns:1fr;
 gap:16px;
 }
 
 .dashboard-top-grid{
+display:grid;
 grid-template-columns:1fr;
+gap:20px;
 }
 
 .form-grid{
+display:grid;
 grid-template-columns:1fr;
 }
 
