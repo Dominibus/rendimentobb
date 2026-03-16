@@ -1081,7 +1081,10 @@ console.log("Firebase non pronto, continuo comunque il calcolo");
 let freeRuns =
 parseInt(localStorage.getItem("rb_free_runs") || "0");
 
-if(!window.currentUser && freeRuns >= 3){
+const isLogged = !!window.currentUser;
+const isPro = window.currentPlan === "pro";
+
+if(!isLogged && !isPro && freeRuns >= 3){
 
 alert(
 window.currentLang==="it"
@@ -1094,8 +1097,8 @@ return;
 
 }
 
-// incrementa solo dopo simulazione reale
-if(!window.currentUser){
+// incrementa solo per utenti anonimi
+if(!isLogged){
 freeRuns++;
 localStorage.setItem("rb_free_runs", freeRuns);
 }
