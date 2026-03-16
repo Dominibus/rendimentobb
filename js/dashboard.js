@@ -276,6 +276,7 @@ labels = [];
 let totalROI = 0;
 let totalCapital = 0;
 let count = 0;
+let totalCashflow = 0; 
 
 let analyses = [];  
 
@@ -330,6 +331,7 @@ const yearlyProfit = (price * roi) / 100;
 
 totalROI += roi;
 totalCapital += price;
+totalCashflow += yearlyProfit;   
 count++;
 
 const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
@@ -398,7 +400,7 @@ list.appendChild(card);
 
 });
 
-renderStats(count,totalROI,totalCapital);
+renderStats(count,totalROI,totalCapital,totalCashflow);
 renderInsight(count,totalROI,totalCapital);
 renderROIOptimizer(count,totalROI,totalCapital);
 renderROITargetCalculator(analyses); 
@@ -599,11 +601,37 @@ Tool
 
 // ================= STATS =================
 
-function renderStats(count,totalROI,totalCapital){
+function renderStats(count,totalROI,totalCapital,totalCashflow){
 
 // ================= KPI HEADER =================
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+
+ // ================= PORTFOLIO PERFORMANCE =================
+
+const avgCashflow = count ? (totalCashflow / count) : 0;
+
+const roiEl = document.getElementById("portfolio-roi");
+const cashEl = document.getElementById("portfolio-cashflow");
+const capEl = document.getElementById("portfolio-capital");
+const countEl = document.getElementById("portfolio-count");
+
+if(roiEl){
+roiEl.textContent = avgROI + "%";
+}
+
+if(cashEl){
+cashEl.textContent = formatCurrency(avgCashflow);
+}
+
+if(capEl){
+capEl.textContent = formatCurrency(totalCapital);
+}
+
+if(countEl){
+countEl.textContent = count;
+}
+ 
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
 
 const kpiContainer = document.getElementById("dashboard-kpi");
