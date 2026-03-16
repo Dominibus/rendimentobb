@@ -1008,7 +1008,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 .stats-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:22px;
 margin-bottom:50px;
 width:100%;
@@ -1019,15 +1019,14 @@ min-width:0;
 overflow:hidden;
 }
 
+/* MOBILE FIX KPI */
+
 @media (max-width:768px){
 
 .stats-grid{
 grid-template-columns:1fr;
+gap:18px;
 }
-
-.analysis-card{
-overflow:hidden;
-} 
 
 }
 
