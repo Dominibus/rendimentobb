@@ -13,6 +13,10 @@ orderBy,
 deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+getAuth
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { marketData } from "./market-data.js";
 
 const db = getFirestore();
@@ -1512,8 +1516,6 @@ window.currentLang === "en"
 if(!confirmDelete) return;
 
 try{
-
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const auth = getAuth();
 
