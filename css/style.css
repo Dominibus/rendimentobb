@@ -2825,6 +2825,8 @@ border-radius:6px;
 font-size:12px;
 cursor:pointer;
 transition:0.2s ease;
+margin-top:10px;
+align-self:flex-end; 
 }
 
 .delete-analysis:hover{
