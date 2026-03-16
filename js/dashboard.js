@@ -1502,8 +1502,6 @@ if(!btn) return;
 
 const id = btn.dataset.id;
 
-const id = e.target.dataset.id;
-
 const confirmDelete = confirm(
 window.currentLang === "en"
 ? "Delete this analysis?"
@@ -1516,7 +1514,7 @@ try{
 
 await deleteDoc(doc(db,"analyses",id));
 
-loadDashboard(); // ricarica dati senza refresh pagina
+loadDashboard();
 
 }catch(err){
 
@@ -1524,7 +1522,7 @@ console.error("Delete error",err);
 
 }
 
-}); 
+});
 
 // ===============================
 // DOWNLOAD PDF REPORT
