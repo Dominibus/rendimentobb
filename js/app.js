@@ -38,40 +38,35 @@ const citySelector = document.getElementById("market-city");
 
 async function saveAnalysis(data){
 
-  // salva solo se la simulazione è stata eseguita
-  if(!window.simulationExecuted) return;
-
-  // blocco anti-duplicazione
-  if(window.analysisSaving) return;
-  window.analysisSaving = true;
-
-  if(!window.currentUser || !window.currentUser.uid){
-    window.analysisSaving = false;
+  if(!window.firebaseReady){
+    console.log("⏳ Firebase non pronto");
     return;
   }
 
-try{
+  if(!window.currentUser || !window.currentUser.uid){
+    console.log("❌ Utente non loggato");
+    return;
+  }
 
-  await addDoc(collection(db,"analyses"),{
-  uid: window.currentUser.uid,
-  propertyPrice: data.price,
-  equity: data.equity,
-  roi: data.roi,
-  risk: data.risk,
-  city: data.city || window.currentCity || null,
-  createdAt: new Date()
-  });
+  try{
 
-}catch(e){
+    await addDoc(collection(db,"analyses"),{
+      uid: window.currentUser.uid,
+      propertyPrice: data.price,
+      equity: data.equity,
+      roi: data.roi,
+      risk: data.risk,
+      city: data.city || "italy",
+      createdAt: new Date()
+    });
 
-  console.error("Errore salvataggio analisi:",e);
+    console.log("✅ SALVATO FIRESTORE");
 
-}finally{
+  }catch(e){
 
-  // sblocca per la prossima simulazione
-  window.analysisSaving = false;
+    console.error("Errore salvataggio:", e);
 
-}
+  }
 
 }
 
