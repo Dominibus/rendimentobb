@@ -14,13 +14,10 @@ height:auto;
 display:block;
 }
 
-html,body{
-height:100%;
-}
-
 body{
 display:flex;
 flex-direction:column;
+padding-top:80px; /* altezza header */ 
 
 min-height:100vh;
 color:#0f172a;
@@ -53,7 +50,7 @@ max-width:1400px;
 margin:auto;
 padding:0 20px;
 box-sizing:border-box;
-overflow-x:hidden;
+overflow:visible;
 }
 
 /* FIX MOBILE CONTAINER */
@@ -840,8 +837,8 @@ font-size:18px;
 
 .dashboard-container{
 max-width:1200px;
-margin:auto;
-padding:90px 20px 80px 20px;
+margin-top:80px;
+padding:20px 20px 80px 20px;
 width:100%;
 box-sizing:border-box;
 }
@@ -860,7 +857,7 @@ padding:60px 12px;
 
 .dashboard-layout{
 display:grid;
-grid-template-columns:1fr 320px;
+grid-template-columns:minmax(0,1fr) 300px;
 gap:40px;
 align-items:start;
 max-width:1200px;
@@ -883,6 +880,7 @@ top:auto;
 }
 
 .dashboard-main{
+min-width:0; 
 width:100%;
 }
 
@@ -906,7 +904,7 @@ width:100%;
 
 .dashboard-top-grid{
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:22px;
 margin-bottom:30px;
 }
@@ -3033,20 +3031,17 @@ max-width:100%;
 /* ============================= */
 
 .dashboard-bg{
-
 background:
 linear-gradient(
 rgba(255,255,255,0.75),
 rgba(255,255,255,0.92)
 ),
-url("/img/napoli-dashboard.jpg")
+url("/img/napoli-dashboard.jpg");
 
 background-size:cover;
 background-position:center;
 background-attachment:fixed;
-
 min-height:100vh;
-
 }
 
 /* ===================== */
