@@ -16,7 +16,7 @@ milan: "/img/milan-bg.jpg"
 if(!images[city]) return;
 
 document.body.style.background =
-"linear-gradient(rgba(255,255,255,0.55),rgba(255,255,255,0.55)), url('" +
+"linear-gradient(rgba(15,23,42,0.45),rgba(15,23,42,0.45)), url('" +
 images[city] +
 "') center/cover fixed";
 
