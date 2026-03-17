@@ -865,6 +865,7 @@ gap:40px;
 align-items:start;
 max-width:1200px;
 margin:auto;
+width:100%; 
 }
 
 /* MOBILE FIX */
@@ -873,6 +874,7 @@ margin:auto;
 
 .dashboard-layout{
 grid-template-columns:1fr;
+width:100%; 
 }
 
 .dashboard-side{
@@ -1090,7 +1092,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 .stats-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(0,1fr));
 gap:22px;
 margin-bottom:50px;
 width:100%;
@@ -2185,7 +2187,10 @@ max-width:100%;
 }
 
 .analysis-card,
-.kpi-box{
+.kpi-box,
+.stats-grid > *,
+.analysis-grid > *{
+min-width:0;
 width:100%;
 max-width:100%;
 }
@@ -3097,3 +3102,27 @@ background:#dc2626;
 }
 
 /* SIMULATOR HERO PROFESSIONAL */
+
+/* ===================== */
+/* GLOBAL WIDTH FIX */
+/* ===================== */
+
+*,
+*::before,
+*::after{
+box-sizing:border-box;
+}
+
+html,body{
+overflow-x:hidden;
+width:100%;
+}
+
+.container,
+.dashboard-container,
+.dashboard-layout,
+.dashboard-main{
+width:100%;
+max-width:100%;
+overflow:visible;
+}
