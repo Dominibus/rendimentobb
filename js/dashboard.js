@@ -267,7 +267,7 @@ renderHeader();
 const q = query(
 collection(db,"analyses"),
 where("uid","==",window.currentUser.uid),
-orderBy("createdAt","desc")
+
 );
 
 const querySnapshot = await getDocs(q);
