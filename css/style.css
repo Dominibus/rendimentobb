@@ -22,14 +22,14 @@ body{
 display:flex;
 flex-direction:column;
 
-background:
-radial-gradient(circle at 15% 10%, rgba(16,185,129,0.15), transparent 40%),
-radial-gradient(circle at 85% 90%, rgba(59,130,246,0.12), transparent 45%),
-linear-gradient(180deg,#f4f7fb 0%,#e9eef5 100%);
-
 min-height:100vh;
 color:#0f172a;
 -webkit-font-smoothing:antialiased;
+overflow-x:hidden;
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed; 
 
 /* FIX MOBILE */
 overflow-x:hidden;
