@@ -76,7 +76,7 @@ Academy
 
 <a href="/dashboard/"
 id="nav-dashboard"
-style="display:none;"
+style="display:block;"
 data-it="Dashboard"
 data-en="Dashboard">
 Dashboard
@@ -121,6 +121,102 @@ applyStaticTranslations();
 }
 
 /* ===================== */
+/* USER AREA */
+/* ===================== */
+
+const userArea = document.getElementById("user-area");
+
+if(userArea){
+
+userArea.innerHTML = `
+<div style="text-align:right">
+
+<div style="font-size:12px;color:#64748b;"
+data-it="Area riservata"
+data-en="Private area">
+Area riservata
+</div>
+
+<a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
+data-it="Accedi"
+data-en="Login">
+Accedi
+</a>
+
+</div>
+`;
+
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
+}
+
+}
+
+const userArea = document.getElementById("user-area");
+
+if(userArea){
+
+const user = window.currentUser || null;
+
+if(user){
+
+userArea.innerHTML = `
+<div style="text-align:right">
+
+<div style="font-size:12px;color:#64748b;"
+data-it="Account"
+data-en="Account">
+Account
+</div>
+
+<div style="font-weight:600;font-size:14px;">
+${user.email || "User"}
+</div>
+
+<div style="margin-top:6px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+
+<a href="/dashboard/" class="btn btn-secondary"
+data-it="Dashboard"
+data-en="Dashboard">
+Dashboard
+</a>
+
+<button onclick="logout()" class="btn btn-secondary"
+data-it="Esci"
+data-en="Logout">
+Esci
+</button>
+
+</div>
+
+</div>
+`;
+
+}else{
+
+userArea.innerHTML = `
+<div style="text-align:right">
+
+<div style="font-size:12px;color:#64748b;"
+data-it="Area riservata"
+data-en="Private area">
+Area riservata
+</div>
+
+<a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
+data-it="Accedi"
+data-en="Login">
+Accedi
+</a>
+
+</div>
+`;
+
+}
+
+}  
+
+/* ===================== */
 /* HAMBURGER MENU */
 /* ===================== */
 
@@ -149,18 +245,6 @@ const href = link.getAttribute("href");
 
 if(currentPath.startsWith(href)){
 link.classList.add("active");
-}
-
-});
-
-/* ===================== */
-/* LANGUAGE UPDATE */
-/* ===================== */
-
-document.addEventListener("rb_language_changed", () => {
-
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
 }
 
 });
