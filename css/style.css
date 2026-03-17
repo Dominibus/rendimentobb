@@ -1733,6 +1733,10 @@ box-shadow:
 0 25px 80px rgba(0,0,0,0.12);
 }
 
+.section-light ul li{
+margin-bottom:8px;
+}
+
 .section-light .btn-primary{
 box-shadow:
 0 20px 60px rgba(16,185,129,.7),
@@ -2428,11 +2432,12 @@ color:#0f172a;
 color:#0f172a;
 font-weight:500;
 text-decoration:none;
+transition:.2s ease;
 }
 
 .section-light a:hover{
 color:#10b981;
-text-decoration:underline;
+padding-left:4px;
 }
 
 .section-light p,
