@@ -28,6 +28,15 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
+document.addEventListener("rb_auth_ready", ()=>{
+
+  const btn = document.getElementById("calc-btn");
+  if(btn){
+    btn.disabled = false;
+  }
+
+});
+
 
 // ================= CITY FROM HOMEPAGE =================
 
