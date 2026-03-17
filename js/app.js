@@ -1085,7 +1085,7 @@ ${lang === "it"
 
 }
 
-function calculate(force = false) {
+function calculate(force = false) {  
 
 // blocca esecuzioni automatiche
 if(!force && !window.simulationExecuted){
@@ -1106,6 +1106,8 @@ calculate(force);
 return;
 
 }
+
+window.calculate = calculate;  
 
 // ================= FREE LIMIT =================
 
