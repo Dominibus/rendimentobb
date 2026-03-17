@@ -1,4 +1,10 @@
 /* ===================== */
+/* FIREBASE IMPORT */
+/* ===================== */
+
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+/* ===================== */
 /* GLOBAL CITY BACKGROUND */
 /* ===================== */
 
@@ -115,16 +121,9 @@ EN
 `;
 
 document.body.insertAdjacentHTML("afterbegin", header);
-
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
-}
-
 /* ===================== */
 /* USER AREA (FIREBASE) */
 /* ===================== */
-
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const auth = getAuth();
 
@@ -194,7 +193,11 @@ if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
 
-});
+});  
+
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
+}
 
 /* ===================== */
 /* HAMBURGER MENU */
