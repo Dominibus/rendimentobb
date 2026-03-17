@@ -14,9 +14,6 @@ deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-import {
-getAuth
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { marketData } from "./market-data.js";
 
 const db = getFirestore();
@@ -1027,7 +1024,7 @@ loadDashboard();
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-const auth = getAuth();
+const auth = window.firebaseAuth;
 
 onAuthStateChanged(auth, (user)=>{
 
