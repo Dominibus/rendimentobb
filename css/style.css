@@ -1722,15 +1722,15 @@ font-size:18px;
 }
 
 .section-light{
-background: rgba(255,255,255,0.45);
+background: rgba(255,255,255,0.92);
 
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
 
-border:1px solid rgba(255,255,255,0.25);
+border:1px solid rgba(0,0,0,0.05);
 
 box-shadow:
-0 30px 80px rgba(0,0,0,0.10);
+0 25px 80px rgba(0,0,0,0.12);
 }
 
 .section + .section{
