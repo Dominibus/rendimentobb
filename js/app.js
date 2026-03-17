@@ -1510,6 +1510,20 @@ responsive:true
 // esegue grafico dashboard
 document.addEventListener("DOMContentLoaded", renderCityROIChart);
 
+// ================= RENDER UI COMPLETA =================
+
+// Benchmark mercato
+renderMarketBenchmark(data);
+
+// KPI avanzati
+renderExecutiveKPI(data);
+
+// Forecast + simulazioni
+renderForecast(data);
+renderMarketComparison(data);
+renderOccupancySensitivity(data);
+renderCashflowChart(data);
+
 // ================= EXECUTIVE PDF =================
 
 async function generateExecutivePDF(){
