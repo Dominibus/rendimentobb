@@ -2373,11 +2373,6 @@ word-break:normal;
 overflow-wrap:normal;
 }
 
-html,body{
-max-width:100%;
-overflow-x:hidden;
-} 
-
 /* ROI QUICK SIMULATOR */
 
 .roi-grid{
