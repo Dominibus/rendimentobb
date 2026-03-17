@@ -2278,9 +2278,9 @@ box-shadow:0 0 0 2px rgba(16,185,129,0.2);
 /* ===================== */
 
 .section{
-
-padding:100px 0;
-
+background: rgba(255,255,255,0.92);
+backdrop-filter: blur(6px);
+-webkit-backdrop-filter: blur(6px);
 }
 
 .section .container{
