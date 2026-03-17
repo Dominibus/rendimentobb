@@ -1025,7 +1025,24 @@ loadDashboard();
 
 // ================= INIT =================
 
-document.addEventListener("rb_plan_loaded", loadDashboard);
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth();
+
+onAuthStateChanged(auth, (user)=>{
+
+if(user){
+
+window.currentUser = user;
+loadDashboard();
+
+}else{
+
+window.location.href="/login/";
+
+}
+
+});
 
 /* aggiorna automaticamente quando cambi lingua */
 
