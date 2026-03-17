@@ -1664,6 +1664,19 @@ font-size:18px;
 background: rgba(255,255,255,0.95);
 }
 
+.section-dark{
+background: rgba(15,23,42,0.75);
+backdrop-filter: blur(6px);
+-webkit-backdrop-filter: blur(6px);
+color: white;
+}
+
+.section-dark h2,
+.section-dark p,
+.section-dark a{
+color: white;
+}
+
 /* ===================== */
 /* QUICK ROI */
 /* ===================== */
