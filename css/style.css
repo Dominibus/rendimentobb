@@ -857,7 +857,7 @@ padding:60px 12px;
 
 .dashboard-layout{
 display:grid;
-grid-template-columns:minmax(0,1fr) 300px;
+grid-template-columns:minmax(220px,1fr) 300px;
 gap:40px;
 align-items:start;
 max-width:1200px;
@@ -1090,7 +1090,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 .stats-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:22px;
 margin-bottom:50px;
 width:100%;
