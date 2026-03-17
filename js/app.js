@@ -1223,7 +1223,14 @@ equity > 0 && netAfterMortgage > 0
 ? (equity / netAfterMortgage)
 : null;
 
-renderInvestmentVerdict(roi, payback);  
+renderInvestmentVerdict(roi, payback); 
+renderBreakEvenOccupancy(
+priceNight,
+expenses,
+commission,
+tax,
+mortgageYearly
+);  
   
 showUpgradePopup(roi);
 
@@ -1509,20 +1516,6 @@ responsive:true
 
 // esegue grafico dashboard
 document.addEventListener("DOMContentLoaded", renderCityROIChart);
-
-// ================= RENDER UI COMPLETA =================
-
-// Benchmark mercato
-renderMarketBenchmark(data);
-
-// KPI avanzati
-renderExecutiveKPI(data);
-
-// Forecast + simulazioni
-renderForecast(data);
-renderMarketComparison(data);
-renderOccupancySensitivity(data);
-renderCashflowChart(data);
 
 // ================= EXECUTIVE PDF =================
 
