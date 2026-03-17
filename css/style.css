@@ -766,6 +766,11 @@ box-shadow:
 transition:all .3s ease;
 }
 
+.btn-primary::before,
+.btn-primary::after{
+display:none !important;
+}
+
 .btn-primary span{
 position:relative;
 z-index:2;
