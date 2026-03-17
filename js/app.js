@@ -28,39 +28,6 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
-async function saveAnalysis(data){
-
-  if(!window.currentUser){
-    console.warn("Utente non loggato → salvataggio saltato");
-    return;
-  }
-
-  try{
-
-    await addDoc(collection(db,"analyses"),{
-
-      uid: window.currentUser.uid,
-
-      propertyPrice: data.price,
-      equity: data.equity,
-      roi: data.roi,
-      risk: data.risk,
-
-      city: data.city || "italy",
-
-      createdAt: new Date()
-
-    });
-
-    console.log("✅ Analisi salvata su Firestore");
-
-  }catch(err){
-
-    console.error("❌ Errore salvataggio:", err);
-
-  }
-
-}
 
 // ================= CITY FROM HOMEPAGE =================
 
@@ -1228,20 +1195,12 @@ updateInvestmentScore(investmentScore);
 renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
 
 saveAnalysis({
-  price: propertyPrice,
+  price: getValue("price"),
   equity: equity,
   roi: roi,
   risk: riskScore,
-  city: selectedCity
-});  
-
-renderBreakEvenOccupancy(
-priceNight,
-expenses,
-commission,
-tax,
-mortgageYearly
-);  
+  city: window.currentCity || null
+});
 
 renderChart(netAfterMortgage);
 
@@ -2050,13 +2009,11 @@ window.location.href = "/tool/";
 
 // ================= CAPTURE LAST ANALYSIS =================
 
-const originalCalculate = window.calculate;
+const originalCalculate = calculate;
 
 window.calculate = function(force = false){
 
 originalCalculate(force);
-
-originalCalculate();
 
 const equity = getValue("equity");
 const priceNight = getValue("priceNight");
