@@ -1648,10 +1648,15 @@ padding:80px 20px;
 color:#0f172a;
 }
 
+.hero-market h1{
+color:white;
+text-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+
 .hero-sub{
 margin-top:15px;
 font-size:18px;
-color:#64748b;
+color:#e2e8f0;
 }
 
 /* ===================== */
