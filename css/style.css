@@ -2265,22 +2265,16 @@ box-shadow:0 0 0 2px rgba(16,185,129,0.2);
 
 padding:100px 0;
 
+}
+
+.section .container{
+
 background: rgba(255,255,255,0.9);
-border-radius: 12px;
+border-radius: 16px;
+padding: 40px;
+box-shadow: 0 30px 80px rgba(0,0,0,0.08);
 
 }
-
-.section-light{
-
-background:white;
-
-}
-
-.section-soft{
-
-background:rgba(255,255,255,0.6);
-
-}  
 
 /* ROI SIMULATOR CARD */
 
