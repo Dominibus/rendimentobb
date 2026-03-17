@@ -824,8 +824,18 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth
 
 const auth = getAuth();
 
-window.startAnalysis = function(){
-  window.location.href="/tool/";
+import { signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+window.logout = function(){
+
+signOut(auth)
+.then(() => {
+window.location.href = "/";
+})
+.catch((error) => {
+console.error("Logout error:", error);
+});
+
 }
 
 // ================= HERO BACKGROUND =================
