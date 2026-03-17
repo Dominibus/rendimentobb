@@ -1643,6 +1643,17 @@ font-size:14px;
 color:#64748b;
 }  
 
+.hero-market{
+padding:80px 20px;
+color:#0f172a;
+}
+
+.hero-sub{
+margin-top:15px;
+font-size:18px;
+color:#64748b;
+}
+
 /* ===================== */
 /* QUICK ROI */
 /* ===================== */
