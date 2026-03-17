@@ -2284,14 +2284,18 @@ box-shadow:0 0 0 2px rgba(16,185,129,0.2);
 /* ===================== */
 
 .section{
+background: transparent;
+}
+
+.section-light{
 background: rgba(255,255,255,0.92);
 backdrop-filter: blur(6px);
 -webkit-backdrop-filter: blur(6px);
 }
 
 .section .container{
-border-radius: 16px;
-padding: 40px;
+border-radius:16px;
+padding:40px;
 }
 
 /* ROI SIMULATOR CARD */
