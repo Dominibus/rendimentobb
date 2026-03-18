@@ -312,6 +312,8 @@ if(analyses && analyses.length > 0){
 }
 
 const cityImage = cityImages[selectedCity] || cityImages["napoli"];
+  
+updateMarketHero(selectedCity);  
 
 console.log("Città selezionata:", selectedCity);  
 
@@ -1647,12 +1649,10 @@ const title = document.getElementById("market-hero-title");
 if(!hero) return;
 
 const images = {
-
-rome:"/img/roma-dashboard.jpg",
-naples:"/img/napoli-dashboard.jpg",
-milan:"/img/milano-dashboard.jpg",
-florence:"/img/firenze-dashboard.jpg"
-
+roma:"/img/roma-dashboard.jpg",
+napoli:"/img/napoli-dashboard.jpg",
+milano:"/img/milano-dashboard.jpg",
+firenze:"/img/firenze-dashboard.jpg"
 };
 
 /* ITALIA -> random */
@@ -1676,10 +1676,10 @@ hero.style.backgroundImage = `url('${images[city]}')`;
 /* cambia titolo */
 
 const names = {
-rome:"Roma",
-naples:"Napoli",
-milan:"Milano",
-florence:"Firenze"
+roma:"Roma",
+napoli:"Napoli",
+milano:"Milano",
+firenze:"Firenze"
 };
 
 title.innerText = "Investire in un B&B a " + names[city];
