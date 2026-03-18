@@ -1118,8 +1118,8 @@ function calculate(force = false){
 
 window.calculate = calculate;
 
-if(!force && window.simulationExecuted){
-return;
+if(!force){
+window.simulationExecuted = true;
 }
 
 window.simulationExecuted = true;
@@ -1260,6 +1260,8 @@ renderInvestmentRanking(roi);
 renderRiskMeter(riskScore);
 
 renderSmartInvestmentAlert(roi);
+
+renderChart(netAfterMortgage);  
 
 // PAYBACK
 const payback =
@@ -1556,6 +1558,13 @@ const doc = new jsPDF();
 
 let y = 34;
 
+let chartImage = null;
+
+const canvas = document.getElementById("roiChart");
+if(canvas){
+  chartImage = canvas.toDataURL("image/png");
+}  
+
 console.log("PDF DATA:", data);  
 
 
@@ -1848,6 +1857,12 @@ y+=15;
 
 
 // ================= CHART =================
+ let chartImage = null;
+
+const canvas = document.getElementById("roiChart");
+if(canvas){
+  chartImage = canvas.toDataURL("image/png");
+} 
 
 // nuova pagina dedicata
 doc.addPage();
