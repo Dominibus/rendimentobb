@@ -1156,7 +1156,17 @@ const result = calculateROI({
 
 console.log("RESULT:", result);  
 
-window.lastAnalysisData = result;  
+window.lastAnalysisData = {
+  ...result,
+
+  // 🔥 ALLINEAMENTO NOMI PDF
+  price: getValue("price"),
+  equity: getValue("equity"),
+  loan: result.loan || getValue("loanAmount"),
+
+  revenue: result.revenue || result.gross,
+  profit: result.profit || result.netAfterMortgage
+};  
 
 const equity = getValue("equity");
 if (equity < 0) return;
