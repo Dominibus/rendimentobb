@@ -1454,7 +1454,6 @@ document.getElementById("city-select")?.addEventListener("change",(e)=>{
   const selectedCity = e.target.value;
 
   updateMarketHero(selectedCity);
-  updateMarketStats(selectedCity); // lo faremo dopo
 
   console.log("Città cambiata:", selectedCity);
 
