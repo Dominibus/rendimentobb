@@ -1086,32 +1086,6 @@ ${lang === "it"
 
 }
 
-
-function updateAdvancedUI(roi, annualRevenue){
-
-// ===== BENCHMARK (fake realistico per ora)
-
-document.getElementById("benchmark-price").innerText = "110€";
-document.getElementById("benchmark-occupancy").innerText = "71%";
-document.getElementById("benchmark-revenue").innerText = formatCurrency(28500);
-
-
-// ===== MARKET COMPARISON
-
-const marketComparison = document.getElementById("market-comparison");
-
-if(marketComparison){
-
-marketComparison.innerHTML = `
-<div class="kpi-box">
-<div class="kpi-label">ROI vs Market</div>
-<div class="kpi-value">${roi > 10 ? "📈 Above average" : "⚠️ Below average"}</div>
-</div>
-`;
-
-}
-
-
 // ===== OCCUPANCY SIMULATION
 
 const occupancyBox = document.getElementById("occupancy-sensitivity");
@@ -1249,6 +1223,34 @@ tax,
 mortgageYearly,
 equity
 );
+
+// ===== NUOVE RENDER UI (FONDAMENTALE)
+
+renderRevenueForecast(gross);
+
+renderInvestmentScore(roi, riskScore);
+
+renderInvestmentRanking(roi);
+
+renderRiskMeter(riskScore);
+
+renderSmartInvestmentAlert(roi);
+
+// PAYBACK
+const payback =
+equity > 0 && netAfterMortgage > 0
+? (equity / netAfterMortgage)
+: null;
+
+renderInvestmentVerdict(roi, payback);
+
+renderBreakEvenOccupancy(
+priceNight,
+expenses,
+commission,
+tax,
+mortgageYearly
+);  
 
 const propertyLink = localStorage.getItem("property_link") || "";
 
