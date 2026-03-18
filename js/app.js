@@ -1103,7 +1103,7 @@ window.currentLang==="it"
 );
 
 window.location.href="/login/";
-return;
+throw new Error("Free limit reached");
 
 }
 
