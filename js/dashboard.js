@@ -22,6 +22,11 @@ onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import { marketData } from "./market-data.js";
+// ================= TRANSLATION HELPER =================
+
+function t(it,en){
+  return window.RB_LANG?.current === "en" ? en : it;
+}
 
 const db = getFirestore();
 const auth = getAuth(); 
