@@ -301,33 +301,7 @@ console.error("analysis-list NON trovato");
 return;
 }
 
-// ================= CITY DYNAMIC =================
-
-let selectedCity = "napoli";
-
-if(analyses && analyses.length > 0){
-  analyses.sort((a,b)=> 
-  new Date(b.createdAt) - new Date(a.createdAt)
-);
-
-const selectedCity = analyses[0]?.city || "napoli";
-}
-
-const cityImage = cityImages[selectedCity] || cityImages["napoli"];
-  
-updateMarketHero(selectedCity);  
-
-console.log("Città selezionata:", selectedCity);  
-
-list.innerHTML="";
-
-roiValues = [];
-labels = [];  
-
-let totalROI = 0;
-let totalCapital = 0;
-let count = 0;
-let totalCashflow = 0; 
+// ================= CREA ANALYSES =================
 
 const analyses = querySnapshot.docs.map(doc => ({
   id: doc.id,
@@ -337,11 +311,35 @@ const analyses = querySnapshot.docs.map(doc => ({
   risk: doc.data().risk || 0,
   city: doc.data().city || "italy",
   createdAt: doc.data().createdAt
+}));
 
+// ================= CITY DYNAMIC =================
 
-});
+let selectedCity = "napoli";
 
+if(analyses.length > 0){
+  analyses.sort((a,b)=> 
+    new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
+  selectedCity = analyses[0]?.city || "napoli";
+}
+
+updateMarketHero(selectedCity);
+
+console.log("Città selezionata:", selectedCity);
+
+// ================= RESET =================
+
+list.innerHTML="";
+
+roiValues = [];
+labels = [];
+
+let totalROI = 0;
+let totalCapital = 0;
+let count = 0;
+let totalCashflow = 0;
 // ================= SORT BY ROI =================
 
 analyses.sort((a,b)=> b.roi - a.roi);
