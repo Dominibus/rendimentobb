@@ -1653,16 +1653,12 @@ data.roi > 12
 : data.roi > 6
 ? (lang==="it"?"BILANCIATO":"BALANCED")
 : (lang==="it"?"RISCHIOSO":"RISKY");
-data.roi > 6 ? "BALANCED" :
-"RISKY";
 
 doc.text(badge,120,y+22);
 
 y += 40;
 
 doc.setTextColor(0,0,0);
-{maxWidth:170}
-);
 
 y+=10;
 
@@ -2044,9 +2040,6 @@ y+=20;
 
 doc.setDrawColor(220);
 doc.line(20,270,190,270);
-
-doc.setFontSize(9);
-doc.setTextColor(120);
 
 doc.setFontSize(9);
 doc.setTextColor(120);
