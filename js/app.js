@@ -1699,7 +1699,8 @@ y+=14;
 // ================= KPI BOX =================
 
 doc.setDrawColor(220);
-doc.roundedRect(20,y,170,22,3,3);
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y,170,22,3,3,"F");
 
 doc.setFontSize(11);
 
@@ -1786,11 +1787,27 @@ doc.setTextColor(0,0,0);
 
 y+=18;
 
+doc.setFontSize(10);
+doc.setTextColor(100);
+
+doc.text(
+data.roi > 12
+? "🔥 High performance investment"
+: data.roi > 6
+? "⚖️ Balanced investment"
+: "⚠️ Risky investment",
+20,
+y+6
+);
+
+y+=12;
+doc.setTextColor(0,0,0);  
+
 
 // ================= SCENARIOS =================
 
-doc.setFontSize(14);
-doc.setTextColor(16,185,129);
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y-5,170,25,3,3,"F");
 
 doc.text(
 lang==="it"
@@ -1818,22 +1835,41 @@ y+=15;
 
 // ================= CHART =================
 
-const chartCanvas = document.getElementById("roiChart");
+let chartImage = null;
 
-if(chartCanvas){
+try{
 
-const scale = 4;
+const canvas = document.getElementById("roiChart");
+
+if(canvas){
+
+// FORZA DIMENSIONI REALI (fix Chart.js responsive bug)
+const width = canvas.offsetWidth;
+const height = canvas.offsetHeight;
 
 const exportCanvas = document.createElement("canvas");
-exportCanvas.width = chartCanvas.width * scale;
-exportCanvas.height = chartCanvas.height * scale;
+exportCanvas.width = width * 2;
+exportCanvas.height = height * 2;
 
 const ctx = exportCanvas.getContext("2d");
 
-ctx.scale(scale,scale);
-ctx.drawImage(chartCanvas,0,0);
+// SFONDO BIANCO (fondamentale per PDF)
+ctx.fillStyle = "#ffffff";
+ctx.fillRect(0,0,exportCanvas.width,exportCanvas.height);
 
-const img = exportCanvas.toDataURL("image/png",1.0);
+ctx.drawImage(canvas,0,0,exportCanvas.width,exportCanvas.height);
+
+chartImage = exportCanvas.toDataURL("image/png",1.0);
+
+}
+
+}catch(e){
+console.warn("Errore grafico PDF:", e);
+}
+
+
+// 👉 INSERIMENTO
+if(chartImage){
 
 const chartWidth = 170;
 const chartHeight = 75;
@@ -1845,14 +1881,7 @@ y = 30;
 
 const chartX = (210 - chartWidth)/2;
 
-doc.addImage(
-img,
-"PNG",
-chartX,
-y,
-chartWidth,
-chartHeight
-);
+doc.addImage(chartImage,"PNG",chartX,y,chartWidth,chartHeight);
 
 y += chartHeight + 10;
 
