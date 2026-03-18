@@ -1135,6 +1135,8 @@ const result = calculateROI({
   loanAmount: getValue("loanAmount"),
   interestRate: getValue("interestRate"),
   loanYears: getValue("loanYears")
+
+  calculateMortgage
 });  
 
 const equity = getValue("equity");
