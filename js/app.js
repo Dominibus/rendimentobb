@@ -1124,17 +1124,26 @@ return;
 
 window.simulationExecuted = true;
 
+const priceNight = getValue("priceNight");
+const occupancy = getValue("occupancy");
+const expenses = getValue("expenses");
+const commission = getValue("commission") || 15;
+const tax = getValue("tax") || 21;
+const loanAmount = getValue("loanAmount");
+const interestRate = getValue("interestRate");
+const loanYears = getValue("loanYears");  
+
 const result = calculateROI({
   price: getValue("price"),
   equity: getValue("equity"),
-  priceNight: getValue("priceNight"),
-  occupancy: getValue("occupancy"),
-  expenses: getValue("expenses"),
-  commission: getValue("commission"),
-  tax: getValue("tax"),
-  loanAmount: getValue("loanAmount"),
-  interestRate: getValue("interestRate"),
-  loanYears: getValue("loanYears")
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
 });
 
 const equity = getValue("equity");
