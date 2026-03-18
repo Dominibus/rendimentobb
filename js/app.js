@@ -1851,56 +1851,25 @@ y+=15;
 
 let chartImage = null;
 
-try{
+try {
 
 const canvas = document.getElementById("roiChart");
 
 if(canvas){
 
-// FORZA DIMENSIONI REALI (fix Chart.js responsive bug)
-const width = canvas.offsetWidth;
-const height = canvas.offsetHeight;
+// 🧠 FORZA RENDER COMPLETO
+await new Promise(resolve => setTimeout(resolve, 300));
 
-const exportCanvas = document.createElement("canvas");
-exportCanvas.width = width * 2;
-exportCanvas.height = height * 2;
-
-const ctx = exportCanvas.getContext("2d");
-
-// SFONDO BIANCO (fondamentale per PDF)
-ctx.fillStyle = "#ffffff";
-ctx.fillRect(0,0,exportCanvas.width,exportCanvas.height);
-
-ctx.drawImage(canvas,0,0,exportCanvas.width,exportCanvas.height);
-
-chartImage = exportCanvas.toDataURL("image/png",1.0);
+// fallback diretto
+chartImage = canvas.toDataURL("image/png", 1.0);
 
 }
 
-}catch(e){
+} catch(e){
 console.warn("Errore grafico PDF:", e);
 }
 
-
-// 👉 INSERIMENTO
-if(chartImage){
-
-const chartWidth = 170;
-const chartHeight = 75;
-
-if(y + chartHeight > 260){
-doc.addPage();
-y = 30;
-}
-
-const chartX = (210 - chartWidth)/2;
-
-doc.addImage(chartImage,"PNG",chartX,y,chartWidth,chartHeight);
-
-y += chartHeight + 10;
-
-}
-
+  console.log("CHART IMAGE:", chartImage);
 
 // ================= PAGE 2 =================
 
