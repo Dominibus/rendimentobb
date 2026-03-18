@@ -268,6 +268,10 @@ collection(db,"analyses")
 );
 
 const querySnapshot = await getDocs(q);
+ if(querySnapshot.empty){
+  console.warn("Nessuna analisi trovata");
+}
+console.log("DOCUMENTI:", querySnapshot.docs.map(d => d.data())); 
 console.log("UID:", window.currentUser?.uid);
 console.log("Analisi trovate:", querySnapshot.size); 
 
@@ -1036,23 +1040,7 @@ if(!window.firebaseReady){
   setTimeout(()=>loadDashboard(),300);
   return;
 }
-
-if(user){
-
-window.currentUser = user;
-
-console.log("USER OK:", user.uid);
-
-document.dispatchEvent(new Event("rb_auth_ready")); 
-
-await loadDashboard();
-
-}else{
-
-window.location.href="/login/";
-
-}
-
+ 
 });
 
 if(user){
