@@ -16,6 +16,13 @@ deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+const cityImages = {
+  napoli: "/img/napoli-dashboard.jpg",
+  roma: "/img/roma-dashboard.jpg",
+  milano: "/img/milano-dashboard.jpg",
+  firenze: "/img/firenze-dashboard.jpg"
+};
+
 // 🔥 AUTH (CORRETTO)
 import {
 getAuth,
@@ -293,6 +300,20 @@ if(!list){
 console.error("analysis-list NON trovato");
 return;
 }
+
+// ================= CITY DYNAMIC =================
+
+const analyses = querySnapshot.docs.map(doc => doc.data());
+
+let selectedCity = "napoli";
+
+if(analyses && analyses.length > 0){
+  selectedCity = (analyses[0].city || "napoli").toLowerCase();
+}
+
+const cityImage = cityImages[selectedCity] || cityImages["napoli"];
+
+console.log("Città selezionata:", selectedCity);  
 
 list.innerHTML="";
 
