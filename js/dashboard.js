@@ -18,7 +18,7 @@ doc
 
 import { marketData } from "./market-data.js";
 
-const db = getFirestore();+
+const db = getFirestore();
 const auth = getAuth(); 
 
 // ================= CHART DATA =================
@@ -294,7 +294,7 @@ const data = doc.data();
 analyses.push({
 id:doc.id,
 roi:data.roi || 0,
-price:data.price || 0,
+price:data.propertyPrice || data.price || 0,
 equity:data.equity || 0,
 risk:data.risk || 0,
 city:data.city || "italy",
