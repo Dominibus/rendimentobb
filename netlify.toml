@@ -3,3 +3,4 @@
 
 [build.environment]
   SECRETS_SCAN_OMIT_VALUES = "AIza"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
