@@ -1171,6 +1171,16 @@ freeRuns++;
 localStorage.setItem("rb_free_runs", freeRuns);
 }
 
+function calculate(force = false){
+
+window.calculate = calculate;
+
+if(!force && !window.simulationExecuted){
+return;
+}
+
+window.simulationExecuted = true;
+
 const equity = getValue("equity");
 const priceNight = getValue("priceNight");
 const occupancy = getValue("occupancy");
@@ -1338,7 +1348,7 @@ const resultsSection = document.getElementById("results");
 if(resultsSection){
 resultsSection.scrollIntoView({
 behavior: "smooth"
-});
+}); 
 }
 
 }
