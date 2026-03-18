@@ -1087,6 +1087,7 @@ ${lang === "it"
 }
 
 function calculate(force = false) {  
+window.calculate = calculate;  
 
 // blocca esecuzioni automatiche
 if(!force && !window.simulationExecuted){
@@ -2023,11 +2024,7 @@ window.location.href = "/tool/";
 
 // ================= CAPTURE LAST ANALYSIS =================
 
-const originalCalculate = calculate;
-
-window.calculate = function(force = false){
-
-originalCalculate(force);
+function captureAnalysisData(){
 
 const equity = getValue("equity");
 const priceNight = getValue("priceNight");
@@ -2058,7 +2055,6 @@ const profit = operatingProfit - taxCost - mortgage;
 const roi = equity > 0 ? (profit / equity) * 100 : 0;
 
 window.lastAnalysisData = {
-
 price: getValue("price") || 0,
 equity: equity,
 loan: loanAmount,
@@ -2066,10 +2062,9 @@ revenue: revenue,
 profit: profit,
 roi: roi,
 risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
-
-}; 
-
 };
+
+}
 
 // ================= SAFE PLAN BUY =================
 
