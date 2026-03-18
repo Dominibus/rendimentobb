@@ -3,9 +3,8 @@
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
 
+// 🔥 FIRESTORE
 import {
-getAuth,
-onAuthStateChanged, 
 getFirestore,
 collection,
 query,
@@ -15,6 +14,12 @@ orderBy,
 deleteDoc,
 doc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// 🔥 AUTH (CORRETTO)
+import {
+getAuth,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 import { marketData } from "./market-data.js";
 
