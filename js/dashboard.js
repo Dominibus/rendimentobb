@@ -317,10 +317,12 @@ const analyses = querySnapshot.docs.map(doc => ({
 
 const citySelect = document.getElementById("city-select");
 
+// città iniziale
 let selectedCity = citySelect?.value || "italy";
 
-/* fallback solo se "italy" */
+// fallback solo se "italy"
 if(selectedCity === "italy" && analyses.length > 0){
+
   analyses.sort((a,b)=> 
     new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -328,13 +330,21 @@ if(selectedCity === "italy" && analyses.length > 0){
   selectedCity = analyses[0]?.city || "napoli";
 }
 
+// 🔥 aggiorna SOLO il riquadro (NON background)
 updateMarketHero(selectedCity);
 
-console.log("Città selezionata:", selectedCity);
+console.log("Città iniziale:", selectedCity);
 
-updateMarketHero(selectedCity);
+// 🔥 CAMBIO CITTÀ LIVE (QUESTO TI MANCAVA)
+citySelect?.addEventListener("change",(e)=>{
 
-console.log("Città selezionata:", selectedCity);
+  const newCity = e.target.value;
+
+  updateMarketHero(newCity);
+
+  console.log("Città cambiata:", newCity);
+
+});
 
 // ================= RESET =================
 
