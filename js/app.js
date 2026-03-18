@@ -1131,7 +1131,15 @@ const commission = getValue("commission") || 15;
 const tax = getValue("tax") || 21;
 const loanAmount = getValue("loanAmount");
 const interestRate = getValue("interestRate");
-const loanYears = getValue("loanYears");  
+const loanYears = getValue("loanYears"); 
+
+console.log("DEBUG:", {
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax
+}); 
 
 const result = calculateROI({
   price: getValue("price"),
