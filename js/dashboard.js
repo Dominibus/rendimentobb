@@ -1022,16 +1022,20 @@ loadDashboard();
 
 // ================= INIT =================
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+onAuthStateChanged(auth, async (user)=>{
 
-const auth = window.firebaseAuth;
-
-onAuthStateChanged(auth, (user)=>{
+if(!window.firebaseReady){
+  setTimeout(()=>location.reload(),300);
+  return;
+}
 
 if(user){
 
 window.currentUser = user;
-loadDashboard();
+
+console.log("USER OK:", user.uid);
+
+await loadDashboard();
 
 }else{
 
@@ -1048,6 +1052,8 @@ document.addEventListener("rb_language_changed", () => {
 if(!window.currentUser) return;
 
 loadDashboard();
+console.log("Query UID:", window.currentUser?.uid);
+console.log("Docs trovati:", querySnapshot.size); 
 
 });
 
