@@ -2,6 +2,7 @@
 // RENDIMENTOBB – DASHBOARD ENGINE 4.0
 // Safe Data Handling + Capital Stats + Date Display
 // ===============================================
+import { app } from "./firebase-init.js";
 
 // 🔥 FIRESTORE
 import {
