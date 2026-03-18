@@ -1163,6 +1163,18 @@ const taxCost = result.taxCost;
 const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = result.netAfterMortgage;
 const roi = result.roi;
+const roiEl = document.getElementById("roi-live");
+if(roiEl){
+  roiEl.innerText = roi.toFixed(1) + "%";
+}  
+const roiEl = document.getElementById("roi-live");
+if(roiEl){
+  roiEl.innerText = roi.toFixed(1) + "%";
+}
+const roiEl = document.getElementById("roi-live");
+if(roiEl){
+  roiEl.innerText = roi.toFixed(1) + "%";
+}  
 
 let city = window.currentCity || citySelector?.value || null;  
 
