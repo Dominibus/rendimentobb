@@ -1118,7 +1118,7 @@ function calculate(force = false){
 
 window.calculate = calculate;
 
-if(!force && !window.simulationExecuted){
+if(!force && window.simulationExecuted){
 return;
 }
 
@@ -1545,6 +1545,8 @@ const data = window.lastAnalysisData;
 const doc = new jsPDF();
 
 let y = 34;
+
+console.log("PDF DATA:", data);  
 
 
 // ================= HEADER =================
@@ -2050,51 +2052,6 @@ sessionStorage.setItem("from_property_page", true);
 window.location.href = "/tool/";
 
 };
-
-
-// ================= CAPTURE LAST ANALYSIS =================
-
-function captureAnalysisData(){
-
-const equity = getValue("equity");
-const priceNight = getValue("priceNight");
-const occupancy = getValue("occupancy");
-const loanAmount = getValue("loanAmount");
-const expenses = getValue("expenses");
-
-const nights = 365 * (occupancy / 100);
-const revenue = priceNight * nights;
-
-const commission = getValue("commission");
-const tax = getValue("tax");
-const interestRate = getValue("interestRate");
-const loanYears = getValue("loanYears");
-
-const mortgage = calculateMortgage(loanAmount, interestRate, loanYears);
-
-const fees = revenue * (commission / 100);
-
-const operatingProfit = revenue - fees - (expenses * 12);
-
-const taxCost = operatingProfit > 0
-  ? operatingProfit * (tax / 100)
-  : 0;
-
-const profit = operatingProfit - taxCost - mortgage;
-
-const roi = equity > 0 ? (profit / equity) * 100 : 0;
-
-window.lastAnalysisData = {
-price: getValue("price") || 0,
-equity: equity,
-loan: loanAmount,
-revenue: revenue,
-profit: profit,
-roi: roi,
-risk: roi > 12 ? 30 : roi > 6 ? 55 : 75
-};
-
-}
 
 // ================= SAFE PLAN BUY =================
 
