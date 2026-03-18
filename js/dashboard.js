@@ -275,6 +275,11 @@ console.log("Analisi trovate:", querySnapshot.size);
 
 const list = document.getElementById("analysis-list");
 
+if(!list){
+console.error("analysis-list NON trovato");
+return;
+}
+
 list.innerHTML="";
 
 roiValues = [];
@@ -1029,9 +1034,28 @@ loadDashboard();
 onAuthStateChanged(auth, async (user)=>{
 
 if(!window.firebaseReady){
-  setTimeout(()=>location.reload(),300);
+  console.log("Firebase non pronto, attendo...");
+  setTimeout(()=>loadDashboard(),300);
   return;
 }
+
+if(user){
+
+window.currentUser = user;
+
+console.log("USER OK:", user.uid);
+
+document.dispatchEvent(new Event("rb_auth_ready")); 
+
+await loadDashboard();
+
+}else{
+
+window.location.href="/login/";
+
+}
+
+});
 
 if(user){
 
