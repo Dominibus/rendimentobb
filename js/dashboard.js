@@ -315,15 +315,22 @@ const analyses = querySnapshot.docs.map(doc => ({
 
 // ================= CITY DYNAMIC =================
 
-let selectedCity = "napoli";
+const citySelect = document.getElementById("city-select");
 
-if(analyses.length > 0){
+let selectedCity = citySelect?.value || "italy";
+
+/* fallback solo se "italy" */
+if(selectedCity === "italy" && analyses.length > 0){
   analyses.sort((a,b)=> 
     new Date(b.createdAt) - new Date(a.createdAt)
   );
 
   selectedCity = analyses[0]?.city || "napoli";
 }
+
+updateMarketHero(selectedCity);
+
+console.log("Città selezionata:", selectedCity);
 
 updateMarketHero(selectedCity);
 
@@ -1432,13 +1439,14 @@ ${t(
 // CITY MARKET CHANGE
 // ===============================
 
-document.addEventListener("change", (e)=>{
+document.getElementById("city-select")?.addEventListener("change",(e)=>{
 
-if(e.target.id === "city-select"){
+  const selectedCity = e.target.value;
 
-loadDashboard();
+  updateMarketHero(selectedCity);
+  updateMarketStats(selectedCity); // lo faremo dopo
 
-}
+  console.log("Città cambiata:", selectedCity);
 
 });
 
