@@ -264,9 +264,7 @@ return;
 renderHeader();
 
 const q = query(
-collection(db,"analyses"),
-where("uid","==",window.currentUser.uid),
-orderBy("createdAt","desc")
+collection(db,"analyses")
 );
 
 const querySnapshot = await getDocs(q);
