@@ -1,3 +1,5 @@
+import { calculateMortgage } from "./mortgage-engine.js";
+
 export function calculateROI({
 priceNight,
 occupancy,
@@ -7,8 +9,7 @@ tax,
 equity,
 loanAmount,
 interestRate,
-loanYears,
-calculateMortgage
+loanYears
 }){
 
 const mortgageYearly =
