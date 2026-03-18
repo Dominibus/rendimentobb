@@ -1123,6 +1123,20 @@ return;
 
 window.simulationExecuted = true;
 
+const result = calculateROI({
+  price: getValue("price"),
+  equity: getValue("equity"),
+  priceNight: getValue("priceNight"),
+  occupancy: getValue("occupancy"),
+  expenses: getValue("expenses"),
+  commission: getValue("commission"),
+  tax: getValue("tax"),
+  loanAmount: getValue("loanAmount"),
+  interestRate: getValue("interestRate"),
+  loanYears: getValue("loanYears")
+});  
+
+const equity = getValue("equity");
 if (equity < 0) return;
 
 const gross = result.gross;
