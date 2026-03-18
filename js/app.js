@@ -1183,33 +1183,7 @@ return;
 
 window.simulationExecuted = true;
 
-const equity = getValue("equity");
-const priceNight = getValue("priceNight");
-const occupancy = getValue("occupancy");
-const expenses = getValue("expenses");
-const commission = getValue("commission");
-const tax = getValue("tax");
-
-const loanAmount = getValue("loanAmount");
-const interestRate = getValue("interestRate");
-const loanYears = getValue("loanYears");
-
 if (equity < 0) return;
-
-const result = calculateROI({
-
-priceNight,
-occupancy,
-expenses,
-commission,
-tax,
-equity,
-loanAmount,
-interestRate,
-loanYears,
-calculateMortgage
-
-});
 
 const gross = result.gross;
 const operatingProfit = result.operatingProfit;
@@ -1238,34 +1212,6 @@ const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
 if(typeof updateInvestmentScore === "function"){
 updateInvestmentScore(investmentScore);
 }  
-
-renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
-
-renderChart(netAfterMortgage);
-
-renderStrategicInsight(roi);
-
-renderRevenueForecast(gross);
-
-renderInvestmentScore(roi, riskScore);
-renderInvestmentRanking(roi); 
-renderRiskMeter(riskScore);  
-renderSmartInvestmentAlert(roi);  
-const payback =
-equity > 0 && netAfterMortgage > 0
-? (equity / netAfterMortgage)
-: null;
-
-renderInvestmentVerdict(roi, payback); 
-renderBreakEvenOccupancy(
-priceNight,
-expenses,
-commission,
-tax,
-mortgageYearly
-);  
-  
-showUpgradePopup(roi);
 
 // ================= SAVE CORRETTO =================
 
