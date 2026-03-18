@@ -1133,6 +1133,64 @@ document.getElementById("revenue-live").innerText = formatCurrency(annualRevenue
 
 }
 
+function updateAdvancedUI(roi, annualRevenue){
+
+// ===== BENCHMARK (fake realistico per ora)
+
+document.getElementById("benchmark-price").innerText = "110€";
+document.getElementById("benchmark-occupancy").innerText = "71%";
+document.getElementById("benchmark-revenue").innerText = formatCurrency(28500);
+
+
+// ===== MARKET COMPARISON
+
+const marketComparison = document.getElementById("market-comparison");
+
+if(marketComparison){
+
+marketComparison.innerHTML = `
+<div class="kpi-box">
+<div class="kpi-label">ROI vs Market</div>
+<div class="kpi-value">${roi > 10 ? "📈 Above average" : "⚠️ Below average"}</div>
+</div>
+`;
+
+}
+
+
+// ===== OCCUPANCY SIMULATION
+
+const occupancyBox = document.getElementById("occupancy-sensitivity");
+
+if(occupancyBox){
+
+occupancyBox.innerHTML = `
+<div class="kpi-box">
+<div class="kpi-label">Occupancy Impact</div>
+<div class="kpi-value">+10% → +${Math.round(annualRevenue*0.1)}€</div>
+</div>
+`;
+
+}
+
+
+// ===== FORECAST
+
+const forecast = document.getElementById("revenue-forecast");
+
+if(forecast){
+
+forecast.innerHTML = `
+<div class="kpi-box">
+<div class="kpi-label">Next Year Forecast</div>
+<div class="kpi-value">${formatCurrency(annualRevenue * 1.08)}</div>
+</div>
+`;
+
+}
+
+}
+
 // ================= FREE LIMIT =================
 
 let freeRuns =
