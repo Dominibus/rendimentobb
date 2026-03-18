@@ -1097,18 +1097,6 @@ return;
 
 window.simulationExecuted = true;
 
-// attende Firebase
-if(window.firebaseReady === false){
-
-console.log("Firebase non pronto, attendo...");
-
-setTimeout(()=>{
-calculate(force);
-},300);
-
-return;
-}
-
 // ================= DATI INPUT =================
 
 const price = Number(document.getElementById("price").value || 0);
