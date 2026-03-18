@@ -1086,55 +1086,6 @@ ${lang === "it"
 
 }
 
-function calculate(force = false){
-
-window.calculate = calculate;
-
-// blocca esecuzioni automatiche
-if(!force && !window.simulationExecuted){
-return;
-}
-
-window.simulationExecuted = true;
-
-// ================= DATI INPUT =================
-
-const price = Number(document.getElementById("price").value || 0);
-const equity = Number(document.getElementById("equity").value || 0);
-const priceNight = Number(document.getElementById("priceNight").value || 0);
-const occupancy = Number(document.getElementById("occupancy").value || 0);
-const expenses = Number(document.getElementById("expenses").value || 0);
-
-// ================= CALCOLI =================
-
-const annualRevenue = priceNight * occupancy/100 * 365;
-const monthlyProfit = (annualRevenue / 12) - expenses;
-const roi = equity ? ((monthlyProfit * 12) / equity * 100).toFixed(1) : 0;
-const risk = roi > 15 ? 20 : roi > 10 ? 40 : 70;
-
-// ================= SALVATAGGIO =================
-
-window.lastAnalysisData = {
-  propertyPrice: price,
-  equity: equity,
-  roi: Number(roi),
-  risk: risk,
-  city: window.currentCity || "italy",
-  createdAt: new Date()
-};
-
-// ================= UI UPDATE =================
-
-document.getElementById("roi-live").innerText = roi + "%";
-document.getElementById("occ-value").innerText = occupancy + "%";    
-document.getElementById("profit-live").innerText = formatCurrency(monthlyProfit);
-document.getElementById("revenue-live").innerText = formatCurrency(annualRevenue);
-
-updateAdvancedUI(Number(roi), annualRevenue);  
-
-
-}
-
 function updateAdvancedUI(roi, annualRevenue){
 
 // ===== BENCHMARK (fake realistico per ora)
