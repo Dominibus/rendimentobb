@@ -2,27 +2,7 @@
 /* FIREBASE INIT */
 /* ===================== */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDvgqXf8gAB3BKdz6xiGpW9iNFcV-xXw_g",
-  authDomain: "rendimento-bb.firebaseapp.com",
-  projectId: "rendimento-bb",
-  storageBucket: "rendimento-bb.firebasestorage.app",
-  messagingSenderId: "144452546362",
-  appId: "1:144452546362:web:829e08d7b1703137b16a03",
-  measurementId: "G-749B8PW4ST"
-};
-
-// 🔥 evita doppia inizializzazione
-let app;
-if(!window.firebaseApp){
-  app = initializeApp(firebaseConfig);
-  window.firebaseApp = app;
-}else{
-  app = window.firebaseApp;
-}
 
 /* ===================== */
 /* GLOBAL CITY BACKGROUND */
