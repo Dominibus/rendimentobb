@@ -303,12 +303,14 @@ return;
 
 // ================= CITY DYNAMIC =================
 
-const analyses = querySnapshot.docs.map(doc => doc.data());
-
 let selectedCity = "napoli";
 
 if(analyses && analyses.length > 0){
-  selectedCity = (analyses[0].city || "napoli").toLowerCase();
+  analyses.sort((a,b)=> 
+  new Date(b.createdAt) - new Date(a.createdAt)
+);
+
+const selectedCity = analyses[0]?.city || "napoli";
 }
 
 const cityImage = cityImages[selectedCity] || cityImages["napoli"];
@@ -335,7 +337,7 @@ const analyses = querySnapshot.docs.map(doc => ({
   risk: doc.data().risk || 0,
   city: doc.data().city || "italy",
   createdAt: doc.data().createdAt
-}));
+
 
 });
 
