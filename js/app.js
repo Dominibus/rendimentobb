@@ -1130,6 +1130,8 @@ document.getElementById("occ-value").innerText = occupancy + "%";
 document.getElementById("profit-live").innerText = formatCurrency(monthlyProfit);
 document.getElementById("revenue-live").innerText = formatCurrency(annualRevenue);
 
+updateAdvancedUI(Number(roi), annualRevenue);  
+
 
 }
 
