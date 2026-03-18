@@ -1560,10 +1560,38 @@ let y = 34;
 
 let chartImage = null;
 
+try {
+
 const canvas = document.getElementById("roiChart");
+
 if(canvas){
-  chartImage = canvas.toDataURL("image/png");
-}  
+
+// ⏳ aspetta render Chart.js
+await new Promise(resolve => setTimeout(resolve, 500));
+
+// 🔥 canvas export HD
+const exportCanvas = document.createElement("canvas");
+exportCanvas.width = canvas.width * 2;
+exportCanvas.height = canvas.height * 2;
+
+const ctx = exportCanvas.getContext("2d");
+
+// sfondo bianco (FONDAMENTALE per PDF)
+ctx.fillStyle = "#ffffff";
+ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+// copia grafico
+ctx.drawImage(canvas, 0, 0, exportCanvas.width, exportCanvas.height);
+
+chartImage = exportCanvas.toDataURL("image/png", 1.0);
+
+}
+
+} catch(e){
+console.warn("Errore chart PDF:", e);
+}
+
+console.log("CHART OK?", !!chartImage);  
 
 console.log("PDF DATA:", data);  
 
