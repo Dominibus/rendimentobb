@@ -313,6 +313,17 @@ const analyses = querySnapshot.docs.map(doc => ({
   createdAt: doc.data().createdAt
 }));
 
+// ================= URL PARAMS =================
+
+const urlParams = new URLSearchParams(window.location.search);
+
+// 🔥 lingua da URL
+const langFromURL = urlParams.get("lang");
+
+if(langFromURL && typeof setLang === "function"){
+  setLang(langFromURL);
+}  
+
 // ================= CITY DYNAMIC =================
 
 const citySelect = document.getElementById("city-select");
