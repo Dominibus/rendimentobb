@@ -1086,7 +1086,7 @@ ${lang === "it"
 
 }
 
-/*
+
 function updateAdvancedUI(roi, annualRevenue){
 
 // ===== BENCHMARK (fake realistico per ora)
@@ -1110,7 +1110,6 @@ marketComparison.innerHTML = `
 `;
 
 }
-/*
 
 
 // ===== OCCUPANCY SIMULATION
