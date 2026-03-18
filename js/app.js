@@ -22,7 +22,8 @@ compareMortgages
 import {
   getFirestore,
   collection,
-  addDoc
+  addDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import { app } from "./firebase-init.js";
@@ -66,10 +67,8 @@ async function saveAnalysis(data){
       roi: data.roi,
       risk: data.risk,
       city: data.city || "italy",
-      import { serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
       createdAt: serverTimestamp()
-    });
+ });
 
     console.log("✅ SALVATO FIRESTORE");
 
