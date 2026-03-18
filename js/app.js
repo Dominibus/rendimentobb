@@ -1119,7 +1119,7 @@ function calculate(force = false){
 window.calculate = calculate;
 
 if(!force && window.simulationExecuted){
-  return;
+  console.log("Simulazione già eseguita, ma forzo aggiornamento UI");
 }
 
 window.simulationExecuted = true;
@@ -1231,13 +1231,11 @@ console.log("Utente non loggato → niente salvataggio");
 
 // MARKET BENCHMARK + COMPARISON
 
-if(city){
+const citySafe = city || "italy";
 
-renderMarketBenchmark(city);
-renderMarketComparison(gross, city);
-renderROIMarketComparison(roi, city);
-
-}
+renderMarketBenchmark(citySafe);
+renderMarketComparison(gross, citySafe);
+renderROIMarketComparison(roi, citySafe);
 
 renderOccupancySensitivity(
 priceNight,
