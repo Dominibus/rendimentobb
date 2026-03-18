@@ -1145,10 +1145,19 @@ const expenses = getValue("expenses");
 const commission = getValue("commission");
 const tax = getValue("tax");
 
-if(!window.currentUser){
+if(window.currentUser){
 
-// utente non loggato può comunque fare simulazione
-console.log("Utente non loggato – analisi solo locale");
+saveAnalysis({
+price: getValue("price"),
+equity: equity,
+roi: roi,
+risk: riskScore,
+city: city
+});
+
+}else{
+
+console.log("Utente non loggato → niente salvataggio");
 
 }
 
@@ -1207,7 +1216,7 @@ saveAnalysis({
   equity: equity,
   roi: roi,
   risk: riskScore,
-  city: window.currentCity || null
+  city: city || "italy"
 });
 
 renderChart(netAfterMortgage);
