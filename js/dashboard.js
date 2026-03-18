@@ -4,6 +4,8 @@
 // ===============================================
 
 import {
+getAuth,
+onAuthStateChanged, 
 getFirestore,
 collection,
 query,
@@ -16,7 +18,8 @@ doc
 
 import { marketData } from "./market-data.js";
 
-const db = getFirestore();
+const db = getFirestore();+
+const auth = getAuth(); 
 
 // ================= CHART DATA =================
 
@@ -39,16 +42,15 @@ function formatDate(timestamp){
 
 if(!timestamp) return "-";
 
-const date = new Date(timestamp.seconds * 1000);
+// 🔥 SUPPORTA ENTRAMBI I CASI
+const date = timestamp.seconds
+? new Date(timestamp.seconds * 1000)
+: new Date(timestamp);
 
 return date.toLocaleDateString(
 window.currentLang === "it" ? "it-IT" : "en-US"
 );
 
-}
-
-function t(it,en){
-return window.currentLang === "en" ? en : it;
 }
 
 // ================= INVESTMENT SCORE =================
@@ -264,7 +266,7 @@ renderHeader();
 const q = query(
 collection(db,"analyses"),
 where("uid","==",window.currentUser.uid),
-
+orderBy("createdAt","desc")
 );
 
 const querySnapshot = await getDocs(q);
@@ -292,7 +294,7 @@ const data = doc.data();
 analyses.push({
 id:doc.id,
 roi:data.roi || 0,
-price:data.propertyPrice || 0,
+price:data.price || 0,
 equity:data.equity || 0,
 risk:data.risk || 0,
 city:data.city || "italy",
@@ -1037,6 +1039,8 @@ window.currentUser = user;
 
 console.log("USER OK:", user.uid);
 
+document.dispatchEvent(new Event("rb_auth_ready")); 
+
 await loadDashboard();
 
 }else{
@@ -1055,7 +1059,6 @@ if(!window.currentUser) return;
 
 loadDashboard();
 console.log("Query UID:", window.currentUser?.uid);
-console.log("Docs trovati:", querySnapshot.size); 
 
 });
 
