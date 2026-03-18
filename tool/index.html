@@ -681,8 +681,6 @@ function applyPaywall(){
     console.log("Utente PRO - paywall disattivato");
     
     document.querySelectorAll('[data-locked]').forEach(el => el.remove());
-   
-    });
 
     document.querySelectorAll(
       "#revenue-forecast, #market-comparison, #occupancy-sensitivity, #strategic-insight"
@@ -692,11 +690,10 @@ function applyPaywall(){
       card.style.opacity = "1";
       card.style.pointerEvents = "auto";
 
-     // rimuove overlay PRO se presente
       const lock = card.querySelector('[data-locked]');
       if(lock){
-      lock.remove();
-  }
+        lock.remove();
+      }
     });
 
     return;
