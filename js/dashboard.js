@@ -24,9 +24,9 @@ onAuthStateChanged
 import { marketData } from "./market-data.js";
 // ================= TRANSLATION HELPER =================
 
-function t(it,en){
+window.t = function(it,en){
   return window.RB_LANG?.current === "en" ? en : it;
-}
+};
 
 const db = getFirestore();
 const auth = getAuth(); 
