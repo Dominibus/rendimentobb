@@ -2,8 +2,8 @@
 /* FIREBASE INIT */
 /* ===================== */
 
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
+import { auth } from "/js/firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 /* ===================== */
 /* GLOBAL CITY BACKGROUND */
 /* ===================== */
