@@ -254,7 +254,7 @@ Investire in un B&B a Firenze – rendimento affitti brevi
 </main>
 
 <script src="/js/lang.js" defer></script>
-<script src="/js/header.js" defer></script>
+<script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js" defer></script>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -263,7 +263,9 @@ if(window.applyTranslations){
 applyTranslations();
 }
 
-applyCityBackground("rome");
+if(window.applyCityBackground){
+  applyCityBackground("rome");
+}
 
 });
 </script>
