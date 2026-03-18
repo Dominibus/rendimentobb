@@ -327,21 +327,15 @@ let totalCapital = 0;
 let count = 0;
 let totalCashflow = 0; 
 
-let analyses = [];  
-
-querySnapshot.forEach(doc=>{
-
-const data = doc.data();
-
-analyses.push({
-id:doc.id,
-roi:data.roi || 0,
-price:data.propertyPrice || data.price || 0,
-equity:data.equity || 0,
-risk:data.risk || 0,
-city:data.city || "italy",
-createdAt:data.createdAt
-});
+const analyses = querySnapshot.docs.map(doc => ({
+  id: doc.id,
+  roi: doc.data().roi || 0,
+  price: doc.data().propertyPrice || doc.data().price || 0,
+  equity: doc.data().equity || 0,
+  risk: doc.data().risk || 0,
+  city: doc.data().city || "italy",
+  createdAt: doc.data().createdAt
+}));
 
 });
 
