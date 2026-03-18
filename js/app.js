@@ -66,7 +66,9 @@ async function saveAnalysis(data){
       roi: data.roi,
       risk: data.risk,
       city: data.city || "italy",
-      createdAt: new Date()
+      import { serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+      createdAt: serverTimestamp()
     });
 
     console.log("✅ SALVATO FIRESTORE");
