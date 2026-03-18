@@ -1648,7 +1648,11 @@ doc.text(data.roi.toFixed(2)+"%",25,y+22);
 doc.setFontSize(10);
 
 let badge =
-data.roi > 12 ? "HIGH PERFORMANCE" :
+data.roi > 12
+? (lang==="it"?"ALTA PERFORMANCE":"HIGH PERFORMANCE")
+: data.roi > 6
+? (lang==="it"?"BILANCIATO":"BALANCED")
+: (lang==="it"?"RISCHIOSO":"RISKY");
 data.roi > 6 ? "BALANCED" :
 "RISKY";
 
@@ -1793,30 +1797,6 @@ doc.text(formatCurrency(data.profit),25+boxWidth+gap,y+16);
 
 y += 30;
 
-doc.setFontSize(11);
-
-doc.text(
-(lang==="it"?"Ricavi: ":"Revenue: ")
-+ formatCurrency(data.revenue),
-25,
-y+9
-);
-
-doc.text(
-(lang==="it"?"Profitto: ":"Profit: ")
-+ formatCurrency(data.profit),
-90,
-y+9
-);
-
-doc.text(
-t("roi")+": "+data.roi.toFixed(2)+"%",
-150,
-y+9
-);
-
-y+=30;
-
 // ================= ADVANCED KPI =================
 
 const payback =
@@ -1938,19 +1918,6 @@ const chartHeight = 90;
 const chartX = (210 - chartWidth) / 2;
 
 // ================= CHART HEADER =================
-
-doc.setFontSize(18);
-doc.setTextColor(0,0,0);
-
-doc.text(
-lang==="it"
-? "Andamento rendimento investimento"
-: "Investment Performance Trend",
-20,
-y
-);
-
-y += 6;
 
 doc.setFontSize(10);
 doc.setTextColor(120);
@@ -2091,7 +2058,9 @@ doc.text(
 );
 
 doc.text(
-"Confidential – For analysis purposes only",
+lang==="it"
+? "Confidenziale – Solo per analisi informativa"
+: "Confidential – For analysis purposes only",
 130,
 278
 );
