@@ -1040,8 +1040,6 @@ if(!window.firebaseReady){
   setTimeout(()=>loadDashboard(),300);
   return;
 }
- 
-});
 
 if(user){
 
