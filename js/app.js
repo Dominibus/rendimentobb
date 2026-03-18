@@ -1154,6 +1154,8 @@ const result = calculateROI({
   loanYears
 });
 
+console.log("RESULT:", result);  
+
 window.lastAnalysisData = result;  
 
 const equity = getValue("equity");
