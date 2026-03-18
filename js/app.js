@@ -1086,37 +1086,6 @@ ${lang === "it"
 
 }
 
-// ===== OCCUPANCY SIMULATION
-
-const occupancyBox = document.getElementById("occupancy-sensitivity");
-
-if(occupancyBox){
-
-occupancyBox.innerHTML = `
-<div class="kpi-box">
-<div class="kpi-label">Occupancy Impact</div>
-<div class="kpi-value">+10% → +${Math.round(annualRevenue*0.1)}€</div>
-</div>
-`;
-
-}
-
-
-// ===== FORECAST
-
-const forecast = document.getElementById("revenue-forecast");
-
-if(forecast){
-
-forecast.innerHTML = `
-<div class="kpi-box">
-<div class="kpi-label">Next Year Forecast</div>
-<div class="kpi-value">${formatCurrency(annualRevenue * 1.08)}</div>
-</div>
-`;
-
-}
-
 }
 
 // ================= FREE LIMIT =================
