@@ -1849,32 +1849,40 @@ y+=15;
 
 // ================= CHART =================
 
-let chartImage = null;
+// nuova pagina dedicata
+doc.addPage();
+y = 30;
 
-try {
+if(chartImage){
 
-const canvas = document.getElementById("roiChart");
+const chartWidth = 170;
+const chartHeight = 90;
 
-if(canvas){
+const chartX = (210 - chartWidth) / 2;
 
-// 🧠 FORZA RENDER COMPLETO
-await new Promise(resolve => setTimeout(resolve, 300));
+doc.setFontSize(14);
+doc.setTextColor(16,185,129);
 
-// fallback diretto
-chartImage = canvas.toDataURL("image/png", 1.0);
+doc.text(
+lang==="it" ? "Analisi Andamento ROI" : "ROI Trend Analysis",
+20,
+y
+);
+
+y += 10;
+
+doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight);
+
+y += chartHeight + 10;
 
 }
-
-} catch(e){
-console.warn("Errore grafico PDF:", e);
-}
-
-  console.log("CHART IMAGE:", chartImage);
 
 // ================= PAGE 2 =================
 
-doc.addPage();
-y=30;
+if(y > 220){
+  doc.addPage();
+  y = 30;
+}
 
 
 // ================= INVESTMENT GRADE =================
