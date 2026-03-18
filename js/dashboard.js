@@ -29,8 +29,8 @@ window.t = function(it,en){
   return window.RB_LANG?.current === "en" ? en : it;
 };
 
-const db = getFirestore();
-const auth = getAuth(); 
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 // ================= CHART DATA =================
 
