@@ -1088,31 +1088,6 @@ ${lang === "it"
 
 // ================= FREE LIMIT =================
 
-let freeRuns =
-parseInt(localStorage.getItem("rb_free_runs") || "0");
-
-const isLogged = !!window.currentUser;
-const isPro = window.currentPlan === "pro";
-
-if(!isLogged && !isPro && freeRuns >= 3){
-
-alert(
-window.currentLang==="it"
-? "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare."
-: "You reached the free simulation limit. Create a free account to continue."
-);
-
-window.location.href="/login/";
-throw new Error("Free limit reached");
-
-}
-
-// incrementa solo per utenti anonimi
-if(!isLogged){
-freeRuns++;
-localStorage.setItem("rb_free_runs", freeRuns);
-}
-
 function calculate(force = false){
 
 window.calculate = calculate;
