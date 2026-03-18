@@ -1167,14 +1167,14 @@ const roiEl = document.getElementById("roi-live");
 if(roiEl){
   roiEl.innerText = roi.toFixed(1) + "%";
 }  
-const roiEl = document.getElementById("roi-live");
-if(roiEl){
-  roiEl.innerText = roi.toFixed(1) + "%";
+const profitEl = document.getElementById("profit-live");
+if(profitEl){
+  profitEl.innerText = formatCurrency(netAfterMortgage / 12);
 }
-const roiEl = document.getElementById("roi-live");
-if(roiEl){
-  roiEl.innerText = roi.toFixed(1) + "%";
-}  
+const revenueEl = document.getElementById("revenue-live");
+if(revenueEl){
+  revenueEl.innerText = formatCurrency(gross);
+} 
 
 let city = window.currentCity || citySelector?.value || null;  
 
