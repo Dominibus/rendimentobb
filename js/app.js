@@ -1630,26 +1630,33 @@ doc.addImage(logo,"PNG",140,3,55,18);
 // ================= TITLE =================
 
 doc.setTextColor(0,0,0);
-doc.setFontSize(22);
+// ================= HERO KPI =================
 
-doc.text(
-lang==="it"
-?"Report Strategico Investimento B&B"
-:"Strategic B&B Investment Report",
-20,
-y
-);
+doc.setFillColor(16,185,129);
+doc.roundedRect(20,y,170,30,6,6,"F");
 
-y+=10;
+doc.setTextColor(255,255,255);
+doc.setFontSize(12);
 
-doc.setFontSize(11);
+doc.text("ROI",25,y+10);
 
-doc.text(
-lang==="it"
-?"Analisi professionale della sostenibilità economica di un investimento in struttura ricettiva."
-:"Professional financial analysis of a short-term rental investment.",
-20,
-y,
+doc.setFontSize(26);
+
+doc.text(data.roi.toFixed(2)+"%",25,y+22);
+
+// badge
+doc.setFontSize(10);
+
+let badge =
+data.roi > 12 ? "HIGH PERFORMANCE" :
+data.roi > 6 ? "BALANCED" :
+"RISKY";
+
+doc.text(badge,120,y+22);
+
+y += 40;
+
+doc.setTextColor(0,0,0);
 {maxWidth:170}
 );
 
@@ -1751,7 +1758,40 @@ y+=14;
 
 doc.setDrawColor(220);
 doc.setFillColor(248,250,252);
-doc.roundedRect(20,y,170,22,3,3,"F");
+// ================= KPI GRID =================
+
+const boxWidth = 80;
+const gap = 10;
+
+// Revenue
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y,boxWidth,22,4,4,"F");
+
+doc.setFontSize(9);
+doc.setTextColor(100);
+
+doc.text("Revenue",25,y+8);
+
+doc.setFontSize(12);
+doc.setTextColor(0);
+
+doc.text(formatCurrency(data.revenue),25,y+16);
+
+// Profit
+doc.setFillColor(248,250,252);
+doc.roundedRect(20+boxWidth+gap,y,boxWidth,22,4,4,"F");
+
+doc.setFontSize(9);
+doc.setTextColor(100);
+
+doc.text("Profit",25+boxWidth+gap,y+8);
+
+doc.setFontSize(12);
+doc.setTextColor(0);
+
+doc.text(formatCurrency(data.profit),25+boxWidth+gap,y+16);
+
+y += 30;
 
 doc.setFontSize(11);
 
@@ -1897,7 +1937,33 @@ const chartHeight = 90;
 
 const chartX = (210 - chartWidth) / 2;
 
-doc.setFontSize(14);
+// ================= CHART HEADER =================
+
+doc.setFontSize(18);
+doc.setTextColor(0,0,0);
+
+doc.text(
+lang==="it"
+? "Andamento rendimento investimento"
+: "Investment Performance Trend",
+20,
+y
+);
+
+y += 6;
+
+doc.setFontSize(10);
+doc.setTextColor(120);
+
+doc.text(
+lang==="it"
+? "Proiezione su base pluriennale del rendimento"
+: "Multi-year performance projection",
+20,
+y
+);
+
+y += 12;
 doc.setTextColor(16,185,129);
 
 doc.text(
