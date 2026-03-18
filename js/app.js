@@ -1118,8 +1118,8 @@ function calculate(force = false){
 
 window.calculate = calculate;
 
-if(!force){
-window.simulationExecuted = true;
+if(!force && window.simulationExecuted){
+  return;
 }
 
 window.simulationExecuted = true;
@@ -1857,12 +1857,6 @@ y+=15;
 
 
 // ================= CHART =================
- let chartImage = null;
-
-const canvas = document.getElementById("roiChart");
-if(canvas){
-  chartImage = canvas.toDataURL("image/png");
-} 
 
 // nuova pagina dedicata
 doc.addPage();
