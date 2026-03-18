@@ -268,6 +268,8 @@ where("uid","==",window.currentUser.uid),
 );
 
 const querySnapshot = await getDocs(q);
+console.log("UID:", window.currentUser?.uid);
+console.log("Analisi trovate:", querySnapshot.size); 
 
 const list = document.getElementById("analysis-list");
 
