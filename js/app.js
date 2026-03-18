@@ -1145,22 +1145,6 @@ const expenses = getValue("expenses");
 const commission = getValue("commission");
 const tax = getValue("tax");
 
-if(window.currentUser){
-
-saveAnalysis({
-price: getValue("price"),
-equity: equity,
-roi: roi,
-risk: riskScore,
-city: city
-});
-
-}else{
-
-console.log("Utente non loggato → niente salvataggio");
-
-}
-
 const loanAmount = getValue("loanAmount");
 const interestRate = getValue("interestRate");
 const loanYears = getValue("loanYears");
@@ -1189,6 +1173,7 @@ const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = result.netAfterMortgage;
 const roi = result.roi;
 
+let city = window.currentCity || citySelector?.value || null;  
 
 window.lastROI = roi;  
 
@@ -1210,14 +1195,6 @@ updateInvestmentScore(investmentScore);
 }  
 
 renderExecutiveKPI(roi, netAfterMortgage, gross, equity);
-
-saveAnalysis({
-  price: getValue("price"),
-  equity: equity,
-  roi: roi,
-  risk: riskScore,
-  city: city || "italy"
-});
 
 renderChart(netAfterMortgage);
 
@@ -1245,9 +1222,25 @@ mortgageYearly
   
 showUpgradePopup(roi);
 
-// MARKET BENCHMARK + COMPARISON
+// ================= SAVE CORRETTO =================
 
-let city = window.currentCity || citySelector?.value || null;
+if(window.currentUser){
+
+saveAnalysis({
+  price: getValue("price"),
+  equity: equity,
+  roi: roi,
+  risk: riskScore,
+  city: city || "italy"
+});
+
+}else{
+
+console.log("Utente non loggato → niente salvataggio");
+
+}  
+
+// MARKET BENCHMARK + COMPARISON
 
 if(city){
 
