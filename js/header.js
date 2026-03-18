@@ -125,8 +125,6 @@ document.body.insertAdjacentHTML("afterbegin", header);
 /* USER AREA (FIREBASE) */
 /* ===================== */
 
-const auth = getAuth();
-
 onAuthStateChanged(auth, (user) => {
 
 const userArea = document.getElementById("user-area");
