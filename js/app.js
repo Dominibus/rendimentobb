@@ -1295,14 +1295,6 @@ city = "italy";
 
 if(window.currentUser){
 
-saveAnalysis({
-price: getValue("price"),
-equity: equity,
-roi: roi,
-risk: riskScore,
-city: city
-});
-
 } 
 
 // SCROLL AUTOMATICO AI RISULTATI
