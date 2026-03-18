@@ -1126,8 +1126,10 @@ window.lastAnalysisData = {
 // ================= UI UPDATE =================
 
 document.getElementById("roi-live").innerText = roi + "%";
+document.getElementById("occ-value").innerText = occupancy + "%";    
 document.getElementById("profit-live").innerText = formatCurrency(monthlyProfit);
 document.getElementById("revenue-live").innerText = formatCurrency(annualRevenue);
+
 
 }
 
