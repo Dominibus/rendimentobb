@@ -344,6 +344,11 @@ margin:0 auto;
 
 align-items:center;
 
+backdrop-filter: blur(6px);
+background: rgba(255,255,255,0.4);
+padding: 25px;
+border-radius: 20px; 
+
 }
 
 /* ===================== */
@@ -367,6 +372,8 @@ max-width:520px;
 margin:0 auto;  
 
 }
+
+/* INPUT */
 
 .city-input-wrapper{
 
@@ -404,22 +411,27 @@ font-size:15px;
 outline:none;
 }
 
+/* ===================== */
+/* QUICK CITY BUTTONS */
+/* ===================== */
+
 .city-quick{
 
 display:flex;
 gap:10px;
-
 margin-top:12px;
-
 flex-wrap:wrap;
+justify-content:flex-start;
 
 }
+
+/* BOTTONI */
 
 .city-btn{
 
 background:#f1f5f9;
 
-border:none;
+border:1px solid #e2e8f0;
 
 padding:8px 14px;
 
@@ -431,18 +443,46 @@ cursor:pointer;
 
 transition:all .25s ease;
 
+color:#0f172a;
+
 }
+
+/* HOVER */
 
 .city-btn:hover{
 
 background:#10b981;
 color:white;
 transform:translateY(-2px);
+border-color:#10b981;
 
 }
+
+/* ACTIVE */
+
 .city-btn.active{
+
 background:#10b981;
 color:white;
+border-color:#10b981;
+
+}
+
+/* ===================== */
+/* MOBILE FIX */
+/* ===================== */
+
+@media (max-width:768px){
+
+.city-quick{
+justify-content:center;
+}
+
+.city-btn{
+font-size:12px;
+padding:7px 12px;
+}
+
 }
 
 /* ===================== */
