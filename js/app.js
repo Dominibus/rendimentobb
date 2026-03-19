@@ -158,13 +158,15 @@ return false;
 
 if(!hasPlan(requiredPlan)){
 
-if(confirm(
+const goUpgrade = confirm(
 t(
 "Questa funzione richiede un piano superiore.",
 "This feature requires a higher plan."
 )
-)){
-window.location.href="/pricing/";
+);
+
+if(goUpgrade){
+  window.location.href="/pricing/";
 }
 
 return false;
@@ -561,7 +563,7 @@ const container = document.getElementById("investment-score");
 if(!container) return;
 
 let grade = "C";
-let recommendation = "High Risk";
+let recommendation = t("Alto rischio","High risk");
 
 if(roi > 12){
 grade = "A";
@@ -864,7 +866,7 @@ text-align:center;
 ">
 
 <strong style="font-size:16px;">
-${t("highYield")}
+${t("Investimento ad alto rendimento","High yield investment")}
 </strong>
 
 <p style="margin-top:8px;font-size:14px;">
@@ -872,7 +874,10 @@ ROI stimato: <strong>${roi.toFixed(1)}%</strong>
 </p>
 
 <p style="margin-top:10px;font-size:14px;">
-${t("highYieldDesc")}
+${t(
+"Questo investimento supera le medie di mercato e mostra forte potenziale.",
+"This investment outperforms market averages and shows strong potential."
+)}
 </p>
 
 <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
@@ -903,12 +908,7 @@ const container = document.getElementById("smart-investment-alert");
 
 if(!container) return;
 
-const lang = window.currentLang || "it";
-
-const title =
-lang === "it"
-? "🔥 Investimento promettente"
-: "🔥 Promising investment";
+const title = t("🔥 Investimento promettente","🔥 Promising investment");
 
 const discover =
 lang === "it"
@@ -1736,7 +1736,7 @@ doc.setFontSize(22);
 doc.setTextColor(16,185,129);
 
 doc.text(
-t("roi")+": "+data.roi.toFixed(2)+"%",
+t("ROI","ROI"),
 20,
 y
 );
@@ -1784,9 +1784,9 @@ const low=data.revenue*0.8;
 const base=data.revenue;
 const high=data.revenue*1.2;
 
-doc.text(t("lowScenario")+": "+formatCurrency(low),20,y); y+=7;
-doc.text(t("baseScenario")+": "+formatCurrency(base),20,y); y+=7;
-doc.text(t("highScenario")+": "+formatCurrency(high),20,y);
+doc.text(t("Scenario prudente","Low scenario")+": "+formatCurrency(low),20,y);
+doc.text(t("Scenario base","Base scenario")+": "+formatCurrency(base),20,y);
+doc.text(t("Scenario ottimistico","High scenario")+": "+formatCurrency(high),20,y);
 
 y+=15;
 
@@ -1847,7 +1847,7 @@ if(y > 220){
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text(t("grade"),20,y);
+doc.text(t("Valutazione","Grade"),20,y);
 
 y+=12;
 
@@ -1991,7 +1991,12 @@ window.analyzeProperty = function(){
 const link = document.getElementById("property-link").value;
 
 if(!link){
-alert(t("insertPropertyLink"));
+alert(
+t(
+"Inserisci il link dell'immobile",
+"Insert property link"
+)
+);
 return;
 }
 
@@ -2012,9 +2017,10 @@ const user = window.currentUser;
 if(!user){
 
 const goLogin = confirm(
-window.currentLang==="it"
-? "Devi effettuare il login prima di acquistare il piano."
-: "You must login before purchasing the plan."
+t(
+"Devi effettuare il login prima di acquistare il piano.",
+"You must login before purchasing the plan."
+)
 );
 
 if(goLogin){
