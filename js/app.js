@@ -30,6 +30,11 @@ import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
 // ================= PLAN DEFAULT =================
+
+function t(it, en){
+  return window.currentLang === "it" ? it : en;
+}
+
 window.currentPlan = "free";
 
 document.addEventListener("rb_auth_ready", ()=>{
@@ -195,10 +200,7 @@ async function loadUserPlan(uid){
 
 document.addEventListener("rb_language_changed", () => {
 
-window.currentLang = getLang();
-function t(it, en){
-  return window.currentLang === "it" ? it : en;
-}  
+window.currentLang = getLang();  
 
 // aggiorna chart se presente
 if(window.lastROI && typeof renderChart === "function"){
@@ -322,12 +324,12 @@ function renderMarketComparison(userRevenue, cityKey){
   </div>
 
   <div class="kpi-box">
-  <span>${t("marketAverage")}</span>
+  <span>${t("Media mercato","Market average")}</span>
   <strong>${formatCurrency(marketRevenue)}</strong>
   </div>
 
   <div class="kpi-box">
-  <span>${t("assessment")}</span>
+  <span>${t("Valutazione","Assessment")}</span>
   <strong style="color:${color}">${message}</strong>
   </div>
 
@@ -373,7 +375,7 @@ ${t("ROI sopra la media", "ROI above average")}
 
 }else{
 
-message = t("roiBelowCity");
+message = t("ROI sotto la media","ROI below average");
 
 }
 
@@ -419,12 +421,12 @@ function renderRevenueForecast(baseRevenue){
   </div>
 
   <div class="kpi-box">
-    <span>${t("baseScenario")}</span>
+    <span>${t("Scenario base","Base scenario")}</span>
     <strong>${formatCurrency(mid)}</strong>
   </div>
 
   <div class="kpi-box">
-    <span>${t("highScenario")}</span>
+    <span>${t("Scenario ottimistico","High scenario")}</span>
     <strong>${formatCurrency(high)}</strong>
   </div>
 
@@ -587,19 +589,19 @@ else if(grade === "B") gradeColor = "#f59e0b";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${t("grade")}</span>
+<span>${t("Valutazione","Grade")}</span>
 <strong style="color:${gradeColor};font-size:22px;">
 ${grade}
 </strong>
 </div>
 
 <div class="kpi-box">
-<span>${t("riskScore")}</span>
+<span>${t("Indice rischio","Risk score")}</span>
 <strong>${riskScore} / 100</strong>
 </div>
 
 <div class="kpi-box">
-<span>${t("recommendation")}</span>
+<span>${t("Raccomandazione","Recommendation")}</span>
 <strong>${recommendation}</strong>
 </div>
 
@@ -633,7 +635,7 @@ label = t("Opportunità moderata","Moderate opportunity");
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Ranking investimento":"Investment ranking"}</span>
+<span>${t("Ranking investimento","Investment ranking")}</span>
 <strong>Top ${100-percentile}%</strong>
 </div>
 
@@ -660,13 +662,20 @@ let label = t("Rischio elevato","High risk");
 if(riskScore < 40){
 label = t("Rischio basso","Low risk");
 }
-else if(riskScore < 65){
-label = t("Rischio medio","Medium risk");
+if(riskScore < 40){
+  label = t("Rischio basso","Low risk");
+  color = "#10b981";
+  icon = "🟢";
 }
-color = "#f59e0b";
-icon = "🟠";
-labelIT = "Rischio medio";
-labelEN = "Medium risk";
+else if(riskScore < 65){
+  label = t("Rischio medio","Medium risk");
+  color = "#f59e0b";
+  icon = "🟠";
+}
+else{
+  label = t("Rischio elevato","High risk");
+  color = "#ef4444";
+  icon = "🔴";
 }
 
 container.innerHTML = `
@@ -705,27 +714,31 @@ if(!box) return;
 
 let color = "#ef4444";
 let icon = "🔴";
-let title =
-window.currentLang==="it"
-? "Investimento ad alto rischio"
-: "High risk investment";
-let message =
-window.currentLang==="it"
-? "Il rendimento atteso è basso rispetto al capitale investito."
-: "The expected return is low compared to the invested capital.";
+
+let title = t(
+"Investimento ad alto rischio",
+"High risk investment"
+);
+
+let message = t(
+"Il rendimento atteso è basso rispetto al capitale investito.",
+"The expected return is low compared to the invested capital."
+);
 
 if(roi > 12){
 
 color = "#10b981";
 icon = "🟢";
-title =
-window.currentLang==="it"
-? "Ottima opportunità investimento"
-: "Strong investment opportunity";
-message =
-window.currentLang==="it"
-? "Il ROI è molto superiore alla media del mercato e la struttura finanziaria è solida."
-: "ROI is well above market average and financial structure is solid.";
+
+title = t(
+"Ottima opportunità investimento",
+"Strong investment opportunity"
+);
+
+message = t(
+"Il ROI è molto superiore alla media del mercato e la struttura finanziaria è solida.",
+"ROI is well above market average and financial structure is solid."
+);
 
 }
 
@@ -733,14 +746,16 @@ else if(roi > 6){
 
 color = "#f59e0b";
 icon = "🟠";
-title =
-window.currentLang==="it"
-? "Investimento moderato"
-: "Moderate investment";
-message =
-window.currentLang==="it"
-? "Il rendimento è accettabile ma dipende molto dalla stabilità dell'occupazione."
-: "Returns are acceptable but depend strongly on occupancy stability.";
+
+title = t(
+"Investimento moderato",
+"Moderate investment"
+);
+
+message = t(
+"Il rendimento è accettabile ma dipende molto dalla stabilità dell'occupazione.",
+"Returns are acceptable but depend strongly on occupancy stability."
+);
 
 }
 
