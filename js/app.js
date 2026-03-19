@@ -29,6 +29,9 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
+// ================= PLAN DEFAULT =================
+window.currentPlan = "free";
+
 document.addEventListener("rb_auth_ready", ()=>{
 
 let freeRuns =
