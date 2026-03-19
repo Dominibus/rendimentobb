@@ -30,11 +30,7 @@ function applyStaticTranslations(){
     const text = el.getAttribute("data-" + RB_LANG.current);
     if(!text) return;
 
-    if(text.includes("<")){
-       el.innerHTML = text;
-   } else {
-       el.textContent = text;
-   }
+    el.innerHTML = text;
 
   });
 
