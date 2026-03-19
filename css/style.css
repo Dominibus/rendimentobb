@@ -800,12 +800,12 @@ transform:translateY(-2px);
 background:linear-gradient(135deg,#10b981,#059669);
 color:#ffffff !important;
 
-font-size:18px;
+font-size:17px;
 letter-spacing:0.4px;
 text-shadow:0 2px 6px rgba(0,0,0,0.35);
 
-padding:16px 34px;
-border-radius:14px;
+padding:18px 36px;
+border-radius:16px;
 font-weight:700;
 
 position:relative;
@@ -815,7 +815,18 @@ overflow:hidden;
 opacity:1 !important;
 filter:none !important;
 
-box-shadow:0 10px 30px rgba(16,185,129,0.4);
+box-shadow:
+0 20px 60px rgba(16,185,129,0.6),
+0 0 20px rgba(16,185,129,0.4);
+}
+
+.section a{
+font-weight:600;
+}
+
+.section a:hover{
+opacity:0.7;
+}
 
 transition:all .3s ease;
 }
