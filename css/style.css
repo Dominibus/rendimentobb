@@ -3288,3 +3288,42 @@ grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:30px;
 margin-top:40px;
 }
+
+/* ===================== */
+/* HERO PREMIUM UPGRADE */
+/* ===================== */
+
+.hero{
+padding:140px 0 160px 0;
+}
+
+.hero .container{
+max-width:900px;
+text-align:center;
+}
+
+.hero h1{
+font-size:52px;
+font-weight:800;
+letter-spacing:-1px;
+color:white;
+text-shadow:0 10px 40px rgba(0,0,0,0.4);
+margin-bottom:18px;
+}
+
+.hero p{
+font-size:20px;
+color:#e2e8f0;
+max-width:640px;
+margin:0 auto 30px auto;
+}
+
+/* mobile */
+@media (max-width:768px){
+.hero h1{
+font-size:32px;
+}
+.hero p{
+font-size:16px;
+}
+}
