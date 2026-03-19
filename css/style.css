@@ -601,7 +601,13 @@ box-shadow:0 12px 35px rgba(0,0,0,0.06);
 
 border:1px solid #e2e8f0;
 
+/* FIX CENTRATURA */
 max-width:520px;
+width:100%;
+margin:25px auto;
+
+/* allineamento interno */
+text-align:center;
 
 }
 
