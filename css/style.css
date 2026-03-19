@@ -425,9 +425,10 @@ outline:none;
 
 display:flex;
 gap:10px;
-margin-top:12px;
+margin-top:16px;
+margin-bottom:10px;
 flex-wrap:wrap;
-justify-content:flex-start;
+justify-content:center;
 visibility:visible !important;
 opacity:1 !important;
 position:relative;
