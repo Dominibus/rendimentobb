@@ -972,9 +972,10 @@ ${unlock}
 </button>
 
 <div style="margin-top:8px;font-size:12px;color:#64748b;">
-${lang === "it"
-? "Accesso completo a tutte le simulazioni professionali"
-: "Full access to all professional simulations"}
+${t(
+"Accesso completo a tutte le simulazioni professionali",
+"Full access to all professional simulations"
+)}
 </div>
 
 </div>
