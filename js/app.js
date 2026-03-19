@@ -196,6 +196,9 @@ async function loadUserPlan(uid){
 document.addEventListener("rb_language_changed", () => {
 
 window.currentLang = getLang();
+function t(it, en){
+  return window.currentLang === "it" ? it : en;
+}  
 
 // aggiorna chart se presente
 if(window.lastROI && typeof renderChart === "function"){
@@ -212,134 +215,6 @@ return window.RB_LANG?.current || localStorage.getItem("rb_lang") || "it";
 }
 
 window.currentLang = getLang();
-
-const TEXT = {
-
-  it: {
-    roi: "ROI",
-    annualNet: "Netto Annuale",
-
-    estimatedRevenue: "Ricavi annui",
-    marketAverage: "Media mercato",
-    assessment: "Valutazione",
-
-    roiAboveCity: "🏆 ROI sopra la media della città",
-    roiBelowCity: "⚠ ROI sotto la media della città",
-
-    breakEvenOcc: "Occupazione break-even",
-    minimumNights: "Notti minime",
-
-    investmentRanking: "Ranking investimento",
-    marketPosition: "Posizione mercato",
-
-    highYield: "🔥 Investimento ad alto rendimento",
-    highYieldDesc: "Questo investimento sembra molto interessante",
-
-    loginRequired: "🔒 Accesso richiesto",
-    createAccountMortgage: "Per confrontare i mutui devi creare un account gratuito.",
-    loginRegister: "Accedi o Registrati",
-
-    proFeature: "🔒 Funzione PRO",
-    mortgageProDesc: "Il comparatore mutui completo è disponibile nella versione PRO.",
-
-    insertPropertyLink: "Inserisci un link immobile",
-
-    strategicLocked: "🔒 Interpretazione Strategica Bloccata",
-    unlock: "Sblocca versione PRO",
-    strategicTitle: "🔎 Interpretazione Strategica",
-
-    bestSolution: "🏆 Miglior Soluzione",
-
-    insertMortgageData: "Inserisci importo e durata.",
-
-    yearlyPayment: "Rata Annuale",
-    totalInterest: "Totale Interessi",
-    rate: "Tasso",
-
-    mortgageComparison:"Confronto mutui",
-    bestMortgage:"Miglior mutuo",
-    bank:"Banca",
-
-    insightSolid: "Investimento strutturalmente resiliente.",
-    insightMedium: "Moderatamente sostenibile.",
-    insightWeak: "Strutturalmente fragile.",
-
-    lowScenario: "Scenario prudente",
-    baseScenario: "Scenario base",
-    highScenario: "Scenario ottimistico",
-
-    grade: "Investment Grade",
-    riskScore: "Risk Score",
-    recommendation: "Raccomandazione"
-  },
-
-  en: {
-    roi: "ROI",
-    annualNet: "Annual Net",
-
-    estimatedRevenue: "Estimated revenue",
-    marketAverage: "Market average",
-    assessment: "Assessment",
-
-    roiAboveCity: "🏆 ROI above city average",
-    roiBelowCity: "⚠ ROI below city average",
-
-    breakEvenOcc: "Break-even occupancy",
-    minimumNights: "Minimum nights",
-
-    investmentRanking: "Investment ranking",
-    marketPosition: "Market position",
-
-    highYield: "🔥 High Yield Investment",
-    highYieldDesc: "This investment looks very interesting",
-
-    loginRequired: "🔒 Login required",
-    createAccountMortgage: "Create a free account to compare mortgages.",
-    loginRegister: "Login or Register",
-
-    proFeature: "🔒 PRO Feature",
-    mortgageProDesc: "Full mortgage comparator available in PRO.",
-
-    insertPropertyLink: "Insert property link",
-
-    strategicLocked: "🔒 Strategic Interpretation Locked",
-    unlock: "Unlock PRO version",
-    strategicTitle: "🔎 Strategic Interpretation",
-
-    bestSolution: "🏆 Best Solution",
-
-    insertMortgageData: "Insert amount and duration.",
-
-    yearlyPayment: "Yearly Payment",
-    totalInterest: "Total Interest",
-    rate: "Rate",
-    
-    mortgageComparison:"Mortgage comparison",
-    bestMortgage:"Best mortgage",
-    bank:"Bank",
-
-    insightSolid: "Structurally resilient investment.",
-    insightMedium: "Moderately viable.",
-    insightWeak: "Structurally fragile.",
-
-    lowScenario: "Low scenario",
-    baseScenario: "Base scenario",
-    highScenario: "High scenario",
-
-    grade: "Investment Grade",
-    riskScore: "Risk Score",
-    recommendation: "Recommendation"
-  }
-
-};
-
-function t(key){
-
-const lang = getLang();
-  
-return TEXT[lang]?.[key] || TEXT["en"]?.[key] || key;
-
-}
 
 
 // ================= UTIL =================
@@ -442,7 +317,7 @@ function renderMarketComparison(userRevenue, cityKey){
   container.innerHTML = `
 
   <div class="kpi-box">
-  <span>${t("estimatedRevenue")}</span>
+  <span>${t("Ricavi annui","Estimated revenue")}</span>
   <strong>${formatCurrency(userRevenue)}</strong>
   </div>
 
@@ -480,7 +355,7 @@ let badge = "";
 
 if(roi > marketROI){
 
-message = t("roiAboveCity");
+message = t("ROI sopra la media", "ROI above average");
 color = "#10b981";
 
 badge = `
@@ -492,7 +367,7 @@ background:#ecfdf5;
 border:1px solid #10b981;
 font-weight:600;
 ">
-${t("roiAboveCity")}
+${t("ROI sopra la media", "ROI above average")}
 </div>
 `;
 
@@ -505,21 +380,17 @@ message = t("roiBelowCity");
 container.innerHTML = badge + `
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"ROI investimento":"Your ROI"}</span>
+<span>${t("ROI investimento","Your ROI")}</span>
 <strong>${roi.toFixed(1)}%</strong>
 </div>
 
 <div class="kpi-box">
-<span>
-${window.currentLang==="it"
-? "ROI medio " + cityKey
-: cityKey + " average ROI"}
-</span>
+<span>${t("ROI medio","Average ROI")} ${cityKey}</span>
 <strong>${marketROI}%</strong>
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Confronto mercato":"Market comparison"}</span>
+<span>${t("Confronto mercato","Market comparison")}</span>
 <strong style="color:${color}">
 ${message}
 </strong>
@@ -543,7 +414,7 @@ function renderRevenueForecast(baseRevenue){
   container.innerHTML = `
 
   <div class="kpi-box">
-    <span>${t("lowScenario")}</span>
+    <span>${t("Scenario prudente","Low scenario")}</span>
     <strong>${formatCurrency(low)}</strong>
   </div>
 
@@ -605,17 +476,17 @@ const high = simulate(occupancy*1.1);
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Occupazione -10%":"Occupancy -10%"}</span>
+<span>${t("Occupazione -10%","Occupancy -10%")}</span>
 <strong>${low}% ROI</strong>
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Occupazione Base":"Base Occupancy"}</span>
+<span>${t("Occupazione base","Base occupancy")}</span>
 <strong>${base}% ROI</strong>
 </div>
 
 <div class="kpi-box">
-<span>${window.currentLang==="it"?"Occupazione +10%":"Occupancy +10%"}</span>
+<span>${t("Occupazione +10%","Occupancy +10%")}</span>
 <strong>${high}% ROI</strong>
 </div>
 
@@ -744,31 +615,19 @@ const container = document.getElementById("investment-ranking");
 if(!container) return;
 
 let percentile = 50;
-let label =
-window.currentLang==="it"
-? "Investimento medio"
-: "Average investment";
+label = t("Investimento medio","Average investment");
 
 if(roi > 15){
 percentile = 90;
-label =
-window.currentLang==="it"
-? "Investimento eccellente"
-: "Top investment opportunity";
+label = t("Investimento eccellente","Top investment opportunity");
 }
 else if(roi > 10){
 percentile = 75;
-label =
-window.currentLang==="it"
-? "Investimento forte"
-: "Strong investment";
+label = t("Investimento forte","Strong investment");
 }
 else if(roi > 6){
 percentile = 60;
-label =
-window.currentLang==="it"
-? "Opportunità moderata"
-: "Moderate opportunity";
+label = t("Opportunità moderata","Moderate opportunity");
 }
 
 container.innerHTML = `
@@ -796,27 +655,19 @@ if(!container) return;
 
 let color = "#ef4444";
 let icon = "🔴";
-let labelIT = "Rischio elevato";
-let labelEN = "High risk";
+let label = t("Rischio elevato","High risk");
 
 if(riskScore < 40){
-color = "#10b981";
-icon = "🟢";
-labelIT = "Rischio basso";
-labelEN = "Low risk";
+label = t("Rischio basso","Low risk");
 }
-
 else if(riskScore < 65){
+label = t("Rischio medio","Medium risk");
+}
 color = "#f59e0b";
 icon = "🟠";
 labelIT = "Rischio medio";
 labelEN = "Medium risk";
 }
-
-const label =
-window.currentLang === "it"
-? labelIT
-: labelEN;
 
 container.innerHTML = `
 
@@ -1024,9 +875,10 @@ ${t("highYieldDesc")}
 </p>
 
 <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-${window.currentLang==="it"
-? "🔓 Accedi gratis per vedere l'analisi completa – 29€/mese"
-: "🔓 Login to unlock full analysis – €29/month"}
+${t(
+"🔓 Accedi gratis per vedere l'analisi completa – 29€/mese",
+"🔓 Login to unlock full analysis – €29/month"
+)}
 </button>
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
