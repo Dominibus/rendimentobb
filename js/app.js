@@ -53,9 +53,10 @@ if(window.currentUser && window.currentUser.uid){
 }  
 
 alert(
-window.currentLang==="it"
-? "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare."
-: "You reached the free simulation limit. Create a free account to continue."
+t(
+"Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare.",
+"You reached the free simulation limit. Create a free account to continue."
+)
 );
 
 window.location.href="/login/";
@@ -157,9 +158,10 @@ return false;
 if(!hasPlan(requiredPlan)){
 
 if(confirm(
-window.currentLang==="it"
-? "Questa funzione richiede un piano superiore."
-: "This feature requires a higher plan."
+t(
+"Questa funzione richiede un piano superiore.",
+"This feature requires a higher plan."
+)
 )){
 window.location.href="/pricing/";
 }
@@ -387,7 +389,7 @@ container.innerHTML = badge + `
 </div>
 
 <div class="kpi-box">
-<span>${t("ROI medio","Average ROI")} ${cityKey}</span>
+<span>${t("ROI medio città","City average ROI")} ${cityKey}</span>
 <strong>${marketROI}%</strong>
 </div>
 
@@ -617,7 +619,7 @@ const container = document.getElementById("investment-ranking");
 if(!container) return;
 
 let percentile = 50;
-label = t("Investimento medio","Average investment");
+let label = t("Investimento medio","Average investment");
 
 if(roi > 15){
 percentile = 90;
@@ -640,7 +642,7 @@ container.innerHTML = `
 </div>
 
 <div class="kpi-box">
-<span>${t("investmentRanking")}</span>
+<span>${t("Tipo investimento","Investment type")}</span>
 <strong>${label}</strong>
 </div>
 
@@ -660,12 +662,19 @@ let icon = "🔴";
 let label = t("Rischio elevato","High risk");
 
 if(riskScore < 40){
-label = t("Rischio basso","Low risk");
-}
-if(riskScore < 40){
   label = t("Rischio basso","Low risk");
   color = "#10b981";
   icon = "🟢";
+}
+else if(riskScore < 65){
+  label = t("Rischio medio","Medium risk");
+  color = "#f59e0b";
+  icon = "🟠";
+}
+else{
+  label = t("Rischio elevato","High risk");
+  color = "#ef4444";
+  icon = "🔴";
 }
 else if(riskScore < 65){
   label = t("Rischio medio","Medium risk");
@@ -693,9 +702,10 @@ ${icon} ${label}
 
 <p style="margin-top:6px;font-size:13px;color:#64748b">
 
-${window.currentLang==="it"
-? "Valutazione del rischio basata su ROI e sostenibilità finanziaria."
-: "Risk evaluation based on ROI and financial sustainability."}
+${t(
+"Valutazione del rischio basata su ROI e sostenibilità finanziaria.",
+"Risk evaluation based on ROI and financial sustainability."
+)}
 
 </p>
 
@@ -852,9 +862,7 @@ border:1px solid #f59e0b;
 font-weight:600;
 ">
 
-${window.currentLang==="it"
-? "🔥 Investimento ad alto rendimento"
-: "🔥 High Yield Investment"}
+${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
 
 </div>
 `;
@@ -897,7 +905,10 @@ ${t(
 </button>
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
-Accesso a tutte le simulazioni professionali
+${t(
+"Accesso a tutte le simulazioni professionali",
+"Access to all professional simulations"
+)}
 </div>
 
 </div>
@@ -1294,7 +1305,7 @@ labels: window.currentLang==="it"
 datasets:[
 
 {
-label: t("lowScenario"),
+label: t("Scenario prudente","Low scenario"),
 data: conservative,
 borderColor:"#ef4444",
 backgroundColor:"rgba(239,68,68,0.1)",
@@ -1306,7 +1317,7 @@ pointHoverRadius:5
 },
 
 {
-label: t("baseScenario"),
+label: t("Scenario base","Base scenario"),
 data: base,
 borderColor:"#3b82f6",
 backgroundColor:"rgba(59,130,246,0.15)",
@@ -1318,7 +1329,7 @@ pointHoverRadius:5
 },
 
 {
-label: t("highScenario"),
+label: t("Scenario ottimistico","High scenario"),
 data: optimistic,
 borderColor:"#10b981",
 backgroundColor:"rgba(16,185,129,0.15)",
