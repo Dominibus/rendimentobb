@@ -820,15 +820,17 @@ box-shadow:
 0 0 20px rgba(16,185,129,0.4);
 }
 
-.section a{
+.section a:not(.btn){
 font-weight:600;
+transition:all .3s ease;
+}
+
+.section a:not(.btn):hover{
+opacity:0.7;
 }
 
 .section a:hover{
 opacity:0.7;
-}
-
-transition:all .3s ease;
 }
 
 .btn-primary::before,
