@@ -312,31 +312,30 @@ function renderMarketComparison(userRevenue, cityKey){
 
   }else{
 
-    message =
-      window.currentLang === "it"
-      ? "⚠ Performance sotto media mercato"
-      : "⚠ Underperforming market";
+    message = t(
+"⚠ Performance sotto media mercato",
+"⚠ Underperforming market"
+);
 
   }
 
   container.innerHTML = `
 
-  <div class="kpi-box">
-  <span>${t("Ricavi annui","Estimated revenue")}</span>
-  <strong>${formatCurrency(userRevenue)}</strong>
-  </div>
+<div class="kpi-box">
+<span>${t("Occupazione break-even","Break-even occupancy")}</span>
+<strong style="color:${color}">
+${occRounded.toFixed(1)}%
+</strong>
+</div>
 
-  <div class="kpi-box">
-  <span>${t("Media mercato","Market average")}</span>
-  <strong>${formatCurrency(marketRevenue)}</strong>
-  </div>
+<div class="kpi-box">
+<span>${t("Notti minime","Minimum nights")}</span>
+<strong>
+${Math.round(nightsNeeded)}
+</strong>
+</div>
 
-  <div class="kpi-box">
-  <span>${t("Valutazione","Assessment")}</span>
-  <strong style="color:${color}">${message}</strong>
-  </div>
-
-  `;
+`;
 
 }
 
@@ -837,7 +836,7 @@ function renderSmartInvestmentAlert(roi){
 const container = document.getElementById("smart-investment-alert");
 if(!container) return;
 
-if(window.currentPlan === "pro"){
+if(hasPlan("pro")){
 container.innerHTML = "";
 return;
 }
