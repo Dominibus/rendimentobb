@@ -920,7 +920,7 @@ ${message}
 
 function showUpgradePopup(roi){
 
-if(hasPlan("investor")) return;
+if(hasPlan("pro")) return;
 
 const lang = window.currentLang || "it";
 
@@ -1023,10 +1023,10 @@ ROI stimato: <strong>${roi.toFixed(1)}%</strong>
 ${t("highYieldDesc")}
 </p>
 
-<button onclick="startPlanPurchase('investor')" class="btn btn-primary">
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
 ${window.currentLang==="it"
-? "🔓 Accedi gratis per vedere l'analisi completa – 19€/mese"
-: "🔓 Login to unlock full analysis – €19/month"}
+? "🔓 Accedi gratis per vedere l'analisi completa – 29€/mese"
+: "🔓 Login to unlock full analysis – €29/month"}
 </button>
 
 <div style="margin-top:6px;font-size:12px;color:#64748b;">
@@ -1366,7 +1366,7 @@ const box = document.getElementById("strategic-insight");
 
 if (!box) return;
 
-if(!hasPlan("investor")){
+if(!hasPlan("pro")){
 
 box.innerHTML = `
 <strong>${t("strategicLocked")}</strong>
@@ -1567,7 +1567,10 @@ async function generateExecutivePDF(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-if(!requirePlan("pro")) return;
+if(!hasPlan("pro")){
+  alert("Funzione disponibile solo nel piano PRO");
+  return;
+}
 
 if(!window.lastAnalysisData){
 
