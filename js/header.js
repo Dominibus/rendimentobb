@@ -187,15 +187,11 @@ Accedi
 
 }
 
+setTimeout(()=>{
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
-
-});  
-
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
-}
+},100);
 
 /* ===================== */
 /* HAMBURGER MENU */
