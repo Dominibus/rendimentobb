@@ -170,4 +170,9 @@ function applyStaticTranslations(){
 
   });
 
+  window.t = function(it, en){
+  if(!en) return it;
+  return window.RB_LANG.current === "en" ? en : it;
+};
+
 })();
