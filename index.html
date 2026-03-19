@@ -684,19 +684,88 @@ Report professionale per analizzare il potenziale dell'immobile.
 
 </div>
 
-<div style="margin-top:50px">
+<div class="pricing-preview" style="margin-top:50px">
 
-<button onclick="buyPro()" class="btn btn-primary"
-style="font-size:18px;padding:14px 30px"
-data-it="🔓 Sblocca analisi completa – 29€"
-data-en="🔓 Unlock full analysis – €29">
-🔓 Sblocca analisi PRO – 29€
+<div class="pricing-grid">
+
+<!-- INVESTOR -->
+<div class="plan-card">
+
+<h3>Investor</h3>
+<p>€19 / mese</p>
+
+<ul>
+<li>✔ ${t("Simulazioni illimitate","Unlimited simulations")}</li>
+<li>✔ ${t("Calcolo ROI avanzato","Advanced ROI calculation")}</li>
+
+<li style="opacity:0.5">✖ ${t("Analisi rischio avanzata","Advanced risk analysis")}</li>
+<li style="opacity:0.5">✖ ${t("Comparatore mutui","Mortgage comparator")}</li>
+<li style="opacity:0.5">✖ ${t("Report PDF professionale","Professional PDF report")}</li>
+</ul>
+
+<button onclick="window.location.href='/pricing/'">
+${t("Scopri di più","Learn more")}
 </button>
 
-<p style="margin-top:10px;color:#64748b;font-size:14px"
-data-it="Pagamento una tantum. Accesso immediato."
-data-en="One-time payment. Instant access.">
-Pagamento una tantum. Accesso immediato.
+</div>
+
+
+<!-- PRO -->
+<div class="plan-card featured">
+
+<div class="badge">
+🔥 ${t("Più scelto","Most popular")}
+</div>
+
+<h3>Pro</h3>
+<p>€29 / mese</p>
+
+<ul>
+<li>✔ ${t("Tutto di Investor","Everything in Investor")}</li>
+<li>✔ ${t("Analisi rischio avanzata","Advanced risk analysis")}</li>
+<li>✔ ${t("Comparatore mutui","Mortgage comparator")}</li>
+<li>✔ ${t("Report PDF professionale","Professional PDF report")}</li>
+</ul>
+
+<button onclick="window.location.href='/pricing/'" class="btn-primary">
+${t("Sblocca tutto","Unlock full access")}
+</button>
+
+</div>
+
+
+<!-- ANNUALE -->
+<div class="plan-card">
+
+<div class="badge">
+💰 ${t("Risparmi 149€","Save €149")}
+</div>
+
+<h3>Pro Annuale</h3>
+<p>€199 / anno</p>
+
+<p style="font-size:13px;color:#64748b;">
+${t("Solo 16€ al mese","Only €16/month")}
+</p>
+
+<ul>
+<li>✔ ${t("Tutto del piano Pro","Everything in Pro")}</li>
+<li>✔ ${t("Accesso completo 12 mesi","Full access for 12 months")}</li>
+</ul>
+
+<button onclick="window.location.href='/pricing/'">
+${t("Risparmia con annuale","Save with yearly")}
+</button>
+
+</div>
+
+</div>
+
+<p style="margin-top:20px;color:#64748b;font-size:14px;">
+${t(
+"Nessun vincolo. Puoi cancellare quando vuoi.",
+"No commitment. Cancel anytime."
+)}
 </p>
 
 </div>
