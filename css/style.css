@@ -1876,6 +1876,45 @@ box-shadow:
 }
 
 /* ===================== */
+/* MARKET BUTTONS */
+/* ===================== */
+
+.market-section{
+padding:40px 0;
+}
+
+.market-buttons{
+display:flex;
+flex-direction:column;
+gap:16px;
+max-width:500px;
+margin:0 auto;
+}
+
+.market-btn{
+background: linear-gradient(135deg,#10b981,#059669);
+color:white;
+border:none;
+padding:18px;
+border-radius:16px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+box-shadow:0 15px 35px rgba(16,185,129,0.25);
+transition:all 0.2s ease;
+width:100%;
+}
+
+.market-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 20px 40px rgba(16,185,129,0.35);
+}
+
+.market-btn:active{
+transform:scale(0.98);
+}
+
+/* ===================== */
 /* QUICK ROI */
 /* ===================== */
 
