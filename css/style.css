@@ -882,16 +882,26 @@ box-shadow:
 }
 
 .btn-secondary{
-background:rgba(255,255,255,0.08);
-color:#ffffff;
-border:1px solid rgba(255,255,255,0.2);
-backdrop-filter:blur(6px);
+background:linear-gradient(
+135deg,
+rgba(255,255,255,0.08),
+rgba(255,255,255,0.02)
+);
+color:#fff;
+border:1px solid rgba(255,255,255,0.15);
+backdrop-filter:blur(8px);
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+transition:all .25s ease; 
 }
 
 .btn-secondary:hover{
 background:#10b981;
 color:white;
 border-color:#10b981;
+}
+
+.section-dark .btn{
+color:#fff !important;
 }
 
 /* ===================== */
