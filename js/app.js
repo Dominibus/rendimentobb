@@ -43,6 +43,10 @@ const isPro = window.currentPlan === "pro";
 // BLOCCO SOLO DOPO AUTH READY
 if(!isLogged && !isPro && freeRuns >= 3){
 
+if(window.currentUser && window.currentUser.uid){
+  loadUserPlan(window.currentUser.uid);
+}  
+
 alert(
 window.currentLang==="it"
 ? "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare."
@@ -160,6 +164,30 @@ return false;
 }
 
 return true;
+
+}
+
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+async function loadUserPlan(uid){
+
+  try{
+
+    const docRef = doc(db, "users", uid);
+    const snap = await getDoc(docRef);
+
+    if(snap.exists()){
+      window.currentPlan = snap.data().plan || "free";
+    }else{
+      window.currentPlan = "free";
+    }
+
+    console.log("🔥 PLAN LOADED:", window.currentPlan);
+
+  }catch(e){
+    console.error("Errore caricamento piano:", e);
+    window.currentPlan = "free";
+  }
 
 }
 
