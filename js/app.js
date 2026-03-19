@@ -546,20 +546,19 @@ else if(occRounded < 75) color = "#f59e0b";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${t("Occupazione break-even","Break-even occupancy")}</span>
-<strong style="color:${color}">
-${occRounded.toFixed(1)}%
-</strong>
-</div>
-<strong style="color:${color}">
-${occRounded.toFixed(1)}%
-</strong>
+<span>${t("Ricavi stimati","Estimated revenue")}</span>
+<strong>${formatCurrency(userRevenue)}</strong>
 </div>
 
 <div class="kpi-box">
-<span>${t("Notti minime","Minimum nights")}</span>
-<strong>
-${Math.round(nightsNeeded)}
+<span>${t("Media mercato","Market average")}</span>
+<strong>${formatCurrency(marketRevenue)}</strong>
+</div>
+
+<div class="kpi-box">
+<span>${t("Confronto","Comparison")}</span>
+<strong style="color:${color}">
+${message}
 </strong>
 </div>
 
@@ -791,9 +790,14 @@ function showUpgradePopup(roi){
 
 if(hasPlan("pro")) return;
 
-const lang = window.currentLang || "it";
+const message = t(
+`Questo investimento sembra interessante...
 
-const message = lang === "it"
+ROI stimato: ${roi.toFixed(1)}%`,
+`This investment looks promising...
+
+Estimated ROI: ${roi.toFixed(1)}%`
+);
 ? `Questo investimento sembra interessante.
 
 ROI stimato: ${roi.toFixed(1)}%
