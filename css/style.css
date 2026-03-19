@@ -809,9 +809,16 @@ box-shadow:
 
 .btn-secondary{
 
-background:#0f172a;
-color:white;
+background:white;
+color:#10b981;
 
+border:1px solid #10b981;
+
+}
+
+.btn-secondary:hover{
+background:#10b981;
+color:white;
 }
 
 /* ===================== */
@@ -1719,8 +1726,9 @@ text-align:center;
 
 .market-card strong{
 display:block;
-font-size:32px;
+font-size:28px;
 color:#10b981;
+font-weight:700;
 margin-bottom:10px;
 }
 
@@ -2259,14 +2267,54 @@ word-break:break-word;
 }  
 
 .card{
-background: rgba(255,255,255,0.92);
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
+background:white;
 
-padding:30px;
-border-radius:20px;
-border:1px solid rgba(255,255,255,0.3);
-box-shadow:0 25px 70px rgba(15,23,42,.08);
+padding:28px;
+border-radius:18px;
+
+border:1px solid #e2e8f0;
+
+box-shadow:0 20px 60px rgba(15,23,42,0.06);
+
+transition:all .25s ease;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 35px 90px rgba(15,23,42,0.10);
+border-color:#10b981;
+}
+.market-card,
+.feature-card,
+.analysis-card,
+.metric-card,
+.kpi-box,
+.how-card,
+.why-card,
+.guide-card{
+
+background:white;
+padding:28px;
+border-radius:18px;
+border:1px solid #e2e8f0;
+box-shadow:0 20px 60px rgba(15,23,42,0.06);
+transition:all .25s ease;
+
+}
+
+.market-card:hover,
+.feature-card:hover,
+.analysis-card:hover,
+.metric-card:hover,
+.kpi-box:hover,
+.how-card:hover,
+.why-card:hover,
+.guide-card:hover{
+
+transform:translateY(-6px);
+box-shadow:0 35px 90px rgba(15,23,42,0.10);
+border-color:#10b981;
+
 }
 
 /* BUTTONS */
