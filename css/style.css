@@ -1791,12 +1791,24 @@ margin-top:40px;
 }
 
 .market-card{
-background:white;
-padding:40px;
-border-radius:20px;
-border:1px solid #e2e8f0;
-box-shadow:0 20px 60px rgba(0,0,0,0.05);
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(10px);
+
+padding:36px 20px;
+
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.6);
+
+box-shadow:0 25px 80px rgba(0,0,0,0.08);
+
 text-align:center;
+
+transition:all .25s ease;
+}
+
+.market-card:hover{
+transform:translateY(-6px) scale(1.02);
+box-shadow:0 40px 120px rgba(0,0,0,0.12);
 }
 
 .market-card strong{
