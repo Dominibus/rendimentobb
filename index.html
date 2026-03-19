@@ -882,7 +882,13 @@ window.buyPro = async function(){
 const user = auth.currentUser;
 
 if(!user){
-alert("Devi effettuare il login.");
+const lang = localStorage.getItem("rb_lang") || "it";
+
+alert(
+lang === "en"
+? "You must login first."
+: "Devi effettuare il login."
+);
 window.location.href="/login/";
 return;
 }
@@ -896,7 +902,11 @@ if(userDoc.exists()){
 const data = userDoc.data();
 
 if(data.plan === "pro"){
-alert("Hai già la versione PRO.");
+alert(
+lang === "en"
+? "You already have PRO."
+: "Hai già la versione PRO."
+);
 window.location.href="/dashboard/";
 return;
 }
@@ -978,7 +988,13 @@ window.analyzeListing = function(){
 const url = document.getElementById("listing_url").value;
 
 if(!url){
-alert("Inserisci il link dell'annuncio.");
+const lang = localStorage.getItem("rb_lang") || "it";
+
+alert(
+lang === "en"
+? "Insert the listing URL."
+: "Inserisci il link dell'annuncio."
+);
 return;
 }
 
