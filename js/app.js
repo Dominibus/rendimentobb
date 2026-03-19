@@ -43,7 +43,7 @@ let freeRuns =
 parseInt(localStorage.getItem("rb_free_runs") || "0");
 
 const isLogged = !!window.currentUser;
-const isPro = window.currentPlan === "pro";
+const isPro = hasPlan("pro");
 
 // BLOCCO SOLO DOPO AUTH READY
 if(!isLogged && !isPro && freeRuns >= 3){
@@ -145,9 +145,10 @@ function requirePlan(requiredPlan){
 if(!window.currentUser){
 
 alert(
-window.currentLang === "it"
-? "Per usare questa funzione devi creare un account gratuito."
-: "Create a free account to use this feature."
+t(
+"Per usare questa funzione devi creare un account gratuito.",
+"Create a free account to use this feature."
+)
 );
 
 window.location.href="/login/";
@@ -302,10 +303,10 @@ function renderMarketComparison(userRevenue, cityKey){
 
   if(userRevenue > marketRevenue){
 
-    message =
-      window.currentLang === "it"
-      ? "✓ Performance superiore al mercato"
-      : "✓ Outperforming market";
+    message = t(
+         "✓ Performance superiore al mercato",
+         "✓ Outperforming market"
+           );
 
     color = "#10b981";
 
@@ -546,14 +547,18 @@ else if(occRounded < 75) color = "#f59e0b";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${t("breakEvenOcc")}</span>
+<span>${t("Occupazione break-even","Break-even occupancy")}</span>
+<strong style="color:${color}">
+${occRounded.toFixed(1)}%
+</strong>
+</div>
 <strong style="color:${color}">
 ${occRounded.toFixed(1)}%
 </strong>
 </div>
 
 <div class="kpi-box">
-<span>${t("minimumNights")}</span>
+<span>${t("Notti minime","Minimum nights")}</span>
 <strong>
 ${Math.round(nightsNeeded)}
 </strong>
@@ -654,65 +659,54 @@ container.innerHTML = `
 
 function renderRiskMeter(riskScore){
 
-const container = document.getElementById("investment-risk-meter");
-if(!container) return;
+  const container = document.getElementById("investment-risk-meter");
+  if(!container) return;
 
-let color = "#ef4444";
-let icon = "🔴";
-let label = t("Rischio elevato","High risk");
+  let color = "#ef4444";
+  let icon = "🔴";
+  let label = t("Rischio elevato","High risk");
 
-if(riskScore < 40){
-  label = t("Rischio basso","Low risk");
-  color = "#10b981";
-  icon = "🟢";
-}
-else if(riskScore < 65){
-  label = t("Rischio medio","Medium risk");
-  color = "#f59e0b";
-  icon = "🟠";
-}
-else{
-  label = t("Rischio elevato","High risk");
-  color = "#ef4444";
-  icon = "🔴";
-}
-else if(riskScore < 65){
-  label = t("Rischio medio","Medium risk");
-  color = "#f59e0b";
-  icon = "🟠";
-}
-else{
-  label = t("Rischio elevato","High risk");
-  color = "#ef4444";
-  icon = "🔴";
-}
+  if(riskScore < 40){
+    label = t("Rischio basso","Low risk");
+    color = "#10b981";
+    icon = "🟢";
+  }
+  else if(riskScore < 65){
+    label = t("Rischio medio","Medium risk");
+    color = "#f59e0b";
+    icon = "🟠";
+  }
+  else{
+    label = t("Rischio elevato","High risk");
+    color = "#ef4444";
+    icon = "🔴";
+  }
 
-container.innerHTML = `
+  container.innerHTML = `
 
-<div style="
-padding:18px;
-border-radius:12px;
-background:#f8fafc;
-border-left:6px solid ${color};
-">
+  <div style="
+  padding:18px;
+  border-radius:12px;
+  background:#f8fafc;
+  border-left:6px solid ${color};
+  ">
 
-<strong style="font-size:16px;">
-${icon} ${label}
-</strong>
+  <strong style="font-size:16px;">
+  ${icon} ${label}
+  </strong>
 
-<p style="margin-top:6px;font-size:13px;color:#64748b">
+  <p style="margin-top:6px;font-size:13px;color:#64748b">
 
-${t(
-"Valutazione del rischio basata su ROI e sostenibilità finanziaria.",
-"Risk evaluation based on ROI and financial sustainability."
-)}
+  ${t(
+  "Valutazione del rischio basata su ROI e sostenibilità finanziaria.",
+  "Risk evaluation based on ROI and financial sustainability."
+  )}
 
-</p>
+  </p>
 
-</div>
+  </div>
 
-`;
-
+  `;
 }
 
 // ================= INVESTMENT VERDICT =================
@@ -1298,9 +1292,7 @@ roiChartInstance = new Chart(ctx,{
 type:"line",
 
 data:{
-labels: window.currentLang==="it"
-? years.map(y=>"Anno "+y)
-: years.map(y=>"Year "+y),
+labels: years.map(y => t("Anno ","Year ") + y),
 
 datasets:[
 
@@ -1446,7 +1438,12 @@ async function generateExecutivePDF(){
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
 if(!hasPlan("pro")){
-  alert("Funzione disponibile solo nel piano PRO");
+  alert(
+t(
+"Funzione disponibile solo nel piano PRO",
+"Feature available only in PRO plan"
+)
+);
   return;
 }
 
