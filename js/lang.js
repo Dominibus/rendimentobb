@@ -31,10 +31,10 @@ function applyStaticTranslations(){
     if(!text) return;
 
     if(text.includes("<")){
-      el.innerHTML = text;
-    } else {
-      el.textContent = text;
-    }
+       el.innerHTML = text;
+   } else {
+       el.textContent = text;
+   }
 
   });
 
