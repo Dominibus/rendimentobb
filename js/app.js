@@ -289,11 +289,9 @@ function renderMarketComparison(userRevenue, cityKey){
   if(!window.getMarketBenchmark) return;
 
   const market = window.getMarketBenchmark(cityKey);
-
   if(!market) return;
 
   const container = document.getElementById("market-comparison");
-
   if(!container) return;
 
   const marketRevenue = market.estimatedRevenue;
@@ -302,41 +300,38 @@ function renderMarketComparison(userRevenue, cityKey){
   let color = "#ef4444";
 
   if(userRevenue > marketRevenue){
-
     message = t(
-         "✓ Performance superiore al mercato",
-         "✓ Outperforming market"
-           );
-
+      "✓ Performance superiore al mercato",
+      "✓ Outperforming market"
+    );
     color = "#10b981";
-
   }else{
-
     message = t(
-"⚠ Performance sotto media mercato",
-"⚠ Underperforming market"
-);
-
+      "⚠ Performance sotto media mercato",
+      "⚠ Underperforming market"
+    );
   }
 
   container.innerHTML = `
 
-<div class="kpi-box">
-<span>${t("Occupazione break-even","Break-even occupancy")}</span>
-<strong style="color:${color}">
-${occRounded.toFixed(1)}%
-</strong>
-</div>
+  <div class="kpi-box">
+    <span>${t("Ricavi stimati","Estimated revenue")}</span>
+    <strong>${formatCurrency(userRevenue)}</strong>
+  </div>
 
-<div class="kpi-box">
-<span>${t("Notti minime","Minimum nights")}</span>
-<strong>
-${Math.round(nightsNeeded)}
-</strong>
-</div>
+  <div class="kpi-box">
+    <span>${t("Media mercato","Market average")}</span>
+    <strong>${formatCurrency(marketRevenue)}</strong>
+  </div>
 
-`;
+  <div class="kpi-box">
+    <span>${t("Confronto","Comparison")}</span>
+    <strong style="color:${color}">
+      ${message}
+    </strong>
+  </div>
 
+  `;
 }
 
 // ================= ROI VS MARKET =================
@@ -513,7 +508,6 @@ const container = document.getElementById("break-even-kpi");
 if(!container) return;
 
 const yearlyExpenses = expenses * 12;
-
 const costBase = yearlyExpenses + mortgage;
 
 const revenuePerNight =
@@ -523,7 +517,7 @@ if(revenuePerNight <= 0){
 
 container.innerHTML = `
 <div class="kpi-box">
-<span>Break-even occupancy (min)</span>
+<span>${t("Occupazione break-even","Break-even occupancy")}</span>
 <strong>—</strong>
 </div>
 `;
@@ -533,7 +527,6 @@ return;
 }
 
 const nightsNeeded = costBase / revenuePerNight;
-
 const occupancy = (nightsNeeded / 365) * 100;
 
 const occRounded = Math.min(100, Math.max(0, occupancy));
@@ -546,25 +539,20 @@ else if(occRounded < 75) color = "#f59e0b";
 container.innerHTML = `
 
 <div class="kpi-box">
-<span>${t("Ricavi stimati","Estimated revenue")}</span>
-<strong>${formatCurrency(userRevenue)}</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("Media mercato","Market average")}</span>
-<strong>${formatCurrency(marketRevenue)}</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("Confronto","Comparison")}</span>
+<span>${t("Occupazione break-even","Break-even occupancy")}</span>
 <strong style="color:${color}">
-${message}
+${occRounded.toFixed(1)}%
 </strong>
 </div>
 
-`;
-}
+<div class="kpi-box">
+<span>${t("Notti minime","Minimum nights")}</span>
+<strong>${Math.round(nightsNeeded)}</strong>
+</div>
 
+`;
+
+}
 // ================= INVESTMENT SCORE =================
 
 function renderInvestmentScore(roi, riskScore){
