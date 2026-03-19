@@ -563,7 +563,6 @@ ${message}
 </div>
 
 `;
-
 }
 
 // ================= INVESTMENT SCORE =================
@@ -791,16 +790,9 @@ function showUpgradePopup(roi){
 if(hasPlan("pro")) return;
 
 const message = t(
-`Questo investimento sembra interessante...
+`Questo investimento sembra interessante.
 
-ROI stimato: ${roi.toFixed(1)}%`,
-`This investment looks promising...
-
-Estimated ROI: ${roi.toFixed(1)}%`
-);
-? `Questo investimento sembra interessante.
-
-ROI stimato: ${roi.toFixed(1)}%
+ROI stimato: ${roi.toFixed(1)}
 
 Scopri:
 • rischio reale
@@ -809,17 +801,18 @@ Scopri:
 • simulazioni occupazione
 • report professionale
 
-Sblocca l'analisi completa.`
-: `This investment looks promising.
+Sblocca l'analisi completa.`,
+`This investment looks promising.
 
-Estimated ROI: ${roi.toFixed(1)}%
+Estimated ROI: ${roi.toFixed(1)}
 
 Unlock:
 • risk score
 • mortgage comparator
 • market scenarios
 • occupancy simulations
-• professional report`;
+• professional report`
+);
 
 if(roi > 8){
 
