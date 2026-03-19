@@ -2195,7 +2195,7 @@ let stripeUrl = null;
 
 // PLAN ROUTING
 
-if(!["starter","investor","pro"].includes(plan)){
+if(!["starter","investor","pro","pro_yearly"].includes(plan)){
 console.error("Piano non valido:", plan);
 return;
 }
@@ -2207,8 +2207,13 @@ stripeUrl =
 
 if(plan === "pro"){
 stripeUrl =
-"https://buy.stripe.com/PRO_LINK?client_reference_id=" + uid;
+"https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02?client_reference_id=" + uid;
 }
+
+if(plan === "pro_yearly"){
+stripeUrl =
+"https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03?client_reference_id=" + uid;
+}  
 
 if(!stripeUrl){
 console.error("Stripe plan non valido:", plan);
