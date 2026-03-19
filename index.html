@@ -882,13 +882,10 @@ window.buyPro = async function(){
 const user = auth.currentUser;
 
 if(!user){
-const lang = localStorage.getItem("rb_lang") || "it";
-
-alert(
-lang === "en"
-? "You must login first."
-: "Devi effettuare il login."
-);
+alert(t(
+"Devi effettuare il login.",
+"You must login first."
+));
 window.location.href="/login/";
 return;
 }
@@ -902,11 +899,10 @@ if(userDoc.exists()){
 const data = userDoc.data();
 
 if(data.plan === "pro"){
-alert(
-lang === "en"
-? "You already have PRO."
-: "Hai già la versione PRO."
-);
+alert(t(
+"Hai già la versione PRO.",
+"You already have PRO."
+));
 window.location.href="/dashboard/";
 return;
 }
@@ -961,11 +957,9 @@ const monthlyProfit = netIncome / 12;
 
 // risultati base
 
-const lang = localStorage.getItem("rb_lang") || "it";
-
-const yearWord = lang === "en" ? "years" : "anni";
-const yearLabel = lang === "en" ? "€ / year" : "€ / anno";
-const monthLabel = lang === "en" ? "€ / month" : "€ / mese";
+const yearWord = t("anni","years");
+const yearLabel = t("€ / anno","€ / year");
+const monthLabel = t("€ / mese","€ / month");
  
 document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%"; 
 
@@ -990,11 +984,10 @@ const url = document.getElementById("listing_url").value;
 if(!url){
 const lang = localStorage.getItem("rb_lang") || "it";
 
-alert(
-lang === "en"
-? "Insert the listing URL."
-: "Inserisci il link dell'annuncio."
-);
+alert(t(
+"Inserisci il link dell'annuncio.",
+"Insert the listing URL."
+));
 return;
 }
 
