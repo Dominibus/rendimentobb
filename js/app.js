@@ -567,12 +567,18 @@ let recommendation = t("Alto rischio","High risk");
 
 if(roi > 12){
 grade = "A";
-recommendation = "SAFE INVESTMENT";
+recommendation = t(
+"Investimento sicuro",
+"Safe investment"
+);
 }
 
 else if(roi > 6){
 grade = "B";
-recommendation = "MODERATE RETURN";
+recommendation = t(
+"Rendimento moderato",
+"Moderate return"
+);
 }
 
 let gradeColor = "#ef4444";
@@ -910,45 +916,23 @@ if(!container) return;
 
 const title = t("🔥 Investimento promettente","🔥 Promising investment");
 
-const discover =
-lang === "it"
-? "Scopri l'analisi completa"
-: "Discover the full analysis";
+const discover = t(
+"Scopri l'analisi completa",
+"Discover the full analysis"
+);
 
-const risk =
-lang === "it"
-? "rischio reale"
-: "real risk";
+const risk = t("rischio reale","real risk");
+const benchmark = t("benchmark mercato","market benchmark");
+const occupancy = t("simulazione occupazione","occupancy simulation");
+const mortgage = t("comparatore mutui","mortgage comparator");
+const report = t("report professionale","professional report");
 
-const benchmark =
-lang === "it"
-? "benchmark mercato"
-: "market benchmark";
+const unlock = t(
+"🔓 Sblocca analisi completa – 19€/mese",
+"🔓 Unlock full analysis – €19/month"
+);
 
-const occupancy =
-lang === "it"
-? "simulazione occupazione"
-: "occupancy simulation";
-
-const mortgage =
-lang === "it"
-? "comparatore mutui"
-: "mortgage comparator";
-
-const report =
-lang === "it"
-? "report professionale"
-: "professional report";
-
-const unlock =
-lang === "it"
-? "🔓 Sblocca analisi completa – 19€/mese"
-: "🔓 Unlock full analysis – €19/month";
-
-const roiText =
-lang === "it"
-? "ROI stimato"
-: "Estimated ROI";
+const roiText = t("ROI stimato","Estimated ROI");
 
 container.innerHTML = `
 
