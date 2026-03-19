@@ -904,6 +904,14 @@ border-color:#10b981;
 color:#fff !important;
 }
 
+.portal-header .btn-secondary{
+color:#0f172a !important;
+border:1px solid rgba(0,0,0,0.15);
+background:rgba(255,255,255,0.9);
+backdrop-filter:none;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
 /* ===================== */
 /* GLOBAL LINKS */
 /* ===================== */
