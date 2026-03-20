@@ -918,10 +918,10 @@ window.location.href = "/";
 console.error("Logout error:", error);
 });
 
-}
+};
+</script>
 
 <script>
-
 // ================= HERO BACKGROUND =================
 window.changeCityBackground = function(city){
 
@@ -1043,17 +1043,6 @@ elBreak.innerText = breakEven.toFixed(1) + " " + yearWord;
 elRev.innerText = Math.round(revenue) + " " + yearLabel;
 elProfit.innerText = Math.round(netIncome) + " " + yearLabel;
 elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
-
-}
-
-// ================= LOGOUT =================
-window.logout = function(){
-
-const auth = window.auth;
-
-window.signOut(auth)
-.then(() => window.location.href = "/")
-.catch((error) => console.error("Logout error:", error));
 
 }
 
