@@ -79,8 +79,7 @@ data-it="Dashboard" data-en="Dashboard">Dashboard</a>
 </header>
 `;
 
-document.getElementById("global-header").innerHTML = header;
-  const container = document.getElementById("global-header");
+const container = document.getElementById("global-header");
 
 if(container){
 container.innerHTML = header;
@@ -195,4 +194,3 @@ link.classList.add("active");
 }
 });  
 
-});
