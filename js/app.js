@@ -2005,29 +2005,6 @@ window.location.href = "/tool/";
 
 };
 
-// ================= USER PLAN =================
-
-window.userPlan = "free";
-
-async function loadUserPlan(){
-
-const user = window.currentUser;
-if(!user) return;
-
-try{
-
-const docSnap = await getDoc(doc(db,"users",user.uid));
-
-if(docSnap.exists()){
-window.userPlan = docSnap.data().plan || "free";
-}
-
-}catch(e){
-console.log("Errore lettura piano:", e);
-}
-
-}
-
 // ================= REQUIRE PLAN =================
 
 function requirePlan(required){
