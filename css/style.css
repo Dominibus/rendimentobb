@@ -884,16 +884,23 @@ inset 0 1px 0 rgba(255,255,255,0.25);
 display:flex;
 flex-direction:column;
 justify-content:space-between;
-height:100%;  
+height:100%; 
+width:100%;
+max-width:320px;  
 }
 
 .plan-card button{
 margin-top:auto;
 }
 
+.plan-annual strong{
+color:#f59e0b;
+font-size:28px;
+}
+
 .plan-annual{
 transform:scale(1.05);
-padding-top:30px;
+padding-top:36px;
 border:2px solid #f59e0b;
 box-shadow:0 30px 80px rgba(245,158,11,0.25);
 background:linear-gradient(
@@ -911,7 +918,7 @@ align-items:stretch;
 
 .plan-badge{
 position:absolute;
-top:-16px; /* più alto */
+top:-18px; /* più alto */
 left:50%;
 transform:translateX(-50%);
 
@@ -3553,6 +3560,7 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:30px;
 margin-top:40px;
+justify-items:center;  
 }
 
 /* ===================== */
