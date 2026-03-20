@@ -1050,6 +1050,28 @@ document.querySelector(".city-search-input")
 if(e.key === "Enter"){
 selectCity(this.value.toLowerCase(), this.value.toLowerCase());
 }
+
+// ================= APPLY CITY BACKGROUND AUTO =================
+
+const savedCity = localStorage.getItem("selected_city");
+
+if(savedCity){
+
+const map = {
+roma: "rome",
+napoli: "naples",
+milano: "milan",
+firenze: "florence"
+};
+
+const bg = map[savedCity];
+
+if(bg){
+changeCityBackground(bg);
+}
+
+} 
+ 
 });
 
 });
