@@ -48,12 +48,31 @@ if(uid){
 
 try{
 
-await db.collection("users").doc(uid).update({
-plan:"pro",
-proActivatedAt:new Date()
-});
+// 🔥 PRENDI IMPORTO
+const amount = session.amount_total;
 
-console.log("User upgraded to PRO:",uid);
+// 🔥 LOGICA PIANI
+let plan = "free";
+
+if(amount === 1900){
+plan = "investor"; // 19€
+}
+
+if(amount === 2900){
+plan = "pro"; // 29€
+}
+
+if(amount === 19900){
+plan = "pro_yearly"; // 199€
+}
+
+// 🔥 SALVA
+await db.collection("users").doc(uid).set({
+plan: plan,
+updatedAt: new Date()
+},{ merge:true });
+
+console.log("User plan updated:",uid,plan);
 
 }catch(e){
 
