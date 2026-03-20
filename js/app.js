@@ -984,9 +984,29 @@ ${t(
 
 }
 
+// ================= PDF BUTTON VISIBILITY =================
+
+function updatePDFButton(){
+
+const btn = document.getElementById("pdf-btn");
+if(!btn) return;
+
+if(window.userPlan === "pro" || window.userPlan === "pro_yearly"){
+btn.style.display = "inline-block";
+}else{
+btn.style.display = "none";
+}
+
+}
+
+// aggiorna dopo login
+document.addEventListener("rb_auth_ready", ()=>{
+setTimeout(updatePDFButton, 500);
+});
+
 // ================= FREE LIMIT =================
 
-function calculate(force = false){
+function calculate(force = false){  
 
 window.calculate = calculate;
 
