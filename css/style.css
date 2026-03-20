@@ -837,9 +837,7 @@ overflow:hidden;
 opacity:1 !important;
 filter:none !important;
 
-box-shadow:
-0 20px 60px rgba(16,185,129,0.6),
-0 0 20px rgba(16,185,129,0.4);
+box-shadow:0 10px 25px rgba(16,185,129,0.25);
 }
 
 .section a:not(.btn){
@@ -3445,4 +3443,56 @@ font-size:32px;
 .hero p{
 font-size:16px;
 }
+}
+
+/* ===================== */
+/* HEADER RESPONSIVE FIX */
+/* ===================== */
+
+.hamburger{
+display:none;
+font-size:22px;
+background:none;
+border:none;
+cursor:pointer;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+.portal-nav{
+display:none;
+}
+
+.portal-nav.open{
+display:flex;
+flex-direction:column;
+gap:15px;
+margin-top:15px;
+}
+
+.hamburger{
+display:block;
+}
+
+}
+
+/* ===================== */
+/* HEADER LAYER FIX */
+/* ===================== */
+
+.portal-header{
+position:relative;
+z-index:100;
+}
+
+/* BLOCCA OVERLAY INVISIBILI */
+.portal-header *{
+pointer-events:auto;
+}
+
+/* CONTENUTO SOTTO */
+main{
+position:relative;
+z-index:1;
 }
