@@ -230,8 +230,8 @@ z-index:3;
 
 background:
 linear-gradient(
-rgba(15,23,42,0.25),
-rgba(15,23,42,0.35)
+rgba(15,23,42,0.55),
+rgba(15,23,42,0.75)
 ),
 url("/img/rome-bg.jpg");
 
@@ -239,7 +239,8 @@ background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
 
-padding:120px 0 150px 0;
+padding:140px 0 160px 0;
+min-height:100vh;
 
 transition:background 0.6s ease;
 overflow:visible; 
