@@ -1054,6 +1054,8 @@ document.querySelector(".city-search-input")
 
 window.analyzeListing = function(){
 
+if(!requirePlan("investor")) return;
+
 const url = document.getElementById("listing_url").value;
 
 if(!url){
