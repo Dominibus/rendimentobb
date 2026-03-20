@@ -86,103 +86,6 @@ container.innerHTML = header;
 }
 
 /* ===================== */
-/* HAMBURGER MENU (DOPO RENDER) */
-/* ===================== */
-
-const hamburger = document.querySelector(".hamburger");
-const nav = document.querySelector(".portal-nav");
-
-if(hamburger && nav){
-hamburger.addEventListener("click", () => {
-nav.classList.toggle("open");
-});
-}
-
-});
-
-/* ===================== */
-/* USER AREA */
-/* ===================== */
-
-onAuthStateChanged(auth, (user) => {
-
-const userArea = document.getElementById("user-area");
-if(!userArea) return;
-
-if(user){
-
-userArea.innerHTML = `
-<div style="text-align:right">
-
-<div style="font-size:12px;color:#64748b;"
-data-it="Account"
-data-en="Account">
-Account
-</div>
-
-<div style="font-weight:600;font-size:14px;">
-${user.email}
-</div>
-
-<div style="margin-top:6px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
-
-<a href="/dashboard/" class="btn btn-secondary"
-data-it="Dashboard"
-data-en="Dashboard">
-Dashboard
-</a>
-
-<button onclick="logout()" class="btn btn-secondary"
-data-it="Esci"
-data-en="Logout">
-Esci
-</button>
-
-</div>
-
-</div>
-`;
-
-}else{
-
-userArea.innerHTML = `
-<div style="text-align:right">
-
-<div style="font-size:12px;color:#64748b;"
-data-it="Area riservata"
-data-en="Private area">
-Private area
-</div>
-
-<a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
-data-it="Accedi"
-data-en="Login">
-Accedi
-</a>
-
-</div>
-`;
-
-}
-
-// 🔥 FORZA TRADUZIONE DOPO RENDER USER AREA
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
-}
-
-});
-
-/* ===================== */
-/* TRADUZIONE HEADER BASE */
-/* ===================== */
-
-setTimeout(()=>{
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
-}
-},100);
-
-/* ===================== */
 /* HAMBURGER MENU */
 /* ===================== */
 
@@ -206,5 +109,6 @@ const href = link.getAttribute("href");
 if(currentPath.startsWith(href)){
 link.classList.add("active");
 }
-});  
+});
 
+});
