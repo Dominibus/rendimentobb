@@ -2232,7 +2232,7 @@ min-height:60px;
 }
 
 .right-controls{
-display:flex;
+display:none;
 flex-wrap:wrap; 
 justify-content:center;
 gap:8px;
@@ -2414,6 +2414,7 @@ width:100%;
 .header-actions{
 flex-direction:column;
 gap:10px;
+display:none;  
 }
 
 .header-actions .btn-secondary{
