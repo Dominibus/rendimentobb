@@ -831,7 +831,7 @@ border-radius:16px;
 font-weight:700;
 
 position:relative;
-z-index:5; 
+z-index:10; 
 overflow:hidden;
 
 opacity:1 !important;
@@ -849,18 +849,9 @@ transition:all .3s ease;
 opacity:0.7;
 }
 
-.section a:hover{
+/* 🔥 FIX: escludi i bottoni */
+.section a:not(.btn):hover{
 opacity:0.7;
-}
-
-.btn-primary::before,
-.btn-primary::after{
-display:none !important;
-}
-
-.btn-primary{
-position:relative;
-z-index:10;
 }
 
 .btn-primary *{
@@ -876,7 +867,7 @@ left:-50%;
 width:200%;
 height:100%;
 
-z-index:0;
+z-index:1;
 pointer-events:none; 
 
 background:linear-gradient(
@@ -888,6 +879,10 @@ transparent
 
 transform:skewX(-20deg);
 transition:all .6s ease;
+}
+
+.btn-primary::after{
+display:none !important;
 }
 
 .btn-primary:hover::before{
@@ -2544,6 +2539,7 @@ width:100%;
 text-align:center;
 padding:16px;
 font-size:15px;
+opacity:1 !important;  
 }
 
 .dashboard-actions{
