@@ -81,7 +81,7 @@ data-it="Dashboard" data-en="Dashboard">Dashboard</a>
 </header>
 `;
 
-document.body.insertAdjacentHTML("afterbegin", header);
+document.getElementById("global-header").innerHTML = header;
 
 /* ===================== */
 /* USER AREA */
