@@ -1993,6 +1993,63 @@ window.location.href = "/tool/";
 
 };
 
+// ================= USER PLAN =================
+
+window.userPlan = "free";
+
+async function loadUserPlan(){
+
+const user = window.currentUser;
+if(!user) return;
+
+try{
+
+const docSnap = await getDoc(doc(db,"users",user.uid));
+
+if(docSnap.exists()){
+window.userPlan = docSnap.data().plan || "free";
+}
+
+}catch(e){
+console.log("Errore lettura piano:", e);
+}
+
+}
+
+// ================= REQUIRE PLAN =================
+
+function requirePlan(required){
+
+const plan = window.userPlan;
+
+// INVESTOR access
+if(required === "investor"){
+if(plan === "investor" || plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// PRO access
+if(required === "pro"){
+if(plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// ❌ BLOCCO
+alert(
+t(
+"Sblocca la versione PRO per usare questa funzione",
+"Upgrade to PRO to use this feature"
+)
+);
+
+window.location.href = "/#pricing";
+
+return false;
+
+}
+
 // ================= SAFE PLAN BUY =================
 
 window.startPlanPurchase = function(plan){
@@ -2022,6 +2079,23 @@ console.error("Piano non specificato");
 return;
 }
 
+// 🔥 SE GIÀ HA IL PIANO → BLOCCA
+if(window.userPlan === plan){
+alert(
+t(
+"Hai già questo piano attivo",
+"You already have this plan"
+)
+);
+return;
+}
+
+// 🔥 upgrade logico
+if(plan === "investor" && window.userPlan === "pro"){
+alert("Hai già un piano superiore");
+return;
+}
+
 // utente loggato → Stripe
 window.buyPlan(plan);
 
@@ -2031,7 +2105,6 @@ window.buyPlan(plan);
 
 window.buyPlan = function(plan){
 
-// utente già gestito globalmente dal sistema
 const user = window.currentUser;
 
 if(!user){
@@ -2045,25 +2118,28 @@ let stripeUrl = null;
 
 // PLAN ROUTING
 
-if(!["starter","investor","pro","pro_yearly"].includes(plan)){
+if(!["investor","pro","pro_yearly"].includes(plan)){
 console.error("Piano non valido:", plan);
 return;
 }
 
+// 🔥 INVESTOR
 if(plan === "investor"){
 stripeUrl =
 "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01?client_reference_id=" + uid;
 }
 
+// 🔥 PRO
 if(plan === "pro"){
 stripeUrl =
 "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02?client_reference_id=" + uid;
 }
 
+// 🔥 ANNUALE
 if(plan === "pro_yearly"){
 stripeUrl =
 "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03?client_reference_id=" + uid;
-}  
+}
 
 if(!stripeUrl){
 console.error("Stripe plan non valido:", plan);
@@ -2071,7 +2147,8 @@ return;
 }
 
 window.location.href = stripeUrl;
-} 
+
+};
 
 // ================= PROPERTY SCRAPER =================
 
