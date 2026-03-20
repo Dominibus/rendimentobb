@@ -155,19 +155,19 @@ autocomplete="off">
 
 <div class="city-quick">
 
-<button onclick="selectCity('roma','rome')" class="btn btn-primary market-btn">
+<button onclick="goToMarket('roma')" class="btn btn-primary market-btn">
 <span data-it="Roma" data-en="Rome">Roma</span>
 </button>
 
-<button onclick="selectCity('napoli','naples')" class="btn btn-primary market-btn">
+<button onclick="goToMarket('napoli')" class="btn btn-primary market-btn">
 <span data-it="Napoli" data-en="Naples">Napoli</span>
 </button>
 
-<button onclick="selectCity('milano','milan')" class="btn btn-primary market-btn">
+<button onclick="goToMarket('milano')" class="btn btn-primary market-btn">
 <span data-it="Milano" data-en="Milan">Milano</span>
 </button>
 
-<button onclick="selectCity('firenze','florence')" class="btn btn-primary market-btn">
+<button onclick="goToMarket('firenze')" class="btn btn-primary market-btn">
 <span data-it="Firenze" data-en="Florence">Firenze</span>
 </button>
 
@@ -920,6 +920,8 @@ console.error("Logout error:", error);
 
 }
 
+<script>
+
 // ================= HERO BACKGROUND =================
 window.changeCityBackground = function(city){
 
@@ -952,14 +954,20 @@ hero.style.backgroundPosition = "center";
 
 }
 
-// ================= SELECT CITY =================
+// ================= SELECT CITY (TOP HERO BUTTONS) =================
 window.selectCity = function(city, bg){
 
 localStorage.setItem("selected_city", city);
 
-changeCityBackground(bg);
-
+// NON serve cambiare background qui (lo farà /tool/)
 window.location.href = "/tool/?city=" + city;
+
+}
+
+// ================= MARKET BUTTONS (BOTTOM) =================
+window.goToMarket = function(city){
+
+window.location.href = "/" + city + "/";
 
 }
 
@@ -976,11 +984,10 @@ window.location.href = "/tool/";
 
 }
 
+// ================= TRANSLATION FALLBACK =================
 window.t = window.t || function(it, en){
 return it;
 };
-
- console.log("quickROI click OK");
 
 // ================= QUICK ROI =================
 window.quickROI = function(){
@@ -1008,17 +1015,12 @@ document.getElementById("qr_cost").value = cost;
 }
 
 const investment = price + reno;
-
 const revenue = night * 365 * (occ/100);
-
 const operatingCosts = revenue * (cost/100);
-
 const netIncome = revenue - operatingCosts;
 
 const roi = (netIncome / investment) * 100;
-
 const breakEven = investment / netIncome;
-
 const monthlyProfit = netIncome / 12;
 
 const yearWord = window.t("anni","years");
@@ -1044,11 +1046,22 @@ elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
 
 }
 
+// ================= LOGOUT =================
+window.logout = function(){
+
+const auth = window.auth;
+
+window.signOut(auth)
+.then(() => window.location.href = "/")
+.catch((error) => console.error("Logout error:", error));
+
+}
+
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", function(){
 
-// 👉 QUICK ROI INIT
-if(!document.getElementById("qr_price").value){
+// 👉 AUTO QUICK ROI
+if(document.getElementById("qr_price") && !document.getElementById("qr_price").value){
 quickROI();
 }
 
@@ -1060,8 +1073,7 @@ selectCity(this.value.toLowerCase(), this.value.toLowerCase());
 }
 });
 
-// ================= APPLY CITY FROM URL =================
-
+// 👉 APPLY CITY FROM URL
 const params = new URLSearchParams(window.location.search);
 const cityFromUrl = params.get("city");
 
@@ -1074,15 +1086,11 @@ firenze: "florence"
 
 if(cityFromUrl && map[cityFromUrl]){
 
-// salva sempre la città corretta
 localStorage.setItem("selected_city", cityFromUrl);
-
-// applica background corretto
 changeCityBackground(map[cityFromUrl]);
 
 }else{
 
-// fallback se arrivi senza parametri
 const savedCity = localStorage.getItem("selected_city");
 
 if(savedCity && map[savedCity]){
@@ -1092,3 +1100,5 @@ changeCityBackground(map[savedCity]);
 }
 
 });
+
+</script>
