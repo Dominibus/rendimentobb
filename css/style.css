@@ -101,7 +101,7 @@ display:grid;
 grid-template-columns:auto 1fr auto;
 align-items:center;
 gap:30px;
-min-height:85px;
+min-height:100px;
 }
 
 .portal-header .container{
@@ -178,11 +178,7 @@ flex-shrink:0;
 }
 
 .logo-img{
-height:42px;
-width:auto;
-transition:0.2s ease;
-transform:scale(1.2);
-transform-origin:left center; 
+height:100px;
 }
 
 .logo-link{
@@ -2486,21 +2482,6 @@ display:none;
 max-width:420px;
 margin:auto;
 }  
-
-/* ===================== */
-/* MOBILE */
-/* ===================== */
-
-}
-
-@media(max-width:768px){
-
-.logo-img{
-width:160px;
-height:auto;
-}
-
-}
 
 /* ===================== */
 /* MOBILE HAMBURGER */
