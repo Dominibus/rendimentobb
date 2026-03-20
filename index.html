@@ -1019,11 +1019,22 @@ const yearWord = window.t("anni","years");
 const yearLabel = window.t("€ / anno","€ / year");
 const monthLabel = window.t("€ / mese","€ / month");
 
-document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%"; 
-document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " " + yearWord;
-document.getElementById("qr_rev").innerText = Math.round(revenue) + " " + yearLabel;
-document.getElementById("qr_profit").innerText = Math.round(netIncome) + " " + yearLabel;
-document.getElementById("qr_month").innerText = Math.round(monthlyProfit) + " " + monthLabel;
+const elRoi = document.getElementById("qr_roi");
+const elBreak = document.getElementById("qr_break");
+const elRev = document.getElementById("qr_rev");
+const elProfit = document.getElementById("qr_profit");
+const elMonth = document.getElementById("qr_month");
+
+if(!elRoi || !elBreak || !elRev || !elProfit || !elMonth){
+console.error("Elementi ROI non trovati");
+return;
+}
+
+elRoi.innerText = roi.toFixed(1) + "%"; 
+elBreak.innerText = breakEven.toFixed(1) + " " + yearWord;
+elRev.innerText = Math.round(revenue) + " " + yearLabel;
+elProfit.innerText = Math.round(netIncome) + " " + yearLabel;
+elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
 
 }
 
