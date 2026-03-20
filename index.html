@@ -155,19 +155,19 @@ autocomplete="off">
 
 <div class="city-quick">
 
-<button onclick="changeCityBackground('rome')" class="btn btn-primary market-btn">
+<button onclick="selectCity('roma','rome')" class="btn btn-primary market-btn">
 <span data-it="Roma" data-en="Rome">Roma</span>
 </button>
 
-<button onclick="changeCityBackground('naples')" class="btn btn-primary market-btn">
+<button onclick="selectCity('napoli','naples')" class="btn btn-primary market-btn">
 <span data-it="Napoli" data-en="Naples">Napoli</span>
 </button>
 
-<button onclick="changeCityBackground('milan')" class="btn btn-primary market-btn">
+<button onclick="selectCity('milano','milan')" class="btn btn-primary market-btn">
 <span data-it="Milano" data-en="Milan">Milano</span>
 </button>
 
-<button onclick="changeCityBackground('florence')" class="btn btn-primary market-btn">
+<button onclick="selectCity('firenze','florence')" class="btn btn-primary market-btn">
 <span data-it="Firenze" data-en="Florence">Firenze</span>
 </button>
 
@@ -748,7 +748,7 @@ data-en="✖ Professional PDF report">
 
 </ul>
 
-<button onclick="buyPro()" class="btn-primary"
+<button onclick="buyPlan('investor')" class="btn-primary"
 data-it="Scopri di più"
 data-en="Learn more">
 Scopri di più
@@ -806,7 +806,7 @@ data-en="✔ Professional PDF report">
 
 </ul>
 
-<button onclick="buyPro()" class="btn-primary"
+<button onclick="buyPlan('pro')" class="btn-primary"
 data-it="Sblocca tutto"
 data-en="Unlock full access">
 Sblocca tutto
@@ -858,7 +858,7 @@ data-en="✔ Full access for 12 months">
 
 </ul>
 
-<button onclick="buyPro()"
+<button onclick="buyPlan('annual')"
 data-it="Risparmia con annuale"
 data-en="Save with yearly">
 Risparmia con annuale
@@ -939,6 +939,19 @@ localStorage.setItem("selected_city", city);
 window.location.href = "/market/" + city + "/";
 
 }
+
+window.startAnalysis = function(){
+
+const selectedCity = localStorage.getItem("selected_city");
+
+if(selectedCity){
+window.location.href = "/tool/?city=" + selectedCity;
+}else{
+window.location.href = "/tool/";
+}
+
+}
+
 
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -1055,27 +1068,42 @@ document.addEventListener("DOMContentLoaded", function(){
 
 }); // 🔥 QUESTA MANCAVA
 
+ window.buyPlan = async function(plan){
+
+const user = auth.currentUser;
+
+if(!user){
+alert(t("Devi effettuare il login.","You must login first."));
+window.location.href="/login/";
+return;
+}
+
+const uid = user.uid;
+
+let stripeUrl = "";
+
+// 🔹 INVESTOR (19€)
+if(plan === "investor"){
+stripeUrl = "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
+}
+
+// 🔹 PRO (29€)
+if(plan === "pro"){
+stripeUrl = "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
+}
+
+// 🔹 ANNUALE (199€)
+if(plan === "annual"){
+stripeUrl = "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03";
+}
+
+// redirect a Stripe
+window.location.href = stripeUrl + "?client_reference_id=" + uid;
+
+}
+
 // ================= ANALYZE LISTING =================
 
-window.analyzeListing = function(){
-
-  if(!requirePlan("investor")) return;
-
-  const url = document.getElementById("listing_url").value;
-
-  if(!url){
-    alert(t(
-      "Inserisci il link dell'annuncio.",
-      "Insert the listing URL."
-    ));
-    return;
-  }
-
-  localStorage.setItem("property_link", url);
-
-  window.location.href = "/tool/";
-
-};
 
 window.analyzeListing = function(){
 
