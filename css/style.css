@@ -858,7 +858,12 @@ opacity:0.7;
 display:none !important;
 }
 
-.btn-primary span{
+.btn-primary{
+position:relative;
+z-index:10;
+}
+
+.btn-primary *{
 position:relative;
 z-index:2;
 }
