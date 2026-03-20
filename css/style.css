@@ -880,6 +880,13 @@ inset 0 1px 0 rgba(255,255,255,0.25);
 
 }
 
+.annual-badge{
+font-size:12px;
+font-weight:600;
+color:#f59e0b;
+margin-bottom:8px;
+}
+
 /* hover */
 
 .btn-annual:hover{
