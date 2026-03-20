@@ -795,175 +795,175 @@ border:1px solid #10b981;
 }
 
 /* ===================== */
-/* BUTTONS */
+/* BUTTON SYSTEM 2.0 */
 /* ===================== */
 
+/* BASE */
+
 .btn{
-display:inline-block;
-padding:16px 34px;
-border-radius:14px;
-font-weight:700;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+padding:14px 28px;
+border-radius:12px;
+
+font-weight:600;
+font-size:15px;
+
 text-decoration:none;
-transition:all .25s ease;
 cursor:pointer;
 
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
+transition:
+transform .2s ease,
+box-shadow .2s ease,
+background .2s ease,
+color .2s ease;
+
+border:1px solid transparent;
+
+position:relative;
+overflow:hidden;
 }
+
+/* MICRO INTERACTION */
 
 .btn:hover{
 transform:translateY(-2px);
 }
 
+.btn:active{
+transform:translateY(0) scale(0.98);
+}
+
+/* ===================== */
+/* PRIMARY (MAIN CTA) */
+/* ===================== */
+
 .btn-primary{
 
-margin-top:20px;
-width:100%;
-max-width:520px;  
-
 background:linear-gradient(135deg,#10b981,#059669);
-color:#ffffff !important;
+color:#fff;
 
-font-size:17px;
-letter-spacing:0.4px;
-text-shadow:0 2px 6px rgba(0,0,0,0.35);
+box-shadow:
+0 8px 20px rgba(16,185,129,0.25);
 
-padding:18px 36px;
-border-radius:16px;
-font-weight:700;
-
-position:relative;
-z-index:10; 
-overflow:hidden;
-
-opacity:1 !important;
-filter:none !important;
-
-box-shadow:0 10px 25px rgba(16,185,129,0.25);
 }
 
-.section a:not(.btn){
-font-weight:600;
-transition:all .3s ease;
+/* glow controllato (NO neon spam) */
+.btn-primary:hover{
+
+box-shadow:
+0 14px 35px rgba(16,185,129,0.35);
+
 }
 
-.section a:not(.btn):hover{
-opacity:0.7;
-}
-
-/* 🔥 FIX: escludi i bottoni */
-.section a:not(.btn):hover{
-opacity:0.7;
-}
-
-.btn-primary *{
-position:relative;
-z-index:2;
-}
-
+/* shimmer leggero */
 .btn-primary::before{
 content:"";
 position:absolute;
 top:0;
-left:-50%;
-width:200%;
+left:-100%;
+width:100%;
 height:100%;
-
-z-index:1;
-pointer-events:none; 
 
 background:linear-gradient(
 120deg,
 transparent,
-rgba(255,255,255,0.4),
+rgba(255,255,255,0.3),
 transparent
 );
 
-transform:skewX(-20deg);
-transition:all .6s ease;
-}
-
-.btn-primary::after{
-display:none !important;
+transition:.6s ease;
 }
 
 .btn-primary:hover::before{
 left:100%;
 }
 
-.btn-primary:hover{
-transform:translateY(-3px) scale(1.02);
-
-color:#ffffff !important;
-opacity:1 !important;
-filter:none !important;
-
-box-shadow:
-0 20px 50px rgba(16,185,129,.55),
-0 0 20px rgba(16,185,129,.4);
-}
-
 /* ===================== */
-/* SECONDARY BUTTON */
+/* SECONDARY (GLASS/WHITE) */
 /* ===================== */
 
 .btn-secondary{
-background:#ffffff;
+
+background:rgba(255,255,255,0.9);
 color:#0f172a;
+
 border:1px solid #e2e8f0;
 
-border-radius:14px;
-font-weight:600;
+box-shadow:
+0 6px 18px rgba(0,0,0,0.06);
 
-box-shadow:0 6px 18px rgba(0,0,0,0.08);
-transition:all .25s ease;
-cursor:pointer;
+backdrop-filter:blur(6px);
 }
 
+/* hover coerente */
 .btn-secondary:hover{
+
 background:#10b981;
-color:#ffffff;
+color:#fff;
 border-color:#10b981;
 
-transform:translateY(-2px);
-box-shadow:0 12px 30px rgba(16,185,129,0.25);
+box-shadow:
+0 12px 30px rgba(16,185,129,0.25);
+
 }
 
 /* ===================== */
-/* CTA BUTTON (SPECIFICO ANALYZER) */
+/* GHOST (per header / soft UI) */
+/* ===================== */
+
+.btn-ghost{
+
+background:transparent;
+color:#0f172a;
+
+border:1px solid rgba(0,0,0,0.08);
+}
+
+.btn-ghost:hover{
+background:#f1f5f9;
+}
+
+/* ===================== */
+/* ANALYZER CTA (SPECIAL) */
 /* ===================== */
 
 .property-analyzer .btn-secondary{
-background:#10b981;
-color:#ffffff;
+
+background:linear-gradient(135deg,#10b981,#059669);
+color:#fff;
 border:none;
 
-box-shadow:0 10px 25px rgba(16,185,129,0.25);
+box-shadow:
+0 10px 25px rgba(16,185,129,0.25);
+
 }
 
 .property-analyzer .btn-secondary:hover{
-background:#059669;
-transform:translateY(-2px);
-box-shadow:0 15px 35px rgba(16,185,129,0.35);
+
+box-shadow:
+0 16px 40px rgba(16,185,129,0.35);
+
 }
 
-.section-dark .btn{
-color:#fff !important;
+/* ===================== */
+/* SIZE VARIANTS */
+/* ===================== */
+
+.btn-lg{
+padding:18px 36px;
+font-size:16px;
+border-radius:14px;
+width:100%;
+max-width:520px;
 }
 
-.portal-header .btn-secondary{
-color:#0f172a !important;
-background:rgba(255,255,255,0.9);
-border:1px solid rgba(0,0,0,0.15);
-backdrop-filter:none;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-
-.hero .btn-secondary{
-color:#0f172a !important;
-background:rgba(255,255,255,0.9);
-border:1px solid rgba(0,0,0,0.15);
-backdrop-filter:none;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
+.btn-sm{
+padding:10px 16px;
+font-size:13px;
+border-radius:10px;
 }
 
 /* ===================== */
@@ -1174,30 +1174,30 @@ height:160px;
 
 }
 
-.btn-analyze{
+.btn-dashboard{
 
-background:#10b981;
+display:inline-flex;
+align-items:center;
+justify-content:center;
 
-color:white;
+padding:10px 16px;
+font-size:13px;
 
-border:none;
+border-radius:10px;
 
-padding:6px 10px;
+background:#0f172a;
+color:#fff;
 
-border-radius:6px;
-
-font-size:12px;
+border:1px solid rgba(0,0,0,0.1);
 
 cursor:pointer;
 
-transition:0.2s ease;
-
+transition:.2s ease;
 }
 
-.btn-analyze:hover{
-
-background:#059669;
-
+.btn-dashboard:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
 /* BEST INVESTMENT CARD */
@@ -2001,42 +2001,63 @@ box-shadow:
 }
 
 /* ===================== */
-/* MARKET BUTTONS */
+/* BUTTON ADAPTERS (SAFE REFACTOR) */
 /* ===================== */
 
-.market-section{
-padding:40px 0;
+/* MARKET BUTTONS */
+
+.market-btn{
+display:block;
+width:100%;
+
 }
 
-.market-buttons{
-display:flex;
-flex-direction:column;
-gap:16px;
-max-width:500px;
-margin:0 auto;
+/* usa il nuovo sistema */
+.market-btn{
+all:unset;
 }
 
 .market-btn{
-background: linear-gradient(135deg,#10b981,#059669);
-color:white;
-border:none;
-padding:18px;
-border-radius:16px;
-font-size:18px;
-font-weight:600;
-cursor:pointer;
-box-shadow:0 15px 35px rgba(16,185,129,0.25);
-transition:all 0.2s ease;
+display:block;
 width:100%;
+
+/* eredita stile primary */
+}
+
+/* 👉 APPLY NEW SYSTEM */
+.market-btn{
+@apply-btn-primary;
+}
+
+/* ===================== */
+/* MARKET BUTTON FIX */
+/* ===================== */
+
+.market-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+width:100%;
+padding:18px;
+
+border-radius:14px;
+font-size:16px;
+font-weight:600;
+
+background:linear-gradient(135deg,#10b981,#059669);
+color:#fff;
+
+cursor:pointer;
+
+transition:.2s ease;
+
+box-shadow:0 8px 20px rgba(16,185,129,0.25);
 }
 
 .market-btn:hover{
-transform:translateY(-3px);
-box-shadow:0 20px 40px rgba(16,185,129,0.35);
-}
-
-.market-btn:active{
-transform:scale(0.98);
+transform:translateY(-2px);
+box-shadow:0 14px 35px rgba(16,185,129,0.35);
 }
 
 /* ===================== */
