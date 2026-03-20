@@ -134,7 +134,7 @@ userArea.innerHTML = `
 <div style="font-size:12px;color:#64748b;"
 data-it="Area riservata"
 data-en="Private area">
-Area riservata
+Private area
 </div>
 
 <a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
@@ -148,12 +148,10 @@ Accedi
 
 }
 
-/* ✅ FIX TRADUZIONE (DELAY SICURO) */
-setTimeout(()=>{
+// 🔥 FORZA TRADUZIONE DOPO RENDER USER AREA
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
-},100);
 
 });
 
