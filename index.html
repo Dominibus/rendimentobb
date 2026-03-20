@@ -923,9 +923,12 @@ console.error("Logout error:", error);
 // ================= HERO BACKGROUND =================
 window.changeCityBackground = function(city){
 
-const hero = document.querySelector(".hero");
+const hero = document.querySelector(".tool-hero") || document.querySelector(".hero");
 
-if(!hero) return;
+if(!hero){
+console.error("Hero section non trovata");
+return;
+}
 
 const images = {
 rome: "/img/rome-bg.jpg",
@@ -934,7 +937,10 @@ florence: "/img/florence-bg.jpg",
 milan: "/img/milan-bg.jpg"
 };
 
-if(!images[city]) return;
+if(!images[city]){
+console.warn("Città non trovata:", city);
+return;
+}
 
 hero.style.background =
 "linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.75)), url('" +
