@@ -925,7 +925,12 @@ console.error("Logout error:", error);
 // ================= HERO BACKGROUND =================
 window.changeCityBackground = function(city){
 
-const hero = document.querySelector(".tool-hero") || document.querySelector(".hero");
+const hero =
+document.querySelector(".tool-hero") ||
+document.querySelector(".hero") ||
+document.querySelector("section.hero");
+
+ console.log("Cambio sfondo città:", city);
 
 if(!hero){
 console.error("Hero section non trovata");
@@ -1061,20 +1066,19 @@ window.buyPlan = function(plan){
 
 console.log("Piano selezionato:", plan);
 
-// 👉 TEMP: redirect semplice
-if(plan === "investor"){
-alert("Piano Investor - integrazione Stripe da collegare");
+const links = {
+investor: "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
+pro: "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
+annual: "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+};
+
+if(links[plan]){
+window.location.href = links[plan];
+}else{
+console.error("Piano non valido:", plan);
 }
 
-if(plan === "pro"){
-alert("Piano PRO - integrazione Stripe da collegare");
-}
-
-if(plan === "annual"){
-alert("Piano Annuale - integrazione Stripe da collegare");
-}
-
-} 
+};
 
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", function(){
