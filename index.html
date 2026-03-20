@@ -1041,16 +1041,41 @@ document.getElementById("qr_month").innerText = Math.round(monthlyProfit) + " " 
 }
 
 document.addEventListener("DOMContentLoaded", function(){
+
   if(!document.getElementById("qr_price").value){
     quickROI();
   }
 
-document.querySelector(".city-search-input")
-?.addEventListener("keypress", function(e){
-  if(e.key === "Enter"){
-    openCity(this.value.toLowerCase());
+  document.querySelector(".city-search-input")
+  ?.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+      openCity(this.value.toLowerCase());
+    }
+  });
+
+}); // 🔥 QUESTA MANCAVA
+
+// ================= ANALYZE LISTING =================
+
+window.analyzeListing = function(){
+
+  if(!requirePlan("investor")) return;
+
+  const url = document.getElementById("listing_url").value;
+
+  if(!url){
+    alert(t(
+      "Inserisci il link dell'annuncio.",
+      "Insert the listing URL."
+    ));
+    return;
   }
-});  
+
+  localStorage.setItem("property_link", url);
+
+  window.location.href = "/tool/";
+
+};
 
 window.analyzeListing = function(){
 
