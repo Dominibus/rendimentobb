@@ -1041,21 +1041,23 @@ elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", function(){
 
+// 👉 QUICK ROI INIT
 if(!document.getElementById("qr_price").value){
 quickROI();
 }
 
+// 👉 SEARCH ENTER
 document.querySelector(".city-search-input")
 ?.addEventListener("keypress", function(e){
 if(e.key === "Enter"){
 selectCity(this.value.toLowerCase(), this.value.toLowerCase());
 }
+});
 
-// ================= APPLY CITY BACKGROUND AUTO =================
+// ================= APPLY CITY FROM URL =================
 
-const savedCity = localStorage.getItem("selected_city");
-
-if(savedCity){
+const params = new URLSearchParams(window.location.search);
+const cityFromUrl = params.get("city");
 
 const map = {
 roma: "rome",
@@ -1064,73 +1066,23 @@ milano: "milan",
 firenze: "florence"
 };
 
-const bg = map[savedCity];
+if(cityFromUrl && map[cityFromUrl]){
 
-if(bg){
-changeCityBackground(bg);
+// salva sempre la città corretta
+localStorage.setItem("selected_city", cityFromUrl);
+
+// applica background corretto
+changeCityBackground(map[cityFromUrl]);
+
+}else{
+
+// fallback se arrivi senza parametri
+const savedCity = localStorage.getItem("selected_city");
+
+if(savedCity && map[savedCity]){
+changeCityBackground(map[savedCity]);
 }
 
-} 
- 
+}
+
 });
-
-});
-
-// ================= BUY PLAN =================
-window.buyPlan = async function(plan){
-
-const auth = window.auth;
-const db = window.db;
-
-const user = auth.currentUser;
-
-if(!user){
-alert(window.t("Devi effettuare il login.","You must login first."));
-window.location.href="/login/";
-return;
-}
-
-const uid = user.uid;
-
-let stripeUrl = "";
-
-if(plan === "investor"){
-stripeUrl = "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
-}
-
-if(plan === "pro"){
-stripeUrl = "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
-}
-
-if(plan === "annual"){
-stripeUrl = "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03";
-}
-
-window.location.href = stripeUrl + "?client_reference_id=" + uid;
-
-}
-
-// ================= ANALYZE LISTING =================
-window.requirePlan = function(){
-return true;
-}
-
-window.analyzeListing = function(){
-
-const url = document.getElementById("listing_url").value;
-
-if(!url){
-alert(window.t("Inserisci il link dell'annuncio.","Insert the listing URL."));
-return;
-}
-
-localStorage.setItem("property_link", url);
-
-window.location.href = "/tool/";
-
-}
-
-</script>
-
-</body>
-</html>
