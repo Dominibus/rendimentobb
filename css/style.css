@@ -915,6 +915,12 @@ box-shadow:0 10px 30px rgba(0,0,0,0.2);
 transition:all .25s ease; 
 }
 
+.property-analyzer .btn-secondary{
+background:#10b981;
+color:#fff;
+border:none;
+}
+
 .btn-secondary:hover{
 background:#10b981;
 color:white;
