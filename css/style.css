@@ -3557,15 +3557,6 @@ html,body{
 width:100%;
 }
 
-.container,
-.dashboard-container,
-.dashboard-layout,
-.dashboard-main{
-width:100%;
-max-width:100%;
-overflow:visible;
-}
-
 .pricing-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -3644,12 +3635,13 @@ display:block;
 }
 
 /* ===================== */
-/* HEADER LAYER FIX */
+/* HEADER FINAL FIX */
 /* ===================== */
 
 .portal-header{
-position:relative;
-z-index:100;
+position:sticky;
+top:0;
+z-index:1000;
 }
 
 /* BLOCCA OVERLAY INVISIBILI */
