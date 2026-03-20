@@ -17,7 +17,7 @@ display:block;
 body{
 display:flex;
 flex-direction:column;
-padding-top:70px; /* altezza header */ 
+padding-top:100px; /* altezza header */ 
 
 min-height:100vh;
 color:#0f172a;
@@ -31,7 +31,7 @@ background-attachment:fixed;
 
 @media (max-width:768px){
   body{
-    padding-top:60px;
+    padding-top:80px;
   }
 }
 
@@ -178,7 +178,9 @@ flex-shrink:0;
 }
 
 .logo-img{
-height:100px;
+height:120px;
+width:auto;
+transform:none !important;
 }
 
 .logo-link{
@@ -2420,7 +2422,7 @@ font-size:15px;
 grid-template-columns:1fr auto;
 align-items:center;
 gap:10px;
-min-height:60px; 
+min-height:80px; 
 }
 
 .right-controls{
@@ -3595,10 +3597,6 @@ justify-items:center;
 /* ===================== */
 /* HERO PREMIUM UPGRADE */
 /* ===================== */
-
-.hero{
-padding:140px 0 160px 0;
-}
 
 .hero .container{
 max-width:900px;
