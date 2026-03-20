@@ -220,6 +220,13 @@ margin:0 auto;
 
 .hero{
 position:relative;
+z-index:1;  
+
+.quick-roi-box,
+.roi-card{
+position:relative;
+z-index:3;
+}  
 
 background:
 linear-gradient(
@@ -238,6 +245,12 @@ transition:background 0.6s ease;
 overflow:visible; 
 
 }
+
+@media (max-width:768px){
+.section{
+margin-top:20px;
+}
+}  
 
 .hero.rome{
 background-position:center 50%;
@@ -801,6 +814,10 @@ transform:translateY(-2px);
 }
 
 .btn-primary{
+
+margin-top:20px;
+width:100%;
+max-width:520px;  
 
 background:linear-gradient(135deg,#10b981,#059669);
 color:#ffffff !important;
@@ -2672,14 +2689,13 @@ background: transparent;
 border-radius:24px;
 
 margin:80px auto;
-
-padding:60px 30px; 
+margin-top: 40px;  
 
 padding:50px 30px;
 
 max-width:1000px;
 
-transform: translateY(-40px); 
+transform: none;
 
 position:relative;
 z-index:2;
