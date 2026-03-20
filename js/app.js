@@ -1406,15 +1406,7 @@ async function generateExecutivePDF(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-if(!hasPlan("pro")){
-  alert(
-t(
-"Funzione disponibile solo nel piano PRO",
-"Feature available only in PRO plan"
-)
-);
-  return;
-}
+if(!requirePlan("pro")) return;
 
 if(!window.lastAnalysisData){
 
