@@ -959,16 +959,26 @@ window.selectCity = function(city, bg){
 
 localStorage.setItem("selected_city", city);
 
-// NON serve cambiare background qui (lo farà /tool/)
+// 🔥 FIX: aggiorna subito background
+const map = {
+roma: "rome",
+napoli: "naples",
+milano: "milan",
+firenze: "florence"
+};
+
+if(map[city]){
+changeCityBackground(map[city]);
+}
+
+// redirect
 window.location.href = "/tool/?city=" + city;
 
 }
 
 // ================= MARKET BUTTONS (BOTTOM) =================
 window.goToMarket = function(city){
-
-window.location.href = "/" + city + "/";
-
+window.location.href = "/tool/?city=" + city;
 }
 
 // ================= START ANALYSIS =================
@@ -1045,6 +1055,26 @@ elProfit.innerText = Math.round(netIncome) + " " + yearLabel;
 elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
 
 }
+
+// ================= BUY PLAN =================
+window.buyPlan = function(plan){
+
+console.log("Piano selezionato:", plan);
+
+// 👉 TEMP: redirect semplice
+if(plan === "investor"){
+alert("Piano Investor - integrazione Stripe da collegare");
+}
+
+if(plan === "pro"){
+alert("Piano PRO - integrazione Stripe da collegare");
+}
+
+if(plan === "annual"){
+alert("Piano Annuale - integrazione Stripe da collegare");
+}
+
+} 
 
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", function(){
