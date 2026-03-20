@@ -155,19 +155,19 @@ autocomplete="off">
 
 <div class="city-quick">
 
-<button onclick="changeCityBackground('rome');openCity('roma')" class="btn btn-primary market-btn">
+<button onclick="changeCityBackground('rome')" class="btn btn-primary market-btn">
 <span data-it="Roma" data-en="Rome">Roma</span>
 </button>
 
-<button onclick="changeCityBackground('naples');openCity('napoli')" class="btn btn-primary market-btn">
+<button onclick="changeCityBackground('naples')" class="btn btn-primary market-btn">
 <span data-it="Napoli" data-en="Naples">Napoli</span>
 </button>
 
-<button onclick="changeCityBackground('milan');openCity('milano')" class="btn btn-primary market-btn">
+<button onclick="changeCityBackground('milan')" class="btn btn-primary market-btn">
 <span data-it="Milano" data-en="Milan">Milano</span>
 </button>
 
-<button onclick="changeCityBackground('florence');openCity('firenze')" class="btn btn-primary market-btn">
+<button onclick="changeCityBackground('florence')" class="btn btn-primary market-btn">
 <span data-it="Firenze" data-en="Florence">Firenze</span>
 </button>
 
@@ -748,7 +748,7 @@ data-en="✖ Professional PDF report">
 
 </ul>
 
-<button onclick="window.location.href='/pricing/'"
+<button onclick="buyPro()" class="btn-primary"
 data-it="Scopri di più"
 data-en="Learn more">
 Scopri di più
@@ -806,7 +806,7 @@ data-en="✔ Professional PDF report">
 
 </ul>
 
-<button onclick="window.location.href='/pricing/'" class="btn-primary"
+<button onclick="buyPro()" class="btn-primary"
 data-it="Sblocca tutto"
 data-en="Unlock full access">
 Sblocca tutto
@@ -858,7 +858,7 @@ data-en="✔ Full access for 12 months">
 
 </ul>
 
-<button onclick="window.location.href='/pricing/'"
+<button onclick="buyPro()"
 data-it="Risparmia con annuale"
 data-en="Save with yearly">
 Risparmia con annuale
@@ -888,11 +888,9 @@ Nessun vincolo. Puoi cancellare quando vuoi.
 
 <script type="module">
 
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const auth = getAuth();
-
-import { signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 window.logout = function(){
 
@@ -1043,8 +1041,16 @@ document.getElementById("qr_month").innerText = Math.round(monthlyProfit) + " " 
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-  quickROI();
-}); 
+  if(!document.getElementById("qr_price").value){
+    quickROI();
+  }
+
+document.querySelector(".city-search-input")
+?.addEventListener("keypress", function(e){
+  if(e.key === "Enter"){
+    openCity(this.value.toLowerCase());
+  }
+});  
 
 window.analyzeListing = function(){
 
