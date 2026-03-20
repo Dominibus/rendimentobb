@@ -67,12 +67,32 @@ plan = "pro_yearly"; // 199€
 }
 
 // 🔥 SALVA
+// 🔥 PRENDI IMPORTO PAGATO
+const amount = session.amount_total;
+
+// 🔥 DECIDI PIANO
+let plan = "free";
+
+if(amount === 1900){
+plan = "investor";
+}
+
+if(amount === 2900){
+plan = "pro";
+}
+
+if(amount === 19900){
+plan = "pro_yearly";
+}
+
+// 🔥 SALVA SU FIRESTORE
 await db.collection("users").doc(uid).set({
 plan: plan,
 updatedAt: new Date()
 },{ merge:true });
 
-console.log("User plan updated:",uid,plan);
+console.log("User plan updated:", uid, plan);
+
 
 }catch(e){
 
