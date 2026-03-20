@@ -886,15 +886,31 @@ Nessun vincolo. Puoi cancellare quando vuoi.
 <script src="/js/footer.js" defer></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
-<script>
+<!-- 🔹 FIREBASE (MODULE) -->
+<script type="module">
 
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const auth = getAuth();
+const db = getFirestore();
 
+// rendiamo globali
+window.auth = auth;
+window.db = db;
+window.signOut = signOut;
+
+</script>
+
+<!-- 🔹 SCRIPT PRINCIPALE (NO MODULE) -->
+<script>
+
+// ================= LOGOUT =================
 window.logout = function(){
 
-signOut(auth)
+const auth = window.auth;
+
+window.signOut(auth)
 .then(() => {
 window.location.href = "/";
 })
@@ -905,7 +921,6 @@ console.error("Logout error:", error);
 }
 
 // ================= HERO BACKGROUND =================
-
 window.changeCityBackground = function(city){
 
 const hero = document.querySelector(".hero");
@@ -929,17 +944,20 @@ images[city] +
 hero.style.backgroundSize = "cover";
 hero.style.backgroundPosition = "center";
 
-} 
+}
 
-window.openCity = function(city){
+// ================= SELECT CITY =================
+window.selectCity = function(city, bg){
 
 localStorage.setItem("selected_city", city);
 
-// 👉 redirect corretto MARKET SEO
-window.location.href = "/market/" + city + "/";
+changeCityBackground(bg);
+
+window.location.href = "/tool/?city=" + city;
 
 }
 
+// ================= START ANALYSIS =================
 window.startAnalysis = function(){
 
 const selectedCity = localStorage.getItem("selected_city");
@@ -952,50 +970,7 @@ window.location.href = "/tool/";
 
 }
 
-
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-const db = getFirestore();
-
-window.buyPro = async function(){
-
-const user = auth.currentUser;
-
-if(!user){
-alert(t(
-"Devi effettuare il login.",
-"You must login first."
-));
-window.location.href="/login/";
-return;
-}
-
-const uid = user.uid;
-
-const userDoc = await getDoc(doc(db,"users",uid));
-
-if(userDoc.exists()){
-
-const data = userDoc.data();
-
-if(data.plan === "pro"){
-alert(t(
-"Hai già la versione PRO.",
-"You already have PRO."
-));
-window.location.href="/dashboard/";
-return;
-}
-
-}
-
-const stripeUrl =
-"https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02?client_reference_id=" + uid;
-
-window.location.href = stripeUrl;
-
-}  
-
+// ================= QUICK ROI =================
 window.quickROI = function(){
 
 let price = parseFloat(document.getElementById("qr_price").value);
@@ -1034,46 +1009,44 @@ const breakEven = investment / netIncome;
 
 const monthlyProfit = netIncome / 12;
 
+const yearWord = window.t("anni","years");
+const yearLabel = window.t("€ / anno","€ / year");
+const monthLabel = window.t("€ / mese","€ / month");
 
-// risultati base
-
-const yearWord = t("anni","years");
-const yearLabel = t("€ / anno","€ / year");
-const monthLabel = t("€ / mese","€ / month");
- 
 document.getElementById("qr_roi").innerText = roi.toFixed(1) + "%"; 
-
 document.getElementById("qr_break").innerText = breakEven.toFixed(1) + " " + yearWord;
-
 document.getElementById("qr_rev").innerText = Math.round(revenue) + " " + yearLabel;
-
 document.getElementById("qr_profit").innerText = Math.round(netIncome) + " " + yearLabel;
-
 document.getElementById("qr_month").innerText = Math.round(monthlyProfit) + " " + monthLabel;
 
 }
 
+// ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", function(){
 
-  if(!document.getElementById("qr_price").value){
-    quickROI();
-  }
+if(!document.getElementById("qr_price").value){
+quickROI();
+}
 
-  document.querySelector(".city-search-input")
-  ?.addEventListener("keypress", function(e){
-    if(e.key === "Enter"){
-      openCity(this.value.toLowerCase());
-    }
-  });
+document.querySelector(".city-search-input")
+?.addEventListener("keypress", function(e){
+if(e.key === "Enter"){
+selectCity(this.value.toLowerCase(), this.value.toLowerCase());
+}
+});
 
-}); // 🔥 QUESTA MANCAVA
+});
 
- window.buyPlan = async function(plan){
+// ================= BUY PLAN =================
+window.buyPlan = async function(plan){
+
+const auth = window.auth;
+const db = window.db;
 
 const user = auth.currentUser;
 
 if(!user){
-alert(t("Devi effettuare il login.","You must login first."));
+alert(window.t("Devi effettuare il login.","You must login first."));
 window.location.href="/login/";
 return;
 }
@@ -1082,49 +1055,38 @@ const uid = user.uid;
 
 let stripeUrl = "";
 
-// 🔹 INVESTOR (19€)
 if(plan === "investor"){
 stripeUrl = "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
 }
 
-// 🔹 PRO (29€)
 if(plan === "pro"){
 stripeUrl = "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
 }
 
-// 🔹 ANNUALE (199€)
 if(plan === "annual"){
 stripeUrl = "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03";
 }
 
-// redirect a Stripe
 window.location.href = stripeUrl + "?client_reference_id=" + uid;
 
 }
 
 // ================= ANALYZE LISTING =================
-
+window.requirePlan = function(){
+return true;
+}
 
 window.analyzeListing = function(){
-
-if(!requirePlan("investor")) return;
 
 const url = document.getElementById("listing_url").value;
 
 if(!url){
-const lang = localStorage.getItem("rb_lang") || "it";
-
-alert(t(
-"Inserisci il link dell'annuncio.",
-"Insert the listing URL."
-));
+alert(window.t("Inserisci il link dell'annuncio.","Insert the listing URL."));
 return;
 }
 
-// salva il link
 localStorage.setItem("property_link", url);
 
-// apri il tool
 window.location.href = "/tool/";
 
 }
