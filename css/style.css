@@ -2185,6 +2185,12 @@ color:#10b981;
 /* HAMBURGER DESKTOP FIX */
 /* ===================== */
 
+@media (min-width: 768px){
+.mobile-menu-toggle{
+display:none !important;
+}
+}
+
 /* ===================== */
 /* RESPONSIVE */
 /* ===================== */
