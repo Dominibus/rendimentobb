@@ -80,7 +80,8 @@ margin:auto;
 /* ===================== */
 
 .portal-header{
-padding:10px 0;
+padding:14px 0;
+box-shadow:0 8px 30px rgba(0,0,0,0.05);  
 
 width:100%;
 max-width:100%;
@@ -100,7 +101,7 @@ display:grid;
 grid-template-columns:auto 1fr auto;
 align-items:center;
 gap:30px;
-min-height:70px;
+min-height:80px;
 }
 
 .portal-header .container{
@@ -177,7 +178,7 @@ flex-shrink:0;
 }
 
 .logo-img{
-width:200px; /* prima 180 */
+width:220px; /* prima 180 */
 height:auto;
 transition:0.2s ease;
 }
