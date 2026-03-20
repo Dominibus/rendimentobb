@@ -17,7 +17,7 @@ display:block;
 body{
 display:flex;
 flex-direction:column;
-padding-top:80px; /* altezza header */ 
+padding-top:70px; /* altezza header */ 
 
 min-height:100vh;
 color:#0f172a;
@@ -27,6 +27,11 @@ overflow-x:hidden;
 background-size:cover;
 background-position:center;
 background-attachment:fixed; 
+
+@media (max-width:768px){
+  body{
+    padding-top:60px;
+  }
 
 }
 
@@ -95,7 +100,7 @@ display:grid;
 grid-template-columns:auto 1fr auto;
 align-items:center;
 gap:30px;
-min-height:80px;
+min-height:70px;
 }
 
 .portal-header .container{
@@ -172,7 +177,7 @@ flex-shrink:0;
 }
 
 .logo-img{
-width:240px;
+width:180px;
 height:auto;
 }
 
@@ -2220,9 +2225,10 @@ font-size:15px;
 @media (max-width:768px){
 
 .portal-header-inner{
-grid-template-columns:1fr;
-text-align:center;
+grid-template-columns:1fr auto;
+align-items:center;
 gap:10px;
+min-height:60px; 
 }
 
 .right-controls{
@@ -2295,7 +2301,7 @@ margin:auto;
 
 .logo-img{
 height:54px;
-max-width:200px;
+width:140px;
 }
 
 }
@@ -2303,10 +2309,6 @@ max-width:200px;
 /* ===================== */
 /* MOBILE HAMBURGER */
 /* ===================== */
-
-.hamburger{
-display:none;
-}
 
 @media (max-width:768px){
 
@@ -2336,7 +2338,7 @@ transform:rotate(90deg);
 max-height:0;
 overflow:hidden;
 
-display:flex;
+display:none;
 flex-direction:column;
 align-items:center;
 
@@ -2350,6 +2352,8 @@ gap:14px;
 background:white;
 
 width:100%;
+box-shadow:0 20px 60px rgba(0,0,0,0.1);
+border-radius:0 0 20px 20px; 
 
 border-top:1px solid #e2e8f0;
 
@@ -2410,6 +2414,13 @@ width:100%;
 .header-actions{
 flex-direction:column;
 gap:10px;
+}
+
+.header-actions .btn-secondary{
+padding:8px 14px;
+font-size:13px;
+border-radius:10px;
+font-weight:600;
 }
 
 /* CONTAINER */
