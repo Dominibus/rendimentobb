@@ -902,29 +902,48 @@ box-shadow:
 0 0 20px rgba(16,185,129,.4);
 }
 
-.btn-secondary{
-background:linear-gradient(
-135deg,
-rgba(255,255,255,0.08),
-rgba(255,255,255,0.02)
-);
-color:#fff;
-border:1px solid rgba(255,255,255,0.15);
-backdrop-filter:blur(8px);
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-transition:all .25s ease; 
-}
+/* ===================== */
+/* SECONDARY BUTTON */
+/* ===================== */
 
-.property-analyzer .btn-secondary{
-background:#10b981;
-color:#fff;
-border:none;
+.btn-secondary{
+background:#ffffff;
+color:#0f172a;
+border:1px solid #e2e8f0;
+
+border-radius:14px;
+font-weight:600;
+
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+transition:all .25s ease;
+cursor:pointer;
 }
 
 .btn-secondary:hover{
 background:#10b981;
-color:white;
+color:#ffffff;
 border-color:#10b981;
+
+transform:translateY(-2px);
+box-shadow:0 12px 30px rgba(16,185,129,0.25);
+}
+
+/* ===================== */
+/* CTA BUTTON (SPECIFICO ANALYZER) */
+/* ===================== */
+
+.property-analyzer .btn-secondary{
+background:#10b981;
+color:#ffffff;
+border:none;
+
+box-shadow:0 10px 25px rgba(16,185,129,0.25);
+}
+
+.property-analyzer .btn-secondary:hover{
+background:#059669;
+transform:translateY(-2px);
+box-shadow:0 15px 35px rgba(16,185,129,0.35);
 }
 
 .section-dark .btn{
