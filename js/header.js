@@ -23,7 +23,7 @@ if(!images[city]) return;
 const hero = document.querySelector(".hero");
 if(hero){
 hero.style.background =
-"linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.75)), url('" + images[city] + "') center/cover";
+"linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.75)), url('" + images[city] + "') center/cover";
 }
 
 };  
