@@ -880,6 +880,16 @@ inset 0 1px 0 rgba(255,255,255,0.25);
 
 }
 
+.plan-card{
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+}
+
+.plan-card button{
+margin-top:auto;
+}
+
 .plan-annual{
 
 transform:scale(1.05);
