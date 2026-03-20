@@ -59,6 +59,42 @@ window.isProUser = () =>
 window.currentPlan === "pro" ||
 window.currentPlan === "investor";
 
+// ===============================
+// REQUIRE PLAN (BLOCCO FEATURE)
+// ===============================
+
+window.requirePlan = function(required){
+
+const plan = window.currentPlan;
+
+// INVESTOR access
+if(required === "investor"){
+if(plan === "investor" || plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// PRO access
+if(required === "pro"){
+if(plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// ❌ BLOCCO
+alert(
+getCurrentLang() === "it"
+? "Sblocca la versione PRO per usare questa funzione"
+: "Upgrade to PRO to use this feature"
+);
+
+// scroll pricing (UX migliore)
+window.location.href = "/#pricing";
+
+return false;
+
+};
+
 
 // ===============================
 // HELPER – CURRENT LANGUAGE
