@@ -20,12 +20,13 @@ milan: "/img/milan-bg.jpg"
 
 if(!images[city]) return;
 
-document.body.style.background =
+const hero = document.querySelector(".hero");
+if(hero){
+hero.style.background =
 "linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.75)), url('" +
 images[city] +
-"') center/cover fixed";
-
-};
+"') center/cover";
+}
 
 /* ===================== */
 /* INIT HEADER */
