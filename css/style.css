@@ -892,21 +892,17 @@ margin-top:auto;
 }
 
 .plan-annual{
-
 transform:scale(1.05);
-transform-origin:center top;
-margin-top:-10px;  
-
 border:2px solid #f59e0b;
-
-box-shadow:
-0 30px 80px rgba(245,158,11,0.25);
-
+box-shadow:0 30px 80px rgba(245,158,11,0.25);
 background:linear-gradient(
 180deg,
 rgba(255,255,255,1),
 rgba(255,251,235,1)
 );
+position:relative;
+z-index:2;
+}  
 
 .pricing-grid{
 align-items:stretch;
@@ -917,21 +913,17 @@ position:absolute;
 top:-12px;
 left:50%;
 transform:translateX(-50%);
-
 background:#f59e0b;
 color:white;
-
 font-size:12px;
 font-weight:600;
-
 padding:6px 12px;
 border-radius:20px;
-
 box-shadow:0 6px 15px rgba(245,158,11,0.4);
-}  
+}
 
-position:relative;
-z-index:2;
+.plan-annual:hover{
+transform:scale(1.07);
 }
 
 .annual-badge{
