@@ -80,6 +80,12 @@ data-it="Dashboard" data-en="Dashboard">Dashboard</a>
 `;
 
 document.getElementById("global-header").innerHTML = header;
+  const container = document.getElementById("global-header");
+
+if(container){
+container.innerHTML = header;
+}
+});
 
 /* ===================== */
 /* USER AREA */
@@ -187,6 +193,6 @@ const href = link.getAttribute("href");
 if(currentPath.startsWith(href)){
 link.classList.add("active");
 }
-});
+});  
 
 });
