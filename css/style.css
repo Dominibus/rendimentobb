@@ -27,12 +27,12 @@ overflow-x:hidden;
 background-size:cover;
 background-position:center;
 background-attachment:fixed; 
+}  
 
 @media (max-width:768px){
   body{
     padding-top:60px;
   }
-
 }
 
 /* ===================== */
@@ -65,7 +65,7 @@ padding:0 16px;
 }
 
 }
-
+  
 /* ===================== */
 /* PAGE WIDTH FIX */
 /* ===================== */
@@ -831,7 +831,7 @@ border-radius:16px;
 font-weight:700;
 
 position:relative;
-z-index:2; 
+z-index:5; 
 overflow:hidden;
 
 opacity:1 !important;
@@ -2384,11 +2384,6 @@ transition:max-height .35s ease;
 }
 /* apertura menu */
 
-.portal-nav.open{
-max-height:80vh;
-padding:15px 0;
-}
-
 .portal-nav a{
 font-size:16px;
 padding:10px 0;
@@ -3465,6 +3460,8 @@ display:none;
 }
 
 .portal-nav.open{
+max-height:80vh;
+padding:15px 0;
 display:flex;
 flex-direction:column;
 gap:15px;
