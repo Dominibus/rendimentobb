@@ -37,39 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const header = `
 <header class="portal-header">
 
-<div class="portal-header-inner">
-
-<a href="/" class="logo-link rb-logo">
-<img src="/img/logo-main.png" alt="RendimentoBB" class="logo-img">
-</a>
-
-<nav class="portal-nav">
-
-<a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-<a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
-<a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
-<a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
-<a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
-
-<a href="/dashboard/" id="nav-dashboard">Dashboard</a>
-<a href="/contact.html">Contatti</a>
-
-</nav>
-
-<div class="right-controls">
-
-<div id="user-area"></div>
-
-<div class="lang-switch">
-<button onclick="setLang('it')" id="btn-it">IT</button>
-<button onclick="setLang('en')" id="btn-en">EN</button>
-</div>
-
-</div>
-
-</div>
-</header>
-`;
+<div class="container portal-header-inner">
 
 <div class="header-left">
 
@@ -116,6 +84,20 @@ const container = document.getElementById("global-header");
 if(container){
 container.innerHTML = header;
 }
+
+/* ===================== */
+/* HAMBURGER MENU (DOPO RENDER) */
+/* ===================== */
+
+const hamburger = document.querySelector(".hamburger");
+const nav = document.querySelector(".portal-nav");
+
+if(hamburger && nav){
+hamburger.addEventListener("click", () => {
+nav.classList.toggle("open");
+});
+}
+
 });
 
 /* ===================== */
