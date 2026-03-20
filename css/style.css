@@ -895,6 +895,24 @@ rgba(255,255,255,1),
 rgba(255,251,235,1)
 );
 
+.plan-badge{
+position:absolute;
+top:-12px;
+left:50%;
+transform:translateX(-50%);
+
+background:#f59e0b;
+color:white;
+
+font-size:12px;
+font-weight:600;
+
+padding:6px 12px;
+border-radius:20px;
+
+box-shadow:0 6px 15px rgba(245,158,11,0.4);
+}  
+
 position:relative;
 z-index:2;
 }
