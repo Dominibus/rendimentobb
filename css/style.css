@@ -2495,36 +2495,7 @@ transform:rotate(90deg);
 /* ===================== */
 /* MOBILE NAV */
 /* ===================== */
-@media (max-width:768px){  
 
-.portal-nav{
-
-max-height:0;
-overflow:hidden;
-
-display:none;
-flex-direction:column;
-align-items:center;
-
-position:absolute;
-top:100%;
-left:0;
-z-index:2000;
-
-gap:14px;
-
-background:white;
-
-width:100%;
-box-shadow:0 20px 60px rgba(0,0,0,0.1);
-border-radius:0 0 20px 20px; 
-
-border-top:1px solid #e2e8f0;
-
-transition:max-height .35s ease;
-
- }
-}
 /* apertura menu */
 
 .portal-nav a{
