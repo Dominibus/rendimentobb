@@ -17,7 +17,7 @@ display:block;
 body{
 display:flex;
 flex-direction:column;
-padding-top:80px; /* altezza header */ 
+padding-top:90px; /* altezza header */ 
 
 min-height:100vh;
 color:#0f172a;
@@ -92,6 +92,12 @@ border-bottom:1px solid #e2e8f0;
 padding:10px 0;
 }
 
+.portal-header .container{
+padding:0 20px;
+max-width:1400px;
+margin:auto;
+}
+
 /* layout a 3 colonne vero */
 .portal-header-inner{
 display:grid;
@@ -146,9 +152,9 @@ text-decoration:none;
 
 /* 🔥 dimensione reale */
 .logo-img{
-height:60px;
+height:48px;
 width:auto;
-display:block;
+object-fit:contain;
 }
 
 /* hover */
@@ -2382,18 +2388,23 @@ font-size:15px;
 @media (max-width:768px){
 
 .portal-header-inner{
-grid-template-columns:1fr auto;
-align-items:center;
-gap:10px;
-min-height:80px; 
+grid-template-columns:auto auto;
+justify-content:space-between;
 }
 
-.right-controls{
+.portal-nav{
 display:none;
-flex-wrap:wrap; 
-justify-content:center;
-gap:8px;
-margin-top:6px;
+}
+
+.portal-nav.open{
+display:flex;
+position:absolute;
+top:100%;
+left:0;
+width:100%;
+background:white;
+flex-direction:column;
+padding:20px;
 }
 
 }
@@ -3615,16 +3626,6 @@ margin-top:15px;
 display:block;
 }
 
-}
-
-/* ===================== */
-/* HEADER FINAL FIX */
-/* ===================== */
-
-.portal-header{
-position:sticky;
-top:0;
-z-index:1000;
 }
 
 /* BLOCCA OVERLAY INVISIBILI */
