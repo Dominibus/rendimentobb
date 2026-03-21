@@ -17,7 +17,7 @@ display:block;
 body{
 display:flex;
 flex-direction:column;
-padding-top:90px; /* 🔥 aumentato per header più grande */
+padding-top:80px; /* altezza header */ 
 
 min-height:100vh;
 color:#0f172a;
@@ -31,7 +31,7 @@ background-attachment:fixed;
 
 @media (max-width:768px){
   body{
-    padding-top:90px;
+    padding-top:80px;
   }
 }
 
@@ -75,7 +75,7 @@ margin:auto;
 }
 
 /* ===================== */
-/* HEADER FIX DEFINITIVO */
+/* HEADER FINAL CLEAN */
 /* ===================== */
 
 .portal-header{
@@ -88,39 +88,42 @@ z-index:1000;
 background:rgba(255,255,255,0.95);
 backdrop-filter:blur(10px);
 border-bottom:1px solid #e2e8f0;
+
+padding:10px 0;
 }
 
-/* FLEX stabile (NO GRID) */
+/* layout a 3 colonne vero */
 .portal-header-inner{
-display:flex;
+display:grid;
+grid-template-columns:auto 1fr auto;
 align-items:center;
-justify-content:space-between;
+gap:20px;
 
 max-width:1400px;
 margin:auto;
-padding:10px 20px;
-min-height:80px;
+padding:0 20px;
+
+min-height:70px;
 }
 
-/* SINISTRA */
-.header-left{
-display:flex;
-align-items:center;
-gap:12px;
+/* LOGO */
+.rb-logo{
+justify-self:start;
 }
 
 /* NAV CENTRATA */
 .portal-nav{
 display:flex;
+justify-content:center;
 align-items:center;
 gap:20px;
 
-flex:1;
-justify-content:center;
+width:100%;
 }
 
 /* DESTRA */
 .right-controls{
+justify-self:end;
 display:flex;
 align-items:center;
 gap:12px;
@@ -141,9 +144,9 @@ align-items:center;
 text-decoration:none;
 }
 
-/* 🔥 LOGO PIÙ GRANDE */
+/* 🔥 dimensione reale */
 .logo-img{
-height:80px;
+height:60px;
 width:auto;
 display:block;
 }
@@ -152,45 +155,6 @@ display:block;
 .logo-link:hover .logo-img{
 transform:scale(1.05);
 opacity:0.9;
-}
-
-/* ===================== */
-/* MOBILE HEADER */
-/* ===================== */
-
-.hamburger{
-display:none;
-font-size:24px;
-background:none;
-border:none;
-cursor:pointer;
-}
-
-@media (max-width:768px){
-
-.portal-header-inner{
-flex-wrap:wrap;
-}
-
-.portal-nav{
-display:none;
-flex-direction:column;
-width:100%;
-margin-top:10px;
-}
-
-.portal-nav.open{
-display:flex;
-}
-
-.right-controls{
-display:none;
-}
-
-.hamburger{
-display:block;
-}
-
 }
 
 /* ===================== */
@@ -208,13 +172,16 @@ font-weight:800;
 letter-spacing:-0.5px;
 margin-bottom:14px;
 color:#0f172a;
+
 }
 
 .page-title p{
+
 color:#475569;
 font-size:17px;
 max-width:520px;
 margin:0 auto;
+
 }
 
 /* ===================== */
@@ -224,6 +191,12 @@ margin:0 auto;
 .hero{
 position:relative;
 z-index:1;  
+
+.quick-roi-box,
+.roi-card{
+position:relative;
+z-index:3;
+}  
 
 background:
 linear-gradient(
@@ -241,32 +214,61 @@ min-height:100vh;
 
 transition:background 0.6s ease;
 overflow:visible; 
+
 }
 
-/* FIX Z-INDEX */
-.quick-roi-box,
-.roi-card{
-position:relative;
-z-index:3;
+@media (max-width:768px){
+.section{
+margin-top:20px;
+}
+}  
+
+.hero.rome{
+background-position:center 50%;
 }
 
-/* HERO CITY POSITION */
+.hero.naples{
+background-position:center 65%;
+}
 
-.hero.rome{ background-position:center 50%; }
-.hero.naples{ background-position:center 60%; }
-.hero.milan{ background-position:center 45%; }
-.hero.florence{ background-position:center 55%; }
+.hero.milan{
+background-position:center 45%;
+}
+
+.hero.florence{
+background-position:center 55%;
+}
+
+/* HERO CITY POSITION FIX */
+
+.hero.rome{
+background-position:center 50%;
+}
+
+.hero.naples{
+background-position:center 60%;
+}
+
+.hero.milan{
+background-position:center 45%;
+}
+
+.hero.florence{
+background-position:center 55%;
+}
 
 /* HERO LIGHT EFFECT */
 
 .hero::after{
+
 content:"";
+
 position:absolute;
 top:0;
 left:0;
 width:100%;
 height:100%;
-z-index:0;
+z-index:0; /* 🔥 AGGIUNGI QUESTO */  
 
 background:
 radial-gradient(
@@ -276,6 +278,7 @@ transparent 50%
 );
 
 pointer-events:none;
+
 }
 
 /* ===================== */
@@ -283,14 +286,20 @@ pointer-events:none;
 /* ===================== */
 
 .hero-grid{
+
 display:grid;
 grid-template-columns:1fr;
+
 gap:40px;
+
 max-width:760px;
+
 margin:80px auto;
+
 align-items:start;
 justify-items:center;
 text-align:center;
+
 }
 
 .hero-card h1{
@@ -298,40 +307,47 @@ color:#ffffff;
 text-shadow:0 2px 10px rgba(0,0,0,0.25);
 }
 
-/* NAV LINKS */
-
 .portal-nav a:hover{
+
 background:#f1f5f9;
 color:#10b981;
+
 transform:translateY(-1px);
+
 }
 
 .portal-nav a.active{
+
 background:#ecfdf5;
 color:#10b981;
 font-weight:600;
 border:1px solid #10b981;
+
 }
 
-/* HERO CARD */
-
 .hero-left{
+
 display:flex;
 flex-direction:column;
+
 text-align:center;
 
 width:100%;
 max-width:620px;
+
 margin:0 auto;
 
+/* 🔥 FIX */
 align-items:stretch;
 justify-content:flex-start;
 gap:20px;
 
+/* UI */
 backdrop-filter: blur(6px);
 background: rgba(255,255,255,0.85);
 padding:25px;
 border-radius:20px;
+
 }
 
 /* ===================== */
