@@ -3658,5 +3658,5 @@ height:auto;
 
 .logo-img{
 height:48px;
-max-height:none; /* 🔥 fix definitivo */
+max-height:none; /* 🔥 questo è il fix reale */
 }
