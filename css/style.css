@@ -129,10 +129,10 @@ align-items:center;
 gap:20px;
 
 min-width:0;
-flex-wrap:nowrap;
-overflow-x:auto;   
+flex-wrap:wrap; /* 🔥 QUESTO */
 
 width:100%;
+overflow:visible; /* 🔥 QUESTO */
 }
 
 /* DESTRA */
@@ -3619,15 +3619,18 @@ pointer-events:auto;
 main{
 position:relative;
 z-index:1;
-}/* ===================== */
+  
+/* ===================== */
 /* HEADER SAFE FIX */
 /* ===================== */
 
 .portal-header img{
-height:auto;
+height:48px !important;
+width:auto;
 }
 
 .logo-img{
-height:48px;
-max-height:none; /* 🔥 questo è il fix reale */
+height:48px !important;
+width:auto;
+display:block;
 }
