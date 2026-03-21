@@ -39,6 +39,7 @@ const header = `
 
 <div class="container portal-header-inner">
 
+<!-- LEFT -->
 <div class="header-left">
 
 <a href="/" class="logo-link rb-logo">
@@ -49,6 +50,7 @@ const header = `
 
 </div>
 
+<!-- CENTER NAV -->
 <nav class="portal-nav">
 
 <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
@@ -64,6 +66,7 @@ data-it="Dashboard" data-en="Dashboard">Dashboard</a>
 
 </nav>
 
+<!-- RIGHT -->
 <div class="right-controls">
 
 <div id="user-area"></div>
