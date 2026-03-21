@@ -2486,8 +2486,10 @@ transform:rotate(90deg);
 font-size:16px;
 padding:10px 0;
 white-space:nowrap;
-width:100%;
-text-align:center;
+
+/* 🔥 FIX */
+width:auto;
+text-align:left;
 }
 
 /* ===================== */
