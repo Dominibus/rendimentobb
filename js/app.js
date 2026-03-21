@@ -2375,15 +2375,27 @@ changeCityBackground(city);
 
 // ================= RESTORE CITY =================
 
-const selectedCity = localStorage.getItem("selected_city");
+// 🔥 1. PRIORITÀ URL (home → tool)
+const params = new URLSearchParams(window.location.search);
+const cityFromUrl = params.get("city");
 
-if(citySelector && selectedCity){
+// 🔥 2. fallback localStorage
+const cityFromStorage = localStorage.getItem("selected_city");
 
-citySelector.value = selectedCity;
+// 🔥 3. scelta finale
+let selectedCity = cityFromUrl || cityFromStorage || "napoli";
+
+// salva sempre
+localStorage.setItem("selected_city", selectedCity);
+window.currentCity = selectedCity;
+
+// applica UI
+if(citySelector){
+  citySelector.value = selectedCity;
+}
 
 changeCityBackground(selectedCity);
 
-// citySelector.dispatchEvent(new Event("change"));
-
-}
+// debug
+console.log("🔥 Città iniziale:", selectedCity);
 
