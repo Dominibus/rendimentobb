@@ -2401,10 +2401,12 @@ font-size:15px;
 grid-template-columns:auto 1fr auto;
 }
 
+/* NASCONDI SOLO SU MOBILE */
 .portal-nav{
 display:none;
 }
 
+/* MENU APERTO */
 .portal-nav.open{
 display:flex;
 position:absolute;
