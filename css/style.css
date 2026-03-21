@@ -837,6 +837,45 @@ transform:translateY(0) scale(0.98);
 }
 
 /* ===================== */
+/* LANGUAGE SWITCH FIX */
+/* ===================== */
+
+.lang-switch{
+display:flex;
+gap:6px;
+align-items:center;
+}
+
+.lang-btn{
+padding:6px 10px;
+font-size:12px;
+font-weight:600;
+
+border-radius:8px;
+border:1px solid #e2e8f0;
+
+background:#f8fafc;
+color:#475569;
+
+cursor:pointer;
+transition:all .2s ease;
+}
+
+/* hover */
+.lang-btn:hover{
+background:#10b981;
+color:white;
+border-color:#10b981;
+}
+
+/* attivo */
+.lang-btn.active{
+background:#10b981;
+color:white;
+border-color:#10b981;
+}
+
+/* ===================== */
 /* PRIMARY (MAIN CTA) */
 /* ===================== */
 
