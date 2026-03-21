@@ -3568,6 +3568,54 @@ justify-items:center;
 }
 
 /* ===================== */
+/* PRICING SECTION FIX (DEPTH + CONTRAST) */
+/* ===================== */
+
+.pricing-preview{
+background:linear-gradient(
+180deg,
+rgba(240,249,255,0.8),
+rgba(255,255,255,1)
+);
+
+padding:60px 30px;
+border-radius:28px;
+
+box-shadow:
+0 40px 120px rgba(15,23,42,0.08);
+
+border:1px solid #e2e8f0;
+}
+
+/* card pricing migliorate */
+
+.plan-card{
+background:linear-gradient(
+180deg,
+#ffffff,
+#f8fafc
+);
+
+border:1px solid #e2e8f0;
+
+box-shadow:
+0 25px 70px rgba(15,23,42,0.08);
+
+transition:all .3s ease;
+}
+
+/* hover più premium */
+
+.plan-card:hover{
+transform:translateY(-8px) scale(1.02);
+
+box-shadow:
+0 50px 140px rgba(15,23,42,0.12);
+
+border-color:#10b981;
+}
+
+/* ===================== */
 /* HERO PREMIUM UPGRADE */
 /* ===================== */
 
