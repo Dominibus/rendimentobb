@@ -220,8 +220,8 @@ z-index:3;
 
 background:
 linear-gradient(
-rgba(255,255,255,0.65),
-rgba(255,255,255,0.75)
+rgba(255,255,255,0.25),
+rgba(255,255,255,0.45)
 ),
 url("/img/rome-bg.jpg");
 
@@ -3634,14 +3634,14 @@ text-align:center;
 font-size:52px;
 font-weight:800;
 letter-spacing:-1px;
-color:white;
-text-shadow:0 10px 40px rgba(0,0,0,0.4);
+color:#0f172a;
+text-shadow:0 6px 20px rgba(0,0,0,0.15);
 margin-bottom:18px;
 }
 
 .hero p{
 font-size:20px;
-color:#e2e8f0;
+color:#334155;
 max-width:640px;
 margin:0 auto 30px auto;
 }
@@ -3785,6 +3785,29 @@ display:block;
 
 }
 
+.hero-features{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.hero-feature{
+text-align:center;
+}
+
+.hero-feature strong{
+color:#10b981;
+font-size:16px;
+display:block;
+}
+
+.hero-feature span{
+font-size:13px;
+color:#475569;
+}
+
 /* BLOCCA OVERLAY INVISIBILI */
 .portal-header *{
 pointer-events:auto;
@@ -3794,4 +3817,6 @@ pointer-events:auto;
 main{
 position:relative;
 z-index:1;
+
+  
   
