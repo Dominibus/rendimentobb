@@ -126,7 +126,7 @@ justify-self:start;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:20px;
+gap:24px;
 
 min-width:0;
 flex-wrap:wrap; /* 🔥 QUESTO */
@@ -168,11 +168,12 @@ transform:scale(1.8);
 transform-origin:left center;  
 width:auto;
 display:block;
+transition:transform .25s ease, opacity .25s ease;
 }
 
 /* hover */
 .logo-link:hover .logo-img{
-transform:scale(1.05);
+transform:scale(1.9); /* 🔥 NON più shrink */
 opacity:0.9;
 }
 
@@ -847,32 +848,31 @@ align-items:center;
 }
 
 .lang-btn{
-padding:6px 10px;
+padding:6px 12px;
 font-size:12px;
 font-weight:600;
 
-border-radius:8px;
-border:1px solid #e2e8f0;
+border-radius:999px;
 
-background:#f8fafc;
+background:#f1f5f9;
 color:#475569;
+
+border:none;
 
 cursor:pointer;
 transition:all .2s ease;
 }
 
-/* hover */
 .lang-btn:hover{
 background:#10b981;
-color:white;
-border-color:#10b981;
+color:#fff;
+transform:translateY(-1px);
 }
 
-/* attivo */
 .lang-btn.active{
 background:#10b981;
-color:white;
-border-color:#10b981;
+color:#fff;
+box-shadow:0 4px 12px rgba(16,185,129,0.3);
 }
 
 /* ===================== */
@@ -3662,17 +3662,3 @@ main{
 position:relative;
 z-index:1;
   
-/* ===================== */
-/* HEADER SAFE FIX */
-/* ===================== */
-
-.portal-header img{
-height:48px !important;
-width:auto;
-}
-
-.logo-img{
-height:48px !important;
-width:auto;
-display:block;
-}
