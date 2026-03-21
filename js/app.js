@@ -2399,3 +2399,6 @@ changeCityBackground(selectedCity);
 // debug
 console.log("🔥 Città iniziale:", selectedCity);
 
+// 🔥 FIX ANALYZE BUTTON
+window.analyzeListing = window.analyzeProperty;
+
