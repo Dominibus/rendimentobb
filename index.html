@@ -50,8 +50,15 @@ content="Analyze ROI, mortgage impact and risk before launching a B&B. Make data
 <meta name="application-name" content="RendimentoBB">
 <meta name="apple-mobile-web-app-title" content="RendimentoBB"> 
 
-<meta property="og:title" content="RendimentoBB – Calcola il ROI di un B&B prima di investire">
-<meta property="og:description" content="Simula rendimento, rischio e sostenibilità di un B&B. Scopri se un immobile può generare il 10-18% di ROI.">
+<meta property="og:title"
+data-it="RendimentoBB – Calcola il ROI di un B&B prima di investire"
+data-en="RendimentoBB – Calculate B&B ROI before investing"
+content="RendimentoBB – Calculate B&B ROI before investing">
+
+<meta property="og:description"
+data-it="Simula rendimento, rischio e sostenibilità di un B&B. Scopri se un immobile può generare il 10-18% di ROI."
+data-en="Simulate returns, risk and sustainability. Discover if a property can generate 10–18% ROI."
+content="Simulate returns, risk and sustainability. Discover if a property can generate 10–18% ROI.">
 
 <script type="application/ld+json">
 {
@@ -114,14 +121,14 @@ Inizia analisi
 
 <div>
 <strong>ROI</strong>
-<p data-it="calcolo realistico" data-en="realistic calculation">
+<p data-it="calcolo realistico" data-en="realistic ROI modeling">
 calcolo realistico
 </p>
 </div>
 
 <div>
 <strong>Break-even</strong>
-<p data-it="occupazione minima" data-en="minimum occupancy">
+<p data-it="occupazione minima" data-en="break-even occupancy">
 occupazione minima
 </p>
 </div>
@@ -342,7 +349,8 @@ Analizza immobile da annuncio
 style="margin-top:6px;font-size:14px;color:#64748b"
 data-it="Incolla un annuncio e scopri subito ROI, rischio e rendimento."
 data-en="Paste a listing and instantly discover ROI, risk and profitability.">
-Incolla il link di un annuncio Idealista o Immobiliare.it per stimare il rendimento.
+data-it="Incolla il link di un annuncio e scopri subito ROI, rischio e rendimento."
+data-en="Paste a listing link and instantly calculate ROI, risk and profitability."
 </p>
 
 <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
@@ -426,7 +434,7 @@ Ricavo annuo
 <button onclick="startAnalysis()" 
 class="btn btn-primary btn-lg block"
 data-it="Sblocca analisi completa con rischio e mutuo"
-data-en="Unlock full analysis with risk & mortgage">
+data-en="Unlock full ROI & risk analysis">
 Sblocca analisi completa con rischio e mutuo
 </button>
 
@@ -481,7 +489,8 @@ Analisi professionale con scenari realistici
 <p
 data-it="Modelli finanziari realistici basati su dati di mercato"
 data-en="Real financial models based on market data">
-Simulazioni basate su modelli finanziari reali
+data-it="Modelli finanziari realistici basati su dati di mercato"
+data-en="Data-driven financial models based on real market data"
 </p>
 </div>
 
@@ -578,7 +587,7 @@ Investire in un Bed & Breakfast può generare rendimenti interessanti, ma è fon
 
 <p
 data-it="Approfondisci i principali aspetti dell'investimento in un Bed & Breakfast: costi iniziali, ROI medio e sostenibilità finanziaria."
-data-en="Explore the key aspects of investing in a Bed & Breakfast: startup costs, average ROI and financial sustainability.">
+data-en="Explore the key aspects of B&B investments: startup costs, average ROI and long-term sustainability.">
 Approfondisci i principali aspetti dell'investimento in un Bed & Breakfast.
 </p>
 
@@ -752,7 +761,7 @@ data-en="✖ Professional PDF report">
 
 <button onclick="buyPlan('investor')" class="btn-primary"
 data-it="Scopri di più"
-data-en="Learn more">
+data-en="Get started">
 Scopri di più
 </button>
 
@@ -810,9 +819,15 @@ data-en="✔ Professional PDF report">
 
 <button onclick="buyPlan('pro')" class="btn-primary"
 data-it="Sblocca tutto"
-data-en="Unlock full access">
+data-en="Unlock full analysis">
 Sblocca tutto
 </button>
+
+<p style="font-size:12px;color:#64748b;margin-top:10px;"
+data-it="✔ Accesso immediato • ✔ Nessun vincolo • ✔ Cancella quando vuoi"
+data-en="✔ Instant access • ✔ No commitment • ✔ Cancel anytime">
+✔ Accesso immediato • ✔ Nessun vincolo • ✔ Cancella quando vuoi
+</p> 
 
 </div>
 
@@ -864,7 +879,7 @@ data-en="✔ Full access for 12 months">
 
 <button onclick="buyPlan('pro_yearly')" class="btn btn-primary btn-annual"
 data-it="Risparmia con annuale"
-data-en="Save with yearly">
+data-en="Save with annual plan">
 Risparmia con annuale
 </button>
 
@@ -874,7 +889,7 @@ Risparmia con annuale
 
 <p style="margin-top:20px;color:#64748b;font-size:14px;"
 data-it="Nessun vincolo. Puoi cancellare quando vuoi."
-data-en="No commitment. Cancel anytime.">
+data-en="No commitment • Cancel anytime">
 Nessun vincolo. Puoi cancellare quando vuoi.
 </p>
 
