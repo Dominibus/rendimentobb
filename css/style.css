@@ -112,6 +112,10 @@ padding:0 20px;
 min-height:70px;
 }
 
+.portal-header-inner > *{
+min-width:0;
+}
+
 /* LOGO */
 .rb-logo{
 justify-self:start;
@@ -123,6 +127,9 @@ display:flex;
 justify-content:center;
 align-items:center;
 gap:20px;
+
+min-width:0;
+flex-wrap:nowrap;   /* 🔥 IMPORTANTE */
 
 width:100%;
 }
@@ -150,11 +157,14 @@ align-items:center;
 text-decoration:none;
 }
 
-/* 🔥 dimensione reale */
+.rb-logo{
+flex-shrink:0;
+}
+
 .logo-img{
 height:48px;
 width:auto;
-object-fit:contain;
+display:block;
 }
 
 /* hover */
@@ -2390,7 +2400,7 @@ font-size:15px;
 .portal-header-inner{
 grid-template-columns:auto auto;
 justify-content:space-between;
-}
+}  
 
 .portal-nav{
 display:none;
@@ -2551,8 +2561,8 @@ max-width:100%;
 .header-left{
 display:flex;
 align-items:center;
-justify-content:space-between;
-width:100%;
+gap:10px;
+width:auto;
 }
 
 }
@@ -3646,6 +3656,3 @@ max-height:60px;
 height:auto;
 }
 
-.portal-header *{
-flex-shrink:0;
-}
