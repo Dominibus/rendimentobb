@@ -4165,3 +4165,23 @@ font-weight:500;
 max-width:700px;
 margin:0 auto;
 }
+
+/* ===================== */
+/* HERO ROI FINAL FIX */
+/* ===================== */
+
+/* RIMUOVE BOX SCURO */
+.hero p{
+background:none !important;
+padding:0 !important;
+border-radius:0 !important;
+}
+
+/* TESTO PERFETTO */
+.hero.hero-bg p{
+color:#ffffff !important;
+font-weight:500;
+text-shadow:0 4px 20px rgba(0,0,0,0.7);
+max-width:700px;
+margin:0 auto;
+}
