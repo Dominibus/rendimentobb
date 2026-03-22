@@ -2152,8 +2152,43 @@ margin-bottom:20px;
 }
 
 .section-dark a:not(.btn){
-  color:#ffffff;
-  text-decoration:underline;
+color:#ffffff;
+text-decoration:none;
+}
+
+.section-dark a:not(.btn):hover{
+text-decoration:underline;
+}
+
+.section-dark ul li a{
+font-size:16px;
+letter-spacing:0.3px;  
+color:#ffffff !important;
+font-weight:600;
+opacity:1 !important;
+display:inline-block;
+margin:6px 0;
+}
+
+.section-dark ul{
+list-style:none;
+padding:0;
+margin-top:20px;
+}
+
+.section-dark ul li{
+margin:10px 0; 
+}
+
+.section-dark ul li a:hover{
+color:#a7f3d0;
+transform:translateX(4px);
+}
+
+.section-dark .container{
+background:rgba(255,255,255,0.08);
+padding:25px;
+border-radius:16px;
 }
 
 .section-dark .btn-primary{
