@@ -4207,3 +4207,12 @@ text-shadow:0 4px 20px rgba(0,0,0,0.7);
 max-width:700px;
 margin:0 auto;
 }
+
+/* ===================== */
+/* ROI CTA TEXT FIX FINAL */
+/* ===================== */
+
+.section .container p{
+color:#475569 !important; /* 🔥 grigio leggibile */
+text-shadow:none !important;
+}
