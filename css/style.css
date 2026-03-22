@@ -3839,38 +3839,55 @@ z-index:1;
 
 @media (max-width:768px){
 
-/* NASCONDI INFO UTENTE */
-.user-info{
-display:none;
+/* 🔥 STRUTTURA HEADER (FIX PRINCIPALE) */
+.portal-header-inner{
+display:flex !important;
+align-items:center;
+justify-content:space-between;
+gap:10px;
 }
 
-/* NASCONDI LOGOUT */
-.logout-btn{
-display:none;
+/* 🔥 LOGO FIX (FINALMENTE GRANDE) */
+.logo{
+flex:0 0 auto;
 }
 
-/* RIDUCI SPAZI DESTRA */
+.logo-img{
+height:60px !important;
+width:auto;
+transform:none !important;
+}
+
+/* 🔥 MENU HAMBURGER */
+.nav-toggle{
+flex:0 0 auto;
+}
+
+/* 🔥 CONTROLLI DESTRA */
 .right-controls{
+display:flex;
+align-items:center;
 gap:6px;
+flex:0 0 auto;
 }
 
-/* BOTTONI PIÙ COMPATTI */
+/* 🔥 BOTTONI COMPATTI */
 .right-controls .btn{
 padding:6px 10px;
 font-size:12px;
+white-space:nowrap;
 }
 
-/* LINGUA PIÙ PICCOLA */
+/* 🔥 LINGUA */
 .lang-btn{
 padding:5px 10px;
 font-size:11px;
 }
 
-}  
-
-@media (max-width:768px){
-
-/* 🔥 NASCONDE QUALSIASI BLOCCO TESTO UTENTE */
+/* 🔥 NASCONDE COMPLETAMENTE UTENTE */
+.user-info,
+.user-name,
+.user-plan,
 [class*="user"],
 [class*="profile"],
 [class*="account"]{
@@ -3878,96 +3895,13 @@ display:none !important;
 }
 
 /* 🔥 NASCONDE LOGOUT */
-button, .btn{
-white-space:nowrap;
-}
-
-button:has-text("Logout"){
-display:none !important;
-}
-
-}  
-
-@media (max-width:768px){
-
-/* 🔥 BLOCCO HEADER DESTRO */
-.header-right,
-.user-info,
-.user-box{
-display:flex;
-align-items:center;
-gap:6px;
-}
-
-/* 🔥 NASCONDI TESTO UTENTE */
-.user-info span,
-.user-name,
-.user-plan{
-display:none !important;
-}
-
-/* 🔥 EVITA OVERFLOW */
-.portal-header{
-overflow:hidden;
-}
-
-.btn-secondary{
-padding:8px 10px;
-font-size:12px;
-}  
-
-}
-
-@media (max-width:768px){
-
-/* HEADER STRUTTURA */
-.portal-header-inner{
-display:grid !important;
-grid-template-columns:auto 1fr auto;
-align-items:center;
-gap:6px;
-}
-
-/* LOGO */
-.logo-img{
-height:60px !important;
-width:auto;
-transform:none !important;
-}
-
-/* NASCONDE USER */
-.user-info,
-.user-name,
-.user-plan,
-[class*="user"],
-[class*="profile"]{
-display:none !important;
-}
-
-/* NASCONDE LOGOUT */
-button:has-text("Logout"),
 .logout-btn{
 display:none !important;
 }
 
-/* CONTROLLI DESTRA */
-.right-controls{
-display:flex;
-align-items:center;
-gap:6px;
-}
-
-/* BOTTONI */
-.right-controls .btn{
-padding:6px 10px;
-font-size:12px;
-}
-
-/* HEADER SAFE */
+/* 🔥 SICUREZZA OVERFLOW */
 .portal-header{
 overflow:hidden;
 }
 
 }
-  
-  
