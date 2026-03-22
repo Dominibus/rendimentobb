@@ -209,7 +209,7 @@ calculate();
 // B&B MARKET DATA
 // ===============================
 
-export const marketData = {
+window.marketData = {
 
 italy:{
 roi:8.4,
