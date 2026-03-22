@@ -3848,12 +3848,12 @@ gap:10px;
 }
 
 /* 🔥 LOGO FIX (FINALMENTE GRANDE) */
-.logo{
-flex:0 0 auto;
-}
-
-.logo-img{
-transform:scale(1.6) !important;
+/* PRENDE QUALSIASI IMG DENTRO HEADER */
+.portal-header img{
+height:40px !important;
+transform:scale(1.8) !important;
+transform-origin:left center !important;
+max-width:none !important;
 }
 
 /* 🔥 MENU HAMBURGER */
