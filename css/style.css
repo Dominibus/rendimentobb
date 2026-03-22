@@ -3930,8 +3930,9 @@ gap:6px;
 
 /* LOGO */
 .logo-img{
-height:100px !important;
-transform:scale(1) !important;
+height:60px !important;
+width:auto;
+transform:none !important;
 }
 
 /* NASCONDE USER */
