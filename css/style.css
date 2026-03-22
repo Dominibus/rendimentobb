@@ -241,8 +241,8 @@ z-index:3;
 .hero-bg{
 background:
 linear-gradient(
-rgba(255,255,255,0.4),
-rgba(255,255,255,0.6)
+rgba(0,0,0,0.35),
+rgba(0,0,0,0.55)
 ),
 url("/img/rome-bg.jpg");
 
@@ -3759,7 +3759,8 @@ margin-bottom:18px;
 
 .hero p{
 font-size:20px;
-color:#e2e8f0;
+color:#ffffff !important;
+font-weight:500;  
 max-width:640px;
 margin:0 auto 30px auto;
 text-shadow:0 2px 10px rgba(0,0,0,0.3);
