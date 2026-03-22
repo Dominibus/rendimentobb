@@ -666,7 +666,8 @@ display:flex;
 flex-direction:column;
 gap:14px;
 font-size:14px;
-color:#64748b;
+color:#ffffff;
+text-shadow:0 2px 8px rgba(0,0,0,0.6); 
 }
 
 .hero-trust > *{
@@ -3805,6 +3806,15 @@ font-size:16px;
 }
 
 /* ===================== */
+/* CTA ROI TEXT FIX */
+/* ===================== */
+
+.hero-bg .hero-left p{
+color:#ffffff !important;
+text-shadow:0 3px 12px rgba(0,0,0,0.6);
+}
+
+/* ===================== */
 /* PRICING HIERARCHY (PRO DOMINANCE) */
 /* ===================== */
 
@@ -4164,12 +4174,6 @@ margin-top:25px;
 .hero-buttons .btn{
 max-width:260px;
 width:100%;
-}
-
-.hero p{
-color:#ffffff !important;
-font-weight:600;
-text-shadow:0 4px 20px rgba(0,0,0,0.8);
 }
 
 /* ===================== */
