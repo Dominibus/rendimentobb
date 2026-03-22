@@ -2147,35 +2147,9 @@ window.location.href = stripeUrl;
 
 async function scrapePropertyFromBrowser(url){
 
-try{
+console.log("Scraper disattivato (Vercel)");
 
-let endpoint = "";
-
-if(url.includes("idealista")){
-endpoint = "/.netlify/functions/scrape-idealista";
-}
-else if(url.includes("immobiliare")){
-endpoint = "/.netlify/functions/scrape-immobiliare";
-}
-else{
-console.warn("Sito non supportato");
-return { price:null };
-}
-
-const response = await fetch(
-endpoint + "?url=" + encodeURIComponent(url)
-);
-
-const data = await response.json();
-
-console.log("Prezzo trovato:", data.price);
-
-return data;
-
-}catch(e){
-
-console.error("Errore scraping Netlify:", e);
-return { price:null };
+return { price: null };
 
 }
 
