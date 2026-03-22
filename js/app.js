@@ -2406,5 +2406,5 @@ if(cityFromQuery){
 // ... tutto il tuo codice sopra
 
 function goToMarket(city){
-  window.location.href = "/" + city;
+  window.location.href = "/market/" + city;
 }
