@@ -1,3 +1,5 @@
+import "./market-data.js";
+
 export function renderMarketBenchmark(city){
 
   // 🔥 sicurezza globale
