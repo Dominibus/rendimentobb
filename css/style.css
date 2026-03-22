@@ -309,9 +309,9 @@ pointer-events:none;
 
 }
 
-.hero *{
-position:relative;
-z-index:2;
+.hero > *{
+  position:relative;
+  z-index:2;
 }
 
 /* ===================== */
@@ -1049,6 +1049,7 @@ inset 0 1px 0 rgba(255,255,255,0.3);
 
 background:rgba(255,255,255,0.9);
 color:#0f172a;
+background:#ffffff !important;  
 
 border:1px solid #e2e8f0;
 
@@ -2150,8 +2151,9 @@ opacity:0.9;
 margin-bottom:20px;
 }
 
-.section-dark a{
-color: white;
+.section-dark a:not(.btn){
+  color:#ffffff;
+  text-decoration:underline;
 }
 
 .section-dark .btn-primary{
@@ -3830,8 +3832,9 @@ pointer-events:auto;
 
 /* CONTENUTO SOTTO */
 main{
-position:relative;
-z-index:1;
+  position:relative;
+  z-index:1;
+}
 
 /* ===================== */
 /* HEADER MOBILE FIX PRO */
