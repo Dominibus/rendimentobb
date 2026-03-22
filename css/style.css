@@ -2152,7 +2152,7 @@ margin-bottom:20px;
 }
 
 .section-dark a:not(.btn){
-color:#ffffff;
+color:#a7f3d0; /* verde chiaro leggibile */
 text-decoration:none;
 }
 
@@ -2163,7 +2163,7 @@ text-decoration:underline;
 .section-dark ul li a{
 font-size:16px;
 letter-spacing:0.3px;  
-color:#ffffff !important;
+color:#a7f3d0 !important;
 font-weight:600;
 opacity:1 !important;
 display:inline-block;
@@ -2183,7 +2183,7 @@ margin:10px 0;
 }
 
 .section-dark ul li a:hover{
-color:#a7f3d0;
+color:#ffffff;
 transform:translateX(4px);
 }
 
