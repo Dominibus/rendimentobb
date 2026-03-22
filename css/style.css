@@ -4107,3 +4107,18 @@ border:1px solid #e2e8f0 !important;
 background:#10b981 !important;
 color:#ffffff !important;
 }
+
+/* HERO BUTTON GROUP */
+
+.hero-buttons{
+display:flex;
+gap:14px;
+justify-content:center;
+flex-wrap:wrap;
+margin-top:25px;
+}
+
+.hero-buttons .btn{
+max-width:260px;
+width:100%;
+}
