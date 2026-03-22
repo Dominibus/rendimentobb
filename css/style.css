@@ -1114,17 +1114,71 @@ border-radius:10px;
 }
 
 /* ===================== */
-/* GLOBAL LINKS */
+/* GLOBAL LINK FIX FINAL */
 /* ===================== */
 
+/* BASE SICURA */
 a{
 color:#10b981;
 text-decoration:none;
 transition:0.2s ease;
 }
 
+/* hover */
 a:hover{
-opacity:0.8;
+opacity:0.9;
+}
+
+/* HEADER NAV */
+.portal-nav a{
+color:#334155;
+font-weight:500;
+}
+
+.portal-nav a:hover{
+color:#10b981;
+}
+
+/* HERO (se dentro card bianca) */
+.hero a{
+color:#10b981;
+}
+
+/* SECTION LIGHT */
+.section-light a{
+color:#10b981;
+font-weight:600;
+}
+
+/* SECTION DARK (fondi scuri) */
+.section-dark a{
+color:#bbf7d0 !important;
+font-weight:600;
+opacity:1 !important;
+}
+
+.section-dark a:hover{
+color:#ffffff !important;
+}
+
+/* MARKET LINKS (🔥 QUESTO TI MANCAVA) */
+.market-link{
+color:#10b981 !important;
+font-weight:600;
+display:inline-block;
+}
+
+.market-link:hover{
+text-decoration:underline;
+}
+
+/* FOOTER */
+.footer-links a{
+color:#94a3b8;
+}
+
+.footer-links a:hover{
+color:#ffffff;
 }
 
 /* ===================== */
