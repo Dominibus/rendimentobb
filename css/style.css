@@ -3998,55 +3998,46 @@ overflow:hidden;
 }
 
 /* ===================== */
-/* MARKET SECTION FIX */
+/* MARKET REAL FIX (CORRETTO) */
 /* ===================== */
 
-/* BOX GRIGIO */
-.market-section,
-.section{
-background: rgba(255,255,255,0.96) !important;
+/* TARGET GIUSTO */
+.section.section-dark{
+background:#ffffff !important;
+color:#0f172a !important;
+
+box-shadow:0 25px 80px rgba(0,0,0,0.08) !important;
+border:1px solid #e2e8f0 !important;
 }
 
-/* CONTENUTO MARKET */
-.market-section a,
-.market-section li a{
+/* TITOLO */
+.section.section-dark h3{
+color:#0f172a !important;
+}
+
+/* LINK VISIBILI */
+.section.section-dark a{
 color:#10b981 !important;
-font-weight:600;
 opacity:1 !important;
-text-decoration:none;
+text-shadow:none !important;
 }
 
 /* HOVER */
-.market-section a:hover{
+.section.section-dark a:hover{
 color:#059669 !important;
-text-decoration:underline;
 }
 
-/* LISTA GUIDE */
-.market-section ul li{
-color:#334155;
+/* LISTA */
+.section.section-dark ul li{
+color:#334155 !important;
 }
 
-/* FIX TESTO INVISIBILE */
-.market-section{
-color:#0f172a !important;
+/* RIMUOVE FILTRI CHE SPORCANO */
+.section.section-dark{
+filter:none !important;
 }
 
-/* BOTTONI MARKET */
-.market-section .btn,
-.market-section .market-btn{
-opacity:1 !important;
-visibility:visible !important;
-}
-
-/* FIX BOTTONE SECONDARIO (quello bianco che sparisce) */
-.market-section .btn-secondary{
-color:#0f172a !important;
-background:#ffffff !important;
-border:1px solid #cbd5e1 !important;
-}
-
-/* FIX OVERLAY VERDE CHE COPRE */
-.section::before{
+/* RIMUOVE OVERLAY */
+.section.section-dark::before{
 display:none !important;
 }
