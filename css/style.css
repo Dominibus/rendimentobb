@@ -2188,7 +2188,7 @@ transform:translateX(4px);
 }
 
 .section-dark .container{
-background:rgba(255,255,255,0.08);
+background:transparent;
 padding:25px;
 border-radius:16px;
 }
