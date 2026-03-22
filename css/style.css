@@ -165,7 +165,7 @@ flex-shrink:0;
 
 .logo-img{
 height:80px;
-transform:scale(1.8);
+transform:none;
 transform-origin:left center;  
 width:auto;
 display:block;
