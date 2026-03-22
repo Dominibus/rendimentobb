@@ -2005,40 +2005,6 @@ window.location.href = "/tool/";
 
 };
 
-// ================= REQUIRE PLAN =================
-
-function requirePlan(required){
-
-const plan = window.userPlan;
-
-// INVESTOR access
-if(required === "investor"){
-if(plan === "investor" || plan === "pro" || plan === "pro_yearly"){
-return true;
-}
-}
-
-// PRO access
-if(required === "pro"){
-if(plan === "pro" || plan === "pro_yearly"){
-return true;
-}
-}
-
-// ❌ BLOCCO
-alert(
-t(
-"Sblocca la versione PRO per usare questa funzione",
-"Upgrade to PRO to use this feature"
-)
-);
-
-window.location.href = "/#pricing";
-
-return false;
-
-}
-
 // ================= SAFE PLAN BUY =================
 
 window.startPlanPurchase = function(plan){
