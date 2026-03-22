@@ -4052,22 +4052,26 @@ display:none !important;
 /* FIX BOTTONI GLOBALI */
 /* ===================== */
 
-a.btn,
+/* BASE */
 .btn{
-color:#ffffff !important;
+text-decoration:none;
 }
 
-/* PRIMARY OK */
+/* PRIMARY (verde) */
 .btn-primary{
 color:#ffffff !important;
 }
 
-/* SECONDARY FIX (QUESTO È IL PROBLEMA VERO) */
+/* SECONDARY (bianco) */
 .btn-secondary{
 color:#0f172a !important;
+background:#ffffff !important;
+border:1px solid #e2e8f0;
 }
 
-/* HOVER */
+/* HOVER SECONDARY */
 .btn-secondary:hover{
 color:#ffffff !important;
+background:#10b981 !important;
+border-color:#10b981 !important;
 }
