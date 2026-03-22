@@ -2402,3 +2402,9 @@ document.addEventListener("DOMContentLoaded", () => {
 if(cityFromQuery){
   window.location.href = "/" + cityFromQuery;
 }
+
+// ... tutto il tuo codice sopra
+
+function goToMarket(city){
+  window.location.href = "/" + city;
+}
