@@ -2898,6 +2898,11 @@ position:relative;
 z-index:2;
 }
 
+.section a{
+color:#10b981;
+font-weight:600;
+}
+
 .section h2{
 font-size:28px;
 margin-bottom:14px;
