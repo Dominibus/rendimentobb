@@ -219,6 +219,9 @@ margin:0 auto;
 .hero{
 position:relative;
 z-index:1;
+display:flex;
+align-items:center;
+justify-content:center;  
 
 padding:140px 0 160px 0;
 min-height:100vh;
@@ -3731,7 +3734,18 @@ border-color:#10b981;
 
 .hero .container{
 max-width:900px;
+margin:0 auto;
+display:flex;
+flex-direction:column;
+align-items:center; /* 🔥 QUESTO RISOLVE */
 text-align:center;
+}
+
+.hero > .container > *{
+width:100%;
+max-width:720px;
+margin-left:auto;
+margin-right:auto;
 }
 
 .hero h1{
