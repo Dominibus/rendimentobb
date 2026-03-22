@@ -3925,6 +3925,11 @@ align-items:center;
 overflow:hidden;
 }
 
+.btn-secondary{
+padding:8px 10px;
+font-size:12px;
+}  
+
 }
   
   
