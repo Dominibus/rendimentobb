@@ -1985,7 +1985,7 @@ window.generateExecutivePDF = generateExecutivePDF;
 
 window.analyzeProperty = function(){
 
-  const input = document.getElementById("property-link");
+  const input = document.getElementById("listing_url");
 
   if(!input){
     console.error("Input property-link non trovato");
