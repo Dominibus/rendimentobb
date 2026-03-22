@@ -34,7 +34,8 @@ content="Scopri quanto rende davvero un B&B a Napoli: ROI medio, guadagni, occup
 <div id="global-header"></div>  
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero hero-bg naples">
+
 <div class="container">
 
 <h1
@@ -44,22 +45,30 @@ ROI B&B Napoli: quanto si guadagna davvero?
 </h1>
 
 <p
-data-it="Analisi reale del rendimento degli affitti brevi a Napoli: dati aggiornati, guadagni medi e simulazione investimento."
-data-en="Real analysis of short-term rental profitability in Naples with updated data and investment simulation.">
-Analisi reale del rendimento degli affitti brevi a Napoli: dati aggiornati, guadagni medi e simulazione investimento.
+data-it="Analisi reale del rendimento degli affitti brevi a Napoli: domanda turistica in crescita e alto potenziale di rendimento."
+data-en="Real analysis of short-term rental profitability in Naples: growing tourism demand and high return potential.">
+Analisi reale del rendimento degli affitti brevi a Napoli.
 </p>
 
-<a href="/tool/" class="btn btn-primary">
+<div class="hero-buttons">
+
+<a href="/tool/?city=napoli" class="btn btn-primary btn-lg"
+data-it="Avvia simulazione"
+data-en="Start simulation">
 Avvia simulazione
 </a>
 
-<a href="/dashboard/?city=roma" class="btn btn-secondary">
+<a href="/dashboard/?city=napoli" class="btn btn-secondary btn-lg"
+data-it="Analizza mercato reale"
+data-en="Analyze real market">
 Analizza mercato reale
 </a>
 
 </div>
-</section>
 
+</div>
+</section>
+  
 <!-- KPI -->
 <section class="section section-light">
 <div class="container">
@@ -175,10 +184,10 @@ applyCityBackground("naples");
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   if(window.applyCityBackground){
-    applyCityBackground("roma");
+    applyCityBackground("naples");
   }
 });
-</script>  
+</script> 
 
 </body>
 </html>
