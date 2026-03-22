@@ -227,8 +227,8 @@ z-index:3;
 
 background:
 linear-gradient(
-rgba(255,255,255,0.25),
-rgba(255,255,255,0.45)
+rgba(15,23,42,0.45),
+rgba(15,23,42,0.65)
 ),
 url("/img/rome-bg.jpg");
 
@@ -377,7 +377,8 @@ gap:20px;
 
 /* UI */
 backdrop-filter: blur(8px);
-background: rgba(255,255,255,0.92);
+background: rgba(255,255,255,0.98);
+box-shadow:0 25px 80px rgba(0,0,0,0.15);
 padding:25px;
 border-radius:20px;
 
@@ -1051,7 +1052,7 @@ background:rgba(255,255,255,0.9);
 color:#0f172a;
 background:#ffffff !important;  
 
-border:1px solid #e2e8f0;
+border:1px solid #cbd5e1;
 
 box-shadow:
 0 6px 18px rgba(0,0,0,0.06);
@@ -2880,7 +2881,8 @@ box-shadow:0 0 0 2px rgba(16,185,129,0.2);
 /* ===================== */
 
 .section{
-background: transparent;
+background: rgba(255,255,255,0.96);
+backdrop-filter: blur(10px);
 border-radius:24px;
 
 margin:80px auto;
@@ -3686,16 +3688,17 @@ text-align:center;
 font-size:52px;
 font-weight:800;
 letter-spacing:-1px;
-color:#0f172a;
-text-shadow:0 6px 20px rgba(0,0,0,0.15);
+color:#ffffff;
+text-shadow:0 4px 20px rgba(0,0,0,0.6);
 margin-bottom:18px;
 }
 
 .hero p{
 font-size:20px;
-color:#334155;
+color:#f1f5f9;
 max-width:640px;
 margin:0 auto 30px auto;
+text-shadow:0 2px 10px rgba(0,0,0,0.5);
 }
 
 /* mobile */
