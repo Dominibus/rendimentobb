@@ -1,6 +1,5 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 6.0
-// FULL SYNC STATIC + DYNAMIC + TOOL FIX
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 6.0 FIXED
 // ===============================================
 
 (function(){
@@ -19,110 +18,64 @@
 
 
   // ===============================
-// APPLY STATIC TRANSLATIONS
-// ===============================
+  // APPLY STATIC TRANSLATIONS
+  // ===============================
 
-function applyStaticTranslations(){
+  function applyStaticTranslations(){
 
-  // ================= TEXT =================
-  document.querySelectorAll("[data-it], [data-en]").forEach(el => {
+    // ================= TEXT =================
+    document.querySelectorAll("[data-it], [data-en]").forEach(el => {
 
-    const text = el.getAttribute("data-" + RB_LANG.current);
-    if(!text) return;
+      const text = el.getAttribute("data-" + RB_LANG.current);
+      if(!text) return;
 
-    if(el.tagName === "A" || el.tagName === "BUTTON"){
+      if(el.tagName === "A" || el.tagName === "BUTTON"){
+        el.textContent = text;
+      } else {
+        el.innerHTML = text;
+      }
 
-      el.textContent = text;
+    });
 
-    } else {
-      el.innerHTML = text;
+    // ================= PLACEHOLDER =================
+    document.querySelectorAll("[data-placeholder-it]").forEach(el => {
+
+      const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
+      if(ph){
+        el.setAttribute("placeholder", ph);
+      }
+
+    });
+
+    document.querySelectorAll("[data-it-placeholder]").forEach(el => {
+
+      const ph = el.getAttribute("data-" + RB_LANG.current + "-placeholder");
+      if(ph){
+        el.setAttribute("placeholder", ph);
+      }
+
+    });
+
+    // ================= TITLE =================
+    const titleEl = document.querySelector("title");
+    if(titleEl){
+      const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
+      if(titleText){
+        document.title = titleText;
+      }
     }
 
-  });
-
-  // ================= PLACEHOLDER =================
-  document.querySelectorAll("[data-placeholder-it]").forEach(el => {
-
-    const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
-    if(ph){
-      el.setAttribute("placeholder", ph);
+    // ================= META =================
+    const metaDesc = document.querySelector("meta[name='description']");
+    if(metaDesc){
+      const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
+      if(descText){
+        metaDesc.setAttribute("content", descText);
+      }
     }
 
-  });
-
-  document.querySelectorAll("[data-it-placeholder]").forEach(el => {
-
-    const ph = el.getAttribute("data-" + RB_LANG.current + "-placeholder");
-    if(ph){
-      el.setAttribute("placeholder", ph);
-    }
-
-  });
-
-  // ================= TITLE =================
-  const titleEl = document.querySelector("title");
-  if(titleEl){
-    const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
-    if(titleText){
-      document.title = titleText;
-    }
   }
 
-  // ================= META =================
-  const metaDesc = document.querySelector("meta[name='description']");
-  if(metaDesc){
-    const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
-    if(descText){
-      metaDesc.setAttribute("content", descText);
-    }
-  }
-
-}
-
-
-  // ================= PLACEHOLDER =================
-
-  document.querySelectorAll("[data-placeholder-it]").forEach(el => {
-
-    const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
-    if(ph){
-      el.setAttribute("placeholder", ph);
-    }
-
-  });
-
-  document.querySelectorAll("[data-it-placeholder]").forEach(el => {
-
-    const ph = el.getAttribute("data-" + RB_LANG.current + "-placeholder");
-    if(ph){
-      el.setAttribute("placeholder", ph);
-    }
-
-  });
-
-
-  // ================= TITLE =================
-
-  const titleEl = document.querySelector("title");
-  if(titleEl){
-    const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
-    if(titleText){
-      document.title = titleText;
-    }
-  }
-
-
-  // ================= META =================
-
-  const metaDesc = document.querySelector("meta[name='description']");
-  if(metaDesc){
-    const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
-    if(descText){
-      metaDesc.setAttribute("content", descText);
-    }
-  }
-
-}
 
   // ===============================
   // UPDATE LANGUAGE UI
@@ -150,7 +103,6 @@ function applyStaticTranslations(){
 
   function rerenderDynamic(){
 
-    // 🔥 Sync with app.js every time
     window.currentLang = RB_LANG.current;
 
     if(typeof calculate === "function"){
@@ -165,7 +117,6 @@ function applyStaticTranslations(){
       compareMortgages();
     }
 
-    // 🔥 Dispatch global event (future-proof)
     document.dispatchEvent(
       new CustomEvent("rb_language_changed", {
         detail: { lang: RB_LANG.current }
@@ -183,7 +134,7 @@ function applyStaticTranslations(){
     if(!RB_LANG.supported.includes(lang)) return;
 
     RB_LANG.current = lang;
-    window.currentLang = lang; // 🔥 CRITICAL FIX
+    window.currentLang = lang;
 
     localStorage.setItem("rb_lang", lang);
 
@@ -216,9 +167,14 @@ function applyStaticTranslations(){
 
   });
 
+
+  // ===============================
+  // HELPER TRANSLATION FUNCTION
+  // ===============================
+
   window.t = function(it, en){
-  if(!en) return it;
-  return window.RB_LANG.current === "en" ? en : it;
-};
+    if(!en) return it;
+    return window.RB_LANG.current === "en" ? en : it;
+  };
 
 })();
