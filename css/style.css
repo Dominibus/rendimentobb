@@ -4047,3 +4047,20 @@ filter:none !important;
 .section.section-dark::before{
 display:none !important;
 }
+
+/* ===================== */
+/* FIX DEFINITIVO BOTTONI MARKET */
+/* ===================== */
+
+.market-btn,
+.market-buttons a.market-btn{
+color:#ffffff !important;
+background:linear-gradient(135deg,#10b981,#059669) !important;
+text-shadow:0 1px 3px rgba(0,0,0,0.4) !important;
+opacity:1 !important;
+}
+
+/* BLOCCA OVERRIDE LINK GLOBALI */
+.market-buttons a.market-btn:hover{
+color:#ffffff !important;
+}
