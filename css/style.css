@@ -63,11 +63,11 @@ max-width:100%;
 padding:0 16px;
 }
 
-}
-
+/* LOGO MOBILE */
 .logo-img{
-height:40px;        /* 👈 dimensione reale */
-transform:scale(1.2); /* 👈 meno aggressivo */
+height:40px;
+transform:scale(1.2);
+transform-origin:left center;
 }
 
 }
