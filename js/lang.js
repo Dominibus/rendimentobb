@@ -31,13 +31,19 @@ function applyStaticTranslations(){
   if(!text) return;
 
   // 🔥 FIX BOTTONI / LINK (NO HTML)
-  if(el.tagName === "A" || el.tagName === "BUTTON"){
-    el.textContent = text;
-  } else {
-    el.innerHTML = text;
+if(el.tagName === "A" || el.tagName === "BUTTON"){
+
+  // 🔥 reset totale contenuto
+  while(el.firstChild){
+    el.removeChild(el.firstChild);
   }
 
-});
+  // 🔥 inserisce SOLO testo pulito
+  el.appendChild(document.createTextNode(text));
+
+} else {
+  el.innerHTML = text;
+}
 
   // PLACEHOLDER SYSTEM (STANDARD)
   document.querySelectorAll("[data-placeholder-it]").forEach(el => {
