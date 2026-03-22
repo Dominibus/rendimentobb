@@ -1,5 +1,5 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 6.0 FIXED
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 6.1 STABLE
 // ===============================================
 
 (function(){
@@ -13,7 +13,7 @@
     supported: ["it", "en"]
   };
 
-  // 🔥 HARD SYNC WITH APP.JS
+  // sync globale
   window.currentLang = window.RB_LANG.current;
 
 
@@ -26,16 +26,26 @@
     // ================= TEXT =================
     document.querySelectorAll("[data-it], [data-en]").forEach(el => {
 
+      // 🚫 NON TOCCARE HEADER DINAMICO (login, user, logout)
+      if(el.closest("#global-header")) return;
+
       const text = el.getAttribute("data-" + RB_LANG.current);
       if(!text) return;
 
+      // 🔥 BOTTONI SOLO TESTO (senza rompere struttura)
       if(el.tagName === "A" || el.tagName === "BUTTON"){
-        el.textContent = text;
+
+        // NON toccare se contiene elementi figli (icone, span ecc.)
+        if(el.children.length === 0){
+          el.textContent = text;
+        }
+
       } else {
         el.innerHTML = text;
       }
 
     });
+
 
     // ================= PLACEHOLDER =================
     document.querySelectorAll("[data-placeholder-it]").forEach(el => {
@@ -56,6 +66,7 @@
 
     });
 
+
     // ================= TITLE =================
     const titleEl = document.querySelector("title");
     if(titleEl){
@@ -64,6 +75,7 @@
         document.title = titleText;
       }
     }
+
 
     // ================= META =================
     const metaDesc = document.querySelector("meta[name='description']");
@@ -169,7 +181,7 @@
 
 
   // ===============================
-  // HELPER TRANSLATION FUNCTION
+  // HELPER
   // ===============================
 
   window.t = function(it, en){
