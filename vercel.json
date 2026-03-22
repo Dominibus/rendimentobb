@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/roma", "destination": "/tool/index.html" },
+    { "source": "/milano", "destination": "/tool/index.html" },
+    { "source": "/napoli", "destination": "/tool/index.html" },
+    { "source": "/firenze", "destination": "/tool/index.html" }
+  ]
+}
