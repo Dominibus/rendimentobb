@@ -4049,18 +4049,25 @@ display:none !important;
 }
 
 /* ===================== */
-/* FIX DEFINITIVO BOTTONI MARKET */
+/* FIX BOTTONI GLOBALI */
 /* ===================== */
 
-.market-btn,
-.market-buttons a.market-btn{
+a.btn,
+.btn{
 color:#ffffff !important;
-background:linear-gradient(135deg,#10b981,#059669) !important;
-text-shadow:0 1px 3px rgba(0,0,0,0.4) !important;
-opacity:1 !important;
 }
 
-/* BLOCCA OVERRIDE LINK GLOBALI */
-.market-buttons a.market-btn:hover{
+/* PRIMARY OK */
+.btn-primary{
+color:#ffffff !important;
+}
+
+/* SECONDARY FIX (QUESTO È IL PROBLEMA VERO) */
+.btn-secondary{
+color:#0f172a !important;
+}
+
+/* HOVER */
+.btn-secondary:hover{
 color:#ffffff !important;
 }
