@@ -342,6 +342,8 @@ border:1px solid #10b981;
 }
 
 /* HERO BOX */
+
+/* 👉 DEFAULT (PAGINE ROI - ROMA, MILANO ecc) */
 .hero-left{
 display:flex;
 flex-direction:column;
@@ -357,14 +359,22 @@ align-items:stretch;
 justify-content:flex-start;
 gap:20px;
 
-/* UI */
+/* 🔥 NIENTE BOX QUI */
+background:transparent;
+backdrop-filter:none;
+box-shadow:none;
+padding:0;
+border-radius:0;
+}
+
+/* 👉 SOLO HOME (mantiene box bello per simulatore) */
+.home .hero-left{
 backdrop-filter: blur(8px);
 background: rgba(255,255,255,0.98);
 box-shadow:0 25px 80px rgba(0,0,0,0.15);
 padding:25px;
 border-radius:20px;
 }
-
 /* MOBILE */
 @media (max-width:768px){
 .section{
