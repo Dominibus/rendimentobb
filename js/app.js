@@ -2285,10 +2285,10 @@ break;
 
 }
 
-if(detectedCity){
+if(detectedCity && !window.currentCity){
 window.currentCity = detectedCity;
 console.log("Città rilevata da link:", detectedCity);
-} 
+}
 
 }
 
@@ -2406,13 +2406,21 @@ localStorage.setItem("selected_city", selectedCity);
 window.currentCity = selectedCity;
 
 // UI sync
-if(citySelector){
-  citySelector.value = selectedCity;
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-changeCityBackground(selectedCity);
+  window.currentCity = selectedCity;
 
-console.log("🔥 Città attiva:", selectedCity);
+  const citySelector = document.getElementById("market-city");
+
+  if(citySelector){
+    citySelector.value = selectedCity;
+  }
+
+  changeCityBackground(selectedCity);
+
+  console.log("🔥 Città attiva:", selectedCity);
+
+});
 
 // redirect vecchio formato → nuovo
 if(cityFromQuery){
