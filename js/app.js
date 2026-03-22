@@ -2153,8 +2153,6 @@ return { price: null };
 
 }
 
-}
-
 // ================= AUTO PRICE =================
 
 const price = localStorage.getItem("property_price");
