@@ -64,6 +64,13 @@ padding:0 16px;
 }
 
 }
+
+.logo-img{
+height:40px;        /* 👈 dimensione reale */
+transform:scale(1.2); /* 👈 meno aggressivo */
+}
+
+}
   
 /* ===================== */
 /* PAGE WIDTH FIX */
@@ -164,8 +171,8 @@ flex-shrink:0;
 }
 
 .logo-img{
-height:80px;
-transform:none;
+height:100px;
+transform:scale(1.8);
 transform-origin:left center;  
 width:auto;
 display:block;
