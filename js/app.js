@@ -2373,32 +2373,48 @@ changeCityBackground(city);
 
 }
 
-// ================= RESTORE CITY =================
+// ================= CITY ROUTING FIX =================
 
-// 🔥 1. PRIORITÀ URL (home → tool)
+// 1. prendi path (/roma, /milano ecc)
+function getCityFromPath(){
+
+  const path = window.location.pathname.toLowerCase();
+
+  if(path.includes("roma")) return "roma";
+  if(path.includes("milano")) return "milano";
+  if(path.includes("firenze")) return "firenze";
+  if(path.includes("napoli")) return "napoli";
+
+  return null;
+}
+
+// 2. fallback vecchio sistema
 const params = new URLSearchParams(window.location.search);
-const cityFromUrl = params.get("city");
+const cityFromQuery = params.get("city");
 
-// 🔥 2. fallback localStorage
 const cityFromStorage = localStorage.getItem("selected_city");
 
-// 🔥 3. scelta finale
-let selectedCity = cityFromUrl || cityFromStorage || "napoli";
+// 3. PRIORITÀ
+let selectedCity =
+  getCityFromPath() ||
+  cityFromQuery ||
+  cityFromStorage ||
+  "napoli";
 
 // salva sempre
 localStorage.setItem("selected_city", selectedCity);
 window.currentCity = selectedCity;
 
-// applica UI
+// UI sync
 if(citySelector){
   citySelector.value = selectedCity;
 }
 
 changeCityBackground(selectedCity);
 
-// debug
-console.log("🔥 Città iniziale:", selectedCity);
+console.log("🔥 Città attiva:", selectedCity);
 
-// 🔥 FIX ANALYZE BUTTON
-window.analyzeListing = window.analyzeProperty;
-
+// redirect vecchio formato → nuovo
+if(cityFromQuery){
+  window.location.href = "/" + cityFromQuery;
+}
