@@ -129,18 +129,18 @@ if(user){
 
 const isMobile = window.innerWidth < 768;
 
-userArea.innerHTML = isMobile ? `
+if(isMobile){
 
+userArea.innerHTML = `
 <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
-
 <a href="/dashboard/" class="btn btn-secondary">📊</a>
-
 <button onclick="logout()" class="btn btn-secondary">⎋</button>
-
 </div>
+`;
 
-` : `
+}else{
 
+userArea.innerHTML = `
 <div style="text-align:right">
 
 <div style="font-size:12px;color:#64748b;">
@@ -164,42 +164,9 @@ Esci
 </div>
 
 </div>
-
 `;
 
 }
-
-userArea.innerHTML = `
-<div style="text-align:right">
-
-<div style="font-size:12px;color:#64748b;"
-data-it="Account"
-data-en="Account">
-Account
-</div>
-
-<div style="font-weight:600;font-size:14px;">
-${user.email}
-</div>
-
-<div style="margin-top:6px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
-
-<a href="/dashboard/" class="btn btn-secondary"
-data-it="Dashboard"
-data-en="Dashboard">
-Dashboard
-</a>
-
-<button onclick="logout()" class="btn btn-secondary"
-data-it="Esci"
-data-en="Logout">
-Esci
-</button>
-
-</div>
-
-</div>
-`;
 
 }else{
 
