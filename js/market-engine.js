@@ -1,10 +1,12 @@
 export function renderMarketBenchmark(city){
 
   // 🔥 sicurezza globale
-  if(!window.RB_MARKET_DATA){
-    console.warn("RB_MARKET_DATA non disponibile");
-    return;
-  }
+  if(typeof window.RB_MARKET_DATA === "undefined"){
+  console.warn("RB_MARKET_DATA non ancora pronto → retry");
+
+  setTimeout(() => renderMarketBenchmark(city), 200);
+  return;
+}
 
   const data = window.RB_MARKET_DATA[city];
 
