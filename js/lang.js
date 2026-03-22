@@ -24,7 +24,7 @@
 
 function applyStaticTranslations(){
 
-  // TEXT TRANSLATION
+  // ================= TEXT =================
   document.querySelectorAll("[data-it], [data-en]").forEach(el => {
 
     const text = el.getAttribute("data-" + RB_LANG.current);
@@ -32,17 +32,52 @@ function applyStaticTranslations(){
 
     if(el.tagName === "A" || el.tagName === "BUTTON"){
 
-      while(el.firstChild){
-        el.removeChild(el.firstChild);
-      }
-
-      el.appendChild(document.createTextNode(text));
+      el.textContent = text;
 
     } else {
       el.innerHTML = text;
     }
 
-  }); // ✅ CHIUSO QUI (FONDAMENTALE)
+  });
+
+  // ================= PLACEHOLDER =================
+  document.querySelectorAll("[data-placeholder-it]").forEach(el => {
+
+    const ph = el.getAttribute("data-placeholder-" + RB_LANG.current);
+    if(ph){
+      el.setAttribute("placeholder", ph);
+    }
+
+  });
+
+  document.querySelectorAll("[data-it-placeholder]").forEach(el => {
+
+    const ph = el.getAttribute("data-" + RB_LANG.current + "-placeholder");
+    if(ph){
+      el.setAttribute("placeholder", ph);
+    }
+
+  });
+
+  // ================= TITLE =================
+  const titleEl = document.querySelector("title");
+  if(titleEl){
+    const titleText = titleEl.getAttribute("data-" + RB_LANG.current);
+    if(titleText){
+      document.title = titleText;
+    }
+  }
+
+  // ================= META =================
+  const metaDesc = document.querySelector("meta[name='description']");
+  if(metaDesc){
+    const descText = metaDesc.getAttribute("data-" + RB_LANG.current);
+    if(descText){
+      metaDesc.setAttribute("content", descText);
+    }
+  }
+
+}
 
 
   // ================= PLACEHOLDER =================
