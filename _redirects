@@ -1,9 +1,13 @@
-https://rendimentobb.it/*     https://rendimentobb.com/:splat     301!
-https://www.rendimentobb.it/* https://rendimentobb.com/:splat     301!
+https://rendimentobb.com/* https://rendimentobb.it/:splat 301!
+https://www.rendimentobb.com/* https://rendimentobb.it/:splat 301!
+
+/roma     /tool/index.html   200
+/milano   /tool/index.html   200
+/napoli   /tool/index.html   200
+/firenze  /tool/index.html   200
 
 /dashboard/*   /dashboard/index.html   200
 /login/*       /login/index.html       200
 /tool/*        /tool/index.html        200
 /pro-success/* /pro-success/index.html 200
 /academy/*     /academy/index.html     200
-
