@@ -375,6 +375,16 @@ box-shadow:0 25px 80px rgba(0,0,0,0.15);
 padding:25px;
 border-radius:20px;
 }
+
+.home .hero-left h1{
+color:#0f172a !important;
+text-shadow:none !important;
+}
+
+.home .hero-left p{
+color:#475569 !important;
+text-shadow:none !important;
+}
 /* MOBILE */
 @media (max-width:768px){
 .section{
@@ -3767,13 +3777,21 @@ text-shadow:0 4px 20px rgba(0,0,0,0.4);
 margin-bottom:18px;
 }
 
+/* ===================== */
+/* HERO TEXT SYSTEM FINAL */
+/* ===================== */
+
+/* 👉 DEFAULT (HOME) */
 .hero p{
-font-size:20px;
+color:#475569;
+text-shadow:none;
+font-weight:500;
+}
+
+/* 👉 SOLO PAGINE CON BACKGROUND (ROI) */
+.hero.hero-bg p{
 color:#ffffff !important;
-font-weight:500;  
-max-width:640px;
-margin:0 auto 30px auto;
-text-shadow:0 2px 10px rgba(0,0,0,0.3);
+text-shadow:0 4px 20px rgba(0,0,0,0.7);
 }
 
 /* mobile */
