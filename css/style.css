@@ -4216,3 +4216,9 @@ margin:0 auto;
 color:#475569 !important; /* 🔥 grigio leggibile */
 text-shadow:none !important;
 }
+
+/* FIX TESTO CTA ROI (DOPO override section-dark) */
+.section.section-dark p{
+color:#475569 !important;
+text-shadow:none !important;
+}
