@@ -27,12 +27,17 @@ function applyStaticTranslations(){
   // TEXT TRANSLATION
   document.querySelectorAll("[data-it], [data-en]").forEach(el => {
 
-    const text = el.getAttribute("data-" + RB_LANG.current);
-    if(!text) return;
+  const text = el.getAttribute("data-" + RB_LANG.current);
+  if(!text) return;
 
+  // 🔥 FIX BOTTONI / LINK (NO HTML)
+  if(el.tagName === "A" || el.tagName === "BUTTON"){
+    el.textContent = text;
+  } else {
     el.innerHTML = text;
+  }
 
-  });
+});
 
   // PLACEHOLDER SYSTEM (STANDARD)
   document.querySelectorAll("[data-placeholder-it]").forEach(el => {
