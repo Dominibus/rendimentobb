@@ -34,7 +34,8 @@ content="Scopri quanto rende davvero un B&B a Firenze: ROI medio, guadagni, occu
 <div id="global-header"></div>  
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero hero-bg florence">
+
 <div class="container">
 
 <h1
@@ -44,18 +45,26 @@ ROI B&B Firenze: quanto si guadagna davvero?
 </h1>
 
 <p
-data-it="Analisi reale del rendimento degli affitti brevi a Firenze: dati aggiornati, guadagni medi e simulazione investimento."
-data-en="Real analysis of short-term rental profitability in Florence with updated data and investment simulation.">
-Analisi reale del rendimento degli affitti brevi a Firenze: dati aggiornati, guadagni medi e simulazione investimento.
+data-it="Analisi reale del rendimento degli affitti brevi a Firenze: turismo internazionale e forte stagionalità."
+data-en="Real analysis of short-term rental profitability in Florence: international tourism and strong seasonality.">
+Analisi reale del rendimento degli affitti brevi a Firenze.
 </p>
 
-<a href="/tool/" class="btn btn-primary">
+<div class="hero-buttons">
+
+<a href="/tool/?city=firenze" class="btn btn-primary btn-lg"
+data-it="Avvia simulazione"
+data-en="Start simulation">
 Avvia simulazione
 </a>
 
-<a href="/dashboard/?city=roma" class="btn btn-secondary">
+<a href="/dashboard/?city=firenze" class="btn btn-secondary btn-lg"
+data-it="Analizza mercato reale"
+data-en="Analyze real market">
 Analizza mercato reale
 </a>
+
+</div>
 
 </div>
 </section>
@@ -175,10 +184,10 @@ applyCityBackground("florence");
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   if(window.applyCityBackground){
-    applyCityBackground("roma");
+    applyCityBackground("florence");
   }
 });
-</script>  
+</script>
 
 </body>
 </html>
