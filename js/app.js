@@ -2400,7 +2400,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // redirect vecchio formato → nuovo
 if(cityFromQuery){
-  window.location.href = "/" + cityFromQuery;
+  window.location.href = "/market/" + cityFromQuery;
+
 }
 
 // ... tutto il tuo codice sopra
