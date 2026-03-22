@@ -1985,26 +1985,64 @@ window.generateExecutivePDF = generateExecutivePDF;
 
 window.analyzeProperty = function(){
 
-const link = document.getElementById("property-link").value;
+  const input = document.getElementById("property-link");
 
-if(!link){
-alert(
-t(
-"Inserisci il link dell'immobile",
-"Insert property link"
-)
-);
-return;
-}
+  if(!input){
+    console.error("Input property-link non trovato");
+    return;
+  }
 
-localStorage.setItem("property_link", link);
+  const link = input.value.trim();
 
-sessionStorage.setItem("from_property_page", true);  
+  if(!link){
+    alert(
+      t(
+        "Inserisci il link dell'immobile",
+        "Insert property link"
+      )
+    );
+    return;
+  }
 
-window.location.href = "/tool/";
+  // salva link
+  localStorage.setItem("property_link", link);
+  sessionStorage.setItem("from_property_page", true);
+
+  // ================= AUTO CITY DETECTION =================
+
+  function extractCityFromLink(url){
+
+    const cities = [
+      "napoli",
+      "roma",
+      "milano",
+      "firenze"
+    ];
+
+    const lower = url.toLowerCase();
+
+    for(const city of cities){
+      if(lower.includes(city)){
+        return city;
+      }
+    }
+
+    return null;
+  }
+
+  const detectedCity = extractCityFromLink(link);
+
+  console.log("Città rilevata dal link:", detectedCity);
+
+  // ================= REDIRECT =================
+
+  if(detectedCity){
+    window.location.href = "/" + detectedCity;
+  }else{
+    window.location.href = "/napoli"; // fallback
+  }
 
 };
-
 // ================= SAFE PLAN BUY =================
 
 window.startPlanPurchase = function(plan){
