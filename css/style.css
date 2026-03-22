@@ -63,10 +63,10 @@ max-width:100%;
 padding:0 16px;
 }
 
-/* LOGO MOBILE */
+/* LOGO MOBILE FIX DEFINITIVO */
 .logo-img{
-height:40px;
-transform:scale(1.2);
+height:42px;
+transform:scale(1.1);
 transform-origin:left center;
 }
 
@@ -97,7 +97,7 @@ backdrop-filter:blur(10px);
 border-bottom:1px solid #e2e8f0;
 
 /* 🔥 FIX */
-padding:6px 0;
+padding:10px 0;
 }
 
 .portal-header .container{
@@ -3834,5 +3834,39 @@ main{
 position:relative;
 z-index:1;
 
+/* ===================== */
+/* HEADER MOBILE FIX PRO */
+/* ===================== */
+
+@media (max-width:768px){
+
+/* NASCONDI INFO UTENTE */
+.user-info{
+display:none;
+}
+
+/* NASCONDI LOGOUT */
+.logout-btn{
+display:none;
+}
+
+/* RIDUCI SPAZI DESTRA */
+.right-controls{
+gap:6px;
+}
+
+/* BOTTONI PIÙ COMPATTI */
+.right-controls .btn{
+padding:6px 10px;
+font-size:12px;
+}
+
+/* LINGUA PIÙ PICCOLA */
+.lang-btn{
+padding:5px 10px;
+font-size:11px;
+}
+
+}  
   
   
