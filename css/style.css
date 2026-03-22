@@ -241,8 +241,8 @@ z-index:3;
 .hero-bg{
 background:
 linear-gradient(
-rgba(15,23,42,0.25),
-rgba(15,23,42,0.35)
+rgba(255,255,255,0.4),
+rgba(255,255,255,0.6)
 ),
 url("/img/rome-bg.jpg");
 
@@ -3752,17 +3752,17 @@ margin-right:auto;
 font-size:52px;
 font-weight:800;
 letter-spacing:-1px;
-color:#0f172a;
-text-shadow:none;
+color:#ffffff;
+text-shadow:0 4px 20px rgba(0,0,0,0.4);
 margin-bottom:18px;
 }
 
 .hero p{
 font-size:20px;
-color:#334155;
+color:#e2e8f0;
 max-width:640px;
 margin:0 auto 30px auto;
-text-shadow:none;
+text-shadow:0 2px 10px rgba(0,0,0,0.3);
 }
 
 /* mobile */
