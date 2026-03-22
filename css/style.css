@@ -3868,5 +3868,25 @@ font-size:11px;
 }
 
 }  
+
+@media (max-width:768px){
+
+/* 🔥 NASCONDE QUALSIASI BLOCCO TESTO UTENTE */
+[class*="user"],
+[class*="profile"],
+[class*="account"]{
+display:none !important;
+}
+
+/* 🔥 NASCONDE LOGOUT */
+button, .btn{
+white-space:nowrap;
+}
+
+button:has-text("Logout"){
+display:none !important;
+}
+
+}  
   
   
