@@ -1019,12 +1019,9 @@ window.location.href = "/tool/?city=" + city;
 // ================= MARKET BUTTONS (BOTTOM) =================
 window.goToMarket = function(city){
 
-// 🔥 salva per continuità (utile dopo)
-localStorage.setItem("selected_city", city);
+  localStorage.setItem("selected_city", city);
 
-// redirect SEO city page
-window.location.href = "/" + city + "/";
-
+  window.location.href = "/market/" + city + "/";
 }
 
 // ================= START ANALYSIS =================
