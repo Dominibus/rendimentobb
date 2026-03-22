@@ -984,13 +984,19 @@ console.warn("Città non trovata:", city);
 return;
 }
 
-hero.style.background =
-"linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.75)), url('" +
-images[city] +
-"')";
+window.changeCityBackground = function(city){
 
-hero.style.backgroundSize = "cover";
-hero.style.backgroundPosition = "center";
+const hero = document.querySelector(".hero-bg");
+
+if(!hero) return;
+
+// reset classi
+hero.classList.remove("rome","naples","milan","florence");
+
+// aggiunge classe città
+hero.classList.add(city);
+
+}
 
 }
 
