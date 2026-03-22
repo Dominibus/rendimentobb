@@ -3888,5 +3888,43 @@ display:none !important;
 }
 
 }  
+
+@media (max-width:768px){
+
+/* 🔥 BLOCCO HEADER DESTRO */
+.header-right,
+.user-info,
+.user-box{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+/* 🔥 NASCONDI TESTO UTENTE */
+.user-info span,
+.user-name,
+.user-plan{
+display:none !important;
+}
+
+/* 🔥 SISTEMA LOGO */
+.logo-img{
+height:60px;
+transform:scale(1.2);
+}
+
+/* 🔥 HEADER PIÙ STABILE */
+.portal-header-inner{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* 🔥 EVITA OVERFLOW */
+.portal-header{
+overflow:hidden;
+}
+
+}
   
   
