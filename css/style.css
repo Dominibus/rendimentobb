@@ -4153,3 +4153,15 @@ color:#ffffff !important;
 font-weight:600;
 text-shadow:0 4px 20px rgba(0,0,0,0.8);
 }
+
+/* ===================== */
+/* HERO ROI TEXT FIX */
+/* ===================== */
+
+.hero.hero-bg p{
+color:#ffffff !important;
+text-shadow:0 2px 10px rgba(0,0,0,0.6);
+font-weight:500;
+max-width:700px;
+margin:0 auto;
+}
