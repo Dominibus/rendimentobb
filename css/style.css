@@ -215,16 +215,27 @@ margin:0 auto;
 /* HERO BACKGROUND */
 /* ===================== */
 
+/* BASE HERO (senza background!) */
 .hero{
 position:relative;
-z-index:1;  
+z-index:1;
 
-.quick-roi-box,
-.roi-card{
+padding:140px 0 160px 0;
+min-height:100vh;
+
+overflow:visible;
+border-bottom:1px solid rgba(0,0,0,0.05);
+}
+
+/* CONTENUTI SOPRA */
+.hero .quick-roi-box,
+.hero .roi-card{
 position:relative;
 z-index:3;
-}  
+}
 
+/* HERO CON BACKGROUND (solo dove serve) */
+.hero-bg{
 background:
 linear-gradient(
 rgba(15,23,42,0.45),
@@ -236,13 +247,24 @@ background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
 
-padding:140px 0 160px 0;
-min-height:100vh;
-
 transition:background 0.6s ease;
-overflow:visible; 
+}
 
-border-bottom:1px solid rgba(0,0,0,0.05);
+/* POSIZIONE PER CITTÀ */
+.hero-bg.rome{
+background-position:center 50%;
+}
+
+.hero-bg.naples{
+background-position:center 60%;
+}
+
+.hero-bg.milan{
+background-position:center 45%;
+}
+
+.hero-bg.florence{
+background-position:center 55%;
 }
 
 @media (max-width:768px){
