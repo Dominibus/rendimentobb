@@ -280,6 +280,27 @@ function getValue(id) {
 
 let roiChartInstance = null;
 
+// ================= GLOBAL HERO BACKGROUND =================
+
+window.applyCityBackground = function(city){
+
+const hero = document.querySelector(".hero-bg");
+
+if(!hero) return;
+
+hero.classList.remove("rome","naples","milan","florence");
+
+const map = {
+  roma:"rome",
+  napoli:"naples",
+  milano:"milan",
+  firenze:"florence"
+};
+
+hero.classList.add(map[city] || "rome");
+
+};
+
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
 window.simulationExecuted = false;
