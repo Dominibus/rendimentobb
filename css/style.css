@@ -3688,16 +3688,26 @@ text-align:center;
 font-size:52px;
 font-weight:800;
 letter-spacing:-1px;
-color:#ffffff;
-text-shadow:0 4px 20px rgba(0,0,0,0.6);
+color:#0f172a;
+text-shadow:none;
 margin-bottom:18px;
 }
 
 .hero p{
 font-size:20px;
-color:#f1f5f9;
+color:#334155;
 max-width:640px;
 margin:0 auto 30px auto;
+text-shadow:none;
+}
+
+.hero-bg h1{
+color:#ffffff;
+text-shadow:0 4px 20px rgba(0,0,0,0.6);
+}
+
+.hero-bg p{
+color:#f1f5f9;
 text-shadow:0 2px 10px rgba(0,0,0,0.5);
 }
 
