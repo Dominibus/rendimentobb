@@ -4222,3 +4222,17 @@ text-shadow:none !important;
 color:#475569 !important;
 text-shadow:none !important;
 }
+
+/* ===================== */
+/* FIX CTA ROI DEFINITIVO */
+/* ===================== */
+
+.section.section-dark h2{
+color:#0f172a !important;
+text-shadow:none !important;
+}
+
+.section.section-dark p{
+color:#475569 !important;
+text-shadow:none !important;
+}
