@@ -127,6 +127,48 @@ if(!userArea) return;
 
 if(user){
 
+const isMobile = window.innerWidth < 768;
+
+userArea.innerHTML = isMobile ? `
+
+<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+
+<a href="/dashboard/" class="btn btn-secondary">📊</a>
+
+<button onclick="logout()" class="btn btn-secondary">⎋</button>
+
+</div>
+
+` : `
+
+<div style="text-align:right">
+
+<div style="font-size:12px;color:#64748b;">
+Account
+</div>
+
+<div style="font-weight:600;font-size:14px;">
+${user.email}
+</div>
+
+<div style="margin-top:6px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+
+<a href="/dashboard/" class="btn btn-secondary">
+Dashboard
+</a>
+
+<button onclick="logout()" class="btn btn-secondary">
+Esci
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
 userArea.innerHTML = `
 <div style="text-align:right">
 
