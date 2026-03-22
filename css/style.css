@@ -3996,3 +3996,57 @@ overflow:hidden;
 }
 
 }
+
+/* ===================== */
+/* MARKET SECTION FIX */
+/* ===================== */
+
+/* BOX GRIGIO */
+.market-section,
+.section{
+background: rgba(255,255,255,0.96) !important;
+}
+
+/* CONTENUTO MARKET */
+.market-section a,
+.market-section li a{
+color:#10b981 !important;
+font-weight:600;
+opacity:1 !important;
+text-decoration:none;
+}
+
+/* HOVER */
+.market-section a:hover{
+color:#059669 !important;
+text-decoration:underline;
+}
+
+/* LISTA GUIDE */
+.market-section ul li{
+color:#334155;
+}
+
+/* FIX TESTO INVISIBILE */
+.market-section{
+color:#0f172a !important;
+}
+
+/* BOTTONI MARKET */
+.market-section .btn,
+.market-section .market-btn{
+opacity:1 !important;
+visibility:visible !important;
+}
+
+/* FIX BOTTONE SECONDARIO (quello bianco che sparisce) */
+.market-section .btn-secondary{
+color:#0f172a !important;
+background:#ffffff !important;
+border:1px solid #cbd5e1 !important;
+}
+
+/* FIX OVERLAY VERDE CHE COPRE */
+.section::before{
+display:none !important;
+}
