@@ -29,7 +29,7 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
-window.compareMortgages = function(){
+window.runMortgageComparison = function(){
 
 const amount = parseFloat(document.getElementById("mortgageAmount").value);
 const years = parseFloat(document.getElementById("mortgageYears").value);
