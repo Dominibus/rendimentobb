@@ -2058,10 +2058,10 @@ window.analyzeProperty = function(){
   // ================= REDIRECT =================
 
   if(detectedCity){
-    window.location.href = "/" + detectedCity;
-  }else{
-    window.location.href = "/napoli"; // fallback
-  }
+  window.location.href = "/tool/?city=" + detectedCity;
+}else{
+  window.location.href = "/tool/?city=napoli";
+}
 
 };
 // ================= SAFE PLAN BUY =================
@@ -2377,10 +2377,13 @@ function getCityFromPath(){
 
   const path = window.location.pathname.toLowerCase();
 
-  if(path.includes("roma")) return "roma";
-  if(path.includes("milano")) return "milano";
-  if(path.includes("firenze")) return "firenze";
-  if(path.includes("napoli")) return "napoli";
+  // SOLO market
+  if(path.startsWith("/market/")){
+    if(path.includes("roma")) return "roma";
+    if(path.includes("milano")) return "milano";
+    if(path.includes("firenze")) return "firenze";
+    if(path.includes("napoli")) return "napoli";
+  }
 
   return null;
 }
@@ -2418,12 +2421,6 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🔥 Città attiva:", selectedCity);
 
 });
-
-// redirect vecchio formato → nuovo
-if(cityFromQuery){
-  window.location.href = "/market/" + cityFromQuery;
-
-}
 
 // ... tutto il tuo codice sopra
 
