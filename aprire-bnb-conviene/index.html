@@ -23,10 +23,91 @@ content="Scopri se aprire un B&B conviene davvero. Calcola ROI, costi e rendimen
 
 <script src="/js/lang.js" defer></script>
 
+<script>
+(function(){
+
+const lang = localStorage.getItem("rb_lang") || "it";
+
+const faqData = {
+it: {
+q1: "Conviene aprire un B&B nel 2026?",
+a1: "Sì, se supportato da analisi dati su costi, occupazione e rendimento.",
+q2: "Qual è il ROI di un B&B?",
+a2: "Il ROI medio varia tra il 6% e il 18% annuo.",
+q3: "Qual è il rischio principale?",
+a3: "Sopravvalutare l'occupazione e sottovalutare i costi."
+},
+en: {
+q1: "Is opening a B&B profitable in 2026?",
+a1: "Yes, if supported by data analysis on costs, occupancy and returns.",
+q2: "What is the ROI of a B&B?",
+a2: "Average ROI ranges between 6% and 18% annually.",
+q3: "What is the main risk?",
+a3: "Overestimating occupancy and underestimating costs."
+}
+};
+
+const data = faqData[lang];
+
+const jsonLd = {
+"@context": "https://schema.org",
+"@type": "FAQPage",
+"mainEntity": [
+{
+"@type": "Question",
+"name": data.q1,
+"acceptedAnswer": {"@type": "Answer","text": data.a1}
+},
+{
+"@type": "Question",
+"name": data.q2,
+"acceptedAnswer": {"@type": "Answer","text": data.a2}
+},
+{
+"@type": "Question",
+"name": data.q3,
+"acceptedAnswer": {"@type": "Answer","text": data.a3}
+}
+]
+};
+
+const script = document.createElement("script");
+script.type = "application/ld+json";
+script.text = JSON.stringify(jsonLd);
+
+document.head.appendChild(script);
+
+})();
+</script>  
+
 </head>
 
 
 <body>
+
+<div id="global-header"></div>
+
+<section class="hero-market">
+
+<h1
+data-it="Aprire un B&B conviene nel 2026?"
+data-en="Is opening a B&B profitable in 2026?">
+Aprire un B&B conviene nel 2026?
+</h1>
+
+<p
+data-it="Scopri se aprire un Bed & Breakfast è davvero un investimento redditizio: analizza costi, ROI e rischi reali."
+data-en="Discover if opening a Bed & Breakfast is truly a profitable investment: analyze costs, ROI and real risks.">
+Scopri se aprire un Bed & Breakfast è davvero un investimento redditizio.
+</p>
+
+<a href="/tool/" class="btn btn-primary"
+data-it="Simula il tuo investimento"
+data-en="Simulate your investment">
+Simula il tuo investimento
+</a>
+
+</section>  
 
 
 <main>
@@ -34,23 +115,6 @@ content="Scopri se aprire un B&B conviene davvero. Calcola ROI, costi e rendimen
 <section class="section">
 
 <div class="container" style="max-width:900px;">
-
-<div class="page-title">
-
-<h1
-data-it="Aprire un B&B conviene davvero?"
-data-en="Is opening a B&B really profitable?">
-Aprire un B&B conviene davvero?
-</h1>
-
-<p
-data-it="Scopri se aprire un Bed & Breakfast è un investimento redditizio e calcola il rendimento con il simulatore professionale RendimentoBB."
-data-en="Discover if opening a Bed & Breakfast is a profitable investment and calculate the return with the professional RendimentoBB simulator.">
-Scopri se aprire un Bed & Breakfast è un investimento redditizio
-e calcola il rendimento con il simulatore professionale RendimentoBB.
-</p>
-
-</div>
 
 </div>
 
@@ -69,8 +133,8 @@ Aprire un Bed & Breakfast conviene nel 2026?
 </h2>
 
 <p
-data-it="Aprire un Bed & Breakfast è uno degli investimenti immobiliari più diffusi in Italia, soprattutto nelle città turistiche."
-data-en="Opening a Bed & Breakfast is one of the most common real estate investments in Italy, especially in tourist cities.">
+data-it="Aprire un Bed & Breakfast può essere molto redditizio, ma solo se analizzato correttamente considerando costi, occupazione e strategia."
+data-en="Opening a Bed & Breakfast can be highly profitable, but only if properly analyzed considering costs, occupancy and strategy.">
 Aprire un Bed & Breakfast è uno degli investimenti immobiliari più diffusi in Italia.
 </p>
 
@@ -111,6 +175,48 @@ rischio dell'investimento
 </div>
 
 </section>
+
+<section class="section">
+
+<div class="container" style="max-width:900px;">
+
+<h2
+data-it="Quando NON conviene aprire un B&B"
+data-en="When opening a B&B is NOT profitable">
+Quando NON conviene aprire un B&B
+</h2>
+
+<ul>
+
+<li
+data-it="se il tasso di occupazione è basso"
+data-en="if occupancy rate is low">
+se il tasso di occupazione è basso
+</li>
+
+<li
+data-it="se i costi superano i ricavi"
+data-en="if costs exceed revenues">
+se i costi superano i ricavi
+</li>
+
+<li
+data-it="se il mutuo è troppo elevato"
+data-en="if the mortgage is too high">
+se il mutuo è troppo elevato
+</li>
+
+<li
+data-it="se manca una strategia di gestione"
+data-en="if there is no management strategy">
+se manca una strategia di gestione
+</li>
+
+</ul>
+
+</div>
+
+</section>  
 
 
 
@@ -249,7 +355,6 @@ Avvia simulazione gratuita
 
 </main>
 
-<script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js" defer></script>
 
