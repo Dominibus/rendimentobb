@@ -302,8 +302,6 @@ ${t("Simula con questo mutuo","Simulate with this mortgage")}
 
 }
 
-}
-
 // ================= LANGUAGE EVENT =================
 
 document.addEventListener("rb_language_changed", () => {
