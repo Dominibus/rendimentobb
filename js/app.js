@@ -29,6 +29,32 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
+import { compareMortgages } from "/js/mortgage-engine.js";
+
+window.compareMortgages = function(){
+
+const amount = parseFloat(document.getElementById("mortgageAmount").value);
+const years = parseFloat(document.getElementById("mortgageYears").value);
+
+const rateA = parseFloat(document.getElementById("rateA").value);
+const rateB = parseFloat(document.getElementById("rateB").value);
+const rateC = parseFloat(document.getElementById("rateC").value);
+
+if(!amount || !years){
+alert("Inserisci importo e durata");
+return;
+}
+
+const results = compareMortgages(amount, years, [
+{rate: rateA},
+{rate: rateB},
+{rate: rateC}
+]);
+
+renderMortgageResults(results);
+
+};
+
 // ================= PLAN DEFAULT =================
 
 function t(it, en){
@@ -198,6 +224,48 @@ async function loadUserPlan(uid){
     console.error("Errore caricamento piano:", e);
     window.currentPlan = "free";
   }
+
+}
+
+// ================= Function Mutui =================
+
+function renderMortgageResults(results){
+
+const container = document.getElementById("mortgage-results");
+
+if(!results || results.length === 0){
+container.innerHTML = "<p>Nessun risultato</p>";
+return;
+}
+
+// trova migliore
+const best = results.reduce((a,b)=>
+a.yearlyCost < b.yearlyCost ? a : b
+);
+
+container.innerHTML = results.map((r,i)=>{
+
+const isBest = r === best;
+
+return `
+<div style="
+padding:20px;
+margin-bottom:15px;
+border-radius:12px;
+background:${isBest ? "#ecfdf5" : "#fff"};
+border:${isBest ? "2px solid #10b981" : "1px solid #e5e7eb"};
+">
+
+<strong>Banca ${String.fromCharCode(65+i)}</strong><br>
+Tasso: ${r.rate}%<br>
+Costo annuo: € ${r.yearlyCost.toFixed(0)}
+
+${isBest ? "<div style='color:#10b981;font-weight:600;'>✔ Migliore scelta</div>" : ""}
+
+</div>
+`;
+
+}).join("");
 
 }
 
