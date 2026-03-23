@@ -4328,3 +4328,21 @@ transform:translateY(-2px);
 box-shadow:0 12px 30px rgba(0,0,0,0.08);
 transition:0.2s;
 }
+
+.roi-links{
+display:flex;
+flex-wrap:wrap;
+gap:16px;
+justify-content:center;
+margin-top:20px;
+}
+
+.roi-links a{
+color:#10b981;
+font-weight:500;
+text-decoration:none;
+}
+
+.roi-links a:hover{
+text-decoration:underline;
+}
