@@ -4604,3 +4604,7 @@ rgba(0,0,0,0.20)
 ),
 url("/img/firenze-bg.jpg") !important;
 }
+
+body.immobili-page .hero-bg{
+background:none !important;
+}
