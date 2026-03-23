@@ -4290,3 +4290,22 @@ text-shadow:none !important;
 color:#475569 !important;
 text-shadow:none !important;
 }
+
+.faq-item{
+background:white;
+padding:20px;
+border-radius:14px;
+border:1px solid #e2e8f0;
+margin-bottom:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+.faq-item h3{
+font-size:16px;
+margin-bottom:6px;
+}
+
+.faq-item p{
+font-size:14px;
+color:#475569;
+}
