@@ -4486,7 +4486,7 @@ margin-top:10px;
 /* ===================== */
 
 body.immobili-page .hero::before{
-background:rgba(0,0,0,0.08) !important;
+background:rgba(0,0,0,0.10) !important;
 }
 
 body.immobili-page .hero-bg{
