@@ -252,22 +252,54 @@ const isBest = r === best;
 
 return `
 <div style="
-padding:20px;
-margin-bottom:15px;
-border-radius:12px;
-background:${isBest ? "#ecfdf5" : "#fff"};
+padding:22px;
+margin-bottom:18px;
+border-radius:16px;
+background:${isBest ? "#ecfdf5" : "#ffffff"};
 border:${isBest ? "2px solid #10b981" : "1px solid #e5e7eb"};
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:0.2s;
 ">
 
-<strong>
-${window.currentLang === "it" 
-  ? r.name?.it || r.name 
-  : r.name?.en || r.name}
-</strong><br>
-Tasso: ${r.rate}%<br>
-Costo annuo: € ${r.yearlyCost.toFixed(0)}
+<div style="display:flex;justify-content:space-between;align-items:center;">
 
-${isBest ? "<div style='color:#10b981;font-weight:600;'>✔ Migliore scelta</div>" : ""}
+<div>
+<strong style="font-size:16px;">
+${window.currentLang === "it" ? r.name?.it : r.name?.en}
+</strong>
+
+<div style="font-size:13px;color:#64748b;margin-top:4px;">
+${window.currentLang === "it" ? "Tasso" : "Rate"}: ${r.rate}%
+</div>
+</div>
+
+${isBest ? `
+<div style="
+background:#10b981;
+color:white;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+">
+BEST
+</div>
+` : ""}
+
+</div>
+
+<div style="margin-top:12px;font-size:14px;">
+${window.currentLang === "it" ? "Costo annuo" : "Yearly cost"}:
+<strong>€ ${r.yearlyCost.toFixed(0)}</strong>
+</div>
+
+<div style="margin-top:12px;">
+<button class="btn btn-primary" style="width:100%;font-size:14px;">
+${window.currentLang === "it" 
+? "Simula investimento con questo mutuo"
+: "Simulate investment with this mortgage"}
+</button>
+</div>
 
 </div>
 `;
