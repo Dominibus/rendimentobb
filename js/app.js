@@ -234,18 +234,6 @@ async function loadUserPlan(uid){
 
 function renderMortgageResults(results){
 
-const container = document.getElementById("mortgage-results");
-
-if(!results || results.length === 0){
-container.innerHTML = "<p>Nessun risultato</p>";
-return;
-}
-
-// trova migliore
-const best = results.reduce((a,b)=>
-a.yearlyCost < b.yearlyCost ? a : b
-);
-
 container.innerHTML = results.map((r,i)=>{
 
 const isBest = r === best;
@@ -269,7 +257,7 @@ ${window.currentLang === "it" ? r.name?.it : r.name?.en}
 </strong>
 
 <div style="font-size:13px;color:#64748b;margin-top:4px;">
-${window.currentLang === "it" ? "Tasso" : "Rate"}: ${r.rate}%
+${t("Tasso","Rate")}: ${r.rate}%
 </div>
 </div>
 
@@ -282,22 +270,20 @@ border-radius:8px;
 font-size:12px;
 font-weight:600;
 ">
-BEST
+${t("Migliore scelta","Best choice")}
 </div>
 ` : ""}
 
 </div>
 
 <div style="margin-top:12px;font-size:14px;">
-${window.currentLang === "it" ? "Costo annuo" : "Yearly cost"}:
+${t("Costo annuo","Yearly cost")}:
 <strong>€ ${r.yearlyCost.toFixed(0)}</strong>
 </div>
 
 <div style="margin-top:12px;">
-<button class="btn btn-primary" style="width:100%;font-size:14px;">
-${window.currentLang === "it" 
-? "Simula investimento con questo mutuo"
-: "Simulate investment with this mortgage"}
+<button onclick="selectMortgage(${r.rate})" class="btn btn-primary" style="width:100%;">
+${t("Simula con questo mutuo","Simulate with this mortgage")}
 </button>
 </div>
 
@@ -2104,6 +2090,14 @@ lang==="it"
 
 }
 
+window.selectMortgage = function(rate){
+
+localStorage.setItem("selected_mortgage_rate", rate);
+
+window.location.href = "/tool/";
+
+};
+
 
 // ================= EXPORT GLOBAL =================
 
@@ -2452,6 +2446,24 @@ occ.addEventListener("input",()=>{
 occValue.innerText = occ.value + "%";
 
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const savedRate = localStorage.getItem("selected_mortgage_rate");
+
+if(savedRate){
+
+const rateInput = document.getElementById("interestRate");
+
+if(rateInput){
+rateInput.value = savedRate;
+}
+
+localStorage.removeItem("selected_mortgage_rate");
+
+}
+
+});  
 
 }
 
