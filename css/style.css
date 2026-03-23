@@ -4489,3 +4489,17 @@ rgba(0,0,0,0.45)
 ),
 url("/img/rome-bg.jpg");
 }
+
+body.immobili-page .hero h1{
+text-shadow:0 6px 30px rgba(0,0,0,0.8);
+}
+
+body.immobili-page .hero p{
+opacity:0.95;
+}
+
+body.immobili-page .market-card{
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(12px);
+box-shadow:0 25px 80px rgba(0,0,0,0.15);
+}
