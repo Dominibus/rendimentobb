@@ -170,7 +170,7 @@ flex-shrink:0;
 }
 
 .logo-img{
-height:100px;
+height:80px;
 transform:scale(1.8);
 transform-origin:left center;  
 width:auto;
@@ -2559,15 +2559,13 @@ font-size:15px;
 
 }
 
-/* ===================== */
 /* GLOBAL MOBILE FIX */
-/* ===================== */
-
 @media (max-width:768px){
 
-.portal-header-inner{
+/* DISATTIVATO GRID HEADER */
+/* .portal-header-inner{
 grid-template-columns:auto 1fr auto;
-}
+} */
 
 }
 /* HERO MOBILE */
@@ -3986,39 +3984,43 @@ main{
 }
 
 /* ===================== */
-/* HEADER MOBILE FIX PRO */
+/* HEADER MOBILE FIX FINAL */
 /* ===================== */
 
 @media (max-width:768px){
 
-/* 🔥 STRUTTURA HEADER (FIX PRINCIPALE) */
+/* 🔥 STRUTTURA HEADER */
 .portal-header-inner{
 display:flex !important;
 align-items:center;
 justify-content:space-between;
-gap:10px;
+gap:8px;
+padding:0 10px;
 }
 
-/* 🔥 LOGO FIX (FINALMENTE GRANDE) */
-/* PRENDE QUALSIASI IMG DENTRO HEADER */
-.portal-header img{
-height:40px !important;
-transform:scale(1.8) !important;
-transform-origin:left center !important;
-max-width:none !important;
+/* 🔥 LOGO (RIDIMENSIONATO CORRETTAMENTE) */
+.logo-img{
+height:42px !important;
+transform:none !important;
 }
 
-/* 🔥 MENU HAMBURGER */
-.nav-toggle{
-flex:0 0 auto;
+/* 🔥 NAV OFF (usa hamburger) */
+.portal-nav{
+display:none;
 }
 
-/* 🔥 CONTROLLI DESTRA */
+/* 🔥 HAMBURGER */
+.hamburger{
+display:block;
+font-size:24px;
+}
+
+/* 🔥 DESTRA (login + lingua) */
 .right-controls{
 display:flex;
 align-items:center;
 gap:6px;
-flex:0 0 auto;
+flex-wrap:nowrap;
 }
 
 /* 🔥 BOTTONI COMPATTI */
@@ -4030,28 +4032,26 @@ white-space:nowrap;
 
 /* 🔥 LINGUA */
 .lang-btn{
-padding:5px 10px;
+padding:5px 8px;
 font-size:11px;
 }
 
-/* 🔥 NASCONDE COMPLETAMENTE UTENTE */
-.user-info,
-.user-name,
-.user-plan,
-[class*="user"],
-[class*="profile"],
-[class*="account"]{
-display:none !important;
-}
+/* ❌ NON NASCONDERE TUTTO (ERRORE DI PRIMA) */
+/* rimosso hide user */
 
-/* 🔥 NASCONDE LOGOUT */
-.logout-btn{
-display:none !important;
+/* 🔥 HEADER HEIGHT FIX */
+.portal-header{
+padding:6px 0;
 }
 
 /* 🔥 SICUREZZA OVERFLOW */
+.portal-header-inner > *{
+min-width:auto;
+}
+
+/* 🔥 PREVIENE COLLASSO */
 .portal-header{
-overflow:hidden;
+overflow:visible;
 }
 
 }
