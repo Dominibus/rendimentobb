@@ -18,68 +18,89 @@ Immobili investimento B&B Roma – RendimentoBB
 
 </head>
 
-<body>
+<body class="immobili-page">
 
 <div id="global-header"></div>  
 
 <main>
 
-<section class="tool-hero">  
+<!-- HERO NUOVA -->
+<section class="hero hero-bg">
 
-<div class="container" style="padding-top:120px">
+<div class="container">
 
-<h1>Immobili analizzati per investimento B&B a Roma</h1>
+<div class="hero-content-box">
+
+<h1>
+Immobili per investimento B&B a Roma  
+<br>ROI fino al 14%
+</h1>
+
+<p>
+Analizza immobili reali, confronta il mercato e trova le migliori opportunità nella capitale.
+</p>
+
+<div class="hero-buttons">
+
+<a href="/tool/" class="btn btn-primary">
+Simula investimento
+</a>
+
+<a href="/market/roma/" class="btn btn-secondary">
+Vedi dati mercato
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- LISTA IMMOBILI -->
+<section class="section">
+
+<div class="container">
+
+<h2 style="text-align:center; margin-bottom:30px;">
+Immobili analizzati a Roma
+</h2>
 
 <div class="property-grid">
 
-
 <div class="property-card">
-
 <div class="property-title">Trastevere – Bilocale 60mq</div>
-
 <div class="property-data">Prezzo immobile: 380000€</div>
 <div class="property-data">Prezzo medio notte: 145€</div>
 <div class="property-data">Occupazione stimata: 70%</div>
-
 <div class="property-roi">ROI stimato: 14.1%</div>
-
 <a href="/tool/" class="btn btn-primary">Analizza investimento</a>
-
 </div>
 
-
 <div class="property-card">
-
 <div class="property-title">Prati – Trilocale 75mq</div>
-
 <div class="property-data">Prezzo immobile: 420000€</div>
 <div class="property-data">Prezzo medio notte: 155€</div>
 <div class="property-data">Occupazione stimata: 69%</div>
-
 <div class="property-roi">ROI stimato: 13.6%</div>
-
 <a href="/tool/" class="btn btn-primary">Analizza investimento</a>
-
 </div>
 
-
 <div class="property-card">
-
 <div class="property-title">Monti – Bilocale 55mq</div>
-
 <div class="property-data">Prezzo immobile: 350000€</div>
 <div class="property-data">Prezzo medio notte: 150€</div>
 <div class="property-data">Occupazione stimata: 71%</div>
-
 <div class="property-roi">ROI stimato: 14.3%</div>
-
 <a href="/tool/" class="btn btn-primary">Analizza investimento</a>
-
 </div>
 
 </div>
 
 </div>
+
+</section>
 
 </main>
 
@@ -87,6 +108,7 @@ Immobili investimento B&B Roma – RendimentoBB
 <script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js" defer></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 applyCityBackground("rome");
