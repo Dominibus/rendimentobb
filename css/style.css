@@ -4317,3 +4317,9 @@ line-height:1.4;
 
 max-width:520px; /* 🔥 evita testo troppo largo */
 }
+
+.faq-item:hover{
+transform:translateY(-2px);
+box-shadow:0 12px 30px rgba(0,0,0,0.08);
+transition:0.2s;
+}
