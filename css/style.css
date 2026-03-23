@@ -244,6 +244,7 @@ linear-gradient(
 rgba(0,0,0,0.08),
 rgba(0,0,0,0.25)
 ),
+url("/img/roma-bg.jpg");  
 
 background-size:cover;
 background-position:center;
