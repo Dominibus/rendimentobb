@@ -82,6 +82,7 @@ if(!r) return;
 const yearlyCost = calculateMortgage(amount, r, years);
 
 results.push({
+name: rate.name || "Bank",
 rate: r,
 yearlyCost
 });
