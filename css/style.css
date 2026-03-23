@@ -3999,9 +3999,12 @@ padding:0 10px;
 }
 
 /* 🔥 LOGO (RIDIMENSIONATO CORRETTAMENTE) */
+/* 🔥 LOGO MOBILE OPTIMIZED */
 .logo-img{
-height:42px !important;
-transform:none !important;
+height:48px !important;
+width:auto;
+transform:scale(1.15) !important;
+transform-origin:left center;
 }
 
 /* 🔥 NAV OFF (usa hamburger) */
