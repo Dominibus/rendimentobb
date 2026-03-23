@@ -17,39 +17,71 @@ data-it="Scopri quanto guadagna realmente un Bed and Breakfast. Analizza ROI, oc
 data-en="Discover how much a Bed & Breakfast really earns. Analyze ROI, occupancy and costs with the RendimentoBB professional simulator."
 content="Scopri quanto guadagna realmente un Bed and Breakfast.">
 
-<script type="application/ld+json">
-{
+<script>
+(function(){
+
+const lang = localStorage.getItem("rb_lang") || "it";
+
+const faqData = {
+it: {
+  q1: "Quanto guadagna un B&B al mese?",
+  a1: "Un B&B può guadagnare tra 1.200€ e 5.000€ al mese in base a città, occupazione e gestione.",
+  q2: "Qual è il ROI di un B&B?",
+  a2: "Il ROI medio varia tra il 6% e il 18%, con valori più alti nelle città turistiche.",
+  q3: "Conviene aprire un B&B nel 2026?",
+  a3: "Sì, se supportato da analisi dati e simulazioni realistiche."
+},
+en: {
+  q1: "How much does a B&B earn per month?",
+  a1: "A B&B can earn between €1,200 and €5,000 per month depending on city, occupancy and management.",
+  q2: "What is the ROI of a B&B?",
+  a2: "The average ROI ranges between 6% and 18%, with higher values in tourist cities.",
+  q3: "Is opening a B&B in 2026 worth it?",
+  a3: "Yes, if supported by data analysis and realistic simulations."
+}
+};
+
+const data = faqData[lang];
+
+const jsonLd = {
 "@context": "https://schema.org",
 "@type": "FAQPage",
 "mainEntity": [
 {
 "@type": "Question",
-"name": "Quanto guadagna un B&B al mese?",
+"name": data.q1,
 "acceptedAnswer": {
 "@type": "Answer",
-"text": "Un B&B può guadagnare tra 1.200€ e 5.000€ al mese in base a città, occupazione e gestione."
+"text": data.a1
 }
 },
 {
 "@type": "Question",
-"name": "Qual è il ROI di un B&B?",
+"name": data.q2,
 "acceptedAnswer": {
 "@type": "Answer",
-"text": "Il ROI medio di un B&B varia tra il 6% e il 18%, con punte più alte nelle città turistiche."
+"text": data.a2
 }
 },
 {
 "@type": "Question",
-"name": "Conviene aprire un B&B nel 2026?",
+"name": data.q3,
 "acceptedAnswer": {
 "@type": "Answer",
-"text": "Sì, se supportato da analisi dati e simulazioni realistiche come quelle offerte da RendimentoBB."
+"text": data.a3
 }
 }
 ]
-}
-</script>  
+};
 
+const script = document.createElement("script");
+script.type = "application/ld+json";
+script.text = JSON.stringify(jsonLd);
+
+document.head.appendChild(script);
+
+})();
+</script>
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
