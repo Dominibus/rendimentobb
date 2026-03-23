@@ -234,7 +234,16 @@ async function loadUserPlan(uid){
 
 function renderMortgageResults(results){
 
-container.innerHTML = results.map((r,i)=>{
+const container = document.getElementById("mortgage-results");
+
+if(!container) return;
+
+// trova migliore
+const best = results.reduce((min, r) =>
+r.yearlyCost < min.yearlyCost ? r : min
+, results[0]);
+
+container.innerHTML = results.map((r)=>{
 
 const isBest = r === best;
 
@@ -246,7 +255,6 @@ border-radius:16px;
 background:${isBest ? "#ecfdf5" : "#ffffff"};
 border:${isBest ? "2px solid #10b981" : "1px solid #e5e7eb"};
 box-shadow:0 10px 30px rgba(0,0,0,0.05);
-transition:0.2s;
 ">
 
 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -291,6 +299,8 @@ ${t("Simula con questo mutuo","Simulate with this mortgage")}
 `;
 
 }).join("");
+
+}
 
 }
 
