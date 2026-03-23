@@ -1,13 +1,21 @@
+# dominio
 https://rendimentobb.com/* https://rendimentobb.it/:splat 301!
 https://www.rendimentobb.com/* https://rendimentobb.it/:splat 301!
 
-/roma     /tool/index.html   200
-/milano   /tool/index.html   200
-/napoli   /tool/index.html   200
-/firenze  /tool/index.html   200
+# IMMOBILI
+/immobili/*   /immobili/:splat/index.html   200
 
+# MARKET
+/market/*     /market/:splat/index.html     200
+
+# ROI
+/roi-bnb/*    /roi-bnb/:splat/index.html    200
+
+# TOOL
+/tool/*       /tool/index.html              200
+
+# ALTRE
 /dashboard/*   /dashboard/index.html   200
 /login/*       /login/index.html       200
-/tool/*        /tool/index.html        200
 /pro-success/* /pro-success/index.html 200
 /academy/*     /academy/index.html     200
