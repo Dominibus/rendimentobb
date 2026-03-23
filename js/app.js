@@ -45,7 +45,7 @@ return;
 
 const banks = Object.values(window.RB_MORTGAGE_RATES);
 
-const results = compareMortgages(
+const results = compareMortgagesEngine(
   amount,
   years,
   banks.map(b => ({
