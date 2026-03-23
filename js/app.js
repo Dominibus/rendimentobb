@@ -2106,11 +2106,13 @@ window.selectMortgage = function(rate){
 
 localStorage.setItem("selected_mortgage_rate", rate);
 
-window.location.href = "/tool/";
+// 💥 NUOVO → salva anche contesto
+localStorage.setItem("from_mortgage", "true");
+localStorage.setItem("mortgage_selected_rate", rate);
+
+window.location.href = "/tool/?from=mortgage";
 
 };
-
-
 
 // ================= EXPORT GLOBAL =================
 
@@ -2470,6 +2472,28 @@ const rateInput = document.getElementById("interestRate");
 
 if(rateInput){
 rateInput.value = savedRate;
+}
+
+// 💥 UX MESSAGE
+const banner = document.getElementById("mortgage-banner");
+
+if(banner){
+banner.innerHTML = `
+<div style="
+margin-bottom:20px;
+padding:14px;
+border-radius:12px;
+background:#ecfdf5;
+border:1px solid #10b981;
+font-weight:600;
+text-align:center;
+">
+${t(
+"Mutuo selezionato automaticamente dal comparatore",
+"Mortgage auto-selected from comparator"
+)} (${savedRate}%)
+</div>
+`;
 }
 
 localStorage.removeItem("selected_mortgage_rate");
