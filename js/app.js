@@ -259,7 +259,11 @@ background:${isBest ? "#ecfdf5" : "#fff"};
 border:${isBest ? "2px solid #10b981" : "1px solid #e5e7eb"};
 ">
 
-<strong>Banca ${String.fromCharCode(65+i)}</strong><br>
+<strong>
+${window.currentLang === "it" 
+  ? r.name?.it || r.name 
+  : r.name?.en || r.name}
+</strong><br>
 Tasso: ${r.rate}%<br>
 Costo annuo: € ${r.yearlyCost.toFixed(0)}
 
