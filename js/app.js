@@ -29,8 +29,6 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
-import { compareMortgages } from "/js/mortgage-engine.js";
-
 window.compareMortgages = function(){
 
 const amount = parseFloat(document.getElementById("mortgageAmount").value);
@@ -2069,7 +2067,6 @@ lang==="it"
 // ================= EXPORT GLOBAL =================
 
 window.calculate = calculate;
-window.compareMortgages = compareMortgages;
 window.generateExecutivePDF = generateExecutivePDF;
 
 window.analyzeProperty = function(){
