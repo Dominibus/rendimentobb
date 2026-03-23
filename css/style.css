@@ -4514,16 +4514,17 @@ background-size:cover;
 background-position:center;
 }
 
-body.immobili-page .hero-bg.milan{
+body.immobili-page .hero.hero-bg.milan{
 background:
 linear-gradient(
 rgba(0,0,0,0.08),
 rgba(0,0,0,0.20)
 ),
-url("/img/milano-bg.jpg");
+url("/img/milano-bg.jpg") !important;
 
-background-size:cover;
-background-position:center;
+background-size:cover !important;
+background-position:center !important;
+background-repeat:no-repeat !important;
 }
 
 body.immobili-page .hero-bg.florence{
