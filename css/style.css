@@ -4509,3 +4509,11 @@ background:#ffffff !important;
 border:1px solid #e2e8f0 !important;
 color:#0f172a !important;
 }
+
+body.immobili-page .section h2{
+color:#0f172a;
+}
+
+body.immobili-page .section p{
+color:#334155;
+}
