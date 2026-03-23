@@ -4499,7 +4499,7 @@ url("/img/rome-bg.jpg");
 }
 
 body.immobili-page .hero h1{
-text-shadow:0 6px 30px rgba(0,0,0,0.8);
+text-shadow:0 6px 30px rgba(0,0,0,0.4);
 }
 
 body.immobili-page .hero p{
