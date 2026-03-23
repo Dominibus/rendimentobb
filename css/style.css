@@ -4489,14 +4489,54 @@ body.immobili-page .hero::before{
 background:transparent !important;
 }
 
-body.immobili-page .hero-bg{ 
+/* HERO DINAMICO PER CITTÀ (IMMOBILI FIX) */
+
+body.immobili-page .hero-bg.rome{
 background:
 linear-gradient(
 rgba(0,0,0,0.08),
 rgba(0,0,0,0.20)
 ),
-url("/img/rome-bg.jpg");
-filter:brightness(1.15) contrast(1.05);   
+url("/img/roma-bg.jpg");
+
+background-size:cover;
+background-position:center;
+}
+
+body.immobili-page .hero-bg.naples{
+background:
+linear-gradient(
+rgba(0,0,0,0.08),
+rgba(0,0,0,0.20)
+),
+url("/img/napoli-bg.jpg");
+
+background-size:cover;
+background-position:center;
+}
+
+body.immobili-page .hero-bg.milan{
+background:
+linear-gradient(
+rgba(0,0,0,0.08),
+rgba(0,0,0,0.20)
+),
+url("/img/milano-bg.jpg");
+
+background-size:cover;
+background-position:center;
+}
+
+body.immobili-page .hero-bg.florence{
+background:
+linear-gradient(
+rgba(0,0,0,0.08),
+rgba(0,0,0,0.20)
+),
+url("/img/firenze-bg.jpg");
+
+background-size:cover;
+background-position:center;
 }
 
 body.immobili-page .hero h1{
