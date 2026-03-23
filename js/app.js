@@ -43,11 +43,16 @@ alert("Inserisci importo e durata");
 return;
 }
 
-const results = compareMortgages(amount, years, [
-{rate: rateA},
-{rate: rateB},
-{rate: rateC}
-]);
+const banks = Object.values(window.RB_MORTGAGE_RATES);
+
+const results = compareMortgages(
+  amount,
+  years,
+  banks.map(b => ({
+    name: b.name,
+    rate: b.rate
+  }))
+);
 
 renderMortgageResults(results);
 
