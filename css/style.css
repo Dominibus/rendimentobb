@@ -4346,3 +4346,45 @@ text-decoration:none;
 .roi-links a:hover{
 text-decoration:underline;
 }
+
+/* ===================== */
+/* HERO TEXT FIX */
+/* ===================== */
+
+.hero h1,
+.hero h2,
+.hero h3{
+color:#ffffff;
+font-weight:700;
+text-shadow:0 2px 10px rgba(0,0,0,0.4);
+}
+
+.hero p{
+color:rgba(255,255,255,0.9);
+text-shadow:0 1px 6px rgba(0,0,0,0.4);
+}
+
+/* BOTTONI HERO */
+.hero .btn{
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+/* ===================== */
+/* HERO OVERLAY (IMPORTANTISSIMO) */
+/* ===================== */
+
+.hero::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.45);
+z-index:0;
+}
+
+.hero .container{
+position:relative;
+z-index:2;
+}
