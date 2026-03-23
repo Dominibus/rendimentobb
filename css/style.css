@@ -2855,7 +2855,8 @@ text-align:center;
 padding:16px;
 font-size:15px;
 opacity:1 !important; 
-display:inline-flex;  
+display:inline-flex;
+width:auto; /* 🔥 FIX */
 }
 
 .btn.block{
