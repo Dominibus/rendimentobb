@@ -15,7 +15,7 @@ renderExecutiveKPI
 
 import {
 calculateMortgage,
-compareMortgages
+compareMortgages as compareMortgagesEngine
 } from "./mortgage-engine.js";
 
 
@@ -2097,6 +2097,7 @@ localStorage.setItem("selected_mortgage_rate", rate);
 window.location.href = "/tool/";
 
 };
+
 
 
 // ================= EXPORT GLOBAL =================
