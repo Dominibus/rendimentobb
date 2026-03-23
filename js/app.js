@@ -44,9 +44,21 @@ return;
 }
 
 const banks = [
-  { name:{it:"Banca A",en:"Bank A"}, rate: rateA },
-  { name:{it:"Banca B",en:"Bank B"}, rate: rateB },
-  { name:{it:"Banca C",en:"Bank C"}, rate: rateC }
+
+{ name:{it:"Intesa Sanpaolo",en:"Intesa Sanpaolo"}, rate: rateA || 3.45 },
+
+{ name:{it:"UniCredit",en:"UniCredit"}, rate: rateB || 3.6 },
+
+{ name:{it:"BNL",en:"BNL"}, rate: rateC || 3.5 },
+
+{ name:{it:"Crédit Agricole",en:"Crédit Agricole"}, rate: 3.4 },
+
+{ name:{it:"Banco BPM",en:"Banco BPM"}, rate: 3.55 },
+
+{ name:{it:"Mediolanum",en:"Mediolanum"}, rate: 3.48 },
+
+{ name:{it:"CheBanca!",en:"CheBanca!"}, rate: 3.52 }
+
 ];
 
 const results = compareMortgagesEngine(
