@@ -23,6 +23,72 @@ content="Scopri quanto costa aprire un B&B in Italia.">
 
 <script src="/js/lang.js" defer></script>
 
+<script>
+(function(){
+
+const lang = localStorage.getItem("rb_lang") || "it";
+
+const faqData = {
+it: {
+  q1: "Quanto costa aprire un B&B?",
+  a1: "Aprire un B&B può costare tra 50.000€ e oltre 300.000€ in base a città, immobile e ristrutturazione.",
+  q2: "Quali sono i costi principali?",
+  a2: "I costi principali includono immobile, ristrutturazione, arredi, licenze e marketing.",
+  q3: "Quanto costano le spese annuali?",
+  a3: "Le spese annuali includono utenze, manutenzione, pulizie, commissioni e tasse."
+},
+en: {
+  q1: "How much does it cost to open a B&B?",
+  a1: "Opening a B&B can cost between €50,000 and over €300,000 depending on city, property and renovation.",
+  q2: "What are the main costs?",
+  a2: "Main costs include property, renovation, furniture, licenses and marketing.",
+  q3: "What are the annual costs?",
+  a3: "Annual costs include utilities, maintenance, cleaning, commissions and taxes."
+}
+};
+
+const data = faqData[lang];
+
+const jsonLd = {
+"@context": "https://schema.org",
+"@type": "FAQPage",
+"mainEntity": [
+{
+"@type": "Question",
+"name": data.q1,
+"acceptedAnswer": {
+"@type": "Answer",
+"text": data.a1
+}
+},
+{
+"@type": "Question",
+"name": data.q2,
+"acceptedAnswer": {
+"@type": "Answer",
+"text": data.a2
+}
+},
+{
+"@type": "Question",
+"name": data.q3,
+"acceptedAnswer": {
+"@type": "Answer",
+"text": data.a3
+}
+}
+]
+};
+
+const script = document.createElement("script");
+script.type = "application/ld+json";
+script.text = JSON.stringify(jsonLd);
+
+document.head.appendChild(script);
+
+})();
+</script>  
+
 </head>
 
 <body>
@@ -173,7 +239,58 @@ tasse e imposte
 
 </section>
 
+<section class="section">
 
+<div class="container" style="max-width:700px;">
+
+<h2
+data-it="Domande frequenti sui costi di un B&B"
+data-en="FAQ about B&B costs">
+Domande frequenti sui costi di un B&B
+</h2>
+
+<div class="faq-item">
+<h3
+data-it="Quanto costa aprire un B&B?"
+data-en="How much does it cost to open a B&B?">
+Quanto costa aprire un B&B?
+</h3>
+<p
+data-it="Aprire un B&B può costare tra 50.000€ e oltre 300.000€ in base a città, immobile e ristrutturazione."
+data-en="Opening a B&B can cost between €50,000 and over €300,000 depending on city, property and renovation.">
+Costo apertura B&B variabile.
+</p>
+</div>
+
+<div class="faq-item">
+<h3
+data-it="Quali sono i costi principali?"
+data-en="What are the main costs?">
+Quali sono i costi principali?
+</h3>
+<p
+data-it="I costi principali includono immobile, ristrutturazione, arredi, licenze e marketing."
+data-en="Main costs include property, renovation, furniture, licenses and marketing.">
+Costi principali B&B.
+</p>
+</div>
+
+<div class="faq-item">
+<h3
+data-it="Quanto costano le spese annuali?"
+data-en="What are the annual costs?">
+Quanto costano le spese annuali?
+</h3>
+<p
+data-it="Le spese annuali includono utenze, manutenzione, pulizie, commissioni e tasse."
+data-en="Annual costs include utilities, maintenance, cleaning, commissions and taxes.">
+Costi gestione B&B.
+</p>
+</div>
+
+</div>
+
+</section>
 
 <section class="section section-soft">
 
