@@ -43,7 +43,11 @@ alert("Inserisci importo e durata");
 return;
 }
 
-const banks = Object.values(window.RB_MORTGAGE_RATES);
+const banks = [
+  { name:{it:"Banca A",en:"Bank A"}, rate: rateA },
+  { name:{it:"Banca B",en:"Bank B"}, rate: rateB },
+  { name:{it:"Banca C",en:"Bank C"}, rate: rateC }
+];
 
 const results = compareMortgagesEngine(
   amount,
