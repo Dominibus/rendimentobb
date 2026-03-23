@@ -1195,6 +1195,48 @@ const taxCost = result.taxCost;
 const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = result.netAfterMortgage;
 const roi = result.roi;
+// 💥 HOOK MUTUO → UPSELL
+if(localStorage.getItem("from_mortgage")){
+
+const alertBox = document.getElementById("smart-investment-alert");
+
+if(alertBox){
+
+alertBox.innerHTML = `
+<div style="
+margin-top:20px;
+padding:20px;
+border-radius:14px;
+background:#fef3c7;
+border:1px solid #f59e0b;
+text-align:center;
+">
+
+<strong>
+${t(
+"Hai ottimizzato il mutuo — ora ottimizza l’investimento",
+"You optimized your mortgage — now optimize the investment"
+)}
+</strong>
+
+<p style="margin-top:10px;">
+${t(
+"Scopri ROI reale, rischio e scenari avanzati",
+"Unlock real ROI, risk and advanced scenarios"
+)}
+</p>
+
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+${t("Sblocca analisi completa","Unlock full analysis")}
+</button>
+
+</div>
+`;
+}
+
+localStorage.removeItem("from_mortgage");
+
+}  
 const roiEl = document.getElementById("roi-live");
 if(roiEl){
   roiEl.innerText = roi.toFixed(1) + "%";
