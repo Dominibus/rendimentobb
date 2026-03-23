@@ -56,26 +56,17 @@ const jsonLd = {
 {
 "@type": "Question",
 "name": data.q1,
-"acceptedAnswer": {
-"@type": "Answer",
-"text": data.a1
-}
+"acceptedAnswer": {"@type": "Answer","text": data.a1}
 },
 {
 "@type": "Question",
 "name": data.q2,
-"acceptedAnswer": {
-"@type": "Answer",
-"text": data.a2
-}
+"acceptedAnswer": {"@type": "Answer","text": data.a2}
 },
 {
 "@type": "Question",
 "name": data.q3,
-"acceptedAnswer": {
-"@type": "Answer",
-"text": data.a3
-}
+"acceptedAnswer": {"@type": "Answer","text": data.a3}
 }
 ]
 };
@@ -87,7 +78,7 @@ script.text = JSON.stringify(jsonLd);
 document.head.appendChild(script);
 
 })();
-</script>  
+</script>
 
 </head>
 
