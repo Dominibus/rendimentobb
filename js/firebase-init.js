@@ -293,29 +293,28 @@ function updateProVisibility() {
 
 onAuthStateChanged(auth, async (user) => {
 
-  currentUser = user;
   window.currentUser = user;
 
-  if (user) {
-    await loadUserPlan(user.uid);
-  }else{
-
-currentPlan = "free";
-window.currentPlan = "free";
-
-document.dispatchEvent(
-  new CustomEvent("rb_plan_loaded", {
-    detail:{ plan:"free" }
-  })
-);
-
-}
-
-  updateUserUI(user);
-
-  // FIREBASE READY
+  // FIREBASE READY SUBITO
   window.firebaseReady = true;
 
+  if (user) {
+
+    console.log("🔥 Auth OK:", user.uid);
+
+    // 🔥 QUI carichi piano UNA SOLA VOLTA
+    await loadUserPlan(user.uid);
+
+  } else {
+
+    window.currentPlan = "free";
+
+  }
+
+  // UI
+  updateUserUI(user);
+
+  // 🔥 EVENTO DOPO CHE TUTTO È PRONTO
   document.dispatchEvent(
     new CustomEvent("rb_auth_ready", {
       detail: {
@@ -326,7 +325,6 @@ document.dispatchEvent(
   );
 
 });
-
 // ===============================
 // STRIPE PLAN ACTIVATION
 // ===============================
