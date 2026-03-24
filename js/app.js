@@ -2167,16 +2167,6 @@ window.analyzeProperty = function(){
   localStorage.setItem("property_link", link);
   sessionStorage.setItem("from_property_page", true);
 
-  // ================= EVENTI GLOBALI =================
-
-document.addEventListener("rb_plan_loaded", () => {
-  console.log("🔥 Piano aggiornato:", window.currentPlan);
-
-  updatePDFButton();
-
-  // 👉 qui puoi aggiornare UI PRO
-});
-
   // ================= AUTO CITY DETECTION =================
 
   function extractCityFromLink(url){
@@ -2615,3 +2605,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function goToMarket(city){
   window.location.href = "/market/" + city;
 }
+
+  // ================= EVENTI GLOBALI =================
+
+document.addEventListener("rb_plan_loaded", () => {
+  console.log("🔥 Piano aggiornato:", window.currentPlan);
+
+  updatePDFButton();
+
+  // 👉 qui puoi aggiornare UI PRO
+});
