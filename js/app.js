@@ -85,19 +85,15 @@ window.currentPlan = "free";
 document.addEventListener("rb_auth_ready", async ()=>{
 
   console.log("UID LOGGATO:", window.currentUser?.uid);
-  console.log("🔥 PROJECT:", app.options.projectId);
 
-  let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
-
-  const isLogged = !!window.currentUser;
-
-  // 🔥 CARICA PIANO UTENTE (FIX PRINCIPALE)
-  if(window.currentUser && window.currentUser.uid){
+  if(window.currentUser?.uid){
     await loadUserPlan(window.currentUser.uid);
-    document.dispatchEvent(new Event("rb_plan_loaded"));
-  }
 
-  const isPro = hasPlan("pro");
+    // 🔥 aspetta prima di continuare
+    setTimeout(()=>{
+      document.dispatchEvent(new Event("rb_plan_loaded"));
+    }, 300);
+  }
 
   // ================= BLOCCO FREE =================
 
@@ -237,13 +233,22 @@ async function loadUserPlan(uid){
 
     console.log("Cerco utente UID:", uid);
 
+    // 🔥 ASPETTA FIREBASE PRONTO
+    let tries = 0;
+
+    while(!window.firebaseReady && tries < 10){
+      console.log("⏳ Attendo Firebase...");
+      await new Promise(r => setTimeout(r, 200));
+      tries++;
+    }
+
     const docRef = doc(db, "users", uid);
     const snap = await getDoc(docRef);
 
     console.log("Documento esiste?", snap.exists());
 
     if(snap.exists()){
-      console.log("DATI:", snap.data()); // 👈 AGGIUNGI QUESTO
+      console.log("DATI:", snap.data());
 
       window.currentPlan = snap.data().plan || "free";
     }else{
