@@ -826,7 +826,7 @@ if(hasPlan("pro")) return;
 const message = t(
 `Questo investimento sembra interessante.
 
-ROI stimato: ${roi.toFixed(1)}
+ROI stimato: ${safeNumber(roi).toFixed(1)}
 
 Scopri:
 • rischio reale
@@ -838,7 +838,7 @@ Scopri:
 Sblocca l'analisi completa.`,
 `This investment looks promising.
 
-Estimated ROI: ${roi.toFixed(1)}
+Estimated ROI: ${safeNumber(roi).toFixed(1)}
 
 Unlock:
 • risk score
