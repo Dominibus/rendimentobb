@@ -3,7 +3,6 @@
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE ================
-document.addEventListener("DOMContentLoaded", () => {
 import { calculateROI } from "./roi-engine.js";
 
 import {
@@ -29,6 +28,8 @@ import {
 
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
+document.addEventListener("DOMContentLoaded", () => {
+  });
 
 window.runMortgageComparison = function(){
 
@@ -2621,4 +2622,4 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // 👉 qui puoi aggiornare UI PRO
 });
-});
+
