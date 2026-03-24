@@ -95,6 +95,7 @@ if(!isLogged && !isPro && freeRuns >= 3){
 
 if(window.currentUser && window.currentUser.uid){
   loadUserPlan(window.currentUser.uid);
+  document.dispatchEvent(new Event("rb_plan_loaded"));
 }  
 
 alert(
@@ -1129,11 +1130,13 @@ function updatePDFButton(){
 const btn = document.getElementById("pdf-btn");
 if(!btn) return;
 
-if(window.userPlan === "pro" || window.userPlan === "pro_yearly"){
-btn.style.display = "inline-block";
+if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
+  btn.style.display = "inline-block";
 }else{
-btn.style.display = "none";
+  btn.style.display = "none";
 }
+
+console.log("PDF visibility:", window.currentPlan);
 
 }
 
@@ -1285,21 +1288,35 @@ updateInvestmentScore(investmentScore);
 
 // ================= SAVE CORRETTO =================
 
-if(window.currentUser){
+if(window.currentUser && window.currentUser.uid){
 
-saveAnalysis({
-  price: getValue("price"),
-  equity: equity,
-  roi: roi,
-  risk: riskScore,
-  city: city || "italy"
-});
+  console.log("🔥 Salvataggio avviato:", window.currentUser.uid);
+
+  saveAnalysis({
+    price: getValue("price"),
+    equity: equity,
+    roi: roi,
+    risk: riskScore,
+    city: city || "italy"
+  });
 
 }else{
 
-console.log("Utente non loggato → niente salvataggio");
+  console.warn("⚠️ User non pronto → ritento tra 500ms");
 
-}  
+  setTimeout(()=>{
+    if(window.currentUser && window.currentUser.uid){
+      saveAnalysis({
+        price: getValue("price"),
+        equity: equity,
+        roi: roi,
+        risk: riskScore,
+        city: city || "italy"
+      });
+    }
+  },500);
+
+}
 
 // MARKET BENCHMARK + COMPARISON
 
