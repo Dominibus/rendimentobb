@@ -4674,3 +4674,15 @@ body.immobili-page .property-card .market-link{
 .hero .property-card .market-link{
   color:#10b981 !important;
 }
+
+/* ===================== */
+/* ACADEMY FIX */
+/* ===================== */
+
+.guide-card h3{
+color:#0f172a;
+}
+
+.guide-card p{
+color:#475569;
+}
