@@ -82,27 +82,13 @@ function t(it, en){
 
 window.currentPlan = "free";
 
-document.addEventListener("rb_auth_ready", async ()=>{
+document.addEventListener("rb_auth_ready", ()=>{
 
-  console.log("UID LOGGATO:", window.currentUser?.uid);
-
-  // ================= INIT VAR =================
+  console.log("PLAN GIÀ CARICATO:", window.currentPlan);
 
   let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
 
   const isLogged = !!window.currentUser;
-
-  // ================= LOAD PLAN =================
-
-  if(window.currentUser?.uid){
-    await loadUserPlan(window.currentUser.uid);
-
-    // piccolo delay sicurezza UI
-    setTimeout(()=>{
-      document.dispatchEvent(new Event("rb_plan_loaded"));
-    }, 300);
-  }
-
   const isPro = hasPlan("pro");
 
   console.log("DEBUG PLAN:", {
@@ -112,6 +98,31 @@ document.addEventListener("rb_auth_ready", async ()=>{
     plan: window.currentPlan
   });
 
+  // BLOCCO FREE
+  if(!isLogged && !isPro && freeRuns >= 3){
+
+    alert(
+      t(
+        "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare.",
+        "You reached the free simulation limit. Create a free account to continue."
+      )
+    );
+
+    window.location.href="/login/";
+    return;
+  }
+
+  if(!isLogged){
+    freeRuns++;
+    localStorage.setItem("rb_free_runs", freeRuns);
+  }
+
+  const btn = document.getElementById("calc-btn");
+  if(btn){
+    btn.disabled = false;
+  }
+
+});
   // ================= BLOCCO FREE =================
 
   if(!isLogged && !isPro && freeRuns >= 3){
