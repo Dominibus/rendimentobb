@@ -303,10 +303,11 @@ window.currentLang = getLang();
 
 // ================= UTIL =================
 
-function safeRender(id, callback){
-  function safeNumber(value){
+function safeNumber(value){
   return Number(value) || 0;
 }
+
+function safeRender(id, callback){
   const container = document.getElementById(id);
   if(!container) return;
 
