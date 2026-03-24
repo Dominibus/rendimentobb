@@ -1,5 +1,6 @@
 // ===============================
-// FIREBASE INIT – RENDIMENTOBB (FIX DEFINITIVO)
+// FIREBASE INIT – RENDIMENTOBB
+// VERSIONE SAAS MULTI PAGINA STABILE
 // ===============================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -39,6 +40,7 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const db = getFirestore(app);
 
+// rende Firebase Auth globale per tutto il sito
 window.firebaseAuth = auth;
 
 
@@ -46,6 +48,7 @@ window.firebaseAuth = auth;
 // GLOBAL STATE
 // ===============================
 
+let currentUser = null;
 let currentPlan = "free";
 
 window.currentUser = null;
@@ -53,23 +56,64 @@ window.currentPlan = "free";
 window.firebaseReady = false;
 
 window.isProUser = () =>
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+window.currentPlan === "pro" ||
+window.currentPlan === "investor";
+
+// ===============================
+// REQUIRE PLAN (BLOCCO FEATURE)
+// ===============================
+
+window.requirePlan = function(required){
+
+const plan = window.currentPlan;
+
+// INVESTOR access
+if(required === "investor"){
+if(plan === "investor" || plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// PRO access
+if(required === "pro"){
+if(plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// ❌ BLOCCO
+alert(
+getCurrentLang() === "it"
+? "Sblocca la versione PRO per usare questa funzione"
+: "Upgrade to PRO to use this feature"
+);
+
+// scroll pricing (UX migliore)
+window.location.href = "/#pricing";
+
+return false;
+
+};
 
 
 // ===============================
-// HELPER – LANGUAGE
+// HELPER – CURRENT LANGUAGE
 // ===============================
 
 function getCurrentLang(){
+
   if(window.currentLang) return window.currentLang;
-  return localStorage.getItem("rb_lang") || "it";
+
+  const saved = localStorage.getItem("rb_lang");
+  if(saved) return saved;
+
+  return "it";
+
 }
 
 
 // ===============================
-// REGISTER
+// REGISTRAZIONE
 // ===============================
 
 async function registerUser(email, password) {
@@ -107,74 +151,64 @@ async function logoutUser() {
 
 
 // ===============================
-// 🔥 LOAD USER PLAN (FIX + DEBUG)
+// CARICA PIANO UTENTE
 // ===============================
 
 async function loadUserPlan(uid) {
 
-  try{
+  const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
 
-    console.log("🔥 Carico piano per:", uid);
-
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-
-    console.log("🔥 Snapshot exists:", docSnap.exists());
-
-    if (docSnap.exists()) {
-      console.log("🔥 Data:", docSnap.data());
-      currentPlan = docSnap.data().plan || "free";
-    } else {
-      console.warn("⚠️ Documento utente NON trovato");
-      currentPlan = "free";
-    }
-
-    window.currentPlan = currentPlan;
-
-    console.log("🔥 Piano finale:", currentPlan);
-
-    document.dispatchEvent(
-      new CustomEvent("rb_plan_loaded", {
-        detail: { plan: currentPlan }
-      })
-    );
-
-    updateProVisibility();
-
-  }catch(err){
-
-    console.error("❌ ERRORE loadUserPlan:", err);
-
-    window.currentPlan = "free";
-
+  if (docSnap.exists()) {
+    currentPlan = docSnap.data().plan || "free";
+  } else {
+    currentPlan = "free";
   }
 
+  window.currentPlan = currentPlan;
+
+  document.dispatchEvent(
+    new CustomEvent("rb_plan_loaded", {
+      detail: { plan: currentPlan }
+    })
+  );
+
+  updateProVisibility();
 }
 
 
 // ===============================
-// UPDATE PLAN
+// AGGIORNA PRO (TEST)
+// ===============================
+
+// ===============================
+// AGGIORNA PIANO UTENTE
 // ===============================
 
 export async function upgradeToPro(uid){
-  await updateDoc(doc(db,"users",uid),{
-    plan:"pro",
-    updatedAt:new Date()
-  });
-  await loadUserPlan(uid);
+
+await updateDoc(doc(db,"users",uid),{
+plan:"pro",
+updatedAt:new Date()
+});
+
+await loadUserPlan(uid);
+
 }
 
 export async function upgradeToInvestor(uid){
-  await updateDoc(doc(db,"users",uid),{
-    plan:"investor",
-    updatedAt:new Date()
-  });
-  await loadUserPlan(uid);
+
+await updateDoc(doc(db,"users",uid),{
+plan:"investor",
+updatedAt:new Date()
+});
+
+await loadUserPlan(uid);
+
 }
 
-
 // ===============================
-// USER UI
+// UI USER NAVBAR
 // ===============================
 
 function updateUserUI(user) {
@@ -184,8 +218,15 @@ function updateUserUI(user) {
 
   const lang = getCurrentLang();
 
-  const welcomeText = lang === "en" ? "Welcome" : "Benvenuto";
-  const loginText = lang === "en" ? "Login" : "Accedi";
+  const welcomeText =
+    lang === "en"
+      ? "Welcome"
+      : "Benvenuto";
+
+  const loginText =
+    lang === "en"
+      ? "Login"
+      : "Accedi";
 
   if (user) {
 
@@ -195,9 +236,9 @@ function updateUserUI(user) {
       <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:13px;">
           👤 ${welcomeText} <strong>${name}</strong>
-          ${window.currentPlan !== "free"
-            ? `<span style="color:#00c896; font-weight:bold;"> ${window.currentPlan.toUpperCase()}</span>`
-            : ''}
+          ${currentPlan !== "free"
+          ? `<span style="color:#00c896; font-weight:bold;"> ${currentPlan.toUpperCase()}</span>`
+          : ''}
         </span>
 
         <button id="logout-btn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
@@ -206,16 +247,21 @@ function updateUserUI(user) {
       </div>
     `;
 
-    document.getElementById("logout-btn")?.addEventListener("click", async () => {
-      await logoutUser();
-      window.location.reload();
-    });
+    const logoutBtn = document.getElementById("logout-btn");
+
+    if(logoutBtn){
+      logoutBtn.addEventListener("click", async () => {
+        await logoutUser();
+        window.location.reload();
+      });
+    }
 
   } else {
 
     userArea.innerHTML = `
       <button onclick="window.location.href='/login/'" 
-        class="btn btn-secondary">
+        class="btn btn-secondary" 
+        style="padding:8px 18px; font-size:13px;">
         ${loginText}
       </button>
     `;
@@ -224,7 +270,7 @@ function updateUserUI(user) {
 
 
 // ===============================
-// PRO UI
+// PRO BUTTON
 // ===============================
 
 function updateProVisibility() {
@@ -232,7 +278,8 @@ function updateProVisibility() {
   const proBtn = document.getElementById("pro-btn");
   if (!proBtn) return;
 
-  if (window.currentPlan === "pro") {
+  if (currentPlan === "pro") {
+
     proBtn.textContent = "PRO Attivo";
     proBtn.disabled = true;
     proBtn.style.opacity = 0.6;
@@ -241,23 +288,22 @@ function updateProVisibility() {
 
 
 // ===============================
-// 🔥 AUTH OBSERVER (FIX TIMING)
+// AUTH OBSERVER
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
 
   window.currentUser = user;
+  window.firebaseReady = true;
 
   if (user) {
 
     console.log("🔥 Auth OK:", user.uid);
 
-    // 🔥 carico piano
+    // 🔥 PRIMA carica piano
     await loadUserPlan(user.uid);
 
-    // 🔥 ora Firebase è pronto
-    window.firebaseReady = true;
-
+    // 🔥 POI aggiorna UI (FONDAMENTALE)
     updateUserUI(user);
 
   } else {
@@ -265,7 +311,6 @@ onAuthStateChanged(auth, async (user) => {
     console.log("👤 Utente non loggato");
 
     window.currentPlan = "free";
-    window.firebaseReady = true;
 
     updateUserUI(null);
 
@@ -284,21 +329,8 @@ onAuthStateChanged(auth, async (user) => {
 
 });
 
-
 // ===============================
-// 🔥 FAILSAFE (ANTI BUG)
-// ===============================
-
-setTimeout(()=>{
-  if(window.currentUser && window.currentUser.uid){
-    console.log("⚡ Fallback loadUserPlan");
-    loadUserPlan(window.currentUser.uid);
-  }
-},1000);
-
-
-// ===============================
-// STRIPE RETURN
+// STRIPE PLAN ACTIVATION
 // ===============================
 
 document.addEventListener("rb_stripe_return", async (e)=>{
@@ -309,30 +341,48 @@ try{
 
 await updateDoc(doc(db,"users",window.currentUser.uid),{
 plan:"investor",
+stripeSession:e.detail.session,
 updatedAt:new Date()
 });
 
 await loadUserPlan(window.currentUser.uid);
 
-alert("Pagamento completato!");
+alert(
+getCurrentLang()==="it"
+? "Pagamento completato! Piano Investor attivo."
+: "Payment successful! Investor plan activated."
+);
 
 }catch(err){
-console.error("Errore Stripe:",err);
+
+console.error("Errore attivazione piano:",err);
+
 }
+
+});
+
+document.addEventListener("rb_language_changed", () => {
+
+  updateUserUI(currentUser);
 
 });
 
 
 // ===============================
-// DOM READY
+// DOM EVENTS
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ===============================
+// STRIPE RETURN CHECK
+// ===============================
 
 const params = new URLSearchParams(window.location.search);
 const stripeSession = params.get("session_id");
 
 if(stripeSession){
+
+console.log("Stripe session rilevata:", stripeSession);
 
 document.dispatchEvent(
   new CustomEvent("rb_stripe_return",{
@@ -340,9 +390,55 @@ document.dispatchEvent(
   })
 );
 
-params.delete("session_id");
-history.replaceState({}, document.title, window.location.pathname);
+  params.delete("session_id");
+  history.replaceState({}, document.title, window.location.pathname);  
 
 }
+
+  const registerAction = document.getElementById("register-action");
+  const loginAction = document.getElementById("login-action");
+  const proBtn = document.getElementById("pro-btn");
+
+  if (registerAction) {
+
+    registerAction.addEventListener("click", async () => {
+
+      const email = document.getElementById("auth-email").value;
+      const password = document.getElementById("auth-password").value;
+
+      try {
+
+        await registerUser(email, password);
+
+      } catch (err) {
+
+        alert(err.message);
+
+      }
+
+    });
+
+  }
+
+  if (loginAction) {
+
+    loginAction.addEventListener("click", async () => {
+
+      const email = document.getElementById("auth-email").value;
+      const password = document.getElementById("auth-password").value;
+
+      try {
+
+        await loginUser(email, password);
+
+      } catch (err) {
+
+        alert(err.message);
+
+      }
+
+    });
+
+  }
 
 });
