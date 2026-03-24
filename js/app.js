@@ -295,7 +295,7 @@ renderChart(window.lastROI);
 
 // lingua iniziale sincronizzata con lang.js
 function getLang(){
-return window.RB_LANG?.current || localStorage.getItem("rb_lang") || "it";
+  return window.RB_LANG?.current || localStorage.getItem("rb_lang") || "it";
 }
 
 window.currentLang = getLang();
@@ -303,10 +303,21 @@ window.currentLang = getLang();
 
 // ================= UTIL =================
 
+// 🔥 SAFE NUMBER GLOBALE (ANTI-CRASH)
 function safeNumber(value){
-  return Number(value) || 0;
+  if(value === null || value === undefined) return 0;
+
+  const num = Number(value);
+
+  return isNaN(num) ? 0 : num;
 }
 
+// 🔥 SAFE PERCENT (opzionale ma TOP)
+function safePercent(value){
+  return safeNumber(value).toFixed(1);
+}
+
+// 🔥 SAFE RENDER (NON DEVE CONTENERE ALTRO)
 function safeRender(id, callback){
   const container = document.getElementById(id);
   if(!container) return;
