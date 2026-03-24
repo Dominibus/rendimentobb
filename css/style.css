@@ -4545,6 +4545,11 @@ display:none !important;
 
 /* BACKGROUND PER CITTÀ (UNICO SISTEMA) */
 
+/* DISATTIVA HERO BASE SOLO PER IMMOBILI */
+body.immobili-page .hero-bg{
+background:none !important;
+}
+
 body.immobili-page .hero.hero-bg.rome{
 background:
 linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
