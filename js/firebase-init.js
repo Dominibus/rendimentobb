@@ -164,12 +164,15 @@ async function loadUserPlan(uid) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("🔥 Piano da DB:", docSnap.data());
-      currentPlan = docSnap.data().plan || "free";
-    } else {
-      console.warn("⚠️ Documento utente NON trovato");
-      currentPlan = "free";
-    }
+  currentPlan = docSnap.data().plan || "free";
+} else {
+  console.warn("⚠️ Documento NON trovato → NON sovrascrivo");
+
+  // 🔥 NON toccare il piano se già caricato
+  if(!window.currentPlan){
+    currentPlan = "free";
+  }
+}
 
     window.currentPlan = currentPlan;
 
@@ -345,19 +348,6 @@ onAuthStateChanged(auth, async (user) => {
 
 });
 
-
-// 🔥 FAILSAFE se Firebase arriva in ritardo
-setTimeout(()=>{
-  if(window.currentUser && window.currentUser.uid){
-
-    // 👉 evita doppio caricamento inutile
-    if(window.currentPlan === "free"){
-      console.log("⚡ Fallback loadUserPlan");
-      loadUserPlan(window.currentUser.uid);
-    }
-
-  }
-},800);
 // ===============================
 // STRIPE PLAN ACTIVATION
 // ===============================
