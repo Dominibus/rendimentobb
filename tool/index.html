@@ -306,9 +306,9 @@ data-en="Estimated annual ROI">
 ROI
 </div>
 
-<div id="roi-live" class="roi-value">
-<div id="roi-badge" style="margin-top:8px;font-weight:600;"></div>  
-0%
+<div class="roi-value">
+  <span id="roi-live">0%</span>
+  <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
 </div>
 
 </div>
@@ -611,23 +611,26 @@ window.applyMarketData = function(city){
 
 function updateInvestmentScore(score){
 
-const circle = document.getElementById("score-circle");
+  const circle = document.getElementById("score-circle");
 
-circle.innerText = score;
+  if(!circle){
+    console.warn("score-circle NON trovato");
+    return;
+  }
 
-circle.classList.remove("score-good","score-medium","score-bad");
+  circle.innerText = score;
 
-if(score >= 75){
-circle.classList.add("score-good");
-}
+  circle.classList.remove("score-good","score-medium","score-bad");
 
-else if(score >= 50){
-circle.classList.add("score-medium");
-}
-
-else{
-circle.classList.add("score-bad");
-}
+  if(score >= 75){
+    circle.classList.add("score-good");
+  }
+  else if(score >= 50){
+    circle.classList.add("score-medium");
+  }
+  else{
+    circle.classList.add("score-bad");
+  }
 
 }
 
