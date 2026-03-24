@@ -29,6 +29,29 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
+// ================= SAFE GLOBAL EARLY FIX =================
+
+window.safeNumber = function(value){
+  if(value === null || value === undefined) return 0;
+  const num = Number(value);
+  return isNaN(num) ? 0 : num;
+};
+
+window.safePercent = function(value){
+  return window.safeNumber(value).toFixed(1);
+};
+
+window.safeRender = function(id, callback){
+  const container = document.getElementById(id);
+  if(!container) return;
+
+  try{
+    callback(container);
+  }catch(e){
+    console.error("Render error:", id, e);
+  }
+};
+
 window.runMortgageComparison = function(){
 
 const amount = parseFloat(document.getElementById("mortgageAmount").value);
