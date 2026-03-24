@@ -80,7 +80,9 @@ function t(it, en){
   return window.currentLang === "it" ? it : en;
 }
 
-window.currentPlan = "free";
+if(!window.currentPlan){
+  window.currentPlan = "free";
+}
 
 document.addEventListener("rb_plan_loaded", ()=>{
 
@@ -156,16 +158,18 @@ function getUserPlan(){
 
 function hasPlan(requiredPlan){
 
-  const plans = {
-    free:0,
-    starter:1,
-    investor:2,
-    pro:3
-  };
+  const userPlan = window.currentPlan || "free";
 
-  const userPlan = getUserPlan();
+  // 🔥 INVESTOR vale come PRO
+  if(requiredPlan === "pro"){
+    return userPlan === "pro" || userPlan === "pro_yearly" || userPlan === "investor";
+  }
 
-  return plans[userPlan] >= plans[requiredPlan];
+  if(requiredPlan === "investor"){
+    return userPlan === "investor" || userPlan === "pro" || userPlan === "pro_yearly";
+  }
+
+  return userPlan === requiredPlan;
 }
 
 function requirePlan(requiredPlan){
