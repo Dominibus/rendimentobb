@@ -85,6 +85,7 @@ window.currentPlan = "free";
 document.addEventListener("rb_auth_ready", async ()=>{
 
   console.log("UID LOGGATO:", window.currentUser?.uid);
+  console.log("🔥 PROJECT:", app.options.projectId);
 
   let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
 
