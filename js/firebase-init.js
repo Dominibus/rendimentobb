@@ -156,31 +156,42 @@ async function logoutUser() {
 
 async function loadUserPlan(uid) {
 
-  const docRef = doc(db, "users", uid);
-  const docSnap = await getDoc(docRef);
+  try{
 
-  if (docSnap.exists()) {
-    currentPlan = docSnap.data().plan || "free";
-  } else {
-    currentPlan = "free";
+    console.log("🔥 Carico piano per:", uid);
+
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("🔥 Piano da DB:", docSnap.data());
+      currentPlan = docSnap.data().plan || "free";
+    } else {
+      console.warn("⚠️ Documento utente NON trovato");
+      currentPlan = "free";
+    }
+
+    window.currentPlan = currentPlan;
+
+    console.log("🔥 Piano finale:", currentPlan);
+
+    document.dispatchEvent(
+      new CustomEvent("rb_plan_loaded", {
+        detail: { plan: currentPlan }
+      })
+    );
+
+    updateProVisibility();
+
+  }catch(err){
+
+    console.error("❌ ERRORE loadUserPlan:", err);
+
+    window.currentPlan = "free";
+
   }
 
-  window.currentPlan = currentPlan;
-
-  document.dispatchEvent(
-    new CustomEvent("rb_plan_loaded", {
-      detail: { plan: currentPlan }
-    })
-  );
-
-  updateProVisibility();
 }
-
-
-// ===============================
-// AGGIORNA PRO (TEST)
-// ===============================
-
 // ===============================
 // AGGIORNA PIANO UTENTE
 // ===============================
@@ -294,16 +305,20 @@ function updateProVisibility() {
 onAuthStateChanged(auth, async (user) => {
 
   window.currentUser = user;
-  window.firebaseReady = true;
+  window.firebaseReady = false;
 
   if (user) {
 
     console.log("🔥 Auth OK:", user.uid);
 
-    // 🔥 PRIMA carica piano
+    // 🔥 carica piano
     await loadUserPlan(user.uid);
 
-    // 🔥 POI aggiorna UI (FONDAMENTALE)
+    // 🔥 ora Firebase è pronto
+    window.firebaseReady = true;
+    console.log("✅ Firebase READY con piano:", window.currentPlan);
+
+    // 🔥 aggiorna UI
     updateUserUI(user);
 
   } else {
@@ -311,6 +326,7 @@ onAuthStateChanged(auth, async (user) => {
     console.log("👤 Utente non loggato");
 
     window.currentPlan = "free";
+    window.firebaseReady = true; // ✅ MANCAVA QUESTO
 
     updateUserUI(null);
 
@@ -329,6 +345,19 @@ onAuthStateChanged(auth, async (user) => {
 
 });
 
+
+// 🔥 FAILSAFE se Firebase arriva in ritardo
+setTimeout(()=>{
+  if(window.currentUser && window.currentUser.uid){
+
+    // 👉 evita doppio caricamento inutile
+    if(window.currentPlan === "free"){
+      console.log("⚡ Fallback loadUserPlan");
+      loadUserPlan(window.currentUser.uid);
+    }
+
+  }
+},800);
 // ===============================
 // STRIPE PLAN ACTIVATION
 // ===============================
