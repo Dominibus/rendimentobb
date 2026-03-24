@@ -1367,8 +1367,7 @@ if(resultsSection){
 resultsSection.scrollIntoView({
 behavior: "smooth"
 }); 
-}
-}  
+} 
 
 }
 
@@ -2466,29 +2465,6 @@ checkMortgageRateUpdate();
 
 });
 
-// ================= AUTO LOAD PROPERTY =================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-const link = localStorage.getItem("property_link");
-
-// carica solo se l'utente arriva dalla pagina immobile
-if(link && sessionStorage.getItem("from_property_page")){
-loadPropertyFromLink();
-sessionStorage.removeItem("from_property_page");
-}
-
-  const occ = document.getElementById("occupancy");
-const occValue = document.getElementById("occ-value");
-
-if(occ && occValue){
-
-occ.addEventListener("input",()=>{
-
-occValue.innerText = occ.value + "%";
-
-});
-
 document.addEventListener("DOMContentLoaded", () => {
 
 const savedRate = localStorage.getItem("selected_mortgage_rate");
@@ -2528,6 +2504,31 @@ localStorage.removeItem("selected_mortgage_rate");
 }
 
 });  
+
+// ================= AUTO LOAD PROPERTY =================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+const link = localStorage.getItem("property_link");
+
+// carica solo se l'utente arriva dalla pagina immobile
+if(link && sessionStorage.getItem("from_property_page")){
+loadPropertyFromLink();
+sessionStorage.removeItem("from_property_page");
+}
+
+  const occ = document.getElementById("occupancy");
+const occValue = document.getElementById("occ-value");
+
+if(occ && occValue){
+
+occ.addEventListener("input",()=>{
+
+occValue.innerText = occ.value + "%";
+
+});
+
+
 
 }
 
