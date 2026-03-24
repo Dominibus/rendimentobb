@@ -1137,12 +1137,19 @@ function getInvestmentBadge(roi){
 
 function calculate(force = false){
 
+// 🔥 BLOCCO SICUREZZA PRIMA DI TUTTO
+if(typeof window.safeNumber !== "function"){
+  console.warn("safeNumber non pronto → skip calculate");
+  return;
+}
+
 // sicurezza DOM ma NON bloccare
 if(document.readyState === "loading"){
   console.warn("DOM non pronto ma continuo comunque");
 }
 
-window.simulationExecuted = true;
+// 👉 SOLO QUI
+window.simulationExecuted = true; 
 
 const priceNight = getValue("priceNight");
 const occupancy = getValue("occupancy");
