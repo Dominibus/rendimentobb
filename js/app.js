@@ -123,35 +123,6 @@ document.addEventListener("rb_auth_ready", ()=>{
   }
 
 });
-  // ================= BLOCCO FREE =================
-
-  if(!isLogged && !isPro && freeRuns >= 3){
-
-    alert(
-      t(
-        "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare.",
-        "You reached the free simulation limit. Create a free account to continue."
-      )
-    );
-
-    window.location.href="/login/";
-    return;
-  }
-
-  // incrementa solo utenti anonimi
-  if(!isLogged){
-    freeRuns++;
-    localStorage.setItem("rb_free_runs", freeRuns);
-  }
-
-  // abilita bottone
-  const btn = document.getElementById("calc-btn");
-  if(btn){
-    btn.disabled = false;
-  }
-
-});
-
 
 // ================= CITY FROM HOMEPAGE =================
 
