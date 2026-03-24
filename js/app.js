@@ -234,10 +234,16 @@ async function loadUserPlan(uid){
 
   try{
 
+    console.log("Cerco utente UID:", uid);
+
     const docRef = doc(db, "users", uid);
     const snap = await getDoc(docRef);
 
+    console.log("Documento esiste?", snap.exists());
+
     if(snap.exists()){
+      console.log("DATI:", snap.data()); // 👈 AGGIUNGI QUESTO
+
       window.currentPlan = snap.data().plan || "free";
     }else{
       window.currentPlan = "free";
