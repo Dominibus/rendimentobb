@@ -118,8 +118,13 @@
     window.currentLang = RB_LANG.current;
 
     if(typeof calculate === "function"){
-      calculate();
-    }
+
+  // 🔥 evita crash se app non è pronta
+  if(window.simulationExecuted || document.readyState === "complete"){
+    calculate(true);
+  }
+
+}
 
     if(typeof runRealCalculation === "function"){
       runRealCalculation();
