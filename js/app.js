@@ -1125,7 +1125,11 @@ const result = calculateROI({
   loanYears
 });
 
-console.log("RESULT:", result);  
+// DEBUG
+console.log("RESULT:", result);
+
+// 🔥 QUI DEVE STARE (FUORI!)
+renderExecutiveKPI(result);;
 
 window.lastAnalysisData = {
   ...result,
