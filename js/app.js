@@ -304,6 +304,9 @@ window.currentLang = getLang();
 // ================= UTIL =================
 
 function safeRender(id, callback){
+  function safeNumber(value){
+  return Number(value) || 0;
+}
   const container = document.getElementById(id);
   if(!container) return;
 
@@ -456,7 +459,7 @@ function renderROIMarketComparison(roi, cityKey){
     container.innerHTML = badge + `
       <div class="kpi-box">
         <span>${t("ROI investimento","Your ROI")}</span>
-        <strong>${roi.toFixed(1)}%</strong>
+        <strong>${safeNumber(roi).toFixed(1)}%</strong>
       </div>
 
       <div class="kpi-box">
@@ -910,7 +913,7 @@ ${t("Investimento ad alto rendimento","High yield investment")}
 </strong>
 
 <p style="margin-top:8px;font-size:14px;">
-ROI stimato: <strong>${roi.toFixed(1)}%</strong>
+ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong>
 </p>
 
 <p style="margin-top:10px;font-size:14px;">
@@ -984,7 +987,7 @@ ${title}
 </h3>
 
 <p>
-${roiText}: <strong>${roi.toFixed(1)}%</strong>
+${roiText}: <strong>${safeNumber(roi).toFixed(1)}%</strong>
 </p>
 
 <p style="margin-top:10px;font-size:14px;">
@@ -1156,7 +1159,7 @@ const operatingProfit = result.operatingProfit;
 const taxCost = result.taxCost;
 const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = result.netAfterMortgage;
-const roi = result.roi;
+const roi = safeNumber(result.roi);
 // 💥 HOOK MUTUO → UPSELL
 if(localStorage.getItem("from_mortgage")){
 
