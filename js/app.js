@@ -86,14 +86,31 @@ document.addEventListener("rb_auth_ready", async ()=>{
 
   console.log("UID LOGGATO:", window.currentUser?.uid);
 
+  // ================= INIT VAR =================
+
+  let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
+
+  const isLogged = !!window.currentUser;
+
+  // ================= LOAD PLAN =================
+
   if(window.currentUser?.uid){
     await loadUserPlan(window.currentUser.uid);
 
-    // 🔥 aspetta prima di continuare
+    // piccolo delay sicurezza UI
     setTimeout(()=>{
       document.dispatchEvent(new Event("rb_plan_loaded"));
     }, 300);
   }
+
+  const isPro = hasPlan("pro");
+
+  console.log("DEBUG PLAN:", {
+    isLogged,
+    isPro,
+    freeRuns,
+    plan: window.currentPlan
+  });
 
   // ================= BLOCCO FREE =================
 
@@ -108,7 +125,6 @@ document.addEventListener("rb_auth_ready", async ()=>{
 
     window.location.href="/login/";
     return;
-
   }
 
   // incrementa solo utenti anonimi
@@ -124,6 +140,7 @@ document.addEventListener("rb_auth_ready", async ()=>{
   }
 
 });
+
 
 // ================= CITY FROM HOMEPAGE =================
 
@@ -155,17 +172,16 @@ async function saveAnalysis(data){
       city: data.city || "italy",
       createdAt: serverTimestamp(),
       createdAtClient: new Date()
- });
+    });
 
     console.log("✅ SALVATO FIRESTORE");
 
   }catch(e){
-
     console.error("Errore salvataggio:", e);
-
   }
 
 }
+
 
 // ================= PLAN SYSTEM =================
 
@@ -175,55 +191,54 @@ function getUserPlan(){
 
 function hasPlan(requiredPlan){
 
-const plans = {
-free:0,
-starter:1,
-investor:2,
-pro:3
-};
+  const plans = {
+    free:0,
+    starter:1,
+    investor:2,
+    pro:3
+  };
 
-const userPlan = getUserPlan();
+  const userPlan = getUserPlan();
 
-return plans[userPlan] >= plans[requiredPlan];
-
+  return plans[userPlan] >= plans[requiredPlan];
 }
 
 function requirePlan(requiredPlan){
 
-if(!window.currentUser){
+  if(!window.currentUser){
 
-alert(
-t(
-"Per usare questa funzione devi creare un account gratuito.",
-"Create a free account to use this feature."
-)
-);
+    alert(
+      t(
+        "Per usare questa funzione devi creare un account gratuito.",
+        "Create a free account to use this feature."
+      )
+    );
 
-window.location.href="/login/";
-return false;
+    window.location.href="/login/";
+    return false;
+  }
 
+  if(!hasPlan(requiredPlan)){
+
+    const goUpgrade = confirm(
+      t(
+        "Questa funzione richiede un piano superiore.",
+        "This feature requires a higher plan."
+      )
+    );
+
+    if(goUpgrade){
+      window.location.href="/pricing/";
+    }
+
+    return false;
+  }
+
+  return true;
 }
 
-if(!hasPlan(requiredPlan)){
 
-const goUpgrade = confirm(
-t(
-"Questa funzione richiede un piano superiore.",
-"This feature requires a higher plan."
-)
-);
-
-if(goUpgrade){
-  window.location.href="/pricing/";
-}
-
-return false;
-
-}
-
-return true;
-
-}
+// ================= LOAD USER PLAN =================
 
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -233,7 +248,7 @@ async function loadUserPlan(uid){
 
     console.log("Cerco utente UID:", uid);
 
-    // 🔥 ASPETTA FIREBASE PRONTO
+    // 🔥 attesa firebase ready
     let tries = 0;
 
     while(!window.firebaseReady && tries < 10){
@@ -248,22 +263,28 @@ async function loadUserPlan(uid){
     console.log("Documento esiste?", snap.exists());
 
     if(snap.exists()){
-      console.log("DATI:", snap.data());
 
-      window.currentPlan = snap.data().plan || "free";
+      const data = snap.data();
+
+      console.log("DATI UTENTE:", data);
+
+      window.currentPlan = data.plan || "free";
+
     }else{
+
+      console.warn("⚠️ Utente NON trovato → fallback free");
       window.currentPlan = "free";
     }
 
     console.log("🔥 PLAN LOADED:", window.currentPlan);
 
   }catch(e){
+
     console.error("Errore caricamento piano:", e);
     window.currentPlan = "free";
   }
 
 }
-
 // ================= Function Mutui =================
 
 function renderMortgageResults(results){
