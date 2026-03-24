@@ -248,14 +248,19 @@ async function loadUserPlan(uid){
 
     console.log("Cerco utente UID:", uid);
 
-    // 🔥 attesa firebase ready
-    let tries = 0;
+    // 🔥 ASPETTA FIREBASE IN MODO SERIO
+    await new Promise(resolve => {
 
-    while(!window.firebaseReady && tries < 10){
-      console.log("⏳ Attendo Firebase...");
-      await new Promise(r => setTimeout(r, 200));
-      tries++;
-    }
+      let check = setInterval(() => {
+        if(window.firebaseReady){
+          clearInterval(check);
+          resolve();
+        }
+      }, 100);
+
+    });
+
+    console.log("🔥 Firebase READY");
 
     const docRef = doc(db, "users", uid);
     const snap = await getDoc(docRef);
@@ -272,7 +277,7 @@ async function loadUserPlan(uid){
 
     }else{
 
-      console.warn("⚠️ Utente NON trovato → fallback free");
+      console.warn("⚠️ Documento NON trovato → fallback free");
       window.currentPlan = "free";
     }
 
