@@ -4609,87 +4609,37 @@ background-repeat:no-repeat !important;
 }
 
 /* ===================== */
-/* FIX TESTO CARD IMMOBILI */
-/* ===================== */
-
-.property-card h3{
-color:#0f172a !important;
-}
-
-.property-card .market-label{
-color:#64748b !important;
-}
-
-.property-card .market-extra{
-color:#475569 !important;
-}
-
-.property-card .market-link{
-color:#10b981 !important;
-}
-
-/* ===================== */
-/* FIX COMPLETO TESTI CARD IMMOBILI */
-/* ===================== */
-
-.property-card{
-color:#0f172a !important;
-}
-
-/* Titolo città */
-.property-card h3{
-color:#0f172a !important;
-}
-
-/* ROI label (quello sbiadito) */
-.property-card .market-label{
-color:#64748b !important;
-opacity:1 !important;
-}
-
-/* ROI numero */
-.property-card .property-roi{
-color:#10b981 !important;
-}
-
-/* Descrizione sotto */
-.property-card .market-extra,
-.property-card .market-extra span{
-color:#475569 !important;
-}
-
-/* Link finale */
-.property-card .market-link{
-color:#10b981 !important;
-}
-
-/* ===================== */
-/* FIX ISOLAMENTO CARD DA HERO */
+/* FIX TESTI CARD IMMOBILI DEFINITIVO */
 /* ===================== */
 
 body.immobili-page .property-card{
-color:#0f172a !important;
+  color:#0f172a !important;
 }
 
-/* forza tutti i figli */
-body.immobili-page .property-card *{
-color:inherit !important;
+/* Titolo */
+body.immobili-page .property-card h3{
+  color:#0f172a !important;
 }
 
-/* override specifici */
-body.immobili-page .property-card .property-roi{
-color:#10b981 !important;
-}
-
+/* Label (ROI medio B&B) */
 body.immobili-page .property-card .market-label{
-color:#64748b !important;
-opacity:1 !important;
+  color:#64748b !important;
+  opacity:1 !important;
+  text-shadow:none !important;
 }
 
+/* Numero ROI */
+body.immobili-page .property-card .property-roi{
+  color:#10b981 !important;
+}
+
+/* Descrizione */
 body.immobili-page .property-card .market-extra{
-color:#475569 !important;
+  color:#475569 !important;
+  text-shadow:none !important;
 }
 
+/* Link */
 body.immobili-page .property-card .market-link{
-color:#10b981 !important;
+  color:#10b981 !important;
 }
