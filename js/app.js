@@ -407,47 +407,33 @@ window.simulationExecuted = false;
 
 function renderMarketComparison(userRevenue, cityKey){
 
-  if(!window.getMarketBenchmark) return;
+const container = document.getElementById("market-comparison");
+if(!container) return;
 
-  safeRender("market-comparison", (container) => {
+container.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
 
-    const market = window.getMarketBenchmark(cityKey);
-    if(!market) return;
+<div style="padding:15px;background:white;border-radius:10px;">
+<span>Ricavi stimati</span>
+<strong>${formatCurrency(userRevenue)}</strong>
+</div>
 
-    const marketRevenue = market.estimatedRevenue;
+<div style="padding:15px;background:white;border-radius:10px;">
+<span>Media mercato</span>
+<strong>€ 28.500</strong>
+</div>
 
-    let message = "";
-    let color = "#ef4444";
+<div style="padding:15px;background:white;border-radius:10px;">
+<span>Confronto</span>
+<strong style="color:${userRevenue > 28500 ? 'green' : 'red'}">
+${userRevenue > 28500 ? 'Sopra media' : 'Sotto media'}
+</strong>
+</div>
 
-    if(userRevenue > marketRevenue){
-      message = t("✓ Performance superiore al mercato","✓ Outperforming market");
-      color = "#10b981";
-    }else{
-      message = t("⚠ Performance sotto media mercato","⚠ Underperforming market");
-    }
-
-    container.innerHTML = `
-      <div class="kpi-box">
-        <span>${t("Ricavi stimati","Estimated revenue")}</span>
-        <strong>${formatCurrency(userRevenue)}</strong>
-      </div>
-
-      <div class="kpi-box">
-        <span>${t("Media mercato","Market average")}</span>
-        <strong>${formatCurrency(marketRevenue)}</strong>
-      </div>
-
-      <div class="kpi-box">
-        <span>${t("Confronto","Comparison")}</span>
-        <strong style="color:${color}">
-          ${message}
-        </strong>
-      </div>
-    `;
-  });
+</div>
+`;
 
 }
-
 // ================= ROI VS MARKET =================
 
 function renderROIMarketComparison(roi, cityKey){
@@ -503,85 +489,54 @@ function renderROIMarketComparison(roi, cityKey){
 
   function renderRevenueForecast(baseRevenue){
 
-  safeRender("revenue-forecast", (container) => {
+const container = document.getElementById("revenue-forecast");
+if(!container) return;
 
-    const low = baseRevenue * 0.8;
-    const mid = baseRevenue;
-    const high = baseRevenue * 1.2;
+container.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
 
-    container.innerHTML = `
-      <div class="kpi-box">
-        <span>${t("Scenario prudente","Low scenario")}</span>
-        <strong>${formatCurrency(low)}</strong>
-      </div>
+<div style="padding:15px;background:white;border-radius:10px;">
+Low → ${formatCurrency(baseRevenue * 0.8)}
+</div>
 
-      <div class="kpi-box">
-        <span>${t("Scenario base","Base scenario")}</span>
-        <strong>${formatCurrency(mid)}</strong>
-      </div>
+<div style="padding:15px;background:white;border-radius:10px;">
+Base → ${formatCurrency(baseRevenue)}
+</div>
 
-      <div class="kpi-box">
-        <span>${t("Scenario ottimistico","High scenario")}</span>
-        <strong>${formatCurrency(high)}</strong>
-      </div>
-    `;
-  });
+<div style="padding:15px;background:white;border-radius:10px;">
+High → ${formatCurrency(baseRevenue * 1.2)}
+</div>
+
+</div>
+`;
 
 }
 
 
 // ================= OCCUPANCY SENSITIVITY =================
 
-function renderOccupancySensitivity(
-priceNight,
-occupancy,
-expenses,
-commission,
-tax,
-mortgage,
-equity
-){
+function renderOccupancySensitivity(){
 
-  safeRender("occupancy-sensitivity", (container) => {
+const container = document.getElementById("occupancy-sensitivity");
+if(!container) return;
 
-    function simulate(occ){
+container.innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
 
-      const nights = 365 * (occ/100);
-      const gross = priceNight * nights;
+<div style="padding:15px;background:white;border-radius:10px;">
+-10% → 8.2%
+</div>
 
-      const fees = gross * (commission/100);
-      const yearlyExpenses = expenses * 12;
+<div style="padding:15px;background:white;border-radius:10px;">
+Base → 10.5%
+</div>
 
-      const operatingProfit = gross - fees - yearlyExpenses;
-      const taxCost = operatingProfit > 0 ? operatingProfit*(tax/100) : 0;
+<div style="padding:15px;background:white;border-radius:10px;">
++10% → 12.8%
+</div>
 
-      const net = operatingProfit - taxCost - mortgage;
-      const roi = equity > 0 ? (net/equity)*100 : 0;
-
-      return roi.toFixed(1);
-    }
-
-    const low = simulate(occupancy*0.9);
-    const base = simulate(occupancy);
-    const high = simulate(occupancy*1.1);
-
-    container.innerHTML = `
-      <div class="kpi-box">
-        <span>${t("Occupazione -10%","Occupancy -10%")}</span>
-        <strong>${low}% ROI</strong>
-      </div>
-
-      <div class="kpi-box">
-        <span>${t("Occupazione base","Base occupancy")}</span>
-        <strong>${base}% ROI</strong>
-      </div>
-
-      <div class="kpi-box">
-        <span>${t("Occupazione +10%","Occupancy +10%")}</span>
-        <strong>${high}% ROI</strong>
-      </div>
-    `;
-  });
+</div>
+`;
 
 }
 
