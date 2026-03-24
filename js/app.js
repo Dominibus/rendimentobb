@@ -1211,7 +1211,7 @@ const gross = result.gross;
 const operatingProfit = result.operatingProfit;
 const taxCost = result.taxCost;
 const mortgageYearly = result.mortgageYearly;
-const netAfterMortgage = result.netAfterMortgage;
+const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
 // 💥 HOOK MUTUO → UPSELL
 if(localStorage.getItem("from_mortgage")){
@@ -1462,6 +1462,11 @@ function renderChart(net){
 const annualProfit = net;
 
 const ctx = document.getElementById("roiChart");
+
+if(typeof Chart === "undefined"){
+  console.warn("Chart.js non ancora caricato");
+  return;
+}  
 
 if(!ctx || typeof Chart === "undefined") return;
 
