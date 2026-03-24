@@ -249,6 +249,9 @@ async function loadUserPlan(uid){
   }
 
 }
+
+window.loadUserPlan = loadUserPlan;
+
 // ================= Function Mutui =================
 
 function renderMortgageResults(results){
