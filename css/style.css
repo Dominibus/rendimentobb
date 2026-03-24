@@ -4627,3 +4627,38 @@ color:#475569 !important;
 .property-card .market-link{
 color:#10b981 !important;
 }
+
+/* ===================== */
+/* FIX COMPLETO TESTI CARD IMMOBILI */
+/* ===================== */
+
+.property-card{
+color:#0f172a !important;
+}
+
+/* Titolo città */
+.property-card h3{
+color:#0f172a !important;
+}
+
+/* ROI label (quello sbiadito) */
+.property-card .market-label{
+color:#64748b !important;
+opacity:1 !important;
+}
+
+/* ROI numero */
+.property-card .property-roi{
+color:#10b981 !important;
+}
+
+/* Descrizione sotto */
+.property-card .market-extra,
+.property-card .market-extra span{
+color:#475569 !important;
+}
+
+/* Link finale */
+.property-card .market-link{
+color:#10b981 !important;
+}
