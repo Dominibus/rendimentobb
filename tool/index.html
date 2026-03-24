@@ -614,6 +614,22 @@ Contatti
 <script type="module" src="/js/app.js"></script>
 
 <script>
+window.applyMarketData = function(city){
+  window.currentCity = city;
+
+  if(typeof renderMarketBenchmark === "function"){
+    renderMarketBenchmark(city);
+  }
+
+  if(typeof changeCityBackground === "function"){
+    changeCityBackground(city);
+  }
+
+  console.log("City selected:", city);
+};
+</script>
+
+<script>
 
 function updateInvestmentScore(score){
 
