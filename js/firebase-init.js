@@ -295,26 +295,27 @@ onAuthStateChanged(auth, async (user) => {
 
   window.currentUser = user;
 
-  // FIREBASE READY SUBITO
+  // firebase pronto subito
   window.firebaseReady = true;
 
   if (user) {
 
     console.log("🔥 Auth OK:", user.uid);
 
-    // 🔥 QUI carichi piano UNA SOLA VOLTA
     await loadUserPlan(user.uid);
 
   } else {
 
+    console.log("👤 Utente non loggato");
+
     window.currentPlan = "free";
+
+    // 🔥 fondamentale
+    document.dispatchEvent(new Event("rb_plan_loaded"));
 
   }
 
-  // UI
-  updateUserUI(user);
-
-  // 🔥 EVENTO DOPO CHE TUTTO È PRONTO
+  // 🔥 QUESTO SOLO DOPO IL PLAN
   document.dispatchEvent(
     new CustomEvent("rb_auth_ready", {
       detail: {
