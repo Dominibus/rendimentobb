@@ -4,7 +4,7 @@ const roiEl = document.getElementById("roi-live");
 const profitEl = document.getElementById("profit-live");
 const revenueEl = document.getElementById("revenue-live");
 
-// 🔥 FIX TOTALE (questo evita il crash)
+// 🔥 SAFE FIX (anti crash)
 const roi = Number(result?.roi) || 0;
 const profit = Number(result?.netAfterMortgage || result?.profit) || 0;
 const revenue = Number(result?.gross || result?.revenue) || 0;
