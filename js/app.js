@@ -1089,7 +1089,12 @@ function updatePDFButton(){
 const btn = document.getElementById("pdf-btn");
 if(!btn) return;
 
-if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
+if(!window.firebaseReady){
+  console.log("⏳ Aspetto Firebase...");
+  return;
+}
+
+if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly" || window.currentPlan === "investor"){
   btn.style.display = "inline-block";
 }else{
   btn.style.display = "none";
