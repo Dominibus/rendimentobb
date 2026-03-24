@@ -202,11 +202,6 @@ function requirePlan(requiredPlan){
   return true;
 }
 
-
-// ================= LOAD USER PLAN =================
-
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 // ================= Function Mutui =================
 
 function renderMortgageResults(results){
@@ -1266,16 +1261,19 @@ if(window.currentUser && window.currentUser.uid){
   console.warn("⚠️ User non pronto → ritento tra 500ms");
 
   setTimeout(()=>{
-    if(window.currentUser && window.currentUser.uid){
-      saveAnalysis({
-        price: getValue("price"),
-        equity: equity,
-        roi: roi,
-        risk: riskScore,
-        city: city || "italy"
-      });
-    }
-  },500);
+    if(window.currentUser && window.currentUser.uid && roi > 0){
+
+  saveAnalysis({
+    price: getValue("price"),
+    equity: equity,
+    roi: roi,
+    risk: riskScore,
+    city: city || "italy"
+  });
+
+}else{
+  console.log("⛔ Salvataggio bloccato (utente non pronto o ROI=0)");
+}
 
 }
 
