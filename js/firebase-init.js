@@ -294,15 +294,17 @@ function updateProVisibility() {
 onAuthStateChanged(auth, async (user) => {
 
   window.currentUser = user;
-
-  // firebase pronto subito
   window.firebaseReady = true;
 
   if (user) {
 
     console.log("🔥 Auth OK:", user.uid);
 
+    // 🔥 PRIMA carica piano
     await loadUserPlan(user.uid);
+
+    // 🔥 POI aggiorna UI (FONDAMENTALE)
+    updateUserUI(user);
 
   } else {
 
@@ -310,12 +312,12 @@ onAuthStateChanged(auth, async (user) => {
 
     window.currentPlan = "free";
 
-    // 🔥 fondamentale
+    updateUserUI(null);
+
     document.dispatchEvent(new Event("rb_plan_loaded"));
 
   }
 
-  // 🔥 QUESTO SOLO DOPO IL PLAN
   document.dispatchEvent(
     new CustomEvent("rb_auth_ready", {
       detail: {
