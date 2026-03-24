@@ -4662,3 +4662,34 @@ color:#475569 !important;
 .property-card .market-link{
 color:#10b981 !important;
 }
+
+/* ===================== */
+/* FIX ISOLAMENTO CARD DA HERO */
+/* ===================== */
+
+body.immobili-page .property-card{
+color:#0f172a !important;
+}
+
+/* forza tutti i figli */
+body.immobili-page .property-card *{
+color:inherit !important;
+}
+
+/* override specifici */
+body.immobili-page .property-card .property-roi{
+color:#10b981 !important;
+}
+
+body.immobili-page .property-card .market-label{
+color:#64748b !important;
+opacity:1 !important;
+}
+
+body.immobili-page .property-card .market-extra{
+color:#475569 !important;
+}
+
+body.immobili-page .property-card .market-link{
+color:#10b981 !important;
+}
