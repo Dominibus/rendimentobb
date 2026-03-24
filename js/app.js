@@ -82,15 +82,21 @@ function t(it, en){
 
 window.currentPlan = "free";
 
-document.addEventListener("rb_auth_ready", ()=>{
+document.addEventListener("rb_auth_ready", async ()=>{
 
+let freeRuns =
+parseInt(localStorage.getItem("rb_free_runs") || "0");
+
+const isLogged = !!window.currentUser;
+
+// 🔥 AGGIUNGI QUESTO BLOCCO
 if(window.currentUser && window.currentUser.uid){
-  loadUserPlan(window.currentUser.uid);
-
+  await loadUserPlan(window.currentUser.uid);
   document.dispatchEvent(new Event("rb_plan_loaded"));
+}
 
-  console.log("🔥 Piano caricato post-auth");
-}  
+// 👉 ORA sarà corretto
+const isPro = hasPlan("pro");
 
 let freeRuns =
 parseInt(localStorage.getItem("rb_free_runs") || "0");
