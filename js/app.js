@@ -304,24 +304,14 @@ window.currentLang = getLang();
 // ================= UTIL =================
 
 function safeRender(id, callback){
-
   const container = document.getElementById(id);
-
-  if(!container){
-    return; // silenzioso in produzione
-  }
-
-  if(container.dataset.rendered === "true"){
-    return;
-  }
+  if(!container) return;
 
   try{
     callback(container);
-    container.dataset.rendered = "true";
   }catch(e){
     console.error("Render error:", id, e);
   }
-
 }
 
 // ================= HERO CITY BACKGROUND =================
@@ -1100,7 +1090,7 @@ function calculate(force = false){
 
 // sicurezza DOM ma NON bloccare
 if(document.readyState === "loading"){
-  console.log("DOM non pronto, skip momentaneo");
+  console.warn("DOM non pronto ma continuo comunque");
 }
 
 window.simulationExecuted = true;
@@ -1277,33 +1267,31 @@ if(window.currentUser && window.currentUser.uid && roi > 0){
 }
 // MARKET BENCHMARK + COMPARISON
 
+// ================= RENDER BLOCCO COMPLETO =================
+
 const citySafe = city || "italy";
 
-setTimeout(() => {
+// 🔹 MARKET + BENCHMARK
+renderMarketBenchmark(citySafe);
+renderMarketComparison(gross, citySafe);
+renderROIMarketComparison(roi, citySafe);
 
-  renderMarketBenchmark(citySafe);
-  renderMarketComparison(gross, citySafe);
-  renderROIMarketComparison(roi, citySafe);
-
-}, 100);
-
+// 🔹 FORECAST + SENSITIVITY
+renderRevenueForecast(gross);
 renderOccupancySensitivity();
 
-// ===== NUOVE RENDER UI (FONDAMENTALE)
-
-setTimeout(() => {
-  renderRevenueForecast(gross);
-}, 50);
-
+// 🔹 CORE KPI
 renderInvestmentScore(roi, riskScore);
-
 renderInvestmentRanking(roi);
-
 renderRiskMeter(riskScore);
 
+// 🔹 SMART UX
 renderSmartInvestmentAlert(roi);
 
-renderChart(netAfterMortgage);  
+// 🔹 CHART (LEGGERO RITARDO)
+setTimeout(() => {
+  renderChart(netAfterMortgage);
+}, 50);
 
 // PAYBACK
 const payback =
