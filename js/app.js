@@ -303,6 +303,27 @@ window.currentLang = getLang();
 
 // ================= UTIL =================
 
+function safeRender(id, callback){
+
+  const container = document.getElementById(id);
+
+  if(!container){
+    return; // silenzioso in produzione
+  }
+
+  if(container.dataset.rendered === "true"){
+    return;
+  }
+
+  try{
+    callback(container);
+    container.dataset.rendered = "true";
+  }catch(e){
+    console.error("Render error:", id, e);
+  }
+
+}
+
 // ================= HERO CITY BACKGROUND =================
 
 function changeCityBackground(city){
