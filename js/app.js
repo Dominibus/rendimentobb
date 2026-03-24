@@ -84,19 +84,28 @@ window.currentPlan = "free";
 
 document.addEventListener("rb_plan_loaded", ()=>{
 
-  console.log("🔥 PLAN DEFINITIVO:", window.currentPlan);
-
   let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
 
   const isLogged = !!window.currentUser;
   const isPro = hasPlan("pro");
 
-  console.log("DEBUG PLAN:", {
-    isLogged,
-    isPro,
-    freeRuns,
-    plan: window.currentPlan
-  });
+  if(!isLogged && !isPro && freeRuns >= 3){
+    alert("...");
+    window.location.href="/login/";
+    return;
+  }
+
+  if(!isLogged){
+    freeRuns++;
+    localStorage.setItem("rb_free_runs", freeRuns);
+  }
+
+  const btn = document.getElementById("calc-btn");
+  if(btn){
+    btn.disabled = false;
+  }
+
+});
 
 // ================= CITY FROM HOMEPAGE =================
 
