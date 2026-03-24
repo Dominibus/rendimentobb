@@ -1098,9 +1098,9 @@ function getInvestmentBadge(roi){
 
 function calculate(force = false){
 
-if(document.readyState !== "complete"){
-  window.addEventListener("load", () => calculate(true));
-  return;
+// sicurezza DOM ma NON bloccare
+if(document.readyState === "loading"){
+  console.log("DOM non pronto, skip momentaneo");
 }
 
 window.simulationExecuted = true;
@@ -1287,15 +1287,7 @@ setTimeout(() => {
 
 }, 100);
 
-renderOccupancySensitivity(
-priceNight,
-occupancy,
-expenses,
-commission,
-tax,
-mortgageYearly,
-equity
-);
+renderOccupancySensitivity();
 
 // ===== NUOVE RENDER UI (FONDAMENTALE)
 
