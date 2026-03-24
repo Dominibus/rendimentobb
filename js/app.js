@@ -501,12 +501,12 @@ ${message}
 
 // ================= REVENUE FORECAST =================
 
-function renderRevenueForecast(baseRevenue){
+  function renderRevenueForecast(baseRevenue){
 
   const container = document.getElementById("revenue-forecast");
 
   if(!container){
-    console.error("❌ revenue-forecast NON trovato nel DOM");
+    setTimeout(() => renderRevenueForecast(baseRevenue), 100);
     return;
   }
 
@@ -1117,8 +1117,9 @@ document.addEventListener("rb_auth_ready", ()=>{
 
 function calculate(force = false){
 
-if(!force && window.simulationExecuted){
-  console.log("Simulazione già eseguita, ma forzo aggiornamento UI");
+if(document.readyState !== "complete"){
+  window.addEventListener("load", () => calculate(true));
+  return;
 }
 
 window.simulationExecuted = true;
