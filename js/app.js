@@ -207,51 +207,6 @@ function requirePlan(requiredPlan){
 
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-async function loadUserPlan(uid){
-
-  try{
-
-    console.log("🔥 LOAD PLAN START:", uid);
-
-    if(!uid){
-      console.error("UID mancante");
-      window.currentPlan = "free";
-      return;
-    }
-
-    const docRef = doc(db, "users", uid);
-    const snap = await getDoc(docRef);
-
-    if(snap.exists()){
-
-      const data = snap.data();
-
-      console.log("✅ UTENTE TROVATO:", data);
-
-      window.currentPlan = data.plan || "free";
-
-    }else{
-
-      console.warn("❌ Documento NON trovato per UID:", uid);
-
-      window.currentPlan = "free";
-    }
-
-    console.log("🔥 PLAN LOADED:", window.currentPlan);
-
-    // 🔥 evento importante
-    document.dispatchEvent(new Event("rb_plan_loaded"));
-
-  }catch(e){
-
-    console.error("Errore loadUserPlan:", e);
-    window.currentPlan = "free";
-  }
-
-}
-
-window.loadUserPlan = loadUserPlan;
-
 // ================= Function Mutui =================
 
 function renderMortgageResults(results){
