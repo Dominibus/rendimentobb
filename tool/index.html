@@ -644,7 +644,7 @@ if(riskEl) riskEl.innerText = risk + "/100";
 
 <script>
 
-/* checkout stripe */
+/* ================= BUY PRO ================= */
 
 window.buyPro = function(){
 
@@ -652,10 +652,10 @@ window.buyPro = function(){
 
   if(!user){
     alert(
-window.currentLang === "en"
-? "You must login first."
-: "Devi effettuare il login."
-);
+      window.currentLang === "en"
+      ? "You must login first."
+      : "Devi effettuare il login."
+    );
     window.location.href = "/login/";
     return;
   }
@@ -666,37 +666,12 @@ window.currentLang === "en"
   "https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
 
   window.location.href = stripeUrl;
+};
 
-}
 
-</script>
-
-<script>
+/* ================= PAYWALL ================= */
 
 function applyPaywall(){
-
-  if(window.currentPlan === "pro"){
-
-    console.log("Utente PRO - paywall disattivato");
-    
-    document.querySelectorAll('[data-locked]').forEach(el => el.remove());
-
-    document.querySelectorAll(
-      "#revenue-forecast, #market-comparison, #occupancy-sensitivity, #strategic-insight"
-    ).forEach(card=>{
-      card.dataset.locked = "false";
-
-      card.style.opacity = "1";
-      card.style.pointerEvents = "auto";
-
-      const lock = card.querySelector('[data-locked]');
-      if(lock){
-        lock.remove();
-      }
-    });
-
-    return;
-  }
 
   const proSections = [
     "revenue-forecast",
@@ -705,47 +680,77 @@ function applyPaywall(){
     "strategic-insight"
   ];
 
+  // ================= PRO USER =================
+  if(window.currentPlan === "pro" || window.currentPlan === "investor" || window.currentPlan === "pro_yearly"){
+
+    console.log("Utente PRO - paywall disattivato");
+
+    document.querySelectorAll('[data-locked]').forEach(el => el.remove());
+
+    proSections.forEach(id => {
+
+      const inner = document.getElementById(id);
+      if(!inner) return;
+
+      const card = inner.closest(".results-card");
+      if(!card) return;
+
+      card.dataset.locked = "false";
+
+      const lock = card.querySelector('[data-locked]');
+      if(lock){
+        lock.remove();
+      }
+
+    });
+
+    return;
+  }
+
+  // ================= FREE USER =================
+
   proSections.forEach(id => {
 
-    const card = document.getElementById(id);
+    const inner = document.getElementById(id);
+    if(!inner) return;
+
+    const card = inner.closest(".results-card");
     if(!card) return;
 
     if(card.dataset.locked === "true") return;
 
     card.dataset.locked = "true";
 
-    card.style.opacity = "0.4";
-    card.style.pointerEvents = "none";
+    // 🔥 NON blocchiamo più il contenuto!
     card.style.position = "relative";
+    card.style.overflow = "hidden";
 
     const lock = document.createElement("div");
     lock.setAttribute("data-locked","true");
 
     lock.innerHTML = `
-    <div style="
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap:15px;
-      background:rgba(255,255,255,0.85);
-      backdrop-filter:blur(4px);
-      border-radius:16px;
-      pointer-events:none;
-    ">
-      <div style="font-weight:600;font-size:16px;"
-        data-it="🔒 Funzione PRO"
-        data-en="🔒 PRO Feature">
-      </div>
+      <div style="
+        position:absolute;
+        inset:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        gap:15px;
+        background:rgba(255,255,255,0.85);
+        backdrop-filter:blur(4px);
+        border-radius:16px;
+      ">
+        <div style="font-weight:600;font-size:16px;"
+          data-it="🔒 Funzione PRO"
+          data-en="🔒 PRO Feature">
+        </div>
 
-      <button onclick="buyPro()" class="btn btn-primary"
-        style="pointer-events:auto"
-        data-it="🔓 Sblocca versione PRO – 29€"
-        data-en="🔓 Unlock PRO version – €29">
-      </button>
-    </div>
+        <button onclick="buyPro()" class="btn btn-primary"
+          data-it="🔓 Sblocca versione PRO – 29€"
+          data-en="🔓 Unlock PRO version – €29">
+        </button>
+      </div>
     `;
 
     card.appendChild(lock);
@@ -757,6 +762,15 @@ function applyPaywall(){
   });
 
 }
+
+
+/* ================= AUTO INIT ================= */
+
+// 👉 IMPORTANTISSIMO
+document.addEventListener("rb_plan_loaded", applyPaywall);
+document.addEventListener("DOMContentLoaded", applyPaywall);
+
+</script>
 
 
 // quando Firebase carica il piano
