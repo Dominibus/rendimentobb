@@ -1117,10 +1117,6 @@ document.addEventListener("rb_auth_ready", ()=>{
 
 // ================= FREE LIMIT =================
 
-function calculate(force = false){  
-
-window.calculate = calculate;
-
 if(!force && window.simulationExecuted){
   console.log("Simulazione già eseguita, ma forzo aggiornamento UI");
 }
