@@ -488,7 +488,7 @@ data-en="🔓 Unlock PRO version – €29">
 
 <div class="results-card">
   <h3 data-it="Proiezione Cashflow 5 anni" data-en="5-Year Cashflow Forecast"></h3>
-  <canvas id="roiChart" height="120"></canvas>
+  <canvas id="roiChartProjection" height="120"></canvas>
 </div>
 
 
@@ -764,42 +764,66 @@ function applyPaywall(){
 }
 
 
-/* ================= AUTO INIT ================= */
+<script>
 
-// 👉 IMPORTANTISSIMO
-document.addEventListener("rb_plan_loaded", applyPaywall);
-document.addEventListener("DOMContentLoaded", applyPaywall);
+/* ================= AUTO INIT PAYWALL ================= */
 
-</script>
-
-
-// quando Firebase carica il piano
+// quando Firebase carica il piano (login / upgrade)
 document.addEventListener("rb_plan_loaded", applyPaywall);
 
-
-// applica comunque il paywall se utente non loggato
+// al primo caricamento pagina
 document.addEventListener("DOMContentLoaded", () => {
 
+  // 👉 se non loggato → forza FREE
   if(!window.currentUser){
     window.currentPlan = "free";
-    applyPaywall();
+  }
+
+  // applica paywall
+  applyPaywall();
+
+});
+
+
+/* ================= CITY PERSIST ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const citySelect = document.getElementById("market-city");
+  const savedCity = localStorage.getItem("selected_city");
+
+  if(citySelect && savedCity){
+    citySelect.value = savedCity;
+    applyMarketData(savedCity);
   }
 
 });
 
+
+/* ================= CITY FROM URL ================= */
+
 document.addEventListener("DOMContentLoaded", () => {
 
-const citySelect = document.getElementById("market-city");
-const savedCity = localStorage.getItem("selected_city");
+  const params = new URLSearchParams(window.location.search);
+  const city = params.get("city");
 
-if(citySelect && savedCity){
+  if(!city) return;
 
-citySelect.value = savedCity;
-applyMarketData(savedCity);
+  window.currentCity = city;
 
-}
+  // salva città
+  localStorage.setItem("selected_city", city);
+
+  const citySelect = document.getElementById("market-city");
+
+  if(citySelect){
+    citySelect.value = city;
+    applyMarketData(city);
+  }
 
 });
+
+</script>
 
 
 // ================= CITY FROM URL (HOME → SIMULATORE) =================
