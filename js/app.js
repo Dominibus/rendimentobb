@@ -1232,7 +1232,7 @@ roi > 6 ? 55 :
 // ================= PREVIEW PANEL =================
 
 if(typeof updatePreviewMetrics === "function"){
-updatePreviewMetrics(roi.toFixed(1), riskScore);
+updatePreviewMetrics(Number(roi || 0).toFixed(1), riskScore);
 }
 
 const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
