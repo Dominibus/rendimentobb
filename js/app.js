@@ -1056,7 +1056,45 @@ document.addEventListener("rb_auth_ready", ()=>{
   
 });
 
-// ================= FREE LIMIT =================
+// ================= ANIMATION + UI BOOST =================  👈 AGGIUNGI QUI
+
+function animateValue(el, start, end, duration = 800){
+  if(!el) return;
+
+  let startTime = null;
+
+  function animate(currentTime){
+    if(!startTime) startTime = currentTime;
+
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    const value = start + (end - start) * progress;
+
+    el.innerText = value.toFixed(1) + "%";
+
+    if(progress < 1){
+      requestAnimationFrame(animate);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function getROIColor(roi){
+  if(roi >= 20) return "#10b981";
+  if(roi >= 10) return "#f59e0b";
+  return "#ef4444";
+}
+
+function getInvestmentBadge(roi){
+  if(roi >= 20) return "🚀 Investimento TOP";
+  if(roi >= 12) return "🔥 Ottima opportunità";
+  if(roi >= 8) return "👍 Buon investimento";
+  return "⚠️ Attenzione rischio";
+}
+
+
+
+// ================= FREE LIMIT =================  👈 QUESTO ERA GIÀ PRESENTE
 
 function calculate(force = false){
 
@@ -1166,8 +1204,16 @@ localStorage.removeItem("from_mortgage");
 
 }  
 const roiEl = document.getElementById("roi-live");
+
 if(roiEl){
-  roiEl.innerText = roi.toFixed(1) + "%";
+  animateValue(roiEl, 0, roi);
+  roiEl.style.color = getROIColor(roi);
+}
+
+const badge = document.getElementById("roi-badge");
+
+if(badge){
+  badge.innerText = getInvestmentBadge(roi);
 }  
 const profitEl = document.getElementById("profit-live");
 if(profitEl){
