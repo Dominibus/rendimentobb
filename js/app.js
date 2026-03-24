@@ -84,54 +84,47 @@ window.currentPlan = "free";
 
 document.addEventListener("rb_auth_ready", async ()=>{
 
-let freeRuns =
-parseInt(localStorage.getItem("rb_free_runs") || "0");
+  let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
 
-const isLogged = !!window.currentUser;
+  const isLogged = !!window.currentUser;
 
-// 🔥 AGGIUNGI QUESTO BLOCCO
-if(window.currentUser && window.currentUser.uid){
-  await loadUserPlan(window.currentUser.uid);
-  document.dispatchEvent(new Event("rb_plan_loaded"));
-}
+  // 🔥 CARICA PIANO UTENTE (FIX PRINCIPALE)
+  if(window.currentUser && window.currentUser.uid){
+    await loadUserPlan(window.currentUser.uid);
+    document.dispatchEvent(new Event("rb_plan_loaded"));
+  }
 
-// 👉 ORA sarà corretto
-const isPro = hasPlan("pro");
+  const isPro = hasPlan("pro");
 
-let freeRuns =
-parseInt(localStorage.getItem("rb_free_runs") || "0");
+  // ================= BLOCCO FREE =================
 
-const isLogged = !!window.currentUser;
-const isPro = hasPlan("pro");
+  if(!isLogged && !isPro && freeRuns >= 3){
 
-// BLOCCO SOLO DOPO AUTH READY
-if(!isLogged && !isPro && freeRuns >= 3){
+    alert(
+      t(
+        "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare.",
+        "You reached the free simulation limit. Create a free account to continue."
+      )
+    );
 
-alert(
-t(
-"Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare.",
-"You reached the free simulation limit. Create a free account to continue."
-)
-);
+    window.location.href="/login/";
+    return;
 
-window.location.href="/login/";
-return;
+  }
 
-}
+  // incrementa solo utenti anonimi
+  if(!isLogged){
+    freeRuns++;
+    localStorage.setItem("rb_free_runs", freeRuns);
+  }
 
-// incrementa solo per utenti anonimi
-if(!isLogged){
-freeRuns++;
-localStorage.setItem("rb_free_runs", freeRuns);
-}  
-
+  // abilita bottone
   const btn = document.getElementById("calc-btn");
   if(btn){
     btn.disabled = false;
   }
 
 });
-
 
 // ================= CITY FROM HOMEPAGE =================
 
