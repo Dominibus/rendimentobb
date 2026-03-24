@@ -16,119 +16,90 @@ data-en="Strategic academy for B&B investments: ROI analysis, risk, financial su
 content="RendimentoBB Academy">
 
 <link rel="stylesheet" href="/css/style.css">
+
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">
 
 <style>
 
-.portal-header{
-padding:25px 0;
-position:sticky;
-top:0;
-background:rgba(255,255,255,0.95);
-backdrop-filter:blur(10px);
-z-index:100;
-border-bottom:1px solid #e2e8f0;
-}
+/* ===================== */
+/* ACADEMY PREMIUM STYLE */
+/* ===================== */
 
-.portal-header-inner{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.portal-nav{
-display:flex;
-gap:28px;
-font-size:14px;
-}
-
-.portal-nav a{
-text-decoration:none;
+.academy-intro{
+max-width:760px;
+margin:40px auto 0;
+text-align:center;
+font-size:17px;
 color:#475569;
-font-weight:500;
-transition:.2s ease;
+line-height:1.7;
 }
 
-.portal-nav a:hover{
+/* grid già coerente con sito */
+.guide-grid{
+margin-top:50px;
+}
+
+/* upgrade card */
+.guide-card{
+position:relative;
+overflow:hidden;
+}
+
+.guide-card::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(
+120deg,
+transparent,
+rgba(16,185,129,0.08),
+transparent
+);
+opacity:0;
+transition:0.5s;
+}
+
+.guide-card:hover::after{
+opacity:1;
+}
+
+.guide-card h3{
 color:#0f172a;
+font-size:17px;
 }
 
-.right-controls{
-display:flex;
-align-items:center;
-gap:18px;
+.guide-card p{
+color:#475569;
 }
 
-.lang-switch{
-display:flex;
-gap:8px;
-}
-
-.lang-btn{
-padding:6px 14px;
-border-radius:999px;
-border:1px solid #cbd5e1;
-background:white;
-cursor:pointer;
-font-size:13px;
-font-weight:600;
-}
-
-.lang-btn.active{
-background:#0f172a;
-color:white;
-}
-
-.content-section{
+/* CTA PREMIUM */
+.academy-cta{
+text-align:center;
 margin-top:60px;
 }
 
-.content-card{
-background:white;
-padding:50px;
-border-radius:24px;
-box-shadow:0 40px 100px rgba(0,0,0,0.06);
-border:1px solid #e2e8f0;
-margin-bottom:50px;
-}
-
-.content-card h2{
-margin-bottom:18px;
+.academy-cta h3{
 font-size:22px;
+margin-bottom:16px;
 }
 
-.content-card p{
-color:#475569;
-line-height:1.7;
-font-size:16px;
-}
-
-.intro-text{
-font-size:18px;
-line-height:1.8;
-color:#475569;
-max-width:900px;
-margin:auto;
-text-align:center;
-margin-top:25px;
-}
-
-.cta-box{
-text-align:center;
-margin-top:70px;
-}
-
-@media(max-width:1024px){
-.portal-nav{display:none;}
+/* spacing migliore */
+.section.section-light{
+margin-top:-60px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div id="global-header"></div>  
+<!-- HEADER DINAMICO -->
+<div id="global-header"></div>
 
 <main>
 
@@ -138,6 +109,7 @@ margin-top:70px;
   <div class="container">
 
     <div class="page-title">
+
       <h1
       data-it="Academy Strategica per Investimenti B&B"
       data-en="Strategic Academy for B&B Investments">
@@ -145,10 +117,16 @@ margin-top:70px;
       </h1>
 
       <p
-      data-it="Guide pratiche, strategie e analisi per costruire un investimento B&B profittevole."
-      data-en="Guides, strategies and insights to build a profitable B&B investment.">
-      Guide pratiche, strategie e analisi per costruire un investimento B&B profittevole.
+      data-it="Impara a trasformare un immobile in un business turistico profittevole con strategie reali e dati concreti."
+      data-en="Learn how to turn a property into a profitable hospitality business with real strategies and data.">
+      Impara a trasformare un immobile in un business turistico profittevole con strategie reali e dati concreti.
       </p>
+
+      <div class="academy-intro"
+      data-it="Questa sezione è pensata per guidarti passo dopo passo: dall’analisi del ROI alla sostenibilità finanziaria, fino alle decisioni strategiche che fanno davvero la differenza."
+      data-en="This section is designed to guide you step by step: from ROI analysis to financial sustainability and strategic decisions that truly make a difference.">
+      Questa sezione è pensata per guidarti passo dopo passo: dall’analisi del ROI alla sostenibilità finanziaria, fino alle decisioni strategiche che fanno davvero la differenza.
+      </div>
 
     </div>
 
@@ -164,7 +142,6 @@ margin-top:70px;
 
 <div class="guide-grid">
 
-<!-- CARD 1 -->
 <a href="#" class="guide-card">
 <h3 data-it="Perché usare RendimentoBB" data-en="Why use RendimentoBB">
 Perché usare RendimentoBB
@@ -175,7 +152,6 @@ Scopri come analizzare un investimento B&B in modo professionale.
 </p>
 </a>
 
-<!-- CARD 2 -->
 <a href="#" class="guide-card">
 <h3 data-it="Come interpretare il ROI" data-en="How to interpret ROI">
 Come interpretare il ROI
@@ -186,7 +162,6 @@ Capisci se un investimento è davvero profittevole.
 </p>
 </a>
 
-<!-- CARD 3 -->
 <a href="#" class="guide-card">
 <h3 data-it="Mutuo e sostenibilità" data-en="Mortgage sustainability">
 Mutuo e sostenibilità
@@ -197,7 +172,6 @@ Quando un mutuo è sostenibile per un B&B.
 </p>
 </a>
 
-<!-- CARD 4 -->
 <a href="#" class="guide-card">
 <h3 data-it="Errori da evitare" data-en="Common mistakes">
 Errori da evitare
@@ -211,7 +185,7 @@ Evita gli errori più comuni negli investimenti B&B.
 </div>
 
 <!-- CTA -->
-<div style="text-align:center; margin-top:50px;">
+<div class="academy-cta">
 
 <h3
 data-it="Simula il rendimento del tuo investimento"
@@ -232,9 +206,10 @@ Simula ora
 
 </main>
 
-<script src="/js/lang.js" defer></script>
+<!-- SCRIPT (ORDINE CORRETTO) -->
+<script src="/js/lang.js"></script>
 <script src="/js/header.js"></script>
-<script src="/js/footer.js" defer></script>
+<script src="/js/footer.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
 </body>
