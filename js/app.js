@@ -388,114 +388,93 @@ function renderMarketComparison(userRevenue, cityKey){
 
   if(!window.getMarketBenchmark) return;
 
-  const market = window.getMarketBenchmark(cityKey);
-  if(!market) return;
+  safeRender("market-comparison", (container) => {
 
-  const container = document.getElementById("market-comparison");
-  if(!container) return;
+    const market = window.getMarketBenchmark(cityKey);
+    if(!market) return;
 
-  const marketRevenue = market.estimatedRevenue;
+    const marketRevenue = market.estimatedRevenue;
 
-  let message = "";
-  let color = "#ef4444";
+    let message = "";
+    let color = "#ef4444";
 
-  if(userRevenue > marketRevenue){
-    message = t(
-      "✓ Performance superiore al mercato",
-      "✓ Outperforming market"
-    );
-    color = "#10b981";
-  }else{
-    message = t(
-      "⚠ Performance sotto media mercato",
-      "⚠ Underperforming market"
-    );
-  }
+    if(userRevenue > marketRevenue){
+      message = t("✓ Performance superiore al mercato","✓ Outperforming market");
+      color = "#10b981";
+    }else{
+      message = t("⚠ Performance sotto media mercato","⚠ Underperforming market");
+    }
 
-  container.innerHTML = `
+    container.innerHTML = `
+      <div class="kpi-box">
+        <span>${t("Ricavi stimati","Estimated revenue")}</span>
+        <strong>${formatCurrency(userRevenue)}</strong>
+      </div>
 
-  <div class="kpi-box">
-    <span>${t("Ricavi stimati","Estimated revenue")}</span>
-    <strong>${formatCurrency(userRevenue)}</strong>
-  </div>
+      <div class="kpi-box">
+        <span>${t("Media mercato","Market average")}</span>
+        <strong>${formatCurrency(marketRevenue)}</strong>
+      </div>
 
-  <div class="kpi-box">
-    <span>${t("Media mercato","Market average")}</span>
-    <strong>${formatCurrency(marketRevenue)}</strong>
-  </div>
+      <div class="kpi-box">
+        <span>${t("Confronto","Comparison")}</span>
+        <strong style="color:${color}">
+          ${message}
+        </strong>
+      </div>
+    `;
+  });
 
-  <div class="kpi-box">
-    <span>${t("Confronto","Comparison")}</span>
-    <strong style="color:${color}">
-      ${message}
-    </strong>
-  </div>
-
-  `;
 }
 
 // ================= ROI VS MARKET =================
 
 function renderROIMarketComparison(roi, cityKey){
 
-if(!window.RB_MARKET_DATA) return;
+  if(!window.RB_MARKET_DATA) return;
 
-const container = document.getElementById("roi-market-comparison");
-if(!container) return;
+  safeRender("roi-market-comparison", (container) => {
 
-const market = window.RB_MARKET_DATA[cityKey];
-if(!market) return;
+    const market = window.RB_MARKET_DATA[cityKey];
+    if(!market) return;
 
-const marketROI = market.roi;
+    const marketROI = market.roi;
 
-let message = "";
-let color = "#ef4444";
-let badge = "";
+    let message = "";
+    let color = "#ef4444";
+    let badge = "";
 
-if(roi > marketROI){
+    if(roi > marketROI){
+      message = t("ROI sopra la media","ROI above average");
+      color = "#10b981";
 
-message = t("ROI sopra la media", "ROI above average");
-color = "#10b981";
+      badge = `
+      <div style="margin-bottom:12px;padding:12px;border-radius:10px;background:#ecfdf5;border:1px solid #10b981;font-weight:600;">
+        ${t("ROI sopra la media","ROI above average")}
+      </div>`;
+    }else{
+      message = t("ROI sotto la media","ROI below average");
+    }
 
-badge = `
-<div style="
-margin-bottom:12px;
-padding:12px;
-border-radius:10px;
-background:#ecfdf5;
-border:1px solid #10b981;
-font-weight:600;
-">
-${t("ROI sopra la media", "ROI above average")}
-</div>
-`;
+    container.innerHTML = badge + `
+      <div class="kpi-box">
+        <span>${t("ROI investimento","Your ROI")}</span>
+        <strong>${roi.toFixed(1)}%</strong>
+      </div>
 
-}else{
+      <div class="kpi-box">
+        <span>${t("ROI medio città","City average ROI")} ${cityKey}</span>
+        <strong>${marketROI}%</strong>
+      </div>
 
-message = t("ROI sotto la media","ROI below average");
-
-}
-
-container.innerHTML = badge + `
-
-<div class="kpi-box">
-<span>${t("ROI investimento","Your ROI")}</span>
-<strong>${roi.toFixed(1)}%</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("ROI medio città","City average ROI")} ${cityKey}</span>
-<strong>${marketROI}%</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("Confronto mercato","Market comparison")}</span>
-<strong style="color:${color}">
-${message}
-</strong>
-</div>
-
-`;
+      <div class="kpi-box">
+        <span>${t("Confronto mercato","Market comparison")}</span>
+        <strong style="color:${color}">
+          ${message}
+        </strong>
+      </div>
+    `;
+  });
 
 }
 
@@ -503,35 +482,30 @@ ${message}
 
   function renderRevenueForecast(baseRevenue){
 
-  const container = document.getElementById("revenue-forecast");
+  safeRender("revenue-forecast", (container) => {
 
-  if(!container){
-    setTimeout(() => renderRevenueForecast(baseRevenue), 100);
-    return;
-  }
+    const low = baseRevenue * 0.8;
+    const mid = baseRevenue;
+    const high = baseRevenue * 1.2;
 
-  const low = baseRevenue * 0.8;
-  const mid = baseRevenue;
-  const high = baseRevenue * 1.2;
+    container.innerHTML = `
+      <div class="kpi-box">
+        <span>${t("Scenario prudente","Low scenario")}</span>
+        <strong>${formatCurrency(low)}</strong>
+      </div>
 
-  container.innerHTML = `
+      <div class="kpi-box">
+        <span>${t("Scenario base","Base scenario")}</span>
+        <strong>${formatCurrency(mid)}</strong>
+      </div>
 
-  <div class="kpi-box">
-    <span>${t("Scenario prudente","Low scenario")}</span>
-    <strong>${formatCurrency(low)}</strong>
-  </div>
+      <div class="kpi-box">
+        <span>${t("Scenario ottimistico","High scenario")}</span>
+        <strong>${formatCurrency(high)}</strong>
+      </div>
+    `;
+  });
 
-  <div class="kpi-box">
-    <span>${t("Scenario base","Base scenario")}</span>
-    <strong>${formatCurrency(mid)}</strong>
-  </div>
-
-  <div class="kpi-box">
-    <span>${t("Scenario ottimistico","High scenario")}</span>
-    <strong>${formatCurrency(high)}</strong>
-  </div>
-
-  `;
 }
 
 
@@ -546,56 +520,49 @@ tax,
 mortgage,
 equity
 ){
-  
-const container = document.getElementById("occupancy-sensitivity");
-if(!container) return;
 
-function simulate(occ){
+  safeRender("occupancy-sensitivity", (container) => {
 
-const nights = 365 * (occ/100);
-const gross = priceNight * nights;
+    function simulate(occ){
 
-const fees = gross * (commission/100);
-const yearlyExpenses = expenses * 12;
+      const nights = 365 * (occ/100);
+      const gross = priceNight * nights;
 
-const operatingProfit = gross - fees - yearlyExpenses;
+      const fees = gross * (commission/100);
+      const yearlyExpenses = expenses * 12;
 
-const taxCost =
-operatingProfit > 0 ? operatingProfit*(tax/100) : 0;
+      const operatingProfit = gross - fees - yearlyExpenses;
+      const taxCost = operatingProfit > 0 ? operatingProfit*(tax/100) : 0;
 
-const net = operatingProfit - taxCost - mortgage;
+      const net = operatingProfit - taxCost - mortgage;
+      const roi = equity > 0 ? (net/equity)*100 : 0;
 
-const roi = equity > 0 ? (net/equity)*100 : 0;
+      return roi.toFixed(1);
+    }
 
-return roi.toFixed(1);
+    const low = simulate(occupancy*0.9);
+    const base = simulate(occupancy);
+    const high = simulate(occupancy*1.1);
 
-}
+    container.innerHTML = `
+      <div class="kpi-box">
+        <span>${t("Occupazione -10%","Occupancy -10%")}</span>
+        <strong>${low}% ROI</strong>
+      </div>
 
-const low = simulate(occupancy*0.9);
-const base = simulate(occupancy);
-const high = simulate(occupancy*1.1);
+      <div class="kpi-box">
+        <span>${t("Occupazione base","Base occupancy")}</span>
+        <strong>${base}% ROI</strong>
+      </div>
 
-container.innerHTML = `
-
-<div class="kpi-box">
-<span>${t("Occupazione -10%","Occupancy -10%")}</span>
-<strong>${low}% ROI</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("Occupazione base","Base occupancy")}</span>
-<strong>${base}% ROI</strong>
-</div>
-
-<div class="kpi-box">
-<span>${t("Occupazione +10%","Occupancy +10%")}</span>
-<strong>${high}% ROI</strong>
-</div>
-
-`;
+      <div class="kpi-box">
+        <span>${t("Occupazione +10%","Occupancy +10%")}</span>
+        <strong>${high}% ROI</strong>
+      </div>
+    `;
+  });
 
 }
-
 
 // ================= BREAK EVEN OCCUPANCY =================
 
