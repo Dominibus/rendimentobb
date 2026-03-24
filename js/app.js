@@ -1168,7 +1168,10 @@ window.lastAnalysisData = {
 };  
 
 const equity = getValue("equity");
-if (equity < 0) return;
+if (equity < 0){
+  console.log("Equity non valido");
+  return;
+}
 
 const gross = result.gross;
 const operatingProfit = result.operatingProfit;
