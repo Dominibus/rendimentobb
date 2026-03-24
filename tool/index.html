@@ -830,32 +830,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script>
 
-// ================= CITY FROM URL =================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-const params = new URLSearchParams(window.location.search);
-const city = params.get("city");
-
-if(!city) return;
-
-window.currentCity = city;
-
-localStorage.setItem("selected_city", city);
-
-const citySelect = document.getElementById("market-city");
-
-if(citySelect){
-citySelect.value = city;
-applyMarketData(city);
-}
-
-});
-
-</script>
-
-<script>
-
 const params = new URLSearchParams(window.location.search);
 const upgrade = params.get("upgrade");
 
@@ -867,7 +841,7 @@ if(upgrade){
 
     if(upgrade === "dashboard"){
 
-  message = lang === "en"
+  const lang = window.currentLang;
   ? "🔒 The Dashboard is available only for PRO users.\n\nUnlock the PRO version to access it."
   : "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
 
@@ -875,7 +849,7 @@ if(upgrade){
 
 if(upgrade === "academy"){
 
-  message = lang === "en"
+  const lang = window.currentLang;
   ? "🎓 The Academy is available only for PRO users.\n\nUnlock the PRO version to access strategic content."
   : "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
 
@@ -883,7 +857,7 @@ if(upgrade === "academy"){
 
 if(upgrade === "true"){
 
-  message = lang === "en"
+  const lang = window.currentLang;
   ? "🔒 This feature is available only in the PRO version."
   : "🔒 Funzione disponibile solo nella versione PRO.";
 
