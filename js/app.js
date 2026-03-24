@@ -155,7 +155,7 @@ async function saveAnalysis(data){
       roi: data.roi,
       risk: data.risk,
       city: data.city || "italy",
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
       createdAtClient: new Date()
  });
 
@@ -1148,9 +1148,11 @@ console.log("PDF visibility:", window.currentPlan);
 document.addEventListener("rb_auth_ready", ()=>{
 setTimeout(updatePDFButton, 500);
 
+});  
+
 document.addEventListener("rb_plan_loaded", ()=>{
   updatePDFButton();
-});  
+  
 });
 
 // ================= FREE LIMIT =================
