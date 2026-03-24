@@ -28,8 +28,6 @@ import {
 
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
-document.addEventListener("DOMContentLoaded", () => {
-  });
 
 window.runMortgageComparison = function(){
 
@@ -1117,6 +1115,8 @@ document.addEventListener("rb_auth_ready", ()=>{
 
 // ================= FREE LIMIT =================
 
+function calculate(force = false){
+
 if(!force && window.simulationExecuted){
   console.log("Simulazione già eseguita, ma forzo aggiornamento UI");
 }
@@ -1368,6 +1368,7 @@ resultsSection.scrollIntoView({
 behavior: "smooth"
 }); 
 }
+}  
 
 }
 
@@ -2617,5 +2618,5 @@ document.addEventListener("rb_plan_loaded", () => {
   updatePDFButton();
 
   // 👉 qui puoi aggiornare UI PRO
-});
+
 
