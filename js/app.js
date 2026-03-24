@@ -84,6 +84,14 @@ window.currentPlan = "free";
 
 document.addEventListener("rb_auth_ready", ()=>{
 
+if(window.currentUser && window.currentUser.uid){
+  loadUserPlan(window.currentUser.uid);
+
+  document.dispatchEvent(new Event("rb_plan_loaded"));
+
+  console.log("🔥 Piano caricato post-auth");
+}  
+
 let freeRuns =
 parseInt(localStorage.getItem("rb_free_runs") || "0");
 
@@ -92,11 +100,6 @@ const isPro = hasPlan("pro");
 
 // BLOCCO SOLO DOPO AUTH READY
 if(!isLogged && !isPro && freeRuns >= 3){
-
-if(window.currentUser && window.currentUser.uid){
-  loadUserPlan(window.currentUser.uid);
-  document.dispatchEvent(new Event("rb_plan_loaded"));
-}  
 
 alert(
 t(
@@ -153,6 +156,7 @@ async function saveAnalysis(data){
       risk: data.risk,
       city: data.city || "italy",
       createdAt: serverTimestamp()
+      createdAtClient: new Date()
  });
 
     console.log("✅ SALVATO FIRESTORE");
@@ -1143,6 +1147,10 @@ console.log("PDF visibility:", window.currentPlan);
 // aggiorna dopo login
 document.addEventListener("rb_auth_ready", ()=>{
 setTimeout(updatePDFButton, 500);
+
+document.addEventListener("rb_plan_loaded", ()=>{
+  updatePDFButton();
+});  
 });
 
 // ================= FREE LIMIT =================
@@ -2280,7 +2288,7 @@ return;
 }
 
 // 🔥 SE GIÀ HA IL PIANO → BLOCCA
-if(window.userPlan === plan){
+if(window.currentPlan === plan){
 alert(
 t(
 "Hai già questo piano attivo",
@@ -2291,7 +2299,7 @@ return;
 }
 
 // 🔥 upgrade logico
-if(plan === "investor" && window.userPlan === "pro"){
+if(plan === "investor" && window.currentPlan === "pro"){
 alert("Hai già un piano superiore");
 return;
 }
