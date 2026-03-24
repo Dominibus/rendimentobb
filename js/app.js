@@ -92,20 +92,20 @@ document.addEventListener("rb_plan_loaded", ()=>{
   const isPro = hasPlan("pro");
 
   if(!isLogged && !isPro && freeRuns >= 3){
-    alert("...");
+
+  const message = t(
+    "Hai raggiunto il limite gratuito. Accedi per continuare.",
+    "Free limit reached. Login to continue."
+  );
+
+  showToast(message); // oppure UI custom
+
+  setTimeout(()=>{
     window.location.href="/login/";
-    return;
-  }
+  }, 1200);
 
-  if(!isLogged){
-    freeRuns++;
-    localStorage.setItem("rb_free_runs", freeRuns);
-  }
-
-  const btn = document.getElementById("calc-btn");
-  if(btn){
-    btn.disabled = false;
-  }
+  return;
+}
 
 });
 
