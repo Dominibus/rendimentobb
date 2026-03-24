@@ -1278,9 +1278,13 @@ if(window.currentUser && window.currentUser.uid && roi > 0){
 
 const citySafe = city || "italy";
 
-renderMarketBenchmark(citySafe);
-renderMarketComparison(gross, citySafe);
-renderROIMarketComparison(roi, citySafe);
+setTimeout(() => {
+
+  renderMarketBenchmark(citySafe);
+  renderMarketComparison(gross, citySafe);
+  renderROIMarketComparison(roi, citySafe);
+
+}, 100);
 
 renderOccupancySensitivity(
 priceNight,
