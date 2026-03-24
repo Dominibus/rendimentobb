@@ -1129,7 +1129,9 @@ const result = calculateROI({
 console.log("RESULT:", result);
 
 // 🔥 QUI DEVE STARE (FUORI!)
-renderExecutiveKPI(result);;
+safeRender("executive-kpi", () => {
+  renderExecutiveKPI(result);
+});
 
 window.lastAnalysisData = {
   ...result,
