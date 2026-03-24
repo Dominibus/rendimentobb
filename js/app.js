@@ -2,7 +2,8 @@
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
 // PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
-// ================= FIRESTORE =================
+// ================= FIRESTORE ================
+document.addEventListener("DOMContentLoaded", () => {
 import { calculateROI } from "./roi-engine.js";
 
 import {
@@ -504,7 +505,11 @@ ${message}
 function renderRevenueForecast(baseRevenue){
 
   const container = document.getElementById("revenue-forecast");
-  if(!container) return;
+
+  if(!container){
+    console.error("❌ revenue-forecast NON trovato nel DOM");
+    return;
+  }
 
   const low = baseRevenue * 0.8;
   const mid = baseRevenue;
@@ -528,7 +533,6 @@ function renderRevenueForecast(baseRevenue){
   </div>
 
   `;
-
 }
 
 
@@ -1290,7 +1294,9 @@ equity
 
 // ===== NUOVE RENDER UI (FONDAMENTALE)
 
-renderRevenueForecast(gross);
+setTimeout(() => {
+  renderRevenueForecast(gross);
+}, 50);
 
 renderInvestmentScore(roi, riskScore);
 
@@ -2614,4 +2620,5 @@ document.addEventListener("rb_plan_loaded", () => {
   updatePDFButton();
 
   // 👉 qui puoi aggiornare UI PRO
+});
 });
