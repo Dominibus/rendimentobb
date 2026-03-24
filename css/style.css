@@ -4609,78 +4609,21 @@ background-repeat:no-repeat !important;
 }
 
 /* ===================== */
-/* FIX LEGGIBILITÀ GRID IMMOBILI (INDEX) */
+/* FIX TESTO CARD IMMOBILI */
 /* ===================== */
 
-body.immobili-page .property-grid{
-position:relative;
-z-index:3;
+.property-card h3{
+color:#0f172a !important;
 }
 
-/* CARD PIÙ SOLIDE */
-body.immobili-page .property-card{
-
-background:rgba(255,255,255,0.98); /* 🔥 quasi pieno */
-backdrop-filter:blur(10px);
-
-border:1px solid rgba(255,255,255,0.6);
-
-box-shadow:
-0 20px 60px rgba(0,0,0,0.15),
-0 0 0 1px rgba(0,0,0,0.02);
-
+.property-card .market-label{
+color:#64748b !important;
 }
 
-/* TESTI PIÙ CONTRASTATI */
-body.immobili-page .property-title{
-color:#0f172a;
+.property-card .market-extra{
+color:#475569 !important;
 }
 
-body.immobili-page .property-data{
-color:#475569;
-}
-
-body.immobili-page .property-roi{
-color:#10b981;
-font-weight:800;
-}
-
-/* BADGE PIÙ VISIBILE */
-body.immobili-page .property-badge{
-background:#fef3c7;
-color:#92400e;
-font-weight:700;
-}
-
-/* ===================== */
-/* FIX CARD CITTÀ (NAPOLI / MILANO / ROMA / FIRENZE) */
-/* ===================== */
-
-body.immobili-page .property-grid a.property-card{
-
-background:rgba(255,255,255,0.96);
-backdrop-filter:blur(12px);
-
-}
-
-/* ===================== */
-/* FIX HERO GRID CITTÀ (QUELLA CHE NON SI LEGGE) */
-/* ===================== */
-
-body.immobili-page .property-grid{
-
-margin-top:60px;
-}
-
-/* 🔥 FONDAMENTALE */
-body.immobili-page .hero .property-card{
-background:rgba(255,255,255,0.95) !important;
-}
-
-/* ===================== */
-/* OPTIONAL: MIGLIORA LEGGIBILITÀ GENERALE */
-/* ===================== */
-
-body.immobili-page .hero{
-background-attachment:scroll !important; /* evita effetto washed su alcuni schermi */
+.property-card .market-link{
+color:#10b981 !important;
 }
