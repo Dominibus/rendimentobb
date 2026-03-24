@@ -828,10 +828,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-</script>
+<script>
 
-
-// ================= CITY FROM URL (HOME → SIMULATORE) =================
+// ================= CITY FROM URL =================
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -842,10 +841,8 @@ if(!city) return;
 
 window.currentCity = city;
 
-// salva città selezionata
 localStorage.setItem("selected_city", city);
 
-// seleziona nel dropdown
 const citySelect = document.getElementById("market-city");
 
 if(citySelect){
