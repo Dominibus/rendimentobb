@@ -2620,4 +2620,4 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // 👉 qui puoi aggiornare UI PRO
 
-
+});
