@@ -4360,10 +4360,10 @@ text-decoration:underline;
 /* HERO TEXT FIX */
 /* ===================== */
 
-.hero h1,
-.hero h2,
-.hero h3{
-color:#ffffff;
+.hero > .container > .page-title h1,
+.hero > .container > .page-title h2,
+.hero > .container > .page-title h3{
+  color:#ffffff;
 font-weight:700;
 text-shadow:0 2px 10px rgba(0,0,0,0.4);
 }
@@ -4641,5 +4641,36 @@ body.immobili-page .property-card .market-extra{
 
 /* Link */
 body.immobili-page .property-card .market-link{
+  color:#10b981 !important;
+}
+
+/* ===================== */
+/* FIX DEFINITIVO CARD DENTRO HERO */
+/* ===================== */
+
+.hero .property-card h3{
+  color:#0f172a !important;
+}
+
+.hero .property-card p,
+.hero .property-card span,
+.hero .property-card div{
+  color:#0f172a !important;
+}
+
+/* override specifici */
+.hero .property-card .property-roi{
+  color:#10b981 !important;
+}
+
+.hero .property-card .market-label{
+  color:#64748b !important;
+}
+
+.hero .property-card .market-extra{
+  color:#475569 !important;
+}
+
+.hero .property-card .market-link{
   color:#10b981 !important;
 }
