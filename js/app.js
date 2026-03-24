@@ -312,25 +312,17 @@ function safeNumber(value){
   return isNaN(num) ? 0 : num;
 }
 
-// 🔥 RENDO GLOBALE (FONDAMENTALE)
+// 👉 RENDI GLOBALE
 window.safeNumber = safeNumber;
+
 
 // 🔥 SAFE PERCENT (opzionale ma TOP)
 function safePercent(value){
   return safeNumber(value).toFixed(1);
 }
 
-// 🔥 SAFE RENDER (NON DEVE CONTENERE ALTRO)
-function safeRender(id, callback){
-  const container = document.getElementById(id);
-  if(!container) return;
-
-  try{
-    callback(container);
-  }catch(e){
-    console.error("Render error:", id, e);
-  }
-}
+// 👉 RENDI GLOBALE
+window.safePercent = safePercent;
 
 // ================= HERO CITY BACKGROUND =================
 
