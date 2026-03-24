@@ -228,46 +228,40 @@ async function loadUserPlan(uid){
 
   try{
 
-    console.log("Cerco utente UID:", uid);
+    console.log("🔥 LOAD PLAN START:", uid);
 
-    // 🔥 ASPETTA FIREBASE IN MODO SERIO
-    await new Promise(resolve => {
-
-      let check = setInterval(() => {
-        if(window.firebaseReady){
-          clearInterval(check);
-          resolve();
-        }
-      }, 100);
-
-    });
-
-    console.log("🔥 Firebase READY");
+    if(!uid){
+      console.error("UID mancante");
+      window.currentPlan = "free";
+      return;
+    }
 
     const docRef = doc(db, "users", uid);
     const snap = await getDoc(docRef);
-
-    console.log("Documento esiste?", snap.exists());
 
     if(snap.exists()){
 
       const data = snap.data();
 
-      console.log("DATI UTENTE:", data);
+      console.log("✅ UTENTE TROVATO:", data);
 
       window.currentPlan = data.plan || "free";
 
     }else{
 
-      console.warn("⚠️ Documento NON trovato → fallback free");
+      console.warn("❌ Documento NON trovato per UID:", uid);
+
       window.currentPlan = "free";
     }
 
     console.log("🔥 PLAN LOADED:", window.currentPlan);
 
+    // 🔥 evento importante
+    document.dispatchEvent(new Event("rb_plan_loaded"));
+
   }catch(e){
 
-    console.error("Errore caricamento piano:", e);
+    console.error("Errore loadUserPlan:", e);
     window.currentPlan = "free";
   }
 
