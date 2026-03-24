@@ -1244,24 +1244,9 @@ updateInvestmentScore(investmentScore);
 
 // ================= SAVE CORRETTO =================
 
-if(window.currentUser && window.currentUser.uid){
+if(window.currentUser && window.currentUser.uid && roi > 0){
 
-  console.log("🔥 Salvataggio avviato:", window.currentUser.uid);
-
-  saveAnalysis({
-    price: getValue("price"),
-    equity: equity,
-    roi: roi,
-    risk: riskScore,
-    city: city || "italy"
-  });
-
-}else{
-
-  console.warn("⚠️ User non pronto → ritento tra 500ms");
-
-  setTimeout(()=>{
-    if(window.currentUser && window.currentUser.uid && roi > 0){
+  console.log("🔥 Salvataggio OK:", window.currentUser.uid);
 
   saveAnalysis({
     price: getValue("price"),
@@ -1272,11 +1257,10 @@ if(window.currentUser && window.currentUser.uid){
   });
 
 }else{
-  console.log("⛔ Salvataggio bloccato (utente non pronto o ROI=0)");
-}
+
+  console.log("⛔ Salvataggio bloccato (utente non loggato o ROI=0)");
 
 }
-
 // MARKET BENCHMARK + COMPARISON
 
 const citySafe = city || "italy";
