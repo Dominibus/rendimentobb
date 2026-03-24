@@ -828,6 +828,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+</script>  
+
 <script>
 
 const params = new URLSearchParams(window.location.search);
@@ -838,30 +840,31 @@ if(upgrade){
   setTimeout(()=>{
 
     let message = "";
+    const lang = window.currentLang || "it";
 
     if(upgrade === "dashboard"){
 
-  const lang = window.currentLang;
-  ? "🔒 The Dashboard is available only for PRO users.\n\nUnlock the PRO version to access it."
-  : "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
+      message = lang === "en"
+        ? "🔒 The Dashboard is available only for PRO users.\n\nUnlock the PRO version to access it."
+        : "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
 
-}
+    }
 
-if(upgrade === "academy"){
+    if(upgrade === "academy"){
 
-  const lang = window.currentLang;
-  ? "🎓 The Academy is available only for PRO users.\n\nUnlock the PRO version to access strategic content."
-  : "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
+      message = lang === "en"
+        ? "🎓 The Academy is available only for PRO users.\n\nUnlock the PRO version to access strategic content."
+        : "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
 
-}
+    }
 
-if(upgrade === "true"){
+    if(upgrade === "true"){
 
-  const lang = window.currentLang;
-  ? "🔒 This feature is available only in the PRO version."
-  : "🔒 Funzione disponibile solo nella versione PRO.";
+      message = lang === "en"
+        ? "🔒 This feature is available only in the PRO version."
+        : "🔒 Funzione disponibile solo nella versione PRO.";
 
-}
+    }
 
     if(message){
       alert(message);
