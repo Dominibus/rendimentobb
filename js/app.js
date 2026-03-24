@@ -82,9 +82,9 @@ function t(it, en){
 
 window.currentPlan = "free";
 
-document.addEventListener("rb_auth_ready", ()=>{
+document.addEventListener("rb_plan_loaded", ()=>{
 
-  console.log("PLAN GIÀ CARICATO:", window.currentPlan);
+  console.log("🔥 PLAN DEFINITIVO:", window.currentPlan);
 
   let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
 
@@ -97,6 +97,34 @@ document.addEventListener("rb_auth_ready", ()=>{
     freeRuns,
     plan: window.currentPlan
   });
+
+  // BLOCCO FREE
+  if(!isLogged && !isPro && freeRuns >= 3){
+
+    alert(
+      t(
+        "Hai raggiunto il limite di simulazioni gratuite. Crea un account gratuito per continuare.",
+        "You reached the free simulation limit. Create a free account to continue."
+      )
+    );
+
+    window.location.href="/login/";
+    return;
+  }
+
+  // incrementa solo utenti anonimi
+  if(!isLogged){
+    freeRuns++;
+    localStorage.setItem("rb_free_runs", freeRuns);
+  }
+
+  // abilita bottone solo quando piano è pronto
+  const btn = document.getElementById("calc-btn");
+  if(btn){
+    btn.disabled = false;
+  }
+
+});
 
   // BLOCCO FREE
   if(!isLogged && !isPro && freeRuns >= 3){
@@ -1161,11 +1189,6 @@ console.log("PDF visibility:", window.currentPlan);
 
 // aggiorna dopo login
 document.addEventListener("rb_auth_ready", ()=>{
-setTimeout(updatePDFButton, 500);
-
-});  
-
-document.addEventListener("rb_plan_loaded", ()=>{
   updatePDFButton();
   
 });
