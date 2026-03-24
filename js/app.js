@@ -312,6 +312,9 @@ function safeNumber(value){
   return isNaN(num) ? 0 : num;
 }
 
+// 🔥 RENDO GLOBALE (FONDAMENTALE)
+window.safeNumber = safeNumber;
+
 // 🔥 SAFE PERCENT (opzionale ma TOP)
 function safePercent(value){
   return safeNumber(value).toFixed(1);
