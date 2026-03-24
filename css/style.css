@@ -4547,13 +4547,13 @@ display:none !important;
 
 /* DISATTIVA HERO BASE SOLO PER IMMOBILI */
 body.immobili-page .hero-bg{
-background:none !important;
+background:unset !important;
 }
 
 body.immobili-page .hero.hero-bg.rome{
 background:
 linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
-url("/img/rome-bg.jpg");
+url("/img/rome-bg.jpg") !important;
 background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
@@ -4562,7 +4562,7 @@ background-repeat:no-repeat;
 body.immobili-page .hero.hero-bg.milan{
 background:
 linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
-url("/img/milan-bg.jpg");
+url("/img/milan-bg.jpg") !important;
 background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
@@ -4571,7 +4571,7 @@ background-repeat:no-repeat;
 body.immobili-page .hero.hero-bg.naples{
 background:
 linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
-url("/img/naples-bg.jpg");
+url("/img/naples-bg.jpg" !important);
 background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
@@ -4580,7 +4580,7 @@ background-repeat:no-repeat;
 body.immobili-page .hero.hero-bg.florence{
 background:
 linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
-url("/img/florence-bg.jpg");
+url("/img/florence-bg.jpg" !important);
 background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
