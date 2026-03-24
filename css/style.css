@@ -4486,8 +4486,22 @@ margin-top:10px;
 /* FIX HERO SOLO IMMOBILI */
 /* ===================== */
 
+/* RIMUOVE OVERLAY */
 body.immobili-page .hero::before{
 background:transparent !important;
+}
+
+body.immobili-page .hero::after{
+display:none !important;
+}
+
+/* BACKGROUND PULITO */
+body.immobili-page .hero.hero-bg.rome{
+background:
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/roma-bg.jpg") !important;
+background-size:cover !important;
+background-position:center !important;
 }
 
 /* HERO DINAMICO PER CITTÀ (IMMOBILI FIX) */
@@ -4520,78 +4534,50 @@ body.immobili-page .section p{
 color:#334155;
 }
 
-/* 🔥 FORCE BACKGROUND IMMOBILI (PRIORITÀ MASSIMA) */
-
-body.immobili-page .hero-bg.rome{
-background:
-linear-gradient(
-rgba(0,0,0,0.08),
-rgba(0,0,0,0.20)
-),
-url("/img/roma-bg.jpg") !important;
+/* RIMUOVE OVERLAY */
+body.immobili-page .hero::before{
+background:transparent !important;
 }
 
-body.immobili-page .hero-bg.naples{
-background:
-linear-gradient(
-rgba(0,0,0,0.08),
-rgba(0,0,0,0.20)
-),
-url("/img/napoli-bg.jpg") !important;
+body.immobili-page .hero::after{
+display:none !important;
 }
 
-body.immobili-page .hero-bg.milan{
-background:
-linear-gradient(
-rgba(0,0,0,0.08),
-rgba(0,0,0,0.20)
-),
-url("/img/milano-bg.jpg") !important;
-}
-
-body.immobili-page .hero-bg.florence{
-background:
-linear-gradient(
-rgba(0,0,0,0.08),
-rgba(0,0,0,0.20)
-),
-url("/img/firenze-bg.jpg") !important;
-}
-
-/* ===================== */
-/* IMMOBILI HERO FIX FINAL */
-/* ===================== */
+/* BACKGROUND PER CITTÀ (UNICO SISTEMA) */
 
 body.immobili-page .hero.hero-bg.rome{
 background:
-linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.20)),
-url("/img/roma-bg.jpg") !important;
-background-size:cover !important;
-background-position:center !important;
-}
-
-body.immobili-page .hero.hero-bg.naples{
-background:
-linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.20)),
-url("/img/napoli-bg.jpg") !important;
-background-size:cover !important;
-background-position:center !important;
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/roma-bg.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
 }
 
 body.immobili-page .hero.hero-bg.milan{
 background:
-linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.20)),
-url("/img/milano-bg.jpg") !important;
-background-size:cover !important;
-background-position:center !important;
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/milano-bg.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+body.immobili-page .hero.hero-bg.naples{
+background:
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/napoli-bg.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
 }
 
 body.immobili-page .hero.hero-bg.florence{
 background:
-linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.20)),
-url("/img/firenze-bg.jpg") !important;
-background-size:cover !important;
-background-position:center !important;
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/firenze-bg.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
 }
-
 
