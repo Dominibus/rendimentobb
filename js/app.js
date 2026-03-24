@@ -1241,9 +1241,20 @@ updatePreviewMetrics(roi.toFixed(1), riskScore);
 
 const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
 
-if(typeof updateInvestmentScore === "function"){
-updateInvestmentScore(investmentScore);
-}  
+setTimeout(() => {
+
+  const el = document.getElementById("score-circle");
+
+  if(!el){
+    console.warn("⛔ score-circle non ancora pronto");
+    return;
+  }
+
+  if(typeof updateInvestmentScore === "function"){
+    updateInvestmentScore(investmentScore);
+  }
+
+}, 50);  
 
 // ================= SAVE CORRETTO =================
 
