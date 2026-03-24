@@ -326,6 +326,36 @@ onAuthStateChanged(auth, async (user) => {
   );
 
 });
+
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+
+  if(user){
+
+    window.currentUser = user;
+
+    console.log("✅ Auth OK:", user.uid);
+
+    // 🔥 QUESTA È LA RIGA CHE TI MANCA
+    if(window.loadUserPlan){
+      window.loadUserPlan(user.uid);
+    }
+
+    document.dispatchEvent(new Event("rb_auth_ready"));
+
+  }else{
+
+    window.currentUser = null;
+    window.currentPlan = "free";
+
+    console.log("❌ User non loggato");
+
+  }
+
+});
 // ===============================
 // STRIPE PLAN ACTIVATION
 // ===============================
