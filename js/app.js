@@ -1194,11 +1194,12 @@ const taxCost = result.taxCost;
 const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
-// 💥 HOOK MUTUO → UPSELL
 
+// 💥 HOOK MUTUO → RESET FLAG
 localStorage.removeItem("from_mortgage");
 
-}  
+// ================= UI LIVE =================
+
 const roiEl = document.getElementById("roi-live");
 
 if(roiEl){
@@ -1211,17 +1212,20 @@ const badge = document.getElementById("roi-badge");
 if(badge){
   badge.innerText = getInvestmentBadge(roi);
 }  
+
 const profitEl = document.getElementById("profit-live");
 if(profitEl){
   profitEl.innerText = formatCurrency(netAfterMortgage / 12);
 }
+
 const revenueEl = document.getElementById("revenue-live");
 if(revenueEl){
   revenueEl.innerText = formatCurrency(gross);
 } 
 
-let city = window.currentCity || citySelector?.value || null;  
+// ================= DATI =================
 
+let city = window.currentCity || citySelector?.value || null;  
 window.lastROI = roi;  
 
 const riskScore =
@@ -1232,7 +1236,7 @@ roi > 6 ? 55 :
 // ================= PREVIEW PANEL =================
 
 if(typeof updatePreviewMetrics === "function"){
-updatePreviewMetrics(Number(roi || 0).toFixed(1), riskScore);
+  updatePreviewMetrics(Number(roi || 0).toFixed(1), riskScore);
 }
 
 const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
@@ -1248,7 +1252,8 @@ requestAnimationFrame(() => {
   }
 
 });
-// ================= SAVE CORRETTO =================
+
+// ================= SAVE =================
 
 if(window.currentUser && window.currentUser.uid && roi > 0){
 
@@ -1263,24 +1268,21 @@ if(window.currentUser && window.currentUser.uid && roi > 0){
   });
 
 }else{
-
   console.log("⛔ Salvataggio bloccato (utente non loggato o ROI=0)");
-
 }
-// MARKET BENCHMARK + COMPARISON
 
 // ================= RENDER BLOCCO COMPLETO =================
 
 const citySafe = city || "italy";
 
-// 🔥 CALCOLO PAYBACK SICURO (PRIMA DI USARLO)
+// 🔥 PAYBACK
 let payback = 0;
 
 if(equity > 0 && netAfterMortgage > 0){
   payback = equity / netAfterMortgage;
 }
 
-// 🔹 MARKET + BENCHMARK
+// 🔹 MARKET
 safeRender("market-benchmark", () => {
   renderMarketBenchmark(citySafe);
 });
@@ -1293,7 +1295,7 @@ safeRender("roi-market-comparison", () => {
   renderROIMarketComparison(roi, citySafe);
 });
 
-// 🔹 FORECAST + SENSITIVITY
+// 🔹 FORECAST
 safeRender("revenue-forecast", () => {
   renderRevenueForecast(gross);
 });
@@ -1302,7 +1304,7 @@ safeRender("occupancy-sensitivity", () => {
   renderOccupancySensitivity();
 });
 
-// 🔹 CORE KPI
+// 🔹 KPI
 safeRender("investment-score", () => {
   renderInvestmentScore(roi, riskScore);
 });
@@ -1315,59 +1317,12 @@ safeRender("investment-risk-meter", () => {
   renderRiskMeter(riskScore);
 });
 
-// 🔹 SMART UX
+// 🔹 ALERT (NON ROMPE PIÙ PRO)
 safeRender("smart-investment-alert", () => {
   renderSmartInvestmentAlert(roi);
 });
 
-if(localStorage.getItem("from_mortgage")){
-
-  const alertBox = document.getElementById("smart-investment-alert");
-
-  if(alertBox){
-
-    alertBox.insertAdjacentHTML("beforeend", `
-    <div style="
-    margin-top:20px;
-    padding:20px;
-    border-radius:14px;
-    background:#fef3c7;
-    border:1px solid #f59e0b;
-    text-align:center;
-    ">
-
-    <strong>
-    ${t(
-    "Hai ottimizzato il mutuo — ora ottimizza l’investimento",
-    "You optimized your mortgage — now optimize the investment"
-    )}
-    </strong>
-
-    <p style="margin-top:10px;">
-    ${t(
-    "Scopri ROI reale, rischio e scenari avanzati",
-    "Unlock real ROI, risk and advanced scenarios"
-    )}
-    </p>
-
-    <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-    ${t("Sblocca analisi completa","Unlock full analysis")}
-    </button>
-
-    </div>
-    `);
-
-  }
-
-  localStorage.removeItem("from_mortgage");
-}
-
-// DOPO (non prima)
-if(localStorage.getItem("from_mortgage")){
-  // append ONLY
-}
-
-// 🔹 VERDICT (ORA SICURO)
+// 🔹 VERDICT
 safeRender("investment-verdict", () => {
   renderInvestmentVerdict(roi, payback);
 });
@@ -1382,7 +1337,6 @@ safeRender("break-even-kpi", () => {
     mortgageYearly
   );
 });
-
 
 // ================= PROPERTY LINK =================
 
