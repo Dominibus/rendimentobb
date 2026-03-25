@@ -1300,6 +1300,34 @@ if(typeof renderChart === "function"){
   renderChart(netAfterMortgage);
 }  
 
+// ================= INVESTMENT METRICS =================
+
+const metrics = document.getElementById("investment-metrics");
+
+if(metrics){
+
+  const riskScore =
+    roi > 12 ? 30 :
+    roi > 6 ? 55 :
+    75;
+
+  metrics.innerHTML = `
+  
+  <div class="metric-card">
+    <span>ROI Stimato</span>
+    <strong style="color:${roi > 12 ? '#10b981' : roi > 6 ? '#f59e0b' : '#ef4444'}">
+${roi.toFixed(1)}%
+</strong>
+  </div>
+
+  <div class="metric-card">
+    <span>Risk Score</span>
+    <strong>${riskScore} / 100</strong>
+  </div>
+
+  `;
+}  
+
 // ================= INSIGHTS =================
 
 const insights = generateInsights({
