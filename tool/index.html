@@ -686,12 +686,15 @@ function applyPaywall(){
     "strategic-insight"
   ];
 
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
   // ================= PRO USER =================
-  if(window.currentPlan === "pro" || window.currentPlan === "investor" || window.currentPlan === "pro_yearly"){
+  if(isPro){
 
-    console.log("Utente PRO - paywall disattivato");
-
-    document.querySelectorAll('[data-locked]').forEach(el => el.remove());
+    console.log("✅ PRO attivo → sblocco UI");
 
     proSections.forEach(id => {
 
@@ -701,12 +704,15 @@ function applyPaywall(){
       const card = inner.closest(".results-card");
       if(!card) return;
 
-      card.dataset.locked = "false";
-
-      const lock = card.querySelector('[data-locked]');
+      // 🔥 rimuove SOLO overlay (non la card)
+      const lock = card.querySelector('[data-paywall]');
       if(lock){
         lock.remove();
       }
+
+      card.dataset.locked = "false";
+      card.style.filter = "none";
+      card.style.pointerEvents = "auto";
 
     });
 
@@ -723,16 +729,13 @@ function applyPaywall(){
     const card = inner.closest(".results-card");
     if(!card) return;
 
-    if(card.dataset.locked === "true") return;
+    // evita duplicati
+    if(card.querySelector('[data-paywall]')) return;
 
     card.dataset.locked = "true";
 
-    // 🔥 NON blocchiamo più il contenuto!
-    card.style.position = "relative";
-    card.style.overflow = "hidden";
-
     const lock = document.createElement("div");
-    lock.setAttribute("data-locked","true");
+    lock.setAttribute("data-paywall","true");
 
     lock.innerHTML = `
       <div style="
@@ -747,23 +750,18 @@ function applyPaywall(){
         backdrop-filter:blur(4px);
         border-radius:16px;
       ">
-        <div style="font-weight:600;font-size:16px;"
-          data-it="🔒 Funzione PRO"
-          data-en="🔒 PRO Feature">
+        <div style="font-weight:600;font-size:16px;">
+          🔒 Funzione PRO
         </div>
 
-        <button onclick="buyPro()" class="btn btn-primary"
-          data-it="🔓 Sblocca versione PRO – 29€"
-          data-en="🔓 Unlock PRO version – €29">
+        <button onclick="buyPro()" class="btn btn-primary">
+          🔓 Sblocca versione PRO – 29€
         </button>
       </div>
     `;
 
+    card.style.position = "relative";
     card.appendChild(lock);
-
-    if(typeof applyLanguage === "function"){
-      applyLanguage();
-    }
 
   });
 
