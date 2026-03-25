@@ -1743,49 +1743,39 @@ doc.text(
   20
 );
 
-// logo piccolo e pulito
-const logo = new Image();
-logo.src="/img/logo-report.svg";
+// ================= LOGO PRO (FIX DEFINITIVO) =================
 
-await new Promise(resolve=>logo.onload=resolve);
+const img = new Image();
+img.src = "/img/logo-report.svg";
 
-// 🔥 LOGO FIX
-doc.addImage(logo,"PNG",160,5,30,12);
-
-// ================= LOGO FINAL =================
-
-// 🔥 carica SVG → convertito in PNG per jsPDF
-const logo = new Image();
-logo.src = "/img/logo-report.svg";
-
-await new Promise(resolve => {
-  logo.onload = resolve;
-  logo.onerror = resolve;
+await new Promise(r => {
+  img.onload = r;
+  img.onerror = r;
 });
 
-// 🔥 dimensioni corrette
+// converte SVG → PNG HD
+const canvasLogo = document.createElement("canvas");
+canvasLogo.width = img.width * 2;
+canvasLogo.height = img.height * 2;
+
+const ctxLogo = canvasLogo.getContext("2d");
+ctxLogo.scale(2,2);
+ctxLogo.drawImage(img,0,0);
+
+const logoData = canvasLogo.toDataURL("image/png");
+
+// posizione perfetta
 const logoWidth = 28;
 const logoHeight = 10;
-
-// 🔥 posizione perfetta
 const logoX = 210 - logoWidth - 10;
 const logoY = 6;
 
-// 🔥 background pulito
+// sfondo bianco pulito
 doc.setFillColor(255,255,255);
 doc.roundedRect(logoX - 2, logoY - 2, logoWidth + 4, logoHeight + 4, 2, 2, "F");
 
-// 🔥 render (usa JPEG per migliore compatibilità)
-doc.addImage(
-  logo,
-  "JPEG",
-  logoX,
-  logoY,
-  logoWidth,
-  logoHeight,
-  undefined,
-  "FAST"
-);
+// render HD
+doc.addImage(logoData,"PNG",logoX,logoY,logoWidth,logoHeight);
 // ================= HERO KPI =================
 
 doc.setFillColor(16,185,129);
