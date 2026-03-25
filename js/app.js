@@ -1466,7 +1466,16 @@ function renderChart(net){
   
 const annualProfit = net;
 
-const ctx = document.getElementById("roiChart");
+const canvas = document.getElementById("roiChart");
+
+// 🔥 FORZA RISOLUZIONE ALTA
+const dpi = window.devicePixelRatio || 2;
+
+canvas.width = canvas.offsetWidth * dpi;
+canvas.height = canvas.offsetHeight * dpi;
+
+const ctx = canvas.getContext("2d");
+ctx.scale(dpi, dpi);
 
 if(typeof Chart === "undefined"){
   console.warn("Chart.js non ancora caricato");
@@ -1714,34 +1723,69 @@ try {
 } catch(e){
   console.warn("Errore chart PDF:", e);
 }
-// ================= HEADER =================
+// ================= HEADER CLEAN =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,30,"F");
+doc.rect(0,0,210,26,"F");
 
+// titolo
 doc.setTextColor(255,255,255);
-doc.setFontSize(18);
-doc.text("RendimentoBB Strategic Report", 14, 18);
+doc.setFontSize(16);
+doc.text("RendimentoBB Strategic Report", 14, 14);
 
+// sottotitolo
 doc.setFontSize(9);
-
 doc.text(
-lang==="it"
-? "Report Intelligence Investimenti"
-: "Investment Intelligence Report",
-20,
-20
+  lang==="it"
+  ? "Report Intelligence Investimenti"
+  : "Investment Intelligence Report",
+  14,
+  20
 );
 
-// ================= LOGO =================
-
+// logo piccolo e pulito
 const logo = new Image();
 logo.src="/img/logo-report.png";
 
 await new Promise(resolve=>logo.onload=resolve);
 
-doc.addImage(logo,"PNG",140,3,55,18);
+// 🔥 LOGO FIX
+doc.addImage(logo,"PNG",160,5,30,12);
 
+// ================= LOGO PRO =================
+
+const logo = new Image();
+logo.src="/img/logo-report.png";
+
+// 🔥 evita blocchi se immagine non carica
+await new Promise(resolve => {
+  logo.onload = resolve;
+  logo.onerror = resolve;
+});
+
+// 🔥 DIMENSIONI PROPORZIONALI
+const logoWidth = 28;
+const logoHeight = 10;
+
+// 🔥 POSIZIONE PULITA (top right)
+const logoX = 210 - logoWidth - 10;
+const logoY = 6;
+
+// 🔥 SFONDO BIANCO dietro logo (evita trasparenze brutte)
+doc.setFillColor(255,255,255);
+doc.roundedRect(logoX - 2, logoY - 2, logoWidth + 4, logoHeight + 4, 2, 2, "F");
+
+// 🔥 INSERIMENTO OTTIMIZZATO
+doc.addImage(
+  logo,
+  "PNG",
+  logoX,
+  logoY,
+  logoWidth,
+  logoHeight,
+  undefined,
+  "FAST"
+);
 // ================= HERO KPI =================
 
 doc.setFillColor(16,185,129);
@@ -1957,7 +2001,7 @@ if(chartImage){
   doc.setFillColor(248,250,252);
   doc.roundedRect(15, y-10, 180, chartHeight+25, 6, 6, "F");
 
-  doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight);
+  doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight, undefined, "FAST");
 
   y += chartHeight + 10;
 
