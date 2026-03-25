@@ -261,5 +261,4 @@ window.getMarketBenchmark = function(city){
   };
 };
 
-// 🔥 AGGIUNGI QUESTO
-export const marketData = window.marketData;
+;
