@@ -140,24 +140,39 @@ function getUserPlan(){
   return window.currentPlan || "free";
 }
 
+// 🔥 CHECK GERARCHICO CORRETTO
 function hasPlan(requiredPlan){
 
-  const userPlan = window.currentPlan || "free";
+  const plan = getUserPlan();
 
-  // 🔥 INVESTOR vale come PRO
+  // 🟢 PRO (massimo livello)
   if(requiredPlan === "pro"){
-    return userPlan === "pro" || userPlan === "pro_yearly" || userPlan === "investor";
+    return plan === "pro" || plan === "pro_yearly";
   }
 
+  // 🟡 INVESTOR (medio livello)
   if(requiredPlan === "investor"){
-    return userPlan === "investor" || userPlan === "pro" || userPlan === "pro_yearly";
+    return (
+      plan === "investor" ||
+      plan === "pro" ||
+      plan === "pro_yearly"
+    );
   }
 
-  return userPlan === requiredPlan;
+  // 🟢 FREE
+  if(requiredPlan === "free"){
+    return true;
+  }
+
+  return false;
 }
 
+// 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
 
+  const plan = getUserPlan();
+
+  // 🔐 NON LOGGATO
   if(!window.currentUser){
 
     alert(
@@ -171,14 +186,26 @@ function requirePlan(requiredPlan){
     return false;
   }
 
+  // ❌ NON HA IL PIANO
   if(!hasPlan(requiredPlan)){
 
-    const goUpgrade = confirm(
-      t(
-        "Questa funzione richiede un piano superiore.",
-        "This feature requires a higher plan."
-      )
-    );
+    let message = "";
+
+    if(requiredPlan === "investor"){
+      message = t(
+        "Questa funzione richiede il piano Investor.",
+        "This feature requires the Investor plan."
+      );
+    }
+
+    if(requiredPlan === "pro"){
+      message = t(
+        "Questa funzione richiede il piano Pro.",
+        "This feature requires the Pro plan."
+      );
+    }
+
+    const goUpgrade = confirm(message);
 
     if(goUpgrade){
       window.location.href="/pricing/";
