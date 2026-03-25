@@ -1333,6 +1333,14 @@ if(window.currentUser && window.currentUser.uid && roi > 0){
 
 const citySafe = city || "italy";
 
+// 🔥 CALCOLO PAYBACK SICURO (PRIMA DI USARLO)
+let payback = 0;
+
+if(equity > 0 && netAfterMortgage > 0){
+  payback = equity / netAfterMortgage;
+}
+
+// 🔹 MARKET + BENCHMARK
 safeRender("market-benchmark", () => {
   renderMarketBenchmark(citySafe);
 });
@@ -1345,6 +1353,7 @@ safeRender("roi-market-comparison", () => {
   renderROIMarketComparison(roi, citySafe);
 });
 
+// 🔹 FORECAST + SENSITIVITY
 safeRender("revenue-forecast", () => {
   renderRevenueForecast(gross);
 });
@@ -1353,6 +1362,7 @@ safeRender("occupancy-sensitivity", () => {
   renderOccupancySensitivity();
 });
 
+// 🔹 CORE KPI
 safeRender("investment-score", () => {
   renderInvestmentScore(roi, riskScore);
 });
@@ -1365,14 +1375,17 @@ safeRender("investment-risk-meter", () => {
   renderRiskMeter(riskScore);
 });
 
+// 🔹 SMART UX
 safeRender("smart-investment-alert", () => {
   renderSmartInvestmentAlert(roi);
 });
 
+// 🔹 VERDICT (ORA SICURO)
 safeRender("investment-verdict", () => {
   renderInvestmentVerdict(roi, payback);
 });
 
+// 🔹 BREAK EVEN
 safeRender("break-even-kpi", () => {
   renderBreakEvenOccupancy(
     priceNight,
@@ -1381,58 +1394,55 @@ safeRender("break-even-kpi", () => {
     tax,
     mortgageYearly
   );
-});  
+});
+
+
+// ================= PROPERTY LINK =================
 
 const propertyLink = localStorage.getItem("property_link") || "";
 
 function extractCity(url){
 
-const cities = [
-"napoli",
-"roma",
-"milano",
-"torino",
-"bologna",
-"firenze",
-"venezia",
-"genova",
-"palermo"
-];
+  const cities = [
+    "napoli",
+    "roma",
+    "milano",
+    "torino",
+    "bologna",
+    "firenze",
+    "venezia",
+    "genova",
+    "palermo"
+  ];
 
-for(const c of cities){
-if(url.toLowerCase().includes(c)){
-return c;
-}
-}
+  for(const c of cities){
+    if(url.toLowerCase().includes(c)){
+      return c;
+    }
+  }
 
-return null;
+  return null;
 }
 
 // se non è stata scelta manualmente
 if(!city && propertyLink){
-city = extractCity(propertyLink);
+  city = extractCity(propertyLink);
 }
 
 // fallback
 if(!city){
-city = "italy";
+  city = "italy";
 }
 
-if(window.currentUser){
+// ================= SCROLL =================
 
-} 
-
-// SCROLL AUTOMATICO AI RISULTATI
 const resultsSection = document.getElementById("results");
 
 if(resultsSection){
-resultsSection.scrollIntoView({
-behavior: "smooth"
-}); 
-} 
-
+  resultsSection.scrollIntoView({
+    behavior: "smooth"
+  });
 }
-
 // ================= STRATEGIC =================
 
 function renderStrategicInsight(roi) {
