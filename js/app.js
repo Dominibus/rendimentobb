@@ -1186,7 +1186,16 @@ function renderInsights(insights){
   const container = document.getElementById("ai-insights");
   if(!container) return;
 
-  container.innerHTML = insights.map(i=>{
+  if(!insights.length){
+  container.innerHTML = `
+    <div style="color:#64748b;font-size:14px;">
+      ${t("Nessun alert rilevato","No critical insights detected")}
+    </div>
+  `;
+  return;
+}
+
+container.innerHTML = insights.map(i=>{
 
     let color = "#64748b";
 
