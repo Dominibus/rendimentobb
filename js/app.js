@@ -1629,7 +1629,7 @@ document.addEventListener("DOMContentLoaded", renderCityROIChart);
 
 // ================= EXECUTIVE PDF =================
 
-async function generateExecutivePDF(){
+window.generateExecutivePDF = async function(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
