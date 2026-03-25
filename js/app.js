@@ -41,17 +41,6 @@ window.safePercent = function(value){
   return window.safeNumber(value).toFixed(1);
 };
 
-window.safeRender = function(id, callback){
-  const container = document.getElementById(id);
-  if(!container) return;
-
-  try{
-    callback(container);
-  }catch(e){
-    console.error("Render error:", id, e);
-  }
-};
-
 window.runMortgageComparison = function(){
 
 const amount = parseFloat(document.getElementById("mortgageAmount").value);
