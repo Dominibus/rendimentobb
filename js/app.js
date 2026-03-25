@@ -2008,29 +2008,6 @@ y+10
 
 y+=34;  
 
-
-// ================= ROI =================
-
-doc.setFillColor(248,250,252);
-doc.roundedRect(20,y-5,170,30,3,3,"F");
-
-doc.setFontSize(11);
-doc.setTextColor(0);
-
-const low = data.revenue * 0.8;
-const base = data.revenue;
-const high = data.revenue * 1.2;
-
-doc.text((lang==="it"?"Scenario prudente: ":"Low scenario: ") + formatCurrency(low),20,y);
-y+=7;
-
-doc.text((lang==="it"?"Scenario base: ":"Base scenario: ") + formatCurrency(base),20,y);
-y+=7;
-
-doc.text((lang==="it"?"Scenario ottimistico: ":"High scenario: ") + formatCurrency(high),20,y);
-
-y+=18;
-
 doc.text(
 t("ROI","ROI"),
 20,
