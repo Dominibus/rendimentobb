@@ -333,6 +333,33 @@ box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 text-shadow: 0 0 8px rgba(16,185,129,0.3);
 }  
 
+#market-hero-bg{
+position:relative;
+overflow:hidden;
+}
+
+#market-hero-bg::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+
+background: linear-gradient(
+to top,
+rgba(0,0,0,0.5),
+rgba(0,0,0,0.1)
+);
+
+}
+
+#market-hero-title{
+position:relative;
+z-index:2;
+text-shadow:0 4px 20px rgba(0,0,0,0.4);
+}  
+
 </style>
 
 </head>
