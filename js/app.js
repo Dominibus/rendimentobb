@@ -2169,6 +2169,8 @@ lang==="it"
 : "RendimentoBB-Investment-Report.pdf"
 );
 
+}  
+
   // ================= AUTO CITY DETECTION =================
 
   function extractCityFromLink(url){
