@@ -1657,6 +1657,9 @@ return;
 const { jsPDF } = window.jspdf;
 const data = window.lastAnalysisData;
 
+// 🔥 SAFE CLEAN GLOBAL
+const clean = (v) => isFinite(v) ? v : 0;  
+
 const doc = new jsPDF();
 
 let y = 34;
@@ -1665,35 +1668,40 @@ let chartImage = null;
 
 try {
 
-const canvas = document.getElementById("roiChart");
+  const canvas = document.getElementById("roiChart");
 
-if(canvas){
+  if(canvas){
 
-  await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-  const exportCanvas = document.createElement("canvas");
-  const scale = 2;
+    if(canvas.width === 0 || canvas.height === 0){
+      console.warn("Canvas vuoto → skip chart");
+    }else{
 
-  exportCanvas.width = canvas.width * scale;
-  exportCanvas.height = canvas.height * scale;
+      const exportCanvas = document.createElement("canvas");
+      const scale = 2;
 
-  const ctx = exportCanvas.getContext("2d");
+      exportCanvas.width = canvas.width * scale;
+      exportCanvas.height = canvas.height * scale;
 
-  ctx.scale(scale, scale);
+      const ctx = exportCanvas.getContext("2d");
 
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(scale, scale);
 
-  ctx.drawImage(canvas, 0, 0);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  chartImage = exportCanvas.toDataURL("image/png", 1.0);
+      ctx.drawImage(canvas, 0, 0);
 
-}
+      chartImage = exportCanvas.toDataURL("image/png", 1.0);
+
+    }
+
+  }
 
 } catch(e){
-console.warn("Errore chart PDF:", e);
+  console.warn("Errore chart PDF:", e);
 }
-
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
@@ -1734,7 +1742,7 @@ doc.text("ROI",25,y+10);
 
 doc.setFontSize(26);
 
-doc.text((data.roi || 0).toFixed(2)+"%",25,y+22);
+doc.text(clean(data.roi).toFixed(2)+"%",25,y+22);
 
 doc.setFontSize(10);
 
@@ -1834,7 +1842,7 @@ doc.text(lang==="it"?"Ricavi":"Revenue",25,y+8);
 
 doc.setFontSize(12);
 doc.setTextColor(0);
-doc.text(formatCurrency(data.revenue),25,y+16);
+doc.text(formatCurrency(clean(data.revenue)),25,y+16);
 
 doc.roundedRect(20+boxWidth+gap,y,boxWidth,22,4,4,"F");
 
@@ -1844,7 +1852,7 @@ doc.text(lang==="it"?"Profitto":"Profit",25+boxWidth+gap,y+8);
 
 doc.setFontSize(12);
 doc.setTextColor(0);
-doc.text(formatCurrency(data.profit),25+boxWidth+gap,y+16);
+doc.text(formatCurrency(clean(data.profit)),25+boxWidth+gap,y+16);;
 
 y += 30;
 
@@ -1883,7 +1891,7 @@ doc.roundedRect(20,y,170,22,4,4,"F");
 doc.setFontSize(11);
 doc.setTextColor(16,185,129);
 
-doc.text("ROI: "+(data.roi||0).toFixed(2)+"% - "+badge,25,y+14);
+doc.text("ROI: "+clean(data.roi).toFixed(2)+"% - "+badge,25,y+14);
 
 y+=30;
 
@@ -1899,9 +1907,9 @@ doc.text(lang==="it"?"Scenario Ricavi":"Revenue Scenarios",20,y);
 
 y+=10;
 
-const low=data.revenue*0.8;
-const base=data.revenue;
-const high=data.revenue*1.2;
+const low = clean(data.revenue) * 0.8;
+const base = clean(data.revenue);
+const high = clean(data.revenue) * 1.2;
 
 doc.text("Low: "+formatCurrency(low),20,y); y+=6;
 doc.text("Base: "+formatCurrency(base),20,y); y+=6;
@@ -2046,13 +2054,13 @@ doc.setTextColor(0);
 let finalVerdict;
 
 if(data.roi > 12){
-finalVerdict = "✔ Investimento eccellente";
+finalVerdict = "Investimento eccellente";
 }
 else if(data.roi > 6){
-finalVerdict = "⚖️ Investimento bilanciato";
+finalVerdict = "Investimento bilanciato";
 }
 else{
-finalVerdict = "⚠️ Investimento rischioso";
+finalVerdict = "Investimento rischioso";
 }
 
 doc.text(finalVerdict,20,y,{maxWidth:170});
