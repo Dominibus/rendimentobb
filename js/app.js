@@ -1201,36 +1201,37 @@ const alertBox = document.getElementById("smart-investment-alert");
 
 if(alertBox){
 
-alertBox.innerHTML = `
-<div style="
-margin-top:20px;
-padding:20px;
-border-radius:14px;
-background:#fef3c7;
-border:1px solid #f59e0b;
-text-align:center;
-">
+  // 🔥 NON SOVRASCRIVERE → aggiungi sopra
+  alertBox.insertAdjacentHTML("beforeend", `
+  <div style="
+  margin-top:20px;
+  padding:20px;
+  border-radius:14px;
+  background:#fef3c7;
+  border:1px solid #f59e0b;
+  text-align:center;
+  ">
 
-<strong>
-${t(
-"Hai ottimizzato il mutuo — ora ottimizza l’investimento",
-"You optimized your mortgage — now optimize the investment"
-)}
-</strong>
+  <strong>
+  ${t(
+  "Hai ottimizzato il mutuo — ora ottimizza l’investimento",
+  "You optimized your mortgage — now optimize the investment"
+  )}
+  </strong>
 
-<p style="margin-top:10px;">
-${t(
-"Scopri ROI reale, rischio e scenari avanzati",
-"Unlock real ROI, risk and advanced scenarios"
-)}
-</p>
+  <p style="margin-top:10px;">
+  ${t(
+  "Scopri ROI reale, rischio e scenari avanzati",
+  "Unlock real ROI, risk and advanced scenarios"
+  )}
+  </p>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-${t("Sblocca analisi completa","Unlock full analysis")}
-</button>
+  <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+  ${t("Sblocca analisi completa","Unlock full analysis")}
+  </button>
 
-</div>
-`;
+  </div>
+  `);
 }
 
 localStorage.removeItem("from_mortgage");
