@@ -1312,6 +1312,35 @@ if(metrics){
     75;
 
   metrics.innerHTML = `
+
+  // ================= INVESTMENT GRADE FIX =================
+
+const scoreCircle = document.querySelector(".score-circle");
+const scoreLabel = document.querySelector(".score-label");
+
+if(scoreCircle){
+
+  let grade = "C";
+  let color = "#ef4444";
+
+  if(roi > 12){
+    grade = "A";
+    color = "#10b981";
+  }
+  else if(roi > 6){
+    grade = "B";
+    color = "#f59e0b";
+  }
+
+  scoreCircle.innerText = grade;
+  scoreCircle.style.background = color;
+  scoreCircle.style.color = "#fff";
+
+}
+
+if(scoreLabel){
+  scoreLabel.innerText = "Investment Grade";
+}
   
   <div class="metric-card">
     <span>ROI Stimato</span>
@@ -1738,7 +1767,13 @@ try {
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.drawImage(canvas, 0, 0);
+      if(canvas && canvas.width > 0 && canvas.height > 0){
+
+  ctx.drawImage(canvas, 0, 0);
+
+}else{
+  console.warn("Canvas non valido per PDF");
+}
 
       chartImage = exportCanvas.toDataURL("image/png", 1.0);
 
@@ -1769,15 +1804,28 @@ doc.text(
   20
 );
 
-// ================= LOGO PRO (FIX DEFINITIVO) =================
+// ================= LOGO FIX DEFINITIVO =================
 
-const img = new Image();
-img.src = "/img/logo-report.svg";
+const logo = new Image();
+logo.src = "/img/logo-report.png";
 
-await new Promise(r => {
-  img.onload = () => setTimeout(r, 100);
-  img.onerror = r;
-}); 
+await new Promise(resolve => {
+  logo.onload = resolve;
+  logo.onerror = resolve;
+});
+
+// posizione
+const logoWidth = 30;
+const logoHeight = 12;
+const logoX = 210 - logoWidth - 10;
+const logoY = 6;
+
+// sfondo bianco
+doc.setFillColor(255,255,255);
+doc.roundedRect(logoX - 2, logoY - 2, logoWidth + 4, logoHeight + 4, 2, 2, "F");
+
+// render
+doc.addImage(logo,"PNG",logoX,logoY,logoWidth,logoHeight);
 
 // ================= SVG → PNG FIX DEFINITIVO =================
 
