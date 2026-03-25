@@ -1117,98 +1117,6 @@ function getInvestmentBadge(roi){
   return "⚠️ Attenzione rischio";
 }
 
-
-
-// ================= FREE LIMIT =================  👈 QUESTO ERA GIÀ PRESENTE
-
-function calculate(force = false){
-
-// 🔥 BLOCCO SICUREZZA PRIMA DI TUTTO
-if(typeof window.safeNumber !== "function"){
-  console.warn("safeNumber non pronto → skip calculate");
-  return;
-}
-
-// sicurezza DOM ma NON bloccare
-if(document.readyState === "loading"){
-  console.warn("DOM non pronto ma continuo comunque");
-}
-
-// 👉 SOLO QUI
-window.simulationExecuted = true; 
-
-const priceNight = getValue("priceNight");
-const occupancy = getValue("occupancy");
-const expenses = getValue("expenses");
-const commission = getValue("commission") || 15;
-const tax = getValue("tax") || 21;
-const loanAmount = getValue("loanAmount");
-const interestRate = getValue("interestRate");
-const loanYears = getValue("loanYears"); 
-
-console.log("DEBUG:", {
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax
-}); 
-
-const result = calculateROI({
-  price: getValue("price"),
-  equity: safeNumber(getValue("equity")),
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
-});
-
-const equity = safeNumber(getValue("equity"));
-
-// DEBUG
-console.log("RESULT:", result);
-
-// 🔥 QUI DEVE STARE (FUORI!)
-safeRender("executive-kpi", () => {
-  renderExecutiveKPI(result);
-});
-
-window.lastAnalysisData = {
-  ...result,
-
-  // 🔥 ALLINEAMENTO NOMI PDF
-  price: getValue("price"),
-  equity: safeNumber(getValue("equity")),
-  loan: result.loan || getValue("loanAmount"),
-
-  revenue: result.revenue || result.gross,
-  profit: result.profit || result.netAfterMortgage
-};  
-
-if (equity < 0){
-  console.warn("Equity non valido → continuo comunque");
-}
-
-const gross = result.gross;
-const operatingProfit = result.operatingProfit;
-const taxCost = result.taxCost;
-const mortgageYearly = result.mortgageYearly;
-const netAfterMortgage = safeNumber(result.netAfterMortgage);
-const roi = safeNumber(result.roi);
-
-const insights = generateInsights({
-  roi,
-  occupancy,
-  priceNight,
-  expenses
-});
-
-renderInsights(insights);  
-
 // ================= AI INSIGHT ENGINE =================
 
 function generateInsights(data){
@@ -1300,7 +1208,98 @@ function renderInsights(insights){
 
   }).join("");
 
-}  
+}
+
+
+// ================= FREE LIMIT =================  👈 QUESTO ERA GIÀ PRESENTE
+
+function calculate(force = false){
+
+// 🔥 BLOCCO SICUREZZA PRIMA DI TUTTO
+if(typeof window.safeNumber !== "function"){
+  console.warn("safeNumber non pronto → skip calculate");
+  return;
+}
+
+// sicurezza DOM ma NON bloccare
+if(document.readyState === "loading"){
+  console.warn("DOM non pronto ma continuo comunque");
+}
+
+// 👉 SOLO QUI
+window.simulationExecuted = true; 
+
+const priceNight = getValue("priceNight");
+const occupancy = getValue("occupancy");
+const expenses = getValue("expenses");
+const commission = getValue("commission") || 15;
+const tax = getValue("tax") || 21;
+const loanAmount = getValue("loanAmount");
+const interestRate = getValue("interestRate");
+const loanYears = getValue("loanYears"); 
+
+console.log("DEBUG:", {
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax
+}); 
+
+const result = calculateROI({
+  price: getValue("price"),
+  equity: safeNumber(getValue("equity")),
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
+
+const equity = safeNumber(getValue("equity"));
+
+// DEBUG
+console.log("RESULT:", result);
+
+// 🔥 QUI DEVE STARE (FUORI!)
+safeRender("executive-kpi", () => {
+  renderExecutiveKPI(result);
+});
+
+window.lastAnalysisData = {
+  ...result,
+
+  // 🔥 ALLINEAMENTO NOMI PDF
+  price: getValue("price"),
+  equity: safeNumber(getValue("equity")),
+  loan: result.loan || getValue("loanAmount"),
+
+  revenue: result.revenue || result.gross,
+  profit: result.profit || result.netAfterMortgage
+};  
+
+if (equity < 0){
+  console.warn("Equity non valido → continuo comunque");
+}
+
+const gross = result.gross;
+const operatingProfit = result.operatingProfit;
+const taxCost = result.taxCost;
+const mortgageYearly = result.mortgageYearly;
+const netAfterMortgage = safeNumber(result.netAfterMortgage);
+const roi = safeNumber(result.roi);
+
+const insights = generateInsights({
+  roi,
+  occupancy,
+  priceNight,
+  expenses
+});
+
+renderInsights(insights);  
 
 // 💥 HOOK MUTUO → RESET FLAG
 localStorage.removeItem("from_mortgage");
