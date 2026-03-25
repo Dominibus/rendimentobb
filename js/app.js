@@ -1297,6 +1297,11 @@ const gross = result.gross;
 const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
 
+// 🔥 RENDER CHART SEMPRE
+if(typeof renderChart === "function"){
+  renderChart(netAfterMortgage);
+}  
+
 // ================= INSIGHTS =================
 
 const insights = generateInsights({
