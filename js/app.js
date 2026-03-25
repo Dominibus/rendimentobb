@@ -1787,13 +1787,24 @@ doc.text(
 
 // ================= LOGO (PNG CLEAN DEFINITIVO) =================
 
+let logoLoaded = false;
+
 const logoImg = new Image();
-logoImg.src = "/img/logo-report.png";
 logoImg.crossOrigin = "anonymous";
 
+// 🔥 URL ASSOLUTO (fondamentale)
+logoImg.src = "https://rendimentobb.it/img/logo-report.png";
+
+// attesa caricamento (senza bloccare tutto)
 await new Promise(resolve => {
-  logoImg.onload = resolve;
-  logoImg.onerror = resolve;
+  logoImg.onload = () => {
+    logoLoaded = true;
+    resolve();
+  };
+  logoImg.onerror = () => {
+    console.warn("Logo non caricato");
+    resolve();
+  };
 });
 
 // dimensioni ottimizzate
@@ -1803,16 +1814,25 @@ const logoH = 20;
 const logoPosX = 210 - logoW - 12;
 const logoPosY = 4;
 
-doc.addImage(
-  logoImg,
-  "PNG",
-  logoPosX,
-  logoPosY,
-  logoW,
-  logoH,
-  undefined,
-  "SLOW" // 🔥 IMPORTANTISSIMO
-);
+// 🔥 AGGIUNTA SICURA (NO CRASH)
+if(logoLoaded && logoImg.naturalWidth > 0){
+  try{
+    doc.addImage(
+      logoImg,
+      "PNG",
+      logoPosX,
+      logoPosY,
+      logoW,
+      logoH,
+      undefined,
+      "SLOW" // qualità alta
+    );
+  }catch(e){
+    console.warn("Errore inserimento logo PDF:", e);
+  }
+}else{
+  console.warn("Logo skip → PDF continua senza logo");
+}
 // ================= HERO KPI =================
 
 doc.setFillColor(16,185,129);
