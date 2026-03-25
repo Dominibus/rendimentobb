@@ -1190,10 +1190,8 @@ window.lastAnalysisData = {
   profit: result.profit || result.netAfterMortgage
 };  
 
-const equity = getValue("equity");
 if (equity < 0){
-  console.log("Equity non valido");
-  return;
+  console.warn("Equity non valido → continuo comunque");
 }
 
 const gross = result.gross;
