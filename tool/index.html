@@ -785,16 +785,10 @@ document.addEventListener("rb_plan_loaded", () => {
 // al primo caricamento pagina
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 👉 se non loggato → forza FREE
-  if(!window.currentUser){
-    window.currentPlan = "free";
-  }
-
-  // applica paywall
-  applyPaywall();
+  // NON applicare subito
+  console.log("⏳ Attendo Firebase prima di applicare paywall");
 
 });
-
 
 /* ================= CITY PERSIST ================= */
 
