@@ -96,30 +96,6 @@ if(!window.currentPlan){
   window.currentPlan = "free";
 }
 
-document.addEventListener("rb_plan_loaded", ()=>{
-
-  let freeRuns = parseInt(localStorage.getItem("rb_free_runs") || "0");
-
-  const isLogged = !!window.currentUser;
-  const isPro = hasPlan("pro");
-
-  if(!isLogged && !isPro && freeRuns >= 3){
-
-  const message = t(
-    "Hai raggiunto il limite gratuito. Accedi per continuare.",
-    "Free limit reached. Login to continue."
-  );
-
-  showToast(message); // oppure UI custom
-
-  setTimeout(()=>{
-    window.location.href="/login/";
-  }, 1200);
-
-  return;
-}
-
-});
 
 // ================= CITY FROM HOMEPAGE =================
 
@@ -2636,10 +2612,15 @@ function goToMarket(city){
   // ================= EVENTI GLOBALI =================
 
 document.addEventListener("rb_plan_loaded", () => {
+
   console.log("🔥 Piano aggiornato:", window.currentPlan);
 
+  // 🔥 aggiorna PDF
   updatePDFButton();
 
-  // 👉 qui puoi aggiornare UI PRO
+  // 🔥 aggiorna paywall DOPO che piano è sicuro
+  if(typeof applyPaywall === "function"){
+    applyPaywall();
+  }
 
-});
+});;
