@@ -1358,6 +1358,11 @@ safeRender("smart-investment-alert", () => {
   renderSmartInvestmentAlert(roi);
 });
 
+// DOPO (non prima)
+if(localStorage.getItem("from_mortgage")){
+  // append ONLY
+}
+
 // 🔹 VERDICT (ORA SICURO)
 safeRender("investment-verdict", () => {
   renderInvestmentVerdict(roi, payback);
