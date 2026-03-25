@@ -1741,15 +1741,17 @@ if(canvas){
 await new Promise(resolve => setTimeout(resolve, 500));
 
 // 🔥 canvas export HD
-const exportCanvas = document.createElement("canvas");
-exportCanvas.width = canvas.width * 2;
-exportCanvas.height = canvas.height * 2;
+const scale = 2;
 
-const ctx = exportCanvas.getContext("2d");
+exportCanvas.width = canvas.width * scale;
+exportCanvas.height = canvas.height * scale;
 
-// sfondo bianco (FONDAMENTALE per PDF)
+ctx.scale(scale, scale);
+
 ctx.fillStyle = "#ffffff";
-ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.drawImage(canvas, 0, 0);
 
 // copia grafico
 ctx.drawImage(canvas, 0, 0, exportCanvas.width, exportCanvas.height);
@@ -2073,7 +2075,7 @@ y = 30;
 if(chartImage){
 
 const chartWidth = 170;
-const chartHeight = 90;
+const chartHeight = 120;
 
 const chartX = (210 - chartWidth) / 2;
 
@@ -2100,6 +2102,8 @@ y
 );
 
 y += 10;
+  
+y += 5;
 
 doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight);
 
