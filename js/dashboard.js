@@ -29,7 +29,7 @@ getAuth,
 onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-import * as marketData from "./market-data.js";
+import { marketData } from "./market-data.js";
 // ================= TRANSLATION HELPER =================
 
 window.t = function(it,en){
@@ -782,7 +782,11 @@ ${investmentScore}/100
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
 
-const marketROI = marketData[selectedCity].roi;
+const cityMarket = marketData[selectedCity] || marketData["italy"] || { roi: 8 };
+
+const marketROI = cityMarket.roi;
+
+console.log("City:", selectedCity, "Market:", cityMarket);  
 
 const performanceEl = document.getElementById("market-performance");
 const userRoiEl = document.getElementById("user-roi-benchmark");
