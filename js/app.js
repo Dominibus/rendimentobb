@@ -1293,24 +1293,17 @@ updatePreviewMetrics(Number(roi || 0).toFixed(1), riskScore);
 
 const investmentScore = Math.round((roi * 2) - (riskScore * 0.5));
 
-setTimeout(() => {
+requestAnimationFrame(() => {
 
   const el = document.getElementById("score-circle");
 
-  if(!el){
-  console.warn("⛔ score-circle non ancora pronto");
-}else{
-  if(typeof updateInvestmentScore === "function"){
+  if(el && typeof updateInvestmentScore === "function"){
     updateInvestmentScore(investmentScore);
-  }
-}
-
-  if(typeof updateInvestmentScore === "function"){
-    updateInvestmentScore(investmentScore);
+  }else{
+    console.warn("⛔ score-circle skip (non pronto)");
   }
 
-}, 50);  
-
+});
 // ================= SAVE CORRETTO =================
 
 if(window.currentUser && window.currentUser.uid && roi > 0){
