@@ -1745,40 +1745,40 @@ doc.text(
 
 // logo piccolo e pulito
 const logo = new Image();
-logo.src="/img/logo-report.png";
+logo.src="/img/logo-report.svg";
 
 await new Promise(resolve=>logo.onload=resolve);
 
 // 🔥 LOGO FIX
 doc.addImage(logo,"PNG",160,5,30,12);
 
-// ================= LOGO PRO =================
+// ================= LOGO FINAL =================
 
+// 🔥 carica SVG → convertito in PNG per jsPDF
 const logo = new Image();
-logo.src="/img/logo-report.png";
+logo.src = "/img/logo-report.svg";
 
-// 🔥 evita blocchi se immagine non carica
 await new Promise(resolve => {
   logo.onload = resolve;
   logo.onerror = resolve;
 });
 
-// 🔥 DIMENSIONI PROPORZIONALI
+// 🔥 dimensioni corrette
 const logoWidth = 28;
 const logoHeight = 10;
 
-// 🔥 POSIZIONE PULITA (top right)
+// 🔥 posizione perfetta
 const logoX = 210 - logoWidth - 10;
 const logoY = 6;
 
-// 🔥 SFONDO BIANCO dietro logo (evita trasparenze brutte)
+// 🔥 background pulito
 doc.setFillColor(255,255,255);
 doc.roundedRect(logoX - 2, logoY - 2, logoWidth + 4, logoHeight + 4, 2, 2, "F");
 
-// 🔥 INSERIMENTO OTTIMIZZATO
+// 🔥 render (usa JPEG per migliore compatibilità)
 doc.addImage(
   logo,
-  "PNG",
+  "JPEG",
   logoX,
   logoY,
   logoWidth,
