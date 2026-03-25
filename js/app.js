@@ -1523,8 +1523,6 @@ const annualProfit = net;
 const canvas = document.getElementById("roiChart");
 
 // 🔥 RESET COMPLETO (evita blur cumulativo)
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
 
 const ctx = canvas.getContext("2d");
 
@@ -1599,6 +1597,13 @@ pointHoverRadius:5
 },
 
 options:{
+
+responsive:true,
+maintainAspectRatio:false, // 🔥 IMPORTANTISSIMO
+
+animation:false, // 🔥 evita rendering incompleto
+
+devicePixelRatio:2, // 🔥 qualità retina  
 
 responsive:true,
 
@@ -1784,6 +1789,7 @@ doc.text(
 
 const logoImg = new Image();
 logoImg.src = "/img/logo-report.png";
+logoImg.crossOrigin = "anonymous";
 
 await new Promise(resolve => {
   logoImg.onload = resolve;
@@ -1791,14 +1797,12 @@ await new Promise(resolve => {
 });
 
 // dimensioni ottimizzate
-const logoW = 30;
-const logoH = 12;
+const logoW = 50;
+const logoH = 20;
 
-// posizione top-right
-const logoPosX = 210 - logoW - 10;
-const logoPosY = 6;
+const logoPosX = 210 - logoW - 12;
+const logoPosY = 4;
 
-// render logo
 doc.addImage(
   logoImg,
   "PNG",
@@ -1807,7 +1811,7 @@ doc.addImage(
   logoW,
   logoH,
   undefined,
-  "FAST"
+  "SLOW" // 🔥 IMPORTANTISSIMO
 );
 // ================= HERO KPI =================
 
