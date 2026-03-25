@@ -547,6 +547,8 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
+const isPro = window.currentPlan === "pro";
+
 container.innerHTML = `
 
 <div class="analysis-card" style="position:relative;overflow:hidden">
@@ -571,7 +573,7 @@ TOP ROI
 🏆 ${t("Miglior investimento","Best investment")}
 </h3>
 
-<!-- ROI HERO -->
+<!-- ROI -->
 <div style="
 font-size:34px;
 font-weight:800;
@@ -581,15 +583,11 @@ margin-bottom:12px;
 ${best.roi.toFixed(1)}%
 </div>
 
-<div style="
-font-size:13px;
-color:#64748b;
-margin-bottom:18px;
-">
+<div style="font-size:13px;color:#64748b;margin-bottom:18px">
 ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 </div>
 
-<!-- METRICHE -->
+<!-- DATI BASE (SEMPRE VISIBILI) -->
 <div class="metric">
 <span>${t("Prezzo immobile","Property price")}</span>
 <strong>${formatCurrency(best.price)}</strong>
@@ -600,6 +598,13 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 <strong>${formatCurrency(best.equity)}</strong>
 </div>
 
+<hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0">
+
+<!-- 🔒 BLOCCO PRO -->
+${
+isPro
+? `
+<!-- CONTENUTO PRO -->
 <div class="metric">
 <span>${t("Indice rischio","Risk score")}</span>
 <strong>${best.risk}/100</strong>
@@ -607,53 +612,50 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <div class="metric">
 <span>${t("Break-even investimento","Investment break-even")}</span>
-<strong>
-${breakEvenYears} ${t("anni","years")}
-</strong>
+<strong>${breakEvenYears} ${t("anni","years")}</strong>
 </div>
 
-<hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0">
-
-<!-- INSIGHT -->
-<div style="
-background:rgba(16,185,129,0.08);
-border-radius:12px;
-padding:12px;
-font-size:13px;
-color:#065f46;
-">
-
-<strong>💡 ${t("Insight","Insight")}:</strong><br>
-
-${t(
-"Questo investimento supera la media di mercato.",
-"This investment outperforms the market average."
-)}
-
-</div>
-
-<!-- SUGGERIMENTO -->
 <div style="
 margin-top:14px;
 padding:12px;
 border-radius:12px;
-background:rgba(37,99,235,0.08);
+background:rgba(16,185,129,0.08);
 font-size:13px;
-color:#1e3a8a;
+color:#065f46;
+">
+<strong>💡 Insight:</strong><br>
+${t(
+"Questo investimento supera la media di mercato.",
+"This investment outperforms the market average."
+)}
+</div>
+`
+: `
+<!-- LOCKED -->
+<div style="
+margin-top:14px;
+padding:14px;
+border-radius:12px;
+background:rgba(0,0,0,0.03);
+text-align:center;
 ">
 
-<strong>📊 ${t("Prezzo ottimizzato","Optimized price")}:</strong><br>
+<div style="font-size:22px;margin-bottom:6px">🔒</div>
 
-${formatCurrency(suggestedPrice)}
-
-<div style="margin-top:4px;color:#64748b;font-size:12px">
+<div style="font-size:13px;color:#64748b;margin-bottom:10px">
 ${t(
-"per raggiungere ROI medio di mercato",
-"to match market average ROI"
-)} (${marketROI}%)
+"Sblocca analisi completa e strategia investimento",
+"Unlock full analysis and investment strategy"
+)}
 </div>
 
+<button class="btn-primary btn-sm" onclick="goToUpgrade()">
+${t("Sblocca PRO","Unlock PRO")}
+</button>
+
 </div>
+`
+}
 
 </div>
 
