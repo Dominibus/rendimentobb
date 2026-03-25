@@ -1333,43 +1333,55 @@ if(window.currentUser && window.currentUser.uid && roi > 0){
 
 const citySafe = city || "italy";
 
-// 🔹 MARKET + BENCHMARK
-renderMarketBenchmark(citySafe);
-renderMarketComparison(gross, citySafe);
-renderROIMarketComparison(roi, citySafe);
+safeRender("market-benchmark", () => {
+  renderMarketBenchmark(citySafe);
+});
 
-// 🔹 FORECAST + SENSITIVITY
-renderRevenueForecast(gross);
-renderOccupancySensitivity();
+safeRender("market-comparison", () => {
+  renderMarketComparison(gross, citySafe);
+});
 
-// 🔹 CORE KPI
-renderInvestmentScore(roi, riskScore);
-renderInvestmentRanking(roi);
-renderRiskMeter(riskScore);
+safeRender("roi-market-comparison", () => {
+  renderROIMarketComparison(roi, citySafe);
+});
 
-// 🔹 SMART UX
-renderSmartInvestmentAlert(roi);
+safeRender("revenue-forecast", () => {
+  renderRevenueForecast(gross);
+});
 
-// 🔹 CHART (LEGGERO RITARDO)
-setTimeout(() => {
-  renderChart(netAfterMortgage);
-}, 50);
+safeRender("occupancy-sensitivity", () => {
+  renderOccupancySensitivity();
+});
 
-// PAYBACK
-const payback =
-equity > 0 && netAfterMortgage > 0
-? (equity / netAfterMortgage)
-: null;
+safeRender("investment-score", () => {
+  renderInvestmentScore(roi, riskScore);
+});
 
-renderInvestmentVerdict(roi, payback);
+safeRender("investment-ranking", () => {
+  renderInvestmentRanking(roi);
+});
 
-renderBreakEvenOccupancy(
-priceNight,
-expenses,
-commission,
-tax,
-mortgageYearly
-);  
+safeRender("investment-risk-meter", () => {
+  renderRiskMeter(riskScore);
+});
+
+safeRender("smart-investment-alert", () => {
+  renderSmartInvestmentAlert(roi);
+});
+
+safeRender("investment-verdict", () => {
+  renderInvestmentVerdict(roi, payback);
+});
+
+safeRender("break-even-kpi", () => {
+  renderBreakEvenOccupancy(
+    priceNight,
+    expenses,
+    commission,
+    tax,
+    mortgageYearly
+  );
+});  
 
 const propertyLink = localStorage.getItem("property_link") || "";
 
