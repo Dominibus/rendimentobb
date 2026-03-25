@@ -263,3 +263,5 @@ window.getMarketBenchmark = function(city){
   };
 
 };
+
+export const marketData = window.marketData;
