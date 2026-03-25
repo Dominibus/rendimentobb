@@ -1751,10 +1751,28 @@ try {
     }else{
 
       const exportCanvas = document.createElement("canvas");
-      const scale = 4; // 🔥 qualità retina PDF
 
-      exportCanvas.width = canvas.width * scale;
-      exportCanvas.height = canvas.height * scale;
+     // 🔥 PRENDI DIMENSIONI REALI VISIVE
+    const width = canvas.offsetWidth;
+    const height = canvas.offsetHeight;
+
+    // 🔥 SUPER RISOLUZIONE
+   const scale = 3;
+
+   exportCanvas.width = width * scale;
+   exportCanvas.height = height * scale;
+
+   const ctx = exportCanvas.getContext("2d");
+
+   // scala per alta qualità
+   ctx.scale(scale, scale);
+
+   // sfondo bianco (fondamentale per PDF)
+   ctx.fillStyle = "#ffffff";
+   ctx.fillRect(0, 0, width, height);
+
+   // 🔥 DISEGNA USANDO DIMENSIONI REALI
+   ctx.drawImage(canvas, 0, 0, width, height);
 
       const ctx = exportCanvas.getContext("2d");
 
@@ -1821,8 +1839,8 @@ const logoH = 12;
 const logoPosX = 210 - logoW - 10;
 const logoPosY = 6;
 
-// sfondo bianco (pulizia visiva)
-doc.setFillColor(255,255,255);
+// sfondo verde brand (fix visibilità logo bianco)
+doc.setFillColor(16,185,129);
 doc.roundedRect(
   logoPosX - 2,
   logoPosY - 2,
