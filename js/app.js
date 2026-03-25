@@ -92,10 +92,6 @@ function t(it, en){
   return window.currentLang === "it" ? it : en;
 }
 
-if(!window.currentPlan){
-  window.currentPlan = "free";
-}
-
 
 // ================= CITY FROM HOMEPAGE =================
 
