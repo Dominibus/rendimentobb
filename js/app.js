@@ -1220,7 +1220,7 @@ container.innerHTML = insights.map(i=>{
 }
 
 
-// ================= FREE LIMIT =================  👈 QUESTO ERA GIÀ PRESENTE
+// ================= FREE LIMIT =================
 
 function calculate(force = false){
 
@@ -1273,7 +1273,7 @@ const equity = safeNumber(getValue("equity"));
 // DEBUG
 console.log("RESULT:", result);
 
-// 🔥 QUI DEVE STARE (FUORI!)
+// 🔥 RENDER KPI
 safeRender("executive-kpi", () => {
   renderExecutiveKPI(result);
 });
@@ -1281,7 +1281,6 @@ safeRender("executive-kpi", () => {
 window.lastAnalysisData = {
   ...result,
 
-  // 🔥 ALLINEAMENTO NOMI PDF
   price: getValue("price"),
   equity: safeNumber(getValue("equity")),
   loan: result.loan || getValue("loanAmount"),
@@ -1295,11 +1294,10 @@ if (equity < 0){
 }
 
 const gross = result.gross;
-const operatingProfit = result.operatingProfit;
-const taxCost = result.taxCost;
-const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
+
+// ================= INSIGHTS =================
 
 const insights = generateInsights({
   roi,
@@ -1316,17 +1314,9 @@ localStorage.removeItem("from_mortgage");
 // ================= UI LIVE =================
 
 const roiEl = document.getElementById("roi-live");
-
 if(roiEl){
-  animateValue(roiEl, 0, roi);
-  roiEl.style.color = getROIColor(roi);
+  roiEl.innerText = roi.toFixed(1) + "%";
 }
-
-const badge = document.getElementById("roi-badge");
-
-if(badge){
-  badge.innerText = getInvestmentBadge(roi);
-}  
 
 const profitEl = document.getElementById("profit-live");
 if(profitEl){
@@ -1336,7 +1326,12 @@ if(profitEl){
 const revenueEl = document.getElementById("revenue-live");
 if(revenueEl){
   revenueEl.innerText = formatCurrency(gross);
-} 
+}
+
+} // 👈 CHIUSURA FUNZIONE
+
+// 🔥 QUESTA È LA RIGA FONDAMENTALE
+window.calculate = calculate;
 
 // ================= DATI =================
 
