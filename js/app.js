@@ -1323,14 +1323,6 @@ safeRender("investment-risk-meter", () => {
   renderRiskMeter(riskScore);
 });
 
-// 🔹 ALERT (NON ROMPE PIÙ PRO)
-function safeRender(id, fn){
-  try{
-    fn();
-  }catch(e){
-    console.warn("Render skip:", id, e);
-  }
-}
 
 // 🔹 VERDICT
 safeRender("investment-verdict", () => {
