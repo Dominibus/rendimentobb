@@ -1709,6 +1709,14 @@ async function generateExecutivePDF(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
+// fallback traduzioni (NON rompe il tuo sistema)
+const tSafe = (it,en) => {
+  if(typeof t === "function"){
+    return t(it,en);
+  }
+  return lang==="it"?it:en;
+};
+
 if(!requirePlan("pro")) return;
 
 if(!window.lastAnalysisData){
@@ -1737,37 +1745,30 @@ const canvas = document.getElementById("roiChart");
 
 if(canvas){
 
-// ⏳ aspetta render Chart.js
-await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 500));
 
-// 🔥 canvas export HD
-const scale = 2;
+  const exportCanvas = document.createElement("canvas");
+  const scale = 2;
 
-exportCanvas.width = canvas.width * scale;
-exportCanvas.height = canvas.height * scale;
+  exportCanvas.width = canvas.width * scale;
+  exportCanvas.height = canvas.height * scale;
 
-ctx.scale(scale, scale);
+  const ctx = exportCanvas.getContext("2d");
 
-ctx.fillStyle = "#ffffff";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.scale(scale, scale);
 
-ctx.drawImage(canvas, 0, 0);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// copia grafico
-ctx.drawImage(canvas, 0, 0, exportCanvas.width, exportCanvas.height);
+  ctx.drawImage(canvas, 0, 0);
 
-chartImage = exportCanvas.toDataURL("image/png", 1.0);
+  chartImage = exportCanvas.toDataURL("image/png", 1.0);
 
 }
 
 } catch(e){
 console.warn("Errore chart PDF:", e);
 }
-
-console.log("CHART OK?", !!chartImage);  
-
-console.log("PDF DATA:", data);  
-
 
 // ================= HEADER =================
 
@@ -1788,7 +1789,6 @@ lang==="it"
 20
 );
 
-
 // ================= LOGO =================
 
 const logo = new Image();
@@ -1798,10 +1798,6 @@ await new Promise(resolve=>logo.onload=resolve);
 
 doc.addImage(logo,"PNG",140,3,55,18);
 
-
-// ================= TITLE =================
-
-doc.setTextColor(0,0,0);
 // ================= HERO KPI =================
 
 doc.setFillColor(16,185,129);
@@ -1814,9 +1810,8 @@ doc.text("ROI",25,y+10);
 
 doc.setFontSize(26);
 
-doc.text(data.roi.toFixed(2)+"%",25,y+22);
+doc.text((data.roi || 0).toFixed(2)+"%",25,y+22);
 
-// badge
 doc.setFontSize(10);
 
 let badge =
@@ -1830,13 +1825,9 @@ doc.text(badge,120,y+22);
 
 y += 40;
 
-doc.setTextColor(0,0,0);
-
-y+=10;
-
-
 // ================= DATE =================
 
+doc.setTextColor(0,0,0);
 doc.setFontSize(9);
 
 doc.text(
@@ -1847,7 +1838,6 @@ y
 );
 
 y+=14;
-
 
 // ================= EXECUTIVE SUMMARY =================
 
@@ -1863,20 +1853,19 @@ doc.setTextColor(0,0,0);
 let verdict;
 
 if(data.roi>12){
-verdict = t("insightSolid");
+verdict = tSafe("Investimento altamente profittevole sopra media mercato","High performing investment above market average");
 }
 else if(data.roi>6){
-verdict = t("insightMedium");
+verdict = tSafe("Investimento bilanciato con buon ROI","Balanced investment with good ROI");
 }
 else{
-verdict = t("insightWeak");
+verdict = tSafe("Investimento rischioso con rendimento basso","Risky investment with low return");
 }
 
 doc.setFontSize(11);
 doc.text(verdict,20,y,{maxWidth:170});
 
 y+=15;
-
 
 // ================= INVESTMENT STRUCTURE =================
 
@@ -1900,67 +1889,37 @@ const ltv = data.price>0 && data.loan
 ? ((data.loan/data.price)*100).toFixed(0)
 :0;
 
-doc.text(
-(lang==="it"?"Prezzo immobile: ":"Property price: ")
-+ formatCurrency(data.price),
-20,
-y
-); y+=7;
-
-doc.text(
-(lang==="it"?"Capitale investito: ":"Equity invested: ")
-+ formatCurrency(data.equity),
-20,
-y
-); y+=7;
-
-doc.text(
-(lang==="it"?"Importo mutuo: ":"Loan amount: ")
-+ formatCurrency(data.loan),
-20,
-y
-); y+=7;
-
+doc.text((lang==="it"?"Prezzo immobile: ":"Property price: ") + formatCurrency(data.price),20,y); y+=7;
+doc.text((lang==="it"?"Capitale investito: ":"Equity invested: ") + formatCurrency(data.equity),20,y); y+=7;
+doc.text((lang==="it"?"Importo mutuo: ":"Loan amount: ") + formatCurrency(data.loan),20,y); y+=7;
 doc.text("Loan to Value: "+ltv+"%",20,y);
 
 y+=14;
 
-
-// ================= KPI BOX =================
-
-doc.setDrawColor(220);
-doc.setFillColor(248,250,252);
 // ================= KPI GRID =================
 
 const boxWidth = 80;
 const gap = 10;
 
-// Revenue
 doc.setFillColor(248,250,252);
 doc.roundedRect(20,y,boxWidth,22,4,4,"F");
 
 doc.setFontSize(9);
 doc.setTextColor(100);
-
 doc.text(lang==="it"?"Ricavi":"Revenue",25,y+8);
 
 doc.setFontSize(12);
 doc.setTextColor(0);
-
 doc.text(formatCurrency(data.revenue),25,y+16);
 
-// Profit
-doc.setFillColor(248,250,252);
 doc.roundedRect(20+boxWidth+gap,y,boxWidth,22,4,4,"F");
 
 doc.setFontSize(9);
 doc.setTextColor(100);
-
 doc.text(lang==="it"?"Profitto":"Profit",25+boxWidth+gap,y+8);
 
 doc.setFontSize(12);
 doc.setTextColor(0);
-
 doc.text(formatCurrency(data.profit),25+boxWidth+gap,y+16);
 
 y += 30;
@@ -1977,98 +1936,57 @@ doc.roundedRect(20,y,170,26,3,3);
 
 doc.setFontSize(11);
 
-doc.text(
-(lang==="it"?"Payback investimento: ":"Investment payback: "),
-25,
-y+10
-);
+doc.text((lang==="it"?"Payback investimento: ":"Investment payback: "),25,y+10);
 
-doc.text(
-payback
-? payback.toFixed(1) + (lang==="it"?" anni":" yrs")
-: "—",
-85,
-y+10
-);
+doc.text(payback ? payback.toFixed(1) + (lang==="it"?" anni":" yrs") : "—",85,y+10);
 
-doc.text(
-(lang==="it"?"Margine profitto: ":"Profit margin: "),
-110,
-y+10
-);
+doc.text((lang==="it"?"Margine profitto: ":"Profit margin: "),110,y+10);
 
 const margin =
 data.revenue > 0
 ? ((data.profit/data.revenue)*100)
 :0;
 
-doc.text(
-margin.toFixed(1)+"%",
-150,
-y+10
-);
+doc.text(margin.toFixed(1)+"%",150,y+10);
 
-y+=34;  
+y+=34;
 
-doc.text(
-t("ROI","ROI"),
-20,
-y
-);
+// ================= ROI BOX (FIX BUG) =================
 
-doc.setTextColor(0,0,0);
+doc.setFillColor(240,253,244);
+doc.roundedRect(20,y,170,22,4,4,"F");
 
-y+=18;
+doc.setFontSize(11);
+doc.setTextColor(16,185,129);
 
-doc.setFontSize(10);
-doc.setTextColor(100);
+doc.text("ROI: "+(data.roi||0).toFixed(2)+"% - "+badge,25,y+14);
 
-doc.text(
-data.roi > 12
-? "🔥 High performance investment"
-: data.roi > 6
-? "⚖️ Balanced investment"
-: "⚠️ Risky investment",
-20,
-y+6
-);
-
-y+=12;
-doc.setTextColor(0,0,0);  
-
+y+=30;
 
 // ================= SCENARIOS =================
 
 doc.setFillColor(248,250,252);
-doc.roundedRect(20,y-5,170,25,3,3,"F");
+doc.roundedRect(20,y-5,170,30,3,3,"F");
 
-doc.text(
-lang==="it"
-?"Scenario Ricavi"
-:"Revenue Scenarios",
-20,
-y
-);
+doc.setFontSize(12);
+doc.setTextColor(0);
+
+doc.text(lang==="it"?"Scenario Ricavi":"Revenue Scenarios",20,y);
 
 y+=10;
-
-doc.setFontSize(11);
-doc.setTextColor(0,0,0);
 
 const low=data.revenue*0.8;
 const base=data.revenue;
 const high=data.revenue*1.2;
 
-doc.text(t("Scenario prudente","Low scenario")+": "+formatCurrency(low),20,y);
-doc.text(t("Scenario base","Base scenario")+": "+formatCurrency(base),20,y);
-doc.text(t("Scenario ottimistico","High scenario")+": "+formatCurrency(high),20,y);
+doc.text("Low: "+formatCurrency(low),20,y); y+=6;
+doc.text("Base: "+formatCurrency(base),20,y); y+=6;
+doc.text("High: "+formatCurrency(high),20,y);
 
 y+=15;
 
-
 // ================= CHART =================
 
-// nuova pagina dedicata
 doc.addPage();
 y = 30;
 
@@ -2076,34 +1994,22 @@ if(chartImage){
 
 const chartWidth = 170;
 const chartHeight = 120;
-
 const chartX = (210 - chartWidth) / 2;
-
-// ================= CHART HEADER =================
 
 doc.setFontSize(10);
 doc.setTextColor(120);
 
-doc.text(
-lang==="it"
-? "Proiezione su base pluriennale del rendimento"
-: "Multi-year performance projection",
-20,
-y
-);
+doc.text(lang==="it"?"Proiezione rendimento":"Performance projection",20,y);
 
 y += 12;
-doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it" ? "Analisi Andamento ROI" : "ROI Trend Analysis",
-20,
-y
-);
+doc.setTextColor(16,185,129);
+doc.text("ROI Trend Analysis",20,y);
 
 y += 10;
-  
-y += 5;
+
+doc.setFillColor(248,250,252);
+doc.roundedRect(15, y-10, 180, chartHeight+25, 6, 6, "F");
 
 doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight);
 
@@ -2111,20 +2017,14 @@ y += chartHeight + 10;
 
 }
 
-// ================= PAGE 2 =================
-
-if(y > 220){
-  doc.addPage();
-  y = 30;
-}
-
-
 // ================= INVESTMENT GRADE =================
+
+if(y > 220){ doc.addPage(); y=30; }
 
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text(t("Valutazione","Grade"),20,y);
+doc.text(tSafe("Valutazione","Grade"),20,y);
 
 y+=12;
 
@@ -2141,25 +2041,19 @@ risk=lang==="it"?"Rischio medio":"Medium Risk";
 }
 
 doc.setFontSize(12);
-doc.setTextColor(0,0,0);
+doc.setTextColor(0);
 
 doc.text("Grade: "+grade,20,y); y+=7;
 doc.text((lang==="it"?"Profilo rischio: ":"Risk profile: ")+risk,20,y);
 
 y+=15;
 
-// ================= INVESTMENT SCORE =================
+// ================= SCORE =================
 
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it"
-?"Investment Score"
-:"Investment Score",
-20,
-y
-);
+doc.text("Investment Score",20,y);
 
 y+=10;
 
@@ -2175,60 +2069,52 @@ score > 80 ? 129 : score > 60 ? 11 : 68
 
 doc.text(score + "/100",20,y);
 
-doc.setTextColor(0,0,0);
+doc.setTextColor(0);
 
 y+=18;
-  
-
 
 // ================= STRATEGIC =================
 
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
-doc.text(
-lang==="it"
-?"Interpretazione Strategica"
-:"Strategic Insight",
-20,
-y
-);
+doc.text(lang==="it"?"Interpretazione Strategica":"Strategic Insight",20,y);
 
 y+=10;
 
 doc.setFontSize(11);
-doc.setTextColor(0,0,0);
+doc.setTextColor(0);
 
 let summary;
 
 if(data.roi > 12){
 summary = lang==="it"
-? `Questo investimento presenta un ROI del ${data.roi.toFixed(1)}%, ampiamente sopra la media di mercato. La redditività è elevata e il rischio risulta controllato.`
-: `This investment shows a ${data.roi.toFixed(1)}% ROI, significantly above market average. Profitability is strong with controlled risk.`;
+? `ROI ${data.roi.toFixed(1)}% sopra media mercato.`
+: `ROI ${data.roi.toFixed(1)}% above market average.`;
 }
 else if(data.roi > 6){
 summary = lang==="it"
-? `Investimento bilanciato con ROI del ${data.roi.toFixed(1)}%. Buon equilibrio tra rischio e rendimento.`
-: `Balanced investment with ${data.roi.toFixed(1)}% ROI. Good balance between risk and return.`;
+? `ROI ${data.roi.toFixed(1)}% bilanciato.`
+: `Balanced ROI ${data.roi.toFixed(1)}%.`;
 }
 else{
 summary = lang==="it"
-? `ROI del ${data.roi.toFixed(1)}%. Rendimento basso e rischio elevato. Richiede ottimizzazione.`
-: `ROI of ${data.roi.toFixed(1)}%. Low return and higher risk. Needs optimization.`;
+? `ROI ${data.roi.toFixed(1)}% rischio elevato.`
+: `ROI ${data.roi.toFixed(1)}% high risk.`;
 }
 
 doc.text(summary,20,y,{maxWidth:170});
 
 y+=20;
 
-y += 10;
+// ================= FINAL =================
 
 doc.setFontSize(16);
 doc.setTextColor(16,185,129);
 
 doc.text(lang==="it"?"Verdetto Finale":"Final Verdict",20,y);
 
-y += 10;
+y+=10;
 
 doc.setFontSize(12);
 doc.setTextColor(0);
@@ -2236,22 +2122,16 @@ doc.setTextColor(0);
 let finalVerdict;
 
 if(data.roi > 12){
-finalVerdict = lang==="it"
-? "✔ Investimento eccellente. ROI elevato e sopra media mercato."
-: "✔ Excellent investment. High ROI above market average.";
+finalVerdict = "✔ Investimento eccellente";
 }
 else if(data.roi > 6){
-finalVerdict = lang==="it"
-? "⚖️ Investimento bilanciato. Valutare ottimizzazione."
-: "⚖️ Balanced investment. Consider optimization.";
+finalVerdict = "⚖️ Investimento bilanciato";
 }
 else{
-finalVerdict = lang==="it"
-? "⚠️ Investimento rischioso. Non consigliato senza modifiche."
-: "⚠️ Risky investment. Not recommended without changes.";
+finalVerdict = "⚠️ Investimento rischioso";
 }
 
-doc.text(finalVerdict,20,y,{maxWidth:170});  
+doc.text(finalVerdict,20,y,{maxWidth:170});
 
 // ================= FOOTER =================
 
@@ -2261,11 +2141,7 @@ doc.line(20,270,190,270);
 doc.setFontSize(9);
 doc.setTextColor(120);
 
-doc.text(
-"RendimentoBB © Strategic Investment Engine",
-20,
-278
-);
+doc.text("RendimentoBB © Strategic Investment Engine",20,278);
 
 doc.text(
 lang==="it"
@@ -2275,25 +2151,15 @@ lang==="it"
 278
 );
 
-
 // ================= PAGE NUMBERS =================
 
 const pages = doc.internal.getNumberOfPages();
 
 for(let i=1;i<=pages;i++){
-
 doc.setPage(i);
-
 doc.setFontSize(8);
-
-doc.text(
-"Page "+i+" / "+pages,
-180,
-290
-);
-
+doc.text("Page "+i+" / "+pages,180,290);
 }
-
 
 // ================= SAVE =================
 
@@ -2304,48 +2170,6 @@ lang==="it"
 );
 
 }
-
-window.selectMortgage = function(rate){
-
-localStorage.setItem("selected_mortgage_rate", rate);
-
-// 💥 NUOVO → salva anche contesto
-localStorage.setItem("from_mortgage", "true");
-localStorage.setItem("mortgage_selected_rate", rate);
-
-window.location.href = "/tool/?from=mortgage";
-
-};
-
-// ================= EXPORT GLOBAL =================
-
-window.calculate = calculate;
-window.generateExecutivePDF = generateExecutivePDF;
-
-window.analyzeProperty = function(){
-
-  const input = document.getElementById("listing_url");
-
-  if(!input){
-    console.error("Input property-link non trovato");
-    return;
-  }
-
-  const link = input.value.trim();
-
-  if(!link){
-    alert(
-      t(
-        "Inserisci il link dell'immobile",
-        "Insert property link"
-      )
-    );
-    return;
-  }
-
-  // salva link
-  localStorage.setItem("property_link", link);
-  sessionStorage.setItem("from_property_page", true);
 
   // ================= AUTO CITY DETECTION =================
 
