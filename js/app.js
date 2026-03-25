@@ -1311,9 +1311,24 @@ if(metrics){
     roi > 6 ? 55 :
     75;
 
-  metrics.innerHTML = `
+metrics.innerHTML = `
 
-  // ================= INVESTMENT GRADE FIX =================
+<div class="metric-card">
+  <span>ROI Stimato</span>
+  <strong style="color:${roi > 12 ? '#10b981' : roi > 6 ? '#f59e0b' : '#ef4444'}">
+    ${roi.toFixed(1)}%
+  </strong>
+</div>
+
+<div class="metric-card">
+  <span>Risk Score</span>
+  <strong>${riskScore} / 100</strong>
+</div>
+
+`;
+}  
+
+// ================= INVESTMENT GRADE FIX (FUORI HTML) =================
 
 const scoreCircle = document.querySelector(".score-circle");
 const scoreLabel = document.querySelector(".score-label");
@@ -1335,26 +1350,10 @@ if(scoreCircle){
   scoreCircle.innerText = grade;
   scoreCircle.style.background = color;
   scoreCircle.style.color = "#fff";
-
 }
 
 if(scoreLabel){
   scoreLabel.innerText = "Investment Grade";
-}
-  
-  <div class="metric-card">
-    <span>ROI Stimato</span>
-    <strong style="color:${roi > 12 ? '#10b981' : roi > 6 ? '#f59e0b' : '#ef4444'}">
-${roi.toFixed(1)}%
-</strong>
-  </div>
-
-  <div class="metric-card">
-    <span>Risk Score</span>
-    <strong>${riskScore} / 100</strong>
-  </div>
-
-  `;
 }  
 
 // ================= INSIGHTS =================
