@@ -903,8 +903,12 @@ function renderSmartInvestmentAlert(roi){
 
   // 🔥 PRO → NON TOCCARE MAI IL DOM
   if(hasPlan("pro")){
-    return;
+  const container = document.getElementById("smart-investment-alert");
+  if(container){
+    container.innerHTML = ""; // svuota SOLO alert
   }
+  return;
+}
 
   // 🔥 ROI basso → NON TOCCARE DOM (evita flicker/reset)
   if(roi < 10){
@@ -1320,9 +1324,13 @@ safeRender("investment-risk-meter", () => {
 });
 
 // 🔹 ALERT (NON ROMPE PIÙ PRO)
-safeRender("smart-investment-alert", () => {
-  renderSmartInvestmentAlert(roi);
-});
+function safeRender(id, fn){
+  try{
+    fn();
+  }catch(e){
+    console.warn("Render skip:", id, e);
+  }
+}
 
 // 🔹 VERDICT
 safeRender("investment-verdict", () => {
