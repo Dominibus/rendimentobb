@@ -1153,7 +1153,7 @@ console.log("DEBUG:", {
 
 const result = calculateROI({
   price: getValue("price"),
-  equity: getValue("equity"),
+  equity: safeNumber(getValue("equity")),
   priceNight,
   occupancy,
   expenses,
@@ -1163,6 +1163,8 @@ const result = calculateROI({
   interestRate,
   loanYears
 });
+
+const equity = safeNumber(getValue("equity"));
 
 // DEBUG
 console.log("RESULT:", result);
@@ -1177,7 +1179,7 @@ window.lastAnalysisData = {
 
   // 🔥 ALLINEAMENTO NOMI PDF
   price: getValue("price"),
-  equity: getValue("equity"),
+  equity: safeNumber(getValue("equity")),
   loan: result.loan || getValue("loanAmount"),
 
   revenue: result.revenue || result.gross,
