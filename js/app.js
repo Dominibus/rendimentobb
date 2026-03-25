@@ -2191,19 +2191,23 @@ lang==="it"
     return null;
   }
 
+  // ================= AUTO CITY DETECTION =================
+
+function handleAutoCityRedirect(){
+
+  const link = localStorage.getItem("property_link");
+
+  if(!link) return;
+
   const detectedCity = extractCityFromLink(link);
 
   console.log("Città rilevata dal link:", detectedCity);
 
-  // ================= REDIRECT =================
-
   if(detectedCity){
-  window.location.href = "/tool/?city=" + detectedCity;
-}else{
-  window.location.href = "/tool/?city=napoli";
-}
+    window.location.href = "/tool/?city=" + detectedCity;
+  }
 
-};
+}
 // ================= SAFE PLAN BUY =================
 
 window.startPlanPurchase = function(plan){
@@ -2502,7 +2506,9 @@ localStorage.removeItem("selected_mortgage_rate");
 
 }
 
-});  
+});
+
+document.addEventListener("DOMContentLoaded", handleAutoCityRedirect);
 
 // ================= AUTO LOAD PROPERTY =================
 
