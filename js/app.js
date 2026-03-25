@@ -1770,12 +1770,11 @@ console.log("PDF DATA:", data);
 // ================= HEADER =================
 
 doc.setFillColor(16,185,129);
-doc.rect(0,0,210,26,"F");
+doc.rect(0,0,210,30,"F");
 
 doc.setTextColor(255,255,255);
-doc.setFontSize(12);
-
-doc.text("RendimentoBB Strategic Engine",20,14);
+doc.setFontSize(18);
+doc.text("RendimentoBB Strategic Report", 14, 18);
 
 doc.setFontSize(9);
 
@@ -1941,7 +1940,7 @@ doc.roundedRect(20,y,boxWidth,22,4,4,"F");
 doc.setFontSize(9);
 doc.setTextColor(100);
 
-doc.text("Revenue",25,y+8);
+doc.text(lang==="it"?"Ricavi":"Revenue",25,y+8);
 
 doc.setFontSize(12);
 doc.setTextColor(0);
@@ -1955,7 +1954,7 @@ doc.roundedRect(20+boxWidth+gap,y,boxWidth,22,4,4,"F");
 doc.setFontSize(9);
 doc.setTextColor(100);
 
-doc.text("Profit",25+boxWidth+gap,y+8);
+doc.text(lang==="it"?"Profitto":"Profit",25+boxWidth+gap,y+8);
 
 doc.setFontSize(12);
 doc.setTextColor(0);
@@ -2012,8 +2011,25 @@ y+=34;
 
 // ================= ROI =================
 
-doc.setFontSize(22);
-doc.setTextColor(16,185,129);
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y-5,170,30,3,3,"F");
+
+doc.setFontSize(11);
+doc.setTextColor(0);
+
+const low = data.revenue * 0.8;
+const base = data.revenue;
+const high = data.revenue * 1.2;
+
+doc.text((lang==="it"?"Scenario prudente: ":"Low scenario: ") + formatCurrency(low),20,y);
+y+=7;
+
+doc.text((lang==="it"?"Scenario base: ":"Base scenario: ") + formatCurrency(base),20,y);
+y+=7;
+
+doc.text((lang==="it"?"Scenario ottimistico: ":"High scenario: ") + formatCurrency(high),20,y);
+
+y+=18;
 
 doc.text(
 t("ROI","ROI"),
@@ -2202,10 +2218,59 @@ y+=10;
 doc.setFontSize(11);
 doc.setTextColor(0,0,0);
 
-doc.text(verdict,20,y,{maxWidth:170});
+let summary;
+
+if(data.roi > 12){
+summary = lang==="it"
+? `Questo investimento presenta un ROI del ${data.roi.toFixed(1)}%, ampiamente sopra la media di mercato. La redditività è elevata e il rischio risulta controllato.`
+: `This investment shows a ${data.roi.toFixed(1)}% ROI, significantly above market average. Profitability is strong with controlled risk.`;
+}
+else if(data.roi > 6){
+summary = lang==="it"
+? `Investimento bilanciato con ROI del ${data.roi.toFixed(1)}%. Buon equilibrio tra rischio e rendimento.`
+: `Balanced investment with ${data.roi.toFixed(1)}% ROI. Good balance between risk and return.`;
+}
+else{
+summary = lang==="it"
+? `ROI del ${data.roi.toFixed(1)}%. Rendimento basso e rischio elevato. Richiede ottimizzazione.`
+: `ROI of ${data.roi.toFixed(1)}%. Low return and higher risk. Needs optimization.`;
+}
+
+doc.text(summary,20,y,{maxWidth:170});
 
 y+=20;
 
+y += 10;
+
+doc.setFontSize(16);
+doc.setTextColor(16,185,129);
+
+doc.text(lang==="it"?"Verdetto Finale":"Final Verdict",20,y);
+
+y += 10;
+
+doc.setFontSize(12);
+doc.setTextColor(0);
+
+let finalVerdict;
+
+if(data.roi > 12){
+finalVerdict = lang==="it"
+? "✔ Investimento eccellente. ROI elevato e sopra media mercato."
+: "✔ Excellent investment. High ROI above market average.";
+}
+else if(data.roi > 6){
+finalVerdict = lang==="it"
+? "⚖️ Investimento bilanciato. Valutare ottimizzazione."
+: "⚖️ Balanced investment. Consider optimization.";
+}
+else{
+finalVerdict = lang==="it"
+? "⚠️ Investimento rischioso. Non consigliato senza modifiche."
+: "⚠️ Risky investment. Not recommended without changes.";
+}
+
+doc.text(finalVerdict,20,y,{maxWidth:170});  
 
 // ================= FOOTER =================
 
