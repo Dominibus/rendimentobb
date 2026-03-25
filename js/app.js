@@ -1443,6 +1443,8 @@ if(resultsSection){
     behavior: "smooth"
   });
 }
+
+}  
 // ================= STRATEGIC =================
 
 function renderStrategicInsight(roi) {
