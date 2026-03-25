@@ -898,82 +898,78 @@ showUpgradeModal(roi);
 
 function renderSmartInvestmentAlert(roi){
 
-const container = document.getElementById("smart-investment-alert");
-if(!container) return;
+  const container = document.getElementById("smart-investment-alert");
+  if(!container) return;
 
-if(hasPlan("pro")){
-  return; // NON toccare il container
-}
+  // 🔥 PRO → NON TOCCARE MAI IL DOM
+  if(hasPlan("pro")){
+    return;
+  }
 
-let badge = "";
+  // 🔥 ROI basso → NON TOCCARE DOM (evita flicker/reset)
+  if(roi < 10){
+    return;
+  }
 
-if(roi > 12){
+  let badge = "";
 
-badge = `
-<div style="
-margin-bottom:12px;
-padding:10px;
-border-radius:10px;
-background:#fef3c7;
-border:1px solid #f59e0b;
-font-weight:600;
-">
+  if(roi > 12){
+    badge = `
+    <div style="
+    margin-bottom:12px;
+    padding:10px;
+    border-radius:10px;
+    background:#fef3c7;
+    border:1px solid #f59e0b;
+    font-weight:600;
+    ">
+    ${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
+    </div>
+    `;
+  }
 
-${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
+  // 🔥 RENDER SOLO QUI (UNA VOLTA SOLA)
+  container.innerHTML = badge + `
+  <div style="
+  margin-top:20px;
+  padding:20px;
+  border-radius:14px;
+  background:#ecfdf5;
+  border:1px solid #10b981;
+  text-align:center;
+  ">
 
-</div>
-`;
+  <strong style="font-size:16px;">
+  ${t("Investimento ad alto rendimento","High yield investment")}
+  </strong>
 
-}  
+  <p style="margin-top:8px;font-size:14px;">
+  ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong>
+  </p>
 
-if(roi < 10){
-  return;
-}
+  <p style="margin-top:10px;font-size:14px;">
+  ${t(
+  "Questo investimento supera le medie di mercato e mostra forte potenziale.",
+  "This investment outperforms market averages and shows strong potential."
+  )}
+  </p>
 
-container.innerHTML = badge + `
+  <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+  ${t(
+  "🔓 Accedi gratis per vedere l'analisi completa – 29€/mese",
+  "🔓 Login to unlock full analysis – €29/month"
+  )}
+  </button>
 
-<div style="
-margin-top:20px;
-padding:20px;
-border-radius:14px;
-background:#ecfdf5;
-border:1px solid #10b981;
-text-align:center;
-">
+  <div style="margin-top:6px;font-size:12px;color:#64748b;">
+  ${t(
+  "Accesso a tutte le simulazioni professionali",
+  "Access to all professional simulations"
+  )}
+  </div>
 
-<strong style="font-size:16px;">
-${t("Investimento ad alto rendimento","High yield investment")}
-</strong>
-
-<p style="margin-top:8px;font-size:14px;">
-ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong>
-</p>
-
-<p style="margin-top:10px;font-size:14px;">
-${t(
-"Questo investimento supera le medie di mercato e mostra forte potenziale.",
-"This investment outperforms market averages and shows strong potential."
-)}
-</p>
-
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-${t(
-"🔓 Accedi gratis per vedere l'analisi completa – 29€/mese",
-"🔓 Login to unlock full analysis – €29/month"
-)}
-</button>
-
-<div style="margin-top:6px;font-size:12px;color:#64748b;">
-${t(
-"Accesso a tutte le simulazioni professionali",
-"Access to all professional simulations"
-)}
-</div>
-
-</div>
-
-`;
-
+  </div>
+  `;
 }
 
 // ================= UPGRADE MODAL =================
