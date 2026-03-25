@@ -1308,6 +1308,94 @@ const insights = generateInsights({
 
 renderInsights(insights);  
 
+// ================= UI + SAVE + SCROLL =================
+
+const city = window.currentCity || "italy";
+
+const riskScore =
+roi > 12 ? 30 :
+roi > 6 ? 55 :
+75;
+
+// ================= SAVE =================
+
+if(window.currentUser && window.currentUser.uid && roi > 0){
+
+  saveAnalysis({
+    price: safeNumber(getValue("price")),
+    equity: safeNumber(getValue("equity")),
+    roi: safeNumber(roi),
+    risk: safeNumber(riskScore),
+    city
+  });
+
+}
+
+// ================= RENDER =================
+
+safeRender("market-benchmark", () => {
+  renderMarketBenchmark(city);
+});
+
+safeRender("market-comparison", () => {
+  renderMarketComparison(gross, city);
+});
+
+safeRender("roi-market-comparison", () => {
+  renderROIMarketComparison(roi, city);
+});
+
+safeRender("revenue-forecast", () => {
+  renderRevenueForecast(gross);
+});
+
+safeRender("occupancy-sensitivity", () => {
+  renderOccupancySensitivity();
+});
+
+safeRender("investment-score", () => {
+  renderInvestmentScore(roi, riskScore);
+});
+
+safeRender("investment-ranking", () => {
+  renderInvestmentRanking(roi);
+});
+
+safeRender("investment-risk-meter", () => {
+  renderRiskMeter(riskScore);
+});
+
+// PAYBACK
+let payback = 0;
+
+if(equity > 0 && netAfterMortgage > 0){
+  payback = equity / netAfterMortgage;
+}
+
+safeRender("investment-verdict", () => {
+  renderInvestmentVerdict(roi, payback);
+});
+
+safeRender("break-even-kpi", () => {
+  renderBreakEvenOccupancy(
+    priceNight,
+    expenses,
+    commission,
+    tax,
+    result.mortgageYearly || 0
+  );
+});
+
+// ================= SCROLL =================
+
+const resultsSection = document.getElementById("results");
+
+if(resultsSection){
+  resultsSection.scrollIntoView({
+    behavior: "smooth"
+  });
+}  
+
 // 💥 HOOK MUTUO → RESET FLAG
 localStorage.removeItem("from_mortgage");
 
