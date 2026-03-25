@@ -29,7 +29,7 @@ getAuth,
 onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-import { marketData } from "./market-data.js";
+import * as marketData from "./market-data.js";
 // ================= TRANSLATION HELPER =================
 
 window.t = function(it,en){
