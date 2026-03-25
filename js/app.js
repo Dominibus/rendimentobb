@@ -1804,67 +1804,47 @@ doc.text(
   20
 );
 
-// ================= LOGO FIX DEFINITIVO =================
+// ================= LOGO (PNG CLEAN DEFINITIVO) =================
 
-const logo = new Image();
-logo.src = "/img/logo-report.png";
+const logoImg = new Image();
+logoImg.src = "/img/logo-report.png";
 
 await new Promise(resolve => {
-  logo.onload = resolve;
-  logo.onerror = resolve;
+  logoImg.onload = resolve;
+  logoImg.onerror = resolve;
 });
 
-// posizione
-const logoWidth = 30;
-const logoHeight = 12;
-const logoX = 210 - logoWidth - 10;
-const logoY = 6;
+// dimensioni ottimizzate
+const logoW = 30;
+const logoH = 12;
 
-// sfondo bianco
+// posizione top-right
+const logoPosX = 210 - logoW - 10;
+const logoPosY = 6;
+
+// sfondo bianco (pulizia visiva)
 doc.setFillColor(255,255,255);
-doc.roundedRect(logoX - 2, logoY - 2, logoWidth + 4, logoHeight + 4, 2, 2, "F");
+doc.roundedRect(
+  logoPosX - 2,
+  logoPosY - 2,
+  logoW + 4,
+  logoH + 4,
+  2,
+  2,
+  "F"
+);
 
-// render
-doc.addImage(logo,"PNG",logoX,logoY,logoWidth,logoHeight);
-
-// ================= SVG → PNG FIX DEFINITIVO =================
-
-const canvasLogo = document.createElement("canvas");
-
-// 🔥 dimensioni FORZATE (SVG non ha width)
-const baseWidth = 200;
-const baseHeight = 60;
-
-canvasLogo.width = baseWidth * 2;
-canvasLogo.height = baseHeight * 2;
-
-const ctxLogo = canvasLogo.getContext("2d");
-
-// retina scale
-ctxLogo.scale(2,2);
-
-// sfondo bianco (evita bug trasparenza)
-ctxLogo.fillStyle = "#ffffff";
-ctxLogo.fillRect(0,0,baseWidth,baseHeight);
-
-// draw SVG
-ctxLogo.drawImage(img, 0, 0, baseWidth, baseHeight);
-
-// export PNG
-const logoData = canvasLogo.toDataURL("image/png");
-
-// posizione perfetta
-const logoWidth = 28;
-const logoHeight = 10;
-const logoX = 210 - logoWidth - 10;
-const logoY = 6;
-
-// sfondo bianco pulito
-doc.setFillColor(255,255,255);
-doc.roundedRect(logoX - 2, logoY - 2, logoWidth + 4, logoHeight + 4, 2, 2, "F");
-
-// render HD
-doc.addImage(logoData,"PNG",logoX,logoY,logoWidth,logoHeight);
+// render logo
+doc.addImage(
+  logoImg,
+  "PNG",
+  logoPosX,
+  logoPosY,
+  logoW,
+  logoH,
+  undefined,
+  "FAST"
+);
 // ================= HERO KPI =================
 
 doc.setFillColor(16,185,129);
