@@ -1749,19 +1749,34 @@ const img = new Image();
 img.src = "/img/logo-report.svg";
 
 await new Promise(r => {
-  img.onload = r;
+  img.onload = () => setTimeout(r, 100);
   img.onerror = r;
-});
+}); 
 
-// converte SVG → PNG HD
+// ================= SVG → PNG FIX DEFINITIVO =================
+
 const canvasLogo = document.createElement("canvas");
-canvasLogo.width = img.width * 2;
-canvasLogo.height = img.height * 2;
+
+// 🔥 dimensioni FORZATE (SVG non ha width)
+const baseWidth = 200;
+const baseHeight = 60;
+
+canvasLogo.width = baseWidth * 2;
+canvasLogo.height = baseHeight * 2;
 
 const ctxLogo = canvasLogo.getContext("2d");
-ctxLogo.scale(2,2);
-ctxLogo.drawImage(img,0,0);
 
+// retina scale
+ctxLogo.scale(2,2);
+
+// sfondo bianco (evita bug trasparenza)
+ctxLogo.fillStyle = "#ffffff";
+ctxLogo.fillRect(0,0,baseWidth,baseHeight);
+
+// draw SVG
+ctxLogo.drawImage(img, 0, 0, baseWidth, baseHeight);
+
+// export PNG
 const logoData = canvasLogo.toDataURL("image/png");
 
 // posizione perfetta
@@ -1991,7 +2006,7 @@ if(chartImage){
   doc.setFillColor(248,250,252);
   doc.roundedRect(15, y-10, 180, chartHeight+25, 6, 6, "F");
 
-  doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight, undefined, "FAST");
+  doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight, undefined, "SLOW");
 
   y += chartHeight + 10;
 
