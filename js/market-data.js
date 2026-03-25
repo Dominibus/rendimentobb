@@ -250,9 +250,7 @@ adr:168
 // ================================
 
 window.getMarketBenchmark = function(city){
-
   const data = RB_MARKET_DATA[city];
-
   if(!data) return null;
 
   return {
@@ -261,7 +259,7 @@ window.getMarketBenchmark = function(city){
     occupancyRate: data.occupancy,
     estimatedRevenue: data.annualRevenue
   };
-
 };
 
+// 🔥 AGGIUNGI QUESTO
 export const marketData = window.marketData;
