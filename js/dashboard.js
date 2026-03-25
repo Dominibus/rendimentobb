@@ -697,11 +697,20 @@ function renderStats(count,totalROI,totalCapital,totalCashflow){
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 
+const selectedCity =
+document.getElementById("city-select")?.value || "italy";
+
+const cityMarket = marketData[selectedCity] || marketData["italy"] || { roi: 8 };
+
+const marketROI = cityMarket.roi;
+
+const trend = avgROI >= marketROI ? "↑" : "↓";  
+
  // ================= PORTFOLIO PERFORMANCE =================
 
 const avgCashflow = count ? (totalCashflow / count) : 0;
 
-const roiEl = document.getElementById("portfolio-roi");
+const roiEl = document.getElementById("portfolio-roi"); 
 const cashEl = document.getElementById("portfolio-cashflow");
 const capEl = document.getElementById("portfolio-capital");
 const countEl = document.getElementById("portfolio-count");
@@ -745,8 +754,12 @@ ${formatCurrency(totalCapital)}
 
 <h3>${t("ROI medio","Average ROI")}</h3>
 
-<div style="font-size:28px;font-weight:700;color:#10b981">
-${avgROI}%
+<div style="
+font-size:28px;
+font-weight:700;
+color:${avgROI >= marketROI ? '#10b981' : '#ef4444'};
+">
+${avgROI}% ${trend}
 </div>
 
 </div>
@@ -1680,6 +1693,38 @@ napoli:"/img/napoli-dashboard.jpg",
 milano:"/img/milano-dashboard.jpg",
 firenze:"/img/firenze-dashboard.jpg"
 };
+
+const market = marketData[city] || marketData["italy"];
+
+const stats = document.querySelector(".market-hero-stats");
+
+if(stats && market){
+
+stats.innerHTML = `
+
+<div>
+<div style="font-size:13px;color:#64748b">ROI medio</div>
+<div style="font-size:22px;font-weight:600;color:#10b981">
+${market.roi}%
+</div>
+</div>
+
+<div>
+<div style="font-size:13px;color:#64748b">Occupazione</div>
+<div style="font-size:22px;font-weight:600">
+${market.occupancy}%
+</div>
+</div>
+
+<div>
+<div style="font-size:13px;color:#64748b">ADR</div>
+<div style="font-size:22px;font-weight:600">
+€${market.adr}
+</div>
+</div>
+
+`;
+}  
 
 /* ITALIA -> random */
 
