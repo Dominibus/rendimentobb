@@ -1274,9 +1274,7 @@ const equity = safeNumber(getValue("equity"));
 console.log("RESULT:", result);
 
 // 🔥 RENDER KPI
-safeRender("executive-kpi", () => {
-  renderExecutiveKPI(result);
-});
+renderExecutiveKPI(result);
 
 window.lastAnalysisData = {
   ...result,
