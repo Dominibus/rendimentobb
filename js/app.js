@@ -1688,7 +1688,7 @@ try {
     }else{
 
       const exportCanvas = document.createElement("canvas");
-      const scale = 2;
+      const scale = 4; // 🔥 qualità retina PDF
 
       exportCanvas.width = canvas.width * scale;
       exportCanvas.height = canvas.height * scale;
@@ -1696,6 +1696,9 @@ try {
       const ctx = exportCanvas.getContext("2d");
 
       ctx.scale(scale, scale);
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
 
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1853,14 +1856,16 @@ doc.setFontSize(12);
 doc.setTextColor(0);
 doc.text(formatCurrency(clean(data.revenue)),25,y+16);
 
+doc.setFillColor(248,250,252);
+doc.setDrawColor(255,255,255);
 doc.roundedRect(20+boxWidth+gap,y,boxWidth,22,4,4,"F");
 
 doc.setFontSize(9);
-doc.setTextColor(100);
+doc.setTextColor(100,100,100);
 doc.text(lang==="it"?"Profitto":"Profit",25+boxWidth+gap,y+8);
 
 doc.setFontSize(12);
-doc.setTextColor(0,0,0); // 🔥 FORZA RGB
+doc.setTextColor(0,0,0);
 doc.text(formatCurrency(clean(data.profit)),25+boxWidth+gap,y+16);
 
 y += 30;
