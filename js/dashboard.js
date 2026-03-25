@@ -703,6 +703,8 @@ document.getElementById("city-select")?.value || "italy";
 const cityMarket = marketData[selectedCity] || marketData["italy"] || { roi: 8 };
 
 const marketROI = cityMarket.roi;
+const occupancy = cityMarket.occupancy || 60;
+const adr = cityMarket.adr || 120;  
 
 const trend = avgROI >= marketROI ? "↑" : "↓";  
 
@@ -792,13 +794,6 @@ ${investmentScore}/100
 
 // ================= MARKET BENCHMARK =================
 
-const selectedCity =
-document.getElementById("city-select")?.value || "italy";
-
-const cityMarket = marketData[selectedCity] || marketData["italy"] || { roi: 8 };
-
-const marketROI = cityMarket.roi;
-
 console.log("City:", selectedCity, "Market:", cityMarket);  
 
 const performanceEl = document.getElementById("market-performance");
@@ -856,9 +851,6 @@ marketColor = "#ef4444";
 }
 
 /* MARKET OPPORTUNITY SCORE */
-
-const occupancy = marketData[selectedCity].occupancy;
-const adr = marketData[selectedCity].adr;
 
 let opportunityScore = 50;
 
