@@ -902,8 +902,7 @@ const container = document.getElementById("smart-investment-alert");
 if(!container) return;
 
 if(hasPlan("pro")){
-container.innerHTML = "";
-return;
+  return; // NON toccare il container
 }
 
 let badge = "";
@@ -928,8 +927,7 @@ ${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
 }  
 
 if(roi < 10){
-container.innerHTML = "";
-return;
+  return;
 }
 
 container.innerHTML = badge + `
