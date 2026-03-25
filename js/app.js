@@ -1701,7 +1701,7 @@ window.generateExecutivePDF = async function(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-// fallback traduzioni (NON rompe il tuo sistema)
+// fallback traduzioni
 const tSafe = (it,en) => {
   if(typeof t === "function"){
     return t(it,en);
@@ -1725,7 +1725,7 @@ return;
 const { jsPDF } = window.jspdf;
 const data = window.lastAnalysisData;
 
-// 🔥 SAFE CLEAN GLOBAL
+// SAFE CLEAN
 const clean = (v) => isFinite(v) ? v : 0;  
 
 const doc = new jsPDF();
@@ -1740,11 +1740,12 @@ try {
 
   if(canvas){
 
+    // aspetta render completo chart
     await new Promise(resolve => {
-  requestAnimationFrame(() => {
-    setTimeout(resolve, 300);
-  });
-});
+      requestAnimationFrame(() => {
+        setTimeout(resolve, 300);
+      });
+    });
 
     if(canvas.width === 0 || canvas.height === 0){
       console.warn("Canvas vuoto → skip chart");
@@ -1752,46 +1753,31 @@ try {
 
       const exportCanvas = document.createElement("canvas");
 
-     // 🔥 PRENDI DIMENSIONI REALI VISIVE
-    const width = canvas.offsetWidth;
-    const height = canvas.offsetHeight;
+      const width = canvas.offsetWidth;
+      const height = canvas.offsetHeight;
 
-    // 🔥 SUPER RISOLUZIONE
-   const scale = 3;
+      const scale = 3; // 🔥 qualità HD
 
-   exportCanvas.width = width * scale;
-   exportCanvas.height = height * scale;
-
-   const ctx = exportCanvas.getContext("2d");
-
-   // scala per alta qualità
-   ctx.scale(scale, scale);
-
-   // sfondo bianco (fondamentale per PDF)
-   ctx.fillStyle = "#ffffff";
-   ctx.fillRect(0, 0, width, height);
-
-   // 🔥 DISEGNA USANDO DIMENSIONI REALI
-   ctx.drawImage(canvas, 0, 0, width, height);
+      exportCanvas.width = width * scale;
+      exportCanvas.height = height * scale;
 
       const ctx = exportCanvas.getContext("2d");
 
-      ctx.scale(scale, scale);
-
+      // 🔥 qualità massima
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
 
+      // scala retina
+      ctx.scale(scale, scale);
+
+      // sfondo bianco pulito
       ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, width, height);
 
-      if(canvas && canvas.width > 0 && canvas.height > 0){
+      // 🔥 DRAW CORRETTO (NO BLUR)
+      ctx.drawImage(canvas, 0, 0, width, height);
 
-  ctx.drawImage(canvas, 0, 0);
-
-}else{
-  console.warn("Canvas non valido per PDF");
-}
-
+      // export finale
       chartImage = exportCanvas.toDataURL("image/png", 1.0);
 
     }
@@ -1838,18 +1824,6 @@ const logoH = 12;
 // posizione top-right
 const logoPosX = 210 - logoW - 10;
 const logoPosY = 6;
-
-// sfondo verde brand (fix visibilità logo bianco)
-doc.setFillColor(16,185,129);
-doc.roundedRect(
-  logoPosX - 2,
-  logoPosY - 2,
-  logoW + 4,
-  logoH + 4,
-  2,
-  2,
-  "F"
-);
 
 // render logo
 doc.addImage(
