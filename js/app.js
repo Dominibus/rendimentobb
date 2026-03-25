@@ -1200,6 +1200,108 @@ const mortgageYearly = result.mortgageYearly;
 const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
 
+const insights = generateInsights({
+  roi,
+  occupancy,
+  priceNight,
+  expenses
+});
+
+renderInsights(insights);  
+
+// ================= AI INSIGHT ENGINE =================
+
+function generateInsights(data){
+
+  const insights = [];
+
+  const roi = data.roi;
+  const occupancy = data.occupancy;
+  const priceNight = data.priceNight;
+  const expenses = data.expenses;
+
+  if(roi < 5){
+    insights.push({
+      type:"danger",
+      text:t(
+        "ROI troppo basso → rischio investimento non sostenibile",
+        "ROI too low → investment may not be sustainable"
+      )
+    });
+  }
+
+  if(occupancy < 55){
+    insights.push({
+      type:"warning",
+      text:t(
+        "Occupazione bassa → rischio stagionalità elevata",
+        "Low occupancy → high seasonality risk"
+      )
+    });
+  }
+
+  if(priceNight < 80){
+    insights.push({
+      type:"warning",
+      text:t(
+        "Prezzo notte sotto media → possibile perdita di margine",
+        "Night price below market → margin compression risk"
+      )
+    });
+  }
+
+  if(roi > 12){
+    insights.push({
+      type:"success",
+      text:t(
+        "Ottima opportunità → sopra media mercato",
+        "Strong opportunity → above market average"
+      )
+    });
+  }
+
+  if(expenses > 2000){
+    insights.push({
+      type:"warning",
+      text:t(
+        "Costi operativi elevati → ottimizzabili",
+        "High operating costs → optimization needed"
+      )
+    });
+  }
+
+  return insights;
+}
+
+function renderInsights(insights){
+
+  const container = document.getElementById("ai-insights");
+  if(!container) return;
+
+  container.innerHTML = insights.map(i=>{
+
+    let color = "#64748b";
+
+    if(i.type === "success") color = "#10b981";
+    if(i.type === "warning") color = "#f59e0b";
+    if(i.type === "danger") color = "#ef4444";
+
+    return `
+      <div style="
+        padding:12px;
+        border-radius:10px;
+        background:#f8fafc;
+        border-left:4px solid ${color};
+        font-size:14px;
+      ">
+        ${i.text}
+      </div>
+    `;
+
+  }).join("");
+
+}  
+
 // 💥 HOOK MUTUO → RESET FLAG
 localStorage.removeItem("from_mortgage");
 
