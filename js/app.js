@@ -1298,9 +1298,12 @@ setTimeout(() => {
   const el = document.getElementById("score-circle");
 
   if(!el){
-    console.warn("⛔ score-circle non ancora pronto");
-    return;
+  console.warn("⛔ score-circle non ancora pronto");
+}else{
+  if(typeof updateInvestmentScore === "function"){
+    updateInvestmentScore(investmentScore);
   }
+}
 
   if(typeof updateInvestmentScore === "function"){
     updateInvestmentScore(investmentScore);
