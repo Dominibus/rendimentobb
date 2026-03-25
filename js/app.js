@@ -1260,12 +1260,12 @@ if(window.currentUser && window.currentUser.uid && roi > 0){
   console.log("🔥 Salvataggio OK:", window.currentUser.uid);
 
   saveAnalysis({
-    price: getValue("price"),
-    equity: equity,
-    roi: roi,
-    risk: riskScore,
-    city: city || "italy"
-  });
+  price: safeNumber(getValue("price")),
+  equity: safeNumber(getValue("equity")),
+  roi: safeNumber(roi),
+  risk: safeNumber(riskScore),
+  city: city || "italy"
+});
 
 }else{
   console.log("⛔ Salvataggio bloccato (utente non loggato o ROI=0)");
