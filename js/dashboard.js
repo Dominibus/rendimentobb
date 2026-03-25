@@ -549,10 +549,47 @@ const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
 container.innerHTML = `
 
-<div class="analysis-card">
+<div class="analysis-card" style="position:relative;overflow:hidden">
 
-<h3>🏆 ${t("Miglior investimento","Best investment")}</h3>
+<!-- BADGE -->
+<div style="
+position:absolute;
+top:14px;
+right:14px;
+background:linear-gradient(135deg,#10b981,#34d399);
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:600;
+box-shadow:0 4px 12px rgba(16,185,129,0.4);
+">
+TOP ROI
+</div>
 
+<h3 style="margin-bottom:16px">
+🏆 ${t("Miglior investimento","Best investment")}
+</h3>
+
+<!-- ROI HERO -->
+<div style="
+font-size:34px;
+font-weight:800;
+color:${roiColor};
+margin-bottom:12px;
+">
+${best.roi.toFixed(1)}%
+</div>
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-bottom:18px;
+">
+${t("ROI dell'investimento selezionato","Selected investment ROI")}
+</div>
+
+<!-- METRICHE -->
 <div class="metric">
 <span>${t("Prezzo immobile","Property price")}</span>
 <strong>${formatCurrency(best.price)}</strong>
@@ -561,13 +598,6 @@ container.innerHTML = `
 <div class="metric">
 <span>${t("Equity investita","Equity invested")}</span>
 <strong>${formatCurrency(best.equity)}</strong>
-</div>
-
-<div class="metric">
-<span>ROI</span>
-<strong style="color:${roiColor}">
-${best.roi.toFixed(1)}%
-</strong>
 </div>
 
 <div class="metric">
@@ -582,18 +612,47 @@ ${breakEvenYears} ${t("anni","years")}
 </strong>
 </div>
 
-<div class="metric">
-<span>${t("Prezzo immobile consigliato","Suggested property price")}</span>
-<strong>
-${formatCurrency(suggestedPrice)}
-</strong>
+<hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0">
+
+<!-- INSIGHT -->
+<div style="
+background:rgba(16,185,129,0.08);
+border-radius:12px;
+padding:12px;
+font-size:13px;
+color:#065f46;
+">
+
+<strong>💡 ${t("Insight","Insight")}:</strong><br>
+
+${t(
+"Questo investimento supera la media di mercato.",
+"This investment outperforms the market average."
+)}
+
 </div>
 
-<div style="font-size:12px;color:#64748b;margin-top:4px">
+<!-- SUGGERIMENTO -->
+<div style="
+margin-top:14px;
+padding:12px;
+border-radius:12px;
+background:rgba(37,99,235,0.08);
+font-size:13px;
+color:#1e3a8a;
+">
+
+<strong>📊 ${t("Prezzo ottimizzato","Optimized price")}:</strong><br>
+
+${formatCurrency(suggestedPrice)}
+
+<div style="margin-top:4px;color:#64748b;font-size:12px">
 ${t(
-"per raggiungere il ROI medio di mercato",
-"to reach average market ROI"
+"per raggiungere ROI medio di mercato",
+"to match market average ROI"
 )} (${marketROI}%)
+</div>
+
 </div>
 
 </div>
@@ -697,6 +756,19 @@ Tool
 // ================= STATS =================
 
 function renderStats(count,totalROI,totalCapital,totalCashflow){
+ setTimeout(()=>{
+document.querySelectorAll(".stats-card").forEach((card,i)=>{
+card.style.opacity=0;
+card.style.transform="translateY(10px)";
+
+setTimeout(()=>{
+card.style.transition="all 0.4s ease";
+card.style.opacity=1;
+card.style.transform="translateY(0)";
+}, i*120);
+
+});
+},100); 
 
 // ================= KPI HEADER =================
 
@@ -1156,18 +1228,6 @@ const cityCount = {};
 analyses.forEach(a=>{
 
 const city = safeCity(a.city);
-
-citySelect?.addEventListener("change",(e)=>{
-
-  const newCity = safeCity(e.target.value);
-
-  updateMarketHero(newCity);
-
-  if(!selectedCity){
-  console.error("🚨 CITY UNDEFINED BLOCCATA");
-}  
-
-});
 
 if(!cityCount[city]){
 cityCount[city] = 0;
