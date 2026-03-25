@@ -1522,14 +1522,13 @@ const annualProfit = net;
 
 const canvas = document.getElementById("roiChart");
 
-// 🔥 FORZA RISOLUZIONE ALTA
-const dpi = window.devicePixelRatio || 2;
-
-canvas.width = canvas.offsetWidth * dpi;
-canvas.height = canvas.offsetHeight * dpi;
+// 🔥 RESET COMPLETO (evita blur cumulativo)
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
 const ctx = canvas.getContext("2d");
-ctx.scale(dpi, dpi);
+
+// 🔥 NO SCALE QUI (Chart.js gestisce da solo)
 
 if(typeof Chart === "undefined"){
   console.warn("Chart.js non ancora caricato");
@@ -1743,43 +1742,17 @@ try {
     // aspetta render completo chart
     await new Promise(resolve => {
       requestAnimationFrame(() => {
-        setTimeout(resolve, 300);
+        setTimeout(resolve, 400);
       });
     });
 
-    if(canvas.width === 0 || canvas.height === 0){
-      console.warn("Canvas vuoto → skip chart");
+    if(canvas.width > 0 && canvas.height > 0){
+
+      // 🔥 EXPORT DIRETTO (QUALITÀ MASSIMA)
+      chartImage = canvas.toDataURL("image/png", 1.0);
+
     }else{
-
-      const exportCanvas = document.createElement("canvas");
-
-      const width = canvas.offsetWidth;
-      const height = canvas.offsetHeight;
-
-      const scale = 3; // 🔥 qualità HD
-
-      exportCanvas.width = width * scale;
-      exportCanvas.height = height * scale;
-
-      const ctx = exportCanvas.getContext("2d");
-
-      // 🔥 qualità massima
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-
-      // scala retina
-      ctx.scale(scale, scale);
-
-      // sfondo bianco pulito
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, width, height);
-
-      // 🔥 DRAW CORRETTO (NO BLUR)
-      ctx.drawImage(canvas, 0, 0, width, height);
-
-      // export finale
-      chartImage = exportCanvas.toDataURL("image/png", 1.0);
-
+      console.warn("Canvas vuoto → skip chart");
     }
 
   }
