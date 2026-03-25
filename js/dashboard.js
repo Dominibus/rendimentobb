@@ -45,6 +45,11 @@ let roiValues = [];
 let labels = [];
 let roiChartInstance = null;
 
+function safeCity(city){
+  if(!city || city === "undefined") return "italy";
+  return city;
+}
+
 // ================= UTIL =================
 
 function formatCurrency(value){
@@ -342,7 +347,7 @@ if(selectedCity === "italy" && analyses.length > 0){
 }
 
 // 🔥 aggiorna SOLO il riquadro (NON background)
-updateMarketHero(selectedCity);
+updateMarketHero(safeCity(selectedCity));
 
 console.log("Città iniziale:", selectedCity);
 
@@ -1150,7 +1155,19 @@ const cityCount = {};
 
 analyses.forEach(a=>{
 
-const city = a.city || "italy";
+const city = safeCity(a.city);
+
+citySelect?.addEventListener("change",(e)=>{
+
+  const newCity = safeCity(e.target.value);
+
+  updateMarketHero(newCity);
+
+  if(!selectedCity){
+  console.error("🚨 CITY UNDEFINED BLOCCATA");
+}  
+
+});
 
 if(!cityCount[city]){
 cityCount[city] = 0;
