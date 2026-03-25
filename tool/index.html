@@ -776,7 +776,11 @@ function applyPaywall(){
 /* ================= AUTO INIT PAYWALL ================= */
 
 // quando Firebase carica il piano (login / upgrade)
-document.addEventListener("rb_plan_loaded", applyPaywall);
+document.addEventListener("rb_plan_loaded", () => {
+  setTimeout(() => {
+    applyPaywall();
+  }, 50);
+});
 
 // al primo caricamento pagina
 document.addEventListener("DOMContentLoaded", () => {
