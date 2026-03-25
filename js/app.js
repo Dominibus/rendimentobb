@@ -1672,7 +1672,11 @@ try {
 
   if(canvas){
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => {
+  requestAnimationFrame(() => {
+    setTimeout(resolve, 300);
+  });
+});
 
     if(canvas.width === 0 || canvas.height === 0){
       console.warn("Canvas vuoto → skip chart");
@@ -1851,8 +1855,8 @@ doc.setTextColor(100);
 doc.text(lang==="it"?"Profitto":"Profit",25+boxWidth+gap,y+8);
 
 doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text(formatCurrency(clean(data.profit)),25+boxWidth+gap,y+16);;
+doc.setTextColor(0,0,0); // 🔥 FORZA RGB
+doc.text(formatCurrency(clean(data.profit)),25+boxWidth+gap,y+16);
 
 y += 30;
 
@@ -1924,28 +1928,33 @@ y = 30;
 
 if(chartImage){
 
-const chartWidth = 170;
-const chartHeight = 120;
-const chartX = (210 - chartWidth) / 2;
+  const chartWidth = 170;
+  const chartHeight = 120;
+  const chartX = (210 - chartWidth) / 2;
 
-doc.setFontSize(10);
-doc.setTextColor(120);
+  doc.setFontSize(10);
+  doc.setTextColor(120,120,120);
 
-doc.text(lang==="it"?"Proiezione rendimento":"Performance projection",20,y);
+  doc.text(lang==="it"?"Proiezione rendimento":"Performance projection",20,y);
 
-y += 12;
+  y += 12;
 
-doc.setTextColor(16,185,129);
-doc.text("ROI Trend Analysis",20,y);
+  doc.setTextColor(16,185,129);
+  doc.text("ROI Trend Analysis",20,y);
 
-y += 10;
+  y += 10;
 
-doc.setFillColor(248,250,252);
-doc.roundedRect(15, y-10, 180, chartHeight+25, 6, 6, "F");
+  doc.setFillColor(248,250,252);
+  doc.roundedRect(15, y-10, 180, chartHeight+25, 6, 6, "F");
 
-doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight);
+  doc.addImage(chartImage, "PNG", chartX, y, chartWidth, chartHeight);
 
-y += chartHeight + 10;
+  y += chartHeight + 10;
+
+}else{
+
+  doc.setTextColor(150,150,150); // 🔥 FIX
+  doc.text("Chart non disponibile",20,y+20);
 
 }
 
