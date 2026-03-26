@@ -1204,7 +1204,9 @@ await loadDashboard();
 
 }else{
 
-window.location.href="/login/";
+  console.log("NON LOGGATO → pricing");
+
+  window.location.href="/#pricing";
 
 }
 
