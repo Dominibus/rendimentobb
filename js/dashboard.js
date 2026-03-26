@@ -29,7 +29,6 @@ getAuth,
 onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-import { marketData } from "./market-data.js";
 // ================= TRANSLATION HELPER =================
 
 window.t = function(it,en){
@@ -779,7 +778,7 @@ const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
 
-const cityMarket = marketData[selectedCity] || marketData["italy"] || { roi: 8 };
+const cityMarket = window.marketData[selectedCity] || window.marketData["italy"] || { roi: 8 };
 
 const marketROI = cityMarket.roi;
 const occupancy = cityMarket.occupancy || 60;
@@ -1770,7 +1769,7 @@ milano:"/img/milano-dashboard.jpg",
 firenze:"/img/firenze-dashboard.jpg"
 };
 
-const market = marketData[city] || marketData["italy"];
+const market = window.marketData[city] || window.marketData["italy"];
 
 const stats = document.querySelector(".market-hero-stats");
 
