@@ -425,13 +425,11 @@ const card = document.createElement("div");
 
 card.className = "analysis-card";
 
-card.innerHTML=`
+card.innerHTML = `
 
 ${badge}
 
-<h3>
-'<h3>' + t("Analisi investimento","Investment analysis") + '</h3>'
-</h3>
+<h3>${t("Analisi investimento","Investment analysis")}</h3>
 
 <div class="metric">
 <span>${t("Città","City")}</span>
