@@ -1064,24 +1064,28 @@ window.addEventListener("DOMContentLoaded", () => {
 
 if(window.currentPlan === "pro"){
 
-  console.log("PRO USER → force unlock UI");
+  console.log("PRO USER → unlock completo");
 
-  // 🔥 rimuove QUALSIASI blur applicato
+  // 🔥 rimuove blur globale
   document.querySelectorAll("*").forEach(el=>{
     el.style.filter = "";
     el.style.pointerEvents = "";
     el.style.opacity = "";
   });
 
-  // 🔥 re-render grafici (CRUCIALE)
+  // 🔥 rimuove blur PRO LOCK
+  document.querySelectorAll(".pro-lock").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  // 🔥 redraw chart
   setTimeout(()=>{
     renderChart();
     renderCashflowChart();
-  }, 100);
+  }, 150);
 
 }else{
 
-  // 🔥 OVERLAY SOLO FREE
   if(!window.proOverlayShown){
 
     window.proOverlayShown = true;
