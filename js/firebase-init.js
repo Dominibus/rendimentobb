@@ -81,15 +81,12 @@ return true;
 }
 }
 
-// ❌ BLOCCO
-alert(
-getCurrentLang() === "it"
-? "Sblocca la versione PRO per usare questa funzione"
-: "Upgrade to PRO to use this feature"
-);
-
-// scroll pricing (UX migliore)
-window.location.href = "/#pricing";
+// 🔥 NUOVO UX (NO ALERT)
+if(typeof showUpgradeModal === "function"){
+  showUpgradeModal(10); // ROI fake per attivare UI
+}else{
+  window.location.href = "/pricing/";
+}
 
 return false;
 
