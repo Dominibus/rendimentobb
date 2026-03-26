@@ -828,7 +828,8 @@ setTimeout(()=>{
 
 // ================= KPI HEADER =================
 
-const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+const avgROI = count ? (totalROI/count) : 0;
+const avgROIRounded = avgROI.toFixed(1);
 
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
@@ -875,7 +876,7 @@ ${formatCurrency(totalCapital)}
 <div class="stats-card">
 <h3>${t("ROI medio","Average ROI")}</h3>
 <div style="font-size:28px;font-weight:700;color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};">
-${avgROI}% ${trend}
+${avgROIRounded}% ${trend}
 </div>
 </div>
 
@@ -953,7 +954,7 @@ ${window.currentPlan==="pro"?"PRO":"FREE"}
 
 <div class="analysis-card">
 <h3>${t("ROI medio","Average ROI")}</h3>
-<strong style="font-size:22px">${avgROI}%</strong>
+<strong style="font-size:22px">${avgROIRounded}%</strong>
 </div>
 
 <div class="analysis-card">
