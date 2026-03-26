@@ -944,7 +944,7 @@ const db = getFirestore();
 
 <script>
 
-function showProOverlay(){
+window.showProOverlay = function(){
   const overlay = document.getElementById("pro-overlay");
   if(overlay){
     overlay.style.display="flex";
@@ -955,7 +955,7 @@ function showProOverlay(){
   document.querySelector("main").style.pointerEvents="none";
 }
 
-function closeOverlay(){
+window.closeOverlay = function(){
 
   const overlay = document.getElementById("pro-overlay");
 
