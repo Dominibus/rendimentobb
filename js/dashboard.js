@@ -1759,7 +1759,7 @@ downloadReport();
 
 // ================= UPGRADE =================
 window.goToUpgrade = function(){
-  window.location.href = "/pricing/";
+  window.location.href = "/#pricing";
 }
 
 // ================= HERO MARKET BACKGROUND =================
