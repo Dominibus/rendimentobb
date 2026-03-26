@@ -1404,20 +1404,6 @@ ${t(
 }
 
 // ===============================
-// CITY MARKET CHANGE
-// ===============================
-
-document.getElementById("city-select")?.addEventListener("change",(e)=>{
-
-  const selectedCity = e.target.value;
-
-  updateMarketHero(selectedCity);
-
-  console.log("Città cambiata:", selectedCity);
-
-});
-
-// ===============================
 // ROI TARGET CALCULATOR
 // ===============================
 
