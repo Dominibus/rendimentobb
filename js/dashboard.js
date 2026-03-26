@@ -2093,8 +2093,8 @@ function renderUpgradeTrigger(best){
     margin-bottom:18px;
     ">
       ⚠️ ${t(
-        "Stai visualizzando solo una preview limitata",
-        "You are seeing a limited preview"
+        "Stai perdendo i dati più importanti per guadagnare davvero",
+        "You are missing the most important data to actually profit"
       )}
     </div>
 
