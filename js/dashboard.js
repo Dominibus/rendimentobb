@@ -1870,4 +1870,84 @@ subtitle.innerText = randomText;
 
 }
 
+// ================= VERDICT ENGINE =================
+
+function generateInvestmentVerdict(result){
+
+if(!result) return null;
+
+const roi = result.roi || 0;
+const cashflow = result.cashflow || 0;
+const risk = result.risk || 50;
+
+if(roi >= 10 && cashflow > 0 && risk < 70){
+return {
+type:"excellent",
+title:"🔥 Ottimo investimento",
+subtitle:"ROI sopra la media e cashflow positivo",
+color:"#10b981",
+action:"Procedere",
+message:"Investimento solido con ottimo equilibrio tra rendimento e rischio."
+};
+}
+
+if(roi >= 7){
+return {
+type:"good",
+title:"📊 Buon investimento",
+subtitle:"Margine interessante ma migliorabile",
+color:"#f59e0b",
+action:"Ottimizzare",
+message:"Buona opportunità ma ottimizzabile su pricing o occupazione."
+};
+}
+
+return {
+type:"risk",
+title:"⚠️ Investimento rischioso",
+subtitle:"ROI basso o cashflow negativo",
+color:"#ef4444",
+action:"Evitare",
+message:"Rendimento insufficiente o rischio elevato rispetto al mercato."
+};
+
+}
+
+
+// ================= VERDICT RENDER =================
+
+function renderInvestmentVerdict(result){
+
+const container = document.getElementById("investment-verdict");
+if(!container) return;
+
+const verdict = generateInvestmentVerdict(result);
+if(!verdict) return;
+
+container.innerHTML = `
+
+<div style="display:flex;flex-direction:column;gap:10px;">
+
+<h2 style="font-size:22px;font-weight:700;color:${verdict.color};">
+${verdict.title}
+</h2>
+
+<div style="font-size:14px;color:#64748b;">
+${verdict.subtitle}
+</div>
+
+<div style="font-size:15px;margin-top:6px;color:#0f172a;">
+${verdict.message}
+</div>
+
+<div style="margin-top:12px;font-weight:600;">
+👉 Consiglio: ${verdict.action}
+</div>
+
+</div>
+
+`;
+
+}
+  
 }
