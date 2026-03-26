@@ -279,8 +279,11 @@ cutout:"65%"
 async function loadDashboard(){
 
 if(!window.currentUser){
-window.location.href="/login/";
+
+showGuestPopup();
+
 return;
+
 }
 
 renderHeader();
@@ -2002,5 +2005,102 @@ color:#065f46;
 
 </div>
 `;
+
+}
+
+function showGuestPopup(){
+
+const existing = document.getElementById("guest-popup");
+if(existing) return;
+
+const popup = document.createElement("div");
+
+popup.id = "guest-popup";
+
+popup.innerHTML = `
+
+<div style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:28px;
+border-radius:14px;
+max-width:420px;
+width:90%;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+">
+
+<h2 style="margin-bottom:10px">
+🚀 ${t("Scopri la tua redditività","Discover your ROI")}
+</h2>
+
+<p style="color:#64748b;font-size:14px;margin-bottom:20px">
+${t(
+"Analizza investimenti B&B, calcola ROI e scopri se conviene davvero.",
+"Analyze B&B investments, calculate ROI and see if it's worth it."
+)}
+</p>
+
+<div style="
+display:flex;
+flex-direction:column;
+gap:10px;
+">
+
+<button onclick="window.location.href='/login/'" style="
+background:#10b981;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+">
+${t("Accedi","Login")}
+</button>
+
+<button onclick="window.location.href='/login/'" style="
+background:#0f172a;
+color:white;
+border:none;
+padding:12px;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+">
+${t("Registrati gratis","Register free")}
+</button>
+
+<button onclick="document.getElementById('guest-popup').remove()" style="
+background:none;
+border:none;
+color:#64748b;
+margin-top:6px;
+cursor:pointer;
+font-size:12px;
+">
+${t("Continua come ospite","Continue as guest")}
+</button>
+
+</div>
+
+</div>
+</div>
+
+`;
+
+document.body.appendChild(popup);
 
 }
