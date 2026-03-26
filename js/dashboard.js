@@ -823,6 +823,7 @@ card.style.transform="translateY(0)";
 });
 },100); 
 
+}
 // ================= KPI HEADER =================
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
