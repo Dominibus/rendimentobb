@@ -991,75 +991,73 @@ loadDashboard();
 
 // ================= INIT =================
 
-onAuthStateChanged(auth, async (user)=>{
+onAuthStateChanged(auth, async (user) => {
 
-if(!window.firebaseReady){
-  console.log("Firebase non pronto, attendo...");
+  if(!window.firebaseReady){
+    console.log("Firebase non pronto, attendo...");
 
-  setTimeout(()=>{
-    loadDashboard();
+    setTimeout(()=>{
+      loadDashboard();
 
-    // 🔥 AGGIUNGI QUESTO BLOCCO
-    if(window.currentPlan !== "pro"){
-      if(typeof window.showProOverlay === "function"){
-        window.showProOverlay();
+      if(window.currentPlan !== "pro"){
+        if(typeof window.showProOverlay === "function"){
+          window.showProOverlay();
+        }
       }
-    }
 
-  },300);
+    },300);
 
-  return;
-}
-
-if(user){
-
-  window.currentUser = user;
-
-  console.log("USER OK:", user.uid);
-
-  // 🔥 PRENDI IL PIANO DA FIRESTORE
-  const userDoc = await getDoc(doc(db,"users", user.uid));
-
-  if(userDoc.exists()){
-    const data = userDoc.data();
-
-    window.currentPlan = data.plan || "free";
-  }else{
-    window.currentPlan = "free";
+    return;
   }
 
-  // fallback sicurezza
-  window.currentPlan = window.currentPlan || "free";
+  if(user){
 
-  console.log("PLAN:", window.currentPlan);
+    window.currentUser = user;
 
-  document.dispatchEvent(new Event("rb_auth_ready")); 
+    console.log("USER OK:", user.uid);
 
-  await loadDashboard();
+    try {
 
-// 🔥 SBLOCCA SE PRO
-unlockProContent();
+      const userDoc = await getDoc(doc(db,"users", user.uid));
 
-// 🔥 MOSTRA OVERLAY SOLO SE FREE
-if(window.currentPlan !== "pro" && !window.proOverlayShown){
+      if(userDoc.exists()){
+        const data = userDoc.data();
+        window.currentPlan = data.plan || "free";
+      } else {
+        window.currentPlan = "free";
+      }
 
-  window.proOverlayShown = true;
-
-  setTimeout(()=>{
-    if(typeof showProOverlay === "function"){
-      showProOverlay();
+    } catch(err){
+      console.error("Errore lettura piano:", err);
+      window.currentPlan = "free";
     }
-  }, 1200);
 
-}
+    window.currentPlan = window.currentPlan || "free";
 
-}else{
+    console.log("PLAN:", window.currentPlan);
 
-  console.log("NON LOGGATO → pricing");
+    document.dispatchEvent(new Event("rb_auth_ready")); 
 
-  window.location.href="/#pricing";
+    await loadDashboard();
 
-}
+    unlockProContent();
+
+    if(window.currentPlan !== "pro" && !window.proOverlayShown){
+      window.proOverlayShown = true;
+
+      setTimeout(()=>{
+        if(typeof showProOverlay === "function"){
+          showProOverlay();
+        }
+      }, 1200);
+    }
+
+  } else {
+
+    console.log("NON LOGGATO → pricing");
+    window.location.href="/#pricing";
+
+  }
 
 });
 
