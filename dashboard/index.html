@@ -366,6 +366,66 @@ text-shadow:0 4px 20px rgba(0,0,0,0.4);
 
 <body class="dashboard-bg">
 
+<div id="pro-overlay" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(15,23,42,0.55);
+backdrop-filter: blur(8px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+  <div style="
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  max-width:420px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,0.25);
+  ">
+
+    <h2 style="margin-bottom:10px">
+      🔒 Dashboard PRO
+    </h2>
+
+    <p style="font-size:14px;color:#64748b;margin-bottom:20px">
+      Sblocca analisi avanzata, ROI strategico e simulazioni complete
+    </p>
+
+    <button onclick="goToUpgrade()" style="
+    background:#10b981;
+    border:none;
+    padding:12px 16px;
+    border-radius:10px;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    width:100%;
+    ">
+      🚀 Sblocca PRO
+    </button>
+
+    <button onclick="closeOverlay()" style="
+    margin-top:10px;
+    background:none;
+    border:none;
+    color:#64748b;
+    font-size:12px;
+    cursor:pointer;
+    ">
+      Continua in modalità limitata
+    </button>
+
+  </div>
+
+</div>  
+
 <div id="global-header"></div>  
 
 <main>
@@ -883,33 +943,27 @@ onAuthStateChanged(auth, async (user)=>{
   if(user === undefined) return;
 
   // ================= NON LOGGATO =================
-  if(!user){
-    console.log("NON LOGGATO → pricing");
-    goToPricing();
-    return;
-  }
+ if(!user){
+  console.log("GUEST → mostra overlay");
+  document.querySelector("main").style.display="block";
+  window.isProUser = false;
+  showProOverlay();
+  return;
+}
 
-  try{
+const data = userDoc.data();
 
-    const uid = user.uid;
+if(data.plan !== "pro"){
+  console.log("FREE → overlay PRO");
+  document.querySelector("main").style.display="block";
+  window.isProUser = false;
+  showProOverlay();
+  return;
+}
 
-    const userDoc = await getDoc(doc(db,"users",uid));
-
-    // ================= UTENTE SENZA DOCUMENTO =================
-    if(!userDoc.exists()){
-      console.log("NO USER DOC → pricing");
-      goToPricing();
-      return;
-    }
-
-    const data = userDoc.data();
-
-    // ================= UTENTE FREE =================
-    if(data.plan !== "pro"){
-      console.log("FREE USER → pricing");
-      goToPricing();
-      return;
-    }
+// PRO
+window.isProUser = true;
+document.querySelector("main").style.display="block";
 
     // ================= UTENTE PRO =================
     console.log("PRO USER → dashboard");
@@ -927,6 +981,31 @@ onAuthStateChanged(auth, async (user)=>{
 });
 
 </script>
+
+<script>
+
+function showProOverlay(){
+  const overlay = document.getElementById("pro-overlay");
+  if(overlay){
+    overlay.style.display="flex";
+  }
+
+  // blur dashboard
+  document.querySelector("main").style.filter="blur(4px)";
+  document.querySelector("main").style.pointerEvents="none";
+}
+
+function closeOverlay(){
+  const overlay = document.getElementById("pro-overlay");
+  if(overlay){
+    overlay.style.display="none";
+  }
+
+  document.querySelector("main").style.filter="none";
+  document.querySelector("main").style.pointerEvents="auto";
+}
+
+</script>  
 
 </body>
 </html>
