@@ -863,55 +863,70 @@ import { getFirestore, doc, getDoc }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import { auth } from "/js/firebase-init.js";
+
 import { onAuthStateChanged }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const db = getFirestore();
 
 /* NASCONDE LA DASHBOARD FINO AL CONTROLLO */
-
 document.querySelector("main").style.display = "none";
+
+/* FUNZIONE REDIRECT */
+function goToPricing(){
+  window.location.href="/#pricing";
+}
 
 onAuthStateChanged(auth, async (user)=>{
 
+  // 🔥 evita trigger prematuro Firebase
+  if(user === undefined) return;
+
+  // ================= NON LOGGATO =================
   if(!user){
-  window.location.href="/#pricing";
-setTimeout(()=>{
-  document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"});
-},300);
-  return;
-}
+    console.log("NON LOGGATO → pricing");
+    goToPricing();
+    return;
+  }
 
-  const uid = user.uid;
+  try{
 
-  const userDoc = await getDoc(doc(db,"users",uid));
+    const uid = user.uid;
 
-if(!userDoc.exists()){
-  window.location.href="/#pricing";
-setTimeout(()=>{
-  document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"});
-},300);
-  return;
-}
+    const userDoc = await getDoc(doc(db,"users",uid));
 
-const data = userDoc.data();
+    // ================= UTENTE SENZA DOCUMENTO =================
+    if(!userDoc.exists()){
+      console.log("NO USER DOC → pricing");
+      goToPricing();
+      return;
+    }
 
-if(data.plan !== "pro"){
-  window.location.href="/#pricing";
-setTimeout(()=>{
-  document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"});
-},300);
-  return;
-}
+    const data = userDoc.data();
 
-  /* SOLO PRO VEDE LA DASHBOARD */
+    // ================= UTENTE FREE =================
+    if(data.plan !== "pro"){
+      console.log("FREE USER → pricing");
+      goToPricing();
+      return;
+    }
 
-  document.querySelector("main").style.display="block";
+    // ================= UTENTE PRO =================
+    console.log("PRO USER → dashboard");
+
+    document.querySelector("main").style.display="block";
+
+  }catch(err){
+
+    console.error("Errore controllo utente:", err);
+
+    // fallback sicurezza
+    goToPricing();
+  }
 
 });
 
 </script>
 
 </body>
-
 </html>
