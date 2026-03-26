@@ -2050,8 +2050,9 @@ function renderUpgradeTrigger(best){
 
   if(!best) return;
 
-  // 🔥 trigger solo se ROI interessante
   if(best.roi < 6) return;
+
+  const potentialProfit = Math.round((best.price * best.roi) / 100);
 
   container.style.display = "block";
 
@@ -2060,30 +2061,53 @@ function renderUpgradeTrigger(best){
   <div style="
   background:linear-gradient(135deg,#0f172a,#1e293b);
   color:white;
-  padding:20px;
-  border-radius:16px;
+  padding:22px;
+  border-radius:18px;
   text-align:center;
-  box-shadow:0 20px 50px rgba(0,0,0,0.2);
+  box-shadow:0 25px 60px rgba(0,0,0,0.25);
   ">
 
-    <div style="font-size:18px;font-weight:700;margin-bottom:8px">
-      💰 Questo investimento può generare profitto reale
+    <div style="font-size:20px;font-weight:700;margin-bottom:10px">
+      💰 Questo investimento può generare
+    </div>
+
+    <div style="
+    font-size:32px;
+    font-weight:800;
+    color:#10b981;
+    margin-bottom:10px;
+    ">
+      ${formatCurrency(potentialProfit)}
     </div>
 
     <div style="font-size:14px;opacity:0.85;margin-bottom:16px">
-      Stai analizzando un ROI del ${best.roi.toFixed(1)}%  
-      → scopri cashflow reale, strategia e ottimizzazione
+      ${t(
+        "profitto annuo stimato",
+        "estimated yearly profit"
+      )}
+    </div>
+
+    <div style="
+    font-size:13px;
+    color:#94a3b8;
+    margin-bottom:18px;
+    ">
+      ⚠️ ${t(
+        "Stai visualizzando solo una preview limitata",
+        "You are seeing a limited preview"
+      )}
     </div>
 
     <button onclick="goToUpgrade()" style="
     background:#10b981;
     border:none;
-    padding:12px 18px;
-    border-radius:10px;
-    font-weight:600;
+    padding:14px 20px;
+    border-radius:12px;
+    font-weight:700;
     cursor:pointer;
+    font-size:15px;
     ">
-      🚀 Sblocca ora
+      🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
     </button>
 
   </div>
