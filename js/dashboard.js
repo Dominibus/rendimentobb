@@ -849,10 +849,17 @@ const trend = avgROI >= marketROI ? "↑" : "↓";
 
 const avgCashflow = count ? (totalCashflow / count) : 0;
 
-document.getElementById("portfolio-roi")?.textContent = avgROI + "%";
-document.getElementById("portfolio-cashflow")?.textContent = formatCurrency(avgCashflow);
-document.getElementById("portfolio-capital")?.textContent = formatCurrency(totalCapital);
-document.getElementById("portfolio-count")?.textContent = count;
+const roiEl = document.getElementById("portfolio-roi");
+if(roiEl) roiEl.textContent = avgROIRounded + "%";
+
+const cashEl = document.getElementById("portfolio-cashflow");
+if(cashEl) cashEl.textContent = formatCurrency(avgCashflow);
+
+const capEl = document.getElementById("portfolio-capital");
+if(capEl) capEl.textContent = formatCurrency(totalCapital);
+
+const countEl = document.getElementById("portfolio-count");
+if(countEl) countEl.textContent = count;
 
 // ================= SCORE =================
 
