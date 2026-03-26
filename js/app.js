@@ -1301,6 +1301,22 @@ const gross = result.gross;
 const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
 
+// ================= PAYWALL TRIGGER =================
+
+if(!hasPlan("pro")){
+
+  if(roi > 8){
+
+    console.log("🔥 Trigger paywall ROI:", roi);
+
+    setTimeout(()=>{
+      showUpgradeModal(roi); // 👉 USA IL TUO MODAL GIÀ ESISTENTE
+    }, 800);
+
+  }
+
+}  
+
 // 🔥 RENDER CHART SEMPRE
 if(typeof renderChart === "function"){
   renderChart(netAfterMortgage);
@@ -1372,6 +1388,9 @@ const insights = generateInsights({
 });
 
 renderInsights(insights);  
+
+// ================= SMART ALERT =================
+renderSmartInvestmentAlert(roi);  
 
 // ================= UI + SAVE + SCROLL =================
 
