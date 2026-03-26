@@ -1947,11 +1947,60 @@ ${verdict.message}
 </div>
 
 <div style="margin-top:12px;font-weight:600;">
-👉 Consiglio: ${verdict.action}
+👉 ${t("Consiglio","Advice")}: ${verdict.action}
 </div>
 
+${
+window.currentPlan !== "pro"
+? `
+<div style="
+margin-top:16px;
+padding:14px;
+border-radius:12px;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+text-align:center;
+">
+
+<div style="font-size:13px;margin-bottom:8px">
+${t(
+"Vuoi sapere come migliorare questo investimento?",
+"Want to improve this investment?"
+)}
 </div>
 
+<button onclick="goToUpgrade()" style="
+background:#10b981;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+color:white;
+font-weight:600;
+cursor:pointer;
+">
+${t("Sblocca strategia PRO","Unlock PRO strategy")}
+</button>
+
+</div>
+`
+: `
+<div style="
+margin-top:12px;
+padding:12px;
+border-radius:10px;
+background:rgba(16,185,129,0.08);
+font-size:13px;
+color:#065f46;
+">
+💡 ${t(
+"Strategia attiva: ottimizza prezzo e occupazione per aumentare ROI.",
+"Strategy active: optimize pricing and occupancy to increase ROI."
+)}
+</div>
+`
+}
+
+</div>
 `;
 
 }
