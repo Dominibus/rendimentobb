@@ -958,22 +958,18 @@ window.showProOverlay = function(){
 window.closeOverlay = function(){
 
   const overlay = document.getElementById("pro-overlay");
-
-  if(overlay){
-    overlay.style.display="none";
-  }
-
   const main = document.querySelector("main");
 
-  main.style.filter = "none";
+  if(overlay){
+    overlay.style.display = "none";
+  }
 
-}
-
-  // reset UI
-  main.style.filter = "none";
-  main.style.pointerEvents = "auto";
-  main.style.opacity = "1";
-  main.style.display = "block";
+  if(main){
+    main.style.filter = "none";
+    main.style.pointerEvents = "auto";
+    main.style.opacity = "1";
+    main.style.display = "block";
+  }
 
 }
 
