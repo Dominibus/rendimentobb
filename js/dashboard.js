@@ -473,23 +473,17 @@ ${roi.toFixed(1)}%
 <div class="metric">
 <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
 
-${
-window.currentPlan === "pro"
-? `<strong>${formatCurrency(yearlyProfit)}</strong>`
-: `
+${window.currentPlan === "pro"
+  ? "<strong>" + formatCurrency(yearlyProfit) + "</strong>"
+  : `
 <strong style="filter:blur(4px)">
 ${formatCurrency(yearlyProfit)}
 </strong>
 
-<div style="
-font-size:12px;
-color:#64748b;
-margin-top:4px;
-">
+<div style="font-size:12px;color:#64748b;margin-top:4px;">
 🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
 </div>
-`
-}
+`}
 </div>
 
 ${
