@@ -1741,7 +1741,7 @@ container.innerHTML = `
 ${t("Ricavo annuo stimato","Estimated yearly revenue")}
 </div>
 
-`;
+`;  
 
 updateRevenue();
 
