@@ -500,6 +500,10 @@ renderROIOptimizer(count,totalROI,totalCapital);
 renderROITargetCalculator(analyses); 
 renderRevenueSimulator(); 
 renderBestInvestment(analyses);
+  
+const best = analyses[0];
+renderInvestmentVerdict(best);  
+  
 renderInvestmentRanking(analyses);
 renderCityDistribution(analyses); 
 renderChart();
@@ -1869,6 +1873,8 @@ HERO_CONTENT[city][Math.floor(Math.random()*HERO_CONTENT[city].length)];
 subtitle.innerText = randomText;
 
 }
+  
+}
 
 // ================= VERDICT ENGINE =================
 
@@ -1948,6 +1954,4 @@ ${verdict.message}
 
 `;
 
-}
-  
 }
