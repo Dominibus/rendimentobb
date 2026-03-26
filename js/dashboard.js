@@ -963,7 +963,6 @@ performanceEl.style.color = "#ef4444";
 
 }
 
-} 
 /* MARKET GAP */
 
 const marketGap = (avgROI - marketROI).toFixed(1);
