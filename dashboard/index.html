@@ -116,9 +116,23 @@ box-shadow:0 6px 18px rgba(0,0,0,0.1);
 
 /* aumenta altezza grafico ROI */
 
-#roi-chart-container{
-height:320px;
+#roi-chart-container,
+#cashflow-chart-container,
+#city-roi-chart {
+
+height:320px !important;
 width:100%;
+position:relative;
+
+}
+
+#roi-chart-container canvas,
+#cashflow-chart-container canvas,
+#city-roi-chart canvas{
+
+height:100% !important;
+width:100% !important;
+
 }
 /* ================= STATS ================= */
 
