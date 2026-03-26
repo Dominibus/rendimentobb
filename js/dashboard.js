@@ -1230,7 +1230,19 @@ onAuthStateChanged(auth, async (user)=>{
 
 if(!window.firebaseReady){
   console.log("Firebase non pronto, attendo...");
-  setTimeout(()=>loadDashboard(),300);
+
+  setTimeout(()=>{
+    loadDashboard();
+
+    // 🔥 AGGIUNGI QUESTO BLOCCO
+    if(window.currentPlan !== "pro"){
+      if(typeof window.showProOverlay === "function"){
+        window.showProOverlay();
+      }
+    }
+
+  },300);
+
   return;
 }
 
