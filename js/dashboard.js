@@ -532,6 +532,7 @@ async function loadDashboard(){
 
   const best = analyses[0];
   renderInvestmentVerdict(best);  
+  renderUpgradeTrigger(best);
 
   renderInvestmentRanking(analyses);
   renderCityDistribution(analyses); 
@@ -2037,4 +2038,54 @@ function unlockProContent(){
     overlay.style.display = "none";
   }
 
+}
+
+function renderUpgradeTrigger(best){
+
+  if(window.currentPlan === "pro") return;
+
+  const container = document.getElementById("upgrade-trigger");
+  if(!container) return;
+
+  if(!best) return;
+
+  // 🔥 trigger solo se ROI interessante
+  if(best.roi < 6) return;
+
+  container.style.display = "block";
+
+  container.innerHTML = `
+
+  <div style="
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.2);
+  ">
+
+    <div style="font-size:18px;font-weight:700;margin-bottom:8px">
+      💰 Questo investimento può generare profitto reale
+    </div>
+
+    <div style="font-size:14px;opacity:0.85;margin-bottom:16px">
+      Stai analizzando un ROI del ${best.roi.toFixed(1)}%  
+      → scopri cashflow reale, strategia e ottimizzazione
+    </div>
+
+    <button onclick="goToUpgrade()" style="
+    background:#10b981;
+    border:none;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    ">
+      🚀 Sblocca ora
+    </button>
+
+  </div>
+
+  `;
 }
