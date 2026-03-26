@@ -401,6 +401,14 @@ ROI annuo
 <strong id="qr_roi"></strong>
 </div>
 
+<div id="roi-psychology"
+data-it=""
+data-en=""
+style="margin-top:15px;font-weight:600;text-align:center">
+</div>
+
+<div id="upgrade-box"></div> 
+
 <div class="metric-card">
 <span
 data-it="Profitto annuo"
@@ -1169,6 +1177,87 @@ elBreak.innerText = breakEven.toFixed(1) + " " + yearWord;
 elRev.innerText = Math.round(revenue) + " " + yearLabel;
 elProfit.innerText = Math.round(netIncome) + " " + yearLabel;
 elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
+
+window.showUpgradeCTA = function(roi){
+
+const box = document.getElementById("upgrade-box");
+
+box.innerHTML = `
+<div style="
+margin-top:20px;
+padding:20px;
+border-radius:12px;
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+text-align:center;
+">
+
+<h3 
+data-it="🔥 Analisi PRO disponibile"
+data-en="🔥 PRO analysis available">
+🔥 Analisi PRO disponibile
+</h3>
+
+<p 
+data-it="Questo immobile può generare circa ${roi.toFixed(1)}% ROI"
+data-en="This property can generate about ${roi.toFixed(1)}% ROI">
+Questo immobile può generare circa ${roi.toFixed(1)}% ROI
+</p>
+
+<p
+data-it="Sblocca rischio reale, mutuo e scenari avanzati"
+data-en="Unlock real risk, mortgage and advanced scenarios">
+Sblocca rischio reale, mutuo e scenari avanzati
+</p>
+
+<button onclick="buyPlan('pro')" class="btn btn-primary"
+data-it="Sblocca analisi completa"
+data-en="Unlock full analysis">
+Sblocca analisi completa
+</button>
+
+</div>
+`;
+
+if(window.RB_LANG){
+window.RB_LANG.apply();
+}
+
+}; 
+
+// ================= PSICOLOGIA + CTA =================
+
+const psych = document.getElementById("roi-psychology");
+const upgradeBox = document.getElementById("upgrade-box");
+
+// reset
+upgradeBox.innerHTML = "";
+
+if(roi > 15){
+
+psych.setAttribute("data-it","🔥 Opportunità rara: ROI sopra la media di mercato");
+psych.setAttribute("data-en","🔥 Rare opportunity: ROI above market average");
+
+showUpgradeCTA(roi);
+
+}
+else if(roi > 10){
+
+psych.setAttribute("data-it","✅ Buon investimento se gestito correttamente");
+psych.setAttribute("data-en","✅ Good investment if managed correctly");
+
+}
+else{
+
+psych.setAttribute("data-it","⚠️ Attenzione: margine basso, serve ottimizzazione");
+psych.setAttribute("data-en","⚠️ Low margin: optimization needed");
+
+}
+
+// aggiorna lingua
+if(window.RB_LANG){
+window.RB_LANG.apply();
+} 
 
 }
 
