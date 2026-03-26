@@ -539,7 +539,11 @@ async function loadDashboard(){
   renderCityROIChart(analyses);
 
 // 🔥 BLOCCO FREE USER
-lockFreeUser();
+setTimeout(()=>{
+  if(window.currentPlan === "free"){
+    lockFreeUser();
+  }
+}, 500);
 
 }
 
@@ -547,18 +551,32 @@ lockFreeUser();
 
 function lockFreeUser(){
 
-  if(window.currentPlan === "pro") return;
+  console.log("PLAN:", window.currentPlan);
+
+  // sicurezza: se non è ancora definito → NON bloccare
+  if(!window.currentPlan) return;
+
+  if(window.currentPlan === "pro"){
+    console.log("PRO USER → unlock everything");
+    return;
+  }
 
   console.log("FREE USER → limit UI");
 
-  document.querySelectorAll(`
-    #roi-chart,
-    #cashflow-chart,
-    #city-roi-chart,
-    #roi-optimizer,
-    #investment-ranking,
-    #best-investment
-  `).forEach(el=>{
+  // 🔥 CONTENITORI REALI (presi dal tuo codice)
+  const elementsToLock = [
+    "roi-chart-container",
+    "cashflow-chart-container",
+    "city-roi-chart",
+    "city-distribution-chart",
+    "roi-optimizer",
+    "investment-ranking",
+    "best-investment"
+  ];
+
+  elementsToLock.forEach(id=>{
+    const el = document.getElementById(id);
+
     if(el){
       el.style.filter = "blur(6px)";
       el.style.pointerEvents = "none";
@@ -1046,8 +1064,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
       await loadDashboard();
 
-      // 🔥 SBLOCCA SE PRO
-      unlockProContent();
+      if(window.currentPlan === "pro"){
+  unlockProContent();
+}
 
       // 🔥 OVERLAY SOLO SE FREE (più controllato)
       if(window.currentPlan !== "pro" && !window.proOverlayShown){
