@@ -946,14 +946,16 @@ const db = getFirestore();
 
 window.showProOverlay = function(){
   const overlay = document.getElementById("pro-overlay");
+  const main = document.querySelector("main");
+
   if(overlay){
-    overlay.style.display="flex";
+    overlay.style.display = "flex";
   }
 
-  // blur dashboard
-  document.querySelector("main").style.filter="blur(4px)";
-
-}
+  if(main){
+    main.style.filter = "blur(4px)";
+  }
+};
 
 window.closeOverlay = function(){
 
@@ -971,7 +973,7 @@ window.closeOverlay = function(){
     main.style.display = "block";
   }
 
-}
+};
 
 </script>  
 
