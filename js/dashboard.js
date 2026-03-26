@@ -924,48 +924,52 @@ ${investmentScore}/100
 
 // ================= MARKET BENCHMARK =================
 
-console.log("City:", selectedCity, "Market:", cityMarket);  
+console.log("City:", selectedCity, "Market:", cityMarket);
 
 const performanceEl = document.getElementById("market-performance");
 const userRoiEl = document.getElementById("user-roi-benchmark");
 
+// ================= USER ROI =================
+
 if(userRoiEl){
 
-userRoiEl.textContent = avgROI + "%";
+  userRoiEl.textContent = avgROI + "%";
 
-if(avgROI >= marketROI){
-userRoiEl.style.color = "#10b981";
-}else{
-userRoiEl.style.color = "#ef4444";
+  if(avgROI >= marketROI){
+    userRoiEl.style.color = "#10b981";
+  }else{
+    userRoiEl.style.color = "#ef4444";
+  }
+
 }
 
-}
+// ================= PERFORMANCE =================
 
 if(performanceEl){
 
-if(avgROI >= marketROI){
+  if(avgROI >= marketROI){
 
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sopra la media di mercato"
-: "Above market average";
+    performanceEl.textContent = t(
+      "Sopra la media di mercato",
+      "Above market average"
+    );
 
-performanceEl.style.color = "#10b981";
+    performanceEl.style.color = "#10b981";
 
-}else{
+  }else{
 
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sotto la media di mercato"
-: "Below market average";
+    performanceEl.textContent = t(
+      "Sotto la media di mercato",
+      "Below market average"
+    );
 
-performanceEl.style.color = "#ef4444";
+    performanceEl.style.color = "#ef4444";
+
+  }
 
 }
 
-}  
-
-/* MARKET GAP */
+// ================= MARKET GAP =================
 
 const marketGap = (avgROI - marketROI).toFixed(1);
 
@@ -979,94 +983,97 @@ if(marketGap >= 0){
   marketLabel = t("Sotto il mercato","Below market");
   marketColor = "#ef4444";
 }
-/* MARKET OPPORTUNITY SCORE */
+
+// ================= MARKET OPPORTUNITY SCORE =================
 
 let opportunityScore = 50;
 
-/* ROI influence */
-
+// ROI
 if(marketROI > 10) opportunityScore += 20;
 else if(marketROI > 7) opportunityScore += 10;
 
-/* occupancy */
-
+// Occupazione
 if(occupancy > 70) opportunityScore += 20;
 else if(occupancy > 60) opportunityScore += 10;
 
-/* ADR */
-
+// ADR
 if(adr > 150) opportunityScore += 10;
 
+// Clamp
 if(opportunityScore > 100) opportunityScore = 100;
- 
+
+// ================= SCORE =================
+
 let scoreColor = "#ef4444";
 let scoreLabel = t("Alto rischio","High risk");
 
 if(investmentScore >= 80){
-scoreColor = "#10b981";
-scoreLabel = t("Investimento sicuro","Safe investment");
+  scoreColor = "#10b981";
+  scoreLabel = t("Investimento sicuro","Safe investment");
 }
 else if(investmentScore >= 60){
-scoreColor = "#f59e0b";
-scoreLabel = t("Rischio medio","Medium risk");
+  scoreColor = "#f59e0b";
+  scoreLabel = t("Rischio medio","Medium risk");
 }
+
+// ================= DECISION =================
 
 let decisionText = "";
 let decisionDesc = "";
 
 if(investmentScore >= 80){
 
-decisionText = t(
-"Ottima opportunità di investimento",
-"Strong investment opportunity"
-);
+  decisionText = t(
+    "Ottima opportunità di investimento",
+    "Strong investment opportunity"
+  );
 
-decisionDesc = t(
-"Questo investimento mostra un buon potenziale di redditività.",
-"This investment shows solid profitability potential."
-);
+  decisionDesc = t(
+    "Questo investimento mostra un buon potenziale di redditività.",
+    "This investment shows solid profitability potential."
+  );
 
 }
 else if(investmentScore >= 60){
 
-decisionText = t(
-"Investimento moderato",
-"Moderate investment"
-);
+  decisionText = t(
+    "Investimento moderato",
+    "Moderate investment"
+  );
 
-decisionDesc = t(
-"Potrebbe essere interessante ma richiede ulteriori valutazioni.",
-"This investment could work but requires deeper analysis."
-);
+  decisionDesc = t(
+    "Potrebbe essere interessante ma richiede ulteriori valutazioni.",
+    "This investment could work but requires deeper analysis."
+  );
 
 }
 else{
 
-decisionText = t(
-"Investimento sconsigliato",
-"Avoid this investment"
-);
+  decisionText = t(
+    "Investimento sconsigliato",
+    "Avoid this investment"
+  );
 
-decisionDesc = t(
-"La redditività prevista è bassa o negativa rispetto al rischio.",
-"The projected profitability is too low compared to the risk."
-);
+  decisionDesc = t(
+    "La redditività prevista è bassa o negativa rispetto al rischio.",
+    "The projected profitability is too low compared to the risk."
+  );
 
 }
 
+// ================= PROFIT =================
+
 const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
 
-// ================= PROFIT ESTIMATION =================
-
 const yearlyProfit = (totalCapital * avgROI) / 100;
-const monthlyProfit = yearlyProfit / 12;  
+const monthlyProfit = yearlyProfit / 12;
 
 // ================= BREAK EVEN =================
 
 let breakEvenYears = "-";
 
 if(yearlyProfit > 0){
-breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
+  breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
 }  
 
 const statsContainer = document.getElementById("dashboard-stats");
