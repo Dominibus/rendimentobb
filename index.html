@@ -1172,6 +1172,29 @@ elMonth.innerText = Math.round(monthlyProfit) + " " + monthLabel;
 
 }
 
+// ================= ANALYZE PROPERTY =================
+window.analyzeProperty = function(){
+
+const url = document.getElementById("listing_url").value;
+
+if(!url){
+alert("Inserisci un link valido");
+return;
+}
+
+console.log("Analizzo immobile:", url);
+
+// 👉 per ora simuliamo comportamento
+// poi lo colleghiamo al vero scraper/API
+
+quickROI();
+
+// scroll ai risultati
+document.querySelector(".investment-metrics")
+?.scrollIntoView({behavior:"smooth"});
+
+}; 
+
 // ================= BUY PLAN =================
 window.buyPlan = function(plan){
 
