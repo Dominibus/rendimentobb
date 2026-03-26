@@ -1109,6 +1109,12 @@ console.log("Query UID:", window.currentUser?.uid);
 
 });
 
+  }else{
+    window.location.href="/#pricing";
+  }
+
+}); // 👈 CHIUSURA onAuthStateChanged      
+
 function renderCityDistribution(analyses){
 
 const container = document.getElementById("city-distribution-chart");
