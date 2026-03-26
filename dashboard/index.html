@@ -965,11 +965,18 @@ window.closeOverlay = function(){
 
   const main = document.querySelector("main");
 
-  // 🔥 RESET COMPLETO (questo ti salva la dashboard)
+  // reset UI
   main.style.filter = "none";
   main.style.pointerEvents = "auto";
   main.style.opacity = "1";
   main.style.display = "block";
+
+  // 🔥 FIX CRITICO: forza rendering dashboard
+  if(typeof window.loadDashboard === "function"){
+    setTimeout(()=>{
+      window.loadDashboard();
+    },200);
+  }
 
 }
 
