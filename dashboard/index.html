@@ -875,9 +875,12 @@ document.querySelector("main").style.display = "none";
 onAuthStateChanged(auth, async (user)=>{
 
   if(!user){
-    window.location.href="/login/";
-    return;
-  }
+  window.location.href="/#pricing";
+setTimeout(()=>{
+  document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"});
+},300);
+  return;
+}
 
   const uid = user.uid;
 
@@ -885,6 +888,9 @@ onAuthStateChanged(auth, async (user)=>{
 
 if(!userDoc.exists()){
   window.location.href="/#pricing";
+setTimeout(()=>{
+  document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"});
+},300);
   return;
 }
 
@@ -892,6 +898,9 @@ const data = userDoc.data();
 
 if(data.plan !== "pro"){
   window.location.href="/#pricing";
+setTimeout(()=>{
+  document.getElementById("pricing")?.scrollIntoView({behavior:"smooth"});
+},300);
   return;
 }
 
