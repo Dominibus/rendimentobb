@@ -1075,27 +1075,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
      await loadDashboard();
 
+// 🔥 GESTIONE POST LOAD
 if(window.currentPlan === "pro"){
 
-  console.log("PRO USER → unlock completo");
+  console.log("PRO USER → OK");
 
-  // 🔥 rimuove blur globale
-  document.querySelectorAll("*").forEach(el=>{
-    el.style.filter = "";
-    el.style.pointerEvents = "";
-    el.style.opacity = "";
-  });
-
-  // 🔥 rimuove blur PRO LOCK
-  document.querySelectorAll(".pro-lock").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
-
-  // 🔥 redraw chart
-  setTimeout(()=>{
-    renderChart();
-    renderCashflowChart();
-  }, 150);
+  // nessun reset globale (era quello che rompeva tutto)
+  unlockProContent();
 
 }else{
 
