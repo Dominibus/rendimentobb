@@ -37,6 +37,7 @@ window.t = function(it,en){
 
 const db = getFirestore(app);
 const auth = getAuth(app);
+window.proOverlayShown = false;
 
 // ================= CHART DATA =================
 
@@ -1277,12 +1278,16 @@ if(user){
 unlockProContent();
 
 // 🔥 MOSTRA OVERLAY SOLO SE FREE
-if(window.currentPlan !== "pro"){
+if(window.currentPlan !== "pro" && !window.proOverlayShown){
+
+  window.proOverlayShown = true;
+
   setTimeout(()=>{
     if(typeof showProOverlay === "function"){
       showProOverlay();
     }
   }, 1200);
+
 }
 
 }else{
