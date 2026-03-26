@@ -889,7 +889,7 @@ ${formatCurrency(totalCapital)}
 <div style="
 font-size:28px;
 font-weight:700;
-color:${avgROI >= marketROI ? '#10b981' : '#ef4444'};
+color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
 ">
 ${avgROI}% ${trend}
 </div>
@@ -1087,7 +1087,7 @@ ${window.currentUser.email}
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
 <strong style="
-color:${window.currentPlan === "pro" ? '#10b981' : '#64748b'};
+color:${window.currentPlan === "pro" ? "#10b981" : "#64748b"};
 font-weight:700;
 ">
 ${window.currentPlan === "pro" ? "PRO" : "FREE"}
