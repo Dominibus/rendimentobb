@@ -1260,8 +1260,17 @@ if(user){
 
   await loadDashboard();
 
-  // 🔥 SBLOCCA SE PRO
-  unlockProContent();
+// 🔥 SBLOCCA SE PRO
+unlockProContent();
+
+// 🔥 MOSTRA OVERLAY SOLO SE FREE
+if(window.currentPlan !== "pro"){
+  setTimeout(()=>{
+    if(typeof showProOverlay === "function"){
+      showProOverlay();
+    }
+  }, 1200);
+}
 
 }else{
 
