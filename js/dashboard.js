@@ -972,14 +972,12 @@ let marketLabel = "";
 let marketColor = "#ef4444";
 
 if(marketGap >= 0){
-marketLabel = t("Sopra il mercato","Above market");
-marketColor = "#10b981";
+  marketLabel = t("Sopra il mercato","Above market");
+  marketColor = "#10b981";
 }else{
-marketLabel = t("Sotto il mercato","Below market");
-marketColor = "#ef4444";
- 
+  marketLabel = t("Sotto il mercato","Below market");
+  marketColor = "#ef4444";
 }
-
 /* MARKET OPPORTUNITY SCORE */
 
 let opportunityScore = 50;
