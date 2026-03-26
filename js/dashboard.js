@@ -1096,7 +1096,7 @@ ${window.currentPlan === "pro" ? "PRO" : "FREE"}
 
 </div>
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card ${window.currentPlan !== "pro" ? "pro-lock pro-blur" : ""}">
 
 <h3>${t("Analisi salvate","Saved analyses")}</h3>
 
@@ -1109,7 +1109,7 @@ ${count}
 </div>
 
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card ${window.currentPlan !== "pro" ? "pro-lock pro-blur" : ""}">
 
 <h3>${t("ROI medio","Average ROI")}</h3>
 
@@ -1123,7 +1123,7 @@ ${avgROI}%
 
 </div>
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card ${window.currentPlan !== "pro" ? "pro-lock pro-blur" : ""}">
 
 <h3>${t("Capitale analizzato","Analyzed capital")}</h3>
 
@@ -1137,7 +1137,7 @@ ${formatCurrency(totalCapital)}
 
 </div>
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card ${window.currentPlan !== "pro" ? "pro-lock pro-blur" : ""}">
 
 <h3>${t("Opportunità mercato","Market opportunity")}</h3>
 
