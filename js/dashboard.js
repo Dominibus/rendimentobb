@@ -539,7 +539,7 @@ async function loadDashboard(){
   renderCityROIChart(analyses);
 
 // 🔥 BLOCCO FREE USER
-if(window.currentPlan === "free"){
+if(window.currentPlan && window.currentPlan !== "pro"){
   lockFreeUser();
 }
 
@@ -554,14 +554,28 @@ function lockFreeUser(){
   // sicurezza: se non è ancora definito → NON bloccare
   if(!window.currentPlan) return;
 
+  // 🔥 SE PRO → SBLOCCA TUTTO (FIX DEFINITIVO)
   if(window.currentPlan === "pro"){
     console.log("PRO USER → unlock everything");
+
+    // rimuove blur inline
+    document.querySelectorAll("*").forEach(el=>{
+      el.style.filter = "";
+      el.style.pointerEvents = "";
+      el.style.opacity = "";
+    });
+
+    // 🔥 rimuove anche classi CSS (CRUCIALE)
+    document.querySelectorAll(".pro-lock").forEach(el=>{
+      el.classList.remove("pro-blur");
+    });
+
     return;
   }
 
   console.log("FREE USER → limit UI");
 
-  // 🔥 CONTENITORI REALI (presi dal tuo codice)
+  // 🔥 CONTENITORI REALI (corretti)
   const elementsToLock = [
     "roi-chart-container",
     "cashflow-chart-container",
@@ -583,7 +597,6 @@ function lockFreeUser(){
   });
 
 }
-
 // ================= BEST INVESTMENT =================
 
 function renderBestInvestment(analyses){
