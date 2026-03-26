@@ -1998,22 +1998,43 @@ document.body.appendChild(popup);
 
 function unlockProContent(){
 
-  console.log("🔥 UNLOCK PRO FORZATO");
+  console.log("🔥 UNLOCK PRO COMPLETO");
 
-  // 🔥 rimuove blur inline (QUESTO è quello che ti blocca i grafici)
-  document.querySelectorAll("*").forEach(el=>{
-    el.style.filter = "";
-    el.style.pointerEvents = "";
-    el.style.opacity = "";
-  });
+  // 🔥 rimuove blur SOLO dagli elementi giusti (non tutto il DOM)
+  const ids = [
+    "roi-chart-container",
+    "cashflow-chart-container",
+    "city-roi-chart",
+    "city-distribution-chart",
+    "roi-optimizer",
+    "investment-ranking",
+    "best-investment"
+  ];
 
-  // 🔥 rimuove classi eventuali
-  document.querySelectorAll(".pro-lock").forEach(el=>{
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.style.filter = "none";
+    el.style.pointerEvents = "auto";
+    el.style.opacity = "1";
+
     el.classList.remove("pro-lock");
-  });
-
-  document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
+
+  // 🔥 IMPORTANTISSIMO → rimuove blur dal MAIN (overlay effect)
+  const main = document.querySelector("main");
+  if(main){
+    main.style.filter = "none";
+    main.style.pointerEvents = "auto";
+    main.style.opacity = "1";
+  }
+
+  // 🔥 chiude overlay se aperto
+  const overlay = document.getElementById("pro-overlay");
+  if(overlay){
+    overlay.style.display = "none";
+  }
 
 }
