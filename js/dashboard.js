@@ -117,6 +117,7 @@ if(!container) return;
 container.innerHTML = '<canvas id="roiChart"></canvas>';
 
 const canvas = document.getElementById("roiChart");
+canvas.height = 300;  
 const ctx = canvas.getContext("2d");
 
 if(roiChartInstance){
@@ -1179,6 +1180,7 @@ if(!container) return;
 container.innerHTML = '<canvas id="cashflowChart"></canvas>';
 
 const canvas = document.getElementById("cashflowChart");
+canvas.height = 300;  
 const ctx = canvas.getContext("2d");
 
 /* dati demo */
@@ -1984,19 +1986,22 @@ document.body.appendChild(popup);
 
 function unlockProContent(){
 
-  const isPro = window.currentPlan === "pro";
+  console.log("🔥 UNLOCK PRO ATTIVO");
 
-if(!isPro){
-  // fallback visuale (blur o placeholder)
-  return;
-}
+  // 🔥 RIMUOVE CLASSI CSS
+  document.querySelectorAll(".pro-lock").forEach(el=>{
+    el.classList.remove("pro-lock");
+  });
 
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  document.querySelectorAll(".pro-lock").forEach(el=>{
-    el.classList.remove("pro-lock");
+  // 🔥 RIMUOVE STILI INLINE (QUESTO È IL FIX VERO)
+  document.querySelectorAll("*").forEach(el=>{
+    el.style.filter = "";
+    el.style.pointerEvents = "";
+    el.style.opacity = "";
   });
 
 }
