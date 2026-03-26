@@ -929,53 +929,60 @@ from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const db = getFirestore();
 
-/* NASCONDE LA DASHBOARD FINO AL CONTROLLO */
+/* NASCONDE DASHBOARD */
 document.querySelector("main").style.display = "none";
-
-/* FUNZIONE REDIRECT */
-function goToPricing(){
-  window.location.href="/#pricing";
-}
 
 onAuthStateChanged(auth, async (user)=>{
 
-  // 🔥 evita trigger prematuro Firebase
   if(user === undefined) return;
 
-  // ================= NON LOGGATO =================
- if(!user){
-  console.log("GUEST → mostra overlay");
-  document.querySelector("main").style.display="block";
-  window.isProUser = false;
-  showProOverlay();
-  return;
-}
+  try{
 
-const data = userDoc.data();
+    // ================= NON LOGGATO =================
+    if(!user){
+      console.log("GUEST → overlay");
+      document.querySelector("main").style.display="block";
+      window.isProUser = false;
+      showProOverlay();
+      return;
+    }
 
-if(data.plan !== "pro"){
-  console.log("FREE → overlay PRO");
-  document.querySelector("main").style.display="block";
-  window.isProUser = false;
-  showProOverlay();
-  return;
-}
+    const uid = user.uid;
 
-// PRO
-window.isProUser = true;
-document.querySelector("main").style.display="block";
+    const userDoc = await getDoc(doc(db,"users",uid));
 
-    // ================= UTENTE PRO =================
-    console.log("PRO USER → dashboard");
+    // ================= NO DOCUMENT =================
+    if(!userDoc.exists()){
+      console.log("NO USER DOC → overlay");
+      document.querySelector("main").style.display="block";
+      window.isProUser = false;
+      showProOverlay();
+      return;
+    }
 
+    const data = userDoc.data();
+
+    // ================= FREE USER =================
+    if(data.plan !== "pro"){
+      console.log("FREE → overlay PRO");
+      document.querySelector("main").style.display="block";
+      window.isProUser = false;
+      showProOverlay();
+      return;
+    }
+
+    // ================= PRO USER =================
+    console.log("PRO USER → accesso completo");
+    window.isProUser = true;
     document.querySelector("main").style.display="block";
 
   }catch(err){
 
     console.error("Errore controllo utente:", err);
 
-    // fallback sicurezza
-    goToPricing();
+    // fallback
+    window.location.href="/#pricing";
+
   }
 
 });
