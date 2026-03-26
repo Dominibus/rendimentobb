@@ -1757,6 +1757,8 @@ window.goToUpgrade = function(){
 
 function updateMarketHero(city){
 
+city = safeCity(city);
+
 const hero = document.getElementById("market-hero-bg");
 const title = document.getElementById("market-hero-title");
 
@@ -1769,6 +1771,40 @@ milano:"/img/milano-dashboard.jpg",
 firenze:"/img/firenze-dashboard.jpg"
 };
 
+const names = {
+roma:"Roma",
+napoli:"Napoli",
+milano:"Milano",
+firenze:"Firenze"
+};
+
+/* ================= HERO CONTENT ================= */
+
+const HERO_CONTENT = {
+roma:[
+"Domanda turistica costante e ROI stabile",
+"Capitale del turismo internazionale",
+"Mercato premium ad alta occupazione"
+],
+napoli:[
+"ROI sopra la media nazionale",
+"Forte crescita turistica",
+"Ottimo rapporto prezzo / rendimento"
+],
+milano:[
+"Business travel e alta occupazione",
+"Mercato stabile e liquido",
+"Alta domanda tutto l’anno"
+],
+firenze:[
+"Turismo internazionale premium",
+"Alta redditività stagionale",
+"Domanda costante tutto l’anno"
+]
+};
+
+/* ================= MARKET STATS ================= */
+
 const market = window.marketData[city] || window.marketData["italy"];
 
 const stats = document.querySelector(".market-hero-stats");
@@ -1776,7 +1812,6 @@ const stats = document.querySelector(".market-hero-stats");
 if(stats && market){
 
 stats.innerHTML = `
-
 <div>
 <div style="font-size:13px;color:#64748b">ROI medio</div>
 <div style="font-size:22px;font-weight:600;color:#10b981">
@@ -1797,38 +1832,42 @@ ${market.occupancy}%
 €${market.adr}
 </div>
 </div>
-
 `;
-}  
+}
 
-/* ITALIA -> random */
+/* ================= RANDOM SMART ================= */
 
-if(city === "italy"){
-
+if(!images[city]){
 const keys = Object.keys(images);
 city = keys[Math.floor(Math.random()*keys.length)];
+}
+
+if(city === "italy"){
+const keys = Object.keys(images);
+city = keys[Math.floor(Math.random()*keys.length)];
+}
+
+/* ================= IMMAGINE SAFE ================= */
+
+const image = images[city] || images["napoli"];
+hero.style.backgroundImage = `url('${image}')`;
+
+/* ================= TITOLO SAFE ================= */
+
+const cityName = names[city] || "Italia";
+title.innerText = "Investire in un B&B a " + cityName;
+
+/* ================= DESCRIZIONE RANDOM ================= */
+
+const subtitle = hero.querySelector("div div:nth-child(2)");
+
+if(subtitle && HERO_CONTENT[city]){
+
+const randomText =
+HERO_CONTENT[city][Math.floor(Math.random()*HERO_CONTENT[city].length)];
+
+subtitle.innerText = randomText;
 
 }
 
-/* cambia classe per CSS */
-
-hero.classList.remove("rome","milan","florence","naples");
-hero.classList.add(city);
-
-/* cambia immagine */
-
-hero.style.backgroundImage = `url('${images[city]}')`;
-
-/* cambia titolo */
-
-const names = {
-roma:"Roma",
-napoli:"Napoli",
-milano:"Milano",
-firenze:"Firenze"
-};
-
-title.innerText = "Investire in un B&B a " + names[city];
-
-} 
-
+}
