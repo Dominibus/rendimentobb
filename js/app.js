@@ -205,7 +205,13 @@ function requirePlan(requiredPlan){
       );
     }
 
-    const goUpgrade = confirm(message);
+    alert(
+window.currentLang === "it"
+? "🔒 Sblocca analisi avanzata, strategia ROI e simulazioni complete."
+: "🔒 Unlock advanced analysis, ROI strategy and full simulations."
+);
+
+const goUpgrade = confirm(message);
 
     if(goUpgrade){
       window.location.href="/pricing/";
