@@ -1212,6 +1212,7 @@ ${breakEvenYears} ${t("anni","years")}
 
 </div>
 `;
+}
 
 // ================= LANGUAGE REFRESH =================
 
