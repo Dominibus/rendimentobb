@@ -1749,6 +1749,11 @@ downloadReport();
 
 });
 
+// ================= UPGRADE =================
+window.goToUpgrade = function(){
+  window.location.href = "/pricing/";
+}
+
 // ================= HERO MARKET BACKGROUND =================
 
 function updateMarketHero(city){
