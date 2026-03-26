@@ -1204,9 +1204,7 @@ await loadDashboard();
 
 }else{
 
-  console.log("NON LOGGATO → pricing");
-
-  window.location.href="/#pricing";
+window.location.href="/login/";
 
 }
 
@@ -1759,7 +1757,7 @@ downloadReport();
 
 // ================= UPGRADE =================
 window.goToUpgrade = function(){
-  window.location.href = "/#pricing";
+  window.location.href = "/pricing/";
 }
 
 // ================= HERO MARKET BACKGROUND =================
