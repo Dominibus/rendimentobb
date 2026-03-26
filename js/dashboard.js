@@ -11,6 +11,7 @@ collection,
 query,
 where,
 getDocs,
+getDoc,
 orderBy,
 deleteDoc,
 doc
@@ -37,6 +38,7 @@ window.t = function(it,en){
 
 const db = getFirestore(app);
 const auth = getAuth(app);
+window.proOverlayShown = false;
 
 // ================= CHART DATA =================
 
@@ -277,6 +279,7 @@ cutout:"65%"
 // ================= LOAD DASHBOARD =================
 
 async function loadDashboard(){
+window.loadDashboard = loadDashboard; 
 
 if(!window.currentUser){
 
@@ -420,7 +423,7 @@ const badge = index === 0
 
 const card = document.createElement("div");
 
-card.className="analysis-card";
+card.className = "analysis-card";
 
 card.innerHTML=`
 
@@ -469,8 +472,50 @@ ${roi.toFixed(1)}%
 
 <div class="metric">
 <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
-<strong>${formatCurrency(yearlyProfit)}</strong>
+
+${
+window.currentPlan === "pro"
+? `<strong>${formatCurrency(yearlyProfit)}</strong>`
+: `
+<strong style="filter:blur(4px)">
+${formatCurrency(yearlyProfit)}
+</strong>
+
+<div style="
+font-size:12px;
+color:#64748b;
+margin-top:4px;
+">
+🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
 </div>
+`
+}
+</div>
+
+${
+window.currentPlan !== "pro"
+? `
+<div style="margin-top:12px">
+
+<button onclick="goToUpgrade()" style="
+background:#10b981;
+border:none;
+padding:10px;
+border-radius:8px;
+color:white;
+font-weight:600;
+cursor:pointer;
+width:100%;
+">
+
+🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
+
+</button>
+
+</div>
+`
+: ""
+}
 
 <div style="margin-top:12px;text-align:right">
 
@@ -764,61 +809,63 @@ Tool
 // ================= STATS =================
 
 function renderStats(count,totalROI,totalCapital,totalCashflow){
- setTimeout(()=>{
-document.querySelectorAll(".stats-card").forEach((card,i)=>{
-card.style.opacity=0;
-card.style.transform="translateY(10px)";
+
+// ================= ANIMATION =================
 
 setTimeout(()=>{
-card.style.transition="all 0.4s ease";
-card.style.opacity=1;
-card.style.transform="translateY(0)";
-}, i*120);
+  document.querySelectorAll(".stats-card").forEach((card,i)=>{
+    card.style.opacity=0;
+    card.style.transform="translateY(10px)";
 
-});
-},100); 
+    setTimeout(()=>{
+      card.style.transition="all 0.4s ease";
+      card.style.opacity=1;
+      card.style.transform="translateY(0)";
+    }, i*120);
+
+  });
+},100);
 
 // ================= KPI HEADER =================
 
-const avgROI = count ? (totalROI/count).toFixed(1) : 0;
+const avgROI = count ? (totalROI/count) : 0;
+const avgROIRounded = avgROI.toFixed(1);
 
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
 
-const cityMarket = window.marketData[selectedCity] || window.marketData["italy"] || { roi: 8 };
+const cityMarket =
+window.marketData?.[selectedCity] ||
+window.marketData?.["italy"] ||
+{ roi:8, occupancy:60, adr:120 };
 
 const marketROI = cityMarket.roi;
-const occupancy = cityMarket.occupancy || 60;
-const adr = cityMarket.adr || 120;  
+const occupancy = cityMarket.occupancy;
+const adr = cityMarket.adr;
 
-const trend = avgROI >= marketROI ? "↑" : "↓";  
+const trend = avgROI >= marketROI ? "↑" : "↓";
 
- // ================= PORTFOLIO PERFORMANCE =================
+// ================= PORTFOLIO =================
 
 const avgCashflow = count ? (totalCashflow / count) : 0;
 
-const roiEl = document.getElementById("portfolio-roi"); 
+const roiEl = document.getElementById("portfolio-roi");
+if(roiEl) roiEl.textContent = avgROIRounded + "%";
+
 const cashEl = document.getElementById("portfolio-cashflow");
+if(cashEl) cashEl.textContent = formatCurrency(avgCashflow);
+
 const capEl = document.getElementById("portfolio-capital");
+if(capEl) capEl.textContent = formatCurrency(totalCapital);
+
 const countEl = document.getElementById("portfolio-count");
+if(countEl) countEl.textContent = count;
 
-if(roiEl){
-roiEl.textContent = avgROI + "%";
-}
+// ================= SCORE =================
 
-if(cashEl){
-cashEl.textContent = formatCurrency(avgCashflow);
-}
-
-if(capEl){
-capEl.textContent = formatCurrency(totalCapital);
-}
-
-if(countEl){
-countEl.textContent = count;
-}
- 
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
+
+// ================= KPI GRID =================
 
 const kpiContainer = document.getElementById("dashboard-kpi");
 
@@ -827,349 +874,109 @@ if(kpiContainer){
 kpiContainer.innerHTML = `
 
 <div class="stats-card">
-
 <h3>${t("Capitale portfolio","Portfolio capital")}</h3>
-
 <div style="font-size:28px;font-weight:700">
 ${formatCurrency(totalCapital)}
 </div>
-
 </div>
 
-
 <div class="stats-card">
-
 <h3>${t("ROI medio","Average ROI")}</h3>
-
-<div style="
-font-size:28px;
-font-weight:700;
-color:${avgROI >= marketROI ? '#10b981' : '#ef4444'};
-">
-${avgROI}% ${trend}
+<div style="font-size:28px;font-weight:700;color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};">
+${avgROIRounded}% ${trend}
 </div>
-
 </div>
-
 
 <div class="stats-card">
-
 <h3>${t("Analisi salvate","Saved analyses")}</h3>
-
 <div style="font-size:28px;font-weight:700">
 ${count}
 </div>
-
 </div>
 
-
 <div class="stats-card">
-
 <h3>${t("Investment Score","Investment Score")}</h3>
-
 <div style="font-size:28px;font-weight:700;color:#2563eb">
 ${investmentScore}/100
 </div>
-
 </div>
 
 `;
 
-} 
+}
 
-// ================= MARKET BENCHMARK =================
-
-console.log("City:", selectedCity, "Market:", cityMarket);  
+// ================= MARKET =================
 
 const performanceEl = document.getElementById("market-performance");
 const userRoiEl = document.getElementById("user-roi-benchmark");
 
 if(userRoiEl){
-
 userRoiEl.textContent = avgROI + "%";
-
-if(avgROI >= marketROI){
-userRoiEl.style.color = "#10b981";
-}else{
-userRoiEl.style.color = "#ef4444";
-}
-
+userRoiEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
 
 if(performanceEl){
+performanceEl.textContent = avgROI >= marketROI
+? t("Sopra la media di mercato","Above market average")
+: t("Sotto la media di mercato","Below market average");
 
-if(avgROI >= marketROI){
-
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sopra la media di mercato"
-: "Above market average";
-
-performanceEl.style.color = "#10b981";
-
-}else{
-
-performanceEl.textContent =
-window.currentLang === "it"
-? "Sotto la media di mercato"
-: "Below market average";
-
-performanceEl.style.color = "#ef4444";
-
+performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
 
-} 
-/* MARKET GAP */
-
-const marketGap = (avgROI - marketROI).toFixed(1);
-
-let marketLabel = "";
-let marketColor = "#ef4444";
-
-if(marketGap >= 0){
-marketLabel = t("Sopra il mercato","Above market");
-marketColor = "#10b981";
-}else{
-marketLabel = t("Sotto il mercato","Below market");
-marketColor = "#ef4444";
- 
-}
-
-/* MARKET OPPORTUNITY SCORE */
-
-let opportunityScore = 50;
-
-/* ROI influence */
-
-if(marketROI > 10) opportunityScore += 20;
-else if(marketROI > 7) opportunityScore += 10;
-
-/* occupancy */
-
-if(occupancy > 70) opportunityScore += 20;
-else if(occupancy > 60) opportunityScore += 10;
-
-/* ADR */
-
-if(adr > 150) opportunityScore += 10;
-
-if(opportunityScore > 100) opportunityScore = 100;
- 
-let scoreColor = "#ef4444";
-let scoreLabel = t("Alto rischio","High risk");
-
-if(investmentScore >= 80){
-scoreColor = "#10b981";
-scoreLabel = t("Investimento sicuro","Safe investment");
-}
-else if(investmentScore >= 60){
-scoreColor = "#f59e0b";
-scoreLabel = t("Rischio medio","Medium risk");
-}
-
-let decisionText = "";
-let decisionDesc = "";
-
-if(investmentScore >= 80){
-
-decisionText = t(
-"Ottima opportunità di investimento",
-"Strong investment opportunity"
-);
-
-decisionDesc = t(
-"Questo investimento mostra un buon potenziale di redditività.",
-"This investment shows solid profitability potential."
-);
-
-}
-else if(investmentScore >= 60){
-
-decisionText = t(
-"Investimento moderato",
-"Moderate investment"
-);
-
-decisionDesc = t(
-"Potrebbe essere interessante ma richiede ulteriori valutazioni.",
-"This investment could work but requires deeper analysis."
-);
-
-}
-else{
-
-decisionText = t(
-"Investimento sconsigliato",
-"Avoid this investment"
-);
-
-decisionDesc = t(
-"La redditività prevista è bassa o negativa rispetto al rischio.",
-"The projected profitability is too low compared to the risk."
-);
-
-}
-
-const roiColor = avgROI >= 0 ? "#10b981" : "#ef4444";
-
-// ================= PROFIT ESTIMATION =================
+// ================= PROFIT =================
 
 const yearlyProfit = (totalCapital * avgROI) / 100;
-const monthlyProfit = yearlyProfit / 12;  
-
-// ================= BREAK EVEN =================
+const monthlyProfit = yearlyProfit / 12;
 
 let breakEvenYears = "-";
-
 if(yearlyProfit > 0){
 breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
-}  
+}
+
+// ================= FINAL BLOCK =================
 
 const statsContainer = document.getElementById("dashboard-stats");
 
-statsContainer.innerHTML=`
+if(!statsContainer) return;
 
-<div class="stats-card">
+statsContainer.innerHTML = `
+
+<div class="analysis-card">
 
 <h3>${t("Account","Account")}</h3>
 
 <div class="metric">
 <span>${t("Utente","User")}</span>
-<strong class="account-email" title="${window.currentUser.email}">
-${window.currentUser.email}
-</strong>
+<strong>${window.currentUser.email}</strong>
 </div>
 
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
-<strong style="
-color:${window.currentPlan === 'pro' ? '#10b981' : '#64748b'};
-font-weight:700;
-">
-${window.currentPlan === "pro" ? "PRO" : "FREE"}
+<strong style="color:${window.currentPlan==="pro"?"#10b981":"#64748b"};">
+${window.currentPlan==="pro"?"PRO":"FREE"}
 </strong>
 </div>
 
 </div>
 
 <div class="analysis-card">
-
-<h3>${t("Analisi salvate","Saved analyses")}</h3>
-
-<div class="metric">
-<strong style="font-size:22px">
-${count}
-</strong>
-</div>
-
-</div>
-
-
-<div class="analysis-card">
-
 <h3>${t("ROI medio","Average ROI")}</h3>
-
-<div class="metric">
-
-<strong style="font-size:22px;color:${roiColor}">
-${avgROI}%
-</strong>
-
-</div>
-
+<strong style="font-size:22px">${avgROIRounded}%</strong>
 </div>
 
 <div class="analysis-card">
-
-<h3>${t("Capitale analizzato","Analyzed capital")}</h3>
-
-<div class="metric">
-
-<strong style="font-size:22px">
-${formatCurrency(totalCapital)}
-</strong>
-
-</div>
-
+<h3>${t("Profitto annuo","Yearly profit")}</h3>
+<strong>${formatCurrency(yearlyProfit)}</strong>
 </div>
 
 <div class="analysis-card">
-
-<h3>${t("Opportunità mercato","Market opportunity")}</h3>
-
-<div style="font-size:26px;font-weight:700;color:#2563eb">
-${opportunityScore}/100
+<h3>${t("Break-even","Break-even")}</h3>
+<strong>${breakEvenYears} ${t("anni","years")}</strong>
 </div>
 
-<div style="font-size:13px;color:#64748b;margin-top:6px">
-${t("Basato su ROI mercato, occupazione e ADR",
-"Based on market ROI, occupancy and ADR")}
-</div>
-
-</div>
-
-
-<div class="analysis-card" style="grid-column: span 2">
-
-<h3>${t("Indice investimento","Investment Score")}</h3>
-
-<div style="font-size:34px;font-weight:700;color:${scoreColor}">
-${investmentScore}/100
-</div>
-
-<div style="margin-top:14px;font-weight:700;font-size:16px;color:${scoreColor}">
-${decisionText}
-</div>
-
-<div style="font-size:14px;color:#475569;margin-top:6px">
-${decisionDesc}
-</div>
-
-<div style="font-size:14px;color:#64748b;margin-top:6px">
-${investmentScore >= 80 ? "🟢" : investmentScore >= 60 ? "🟡" : "🔴"} ${scoreLabel}
-</div>
-
-<div class="metric">
-<span>${t("Differenza dal mercato","Market difference")}</span>
-<strong style="color:${marketColor}">
-${marketGap}% (${marketLabel})
-</strong>
-</div>
-
-<div style="margin-top:10px;height:8px;background:#e2e8f0;border-radius:6px;overflow:hidden">
-<div style="width:${investmentScore}%;background:${scoreColor};height:100%"></div>
-</div>
-
-<div style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:12px">
-
-<div class="metric">
-<span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
-<strong style="color:${roiColor}">
-${formatCurrency(yearlyProfit)}
-</strong>
-</div>
-
-<div class="metric">
-<span>${t("Profitto mensile stimato","Estimated monthly profit")}</span>
-<strong style="color:${roiColor}">
-${formatCurrency(monthlyProfit)}
-</strong>
-</div>
-
-<div class="metric">
-<span>${t("Break-even stimato","Estimated break-even")}</span>
-<strong>
-${breakEvenYears} ${t("anni","years")}
-</strong>
-</div>
-
-</div>
-
-</div>
 `;
 
 }
-
 
 // ================= LANGUAGE REFRESH =================
 
@@ -1188,23 +995,69 @@ onAuthStateChanged(auth, async (user)=>{
 
 if(!window.firebaseReady){
   console.log("Firebase non pronto, attendo...");
-  setTimeout(()=>loadDashboard(),300);
+
+  setTimeout(()=>{
+    loadDashboard();
+
+    // 🔥 AGGIUNGI QUESTO BLOCCO
+    if(window.currentPlan !== "pro"){
+      if(typeof window.showProOverlay === "function"){
+        window.showProOverlay();
+      }
+    }
+
+  },300);
+
   return;
 }
 
 if(user){
 
-window.currentUser = user;
+  window.currentUser = user;
 
-console.log("USER OK:", user.uid);
+  console.log("USER OK:", user.uid);
 
-document.dispatchEvent(new Event("rb_auth_ready")); 
+  // 🔥 PRENDI IL PIANO DA FIRESTORE
+  const userDoc = await getDoc(doc(db,"users", user.uid));
 
-await loadDashboard();
+  if(userDoc.exists()){
+    const data = userDoc.data();
+
+    window.currentPlan = data.plan || "free";
+  }else{
+    window.currentPlan = "free";
+  }
+
+  // fallback sicurezza
+  window.currentPlan = window.currentPlan || "free";
+
+  console.log("PLAN:", window.currentPlan);
+
+  document.dispatchEvent(new Event("rb_auth_ready")); 
+
+  await loadDashboard();
+
+// 🔥 SBLOCCA SE PRO
+unlockProContent();
+
+// 🔥 MOSTRA OVERLAY SOLO SE FREE
+if(window.currentPlan !== "pro" && !window.proOverlayShown){
+
+  window.proOverlayShown = true;
+
+  setTimeout(()=>{
+    if(typeof showProOverlay === "function"){
+      showProOverlay();
+    }
+  }, 1200);
+
+}
 
 }else{
 
-window.location.href="/login/";
+  console.log("NON LOGGATO → pricing");
+
+  window.location.href="/#pricing";
 
 }
 
@@ -1551,20 +1404,6 @@ ${t(
 }
 
 // ===============================
-// CITY MARKET CHANGE
-// ===============================
-
-document.getElementById("city-select")?.addEventListener("change",(e)=>{
-
-  const selectedCity = e.target.value;
-
-  updateMarketHero(selectedCity);
-
-  console.log("Città cambiata:", selectedCity);
-
-});
-
-// ===============================
 // ROI TARGET CALCULATOR
 // ===============================
 
@@ -1652,7 +1491,7 @@ container.innerHTML = `
 ${t("Ricavo annuo stimato","Estimated yearly revenue")}
 </div>
 
-`;
+`;  
 
 updateRevenue();
 
@@ -1757,7 +1596,7 @@ downloadReport();
 
 // ================= UPGRADE =================
 window.goToUpgrade = function(){
-  window.location.href = "/pricing/";
+  window.location.href = "/#pricing";
 }
 
 // ================= HERO MARKET BACKGROUND =================
@@ -2102,5 +1941,19 @@ ${t("Continua come ospite","Continue as guest")}
 `;
 
 document.body.appendChild(popup);
+
+}
+
+function unlockProContent(){
+
+  if(window.currentPlan !== "pro") return;
+
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  document.querySelectorAll(".pro-lock").forEach(el=>{
+    el.classList.remove("pro-lock");
+  });
 
 }
