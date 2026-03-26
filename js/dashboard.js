@@ -420,7 +420,9 @@ const badge = index === 0
 
 const card = document.createElement("div");
 
-card.className="analysis-card";
+card.className = window.currentPlan === "pro"
+  ? "analysis-card"
+  : "analysis-card pro-lock pro-blur";
 
 card.innerHTML=`
 
@@ -1052,7 +1054,7 @@ ${window.currentPlan === "pro" ? "PRO" : "FREE"}
 
 </div>
 
-<div class="analysis-card">
+<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
 
 <h3>${t("Analisi salvate","Saved analyses")}</h3>
 
@@ -1065,7 +1067,7 @@ ${count}
 </div>
 
 
-<div class="analysis-card">
+<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
 
 <h3>${t("ROI medio","Average ROI")}</h3>
 
@@ -1079,7 +1081,7 @@ ${avgROI}%
 
 </div>
 
-<div class="analysis-card">
+<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
 
 <h3>${t("Capitale analizzato","Analyzed capital")}</h3>
 
@@ -1093,7 +1095,7 @@ ${formatCurrency(totalCapital)}
 
 </div>
 
-<div class="analysis-card">
+<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
 
 <h3>${t("Opportunità mercato","Market opportunity")}</h3>
 
@@ -1194,13 +1196,32 @@ if(!window.firebaseReady){
 
 if(user){
 
-window.currentUser = user;
+  window.currentUser = user;
 
-console.log("USER OK:", user.uid);
+  console.log("USER OK:", user.uid);
 
-document.dispatchEvent(new Event("rb_auth_ready")); 
+  // 🔥 PRENDI IL PIANO DA FIRESTORE
+  const userDoc = await getDoc(doc(db,"users", user.uid));
 
-await loadDashboard();
+  if(userDoc.exists()){
+    const data = userDoc.data();
+
+    window.currentPlan = data.plan || "free";
+  }else{
+    window.currentPlan = "free";
+  }
+
+  // fallback sicurezza
+  window.currentPlan = window.currentPlan || "free";
+
+  console.log("PLAN:", window.currentPlan);
+
+  document.dispatchEvent(new Event("rb_auth_ready")); 
+
+  await loadDashboard();
+
+  // 🔥 SBLOCCA SE PRO
+  unlockProContent();
 
 }else{
 
@@ -2104,5 +2125,19 @@ ${t("Continua come ospite","Continue as guest")}
 `;
 
 document.body.appendChild(popup);
+
+}
+
+function unlockProContent(){
+
+  if(window.currentPlan !== "pro") return;
+
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  document.querySelectorAll(".pro-lock").forEach(el=>{
+    el.classList.remove("pro-lock");
+  });
 
 }
