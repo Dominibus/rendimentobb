@@ -15,7 +15,7 @@ https://www.rendimentobb.com/* https://rendimentobb.it/:splat 301!
 /tool/*       /tool/index.html              200
 
 # ACADEMY 🔥 FIX
-/academy/*    /academy/:splat/index.html    200
+/academy/*     /academy/:splat/index.html     200
 
 # ALTRE
 /dashboard/*   /dashboard/index.html   200
