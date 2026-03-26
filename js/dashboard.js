@@ -11,6 +11,7 @@ collection,
 query,
 where,
 getDocs,
+getDoc,
 orderBy,
 deleteDoc,
 doc
