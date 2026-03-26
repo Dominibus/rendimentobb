@@ -539,9 +539,21 @@ async function loadDashboard(){
   renderCashflowChart();
   renderCityROIChart(analyses);
 
-// 🔥 BLOCCO FREE USER
-if(window.currentPlan && window.currentPlan !== "pro"){
+// ================= FIX PLAN (DEFINITIVO) =================
+
+// se il piano non è ancora pronto → non fare nulla
+if(!window.currentPlan){
+  console.warn("Plan non pronto → skip");
+}else if(window.currentPlan === "pro"){
+
+  console.log("PRO → UNLOCK");
+  unlockProContent();
+
+}else{
+
+  console.log("FREE → LOCK");
   lockFreeUser();
+
 }
 
 }
@@ -1986,22 +1998,22 @@ document.body.appendChild(popup);
 
 function unlockProContent(){
 
-  console.log("🔥 UNLOCK PRO ATTIVO");
+  console.log("🔥 UNLOCK PRO FORZATO");
 
-  // 🔥 RIMUOVE CLASSI CSS
+  // 🔥 rimuove blur inline (QUESTO è quello che ti blocca i grafici)
+  document.querySelectorAll("*").forEach(el=>{
+    el.style.filter = "";
+    el.style.pointerEvents = "";
+    el.style.opacity = "";
+  });
+
+  // 🔥 rimuove classi eventuali
   document.querySelectorAll(".pro-lock").forEach(el=>{
     el.classList.remove("pro-lock");
   });
 
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
-  });
-
-  // 🔥 RIMUOVE STILI INLINE (QUESTO È IL FIX VERO)
-  document.querySelectorAll("*").forEach(el=>{
-    el.style.filter = "";
-    el.style.pointerEvents = "";
-    el.style.opacity = "";
   });
 
 }
