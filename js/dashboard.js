@@ -538,6 +538,34 @@ async function loadDashboard(){
   renderCashflowChart();
   renderCityROIChart(analyses);
 
+// 🔥 BLOCCO FREE USER
+lockFreeUser();
+
+}
+
+// ================= LOCK FREE USER =================
+
+function lockFreeUser(){
+
+  if(window.currentPlan === "pro") return;
+
+  console.log("FREE USER → limit UI");
+
+  document.querySelectorAll(`
+    #roi-chart,
+    #cashflow-chart,
+    #city-roi-chart,
+    #roi-optimizer,
+    #investment-ranking,
+    #best-investment
+  `).forEach(el=>{
+    if(el){
+      el.style.filter = "blur(6px)";
+      el.style.pointerEvents = "none";
+      el.style.opacity = "0.6";
+    }
+  });
+
 }
 
 // ================= BEST INVESTMENT =================
@@ -1928,7 +1956,12 @@ document.body.appendChild(popup);
 
 function unlockProContent(){
 
-  if(window.currentPlan !== "pro") return;
+  const isPro = window.currentPlan === "pro";
+
+if(!isPro){
+  // fallback visuale (blur o placeholder)
+  return;
+}
 
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
