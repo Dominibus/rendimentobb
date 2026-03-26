@@ -527,6 +527,7 @@ async function loadDashboard(){
   renderInsight(count,totalROI,totalCapital);
   renderROIOptimizer(count,totalROI,totalCapital);
   renderROITargetCalculator(analyses); 
+  renderROIMarketComparison(count,totalROI);
   renderRevenueSimulator(); 
   renderBestInvestment(analyses);
 
@@ -2084,6 +2085,106 @@ function renderUpgradeTrigger(best){
     ">
       🚀 Sblocca ora
     </button>
+
+  </div>
+
+  `;
+}
+
+function renderROIMarketComparison(count,totalROI){
+
+  const container = document.getElementById("roi-market-comparison");
+  if(!container) return;
+
+  if(count === 0){
+    container.innerHTML = "";
+    return;
+  }
+
+  const avgROI = totalROI / count;
+
+  // 🔥 benchmark reale (puoi evolverlo dopo)
+  const marketROI = 8.4;
+
+  const diff = avgROI - marketROI;
+
+  const isBetter = diff >= 0;
+
+  const color = isBetter ? "#10b981" : "#ef4444";
+
+  const message = isBetter
+    ? "Stai battendo il mercato"
+    : "Sei sotto la media di mercato";
+
+  const percentage = Math.abs(diff).toFixed(1);
+
+  container.innerHTML = `
+
+  <h3>📊 ${t("Confronto con il mercato","Market comparison")}</h3>
+
+  <div style="
+  margin-top:14px;
+  font-size:28px;
+  font-weight:700;
+  color:${color};
+  ">
+    ${isBetter ? "+" : "-"}${percentage}%
+  </div>
+
+  <div style="margin-top:6px;color:#64748b;font-size:14px">
+    ${message}
+  </div>
+
+  <div style="margin-top:16px">
+
+    ${
+    window.currentPlan === "pro"
+    ? `
+      <div style="
+      padding:12px;
+      border-radius:10px;
+      background:rgba(16,185,129,0.08);
+      font-size:13px;
+      color:#065f46;
+      ">
+        💡 ${t(
+          "Il tuo investimento è sopra il benchmark nazionale.",
+          "Your investment outperforms the national benchmark."
+        )}
+      </div>
+    `
+    : `
+      <div style="
+      padding:14px;
+      border-radius:12px;
+      background:rgba(0,0,0,0.04);
+      text-align:center;
+      ">
+
+        <div style="font-size:20px;margin-bottom:6px">🔒</div>
+
+        <div style="font-size:13px;color:#64748b;margin-bottom:10px">
+          ${t(
+            "Sblocca confronto avanzato e analisi strategica",
+            "Unlock advanced comparison and strategy"
+          )}
+        </div>
+
+        <button onclick="goToUpgrade()" style="
+        background:#10b981;
+        border:none;
+        padding:10px 14px;
+        border-radius:8px;
+        color:white;
+        font-weight:600;
+        cursor:pointer;
+        ">
+          🚀 ${t("Sblocca PRO","Unlock PRO")}
+        </button>
+
+      </div>
+    `
+    }
 
   </div>
 
