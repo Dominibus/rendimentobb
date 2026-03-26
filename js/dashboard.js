@@ -809,21 +809,23 @@ Tool
 // ================= STATS =================
 
 function renderStats(count,totalROI,totalCapital,totalCashflow){
- setTimeout(()=>{
-document.querySelectorAll(".stats-card").forEach((card,i)=>{
-card.style.opacity=0;
-card.style.transform="translateY(10px)";
+
+// ================= ANIMATION =================
 
 setTimeout(()=>{
-card.style.transition="all 0.4s ease";
-card.style.opacity=1;
-card.style.transform="translateY(0)";
-}, i*120);
+  document.querySelectorAll(".stats-card").forEach((card,i)=>{
+    card.style.opacity=0;
+    card.style.transform="translateY(10px)";
 
-});
-},100); 
+    setTimeout(()=>{
+      card.style.transition="all 0.4s ease";
+      card.style.opacity=1;
+      card.style.transform="translateY(0)";
+    }, i*120);
 
-}
+  });
+},100);
+
 // ================= KPI HEADER =================
 
 const avgROI = count ? (totalROI/count).toFixed(1) : 0;
@@ -831,40 +833,31 @@ const avgROI = count ? (totalROI/count).toFixed(1) : 0;
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
 
-const cityMarket = window.marketData[selectedCity] || window.marketData["italy"] || { roi: 8 };
+const cityMarket =
+window.marketData?.[selectedCity] ||
+window.marketData?.["italy"] ||
+{ roi:8, occupancy:60, adr:120 };
 
 const marketROI = cityMarket.roi;
-const occupancy = cityMarket.occupancy || 60;
-const adr = cityMarket.adr || 120;  
+const occupancy = cityMarket.occupancy;
+const adr = cityMarket.adr;
 
-const trend = avgROI >= marketROI ? "↑" : "↓";  
+const trend = avgROI >= marketROI ? "↑" : "↓";
 
- // ================= PORTFOLIO PERFORMANCE =================
+// ================= PORTFOLIO =================
 
 const avgCashflow = count ? (totalCashflow / count) : 0;
 
-const roiEl = document.getElementById("portfolio-roi"); 
-const cashEl = document.getElementById("portfolio-cashflow");
-const capEl = document.getElementById("portfolio-capital");
-const countEl = document.getElementById("portfolio-count");
+document.getElementById("portfolio-roi")?.textContent = avgROI + "%";
+document.getElementById("portfolio-cashflow")?.textContent = formatCurrency(avgCashflow);
+document.getElementById("portfolio-capital")?.textContent = formatCurrency(totalCapital);
+document.getElementById("portfolio-count")?.textContent = count;
 
-if(roiEl){
-roiEl.textContent = avgROI + "%";
-}
+// ================= SCORE =================
 
-if(cashEl){
-cashEl.textContent = formatCurrency(avgCashflow);
-}
-
-if(capEl){
-capEl.textContent = formatCurrency(totalCapital);
-}
-
-if(countEl){
-countEl.textContent = count;
-}
- 
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
+
+// ================= KPI GRID =================
 
 const kpiContainer = document.getElementById("dashboard-kpi");
 
@@ -873,55 +866,109 @@ if(kpiContainer){
 kpiContainer.innerHTML = `
 
 <div class="stats-card">
-
 <h3>${t("Capitale portfolio","Portfolio capital")}</h3>
-
 <div style="font-size:28px;font-weight:700">
 ${formatCurrency(totalCapital)}
 </div>
-
 </div>
 
-
 <div class="stats-card">
-
 <h3>${t("ROI medio","Average ROI")}</h3>
-
-<div style="
-font-size:28px;
-font-weight:700;
-color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
-">
+<div style="font-size:28px;font-weight:700;color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};">
 ${avgROI}% ${trend}
 </div>
-
 </div>
 
-
 <div class="stats-card">
-
 <h3>${t("Analisi salvate","Saved analyses")}</h3>
-
 <div style="font-size:28px;font-weight:700">
 ${count}
 </div>
-
 </div>
 
-
 <div class="stats-card">
-
 <h3>${t("Investment Score","Investment Score")}</h3>
-
 <div style="font-size:28px;font-weight:700;color:#2563eb">
 ${investmentScore}/100
 </div>
-
 </div>
 
 `;
 
-} 
+}
+
+// ================= MARKET =================
+
+const performanceEl = document.getElementById("market-performance");
+const userRoiEl = document.getElementById("user-roi-benchmark");
+
+if(userRoiEl){
+userRoiEl.textContent = avgROI + "%";
+userRoiEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
+}
+
+if(performanceEl){
+performanceEl.textContent = avgROI >= marketROI
+? t("Sopra la media di mercato","Above market average")
+: t("Sotto la media di mercato","Below market average");
+
+performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
+}
+
+// ================= PROFIT =================
+
+const yearlyProfit = (totalCapital * avgROI) / 100;
+const monthlyProfit = yearlyProfit / 12;
+
+let breakEvenYears = "-";
+if(yearlyProfit > 0){
+breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
+}
+
+// ================= FINAL BLOCK =================
+
+const statsContainer = document.getElementById("dashboard-stats");
+
+if(!statsContainer) return;
+
+statsContainer.innerHTML = `
+
+<div class="analysis-card">
+
+<h3>${t("Account","Account")}</h3>
+
+<div class="metric">
+<span>${t("Utente","User")}</span>
+<strong>${window.currentUser.email}</strong>
+</div>
+
+<div class="metric">
+<span>${t("Piano","Plan")}</span>
+<strong style="color:${window.currentPlan==="pro"?"#10b981":"#64748b"};">
+${window.currentPlan==="pro"?"PRO":"FREE"}
+</strong>
+</div>
+
+</div>
+
+<div class="analysis-card">
+<h3>${t("ROI medio","Average ROI")}</h3>
+<strong style="font-size:22px">${avgROI}%</strong>
+</div>
+
+<div class="analysis-card">
+<h3>${t("Profitto annuo","Yearly profit")}</h3>
+<strong>${formatCurrency(yearlyProfit)}</strong>
+</div>
+
+<div class="analysis-card">
+<h3>${t("Break-even","Break-even")}</h3>
+<strong>${breakEvenYears} ${t("anni","years")}</strong>
+</div>
+
+`;
+
+}
 
 // ================= MARKET BENCHMARK =================
 
