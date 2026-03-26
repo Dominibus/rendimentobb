@@ -975,12 +975,18 @@ onAuthStateChanged(auth, async (user)=>{
 
     // ================= FREE USER =================
     if(data.plan !== "pro"){
-      console.log("FREE → overlay PRO");
-      document.querySelector("main").style.display="block";
-      window.isProUser = false;
-      showProOverlay();
-      return;
-    }
+  console.log("FREE → accesso limitato");
+
+  document.querySelector("main").style.display="block";
+  window.isProUser = false;
+
+  // 🔥 MOSTRA overlay SOLO UNA VOLTA
+  setTimeout(()=>{
+    showProOverlay();
+  }, 800);
+
+  // ❌ NON bloccare la dashboard
+}
 
     // ================= PRO USER =================
     console.log("PRO USER → accesso completo");
@@ -1014,13 +1020,21 @@ function showProOverlay(){
 }
 
 function closeOverlay(){
+
   const overlay = document.getElementById("pro-overlay");
+
   if(overlay){
     overlay.style.display="none";
   }
 
-  document.querySelector("main").style.filter="none";
-  document.querySelector("main").style.pointerEvents="auto";
+  const main = document.querySelector("main");
+
+  // 🔥 RESET COMPLETO (questo ti salva la dashboard)
+  main.style.filter = "none";
+  main.style.pointerEvents = "auto";
+  main.style.opacity = "1";
+  main.style.display = "block";
+
 }
 
 </script>  
