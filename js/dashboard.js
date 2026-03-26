@@ -279,282 +279,264 @@ cutout:"65%"
 // ================= LOAD DASHBOARD =================
 
 async function loadDashboard(){
-window.loadDashboard = loadDashboard; 
 
-if(!window.currentUser){
+  window.loadDashboard = loadDashboard; 
 
-showGuestPopup();
+  if(!window.currentUser){
+    showGuestPopup();
+    return;
+  }
 
-return;
+  renderHeader();
 
-}
-
-renderHeader();
-
-const q = query(
-  collection(db,"analyses"),
-  where("uid","==", window.currentUser.uid)
-);
-
-const querySnapshot = await getDocs(q);
- if(querySnapshot.empty){
-  console.warn("Nessuna analisi trovata");
-}
-console.log("DOCUMENTI:", querySnapshot.docs.map(d => d.data())); 
-console.log("UID:", window.currentUser?.uid);
-console.log("Analisi trovate:", querySnapshot.size); 
-
-const list = document.getElementById("analysis-list");
-
-if(!list){
-console.error("analysis-list NON trovato");
-return;
-}
-
-// ================= CREA ANALYSES =================
-
-const analyses = querySnapshot.docs.map(doc => ({
-  id: doc.id,
-  roi: doc.data().roi || 0,
-  price: doc.data().propertyPrice || doc.data().price || 0,
-  equity: doc.data().equity || 0,
-  risk: doc.data().risk || 0,
-  city: doc.data().city || "italy",
-  createdAt: doc.data().createdAt
-}));
-
-// ================= URL PARAMS =================
-
-const urlParams = new URLSearchParams(window.location.search);
-
-// 🔥 lingua da URL
-const langFromURL = urlParams.get("lang");
-
-if(langFromURL && typeof setLang === "function"){
-  setLang(langFromURL);
-}  
-
-// ================= CITY DYNAMIC =================
-
-const citySelect = document.getElementById("city-select");
-
-// città iniziale
-let selectedCity = citySelect?.value || "italy";
-
-// fallback solo se "italy"
-if(selectedCity === "italy" && analyses.length > 0){
-
-  analyses.sort((a,b)=> 
-    new Date(b.createdAt) - new Date(a.createdAt)
+  const q = query(
+    collection(db,"analyses"),
+    where("uid","==", window.currentUser.uid)
   );
 
-  selectedCity = analyses[0]?.city || "napoli";
-}
+  const querySnapshot = await getDocs(q);
 
-// 🔥 aggiorna SOLO il riquadro (NON background)
-updateMarketHero(safeCity(selectedCity));
+  if(querySnapshot.empty){
+    console.warn("Nessuna analisi trovata");
+  }
 
-console.log("Città iniziale:", selectedCity);
+  console.log("DOCUMENTI:", querySnapshot.docs.map(d => d.data())); 
+  console.log("UID:", window.currentUser?.uid);
+  console.log("Analisi trovate:", querySnapshot.size); 
 
-// 🔥 CAMBIO CITTÀ LIVE (QUESTO TI MANCAVA)
-citySelect?.addEventListener("change",(e)=>{
+  const list = document.getElementById("analysis-list");
 
-  const newCity = e.target.value;
+  if(!list){
+    console.error("analysis-list NON trovato");
+    return;
+  }
 
-  updateMarketHero(newCity);
+  // ================= CREA ANALYSES =================
 
-  console.log("Città cambiata:", newCity);
+  const analyses = querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    roi: doc.data().roi || 0,
+    price: doc.data().propertyPrice || doc.data().price || 0,
+    equity: doc.data().equity || 0,
+    risk: doc.data().risk || 0,
+    city: doc.data().city || "italy",
+    createdAt: doc.data().createdAt
+  }));
 
-});
+  // ================= URL PARAMS =================
 
-// ================= RESET =================
+  const urlParams = new URLSearchParams(window.location.search);
 
-list.innerHTML="";
+  const langFromURL = urlParams.get("lang");
 
-roiValues = [];
-labels = [];
+  if(langFromURL && typeof setLang === "function"){
+    setLang(langFromURL);
+  }  
 
-let totalROI = 0;
-let totalCapital = 0;
-let count = 0;
-let totalCashflow = 0;
-// ================= SORT BY ROI =================
+  // ================= CITY DYNAMIC =================
 
-analyses.sort((a,b)=> b.roi - a.roi);
+  const citySelect = document.getElementById("city-select");
 
+  let selectedCity = citySelect?.value || "italy";
 
-// ================= LIMIT RESULTS =================
+  if(selectedCity === "italy" && analyses.length > 0){
 
-const visibleAnalyses = analyses.slice(0,12);
+    analyses.sort((a,b)=> 
+      new Date(b.createdAt) - new Date(a.createdAt)
+    );
 
+    selectedCity = analyses[0]?.city || "napoli";
+  }
 
-// ================= RENDER CARDS =================
+  updateMarketHero(safeCity(selectedCity));
 
-visibleAnalyses.forEach((data,index)=>{
+  console.log("Città iniziale:", selectedCity);
 
-roiValues.push(data.roi);
-labels.push(formatDate(data.createdAt));  
+  citySelect?.addEventListener("change",(e)=>{
 
-const roi = data.roi;
-const price = data.price;
-const equity = data.equity;
+    const newCity = e.target.value;
 
-/* revenue estimate */
+    updateMarketHero(newCity);
 
-const occupancy = 65;
-const adr = 120;
+    console.log("Città cambiata:", newCity);
 
-const revenueNeeded = Math.round(
-adr * occupancy * 365 / 100
-);  
+  });
 
-const yearlyProfit = (price * roi) / 100;  
+  // ================= RESET =================
 
-totalROI += roi;
-totalCapital += price;
-totalCashflow += yearlyProfit;   
-count++;
+  list.innerHTML = "";
 
-const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
+  roiValues = [];
+  labels = [];
 
-const badge = index === 0
-? `<div style="font-size:12px;color:#10b981;margin-bottom:6px;font-weight:600;">🏆 Best ROI</div>`
-: "";
+  let totalROI = 0;
+  let totalCapital = 0;
+  let count = 0;
+  let totalCashflow = 0;
 
-const card = document.createElement("div");
+  // ================= SORT =================
 
-card.className = "analysis-card";
+  analyses.sort((a,b)=> b.roi - a.roi);
 
-card.innerHTML = `
+  const visibleAnalyses = analyses.slice(0,12);
 
-${badge}
+  // ================= RENDER CARDS =================
 
-<h3>${t("Analisi investimento","Investment analysis")}</h3>
+  visibleAnalyses.forEach((data,index)=>{
 
-<div class="metric">
-<span>${t("Città","City")}</span>
-<strong>${data.city}</strong>
-</div>
+    roiValues.push(data.roi);
+    labels.push(formatDate(data.createdAt));  
 
-<div class="metric">
-<span>${t("Prezzo immobile","Property price")}</span>
-<strong>${formatCurrency(price)}</strong>
-</div>
+    const roi = data.roi;
+    const price = data.price;
+    const equity = data.equity;
 
-<div class="metric">
-<span>${t("Equity investita","Equity invested")}</span>
-<strong>${formatCurrency(equity)}</strong>
-</div>
+    const occupancy = 65;
+    const adr = 120;
 
-<div class="metric">
-<span>ROI</span>
-<strong class="${roiClass}">
-${roi.toFixed(1)}%
-</strong>
-</div>
+    const revenueNeeded = Math.round(
+      adr * occupancy * 365 / 100
+    );  
 
-<div class="metric">
-<span>${t("Indice rischio","Risk score")}</span>
-<strong>${data.risk}/100</strong>
-</div>
+    const yearlyProfit = (price * roi) / 100;  
 
-<div class="metric">
-<span>${t("Data analisi","Analysis date")}</span>
-<strong>${formatDate(data.createdAt)}</strong>
-</div>
+    totalROI += roi;
+    totalCapital += price;
+    totalCashflow += yearlyProfit;   
+    count++;
 
-<div class="metric">
-<span>${t("Ricavo annuo necessario","Required yearly revenue")}</span>
-<strong>${formatCurrency(revenueNeeded)}</strong>
-</div>
+    const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
 
-<div class="metric">
-<span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
+    const badge = index === 0
+      ? `<div style="font-size:12px;color:#10b981;margin-bottom:6px;font-weight:600;">🏆 Best ROI</div>`
+      : "";
 
-${
-window.currentPlan === "pro"
-? `<strong>${formatCurrency(yearlyProfit)}</strong>`
-: `
-<strong style="filter:blur(4px)">
-${formatCurrency(yearlyProfit)}
-</strong>
+    const card = document.createElement("div");
+    card.className = "analysis-card";
 
-<div style="
-font-size:12px;
-color:#64748b;
-margin-top:4px;
-">
-🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
-</div>
-`
-}
-</div>
+    card.innerHTML = `
 
-${
-window.currentPlan !== "pro"
-? `
-<div style="margin-top:12px">
+      ${badge}
 
-<button onclick="goToUpgrade()" style="
-background:#10b981;
-border:none;
-padding:10px;
-border-radius:8px;
-color:white;
-font-weight:600;
-cursor:pointer;
-width:100%;
-">
+      <h3>${t("Analisi investimento","Investment analysis")}</h3>
 
-🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
+      <div class="metric">
+        <span>${t("Città","City")}</span>
+        <strong>${data.city}</strong>
+      </div>
 
-</button>
+      <div class="metric">
+        <span>${t("Prezzo immobile","Property price")}</span>
+        <strong>${formatCurrency(price)}</strong>
+      </div>
 
-</div>
-`
-: ""
-}
+      <div class="metric">
+        <span>${t("Equity investita","Equity invested")}</span>
+        <strong>${formatCurrency(equity)}</strong>
+      </div>
 
-<div style="margin-top:12px;text-align:right">
+      <div class="metric">
+        <span>ROI</span>
+        <strong class="${roiClass}">
+          ${roi.toFixed(1)}%
+        </strong>
+      </div>
 
-<button 
-class="delete-analysis" 
-data-id="${data.id}"
-style="
-background:#ef4444;
-color:white;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-font-size:12px;
-cursor:pointer;
-">
-🗑 ${t("Elimina","Delete")}
-</button>
+      <div class="metric">
+        <span>${t("Indice rischio","Risk score")}</span>
+        <strong>${data.risk}/100</strong>
+      </div>
 
-</div>
+      <div class="metric">
+        <span>${t("Data analisi","Analysis date")}</span>
+        <strong>${formatDate(data.createdAt)}</strong>
+      </div>
 
-`;
+      <div class="metric">
+        <span>${t("Ricavo annuo necessario","Required yearly revenue")}</span>
+        <strong>${formatCurrency(revenueNeeded)}</strong>
+      </div>
 
-list.appendChild(card);
+      <div class="metric">
+        <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
 
-});
+        ${
+        window.currentPlan === "pro"
+        ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
+        : `
+        <strong style="filter:blur(4px)">
+          ${formatCurrency(yearlyProfit)}
+        </strong>
 
-renderStats(count,totalROI,totalCapital,totalCashflow);
-renderInsight(count,totalROI,totalCapital);
-renderROIOptimizer(count,totalROI,totalCapital);
-renderROITargetCalculator(analyses); 
-renderRevenueSimulator(); 
-renderBestInvestment(analyses);
-  
-const best = analyses[0];
-renderInvestmentVerdict(best);  
-  
-renderInvestmentRanking(analyses);
-renderCityDistribution(analyses); 
-renderChart();
-renderCashflowChart();
-renderCityROIChart(analyses);
+        <div style="font-size:12px;color:#64748b;margin-top:4px;">
+          🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
+        </div>
+        `
+        }
+      </div>
+
+      ${
+      window.currentPlan !== "pro"
+      ? `
+      <div style="margin-top:12px">
+        <button onclick="goToUpgrade()" style="
+          background:#10b981;
+          border:none;
+          padding:10px;
+          border-radius:8px;
+          color:white;
+          font-weight:600;
+          cursor:pointer;
+          width:100%;
+        ">
+          🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
+        </button>
+      </div>
+      `
+      : ""
+      }
+
+      <div style="margin-top:12px;text-align:right">
+        <button 
+          class="delete-analysis" 
+          data-id="${data.id}"
+          style="
+            background:#ef4444;
+            color:white;
+            border:none;
+            padding:6px 10px;
+            border-radius:6px;
+            font-size:12px;
+            cursor:pointer;
+          ">
+          🗑 ${t("Elimina","Delete")}
+        </button>
+      </div>
+
+    `;
+
+    // 🔥 QUESTA È LA CHIAVE (ERA IL TUO PROBLEMA)
+    list.appendChild(card);
+
+  });
+
+  // ================= RENDER ENGINE =================
+
+  renderStats(count,totalROI,totalCapital,totalCashflow);
+  renderInsight(count,totalROI,totalCapital);
+  renderROIOptimizer(count,totalROI,totalCapital);
+  renderROITargetCalculator(analyses); 
+  renderRevenueSimulator(); 
+  renderBestInvestment(analyses);
+
+  const best = analyses[0];
+  renderInvestmentVerdict(best);  
+
+  renderInvestmentRanking(analyses);
+  renderCityDistribution(analyses); 
+  renderChart();
+  renderCashflowChart();
+  renderCityROIChart(analyses);
 
 }
 
