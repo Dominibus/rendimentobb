@@ -1042,7 +1042,7 @@ ${discover}:
 • ${report}
 </p>
 
-<button onclick="startPlanPurchase('investor')" class="btn btn-primary">
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
 ${unlock}
 </button>
 
