@@ -1073,101 +1073,98 @@ window.addEventListener("DOMContentLoaded", () => {
 
       document.dispatchEvent(new Event("rb_auth_ready")); 
 
-     await loadDashboard();
+      await loadDashboard();
 
-// 🔥 GESTIONE POST LOAD
-if(window.currentPlan === "pro"){
+      // 🔥 GESTIONE POST LOAD
+      if(window.currentPlan === "pro"){
 
-  console.log("PRO USER → OK");
+        console.log("PRO USER → OK");
 
-  // nessun reset globale (era quello che rompeva tutto)
-  unlockProContent();
+        unlockProContent();
 
-}else{
+      }else{
 
-  if(!window.proOverlayShown){
+        if(!window.proOverlayShown){
 
-    window.proOverlayShown = true;
+          window.proOverlayShown = true;
 
-    setTimeout(()=>{
-      if(typeof showProOverlay === "function"){
-        showProOverlay();
+          setTimeout(()=>{
+            if(typeof showProOverlay === "function"){
+              showProOverlay();
+            }
+          }, 1200);
+
+        }
+
       }
-    }, 1200);
 
-  }
+    }else{
+      window.location.href="/#pricing";
+    }
 
-}
-/* aggiorna automaticamente quando cambi lingua */
+  }); // 👈 CHIUSURA onAuthStateChanged
 
-document.addEventListener("rb_language_changed", () => {
+  // 🔥 EVENTO LINGUA (FUORI, NON DENTRO AUTH)
+  document.addEventListener("rb_language_changed", () => {
 
-if(!window.currentUser) return;
+    if(!window.currentUser) return;
 
-loadDashboard();
-console.log("Query UID:", window.currentUser?.uid);
+    loadDashboard();
+    console.log("Query UID:", window.currentUser?.uid);
 
-});
+  });
 
-  }else{
-    window.location.href="/#pricing";
-  }
+}); // 👈 CHIUSURA DOMContentLoaded
 
-}); // 👈 CHIUSURA onAuthStateChanged      
+
+// ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
 
-const container = document.getElementById("city-distribution-chart");
-if(!container) return;
+  const container = document.getElementById("city-distribution-chart");
+  if(!container) return;
 
-if(!analyses || analyses.length === 0){
-container.innerHTML = "";
-return;
+  if(!analyses || analyses.length === 0){
+    container.innerHTML = "";
+    return;
+  }
+
+  const cityCount = {};
+
+  analyses.forEach(a=>{
+    const city = safeCity(a.city);
+
+    if(!cityCount[city]){
+      cityCount[city] = 0;
+    }
+
+    cityCount[city]++;
+  });
+
+  const labels = Object.keys(cityCount);
+  const values = Object.values(cityCount);
+
+  container.innerHTML = '<canvas id="cityChart"></canvas>';
+
+  const ctx = document.getElementById("cityChart").getContext("2d");
+
+  new Chart(ctx,{
+    type:"doughnut",
+    data:{
+      labels:labels,
+      datasets:[{
+        data:values
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{position:"bottom"}
+      }
+    }
+  });
+
 }
-
-const cityCount = {};
-
-analyses.forEach(a=>{
-
-const city = safeCity(a.city);
-
-if(!cityCount[city]){
-cityCount[city] = 0;
-}
-
-cityCount[city]++;
-
-});
-
-const labels = Object.keys(cityCount);
-const values = Object.values(cityCount);
-
-container.innerHTML = '<canvas id="cityChart"></canvas>';
-
-const ctx = document.getElementById("cityChart").getContext("2d");
-
-new Chart(ctx,{
-
-type:"doughnut",
-
-data:{
-labels:labels,
-datasets:[{
-data:values
-}]
-},
-
-options:{
-responsive:true,
-plugins:{
-legend:{position:"bottom"}
-}
-}
-
-});
-
-} 
-
 // ===============================
 // CASHFLOW PROJECTION CHART
 // ===============================
