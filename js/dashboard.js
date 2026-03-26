@@ -277,6 +277,7 @@ cutout:"65%"
 // ================= LOAD DASHBOARD =================
 
 async function loadDashboard(){
+window.loadDashboard = loadDashboard; 
 
 if(!window.currentUser){
 
