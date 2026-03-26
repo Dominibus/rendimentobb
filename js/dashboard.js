@@ -539,11 +539,9 @@ async function loadDashboard(){
   renderCityROIChart(analyses);
 
 // 🔥 BLOCCO FREE USER
-setTimeout(()=>{
-  if(window.currentPlan === "free"){
-    lockFreeUser();
-  }
-}, 500);
+if(window.currentPlan === "free"){
+  lockFreeUser();
+}
 
 }
 
@@ -1062,36 +1060,41 @@ window.addEventListener("DOMContentLoaded", () => {
 
       document.dispatchEvent(new Event("rb_auth_ready")); 
 
-      await loadDashboard();
+     await loadDashboard();
 
-      if(window.currentPlan === "pro"){
-  unlockProContent();
-}
+if(window.currentPlan === "pro"){
 
-      // 🔥 OVERLAY SOLO SE FREE (più controllato)
-      if(window.currentPlan !== "pro" && !window.proOverlayShown){
+  console.log("PRO USER → force unlock UI");
 
-        window.proOverlayShown = true;
-
-        setTimeout(()=>{
-          if(typeof showProOverlay === "function"){
-            showProOverlay();
-          }
-        }, 1200);
-
-      }
-
-    }else{
-
-      console.log("NON LOGGATO → pricing");
-      window.location.href="/#pricing";
-
-    }
-
+  // 🔥 rimuove QUALSIASI blur applicato
+  document.querySelectorAll("*").forEach(el=>{
+    el.style.filter = "";
+    el.style.pointerEvents = "";
+    el.style.opacity = "";
   });
 
-});
+  // 🔥 re-render grafici (CRUCIALE)
+  setTimeout(()=>{
+    renderChart();
+    renderCashflowChart();
+  }, 100);
 
+}else{
+
+  // 🔥 OVERLAY SOLO FREE
+  if(!window.proOverlayShown){
+
+    window.proOverlayShown = true;
+
+    setTimeout(()=>{
+      if(typeof showProOverlay === "function"){
+        showProOverlay();
+      }
+    }, 1200);
+
+  }
+
+}
 /* aggiorna automaticamente quando cambi lingua */
 
 document.addEventListener("rb_language_changed", () => {
