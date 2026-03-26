@@ -989,75 +989,77 @@ loadDashboard();
 
 // ================= INIT =================
 
-onAuthStateChanged(auth, async (user)=>{
+window.addEventListener("DOMContentLoaded", () => {
 
-if(!window.firebaseReady){
-  console.log("Firebase non pronto, attendo...");
+  onAuthStateChanged(auth, async (user)=>{
 
-  setTimeout(()=>{
-    loadDashboard();
+    if(!window.firebaseReady){
+      console.log("Firebase non pronto, attendo...");
 
-    // 🔥 AGGIUNGI QUESTO BLOCCO
-    if(window.currentPlan !== "pro"){
-      if(typeof window.showProOverlay === "function"){
-        window.showProOverlay();
+      setTimeout(()=>{
+        loadDashboard();
+
+        // 🔥 overlay SOLO se free
+        if(window.currentPlan !== "pro"){
+          if(typeof window.showProOverlay === "function"){
+            window.showProOverlay();
+          }
+        }
+
+      },300);
+
+      return;
+    }
+
+    if(user){
+
+      window.currentUser = user;
+
+      console.log("USER OK:", user.uid);
+
+      // 🔥 PRENDI IL PIANO
+      const userDoc = await getDoc(doc(db,"users", user.uid));
+
+      if(userDoc.exists()){
+        const data = userDoc.data();
+        window.currentPlan = data.plan || "free";
+      }else{
+        window.currentPlan = "free";
       }
+
+      // sicurezza
+      window.currentPlan = window.currentPlan || "free";
+
+      console.log("PLAN:", window.currentPlan);
+
+      document.dispatchEvent(new Event("rb_auth_ready")); 
+
+      await loadDashboard();
+
+      // 🔥 SBLOCCA SE PRO
+      unlockProContent();
+
+      // 🔥 OVERLAY SOLO SE FREE (più controllato)
+      if(window.currentPlan !== "pro" && !window.proOverlayShown){
+
+        window.proOverlayShown = true;
+
+        setTimeout(()=>{
+          if(typeof showProOverlay === "function"){
+            showProOverlay();
+          }
+        }, 1200);
+
+      }
+
+    }else{
+
+      console.log("NON LOGGATO → pricing");
+      window.location.href="/#pricing";
+
     }
 
-  },300);
-
-  return;
-}
-
-if(user){
-
-  window.currentUser = user;
-
-  console.log("USER OK:", user.uid);
-
-  // 🔥 PRENDI IL PIANO DA FIRESTORE
-  const userDoc = await getDoc(doc(db,"users", user.uid));
-
-  if(userDoc.exists()){
-    const data = userDoc.data();
-
-    window.currentPlan = data.plan || "free";
-  }else{
-    window.currentPlan = "free";
-  }
-
-  // fallback sicurezza
-  window.currentPlan = window.currentPlan || "free";
-
-  console.log("PLAN:", window.currentPlan);
-
-  document.dispatchEvent(new Event("rb_auth_ready")); 
-
-  await loadDashboard();
-
-// 🔥 SBLOCCA SE PRO
-unlockProContent();
-
-// 🔥 MOSTRA OVERLAY SOLO SE FREE
-if(window.currentPlan !== "pro" && !window.proOverlayShown){
-
-  window.proOverlayShown = true;
-
-  setTimeout(()=>{
-    if(typeof showProOverlay === "function"){
-      showProOverlay();
-    }
-  }, 1200);
-
-}
-
-}else{
-
-  console.log("NON LOGGATO → pricing");
-
-  window.location.href="/#pricing";
-
-}
+  });
 
 });
 
