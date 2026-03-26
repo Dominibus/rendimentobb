@@ -952,7 +952,7 @@ window.showProOverlay = function(){
 
   // blur dashboard
   document.querySelector("main").style.filter="blur(4px)";
-  document.querySelector("main").style.pointerEvents="none";
+
 }
 
 window.closeOverlay = function(){
@@ -965,18 +965,15 @@ window.closeOverlay = function(){
 
   const main = document.querySelector("main");
 
+  main.style.filter = "none";
+
+}
+
   // reset UI
   main.style.filter = "none";
   main.style.pointerEvents = "auto";
   main.style.opacity = "1";
   main.style.display = "block";
-
-  // 🔥 FIX CRITICO: forza rendering dashboard
-  if(typeof window.loadDashboard === "function"){
-    setTimeout(()=>{
-      window.loadDashboard();
-    },200);
-  }
 
 }
 
