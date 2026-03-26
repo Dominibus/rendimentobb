@@ -1146,8 +1146,10 @@ ${opportunityScore}/100
 </div>
 
 <div style="font-size:13px;color:#64748b;margin-top:6px">
-${t("Basato su ROI mercato, occupazione e ADR",
-"Based on market ROI, occupancy and ADR")}
+${t(
+"Basato su ROI mercato, occupazione e ADR",
+"Based on market ROI, occupancy and ADR"
+)}
 </div>
 
 </div>
