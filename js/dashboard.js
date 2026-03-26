@@ -420,7 +420,7 @@ const badge = index === 0
 
 const card = document.createElement("div");
 
-card.className = "analysis-card";
+card.className="analysis-card";
 
 card.innerHTML=`
 
@@ -469,50 +469,8 @@ ${roi.toFixed(1)}%
 
 <div class="metric">
 <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
-
-${
-window.currentPlan === "pro"
-? `<strong>${formatCurrency(yearlyProfit)}</strong>`
-: `
-<strong style="filter:blur(4px)">
-${formatCurrency(yearlyProfit)}
-</strong>
-
-<div style="
-font-size:12px;
-color:#64748b;
-margin-top:4px;
-">
-🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
+<strong>${formatCurrency(yearlyProfit)}</strong>
 </div>
-`
-}
-</div>
-
-${
-window.currentPlan !== "pro"
-? `
-<div style="margin-top:12px">
-
-<button onclick="goToUpgrade()" style="
-background:#10b981;
-border:none;
-padding:10px;
-border-radius:8px;
-color:white;
-font-weight:600;
-cursor:pointer;
-width:100%;
-">
-
-🚀 ${t("Sblocca guadagni reali","Unlock real earnings")}
-
-</button>
-
-</div>
-`
-: ""
-}
 
 <div style="margin-top:12px;text-align:right">
 
@@ -1094,7 +1052,7 @@ ${window.currentPlan === "pro" ? "PRO" : "FREE"}
 
 </div>
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card">
 
 <h3>${t("Analisi salvate","Saved analyses")}</h3>
 
@@ -1107,7 +1065,7 @@ ${count}
 </div>
 
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card">
 
 <h3>${t("ROI medio","Average ROI")}</h3>
 
@@ -1121,7 +1079,7 @@ ${avgROI}%
 
 </div>
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card">
 
 <h3>${t("Capitale analizzato","Analyzed capital")}</h3>
 
@@ -1135,7 +1093,7 @@ ${formatCurrency(totalCapital)}
 
 </div>
 
-<div class="analysis-card ${window.currentPlan !== 'pro' ? 'pro-lock pro-blur' : ''}">
+<div class="analysis-card">
 
 <h3>${t("Opportunità mercato","Market opportunity")}</h3>
 
@@ -1236,32 +1194,13 @@ if(!window.firebaseReady){
 
 if(user){
 
-  window.currentUser = user;
+window.currentUser = user;
 
-  console.log("USER OK:", user.uid);
+console.log("USER OK:", user.uid);
 
-  // 🔥 PRENDI IL PIANO DA FIRESTORE
-  const userDoc = await getDoc(doc(db,"users", user.uid));
+document.dispatchEvent(new Event("rb_auth_ready")); 
 
-  if(userDoc.exists()){
-    const data = userDoc.data();
-
-    window.currentPlan = data.plan || "free";
-  }else{
-    window.currentPlan = "free";
-  }
-
-  // fallback sicurezza
-  window.currentPlan = window.currentPlan || "free";
-
-  console.log("PLAN:", window.currentPlan);
-
-  document.dispatchEvent(new Event("rb_auth_ready")); 
-
-  await loadDashboard();
-
-  // 🔥 SBLOCCA SE PRO
-  unlockProContent();
+await loadDashboard();
 
 }else{
 
@@ -2165,19 +2104,5 @@ ${t("Continua come ospite","Continue as guest")}
 `;
 
 document.body.appendChild(popup);
-
-}
-
-function unlockProContent(){
-
-  if(window.currentPlan !== "pro") return;
-
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
-
-  document.querySelectorAll(".pro-lock").forEach(el=>{
-    el.classList.remove("pro-lock");
-  });
 
 }
