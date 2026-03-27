@@ -4753,3 +4753,20 @@ margin-top:30px;
 margin-bottom:10px;
 text-align:center;
 }
+
+.danger-block{
+padding:80px 0;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+.danger-block h2{
+font-size:30px;
+margin-bottom:20px;
+}
+
+.danger-block p{
+color:#cbd5f5;
+margin-bottom:15px;
+}
