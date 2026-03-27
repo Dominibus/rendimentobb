@@ -1301,6 +1301,35 @@ const gross = result.gross;
 const netAfterMortgage = safeNumber(result.netAfterMortgage);
 const roi = safeNumber(result.roi);
 
+// ================= ROI VERDICT =================
+
+let verdict = "";
+
+if(roi > 12){
+  verdict = t(
+    "💰 Questo immobile può generare profitto reale",
+    "💰 This property can generate real profit"
+  );
+}
+else if(roi > 8){
+  verdict = t(
+    "⚖️ Investimento borderline",
+    "⚖️ Borderline investment"
+  );
+}
+else{
+  verdict = t(
+    "❌ Rischio alto: possibile perdita",
+    "❌ High risk: potential loss"
+  );
+}
+
+const verdictEl = document.getElementById("roi-verdict");
+
+if(verdictEl){
+  verdictEl.innerText = verdict;
+}  
+
 // ================= PAYWALL TRIGGER =================
 
 if(!hasPlan("pro")){
