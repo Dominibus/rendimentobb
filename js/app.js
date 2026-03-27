@@ -2342,50 +2342,42 @@ window.buyPlan(plan);
 
 // ================= STRIPE SUBSCRIPTION =================
 
-window.buyPlan = function(plan){
+window.buyPlan = async function(plan){
 
-const user = window.currentUser;
+  const user = window.currentUser;
 
-if(!user){
-window.location.href = "/login/";
-return;
-}
+  if(!user){
+    alert("Devi effettuare il login");
+    window.location.href = "/login/";
+    return;
+  }
 
-const uid = user.uid;
+  const uid = user.uid;
 
-let stripeUrl = null;
+  try{
 
-// PLAN ROUTING
+    const res = await fetch("/api/create-checkout-session",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        plan: plan,
+        uid: uid
+      })
+    });
 
-if(!["investor","pro","pro_yearly"].includes(plan)){
-console.error("Piano non valido:", plan);
-return;
-}
+    const data = await res.json();
 
-// 🔥 INVESTOR
-if(plan === "investor"){
-stripeUrl =
-"https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01?client_reference_id=" + uid;
-}
+    if(data.url){
+      window.location.href = data.url;
+    }else{
+      console.error("Errore Stripe:", data);
+    }
 
-// 🔥 PRO
-if(plan === "pro"){
-stripeUrl =
-"https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02?client_reference_id=" + uid;
-}
-
-// 🔥 ANNUALE
-if(plan === "pro_yearly"){
-stripeUrl =
-"https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03?client_reference_id=" + uid;
-}
-
-if(!stripeUrl){
-console.error("Stripe plan non valido:", plan);
-return;
-}
-
-window.location.href = stripeUrl;
+  }catch(err){
+    console.error("Errore:", err);
+  }
 
 };
 
