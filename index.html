@@ -1298,8 +1298,8 @@ Sblocca analisi completa
 </div>
 `;
 
-if(window.RB_LANG){
-window.RB_LANG.apply();
+if(window.RB_LANG && typeof window.RB_LANG.apply === "function"){
+  window.RB_LANG.apply();
 }
 
 }; 
@@ -1334,8 +1334,9 @@ psych.setAttribute("data-en","⚠️ Low margin: optimization needed");
 }
 
 // aggiorna lingua
-if(window.RB_LANG){
-window.RB_LANG.apply();
+if(window.RB_LANG && typeof window.RB_LANG.apply === "function"){
+  window.RB_LANG.apply();
+}
 } 
 
 }
