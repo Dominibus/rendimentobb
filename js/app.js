@@ -886,11 +886,7 @@ function renderSmartInvestmentAlert(roi){
 
   // 🔥 PRO → NON TOCCARE MAI IL DOM
   if(hasPlan("pro")){
-  const container = document.getElementById("smart-investment-alert");
-  if(container){
-    container.innerHTML = ""; // svuota SOLO alert
-  }
-  return;
+  return; // 🔥 NON TOCCARE DOM
 }
 
   // 🔥 ROI basso → NON TOCCARE DOM (evita flicker/reset)
@@ -1259,7 +1255,15 @@ console.log("RESULT:", result);
 
 // 🔥 RENDER KPI
 renderExecutiveKPI(result);
-
+// 🔥 FIX PRO: ri-sblocca dopo render
+if(
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+){
+  unlockProUI();
+}
+  
 showUpgradePopup(result.roi);  
 
 window.lastAnalysisData = {
@@ -2693,13 +2697,27 @@ function goToMarket(city){
 
 function unlockProUI(){
 
-  const blocks = document.querySelectorAll(".pro-blur");
+  console.log("🚀 UNLOCK PRO UI START");
 
-  blocks.forEach(el=>{
+  // 🔓 rimuove blur
+  document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  console.log("✅ UI PRO sbloccata");
+  // 🔓 rimuove overlay
+  document.querySelectorAll(".pro-overlay").forEach(el=>{
+    el.remove();
+  });
+
+  // 🔓 mostra contenuti nascosti
+  document.querySelectorAll(".pro-locked").forEach(el=>{
+    el.style.display = "block";
+  });
+
+  // 🔓 flag globale
+  document.body.classList.add("pro-user");
+
+  console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
 
   // ================= EVENTI GLOBALI =================
@@ -2708,10 +2726,8 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🔥 Piano aggiornato:", window.currentPlan);
 
-  // 🔥 aggiorna PDF
   updatePDFButton();
 
-  // 🔥 SBLOCCO IMMEDIATO UI
   if(
     window.currentPlan === "pro" ||
     window.currentPlan === "investor" ||
@@ -2720,9 +2736,7 @@ document.addEventListener("rb_plan_loaded", () => {
     unlockProUI();
   }
 
-  // 🔥 FORZA RENDER DOPO SBLOCCO
-  if(window.lastAnalysisData){
-    calculate(true); // 👈 QUESTA È LA CHIAVE
-  }
+  // ❌ PRIMA: calculate(true);
+  // 🔥 DOPO: evita loop distruttivo
 
 });
