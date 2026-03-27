@@ -2748,6 +2748,8 @@ setTimeout(()=>{
 
   document.querySelectorAll(".blur-content").forEach(el=>{
   el.style.filter = "none";
+  el.style.opacity = "1";
+  el.style.pointerEvents = "auto";
 });
 
   document.body.classList.add("pro-user");
