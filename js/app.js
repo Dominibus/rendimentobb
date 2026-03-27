@@ -1348,26 +1348,31 @@ if(verdictEl && roiEl){
 
 } 
 
-// ================= PAYWALL TRIGGER =================
+// ================= PAYWALL + BLUR KPI =================
 
 if(!hasPlan("pro")){
 
+  // 🔥 BLUR DATI PRO
+  const hidden = document.querySelectorAll(".pro-only");
+
+  hidden.forEach(el=>{
+    el.style.filter = "blur(6px)";
+    el.style.opacity = "0.6";
+    el.style.pointerEvents = "none";
+  });
+
+  // 🔥 TRIGGER MODAL SE ROI ALTO
   if(roi > 8){
 
     console.log("🔥 Trigger paywall ROI:", roi);
 
     setTimeout(()=>{
-      showUpgradeModal(roi); // 👉 USA IL TUO MODAL GIÀ ESISTENTE
+      showUpgradeModal(roi);
     }, 800);
 
   }
 
-}  
-
-// 🔥 RENDER CHART SEMPRE
-if(typeof renderChart === "function"){
-  renderChart(netAfterMortgage);
-}  
+}
 
 // ================= INVESTMENT METRICS =================
 
