@@ -30,21 +30,21 @@ export default async function handler(req, res) {
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "subscription",
+  payment_method_types: ["card"],
+  mode: "subscription", // 🔥 FIX
 
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
+  line_items: [
+    {
+      price: priceId,
+      quantity: 1,
+    },
+  ],
 
-      success_url: `https://rendimentobb.it/?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://rendimentobb.it/`,
+  success_url: `https://rendimentobb.it/?session_id={CHECKOUT_SESSION_ID}`,
+  cancel_url: `https://rendimentobb.it/`,
 
-      client_reference_id: uid
-    });
+  client_reference_id: uid
+});
 
     res.status(200).json({ url: session.url });
 
