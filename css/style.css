@@ -4772,7 +4772,7 @@ font-weight:600;
 }
 
 .pro-blur{
-filter:blur(4px);
+filter:blur(2.5px);
 pointer-events:none;
 user-select:none;
 opacity:0.6;
@@ -4946,7 +4946,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 .pro-blur{
   position:relative;
-  filter:blur(4px);
+  filter:blur(2.5px);
   pointer-events:none;
 }
 
@@ -4962,7 +4962,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
 
 .pro-blur{
   position:relative;
-  filter:blur(4px);
+  filter:blur(2.5px);
   pointer-events:none;
 }
 
