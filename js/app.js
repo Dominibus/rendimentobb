@@ -2690,16 +2690,23 @@ function goToMarket(city){
   window.location.href = "/market/" + city;
 }
 
+window.proUnlocked = false;
+
 function unlockProUI(){
+
+  if(window.proUnlocked){
+    console.log("⛔ PRO già sbloccato → skip");
+    return;
+  }
+
+  window.proUnlocked = true;
 
   console.log("🚀 UNLOCK PRO UI START");
 
-  // 🔥 1. RIMUOVE BLUR
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  // 🔥 2. RIMUOVE OVERLAY
   setTimeout(() => {
     document.querySelectorAll('[data-paywall]').forEach(el=>{
       el.remove();
@@ -2707,34 +2714,40 @@ function unlockProUI(){
     console.log("🔥 Overlay rimossi post-render");
   }, 300);
 
-  // 🔥 3. SBLOCCA SEZIONI
+  document.body.classList.add("pro-user");
+
   document.querySelectorAll(".locked-section").forEach(el=>{
     el.style.filter = "none";
     el.style.pointerEvents = "auto";
   });
 
-  // 🔥 4. SBLOCCA CONTENUTI
-  document.querySelectorAll(".pro-only, .blur-content").forEach(el=>{
+  document.querySelectorAll(".pro-only").forEach(el=>{
     el.style.display = "block";
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
   });
 
-  // 🔥 5. RIMUOVE BLUR INLINE
   document.querySelectorAll("*").forEach(el=>{
     if(el.style.filter && el.style.filter.includes("blur")){
       el.style.filter = "none";
     }
   });
 
-  // 🔥 6. SBLOCCA CARD
+  document.querySelectorAll("[data-locked='true']").forEach(el=>{
+    el.removeAttribute("data-locked");
+  });
+
   document.querySelectorAll(".results-card").forEach(card=>{
     card.style.filter = "none";
     card.style.pointerEvents = "auto";
   });
 
-  document.body.classList.add("pro-user");
+  document.querySelectorAll(".blur-content").forEach(el=>{
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
