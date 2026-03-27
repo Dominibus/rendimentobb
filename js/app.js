@@ -1362,21 +1362,28 @@ const scoreLabel = document.querySelector(".score-label");
 
 if(scoreCircle){
 
-  let grade = "C";
-  let color = "#ef4444";
+  // 🔒 FREE → NON TOCCARE (mantieni blur / stato iniziale)
+  if(!hasPlan("pro")){
+    console.log("🔒 FREE → score bloccato");
+  }else{
 
-  if(roi > 12){
-    grade = "A";
-    color = "#10b981";
-  }
-  else if(roi > 6){
-    grade = "B";
-    color = "#f59e0b";
-  }
+    let grade = "C";
+    let color = "#ef4444";
 
-  scoreCircle.innerText = grade;
-  scoreCircle.style.background = color;
-  scoreCircle.style.color = "#fff";
+    if(roi > 12){
+      grade = "A";
+      color = "#10b981";
+    }
+    else if(roi > 6){
+      grade = "B";
+      color = "#f59e0b";
+    }
+
+    scoreCircle.innerText = grade;
+    scoreCircle.style.background = color;
+    scoreCircle.style.color = "#fff";
+
+  }
 }
 
 if(scoreLabel){
@@ -1442,8 +1449,16 @@ safeRender("occupancy-sensitivity", () => {
   renderOccupancySensitivity();
 });
 
-safeRender("investment-score", () => {
+safeRender("investment-score", (container) => {
+
+  // 🔒 FREE → NON RISCRIVERE
+  if(!hasPlan("pro")){
+    console.log("🔒 FREE → investment score statico");
+    return;
+  }
+
   renderInvestmentScore(roi, riskScore);
+
 });
 
 safeRender("investment-ranking", () => {
