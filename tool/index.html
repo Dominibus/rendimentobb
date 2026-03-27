@@ -932,6 +932,15 @@ document.addEventListener("rb_plan_loaded", () => {
   // ✅ solo FREE
   setTimeout(() => {
     applyPaywall();
+    const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
+if(isPro){
+  console.log("🚀 PAYWALL DISATTIVATO (PRO)");
+  return;
+}
   }, 50);
 
 });;
