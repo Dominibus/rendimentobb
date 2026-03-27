@@ -96,9 +96,9 @@ content="Simulate returns, risk and sustainability. Discover if a property can g
 <div class="page-title">
 
 <h1
-data-it="Calcolo ROI B&B: scopri rendimento, costi e guadagni prima di investire"
-data-en="B&B ROI calculator: analyze profitability, costs and returns before investing">
-Calcolo ROI B&B: scopri rendimento, costi e guadagni prima di investire
+data-it="Scopri se questo B&B ti fa guadagnare o perdere soldi in 30 secondi"
+data-en="Find out if this B&B will make you profit or lose money in 30 seconds">
+Scopri se questo B&B ti fa guadagnare o perdere soldi in 30 secondi
 </h1>
 
 <p
@@ -116,6 +116,13 @@ data-it="Inizia analisi"
 data-en="Start analysis">
 Inizia analisi
 </button>
+
+<p
+data-it="🔥 Oltre 1.200 investitori hanno già analizzato il loro B&B"
+data-en="🔥 Over 1,200 investors have already analyzed their B&B"
+style="margin-top:10px;font-size:14px;color:#e2e8f0;">
+🔥 Oltre 1.200 investitori hanno già analizzato il loro B&B
+</p> 
 
 <div class="micro-trust">
 
@@ -525,9 +532,9 @@ Per questo è fondamentale analizzare ROI, break-even e sostenibilità finanziar
 <div class="container" style="max-width:900px;text-align:center">
 
 <h2
-data-it="Il 72% degli investimenti B&B fallisce"
-data-en="72% of B&B investments fail">
-Il 72% degli investimenti B&B fallisce
+data-it="Stai per fare lo stesso errore del 72% degli investitori"
+data-en="You are about to make the same mistake as 72% of investors">
+Stai per fare lo stesso errore del 72% degli investitori
 </h2>
 
 <p
@@ -1236,6 +1243,8 @@ if(!elRoi || !elBreak || !elRev || !elProfit || !elMonth){
 console.error("Elementi ROI non trovati");
 return;
 }
+
+<div id="roi-verdict" style="margin:15px 0;font-weight:600;text-align:center;"></div> 
 
 elRoi.innerText = roi.toFixed(1) + "%"; 
 elBreak.innerText = breakEven.toFixed(1) + " " + yearWord;
