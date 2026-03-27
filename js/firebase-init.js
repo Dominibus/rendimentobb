@@ -183,22 +183,14 @@ async function loadUserPlan(uid) {
 
     window.currentPlan = currentPlan;
 
-// 🔥 TRIGGER IMMEDIATO UI (CRUCIALE)
-setTimeout(()=>{
-  document.dispatchEvent(
-    new CustomEvent("rb_plan_loaded", {
-      detail: { plan: currentPlan }
-    })
-  );
-}, 50);
+console.log("🔥 Piano finale:", currentPlan);
 
-    console.log("🔥 Piano finale:", currentPlan);
-
-    document.dispatchEvent(
-      new CustomEvent("rb_plan_loaded", {
-        detail: { plan: currentPlan }
-      })
-    );
+// 🔥 SINGLE TRIGGER (NO BUG)
+document.dispatchEvent(
+  new CustomEvent("rb_plan_loaded", {
+    detail: { plan: currentPlan }
+  })
+);
 
     updateProVisibility();
 
