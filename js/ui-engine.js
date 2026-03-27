@@ -37,6 +37,68 @@ function animateValue(el, start, end, duration){
   requestAnimationFrame(animation);
 }
 
+// ================= ROI BADGE =================
+
+const badgeEl = document.getElementById("roi-badge");
+
+if(badgeEl){
+
+  let text = "";
+  let color = "#10b981";
+
+  if(roi < 5){
+    text = "❌ Investimento rischioso";
+    color = "#ef4444";
+  }
+  else if(roi < 10){
+    text = "⚠️ Da ottimizzare";
+    color = "#f59e0b";
+  }
+  else{
+    text = "🔥 Investimento interessante";
+    color = "#10b981";
+  }
+
+  badgeEl.innerText = text;
+  badgeEl.style.color = color;
+}
+
+// ================= RISK BAR =================
+
+const riskEl = document.getElementById("risk-bar");
+
+if(riskEl){
+
+  let risk = 100 - roi;
+
+  if(risk < 20) risk = 20;
+  if(risk > 90) risk = 90;
+
+  let color = "#10b981";
+
+  if(risk > 70) color = "#ef4444";
+  else if(risk > 40) color = "#f59e0b";
+
+  riskEl.innerHTML = `
+    <div style="margin-top:10px">
+
+      <div style="font-size:12px;margin-bottom:6px;opacity:0.7">
+        Livello rischio investimento
+      </div>
+
+      <div style="background:#e5e7eb;height:8px;border-radius:6px;overflow:hidden">
+        <div style="
+          width:${risk}%;
+          height:100%;
+          background:${color};
+          transition:width 0.6s ease;
+        "></div>
+      </div>
+
+    </div>
+  `;
+}  
+
 // ================= APPLY =================
 
 // ROI
