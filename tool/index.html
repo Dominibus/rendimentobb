@@ -915,12 +915,26 @@ function applyPaywall(){
 
 /* ================= AUTO INIT PAYWALL ================= */
 
-// quando Firebase carica il piano (login / upgrade)
 document.addEventListener("rb_plan_loaded", () => {
+
+  console.log("🔥 rb_plan_loaded ricevuto:", window.currentPlan);
+
+  // ❌ NON applicare paywall se PRO
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  ){
+    console.log("🚀 PRO → skip paywall");
+    return;
+  }
+
+  // ✅ solo FREE
   setTimeout(() => {
     applyPaywall();
   }, 50);
-});
+
+});;
 
 // al primo caricamento pagina
 document.addEventListener("DOMContentLoaded", () => {
@@ -974,35 +988,34 @@ document.addEventListener("DOMContentLoaded", () => {
 const params = new URLSearchParams(window.location.search);
 const upgrade = params.get("upgrade");
 
-if(upgrade){
-
+// ❌ NON mostrare popup se PRO
+if(
+  upgrade &&
+  window.currentPlan !== "pro" &&
+  window.currentPlan !== "investor" &&
+  window.currentPlan !== "pro_yearly"
+){
   setTimeout(()=>{
 
     let message = "";
     const lang = window.currentLang || "it";
 
     if(upgrade === "dashboard"){
-
       message = lang === "en"
-        ? "🔒 The Dashboard is available only for PRO users.\n\nUnlock the PRO version to access it."
-        : "🔒 La Dashboard è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere.";
-
+        ? "🔒 The Dashboard is available only for PRO users."
+        : "🔒 La Dashboard è disponibile solo per utenti PRO.";
     }
 
     if(upgrade === "academy"){
-
       message = lang === "en"
-        ? "🎓 The Academy is available only for PRO users.\n\nUnlock the PRO version to access strategic content."
-        : "🎓 La Academy è disponibile solo per utenti PRO.\n\nSblocca la versione PRO per accedere ai contenuti strategici.";
-
+        ? "🎓 The Academy is available only for PRO users."
+        : "🎓 La Academy è disponibile solo per utenti PRO.";
     }
 
     if(upgrade === "true"){
-
       message = lang === "en"
         ? "🔒 This feature is available only in the PRO version."
         : "🔒 Funzione disponibile solo nella versione PRO.";
-
     }
 
     if(message){
@@ -1010,8 +1023,8 @@ if(upgrade){
     }
 
   },400);
-
 }
+
 
 </script>
 
