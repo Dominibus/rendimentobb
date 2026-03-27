@@ -18,9 +18,9 @@ export default async function handler(req, res) {
 
     // 🔥 PREZZI STRIPE (USA I TUOI price_xxx)
     const prices = {
-      investor: "prod_U8kCev2n7lTlVR",
-      pro: "prod_UAyXmZ487wFiK0",
-      pro_yearly: "prod_UAyZR28CgVdqbK"
+      investor: "price_1TASiWCHMfsTxRqQTQqRzkg0",
+      pro: "price_1TCcaCCHMfsTxRqQBVjFHVRo",
+      pro_yearly: "price_1TCccSCHMfsTxRqQie5FtqqC"
     };
 
     const priceId = prices[plan];
