@@ -2802,6 +2802,14 @@ document.addEventListener("rb_plan_loaded", () => {
     window.currentPlan === "pro_yearly"
   ){
     unlockProUI();
+
+    // 💥 FIX CRITICO
+    setTimeout(() => {
+      if(window.simulationExecuted){
+        console.log("🔄 Re-run calculate dopo unlock PRO");
+        calculate(true);
+      }
+    }, 200);
   }
 
-}, { once: true }); // 🔥 QUESTA È LA CHIAVE
+}, { once: true });
