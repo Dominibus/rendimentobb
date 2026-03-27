@@ -1532,9 +1532,9 @@ localStorage.removeItem("from_mortgage");
 
 // ================= UI LIVE =================
 
-const roiEl = document.getElementById("roi-live");
-if(roiEl){
-  roiEl.innerText = roi.toFixed(1) + "%";
+const roiLiveEl = document.getElementById("roi-live");
+if(roiLiveEl){
+  roiLiveEl.innerText = roi.toFixed(1) + "%";
 }
 
 const profitEl = document.getElementById("profit-live");
