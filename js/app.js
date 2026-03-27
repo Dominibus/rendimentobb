@@ -2769,12 +2769,12 @@ let planHandled = false;
 
 document.addEventListener("rb_plan_loaded", () => {
 
-  if(planHandled){
-    console.log("⛔ Piano già gestito → skip");
+  if(window.planInitialized){
+    console.log("⛔ Piano già inizializzato → stop");
     return;
   }
 
-  planHandled = true;
+  window.planInitialized = true;
 
   console.log("🔥 Piano aggiornato:", window.currentPlan);
 
@@ -2788,4 +2788,4 @@ document.addEventListener("rb_plan_loaded", () => {
     unlockProUI();
   }
 
-});
+}, { once: true }); // 🔥 QUESTA È LA CHIAVE
