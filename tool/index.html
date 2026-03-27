@@ -800,31 +800,6 @@ if(riskEl) riskEl.innerText = risk + "/100";
 
 <script>
 
-/* ================= BUY PRO ================= */
-
-window.buyPro = function(){
-
-  const user = window.currentUser;
-
-  if(!user){
-    alert(
-      window.currentLang === "en"
-      ? "You must login first."
-      : "Devi effettuare il login."
-    );
-    window.location.href = "/login/";
-    return;
-  }
-
-  const uid = user.uid;
-
-  const stripeUrl =
-  "https://buy.stripe.com/aFaeVc9vedBwft5fCGgMw00?client_reference_id=" + uid;
-
-  window.location.href = stripeUrl;
-};
-
-
 /* ================= PAYWALL ================= */
 
 function applyPaywall(){
