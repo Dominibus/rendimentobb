@@ -2699,12 +2699,25 @@ function unlockProUI(){
     el.classList.remove("pro-blur");
   });
 
-  // 🔥 2. RIMUOVE TUTTI GLI OVERLAY
+  // 🔥 2. RIMUOVE TUTTI GLI OVERLAY (anche dinamici)
+setTimeout(() => {
+
   document.querySelectorAll(
     ".results-overlay, .locked-overlay, .home-blur-overlay"
   ).forEach(el=>{
     el.remove();
   });
+
+  console.log("🔥 Overlay rimossi post-render");
+
+}, 300);
+  document.body.classList.add("pro-user");
+  // 🔥 forza rimozione blur anche dopo render
+setTimeout(()=>{
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+},300);
 
   // 🔥 3. SBLOCCA SEZIONI LOCKED
   document.querySelectorAll(".locked-section").forEach(el=>{
