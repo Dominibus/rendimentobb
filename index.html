@@ -1244,7 +1244,14 @@ console.error("Elementi ROI non trovati");
 return;
 }
 
-<div id="roi-verdict" style="margin:15px 0;font-weight:600;text-align:center;"></div> 
+<div id="roi-verdict"
+style="
+margin:15px 0;
+font-weight:600;
+text-align:center;
+font-size:15px;
+">
+</div>
 
 elRoi.innerText = roi.toFixed(1) + "%"; 
 elBreak.innerText = breakEven.toFixed(1) + " " + yearWord;
