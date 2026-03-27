@@ -2693,33 +2693,51 @@ function unlockProUI(){
 
   console.log("🚀 UNLOCK PRO UI START");
 
-  // 🔥 rimuove blur class
+  // 🔥 1. RIMUOVE BLUR
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  // 🔥 rimuove overlay blocchi
-  document.querySelectorAll(".results-overlay, .locked-overlay, .home-blur-overlay").forEach(el=>{
+  // 🔥 2. RIMUOVE TUTTI GLI OVERLAY
+  document.querySelectorAll(
+    ".results-overlay, .locked-overlay, .home-blur-overlay"
+  ).forEach(el=>{
     el.remove();
   });
 
-  // 🔥 sblocca sezioni locked
+  // 🔥 3. SBLOCCA SEZIONI LOCKED
   document.querySelectorAll(".locked-section").forEach(el=>{
     el.style.filter = "none";
     el.style.pointerEvents = "auto";
   });
 
-  // 🔥 forza visibilità contenuti
+  // 🔥 4. MOSTRA CONTENUTI PRO
   document.querySelectorAll(".pro-only").forEach(el=>{
     el.style.display = "block";
   });
 
-  // 🔥 elimina QUALSIASI blur inline
+  // 🔥 5. RIMUOVE QUALSIASI BLUR INLINE
   document.querySelectorAll("*").forEach(el=>{
     if(el.style.filter && el.style.filter.includes("blur")){
       el.style.filter = "none";
     }
   });
+
+  // 🔥 6. RIMUOVE CLASSI CHE BLOCCANO
+  document.querySelectorAll("[data-locked='true']").forEach(el=>{
+    el.removeAttribute("data-locked");
+  });
+
+  // 🔥 7. SBLOCCA TUTTE LE CARD
+  document.querySelectorAll(".results-card").forEach(card=>{
+    card.style.filter = "none";
+    card.style.pointerEvents = "auto";
+  });
+
+  document.body.classList.add("pro-user");
+
+  console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
+}
 
   document.body.classList.add("pro-user");
 
