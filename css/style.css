@@ -5057,3 +5057,25 @@ body.pro-user .locked-section .blur-content {
 body.pro-user * {
   filter: none !important;
 }
+
+/* ===================== */
+/* PRO FINAL UNLOCK FIX */
+/* ===================== */
+
+body.pro-user .pro-only{
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+body.pro-user .pro-only::after{
+  display:none !important;
+}
+
+body.pro-user .locked-overlay{
+  display:none !important;
+}
+
+body.pro-user [data-paywall]{
+  display:none !important;
+}
