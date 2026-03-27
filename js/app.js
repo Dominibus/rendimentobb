@@ -1512,9 +1512,10 @@ setTimeout(()=>{
 
 }, 100);  
 
-} // 👈 CHIUSURA FUNZIONE
+// 🔥 CHIUSURA CORRETTA calculate
+}
 
-// 🔥 QUESTA È LA RIGA FONDAMENTALE
+// 🔥 EXPORT
 window.calculate = calculate;
  
 // ================= STRATEGIC =================
