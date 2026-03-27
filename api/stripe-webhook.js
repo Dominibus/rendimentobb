@@ -56,7 +56,43 @@ return res.status(400).send(`Webhook Error: ${err.message}`);
 
 if(event.type === "checkout.session.completed"){
 
-const session = event.data.object;
+if(event.type === "checkout.session.completed"){
+
+  const session = await stripe.checkout.sessions.retrieve(
+    event.data.object.id,
+    {
+      expand: ["line_items"]
+    }
+  );
+
+  const uid = session.client_reference_id;
+
+  if(uid){
+
+    try{
+
+      const priceId = session.line_items.data[0].price.id;
+
+      let plan = "free";
+
+      if(priceId === "price_1TASiWCHMfsTxRqQTQqRzkg0") plan = "investor";
+      if(priceId === "price_1TCcaCCHMfsTxRqQBVjFHVRo") plan = "pro";
+      if(priceId === "price_1TCccSCHMfsTxRqQie5FtqqC") plan = "pro_yearly";
+
+      await db.collection("users").doc(uid).set({
+        plan: plan,
+        updatedAt: new Date()
+      },{ merge:true });
+
+      console.log("✅ User updated:", uid, plan);
+
+    }catch(e){
+      console.error("Firestore error:", e);
+    }
+
+  }
+
+}
 
 const uid = session.client_reference_id;
 
@@ -64,14 +100,13 @@ if(uid){
 
 try{
 
-const amount = session.amount_total;
+const priceId = session.line_items?.data?.[0]?.price?.id;
 
-// 🔥 PIANI
 let plan = "free";
 
-if(amount === 1900) plan = "investor";
-if(amount === 2900) plan = "pro";
-if(amount === 19900) plan = "pro_yearly";
+if(priceId === "price_1TASiWCHMfsTxRqQTQqRzkg0") plan = "investor";
+if(priceId === "price_1TCcaCCHMfsTxRqQBVjFHVRo") plan = "pro";
+if(priceId === "price_1TCccSCHMfsTxRqQie5FtqqC") plan = "pro_yearly";
 
 // 🔥 SALVA
 await db.collection("users").doc(uid).set({
