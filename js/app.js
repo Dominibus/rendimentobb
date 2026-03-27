@@ -2693,30 +2693,35 @@ function unlockProUI(){
 
   console.log("🚀 UNLOCK PRO UI START");
 
-  // 🔓 rimuove blur
+  // 🔥 rimuove blur class
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  // 🔓 rimuove overlay
-  document.querySelectorAll(".pro-overlay").forEach(el=>{
+  // 🔥 rimuove overlay blocchi
+  document.querySelectorAll(".results-overlay, .locked-overlay, .home-blur-overlay").forEach(el=>{
     el.remove();
   });
 
-  // 🔓 mostra contenuti nascosti
-  document.querySelectorAll(".pro-locked").forEach(el=>{
+  // 🔥 sblocca sezioni locked
+  document.querySelectorAll(".locked-section").forEach(el=>{
+    el.style.filter = "none";
+    el.style.pointerEvents = "auto";
+  });
+
+  // 🔥 forza visibilità contenuti
+  document.querySelectorAll(".pro-only").forEach(el=>{
     el.style.display = "block";
   });
 
-  // 🔓 flag globale
-  document.body.classList.add("pro-user");
-
-    // 🔥 AGGIUNTA
+  // 🔥 elimina QUALSIASI blur inline
   document.querySelectorAll("*").forEach(el=>{
-    if(el.style.filter === "blur(6px)"){
+    if(el.style.filter && el.style.filter.includes("blur")){
       el.style.filter = "none";
     }
   });
+
+  document.body.classList.add("pro-user");
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
