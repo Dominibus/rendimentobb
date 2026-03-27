@@ -5043,3 +5043,13 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
   color:#64748b;
   max-width:300px;
 }
+
+/* ================= PRO UNLOCK FIX ================= */
+
+body.pro-user .blur-content,
+body.pro-user .pro-blur,
+body.pro-user .locked-section .blur-content {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
