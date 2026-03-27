@@ -4,13 +4,61 @@ const roiEl = document.getElementById("roi-live");
 const profitEl = document.getElementById("profit-live");
 const revenueEl = document.getElementById("revenue-live");
 
-// 🔥 SAFE FIX (anti crash)
+// ================= SAFE DATA =================
 const roi = Number(result?.roi) || 0;
 const profit = Number(result?.netAfterMortgage || result?.profit) || 0;
 const revenue = Number(result?.gross || result?.revenue) || 0;
 
-if(roiEl) roiEl.innerText = roi.toFixed(1) + "%";
-if(profitEl) profitEl.innerText = profit.toLocaleString("it-IT",{style:"currency",currency:"EUR"});
-if(revenueEl) revenueEl.innerText = revenue.toLocaleString("it-IT",{style:"currency",currency:"EUR"});
+// ================= ROI COLOR =================
+function getROIColor(value){
+  if(value < 5) return "#ef4444"; // rosso
+  if(value < 10) return "#f59e0b"; // arancione
+  return "#10b981"; // verde
+}
+
+// ================= ANIMATION =================
+function animateValue(el, start, end, duration){
+
+  let startTime = null;
+
+  function animation(currentTime){
+    if(!startTime) startTime = currentTime;
+
+    const progress = Math.min((currentTime - startTime)/duration,1);
+    const current = start + (end-start)*progress;
+
+    el.innerText = current.toFixed(1) + "%";
+
+    if(progress < 1){
+      requestAnimationFrame(animation);
+    }
+  }
+
+  requestAnimationFrame(animation);
+}
+
+// ================= APPLY =================
+
+// ROI
+if(roiEl){
+  roiEl.style.color = getROIColor(roi);
+  animateValue(roiEl, 0, roi, 800);
+}
+
+// PROFITTO
+if(profitEl){
+  profitEl.innerText = profit.toLocaleString("it-IT",{
+    style:"currency",
+    currency:"EUR"
+  });
+}
+
+// RICAVI
+if(revenueEl){
+  revenueEl.innerText = revenue.toLocaleString("it-IT",{
+    style:"currency",
+    currency:"EUR"
+  });
+}
 
 }
