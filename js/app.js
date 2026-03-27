@@ -2739,12 +2739,7 @@ function unlockProUI(){
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
 
-  document.body.classList.add("pro-user");
-
-  console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
-}
-
-  // ================= EVENTI GLOBALI =================
+// ================= EVENTI GLOBALI =================
 
 document.addEventListener("rb_plan_loaded", () => {
 
@@ -2759,8 +2754,5 @@ document.addEventListener("rb_plan_loaded", () => {
   ){
     unlockProUI();
   }
-
-  // ❌ PRIMA: calculate(true);
-  // 🔥 DOPO: evita loop distruttivo
 
 });
