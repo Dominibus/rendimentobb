@@ -4858,3 +4858,23 @@ color:#d97706;
 .roi-bad{
 color:#dc2626;
 }
+
+.pro-only{
+  opacity:0.25;
+  filter:blur(2px);
+  pointer-events:none;
+  user-select:none;
+  position:relative;
+}
+
+.pro-only::after{
+  content:"🔒 PRO";
+  position:absolute;
+  top:8px;
+  right:10px;
+  font-size:11px;
+  background:#10b981;
+  color:#fff;
+  padding:2px 6px;
+  border-radius:6px;
+}
