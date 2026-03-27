@@ -1114,45 +1114,31 @@ console.error("Logout error:", error);
 // ================= HERO BACKGROUND =================
 window.changeCityBackground = function(city){
 
-const hero =
-document.querySelector(".tool-hero") ||
-document.querySelector(".hero") ||
-document.querySelector("section.hero");
-
- console.log("Cambio sfondo città:", city);
-
-if(!hero){
-console.error("Hero section non trovata");
-return;
-}
-
-const images = {
-rome: "/img/rome-bg.jpg",
-naples: "/img/naples-bg.jpg",
-florence: "/img/florence-bg.jpg",
-milan: "/img/milan-bg.jpg"
-};
-
-if(!images[city]){
-console.warn("Città non trovata:", city);
-return;
-}
-
-window.changeCityBackground = function(city){
+console.log("Cambio sfondo città:", city);
 
 const hero = document.querySelector(".hero-bg");
 
-if(!hero) return;
+if(!hero){
+console.warn("Hero non trovata");
+return;
+}
+
+// mappa classi città
+const allowedCities = ["rome","naples","milan","florence"];
+
+// controllo sicurezza
+if(!allowedCities.includes(city)){
+console.warn("Città non valida:", city);
+return;
+}
 
 // reset classi
 hero.classList.remove("rome","naples","milan","florence");
 
-// aggiunge classe città
+// aggiunge nuova classe
 hero.classList.add(city);
 
-}
-
-}
+};
 
 // ================= SELECT CITY (TOP HERO BUTTONS) =================
 window.selectCity = function(city, bg){
