@@ -4879,3 +4879,53 @@ color:#dc2626;
   border-radius:8px;
   font-weight:600;
 }
+
+/* 🔒 PRO BLUR */
+.pro-only{
+  filter: blur(6px);
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 🔥 OVERLAY */
+.results-card{
+  position: relative;
+}
+
+.results-overlay{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+}
+
+.overlay-content{
+  text-align: center;
+}
+
+.overlay-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.overlay-text{
+  font-size:14px;
+  opacity:0.7;
+  margin-bottom:12px;
+}
+
+.unlock-btn{
+  background:#10b981;
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+}
