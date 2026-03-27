@@ -5053,3 +5053,7 @@ body.pro-user .locked-section .blur-content {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
+body.pro-user * {
+  filter: none !important;
+}
