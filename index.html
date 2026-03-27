@@ -399,6 +399,15 @@ Analizza immobile
 
 <div class="investment-metrics">
 
+<div id="roi-verdict"
+style="
+margin:15px 0;
+font-weight:600;
+text-align:center;
+font-size:15px;
+">
+</div>
+
 <div class="metric-card">
 <span
 data-it="ROI annuo"
@@ -1226,6 +1235,32 @@ const operatingCosts = revenue * (cost/100);
 const netIncome = revenue - operatingCosts;
 
 const roi = (netIncome / investment) * 100;
+let verdict = "";
+
+if(roi > 12){
+  verdict = window.t(
+    "💰 Questo immobile può generare profitto reale",
+    "💰 This property can generate real profit"
+  );
+}
+else if(roi > 8){
+  verdict = window.t(
+    "⚖️ Investimento borderline",
+    "⚖️ Borderline investment"
+  );
+}
+else{
+  verdict = window.t(
+    "❌ Rischio alto: possibile perdita",
+    "❌ High risk: potential loss"
+  );
+}
+
+const verdictEl = document.getElementById("roi-verdict");
+if(verdictEl){
+  verdictEl.innerText = verdict;
+}
+ 
 const breakEven = investment / netIncome;
 const monthlyProfit = netIncome / 12;
 
@@ -1243,15 +1278,6 @@ if(!elRoi || !elBreak || !elRev || !elProfit || !elMonth){
 console.error("Elementi ROI non trovati");
 return;
 }
-
-<div id="roi-verdict"
-style="
-margin:15px 0;
-font-weight:600;
-text-align:center;
-font-size:15px;
-">
-</div>
 
 elRoi.innerText = roi.toFixed(1) + "%"; 
 elBreak.innerText = breakEven.toFixed(1) + " " + yearWord;
