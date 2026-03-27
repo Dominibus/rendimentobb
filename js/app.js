@@ -2726,3 +2726,18 @@ document.addEventListener("rb_plan_loaded", () => {
   }
 
 });
+
+function unlockProUI(){
+
+  const locked = document.getElementById("advanced-analysis");
+
+  if(!locked) return;
+
+  const blur = locked.querySelector(".blur-content");
+  const overlay = locked.querySelector(".locked-overlay");
+
+  if(blur) blur.style.filter = "none";
+  if(blur) blur.style.pointerEvents = "auto";
+  if(overlay) overlay.remove();
+
+}
