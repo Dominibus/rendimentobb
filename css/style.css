@@ -4729,3 +4729,27 @@ pointer-events:none;
 user-select:none;
 opacity:0.6;
 }
+
+.seo-block{
+padding:80px 0;
+background:#ffffff;
+}
+
+.seo-block h2{
+font-size:28px;
+margin-bottom:20px;
+text-align:center;
+}
+
+.seo-block p{
+color:#64748b;
+line-height:1.6;
+margin-bottom:20px;
+text-align:center;
+}
+
+.seo-block h3{
+margin-top:30px;
+margin-bottom:10px;
+text-align:center;
+}
