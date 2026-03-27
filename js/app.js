@@ -2711,7 +2711,7 @@ document.addEventListener("rb_plan_loaded", () => {
   // 🔥 aggiorna PDF
   updatePDFButton();
 
-  // 🔥 SBLOCCO UI PRO
+  // 🔥 SBLOCCO IMMEDIATO UI
   if(
     window.currentPlan === "pro" ||
     window.currentPlan === "investor" ||
@@ -2720,24 +2720,9 @@ document.addEventListener("rb_plan_loaded", () => {
     unlockProUI();
   }
 
-  // 🔥 aggiorna paywall DOPO che piano è sicuro
-  if(typeof applyPaywall === "function"){
-    applyPaywall();
+  // 🔥 FORZA RENDER DOPO SBLOCCO
+  if(window.lastAnalysisData){
+    calculate(true); // 👈 QUESTA È LA CHIAVE
   }
 
 });
-
-function unlockProUI(){
-
-  const locked = document.getElementById("advanced-analysis");
-
-  if(!locked) return;
-
-  const blur = locked.querySelector(".blur-content");
-  const overlay = locked.querySelector(".locked-overlay");
-
-  if(blur) blur.style.filter = "none";
-  if(blur) blur.style.pointerEvents = "auto";
-  if(overlay) overlay.remove();
-
-}
