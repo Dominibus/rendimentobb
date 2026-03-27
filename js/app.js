@@ -1325,10 +1325,28 @@ else{
 }
 
 const verdictEl = document.getElementById("roi-verdict");
+const roiEl = document.getElementById("qr_roi");
 
-if(verdictEl){
+if(verdictEl && roiEl){
+
   verdictEl.innerText = verdict;
-}  
+
+  verdictEl.classList.remove("roi-good","roi-medium","roi-bad");
+
+  if(roi > 12){
+    verdictEl.classList.add("roi-good");
+    roiEl.style.color = "#059669";
+  }
+  else if(roi > 8){
+    verdictEl.classList.add("roi-medium");
+    roiEl.style.color = "#d97706";
+  }
+  else{
+    verdictEl.classList.add("roi-bad");
+    roiEl.style.color = "#dc2626";
+  }
+
+} 
 
 // ================= PAYWALL TRIGGER =================
 
