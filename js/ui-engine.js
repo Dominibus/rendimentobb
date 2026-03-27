@@ -45,6 +45,47 @@ if(roiEl){
   animateValue(roiEl, 0, roi, 800);
 }
 
+// ================= INVESTMENT STATUS =================
+
+const statusEl = document.getElementById("investment-status");
+
+if(statusEl){
+
+  let textIT = "";
+  let textEN = "";
+  let color = "#10b981";
+
+  if(roi < 5){
+    textIT = "❌ Investimento rischioso";
+    textEN = "❌ Risky investment";
+    color = "#ef4444";
+  }
+  else if(roi < 10){
+    textIT = "⚠️ Investimento da ottimizzare";
+    textEN = "⚠️ Needs optimization";
+    color = "#f59e0b";
+  }
+  else{
+    textIT = "🔥 Investimento interessante";
+    textEN = "🔥 Strong investment";
+    color = "#10b981";
+  }
+
+  statusEl.innerHTML = `
+    <div 
+      data-it="${textIT}" 
+      data-en="${textEN}"
+      style="
+        font-weight:600;
+        margin-top:8px;
+        color:${color};
+        font-size:14px;
+      ">
+      ${textIT}
+    </div>
+  `;
+}  
+
 // PROFITTO
 if(profitEl){
   profitEl.innerText = profit.toLocaleString("it-IT",{
