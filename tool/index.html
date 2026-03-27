@@ -400,13 +400,31 @@ data-en="⚠️ You could lose thousands without this full analysis">
 
 <div class="results-grid">
 
-<div class="result-item">
-  <span data-it="Profitto mensile" data-en="Monthly profit"></span>
-  <strong id="profit-monthly"></strong>
+  <!-- ✅ FREE -->
+  <div class="result-item">
+    <span data-it="Profitto mensile" data-en="Monthly profit"></span>
+    <strong id="profit-monthly"></strong>
+  </div>
+
+  <!-- 🔒 PRO -->
+  <div class="result-item pro-only">
+    <span data-it="Profitto annuo" data-en="Annual profit"></span>
+    <strong id="profit-annual"></strong>
+  </div>
+
+  <div class="result-item pro-only">
+    <span data-it="Break-even" data-en="Break-even"></span>
+    <strong id="break-even"></strong>
+  </div>
+
+  <div class="result-item pro-only">
+    <span data-it="Ricavi annui" data-en="Annual revenue"></span>
+    <strong id="revenue-annual"></strong>
+  </div>
+
 </div>
 
-<div class="results-grid">
-
+<!-- 🔥 OVERLAY (FUORI dalla grid) -->
 <div class="results-overlay">
 
   <div class="overlay-content">
@@ -421,7 +439,7 @@ data-en="⚠️ You could lose thousands without this full analysis">
          data-en="See real profit, risk and sustainability">
     </div>
 
-    <button class="unlock-btn"
+    <button class="unlock-btn" onclick="buyPro()"
             data-it="Sblocca ora"
             data-en="Unlock now">
       Sblocca ora
@@ -429,7 +447,7 @@ data-en="⚠️ You could lose thousands without this full analysis">
 
   </div>
 
-</div>  
+</div>
 
 <!-- ✅ FREE -->
 <div class="result-item">
