@@ -2746,6 +2746,10 @@ setTimeout(()=>{
     card.style.pointerEvents = "auto";
   });
 
+  document.querySelectorAll(".blur-content").forEach(el=>{
+  el.style.filter = "none";
+});
+
   document.body.classList.add("pro-user");
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
