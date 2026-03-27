@@ -1260,6 +1260,8 @@ console.log("RESULT:", result);
 // 🔥 RENDER KPI
 renderExecutiveKPI(result);
 
+showUpgradePopup(result.roi);  
+
 window.lastAnalysisData = {
   ...result,
 
