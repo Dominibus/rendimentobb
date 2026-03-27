@@ -1503,12 +1503,13 @@ if(revenueEl){
 setTimeout(()=>{
 
   if(
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  ){
-    unlockProUI();
-  }
+  (window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly") &&
+  !window.proUnlocked
+){
+  unlockProUI();
+}
 
 }, 100);  
 
