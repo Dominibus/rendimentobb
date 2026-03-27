@@ -1203,6 +1203,12 @@ container.innerHTML = insights.map(i=>{
 // ================= FREE LIMIT =================
 
 function calculate(force = false){
+  if(window.isCalculating){
+  console.log("⛔ calculate già in esecuzione → skip");
+  return;
+}
+
+window.isCalculating = true;
 
 // 🔥 BLOCCO SICUREZZA PRIMA DI TUTTO
 if(typeof window.safeNumber !== "function"){
@@ -1512,6 +1518,10 @@ setTimeout(()=>{
 }
 
 }, 100);  
+
+  setTimeout(()=>{
+  window.isCalculating = false;
+}, 300);
 
 // 🔥 CHIUSURA CORRETTA calculate
 }
@@ -2755,7 +2765,16 @@ function unlockProUI(){
 
 // ================= EVENTI GLOBALI =================
 
+let planHandled = false;
+
 document.addEventListener("rb_plan_loaded", () => {
+
+  if(planHandled){
+    console.log("⛔ Piano già gestito → skip");
+    return;
+  }
+
+  planHandled = true;
 
   console.log("🔥 Piano aggiornato:", window.currentPlan);
 
