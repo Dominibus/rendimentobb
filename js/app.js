@@ -2758,6 +2758,15 @@ setTimeout(()=>{
   document.body.classList.add("pro-user");
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
+  // 🔥 FORZA RE-RENDER COMPLETO
+setTimeout(()=>{
+
+  if(typeof calculate === "function"){
+    console.log("🔁 Re-render dopo unlock PRO");
+    calculate(true);
+  }
+
+}, 100);
 }
 
 // ================= EVENTI GLOBALI =================
