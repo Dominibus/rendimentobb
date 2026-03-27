@@ -856,46 +856,24 @@ ${message}
 
 }
 
-// ================= SMART PAYWALL =================
+// ================= SMART PAYWALL (SOFT VERSION) =================
 
 function showUpgradePopup(roi){
 
-if(hasPlan("pro")) return;
+  if(hasPlan("pro")) return;
 
-const message = t(
-`Questo investimento sembra interessante.
+  if(roi > 8){
 
-ROI stimato: ${safeNumber(roi).toFixed(1)}
+    console.log("Soft paywall attivo ROI:", roi);
 
-Scopri:
-• rischio reale
-• comparatore mutui
-• scenari mercato
-• simulazioni occupazione
-• report professionale
+    // 👉 mostra solo CTA, NON bloccare UI
+    const upgradeBox = document.getElementById("upgrade-box");
 
-Sblocca l'analisi completa.`,
-`This investment looks promising.
+    if(upgradeBox){
+      upgradeBox.style.display = "block";
+    }
 
-Estimated ROI: ${safeNumber(roi).toFixed(1)}
-
-Unlock:
-• risk score
-• mortgage comparator
-• market scenarios
-• occupancy simulations
-• professional report`
-);
-
-if(roi > 8){
-
-setTimeout(()=>{
-
-showUpgradeModal(roi);
-
-},1500);
-
-}
+  }
 
 }
 
@@ -1347,32 +1325,6 @@ if(verdictEl && roiEl){
   }
 
 } 
-
-// ================= PAYWALL + BLUR KPI =================
-
-if(!hasPlan("pro")){
-
-  // 🔥 BLUR DATI PRO
-  const hidden = document.querySelectorAll(".pro-only");
-
-  hidden.forEach(el=>{
-    el.style.filter = "blur(6px)";
-    el.style.opacity = "0.6";
-    el.style.pointerEvents = "none";
-  });
-
-  // 🔥 TRIGGER MODAL SE ROI ALTO
-  if(roi > 8){
-
-    console.log("🔥 Trigger paywall ROI:", roi);
-
-    setTimeout(()=>{
-      showUpgradeModal(roi);
-    }, 800);
-
-  }
-
-}
 
 // ================= INVESTMENT METRICS =================
 
