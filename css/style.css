@@ -4929,3 +4929,13 @@ color:#dc2626;
   font-weight:600;
   cursor:pointer;
 }
+
+.upgrade-home-box{
+margin-top:20px;
+padding:20px;
+border-radius:12px;
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
