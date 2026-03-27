@@ -2702,11 +2702,9 @@ function unlockProUI(){
   // 🔥 2. RIMUOVE TUTTI GLI OVERLAY (anche dinamici)
 setTimeout(() => {
 
-  document.querySelectorAll(
-    ".results-overlay, .locked-overlay, .home-blur-overlay"
-  ).forEach(el=>{
-    el.remove();
-  });
+  document.querySelectorAll('[data-paywall]').forEach(el=>{
+  el.remove();
+});
 
   console.log("🔥 Overlay rimossi post-render");
 
