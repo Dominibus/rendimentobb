@@ -4609,6 +4609,54 @@ background-repeat:no-repeat !important;
 }
 
 /* ===================== */
+/* HERO BACKGROUND GLOBAL */
+/* ===================== */
+
+.hero.hero-bg.rome{
+background:
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/rome-bg.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.hero.hero-bg.milan{
+background:
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/milan-bg.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.hero.hero-bg.naples{
+background:
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/naples-bg.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.hero.hero-bg.florence{
+background:
+linear-gradient(rgba(0,0,0,0.02), rgba(0,0,0,0.10)),
+url("/img/florence-bg.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.hero.hero-bg{
+transition: background 0.5s ease-in-out;
+}
+
+/* ===================== */
 /* FIX TESTI CARD IMMOBILI DEFINITIVO */
 /* ===================== */
 
