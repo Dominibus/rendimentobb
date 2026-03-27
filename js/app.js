@@ -1252,17 +1252,6 @@ const equity = safeNumber(getValue("equity"));
 
 // DEBUG
 console.log("RESULT:", result);
-
-// 🔥 RENDER KPI
-renderExecutiveKPI(result);
-// 🔥 FIX PRO: ri-sblocca dopo render
-if(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-){
-  unlockProUI();
-}
   
 showUpgradePopup(result.roi);  
 
@@ -1509,6 +1498,19 @@ const revenueEl = document.getElementById("revenue-live");
 if(revenueEl){
   revenueEl.innerText = formatCurrency(gross);
 }
+
+// 🔥 SBLOCCO PRO DOPO TUTTO IL RENDER
+setTimeout(()=>{
+
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  ){
+    unlockProUI();
+  }
+
+}, 100);  
 
 } // 👈 CHIUSURA FUNZIONE
 
@@ -2716,6 +2718,13 @@ function unlockProUI(){
 
   // 🔓 flag globale
   document.body.classList.add("pro-user");
+
+    // 🔥 AGGIUNTA
+  document.querySelectorAll("*").forEach(el=>{
+    if(el.style.filter === "blur(6px)"){
+      el.style.filter = "none";
+    }
+  });
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
