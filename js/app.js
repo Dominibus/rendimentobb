@@ -2691,6 +2691,17 @@ function goToMarket(city){
   window.location.href = "/market/" + city;
 }
 
+function unlockProUI(){
+
+  const blocks = document.querySelectorAll(".pro-blur");
+
+  blocks.forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  console.log("✅ UI PRO sbloccata");
+}
+
   // ================= EVENTI GLOBALI =================
 
 document.addEventListener("rb_plan_loaded", () => {
@@ -2700,9 +2711,18 @@ document.addEventListener("rb_plan_loaded", () => {
   // 🔥 aggiorna PDF
   updatePDFButton();
 
+  // 🔥 SBLOCCO UI PRO
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  ){
+    unlockProUI();
+  }
+
   // 🔥 aggiorna paywall DOPO che piano è sicuro
   if(typeof applyPaywall === "function"){
     applyPaywall();
   }
 
-});;
+});
