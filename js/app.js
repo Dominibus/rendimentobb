@@ -886,7 +886,8 @@ function renderSmartInvestmentAlert(roi){
 
   // 🔥 PRO → NON TOCCARE MAI IL DOM
   if(hasPlan("pro")){
-  return; // 🔥 NON TOCCARE DOM
+  container.innerHTML = ""; // 🔥 pulisci
+  return;
 }
 
   // 🔥 ROI basso → NON TOCCARE DOM (evita flicker/reset)
@@ -1449,24 +1450,24 @@ safeRender("occupancy-sensitivity", () => {
   renderOccupancySensitivity();
 });
 
+  console.log("PLAN CHECK:", window.currentPlan, hasPlan("pro"));
+
 safeRender("investment-score", (container) => {
 
-  // 🔒 FREE → NON RISCRIVERE
-  if(!hasPlan("pro")){
-    console.log("🔒 FREE → investment score statico");
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  console.log("🔥 INVESTMENT SCORE PLAN:", window.currentPlan, isPro);
+
+  if(!isPro){
+    console.log("🔒 FREE → skip render");
     return;
   }
 
   renderInvestmentScore(roi, riskScore);
 
-});
-
-safeRender("investment-ranking", () => {
-  renderInvestmentRanking(roi);
-});
-
-safeRender("investment-risk-meter", () => {
-  renderRiskMeter(riskScore);
 });
 
 // PAYBACK
