@@ -4818,3 +4818,43 @@ margin-bottom:20px;
 color:#cbd5f5;
 margin-bottom:15px;
 }
+
+/* ===================== */
+/* ROI HIGHLIGHT (WOW) */
+/* ===================== */
+
+.roi-highlight{
+text-align:center;
+padding:25px;
+border-radius:16px;
+background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
+border:1px solid #bbf7d0;
+}
+
+.roi-big{
+font-size:42px;
+font-weight:800;
+display:block;
+margin-top:10px;
+color:#059669;
+}
+
+.roi-verdict{
+margin-top:10px;
+font-size:15px;
+font-weight:600;
+}
+
+/* dinamico */
+
+.roi-good{
+color:#059669;
+}
+
+.roi-medium{
+color:#d97706;
+}
+
+.roi-bad{
+color:#dc2626;
+}
