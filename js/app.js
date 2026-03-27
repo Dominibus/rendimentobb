@@ -2726,6 +2726,9 @@ setTimeout(()=>{
   // 🔥 4. MOSTRA CONTENUTI PRO
   document.querySelectorAll(".pro-only").forEach(el=>{
     el.style.display = "block";
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
   });
 
   // 🔥 5. RIMUOVE QUALSIASI BLUR INLINE
