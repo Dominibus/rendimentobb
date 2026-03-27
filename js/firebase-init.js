@@ -83,7 +83,17 @@ return true;
 
 // 🔥 NUOVO UX (NO ALERT)
 if(typeof showUpgradeModal === "function"){
-  showUpgradeModal(10); // ROI fake per attivare UI
+  showUpgradeModal(12); // ROI più realistico
+
+// 🔥 AGGIUNTA PSICOLOGICA
+setTimeout(()=>{
+  alert(
+    getCurrentLang()==="it"
+    ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
+    : "⚠️ You are making decisions without real data"
+  );
+}, 300);
+  
 }else{
   window.location.href = "/pricing/";
 }
@@ -173,6 +183,15 @@ async function loadUserPlan(uid) {
 
     window.currentPlan = currentPlan;
 
+// 🔥 TRIGGER IMMEDIATO UI (CRUCIALE)
+setTimeout(()=>{
+  document.dispatchEvent(
+    new CustomEvent("rb_plan_loaded", {
+      detail: { plan: currentPlan }
+    })
+  );
+}, 50);
+
     console.log("🔥 Piano finale:", currentPlan);
 
     document.dispatchEvent(
@@ -182,6 +201,17 @@ async function loadUserPlan(uid) {
     );
 
     updateProVisibility();
+
+  // 🔥 AUTO SBLOCCO DIRETTO (fallback sicurezza)
+if(
+  currentPlan === "pro" ||
+  currentPlan === "investor" ||
+  currentPlan === "pro_yearly"
+){
+  if(typeof unlockProUI === "function"){
+    unlockProUI();
+  }
+}  
 
   }catch(err){
 
@@ -309,39 +339,71 @@ onAuthStateChanged(auth, async (user) => {
 
   if (user) {
 
-    console.log("🔥 Auth OK:", user.uid);
+  console.log("🔥 Auth OK:", user.uid);
 
-    // 🔥 carica piano
-    await loadUserPlan(user.uid);
+  // 🔥 carica piano
+  await loadUserPlan(user.uid);
 
-    // 🔥 ora Firebase è pronto
-    window.firebaseReady = true;
-    console.log("✅ Firebase READY con piano:", window.currentPlan);
+  // 🔥 Firebase pronto
+  window.firebaseReady = true;
 
-    // 🔥 aggiorna UI
-    updateUserUI(user);
+  console.log("✅ Firebase READY con piano:", window.currentPlan);
+
+  // 🔥 aggiorna UI navbar
+  updateUserUI(user);
+
+  // 🔥 NUOVO: differenzia FREE vs PRO (importantissimo)
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  ){
+
+    console.log("💰 Utente PRO → sblocco totale UI");
+
+    if(typeof unlockProUI === "function"){
+      unlockProUI();
+    }
 
   } else {
 
-    console.log("👤 Utente non loggato");
+    console.log("👀 Utente FREE → attivo funnel");
 
-    window.currentPlan = "free";
-    window.firebaseReady = true; // ✅ MANCAVA QUESTO
-
-    updateUserUI(null);
-
-    document.dispatchEvent(new Event("rb_plan_loaded"));
+    // 🔥 micro trigger psicologico (non invasivo)
+    setTimeout(()=>{
+      console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
+    },1500);
 
   }
 
-  document.dispatchEvent(
-    new CustomEvent("rb_auth_ready", {
-      detail: {
-        user: user,
-        plan: window.currentPlan
-      }
-    })
-  );
+} else {
+
+  console.log("👤 Utente non loggato");
+
+  window.currentPlan = "free";
+  window.firebaseReady = true;
+
+  updateUserUI(null);
+
+  // 🔥 trigger UI per stato FREE
+  document.dispatchEvent(new Event("rb_plan_loaded"));
+
+  // 🔥 micro social proof (conversione)
+  setTimeout(()=>{
+    console.log("📊 +1.247 utenti stanno analizzando investimenti ora");
+  },2000);
+
+}
+
+// 🔥 evento globale sempre (NON TOCCARE)
+document.dispatchEvent(
+  new CustomEvent("rb_auth_ready", {
+    detail: {
+      user: user,
+      plan: window.currentPlan
+    }
+  })
+);
 
 });
 
