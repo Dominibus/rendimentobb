@@ -1212,84 +1212,247 @@ container.innerHTML = insights.map(i=>{
 // ================= FREE LIMIT =================
 
 function calculate(force = false){
+
   if(window.isCalculating){
-  console.log("⛔ calculate già in esecuzione → skip");
-  return;
+    console.log("⛔ calculate già in esecuzione → skip");
+    return;
+  }
+
+  window.isCalculating = true;
+
+  // 🔥 sicurezza
+  if(typeof window.safeNumber !== "function"){
+    console.warn("safeNumber non pronto → skip calculate");
+    return;
+  }
+
+  if(document.readyState === "loading"){
+    console.warn("DOM non pronto ma continuo comunque");
+  }
+
+  window.simulationExecuted = true;
+
+  // ================= INPUT =================
+
+  const priceNight = getValue("priceNight");
+  const occupancy = getValue("occupancy");
+  const expenses = getValue("expenses");
+  const commission = getValue("commission") || 15;
+  const tax = getValue("tax") || 21;
+  const loanAmount = getValue("loanAmount");
+  const interestRate = getValue("interestRate");
+  const loanYears = getValue("loanYears");
+
+  const equity = safeNumber(getValue("equity"));
+
+  console.log("DEBUG:", {
+    priceNight,
+    occupancy,
+    expenses,
+    commission,
+    tax
+  });
+
+  // ================= CALCOLO =================
+
+  const result = calculateROI({
+    price: getValue("price"),
+    equity,
+    priceNight,
+    occupancy,
+    expenses,
+    commission,
+    tax,
+    loanAmount,
+    interestRate,
+    loanYears
+  });
+
+  console.log("RESULT:", result);
+
+  const gross = result.gross;
+  const netAfterMortgage = safeNumber(result.netAfterMortgage);
+  const roi = safeNumber(result.roi);
+
+  // ================= PLAN =================
+
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(!isPro){
+    showUpgradePopup(roi);
+  }
+
+  // ================= SALVATAGGIO =================
+
+  window.lastAnalysisData = {
+    ...result,
+    price: getValue("price"),
+    equity,
+    loan: result.loan || loanAmount,
+    revenue: result.revenue || gross,
+    profit: result.profit || netAfterMortgage
+  };
+
+  // ================= ROI LIVE =================
+
+  const roiLiveEl = document.getElementById("roi-live");
+  if(roiLiveEl){
+    roiLiveEl.innerText = roi.toFixed(1) + "%";
+  }
+
+  const profitEl = document.getElementById("profit-live");
+  if(profitEl){
+    profitEl.innerText = formatCurrency(netAfterMortgage / 12);
+  }
+
+  const revenueEl = document.getElementById("revenue-live");
+  if(revenueEl){
+    revenueEl.innerText = formatCurrency(gross);
+  }
+
+  // ================= 🔥 FIX DATI PRO =================
+
+  const profitAnnualEl = document.getElementById("profit-annual");
+  const breakEvenEl = document.getElementById("break-even");
+  const revenueAnnualEl = document.getElementById("revenue-annual");
+
+  let payback = 0;
+
+  if(equity > 0 && netAfterMortgage > 0){
+    payback = equity / netAfterMortgage;
+  }
+
+  if(profitAnnualEl){
+    profitAnnualEl.innerText = formatCurrency(netAfterMortgage);
+  }
+
+  if(breakEvenEl){
+    breakEvenEl.innerText = payback ? payback.toFixed(1) + " anni" : "-";
+  }
+
+  if(revenueAnnualEl){
+    revenueAnnualEl.innerText = formatCurrency(gross);
+  }
+
+  // ================= SCORE =================
+
+  const scoreCircle = document.getElementById("score-circle");
+
+  if(scoreCircle){
+
+    if(!isPro){
+      scoreCircle.style.filter = "blur(6px)";
+      scoreCircle.style.opacity = "0.4";
+    } else {
+
+      scoreCircle.style.filter = "none";
+      scoreCircle.style.opacity = "1";
+
+      let grade = "C";
+      let color = "#ef4444";
+
+      if(roi > 12){
+        grade = "A";
+        color = "#10b981";
+      } else if(roi > 6){
+        grade = "B";
+        color = "#f59e0b";
+      }
+
+      scoreCircle.innerText = grade;
+      scoreCircle.style.background = color;
+      scoreCircle.style.color = "#fff";
+    }
+  }
+
+  // ================= SAFE RENDER =================
+
+  const city = window.currentCity || "italy";
+
+  safeRender("market-benchmark", () => {
+    renderMarketBenchmark(city);
+  });
+
+  safeRender("market-comparison", () => {
+    renderMarketComparison(gross, city);
+  });
+
+  safeRender("roi-market-comparison", () => {
+    renderROIMarketComparison(roi, city);
+  });
+
+  safeRender("revenue-forecast", () => {
+    renderRevenueForecast(gross);
+  });
+
+  safeRender("occupancy-sensitivity", () => {
+    renderOccupancySensitivity();
+  });
+
+  safeRender("investment-score", () => {
+
+    renderInvestmentScore(roi);
+
+    const el = document.getElementById("investment-score");
+
+    if(!el) return;
+
+    if(!isPro){
+      el.classList.add("pro-blur");
+    } else {
+      el.classList.remove("pro-blur");
+    }
+
+  });
+
+  safeRender("investment-verdict", () => {
+    renderInvestmentVerdict(roi, payback);
+  });
+
+  safeRender("break-even-kpi", () => {
+    renderBreakEvenOccupancy(
+      priceNight,
+      expenses,
+      commission,
+      tax,
+      result.mortgageYearly || 0
+    );
+  });
+
+  // ================= 🔥 UNLOCK DEFINITIVO =================
+
+  if(isPro){
+
+    console.log("🚀 FORCE UNLOCK UI");
+
+    document.body.classList.add("pro-user");
+
+    document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
+      el.classList.remove("pro-only","pro-blur");
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+    });
+
+    document.querySelectorAll('[data-paywall], .locked-overlay, .results-overlay').forEach(el=>{
+      el.remove();
+    });
+
+  }
+
+  // ================= RESET FLAG =================
+
+  setTimeout(()=>{
+    window.isCalculating = false;
+  },300);
+
 }
 
-window.isCalculating = true;
-
-// 🔥 BLOCCO SICUREZZA PRIMA DI TUTTO
-if(typeof window.safeNumber !== "function"){
-  console.warn("safeNumber non pronto → skip calculate");
-  return;
-}
-
-// sicurezza DOM ma NON bloccare
-if(document.readyState === "loading"){
-  console.warn("DOM non pronto ma continuo comunque");
-}
-
-// 👉 SOLO QUI
-window.simulationExecuted = true; 
-
-const priceNight = getValue("priceNight");
-const occupancy = getValue("occupancy");
-const expenses = getValue("expenses");
-const commission = getValue("commission") || 15;
-const tax = getValue("tax") || 21;
-const loanAmount = getValue("loanAmount");
-const interestRate = getValue("interestRate");
-const loanYears = getValue("loanYears"); 
-
-console.log("DEBUG:", {
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax
-}); 
-
-const result = calculateROI({
-  price: getValue("price"),
-  equity: safeNumber(getValue("equity")),
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
-});
-
-const equity = safeNumber(getValue("equity"));
-
-// DEBUG
-console.log("RESULT:", result);
-  
-if(window.currentPlan === "free"){
-  showUpgradePopup(result.roi);
-}  
-
-window.lastAnalysisData = {
-  ...result,
-
-  price: getValue("price"),
-  equity: safeNumber(getValue("equity")),
-  loan: result.loan || getValue("loanAmount"),
-
-  revenue: result.revenue || result.gross,
-  profit: result.profit || result.netAfterMortgage
-};  
-
-if (equity < 0){
-  console.warn("Equity non valido → continuo comunque");
-}
-
-const gross = result.gross;
-const netAfterMortgage = safeNumber(result.netAfterMortgage);
-const roi = safeNumber(result.roi);
+// 🔥 EXPORT
+window.calculate = calculate;
 
 // ================= ROI VERDICT =================
 
