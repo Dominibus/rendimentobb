@@ -5075,3 +5075,53 @@ body.pro-user .results-overlay{
 body.pro-user [data-paywall]{
   display:none !important;
 }
+
+/* ================= MOBILE FIX GLOBAL ================= */
+
+html, body{
+  overflow-x:hidden;
+}
+
+/* sicurezza universale */
+*{
+  max-width:100%;
+}
+
+/* ================= GRID ================= */
+
+.property-grid{
+  grid-template-columns:1fr; /* mobile 1 colonna */
+  gap:20px;
+}
+
+/* ================= CARD ================= */
+
+.property-card{
+  padding:20px; /* 🔥 da 40 → 20 */
+}
+
+/* ================= SECTION ================= */
+
+.section-info{
+  margin-top:60px;
+  padding:0 15px;
+}
+
+/* ================= FORM ================= */
+
+.form-grid{
+  grid-template-columns:1fr;
+}
+
+/* ================= INPUT ================= */
+
+input{
+  width:100%;
+}
+
+/* ================= HERO ================= */
+
+.container{
+  padding-left:15px !important;
+  padding-right:15px !important;
+}
