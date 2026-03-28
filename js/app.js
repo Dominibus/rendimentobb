@@ -2714,6 +2714,8 @@ function goToMarket(city){
   window.location.href = "/market/" + city;
 }
 
+// ================= PRO UNLOCK =================
+
 window.proUnlocked = false;
 
 function unlockProUI(){
@@ -2727,19 +2729,30 @@ function unlockProUI(){
 
   console.log("🚀 UNLOCK PRO UI START");
 
+  // 🔥 RIMUOVE BLUR
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  setTimeout(() => {
-    document.querySelectorAll('[data-paywall]').forEach(el=>{
-      el.remove();
-    });
-    console.log("🔥 Overlay rimossi post-render");
-  }, 300);
+  // 🔥 RIMUOVE OVERLAY / PAYWALL (FIX DEFINITIVO)
+  document.querySelectorAll('[data-paywall]').forEach(el=>{
+    el.remove();
+  });
 
-  document.body.classList.add("pro-user");
+  document.querySelectorAll(".locked-overlay, .upgrade-box, .paywall-box").forEach(el=>{
+    el.remove();
+  });
 
+  // 🔥 SBLOCCA CLICK GLOBALI
+  document.body.style.pointerEvents = "auto";
+
+  document.querySelectorAll("*").forEach(el=>{
+    if(el.style.pointerEvents === "none"){
+      el.style.pointerEvents = "auto";
+    }
+  });
+
+  // 🔥 SBLOCCA SEZIONI
   document.querySelectorAll(".locked-section").forEach(el=>{
     el.style.filter = "none";
     el.style.pointerEvents = "auto";
@@ -2750,16 +2763,6 @@ function unlockProUI(){
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
-  });
-
-  document.querySelectorAll("*").forEach(el=>{
-    if(el.style.filter && el.style.filter.includes("blur")){
-      el.style.filter = "none";
-    }
-  });
-
-  document.querySelectorAll("[data-locked='true']").forEach(el=>{
-    el.removeAttribute("data-locked");
   });
 
   document.querySelectorAll(".results-card").forEach(card=>{
@@ -2773,38 +2776,8 @@ function unlockProUI(){
     el.style.pointerEvents = "auto";
   });
 
-  function unlockProUI(){
-
-  if(window.proUnlocked){
-    return;
-  }
-
-  window.proUnlocked = true;
-
-  console.log("🚀 UNLOCK PRO UI START");
-
-  // 🔥 RIMUOVE BLUR
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
-
-  // 🔥 RIMUOVE OVERLAY CLASSICI
-  document.querySelectorAll('[data-paywall]').forEach(el=>{
-    el.remove();
-  });
-
-  // 🔥 💥 QUESTO È IL FIX CHIAVE
-  document.querySelectorAll(".locked-overlay, .upgrade-box, .paywall-box").forEach(el=>{
-    el.remove();
-  });
-
-  // 🔥 SBLOCCA CLICK GLOBALI
-  document.body.style.pointerEvents = "auto";
-
-  document.querySelectorAll("*").forEach(el=>{
-    if(el.style.pointerEvents === "none"){
-      el.style.pointerEvents = "auto";
-    }
+  document.querySelectorAll("[data-locked='true']").forEach(el=>{
+    el.removeAttribute("data-locked");
   });
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
@@ -2827,7 +2800,7 @@ document.addEventListener("rb_plan_loaded", () => {
     unlockProUI();
   }
 
-  // 🔥 SEMPRE RICALCOLA (fix definitivo)
+  // 🔥 SEMPRE RICALCOLA
   if(window.simulationExecuted){
     console.log("🔄 Re-run calculate (plan update)");
     calculate(true);
