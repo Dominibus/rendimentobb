@@ -1365,14 +1365,16 @@ const scoreLabel = document.querySelector(".score-label");
 
 if(scoreCircle){
 
-  // 🔒 FREE → NON TOCCARE (mantieni blur / stato iniziale)
   if(window.currentPlan === "free"){
-  console.log("🔒 FREE → score bloccato");
-    else{
-  scoreCircle.style.filter = "none";
-  scoreCircle.style.opacity = "1";
-}
-  }else{
+    console.log("🔒 FREE → score bloccato");
+
+    scoreCircle.style.filter = "blur(6px)";
+    scoreCircle.style.opacity = "0.4";
+
+  } else {
+
+    scoreCircle.style.filter = "none";
+    scoreCircle.style.opacity = "1";
 
     let grade = "C";
     let color = "#ef4444";
@@ -1391,6 +1393,7 @@ if(scoreCircle){
     scoreCircle.style.color = "#fff";
 
   }
+
 }
 
 if(scoreLabel){
