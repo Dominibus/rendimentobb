@@ -1368,6 +1368,10 @@ if(scoreCircle){
   // 🔒 FREE → NON TOCCARE (mantieni blur / stato iniziale)
   if(window.currentPlan === "free"){
   console.log("🔒 FREE → score bloccato");
+    else{
+  scoreCircle.style.filter = "none";
+  scoreCircle.style.opacity = "1";
+}
   }else{
 
     let grade = "C";
@@ -1461,13 +1465,16 @@ safeRender("investment-score", () => {
     window.currentPlan === "investor" ||
     window.currentPlan === "pro_yearly";
 
-  console.log("🔥 INVESTMENT SCORE PLAN:", window.currentPlan, isPro);
-
-  // 🔥 SEMPRE RENDER → MA GESTISCI UI
   renderInvestmentScore(roi, riskScore);
 
+  const el = document.querySelector("#investment-score");
+
+  if(!el) return;
+
   if(!isPro){
-    document.querySelector("#investment-score")?.classList.add("pro-blur");
+    el.classList.add("pro-blur");
+  } else {
+    el.classList.remove("pro-blur"); // 💥 FIX
   }
 
 });
