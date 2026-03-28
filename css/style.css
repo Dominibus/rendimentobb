@@ -4824,44 +4824,41 @@ margin-bottom:15px;
 /* ===================== */
 
 .roi-highlight{
-text-align:center;
-padding:25px;
-border-radius:16px;
-background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
-border:1px solid #bbf7d0;
+  text-align:center;
+  padding:25px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
+  border:1px solid #bbf7d0;
 }
 
 .roi-big{
-font-size:42px;
-font-weight:800;
-display:block;
-margin-top:10px;
-color:#059669;
+  font-size:42px;
+  font-weight:800;
+  display:block;
+  margin-top:10px;
+  color:#059669;
 }
 
 .roi-verdict{
-margin-top:10px;
-font-size:15px;
-font-weight:600;
+  margin-top:10px;
+  font-size:15px;
+  font-weight:600;
 }
 
 /* dinamico */
 
-.roi-good{
-color:#059669;
-}
+.roi-good{ color:#059669; }
+.roi-medium{ color:#d97706; }
+.roi-bad{ color:#dc2626; }
 
-.roi-medium{
-color:#d97706;
-}
 
-.roi-bad{
-color:#dc2626;
-}
+/* ===================== */
+/* PRO LOCK SYSTEM CLEAN */
+/* ===================== */
 
 .pro-only{
-  opacity:0.15 !important;
-  filter:blur(4px) !important;
+  opacity:0.25;
+  filter:blur(4px);
   pointer-events:none;
   user-select:none;
   position:relative;
@@ -4880,32 +4877,29 @@ color:#dc2626;
   font-weight:600;
 }
 
-/* 🔒 PRO BLUR */
-.pro-only{
-  filter: blur(6px);
-  opacity: 0.5;
-  pointer-events: none;
-  user-select: none;
-}
 
-/* 🔥 OVERLAY */
+/* ===================== */
+/* RESULTS OVERLAY */
+/* ===================== */
+
 .results-card{
-  position: relative;
+  position:relative;
 }
 
 .results-overlay{
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(6px);
-  border-radius: 16px;
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(6px);
+  border-radius:16px;
+  z-index:5;
 }
 
 .overlay-content{
-  text-align: center;
+  text-align:center;
 }
 
 .overlay-title{
@@ -4916,7 +4910,7 @@ color:#dc2626;
 
 .overlay-text{
   font-size:14px;
-  opacity:0.7;
+  color:#64748b;
   margin-bottom:12px;
 }
 
@@ -4930,23 +4924,30 @@ color:#dc2626;
   cursor:pointer;
 }
 
+
+/* ===================== */
+/* UPGRADE BOX */
+/* ===================== */
+
 .upgrade-home-box{
-margin-top:20px;
-padding:20px;
-border-radius:12px;
-background:linear-gradient(135deg,#10b981,#059669);
-color:white;
-text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  margin-top:20px;
+  padding:20px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
 }
 
+
 /* ===================== */
-/* GLOBAL BLUR PAYWALL */
+/* GLOBAL PAYWALL BLUR */
 /* ===================== */
 
 .pro-blur{
   position:relative;
   filter:blur(2px);
+  opacity:0.6;
   pointer-events:none;
 }
 
@@ -4960,21 +4961,10 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
   z-index:2;
 }
 
-.pro-blur{
-  position:relative;
-  filter:blur(2px);
-  pointer-events:none;
-}
 
-.pro-blur::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(6px);
-  border-radius:16px;
-  z-index:2;
-}
+/* ===================== */
+/* HOME OVERLAY */
+/* ===================== */
 
 .home-blur-overlay{
   position:absolute;
@@ -4994,17 +4984,10 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
   max-width:280px;
 }
 
-.overlay-title{
-  font-weight:700;
-  margin-bottom:8px;
-}
 
-.overlay-text{
-  font-size:14px;
-  margin-bottom:12px;
-}
-
-/* ================= LOCKED SAAS SECTION ================= */
+/* ===================== */
+/* LOCKED SECTIONS */
+/* ===================== */
 
 .locked-section{
   position:relative;
@@ -5033,46 +5016,37 @@ box-shadow:0 10px 25px rgba(0,0,0,0.15);
   padding:20px;
 }
 
-.overlay-title{
-  font-size:18px;
-  font-weight:700;
-}
-
-.overlay-text{
-  font-size:14px;
-  color:#64748b;
-  max-width:300px;
-}
-
-/* ================= PRO UNLOCK FIX ================= */
-
-body.pro-user .blur-content,
-body.pro-user .pro-blur,
-body.pro-user .locked-section .blur-content {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-body.pro-user * {
-  filter: none !important;
-}
 
 /* ===================== */
-/* PRO FINAL UNLOCK FIX */
+/* PRO UNLOCK (CORRETTO) */
 /* ===================== */
 
 body.pro-user .pro-only{
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
 }
 
 body.pro-user .pro-only::after{
   display:none !important;
 }
 
+body.pro-user .pro-blur{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+body.pro-user .blur-content{
+  filter:none !important;
+  pointer-events:auto !important;
+}
+
 body.pro-user .locked-overlay{
+  display:none !important;
+}
+
+body.pro-user .results-overlay{
   display:none !important;
 }
 
