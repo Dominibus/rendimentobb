@@ -1274,6 +1274,29 @@ function calculate(force = false){
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
 
+  safeRender("investment-metrics", (container) => {
+
+  container.innerHTML = `
+  
+  <div class="metric-card">
+    <div>ROI</div>
+    <strong>${roi.toFixed(1)}%</strong>
+  </div>
+
+  <div class="metric-card">
+    <div>Profitto annuo</div>
+    <strong>${formatCurrency(netAfterMortgage)}</strong>
+  </div>
+
+  <div class="metric-card">
+    <div>Ricavi</div>
+    <strong>${formatCurrency(gross)}</strong>
+  </div>
+
+  `;
+
+});
+
   // ================= PLAN =================
 
   const isPro =
@@ -1394,7 +1417,7 @@ function calculate(force = false){
 
   safeRender("investment-score", () => {
 
-    renderInvestmentScore(roi);
+    renderInvestmentScore(roi, result.risk || 50);
 
     const el = document.getElementById("investment-score");
 
