@@ -1448,6 +1448,8 @@ function calculate(force = false){
 }, 300);
 
 } // 🔥 QUESTA È LA CHIUSURA CORRETTA DI calculate 
+
+window.calculate = calculate;
  
 // ================= STRATEGIC =================
 
