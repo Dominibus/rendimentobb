@@ -2734,13 +2734,23 @@ function unlockProUI(){
     el.classList.remove("pro-blur");
   });
 
-  // 🔥 RIMUOVE OVERLAY / PAYWALL (FIX DEFINITIVO)
+  // 🔥 RIMUOVE OVERLAY / PAYWALL
   document.querySelectorAll('[data-paywall]').forEach(el=>{
     el.remove();
   });
 
   document.querySelectorAll(".locked-overlay, .upgrade-box, .paywall-box").forEach(el=>{
     el.remove();
+  });
+
+  // 💥 🔥 FIX DEFINITIVO TUO CASO (overlay 30%)
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.remove();
+  });
+
+  // 🔥 PULISCE eventuale contenuto interno alert
+  document.querySelectorAll("#smart-investment-alert").forEach(el=>{
+    el.innerHTML = "";
   });
 
   // 🔥 SBLOCCA CLICK GLOBALI
