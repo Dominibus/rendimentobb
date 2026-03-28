@@ -1564,48 +1564,41 @@ window.calculate = calculate;
 
 function renderStrategicInsight(roi) {
 
-const box = document.getElementById("strategic-insight");
+  const box = document.getElementById("strategic-insight");
+  if (!box) return;
 
-if (!box) return;
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
 
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+  // 🔒 UTENTE FREE → mostra blocco
+  if(!isPro){
 
-if(!isPro){
+    box.innerHTML = `
+      <strong>${t("strategicLocked")}</strong>
+      <div style="margin-top:10px;">
+        <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+          ${t("unlock")}
+        </button>
+      </div>
+    `;
+
+    return;
+  }
+
+  // ✅ UTENTE PRO → insight reale
+  let message =
+    roi > 12
+      ? t("insightSolid")
+      : roi > 6
+      ? t("insightMedium")
+      : t("insightWeak");
 
   box.innerHTML = `
-  <strong>${t("strategicLocked")}</strong>
-  <div style="margin-top:10px;">
-  <button class="btn btn-primary">${t("unlock")}</button>
-  </div>
+    <strong>${t("strategicTitle")}</strong>
+    <p style="margin-top:10px;">${message}</p>
   `;
-
-  return;
-}
-
-box.innerHTML = `
-<strong>${t("strategicLocked")}</strong>
-<div style="margin-top:10px;">
-<button class="btn btn-primary">${t("unlock")}</button>
-</div>
-`;
-
-return;
-
-}
-
-let message =
-roi > 12 ? t("insightSolid")
-: roi > 6 ? t("insightMedium")
-: t("insightWeak");
-
-box.innerHTML = `
-<strong>${t("strategicTitle")}</strong>
-<p style="margin-top:10px;">${message}</p>
-`;
-
 }
 
 
