@@ -5125,3 +5125,146 @@ input{
   padding-left:15px !important;
   padding-right:15px !important;
 }
+
+/* ================= MOBILE PREMIUM UX ================= */
+
+@media (max-width:768px){
+
+/* ===== RESET ===== */
+
+html, body{
+  overflow-x:hidden;
+}
+
+.container{
+  padding:0 16px !important;
+}
+
+/* ===== HERO ===== */
+
+.hero .container{
+  padding-top:80px !important;
+}
+
+.page-title h1{
+  font-size:26px;
+  line-height:1.2;
+}
+
+.page-title p{
+  font-size:14px;
+}
+
+/* ===== GRID ===== */
+
+.property-grid{
+  display:flex;
+  overflow-x:auto;
+  gap:16px;
+  padding-bottom:10px;
+  scroll-snap-type:x mandatory;
+}
+
+.property-grid::-webkit-scrollbar{
+  display:none;
+}
+
+/* ===== CARD ===== */
+
+.property-card{
+  min-width:85%;
+  flex-shrink:0;
+  padding:20px;
+  border-radius:16px;
+  scroll-snap-align:start;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* hover disattivato mobile */
+.property-card:hover{
+  transform:none;
+}
+
+/* ===== ROI ===== */
+
+.property-roi{
+  font-size:22px;
+}
+
+/* ===== SEZIONI ===== */
+
+section{
+  margin-top:60px !important;
+}
+
+.section-info{
+  margin-top:60px;
+  padding:0;
+}
+
+.section-info p{
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* ===== FORM ===== */
+
+.form-grid{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+input{
+  width:100%;
+  font-size:16px;
+}
+
+/* ===== BUTTON ===== */
+
+.btn{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+}
+
+/* ===== PROPERTY RESULT CARD ===== */
+
+#property-search-results .property-grid{
+  display:flex;
+}
+
+/* ===== ANALYZE BOX ===== */
+
+#property-preview{
+  font-size:13px;
+}
+
+/* ===== STICKY CTA ===== */
+
+.mobile-sticky-cta{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  padding:12px 16px;
+  background:white;
+  border-top:1px solid #e5e7eb;
+  box-shadow:0 -10px 30px rgba(0,0,0,0.05);
+  z-index:999;
+}
+
+.mobile-sticky-cta button{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  border-radius:10px;
+}
+
+/* spazio sotto per evitare overlap */
+body{
+  padding-bottom:80px;
+}
+
+}
