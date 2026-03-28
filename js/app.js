@@ -1364,8 +1364,8 @@ const scoreLabel = document.querySelector(".score-label");
 if(scoreCircle){
 
   // 🔒 FREE → NON TOCCARE (mantieni blur / stato iniziale)
-  if(!hasPlan("pro")){
-    console.log("🔒 FREE → score bloccato");
+  if(window.currentPlan === "free"){
+  console.log("🔒 FREE → score bloccato");
   }else{
 
     let grade = "C";
@@ -1452,7 +1452,7 @@ safeRender("occupancy-sensitivity", () => {
 
   console.log("PLAN CHECK:", window.currentPlan, hasPlan("pro"));
 
-safeRender("investment-score", (container) => {
+safeRender("investment-score", () => {
 
   const isPro =
     window.currentPlan === "pro" ||
@@ -1461,12 +1461,12 @@ safeRender("investment-score", (container) => {
 
   console.log("🔥 INVESTMENT SCORE PLAN:", window.currentPlan, isPro);
 
-  if(!isPro){
-    console.log("🔒 FREE → skip render");
-    return;
-  }
-
+  // 🔥 SEMPRE RENDER → MA GESTISCI UI
   renderInvestmentScore(roi, riskScore);
+
+  if(!isPro){
+    document.querySelector("#investment-score")?.classList.add("pro-blur");
+  }
 
 });
 
@@ -1522,18 +1522,13 @@ if(revenueEl){
 }
 
 // 🔥 SBLOCCO PRO DOPO TUTTO IL RENDER
-setTimeout(()=>{
-
-  if(
-  (window.currentPlan === "pro" ||
+if(
+  window.currentPlan === "pro" ||
   window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly") &&
-  !window.proUnlocked
+  window.currentPlan === "pro_yearly"
 ){
   unlockProUI();
 }
-
-}, 100);  
 
   setTimeout(()=>{
   window.isCalculating = false;
@@ -2781,16 +2776,27 @@ function unlockProUI(){
 
 // ================= EVENTI GLOBALI =================
 
-let planHandled = false;
-
 document.addEventListener("rb_plan_loaded", () => {
 
-  if(window.planInitialized){
-    console.log("⛔ Piano già inizializzato → stop");
-    return;
+  console.log("🔥 Piano aggiornato:", window.currentPlan);
+
+  updatePDFButton();
+
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  ){
+    unlockProUI();
   }
 
-  window.planInitialized = true;
+  // 🔥 SEMPRE RICALCOLA
+  if(window.simulationExecuted){
+    console.log("🔄 Re-run calculate (plan update)");
+    calculate(true);
+  }
+
+});
 
   console.log("🔥 Piano aggiornato:", window.currentPlan);
 
