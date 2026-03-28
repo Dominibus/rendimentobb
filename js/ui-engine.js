@@ -9,11 +9,17 @@ const roi = Number(result?.roi) || 0;
 const profit = Number(result?.netAfterMortgage || result?.profit) || 0;
 const revenue = Number(result?.gross || result?.revenue) || 0;
 
+// ================= PLAN CHECK =================
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
 // ================= ROI COLOR =================
 function getROIColor(value){
-  if(value < 5) return "#ef4444"; // rosso
-  if(value < 10) return "#f59e0b"; // arancione
-  return "#10b981"; // verde
+  if(value < 5) return "#ef4444";
+  if(value < 10) return "#f59e0b";
+  return "#10b981";
 }
 
 // ================= ANIMATION =================
@@ -81,7 +87,6 @@ if(riskEl){
 
   riskEl.innerHTML = `
     <div style="margin-top:10px">
-
       <div style="font-size:12px;margin-bottom:6px;opacity:0.7">
         Livello rischio investimento
       </div>
@@ -94,10 +99,9 @@ if(riskEl){
           transition:width 0.6s ease;
         "></div>
       </div>
-
     </div>
   `;
-}  
+}
 
 // ================= APPLY =================
 
@@ -146,9 +150,10 @@ if(statusEl){
       ${textIT}
     </div>
   `;
-}  
+}
 
-// PROFITTO
+// ================= PROFIT / REVENUE =================
+
 if(profitEl){
   profitEl.innerText = profit.toLocaleString("it-IT",{
     style:"currency",
@@ -156,11 +161,30 @@ if(profitEl){
   });
 }
 
-// RICAVI
 if(revenueEl){
   revenueEl.innerText = revenue.toLocaleString("it-IT",{
     style:"currency",
     currency:"EUR"
+  });
+}
+
+// ================= 🔥 PLAN UI CONTROL =================
+
+// 👉 FREE → applica blur
+if(!isPro){
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.classList.add("pro-blur");
+  });
+}
+
+// 👉 PRO → rimuove tutto
+if(isPro){
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  document.querySelectorAll("[data-paywall]").forEach(el=>{
+    el.remove();
   });
 }
 
