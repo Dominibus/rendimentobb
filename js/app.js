@@ -1469,7 +1469,9 @@ safeRender("occupancy-sensitivity", () => {
   renderOccupancySensitivity();
 });
 
-  safeRender("investment-score", () => {
+  // ================= INVESTMENT SCORE =================
+
+safeRender("investment-score", () => {
 
   const isPro =
     window.currentPlan === "pro" ||
@@ -1479,27 +1481,83 @@ safeRender("occupancy-sensitivity", () => {
   renderInvestmentScore(roi, riskScore);
 
   const el = document.querySelector("#investment-score");
-
   if(!el) return;
 
   if(!isPro){
     el.classList.add("pro-blur");
   } else {
-    el.classList.remove("pro-blur"); // 💥 FIX
+    el.classList.remove("pro-blur");
   }
 
 });
 
-// PAYBACK
+
+// ================= INVESTMENT GRADE (FIX VUOTO) =================
+
+safeRender("investment-grade-panel", () => {
+
+  const el = document.getElementById("investment-grade-panel");
+  if(!el) return;
+
+  let grade = "C";
+  let color = "#ef4444";
+
+  if(roi > 12){
+    grade = "A";
+    color = "#10b981";
+  }
+  else if(roi > 6){
+    grade = "B";
+    color = "#f59e0b";
+  }
+
+  el.innerHTML = `
+    <div style="
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      background:${color};
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-size:28px;
+      font-weight:700;
+      margin:auto;
+    ">
+      ${grade}
+    </div>
+
+    <div style="
+      text-align:center;
+      margin-top:10px;
+      font-size:13px;
+      color:#64748b;
+    ">
+      Investment Grade
+    </div>
+  `;
+
+});
+
+
+// ================= PAYBACK =================
+
 let payback = 0;
 
 if(equity > 0 && netAfterMortgage > 0){
   payback = equity / netAfterMortgage;
 }
 
+
+// ================= INVESTMENT VERDICT =================
+
 safeRender("investment-verdict", () => {
   renderInvestmentVerdict(roi, payback);
 });
+
+
+// ================= BREAK EVEN =================
 
 safeRender("break-even-kpi", () => {
   renderBreakEvenOccupancy(
