@@ -1260,7 +1260,9 @@ const equity = safeNumber(getValue("equity"));
 // DEBUG
 console.log("RESULT:", result);
   
-showUpgradePopup(result.roi);  
+if(window.currentPlan === "free"){
+  showUpgradePopup(result.roi);
+}  
 
 window.lastAnalysisData = {
   ...result,
@@ -2769,6 +2771,40 @@ function unlockProUI(){
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
+  });
+
+  function unlockProUI(){
+
+  if(window.proUnlocked){
+    return;
+  }
+
+  window.proUnlocked = true;
+
+  console.log("🚀 UNLOCK PRO UI START");
+
+  // 🔥 RIMUOVE BLUR
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  // 🔥 RIMUOVE OVERLAY CLASSICI
+  document.querySelectorAll('[data-paywall]').forEach(el=>{
+    el.remove();
+  });
+
+  // 🔥 💥 QUESTO È IL FIX CHIAVE
+  document.querySelectorAll(".locked-overlay, .upgrade-box, .paywall-box").forEach(el=>{
+    el.remove();
+  });
+
+  // 🔥 SBLOCCA CLICK GLOBALI
+  document.body.style.pointerEvents = "auto";
+
+  document.querySelectorAll("*").forEach(el=>{
+    if(el.style.pointerEvents === "none"){
+      el.style.pointerEvents = "auto";
+    }
   });
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
