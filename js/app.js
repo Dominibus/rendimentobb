@@ -1442,6 +1442,12 @@ function calculate(force = false){
     });
 
   }
+
+ setTimeout(()=>{
+  window.isCalculating = false;
+}, 300);
+
+} // 🔥 QUESTA È LA CHIUSURA CORRETTA DI calculate 
  
 // ================= STRATEGIC =================
 
