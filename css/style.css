@@ -4853,7 +4853,7 @@ margin-bottom:15px;
 
 
 /* ===================== */
-/* PRO LOCK SYSTEM CLEAN */
+/* PRO LOCK SYSTEM */
 /* ===================== */
 
 .pro-only{
@@ -5018,30 +5018,52 @@ margin-bottom:15px;
 
 
 /* ===================== */
-/* PRO UNLOCK (CORRETTO) */
+/* 🚀 HARD UNLOCK PRO */
 /* ===================== */
 
+/* override totale */
 body.pro-user .pro-only{
-  filter:none !important;
+  all:unset !important;
+  display:block !important;
   opacity:1 !important;
+  filter:none !important;
+  pointer-events:auto !important;
+  user-select:auto !important;
+}
+
+/* figli */
+body.pro-user .pro-only *{
+  opacity:1 !important;
+  filter:none !important;
   pointer-events:auto !important;
 }
 
+/* sicurezza grid */
+body.pro-user .results-grid .pro-only{
+  opacity:1 !important;
+  filter:none !important;
+  pointer-events:auto !important;
+}
+
+/* rimuove badge */
 body.pro-user .pro-only::after{
   display:none !important;
 }
 
+/* rimuove blur globale */
 body.pro-user .pro-blur{
   filter:none !important;
   opacity:1 !important;
   pointer-events:auto !important;
 }
 
+/* rimuove blur contenuti */
 body.pro-user .blur-content{
   filter:none !important;
   pointer-events:auto !important;
 }
 
+/* rimuove overlay */
 body.pro-user .locked-overlay{
   display:none !important;
 }
