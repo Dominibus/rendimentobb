@@ -860,13 +860,17 @@ ${message}
 
 function showUpgradePopup(roi){
 
-  if(hasPlan("pro")) return;
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(isPro) return;
 
   if(roi > 8){
 
     console.log("Soft paywall attivo ROI:", roi);
 
-    // 👉 mostra solo CTA, NON bloccare UI
     const upgradeBox = document.getElementById("upgrade-box");
 
     if(upgradeBox){
@@ -884,13 +888,17 @@ function renderSmartInvestmentAlert(roi){
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
 
-  // 🔥 PRO → NON TOCCARE MAI IL DOM
-  if(hasPlan("pro")){
-  container.innerHTML = ""; // 🔥 pulisci
-  return;
-}
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
 
-  // 🔥 ROI basso → NON TOCCARE DOM (evita flicker/reset)
+  // ✅ PRO → pulisci e STOP
+  if(isPro){
+    container.innerHTML = "";
+    return;
+  }
+
   if(roi < 10){
     return;
   }
@@ -1412,7 +1420,9 @@ const insights = generateInsights({
 renderInsights(insights);  
 
 // ================= SMART ALERT =================
-renderSmartInvestmentAlert(roi);  
+if(window.currentPlan === "free"){
+  renderSmartInvestmentAlert(roi);
+}
 
 // ================= UI + SAVE + SCROLL =================
 
@@ -1459,9 +1469,7 @@ safeRender("occupancy-sensitivity", () => {
   renderOccupancySensitivity();
 });
 
-  console.log("PLAN CHECK:", window.currentPlan, hasPlan("pro"));
-
-safeRender("investment-score", () => {
+  safeRender("investment-score", () => {
 
   const isPro =
     window.currentPlan === "pro" ||
@@ -1560,7 +1568,22 @@ const box = document.getElementById("strategic-insight");
 
 if (!box) return;
 
-if(!hasPlan("pro")){
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
+if(!isPro){
+
+  box.innerHTML = `
+  <strong>${t("strategicLocked")}</strong>
+  <div style="margin-top:10px;">
+  <button class="btn btn-primary">${t("unlock")}</button>
+  </div>
+  `;
+
+  return;
+}
 
 box.innerHTML = `
 <strong>${t("strategicLocked")}</strong>
