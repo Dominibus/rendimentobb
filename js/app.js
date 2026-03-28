@@ -1443,18 +1443,7 @@ function calculate(force = false){
 
   }
 
-  // ================= RESET FLAG =================
-
-  setTimeout(()=>{
-    window.isCalculating = false;
-  },300);
-
-}
-
-// 🔥 EXPORT
-window.calculate = calculate;
-
-// ================= ROI VERDICT =================
+  // ================= ROI VERDICT =================
 
 let verdict = "";
 
@@ -1581,6 +1570,17 @@ const insights = generateInsights({
 });
 
 renderInsights(insights);  
+
+  // ================= RESET FLAG =================
+
+  setTimeout(()=>{
+    window.isCalculating = false;
+  },300);
+
+}
+
+// 🔥 EXPORT
+window.calculate = calculate;
 
 // ================= SMART ALERT =================
 if(window.currentPlan === "free"){
