@@ -2782,40 +2782,19 @@ document.addEventListener("rb_plan_loaded", () => {
 
   updatePDFButton();
 
-  if(
+  const isPro =
     window.currentPlan === "pro" ||
     window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  ){
+    window.currentPlan === "pro_yearly";
+
+  if(isPro){
     unlockProUI();
   }
 
-  // 🔥 SEMPRE RICALCOLA
+  // 🔥 SEMPRE RICALCOLA (fix definitivo)
   if(window.simulationExecuted){
     console.log("🔄 Re-run calculate (plan update)");
     calculate(true);
   }
 
 });
-
-  console.log("🔥 Piano aggiornato:", window.currentPlan);
-
-  updatePDFButton();
-
-  if(
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  ){
-    unlockProUI();
-
-    // 💥 FIX CRITICO
-    setTimeout(() => {
-      if(window.simulationExecuted){
-        console.log("🔄 Re-run calculate dopo unlock PRO");
-        calculate(true);
-      }
-    }, 200);
-  }
-
-}, { once: true });
