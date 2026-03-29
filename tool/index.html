@@ -1109,6 +1109,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })();
 
+  // ================= CTA UPGRADE =================
+
+window.handleUpgradeClick = function(){
+
+  console.log("🔥 CTA CLICK");
+
+  const lang = window.RB_LANG?.current || "it";
+
+  const message = lang === "en"
+    ? "You are about to unlock the full investment analysis.\n\nROI, risks, mortgage and real profit."
+    : "Stai per sbloccare l’analisi completa.\n\nROI reale, rischi, mutuo e profitto.";
+
+  if(confirm(message)){
+    window.location.href = "https://buy.stripe.com/YOUR_LINK";
+  }
+
+};
+
 </script>
 </body>
 </html>
