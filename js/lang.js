@@ -198,6 +198,19 @@
 
 window.RB_TEXT = {
 
+  risk: {
+  it: "Rischio",
+  en: "Risk"
+},
+breakEven: {
+  it: "Break-even",
+  en: "Break-even"
+},
+monthlyProfit: {
+  it: "Profitto mensile",
+  en: "Monthly profit"
+},
+
   roi: {
     it: "ROI",
     en: "ROI"
