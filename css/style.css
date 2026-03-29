@@ -5472,3 +5472,9 @@ body{
   max-width:900px;
   margin:40px auto 0 auto;
 }
+
+.tool-card{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+}
