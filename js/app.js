@@ -2811,12 +2811,20 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
+  // 🔒 evita trigger se già PRO
   if(window.isProUser && window.isProUser()) return;
 
   const safeROI = Number(roi || 0);
 
+  // 🔥 trigger solo se ROI interessante
   if(safeROI >= 8){
+
+    // ❌ evita spam popup multipli
+    if(window.upgradeTriggered) return;
+    window.upgradeTriggered = true;
+
     setTimeout(()=>{
+
       const lang = window.currentLang || "it";
 
       const msg = lang === "en"
@@ -2826,7 +2834,9 @@ window.triggerUpgradeIfNeeded = function(roi){
       if(confirm(msg)){
         buyPlan("pro");
       }
+
     },1500);
+
   }
 
-}
+};
