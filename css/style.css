@@ -5478,3 +5478,27 @@ body{
   max-width:520px;
   margin:0 auto;
 }
+
+.kpi-card{
+  padding:18px;
+  border-radius:14px;
+  background:white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.06);
+  transition:all 0.3s ease;
+}
+
+.kpi-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+.kpi-card span{
+  font-size:12px;
+  color:#64748b;
+}
+
+.kpi-card strong{
+  display:block;
+  margin-top:6px;
+  font-size:18px;
+}
