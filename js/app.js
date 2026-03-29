@@ -2807,31 +2807,3 @@ document.addEventListener("rb_plan_loaded", () => {
 
 });
 
-<script>
-
-function updateInvestors(){
-
-  const base = 1200;
-  const random = Math.floor(Math.random() * 120);
-
-  const value = base + random;
-
-  const el = document.getElementById("live-investors");
-
-  if(!el) return;
-
-  el.innerHTML = `🔥 +${value.toLocaleString()} ${
-    window.currentLang === "en"
-      ? "investors are analyzing mortgages now"
-      : "investitori stanno analizzando mutui ora"
-  }`;
-
-}
-
-// primo run
-updateInvestors();
-
-// aggiornamento continuo
-setInterval(updateInvestors, 4000);
-
-</script>
