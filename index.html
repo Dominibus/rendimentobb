@@ -1223,24 +1223,48 @@ window.location.href = selectedCity
 };
 
 
+<script>
+
+// ================= SAFE UTILS =================
+const safeNum = (v, def=0)=>{
+  const n = parseFloat(v);
+  return isNaN(n) ? def : n;
+};
+
+const log = (...a)=>console.log("[RB]",...a);
+const error = (...a)=>console.error("[RB]",...a);
+
+
 // ================= QUICK ROI =================
 window.quickROI = function(){
 
-let price = safeNum(qr_price?.value,250000);
-let reno  = safeNum(qr_reno?.value,30000);
-let night = safeNum(qr_night?.value,110);
-let occ   = safeNum(qr_occ?.value,65);
-let cost  = safeNum(qr_cost?.value,35);
+// INPUT ELEMENTS (FIX ERRORI)
+const priceEl = document.getElementById("qr_price");
+const renoEl  = document.getElementById("qr_reno");
+const nightEl = document.getElementById("qr_night");
+const occEl   = document.getElementById("qr_occ");
+const costEl  = document.getElementById("qr_cost");
 
+// VALUES
+let price = safeNum(priceEl?.value,250000);
+let reno  = safeNum(renoEl?.value,30000);
+let night = safeNum(nightEl?.value,110);
+let occ   = safeNum(occEl?.value,65);
+let cost  = safeNum(costEl?.value,35);
+
+// CLAMP
 occ = Math.min(Math.max(occ,1),95);
 cost = Math.min(Math.max(cost,1),90);
 
-qr_price.value = price;
-qr_reno.value = reno;
-qr_night.value = night;
-qr_occ.value = occ;
-qr_cost.value = cost;
+// UPDATE INPUT UI
+if(priceEl) priceEl.value = price;
+if(renoEl)  renoEl.value = reno;
+if(nightEl) nightEl.value = night;
+if(occEl)   occEl.value = occ;
+if(costEl)  costEl.value = cost;
 
+
+// ================= CALCOLI =================
 const investment = price + reno;
 const revenue = night * 365 * (occ/100);
 const net = revenue - (revenue*(cost/100));
@@ -1248,14 +1272,27 @@ const net = revenue - (revenue*(cost/100));
 const roi = (net/investment)*100;
 const breakEven = net>0 ? investment/net : 99;
 
-// ROI OUTPUT
-qr_roi.innerText = roi.toFixed(1)+"%";
 
-// 🔥 BLOCCATI → NON MOSTRIAMO PIÙ I VALORI
-qr_profit.innerText = "🔒";
-qr_month.innerText = "🔒";
-qr_break.innerText = "🔒";
-qr_rev.innerText = "🔒";
+// ================= OUTPUT =================
+const elRoi    = document.getElementById("qr_roi");
+const elProfit = document.getElementById("qr_profit");
+const elMonth  = document.getElementById("qr_month");
+const elBreak  = document.getElementById("qr_break");
+const elRev    = document.getElementById("qr_rev");
+
+if(!elRoi) return;
+
+// ROI VISIBILE
+elRoi.innerText = roi.toFixed(1)+"%";
+
+// 🔒 BLOCCO DATI (FREE)
+const lock = (el)=>{ if(el) el.innerText = "🔒"; };
+
+lock(elProfit);
+lock(elMonth);
+lock(elBreak);
+lock(elRev);
+
 
 // ================= PSICOLOGIA =================
 const psych = document.getElementById("roi-psychology");
@@ -1277,7 +1314,8 @@ else{
 
 }
 
-// ================= CTA DINAMICA =================
+
+// ================= CTA =================
 renderUpgradeCTA(roi);
 
 // lingua
@@ -1286,7 +1324,8 @@ window.RB_LANG?.apply?.();
 };
 
 
-// ================= CTA =================
+
+// ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
 const box = document.getElementById("upgrade-box");
@@ -1308,10 +1347,12 @@ text-align:center;
 
 <h3>🔥 ${window.t("Analisi completa disponibile","Full analysis available")}</h3>
 
-<p>${window.t(
+<p>
+${window.t(
 "ROI stimato: "+roi.toFixed(1)+"%",
 "Estimated ROI: "+roi.toFixed(1)+"%"
-)}</p>
+)}
+</p>
 
 <p style="opacity:.9">
 ${window.t(
@@ -1332,10 +1373,12 @@ window.RB_LANG?.apply?.();
 }
 
 
+
 // ================= ANALYZE PROPERTY =================
 window.analyzeProperty = function(){
 
-const url = listing_url?.value;
+const input = document.getElementById("listing_url");
+const url = input?.value;
 
 if(!url){
   alert(window.t("Inserisci un link valido","Enter a valid URL"));
@@ -1345,10 +1388,12 @@ if(!url){
 // simulazione
 quickROI();
 
+// scroll UX
 document.querySelector(".investment-metrics")
 ?.scrollIntoView({behavior:"smooth"});
 
 };
+
 
 
 // ================= BUY PLAN =================
@@ -1362,7 +1407,6 @@ if(!user){
   return;
 }
 
-// 🔥 TRACKING (fondamentale)
 log("CLICK BUY:", plan);
 
 try{
@@ -1390,13 +1434,16 @@ if(data.url){
 };
 
 
+
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
 
-// auto ROI
-if(qr_price) quickROI();
+// AUTO ROI
+if(document.getElementById("qr_price")){
+  quickROI();
+}
 
-// enter search
+// ENTER SEARCH
 document.querySelector(".city-search-input")
 ?.addEventListener("keypress",(e)=>{
   if(e.key==="Enter"){
@@ -1404,10 +1451,13 @@ document.querySelector(".city-search-input")
   }
 });
 
-// restore city
+// RESTORE CITY
 const saved = localStorage.getItem("selected_city");
 const map = {roma:"rome",napoli:"naples",milano:"milan",firenze:"florence"};
-if(saved && map[saved]) changeCityBackground(map[saved]);
+
+if(saved && map[saved]){
+  changeCityBackground(map[saved]);
+}
 
 });
 
