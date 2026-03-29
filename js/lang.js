@@ -218,4 +218,9 @@ window.RB_TEXT = {
     en: "Estimated profit (partial)"
   }
 
+}
+
+window.tt = function(key){
+  const lang = window.RB_LANG.current || "it";
+  return window.RB_TEXT?.[key]?.[lang] || key;
 };
