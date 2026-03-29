@@ -2990,3 +2990,11 @@ window.handleUpgradeClick = function(){
   }, 900);
 
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  if(window.RB_LANG && typeof window.RB_LANG.apply === "function"){
+    window.RB_LANG.apply();
+  }
+
+});
