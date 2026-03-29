@@ -255,63 +255,37 @@ data-en="Results are based on average market data. Real risk is calculated in th
 
 <div class="tool-card">
 
-<!-- 🔥 TITLE PIÙ STRATEGICO -->
-<h3 data-it="💰 Simula il tuo investimento B&B"
-data-en="💰 Simulate your B&B investment"></h3>
+  <!-- TITLE -->
+  <h3 
+  data-it="💰 Simula il tuo investimento B&B"
+  data-en="💰 Simulate your B&B investment"></h3>
 
-<!-- 🔥 MICRO COPY -->
-<div style="font-size:13px;color:#64748b;margin-bottom:15px;"
-data-it="Inserisci i dati e scopri se questo investimento può funzionare"
-data-en="Enter the data and see if this investment could work">
-</div>
+  <!-- MICRO COPY -->
+  <div style="font-size:13px;color:#64748b;margin-bottom:15px;"
+  data-it="Inserisci i dati e scopri se questo investimento può funzionare"
+  data-en="Enter the data and see if this investment could work">
+  </div>
 
-<div class="input-group">
+  <!-- 🔥 TUTTI GLI INPUT DEVONO STARE QUI DENTRO -->
+  <div class="input-group">
 
-<label data-it="Città mercato"
-data-en="City Market"></label>
+    <label data-it="Città mercato" data-en="City Market"></label>
 
-<select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
+    <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
+      <option value="">Seleziona città</option>
+      <option value="milano">Milano</option>
+      <option value="roma">Roma</option>
+      <option value="napoli">Napoli</option>
+    </select>
 
-<option value="">Seleziona città</option>
+    <div style="font-size:12px;color:#64748b;margin-top:6px;"
+    data-it="💡 I dati di mercato verranno applicati automaticamente"
+    data-en="💡 Market data will be applied automatically">
+    </div>
 
-<option value="milano">Milano</option>
-<option value="torino">Torino</option>
-<option value="verona">Verona</option>
-<option value="trento">Trento</option>
-<option value="trieste">Trieste</option>
-<option value="genova">Genova</option>
-
-<option value="roma">Roma</option>
-<option value="firenze">Firenze</option>
-<option value="pisa">Pisa</option>
-<option value="bologna">Bologna</option>
-
-<option value="napoli">Napoli</option>
-<option value="bari">Bari</option>
-<option value="lecce">Lecce</option>
-<option value="matera">Matera</option>
-
-<option value="palermo">Palermo</option>
-<option value="catania">Catania</option>
-<option value="taormina">Taormina</option>
-
-<option value="venezia">Venezia</option>
-<option value="sorrento">Sorrento</option>
-<option value="como">Como</option>
-
-</select>
-
-<!-- 🔥 HINT PSICOLOGICO -->
-<div style="font-size:12px;color:#64748b;margin-top:6px;"
-data-it="💡 I dati di mercato verranno applicati automaticamente"
-data-en="💡 Market data will be applied automatically">
-</div>
+  </div>
 
 </div>
-
-
-</div>
-
 
 <div class="input-group">
 <label data-it="Prezzo immobile (€)"
