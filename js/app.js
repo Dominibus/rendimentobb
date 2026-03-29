@@ -2500,53 +2500,102 @@ Date.now()
 
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
-checkMortgageRateUpdate();
-
-});
+// ===============================================
+// RENDIMENTOBB – APP CORE (CLEAN + UX + SYNC)
+// ===============================================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const savedRate = localStorage.getItem("selected_mortgage_rate");
+  console.log("🚀 App init");
 
-if(savedRate){
+  // ===============================
+  // MUTUI → TOOL SYNC
+  // ===============================
 
-const rateInput = document.getElementById("interestRate");
+  applySelectedMortgage();
 
-if(rateInput){
-rateInput.value = savedRate;
-}
+  // ===============================
+  // CHECK RATE UPDATE (se esiste)
+  // ===============================
 
-// 💥 UX MESSAGE
-const banner = document.getElementById("mortgage-banner");
+  if(typeof checkMortgageRateUpdate === "function"){
+    checkMortgageRateUpdate();
+  }
 
-if(banner){
-banner.innerHTML = `
-<div style="
-margin-bottom:20px;
-padding:14px;
-border-radius:12px;
-background:#ecfdf5;
-border:1px solid #10b981;
-font-weight:600;
-text-align:center;
-">
-${t(
-"Mutuo selezionato automaticamente dal comparatore",
-"Mortgage auto-selected from comparator"
-)} (${savedRate}%)
-</div>
-`;
-}
+  // ===============================
+  // AUTO CITY REDIRECT (se esiste)
+  // ===============================
 
-localStorage.removeItem("selected_mortgage_rate");
-
-}
+  if(typeof handleAutoCityRedirect === "function"){
+    handleAutoCityRedirect();
+  }
 
 });
 
-document.addEventListener("DOMContentLoaded", handleAutoCityRedirect);
+
+// ===============================================
+// APPLY MORTGAGE FROM COMPARATOR
+// ===============================================
+
+function applySelectedMortgage(){
+
+  const savedRate =
+    localStorage.getItem("selected_mortgage_rate") ||
+    localStorage.getItem("mortgage_rate");
+
+  if(!savedRate) return;
+
+  console.log("🏦 Applying mortgage:", savedRate);
+
+  const rateInput = document.getElementById("interestRate");
+
+  if(rateInput){
+    rateInput.value = savedRate;
+  }
+
+  // ===============================
+  // UX BANNER PREMIUM
+  // ===============================
+
+  const banner = document.getElementById("mortgage-banner");
+
+  if(banner){
+
+    banner.innerHTML = `
+    <div style="
+      margin-bottom:20px;
+      padding:14px;
+      border-radius:12px;
+      background:linear-gradient(135deg,#ecfdf5,#d1fae5);
+      border:1px solid #10b981;
+      font-weight:600;
+      text-align:center;
+      box-shadow:0 8px 20px rgba(16,185,129,0.15);
+    ">
+      🏦 ${
+        typeof t === "function"
+        ? t(
+          "Mutuo selezionato automaticamente dal comparatore",
+          "Mortgage auto-selected from comparator"
+        )
+        : "Mutuo selezionato"
+      }
+      <br>
+      <span style="font-size:18px;color:#059669">
+        ${savedRate}%
+      </span>
+    </div>
+    `;
+  }
+
+  // ===============================
+  // CLEAN STORAGE
+  // ===============================
+
+  localStorage.removeItem("selected_mortgage_rate");
+  localStorage.removeItem("mortgage_rate");
+
+}
 
 // ================= AUTO LOAD PROPERTY =================
 
