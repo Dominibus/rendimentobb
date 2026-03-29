@@ -129,5 +129,25 @@ Confronta Mutui
 <script type="module" src="/js/firebase-init.js"></script>
 <script type="module" src="/js/app.js"></script>
 
+<script>
+
+function selectMortgage(rate){
+
+// prendi dati inseriti
+const amount = document.getElementById("mortgageAmount")?.value || 0;
+const years = document.getElementById("mortgageYears")?.value || 20;
+
+// salva per il simulatore
+localStorage.setItem("mortgage_rate", rate);
+localStorage.setItem("mortgage_amount", amount);
+localStorage.setItem("mortgage_years", years);
+
+// redirect tool
+window.location.href = "/tool/";
+
+}
+
+</script>  
+
 </body>
 </html>
