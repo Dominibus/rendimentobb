@@ -195,3 +195,27 @@
   };
 
 })();
+
+window.RB_TEXT = {
+
+  roi: {
+    it: "ROI",
+    en: "ROI"
+  },
+
+  annualProfit: {
+    it: "Profitto annuo",
+    en: "Annual profit"
+  },
+
+  revenue: {
+    it: "Ricavi",
+    en: "Revenue"
+  },
+
+  partialProfit: {
+    it: "Profitto stimato (parziale)",
+    en: "Estimated profit (partial)"
+  }
+
+};
