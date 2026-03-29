@@ -443,29 +443,48 @@ function renderMarketComparison(userRevenue, cityKey){
 const container = document.getElementById("market-comparison");
 if(!container) return;
 
-container.innerHTML = `
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
+const marketAvg = 28500;
 
-<div style="padding:15px;background:white;border-radius:10px;">
-<span>Ricavi stimati</span>
+const diff = userRevenue - marketAvg;
+const diffPerc = ((diff / marketAvg) * 100).toFixed(1);
+
+const isPositive = diff >= 0;
+
+container.innerHTML = `
+<div style="
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+">
+
+<div class="kpi-card">
+<span>📊 Your revenue</span>
 <strong>${formatCurrency(userRevenue)}</strong>
 </div>
 
-<div style="padding:15px;background:white;border-radius:10px;">
-<span>Media mercato</span>
-<strong>€ 28.500</strong>
+<div class="kpi-card">
+<span>🏙 Market average</span>
+<strong>${formatCurrency(marketAvg)}</strong>
 </div>
 
-<div style="padding:15px;background:white;border-radius:10px;">
-<span>Confronto</span>
-<strong style="color:${userRevenue > 28500 ? 'green' : 'red'}">
-${userRevenue > 28500 ? 'Sopra media' : 'Sotto media'}
+<div class="kpi-card" style="
+background:${isPositive ? "#ecfdf5" : "#fef2f2"};
+border:1px solid ${isPositive ? "#10b981" : "#ef4444"};
+">
+<span>⚡ Performance</span>
+
+<strong style="color:${isPositive ? "#10b981" : "#ef4444"}">
+${isPositive ? "▲ +" : "▼ "}${diffPerc}%
 </strong>
+
+<div style="font-size:12px;margin-top:4px;color:#64748b">
+${isPositive ? "Above market" : "Below market"}
+</div>
+
 </div>
 
 </div>
 `;
-
 }
 // ================= ROI VS MARKET =================
 
