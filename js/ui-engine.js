@@ -120,6 +120,36 @@ if(roiEl){
   animateValue(roiEl, 0, roi, 800);
 }
 
+// ================= 🧠 AI VERDICT =================
+
+const verdictEl = document.getElementById("roi-verdict");
+
+if(verdictEl){
+
+  let text = "";
+
+  if(roi < 5){
+    text = t(
+      "❌ Alto rischio: questo investimento potrebbe non essere sostenibile",
+      "❌ High risk: this investment may not be sustainable"
+    );
+  }
+  else if(roi < 10){
+    text = t(
+      "⚠️ Margine basso: serve ottimizzazione per essere profittevole",
+      "⚠️ Low margin: needs optimization to be profitable"
+    );
+  }
+  else{
+    text = t(
+      "🔥 Ottimo potenziale: sopra media mercato, ma verifica rischio reale",
+      "🔥 Strong potential: above market average, but check real risk"
+    );
+  }
+
+  verdictEl.innerText = text;
+}  
+
 // ================= STATUS =================
 
 const statusEl = document.getElementById("investment-status");
