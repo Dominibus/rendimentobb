@@ -5,28 +5,89 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- 🔥 TITLE OTTIMIZZATO CONVERSION + SEO -->
 <title id="page-title"
-data-it="RendimentoBB – Analisi Strategica Investimento B&B"
-data-en="RendimentoBB – Strategic B&B Investment Analysis">
-RendimentoBB – Strategic B&B Investment Analysis
+data-it="Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)"
+data-en="B&B ROI Calculator – See how much you can earn (or lose)">
+Simulatore ROI B&B – Scopri quanto puoi guadagnare (o perdere)
 </title>
 
+<!-- 🔥 DESCRIPTION PSICOLOGICA -->
 <meta name="description"
-data-it="Simula ROI, struttura finanziaria, sostenibilità e rischio prima di investire in un B&B."
-data-en="Simulate ROI, financial structure, sustainability and risk before investing in a B&B."
-content="Simulate ROI, financial structure, sustainability and risk before investing in a B&B.">
+data-it="Calcola ROI, rischio reale e sostenibilità di un B&B prima di investire. Evita errori e scopri il vero profitto."
+data-en="Calculate ROI, real risk and sustainability before investing in a B&B. Avoid mistakes and discover real profit."
+content="Calculate ROI, real risk and sustainability before investing in a B&B. Avoid mistakes and discover real profit.">
 
-<link rel="stylesheet" href="/css/style.css">
+<!-- 🔥 OPEN GRAPH (SOCIAL) -->
+<meta property="og:title" content="Simulatore ROI B&B – Analisi investimento reale">
+<meta property="og:description" content="Scopri quanto puoi guadagnare (o perdere) prima di investire in un B&B.">
+<meta property="og:image" content="https://rendimentobb.com/img/preview.jpg">
+<meta property="og:type" content="website">
+
+<!-- 🔥 FAVICON -->
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
 
+<!-- 🔥 CSS -->
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- 🔥 PERFORMANCE (preconnect) -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<!-- 🔥 LIBS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<!-- 🔥 FIREBASE -->
 <script type="module" src="/js/firebase-init.js"></script>
 <script type="module" src="/js/mortgage-rates.js"></script>
 
+<!-- 🔥 TRUST SIGNAL (Schema JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "RendimentoBB ROI Simulator",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "29",
+    "priceCurrency": "EUR"
+  }
+}
+</script>
+
 <style>
+
+/* ============================= */
+/* MICRO UX BOOST (IMPORTANTE) */
+/* ============================= */
+
+/* smooth rendering */
+body{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* input focus premium */
+input:focus{
+  outline:none;
+  border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
+}
+
+/* subtle hover lift */
+.tool-card:hover,
+.results-card:hover{
+  transform:translateY(-2px);
+  transition:0.25s ease;
+}
+
+/* ============================= */
+/* MARKET SELECT */
+/* ============================= */
 
 .market-select{
 margin-top:15px;
@@ -35,10 +96,6 @@ border-radius:12px;
 border:1px solid #e2e8f0;
 width:100%;
 font-size:14px;
-}
-
-@media(max-width:1024px){
-.portal-nav{ display:none; }
 }
 
 /* ============================= */
@@ -102,7 +159,7 @@ font-size:16px;
 }
 
 /* ============================= */
-/* INVESTMENT SCORE VISUAL */
+/* INVESTMENT SCORE */
 /* ============================= */
 
 .score-circle{
@@ -120,20 +177,9 @@ color:#0f172a;
 transition:0.3s;
 }
 
-.score-good{
-background:#10b981;
-color:white;
-}
-
-.score-medium{
-background:#f59e0b;
-color:white;
-}
-
-.score-bad{
-background:#ef4444;
-color:white;
-}
+.score-good{ background:#10b981; color:white; }
+.score-medium{ background:#f59e0b; color:white; }
+.score-bad{ background:#ef4444; color:white; }
 
 .investment-panel{
 display:grid;
@@ -159,9 +205,10 @@ margin-bottom:6px;
 
 .metric-card strong{
 font-size:18px;
-}  
+}
 
 </style>
+
 </head>
 
 <body>
@@ -170,18 +217,31 @@ font-size:18px;
 
 <main>
 
+<!-- 🔥 SOURCE + TRUST -->
 <div id="property-source"
 style="
 margin-bottom:30px;
 padding:16px;
-background:#f8fafc;
+background:#ecfdf5;
 border-left:4px solid #10b981;
-border-radius:8px;
+border-radius:10px;
 font-size:14px;
 line-height:1.5;
 max-width:1200px;
 margin:auto;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
 ">
+
+<div style="font-weight:600;margin-bottom:4px;"
+data-it="✔️ Analisi basata su dati reali di mercato"
+data-en="✔️ Analysis based on real market data">
+</div>
+
+<div style="font-size:13px;color:#64748b;"
+data-it="I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcolato nella versione completa."
+data-en="Results are based on average market data. Real risk is calculated in the full version.">
+</div>
+
 </div>  
 
 <section class="tool-hero">
@@ -195,9 +255,15 @@ margin:auto;
 
 <div class="tool-card">
 
-<h3 data-it="💰 Struttura Investimento"
-data-en="💰 Investment Structure"></h3>
+<!-- 🔥 TITLE PIÙ STRATEGICO -->
+<h3 data-it="💰 Simula il tuo investimento B&B"
+data-en="💰 Simulate your B&B investment"></h3>
 
+<!-- 🔥 MICRO COPY -->
+<div style="font-size:13px;color:#64748b;margin-bottom:15px;"
+data-it="Inserisci i dati e scopri se questo investimento può funzionare"
+data-en="Enter the data and see if this investment could work">
+</div>
 
 <div class="input-group">
 
@@ -235,6 +301,14 @@ data-en="City Market"></label>
 
 </select>
 
+<!-- 🔥 HINT PSICOLOGICO -->
+<div style="font-size:12px;color:#64748b;margin-top:6px;"
+data-it="💡 I dati di mercato verranno applicati automaticamente"
+data-en="💡 Market data will be applied automatically">
+</div>
+
+</div>
+
 
 </div>
 
@@ -244,7 +318,6 @@ data-en="City Market"></label>
 data-en="Property price (€)"></label>
 <input type="number" id="price" placeholder="150000">
 </div>
-
 
 <div class="input-group">
 <label data-it="Capitale proprio investito (€)"
@@ -274,6 +347,12 @@ oninput="calculate()">
 <span id="occ-value">70%</span>
 </div>
 
+<!-- 🔥 MICRO UX -->
+<div style="font-size:12px;color:#64748b;margin-top:5px;"
+data-it="💡 L’occupazione è il fattore più importante"
+data-en="💡 Occupancy is the most important factor">
+</div>
+
 </div>
 
 <div class="input-group">
@@ -282,16 +361,16 @@ data-en="Monthly operating costs (€)"></label>
 <input type="number" id="expenses" placeholder="1200">
 </div>
 
+<!-- 🔥 CTA MIGLIORATA -->
 <button onclick="calculate(true)" class="btn btn-primary"
-data-it="Calcola ROI"
-data-en="Calculate ROI">
-Calcola ROI
+style="margin-top:10px;font-size:16px;"
+data-it="🔍 Analizza investimento"
+data-en="🔍 Analyze investment">
+🔍 Analizza investimento
 </button>
 
 </div>
-
 </div>
-
 
 <!-- RIGHT SIDE – DASHBOARD -->
 
@@ -301,46 +380,57 @@ Calcola ROI
 
 <div class="roi-main">
 
+<!-- 🔥 LABEL PIÙ INTELLIGENTE -->
 <div class="roi-label"
-data-it="ROI annuo stimato"
-data-en="Estimated annual ROI">
-ROI
+data-it="Potenziale rendimento"
+data-en="Potential return">
 </div>
 
 <div class="roi-value">
 
-  <span id="roi-live">0%</span>
+<span id="roi-live">0%</span>
 
-  <!-- stato investimento -->
-  <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
+<!-- 🔥 TRUST + DUBBIO -->
+<div style="font-size:12px;color:#64748b;margin-top:6px;"
+data-it="Basato su dati medi (rischio reale non incluso)"
+data-en="Based on averages (real risk not included)">
+</div>
 
-  <!-- barra rischio -->
-  <div id="risk-bar"></div>
+<!-- stato investimento -->
+<div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
 
-  <!-- 🔥 TRIGGER UPGRADE -->
-  <div class="roi-upgrade-note"
-       data-it="🔓 Sblocca rischio reale, mutuo e scenari avanzati"
-       data-en="🔓 Unlock real risk, mortgage and advanced scenarios">
-  </div>
+<!-- barra rischio -->
+<div id="risk-bar"></div>
+
+<!-- 🔥 UPGRADE HOOK -->
+<div class="roi-upgrade-note"
+style="margin-top:10px;font-size:13px;font-weight:600;color:#ef4444;"
+data-it="🔓 Il ROI reale potrebbe essere molto diverso"
+data-en="🔓 Real ROI could be very different">
+</div>
 
 </div>
 </div>
 
-<!-- 🔥 MICRO COPY (PSICOLOGIA) -->
-<div style="margin-top:10px;font-weight:600;"
-data-it="🔥 Questo immobile può generare profitto… ma stai vedendo solo una parte dei dati"
-data-en="🔥 This property may generate profit… but you're only seeing part of the data">
-🔥 Questo immobile può generare profitto… ma stai vedendo solo una parte dei dati
+<!-- 🔥 PSICOLOGIA FORTE -->
+<div style="margin-top:12px;font-weight:600;font-size:15px;"
+data-it="🔥 Sembra profittevole… ma senza analisi rischio potresti sbagliare investimento"
+data-en="🔥 Looks profitable… but without risk analysis you could make a wrong investment">
 </div>
-
 
 <div class="roi-metrics">
 
-<!-- 🔥 FREE -->
+<!-- 🔥 FREE (MA DEPOTENZIATO) -->
 <div class="metric">
-  <span data-it="Profitto mensile"
-        data-en="Monthly profit"></span>
+  <span data-it="Profitto stimato (parziale)"
+        data-en="Estimated profit (partial)"></span>
   <strong id="profit-live">—</strong>
+
+  <div style="font-size:11px;color:#ef4444;margin-top:4px;"
+  data-it="⚠️ Non include tasse, mutuo e rischio"
+  data-en="⚠️ Does not include taxes, mortgage and risk">
+  </div>
+
 </div>
 
 <!-- 🔒 PRO -->
@@ -364,19 +454,19 @@ data-en="🔥 This property may generate profit… but you're only seeing part o
 
 <div id="mortgage-banner"></div>
 
-
 <!-- RESULTS -->
 
 <div id="results" class="results-card simulator-results">
+
+<!-- 🔥 PAURA IMMEDIATA -->
 <div style="text-align:center;margin-bottom:10px;font-weight:600;color:#ef4444;"
 data-it="⚠️ Stai prendendo decisioni senza vedere i dati reali"
 data-en="⚠️ You are making decisions without real data">
-⚠️ Stai prendendo decisioni senza vedere i dati reali
 </div>
   
 
-<h3 data-it="Sintesi Investimento"
-data-en="Executive Investment Summary"></h3>
+<h3 data-it="Sintesi investimento"
+data-en="Investment summary"></h3>
 
 <div id="investment-grade-panel" class="investment-panel">
 
@@ -385,110 +475,118 @@ data-en="Executive Investment Summary"></h3>
 <div id="score-circle" class="score-circle">—</div>
 
 <div class="score-label"
-data-it="Investment Grade"
-data-en="Investment Grade">
-Investment Grade
+data-it="Valutazione investimento"
+data-en="Investment grade">
 </div>
 
 </div>
 
 </div>
 
-
-<!-- 🔥 ALERT PAURA -->
+<!-- 🔥 PAURA + SOLDI -->
 <div style="margin:20px 0;font-weight:600;color:#ef4444;text-align:center;"
 data-it="⚠️ Potresti perdere migliaia di euro senza questa analisi completa"
 data-en="⚠️ You could lose thousands without this full analysis">
-⚠️ Potresti perdere migliaia di euro senza questa analisi completa
 </div>
 
-
-<!-- 🔥 RISULTATI (PARZIALI) -->
+<!-- 🔥 RISULTATI -->
 
 <div class="results-grid">
 
-  <!-- ✅ FREE -->
-  <div class="result-item">
-    <span data-it="Profitto mensile" data-en="Monthly profit"></span>
-    <strong id="profit-monthly" class="pro-blur"></strong>
-  </div>
+<div class="result-item">
+<span data-it="Profitto mensile" data-en="Monthly profit"></span>
+<strong id="profit-monthly" class="pro-blur"></strong>
+</div>
 
-  <!-- 🔒 PRO -->
-  <div class="result-item pro-only">
-    <span data-it="Profitto annuo" data-en="Annual profit"></span>
-    <strong id="profit-annual" class="pro-blur"></strong>
-  </div>
+<div class="result-item pro-only">
+<span data-it="Profitto annuo" data-en="Annual profit"></span>
+<strong id="profit-annual" class="pro-blur"></strong>
+</div>
 
-  <div class="result-item pro-only">
-    <span data-it="Break-even" data-en="Break-even"></span>
-    <strong id="break-even" class="pro-blur"></strong>
-  </div>
+<div class="result-item pro-only">
+<span data-it="Break-even" data-en="Break-even"></span>
+<strong id="break-even" class="pro-blur"></strong>
+</div>
 
-  <div class="result-item pro-only">
-    <span data-it="Ricavi annui" data-en="Annual revenue"></span>
-    <strong id="revenue-annual" class="pro-blur"></strong>
-  </div>
+<div class="result-item pro-only">
+<span data-it="Ricavi annui" data-en="Annual revenue"></span>
+<strong id="revenue-annual" class="pro-blur"></strong>
+</div>
 
 </div>
 
-<!-- 🔥 OVERLAY (FUORI dalla grid) -->
+<!-- 🔥 OVERLAY SUPER CONVERSION -->
+
 <div class="results-overlay" data-paywall="true">
 
-  <div class="overlay-content">
+<div class="overlay-content">
 
-    <div class="overlay-title"
-         data-it="🔓 Sblocca analisi completa"
-         data-en="🔓 Unlock full analysis">
-    </div>
+<div class="overlay-title"
+data-it="🔓 Stai vedendo solo il 30% dei dati"
+data-en="🔓 You are seeing only 30% of the data">
+</div>
 
-    <div class="overlay-text"
-         data-it="Scopri profitto reale, rischio e sostenibilità"
-         data-en="See real profit, risk and sustainability">
-    </div>
+<div class="overlay-text"
+data-it="Il profitto reale può cambiare drasticamente. Scopri rischio, mutuo e sostenibilità prima di investire."
+data-en="Real profit can change drastically. Discover risk, mortgage and sustainability before investing.">
+</div>
 
-    <button class="unlock-btn" onclick="buyPlan('pro')"
-            data-it="Sblocca ora"
-            data-en="Unlock now">
-      Sblocca ora
-    </button>
-
-  </div>
+<button class="unlock-btn" onclick="buyPlan('pro')"
+data-it="🔥 Sblocca analisi completa – 29€"
+data-en="🔥 Unlock full analysis – €29">
+🔥 Sblocca analisi completa – 29€
+</button>
 
 </div>
 
-<!-- 🔥 CTA CONVERSIONE -->
+</div>
+
+<!-- 🔥 CTA CONVERSIONE (POTENZIATA) -->
 
 <div style="text-align:center;margin-top:30px;">
 
-<button class="cta-primary">
+<button class="cta-primary" style="font-size:18px;padding:16px 26px;">
 
-<span data-it="Scopri se questo B&B ti farà guadagnare davvero"
-      data-en="Find out if this B&B will truly make you profit">
-Scopri se questo B&B ti farà guadagnare davvero
+<span data-it="💰 Scopri quanto puoi guadagnare (o perdere davvero)"
+      data-en="💰 See how much you can really earn (or lose)">
+💰 Scopri quanto puoi guadagnare (o perdere davvero)
 </span>
 
 </button>
 
-<div style="margin-top:8px;font-size:13px;opacity:0.7;"
-data-it="Analisi professionale con scenari realistici"
-data-en="Professional analysis with realistic scenarios">
-Analisi professionale con scenari realistici
+<div style="margin-top:10px;font-size:13px;color:#64748b;"
+data-it="Analisi reale con rischio, mutuo e scenari avanzati"
+data-en="Real analysis with risk, mortgage and advanced scenarios">
+</div>
+
+<!-- 🔥 SOCIAL PROOF -->
+<div style="margin-top:8px;font-size:12px;color:#10b981;font-weight:600;"
+data-it="🔥 +1.247 investitori stanno analizzando immobili questa settimana"
+data-en="🔥 +1,247 investors are analyzing properties this week">
 </div>
 
 </div>
 
 </div>
+
+<!-- 🔥 PREVIEW KPI (TEASER) -->
 
 <div id="investment-metrics" class="investment-metrics">
 
 <div class="metric-card">
-<span data-it="ROI Stimato" data-en="Estimated ROI">ROI</span>
+<span data-it="ROI stimato" data-en="Estimated ROI">ROI</span>
 <strong id="roi-preview">—</strong>
 </div>
 
 <div class="metric-card">
-<span data-it="Risk Score" data-en="Risk Score">Risk Score</span>
+<span data-it="Risk Score (parziale)" data-en="Risk Score (partial)">Risk</span>
 <strong id="risk-preview">—</strong>
+
+<div style="font-size:11px;color:#ef4444;margin-top:4px;"
+data-it="⚠️ Versione completa include rischio reale"
+data-en="⚠️ Full version includes real risk">
+</div>
+
 </div>
 
 </div>
@@ -499,90 +597,162 @@ Analisi professionale con scenari realistici
 
 <div class="locked-section" id="advanced-analysis">
 
-  <!-- 🔒 OVERLAY -->
-  <div class="locked-overlay" data-paywall="true">
+<!-- 🔒 OVERLAY MIGLIORATO -->
+<div class="locked-overlay" data-paywall="true">
 
-    <div class="overlay-title"
-      data-it="🔒 Analisi avanzata bloccata"
-      data-en="🔒 Advanced analysis locked">
-    </div>
+<div class="overlay-title"
+data-it="🔒 Stai prendendo decisioni al buio"
+data-en="🔒 You are making decisions blindly">
+</div>
 
-    <div class="overlay-text"
-      data-it="Stai vedendo solo il 30% dei dati. Rischio reale, ranking e scenari sono nascosti."
-      data-en="You are seeing only 30% of the data. Real risk, ranking and scenarios are hidden.">
-    </div>
+<div class="overlay-text"
+data-it="Senza analisi rischio e mutuo potresti investire in perdita."
+data-en="Without risk and mortgage analysis you could invest at a loss.">
+</div>
 
-    <button onclick="buyPro()" class="btn btn-primary"
-      data-it="Sblocca analisi completa"
-      data-en="Unlock full analysis">
-      Sblocca analisi completa
-    </button>
+<!-- 🔥 BULLET VALUE -->
+<div style="font-size:13px;color:#475569;margin-top:8px;text-align:center;">
+✔️ ROI reale  
+✔️ Analisi mutuo  
+✔️ Break-even  
+✔️ Scenario rischio  
+</div>
 
-  </div>
+<button onclick="buyPro()" class="btn btn-primary"
+style="margin-top:10px;font-size:16px;"
+data-it="🔥 Sblocca analisi completa – 29€"
+data-en="🔥 Unlock full analysis – €29">
+🔥 Sblocca analisi completa – 29€
+</button>
 
-  <!-- 🔥 CONTENUTO BLUR -->
-  <div class="blur-content">
+</div>
 
-    <div id="executive-kpi" class="kpi-grid"></div>
+<!-- 🔥 CONTENUTO BLUR -->
+<div class="blur-content">
 
-    <div id="break-even-kpi" class="kpi-grid" style="margin-top:15px;"></div>  
+<div id="executive-kpi" class="kpi-grid"></div>
 
-    <div id="investment-score" class="kpi-grid" style="margin-top:25px;"></div>
+<div id="break-even-kpi" class="kpi-grid" style="margin-top:15px;"></div>  
 
-    <div id="investment-ranking" class="kpi-grid" style="margin-top:15px;"></div> 
+<div id="investment-score" class="kpi-grid" style="margin-top:25px;"></div>
 
-    <div id="investment-risk-meter" style="margin-top:20px;"></div>  
+<div id="investment-ranking" class="kpi-grid" style="margin-top:15px;"></div> 
 
-    <div id="investment-verdict" style="margin-top:20px;"></div>  
+<div id="investment-risk-meter" style="margin-top:20px;"></div>  
 
-    <div id="ai-insights" style="margin-top:20px;"></div>  
+<div id="investment-verdict" style="margin-top:20px;"></div>  
 
-    <div id="smart-investment-alert"></div>  
+<div id="ai-insights" style="margin-top:20px;"></div>  
 
-    <div id="roi-market-comparison" class="kpi-grid" style="margin-top:20px;"></div>  
+<div id="smart-investment-alert"></div>  
 
-    <div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
+<div id="roi-market-comparison" class="kpi-grid" style="margin-top:20px;"></div>  
 
-  </div>
+<div id="strategic-insight" class="lock-box" style="margin-top:40px;"></div>
+
+</div>
 
 </div>
 
 <!-- ================= CTA SOTTO ================= -->
 
-<div style="text-align:center;margin-top:25px;">
+<div style="text-align:center;margin-top:30px;">
 
-  <button id="pro-btn" onclick="buyPro()" class="btn btn-primary"
-  data-it="💰 Scopri quanto puoi guadagnare davvero (o perdere)"
-  data-en="💰 See how much you can really earn (or lose)">
-  </button>
+<button id="pro-btn" onclick="buyPro()" class="btn btn-primary"
+style="font-size:18px;padding:16px 26px;"
+data-it="💰 Sblocca il vero risultato dell’investimento"
+data-en="💰 Unlock the real investment result">
+</button>
 
-  <div style="margin-top:8px;font-size:13px;opacity:0.7;"
-  data-it="+1.247 investitori hanno analizzato immobili questa settimana"
-  data-en="+1,247 investors analyzed properties this week">
-  </div>
+<div style="margin-top:10px;font-size:13px;color:#64748b;"
+data-it="Scopri profitto reale, rischio e sostenibilità prima di investire"
+data-en="Discover real profit, risk and sustainability before investing">
+</div>
 
 </div>
 </div>
 
+<!-- 🔒 BLOCCO TUTTE LE SEZIONI SOTTO -->
+
+<div class="results-card" data-paywall="true">
+
+<div class="overlay-content" style="text-align:center;padding:30px;">
+
+<div class="overlay-title"
+data-it="🔒 Dati avanzati bloccati"
+data-en="🔒 Advanced data locked">
+</div>
+
+<div class="overlay-text"
+data-it="Questi dati fanno la differenza tra guadagnare e perdere."
+data-en="These data make the difference between profit and loss.">
+</div>
+
+<button onclick="buyPro()" class="btn btn-primary"
+style="margin-top:10px;"
+data-it="🔥 Sblocca ora – 29€"
+data-en="🔥 Unlock now – €29">
+🔥 Sblocca ora – 29€
+</button>
+
+</div>
+
+</div>
+
+
+<!-- 🔒 PREMIUM DATA SECTION -->
+
+<div class="results-card" data-paywall="true">
+
+<div class="overlay-content" style="text-align:center;padding:40px 20px;">
+
+<div class="overlay-title"
+data-it="🔒 Dati avanzati di investimento bloccati"
+data-en="🔒 Advanced investment data locked">
+</div>
+
+<div class="overlay-text"
+data-it="Questi dati fanno la differenza tra un investimento profittevole e una perdita."
+data-en="These data make the difference between a profitable investment and a loss.">
+</div>
+
+<!-- 🔥 VALUE STACK -->
+<div style="margin-top:12px;font-size:13px;color:#475569;">
+✔️ Previsione ricavi reali  
+✔️ Benchmark città  
+✔️ Confronto mercato  
+✔️ Simulazione occupazione  
+✔️ Cashflow 5 anni  
+</div>
+
+<button onclick="buyPro()" class="btn btn-primary"
+style="margin-top:15px;font-size:16px;"
+data-it="🔥 Sblocca tutti i dati – 29€"
+data-en="🔥 Unlock all data – €29">
+🔥 Sblocca tutti i dati – 29€
+</button>
+
+</div>
+
+</div>
+
+<!-- (CONTENUTO REALE SOTTO → MA NON VISIBILE SENZA PRO) -->
 
 <!-- FORECAST -->
-
-<div class="results-card">
+<div class="results-card pro-only">
   <h3
-    data-it="Previsione Ricavi Mercato"
-    data-en="Market Revenue Forecast">
+    data-it="Previsione ricavi mercato"
+    data-en="Market revenue forecast">
   </h3>
 
   <div id="revenue-forecast" class="kpi-grid"></div>
 </div>
 
-
 <!-- BENCHMARK -->
-
-<div class="results-card">
+<div class="results-card pro-only">
   <h3
-    data-it="Benchmark Mercato Città"
-    data-en="City Market Benchmark">
+    data-it="Benchmark mercato città"
+    data-en="City market benchmark">
   </h3>
 
   <div id="market-benchmark" class="kpi-grid">
@@ -590,61 +760,50 @@ Analisi professionale con scenari realistici
     <div class="kpi-box">
       <div class="kpi-label"
         data-it="Prezzo medio notte"
-        data-en="Average Night Price"></div>
+        data-en="Average night price"></div>
       <div id="benchmark-price" class="kpi-value">—</div>
     </div>
 
     <div class="kpi-box">
       <div class="kpi-label"
         data-it="Occupazione media"
-        data-en="Average Occupancy"></div>
+        data-en="Average occupancy"></div>
       <div id="benchmark-occupancy" class="kpi-value">—</div>
     </div>
 
     <div class="kpi-box">
       <div class="kpi-label"
         data-it="Ricavo medio annuo"
-        data-en="Estimated Annual Revenue"></div>
+        data-en="Estimated annual revenue"></div>
       <div id="benchmark-revenue" class="kpi-value">—</div>
     </div>
 
   </div>
 </div>
 
-
 <!-- MARKET COMPARISON -->
-
-<div class="results-card">
-  <h3 data-it="Performance vs Mercato" data-en="Market Performance"></h3>
+<div class="results-card pro-only">
+  <h3 data-it="Performance vs mercato" data-en="Market performance"></h3>
   <div id="market-comparison" class="kpi-grid"></div>
 </div>
 
-
 <!-- OCCUPANCY -->
-
-<div class="results-card">
-  <h3 data-it="Simulazione Occupazione" data-en="Occupancy Simulation"></h3>
+<div class="results-card pro-only">
+  <h3 data-it="Simulazione occupazione" data-en="Occupancy simulation"></h3>
   <div id="occupancy-sensitivity" class="kpi-grid"></div>
 </div>
 
-
 <!-- CHART -->
-
-<div class="results-card">
-  <h3 data-it="Proiezione Cashflow 5 anni" data-en="5-Year Cashflow Forecast"></h3>
-  <!--
-<canvas id="roiChartProjection" height="120"></canvas>
--->
+<div class="results-card pro-only">
+  <h3 data-it="Proiezione cashflow 5 anni" data-en="5-year cashflow forecast"></h3>
 </div>
 
-
 <!-- PDF EXPORT -->
-
-<div class="results-card" style="text-align:center;">
+<div class="results-card pro-only" style="text-align:center;">
 
 <h3
-data-it="Report Strategico Investimento"
-data-en="Strategic Investment Report">
+data-it="Report strategico investimento"
+data-en="Strategic investment report">
 </h3>
 
 <p
@@ -656,7 +815,7 @@ data-en="Download the professional investment analysis report.">
 id="pdf-btn"
 onclick="generateExecutivePDF()"
 class="btn btn-primary"
-style="padding:14px 32px;font-size:16px;margin-top:15px; display:none;"
+style="padding:14px 32px;font-size:16px;margin-top:15px;"
 data-it="📄 Scarica Executive Report PDF"
 data-en="📄 Download Executive Report PDF">
 
@@ -737,8 +896,27 @@ Contatti
 <script type="module" src="/js/app.js"></script>
 
 <script>
+
+/* ================= GLOBAL PLAN CHECK ================= */
+
+window.isProUser = function(){
+  return (
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  );
+};
+
+/* ================= CITY HANDLER ================= */
+
 window.applyMarketData = function(city){
+
+  if(!city) return;
+
   window.currentCity = city;
+
+  // salva sempre
+  localStorage.setItem("selected_city", city);
 
   if(typeof renderMarketBenchmark === "function"){
     renderMarketBenchmark(city);
@@ -748,29 +926,26 @@ window.applyMarketData = function(city){
     changeCityBackground(city);
   }
 
-  console.log("City selected:", city);
+  console.log("📍 City selected:", city);
 };
-</script>
 
-<script>
+/* ================= INVESTMENT SCORE ================= */
 
 function updateInvestmentScore(score){
 
   const circle = document.getElementById("score-circle");
+  if(!circle) return;
 
-  if(!circle){
-    console.warn("score-circle NON trovato");
-    return;
-  }
+  const safeScore = Math.round(score || 0);
 
-  circle.innerText = score;
+  circle.innerText = safeScore;
 
   circle.classList.remove("score-good","score-medium","score-bad");
 
-  if(score >= 75){
+  if(safeScore >= 75){
     circle.classList.add("score-good");
   }
-  else if(score >= 50){
+  else if(safeScore >= 50){
     circle.classList.add("score-medium");
   }
   else{
@@ -779,19 +954,20 @@ function updateInvestmentScore(score){
 
 }
 
+/* ================= KPI PREVIEW ================= */
+
 function updatePreviewMetrics(roi,risk){
 
-const roiEl = document.getElementById("roi-preview");
-const riskEl = document.getElementById("risk-preview");
+  const roiEl = document.getElementById("roi-preview");
+  const riskEl = document.getElementById("risk-preview");
 
-if(roiEl) roiEl.innerText = roi + "%";
-if(riskEl) riskEl.innerText = risk + "/100";
+  const safeROI = Number(roi || 0).toFixed(1);
+  const safeRisk = Math.round(risk || 0);
+
+  if(roiEl) roiEl.innerText = safeROI + "%";
+  if(riskEl) riskEl.innerText = safeRisk + "/100";
 
 }
-
-</script>
-
-<script>
 
 /* ================= PAYWALL ================= */
 
@@ -804,41 +980,23 @@ function applyPaywall(){
     "strategic-insight"
   ];
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+  // 🔥 PRO USER → SBLOCCA TUTTO
+  if(window.isProUser()){
 
-  // ================= PRO USER =================
-  if(isPro){
+    console.log("🚀 PRO attivo → sblocco UI");
 
-    console.log("✅ PRO attivo → sblocco UI");
+    document.querySelectorAll("[data-paywall]").forEach(el => el.remove());
 
-    proSections.forEach(id => {
-
-      const inner = document.getElementById(id);
-      if(!inner) return;
-
-      const card = inner.closest(".results-card");
-      if(!card) return;
-
-      // 🔥 rimuove SOLO overlay (non la card)
-      const lock = card.querySelector('[data-paywall]');
-      if(lock){
-        lock.remove();
-      }
-
-      card.dataset.locked = "false";
+    document.querySelectorAll(".results-card").forEach(card=>{
       card.style.filter = "none";
       card.style.pointerEvents = "auto";
-
+      card.dataset.locked = "false";
     });
 
     return;
   }
 
-  // ================= FREE USER =================
-
+  // 🔒 FREE USER
   proSections.forEach(id => {
 
     const inner = document.getElementById(id);
@@ -847,8 +1005,7 @@ function applyPaywall(){
     const card = inner.closest(".results-card");
     if(!card) return;
 
-    // evita duplicati
-    if(card.querySelector('[data-paywall]')) return;
+    if(card.querySelector("[data-paywall]")) return;
 
     card.dataset.locked = "true";
 
@@ -856,27 +1013,31 @@ function applyPaywall(){
     lock.setAttribute("data-paywall","true");
 
     lock.innerHTML = `
-  <div style="
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:15px;
-    background:rgba(255,255,255,0.85);
-    backdrop-filter:blur(4px);
-    border-radius:16px;
-  ">
-    <div style="font-weight:600;font-size:16px;">
-      🔒 Funzione PRO
-    </div>
+      <div style="
+        position:absolute;
+        inset:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        gap:15px;
+        background:rgba(255,255,255,0.9);
+        backdrop-filter:blur(6px);
+        border-radius:16px;
+      ">
+        <div style="font-weight:600;font-size:16px;">
+          🔒 Analisi avanzata
+        </div>
 
-    <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-      🔓 Sblocca versione PRO – 29€
-    </button>
-  </div>
-`;
+        <div style="font-size:13px;color:#64748b;text-align:center;max-width:260px;">
+          Scopri rischio reale, mutuo e sostenibilità prima di investire
+        </div>
+
+        <button onclick="buyPlan('pro')" class="btn btn-primary">
+          🔥 Sblocca – 29€
+        </button>
+      </div>
+    `;
 
     card.style.position = "relative";
     card.appendChild(lock);
@@ -885,133 +1046,105 @@ function applyPaywall(){
 
 }
 
- </script>
-
-<script> 
-
-/* ================= AUTO INIT PAYWALL ================= */
+/* ================= AUTO INIT ================= */
 
 document.addEventListener("rb_plan_loaded", () => {
 
-  console.log("🔥 rb_plan_loaded ricevuto:", window.currentPlan);
+  console.log("🔥 Plan loaded:", window.currentPlan);
 
-  // ❌ NON applicare paywall se PRO
-  if(
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  ){
-    console.log("🚀 PRO → skip paywall");
-    return;
-  }
-
-  // ✅ solo FREE
   setTimeout(() => {
     applyPaywall();
-    const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
-
-if(isPro){
-  console.log("🚀 PAYWALL DISATTIVATO (PRO)");
-  return;
-}
   }, 50);
 
 });
 
-// al primo caricamento pagina
-document.addEventListener("DOMContentLoaded", () => {
-
-  // NON applicare subito
-  console.log("⏳ Attendo Firebase prima di applicare paywall");
-
-});
-
-/* ================= CITY PERSIST ================= */
+/* ================= CITY LOAD ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
   const citySelect = document.getElementById("market-city");
+
+  // localStorage
   const savedCity = localStorage.getItem("selected_city");
 
-  if(citySelect && savedCity){
-    citySelect.value = savedCity;
-    applyMarketData(savedCity);
+  // URL priority
+  const params = new URLSearchParams(window.location.search);
+  const urlCity = params.get("city");
+
+  const finalCity = urlCity || savedCity;
+
+  if(citySelect && finalCity){
+    citySelect.value = finalCity;
+    applyMarketData(finalCity);
   }
 
 });
 
+/* ================= UPGRADE TRIGGER ================= */
 
-/* ================= CITY FROM URL ================= */
-
-document.addEventListener("DOMContentLoaded", () => {
+(function(){
 
   const params = new URLSearchParams(window.location.search);
-  const city = params.get("city");
+  const upgrade = params.get("upgrade");
 
-  if(!city) return;
+  if(!upgrade || window.isProUser()) return;
 
-  window.currentCity = city;
-
-  // salva città
-  localStorage.setItem("selected_city", city);
-
-  const citySelect = document.getElementById("market-city");
-
-  if(citySelect){
-    citySelect.value = city;
-    applyMarketData(city);
-  }
-
-});
-</script>
-
-<script>
-
-const params = new URLSearchParams(window.location.search);
-const upgrade = params.get("upgrade");
-
-// ❌ NON mostrare popup se PRO
-if(
-  upgrade &&
-  window.currentPlan !== "pro" &&
-  window.currentPlan !== "investor" &&
-  window.currentPlan !== "pro_yearly"
-){
   setTimeout(()=>{
 
-    let message = "";
     const lang = window.currentLang || "it";
 
-    if(upgrade === "dashboard"){
-      message = lang === "en"
-        ? "🔒 The Dashboard is available only for PRO users."
-        : "🔒 La Dashboard è disponibile solo per utenti PRO.";
-    }
+    const messages = {
+      dashboard: {
+        it: "🔒 La Dashboard è disponibile solo per utenti PRO.",
+        en: "🔒 Dashboard available only for PRO users."
+      },
+      academy: {
+        it: "🎓 La Academy è disponibile solo per utenti PRO.",
+        en: "🎓 Academy available only for PRO users."
+      },
+      default: {
+        it: "🔒 Funzione disponibile solo nella versione PRO.",
+        en: "🔒 This feature is available only in the PRO version."
+      }
+    };
 
-    if(upgrade === "academy"){
-      message = lang === "en"
-        ? "🎓 The Academy is available only for PRO users."
-        : "🎓 La Academy è disponibile solo per utenti PRO.";
-    }
+    const msg = messages[upgrade] || messages.default;
 
-    if(upgrade === "true"){
-      message = lang === "en"
-        ? "🔒 This feature is available only in the PRO version."
-        : "🔒 Funzione disponibile solo nella versione PRO.";
-    }
-
-    if(message){
-      alert(message);
-    }
+    alert(lang === "en" ? msg.en : msg.it);
 
   },400);
-}
 
+})();
+
+/* ================= 🔥 SMART CONVERSION TRIGGER ================= */
+
+window.triggerUpgradeIfNeeded = function(roi){
+
+  if(window.isProUser()) return;
+
+  const safeROI = Number(roi || 0);
+
+  // 👉 trigger SOLO se ROI interessante
+  if(safeROI >= 8){
+
+    setTimeout(()=>{
+
+      const lang = window.currentLang || "it";
+
+      const msg = lang === "en"
+        ? "🔥 This investment looks profitable. Unlock full analysis before investing."
+        : "🔥 Questo investimento sembra profittevole. Sblocca l’analisi completa prima di investire.";
+
+      if(confirm(msg)){
+        buyPlan("pro");
+      }
+
+    },1500);
+
+  }
+
+};
 
 </script>
-
 </body>
 </html>
