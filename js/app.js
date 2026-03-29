@@ -1293,6 +1293,19 @@ function calculate(force = false){
 
   console.log("RESULT:", result);
 
+  // 🔥 GLOBAL SYNC (FONDAMENTALE)
+window.currentRevenue = result.revenue || result.gross || 0;
+
+document.dispatchEvent(
+  new CustomEvent("rb_simulation_updated", {
+    detail: {
+      revenue: window.currentRevenue,
+      roi: result.roi,
+      data: result
+    }
+  })
+);
+
   const gross = result.gross;
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
