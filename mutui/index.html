@@ -24,26 +24,57 @@ Comparatore Mutui – RendimentoBB
 
 <main>
 
-<div class="container" style="padding-top:80px;padding-bottom:120px;">
+<!-- ================= HERO ================= -->
+
+<section class="hero hero-mutui">
+
+  <div class="container">
+
+    <div class="page-title">
+
+      <h1
+        data-it="Comparatore Mutui Intelligente"
+        data-en="Smart Mortgage Comparator">
+        Comparatore Mutui Intelligente
+      </h1>
+
+      <p
+        data-it="Confronta rapidamente i migliori mutui per il tuo investimento B&B e simula l’impatto reale sul ROI."
+        data-en="Quickly compare the best mortgages for your B&B investment and simulate real ROI impact.">
+        Confronta rapidamente i migliori mutui per il tuo investimento B&B e simula l’impatto reale sul ROI.
+      </p>
+
+      <div class="hero-trust">
+        🏦 +1.200 investitori stanno confrontando mutui oggi
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
 
-<h1 
-data-it="Comparatore Mutui"
-data-en="Mortgage Comparator"
-style="text-align:center;margin-bottom:40px;">
-Comparatore Mutui
-</h1>
+<!-- ================= CONTENUTO ================= -->
 
+<div class="container" style="margin-top:-60px;padding-bottom:120px;">
 
-<!-- MORTGAGE COMPARATOR -->
+<!-- ================= CARD TOOL ================= -->
 
-<div id="mortgage" class="tool-card">
+<div id="mortgage" class="tool-card premium-card">
 
 <h3
 data-it="🏦 Comparatore Mutui"
 data-en="🏦 Mortgage Comparator">
 🏦 Comparatore Mutui
 </h3>
+
+<p style="font-size:13px;color:#64748b;margin-bottom:20px;">
+<span data-it="Simula e confronta i mutui in pochi secondi"
+      data-en="Simulate and compare mortgages in seconds">
+Simula e confronta i mutui in pochi secondi
+</span>
+</p>
 
 <div class="form-grid">
 
@@ -54,6 +85,7 @@ data-en="Mortgage Amount (€)">
 Importo Mutuo (€)
 </label>
 <input type="number" id="mortgageAmount"
+placeholder="100000"
 data-placeholder-it="Inserisci importo"
 data-placeholder-en="Enter amount">
 </div>
@@ -64,9 +96,7 @@ data-it="Durata (anni)"
 data-en="Duration (years)">
 Durata (anni)
 </label>
-<input type="number" id="mortgageYears" value="20"
-data-placeholder-it="Durata in anni"
-data-placeholder-en="Duration in years">
+<input type="number" id="mortgageYears" value="20">
 </div>
 
 <div class="input-group">
@@ -75,9 +105,7 @@ data-it="Tasso Banca A (%)"
 data-en="Bank A Rate (%)">
 Tasso Banca A (%)
 </label>
-<input type="number" id="rateA" value="3.2" step="0.1"
-data-placeholder-it="Tasso banca A"
-data-placeholder-en="Bank A rate">
+<input type="number" id="rateA" value="3.2" step="0.1">
 </div>
 
 <div class="input-group">
@@ -86,9 +114,7 @@ data-it="Tasso Banca B (%)"
 data-en="Bank B Rate (%)">
 Tasso Banca B (%)
 </label>
-<input type="number" id="rateB" value="3.6"
-data-placeholder-it="Tasso banca B"
-data-placeholder-en="Bank B rate">
+<input type="number" id="rateB" value="3.6">
 </div>
 
 <div class="input-group">
@@ -97,28 +123,31 @@ data-it="Tasso Banca C (%)"
 data-en="Bank C Rate (%)">
 Tasso Banca C (%)
 </label>
-<input type="number" id="rateC" value="4.1"
-data-placeholder-it="Tasso banca C"
-data-placeholder-en="Bank C rate">
+<input type="number" id="rateC" value="4.1">
 </div>
 
 </div>
 
-
-<button onclick="runMortgageComparison()" class="btn btn-primary"
+<button onclick="runMortgageComparison()" class="btn btn-primary premium-btn"
 data-it="Confronta Mutui"
 data-en="Compare Mortgages">
 Confronta Mutui
 </button>
+
 </div>
+
+<!-- ================= RESULTS ================= -->
 
 <div id="mortgage-results" style="margin-top:40px;"></div>
 
 </div>
 
-</div>
-
 </main>
+
+<div id="global-footer"></div>
+
+</body>
+</html>
 
 <script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
