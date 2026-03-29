@@ -2933,35 +2933,60 @@ window.handleUpgradeClick = function(){
 
   console.log("🔥 CTA CLICK");
 
-  // 🔥 micro feedback UX
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
   const btn = document.querySelector(".cta-primary");
-  if(btn){
-    btn.innerHTML = "⏳ Analisi in corso...";
-    btn.style.opacity = "0.7";
+
+  // ================= 🟢 UTENTE PRO =================
+  if(isPro){
+
+    console.log("✅ PRO USER");
+
+    if(btn){
+      btn.innerHTML = "🚀 Accesso analisi avanzata...";
+      btn.style.opacity = "0.7";
+    }
+
+    setTimeout(()=>{
+      const target = document.getElementById("advanced-analysis");
+      if(target){
+        target.scrollIntoView({ behavior:"smooth" });
+      }
+    }, 600);
+
+    return;
   }
 
-  // 🔥 delay psicologico (effetto AI / valore)
-  setTimeout(()=>{
-
-    // 👉 QUI METTI STRIPE LINK
-    window.location.href = "https://buy.stripe.com/YOUR_LINK";
-
-  }, 800);
-
-};
-
-// ================= CTA UPGRADE =================
-
-window.handleUpgradeClick = function(){
+  // ================= 🔒 UTENTE FREE =================
 
   const lang = window.RB_LANG?.current || "it";
 
-  const message = lang === "en"
-    ? "You are about to unlock the full investment analysis.\n\nROI, risks, mortgage and real profit."
-    : "Stai per sbloccare l’analisi completa dell’investimento.\n\nROI reale, rischi, mutuo e profitto reale.";
-
-  if(confirm(message)){
-    window.location.href = "https://buy.stripe.com/YOUR_LINK";
+  if(btn){
+    btn.innerHTML = lang === "en"
+      ? "⏳ AI is analyzing your investment..."
+      : "⏳ L'AI sta analizzando il tuo investimento...";
+    btn.style.opacity = "0.7";
   }
+
+  setTimeout(()=>{
+
+    const message = lang === "en"
+      ? "This investment looks profitable.\n\nUnlock full analysis with ROI, risk and real profit."
+      : "Questo investimento sembra profittevole.\n\nSblocca analisi completa con ROI reale, rischio e profitto.";
+
+    if(confirm(message)){
+      startPlanPurchase("pro"); // 🔥 USA LA TUA LOGICA
+    }
+
+    // reset bottone
+    if(btn){
+      btn.innerHTML = "🔥 Scopri quanto puoi guadagnare davvero";
+      btn.style.opacity = "1";
+    }
+
+  }, 900);
 
 };
