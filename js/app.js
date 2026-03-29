@@ -1611,6 +1611,24 @@ function renderStrategicInsight(roi) {
   `;
 }
 
+// ================= UPGRADE OVERLAY =================
+
+function showUpgradeOverlay(){
+
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(isPro) return;
+
+  const overlay = document.getElementById("upgrade-overlay");
+
+  if(overlay){
+    overlay.classList.remove("hidden");
+  }
+}
+
 
 // ================= CHART =================
 
@@ -2654,22 +2672,6 @@ function applySelectedMortgage(){
   if(rateInput){
     rateInput.value = savedRate;
   }
-
-  function showUpgradeOverlay(){
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
-
-  if(isPro) return;
-
-  const overlay = document.getElementById("upgrade-overlay");
-
-  if(overlay){
-    overlay.classList.remove("hidden");
-  }
-}
 
   // ===============================
   // UX BANNER PREMIUM
