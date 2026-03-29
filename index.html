@@ -1222,15 +1222,6 @@ window.location.href = selectedCity
 
 };
 
-// ================= SAFE UTILS =================
-const safeNum = (v, def=0)=>{
-  const n = parseFloat(v);
-  return isNaN(n) ? def : n;
-};
-
-const log = (...a)=>console.log("[RB]",...a);
-const error = (...a)=>console.error("[RB]",...a);
-
 
 // ================= QUICK ROI =================
 window.quickROI = function(){
