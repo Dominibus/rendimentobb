@@ -5443,3 +5443,30 @@ body{
 .bump{
   transform: scale(1.15);
 }
+
+/* ================= SIMULATOR LAYOUT FIX ================= */
+
+.simulator-container{
+  max-width:1200px;
+  margin:auto;
+}
+
+.simulator-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:40px;
+  align-items:start;
+}
+
+/* centratura mobile */
+@media (max-width:900px){
+  .simulator-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* fix allineamento */
+.simulator-left,
+.simulator-right{
+  width:100%;
+}
