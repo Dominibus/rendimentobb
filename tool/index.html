@@ -997,44 +997,45 @@ function applyPaywall(){
 
     const lang = window.RB_LANG?.current || "it";
 
-lock.innerHTML = `
-  <div style="
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:15px;
-    background:rgba(255,255,255,0.85);
-    backdrop-filter:blur(4px);
-    border-radius:16px;
-    text-align:center;
-    padding:20px;
-  ">
+    lock.innerHTML = `
+      <div style="
+        position:absolute;
+        inset:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        gap:15px;
+        background:rgba(255,255,255,0.85);
+        backdrop-filter:blur(4px);
+        border-radius:16px;
+        text-align:center;
+        padding:20px;
+      ">
 
-    <div style="font-weight:600;font-size:16px;">
-      ${lang === "en" ? "🔒 Advanced analysis locked" : "🔒 Analisi avanzata bloccata"}
-    </div>
+        <div style="font-weight:600;font-size:16px;">
+          ${lang === "en" ? "🔒 Advanced analysis locked" : "🔒 Analisi avanzata bloccata"}
+        </div>
 
-    <div style="font-size:13px;color:#64748b;max-width:260px;">
-      ${lang === "en"
-        ? "You are seeing only part of the data. Unlock full analysis before investing."
-        : "Stai vedendo solo una parte dei dati. Sblocca l’analisi completa prima di investire"}
-    </div>
+        <div style="font-size:13px;color:#64748b;max-width:260px;">
+          ${lang === "en"
+            ? "You are seeing only part of the data. Unlock full analysis before investing."
+            : "Stai vedendo solo una parte dei dati. Sblocca l’analisi completa prima di investire"}
+        </div>
 
-    <button onclick="buyPlan('pro')" class="btn btn-primary">
-      ${lang === "en" ? "🔥 Unlock full analysis – €29" : "🔥 Sblocca analisi completa – 29€"}
-    </button>
+        <button onclick="buyPlan('pro')" class="btn btn-primary">
+          ${lang === "en" ? "🔥 Unlock full analysis – €29" : "🔥 Sblocca analisi completa – 29€"}
+        </button>
 
-  </div>
-`;
+      </div>
+    `;
 
-card.style.position = "relative";
-card.appendChild(lock);
+    card.style.position = "relative";
+    card.appendChild(lock);
 
-/* 🔥 forza aggiornamento lingua globale */
-document.dispatchEvent(new Event("rb_language_changed"));
+  }); // ✅ CHIUSURA forEach
+
+} // ✅ CHIUSURA FUNZIONE
 
 /* ================= AUTO INIT ================= */
 
