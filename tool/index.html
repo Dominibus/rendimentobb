@@ -1116,35 +1116,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })();
 
-/* ================= 🔥 SMART CONVERSION TRIGGER ================= */
-
-window.triggerUpgradeIfNeeded = function(roi){
-
-  if(window.isProUser()) return;
-
-  const safeROI = Number(roi || 0);
-
-  // 👉 trigger SOLO se ROI interessante
-  if(safeROI >= 8){
-
-    setTimeout(()=>{
-
-      const lang = window.currentLang || "it";
-
-      const msg = lang === "en"
-        ? "🔥 This investment looks profitable. Unlock full analysis before investing."
-        : "🔥 Questo investimento sembra profittevole. Sblocca l’analisi completa prima di investire.";
-
-      if(confirm(msg)){
-        buyPlan("pro");
-      }
-
-    },1500);
-
-  }
-
-};
-
 </script>
 </body>
 </html>
