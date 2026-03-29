@@ -5449,24 +5449,26 @@ body{
 .simulator-container{
   max-width:1200px;
   margin:auto;
+  padding:0 20px;
 }
 
+/* 🔥 CENTRATO DEFINITIVO */
 .simulator-grid{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:40px;
-  align-items:start;
+  grid-template-columns: 1fr;
+  justify-items:center; /* CENTRA TUTTO */
 }
 
-/* centratura mobile */
-@media (max-width:900px){
-  .simulator-grid{
-    grid-template-columns:1fr;
-  }
+/* 🔥 BLOCCO SINISTRA (FORM) */
+.simulator-left{
+  width:100%;
+  max-width:600px;
+  margin:0 auto;
 }
 
-/* fix allineamento */
-.simulator-left,
+/* 🔥 BLOCCO RISULTATI */
 .simulator-right{
   width:100%;
+  max-width:900px;
+  margin:40px auto 0 auto;
 }
