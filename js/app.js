@@ -2809,3 +2809,22 @@ document.addEventListener("rb_plan_loaded", () => {
 
 });
 
+function triggerUpgradeIfNeeded(roi){
+  if(window.isProUser && window.isProUser()) return;
+
+  const safeROI = Number(roi || 0);
+
+  if(safeROI >= 8){
+    setTimeout(()=>{
+      const lang = window.currentLang || "it";
+
+      const msg = lang === "en"
+        ? "🔥 This investment looks profitable. Unlock full analysis before investing."
+        : "🔥 Questo investimento sembra profittevole. Sblocca l’analisi completa prima di investire.";
+
+      if(confirm(msg)){
+        buyPlan("pro");
+      }
+    },1500);
+  }
+}
