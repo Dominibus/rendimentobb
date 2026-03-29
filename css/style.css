@@ -5272,3 +5272,84 @@ body{
 }
 
 }
+
+/* HERO MUTUI */
+
+.hero-mutui{
+  position:relative;
+  min-height:60vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+
+  background:
+    linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.8)),
+    url("/img/roma-dashboard.jpg") center/cover no-repeat;
+
+  color:white;
+}
+
+.hero-mutui h1{
+  font-size:38px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.hero-mutui p{
+  font-size:16px;
+  opacity:0.9;
+  max-width:600px;
+  margin:0 auto;
+}
+
+.hero-trust{
+  margin-top:18px;
+  font-size:13px;
+  background:rgba(255,255,255,0.1);
+  padding:8px 14px;
+  border-radius:20px;
+  display:inline-block;
+  backdrop-filter:blur(6px);
+}
+
+/* CARD PREMIUM */
+
+.premium-card{
+  background:white;
+  border-radius:18px;
+  padding:26px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.08);
+  border:1px solid #e5e7eb;
+}
+
+/* BUTTON PREMIUM */
+
+.premium-btn{
+  width:100%;
+  margin-top:20px;
+  padding:14px;
+  font-size:16px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#10b981,#059669);
+  box-shadow:0 10px 30px rgba(16,185,129,0.3);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .hero-mutui{
+    min-height:50vh;
+    padding:40px 16px;
+  }
+
+  .hero-mutui h1{
+    font-size:26px;
+  }
+
+  .hero-mutui p{
+    font-size:14px;
+  }
+
+}
