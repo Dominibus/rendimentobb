@@ -4884,6 +4884,12 @@ margin-bottom:15px;
 
 .results-card{
   position:relative;
+  transition: all 0.3s ease;
+}
+
+.results-card:hover{
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
 
 .results-overlay{
