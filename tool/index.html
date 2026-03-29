@@ -1115,6 +1115,28 @@ window.handleUpgradeClick = function(){
 
   console.log("🔥 CTA CLICK");
 
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  // ================= 🟢 UTENTE PRO =================
+  if(isPro){
+
+    console.log("✅ PRO USER → scroll advanced");
+
+    const target = document.getElementById("advanced-analysis");
+
+    if(target){
+      target.scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+    return;
+  }
+
+  // ================= 🔒 UTENTE FREE =================
   const lang = window.RB_LANG?.current || "it";
 
   const message = lang === "en"
@@ -1122,11 +1144,7 @@ window.handleUpgradeClick = function(){
     : "Stai per sbloccare l’analisi completa.\n\nROI reale, rischi, mutuo e profitto.";
 
   if(confirm(message)){
-    window.location.href = "https://buy.stripe.com/YOUR_LINK";
+    buyPlan("pro"); // 🔥 USA LA TUA LOGICA STRIPE GIÀ ESISTENTE
   }
 
 };
-
-</script>
-</body>
-</html>
