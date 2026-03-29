@@ -2929,3 +2929,23 @@ setInterval(()=>{
 
 },3000);
 
+window.handleUpgradeClick = function(){
+
+  console.log("🔥 CTA CLICK");
+
+  // 🔥 micro feedback UX
+  const btn = document.querySelector(".cta-primary");
+  if(btn){
+    btn.innerHTML = "⏳ Analisi in corso...";
+    btn.style.opacity = "0.7";
+  }
+
+  // 🔥 delay psicologico (effetto AI / valore)
+  setTimeout(()=>{
+
+    // 👉 QUI METTI STRIPE LINK
+    window.location.href = "https://buy.stripe.com/YOUR_LINK";
+
+  }, 800);
+
+};
