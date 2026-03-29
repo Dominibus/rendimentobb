@@ -1226,12 +1226,7 @@ function calculate(force = false){
     return;
   }
 
-  if(badgeEl){
-  badgeEl.innerText = getInvestmentBadge(roi);
-  badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
-  }
-
-  if(document.readyState === "loading"){
+    if(document.readyState === "loading"){
     console.warn("DOM non pronto ma continuo comunque");
   }
 
@@ -1373,9 +1368,11 @@ function calculate(force = false){
   // ================= 🔥 FIX DATI PRO =================
 
   const badgeEl = document.getElementById("roi-badge");
+
   if(badgeEl){
   badgeEl.innerText = getInvestmentBadge(roi);
- }
+  badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
+}
 
 
   const profitAnnualEl = document.getElementById("profit-annual");
