@@ -2949,3 +2949,19 @@ window.handleUpgradeClick = function(){
   }, 800);
 
 };
+
+// ================= CTA UPGRADE =================
+
+window.handleUpgradeClick = function(){
+
+  const lang = window.RB_LANG?.current || "it";
+
+  const message = lang === "en"
+    ? "You are about to unlock the full investment analysis.\n\nROI, risks, mortgage and real profit."
+    : "Stai per sbloccare l’analisi completa dell’investimento.\n\nROI reale, rischi, mutuo e profitto reale.";
+
+  if(confirm(message)){
+    window.location.href = "https://buy.stripe.com/YOUR_LINK";
+  }
+
+};
