@@ -2885,3 +2885,27 @@ window.triggerUpgradeIfNeeded = function(roi){
 
 };
 
+setInterval(()=>{
+
+  const el = document.getElementById("live-users");
+  if(!el) return;
+
+  let val = parseInt(el.innerText);
+  if(isNaN(val)) val = 1200;
+
+  val += Math.floor(Math.random()*3);
+
+  if(val > 1350){
+    val = 1200 + Math.floor(Math.random()*50);
+  }
+
+  el.classList.add("bump");
+
+  setTimeout(()=>{
+    el.classList.remove("bump");
+  },200);
+
+  el.innerText = val;
+
+},3000);
+
