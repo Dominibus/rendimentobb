@@ -946,10 +946,16 @@ function renderSmartInvestmentAlert(roi){
   )}
   </p>
 
-  <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+<button onclick="
+  if(window.currentPlan === 'pro'){
+    document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
+  } else {
+    startPlanPurchase('pro');
+  }
+" class="btn btn-primary" style="margin:20px auto;display:block;">
   ${t(
-  "🔓 Accedi gratis per vedere l'analisi completa – 29€/mese",
-  "🔓 Login to unlock full analysis – €29/month"
+   "💰 Scopri quanto puoi guadagnare (o perdere davvero)",
+   "💰 See how much you can really earn (or lose)"
   )}
   </button>
 
