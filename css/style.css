@@ -5126,7 +5126,7 @@ input{
   padding-right:15px !important;
 }
 
-/* ================= MOBILE PREMIUM UX ================= */
+/* ================= MOBILE UX CLEAN (FINAL) ================= */
 
 @media (max-width:768px){
 
@@ -5142,46 +5142,49 @@ html, body{
 
 /* ===== HERO ===== */
 
-.hero .container{
-  padding-top:80px !important;
+.hero{
+  min-height:60vh !important;
+  display:flex;
+  align-items:flex-end;
 }
 
+.hero .container{
+  padding-top:40px !important;
+  padding-bottom:20px;
+}
+
+/* ===== TITOLI ===== */
+
 .page-title h1{
-  font-size:26px;
+  font-size:22px !important;
   line-height:1.2;
+  text-align:center;
 }
 
 .page-title p{
   font-size:14px;
+  text-align:center;
+  margin-top:10px;
 }
 
-/* ===== GRID ===== */
+/* ===== GRID (🔥 FIX PRINCIPALE) ===== */
 
 .property-grid{
-  display:flex;
-  overflow-x:auto;
+  display:grid !important;
+  grid-template-columns:1fr !important;
   gap:16px;
-  padding-bottom:10px;
-  scroll-snap-type:x mandatory;
-}
-
-.property-grid::-webkit-scrollbar{
-  display:none;
 }
 
 /* ===== CARD ===== */
 
 .property-card{
-  min-width:85%;
-  flex-shrink:0;
+  width:100%;
   padding:20px;
-  border-radius:16px;
-  scroll-snap-align:start;
-
+  border-radius:14px;
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* hover disattivato mobile */
+/* disattiva hover mobile */
 .property-card:hover{
   transform:none;
 }
@@ -5195,11 +5198,11 @@ html, body{
 /* ===== SEZIONI ===== */
 
 section{
-  margin-top:60px !important;
+  margin-top:50px !important;
 }
 
 .section-info{
-  margin-top:60px;
+  margin-top:30px !important;
   padding:0;
 }
 
@@ -5229,19 +5232,20 @@ input{
   font-size:16px;
 }
 
-/* ===== PROPERTY RESULT CARD ===== */
+/* ===== SEARCH RESULTS ===== */
 
 #property-search-results .property-grid{
-  display:flex;
+  display:grid !important;
+  grid-template-columns:1fr !important;
 }
 
-/* ===== ANALYZE BOX ===== */
+/* ===== PREVIEW ===== */
 
 #property-preview{
   font-size:13px;
 }
 
-/* ===== STICKY CTA ===== */
+/* ===== CTA STICKY ===== */
 
 .mobile-sticky-cta{
   position:fixed;
@@ -5262,57 +5266,9 @@ input{
   border-radius:10px;
 }
 
-/* spazio sotto per evitare overlap */
+/* spazio sotto */
 body{
   padding-bottom:80px;
-}
-
-}
-
-@media (max-width:768px){
-
-/* ===== HERO FIX SERIO ===== */
-
-.hero{
-  min-height:65vh !important;
-  display:flex;
-  align-items:flex-end; /* 🔥 porta testo più in basso */
-}
-
-/* container interno */
-.hero .container{
-  padding-top:40px !important;
-  padding-bottom:30px;
-}
-
-/* ===== TITOLO ===== */
-
-.page-title h1{
-  font-size:24px !important;
-  line-height:1.2;
-  text-align:center;
-}
-
-/* ===== TESTO ===== */
-
-.page-title p{
-  font-size:14px;
-  text-align:center;
-  margin-top:10px;
-}
-
-/* ===== BLOCCO INFO ===== */
-
-.section-info{
-  margin-top:30px !important;
-}
-
-/* ===== TAGLIO SPAZIO INUTILE ===== */
-
-.hero::after{
-  content:"";
-  display:block;
-  height:20px;
 }
 
 }
