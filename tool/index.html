@@ -1204,7 +1204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setTimeout(()=>{
 
-    const lang = window.currentLang || "it";
+    const lang = window.RB_LANG?.current || "it";
 
     const messages = {
       dashboard: {
@@ -1223,12 +1223,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const msg = messages[upgrade] || messages.default;
 
-    alert(lang === "en" ? msg.en : msg.it);
+    showUpgradeModalCustom(msg.it, msg.en);
 
   },400);
 
 })();
-
   // ================= CTA UPGRADE =================
 
 window.handleUpgradeClick = function(){
