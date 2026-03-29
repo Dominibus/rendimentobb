@@ -1254,10 +1254,6 @@ container.innerHTML = insights.map(i=>{
 
 function calculate(force = false){
 
-  if(result.roi > 8){
-  setTimeout(showUpgradeOverlay, 1200);
-}
-
   if(window.isCalculating){
     console.log("⛔ calculate già in esecuzione → skip");
     return;
@@ -1315,6 +1311,10 @@ function calculate(force = false){
   });
 
   console.log("RESULT:", result);
+
+    if(result.roi > 8){
+  setTimeout(showUpgradeOverlay, 1200);
+}
 
   // 🔥 GLOBAL SYNC (FONDAMENTALE)
 window.currentRevenue = result.revenue || result.gross || 0;
