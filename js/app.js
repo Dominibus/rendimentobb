@@ -1100,10 +1100,10 @@ function getROIColor(roi){
 }
 
 function getInvestmentBadge(roi){
-  if(roi >= 20) return "🚀 Investimento TOP";
-  if(roi >= 12) return "🔥 Ottima opportunità";
-  if(roi >= 8) return "👍 Buon investimento";
-  return "⚠️ Attenzione rischio";
+  if(roi >= 20) return t("🚀 Investimento TOP","🚀 Top investment");
+  if(roi >= 12) return t("🔥 Ottima opportunità","🔥 Great opportunity");
+  if(roi >= 8) return t("👍 Buon investimento","👍 Good investment");
+  return t("⚠️ Attenzione rischio","⚠️ Risk warning");
 }
 
 // ================= AI INSIGHT ENGINE =================
@@ -1351,7 +1351,8 @@ function calculate(force = false){
 
   const roiLiveEl = document.getElementById("roi-live");
   if(roiLiveEl){
-    roiLiveEl.innerText = roi.toFixed(1) + "%";
+    animateValue(roiLiveEl, 0, roi, 800);
+    roiLiveEl.style.color = getROIColor(roi);
   }
 
   const profitEl = document.getElementById("profit-live");
@@ -1365,6 +1366,12 @@ function calculate(force = false){
   }
 
   // ================= 🔥 FIX DATI PRO =================
+
+  const badgeEl = document.getElementById("roi-badge");
+  if(badgeEl){
+  badgeEl.innerText = getInvestmentBadge(roi);
+ }
+
 
   const profitAnnualEl = document.getElementById("profit-annual");
   const breakEvenEl = document.getElementById("break-even");
