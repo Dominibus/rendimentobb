@@ -616,6 +616,7 @@ let portal = "Portale immobiliare";
 let id = "";
 let estimatedPrice = "";
 
+// ===== DETECTION =====
 if(link.includes("idealista")){
 portal = "Idealista";
 id = link.split("/").filter(Boolean).pop();
@@ -626,21 +627,49 @@ portal = "Immobiliare.it";
 id = link.split("/").filter(Boolean).pop();
 }
 
+// ===== FAKE SMART PRICE =====
 if(id){
 estimatedPrice = (Math.floor(Math.random()*200)+80) * 1000;
 }
 
+// ===== PREMIUM PREVIEW =====
 document.getElementById("property-preview").innerHTML = `
-<div style="background:#f1f5f9;padding:14px;border-radius:10px;margin-top:12px;text-align:left">
+<div style="
+background:linear-gradient(135deg,#f8fafc,#eef2f7);
+padding:18px;
+border-radius:14px;
+margin-top:14px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+border:1px solid #e5e7eb;
+text-align:left;
+animation:fadeIn .4s ease;
+">
 
-<strong>📍 Immobile rilevato</strong><br>
+<div style="font-size:13px;color:#64748b;margin-bottom:6px">
+${window.currentLang==="en"?"Detected property":"Immobile rilevato"}
+</div>
 
-Portale: ${portal}<br>
-ID annuncio: ${id}<br>
+<strong style="font-size:16px">📍 ${portal}</strong><br>
 
-${estimatedPrice ? `💰 Prezzo stimato: <strong>${estimatedPrice.toLocaleString()} €</strong><br>` : ""}
+<div style="margin-top:6px;font-size:13px;color:#64748b">
+ID: ${id}
+</div>
 
-<a href="${link}" target="_blank">Apri annuncio</a>
+${estimatedPrice ? `
+<div style="margin-top:10px;font-size:18px;font-weight:700;color:#10b981">
+💰 ${estimatedPrice.toLocaleString()} €
+</div>
+` : ""}
+
+<a href="${link}" target="_blank" style="
+display:inline-block;
+margin-top:10px;
+font-size:13px;
+color:#3b82f6;
+text-decoration:none;
+">
+🔗 ${window.currentLang==="en"?"Open listing":"Apri annuncio"}
+</a>
 
 </div>
 `;
@@ -656,6 +685,8 @@ window.location.href="/tool/";
 
 
 
+// ================= SEARCH =================
+
 function searchProperties(){
 
 const city = document.getElementById("searchCity").value ||
@@ -663,10 +694,11 @@ const city = document.getElementById("searchCity").value ||
 
 const container = document.getElementById("property-search-results");
 
-container.innerHTML =
-window.currentLang === "en"
-? "Searching properties..."
-: "Ricerca immobili...";
+container.innerHTML = `
+<div style="padding:20px;text-align:center;color:#64748b">
+⏳ ${window.currentLang==="en"?"Analyzing market...":"Analisi mercato in corso..."}
+</div>
+`;
 
 setTimeout(()=>{
 
@@ -678,6 +710,7 @@ const price2 = 240000;
 const sqm2 = 85;
 const roi2 = ((18000 / price2) * 100).toFixed(1);
 
+// ===== BADGE =====
 const badge1 = roi1 > 8
 ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
 : "";
@@ -686,57 +719,103 @@ const badge2 = roi2 > 8
 ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
 : "";
 
+// ===== CARD TEMPLATE =====
+function createCard(title, price, sqm, roi, badge, highlight=false){
+
+return `
+<div class="property-card" style="
+position:relative;
+padding:22px;
+border-radius:16px;
+background:white;
+box-shadow:0 15px 40px rgba(0,0,0,0.06);
+border:${highlight ? "2px solid #10b981" : "1px solid #e5e7eb"};
+transition:all .25s ease;
+">
+
+${highlight ? `
+<div style="
+position:absolute;
+top:12px;
+right:12px;
+background:#10b981;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:600;
+">
+TOP DEAL
+</div>
+` : ""}
+
+<h3 style="font-size:18px;margin-bottom:6px">${title}</h3>
+
+<div style="font-size:22px;font-weight:700;color:#111">
+€${price.toLocaleString()}
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-top:4px">
+${sqm} m² · ${city}
+</div>
+
+<div style="
+margin-top:12px;
+font-size:14px;
+color:#10b981;
+font-weight:600
+">
+${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi}%
+</div>
+
+${badge ? `
+<div style="
+margin-top:6px;
+font-size:13px;
+color:#f59e0b;
+font-weight:600
+">
+${badge}
+</div>
+` : ""}
+
+<button class="btn btn-primary" style="
+margin-top:14px;
+width:100%;
+border-radius:10px;
+font-weight:600;
+"
+onclick="openInvestment(${price})">
+
+${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
+
+</button>
+
+</div>
+`;
+}
+
+// ===== RENDER =====
 container.innerHTML = `
 
 <div class="property-grid">
 
-<div class="property-card">
+${createCard(
+window.currentLang==="en"?"Investment apartment":"Bilocale investimento",
+price1,
+sqm1,
+roi1,
+badge1,
+true
+)}
 
-<h3>${window.currentLang==="en"?"Investment apartment":"Bilocale investimento"}</h3>
-
-<div class="property-roi">€${price1.toLocaleString()}</div>
-
-<div>${sqm1} m² · ${city}</div>
-
-<div style="margin-top:10px;color:#10b981;font-weight:600">
-${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi1}%
-</div>
-
-${badge1 ? `<div style="margin-top:6px;color:#f59e0b;font-weight:600">${badge1}</div>` : ""}
-
-<button class="btn btn-primary"
-onclick="openInvestment(${price1})">
-
-${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
-
-</button>
-
-</div>
-
-
-
-<div class="property-card">
-
-<h3>${window.currentLang==="en"?"Renovated apartment":"Trilocale ristrutturato"}</h3>
-
-<div class="property-roi">€${price2.toLocaleString()}</div>
-
-<div>${sqm2} m² · ${city}</div>
-
-<div style="margin-top:10px;color:#10b981;font-weight:600">
-${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi2}%
-</div>
-
-${badge2 ? `<div style="margin-top:6px;color:#f59e0b;font-weight:600">${badge2}</div>` : ""}
-
-<button class="btn btn-primary"
-onclick="openInvestment(${price2})">
-
-${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
-
-</button>
-
-</div>
+${createCard(
+window.currentLang==="en"?"Renovated apartment":"Trilocale ristrutturato",
+price2,
+sqm2,
+roi2,
+badge2
+)}
 
 </div>
 
@@ -746,15 +825,17 @@ ${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
 
 }
 
+
+
+// ================= REDIRECT =================
+
 function openInvestment(price){
 
 localStorage.setItem("property_price", price);
 
 window.location.href="/tool/";
 
-}  
-
-</script>
+}
 
 </body>
 </html>
