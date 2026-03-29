@@ -5273,83 +5273,107 @@ body{
 
 }
 
-/* HERO MUTUI */
+/* ================= HERO MUTUI PREMIUM ================= */
 
-.hero-mutui{
+.hero-mutui-premium{
   position:relative;
-  min-height:60vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-
-  background:
-    linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.8)),
-    url("/img/roma-dashboard.jpg") center/cover no-repeat;
-
-  color:white;
+  padding:110px 20px 90px;
+  background-image:url("/img/roma-dashboard.jpg");
+  background-size:cover;
+  background-position:center;
+  overflow:hidden;
 }
 
-.hero-mutui h1{
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(15,23,42,0.75), rgba(15,23,42,0.9));
+}
+
+.hero-content{
+  position:relative;
+  text-align:center;
+  color:white;
+  max-width:700px;
+  margin:auto;
+}
+
+/* BADGE SOPRA */
+
+.hero-badge{
+  display:inline-block;
+  padding:6px 14px;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.25);
+  backdrop-filter:blur(10px);
+  border-radius:20px;
+  font-size:12px;
+  margin-bottom:16px;
+}
+
+/* TITOLO */
+
+.hero-mutui-premium h1{
   font-size:38px;
   font-weight:700;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
-.hero-mutui p{
+/* TESTO */
+
+.hero-mutui-premium p{
   font-size:16px;
-  opacity:0.9;
-  max-width:600px;
-  margin:0 auto;
+  color:#e2e8f0;
 }
+
+/* 🔥 FIX TRUST BADGE (QUESTO È IL PUNTO CHIAVE) */
 
 .hero-trust{
-  margin-top:18px;
+  margin-top:22px;
   font-size:13px;
-  background:rgba(255,255,255,0.1);
-  padding:8px 14px;
-  border-radius:20px;
-  display:inline-block;
-  backdrop-filter:blur(6px);
-}
 
-/* CARD PREMIUM */
-
-.premium-card{
-  background:white;
-  border-radius:18px;
-  padding:26px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.08);
-  border:1px solid #e5e7eb;
-}
-
-/* BUTTON PREMIUM */
-
-.premium-btn{
-  width:100%;
-  margin-top:20px;
-  padding:14px;
-  font-size:16px;
-  border-radius:12px;
   background:linear-gradient(135deg,#10b981,#059669);
-  box-shadow:0 10px 30px rgba(16,185,129,0.3);
+  color:white;
+
+  padding:10px 18px;
+  border-radius:999px;
+
+  display:inline-block;
+
+  font-weight:600;
+
+  box-shadow:
+    0 8px 25px rgba(16,185,129,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
-/* MOBILE */
+/* ================= SPACING ================= */
+
+.main-spacing{
+  margin-top:-60px;
+  padding-bottom:120px;
+  position:relative;
+  z-index:2;
+}
+
+/* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
-  .hero-mutui{
-    min-height:50vh;
-    padding:40px 16px;
-  }
+.hero-mutui-premium{
+  padding:80px 16px 60px;
+}
 
-  .hero-mutui h1{
-    font-size:26px;
-  }
+.hero-mutui-premium h1{
+  font-size:26px;
+}
 
-  .hero-mutui p{
-    font-size:14px;
-  }
+.hero-mutui-premium p{
+  font-size:14px;
+}
+
+.main-spacing{
+  margin-top:-40px;
+}
 
 }
