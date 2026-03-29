@@ -1278,20 +1278,46 @@ function calculate(force = false){
 
   safeRender("investment-metrics", (container) => {
 
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  // 🔒 FREE → SOLO TEASER
+  if(!isPro){
+
+    container.innerHTML = `
+    
+    <div class="metric-card">
+      <div>${tt("roi")}</div>
+      <strong>${roi.toFixed(1)}%</strong>
+    </div>
+
+    <div class="metric-card">
+      <div>${tt("partialProfit")}</div>
+      <strong>${formatCurrency(netAfterMortgage)}</strong>
+    </div>
+
+    `;
+
+    return;
+  }
+
+  // 🔓 PRO → FULL DATA
   container.innerHTML = `
   
   <div class="metric-card">
-    <div>ROI</div>
+    <div>${tt("roi")}</div>
     <strong>${roi.toFixed(1)}%</strong>
   </div>
 
   <div class="metric-card">
-    <div>Profitto annuo</div>
+    <div>${tt("annualProfit")}</div>
     <strong>${formatCurrency(netAfterMortgage)}</strong>
   </div>
 
   <div class="metric-card">
-    <div>Ricavi</div>
+    <div>${tt("revenue")}</div>
     <strong>${formatCurrency(gross)}</strong>
   </div>
 
