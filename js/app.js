@@ -1031,14 +1031,30 @@ ${discover}:
 • ${report}
 </p>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+<button 
+onclick="
+  if(window.currentPlan === 'pro'){
+    document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
+  } else {
+    startPlanPurchase('pro');
+  }
+"
+class="btn btn-primary"
+style="
+margin:20px auto 10px auto;
+display:block;
+max-width:280px;
+width:100%;
+text-align:center;
+"
+>
 ${unlock}
 </button>
 
 <div style="margin-top:8px;font-size:12px;color:#64748b;">
 ${t(
-"Accesso completo a tutte le simulazioni professionali",
-"Full access to all professional simulations"
+"💰 Scopri quanto puoi guadagnare (o perdere davvero)",
+"💰 See how much you can really earn (or lose)"
 )}
 </div>
 
@@ -1228,9 +1244,10 @@ function calculate(force = false){
 
   // 🔥 sicurezza
   if(typeof window.safeNumber !== "function"){
-    console.warn("safeNumber non pronto → skip calculate");
-    return;
-  }
+  console.warn("safeNumber non pronto → skip calculate");
+  window.isCalculating = false; // 🔥 FIX
+  return;
+}
 
     if(document.readyState === "loading"){
     console.warn("DOM non pronto ma continuo comunque");
