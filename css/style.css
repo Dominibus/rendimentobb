@@ -5436,3 +5436,10 @@ body{
 .badge-top{ background:#dcfce7; color:#059669; }
 .badge-good{ background:#fef3c7; color:#d97706; }
 .badge-risk{ background:#fee2e2; color:#dc2626; }
+
+#live-users{
+  transition: transform 0.2s ease;
+}
+.bump{
+  transform: scale(1.15);
+}
