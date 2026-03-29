@@ -2809,7 +2809,8 @@ document.addEventListener("rb_plan_loaded", () => {
 
 });
 
-function triggerUpgradeIfNeeded(roi){
+window.triggerUpgradeIfNeeded = function(roi){
+
   if(window.isProUser && window.isProUser()) return;
 
   const safeROI = Number(roi || 0);
@@ -2827,4 +2828,5 @@ function triggerUpgradeIfNeeded(roi){
       }
     },1500);
   }
+
 }
