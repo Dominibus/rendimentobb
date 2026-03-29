@@ -1021,39 +1021,46 @@ function applyPaywall(){
     const lock = document.createElement("div");
     lock.setAttribute("data-paywall","true");
 
-    lock.innerHTML = `
-      <div style="
-        position:absolute;
-        inset:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        gap:15px;
-        background:rgba(255,255,255,0.9);
-        backdrop-filter:blur(6px);
-        border-radius:16px;
-      ">
-        <div style="font-weight:600;font-size:16px;">
-          🔒 Analisi avanzata
-        </div>
+    const lang = window.RB_LANG?.current || "it";
 
-        <div style="font-size:13px;color:#64748b;text-align:center;max-width:260px;">
-          Scopri rischio reale, mutuo e sostenibilità prima di investire
-        </div>
+lock.innerHTML = `
+  <div style="
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:15px;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(4px);
+    border-radius:16px;
+    text-align:center;
+    padding:20px;
+  ">
 
-        <button onclick="buyPlan('pro')" class="btn btn-primary">
-          🔥 Sblocca – 29€
-        </button>
-      </div>
-    `;
+    <div style="font-weight:600;font-size:16px;">
+      ${lang === "en" ? "🔒 Advanced analysis locked" : "🔒 Analisi avanzata bloccata"}
+    </div>
 
-    card.style.position = "relative";
-    card.appendChild(lock);
+    <div style="font-size:13px;color:#64748b;max-width:260px;">
+      ${lang === "en"
+        ? "You are seeing only part of the data. Unlock full analysis before investing."
+        : "Stai vedendo solo una parte dei dati. Sblocca l’analisi completa prima di investire"}
+    </div>
 
-  });
+    <button onclick="buyPlan('pro')" class="btn btn-primary">
+      ${lang === "en" ? "🔥 Unlock full analysis – €29" : "🔥 Sblocca analisi completa – 29€"}
+    </button>
 
-}
+  </div>
+`;
+
+card.style.position = "relative";
+card.appendChild(lock);
+
+/* 🔥 forza aggiornamento lingua globale */
+document.dispatchEvent(new Event("rb_language_changed"));
 
 /* ================= AUTO INIT ================= */
 
