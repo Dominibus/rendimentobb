@@ -5273,50 +5273,84 @@ body{
 
 }
 
-/* ================= HERO MUTUI PREMIUM ================= */
+/* ================= HERO MUTUI PREMIUM 2.0 ================= */
 
 .hero-mutui-premium{
   position:relative;
   padding:110px 20px 90px;
-  background-image:url("/img/roma-dashboard.jpg");
+  overflow:hidden;
+
+  background:
+    radial-gradient(circle at 20% 30%, rgba(16,185,129,0.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(59,130,246,0.15), transparent 40%),
+    url("/img/roma-dashboard.jpg");
+
   background-size:cover;
   background-position:center;
-  overflow:hidden;
 }
+
+/* OVERLAY PIÙ LEGGERO */
 
 .hero-overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg, rgba(15,23,42,0.75), rgba(15,23,42,0.9));
+  background:linear-gradient(
+    180deg,
+    rgba(15,23,42,0.45),
+    rgba(15,23,42,0.65)
+  );
 }
+
+/* EFFETTO GLOW DINAMICO */
+
+.hero-mutui-premium::after{
+  content:"";
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle, rgba(16,185,129,0.25), transparent 60%);
+  top:-100px;
+  left:-100px;
+  filter:blur(60px);
+  animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes floatGlow{
+  0%{transform:translate(0,0);}
+  100%{transform:translate(60px,40px);}
+}
+
+/* CONTENUTO */
 
 .hero-content{
   position:relative;
   text-align:center;
   color:white;
-  max-width:700px;
+  max-width:720px;
   margin:auto;
 }
 
-/* BADGE SOPRA */
+/* BADGE */
 
 .hero-badge{
   display:inline-block;
   padding:6px 14px;
-  background:rgba(255,255,255,0.15);
-  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.2);
+  border:1px solid rgba(255,255,255,0.3);
   backdrop-filter:blur(10px);
   border-radius:20px;
   font-size:12px;
-  margin-bottom:16px;
+  margin-bottom:18px;
+  font-weight:500;
 }
 
 /* TITOLO */
 
 .hero-mutui-premium h1{
-  font-size:38px;
+  font-size:40px;
   font-weight:700;
   margin-bottom:14px;
+  letter-spacing:-0.3px;
 }
 
 /* TESTO */
@@ -5326,31 +5360,38 @@ body{
   color:#e2e8f0;
 }
 
-/* 🔥 FIX TRUST BADGE (QUESTO È IL PUNTO CHIAVE) */
+/* 🔥 TRUST SUPER (PIÙ PREMIUM + ANIMAZIONE) */
 
 .hero-trust{
-  margin-top:22px;
+  margin-top:24px;
   font-size:13px;
 
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
 
-  padding:10px 18px;
+  padding:10px 20px;
   border-radius:999px;
 
   display:inline-block;
-
   font-weight:600;
 
   box-shadow:
-    0 8px 25px rgba(16,185,129,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+    0 10px 30px rgba(16,185,129,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+
+  animation:pulseGlow 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseGlow{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+  100%{transform:scale(1);}
 }
 
 /* ================= SPACING ================= */
 
 .main-spacing{
-  margin-top:-60px;
+  margin-top:-70px;
   padding-bottom:120px;
   position:relative;
   z-index:2;
