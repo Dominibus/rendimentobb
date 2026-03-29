@@ -1279,6 +1279,10 @@ function calculate(force = false){
   const priceNight = getValue("priceNight");
   const occupancy = getValue("occupancy");
   const expenses = getValue("expenses");
+  const occValue = document.getElementById("occ-value");
+if(occValue){
+  occValue.innerText = occupancy + "%";
+}
   const commission = getValue("commission") || 15;
   const tax = getValue("tax") || 21;
   const loanAmount = getValue("loanAmount");
