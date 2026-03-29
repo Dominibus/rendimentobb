@@ -147,7 +147,11 @@ if(verdictEl){
     );
   }
 
-  verdictEl.innerText = text;
+  verdictEl.innerHTML = `
+<span data-it="${textIT}" data-en="${textEN}">
+${window.RB_LANG?.current === "en" ? textEN : textIT}
+</span>
+`;
 }  
 
 // ================= STATUS =================
