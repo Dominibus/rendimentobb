@@ -1312,8 +1312,8 @@ function calculate(force = false){
 
   console.log("RESULT:", result);
 
-    if(result.roi > 8){
-  setTimeout(showUpgradeOverlay, 1200);
+    if(result.roi >= 8){
+  triggerUpgradeIfNeeded(result.roi);
 }
 
   // 🔥 GLOBAL SYNC (FONDAMENTALE)
