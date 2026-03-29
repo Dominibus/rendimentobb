@@ -213,6 +213,56 @@ font-size:18px;
 
 <body>
 
+<div id="upgrade-modal" style="
+position:fixed;
+inset:0;
+background:rgba(15,23,42,0.7);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:16px;
+max-width:400px;
+width:90%;
+text-align:center;
+">
+
+<h3 
+data-it="🔥 Sblocca l’analisi completa"
+data-en="🔥 Unlock full investment analysis"
+style="margin-bottom:10px;">
+</h3>
+
+<p 
+data-it="ROI reale, rischio, mutuo e sostenibilità dell’investimento."
+data-en="Real ROI, risk, mortgage and investment sustainability."
+style="font-size:14px;color:#64748b;">
+</p>
+
+<button onclick="buyPlan('pro')" class="btn btn-primary" style="margin-top:15px;width:100%;"
+data-it="🔥 Sblocca ora – 29€"
+data-en="🔥 Unlock now – €29">
+</button>
+
+<button onclick="closeUpgradeModal()" style="
+margin-top:10px;
+background:none;
+border:none;
+color:#64748b;
+cursor:pointer;
+"
+data-it="Ora no"
+data-en="Not now">
+</button>
+
+</div>
+</div>  
+
 <div id="global-header"></div>  
 
 <main>
@@ -505,8 +555,18 @@ data-en="⚠️ You could lose thousands without this full analysis">
 <div class="overlay-content">
 
 <div class="overlay-title"
-data-it="🔓 Stai vedendo solo il 30% dei dati"
-data-en="🔓 You are seeing only 30% of the data">
+data-it="🚨 Stai prendendo una decisione al buio"
+data-en="🚨 You are making a decision blindly">
+</div>
+
+<div style="
+margin-top:10px;
+font-size:13px;
+color:#ef4444;
+font-weight:600;
+"
+data-it="💸 Questo investimento potrebbe farti perdere migliaia di euro"
+data-en="💸 This investment could cost you thousands">
 </div>
 
 <div class="overlay-text"
@@ -1176,8 +1236,6 @@ window.handleUpgradeClick = function(){
     ? "You are about to unlock the full investment analysis.\n\nROI, risks, mortgage and real profit."
     : "Stai per sbloccare l’analisi completa.\n\nROI reale, rischi, mutuo e profitto.";
 
-  if(confirm(message)){
-    buyPlan("pro"); // 🔥 USA LA TUA LOGICA STRIPE GIÀ ESISTENTE
-  }
+  openUpgradeModal();
 
 };
