@@ -49,23 +49,31 @@ const badgeEl = document.getElementById("roi-badge");
 
 if(badgeEl){
 
-  let text = "";
+  let textIT = "";
+  let textEN = "";
   let color = "#10b981";
 
   if(roi < 5){
-    text = "❌ Investimento rischioso";
+    textIT = "❌ Investimento rischioso";
+    textEN = "❌ Risky investment";
     color = "#ef4444";
   }
   else if(roi < 10){
-    text = "⚠️ Da ottimizzare";
+    textIT = "⚠️ Da ottimizzare";
+    textEN = "⚠️ Needs optimization";
     color = "#f59e0b";
   }
   else{
-    text = "🔥 Investimento interessante";
+    textIT = "🔥 Investimento interessante";
+    textEN = "🔥 Strong investment";
     color = "#10b981";
   }
 
-  badgeEl.innerText = text;
+  badgeEl.innerHTML = `
+    <span data-it="${textIT}" data-en="${textEN}">
+      ${window.RB_LANG?.current === "en" ? textEN : textIT}
+    </span>
+  `;
   badgeEl.style.color = color;
 }
 
@@ -87,8 +95,10 @@ if(riskEl){
 
   riskEl.innerHTML = `
     <div style="margin-top:10px">
-      <div style="font-size:12px;margin-bottom:6px;opacity:0.7">
-        Livello rischio investimento
+      <div style="font-size:12px;margin-bottom:6px;opacity:0.7"
+      data-it="Livello rischio investimento"
+      data-en="Investment risk level">
+      ${t("Livello rischio investimento","Investment risk level")}
       </div>
 
       <div style="background:#e5e7eb;height:8px;border-radius:6px;overflow:hidden">
@@ -103,15 +113,14 @@ if(riskEl){
   `;
 }
 
-// ================= APPLY =================
+// ================= ROI =================
 
-// ROI
 if(roiEl){
   roiEl.style.color = getROIColor(roi);
   animateValue(roiEl, 0, roi, 800);
 }
 
-// ================= INVESTMENT STATUS =================
+// ================= STATUS =================
 
 const statusEl = document.getElementById("investment-status");
 
@@ -138,16 +147,9 @@ if(statusEl){
   }
 
   statusEl.innerHTML = `
-    <div 
-      data-it="${textIT}" 
-      data-en="${textEN}"
-      style="
-        font-weight:600;
-        margin-top:8px;
-        color:${color};
-        font-size:14px;
-      ">
-      ${textIT}
+    <div data-it="${textIT}" data-en="${textEN}"
+    style="font-weight:600;margin-top:8px;color:${color};font-size:14px;">
+      ${window.RB_LANG?.current === "en" ? textEN : textIT}
     </div>
   `;
 }
@@ -155,29 +157,109 @@ if(statusEl){
 // ================= PROFIT / REVENUE =================
 
 if(profitEl){
-  profitEl.innerText = profit.toLocaleString("it-IT",{
-    style:"currency",
-    currency:"EUR"
-  });
+  profitEl.innerText = profit.toLocaleString(
+    window.RB_LANG?.current === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  );
 }
 
 if(revenueEl){
-  revenueEl.innerText = revenue.toLocaleString("it-IT",{
-    style:"currency",
-    currency:"EUR"
-  });
+  revenueEl.innerText = revenue.toLocaleString(
+    window.RB_LANG?.current === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  );
+}
+
+// ================= 🚀 PRO BADGE (WOW EFFECT) =================
+
+const container = document.getElementById("executive-kpi");
+
+if(isPro && container && !container.querySelector(".pro-badge")){
+
+  const proBadge = document.createElement("div");
+  proBadge.classList.add("pro-badge");
+
+  proBadge.innerHTML = `
+  <div style="
+  margin-bottom:12px;
+  padding:12px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  font-size:13px;
+  font-weight:600;
+  text-align:center;
+  ">
+  ${t(
+  "🚀 Analisi PRO attiva – Intelligenza investimento sbloccata",
+  "🚀 PRO Analysis Active – Investment intelligence unlocked"
+  )}
+  </div>
+  `;
+
+  container.prepend(proBadge);
+}
+
+// ================= 🔥 FREE → PSYCHO TRIGGER =================
+
+if(!isPro){
+
+  const upsell = document.getElementById("smart-upsell");
+
+  if(upsell){
+
+    upsell.innerHTML = `
+    <div style="
+    margin-top:15px;
+    padding:16px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    text-align:center;
+    ">
+
+    <div style="font-weight:600;font-size:15px;">
+    ${t(
+    "🚨 Stai prendendo una decisione al buio",
+    "🚨 You are making a decision blindly"
+    )}
+    </div>
+
+    <div style="font-size:13px;margin-top:6px;opacity:0.8;">
+    ${t(
+    "Questo investimento potrebbe farti perdere migliaia di euro",
+    "This investment could cost you thousands"
+    )}
+    </div>
+
+    <button onclick="openUpgradeModal()" style="
+    margin-top:12px;
+    padding:10px 20px;
+    border-radius:10px;
+    background:#10b981;
+    border:none;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    ">
+    ${t("🔥 Sblocca analisi completa","🔥 Unlock full analysis")}
+    </button>
+
+    </div>
+    `;
+  }
 }
 
 // ================= 🔥 PLAN UI CONTROL =================
 
-// 👉 FREE → applica blur
+// FREE
 if(!isPro){
   document.querySelectorAll(".pro-only").forEach(el=>{
     el.classList.add("pro-blur");
   });
 }
 
-// 👉 PRO → rimuove tutto
+// PRO
 if(isPro){
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
