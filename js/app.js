@@ -1226,6 +1226,11 @@ function calculate(force = false){
     return;
   }
 
+  if(badgeEl){
+  badgeEl.innerText = getInvestmentBadge(roi);
+  badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
+  }
+
   if(document.readyState === "loading"){
     console.warn("DOM non pronto ma continuo comunque");
   }
@@ -2250,6 +2255,12 @@ lang==="it"
 
 }  
 
+function getInvestmentBadgeClass(roi){
+  if(roi >= 20) return "badge-top";
+  if(roi >= 10) return "badge-good";
+  return "badge-risk";
+}
+
   // ================= AUTO CITY DETECTION =================
 
   function extractCityFromLink(url){
@@ -2873,3 +2884,4 @@ window.triggerUpgradeIfNeeded = function(roi){
   }
 
 };
+
