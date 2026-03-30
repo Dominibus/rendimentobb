@@ -1323,10 +1323,7 @@ if(occValue){
 
   console.log("RESULT:", result);
 
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+const isPro = window.isPro();
 
   // 🔥 GLOBAL SYNC (FONDAMENTALE)
 window.currentRevenue = result.revenue || result.gross || 0;
