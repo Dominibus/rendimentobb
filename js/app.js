@@ -1406,8 +1406,8 @@ if(!window.isPro()){
     }
 
     if(typeof renderMarketBenchmark === "function"){
-      renderMarketBenchmark();
-    }
+  renderMarketBenchmark(window.currentCity || "napoli");
+}
 
     // ================= CTA =================
     if(typeof triggerUpgradeIfNeeded === "function"){
@@ -1595,7 +1595,7 @@ if(revenueAnnualEl){
 
   // ================= SAFE RENDER =================
 
-  const city = window.currentCity || "italy";
+  const city = window.currentCity || "napoli";
 
   safeRender("market-benchmark", () => {
     renderMarketBenchmark(city);
@@ -2912,7 +2912,6 @@ const city = citySelector.value;
 window.currentCity = city;
 localStorage.setItem("selected_city", city);
 
-renderMarketBenchmark(city);
 changeCityBackground(city);
 
 // non avviare automaticamente la simulazione
