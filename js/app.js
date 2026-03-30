@@ -1840,6 +1840,12 @@ function showUpgradeOverlay(){
 // ================= ROI CHART (SaaS Ready) =================
 function renderChart(net){
 
+  // 🔒 ANTI DOUBLE RENDER
+if(window.renderingChart){
+  return;
+}
+window.renderingChart = true;
+
   // 🛑 sicurezza dati
   net = Number(net);
   if(!net || net <= 0){
@@ -1976,6 +1982,8 @@ function renderChart(net){
   });
 
   console.log("✅ ROI chart renderizzato");
+  // 🔓 RESET LOCK
+window.renderingChart = false;
 }
 
 
