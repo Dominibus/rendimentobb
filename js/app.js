@@ -1366,6 +1366,21 @@ if(!isPro){
   const roi = safeNumber(result.roi);
   const roiToShow = displayROI;
 
+  // ================= PLAN CHECK =================
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
+// ================= FREE LIMIT ENGINE =================
+let displayROI = roi;
+let displayProfit = netAfterMortgage;
+
+if(!isPro){
+  displayROI = Math.round(roi);
+  displayProfit = netAfterMortgage * 0.7;
+}
+
   // ================= 📊 RENDER CHART =================
 
 try{
@@ -1384,23 +1399,41 @@ try{
   // 🔒 FREE → SOLO TEASER
   if(!isPro){
 
-    container.innerHTML = `
+  const roiMin = Math.max(0, Math.round(roi - 3));
+  const roiMax = Math.round(roi + 3);
+
+  const fakeProfit = netAfterMortgage * 0.6;
+
+  const loss = Math.round((result.revenue || 0) * 0.25);
+
+  container.innerHTML = `
 
 <div class="metric-card">
-  <div>${t("ROI","ROI")}</div>
-  <strong>${roi.toFixed(1)}%</strong>
+  <div>${t("ROI stimato","Estimated ROI")}</div>
+  <strong>${roiMin}% - ${roiMax}%</strong>
 </div>
 
 <div class="metric-card">
-  <div>${t("Profitto parziale","Partial profit")}</div>
-  <strong>${formatCurrency(netAfterMortgage)}</strong>
+  <div>${t("Profitto stimato","Estimated profit")}</div>
+  <strong>${formatCurrency(fakeProfit)}</strong>
+</div>
+
+<div style="margin-top:12px;font-size:13px;color:#ef4444;font-weight:600;">
+  ⚠️ ${t(
+    "Potresti perdere fino a","You could lose up to"
+  )} ${loss.toLocaleString("it-IT")}€
+</div>
+
+<div style="margin-top:14px;">
+  <button class="btn-primary" onclick="openUpgradeModal()">
+    🔓 ${t("Sblocca analisi completa","Unlock full analysis")}
+  </button>
 </div>
 
 `;
 
-    return;
-  }
-
+  return;
+}
   // 🔓 PRO → FULL DATA
   container.innerHTML = `
   
