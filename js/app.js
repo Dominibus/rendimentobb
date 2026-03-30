@@ -1558,16 +1558,52 @@ document.dispatchEvent(
 
   if(isPro){
 
-    console.log("🚀 FORCE UNLOCK UI");
+  console.log("🚀 FORCE UNLOCK UI");
 
-    document.body.classList.add("pro-user");
+  document.body.classList.add("pro-user");
 
-    // 🔥 RIMUOVE ALERT FREE (UNA VOLTA SOLA)
-document.querySelectorAll(
-  ".upgrade-warning, .alert-upgrade, .roi-warning, .fake-warning"
-).forEach(el=>{
-  el.remove();
-});
+  // 🔥 RIMUOVE TUTTI GLI ALERT VISIVI
+  document.querySelectorAll(`
+    .upgrade-warning,
+    .alert-upgrade,
+    .roi-warning,
+    .fake-warning,
+    .results-overlay,
+    .upgrade-overlay,
+    #upgrade-overlay,
+    #upgrade-modal
+  `).forEach(el=>{
+    el.remove();
+  });
+
+  // 🔥 RIMUOVE QUALSIASI PAYWALL
+  document.querySelectorAll('[data-paywall]').forEach(el=>{
+    el.remove();
+  });
+
+  // 🔥 RIMUOVE TESTI DI PAURA STATICI
+  document.querySelectorAll("*").forEach(el=>{
+    if(
+      el.innerText &&
+      (
+        el.innerText.includes("Stai prendendo decisioni") ||
+        el.innerText.includes("Potresti perdere") ||
+        el.innerText.includes("decisione al buio")
+      )
+    ){
+      el.style.display = "none";
+    }
+  });
+
+  // 🔓 SBLOCCA UI
+  document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
+    el.classList.remove("pro-only","pro-blur");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+}
 
 // 🔓 SBLOCCA UI
 document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
