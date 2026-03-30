@@ -1348,6 +1348,14 @@ document.dispatchEvent(
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
 
+  // ================= 📊 RENDER CHART =================
+
+try{
+  renderChart(netAfterMortgage);
+}catch(e){
+  console.error("Errore renderChart:", e);
+}
+
   safeRender("investment-metrics", (container) => {
 
   const isPro =
@@ -1588,6 +1596,31 @@ if(revenueAnnualEl){
   });
 
   // ================= 🔥 UNLOCK DEFINITIVO =================
+
+// 🔥 RIMUOVE ALERT TESTUALI HARDCODED
+if(isPro){
+
+  document.querySelectorAll(".results-card, .roi-dashboard").forEach(container=>{
+
+    container.querySelectorAll("div").forEach(el=>{
+
+      if(!el.innerText) return;
+
+      const text = el.innerText.toLowerCase();
+
+      if(
+        text.includes("stai prendendo decisioni") ||
+        text.includes("potresti perdere") ||
+        text.includes("decisione al buio")
+      ){
+        el.style.display = "none";
+      }
+
+    });
+
+  });
+
+}  
 
 if(isPro){
 
