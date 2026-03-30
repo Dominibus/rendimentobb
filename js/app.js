@@ -1381,7 +1381,7 @@ if(!isPro){
   displayProfit = netAfterMortgage * 0.7;
 }
 
-  // ================= 📊 RENDER CHART =================
+// ================= 📊 RENDER CHART =================
 
 try{
   renderChart(netAfterMortgage);
@@ -1389,7 +1389,55 @@ try{
   console.error("Errore renderChart:", e);
 }
 
-  safeRender("investment-metrics", (container) => {
+
+// ================= 🔒 CHART PAYWALL =================
+
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
+const chartContainer = document.querySelector(".roi-chart");
+
+if(chartContainer){
+
+  if(!isPro){
+
+    chartContainer.classList.add("chart-locked");
+
+    // evita duplicati overlay
+    if(!chartContainer.querySelector(".chart-overlay")){
+
+      const overlay = document.createElement("div");
+      overlay.className = "chart-overlay";
+
+      overlay.innerHTML = `
+        <div style="font-weight:600;font-size:14px;">
+          🔒 ${t("Sblocca il grafico completo","Unlock full chart")}
+        </div>
+        <button class="btn-primary" onclick="openUpgradeModal()">
+          ${t("Passa a PRO","Upgrade to PRO")}
+        </button>
+      `;
+
+      chartContainer.appendChild(overlay);
+    }
+
+  }else{
+
+    chartContainer.classList.remove("chart-locked");
+
+    const overlay = chartContainer.querySelector(".chart-overlay");
+    if(overlay) overlay.remove();
+
+  }
+
+}
+
+
+// ================= 📊 KPI RENDER =================
+
+safeRender("investment-metrics", (container) => {
 
   const isPro =
     window.currentPlan === "pro" ||
@@ -1399,14 +1447,14 @@ try{
   // 🔒 FREE → SOLO TEASER
   if(!isPro){
 
-  const roiMin = Math.max(0, Math.round(roi - 3));
-  const roiMax = Math.round(roi + 3);
+    const roiMin = Math.max(0, Math.round(roi - 3));
+    const roiMax = Math.round(roi + 3);
 
-  const fakeProfit = netAfterMortgage * 0.6;
+    const fakeProfit = netAfterMortgage * 0.6;
 
-  const loss = Math.round((result.revenue || 0) * 0.25);
+    const loss = Math.round((result.revenue || 0) * 0.25);
 
-  container.innerHTML = `
+    container.innerHTML = `
 
 <div class="metric-card">
   <div>${t("ROI stimato","Estimated ROI")}</div>
@@ -1419,9 +1467,7 @@ try{
 </div>
 
 <div style="margin-top:12px;font-size:13px;color:#ef4444;font-weight:600;">
-  ⚠️ ${t(
-    "Potresti perdere fino a","You could lose up to"
-  )} ${loss.toLocaleString("it-IT")}€
+  ⚠️ ${t("Potresti perdere fino a","You could lose up to")} ${loss.toLocaleString("it-IT")}€
 </div>
 
 <div style="margin-top:14px;">
@@ -1432,8 +1478,9 @@ try{
 
 `;
 
-  return;
-}
+    return;
+  }
+
   // 🔓 PRO → FULL DATA
   container.innerHTML = `
   
@@ -1455,7 +1502,6 @@ try{
   `;
 
 });
-
   // ================= PLAN =================
 
   const isPro =
