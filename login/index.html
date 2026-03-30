@@ -214,10 +214,10 @@ function updateUI(){
     tabRegister.classList.add("btn-primary");
     tabLogin.classList.remove("btn-primary");
 
+  }
+
     tabLogin.classList.toggle("active", mode === "login");
     tabRegister.classList.toggle("active", mode === "register");
-
-  }
 
   // 🔥 RILANCIA traduzioni
   if(typeof setLang === "function"){
