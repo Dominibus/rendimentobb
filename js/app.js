@@ -1755,8 +1755,6 @@ animation:false,
 
 devicePixelRatio:2,
 
-responsive:true,
-
 interaction:{
 mode:"index",
 intersect:false
@@ -1783,6 +1781,8 @@ callback:(v)=>formatCurrency(v)
 }
 
 }
+
+});
 
 // ================= CITY ROI CHART =================
 
