@@ -1337,6 +1337,11 @@ if(occValue){
 
   console.log("RESULT:", result);
 
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
   // 🔥 GLOBAL SYNC (FONDAMENTALE)
 window.currentRevenue = result.revenue || result.gross || 0;
 
@@ -1353,7 +1358,6 @@ document.dispatchEvent(
   const gross = result.gross;
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
-  const roiToShow = displayROI;
 
 // ================= FREE LIMIT ENGINE =================
 let displayROI = roi;
@@ -1362,6 +1366,7 @@ let displayProfit = netAfterMortgage;
 if(!isPro){
   displayROI = Math.round(roi);
   displayProfit = netAfterMortgage * 0.7;
+  displayRevenue = null;
 }
 
 // ================= 📊 RENDER CHART =================
