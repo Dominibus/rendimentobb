@@ -1263,11 +1263,12 @@ container.innerHTML = insights.map(i=>{
 
 function calculate(force = false){
 
-  if(window.isCalculating){
-  console.warn("⚠️ Re-entry calculate → continuo comunque");
-}
+  if(window.isCalculating && !force){
+    console.warn("⛔ BLOCCO re-entry calculate");
+    return;
+  }
 
-window.isCalculating = true;
+  window.isCalculating = true;
 
   // 🔥 sicurezza
   if(typeof window.safeNumber !== "function"){
@@ -1280,7 +1281,7 @@ window.isCalculating = true;
     console.warn("DOM non pronto ma continuo comunque");
   }
 
-  window.simulationExecuted = true;
+  window.isCalculating = false;
 
   // ================= INPUT =================
 
@@ -1523,11 +1524,17 @@ document.dispatchEvent(
     renderOccupancySensitivity();
   });
 
-  safeRender("investment-score", () => {
+  safeRender("investment-score", (el) => {
 
-    renderInvestmentScore(roi, result.risk || 50);
+  renderInvestmentScore(roi, result.risk || 50);
 
-    const el = document.getElementById("investment-score");
+  if(!isPro){
+    el.classList.add("pro-blur");
+  } else {
+    el.classList.remove("pro-blur");
+  }
+
+});
 
     if(!el) return;
 
@@ -1675,12 +1682,13 @@ function showUpgradeOverlay(){
 // ================= CHART =================
 
 function renderChart(net){
-  
-const annualProfit = net;
 
 const canvas = document.getElementById("roiChart");
 
-// 🔥 RESET COMPLETO (evita blur cumulativo)
+if(!canvas){
+  console.warn("Canvas roiChart non trovato");
+  return;
+}
 
 const ctx = canvas.getContext("2d");
 
