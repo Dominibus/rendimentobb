@@ -1486,6 +1486,28 @@ document.querySelector(".city-search-input")
   }
 });
 
+ document.addEventListener("rb_auth_ready", () => {
+
+  console.log("🔥 HOME AUTH READY:", window.currentPlan);
+
+  if(window.isPro()){
+
+    console.log("✅ SBLOCCO UI HOME PRO");
+
+    // 🔓 rimuove blur
+    document.querySelectorAll(".pro-blur").forEach(el=>{
+      el.classList.remove("pro-blur");
+    });
+
+    // 🔓 rimuove overlay
+    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+      el.remove();
+    });
+
+  }
+
+});
+
 // RESTORE CITY
 const saved = localStorage.getItem("selected_city");
 const map = {roma:"rome",napoli:"naples",milano:"milan",firenze:"florence"};
