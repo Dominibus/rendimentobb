@@ -82,19 +82,57 @@ color:#0f172a;
 
 <div class="login-card">
 
-<h2>Accesso</h2>
+<h2 
+data-it="Accesso"
+data-en="Login"
+id="auth-title">
+Accesso
+</h2>
+
+<div 
+id="auth-subtitle"
+style="font-size:13px;color:#64748b;margin-bottom:15px;"
+data-it="Accedi al tuo account"
+data-en="Access your account">
+Accedi al tuo account
+</div>
+
+<div style="font-size:12px;color:#10b981;margin-bottom:10px;"
+data-it="✔️ Gratis – nessuna carta richiesta"
+data-en="✔️ Free – no credit card required">
+✔️ Gratis – nessuna carta richiesta
+</div>  
 
 <div id="login-message" style="font-size:14px;color:#475569;margin-bottom:15px;"></div>
 
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<input id="email" type="email"
+data-placeholder-it="Email"
+data-placeholder-en="Email">
 
-<button id="loginBtn" class="btn btn-primary" style="width:100%;margin-bottom:12px;">
-Login
+<input id="password" type="password"
+data-placeholder-it="Password"
+data-placeholder-en="Password">
+
+<div style="display:flex;gap:10px;margin-bottom:15px;">
+
+<button id="tab-login" class="btn btn-primary" style="flex:1;"
+data-it="Accedi"
+data-en="Login">
+Accedi
 </button>
 
-<button id="registerBtn" class="btn btn-secondary" style="width:100%;">
+<button id="tab-register" class="btn btn-secondary" style="flex:1;"
+data-it="Registrati"
+data-en="Sign up">
 Registrati
+</button>
+
+</div>
+
+<button id="authBtn" class="btn btn-primary" style="width:100%;margin-bottom:12px;"
+data-it="Continua"
+data-en="Continue">
+Continua
 </button>
 
 <div class="back-link">
@@ -132,54 +170,128 @@ Per analizzare questo immobile devi creare un account gratuito.<br><br>
 
 <!-- FIREBASE AUTH -->
 
-<script type="module">
+let mode = "login";
 
-import {
-getAuth,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword
+const auth = getAuth();
+
+const title = document.getElementById("auth-title");
+const subtitle = document.getElementById("auth-subtitle");
+
+const tabLogin = document.getElementById("tab-login");
+const tabRegister = document.getElementById("tab-register");
+
+tabLogin.onclick = () => {
+  mode = "login";
+  updateUI();
+};
+
+tabRegister.onclick = () => {
+  mode = "register";
+  updateUI();
+};
+
+function updateUI(){
+
+  if(mode === "login"){
+
+    title.setAttribute("data-it","Accesso");
+    title.setAttribute("data-en","Login");
+
+    subtitle.setAttribute("data-it","Accedi al tuo account");
+    subtitle.setAttribute("data-en","Access your account");
+
+    tabLogin.classList.add("btn-primary");
+    tabRegister.classList.remove("btn-primary");
+
+  }else{
+
+    title.setAttribute("data-it","Crea account");
+    title.setAttribute("data-en","Create account");
+
+    subtitle.setAttribute("data-it","Registrati gratis in 10 secondi");
+    subtitle.setAttribute("data-en","Sign up in 10 seconds");
+
+    tabRegister.classList.add("btn-primary");
+    tabLogin.classList.remove("btn-primary");
+
+  }
+
+  // 🔥 RILANCIA traduzioni
+  if(typeof setLang === "function"){
+    setLang(window.RB_LANG.current);
+  }
+
 }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-const auth=getAuth();
+updateUI();
 
-document.getElementById("loginBtn").onclick=async()=>{
+document.getElementById("authBtn").onclick = async () => {
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-try{
+  if(!email || !password){
+    showError("empty");
+    return;
+  }
 
-await signInWithEmailAndPassword(auth,email,password);
+  try{
 
-window.location.href=document.referrer || "/tool/";
+    if(mode === "login"){
+      await signInWithEmailAndPassword(auth,email,password);
+    }else{
+      await createUserWithEmailAndPassword(auth,email,password);
+    }
 
-}catch(e){
+    window.location.href = document.referrer || "/tool/";
 
-alert(e.message);
+  }catch(e){
 
-}
+    showError(e.code);
+
+  }
 
 };
 
-document.getElementById("registerBtn").onclick=async()=>{
+function showError(code){
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
+  const lang = window.RB_LANG?.current || "it";
 
-try{
+  const errors = {
+    empty: {
+      it: "Inserisci email e password",
+      en: "Enter email and password"
+    },
+    "auth/invalid-email": {
+      it: "Email non valida",
+      en: "Invalid email"
+    },
+    "auth/email-already-in-use": {
+      it: "Email già registrata",
+      en: "Email already registered"
+    },
+    "auth/weak-password": {
+      it: "Password troppo debole (min 6 caratteri)",
+      en: "Weak password (min 6 characters)"
+    },
+    "auth/user-not-found": {
+      it: "Utente non trovato",
+      en: "User not found"
+    },
+    "auth/wrong-password": {
+      it: "Password errata",
+      en: "Wrong password"
+    }
+  };
 
-await createUserWithEmailAndPassword(auth,email,password);
+  const msg = errors[code] || {
+    it: "Errore imprevisto",
+    en: "Unexpected error"
+  };
 
-window.location.href = document.referrer || "/tool/";
-
-}catch(e){
-
-alert(e.message);
+  alert(lang === "en" ? msg.en : msg.it);
 
 }
-
-};
 
 </script>
 
