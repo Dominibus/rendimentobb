@@ -1562,14 +1562,15 @@ document.dispatchEvent(
 
     document.body.classList.add("pro-user");
 
-    document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
-  // 🔥 RIMUOVE ALERT FREE
-  document.querySelectorAll(
-    ".upgrade-warning, .alert-upgrade, .roi-warning, .fake-warning"
-  ).forEach(el=>{
-    el.remove();
-  });
+    // 🔥 RIMUOVE ALERT FREE (UNA VOLTA SOLA)
+document.querySelectorAll(
+  ".upgrade-warning, .alert-upgrade, .roi-warning, .fake-warning"
+).forEach(el=>{
+  el.remove();
+});
 
+// 🔓 SBLOCCA UI
+document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
   el.classList.remove("pro-only","pro-blur");
   el.style.filter = "none";
   el.style.opacity = "1";
