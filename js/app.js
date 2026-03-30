@@ -1563,17 +1563,18 @@ document.dispatchEvent(
     document.body.classList.add("pro-user");
 
     document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
-      // 🔥 RIMUOVE ALERT FREE (IMPORTANTISSIMO)
-     document.querySelectorAll(
-     ".upgrade-warning, .alert-upgrade, .roi-warning, .fake-warning"
-     ).forEach(el=>{
-     el.remove();
-     });
-      el.classList.remove("pro-only","pro-blur");
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-    });
+  // 🔥 RIMUOVE ALERT FREE
+  document.querySelectorAll(
+    ".upgrade-warning, .alert-upgrade, .roi-warning, .fake-warning"
+  ).forEach(el=>{
+    el.remove();
+  });
+
+  el.classList.remove("pro-only","pro-blur");
+  el.style.filter = "none";
+  el.style.opacity = "1";
+  el.style.pointerEvents = "auto";
+});
 
     document.querySelectorAll('[data-paywall], .locked-overlay, .results-overlay').forEach(el=>{
       el.remove();
