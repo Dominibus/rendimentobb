@@ -5599,8 +5599,9 @@ border:none;
 }
 
 canvas{
-  max-width:100% !important;
-  height:100% !important;
+  display:block;
+  width:100% !important;
+  height:auto !important;
 }
 
 /* ================= MOBILE FIX SIMULATORE ================= */
@@ -5668,6 +5669,66 @@ canvas{
   .btn{
     width: 100%;
     font-size: 15px;
+  }
+
+}
+
+/* ============================= */
+/* 🔥 FIX IPHONE SIMULATORE REAL */
+/* ============================= */
+
+@media (max-width:768px){
+
+  /* 🔴 BLOCCO PRINCIPALE */
+  .roi-dashboard,
+  .results-card,
+  .simulator-right{
+    width:100% !important;
+    max-width:100% !important;
+    margin:20px auto !important;
+    padding:16px !important;
+    overflow:hidden !important;
+  }
+
+  /* 🔴 CARD INTERNE */
+  .roi-dashboard *{
+    max-width:100% !important;
+  }
+
+  /* 🔴 GRAFICO (QUESTO È IL PROBLEMA PRINCIPALE) */
+  .roi-chart,
+  #roi-chart,
+  canvas{
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+  }
+
+  /* 🔴 CONTENITORE GRAFICO */
+  .roi-chart{
+    overflow:hidden;
+  }
+
+  /* 🔴 KPI GRID */
+  .roi-metrics{
+    grid-template-columns:1fr !important;
+  }
+
+  /* 🔴 TESTI LUNGHI NON ROMPONO */
+  .metric strong{
+    white-space:normal !important;
+    word-break:break-word !important;
+  }
+
+  /* 🔴 FIX HEADER OVERLAY (si vede nel tuo screen) */
+  .portal-header{
+    position:fixed;
+    width:100%;
+  }
+
+  /* 🔴 SPAZIO SOTTO HEADER */
+  body{
+    padding-top:70px !important;
   }
 
 }
