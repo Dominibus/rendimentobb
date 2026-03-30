@@ -1526,6 +1526,8 @@ document.dispatchEvent(
 
   safeRender("investment-score", (el) => {
 
+  if(!el) return;
+
   renderInvestmentScore(roi, result.risk || 50);
 
   if(!isPro){
@@ -1535,16 +1537,6 @@ document.dispatchEvent(
   }
 
 });
-
-    if(!el) return;
-
-    if(!isPro){
-      el.classList.add("pro-blur");
-    } else {
-      el.classList.remove("pro-blur");
-    }
-
-  });
 
   safeRender("investment-verdict", () => {
     renderInvestmentVerdict(roi, payback);
