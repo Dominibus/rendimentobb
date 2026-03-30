@@ -137,6 +137,15 @@ async function saveAnalysis(data){
 // ================= PLAN SYSTEM =================
 
 function getUserPlan(){
+  
+  window.isProUser = function(){
+  return (
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  );
+};
+  
   return window.currentPlan || "free";
 }
 
@@ -1554,6 +1563,12 @@ document.dispatchEvent(
     document.body.classList.add("pro-user");
 
     document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
+      // 🔥 RIMUOVE ALERT FREE (IMPORTANTISSIMO)
+     document.querySelectorAll(
+     ".upgrade-warning, .alert-upgrade, .roi-warning, .fake-warning"
+     ).forEach(el=>{
+     el.remove();
+     });
       el.classList.remove("pro-only","pro-blur");
       el.style.filter = "none";
       el.style.opacity = "1";
@@ -2933,15 +2948,16 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  // 🔒 evita trigger se già PRO
-  if(window.isProUser && window.isProUser()) return;
+window.triggerUpgradeIfNeeded = function(roi){
+
+  if(window.isProUser && window.isProUser()){
+    return; // 🔥 STOP totale
+  }
 
   const safeROI = Number(roi || 0);
 
-  // 🔥 trigger solo se ROI interessante
   if(safeROI >= 8){
 
-    // ❌ evita spam popup multipli
     if(window.upgradeTriggered) return;
     window.upgradeTriggered = true;
 
