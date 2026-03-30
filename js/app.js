@@ -2986,10 +2986,13 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  if(window.isProUser && window.isProUser()){
-    return;
-  }
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
 
+  if(isPro) return;
+  
   const safeROI = Number(roi || 0);
 
   if(safeROI >= 8){
