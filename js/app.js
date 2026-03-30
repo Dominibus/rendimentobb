@@ -1309,16 +1309,22 @@ if(occValue){
   // ================= CALCOLO =================
 
   const result = calculateROI({
+
   price: getValue("price"),
-  equity,
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
+
+  equity: safeNumber(equity),
+
+  priceNight: safeNumber(getValue("priceNight")),
+  occupancy: safeNumber(getValue("occupancy")),
+  expenses: safeNumber(getValue("expenses")),
+
+  commission: safeNumber(getValue("commission")),
+  tax: safeNumber(getValue("tax")),
+
+  loanAmount: safeNumber(loanAmount),
+  interestRate: safeNumber(interestRate),
+  loanYears: safeNumber(loanYears)
+
 });
 
   console.log("RESULT:", result);
