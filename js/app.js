@@ -1354,6 +1354,7 @@ document.dispatchEvent(
 // ================= FREE LIMIT ENGINE =================
 let displayROI = roi;
 let displayProfit = netAfterMortgage;
+let displayRevenue = gross;  
 
 if(!isPro){
   displayROI = Math.round(roi);
