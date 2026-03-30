@@ -1,3 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login – RendimentoBB</title>
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+
+<style>
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+}
+
+.login-wrapper{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:40px 20px;
+}
+
+.login-card{
+background:white;
+color:#0f172a;
+padding:50px;
+border-radius:20px;
+width:360px;
+box-shadow:0 40px 80px rgba(0,0,0,0.25);
+text-align:center;
+}
+
+.login-card h2{
+margin-bottom:20px;
+font-weight:800;
+}
+
+.login-card input{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+font-size:14px;
+}
+
+.login-card input:focus{
+outline:none;
+border-color:#10b981;
+box-shadow:0 0 0 3px rgba(16,185,129,.2);
+}
+
+.auth-tabs{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+}
+
+.auth-tab{
+flex:1;
+padding:10px;
+border-radius:10px;
+border:1px solid #e2e8f0;
+background:#f1f5f9;
+cursor:pointer;
+}
+
+.auth-tab.active{
+background:#10b981;
+color:white;
+}
+
+.back-link{
+margin-top:20px;
+font-size:13px;
+}
+
+.back-link a{
+color:#64748b;
+text-decoration:none;
+}
+
+.back-link a:hover{
+color:#0f172a;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="login-wrapper">
+
+<div class="login-card">
+
+<h2 id="auth-title">Accesso</h2>
+
+<div id="auth-subtitle" style="font-size:13px;color:#64748b;margin-bottom:10px;">
+Accedi al tuo account
+</div>
+
+<div style="font-size:12px;color:#10b981;margin-bottom:10px;">
+✔️ Gratis – nessuna carta richiesta
+</div>
+
+<div id="login-message" style="font-size:13px;margin-bottom:10px;"></div>
+
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<div class="auth-tabs">
+<button id="tab-login" class="auth-tab active">Accedi</button>
+<button id="tab-register" class="auth-tab">Registrati</button>
+</div>
+
+<button id="authBtn" class="btn btn-primary" style="width:100%;">
+Continua
+</button>
+
+<div class="back-link">
+<a href="/">← Torna alla Home</a>
+</div>
+
+</div>
+
+</main>
+
 <!-- 🔥 FIREBASE AUTH -->
 <script type="module">
 
@@ -12,22 +147,17 @@ import {
 const auth = getAuth(app);
 
 // ================= STATE =================
-
 let mode = "login";
 
 // ================= ELEMENTS =================
-
 const title = document.getElementById("auth-title");
 const subtitle = document.getElementById("auth-subtitle");
-
 const tabLogin = document.getElementById("tab-login");
 const tabRegister = document.getElementById("tab-register");
-
 const messageBox = document.getElementById("login-message");
 const btn = document.getElementById("authBtn");
 
-// ================= SWITCH MODE =================
-
+// ================= SWITCH =================
 tabLogin.onclick = () => {
   mode = "login";
   updateUI();
@@ -39,33 +169,19 @@ tabRegister.onclick = () => {
 };
 
 // ================= UI =================
-
 function updateUI(){
 
   if(mode === "login"){
-
     title.innerText = "Accesso";
     subtitle.innerText = "Accedi al tuo account";
-
     btn.innerText = "Accedi";
-
     messageBox.innerHTML = "";
-
   }else{
-
     title.innerText = "Crea account";
     subtitle.innerText = "Registrati gratis in 10 secondi";
-
     btn.innerText = "Registrati";
-
     messageBox.innerHTML = `
-      <div style="
-        background:#ecfdf5;
-        color:#065f46;
-        padding:10px;
-        border-radius:8px;
-        font-size:13px;
-      ">
+      <div style="color:#10b981;">
         ✔️ Gratis<br>
         ✔️ Nessuna carta richiesta<br>
         ✔️ Accesso immediato
@@ -75,33 +191,20 @@ function updateUI(){
 
   tabLogin.classList.toggle("active", mode === "login");
   tabRegister.classList.toggle("active", mode === "register");
-
-  tabLogin.classList.toggle("btn-primary", mode === "login");
-  tabRegister.classList.toggle("btn-primary", mode === "register");
-
-  if(typeof setLang === "function"){
-    setLang(window.RB_LANG?.current || "it");
-  }
 }
 
-// INIT
 updateUI();
 
-// ================= AUTH ACTION =================
-
+// ================= AUTH =================
 btn.onclick = async () => {
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
   if(!email || !password){
-    showError("empty");
+    showError("Inserisci email e password");
     return;
   }
-
-  // loading state
-  btn.disabled = true;
-  btn.innerText = "⏳...";
 
   try{
 
@@ -111,66 +214,24 @@ btn.onclick = async () => {
       await createUserWithEmailAndPassword(auth,email,password);
     }
 
-    // redirect smart
-    const redirect = localStorage.getItem("redirect_after_login") || "/tool/";
-    window.location.href = redirect;
+    window.location.href = "/tool/";
 
   }catch(e){
-    showError(e.code);
+    showError(e.message);
   }
 
-  btn.disabled = false;
-  updateUI();
 };
 
-// ================= ERROR HANDLER =================
-
-function showError(code){
-
-  const lang = window.RB_LANG?.current || "it";
-
-  const errors = {
-    empty: {
-      it: "Inserisci email e password",
-      en: "Enter email and password"
-    },
-    "auth/invalid-email": {
-      it: "Email non valida",
-      en: "Invalid email"
-    },
-    "auth/email-already-in-use": {
-      it: "Email già registrata → fai login",
-      en: "Email already registered"
-    },
-    "auth/weak-password": {
-      it: "Password troppo debole (min 6 caratteri)",
-      en: "Weak password (min 6 characters)"
-    },
-    "auth/user-not-found": {
-      it: "Utente non trovato",
-      en: "User not found"
-    },
-    "auth/wrong-password": {
-      it: "Password errata",
-      en: "Wrong password"
-    }
-  };
-
-  const msg = errors[code] || {
-    it: "Errore imprevisto",
-    en: "Unexpected error"
-  };
-
+// ================= ERROR =================
+function showError(msg){
   messageBox.innerHTML = `
     <div style="
       background:#fee2e2;
       color:#991b1b;
-      padding:12px;
+      padding:10px;
       border-radius:8px;
-      font-size:13px;
-      margin-top:10px;
     ">
-      ${lang === "en" ? msg.en : msg.it}
+      ${msg}
     </div>
   `;
 }
@@ -178,5 +239,6 @@ function showError(code){
 </script>
 
 <script src="/js/lang.js" defer></script>
-<script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js" defer></script>
+
+</body>
+</html>
