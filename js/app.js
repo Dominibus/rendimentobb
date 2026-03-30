@@ -1749,11 +1749,11 @@ pointHoverRadius:5
 options:{
 
 responsive:true,
-maintainAspectRatio:false, // 🔥 IMPORTANTISSIMO
+maintainAspectRatio:false,
 
-animation:false, // 🔥 evita rendering incompleto
+animation:false,
 
-devicePixelRatio:2, // 🔥 qualità retina  
+devicePixelRatio:2,
 
 responsive:true,
 
@@ -1763,33 +1763,24 @@ intersect:false
 },
 
 plugins:{
-
 legend:{
 display:true,
 position:"bottom"
 },
-
 tooltip:{
 callbacks:{
 label:(ctx)=>formatCurrency(ctx.raw)
 }
 }
-
 },
 
 scales:{
-
 y:{
 ticks:{
 callback:(v)=>formatCurrency(v)
 }
 }
-
 }
-
-}
-
-});
 
 }
 
