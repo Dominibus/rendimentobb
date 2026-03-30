@@ -41,6 +41,31 @@ window.safePercent = function(value){
   return window.safeNumber(value).toFixed(1);
 };
 
+window.quickROI = function(){
+
+  const safeNum = (v, def=0)=>{
+    const n = parseFloat(v);
+    return isNaN(n) ? def : n;
+  };
+
+  const price = safeNum(document.getElementById("qr_price")?.value,250000);
+  const reno  = safeNum(document.getElementById("qr_reno")?.value,30000);
+  const night = safeNum(document.getElementById("qr_night")?.value,110);
+  const occ   = safeNum(document.getElementById("qr_occ")?.value,65);
+  const cost  = safeNum(document.getElementById("qr_cost")?.value,35);
+
+  const investment = price + reno;
+  const revenue = night * 365 * (occ/100);
+  const net = revenue - (revenue*(cost/100));
+  const roi = (net/investment)*100;
+
+  const el = document.getElementById("qr_roi");
+  if(el){
+    el.innerText = roi.toFixed(1)+"%";
+  }
+
+};
+
 window.runMortgageComparison = function(){
 
 const amount = parseFloat(document.getElementById("mortgageAmount").value);
