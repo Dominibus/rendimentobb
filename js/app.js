@@ -1257,10 +1257,11 @@ container.innerHTML = insights.map(i=>{
 }
 
 
-// ================= FREE LIMIT =================
+// ================= FREE LIMIT / MAIN CALCULATE =================
 
 function calculate(force = false){
 
+  // ================= ANTI LOOP =================
   if(window.isCalculating && !force){
     console.warn("⛔ BLOCCO re-entry calculate");
     return;
@@ -1268,85 +1269,150 @@ function calculate(force = false){
 
   window.isCalculating = true;
 
-  // 🔥 sicurezza
-  if(typeof window.safeNumber !== "function"){
-    console.warn("safeNumber non pronto → skip calculate");
-    window.isCalculating = false;
-    return;
-  }
+  try{
 
-  if(document.readyState === "loading"){
-    console.warn("DOM non pronto ma continuo comunque");
-  }
-
-  // ❌ NON METTERE false QUI
-
-  // ================= INPUT =================
-
-  const priceNight = getValue("priceNight");
-  const occupancy = getValue("occupancy");
-  const expenses = getValue("expenses");
-  const occValue = document.getElementById("occ-value");
-if(occValue){
-  occValue.innerText = occupancy + "%";
-}
-  const commission = getValue("commission") || 15;
-  const tax = getValue("tax") || 21;
-  const loanAmount = getValue("loanAmount");
-  const interestRate = getValue("interestRate");
-  const loanYears = getValue("loanYears");
-
-  const equity = safeNumber(getValue("equity"));
-
-  console.log("DEBUG:", {
-    priceNight,
-    occupancy,
-    expenses,
-    commission,
-    tax
-  });
-
-  // ================= CALCOLO =================
-
-  const result = calculateROI({
-
-  price: getValue("price"),
-
-  equity: safeNumber(equity),
-
-  priceNight: safeNumber(getValue("priceNight")),
-  occupancy: safeNumber(getValue("occupancy")),
-  expenses: safeNumber(getValue("expenses")),
-
-  commission: safeNumber(getValue("commission")),
-  tax: safeNumber(getValue("tax")),
-
-  loanAmount: safeNumber(loanAmount),
-  interestRate: safeNumber(interestRate),
-  loanYears: safeNumber(loanYears)
-
-});
-
-  console.log("RESULT:", result);
-
-const isPro = window.isPro();
-
-  // 🔥 GLOBAL SYNC (FONDAMENTALE)
-window.currentRevenue = result.revenue || result.gross || 0;
-
-document.dispatchEvent(
-  new CustomEvent("rb_simulation_updated", {
-    detail: {
-      revenue: window.currentRevenue,
-      roi: result.roi,
-      data: result
+    // ================= SAFE CHECK =================
+    if(typeof window.safeNumber !== "function"){
+      console.warn("⛔ safeNumber non pronto → skip");
+      return;
     }
-  })
-);
 
-  const gross = result.gross;
-  const netAfterMortgage = safeNumber(result.netAfterMortgage);
-  const roi = safeNumber(result.roi);
+    // ================= INPUT =================
+    const price        = safeNumber(getValue("price"));
+    const priceNight   = safeNumber(getValue("priceNight"));
+    const occupancy    = safeNumber(getValue("occupancy"));
+    const expenses     = safeNumber(getValue("expenses"));
+    const commission   = safeNumber(getValue("commission") || 15);
+    const tax          = safeNumber(getValue("tax") || 21);
+    const loanAmount   = safeNumber(getValue("loanAmount"));
+    const interestRate = safeNumber(getValue("interestRate"));
+    const loanYears    = safeNumber(getValue("loanYears"));
+    const equity       = safeNumber(getValue("equity"));
+
+    // UI sync slider
+    const occValue = document.getElementById("occ-value");
+    if(occValue) occValue.innerText = occupancy + "%";
+
+    console.log("DEBUG INPUT:", {
+      priceNight,
+      occupancy,
+      expenses,
+      commission,
+      tax
+    });
+
+    // ================= CALCOLO =================
+    const result = calculateROI({
+      price,
+      equity,
+      priceNight,
+      occupancy,
+      expenses,
+      commission,
+      tax,
+      loanAmount,
+      interestRate,
+      loanYears
+    });
+
+    console.log("RESULT:", result);
+
+    if(!result){
+      console.warn("⛔ result nullo");
+      return;
+    }
+
+    const gross = safeNumber(result.gross);
+    const netAfterMortgage = safeNumber(result.netAfterMortgage);
+    const roi = safeNumber(result.roi);
+
+    // ================= GLOBAL SYNC =================
+    window.currentRevenue = result.revenue || gross || 0;
+
+    document.dispatchEvent(
+      new CustomEvent("rb_simulation_updated", {
+        detail:{
+          revenue: window.currentRevenue,
+          roi,
+          data: result
+        }
+      })
+    );
+
+    // ================= UI UPDATE (SaaS) =================
+
+    // ROI
+    const roiEl = document.getElementById("roi-live") || document.getElementById("qr_roi");
+    if(roiEl){
+      roiEl.innerText = roi.toFixed(1) + "%";
+    }
+
+    // PROFIT
+    const profitEl = document.getElementById("profit-live");
+    if(profitEl){
+      profitEl.innerText = formatCurrency(netAfterMortgage);
+    }
+
+    // REVENUE
+    const revenueEl = document.getElementById("revenue-live");
+    if(revenueEl){
+      revenueEl.innerText = formatCurrency(gross);
+    }
+
+    // ================= CHART (CRITICO) =================
+    setTimeout(()=>{
+      renderChart(netAfterMortgage);
+    }, 200);
+
+    // ================= PRO UNLOCK =================
+    const isPro =
+      window.currentPlan === "pro" ||
+      window.currentPlan === "pro_yearly" ||
+      window.currentPlan === "investor";
+
+    if(isPro){
+
+      console.log("🔓 PRO → sblocco UI");
+
+      // rimuove blur
+      document.querySelectorAll(".pro-blur").forEach(el=>{
+        el.classList.remove("pro-blur");
+      });
+
+      // rimuove overlay
+      document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+        el.remove();
+      });
+
+      document.body.classList.add("pro-user");
+
+    }
+
+    // ================= KPI / ENGINE =================
+    if(typeof renderExecutiveKPI === "function"){
+      renderExecutiveKPI(result);
+    }
+
+    if(typeof renderMarketBenchmark === "function"){
+      renderMarketBenchmark();
+    }
+
+    // ================= CTA =================
+    if(typeof triggerUpgradeIfNeeded === "function"){
+      triggerUpgradeIfNeeded(roi);
+    }
+
+    // ================= LINGUA =================
+    window.RB_LANG?.apply?.();
+
+  }catch(err){
+    console.error("💥 calculate error:", err);
+  }
+
+  // ================= RESET LOCK =================
+  window.isCalculating = false;
+
+}
 
 // ================= FREE LIMIT ENGINE =================
 let displayROI = roi;
@@ -1779,183 +1845,215 @@ function showUpgradeOverlay(){
 }
 
 
-// ================= CHART =================
+// ================= GLOBAL INSTANCE =================
+let roiChartInstance = null;
 
+// ================= ROI CHART (SaaS Ready) =================
 function renderChart(net){
 
-const canvas = document.getElementById("roiChart");
+  // 🛑 sicurezza dati
+  net = Number(net);
+  if(!net || net <= 0){
+    console.warn("⛔ renderChart skip → net non valido:", net);
+    return;
+  }
 
-if(!canvas){
-  console.warn("Canvas roiChart non trovato");
-  return;
+  // ⏱ retry intelligente (DOM + canvas)
+  const canvas = document.getElementById("roiChart");
+
+  if(!canvas){
+    console.warn("⏳ Canvas roiChart non pronto → retry");
+    setTimeout(()=>renderChart(net), 300);
+    return;
+  }
+
+  if(typeof Chart === "undefined"){
+    console.warn("⏳ Chart.js non caricato → retry");
+    setTimeout(()=>renderChart(net), 300);
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  if(!ctx){
+    console.warn("⛔ ctx non disponibile");
+    return;
+  }
+
+  // 🔥 destroy precedente
+  if(roiChartInstance){
+    roiChartInstance.destroy();
+    roiChartInstance = null;
+  }
+
+  // ================= DATA =================
+  const years = Array.from({length:10}, (_,i)=>i+1);
+
+  const conservative = years.map(y => net * y * 0.8);
+  const base = years.map(y => net * y);
+  const optimistic = years.map(y => net * y * 1.2);
+
+  // ================= CHART =================
+  roiChartInstance = new Chart(ctx,{
+
+    type:"line",
+
+    data:{
+      labels: years.map(y => t("Anno ","Year ") + y),
+
+      datasets:[
+
+        {
+          label: t("Scenario prudente","Low scenario"),
+          data: conservative,
+          borderColor:"#ef4444",
+          backgroundColor:"rgba(239,68,68,0.08)",
+          tension:0.4,
+          borderWidth:2,
+          fill:true,
+          pointRadius:0,
+          pointHoverRadius:5
+        },
+
+        {
+          label: t("Scenario base","Base scenario"),
+          data: base,
+          borderColor:"#3b82f6",
+          backgroundColor:"rgba(59,130,246,0.15)",
+          tension:0.4,
+          borderWidth:3,
+          fill:true,
+          pointRadius:0,
+          pointHoverRadius:5
+        },
+
+        {
+          label: t("Scenario ottimistico","High scenario"),
+          data: optimistic,
+          borderColor:"#10b981",
+          backgroundColor:"rgba(16,185,129,0.12)",
+          tension:0.4,
+          borderWidth:2,
+          fill:true,
+          pointRadius:0,
+          pointHoverRadius:5
+        }
+
+      ]
+    },
+
+    options:{
+
+      responsive:true,
+      maintainAspectRatio:false, // 🔥 SaaS style responsive
+      animation:false,
+      devicePixelRatio:2,
+
+      interaction:{
+        mode:"index",
+        intersect:false
+      },
+
+      plugins:{
+        legend:{
+          display:true,
+          position:"bottom",
+          labels:{
+            usePointStyle:true
+          }
+        },
+
+        tooltip:{
+          callbacks:{
+            label:(ctx)=>formatCurrency(ctx.raw)
+          }
+        }
+      },
+
+      scales:{
+        x:{
+          grid:{display:false}
+        },
+        y:{
+          grid:{color:"rgba(0,0,0,0.05)"},
+          ticks:{
+            callback:(v)=>formatCurrency(v)
+          }
+        }
+      }
+
+    }
+
+  });
+
+  console.log("✅ ROI chart renderizzato");
 }
 
-const ctx = canvas.getContext("2d");
 
-// 🔥 NO SCALE QUI (Chart.js gestisce da solo)
 
-if(typeof Chart === "undefined"){
-  console.warn("Chart.js non ancora caricato");
-  return;
-}  
-
-if(!ctx || typeof Chart === "undefined") return;
-
-if(roiChartInstance){
-roiChartInstance.destroy();
-roiChartInstance = null;
-}
-
-// anni simulazione
-const years = [1,2,3,4,5,6,7,8,9,10];
-
-// scenari
-const conservative = years.map(y => net * y * 0.8);
-const base = years.map(y => net * y);
-const optimistic = years.map(y => net * y * 1.2);
-
-roiChartInstance = new Chart(ctx,{
-
-type:"line",
-
-data:{
-labels: years.map(y => t("Anno ","Year ") + y),
-
-datasets:[
-
-{
-label: t("Scenario prudente","Low scenario"),
-data: conservative,
-borderColor:"#ef4444",
-backgroundColor:"rgba(239,68,68,0.1)",
-tension:0.35,
-borderWidth:2,
-fill:true,
-pointRadius:2,
-pointHoverRadius:5
-},
-
-{
-label: t("Scenario base","Base scenario"),
-data: base,
-borderColor:"#3b82f6",
-backgroundColor:"rgba(59,130,246,0.15)",
-tension:0.35,
-borderWidth:3,
-fill:true,
-pointRadius:2,
-pointHoverRadius:5
-},
-
-{
-label: t("Scenario ottimistico","High scenario"),
-data: optimistic,
-borderColor:"#10b981",
-backgroundColor:"rgba(16,185,129,0.15)",
-tension:0.35,
-borderWidth:2,
-fill:true,
-pointRadius:2,
-pointHoverRadius:5
-}
-
-]
-},
-
-options:{
-
-responsive:true,
-maintainAspectRatio:true,
-aspectRatio:1.8,
-animation:false,
-devicePixelRatio:2,
-
-interaction:{
-mode:"index",
-intersect:false
-},
-
-plugins:{
-legend:{
-display:true,
-position:"bottom"
-},
-tooltip:{
-callbacks:{
-label:(ctx)=>formatCurrency(ctx.raw)
-}
-}
-},
-
-scales:{
-y:{
-ticks:{
-callback:(v)=>formatCurrency(v)
-}
-}
-}
-
-}
-
-}); // ✅ chiusura Chart
-
-} // ✅ chiusura funzione renderChart
-
-// ================= CITY ROI CHART =================
-
+// ================= CITY ROI CHART (SAFE) =================
 function renderCityROIChart(){
 
-const ctx = document.getElementById("city-roi-chart");
+  const canvas = document.getElementById("city-roi-chart");
 
-if(!ctx || typeof Chart === "undefined") return;
+  if(!canvas){
+    console.warn("⏳ city chart non pronto → skip");
+    return;
+  }
 
-new Chart(ctx,{
+  if(typeof Chart === "undefined"){
+    console.warn("⏳ Chart.js non pronto → skip");
+    return;
+  }
 
-type:"doughnut",
+  const ctx = canvas.getContext("2d");
 
-data:{
-labels:[
-"Napoli",
-"Roma",
-"Firenze",
-"Milano"
-],
+  new Chart(ctx,{
 
-datasets:[{
-data:[
-16.7,
-14.2,
-12.9,
-10.5
-],
+    type:"doughnut",
 
-backgroundColor:[
-"#10b981",
-"#3b82f6",
-"#f59e0b",
-"#6366f1"
-],
+    data:{
+      labels:["Napoli","Roma","Firenze","Milano"],
 
-borderWidth:0
-}]
-},
+      datasets:[{
+        data:[16.7,14.2,12.9,10.5],
 
-options:{
-plugins:{
-legend:{
-position:"bottom"
+        backgroundColor:[
+          "#10b981",
+          "#3b82f6",
+          "#f59e0b",
+          "#6366f1"
+        ],
+
+        borderWidth:0
+      }]
+    },
+
+    options:{
+      responsive:true,
+      cutout:"70%",
+
+      plugins:{
+        legend:{
+          position:"bottom"
+        }
+      }
+
+    }
+
+  });
+
 }
-},
-cutout:"65%",
-responsive:true
-}
+
+
+
+// ================= AUTO INIT =================
+document.addEventListener("DOMContentLoaded", ()=>{
+
+  // dashboard chart
+  renderCityROIChart();
 
 });
-
-}
-
-// esegue grafico dashboard
-document.addEventListener("DOMContentLoaded", renderCityROIChart);
 
 // ================= EXECUTIVE PDF =================
 
