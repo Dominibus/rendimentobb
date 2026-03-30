@@ -1815,7 +1815,8 @@ pointHoverRadius:5
 options:{
 
 responsive:true,
-maintainAspectRatio:false,
+maintainAspectRatio:true,
+aspectRatio:1.8,
 animation:false,
 devicePixelRatio:2,
 
