@@ -136,23 +136,17 @@ async function saveAnalysis(data){
 
 // ================= PLAN SYSTEM =================
 
+// ✅ SOURCE OF TRUTH UNICA
+window.isPro = function(){
+  return (
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  );
+};
+
+// ✅ GET PLAN PULITO (NO SIDE EFFECT)
 function getUserPlan(){
-  window.isPro = function(){
-  return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  );
-};
-  
-  window.isProUser = function(){
-  return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  );
-};
-  
   return window.currentPlan || "free";
 }
 
@@ -222,12 +216,12 @@ function requirePlan(requiredPlan){
     }
 
     alert(
-window.currentLang === "it"
-? "🔒 Sblocca analisi avanzata, strategia ROI e simulazioni complete."
-: "🔒 Unlock advanced analysis, ROI strategy and full simulations."
-);
+      window.currentLang === "it"
+      ? "🔒 Sblocca analisi avanzata, strategia ROI e simulazioni complete."
+      : "🔒 Unlock advanced analysis, ROI strategy and full simulations."
+    );
 
-const goUpgrade = confirm(message);
+    const goUpgrade = confirm(message);
 
     if(goUpgrade){
       window.location.href="/pricing/";
