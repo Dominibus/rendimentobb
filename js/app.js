@@ -1361,7 +1361,7 @@ document.dispatchEvent(
     container.innerHTML = `
     
     <div class="metric-card">
-      <div>${tt("roi")}</div>
+      <div>${t("roi")}</div>
       <strong>${roi.toFixed(1)}%</strong>
     </div>
 
