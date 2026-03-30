@@ -1486,62 +1486,61 @@ document.querySelector(".city-search-input")
   }
 });
 
-// ================= SBLOCCO HOME PRO =================
+document.addEventListener("DOMContentLoaded", ()=>{
 
-function unlockHomeProUI(){
+  // ================= SBLOCCO HOME PRO =================
 
-  if(!window.isPro || !window.isPro()){
-    return;
-  }
+  function unlockHomeProUI(){
 
-  console.log("🔥 FORCE UNLOCK HOME PRO");
+    if(!window.isPro || !window.isPro()){
+      return;
+    }
 
-  // 🔓 rimuove blur
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
+    console.log("🔥 FORCE UNLOCK HOME PRO");
 
-  // 🔓 rimuove overlay
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.remove();
-  });
+    // 🔓 rimuove blur
+    document.querySelectorAll(".pro-blur").forEach(el=>{
+      el.classList.remove("pro-blur");
+    });
 
-}
-
-// ⏱ retry intelligente (fondamentale)
-function waitForProAndUnlock(){
-
-  if(window.currentPlan){
-
-    unlockHomeProUI();
-
-  }else{
-
-    setTimeout(waitForProAndUnlock, 300);
+    // 🔓 rimuove overlay
+    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+      el.remove();
+    });
 
   }
 
-}
+  // ⏱ retry intelligente
+  function waitForProAndUnlock(){
 
-// 🚀 START
-waitForProAndUnlock();
+    if(window.currentPlan){
+      unlockHomeProUI();
+    }else{
+      setTimeout(waitForProAndUnlock, 300);
+    }
 
   }
 
-});
+  // 🚀 START
+  waitForProAndUnlock();
 
-// RESTORE CITY
-const saved = localStorage.getItem("selected_city");
-const map = {roma:"rome",napoli:"naples",milano:"milan",firenze:"florence"};
 
-if(saved && map[saved]){
-  changeCityBackground(map[saved]);
-}
+  // ================= RESTORE CITY =================
+
+  const saved = localStorage.getItem("selected_city");
+  const map = {
+    roma:"rome",
+    napoli:"naples",
+    milano:"milan",
+    firenze:"florence"
+  };
+
+  if(saved && map[saved]){
+    changeCityBackground(map[saved]);
+  }
 
 });
 
 
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
-
-</script>
