@@ -1344,12 +1344,6 @@ document.dispatchEvent(
   })
 );
 
-  // ================= PLAN CHECK =================
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
-
 // ================= FREE LIMIT ENGINE =================
 let displayROI = result.roi;
 let displayProfit = result.netAfterMortgage;
@@ -1365,12 +1359,6 @@ if(!isPro){
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
   const roiToShow = displayROI;
-
-  // ================= PLAN CHECK =================
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
 
 // ================= FREE LIMIT ENGINE =================
 let displayROI = roi;
@@ -1439,11 +1427,6 @@ if(chartContainer){
 
 safeRender("investment-metrics", (container) => {
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
-
   // 🔒 FREE → SOLO TEASER
   if(!isPro){
 
@@ -1503,11 +1486,6 @@ safeRender("investment-metrics", (container) => {
 
 });
   // ================= PLAN =================
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
 
   if(!isPro){
     showUpgradePopup(roi);
