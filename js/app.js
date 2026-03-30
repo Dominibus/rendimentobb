@@ -2786,31 +2786,42 @@ function unlockProUI(){
 
   console.log("🚀 UNLOCK PRO UI START");
 
-  // 🔥 RIMUOVE BLUR
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
+  // ================= REMOVE BLUR =================
+
+  document.querySelectorAll(`
+    .pro-blur,
+    .blur-content,
+    .locked,
+    .locked-content,
+    .pro-lock,
+    .premium-lock
+  `).forEach(el=>{
+    el.classList.remove(
+      "pro-blur","blur-content","locked","locked-content","pro-lock","premium-lock"
+    );
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
   });
 
-  // 🔥 RIMUOVE OVERLAY / PAYWALL
-  document.querySelectorAll('[data-paywall]').forEach(el=>{
+  // ================= REMOVE PAYWALL =================
+
+  document.querySelectorAll(`
+    [data-paywall],
+    .locked-overlay,
+    .upgrade-box,
+    .paywall-box,
+    .results-overlay,
+    .upgrade-overlay,
+    #upgrade-overlay,
+    #upgrade-modal,
+    .home-blur-overlay
+  `).forEach(el=>{
     el.remove();
   });
 
-  document.querySelectorAll(".locked-overlay, .upgrade-box, .paywall-box").forEach(el=>{
-    el.remove();
-  });
+  // ================= UNLOCK CLICK =================
 
-  // 💥 🔥 FIX DEFINITIVO TUO CASO (overlay 30%)
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.remove();
-  });
-
-  // 🔥 PULISCE eventuale contenuto interno alert
-  document.querySelectorAll("#smart-investment-alert").forEach(el=>{
-    el.innerHTML = "";
-  });
-
-  // 🔥 SBLOCCA CLICK GLOBALI
   document.body.style.pointerEvents = "auto";
 
   document.querySelectorAll("*").forEach(el=>{
@@ -2819,8 +2830,9 @@ function unlockProUI(){
     }
   });
 
-  // 🔥 SBLOCCA SEZIONI
-  document.querySelectorAll(".locked-section").forEach(el=>{
+  // ================= UNLOCK SECTIONS =================
+
+  document.querySelectorAll(".locked-section, .results-card").forEach(el=>{
     el.style.filter = "none";
     el.style.pointerEvents = "auto";
   });
@@ -2832,20 +2844,58 @@ function unlockProUI(){
     el.style.pointerEvents = "auto";
   });
 
-  document.querySelectorAll(".results-card").forEach(card=>{
-    card.style.filter = "none";
-    card.style.pointerEvents = "auto";
-  });
-
-  document.querySelectorAll(".blur-content").forEach(el=>{
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
-
   document.querySelectorAll("[data-locked='true']").forEach(el=>{
     el.removeAttribute("data-locked");
   });
+
+  // ================= 🔥 FIX HOME KPI =================
+
+  document.querySelectorAll(`
+    #annual-profit,
+    #monthly-profit,
+    #break-even,
+    #annual-revenue
+  `).forEach(el=>{
+    if(el && el.innerText.includes("🔒")){
+      el.innerText = "";
+    }
+  });
+
+  // ================= 🔥 REMOVE ALERT TESTUALI =================
+
+  document.querySelectorAll(".results-card, .roi-dashboard").forEach(container=>{
+    container.querySelectorAll("div").forEach(el=>{
+      if(!el.innerText) return;
+
+      const text = el.innerText.toLowerCase();
+
+      if(
+        text.includes("potresti perdere") ||
+        text.includes("decisione al buio") ||
+        text.includes("without real data")
+      ){
+        el.style.display = "none";
+      }
+    });
+  });
+
+  // ================= 🔥 RESET SMART ALERT =================
+
+  const alertBox = document.getElementById("smart-investment-alert");
+  if(alertBox){
+    alertBox.innerHTML = "";
+  }
+
+  // ================= 🔥 RICALCOLO HOME =================
+
+  if(typeof window.quickROI === "function"){
+    console.log("🔄 quickROI refresh");
+    window.quickROI();
+  }
+
+  // ================= 🔥 FORCE UI UPDATE =================
+
+  document.dispatchEvent(new Event("rb_simulation_updated"));
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
@@ -2862,13 +2912,14 @@ document.addEventListener("rb_plan_loaded", () => {
     unlockProUI();
   }
 
-  // 🔥 SEMPRE RICALCOLA
   if(window.simulationExecuted){
     console.log("🔄 Re-run calculate (plan update)");
     calculate(true);
   }
 
 });
+
+// ================= SMART PAYWALL =================
 
 window.triggerUpgradeIfNeeded = function(roi){
 
@@ -2899,6 +2950,8 @@ window.triggerUpgradeIfNeeded = function(roi){
 
 };
 
+// ================= LIVE USERS =================
+
 setInterval(()=>{
 
   const el = document.getElementById("live-users");
@@ -2915,24 +2968,19 @@ setInterval(()=>{
 
   el.classList.add("bump");
 
-  setTimeout(()=>{
-    el.classList.remove("bump");
-  },200);
+  setTimeout(()=> el.classList.remove("bump"), 200);
 
   el.innerText = val;
 
 },3000);
 
-window.handleUpgradeClick = function(){
+// ================= CTA =================
 
-  console.log("🔥 CTA CLICK");
+window.handleUpgradeClick = function(){
 
   const btn = document.querySelector(".cta-primary");
 
-  // ================= 🟢 UTENTE PRO =================
   if(window.isPro()){
-
-    console.log("✅ PRO USER");
 
     if(btn){
       btn.innerHTML = "🚀 Accesso analisi avanzata...";
@@ -2940,18 +2988,13 @@ window.handleUpgradeClick = function(){
     }
 
     setTimeout(()=>{
-      const target = document.getElementById("advanced-analysis");
-      if(target){
-        target.scrollIntoView({ behavior:"smooth" });
-      }
-    }, 600);
+      document.getElementById("advanced-analysis")?.scrollIntoView({behavior:"smooth"});
+    },600);
 
     return;
   }
 
-  // ================= 🔒 UTENTE FREE =================
-
-  const lang = window.RB_LANG?.current || "it";
+  const lang = window.currentLang || "it";
 
   if(btn){
     btn.innerHTML = lang === "en"
@@ -2962,27 +3005,28 @@ window.handleUpgradeClick = function(){
 
   setTimeout(()=>{
 
-    const message = lang === "en"
-      ? "This investment looks profitable.\n\nUnlock full analysis with ROI, risk and real profit."
-      : "Questo investimento sembra profittevole.\n\nSblocca analisi completa con ROI reale, rischio e profitto.";
+    const msg = lang === "en"
+      ? "Unlock full analysis with ROI, risk and real profit."
+      : "Sblocca analisi completa con ROI reale, rischio e profitto.";
 
-    if(confirm(message)){
-      startPlanPurchase("pro"); // 🔥 USA LA TUA LOGICA
+    if(confirm(msg)){
+      startPlanPurchase("pro");
     }
 
-    // reset bottone
     if(btn){
       btn.innerHTML = "🔥 Scopri quanto puoi guadagnare davvero";
       btn.style.opacity = "1";
     }
 
-  }, 900);
+  },900);
 
 };
 
+// ================= LANG INIT =================
+
 document.addEventListener("DOMContentLoaded", () => {
 
-  if(window.RB_LANG && typeof window.RB_LANG.apply === "function"){
+  if(window.RB_LANG?.apply){
     window.RB_LANG.apply();
   }
 
