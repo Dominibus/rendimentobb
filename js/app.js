@@ -1325,6 +1325,9 @@ function calculate(force = false){
     const gross = safeNumber(result.gross);
     const netAfterMortgage = safeNumber(result.netAfterMortgage);
     const roi = safeNumber(result.roi);
+    if(!window.isPro()){
+  showUpgradePopup(roi);
+}
     let displayROI = roi;
 let displayProfit = netAfterMortgage;
 let displayRevenue = gross;
@@ -1459,12 +1462,6 @@ if(chartContainer){
     const overlay = chartContainer.querySelector(".chart-overlay");
     if(overlay) overlay.remove();
 
-  }
-
-  // ================= PLAN =================
-
-  if(!window.isPro()){
-    showUpgradePopup(roi);
   }
 
   // ================= SALVATAGGIO =================
