@@ -2,6 +2,7 @@
 <html lang="it">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,6 +14,7 @@ Login – RendimentoBB
 <link rel="icon" href="/img/favicon.png">
 
 <style>
+
 body{
 background:linear-gradient(135deg,#0f172a,#1e293b);
 color:white;
@@ -27,16 +29,22 @@ border-radius:6px;
 cursor:pointer;
 font-size:12px;
 }
+
+.lang-btn:hover{
+background:rgba(255,255,255,0.2);
+}  
+
 .lang-btn.active{
 background:#10b981;
 border-color:#10b981;
-}
-
+}  
+  
 .login-wrapper{
 min-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
+padding:40px 20px;
 }
 
 .login-card{
@@ -47,6 +55,26 @@ border-radius:20px;
 width:360px;
 box-shadow:0 40px 80px rgba(0,0,0,0.25);
 text-align:center;
+}
+
+.login-card h2{
+margin-bottom:15px;
+font-weight:800;
+}
+
+.login-card input{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+font-size:14px;
+}
+
+.login-card input:focus{
+outline:none;
+border-color:#10b981;
+box-shadow:0 0 0 3px rgba(16,185,129,.2);
 }
 
 .auth-tabs{
@@ -62,58 +90,120 @@ border-radius:10px;
 border:1px solid #e2e8f0;
 background:#f1f5f9;
 cursor:pointer;
+font-size:14px;
 }
 
 .auth-tab.active{
 background:#10b981;
 color:white;
 }
+
+.back-link{
+margin-top:20px;
+font-size:13px;
+}
+
+.back-link a{
+color:#64748b;
+text-decoration:none;
+}
+
+.back-link a:hover{
+color:#0f172a;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <main class="login-wrapper">
 
-<!-- LANGUAGE -->
-<div style="position:absolute;top:20px;right:20px;display:flex;gap:8px;">
-<button onclick="changeLang('it')" class="lang-btn" id="btn-it">IT</button>
-<button onclick="changeLang('en')" class="lang-btn" id="btn-en">EN</button>
-</div>
+<div style="
+position:absolute;
+top:20px;
+right:20px;
+display:flex;
+gap:8px;
+">
+
+<button onclick="changeLang('it')" class="lang-btn">IT</button>
+<button onclick="changeLang('en')" class="lang-btn">EN</button>
+
+</div>  
 
 <div class="login-card">
 
-<h2 id="auth-title">Accesso</h2>
+<h2 id="auth-title"
+data-it="Accesso"
+data-en="Login">
+Accesso
+</h2>
 
-<div id="auth-subtitle" style="font-size:13px;color:#64748b;margin-bottom:10px;">
+<div id="auth-subtitle"
+data-it="Accedi al tuo account"
+data-en="Access your account"
+style="font-size:13px;color:#64748b;margin-bottom:10px;">
 Accedi al tuo account
 </div>
 
-<div style="font-size:12px;color:#10b981;margin-bottom:10px;">
+<div
+data-it="✔️ Gratis – nessuna carta richiesta"
+data-en="✔️ Free – no credit card required"
+style="font-size:12px;color:#10b981;margin-bottom:10px;">
 ✔️ Gratis – nessuna carta richiesta
 </div>
 
-<div id="login-message"></div>
+<div id="login-message" style="font-size:13px;margin-bottom:10px;"></div>
 
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<input id="email" type="email"
+data-placeholder-it="Email"
+data-placeholder-en="Email">
+
+<input id="password" type="password"
+data-placeholder-it="Password"
+data-placeholder-en="Password">
 
 <div class="auth-tabs">
-<button id="tab-login" class="auth-tab active">Accedi</button>
-<button id="tab-register" class="auth-tab">Registrati</button>
+  <button id="tab-login" class="auth-tab active"
+  data-it="Accedi"
+  data-en="Login">Accedi</button>
+
+  <button id="tab-register" class="auth-tab"
+  data-it="Registrati"
+  data-en="Sign up">Registrati</button>
 </div>
 
-<button id="authBtn" class="btn btn-primary" style="width:100%;">Accedi</button>
+<button id="authBtn" class="btn btn-primary" style="width:100%;"
+data-it="Accedi"
+data-en="Login">
+Accedi
+</button>
+
+<div style="margin-top:8px;font-size:12px;color:#64748b;"
+data-it="⚡ Accesso immediato • Nessuna carta richiesta"
+data-en="⚡ Instant access • No credit card required">
+⚡ Accesso immediato • Nessuna carta richiesta
+</div>
+
+<div class="back-link">
+<a href="/"
+data-it="← Torna alla Home"
+data-en="← Back to Home">
+← Torna alla Home
+</a>
+</div>
 
 </div>
+
 </main>
 
-<!-- LANG -->
-<script src="/js/lang.js"></script>
-
-<!-- FIREBASE -->
+<!-- 🔥 FIREBASE AUTH -->
 <script type="module">
+
 import { app } from "/js/firebase-init.js";
+
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -128,34 +218,50 @@ const title = document.getElementById("auth-title");
 const subtitle = document.getElementById("auth-subtitle");
 const tabLogin = document.getElementById("tab-login");
 const tabRegister = document.getElementById("tab-register");
+const messageBox = document.getElementById("login-message");
 const btn = document.getElementById("authBtn");
 
 // SWITCH
-tabLogin.onclick = () => { mode="login"; updateUI(); };
-tabRegister.onclick = () => { mode="register"; updateUI(); };
+tabLogin.onclick = () => {
+  mode = "login";
+  updateUI();
+};
+
+tabRegister.onclick = () => {
+  mode = "register";
+  updateUI();
+};
 
 // UI
 function updateUI(){
 
-  const lang = localStorage.getItem("rb_lang") || "it";
+  const lang = window.RB_LANG?.current || "it";
 
-  if(mode==="login"){
-    title.innerText = lang==="en"?"Login":"Accesso";
-    subtitle.innerText = lang==="en"?"Access your account":"Accedi al tuo account";
-    btn.innerText = lang==="en"?"Login":"Accedi";
+  if(mode === "login"){
+    title.innerText = lang === "en" ? "Login" : "Accesso";
+    subtitle.innerText = lang === "en" ? "Access your account" : "Accedi al tuo account";
+    btn.innerText = lang === "en" ? "Login" : "Accedi";
+    messageBox.innerHTML = "";
   }else{
-    title.innerText = lang==="en"?"Create account":"Crea account";
-    subtitle.innerText = lang==="en"?"Sign up in 10 seconds":"Registrati gratis";
-    btn.innerText = lang==="en"?"Sign up":"Registrati";
+    title.innerText = lang === "en" ? "Create account" : "Crea account";
+    subtitle.innerText = lang === "en" ? "Sign up in 10 seconds" : "Registrati gratis in 10 secondi";
+    btn.innerText = lang === "en" ? "Sign up" : "Registrati";
+
+    messageBox.innerHTML = `
+      <div style="color:#10b981;">
+        ✔️ ${lang==="en"?"Free":"Gratis"}<br>
+        ✔️ ${lang==="en"?"No credit card":"Nessuna carta richiesta"}<br>
+        ✔️ ${lang==="en"?"Instant access":"Accesso immediato"}
+      </div>
+    `;
   }
 
-  tabLogin.classList.toggle("active",mode==="login");
-  tabRegister.classList.toggle("active",mode==="register");
+  tabLogin.classList.toggle("active", mode === "login");
+  tabRegister.classList.toggle("active", mode === "register");
 
-  // active lang button
-  document.getElementById("btn-it").classList.toggle("active",lang==="it");
-  document.getElementById("btn-en").classList.toggle("active",lang==="en");
 }
+
+updateUI();
 
 // AUTH
 btn.onclick = async () => {
@@ -164,34 +270,102 @@ btn.onclick = async () => {
   const password = document.getElementById("password").value.trim();
 
   if(!email || !password){
-    alert("Inserisci email e password");
+    showError("empty");
     return;
   }
 
   try{
-    if(mode==="login"){
+
+    if(mode === "login"){
       await signInWithEmailAndPassword(auth,email,password);
     }else{
       await createUserWithEmailAndPassword(auth,email,password);
     }
 
-    window.location.href="/tool/";
+    const redirect = localStorage.getItem("redirect_after_login");
+    window.location.href = redirect || "/tool/";
 
   }catch(e){
-    alert(e.message);
+    showError(e.code);
   }
+
 };
 
-// LANGUAGE FIX DEFINITIVO
-window.changeLang = function(lang){
-  localStorage.setItem("rb_lang",lang);
+// ERROR
+function showError(code){
+
+  const lang = window.RB_LANG?.current || "it";
+
+  const errors = {
+    empty: {
+      it: "Inserisci email e password",
+      en: "Enter email and password"
+    },
+    "auth/invalid-email": {
+      it: "Email non valida",
+      en: "Invalid email"
+    },
+    "auth/email-already-in-use": {
+      it: "Email già registrata",
+      en: "Email already registered"
+    },
+    "auth/weak-password": {
+      it: "Password troppo debole",
+      en: "Weak password"
+    },
+    "auth/user-not-found": {
+      it: "Utente non trovato",
+      en: "User not found"
+    },
+    "auth/wrong-password": {
+      it: "Password errata",
+      en: "Wrong password"
+    }
+  };
+
+  const msg = errors[code] || {
+    it: "Errore",
+    en: "Error"
+  };
+
+  messageBox.innerHTML = `
+    <div style="
+      background:#fee2e2;
+      color:#991b1b;
+      padding:10px;
+      border-radius:8px;
+    ">
+      ${lang === "en" ? msg.en : msg.it}
+    </div>
+  `;
+}
+
+function changeLang(lang){
+
+  // cambia lingua globale
+  if(typeof setLang === "function"){
+    setLang(lang);
+  }
+
+  // aggiorna UI login (titolo, bottoni ecc)
   updateUI();
-};
 
-// INIT
-setTimeout(updateUI,100);
+  // stato attivo bottone
+  document.querySelectorAll(".lang-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
 
+  document.querySelectorAll(".lang-btn").forEach(btn=>{
+    if(btn.innerText.toLowerCase() === lang){
+      btn.classList.add("active");
+    }
+  });
+
+}
+  
 </script>
+
+<script src="/js/lang.js" defer></script>
 
 </body>
 </html>
