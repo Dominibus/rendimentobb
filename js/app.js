@@ -1325,6 +1325,15 @@ function calculate(force = false){
     const gross = safeNumber(result.gross);
     const netAfterMortgage = safeNumber(result.netAfterMortgage);
     const roi = safeNumber(result.roi);
+    let displayROI = roi;
+let displayProfit = netAfterMortgage;
+let displayRevenue = gross;
+
+if(!window.isPro()){
+  displayROI = Math.round(roi);
+  displayProfit = netAfterMortgage * 0.7;
+  displayRevenue = null;
+}
 
     // ================= GLOBAL SYNC =================
     window.currentRevenue = result.revenue || gross || 0;
@@ -1412,17 +1421,6 @@ function calculate(force = false){
   // ================= RESET LOCK =================
   window.isCalculating = false;
 
-}
-
-// ================= FREE LIMIT ENGINE =================
-let displayROI = roi;
-let displayProfit = netAfterMortgage;
-let displayRevenue = gross;  
-
-if(!isPro){
-  displayROI = Math.round(roi);
-  displayProfit = netAfterMortgage * 0.7;
-  displayRevenue = null;
 }
 
 
