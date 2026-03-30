@@ -1365,7 +1365,7 @@ document.dispatchEvent(
     </div>
 
     <div class="metric-card">
-      <div>${tt("partialProfit")}</div>
+      <div>${t("Profitto parziale","Partial profit")}</div>
       <strong>${formatCurrency(netAfterMortgage)}</strong>
     </div>
 
@@ -1378,7 +1378,7 @@ document.dispatchEvent(
   container.innerHTML = `
   
   <div class="metric-card">
-    <div>${tt("roi")}</div>
+    <div>${t("ROI","ROI")}</div>
     <strong>${roi.toFixed(1)}%</strong>
   </div>
 
