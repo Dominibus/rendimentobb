@@ -1344,9 +1344,27 @@ document.dispatchEvent(
   })
 );
 
+  // ================= PLAN CHECK =================
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
+// ================= FREE LIMIT ENGINE =================
+let displayROI = result.roi;
+let displayProfit = result.netAfterMortgage;
+let displayRevenue = result.revenue;
+
+if(!isPro){
+  displayROI = Math.round(result.roi);
+  displayProfit = result.netAfterMortgage * 0.7;
+  displayRevenue = null;
+}
+
   const gross = result.gross;
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
+  const roiToShow = displayROI;
 
   // ================= 📊 RENDER CHART =================
 
