@@ -887,11 +887,7 @@ ${message}
 // ================= SMART PAYWALL (SOFT VERSION) =================
 
 function showUpgradePopup(roi){
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+  
 
   if(isPro) return;
 
@@ -915,11 +911,6 @@ function renderSmartInvestmentAlert(roi){
 
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
 
   // ✅ PRO → pulisci e STOP
   if(isPro){
@@ -1317,23 +1308,17 @@ if(occValue){
   // ================= CALCOLO =================
 
   const result = calculateROI({
-    
-    const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
-  
-    price: getValue("price"),
-    equity,
-    priceNight,
-    occupancy,
-    expenses,
-    commission,
-    tax,
-    loanAmount,
-    interestRate,
-    loanYears
-  });
+  price: getValue("price"),
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
   console.log("RESULT:", result);
 
@@ -1379,11 +1364,6 @@ try{
 
 
 // ================= 🔒 CHART PAYWALL =================
-
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
 
 const chartContainer = document.querySelector(".roi-chart");
 
@@ -1751,11 +1731,6 @@ function renderStrategicInsight(roi) {
   const box = document.getElementById("strategic-insight");
   if (!box) return;
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
-
   // 🔒 UTENTE FREE → mostra blocco
   if(!isPro){
 
@@ -1788,11 +1763,6 @@ function renderStrategicInsight(roi) {
 // ================= UPGRADE OVERLAY =================
 
 function showUpgradeOverlay(){
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
 
   if(isPro) return;
 
@@ -3071,11 +3041,6 @@ document.addEventListener("rb_plan_loaded", () => {
 
   updatePDFButton();
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
-
   if(isPro){
     unlockProUI();
   }
@@ -3089,11 +3054,6 @@ document.addEventListener("rb_plan_loaded", () => {
 });
 
 window.triggerUpgradeIfNeeded = function(roi){
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
 
   if(isPro) return;
   
@@ -3149,11 +3109,6 @@ setInterval(()=>{
 window.handleUpgradeClick = function(){
 
   console.log("🔥 CTA CLICK");
-
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
 
   const btn = document.querySelector(".cta-primary");
 
