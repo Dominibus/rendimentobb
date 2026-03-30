@@ -1358,18 +1358,18 @@ document.dispatchEvent(
   if(!isPro){
 
     container.innerHTML = `
-    
-    <div class="metric-card">
-      <div>${t("roi")}</div>
-      <strong>${roi.toFixed(1)}%</strong>
-    </div>
 
-    <div class="metric-card">
-      <div>${t("Profitto parziale","Partial profit")}</div>
-      <strong>${formatCurrency(netAfterMortgage)}</strong>
-    </div>
+<div class="metric-card">
+  <div>${t("ROI","ROI")}</div>
+  <strong>${roi.toFixed(1)}%</strong>
+</div>
 
-    `;
+<div class="metric-card">
+  <div>${t("Profitto parziale","Partial profit")}</div>
+  <strong>${formatCurrency(netAfterMortgage)}</strong>
+</div>
+
+`;
 
     return;
   }
@@ -1383,12 +1383,12 @@ document.dispatchEvent(
   </div>
 
   <div class="metric-card">
-    <div>${tt("annualProfit")}</div>
+    <div>${t("Profitto annuo","Annual profit")}</div>>
     <strong>${formatCurrency(netAfterMortgage)}</strong>
   </div>
 
   <div class="metric-card">
-    <div>${tt("revenue")}</div>
+    <div>${t("Ricavi","Revenue")}</div>
     <strong>${formatCurrency(gross)}</strong>
   </div>
 
