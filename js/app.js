@@ -1437,46 +1437,75 @@ document.dispatchEvent(
     revenueEl.innerText = formatCurrency(gross);
   }
 
-  // ================= 🔥 FIX DATI PRO =================
+// ================= 🔥 FIX DATI PRO (SAFE VERSION) =================
 
-  const badgeEl = document.getElementById("roi-badge");
+// ROI BADGE
+const badgeEl = document.getElementById("roi-badge");
 
-  if(badgeEl){
+if(badgeEl){
 
-  badgeEl.innerText = getInvestmentBadge(roi);
+  try{
 
-  if(typeof getInvestmentBadgeClass === "function"){
-    badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
-  }else{
-    console.warn("getInvestmentBadgeClass non disponibile");
+    badgeEl.innerText = getInvestmentBadge(roi);
+
+    if(typeof getInvestmentBadgeClass === "function"){
+      badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
+    }else{
+      console.warn("getInvestmentBadgeClass non disponibile");
+      badgeEl.className = "roi-badge";
+    }
+
+  }catch(e){
+    console.error("Errore badge:", e);
+    badgeEl.innerText = roi.toFixed(1) + "%";
     badgeEl.className = "roi-badge";
   }
 
 }
 
 
-  const profitAnnualEl = document.getElementById("profit-annual");
-  const breakEvenEl = document.getElementById("break-even");
-  const revenueAnnualEl = document.getElementById("revenue-annual");
+// ================= KPI DATI =================
 
-  let payback = 0;
+const profitAnnualEl = document.getElementById("profit-annual");
+const breakEvenEl = document.getElementById("break-even");
+const revenueAnnualEl = document.getElementById("revenue-annual");
 
-  if(equity > 0 && netAfterMortgage > 0){
-    payback = equity / netAfterMortgage;
-  }
+let payback = 0;
 
-  if(profitAnnualEl){
+// sicurezza totale
+if(equity > 0 && netAfterMortgage > 0){
+  payback = equity / netAfterMortgage;
+}
+
+// PROFITTO ANNUO
+if(profitAnnualEl){
+  try{
     profitAnnualEl.innerText = formatCurrency(netAfterMortgage);
+  }catch(e){
+    console.error("Errore profitAnnual:", e);
+    profitAnnualEl.innerText = "—";
   }
+}
 
-  if(breakEvenEl){
+// BREAK EVEN
+if(breakEvenEl){
+  try{
     breakEvenEl.innerText = payback ? payback.toFixed(1) + " anni" : "-";
+  }catch(e){
+    console.error("Errore breakEven:", e);
+    breakEvenEl.innerText = "-";
   }
+}
 
-  if(revenueAnnualEl){
+// RICAVI ANNUALI
+if(revenueAnnualEl){
+  try{
     revenueAnnualEl.innerText = formatCurrency(gross);
+  }catch(e){
+    console.error("Errore revenueAnnual:", e);
+    revenueAnnualEl.innerText = "—";
   }
-
+}
   // ================= SCORE =================
 
   const scoreCircle = document.getElementById("score-circle");
@@ -1585,20 +1614,10 @@ if(isPro){
     el.remove();
   });
 
-  // 🔥 NASCONDE TESTI FREE
-  document.querySelectorAll("*").forEach(el=>{
-    if(
-      el.innerText &&
-      (
-        el.innerText.includes("Stai prendendo decisioni") ||
-        el.innerText.includes("Potresti perdere") ||
-        el.innerText.includes("decisione al buio")
-      )
-    ){
-      el.style.display = "none";
-    }
-  });
-
+document.querySelectorAll(".upgrade-warning, .alert-upgrade").forEach(el=>{
+  el.remove();
+});
+  
   // 🔓 SBLOCCA UI
   document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
     el.classList.remove("pro-only","pro-blur");
