@@ -1346,8 +1346,6 @@ document.dispatchEvent(
   const netAfterMortgage = safeNumber(result.netAfterMortgage);
   const roi = safeNumber(result.roi);
 
-  triggerUpgradeIfNeeded(roi);
-
   safeRender("investment-metrics", (container) => {
 
   const isPro =
