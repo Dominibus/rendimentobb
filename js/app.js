@@ -2948,8 +2948,6 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-window.triggerUpgradeIfNeeded = function(roi){
-
   if(window.isProUser && window.isProUser()){
     return; // 🔥 STOP totale
   }
