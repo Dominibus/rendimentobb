@@ -1383,7 +1383,7 @@ document.dispatchEvent(
   </div>
 
   <div class="metric-card">
-    <div>${t("Profitto annuo","Annual profit")}</div>>
+    <div>${t("Profitto annuo","Annual profit")}</div>
     <strong>${formatCurrency(netAfterMortgage)}</strong>
   </div>
 
