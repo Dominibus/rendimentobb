@@ -1750,9 +1750,7 @@ options:{
 
 responsive:true,
 maintainAspectRatio:false,
-
 animation:false,
-
 devicePixelRatio:2,
 
 interaction:{
@@ -1782,7 +1780,9 @@ callback:(v)=>formatCurrency(v)
 
 }
 
-});
+}); // ✅ chiusura Chart
+
+} // ✅ chiusura funzione renderChart
 
 // ================= CITY ROI CHART =================
 
