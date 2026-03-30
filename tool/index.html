@@ -1175,6 +1175,11 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🔥 Plan loaded:", window.currentPlan);
 
+  if(window.isProUser()){
+    console.log("🚀 PRO → skip paywall");
+    return;
+  }
+
   setTimeout(() => {
     applyPaywall();
   }, 50);
