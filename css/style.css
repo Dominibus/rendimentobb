@@ -5602,3 +5602,72 @@ canvas{
   max-width:100% !important;
   height:100% !important;
 }
+
+/* ================= MOBILE FIX SIMULATORE ================= */
+
+@media (max-width: 768px){
+
+  /* 🔥 container principale */
+  .results-card,
+  .roi-dashboard,
+  .investment-metrics,
+  .simulator-container{
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 16px !important;
+    box-sizing: border-box;
+  }
+
+  /* 🔥 elimina margini laterali che tagliano */
+  body{
+    overflow-x: hidden;
+  }
+
+  /* 🔥 grafico responsive */
+  canvas{
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 🔥 KPI box */
+  .kpi-grid,
+  .metrics-grid{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+  }
+
+  /* 🔥 card singole */
+  .kpi,
+  .metric,
+  .box{
+    width: 100% !important;
+  }
+
+  /* 🔥 TITOLI */
+  h1{
+    font-size: 22px !important;
+  }
+
+  h2{
+    font-size: 18px !important;
+  }
+
+  h3{
+    font-size: 16px !important;
+  }
+
+  /* 🔥 testi */
+  p, span, div{
+    font-size: 14px !important;
+  }
+
+  /* 🔥 bottone CTA */
+  button,
+  .cta,
+  .btn{
+    width: 100%;
+    font-size: 15px;
+  }
+
+}
