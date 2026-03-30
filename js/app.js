@@ -1425,14 +1425,6 @@ if(!isPro){
   displayRevenue = null;
 }
 
-// ================= 📊 RENDER CHART =================
-
-try{
-  renderChart(netAfterMortgage);
-}catch(e){
-  console.error("Errore renderChart:", e);
-}
-
 
 // ================= 🔒 CHART PAYWALL =================
 
@@ -1845,9 +1837,6 @@ function showUpgradeOverlay(){
 }
 
 
-// ================= GLOBAL INSTANCE =================
-let roiChartInstance = null;
-
 // ================= ROI CHART (SaaS Ready) =================
 function renderChart(net){
 
@@ -2101,11 +2090,7 @@ try {
   if(canvas){
 
     // aspetta render completo chart
-    await new Promise(resolve => {
-      requestAnimationFrame(() => {
-        setTimeout(resolve, 400);
-      });
-    });
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     if(canvas.width > 0 && canvas.height > 0){
 
