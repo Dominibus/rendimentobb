@@ -137,6 +137,13 @@ async function saveAnalysis(data){
 // ================= PLAN SYSTEM =================
 
 function getUserPlan(){
+  window.isPro = function(){
+  return (
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  );
+};
   
   window.isProUser = function(){
   return (
@@ -889,7 +896,7 @@ ${message}
 function showUpgradePopup(roi){
   
 
-  if(isPro) return;
+  if(window.isPro()) return;
 
   if(roi > 8){
 
@@ -913,7 +920,7 @@ function renderSmartInvestmentAlert(roi){
   if(!container) return;
 
   // ✅ PRO → pulisci e STOP
-  if(isPro){
+  if(window.isPro()){
     container.innerHTML = "";
     return;
   }
@@ -1653,7 +1660,7 @@ if(revenueAnnualEl){
   // ================= 🔥 UNLOCK DEFINITIVO =================
 
 // 🔥 RIMUOVE ALERT TESTUALI HARDCODED
-if(isPro){
+if(window.isPro()){
 
   document.querySelectorAll(".results-card, .roi-dashboard").forEach(container=>{
 
@@ -1677,7 +1684,7 @@ if(isPro){
 
 }  
 
-if(isPro){
+if(window.isPro()){
 
   console.log("🚀 FORCE UNLOCK UI");
 
@@ -1764,7 +1771,7 @@ function renderStrategicInsight(roi) {
 
 function showUpgradeOverlay(){
 
-  if(isPro) return;
+  if(window.isPro()) return;
 
   const overlay = document.getElementById("upgrade-overlay");
 
@@ -3041,7 +3048,7 @@ document.addEventListener("rb_plan_loaded", () => {
 
   updatePDFButton();
 
-  if(isPro){
+  if(window.isPro()){
     unlockProUI();
   }
 
@@ -3055,7 +3062,7 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  if(isPro) return;
+  if(window.isPro()) return;
   
   const safeROI = Number(roi || 0);
 
@@ -3113,7 +3120,7 @@ window.handleUpgradeClick = function(){
   const btn = document.querySelector(".cta-primary");
 
   // ================= 🟢 UTENTE PRO =================
-  if(isPro){
+  if(window.isPro()){
 
     console.log("✅ PRO USER");
 
