@@ -5591,3 +5591,14 @@ background:#10b981;
 color:white;
 border:none;
 }
+
+.roi-chart{
+  width:100%;
+  height:220px;
+  overflow:hidden;
+}
+
+canvas{
+  max-width:100% !important;
+  height:100% !important;
+}
