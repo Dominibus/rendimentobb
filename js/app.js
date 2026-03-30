@@ -1277,17 +1277,44 @@ function calculate(force = false){
       return;
     }
 
-    // ================= INPUT =================
-    const price        = safeNumber(getValue("price"));
-    const priceNight   = safeNumber(getValue("priceNight"));
-    const occupancy    = safeNumber(getValue("occupancy"));
-    const expenses     = safeNumber(getValue("expenses"));
-    const commission   = safeNumber(getValue("commission") || 15);
-    const tax          = safeNumber(getValue("tax") || 21);
-    const loanAmount   = safeNumber(getValue("loanAmount"));
-    const interestRate = safeNumber(getValue("interestRate"));
-    const loanYears    = safeNumber(getValue("loanYears"));
-    const equity       = safeNumber(getValue("equity"));
+   // ================= INPUT =================
+
+// 🔥 SUPPORTO MULTI-SORGENTE (HOME + TOOL)
+
+const price =
+  safeNumber(getValue("price")) ||
+  safeNumber(getValue("qr_price"));
+
+const equity =
+  safeNumber(getValue("equity"));
+
+const priceNight =
+  safeNumber(getValue("priceNight")) ||
+  safeNumber(getValue("qr_night"));
+
+const occupancy =
+  safeNumber(getValue("occupancy")) ||
+  safeNumber(getValue("qr_occ"));
+
+const expenses =
+  safeNumber(getValue("expenses")) ||
+  safeNumber(getValue("qr_cost"));
+
+// 🔥 DEFAULT SICURI
+const commission =
+  safeNumber(getValue("commission")) || 15;
+
+const tax =
+  safeNumber(getValue("tax")) || 21;
+
+const loanAmount =
+  safeNumber(getValue("loanAmount"));
+
+const interestRate =
+  safeNumber(getValue("interestRate"));
+
+const loanYears =
+  safeNumber(getValue("loanYears"));
 
     // UI sync slider
     const occValue = document.getElementById("occ-value");
