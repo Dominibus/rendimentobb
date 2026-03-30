@@ -1264,11 +1264,10 @@ container.innerHTML = insights.map(i=>{
 function calculate(force = false){
 
   if(window.isCalculating){
-    console.log("⛔ calculate già in esecuzione → skip");
-    return;
-  }
+  console.warn("⚠️ Re-entry calculate → continuo comunque");
+}
 
-  window.isCalculating = true;
+window.isCalculating = true;
 
   // 🔥 sicurezza
   if(typeof window.safeNumber !== "function"){
