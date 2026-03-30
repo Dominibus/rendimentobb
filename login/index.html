@@ -1,5 +1,7 @@
 <!-- 🔥 FIREBASE AUTH -->
-<script type="module">
+<<script type="module">
+
+import { app } from "/js/firebase-init.js";
 
 import {
   getAuth,
@@ -7,9 +9,9 @@ import {
   createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-import { app } from "/js/firebase-init.js";
-
 const auth = getAuth(app);
+
+// ================= INIT =================
 
 let mode = "login";
 
@@ -21,7 +23,7 @@ const tabRegister = document.getElementById("tab-register");
 
 const messageBox = document.getElementById("login-message");
 
-// ================= TAB SWITCH =================
+// ================= SWITCH =================
 
 tabLogin.onclick = () => {
   mode = "login";
@@ -33,7 +35,7 @@ tabRegister.onclick = () => {
   updateUI();
 };
 
-// ================= UI UPDATE =================
+// ================= UI =================
 
 function updateUI(){
 
@@ -57,19 +59,16 @@ function updateUI(){
 
     messageBox.innerHTML = `
       <div style="font-size:13px;color:#10b981;">
-        ✔️ Account gratuito<br>
+        ✔️ Gratis<br>
         ✔️ Nessuna carta richiesta<br>
-        ✔️ Accesso immediato al simulatore
+        ✔️ Accesso immediato
       </div>
     `;
-
   }
 
-  // 🔥 FIX ATTIVO (QUESTO ERA IL TUO BUG)
   tabLogin.classList.toggle("active", mode === "login");
   tabRegister.classList.toggle("active", mode === "register");
 
-  // lingua
   if(typeof setLang === "function"){
     setLang(window.RB_LANG.current);
   }
@@ -77,7 +76,7 @@ function updateUI(){
 
 updateUI();
 
-// ================= AUTH ACTION =================
+// ================= AUTH =================
 
 document.getElementById("authBtn").onclick = async () => {
 
@@ -97,7 +96,6 @@ document.getElementById("authBtn").onclick = async () => {
       await createUserWithEmailAndPassword(auth,email,password);
     }
 
-    // redirect intelligente
     window.location.href = "/tool/";
 
   }catch(e){
@@ -106,7 +104,7 @@ document.getElementById("authBtn").onclick = async () => {
 
 };
 
-// ================= ERROR HANDLER =================
+// ================= ERROR =================
 
 function showError(code){
 
@@ -123,15 +121,15 @@ function showError(code){
     },
     "auth/email-already-in-use": {
       it: "Email già registrata → fai login",
-      en: "Email already registered → login instead"
+      en: "Email already registered"
     },
     "auth/weak-password": {
-      it: "Password troppo debole (min 6 caratteri)",
-      en: "Weak password (min 6 characters)"
+      it: "Password troppo debole",
+      en: "Weak password"
     },
     "auth/user-not-found": {
-      it: "Utente non trovato → registrati",
-      en: "User not found → sign up"
+      it: "Utente non trovato",
+      en: "User not found"
     },
     "auth/wrong-password": {
       it: "Password errata",
@@ -140,14 +138,11 @@ function showError(code){
   };
 
   const msg = errors[code] || {
-    it: "Errore imprevisto",
-    en: "Unexpected error"
+    it: "Errore",
+    en: "Error"
   };
 
-  // 🔥 UI MIGLIORATA (NO ALERT)
-  const box = document.getElementById("login-message");
-
-  box.innerHTML = `
+  messageBox.innerHTML = `
     <div style="
       background:#fee2e2;
       color:#991b1b;
@@ -158,7 +153,6 @@ function showError(code){
       ${lang === "en" ? msg.en : msg.it}
     </div>
   `;
-
 }
 
 </script>
