@@ -1474,44 +1474,6 @@ if(!window.isPro()){
 
 }
 
-
-// ================= 🔒 CHART PAYWALL =================
-
-const chartContainer = document.querySelector(".roi-chart");
-
-if(chartContainer){
-
-  if(!window.isPro()){
-
-    chartContainer.classList.add("chart-locked");
-
-    // evita duplicati overlay
-    if(!chartContainer.querySelector(".chart-overlay")){
-
-      const overlay = document.createElement("div");
-      overlay.className = "chart-overlay";
-
-      overlay.innerHTML = `
-        <div style="font-weight:600;font-size:14px;">
-          🔒 ${t("Sblocca il grafico completo","Unlock full chart")}
-        </div>
-        <button class="btn-primary" onclick="openUpgradeModal()">
-          ${t("Passa a PRO","Upgrade to PRO")}
-        </button>
-      `;
-
-      chartContainer.appendChild(overlay);
-    }
-
-  }else{
-
-    chartContainer.classList.remove("chart-locked");
-
-    const overlay = chartContainer.querySelector(".chart-overlay");
-    if(overlay) overlay.remove();
-
-  }
-
   // ================= SALVATAGGIO =================
 
   window.lastAnalysisData = {
