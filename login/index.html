@@ -115,13 +115,13 @@ data-placeholder-en="Password">
 
 <div style="display:flex;gap:10px;margin-bottom:15px;">
 
-<button id="tab-login" class="btn btn-primary" style="flex:1;"
+<button id="tab-login" class="auth-tab active" style="flex:1;"
 data-it="Accedi"
 data-en="Login">
 Accedi
 </button>
 
-<button id="tab-register" class="btn btn-secondary" style="flex:1;"
+<button id="tab-register" class="auth-tab" style="flex:1;"
 data-it="Registrati"
 data-en="Sign up">
 Registrati
@@ -213,6 +213,9 @@ function updateUI(){
 
     tabRegister.classList.add("btn-primary");
     tabLogin.classList.remove("btn-primary");
+
+    tabLogin.classList.toggle("active", mode === "login");
+    tabRegister.classList.toggle("active", mode === "register");
 
   }
 
