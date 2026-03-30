@@ -1432,10 +1432,6 @@ if(!window.isPro()){
       renderExecutiveKPI(result);
     }
 
-    if(typeof renderMarketBenchmark === "function"){
-  renderMarketBenchmark(window.currentCity || "napoli");
-}
-
     // ================= CTA =================
     if(typeof triggerUpgradeIfNeeded === "function"){
       triggerUpgradeIfNeeded(roi);
@@ -1813,11 +1809,10 @@ window.renderingChart = true;
   // ⏱ retry intelligente (DOM + canvas)
   const canvas = document.getElementById("roiChart");
 
-  if(!canvas){
-    console.warn("⏳ Canvas roiChart non pronto → retry");
-    setTimeout(()=>renderChart(net), 300);
-    return;
-  }
+if(!canvas){
+  console.warn("⛔ Canvas non presente → skip chart (home mode)");
+  return;
+}
 
   if(typeof Chart === "undefined"){
     console.warn("⏳ Chart.js non caricato → retry");
