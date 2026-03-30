@@ -1321,12 +1321,28 @@ if(!elRoi) return;
 elRoi.innerText = roi.toFixed(1)+"%";
 
 // 🔒 BLOCCO DATI (FREE)
-const lock = (el)=>{ if(el) el.innerText = "🔒"; };
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor";
 
-lock(elProfit);
-lock(elMonth);
-lock(elBreak);
-lock(elRev);
+if(!isPro){
+
+  const lock = (el)=>{ if(el) el.innerText = "🔒"; };
+
+  lock(elProfit);
+  lock(elMonth);
+  lock(elBreak);
+  lock(elRev);
+
+} else {
+
+  // 🔓 PRO → mostra valori reali (placeholder per ora)
+  if(elProfit) elProfit.innerText = formatCurrency(net);
+  if(elMonth)  elMonth.innerText = formatCurrency(net/12);
+  if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
+  if(elRev)    elRev.innerText = formatCurrency(revenue);
+
+}
 
 
 // ================= PSICOLOGIA =================
