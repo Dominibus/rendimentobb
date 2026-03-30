@@ -2940,7 +2940,6 @@ width:100%;
 #roi-chart,
 #cashflow-chart{
 width:100% !important;
-height:100% !important;
 }
 
 canvas{
