@@ -21,6 +21,7 @@ radial-gradient(circle at 20% 20%, rgba(16,185,129,0.15), transparent 40%),
 radial-gradient(circle at 80% 80%, rgba(59,130,246,0.15), transparent 40%),
 linear-gradient(135deg,#0f172a,#020617);
 color:white;
+font-family:system-ui;
 }
 
 /* ===== LANGUAGE ===== */
@@ -53,8 +54,8 @@ justify-content:center;
 }
 
 .login-card{
-background:rgba(255,255,255,0.95);
-backdrop-filter:blur(12px);
+background:rgba(255,255,255,0.96);
+backdrop-filter:blur(14px);
 color:#0f172a;
 padding:50px;
 border-radius:24px;
@@ -63,6 +64,12 @@ box-shadow:
 0 30px 80px rgba(0,0,0,0.4),
 0 0 40px rgba(16,185,129,0.15);
 text-align:center;
+animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
 }
 
 /* ===== INPUT ===== */
@@ -94,6 +101,7 @@ border-radius:10px;
 border:1px solid #e2e8f0;
 background:#f1f5f9;
 cursor:pointer;
+transition:.2s;
 }
 
 .auth-tab.active{
@@ -112,6 +120,27 @@ width:100%;
 font-weight:600;
 cursor:pointer;
 box-shadow:0 10px 25px rgba(16,185,129,0.3);
+transition:.2s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 15px 35px rgba(16,185,129,0.4);
+}
+
+/* ===== BACK LINK ===== */
+.back-home{
+margin-top:18px;
+display:inline-block;
+font-size:13px;
+color:#64748b;
+text-decoration:none;
+transition:.2s;
+}
+
+.back-home:hover{
+color:#0f172a;
+transform:translateX(-4px);
 }
 
 </style>
@@ -160,11 +189,18 @@ data-placeholder-en="Password">
 
 <button id="authBtn" class="btn">Login</button>
 
+<!-- 🔥 BACK HOME -->
+<a href="/" class="back-home"
+data-it="← Torna alla Home"
+data-en="← Back to Home">
+← Torna alla Home
+</a>
+
 </div>
 
 </main>
 
-<!-- LANG FIRST -->
+<!-- LANG -->
 <script src="/js/lang.js"></script>
 
 <!-- AUTH -->
@@ -188,17 +224,17 @@ const tabRegister=document.getElementById("tab-register");
 const btn=document.getElementById("authBtn");
 const messageBox=document.getElementById("login-message");
 
-// ===== LANG FIX =====
+// ===== LANG =====
 window.changeLang = function(lang){
 
-  if(window.setLang){
-    window.setLang(lang);
-  }
+if(window.setLang){
+window.setLang(lang);
+}
 
-  updateUI();
+updateUI();
 
-  document.getElementById("btn-it").classList.toggle("active",lang==="it");
-  document.getElementById("btn-en").classList.toggle("active",lang==="en");
+document.getElementById("btn-it").classList.toggle("active",lang==="it");
+document.getElementById("btn-en").classList.toggle("active",lang==="en");
 
 };
 
