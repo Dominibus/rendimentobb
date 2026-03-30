@@ -1325,10 +1325,6 @@ if(occValue){
 
   console.log("RESULT:", result);
 
-    if(result.roi >= 8){
-  triggerUpgradeIfNeeded(result.roi);
-}
-
   // 🔥 GLOBAL SYNC (FONDAMENTALE)
 window.currentRevenue = result.revenue || result.gross || 0;
 
@@ -1523,8 +1519,6 @@ document.dispatchEvent(
   });
 
   safeRender("investment-score", (el) => {
-
-  if(!el) return;
 
   renderInvestmentScore(roi, result.risk || 50);
 
