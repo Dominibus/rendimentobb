@@ -1556,13 +1556,13 @@ document.dispatchEvent(
 
   // ================= 🔥 UNLOCK DEFINITIVO =================
 
-  if(isPro){
+if(isPro){
 
   console.log("🚀 FORCE UNLOCK UI");
 
   document.body.classList.add("pro-user");
 
-  // 🔥 RIMUOVE TUTTI GLI ALERT VISIVI
+  // 🔥 RIMUOVE ALERT
   document.querySelectorAll(`
     .upgrade-warning,
     .alert-upgrade,
@@ -1576,12 +1576,12 @@ document.dispatchEvent(
     el.remove();
   });
 
-  // 🔥 RIMUOVE QUALSIASI PAYWALL
-  document.querySelectorAll('[data-paywall]').forEach(el=>{
+  // 🔥 RIMUOVE PAYWALL
+  document.querySelectorAll('[data-paywall], .locked-overlay, .results-overlay').forEach(el=>{
     el.remove();
   });
 
-  // 🔥 RIMUOVE TESTI DI PAURA STATICI
+  // 🔥 NASCONDE TESTI FREE
   document.querySelectorAll("*").forEach(el=>{
     if(
       el.innerText &&
@@ -1604,20 +1604,6 @@ document.dispatchEvent(
   });
 
 }
-
-// 🔓 SBLOCCA UI
-document.querySelectorAll(".pro-only, .pro-blur, .blur-content").forEach(el=>{
-  el.classList.remove("pro-only","pro-blur");
-  el.style.filter = "none";
-  el.style.opacity = "1";
-  el.style.pointerEvents = "auto";
-});
-
-    document.querySelectorAll('[data-paywall], .locked-overlay, .results-overlay').forEach(el=>{
-      el.remove();
-    });
-
-  }
 
  setTimeout(()=>{
   window.isCalculating = false;
