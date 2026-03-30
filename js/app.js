@@ -1430,7 +1430,7 @@ const chartContainer = document.querySelector(".roi-chart");
 
 if(chartContainer){
 
-  if(!isPro){
+  if(!window.isPro()){
 
     chartContainer.classList.add("chart-locked");
 
@@ -1464,71 +1464,9 @@ if(chartContainer){
 }
 
 
-// ================= 📊 KPI RENDER =================
-
-safeRender("investment-metrics", (container) => {
-
-  // 🔒 FREE → SOLO TEASER
-  if(!isPro){
-
-    const roiMin = Math.max(0, Math.round(roi - 3));
-    const roiMax = Math.round(roi + 3);
-
-    const fakeProfit = netAfterMortgage * 0.6;
-
-    const loss = Math.round((result.revenue || 0) * 0.25);
-
-    container.innerHTML = `
-
-<div class="metric-card">
-  <div>${t("ROI stimato","Estimated ROI")}</div>
-  <strong>${roiMin}% - ${roiMax}%</strong>
-</div>
-
-<div class="metric-card">
-  <div>${t("Profitto stimato","Estimated profit")}</div>
-  <strong>${formatCurrency(fakeProfit)}</strong>
-</div>
-
-<div style="margin-top:12px;font-size:13px;color:#ef4444;font-weight:600;">
-  ⚠️ ${t("Potresti perdere fino a","You could lose up to")} ${loss.toLocaleString("it-IT")}€
-</div>
-
-<div style="margin-top:14px;">
-  <button class="btn-primary" onclick="openUpgradeModal()">
-    🔓 ${t("Sblocca analisi completa","Unlock full analysis")}
-  </button>
-</div>
-
-`;
-
-    return;
-  }
-
-  // 🔓 PRO → FULL DATA
-  container.innerHTML = `
-  
-  <div class="metric-card">
-    <div>${t("ROI","ROI")}</div>
-    <strong>${roi.toFixed(1)}%</strong>
-  </div>
-
-  <div class="metric-card">
-    <div>${t("Profitto annuo","Annual profit")}</div>
-    <strong>${formatCurrency(netAfterMortgage)}</strong>
-  </div>
-
-  <div class="metric-card">
-    <div>${t("Ricavi","Revenue")}</div>
-    <strong>${formatCurrency(gross)}</strong>
-  </div>
-
-  `;
-
-});
   // ================= PLAN =================
 
-  if(!isPro){
+  if(!window.isPro()){
     showUpgradePopup(roi);
   }
 
@@ -1636,7 +1574,7 @@ if(revenueAnnualEl){
 
   if(scoreCircle){
 
-    if(!isPro){
+    if(!window.isPro()){
       scoreCircle.style.filter = "blur(6px)";
       scoreCircle.style.opacity = "0.4";
     } else {
@@ -1689,7 +1627,7 @@ if(revenueAnnualEl){
 
   renderInvestmentScore(roi, result.risk || 50);
 
-  if(!isPro){
+  if(!window.isPro()){
     el.classList.add("pro-blur");
   } else {
     el.classList.remove("pro-blur");
@@ -1793,7 +1731,7 @@ function renderStrategicInsight(roi) {
   if (!box) return;
 
   // 🔒 UTENTE FREE → mostra blocco
-  if(!isPro){
+  if(!window.isPro()){
 
     box.innerHTML = `
       <strong>${t("strategicLocked")}</strong>
