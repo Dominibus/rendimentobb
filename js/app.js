@@ -1156,6 +1156,12 @@ function getInvestmentBadge(roi){
   return t("⚠️ Attenzione rischio","⚠️ Risk warning");
 }
 
+function getInvestmentBadgeClass(roi){
+  if(roi >= 20) return "badge-top";
+  if(roi >= 10) return "badge-good";
+  return "badge-risk";
+}
+
 // ================= AI INSIGHT ENGINE =================
 
 function generateInsights(data){
@@ -1436,8 +1442,16 @@ document.dispatchEvent(
   const badgeEl = document.getElementById("roi-badge");
 
   if(badgeEl){
+
   badgeEl.innerText = getInvestmentBadge(roi);
-  badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
+
+  if(typeof getInvestmentBadgeClass === "function"){
+    badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
+  }else{
+    console.warn("getInvestmentBadgeClass non disponibile");
+    badgeEl.className = "roi-badge";
+  }
+
 }
 
 
@@ -2353,12 +2367,6 @@ lang==="it"
 );
 
 }  
-
-function getInvestmentBadgeClass(roi){
-  if(roi >= 20) return "badge-top";
-  if(roi >= 10) return "badge-good";
-  return "badge-risk";
-}
 
   // ================= AUTO CITY DETECTION =================
 
