@@ -123,8 +123,8 @@ display:flex;
 gap:8px;
 ">
 
-<button onclick="setLang('it')" class="lang-btn">IT</button>
-<button onclick="setLang('en')" class="lang-btn">EN</button>
+<button onclick="changeLang('it')" class="lang-btn">IT</button>
+<button onclick="changeLang('en')" class="lang-btn">EN</button>
 
 </div>  
 
@@ -254,9 +254,6 @@ function updateUI(){
   tabLogin.classList.toggle("active", mode === "login");
   tabRegister.classList.toggle("active", mode === "register");
 
-  if(typeof setLang === "function"){
-    setLang(lang);
-  }
 }
 
 updateUI();
@@ -338,6 +335,15 @@ function showError(code){
   `;
 }
 
+function changeLang(lang){
+  if(typeof setLang === "function"){
+    setLang(lang);
+  }
+
+  // aggiorna UI login
+  updateUI();
+}
+  
 </script>
 
 <script src="/js/lang.js" defer></script>
