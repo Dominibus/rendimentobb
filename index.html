@@ -1469,30 +1469,29 @@ if(data.url){
 };
 
 
-
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
 
-// AUTO ROI
-if(document.getElementById("qr_price")){
-  quickROI();
-}
-
-// ENTER SEARCH
-document.querySelector(".city-search-input")
-?.addEventListener("keypress",(e)=>{
-  if(e.key==="Enter"){
-    selectCity(e.target.value.toLowerCase());
+  // ================= AUTO ROI =================
+  if(document.getElementById("qr_price")){
+    quickROI();
   }
-});
 
-document.addEventListener("DOMContentLoaded", ()=>{
+  // ================= ENTER SEARCH =================
+  document.querySelector(".city-search-input")
+  ?.addEventListener("keypress",(e)=>{
+    if(e.key==="Enter"){
+      selectCity(e.target.value.toLowerCase());
+    }
+  });
 
   // ================= SBLOCCO HOME PRO =================
 
   function unlockHomeProUI(){
 
-    if(!window.isPro || !window.isPro()){
+    // 🔥 controllo piano CORRETTO
+    if(!window.currentPlan || 
+      (window.currentPlan !== "pro" && window.currentPlan !== "investor")){
       return;
     }
 
@@ -1506,6 +1505,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
     // 🔓 rimuove overlay
     document.querySelectorAll(".home-blur-overlay").forEach(el=>{
       el.remove();
+    });
+
+    // 🔥 opzionale: sblocca placeholder valori
+    document.querySelectorAll(".metric-card strong").forEach(el=>{
+      if(el.innerText === "🔒"){
+        el.innerText = "—";
+      }
     });
 
   }
@@ -1524,6 +1530,26 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // 🚀 START
   waitForProAndUnlock();
 
+  // ================= RESTORE CITY =================
+
+  const saved = localStorage.getItem("selected_city");
+
+  const map = {
+    roma:"rome",
+    napoli:"naples",
+    milano:"milan",
+    firenze:"florence"
+  };
+
+  if(saved && map[saved]){
+    changeCityBackground(map[saved]);
+  }
+
+});
+
+
+// ================= FALLBACK =================
+window.t = window.t || ((it)=>it);
 
   // ================= RESTORE CITY =================
 
