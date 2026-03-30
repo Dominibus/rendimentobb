@@ -1272,16 +1272,16 @@ function calculate(force = false){
 
   // 🔥 sicurezza
   if(typeof window.safeNumber !== "function"){
-  console.warn("safeNumber non pronto → skip calculate");
-  window.isCalculating = false; // 🔥 FIX
-  return;
-}
+    console.warn("safeNumber non pronto → skip calculate");
+    window.isCalculating = false;
+    return;
+  }
 
-    if(document.readyState === "loading"){
+  if(document.readyState === "loading"){
     console.warn("DOM non pronto ma continuo comunque");
   }
 
-  window.isCalculating = false;
+  // ❌ NON METTERE false QUI
 
   // ================= INPUT =================
 
