@@ -1461,9 +1461,6 @@ if(chartContainer){
 
   }
 
-}
-
-
   // ================= PLAN =================
 
   if(!window.isPro()){
