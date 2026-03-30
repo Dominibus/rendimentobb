@@ -11,9 +11,11 @@ import {
 
 const auth = getAuth(app);
 
-// ================= INIT =================
+// ================= STATE =================
 
 let mode = "login";
+
+// ================= ELEMENTS =================
 
 const title = document.getElementById("auth-title");
 const subtitle = document.getElementById("auth-subtitle");
@@ -22,8 +24,9 @@ const tabLogin = document.getElementById("tab-login");
 const tabRegister = document.getElementById("tab-register");
 
 const messageBox = document.getElementById("login-message");
+const btn = document.getElementById("authBtn");
 
-// ================= SWITCH =================
+// ================= SWITCH MODE =================
 
 tabLogin.onclick = () => {
   mode = "login";
@@ -41,24 +44,28 @@ function updateUI(){
 
   if(mode === "login"){
 
-    title.setAttribute("data-it","Accesso");
-    title.setAttribute("data-en","Login");
+    title.innerText = "Accesso";
+    subtitle.innerText = "Accedi al tuo account";
 
-    subtitle.setAttribute("data-it","Accedi al tuo account");
-    subtitle.setAttribute("data-en","Access your account");
+    btn.innerText = "Accedi";
 
     messageBox.innerHTML = "";
 
   }else{
 
-    title.setAttribute("data-it","Crea account");
-    title.setAttribute("data-en","Create account");
+    title.innerText = "Crea account";
+    subtitle.innerText = "Registrati gratis in 10 secondi";
 
-    subtitle.setAttribute("data-it","Registrati gratis in 10 secondi");
-    subtitle.setAttribute("data-en","Sign up in 10 seconds");
+    btn.innerText = "Registrati";
 
     messageBox.innerHTML = `
-      <div style="font-size:13px;color:#10b981;">
+      <div style="
+        background:#ecfdf5;
+        color:#065f46;
+        padding:10px;
+        border-radius:8px;
+        font-size:13px;
+      ">
         ✔️ Gratis<br>
         ✔️ Nessuna carta richiesta<br>
         ✔️ Accesso immediato
@@ -69,16 +76,20 @@ function updateUI(){
   tabLogin.classList.toggle("active", mode === "login");
   tabRegister.classList.toggle("active", mode === "register");
 
+  tabLogin.classList.toggle("btn-primary", mode === "login");
+  tabRegister.classList.toggle("btn-primary", mode === "register");
+
   if(typeof setLang === "function"){
-    setLang(window.RB_LANG.current);
+    setLang(window.RB_LANG?.current || "it");
   }
 }
 
+// INIT
 updateUI();
 
-// ================= AUTH =================
+// ================= AUTH ACTION =================
 
-document.getElementById("authBtn").onclick = async () => {
+btn.onclick = async () => {
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -88,6 +99,10 @@ document.getElementById("authBtn").onclick = async () => {
     return;
   }
 
+  // loading state
+  btn.disabled = true;
+  btn.innerText = "⏳...";
+
   try{
 
     if(mode === "login"){
@@ -96,15 +111,19 @@ document.getElementById("authBtn").onclick = async () => {
       await createUserWithEmailAndPassword(auth,email,password);
     }
 
-    window.location.href = "/tool/";
+    // redirect smart
+    const redirect = localStorage.getItem("redirect_after_login") || "/tool/";
+    window.location.href = redirect;
 
   }catch(e){
     showError(e.code);
   }
 
+  btn.disabled = false;
+  updateUI();
 };
 
-// ================= ERROR =================
+// ================= ERROR HANDLER =================
 
 function showError(code){
 
@@ -124,8 +143,8 @@ function showError(code){
       en: "Email already registered"
     },
     "auth/weak-password": {
-      it: "Password troppo debole",
-      en: "Weak password"
+      it: "Password troppo debole (min 6 caratteri)",
+      en: "Weak password (min 6 characters)"
     },
     "auth/user-not-found": {
       it: "Utente non trovato",
@@ -138,17 +157,18 @@ function showError(code){
   };
 
   const msg = errors[code] || {
-    it: "Errore",
-    en: "Error"
+    it: "Errore imprevisto",
+    en: "Unexpected error"
   };
 
   messageBox.innerHTML = `
     <div style="
       background:#fee2e2;
       color:#991b1b;
-      padding:10px;
+      padding:12px;
       border-radius:8px;
       font-size:13px;
+      margin-top:10px;
     ">
       ${lang === "en" ? msg.en : msg.it}
     </div>
@@ -159,7 +179,4 @@ function showError(code){
 
 <script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js" defer></script>  
-
-</body>
-</html>
+<script src="/js/footer.js" defer></script>
