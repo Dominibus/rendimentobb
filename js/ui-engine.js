@@ -126,33 +126,28 @@ const verdictEl = document.getElementById("roi-verdict");
 
 if(verdictEl){
 
-  let text = "";
+  let textIT = "";
+  let textEN = "";
 
   if(roi < 5){
-    text = t(
-      "❌ Alto rischio: questo investimento potrebbe non essere sostenibile",
-      "❌ High risk: this investment may not be sustainable"
-    );
+    textIT = "❌ Alto rischio: questo investimento potrebbe non essere sostenibile";
+    textEN = "❌ High risk: this investment may not be sustainable";
   }
   else if(roi < 10){
-    text = t(
-      "⚠️ Margine basso: serve ottimizzazione per essere profittevole",
-      "⚠️ Low margin: needs optimization to be profitable"
-    );
+    textIT = "⚠️ Margine basso: serve ottimizzazione per essere profittevole";
+    textEN = "⚠️ Low margin: needs optimization to be profitable";
   }
   else{
-    text = t(
-      "🔥 Ottimo potenziale: sopra media mercato, ma verifica rischio reale",
-      "🔥 Strong potential: above market average, but check real risk"
-    );
+    textIT = "🔥 Ottimo potenziale: sopra media mercato, ma verifica rischio reale";
+    textEN = "🔥 Strong potential: above market average, but check real risk";
   }
 
   verdictEl.innerHTML = `
-<span data-it="${textIT}" data-en="${textEN}">
-${window.RB_LANG?.current === "en" ? textEN : textIT}
-</span>
-`;
-}  
+    <span data-it="${textIT}" data-en="${textEN}">
+      ${window.RB_LANG?.current === "en" ? textEN : textIT}
+    </span>
+  `;
+} 
 
 // ================= STATUS =================
 
