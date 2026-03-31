@@ -1178,6 +1178,7 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <!-- 🔹 FIREBASE (MODULE) -->
 <script type="module">
 
+import { app } from "/js/firebase-init.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -1380,7 +1381,7 @@ function renderUpgradeCTA(roi){
 
  const isPro =
   window.currentPlan === "pro" ||
-  window.currentPlan === "investor";
+  window.currentPlan === "investor" ||
   window.currentPlan === "pro_yearly";
 
 if(isPro) return; // 🔥 BLOCCA tutto per PRO
@@ -1512,42 +1513,37 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   // ================= SBLOCCO HOME PRO =================
 
-  function unlockHomeProUI(){
+ function unlockHomeProUI(){
 
-    // 🔥 controllo piano CORRETTO
-    if(!window.currentPlan || 
-  (window.currentPlan !== "pro" && 
-   window.currentPlan !== "investor" &&
-   window.currentPlan !== "pro_yearly")){
-  return;
-}
-      (window.currentPlan !== "pro" && window.currentPlan !== "investor")){
-      return;
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(!isPro) return;
+
+  console.log("🔥 FORCE UNLOCK HOME PRO");
+
+  document.body.classList.add("pro-user");
+
+  // 🔓 rimuove blur
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  // 🔓 rimuove overlay
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.remove();
+  });
+
+  // 🔓 reset valori
+  document.querySelectorAll(".metric-card strong").forEach(el=>{
+    if(el.innerText === "🔒"){
+      el.innerText = "—";
     }
+  });
 
-    console.log("🔥 FORCE UNLOCK HOME PRO");
-
-   document.body.classList.add("pro-user");
-
-    // 🔓 rimuove blur
-    document.querySelectorAll(".pro-blur").forEach(el=>{
-      el.classList.remove("pro-blur");
-    });
-
-    // 🔓 rimuove overlay
-    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-      el.remove();
-    });
-
-    // 🔥 opzionale: sblocca placeholder valori
-    document.querySelectorAll(".metric-card strong").forEach(el=>{
-      if(el.innerText === "🔒"){
-        el.innerText = "—";
-      }
-    });
-
-  }
-
+}
   // ⏱ retry intelligente
   function waitForProAndUnlock(){
 
