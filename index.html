@@ -1305,10 +1305,8 @@ window.quickROI = function(){
   if(costEl)  costEl.value = cost;
 
   // ================= CALCOLO =================
-
   let result = null;
 
-  // 🔥 USA ENGINE REALE SE DISPONIBILE
   if(typeof calculateROI === "function"){
 
     result = calculateROI({
@@ -1326,25 +1324,36 @@ window.quickROI = function(){
 
   } else {
 
-    // ⚠️ FALLBACK (sicurezza)
     const investment = price + reno;
     const revenue = night * 365 * (occ/100);
     const net = revenue - (revenue*(cost/100));
 
     result = {
       roi: (net/investment)*100,
-      net: net,
+      netAnnual: net,
       revenue: revenue,
-      breakEven: net>0 ? investment/net : 99
+      breakEvenYears: net>0 ? investment/net : 99
     };
 
     console.warn("⚠️ ROI engine non trovato → fallback attivo");
   }
 
+  // ================= NORMALIZZAZIONE (🔥 FIX) =================
+
   const roi = safeNum(result.roi);
-  const net = safeNum(result.net);
+
+  const netAnnual =
+    safeNum(result.netAnnual) ||
+    safeNum(result.netAfterMortgage) ||
+    safeNum(result.net);
+
   const revenue = safeNum(result.revenue);
-  const breakEven = safeNum(result.breakEven);
+
+  const breakEven =
+    safeNum(result.breakEvenYears) ||
+    safeNum(result.breakEven);
+
+  console.log("🔥 QUICK ROI RESULT:", result);
 
   // ================= OUTPUT =================
 
@@ -1354,35 +1363,18 @@ window.quickROI = function(){
   const elBreak  = document.getElementById("qr_break");
   const elRev    = document.getElementById("qr_rev");
 
-  // ❌ mai bloccare tutto
   if(elRoi){
     elRoi.innerText = roi.toFixed(1)+"%";
   }
- 
-// ================= PLAN =================
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
 
-// 🔥 SE PRO → mostra dati
-if(isPro){
-
-  if(elProfit) elProfit.innerText = formatCurrency(net);
-  if(elMonth)  elMonth.innerText = formatCurrency(net/12);
-  if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
+  // 🔥 MOSTRA SEMPRE (niente bug PRO)
+  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
+  if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
+  if(elBreak)  elBreak.innerText = breakEven ? breakEven.toFixed(1)+" anni" : "—";
   if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-} else {
-
-    if(elProfit) elProfit.innerText = formatCurrency(net);
-    if(elMonth)  elMonth.innerText = formatCurrency(net/12);
-    if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
-    if(elRev)    elRev.innerText = formatCurrency(revenue);
-
-  }
-
   // ================= PSICOLOGIA =================
+
   const psych = document.getElementById("roi-psychology");
 
   if(psych){
@@ -1402,7 +1394,8 @@ if(isPro){
 
   }
 
-  // ================= EVENT SYNC (FONDAMENTALE) =================
+  // ================= EVENT =================
+
   document.dispatchEvent(
     new CustomEvent("rb_simulation_updated", {
       detail: {
@@ -1414,11 +1407,13 @@ if(isPro){
   );
 
   // ================= CTA =================
+
   if(typeof renderUpgradeCTA === "function"){
     renderUpgradeCTA(roi);
   }
 
   // ================= LANG =================
+
   window.RB_LANG?.apply?.();
 
 };
