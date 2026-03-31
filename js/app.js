@@ -73,24 +73,24 @@ window.quickROI = function(){
 
   if(true){
 
-    if(annualRevenueEl){
-      annualRevenueEl.innerText = formatCurrency(revenue);
-    }
+  if(elProfit){
+    elProfit.innerText = formatCurrency(net);
+  }
 
-    if(annualProfitEl){
-      annualProfitEl.innerText = formatCurrency(net);
-    }
+  if(elMonth){
+    elMonth.innerText = formatCurrency(net / 12);
+  }
 
-    if(monthlyProfitEl){
-      monthlyProfitEl.innerText = formatCurrency(net / 12);
-    }
+  if(elBreak){
+    const payback = net > 0 ? investment / net : 0;
+    elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
+  }
 
-    if(breakEvenEl){
-      const payback = net > 0 ? investment / net : 0;
-      breakEvenEl.innerText = payback ? payback.toFixed(1)+" anni" : "-";
-    }
+  if(elRev){
+    elRev.innerText = formatCurrency(revenue);
+  }
 
-  }else{
+}else{
 
     if(annualRevenueEl) annualRevenueEl.innerText = "🔒";
     if(annualProfitEl) annualProfitEl.innerText = "🔒";
