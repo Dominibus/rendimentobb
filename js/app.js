@@ -71,7 +71,7 @@ window.quickROI = function(){
   const monthlyProfitEl = document.getElementById("monthly-profit");
   const breakEvenEl = document.getElementById("break-even");
 
-  if(window.isPro?.()){
+  if(window.firebaseReady && window.isPro?.()){
 
     if(annualRevenueEl){
       annualRevenueEl.innerText = formatCurrency(revenue);
@@ -239,6 +239,10 @@ function hasPlan(requiredPlan){
 
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
+  // 🔥 PRO → bypass totale
+if(window.isPro?.()){
+  return true;
+}
 
   const plan = getUserPlan();
 
@@ -956,7 +960,7 @@ ${message}
 
 function showUpgradePopup(roi){
 
-  if(window.isPro?.()){
+  if(!window.firebaseReady || window.isPro?.()){
   return;
 }
 
@@ -1334,6 +1338,11 @@ function calculate(force = false){
 
   // ================= GUARD =================
   if(window.isCalculating && !force){
+    // 🔥 BLOCCA finché piano non è pronto
+if(!window.firebaseReady){
+  console.warn("⏳ Firebase non pronto → skip calculate");
+  return;
+}
     console.warn("⛔ skip calculate (already running)");
     return;
   }
@@ -3073,8 +3082,8 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  if(window.isPro?.()){
-  console.log("🟢 PRO → skip upgrade trigger");
+  if(!window.firebaseReady || window.isPro?.()){
+  console.log("🟢 PRO o Firebase non pronto → skip upgrade");
   return;
 }
 
