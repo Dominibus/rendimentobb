@@ -956,15 +956,9 @@ ${message}
 
 function showUpgradePopup(roi){
 
-  // 🔥 HARD CHECK (NO isPro, NO delay bug)
-  const isUserPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly" ||
-    window.currentPlan === "investor";
-
-  if(isUserPro){
-    return; // ⛔ STOP TOTALE per PRO
-  }
+  if(window.isPro?.()){
+  return;
+}
 
   // 🔥 sicurezza ROI
   const safeROI = Number(roi || 0);
@@ -1044,7 +1038,7 @@ function renderSmartInvestmentAlert(roi){
   </p>
 
 <button onclick="
-  if(window.currentPlan === 'pro'){
+  if(window.isPro()){
     document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
   } else {
     startPlanPurchase('pro');
@@ -1173,7 +1167,7 @@ if(!window.firebaseReady){
   return;
 }
 
-if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly" || window.currentPlan === "investor"){
+if(window.isPro()){
   btn.style.display = "inline-block";
 }else{
   btn.style.display = "none";
@@ -1629,13 +1623,7 @@ if(window.isPro?.()){
 
     // ================= CTA =================
 
-    // 🔥 HARD BLOCK PRO (NON SBAGLIA MAI)
-const isUserPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly" ||
-  window.currentPlan === "investor";
-
-if(!isUserPro){
+    if(!window.isPro?.()){
   triggerUpgradeIfNeeded?.(roi);
 }
 
@@ -2930,12 +2918,7 @@ function unlockProUI(){
 
   console.log("🚀 UNLOCK PRO UI START");
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly" ||
-    window.currentPlan === "investor";
-
-  if(!isPro){
+  if(!window.isPro()){
     console.log("⛔ NOT PRO → skip unlock");
     return;
   }
@@ -3071,12 +3054,9 @@ document.addEventListener("rb_plan_loaded", () => {
     updatePDFButton();
   }
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly" ||
-    window.currentPlan === "investor";
-
-  if(isPro){
+  if(window.isPro()){
+  unlockProUI();
+}
     unlockProUI();
   }
 
@@ -3094,16 +3074,10 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  const isUserPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly" ||
-    window.currentPlan === "investor";
-
-  // 🔥 BLOCCO TOTALE PER PRO
-  if(isUserPro){
-    console.log("🟢 PRO → skip upgrade trigger");
-    return;
-  }
+  if(window.isPro?.()){
+  console.log("🟢 PRO → skip upgrade trigger");
+  return;
+}
 
   const safeROI = Number(roi || 0);
 
@@ -3160,14 +3134,7 @@ setInterval(()=>{
 
 window.handleUpgradeClick = function(){
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly" ||
-    window.currentPlan === "investor";
-
-  const btn = document.querySelector(".cta-primary");
-
-  if(isPro){
+  window.isPro()
 
     console.log("✅ PRO → scroll");
 
