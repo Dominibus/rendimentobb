@@ -3088,6 +3088,7 @@ document.addEventListener("rb_plan_loaded", () => {
   console.log("🔄 Re-run calculate (tool only)");
   calculate(true);
 }
+  });
 
 // ================= SMART PAYWALL =================
 
