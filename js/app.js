@@ -472,9 +472,8 @@ function getValue(id){
   const el = document.getElementById(id);
 
   if(!el){
-    console.warn("❌ campo NON trovato:", id);
-    return null;
-  }
+  return null; // 🔥 niente log → niente casino
+}
 
   const raw = (el.value || "").toString().replace(",", ".");
 
@@ -1360,41 +1359,47 @@ function calculate(force = false){
   };
 }
 
-  // ================= INPUT (FIX DEFINITIVO) =================
+ // ================= INPUT (FIX DEFINITIVO) =================
 
-// 🔥 valori principali (NO safeNumber qui)
-const price =
-  getValue("price") ??
-  getValue("qr_price") ??
-  100000;
+// 🔥 rileva contesto (TOOL vs HOME)
+const isTool = !!document.getElementById("price");
 
-const equity =
-  getValue("equity") ??
-  Math.round(price * 0.3);
+// ================= VALORI PRINCIPALI =================
 
-const priceNight =
-  getValue("priceNight") ??
-  getValue("qr_night") ??
-  100;
+// 🔥 PRICE
+const price = isTool
+  ? (getValue("price") ?? 100000)
+  : (getValue("qr_price") ?? 100000);
 
-const occupancy =
-  getValue("occupancy") ??
-  getValue("qr_occ") ??
-  65;
+// 🔥 EQUITY (solo tool reale)
+const equity = isTool
+  ? (getValue("equity") ?? Math.round(price * 0.3))
+  : 0;
 
-const expenses =
-  getValue("expenses") ??
-  getValue("qr_cost") ??
-  30;
+// 🔥 NIGHT PRICE
+const priceNight = isTool
+  ? (getValue("priceNight") ?? 100)
+  : (getValue("qr_night") ?? 100);
 
-// 🔥 parametri
-const commission =
-  getValue("commission") ?? 15;
+// 🔥 OCCUPANCY
+const occupancy = isTool
+  ? (getValue("occupancy") ?? 65)
+  : (getValue("qr_occ") ?? 65);
 
-const tax =
-  getValue("tax") ?? 21;
+// 🔥 EXPENSES
+const expenses = isTool
+  ? (getValue("expenses") ?? 30)
+  : (getValue("qr_cost") ?? 30);
 
-// 🔥 mutuo
+// ================= PARAMETRI =================
+
+// 🔥 questi esistono solo nel TOOL → fallback sicuro
+const commission = getValue("commission") ?? 15;
+const tax = getValue("tax") ?? 21;
+
+// ================= MUTUO =================
+
+// 🔥 solo tool → ma fallback sicuro se non presenti
 const loanAmount =
   getValue("loanAmount") ?? (price - equity);
 
@@ -1403,7 +1408,6 @@ const interestRate =
 
 const loanYears =
   getValue("loanYears") ?? 20;
-
 
 // ================= 🚀 SAFE VALIDATION (NO STOP) =================
 
@@ -1584,9 +1588,6 @@ if(window.isPro?.()){
         el.classList.remove?.("pro-blur");
         el.remove?.();
       });
-
-    }else{
-      showUpgradePopup?.(roi);
     }
 
     // ================= ENGINE AVANZATO =================
@@ -3079,13 +3080,14 @@ document.addEventListener("rb_plan_loaded", () => {
     unlockProUI();
   }
 
-  if(window.simulationExecuted && typeof calculate === "function"){
-    console.log("🔄 Re-run calculate (plan update)");
-    calculate(true);
-  }
-
-});
-
+  if(
+  window.simulationExecuted &&
+  typeof calculate === "function" &&
+  document.getElementById("price") // 🔥 SOLO TOOL
+){
+  console.log("🔄 Re-run calculate (tool only)");
+  calculate(true);
+}
 
 // ================= SMART PAYWALL =================
 
