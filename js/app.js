@@ -1124,7 +1124,7 @@ ${discover}:
 
 <button 
 onclick="
-  if(window.currentPlan === 'pro'){
+  if(window.isPro()){
     document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
   } else {
     startPlanPurchase('pro');
@@ -3055,20 +3055,19 @@ document.addEventListener("rb_plan_loaded", () => {
   }
 
   if(window.isPro()){
-  unlockProUI();
-}
     unlockProUI();
   }
 
   if(
-  window.simulationExecuted &&
-  typeof calculate === "function" &&
-  document.getElementById("price") // 🔥 SOLO TOOL
-){
-  console.log("🔄 Re-run calculate (tool only)");
-  calculate(true);
-}
-  });
+    window.simulationExecuted &&
+    typeof calculate === "function" &&
+    document.getElementById("price")
+  ){
+    console.log("🔄 Re-run calculate (tool only)");
+    calculate(true);
+  }
+
+});
 
 // ================= SMART PAYWALL =================
 
@@ -3134,7 +3133,9 @@ setInterval(()=>{
 
 window.handleUpgradeClick = function(){
 
-  window.isPro()
+  const btn = document.querySelector(".upgrade-btn");
+
+  if(window.isPro()){
 
     console.log("✅ PRO → scroll");
 
