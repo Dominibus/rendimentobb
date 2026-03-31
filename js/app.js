@@ -1458,6 +1458,7 @@ console.log("🔥 INPUT FINAL:", {
       interestRate,
       loanYears
     });
+    window.lastResult = result;
     // 🔥 RENDER KPI (FIX CRITICO)
 if(typeof renderExecutiveKPI === "function"){
   renderExecutiveKPI(result);
