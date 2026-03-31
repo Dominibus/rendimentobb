@@ -467,16 +467,24 @@ function formatCurrency(value) {
 
 }
 
-function getValue(id) {
+function getValue(id){
 
   const el = document.getElementById(id);
 
-  if (!el) return 0;
+  if(!el){
+    console.warn("❌ campo NON trovato:", id);
+    return null;
+  }
 
-  const val = parseFloat(el.value.replace(",", "."));
+  const raw = (el.value || "").toString().replace(",", ".");
 
-  return isNaN(val) ? 0 : val;
+  const val = parseFloat(raw);
 
+  if(isNaN(val)){
+    return null;
+  }
+
+  return val;
 }
 
 let roiChartInstance = null;
@@ -1337,49 +1345,49 @@ function calculate(force = false){
       return;
     }
 
-    // ================= INPUT (SaaS SAFE + FALLBACK) =================
+  // ================= INPUT (FIX DEFINITIVO) =================
 
-// 🔥 valori principali (home + tool + fallback intelligenti)
+// 🔥 valori principali (NO safeNumber qui)
 const price =
-  safeNumber(getValue("price")) ||
-  safeNumber(getValue("qr_price")) ||
-  100000; // fallback SaaS
+  getValue("price") ??
+  getValue("qr_price") ??
+  100000;
 
 const equity =
-  safeNumber(getValue("equity")) ||
-  Math.round(price * 0.3); // default 30%
+  getValue("equity") ??
+  Math.round(price * 0.3);
 
 const priceNight =
-  safeNumber(getValue("priceNight")) ||
-  safeNumber(getValue("qr_night")) ||
+  getValue("priceNight") ??
+  getValue("qr_night") ??
   100;
 
 const occupancy =
-  safeNumber(getValue("occupancy")) ||
-  safeNumber(getValue("qr_occ")) ||
+  getValue("occupancy") ??
+  getValue("qr_occ") ??
   65;
 
 const expenses =
-  safeNumber(getValue("expenses")) ||
-  safeNumber(getValue("qr_cost")) ||
+  getValue("expenses") ??
+  getValue("qr_cost") ??
   30;
 
-// 🔥 parametri fiscali / operativi
+// 🔥 parametri
 const commission =
-  safeNumber(getValue("commission")) || 15;
+  getValue("commission") ?? 15;
 
 const tax =
-  safeNumber(getValue("tax")) || 21;
+  getValue("tax") ?? 21;
 
 // 🔥 mutuo
 const loanAmount =
-  safeNumber(getValue("loanAmount")) || (price - equity);
+  getValue("loanAmount") ?? (price - equity);
 
 const interestRate =
-  safeNumber(getValue("interestRate")) || 3.5;
+  getValue("interestRate") ?? 3.5;
 
 const loanYears =
-  safeNumber(getValue("loanYears")) || 20;
+  getValue("loanYears") ?? 20;
 
 
 // ================= 🚀 SAFE VALIDATION (NO STOP) =================
