@@ -5748,3 +5748,23 @@ canvas{
     height: 260px;
   }
 }
+
+/* 🔥 FORCE UNLOCK KPI */
+body.pro-user #profit-annual,
+body.pro-user #revenue-annual,
+body.pro-user #profit-monthly{
+
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  position:relative !important;
+  z-index:10 !important;
+
+}
+
+/* 🔥 RIMUOVE OVERLAY FANTASMA */
+body.pro-user #profit-annual::after,
+body.pro-user #revenue-annual::after,
+body.pro-user #profit-monthly::after{
+  display:none !important;
+}
