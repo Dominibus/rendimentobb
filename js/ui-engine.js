@@ -281,23 +281,17 @@ if(!isPro){
 
 // ================= 🔥 PLAN UI CONTROL =================
 
-// FREE
-if(!isPro){
-  document.querySelectorAll(".pro-only").forEach(el=>{
-    el.classList.add("pro-blur");
-  });
+// 🔥 CONTROLLO UI CORRETTO (NO RE-LOCK BUG)
+
+// PRO → NON TOCCARE NULLA
+if(window.isPro?.()){
+  return;
 }
 
-// PRO
-if(isPro){
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
-
-  document.querySelectorAll("[data-paywall]").forEach(el=>{
-    el.remove();
-  });
-}
+// FREE → applica blur
+document.querySelectorAll(".pro-only").forEach(el=>{
+  el.classList.add("pro-blur");
+});
 // ================= 🔥 MONTHLY PROFIT (FIX) =================
 
 const monthlyEl = document.getElementById("profit-monthly");
