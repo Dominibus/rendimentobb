@@ -1337,30 +1337,81 @@ function calculate(force = false){
       return;
     }
 
-    // ================= INPUT =================
+    // ================= INPUT (SaaS SAFE + FALLBACK) =================
 
-    const price       = safeNumber(getValue("price")) || safeNumber(getValue("qr_price"));
-    const equity      = safeNumber(getValue("equity"));
-    const priceNight  = safeNumber(getValue("priceNight")) || safeNumber(getValue("qr_night"));
-    const occupancy   = safeNumber(getValue("occupancy")) || safeNumber(getValue("qr_occ"));
-    const expenses    = safeNumber(getValue("expenses")) || safeNumber(getValue("qr_cost"));
+// 🔥 valori principali (home + tool + fallback intelligenti)
+const price =
+  safeNumber(getValue("price")) ||
+  safeNumber(getValue("qr_price")) ||
+  100000; // fallback SaaS
 
-    const commission  = safeNumber(getValue("commission")) || 15;
-    const tax         = safeNumber(getValue("tax")) || 21;
+const equity =
+  safeNumber(getValue("equity")) ||
+  Math.round(price * 0.3); // default 30%
 
-    const loanAmount  = safeNumber(getValue("loanAmount"));
-    const interestRate= safeNumber(getValue("interestRate"));
-    const loanYears   = safeNumber(getValue("loanYears"));
+const priceNight =
+  safeNumber(getValue("priceNight")) ||
+  safeNumber(getValue("qr_night")) ||
+  100;
 
-    // ================= 🚨 BLOCCO DATI INVALIDI =================
-    if(price <= 0 || priceNight <= 0 || occupancy <= 0){
-      console.warn("⛔ dati insufficienti → skip");
-      return;
-    }
+const occupancy =
+  safeNumber(getValue("occupancy")) ||
+  safeNumber(getValue("qr_occ")) ||
+  65;
 
-    // UI OCC
-    const occValue = document.getElementById("occ-value");
-    if(occValue) occValue.innerText = occupancy + "%";
+const expenses =
+  safeNumber(getValue("expenses")) ||
+  safeNumber(getValue("qr_cost")) ||
+  30;
+
+// 🔥 parametri fiscali / operativi
+const commission =
+  safeNumber(getValue("commission")) || 15;
+
+const tax =
+  safeNumber(getValue("tax")) || 21;
+
+// 🔥 mutuo
+const loanAmount =
+  safeNumber(getValue("loanAmount")) || (price - equity);
+
+const interestRate =
+  safeNumber(getValue("interestRate")) || 3.5;
+
+const loanYears =
+  safeNumber(getValue("loanYears")) || 20;
+
+
+// ================= 🚀 SAFE VALIDATION (NO STOP) =================
+
+// ❌ NON bloccare mai il calcolo
+if(price <= 0 || priceNight <= 0 || occupancy <= 0){
+  console.warn("⚠️ dati incompleti → uso fallback automatico");
+}
+
+
+// ================= UI SYNC =================
+
+const occValue = document.getElementById("occ-value");
+if(occValue){
+  occValue.innerText = occupancy + "%";
+}
+
+
+// ================= DEBUG (SUPER UTILE) =================
+
+console.log("🔥 INPUT FINAL:", {
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
     // ================= CALCOLO =================
 
