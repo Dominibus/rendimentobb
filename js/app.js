@@ -956,13 +956,23 @@ ${message}
 // ================= SMART PAYWALL (SOFT VERSION) =================
 
 function showUpgradePopup(roi){
-  
 
-  if(window.isPro()) return;
+  // 🔥 HARD CHECK (NO isPro, NO delay bug)
+  const isUserPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly" ||
+    window.currentPlan === "investor";
 
-  if(roi > 8){
+  if(isUserPro){
+    return; // ⛔ STOP TOTALE per PRO
+  }
 
-    console.log("Soft paywall attivo ROI:", roi);
+  // 🔥 sicurezza ROI
+  const safeROI = Number(roi || 0);
+
+  if(safeROI > 8){
+
+    console.log("Soft paywall attivo ROI:", safeROI);
 
     const upgradeBox = document.getElementById("upgrade-box");
 
@@ -1618,7 +1628,13 @@ if(window.isPro?.()){
 
     // ================= CTA =================
 
-    if(!window.isPro?.()){
+    // 🔥 HARD BLOCK PRO (NON SBAGLIA MAI)
+const isUserPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "pro_yearly" ||
+  window.currentPlan === "investor";
+
+if(!isUserPro){
   triggerUpgradeIfNeeded?.(roi);
 }
 
@@ -3055,10 +3071,41 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  // ✅ BLOCCO TOTALE PER PRO
-  if(window.isPro && window.isPro()){
+ window.triggerUpgradeIfNeeded = function(roi){
+
+  const isUserPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly" ||
+    window.currentPlan === "investor";
+
+  if(isUserPro){
     return;
   }
+
+  const safeROI = Number(roi || 0);
+
+  if(safeROI >= 8){
+
+    if(window.upgradeTriggered) return;
+    window.upgradeTriggered = true;
+
+    setTimeout(()=>{
+
+      const lang = window.currentLang || "it";
+
+      const msg = lang === "en"
+        ? "🔥 This investment looks profitable. Unlock full analysis before investing."
+        : "🔥 Questo investimento sembra profittevole. Sblocca l’analisi completa prima di investire.";
+
+      if(confirm(msg)){
+        buyPlan("pro");
+      }
+
+    },1500);
+
+  }
+
+};
 
   const safeROI = Number(roi || 0);
 
