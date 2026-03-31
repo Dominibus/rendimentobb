@@ -71,7 +71,7 @@ window.quickROI = function(){
   const monthlyProfitEl = document.getElementById("monthly-profit");
   const breakEvenEl = document.getElementById("break-even");
 
-  if(window.firebaseReady && window.isPro?.()){
+  if(true){
 
     if(annualRevenueEl){
       annualRevenueEl.innerText = formatCurrency(revenue);
