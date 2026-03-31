@@ -1555,6 +1555,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     quickROI();
   }
 
+ ["qr_price","qr_reno","qr_night","qr_occ","qr_cost"].forEach(id=>{
+  document.getElementById(id)?.addEventListener("input", quickROI);
+});
+
   // ================= ENTER SEARCH =================
   document.querySelector(".city-search-input")
   ?.addEventListener("keypress",(e)=>{
@@ -1609,6 +1613,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   // 🚀 START
   waitForProAndUnlock();
+ document.addEventListener("rb_plan_loaded", ()=>{
+  unlockHomeProUI();
+});
 
   // ================= RESTORE CITY =================
 
