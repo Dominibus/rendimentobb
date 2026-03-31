@@ -1,5 +1,6 @@
 // ===============================
-// FIREBASE INIT – RENDIMENTOBB (FIX DEFINITIVO)
+// FIREBASE INIT – RENDIMENTOBB
+// VERSIONE SAAS MULTI PAGINA STABILE
 // ===============================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -26,7 +27,7 @@ import {
 // ===============================
 
 const firebaseConfig = {
-  apiKey: "AIzaSy...",
+  apiKey: "AIzaSyCGg0ffpwnD0VXkxFgXxyj0ZrAoVZJHdKU",
   authDomain: "rendimento-bb.firebaseapp.com",
   projectId: "rendimento-bb",
   storageBucket: "rendimento-bb.firebasestorage.app",
@@ -39,6 +40,7 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const db = getFirestore(app);
 
+// rende Firebase Auth globale per tutto il sito
 window.firebaseAuth = auth;
 
 
@@ -46,22 +48,79 @@ window.firebaseAuth = auth;
 // GLOBAL STATE
 // ===============================
 
+let currentUser = null;
+let currentPlan = "free";
+
 window.currentUser = null;
 window.currentPlan = "free";
 window.firebaseReady = false;
 
-// 🔥 UNICA SOURCE OF TRUTH
-window.isPro = function(){
-  return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
+window.isProUser = () =>
+window.currentPlan === "pro" ||
+window.currentPlan === "investor";
+
+// ===============================
+// REQUIRE PLAN (BLOCCO FEATURE)
+// ===============================
+
+window.requirePlan = function(required){
+
+const plan = window.currentPlan;
+
+// INVESTOR access
+if(required === "investor"){
+if(plan === "investor" || plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// PRO access
+if(required === "pro"){
+if(plan === "pro" || plan === "pro_yearly"){
+return true;
+}
+}
+
+// 🔥 NUOVO UX (NO ALERT)
+if(typeof showUpgradeModal === "function"){
+  showUpgradeModal(12); // ROI più realistico
+
+// 🔥 AGGIUNTA PSICOLOGICA
+setTimeout(()=>{
+  alert(
+    getCurrentLang()==="it"
+    ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
+    : "⚠️ You are making decisions without real data"
   );
+}, 300);
+  
+}else{
+  window.location.href = "/pricing/";
+}
+
+return false;
+
 };
 
 
 // ===============================
-// REGISTER
+// HELPER – CURRENT LANGUAGE
+// ===============================
+
+function getCurrentLang(){
+
+  if(window.currentLang) return window.currentLang;
+
+  const saved = localStorage.getItem("rb_lang");
+  if(saved) return saved;
+
+  return "it";
+
+}
+
+
+// ===============================
+// REGISTRAZIONE
 // ===============================
 
 async function registerUser(email, password) {
@@ -70,7 +129,7 @@ async function registerUser(email, password) {
   const user = userCredential.user;
 
   await setDoc(doc(db, "users", user.uid), {
-    email,
+    email: email,
     plan: "free",
     createdAt: new Date()
   });
@@ -99,113 +158,282 @@ async function logoutUser() {
 
 
 // ===============================
-// LOAD PLAN (CRITICO)
+// CARICA PIANO UTENTE
 // ===============================
 
 async function loadUserPlan(uid) {
 
   try{
 
-    const docSnap = await getDoc(doc(db, "users", uid));
+    console.log("🔥 Carico piano per:", uid);
+
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      window.currentPlan = docSnap.data().plan || "free";
-    } else {
-      window.currentPlan = "free";
-    }
+  currentPlan = docSnap.data().plan || "free";
+} else {
+  console.warn("⚠️ Documento NON trovato → NON sovrascrivo");
 
-    console.log("🔥 Piano:", window.currentPlan);
+  // 🔥 NON toccare il piano se già caricato
+  if(!window.currentPlan){
+    currentPlan = "free";
+  }
+}
 
-    // 🔥 EVENTO GLOBALE
-    document.dispatchEvent(
-      new CustomEvent("rb_plan_loaded", {
-        detail: { plan: window.currentPlan }
-      })
-    );
+    window.currentPlan = currentPlan;
 
-    // 🔥 SBLOCCO DIRETTO
-    if(window.isPro()){
-      if(typeof unlockProUI === "function"){
-        unlockProUI();
-      }
-    }
+console.log("🔥 Piano finale:", currentPlan);
+
+// 🔥 SINGLE TRIGGER (NO BUG)
+document.dispatchEvent(
+  new CustomEvent("rb_plan_loaded", {
+    detail: { plan: currentPlan }
+  })
+);
+
+    updateProVisibility();
+
+  // 🔥 AUTO SBLOCCO DIRETTO (fallback sicurezza)
+if(
+  currentPlan === "pro" ||
+  currentPlan === "investor" ||
+  currentPlan === "pro_yearly"
+){
+  if(typeof unlockProUI === "function"){
+    unlockProUI();
+  }
+}  
 
   }catch(err){
 
-    console.error("❌ Errore piano:", err);
+    console.error("❌ ERRORE loadUserPlan:", err);
+
     window.currentPlan = "free";
 
   }
 
 }
+// ===============================
+// AGGIORNA PIANO UTENTE
+// ===============================
+
+export async function upgradeToPro(uid){
+
+await updateDoc(doc(db,"users",uid),{
+plan:"pro",
+updatedAt:new Date()
+});
+
+await loadUserPlan(uid);
+
+}
+
+export async function upgradeToInvestor(uid){
+
+await updateDoc(doc(db,"users",uid),{
+plan:"investor",
+updatedAt:new Date()
+});
+
+await loadUserPlan(uid);
+
+}
+
+// ===============================
+// UI USER NAVBAR
+// ===============================
+
+function updateUserUI(user) {
+
+  const userArea = document.getElementById("user-area");
+  if (!userArea) return;
+
+  const lang = getCurrentLang();
+
+  const welcomeText =
+    lang === "en"
+      ? "Welcome"
+      : "Benvenuto";
+
+  const loginText =
+    lang === "en"
+      ? "Login"
+      : "Accedi";
+
+  if (user) {
+
+    const name = user.email.split("@")[0];
+
+    userArea.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:13px;">
+          👤 ${welcomeText} <strong>${name}</strong>
+          ${currentPlan !== "free"
+          ? `<span style="color:#00c896; font-weight:bold;"> ${currentPlan.toUpperCase()}</span>`
+          : ''}
+        </span>
+
+        <button id="logout-btn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;">
+          Logout
+        </button>
+      </div>
+    `;
+
+    const logoutBtn = document.getElementById("logout-btn");
+
+    if(logoutBtn){
+      logoutBtn.addEventListener("click", async () => {
+        await logoutUser();
+        window.location.reload();
+      });
+    }
+
+  } else {
+
+    userArea.innerHTML = `
+      <button onclick="window.location.href='/login/'" 
+        class="btn btn-secondary" 
+        style="padding:8px 18px; font-size:13px;">
+        ${loginText}
+      </button>
+    `;
+  }
+}
 
 
 // ===============================
-// AUTH OBSERVER (FIX DEFINITIVO)
+// PRO BUTTON
+// ===============================
+
+function updateProVisibility() {
+
+  const proBtn = document.getElementById("pro-btn");
+  if (!proBtn) return;
+
+  if (currentPlan === "pro") {
+
+    proBtn.textContent = "PRO Attivo";
+    proBtn.disabled = true;
+    proBtn.style.opacity = 0.6;
+  }
+}
+
+
+// ===============================
+// AUTH OBSERVER
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
 
-  window.firebaseReady = false;
   window.currentUser = user;
+  window.firebaseReady = false;
 
   if (user) {
 
-    console.log("🔥 Auth OK:", user.uid);
+  console.log("🔥 Auth OK:", user.uid);
 
-    await loadUserPlan(user.uid);
+  // 🔥 carica piano
+  await loadUserPlan(user.uid);
 
-    // 🔥 QUI DIVENTA READY
-    window.firebaseReady = true;
+  // 🔥 Firebase pronto
+  window.firebaseReady = true;
 
-    console.log("✅ Firebase READY:", window.currentPlan);
+  console.log("✅ Firebase READY con piano:", window.currentPlan);
+
+  // 🔥 aggiorna UI navbar
+  updateUserUI(user);
+
+  // 🔥 NUOVO: differenzia FREE vs PRO (importantissimo)
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly"
+  ){
+
+    console.log("💰 Utente PRO → sblocco totale UI");
+
+    if(typeof unlockProUI === "function"){
+      unlockProUI();
+    }
 
   } else {
 
-    console.log("👤 Guest");
+    console.log("👀 Utente FREE → attivo funnel");
 
-    window.currentPlan = "free";
-    window.firebaseReady = true;
-
-    document.dispatchEvent(new Event("rb_plan_loaded"));
+    // 🔥 micro trigger psicologico (non invasivo)
+    setTimeout(()=>{
+      console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
+    },1500);
 
   }
 
-  // 🔥 EVENTO GLOBALE
-  document.dispatchEvent(
-    new CustomEvent("rb_auth_ready", {
-      detail: {
-        user,
-        plan: window.currentPlan
-      }
-    })
-  );
+} else {
+
+  console.log("👤 Utente non loggato");
+
+  window.currentPlan = "free";
+  window.firebaseReady = true;
+
+  updateUserUI(null);
+
+  // 🔥 trigger UI per stato FREE
+  document.dispatchEvent(new Event("rb_plan_loaded"));
+
+  // 🔥 micro social proof (conversione)
+  setTimeout(()=>{
+    console.log("📊 +1.247 utenti stanno analizzando investimenti ora");
+  },2000);
+
+}
+
+// 🔥 evento globale sempre (NON TOCCARE)
+document.dispatchEvent(
+  new CustomEvent("rb_auth_ready", {
+    detail: {
+      user: user,
+      plan: window.currentPlan
+    }
+  })
+);
 
 });
 
-
 // ===============================
-// STRIPE RETURN
+// STRIPE PLAN ACTIVATION
 // ===============================
 
 document.addEventListener("rb_stripe_return", async (e)=>{
 
-  if(!window.currentUser) return;
+if(!window.currentUser) return;
 
-  try{
+try{
 
-    await updateDoc(doc(db,"users",window.currentUser.uid),{
-      plan:"investor",
-      updatedAt:new Date()
-    });
+await updateDoc(doc(db,"users",window.currentUser.uid),{
+plan:"investor",
+stripeSession:e.detail.session,
+updatedAt:new Date()
+});
 
-    await loadUserPlan(window.currentUser.uid);
+await loadUserPlan(window.currentUser.uid);
 
-    alert("Pagamento completato!");
+alert(
+getCurrentLang()==="it"
+? "Pagamento completato! Piano Investor attivo."
+: "Payment successful! Investor plan activated."
+);
 
-  }catch(err){
-    console.error(err);
-  }
+}catch(err){
+
+console.error("Errore attivazione piano:",err);
+
+}
+
+});
+
+document.addEventListener("rb_language_changed", () => {
+
+  updateUserUI(currentUser);
 
 });
 
@@ -215,38 +443,72 @@ document.addEventListener("rb_stripe_return", async (e)=>{
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ===============================
+// STRIPE RETURN CHECK
+// ===============================
+
+const params = new URLSearchParams(window.location.search);
+const stripeSession = params.get("session_id");
+
+if(stripeSession){
+
+console.log("Stripe session rilevata:", stripeSession);
+
+document.dispatchEvent(
+  new CustomEvent("rb_stripe_return",{
+    detail:{ session: stripeSession }
+  })
+);
+
+  params.delete("session_id");
+  history.replaceState({}, document.title, window.location.pathname);  
+
+}
 
   const registerAction = document.getElementById("register-action");
   const loginAction = document.getElementById("login-action");
+  const proBtn = document.getElementById("pro-btn");
 
   if (registerAction) {
+
     registerAction.addEventListener("click", async () => {
 
       const email = document.getElementById("auth-email").value;
       const password = document.getElementById("auth-password").value;
 
       try {
+
         await registerUser(email, password);
+
       } catch (err) {
+
         alert(err.message);
+
       }
 
     });
+
   }
 
   if (loginAction) {
+
     loginAction.addEventListener("click", async () => {
 
       const email = document.getElementById("auth-email").value;
       const password = document.getElementById("auth-password").value;
 
       try {
+
         await loginUser(email, password);
+
       } catch (err) {
+
         alert(err.message);
+
       }
 
     });
+
   }
 
 });
