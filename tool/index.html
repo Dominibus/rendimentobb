@@ -335,22 +335,23 @@ data-en="Results are based on average market data. Real risk is calculated in th
 
   </div>
 
-</div>
-
 <div class="input-group">
 <label data-it="Prezzo immobile (€)"
 data-en="Property price (€)"></label>
 <input type="number" id="price" placeholder="150000">
+</div>
 
 <div class="input-group">
 <label data-it="Capitale proprio investito (€)"
 data-en="Equity invested (€)"></label>
 <input type="number" id="equity" placeholder="30000">
+</div>
 
 <div class="input-group">
 <label data-it="Prezzo medio notte (€)"
 data-en="Average nightly price (€)"></label>
 <input type="number" id="priceNight" placeholder="120">
+</div>
 
 <div class="input-group">
 <label data-it="Occupazione media (%)"
@@ -368,12 +369,10 @@ oninput="calculate()">
 <span id="occ-value">70%</span>
 </div>
 
-<!-- 🔥 MICRO UX -->
 <div style="font-size:12px;color:#64748b;margin-top:5px;"
 data-it="💡 L’occupazione è il fattore più importante"
 data-en="💡 Occupancy is the most important factor">
 </div>
-
 </div>
 
 <div class="input-group">
@@ -1274,10 +1273,7 @@ window.handleUpgradeClick = function(){
     ? "You are about to unlock the full investment analysis.\n\nROI, risks, mortgage and real profit."
     : "Stai per sbloccare l’analisi completa.\n\nROI reale, rischi, mutuo e profitto.";
 
-  showUpgradeModalCustom(
-  "Sblocca analisi completa",
-  "Unlock full analysis"
-);
+  
 
 };
 
@@ -1300,6 +1296,18 @@ window.closeUpgradeModal = function(){
   if(modal){
     modal.style.display = "none";
   }
+
+};
+
+  window.showUpgradeModalCustom = function(titleIT, titleEN){
+
+  console.log("🔥 OPEN UPGRADE MODAL");
+
+  const modal = document.getElementById("upgrade-modal");
+
+  if(!modal) return;
+
+  modal.style.display = "flex";
 
 };
 
