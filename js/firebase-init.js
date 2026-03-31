@@ -48,16 +48,24 @@ window.firebaseAuth = auth;
 // GLOBAL STATE
 // ===============================
 
-let currentUser = null;
-let currentPlan = "free";
-
 window.currentUser = null;
 window.currentPlan = "free";
 window.firebaseReady = false;
 
-window.isProUser = () =>
-window.currentPlan === "pro" ||
-window.currentPlan === "investor";
+// ===============================
+// PRO CHECK (FIX DEFINITIVO)
+// ===============================
+
+window.isPro = function(){
+  return (
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly" ||
+    window.currentPlan === "investor"
+  );
+};
+
+// compatibilità vecchio codice
+window.isProUser = window.isPro;
 
 // ===============================
 // REQUIRE PLAN (BLOCCO FEATURE)
@@ -65,43 +73,51 @@ window.currentPlan === "investor";
 
 window.requirePlan = function(required){
 
-const plan = window.currentPlan;
+  const plan = window.currentPlan;
 
-// INVESTOR access
-if(required === "investor"){
-if(plan === "investor" || plan === "pro" || plan === "pro_yearly"){
-return true;
-}
-}
+  // 🔓 INVESTOR access
+  if(required === "investor"){
+    if(
+      plan === "investor" ||
+      plan === "pro" ||
+      plan === "pro_yearly"
+    ){
+      return true;
+    }
+  }
 
-// PRO access
-if(required === "pro"){
-if(plan === "pro" || plan === "pro_yearly"){
-return true;
-}
-}
+  // 🔓 PRO access
+  if(required === "pro"){
+    if(
+      plan === "pro" ||
+      plan === "pro_yearly"
+    ){
+      return true;
+    }
+  }
 
-// 🔥 NUOVO UX (NO ALERT)
-if(typeof showUpgradeModal === "function"){
-  showUpgradeModal(12); // ROI più realistico
+  // ===============================
+  // UX BLOCCO (NO BREAK APP)
+  // ===============================
 
-// 🔥 AGGIUNTA PSICOLOGICA
-setTimeout(()=>{
-  alert(
-    getCurrentLang()==="it"
-    ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
-    : "⚠️ You are making decisions without real data"
-  );
-}, 300);
-  
-}else{
-  window.location.href = "/pricing/";
-}
+  if(typeof showUpgradeModal === "function"){
 
-return false;
+    showUpgradeModal(12);
 
+    setTimeout(()=>{
+      alert(
+        (window.getCurrentLang && getCurrentLang() === "it")
+        ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
+        : "⚠️ You are making decisions without real data"
+      );
+    }, 300);
+
+  }else{
+    window.location.href = "/pricing/";
+  }
+
+  return false;
 };
-
 
 // ===============================
 // HELPER – CURRENT LANGUAGE
