@@ -219,6 +219,10 @@ if(
   if(typeof unlockProUI === "function"){
     unlockProUI();
   }
+  // 🔥 FORCE UI REFRESH (QUI VA, NON DENTRO isPro)
+  setTimeout(()=>{
+    document.dispatchEvent(new Event("rb_force_ui_refresh"));
+  }, 200);
 }  
 
   }catch(err){
