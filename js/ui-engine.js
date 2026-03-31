@@ -284,17 +284,21 @@ if(!isPro){
   }
 }
 
-// ================= 🔥 PLAN UI CONTROL =================
+// 🔥 WAIT FIREBASE (CRITICO)
+if(!window.firebaseReady){
+  console.log("⏳ Skip UI lock → Firebase non pronto");
+  return;
+}
 
 // FREE
-if(!isPro){
+if(!window.isPro?.()){
   document.querySelectorAll(".pro-only").forEach(el=>{
     el.classList.add("pro-blur");
   });
 }
 
 // PRO
-if(isPro){
+if(window.isPro?.()){
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
@@ -304,4 +308,10 @@ if(isPro){
   });
 }
 
-}
+document.addEventListener("rb_plan_loaded", () => {
+  console.log("🔄 Re-run UI engine after plan");
+
+  if(typeof renderExecutiveKPI === "function"){
+    renderExecutiveKPI();
+  }
+});
