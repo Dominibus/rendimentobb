@@ -1447,10 +1447,6 @@ console.log("🔥 INPUT FINAL:", {
     // ================= CALCOLO =================
 
     const result = calculateROI({
-      // 🔥 RENDER KPI (FIX CRITICO)
-if(typeof renderExecutiveKPI === "function"){
-  renderExecutiveKPI(result);
-}
       price,
       equity,
       priceNight,
@@ -1462,6 +1458,10 @@ if(typeof renderExecutiveKPI === "function"){
       interestRate,
       loanYears
     });
+    // 🔥 RENDER KPI (FIX CRITICO)
+if(typeof renderExecutiveKPI === "function"){
+  renderExecutiveKPI(result);
+}
 
     // 🔥 DEBUG + UNLOCK FORZATO
 console.log("🔥 RESULT:", result);
