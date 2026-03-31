@@ -302,9 +302,11 @@ if(window.isPro?.()){
 }
 
 document.addEventListener("rb_plan_loaded", () => {
+
   console.log("🔄 Re-run UI engine after plan");
 
-  if(typeof renderExecutiveKPI === "function"){
-    renderExecutiveKPI();
+  if(typeof window.renderExecutiveKPI === "function" && window.lastAnalysisData){
+    window.renderExecutiveKPI(window.lastAnalysisData);
   }
+
 });
