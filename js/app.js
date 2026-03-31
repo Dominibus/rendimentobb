@@ -1433,20 +1433,35 @@ window.calculate = function(force = false){
 
     // ================= UI BASE =================
 
-    const roiEl = document.getElementById("roi-live") || document.getElementById("qr_roi");
-    if(roiEl){
-      roiEl.innerText = roi.toFixed(1) + "%";
-    }
+    // ================= KPI TOOL (CORRETTO) =================
 
-    const profitEl = document.getElementById("profit-live");
-    if(profitEl){
-      profitEl.innerText = formatCurrency(net);
-    }
+const roiTool = document.getElementById("roi-preview");
+if(roiTool){
+  roiTool.innerText = roi.toFixed(1) + "%";
+}
 
-    const revenueEl = document.getElementById("revenue-live");
-    if(revenueEl){
-      revenueEl.innerText = formatCurrency(gross);
-    }
+const riskTool = document.getElementById("risk-preview");
+if(riskTool){
+  const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
+  riskTool.innerText = riskScore + " / 100";
+}
+
+// ================= KPI HOME (SE PRESENTE) =================
+
+const roiHome = document.getElementById("qr_roi");
+if(roiHome){
+  roiHome.innerText = roi.toFixed(1) + "%";
+}
+
+const profitHome = document.getElementById("profit-live");
+if(profitHome){
+  profitHome.innerText = formatCurrency(net);
+}
+
+const revenueHome = document.getElementById("revenue-live");
+if(revenueHome){
+  revenueHome.innerText = formatCurrency(gross);
+}
 
     // ================= KPI =================
     if(typeof renderExecutiveKPI === "function"){
