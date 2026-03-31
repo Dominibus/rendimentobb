@@ -1358,26 +1358,22 @@ window.quickROI = function(){
   if(elRoi){
     elRoi.innerText = roi.toFixed(1)+"%";
   }
+ 
+// ================= PLAN =================
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
 
-  // ================= PLAN =================
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+// 🔥 SE PRO → mostra dati
+if(isPro){
 
-  // 🔥 BLOCCO SOLO SE FIREBASE PRONTO + NON PRO
-if(window.firebaseReady && !isPro){
+  if(elProfit) elProfit.innerText = formatCurrency(net);
+  if(elMonth)  elMonth.innerText = formatCurrency(net/12);
+  if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
+  if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-    const lock = (el)=>{
-      if(el) el.innerText = "🔒";
-    };
-
-    lock(elProfit);
-    lock(elMonth);
-    lock(elBreak);
-    lock(elRev);
-
-  } else {
+} else {
 
     if(elProfit) elProfit.innerText = formatCurrency(net);
     if(elMonth)  elMonth.innerText = formatCurrency(net/12);
