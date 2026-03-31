@@ -1450,6 +1450,29 @@ console.log("🔥 INPUT FINAL:", {
     const net   = safeNumber(result.netAfterMortgage);
     const roi   = safeNumber(result.roi);
 
+    // 🔥 FORCE UNLOCK UI PRO (CRITICO)
+if(window.isPro?.()){
+
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock
+  `).forEach(el=>{
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+}
+
     if(net <= 0){
       console.warn("⛔ net non valido:", net);
     }
@@ -1595,9 +1618,9 @@ console.log("🔥 INPUT FINAL:", {
 
     // ================= CTA =================
 
-    if(typeof triggerUpgradeIfNeeded === "function"){
-      triggerUpgradeIfNeeded(roi);
-    }
+    if(!window.isPro?.()){
+  triggerUpgradeIfNeeded?.(roi);
+}
 
     // ================= LANG =================
 
