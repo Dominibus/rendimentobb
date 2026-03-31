@@ -298,5 +298,15 @@ if(isPro){
     el.remove();
   });
 }
+// ================= 🔥 MONTHLY PROFIT (FIX) =================
+
+const monthlyEl = document.getElementById("profit-monthly");
+
+if(monthlyEl){
+  monthlyEl.innerText = (profit/12).toLocaleString(
+    window.RB_LANG?.current === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  );
+}  
 
 }
