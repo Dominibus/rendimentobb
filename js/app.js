@@ -1337,15 +1337,16 @@ container.innerHTML = insights.map(i=>{
 function calculate(force = false){
 
   // ================= GUARD =================
-  if(window.isCalculating && !force){
-    // 🔥 BLOCCA finché piano non è pronto
-if(!window.firebaseReady){
-  console.warn("⏳ Firebase non pronto → skip calculate");
+  // 🔥 NON bloccare il calcolo per Firebase
+if(window.isCalculating && !force){
+  console.warn("⛔ skip calculate (already running)");
   return;
 }
-    console.warn("⛔ skip calculate (already running)");
-    return;
-  }
+
+// 🔥 Firebase non deve bloccare il calcolo
+if(!window.firebaseReady){
+  console.warn("⏳ Firebase non pronto → continuo comunque");
+}
 
   window.isCalculating = true;
 
