@@ -1529,207 +1529,149 @@ if(window.isPro?.()){
       detail:{ revenue: window.currentRevenue, roi, data: result }
     }));
 
-    // ================= UI CORE =================
+   // ================= UI CORE =================
 
-    const roiEl = document.getElementById("roi-live") || document.getElementById("qr_roi");
-    if(roiEl){
-      roiEl.innerText = roi.toFixed(1) + "%";
-      roiEl.style.color = getROIColor(roi);
-    }
+const roiEl = document.getElementById("roi-live") || document.getElementById("qr_roi");
+if(roiEl){
+  roiEl.innerText = roi.toFixed(1) + "%";
+  roiEl.style.color = getROIColor(roi);
+}
 
-    const profitEl = document.getElementById("profit-annual");
-    if(profitEl) profitEl.innerText = formatCurrency(net);
+// ================= KPI UNIVERSALE (FIX DEFINITIVO) =================
 
-    const revenueEl = document.getElementById("revenue-annual");
-    if(revenueEl) revenueEl.innerText = formatCurrency(gross);
+const setText = (id, value) => {
+  const el = document.getElementById(id);
+  if(el) el.innerText = value;
+};
 
-    const monthlyEl = document.getElementById("profit-monthly");
-    
-    // ================= KPI =================
+// PROFIT
+setText("profit-annual", formatCurrency(net));
+setText("profit-live", formatCurrency(net));
 
-    let payback = 0;
-    if(equity > 0 && net > 0){
-      payback = equity / net;
-    }
+// REVENUE
+setText("revenue-annual", formatCurrency(gross));
+setText("revenue-live", formatCurrency(gross));
 
-    const profitAnnualEl = document.getElementById("profit-annual");
-    if(profitAnnualEl) profitAnnualEl.innerText = formatCurrency(net);
+// MONTHLY
+setText("profit-monthly", formatCurrency(net / 12));
 
-    const revenueAnnualEl = document.getElementById("revenue-annual");
-    if(revenueAnnualEl) revenueAnnualEl.innerText = formatCurrency(gross);
+// ================= KPI =================
 
-    const breakEvenEl = document.getElementById("break-even");
-    if(breakEvenEl){
-      breakEvenEl.innerText = payback ? payback.toFixed(1)+" anni" : "-";
-    }
+let payback = 0;
+if(equity > 0 && net > 0){
+  payback = equity / net;
+}
 
-    // ================= ROI BADGE =================
+// BREAK EVEN
+setText("break-even", payback ? payback.toFixed(1)+" anni" : "-");
 
-    const badgeEl = document.getElementById("roi-badge");
-    if(badgeEl){
-      badgeEl.innerText = getInvestmentBadge(roi);
-      badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
-    }
+// ================= ROI BADGE =================
 
-    // ================= SCORE =================
+const badgeEl = document.getElementById("roi-badge");
+if(badgeEl){
+  badgeEl.innerText = getInvestmentBadge(roi);
+  badgeEl.className = "roi-badge " + getInvestmentBadgeClass(roi);
+}
 
-    const scoreCircle = document.getElementById("score-circle");
+// ================= SCORE =================
 
-    if(scoreCircle){
+const scoreCircle = document.getElementById("score-circle");
 
-      if(!window.isPro?.()){
-        scoreCircle.style.filter = "blur(6px)";
-        scoreCircle.style.opacity = "0.4";
-      } else {
+if(scoreCircle){
 
-        let grade="C", color="#ef4444";
+  if(!window.isPro?.()){
+    scoreCircle.style.filter = "blur(6px)";
+    scoreCircle.style.opacity = "0.4";
+  } else {
 
-        if(roi > 12){ grade="A"; color="#10b981"; }
-        else if(roi > 6){ grade="B"; color="#f59e0b"; }
+    let grade="C", color="#ef4444";
 
-        scoreCircle.innerText = grade;
-        scoreCircle.style.background = color;
-        scoreCircle.style.color = "#fff";
-        scoreCircle.style.filter = "none";
-        scoreCircle.style.opacity = "1";
-      }
-    }
+    if(roi > 12){ grade="A"; color="#10b981"; }
+    else if(roi > 6){ grade="B"; color="#f59e0b"; }
 
-    // ================= CHART (SAFE) =================
+    scoreCircle.innerText = grade;
+    scoreCircle.style.background = color;
+    scoreCircle.style.color = "#fff";
+    scoreCircle.style.filter = "none";
+    scoreCircle.style.opacity = "1";
+  }
+}
 
-    if(net > 0){
-      setTimeout(()=>renderChart(net),150);
-    }else{
-      console.warn("⛔ chart skip (net=0)");
-    }
+// ================= CHART (SAFE) =================
 
-    // ================= PRO UNLOCK =================
+if(net > 0){
+  setTimeout(()=>renderChart(net),150);
+}else{
+  console.warn("⛔ chart skip (net=0)");
+}
 
-    if(window.isPro?.()){
+// ================= PRO UNLOCK =================
 
-      document.body.classList.add("pro-user");
+if(window.isPro?.()){
 
-      document.querySelectorAll(`
-        .pro-blur,
-        .home-blur-overlay,
-        .upgrade-warning,
-        .alert-upgrade,
-        .results-overlay,
-        [data-paywall]
-      `).forEach(el=>{
-        el.classList.remove?.("pro-blur");
-        el.remove?.();
-      });
-    }
+  document.body.classList.add("pro-user");
 
-    // ================= ENGINE AVANZATO =================
+  document.querySelectorAll(`
+    .pro-blur,
+    .home-blur-overlay,
+    .upgrade-warning,
+    .alert-upgrade,
+    .results-overlay,
+    [data-paywall]
+  `).forEach(el=>{
+    el.classList.remove?.("pro-blur");
+    el.remove?.();
+  });
+}
 
-    const city = window.currentCity || "napoli";
+// ================= ENGINE AVANZATO =================
 
-    safeRender("market-benchmark", ()=>renderMarketBenchmark(city));
-    safeRender("market-comparison", ()=>renderMarketComparison(gross, city));
-    safeRender("roi-market-comparison", ()=>renderROIMarketComparison(roi, city));
-    safeRender("revenue-forecast", ()=>renderRevenueForecast(gross));
-    safeRender("occupancy-sensitivity", ()=>renderOccupancySensitivity());
+const city = window.currentCity || "napoli";
 
-    safeRender("investment-score", (el)=>{
-      renderInvestmentScore(roi, result.risk || 50);
-      if(!window.isPro?.()) el.classList.add("pro-blur");
-    });
+safeRender("market-benchmark", ()=>renderMarketBenchmark(city));
+safeRender("market-comparison", ()=>renderMarketComparison(gross, city));
+safeRender("roi-market-comparison", ()=>renderROIMarketComparison(roi, city));
+safeRender("revenue-forecast", ()=>renderRevenueForecast(gross));
+safeRender("occupancy-sensitivity", ()=>renderOccupancySensitivity());
 
-    safeRender("investment-verdict", ()=>renderInvestmentVerdict(roi, payback));
+safeRender("investment-score", (el)=>{
+  renderInvestmentScore(roi, result.risk || 50);
+  if(!window.isPro?.()) el.classList.add("pro-blur");
+});
 
-    safeRender("break-even-kpi", ()=>{
-      renderBreakEvenOccupancy(
-        priceNight,
-        expenses,
-        commission,
-        tax,
-        result.mortgageYearly || 0
-      );
-    });
+safeRender("investment-verdict", ()=>renderInvestmentVerdict(roi, payback));
 
-    // ================= SAVE =================
+safeRender("break-even-kpi", ()=>{
+  renderBreakEvenOccupancy(
+    priceNight,
+    expenses,
+    commission,
+    tax,
+    result.mortgageYearly || 0
+  );
+});
 
-    window.lastAnalysisData = {
-      ...result,
-      price,
-      equity,
-      revenue: gross,
-      profit: net
-    };
+// ================= SAVE =================
 
-    // ================= CTA =================
+window.lastAnalysisData = {
+  ...result,
+  price,
+  equity,
+  revenue: gross,
+  profit: net
+};
 
-    if(!window.isPro?.()){
+// ================= CTA =================
+
+if(!window.isPro?.()){
   triggerUpgradeIfNeeded?.(roi);
 }
 
-    // ================= LANG =================
+// ================= LANG =================
 
-    window.RB_LANG?.apply?.();
+window.RB_LANG?.apply?.();
 
-    window.simulationExecuted = true;
-
-  }catch(err){
-    console.error("💥 calculate crash:", err);
-  }
-
-  window.isCalculating = false;
-}
-
-window.calculate = calculate;
-
-// ================= STRATEGIC =================
-
-function renderStrategicInsight(roi) {
-
-  const box = document.getElementById("strategic-insight");
-  if (!box) return;
-
-  // 🔒 UTENTE FREE → mostra blocco
-  if(!window.isPro()){
-
-    box.innerHTML = `
-      <strong>${t("strategicLocked")}</strong>
-      <div style="margin-top:10px;">
-        <button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-          ${t("unlock")}
-        </button>
-      </div>
-    `;
-
-    return;
-  }
-
-  // ✅ UTENTE PRO → insight reale
-  let message =
-    roi > 12
-      ? t("insightSolid")
-      : roi > 6
-      ? t("insightMedium")
-      : t("insightWeak");
-
-  box.innerHTML = `
-    <strong>${t("strategicTitle")}</strong>
-    <p style="margin-top:10px;">${message}</p>
-  `;
-}
-
-// ================= UPGRADE OVERLAY =================
-
-function showUpgradeOverlay(){
-
-  if(window.isPro()) return;
-
-  const overlay = document.getElementById("upgrade-overlay");
-
-  if(overlay){
-    overlay.classList.remove("hidden");
-  }
-}
-
-
+window.simulationExecuted = true;
 // ================= ROI CHART (SaaS Ready) =================
 function renderChart(net){
 
