@@ -1447,6 +1447,10 @@ console.log("🔥 INPUT FINAL:", {
     // ================= CALCOLO =================
 
     const result = calculateROI({
+      // 🔥 RENDER KPI (FIX CRITICO)
+if(typeof renderExecutiveKPI === "function"){
+  renderExecutiveKPI(result);
+}
       price,
       equity,
       priceNight,
