@@ -1493,32 +1493,6 @@ if(window.isPro && window.isPro()){
     const net   = safeNumber(result.netAfterMortgage);
     const roi   = safeNumber(result.roi);
 
-    // ================= UI CORE =================
-
-const roiEl = document.getElementById("roi-live") || document.getElementById("qr_roi");
-if(roiEl){
-  roiEl.innerText = roi.toFixed(1) + "%";
-  roiEl.style.color = getROIColor(roi);
-}
-
-// 🔥 PROFIT ANNUO
-const profitEl = document.getElementById("profit-annual");
-if(profitEl){
-  profitEl.innerText = formatCurrency(net);
-}
-
-// 🔥 REVENUE ANNUA
-const revenueEl = document.getElementById("revenue-annual");
-if(revenueEl){
-  revenueEl.innerText = formatCurrency(gross);
-}
-
-// 🔥 PROFIT MENSILE
-const monthlyEl = document.getElementById("profit-monthly");
-if(monthlyEl){
-  monthlyEl.innerText = formatCurrency(net / 12);
-}
-
     // 🔥 FORCE UNLOCK UI PRO (CRITICO)
 if(window.isPro?.()){
 
