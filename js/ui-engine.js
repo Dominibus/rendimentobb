@@ -147,12 +147,8 @@ if(verdictEl){
     );
   }
 
-  verdictEl.innerHTML = `
-<span data-it="${textIT}" data-en="${textEN}">
-${window.RB_LANG?.current === "en" ? textEN : textIT}
-</span>
-`;
-}  
+  verdictEl.innerText = text;
+}
 
 // ================= STATUS =================
 
