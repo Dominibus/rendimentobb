@@ -3096,7 +3096,11 @@ window.triggerUpgradeIfNeeded = function(roi){
     window.currentPlan === "pro_yearly" ||
     window.currentPlan === "investor";
 
-  if(isUserPro) return;
+  // 🔥 BLOCCO TOTALE PER PRO
+  if(isUserPro){
+    console.log("🟢 PRO → skip upgrade trigger");
+    return;
+  }
 
   const safeROI = Number(roi || 0);
 
