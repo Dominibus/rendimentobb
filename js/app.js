@@ -1340,10 +1340,15 @@ function calculate(force = false){
   try{
 
     // ================= SAFETY =================
-    if(typeof window.safeNumber !== "function"){
-      console.warn("⛔ safeNumber not ready");
-      return;
-    }
+  if(typeof window.safeNumber !== "function"){
+  console.warn("⚠️ safeNumber non pronto → uso fallback");
+
+  window.safeNumber = function(value){
+    if(value === null || value === undefined) return 0;
+    const num = Number(value);
+    return isNaN(num) ? 0 : num;
+  };
+}
 
   // ================= INPUT (FIX DEFINITIVO) =================
 
