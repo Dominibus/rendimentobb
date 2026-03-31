@@ -1066,7 +1066,7 @@ data-en="€19 / month">
 <li style="opacity:0.5" data-it="✖ Report PDF" data-en="✖ PDF report">✖ Report PDF</li>
 </ul>
 
-<button onclick="buyPlan('investor')" class="btn-primary"
+<button onclick="startPlanPurchase('investor')" class="btn-primary"
 data-it="Inizia"
 data-en="Start">
 Inizia
@@ -1146,7 +1146,7 @@ Solo 16€/mese
 <li data-it="✔ Accesso completo 12 mesi" data-en="✔ Full access 12 months">✔ Accesso completo 12 mesi</li>
 </ul>
 
-<button onclick="buyPlan('pro_yearly')" class="btn btn-primary btn-annual"
+<button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary btn-annual"
 data-it="Risparmia ora"
 data-en="Save now">
 Risparmia ora
@@ -1381,6 +1381,7 @@ function renderUpgradeCTA(roi){
  const isPro =
   window.currentPlan === "pro" ||
   window.currentPlan === "investor";
+  window.currentPlan === "pro_yearly";
 
 if(isPro) return; // 🔥 BLOCCA tutto per PRO
 
@@ -1417,7 +1418,7 @@ ${window.t(
 )}
 </p>
 
-<button  class="btn btn-primary" style="margin-top:12px">
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary" style="margin-top:12px">
 ${window.t("🔓 Sblocca analisi","🔓 Unlock analysis")}
 </button>
 
@@ -1515,6 +1516,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     // 🔥 controllo piano CORRETTO
     if(!window.currentPlan || 
+  (window.currentPlan !== "pro" && 
+   window.currentPlan !== "investor" &&
+   window.currentPlan !== "pro_yearly")){
+  return;
+}
       (window.currentPlan !== "pro" && window.currentPlan !== "investor")){
       return;
     }
