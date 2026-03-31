@@ -1819,7 +1819,14 @@ if(!canvas){
   // 🔓 RESET LOCK
 window.renderingChart = false;
 }
+    
+  } catch(e){
+    console.error("❌ Errore calculate:", e);
+  } finally {
+    window.isCalculating = false;
+  }
 
+}
 
 
 // ================= CITY ROI CHART (SAFE) =================
