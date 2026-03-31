@@ -66,10 +66,10 @@ window.quickROI = function(){
   }
 
   // 🔥 KPI HOME
-  const annualRevenueEl = document.getElementById("annual-revenue");
-  const annualProfitEl = document.getElementById("annual-profit");
-  const monthlyProfitEl = document.getElementById("monthly-profit");
-  const breakEvenEl = document.getElementById("break-even");
+  const elProfit = document.getElementById("qr_profit");
+  const elMonth  = document.getElementById("qr_month");
+  const elBreak  = document.getElementById("qr_break");
+  const elRev    = document.getElementById("qr_rev");
 
   if(true){
 
