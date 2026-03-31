@@ -1459,6 +1459,27 @@ console.log("🔥 INPUT FINAL:", {
       loanYears
     });
 
+    // 🔥 DEBUG + UNLOCK FORZATO
+console.log("🔥 RESULT:", result);
+console.log("🔥 PLAN:", window.currentPlan);
+console.log("🔥 IS PRO:", window.isPro?.());
+
+if(window.isPro && window.isPro()){
+  console.log("🔥 FORCE UNLOCK UI");
+
+  document.querySelectorAll(".pro-blur, .locked, [data-paywall]").forEach(el=>{
+    el.classList.remove("pro-blur","locked");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.style.display = "block";
+    el.style.opacity = "1";
+  });
+}
+
     if(!result){
       console.warn("⛔ result null");
       return;
