@@ -166,7 +166,7 @@ data-en="Analyze investment now">
 Analizza investimento ora
 </button>
 
-<button onclick="buyPlan('pro')" class="btn btn-secondary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-secondary"
 data-it="Sblocca analisi PRO"
 data-en="Unlock PRO analysis">
 Sblocca analisi PRO
@@ -493,7 +493,7 @@ data-it="Il profitto reale e il rischio sono nascosti"
 data-en="Real profit and risk are hidden">
 </div>
 
-<button onclick="buyPlan('pro')" class="btn btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
 data-it="Sblocca analisi completa"
 data-en="Unlock full analysis">
 Sblocca analisi completa
@@ -510,7 +510,7 @@ Sblocca analisi completa
 <!-- CTA FINALE -->
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
 
-<button onclick="buyPlan('pro')" 
+<button onclick="startPlanPurchase('pro')" 
 class="btn btn-primary btn-lg block"
 data-it="🔓 Scopri profitto reale e rischio"
 data-en="🔓 Unlock real profit & risk">
@@ -659,7 +659,7 @@ Un errore può costarti 10.000€ – 30.000€ nei primi anni
 <!-- CTA -->
 <div style="margin-top:35px">
 
-<button onclick="buyPlan('pro')" class="btn btn-primary btn-lg"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary btn-lg"
 data-it="🔓 Evita errori → scopri profitto reale"
 data-en="🔓 Avoid mistakes → see real profit">
 🔓 Evita errori → scopri profitto reale
@@ -834,7 +834,7 @@ Questo è un esempio reale. Ma non stai vedendo il rischio completo.
 <!-- CTA SNAPSHOT -->
 <div style="margin-top:20px;text-align:center">
 
-<button onclick="buyPlan('pro')" class="btn btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
 data-it="🔓 Ottieni analisi completa"
 data-en="🔓 Get full analysis">
 🔓 Ottieni analisi completa
@@ -919,8 +919,6 @@ data-it="Guide per investire in un B&B"
 data-en="Guides for investing in a B&B">
 Guide per investire in un B&B
 </h3>
-
-<ul style="margin-top:20px;line-height:1.8">
 
 <ul style="margin-top:20px;line-height:1.8">
 
@@ -1100,7 +1098,7 @@ data-en="€29 / month">
 <li data-it="✔ Report PDF professionale" data-en="✔ Professional PDF report">✔ Report PDF professionale</li>
 </ul>
 
-<button onclick="buyPlan('pro')" class="btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn-primary"
 data-it="🔓 Sblocca profitto reale"
 data-en="🔓 Unlock real profit">
 🔓 Sblocca profitto reale
@@ -1323,7 +1321,8 @@ elRoi.innerText = roi.toFixed(1)+"%";
 // 🔒 BLOCCO DATI (FREE)
 const isPro =
   window.currentPlan === "pro" ||
-  window.currentPlan === "investor";
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
 
 if(!isPro){
 
@@ -1418,7 +1417,7 @@ ${window.t(
 )}
 </p>
 
-<button onclick="buyPlan('pro')" class="btn btn-primary" style="margin-top:12px">
+<button  class="btn btn-primary" style="margin-top:12px">
 ${window.t("🔓 Sblocca analisi","🔓 Unlock analysis")}
 </button>
 
@@ -1461,6 +1460,7 @@ window.buyPlan = async function(plan){
 const user = window.currentUser;
 
 if(!user){
+  console.warn("Utente non loggato → redirect login") 
   alert(window.t("Devi effettuare il login","Login required"));
   window.location.href="/login/";
   return;
