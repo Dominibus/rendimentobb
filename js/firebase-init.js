@@ -358,22 +358,26 @@ onAuthStateChanged(auth, async (user) => {
   console.log("✅ Firebase READY con piano:", window.currentPlan);
 
   // 🔥 aggiorna UI navbar
-  updateUserUI(user);
+updateUserUI(user);
 
-  // 🔥 NUOVO: differenzia FREE vs PRO (importantissimo)
-  if(
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  ){
+// 🔥 🔥 🔥 FIX CRITICO (QUESTO TI RISOLVE TUTTO)
+if(
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+){
 
-    console.log("💰 Utente PRO → sblocco totale UI");
+  console.log("💰 Utente PRO → sblocco totale UI");
 
-    if(typeof unlockProUI === "function"){
-      unlockProUI();
-    }
+  // 👉 QUESTO TI MANCAVA
+  document.body.classList.add("pro-user");
 
-  } else {
+  // fallback sicurezza
+  if(typeof unlockProUI === "function"){
+    unlockProUI();
+  }
+
+} else {
 
     console.log("👀 Utente FREE → attivo funnel");
 
