@@ -1365,7 +1365,8 @@ window.quickROI = function(){
     window.currentPlan === "investor" ||
     window.currentPlan === "pro_yearly";
 
-  if(!isPro){
+  // 🔥 BLOCCO SOLO SE FIREBASE PRONTO + NON PRO
+if(window.firebaseReady && !isPro){
 
     const lock = (el)=>{
       if(el) el.innerText = "🔒";
