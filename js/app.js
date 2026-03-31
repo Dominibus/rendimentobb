@@ -3222,3 +3222,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+// ================= FORCE UI REFRESH (FIX DEFINITIVO) =================
+
+document.addEventListener("rb_force_ui_refresh", ()=>{
+
+  console.log("🔥 FORCE UI REFRESH");
+
+  if(window.lastResult && typeof renderExecutiveKPI === "function"){
+    renderExecutiveKPI(window.lastResult);
+  }
+
+});
