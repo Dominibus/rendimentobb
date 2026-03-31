@@ -2929,6 +2929,16 @@ function unlockProUI(){
 
   console.log("🚀 UNLOCK PRO UI START");
 
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly" ||
+    window.currentPlan === "investor";
+
+  if(!isPro){
+    console.log("⛔ NOT PRO → skip unlock");
+    return;
+  }
+
   // ================= REMOVE BLUR =================
 
   document.querySelectorAll(`
@@ -2991,7 +3001,7 @@ function unlockProUI(){
     el.removeAttribute("data-locked");
   });
 
-  // ================= 🔥 FIX HOME KPI =================
+  // ================= FIX HOME KPI =================
 
   document.querySelectorAll(`
     #annual-profit,
@@ -3004,7 +3014,7 @@ function unlockProUI(){
     }
   });
 
-  // ================= 🔥 REMOVE ALERT TESTUALI =================
+  // ================= REMOVE ALERT TESTUALI =================
 
   document.querySelectorAll(".results-card, .roi-dashboard").forEach(container=>{
     container.querySelectorAll("div").forEach(el=>{
@@ -3022,31 +3032,33 @@ function unlockProUI(){
     });
   });
 
-  // ================= 🔥 RESET SMART ALERT =================
+  // ================= RESET SMART ALERT =================
 
   const alertBox = document.getElementById("smart-investment-alert");
   if(alertBox){
     alertBox.innerHTML = "";
   }
 
-  // ================= 🔥 RICALCOLO HOME =================
+  // ================= SAFE RECALC =================
 
   if(typeof window.quickROI === "function"){
     console.log("🔄 quickROI refresh");
     window.quickROI();
   }
 
-  if(typeof window.calculate === "function"){
-  console.log("🔄 calculate refresh");
-  window.calculate(true);
-}
+  // 🔥 IMPORTANTE: evita errori HOME
+  if(typeof window.calculate === "function" && document.getElementById("price")){
+    console.log("🔄 calculate refresh (tool only)");
+    window.calculate(true);
+  }
 
-  // ================= 🔥 FORCE UI UPDATE =================
+  // ================= FORCE UI UPDATE =================
 
   document.dispatchEvent(new Event("rb_simulation_updated"));
 
   console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
 }
+
 
 // ================= EVENTI GLOBALI =================
 
@@ -3054,33 +3066,37 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🔥 Piano aggiornato:", window.currentPlan);
 
-  updatePDFButton();
+  if(typeof updatePDFButton === "function"){
+    updatePDFButton();
+  }
 
-  if(window.isPro()){
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly" ||
+    window.currentPlan === "investor";
+
+  if(isPro){
     unlockProUI();
   }
 
-  if(window.simulationExecuted){
+  if(window.simulationExecuted && typeof calculate === "function"){
     console.log("🔄 Re-run calculate (plan update)");
     calculate(true);
   }
 
 });
 
+
 // ================= SMART PAYWALL =================
 
 window.triggerUpgradeIfNeeded = function(roi){
-
- window.triggerUpgradeIfNeeded = function(roi){
 
   const isUserPro =
     window.currentPlan === "pro" ||
     window.currentPlan === "pro_yearly" ||
     window.currentPlan === "investor";
 
-  if(isUserPro){
-    return;
-  }
+  if(isUserPro) return;
 
   const safeROI = Number(roi || 0);
 
@@ -3107,30 +3123,7 @@ window.triggerUpgradeIfNeeded = function(roi){
 
 };
 
-  const safeROI = Number(roi || 0);
 
-  if(safeROI >= 8){
-
-    if(window.upgradeTriggered) return;
-    window.upgradeTriggered = true;
-
-    setTimeout(()=>{
-
-      const lang = window.currentLang || "it";
-
-      const msg = lang === "en"
-        ? "🔥 This investment looks profitable. Unlock full analysis before investing."
-        : "🔥 Questo investimento sembra profittevole. Sblocca l’analisi completa prima di investire.";
-
-      if(confirm(msg)){
-        buyPlan("pro");
-      }
-
-    },1500);
-
-  }
-
-};
 // ================= LIVE USERS =================
 
 setInterval(()=>{
@@ -3155,22 +3148,30 @@ setInterval(()=>{
 
 },3000);
 
+
 // ================= CTA =================
 
 window.handleUpgradeClick = function(){
 
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly" ||
+    window.currentPlan === "investor";
+
   const btn = document.querySelector(".cta-primary");
 
-  if(window.isPro()){
+  if(isPro){
+
+    console.log("✅ PRO → scroll");
 
     if(btn){
-      btn.innerHTML = "🚀 Accesso analisi avanzata...";
       btn.style.opacity = "0.7";
     }
 
     setTimeout(()=>{
-      document.getElementById("advanced-analysis")?.scrollIntoView({behavior:"smooth"});
-    },600);
+      document.getElementById("advanced-analysis")
+      ?.scrollIntoView({behavior:"smooth"});
+    },400);
 
     return;
   }
@@ -3178,9 +3179,6 @@ window.handleUpgradeClick = function(){
   const lang = window.currentLang || "it";
 
   if(btn){
-    btn.innerHTML = lang === "en"
-      ? "⏳ AI is analyzing your investment..."
-      : "⏳ L'AI sta analizzando il tuo investimento...";
     btn.style.opacity = "0.7";
   }
 
@@ -3195,13 +3193,13 @@ window.handleUpgradeClick = function(){
     }
 
     if(btn){
-      btn.innerHTML = "🔥 Scopri quanto puoi guadagnare davvero";
       btn.style.opacity = "1";
     }
 
-  },900);
+  },800);
 
 };
+
 
 // ================= LANG INIT =================
 
