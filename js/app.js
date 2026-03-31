@@ -48,37 +48,41 @@ window.quickROI = function(){
     return isNaN(n) ? def : n;
   };
 
+  // ================= INPUT =================
+
   const price = safeNum(document.getElementById("qr_price")?.value,250000);
   const reno  = safeNum(document.getElementById("qr_reno")?.value,30000);
   const night = safeNum(document.getElementById("qr_night")?.value,110);
   const occ   = safeNum(document.getElementById("qr_occ")?.value,65);
   const cost  = safeNum(document.getElementById("qr_cost")?.value,35);
 
+  // ================= CALCOLO =================
+
   const investment = price + reno;
   const revenue = night * 365 * (occ/100);
   const net = revenue - (revenue*(cost/100));
-  const roi = (net/investment)*100;
+  const roi = investment > 0 ? (net/investment)*100 : 0;
 
-  // ROI
+  // ================= ROI =================
+
   const roiEl = document.getElementById("qr_roi");
   if(roiEl){
     roiEl.innerText = roi.toFixed(1)+"%";
   }
 
-  // 🔥 KPI HOME
-  const elProfit = document.getElementById("qr_profit");
-  const elMonth  = document.getElementById("qr_month");
-  const elBreak  = document.getElementById("qr_break");
-  const elRev    = document.getElementById("qr_rev");
+  // ================= KPI (STANDARD UNIFICATO) =================
 
-  if(true){
+  const elMonthly = document.getElementById("profit-monthly");
+  const elAnnual  = document.getElementById("profit-annual");
+  const elBreak   = document.getElementById("break-even");
+  const elRevenue = document.getElementById("revenue-annual");
 
-  if(elProfit){
-    elProfit.innerText = formatCurrency(net);
+  if(elMonthly){
+    elMonthly.innerText = formatCurrency(net / 12);
   }
 
-  if(elMonth){
-    elMonth.innerText = formatCurrency(net / 12);
+  if(elAnnual){
+    elAnnual.innerText = formatCurrency(net);
   }
 
   if(elBreak){
@@ -86,17 +90,8 @@ window.quickROI = function(){
     elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
   }
 
-  if(elRev){
-    elRev.innerText = formatCurrency(revenue);
-  }
-
-}else{
-
-    if(annualRevenueEl) annualRevenueEl.innerText = "🔒";
-    if(annualProfitEl) annualProfitEl.innerText = "🔒";
-    if(monthlyProfitEl) monthlyProfitEl.innerText = "🔒";
-    if(breakEvenEl) breakEvenEl.innerText = "🔒";
-
+  if(elRevenue){
+    elRevenue.innerText = formatCurrency(revenue);
   }
 
 };
@@ -2806,22 +2801,6 @@ function unlockProUI(){
     .home-blur-overlay
   `).forEach(el=>{
     el.remove();
-  });
-
-  // ================= FIX KPI (🔥 QUESTO È IL BUG REALE) =================
-
-  document.querySelectorAll(`
-    #qr_profit,
-    #qr_month,
-    #qr_break,
-    #qr_rev
-  `).forEach(el=>{
-    if(!el) return;
-
-    el.innerText = "";
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
   });
 
   // ================= FORCE RE-CALC =================
