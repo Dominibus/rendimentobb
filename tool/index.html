@@ -1303,41 +1303,20 @@ window.closeUpgradeModal = function(){
   console.log("🔥 OPEN UPGRADE MODAL");
 
   const modal = document.getElementById("upgrade-modal");
-
   if(!modal) return;
+
+  const title = modal.querySelector("h3");
+  const lang = window.RB_LANG?.current || "it";
+
+  if(title){
+    title.innerText = lang === "en" ? titleEN : titleIT;
+  }
 
   modal.style.display = "flex";
 
 };
 
   </script>
-
-  <!-- ================= OVERLAY UPGRADE ================= -->
-
-<div id="upgrade-overlay" class="upgrade-overlay hidden">
-
-  <div class="upgrade-box">
-
-    <div class="upgrade-title"
-      data-it="🚨 Stai prendendo una decisione al buio"
-      data-en="🚨 You are making a decision blindly">
-      🚨 Stai prendendo una decisione al buio
-    </div>
-
-    <div class="upgrade-sub"
-      data-it="Questo investimento potrebbe farti perdere migliaia di euro senza un'analisi completa"
-      data-en="This investment could cost you thousands without full analysis">
-      Questo investimento potrebbe farti perdere migliaia di euro
-    </div>
-
-    <div class="upgrade-features">
-
-      <div>✔ ROI reale</div>
-      <div>✔ Analisi mutuo</div>
-      <div>✔ Break-even</div>
-      <div>✔ Scenario rischio</div>
-
-    </div>
 
     <button class="upgrade-btn" onclick="startPlanPurchase('pro')">
       🔥 <span 
