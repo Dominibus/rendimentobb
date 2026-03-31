@@ -10,10 +10,7 @@ const profit = Number(result?.netAfterMortgage || result?.profit) || 0;
 const revenue = Number(result?.gross || result?.revenue) || 0;
 
 // ================= PLAN CHECK =================
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+const isPro = window.isPro?.() || false;
 
 // ================= ROI COLOR =================
 function getROIColor(value){
