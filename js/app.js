@@ -989,10 +989,10 @@ function renderSmartInvestmentAlert(roi){
   if(!container) return;
 
   // ✅ PRO → pulisci e STOP
-  if(window.isPro()){
-    container.innerHTML = "";
-    return;
-  }
+  if(window.isPro && window.isPro()){
+  container.innerHTML = "";
+  return;
+}
 
   if(roi < 10){
     return;
@@ -1042,7 +1042,7 @@ function renderSmartInvestmentAlert(roi){
   </p>
 
 <button onclick="
-  if(window.isPro()){
+  if(window.isPro && window.isPro()){
     document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
   } else {
     startPlanPurchase('pro');
@@ -1128,7 +1128,7 @@ ${discover}:
 
 <button 
 onclick="
-  if(window.isPro()){
+  if(window.isPro && window.isPro()){
     document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
   } else {
     startPlanPurchase('pro');
@@ -1171,7 +1171,7 @@ if(!window.firebaseReady){
   return;
 }
 
-if(window.isPro()){
+if(window.isPro && window.isPro()){
   btn.style.display = "inline-block";
 }else{
   btn.style.display = "none";
@@ -1490,7 +1490,11 @@ if(revenueHome){
 
     // ================= PRO UNLOCK =================
 
-    if(window.isPro && window.isPro()){
+    if(
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+){
 
       console.log("🔓 PRO → unlock totale");
 
@@ -2739,45 +2743,56 @@ function goToMarket(city){
   window.location.href = "/market/" + city;
 }
 
-// ================= PRO UNLOCK =================
+// ================= PRO UNLOCK (FINAL FIX DEFINITIVO) =================
 
 window.proUnlocked = false;
 
 function unlockProUI(){
 
   if(window.proUnlocked){
-    console.log("⛔ PRO già sbloccato → skip");
+    console.log("⛔ già sbloccato → skip");
+    return;
+  }
+
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(!isPro){
+    console.log("⛔ NOT PRO → skip");
     return;
   }
 
   window.proUnlocked = true;
 
-  console.log("🚀 UNLOCK PRO UI START");
+  console.log("🔥 UNLOCK PRO UI HARD");
 
-  if(!window.isPro()){
-    console.log("⛔ NOT PRO → skip unlock");
-    return;
-  }
+  // 🔥 ATTIVA STATO GLOBALE
+  document.body.classList.add("pro-user");
 
-  // ================= REMOVE BLUR =================
+  // ================= REMOVE CLASSI BLOCCO =================
 
-  document.querySelectorAll(`
-    .pro-blur,
-    .blur-content,
-    .locked,
-    .locked-content,
-    .pro-lock,
-    .premium-lock
-  `).forEach(el=>{
+  document.querySelectorAll("*").forEach(el=>{
+
     el.classList.remove(
-      "pro-blur","blur-content","locked","locked-content","pro-lock","premium-lock"
+      "pro-blur",
+      "blur-content",
+      "locked",
+      "locked-content",
+      "pro-lock",
+      "premium-lock",
+      "pro-only"
     );
+
+    // 🔥 RESET STILI
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
+
   });
 
-  // ================= REMOVE PAYWALL =================
+  // ================= RIMUOVE OVERLAY (CRITICO) =================
 
   document.querySelectorAll(`
     [data-paywall],
@@ -2793,243 +2808,50 @@ function unlockProUI(){
     el.remove();
   });
 
-  // ================= UNLOCK CLICK =================
+  // ================= FIX KPI (🔥 QUESTO È IL BUG REALE) =================
 
-  document.body.style.pointerEvents = "auto";
+  document.querySelectorAll(`
+    #qr_profit,
+    #qr_month,
+    #qr_break,
+    #qr_rev
+  `).forEach(el=>{
+    if(!el) return;
 
-  document.querySelectorAll("*").forEach(el=>{
-    if(el.style.pointerEvents === "none"){
-      el.style.pointerEvents = "auto";
-    }
-  });
-
-  // ================= UNLOCK SECTIONS =================
-
-  document.querySelectorAll(".locked-section, .results-card").forEach(el=>{
-    el.style.filter = "none";
-    el.style.pointerEvents = "auto";
-  });
-
-  document.querySelectorAll(".pro-only").forEach(el=>{
-    el.style.display = "block";
+    el.innerText = "";
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
   });
 
-  document.querySelectorAll("[data-locked='true']").forEach(el=>{
-    el.removeAttribute("data-locked");
-  });
+  // ================= FORCE RE-CALC =================
 
-  // ================= FIX HOME KPI =================
-
-  document.querySelectorAll(`
-    #annual-profit,
-    #monthly-profit,
-    #break-even,
-    #annual-revenue
-  `).forEach(el=>{
-    if(el && el.innerText.includes("🔒")){
-      el.innerText = "";
+  setTimeout(()=>{
+    if(typeof window.quickROI === "function"){
+      console.log("🔄 FORCE quickROI");
+      window.quickROI();
     }
-  });
+  },100);
 
-  // ================= REMOVE ALERT TESTUALI =================
-
-  document.querySelectorAll(".results-card, .roi-dashboard").forEach(container=>{
-    container.querySelectorAll("div").forEach(el=>{
-      if(!el.innerText) return;
-
-      const text = el.innerText.toLowerCase();
-
-      if(
-        text.includes("potresti perdere") ||
-        text.includes("decisione al buio") ||
-        text.includes("without real data")
-      ){
-        el.style.display = "none";
-      }
-    });
-  });
-
-  // ================= RESET SMART ALERT =================
-
-  const alertBox = document.getElementById("smart-investment-alert");
-  if(alertBox){
-    alertBox.innerHTML = "";
-  }
-
-  // ================= SAFE RECALC =================
-
-  if(typeof window.quickROI === "function"){
-    console.log("🔄 quickROI refresh");
-    window.quickROI();
-  }
-
-  // 🔥 IMPORTANTE: evita errori HOME
-  if(typeof window.calculate === "function" && document.getElementById("price")){
-    console.log("🔄 calculate refresh (tool only)");
-    window.calculate(true);
-  }
-
-  // ================= FORCE UI UPDATE =================
+  // ================= EVENT =================
 
   document.dispatchEvent(new Event("rb_simulation_updated"));
 
-  console.log("✅ UI PRO COMPLETAMENTE SBLOCCATA");
+  console.log("✅ PRO SBLOCCATO DEFINITIVO");
+
 }
 
 
-// ================= EVENTI GLOBALI =================
+// ================= EVENTI =================
 
-document.addEventListener("rb_plan_loaded", () => {
-
-  console.log("🔥 Piano aggiornato:", window.currentPlan);
-
-  if(typeof updatePDFButton === "function"){
-    updatePDFButton();
-  }
-
-  if(window.isPro()){
-    unlockProUI();
-  }
-
-  if(
-    window.simulationExecuted &&
-    typeof calculate === "function" &&
-    document.getElementById("price")
-  ){
-    console.log("🔄 Re-run calculate (tool only)");
-    calculate(true);
-  }
-
-});
-
-// ================= SMART PAYWALL =================
-
-window.triggerUpgradeIfNeeded = function(roi){
-
-  if(!window.firebaseReady || window.isPro?.()){
-  console.log("🟢 PRO o Firebase non pronto → skip upgrade");
-  return;
-}
-
-  const safeROI = Number(roi || 0);
-
-  if(safeROI >= 8){
-
-    if(window.upgradeTriggered) return;
-    window.upgradeTriggered = true;
-
-    setTimeout(()=>{
-
-      const lang = window.currentLang || "it";
-
-      const msg = lang === "en"
-        ? "🔥 This investment looks profitable. Unlock full analysis before investing."
-        : "🔥 Questo investimento sembra profittevole. Sblocca l’analisi completa prima di investire.";
-
-      if(confirm(msg)){
-        buyPlan("pro");
-      }
-
-    },1500);
-
-  }
-
-};
+// 🔥 QUESTI SONO FONDAMENTALI
+document.addEventListener("rb_plan_loaded", unlockProUI);
+document.addEventListener("rb_auth_ready", unlockProUI);
 
 
-// ================= LIVE USERS =================
+// ================= DEBUG FORZATO =================
 
-setInterval(()=>{
-
-  const el = document.getElementById("live-users");
-  if(!el) return;
-
-  let val = parseInt(el.innerText);
-  if(isNaN(val)) val = 1200;
-
-  val += Math.floor(Math.random()*3);
-
-  if(val > 1350){
-    val = 1200 + Math.floor(Math.random()*50);
-  }
-
-  el.classList.add("bump");
-
-  setTimeout(()=> el.classList.remove("bump"), 200);
-
-  el.innerText = val;
-
-},3000);
-
-
-// ================= CTA =================
-
-window.handleUpgradeClick = function(){
-
-  const btn = document.querySelector(".upgrade-btn");
-
-  if(window.isPro?.()){
-
-    console.log("✅ PRO → scroll");
-
-    if(btn){
-      btn.style.opacity = "0.7";
-    }
-
-    setTimeout(()=>{
-      document.getElementById("advanced-analysis")
-      ?.scrollIntoView({behavior:"smooth"});
-    },400);
-
-    return;
-  }
-
-  const lang = window.currentLang || "it";
-
-  if(btn){
-    btn.style.opacity = "0.7";
-  }
-
-  setTimeout(()=>{
-
-    const msg = lang === "en"
-      ? "Unlock full analysis with ROI, risk and real profit."
-      : "Sblocca analisi completa con ROI reale, rischio e profitto.";
-
-    if(confirm(msg)){
-      startPlanPurchase("pro");
-    }
-
-    if(btn){
-      btn.style.opacity = "1";
-    }
-
-  },800);
-
-};
-
-
-// ================= LANG INIT =================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  if(window.RB_LANG?.apply){
-    window.RB_LANG.apply();
-  }
-
-});
-
-// ================= FORCE UI REFRESH (FIX DEFINITIVO) =================
-
-document.addEventListener("rb_force_ui_refresh", ()=>{
-
-  console.log("🔥 FORCE UI REFRESH");
-
-  if(window.lastResult && typeof renderExecutiveKPI === "function"){
-    renderExecutiveKPI(window.lastResult);
-  }
-
-});
+// 🔥 QUESTO ASSICURA CHE NON FALLISCA MAI
+setTimeout(()=>{
+  unlockProUI();
+},1500);
