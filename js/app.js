@@ -71,7 +71,7 @@ window.quickROI = function(){
   const monthlyProfitEl = document.getElementById("monthly-profit");
   const breakEvenEl = document.getElementById("break-even");
 
-  if(window.isPro()){
+  if(window.isPro?.()){
 
     if(annualRevenueEl){
       annualRevenueEl.innerText = formatCurrency(revenue);
@@ -3135,7 +3135,7 @@ window.handleUpgradeClick = function(){
 
   const btn = document.querySelector(".upgrade-btn");
 
-  if(window.isPro()){
+  if(window.isPro?.()){
 
     console.log("✅ PRO → scroll");
 
