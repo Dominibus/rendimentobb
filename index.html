@@ -160,13 +160,13 @@ Simula ROI, profitto reale e rischio in 30 secondi. Evita errori da migliaia di 
 
 <div style="display:flex;gap:10px;flex-wrap:wrap">
 
-<button onclick="startAnalysis()" class="btn btn-primary btn-lg"
+<button onclick="document.getElementById('qr_price')?.scrollIntoView({behavior:'smooth'})" class="btn btn-primary btn-lg"
 data-it="Analizza investimento ora"
 data-en="Analyze investment now">
 Analizza investimento ora
 </button>
 
-<button onclick="buyPlan('pro')" class="btn btn-secondary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-secondary"
 data-it="Sblocca analisi PRO"
 data-en="Unlock PRO analysis">
 Sblocca analisi PRO
@@ -493,7 +493,7 @@ data-it="Il profitto reale e il rischio sono nascosti"
 data-en="Real profit and risk are hidden">
 </div>
 
-<button onclick="buyPlan('pro')" class="btn btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
 data-it="Sblocca analisi completa"
 data-en="Unlock full analysis">
 Sblocca analisi completa
@@ -510,7 +510,7 @@ Sblocca analisi completa
 <!-- CTA FINALE -->
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
 
-<button onclick="buyPlan('pro')" 
+<button onclick="startPlanPurchase('pro')" 
 class="btn btn-primary btn-lg block"
 data-it="🔓 Scopri profitto reale e rischio"
 data-en="🔓 Unlock real profit & risk">
@@ -659,7 +659,7 @@ Un errore può costarti 10.000€ – 30.000€ nei primi anni
 <!-- CTA -->
 <div style="margin-top:35px">
 
-<button onclick="buyPlan('pro')" class="btn btn-primary btn-lg"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary btn-lg"
 data-it="🔓 Evita errori → scopri profitto reale"
 data-en="🔓 Avoid mistakes → see real profit">
 🔓 Evita errori → scopri profitto reale
@@ -834,7 +834,7 @@ Questo è un esempio reale. Ma non stai vedendo il rischio completo.
 <!-- CTA SNAPSHOT -->
 <div style="margin-top:20px;text-align:center">
 
-<button onclick="buyPlan('pro')" class="btn btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
 data-it="🔓 Ottieni analisi completa"
 data-en="🔓 Get full analysis">
 🔓 Ottieni analisi completa
@@ -1068,7 +1068,7 @@ data-en="€19 / month">
 <li style="opacity:0.5" data-it="✖ Report PDF" data-en="✖ PDF report">✖ Report PDF</li>
 </ul>
 
-<button onclick="buyPlan('investor')" class="btn-primary"
+<button onclick="startPlanPurchase('investor')" class="btn-primary"
 data-it="Inizia"
 data-en="Start">
 Inizia
@@ -1100,7 +1100,7 @@ data-en="€29 / month">
 <li data-it="✔ Report PDF professionale" data-en="✔ Professional PDF report">✔ Report PDF professionale</li>
 </ul>
 
-<button onclick="buyPlan('pro')" class="btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn-primary"
 data-it="🔓 Sblocca profitto reale"
 data-en="🔓 Unlock real profit">
 🔓 Sblocca profitto reale
@@ -1148,7 +1148,7 @@ Solo 16€/mese
 <li data-it="✔ Accesso completo 12 mesi" data-en="✔ Full access 12 months">✔ Accesso completo 12 mesi</li>
 </ul>
 
-<button onclick="buyPlan('pro_yearly')" class="btn btn-primary btn-annual"
+<button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary btn-annual"
 data-it="Risparmia ora"
 data-en="Save now">
 Risparmia ora
@@ -1379,6 +1379,12 @@ window.RB_LANG?.apply?.();
 // ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
+ const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor";
+
+if(isPro) return; // 🔥 BLOCCA tutto per PRO
+
 const box = document.getElementById("upgrade-box");
 if(!box) return;
 
@@ -1412,7 +1418,7 @@ ${window.t(
 )}
 </p>
 
-<button onclick="buyPlan('pro')" class="btn btn-primary" style="margin-top:12px">
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary" style="margin-top:12px">
 ${window.t("🔓 Sblocca analisi","🔓 Unlock analysis")}
 </button>
 
@@ -1513,6 +1519,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     console.log("🔥 FORCE UNLOCK HOME PRO");
 
+   document.body.classList.add("pro-user");
+
     // 🔓 rimuove blur
     document.querySelectorAll(".pro-blur").forEach(el=>{
       el.classList.remove("pro-blur");
@@ -1562,27 +1570,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
 });
-
-
-// ================= FALLBACK =================
-window.t = window.t || ((it)=>it);
-
-  // ================= RESTORE CITY =================
-
-  const saved = localStorage.getItem("selected_city");
-  const map = {
-    roma:"rome",
-    napoli:"naples",
-    milano:"milan",
-    firenze:"florence"
-  };
-
-  if(saved && map[saved]){
-    changeCityBackground(map[saved]);
-  }
-
-});
-
 
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
