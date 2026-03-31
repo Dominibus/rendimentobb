@@ -3032,8 +3032,11 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.triggerUpgradeIfNeeded = function(roi){
 
-  if(window.isPro()) return;
-  
+  // ✅ BLOCCO TOTALE PER PRO
+  if(window.isPro && window.isPro()){
+    return;
+  }
+
   const safeROI = Number(roi || 0);
 
   if(safeROI >= 8){
@@ -3058,7 +3061,6 @@ window.triggerUpgradeIfNeeded = function(roi){
   }
 
 };
-
 // ================= LIVE USERS =================
 
 setInterval(()=>{
