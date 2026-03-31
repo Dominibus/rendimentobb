@@ -1267,16 +1267,15 @@ window.handleUpgradeClick = function(){
   }
 
   // ================= 🔒 UTENTE FREE =================
-  const lang = window.RB_LANG?.current || "it";
 
-  const message = lang === "en"
-    ? "You are about to unlock the full investment analysis.\n\nROI, risks, mortgage and real profit."
-    : "Stai per sbloccare l’analisi completa.\n\nROI reale, rischi, mutuo e profitto.";
+  console.log("🔒 FREE USER → open upgrade modal");
 
-  
+  window.showUpgradeModalCustom(
+    "🔥 Sblocca analisi completa",
+    "🔥 Unlock full analysis"
+  );
 
 };
-
   // ================= MODAL UPGRADE =================
 
 window.openUpgradeModal = function(){
