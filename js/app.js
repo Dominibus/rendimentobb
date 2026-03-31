@@ -59,9 +59,44 @@ window.quickROI = function(){
   const net = revenue - (revenue*(cost/100));
   const roi = (net/investment)*100;
 
-  const el = document.getElementById("qr_roi");
-  if(el){
-    el.innerText = roi.toFixed(1)+"%";
+  // ROI
+  const roiEl = document.getElementById("qr_roi");
+  if(roiEl){
+    roiEl.innerText = roi.toFixed(1)+"%";
+  }
+
+  // 🔥 KPI HOME
+  const annualRevenueEl = document.getElementById("annual-revenue");
+  const annualProfitEl = document.getElementById("annual-profit");
+  const monthlyProfitEl = document.getElementById("monthly-profit");
+  const breakEvenEl = document.getElementById("break-even");
+
+  if(window.isPro()){
+
+    if(annualRevenueEl){
+      annualRevenueEl.innerText = formatCurrency(revenue);
+    }
+
+    if(annualProfitEl){
+      annualProfitEl.innerText = formatCurrency(net);
+    }
+
+    if(monthlyProfitEl){
+      monthlyProfitEl.innerText = formatCurrency(net / 12);
+    }
+
+    if(breakEvenEl){
+      const payback = net > 0 ? investment / net : 0;
+      breakEvenEl.innerText = payback ? payback.toFixed(1)+" anni" : "-";
+    }
+
+  }else{
+
+    if(annualRevenueEl) annualRevenueEl.innerText = "🔒";
+    if(annualProfitEl) annualProfitEl.innerText = "🔒";
+    if(monthlyProfitEl) monthlyProfitEl.innerText = "🔒";
+    if(breakEvenEl) breakEvenEl.innerText = "🔒";
+
   }
 
 };
@@ -1342,6 +1377,34 @@ function calculate(force = false){
     const gross = safeNumber(result.gross);
     const netAfterMortgage = safeNumber(result.netAfterMortgage);
     const roi = safeNumber(result.roi);
+
+    // ================= 🔥 SYNC HOME + TOOL =================
+
+const annualRevenueElHome = document.getElementById("annual-revenue");
+const annualProfitElHome = document.getElementById("annual-profit");
+const monthlyProfitElHome = document.getElementById("monthly-profit");
+const breakEvenElHome = document.getElementById("break-even");
+
+if(window.isPro()){
+
+  if(annualRevenueElHome){
+    annualRevenueElHome.innerText = formatCurrency(gross);
+  }
+
+  if(annualProfitElHome){
+    annualProfitElHome.innerText = formatCurrency(netAfterMortgage);
+  }
+
+  if(monthlyProfitElHome){
+    monthlyProfitElHome.innerText = formatCurrency(netAfterMortgage / 12);
+  }
+
+  if(breakEvenElHome){
+    const payback = netAfterMortgage > 0 ? (equity / netAfterMortgage) : 0;
+    breakEvenElHome.innerText = payback ? payback.toFixed(1)+" anni" : "-";
+  }
+
+}
 
     // ================= PAYWALL =================
 
@@ -2892,6 +2955,11 @@ function unlockProUI(){
     console.log("🔄 quickROI refresh");
     window.quickROI();
   }
+
+  if(typeof window.calculate === "function"){
+  console.log("🔄 calculate refresh");
+  window.calculate(true);
+}
 
   // ================= 🔥 FORCE UI UPDATE =================
 
