@@ -2539,14 +2539,14 @@ return { price: null };
 
 // ================= AUTO PRICE =================
 
-const price = localStorage.getItem("property_price");
+const storedPrice = localStorage.getItem("property_price");
 
-if(price && price > 0){
+if(storedPrice && storedPrice > 0){
 
 const priceField = document.getElementById("price");
 
 if(priceField){
-priceField.value = price;
+priceField.value = storedPrice;
 }
 
 }
