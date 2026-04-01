@@ -5844,8 +5844,10 @@ body.pro-user #profit-monthly::after{
   padding:18px;
   border-radius:16px;
   box-shadow:0 10px 30px rgba(0,0,0,0.06);
+
   width:100%;
-  max-width:240px;
+  max-width:none; /* 🔥 FIX CRITICO */
+
   text-align:center;
   transition:all 0.25s ease;
 }
@@ -5865,6 +5867,16 @@ body.pro-user #profit-monthly::after{
   font-size:20px;
   font-weight:700;
   color:#0f172a;
+}
+
+/* ============================= */
+/* CONTAINER GRID FIX */
+/* ============================= */
+
+#market-comparison,
+#revenue-forecast,
+#occupancy-sensitivity{
+  width:100%; /* 🔥 evita compressione */
 }
 
 /* ============================= */
