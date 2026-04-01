@@ -5770,3 +5770,45 @@ body.pro-user #revenue-annual::after,
 body.pro-user #profit-monthly::after{
   display:none !important;
 }
+
+/* ============================= */
+/* FIX DESKTOP KPI / RESULT CARD */
+/* ============================= */
+
+@media (min-width:1025px){
+
+  /* 🔥 uniforma tutte le card risultati */
+  .results-card{
+    max-width:900px;
+    margin:30px auto;
+  }
+
+  /* 🔥 KPI grid coerente desktop */
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+  }
+
+  /* 🔥 investment metrics (preview blocco sotto) */
+  .investment-metrics{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    max-width:600px;
+    margin:20px auto;
+  }
+
+  /* 🔥 fix benchmark interno */
+  #market-benchmark{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  /* 🔥 fix forecast / occupancy / comparison */
+  #revenue-forecast,
+  #market-comparison,
+  #occupancy-sensitivity{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
