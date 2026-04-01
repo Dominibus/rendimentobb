@@ -1469,6 +1469,13 @@ if(typeof renderInvestmentScore === "function"){
   renderInvestmentScore(roi, riskScore);
 }
 
+// ================= SCORE CERCHIO (FIX) =================
+const investmentScore = Math.min(100, Math.round(roi * 3));
+
+if(typeof window.updateInvestmentScore === "function"){
+  window.updateInvestmentScore(investmentScore);
+}
+
 // ranking
 if(typeof renderInvestmentRanking === "function"){
   renderInvestmentRanking(roi);
