@@ -299,17 +299,37 @@ flex-wrap:wrap;
 justify-content:center;
 ">
 
-<a href="/roi-bnb/roma/" class="btn btn-secondary"
-data-it="ROI Roma" data-en="ROI Rome">Roma</a>
+<a href="/roi-bnb/roma/" 
+onclick="localStorage.setItem('selected_city_bg','rome')" 
+class="btn btn-secondary"
+data-it="ROI Roma" 
+data-en="ROI Rome">
+ROI Roma
+</a>
 
-<a href="/roi-bnb/milano/" class="btn btn-secondary"
-data-it="ROI Milano" data-en="ROI Milan">Milano</a>
+<a href="/roi-bnb/milano/" 
+onclick="localStorage.setItem('selected_city_bg','milan')" 
+class="btn btn-secondary"
+data-it="ROI Milano" 
+data-en="ROI Milan">
+ROI Milano
+</a>
 
-<a href="/roi-bnb/napoli/" class="btn btn-secondary"
-data-it="ROI Napoli" data-en="ROI Naples">Napoli</a>
+<a href="/roi-bnb/napoli/" 
+onclick="localStorage.setItem('selected_city_bg','naples')" 
+class="btn btn-secondary"
+data-it="ROI Napoli" 
+data-en="ROI Naples">
+ROI Napoli
+</a>
 
-<a href="/roi-bnb/firenze/" class="btn btn-secondary"
-data-it="ROI Firenze" data-en="ROI Florence">Firenze</a>
+<a href="/roi-bnb/firenze/" 
+onclick="localStorage.setItem('selected_city_bg','florence')" 
+class="btn btn-secondary"
+data-it="ROI Firenze" 
+data-en="ROI Florence">
+ROI Firenze
+</a>
 
 </div>
 
@@ -428,8 +448,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "/roi-bnb/firenze/": "florence"
   };
 
-  let cityClass = "rome"; // default
+  let cityClass = null;
 
+  // 🔥 1. PRIORITÀ URL (SEO)
   for(const key in map){
     if(path.includes(key)){
       cityClass = map[key];
@@ -437,10 +458,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // 🔥 2. fallback localStorage (click utente)
+  if(!cityClass){
+    cityClass = localStorage.getItem("selected_city_bg");
+  }
+
+  // 🔥 3. default finale
+  if(!cityClass){
+    cityClass = "rome";
+  }
+
+  console.log("CITY BG ACTIVE:", cityClass);
+
   hero.classList.add(cityClass);
 
 });
-</script>  
+</script>
 
 </body>
 </html>
