@@ -153,25 +153,26 @@ box-shadow:0 20px 50px rgba(16,185,129,0.25);
 
 <!-- ================= HERO ================= -->
 
-<section class="hero-roi">
+<!-- 🔥 CAMBIA SOLO QUESTA CLASSE PER PAGINA -->
+<section class="hero-roi milan">
 
 <h1
-data-it="Il ROI di un B&B può sembrare alto… ma molti investitori perdono soldi."
-data-en="B&B ROI can look high… but many investors still lose money.">
-Il ROI di un B&B può sembrare alto… ma molti investitori perdono soldi.
+data-it="ROI B&B Milano: quanto si guadagna davvero?"
+data-en="B&B ROI Milan: how profitable is it?">
+ROI B&B Milano: quanto si guadagna davvero?
 </h1>
 
 <p
-data-it="Scopri il rendimento reale, il rischio e se il tuo investimento è davvero profittevole."
-data-en="Discover real returns, risk and whether your investment is truly profitable.">
-Scopri il rendimento reale, il rischio e se il tuo investimento funziona davvero.
+data-it="Analizza rendimento reale, rischio e profitti degli affitti brevi a Milano."
+data-en="Analyze real returns, risk and profits of short-term rentals in Milan.">
+Analizza rendimento reale, rischio e profitti degli affitti brevi a Milano.
 </p>
 
 <div class="cta">
-<a href="/tool/" class="btn btn-primary"
-data-it="🔍 Simula il tuo ROI reale"
-data-en="🔍 Simulate your real ROI">
-🔍 Simula il tuo ROI reale
+<a href="/tool/?city=milano" class="btn btn-primary"
+data-it="🔍 Simula investimento a Milano"
+data-en="🔍 Simulate Milan investment">
+🔍 Simula investimento a Milano
 </a>
 </div>
 
@@ -271,99 +272,31 @@ Il rendimento cambia drasticamente in base alla città.
 <div class="roi-card">
 
 <ul>
-
 <li><strong>Roma:</strong> 10% – 16%</li>
 <li><strong>Milano:</strong> 7% – 12%</li>
 <li><strong>Napoli:</strong> 12% – 18%</li>
 <li><strong>Firenze:</strong> 9% – 14%</li>
-
 </ul>
 
 </div>
 
-<!-- 🔥 SEO + UX BOOST (LINK CITTÀ) -->
+<!-- 🔥 LINK SEO PULITI (NO JS) -->
 
-<div style="
-margin-top:25px;
-padding:20px;
-border-radius:12px;
-background:#ecfdf5;
-text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,0.05);
-">
+<div style="margin-top:25px;text-align:center;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
 
-<div style="font-weight:600;margin-bottom:8px;"
-data-it="Analisi dettagliata ROI per città"
-data-en="Detailed ROI analysis by city">
-Analisi dettagliata ROI per città
-</div>
+<a href="/roi-bnb/roma/" class="btn btn-secondary"
+data-it="ROI Roma" data-en="ROI Rome">ROI Roma</a>
 
-<div style="
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-justify-content:center;
-">
+<a href="/roi-bnb/milano/" class="btn btn-secondary"
+data-it="ROI Milano" data-en="ROI Milan">ROI Milano</a>
 
-<a href="/roi-bnb/roma/" 
-onclick="localStorage.setItem('selected_city_bg','rome')" 
-class="btn btn-secondary"
-data-it="ROI Roma" 
-data-en="ROI Rome">
-ROI Roma
-</a>
+<a href="/roi-bnb/napoli/" class="btn btn-secondary"
+data-it="ROI Napoli" data-en="ROI Naples">ROI Napoli</a>
 
-<a href="/roi-bnb/milano/" 
-onclick="localStorage.setItem('selected_city_bg','milan')" 
-class="btn btn-secondary"
-data-it="ROI Milano" 
-data-en="ROI Milan">
-ROI Milano
-</a>
-
-<a href="/roi-bnb/napoli/" 
-onclick="localStorage.setItem('selected_city_bg','naples')" 
-class="btn btn-secondary"
-data-it="ROI Napoli" 
-data-en="ROI Naples">
-ROI Napoli
-</a>
-
-<a href="/roi-bnb/firenze/" 
-onclick="localStorage.setItem('selected_city_bg','florence')" 
-class="btn btn-secondary"
-data-it="ROI Firenze" 
-data-en="ROI Florence">
-ROI Firenze
-</a>
+<a href="/roi-bnb/firenze/" class="btn btn-secondary"
+data-it="ROI Firenze" data-en="ROI Florence">ROI Firenze</a>
 
 </div>
-
-</div>
-
-<!-- 🔥 INTERNAL LINKING SEO -->
-
-<p style="margin-top:15px;font-size:14px;text-align:center;">
-
-<a href="/quanto-guadagna-bnb/"
-data-it="Quanto guadagna un B&B"
-data-en="How much does a B&B earn?">
-Quanto guadagna un B&B
-</a> • 
-
-<a href="/costi-aprire-bnb/"
-data-it="Costi B&B"
-data-en="B&B costs">
-Costi B&B
-</a> • 
-
-<a href="/aprire-bnb-conviene/"
-data-it="Conviene aprire un B&B"
-data-en="Is opening a B&B profitable?">
-Conviene aprire un B&B
-</a>
-
-</p>
 
 </div>
 
@@ -438,48 +371,6 @@ Avvia simulazione gratuita
 <script type="module" src="/js/header.js"></script>
 <script type="module" src="/js/app.js"></script>
 <script src="/js/footer.js" defer></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const hero = document.querySelector(".hero-roi");
-  if(!hero) return;
-
-  const path = window.location.pathname;
-
-  const map = {
-    "/roi-bnb/roma/": "rome",
-    "/roi-bnb/milano/": "milan",
-    "/roi-bnb/napoli/": "naples",
-    "/roi-bnb/firenze/": "florence"
-  };
-
-  let cityClass = null;
-
-  // 🔥 1. PRIORITÀ URL (SEO)
-  for(const key in map){
-    if(path.includes(key)){
-      cityClass = map[key];
-      break;
-    }
-  }
-
-  // 🔥 2. fallback localStorage (click utente)
-  if(!cityClass){
-    cityClass = localStorage.getItem("selected_city_bg");
-  }
-
-  // 🔥 3. default finale
-  if(!cityClass){
-    cityClass = "rome";
-  }
-
-  console.log("CITY BG ACTIVE:", cityClass);
-
-  hero.classList.add(cityClass);
-
-});
-</script>
 
 </body>
 </html>
