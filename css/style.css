@@ -793,9 +793,10 @@ font-weight:700;
 .kpi-grid{
 
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:25px;
-margin-bottom:30px;
+  grid-template-columns:repeat(3,1fr); /* 🔥 FIX DEFINITIVO */
+  gap:22px;
+  width:100%;
+  margin-bottom:30px;
 
 }
 
