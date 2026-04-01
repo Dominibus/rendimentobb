@@ -1343,9 +1343,14 @@ window.quickROI = function(){
   const roi = safeNum(result.roi);
 
   const netAnnual =
-    safeNum(result.netAnnual) ||
-    safeNum(result.netAfterMortgage) ||
-    safeNum(result.net);
+  safeNum(result.netAnnual) ||
+  safeNum(result.netAfterMortgage) ||
+  safeNum(result.net) ||
+  0;
+ if(!netAnnual){
+  console.warn("⚠️ netAnnual mancante → result:", result);
+}
+ const elProfit = document.getElementById("qr_profit");
 
   const revenue = safeNum(result.revenue);
 
@@ -1368,10 +1373,21 @@ window.quickROI = function(){
   }
 
   // 🔥 MOSTRA SEMPRE (niente bug PRO)
-  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
-  if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
-  if(elBreak)  elBreak.innerText = breakEven ? breakEven.toFixed(1)+" anni" : "—";
-  if(elRev)    elRev.innerText = formatCurrency(revenue);
+  if(elProfit){
+  elProfit.innerText = netAnnual > 0 ? formatCurrency(netAnnual) : "—";
+}
+
+if(elMonth){
+  elMonth.innerText = netAnnual > 0 ? formatCurrency(netAnnual/12) : "—";
+}
+
+if(elBreak){
+  elBreak.innerText = breakEven ? breakEven.toFixed(1)+" anni" : "—";
+}
+
+if(elRev){
+  elRev.innerText = revenue > 0 ? formatCurrency(revenue) : "—";
+}
 
   // ================= PSICOLOGIA =================
 
