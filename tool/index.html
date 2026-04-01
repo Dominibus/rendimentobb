@@ -1317,6 +1317,19 @@ window.closeUpgradeModal = function(){
 
 };
 
+  // ================= 🔥 RESTORE CITY BACKGROUND =================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const savedBg = localStorage.getItem("selected_city_bg");
+
+  if(savedBg && typeof changeCityBackground === "function"){
+    console.log("🌆 Ripristino background città:", savedBg);
+    changeCityBackground(savedBg);
+  }
+
+});
+
   </script>
 
     <button class="upgrade-btn" onclick="startPlanPurchase('pro')">
