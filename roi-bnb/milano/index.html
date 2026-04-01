@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
- <script>
+<script>
 function openUpgradePopup(){
   const popup = document.getElementById("upgrade-popup");
   if(popup) popup.style.display = "flex";
@@ -313,10 +313,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btn.addEventListener("click", function(e){
 
+      const plan = window.currentPlan || "free";
+
       const isPro =
-        window.currentPlan === "pro" ||
-        window.currentPlan === "investor" ||
-        window.currentPlan === "pro_yearly";
+        plan === "pro" ||
+        plan === "investor" ||
+        plan === "pro_yearly";
 
       if(!isPro){
         e.preventDefault();
