@@ -5963,3 +5963,8 @@ body.pro-user #profit-monthly::after{
   }
 
 }
+
+.market-card.highlight{
+border:2px solid #10b981;
+transform:scale(1.05);
+}
