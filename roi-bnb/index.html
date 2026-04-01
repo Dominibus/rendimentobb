@@ -413,5 +413,34 @@ Avvia simulazione gratuita
 <script type="module" src="/js/app.js"></script>
 <script src="/js/footer.js" defer></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const hero = document.querySelector(".hero-roi");
+  if(!hero) return;
+
+  const path = window.location.pathname;
+
+  const map = {
+    "/roi-bnb/roma/": "rome",
+    "/roi-bnb/milano/": "milan",
+    "/roi-bnb/napoli/": "naples",
+    "/roi-bnb/firenze/": "florence"
+  };
+
+  let cityClass = "rome"; // default
+
+  for(const key in map){
+    if(path.includes(key)){
+      cityClass = map[key];
+      break;
+    }
+  }
+
+  hero.classList.add(cityClass);
+
+});
+</script>  
+
 </body>
 </html>
