@@ -157,9 +157,9 @@ box-shadow:0 20px 50px rgba(16,185,129,0.25);
 <section class="hero-roi" id="hero-roi">
 
 <h1 id="roi-title"
-data-it="ROI B&B nel <span id='year'></span>: scopri se stai per guadagnare o perdere soldi"
-data-en="B&B ROI in <span id='year'></span>: find out if you will profit or lose money">
-ROI B&B nel <span id="year"></span>: scopri se stai per guadagnare o perdere soldi
+data-it="ROI B&B nel <span class='year'></span>: scopri se stai per guadagnare o perdere soldi"
+data-en="B&B ROI in <span class='year'></span>: find out if you will profit or lose money">
+ROI B&B nel <span class="year"></span>: scopri se stai per guadagnare o perdere soldi
 </h1>
 
 <p id="roi-subtitle"
@@ -381,9 +381,10 @@ data-en="🚀 Analyze your investment now">
 <script>
 (function(){
 
-  // ================= ANNO DINAMICO =================
+  // ================= ANNO DINAMICO (FIX) =================
   const year = new Date().getFullYear();
-  document.querySelectorAll("#year").forEach(el=>{
+
+  document.querySelectorAll(".year").forEach(el=>{
     el.innerText = year;
   });
 
@@ -415,7 +416,7 @@ data-en="🚀 Analyze your investment now">
   if(lang === "it"){
 
     title.innerHTML =
-  `ROI B&B ${randomCity.name.it} nel ${year}: stai per guadagnare o perdere soldi?`;
+      `ROI B&B ${randomCity.name.it} nel ${year}: stai per guadagnare o perdere soldi?`;
 
     subtitle.innerText =
       `Analizza rendimento reale, rischio e profitti degli affitti brevi a ${randomCity.name.it}.`;
@@ -426,7 +427,7 @@ data-en="🚀 Analyze your investment now">
   }else{
 
     title.innerHTML =
-  `B&B ROI ${randomCity.name.en} in ${year}: will you profit or lose money?`;
+      `B&B ROI ${randomCity.name.en} in ${year}: will you profit or lose money?`;
 
     subtitle.innerText =
       `Analyze real returns, risk and profits of short-term rentals in ${randomCity.name.en}.`;
@@ -440,7 +441,7 @@ data-en="🚀 Analyze your investment now">
   cta.href = "/tool/?city=" + randomCity.key;
 
 })();
-</script>  
+</script>
 
 </body>
 </html>
