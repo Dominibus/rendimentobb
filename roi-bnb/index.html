@@ -33,43 +33,49 @@ position:relative;
 overflow:hidden;
 }
 
-/* 🔥 BACKGROUND DINAMICO */
+/* 🔥 BACKGROUND DINAMICO (FIX DEFINITIVO) */
 .hero-roi::before{
 content:"";
 position:absolute;
 inset:0;
-background:
-linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/rome-bg.jpg") center/cover;
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
 z-index:-1;
 transition:all .4s ease;
 }
 
-/* 🔥 CLASSI CITTÀ */
-.hero-roi.rome::before{
-background:
+/* 🔥 DEFAULT (ROMA) */
+.hero-roi::before{
+background-image:
 linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/rome-bg.jpg") center/cover;
+url("/img/rome-bg.jpg");
+}
+
+/* 🔥 CLASSI CITTÀ (SOVRASCRIVONO CORRETTAMENTE) */
+.hero-roi.rome::before{
+background-image:
+linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
+url("/img/rome-bg.jpg");
 }
 
 .hero-roi.milan::before{
-background:
+background-image:
 linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/milan-bg.jpg") center/cover;
+url("/img/milan-bg.jpg");
 }
 
 .hero-roi.naples::before{
-background:
+background-image:
 linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/naples-bg.jpg") center/cover;
+url("/img/naples-bg.jpg");
 }
 
 .hero-roi.florence::before{
-background:
+background-image:
 linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/florence-bg.jpg") center/cover;
+url("/img/florence-bg.jpg");
 }
-
 /* ================= HERO TEXT ================= */
 .hero-roi h1{
 font-size:38px;
