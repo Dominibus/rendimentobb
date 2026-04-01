@@ -2880,7 +2880,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🔥 BACKGROUND TOOL (NON TOCCARE)
+  // 🔥 NON applicare background inline nelle pagine ROI
+if(!window.location.pathname.startsWith("/roi-bnb/")){
   changeCityBackground(selectedCity);
+}
 
   // 🔥 BACKGROUND ROI (AGGIUNTO)
   if(window.applyCityBackground){
