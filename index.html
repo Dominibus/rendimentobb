@@ -1338,42 +1338,43 @@ window.quickROI = function(){
     console.warn("⚠️ ROI engine non trovato → fallback attivo");
   }
 
-  // ================= NORMALIZZAZIONE (🔥 FIX) =================
+ // ================= NORMALIZZAZIONE (🔥 FIX) =================
 
-  const roi = safeNum(result.roi);
+const roi = safeNum(result?.roi);
 
-  const netAnnual =
-  safeNum(result.netAnnual) ||
-  safeNum(result.netAfterMortgage) ||
-  safeNum(result.net) ||
+const netAnnual =
+  safeNum(result?.netAnnual) ||
+  safeNum(result?.netAfterMortgage) ||
+  safeNum(result?.net) ||
   0;
- if(!netAnnual){
+
+if(!netAnnual){
   console.warn("⚠️ netAnnual mancante → result:", result);
 }
- const elProfit = document.getElementById("qr_profit");
 
-  const revenue = safeNum(result.revenue);
+const revenue = safeNum(result?.revenue);
 
-  const breakEven =
-    safeNum(result.breakEvenYears) ||
-    safeNum(result.breakEven);
+const breakEven =
+  safeNum(result?.breakEvenYears) ||
+  safeNum(result?.breakEven);
 
-  console.log("🔥 QUICK ROI RESULT:", result);
+console.log("🔥 QUICK ROI RESULT:", result);
 
-  // ================= OUTPUT =================
+// ================= OUTPUT =================
 
-  const elRoi    = document.getElementById("qr_roi");
-  const elProfit = document.getElementById("qr_profit");
-  const elMonth  = document.getElementById("qr_month");
-  const elBreak  = document.getElementById("qr_break");
-  const elRev    = document.getElementById("qr_rev");
+const elRoi   = document.getElementById("qr_roi");
+const elProfit= document.getElementById("qr_profit");
+const elMonth = document.getElementById("qr_month");
+const elBreak = document.getElementById("qr_break");
+const elRev   = document.getElementById("qr_rev");
 
-  if(elRoi){
-    elRoi.innerText = roi.toFixed(1)+"%";
-  }
+// ROI
+if(elRoi){
+  elRoi.innerText = roi ? roi.toFixed(1)+"%" : "—";
+}
 
-  // 🔥 MOSTRA SEMPRE (niente bug PRO)
-  if(elProfit){
+// 🔥 MOSTRA SEMPRE (NO BUG PRO)
+if(elProfit){
   elProfit.innerText = netAnnual > 0 ? formatCurrency(netAnnual) : "—";
 }
 
@@ -1382,13 +1383,12 @@ if(elMonth){
 }
 
 if(elBreak){
-  elBreak.innerText = breakEven ? breakEven.toFixed(1)+" anni" : "—";
+  elBreak.innerText = breakEven > 0 ? breakEven.toFixed(1)+" anni" : "—";
 }
 
 if(elRev){
   elRev.innerText = revenue > 0 ? formatCurrency(revenue) : "—";
 }
-
   // ================= PSICOLOGIA =================
 
   const psych = document.getElementById("roi-psychology");
@@ -1657,3 +1657,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
+
+ </script>
+
+</body>
+</html>
