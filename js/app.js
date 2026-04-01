@@ -1461,6 +1461,8 @@ window.calculate = function(force = false){
 
     window.lastResult = result;
 
+    window.lastAnalysis = result;
+
     const gross = safeNumber(result.gross);
     const net   = safeNumber(result.netAfterMortgage);
     const roi   = safeNumber(result.roi);
