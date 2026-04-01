@@ -878,6 +878,9 @@ transform:translateY(0) scale(0.98);
 display:flex;
 gap:6px;
 align-items:center;
+
+flex-wrap:nowrap;        /* 🔥 evita verticale */
+white-space:nowrap;      /* 🔥 sicurezza extra */
 }
 
 .lang-btn{
