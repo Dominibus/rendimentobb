@@ -5812,3 +5812,35 @@ body.pro-user #profit-monthly::after{
   }
 
 }
+
+/* ============================= */
+/* FIX ALLINEAMENTO RISULTATI */
+/* ============================= */
+
+@media (min-width:1025px){
+
+  /* 🔥 centra contenuto interno delle card */
+  #revenue-forecast,
+  #market-comparison,
+  #occupancy-sensitivity{
+    max-width:700px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  /* 🔥 centra anche benchmark */
+  #market-benchmark{
+    max-width:700px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  /* 🔥 centra performance */
+  .performance-card,
+  #market-performance{
+    max-width:700px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+}
