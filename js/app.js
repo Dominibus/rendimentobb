@@ -529,56 +529,71 @@ window.simulationExecuted = false;
 
 function renderMarketComparison(userRevenue, cityKey){
 
-const container = document.getElementById("market-comparison");
-if(!container) return;
+  const container = document.getElementById("market-comparison");
+  if(!container) return;
 
-const marketAvg = 28500;
+  // 🔥 sicurezza numeri
+  const revenue = window.safeNumber(userRevenue);
+  const marketAvg = 28500;
 
-const diff = userRevenue - marketAvg;
-const diffPerc = ((diff / marketAvg) * 100).toFixed(1);
+  const diff = revenue - marketAvg;
+  const diffPerc = marketAvg > 0
+    ? ((diff / marketAvg) * 100).toFixed(1)
+    : 0;
 
-const isPositive = diff >= 0;
+  const isPositive = diff >= 0;
 
-container.innerHTML = `
+  const diffColor = isPositive ? "#10b981" : "#ef4444";
+  const bgColor   = isPositive ? "#ecfdf5" : "#fef2f2";
+  const borderCol = isPositive ? "#10b981" : "#ef4444";
 
-<div class="kpi-box">
-  <div class="kpi-label">📊 Your revenue</div>
-  <div class="kpi-value">
-    ${formatCurrency(userRevenue)}
-  </div>
-</div>
+  // 🔥 RESET IMPORTANTE (evita residui layout vecchi)
+  container.innerHTML = "";
 
-<div class="kpi-box">
-  <div class="kpi-label">🏙 Market average</div>
-  <div class="kpi-value">
-    ${formatCurrency(marketAvg)}
-  </div>
-</div>
+  // 🔥 KPI 1
+  const kpi1 = `
+    <div class="kpi-box">
+      <div class="kpi-label">📊 Your revenue</div>
+      <div class="kpi-value">
+        ${formatCurrency(revenue)}
+      </div>
+    </div>
+  `;
 
-<div class="kpi-box" style="
-background:${isPositive ? "#ecfdf5" : "#fef2f2"};
-border:1px solid ${isPositive ? "#10b981" : "#ef4444"};
-">
+  // 🔥 KPI 2
+  const kpi2 = `
+    <div class="kpi-box">
+      <div class="kpi-label">🏙 Market average</div>
+      <div class="kpi-value">
+        ${formatCurrency(marketAvg)}
+      </div>
+    </div>
+  `;
 
-  <div class="kpi-label">⚡ Performance</div>
+  // 🔥 KPI 3 (PERFORMANCE)
+  const kpi3 = `
+    <div class="kpi-box" style="
+      background:${bgColor};
+      border:1px solid ${borderCol};
+    ">
+      <div class="kpi-label">⚡ Performance</div>
 
-  <div class="kpi-value" style="
-  color:${isPositive ? "#10b981" : "#ef4444"};
-  ">
-    ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
-  </div>
+      <div class="kpi-value" style="color:${diffColor}">
+        ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
+      </div>
 
-  <div style="
-  font-size:12px;
-  margin-top:4px;
-  color:#64748b;
-  ">
-    ${isPositive ? "Above market" : "Below market"}
-  </div>
+      <div style="
+        font-size:12px;
+        margin-top:4px;
+        color:#64748b;
+      ">
+        ${isPositive ? "Above market" : "Below market"}
+      </div>
+    </div>
+  `;
 
-</div>
-
-`;
+  // 🔥 INSERT DIRETTO (NO WRAPPER → FIX DEFINITIVO)
+  container.insertAdjacentHTML("beforeend", kpi1 + kpi2 + kpi3);
 
 }
 // ================= ROI VS MARKET =================
