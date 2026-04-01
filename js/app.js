@@ -2819,6 +2819,9 @@ changeCityBackground(city);
 
 // ================= CITY ROUTING FIX =================
 
+// 🔒 BLOCCO ANTI-OVERRIDE
+window.__CITY_LOCKED__ = false;
+
 // 1. prendi path (/roma, /milano ecc)
 function getCityFromPath(){
 
@@ -2832,7 +2835,7 @@ function getCityFromPath(){
     if(path.includes("napoli")) return "napoli";
   }
 
-  // ================= ROI (FIX AGGIUNTO) =================
+  // ================= ROI (FIX DEFINITIVO) =================
   if(path.startsWith("/roi-bnb/")){
     if(path.includes("roma")) return "roma";
     if(path.includes("milano")) return "milano";
@@ -2843,58 +2846,94 @@ function getCityFromPath(){
   return null;
 }
 
-// 2. fallback vecchio sistema
+// ================= SOURCE DATI =================
+
 const params = new URLSearchParams(window.location.search);
 const cityFromQuery = params.get("city");
-
 const cityFromStorage = localStorage.getItem("selected_city");
 
-// 3. PRIORITÀ
-let selectedCity =
-  getCityFromPath() || // 🔥 SEMPRE PRIORITARIO
-  cityFromQuery ||
-  cityFromStorage ||
-  "roma"; // 🔥 default neutro (NO napoli fisso)
+// ================= PRIORITÀ =================
 
-// 🔥 FIX: se siamo in ROI → NON usare storage vecchio
-if(window.location.pathname.startsWith("/roi-bnb/")){
-  selectedCity = getCityFromPath() || selectedCity;
+// 🔥 PATH SEMPRE PRIORITARIO
+let selectedCity = getCityFromPath();
+
+// fallback SOLO se non trovato
+if(!selectedCity){
+  selectedCity =
+    cityFromQuery ||
+    cityFromStorage ||
+    "roma";
 }
 
-// salva sempre
-// 🔥 NON sporcare storage nelle pagine ROI
+// ================= LOCK HARD (CRITICO) =================
+
+// 🔥 se siamo su ROI → blocca definitivamente la città
+if(window.location.pathname.startsWith("/roi-bnb/")){
+
+  const pathCity = getCityFromPath();
+
+  if(pathCity){
+    selectedCity = pathCity;
+
+    // 🔒 LOCK GLOBALE → impedisce override futuri
+    window.__CITY_LOCKED__ = true;
+
+    console.log("🔒 CITY LOCK ATTIVO:", selectedCity);
+  }
+}
+
+// ================= SAVE =================
+
+// 🔥 NON salvare nelle ROI (evita contaminazioni)
 if(!window.location.pathname.startsWith("/roi-bnb/")){
   localStorage.setItem("selected_city", selectedCity);
 }
+
 window.currentCity = selectedCity;
 
-// UI sync
+// ================= UI SYNC =================
+
 document.addEventListener("DOMContentLoaded", () => {
+
+  // 🔥 se lock attivo → non permettere modifiche
+  if(window.__CITY_LOCKED__){
+    console.log("⛔ Override bloccati (ROI page)");
+  }
 
   window.currentCity = selectedCity;
 
   const citySelector = document.getElementById("market-city");
 
-  if(citySelector){
+  if(citySelector && !window.__CITY_LOCKED__){
     citySelector.value = selectedCity;
   }
 
-  // 🔥 BACKGROUND TOOL (NON TOCCARE)
-  // 🔥 NON applicare background inline nelle pagine ROI
-if(!window.location.pathname.startsWith("/roi-bnb/")){
-  changeCityBackground(selectedCity);
-}
+  // ================= BACKGROUND =================
 
-  // 🔥 BACKGROUND ROI (AGGIUNTO)
-  if(window.applyCityBackground){
-    applyCityBackground(selectedCity);
+  // 🔥 TOOL / MARKET (NON TOCCARE)
+  if(!window.location.pathname.startsWith("/roi-bnb/")){
+    changeCityBackground(selectedCity);
   }
 
-  console.log("🔥 Città attiva:", selectedCity);
+  // 🔥 ROI (FORZATO + LOCK)
+  if(window.applyCityBackground){
+
+    applyCityBackground(selectedCity);
+
+    // 🔥 RIAPPLICA DOPO → anti script esterni
+    setTimeout(()=>{
+      if(window.__CITY_LOCKED__){
+        applyCityBackground(selectedCity);
+        console.log("🔁 Re-apply BG (anti override)");
+      }
+    },200);
+  }
+
+  console.log("🔥 Città attiva finale:", selectedCity);
 
 });
 
-// ... tutto il tuo codice sopra
+// ================= NAV =================
 
 function goToMarket(city){
   window.location.href = "/market/" + city;
