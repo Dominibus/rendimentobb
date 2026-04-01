@@ -881,12 +881,14 @@ align-items:center;
 
 flex-wrap:nowrap;        /* 🔥 evita verticale */
 white-space:nowrap;      /* 🔥 sicurezza extra */
+flex-shrink:0; /* 🔥 QUESTO È IL FIX CRITICO */
 }
 
 .lang-btn{
 padding:6px 12px;
 font-size:12px;
 font-weight:600;
+flex-shrink:0;  
 
 border-radius:999px;
 
@@ -4067,10 +4069,17 @@ main{
 .portal-header-inner{
 display:flex !important;
 align-items:center;
-justify-content:space-between;
-gap:8px;
-padding:0 10px;
+justify-content:flex-start; /* 🔥 FIX */
+gap:6px;
+padding:0 8px;
 }
+
+.right-controls{
+display:flex;
+align-items:center;
+gap:6px;
+flex-wrap:nowrap;
+}  
 
 /* 🔥 LOGO (RIDIMENSIONATO CORRETTAMENTE) */
 /* 🔥 LOGO MOBILE OPTIMIZED */
