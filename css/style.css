@@ -3328,10 +3328,11 @@ box-shadow:
 
 backdrop-filter:blur(10px);
 
-display:flex;
+/* 🔥 FIX GRID UNIFORME */
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:20px;
-flex-wrap:wrap;
-align-items:center;
+align-items:stretch;
 }
 
 .quick-roi-section{
