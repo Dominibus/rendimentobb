@@ -5808,11 +5808,15 @@ body.pro-user #profit-monthly::after{
 /* FIX FORECAST / OCCUPANCY / COMPARISON */
 /* ============================= */
 
-/* 🔥 BASE → NIENTE GRID FORZATA (gestita da JS) */
+/* 🔥 GRID DIRETTA (FIX DEFINITIVO) */
 #revenue-forecast,
 #market-comparison,
 #occupancy-sensitivity{
-  display:block; /* 🔥 FIX CRITICO */
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  justify-items:center;
+  align-items:stretch;
 }
 
 /* ============================= */
@@ -5827,22 +5831,25 @@ body.pro-user #profit-monthly::after{
   align-items:stretch;
 }
 
-/* 🔥 CARD KPI */
+/* ============================= */
+/* KPI CARD */
+/* ============================= */
+
 .kpi-box{
   background:white;
-  padding:16px;
-  border-radius:14px;
+  padding:18px;
+  border-radius:16px;
   box-shadow:0 10px 30px rgba(0,0,0,0.06);
   width:100%;
-  max-width:220px;
+  max-width:240px;
   text-align:center;
   transition:all 0.25s ease;
 }
 
 /* hover SaaS */
 .kpi-box:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.08);
+  transform:translateY(-4px);
+  box-shadow:0 25px 60px rgba(0,0,0,0.10);
 }
 
 /* label */
@@ -5865,30 +5872,28 @@ body.pro-user #profit-monthly::after{
 
 @media (min-width:1025px){
 
-  /* 🔥 CONTENITORI CENTRATI */
+  /* 🔥 CONTENITORI CENTRATI (UGUALI SOPRA E SOTTO) */
   #revenue-forecast,
   #market-comparison,
-  #occupancy-sensitivity{
-    max-width:700px;
+  #occupancy-sensitivity,
+  #market-benchmark{
+    max-width:900px;
     margin:0 auto;
   }
 
-  /* 🔥 BENCHMARK */
+  /* 🔥 BENCHMARK GRID */
   #market-benchmark{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    justify-items:center;
     gap:20px;
-
-    max-width:700px;
-    margin:0 auto;
+    justify-items:center;
     text-align:center;
   }
 
-  /* 🔥 PERFORMANCE */
+  /* 🔥 PERFORMANCE BOX */
   .performance-card,
   #market-performance{
-    max-width:700px;
+    max-width:900px;
     margin:0 auto;
     text-align:center;
   }
@@ -5901,6 +5906,9 @@ body.pro-user #profit-monthly::after{
 
 @media (max-width:768px){
 
+  #revenue-forecast,
+  #market-comparison,
+  #occupancy-sensitivity,
   .kpi-grid{
     grid-template-columns:1fr;
     gap:14px;
