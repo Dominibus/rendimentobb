@@ -295,6 +295,39 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-  
+
+ <script>
+function openUpgradePopup(){
+  const popup = document.getElementById("upgrade-popup");
+  if(popup) popup.style.display = "flex";
+}
+
+function closeUpgradePopup(){
+  const popup = document.getElementById("upgrade-popup");
+  if(popup) popup.style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll('.dashboard-btn').forEach(btn => {
+
+    btn.addEventListener("click", function(e){
+
+      const isPro =
+        window.currentPlan === "pro" ||
+        window.currentPlan === "investor" ||
+        window.currentPlan === "pro_yearly";
+
+      if(!isPro){
+        e.preventDefault();
+        openUpgradePopup();
+      }
+
+    });
+
+  });
+
+});
+</script> 
 </body>
 </html>
