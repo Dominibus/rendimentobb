@@ -5777,60 +5777,97 @@ body.pro-user #profit-monthly::after{
 
 @media (min-width:1025px){
 
-  /* 🔥 uniforma tutte le card risultati */
+  /* 🔥 CARD RISULTATI (LAYOUT PREMIUM) */
   .results-card{
-  width:100%;
-  max-width:1200px;
-  margin:30px auto;
-  padding:26px 40px; /* 🔥 più respiro */
-}
+    width:100%;
+    max-width:1200px;
+    margin:40px auto;
+    padding:30px 40px;
+    border-radius:24px;
+  }
 
-  /* 🔥 KPI grid coerente desktop */
+  /* 🔥 KPI GRID STANDARD */
   .kpi-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:20px;
-    justify-items:stretch;
+    gap:22px;
     align-items:stretch;
   }
 
-  /* 🔥 investment metrics */
+  /* 🔥 KPI BOX FULL WIDTH */
+  .kpi-grid .kpi-box{
+    width:100%;
+    max-width:none;
+  }
+
+  /* 🔥 INVESTMENT METRICS */
   .investment-metrics{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:16px;
-    max-width:600px;
-    margin:20px auto;
+    gap:18px;
+    max-width:640px;
+    margin:25px auto;
   }
 
-  /* 🔥 GRID DIRETTA (FIX DEFINITIVO) */
+  /* ===================================== */
+  /* 🔥 GRID CORE (TUTTE LE SEZIONI KPI) */
+  /* ===================================== */
+
   #revenue-forecast,
-  #market-comparison,
   #occupancy-sensitivity{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:20px;
-    justify-items:stretch;
-    align-items:stretch;
-    max-width:900px;
+    gap:22px;
+    width:100%;
+    max-width:1000px;
     margin:0 auto;
+  }
+
+  /* ===================================== */
+  /* 💣 FIX DEFINITIVO PERFORMANCE (IL TUO BUG) */
+  /* ===================================== */
+
+  #market-comparison{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    width:100%;
+    max-width:1000px;
+    margin:0 auto;
+  }
+
+  /* 🔥 FORZA OGNI ELEMENTO INTERNO */
+  #market-comparison > *{
+    width:100%;
+    display:flex;
+    justify-content:center;
+  }
+
+  /* 🔥 FORZA IL CONTENUTO (ANCHE SE GENERATO DA JS) */
+  #market-comparison .kpi-box,
+  #market-comparison .metric,
+  #market-comparison div{
+    width:100% !important;
+    max-width:none !important;
+    text-align:center;
   }
 
   /* 🔥 BENCHMARK */
   #market-benchmark{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:20px;
+    gap:22px;
     justify-items:center;
     text-align:center;
-    max-width:900px;
+    max-width:1000px;
     margin:0 auto;
   }
 
-  /* 🔥 PERFORMANCE */
-  .performance-card,
-  #market-performance{
-    max-width:900px;
+  /* 🔥 PERFORMANCE WRAPPER */
+  #market-performance,
+  .performance-card{
+    width:100%;
+    max-width:1000px;
     margin:0 auto;
     text-align:center;
   }
@@ -5838,35 +5875,36 @@ body.pro-user #profit-monthly::after{
 }
 
 /* ============================= */
-/* KPI CARD */
+/* KPI CARD (DESIGN SYSTEM) */
 /* ============================= */
 
 .kpi-box{
   background:white;
-  padding:18px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.06);
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.06);
 
   width:100%;
-  max-width:none; /* 🔥 FIX CRITICO */
+  max-width:none;
 
   text-align:center;
   transition:all 0.25s ease;
 }
 
 .kpi-box:hover{
-  transform:translateY(-4px);
-  box-shadow:0 25px 60px rgba(0,0,0,0.10);
+  transform:translateY(-5px);
+  box-shadow:0 30px 70px rgba(0,0,0,0.10);
 }
 
 .kpi-label{
-  font-size:13px;
+  font-size:12px;
   color:#64748b;
   margin-bottom:6px;
+  letter-spacing:0.3px;
 }
 
 .kpi-value{
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
   color:#0f172a;
 }
@@ -5878,11 +5916,11 @@ body.pro-user #profit-monthly::after{
 #market-comparison,
 #revenue-forecast,
 #occupancy-sensitivity{
-  width:100%; /* 🔥 evita compressione */
+  width:100%;
 }
 
 /* ============================= */
-/* MOBILE FIX */
+/* MOBILE FIX (PERFETTO) */
 /* ============================= */
 
 @media (max-width:768px){
@@ -5891,12 +5929,14 @@ body.pro-user #profit-monthly::after{
   #market-comparison,
   #occupancy-sensitivity,
   .kpi-grid{
+    display:grid;
     grid-template-columns:1fr;
     gap:14px;
   }
 
   .kpi-box{
     max-width:100%;
+    padding:16px;
   }
 
 }
