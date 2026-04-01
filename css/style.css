@@ -5977,3 +5977,70 @@ body.pro-user #profit-monthly::after{
 border:2px solid #10b981;
 transform:scale(1.05);
 }
+
+/* ===================== */
+/* FOOTER 2.0 */
+/* ===================== */
+
+.footer-container{
+max-width:1200px;
+margin:auto;
+padding:40px 20px;
+}
+
+.footer-cta{
+text-align:center;
+margin-bottom:40px;
+}
+
+.footer-cta h3{
+font-size:22px;
+margin-bottom:10px;
+}
+
+.footer-cta p{
+font-size:14px;
+color:#94a3b8;
+margin-bottom:20px;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:30px;
+margin-bottom:30px;
+text-align:left;
+}
+
+.footer-col strong{
+display:block;
+margin-bottom:10px;
+color:white;
+}
+
+.footer-col a{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+color:#94a3b8;
+}
+
+.footer-col a:hover{
+color:white;
+}
+
+.footer-trust{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+font-size:13px;
+margin-bottom:20px;
+opacity:0.8;
+}
+
+.footer-bottom{
+text-align:center;
+font-size:12px;
+opacity:0.6;
+}
