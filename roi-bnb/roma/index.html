@@ -57,8 +57,8 @@ data-en="Simulate investment in Rome">
 Simula investimento a Roma
 </a>
 
-<a href="/dashboard/?city=roma"
-class="btn btn-secondary btn-lg"
+<a href="/dashboard/?city=roma" 
+class="btn btn-secondary btn-lg dashboard-btn"
 data-it="Analizza dati reali"
 data-en="Analyze real data">
 Analizza dati reali
@@ -295,5 +295,88 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+  <script>
+function openUpgradePopup(){
+  const popup = document.getElementById("upgrade-popup");
+  if(popup) popup.style.display = "flex";
+}
+
+function closeUpgradePopup(){
+  const popup = document.getElementById("upgrade-popup");
+  if(popup) popup.style.display = "none";
+}
+
+// 🔥 INTERCETTA CLICK ANALIZZA
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll('a[href*="/dashboard/"]').forEach(btn => {
+
+    btn.addEventListener("click", function(e){
+
+      const isPro =
+        window.currentPlan === "pro" ||
+        window.currentPlan === "investor" ||
+        window.currentPlan === "pro_yearly";
+
+      if(!isPro){
+
+        e.preventDefault(); // BLOCCA redirect
+        openUpgradePopup();
+
+      }
+
+    });
+
+  });
+
+});
+</script>
+  
+  <!-- ================= PAYWALL POPUP ================= -->
+<div id="upgrade-popup" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:16px;
+max-width:400px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.2);
+">
+
+<h3
+data-it="🔓 Sblocca l’analisi completa"
+data-en="🔓 Unlock full analysis">
+🔓 Sblocca l’analisi completa
+</h3>
+
+<p style="margin-top:10px;color:#64748b;font-size:14px;"
+data-it="Per accedere ai dati reali e alla dashboard completa, attiva un piano."
+data-en="To access real data and the full dashboard, activate a plan.">
+Per accedere ai dati reali attiva un piano.
+</p>
+
+<div style="margin-top:20px;display:flex;gap:10px;justify-content:center;">
+
+<button onclick="closeUpgradePopup()" class="btn btn-secondary">
+Chiudi
+</button>
+
+<a href="/pricing/" class="btn btn-primary">
+Vedi piani
+</a>
+
+</div>
+
+</div>
+</div>
 </body>
 </html>
