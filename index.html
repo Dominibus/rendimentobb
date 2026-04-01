@@ -1232,14 +1232,14 @@ window.logout = async function(){
 // ================= BACKGROUND =================
 window.changeCityBackground = function(city){
 
-const hero = document.querySelector(".hero-bg");
-if(!hero) return;
+  const hero = document.querySelector(".hero-bg");
+  if(!hero) return;
 
-const allowed = ["rome","naples","milan","florence"];
-if(!allowed.includes(city)) return;
+  const allowed = ["rome","naples","milan","florence"];
+  if(!allowed.includes(city)) return;
 
-hero.classList.remove(...allowed);
-hero.classList.add(city);
+  hero.classList.remove(...allowed);
+  hero.classList.add(city);
 
 };
 
@@ -1247,35 +1247,50 @@ hero.classList.add(city);
 // ================= SELECT CITY =================
 window.selectCity = function(city){
 
-if(!city) return;
+  if(!city) return;
 
-localStorage.setItem("selected_city", city);
+  // 🔥 mapping IT → EN (fondamentale per sfondo)
+  const map = {
+    roma: "rome",
+    napoli: "naples",
+    milano: "milan",
+    firenze: "florence"
+  };
 
-window.location.href = `/tool/?city=${encodeURIComponent(city)}`;
+  const cityBg = map[city] || city;
+
+  // salva entrambe
+  localStorage.setItem("selected_city", city);
+  localStorage.setItem("selected_city_bg", cityBg);
+
+  // redirect al simulatore
+  window.location.href = `/tool/?city=${encodeURIComponent(city)}`;
 
 };
 
 
 // ================= MARKET =================
 window.goToMarket = function(city){
-if(!city) return;
 
-localStorage.setItem("selected_city", city);
-window.location.href = `/market/${encodeURIComponent(city)}/`;
+  if(!city) return;
+
+  localStorage.setItem("selected_city", city);
+
+  window.location.href = `/market/${encodeURIComponent(city)}/`;
+
 };
 
 
 // ================= START =================
 window.startAnalysis = function(){
 
-const selectedCity = localStorage.getItem("selected_city");
+  const selectedCity = localStorage.getItem("selected_city");
 
-window.location.href = selectedCity
-? `/tool/?city=${encodeURIComponent(selectedCity)}`
-: "/tool/";
+  window.location.href = selectedCity
+    ? `/tool/?city=${encodeURIComponent(selectedCity)}`
+    : "/tool/";
 
 };
-
 
 // ================= QUICK ROI (SYNC ENGINE) =================
 window.quickROI = function(){
