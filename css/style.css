@@ -5804,51 +5804,61 @@ body.pro-user #profit-monthly::after{
     grid-template-columns:repeat(3,1fr);
   }
 
-  /* 🔥 fix forecast / occupancy / comparison */
-  #revenue-forecast,
+/* ============================= */
+/* FIX FORECAST / OCCUPANCY / COMPARISON */
+/* ============================= */
+
+/* 🔥 BASE (SEMPRE ATTIVO) */
+#revenue-forecast,
 #market-comparison,
 #occupancy-sensitivity{
-  display:grid; /* 🔥 MANCAVA */
+  display:grid;
   grid-template-columns:repeat(3,1fr);
-  justify-items:center; /* 🔥 CENTRA I CONTENUTI */
+  justify-items:center;
   align-items:center;
   gap:20px;
 }
 
-  #revenue-forecast > *,
+/* 🔥 CARD INTERNE */
+#revenue-forecast > *,
 #market-comparison > *,
 #occupancy-sensitivity > *{
   background:white;
   padding:14px;
   border-radius:12px;
   box-shadow:0 6px 20px rgba(0,0,0,0.05);
-}
-
+  width:100%;
+  max-width:180px;
+  text-align:center;
 }
 
 /* ============================= */
-/* FIX ALLINEAMENTO RISULTATI */
+/* FIX ALLINEAMENTO RISULTATI DESKTOP */
 /* ============================= */
 
 @media (min-width:1025px){
 
-  /* 🔥 centra contenuto interno delle card */
+  /* 🔥 CENTRATURA BLOCCO */
   #revenue-forecast,
   #market-comparison,
   #occupancy-sensitivity{
     max-width:700px;
     margin:0 auto;
-    text-align:center;
   }
 
-  /* 🔥 centra anche benchmark */
+  /* 🔥 BENCHMARK */
   #market-benchmark{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    justify-items:center;
+    gap:20px;
+
     max-width:700px;
     margin:0 auto;
     text-align:center;
   }
 
-  /* 🔥 centra performance */
+  /* 🔥 PERFORMANCE */
   .performance-card,
   #market-performance{
     max-width:700px;
