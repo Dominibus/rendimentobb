@@ -2851,13 +2851,21 @@ const cityFromStorage = localStorage.getItem("selected_city");
 
 // 3. PRIORITÀ
 let selectedCity =
-  getCityFromPath() ||
+  getCityFromPath() || // 🔥 SEMPRE PRIORITARIO
   cityFromQuery ||
   cityFromStorage ||
   "roma"; // 🔥 default neutro (NO napoli fisso)
 
+// 🔥 FIX: se siamo in ROI → NON usare storage vecchio
+if(window.location.pathname.startsWith("/roi-bnb/")){
+  selectedCity = getCityFromPath() || selectedCity;
+}
+
 // salva sempre
-localStorage.setItem("selected_city", selectedCity);
+// 🔥 NON sporcare storage nelle pagine ROI
+if(!window.location.pathname.startsWith("/roi-bnb/")){
+  localStorage.setItem("selected_city", selectedCity);
+}
 window.currentCity = selectedCity;
 
 // UI sync
