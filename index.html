@@ -1655,7 +1655,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
-  // ================= RESTORE CITY =================
+  // ================= RESTORE CITY (FIX DEFINITIVO) =================
+
+document.addEventListener("DOMContentLoaded", () => {
 
   const saved = localStorage.getItem("selected_city");
 
@@ -1667,8 +1669,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
   };
 
   if(saved && map[saved]){
+    console.log("🌆 Restore HOME BG:", map[saved]);
     changeCityBackground(map[saved]);
   }
+
+});
 
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
