@@ -379,68 +379,70 @@ data-en="🚀 Analyze your investment now">
 <script src="/js/footer.js" defer></script>
 
 <script>
-(function(){
+document.addEventListener("DOMContentLoaded", () => {
 
-  // ================= ANNO DINAMICO (FIX) =================
-  const year = new Date().getFullYear();
+  // 🔥 aspetta che lang.js abbia finito
+  setTimeout(() => {
 
-  document.querySelectorAll(".year").forEach(el=>{
-    el.innerText = year;
-  });
+    // ================= ANNO DINAMICO FIX REALE =================
+    const year = new Date().getFullYear();
 
-  // ================= CITTÀ RANDOM =================
-  const cities = [
-    {key:"roma", name:{it:"Roma", en:"Rome"}, class:"rome"},
-    {key:"milano", name:{it:"Milano", en:"Milan"}, class:"milan"},
-    {key:"napoli", name:{it:"Napoli", en:"Naples"}, class:"naples"},
-    {key:"firenze", name:{it:"Firenze", en:"Florence"}, class:"florence"}
-  ];
+    document.querySelectorAll(".year").forEach(el=>{
+      el.innerText = year;
+    });
 
-  const randomCity = cities[Math.floor(Math.random() * cities.length)];
+    // ================= CITTÀ RANDOM =================
+    const cities = [
+      {key:"roma", name:{it:"Roma", en:"Rome"}, class:"rome"},
+      {key:"milano", name:{it:"Milano", en:"Milan"}, class:"milan"},
+      {key:"napoli", name:{it:"Napoli", en:"Naples"}, class:"naples"},
+      {key:"firenze", name:{it:"Firenze", en:"Florence"}, class:"florence"}
+    ];
 
-  // ================= HERO BACKGROUND =================
-  const hero = document.getElementById("hero-roi");
+    const randomCity = cities[Math.floor(Math.random() * cities.length)];
 
-  if(hero){
-    hero.classList.remove("rome","milan","naples","florence");
-    hero.classList.add(randomCity.class);
-  }
+    const hero = document.getElementById("hero-roi");
 
-  // ================= TESTI DINAMICI =================
-  const lang = window.RB_LANG?.current || "it";
+    if(hero){
+      hero.classList.remove("rome","milan","naples","florence");
+      hero.classList.add(randomCity.class);
+    }
 
-  const title = document.getElementById("roi-title");
-  const subtitle = document.getElementById("roi-subtitle");
-  const cta = document.getElementById("roi-cta-link");
+    const lang = window.RB_LANG?.current || "it";
 
-  if(lang === "it"){
+    const title = document.getElementById("roi-title");
+    const subtitle = document.getElementById("roi-subtitle");
+    const cta = document.getElementById("roi-cta-link");
 
-    title.innerHTML =
-      `ROI B&B ${randomCity.name.it} nel ${year}: stai per guadagnare o perdere soldi?`;
+    if(lang === "it"){
 
-    subtitle.innerText =
-      `Analizza rendimento reale, rischio e profitti degli affitti brevi a ${randomCity.name.it}.`;
+      title.innerHTML =
+        `ROI B&B ${randomCity.name.it} nel ${year}: stai per guadagnare o perdere soldi?`;
 
-    cta.innerText =
-      `💰 Simula investimento a ${randomCity.name.it}`;
+      subtitle.innerText =
+        `Analizza rendimento reale, rischio e profitti degli affitti brevi a ${randomCity.name.it}.`;
 
-  }else{
+      cta.innerText =
+        `💰 Simula investimento a ${randomCity.name.it}`;
 
-    title.innerHTML =
-      `B&B ROI ${randomCity.name.en} in ${year}: will you profit or lose money?`;
+    }else{
 
-    subtitle.innerText =
-      `Analyze real returns, risk and profits of short-term rentals in ${randomCity.name.en}.`;
+      title.innerHTML =
+        `B&B ROI ${randomCity.name.en} in ${year}: will you profit or lose money?`;
 
-    cta.innerText =
-      `💰 Simulate ${randomCity.name.en} investment`;
+      subtitle.innerText =
+        `Analyze real returns, risk and profits of short-term rentals in ${randomCity.name.en}.`;
 
-  }
+      cta.innerText =
+        `💰 Simulate ${randomCity.name.en} investment`;
 
-  // ================= LINK TOOL DINAMICO =================
-  cta.href = "/tool/?city=" + randomCity.key;
+    }
 
-})();
+    cta.href = "/tool/?city=" + randomCity.key;
+
+  }, 200); // 🔥 fondamentale
+
+});
 </script>
 
 </body>
