@@ -2814,8 +2814,16 @@ function getCityFromPath(){
 
   const path = window.location.pathname.toLowerCase();
 
-  // SOLO market
+  // ================= MARKET (NON TOCCARE) =================
   if(path.startsWith("/market/")){
+    if(path.includes("roma")) return "roma";
+    if(path.includes("milano")) return "milano";
+    if(path.includes("firenze")) return "firenze";
+    if(path.includes("napoli")) return "napoli";
+  }
+
+  // ================= ROI (FIX AGGIUNTO) =================
+  if(path.startsWith("/roi-bnb/")){
     if(path.includes("roma")) return "roma";
     if(path.includes("milano")) return "milano";
     if(path.includes("firenze")) return "firenze";
@@ -2836,7 +2844,7 @@ let selectedCity =
   getCityFromPath() ||
   cityFromQuery ||
   cityFromStorage ||
-  "napoli";
+  "roma"; // 🔥 default neutro (NO napoli fisso)
 
 // salva sempre
 localStorage.setItem("selected_city", selectedCity);
@@ -2853,7 +2861,13 @@ document.addEventListener("DOMContentLoaded", () => {
     citySelector.value = selectedCity;
   }
 
+  // 🔥 BACKGROUND TOOL (NON TOCCARE)
   changeCityBackground(selectedCity);
+
+  // 🔥 BACKGROUND ROI (AGGIUNTO)
+  if(window.applyCityBackground){
+    applyCityBackground(selectedCity);
+  }
 
   console.log("🔥 Città attiva:", selectedCity);
 
@@ -2864,7 +2878,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function goToMarket(city){
   window.location.href = "/market/" + city;
 }
-
 // ================= PRO UNLOCK (FINAL FIX DEFINITIVO) =================
 
 window.proUnlocked = false;
