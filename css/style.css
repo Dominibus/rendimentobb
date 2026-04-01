@@ -897,6 +897,10 @@ border:none;
 
 cursor:pointer;
 transition:all .2s ease;
+
+/* 🔥 FIX MOBILE */
+flex:0 0 auto;
+white-space:nowrap;
 }
 
 .lang-btn:hover{
