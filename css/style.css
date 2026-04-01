@@ -5779,9 +5779,10 @@ body.pro-user #profit-monthly::after{
 
   /* 🔥 uniforma tutte le card risultati */
   .results-card{
-    max-width:900px;
-    margin:30px auto;
-  }
+  max-width:1200px; /* oppure 100% */
+  width:100%;
+  margin:30px auto;
+}
 
   /* 🔥 KPI grid coerente desktop */
   .kpi-grid{
