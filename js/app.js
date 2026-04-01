@@ -1616,12 +1616,16 @@ if(revenueHome){
       renderMarketBenchmark(window.currentCity || "napoli");
     }
 
-    // ================= MARKET COMPARISON (FIX) =================
-   if(typeof renderMarketComparison === "function"){
-     renderMarketComparison(
-      gross, // 🔥 usa revenue reale
+    // ================= MARKET COMPARISON (FIX DEFINITIVO) =================
+    if(typeof renderMarketComparison === "function"){
+
+      console.log("🔥 renderMarketComparison RUN");
+
+      renderMarketComparison(
+      gross, // ⚠️ IMPORTANTISSIMO
       window.currentCity || "napoli"
     );
+
   }
 
     // ================= UPGRADE =================
