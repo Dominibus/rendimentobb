@@ -33,18 +33,30 @@ function getText(){
   };
 }
 
-/* ================= SAFE CITY ================= */
+/* ================= 🔥 CITY ENGINE FIX ================= */
 
-function getSafeCity(city){
+function getSafeCity(inputCity){
 
-  if(city) return city;
+  // 🔥 1. PRIORITÀ ASSOLUTA → URL (SEO)
+  const path = window.location.pathname.toLowerCase();
 
+  if(path.includes("/milano")) return "milan";
+  if(path.includes("/roma")) return "rome";
+  if(path.includes("/napoli")) return "naples";
+  if(path.includes("/firenze")) return "florence";
+
+  // 🔥 2. parametro esplicito
+  if(inputCity) return inputCity;
+
+  // 🔥 3. global state (simulatore/dashboard)
   if(window.currentCity) return window.currentCity;
 
+  // 🔥 4. storage (solo fallback)
   const stored = localStorage.getItem("selected_city");
   if(stored) return stored;
 
-  return "napoli"; // fallback sicuro
+  // 🔥 5. DEFAULT SAFE
+  return "rome";
 }
 
 /* ================= MAIN FUNCTION ================= */
@@ -53,9 +65,18 @@ export function renderMarketBenchmark(inputCity){
 
   const city = getSafeCity(inputCity);
 
-  console.log("📊 Render Market:", city);
+  console.log("📊 Render Market FIXED:", city);
 
-  // 🔥 WAIT DATA
+  // 🔥 SYNC GLOBAL CITY (IMPORTANTISSIMO)
+  window.currentCity = city;
+
+  // 🔥 BACKGROUND SYNC (fix definitivo)
+  if(window.applyCityBackground){
+    applyCityBackground(city);
+  }
+
+  /* ================= WAIT DATA ================= */
+
   if(!window.RB_MARKET_DATA){
     console.warn("⏳ RB_MARKET_DATA non pronto → retry");
     setTimeout(() => renderMarketBenchmark(city), 300);
@@ -85,7 +106,6 @@ export function renderMarketBenchmark(inputCity){
 
   let userRevenue = Number(window.currentRevenue);
 
-  // 🔥 fallback intelligente
   if(!userRevenue || userRevenue <= 0){
     userRevenue = data.annualRevenue;
   }
@@ -95,6 +115,7 @@ export function renderMarketBenchmark(inputCity){
   const marketRevenue = Number(data.annualRevenue);
 
   const diff = userRevenue - marketRevenue;
+
   const diffPerc = marketRevenue > 0
     ? ((diff / marketRevenue) * 100).toFixed(1)
     : 0;
@@ -126,7 +147,6 @@ export function renderMarketBenchmark(inputCity){
       text-align:center;
     ">
 
-      <!-- USER -->
       <div>
         <div style="font-size:12px;color:#64748b;">
           ${text.revenue}
@@ -136,7 +156,6 @@ export function renderMarketBenchmark(inputCity){
         </div>
       </div>
 
-      <!-- MARKET -->
       <div>
         <div style="font-size:12px;color:#64748b;">
           ${text.average}
@@ -146,7 +165,6 @@ export function renderMarketBenchmark(inputCity){
         </div>
       </div>
 
-      <!-- PERFORMANCE -->
       <div>
         <div style="font-size:12px;color:#64748b;">
           ${text.comparison}
@@ -171,7 +189,6 @@ export function renderMarketBenchmark(inputCity){
 
     </div>
 
-    <!-- 🔥 MICRO INSIGHT -->
     <div style="
       margin-top:14px;
       font-size:12px;
