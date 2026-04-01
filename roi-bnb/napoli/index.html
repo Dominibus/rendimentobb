@@ -147,7 +147,11 @@ Un singolo appartamento può generare fino a <strong>45.000€ annui</strong>.
 <section class="section section-light">
 <div class="container">
 
-<h2>Dati medi mercato B&B Napoli</h2>
+<h2
+data-it="Dati medi mercato B&B Napoli"
+data-en="Average B&B market data Naples">
+Dati medi mercato B&B Napoli
+</h2>
 
 <div class="market-grid">
 
@@ -250,7 +254,11 @@ data-en="✔ No registration • ✔ Instant analysis • ✔ Real data">
 <section class="section section-light">
 <div class="container" style="text-align:center">
 
-<h3>Altri mercati B&B</h3>
+<h3
+data-it="Altri mercati B&B"
+data-en="Other B&B markets">
+Altri mercati B&B
+</h3>
 
 <p>
 <a href="/roi-bnb/roma/">Roma</a> |
@@ -311,5 +319,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+
+  <!-- ================= PAYWALL POPUP ================= -->
+<div id="upgrade-popup" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:16px;
+max-width:400px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.2);
+">
+
+<h3 data-it="🔓 Sblocca l’analisi completa" data-en="🔓 Unlock full analysis">
+🔓 Sblocca l’analisi completa
+</h3>
+
+<p style="margin-top:10px;color:#64748b;font-size:14px;"
+data-it="Per accedere ai dati reali e alla dashboard completa, attiva un piano."
+data-en="To access real data and the full dashboard, activate a plan.">
+Per accedere ai dati reali attiva un piano.
+</p>
+
+<div style="margin-top:20px;display:flex;gap:10px;justify-content:center;">
+
+<button onclick="closeUpgradePopup()" class="btn btn-secondary">
+Chiudi
+</button>
+
+<a href="/pricing/" class="btn btn-primary">
+Vedi piani
+</a>
+
+</div>
+
+</div>
+</div>
 </body>
 </html>
