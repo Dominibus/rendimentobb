@@ -628,27 +628,34 @@ function renderROIMarketComparison(roi, cityKey){
 
 // ================= REVENUE FORECAST =================
 
-  function renderRevenueForecast(baseRevenue){
+function renderRevenueForecast(baseRevenue){
 
 const container = document.getElementById("revenue-forecast");
 if(!container) return;
 
 container.innerHTML = `
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
 
-<div style="padding:15px;background:white;border-radius:10px;">
-Low → ${formatCurrency(baseRevenue * 0.8)}
+<div class="kpi-box">
+  <div class="kpi-label">Low</div>
+  <div class="kpi-value">
+    ${formatCurrency(baseRevenue * 0.8)}
+  </div>
 </div>
 
-<div style="padding:15px;background:white;border-radius:10px;">
-Base → ${formatCurrency(baseRevenue)}
+<div class="kpi-box">
+  <div class="kpi-label">Base</div>
+  <div class="kpi-value">
+    ${formatCurrency(baseRevenue)}
+  </div>
 </div>
 
-<div style="padding:15px;background:white;border-radius:10px;">
-High → ${formatCurrency(baseRevenue * 1.2)}
+<div class="kpi-box">
+  <div class="kpi-label">High</div>
+  <div class="kpi-value">
+    ${formatCurrency(baseRevenue * 1.2)}
+  </div>
 </div>
 
-</div>
 `;
 
 }
@@ -662,25 +669,25 @@ const container = document.getElementById("occupancy-sensitivity");
 if(!container) return;
 
 container.innerHTML = `
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
 
-<div style="padding:15px;background:white;border-radius:10px;">
--10% → 8.2%
+<div class="kpi-box">
+  <div class="kpi-label">-10%</div>
+  <div class="kpi-value">8.2%</div>
 </div>
 
-<div style="padding:15px;background:white;border-radius:10px;">
-Base → 10.5%
+<div class="kpi-box">
+  <div class="kpi-label">Base</div>
+  <div class="kpi-value">10.5%</div>
 </div>
 
-<div style="padding:15px;background:white;border-radius:10px;">
-+10% → 12.8%
+<div class="kpi-box">
+  <div class="kpi-label">+10%</div>
+  <div class="kpi-value">12.8%</div>
 </div>
 
-</div>
 `;
 
 }
-
 // ================= BREAK EVEN OCCUPANCY =================
 
 function renderBreakEvenOccupancy(
