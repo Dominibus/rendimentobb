@@ -154,25 +154,25 @@ box-shadow:0 20px 50px rgba(16,185,129,0.25);
 <!-- ================= HERO ================= -->
 
 <!-- 🔥 CAMBIA SOLO QUESTA CLASSE PER PAGINA -->
-<section class="hero-roi milan">
+<section class="hero-roi" id="hero-roi">
 
-<h1
-data-it="ROI B&B Milano: quanto si guadagna davvero?"
-data-en="B&B ROI Milan: how profitable is it?">
-ROI B&B Milano: quanto si guadagna davvero?
+<h1 id="roi-title"
+data-it="ROI B&B in Italia nel <span id='year'></span>: quanto si guadagna davvero?"
+data-en="B&B ROI in Italy in <span id='year'></span>: how profitable is it?">
+ROI B&B in Italia nel <span id="year"></span>: quanto si guadagna davvero?
 </h1>
 
-<p
-data-it="Analizza rendimento reale, rischio e profitti degli affitti brevi a Milano."
-data-en="Analyze real returns, risk and profits of short-term rentals in Milan.">
-Analizza rendimento reale, rischio e profitti degli affitti brevi a Milano.
+<p id="roi-subtitle"
+data-it="Analizza rendimento reale, rischio e profitti degli affitti brevi."
+data-en="Analyze real returns, risk and profits of short-term rentals.">
+Analizza rendimento reale, rischio e profitti degli affitti brevi.
 </p>
 
 <div class="cta">
-<a href="/tool/?city=milano" class="btn btn-primary"
-data-it="🔍 Simula investimento a Milano"
-data-en="🔍 Simulate Milan investment">
-🔍 Simula investimento a Milano
+<a id="roi-cta-link" href="/tool/" class="btn btn-primary"
+data-it="💰 Calcola il rendimento reale"
+data-en="💰 Calculate real ROI">
+💰 Calcola il rendimento reale
 </a>
 </div>
 
@@ -371,6 +371,70 @@ Avvia simulazione gratuita
 <script type="module" src="/js/header.js"></script>
 <script type="module" src="/js/app.js"></script>
 <script src="/js/footer.js" defer></script>
+
+<script>
+(function(){
+
+  // ================= ANNO DINAMICO =================
+  const year = new Date().getFullYear();
+  document.querySelectorAll("#year").forEach(el=>{
+    el.innerText = year;
+  });
+
+  // ================= CITTÀ RANDOM =================
+  const cities = [
+    {key:"roma", name:{it:"Roma", en:"Rome"}, class:"rome"},
+    {key:"milano", name:{it:"Milano", en:"Milan"}, class:"milan"},
+    {key:"napoli", name:{it:"Napoli", en:"Naples"}, class:"naples"},
+    {key:"firenze", name:{it:"Firenze", en:"Florence"}, class:"florence"}
+  ];
+
+  const randomCity = cities[Math.floor(Math.random() * cities.length)];
+
+  // ================= HERO BACKGROUND =================
+  const hero = document.getElementById("hero-roi");
+
+  if(hero){
+    hero.classList.remove("rome","milan","naples","florence");
+    hero.classList.add(randomCity.class);
+  }
+
+  // ================= TESTI DINAMICI =================
+  const lang = window.RB_LANG?.current || "it";
+
+  const title = document.getElementById("roi-title");
+  const subtitle = document.getElementById("roi-subtitle");
+  const cta = document.getElementById("roi-cta-link");
+
+  if(lang === "it"){
+
+    title.innerHTML =
+      `ROI B&B ${randomCity.name.it} nel ${year}: quanto si guadagna davvero?`;
+
+    subtitle.innerText =
+      `Analizza rendimento reale, rischio e profitti degli affitti brevi a ${randomCity.name.it}.`;
+
+    cta.innerText =
+      `💰 Simula investimento a ${randomCity.name.it}`;
+
+  }else{
+
+    title.innerHTML =
+      `B&B ROI ${randomCity.name.en} in ${year}: how profitable is it?`;
+
+    subtitle.innerText =
+      `Analyze real returns, risk and profits of short-term rentals in ${randomCity.name.en}.`;
+
+    cta.innerText =
+      `💰 Simulate ${randomCity.name.en} investment`;
+
+  }
+
+  // ================= LINK TOOL DINAMICO =================
+  cta.href = "/tool/?city=" + randomCity.key;
+
+})();
+</script>  
 
 </body>
 </html>
