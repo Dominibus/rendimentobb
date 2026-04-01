@@ -537,9 +537,17 @@ function renderMarketComparison(userRevenue, cityKey){
   const marketAvg = 28500;
 
   const diff = revenue - marketAvg;
-  const diffPerc = marketAvg > 0
-    ? ((diff / marketAvg) * 100).toFixed(1)
-    : 0;
+  
+  let diffPerc = marketAvg > 0
+  ? (diff / marketAvg) * 100
+  : 0;
+
+// 🔥 evita 0.0% fake (UX SaaS)
+if(Math.abs(diffPerc) < 0.1 && diff !== 0){
+  diffPerc = diff > 0 ? 0.1 : -0.1;
+}
+
+diffPerc = diffPerc.toFixed(1);
 
   const isPositive = diff >= 0;
 
@@ -1462,6 +1470,8 @@ window.calculate = function(force = false){
     window.lastResult = result;
 
     window.lastAnalysis = result;
+
+    window.lastAnalysisData = result;
 
     const gross = safeNumber(result.gross);
     const net   = safeNumber(result.netAfterMortgage);
