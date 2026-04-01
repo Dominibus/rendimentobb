@@ -5470,7 +5470,7 @@ body{
 /* 🔥 BLOCCO RISULTATI */
 .simulator-right{
   width:100%;
-  max-width:900px;
+  max-width:1200px;
   margin:40px auto 0 auto;
 }
 
@@ -5779,9 +5779,10 @@ body.pro-user #profit-monthly::after{
 
   /* 🔥 uniforma tutte le card risultati */
   .results-card{
-  max-width:1200px; /* oppure 100% */
   width:100%;
+  max-width:1200px;
   margin:30px auto;
+  padding:26px 40px; /* 🔥 più respiro */
 }
 
   /* 🔥 KPI grid coerente desktop */
