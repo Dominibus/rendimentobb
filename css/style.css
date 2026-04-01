@@ -5815,6 +5815,14 @@ body.pro-user #profit-monthly::after{
   gap:20px;
 }
 
+  #revenue-forecast > *,
+#market-comparison > *,
+#occupancy-sensitivity > *{
+  width:100%;
+  max-width:180px;
+  text-align:center;
+}
+
 }
 
 /* ============================= */
