@@ -132,7 +132,7 @@ const isMobile = window.innerWidth < 768;
 if(isMobile){
 
 userArea.innerHTML = `
-<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
+<div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
 <a href="/dashboard/" class="btn btn-secondary">📊</a>
 <button onclick="logout()" class="btn btn-secondary">⎋</button>
 </div>
@@ -151,7 +151,7 @@ Account
 ${user.email}
 </div>
 
-<div style="margin-top:6px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+<div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
 
 <a href="/dashboard/" class="btn btn-secondary">
 Dashboard
