@@ -4192,6 +4192,21 @@ text-decoration:none;
 color:#ffffff !important;
 }
 
+/* 🔥 SOLO HERO CTA ANIMATA */
+.hero-roi .btn-primary{
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{box-shadow:0 0 0 0 rgba(16,185,129,0.4);}
+70%{box-shadow:0 0 0 10px rgba(16,185,129,0);}
+100%{box-shadow:0 0 0 0 rgba(16,185,129,0);}  
+}
+
+.hero-roi .btn-primary:hover{
+transform:translateY(-2px);
+}
+
 /* SECONDARY (bianco) */
 .btn-secondary{
 color:#0f172a !important;
