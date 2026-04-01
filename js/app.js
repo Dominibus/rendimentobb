@@ -1616,6 +1616,14 @@ if(revenueHome){
       renderMarketBenchmark(window.currentCity || "napoli");
     }
 
+    // ================= MARKET COMPARISON (FIX) =================
+   if(typeof renderMarketComparison === "function"){
+     renderMarketComparison(
+      gross, // 🔥 usa revenue reale
+      window.currentCity || "napoli"
+    );
+  }
+
     // ================= UPGRADE =================
     if(typeof triggerUpgradeIfNeeded === "function"){
       triggerUpgradeIfNeeded(roi);
