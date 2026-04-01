@@ -504,12 +504,17 @@ let roiChartInstance = null;
 
 window.applyCityBackground = function(city){
 
-const hero = document.querySelector(".hero-bg");
+// 🔥 SUPPORTA SIA TOOL (.hero-bg) CHE ROI (.hero-roi)
+const hero =
+  document.querySelector(".hero-bg") ||
+  document.querySelector(".hero-roi");
 
 if(!hero) return;
 
+// 🔥 PULIZIA CLASSI (evita accumulo / override)
 hero.classList.remove("rome","naples","milan","florence");
 
+// 🔥 MAP IT → EN (coerente con CSS)
 const map = {
   roma:"rome",
   napoli:"naples",
@@ -517,7 +522,12 @@ const map = {
   firenze:"florence"
 };
 
-hero.classList.add(map[city] || "rome");
+// 🔥 APPLICA CLASSE CORRETTA
+const cityClass = map[city] || "rome";
+
+hero.classList.add(cityClass);
+
+console.log("🎯 BG aggiornato:", cityClass);
 
 };
 
