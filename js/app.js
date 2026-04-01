@@ -3034,3 +3034,26 @@ document.addEventListener("rb_auth_ready", unlockProUI);
 setTimeout(()=>{
   unlockProUI();
 },1500);
+
+// ================= FIX CTA DUPLICATE =================
+document.addEventListener("DOMContentLoaded", () => {
+
+  const ctas = document.querySelectorAll(".btn-secondary");
+
+  let found = 0;
+
+  ctas.forEach(btn => {
+
+    if(btn.innerText.includes("Scopri") || btn.innerText.includes("Find out")){
+
+      found++;
+
+      if(found > 1){
+        btn.remove();
+      }
+
+    }
+
+  });
+
+});
