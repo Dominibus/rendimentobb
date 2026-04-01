@@ -427,7 +427,7 @@ function safeRender(id, callback){
     return;
   }
 
-  container.style.display = "block"; // 🔥 FIX layout
+  container.style.display = "grid";
 
   try{
     callback(container);
