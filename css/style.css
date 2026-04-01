@@ -5806,10 +5806,14 @@ body.pro-user #profit-monthly::after{
 
   /* 🔥 fix forecast / occupancy / comparison */
   #revenue-forecast,
-  #market-comparison,
-  #occupancy-sensitivity{
-    grid-template-columns:repeat(3,1fr);
-  }
+#market-comparison,
+#occupancy-sensitivity{
+  display:grid; /* 🔥 MANCAVA */
+  grid-template-columns:repeat(3,1fr);
+  justify-items:center; /* 🔥 CENTRA I CONTENUTI */
+  align-items:center;
+  gap:20px;
+}
 
 }
 
