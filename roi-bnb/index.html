@@ -379,14 +379,13 @@ data-en="🚀 Analyze your investment now">
 <script src="/js/footer.js" defer></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+(function(){
 
-  // 🔥 aspetta che lang.js abbia finito
-  setTimeout(() => {
+  function updateROIHero(){
 
-    // ================= ANNO DINAMICO FIX REALE =================
     const year = new Date().getFullYear();
 
+    // ================= ANNO =================
     document.querySelectorAll(".year").forEach(el=>{
       el.innerText = year;
     });
@@ -408,11 +407,14 @@ document.addEventListener("DOMContentLoaded", () => {
       hero.classList.add(randomCity.class);
     }
 
+    // ================= TESTI =================
     const lang = window.RB_LANG?.current || "it";
 
     const title = document.getElementById("roi-title");
     const subtitle = document.getElementById("roi-subtitle");
     const cta = document.getElementById("roi-cta-link");
+
+    if(!title || !subtitle || !cta) return;
 
     if(lang === "it"){
 
@@ -440,9 +442,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cta.href = "/tool/?city=" + randomCity.key;
 
-  }, 200); // 🔥 fondamentale
+  }
 
-});
+  // 🚀 PRIMO LOAD
+  document.addEventListener("DOMContentLoaded", updateROIHero);
+
+  // 🚀 DOPO CAMBIO LINGUA (CRUCIALE)
+  document.addEventListener("rb_language_changed", updateROIHero);
+
+})();
 </script>
 
 </body>
