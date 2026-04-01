@@ -413,18 +413,20 @@ window.safePercent = safePercent;
 
 // 🔥 SAFE RENDER
 function safeRender(id, callback){
+
   const container = document.getElementById(id);
-  if(!container) return;
+
+  if(!container){
+    console.warn("⚠️ container non trovato:", id);
+    return;
+  }
 
   try{
     callback(container);
   }catch(e){
-    console.error("Render error:", id, e);
+    console.error("❌ errore render:", id, e);
   }
 }
-
-// 👉 opzionale ma consigliato
-window.safeRender = safeRender;
 
 // ================= HERO CITY BACKGROUND =================
 
@@ -1426,7 +1428,32 @@ window.calculate = function(force = false){
 
     console.log("🔥 RESULT:", result);
 
-    // ================= UI BASE =================
+    // ================= ROI VERDICT (FIX) =================
+
+const verdictEl = document.getElementById("roi-verdict");
+
+if(verdictEl){
+
+  let text = "";
+  let color = "";
+
+  if(roi > 12){
+    text = "🔥 Ottimo investimento";
+    color = "#10b981";
+  }else if(roi > 8){
+    text = "⚠️ Investimento medio";
+    color = "#f59e0b";
+  }else{
+    text = "❌ Investimento rischioso";
+    color = "#ef4444";
+  }
+
+  verdictEl.innerHTML = `
+    <div style="color:${color};font-weight:600;">
+      ${text}
+    </div>
+  `;
+}
 
     // ================= KPI TOOL (CORRETTO) =================
 
@@ -1451,6 +1478,27 @@ if(roiHome){
 const profitHome = document.getElementById("profit-live");
 if(profitHome){
   profitHome.innerText = formatCurrency(net);
+}
+
+    const profitMonthly = document.getElementById("profit-monthly");
+if(profitMonthly){
+  profitMonthly.innerText = formatCurrency(net / 12);
+}
+
+const profitAnnual = document.getElementById("profit-annual");
+if(profitAnnual){
+  profitAnnual.innerText = formatCurrency(net);
+}
+
+const breakEven = document.getElementById("break-even");
+if(breakEven){
+  const payback = net > 0 ? (price / net) : 0;
+  breakEven.innerText = payback ? payback.toFixed(1)+" anni" : "-";
+}
+
+const revenueAnnual = document.getElementById("revenue-annual");
+if(revenueAnnual){
+  revenueAnnual.innerText = formatCurrency(gross);
 }
 
 const revenueHome = document.getElementById("revenue-live");
@@ -1483,45 +1531,47 @@ if(revenueHome){
       })
     );
 
-    // ================= PRO UNLOCK =================
+    // ================= PRO UNLOCK HARD =================
 
-    if(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-){
+if(window.isPro && window.isPro()){
 
-      console.log("🔓 PRO → unlock totale");
+  console.log("🔥 UNLOCK PRO HARD");
 
-      document.body.classList.add("pro-user");
+  document.body.classList.add("pro-user");
 
-      document.querySelectorAll(`
-        .pro-blur,
-        .locked,
-        .locked-content,
-        .premium-lock
-      `).forEach(el=>{
-        el.classList.remove(
-          "pro-blur",
-          "locked",
-          "locked-content",
-          "premium-lock"
-        );
-        el.style.filter = "none";
-        el.style.opacity = "1";
-        el.style.pointerEvents = "auto";
-      });
+  // 🔓 rimuove blur e lock
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock
+  `).forEach(el=>{
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
 
-      document.querySelectorAll(".pro-only").forEach(el=>{
-        el.style.display = "block";
-        el.style.opacity = "1";
-      });
+  // 🔓 SBLOCCA PRO-ONLY (QUESTO TI MANCAVA)
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.classList.remove("pro-only");
+    el.style.display = "block";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
 
-      document.querySelectorAll('[data-paywall], .locked-overlay').forEach(el=>{
-        el.remove();
-      });
+  // 🔓 RIMUOVE OVERLAY
+  document.querySelectorAll('[data-paywall], .locked-overlay').forEach(el=>{
+    el.remove();
+  });
 
-    }
+  console.log("✅ PRO SBLOCCATO DEFINITIVO");
+}
 
     // ================= MARKET =================
     if(typeof renderMarketBenchmark === "function"){
