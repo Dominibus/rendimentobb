@@ -5787,10 +5787,12 @@ body.pro-user #profit-monthly::after{
   .kpi-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:18px;
+    gap:20px;
+    justify-items:center;
+    align-items:stretch;
   }
 
-  /* 🔥 investment metrics (preview blocco sotto) */
+  /* 🔥 investment metrics */
   .investment-metrics{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -5799,36 +5801,38 @@ body.pro-user #profit-monthly::after{
     margin:20px auto;
   }
 
-  /* 🔥 fix benchmark interno */
-  #market-benchmark{
+  /* 🔥 GRID DIRETTA (FIX DEFINITIVO) */
+  #revenue-forecast,
+  #market-comparison,
+  #occupancy-sensitivity{
+    display:grid;
     grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    justify-items:center;
+    align-items:stretch;
+    max-width:900px;
+    margin:0 auto;
   }
 
-/* ============================= */
-/* FIX FORECAST / OCCUPANCY / COMPARISON */
-/* ============================= */
+  /* 🔥 BENCHMARK */
+  #market-benchmark{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    justify-items:center;
+    text-align:center;
+    max-width:900px;
+    margin:0 auto;
+  }
 
-/* 🔥 GRID DIRETTA (FIX DEFINITIVO) */
-#revenue-forecast,
-#market-comparison,
-#occupancy-sensitivity{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  justify-items:center;
-  align-items:stretch;
-}
+  /* 🔥 PERFORMANCE */
+  .performance-card,
+  #market-performance{
+    max-width:900px;
+    margin:0 auto;
+    text-align:center;
+  }
 
-/* ============================= */
-/* GRID INTERNA (STANDARD KPI) */
-/* ============================= */
-
-.kpi-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  justify-items:center;
-  align-items:stretch;
 }
 
 /* ============================= */
@@ -5846,58 +5850,21 @@ body.pro-user #profit-monthly::after{
   transition:all 0.25s ease;
 }
 
-/* hover SaaS */
 .kpi-box:hover{
   transform:translateY(-4px);
   box-shadow:0 25px 60px rgba(0,0,0,0.10);
 }
 
-/* label */
 .kpi-label{
   font-size:13px;
   color:#64748b;
   margin-bottom:6px;
 }
 
-/* value */
 .kpi-value{
   font-size:20px;
   font-weight:700;
   color:#0f172a;
-}
-
-/* ============================= */
-/* FIX ALLINEAMENTO DESKTOP */
-/* ============================= */
-
-@media (min-width:1025px){
-
-  /* 🔥 CONTENITORI CENTRATI (UGUALI SOPRA E SOTTO) */
-  #revenue-forecast,
-  #market-comparison,
-  #occupancy-sensitivity,
-  #market-benchmark{
-    max-width:900px;
-    margin:0 auto;
-  }
-
-  /* 🔥 BENCHMARK GRID */
-  #market-benchmark{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-    justify-items:center;
-    text-align:center;
-  }
-
-  /* 🔥 PERFORMANCE BOX */
-  .performance-card,
-  #market-performance{
-    max-width:900px;
-    margin:0 auto;
-    text-align:center;
-  }
-
 }
 
 /* ============================= */
