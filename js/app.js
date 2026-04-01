@@ -422,7 +422,12 @@ window.safePercent = safePercent;
 // 🔥 SAFE RENDER
 function safeRender(id, callback){
   const container = document.getElementById(id);
-  if(!container) return;
+  if(!container){
+    console.warn("⚠️ container non trovato:", id);
+    return;
+  }
+
+  container.style.display = "block"; // 🔥 FIX layout
 
   try{
     callback(container);
@@ -1434,7 +1439,62 @@ window.calculate = function(force = false){
 
     console.log("🔥 RESULT:", result);
 
-    // ================= UI BASE =================
+    // ================= RENDER COMPLETO TOOL =================
+
+// revenue forecast
+if(typeof renderRevenueForecast === "function"){
+  renderRevenueForecast(gross);
+}
+
+// occupancy sensitivity
+if(typeof renderOccupancySensitivity === "function"){
+  renderOccupancySensitivity();
+}
+
+// break-even occupancy
+if(typeof renderBreakEvenOccupancy === "function"){
+  renderBreakEvenOccupancy(
+    priceNight,
+    expenses,
+    commission,
+    tax,
+    result.mortgageAnnual || 0
+  );
+}
+
+// investment score
+const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
+
+if(typeof renderInvestmentScore === "function"){
+  renderInvestmentScore(roi, riskScore);
+}
+
+// ranking
+if(typeof renderInvestmentRanking === "function"){
+  renderInvestmentRanking(roi);
+}
+
+// risk meter
+if(typeof renderRiskMeter === "function"){
+  renderRiskMeter(riskScore);
+}
+
+// verdict
+if(typeof renderInvestmentVerdict === "function"){
+  const payback = net > 0 ? (price / net) : 0;
+  renderInvestmentVerdict(roi, payback);
+}
+
+// AI insights
+if(typeof generateInsights === "function" && typeof renderInsights === "function"){
+  const insights = generateInsights({
+    roi,
+    occupancy,
+    priceNight,
+    expenses
+  });
+  renderInsights(insights);
+}
 
     // ================= KPI TOOL (CORRETTO) =================
 
