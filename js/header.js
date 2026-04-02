@@ -114,10 +114,15 @@ link.classList.add("active");
 }
 });
 
-// 🔥 traduzione immediata header
+/* ===================== */
+/* TRADUZIONE HEADER (FIX DEFINITIVO) */
+/* ===================== */
+
+setTimeout(() => {
 if(typeof applyTranslations === "function"){
 applyTranslations();
 }
+}, 50);
 
 });
 
@@ -203,10 +208,15 @@ Accedi
 
 }
 
-// 🔥 traduzione user area
+/* ===================== */
+/* TRADUZIONE USER AREA */
+/* ===================== */
+
+setTimeout(() => {
 if(typeof applyTranslations === "function"){
 applyTranslations();
 }
+}, 50);
 
 });
 
