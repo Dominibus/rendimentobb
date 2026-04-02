@@ -738,7 +738,7 @@ Simula investimento
 
 <script>
 
-function analyzeProperty(){
+window.analyzeProperty = function(){
 
 const link = document.getElementById("property-link").value;
 
@@ -826,7 +826,7 @@ window.location.href="/tool/";
 
 // ================= SEARCH =================
 
-function searchProperties(){
+window.searchProperties = function(){
 
   const cityInput = document.getElementById("searchCity").value.trim();
 
@@ -1006,7 +1006,7 @@ function searchProperties(){
 
 // ================= REDIRECT =================
 
-function openInvestment(price){
+window.openInvestment = function(price){
 
 localStorage.setItem("property_price", price);
 
