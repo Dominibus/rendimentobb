@@ -4,100 +4,103 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title
-data-it="Academy B&B – Strategie per aumentare ROI e profitto"
-data-en="B&B Academy – Strategies to increase ROI and profit">
-Academy B&B – Strategie per aumentare ROI e profitto
+<title data-it="Academy B&B – Strategie ROI"
+data-en="B&B Academy – ROI Strategies">
+Academy B&B – Strategie ROI
 </title>
 
 <meta name="description"
-data-it="Scopri come aumentare il rendimento del tuo B&B: ROI reale, mutuo sostenibile e pricing strategico."
-data-en="Learn how to increase your B&B profitability: real ROI, sustainable mortgage and pricing strategy."
-content="B&B ROI strategy academy">
+data-it="Impara a calcolare il ROI reale e investire in modo profittevole."
+data-en="Learn how to calculate real ROI and invest profitably.">
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
 
-/* ===== HERO ===== */
+/* RESET BLOCCO */
+.section, .container, .guide-grid, .guide-card {
+all: unset;
+display: block;
+}
+
+/* HERO */
 .hero-academy{
-position:relative;
-padding:120px 20px 100px !important;
+padding:120px 20px;
 background:
-linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.65)),
-url("/img/naples-bg.jpg") center/cover !important;
-color:white !important;
-text-align:center !important;
+linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.7)),
+url("/img/naples-bg.jpg") center/cover;
+text-align:center;
+color:white;
 }
 
 /* STACK */
-.academy-stack{
-margin-top:50px !important;
-display:flex !important;
-flex-direction:column !important;
-gap:20px !important;
-max-width:750px !important;
-margin-left:auto !important;
-margin-right:auto !important;
+.stack{
+max-width:700px;
+margin:40px auto;
+display:flex;
+flex-direction:column;
+gap:20px;
 }
 
-/* PAIN */
-.academy-pain-new{
-background:#ffffff !important;
-padding:24px !important;
-border-radius:16px !important;
-box-shadow:0 10px 35px rgba(0,0,0,0.15) !important;
-text-align:left !important;
-color:#0f172a !important;
+/* BOX */
+.box{
+background:white;
+color:#0f172a;
+padding:20px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,0.1);
+text-align:left;
 }
 
 /* VALUE */
-.academy-value{
-background:#f8fafc !important;
-padding:24px !important;
-border-radius:16px !important;
-border:1px solid #e2e8f0 !important;
-text-align:left !important;
-color:#0f172a !important;
+.box-light{
+background:#f1f5f9;
 }
 
 /* CTA */
-.academy-cta-box{
-background:linear-gradient(135deg,#10b981,#059669) !important;
-color:white !important;
-padding:28px !important;
-border-radius:18px !important;
-text-align:center !important;
-box-shadow:0 25px 60px rgba(16,185,129,0.4) !important;
+.cta{
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+padding:25px;
+border-radius:16px;
+text-align:center;
 }
 
 /* GRID */
-.guide-grid{
-display:grid !important;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr)) !important;
-gap:22px !important;
-margin-top:60px !important;
+.cards{
+max-width:1000px;
+margin:60px auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
 }
 
 /* CARD */
-.guide-card{
-padding:28px !important;
-background:white !important;
-border-radius:18px !important;
-box-shadow:0 10px 35px rgba(0,0,0,0.12) !important;
+.card{
+background:white;
+padding:20px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,0.1);
+position:relative;
 }
 
 /* LOCK */
-.pro-lock::after{
+.card::after{
 content:"🔒 PRO";
 position:absolute;
-top:12px;
-right:12px;
+top:10px;
+right:10px;
 background:#10b981;
 color:white;
 font-size:11px;
 padding:4px 8px;
 border-radius:6px;
+}
+
+/* CTA FINAL */
+.cta-final{
+text-align:center;
+margin:80px 0;
 }
 
 </style>
@@ -113,164 +116,89 @@ border-radius:6px;
 <!-- HERO -->
 <section class="hero-academy">
 
-<div class="container">
-
 <h1
 data-it="Il vero problema dei B&B non è la domanda. È il ROI."
-data-en="The real problem with B&Bs is not demand. It's ROI.">
+data-en="The real problem is ROI">
 Il vero problema dei B&B non è la domanda. È il ROI.
 </h1>
 
 <p
-data-it="La maggior parte degli investimenti sembra profittevole… finché non analizzi i numeri reali."
-data-en="Most investments look profitable… until you analyze real numbers.">
-La maggior parte degli investimenti sembra profittevole… finché non analizzi i numeri reali.
+data-it="La maggior parte degli investimenti sembra profittevole finché non analizzi i numeri reali."
+data-en="Most investments look profitable until you check real numbers.">
+La maggior parte degli investimenti sembra profittevole finché non analizzi i numeri reali.
 </p>
 
-<div class="academy-trust"
-data-it="🔥 +1.200 investitori stanno migliorando i loro rendimenti"
-data-en="🔥 1,200+ investors are improving their returns">
-🔥 +1.200 investitori stanno migliorando i loro rendimenti
-</div>
+<div class="stack">
 
-<div class="academy-stack">
-
-<div class="academy-pain-new">
-
-<h3
-data-it="Cosa succede nella realtà:"
-data-en="What actually happens:">
-Cosa succede nella realtà:
-</h3>
-
+<div class="box">
+<h3 data-it="Cosa succede nella realtà:" data-en="Reality:">Cosa succede nella realtà:</h3>
 <ul>
-<li
-data-it="ROI falsato da stime ottimistiche"
-data-en="ROI distorted by optimistic assumptions">
-ROI falsato da stime ottimistiche
-</li>
-
-<li
-data-it="Costi nascosti ignorati"
-data-en="Hidden costs ignored">
-Costi nascosti ignorati
-</li>
-
-<li
-data-it="Mutuo che mangia il profitto"
-data-en="Mortgage killing your profit">
-Mutuo che mangia il profitto
-</li>
+<li data-it="ROI falsato" data-en="Fake ROI">ROI falsato</li>
+<li data-it="Costi nascosti" data-en="Hidden costs">Costi nascosti</li>
+<li data-it="Mutuo che distrugge il profitto" data-en="Bad mortgage">Mutuo che distrugge il profitto</li>
 </ul>
-
 </div>
 
-
-<div class="academy-value">
-
-<h3
-data-it="Cosa impari qui dentro:"
-data-en="What you will learn here:">
-Cosa impari qui dentro:
-</h3>
-
+<div class="box box-light">
+<h3 data-it="Cosa impari:" data-en="What you learn:">Cosa impari:</h3>
 <ul>
-<li
-data-it="Calcolare il ROI reale"
-data-en="Calculate real ROI">
-ROI reale
-</li>
-
-<li
-data-it="Capire se un mutuo è sostenibile"
-data-en="Understand if a mortgage is sustainable">
-Mutuo sostenibile
-</li>
-
-<li
-data-it="Ottimizzare i prezzi notte"
-data-en="Optimize nightly pricing">
-Pricing strategico
-</li>
+<li data-it="ROI reale" data-en="Real ROI">ROI reale</li>
+<li data-it="Mutuo sostenibile" data-en="Mortgage">Mutuo sostenibile</li>
+<li data-it="Pricing strategico" data-en="Pricing">Pricing strategico</li>
 </ul>
-
 </div>
 
-
-<div class="academy-cta-box">
-
+<div class="cta">
 <p
-data-it="👉 Prima di investire, verifica se stai davvero guadagnando"
-data-en="👉 Before investing, check if you are actually making profit">
-👉 Prima di investire, verifica se stai davvero guadagnando
+data-it="👉 Verifica se stai davvero guadagnando"
+data-en="👉 Check your profit">
+👉 Verifica se stai davvero guadagnando
 </p>
 
-<a href="/tool/" class="btn btn-primary big-cta"
+<a href="/tool/" class="btn btn-primary"
 data-it="🚀 Analizza investimento"
 data-en="🚀 Analyze investment">
 🚀 Analizza investimento
 </a>
-
 </div>
 
-</div>
 </div>
 
 </section>
 
+<!-- CARDS -->
+<section>
 
-<!-- CONTENUTO -->
-<section class="section section-light">
+<div class="cards">
 
-<div class="container">
+<div class="card">
+<h3 data-it="ROI reale" data-en="ROI">ROI reale</h3>
+<p data-it="Scopri il rendimento reale" data-en="Real profit">Scopri il rendimento reale</p>
+</div>
 
-<div class="guide-grid">
+<div class="card">
+<h3 data-it="Mutuo sostenibile" data-en="Mortgage">Mutuo sostenibile</h3>
+<p data-it="Evita errori" data-en="Avoid mistakes">Evita errori</p>
+</div>
 
-<a href="/academy/roi/" class="guide-card pro-lock">
-<h3 data-it="ROI reale" data-en="Real ROI">ROI reale</h3>
-<p
-data-it="Scopri quanto guadagni davvero."
-data-en="Discover your real profit.">
-Scopri quanto guadagni davvero.
-</p>
-</a>
+<div class="card">
+<h3 data-it="Pricing" data-en="Pricing">Pricing</h3>
+<p data-it="Aumenta ricavi" data-en="Increase revenue">Aumenta ricavi</p>
+</div>
 
-<a href="/academy/mutuo/" class="guide-card pro-lock">
-<h3 data-it="Mutuo sostenibile" data-en="Sustainable mortgage">Mutuo sostenibile</h3>
-<p
-data-it="Evita investimenti sbagliati."
-data-en="Avoid bad investments.">
-Evita investimenti sbagliati.
-</p>
-</a>
-
-<a href="/academy/strategia/" class="guide-card pro-lock">
-<h3 data-it="Pricing strategico" data-en="Strategic pricing">Pricing strategico</h3>
-<p
-data-it="Aumenta il fatturato."
-data-en="Increase revenue.">
-Aumenta il fatturato.
-</p>
-</a>
-
-<a href="/academy/errori/" class="guide-card pro-lock">
-<h3 data-it="Errori critici" data-en="Critical mistakes">Errori critici</h3>
-<p
-data-it="Evita errori costosi."
-data-en="Avoid costly mistakes.">
-Evita errori costosi.
-</p>
-</a>
+<div class="card">
+<h3 data-it="Errori critici" data-en="Mistakes">Errori critici</h3>
+<p data-it="Evita perdite" data-en="Avoid losses">Evita perdite</p>
+</div>
 
 </div>
 
-
-<div class="academy-cta">
+<div class="cta-final">
 
 <h3
-data-it="Scopri se il tuo investimento è davvero profittevole"
-data-en="Find out if your investment is truly profitable">
-Scopri se il tuo investimento è davvero profittevole
+data-it="Scopri se il tuo investimento è profittevole"
+data-en="Check your investment">
+Scopri se il tuo investimento è profittevole
 </h3>
 
 <a href="/tool/" class="btn btn-primary"
@@ -281,8 +209,6 @@ data-en="🚀 Start simulation">
 
 </div>
 
-</div>
-
 </section>
 
 </main>
@@ -290,7 +216,6 @@ data-en="🚀 Start simulation">
 <script src="/js/lang.js"></script>
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js"></script>
-<script type="module" src="/js/firebase-init.js"></script>
 
 </body>
 </html>
