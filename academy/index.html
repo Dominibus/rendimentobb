@@ -342,6 +342,32 @@ data-en="🚀 Start simulation">
 </main>
 
 <script src="/js/lang.js"></script>
+<script>
+function applyLanguage(){
+
+  const lang =
+    window.currentLang ||
+    localStorage.getItem("rb_lang") ||
+    "it";
+
+  document.querySelectorAll("[data-it]").forEach(el => {
+
+    const text = el.getAttribute("data-" + lang);
+
+    if(text){
+      el.innerText = text;
+    }
+
+  });
+
+}
+
+// prima esecuzione
+document.addEventListener("DOMContentLoaded", applyLanguage);
+
+// quando cambi lingua (header)
+document.addEventListener("rb_language_changed", applyLanguage);
+</script>  
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js"></script>
 
