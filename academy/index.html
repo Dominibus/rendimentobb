@@ -20,52 +20,41 @@ data-en="Complete guide to B&B investing: ROI, costs, mortgages and strategies t
 
 <style>
 
-/* ===== BASE DARK SAAS ===== */
-.academy-page{
+/* ===== BACKGROUND FINAL (VISIBILE) ===== */
+body.academy-page{
 background:
-radial-gradient(circle at 20% 20%, rgba(16,185,129,0.15), transparent 40%),
-radial-gradient(circle at 80% 80%, rgba(59,130,246,0.15), transparent 40%),
-linear-gradient(180deg,#e2e8f0 0%, #cbd5f5 100%);
+radial-gradient(circle at 20% 20%, rgba(16,185,129,0.18), transparent 40%),
+radial-gradient(circle at 80% 80%, rgba(59,130,246,0.18), transparent 40%),
+linear-gradient(180deg,#dbeafe 0%, #c7d2fe 100%);
 }
 
 /* ===== HERO ===== */
 .hero-academy{
-display:grid;
-grid-template-columns:1.1fr 1fr;
-gap:50px;
-align-items:center;
-max-width:1200px;
+max-width:1100px;
 margin:80px auto 40px;
 padding:0 20px;
+text-align:center;
 }
 
-/* ===== TEXT ===== */
-.hero-text h1{
-font-size:44px;
+.hero-academy h1{
+font-size:42px;
 font-weight:800;
-line-height:1.15;
 color:#0f172a;
 }
 
-.hero-text p{
-margin-top:18px;
+.hero-academy p{
+margin-top:15px;
 font-size:18px;
 color:#334155;
 }
 
-/* ===== TRUST ===== */
 .trust{
-margin-top:20px;
-font-size:14px;
+margin-top:15px;
 color:#10b981;
 font-weight:600;
 }
 
 /* ===== CTA ===== */
-.hero-cta{
-margin-top:30px;
-}
-
 .btn-primary{
 background:#10b981;
 color:white;
@@ -73,53 +62,59 @@ padding:14px 26px;
 border-radius:12px;
 font-weight:700;
 display:inline-block;
+margin-top:20px;
 box-shadow:0 10px 30px rgba(16,185,129,0.35);
 }
 
-/* ===== SECTION ===== */
+/* ===== SECTION FIX (NO WHITE BLOCK) ===== */
 .value{
 max-width:1100px;
 margin:80px auto;
-padding:0 20px;
+padding:40px 20px;
+
+background:rgba(255,255,255,0.6);
+backdrop-filter:blur(10px);
+border-radius:20px;
+}
+
+/* ===== TITLES ===== */
+.value h2{
+font-size:30px;
+font-weight:800;
+color:#0f172a;
 text-align:center;
 }
 
-.value h2{
-font-size:32px;
-font-weight:800;
-color:#0f172a;
-}
-
 .value p{
-margin-top:10px;
+text-align:center;
 color:#475569;
+margin-top:10px;
 }
 
 /* ===== CARDS ===== */
 .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
+gap:20px;
 margin-top:40px;
 }
 
-/* ===== CARD ===== */
 .card{
 background:rgba(255,255,255,0.85);
 backdrop-filter:blur(10px);
-padding:25px;
-border-radius:18px;
+padding:24px;
+border-radius:16px;
 border:1px solid rgba(0,0,0,0.05);
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
-transition:.25s;
-display:block;
+
 text-decoration:none;
 color:inherit;
+
+transition:.25s;
 }
 
 .card:hover{
 transform:translateY(-6px);
-box-shadow:0 25px 70px rgba(0,0,0,0.12);
+box-shadow:0 20px 60px rgba(0,0,0,0.1);
 }
 
 /* ===== BADGE ===== */
@@ -142,25 +137,16 @@ color:white;
 padding:60px;
 border-radius:24px;
 text-align:center;
-box-shadow:0 40px 100px rgba(16,185,129,0.4);
 }
 
 .cta-final a{
-margin-top:20px;
+margin-top:15px;
 display:inline-block;
-padding:14px 30px;
+padding:14px 28px;
 background:white;
 color:#059669;
-border-radius:12px;
+border-radius:10px;
 font-weight:700;
-}
-
-/* ===== MOBILE ===== */
-@media(max-width:900px){
-.hero-academy{
-grid-template-columns:1fr;
-text-align:center;
-}
 }
 
 </style>
@@ -175,8 +161,6 @@ text-align:center;
 
 <!-- HERO -->
 <section class="hero-academy">
-
-<div class="hero-text">
 
 <h1
 data-it="Come investire in un B&B e ottenere un ROI reale"
@@ -196,19 +180,15 @@ data-en="🔥 1,200+ investors are analyzing investments now">
 🔥 +1.200 investitori stanno analizzando investimenti ora
 </div>
 
-<div class="hero-cta">
 <a href="/tool/" class="btn-primary"
 data-it="🚀 Analizza investimento"
 data-en="🚀 Analyze investment">
 🚀 Analizza investimento
 </a>
-</div>
-
-</div>
 
 </section>
 
-<!-- CONTENUTI SEO -->
+<!-- CONTENUTO -->
 <section class="value">
 
 <h2
@@ -218,8 +198,8 @@ Guida completa investimento B&B
 </h2>
 
 <p
-data-it="Tutto quello che devi sapere prima di acquistare un immobile per affitti brevi."
-data-en="Everything you need before investing in short-term rentals.">
+data-it="Tutto quello che devi sapere prima di investire."
+data-en="Everything you need before investing.">
 Tutto quello che devi sapere prima di investire
 </p>
 
@@ -227,16 +207,16 @@ Tutto quello che devi sapere prima di investire
 
 <a href="/roi-bnb/" class="card">
 <h3 data-it="ROI B&B" data-en="B&B ROI">ROI B&B</h3>
-<p data-it="Calcolo rendimento reale e profitto" data-en="Real ROI calculation">
-Calcolo rendimento reale e profitto
+<p data-it="Calcolo rendimento reale" data-en="Real ROI calculation">
+Calcolo rendimento reale
 </p>
 <span class="badge">SEO</span>
 </a>
 
 <a href="/costi-aprire-bnb/" class="card">
 <h3 data-it="Costi B&B" data-en="B&B costs">Costi B&B</h3>
-<p data-it="Tutti i costi reali da considerare" data-en="All real costs">
-Tutti i costi reali da considerare
+<p data-it="Tutti i costi reali" data-en="All real costs">
+Tutti i costi reali
 </p>
 <span class="badge">SEO</span>
 </a>
@@ -245,8 +225,8 @@ Tutti i costi reali da considerare
 <h3 data-it="Conviene aprire?" data-en="Is it worth it?">
 Conviene aprire?
 </h3>
-<p data-it="Analisi reale mercato affitti brevi" data-en="Market analysis">
-Analisi reale mercato affitti brevi
+<p data-it="Analisi mercato reale" data-en="Market analysis">
+Analisi mercato reale
 </p>
 <span class="badge">SEO</span>
 </a>
@@ -255,8 +235,8 @@ Analisi reale mercato affitti brevi
 <h3 data-it="Analisi città" data-en="City analysis">
 Analisi città
 </h3>
-<p data-it="ROI medio e rendimento per città" data-en="ROI by city">
-ROI medio e rendimento per città
+<p data-it="ROI medio città" data-en="ROI by city">
+ROI medio città
 </p>
 <span class="badge">SEO</span>
 </a>
@@ -275,7 +255,7 @@ Scopri se il tuo investimento è profittevole
 </h3>
 
 <p
-data-it="Simula ROI e rischio in meno di 30 secondi"
+data-it="Simula ROI in pochi secondi"
 data-en="Simulate ROI in seconds">
 Simula ROI in pochi secondi
 </p>
@@ -290,24 +270,8 @@ data-en="🚀 Start simulation">
 
 </main>
 
-<!-- LANG -->
+<!-- USA SOLO lang.js -->
 <script src="/js/lang.js"></script>
-
-<script>
-function applyLanguage(){
-
-  const lang = window.currentLang || localStorage.getItem("rb_lang") || "it";
-
-  document.querySelectorAll("[data-it]").forEach(el=>{
-    const text = el.getAttribute("data-"+lang);
-    if(text) el.innerText = text;
-  });
-
-}
-
-document.addEventListener("DOMContentLoaded", applyLanguage);
-document.addEventListener("rb_language_changed", applyLanguage);
-</script>
 
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js"></script>
