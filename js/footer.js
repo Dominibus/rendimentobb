@@ -53,10 +53,29 @@ data-en="Guides">
 Guide
 </strong>
 
-<a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-<a href="/quanto-guadagna-bnb/">Guadagni B&B</a>
-<a href="/costi-aprire-bnb/">Costi B&B</a>
-<a href="/roi-bnb/">ROI B&B</a>
+<a href="/aprire-bnb-conviene/"
+data-it="Aprire un B&B"
+data-en="Start a B&B">
+Aprire un B&B
+</a>
+
+<a href="/quanto-guadagna-bnb/"
+data-it="Guadagni B&B"
+data-en="B&B earnings">
+Guadagni B&B
+</a>
+
+<a href="/costi-aprire-bnb/"
+data-it="Costi B&B"
+data-en="B&B costs">
+Costi B&B
+</a>
+
+<a href="/roi-bnb/"
+data-it="ROI B&B"
+data-en="B&B ROI">
+ROI B&B
+</a>
 
 </div>
 
@@ -69,21 +88,58 @@ data-en="Tools">
 Strumenti
 </strong>
 
-<a href="/tool/">Simulatore ROI</a>
-<a href="/dashboard/">Dashboard</a>
-<a href="/mutui/">Mutui</a>
-<a href="/immobili/">Immobili</a>
+<a href="/tool/"
+data-it="Simulatore ROI"
+data-en="ROI Simulator">
+Simulatore ROI
+</a>
+
+<a href="/dashboard/"
+data-it="Dashboard"
+data-en="Dashboard">
+Dashboard
+</a>
+
+<a href="/mutui/"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
+
+<a href="/immobili/"
+data-it="Immobili"
+data-en="Properties">
+Immobili
+</a>
 
 </div>
 
 <!-- LEGAL -->
 <div class="footer-col">
 
-<strong>Legal</strong>
+<strong
+data-it="Legale"
+data-en="Legal">
+Legale
+</strong>
 
-<a href="/privacy.html">Privacy</a>
-<a href="/terms.html">Termini</a>
-<a href="/contact.html">Contatti</a>
+<a href="/privacy.html"
+data-it="Privacy"
+data-en="Privacy">
+Privacy
+</a>
+
+<a href="/terms.html"
+data-it="Termini"
+data-en="Terms">
+Termini
+</a>
+
+<a href="/contact.html"
+data-it="Contatti"
+data-en="Contact">
+Contatti
+</a>
 
 </div>
 
@@ -92,9 +148,23 @@ Strumenti
 <!-- 🔥 TRUST BAR -->
 <div class="footer-trust">
 
-<span>🔥 +1.200 investitori attivi</span>
-<span>✔ Analisi basate su dati reali</span>
-<span>✔ ROI fino al 18%</span>
+<span
+data-it="🔥 +1.200 investitori attivi"
+data-en="🔥 1,200+ active investors">
+🔥 +1.200 investitori attivi
+</span>
+
+<span
+data-it="✔ Analisi basate su dati reali"
+data-en="✔ Data-driven analysis">
+✔ Analisi basate su dati reali
+</span>
+
+<span
+data-it="✔ ROI fino al 18%"
+data-en="✔ ROI up to 18%">
+✔ ROI fino al 18%
+</span>
 
 </div>
 
@@ -117,9 +187,16 @@ data-en="© 2026 RendimentoBB – All rights reserved">
 
 document.body.insertAdjacentHTML("beforeend", footer);
 
-/* 🔥 TRADUZIONI */
+/* 🔥 TRADUZIONE IMMEDIATA */
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
+
+/* 🔥 SYNC LINGUA DINAMICA */
+document.addEventListener("rb_language_changed", () => {
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
+}
+});
 
 });
