@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-data-it="Academy B&B – ROI, strategie e investimenti affitti brevi"
-data-en="B&B Academy – ROI, strategy and short-term rental investing">
-Academy B&B – ROI strategie investimento
+data-it="Academy B&B – Come investire e calcolare ROI affitti brevi"
+data-en="B&B Academy – How to invest and calculate ROI short-term rentals">
+Academy B&B – ROI e strategie investimento
 </title>
 
 <meta name="description"
-data-it="Guida completa per investire in un B&B: ROI reale, mutui sostenibili, pricing e strategie per massimizzare il profitto."
-data-en="Complete guide to B&B investing: real ROI, mortgages, pricing and profit optimization strategies.">
+data-it="Guida completa su come investire in un B&B: ROI reale, costi, mutui e strategie per aumentare il profitto."
+data-en="Complete guide to B&B investing: ROI, costs, mortgages and strategies to increase profit.">
 
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/img/favicon.png">
@@ -25,110 +25,70 @@ data-en="Complete guide to B&B investing: real ROI, mortgages, pricing and profi
 background:#f8fafc;
 }
 
-.academy-page main{
-padding-top:40px;
-}
-
-/* ===== HERO SAAS ===== */
+/* ===== HERO (STILE IMMOBILI) ===== */
 .hero-academy{
-display:grid;
-grid-template-columns:1.1fr 1fr;
-gap:40px;
-align-items:center;
-max-width:1200px;
-margin:60px auto;
-padding:0 20px;
+position:relative;
+padding:110px 20px 100px;
+background:
+linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.85)),
+url("/img/naples-bg.jpg") center/cover;
+text-align:center;
 }
 
-/* LEFT */
-.hero-text h1{
+.hero-academy h1{
 font-size:42px;
 font-weight:800;
-line-height:1.2;
 color:#0f172a;
+max-width:900px;
+margin:auto;
 }
 
-.hero-text p{
-margin-top:18px;
+.hero-academy p{
+margin-top:15px;
 font-size:18px;
 color:#475569;
-max-width:520px;
-}
-
-/* badge trust */
-.trust{
-margin-top:20px;
-font-size:14px;
-color:#10b981;
-font-weight:600;
 }
 
 /* CTA */
 .hero-cta{
 margin-top:30px;
-display:flex;
-gap:15px;
-flex-wrap:wrap;
 }
 
 .hero-cta a{
-padding:14px 26px;
+background:#10b981;
+color:white;
+padding:14px 28px;
 border-radius:12px;
 font-weight:700;
 text-decoration:none;
-}
-
-.btn-primary{
-background:#10b981;
-color:white;
 box-shadow:0 10px 25px rgba(16,185,129,0.3);
 }
 
-.btn-primary:hover{
+.hero-cta a:hover{
 transform:translateY(-2px);
 }
 
-.btn-secondary{
-background:white;
-color:#0f172a;
-border:1px solid #e2e8f0;
-}
-
-/* RIGHT VISUAL */
-.hero-visual{
-background:white;
-border-radius:20px;
-padding:30px;
-box-shadow:0 25px 60px rgba(0,0,0,0.08);
-}
-
-/* fake dashboard */
-.metric{
-display:flex;
-justify-content:space-between;
-margin-bottom:15px;
-font-size:14px;
-}
-
-.metric strong{
+/* ===== TRUST ===== */
+.trust{
+margin-top:20px;
 color:#10b981;
+font-weight:600;
 }
 
-/* ===== VALUE SECTION ===== */
-.value{
+/* ===== SECTION ===== */
+.section{
 max-width:1100px;
-margin:100px auto;
+margin:80px auto;
 padding:0 20px;
 text-align:center;
 }
 
-.value h2{
-font-size:32px;
+.section h2{
+font-size:30px;
 font-weight:800;
-color:#0f172a;
 }
 
-.value p{
+.section p{
 margin-top:10px;
 color:#64748b;
 }
@@ -138,27 +98,42 @@ color:#64748b;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:25px;
-margin-top:50px;
+margin-top:40px;
 }
 
 .card{
 background:white;
 padding:25px;
-border-radius:18px;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
+border-radius:16px;
+border:1px solid #e2e8f0;
+box-shadow:0 10px 25px rgba(0,0,0,0.05);
 transition:.25s;
-cursor:pointer;
-border:1px solid #f1f5f9;
+text-align:left;
 }
 
 .card:hover{
-transform:translateY(-6px);
+transform:translateY(-5px);
 box-shadow:0 20px 50px rgba(0,0,0,0.1);
 }
 
+.card a{
+text-decoration:none;
+color:#0f172a;
+display:block;
+}
+
 .card h3{
-font-size:18px;
 margin-bottom:8px;
+}
+
+.badge{
+display:inline-block;
+margin-top:10px;
+font-size:11px;
+background:#10b981;
+color:white;
+padding:4px 8px;
+border-radius:6px;
 }
 
 /* ===== CTA FINAL ===== */
@@ -168,19 +143,13 @@ margin:100px auto;
 background:linear-gradient(135deg,#10b981,#059669);
 color:white;
 padding:50px;
-border-radius:24px;
+border-radius:20px;
 text-align:center;
-box-shadow:0 30px 80px rgba(16,185,129,0.3);
-}
-
-.cta-final h3{
-font-size:28px;
-margin-bottom:15px;
 }
 
 .cta-final a{
+margin-top:20px;
 display:inline-block;
-margin-top:15px;
 padding:14px 30px;
 background:white;
 color:#059669;
@@ -188,23 +157,8 @@ border-radius:12px;
 font-weight:700;
 }
 
-/* ===== MOBILE ===== */
-@media(max-width:900px){
-.hero-academy{
-grid-template-columns:1fr;
-text-align:center;
-}
-
-.hero-text p{
-margin:auto;
-}
-
-.hero-cta{
-justify-content:center;
-}
-}
-
 </style>
+
 </head>
 
 <body class="academy-page">
@@ -216,18 +170,16 @@ justify-content:center;
 <!-- HERO -->
 <section class="hero-academy">
 
-<div class="hero-text">
-
 <h1
-data-it="Impara a investire in B&B con ROI reale e profitto sostenibile"
-data-en="Learn to invest in B&B with real ROI and sustainable profit">
-Impara a investire in B&B con ROI reale
+data-it="Come investire in un B&B e ottenere un ROI reale"
+data-en="How to invest in a B&B and get real ROI">
+Come investire in un B&B con ROI reale
 </h1>
 
 <p
-data-it="Scopri come evitare errori costosi e massimizzare i guadagni negli affitti brevi con dati reali."
-data-en="Avoid costly mistakes and maximize short-term rental profits with real data.">
-Scopri come evitare errori e massimizzare i guadagni.
+data-it="Scopri strategie, costi e numeri reali per evitare errori e massimizzare il profitto."
+data-en="Discover strategies, costs and real numbers to maximize profit.">
+Strategie, costi e numeri reali per investire meglio
 </p>
 
 <div class="trust">
@@ -235,68 +187,62 @@ Scopri come evitare errori e massimizzare i guadagni.
 </div>
 
 <div class="hero-cta">
-<a href="/tool/" class="btn-primary"
+<a href="/tool/"
 data-it="🚀 Analizza investimento"
 data-en="🚀 Analyze investment">
 🚀 Analizza investimento
 </a>
-
-<a href="/market/" class="btn-secondary"
-data-it="📊 Analisi mercato"
-data-en="📊 Market analysis">
-📊 Analisi mercato
-</a>
-</div>
-
-</div>
-
-<!-- VISUAL -->
-<div class="hero-visual">
-
-<div class="metric">ROI medio <strong>+12.4%</strong></div>
-<div class="metric">Occupazione <strong>72%</strong></div>
-<div class="metric">Ricavo annuo <strong>€39.200</strong></div>
-<div class="metric">Break-even <strong>7 anni</strong></div>
-
 </div>
 
 </section>
 
-<!-- VALUE -->
-<section class="value">
+<!-- CONTENUTI SEO -->
+<section class="section">
 
 <h2
-data-it="Tutto quello che serve per investire in un B&B"
-data-en="Everything you need to invest in a B&B">
-Tutto quello che serve per investire
+data-it="Guida completa investimento B&B"
+data-en="Complete B&B investment guide">
+Guida completa investimento B&B
 </h2>
 
 <p
-data-it="Strategie, numeri e strumenti per prendere decisioni intelligenti."
-data-en="Strategies, numbers and tools to make smarter decisions.">
-Strategie, numeri e strumenti reali.
+data-it="Tutto quello che devi sapere prima di acquistare un immobile per affitti brevi."
+data-en="Everything you need before investing in short-term rentals.">
+Tutto quello che devi sapere prima di investire
 </p>
 
 <div class="cards">
 
 <div class="card">
-<h3 data-it="ROI reale" data-en="Real ROI">ROI reale</h3>
-<p data-it="Calcolo preciso del rendimento" data-en="Accurate ROI calculation">Calcolo preciso del rendimento</p>
+<a href="/roi-bnb/">
+<h3>ROI B&B</h3>
+<p>Calcolo rendimento reale e profitto</p>
+<span class="badge">SEO</span>
+</a>
 </div>
 
 <div class="card">
-<h3 data-it="Mutuo sostenibile" data-en="Mortgage strategy">Mutuo sostenibile</h3>
-<p data-it="Evita errori finanziari" data-en="Avoid financial mistakes">Evita errori finanziari</p>
+<a href="/costi-aprire-bnb/">
+<h3>Costi B&B</h3>
+<p>Tutti i costi reali da considerare</p>
+<span class="badge">SEO</span>
+</a>
 </div>
 
 <div class="card">
-<h3 data-it="Pricing" data-en="Pricing strategy">Pricing</h3>
-<p data-it="Massimizza i ricavi" data-en="Maximize revenue">Massimizza i ricavi</p>
+<a href="/aprire-bnb-conviene/">
+<h3>Conviene aprire?</h3>
+<p>Analisi reale mercato affitti brevi</p>
+<span class="badge">SEO</span>
+</a>
 </div>
 
 <div class="card">
-<h3 data-it="Errori critici" data-en="Critical mistakes">Errori critici</h3>
-<p data-it="Evita perdite" data-en="Avoid losses">Evita perdite</p>
+<a href="/market/">
+<h3>Analisi città</h3>
+<p>ROI medio e rendimento per città</p>
+<span class="badge">SEO</span>
+</a>
 </div>
 
 </div>
@@ -307,15 +253,15 @@ Strategie, numeri e strumenti reali.
 <section class="cta-final">
 
 <h3
-data-it="Scopri se il tuo investimento è davvero profittevole"
-data-en="Find out if your investment is truly profitable">
+data-it="Scopri se il tuo investimento è profittevole"
+data-en="Check if your investment is profitable">
 Scopri se il tuo investimento è profittevole
 </h3>
 
 <p
-data-it="Simula ROI, rischio e rendimento in meno di 30 secondi."
-data-en="Simulate ROI, risk and profit in under 30 seconds.">
-Simula ROI e rischio in pochi secondi
+data-it="Simula ROI e rischio in meno di 30 secondi"
+data-en="Simulate ROI in seconds">
+Simula ROI in pochi secondi
 </p>
 
 <a href="/tool/"
