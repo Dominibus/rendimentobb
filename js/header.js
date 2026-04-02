@@ -115,8 +115,8 @@ link.classList.add("active");
 });
 
 // 🔥 traduzione immediata header
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
+if(typeof applyTranslations === "function"){
+applyTranslations();
 }
 
 });
@@ -204,8 +204,8 @@ Accedi
 }
 
 // 🔥 traduzione user area
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
+if(typeof applyTranslations === "function"){
+applyTranslations();
 }
 
 });
@@ -215,7 +215,7 @@ applyStaticTranslations();
 /* ===================== */
 
 document.addEventListener("rb_language_changed", () => {
-if(typeof applyStaticTranslations === "function"){
-applyStaticTranslations();
+if(typeof applyTranslations === "function"){
+applyTranslations();
 }
 });
