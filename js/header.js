@@ -5,35 +5,25 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-/* ===================== */
-/* GLOBAL CITY BACKGROUND */
-/* ===================== */
+window.applyCityBackground = function(city){
 
-window.applyCityBackground = function(){
+const hero =
+  document.querySelector(".hero-bg") ||
+  document.querySelector(".hero");
 
-  const hero =
-    document.querySelector(".hero-bg") ||
-    document.querySelector(".hero");
+if(!hero) return;
 
-  if(!hero) return;
+// reset classi
+hero.classList.remove("rome","naples","milan","florence");
 
-  // reset classi
-  hero.classList.remove("rome","naples","milan","florence");
+// fallback sicurezza
+const finalCity = city || "rome";
 
-  // detect automatico da URL
-  const path = window.location.pathname.toLowerCase();
+// applica classe
+hero.classList.add(finalCity);
 
-  let city = "rome";
+console.log("🎯 Hero city:", finalCity);
 
-  if(path.includes("milano")) city = "milan";
-  else if(path.includes("napoli")) city = "naples";
-  else if(path.includes("firenze")) city = "florence";
-  else if(path.includes("roma")) city = "rome";
-
-  // applica classe
-  hero.classList.add(city);
-
-  console.log("🎯 Hero city:", city);
 };
 
 
