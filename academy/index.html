@@ -1,237 +1,174 @@
-<!DOCTYPE html>
-<html lang="it">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- SEO -->
-<title
-data-it="Academy B&B – Strategie ROI"
-data-en="B&B Academy – ROI Strategies">
-Academy B&B – Strategie ROI
-</title>
-
-<meta name="description"
-data-it="Impara a calcolare il ROI reale e investire in modo profittevole."
-data-en="Learn how to calculate real ROI and invest profitably.">
-
-<link rel="stylesheet" href="/css/style.css">
-<link rel="icon" href="/img/favicon.png">
-
 <style>
 
-/* ===== FIX RESET (non rompere header globale) ===== */
-.academy-page .section,
-.academy-page .container,
-.academy-page .guide-grid,
-.academy-page .guide-card {
-all: unset;
-display: block;
+/* ===== GLOBAL FIX ===== */
+.academy-page main{
+padding-top:40px;
 }
 
-/* ===== HERO ===== */
+/* ===== HERO MODERNO ===== */
 .hero-academy{
-padding:120px 20px;
+padding:100px 20px 80px;
 background:
-linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.75)),
+linear-gradient(rgba(15,23,42,0.35), rgba(15,23,42,0.55)),
 url("/img/naples-bg.jpg") center/cover;
 text-align:center;
 color:white;
+position:relative;
+}
+
+/* glow effect */
+.hero-academy::before{
+content:"";
+position:absolute;
+top:-100px;
+left:50%;
+transform:translateX(-50%);
+width:600px;
+height:600px;
+background:radial-gradient(circle, rgba(16,185,129,0.25), transparent 70%);
+filter:blur(80px);
+z-index:0;
+}
+
+.hero-academy *{
+position:relative;
+z-index:2;
+}
+
+/* ===== HEADLINE ===== */
+.hero-academy h1{
+font-size:38px;
+font-weight:800;
+line-height:1.2;
+max-width:800px;
+margin:auto;
+}
+
+.hero-academy p{
+margin-top:15px;
+font-size:18px;
+opacity:0.9;
 }
 
 /* ===== STACK ===== */
 .stack{
-max-width:700px;
-margin:40px auto;
+max-width:720px;
+margin:50px auto;
 display:flex;
 flex-direction:column;
 gap:20px;
 }
 
-/* ===== BOX ===== */
+/* ===== BOX GLASS ===== */
 .box{
-background:white;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(10px);
 color:#0f172a;
-padding:20px;
-border-radius:16px;
-box-shadow:0 15px 40px rgba(0,0,0,0.1);
-text-align:left;
+padding:22px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:all .25s ease;
+}
+
+.box:hover{
+transform:translateY(-4px);
 }
 
 .box-light{
-background:#f1f5f9;
+background:rgba(241,245,249,0.9);
 }
 
-/* ===== CTA ===== */
+/* ===== CTA PREMIUM ===== */
 .cta{
 background:linear-gradient(135deg,#10b981,#059669);
 color:white;
-padding:25px;
-border-radius:16px;
+padding:28px;
+border-radius:18px;
 text-align:center;
+box-shadow:0 20px 50px rgba(16,185,129,0.3);
+}
+
+.cta p{
+font-weight:600;
 }
 
 .cta .btn{
-margin-top:10px;
+margin-top:12px;
 display:inline-block;
+padding:12px 22px;
+border-radius:10px;
+background:white;
+color:#059669;
+font-weight:700;
+transition:all .2s;
+}
+
+.cta .btn:hover{
+transform:scale(1.05);
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title{
+text-align:center;
+font-size:28px;
+font-weight:700;
+margin-top:80px;
 }
 
 /* ===== GRID ===== */
 .cards{
-max-width:1000px;
-margin:60px auto;
+max-width:1100px;
+margin:50px auto;
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
 padding:0 20px;
 }
 
-/* ===== CARD ===== */
+/* ===== CARD SAAS ===== */
 .card{
 background:white;
-padding:20px;
-border-radius:16px;
-box-shadow:0 15px 40px rgba(0,0,0,0.1);
+padding:25px;
+border-radius:20px;
+box-shadow:0 15px 40px rgba(0,0,0,0.06);
 position:relative;
+transition:all .25s ease;
+border:1px solid #f1f5f9;
 }
 
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 25px 60px rgba(0,0,0,0.1);
+}
+
+/* badge PRO */
 .card::after{
-content:"🔒 PRO";
+content:"PRO";
 position:absolute;
-top:10px;
-right:10px;
+top:12px;
+right:12px;
 background:#10b981;
 color:white;
-font-size:11px;
-padding:4px 8px;
+font-size:10px;
+padding:5px 8px;
 border-radius:6px;
+font-weight:600;
 }
 
 /* ===== CTA FINAL ===== */
 .cta-final{
 text-align:center;
-margin:80px 0;
+margin:100px 0 80px;
+}
+
+.cta-final h3{
+font-size:26px;
+margin-bottom:20px;
+}
+
+.cta-final .btn{
+padding:14px 28px;
+font-size:16px;
 }
 
 </style>
-
-</head>
-
-<body class="academy-page">
-
-<div id="global-header"></div>
-
-<main>
-
-<!-- HERO -->
-<section class="hero-academy">
-
-<h1
-data-it="Il vero problema dei B&B non è la domanda. È il ROI."
-data-en="The real problem with B&B investments is ROI.">
-Il vero problema dei B&B non è la domanda. È il ROI.
-</h1>
-
-<p
-data-it="La maggior parte degli investimenti sembra profittevole finché non analizzi i numeri reali."
-data-en="Most investments look profitable until you analyze the real numbers.">
-La maggior parte degli investimenti sembra profittevole finché non analizzi i numeri reali.
-</p>
-
-<div class="stack">
-
-<div class="box">
-<h3 data-it="Cosa succede nella realtà:" data-en="What really happens:">
-Cosa succede nella realtà:
-</h3>
-<ul>
-<li data-it="ROI falsato" data-en="Misleading ROI">ROI falsato</li>
-<li data-it="Costi nascosti" data-en="Hidden costs">Costi nascosti</li>
-<li data-it="Mutuo che distrugge il profitto" data-en="Mortgage killing profit">Mutuo che distrugge il profitto</li>
-</ul>
-</div>
-
-<div class="box box-light">
-<h3 data-it="Cosa impari:" data-en="What you learn:">
-Cosa impari:
-</h3>
-<ul>
-<li data-it="ROI reale" data-en="Real ROI">ROI reale</li>
-<li data-it="Mutuo sostenibile" data-en="Sustainable mortgage">Mutuo sostenibile</li>
-<li data-it="Pricing strategico" data-en="Strategic pricing">Pricing strategico</li>
-</ul>
-</div>
-
-<div class="cta">
-<p
-data-it="👉 Verifica se stai davvero guadagnando"
-data-en="👉 Check if you're really making profit">
-👉 Verifica se stai davvero guadagnando
-</p>
-
-<a href="/tool/" class="btn btn-primary"
-data-it="🚀 Analizza investimento"
-data-en="🚀 Analyze investment">
-🚀 Analizza investimento
-</a>
-</div>
-
-</div>
-
-</section>
-
-<!-- CARDS -->
-<section>
-
-<div class="cards">
-
-<div class="card">
-<h3 data-it="ROI reale" data-en="Real ROI">ROI reale</h3>
-<p data-it="Scopri il rendimento reale" data-en="Discover real profitability">Scopri il rendimento reale</p>
-</div>
-
-<div class="card">
-<h3 data-it="Mutuo sostenibile" data-en="Mortgage strategy">Mutuo sostenibile</h3>
-<p data-it="Evita errori costosi" data-en="Avoid costly mistakes">Evita errori</p>
-</div>
-
-<div class="card">
-<h3 data-it="Pricing" data-en="Pricing strategy">Pricing</h3>
-<p data-it="Aumenta ricavi" data-en="Increase revenue">Aumenta ricavi</p>
-</div>
-
-<div class="card">
-<h3 data-it="Errori critici" data-en="Critical mistakes">Errori critici</h3>
-<p data-it="Evita perdite" data-en="Avoid losses">Evita perdite</p>
-</div>
-
-</div>
-
-<div class="cta-final">
-
-<h3
-data-it="Scopri se il tuo investimento è profittevole"
-data-en="Find out if your investment is profitable">
-Scopri se il tuo investimento è profittevole
-</h3>
-
-<a href="/tool/" class="btn btn-primary"
-data-it="🚀 Avvia simulazione"
-data-en="🚀 Start simulation">
-🚀 Avvia simulazione
-</a>
-
-</div>
-
-</section>
-
-</main>
-
-<!-- JS -->
-<script src="/js/lang.js"></script>
-<script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js"></script>
-
-</body>
-</html>
