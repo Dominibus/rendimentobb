@@ -549,6 +549,67 @@ Cerca immobili
 
 </section>
 
+<!-- ===================== -->
+<!-- 🔥 CITY BACKGROUND LOGIC -->
+<!-- ===================== -->
+
+<script>
+
+// ✅ FUNZIONE CORRETTA (SOSTITUISCE LA VECCHIA)
+window.applyCityBackground = function(city){
+
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero");
+
+  if(!hero) return;
+
+  // reset classi
+  hero.classList.remove("rome","naples","milan","florence");
+
+  // fallback sicurezza
+  const finalCity = city || "rome";
+
+  hero.classList.add(finalCity);
+
+  console.log("🎯 Hero city:", finalCity);
+};
+
+
+// =====================
+// 🔥 AUTO CHANGE DA INPUT
+// =====================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const cityInput = document.getElementById("searchCity");
+
+  if(cityInput){
+
+    cityInput.addEventListener("input", () => {
+
+      const val = cityInput.value.toLowerCase();
+
+      if(val.includes("milano")){
+        applyCityBackground("milan");
+      }
+      else if(val.includes("napoli")){
+        applyCityBackground("naples");
+      }
+      else if(val.includes("firenze")){
+        applyCityBackground("florence");
+      }
+      else if(val.includes("roma")){
+        applyCityBackground("rome");
+      }
+
+    });
+
+  }
+
+});
+
+</script>
 
 
 <!-- ANALIZZA IMMOBILE -->
