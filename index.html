@@ -692,19 +692,33 @@ Analizza rischio, mutuo e sostenibilità prima di investire
 <div class="container" style="text-align:center">
 
 <h2
-data-it="Dove conviene davvero investire oggi?"
-data-en="Where should you really invest today?">
-Dove conviene davvero investire oggi?
+data-it="Dove investire per ottenere il massimo rendimento nel 2026?"
+data-en="Where to invest for maximum returns in 2026?">
+Dove investire per ottenere il massimo rendimento nel 2026?
 </h2>
 
 <p style="margin-top:8px;color:#64748b;font-size:15px"
-data-it="Confronta rendimenti reali e scopri le zone più profittevoli"
-data-en="Compare real returns and discover the most profitable areas">
-Confronta rendimenti reali e scopri le zone più profittevoli
+data-it="Dati reali, ROI e occupazione: scegli la città giusta prima di investire"
+data-en="Real data, ROI and occupancy: choose the right city before investing">
+Dati reali, ROI e occupazione: scegli la città giusta prima di investire
 </p>
 
-<div class="market-buttons" style="margin-top:25px">
+<!-- 🔥 LINK MARKET PRINCIPALE (SEO + UX) -->
+<div style="margin-top:20px;margin-bottom:10px">
 
+<a href="/market/" 
+class="btn btn-secondary"
+style="font-size:14px;padding:8px 16px;border-radius:999px"
+
+data-it="📊 Vedi analisi completa città"
+data-en="📊 View full city analysis">
+📊 Vedi analisi completa città
+</a>
+
+</div>
+
+<div class="market-buttons" style="margin-top:15px">
+ 
 <button onclick="goToMarket('roma')" class="btn btn-primary market-btn">
 <span data-it="Roma" data-en="Rome">Roma</span>
 </button>
@@ -1274,8 +1288,13 @@ window.goToMarket = function(city){
 
   if(!city) return;
 
+  // salva city
   localStorage.setItem("selected_city", city);
 
+  // 🔥 tracking (futuro analytics)
+  console.log("🔥 MARKET CLICK:", city);
+
+  // 🔥 redirect intelligente
   window.location.href = `/market/${encodeURIComponent(city)}/`;
 
 };
