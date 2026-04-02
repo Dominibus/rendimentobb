@@ -6329,10 +6329,10 @@ font-size:16px;
 }
 
 /* ===================== */
-/* IMMOBILI FORM – FIX DEFINITIVO PRO */
+/* IMMOBILI FORM – FINAL PRO CLEAN */
 /* ===================== */
 
-/* 🎯 LABEL VISIBILI SU HERO (SFONDO FOTO) */
+/* 🎯 LABEL VISIBILI SU HERO */
 body.immobili-page .form-grid .input-group label{
   font-size:13px !important;
   font-weight:600 !important;
@@ -6349,7 +6349,7 @@ body.immobili-page .form-grid .input-group label{
 /* 🎯 INPUT GLASS PREMIUM */
 body.immobili-page .form-grid .input-group input{
 
-  padding:12px !important;
+  padding:14px !important;
   border-radius:12px !important;
 
   background:rgba(255,255,255,0.92) !important;
@@ -6359,6 +6359,7 @@ body.immobili-page .form-grid .input-group input{
 
   color:#0f172a !important;
   font-size:14px !important;
+  font-weight:500;
 
   transition:all .25s ease;
 
@@ -6367,57 +6368,62 @@ body.immobili-page .form-grid .input-group input{
   0 2px 6px rgba(0,0,0,0.05) !important;
 }
 
-/* 🎯 PLACEHOLDER PIÙ LEGGIBILE */
+/* 🎯 PLACEHOLDER */
 body.immobili-page .form-grid .input-group input::placeholder{
-  color:#64748b;
-  opacity:0.9;
+  color:#94a3b8;
+  opacity:1;
 }
 
-/* 🎯 FOCUS (EFFETTO SAAS) */
+/* 🎯 HOVER */
+body.immobili-page .form-grid .input-group input:hover{
+
+  border-color:rgba(16,185,129,0.4);
+
+  box-shadow:
+  0 12px 35px rgba(0,0,0,0.1),
+  0 4px 10px rgba(0,0,0,0.06);
+
+  transform:translateY(-1px);
+}
+
+/* 🎯 FOCUS (SAAS PREMIUM) */
 body.immobili-page .form-grid .input-group input:focus{
+
   outline:none;
 
   border-color:#10b981 !important;
 
   box-shadow:
-  0 0 0 4px rgba(16,185,129,0.18),
-  0 10px 30px rgba(16,185,129,0.15) !important;
+  0 0 0 3px rgba(16,185,129,0.25),
+  0 10px 30px rgba(16,185,129,0.18) !important;
 
-  transform:translateY(-1px);
+  background:#ffffff !important;
+
+  transform:translateY(-2px);
 }
 
-/* 🎯 HOVER LEGGERO */
-body.immobili-page .form-grid .input-group input:hover{
-  border-color:rgba(16,185,129,0.4);
+/* 🎯 INPUT ATTIVO (MICRO UX PRO) */
+body.immobili-page .form-grid .input-group input:not(:placeholder-shown){
+  border-color:#10b981;
 }
 
-/* 🎯 MOBILE FIX (IMPORTANTISSIMO) */
+/* 🎯 MOBILE FIX */
 @media(max-width:768px){
 
   body.immobili-page .form-grid{
     grid-template-columns:1fr;
   }
 
+  body.immobili-page .form-grid .input-group input{
+    padding:16px !important;
+    font-size:16px !important; /* evita zoom iOS */
+  }
+
 }
 
 /* ===================== */
-/* INPUT HOVER PRO */
+/* HERO PREMIUM OVERLAY */
 /* ===================== */
-
-.input-group input{
-transition:all .25s ease;
-}
-
-.input-group input:hover{
-transform:translateY(-1px);
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.input-group input:focus{
-transform:translateY(-2px);
-}
-
-/* ================= HERO PREMIUM OVERLAY ================= */
 
 .hero::before{
 content:"";
