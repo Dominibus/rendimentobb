@@ -6548,3 +6548,45 @@ box-shadow:0 40px 100px rgba(0,0,0,0.2);
     var(--overlay-bottom, rgba(15,23,42,0.75)) 100%
   );
 }
+
+/* ===================================================== */
+/* RENDIMENTOBB – UNIVERSAL HERO OVERLAY ENGINE */
+/* ===================================================== */
+
+/* BASE HERO */
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+/* 🔥 OVERLAY UNIVERSALE */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+
+  background:linear-gradient(
+    180deg,
+    rgba(15,23,42,0.45) 0%,
+    rgba(15,23,42,0.60) 50%,
+    rgba(15,23,42,0.75) 100%
+  );
+
+  pointer-events:none;
+}
+
+/* CONTENUTO SOPRA */
+.hero > *{
+  position:relative;
+  z-index:2;
+}
+
+body.immobili-page .hero::before{
+  background:linear-gradient(
+    180deg,
+    rgba(15,23,42,0.25),
+    rgba(15,23,42,0.40),
+    rgba(15,23,42,0.55)
+  );
+}
