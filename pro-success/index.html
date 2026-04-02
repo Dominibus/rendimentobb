@@ -1,8 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title
+data-it="Pagamento completato – RendimentoBB"
+data-en="Payment successful – RendimentoBB">
+Pagamento completato – RendimentoBB
+</title>
+
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/lang.js" defer></script>
+
+</head>
+
+<body>
+
+<div id="global-header"></div>
+
+<main>
+
+<section class="section" style="text-align:center; padding:100px 20px;">
+
+<div class="container" style="max-width:600px;">
+
+<!-- ICON -->
+<div style="font-size:48px; margin-bottom:20px;">✅</div>
+
+<!-- TITLE -->
+<h1
+data-it="Pagamento completato"
+data-en="Payment successful">
+Pagamento completato
+</h1>
+
+<!-- SUBTITLE -->
+<p style="margin-top:10px; color:#64748b;"
+data-it="Il tuo account PRO è stato attivato con successo."
+data-en="Your PRO account has been successfully activated.">
+Il tuo account PRO è stato attivato con successo.
+</p>
+
+<!-- STATUS -->
+<p id="status-msg" style="margin-top:20px; font-size:14px; color:#94a3b8;">
+Attivazione in corso...
+</p>
+
+<!-- SYNC -->
+<p style="margin-top:10px;font-size:13px;color:#94a3b8;"
+data-it="⏳ Sincronizzazione account in corso (max 5s)"
+data-en="⏳ Syncing account (max 5s)">
+⏳ Sincronizzazione account in corso (max 5s)
+</p>
+
+<!-- CTA -->
+<div style="margin-top:40px; display:flex; flex-direction:column; gap:15px; align-items:center;">
+
+<a href="/dashboard/" class="btn btn-primary btn-lg"
+data-it="Vai alla dashboard"
+data-en="Go to dashboard">
+Vai alla dashboard
+</a>
+
+<a href="/tool/" class="btn btn-secondary"
+data-it="Simula un investimento"
+data-en="Simulate an investment">
+Simula un investimento
+</a>
+
+</div>
+
+<!-- TRUST -->
+<p style="margin-top:40px; font-size:13px; color:#94a3b8;"
+data-it="🚀 Ora hai accesso completo a tutte le analisi PRO"
+data-en="🚀 You now have full access to all PRO features">
+🚀 Ora hai accesso completo a tutte le analisi PRO
+</p>
+
+</div>
+
+</section>
+
+</main>
+
 <script type="module">
 
 import { upgradeToPro } from "/js/firebase-init.js";
-
-document.addEventListener("DOMContentLoaded", () => {
 
 const params = new URLSearchParams(window.location.search);
 
@@ -12,12 +97,7 @@ params.get("uid");
 
 const statusEl = document.getElementById("status-msg");
 
-// 🔥 helper traduzione centralizzata
-function t(it, en){
-  return (window.currentLang === "en") ? en : it;
-}
-
-// 🔥 redirect intelligente
+// 🔥 redirect intelligente (NO BUG UX)
 function smartRedirect(){
   setTimeout(()=>{
     if(window.currentPlan === "pro" || window.currentPlan === "investor"){
@@ -28,69 +108,49 @@ function smartRedirect(){
   }, 2500);
 }
 
-// 🔥 set status UI
-function setStatus(text, color="#94a3b8"){
-  if(statusEl){
-    statusEl.innerText = text;
-    statusEl.style.color = color;
-  }
-}
-
-// 🔥 traduzioni globali subito
-if(window.applyTranslations) applyTranslations();
-
-// ================= MAIN =================
-
 if(uid){
 
-  // 🔥 TEST MODE
+  // 🔥 BLOCCO TEST (fondamentale)
   if(uid === "test123"){
     console.warn("TEST MODE - nessun upgrade reale");
 
-    setStatus(
-      t(
-        "Modalità test attiva (nessun upgrade reale)",
-        "Test mode active (no real upgrade)"
-      ),
-      "#f59e0b"
-    );
+    if(statusEl){
+      statusEl.innerText =
+      (window.currentLang === "en")
+      ? "Test mode active (no real upgrade)"
+      : "Modalità test attiva (nessun upgrade reale)";
+      statusEl.style.color = "#f59e0b";
+    }
 
     smartRedirect();
   }
 
   else{
 
-    setStatus(
-      t(
-        "Attivazione in corso...",
-        "Activating your account..."
-      )
-    );
-
     upgradeToPro(uid)
     .then(()=>{
       console.log("PRO attivato");
 
-      setStatus(
-        t(
-          "Attivazione completata con successo",
-          "Activation completed successfully"
-        ),
-        "#10b981"
-      );
+      if(statusEl){
+        statusEl.innerText =
+        (window.currentLang === "en")
+        ? "Activation completed successfully"
+        : "Attivazione completata con successo";
+        statusEl.style.color = "#10b981";
+      }
 
       smartRedirect();
     })
     .catch(err=>{
       console.error("Errore upgrade PRO:", err);
 
-      setStatus(
-        t(
-          "Accesso già attivo o sincronizzazione in corso",
-          "Access already active or syncing in progress"
-        ),
-        "#10b981"
-      );
+      if(statusEl){
+        statusEl.innerText =
+        (window.currentLang === "en")
+        ? "Activation in progress... access already enabled"
+        : "Attivazione in corso... accesso già abilitato";
+        statusEl.style.color = "#10b981";
+      }
 
       smartRedirect();
     });
@@ -101,16 +161,25 @@ if(uid){
 
   console.warn("UID non trovato nell'URL");
 
-  setStatus(
-    t(
-      "ID utente non trovato",
-      "User ID not found"
-    ),
-    "#ef4444"
-  );
+  if(statusEl){
+    statusEl.innerText =
+    (window.currentLang === "en")
+    ? "User ID not found"
+    : "ID utente non trovato";
+    statusEl.style.color = "#ef4444";
+  }
 
 }
 
+/* 🔥 TRADUZIONI */
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.applyTranslations) applyTranslations();
 });
 
 </script>
+
+<script type="module" src="/js/header.js"></script>
+<script src="/js/footer.js" defer></script>
+
+</body>
+</html>
