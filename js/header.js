@@ -5,20 +5,7 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-/* ===================== */
-/* GLOBAL CITY BACKGROUND */
-/* ===================== */
-
-window.applyCityBackground = function(city){
-
-const images = {
-rome: "/img/rome-bg.jpg",
-naples: "/img/naples-bg.jpg",
-florence: "/img/florence-bg.jpg",
-milan: "/img/milan-bg.jpg"
-};
-
-if(!images[city]) return;
+// ================= GLOBAL CITY BACKGROUND (FINAL PRO) =================
 
 window.applyCityBackground = function(city){
 
@@ -28,27 +15,45 @@ const hero =
 
 if(!hero) return;
 
-// 🔥 pulizia classi
+// 🔥 RESET CLASSI
 hero.classList.remove("rome","naples","milan","florence");
 
-// 🔥 mapping IT → EN
+// 🔥 MAP IT → EN
 const map = {
   roma:"rome",
   napoli:"naples",
   milano:"milan",
-  firenze:"florence"
+  firenze:"florence",
+  rome:"rome",
+  naples:"naples",
+  milan:"milan",
+  florence:"florence"
 };
 
-const cityClass = map[city] || city || "rome";
+// 🔥 NORMALIZZA INPUT
+let cityKey = map[(city || "").toLowerCase()];
 
-// 🔥 applica SOLO classi (NO style inline)
-hero.classList.add(cityClass);
+// ================= AUTO-DETECT URL (🔥 FONDAMENTALE) =================
 
-console.log("🎯 BG aggiornato:", cityClass);
+if(!cityKey){
+
+  const path = window.location.pathname.toLowerCase();
+
+  if(path.includes("milano")) cityKey = "milan";
+  else if(path.includes("napoli")) cityKey = "naples";
+  else if(path.includes("firenze")) cityKey = "florence";
+  else if(path.includes("roma")) cityKey = "rome";
+}
+
+// 🔥 FALLBACK SICURO
+if(!cityKey) cityKey = "rome";
+
+// 🔥 APPLICA CLASSE
+hero.classList.add(cityKey);
+
+console.log("🎯 BG attivo:", cityKey);
 
 };
-
-};  
 
 /* ===================== */
 /* INIT HEADER */
