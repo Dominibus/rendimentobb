@@ -5349,6 +5349,24 @@ body{
     );
 }
 
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(16,185,129,0.15),
+      transparent 40%
+    );
+  pointer-events:none;
+}
+
 /* EFFETTO GLOW DINAMICO */
 
 .hero-mutui-premium::after{
