@@ -4526,6 +4526,18 @@ border-radius:12px;
 display:block;
 }
 
+.property-card{
+overflow:hidden;
+}
+
+.property-image{
+transition:transform .4s ease;
+}
+
+.property-card:hover .property-image{
+transform:scale(1.05);
+}
+
 /* CONTENT */
 .property-content{
 padding:20px;
