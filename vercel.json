@@ -1,47 +1,17 @@
 {
   "redirects": [
-    
-    {
-      "source": "/roma",
-      "destination": "/market/roma/",
-      "permanent": true
-    },
-    {
-      "source": "/milano",
-      "destination": "/market/milano/",
-      "permanent": true
-    },
-    {
-      "source": "/napoli",
-      "destination": "/market/napoli/",
-      "permanent": true
-    },
-    {
-      "source": "/firenze",
-      "destination": "/market/firenze/",
-      "permanent": true
-    },
 
-    {
-      "source": "/market/roma",
-      "destination": "/market/roma/",
-      "permanent": true
-    },
-    {
-      "source": "/market/milano",
-      "destination": "/market/milano/",
-      "permanent": true
-    },
-    {
-      "source": "/market/napoli",
-      "destination": "/market/napoli/",
-      "permanent": true
-    },
-    {
-      "source": "/market/firenze",
-      "destination": "/market/firenze/",
-      "permanent": true
-    }
+    { "source": "/roma", "destination": "/market/roma/", "permanent": true },
+    { "source": "/milano", "destination": "/market/milano/", "permanent": true },
+    { "source": "/napoli", "destination": "/market/napoli/", "permanent": true },
+    { "source": "/firenze", "destination": "/market/firenze/", "permanent": true },
+
+    { "source": "/market/roma", "destination": "/market/roma/", "permanent": true },
+    { "source": "/market/milano", "destination": "/market/milano/", "permanent": true },
+    { "source": "/market/napoli", "destination": "/market/napoli/", "permanent": true },
+    { "source": "/market/firenze", "destination": "/market/firenze/", "permanent": true },
+
+    { "source": "/mutuo", "destination": "/mutui/", "permanent": true }
 
   ]
 }
