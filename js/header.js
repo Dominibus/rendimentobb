@@ -20,11 +20,33 @@ milan: "/img/milan-bg.jpg"
 
 if(!images[city]) return;
 
-const hero = document.querySelector(".hero");
-if(hero){
-hero.style.background =
-"linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.75)), url('" + images[city] + "') center/cover";
-}
+window.applyCityBackground = function(city){
+
+const hero =
+  document.querySelector(".hero-bg") ||
+  document.querySelector(".hero");
+
+if(!hero) return;
+
+// 🔥 pulizia classi
+hero.classList.remove("rome","naples","milan","florence");
+
+// 🔥 mapping IT → EN
+const map = {
+  roma:"rome",
+  napoli:"naples",
+  milano:"milan",
+  firenze:"florence"
+};
+
+const cityClass = map[city] || city || "rome";
+
+// 🔥 applica SOLO classi (NO style inline)
+hero.classList.add(cityClass);
+
+console.log("🎯 BG aggiornato:", cityClass);
+
+};
 
 };  
 
