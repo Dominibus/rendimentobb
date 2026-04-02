@@ -4520,8 +4520,10 @@ border-color:#10b981;
 /* IMAGE */
 .property-image{
 width:100%;
-height:180px;
+height:220px;
 object-fit:cover;
+border-radius:12px;
+display:block;
 }
 
 /* CONTENT */
