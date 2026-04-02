@@ -100,6 +100,14 @@ params.get("uid");
 
 const statusEl = document.getElementById("status-msg");
 
+// 🔥 sync iniziale lingua (NO flicker)
+if(statusEl && statusEl.dataset){
+  statusEl.innerText =
+    (window.currentLang === "en")
+    ? statusEl.dataset.en
+    : statusEl.dataset.it;
+}  
+
 // 🔥 redirect intelligente (NO BUG UX)
 function smartRedirect(){
   setTimeout(()=>{
