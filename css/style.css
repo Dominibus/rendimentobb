@@ -6214,3 +6214,62 @@ font-size:16px;
 }
 
 }
+
+/* ============================= */
+/* 🔥 HERO OVERLAY SaaS FIX FINAL */
+/* ============================= */
+
+/* forza contesto */
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+/* overlay reale (SOVRASCRIVE TUTTO) */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15,23,42,0.35) 0%,
+      rgba(15,23,42,0.55) 40%,
+      rgba(15,23,42,0.80) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(16,185,129,0.12),
+      transparent 50%
+    );
+
+  pointer-events:none;
+}
+
+/* glow SaaS (premium effect) */
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(16,185,129,0.15),
+      transparent 45%
+    );
+
+  pointer-events:none;
+}
+
+/* contenuto sopra overlay */
+.hero .container,
+.hero-grid,
+.hero-left,
+.hero-right{
+  position:relative;
+  z-index:2;
+}
