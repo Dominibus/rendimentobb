@@ -205,6 +205,21 @@ data-en="Find properties that generate profit with a B&B">
 Trova immobili che generano profitto con un B&B
 </h1>
 
+<div style="
+margin-top:10px;
+font-size:13px;
+color:#10b981;
+font-weight:600;
+text-align:center;
+">
+
+<span data-it="⚡ Nuove opportunità aggiornate ogni giorno – le migliori durano poche ore"
+      data-en="⚡ New opportunities updated daily – best deals disappear fast">
+⚡ Nuove opportunità aggiornate ogni giorno
+</span>
+
+</div>  
+
 <p
 data-it="Analizza qualsiasi immobile in pochi secondi e scopri ROI, rischio e rendimento reale prima di investire."
 data-en="Analyze any property in seconds and discover ROI, risk and real profitability before investing.">
@@ -606,6 +621,20 @@ Analizza immobile
 
 </button>
 
+<div style="
+margin-top:15px;
+font-size:13px;
+color:#64748b;
+text-align:center;
+">
+
+<span data-it="🔥 Gli utenti PRO vedono ROI, rischio e guadagno netto completo"
+      data-en="🔥 PRO users unlock full ROI, risk and net profit">
+🔥 Gli utenti PRO vedono ROI completo
+</span>
+
+</div>  
+
 </div>
 
 </section>
@@ -773,18 +802,18 @@ estimatedPrice = (Math.floor(Math.random()*200)+80) * 1000;
 // ===== PREVIEW =====
 document.getElementById("property-preview").innerHTML = `
 <div style="
-background:linear-gradient(135deg,#f8fafc,#eef2f7);
-padding:18px;
-border-radius:14px;
+background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
+padding:20px;
+border-radius:16px;
 margin-top:14px;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
-border:1px solid #e5e7eb;
+box-shadow:0 20px 60px rgba(16,185,129,0.15);
+border:1px solid #bbf7d0;
 text-align:left;
 animation:fadeIn .4s ease;
 ">
 
-<div style="font-size:13px;color:#64748b;margin-bottom:6px">
-${window.currentLang==="en"?"Detected property":"Immobile rilevato"}
+<div style="font-size:13px;color:#065f46;margin-bottom:6px;font-weight:600">
+🤖 ${window.currentLang==="en"?"AI detected a profitable property":"AI ha rilevato un immobile interessante"}
 </div>
 
 <strong style="font-size:16px">📍 ${portal}</strong><br>
@@ -794,20 +823,24 @@ ID: ${id}
 </div>
 
 ${estimatedPrice ? `
-<div style="margin-top:10px;font-size:18px;font-weight:700;color:#10b981">
+<div style="margin-top:10px;font-size:20px;font-weight:700;color:#059669">
 💰 ${estimatedPrice.toLocaleString()} €
 </div>
 ` : ""}
 
-<a href="${link}" target="_blank" style="
-display:inline-block;
-margin-top:10px;
+<div style="
+margin-top:12px;
+padding:10px;
+border-radius:10px;
+background:rgba(16,185,129,0.1);
 font-size:13px;
-color:#3b82f6;
-text-decoration:none;
+color:#065f46;
+font-weight:500;
 ">
-🔗 ${window.currentLang==="en"?"Open listing":"Apri annuncio"}
-</a>
+🚀 ${window.currentLang==="en"
+? "ROI analysis already prepared. Opening full report..."
+: "Analisi ROI già pronta. Apertura report completo..."}
+</div>
 
 </div>
 `;
