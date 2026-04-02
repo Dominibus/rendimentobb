@@ -5,57 +5,37 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-// ================= GLOBAL CITY BACKGROUND (FINAL PRO) =================
+/* ===================== */
+/* GLOBAL CITY BACKGROUND */
+/* ===================== */
 
 window.applyCityBackground = function(){
 
-const hero =
-  document.querySelector(".hero-bg") ||
-  document.querySelector(".hero");
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero");
 
-if(!hero) return;
+  if(!hero) return;
 
-// reset classi
-hero.classList.remove("rome","naples","milan","florence");
+  // reset classi
+  hero.classList.remove("rome","naples","milan","florence");
 
-// detect automatico da URL
-const path = window.location.pathname.toLowerCase();
-
-let city = "rome";
-
-if(path.includes("milano")) city = "milan";
-else if(path.includes("napoli")) city = "naples";
-else if(path.includes("firenze")) city = "florence";
-else if(path.includes("roma")) city = "rome";
-
-// applica classe
-hero.classList.add(city);
-
-console.log("🎯 Hero city:", city);
-
-};
-
-// ================= AUTO-DETECT URL (🔥 FONDAMENTALE) =================
-
-if(!cityKey){
-
+  // detect automatico da URL
   const path = window.location.pathname.toLowerCase();
 
-  if(path.includes("milano")) cityKey = "milan";
-  else if(path.includes("napoli")) cityKey = "naples";
-  else if(path.includes("firenze")) cityKey = "florence";
-  else if(path.includes("roma")) cityKey = "rome";
-}
+  let city = "rome";
 
-// 🔥 FALLBACK SICURO
-if(!cityKey) cityKey = "rome";
+  if(path.includes("milano")) city = "milan";
+  else if(path.includes("napoli")) city = "naples";
+  else if(path.includes("firenze")) city = "florence";
+  else if(path.includes("roma")) city = "rome";
 
-// 🔥 APPLICA CLASSE
-hero.classList.add(cityKey);
+  // applica classe
+  hero.classList.add(city);
 
-console.log("🎯 BG attivo:", cityKey);
-
+  console.log("🎯 Hero city:", city);
 };
+
 
 /* ===================== */
 /* INIT HEADER */
@@ -114,12 +94,12 @@ data-it="Dashboard" data-en="Dashboard">Dashboard</a>
 const container = document.getElementById("global-header");
 
 if(container){
-container.innerHTML = header;
+  container.innerHTML = header;
 }
 
-// 🔥 APPLY HERO BACKGROUND (AUTO)
+// 🔥 APPLY HERO BACKGROUND
 window.applyCityBackground();
-  
+
 /* ===================== */
 /* HAMBURGER MENU */
 /* ===================== */
@@ -128,9 +108,9 @@ const hamburger = document.querySelector(".hamburger");
 const nav = document.querySelector(".portal-nav");
 
 if(hamburger && nav){
-hamburger.addEventListener("click", () => {
-nav.classList.toggle("open");
-});
+  hamburger.addEventListener("click", () => {
+    nav.classList.toggle("open");
+  });
 }
 
 /* ===================== */
@@ -140,23 +120,24 @@ nav.classList.toggle("open");
 const currentPath = window.location.pathname;
 
 document.querySelectorAll(".portal-nav a").forEach(link => {
-const href = link.getAttribute("href");
-if(currentPath.startsWith(href)){
-link.classList.add("active");
-}
+  const href = link.getAttribute("href");
+  if(currentPath.startsWith(href)){
+    link.classList.add("active");
+  }
 });
 
 /* ===================== */
-/* TRADUZIONE HEADER (FIX DEFINITIVO) */
+/* TRADUZIONE HEADER */
 /* ===================== */
 
 setTimeout(() => {
-if(typeof applyTranslations === "function"){
-applyTranslations();
-}
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 }, 50);
 
 });
+
 
 /* ===================== */
 /* USER AREA */
@@ -171,72 +152,72 @@ const isMobile = window.innerWidth < 768;
 
 if(user){
 
-if(isMobile){
+  if(isMobile){
 
-userArea.innerHTML = `
-<div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+    userArea.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
 
-<a href="/dashboard/" class="btn btn-secondary"
-data-it="Dashboard" data-en="Dashboard">📊</a>
+    <a href="/dashboard/" class="btn btn-secondary"
+    data-it="Dashboard" data-en="Dashboard">📊</a>
 
-<button onclick="logout()" class="btn btn-secondary"
-data-it="Esci" data-en="Logout">⎋</button>
+    <button onclick="logout()" class="btn btn-secondary"
+    data-it="Esci" data-en="Logout">⎋</button>
 
-</div>
-`;
+    </div>
+    `;
+
+  }else{
+
+    userArea.innerHTML = `
+    <div style="text-align:right">
+
+    <div style="font-size:12px;color:#64748b;"
+    data-it="Account" data-en="Account">
+    Account
+    </div>
+
+    <div style="font-weight:600;font-size:14px;">
+    ${user.email}
+    </div>
+
+    <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+
+    <a href="/dashboard/" class="btn btn-secondary"
+    data-it="Dashboard" data-en="Dashboard">
+    Dashboard
+    </a>
+
+    <button onclick="logout()" class="btn btn-secondary"
+    data-it="Esci" data-en="Logout">
+    Esci
+    </button>
+
+    </div>
+
+    </div>
+    `;
+
+  }
 
 }else{
 
-userArea.innerHTML = `
-<div style="text-align:right">
+  userArea.innerHTML = `
+  <div style="text-align:right">
 
-<div style="font-size:12px;color:#64748b;"
-data-it="Account" data-en="Account">
-Account
-</div>
+  <div style="font-size:12px;color:#64748b;"
+  data-it="Area riservata"
+  data-en="Private area">
+  Area riservata
+  </div>
 
-<div style="font-weight:600;font-size:14px;">
-${user.email}
-</div>
+  <a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
+  data-it="Accedi"
+  data-en="Login">
+  Accedi
+  </a>
 
-<div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
-
-<a href="/dashboard/" class="btn btn-secondary"
-data-it="Dashboard" data-en="Dashboard">
-Dashboard
-</a>
-
-<button onclick="logout()" class="btn btn-secondary"
-data-it="Esci" data-en="Logout">
-Esci
-</button>
-
-</div>
-
-</div>
-`;
-
-}
-
-}else{
-
-userArea.innerHTML = `
-<div style="text-align:right">
-
-<div style="font-size:12px;color:#64748b;"
-data-it="Area riservata"
-data-en="Private area">
-Area riservata
-</div>
-
-<a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
-data-it="Accedi"
-data-en="Login">
-Accedi
-</a>
-
-</div>
-`;
+  </div>
+  `;
 
 }
 
@@ -245,19 +226,20 @@ Accedi
 /* ===================== */
 
 setTimeout(() => {
-if(typeof applyTranslations === "function"){
-applyTranslations();
-}
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 }, 50);
 
 });
+
 
 /* ===================== */
 /* SYNC LINGUA DINAMICA */
 /* ===================== */
 
 document.addEventListener("rb_language_changed", () => {
-if(typeof applyTranslations === "function"){
-applyTranslations();
-}
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 });
