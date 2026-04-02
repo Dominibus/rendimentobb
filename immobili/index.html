@@ -562,93 +562,6 @@ data-en="✔ Free analysis • No registration • Results in 30 seconds">
 
 </section>
 
-<!-- ===================== -->
-<!-- 🔥 CITY BACKGROUND LOGIC -->
-<!-- ===================== -->
-
-<script>
-
-// ✅ FUNZIONE CORRETTA (SOSTITUISCE LA VECCHIA)
-window.applyCityBackground = function(city){
-
-  const hero =
-    document.querySelector(".hero-bg") ||
-    document.querySelector(".hero");
-
-  if(!hero) return;
-
-  // reset classi
-  hero.classList.remove("rome","naples","milan","florence");
-
-  // fallback sicurezza
-  const finalCity = city || "rome";
-
-  hero.classList.add(finalCity);
-
-  console.log("🎯 Hero city:", finalCity);
-};
-
-
-// =====================
-// 🔥 AUTO CHANGE DA INPUT
-// =====================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const cityInput = document.getElementById("searchCity");
-  const priceInput = document.getElementById("searchPrice");
-  const sqmInput = document.getElementById("searchSqm");
-
-  if(!cityInput) return;
-
-  const cityData = {
-    napoli: { price:180000, sqm:60, bg:"naples" },
-    roma: { price:300000, sqm:70, bg:"rome" },
-    milano: { price:350000, sqm:65, bg:"milan" },
-    firenze: { price:280000, sqm:60, bg:"florence" }
-  };
-
-  let autoSearchTimeout;
-
-  cityInput.addEventListener("input", () => {
-
-    const val = cityInput.value.toLowerCase();
-
-    // 🔥 match intelligente
-    const match = Object.keys(cityData).find(c => val.includes(c));
-
-    if(match){
-
-      const data = cityData[match];
-
-      // 🎯 background sync
-      applyCityBackground(data.bg);
-
-      // 🎯 auto-fill intelligente
-      if(!priceInput.value){
-        priceInput.value = data.price;
-      }
-
-      if(!sqmInput.value){
-        sqmInput.value = data.sqm;
-      }
-
-      // 🔥 AUTO SEARCH (wow effect)
-      clearTimeout(autoSearchTimeout);
-
-      autoSearchTimeout = setTimeout(()=>{
-        searchProperties();
-      }, 800);
-
-    }
-
-  });
-
-});
-
-</script>
-
-
 <!-- ANALIZZA IMMOBILE -->
 
 <section style="margin-top:120px;text-align:center">
@@ -734,18 +647,6 @@ Simula investimento
 <script src="/js/lang.js" defer></script>
 
 <!-- 🔥 PRIMA DEFINIAMO LE FUNZIONI -->
-<script>
-window.searchProperties = window.searchProperties || function(){};
-window.analyzeProperty = window.analyzeProperty || function(){};
-window.openInvestment = window.openInvestment || function(){};
-</script>
-
-<!-- POI HEADER -->
-<script type="module" src="/js/header.js"></script>
-
-<script src="/js/footer.js" defer></script>
-<script type="module" src="/js/firebase-init.js"></script>
-
 <script>
 
 // ================= ANALYZE PROPERTY =================
@@ -996,3 +897,98 @@ window.location.href="/tool/";
 };
 
 </script>
+
+<!-- ===================== -->
+<!-- 🔥 CITY BACKGROUND LOGIC -->
+<!-- ===================== -->
+
+<script>
+
+// ✅ FUNZIONE CORRETTA (SOSTITUISCE LA VECCHIA)
+window.applyCityBackground = function(city){
+
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero");
+
+  if(!hero) return;
+
+  // reset classi
+  hero.classList.remove("rome","naples","milan","florence");
+
+  // fallback sicurezza
+  const finalCity = city || "rome";
+
+  hero.classList.add(finalCity);
+
+  console.log("🎯 Hero city:", finalCity);
+};
+
+
+// =====================
+// 🔥 AUTO CHANGE DA INPUT
+// =====================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const cityInput = document.getElementById("searchCity");
+  const priceInput = document.getElementById("searchPrice");
+  const sqmInput = document.getElementById("searchSqm");
+
+  if(!cityInput) return;
+
+  const cityData = {
+    napoli: { price:180000, sqm:60, bg:"naples" },
+    roma: { price:300000, sqm:70, bg:"rome" },
+    milano: { price:350000, sqm:65, bg:"milan" },
+    firenze: { price:280000, sqm:60, bg:"florence" }
+  };
+
+  let autoSearchTimeout;
+
+  cityInput.addEventListener("input", () => {
+
+    const val = cityInput.value.toLowerCase();
+
+    // 🔥 match intelligente
+    const match = Object.keys(cityData).find(c => val.includes(c));
+
+    if(match){
+
+      const data = cityData[match];
+
+      // 🎯 background sync
+      applyCityBackground(data.bg);
+
+      // 🎯 auto-fill intelligente
+      if(!priceInput.value){
+        priceInput.value = data.price;
+      }
+
+      if(!sqmInput.value){
+        sqmInput.value = data.sqm;
+      }
+
+      // 🔥 AUTO SEARCH (wow effect)
+      clearTimeout(autoSearchTimeout);
+
+      autoSearchTimeout = setTimeout(()=>{
+        searchProperties();
+      }, 800);
+
+    }
+
+  });
+
+});
+
+</script>
+  
+
+<!-- POI HEADER -->
+<script type="module" src="/js/header.js"></script>
+
+<script src="/js/footer.js" defer></script>
+<script type="module" src="/js/firebase-init.js"></script>
+
+
