@@ -748,6 +748,8 @@ window.openInvestment = window.openInvestment || function(){};
 
 <script>
 
+// ================= ANALYZE PROPERTY =================
+
 window.analyzeProperty = function(){
 
 const link = document.getElementById("property-link").value;
@@ -781,7 +783,7 @@ if(id){
 estimatedPrice = (Math.floor(Math.random()*200)+80) * 1000;
 }
 
-// ===== PREMIUM PREVIEW =====
+// ===== PREVIEW =====
 document.getElementById("property-preview").innerHTML = `
 <div style="
 background:linear-gradient(135deg,#f8fafc,#eef2f7);
@@ -830,7 +832,7 @@ setTimeout(()=>{
 window.location.href="/tool/";
 },1200);
 
-}
+};
 
 
 
@@ -838,180 +840,150 @@ window.location.href="/tool/";
 
 window.searchProperties = function(){
 
-  const cityInput = document.getElementById("searchCity").value.trim();
+const cityInput = document.getElementById("searchCity").value.trim();
 
-  const city =
-    cityInput ||
-    (window.currentLang==="en" ? "Italy" : "Italia");
+const city =
+cityInput ||
+(window.currentLang==="en" ? "Italy" : "Italia");
 
-  const container = document.getElementById("property-search-results");
+const container = document.getElementById("property-search-results");
 
-  // =====================
-  // 🔥 SYNC BACKGROUND (FIX PRINCIPALE)
-  // =====================
+// ===== BACKGROUND SYNC =====
+const val = city.toLowerCase();
 
-  const val = city.toLowerCase();
+if(val.includes("milano")) applyCityBackground("milan");
+else if(val.includes("napoli")) applyCityBackground("naples");
+else if(val.includes("firenze")) applyCityBackground("florence");
+else if(val.includes("roma")) applyCityBackground("rome");
 
-  if(val.includes("milano")){
-    applyCityBackground("milan");
-  }
-  else if(val.includes("napoli")){
-    applyCityBackground("naples");
-  }
-  else if(val.includes("firenze")){
-    applyCityBackground("florence");
-  }
-  else if(val.includes("roma")){
-    applyCityBackground("rome");
-  }
+// ===== LOADING =====
+container.innerHTML = `
+<div style="padding:20px;text-align:center;color:#64748b">
+⏳ ${window.currentLang==="en"?"Analyzing market...":"Analisi mercato in corso..."}
+</div>
+`;
 
-  // =====================
-  // LOADING UI
-  // =====================
+setTimeout(()=>{
 
-  container.innerHTML = `
-  <div style="padding:20px;text-align:center;color:#64748b">
-  ⏳ ${window.currentLang==="en"?"Analyzing market...":"Analisi mercato in corso..."}
-  </div>
-  `;
+const price1 = 180000;
+const sqm1 = 65;
+const roi1 = ((15000 / price1) * 100).toFixed(1);
 
-  setTimeout(()=>{
+const price2 = 240000;
+const sqm2 = 85;
+const roi2 = ((18000 / price2) * 100).toFixed(1);
 
-    // =====================
-    // MOCK DATA (poi colleghiamo API)
-    // =====================
+const badge1 = roi1 > 8
+? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
+: "";
 
-    const price1 = 180000;
-    const sqm1 = 65;
-    const roi1 = ((15000 / price1) * 100).toFixed(1);
+const badge2 = roi2 > 8
+? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
+: "";
 
-    const price2 = 240000;
-    const sqm2 = 85;
-    const roi2 = ((18000 / price2) * 100).toFixed(1);
+function createCard(title, price, sqm, roi, badge, highlight=false){
 
-    // =====================
-    // BADGE LOGIC
-    // =====================
+return `
+<div class="property-card" style="
+position:relative;
+padding:22px;
+border-radius:16px;
+background:white;
+box-shadow:0 15px 40px rgba(0,0,0,0.06);
+border:${highlight ? "2px solid #10b981" : "1px solid #e5e7eb"};
+transition:all .25s ease;
+">
 
-    const badge1 = roi1 > 8
-    ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
-    : "";
+${highlight ? `
+<div style="
+position:absolute;
+top:12px;
+right:12px;
+background:#10b981;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:600;
+">
+TOP DEAL
+</div>
+` : ""}
 
-    const badge2 = roi2 > 8
-    ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
-    : "";
+<h3 style="font-size:18px;margin-bottom:6px">${title}</h3>
 
-    // =====================
-    // CARD TEMPLATE (UPGRADE UI)
-    // =====================
+<div style="font-size:22px;font-weight:700;color:#111">
+€${price.toLocaleString()}
+</div>
 
-    function createCard(title, price, sqm, roi, badge, highlight=false){
+<div style="font-size:13px;color:#64748b;margin-top:4px">
+${sqm} m² · ${city}
+</div>
 
-      return `
-      <div class="property-card" style="
-      position:relative;
-      padding:22px;
-      border-radius:16px;
-      background:white;
-      box-shadow:0 15px 40px rgba(0,0,0,0.06);
-      border:${highlight ? "2px solid #10b981" : "1px solid #e5e7eb"};
-      transition:all .25s ease;
-      ">
+<div style="
+margin-top:12px;
+font-size:14px;
+color:#10b981;
+font-weight:600
+">
+${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi}%
+</div>
 
-      ${highlight ? `
-      <div style="
-      position:absolute;
-      top:12px;
-      right:12px;
-      background:#10b981;
-      color:white;
-      padding:4px 10px;
-      border-radius:20px;
-      font-size:11px;
-      font-weight:600;
-      ">
-      TOP DEAL
-      </div>
-      ` : ""}
+${badge ? `
+<div style="
+margin-top:6px;
+font-size:13px;
+color:#f59e0b;
+font-weight:600
+">
+${badge}
+</div>
+` : ""}
 
-      <h3 style="font-size:18px;margin-bottom:6px">${title}</h3>
+<button class="btn btn-primary" style="
+margin-top:14px;
+width:100%;
+border-radius:10px;
+font-weight:600;
+"
+onclick="openInvestment(${price})">
 
-      <div style="font-size:22px;font-weight:700;color:#111">
-      €${price.toLocaleString()}
-      </div>
+${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
 
-      <div style="font-size:13px;color:#64748b;margin-top:4px">
-      ${sqm} m² · ${city}
-      </div>
+</button>
 
-      <div style="
-      margin-top:12px;
-      font-size:14px;
-      color:#10b981;
-      font-weight:600
-      ">
-      ${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi}%
-      </div>
-
-      ${badge ? `
-      <div style="
-      margin-top:6px;
-      font-size:13px;
-      color:#f59e0b;
-      font-weight:600
-      ">
-      ${badge}
-      </div>
-      ` : ""}
-
-      <button class="btn btn-primary" style="
-      margin-top:14px;
-      width:100%;
-      border-radius:10px;
-      font-weight:600;
-      "
-      onclick="openInvestment(${price})">
-
-      ${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
-
-      </button>
-
-      </div>
-      `;
-    }
-
-    // =====================
-    // RENDER
-    // =====================
-
-    container.innerHTML = `
-
-    <div class="property-grid">
-
-    ${createCard(
-    window.currentLang==="en"?"Investment apartment":"Bilocale investimento",
-    price1,
-    sqm1,
-    roi1,
-    badge1,
-    true
-    )}
-
-    ${createCard(
-    window.currentLang==="en"?"Renovated apartment":"Trilocale ristrutturato",
-    price2,
-    sqm2,
-    roi2,
-    badge2
-    )}
-
-    </div>
-
-    `;
-
-  },600);
-
+</div>
+`;
 }
+
+// ===== RENDER =====
+container.innerHTML = `
+<div class="property-grid">
+
+${createCard(
+window.currentLang==="en"?"Investment apartment":"Bilocale investimento",
+price1,
+sqm1,
+roi1,
+badge1,
+true
+)}
+
+${createCard(
+window.currentLang==="en"?"Renovated apartment":"Trilocale ristrutturato",
+price2,
+sqm2,
+roi2,
+badge2
+)}
+
+</div>
+`;
+
+},600);
+
+};
+
 
 
 // ================= REDIRECT =================
@@ -1019,10 +991,8 @@ window.searchProperties = function(){
 window.openInvestment = function(price){
 
 localStorage.setItem("property_price", price);
-
 window.location.href="/tool/";
 
-}
+};
 
-</body>
-</html>
+</script>
