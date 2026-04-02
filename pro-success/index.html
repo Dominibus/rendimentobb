@@ -12,7 +12,6 @@ Pagamento completato – RendimentoBB
 </title>
 
 <link rel="stylesheet" href="/css/style.css">
-
 <script src="/js/lang.js" defer></script>
 
 </head>
@@ -49,7 +48,7 @@ Il tuo account PRO è stato attivato con successo.
 Attivazione in corso...
 </p>
 
-<!-- SYNC INFO -->
+<!-- SYNC -->
 <p style="margin-top:10px;font-size:13px;color:#94a3b8;"
 data-it="⏳ Sincronizzazione account in corso (max 5s)"
 data-en="⏳ Syncing account (max 5s)">
@@ -98,42 +97,65 @@ params.get("uid");
 
 const statusEl = document.getElementById("status-msg");
 
-function redirectToDashboard(){
+// 🔥 redirect intelligente (NO BUG UX)
+function smartRedirect(){
   setTimeout(()=>{
-    window.location.href = "/dashboard/";
+    if(window.currentPlan === "pro" || window.currentPlan === "investor"){
+      window.location.href = "/dashboard/";
+    }else{
+      window.location.href = "/tool/";
+    }
   }, 2500);
 }
 
 if(uid){
 
-  upgradeToPro(uid)
-  .then(()=>{
-    console.log("PRO attivato");
+  // 🔥 BLOCCO TEST (fondamentale)
+  if(uid === "test123"){
+    console.warn("TEST MODE - nessun upgrade reale");
 
     if(statusEl){
       statusEl.innerText =
       (window.currentLang === "en")
-      ? "Activation completed successfully"
-      : "Attivazione completata con successo";
-      statusEl.style.color = "#10b981";
+      ? "Test mode active (no real upgrade)"
+      : "Modalità test attiva (nessun upgrade reale)";
+      statusEl.style.color = "#f59e0b";
     }
 
-    redirectToDashboard();
+    smartRedirect();
+  }
 
-  })
-  .catch(err=>{
-    console.error("Errore upgrade PRO:", err);
+  else{
 
-    if(statusEl){
-      statusEl.innerText =
-      (window.currentLang === "en")
-      ? "Activation in progress... access already enabled"
-      : "Attivazione in corso... accesso già abilitato";
-      statusEl.style.color = "#10b981";
-    }
+    upgradeToPro(uid)
+    .then(()=>{
+      console.log("PRO attivato");
 
-    redirectToDashboard();
-  });
+      if(statusEl){
+        statusEl.innerText =
+        (window.currentLang === "en")
+        ? "Activation completed successfully"
+        : "Attivazione completata con successo";
+        statusEl.style.color = "#10b981";
+      }
+
+      smartRedirect();
+    })
+    .catch(err=>{
+      console.error("Errore upgrade PRO:", err);
+
+      if(statusEl){
+        statusEl.innerText =
+        (window.currentLang === "en")
+        ? "Activation in progress... access already enabled"
+        : "Attivazione in corso... accesso già abilitato";
+        statusEl.style.color = "#10b981";
+      }
+
+      smartRedirect();
+    });
+
+  }
 
 }else{
 
