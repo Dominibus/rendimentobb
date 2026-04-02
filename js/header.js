@@ -117,7 +117,7 @@ if(container){
 container.innerHTML = header;
 }
 
-// 🔥 APPLY HERO BACKGROUND (CRITICO)
+// 🔥 APPLY HERO BACKGROUND (AUTO)
 window.applyCityBackground();
   
 /* ===================== */
