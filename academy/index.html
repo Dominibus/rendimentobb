@@ -21,44 +21,42 @@ data-en="Complete guide to B&B investing: ROI, costs, mortgages and strategies t
 
 <style>
 
-/* ===== HERO LIGHT + SaaS ===== */
+/* ===== HERO SUPER LIGHT ===== */
 .hero.hero-bg.academy{
 background:
-linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.30)),
+linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.20)),
 url("/img/naples-bg.jpg");
 
 background-size:cover;
 background-position:center;
-background-repeat:no-repeat;
-
-padding:120px 20px 100px;
+padding:110px 20px 90px;
 }
 
 /* ===== HERO TEXT ===== */
 .hero .page-title{
 text-align:center;
 color:white;
-max-width:800px;
+max-width:780px;
 margin:auto;
 }
 
 .hero h1{
-font-size:42px;
+font-size:44px;
 font-weight:800;
-line-height:1.2;
+line-height:1.15;
 }
 
 .hero p{
-margin-top:15px;
+margin-top:14px;
 color:#e2e8f0;
 font-size:16px;
 }
 
 /* ===== TRUST ===== */
 .hero-proof{
-margin-top:15px;
+margin-top:14px;
 font-size:13px;
-color:#cbd5f5;
+color:#dbeafe;
 }
 
 /* ===== CTA ===== */
@@ -66,29 +64,31 @@ color:#cbd5f5;
 display:flex;
 gap:12px;
 justify-content:center;
-margin-top:25px;
+margin-top:22px;
 flex-wrap:wrap;
 }
 
+/* 🔥 FIX CONTRASTO */
 .btn-main{
-background:linear-gradient(135deg,#10b981,#059669);
+background:#10b981;
 color:white;
-padding:14px 26px;
+padding:13px 24px;
 border-radius:10px;
 font-weight:600;
 font-size:14px;
 text-decoration:none;
-box-shadow:0 10px 30px rgba(16,185,129,0.3);
+box-shadow:0 8px 25px rgba(16,185,129,0.3);
 }
 
 .btn-main:hover{
 transform:translateY(-2px);
+background:#059669;
 }
 
 .btn-secondary{
 background:white;
 color:#0f172a;
-padding:14px 22px;
+padding:13px 22px;
 border-radius:10px;
 font-weight:500;
 font-size:14px;
@@ -96,58 +96,83 @@ border:1px solid #e2e8f0;
 text-decoration:none;
 }
 
-/* ===== CONTENT WHITE ===== */
+/* ===== CONTENT ===== */
 .academy-content{
 background:white;
-padding:80px 20px;
+padding:70px 20px;
+}
+
+/* ===== TITLE FIX (NON CLICCABILE) ===== */
+.section-title{
+text-align:center;
+font-size:24px;
+font-weight:700;
+position:relative;
+z-index:2;
 }
 
 /* ===== CARDS ===== */
 .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
-margin-top:40px;
+gap:22px;
+margin-top:35px;
 max-width:1100px;
-margin:auto;
+margin-left:auto;
+margin-right:auto;
 }
 
 .card{
+display:block;
 background:white;
-padding:28px;
-border-radius:16px;
+padding:26px;
+border-radius:14px;
 border:1px solid #f1f5f9;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
+box-shadow:0 8px 25px rgba(0,0,0,0.04);
 transition:.25s;
+text-decoration:none;
+color:#0f172a;
+position:relative;
+z-index:1;
 }
 
 .card:hover{
-transform:translateY(-6px);
+transform:translateY(-5px);
 border-color:#10b981;
-box-shadow:0 25px 70px rgba(0,0,0,0.08);
+box-shadow:0 20px 50px rgba(0,0,0,0.08);
 }
 
-/* ===== CTA FINAL ===== */
+/* ===== CTA FINAL (FIX TESTO) ===== */
 .cta-final{
-max-width:700px;
-margin:80px auto;
+max-width:650px;
+margin:70px auto;
 background:linear-gradient(135deg,#10b981,#059669);
 color:white;
-padding:40px;
-border-radius:18px;
+padding:35px;
+border-radius:16px;
 text-align:center;
 box-shadow:0 20px 60px rgba(16,185,129,0.25);
 }
 
+.cta-final h3{
+font-size:20px;
+margin-bottom:10px;
+}
+
 .cta-final a{
 display:inline-block;
-margin-top:15px;
+margin-top:10px;
 background:white;
 color:#059669;
-padding:12px 22px;
-border-radius:10px;
+padding:12px 20px;
+border-radius:8px;
 font-weight:600;
 text-decoration:none;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+.hero h1{font-size:32px;}
 }
 
 </style>
@@ -194,7 +219,7 @@ data-en="🚀 Analyze investment">
 </a>
 
 <a href="/roi-bnb/" class="btn-secondary"
-data-it="Scopri ROI B&B"
+data-it="Scopri ROI"
 data-en="Learn ROI">
 Scopri ROI
 </a>
@@ -209,7 +234,7 @@ Scopri ROI
 <!-- CONTENT -->
 <section class="academy-content">
 
-<h2 style="text-align:center"
+<h2 class="section-title"
 data-it="Guida completa investimento B&B"
 data-en="Complete B&B investment guide">
 Guida completa investimento B&B
