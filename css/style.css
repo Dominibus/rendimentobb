@@ -6044,3 +6044,146 @@ text-align:center;
 font-size:12px;
 opacity:0.6;
 }
+
+/* ===================== */
+/* MOBILE SaaS OPTIMIZATION */
+/* ===================== */
+
+@media (max-width: 768px){
+
+/* HERO */
+.hero-market{
+padding:80px 20px 60px;
+text-align:center;
+}
+
+.hero-market h1{
+font-size:28px;
+line-height:1.3;
+margin-bottom:15px;
+}
+
+.hero-market p{
+font-size:15px;
+line-height:1.5;
+padding:0 10px;
+}
+
+.hero-market .btn{
+width:100%;
+max-width:300px;
+margin:auto;
+display:block;
+}
+
+
+/* SECTION SPACING */
+.section{
+padding:60px 20px;
+}
+
+.container{
+padding:0 10px !important;
+}
+
+
+/* TITOLI */
+h1{
+font-size:26px !important;
+line-height:1.3;
+}
+
+h2{
+font-size:22px !important;
+line-height:1.3;
+}
+
+h3{
+font-size:18px !important;
+}
+
+
+/* CARD STYLE (IMPORTANTISSIMO) */
+.card{
+padding:20px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+
+/* LISTE */
+ul{
+padding-left:20px;
+}
+
+li{
+margin-bottom:8px;
+}
+
+
+/* CTA BOX */
+.section-soft{
+padding:60px 20px;
+}
+
+.section-soft .container{
+padding:25px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+
+/* BUTTON FULL WIDTH */
+.btn{
+width:100%;
+max-width:280px;
+margin:auto;
+display:block;
+text-align:center;
+}
+
+
+/* FAQ */
+.faq-item{
+padding:15px;
+border-radius:12px;
+background:#f8fafc;
+}
+
+
+/* FOOTER spacing */
+.global-footer{
+padding:40px 20px;
+text-align:center;
+}
+
+.footer-links{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+
+/* FIX HEADER MOBILE */
+.portal-nav{
+position:fixed;
+top:70px;
+left:0;
+width:100%;
+background:white;
+flex-direction:column;
+padding:20px;
+display:none;
+z-index:999;
+}
+
+.portal-nav.open{
+display:flex;
+}
+
+.portal-nav a{
+padding:10px 0;
+font-size:16px;
+}
+
+}
