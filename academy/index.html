@@ -2,6 +2,7 @@
 <html lang="it">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,12 +21,18 @@ data-en="Complete guide to B&B investing: ROI, costs, mortgages and strategies t
 
 <style>
 
-/* ===== BACKGROUND FINAL (VISIBILE) ===== */
+/* ===== BACKGROUND SaaS VERO ===== */
 body.academy-page{
 background:
-radial-gradient(circle at 20% 20%, rgba(16,185,129,0.18), transparent 40%),
-radial-gradient(circle at 80% 80%, rgba(59,130,246,0.18), transparent 40%),
-linear-gradient(180deg,#dbeafe 0%, #c7d2fe 100%);
+radial-gradient(circle at 20% 20%, rgba(16,185,129,0.25), transparent 40%),
+radial-gradient(circle at 80% 80%, rgba(59,130,246,0.25), transparent 40%),
+linear-gradient(180deg,#94a3b8 0%, #64748b 100%);
+}
+
+/* sblocca background globale */
+.section,
+.value{
+background: transparent !important;
 }
 
 /* ===== HERO ===== */
@@ -36,96 +43,58 @@ padding:0 20px;
 text-align:center;
 }
 
-.hero-academy h1{
-font-size:42px;
+.hero-text h1{
+font-size:44px;
 font-weight:800;
 color:#0f172a;
 }
 
-.hero-academy p{
+.hero-text p{
 margin-top:15px;
 font-size:18px;
 color:#334155;
-}
-
-.trust{
-margin-top:15px;
-color:#10b981;
-font-weight:600;
 }
 
 /* ===== CTA ===== */
 .btn-primary{
 background:#10b981;
 color:white;
-padding:14px 26px;
+padding:14px 28px;
 border-radius:12px;
 font-weight:700;
 display:inline-block;
-margin-top:20px;
 box-shadow:0 10px 30px rgba(16,185,129,0.35);
 }
 
-/* ===== SECTION FIX (NO WHITE BLOCK) ===== */
+/* ===== VALUE ===== */
 .value{
 max-width:1100px;
 margin:80px auto;
-padding:40px 20px;
-
-background:rgba(255,255,255,0.6);
-backdrop-filter:blur(10px);
-border-radius:20px;
-}
-
-/* ===== TITLES ===== */
-.value h2{
-font-size:30px;
-font-weight:800;
-color:#0f172a;
+padding:0 20px;
 text-align:center;
-}
-
-.value p{
-text-align:center;
-color:#475569;
-margin-top:10px;
 }
 
 /* ===== CARDS ===== */
 .cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:20px;
+gap:25px;
 margin-top:40px;
 }
 
 .card{
 background:rgba(255,255,255,0.85);
 backdrop-filter:blur(10px);
-padding:24px;
-border-radius:16px;
-border:1px solid rgba(0,0,0,0.05);
-
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
 text-decoration:none;
 color:inherit;
-
 transition:.25s;
 }
 
 .card:hover{
 transform:translateY(-6px);
-box-shadow:0 20px 60px rgba(0,0,0,0.1);
-}
-
-/* ===== BADGE ===== */
-.badge{
-display:inline-block;
-margin-top:10px;
-font-size:11px;
-padding:4px 8px;
-background:#10b981;
-color:white;
-border-radius:6px;
 }
 
 /* ===== CTA FINAL ===== */
@@ -137,16 +106,6 @@ color:white;
 padding:60px;
 border-radius:24px;
 text-align:center;
-}
-
-.cta-final a{
-margin-top:15px;
-display:inline-block;
-padding:14px 28px;
-background:white;
-color:#059669;
-border-radius:10px;
-font-weight:700;
 }
 
 </style>
@@ -162,6 +121,8 @@ font-weight:700;
 <!-- HERO -->
 <section class="hero-academy">
 
+<div class="hero-text">
+
 <h1
 data-it="Come investire in un B&B e ottenere un ROI reale"
 data-en="How to invest in a B&B and get real ROI">
@@ -174,11 +135,7 @@ data-en="Discover strategies, costs and real numbers to maximize profit.">
 Strategie, costi e numeri reali per investire meglio
 </p>
 
-<div class="trust"
-data-it="🔥 +1.200 investitori stanno analizzando investimenti ora"
-data-en="🔥 1,200+ investors are analyzing investments now">
-🔥 +1.200 investitori stanno analizzando investimenti ora
-</div>
+<div style="margin-top:20px">
 
 <a href="/tool/" class="btn-primary"
 data-it="🚀 Analizza investimento"
@@ -186,9 +143,13 @@ data-en="🚀 Analyze investment">
 🚀 Analizza investimento
 </a>
 
+</div>
+
+</div>
+
 </section>
 
-<!-- CONTENUTO -->
+<!-- CONTENUTI -->
 <section class="value">
 
 <h2
@@ -197,48 +158,38 @@ data-en="Complete B&B investment guide">
 Guida completa investimento B&B
 </h2>
 
-<p
-data-it="Tutto quello che devi sapere prima di investire."
-data-en="Everything you need before investing.">
-Tutto quello che devi sapere prima di investire
-</p>
-
 <div class="cards">
 
 <a href="/roi-bnb/" class="card">
 <h3 data-it="ROI B&B" data-en="B&B ROI">ROI B&B</h3>
-<p data-it="Calcolo rendimento reale" data-en="Real ROI calculation">
-Calcolo rendimento reale
+<p data-it="Calcolo rendimento reale e profitto" data-en="Real ROI calculation">
+Calcolo rendimento reale e profitto
 </p>
-<span class="badge">SEO</span>
 </a>
 
 <a href="/costi-aprire-bnb/" class="card">
 <h3 data-it="Costi B&B" data-en="B&B costs">Costi B&B</h3>
-<p data-it="Tutti i costi reali" data-en="All real costs">
-Tutti i costi reali
+<p data-it="Tutti i costi reali da considerare" data-en="All real costs">
+Tutti i costi reali da considerare
 </p>
-<span class="badge">SEO</span>
 </a>
 
 <a href="/aprire-bnb-conviene/" class="card">
 <h3 data-it="Conviene aprire?" data-en="Is it worth it?">
 Conviene aprire?
 </h3>
-<p data-it="Analisi mercato reale" data-en="Market analysis">
-Analisi mercato reale
+<p data-it="Analisi reale mercato affitti brevi" data-en="Market analysis">
+Analisi reale mercato affitti brevi
 </p>
-<span class="badge">SEO</span>
 </a>
 
 <a href="/market/" class="card">
 <h3 data-it="Analisi città" data-en="City analysis">
 Analisi città
 </h3>
-<p data-it="ROI medio città" data-en="ROI by city">
-ROI medio città
+<p data-it="ROI medio e rendimento per città" data-en="ROI by city">
+ROI medio e rendimento per città
 </p>
-<span class="badge">SEO</span>
 </a>
 
 </div>
@@ -254,12 +205,6 @@ data-en="Check if your investment is profitable">
 Scopri se il tuo investimento è profittevole
 </h3>
 
-<p
-data-it="Simula ROI in pochi secondi"
-data-en="Simulate ROI in seconds">
-Simula ROI in pochi secondi
-</p>
-
 <a href="/tool/"
 data-it="🚀 Avvia simulazione"
 data-en="🚀 Start simulation">
@@ -270,11 +215,11 @@ data-en="🚀 Start simulation">
 
 </main>
 
-<!-- USA SOLO lang.js -->
-<script src="/js/lang.js"></script>
+<!-- SOLO QUESTO -->
+<script src="/js/lang.js" defer></script>
 
 <script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js"></script>
+<script src="/js/footer.js" defer></script>
 
 </body>
 </html>
