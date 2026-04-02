@@ -516,17 +516,26 @@ Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B.
 
 <div class="input-group">
 <label data-it="Città" data-en="City">Città</label>
-<input id="searchCity" placeholder="Napoli">
+<input id="searchCity"
+placeholder="Napoli, Milano, Roma..."
+data-it-placeholder="Napoli, Milano, Roma..."
+data-en-placeholder="Naples, Milan, Rome...">
 </div>
 
 <div class="input-group">
 <label data-it="Prezzo massimo" data-en="Max price">Prezzo massimo</label>
-<input id="searchPrice">
+<input id="searchPrice"
+placeholder="€ 200000"
+data-it-placeholder="Prezzo es. 200000"
+data-en-placeholder="Price e.g. 200000">
 </div>
 
 <div class="input-group">
 <label data-it="Metri quadri min" data-en="Min sqm">Metri quadri min</label>
-<input id="searchSqm">
+<input id="searchSqm"
+placeholder="60 m²"
+data-it-placeholder="Metri quadri es. 60"
+data-en-placeholder="Size e.g. 60">
 </div>
 
 </div>
@@ -540,6 +549,12 @@ data-en="Search properties">
 Cerca immobili
 
 </button>
+
+<div style="margin-top:10px;font-size:12px;color:#64748b"
+data-it="✔ Analisi gratuita • Nessuna registrazione • Risultati in 30 secondi"
+data-en="✔ Free analysis • No registration • Results in 30 seconds">
+✔ Analisi gratuita • Nessuna registrazione • Risultati in 30 secondi
+</div>
 
 </div>
 
@@ -583,29 +598,53 @@ window.applyCityBackground = function(city){
 document.addEventListener("DOMContentLoaded", () => {
 
   const cityInput = document.getElementById("searchCity");
+  const priceInput = document.getElementById("searchPrice");
+  const sqmInput = document.getElementById("searchSqm");
 
-  if(cityInput){
+  if(!cityInput) return;
 
-    cityInput.addEventListener("input", () => {
+  const cityData = {
+    napoli: { price:180000, sqm:60, bg:"naples" },
+    roma: { price:300000, sqm:70, bg:"rome" },
+    milano: { price:350000, sqm:65, bg:"milan" },
+    firenze: { price:280000, sqm:60, bg:"florence" }
+  };
 
-      const val = cityInput.value.toLowerCase();
+  let autoSearchTimeout;
 
-      if(val.includes("milano")){
-        applyCityBackground("milan");
+  cityInput.addEventListener("input", () => {
+
+    const val = cityInput.value.toLowerCase();
+
+    // 🔥 match intelligente
+    const match = Object.keys(cityData).find(c => val.includes(c));
+
+    if(match){
+
+      const data = cityData[match];
+
+      // 🎯 background sync
+      applyCityBackground(data.bg);
+
+      // 🎯 auto-fill intelligente
+      if(!priceInput.value){
+        priceInput.value = data.price;
       }
-      else if(val.includes("napoli")){
-        applyCityBackground("naples");
-      }
-      else if(val.includes("firenze")){
-        applyCityBackground("florence");
-      }
-      else if(val.includes("roma")){
-        applyCityBackground("rome");
+
+      if(!sqmInput.value){
+        sqmInput.value = data.sqm;
       }
 
-    });
+      // 🔥 AUTO SEARCH (wow effect)
+      clearTimeout(autoSearchTimeout);
 
-  }
+      autoSearchTimeout = setTimeout(()=>{
+        searchProperties();
+      }, 800);
+
+    }
+
+  });
 
 });
 
