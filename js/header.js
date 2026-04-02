@@ -21,12 +21,12 @@ let finalCity = city;
 // AUTO-DETECT URL
 if(!finalCity){
 
-  const path = window.location.pathname.toLowerCase();
+  const path = window.location.pathname.toLowerCase().replace(/\/$/, "");
 
-  if(path.includes("napoli")) finalCity = "naples";
-  else if(path.includes("milano")) finalCity = "milan";
-  else if(path.includes("firenze")) finalCity = "florence";
-  else if(path.includes("roma")) finalCity = "rome";
+  if(path.includes("/napoli")) finalCity = "naples";
+    else if(path.includes("/milano")) finalCity = "milan";
+    else if(path.includes("/firenze")) finalCity = "florence";
+    else if(path.includes("/roma")) finalCity = "rome";
 }
 
 // fallback sicurezza
