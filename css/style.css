@@ -6471,3 +6471,80 @@ background-position:center;
 
 box-shadow:0 40px 100px rgba(0,0,0,0.2);
 }
+
+/* ===================================================== */
+/* RENDIMENTOBB – UNIVERSAL HERO OVERLAY ENGINE (FINAL) */
+/* ===================================================== */
+
+/* BASE HERO */
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+/* 🔥 RESET TOTALE (ELIMINA CASINI PRECEDENTI) */
+.hero::before{
+  display:none !important;
+  content:none !important;
+}
+
+/* OVERLAY UNIVERSALE */
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+
+  background:linear-gradient(
+    180deg,
+    rgba(15,23,42,0.45) 0%,
+    rgba(15,23,42,0.60) 50%,
+    rgba(15,23,42,0.75) 100%
+  );
+}
+
+/* CONTENUTO SEMPRE SOPRA */
+.hero > .container,
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+/* ===================================================== */
+/* 🔥 AUTO MODE (NESSUN HARDCODE PAGINE) */
+/* ===================================================== */
+
+/* HERO CON CTA → più contrasto (conversion) */
+.hero:has(.btn-main){
+  --overlay-top: rgba(15,23,42,0.50);
+  --overlay-mid: rgba(15,23,42,0.65);
+  --overlay-bottom: rgba(15,23,42,0.80);
+}
+
+/* HERO informativi (cards, guide) → più light */
+.hero:has(.cards),
+.hero:has(.page-title){
+  --overlay-top: rgba(15,23,42,0.40);
+  --overlay-mid: rgba(15,23,42,0.55);
+  --overlay-bottom: rgba(15,23,42,0.70);
+}
+
+/* HERO immagini immobili → più luminoso */
+.hero:has(.property),
+.hero:has(.listing){
+  --overlay-top: rgba(15,23,42,0.25);
+  --overlay-mid: rgba(15,23,42,0.40);
+  --overlay-bottom: rgba(15,23,42,0.55);
+}
+
+/* ===================================================== */
+/* APPLY VARIABILI */
+/* ===================================================== */
+
+.hero-overlay{
+  background:linear-gradient(
+    180deg,
+    var(--overlay-top, rgba(15,23,42,0.45)) 0%,
+    var(--overlay-mid, rgba(15,23,42,0.60)) 50%,
+    var(--overlay-bottom, rgba(15,23,42,0.75)) 100%
+  );
+}
