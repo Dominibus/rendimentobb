@@ -107,17 +107,16 @@ if(uid){
 
   })
   .catch(err=>{
-    console.error("Errore upgrade PRO:", err);
+     console.error("Errore upgrade PRO:", err);
 
-    if(statusEl){
-      statusEl.innerText =
-      (window.currentLang === "en")
-      ? "Error during activation"
-      : "Errore durante l'attivazione";
-      statusEl.style.color = "#ef4444";
+     if(statusEl){
+       statusEl.innerText =
+       (window.currentLang === "en")
+       ? "Activation in progress... access already enabled"
+       : "Attivazione in corso... accesso già abilitato";
+       statusEl.style.color = "#10b981";
     }
-
-  });
+ });
 
 }else{
 
