@@ -4,42 +4,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title data-it="RendimentoBB – Academy Strategica B&B" data-en="RendimentoBB – Strategic B&B Investment Academy">
-RendimentoBB – Academy Strategica B&B
+<title data-it="RendimentoBB Academy – Strategie avanzate investimento B&B"
+data-en="RendimentoBB Academy – Advanced B&B Investment Strategies">
+RendimentoBB Academy – Strategie avanzate investimento B&B
 </title>
 
 <meta name="description"
-data-it="Impara a investire in B&B con strategie reali: ROI, rischio, mutui e rendimento. Evita errori e massimizza i profitti."
-data-en="Learn how to invest in B&B with real strategies: ROI, risk, mortgages and profitability. Avoid mistakes and maximize profits."
-content="RendimentoBB Academy">
+data-it="Impara a investire in B&B con strategie reali: ROI, rischio, mutui e pricing. Trasforma dati in profitto."
+data-en="Learn how to invest in B&B with real strategies: ROI, risk, mortgages and pricing. Turn data into profit."
+content="B&B investment academy ROI strategy">
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
 
-/* 🔥 BLOCCO PAIN */
-.academy-pain{
-margin-top:40px;
-background:#0f172a;
+/* ===== HERO ENHANCED ===== */
+.hero-academy{
+position:relative;
+padding:120px 20px 100px;
+background:linear-gradient(180deg, rgba(15,23,42,0.75), rgba(15,23,42,0.9)),
+url("/img/rome-dashboard.jpg") center/cover;
 color:white;
-padding:30px;
+text-align:center;
+}
+
+.hero-academy h1{
+font-size:42px;
+margin-bottom:15px;
+}
+
+.hero-academy p{
+max-width:700px;
+margin:auto;
+color:#cbd5f5;
+}
+
+/* TRUST */
+.academy-trust{
+margin-top:20px;
+font-size:14px;
+color:#94a3b8;
+}
+
+/* PAIN */
+.academy-pain{
+margin-top:50px;
+background:#020617;
+padding:35px;
 border-radius:20px;
-text-align:left;
 max-width:800px;
 margin-left:auto;
 margin-right:auto;
-box-shadow:0 25px 80px rgba(0,0,0,0.25);
-}
-
-.academy-pain h3{
-margin-bottom:12px;
-font-size:20px;
+box-shadow:0 30px 90px rgba(0,0,0,0.4);
 }
 
 .academy-pain ul{
-padding-left:18px;
-line-height:1.8;
+line-height:1.9;
 font-size:15px;
+}
+
+/* GRID */
+.guide-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-top:50px;
+}
+
+.guide-card{
+padding:25px;
+background:white;
+border-radius:16px;
+transition:.25s;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.guide-card:hover{
+transform:translateY(-6px);
+box-shadow:0 25px 60px rgba(0,0,0,0.12);
 }
 
 /* LOCK */
@@ -50,8 +92,8 @@ position:relative;
 .pro-lock::after{
 content:"🔒 PRO";
 position:absolute;
-top:12px;
-right:12px;
+top:10px;
+right:10px;
 background:#10b981;
 color:white;
 font-size:11px;
@@ -62,13 +104,12 @@ border-radius:6px;
 /* CTA */
 .academy-cta{
 text-align:center;
-margin-top:90px; 
-padding-bottom:40px;
+margin-top:90px;
 }
 
-.academy-cta p{
-margin-bottom:15px;
-color:#475569;
+.academy-cta h3{
+margin-top:10px;
+font-size:24px;
 }
 
 </style>
@@ -82,130 +123,150 @@ color:#475569;
 <main>
 
 <!-- HERO -->
-<section class="hero hero-bg rome">
-<div class="container">
-<div class="page-title">
+<section class="hero-academy">
 
 <h1
-data-it="Diventa profittevole con il tuo B&B"
-data-en="Turn your B&B into a profitable business">
-Diventa profittevole con il tuo B&B
+data-it="Da investimento casuale a macchina da profitto"
+data-en="Turn your B&B into a profit machine">
+Da investimento casuale a macchina da profitto
 </h1>
 
 <p
-data-it="Non è questione di fortuna. È questione di numeri, strategia e decisioni corrette."
-data-en="It’s not luck. It’s numbers, strategy, and the right decisions.">
-Non è questione di fortuna. È questione di numeri, strategia e decisioni corrette.
+data-it="Qui non trovi teoria. Trovi strategie reali usate da chi guadagna davvero con i B&B."
+data-en="This is not theory. These are real strategies used by profitable B&B investors.">
+Qui non trovi teoria. Trovi strategie reali usate da chi guadagna davvero.
 </p>
 
+<div class="academy-trust"
+data-it="🔥 +1.200 investitori stanno ottimizzando i loro B&B con RendimentoBB"
+data-en="🔥 1,200+ investors are optimizing their B&B with RendimentoBB">
+🔥 +1.200 investitori stanno ottimizzando i loro B&B
 </div>
 
-<!-- 🔥 PAIN BLOCK -->
+<!-- PAIN -->
 <div class="academy-pain">
 
-<h3 data-it="Il 90% degli investitori B&B perde soldi per questi errori:"
-data-en="90% of B&B investors lose money because of these mistakes:">
-Il 90% degli investitori B&B perde soldi per questi errori:
+<h3
+data-it="Perché il 90% dei B&B NON è profittevole:"
+data-en="Why 90% of B&Bs are NOT profitable:">
+Perché il 90% dei B&B NON è profittevole:
 </h3>
 
 <ul>
-<li data-it="ROI calcolato male" data-en="Wrong ROI calculation">ROI calcolato male</li>
-<li data-it="Costi sottostimati" data-en="Underestimated costs">Costi sottostimati</li>
-<li data-it="Mutuo non sostenibile" data-en="Unsustainable mortgage">Mutuo non sostenibile</li>
-<li data-it="Prezzi notte sbagliati" data-en="Wrong pricing strategy">Prezzi notte sbagliati</li>
+<li data-it="ROI falsato da stime ottimistiche" data-en="ROI distorted by optimistic assumptions">
+ROI falsato da stime ottimistiche
+</li>
+<li data-it="Costi nascosti ignorati" data-en="Hidden costs ignored">
+Costi nascosti ignorati
+</li>
+<li data-it="Mutui che distruggono il cashflow" data-en="Mortgages killing cashflow">
+Mutui che distruggono il cashflow
+</li>
+<li data-it="Prezzi notte non ottimizzati" data-en="Non-optimized pricing">
+Prezzi notte non ottimizzati
+</li>
 </ul>
 
 </div>
 
-</div>
 </section>
+
 
 <!-- CONTENUTO -->
 <section class="section section-light">
 
 <div class="container">
 
-<!-- GRID -->
 <div class="guide-grid">
 
 <a href="/academy/roi/" class="guide-card pro-lock">
-<h3 data-it="Strategia ROI avanzata" data-en="Advanced ROI strategy">
-Strategia ROI avanzata
+<h3 data-it="ROI reale (non marketing)"
+data-en="Real ROI (not marketing)">
+ROI reale (non marketing)
 </h3>
-<p data-it="Capisci quanto guadagni davvero (non quello che pensi)."
-data-en="Understand your real profit (not what you think).">
-Capisci quanto guadagni davvero (non quello che pensi).
+<p data-it="Scopri il vero rendimento e smetti di farti ingannare dai numeri."
+data-en="Discover real returns and stop being misled by numbers.">
+Scopri il vero rendimento e smetti di farti ingannare.
 </p>
 </a>
 
 <a href="/academy/mutuo/" class="guide-card pro-lock">
-<h3 data-it="Mutuo perfetto per B&B" data-en="Perfect mortgage strategy">
-Mutuo perfetto per B&B
+<h3 data-it="Mutuo sostenibile"
+data-en="Sustainable mortgage">
+Mutuo sostenibile
 </h3>
-<p data-it="Quando un mutuo è davvero sostenibile."
-data-en="When a mortgage is truly sustainable.">
-Quando un mutuo è davvero sostenibile.
+<p data-it="Il punto esatto in cui il mutuo diventa profitto o disastro."
+data-en="The exact point where a mortgage becomes profit or disaster.">
+Quando un mutuo è profitto o disastro.
 </p>
 </a>
 
 <a href="/academy/strategia/" class="guide-card pro-lock">
-<h3 data-it="Pricing strategico" data-en="Strategic pricing">
-Pricing strategico
+<h3 data-it="Pricing avanzato"
+data-en="Advanced pricing">
+Pricing avanzato
 </h3>
-<p data-it="Come aumentare i ricavi senza aumentare i costi."
-data-en="Increase revenue without increasing costs.">
-Come aumentare i ricavi senza aumentare i costi.
+<p data-it="Aumenta il fatturato senza cambiare immobile."
+data-en="Increase revenue without changing property.">
+Aumenta il fatturato senza cambiare immobile.
 </p>
 </a>
 
 <a href="/academy/errori/" class="guide-card pro-lock">
-<h3 data-it="Errori che ti fanno perdere soldi" data-en="Money-losing mistakes">
-Errori che ti fanno perdere soldi
+<h3 data-it="Errori invisibili"
+data-en="Hidden mistakes">
+Errori invisibili
 </h3>
-<p data-it="Gli errori invisibili che distruggono il ROI."
-data-en="Hidden mistakes that destroy your ROI.">
-Gli errori invisibili che distruggono il ROI.
+<p data-it="I dettagli che distruggono il ROI senza che tu lo sappia."
+data-en="The details that silently destroy your ROI.">
+I dettagli che distruggono il ROI.
 </p>
 </a>
 
 </div>
 
-<!-- 🔥 COLLEGAMENTO SAAS -->
+<!-- CTA -->
 <div class="academy-cta">
 
 <p
-data-it="Queste strategie vengono applicate automaticamente nella Dashboard RendimentoBB."
-data-en="These strategies are automatically applied inside your RendimentoBB Dashboard.">
-Queste strategie vengono applicate automaticamente nella Dashboard RendimentoBB.
+data-it="Queste strategie sono integrate automaticamente nel simulatore RendimentoBB."
+data-en="These strategies are automatically integrated in the RendimentoBB simulator.">
+Queste strategie sono integrate nel simulatore.
 </p>
 
 <h3
-data-it="Scopri se il tuo investimento sta davvero guadagnando"
-data-en="Find out if your investment is actually profitable">
-Scopri se il tuo investimento sta davvero guadagnando
+data-it="Scopri se il tuo investimento è davvero profittevole"
+data-en="Find out if your investment is truly profitable">
+Scopri se il tuo investimento è davvero profittevole
 </h3>
 
 <a href="/tool/" class="btn btn-primary"
-data-it="🚀 Analizza il tuo investimento"
-data-en="🚀 Analyze your investment">
-🚀 Analizza il tuo investimento
+data-it="🚀 Analizza investimento"
+data-en="🚀 Analyze investment">
+🚀 Analizza investimento
 </a>
 
-<!-- 🔥 SEO INTERNAL LINKS -->
+<!-- SEO -->
 <div style="margin-top:30px;font-size:14px;color:#64748b">
 
-<p><strong data-it="Approfondisci per città:" data-en="Explore by city:">
-Approfondisci per città:
-</strong></p>
+<p>
+<strong data-it="Guide per città:"
+data-en="City guides:">
+Guide per città:
+</strong>
+</p>
 
-<a href="/roi-bnb/roma/">ROI B&B Roma</a> • 
-<a href="/roi-bnb/milano/">ROI B&B Milano</a> • 
-<a href="/roi-bnb/napoli/">ROI B&B Napoli</a> • 
-<a href="/roi-bnb/firenze/">ROI B&B Firenze</a>  
+<a href="/roi-bnb/roma/">Roma</a> • 
+<a href="/roi-bnb/milano/">Milano</a> • 
+<a href="/roi-bnb/napoli/">Napoli</a> • 
+<a href="/roi-bnb/firenze/">Firenze</a>
 
 </div>
 
 </div>
+
+</div>
+
 </section>
 
 </main>
