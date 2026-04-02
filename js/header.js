@@ -16,8 +16,21 @@ if(!hero) return;
 // reset classi
 hero.classList.remove("rome","naples","milan","florence");
 
+let finalCity = city;
+
+// AUTO-DETECT URL
+if(!finalCity){
+
+  const path = window.location.pathname.toLowerCase();
+
+  if(path.includes("napoli")) finalCity = "naples";
+  else if(path.includes("milano")) finalCity = "milan";
+  else if(path.includes("firenze")) finalCity = "florence";
+  else if(path.includes("roma")) finalCity = "rome";
+}
+
 // fallback sicurezza
-const finalCity = city || "rome";
+if(!finalCity) finalCity = "rome";
 
 // applica classe
 hero.classList.add(finalCity);
