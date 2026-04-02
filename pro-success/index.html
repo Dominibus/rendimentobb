@@ -49,6 +49,13 @@ Il tuo account PRO è stato attivato con successo.
 Attivazione in corso...
 </p>
 
+<!-- SYNC INFO -->
+<p style="margin-top:10px;font-size:13px;color:#94a3b8;"
+data-it="⏳ Sincronizzazione account in corso (max 5s)"
+data-en="⏳ Syncing account (max 5s)">
+⏳ Sincronizzazione account in corso (max 5s)
+</p>
+
 <!-- CTA -->
 <div style="margin-top:40px; display:flex; flex-direction:column; gap:15px; align-items:center;">
 
@@ -91,6 +98,12 @@ params.get("uid");
 
 const statusEl = document.getElementById("status-msg");
 
+function redirectToDashboard(){
+  setTimeout(()=>{
+    window.location.href = "/dashboard/";
+  }, 2500);
+}
+
 if(uid){
 
   upgradeToPro(uid)
@@ -105,18 +118,22 @@ if(uid){
       statusEl.style.color = "#10b981";
     }
 
+    redirectToDashboard();
+
   })
   .catch(err=>{
-     console.error("Errore upgrade PRO:", err);
+    console.error("Errore upgrade PRO:", err);
 
-     if(statusEl){
-       statusEl.innerText =
-       (window.currentLang === "en")
-       ? "Activation in progress... access already enabled"
-       : "Attivazione in corso... accesso già abilitato";
-       statusEl.style.color = "#10b981";
+    if(statusEl){
+      statusEl.innerText =
+      (window.currentLang === "en")
+      ? "Activation in progress... access already enabled"
+      : "Attivazione in corso... accesso già abilitato";
+      statusEl.style.color = "#10b981";
     }
- });
+
+    redirectToDashboard();
+  });
 
 }else{
 
