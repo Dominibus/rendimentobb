@@ -646,6 +646,92 @@ Simula investimento
 
 <script src="/js/lang.js" defer></script>
 
+<!-- ===================== -->
+<!-- 🔥 CITY BACKGROUND LOGIC -->
+<!-- ===================== -->
+
+<script>
+
+// ✅ FUNZIONE CORRETTA (SOSTITUISCE LA VECCHIA)
+window.applyCityBackground = function(city){
+
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero");
+
+  if(!hero) return;
+
+  // reset classi
+  hero.classList.remove("rome","naples","milan","florence");
+
+  // fallback sicurezza
+  const finalCity = city || "rome";
+
+  hero.classList.add(finalCity);
+
+  console.log("🎯 Hero city:", finalCity);
+};
+
+
+// =====================
+// 🔥 AUTO CHANGE DA INPUT
+// =====================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const cityInput = document.getElementById("searchCity");
+  const priceInput = document.getElementById("searchPrice");
+  const sqmInput = document.getElementById("searchSqm");
+
+  if(!cityInput) return;
+
+  const cityData = {
+    napoli: { price:180000, sqm:60, bg:"naples" },
+    roma: { price:300000, sqm:70, bg:"rome" },
+    milano: { price:350000, sqm:65, bg:"milan" },
+    firenze: { price:280000, sqm:60, bg:"florence" }
+  };
+
+  let autoSearchTimeout;
+
+  cityInput.addEventListener("input", () => {
+
+    const val = cityInput.value.toLowerCase();
+
+    // 🔥 match intelligente
+    const match = Object.keys(cityData).find(c => val.includes(c));
+
+    if(match){
+
+      const data = cityData[match];
+
+      // 🎯 background sync
+      applyCityBackground(data.bg);
+
+      // 🎯 auto-fill intelligente
+      if(!priceInput.value){
+        priceInput.value = data.price;
+      }
+
+      if(!sqmInput.value){
+        sqmInput.value = data.sqm;
+      }
+
+      // 🔥 AUTO SEARCH (wow effect)
+      clearTimeout(autoSearchTimeout);
+
+      autoSearchTimeout = setTimeout(()=>{
+        searchProperties();
+      }, 800);
+
+    }
+
+  });
+
+});
+
+</script>  
+
 <!-- 🔥 PRIMA DEFINIAMO LE FUNZIONI -->
 <script>
 
@@ -734,8 +820,6 @@ window.location.href="/tool/";
 },1200);
 
 };
-
-
 
 // ================= SEARCH =================
 
@@ -897,93 +981,6 @@ window.location.href="/tool/";
 };
 
 </script>
-
-<!-- ===================== -->
-<!-- 🔥 CITY BACKGROUND LOGIC -->
-<!-- ===================== -->
-
-<script>
-
-// ✅ FUNZIONE CORRETTA (SOSTITUISCE LA VECCHIA)
-window.applyCityBackground = function(city){
-
-  const hero =
-    document.querySelector(".hero-bg") ||
-    document.querySelector(".hero");
-
-  if(!hero) return;
-
-  // reset classi
-  hero.classList.remove("rome","naples","milan","florence");
-
-  // fallback sicurezza
-  const finalCity = city || "rome";
-
-  hero.classList.add(finalCity);
-
-  console.log("🎯 Hero city:", finalCity);
-};
-
-
-// =====================
-// 🔥 AUTO CHANGE DA INPUT
-// =====================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const cityInput = document.getElementById("searchCity");
-  const priceInput = document.getElementById("searchPrice");
-  const sqmInput = document.getElementById("searchSqm");
-
-  if(!cityInput) return;
-
-  const cityData = {
-    napoli: { price:180000, sqm:60, bg:"naples" },
-    roma: { price:300000, sqm:70, bg:"rome" },
-    milano: { price:350000, sqm:65, bg:"milan" },
-    firenze: { price:280000, sqm:60, bg:"florence" }
-  };
-
-  let autoSearchTimeout;
-
-  cityInput.addEventListener("input", () => {
-
-    const val = cityInput.value.toLowerCase();
-
-    // 🔥 match intelligente
-    const match = Object.keys(cityData).find(c => val.includes(c));
-
-    if(match){
-
-      const data = cityData[match];
-
-      // 🎯 background sync
-      applyCityBackground(data.bg);
-
-      // 🎯 auto-fill intelligente
-      if(!priceInput.value){
-        priceInput.value = data.price;
-      }
-
-      if(!sqmInput.value){
-        sqmInput.value = data.sqm;
-      }
-
-      // 🔥 AUTO SEARCH (wow effect)
-      clearTimeout(autoSearchTimeout);
-
-      autoSearchTimeout = setTimeout(()=>{
-        searchProperties();
-      }, 800);
-
-    }
-
-  });
-
-});
-
-</script>
-  
 
 <!-- POI HEADER -->
 <script type="module" src="/js/header.js"></script>
