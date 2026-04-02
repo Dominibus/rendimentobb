@@ -6,90 +6,161 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-data-it="Academy B&B – Strategie, ROI e guida investimento affitti brevi"
-data-en="B&B Academy – ROI, strategy and short-term rental investing">
+data-it="Academy B&B – Come investire e calcolare ROI affitti brevi"
+data-en="B&B Academy – How to invest and calculate ROI short-term rentals">
 Academy B&B – ROI e strategie investimento
 </title>
 
 <meta name="description"
-data-it="Impara a investire in un B&B: ROI reale, costi, mutui e strategie per aumentare il profitto negli affitti brevi."
-data-en="Learn how to invest in a B&B: ROI, costs, mortgages and strategies to maximize profit.">
-
-<link rel="canonical" href="https://www.rendimentobb.it/academy/">
+data-it="Guida completa su come investire in un B&B: ROI reale, costi, mutui e strategie per aumentare il profitto."
+data-en="Complete guide to B&B investing: ROI, costs, mortgages and strategies to increase profit.">
 
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/img/favicon.png">
 
 <style>
 
-/* ===== HERO COME IMMOBILI ===== */
+/* ===== BASE DARK SAAS ===== */
+.academy-page{
+background:
+radial-gradient(circle at 20% 20%, rgba(16,185,129,0.15), transparent 40%),
+radial-gradient(circle at 80% 80%, rgba(59,130,246,0.15), transparent 40%),
+linear-gradient(180deg,#e2e8f0 0%, #cbd5f5 100%);
+}
+
+/* ===== HERO ===== */
 .hero-academy{
-padding-top:80px;
-padding-bottom:80px;
-text-align:center;
-}
-
-/* ===== GRID GUIDE ===== */
-.guide-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:24px;
-margin-top:50px;
+grid-template-columns:1.1fr 1fr;
+gap:50px;
+align-items:center;
+max-width:1200px;
+margin:80px auto 40px;
+padding:0 20px;
 }
 
-/* ===== CARD STILE IMMOBILI ===== */
-.guide-card{
-position:relative;
-background:rgba(255,255,255,0.85);
-backdrop-filter:blur(10px);
-padding:26px;
-border-radius:18px;
-border:1px solid rgba(16,185,129,0.08);
-
-box-shadow:
-0 10px 30px rgba(0,0,0,0.04),
-0 1px 2px rgba(0,0,0,0.06);
-
-text-decoration:none;
-color:inherit;
-transition:.25s;
+/* ===== TEXT ===== */
+.hero-text h1{
+font-size:44px;
+font-weight:800;
+line-height:1.15;
+color:#0f172a;
 }
 
-.guide-card:hover{
-transform:translateY(-6px);
-box-shadow:
-0 30px 80px rgba(0,0,0,0.08),
-0 10px 20px rgba(16,185,129,0.08);
-border-color:#10b981;
+.hero-text p{
+margin-top:18px;
+font-size:18px;
+color:#334155;
 }
 
-/* top border */
-.guide-card::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-right:0;
-height:3px;
-background:linear-gradient(90deg,#10b981,#34d399);
-border-top-left-radius:18px;
-border-top-right-radius:18px;
-opacity:0;
-transition:.3s;
-}
-
-.guide-card:hover::before{
-opacity:1;
+/* ===== TRUST ===== */
+.trust{
+margin-top:20px;
+font-size:14px;
+color:#10b981;
+font-weight:600;
 }
 
 /* ===== CTA ===== */
-.cta-box{
-margin-top:80px;
-padding:40px;
-border-radius:20px;
+.hero-cta{
+margin-top:30px;
+}
+
+.btn-primary{
+background:#10b981;
+color:white;
+padding:14px 26px;
+border-radius:12px;
+font-weight:700;
+display:inline-block;
+box-shadow:0 10px 30px rgba(16,185,129,0.35);
+}
+
+/* ===== SECTION ===== */
+.value{
+max-width:1100px;
+margin:80px auto;
+padding:0 20px;
+text-align:center;
+}
+
+.value h2{
+font-size:32px;
+font-weight:800;
+color:#0f172a;
+}
+
+.value p{
+margin-top:10px;
+color:#475569;
+}
+
+/* ===== CARDS ===== */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+/* ===== CARD ===== */
+.card{
+background:rgba(255,255,255,0.85);
+backdrop-filter:blur(10px);
+padding:25px;
+border-radius:18px;
+border:1px solid rgba(0,0,0,0.05);
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:.25s;
+display:block;
+text-decoration:none;
+color:inherit;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 25px 70px rgba(0,0,0,0.12);
+}
+
+/* ===== BADGE ===== */
+.badge{
+display:inline-block;
+margin-top:10px;
+font-size:11px;
+padding:4px 8px;
+background:#10b981;
+color:white;
+border-radius:6px;
+}
+
+/* ===== CTA FINAL ===== */
+.cta-final{
+max-width:900px;
+margin:100px auto;
 background:linear-gradient(135deg,#10b981,#059669);
 color:white;
+padding:60px;
+border-radius:24px;
 text-align:center;
+box-shadow:0 40px 100px rgba(16,185,129,0.4);
+}
+
+.cta-final a{
+margin-top:20px;
+display:inline-block;
+padding:14px 30px;
+background:white;
+color:#059669;
+border-radius:12px;
+font-weight:700;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:900px){
+.hero-academy{
+grid-template-columns:1fr;
+text-align:center;
+}
 }
 
 </style>
@@ -103,11 +174,9 @@ text-align:center;
 <main>
 
 <!-- HERO -->
-<section class="hero hero-bg rome">
+<section class="hero-academy">
 
-<div class="container">
-
-<div class="page-title">
+<div class="hero-text">
 
 <h1
 data-it="Come investire in un B&B e ottenere un ROI reale"
@@ -116,35 +185,31 @@ Come investire in un B&B con ROI reale
 </h1>
 
 <p
-data-it="Guida completa per evitare errori e massimizzare il profitto negli affitti brevi."
-data-en="Complete guide to avoid mistakes and maximize short-term rental profit">
-Guida completa per investire negli affitti brevi
+data-it="Scopri strategie, costi e numeri reali per evitare errori e massimizzare il profitto."
+data-en="Discover strategies, costs and real numbers to maximize profit.">
+Strategie, costi e numeri reali per investire meglio
 </p>
 
-<div style="margin-top:20px">
-
-<a href="/tool/" class="btn btn-primary"
-data-it="Simula investimento"
-data-en="Simulate investment">
-Simula investimento
-</a>
-
-</div>
-
-<div style="margin-top:10px;font-size:13px;color:#10b981;font-weight:600"
+<div class="trust"
 data-it="🔥 +1.200 investitori stanno analizzando investimenti ora"
 data-en="🔥 1,200+ investors are analyzing investments now">
 🔥 +1.200 investitori stanno analizzando investimenti ora
 </div>
 
+<div class="hero-cta">
+<a href="/tool/" class="btn-primary"
+data-it="🚀 Analizza investimento"
+data-en="🚀 Analyze investment">
+🚀 Analizza investimento
+</a>
 </div>
 
 </div>
 
 </section>
 
-<!-- CONTENUTO SEO -->
-<section class="section-info">
+<!-- CONTENUTI SEO -->
+<section class="value">
 
 <h2
 data-it="Guida completa investimento B&B"
@@ -153,44 +218,47 @@ Guida completa investimento B&B
 </h2>
 
 <p
-data-it="Analizza ROI, costi e mercato prima di acquistare un immobile per affitti brevi."
-data-en="Analyze ROI, costs and market before buying a short-term rental property">
-Analizza ROI, costi e mercato prima di investire
+data-it="Tutto quello che devi sapere prima di acquistare un immobile per affitti brevi."
+data-en="Everything you need before investing in short-term rentals.">
+Tutto quello che devi sapere prima di investire
 </p>
 
-<!-- GRID -->
-<div class="guide-grid">
+<div class="cards">
 
-<a href="/roi-bnb/" class="guide-card">
+<a href="/roi-bnb/" class="card">
 <h3 data-it="ROI B&B" data-en="B&B ROI">ROI B&B</h3>
-<p data-it="Calcolo rendimento reale" data-en="Real ROI calculation">
-Calcolo rendimento reale
+<p data-it="Calcolo rendimento reale e profitto" data-en="Real ROI calculation">
+Calcolo rendimento reale e profitto
 </p>
+<span class="badge">SEO</span>
 </a>
 
-<a href="/costi-aprire-bnb/" class="guide-card">
+<a href="/costi-aprire-bnb/" class="card">
 <h3 data-it="Costi B&B" data-en="B&B costs">Costi B&B</h3>
-<p data-it="Tutti i costi reali" data-en="All real costs">
-Tutti i costi reali
+<p data-it="Tutti i costi reali da considerare" data-en="All real costs">
+Tutti i costi reali da considerare
 </p>
+<span class="badge">SEO</span>
 </a>
 
-<a href="/aprire-bnb-conviene/" class="guide-card">
+<a href="/aprire-bnb-conviene/" class="card">
 <h3 data-it="Conviene aprire?" data-en="Is it worth it?">
 Conviene aprire?
 </h3>
-<p data-it="Analisi mercato reale" data-en="Market analysis">
-Analisi mercato reale
+<p data-it="Analisi reale mercato affitti brevi" data-en="Market analysis">
+Analisi reale mercato affitti brevi
 </p>
+<span class="badge">SEO</span>
 </a>
 
-<a href="/market/" class="guide-card">
+<a href="/market/" class="card">
 <h3 data-it="Analisi città" data-en="City analysis">
 Analisi città
 </h3>
-<p data-it="ROI medio per città" data-en="ROI by city">
-ROI medio per città
+<p data-it="ROI medio e rendimento per città" data-en="ROI by city">
+ROI medio e rendimento per città
 </p>
+<span class="badge">SEO</span>
 </a>
 
 </div>
@@ -198,9 +266,7 @@ ROI medio per città
 </section>
 
 <!-- CTA -->
-<div class="container">
-
-<div class="cta-box">
+<section class="cta-final">
 
 <h3
 data-it="Scopri se il tuo investimento è profittevole"
@@ -214,24 +280,22 @@ data-en="Simulate ROI in seconds">
 Simula ROI in pochi secondi
 </p>
 
-<a href="/tool/" class="btn"
-style="margin-top:15px;background:white;color:#059669"
-data-it="Avvia simulazione"
-data-en="Start simulation">
-Avvia simulazione
+<a href="/tool/"
+data-it="🚀 Avvia simulazione"
+data-en="🚀 Start simulation">
+🚀 Avvia simulazione
 </a>
 
-</div>
-
-</div>
+</section>
 
 </main>
 
 <!-- LANG -->
-<script src="/js/lang.js" defer></script>
+<script src="/js/lang.js"></script>
 
 <script>
 function applyLanguage(){
+
   const lang = window.currentLang || localStorage.getItem("rb_lang") || "it";
 
   document.querySelectorAll("[data-it]").forEach(el=>{
@@ -239,10 +303,6 @@ function applyLanguage(){
     if(text) el.innerText = text;
   });
 
-  document.querySelectorAll("[data-it-placeholder]").forEach(el=>{
-    const text = el.getAttribute("data-"+lang+"-placeholder");
-    if(text) el.placeholder = text;
-  });
 }
 
 document.addEventListener("DOMContentLoaded", applyLanguage);
@@ -250,7 +310,7 @@ document.addEventListener("rb_language_changed", applyLanguage);
 </script>
 
 <script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js" defer></script>
+<script src="/js/footer.js"></script>
 
 </body>
 </html>
