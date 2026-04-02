@@ -115,6 +115,9 @@ if(container){
 container.innerHTML = header;
 }
 
+// 🔥 APPLY HERO BACKGROUND (CRITICO)
+window.applyCityBackground();
+  
 /* ===================== */
 /* HAMBURGER MENU */
 /* ===================== */
