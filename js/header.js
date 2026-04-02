@@ -7,7 +7,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/fi
 
 // ================= GLOBAL CITY BACKGROUND (FINAL PRO) =================
 
-window.applyCityBackground = function(city){
+window.applyCityBackground = function(){
 
 const hero =
   document.querySelector(".hero-bg") ||
@@ -15,23 +15,25 @@ const hero =
 
 if(!hero) return;
 
-// 🔥 RESET CLASSI
+// reset classi
 hero.classList.remove("rome","naples","milan","florence");
 
-// 🔥 MAP IT → EN
-const map = {
-  roma:"rome",
-  napoli:"naples",
-  milano:"milan",
-  firenze:"florence",
-  rome:"rome",
-  naples:"naples",
-  milan:"milan",
-  florence:"florence"
-};
+// detect automatico da URL
+const path = window.location.pathname.toLowerCase();
 
-// 🔥 NORMALIZZA INPUT
-let cityKey = map[(city || "").toLowerCase()];
+let city = "rome";
+
+if(path.includes("milano")) city = "milan";
+else if(path.includes("napoli")) city = "naples";
+else if(path.includes("firenze")) city = "florence";
+else if(path.includes("roma")) city = "rome";
+
+// applica classe
+hero.classList.add(city);
+
+console.log("🎯 Hero city:", city);
+
+};
 
 // ================= AUTO-DETECT URL (🔥 FONDAMENTALE) =================
 
