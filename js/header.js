@@ -114,6 +114,11 @@ link.classList.add("active");
 }
 });
 
+// 🔥 traduzione immediata header
+if(typeof applyStaticTranslations === "function"){
+applyStaticTranslations();
+}
+
 });
 
 /* ===================== */
@@ -125,16 +130,21 @@ onAuthStateChanged(auth, (user) => {
 const userArea = document.getElementById("user-area");
 if(!userArea) return;
 
-if(user){
-
 const isMobile = window.innerWidth < 768;
+
+if(user){
 
 if(isMobile){
 
 userArea.innerHTML = `
 <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
-<a href="/dashboard/" class="btn btn-secondary">📊</a>
-<button onclick="logout()" class="btn btn-secondary">⎋</button>
+
+<a href="/dashboard/" class="btn btn-secondary"
+data-it="Dashboard" data-en="Dashboard">📊</a>
+
+<button onclick="logout()" class="btn btn-secondary"
+data-it="Esci" data-en="Logout">⎋</button>
+
 </div>
 `;
 
@@ -143,7 +153,8 @@ userArea.innerHTML = `
 userArea.innerHTML = `
 <div style="text-align:right">
 
-<div style="font-size:12px;color:#64748b;">
+<div style="font-size:12px;color:#64748b;"
+data-it="Account" data-en="Account">
 Account
 </div>
 
@@ -153,11 +164,13 @@ ${user.email}
 
 <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
 
-<a href="/dashboard/" class="btn btn-secondary">
+<a href="/dashboard/" class="btn btn-secondary"
+data-it="Dashboard" data-en="Dashboard">
 Dashboard
 </a>
 
-<button onclick="logout()" class="btn btn-secondary">
+<button onclick="logout()" class="btn btn-secondary"
+data-it="Esci" data-en="Logout">
 Esci
 </button>
 
@@ -176,7 +189,7 @@ userArea.innerHTML = `
 <div style="font-size:12px;color:#64748b;"
 data-it="Area riservata"
 data-en="Private area">
-Private area
+Area riservata
 </div>
 
 <a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
@@ -190,7 +203,7 @@ Accedi
 
 }
 
-// 🔥 aggiorna traduzioni
+// 🔥 traduzione user area
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
@@ -198,11 +211,11 @@ applyStaticTranslations();
 });
 
 /* ===================== */
-/* TRADUZIONE HEADER */
+/* SYNC LINGUA DINAMICA */
 /* ===================== */
 
-setTimeout(()=>{
+document.addEventListener("rb_language_changed", () => {
 if(typeof applyStaticTranslations === "function"){
 applyStaticTranslations();
 }
-},100);
+});
