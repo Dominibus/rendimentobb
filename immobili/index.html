@@ -546,6 +546,63 @@ Analizza mercato →
 
 </div>
 
+<!-- ================= LEAD SECTION ================= -->
+
+<section style="
+margin-top:100px;
+background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
+padding:50px 20px;
+border-radius:20px;
+max-width:900px;
+margin-left:auto;
+margin-right:auto;
+text-align:center;
+box-shadow:0 20px 60px rgba(16,185,129,0.15);
+border:1px solid #bbf7d0;
+">
+
+<h2
+data-it="Ricevi immobili con ROI già calcolato"
+data-en="Get properties with ROI already calculated">
+
+Ricevi immobili con ROI già calcolato
+
+</h2>
+
+<p style="margin-top:10px;color:#475569"
+data-it="Ti inviamo le migliori opportunità B&B nella tua città con analisi completa già pronta."
+data-en="We send you the best B&B opportunities in your city with full ROI analysis included.">
+
+Ti inviamo le migliori opportunità B&B con analisi completa.
+
+</p>
+
+<div style="margin-top:25px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+
+<input id="lead-email"
+type="email"
+placeholder="Email"
+style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:220px">
+
+<input id="lead-city"
+type="text"
+placeholder="Città (Roma, Napoli...)"
+style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:180px">
+
+<button onclick="sendLeadImmobili()" class="btn btn-primary">
+
+<span data-it="Ricevi opportunità" data-en="Get opportunities">
+Ricevi opportunità
+</span>
+
+</button>
+
+</div>
+
+<div id="lead-msg" style="margin-top:12px;font-size:13px;color:#64748b"></div>
+
+</section>      
+
 <!-- RICERCA IMMOBILI -->
 
 <section style="margin-top:120px">
@@ -1054,6 +1111,56 @@ window.location.href="/tool/";
 
 };
 
+// ================= LEAD IMMOBILI =================
+
+window.sendLeadImmobili = async function(){
+
+const email = document.getElementById("lead-email").value;
+const city = document.getElementById("lead-city").value;
+
+if(!email){
+alert("Inserisci email");
+return;
+}
+
+try{
+
+const res = await fetch("/api/send-lead", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+type: "immobili",
+email,
+city
+})
+});
+
+const data = await res.json();
+
+if(data.success){
+
+document.getElementById("lead-msg").innerText =
+window.currentLang==="en"
+? "✔ Request sent successfully"
+: "✔ Richiesta inviata con successo";
+
+}else{
+throw new Error("fail");
+}
+
+}catch(e){
+
+document.getElementById("lead-msg").innerText =
+window.currentLang==="en"
+? "❌ Error, try again"
+: "❌ Errore, riprova";
+
+}
+
+};            
+
 </script>
 
 <!-- POI HEADER -->
@@ -1061,5 +1168,4 @@ window.location.href="/tool/";
 
 <script src="/js/footer.js" defer></script>
 <script type="module" src="/js/firebase-init.js"></script>
-
 
