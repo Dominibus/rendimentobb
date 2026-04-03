@@ -1,19 +1,130 @@
-<h1>Partnership RendimentoBB</h1>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Partnership – RendimentoBB</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<style>
+
+.hero{
+padding:120px 20px;
+text-align:center;
+color:white;
+background:linear-gradient(135deg,#0f172a,#020617);
+}
+
+.container{
+max-width:900px;
+margin:0 auto;
+padding:40px 20px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 40px rgba(0,0,0,0.08);
+margin-top:30px;
+}
+
+input, textarea{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #e2e8f0;
+margin-top:10px;
+}
+
+button{
+margin-top:15px;
+padding:14px;
+background:#10b981;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+.success{
+color:#10b981;
+margin-top:10px;
+display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="global-header"></div>
+
+<section class="hero">
+<h1>🤝 Partnership RendimentoBB</h1>
+<p>Ricevi lead qualificati pronti a investire</p>
+</section>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Diventa partner</h2>
 
 <p>
-RendimentoBB genera utenti interessati a:
+Collaboriamo con:
+<br>• Banche
+<br>• Broker mutui
+<br>• Agenzie immobiliari
 </p>
 
-<ul>
-<li>Mutui per investimento B&B</li>
-<li>Acquisto immobili</li>
-</ul>
+<input id="name" placeholder="Nome azienda">
+<input id="email" placeholder="Email">
+<textarea id="message" placeholder="Descrivi il tuo servizio"></textarea>
 
-<p>
-Se sei una banca, broker o agenzia immobiliare,
-puoi ricevere lead qualificati.
-</p>
+<button onclick="savePartner()">Invia richiesta</button>
 
-<a href="mailto:rendimentobb@gmail.com">
-Contattaci
-</a>
+<div id="success" class="success">
+✅ Richiesta inviata
+</div>
+
+</div>
+
+</div>
+
+<div id="global-footer"></div>
+
+<script type="module">
+
+import { savePartnerLead } from "/js/leads.js";
+
+window.savePartner = async function(){
+
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const message = document.getElementById("message").value;
+
+if(!email.includes("@")){
+alert("Email non valida");
+return;
+}
+
+await savePartnerLead({
+name,
+email,
+message
+});
+
+document.getElementById("success").style.display="block";
+
+};
+
+</script>
+
+</body>
+</html>
