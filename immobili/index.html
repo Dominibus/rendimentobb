@@ -137,22 +137,29 @@ font-size:14px;
 }
 
 /* ===================== */
-/* 🔥 HERO FIX IMMOBILI */
+/* 🔥 HERO FIX IMMOBILI (PRECISO) */
 /* ===================== */
 
-/* testo piccolo sotto bottoni */
-.hero span,
-.hero p[style],
-.hero div[style]{
+/* SOLO testi informativi sopra (NON card) */
+.hero > .container span,
+.hero > .container p,
+.hero > .container div{
 color:#ffffff !important;
 text-shadow:0 2px 10px rgba(0,0,0,0.7);
 opacity:1 !important;
 }
 
-/* in particolare le tue scritte inline */
-.hero span[data-it],
-.hero div[style*="color:#64748b"]{
+/* override inline grigi */
+.hero > .container div[style*="color:#64748b"],
+.hero > .container span[style*="color:#64748b"]{
 color:#e2e8f0 !important;
+}
+
+/* 🔥 RIPRISTINA CARD (FONDAMENTALE) */
+.hero .property-card,
+.hero .property-card *{
+color:#0f172a !important;
+text-shadow:none !important;
 }
 
 /* ===================== */
