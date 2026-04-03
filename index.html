@@ -1408,21 +1408,48 @@ if(elRoi){
 }
 
 // 🔥 MOSTRA SEMPRE (NO BUG PRO)
-if(elProfit){
-  elProfit.innerText = netAnnual > 0 ? formatCurrency(netAnnual) : "—";
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
+
+
+// 🔒 BLOCCO DATI AVANZATI
+if(isPro){
+
+  if(elProfit){
+    elProfit.innerText = netAnnual > 0 ? formatCurrency(netAnnual) : "—";
+  }
+
+  if(elMonth){
+    elMonth.innerText = netAnnual > 0 ? formatCurrency(netAnnual/12) : "—";
+  }
+
+  if(elBreak){
+    elBreak.innerText = breakEven > 0 ? breakEven.toFixed(1)+" anni" : "—";
+  }
+
+  if(elRev){
+    elRev.innerText = revenue > 0 ? formatCurrency(revenue) : "—";
+  }
+
+}else{
+
+  // 🔒 FREE → lascia lock
+  if(elProfit) elProfit.innerText = "🔒";
+  if(elMonth) elMonth.innerText = "🔒";
+  if(elBreak) elBreak.innerText = "🔒";
+  if(elRev) elRev.innerText = "🔒";
+
 }
 
-if(elMonth){
-  elMonth.innerText = netAnnual > 0 ? formatCurrency(netAnnual/12) : "—";
-}
+ // ================= OVERLAY CONTROL =================
+const overlay = document.querySelector(".home-blur-overlay");
 
-if(elBreak){
-  elBreak.innerText = breakEven > 0 ? breakEven.toFixed(1)+" anni" : "—";
-}
-
-if(elRev){
-  elRev.innerText = revenue > 0 ? formatCurrency(revenue) : "—";
-}
+if(overlay){
+  overlay.style.display = isPro ? "none" : "flex";
+} 
+ 
   // ================= PSICOLOGIA =================
 
   const psych = document.getElementById("roi-psychology");
@@ -1542,7 +1569,7 @@ quickROI();
 
 // scroll UX
 document.querySelector(".investment-metrics")
-?.scrollIntoView({behavior:"smooth"});
+?.scrollIntoView({behavior:"smooth"}); 
 
 };
 
@@ -1632,13 +1659,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     // 🔓 rimuove overlay
     document.querySelectorAll(".home-blur-overlay").forEach(el=>{
       el.remove();
-    });
-
-    // 🔓 reset placeholder (temporaneo)
-    document.querySelectorAll(".metric-card strong").forEach(el=>{
-      if(el.innerText === "🔒"){
-        el.innerText = "—";
-      }
     });
 
     // 🔥 FIX CRITICO → ricalcolo con piano PRO
