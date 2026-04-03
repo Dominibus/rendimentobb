@@ -48,7 +48,7 @@ Messaggio: ${message}
 
     // ================= INVIO EMAIL =================
     const response = await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "RendimentoBB <onboarding@resend.dev>",
       to: ["rendimentobb@gmail.com"],
       subject,
       html: `<div style="font-family:Arial;padding:20px">
