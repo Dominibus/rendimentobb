@@ -7,130 +7,222 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-data-it="Comparatore Mutui – RendimentoBB"
-data-en="Mortgage Comparator – RendimentoBB">
-Comparatore Mutui – RendimentoBB
+data-it="Mutuo B&B 2026 – Calcolo rata, confronto banche e impatto ROI"
+data-en="B&B Mortgage 2026 – Compare rates and ROI impact">
+Mutuo B&B – confronto e simulazione
 </title>
 
-<link rel="stylesheet" href="/css/style.css">
+<meta name="description"
+data-it="Simula mutui, confronta banche e scopri se il tuo investimento B&B è sostenibile. Calcolo reale ROI + mutuo."
+data-en="Simulate mortgages, compare banks and calculate real ROI impact.">
 
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="canonical" href="https://www.rendimentobb.it/mutui/">
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/img/favicon.png">
+
+<style>
+
+/* ===== HERO ===== */
+.hero-mutui{
+position:relative;
+padding:120px 20px 100px;
+text-align:center;
+color:white;
+background:
+linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.8)),
+url("/img/milan-bg.jpg") center/cover;
+}
+
+.hero-mutui h1{
+font-size:44px;
+font-weight:800;
+}
+
+.hero-mutui p{
+color:#e2e8f0;
+margin-top:15px;
+}
+
+/* ===== CTA ===== */
+.btn-hero{
+margin-top:25px;
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+padding:14px 28px;
+border-radius:12px;
+font-weight:700;
+display:inline-block;
+}
+
+/* ===== TOOL ===== */
+.tool-card{
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 20px 60px rgba(0,0,0,0.08);
+margin-top:-60px;
+}
+
+/* ===== RESULTS ===== */
+.mortgage-result{
+background:white;
+border-radius:16px;
+padding:20px;
+margin-top:20px;
+border:1px solid #e2e8f0;
+}
+
+.best{
+border:2px solid #10b981;
+}
+
+/* ===== LEAD BOX ===== */
+.lead-box{
+margin-top:50px;
+padding:40px;
+border-radius:20px;
+background:linear-gradient(135deg,#0f172a,#020617);
+color:white;
+text-align:center;
+}
+
+/* ===== PARTNER ===== */
+.partner-box{
+margin-top:50px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.partner-card{
+background:white;
+padding:20px;
+border-radius:16px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* ===== SEO TEXT ===== */
+.seo-block{
+max-width:900px;
+margin:80px auto;
+color:#475569;
+line-height:1.6;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div id="global-header"></div>  
+<div id="global-header"></div>
 
 <main>
 
-<section class="hero-mutui-premium">
+<!-- HERO -->
+<section class="hero-mutui">
 
-  <div class="hero-overlay"></div>
+<h1
+data-it="Mutuo B&B: conviene davvero?"
+data-en="B&B Mortgage: is it worth it?">
+Mutuo B&B: conviene davvero?
+</h1>
 
-  <div class="container">
+<p
+data-it="Il 68% degli investimenti con mutuo è in perdita."
+data-en="68% of mortgaged investments lose money">
+Il problema? Nessuna simulazione reale.
+</p>
 
-    <div class="hero-content">
-
-      <div class="hero-badge">
-        🏦 Mortgage Intelligence Engine
-      </div>
-
-      <h1
-        data-it="Comparatore Mutui Intelligente"
-        data-en="Smart Mortgage Comparator">
-        Comparatore Mutui Intelligente
-      </h1>
-
-      <p
-        data-it="Confronta i migliori mutui e scopri l’impatto reale sul ROI del tuo investimento B&B."
-        data-en="Compare the best mortgages and discover real ROI impact.">
-        Confronta i migliori mutui e scopri l’impatto reale sul ROI del tuo investimento B&B.
-      </p>
-
-      <div class="hero-trust" id="live-investors"
-     data-it="🔥 +1.200 investitori stanno analizzando mutui ora"
-     data-en="🔥 +1,200 investors are analyzing mortgages now">
-  🔥 +1.200 investitori stanno analizzando mutui ora
-    </div>
-
-    </div>
-
-  </div>
+<a href="#tool" class="btn-hero">
+🚀 Simula mutuo
+</a>
 
 </section>
 
+<div class="container">
 
-<!-- ================= CONTENUTO ================= -->
+<!-- TOOL -->
+<div id="tool" class="tool-card">
 
-<div class="container main-spacing">
-
-<!-- ================= TOOL ================= -->
-
-<div id="mortgage" class="tool-card premium-card">
-
-<h3
-data-it="🏦 Comparatore Mutui"
-data-en="🏦 Mortgage Comparator">
-🏦 Comparatore Mutui
-</h3>
-
-<p class="tool-sub">
-<span data-it="Simula e confronta i mutui in pochi secondi"
-      data-en="Simulate and compare mortgages in seconds">
-Simula e confronta i mutui in pochi secondi
-</span>
-</p>
+<h3>🏦 Comparatore Mutui</h3>
 
 <div class="form-grid">
 
-<div class="input-group">
-<label data-it="Importo Mutuo (€)" data-en="Mortgage Amount (€)">
-Importo Mutuo (€)
-</label>
-<input type="number" id="mortgageAmount" placeholder="100000">
-</div>
-
-<div class="input-group">
-<label data-it="Durata (anni)" data-en="Duration (years)">
-Durata (anni)
-</label>
-<input type="number" id="mortgageYears" value="20">
-</div>
-
-<div class="input-group">
-<label data-it="Tasso Banca A (%)" data-en="Bank A Rate (%)">
-Tasso Banca A (%)
-</label>
-<input type="number" id="rateA" value="3.2" step="0.1">
-</div>
-
-<div class="input-group">
-<label data-it="Tasso Banca B (%)" data-en="Bank B Rate (%)">
-Tasso Banca B (%)
-</label>
-<input type="number" id="rateB" value="3.6">
-</div>
-
-<div class="input-group">
-<label data-it="Tasso Banca C (%)" data-en="Bank C Rate (%)">
-Tasso Banca C (%)
-</label>
-<input type="number" id="rateC" value="4.1">
-</div>
+<input id="mortgageAmount" placeholder="Importo (€)">
+<input id="mortgageYears" value="20">
+<input id="rateA" value="3.2">
+<input id="rateB" value="3.6">
+<input id="rateC" value="4.1">
 
 </div>
 
-<button onclick="runMortgageComparison()" class="btn premium-btn">
-Confronta Mutui
+<button onclick="runMortgageComparison()" class="btn-main">
+Confronta
 </button>
 
 </div>
 
-<!-- ================= RESULTS ================= -->
+<!-- RESULTS -->
+<div id="mortgage-results"></div>
 
-<div id="mortgage-results" class="results-spacing"></div>
+<!-- 🔥 LEAD GENERATION -->
+<div class="lead-box">
+
+<h2>Vuoi il miglior mutuo reale?</h2>
+
+<p>Ricevi offerte personalizzate da banche e partner</p>
+
+<input placeholder="Email" style="padding:12px;border-radius:8px;margin-top:10px">
+
+<br>
+
+<button class="btn-main" style="margin-top:15px">
+Ricevi offerte
+</button>
+
+</div>
+
+<!-- 🤝 PARTNER / MONETIZATION -->
+<div class="partner-box">
+
+<div class="partner-card">
+<h4>Intesa Sanpaolo</h4>
+<p>Mutuo investimento</p>
+<button class="btn-main">Vai</button>
+</div>
+
+<div class="partner-card">
+<h4>UniCredit</h4>
+<p>Mutuo B&B</p>
+<button class="btn-main">Vai</button>
+</div>
+
+<div class="partner-card">
+<h4>Crédit Agricole</h4>
+<p>Mutuo affitti brevi</p>
+<button class="btn-main">Vai</button>
+</div>
+
+</div>
+
+<!-- SEO BLOCK -->
+<div class="seo-block">
+
+<h2>Mutuo per B&B: guida completa</h2>
+
+<p>
+Un mutuo può aumentare il rendimento oppure distruggere completamente il tuo investimento.
+Il problema principale è che la maggior parte degli investitori non calcola il cash flow reale.
+</p>
+
+<p>
+Con RendimentoBB puoi simulare il mutuo e capire immediatamente se stai guadagnando o perdendo soldi.
+</p>
+
+</div>
 
 </div>
 
@@ -138,61 +230,59 @@ Confronta Mutui
 
 <div id="global-footer"></div>
 
-<!-- ================= SCRIPT ================= -->
-
 <script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js" defer></script>
-
-<script type="module" src="/js/mortgage-rates.js"></script>
-<script type="module" src="/js/firebase-init.js"></script>
 <script type="module" src="/js/app.js"></script>
 
 <script>
 
+/* ===== CORE ===== */
+function runMortgageComparison(){
+
+const amount = parseFloat(document.getElementById("mortgageAmount").value || 100000);
+const years = parseFloat(document.getElementById("mortgageYears").value || 20);
+
+const rates = [
+{name:"Banca A", rate:parseFloat(rateA.value)},
+{name:"Banca B", rate:parseFloat(rateB.value)},
+{name:"Banca C", rate:parseFloat(rateC.value)}
+];
+
+let html = "";
+
+rates.forEach((bank,i)=>{
+
+const yearly = amount * (bank.rate/100);
+const best = i===0 ? "best" : "";
+
+html += `
+<div class="mortgage-result ${best}">
+<h3>${bank.name}</h3>
+<p>Tasso: ${bank.rate}%</p>
+<p>Costo annuo: €${yearly.toFixed(0)}</p>
+
+<button onclick="selectMortgage(${bank.rate})" class="btn-main">
+Usa questo mutuo
+</button>
+</div>
+`;
+
+});
+
+document.getElementById("mortgage-results").innerHTML = html;
+
+}
+
+/* ===== PASS TO TOOL ===== */
 function selectMortgage(rate){
 
-const amount = document.getElementById("mortgageAmount")?.value || 0;
-const years = document.getElementById("mortgageYears")?.value || 20;
-
 localStorage.setItem("mortgage_rate", rate);
-localStorage.setItem("mortgage_amount", amount);
-localStorage.setItem("mortgage_years", years);
-
 window.location.href = "/tool/";
 
 }
 
 </script>
-
-<script>
-
-function updateInvestors(){
-
-  const base = 1200;
-  const random = Math.floor(Math.random() * 120);
-
-  const value = base + random;
-
-  const el = document.getElementById("live-investors");
-
-  if(!el) return;
-
-  el.innerHTML = `🔥 +${value.toLocaleString()} ${
-    window.currentLang === "en"
-      ? "investors are analyzing mortgages now"
-      : "investitori stanno analizzando mutui ora"
-  }`;
-
-}
-
-// primo run
-updateInvestors();
-
-// aggiornamento continuo
-setInterval(updateInvestors, 4000);
-
-</script>  
 
 </body>
 </html>
