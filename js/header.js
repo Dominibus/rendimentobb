@@ -70,6 +70,7 @@ const header = `
 <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
 <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
 <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
+<a href="/dashboard-leads/">Leads</a>
 
 <a href="/dashboard/" id="nav-dashboard"
 data-it="Dashboard" data-en="Dashboard">Dashboard</a>
