@@ -2,7 +2,7 @@
   "name": "rendimentobb",
   "version": "1.0.0",
   "description": "RendimentoBB SaaS",
-  "type": "module",   👈🔥 QUESTA RIGA
+  "type": "module",
   "dependencies": {
     "stripe": "^14.0.0",
     "firebase-admin": "^12.0.0",
