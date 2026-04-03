@@ -63,9 +63,10 @@ Messaggio: ${message}
 
     return res.status(200).json({ success:true });
 
-  }catch(err){
-    console.error("❌ ERRORE SEND LEAD:", err);
-    return res.status(500).json({ error:"Errore invio email" });
-  }
-
+  catch(err){
+  console.error("❌ ERRORE SEND LEAD:", err);
+  return res.status(500).json({ 
+    error:"Errore invio email",
+    details: err.message 
+  });
 }
