@@ -49,15 +49,17 @@ Messaggio: ${message}
     }
 
     // ================= INVIO EMAIL =================
-    await resend.emails.send({
-      from: "RendimentoBB <onboarding@resend.dev>", // ⚠️ cambieremo dopo
-      to: ["rendimentobb@gmail.com"],
-      subject,
-      html: `<div style="font-family:Arial;padding:20px">
-              <h2>${subject}</h2>
-              <pre>${content}</pre>
-            </div>`
-    });
+    const response = await resend.emails.send({
+  from: "onboarding@resend.dev",
+  to: ["rendimentobb@gmail.com"],
+  subject,
+  html: `<div style="font-family:Arial;padding:20px">
+          <h2>${subject}</h2>
+          <pre>${content}</pre>
+        </div>`
+});
+
+console.log("RESEND RESPONSE:", response);
 
     console.log("📩 Email inviata:", type);
 
@@ -65,6 +67,9 @@ Messaggio: ${message}
 
   catch(err){
   console.error("❌ ERRORE SEND LEAD:", err);
+  console.error("❌ ERRORE COMPLETO:", err);
+  console.error("❌ MESSAGE:", err.message);
+  console.error("❌ STACK:", err.stack);  
   return res.status(500).json({ 
     error:"Errore invio email",
     details: err.message 
