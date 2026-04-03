@@ -58,33 +58,40 @@ font-size:12px;
 
 <body>
 
+<script type="module" src="/js/header.js"></script>
+<script type="module" src="/js/footer.js"></script>  
+
 <div id="global-header"></div>
 
 <div class="container">
 
 <h1>📊 Dashboard Leads</h1>
 
+<div style="margin-bottom:20px; color:#64748b;">
+Dashboard interna per la gestione dei lead qualificati generati dal sistema RendimentoBB.
+</div>  
+
 <!-- MUTUI -->
 <div class="card">
-<h2>🏦 Mutui</h2>
+<h2>🏦 Lead Mutui</h2>
 <div id="mutuiList">Caricamento...</div>
 </div>
 
 <!-- IMMOBILI -->
 <div class="card">
-<h2>🏠 Immobili</h2>
+<h2>🏠 Lead Immobili</h2>
 <div id="immobiliList">Caricamento...</div>
 </div>
 
 <!-- PARTNER -->
 <div class="card">
-<h2>🤝 Partner</h2>
+<h2>🤝 Lead Partner</h2>
 <div id="partnerList">Caricamento...</div>
 </div>
 
 <!-- WORK -->
 <div class="card">
-<h2>🚀 Lavora con noi</h2>
+<h2>🚀 Candidature</h2>
 <div id="workList">Caricamento...</div>
 </div>
 
@@ -105,22 +112,20 @@ query,
 orderBy
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// 🔐 PROTEZIONE ADMIN
+// 🔐 PROTEZIONE ADMIN (FIX CORRETTO)
 onAuthStateChanged(auth, (user)=>{
 
-onAuthStateChanged(auth, (user)=>{
+  setTimeout(()=>{
 
-setTimeout(()=>{
+    if(!window.isAdmin?.()){
+      alert("Accesso riservato admin");
+      window.location.href = "/";
+      return;
+    }
 
-if(!window.isAdmin?.()){
-  alert("Accesso riservato admin");
-  window.location.href = "/";
-  return;
-}
+    loadAll();
 
-loadAll();
-
-},500);
+  },500);
 
 });
   
