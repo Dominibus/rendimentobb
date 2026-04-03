@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard Leads – RendimentoBB</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<style>
+
+body{
+background:#f8fafc;
+}
+
+.container{
+max-width:1200px;
+margin:0 auto;
+padding:40px 20px;
+}
+
+h1{
+font-size:32px;
+font-weight:800;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:14px;
+margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+.lead{
+border-bottom:1px solid #e2e8f0;
+padding:10px 0;
+}
+
+.lead:last-child{
+border:none;
+}
+
+.badge{
+background:#10b981;
+color:white;
+padding:4px 10px;
+border-radius:999px;
+font-size:12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="global-header"></div>
+
+<div class="container">
+
+<h1>📊 Dashboard Leads</h1>
+
+<!-- MUTUI -->
+<div class="card">
+<h2>🏦 Mutui</h2>
+<div id="mutuiList">Caricamento...</div>
+</div>
+
+<!-- IMMOBILI -->
+<div class="card">
+<h2>🏠 Immobili</h2>
+<div id="immobiliList">Caricamento...</div>
+</div>
+
+<!-- PARTNER -->
+<div class="card">
+<h2>🤝 Partner</h2>
+<div id="partnerList">Caricamento...</div>
+</div>
+
+<!-- WORK -->
+<div class="card">
+<h2>🚀 Lavora con noi</h2>
+<div id="workList">Caricamento...</div>
+</div>
+
+</div>
+
+<div id="global-footer"></div>
+
+<script type="module">
+
+import { auth } from "/js/firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import { db } from "/js/firebase-init.js";
+import {
+collection,
+getDocs,
+query,
+orderBy
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+// 🔐 PROTEZIONE ADMIN
+onAuthStateChanged(auth, (user)=>{
+
+if(!user || user.email !== "rendimentobb@gmail.com"){
+  window.location.href = "/";
+  return;
+}
+
+loadAll();
+
+});
+
+// ================= LOAD =================
+
+async function loadAll(){
+await loadMutui();
+await loadImmobili();
+await loadPartner();
+await loadWork();
+}
+
+// ================= MUTUI =================
+
+async function loadMutui(){
+
+const q = query(collection(db,"leads_mutui"), orderBy("created","desc"));
+const snap = await getDocs(q);
+
+let html = "";
+
+snap.forEach(doc=>{
+
+const d = doc.data();
+
+html += `
+<div class="lead">
+<b>${d.email}</b> | €${d.amount} | ${d.years} anni
+</div>
+`;
+
+});
+
+document.getElementById("mutuiList").innerHTML = html || "Nessun lead";
+
+}
+
+// ================= IMMOBILI =================
+
+async function loadImmobili(){
+
+const q = query(collection(db,"leads_immobili"), orderBy("created","desc"));
+const snap = await getDocs(q);
+
+let html = "";
+
+snap.forEach(doc=>{
+
+const d = doc.data();
+
+html += `
+<div class="lead">
+<b>${d.email}</b> | ${d.city} | €${d.budget}
+</div>
+`;
+
+});
+
+document.getElementById("immobiliList").innerHTML = html || "Nessun lead";
+
+}
+
+// ================= PARTNER =================
+
+async function loadPartner(){
+
+const snap = await getDocs(collection(db,"leads_partner"));
+
+let html = "";
+
+snap.forEach(doc=>{
+
+const d = doc.data();
+
+html += `
+<div class="lead">
+<b>${d.name}</b> | ${d.email}
+<br>${d.message || ""}
+</div>
+`;
+
+});
+
+document.getElementById("partnerList").innerHTML = html || "Nessun lead";
+
+}
+
+// ================= WORK =================
+
+async function loadWork(){
+
+const snap = await getDocs(collection(db,"leads_work"));
+
+let html = "";
+
+snap.forEach(doc=>{
+
+const d = doc.data();
+
+html += `
+<div class="lead">
+<b>${d.name}</b> | ${d.email}
+<br>${d.role || ""}
+</div>
+`;
+
+});
+
+document.getElementById("workList").innerHTML = html || "Nessun lead";
+
+}
+
+</script>
+
+</body>
+</html>
