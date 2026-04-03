@@ -1401,6 +1401,7 @@ window.calculate = function(force = false){
   }
 
   window.isCalculating = true;
+  window.simulationExecuted = false;
 
   try{
 
@@ -1489,6 +1490,13 @@ window.calculate = function(force = false){
 
     console.log("🔥 RESULT:", result);
 
+    // ================= ROI MAIN UI FIX =================
+const roiMain = document.getElementById("roi-live");
+
+if(roiMain){
+  roiMain.innerText = roi.toFixed(1) + "%";
+}
+
     // ================= RENDER COMPLETO TOOL =================
 
 // revenue forecast
@@ -1575,7 +1583,9 @@ if(roiHome){
 
 const profitHome = document.getElementById("profit-live");
 if(profitHome){
-  profitHome.innerText = formatCurrency(net);
+  profitHome.innerText = window.isPro?.() 
+    ? formatCurrency(net)
+    : "—";
 }
 
 const revenueHome = document.getElementById("revenue-live");
@@ -1584,9 +1594,11 @@ if(revenueHome){
 }
 
     // ================= KPI =================
-    if(typeof renderExecutiveKPI === "function"){
-      renderExecutiveKPI(result);
-    }
+    if(window.isPro && window.isPro()){
+  if(typeof renderExecutiveKPI === "function"){
+    renderExecutiveKPI(result);
+  }
+}
 
     // ================= CHART =================
     setTimeout(()=>{
