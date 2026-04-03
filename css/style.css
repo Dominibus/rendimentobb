@@ -6590,3 +6590,88 @@ body.immobili-page .hero::before{
     rgba(15,23,42,0.55)
   );
 }
+
+/* ===================== */
+/* 🔥 FIX LEGGIBILITÀ GLOBALE (CRITICO) */
+/* ===================== */
+
+/* LABEL → default scure */
+.input-group label{
+  color:#334155 !important;
+  text-shadow:none !important;
+}
+
+/* SOLO dentro hero restano bianche */
+.hero .input-group label{
+  color:#ffffff !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.6) !important;
+}
+
+/* ===================== */
+/* 🔥 TESTI CARD / TOOL */
+/* ===================== */
+
+.tool-card,
+.tool-card p,
+.tool-card span,
+.tool-card div{
+  color:#0f172a !important;
+}
+
+/* testi secondari */
+.tool-card small,
+.tool-card .hint,
+.tool-card .info{
+  color:#64748b !important;
+}
+
+/* ===================== */
+/* 🔥 MUTUI FIX */
+/* ===================== */
+
+.mortgage-card,
+.mortgage-card p,
+.mortgage-card span{
+  color:#0f172a !important;
+}
+
+.mortgage-card span{
+  color:#64748b !important;
+}
+
+/* ===================== */
+/* 🔥 INPUT TEXT FIX */
+/* ===================== */
+
+input{
+  color:#0f172a !important;
+}
+
+/* ===================== */
+/* 🔥 RANGE SLIDER TEXT (72%) */
+/* ===================== */
+
+.range-value{
+  color:#0f172a !important;
+  font-weight:600;
+}
+
+/* ===================== */
+/* 🔥 TESTI INFO GLOBALI */
+/* ===================== */
+
+.info,
+.hint,
+small{
+  color:#64748b !important;
+  opacity:1 !important;
+}
+
+/* ===================== */
+/* 🔥 SELECT FIX (MILANO ecc) */
+/* ===================== */
+
+select{
+  color:#0f172a !important;
+  background:#ffffff !important;
+}
