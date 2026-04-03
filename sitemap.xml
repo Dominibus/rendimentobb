@@ -1,110 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-<!-- HOME -->
+<!-- ================= HOME ================= -->
 <url>
 <loc>https://www.rendimentobb.it/</loc>
 <priority>1.0</priority>
 </url>
 
-<!-- CORE -->
-<url>
-<loc>https://www.rendimentobb.it/tool</loc>
-<priority>0.9</priority>
-</url>
+<!-- ================= CORE ================= -->
+<url><loc>https://www.rendimentobb.it/tool</loc><priority>0.9</priority></url>
+<url><loc>https://www.rendimentobb.it/dashboard</loc><priority>0.9</priority></url>
+<url><loc>https://www.rendimentobb.it/login</loc></url>
 
-<url>
-<loc>https://www.rendimentobb.it/dashboard</loc>
-<priority>0.9</priority>
-</url>
+<!-- ================= SEO ================= -->
+<url><loc>https://www.rendimentobb.it/aprire-bnb-conviene</loc></url>
+<url><loc>https://www.rendimentobb.it/costi-aprire-bnb</loc></url>
+<url><loc>https://www.rendimentobb.it/quanto-guadagna-bnb</loc></url>
 
-<url>
-<loc>https://www.rendimentobb.it/login</loc>
-</url>
+<!-- ================= ACADEMY ================= -->
+<url><loc>https://www.rendimentobb.it/academy/</loc><priority>0.9</priority></url>
+<url><loc>https://www.rendimentobb.it/academy/roi</loc></url>
+<url><loc>https://www.rendimentobb.it/academy/mutuo</loc></url>
+<url><loc>https://www.rendimentobb.it/academy/strategia</loc></url>
+<url><loc>https://www.rendimentobb.it/academy/errori</loc></url>
 
-<!-- SEO MAIN -->
-<url>
-<loc>https://www.rendimentobb.it/aprire-bnb-conviene</loc>
-</url>
+<!-- ================= MARKET ================= -->
+<url><loc>https://www.rendimentobb.it/market/</loc><priority>0.9</priority></url>
+<url><loc>https://www.rendimentobb.it/market/napoli</loc></url>
+<url><loc>https://www.rendimentobb.it/market/milano</loc></url>
+<url><loc>https://www.rendimentobb.it/market/roma</loc></url>
+<url><loc>https://www.rendimentobb.it/market/firenze</loc></url>
 
-<url>
-<loc>https://www.rendimentobb.it/costi-aprire-bnb</loc>
-</url>
+<!-- ================= ROI ================= -->
+<url><loc>https://www.rendimentobb.it/roi/</loc><priority>0.9</priority></url>
+<url><loc>https://www.rendimentobb.it/roi-bnb/napoli</loc></url>
+<url><loc>https://www.rendimentobb.it/roi-bnb/milano</loc></url>
+<url><loc>https://www.rendimentobb.it/roi-bnb/roma</loc></url>
+<url><loc>https://www.rendimentobb.it/roi-bnb/firenze</loc></url>
 
-<url>
-<loc>https://www.rendimentobb.it/quanto-guadagna-bnb</loc>
-</url>
+<!-- ================= IMMOBILI ================= -->
+<url><loc>https://www.rendimentobb.it/immobili/</loc><priority>0.9</priority></url>
+<url><loc>https://www.rendimentobb.it/immobili/napoli</loc></url>
+<url><loc>https://www.rendimentobb.it/immobili/milano</loc></url>
+<url><loc>https://www.rendimentobb.it/immobili/roma</loc></url>
+<url><loc>https://www.rendimentobb.it/immobili/firenze</loc></url>
 
-<!-- ACADEMY -->
-<url>
-<loc>https://www.rendimentobb.it/academy</loc>
-</url>
+<!-- ================= MUTUI ================= -->
+<url><loc>https://www.rendimentobb.it/mutui/</loc></url>
 
-<url>
-<loc>https://www.rendimentobb.it/academy/roi</loc>
-</url>
+<!-- ================= LEGALI ================= -->
+<url><loc>https://www.rendimentobb.it/privacy.html</loc></url>
+<url><loc>https://www.rendimentobb.it/terms.html</loc></url>
 
-<url>
-<loc>https://www.rendimentobb.it/academy/mutuo</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/academy/strategia</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/academy/errori</loc>
-</url>
-
-<!-- MARKET -->
-<url>
-<loc>https://www.rendimentobb.it/market/roma</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/market/milano</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/market/napoli</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/market/firenze</loc>
-</url>
-
-<!-- ROI -->
-<url>
-<loc>https://www.rendimentobb.it/roi-bnb/roma</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/roi-bnb/milano</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/roi-bnb/napoli</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/roi-bnb/firenze</loc>
-</url>
-
-<!-- IMMOBILI -->
-<url>
-<loc>https://www.rendimentobb.it/immobili/roma</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/immobili/milano</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/immobili/napoli</loc>
-</url>
-
-<url>
-<loc>https://www.rendimentobb.it/immobili/firenze</loc>
-</url>
+<!-- ================= EXTRA ================= -->
+<url><loc>https://www.rendimentobb.it/contact.html</loc></url>
 
 </urlset>
