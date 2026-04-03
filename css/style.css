@@ -6765,3 +6765,33 @@ overflow:visible;
 .investment-panel{
 overflow:visible;
 }
+
+/* ===================================== */
+/* 🚀 FIX OVERLAY MOBILE BUG DEFINITIVO */
+/* ===================================== */
+
+.results-overlay:empty,
+.locked-overlay:empty,
+.home-blur-overlay:empty{
+  display:none !important;
+}
+
+/* sicurezza extra */
+.results-overlay.hidden,
+.locked-overlay.hidden,
+.home-blur-overlay.hidden{
+  display:none !important;
+}
+
+/* 🔥 BLOCCA overlay fantasma */
+.results-overlay,
+.locked-overlay,
+.home-blur-overlay{
+  pointer-events:none;
+}
+
+/* riattiva solo se visibile davvero */
+.results-overlay.active,
+.locked-overlay.active{
+  pointer-events:auto;
+}
