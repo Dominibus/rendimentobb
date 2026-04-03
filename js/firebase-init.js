@@ -188,7 +188,17 @@ async function loadUserPlan(uid) {
   }
 }
 
-    window.currentPlan = currentPlan;
+    if (docSnap.exists()) {
+  window.currentPlan = docSnap.data().plan || "free";
+} else {
+  console.warn("⚠️ Documento NON trovato → NON sovrascrivo");
+
+  if(!window.currentPlan){
+    
+  }
+}
+
+window.currentPlan = currentPlan;
 
 console.log("🔥 Piano finale:", currentPlan);
 
@@ -199,7 +209,8 @@ document.dispatchEvent(
   })
 );
 
-    updateProVisibility();
+    // ❌ togli questa riga
+// updateProVisibility();
 
   // 🔥 AUTO SBLOCCO DIRETTO (fallback sicurezza)
 if(
@@ -326,37 +337,55 @@ onAuthStateChanged(auth, async (user) => {
 
     console.log("🔥 Auth OK:", user.uid);
 
-    // ===============================
-    // 🔥 AUTO CREATE USER (FIX CRITICO)
-    // ===============================
+   // ===============================
+// 🔥 AUTO CREATE USER (FIX CRITICO)
+// ===============================
 
-    const userRef = doc(db, "users", user.uid);
-    const snap = await getDoc(userRef);
-    
-    const userData = snap.exists() ? snap.data() : null;
+const userRef = doc(db, "users", user.uid);
+const snap = await getDoc(userRef);
 
-    if (!snap.exists()) {
+// 👉 se NON esiste → lo creo
+if (!snap.exists()) {
 
-      console.log("🔥 Creo utente Firestore automatico");
+  console.log("🔥 Creo utente Firestore automatico");
 
-      await setDoc(userRef, {
-        email: user.email,
-        plan: user.email === "rendimentobb@gmail.com" ? "pro" : "free",
-        role: user.email === "rendimentobb@gmail.com" ? "admin" : "user",
-        createdAt: new Date()
-      });
+  await setDoc(userRef, {
+    email: user.email,
+    plan: user.email === "rendimentobb@gmail.com" ? "pro" : "free",
+    role: user.email === "rendimentobb@gmail.com" ? "admin" : "user",
+    createdAt: new Date()
+  });
 
-    } else {
-      console.log("✔ Utente già presente in Firestore");
-    }
+} else {
+  console.log("✔ Utente già presente in Firestore");
+}
 
-    window.getUserData = function(){
-       return {
-        user: window.currentUser,
-        plan: window.currentPlan,
-        isAdmin: window.isAdmin?.() || false
-     };
+// ===============================
+// 🔥 RICARICO DATI (FIX CRITICO)
+// ===============================
+
+const freshSnap = await getDoc(userRef);
+const userData = freshSnap.data();
+
+// ===============================
+// 🔥 ADMIN CHECK (CORRETTO)
+// ===============================
+
+window.isAdmin = function(){
+  return userData?.role === "admin";
+};
+
+// ===============================
+// 🔥 GLOBAL USER DATA (UTILISSIMO)
+// ===============================
+
+window.getUserData = function(){
+  return {
+    user: window.currentUser,
+    plan: window.currentPlan,
+    isAdmin: window.isAdmin()
   };
+};
 
     // ===============================
     // 🔥 CARICA PIANO
@@ -377,8 +406,8 @@ onAuthStateChanged(auth, async (user) => {
     // ===============================
 
     window.isAdmin = function(){
-      return userData?.role === "admin";
-  };
+  return userData?.role === "admin";
+};
 
     // ===============================
     // 🔥 UPDATE UI
