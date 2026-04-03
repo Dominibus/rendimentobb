@@ -44,7 +44,7 @@ Motore decisionale per investimenti B&B basato su dati reali.
 
 </div>
 
-<!-- SEO LINKS -->
+<!-- GUIDE -->
 <div class="footer-col">
 
 <strong
@@ -114,6 +114,29 @@ Immobili
 
 </div>
 
+<!-- BUSINESS (🔥 NUOVO MONETIZATION) -->
+<div class="footer-col">
+
+<strong
+data-it="Business"
+data-en="Business">
+Business
+</strong>
+
+<a href="/partner/"
+data-it="Diventa Partner"
+data-en="Become a Partner">
+Diventa Partner
+</a>
+
+<a href="/lavora-con-noi/"
+data-it="Lavora con noi"
+data-en="Work with us">
+Lavora con noi
+</a>
+
+</div>
+
 <!-- LEGAL -->
 <div class="footer-col">
 
@@ -165,6 +188,23 @@ data-it="✔ ROI fino al 18%"
 data-en="✔ ROI up to 18%">
 ✔ ROI fino al 18%
 </span>
+
+</div>
+
+<!-- 🔥 EXTRA CTA (MONETIZATION BOOST) -->
+<div style="text-align:center; margin-top:20px;">
+
+<p
+data-it="Sei una banca o agenzia? Ricevi clienti pronti a investire."
+data-en="Are you a bank or agency? Get clients ready to invest.">
+Sei una banca o agenzia? Ricevi clienti pronti a investire.
+</p>
+
+<a href="/partner/" class="btn btn-secondary"
+data-it="Diventa partner"
+data-en="Become partner">
+Diventa partner
+</a>
 
 </div>
 
