@@ -1473,6 +1473,8 @@ window.calculate = function(force = false){
       loanYears
     });
 
+    removeGhostOverlays();
+
     if(!result){
       console.warn("⛔ result null");
       return;
