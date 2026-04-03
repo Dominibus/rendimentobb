@@ -200,7 +200,7 @@ if(user){
 
 const leadsLink = document.getElementById("nav-leads");
 
-if(leadsLink && window.isAdmin && window.isAdmin()){
+if(leadsLink && user && user.email === "rendimentobb@gmail.com"){
   leadsLink.style.display = "inline-block";
 }  
 
