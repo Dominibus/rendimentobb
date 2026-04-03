@@ -5,6 +5,11 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+
+/* ===================== */
+/* HERO BACKGROUND */
+/* ===================== */
+
 window.applyCityBackground = function(city){
 
 const hero =
@@ -13,29 +18,21 @@ const hero =
 
 if(!hero) return;
 
-// reset classi
 hero.classList.remove("rome","naples","milan","florence");
 
 let finalCity = city;
 
-// AUTO-DETECT URL
 if(!finalCity){
 
-  const path = window.location.pathname.toLowerCase().replace(/\/$/, "");
+  const path = window.location.pathname.toLowerCase();
 
-  if(path.includes("/napoli")) finalCity = "naples";
-    else if(path.includes("/milano")) finalCity = "milan";
-    else if(path.includes("/firenze")) finalCity = "florence";
-    else if(path.includes("/roma")) finalCity = "rome";
+  if(path.includes("napoli")) finalCity = "naples";
+  else if(path.includes("milano")) finalCity = "milan";
+  else if(path.includes("firenze")) finalCity = "florence";
+  else finalCity = "rome";
 }
 
-// fallback sicurezza
-if(!finalCity) finalCity = "rome";
-
-// applica classe
 hero.classList.add(finalCity);
-
-console.log("🎯 Hero city:", finalCity);
 
 };
 
@@ -53,18 +50,13 @@ const header = `
 
 <div class="container portal-header-inner">
 
-/* LEFT */
 <div class="header-left">
-
 <a href="/" class="logo-link rb-logo">
-<img src="/img/logo-main.png" alt="RendimentoBB" class="logo-img">
+<img src="/img/logo-main.png" class="logo-img">
 </a>
-
-<button class="hamburger" aria-label="Menu">☰</button>
-
+<button class="hamburger">☰</button>
 </div>
 
-/* CENTER NAV */
 <nav class="portal-nav">
 
 <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
@@ -79,9 +71,7 @@ Aprire un B&B
 
 <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
 
-${isAdmin ? `
-<a href="/dashboard-leads/" class="admin-link">Leads</a>
-` : ""}
+${isAdmin ? `<a href="/dashboard-leads/">Leads</a>` : ""}
 
 <a href="/dashboard/" id="nav-dashboard"
 data-it="Dashboard" data-en="Dashboard">
@@ -94,79 +84,6 @@ Contatti
 
 </nav>
 
-/* RIGHT */
-<div class="right-controls">
-
-<div id="user-area"></div>
-
-<div class="lang-switch">
-<button class="lang-btn" onclick="setLang('it')">IT</button>
-<button class="lang-btn" onclick="setLang('en')">EN</button>
-</div>
-
-</div>
-
-</div>
-</header>
-`;
-
-const container = document.getElementById("global-header");
-
-if(container){
-  container.innerHTML = header;
-}
-
-// background
-window.applyCityBackground();
-
-// hamburger
-const hamburger = document.querySelector(".hamburger");
-const nav = document.querySelector(".portal-nav");
-
-if(hamburger && nav){
-  hamburger.addEventListener("click", () => {
-    nav.classList.toggle("open");
-  });
-}
-
-// active link
-const currentPath = window.location.pathname;
-
-document.querySelectorAll(".portal-nav a").forEach(link => {
-  const href = link.getAttribute("href");
-  if(currentPath.startsWith(href)){
-    link.classList.add("active");
-  }
-});
-
-// traduzioni
-setTimeout(() => {
-  if(typeof applyTranslations === "function"){
-    applyTranslations();
-  }
-}, 50);
-
-});
-
-document.getElementById("global-header").innerHTML = header;
-
-
-/* ===================== */
-/* HAMBURGER MOBILE */
-/* ===================== */
-
-const hamburger = document.querySelector(".hamburger");
-const nav = document.querySelector(".portal-nav");
-
-if(hamburger && nav){
-  hamburger.addEventListener("click", () => {
-    nav.classList.toggle("active");
-  });
-}
-
-});
-
-<!-- RIGHT -->
 <div class="right-controls">
 
 <div id="user-area"></div>
@@ -183,49 +100,39 @@ if(hamburger && nav){
 `;
 
 const container = document.getElementById("global-header");
-
 if(container){
   container.innerHTML = header;
 }
 
-// 🔥 APPLY HERO BACKGROUND
+/* HERO */
 window.applyCityBackground();
 
-/* ===================== */
-/* HAMBURGER MENU */
-/* ===================== */
-
+/* MENU */
 const hamburger = document.querySelector(".hamburger");
 const nav = document.querySelector(".portal-nav");
 
 if(hamburger && nav){
-  hamburger.addEventListener("click", () => {
+  hamburger.addEventListener("click", ()=>{
     nav.classList.toggle("open");
   });
 }
 
-/* ===================== */
 /* ACTIVE LINK */
-/* ===================== */
-
 const currentPath = window.location.pathname;
 
-document.querySelectorAll(".portal-nav a").forEach(link => {
+document.querySelectorAll(".portal-nav a").forEach(link=>{
   const href = link.getAttribute("href");
   if(currentPath.startsWith(href)){
     link.classList.add("active");
   }
 });
 
-/* ===================== */
-/* TRADUZIONE HEADER */
-/* ===================== */
-
-setTimeout(() => {
+/* TRADUZIONI */
+setTimeout(()=>{
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
-}, 50);
+},50);
 
 });
 
@@ -234,7 +141,7 @@ setTimeout(() => {
 /* USER AREA */
 /* ===================== */
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, (user)=>{
 
 const userArea = document.getElementById("user-area");
 if(!userArea) return;
@@ -246,13 +153,11 @@ if(user){
   if(isMobile){
 
     userArea.innerHTML = `
-    <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+    <div style="display:flex;gap:6px">
 
-    <a href="/dashboard/" class="btn btn-secondary"
-    data-it="Dashboard" data-en="Dashboard">📊</a>
+      <a href="/dashboard/" class="btn btn-secondary">📊</a>
 
-    <button onclick="logout()" class="btn btn-secondary"
-    data-it="Esci" data-en="Logout">⎋</button>
+      <button onclick="logout()" class="btn btn-secondary">⎋</button>
 
     </div>
     `;
@@ -262,32 +167,20 @@ if(user){
     userArea.innerHTML = `
     <div style="text-align:right">
 
-    <div style="font-size:12px;color:#64748b;"
-    data-it="Account" data-en="Account">
-    Account
-    </div>
+      <div style="font-size:12px;color:#64748b;">Account</div>
 
-    <div style="font-weight:600;font-size:14px;">
-    ${user.email}
-    </div>
+      <div style="font-weight:600">${user.email}</div>
 
-    <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+      <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end">
 
-    <a href="/dashboard/" class="btn btn-secondary"
-    data-it="Dashboard" data-en="Dashboard">
-    Dashboard
-    </a>
+        <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
 
-    <button onclick="logout()" class="btn btn-secondary"
-    data-it="Esci" data-en="Logout">
-    Esci
-    </button>
+        <button onclick="logout()" class="btn btn-secondary">Esci</button>
 
-    </div>
+      </div>
 
     </div>
     `;
-
   }
 
 }else{
@@ -295,41 +188,29 @@ if(user){
   userArea.innerHTML = `
   <div style="text-align:right">
 
-  <div style="font-size:12px;color:#64748b;"
-  data-it="Area riservata"
-  data-en="Private area">
-  Area riservata
-  </div>
+    <div style="font-size:12px;color:#64748b;">Area riservata</div>
 
-  <a href="/login/" class="btn btn-secondary" style="margin-top:5px;"
-  data-it="Accedi"
-  data-en="Login">
-  Accedi
-  </a>
+    <a href="/login/" class="btn btn-secondary">Accedi</a>
 
   </div>
   `;
-
 }
 
-/* ===================== */
-/* TRADUZIONE USER AREA */
-/* ===================== */
-
-setTimeout(() => {
+/* TRADUZIONE */
+setTimeout(()=>{
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
-}, 50);
+},50);
 
 });
 
 
 /* ===================== */
-/* SYNC LINGUA DINAMICA */
+/* LANG SYNC */
 /* ===================== */
 
-document.addEventListener("rb_language_changed", () => {
+document.addEventListener("rb_language_changed", ()=>{
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
