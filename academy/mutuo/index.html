@@ -1,74 +1,189 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-data-it="Mutuo B&B – Quando è davvero sostenibile"
-data-en="B&B Mortgage – When is it sustainable">
-Mutuo B&B – Quando è davvero sostenibile
+data-it="Mutuo B&B 2026 – Quando è sostenibile e quando ti fa perdere soldi"
+data-en="B&B Mortgage 2026 – When it's sustainable and when it destroys your investment">
+Mutuo B&B – sostenibilità reale
 </title>
 
 <meta name="description"
-data-it="Scopri quando un mutuo per B&B è sostenibile, quali rischi evitare e come capire se l'investimento è sicuro."
-data-en="Learn when a B&B mortgage is sustainable, risks to avoid and how to evaluate your investment."
-content="Mutuo B&B">
+data-it="Scopri quando un mutuo per B&B è sostenibile, i rischi nascosti e come evitare perdite mensili."
+data-en="Learn when a B&B mortgage is sustainable, hidden risks and how to avoid monthly losses.">
+
+<link rel="canonical" href="https://www.rendimentobb.it/academy/mutuo-bnb">
 
 <link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/img/favicon.png">
 
 <style>
 
-/* CONTENUTO */
+/* ===== HERO ===== */
+.hero.hero-bg.mutuo{
+padding:120px 20px 100px;
+text-align:center;
+}
+
+.hero h1{
+font-size:44px;
+font-weight:800;
+color:white;
+line-height:1.2;
+}
+
+.hero p{
+color:#e2e8f0;
+margin-top:15px;
+}
+
+/* CTA HERO */
+.hero .btn-main{
+background:linear-gradient(135deg,#10b981,#059669);
+color:#ffffff !important;
+padding:14px 28px;
+border-radius:12px;
+font-weight:700;
+display:inline-block;
+box-shadow:0 10px 25px rgba(16,185,129,0.3);
+transition:.25s;
+}
+
+.hero .btn-main:hover{
+transform:translateY(-2px);
+box-shadow:0 15px 35px rgba(16,185,129,0.4);
+}
+
+/* ===== CONTENT ===== */
 .academy-content{
-max-width:800px;
-margin:60px auto;
-line-height:1.7;
+max-width:1000px;
+margin:80px auto;
+padding:0 20px;
+}
+
+/* ===== GRID ===== */
+.mutuo-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+/* ===== CARD ===== */
+.mutuo-card{
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+padding:28px;
+border-radius:16px;
+border:1px solid #f1f5f9;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:.25s;
+}
+
+.mutuo-card:hover{
+transform:translateY(-6px);
+border-color:#10b981;
+box-shadow:0 25px 70px rgba(0,0,0,0.08);
+}
+
+.mutuo-card h3{
+color:#059669;
+margin-bottom:10px;
+font-size:18px;
+}
+
+.mutuo-card p{
 color:#475569;
-font-size:16px;
+font-size:15px;
 }
 
-.academy-content h2{
-color:#0f172a;
-margin-top:30px;
-margin-bottom:12px;
-}
-
+/* ===== DANGER ===== */
 .danger-box{
 background:#7f1d1d;
 color:white;
 padding:25px;
 border-radius:16px;
 margin:30px 0;
+text-align:center;
+font-weight:600;
 }
 
+/* ===== SAFE ===== */
 .safe-box{
 background:#064e3b;
 color:white;
 padding:25px;
 border-radius:16px;
 margin:30px 0;
+text-align:center;
+font-weight:600;
 }
 
-.cta-box{
+/* ===== CTA ===== */
+.premium-box{
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+padding:60px;
+border-radius:20px;
 text-align:center;
-margin-top:70px;
+margin-top:80px;
+box-shadow:0 20px 60px rgba(16,185,129,0.25);
+}
+
+.premium-box a{
+display:inline-block;
+margin-top:15px;
+background:white;
+color:#059669;
+padding:14px 24px;
+border-radius:10px;
+font-weight:700;
+text-decoration:none;
+}
+
+/* ===== INTERNAL LINKS ===== */
+.internal-links{
+margin-top:25px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+.internal-links a{
+background:rgba(255,255,255,0.95);
+color:#059669;
+padding:8px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:600;
+text-decoration:none;
+transition:all .2s ease;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.internal-links a:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 </style>
 
 </head>
 
-<body>
+<body class="academy-page">
 
 <div id="global-header"></div>
 
 <main>
 
 <!-- HERO -->
-<section class="hero hero-bg milan">
+<section class="hero hero-bg mutuo">
+
 <div class="container">
-<div class="page-title">
 
 <h1
 data-it="Mutuo B&B: rischio o opportunità?"
@@ -77,95 +192,126 @@ Mutuo B&B: rischio o opportunità?
 </h1>
 
 <p
-data-it="Un mutuo può accelerare i guadagni… o distruggere completamente il tuo investimento."
-data-en="A mortgage can accelerate profits… or destroy your investment.">
-Un mutuo può accelerare i guadagni… o distruggere completamente il tuo investimento.
+data-it="Il 68% degli investimenti con mutuo ha cash flow negativo. Il problema? Simulazioni sbagliate."
+data-en="68% of leveraged B&B investments have negative cash flow. The problem? Wrong simulations.">
+Molti investimenti con mutuo perdono soldi
 </p>
 
+<div style="margin-top:25px">
+
+<a href="/tool/" class="btn-main"
+data-it="📊 Verifica sostenibilità mutuo"
+data-en="📊 Check mortgage sustainability">
+📊 Verifica sostenibilità mutuo
+</a>
+
 </div>
+
 </div>
 </section>
 
-<!-- CONTENUTO -->
-<section class="section section-light">
-<div class="container academy-content">
+<!-- CONTENT -->
+<section class="academy-content">
 
-<h2
-data-it="Il problema principale"
-data-en="The main problem">
-Il problema principale
+<h2 style="text-align:center"
+data-it="Quando il mutuo diventa pericoloso"
+data-en="When mortgage becomes dangerous">
+Quando il mutuo diventa pericoloso
 </h2>
 
-<p
-data-it="Molti investitori valutano solo il prezzo dell’immobile, ignorando l’impatto reale della rata sul cash flow."
-data-en="Most investors focus only on property price and ignore the real impact of mortgage payments.">
-Molti ignorano l’impatto della rata.
+<p style="text-align:center;max-width:700px;margin:10px auto;color:#64748b"
+data-it="Il problema non è il mutuo. È usarlo senza analisi reale."
+data-en="The problem is not the mortgage. It's using it without real analysis.">
+Il problema è la simulazione sbagliata
 </p>
+
+<div class="mutuo-grid">
+
+<div class="mutuo-card">
+<h3>📉 Cash flow</h3>
+<p data-it="Se la rata supera il profitto → perdi soldi ogni mese"
+data-en="If mortgage exceeds profit → you lose money monthly">
+Cash flow negativo
+</p>
+</div>
+
+<div class="mutuo-card">
+<h3>🏦 Tassi</h3>
+<p data-it="Anche +1% di interesse cambia totalmente il ROI"
+data-en="Even +1% interest changes ROI completely">
+Impatto interesse
+</p>
+</div>
+
+<div class="mutuo-card">
+<h3>📊 Occupazione</h3>
+<p data-it="Basta un calo del 10% per andare in perdita"
+data-en="A 10% drop can kill profitability">
+Rischio reale
+</p>
+</div>
+
+<div class="mutuo-card">
+<h3>⚠️ Stagionalità</h3>
+<p data-it="Entrate variabili, rata fissa"
+data-en="Variable income, fixed cost">
+Squilibrio
+</p>
+</div>
+
+</div>
 
 <div class="danger-box">
-⚠️ Se la rata supera il cash flow → stai perdendo soldi ogni mese
+⚠️ Se il mutuo non è sostenibile → stai comprando una perdita mensile
 </div>
-
-<h2
-data-it="Quando il mutuo è sostenibile"
-data-en="When a mortgage is sustainable">
-Quando il mutuo è sostenibile
-</h2>
-
-<ul>
-<li data-it="Occupazione stabile" data-en="Stable occupancy">Occupazione stabile</li>
-<li data-it="Prezzo notte corretto" data-en="Correct pricing">Prezzo notte corretto</li>
-<li data-it="Costi sotto controllo" data-en="Controlled costs">Costi sotto controllo</li>
-<li data-it="Margine positivo mensile" data-en="Positive monthly margin">Margine positivo mensile</li>
-</ul>
 
 <div class="safe-box">
-✅ Un buon investimento paga il mutuo… e genera profitto
+✅ Un investimento corretto paga il mutuo + genera profitto
 </div>
-
-<h2
-data-it="Errore fatale"
-data-en="Fatal mistake">
-Errore fatale
-</h2>
-
-<p
-data-it="Comprare un immobile pensando che “si pagherà da solo” senza simulazione reale."
-data-en="Buying a property assuming it will pay itself without real simulation.">
-Comprare senza simulare.
-</p>
 
 <!-- CTA -->
-<div class="cta-box">
+<div class="premium-box">
 
-<h3
-data-it="Verifica se il tuo mutuo è sostenibile"
+<h2
+data-it="Scopri se il tuo mutuo è sostenibile"
 data-en="Check if your mortgage is sustainable">
-Verifica se il tuo mutuo è sostenibile
-</h3>
+Scopri se il tuo mutuo è sostenibile
+</h2>
 
-<a href="/tool/" class="btn btn-primary"
-data-it="📊 Simula mutuo e ROI"
-data-en="📊 Simulate mortgage & ROI">
-📊 Simula mutuo e ROI
+<p style="margin-top:15px;font-size:13px;opacity:0.9"
+data-it="🔥 +1.200 investitori stanno analizzando immobili in questo momento"
+data-en="🔥 1,200+ investors are analyzing properties right now">
+🔥 +1.200 investitori attivi
+</p>
+
+<p
+data-it="Simula mutuo, ROI e rischio in meno di 30 secondi."
+data-en="Simulate mortgage, ROI and risk in under 30 seconds.">
+Decisioni basate su dati reali
+</p>
+
+<a href="/tool/"
+data-it="🚀 Avvia simulazione"
+data-en="🚀 Start simulation">
+🚀 Avvia simulazione
 </a>
 
-<a href="/roi-bnb/roma/">ROI B&B Roma</a> • 
-<a href="/roi-bnb/milano/">ROI B&B Milano</a> • 
-<a href="/roi-bnb/napoli/">ROI B&B Napoli</a> • 
-<a href="/roi-bnb/firenze/">ROI B&B Firenze</a>  
-
+<div class="internal-links">
+<a href="/roi-bnb/roma/">ROI B&B Roma</a>
+<a href="/roi-bnb/milano/">ROI B&B Milano</a>
+<a href="/roi-bnb/napoli/">ROI B&B Napoli</a>
+<a href="/roi-bnb/firenze/">ROI B&B Firenze</a>
 </div>
 
 </div>
+
 </section>
 
 </main>
 
-<script src="/js/lang.js"></script>
+<script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js"></script>
-<script type="module" src="/js/firebase-init.js"></script>
+<script src="/js/footer.js" defer></script>
 
 </body>
 </html>
