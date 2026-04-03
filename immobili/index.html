@@ -1132,10 +1132,34 @@ headers: {
 },
 body: JSON.stringify({
 type: "immobili",
-email,
+email: email.trim(),
 city
 })
 });
+
+const res = await fetch("/api/send-lead", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+type: "immobili",
+email: email.trim(),
+city
+})
+});
+
+// 🔥 EMAIL AUTOMATICA (QUI PRECISO)
+await fetch("/api/send-lead-email", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+email: email.trim(),
+lang: window.currentLang || "it"
+})
+});      
 
 const data = await res.json();
 
