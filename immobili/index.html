@@ -1161,6 +1161,37 @@ lang: window.currentLang || "it"
 })
 });      
 
+// 🔥 FOLLOW-UP 24h (test: 60 sec)
+setTimeout(() => {
+  fetch("/api/send-followup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email,
+      lang: window.currentLang || "it",
+      step: 2
+    })
+  });
+}, 60000); // cambia poi a 86400000 (24h)
+
+
+// 🔥 FOLLOW-UP 72h (test: 2 min)
+setTimeout(() => {
+  fetch("/api/send-followup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email,
+      lang: window.currentLang || "it",
+      step: 3
+    })
+  });
+}, 120000); // cambia poi a 259200000 (72h)      
+
 const data = await res.json();
 
 if(data.success){
