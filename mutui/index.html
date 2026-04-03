@@ -22,31 +22,40 @@ data-en="Calculate the real impact of a mortgage on your B&B investment. Simulat
 
 /* ===== PAGE BACKGROUND (🔥 AIRBNB STYLE) ===== */
 body{
+display:flex;
+flex-direction:column;
+padding-top:60px;
+min-height:100vh;
+
+/* 🔥 FORZA VISUALE */
 background:
-radial-gradient(circle at 20% 20%, rgba(16,185,129,0.06), transparent 40%),
-radial-gradient(circle at 80% 80%, rgba(59,130,246,0.06), transparent 40%),
-linear-gradient(to bottom,#f1f5f9,#e2e8f0);
+radial-gradient(circle at 20% 20%, rgba(16,185,129,0.08), transparent 40%),
+radial-gradient(circle at 80% 80%, rgba(59,130,246,0.08), transparent 40%),
+linear-gradient(to bottom,#f8fafc,#e2e8f0) !important;
+
+background-attachment: fixed;
+background-size: cover;
 }
 
 /* ===== HERO LIGHT ===== */
 .hero-mutui{
 padding:120px 20px 140px;
 text-align:center;
-color:#0f172a;
+color:white;
 
 background:
-linear-gradient(rgba(255,255,255,0.75), rgba(248,250,252,0.95)),
+linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.75)),
 url("/img/milan-bg.jpg") center/cover;
 }
 
 .hero-mutui h1{
 font-size:46px;
 font-weight:800;
-color:#0f172a;
+color:white;
 }
 
 .hero-mutui p{
-color:#64748b;
+color:#cbd5f5;
 margin-top:10px;
 }
 
@@ -54,7 +63,8 @@ margin-top:10px;
 .tool-box{
 max-width:900px;
 margin:-100px auto 0;
-background:rgba(255,255,255,0.85);
+background:rgba(255,255,255,0.92);
+transform:translateY(-20px);  
 backdrop-filter:blur(10px);
 
 padding:30px;
@@ -169,6 +179,25 @@ margin-top:10px;
 display:none;
 }
 
+.roi-alert{
+margin-top:20px;
+padding:15px;
+border-radius:12px;
+font-weight:600;
+text-align:center;
+display:none;
+}
+
+.roi-bad{
+background:#fee2e2;
+color:#b91c1c;
+}
+
+.roi-good{
+background:#dcfce7;
+color:#166534;
+}  
+
 </style>
 
 </head>
@@ -235,6 +264,8 @@ Calcola
 
 </div>
 
+<div id="roi-alert" class="roi-alert"></div>  
+
 <!-- BANKS -->
 <div id="banks"></div>
 
@@ -288,6 +319,38 @@ const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly*12;
 
 const impact = ((income - yearly)/income*100).toFixed(1);
+
+const alertBox = document.getElementById("roi-alert");
+
+if(alertBox){
+
+if(impact < 0){
+  alertBox.style.display="block";
+  alertBox.className="roi-alert roi-bad";
+  alertBox.innerHTML = window.currentLang==="en"
+    ? "⚠️ Mortgage is destroying your ROI"
+    : "⚠️ Il mutuo sta distruggendo il tuo ROI";
+}else{
+  alertBox.style.display="block";
+  alertBox.className="roi-alert roi-good";
+  alertBox.innerHTML = window.currentLang==="en"
+    ? "✅ Sustainable mortgage"
+    : "✅ Mutuo sostenibile";
+}
+
+}
+  alertBox.style.display="block";
+  alertBox.className="roi-alert roi-bad";
+  alertBox.innerHTML = window.currentLang==="en"
+  ? "⚠️ <strong>Mortgage is destroying your ROI</strong>"
+  : "⚠️ <strong>Il mutuo sta distruggendo il tuo ROI</strong>";
+}else{
+  alertBox.style.display="block";
+  alertBox.className="roi-alert roi-good";
+  alertBox.innerHTML = window.currentLang==="en"
+    ? "✅ Sustainable mortgage"
+    : "✅ Mutuo sostenibile";
+}  
 
 document.getElementById("monthly").innerText = "€"+monthly.toFixed(0);
 document.getElementById("yearly").innerText = "€"+yearly.toFixed(0);
