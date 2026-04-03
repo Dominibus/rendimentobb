@@ -1473,7 +1473,9 @@ window.calculate = function(force = false){
       loanYears
     });
 
-    removeGhostOverlays();
+    setTimeout(removeGhostOverlays, 50);
+    setTimeout(removeGhostOverlays, 300);
+    setTimeout(removeGhostOverlays, 800);
 
     if(!result){
       console.warn("⛔ result null");
@@ -1495,11 +1497,9 @@ window.calculate = function(force = false){
     // ================= FORCE SHOW RESULTS (FREE FIX) =================
 
 // rimuove overlay DOPO il primo calcolo
-const overlay = document.querySelector(".results-overlay");
-
-if(overlay){
-  overlay.style.display = "none";
-}
+document.querySelectorAll(".results-overlay").forEach(el=>{
+  el.remove();
+});
 
 // rimuove blur risultati base
 document.querySelectorAll(".pro-blur").forEach(el=>{
@@ -3088,26 +3088,26 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =====================================
-// 🚀 FIX OVERLAY FANTASMA (CRITICO)
+// 🚀 OVERLAY KILLER DEFINITIVO
 // =====================================
 
 function removeGhostOverlays(){
 
-  document.querySelectorAll(
-    ".results-overlay, .locked-overlay, .home-blur-overlay"
-  ).forEach(el => {
+  document.querySelectorAll(`
+    .results-overlay,
+    .locked-overlay,
+    .home-blur-overlay,
+    .upgrade-overlay,
+    #upgrade-overlay,
+    #upgrade-modal,
+    [data-paywall]
+  `).forEach(el => {
 
-    // se è vuoto → rimuovi
-    if(!el.innerHTML.trim()){
-      el.remove();
-    }
+    el.remove(); // 🔥 elimina SEMPRE
 
   });
 
 }
 
-// 🔥 esegui SEMPRE
-document.addEventListener("DOMContentLoaded", removeGhostOverlays);
-
-// 🔥 quando firebase/auth è pronto
-document.addEventListener("rb_auth_ready", removeGhostOverlays);
+// 🔥 ESECUZIONE FORZATA CONTINUA
+setInterval(removeGhostOverlays, 800);
