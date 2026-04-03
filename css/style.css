@@ -6720,3 +6720,17 @@ select{
   }
 
 }
+
+.home-blur-overlay{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:5;
+}
+
+.metric-card.roi-highlight{
+position:relative;
+z-index:10; /* 🔥 ROI SEMPRE SOPRA */
+}
