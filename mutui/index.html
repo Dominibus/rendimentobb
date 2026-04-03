@@ -163,38 +163,28 @@ Ricevi offerte
 <!-- FIREBASE -->
 <script type="module">
 
-import { db } from "/js/firebase-init.js";
-import {
-collection,
-addDoc,
-serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { saveLeadMutui } from "/js/leads.js";
 
-/* ===== SAVE LEAD ===== */
 window.saveLead = async function(){
 
-const email = document.getElementById("leadEmail").value;
+  const email = document.getElementById("leadEmail").value;
+  const amount = document.getElementById("mortgageAmount").value;
+  const years = document.getElementById("mortgageYears").value;
 
-if(!email || !email.includes("@")){
-alert("Inserisci email valida");
-return;
-}
+  if(!email || !email.includes("@")){
+    alert("Inserisci email valida");
+    return;
+  }
 
-try{
+  await saveLeadMutui({
+    email,
+    phone: "",
+    amount,
+    years
+  });
 
-await addDoc(collection(db,"leads_mutui"),{
-email:email,
-created:serverTimestamp(),
-source:"mutui_page"
-});
-
-document.getElementById("successMsg").style.display="block";
-document.getElementById("leadEmail").value="";
-
-}catch(e){
-console.error(e);
-alert("Errore salvataggio");
-}
+  document.getElementById("successMsg").style.display="block";
+  document.getElementById("leadEmail").value="";
 
 };
 
