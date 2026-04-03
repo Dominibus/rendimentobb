@@ -6675,3 +6675,48 @@ select{
   color:#0f172a !important;
   background:#ffffff !important;
 }
+
+/* ===================== */
+/* 🔥 FIX POPUP MOBILE ROI */
+/* ===================== */
+
+@media (max-width: 768px){
+
+  /* container popup */
+  .results-overlay,
+  .locked-overlay{
+    position:fixed !important;
+    inset:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:20px !important;
+    z-index:9999 !important;
+  }
+
+  /* box interno */
+  .results-card,
+  .locked-section,
+  .roi-popup{
+    width:100% !important;
+    max-width:360px !important;
+    margin:auto !important;
+    border-radius:16px !important;
+    padding:20px !important;
+    box-sizing:border-box !important;
+  }
+
+  /* testo centrato */
+  .results-card h3,
+  .results-card p{
+    text-align:center !important;
+  }
+
+  /* bottone */
+  .results-card .btn,
+  .locked-section .btn{
+    width:100% !important;
+    margin-top:12px !important;
+  }
+
+}
