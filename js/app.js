@@ -1490,6 +1490,13 @@ window.calculate = function(force = false){
 
     const gross = safeNumber(result.gross);
     const net   = safeNumber(result.netAfterMortgage);
+    // ================= FIX PROFIT LIVE =================
+
+    const profitLive = document.getElementById("profit-live");
+
+    if(profitLive){
+    profitLive.innerText = formatCurrency(net);
+    }
     const roi   = safeNumber(result.roi);
 
     console.log("🔥 RESULT:", result);
