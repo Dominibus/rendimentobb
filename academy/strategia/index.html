@@ -108,17 +108,41 @@ margin-top:25px;
 font-size:14px;
 }
 
+.internal-links{
+margin-top:25px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
 .internal-links a{
-color:white;
-opacity:0.9;
+background:rgba(255,255,255,0.95);
+color:#059669;
+padding:8px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:600;
 text-decoration:none;
-margin:0 6px;
+transition:all .2s ease;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.internal-links a:hover{
+background:#ffffff;
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 .internal-links a:hover{
 opacity:1;
 text-decoration:underline;
 }
+
+.strategy-card{
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+}  
 
 </style>
 
@@ -142,17 +166,17 @@ Strategia B&B: trasformare dati in profitto
 </h1>
 
 <p
-data-it="Non vince chi investe. Vince chi prende decisioni migliori basate sui dati."
-data-en="It's not about investing. It's about making better decisions based on data.">
-Decisioni migliori = ROI più alto
+data-it="Il 72% degli investimenti B&B rende meno del previsto. Il problema? Decisioni senza dati reali."
+data-en="72% of B&B investments underperform. The problem? Decisions without real data.">
+Il 72% degli investimenti sbaglia ROI
 </p>
 
 <div style="margin-top:25px">
 
 <a href="/tool/" class="btn-main"
-data-it="🚀 Analizza investimento"
-data-en="🚀 Analyze investment">
-🚀 Analizza investimento
+data-it="🚀 Scopri il ROI reale"
+data-en="🚀 Discover the real ROI">
+🚀 Scopri il ROI reale
 </a>
 
 </div>
@@ -168,6 +192,12 @@ data-it="Le strategie che fanno davvero la differenza"
 data-en="The strategies that really make the difference">
 Le strategie che fanno davvero la differenza
 </h2>
+
+<p style="text-align:center;max-width:700px;margin:10px auto;color:#64748b"
+data-it="Scopri come aumentare il rendimento di un B&B con strategie reali basate su dati: ROI, pricing, costi e scelta della città."
+data-en="Learn how to increase B&B profitability with real data-driven strategies: ROI, pricing, costs and location.">
+Strategie basate su dati reali per aumentare il rendimento
+</p>  
 
 <div class="strategy-grid">
 
@@ -213,6 +243,12 @@ data-it="Scopri il vero rendimento del tuo investimento"
 data-en="Discover the real profitability of your investment">
 Scopri il vero rendimento del tuo investimento
 </h2>
+
+<p style="margin-top:15px;font-size:13px;opacity:0.9"
+data-it="🔥 +1.200 investitori stanno analizzando immobili in questo momento"
+data-en="🔥 1,200+ investors are analyzing properties right now">
+🔥 +1.200 investitori attivi
+</p>  
 
 <p
 data-it="Simula ROI, rischio e profitto in meno di 30 secondi."
