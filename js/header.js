@@ -71,7 +71,9 @@ Aprire un B&B
 
 <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
 
-${isAdmin ? `<a href="/dashboard-leads/">Leads</a>` : ""}
+<a href="/dashboard-leads/" id="nav-leads" style="display:none">
+Leads
+</a>
 
 <a href="/dashboard/" id="nav-dashboard"
 data-it="Dashboard" data-en="Dashboard">
@@ -195,6 +197,12 @@ if(user){
   </div>
   `;
 }
+
+const leadsLink = document.getElementById("nav-leads");
+
+if(leadsLink && window.isAdmin && window.isAdmin()){
+  leadsLink.style.display = "inline-block";
+}  
 
 /* TRADUZIONE */
 setTimeout(()=>{
