@@ -59,4 +59,24 @@ export async function saveLeadImmobili(data){
     console.error("❌ Errore lead immobili:", err);
   }
 
+export async function savePartnerLead(data){
+
+  await addDoc(collection(db,"leads_partner"),{
+    ...data,
+    created: serverTimestamp(),
+    status:"new"
+  });
+
 }
+
+export async function saveWorkLead(data){
+
+  await addDoc(collection(db,"leads_work"),{
+    ...data,
+    created: serverTimestamp(),
+    status:"new"
+  });
+
+}
+  
+} 
