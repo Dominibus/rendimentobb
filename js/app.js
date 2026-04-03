@@ -1490,6 +1490,21 @@ window.calculate = function(force = false){
 
     console.log("🔥 RESULT:", result);
 
+    // ================= FORCE SHOW RESULTS (FREE FIX) =================
+
+// rimuove overlay DOPO il primo calcolo
+const overlay = document.querySelector(".results-overlay");
+
+if(overlay){
+  overlay.style.display = "none";
+}
+
+// rimuove blur risultati base
+document.querySelectorAll(".pro-blur").forEach(el=>{
+  el.style.filter = "none";
+  el.style.opacity = "1";
+});
+
     // ================= ROI MAIN UI FIX =================
 const roiMain = document.getElementById("roi-live");
 
