@@ -140,17 +140,8 @@ function getCurrentLang(){
 // ===============================
 
 async function registerUser(email, password) {
-
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  const user = userCredential.user;
-
-  await setDoc(doc(db, "users", user.uid), {
-    email: email,
-    plan: "free",
-    createdAt: new Date()
-  });
-
-  return user;
+  return userCredential.user;
 }
 
 
@@ -187,13 +178,13 @@ async function loadUserPlan(uid) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-  currentPlan = docSnap.data().plan || "free";
+  window.currentPlan = docSnap.data().plan || "free";
 } else {
   console.warn("⚠️ Documento NON trovato → NON sovrascrivo");
 
   // 🔥 NON toccare il piano se già caricato
   if(!window.currentPlan){
-    currentPlan = "free";
+    
   }
 }
 
@@ -323,25 +314,7 @@ function updateUserUI(user) {
 
 
 // ===============================
-// PRO BUTTON
-// ===============================
-
-function updateProVisibility() {
-
-  const proBtn = document.getElementById("pro-btn");
-  if (!proBtn) return;
-
-  if (currentPlan === "pro") {
-
-    proBtn.textContent = "PRO Attivo";
-    proBtn.disabled = true;
-    proBtn.style.opacity = 0.6;
-  }
-}
-
-
-// ===============================
-// AUTH OBSERVER
+// AUTH OBSSERVER (FIX DEFINITIVO)
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
@@ -351,78 +324,131 @@ onAuthStateChanged(auth, async (user) => {
 
   if (user) {
 
-  console.log("🔥 Auth OK:", user.uid);
+    console.log("🔥 Auth OK:", user.uid);
 
-  // 🔥 carica piano
-  await loadUserPlan(user.uid);
+    // ===============================
+    // 🔥 AUTO CREATE USER (FIX CRITICO)
+    // ===============================
 
-  // 🔥 Firebase pronto
-  window.firebaseReady = true;
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    
+    const userData = snap.exists() ? snap.data() : null;
 
-  console.log("✅ Firebase READY con piano:", window.currentPlan);
+    if (!snap.exists()) {
 
-  // 🔥 aggiorna UI navbar
-updateUserUI(user);
+      console.log("🔥 Creo utente Firestore automatico");
 
-// 🔥 🔥 🔥 FIX CRITICO (QUESTO TI RISOLVE TUTTO)
-if(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-){
+      await setDoc(userRef, {
+        email: user.email,
+        plan: user.email === "rendimentobb@gmail.com" ? "pro" : "free",
+        role: user.email === "rendimentobb@gmail.com" ? "admin" : "user",
+        createdAt: new Date()
+      });
 
-  console.log("💰 Utente PRO → sblocco totale UI");
-
-  // 👉 QUESTO TI MANCAVA
-  document.body.classList.add("pro-user");
-
-  // fallback sicurezza
-  if(typeof unlockProUI === "function"){
-    unlockProUI();
-  }
-
-} else {
-
-    console.log("👀 Utente FREE → attivo funnel");
-
-    // 🔥 micro trigger psicologico (non invasivo)
-    setTimeout(()=>{
-      console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
-    },1500);
-
-  }
-
-} else {
-
-  console.log("👤 Utente non loggato");
-
-  window.currentPlan = "free";
-  window.firebaseReady = true;
-
-  updateUserUI(null);
-
-  // 🔥 trigger UI per stato FREE
-  document.dispatchEvent(new Event("rb_plan_loaded"));
-
-  // 🔥 micro social proof (conversione)
-  setTimeout(()=>{
-    console.log("📊 +1.247 utenti stanno analizzando investimenti ora");
-  },2000);
-
-}
-
-// 🔥 evento globale sempre (NON TOCCARE)
-document.dispatchEvent(
-  new CustomEvent("rb_auth_ready", {
-    detail: {
-      user: user,
-      plan: window.currentPlan
+    } else {
+      console.log("✔ Utente già presente in Firestore");
     }
-  })
-);
+
+    window.getUserData = function(){
+       return {
+        user: window.currentUser,
+        plan: window.currentPlan,
+        isAdmin: window.isAdmin?.() || false
+     };
+  };
+
+    // ===============================
+    // 🔥 CARICA PIANO
+    // ===============================
+
+    await loadUserPlan(user.uid);
+
+    // ===============================
+    // 🔥 FIREBASE READY
+    // ===============================
+
+    window.firebaseReady = true;
+
+    console.log("✅ Firebase READY con piano:", window.currentPlan);
+
+    // ===============================
+    // 🔥 ADMIN CHECK
+    // ===============================
+
+    window.isAdmin = function(){
+      return userData?.role === "admin";
+  };
+
+    // ===============================
+    // 🔥 UPDATE UI
+    // ===============================
+
+    updateUserUI(user);
+
+    // ===============================
+    // 🔥 PRO UNLOCK
+    // ===============================
+
+    if(
+      window.currentPlan === "pro" ||
+      window.currentPlan === "investor" ||
+      window.currentPlan === "pro_yearly"
+    ){
+
+      console.log("💰 Utente PRO → sblocco totale UI");
+
+      document.body.classList.add("pro-user");
+
+      if(typeof unlockProUI === "function"){
+        unlockProUI();
+      }
+
+    } else {
+
+      console.log("👀 Utente FREE → attivo funnel");
+
+      setTimeout(()=>{
+        console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
+      },1500);
+
+    }
+
+  } else {
+
+    // ===============================
+    // 🔴 UTENTE NON LOGGATO
+    // ===============================
+
+    console.log("👤 Utente non loggato");
+
+    window.currentPlan = "free";
+    window.firebaseReady = true;
+
+    updateUserUI(null);
+
+    document.dispatchEvent(new Event("rb_plan_loaded"));
+
+    setTimeout(()=>{
+      console.log("📊 +1.247 utenti stanno analizzando investimenti ora");
+    },2000);
+
+  }
+
+  // ===============================
+  // 🔥 EVENTO GLOBALE (NON TOCCARE)
+  // ===============================
+
+  document.dispatchEvent(
+    new CustomEvent("rb_auth_ready", {
+      detail: {
+        user: user,
+        plan: window.currentPlan
+      }
+    })
+  );
 
 });
-
 // ===============================
 // STRIPE PLAN ACTIVATION
 // ===============================
