@@ -53,7 +53,7 @@ const header = `
 
 <div class="container portal-header-inner">
 
-<!-- LEFT -->
+/* LEFT */
 <div class="header-left">
 
 <a href="/" class="logo-link rb-logo">
@@ -64,7 +64,7 @@ const header = `
 
 </div>
 
-<!-- CENTER NAV -->
+/* CENTER NAV */
 <nav class="portal-nav">
 
 <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
@@ -80,10 +80,7 @@ Aprire un B&B
 <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
 
 ${isAdmin ? `
-<a href="/dashboard-leads/" class="admin-link"
-data-it="Leads" data-en="Leads">
-Leads
-</a>
+<a href="/dashboard-leads/" class="admin-link">Leads</a>
 ` : ""}
 
 <a href="/dashboard/" id="nav-dashboard"
@@ -91,15 +88,14 @@ data-it="Dashboard" data-en="Dashboard">
 Dashboard
 </a>
 
-<a href="/contact.html"
-data-it="Contatti" data-en="Contact">
+<a href="/contact.html" data-it="Contatti" data-en="Contact">
 Contatti
 </a>
 
 </nav>
 
-<!-- RIGHT -->
-<div class="header-right">
+/* RIGHT */
+<div class="right-controls">
 
 <div id="user-area"></div>
 
@@ -111,9 +107,46 @@ Contatti
 </div>
 
 </div>
-
 </header>
 `;
+
+const container = document.getElementById("global-header");
+
+if(container){
+  container.innerHTML = header;
+}
+
+// background
+window.applyCityBackground();
+
+// hamburger
+const hamburger = document.querySelector(".hamburger");
+const nav = document.querySelector(".portal-nav");
+
+if(hamburger && nav){
+  hamburger.addEventListener("click", () => {
+    nav.classList.toggle("open");
+  });
+}
+
+// active link
+const currentPath = window.location.pathname;
+
+document.querySelectorAll(".portal-nav a").forEach(link => {
+  const href = link.getAttribute("href");
+  if(currentPath.startsWith(href)){
+    link.classList.add("active");
+  }
+});
+
+// traduzioni
+setTimeout(() => {
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
+}, 50);
+
+});
 
 document.getElementById("global-header").innerHTML = header;
 
