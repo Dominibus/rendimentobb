@@ -6734,3 +6734,26 @@ z-index:5;
 position:relative;
 z-index:10; /* 🔥 ROI SEMPRE SOPRA */
 }
+
+@media (max-width:768px){
+
+.roi-grid{
+grid-template-columns:1fr;
+}
+
+.investment-metrics{
+display:grid;
+grid-template-columns:1fr;
+gap:12px;
+}
+
+.metric-card{
+width:100%;
+box-sizing:border-box;
+}
+
+.roi-big{
+font-size:28px;
+}
+
+}
