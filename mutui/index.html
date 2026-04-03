@@ -62,6 +62,7 @@ padding:14px 20px;
 border-radius:10px;
 font-weight:600;
 cursor:pointer;
+border:none;
 }
 
 /* ===== LEAD BOX ===== */
@@ -105,10 +106,8 @@ border:2px solid #10b981;
 
 <!-- HERO -->
 <section class="hero-mutui">
-
 <h1>Mutuo B&B: conviene davvero?</h1>
 <p>Il 68% degli investimenti con mutuo è in perdita</p>
-
 </section>
 
 <div class="container">
@@ -133,19 +132,23 @@ Confronta mutui
 <!-- RESULTS -->
 <div id="mortgage-results"></div>
 
-<!-- 🔥 LEAD -->
+<!-- 🔥 LEAD (CORE BUSINESS) -->
 <div class="lead-box">
 
 <h2>Ricevi le migliori offerte mutuo</h2>
+<p style="color:#94a3b8;margin-bottom:20px;">
+Ti mettiamo in contatto con i migliori broker e banche
+</p>
 
 <input id="leadEmail" placeholder="Inserisci email">
+<input id="leadPhone" placeholder="Telefono (opzionale)">
 
 <button onclick="saveLead()" class="btn-main">
-Ricevi offerte
+Ricevi offerte personalizzate
 </button>
 
 <div id="successMsg" class="success-msg">
-✅ Richiesta inviata! Ti contatteremo presto
+✅ Richiesta inviata! Verrai contattato entro 24h
 </div>
 
 </div>
@@ -167,24 +170,39 @@ import { saveLeadMutui } from "/js/leads.js";
 
 window.saveLead = async function(){
 
-  const email = document.getElementById("leadEmail").value;
+  const email = document.getElementById("leadEmail").value.trim();
+  const phone = document.getElementById("leadPhone").value.trim();
   const amount = document.getElementById("mortgageAmount").value;
   const years = document.getElementById("mortgageYears").value;
 
+  // VALIDAZIONE
   if(!email || !email.includes("@")){
     alert("Inserisci email valida");
     return;
   }
 
+  // BLOCCO DOPPIO CLICK
+  const btn = document.querySelector(".lead-box button");
+  btn.disabled = true;
+  btn.innerText = "Invio...";
+
   await saveLeadMutui({
     email,
-    phone: "",
+    phone,
     amount,
-    years
+    years,
+    page: "mutui",
+    city: "auto" // futuro routing
   });
 
   document.getElementById("successMsg").style.display="block";
+
+  // reset
   document.getElementById("leadEmail").value="";
+  document.getElementById("leadPhone").value="";
+
+  btn.disabled = false;
+  btn.innerText = "Ricevi offerte personalizzate";
 
 };
 
