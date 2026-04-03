@@ -5,16 +5,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Partnership – RendimentoBB</title>
+<title
+data-it="Partnership – RendimentoBB"
+data-en="Partnership – RendimentoBB">
+Partnership – RendimentoBB
+</title>
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
 
-/* ===== HERO ===== */
-.hero-partner{
+/* HERO */
+.hero{
 position:relative;
-padding:140px 20px 120px;
+padding:140px 20px;
 text-align:center;
 color:white;
 overflow:hidden;
@@ -23,7 +27,6 @@ overflow:hidden;
 .hero-bg{
 position:absolute;
 inset:0;
-z-index:0;
 background-size:cover;
 background-position:center;
 filter:brightness(0.4);
@@ -36,25 +39,25 @@ max-width:900px;
 margin:auto;
 }
 
-.hero-partner h1{
-font-size:48px;
+.hero h1{
+font-size:46px;
 font-weight:800;
 }
 
-.hero-partner p{
+.hero p{
 margin-top:10px;
 color:#e2e8f0;
 font-size:18px;
 }
 
-/* ===== SECTION ===== */
+/* CONTAINER */
 .container{
 max-width:1000px;
 margin:auto;
 padding:60px 20px;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .card{
 background:white;
 padding:40px;
@@ -62,7 +65,7 @@ border-radius:20px;
 box-shadow:0 20px 60px rgba(0,0,0,0.1);
 }
 
-/* ===== GRID BENEFITS ===== */
+/* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -76,12 +79,7 @@ padding:20px;
 border-radius:12px;
 }
 
-.benefit strong{
-display:block;
-margin-bottom:5px;
-}
-
-/* ===== FORM ===== */
+/* FORM */
 input, textarea{
 width:100%;
 padding:14px;
@@ -108,7 +106,7 @@ color:#10b981;
 display:none;
 }
 
-/* ===== TRUST ===== */
+/* TRUST */
 .trust{
 margin-top:50px;
 text-align:center;
@@ -125,17 +123,21 @@ font-size:14px;
 <div id="global-header"></div>
 
 <!-- HERO -->
-<section class="hero-partner">
+<section class="hero">
 
 <div class="hero-bg" id="heroBg"></div>
 
 <div class="hero-content">
 
-<h1>
+<h1
+data-it="🤝 Partnership RendimentoBB"
+data-en="🤝 RendimentoBB Partnership">
 🤝 Partnership RendimentoBB
 </h1>
 
-<p>
+<p
+data-it="Ricevi clienti già pronti a investire in B&B"
+data-en="Get clients ready to invest in B&B properties">
 Ricevi clienti già pronti a investire in B&B
 </p>
 
@@ -148,52 +150,99 @@ Ricevi clienti già pronti a investire in B&B
 
 <div class="card">
 
-<h2 style="margin-bottom:20px;">
+<h2
+data-it="Perché collaborare con noi"
+data-en="Why partner with us">
 Perché collaborare con noi
 </h2>
 
 <div class="grid">
 
 <div class="benefit">
-<strong>🎯 Lead qualificati</strong>
+<strong
+data-it="🎯 Lead qualificati"
+data-en="🎯 Qualified leads">
+🎯 Lead qualificati
+</strong>
+<span
+data-it="Utenti che hanno già simulato ROI e sono pronti ad agire"
+data-en="Users who already simulated ROI and are ready to act">
 Utenti che hanno già simulato ROI e sono pronti ad agire
+</span>
 </div>
 
 <div class="benefit">
-<strong>📊 Dati reali</strong>
+<strong
+data-it="📊 Dati reali"
+data-en="📊 Real data">
+📊 Dati reali
+</strong>
+<span
+data-it="Ogni lead ha dati concreti su investimento e budget"
+data-en="Each lead includes real investment data and budget">
 Ogni lead ha dati concreti su investimento e budget
+</span>
 </div>
 
 <div class="benefit">
-<strong>💰 Alta conversione</strong>
-Non traffico freddo → clienti già caldi
+<strong
+data-it="💰 Alta conversione"
+data-en="💰 High conversion">
+💰 Alta conversione
+</strong>
+<span
+data-it="Clienti caldi, non traffico casuale"
+data-en="Warm clients, not random traffic">
+Clienti caldi, non traffico casuale
+</span>
 </div>
 
 </div>
 
-<h2 style="margin-top:30px;">
+<h2
+data-it="Diventa partner"
+data-en="Become a partner">
 Diventa partner
 </h2>
 
-<p style="margin-bottom:15px;">
+<p
+data-it="Collaboriamo con banche, broker mutui e agenzie immobiliari."
+data-en="We work with banks, mortgage brokers and real estate agencies.">
 Collaboriamo con banche, broker mutui e agenzie immobiliari.
 </p>
 
-<input id="name" placeholder="Nome azienda">
-<input id="email" placeholder="Email">
-<textarea id="message" placeholder="Descrivi il tuo servizio"></textarea>
+<input id="name"
+data-it-placeholder="Nome azienda"
+data-en-placeholder="Company name"
+placeholder="Nome azienda">
 
-<button onclick="savePartner()">
+<input id="email"
+data-it-placeholder="Email"
+data-en-placeholder="Email"
+placeholder="Email">
+
+<textarea id="message"
+data-it-placeholder="Descrivi il tuo servizio"
+data-en-placeholder="Describe your service"
+placeholder="Descrivi il tuo servizio"></textarea>
+
+<button onclick="savePartner()"
+data-it="Invia richiesta"
+data-en="Send request">
 Invia richiesta
 </button>
 
-<div id="success" class="success">
-✅ Richiesta inviata. Ti contatteremo entro 24h
+<div id="success" class="success"
+data-it="✅ Richiesta inviata. Ti contatteremo entro 24h"
+data-en="✅ Request sent. We will contact you within 24h">
+✅ Richiesta inviata
 </div>
 
 </div>
 
-<div class="trust">
+<div class="trust"
+data-it="🔥 +1.200 utenti stanno analizzando investimenti in questo momento"
+data-en="🔥 1,200+ users are analyzing investments right now">
 🔥 +1.200 utenti stanno analizzando investimenti in questo momento
 </div>
 
@@ -221,7 +270,7 @@ document.getElementById("heroBg").style.backgroundImage = `url('${random}')`;
 
 </script>
 
-<!-- FIREBASE LEAD -->
+<!-- FIREBASE -->
 <script type="module">
 
 import { savePartnerLead } from "/js/leads.js";
