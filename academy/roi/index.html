@@ -1,66 +1,184 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title
-data-it="ROI B&B – Come calcolare il rendimento reale"
-data-en="B&B ROI – How to calculate real profitability">
-ROI B&B – Come calcolare il rendimento reale
+data-it="ROI B&B 2026 – Come calcolare il rendimento reale e evitare errori"
+data-en="B&B ROI 2026 – How to calculate real profitability and avoid mistakes">
+ROI B&B – rendimento reale
 </title>
 
 <meta name="description"
 data-it="Scopri come calcolare il ROI reale di un B&B, evitare errori e capire se un investimento è davvero profittevole."
-data-en="Learn how to calculate real B&B ROI, avoid mistakes and understand if an investment is truly profitable."
-content="ROI B&B">
+data-en="Learn how to calculate real B&B ROI, avoid mistakes and understand if an investment is truly profitable.">
+
+<link rel="canonical" href="https://www.rendimentobb.it/academy/roi-bnb">
 
 <link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/img/favicon.png">
 
 <style>
 
-/* HERO CONTENUTO */
+/* ===== HERO ===== */
+.hero.hero-bg.roi{
+padding:120px 20px 100px;
+text-align:center;
+}
+
+.hero h1{
+font-size:44px;
+font-weight:800;
+color:white;
+line-height:1.2;
+}
+
+.hero p{
+color:#e2e8f0;
+margin-top:15px;
+}
+
+/* CTA HERO */
+.hero .btn-main{
+background:linear-gradient(135deg,#10b981,#059669);
+color:#ffffff !important;
+padding:14px 28px;
+border-radius:12px;
+font-weight:700;
+display:inline-block;
+box-shadow:0 10px 25px rgba(16,185,129,0.3);
+transition:.25s;
+}
+
+.hero .btn-main:hover{
+transform:translateY(-2px);
+box-shadow:0 15px 35px rgba(16,185,129,0.4);
+}
+
+/* ===== CONTENT ===== */
 .academy-content{
-max-width:800px;
-margin:60px auto;
-line-height:1.7;
+max-width:1000px;
+margin:80px auto;
+padding:0 20px;
+}
+
+/* ===== GRID ===== */
+.roi-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+/* ===== CARD ===== */
+.roi-card{
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+padding:28px;
+border-radius:16px;
+border:1px solid #f1f5f9;
+box-shadow:0 10px 30px rgba(0,0,0,0.05);
+transition:.25s;
+}
+
+.roi-card:hover{
+transform:translateY(-6px);
+border-color:#10b981;
+box-shadow:0 25px 70px rgba(0,0,0,0.08);
+}
+
+.roi-card h3{
+color:#059669;
+margin-bottom:10px;
+font-size:18px;
+}
+
+.roi-card p{
 color:#475569;
-font-size:16px;
+font-size:15px;
 }
 
-.academy-content h2{
-color:#0f172a;
-margin-bottom:12px;
-margin-top:30px;
-}
-
+/* ===== HIGHLIGHT ===== */
 .highlight-box{
 background:#0f172a;
 color:white;
 padding:25px;
 border-radius:16px;
 margin:30px 0;
+text-align:center;
+font-weight:600;
 }
 
-.cta-box{
+/* ===== CTA BOX ===== */
+.premium-box{
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+padding:60px;
+border-radius:20px;
 text-align:center;
-margin-top:60px;
+margin-top:80px;
+box-shadow:0 20px 60px rgba(16,185,129,0.25);
+}
+
+.premium-box a{
+display:inline-block;
+margin-top:15px;
+background:white;
+color:#059669;
+padding:14px 24px;
+border-radius:10px;
+font-weight:700;
+text-decoration:none;
+transition:.2s;
+}
+
+.premium-box a:hover{
+transform:translateY(-2px);
+}
+
+/* ===== INTERNAL LINKS ===== */
+.internal-links{
+margin-top:25px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+.internal-links a{
+background:rgba(255,255,255,0.95);
+color:#059669;
+padding:8px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:600;
+text-decoration:none;
+transition:all .2s ease;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.internal-links a:hover{
+background:#ffffff;
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 </style>
 
 </head>
 
-<body>
+<body class="academy-page">
 
 <div id="global-header"></div>
 
 <main>
 
 <!-- HERO -->
-<section class="hero hero-bg rome">
+<section class="hero hero-bg roi">
+
 <div class="container">
-<div class="page-title">
 
 <h1
 data-it="ROI B&B: quanto guadagni davvero?"
@@ -69,84 +187,126 @@ ROI B&B: quanto guadagni davvero?
 </h1>
 
 <p
-data-it="Il ROI è il cuore di ogni investimento. Ma il 90% degli investitori lo calcola male."
-data-en="ROI is the core of every investment. But 90% of investors calculate it wrong.">
-Il ROI è il cuore di ogni investimento. Ma il 90% degli investitori lo calcola male.
+data-it="Il 72% degli investimenti B&B rende meno del previsto. Il problema? ROI calcolato male."
+data-en="72% of B&B investments underperform. The problem? Wrong ROI calculation.">
+Il 72% degli investimenti sbaglia ROI
 </p>
 
+<div style="margin-top:25px">
+
+<a href="/tool/" class="btn-main"
+data-it="🚀 Calcola il ROI reale"
+data-en="🚀 Calculate real ROI">
+🚀 Calcola il ROI reale
+</a>
+
 </div>
+
 </div>
 </section>
 
-<!-- CONTENUTO -->
-<section class="section section-light">
-<div class="container academy-content">
+<!-- CONTENT -->
+<section class="academy-content">
 
-<h2 data-it="Cos'è il ROI?" data-en="What is ROI?">
-Cos'è il ROI?
+<h2 style="text-align:center"
+data-it="Come calcolare il ROI corretto"
+data-en="How to calculate real ROI">
+Come calcolare il ROI corretto
 </h2>
 
-<p
-data-it="Il ROI (Return on Investment) misura quanto rende il tuo investimento rispetto al capitale investito."
-data-en="ROI (Return on Investment) measures how much your investment generates compared to the invested capital.">
-Il ROI misura quanto rende il tuo investimento rispetto al capitale investito.
+<p style="text-align:center;max-width:700px;margin:10px auto;color:#64748b"
+data-it="Il ROI reale non è solo una formula: include costi nascosti, tasse, mutuo e occupazione."
+data-en="Real ROI is not just a formula: it includes hidden costs, taxes, mortgage and occupancy.">
+Il ROI reale include tutti i fattori
 </p>
+
+<div class="roi-grid">
+
+<div class="roi-card">
+<h3>💰 Ricavi reali</h3>
+<p
+data-it="Prezzo notte × occupazione reale annua."
+data-en="Night price × real yearly occupancy.">
+Prezzo × occupazione
+</p>
+</div>
+
+<div class="roi-card">
+<h3>📉 Costi nascosti</h3>
+<p
+data-it="Tasse, pulizie, gestione e commissioni piattaforme."
+data-en="Taxes, cleaning, management and platform fees.">
+Costi reali
+</p>
+</div>
+
+<div class="roi-card">
+<h3>🏦 Mutuo</h3>
+<p
+data-it="Il finanziamento impatta direttamente il rendimento."
+data-en="Mortgage directly impacts profitability.">
+Impatto finanziario
+</p>
+</div>
+
+<div class="roi-card">
+<h3>⚠️ Rischio</h3>
+<p
+data-it="Occupazione variabile e stagionalità."
+data-en="Variable occupancy and seasonality.">
+Variabilità reale
+</p>
+</div>
+
+</div>
 
 <div class="highlight-box">
 💡 ROI = (Profitto netto / Capitale investito) × 100
 </div>
 
-<h2 data-it="Errore più comune" data-en="Most common mistake">
-Errore più comune
-</h2>
-
-<p
-data-it="Molti investitori considerano solo i ricavi e ignorano costi reali come tasse, gestione e manutenzione."
-data-en="Most investors consider only revenue and ignore real costs like taxes, management and maintenance.">
-Molti investitori considerano solo i ricavi e ignorano i costi reali.
-</p>
-
-<h2 data-it="Come calcolarlo correttamente" data-en="How to calculate it correctly">
-Come calcolarlo correttamente
-</h2>
-
-<p
-data-it="Un ROI corretto considera: occupazione, prezzo notte, costi operativi e finanziamento."
-data-en="A correct ROI includes occupancy, nightly rate, operating costs and financing.">
-Un ROI corretto considera tutti i fattori.
-</p>
-
 <!-- CTA -->
-<div class="cta-box">
+<div class="premium-box">
 
-<h3
-data-it="Calcola il tuo ROI reale in 30 secondi"
-data-en="Calculate your real ROI in 30 seconds">
-Calcola il tuo ROI reale in 30 secondi
-</h3>
+<h2
+data-it="Scopri il vero rendimento del tuo investimento"
+data-en="Discover the real profitability of your investment">
+Scopri il vero rendimento del tuo investimento
+</h2>
 
-<a href="/tool/" class="btn btn-primary"
-data-it="🚀 Simula il tuo investimento"
-data-en="🚀 Simulate your investment">
-🚀 Simula il tuo investimento
+<p style="margin-top:15px;font-size:13px;opacity:0.9"
+data-it="🔥 +1.200 investitori stanno analizzando immobili in questo momento"
+data-en="🔥 1,200+ investors are analyzing properties right now">
+🔥 +1.200 investitori attivi
+</p>
+
+<p
+data-it="Simula ROI, rischio e profitto in meno di 30 secondi."
+data-en="Simulate ROI, risk and profit in under 30 seconds.">
+Dati reali. Decisioni migliori.
+</p>
+
+<a href="/tool/"
+data-it="🚀 Avvia simulazione"
+data-en="🚀 Start simulation">
+🚀 Avvia simulazione
 </a>
 
-<a href="/roi-bnb/roma/">ROI B&B Roma</a> • 
-<a href="/roi-bnb/milano/">ROI B&B Milano</a> • 
-<a href="/roi-bnb/napoli/">ROI B&B Napoli</a> • 
-<a href="/roi-bnb/firenze/">ROI B&B Firenze</a>  
-
+<div class="internal-links">
+<a href="/roi-bnb/roma/">ROI B&B Roma</a>
+<a href="/roi-bnb/milano/">ROI B&B Milano</a>
+<a href="/roi-bnb/napoli/">ROI B&B Napoli</a>
+<a href="/roi-bnb/firenze/">ROI B&B Firenze</a>
 </div>
 
 </div>
+
 </section>
 
 </main>
 
-<script src="/js/lang.js"></script>
+<script src="/js/lang.js" defer></script>
 <script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js"></script>
-<script type="module" src="/js/firebase-init.js"></script>
+<script src="/js/footer.js" defer></script>
 
 </body>
 </html>
