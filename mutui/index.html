@@ -5,7 +5,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mutuo B&B – Simulazione e confronto</title>
+<title
+data-it="Mutuo B&B – Simulatore e confronto banche Italia"
+data-en="B&B Mortgage – Compare Italian banks and simulate ROI impact">
+Mutuo B&B – Simulatore
+</title>
+
+<meta name="description"
+data-it="Confronta mutui reali per investimenti B&B. Calcola costi, impatto sul ROI e trova le migliori banche in Italia."
+data-en="Compare real mortgages for B&B investments. Calculate costs, ROI impact and find the best banks in Italy.">
 
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/img/favicon.png">
@@ -18,17 +26,17 @@ padding:120px 20px 100px;
 text-align:center;
 color:white;
 background:
-linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.8)),
+linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
 url("/img/milan-bg.jpg") center/cover;
 }
 
 .hero-mutui h1{
-font-size:46px;
+font-size:42px;
 font-weight:800;
 }
 
 .hero-mutui p{
-color:#e2e8f0;
+color:#cbd5f5;
 margin-top:10px;
 }
 
@@ -40,7 +48,6 @@ border-radius:20px;
 box-shadow:0 20px 60px rgba(0,0,0,0.08);
 }
 
-/* ===== TOOL ===== */
 .tool-card{
 margin-top:-60px;
 }
@@ -63,11 +70,31 @@ border-radius:10px;
 font-weight:600;
 cursor:pointer;
 border:none;
+width:100%;
 }
 
-/* ===== LEAD BOX ===== */
+/* ===== RESULT ===== */
+.mortgage-result{
+background:white;
+padding:20px;
+border-radius:14px;
+margin-top:15px;
+border:1px solid #e2e8f0;
+transition:0.3s;
+}
+
+.mortgage-result:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.best{
+border:2px solid #10b981;
+}
+
+/* ===== LEAD ===== */
 .lead-box{
-margin-top:50px;
+margin-top:60px;
 padding:50px;
 border-radius:20px;
 background:linear-gradient(135deg,#0f172a,#020617);
@@ -79,19 +106,6 @@ text-align:center;
 margin-top:15px;
 color:#10b981;
 display:none;
-}
-
-/* ===== RESULT ===== */
-.mortgage-result{
-background:white;
-padding:20px;
-border-radius:14px;
-margin-top:15px;
-border:1px solid #e2e8f0;
-}
-
-.best{
-border:2px solid #10b981;
 }
 
 </style>
@@ -106,8 +120,17 @@ border:2px solid #10b981;
 
 <!-- HERO -->
 <section class="hero-mutui">
-<h1>Mutuo B&B: conviene davvero?</h1>
-<p>Il 68% degli investimenti con mutuo è in perdita</p>
+<h1
+data-it="Mutuo B&B: quanto incide davvero?"
+data-en="Mortgage impact on your B&B investment">
+Mutuo B&B
+</h1>
+
+<p
+data-it="Il mutuo può distruggere o moltiplicare il tuo ROI"
+data-en="A mortgage can destroy or multiply your ROI">
+Analizza prima di investire
+</p>
 </section>
 
 <div class="container">
@@ -115,15 +138,23 @@ border:2px solid #10b981;
 <!-- TOOL -->
 <div class="card tool-card">
 
-<h3>🏦 Comparatore Mutui</h3>
+<h3
+data-it="🏦 Comparatore mutui reali"
+data-en="🏦 Real mortgage comparison">
+Comparatore mutui
+</h3>
 
-<input id="mortgageAmount" placeholder="Importo (€)">
-<input id="mortgageYears" value="20">
-<input id="rateA" value="3.2">
-<input id="rateB" value="3.6">
-<input id="rateC" value="4.1">
+<input id="mortgageAmount"
+data-it-placeholder="Importo mutuo (€)"
+data-en-placeholder="Loan amount (€)">
 
-<button onclick="runMortgageComparison()" class="btn-main">
+<input id="mortgageYears" value="20"
+data-it-placeholder="Durata (anni)"
+data-en-placeholder="Years">
+
+<button onclick="runMortgageComparison()" class="btn-main"
+data-it="Confronta mutui"
+data-en="Compare mortgages">
 Confronta mutui
 </button>
 
@@ -132,23 +163,38 @@ Confronta mutui
 <!-- RESULTS -->
 <div id="mortgage-results"></div>
 
-<!-- 🔥 LEAD (CORE BUSINESS) -->
+<!-- LEAD -->
 <div class="lead-box">
 
-<h2>Ricevi le migliori offerte mutuo</h2>
-<p style="color:#94a3b8;margin-bottom:20px;">
-Ti mettiamo in contatto con i migliori broker e banche
+<h2
+data-it="Ricevi le migliori offerte mutuo"
+data-en="Get the best mortgage offers">
+Offerte mutuo
+</h2>
+
+<p
+data-it="Broker e banche ti contatteranno con offerte reali"
+data-en="Top brokers and banks will contact you with real offers"
+style="color:#94a3b8;margin-bottom:20px;">
+Lead
 </p>
 
-<input id="leadEmail" placeholder="Inserisci email">
-<input id="leadPhone" placeholder="Telefono (opzionale)">
+<input id="leadEmail"
+data-it-placeholder="Inserisci email"
+data-en-placeholder="Enter email">
 
-<button onclick="saveLead()" class="btn-main">
-Ricevi offerte personalizzate
+<input id="leadPhone"
+data-it-placeholder="Telefono (opzionale)"
+data-en-placeholder="Phone (optional)">
+
+<button onclick="saveLead()" class="btn-main"
+data-it="Ricevi offerte personalizzate"
+data-en="Get personalized offers">
+Ricevi offerte
 </button>
 
 <div id="successMsg" class="success-msg">
-✅ Richiesta inviata! Verrai contattato entro 24h
+✅ OK
 </div>
 
 </div>
@@ -163,46 +209,27 @@ Ricevi offerte personalizzate
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js" defer></script>
 
-<!-- FIREBASE -->
 <script type="module">
 
 import { saveLeadMutui } from "/js/leads.js";
 
 window.saveLead = async function(){
 
-  const email = document.getElementById("leadEmail").value.trim();
-  const phone = document.getElementById("leadPhone").value.trim();
-  const amount = document.getElementById("mortgageAmount").value;
-  const years = document.getElementById("mortgageYears").value;
+const email = leadEmail.value.trim();
 
-  // VALIDAZIONE
-  if(!email || !email.includes("@")){
-    alert("Inserisci email valida");
-    return;
-  }
+if(!email.includes("@")){
+alert(window.currentLang==="en" ? "Enter valid email" : "Inserisci email valida");
+return;
+}
 
-  // BLOCCO DOPPIO CLICK
-  const btn = document.querySelector(".lead-box button");
-  btn.disabled = true;
-  btn.innerText = "Invio...";
+await saveLeadMutui({
+email,
+phone: leadPhone.value,
+amount: mortgageAmount.value,
+years: mortgageYears.value
+});
 
-  await saveLeadMutui({
-    email,
-    phone,
-    amount,
-    years,
-    page: "mutui",
-    city: "auto" // futuro routing
-  });
-
-  document.getElementById("successMsg").style.display="block";
-
-  // reset
-  document.getElementById("leadEmail").value="";
-  document.getElementById("leadPhone").value="";
-
-  btn.disabled = false;
-  btn.innerText = "Ricevi offerte personalizzate";
+successMsg.style.display="block";
 
 };
 
@@ -210,31 +237,38 @@ window.saveLead = async function(){
 
 <script>
 
-/* ===== COMPARISON ===== */
 function runMortgageComparison(){
 
-const amount = parseFloat(document.getElementById("mortgageAmount").value || 100000);
+const amount = parseFloat(mortgageAmount.value || 100000);
 
-const rates = [
-{name:"Banca A", rate:parseFloat(rateA.value)},
-{name:"Banca B", rate:parseFloat(rateB.value)},
-{name:"Banca C", rate:parseFloat(rateC.value)}
+const banks = [
+{name:"Intesa Sanpaolo", rate:3.1},
+{name:"UniCredit", rate:3.4},
+{name:"BNL BNP Paribas", rate:3.6},
+{name:"Banco BPM", rate:3.8},
+{name:"Credit Agricole", rate:4.0}
 ];
 
-let html = "";
+banks.sort((a,b)=>a.rate-b.rate);
 
-rates.forEach((bank,i)=>{
+let html="";
+
+banks.forEach((bank,i)=>{
 
 const yearly = amount * (bank.rate/100);
 
-html += `
-<div class="mortgage-result ${i===0 ? "best":""}">
+html+=`
+<div class="mortgage-result ${i===0?"best":""}">
 <h3>${bank.name}</h3>
-<p>Tasso: ${bank.rate}%</p>
-<p>Costo annuo: €${yearly.toFixed(0)}</p>
+
+<p>${window.currentLang==="en"?"Rate":"Tasso"}: ${bank.rate}%</p>
+
+<p>${window.currentLang==="en"?"Yearly cost":"Costo annuo"}: €${yearly.toFixed(0)}</p>
+
 <button onclick="selectMortgage(${bank.rate})" class="btn-main">
-Usa questo mutuo
+${window.currentLang==="en"?"Use this mortgage":"Usa questo mutuo"}
 </button>
+
 </div>
 `;
 
@@ -246,7 +280,7 @@ document.getElementById("mortgage-results").innerHTML = html;
 
 function selectMortgage(rate){
 localStorage.setItem("mortgage_rate", rate);
-window.location.href = "/tool/";
+window.location.href="/tool/";
 }
 
 </script>
