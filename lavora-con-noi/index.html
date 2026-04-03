@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lavora con noi – RendimentoBB</title>
+
+<link rel="stylesheet" href="/css/style.css">
+
+<style>
+
+.hero{
+padding:120px 20px;
+text-align:center;
+color:white;
+background:linear-gradient(135deg,#020617,#0f172a);
+}
+
+.container{
+max-width:900px;
+margin:0 auto;
+padding:40px 20px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 40px rgba(0,0,0,0.08);
+margin-top:30px;
+}
+
+input, textarea{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:1px solid #e2e8f0;
+margin-top:10px;
+}
+
+button{
+margin-top:15px;
+padding:14px;
+background:#10b981;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+.success{
+color:#10b981;
+margin-top:10px;
+display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="global-header"></div>
+
+<section class="hero">
+<h1>🚀 Lavora con noi</h1>
+<p>Costruiamo il futuro degli investimenti B&B</p>
+</section>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Candidati</h2>
+
+<input id="name" placeholder="Nome">
+<input id="email" placeholder="Email">
+<textarea id="role" placeholder="Ruolo / esperienza"></textarea>
+
+<button onclick="saveWork()">Invia candidatura</button>
+
+<div id="success" class="success">
+✅ Candidatura inviata
+</div>
+
+</div>
+
+</div>
+
+<div id="global-footer"></div>
+
+<script type="module">
+
+import { saveWorkLead } from "/js/leads.js";
+
+window.saveWork = async function(){
+
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const role = document.getElementById("role").value;
+
+if(!email.includes("@")){
+alert("Email non valida");
+return;
+}
+
+await saveWorkLead({
+name,
+email,
+role
+});
+
+document.getElementById("success").style.display="block";
+
+};
+
+</script>
+
+</body>
+</html>
