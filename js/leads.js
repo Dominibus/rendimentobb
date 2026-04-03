@@ -59,24 +59,54 @@ export async function saveLeadImmobili(data){
     console.error("❌ Errore lead immobili:", err);
   }
 
+}
+
+// ===============================
+// PARTNER LEAD
+// ===============================
+
 export async function savePartnerLead(data){
 
-  await addDoc(collection(db,"leads_partner"),{
-    ...data,
-    created: serverTimestamp(),
-    status:"new"
-  });
+  try{
+
+    await addDoc(collection(db,"leads_partner"),{
+      name: data.name || "",
+      email: data.email || "",
+      message: data.message || "",
+      created: serverTimestamp(),
+      status: "new",
+      source: "partner"
+    });
+
+    console.log("✅ Lead PARTNER salvato");
+
+  }catch(err){
+    console.error("❌ Errore lead partner:", err);
+  }
 
 }
+
+// ===============================
+// WORK LEAD
+// ===============================
 
 export async function saveWorkLead(data){
 
-  await addDoc(collection(db,"leads_work"),{
-    ...data,
-    created: serverTimestamp(),
-    status:"new"
-  });
+  try{
+
+    await addDoc(collection(db,"leads_work"),{
+      name: data.name || "",
+      email: data.email || "",
+      role: data.role || "",
+      created: serverTimestamp(),
+      status: "new",
+      source: "work"
+    });
+
+    console.log("✅ Lead WORK salvato");
+
+  }catch(err){
+    console.error("❌ Errore lead work:", err);
+  }
 
 }
-  
-} 
