@@ -3084,3 +3084,28 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
+// =====================================
+// 🚀 FIX OVERLAY FANTASMA (CRITICO)
+// =====================================
+
+function removeGhostOverlays(){
+
+  document.querySelectorAll(
+    ".results-overlay, .locked-overlay, .home-blur-overlay"
+  ).forEach(el => {
+
+    // se è vuoto → rimuovi
+    if(!el.innerHTML.trim()){
+      el.remove();
+    }
+
+  });
+
+}
+
+// 🔥 esegui SEMPRE
+document.addEventListener("DOMContentLoaded", removeGhostOverlays);
+
+// 🔥 quando firebase/auth è pronto
+document.addEventListener("rb_auth_ready", removeGhostOverlays);
