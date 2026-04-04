@@ -1911,7 +1911,12 @@ if(isProUser){
     );
 
     // ================= PRO UNLOCK =================
-
+// 🔥 BLOCCO DI SICUREZZA (METTILO QUI)
+if(!window.firebaseReady || !window.userReady){
+  console.log("⏳ Aspetto Firebase/User...");
+  return;
+}
+    
     if(
   window.currentPlan === "pro" ||
   window.currentPlan === "investor" ||
