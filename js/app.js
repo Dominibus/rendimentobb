@@ -1511,6 +1511,17 @@ const result = calculateROI({
   loanYears
 });
 
+// 🔒 VALIDAZIONE CRITICA RESULT
+if(!result || typeof result !== "object"){
+  console.warn("⛔ risultato non valido");
+  return;
+}    
+
+// 🔥 FIX CRITICO VARIABILI GLOBALI
+const roi   = Number(result?.roi || 0);
+const gross = Number(result?.revenue || 0);
+const net   = Number(result?.netAfterMortgage || result?.profit || 0);    
+
 // ================= VALIDAZIONE =================
 if(!result){
   console.warn("⛔ result null");
@@ -1730,7 +1741,7 @@ if(roiMain){
 
 // revenue forecast
 if(typeof renderRevenueForecast === "function"){
-  renderRevenueForecast(gross);
+  renderRevenueForecast(result.revenue);
 }
 
 // occupancy sensitivity
