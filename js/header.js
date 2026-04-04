@@ -199,15 +199,19 @@ if(isMobile){
 
 }else{
 
-  if(isMobile){
+if(isMobile){
 
-    userArea.innerHTML = `
-      <a href="/login/" class="login-mobile-btn">
-        Accedi
+  userArea.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px">
+
+      <a href="/login/" class="btn btn-primary login-mobile-btn">
+        🔑
       </a>
-    `;
 
-  }else{
+    </div>
+  `;
+
+}else{
 
     userArea.innerHTML = `
     <div style="text-align:right">
