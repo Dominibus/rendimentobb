@@ -335,155 +335,139 @@ function updateUserUI(user) {
 
 
 // ===============================
-// AUTH OBSSERVER (FIX DEFINITIVO)
+// AUTH OBSERVER (FIX DEFINITIVO STABILE)
 // ===============================
 
 onAuthStateChanged(auth, async (user) => {
 
   window.currentUser = user;
   window.firebaseReady = false;
-
-  // 🔥 RESET SICURO
   window.userReady = false;
+
+  // ===============================
+  // 🔐 UTENTE LOGGATO
+  // ===============================
 
   if (user) {
 
     console.log("🔥 Auth OK:", user.uid);
 
-    // 🔥 QUI → UTENTE PRONTO
     window.userReady = true;
 
+    try {
+
+      // ===============================
+      // 🔥 AUTO CREATE USER
+      // ===============================
+
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+
+      if (!snap.exists()) {
+
+        console.log("🔥 Creo utente Firestore automatico");
+
+        await setDoc(userRef, {
+          email: user.email,
+          plan: user.email === "rendimentobb@gmail.com" ? "pro" : "free",
+          role: user.email === "rendimentobb@gmail.com" ? "admin" : "user",
+          createdAt: new Date()
+        });
+
       } else {
+        console.log("✔ Utente già presente in Firestore");
+      }
+
+      // ===============================
+      // 🔥 DATI UTENTE
+      // ===============================
+
+      const freshSnap = await getDoc(userRef);
+      const userData = freshSnap.data();
+
+      window.isAdmin = function(){
+        return userData?.role === "admin";
+      };
+
+      window.getUserData = function(){
+        return {
+          user: window.currentUser,
+          plan: window.currentPlan,
+          isAdmin: window.isAdmin()
+        };
+      };
+
+      // ===============================
+      // 🔥 CARICA PIANO
+      // ===============================
+
+      await loadUserPlan(user.uid);
+
+      // ===============================
+      // 🔥 FIREBASE READY
+      // ===============================
+
+      window.firebaseReady = true;
+
+      console.log("✅ Firebase READY con piano:", window.currentPlan);
+
+      // ===============================
+      // 🔥 UPDATE UI
+      // ===============================
+
+      updateUserUI(user);
+
+      // ===============================
+      // 🔥 PRO UNLOCK
+      // ===============================
+
+      if(!window.firebaseReady || !window.userReady){
+        console.log("⏳ Aspetto Firebase/User...");
+        return;
+      }
+
+      if(window.isPro?.()){
+
+        console.log("💰 Utente PRO → sblocco totale UI");
+
+        document.body.classList.add("pro-user");
+
+        if(typeof unlockProUI === "function"){
+          unlockProUI();
+        }
+
+      } else {
+
+        console.log("👀 Utente FREE → attivo funnel");
+
+        setTimeout(()=>{
+          console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
+        },1500);
+
+      }
+
+    } catch(err) {
+
+      console.error("❌ Errore init utente:", err);
+
+      window.currentPlan = "free";
+      window.firebaseReady = true;
+
+    }
+
+  } 
+  
+  // ===============================
+  // 🔴 UTENTE NON LOGGATO
+  // ===============================
+
+  else {
 
     console.log("👤 Utente non loggato");
 
     window.currentUser = null;
-
-    // 🔥 UTENTE NON PRONTO
-    window.userReady = false;
-
-  }
-
-   // ===============================
-// 🔥 AUTO CREATE USER (FIX CRITICO)
-// ===============================
-
-const userRef = doc(db, "users", user.uid);
-const snap = await getDoc(userRef);
-
-// 👉 se NON esiste → lo creo
-if (!snap.exists()) {
-
-  console.log("🔥 Creo utente Firestore automatico");
-
-  await setDoc(userRef, {
-    email: user.email,
-    plan: user.email === "rendimentobb@gmail.com" ? "pro" : "free",
-    role: user.email === "rendimentobb@gmail.com" ? "admin" : "user",
-    createdAt: new Date()
-  });
-
-} else {
-  console.log("✔ Utente già presente in Firestore");
-}
-
-// ===============================
-// 🔥 RICARICO DATI (FIX CRITICO)
-// ===============================
-
-const freshSnap = await getDoc(userRef);
-const userData = freshSnap.data();
-
-// ===============================
-// 🔥 ADMIN CHECK (CORRETTO)
-// ===============================
-
-window.isAdmin = function(){
-  return userData?.role === "admin";
-};
-
-// ===============================
-// 🔥 GLOBAL USER DATA (UTILISSIMO)
-// ===============================
-
-window.getUserData = function(){
-  return {
-    user: window.currentUser,
-    plan: window.currentPlan,
-    isAdmin: window.isAdmin()
-  };
-};
-
-    // ===============================
-    // 🔥 CARICA PIANO
-    // ===============================
-
-    await loadUserPlan(user.uid);
-
-    // ===============================
-    // 🔥 FIREBASE READY
-    // ===============================
-
-    window.firebaseReady = true;
-
-    console.log("✅ Firebase READY con piano:", window.currentPlan);
-
-    // ===============================
-    // 🔥 ADMIN CHECK
-    // ===============================
-
-    window.isAdmin = function(){
-  return userData?.role === "admin";
-};
-
-    // ===============================
-    // 🔥 UPDATE UI
-    // ===============================
-
-    updateUserUI(user);
-
-// ===============================
-// 🔥 PRO UNLOCK (FIX DEFINITIVO VERO)
-// ===============================
-
-if(!window.firebaseReady){
-  console.log("⏳ Firebase non pronto → skip UI logic");
-  return;
-}
-
-// 🔥 aspetta utente
-if(!window.currentUser){
-  console.log("⏳ Utente non ancora disponibile → skip");
-  return;
-}
-
-// 🔥 PRO CHECK UNICO
-if(window.isPro?.()){
-
-  console.log("💰 Utente PRO → sblocco totale UI");
-
-  document.body.classList.add("pro-user");
-
-  if(typeof unlockProUI === "function"){
-    unlockProUI();
-  }
-
-} else {
-
-  console.log("👀 Utente FREE → attivo funnel");
-
-  setTimeout(()=>{
-    console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
-  },1500);
-
-}
-    // ===============================
-    // 🔴 UTENTE NON LOGGATO
-    // ===============================
-
-    console.log("👤 Utente non loggato");
-
     window.currentPlan = "free";
+    window.userReady = false;
     window.firebaseReady = true;
 
     updateUserUI(null);
@@ -497,7 +481,7 @@ if(window.isPro?.()){
   }
 
   // ===============================
-  // 🔥 EVENTO GLOBALE (NON TOCCARE)
+  // 🔥 EVENTO GLOBALE
   // ===============================
 
   document.dispatchEvent(
