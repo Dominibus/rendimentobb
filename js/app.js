@@ -3454,3 +3454,133 @@ document.addEventListener("rb_plan_loaded", ()=>{
   }
 
 });
+
+// ===============================================
+// 🚀 FINAL MASTER FIX – PLAN + UI SYNC (NO BUG)
+// ===============================================
+
+(function(){
+
+  console.log("🚀 FINAL FIX INIT");
+
+  // ================= SAFE PLAN =================
+
+  function forceCorrectPlan(){
+
+    if(!window.firebaseReady){
+      console.warn("⏳ Firebase non pronto → skip fix piano");
+      return;
+    }
+
+    if(!window.currentPlan){
+      console.warn("⚠️ currentPlan mancante");
+      return;
+    }
+
+    // 🔥 BLOCCA DOWNGRADE
+    if(window.__PLAN_LOCKED__){
+      return;
+    }
+
+    if(["pro","investor","pro_yearly"].includes(window.currentPlan)){
+      window.__PLAN_LOCKED__ = true;
+      console.log("🔒 Piano bloccato:", window.currentPlan);
+    }
+
+  }
+
+  // ================= SAFE IS PRO =================
+
+  window.isPro = function(){
+
+    const plan = window.currentPlan;
+
+    if(!plan) return false;
+
+    return ["pro","investor","pro_yearly"].includes(plan);
+
+  };
+
+  // ================= FORCE UI UNLOCK =================
+
+  function forceUnlockUI(){
+
+    if(!window.isPro()) return;
+
+    console.log("🔓 FORCE UI UNLOCK");
+
+    document.body.classList.add("pro-user");
+
+    document.querySelectorAll(`
+      .pro-blur,
+      .locked,
+      .locked-content,
+      .premium-lock,
+      .upgrade-overlay,
+      .results-overlay,
+      .home-blur-overlay,
+      [data-paywall]
+    `).forEach(el=>{
+      el.remove();
+    });
+
+    document.querySelectorAll("*").forEach(el=>{
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+    });
+
+  }
+
+  // ================= FIX FUNNEL =================
+
+  function blockFreeFunnelIfPro(){
+
+    if(!window.isPro()) return;
+
+    console.log("🚫 Blocco funnel FREE");
+
+    window.showUpgradePopup = function(){};
+    window.showUpgradeModal = function(){};
+    window.triggerUpgradeIfNeeded = function(){};
+
+  }
+
+  // ================= AUTO RECALC =================
+
+  function safeRecalculate(){
+
+    if(typeof window.calculate === "function"){
+      console.log("🔁 Recalculate for sync");
+      window.calculate(true);
+    }
+
+  }
+
+  // ================= MASTER SYNC =================
+
+  function runFullFix(){
+
+    forceCorrectPlan();
+    blockFreeFunnelIfPro();
+    forceUnlockUI();
+    safeRecalculate();
+
+  }
+
+  // ================= EVENTS =================
+
+  document.addEventListener("rb_auth_ready", runFullFix);
+  document.addEventListener("rb_plan_loaded", runFullFix);
+
+  // fallback (caso eventi non partono)
+  setTimeout(runFullFix, 1200);
+
+  // watchdog (anti bug random)
+  setInterval(()=>{
+    if(window.isPro()){
+      forceUnlockUI();
+    }
+  }, 1500);
+
+})();
