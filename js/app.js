@@ -3510,29 +3510,33 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
   // ================= SAFE PLAN =================
 
-  function forceCorrectPlan(){
+function forceCorrectPlan(){
 
-    if(!window.firebaseReady){
-      console.warn("⏳ Firebase non pronto → skip fix piano");
-      return;
+  // 🔥 BLOCCO DURO
+  if(!window.firebaseReady || !window.userReady){
+    console.log("⏳ Firebase/User non pronti → skip fix piano");
+    return;
+  }
+
+  console.log("🔥 CHECK PLAN REALE:", window.currentPlan);
+
+  if(window.isPro?.()){
+
+    console.log("💰 FIX → UTENTE PRO CORRETTO");
+
+    document.body.classList.add("pro-user");
+
+    if(typeof unlockProUI === "function"){
+      unlockProUI();
     }
 
-    if(!window.currentPlan){
-      console.warn("⚠️ currentPlan mancante");
-      return;
-    }
+  } else {
 
-    // 🔥 BLOCCA DOWNGRADE
-    if(window.__PLAN_LOCKED__){
-      return;
-    }
-
-    if(["pro","investor","pro_yearly"].includes(window.currentPlan)){
-      window.__PLAN_LOCKED__ = true;
-      console.log("🔒 Piano bloccato:", window.currentPlan);
-    }
+    console.log("👀 FIX → UTENTE FREE");
 
   }
+
+}
 
   // ================= SAFE IS PRO =================
 
