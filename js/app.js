@@ -1473,7 +1473,7 @@ const result = calculateROI({
   loanYears
 });
 
-// ================= EMAIL AUTO TRIGGER (FIXED) =================
+// ================= EMAIL AUTO TRIGGER (FIXED CLEAN) =================
 
 if(!window.emailSent && result && window.userHasClicked){
 
@@ -1492,24 +1492,6 @@ if(!window.emailSent && result && window.userHasClicked){
   .then(res => res.json())
   .then(() => console.log("📩 Email inviata"))
   .catch(err => console.error("❌ Email error", err));
-
-}
-
-window.emailSent = true;
-
-fetch("/api/send-lead", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    email: "rendimentobb@gmail.com",
-    name: "Simulazione utente"
-  })
-})
-.then(res => res.json())
-.then(data => console.log("📩 Email inviata"))
-.catch(err => console.error("❌ Email error", err));
 
 }
 
