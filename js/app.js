@@ -1565,6 +1565,28 @@ if(window.leadSaved){
 
     });
 
+  // 🔥 INVIO AUTOMATICO PARTNER (SOLO HOT)
+
+if(leadScore === "hot"){
+
+  fetch("/api/send-lead-partner", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: userEmail,
+      city: window.currentCity,
+      roi: result.roi,
+      score: leadScore,
+      type: leadType
+    })
+  })
+  .then(()=> console.log("💰 Lead inviato ai partner"))
+  .catch(err => console.error("❌ Partner error:", err));
+
+}
+
   window.leadSaved = true;
 
     console.log("🔥 Lead salvato:", leadScore);
