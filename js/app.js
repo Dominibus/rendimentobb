@@ -1495,21 +1495,21 @@ if(!window.emailSent && result && window.userHasClicked){
 
 }
 
-  window.emailSent = true;
+window.emailSent = true;
 
-  fetch("/api/send-lead", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: "rendimentobb@gmail.com", // 👉 poi dinamico
-      name: "Simulazione utente"
-    })
+fetch("/api/send-lead", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email: "rendimentobb@gmail.com",
+    name: "Simulazione utente"
   })
-  .then(res => res.json())
-  .then(data => console.log("📩 Email inviata"))
-  .catch(err => console.error("❌ Email error", err));
+})
+.then(res => res.json())
+.then(data => console.log("📩 Email inviata"))
+.catch(err => console.error("❌ Email error", err));
 
 }
 
