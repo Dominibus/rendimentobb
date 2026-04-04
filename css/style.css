@@ -7792,3 +7792,33 @@ overflow:hidden;
 }
 
 }
+
+/* 🔥 FIX MENU MOBILE DEFINITIVO */
+.mobile-menu{
+  position:fixed !important;
+  top:64px !important;
+  left:0 !important;
+  width:100% !important;
+
+  display:flex !important;
+  flex-direction:column !important;
+
+  background:#ffffff !important;
+  padding:20px !important;
+
+  transform:translateY(-120%);
+  transition:0.3s ease;
+
+  z-index:999999 !important;
+  pointer-events:auto !important;
+}
+
+/* APERTURA */
+.mobile-menu.active{
+  transform:translateY(0);
+}
+
+/* SICUREZZA HEADER */
+.portal-header{
+  z-index:100000 !important;
+}
