@@ -6858,8 +6858,16 @@ padding:0 16px;
 }
 
 /* ===== LOGO ===== */
+/* DESKTOP */
 .logo-img{
-height:32px;
+  height:42px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .logo-img{
+    height:26px;
+  }
 }
 
 /* ===== NAV DESKTOP ===== */
@@ -6933,10 +6941,14 @@ cursor:pointer;
 
 @media(max-width:768px){
 
-/* HEADER */
 .portal-header-inner{
-gap:6px;
+gap:8px;
+justify-content:space-between;
 }
+
+.portal-header-inner > *{
+flex-shrink:0;
+}  
 
 /* NAV OFF */
 .portal-nav{
@@ -6973,6 +6985,8 @@ gap:6px;
 #user-area{
 display:flex;
 align-items:center;
+justify-content:center;
+min-width:40px;
 }
 
 /* LOGIN MOBILE */
