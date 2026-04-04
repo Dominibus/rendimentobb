@@ -23,7 +23,6 @@ hero.classList.remove("rome","naples","milan","florence");
 let finalCity = city;
 
 if(!finalCity){
-
   const path = window.location.pathname.toLowerCase();
 
   if(path.includes("napoli")) finalCity = "naples";
@@ -43,62 +42,60 @@ hero.classList.add(finalCity);
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const isAdmin = window.isAdmin?.();
-
 const header = `
 <header class="portal-header">
 
-<div class="container portal-header-inner">
+<div class="portal-header-inner">
 
+<!-- LEFT -->
 <div class="header-left">
-<a href="/" class="logo-link rb-logo">
-<img src="/img/logo-main.png" class="logo-img">
-</a>
+  <a href="/" class="logo-link rb-logo">
+    <img src="/img/logo-main.png" class="logo-img">
+  </a>
 </div>
 
-<nav class="portal-nav">
+<!-- NAV DESKTOP -->
+<nav class="portal-nav desktop-nav">
 
 <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-
-<a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">
-Aprire un B&B
-</a>
-
+<a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
 <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
-
 <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
-
 <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
-
-<a href="/dashboard-leads/" id="nav-leads" style="display:none">
-Leads
-</a>
-
-<a href="/dashboard/" id="nav-dashboard"
-data-it="Dashboard" data-en="Dashboard">
-Dashboard
-</a>
-
-<a href="/contact.html" data-it="Contatti" data-en="Contact">
-Contatti
-</a>
+<a href="/dashboard/" data-it="Dashboard" data-en="Dashboard">Dashboard</a>
+<a href="/contact.html" data-it="Contatti" data-en="Contact">Contatti</a>
 
 </nav>
 
-<div class="right-controls">
+<!-- RIGHT -->
+<div class="header-right">
 
 <div id="user-area"></div>
 
 <div class="lang-switch">
-<button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
-<button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+<button class="lang-btn" onclick="setLang('it')">IT</button>
+<button class="lang-btn" onclick="setLang('en')">EN</button>
 </div>
 
-<button class="hamburger">☰</button>
+<button class="hamburger" id="hamburger">☰</button>
 
 </div>
 
 </div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+<a href="/tool/">Simulatore</a>
+<a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+<a href="/mutui/">Mutui</a>
+<a href="/immobili/">Immobili</a>
+<a href="/academy/">Academy</a>
+<a href="/dashboard/">Dashboard</a>
+<a href="/contact.html">Contatti</a>
+
+</div>
+
 </header>
 `;
 
@@ -110,20 +107,33 @@ if(container){
 /* HERO */
 window.applyCityBackground();
 
-/* MENU */
-const hamburger = document.querySelector(".hamburger");
-const nav = document.querySelector(".portal-nav");
+/* ===================== */
+/* MENU MOBILE FIX VERO */
+/* ===================== */
 
-if(hamburger && nav){
-  hamburger.addEventListener("click", ()=>{
-    nav.classList.toggle("open");
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobileMenu");
+
+if(hamburger && mobileMenu){
+
+  hamburger.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    mobileMenu.classList.toggle("active");
   });
+
+  // chiusura click fuori
+  document.addEventListener("click", (e)=>{
+    if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
+      mobileMenu.classList.remove("active");
+    }
+  });
+
 }
 
 /* ACTIVE LINK */
 const currentPath = window.location.pathname;
 
-document.querySelectorAll(".portal-nav a").forEach(link=>{
+document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
   const href = link.getAttribute("href");
   if(currentPath.startsWith(href)){
     link.classList.add("active");
@@ -153,90 +163,29 @@ const isMobile = window.innerWidth < 768;
 
 if(user){
 
-if(isMobile){
-
-  userArea.innerHTML = `
-  <div style="display:flex;align-items:center;gap:6px">
-
-    <a href="/dashboard/" class="btn btn-secondary" style="
-      padding:6px 10px;
-      font-size:12px;
-      border-radius:999px;
-    ">
-      📊
-    </a>
-
-    <button onclick="logout()" class="btn btn-secondary" style="
-      padding:6px 10px;
-      font-size:12px;
-      border-radius:999px;
-    ">
-      ⎋
-    </button>
-
-  </div>
-  `;
-}else{
-
+  if(isMobile){
     userArea.innerHTML = `
-    <div style="text-align:right">
-
-      <div style="font-size:12px;color:#64748b;">Account</div>
-
-      <div style="font-weight:600">${user.email}</div>
-
-      <div style="margin-top:6px;display:flex;gap:8px;justify-content:flex-end">
-
-        <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
-
-        <button onclick="logout()" class="btn btn-secondary">Esci</button>
-
-      </div>
-
-    </div>
+      <a href="/dashboard/" class="btn btn-secondary">📊</a>
+    `;
+  }else{
+    userArea.innerHTML = `
+      <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
     `;
   }
 
 }else{
 
-if(isMobile){
-
-  userArea.innerHTML = `
-    <div style="display:flex;align-items:center;gap:6px">
-
-      <a href="/login/" class="btn btn-primary login-mobile-btn">
-        🔑
-      </a>
-
-    </div>
-  `;
-
-}else{
-
+  if(isMobile){
     userArea.innerHTML = `
-    <div style="text-align:right">
-
-      <div style="font-size:12px;color:#64748b;">Area riservata</div>
-
-      <a href="/login/" class="btn btn-secondary">Accedi</a>
-
-    </div>
+      <a href="/login/" class="login-btn">Accedi</a>
+    `;
+  }else{
+    userArea.innerHTML = `
+      <a href="/login/" class="login-btn">Accedi</a>
     `;
   }
+
 }
-
-const leadsLink = document.getElementById("nav-leads");
-
-if(leadsLink && user && user.email === "rendimentobb@gmail.com"){
-  leadsLink.style.display = "inline-block";
-}  
-
-/* TRADUZIONE */
-setTimeout(()=>{
-  if(typeof applyTranslations === "function"){
-    applyTranslations();
-  }
-},50);
 
 });
 
