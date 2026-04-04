@@ -7712,18 +7712,22 @@ display:none;
 
 
 /* =========================================
-🔥 HEADER MOBILE STABILE (VERO FIX)
+🔥 HEADER MOBILE DEFINITIVO STABILE
 ========================================= */
 @media (max-width:768px){
 
+/* ===== HEADER ===== */
 .portal-header-inner{
 display:flex;
 align-items:center;
 justify-content:space-between;
 padding:0 10px;
+gap:6px;
+width:100%;
 }
 
-/* LOGO */
+
+/* ===== LOGO ===== */
 .header-left{
 flex:0 0 auto;
 }
@@ -7732,48 +7736,59 @@ flex:0 0 auto;
 height:32px;
 }
 
-/* MENU */
+
+/* ===== MENU ===== */
 .hamburger{
 display:block;
 flex:0 0 auto;
 font-size:20px;
-margin-left:auto;
-margin-right:auto;
+cursor:pointer;
 }
 
-/* RIGHT */
+
+/* ===== RIGHT AREA ===== */
 .header-right{
 display:flex;
 align-items:center;
 gap:6px;
 flex:0 0 auto;
+flex-wrap:nowrap;
 }
 
-/* LOGIN */
+
+/* ===== LOGIN / USER ===== */
 #user-area{
-flex:0 0 auto;
+flex:0 1 auto;
+max-width:70px;
+overflow:hidden;
+white-space:nowrap;
 }
 
-/* LANG */
+
+/* ===== LANGUAGE ===== */
 .lang-switch{
 display:flex !important;
 gap:4px;
+flex:0 0 auto;
 }
 
 .lang-btn{
 padding:4px 6px;
 font-size:11px;
 min-width:28px;
+text-align:center;
 }
 
-/* NASCONDI NAV DESKTOP */
+
+/* ===== NASCONDI NAV DESKTOP ===== */
 .desktop-nav{
 display:none !important;
 }
 
+
+/* ===== SICUREZZA ===== */
+.portal-header{
+overflow:hidden;
 }
 
-/* hamburger SOLO mobile */
-.hamburger{
-display:none;
 }
