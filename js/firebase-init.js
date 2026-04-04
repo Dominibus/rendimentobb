@@ -165,7 +165,7 @@ async function logoutUser() {
 
 
 // ===============================
-// CARICA PIANO UTENTE
+// CARICA PIANO UTENTE (FIX DEFINITIVO)
 // ===============================
 
 async function loadUserPlan(uid) {
@@ -177,55 +177,57 @@ async function loadUserPlan(uid) {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-  window.currentPlan = docSnap.data().plan || "free";
-} else {
-  console.warn("⚠️ Documento NON trovato → NON sovrascrivo");
+    // ===============================
+    // 🔥 LET PLAN CORRETTO
+    // ===============================
 
-  // 🔥 NON toccare il piano se già caricato
-  if(!window.currentPlan){
-    
-  }
-}
+    let plan = "free";
 
     if (docSnap.exists()) {
-  window.currentPlan = docSnap.data().plan || "free";
-} else {
-  console.warn("⚠️ Documento NON trovato → NON sovrascrivo");
+      plan = docSnap.data().plan || "free";
+    } else {
+      console.warn("⚠️ Documento NON trovato");
+    }
 
-  if(!window.currentPlan){
-    
-  }
-}
+    // ===============================
+    // 🔥 SET GLOBALE
+    // ===============================
 
-window.currentPlan = currentPlan;
+    window.currentPlan = plan;
 
-console.log("🔥 Piano finale:", currentPlan);
+    console.log("🔥 Piano finale:", window.currentPlan);
 
-// 🔥 SINGLE TRIGGER (NO BUG)
-document.dispatchEvent(
-  new CustomEvent("rb_plan_loaded", {
-    detail: { plan: currentPlan }
-  })
-);
+    // ===============================
+    // 🔥 SBLOCCO UI
+    // ===============================
 
-    // ❌ togli questa riga
-// updateProVisibility();
+    if(window.isPro()){
+      document.body.classList.add("pro-user");
 
-  // 🔥 AUTO SBLOCCO DIRETTO (fallback sicurezza)
-if(
-  currentPlan === "pro" ||
-  currentPlan === "investor" ||
-  currentPlan === "pro_yearly"
-){
-  if(typeof unlockProUI === "function"){
-    unlockProUI();
-  }
-  // 🔥 FORCE UI REFRESH (QUI VA, NON DENTRO isPro)
-  setTimeout(()=>{
-    document.dispatchEvent(new Event("rb_force_ui_refresh"));
-  }, 200);
-}  
+      if(typeof unlockProUI === "function"){
+        unlockProUI();
+      }
+    }
+
+    // ===============================
+    // 🔥 EVENTO GLOBALE
+    // ===============================
+
+    document.dispatchEvent(
+      new CustomEvent("rb_plan_loaded", {
+        detail: { plan: window.currentPlan }
+      })
+    );
+
+    // ===============================
+    // 🔥 REFRESH UI SICURO
+    // ===============================
+
+    if(window.isPro()){
+      setTimeout(()=>{
+        document.dispatchEvent(new Event("rb_force_ui_refresh"));
+      }, 200);
+    }
 
   }catch(err){
 
@@ -291,7 +293,7 @@ function updateUserUI(user) {
       <div style="display:flex; align-items:center; gap:12px;">
         <span style="font-size:13px;">
           👤 ${welcomeText} <strong>${name}</strong>
-          ${currentPlan !== "free"
+          ${window.currentPlan !== "free"
           ? `<span style="color:#00c896; font-weight:bold;"> ${currentPlan.toUpperCase()}</span>`
           : ''}
         </span>
