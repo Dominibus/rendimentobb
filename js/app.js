@@ -1400,6 +1400,25 @@ container.innerHTML = insights.map(i=>{
 
 }
 
+// ================= LEAD ROUTING ENGINE =================
+function getLeadDestination({roi, city}){
+
+  if(roi >= 10){
+    return {
+      type: "immobile",
+      emails: ["rendimentobb@gmail.com"]
+    };
+  }
+
+  if(roi >= 6){
+    return {
+      type: "mutuo",
+      emails: ["rendimentobb@gmail.com"]
+    };
+  }
+
+  return null;
+}
 
 // ================= CORE CALCULATE ENGINE (SAAS READY) =================
 
@@ -1478,6 +1497,7 @@ window.calculate = function(force = false){
 // 🔥 reset anti-duplicazione
 window.emailSent = false;
 
+// ================= RESULT =================
 const result = calculateROI({
   price,
   equity,
@@ -1491,184 +1511,121 @@ const result = calculateROI({
   loanYears
 });
 
-// ================= LEAD ENGINE (SAVE) =================
-
-const userEmail = window.currentUser?.email || null;
-
-// 🎯 calcolo score
-const leadScore = getLeadScore(result);
-
- const leadDestination = getLeadDestination({
-  roi: result.roi,
-  city: window.currentCity
-});   
-
- // ================= SESSION TRACK =================
-
-// inizializza contatore sessione
-window.simulationCount = (window.simulationCount || 0) + 1;
-
-// ================= SCORE BASE =================
-let leadScore = getLeadScore(result);
-
-// 🔥 SUPER LEAD LOGIC
-if(window.simulationCount > 3){
-  leadScore = "hot";
-  console.log("🔥 SUPER LEAD rilevato");
-}   
-
-// 💰 valore stimato lead (puoi usarlo per business)
-const leadValue =
-  leadScore === "hot" ? 100 :
-  leadScore === "warm" ? 40 :
-  0;
-
-// 🎯 tipo lead automatico
-const leadType = "simulator";
-
-try{
-
-  if(userEmail){
-
-    const { addDoc, collection, serverTimestamp } = await import(
-      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
-    );
-
- // 🔒 evita spam nella stessa sessione
-if(window.leadSaved){
-  console.log("⛔ Lead già salvato in questa sessione");
-  return;
-}
-
-// ================= LEAD ROUTING ENGINE =================
-
-function getLeadDestination({roi, city}){
-
-  // 🔥 ROI alto → immobiliare premium
-  if(roi >= 10){
-    return {
-      type: "immobile",
-      emails: [
-        "rendimentobb@gmail.com" // test → poi agenzie
-      ]
-    };
-  }
-
-  // 🏦 ROI medio → banca (mutuo)
-  if(roi >= 6){
-    return {
-      type: "mutuo",
-      emails: [
-        "rendimentobb@gmail.com" // test → poi banche
-      ]
-    };
-  }
-
-  // ❄️ basso → niente
-  return null;
-}
-    
-    await addDoc(collection(db,"leads"),{
-
-      email: userEmail,
-      type: leadType,
-
-      city: window.currentCity || "unknown",
-
-      roi: Number(result.roi || 0),
-      value: leadValue,
-      score: leadScore,
-
-      sessionId: window.sessionId || (window.sessionId = Date.now()),
-      sessionStep: "simulation",
-
-      price: price || 0,
-      revenue: result.revenue || 0,
-
-      sessionId: window.sessionId || (window.sessionId = Date.now())
-
-      createdAt: serverTimestamp(),
-
-      // 🔥 dati extra per futuro AI
-      meta:{
-        occupancy: occupancy,
-        priceNight: priceNight,
-        expenses: expenses
-      }
-
-    });
-
-  // 🔥 INVIO AUTOMATICO PARTNER (SOLO HOT)
-
-if(leadScore === "hot"){
-
-  fetch("/api/send-lead-partner", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: userEmail,
-      city: window.currentCity,
-      roi: result.roi,
-      score: leadScore,
-      type: leadType
-    })
-  })
-  .then(()=> console.log("💰 Lead inviato ai partner"))
-  .catch(err => console.error("❌ Partner error:", err));
-
-}
-
-  // ================= INVIO ROUTING =================
-
-if(leadDestination && leadScore === "hot"){
-
-  fetch("/api/send-lead-partner", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: userEmail,
-      city: window.currentCity,
-      roi: result.roi,
-      score: leadScore,
-      type: leadDestination.type,
-      partners: leadDestination.emails
-    })
-  })
-  .then(()=> console.log("💰 Lead inviato via routing"))
-  .catch(err => console.error("❌ Routing error:", err));
-
-}
-
-  window.leadSaved = true;
-
-    console.log("🔥 Lead salvato:", leadScore);
-
-  }else{
-    console.log("⚠️ Nessuna email → lead non salvato");
-  }
-
-}catch(e){
-  console.error("❌ Lead save error:", e);
-}    
-
 // ================= VALIDAZIONE =================
-
 if(!result){
   console.warn("⛔ result null");
   return;
 }
 
-// ================= CONDIZIONI =================
-
+// ================= USER =================
+const userEmail = window.currentUser?.email || null;
 const isFreeUser = !window.isPro?.();
 const goodROI = Number(result?.roi || 0) > 8;
-const userEmail = window.currentUser?.email;
 
-// ================= EMAIL UTENTE (RETARGETING) =================
+// ================= SESSION TRACK =================
+window.simulationCount = (window.simulationCount || 0) + 1;
+
+// ================= SCORE =================
+let leadScore = getLeadScore(result);
+
+// 🔥 SUPER LEAD
+if(window.simulationCount > 3){
+  leadScore = "hot";
+  console.log("🔥 SUPER LEAD rilevato");
+}
+
+// ================= VALUE =================
+const leadValue =
+  leadScore === "hot" ? 100 :
+  leadScore === "warm" ? 40 :
+  0;
+
+const leadType = "simulator";
+
+// ================= DESTINATION =================
+const leadDestination = getLeadDestination({
+  roi: result.roi,
+  city: window.currentCity
+});
+
+// ================= SAVE LEAD =================
+try{
+
+  if(userEmail){
+
+    // 🔒 anti spam sessione
+    if(window.leadSaved){
+      console.log("⛔ Lead già salvato");
+    }else{
+
+      const { addDoc, collection, serverTimestamp } = await import(
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+      );
+
+      await addDoc(collection(db,"leads"),{
+
+        email: userEmail,
+        type: leadType,
+
+        city: window.currentCity || "unknown",
+
+        roi: Number(result.roi || 0),
+        value: leadValue,
+        score: leadScore,
+
+        sessionId: window.sessionId || (window.sessionId = Date.now()),
+        sessionStep: "simulation",
+
+        price: price || 0,
+        revenue: result.revenue || 0,
+
+        createdAt: serverTimestamp(),
+
+        meta:{
+          occupancy,
+          priceNight,
+          expenses
+        }
+
+      });
+
+      window.leadSaved = true;
+
+      console.log("🔥 Lead salvato:", leadScore);
+    }
+
+    // ================= INVIO PARTNER =================
+
+    if(leadScore === "hot"){
+
+      fetch("/api/send-lead-partner", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          city: window.currentCity,
+          roi: result.roi,
+          score: leadScore,
+          type: leadDestination?.type || leadType,
+          partners: leadDestination?.emails || []
+        })
+      })
+      .then(()=> console.log("💰 Lead inviato ai partner"))
+      .catch(err => console.error("❌ Partner error:", err));
+
+    }
+
+  }else{
+    console.log("⚠️ Nessuna email → skip salvataggio");
+  }
+
+}catch(e){
+  console.error("❌ Lead save error:", e);
+}
+
+// ================= EMAIL UTENTE =================
 
 if(userEmail && isFreeUser && goodROI){
 
@@ -1687,29 +1644,19 @@ if(userEmail && isFreeUser && goodROI){
 
 }
 
-// ================= LEAD ENGINE (MONETIZZAZIONE) =================
+// ================= LEAD MONETIZZAZIONE =================
 
 setTimeout(() => {
 
   try{
 
     if(window.emailSent){
-      console.log("⛔ Lead già inviato");
+      console.log("⛔ già inviato");
       return;
     }
 
-    if(!isFreeUser){
-      console.log("🔓 PRO → skip lead");
-      return;
-    }
-
-    if(!goodROI){
-      console.log("📉 ROI basso → skip lead");
-      return;
-    }
-
-    if(!userEmail){
-      console.log("📭 Nessuna email utente → skip");
+    if(!isFreeUser || !goodROI || !userEmail){
+      console.log("⛔ condizioni non valide");
       return;
     }
 
@@ -1721,7 +1668,7 @@ setTimeout(() => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        type: "simulatore", // 🔥 nuovo tipo
+        type: "simulatore",
         email: userEmail,
         roi: result.roi,
         city: window.currentCity || "unknown",
@@ -1730,9 +1677,7 @@ setTimeout(() => {
       })
     })
     .then(res => res.json())
-    .then(data => {
-      console.log("📩 Lead monetizzabile inviato", data);
-    })
+    .then(data => console.log("📩 Lead monetizzabile inviato", data))
     .catch(err => {
       console.error("❌ Lead error:", err);
       window.emailSent = false;
@@ -1745,24 +1690,20 @@ setTimeout(() => {
 }, 4000);
 
 // ================= UI CLEAN =================
-
 setTimeout(removeGhostOverlays, 50);
 setTimeout(removeGhostOverlays, 300);
 setTimeout(removeGhostOverlays, 800);
 
 // ================= STATE =================
-
 window.lastResult = result;
 window.lastAnalysis = result;
 window.lastAnalysisData = result;
 
+// ================= KPI =================
 const gross = safeNumber(result.gross);
 const net   = safeNumber(result.netAfterMortgage);
 
-// ================= FIX PROFIT LIVE =================
-
 const profitLive = document.getElementById("profit-live");
-
 if(profitLive){
   profitLive.innerText = formatCurrency(net);
 }
@@ -1770,7 +1711,6 @@ if(profitLive){
 const roi = safeNumber(result.roi);
 
 console.log("🔥 RESULT:", result);
-
     // ================= FORCE SHOW RESULTS (FREE FIX) =================
 
 // rimuove overlay DOPO il primo calcolo
