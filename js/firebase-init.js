@@ -195,6 +195,34 @@ async function loadUserPlan(uid) {
 
     window.currentPlan = plan;
 
+    // 🔥 SYNC HARD (evita mismatch ovunque)
+    window.plan = window.currentPlan;
+
+    // 🔥 OVERRIDE GLOBALE SICURO
+  window.isPro = function(){
+  return ["pro","investor","pro_yearly"].includes(window.currentPlan);
+};
+
+window.isProUser = window.isPro;
+
+    if(window.isPro()){
+
+      // 🔥 SBLOCCO FORZATO UI
+setTimeout(()=>{
+
+  document.querySelectorAll(".pro-only, .pro-blur").forEach(el=>{
+    el.classList.remove("pro-only","pro-blur");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+  document.querySelectorAll(".locked-overlay, .results-overlay").forEach(el=>{
+    el.remove();
+  });
+
+},300);
+
     console.log("🔥 Piano finale:", window.currentPlan);
 
     // ===============================
