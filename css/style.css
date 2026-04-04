@@ -6938,3 +6938,18 @@ html{
 }
 
 }
+
+@media (max-width:768px){
+
+.login-mobile-btn{
+  font-size:12px;
+  font-weight:600;
+  padding:6px 12px;
+  border-radius:999px;
+  background:#10b981;
+  color:#fff;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+}
