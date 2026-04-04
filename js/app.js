@@ -1462,9 +1462,10 @@ window.calculate = async function(force = false){
     return;
   }
 
-  if(!window.firebaseReady){
-    console.warn("⏳ Firebase non pronto → continuo comunque");
-  }
+if(!window.firebaseReady){
+  console.warn("⏳ Firebase non pronto → STOP calculate");
+  return;
+}
 
   window.isCalculating = true;
   window.simulationExecuted = false;
@@ -1542,6 +1543,9 @@ const result = calculateROI({
   interestRate,
   loanYears
 });
+
+    window.simulationExecuted = true;
+window.lastAnalysisData = result;
 
 // 🔒 VALIDAZIONE CRITICA RESULT
 if(!result || typeof result !== "object"){
@@ -2994,6 +2998,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if(typeof handleAutoCityRedirect === "function"){
     handleAutoCityRedirect();
+  }
+
+});
+
+// ================= FIREBASE SYNC FIX (CRITICO) =================
+
+document.addEventListener("rb_auth_ready", () => {
+
+  console.log("🔥 Firebase READY → re-sync UI");
+
+  // 🔥 ricalcola SOLO se già eseguita una simulazione
+  if(window.simulationExecuted && typeof window.calculate === "function"){
+    console.log("🔁 Re-run calculate (sync PRO)");
+    window.calculate(true);
+  }
+
+  // 🔥 aggiorna bottone PDF
+  if(typeof updatePDFButton === "function"){
+    updatePDFButton();
   }
 
 });
