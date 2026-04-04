@@ -6823,3 +6823,118 @@ flex-shrink:0;
 }
 
 }
+
+/* =========================================
+🔥 MOBILE HEADER – AIRBNB STYLE (FINAL)
+========================================= */
+
+@media (max-width:768px){
+
+/* ===== HEADER BASE ===== */
+.portal-header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+
+  padding:10px 14px !important;
+
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
+
+  box-shadow:0 6px 25px rgba(0,0,0,0.06);
+
+  z-index:999;
+}
+
+/* ===== OFFSET BODY ===== */
+body{
+  padding-top:70px !important;
+}
+
+/* ===== INNER ===== */
+.portal-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+/* ===== LEFT (LOGO) ===== */
+.header-left{
+  display:flex;
+  align-items:center;
+}
+
+.header-left img{
+  height:26px;
+  width:auto;
+}
+
+/* ===== CENTER (LANGUAGE) ===== */
+.lang-switch{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  background:#f1f5f9;
+  padding:4px;
+  border-radius:999px;
+}
+
+.lang-btn{
+  padding:4px 10px;
+  font-size:11px;
+  font-weight:600;
+
+  border-radius:999px;
+  border:none;
+
+  background:transparent;
+  color:#64748b;
+
+  transition:all .2s ease;
+}
+
+.lang-btn.active{
+  background:#10b981;
+  color:#fff;
+  box-shadow:0 3px 10px rgba(16,185,129,0.3);
+}
+
+/* ===== RIGHT (MENU) ===== */
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.menu-toggle{
+  font-size:22px;
+  padding:6px;
+  cursor:pointer;
+}
+
+/* ===== USER / LOGIN (SE PRESENTE) ===== */
+.header-user{
+  display:none; /* 🔥 nascondiamo su mobile per pulizia */
+}
+
+/* ===== NAV DESKTOP HIDDEN ===== */
+.portal-nav{
+  display:none;
+}
+
+/* ===== CTA FIX ===== */
+.portal-header .btn,
+.portal-header button{
+  padding:6px 10px;
+  font-size:12px;
+}
+
+/* ===== SMOOTH SCROLL UX ===== */
+html{
+  scroll-padding-top:80px;
+}
+
+}
