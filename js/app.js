@@ -1057,13 +1057,24 @@ function renderSmartInvestmentAlert(roi){
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
 
-  // ✅ PRO → pulisci e STOP
-  if(window.isPro && window.isPro()){
-  container.innerHTML = "";
-  return;
-}
+  // ================= CHECK PRO SICURO =================
+  let isProUser = false;
 
-  if(roi < 10){
+  try{
+    isProUser = typeof window.isPro === "function" && window.isPro();
+  }catch(e){
+    console.warn("isPro error", e);
+  }
+
+  // ✅ PRO → pulisci e STOP
+  if(isProUser){
+    container.innerHTML = "";
+    return;
+  }
+
+  // ================= ROI CHECK =================
+  if(!roi || roi < 10){
+    container.innerHTML = "";
     return;
   }
 
@@ -1072,66 +1083,89 @@ function renderSmartInvestmentAlert(roi){
   if(roi > 12){
     badge = `
     <div style="
-    margin-bottom:12px;
-    padding:10px;
-    border-radius:10px;
-    background:#fef3c7;
-    border:1px solid #f59e0b;
-    font-weight:600;
+      margin-bottom:12px;
+      padding:10px;
+      border-radius:10px;
+      background:#fef3c7;
+      border:1px solid #f59e0b;
+      font-weight:600;
     ">
-    ${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
+      ${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
     </div>
     `;
   }
 
-  // 🔥 RENDER SOLO QUI (UNA VOLTA SOLA)
+  // ================= RENDER =================
   container.innerHTML = badge + `
   <div style="
-  margin-top:20px;
-  padding:20px;
-  border-radius:14px;
-  background:#ecfdf5;
-  border:1px solid #10b981;
-  text-align:center;
+    margin-top:20px;
+    padding:20px;
+    border-radius:14px;
+    background:#ecfdf5;
+    border:1px solid #10b981;
+    text-align:center;
   ">
 
-  <strong style="font-size:16px;">
-  ${t("Investimento ad alto rendimento","High yield investment")}
-  </strong>
+    <strong style="font-size:16px;">
+      ${t("Investimento ad alto rendimento","High yield investment")}
+    </strong>
 
-  <p style="margin-top:8px;font-size:14px;">
-  ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong>
-  </p>
+    <p style="margin-top:8px;font-size:14px;">
+      ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong>
+    </p>
 
-  <p style="margin-top:10px;font-size:14px;">
-  ${t(
-  "Questo investimento supera le medie di mercato e mostra forte potenziale.",
-  "This investment outperforms market averages and shows strong potential."
-  )}
-  </p>
+    <p style="margin-top:10px;font-size:14px;">
+      ${t(
+        "Questo investimento supera le medie di mercato e mostra forte potenziale.",
+        "This investment outperforms market averages and shows strong potential."
+      )}
+    </p>
 
-<button onclick="
-  if(window.isPro && window.isPro()){
-    document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
-  } else {
-    startPlanPurchase('pro');
-  }
-" class="btn btn-primary" style="margin:20px auto;display:block;">
-  ${t(
-   "💰 Scopri quanto puoi guadagnare (o perdere davvero)",
-   "💰 See how much you can really earn (or lose)"
-  )}
-  </button>
+    <button id="smart-alert-btn"
+      class="btn btn-primary"
+      style="margin:20px auto;display:block;">
+      ${t(
+        "💰 Scopri quanto puoi guadagnare (o perdere davvero)",
+        "💰 See how much you can really earn (or lose)"
+      )}
+    </button>
 
-  <div style="margin-top:6px;font-size:12px;color:#64748b;">
-  ${t(
-  "Accesso a tutte le simulazioni professionali",
-  "Access to all professional simulations"
-  )}
-  </div>
+    <div style="margin-top:6px;font-size:12px;color:#64748b;">
+      ${t(
+        "Accesso a tutte le simulazioni professionali",
+        "Access to all professional simulations"
+      )}
+    </div>
 
   </div>
   `;
+
+  // ================= BUTTON ACTION (NO INLINE JS = PIÙ STABILE) =================
+
+  const btn = document.getElementById("smart-alert-btn");
+
+  if(btn){
+    btn.onclick = () => {
+
+      let isProNow = false;
+
+      try{
+        isProNow = typeof window.isPro === "function" && window.isPro();
+      }catch(e){
+        console.warn("isPro click error", e);
+      }
+
+      if(isProNow){
+        document.querySelector('#advanced-analysis')?.scrollIntoView({
+          behavior:'smooth'
+        });
+      }else{
+        startPlanPurchase('pro');
+      }
+
+    };
+  }
+
 }
 
 // ================= UPGRADE MODAL =================
@@ -1240,21 +1274,19 @@ if(!window.firebaseReady){
   return;
 }
 
-if(window.isPro && window.isPro()){
-  btn.style.display = "inline-block";
-}else{
-  btn.style.display = "none";
+let isProUser = false;
+
+try{
+  isProUser = typeof window.isPro === "function" && window.isPro();
+}catch(e){
+  console.warn("isPro error", e);
 }
+
+btn.style.display = isProUser ? "inline-block" : "none";
 
 console.log("PDF visibility:", window.currentPlan);
 
 }
-
-// aggiorna dopo login
-document.addEventListener("rb_auth_ready", ()=>{
-  updatePDFButton();
-  
-});
 
 // ================= ANIMATION + UI BOOST =================  👈 AGGIUNGI QUI
 
@@ -1833,8 +1865,17 @@ if(revenueHome){
   revenueHome.innerText = formatCurrency(gross);
 }
 
-    // ================= KPI =================
-    if(window.isPro && window.isPro()){
+// ================= KPI =================
+
+let isProUser = false;
+
+try{
+  isProUser = typeof window.isPro === "function" && window.isPro();
+}catch(e){
+  console.warn("isPro error", e);
+}
+
+if(isProUser){
   if(typeof renderExecutiveKPI === "function"){
     renderExecutiveKPI(result);
   }
