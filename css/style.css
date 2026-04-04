@@ -7704,21 +7704,36 @@ flex-shrink:0;
 }
 
 /* =========================================
-🔥 HEADER MOBILE FIX DEFINITIVO FINAL
+🔥 HEADER MOBILE LAYOUT CENTRATO (FINAL)
 ========================================= */
 @media (max-width:768px){
 
-/* ===== LAYOUT HEADER ===== */
+/* ===== HEADER ===== */
 .portal-header-inner{
-display:flex !important;
-justify-content:space-between;
+display:flex;
 align-items:center;
-gap:8px;
+justify-content:space-between;
+padding:0 10px;
+position:relative;
 }
 
-/* ===== LEFT ===== */
+/* ===== LEFT (LOGO) ===== */
 .header-left{
 flex:0 0 auto;
+}
+
+.logo-img{
+height:32px;
+}
+
+/* ===== MENU CENTRO ===== */
+.hamburger{
+display:block;
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+font-size:22px;
+cursor:pointer;
 }
 
 /* ===== RIGHT ===== */
@@ -7726,60 +7741,42 @@ flex:0 0 auto;
 display:flex;
 align-items:center;
 gap:6px;
-
 flex:0 0 auto;
-
-/* 🔥 FIX CRITICO */
-overflow:visible !important;
 }
 
-/* ===== USER AREA ===== */
+/* ===== LOGIN ===== */
 #user-area{
-flex:0 0 auto;
 max-width:90px;
 overflow:hidden;
 white-space:nowrap;
 text-overflow:ellipsis;
 }
 
-/* ===== LANGUAGE (🔥 FIX EN VISIBILE) ===== */
+/* ===== LANGUAGE ===== */
 .lang-switch{
-display:flex !important;
-flex-direction:row;
+display:flex;
 gap:4px;
-
-flex:0 0 auto;
-
-/* 🔥 QUESTO RISOLVE EN */
-overflow:visible !important;
 }
 
-/* BOTTONI LINGUA */
+/* BOTTONI */
 .lang-btn{
-padding:4px 8px;
+padding:4px 7px;
 font-size:11px;
-min-width:32px;
+min-width:30px;
 text-align:center;
 }
 
-/* ===== HAMBURGER ===== */
-.hamburger{
-display:block;
-flex:0 0 auto;
-font-size:20px;
-}
-
-/* ===== NAV DESKTOP OFF ===== */
+/* ===== NASCONDI NAV DESKTOP ===== */
 .desktop-nav{
 display:none !important;
 }
 
-/* ===== LOGO ===== */
-.logo-img{
-height:34px;
+/* ===== MOBILE MENU ===== */
+.mobile-menu{
+top:64px;
 }
 
-/* ===== HEADER ===== */
+/* ===== SICUREZZA ===== */
 .portal-header{
 overflow:hidden;
 }
