@@ -1,5 +1,44 @@
 /* ===================== */
-/* INIT HEADER FINAL PRO */
+/* FIREBASE INIT */
+/* ===================== */
+
+import { auth } from "/js/firebase-init.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+/* ===================== */
+/* HERO BACKGROUND */
+/* ===================== */
+
+window.applyCityBackground = function(city){
+
+const hero =
+  document.querySelector(".hero-bg") ||
+  document.querySelector(".hero");
+
+if(!hero) return;
+
+hero.classList.remove("rome","naples","milan","florence");
+
+let finalCity = city;
+
+if(!finalCity){
+
+  const path = window.location.pathname.toLowerCase();
+
+  if(path.includes("napoli")) finalCity = "naples";
+  else if(path.includes("milano")) finalCity = "milan";
+  else if(path.includes("firenze")) finalCity = "florence";
+  else finalCity = "rome";
+}
+
+hero.classList.add(finalCity);
+
+};
+
+
+/* ===================== */
+/* INIT HEADER FINAL */
 /* ===================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -68,17 +107,15 @@ if(container){
 /* HERO */
 window.applyCityBackground();
 
-/* MENU TOGGLE */
+/* MENU */
 const hamburger = document.getElementById("hamburger");
 const nav = document.querySelector(".portal-nav");
 
 if(hamburger && nav){
-
   hamburger.addEventListener("click", ()=>{
     nav.classList.toggle("open");
     hamburger.classList.toggle("active");
   });
-
 }
 
 /* ACTIVE LINK */
@@ -98,4 +135,90 @@ setTimeout(()=>{
   }
 },50);
 
+});
+
+
+/* ===================== */
+/* USER AREA */
+/* ===================== */
+
+onAuthStateChanged(auth, (user)=>{
+
+const userArea = document.getElementById("user-area");
+if(!userArea) return;
+
+const isMobile = window.innerWidth < 768;
+
+if(user){
+
+if(isMobile){
+
+  userArea.innerHTML = `
+  <div style="display:flex;align-items:center;gap:6px">
+
+    <a href="/dashboard/" class="btn btn-secondary">
+      📊
+    </a>
+
+    <button onclick="logout()" class="btn btn-secondary">
+      ⎋
+    </button>
+
+  </div>
+  `;
+
+}else{
+
+  userArea.innerHTML = `
+  <div style="display:flex;align-items:center;gap:10px">
+
+    <span class="user-email">${user.email}</span>
+
+    <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
+
+    <button onclick="logout()" class="btn btn-secondary">Esci</button>
+
+  </div>
+  `;
+
+}
+
+}else{
+
+if(isMobile){
+
+  userArea.innerHTML = `
+    <a href="/login/" class="login-btn">
+      Accedi
+    </a>
+  `;
+
+}else{
+
+  userArea.innerHTML = `
+    <a href="/login/" class="btn btn-secondary">Accedi</a>
+  `;
+
+}
+
+}
+
+/* TRADUZIONE */
+setTimeout(()=>{
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
+},50);
+
+});
+
+
+/* ===================== */
+/* LANG SYNC */
+/* ===================== */
+
+document.addEventListener("rb_language_changed", ()=>{
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 });
