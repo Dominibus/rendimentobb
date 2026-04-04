@@ -1458,24 +1458,27 @@ window.calculate = function(force = false){
       loanAmount, interestRate, loanYears
     });
 
-    // ================= CALCOLO =================
+// ================= CALCOLO =================
 
-    const result = calculateROI({
-      price,
-      equity,
-      priceNight,
-      occupancy,
-      expenses,
-      commission,
-      tax,
-      loanAmount,
-      interestRate,
-      loanYears
-    });
+const result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
-    // ================= EMAIL AUTO TRIGGER =================
+// ================= EMAIL AUTO TRIGGER (FIXED) =================
 
-if(!window.emailSent){ // 🔥 evita spam multiplo
+// 🔥 INVIA SOLO DOPO CALCOLO + SOLO 1 VOLTA
+if(!window.emailSent && result){
+
+  window.emailSent = true;
 
   fetch("/api/send-lead", {
     method: "POST",
@@ -1483,43 +1486,43 @@ if(!window.emailSent){ // 🔥 evita spam multiplo
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      email: "rendimentobb@gmail.com", // 🔥 TEST ORA (poi dinamico)
-      name: "User"
+      email: "rendimentobb@gmail.com", // 👉 poi dinamico
+      name: "Simulazione utente"
     })
   })
-  .then(()=>console.log("📩 Email inviata"))
-  .catch(()=>console.log("❌ Email error"));
+  .then(res => res.json())
+  .then(data => console.log("📩 Email inviata"))
+  .catch(err => console.error("❌ Email error", err));
 
-  window.emailSent = true;
 }
 
-    setTimeout(removeGhostOverlays, 50);
-    setTimeout(removeGhostOverlays, 300);
-    setTimeout(removeGhostOverlays, 800);
+setTimeout(removeGhostOverlays, 50);
+setTimeout(removeGhostOverlays, 300);
+setTimeout(removeGhostOverlays, 800);
 
-    if(!result){
-      console.warn("⛔ result null");
-      return;
-    }
+if(!result){
+  console.warn("⛔ result null");
+  return;
+}
 
-    window.lastResult = result;
+window.lastResult = result;
+window.lastAnalysis = result;
+window.lastAnalysisData = result;
 
-    window.lastAnalysis = result;
+const gross = safeNumber(result.gross);
+const net   = safeNumber(result.netAfterMortgage);
 
-    window.lastAnalysisData = result;
+// ================= FIX PROFIT LIVE =================
 
-    const gross = safeNumber(result.gross);
-    const net   = safeNumber(result.netAfterMortgage);
-    // ================= FIX PROFIT LIVE =================
+const profitLive = document.getElementById("profit-live");
 
-    const profitLive = document.getElementById("profit-live");
+if(profitLive){
+  profitLive.innerText = formatCurrency(net);
+}
 
-    if(profitLive){
-    profitLive.innerText = formatCurrency(net);
-    }
-    const roi   = safeNumber(result.roi);
+const roi = safeNumber(result.roi);
 
-    console.log("🔥 RESULT:", result);
+console.log("🔥 RESULT:", result);
 
     // ================= FORCE SHOW RESULTS (FREE FIX) =================
 
