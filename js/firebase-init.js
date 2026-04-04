@@ -165,7 +165,7 @@ async function logoutUser() {
 
 
 // ===============================
-// CARICA PIANO UTENTE (FIX DEFINITIVO)
+// CARICA PIANO UTENTE (FIX DEFINITIVO STABILE)
 // ===============================
 
 async function loadUserPlan(uid) {
@@ -177,10 +177,6 @@ async function loadUserPlan(uid) {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
 
-    // ===============================
-    // 🔥 LET PLAN CORRETTO
-    // ===============================
-
     let plan = "free";
 
     if (docSnap.exists()) {
@@ -189,39 +185,9 @@ async function loadUserPlan(uid) {
       console.warn("⚠️ Documento NON trovato");
     }
 
-    // ===============================
     // 🔥 SET GLOBALE
-    // ===============================
-
     window.currentPlan = plan;
-
-    // 🔥 SYNC HARD (evita mismatch ovunque)
-    window.plan = window.currentPlan;
-
-    // 🔥 OVERRIDE GLOBALE SICURO
-  window.isPro = function(){
-  return ["pro","investor","pro_yearly"].includes(window.currentPlan);
-};
-
-window.isProUser = window.isPro;
-
-    if(window.isPro()){
-
-      // 🔥 SBLOCCO FORZATO UI
-setTimeout(()=>{
-
-  document.querySelectorAll(".pro-only, .pro-blur").forEach(el=>{
-    el.classList.remove("pro-only","pro-blur");
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
-
-  document.querySelectorAll(".locked-overlay, .results-overlay").forEach(el=>{
-    el.remove();
-  });
-
-},300);
+    window.plan = plan;
 
     console.log("🔥 Piano finale:", window.currentPlan);
 
@@ -230,15 +196,33 @@ setTimeout(()=>{
     // ===============================
 
     if(window.isPro()){
+
       document.body.classList.add("pro-user");
 
       if(typeof unlockProUI === "function"){
         unlockProUI();
       }
+
+      // 🔥 FORCE UNLOCK VISIVO
+      setTimeout(()=>{
+
+        document.querySelectorAll(".pro-only, .pro-blur").forEach(el=>{
+          el.classList.remove("pro-only","pro-blur");
+          el.style.filter = "none";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+        });
+
+        document.querySelectorAll(".locked-overlay, .results-overlay").forEach(el=>{
+          el.remove();
+        });
+
+      },300);
+
     }
 
     // ===============================
-    // 🔥 EVENTO GLOBALE
+    // 🔥 EVENTI GLOBALI
     // ===============================
 
     document.dispatchEvent(
@@ -247,14 +231,10 @@ setTimeout(()=>{
       })
     );
 
-    // ===============================
-    // 🔥 REFRESH UI SICURO
-    // ===============================
-
     if(window.isPro()){
       setTimeout(()=>{
         document.dispatchEvent(new Event("rb_force_ui_refresh"));
-      }, 200);
+      },200);
     }
 
   }catch(err){
