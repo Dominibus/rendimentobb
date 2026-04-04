@@ -13,6 +13,7 @@
 
 body{
 background:#f8fafc;
+font-family:system-ui;
 }
 
 .container{
@@ -24,7 +25,12 @@ padding:40px 20px;
 h1{
 font-size:32px;
 font-weight:800;
-margin-bottom:20px;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#64748b;
+margin-bottom:30px;
 }
 
 .card{
@@ -37,7 +43,10 @@ box-shadow:0 10px 30px rgba(0,0,0,0.05);
 
 .lead{
 border-bottom:1px solid #e2e8f0;
-padding:10px 0;
+padding:14px 0;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .lead:last-child{
@@ -45,11 +54,23 @@ border:none;
 }
 
 .badge{
-background:#10b981;
 color:white;
 padding:4px 10px;
 border-radius:999px;
 font-size:12px;
+font-weight:600;
+}
+
+.loader{
+text-align:center;
+padding:20px;
+color:#64748b;
+}
+
+.error{
+color:#ef4444;
+padding:20px;
+text-align:center;
 }
 
 </style>
@@ -66,10 +87,9 @@ font-size:12px;
 <div class="container">
 
 <h1>📊 Dashboard Leads</h1>
-
-<div style="margin-bottom:20px; color:#64748b;">
-Dashboard interna per la gestione dei lead qualificati generati dal sistema RendimentoBB.
-</div>  
+<div class="subtitle">
+Monitoraggio in tempo reale dei lead qualificati generati dal sistema.
+</div>
 
 <!-- KPI -->
 <div class="card" style="display:flex;gap:20px">
@@ -89,7 +109,7 @@ Dashboard interna per la gestione dei lead qualificati generati dal sistema Rend
 <!-- LISTA -->
 <div class="card">
   <h2>🔥 Lead in tempo reale</h2>
-  <div id="leadList">Caricamento...</div>
+  <div id="leadList" class="loader">Caricamento...</div>
 </div>
 
 </div>
@@ -115,7 +135,7 @@ function isAdmin(user){
 
 // ================= AUTH =================
 
-onAuthStateChanged(auth, (user)=>{
+onAuthStateChanged(auth, async (user)=>{
 
   if(!user || !isAdmin(user)){
     alert("Accesso riservato admin");
@@ -123,13 +143,21 @@ onAuthStateChanged(auth, (user)=>{
     return;
   }
 
-  loadLeads();
+  try{
+    await loadLeads();
+  }catch(e){
+    console.error("💥 load error:", e);
+    document.getElementById("leadList").innerHTML =
+      `<div class="error">Errore caricamento lead</div>`;
+  }
 
 });
 
 // ================= LOAD LEADS =================
 
 async function loadLeads(){
+
+  const listEl = document.getElementById("leadList");
 
   const q = query(
     collection(db,"leads"),
@@ -147,7 +175,7 @@ async function loadLeads(){
     const d = doc.data();
 
     totalLeads++;
-    totalValue += d.value || 0;
+    totalValue += Number(d.value || 0);
 
     const badgeColor =
       d.score === "hot" ? "#10b981" :
@@ -155,10 +183,10 @@ async function loadLeads(){
       "#64748b";
 
     html += `
-    <div class="lead" style="display:flex;justify-content:space-between;align-items:center">
+    <div class="lead">
 
       <div>
-        <b>${d.email}</b>
+        <b>${d.email || "—"}</b>
         <div style="font-size:13px;color:#64748b;margin-top:4px">
           ${d.type || "-"} | ${d.city || "-"} | ROI ${d.roi || "-"}%
         </div>
@@ -167,7 +195,7 @@ async function loadLeads(){
       <div style="text-align:right">
 
         <div class="badge" style="background:${badgeColor}">
-          ${d.score?.toUpperCase() || "—"}
+          ${(d.score || "cold").toUpperCase()}
         </div>
 
         <div style="font-weight:700;margin-top:6px">
@@ -181,10 +209,9 @@ async function loadLeads(){
 
   });
 
-  document.getElementById("leadList").innerHTML = html || "Nessun lead";
+  listEl.innerHTML = html || "<div class='loader'>Nessun lead</div>";
 
-  // ================= KPI =================
-
+  // KPI
   document.getElementById("totalLeads").innerText = totalLeads;
   document.getElementById("totalValue").innerText = "€" + totalValue;
 
