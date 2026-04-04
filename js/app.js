@@ -1473,6 +1473,26 @@ window.calculate = function(force = false){
       loanYears
     });
 
+    // ================= EMAIL AUTO TRIGGER =================
+
+if(!window.emailSent){ // 🔥 evita spam multiplo
+
+  fetch("/api/send-lead", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: "rendimentobb@gmail.com", // 🔥 TEST ORA (poi dinamico)
+      name: "User"
+    })
+  })
+  .then(()=>console.log("📩 Email inviata"))
+  .catch(()=>console.log("❌ Email error"));
+
+  window.emailSent = true;
+}
+
     setTimeout(removeGhostOverlays, 50);
     setTimeout(removeGhostOverlays, 300);
     setTimeout(removeGhostOverlays, 800);
