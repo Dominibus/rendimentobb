@@ -7704,7 +7704,7 @@ flex-shrink:0;
 }
 
 /* =========================================
-🔥 HEADER MOBILE FIX DEFINITIVO REAL
+🔥 HEADER MOBILE FIX DEFINITIVO FINAL
 ========================================= */
 @media (max-width:768px){
 
@@ -7727,33 +7727,46 @@ display:flex;
 align-items:center;
 gap:6px;
 
-flex:0 0 auto; /* 🔥 CRITICO */
+flex:0 0 auto;
+
+/* 🔥 FIX CRITICO */
+overflow:visible !important;
 }
 
 /* ===== USER AREA ===== */
 #user-area{
 flex:0 0 auto;
+max-width:90px;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
 }
 
-/* ===== LANGUAGE (🔥 ORA SEMPRE VISIBILE) ===== */
+/* ===== LANGUAGE (🔥 FIX EN VISIBILE) ===== */
 .lang-switch{
 display:flex !important;
 flex-direction:row;
 gap:4px;
 
-flex:0 0 auto; /* 🔥 NON SI SCHIACCIA */
+flex:0 0 auto;
+
+/* 🔥 QUESTO RISOLVE EN */
+overflow:visible !important;
 }
 
-/* BOTTONI */
+/* BOTTONI LINGUA */
 .lang-btn{
-padding:4px 7px;
+padding:4px 8px;
 font-size:11px;
+min-width:32px;
+text-align:center;
 }
 
 /* ===== HAMBURGER ===== */
 .hamburger{
 display:block;
 flex:0 0 auto;
+font-size:20px;
 }
 
 /* ===== NAV DESKTOP OFF ===== */
@@ -7766,7 +7779,7 @@ display:none !important;
 height:34px;
 }
 
-/* ===== SUPER FIX: evita overflow ===== */
+/* ===== HEADER ===== */
 .portal-header{
 overflow:hidden;
 }
