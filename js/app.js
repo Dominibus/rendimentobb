@@ -1422,7 +1422,7 @@ function getLeadDestination({roi, city}){
 
 // ================= CORE CALCULATE ENGINE (SAAS READY) =================
 
-window.calculate = function(force = false){
+window.calculate = async function(force = false){
 
   // ================= GUARD =================
   if(window.isCalculating && !force){
