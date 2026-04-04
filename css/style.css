@@ -7338,3 +7338,52 @@ background:#10b981;
 color:#fff;
 text-decoration:none;
 }
+
+/* =========================================
+🔥 HEADER FINAL FIX (NO BUG)
+========================================= */
+
+.header-right{
+display:flex;
+align-items:center;
+gap:6px;
+flex-wrap:nowrap;
+}
+
+.lang-switch{
+flex-shrink:0;
+}
+
+.hamburger{
+flex-shrink:0;
+z-index:10001;
+}
+
+#user-area{
+display:flex;
+align-items:center;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+.header-right{
+gap:4px;
+}
+
+.login-btn{
+font-size:11px;
+padding:5px 8px;
+white-space:nowrap;
+}
+
+.lang-btn{
+padding:4px 6px;
+font-size:10px;
+}
+
+.hamburger{
+font-size:20px;
+}
+
+}
