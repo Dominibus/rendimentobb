@@ -54,7 +54,6 @@ const header = `
 <a href="/" class="logo-link rb-logo">
 <img src="/img/logo-main.png" class="logo-img">
 </a>
-<button class="hamburger">☰</button>
 </div>
 
 <nav class="portal-nav">
@@ -94,6 +93,8 @@ Contatti
 <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
 <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
 </div>
+
+<button class="hamburger">☰</button>
 
 </div>
 
