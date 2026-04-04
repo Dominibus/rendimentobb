@@ -1529,6 +1529,12 @@ try{
       "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
     );
 
+ // 🔒 evita spam nella stessa sessione
+if(window.leadSaved){
+  console.log("⛔ Lead già salvato in questa sessione");
+  return;
+}
+    
     await addDoc(collection(db,"leads"),{
 
       email: userEmail,
@@ -1558,6 +1564,8 @@ try{
       }
 
     });
+
+  window.leadSaved = true;
 
     console.log("🔥 Lead salvato:", leadScore);
 
