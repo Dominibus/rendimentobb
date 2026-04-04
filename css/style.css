@@ -7712,21 +7712,21 @@ display:none;
 
 
 /* =========================================
-🔥 HEADER MOBILE PERFETTO DEFINITIVO
+🔥 HEADER MOBILE DEFINITIVO (ORDER FIX)
 ========================================= */
 @media (max-width:768px){
 
-/* ===== HEADER ===== */
 .portal-header-inner{
 display:flex;
 align-items:center;
-gap:6px;
 padding:0 10px;
-width:100%;
+gap:6px;
 }
+
 
 /* ===== LOGO ===== */
 .header-left{
+order:1;
 flex:0 0 auto;
 }
 
@@ -7735,47 +7735,46 @@ height:32px;
 }
 
 
-/* ===== MENU CENTRALE ===== */
+/* ===== MENU (CENTRO) ===== */
 .hamburger{
 display:block;
+order:2;
 flex:1;
 text-align:center;
 font-size:20px;
-cursor:pointer;
 }
 
 
 /* ===== RIGHT AREA ===== */
 .header-right{
+order:3;
 display:flex;
 align-items:center;
 gap:6px;
 flex:0 0 auto;
-min-width:0;
 }
 
 
 /* ===== LOGIN ===== */
 #user-area{
+order:1;
 flex:0 0 auto;
-white-space:nowrap;
 }
 
 
 /* ===== LANGUAGE ===== */
 .lang-switch{
+order:2;
 display:flex !important;
-flex-direction:row;
 gap:4px;
-flex:0 0 auto;
 }
+
 
 /* BOTTONI */
 .lang-btn{
 padding:4px 6px;
 font-size:11px;
 min-width:28px;
-text-align:center;
 }
 
 
@@ -7784,10 +7783,9 @@ text-align:center;
 display:none !important;
 }
 
-
-/* ===== SICUREZZA ===== */
-.portal-header{
-overflow:hidden;
 }
 
+/* hamburger SOLO mobile */
+.hamburger{
+display:none;
 }
