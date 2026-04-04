@@ -302,7 +302,7 @@ function updateUserUI(user) {
         <span style="font-size:13px;">
           👤 ${welcomeText} <strong>${name}</strong>
           ${window.currentPlan !== "free"
-          ? `<span style="color:#00c896; font-weight:bold;"> ${currentPlan.toUpperCase()}</span>`
+          ? `<span style="color:#00c896; font-weight:bold;"> ${window.currentPlan.toUpperCase()}</span>`
           : ''}
         </span>
 
