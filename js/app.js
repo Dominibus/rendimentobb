@@ -3460,6 +3460,16 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
 });
 
+document.addEventListener("rb_plan_loaded", () => {
+
+  console.log("🚀 PLAN LOADED → FORCE CHECK");
+
+  setTimeout(() => {
+    forceCorrectPlan();
+  }, 100);
+
+});
+
 // ===============================================
 // 🔥 HARD OVERRIDE FIREBASE FUNNEL (CRITICO)
 // ===============================================
