@@ -1463,7 +1463,12 @@ window.calculate = async function(force = false){
   }
 
 if(!window.firebaseReady){
-  console.warn("⏳ Firebase non pronto → STOP calculate");
+
+  console.warn("⏳ Firebase non pronto → delay calculate");
+
+  // 🔥 salva richiesta calcolo
+  window.pendingCalculation = true;
+
   return;
 }
 
@@ -3006,15 +3011,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("rb_auth_ready", () => {
 
-  console.log("🔥 Firebase READY → re-sync UI");
+  console.log("🔥 Firebase READY → HARD SYNC");
 
-  // 🔥 ricalcola SOLO se già eseguita una simulazione
-  if(window.simulationExecuted && typeof window.calculate === "function"){
-    console.log("🔁 Re-run calculate (sync PRO)");
-    window.calculate(true);
+  // ===============================
+  // 🔥 CASO 1 → CALCOLO MAI PARTITO
+  // ===============================
+
+  if(window.pendingCalculation && typeof window.calculate === "function"){
+
+    console.log("🚀 RUN pending calculation");
+
+    window.pendingCalculation = false;
+
+    setTimeout(()=>{
+      window.calculate(true);
+    },50);
+
+    return;
   }
 
-  // 🔥 aggiorna bottone PDF
+  // ===============================
+  // 🔥 CASO 2 → GIÀ ESEGUITO (RESYNC PRO)
+  // ===============================
+
+  if(window.simulationExecuted && typeof window.calculate === "function"){
+
+    console.log("🔁 Re-run calculate (PRO sync)");
+
+    setTimeout(()=>{
+      window.calculate(true);
+    },50);
+
+  }
+
+  // ===============================
+  // 🔥 PDF BUTTON
+  // ===============================
+
   if(typeof updatePDFButton === "function"){
     updatePDFButton();
   }
