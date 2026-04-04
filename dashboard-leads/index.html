@@ -25,7 +25,6 @@ padding:40px 20px;
 h1{
 font-size:32px;
 font-weight:800;
-margin-bottom:10px;
 }
 
 .subtitle{
@@ -88,7 +87,7 @@ text-align:center;
 
 <h1>📊 Dashboard Leads</h1>
 <div class="subtitle">
-Monitoraggio in tempo reale dei lead qualificati generati dal sistema.
+Monitoraggio lead qualificati generati dal sistema.
 </div>
 
 <!-- KPI -->
@@ -127,7 +126,7 @@ query,
 orderBy
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// ================= ADMIN CHECK =================
+// ================= ADMIN =================
 
 function isAdmin(user){
   return user?.email === "rendimentobb@gmail.com";
@@ -146,14 +145,14 @@ onAuthStateChanged(auth, async (user)=>{
   try{
     await loadLeads();
   }catch(e){
-    console.error("💥 load error:", e);
+    console.error("💥 errore:", e);
     document.getElementById("leadList").innerHTML =
       `<div class="error">Errore caricamento lead</div>`;
   }
 
 });
 
-// ================= LOAD LEADS =================
+// ================= LOAD =================
 
 async function loadLeads(){
 
@@ -187,7 +186,7 @@ async function loadLeads(){
 
       <div>
         <b>${d.email || "—"}</b>
-        <div style="font-size:13px;color:#64748b;margin-top:4px">
+        <div style="font-size:13px;color:#64748b">
           ${d.type || "-"} | ${d.city || "-"} | ROI ${d.roi || "-"}%
         </div>
       </div>
@@ -211,7 +210,6 @@ async function loadLeads(){
 
   listEl.innerHTML = html || "<div class='loader'>Nessun lead</div>";
 
-  // KPI
   document.getElementById("totalLeads").innerText = totalLeads;
   document.getElementById("totalValue").innerText = "€" + totalValue;
 
