@@ -116,10 +116,14 @@ const mobileMenu = document.getElementById("mobileMenu");
 
 if(hamburger && mobileMenu){
 
-  hamburger.addEventListener("click", (e)=>{
-    e.stopPropagation();
-    mobileMenu.classList.toggle("active");
-  });
+hamburger.addEventListener("click", (e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+
+  mobileMenu.classList.toggle("active");
+
+  console.log("MENU TOGGLE:", mobileMenu.classList.contains("active"));
+});
 
   // chiusura click fuori
   document.addEventListener("click", (e)=>{
