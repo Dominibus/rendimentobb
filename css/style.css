@@ -7712,21 +7712,19 @@ display:none;
 
 
 /* =========================================
-🔥 HEADER MOBILE DEFINITIVO (ORDER FIX)
+🔥 HEADER MOBILE STABILE (VERO FIX)
 ========================================= */
 @media (max-width:768px){
 
 .portal-header-inner{
 display:flex;
 align-items:center;
+justify-content:space-between;
 padding:0 10px;
-gap:6px;
 }
 
-
-/* ===== LOGO ===== */
+/* LOGO */
 .header-left{
-order:1;
 flex:0 0 auto;
 }
 
@@ -7734,54 +7732,41 @@ flex:0 0 auto;
 height:32px;
 }
 
-
-/* ===== MENU (CENTRO) ===== */
+/* MENU */
 .hamburger{
 display:block;
-flex:0 0 auto;   /* 🔥 FIX VERO */
+flex:0 0 auto;
 font-size:20px;
-margin:0 auto;   /* 🔥 lo centra senza rompere layout */
+margin-left:auto;
+margin-right:auto;
 }
 
-
-/* ===== RIGHT AREA ===== */
+/* RIGHT */
 .header-right{
-order:3;
 display:flex;
 align-items:center;
 gap:6px;
 flex:0 0 auto;
 }
 
-.portal-header-inner{
-justify-content:space-between;
-}  
-
-
-/* ===== LOGIN ===== */
+/* LOGIN */
 #user-area{
-order:1;
 flex:0 0 auto;
 }
 
-
-/* ===== LANGUAGE ===== */
+/* LANG */
 .lang-switch{
-order:2;
 display:flex !important;
 gap:4px;
 }
 
-
-/* BOTTONI */
 .lang-btn{
 padding:4px 6px;
 font-size:11px;
 min-width:28px;
 }
 
-
-/* ===== NASCONDI NAV DESKTOP ===== */
+/* NASCONDI NAV DESKTOP */
 .desktop-nav{
 display:none !important;
 }
