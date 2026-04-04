@@ -7435,3 +7435,71 @@ font-size:20px;
 }
 
 }
+
+/* ===================== */
+/* HEADER MOBILE FIX DEFINITIVO */
+/* ===================== */
+
+.hamburger{
+display:none;
+cursor:pointer;
+font-size:24px;
+z-index:10002;
+position:relative;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+/* nascondo nav desktop */
+.desktop-nav{
+display:none !important;
+}
+
+/* hamburger visibile */
+.hamburger{
+display:block !important;
+}
+
+/* pulizia header */
+.lang-switch{
+display:none !important;
+}
+
+/* MOBILE MENU */
+.mobile-menu{
+display:none;
+position:absolute;
+top:60px;
+left:0;
+width:100%;
+background:#ffffff;
+
+flex-direction:column;
+gap:16px;
+padding:20px;
+
+border-bottom:1px solid #e2e8f0;
+
+z-index:10001;
+}
+
+.mobile-menu a{
+font-size:16px;
+font-weight:600;
+color:#0f172a;
+text-decoration:none;
+}
+
+/* apertura */
+.mobile-menu.active{
+display:flex;
+}
+
+/* sicurezza click */
+.header-right{
+position:relative;
+z-index:10001;
+}
+
+}
