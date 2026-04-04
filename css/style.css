@@ -7702,3 +7702,73 @@ flex-shrink:0;
 }
 
 }
+
+/* =========================================
+🔥 HEADER MOBILE FIX DEFINITIVO REAL
+========================================= */
+@media (max-width:768px){
+
+/* ===== LAYOUT HEADER ===== */
+.portal-header-inner{
+display:flex !important;
+justify-content:space-between;
+align-items:center;
+gap:8px;
+}
+
+/* ===== LEFT ===== */
+.header-left{
+flex:0 0 auto;
+}
+
+/* ===== RIGHT ===== */
+.header-right{
+display:flex;
+align-items:center;
+gap:6px;
+
+flex:0 0 auto; /* 🔥 CRITICO */
+}
+
+/* ===== USER AREA ===== */
+#user-area{
+flex:0 0 auto;
+}
+
+/* ===== LANGUAGE (🔥 ORA SEMPRE VISIBILE) ===== */
+.lang-switch{
+display:flex !important;
+flex-direction:row;
+gap:4px;
+
+flex:0 0 auto; /* 🔥 NON SI SCHIACCIA */
+}
+
+/* BOTTONI */
+.lang-btn{
+padding:4px 7px;
+font-size:11px;
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger{
+display:block;
+flex:0 0 auto;
+}
+
+/* ===== NAV DESKTOP OFF ===== */
+.desktop-nav{
+display:none !important;
+}
+
+/* ===== LOGO ===== */
+.logo-img{
+height:34px;
+}
+
+/* ===== SUPER FIX: evita overflow ===== */
+.portal-header{
+overflow:hidden;
+}
+
+}
