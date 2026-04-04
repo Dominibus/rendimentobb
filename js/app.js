@@ -3185,10 +3185,10 @@ window.proUnlocked = false;
 
 function unlockProUI(){
 
-  if(window.proUnlocked){
-    console.log("⛔ già sbloccato → skip");
-    return;
-  }
+if(window.proUnlocked && window.isPro()){
+  console.log("⛔ già sbloccato → skip");
+  return;
+}
 
   const isPro =
     window.currentPlan === "pro" ||
@@ -3227,6 +3227,20 @@ function unlockProUI(){
     el.style.pointerEvents = "auto";
 
   });
+
+  // 🔥 RITENTA FINO A QUANDO DIVENTA PRO
+let unlockInterval = setInterval(()=>{
+
+  if(window.isPro && window.isPro()){
+
+    console.log("🔁 Retry unlock PRO");
+
+    unlockProUI();
+
+    clearInterval(unlockInterval);
+  }
+
+}, 500);
 
   // ================= RIMUOVE OVERLAY (CRITICO) =================
 
@@ -3268,13 +3282,6 @@ function unlockProUI(){
 document.addEventListener("rb_plan_loaded", unlockProUI);
 document.addEventListener("rb_auth_ready", unlockProUI);
 
-
-// ================= DEBUG FORZATO =================
-
-// 🔥 QUESTO ASSICURA CHE NON FALLISCA MAI
-setTimeout(()=>{
-  unlockProUI();
-},1500);
 
 // ================= FIX CTA DUPLICATE =================
 document.addEventListener("DOMContentLoaded", () => {
