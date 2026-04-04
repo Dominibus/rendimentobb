@@ -7387,3 +7387,51 @@ font-size:20px;
 }
 
 }
+
+/* =========================================
+🚨 FIX MENU MOBILE NON VISIBILE (CRITICO)
+========================================= */
+
+@media (max-width:768px){
+
+/* MENU BASE NASCOSTO */
+.portal-nav{
+  display:none !important;
+}
+
+/* MENU APERTO */
+.portal-nav.open{
+  display:flex !important;
+
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+
+  position:fixed;
+  top:70px;
+  left:0;
+  width:100%;
+
+  background:#ffffff;
+  padding:20px;
+
+  z-index:9999;
+
+  box-shadow:0 20px 60px rgba(0,0,0,0.15);
+  border-top:1px solid #e2e8f0;
+}
+
+/* LINK */
+.portal-nav a{
+  font-size:16px;
+  padding:10px 0;
+  width:100%;
+  text-align:center;
+}
+
+/* HAMBURGER SOPRA TUTTO */
+.hamburger{
+  z-index:10001;
+}
+
+}
