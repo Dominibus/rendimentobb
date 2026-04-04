@@ -1460,7 +1460,7 @@ window.calculate = function(force = false){
 
 // ================= CALCOLO =================
 
-// 🔥 reset lead ad ogni nuova simulazione
+// 🔥 reset anti-duplicazione
 window.emailSent = false;
 
 const result = calculateROI({
@@ -1483,39 +1483,56 @@ if(!result){
   return;
 }
 
-// ================= EMAIL FUNNEL (SMART LEAD ENGINE) =================
+// ================= CONDIZIONI =================
 
-// 🎯 condizioni SaaS
 const isFreeUser = !window.isPro?.();
 const goodROI = Number(result?.roi || 0) > 8;
+const userEmail = window.currentUser?.email;
 
-// 🔥 delay strategico (utente coinvolto → lead qualificato)
+// ================= EMAIL UTENTE (RETARGETING) =================
+
+if(userEmail && isFreeUser && goodROI){
+
+  fetch("/api/send-lead-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: userEmail,
+      lang: window.currentLang || "it"
+    })
+  })
+  .then(()=> console.log("📨 Email utente inviata"))
+  .catch(err => console.error("❌ Email utente error", err));
+
+}
+
+// ================= LEAD ENGINE (MONETIZZAZIONE) =================
+
 setTimeout(() => {
 
   try{
 
-    // 🔒 anti-duplicazione
     if(window.emailSent){
-      console.log("⛔ Lead già inviato → skip");
-      return;
-    }
-
-    if(!result){
-      console.warn("⛔ result perso → skip");
+      console.log("⛔ Lead già inviato");
       return;
     }
 
     if(!isFreeUser){
-      console.log("🔓 Utente PRO → no lead");
+      console.log("🔓 PRO → skip lead");
       return;
     }
 
     if(!goodROI){
-      console.log("📉 ROI basso → no lead");
+      console.log("📉 ROI basso → skip lead");
       return;
     }
 
-    // ================= INVIO LEAD =================
+    if(!userEmail){
+      console.log("📭 Nessuna email utente → skip");
+      return;
+    }
 
     window.emailSent = true;
 
@@ -1525,20 +1542,21 @@ setTimeout(() => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email: "rendimentobb@gmail.com", // 👉 sostituire poi con email utente
-        name: "Simulazione utente",
+        type: "simulatore", // 🔥 nuovo tipo
+        email: userEmail,
         roi: result.roi,
         city: window.currentCity || "unknown",
+        budget: price,
         timestamp: Date.now()
       })
     })
     .then(res => res.json())
     .then(data => {
-      console.log("📩 Lead qualificato inviato", data);
+      console.log("📩 Lead monetizzabile inviato", data);
     })
     .catch(err => {
       console.error("❌ Lead error:", err);
-      window.emailSent = false; // 🔁 retry possibile
+      window.emailSent = false;
     });
 
   }catch(e){
