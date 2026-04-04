@@ -41,6 +41,21 @@ window.safePercent = function(value){
   return window.safeNumber(value).toFixed(1);
 };
 
+function getLeadScore(result){
+
+  const roi = Number(result?.roi || 0);
+
+  if(roi >= 12){
+    return "hot";
+  }
+
+  if(roi >= 8){
+    return "warm";
+  }
+
+  return "cold";
+}
+
 window.quickROI = function(){
 
   const safeNum = (v, def=0)=>{
@@ -55,21 +70,6 @@ window.quickROI = function(){
   const night = safeNum(document.getElementById("qr_night")?.value,110);
   const occ   = safeNum(document.getElementById("qr_occ")?.value,65);
   const cost  = safeNum(document.getElementById("qr_cost")?.value,35);
-
-  function getLeadScore(result){
-
-  const roi = Number(result?.roi || 0);
-
-  if(roi >= 12){
-    return "hot";
-  }
-
-  if(roi >= 8){
-    return "warm";
-  }
-
-  return "cold";
-}
 
   // ================= CALCOLO =================
 
