@@ -38,7 +38,7 @@ hero.classList.add(finalCity);
 
 
 /* ===================== */
-/* INIT HEADER ULTRA PRO FIX */
+/* INIT HEADER PRO */
 /* ===================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -48,180 +48,160 @@ const header = `
 
 <div class="container portal-header-inner">
 
-<!-- LOGO -->
+<!-- LEFT -->
 <div class="header-left">
-<a href="/" class="logo-link rb-logo">
+<a href="/" class="logo-link">
 <img src="/img/logo-main.png" class="logo-img">
 </a>
 </div>
 
-<!-- NAV DESKTOP -->
+<!-- NAV -->
 <nav class="portal-nav">
 
 <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-<a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
+
+<a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">
+Aprire B&B
+</a>
+
 <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
+
 <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
+
 <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
 
-<a href="/dashboard-leads/" id="nav-leads" style="display:none">Leads</a>
+<a href="/dashboard/" id="nav-dashboard"
+data-it="Dashboard" data-en="Dashboard">
+Dashboard
+</a>
 
-<a href="/dashboard/" data-it="Dashboard" data-en="Dashboard">Dashboard</a>
-<a href="/contact.html" data-it="Contatti" data-en="Contact">Contatti</a>
+<a href="/contact.html" data-it="Contatti" data-en="Contact">
+Contatti
+</a>
 
 </nav>
 
 <!-- RIGHT -->
-<div class="right-controls">
+<div class="header-right">
 
-<!-- 🔥 LOGIN SEMPRE PRESENTE -->
-<div id="user-area">
-<a href="/login/" class="btn btn-primary login-btn" id="login-btn">
-Accedi
-</a>
-</div>
+<div id="user-area"></div>
 
-<!-- LANGUAGE -->
 <div class="lang-switch">
 <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
 <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
 </div>
 
-<!-- HAMBURGER -->
 <button class="hamburger" id="hamburger-btn">
-<span></span>
-<span></span>
-<span></span>
+☰
 </button>
 
 </div>
 
 </div>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobile-menu">
-
-<div class="mobile-menu-inner">
-
-<div id="mobile-user-area">
-<a href="/login/" class="btn btn-primary login-btn">Accedi</a>
-</div>
-
-<nav class="mobile-nav">
-<a href="/tool/">Simulatore</a>
-<a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-<a href="/mutui/">Mutui</a>
-<a href="/immobili/">Immobili</a>
-<a href="/academy/">Academy</a>
-<a href="/dashboard/">Dashboard</a>
-<a href="/contact.html">Contatti</a>
-</nav>
-
-</div>
-
-</div>
-
-<div class="mobile-overlay" id="mobile-overlay"></div>
-
 </header>
 `;
 
-document.getElementById("global-header").innerHTML = header;
-
+const container = document.getElementById("global-header");
+if(container){
+  container.innerHTML = header;
+}
 
 /* HERO */
 window.applyCityBackground();
 
-
-/* ===================== */
-/* MOBILE MENU */
-/* ===================== */
-
+/* MENU MOBILE */
 const hamburger = document.getElementById("hamburger-btn");
-const menu = document.getElementById("mobile-menu");
-const overlay = document.getElementById("mobile-overlay");
+const nav = document.querySelector(".portal-nav");
 
-hamburger.onclick = () => {
-  menu.classList.toggle("open");
-  overlay.classList.toggle("open");
-};
+if(hamburger && nav){
+  hamburger.addEventListener("click", ()=>{
+    nav.classList.toggle("open");
+  });
+}
 
-overlay.onclick = () => {
-  menu.classList.remove("open");
-  overlay.classList.remove("open");
-};
-
-
-/* ===================== */
 /* ACTIVE LINK */
-/* ===================== */
+const currentPath = window.location.pathname;
 
-const path = window.location.pathname;
-
-document.querySelectorAll(".portal-nav a, .mobile-nav a").forEach(a=>{
-  if(path.startsWith(a.getAttribute("href"))){
-    a.classList.add("active");
+document.querySelectorAll(".portal-nav a").forEach(link=>{
+  const href = link.getAttribute("href");
+  if(currentPath.startsWith(href)){
+    link.classList.add("active");
   }
 });
 
-
-/* ===================== */
-/* TRANSLATIONS */
-/* ===================== */
-
+/* TRADUZIONI */
 setTimeout(()=>{
-  window.applyTranslations?.();
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 },50);
 
 });
 
 
 /* ===================== */
-/* USER AREA FINAL FIX (ULTRA STABLE) */
+/* USER AREA FIX */
 /* ===================== */
 
 onAuthStateChanged(auth, (user)=>{
 
-const desktop = document.getElementById("user-area");
-const mobile = document.getElementById("mobile-user-area");
+const userArea = document.getElementById("user-area");
+if(!userArea) return;
 
-if(!desktop || !mobile) return;
+const isMobile = window.innerWidth < 768;
 
 if(user){
 
-const html = `
-<div class="user-box">
-<div class="user-email">${user.email}</div>
-<div class="user-actions">
-<a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
-<button onclick="logout()" class="btn btn-secondary">Esci</button>
-</div>
-</div>
-`;
+if(isMobile){
 
-desktop.innerHTML = html;
-mobile.innerHTML = html;
+  userArea.innerHTML = `
+  <div class="user-mobile">
+
+    <a href="/dashboard/" class="icon-btn">📊</a>
+    <button onclick="logout()" class="icon-btn">⎋</button>
+
+  </div>
+  `;
 
 }else{
 
-const html = `
-<a href="/login/" class="btn btn-primary login-btn">
-Accedi
-</a>
-`;
+  userArea.innerHTML = `
+  <div class="user-desktop">
 
-desktop.innerHTML = html;
-mobile.innerHTML = html;
+    <span class="user-email">${user.email}</span>
+
+    <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
+
+    <button onclick="logout()" class="btn btn-secondary">Esci</button>
+
+  </div>
+  `;
+}
+
+}else{
+
+if(isMobile){
+
+  userArea.innerHTML = `
+  <a href="/login/" class="icon-btn">🔑</a>
+  `;
+
+}else{
+
+  userArea.innerHTML = `
+  <a href="/login/" class="btn btn-secondary">Accedi</a>
+  `;
+}
 
 }
 
-const leadsLink = document.getElementById("nav-leads");
-
-if(leadsLink && user && user.email === "rendimentobb@gmail.com"){
-  leadsLink.style.display = "inline-block";
-}
-
-setTimeout(()=> window.applyTranslations?.(), 50);
+/* TRANSLATION */
+setTimeout(()=>{
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
+},50);
 
 });
 
@@ -231,5 +211,7 @@ setTimeout(()=> window.applyTranslations?.(), 50);
 /* ===================== */
 
 document.addEventListener("rb_language_changed", ()=>{
-  window.applyTranslations?.();
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 });
