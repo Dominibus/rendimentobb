@@ -3323,3 +3323,19 @@ function removeGhostOverlays(){
 
 // 🔥 ESECUZIONE FORZATA CONTINUA
 setInterval(removeGhostOverlays, 800);
+
+document.addEventListener("rb_plan_loaded", ()=>{
+
+  if(window.isPro()){
+
+    console.log("🔥 FORCE PRO MODE");
+
+    document.body.classList.add("pro-user");
+
+    if(typeof unlockProUI === "function"){
+      unlockProUI();
+    }
+
+  }
+
+});
