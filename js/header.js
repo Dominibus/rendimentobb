@@ -153,19 +153,30 @@ const isMobile = window.innerWidth < 768;
 
 if(user){
 
-  if(isMobile){
+if(isMobile){
 
-    userArea.innerHTML = `
-    <div style="display:flex;gap:6px">
+  userArea.innerHTML = `
+  <div style="display:flex;align-items:center;gap:6px">
 
-      <a href="/dashboard/" class="btn btn-secondary">📊</a>
+    <a href="/dashboard/" class="btn btn-secondary" style="
+      padding:6px 10px;
+      font-size:12px;
+      border-radius:999px;
+    ">
+      📊
+    </a>
 
-      <button onclick="logout()" class="btn btn-secondary">⎋</button>
+    <button onclick="logout()" class="btn btn-secondary" style="
+      padding:6px 10px;
+      font-size:12px;
+      border-radius:999px;
+    ">
+      ⎋
+    </button>
 
-    </div>
-    `;
-
-  }else{
+  </div>
+  `;
+}else{
 
     userArea.innerHTML = `
     <div style="text-align:right">
@@ -188,15 +199,26 @@ if(user){
 
 }else{
 
-  userArea.innerHTML = `
-  <div style="text-align:right">
+  if(isMobile){
 
-    <div style="font-size:12px;color:#64748b;">Area riservata</div>
+    userArea.innerHTML = `
+      <a href="/login/" class="login-mobile-btn">
+        Accedi
+      </a>
+    `;
 
-    <a href="/login/" class="btn btn-secondary">Accedi</a>
+  }else{
 
-  </div>
-  `;
+    userArea.innerHTML = `
+    <div style="text-align:right">
+
+      <div style="font-size:12px;color:#64748b;">Area riservata</div>
+
+      <a href="/login/" class="btn btn-secondary">Accedi</a>
+
+    </div>
+    `;
+  }
 }
 
 const leadsLink = document.getElementById("nav-leads");
