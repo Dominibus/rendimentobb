@@ -425,35 +425,29 @@ window.getUserData = function(){
 
     updateUserUI(user);
 
-    // ===============================
-    // 🔥 PRO UNLOCK
-    // ===============================
+// ===============================
+// 🔥 PRO UNLOCK (FIX DEFINITIVO)
+// ===============================
 
-    if(
-      window.currentPlan === "pro" ||
-      window.currentPlan === "investor" ||
-      window.currentPlan === "pro_yearly"
-    ){
+if(window.firebaseReady && window.isPro?.()){
 
-      console.log("💰 Utente PRO → sblocco totale UI");
+  console.log("💰 Utente PRO → sblocco totale UI");
 
-      document.body.classList.add("pro-user");
+  document.body.classList.add("pro-user");
 
-      if(typeof unlockProUI === "function"){
-        unlockProUI();
-      }
+  if(typeof unlockProUI === "function"){
+    unlockProUI();
+  }
 
-    } else {
+} else if(window.firebaseReady) {
 
-      console.log("👀 Utente FREE → attivo funnel");
+  console.log("👀 Utente FREE → attivo funnel");
 
-      setTimeout(()=>{
-        console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
-      },1500);
+  setTimeout(()=>{
+    console.log("📊 Questo investimento potrebbe nascondere rischi non visibili");
+  },1500);
 
-    }
-
-  } else {
+}
 
     // ===============================
     // 🔴 UTENTE NON LOGGATO
