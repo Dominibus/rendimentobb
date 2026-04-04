@@ -119,10 +119,6 @@ padding:0 20px;
 min-height:56px;
 }
 
-.portal-header-inner > *{
-min-width:0;
-}
-
 /* LOGO */
 .rb-logo{
 justify-self:start;
@@ -4026,7 +4022,7 @@ box-shadow:
 /* ===================== */
 
 .hamburger{
-display:none;
+display:block;
 font-size:22px;
 background:none;
 border:none;
@@ -4182,11 +4178,6 @@ font-size:11px;
 /* 🔥 HEADER HEIGHT FIX */
 .portal-header{
 padding:6px 0;
-}
-
-/* 🔥 SICUREZZA OVERFLOW */
-.portal-header-inner > *{
-min-width:auto;
 }
 
 /* 🔥 PREVIENE COLLASSO */
@@ -6928,7 +6919,7 @@ color:#fff;
 
 /* ===== HAMBURGER ===== */
 .hamburger{
-display:none;
+display:block;
 font-size:22px;
 background:none;
 border:none;
@@ -6945,10 +6936,6 @@ cursor:pointer;
 gap:8px;
 justify-content:space-between;
 }
-
-.portal-header-inner > *{
-flex-shrink:0;
-}  
 
 /* NAV OFF */
 .portal-nav{
@@ -7046,10 +7033,6 @@ padding:0 16px;
 gap:10px;
 }
 
-.portal-header-inner > *{
-flex-shrink:0;
-}
-
 /* ===== LOGO ===== */
 .logo-img{
 height:42px;
@@ -7112,7 +7095,7 @@ color:white;
 
 /* ===== HAMBURGER ===== */
 .hamburger{
-display:none;
+display:block;
 font-size:22px;
 background:none;
 border:none;
@@ -7203,10 +7186,6 @@ padding:0 16px;
 gap:10px;
 }
 
-.portal-header-inner > *{
-flex-shrink:0;
-}
-
 /* ===== LOGO ===== */
 .logo-img{
 height:42px;
@@ -7269,7 +7248,7 @@ color:white;
 
 /* ===== HAMBURGER ===== */
 .hamburger{
-display:none;
+display:block;
 font-size:22px;
 background:none;
 border:none;
@@ -7328,4 +7307,34 @@ padding:4px 8px;
 display:block;
 }
 
+}
+
+.portal-header-inner{
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+flex-wrap:nowrap; /* 🔥 IMPORTANTISSIMO */
+}
+
+.header-left,
+.header-right{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* FIX LOGIN */
+.login-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+white-space:nowrap; /* 🔥 RISOLVE TESTO VERTICALE */
+padding:6px 12px;
+font-size:12px;
+border-radius:999px;
+background:#10b981;
+color:#fff;
+text-decoration:none;
 }
