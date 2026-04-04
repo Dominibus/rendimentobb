@@ -1498,6 +1498,11 @@ const userEmail = window.currentUser?.email || null;
 // 🎯 calcolo score
 const leadScore = getLeadScore(result);
 
+ const leadDestination = getLeadDestination({
+  roi: result.roi,
+  city: window.currentCity
+});   
+
  // ================= SESSION TRACK =================
 
 // inizializza contatore sessione
@@ -1533,6 +1538,34 @@ try{
 if(window.leadSaved){
   console.log("⛔ Lead già salvato in questa sessione");
   return;
+}
+
+// ================= LEAD ROUTING ENGINE =================
+
+function getLeadDestination({roi, city}){
+
+  // 🔥 ROI alto → immobiliare premium
+  if(roi >= 10){
+    return {
+      type: "immobile",
+      emails: [
+        "rendimentobb@gmail.com" // test → poi agenzie
+      ]
+    };
+  }
+
+  // 🏦 ROI medio → banca (mutuo)
+  if(roi >= 6){
+    return {
+      type: "mutuo",
+      emails: [
+        "rendimentobb@gmail.com" // test → poi banche
+      ]
+    };
+  }
+
+  // ❄️ basso → niente
+  return null;
 }
     
     await addDoc(collection(db,"leads"),{
@@ -1584,6 +1617,29 @@ if(leadScore === "hot"){
   })
   .then(()=> console.log("💰 Lead inviato ai partner"))
   .catch(err => console.error("❌ Partner error:", err));
+
+}
+
+  // ================= INVIO ROUTING =================
+
+if(leadDestination && leadScore === "hot"){
+
+  fetch("/api/send-lead-partner", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: userEmail,
+      city: window.currentCity,
+      roi: result.roi,
+      score: leadScore,
+      type: leadDestination.type,
+      partners: leadDestination.emails
+    })
+  })
+  .then(()=> console.log("💰 Lead inviato via routing"))
+  .catch(err => console.error("❌ Routing error:", err));
 
 }
 
