@@ -343,9 +343,26 @@ onAuthStateChanged(auth, async (user) => {
   window.currentUser = user;
   window.firebaseReady = false;
 
+  // 🔥 RESET SICURO
+  window.userReady = false;
+
   if (user) {
 
     console.log("🔥 Auth OK:", user.uid);
+
+    // 🔥 QUI → UTENTE PRONTO
+    window.userReady = true;
+
+      } else {
+
+    console.log("👤 Utente non loggato");
+
+    window.currentUser = null;
+
+    // 🔥 UTENTE NON PRONTO
+    window.userReady = false;
+
+  }
 
    // ===============================
 // 🔥 AUTO CREATE USER (FIX CRITICO)
