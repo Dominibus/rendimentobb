@@ -10,7 +10,7 @@ export default async function handler(req, res){
 
   try{
 
-    const { email, city, roi, score, type } = req.body;
+    const { email, city, roi, score, type, partners } = req.body;
 
     // 🔥 manda solo HOT
     if(score !== "hot"){
@@ -41,11 +41,7 @@ export default async function handler(req, res){
       from: "RendimentoBB <noreply@rendimentobb.it>",
 
       // 🔥 QUI METTERAI I PARTNER
-      to: [
-        "rendimentobb@gmail.com", // test
-        // "banca1@email.com",
-        // "agenzia@email.com"
-      ],
+     to: partners || ["rendimentobb@gmail.com"],
 
       subject,
       html
