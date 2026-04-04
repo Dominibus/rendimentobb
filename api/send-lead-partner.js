@@ -49,11 +49,23 @@ export default async function handler(req, res){
 
     console.log("💰 Lead inviato partner");
 
-    return res.status(200).json({ success:true });
+try {
 
-  }catch(err){
-    console.error("❌ Partner lead error:", err);
-    return res.status(500).json({ error:"Send failed" });
-  }
+  // tua logica email
+
+  return res.status(200).json({
+    success: true
+  });
+
+} catch (err) {
+
+  console.error(err);
+
+  return res.status(500).json({
+    success: false,
+    error: err.message
+  });
+
+}
 
 }
