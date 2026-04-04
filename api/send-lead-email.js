@@ -174,14 +174,20 @@ export default async function handler(req, res) {
 
     console.log("📨 Email inviata + tracking:", email, score);
 
-    return res.status(200).json({ 
-      success: true,
-      score
-    });
+  return res.status(200).json({
+    success: true
+  });
 
-  }catch(err){
+} catch (err) {
 
-    console.error("❌ EMAIL ENGINE ERROR:", err);
+  console.error(err);
+
+  return res.status(500).json({
+    success: false,
+    error: err.message
+  });
+
+}
 
     return res.status(500).json({ error: "Email failed" });
 
