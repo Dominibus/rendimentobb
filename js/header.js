@@ -38,7 +38,7 @@ hero.classList.add(finalCity);
 
 
 /* ===================== */
-/* INIT HEADER ULTRA PRO */
+/* INIT HEADER ULTRA PRO FIX */
 /* ===================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -74,13 +74,20 @@ const header = `
 <!-- RIGHT -->
 <div class="right-controls">
 
-<div id="user-area"></div>
+<!-- 🔥 LOGIN SEMPRE PRESENTE -->
+<div id="user-area">
+<a href="/login/" class="btn btn-primary login-btn" id="login-btn">
+Accedi
+</a>
+</div>
 
+<!-- LANGUAGE -->
 <div class="lang-switch">
 <button class="lang-btn" onclick="setLang('it')" id="btn-it">IT</button>
 <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
 </div>
 
+<!-- HAMBURGER -->
 <button class="hamburger" id="hamburger-btn">
 <span></span>
 <span></span>
@@ -96,7 +103,9 @@ const header = `
 
 <div class="mobile-menu-inner">
 
-<div id="mobile-user-area"></div>
+<div id="mobile-user-area">
+<a href="/login/" class="btn btn-primary login-btn">Accedi</a>
+</div>
 
 <nav class="mobile-nav">
 <a href="/tool/">Simulatore</a>
@@ -119,8 +128,10 @@ const header = `
 
 document.getElementById("global-header").innerHTML = header;
 
+
 /* HERO */
 window.applyCityBackground();
+
 
 /* ===================== */
 /* MOBILE MENU */
@@ -140,6 +151,7 @@ overlay.onclick = () => {
   overlay.classList.remove("open");
 };
 
+
 /* ===================== */
 /* ACTIVE LINK */
 /* ===================== */
@@ -151,6 +163,7 @@ document.querySelectorAll(".portal-nav a, .mobile-nav a").forEach(a=>{
     a.classList.add("active");
   }
 });
+
 
 /* ===================== */
 /* TRANSLATIONS */
@@ -164,7 +177,7 @@ setTimeout(()=>{
 
 
 /* ===================== */
-/* USER AREA FINAL FIX */
+/* USER AREA FINAL FIX (ULTRA STABLE) */
 /* ===================== */
 
 onAuthStateChanged(auth, (user)=>{
