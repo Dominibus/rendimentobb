@@ -56,6 +56,21 @@ window.quickROI = function(){
   const occ   = safeNum(document.getElementById("qr_occ")?.value,65);
   const cost  = safeNum(document.getElementById("qr_cost")?.value,35);
 
+  function getLeadScore(result){
+
+  const roi = Number(result?.roi || 0);
+
+  if(roi >= 12){
+    return "hot";
+  }
+
+  if(roi >= 8){
+    return "warm";
+  }
+
+  return "cold";
+}
+
   // ================= CALCOLO =================
 
   const investment = price + reno;
@@ -1475,6 +1490,84 @@ const result = calculateROI({
   interestRate,
   loanYears
 });
+
+// ================= LEAD ENGINE (SAVE) =================
+
+const userEmail = window.currentUser?.email || null;
+
+// 🎯 calcolo score
+const leadScore = getLeadScore(result);
+
+ // ================= SESSION TRACK =================
+
+// inizializza contatore sessione
+window.simulationCount = (window.simulationCount || 0) + 1;
+
+// ================= SCORE BASE =================
+let leadScore = getLeadScore(result);
+
+// 🔥 SUPER LEAD LOGIC
+if(window.simulationCount > 3){
+  leadScore = "hot";
+  console.log("🔥 SUPER LEAD rilevato");
+}   
+
+// 💰 valore stimato lead (puoi usarlo per business)
+const leadValue =
+  leadScore === "hot" ? 100 :
+  leadScore === "warm" ? 40 :
+  0;
+
+// 🎯 tipo lead automatico
+const leadType = "simulator";
+
+try{
+
+  if(userEmail){
+
+    const { addDoc, collection, serverTimestamp } = await import(
+      "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
+    );
+
+    await addDoc(collection(db,"leads"),{
+
+      email: userEmail,
+      type: leadType,
+
+      city: window.currentCity || "unknown",
+
+      roi: Number(result.roi || 0),
+      value: leadValue,
+      score: leadScore,
+
+      sessionId: window.sessionId || (window.sessionId = Date.now()),
+      sessionStep: "simulation",
+
+      price: price || 0,
+      revenue: result.revenue || 0,
+
+      sessionId: window.sessionId || (window.sessionId = Date.now())
+
+      createdAt: serverTimestamp(),
+
+      // 🔥 dati extra per futuro AI
+      meta:{
+        occupancy: occupancy,
+        priceNight: priceNight,
+        expenses: expenses
+      }
+
+    });
+
+    console.log("🔥 Lead salvato:", leadScore);
+
+  }else{
+    console.log("⚠️ Nessuna email → lead non salvato");
+  }
+
+}catch(e){
+  console.error("❌ Lead save error:", e);
+}    
 
 // ================= VALIDAZIONE =================
 
