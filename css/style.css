@@ -7707,6 +7707,12 @@ flex-shrink:0;
 🔥 HEADER MOBILE LAYOUT CENTRATO (FINAL)
 ========================================= */
 @media (max-width:768px){
+.lang-switch{
+display:flex !important;
+visibility:visible !important;
+opacity:1 !important;
+}
+}
 
 /* ===== HEADER ===== */
 .portal-header-inner{
