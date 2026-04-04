@@ -3456,6 +3456,46 @@ document.addEventListener("rb_plan_loaded", ()=>{
 });
 
 // ===============================================
+// 🔥 HARD OVERRIDE FIREBASE FUNNEL (CRITICO)
+// ===============================================
+
+(function(){
+
+  console.log("🛡️ FIREBASE OVERRIDE INIT");
+
+  function fixFirebasePlan(){
+
+    if(!window.currentPlan) return;
+
+    // 🔥 FORZA PRO GLOBALMENTE
+    if(["pro","investor","pro_yearly"].includes(window.currentPlan)){
+
+      console.log("✅ FORCE PRO MODE (firebase override)");
+
+      // blocca qualsiasi logica FREE
+      window.__FORCE_PRO__ = true;
+
+      // override funzione funnel
+      window.activateFreeFunnel = function(){
+        console.log("🚫 Funnel bloccato (PRO)");
+      };
+
+      // override check sparsi
+      window.isFreeUser = false;
+
+    }
+
+  }
+
+  // 🔥 HOOK SU FIREBASE READY
+  document.addEventListener("rb_auth_ready", fixFirebasePlan);
+
+  // fallback
+  setTimeout(fixFirebasePlan, 1500);
+
+})();
+
+// ===============================================
 // 🚀 FINAL MASTER FIX – PLAN + UI SYNC (NO BUG)
 // ===============================================
 
