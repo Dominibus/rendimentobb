@@ -426,10 +426,22 @@ window.getUserData = function(){
     updateUserUI(user);
 
 // ===============================
-// 🔥 PRO UNLOCK (FIX DEFINITIVO)
+// 🔥 PRO UNLOCK (FIX DEFINITIVO VERO)
 // ===============================
 
-if(window.firebaseReady && window.isPro?.()){
+if(!window.firebaseReady){
+  console.log("⏳ Firebase non pronto → skip UI logic");
+  return;
+}
+
+// 🔥 aspetta utente
+if(!window.currentUser){
+  console.log("⏳ Utente non ancora disponibile → skip");
+  return;
+}
+
+// 🔥 PRO CHECK UNICO
+if(window.isPro?.()){
 
   console.log("💰 Utente PRO → sblocco totale UI");
 
@@ -439,7 +451,7 @@ if(window.firebaseReady && window.isPro?.()){
     unlockProUI();
   }
 
-} else if(window.firebaseReady) {
+} else {
 
   console.log("👀 Utente FREE → attivo funnel");
 
@@ -448,7 +460,6 @@ if(window.firebaseReady && window.isPro?.()){
   },1500);
 
 }
-
     // ===============================
     // 🔴 UTENTE NON LOGGATO
     // ===============================
