@@ -44,26 +44,21 @@ const header = `
 
 <div class="portal-header-inner">
 
-<!-- LOGO -->
 <div class="header-left">
   <a href="/">
     <img src="/img/logo-main.png" class="logo-img">
   </a>
 </div>
 
-<!-- NAV -->
 <nav class="portal-nav desktop-nav" id="main-nav">
-
 <a href="/tool/">Simulatore</a>
 <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
 <a href="/mutui/">Mutui</a>
 <a href="/immobili/">Immobili</a>
 <a href="/academy/">Academy</a>
 <a href="/contact.html">Contatti</a>
-
 </nav>
 
-<!-- RIGHT -->
 <div class="header-right">
 
 <div id="user-area"></div>
@@ -79,16 +74,13 @@ const header = `
 
 </div>
 
-<!-- MOBILE -->
 <div class="mobile-menu" id="mobileMenu">
-
 <a href="/tool/">Simulatore</a>
 <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
 <a href="/mutui/">Mutui</a>
 <a href="/immobili/">Immobili</a>
 <a href="/academy/">Academy</a>
 <a href="/contact.html">Contatti</a>
-
 </div>
 
 </header>
@@ -106,6 +98,8 @@ window.applyCityBackground();
 const hamburger = document.getElementById("hamburger");
 const mobileMenu = document.getElementById("mobileMenu");
 
+if(hamburger && mobileMenu){
+
 hamburger.addEventListener("click", (e)=>{
   e.stopPropagation();
   mobileMenu.classList.toggle("active");
@@ -117,10 +111,9 @@ document.addEventListener("click", (e)=>{
   }
 });
 
+}
 
-/* ===================== */
 /* ACTIVE LINK */
-/* ===================== */
 
 const currentPath = window.location.pathname;
 
@@ -130,5 +123,86 @@ document.querySelectorAll(".portal-nav a").forEach(link=>{
     link.classList.add("active");
   }
 });
+
+});
+
+
+/* ===================== */
+/* USER AREA (FUORI!!) */
+/* ===================== */
+
+onAuthStateChanged(auth, (user)=>{
+
+const userArea = document.getElementById("user-area");
+const nav = document.getElementById("main-nav");
+
+if(!userArea) return;
+
+const isMobile = window.innerWidth < 768;
+
+const render = () => {
+
+  const isAdmin = window.isAdmin?.();
+
+  // 🔥 ADMIN → aggiunge LEADS nel menu
+  if(isAdmin && nav && !document.getElementById("admin-link")){
+    const link = document.createElement("a");
+    link.href = "/dashboard-leads/";
+    link.id = "admin-link";
+    link.innerText = "Leads";
+    nav.appendChild(link);
+  }
+
+  if(user){
+
+    let html = `<div style="display:flex;align-items:center;gap:8px;">`;
+
+    if(!isMobile){
+      html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
+    }
+
+    html += `
+      <a href="/dashboard/" class="btn btn-secondary">
+        ${isMobile ? "📊" : "Dashboard"}
+      </a>
+    `;
+
+    html += `
+      <button id="logout-btn" class="btn btn-danger">
+        ${isMobile ? "🚪" : "Logout"}
+      </button>
+    `;
+
+    html += `</div>`;
+
+    userArea.innerHTML = html;
+
+    document.getElementById("logout-btn").onclick = async () => {
+      const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
+      await signOut(auth);
+      location.reload();
+    };
+
+  } else {
+
+    userArea.innerHTML = `<a href="/login/" class="login-btn">Accedi</a>`;
+
+  }
+
+};
+
+// WAIT FIREBASE
+let tries = 0;
+
+const interval = setInterval(()=>{
+
+  if(window.firebaseReady || tries > 10){
+    clearInterval(interval);
+    render();
+  }
+
+  tries++;
+
+},100);
 
 });
