@@ -3032,11 +3032,28 @@ document.addEventListener("rb_auth_ready", () => {
 
 if(window.currentPlan){
 
-  const plan = window.currentPlan.toLowerCase().trim();
+const rawPlan = String(window.currentPlan || "");
 
-  window.currentPlan = plan;
+const plan = rawPlan
+  .toLowerCase()
+  .trim()
+  .replace(/[^a-z_]/g, ""); // 🔥 pulizia totale
 
-  window.__IS_PRO__ = ["pro","investor","pro_yearly"].includes(plan);
+window.currentPlan = plan;
+
+// 🔥 FIX DEFINITIVO
+if(
+  plan === "pro" ||
+  plan === "investor" ||
+  plan === "pro_yearly"
+){
+  window.__IS_PRO__ = true;
+}else{
+  window.__IS_PRO__ = false;
+}
+
+console.log("✅ PLAN CLEAN:", plan);
+console.log("✅ IS_PRO:", window.__IS_PRO__);
 
   console.log("✅ PLAN FIXED:", plan, "IS_PRO:", window.__IS_PRO__);
 
