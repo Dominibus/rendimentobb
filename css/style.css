@@ -8301,3 +8301,114 @@ padding-top:64px;
 }
 
 }
+
+/* =========================================
+🔥 HEADER MOBILE DEFINITIVO FIX
+========================================= */
+
+@media (max-width:768px){
+
+/* ===== HEADER BASE ===== */
+.portal-header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:9999;
+  background:white;
+  border-bottom:1px solid #e2e8f0;
+}
+
+/* ===== INNER ===== */
+.portal-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 12px;
+  gap:8px;
+}
+
+/* ===== LOGO ===== */
+.logo-img{
+  height:34px !important;
+  width:auto;
+}
+
+/* ===== NAV DESKTOP OFF ===== */
+.desktop-nav{
+  display:none !important;
+}
+
+/* ===== RIGHT ===== */
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* ===== USER AREA ===== */
+#user-area{
+  display:flex;
+  align-items:center;
+}
+
+/* 🔥 FIX TESTO SPEZZATO */
+#user-area *{
+  white-space:nowrap !important;
+  writing-mode:horizontal-tb !important;
+}
+
+/* ===== LOGIN BTN ===== */
+.login-btn{
+  font-size:12px;
+  padding:6px 10px;
+}
+
+/* ===== LANG ===== */
+.lang-switch{
+  display:flex;
+  gap:4px;
+}
+
+.lang-btn{
+  font-size:11px;
+  padding:5px 8px;
+}
+
+/* ===== HAMBURGER ===== */
+.hamburger{
+  display:block;
+  font-size:22px;
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu{
+  position:fixed;
+  top:60px;
+  left:0;
+  width:100%;
+  background:white;
+  border-top:1px solid #e2e8f0;
+
+  display:none;
+  flex-direction:column;
+  z-index:9998;
+}
+
+.mobile-menu a{
+  padding:14px;
+  border-bottom:1px solid #f1f5f9;
+  text-decoration:none;
+  color:#0f172a;
+  font-weight:500;
+}
+
+/* ACTIVE MENU */
+.mobile-menu.active{
+  display:flex;
+}
+
+}
