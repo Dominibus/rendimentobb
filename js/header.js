@@ -165,31 +165,60 @@ if(!userArea) return;
 
 const isMobile = window.innerWidth < 768;
 
-if(user){
+// 🔥 aspetta piano caricato
+const waitPlan = () => {
 
-  if(isMobile){
-    userArea.innerHTML = `
-      <a href="/dashboard/" class="btn btn-secondary">📊</a>
-    `;
+  const isPro = window.isPro?.();
+  const isAdmin = window.isAdmin?.();
+
+  if(user){
+
+    // ================= ADMIN =================
+    if(isAdmin){
+
+      userArea.innerHTML = `
+        <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
+        <a href="/admin/leads.html" class="btn btn-primary" style="margin-left:6px;">
+          Leads
+        </a>
+      `;
+      return;
+    }
+
+    // ================= USER NORMALE =================
+    if(isMobile){
+      userArea.innerHTML = `
+        <a href="/dashboard/" class="btn btn-secondary">📊</a>
+      `;
+    }else{
+      userArea.innerHTML = `
+        <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
+      `;
+    }
+
   }else{
-    userArea.innerHTML = `
-      <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
-    `;
-  }
 
-}else{
-
-  if(isMobile){
     userArea.innerHTML = `
       <a href="/login/" class="login-btn">Accedi</a>
     `;
-  }else{
-    userArea.innerHTML = `
-      <a href="/login/" class="login-btn">Accedi</a>
-    `;
+
   }
 
-}
+};
+
+// 🔥 retry fino a quando Firebase ha caricato piano
+let tries = 0;
+
+const interval = setInterval(()=>{
+
+  if(window.firebaseReady || tries > 10){
+    clearInterval(interval);
+    waitPlan();
+  }
+
+  tries++;
+
+},100);
 
 });
 
