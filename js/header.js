@@ -200,18 +200,25 @@ if(isAdmin){
 
         const email = user.email || "";
 
-        let html = `<div class="rb-user">`;
+       const isMobile = window.innerWidth < 768;
 
-        html += `<span class="rb-email">${email}</span>`;
+let html = `<div class="rb-user">`;
 
-        // 🔥 FIX: dashboard appare SOLO dopo plan corretto
-        if(isPro || isAdmin){
-          html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
-        }
+if(!isMobile){
+  // DESKTOP → completo
+  html += `<span class="rb-email">${email}</span>`;
+}else{
+  // MOBILE → niente email (🔥 fondamentale)
+  html += `<span class="rb-avatar">👤</span>`;
+}
 
-        html += `<button id="logout" class="rb-btn red">Logout</button>`;
+if(isPro || isAdmin){
+  html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+}
 
-        html += `</div>`;
+html += `<button id="logout" class="rb-btn red">⎋</button>`;
+
+html += `</div>`;
 
        el.innerHTML = html;
        if(mobileEl) mobileEl.innerHTML = html;
