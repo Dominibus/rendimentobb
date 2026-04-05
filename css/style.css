@@ -9144,17 +9144,42 @@ display:none;
 
 }
 
-/* FIX MOBILE PERFETTO */
 @media (max-width:768px){
 
+  .rb-inner{
+    height:60px;
+    padding:0 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  /* LOGO */
+  .rb-logo{
+    height:32px;
+  }
+
+  /* NAV OFF */
+  .rb-center{
+    display:none;
+  }
+
+  /* RIGHT */
   .rb-right{
     display:flex;
     align-items:center;
     gap:6px;
   }
 
+  /* NASCONDI BOTTONI SU MOBILE */
+  .rb-user{
+    display:none !important;
+  }
+
+  /* LANG */
   .rb-lang{
-    flex-direction:row !important;
+    display:flex;
+    gap:4px;
   }
 
   .rb-lang button{
@@ -9162,18 +9187,10 @@ display:none;
     font-size:11px;
   }
 
-  .rb-login{
-    padding:6px 8px;
-    font-size:11px;
-  }
-
-  .rb-btn{
-    padding:6px 8px;
-    font-size:11px;
-  }
-
-  .rb-email{
-    display:none;
+  /* BURGER */
+  #rb-burger{
+    display:block;
+    font-size:20px;
   }
 
 }
