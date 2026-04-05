@@ -11,23 +11,30 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // ===============================
-// HELPER – INVIO AUTOMATICO
+// HELPER – INVIO AUTOMATICO API
 // ===============================
 
 async function sendLead(type, data){
 
   try{
 
-    await fetch("/api/send-lead",{
+    const response = await fetch("/api/send-lead",{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
         type,
-        ...data
+        ...data,
+        plan: window.currentPlan || "free" // 🔥 SUPER IMPORTANT
       })
     });
 
-    console.log("📤 Lead inviato:", type);
+    if(!response.ok){
+      const text = await response.text();
+      console.error("❌ API Lead error:", text);
+      return;
+    }
+
+    console.log("📤 Lead inviato API:", type);
 
   }catch(err){
     console.error("❌ Errore invio lead:", err);
@@ -35,6 +42,13 @@ async function sendLead(type, data){
 
 }
 
+// ===============================
+// VALIDAZIONE BASE
+// ===============================
+
+function isValidEmail(email){
+  return typeof email === "string" && email.includes("@");
+}
 
 // ===============================
 // MUTUI LEAD
@@ -44,15 +58,20 @@ export async function saveLeadMutui(data){
 
   try{
 
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida → skip mutui");
+      return;
+    }
+
     const leadData = {
-      email: data.email || "",
-      phone: data.phone || "",
-      amount: data.amount || "",
-      years: data.years || "",
-      created: serverTimestamp(),
+      email: data.email,
+      phone: data.phone || null,
+      amount: Number(data.amount || 0),
+      years: Number(data.years || 0),
+      createdAt: serverTimestamp(),
       status: "new",
       source: "mutui",
-      value: 30 // 💰 valore lead (tracking)
+      value: 30
     };
 
     await addDoc(collection(db,"leads_mutui"), leadData);
@@ -67,7 +86,6 @@ export async function saveLeadMutui(data){
 
 }
 
-
 // ===============================
 // IMMOBILI LEAD
 // ===============================
@@ -76,14 +94,19 @@ export async function saveLeadImmobili(data){
 
   try{
 
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida → skip immobili");
+      return;
+    }
+
     const leadData = {
-      email: data.email || "",
-      city: data.city || "",
-      budget: data.budget || "",
-      created: serverTimestamp(),
+      email: data.email,
+      city: data.city || window.currentCity || null,
+      budget: Number(data.budget || 0),
+      createdAt: serverTimestamp(),
       status: "new",
       source: "immobili",
-      value: 50 // 💰 più alto → vale di più
+      value: 50
     };
 
     await addDoc(collection(db,"leads_immobili"), leadData);
@@ -98,7 +121,6 @@ export async function saveLeadImmobili(data){
 
 }
 
-
 // ===============================
 // PARTNER LEAD
 // ===============================
@@ -107,13 +129,19 @@ export async function savePartnerLead(data){
 
   try{
 
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida → skip partner");
+      return;
+    }
+
     const leadData = {
       name: data.name || "",
-      email: data.email || "",
+      email: data.email,
       message: data.message || "",
-      created: serverTimestamp(),
+      createdAt: serverTimestamp(),
       status: "new",
-      source: "partner"
+      source: "partner",
+      value: 100
     };
 
     await addDoc(collection(db,"leads_partner"), leadData);
@@ -128,7 +156,6 @@ export async function savePartnerLead(data){
 
 }
 
-
 // ===============================
 // WORK LEAD
 // ===============================
@@ -137,18 +164,24 @@ export async function saveWorkLead(data){
 
   try{
 
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida → skip work");
+      return;
+    }
+
     const leadData = {
       name: data.name || "",
-      email: data.email || "",
+      email: data.email,
       role: data.role || "",
-      created: serverTimestamp(),
+      createdAt: serverTimestamp(),
       status: "new",
-      source: "work"
+      source: "work",
+      value: 10
     };
 
     await addDoc(collection(db,"leads_work"), leadData);
 
-    await sendLead("work", leadData); // ✅ CORRETTO
+    await sendLead("work", leadData);
 
     console.log("✅ Lead WORK salvato");
 
