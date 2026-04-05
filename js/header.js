@@ -1,5 +1,5 @@
 /* ===================== */
-/* FIREBASE INIT */
+/* FIREBASE */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -10,34 +10,31 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/fi
 /* HERO BACKGROUND */
 /* ===================== */
 
-window.applyCityBackground = function(city){
+window.applyCityBackground = function(){
 
-const hero =
-  document.querySelector(".hero-bg") ||
-  document.querySelector(".hero");
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero");
 
-if(!hero) return;
+  if(!hero) return;
 
-hero.classList.remove("rome","naples","milan","florence");
+  hero.classList.remove("rome","naples","milan","florence");
 
-let finalCity = city;
-
-if(!finalCity){
   const path = window.location.pathname.toLowerCase();
 
-  if(path.includes("napoli")) finalCity = "naples";
-  else if(path.includes("milano")) finalCity = "milan";
-  else if(path.includes("firenze")) finalCity = "florence";
-  else finalCity = "rome";
-}
+  let city = "rome";
 
-hero.classList.add(finalCity);
+  if(path.includes("milano")) city = "milan";
+  else if(path.includes("napoli")) city = "naples";
+  else if(path.includes("firenze")) city = "florence";
+
+  hero.classList.add(city);
 
 };
 
 
 /* ===================== */
-/* INIT HEADER */
+/* HEADER INIT */
 /* ===================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -49,35 +46,32 @@ const header = `
 
 <!-- LEFT -->
 <div class="header-left">
-  <a href="/" class="logo-link rb-logo">
+  <a href="/">
     <img src="/img/logo-main.png" class="logo-img">
   </a>
 </div>
 
 <!-- NAV DESKTOP -->
 <nav class="portal-nav desktop-nav">
-
-<a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-<a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
-<a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
-<a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
-<a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
-<a href="/dashboard/" data-it="Dashboard" data-en="Dashboard">Dashboard</a>
-<a href="/contact.html" data-it="Contatti" data-en="Contact">Contatti</a>
-
+  <a href="/tool/">Simulatore</a>
+  <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+  <a href="/mutui/">Mutui</a>
+  <a href="/immobili/">Immobili</a>
+  <a href="/academy/">Academy</a>
+  <a href="/contact.html">Contatti</a>
 </nav>
 
 <!-- RIGHT -->
 <div class="header-right">
 
-<div id="user-area"></div>
+  <div id="user-area"></div>
 
-<div class="lang-switch">
-<button class="lang-btn" onclick="setLang('it')">IT</button>
-<button class="lang-btn" onclick="setLang('en')">EN</button>
-</div>
+  <div class="lang-switch">
+    <button class="lang-btn" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
 
-<button class="hamburger" id="hamburger">☰</button>
+  <button class="hamburger" id="hamburger">☰</button>
 
 </div>
 
@@ -86,13 +80,13 @@ const header = `
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
 
-<a href="/tool/">Simulatore</a>
-<a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-<a href="/mutui/">Mutui</a>
-<a href="/immobili/">Immobili</a>
-<a href="/academy/">Academy</a>
-<a href="/dashboard/">Dashboard</a>
-<a href="/contact.html">Contatti</a>
+  <a href="/tool/">Simulatore</a>
+  <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+  <a href="/mutui/">Mutui</a>
+  <a href="/immobili/">Immobili</a>
+  <a href="/academy/">Academy</a>
+  <a href="/dashboard/">Dashboard</a>
+  <a href="/contact.html">Contatti</a>
 
 </div>
 
@@ -104,11 +98,11 @@ if(container){
   container.innerHTML = header;
 }
 
-/* HERO */
 window.applyCityBackground();
 
+
 /* ===================== */
-/* MENU MOBILE FIX VERO */
+/* MOBILE MENU */
 /* ===================== */
 
 const hamburger = document.getElementById("hamburger");
@@ -117,15 +111,10 @@ const mobileMenu = document.getElementById("mobileMenu");
 if(hamburger && mobileMenu){
 
   hamburger.addEventListener("click", (e)=>{
-    e.preventDefault();
     e.stopPropagation();
-
     mobileMenu.classList.toggle("active");
-
-    console.log("MENU TOGGLE:", mobileMenu.classList.contains("active"));
   });
 
-  // chiusura click fuori
   document.addEventListener("click", (e)=>{
     if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
       mobileMenu.classList.remove("active");
@@ -134,7 +123,11 @@ if(hamburger && mobileMenu){
 
 }
 
+
+/* ===================== */
 /* ACTIVE LINK */
+/* ===================== */
+
 const currentPath = window.location.pathname;
 
 document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
@@ -144,7 +137,11 @@ document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
   }
 });
 
-/* TRADUZIONI */
+
+/* ===================== */
+/* TRANSLATION */
+/* ===================== */
+
 setTimeout(()=>{
   if(typeof applyTranslations === "function"){
     applyTranslations();
@@ -155,7 +152,7 @@ setTimeout(()=>{
 
 
 /* ===================== */
-/* USER AREA FIX DEFINITIVO */
+/* USER AREA (FINAL FIX) */
 /* ===================== */
 
 onAuthStateChanged(auth, (user)=>{
@@ -165,48 +162,38 @@ if(!userArea) return;
 
 const isMobile = window.innerWidth < 768;
 
-// 🔥 aspetta Firebase + piano
-const renderUser = () => {
+const render = () => {
 
   const isAdmin = window.isAdmin?.();
 
-  // ================= LOGGATO =================
   if(user){
 
-    const userName = user.email || "User";
-
-    let html = `
-      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-    `;
+    let html = `<div style="display:flex;align-items:center;gap:8px;">`;
 
     // 👤 Nome (solo desktop)
     if(!isMobile){
-      html += `
-        <span style="font-size:12px;color:#64748b;">
-          ${userName}
-        </span>
-      `;
+      html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
     }
 
     // 📊 Dashboard
     html += `
-      <a href="/dashboard/" class="btn btn-secondary" style="padding:6px 10px;font-size:12px;">
+      <a href="/dashboard/" class="btn btn-secondary">
         ${isMobile ? "📊" : "Dashboard"}
       </a>
     `;
 
-    // 💰 ADMIN ONLY → LEADS
+    // 💰 Admin
     if(isAdmin){
       html += `
-        <a href="/dashboard-leads/" class="btn btn-primary" style="padding:6px 10px;font-size:12px;">
+        <a href="/dashboard-leads/" class="btn btn-primary">
           ${isMobile ? "💰" : "Leads"}
         </a>
       `;
     }
 
-    // 🚪 LOGOUT
+    // 🚪 Logout
     html += `
-      <button id="logout-btn" class="btn btn-danger" style="padding:6px 10px;font-size:12px;">
+      <button id="logout-btn" class="btn btn-danger">
         ${isMobile ? "🚪" : "Logout"}
       </button>
     `;
@@ -215,7 +202,7 @@ const renderUser = () => {
 
     userArea.innerHTML = html;
 
-    // 🔥 LOGOUT EVENT
+    // logout event
     setTimeout(()=>{
       const btn = document.getElementById("logout-btn");
       if(btn){
@@ -230,10 +217,7 @@ const renderUser = () => {
       }
     },50);
 
-  }
-
-  // ================= NON LOGGATO =================
-  else{
+  } else {
 
     userArea.innerHTML = `
       <a href="/login/" class="login-btn">Accedi</a>
@@ -244,14 +228,14 @@ const renderUser = () => {
 };
 
 
-// 🔥 WAIT FIREBASE READY
+// WAIT FIREBASE
 let tries = 0;
 
 const interval = setInterval(()=>{
 
   if(window.firebaseReady || tries > 10){
     clearInterval(interval);
-    renderUser();
+    render();
   }
 
   tries++;
@@ -259,6 +243,7 @@ const interval = setInterval(()=>{
 },100);
 
 });
+
 
 /* ===================== */
 /* LANG SYNC */
