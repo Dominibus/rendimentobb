@@ -214,24 +214,12 @@ async function saveAnalysis(data){
 
 // ================= PLAN SYSTEM =================
 
-// ✅ SOURCE OF TRUTH UNICA
+// 🔥 FLAG GLOBALE (fonte unica)
+window.__IS_PRO__ = false;
+
+// 🔥 FUNZIONE UNICA PULITA
 window.isPro = function(){
-
-  // 🔥 override assoluto (fondamentale)
-  if(window.__FORCE_PRO__ === true){
-    return true;
-  }
-
-  const plan = window.currentPlan;
-
-  if(!plan) return false;
-
-  return (
-    plan === "pro" ||
-    plan === "investor" ||
-    plan === "pro_yearly"
-  );
-
+  return window.__IS_PRO__ === true;
 };
 
 window.isAdmin = function(){
@@ -3039,6 +3027,22 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("rb_auth_ready", () => {
 
   console.log("🔥 Firebase READY → HARD SYNC");
+
+  // ================= FIX PLAN (CRITICO) =================
+
+if(window.currentPlan){
+
+  const plan = window.currentPlan.toLowerCase().trim();
+
+  window.currentPlan = plan;
+
+  window.__IS_PRO__ = ["pro","investor","pro_yearly"].includes(plan);
+
+  console.log("✅ PLAN FIXED:", plan, "IS_PRO:", window.__IS_PRO__);
+
+}else{
+  console.warn("⛔ currentPlan non disponibile");
+}
 
   // ================= PLAN FIX HARD (CRITICO) =================
 
