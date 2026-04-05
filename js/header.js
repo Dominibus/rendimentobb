@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER FINAL */
+/* RENDIMENTOBB HEADER FINAL PRO */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -45,36 +45,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="rb-inner">
 
-      <!-- TOP -->
-      <div class="rb-top">
+      <!-- LEFT -->
+      <div class="rb-left">
+        <a href="/">
+          <img src="/img/logo-main.png" class="rb-logo">
+        </a>
+      </div>
 
-        <div class="rb-left">
-          <a href="/">
-            <img src="/img/logo-main.png" class="rb-logo">
-          </a>
+      <!-- CENTER (DESKTOP) -->
+      <div class="rb-center">
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/tool/">Simulatore</a>
+        <a href="/immobili/">Immobili</a>
+        <a href="/academy/">Academy</a>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="rb-right">
+
+        <div class="rb-lang">
+          <button data-lang="it">IT</button>
+          <button data-lang="en">EN</button>
         </div>
 
         <div id="user-area"></div>
 
-      </div>
-
-      <!-- BOTTOM -->
-      <div class="rb-bottom">
-
-        <div class="rb-actions">
-
-          <a href="/dashboard/" class="rb-btn main-btn">
-            Dashboard
-          </a>
-
-          <div class="rb-lang">
-            <button data-lang="it">IT</button>
-            <button data-lang="en">EN</button>
-          </div>
-
-          <button id="rb-burger">☰</button>
-
-        </div>
+        <button id="rb-burger">☰</button>
 
       </div>
 
@@ -85,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div id="mobile-user-area"></div>
 
+      <a href="/dashboard/">Dashboard</a>
       <a href="/tool/">Simulatore</a>
       <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
       <a href="/mutui/">Mutui</a>
@@ -190,7 +187,6 @@ function initUser(){
         }
 
         html += `<button id="logout" class="rb-btn red">Logout</button>`;
-
         html += `</div>`;
 
         el.innerHTML = html;
