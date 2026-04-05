@@ -9219,3 +9219,41 @@ padding-top:60px;
 }
 
 }
+
+/* FIX USER AREA */
+#user-area{
+min-width:90px;
+display:flex;
+justify-content:flex-end;
+}
+
+/* FIX LOGIN BUTTON */
+.rb-login{
+white-space:nowrap;
+padding:6px 14px;
+font-weight:600;
+}
+
+/* FIX MOBILE ALIGN */
+@media (max-width:768px){
+
+.rb-right{
+gap:6px;
+}
+
+.rb-login{
+font-size:12px;
+padding:6px 10px;
+}
+
+/* lingua sempre orizzontale */
+.rb-lang{
+flex-direction:row !important;
+}
+
+/* fix overflow */
+.rb-inner{
+grid-template-columns:1fr auto auto;
+}
+
+}
