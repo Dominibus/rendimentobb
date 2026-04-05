@@ -9257,3 +9257,85 @@ grid-template-columns:1fr auto auto;
 }
 
 }
+
+@media (max-width:768px){
+
+/* ===== HEADER BASE ===== */
+.rb-header{
+height:auto;
+padding:8px 12px;
+}
+
+/* ===== GRID MOBILE ===== */
+.rb-inner{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+/* ===== TOP ROW ===== */
+.rb-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* ===== BOTTOM ROW ===== */
+.rb-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:8px;
+}
+
+/* ===== LOGO ===== */
+.rb-logo img{
+height:34px;
+}
+
+/* ===== USER AREA ===== */
+.rb-user{
+display:flex;
+align-items:center;
+gap:6px;
+flex-wrap:wrap;
+}
+
+/* EMAIL PICCOLA */
+.rb-email{
+font-size:11px;
+max-width:120px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+/* BOTTONI */
+.rb-btn{
+padding:5px 10px;
+font-size:12px;
+}
+
+/* LOGIN */
+.rb-login{
+font-size:12px;
+padding:6px 10px;
+}
+
+/* ===== LANGUAGE ===== */
+.rb-lang{
+display:flex;
+gap:4px;
+}
+
+/* ===== HAMBURGER ===== */
+.rb-hamburger{
+font-size:22px;
+}
+
+/* ===== MOBILE MENU ===== */
+.rb-mobile{
+top:90px; /* 🔥 più basso */
+}
+
+}
