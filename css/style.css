@@ -7870,3 +7870,96 @@ canvas + img[src*="logo"],
 .pdf-container img[src*="logo"]{
   width:160px !important;
 }
+
+/* =========================================
+🔥 MOBILE HEADER FIX DEFINITIVO
+========================================= */
+
+@media (max-width:768px){
+
+/* HEADER BASE */
+.portal-header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:9999;
+  background:white;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* INNER */
+.portal-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 14px;
+}
+
+/* LOGO */
+.logo-img{
+  width:120px !important;
+  height:auto !important;
+}
+
+/* NASCONDI NAV DESKTOP */
+.desktop-nav{
+  display:none !important;
+}
+
+/* RIGHT */
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* HAMBURGER */
+.hamburger{
+  font-size:22px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  display:block;
+}
+
+/* MOBILE MENU */
+.mobile-menu{
+  position:fixed;
+  top:60px;
+  left:0;
+  width:100%;
+  background:white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+
+  padding:20px;
+
+  transform:translateY(-120%);
+  opacity:0;
+  pointer-events:none;
+
+  transition:all .3s ease;
+}
+
+/* MENU ATTIVO */
+.mobile-menu.active{
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* LINK */
+.mobile-menu a{
+  font-size:16px;
+  font-weight:600;
+  color:#0f172a;
+  text-decoration:none;
+  padding:10px 0;
+  border-bottom:1px solid #f1f5f9;
+}
+
+}
