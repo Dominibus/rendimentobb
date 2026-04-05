@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER FINAL CLEAN */
+/* RENDIMENTOBB HEADER FINAL */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -28,7 +28,7 @@ window.applyCityBackground = function(){
   else if(path.includes("firenze")) city = "florence";
 
   hero.classList.add(city);
-}; 
+};
 
 
 /* ===================== */
@@ -45,32 +45,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="rb-inner">
 
-      <!-- LEFT -->
-      <div class="rb-left">
-        <a href="/">
-          <img src="/img/logo-main.png" class="rb-logo" alt="RendimentoBB">
-        </a>
-      </div>
+      <!-- TOP -->
+      <div class="rb-top">
 
-      <!-- CENTER -->
-      <div class="rb-center">
-        <a href="/dashboard/">Dashboard</a>
-        <a href="/tool/">Simulatore</a>
-        <a href="/immobili/">Immobili</a>
-        <a href="/academy/">Academy</a>
-      </div>
-
-      <!-- RIGHT -->
-      <div class="rb-right">
-
-        <div class="rb-lang">
-          <button data-lang="it">IT</button>
-          <button data-lang="en">EN</button>
+        <div class="rb-left">
+          <a href="/">
+            <img src="/img/logo-main.png" class="rb-logo">
+          </a>
         </div>
 
         <div id="user-area"></div>
 
-        <button id="rb-burger">☰</button>
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="rb-bottom">
+
+        <div class="rb-actions">
+
+          <a href="/dashboard/" class="rb-btn main-btn">
+            Dashboard
+          </a>
+
+          <div class="rb-lang">
+            <button data-lang="it">IT</button>
+            <button data-lang="en">EN</button>
+          </div>
+
+          <button id="rb-burger">☰</button>
+
+        </div>
 
       </div>
 
@@ -81,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div id="mobile-user-area"></div>
 
-      <a href="/dashboard/">Dashboard</a>
       <a href="/tool/">Simulatore</a>
       <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
       <a href="/mutui/">Mutui</a>
@@ -143,82 +146,80 @@ function initHeaderInteractions(){
 
 
 /* ===================== */
-/* USER AREA SAFE (ANTI-CRASH) */
+/* USER AREA */
 /* ===================== */
 
 function initUser(){
 
-  let attempts = 0;
-
   const waitFirebase = setInterval(()=>{
 
-    attempts++;
-
-    // dopo 2 secondi procede comunque
-    if(!window.firebaseReady && attempts < 20) return;
+    if(!window.firebaseReady) return;
 
     clearInterval(waitFirebase);
 
-    try{
+    onAuthStateChanged(auth, (user)=>{
 
-      onAuthStateChanged(auth, (user)=>{
-        renderUser(user);
-      });
+      const el = document.getElementById("user-area");
+      const mobileEl = document.getElementById("mobile-user-area");
 
-    }catch(e){
-      console.warn("Firebase fallback");
-      renderUser(null);
-    }
+      if(!el) return;
 
-  },100);
+      const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+      const isAdmin = ADMIN_EMAILS.includes(user?.email);
 
-}
+      const isPro =
+        window.currentPlan === "pro" ||
+        window.currentPlan === "investor" ||
+        window.currentPlan === "pro_yearly";
 
+      if(user){
 
-/* ===================== */
-/* RENDER USER */
-/* ===================== */
+        const email = user.email || "";
+        const isMobile = window.innerWidth < 768;
 
-function renderUser(user){
+        let html = `<div class="rb-user">`;
 
-  const el = document.getElementById("user-area");
-  const mobileEl = document.getElementById("mobile-user-area");
+        if(!isMobile){
+          html += `<span class="rb-email">${email}</span>`;
+        }else{
+          html += `<span>👤</span>`;
+        }
 
-  if(!el) return;
+        if(isPro || isAdmin){
+          html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+        }
 
-  if(user){
+        html += `<button id="logout" class="rb-btn red">Logout</button>`;
 
-    const email = user.email || "";
+        html += `</div>`;
 
-    el.innerHTML = `
-      <div class="rb-user">
-        <span class="rb-email">${email}</span>
-        <a href="/dashboard/" class="rb-btn">Dashboard</a>
-        <button id="logout" class="rb-btn red">Logout</button>
-      </div>
-    `;
+        el.innerHTML = html;
 
-    if(mobileEl){
-      mobileEl.innerHTML = `
-        <div class="rb-mobile-user">
-          <div class="rb-email">${email}</div>
-          <a href="/dashboard/" class="rb-btn">Dashboard</a>
-          <button id="logout-mobile" class="rb-btn red">Logout</button>
-        </div>
-      `;
-    }
+        if(mobileEl){
+          mobileEl.innerHTML = `
+            <div class="rb-mobile-user">
+              <div>${email}</div>
+              <a href="/dashboard/">Dashboard</a>
+              <button id="logout-mobile">Logout</button>
+            </div>
+          `;
+        }
 
-    document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
-      btn.onclick = async ()=>{
-        await signOut(auth);
-        location.reload();
-      };
+        document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
+          btn.onclick = async ()=>{
+            await signOut(auth);
+            location.reload();
+          };
+        });
+
+      } else {
+
+        el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+
+      }
+
     });
 
-  } else {
-
-    el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
-
-  }
+  },100);
 
 }
