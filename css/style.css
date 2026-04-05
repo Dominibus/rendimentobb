@@ -9128,3 +9128,79 @@ display:none;
   }
 
 }
+
+/* ===================== */
+/* MOBILE HEADER FIX REAL */
+/* ===================== */
+
+@media (max-width:768px){
+
+  .rb-inner{
+    height:60px;
+    padding:0 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  /* LOGO */
+  .rb-logo{
+    height:32px;
+  }
+
+  /* NAV OFF */
+  .rb-center{
+    display:none;
+  }
+
+  /* RIGHT */
+  .rb-right{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:nowrap;
+  }
+
+  /* LANG */
+  .rb-lang{
+    display:flex;
+    flex-direction:row !important;
+    gap:4px;
+  }
+
+  .rb-lang button{
+    padding:4px 6px;
+    font-size:11px;
+    min-width:auto;
+  }
+
+  /* LOGIN */
+  .rb-login{
+    padding:6px 8px;
+    font-size:11px;
+    white-space:nowrap;
+  }
+
+  /* USER */
+  .rb-btn{
+    padding:6px 8px;
+    font-size:11px;
+  }
+
+  /* EMAIL OFF */
+  .rb-email{
+    display:none;
+  }
+
+  /* BURGER */
+  #rb-burger{
+    display:block;
+    font-size:20px;
+  }
+
+  /* EVITA WRAP */
+  .rb-right *{
+    white-space:nowrap;
+  }
+
+}
