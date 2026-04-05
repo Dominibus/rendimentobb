@@ -8913,806 +8913,7 @@ display:none;
 }
 
 /* ===================== */
-/* HEADER REAL FIX */
-/* ===================== */
-
-.rb-header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-z-index:9999;
-background:rgba(255,255,255,0.95);
-backdrop-filter:blur(10px);
-border-bottom:1px solid #e5e7eb;
-}
-
-/* GRID PERFETTO */
-.rb-header-inner{
-max-width:1200px;
-margin:auto;
-display:grid;
-grid-template-columns:160px 1fr auto;
-align-items:center;
-gap:10px;
-padding:10px 16px;
-}
-
-/* LOGO */
-.rb-logo img{
-height:40px;
-}
-
-/* NAV */
-.rb-nav{
-display:flex;
-justify-content:center;
-gap:22px;
-}
-
-.rb-nav a{
-text-decoration:none;
-font-size:14px;
-color:#0f172a;
-font-weight:500;
-white-space:nowrap;
-}
-
-/* RIGHT */
-.rb-right{
-display:flex;
-align-items:center;
-gap:8px;
-}
-
-/* USER */
-.rb-user{
-display:flex;
-align-items:center;
-gap:6px;
-font-size:12px;
-}
-
-/* LOGIN */
-.rb-login{
-background:#10b981;
-color:#fff;
-padding:6px 12px;
-border-radius:6px;
-text-decoration:none;
-font-size:13px;
-}
-
-/* LANG */
-.rb-lang{
-display:flex;
-gap:4px;
-}
-
-.rb-lang button{
-padding:5px 8px;
-border:none;
-background:#f1f5f9;
-border-radius:999px;
-cursor:pointer;
-}
-
-/* BURGER */
-.rb-burger{
-display:none;
-font-size:20px;
-background:none;
-border:none;
-cursor:pointer;
-}
-
-/* MOBILE MENU */
-.rb-mobile{
-display:none;
-flex-direction:column;
-background:#fff;
-padding:20px;
-gap:12px;
-border-top:1px solid #e5e7eb;
-}
-
-.rb-mobile.open{
-display:flex;
-}
-
-/* ===================== */
-/* MOBILE FIX VERO */
-/* ===================== */
-
-@media (max-width:768px){
-
-.rb-header-inner{
-grid-template-columns:1fr auto auto;
-}
-
-/* NAV OFF */
-.rb-nav{
-display:none;
-}
-
-/* LOGO SMALL */
-.rb-logo img{
-height:32px;
-}
-
-/* USER MINIMAL */
-.rb-user span{
-display:none;
-}
-
-/* BURGER ON */
-.rb-burger{
-display:block;
-}
-
-/* ORDINE PERFETTO */
-.rb-right{
-gap:6px;
-}
-
-}
-
-/* ===================== */
-/* HEADER SaaS FINAL */
-/* ===================== */
-
-.rb-header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:rgba(255,255,255,0.95);
-backdrop-filter:blur(10px);
-z-index:9999;
-border-bottom:1px solid #eee;
-}
-
-/* GRID */
-.rb-inner{
-max-width:1200px;
-margin:auto;
-display:grid;
-grid-template-columns:140px 1fr auto;
-align-items:center;
-gap:10px;
-padding:10px 16px;
-}
-
-/* LOGO */
-.rb-logo{
-height:36px;
-}
-
-/* NAV */
-.rb-nav{
-display:flex;
-justify-content:center;
-gap:22px;
-}
-
-.rb-nav a{
-text-decoration:none;
-color:#0f172a;
-font-size:14px;
-white-space:nowrap;
-}
-
-/* RIGHT */
-.rb-right{
-display:flex;
-align-items:center;
-gap:8px;
-}
-
-/* USER */
-.rb-user{
-display:flex;
-align-items:center;
-gap:6px;
-}
-
-.rb-email{
-font-size:12px;
-color:#64748b;
-}
-
-/* BUTTONS */
-.rb-btn{
-background:#f1f5f9;
-padding:6px 10px;
-border-radius:6px;
-font-size:12px;
-border:none;
-cursor:pointer;
-}
-
-.rb-btn.red{
-background:#ef4444;
-color:#fff;
-}
-
-/* LOGIN */
-.rb-login{
-background:#10b981;
-color:#fff;
-padding:6px 12px;
-border-radius:6px;
-text-decoration:none;
-font-size:13px;
-}
-
-/* LANG */
-.rb-lang{
-display:flex;
-gap:4px;
-}
-
-.rb-lang button{
-padding:5px 8px;
-border:none;
-border-radius:999px;
-background:#f1f5f9;
-font-size:12px;
-white-space:nowrap;
-}
-
-/* BURGER */
-#rb-burger{
-display:none;
-font-size:22px;
-background:none;
-border:none;
-cursor:pointer;
-}
-
-/* MOBILE MENU */
-.rb-mobile{
-display:none;
-flex-direction:column;
-padding:20px;
-gap:12px;
-border-top:1px solid #eee;
-background:white;
-}
-
-.rb-mobile.open{
-display:flex;
-}
-
-/* ===================== */
-/* MOBILE */
-/* ===================== */
-
-@media (max-width:768px){
-
-.rb-inner{
-grid-template-columns:1fr auto auto;
-}
-
-.rb-nav{
-display:none;
-}
-
-.rb-email{
-display:none;
-}
-
-#rb-burger{
-display:block;
-}
-
-.rb-logo{
-height:30px;
-}
-
-.rb-lang{
-flex-direction:row;
-}
-
-body{
-padding-top:60px;
-}
-
-}
-
-/* FIX USER AREA */
-#user-area{
-min-width:90px;
-display:flex;
-justify-content:flex-end;
-}
-
-/* FIX LOGIN BUTTON */
-.rb-login{
-white-space:nowrap;
-padding:6px 14px;
-font-weight:600;
-}
-
-/* FIX MOBILE ALIGN */
-@media (max-width:768px){
-
-.rb-right{
-gap:6px;
-}
-
-.rb-login{
-font-size:12px;
-padding:6px 10px;
-}
-
-/* lingua sempre orizzontale */
-.rb-lang{
-flex-direction:row !important;
-}
-
-/* fix overflow */
-.rb-inner{
-grid-template-columns:1fr auto auto;
-}
-
-}
-
-@media (max-width:768px){
-
-/* ===== HEADER BASE ===== */
-.rb-header{
-height:auto;
-padding:8px 12px;
-}
-
-/* ===== GRID MOBILE ===== */
-.rb-inner{
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-
-/* ===== TOP ROW ===== */
-.rb-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-/* ===== BOTTOM ROW ===== */
-.rb-bottom{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:8px;
-}
-
-/* ===== LOGO ===== */
-.rb-logo img{
-height:34px;
-}
-
-/* ===== USER AREA ===== */
-.rb-user{
-display:flex;
-align-items:center;
-gap:6px;
-flex-wrap:wrap;
-}
-
-/* EMAIL PICCOLA */
-.rb-email{
-font-size:11px;
-max-width:120px;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
-}
-
-/* BOTTONI */
-.rb-btn{
-padding:5px 10px;
-font-size:12px;
-}
-
-/* LOGIN */
-.rb-login{
-font-size:12px;
-padding:6px 10px;
-}
-
-/* ===== LANGUAGE ===== */
-.rb-lang{
-display:flex;
-gap:4px;
-}
-
-/* ===== HAMBURGER ===== */
-.rb-hamburger{
-font-size:22px;
-}
-
-/* ===== MOBILE MENU ===== */
-.rb-mobile{
-top:90px; /* 🔥 più basso */
-}
-
-}
-
-/* ===================== */
-/* HEADER BASE */
-/* ===================== */
-
-.rb-header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:rgba(255,255,255,0.95);
-backdrop-filter:blur(10px);
-z-index:9999;
-border-bottom:1px solid #eee;
-}
-
-/* ===== DESKTOP ===== */
-
-.rb-inner{
-max-width:1200px;
-margin:auto;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:12px 20px;
-gap:20px;
-}
-
-.rb-logo{
-height:42px;
-}
-
-/* NAV */
-.rb-nav{
-display:flex;
-gap:20px;
-align-items:center;
-}
-
-.rb-nav a{
-text-decoration:none;
-font-size:14px;
-font-weight:500;
-color:#1e293b;
-transition:.2s;
-}
-
-.rb-nav a:hover{
-color:#10b981;
-}
-
-/* RIGHT */
-.rb-right{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-/* USER */
-.rb-user{
-display:flex;
-align-items:center;
-gap:8px;
-}
-
-.rb-email{
-font-size:12px;
-color:#64748b;
-max-width:140px;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
-}
-
-/* BUTTONS */
-.rb-btn{
-background:#10b981;
-color:#fff;
-border:none;
-padding:6px 12px;
-border-radius:999px;
-font-size:12px;
-cursor:pointer;
-}
-
-.rb-btn.red{
-background:#ef4444;
-}
-
-.rb-login{
-background:#10b981;
-color:#fff;
-padding:6px 12px;
-border-radius:999px;
-text-decoration:none;
-font-size:12px;
-}
-
-/* LANG */
-.rb-lang{
-display:flex;
-gap:4px;
-}
-
-.rb-lang button{
-border:none;
-padding:6px 10px;
-border-radius:999px;
-background:#f1f5f9;
-cursor:pointer;
-font-size:12px;
-}
-
-/* BURGER */
-#rb-burger{
-display:none;
-font-size:22px;
-background:none;
-border:none;
-cursor:pointer;
-}
-
-/* MOBILE MENU */
-.rb-mobile{
-display:none;
-position:fixed;
-top:70px;
-left:0;
-width:100%;
-background:white;
-flex-direction:column;
-padding:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
-z-index:9998;
-}
-
-.rb-mobile.open{
-display:flex;
-}
-
-.rb-mobile a{
-padding:14px 0;
-border-bottom:1px solid #eee;
-color:#10b981;
-font-weight:500;
-text-decoration:none;
-}
-
-
-/* ===================== */
-/* MOBILE */
-/* ===================== */
-
-@media (max-width:768px){
-
-/* 🔥 STRUTTURA A 2 RIGHE */
-.rb-inner{
-flex-direction:column;
-align-items:stretch;
-padding:10px 12px;
-gap:6px;
-}
-
-/* TOP */
-.rb-left{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-/* LOGO */
-.rb-logo{
-height:34px;
-}
-
-/* NAV OFF */
-.rb-nav{
-display:none;
-}
-
-/* RIGHT → DIVENTA RIGA 2 */
-.rb-right{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:6px;
-flex-wrap:nowrap;
-}
-
-/* USER */
-.rb-user{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-/* EMAIL */
-.rb-email{
-display:none; /* 🔥 nascondiamo email → spazio */
-}
-
-/* BOTTONI */
-.rb-btn{
-padding:6px 8px;
-font-size:11px;
-}
-
-/* LOGIN */
-.rb-login{
-padding:6px 10px;
-font-size:12px;
-}
-
-/* LANG */
-.rb-lang{
-gap:4px;
-}
-
-.rb-lang button{
-padding:5px 8px;
-font-size:11px;
-}
-
-/* BURGER VISIBILE */
-#rb-burger{
-display:block;
-}
-
-/* MENU */
-.rb-mobile{
-top:85px;
-}
-
-/* BODY OFFSET */
-body{
-padding-top:90px;
-}
-
-}
-
-/* ===== MOBILE USER AREA ===== */
-.rb-mobile-user{
-  padding:12px 16px;
-  border-bottom:1px solid #e5e7eb;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.rb-mobile-user .rb-email{
-  font-size:12px;
-  color:#64748b;
-  word-break:break-all;
-}
-
-.rb-mobile-user .rb-btn{
-  width:100%;
-  text-align:center;
-}
-
-/* ===== MOBILE USER AREA ===== */
-.rb-mobile-user{
-  padding:12px 16px;
-  border-bottom:1px solid #e5e7eb;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.rb-mobile-user .rb-email{
-  font-size:12px;
-  color:#64748b;
-  word-break:break-all;
-}
-
-.rb-mobile-user .rb-btn{
-  width:100%;
-  text-align:center;
-}
-
-.rb-avatar{
-  font-size:16px;
-}
-
-/* ===================== */
-/* HEADER MOBILE FINAL */
-/* ===================== */
-
-@media (max-width:768px){
-
-.rb-inner{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  padding:10px;
-}
-
-.rb-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.rb-bottom{
-  display:flex;
-  justify-content:flex-end;
-}
-
-.rb-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.main-btn{
-  background:#10b981;
-  color:white;
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:12px;
-}
-
-.rb-lang button{
-  padding:6px 8px;
-  font-size:11px;
-}
-
-#rb-burger{
-  font-size:20px;
-}
-
-.rb-user{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.rb-email{
-  font-size:12px;
-  color:#64748b;
-}
-
-/* MOBILE MENU */
-.rb-mobile{
-  display:none;
-  flex-direction:column;
-  padding:16px;
-  background:white;
-}
-
-.rb-mobile.open{
-  display:flex;
-}
-
-.rb-mobile a{
-  padding:10px 0;
-  color:#10b981;
-  font-weight:500;
-}
-
-/* USER MOBILE */
-.rb-mobile-user{
-  border-bottom:1px solid #eee;
-  padding-bottom:10px;
-  margin-bottom:10px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-}
-
-/* ===================== */
-/* HEADER BASE */
+/* RENDIMENTOBB HEADER FINAL CLEAN */
 /* ===================== */
 
 .rb-header{
@@ -9720,14 +8921,16 @@ padding-top:90px;
   top:0;
   left:0;
   width:100%;
-  background:#fff;
   z-index:9999;
-  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid #e5e7eb;
 }
 
+/* ===== CONTAINER ===== */
 .rb-inner{
   max-width:1200px;
-  margin:0 auto;
+  margin:auto;
   height:64px;
   display:flex;
   align-items:center;
@@ -9735,12 +8938,12 @@ padding-top:90px;
   padding:0 20px;
 }
 
-/* LEFT */
+/* ===== LOGO ===== */
 .rb-logo{
-  height:42px;
+  height:40px;
 }
 
-/* CENTER */
+/* ===== NAV DESKTOP ===== */
 .rb-center{
   display:flex;
   gap:20px;
@@ -9748,7 +8951,8 @@ padding-top:90px;
 
 .rb-center a{
   text-decoration:none;
-  font-weight:600;
+  font-size:14px;
+  font-weight:500;
   color:#0f172a;
 }
 
@@ -9756,29 +8960,14 @@ padding-top:90px;
   color:#10b981;
 }
 
-/* RIGHT */
+/* ===== RIGHT ===== */
 .rb-right{
   display:flex;
   align-items:center;
   gap:10px;
 }
 
-/* LANG */
-.rb-lang{
-  display:flex;
-  gap:6px;
-}
-
-.rb-lang button{
-  padding:6px 10px;
-  border:none;
-  border-radius:999px;
-  background:#f1f5f9;
-  cursor:pointer;
-  font-size:12px;
-}
-
-/* USER */
+/* ===== USER ===== */
 .rb-user{
   display:flex;
   align-items:center;
@@ -9787,15 +8976,20 @@ padding-top:90px;
 
 .rb-email{
   font-size:12px;
-  color:#475569;
+  color:#64748b;
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
+/* ===== BUTTON ===== */
 .rb-btn{
-  padding:8px 12px;
-  border:none;
-  border-radius:999px;
   background:#10b981;
   color:#fff;
+  border:none;
+  padding:6px 12px;
+  border-radius:999px;
   font-size:12px;
   cursor:pointer;
   text-decoration:none;
@@ -9805,16 +8999,33 @@ padding-top:90px;
   background:#ef4444;
 }
 
+/* ===== LOGIN ===== */
 .rb-login{
-  padding:8px 14px;
   background:#10b981;
   color:#fff;
+  padding:6px 12px;
   border-radius:999px;
   text-decoration:none;
+  font-size:12px;
   font-weight:600;
 }
 
-/* BURGER */
+/* ===== LANGUAGE ===== */
+.rb-lang{
+  display:flex;
+  gap:4px;
+}
+
+.rb-lang button{
+  border:none;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#f1f5f9;
+  cursor:pointer;
+  font-size:12px;
+}
+
+/* ===== BURGER ===== */
 #rb-burger{
   display:none;
   font-size:22px;
@@ -9823,18 +9034,19 @@ padding-top:90px;
   cursor:pointer;
 }
 
-/* MOBILE MENU */
+/* ===== MOBILE MENU ===== */
 .rb-mobile{
+  display:none;
   position:fixed;
   top:64px;
   left:0;
   width:100%;
-  background:#fff;
-  display:none;
+  background:white;
   flex-direction:column;
   padding:20px;
   gap:15px;
   box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  z-index:9998;
 }
 
 .rb-mobile.open{
@@ -9847,9 +9059,13 @@ padding-top:90px;
   color:#0f172a;
 }
 
+/* ===== MOBILE USER ===== */
 .rb-mobile-user{
   padding-bottom:10px;
   border-bottom:1px solid #eee;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 /* ===================== */
@@ -9858,56 +9074,35 @@ padding-top:90px;
 
 @media (max-width:768px){
 
+  /* NAV OFF */
   .rb-center{
     display:none;
   }
 
-  #rb-burger{
-    display:block;
+  /* HEADER */
+  .rb-inner{
+    height:60px;
+    padding:0 12px;
   }
 
+  /* LOGO */
   .rb-logo{
     height:34px;
   }
 
-  .rb-inner{
-    padding:0 12px;
-  }
-
-}
-
-/* ===================== */
-/* FIX HEADER MOBILE DEFINITIVO */
-/* ===================== */
-
-@media (max-width:768px){
-
-  .rb-inner{
-    display:flex !important;
-    align-items:center !important;
-    justify-content:space-between !important;
-    flex-direction:row !important;
-    height:60px;
-  }
-
-  .rb-left{
-    flex:0 0 auto;
-  }
-
+  /* RIGHT */
   .rb-right{
-    display:flex !important;
-    align-items:center;
     gap:6px;
-    flex:0 0 auto;
   }
 
-  .rb-lang{
-    display:flex !important;
-    gap:4px;
+  /* EMAIL OFF */
+  .rb-email{
+    display:none;
   }
 
-  .rb-lang button{
-    padding:4px 8px;
+  /* BUTTONS SMALL */
+  .rb-btn{
+    padding:6px 8px;
     font-size:11px;
   }
 
@@ -9916,14 +9111,20 @@ padding-top:90px;
     font-size:12px;
   }
 
-  #rb-burger{
-    display:block !important;
-    font-size:20px;
+  /* LANG */
+  .rb-lang button{
+    padding:5px 8px;
+    font-size:11px;
   }
 
-}
+  /* BURGER ON */
+  #rb-burger{
+    display:block;
+  }
 
-.rb-header{
-  backdrop-filter:blur(10px);
-  background:rgba(255,255,255,0.9);
+  /* BODY OFFSET */
+  body{
+    padding-top:60px;
+  }
+
 }
