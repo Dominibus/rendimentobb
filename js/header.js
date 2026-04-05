@@ -172,10 +172,23 @@ function initUser(){
         link.href = "/dashboard-leads/";
         link.id = "admin-link";
         link.innerText = "Leads";
-        link.style.color = "#10b981";
-        link.style.fontWeight = "600";
+       link.style.color = "#10b981";
+      link.style.fontWeight = "600";
         nav.appendChild(link);
       }
+
+      /* ===== ADMIN MOBILE LINK ===== */
+if(isAdmin){
+  const mobile = document.getElementById("rb-mobile");
+
+  if(mobile && !document.getElementById("mobile-leads")){
+    const link = document.createElement("a");
+    link.href = "/dashboard-leads/";
+    link.id = "mobile-leads";
+    link.innerText = "Leads";
+    mobile.appendChild(link);
+  }
+}
 
       /* ===== USER ===== */
       if(user){
