@@ -3497,19 +3497,18 @@ document.addEventListener("rb_auth_ready", removeGhostOverlays);
 
 document.addEventListener("rb_plan_loaded", ()=>{
 
-  if(window.isPro()){
+if(window.isPro && window.isPro()){
+  console.log("🔓 PRO USER DASHBOARD");
 
-    console.log("🔥 FORCE PRO MODE");
+  document.querySelectorAll(`
+    .locked,
+    .locked-overlay,
+    .results-overlay
+  `).forEach(el => el.remove());
 
-    document.body.classList.add("pro-user");
-
-    if(typeof unlockProUI === "function"){
-      unlockProUI();
-    }
-
-  }
-
-});
+}else{
+  console.log("🔒 FREE USER");
+}
 
 document.addEventListener("rb_plan_loaded", () => {
 
