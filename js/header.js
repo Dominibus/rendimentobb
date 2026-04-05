@@ -28,7 +28,7 @@ window.applyCityBackground = function(){
   else if(path.includes("firenze")) city = "florence";
 
   hero.classList.add(city);
-};
+}; 
 
 
 /* ===================== */
