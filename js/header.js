@@ -153,7 +153,7 @@ if(isAdmin && nav && !document.getElementById("admin-link")){
 
   const link = document.createElement("a");
 
-  link.href = "/admin/leads.html"; // ⚠️ CAMBIA QUI SE URL DIVERSO
+  link.href = "/dashboard-leads/"; // ⚠️ CAMBIA QUI SE URL DIVERSO
   link.id = "admin-link";
   link.innerText = "Leads";
 
