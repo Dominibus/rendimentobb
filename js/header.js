@@ -145,65 +145,72 @@ function initHeaderInteractions(){
 
 function initUser(){
 
-  onAuthStateChanged(auth, (user)=>{
+  const waitFirebase = setInterval(()=>{
 
-    const el = document.getElementById("user-area");
-    const nav = document.getElementById("rb-nav");
+    if(!window.firebaseReady) return;
 
-    if(!el) return;
+    clearInterval(waitFirebase);
 
-    const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
-    const isAdmin = ADMIN_EMAILS.includes(user?.email);
+    onAuthStateChanged(auth, (user)=>{
 
-    const isPro =
-      window.currentPlan === "pro" ||
-      window.currentPlan === "investor" ||
-      window.currentPlan === "pro_yearly";
+      const el = document.getElementById("user-area");
+      const nav = document.getElementById("rb-nav");
 
-    /* ADMIN LINK */
-    if(isAdmin && nav && !document.getElementById("admin-link")){
-      const link = document.createElement("a");
-      link.href = "/dashboard-leads/";
-      link.id = "admin-link";
-      link.innerText = "Leads";
-      link.style.color = "#10b981";
-      link.style.fontWeight = "600";
-      nav.appendChild(link);
-    }
+      if(!el) return;
 
-    /* USER LOGGED */
-    if(user){
+      const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+      const isAdmin = ADMIN_EMAILS.includes(user?.email);
 
-      let html = `<div class="rb-user">`;
+      const isPro =
+        window.currentPlan === "pro" ||
+        window.currentPlan === "investor" ||
+        window.currentPlan === "pro_yearly";
 
-      html += `<span class="rb-email">${user.email}</span>`;
-
-      if(isPro || isAdmin){
-        html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+      /* ===== ADMIN LINK ===== */
+      if(isAdmin && nav && !document.getElementById("admin-link")){
+        const link = document.createElement("a");
+        link.href = "/dashboard-leads/";
+        link.id = "admin-link";
+        link.innerText = "Leads";
+        link.style.color = "#10b981";
+        link.style.fontWeight = "600";
+        nav.appendChild(link);
       }
 
-      html += `<button id="logout" class="rb-btn red">Logout</button>`;
+      /* ===== USER ===== */
+      if(user){
 
-      html += `</div>`;
+        const email = user.email || "";
 
-      el.innerHTML = html;
+        let html = `<div class="rb-user">`;
 
-      const btn = document.getElementById("logout");
+        html += `<span class="rb-email">${email}</span>`;
 
-      if(btn){
-        btn.onclick = async ()=>{
+        // 🔥 FIX: dashboard appare SOLO dopo plan corretto
+        if(isPro || isAdmin){
+          html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+        }
+
+        html += `<button id="logout" class="rb-btn red">Logout</button>`;
+
+        html += `</div>`;
+
+        el.innerHTML = html;
+
+        document.getElementById("logout").onclick = async ()=>{
+          const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
           await signOut(auth);
           location.reload();
         };
+
+      } else {
+
+        el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+
       }
 
-    }
+    });
 
-    /* NOT LOGGED */
-    else{
-      el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
-    }
-
-  });
+  },100);
 
 }
