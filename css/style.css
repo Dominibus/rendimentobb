@@ -8423,3 +8423,19 @@ padding-top:64px;
 }
 
 }
+
+@media (max-width:768px){
+
+.portal-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* BLOCCA SHIFT */
+.header-right{
+  min-width:120px;
+  justify-content:flex-end;
+}
+
+}
