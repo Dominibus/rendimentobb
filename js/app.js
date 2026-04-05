@@ -3465,7 +3465,11 @@ document.addEventListener("rb_plan_loaded", () => {
   console.log("🚀 PLAN LOADED → FORCE CHECK");
 
   setTimeout(() => {
-    forceCorrectPlan();
+    if(typeof window.forceCorrectPlan === "function"){
+      window.forceCorrectPlan();
+    } else {
+      console.warn("⚠️ forceCorrectPlan non disponibile");
+    }
   }, 100);
 
 });
@@ -3520,7 +3524,7 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= SAFE PLAN =================
 
-function forceCorrectPlan(){
+window.forceCorrectPlan = function(){
 
   // 🔥 BLOCCO DURO
   if(!window.firebaseReady || !window.userReady){
