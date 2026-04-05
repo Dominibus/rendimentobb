@@ -9356,3 +9356,62 @@ display:none;
   }
 
 }
+
+/* ===================== */
+/* 🔥 FIX HEADER MOBILE HARD */
+/* ===================== */
+
+@media (max-width:768px){
+
+  .rb-inner{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    flex-direction:row !important;
+    height:60px;
+    padding:0 10px;
+  }
+
+  .rb-left{
+    flex:0 0 auto;
+  }
+
+  .rb-logo{
+    height:32px;
+  }
+
+  .rb-right{
+    display:flex !important;
+    align-items:center;
+    gap:6px;
+    flex:0 0 auto;
+    min-width:auto;
+  }
+
+  /* lingua compatta */
+  .rb-lang{
+    display:flex !important;
+    gap:4px;
+  }
+
+  .rb-lang button{
+    padding:4px 6px;
+    font-size:10px;
+  }
+
+  /* 🔥 LOGIN SEMPRE VISIBILE */
+  .rb-login{
+    flex:0 0 auto;
+    padding:6px 10px;
+    font-size:11px;
+    white-space:nowrap;
+  }
+
+  /* BURGER */
+  #rb-burger{
+    display:block !important;
+    font-size:20px;
+    flex:0 0 auto;
+  }
+
+}
