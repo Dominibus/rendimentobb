@@ -30,13 +30,17 @@ window.applyCityBackground = function(){
   hero.classList.add(city);
 };
 
+
 /* ===================== */
-/* HEADER INIT */
+/* INIT HEADER */
 /* ===================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const header = `
+  const container = document.getElementById("global-header");
+  if(!container) return;
+
+  container.innerHTML = `
   <header class="portal-header">
 
     <div class="portal-header-inner">
@@ -48,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
       </div>
 
-      <!-- NAV DESKTOP -->
+      <!-- NAV -->
       <nav class="portal-nav desktop-nav" id="main-nav">
         <a href="/tool/">Simulatore</a>
         <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
@@ -61,11 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- RIGHT -->
       <div class="header-right">
 
-        <div id="user-area" style="min-width:70px"></div>
+        <div id="user-area"></div>
 
         <div class="lang-switch">
-          <button class="lang-btn" onclick="setLang('it')">IT</button>
-          <button class="lang-btn" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" data-lang="it">IT</button>
+          <button class="lang-btn" data-lang="en">EN</button>
         </div>
 
         <button class="hamburger" id="hamburger">☰</button>
@@ -74,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     </div>
 
-    <!-- MOBILE MENU -->
+    <!-- MOBILE -->
     <div class="mobile-menu" id="mobileMenu">
       <a href="/tool/">Simulatore</a>
       <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
@@ -87,50 +91,72 @@ document.addEventListener("DOMContentLoaded", () => {
   </header>
   `;
 
-  const container = document.getElementById("global-header");
-  if(container) container.innerHTML = header;
-
   window.applyCityBackground();
 
-  /* ===================== */
-  /* MOBILE MENU FIX */
-  /* ===================== */
+  initHeaderInteractions();
+  highlightActiveLink();
 
-  setTimeout(()=>{
+});
 
-    const hamburger = document.getElementById("hamburger");
-    const mobileMenu = document.getElementById("mobileMenu");
 
-    if(!hamburger || !mobileMenu) return;
+/* ===================== */
+/* INTERAZIONI HEADER */
+/* ===================== */
 
-    hamburger.addEventListener("click", (e)=>{
+function initHeaderInteractions(){
+
+  const hamburger = document.getElementById("hamburger");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  if(hamburger && mobileMenu){
+
+    hamburger.onclick = (e)=>{
       e.preventDefault();
       e.stopPropagation();
       mobileMenu.classList.toggle("active");
-    });
+    };
 
     document.addEventListener("click", (e)=>{
       if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
         mobileMenu.classList.remove("active");
       }
     });
+  }
 
-  },100);
+  // ===== LANGUAGE =====
+  document.querySelectorAll(".lang-btn").forEach(btn=>{
+    btn.onclick = ()=>{
+      const lang = btn.dataset.lang;
 
-  /* ===================== */
-  /* ACTIVE LINK */
-  /* ===================== */
+      if(window.setLang){
+        window.setLang(lang);
+      }
+
+      localStorage.setItem("rb_lang", lang);
+      location.reload();
+    };
+  });
+
+}
+
+
+/* ===================== */
+/* ACTIVE LINK */
+/* ===================== */
+
+function highlightActiveLink(){
 
   const currentPath = window.location.pathname;
 
-  document.querySelectorAll(".portal-nav a").forEach(link=>{
+  document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
     const href = link.getAttribute("href");
     if(href !== "/" && currentPath.startsWith(href)){
       link.classList.add("active");
     }
   });
 
-});
+}
+
 
 /* ===================== */
 /* USER AREA */
@@ -145,81 +171,66 @@ onAuthStateChanged(auth, (user)=>{
 
   const isMobile = window.innerWidth < 768;
 
-  const render = () => {
+  const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
 
-    const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+  const isAdmin =
+    ADMIN_EMAILS.includes(user?.email) ||
+    window.isAdmin?.();
 
-    const isAdmin =
-      ADMIN_EMAILS.includes(user?.email) ||
-      window.isAdmin?.();
+  /* ===== ADMIN MENU LINK ===== */
+  if(isAdmin && nav && !document.getElementById("admin-link")){
 
-    /* ===== ADMIN LINK ===== */
-    if(isAdmin && nav && !document.getElementById("admin-link")){
+    const link = document.createElement("a");
 
-      const link = document.createElement("a");
+    link.href = "/dashboard-leads/";
+    link.id = "admin-link";
+    link.innerText = "Leads";
 
-      link.href = "/dashboard-leads/";
-      link.id = "admin-link";
-      link.innerText = "Leads";
+    link.style.color = "#10b981";
+    link.style.fontWeight = "600";
 
-      link.style.color = "#10b981";
-      link.style.fontWeight = "600";
+    nav.appendChild(link);
+  }
 
-      nav.appendChild(link);
+  /* ===== USER ===== */
+  if(user){
+
+    let html = `<div style="display:flex;align-items:center;gap:8px;">`;
+
+    if(!isMobile){
+      html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
     }
 
-    /* ===== USER ===== */
-    if(user){
+    html += `
+      <a href="/dashboard/" class="btn btn-secondary">
+        ${isMobile ? "📊" : "Dashboard"}
+      </a>
+    `;
 
-      let html = `<div style="display:flex;align-items:center;gap:8px;">`;
+    html += `
+      <button id="logout-btn" class="btn btn-danger">
+        ${isMobile ? "🚪" : "Logout"}
+      </button>
+    `;
 
-      if(!isMobile){
-        html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
-      }
+    html += `</div>`;
 
-      html += `
-        <a href="/dashboard/" class="btn btn-secondary">
-          ${isMobile ? "📊" : "Dashboard"}
-        </a>
-      `;
+    userArea.innerHTML = html;
 
-      html += `
-        <button id="logout-btn" class="btn btn-danger">
-          ${isMobile ? "🚪" : "Logout"}
-        </button>
-      `;
+    const btn = document.getElementById("logout-btn");
 
-      html += `</div>`;
-
-      userArea.innerHTML = html;
-
-      const logoutBtn = document.getElementById("logout-btn");
-
-      if(logoutBtn){
-        logoutBtn.onclick = async () => {
-          const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
-          await signOut(auth);
-          location.reload();
-        };
-      }
-
-    } else {
-
-      userArea.innerHTML = `<a href="/login/" class="login-btn">Accedi</a>`;
-
+    if(btn){
+      btn.onclick = async ()=>{
+        const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
+        await signOut(auth);
+        location.reload();
+      };
     }
 
-  };
+  } else {
 
-  /* WAIT FIREBASE */
-  let tries = 0;
+    userArea.innerHTML = `<a href="/login/" class="login-btn">Accedi</a>`;
 
-  const interval = setInterval(()=>{
-    if(window.firebaseReady || tries > 10){
-      clearInterval(interval);
-      render();
-    }
-    tries++;
-  },100);
+  }
 
 });
