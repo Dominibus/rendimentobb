@@ -80,13 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- MOBILE MENU -->
     <div class="rb-mobile" id="rb-mobile">
-      <a href="/tool/">Simulatore</a>
-      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-      <a href="/mutui/">Mutui</a>
-      <a href="/immobili/">Immobili</a>
-      <a href="/academy/">Academy</a>
-      <a href="/contact.html">Contatti</a>
-    </div>
+
+  <div id="mobile-user-area" class="rb-mobile-user"></div>
+
+  <a href="/tool/">Simulatore</a>
+  <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+  <a href="/mutui/">Mutui</a>
+  <a href="/immobili/">Immobili</a>
+  <a href="/academy/">Academy</a>
+  <a href="/contact.html">Contatti</a>
+
+</div>
 
   </header>
   `;
@@ -154,6 +158,7 @@ function initUser(){
     onAuthStateChanged(auth, (user)=>{
 
       const el = document.getElementById("user-area");
+      const mobileEl = document.getElementById("mobile-user-area");
       const nav = document.getElementById("rb-nav");
 
       if(!el) return;
@@ -208,13 +213,16 @@ if(isAdmin){
 
         html += `</div>`;
 
-        el.innerHTML = html;
+       el.innerHTML = html;
+       if(mobileEl) mobileEl.innerHTML = html;
 
-        document.getElementById("logout").onclick = async ()=>{
-          const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
-          await signOut(auth);
-          location.reload();
-        };
+       document.querySelectorAll("#logout").forEach(btn=>{
+  btn.onclick = async ()=>{
+    const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
+    await signOut(auth);
+    location.reload();
+  };
+});
 
       } else {
 
