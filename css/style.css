@@ -9597,3 +9597,23 @@ padding-top:90px;
   width:100%;
   text-align:center;
 }
+
+/* ===== MOBILE USER AREA ===== */
+.rb-mobile-user{
+  padding:12px 16px;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.rb-mobile-user .rb-email{
+  font-size:12px;
+  color:#64748b;
+  word-break:break-all;
+}
+
+.rb-mobile-user .rb-btn{
+  width:100%;
+  text-align:center;
+}
