@@ -1932,8 +1932,10 @@ if(isProUser){
 
     // ================= PRO UNLOCK =================
 // 🔥 BLOCCO DI SICUREZZA (METTILO QUI)
-if(!window.firebaseReady || !window.userReady){
-  console.log("⏳ Aspetto Firebase/User...");
+if(!window.firebaseReady){
+  console.log("⏳ Firebase non pronto → delay");
+
+  window.pendingCalculation = true;
   return;
 }
     
