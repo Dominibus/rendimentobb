@@ -9542,8 +9542,8 @@ display:none; /* 🔥 nascondiamo email → spazio */
 
 /* BOTTONI */
 .rb-btn{
-padding:5px 10px;
-font-size:12px;
+padding:6px 8px;
+font-size:11px;
 }
 
 /* LOGIN */
@@ -9617,4 +9617,8 @@ padding-top:90px;
 .rb-mobile-user .rb-btn{
   width:100%;
   text-align:center;
+}
+
+.rb-avatar{
+  font-size:16px;
 }
