@@ -86,7 +86,7 @@ export default async function handler(req, res) {
 
             <!-- LOGO -->
             <div style="text-align:center;margin-bottom:20px">
-              <img src="https://www.rendimentobb.it/img/logo.png" style="height:40px">
+              <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:40px">
             </div>
 
             <!-- TITLE -->
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
           <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:16px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.08)">
 
             <div style="text-align:center;margin-bottom:20px">
-              <img src="https://www.rendimentobb.it/img/logo.png" style="height:40px">
+              <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:40px">
             </div>
 
             <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
