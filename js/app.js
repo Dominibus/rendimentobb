@@ -217,7 +217,7 @@ async function saveAnalysis(data){
 // ✅ SOURCE OF TRUTH UNICA
 window.isPro = function(){
 
-  // 🔥 override forzato (fondamentale)
+  // 🔥 override assoluto (fondamentale)
   if(window.__FORCE_PRO__ === true){
     return true;
   }
@@ -3522,127 +3522,5 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // fallback
   setTimeout(fixFirebasePlan, 1500);
-
-})();
-
-// ===============================================
-// 🚀 FINAL MASTER FIX – PLAN + UI SYNC (NO BUG)
-// ===============================================
-
-(function(){
-
-  console.log("🚀 FINAL FIX INIT");
-
-  // ================= SAFE PLAN =================
-
-window.forceCorrectPlan = function(){
-
-  // 🔥 BLOCCO DURO
-  if(!window.firebaseReady || !window.userReady){
-    console.log("⏳ Firebase/User non pronti → skip fix piano");
-    return;
-  }
-
-  console.log("🔥 CHECK PLAN REALE:", window.currentPlan);
-
-  if(window.isPro?.()){
-
-    console.log("💰 FIX → UTENTE PRO CORRETTO");
-
-    document.body.classList.add("pro-user");
-
-    if(typeof unlockProUI === "function"){
-      unlockProUI();
-    }
-
-  } else {
-
-    console.log("👀 FIX → UTENTE FREE");
-
-  }
-
-}
-
-  // ================= FORCE UI UNLOCK =================
-
-  function forceUnlockUI(){
-
-    if(!window.isPro()) return;
-
-    console.log("🔓 FORCE UI UNLOCK");
-
-    document.body.classList.add("pro-user");
-
-    document.querySelectorAll(`
-      .pro-blur,
-      .locked,
-      .locked-content,
-      .premium-lock,
-      .upgrade-overlay,
-      .results-overlay,
-      .home-blur-overlay,
-      [data-paywall]
-    `).forEach(el=>{
-      el.remove();
-    });
-
-    document.querySelectorAll("*").forEach(el=>{
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-    });
-
-  }
-
-  // ================= FIX FUNNEL =================
-
-  function blockFreeFunnelIfPro(){
-
-    if(!window.isPro()) return;
-
-    console.log("🚫 Blocco funnel FREE");
-
-    window.showUpgradePopup = function(){};
-    window.showUpgradeModal = function(){};
-    window.triggerUpgradeIfNeeded = function(){};
-
-  }
-
-  // ================= AUTO RECALC =================
-
-  function safeRecalculate(){
-
-    if(typeof window.calculate === "function"){
-      console.log("🔁 Recalculate for sync");
-      window.calculate(true);
-    }
-
-  }
-
-  // ================= MASTER SYNC =================
-
-  function runFullFix(){
-
-    forceCorrectPlan();
-    blockFreeFunnelIfPro();
-    forceUnlockUI();
-    safeRecalculate();
-
-  }
-
-  // ================= EVENTS =================
-
-  document.addEventListener("rb_auth_ready", runFullFix);
-  document.addEventListener("rb_plan_loaded", runFullFix);
-
-  // fallback (caso eventi non partono)
-  setTimeout(runFullFix, 1200);
-
-  // watchdog (anti bug random)
-  setInterval(()=>{
-    if(window.isPro()){
-      forceUnlockUI();
-    }
-  }, 1500);
 
 })();
