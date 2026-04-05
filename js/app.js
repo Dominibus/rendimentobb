@@ -1673,7 +1673,7 @@ const leadDestination = getLeadDestination({
 })();
 
 // ================= EMAIL UTENTE =================
-if (userEmail && isFreeUser && goodROI) {
+if (userEmail && goodROI) {
 
   fetch("/api/send-lead-email", {
     method: "POST",
@@ -1682,17 +1682,20 @@ if (userEmail && isFreeUser && goodROI) {
     },
     body: JSON.stringify({
       email: userEmail,
-      lang: window.currentLang || "it"
+      lang: window.currentLang || "it",
+      roi: roi,
+      city: window.currentCity
     })
   })
-  .then(async res => {
-    if (!res.ok) {
+  .then(async res=>{
+    if(!res.ok){
       console.error("❌ Email API error:", await res.text());
       return;
     }
     console.log("📨 Email utente inviata");
   })
   .catch(err => console.warn("Email silent fail", err));
+
 }
 
 // ================= LEAD MONETIZZAZIONE =================
