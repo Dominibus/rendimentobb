@@ -3547,3 +3547,53 @@ document.addEventListener("rb_plan_loaded", () => {
   setTimeout(fixFirebasePlan, 1500);
 
 })();
+
+// ================= FORCE PLAN FIX DEFINITIVO =================
+
+window.forceCorrectPlan = function(){
+
+  console.log("🧠 FORCE PLAN FIX RUN");
+
+  if(!window.currentPlan){
+    console.warn("⛔ nessun piano");
+    return;
+  }
+
+  // 🔥 FORZA PRO MODE GLOBALE
+  if(["pro","investor","pro_yearly"].includes(window.currentPlan)){
+
+    console.log("✅ UTENTE PRO → override totale");
+
+    // override globale
+    window.__FORCE_PRO__ = true;
+
+    // fix isPro
+    window.isPro = function(){
+      return true;
+    };
+
+    // rimuovi overlay
+    document.querySelectorAll(`
+      .results-overlay,
+      .locked-overlay,
+      .home-blur-overlay,
+      .upgrade-overlay,
+      #upgrade-overlay,
+      #upgrade-modal,
+      [data-paywall]
+    `).forEach(el => el.remove());
+
+    // rimuovi blur
+    document.querySelectorAll("*").forEach(el=>{
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+    });
+
+    // forza classe
+    document.body.classList.add("pro-user");
+
+    console.log("🚀 FORCE PRO COMPLETATO");
+  }
+
+};
