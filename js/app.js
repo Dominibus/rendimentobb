@@ -1540,7 +1540,7 @@ if(!window.firebaseReady){
 
 // ================= CALCOLO =================
 
-// 🔥 reset anti-duplicazione
+// 🔥 reset anti-duplicazione globale
 window.emailSent = false;
 
 // ================= RESULT =================
@@ -1557,30 +1557,25 @@ const result = calculateROI({
   loanYears
 });
 
-    window.simulationExecuted = true;
-window.lastAnalysisData = result;
-
-// 🔒 VALIDAZIONE CRITICA RESULT
-if(!result || typeof result !== "object"){
+// ================= VALIDAZIONE =================
+if (!result || typeof result !== "object") {
   console.warn("⛔ risultato non valido");
   return;
-}    
+}
 
-// 🔥 FIX CRITICO VARIABILI GLOBALI
+// ================= SESSION =================
+window.simulationExecuted = true;
+window.lastAnalysisData = result;
+
+// ================= SAFE VALUES =================
 const roi   = Number(result?.roi || 0);
 const gross = Number(result?.revenue || 0);
-const net   = Number(result?.netAfterMortgage || result?.profit || 0);    
-
-// ================= VALIDAZIONE =================
-if(!result){
-  console.warn("⛔ result null");
-  return;
-}
+const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
 // ================= USER =================
 const userEmail = window.currentUser?.email || null;
 const isFreeUser = !window.isPro?.();
-const goodROI = Number(result?.roi || 0) > 8;
+const goodROI = roi > 8;
 
 // ================= SESSION TRACK =================
 window.simulationCount = (window.simulationCount || 0) + 1;
@@ -1588,140 +1583,129 @@ window.simulationCount = (window.simulationCount || 0) + 1;
 // ================= SCORE =================
 let leadScore = getLeadScore(result);
 
-if(window.simulationCount > 3){
+if (window.simulationCount > 3) {
   leadScore = "hot";
   console.log("🔥 SUPER LEAD rilevato");
 }
 
 // ================= VALUE =================
-const leadValue =
-  leadScore === "hot" ? 100 :
-  leadScore === "warm" ? 40 :
-  0;
-
+const leadValue = leadScore === "hot" ? 100 : leadScore === "warm" ? 40 : 0;
 const leadType = "simulator";
 
 // ================= DESTINATION =================
 const leadDestination = getLeadDestination({
-  roi: result.roi,
+  roi: roi,
   city: window.currentCity
 });
 
-// ================= SAVE LEAD =================
-try{
+// ================= SAVE LEAD (ASYNC SAFE) =================
+(async () => {
+  try {
 
-  if(userEmail){
-
-    if(window.leadSaved){
-      console.log("⛔ Lead già salvato");
-    }else{
-
-      const { addDoc, collection, serverTimestamp } = await import(
-        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js"
-      );
-
-      await addDoc(collection(db,"leads"),{
-        email: userEmail,
-        type: leadType,
-        city: window.currentCity || "unknown",
-        roi: Number(result.roi || 0),
-        value: leadValue,
-        score: leadScore,
-        sessionId: window.sessionId || (window.sessionId = Date.now()),
-        sessionStep: "simulation",
-        price: price || 0,
-        revenue: result.revenue || 0,
-        createdAt: serverTimestamp(),
-        meta:{
-          occupancy,
-          priceNight,
-          expenses
-        }
-      });
-
-      window.leadSaved = true;
-
-      console.log("🔥 Lead salvato:", leadScore);
+    if (!userEmail) {
+      console.log("⚠️ Nessuna email → skip salvataggio");
+      return;
     }
+
+    if (window.leadSaved) {
+      console.log("⛔ Lead già salvato");
+      return;
+    }
+
+    const {
+      addDoc,
+      collection,
+      serverTimestamp
+    } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+
+    await addDoc(collection(db, "leads"), {
+      email: userEmail,
+      type: leadType,
+      city: window.currentCity || "unknown",
+      roi: roi,
+      value: leadValue,
+      score: leadScore,
+      sessionId: window.sessionId || (window.sessionId = Date.now()),
+      sessionStep: "simulation",
+      price: price || 0,
+      revenue: gross,
+      createdAt: serverTimestamp(),
+      meta: {
+        occupancy,
+        priceNight,
+        expenses
+      }
+    });
+
+    window.leadSaved = true;
+
+    console.log("🔥 Lead salvato:", leadScore);
 
     // ================= INVIO PARTNER =================
-
-    if(leadScore === "hot"){
-
-      setTimeout(()=>{
-
-        fetch("/api/send-lead-partner", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: userEmail,
-            city: window.currentCity,
-            roi: result.roi,
-            score: leadScore,
-            type: leadDestination?.type || leadType,
-            partners: leadDestination?.emails || []
-          })
+    if (leadScore === "hot") {
+      fetch("/api/send-lead-partner", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          city: window.currentCity,
+          roi: roi,
+          score: leadScore,
+          type: leadDestination?.type || leadType,
+          partners: leadDestination?.emails || []
         })
-        .then(async res=>{
-          if(!res.ok){
-            console.error("❌ Partner API error:", await res.text());
-            return;
-          }
-          console.log("💰 Lead inviato ai partner");
-        })
-        .catch(err => console.warn("Partner silent fail", err));
-
-      },0);
-
+      })
+      .then(async res => {
+        if (!res.ok) {
+          console.error("❌ Partner API error:", await res.text());
+          return;
+        }
+        console.log("💰 Lead inviato ai partner");
+      })
+      .catch(err => console.warn("Partner silent fail", err));
     }
 
-  }else{
-    console.log("⚠️ Nessuna email → skip salvataggio");
+  } catch (e) {
+    console.error("❌ Lead save error:", e);
   }
-
-}catch(e){
-  console.error("❌ Lead save error:", e);
-}
+})();
 
 // ================= EMAIL UTENTE =================
+if (userEmail && isFreeUser && goodROI) {
 
-if(userEmail && isFreeUser && goodROI){
-
-  setTimeout(()=>{
-
-    fetch("/api/send-lead-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: userEmail,
-        lang: window.currentLang || "it"
-      })
+  fetch("/api/send-lead-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: userEmail,
+      lang: window.currentLang || "it"
     })
-    .then(async res=>{
-      if(!res.ok){
-        console.error("❌ Email API error:", await res.text());
-        return;
-      }
-      console.log("📨 Email utente inviata");
-    })
-    .catch(err => console.warn("Email silent fail", err));
-
-  },0);
-
+  })
+  .then(async res => {
+    if (!res.ok) {
+      console.error("❌ Email API error:", await res.text());
+      return;
+    }
+    console.log("📨 Email utente inviata");
+  })
+  .catch(err => console.warn("Email silent fail", err));
 }
 
 // ================= LEAD MONETIZZAZIONE =================
-
 setTimeout(() => {
 
-  try{
+  try {
 
-    if(window.emailSent){
+    if (window.emailSent) {
       console.log("⛔ già inviato");
       return;
     }
 
-    if(!isFreeUser || !goodROI || !userEmail){
+    if (!isFreeUser || !goodROI || !userEmail) {
       console.log("⛔ condizioni non valide");
       return;
     }
@@ -1730,11 +1714,13 @@ setTimeout(() => {
 
     fetch("/api/send-lead", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         type: "simulatore",
         email: userEmail,
-        roi: result.roi,
+        roi: roi,
         city: window.currentCity || "unknown",
         budget: price,
         timestamp: Date.now()
@@ -1742,19 +1728,16 @@ setTimeout(() => {
     })
     .then(async res => {
 
-      if(!res.ok){
+      if (!res.ok) {
         const text = await res.text();
         console.error("❌ Lead API error:", text);
         window.emailSent = false;
         return;
       }
 
-      try{
-        const data = await res.json();
-        console.log("📩 Lead monetizzabile inviato", data);
-      }catch{
-        console.warn("⚠️ risposta non JSON");
-      }
+      const data = await res.json().catch(() => null);
+
+      console.log("📩 Lead monetizzabile inviato", data);
 
     })
     .catch(err => {
@@ -1762,19 +1745,19 @@ setTimeout(() => {
       window.emailSent = false;
     });
 
-  }catch(e){
+  } catch (e) {
     console.error("💥 Lead engine error:", e);
   }
 
 }, 4000);
 
-// rimuove overlay DOPO il primo calcolo
-document.querySelectorAll(".results-overlay").forEach(el=>{
-  el.remove();
-});
+// ================= UI UNLOCK =================
 
-// rimuove blur risultati base
-document.querySelectorAll(".pro-blur").forEach(el=>{
+// rimuove overlay
+document.querySelectorAll(".results-overlay").forEach(el => el.remove());
+
+// rimuove blur
+document.querySelectorAll(".pro-blur").forEach(el => {
   el.style.filter = "none";
   el.style.opacity = "1";
 });
