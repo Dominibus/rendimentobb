@@ -8523,3 +8523,85 @@ padding-top:64px;
 }
 
 }
+/* =========================================
+🔥 DESKTOP HEADER FIX PRO (NO WRAP / NO OVERFLOW)
+========================================= */
+
+.portal-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+/* ===== LOGO ===== */
+.header-left{
+  flex:0 0 auto;
+}
+
+/* ===== NAV CENTRALE ===== */
+.portal-nav{
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  /* 🔥 CRITICO */
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+}
+
+.portal-nav a{
+  white-space:nowrap;
+  font-size:14px;
+}
+
+/* ===== RIGHT ===== */
+.header-right{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  /* 🔥 evita che spinga tutto */
+  max-width:40%;
+}
+
+/* ===== USER AREA ===== */
+#user-area{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  overflow:hidden;
+}
+
+/* 🔥 EMAIL NON DEVE ROMPERE */
+#user-area span{
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* ===== BOTTONI ===== */
+.btn{
+  white-space:nowrap;
+  padding:6px 10px;
+  font-size:13px;
+}
+
+/* ===== LANG ===== */
+.lang-switch{
+  flex:0 0 auto;
+}
+
+/* ===== LOGO ===== */
+.logo-img{
+  height:42px;
+}
+
+/* 🔥 BLOCCA ANDARE A CAPO */
+.portal-header-inner,
+.portal-nav{
+  flex-wrap:nowrap;
+}
