@@ -9194,3 +9194,125 @@ display:none;
   }
 
 }
+
+/* FIX ACCEDI MOBILE */
+@media (max-width:768px){
+
+  .rb-login{
+    padding:6px 10px;
+    font-size:11px;
+    border-radius:999px;
+    white-space:nowrap;
+    max-width:80px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+}
+
+/* ===================== */
+/* MOBILE MENU PREMIUM */
+/* ===================== */
+
+.rb-mobile{
+  position:fixed;
+  top:60px;
+  left:0;
+  width:100%;
+  height:calc(100vh - 60px);
+  background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+  display:none;
+  flex-direction:column;
+  padding:20px;
+  gap:14px;
+  z-index:9998;
+  overflow-y:auto;
+  animation:fadeSlide .25s ease;
+}
+
+@keyframes fadeSlide{
+  from{
+    opacity:0;
+    transform:translateY(-10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* LINK MENU */
+.rb-mobile a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-radius:14px;
+  text-decoration:none;
+  font-weight:600;
+  color:#0f172a;
+  background:white;
+  box-shadow:0 4px 14px rgba(0,0,0,0.04);
+  transition:.2s;
+}
+
+/* HOVER MOBILE (effetto app) */
+.rb-mobile a:active{
+  transform:scale(0.97);
+  background:#10b981;
+  color:white;
+}
+
+/* SEZIONE USER */
+.rb-mobile-user{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  padding:16px;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 10px 30px rgba(16,185,129,0.25);
+}
+
+/* EMAIL */
+.rb-mobile-user .rb-email{
+  font-size:12px;
+  opacity:.9;
+}
+
+/* BOTTONI USER */
+.rb-mobile-user .rb-btn{
+  width:100%;
+  text-align:center;
+  border-radius:999px;
+  font-weight:600;
+}
+
+/* DASHBOARD */
+.rb-mobile-user .rb-btn:not(.red){
+  background:white;
+  color:#059669;
+}
+
+/* LOGOUT */
+.rb-mobile-user .rb-btn.red{
+  background:#ef4444;
+  color:white;
+}
+
+/* DIVISORE */
+.rb-mobile::before{
+  content:"Menu";
+  font-size:12px;
+  font-weight:600;
+  color:#94a3b8;
+  margin-bottom:6px;
+}
+
+/* EFFETTO PREMIUM */
+.rb-mobile a::after{
+  content:"→";
+  font-size:14px;
+  opacity:.4;
+}
