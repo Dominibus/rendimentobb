@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER FINAL PRO */
+/* RENDIMENTOBB HEADER FINAL CLEAN */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -48,11 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- LEFT -->
       <div class="rb-left">
         <a href="/">
-          <img src="/img/logo-main.png" class="rb-logo">
+          <img src="/img/logo-main.png" class="rb-logo" alt="RendimentoBB">
         </a>
       </div>
 
-      <!-- CENTER (DESKTOP) -->
+      <!-- CENTER -->
       <div class="rb-center">
         <a href="/dashboard/">Dashboard</a>
         <a href="/tool/">Simulatore</a>
@@ -143,79 +143,82 @@ function initHeaderInteractions(){
 
 
 /* ===================== */
-/* USER AREA */
+/* USER AREA SAFE (ANTI-CRASH) */
 /* ===================== */
 
 function initUser(){
 
+  let attempts = 0;
+
   const waitFirebase = setInterval(()=>{
 
-    if(!window.firebaseReady) return;
+    attempts++;
+
+    // dopo 2 secondi procede comunque
+    if(!window.firebaseReady && attempts < 20) return;
 
     clearInterval(waitFirebase);
 
-    onAuthStateChanged(auth, (user)=>{
+    try{
 
-      const el = document.getElementById("user-area");
-      const mobileEl = document.getElementById("mobile-user-area");
+      onAuthStateChanged(auth, (user)=>{
+        renderUser(user);
+      });
 
-      if(!el) return;
-
-      const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
-      const isAdmin = ADMIN_EMAILS.includes(user?.email);
-
-      const isPro =
-        window.currentPlan === "pro" ||
-        window.currentPlan === "investor" ||
-        window.currentPlan === "pro_yearly";
-
-      if(user){
-
-        const email = user.email || "";
-        const isMobile = window.innerWidth < 768;
-
-        let html = `<div class="rb-user">`;
-
-        if(!isMobile){
-          html += `<span class="rb-email">${email}</span>`;
-        }else{
-          html += `<span>👤</span>`;
-        }
-
-        if(isPro || isAdmin){
-          html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
-        }
-
-        html += `<button id="logout" class="rb-btn red">Logout</button>`;
-        html += `</div>`;
-
-        el.innerHTML = html;
-
-        if(mobileEl){
-          mobileEl.innerHTML = `
-            <div class="rb-mobile-user">
-              <div>${email}</div>
-              <a href="/dashboard/">Dashboard</a>
-              <button id="logout-mobile">Logout</button>
-            </div>
-          `;
-        }
-
-        document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
-          btn.onclick = async ()=>{
-            await signOut(auth);
-            location.reload();
-          };
-        });
-
-      } else {
-
-        el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
-
-      }
-
-    });
+    }catch(e){
+      console.warn("Firebase fallback");
+      renderUser(null);
+    }
 
   },100);
+
+}
+
+
+/* ===================== */
+/* RENDER USER */
+/* ===================== */
+
+function renderUser(user){
+
+  const el = document.getElementById("user-area");
+  const mobileEl = document.getElementById("mobile-user-area");
+
+  if(!el) return;
+
+  if(user){
+
+    const email = user.email || "";
+
+    el.innerHTML = `
+      <div class="rb-user">
+        <span class="rb-email">${email}</span>
+        <a href="/dashboard/" class="rb-btn">Dashboard</a>
+        <button id="logout" class="rb-btn red">Logout</button>
+      </div>
+    `;
+
+    if(mobileEl){
+      mobileEl.innerHTML = `
+        <div class="rb-mobile-user">
+          <div class="rb-email">${email}</div>
+          <a href="/dashboard/" class="rb-btn">Dashboard</a>
+          <button id="logout-mobile" class="rb-btn red">Logout</button>
+        </div>
+      `;
+    }
+
+    document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
+      btn.onclick = async ()=>{
+        await signOut(auth);
+        location.reload();
+      };
+    });
+
+  } else {
+
+    el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+
+  }
 
 }
