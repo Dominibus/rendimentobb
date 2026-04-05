@@ -174,16 +174,24 @@ const waitPlan = () => {
   if(user){
 
     // ================= ADMIN =================
-    if(isAdmin){
+if(isAdmin){
 
-      userArea.innerHTML = `
-        <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
-        <a href="/admin/leads.html" class="btn btn-primary" style="margin-left:6px;">
-          Leads
-        </a>
-      `;
-      return;
-    }
+  userArea.innerHTML = `
+    <div style="display:flex;gap:6px;align-items:center;">
+
+      <a href="/dashboard/" class="btn btn-secondary" style="padding:6px 10px;font-size:13px;">
+        Dashboard
+      </a>
+
+      <a href="/admin/leads.html" class="btn btn-primary" style="padding:6px 10px;font-size:13px;">
+        Leads
+      </a>
+
+    </div>
+  `;
+
+  return;
+}
 
     // ================= USER NORMALE =================
     if(isMobile){
