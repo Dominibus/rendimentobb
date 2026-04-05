@@ -216,11 +216,22 @@ async function saveAnalysis(data){
 
 // ✅ SOURCE OF TRUTH UNICA
 window.isPro = function(){
+
+  // 🔥 override forzato (fondamentale)
+  if(window.__FORCE_PRO__ === true){
+    return true;
+  }
+
+  const plan = window.currentPlan;
+
+  if(!plan) return false;
+
   return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
+    plan === "pro" ||
+    plan === "investor" ||
+    plan === "pro_yearly"
   );
+
 };
 
 // ✅ GET PLAN PULITO (NO SIDE EFFECT)
@@ -3551,18 +3562,6 @@ window.forceCorrectPlan = function(){
   }
 
 }
-
-  // ================= SAFE IS PRO =================
-
-  window.isPro = function(){
-
-    const plan = window.currentPlan;
-
-    if(!plan) return false;
-
-    return ["pro","investor","pro_yearly"].includes(plan);
-
-  };
 
   // ================= FORCE UI UNLOCK =================
 
