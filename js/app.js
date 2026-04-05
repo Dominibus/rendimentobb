@@ -3040,6 +3040,26 @@ document.addEventListener("rb_auth_ready", () => {
 
   console.log("🔥 Firebase READY → HARD SYNC");
 
+  // ================= PLAN FIX HARD (CRITICO) =================
+
+if(window.currentPlan){
+
+  const plan = window.currentPlan.toLowerCase().trim();
+
+  window.currentPlan = plan;
+
+  window.__IS_PRO__ = ["pro","investor","pro_yearly"].includes(plan);
+
+  window.isPro = function(){
+    return window.__IS_PRO__ === true;
+  };
+
+  console.log("✅ PLAN FIXED:", plan, "IS_PRO:", window.__IS_PRO__);
+
+}else{
+  console.warn("⛔ currentPlan non ancora disponibile");
+}
+
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
   // ===============================
