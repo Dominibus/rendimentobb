@@ -79,60 +79,76 @@ export default async function handler(req, res) {
 
       it: {
         subject: `ROI ${roi}% – Stai davvero guadagnando?`,
-        html: `
-        <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
+html: `
+<div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
-          <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:16px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.08)">
+  <div style="max-width:620px;margin:auto;background:#ffffff;border-radius:18px;padding:30px;box-shadow:0 15px 40px rgba(0,0,0,0.08)">
 
-            <!-- LOGO -->
-            <div style="text-align:center;margin-bottom:20px">
-              <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:40px">
-            </div>
+    <!-- LOGO PREMIUM -->
+    <div style="text-align:center;margin-bottom:25px">
+      <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:50px">
+    </div>
 
-            <!-- TITLE -->
-            <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
-              Il tuo investimento può cambiare tutto
-            </h2>
+    <!-- HEADLINE FORTE -->
+    <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:10px">
+      🚨 Stai per fare un investimento da migliaia di euro
+    </h2>
 
-            <!-- ROI -->
-            <div style="text-align:center;margin:20px 0">
-              <div style="font-size:36px;font-weight:bold;color:#10b981">
-                ${roi}%
-              </div>
-              <div style="color:#64748b;font-size:14px">
-                ROI stimato – ${city || "mercato attuale"}
-              </div>
-            </div>
+    <p style="text-align:center;color:#64748b;font-size:14px;margin-bottom:20px">
+      Ma senza dati reali potresti perderli.
+    </p>
 
-            <!-- ALERT -->
-            <div style="background:#fff7ed;padding:16px;border-radius:10px;margin:20px 0;font-size:14px">
-              ⚠️ Il 72% degli investitori prende decisioni sbagliate senza dati reali
-            </div>
+    <!-- ROI HERO -->
+    <div style="text-align:center;margin:30px 0">
+      <div style="font-size:44px;font-weight:800;color:#10b981">
+        ${roi}%
+      </div>
+      <div style="color:#64748b;font-size:14px">
+        ROI stimato – ${city}
+      </div>
+    </div>
 
-            <!-- VALUE -->
-            <ul style="color:#334155;font-size:15px;line-height:1.7;padding-left:20px">
-              <li>ROI reale vs mercato</li>
-              <li>Break-even e rischio</li>
-              <li>Sostenibilità mutuo</li>
-            </ul>
+    <!-- BLOCCO IMPATTO -->
+    <div style="background:#fff7ed;padding:18px;border-radius:12px;margin:20px 0;font-size:14px;color:#7c2d12">
+      ⚠️ Il 72% degli investitori perde soldi perché non analizza rischio e mutuo
+    </div>
 
-            <!-- CTA -->
-            <div style="text-align:center;margin:30px 0">
-              <a href="https://www.rendimentobb.it/dashboard/"
-              style="background:#10b981;color:white;padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:600;display:inline-block">
-              🔥 Sblocca analisi completa
-              </a>
-            </div>
+    <!-- VALUE -->
+    <div style="margin:25px 0">
+      <p style="font-weight:600;color:#0f172a">Con RendimentoBB puoi:</p>
+      <ul style="color:#334155;font-size:14px;line-height:1.7;padding-left:20px">
+        <li>Capire se stai guadagnando davvero</li>
+        <li>Vedere il rischio reale dell'investimento</li>
+        <li>Calcolare il break-even preciso</li>
+        <li>Simulare il mutuo sostenibile</li>
+      </ul>
+    </div>
 
-            <!-- FOOTER -->
-            <p style="font-size:12px;color:#94a3b8;text-align:center">
-              RendimentoBB – Decision engine per investimenti B&B
-            </p>
+    <!-- CTA SUPER -->
+    <div style="text-align:center;margin:35px 0">
+      <a href="https://www.rendimentobb.it/dashboard/"
+      style="background:linear-gradient(135deg,#10b981,#059669);
+      color:white;
+      padding:16px 28px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:700;
+      font-size:15px;
+      display:inline-block;
+      box-shadow:0 8px 25px rgba(16,185,129,0.4)">
+      🔥 Sblocca analisi completa ora
+      </a>
+    </div>
 
-          </div>
+    <!-- FOMO -->
+    <p style="text-align:center;font-size:13px;color:#94a3b8">
+      Ogni giorno senza dati reali è un rischio.
+    </p>
 
-        </div>
-        `
+  </div>
+
+</div>
+`
       },
 
       en: {
