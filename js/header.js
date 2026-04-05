@@ -142,16 +142,27 @@ const isMobile = window.innerWidth < 768;
 
 const render = () => {
 
-  const isAdmin = window.isAdmin?.();
+  const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+
+const isAdmin =
+  ADMIN_EMAILS.includes(user?.email) ||
+  window.isAdmin?.();
 
   // 🔥 ADMIN → aggiunge LEADS nel menu
-  if(isAdmin && nav && !document.getElementById("admin-link")){
-    const link = document.createElement("a");
-    link.href = "/dashboard-leads/";
-    link.id = "admin-link";
-    link.innerText = "Leads";
-    nav.appendChild(link);
-  }
+if(isAdmin && nav && !document.getElementById("admin-link")){
+
+  const link = document.createElement("a");
+
+  link.href = "/admin/leads.html"; // ⚠️ CAMBIA QUI SE URL DIVERSO
+  link.id = "admin-link";
+  link.innerText = "Leads";
+
+  // stile coerente
+  link.style.color = "#10b981";
+  link.style.fontWeight = "600";
+
+  nav.appendChild(link);
+}
 
   if(user){
 
