@@ -9069,67 +9069,6 @@ display:none;
 }
 
 /* ===================== */
-/* MOBILE */
-/* ===================== */
-
-@media (max-width:768px){
-
-  /* NAV OFF */
-  .rb-center{
-    display:none;
-  }
-
-  /* HEADER */
-  .rb-inner{
-    height:60px;
-    padding:0 12px;
-  }
-
-  /* LOGO */
-  .rb-logo{
-    height:34px;
-  }
-
-  /* RIGHT */
-  .rb-right{
-    gap:6px;
-  }
-
-  /* EMAIL OFF */
-  .rb-email{
-    display:none;
-  }
-
-  /* BUTTONS SMALL */
-  .rb-btn{
-    padding:6px 8px;
-    font-size:11px;
-  }
-
-  .rb-login{
-    padding:6px 10px;
-    font-size:12px;
-  }
-
-  /* LANG */
-  .rb-lang button{
-    padding:5px 8px;
-    font-size:11px;
-  }
-
-  /* BURGER ON */
-  #rb-burger{
-    display:block;
-  }
-
-  /* BODY OFFSET */
-  body{
-    padding-top:60px;
-  }
-
-}
-
-/* ===================== */
 /* MOBILE HEADER FIX REAL */
 /* ===================== */
 
