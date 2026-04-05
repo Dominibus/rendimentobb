@@ -9710,3 +9710,168 @@ padding-top:90px;
 }
 
 }
+
+/* ===================== */
+/* HEADER BASE */
+/* ===================== */
+
+.rb-header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  background:#fff;
+  z-index:9999;
+  box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.rb-inner{
+  max-width:1200px;
+  margin:0 auto;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+}
+
+/* LEFT */
+.rb-logo{
+  height:42px;
+}
+
+/* CENTER */
+.rb-center{
+  display:flex;
+  gap:20px;
+}
+
+.rb-center a{
+  text-decoration:none;
+  font-weight:600;
+  color:#0f172a;
+}
+
+.rb-center a:hover{
+  color:#10b981;
+}
+
+/* RIGHT */
+.rb-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* LANG */
+.rb-lang{
+  display:flex;
+  gap:6px;
+}
+
+.rb-lang button{
+  padding:6px 10px;
+  border:none;
+  border-radius:999px;
+  background:#f1f5f9;
+  cursor:pointer;
+  font-size:12px;
+}
+
+/* USER */
+.rb-user{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.rb-email{
+  font-size:12px;
+  color:#475569;
+}
+
+.rb-btn{
+  padding:8px 12px;
+  border:none;
+  border-radius:999px;
+  background:#10b981;
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.rb-btn.red{
+  background:#ef4444;
+}
+
+.rb-login{
+  padding:8px 14px;
+  background:#10b981;
+  color:#fff;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* BURGER */
+#rb-burger{
+  display:none;
+  font-size:22px;
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+
+/* MOBILE MENU */
+.rb-mobile{
+  position:fixed;
+  top:64px;
+  left:0;
+  width:100%;
+  background:#fff;
+  display:none;
+  flex-direction:column;
+  padding:20px;
+  gap:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.rb-mobile.open{
+  display:flex;
+}
+
+.rb-mobile a{
+  text-decoration:none;
+  font-weight:600;
+  color:#0f172a;
+}
+
+.rb-mobile-user{
+  padding-bottom:10px;
+  border-bottom:1px solid #eee;
+}
+
+/* ===================== */
+/* MOBILE */
+/* ===================== */
+
+@media (max-width:768px){
+
+  .rb-center{
+    display:none;
+  }
+
+  #rb-burger{
+    display:block;
+  }
+
+  .rb-logo{
+    height:34px;
+  }
+
+  .rb-inner{
+    padding:0 12px;
+  }
+
+}
