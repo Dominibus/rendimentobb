@@ -43,17 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
   container.innerHTML = `
   <header class="portal-header">
 
-    <div class="portal-header-inner">
+    <div class="header-wrap">
 
-      <!-- LEFT -->
-      <div class="header-left">
+      <!-- LOGO -->
+      <div class="header-logo">
         <a href="/">
           <img src="/img/logo-main.png" class="logo-img">
         </a>
       </div>
 
-      <!-- CENTER NAV (DESKTOP) -->
-      <nav class="portal-nav desktop-nav" id="main-nav">
+      <!-- NAV DESKTOP -->
+      <nav class="header-nav" id="main-nav">
         <a href="/tool/">Simulatore</a>
         <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
         <a href="/mutui/">Mutui</a>
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </nav>
 
       <!-- RIGHT -->
-      <div class="header-right">
+      <div class="header-actions">
 
         <div id="user-area"></div>
 
@@ -112,14 +112,13 @@ function initHeader(){
   const hamburger = document.getElementById("hamburger");
   const mobileMenu = document.getElementById("mobileMenu");
 
-  /* ===== MOBILE MENU ===== */
   if(hamburger && mobileMenu){
 
-    hamburger.addEventListener("click", (e)=>{
+    hamburger.onclick = (e)=>{
       e.stopPropagation();
-      hamburger.classList.toggle("open");
       mobileMenu.classList.toggle("active");
-    });
+      hamburger.classList.toggle("open");
+    };
 
     document.addEventListener("click", (e)=>{
       if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
@@ -129,19 +128,12 @@ function initHeader(){
     });
   }
 
-  /* ===== LANGUAGE ===== */
   document.querySelectorAll(".lang-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
+    btn.onclick = ()=>{
       const lang = btn.dataset.lang;
-
       localStorage.setItem("rb_lang", lang);
-
-      if(window.setLang){
-        window.setLang(lang);
-      }
-
       location.reload();
-    });
+    };
   });
 
 }
@@ -155,9 +147,8 @@ function highlightActiveLink(){
 
   const path = window.location.pathname;
 
-  document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
+  document.querySelectorAll(".header-nav a, .mobile-menu a").forEach(link=>{
     const href = link.getAttribute("href");
-
     if(href !== "/" && path.startsWith(href)){
       link.classList.add("active");
     }
@@ -173,36 +164,17 @@ function highlightActiveLink(){
 onAuthStateChanged(auth, (user)=>{
 
   const userArea = document.getElementById("user-area");
-  const nav = document.getElementById("main-nav");
-
   if(!userArea) return;
 
   const isMobile = window.innerWidth < 768;
-
-  const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
-
-  const isAdmin =
-    ADMIN_EMAILS.includes(user?.email) ||
-    window.isAdmin?.();
-
-  /* ADMIN LINK */
-  if(isAdmin && nav && !document.getElementById("admin-link")){
-    const link = document.createElement("a");
-    link.href = "/dashboard-leads/";
-    link.id = "admin-link";
-    link.innerText = "Leads";
-    link.style.color = "#10b981";
-    link.style.fontWeight = "600";
-    nav.appendChild(link);
-  }
 
   if(user){
 
     userArea.innerHTML = `
       <div class="user-box">
         ${!isMobile ? `<span class="user-email">${user.email}</span>` : ""}
-        <a href="/dashboard/" class="btn btn-secondary">📊</a>
-        <button id="logout-btn" class="btn btn-danger">🚪</button>
+        <a href="/dashboard/" class="btn-mini">📊</a>
+        <button id="logout-btn" class="btn-mini">🚪</button>
       </div>
     `;
 
