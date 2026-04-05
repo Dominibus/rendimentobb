@@ -206,7 +206,7 @@ function renderUser(user){
 
     // 🔥 LEADS SOLO ADMIN
     if(isAdmin){
-      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
+      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`; 
     }
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
