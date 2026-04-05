@@ -141,40 +141,85 @@ export default async function handler(req, res){
       console.error("❌ Email admin error:", e.message);
     }
 
-    // ================= PARTNER ROUTING 💸 =================
-    const partnersMap = {
-      mutui: ["broker@email.com"],
-      immobili: ["agenzia@email.com"],
-      simulatore: roi > 12 ? ["investor@email.com"] : []
-    };
+// ================= PARTNER ROUTING 💸 =================
+const partnersMap = {
+  mutui: ["broker@email.com"],
+  immobili: ["agenzia@email.com"],
+  simulatore: roi > 12 ? ["investor@email.com"] : []
+};
 
-    const targetPartners = partnersMap[type] || [];
+const targetPartners = partnersMap[type] || [];
 
-    await Promise.all(
-      targetPartners.map(partnerEmail => {
+// 🔥 INVIO PARALLELO OTTIMIZZATO
+await Promise.all(
+  targetPartners.map(partnerEmail => {
 
-        return resend.emails.send({
-          from: "RendimentoBB <lead@rendimentobb.it>",
-          to: [partnerEmail],
-          subject: `🔥 Lead ${city.toUpperCase()} – ROI ${roi}%`,
-          html: `
-          <div style="font-family:Arial;padding:20px">
+    return resend.emails.send({
+      from: "RendimentoBB <lead@rendimentobb.it>",
+      to: [partnerEmail],
+      subject: `🔥 Lead HOT ${city.toUpperCase()} – ROI ${roi}%`,
+      html: `
+      <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
-            <h2>Lead pronto</h2>
+        <div style="max-width:600px;margin:auto;background:white;border-radius:16px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.08)">
 
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>ROI:</strong> ${roi}%</p>
-            <p><strong>Città:</strong> ${city}</p>
-            <p><strong>Budget:</strong> €${budget || "-"}</p>
+          <!-- LOGO -->
+          <div style="text-align:center;margin-bottom:20px">
+            <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:40px">
+          </div>
+
+          <!-- TITLE -->
+          <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
+            🔥 Nuovo lead qualificato
+          </h2>
+
+          <!-- ROI BIG -->
+          <div style="text-align:center;margin:20px 0">
+            <div style="font-size:40px;font-weight:bold;color:#10b981">
+              ${roi}%
+            </div>
+            <div style="color:#64748b;font-size:14px">
+              ROI stimato – ${city}
+            </div>
+          </div>
+
+          <!-- INFO -->
+          <div style="background:#f8fafc;padding:15px;border-radius:10px">
+
+            <p style="margin:6px 0"><strong>Email:</strong> ${email}</p>
+            <p style="margin:6px 0"><strong>Città:</strong> ${city}</p>
+            <p style="margin:6px 0"><strong>Budget:</strong> €${budget || "-"}</p>
 
           </div>
-          `
-        }).catch(err=>{
-          console.error("❌ Partner send error:", err.message);
-        });
 
-      })
-    );
+          <!-- ALERT -->
+          <div style="background:#ecfdf5;padding:14px;border-radius:10px;margin-top:15px;font-size:14px">
+            💰 Lead ad alta probabilità di conversione
+          </div>
+
+          <!-- CTA -->
+          <div style="text-align:center;margin:25px 0">
+            <a href="mailto:${email}"
+            style="background:#10b981;color:white;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:600;display:inline-block">
+            Contatta subito il cliente
+            </a>
+          </div>
+
+          <!-- FOOTER -->
+          <p style="font-size:12px;color:#94a3b8;text-align:center">
+            Lead generato da RendimentoBB – piattaforma investimenti B&B
+          </p>
+
+        </div>
+
+      </div>
+      `
+    }).catch(err=>{
+      console.error("❌ Partner send error:", err.message);
+    });
+
+  })
+);
 
     console.log("💰 Lead monetizzato:", value, type);
 
