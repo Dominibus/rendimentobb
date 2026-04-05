@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER FINAL */
+/* RENDIMENTOBB HEADER FINAL PRO */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -12,7 +12,7 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 window.applyCityBackground = function(){
 
   const hero =
-    document.querySelector(".hero-bg") || 
+    document.querySelector(".hero-bg") ||
     document.querySelector(".hero");
 
   if(!hero) return;
@@ -45,36 +45,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="rb-inner">
 
-      <!-- TOP -->
-      <div class="rb-top">
+      <!-- LEFT -->
+      <div class="rb-left">
+        <a href="/">
+          <img src="/img/logo-main.png" class="rb-logo">
+        </a>
+      </div>
 
-        <div class="rb-left">
-          <a href="/">
-            <img src="/img/logo-main.png" class="rb-logo">
-          </a>
+      <!-- CENTER -->
+      <div class="rb-center">
+        <a href="/tool/">Simulatore</a>
+        <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+        <a href="/mutui/">Mutui</a>
+        <a href="/immobili/">Immobili</a>
+        <a href="/academy/">Academy</a>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="rb-right">
+
+        <div class="rb-lang">
+          <button data-lang="it">IT</button>
+          <button data-lang="en">EN</button>
         </div>
 
         <div id="user-area"></div>
 
-      </div>
-
-      <!-- BOTTOM -->
-      <div class="rb-bottom">
-
-        <div class="rb-actions">
-
-          <a href="/dashboard/" class="rb-btn main-btn">
-            Dashboard
-          </a>
-
-          <div class="rb-lang">
-            <button data-lang="it">IT</button>
-            <button data-lang="en">EN</button>
-          </div>
-
-          <button id="rb-burger">☰</button>
-
-        </div>
+        <button id="rb-burger">☰</button>
 
       </div>
 
@@ -128,7 +125,6 @@ function initHeaderInteractions(){
     });
   }
 
-  // lingua
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -151,75 +147,104 @@ function initHeaderInteractions(){
 
 function initUser(){
 
+  let attempts = 0;
+
   const waitFirebase = setInterval(()=>{
 
-    if(!window.firebaseReady) return;
+    attempts++;
+
+    if(!window.firebaseReady && attempts < 20) return;
 
     clearInterval(waitFirebase);
 
-    onAuthStateChanged(auth, (user)=>{
+    try{
 
-      const el = document.getElementById("user-area");
-      const mobileEl = document.getElementById("mobile-user-area");
+      onAuthStateChanged(auth, (user)=>{
+        renderUser(user);
+      });
 
-      if(!el) return;
-
-      const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
-      const isAdmin = ADMIN_EMAILS.includes(user?.email);
-
-      const isPro =
-        window.currentPlan === "pro" ||
-        window.currentPlan === "investor" ||
-        window.currentPlan === "pro_yearly";
-
-      if(user){
-
-        const email = user.email || "";
-        const isMobile = window.innerWidth < 768;
-
-        let html = `<div class="rb-user">`;
-
-        if(!isMobile){
-          html += `<span class="rb-email">${email}</span>`;
-        }else{
-          html += `<span>👤</span>`;
-        }
-
-        if(isPro || isAdmin){
-          html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
-        }
-
-        html += `<button id="logout" class="rb-btn red">Logout</button>`;
-
-        html += `</div>`;
-
-        el.innerHTML = html;
-
-        if(mobileEl){
-          mobileEl.innerHTML = `
-            <div class="rb-mobile-user">
-              <div>${email}</div>
-              <a href="/dashboard/">Dashboard</a>
-              <button id="logout-mobile">Logout</button>
-            </div>
-          `;
-        }
-
-        document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
-          btn.onclick = async ()=>{
-            await signOut(auth);
-            location.reload();
-          };
-        });
-
-      } else {
-
-        el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
-
-      }
-
-    });
+    }catch(e){
+      renderUser(null);
+    }
 
   },100);
+
+}
+
+
+/* ===================== */
+/* RENDER USER */
+/* ===================== */
+
+function renderUser(user){
+
+  const el = document.getElementById("user-area");
+  const mobileEl = document.getElementById("mobile-user-area");
+
+  if(!el) return;
+
+  const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+  const isAdmin = ADMIN_EMAILS.includes(user?.email);
+
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(user){
+
+    const email = user.email || "";
+
+    let html = `<div class="rb-user">`;
+
+    html += `<span class="rb-email">${email}</span>`;
+
+    // 🔥 DASHBOARD SOLO PRO + ADMIN
+    if(isPro || isAdmin){
+      html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+    }
+
+    // 🔥 LEADS SOLO ADMIN
+    if(isAdmin){
+      html += `<a href="/leads/" class="rb-btn">Leads</a>`;
+    }
+
+    html += `<button id="logout" class="rb-btn red">Logout</button>`;
+    html += `</div>`;
+
+    el.innerHTML = html;
+
+    // MOBILE
+    if(mobileEl){
+      let mobileHTML = `
+        <div class="rb-mobile-user">
+          <div class="rb-email">${email}</div>
+      `;
+
+      if(isPro || isAdmin){
+        mobileHTML += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+      }
+
+      if(isAdmin){
+        mobileHTML += `<a href="/leads/" class="rb-btn">Leads</a>`;
+      }
+
+      mobileHTML += `<button id="logout-mobile" class="rb-btn red">Logout</button></div>`;
+
+      mobileEl.innerHTML = mobileHTML;
+    }
+
+    document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
+      btn.onclick = async ()=>{
+        await signOut(auth);
+        location.reload();
+      };
+    });
+
+  } else {
+
+    el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+
+  }
 
 }
