@@ -45,7 +45,7 @@ const header = `
 <div class="portal-header-inner">
 
 <div class="header-left">
-  <a href="/">
+  <a href="/" style="display:flex;align-items:center;">
     <img src="/img/logo-main.png" class="logo-img">
   </a>
 </div>
