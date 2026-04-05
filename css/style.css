@@ -9143,3 +9143,37 @@ display:none;
   }
 
 }
+
+/* FIX MOBILE PERFETTO */
+@media (max-width:768px){
+
+  .rb-right{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .rb-lang{
+    flex-direction:row !important;
+  }
+
+  .rb-lang button{
+    padding:4px 6px;
+    font-size:11px;
+  }
+
+  .rb-login{
+    padding:6px 8px;
+    font-size:11px;
+  }
+
+  .rb-btn{
+    padding:6px 8px;
+    font-size:11px;
+  }
+
+  .rb-email{
+    display:none;
+  }
+
+}
