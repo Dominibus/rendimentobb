@@ -192,7 +192,7 @@ export default async function handler(req, res) {
 
     // ================= SEND EMAIL =================
     await resend.emails.send({
-      from: "RendimentoBB <noreply@rendimentobb.it>",
+      from: "onboarding@resend.dev",
       to: [email],
       subject: selected.subject,
       html: selected.html
