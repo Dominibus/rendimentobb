@@ -206,7 +206,7 @@ function renderUser(user){
 
     // 🔥 LEADS SOLO ADMIN
     if(isAdmin){
-      html += `<a href="/leads/" class="rb-btn">Leads</a>`;
+      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
     }
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
@@ -226,7 +226,7 @@ function renderUser(user){
       }
 
       if(isAdmin){
-        mobileHTML += `<a href="/leads/" class="rb-btn">Leads</a>`;
+        mobileHTML += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
       }
 
       mobileHTML += `<button id="logout-mobile" class="rb-btn red">Logout</button></div>`;
