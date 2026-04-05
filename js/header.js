@@ -78,18 +78,18 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- MOBILE MENU -->
-    <div class="rb-mobile" id="rb-mobile">
+<div class="rb-mobile" id="rb-mobile">
 
-      <div id="mobile-user-area"></div>
+  <div id="mobile-user-area"></div>
 
-      <a href="/tool/">Simulatore</a>
-      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-      <a href="/mutui/">Mutui</a>
-      <a href="/immobili/">Immobili</a>
-      <a href="/academy/">Academy</a>
-      <a href="/contact.html">Contatti</a>
+  <a href="/tool/">Simulatore</a>
+  <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+  <a href="/mutui/">Mutui</a>
+  <a href="/immobili/">Immobili</a>
+  <a href="/academy/">Academy</a>
+  <a href="/contact.html">Contatti</a>
 
-    </div>
+</div>
 
   </header>
   `;
