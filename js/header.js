@@ -12,7 +12,7 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 window.applyCityBackground = function(){
 
   const hero =
-    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero-bg") || 
     document.querySelector(".hero");
 
   if(!hero) return;
