@@ -55,7 +55,7 @@ export default async function handler(req, res){
 
         <!-- LOGO -->
         <div style="text-align:center;margin-bottom:20px">
-          <img src="https://www.rendimentobb.it/img/logo.png" style="height:40px">
+          <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:40px">
         </div>
 
         <!-- TITLE -->
