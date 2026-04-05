@@ -9056,3 +9056,166 @@ gap:6px;
 }
 
 }
+
+/* ===================== */
+/* HEADER SaaS FINAL */
+/* ===================== */
+
+.rb-header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(10px);
+z-index:9999;
+border-bottom:1px solid #eee;
+}
+
+/* GRID */
+.rb-inner{
+max-width:1200px;
+margin:auto;
+display:grid;
+grid-template-columns:140px 1fr auto;
+align-items:center;
+gap:10px;
+padding:10px 16px;
+}
+
+/* LOGO */
+.rb-logo{
+height:36px;
+}
+
+/* NAV */
+.rb-nav{
+display:flex;
+justify-content:center;
+gap:22px;
+}
+
+.rb-nav a{
+text-decoration:none;
+color:#0f172a;
+font-size:14px;
+white-space:nowrap;
+}
+
+/* RIGHT */
+.rb-right{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* USER */
+.rb-user{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.rb-email{
+font-size:12px;
+color:#64748b;
+}
+
+/* BUTTONS */
+.rb-btn{
+background:#f1f5f9;
+padding:6px 10px;
+border-radius:6px;
+font-size:12px;
+border:none;
+cursor:pointer;
+}
+
+.rb-btn.red{
+background:#ef4444;
+color:#fff;
+}
+
+/* LOGIN */
+.rb-login{
+background:#10b981;
+color:#fff;
+padding:6px 12px;
+border-radius:6px;
+text-decoration:none;
+font-size:13px;
+}
+
+/* LANG */
+.rb-lang{
+display:flex;
+gap:4px;
+}
+
+.rb-lang button{
+padding:5px 8px;
+border:none;
+border-radius:999px;
+background:#f1f5f9;
+font-size:12px;
+white-space:nowrap;
+}
+
+/* BURGER */
+#rb-burger{
+display:none;
+font-size:22px;
+background:none;
+border:none;
+cursor:pointer;
+}
+
+/* MOBILE MENU */
+.rb-mobile{
+display:none;
+flex-direction:column;
+padding:20px;
+gap:12px;
+border-top:1px solid #eee;
+background:white;
+}
+
+.rb-mobile.open{
+display:flex;
+}
+
+/* ===================== */
+/* MOBILE */
+/* ===================== */
+
+@media (max-width:768px){
+
+.rb-inner{
+grid-template-columns:1fr auto auto;
+}
+
+.rb-nav{
+display:none;
+}
+
+.rb-email{
+display:none;
+}
+
+#rb-burger{
+display:block;
+}
+
+.rb-logo{
+height:30px;
+}
+
+.rb-lang{
+flex-direction:row;
+}
+
+body{
+padding-top:60px;
+}
+
+}
