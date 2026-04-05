@@ -2057,7 +2057,6 @@ function renderUpgradeTrigger(best){
   if(!container) return;
 
   if(!best) return;
-
   if(best.roi < 6) return;
 
   const potentialProfit = Math.round((best.price * best.roi) / 100);
@@ -2065,7 +2064,6 @@ function renderUpgradeTrigger(best){
   container.style.display = "block";
 
   container.innerHTML = `
-
   <div style="
   background:linear-gradient(135deg,#0f172a,#1e293b);
   color:white;
@@ -2076,7 +2074,7 @@ function renderUpgradeTrigger(best){
   ">
 
     <div style="font-size:20px;font-weight:700;margin-bottom:10px">
-      💰 Questo investimento può generare
+      💰 ${t("Questo investimento può generare","This investment can generate")}
     </div>
 
     <div style="
@@ -2089,10 +2087,7 @@ function renderUpgradeTrigger(best){
     </div>
 
     <div style="font-size:14px;opacity:0.85;margin-bottom:16px">
-      ${t(
-        "profitto annuo stimato",
-        "estimated yearly profit"
-      )}
+      ${t("profitto annuo stimato","estimated yearly profit")}
     </div>
 
     <div style="
@@ -2119,9 +2114,11 @@ function renderUpgradeTrigger(best){
     </button>
 
   </div>
-
   `;
 }
+
+
+// ================= ROI MARKET COMPARISON =================
 
 function renderROIMarketComparison(count,totalROI){
 
@@ -2134,24 +2131,20 @@ function renderROIMarketComparison(count,totalROI){
   }
 
   const avgROI = totalROI / count;
-
-  // 🔥 benchmark reale (puoi evolverlo dopo)
   const marketROI = 8.4;
 
   const diff = avgROI - marketROI;
-
   const isBetter = diff >= 0;
 
   const color = isBetter ? "#10b981" : "#ef4444";
 
   const message = isBetter
-    ? "Stai battendo il mercato"
-    : "Sei sotto la media di mercato";
+    ? t("Stai battendo il mercato","You are beating the market")
+    : t("Sei sotto la media di mercato","You are below market average");
 
   const percentage = Math.abs(diff).toFixed(1);
 
   container.innerHTML = `
-
   <h3>📊 ${t("Confronto con il mercato","Market comparison")}</h3>
 
   <div style="
@@ -2219,6 +2212,5 @@ function renderROIMarketComparison(count,totalROI){
     }
 
   </div>
-
   `;
 }
