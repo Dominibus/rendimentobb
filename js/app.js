@@ -3495,31 +3495,44 @@ function removeGhostOverlays(){
 document.addEventListener("rb_plan_loaded", removeGhostOverlays);
 document.addEventListener("rb_auth_ready", removeGhostOverlays);
 
-document.addEventListener("rb_plan_loaded", ()=>{
-
-if(window.isPro && window.isPro()){
-  console.log("🔓 PRO USER DASHBOARD");
-
-  document.querySelectorAll(`
-    .locked,
-    .locked-overlay,
-    .results-overlay
-  `).forEach(el => el.remove());
-
-}else{
-  console.log("🔒 FREE USER");
-}
+// ================= PLAN LOADED HANDLER CLEAN =================
 
 document.addEventListener("rb_plan_loaded", () => {
 
-  console.log("🚀 PLAN LOADED → FORCE CHECK");
+  console.log("🚀 PLAN LOADED → SYNC");
+
+  // ================= UI BASE =================
+
+  if(window.isPro && window.isPro()){
+
+    console.log("🔓 PRO USER DASHBOARD");
+
+    document.querySelectorAll(`
+      .locked,
+      .locked-overlay,
+      .results-overlay
+    `).forEach(el => el.remove());
+
+  }else{
+
+    console.log("🔒 FREE USER");
+
+  }
+
+  // ================= FORCE PLAN FIX =================
 
   setTimeout(() => {
+
     if(typeof window.forceCorrectPlan === "function"){
+
       window.forceCorrectPlan();
+
     } else {
+
       console.warn("⚠️ forceCorrectPlan non disponibile");
+
     }
+
   }, 100);
 
 });
