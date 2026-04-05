@@ -116,14 +116,14 @@ const mobileMenu = document.getElementById("mobileMenu");
 
 if(hamburger && mobileMenu){
 
-hamburger.addEventListener("click", (e)=>{
-  e.preventDefault();
-  e.stopPropagation();
+  hamburger.addEventListener("click", (e)=>{
+    e.preventDefault();
+    e.stopPropagation();
 
-  mobileMenu.classList.toggle("active");
+    mobileMenu.classList.toggle("active");
 
-  console.log("MENU TOGGLE:", mobileMenu.classList.contains("active"));
-});
+    console.log("MENU TOGGLE:", mobileMenu.classList.contains("active"));
+  });
 
   // chiusura click fuori
   document.addEventListener("click", (e)=>{
@@ -139,7 +139,7 @@ const currentPath = window.location.pathname;
 
 document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
   const href = link.getAttribute("href");
-  if(currentPath.startsWith(href)){
+  if(href !== "/" && currentPath.startsWith(href)){
     link.classList.add("active");
   }
 });
@@ -155,7 +155,7 @@ setTimeout(()=>{
 
 
 /* ===================== */
-/* USER AREA */
+/* USER AREA FIX DEFINITIVO */
 /* ===================== */
 
 onAuthStateChanged(auth, (user)=>{
@@ -165,46 +165,75 @@ if(!userArea) return;
 
 const isMobile = window.innerWidth < 768;
 
-// 🔥 aspetta piano caricato
-const waitPlan = () => {
+// 🔥 aspetta Firebase + piano
+const renderUser = () => {
 
-  const isPro = window.isPro?.();
   const isAdmin = window.isAdmin?.();
 
+  // ================= LOGGATO =================
   if(user){
 
-    // ================= ADMIN =================
-if(isAdmin){
+    const userName = user.email || "User";
 
-  userArea.innerHTML = `
-    <div style="display:flex;gap:6px;align-items:center;">
+    let html = `
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+    `;
 
-      <a href="/dashboard/" class="btn btn-secondary" style="padding:6px 10px;font-size:13px;">
-        Dashboard
-      </a>
-
-      <a href="/admin/leads.html" class="btn btn-primary" style="padding:6px 10px;font-size:13px;">
-        Leads
-      </a>
-
-    </div>
-  `;
-
-  return;
-}
-
-    // ================= USER NORMALE =================
-    if(isMobile){
-      userArea.innerHTML = `
-        <a href="/dashboard/" class="btn btn-secondary">📊</a>
-      `;
-    }else{
-      userArea.innerHTML = `
-        <a href="/dashboard/" class="btn btn-secondary">Dashboard</a>
+    // 👤 Nome (solo desktop)
+    if(!isMobile){
+      html += `
+        <span style="font-size:12px;color:#64748b;">
+          ${userName}
+        </span>
       `;
     }
 
-  }else{
+    // 📊 Dashboard
+    html += `
+      <a href="/dashboard/" class="btn btn-secondary" style="padding:6px 10px;font-size:12px;">
+        ${isMobile ? "📊" : "Dashboard"}
+      </a>
+    `;
+
+    // 💰 ADMIN ONLY → LEADS
+    if(isAdmin){
+      html += `
+        <a href="/dashboard-leads/" class="btn btn-primary" style="padding:6px 10px;font-size:12px;">
+          ${isMobile ? "💰" : "Leads"}
+        </a>
+      `;
+    }
+
+    // 🚪 LOGOUT
+    html += `
+      <button id="logout-btn" class="btn btn-danger" style="padding:6px 10px;font-size:12px;">
+        ${isMobile ? "🚪" : "Logout"}
+      </button>
+    `;
+
+    html += `</div>`;
+
+    userArea.innerHTML = html;
+
+    // 🔥 LOGOUT EVENT
+    setTimeout(()=>{
+      const btn = document.getElementById("logout-btn");
+      if(btn){
+        btn.addEventListener("click", ()=>{
+          import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js")
+          .then(({ signOut })=>{
+            signOut(auth).then(()=>{
+              window.location.href = "/";
+            });
+          });
+        });
+      }
+    },50);
+
+  }
+
+  // ================= NON LOGGATO =================
+  else{
 
     userArea.innerHTML = `
       <a href="/login/" class="login-btn">Accedi</a>
@@ -214,14 +243,15 @@ if(isAdmin){
 
 };
 
-// 🔥 retry fino a quando Firebase ha caricato piano
+
+// 🔥 WAIT FIREBASE READY
 let tries = 0;
 
 const interval = setInterval(()=>{
 
   if(window.firebaseReady || tries > 10){
     clearInterval(interval);
-    waitPlan();
+    renderUser();
   }
 
   tries++;
@@ -229,7 +259,6 @@ const interval = setInterval(()=>{
 },100);
 
 });
-
 
 /* ===================== */
 /* LANG SYNC */
