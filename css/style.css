@@ -7822,3 +7822,51 @@ overflow:hidden;
 .portal-header{
   z-index:100000 !important;
 }
+
+/* =========================================
+🔥 GLOBAL LOGO FIX – UNIVERSALE (FINAL)
+Sistema logo su desktop, mobile, header, dashboard
+========================================= */
+
+/* BASE – tutti i logo immagini */
+img[src*="logo"]{
+  width:180px !important;
+  max-width:180px !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+
+/* HEADER PRIORITY */
+.portal-header img,
+.header img,
+.logo img,
+.logo-img{
+  width:180px !important;
+  max-width:180px !important;
+  height:auto !important;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+  img[src*="logo"],
+  .portal-header img,
+  .logo img,
+  .logo-img{
+    width:140px !important;
+    max-width:140px !important;
+  }
+
+}
+
+/* DASHBOARD / CARD */
+.dashboard img[src*="logo"],
+.card img[src*="logo"]{
+  width:160px !important;
+}
+
+/* PDF PREVIEW (se visibile in DOM) */
+canvas + img[src*="logo"],
+.pdf-container img[src*="logo"]{
+  width:160px !important;
+}
