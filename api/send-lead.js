@@ -1,21 +1,30 @@
 import { Resend } from "resend";
 import admin from "firebase-admin";
 
+// ================= RESEND =================
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// 🔥 INIT FIREBASE (SAFE)
+// ================= FIREBASE INIT SAFE =================
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-    })
-  });
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY
+          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+          : undefined
+      })
+    });
+    console.log("🔥 Firebase Admin initialized");
+  } catch (e) {
+    console.error("❌ Firebase init error:", e.message);
+  }
 }
 
-const db = admin.firestore();
+const db = admin.apps.length ? admin.firestore() : null;
 
+// ================= HANDLER =================
 export default async function handler(req, res){
 
   if(req.method !== "POST"){
@@ -24,8 +33,11 @@ export default async function handler(req, res){
 
   try{
 
-    const {
-      type,
+    // ================= BODY SAFE =================
+    const body = req.body || {};
+
+    let {
+      type = "simulatore",
       email,
       phone,
       city,
@@ -35,7 +47,14 @@ export default async function handler(req, res){
       name,
       message,
       roi
-    } = req.body;
+    } = body;
+
+    // ================= SANITIZE =================
+    email = String(email || "").trim();
+    city = String(city || "").toLowerCase();
+    type = String(type || "simulatore").toLowerCase();
+    roi = Number(roi || 0);
+    budget = Number(budget || 0);
 
     // ================= VALIDAZIONE =================
     if(!email){
@@ -47,7 +66,7 @@ export default async function handler(req, res){
 
     if(type === "mutui") value = 30;
     if(type === "immobili") value = 50;
-    if(type === "simulatore") value = roi > 12 ? 40 : 20;
+    if(type === "simulatore") value = roi > 15 ? 80 : roi > 12 ? 50 : 20;
     if(type === "partner") value = 100;
 
     // ================= LEAD SCORE =================
@@ -65,8 +84,8 @@ export default async function handler(req, res){
       content = `
 Email: ${email}
 Telefono: ${phone || "-"}
-Importo: €${amount}
-Durata: ${years} anni
+Importo: €${amount || "-"}
+Durata: ${years || "-"} anni
 Valore lead: €${value}
 Score: ${score}
       `;
@@ -76,8 +95,8 @@ Score: ${score}
       subject = "🏠 Lead IMMOBILE (INVESTITORE)";
       content = `
 Email: ${email}
-Città: ${city}
-Budget: €${budget}
+Città: ${city || "-"}
+Budget: €${budget || "-"}
 Valore lead: €${value}
 Score: ${score}
       `;
@@ -88,8 +107,8 @@ Score: ${score}
       content = `
 Email: ${email}
 ROI: ${roi}%
-Città: ${city}
-Budget: €${budget}
+Città: ${city || "-"}
+Budget: €${budget || "-"}
 Valore lead: €${value}
 Score: ${score}
       `;
@@ -98,82 +117,97 @@ Score: ${score}
     if(type === "partner"){
       subject = "🤝 Richiesta PARTNER";
       content = `
-Nome: ${name}
+Nome: ${name || "-"}
 Email: ${email}
-Messaggio: ${message}
+Messaggio: ${message || "-"}
 Valore: €${value}
       `;
     }
 
-    // ================= SALVATAGGIO DB =================
-    await db.collection("leads").add({
-      type,
-      email,
-      phone: phone || null,
-      city: city || null,
-      budget: budget || null,
-      amount: amount || null,
-      years: years || null,
-      name: name || null,
-      message: message || null,
-      roi: roi || null,
-      value,
-      score,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    // ================= SAVE FIRESTORE =================
+    if(db){
+      await db.collection("leads").add({
+        type,
+        email,
+        phone: phone || null,
+        city,
+        budget,
+        amount: amount || null,
+        years: years || null,
+        name: name || null,
+        message: message || null,
+        roi,
+        value,
+        score,
+        plan: body.plan || "unknown", // 🔥 IMPORTANTISSIMO
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      console.warn("⚠️ Firestore non disponibile → skip salvataggio");
+    }
 
     // ================= EMAIL ADMIN =================
-    await resend.emails.send({
-      from: "RendimentoBB <info@rendimentobb.it>",
-      to: ["rendimentobb@gmail.com"],
-      subject,
-      html: `
-        <div style="font-family:Arial;padding:20px">
-          <h2>${subject}</h2>
-          <pre>${content}</pre>
-        </div>
-      `
-    });
-
-    // ================= PARTNER ROUTING 💸 =================
-
-    const partners = {
-      mutui: ["broker1@email.com"],
-      immobili: ["agenzia@email.com"],
-      simulatore: ["investor@email.com"]
-    };
-
-    const targetPartners = partners[type] || [];
-
-    for(const partnerEmail of targetPartners){
-
+    try{
       await resend.emails.send({
-        from: "RendimentoBB <lead@rendimentobb.it>",
-        to: [partnerEmail],
-        subject: "🔥 Nuovo cliente pronto",
+        from: "RendimentoBB <info@rendimentobb.it>",
+        to: ["rendimentobb@gmail.com"],
+        subject,
         html: `
           <div style="font-family:Arial;padding:20px">
-            <h2>Nuovo lead qualificato</h2>
-
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>ROI:</strong> ${roi || "-"}</p>
-            <p><strong>Città:</strong> ${city || "-"}</p>
-            <p><strong>Budget:</strong> €${budget || "-"}</p>
-
-            <hr>
-
-            <p style="color:#64748b;font-size:12px">
-            Lead generato da RendimentoBB
-            </p>
+            <h2>${subject}</h2>
+            <pre>${content}</pre>
           </div>
         `
       });
-
+    }catch(e){
+      console.error("❌ Email admin error:", e.message);
     }
+
+    // ================= PARTNER ROUTING 💸 =================
+    const partnersMap = {
+      mutui: ["broker1@email.com"],
+      immobili: ["agenzia@email.com"],
+      simulatore: roi > 12 
+        ? ["investor@email.com"] 
+        : []
+    };
+
+    const targetPartners = partnersMap[type] || [];
+
+    // 🔥 INVIO PARALLELO (VELOCE)
+    await Promise.all(
+      targetPartners.map(partnerEmail => {
+
+        return resend.emails.send({
+          from: "RendimentoBB <lead@rendimentobb.it>",
+          to: [partnerEmail],
+          subject: "🔥 Nuovo cliente pronto",
+          html: `
+            <div style="font-family:Arial;padding:20px">
+              <h2>Nuovo lead qualificato</h2>
+
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>ROI:</strong> ${roi || "-"}</p>
+              <p><strong>Città:</strong> ${city || "-"}</p>
+              <p><strong>Budget:</strong> €${budget || "-"}</p>
+
+              <hr>
+
+              <p style="color:#64748b;font-size:12px">
+              Lead generato da RendimentoBB
+              </p>
+            </div>
+          `
+        }).catch(err=>{
+          console.error("❌ Partner send error:", err.message);
+        });
+
+      })
+    );
 
     console.log("🔥 Lead salvato + monetizzato:", type, value);
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       success:true,
       value,
       score
@@ -181,11 +215,11 @@ Valore: €${value}
 
   }catch(err){
 
-    console.error("❌ ERRORE LEAD ENGINE:", err);
+    console.error("💥 ERRORE LEAD ENGINE:", err);
 
-    return res.status(500).json({ 
+    return res.status(500).json({
       error:"Errore server",
-      details: err.message 
+      details: err.message
     });
 
   }
