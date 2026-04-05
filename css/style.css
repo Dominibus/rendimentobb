@@ -9316,3 +9316,43 @@ display:none;
   font-size:14px;
   opacity:.4;
 }
+
+/* ===================== */
+/* FIX ACCEDI DEFINITIVO */
+/* ===================== */
+
+@media (max-width:768px){
+
+  /* spazio corretto header */
+  .rb-right{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:nowrap;
+  }
+
+  /* lingua più compatta */
+  .rb-lang button{
+    padding:4px 6px;
+    font-size:10px;
+  }
+
+  /* 🔥 ACCEDI PRIORITARIO */
+  .rb-login{
+    flex-shrink:0;              /* NON si comprime */
+    padding:6px 12px;           /* più equilibrato */
+    font-size:12px;
+    border-radius:999px;
+    white-space:nowrap;
+    min-width:70px;             /* 🔥 sempre visibile */
+    text-align:center;
+    background:linear-gradient(135deg,#10b981,#059669);
+    box-shadow:0 4px 12px rgba(16,185,129,0.3);
+  }
+
+  /* burger sempre visibile */
+  #rb-burger{
+    flex-shrink:0;
+  }
+
+}
