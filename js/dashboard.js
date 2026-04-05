@@ -543,20 +543,25 @@ async function loadDashboard(){
 
 // ================= FIX PLAN (DEFINITIVO) =================
 
-// se il piano non è ancora pronto → non fare nulla
+const isPro =
+  window.currentPlan === "pro" ||
+  (typeof window.isPro === "function" && window.isPro());
+
+console.log("CHECK PRO:", isPro, window.currentPlan);
+
 if(!window.currentPlan){
   console.warn("Plan non pronto → skip");
-}else if(window.currentPlan === "pro"){
+}
+else if(isPro){
 
-  console.log("PRO → UNLOCK");
+  console.log("🔥 PRO → UNLOCK FORZATO");
   unlockProContent();
 
-}else{
-
-  console.log("FREE → LOCK");
-  lockFreeUser();
-
 }
+else{
+
+  console.log("🔒 FREE → LOCK");
+  lockFreeUser();
 
 }
 
@@ -1091,13 +1096,16 @@ window.addEventListener("DOMContentLoaded", () => {
       await loadDashboard();
 
       // 🔥 GESTIONE POST LOAD
-      if(window.currentPlan === "pro"){
+      const isPro =
+  window.currentPlan === "pro" ||
+  (typeof window.isPro === "function" && window.isPro());
 
-        console.log("PRO USER → OK");
+if(isPro){
 
-        unlockProContent();
+  console.log("🔥 PRO USER → UNLOCK HARD");
+  unlockProContent();
 
-      }else{
+}else{
 
         if(!window.proOverlayShown){
 
