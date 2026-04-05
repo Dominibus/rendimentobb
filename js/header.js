@@ -61,7 +61,7 @@ const header = `
 
 <div class="header-right">
 
-<div id="user-area"></div>
+<div id="user-area" style="min-width:70px"></div>
 
 <div class="lang-switch">
 <button class="lang-btn" onclick="setLang('it')">IT</button>
