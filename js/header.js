@@ -5,33 +5,30 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-
 /* ===================== */
 /* HERO */
 /* ===================== */
 
 window.applyCityBackground = function(){
 
-const hero =
-  document.querySelector(".hero-bg") ||
-  document.querySelector(".hero");
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero");
 
-if(!hero) return;
+  if(!hero) return;
 
-hero.classList.remove("rome","naples","milan","florence");
+  hero.classList.remove("rome","naples","milan","florence");
 
-const path = window.location.pathname.toLowerCase();
+  const path = window.location.pathname.toLowerCase();
 
-let city = "rome";
+  let city = "rome";
 
-if(path.includes("milano")) city = "milan";
-else if(path.includes("napoli")) city = "naples";
-else if(path.includes("firenze")) city = "florence";
+  if(path.includes("milano")) city = "milan";
+  else if(path.includes("napoli")) city = "naples";
+  else if(path.includes("firenze")) city = "florence";
 
-hero.classList.add(city);
-
+  hero.classList.add(city);
 };
-
 
 /* ===================== */
 /* HEADER INIT */
@@ -39,196 +36,190 @@ hero.classList.add(city);
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const header = `
-<header class="portal-header">
+  const header = `
+  <header class="portal-header">
 
-<div class="portal-header-inner">
+    <div class="portal-header-inner">
 
-<div class="header-left">
-  <a href="/" style="display:flex;align-items:center;">
-    <img src="/img/logo-main.png" class="logo-img">
-  </a>
-</div>
+      <!-- LOGO -->
+      <div class="header-left">
+        <a href="/">
+          <img src="/img/logo-main.png" class="logo-img">
+        </a>
+      </div>
 
-<nav class="portal-nav desktop-nav" id="main-nav">
-<a href="/tool/">Simulatore</a>
-<a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-<a href="/mutui/">Mutui</a>
-<a href="/immobili/">Immobili</a>
-<a href="/academy/">Academy</a>
-<a href="/contact.html">Contatti</a>
-</nav>
+      <!-- NAV DESKTOP -->
+      <nav class="portal-nav desktop-nav" id="main-nav">
+        <a href="/tool/">Simulatore</a>
+        <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+        <a href="/mutui/">Mutui</a>
+        <a href="/immobili/">Immobili</a>
+        <a href="/academy/">Academy</a>
+        <a href="/contact.html">Contatti</a>
+      </nav>
 
-<div class="header-right">
+      <!-- RIGHT -->
+      <div class="header-right">
 
-<div id="user-area" style="min-width:70px"></div>
+        <div id="user-area" style="min-width:70px"></div>
 
-<div class="lang-switch">
-<button class="lang-btn" onclick="setLang('it')">IT</button>
-<button class="lang-btn" onclick="setLang('en')">EN</button>
-</div>
+        <div class="lang-switch">
+          <button class="lang-btn" onclick="setLang('it')">IT</button>
+          <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
 
-<button class="hamburger" id="hamburger">☰</button>
+        <button class="hamburger" id="hamburger">☰</button>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-<div class="mobile-menu" id="mobileMenu">
-<a href="/tool/">Simulatore</a>
-<a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-<a href="/mutui/">Mutui</a>
-<a href="/immobili/">Immobili</a>
-<a href="/academy/">Academy</a>
-<a href="/contact.html">Contatti</a>
-</div>
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/tool/">Simulatore</a>
+      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+      <a href="/mutui/">Mutui</a>
+      <a href="/immobili/">Immobili</a>
+      <a href="/academy/">Academy</a>
+      <a href="/contact.html">Contatti</a>
+    </div>
 
-</header>
-`;
+  </header>
+  `;
 
-document.getElementById("global-header").innerHTML = header;
+  const container = document.getElementById("global-header");
+  if(container) container.innerHTML = header;
 
-window.applyCityBackground();
+  window.applyCityBackground();
 
+  /* ===================== */
+  /* MOBILE MENU FIX */
+  /* ===================== */
 
-/* ===================== */
-/* MOBILE MENU */
-/* ===================== */
+  setTimeout(()=>{
 
-setTimeout(()=>{
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
 
-  const hamburger = document.getElementById("hamburger");
-  const mobileMenu = document.getElementById("mobileMenu");
+    if(!hamburger || !mobileMenu) return;
 
-  if(!hamburger || !mobileMenu){
-    console.warn("❌ hamburger non trovato");
-    return;
-  }
+    hamburger.addEventListener("click", (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      mobileMenu.classList.toggle("active");
+    });
 
-  hamburger.addEventListener("click", (e)=>{
-    e.preventDefault();
-    e.stopPropagation();
+    document.addEventListener("click", (e)=>{
+      if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
+        mobileMenu.classList.remove("active");
+      }
+    });
 
-    mobileMenu.classList.toggle("active");
-  });
+  },100);
 
-  document.addEventListener("click", (e)=>{
-    if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
-      mobileMenu.classList.remove("active");
+  /* ===================== */
+  /* ACTIVE LINK */
+  /* ===================== */
+
+  const currentPath = window.location.pathname;
+
+  document.querySelectorAll(".portal-nav a").forEach(link=>{
+    const href = link.getAttribute("href");
+    if(href !== "/" && currentPath.startsWith(href)){
+      link.classList.add("active");
     }
   });
 
-},100);
-
-document.addEventListener("click", (e)=>{
-  if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
-    mobileMenu.classList.remove("active");
-  }
 });
-
-}
-
-/* ACTIVE LINK */
-
-const currentPath = window.location.pathname;
-
-document.querySelectorAll(".portal-nav a").forEach(link=>{
-  const href = link.getAttribute("href");
-  if(currentPath.startsWith(href)){
-    link.classList.add("active");
-  }
-});
-
-});
-
 
 /* ===================== */
-/* USER AREA (FUORI!!) */
+/* USER AREA */
 /* ===================== */
 
 onAuthStateChanged(auth, (user)=>{
 
-const userArea = document.getElementById("user-area");
-const nav = document.getElementById("main-nav");
+  const userArea = document.getElementById("user-area");
+  const nav = document.getElementById("main-nav");
 
-if(!userArea) return;
+  if(!userArea) return;
 
-const isMobile = window.innerWidth < 768;
+  const isMobile = window.innerWidth < 768;
 
-const render = () => {
+  const render = () => {
 
-  const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+    const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
 
-const isAdmin =
-  ADMIN_EMAILS.includes(user?.email) ||
-  window.isAdmin?.();
+    const isAdmin =
+      ADMIN_EMAILS.includes(user?.email) ||
+      window.isAdmin?.();
 
-  // 🔥 ADMIN → aggiunge LEADS nel menu
-if(isAdmin && nav && !document.getElementById("admin-link")){
+    /* ===== ADMIN LINK ===== */
+    if(isAdmin && nav && !document.getElementById("admin-link")){
 
-  const link = document.createElement("a");
+      const link = document.createElement("a");
 
-  link.href = "/dashboard-leads/"; // ⚠️ CAMBIA QUI SE URL DIVERSO
-  link.id = "admin-link";
-  link.innerText = "Leads";
+      link.href = "/dashboard-leads/";
+      link.id = "admin-link";
+      link.innerText = "Leads";
 
-  // stile coerente
-  link.style.color = "#10b981";
-  link.style.fontWeight = "600";
+      link.style.color = "#10b981";
+      link.style.fontWeight = "600";
 
-  nav.appendChild(link);
-}
-
-  if(user){
-
-    let html = `<div style="display:flex;align-items:center;gap:8px;">`;
-
-    if(!isMobile){
-      html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
+      nav.appendChild(link);
     }
 
-    html += `
-      <a href="/dashboard/" class="btn btn-secondary">
-        ${isMobile ? "📊" : "Dashboard"}
-      </a>
-    `;
+    /* ===== USER ===== */
+    if(user){
 
-    html += `
-      <button id="logout-btn" class="btn btn-danger">
-        ${isMobile ? "🚪" : "Logout"}
-      </button>
-    `;
+      let html = `<div style="display:flex;align-items:center;gap:8px;">`;
 
-    html += `</div>`;
+      if(!isMobile){
+        html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
+      }
 
-    userArea.innerHTML = html;
+      html += `
+        <a href="/dashboard/" class="btn btn-secondary">
+          ${isMobile ? "📊" : "Dashboard"}
+        </a>
+      `;
 
-    document.getElementById("logout-btn").onclick = async () => {
-      const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
-      await signOut(auth);
-      location.reload();
-    };
+      html += `
+        <button id="logout-btn" class="btn btn-danger">
+          ${isMobile ? "🚪" : "Logout"}
+        </button>
+      `;
 
-  } else {
+      html += `</div>`;
 
-    userArea.innerHTML = `<a href="/login/" class="login-btn">Accedi</a>`;
+      userArea.innerHTML = html;
 
-  }
+      const logoutBtn = document.getElementById("logout-btn");
 
-};
+      if(logoutBtn){
+        logoutBtn.onclick = async () => {
+          const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
+          await signOut(auth);
+          location.reload();
+        };
+      }
 
-// WAIT FIREBASE
-let tries = 0;
+    } else {
 
-const interval = setInterval(()=>{
+      userArea.innerHTML = `<a href="/login/" class="login-btn">Accedi</a>`;
 
-  if(window.firebaseReady || tries > 10){
-    clearInterval(interval);
-    render();
-  }
+    }
 
-  tries++;
+  };
 
-},100);
+  /* WAIT FIREBASE */
+  let tries = 0;
+
+  const interval = setInterval(()=>{
+    if(window.firebaseReady || tries > 10){
+      clearInterval(interval);
+      render();
+    }
+    tries++;
+  },100);
 
 });
