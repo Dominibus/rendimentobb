@@ -9530,8 +9530,9 @@ flex-wrap:nowrap;
 
 /* USER */
 .rb-user{
-gap:6px;
-flex-wrap:nowrap;
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
 
 /* EMAIL */
