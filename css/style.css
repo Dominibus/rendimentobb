@@ -9875,3 +9875,55 @@ padding-top:90px;
   }
 
 }
+
+/* ===================== */
+/* FIX HEADER MOBILE DEFINITIVO */
+/* ===================== */
+
+@media (max-width:768px){
+
+  .rb-inner{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    flex-direction:row !important;
+    height:60px;
+  }
+
+  .rb-left{
+    flex:0 0 auto;
+  }
+
+  .rb-right{
+    display:flex !important;
+    align-items:center;
+    gap:6px;
+    flex:0 0 auto;
+  }
+
+  .rb-lang{
+    display:flex !important;
+    gap:4px;
+  }
+
+  .rb-lang button{
+    padding:4px 8px;
+    font-size:11px;
+  }
+
+  .rb-login{
+    padding:6px 10px;
+    font-size:12px;
+  }
+
+  #rb-burger{
+    display:block !important;
+    font-size:20px;
+  }
+
+}
+
+.rb-header{
+  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.9);
+}
