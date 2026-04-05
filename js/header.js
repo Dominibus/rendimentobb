@@ -45,14 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="portal-header-inner">
 
-      <!-- LOGO -->
+      <!-- LEFT -->
       <div class="header-left">
         <a href="/">
           <img src="/img/logo-main.png" class="logo-img">
         </a>
       </div>
 
-      <!-- NAV -->
+      <!-- CENTER NAV (DESKTOP) -->
       <nav class="portal-nav desktop-nav" id="main-nav">
         <a href="/tool/">Simulatore</a>
         <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
@@ -72,13 +72,17 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="lang-btn" data-lang="en">EN</button>
         </div>
 
-        <button class="hamburger" id="hamburger">☰</button>
+        <button class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
       </div>
 
     </div>
 
-    <!-- MOBILE -->
+    <!-- MOBILE MENU -->
     <div class="mobile-menu" id="mobileMenu">
       <a href="/tool/">Simulatore</a>
       <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
@@ -93,48 +97,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.applyCityBackground();
 
-  initHeaderInteractions();
+  initHeader();
   highlightActiveLink();
 
 });
 
 
 /* ===================== */
-/* INTERAZIONI HEADER */
+/* HEADER CORE */
 /* ===================== */
 
-function initHeaderInteractions(){
+function initHeader(){
 
   const hamburger = document.getElementById("hamburger");
   const mobileMenu = document.getElementById("mobileMenu");
 
+  /* ===== MOBILE MENU ===== */
   if(hamburger && mobileMenu){
 
-    hamburger.onclick = (e)=>{
-      e.preventDefault();
+    hamburger.addEventListener("click", (e)=>{
       e.stopPropagation();
+      hamburger.classList.toggle("open");
       mobileMenu.classList.toggle("active");
-    };
+    });
 
     document.addEventListener("click", (e)=>{
       if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
         mobileMenu.classList.remove("active");
+        hamburger.classList.remove("open");
       }
     });
   }
 
-  // ===== LANGUAGE =====
+  /* ===== LANGUAGE ===== */
   document.querySelectorAll(".lang-btn").forEach(btn=>{
-    btn.onclick = ()=>{
+    btn.addEventListener("click", ()=>{
       const lang = btn.dataset.lang;
+
+      localStorage.setItem("rb_lang", lang);
 
       if(window.setLang){
         window.setLang(lang);
       }
 
-      localStorage.setItem("rb_lang", lang);
       location.reload();
-    };
+    });
   });
 
 }
@@ -146,11 +153,12 @@ function initHeaderInteractions(){
 
 function highlightActiveLink(){
 
-  const currentPath = window.location.pathname;
+  const path = window.location.pathname;
 
   document.querySelectorAll(".portal-nav a, .mobile-menu a").forEach(link=>{
     const href = link.getAttribute("href");
-    if(href !== "/" && currentPath.startsWith(href)){
+
+    if(href !== "/" && path.startsWith(href)){
       link.classList.add("active");
     }
   });
@@ -177,55 +185,32 @@ onAuthStateChanged(auth, (user)=>{
     ADMIN_EMAILS.includes(user?.email) ||
     window.isAdmin?.();
 
-  /* ===== ADMIN MENU LINK ===== */
+  /* ADMIN LINK */
   if(isAdmin && nav && !document.getElementById("admin-link")){
-
     const link = document.createElement("a");
-
     link.href = "/dashboard-leads/";
     link.id = "admin-link";
     link.innerText = "Leads";
-
     link.style.color = "#10b981";
     link.style.fontWeight = "600";
-
     nav.appendChild(link);
   }
 
-  /* ===== USER ===== */
   if(user){
 
-    let html = `<div style="display:flex;align-items:center;gap:8px;">`;
-
-    if(!isMobile){
-      html += `<span style="font-size:13px;color:#64748b;">${user.email}</span>`;
-    }
-
-    html += `
-      <a href="/dashboard/" class="btn btn-secondary">
-        ${isMobile ? "📊" : "Dashboard"}
-      </a>
+    userArea.innerHTML = `
+      <div class="user-box">
+        ${!isMobile ? `<span class="user-email">${user.email}</span>` : ""}
+        <a href="/dashboard/" class="btn btn-secondary">📊</a>
+        <button id="logout-btn" class="btn btn-danger">🚪</button>
+      </div>
     `;
 
-    html += `
-      <button id="logout-btn" class="btn btn-danger">
-        ${isMobile ? "🚪" : "Logout"}
-      </button>
-    `;
-
-    html += `</div>`;
-
-    userArea.innerHTML = html;
-
-    const btn = document.getElementById("logout-btn");
-
-    if(btn){
-      btn.onclick = async ()=>{
-        const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
-        await signOut(auth);
-        location.reload();
-      };
-    }
+    document.getElementById("logout-btn").onclick = async ()=>{
+      const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
+      await signOut(auth);
+      location.reload();
+    };
 
   } else {
 
