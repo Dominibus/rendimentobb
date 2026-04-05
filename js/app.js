@@ -3323,6 +3323,19 @@ if(window.proUnlocked && window.isPro()){
   return;
 }
 
+  // ================= ADMIN UI =================
+if(typeof window.isAdmin === "function" && window.isAdmin()){
+
+  console.log("👑 ADMIN SBLOCCATO");
+
+  document.body.classList.add("admin-user");
+
+  document.querySelectorAll(".admin-only").forEach(el=>{
+    el.style.display = "block";
+  });
+
+}
+
   const isPro =
     window.currentPlan === "pro" ||
     window.currentPlan === "investor" ||
@@ -3476,7 +3489,9 @@ function removeGhostOverlays(){
 }
 
 // 🔥 ESECUZIONE FORZATA CONTINUA
-setInterval(removeGhostOverlays, 800);
+// esegui solo quando serve
+document.addEventListener("rb_plan_loaded", removeGhostOverlays);
+document.addEventListener("rb_auth_ready", removeGhostOverlays);
 
 document.addEventListener("rb_plan_loaded", ()=>{
 
