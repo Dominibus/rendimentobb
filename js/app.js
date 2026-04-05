@@ -234,6 +234,15 @@ window.isPro = function(){
 
 };
 
+window.isAdmin = function(){
+
+  const email = window.currentUser?.email || "";
+
+  // 🔥 QUI METTI LA TUA EMAIL ADMIN
+  return email === "rendimentobb@gmail.com";
+
+};
+
 // ✅ GET PLAN PULITO (NO SIDE EFFECT)
 function getUserPlan(){
   return window.currentPlan || "free";
@@ -3365,6 +3374,20 @@ let unlockInterval = setInterval(()=>{
   }
 
 }, 500);
+
+  function unlockAdminUI(){
+
+  if(!window.isAdmin()) return;
+
+  console.log("👑 ADMIN MODE ATTIVO");
+
+  document.body.classList.add("admin-user");
+
+  document.querySelectorAll(".admin-only").forEach(el=>{
+    el.style.display = "block";
+  });
+
+}
 
   // ================= RIMUOVE OVERLAY (CRITICO) =================
 
