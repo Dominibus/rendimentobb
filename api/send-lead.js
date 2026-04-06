@@ -6,18 +6,22 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ================= FIREBASE INIT =================
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY
-        ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-        : undefined
-    })
-  });
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY
+          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+          : undefined
+      })
+    });
+  } catch (e) {
+    console.error("Firebase init error:", e.message);
+  }
 }
 
-const db = admin.firestore();
+const db = admin.apps.length ? admin.firestore() : null;
 
 // ================= HANDLER =================
 export default async function handler(req, res){
@@ -38,7 +42,6 @@ export default async function handler(req, res){
       plan
     } = req.body || {};
 
-    // ================= SANITIZE =================
     email = String(email || "").trim();
     city = String(city || "").toLowerCase();
     type = String(type || "simulatore").toLowerCase();
@@ -51,12 +54,10 @@ export default async function handler(req, res){
 
     const roiRounded = Number(roi.toFixed(1));
 
-    // ================= SCORE =================
     let score = "cold";
     if(roiRounded > 12) score = "hot";
     else if(roiRounded > 8) score = "warm";
 
-    // ================= VALUE =================
     let value = 15;
 
     if(type === "mutui") value = 40;
@@ -70,73 +71,44 @@ export default async function handler(req, res){
     }
 
     if(type === "partner") value = 120;
-
     if(plan === "pro") value *= 1.5;
 
     value = Math.round(value);
 
-    // ================= PRIORITY =================
     const priority = roiRounded > 15 ? "URGENT" : "HIGH";
 
-    // ================= ANTI DUPLICATE =================
-    try{
-      const existing = await db.collection("leads")
-        .where("email","==",email)
-        .orderBy("createdAt","desc")
-        .limit(1)
-        .get();
-
-      if(!existing.empty){
-        const last = existing.docs[0].data();
-
-        if(last?.createdAt?.toMillis){
-          const diff = Date.now() - last.createdAt.toMillis();
-
-        if(diff < 20 * 60 * 1000){
-  console.log("⚠️ duplicato ma continuo per test");
-}
-        }
-      }
-    }catch(e){
-      console.warn("⚠️ Index non pronto → skip controllo duplicati");
-    }
-
     // ================= SAVE FIRESTORE =================
-    await db.collection("leads").add({
-      type,
-      email,
-      phone: phone || null,
-      city,
-      budget,
-      roi: roiRounded,
-      value,
-      score,
-      priority,
-      plan: plan || "free",
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
-
-    await db.collection("revenue").add({
-      email,
-      value,
-      type,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    if(db){
+      await db.collection("leads").add({
+        type,
+        email,
+        phone: phone || null,
+        city,
+        budget,
+        roi: roiRounded,
+        value,
+        score,
+        priority,
+        plan: plan || "free",
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    }
 
     // ================= EMAIL ADMIN =================
     try{
 
       const result = await resend.emails.send({
-        // 🔥 USA QUESTO PER SICUREZZA
-        from: "RendimentoBB <onboarding@resend.dev>",
+        // 🔥 RIPRISTINO CORRETTO
+        from: "RendimentoBB <info@rendimentobb.it>",
         to: ["rendimentobb@gmail.com"],
         reply_to: email,
-        subject: `🔥 Lead ${priority} - €${value}`,
+        subject: `💰 ${priority} Lead – €${value}`,
         html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
+
   <div style="max-width:620px;margin:auto;background:white;padding:30px;border-radius:18px">
 
-    <h2 style="text-align:center">💰 Nuovo lead</h2>
+    <h2 style="text-align:center">Nuovo lead monetizzato</h2>
 
     <div style="text-align:center;font-size:34px;color:#10b981;font-weight:800;margin:20px 0">
       €${value}
@@ -146,57 +118,18 @@ export default async function handler(req, res){
     <p><strong>ROI:</strong> ${roiRounded}%</p>
     <p><strong>Città:</strong> ${city}</p>
     <p><strong>Tipo:</strong> ${type}</p>
-    <p><strong>Priority:</strong> ${priority}</p>
 
   </div>
+
 </div>
 `
       });
 
-      console.log("📨 ADMIN EMAIL SENT:", result);
+      console.log("📨 EMAIL SENT:", result);
 
     }catch(e){
-      console.error("❌ EMAIL ADMIN ERROR:", e);
+      console.error("❌ EMAIL ERROR:", e);
     }
-
-    // ================= PARTNER =================
-    const partners = ["rendimentobb@gmail.com"];
-
-    await Promise.all(
-      partners.map(async (p) => {
-
-        try{
-          const result = await resend.emails.send({
-            // 🔥 STESSO MITTENTE (IMPORTANTISSIMO)
-            from: "RendimentoBB <onboarding@resend.dev>",
-            to: [p],
-            subject: `Lead ${priority} ${city.toUpperCase()} ${roiRounded}%`,
-            html: `
-<div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
-  <div style="max-width:600px;margin:auto;background:white;padding:30px;border-radius:18px">
-
-    <h2>🔥 Investment Lead (${priority})</h2>
-
-    <h1 style="color:#10b981">${roiRounded}%</h1>
-
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Città:</strong> ${city}</p>
-
-  </div>
-</div>
-`
-          });
-
-          console.log("📨 PARTNER EMAIL SENT:", result);
-
-        }catch(e){
-          console.error("❌ PARTNER EMAIL ERROR:", e);
-        }
-
-      })
-    );
-
-    console.log("💰 LEAD COMPLETATO:", value, priority);
 
     return res.status(200).json({
       success:true,
