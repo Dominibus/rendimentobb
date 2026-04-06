@@ -47,6 +47,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Email missing" });
     }
 
+    // 🔥 FIX CREDIBILITÀ ROI
+    const roiRounded = Number(roi.toFixed(1));
+
     // ================= ANTI-SPAM =================
     if (db) {
       const existing = await db.collection("email_logs")
@@ -71,78 +74,77 @@ export default async function handler(req, res) {
 
     // ================= LEAD SCORE =================
     let score = "cold";
-    if (roi > 12) score = "hot";
-    else if (roi > 8) score = "warm";
+    if (roiRounded > 12) score = "hot";
+    else if (roiRounded > 8) score = "warm";
 
-    // ================= EMAIL TEMPLATE PRO =================
+    // ================= TEMPLATE =================
     const templates = {
 
       it: {
-        subject: `ROI ${roi}% – Stai davvero guadagnando?`,
-html: `
+        subject: `ROI ${roiRounded}% – Analisi investimento`,
+        html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
-  <div style="max-width:620px;margin:auto;background:#ffffff;border-radius:18px;padding:30px;box-shadow:0 15px 40px rgba(0,0,0,0.08)">
+  <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:18px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,0.08)">
 
-    <!-- LOGO PREMIUM -->
-    <div style="text-align:center;margin-bottom:25px">
-      <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:50px">
+    <!-- LOGO GRANDE -->
+    <div style="text-align:center;margin-bottom:30px">
+      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:140px">
     </div>
 
-    <!-- HEADLINE FORTE -->
+    <!-- HEADLINE -->
     <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:10px">
-      🚨 Stai per fare un investimento da migliaia di euro
+      🔎 Analisi investimento B&B
     </h2>
 
-    <p style="text-align:center;color:#64748b;font-size:14px;margin-bottom:20px">
-      Ma senza dati reali potresti perderli.
+    <p style="text-align:center;color:#64748b;font-size:14px;margin-bottom:25px">
+      Valutazione basata sui dati inseriti
     </p>
 
     <!-- ROI HERO -->
-    <div style="text-align:center;margin:30px 0">
-      <div style="font-size:44px;font-weight:800;color:#10b981">
-        ${roi}%
+    <div style="text-align:center;margin:35px 0">
+      <div style="font-size:48px;font-weight:800;color:#10b981;letter-spacing:-1px">
+        ${roiRounded}%
       </div>
       <div style="color:#64748b;font-size:14px">
         ROI stimato – ${city}
       </div>
     </div>
 
-    <!-- BLOCCO IMPATTO -->
-    <div style="background:#fff7ed;padding:18px;border-radius:12px;margin:20px 0;font-size:14px;color:#7c2d12">
-      ⚠️ Il 72% degli investitori perde soldi perché non analizza rischio e mutuo
+    <!-- ALERT -->
+    <div style="background:#fff7ed;padding:18px;border-radius:12px;margin:25px 0;font-size:14px;color:#7c2d12">
+      ⚠️ Il ROI da solo non basta: rischio, mutuo e occupazione determinano il risultato reale
     </div>
 
     <!-- VALUE -->
     <div style="margin:25px 0">
-      <p style="font-weight:600;color:#0f172a">Con RendimentoBB puoi:</p>
+      <p style="font-weight:600;color:#0f172a;margin-bottom:10px">Analizza in modo completo:</p>
       <ul style="color:#334155;font-size:14px;line-height:1.7;padding-left:20px">
-        <li>Capire se stai guadagnando davvero</li>
-        <li>Vedere il rischio reale dell'investimento</li>
-        <li>Calcolare il break-even preciso</li>
-        <li>Simulare il mutuo sostenibile</li>
+        <li>Profitto reale mensile e annuale</li>
+        <li>Break-even occupancy</li>
+        <li>Impatto mutuo e interessi</li>
+        <li>Scenario rischio investimento</li>
       </ul>
     </div>
 
-    <!-- CTA SUPER -->
+    <!-- CTA -->
     <div style="text-align:center;margin:35px 0">
       <a href="https://www.rendimentobb.it/dashboard/"
       style="background:linear-gradient(135deg,#10b981,#059669);
       color:white;
-      padding:16px 28px;
+      padding:16px 30px;
       border-radius:999px;
       text-decoration:none;
       font-weight:700;
       font-size:15px;
       display:inline-block;
-      box-shadow:0 8px 25px rgba(16,185,129,0.4)">
-      🔥 Sblocca analisi completa ora
+      box-shadow:0 10px 30px rgba(16,185,129,0.4)">
+      🔥 Vedi analisi completa
       </a>
     </div>
 
-    <!-- FOMO -->
-    <p style="text-align:center;font-size:13px;color:#94a3b8">
-      Ogni giorno senza dati reali è un rischio.
+    <p style="text-align:center;font-size:12px;color:#94a3b8">
+      RendimentoBB – motore decisionale per investimenti B&B
     </p>
 
   </div>
@@ -152,61 +154,72 @@ html: `
       },
 
       en: {
-        subject: `ROI ${roi}% – Is your investment really profitable?`,
+        subject: `ROI ${roiRounded}% – Investment analysis`,
         html: `
-        <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
+<div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
-          <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:16px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.08)">
+  <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:18px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,0.08)">
 
-            <div style="text-align:center;margin-bottom:20px">
-              <img src="https://www.rendimentobb.it/img/logo-main.png" style="height:40px">
-            </div>
+    <div style="text-align:center;margin-bottom:30px">
+      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:140px">
+    </div>
 
-            <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
-              Your investment can change everything
-            </h2>
+    <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:10px">
+      🔎 B&B Investment Analysis
+    </h2>
 
-            <div style="text-align:center;margin:20px 0">
-              <div style="font-size:36px;font-weight:bold;color:#10b981">
-                ${roi}%
-              </div>
-              <div style="color:#64748b;font-size:14px">
-                Estimated ROI – ${city || "market"}
-              </div>
-            </div>
+    <p style="text-align:center;color:#64748b;font-size:14px;margin-bottom:25px">
+      Based on your input data
+    </p>
 
-            <div style="background:#fff7ed;padding:16px;border-radius:10px;margin:20px 0;font-size:14px">
-              ⚠️ 72% of investors make decisions without real data
-            </div>
+    <div style="text-align:center;margin:35px 0">
+      <div style="font-size:48px;font-weight:800;color:#10b981">
+        ${roiRounded}%
+      </div>
+      <div style="color:#64748b;font-size:14px">
+        Estimated ROI – ${city || "market"}
+      </div>
+    </div>
 
-            <ul style="color:#334155;font-size:15px;line-height:1.7;padding-left:20px">
-              <li>Real ROI vs market</li>
-              <li>Break-even & risk</li>
-              <li>Mortgage sustainability</li>
-            </ul>
+    <div style="background:#fff7ed;padding:18px;border-radius:12px;margin:25px 0;font-size:14px">
+      ⚠️ ROI alone is not enough: risk, mortgage and occupancy define real performance
+    </div>
 
-            <div style="text-align:center;margin:30px 0">
-              <a href="https://www.rendimentobb.it/dashboard/"
-              style="background:#10b981;color:white;padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:600;display:inline-block">
-              🔥 Unlock full analysis
-              </a>
-            </div>
+    <ul style="color:#334155;font-size:14px;line-height:1.7;padding-left:20px">
+      <li>Real monthly & yearly profit</li>
+      <li>Break-even occupancy</li>
+      <li>Mortgage impact</li>
+      <li>Investment risk scenario</li>
+    </ul>
 
-            <p style="font-size:12px;color:#94a3b8;text-align:center">
-              RendimentoBB – B&B investment decision engine
-            </p>
+    <div style="text-align:center;margin:35px 0">
+      <a href="https://www.rendimentobb.it/dashboard/"
+      style="background:linear-gradient(135deg,#10b981,#059669);
+      color:white;
+      padding:16px 30px;
+      border-radius:999px;
+      text-decoration:none;
+      font-weight:700;
+      display:inline-block">
+      🔥 View full analysis
+      </a>
+    </div>
 
-          </div>
+    <p style="text-align:center;font-size:12px;color:#94a3b8">
+      RendimentoBB – B&B investment decision engine
+    </p>
 
-        </div>
-        `
+  </div>
+
+</div>
+`
       }
 
     };
 
     const selected = templates[lang] || templates.it;
 
-    // ================= SEND EMAIL =================
+    // ================= SEND =================
     await resend.emails.send({
       from: "onboarding@resend.dev",
       to: [email],
@@ -214,14 +227,14 @@ html: `
       html: selected.html
     });
 
-    // ================= TRACKING =================
+    // ================= TRACK =================
     if (db) {
 
       await db.collection("email_logs").add({
         email,
         type: "retargeting",
         score,
-        roi,
+        roi: roiRounded,
         city,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       });
@@ -229,14 +242,14 @@ html: `
       await db.collection("users").doc(email).set({
         email,
         lastSeen: admin.firestore.FieldValue.serverTimestamp(),
-        lastROI: roi,
+        lastROI: roiRounded,
         lastCity: city,
         score
       }, { merge: true });
 
     }
 
-    console.log("📨 Email PRO inviata:", email, score);
+    console.log("📨 Email inviata:", email, score);
 
     return res.status(200).json({
       success: true,
