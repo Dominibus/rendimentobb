@@ -1,10 +1,8 @@
 import { Resend } from "resend";
 import admin from "firebase-admin";
 
-// ================= RESEND =================
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ================= FIREBASE INIT =================
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -23,7 +21,6 @@ if (!admin.apps.length) {
 
 const db = admin.apps.length ? admin.firestore() : null;
 
-// ================= HANDLER =================
 export default async function handler(req, res){
 
   if(req.method !== "POST"){
@@ -32,22 +29,11 @@ export default async function handler(req, res){
 
   try{
 
-    let {
-      type = "simulatore",
-      email,
-      phone,
-      city,
-      budget,
-      roi,
-      plan
-    } = req.body || {};
+    let { email, city, roi, plan } = req.body || {};
 
-    // ================= SANITIZE =================
     email = String(email || "").trim();
     city = String(city || "").toLowerCase();
-    type = String(type || "simulatore").toLowerCase();
     roi = Number(roi || 0);
-    budget = Number(budget || 0);
 
     if(!email){
       return res.status(400).json({ error:"Email richiesta" });
@@ -55,106 +41,81 @@ export default async function handler(req, res){
 
     const roiRounded = Number(roi.toFixed(1));
 
-    // ================= SCORE =================
-    let score = "cold";
-    if(roiRounded > 12) score = "hot";
-    else if(roiRounded > 8) score = "warm";
+    let value = roiRounded > 20 ? 140 :
+                roiRounded > 16 ? 110 :
+                roiRounded > 12 ? 70 : 30;
 
-    // ================= VALUE =================
-    let value = 30;
-
-    if(type === "mutui") value = 40;
-    if(type === "immobili") value = 80;
-
-    if(type === "simulatore"){
-      if(roiRounded > 20) value = 140;
-      else if(roiRounded > 16) value = 110;
-      else if(roiRounded > 12) value = 70;
-      else value = 30;
-    }
-
-    if(type === "partner") value = 120;
     if(plan === "pro") value *= 1.5;
 
-    value = Math.round(value);
-
-    // ================= PRIORITY =================
     const priority = roiRounded > 15 ? "URGENT" : "HIGH";
 
-    // ================= SAVE FIRESTORE =================
+    // SAVE SAFE
     if(db){
       try{
         await db.collection("leads").add({
-          type,
-          email,
-          phone: phone || null,
-          city,
-          budget,
-          roi: roiRounded,
-          value,
-          score,
-          priority,
-          plan: plan || "free",
+          email, city, roi: roiRounded, value, priority,
           createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
-      }catch(e){
-        console.warn("⚠️ Firestore save error (non blocca email):", e.message);
-      }
+      }catch(e){}
     }
 
-    // ================= EMAIL ADMIN =================
-    try{
+    // EMAIL DESIGN PRO
+    await resend.emails.send({
+      from: "RendimentoBB <info@rendimentobb.it>",
+      to: ["rendimentobb@gmail.com"],
+      reply_to: email,
+      subject: `🔥 ${priority} Lead – €${value}`,
+      html: `
+<div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
 
-      const result = await resend.emails.send({
-        from: "RendimentoBB <info@rendimentobb.it>",
-        to: ["rendimentobb@gmail.com"],
-        reply_to: email,
-        subject: `💰 ${priority} Lead – €${value}`,
-        html: `
-<div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
+  <div style="max-width:620px;margin:auto;background:#ffffff;border-radius:20px;padding:35px">
 
-  <div style="max-width:620px;margin:auto;background:white;padding:30px;border-radius:18px">
-
-    <h2 style="text-align:center">Nuovo lead monetizzato</h2>
-
-    <div style="text-align:center;font-size:34px;color:#10b981;font-weight:800;margin:20px 0">
-      €${value}
+    <div style="text-align:center;margin-bottom:25px">
+      <img src="https://rendimentobb.it/img/logo-main.png" style="width:130px">
     </div>
 
-    <p><strong>Email:</strong> ${email}</p>
-    <p><strong>ROI:</strong> ${roiRounded}%</p>
-    <p><strong>Città:</strong> ${city}</p>
-    <p><strong>Tipo:</strong> ${type}</p>
-    <p><strong>Priority:</strong> ${priority}</p>
+    <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
+      💰 New Investment Lead
+    </h2>
+
+    <p style="text-align:center;color:#64748b;font-size:14px">
+      High intent user detected
+    </p>
+
+    <div style="text-align:center;margin:30px 0">
+      <div style="font-size:48px;font-weight:800;color:#10b981">
+        €${value}
+      </div>
+      <div style="color:#64748b;font-size:14px">
+        Lead Value
+      </div>
+    </div>
+
+    <div style="background:#f8fafc;padding:18px;border-radius:12px">
+
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>City:</strong> ${city}</p>
+      <p><strong>ROI:</strong> ${roiRounded}%</p>
+      <p><strong>Priority:</strong> ${priority}</p>
+
+    </div>
+
+    <div style="text-align:center;margin-top:30px">
+      <a href="mailto:${email}" 
+      style="background:#10b981;color:white;padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:600">
+      Contatta lead
+      </a>
+    </div>
 
   </div>
-
 </div>
 `
-      });
-
-      console.log("📨 EMAIL SENT:", result);
-
-    }catch(e){
-      console.error("❌ EMAIL ERROR:", e.message);
-    }
-
-    // ================= RESPONSE =================
-    return res.status(200).json({
-      success:true,
-      value,
-      score,
-      priority
     });
+
+    return res.status(200).json({ success:true });
 
   }catch(err){
-
-    console.error("💥 LEAD ENGINE ERROR:", err);
-
-    return res.status(500).json({
-      error:"Errore server",
-      details: err.message
-    });
-
+    console.error(err);
+    return res.status(500).json({ error:"server error" });
   }
 }
