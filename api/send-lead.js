@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import admin from "firebase-admin";
 
-// ================= RESEND ================= 
+// ================= RESEND =================
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ================= FIREBASE INIT =================
@@ -16,9 +16,8 @@ if (!admin.apps.length) {
           : undefined
       })
     });
-    console.log("🔥 Firebase Admin initialized");
   } catch (e) {
-    console.error("❌ Firebase init error:", e.message);
+    console.error("Firebase init error:", e.message);
   }
 }
 
@@ -33,9 +32,6 @@ export default async function handler(req, res){
 
   try{
 
-    // ================= BODY =================
-    const body = req.body || {};
-
     let {
       type = "simulatore",
       email,
@@ -48,7 +44,7 @@ export default async function handler(req, res){
       message,
       roi,
       plan
-    } = body;
+    } = req.body || {};
 
     // ================= SANITIZE =================
     email = String(email || "").trim();
@@ -61,10 +57,14 @@ export default async function handler(req, res){
       return res.status(400).json({ error:"Email richiesta" });
     }
 
-    // 🔥 FIX CREDIBILITÀ ROI
     const roiRounded = Number(roi.toFixed(1));
 
-    // ================= LEAD VALUE ENGINE 💰 =================
+    // ================= SCORE =================
+    let score = "cold";
+    if(roiRounded > 12) score = "hot";
+    else if(roiRounded > 8) score = "warm";
+
+    // ================= VALUE ENGINE 💰 =================
     let value = 15;
 
     if(type === "mutui") value = 40;
@@ -79,15 +79,36 @@ export default async function handler(req, res){
 
     if(type === "partner") value = 120;
 
-    // 🔥 BOOST PRO USER
     if(plan === "pro") value *= 1.5;
 
     value = Math.round(value);
 
-    // ================= SCORE =================
-    let score = "cold";
-    if(roiRounded > 12) score = "hot";
-    else if(roiRounded > 8) score = "warm";
+    // ================= PRIORITY =================
+    const priority = roiRounded > 15 ? "URGENT" : "HIGH";
+
+    // ================= ANTI DUPLICATE (🔥 CRITICO) =================
+    if(db){
+
+      const existing = await db.collection("leads")
+        .where("email","==",email)
+        .orderBy("createdAt","desc")
+        .limit(1)
+        .get();
+
+      if(!existing.empty){
+        const last = existing.docs[0].data();
+
+        if(last?.createdAt?.toMillis){
+          const diff = Date.now() - last.createdAt.toMillis();
+
+          // blocco 20 minuti
+          if(diff < 20 * 60 * 1000){
+            console.log("⛔ Lead duplicato bloccato");
+            return res.status(200).json({ skipped:true });
+          }
+        }
+      }
+    }
 
     // ================= SAVE FIRESTORE =================
     if(db){
@@ -98,14 +119,11 @@ export default async function handler(req, res){
         phone: phone || null,
         city,
         budget,
-        amount: amount || null,
-        years: years || null,
-        name: name || null,
-        message: message || null,
         roi: roiRounded,
         value,
         score,
-        plan: plan || "unknown",
+        priority,
+        plan: plan || "free",
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       });
 
@@ -118,35 +136,29 @@ export default async function handler(req, res){
 
     }
 
-    // ================= EMAIL ADMIN (UPGRADE) =================
+    // ================= EMAIL ADMIN =================
     try{
 
       await resend.emails.send({
         from: "RendimentoBB <info@rendimentobb.it>",
         to: ["rendimentobb@gmail.com"],
-        subject: `💰 Lead ${score.toUpperCase()} – €${value}`,
+        subject: `💰 ${priority} Lead – €${value}`,
         html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
 
-  <div style="max-width:620px;margin:auto;background:white;padding:30px;border-radius:18px;box-shadow:0 15px 40px rgba(0,0,0,0.08)">
+  <div style="max-width:620px;margin:auto;background:white;padding:30px;border-radius:18px">
 
-    <div style="text-align:center;margin-bottom:20px">
-      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:130px">
-    </div>
-
-    <h2 style="color:#0f172a;text-align:center">Nuovo lead monetizzato</h2>
+    <h2 style="text-align:center">Nuovo lead monetizzato</h2>
 
     <div style="text-align:center;font-size:34px;color:#10b981;font-weight:800;margin:20px 0">
       €${value}
     </div>
 
-    <div style="background:#f8fafc;padding:16px;border-radius:12px;font-size:14px">
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>ROI:</strong> ${roiRounded}%</p>
-      <p><strong>Città:</strong> ${city}</p>
-      <p><strong>Tipo:</strong> ${type}</p>
-      <p><strong>Piano:</strong> ${plan || "free"}</p>
-    </div>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>ROI:</strong> ${roiRounded}%</p>
+    <p><strong>Città:</strong> ${city}</p>
+    <p><strong>Tipo:</strong> ${type}</p>
+    <p><strong>Priority:</strong> ${priority}</p>
 
   </div>
 
@@ -155,92 +167,60 @@ export default async function handler(req, res){
       });
 
     }catch(e){
-      console.error("❌ Email admin error:", e.message);
+      console.warn("Admin email fail");
     }
 
     // ================= PARTNER ROUTING =================
-    const partnersMap = {
+    const partnerMap = {
       mutui: ["broker@email.com"],
       immobili: ["agenzia@email.com"],
       simulatore: roiRounded > 12 ? ["investor@email.com"] : []
     };
 
-    const targetPartners = partnersMap[type] || [];
+    const partners = partnerMap[type] || [];
 
     // ================= SEND PARTNERS =================
     await Promise.all(
-      targetPartners.map(partnerEmail => {
+      partners.map(p => {
 
         return resend.emails.send({
-          from: "RendimentoBB <lead@rendimentobb.it>",
-          to: [partnerEmail],
-          subject: `🔥 Investment Lead – ${city.toUpperCase()} | ROI ${roiRounded}%`,
+          from: "RendimentoBB Leads <lead@rendimentobb.it>",
+          to: [p],
+          subject: `🔥 ${priority} Lead – ${city.toUpperCase()} (${roiRounded}%)`,
           html: `
-<div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
+<div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
 
-  <div style="max-width:640px;margin:auto;background:white;border-radius:18px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,0.08)">
+  <div style="max-width:600px;margin:auto;background:white;padding:30px;border-radius:18px">
 
-    <div style="text-align:center;margin-bottom:25px">
-      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:140px">
-    </div>
+    <h2>🔥 Investment Lead (${priority})</h2>
 
-    <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:10px">
-      🔥 High-value investment lead
-    </h2>
+    <h1 style="color:#10b981">${roiRounded}%</h1>
 
-    <div style="text-align:center;margin:30px 0">
-      <div style="font-size:48px;font-weight:800;color:#10b981">
-        ${roiRounded}%
-      </div>
-      <div style="color:#64748b;font-size:14px">
-        ROI stimato – ${city}
-      </div>
-    </div>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Città:</strong> ${city}</p>
+    <p><strong>Budget:</strong> €${budget || "-"}</p>
 
-    <div style="background:#f8fafc;padding:18px;border-radius:12px;font-size:14px">
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Città:</strong> ${city}</p>
-      <p><strong>Budget:</strong> €${budget || "-"} </p>
-    </div>
-
-    <div style="background:#ecfdf5;padding:16px;border-radius:12px;margin-top:20px;font-size:14px;color:#065f46">
-      💰 Alta probabilità di conversione
-    </div>
-
-    <div style="text-align:center;margin:35px 0">
-      <a href="mailto:${email}"
-      style="background:linear-gradient(135deg,#10b981,#059669);
-      color:white;
-      padding:16px 30px;
-      border-radius:999px;
-      text-decoration:none;
-      font-weight:700;
-      display:inline-block">
-      Contatta il lead
-      </a>
-    </div>
-
-    <p style="font-size:12px;color:#94a3b8;text-align:center">
-      Lead generato automaticamente da RendimentoBB
-    </p>
+    <a href="mailto:${email}"
+    style="display:inline-block;margin-top:20px;background:#10b981;color:white;padding:12px 20px;border-radius:8px;text-decoration:none">
+    Contatta lead
+    </a>
 
   </div>
 
 </div>
 `
-        }).catch(err=>{
-          console.error("❌ Partner send error:", err.message);
         });
 
       })
     );
 
-    console.log("💰 Lead monetizzato:", value, type);
+    console.log("💰 LEAD COMPLETATO:", value, priority);
 
     return res.status(200).json({
       success:true,
       value,
-      score
+      score,
+      priority
     });
 
   }catch(err){
