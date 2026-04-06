@@ -9541,3 +9541,62 @@ display:none;
 }
 
 }
+
+/* =========================================
+🔥 FIX LANGUAGE LOGIN MOBILE
+========================================= */
+
+@media (max-width:768px){
+
+/* container lingue */
+.lang-switch{
+  display:flex !important;
+  gap:6px;
+  align-items:center;
+  justify-content:center;
+
+  flex-wrap:nowrap;
+  overflow:visible;
+}
+
+/* bottoni lingua */
+.lang-btn{
+  min-width:42px;
+  padding:6px 10px;
+
+  font-size:12px;
+  font-weight:600;
+
+  border-radius:999px;
+  border:none;
+
+  background:#f1f5f9;
+  color:#475569;
+
+  white-space:nowrap;
+}
+
+/* attivo */
+.lang-btn.active{
+  background:#10b981;
+  color:#fff;
+}
+
+/* FIX CRITICO LOGIN PAGE */
+.auth-container .lang-switch,
+.login-container .lang-switch{
+  position:relative;
+  z-index:10;
+
+  justify-content:flex-end;
+  width:100%;
+  padding:0 10px;
+}
+
+/* evita tagli */
+.auth-container,
+.login-container{
+  overflow:visible !important;
+}
+
+}
