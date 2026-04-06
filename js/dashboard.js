@@ -1077,14 +1077,32 @@ window.addEventListener("DOMContentLoaded", () => {
       console.log("USER OK:", user.uid);
 
       // 🔥 PRENDI IL PIANO
-      const userDoc = await getDoc(doc(db,"users", user.uid));
+      if(user){
 
-      if(userDoc.exists()){
-        const data = userDoc.data();
-        window.currentPlan = data.plan || "free";
-      }else{
-        window.currentPlan = "free";
-      }
+  window.currentUser = user;
+
+  console.log("USER OK:", user.uid);
+
+  const userDoc = await getDoc(doc(db,"users", user.uid));
+
+  if(userDoc.exists()){
+    const data = userDoc.data();
+    window.currentPlan = data.plan || "free";
+  }else{
+    window.currentPlan = "free";
+  }
+
+  // ================= BLOCCO ACCESSO DASHBOARD =================
+  const isPro =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
+
+  if(!isPro){
+    console.log("🚫 ACCESSO NEGATO → FREE USER");
+    window.location.href = "/#pricing";
+    return;
+  }
 
       // sicurezza
       window.currentPlan = window.currentPlan || "free";
