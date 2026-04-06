@@ -48,7 +48,7 @@ export default async function handler(req, res){
     const subject = `🔥 Lead HOT ${city.toUpperCase()} – ROI ${roi}%`;
 
     // ================= TEMPLATE PRO (B2B) =================
-    const html: `
+    const html = `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
   <div style="max-width:620px;margin:auto;background:#ffffff;border-radius:18px;padding:30px;box-shadow:0 15px 40px rgba(0,0,0,0.08)">
