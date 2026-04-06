@@ -92,10 +92,9 @@ export default async function handler(req, res){
         if(last?.createdAt?.toMillis){
           const diff = Date.now() - last.createdAt.toMillis();
 
-          if(diff < 20 * 60 * 1000){
-            console.log("⛔ Lead duplicato bloccato");
-            return res.status(200).json({ skipped:true });
-          }
+        if(diff < 20 * 60 * 1000){
+  console.log("⚠️ duplicato ma continuo per test");
+}
         }
       }
     }catch(e){
