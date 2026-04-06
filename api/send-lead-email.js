@@ -4,7 +4,7 @@ import admin from "firebase-admin";
 // ================= RESEND =================
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ================= FIREBASE SAFE INIT =================
+// ================= FIREBASE INIT =================
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -16,9 +16,8 @@ if (!admin.apps.length) {
           : undefined
       })
     });
-    console.log("🔥 Firebase init OK");
   } catch (e) {
-    console.error("❌ Firebase init error:", e.message);
+    console.error("Firebase init error:", e.message);
   }
 }
 
@@ -33,27 +32,21 @@ export default async function handler(req, res) {
 
   try {
 
-    // ================= BODY SAFE =================
-    const body = req.body || {};
+    const { email, lang = "it", roi, city } = req.body || {};
 
-    let { email, lang = "it", roi, city } = body;
+    const cleanEmail = String(email || "").trim();
+    const cleanLang = lang === "en" ? "en" : "it";
+    const roiRounded = Number(Number(roi || 0).toFixed(1));
+    const cleanCity = String(city || "");
 
-    email = String(email || "").trim();
-    lang = lang === "en" ? "en" : "it";
-    roi = Number(roi || 0);
-    city = String(city || "");
-
-    if (!email) {
+    if (!cleanEmail) {
       return res.status(400).json({ error: "Email missing" });
     }
 
-    // 🔥 FIX CREDIBILITÀ ROI
-    const roiRounded = Number(roi.toFixed(1));
-
-    // ================= ANTI-SPAM =================
+    // ================= ANTI-SPAM (10 MIN) =================
     if (db) {
       const existing = await db.collection("email_logs")
-        .where("email", "==", email)
+        .where("email", "==", cleanEmail)
         .orderBy("createdAt", "desc")
         .limit(1)
         .get();
@@ -72,71 +65,68 @@ export default async function handler(req, res) {
       }
     }
 
-    // ================= LEAD SCORE =================
+    // ================= SCORE =================
     let score = "cold";
     if (roiRounded > 12) score = "hot";
     else if (roiRounded > 8) score = "warm";
 
+    // ================= FUNNEL LINK =================
+    const funnelUrl = `https://www.rendimentobb.it/unlock-analysis?roi=${roiRounded}&city=${cleanCity}`;
+
+    // ================= SUBJECT (ANTI-SPAM + CONVERSION) =================
+    const subjects = {
+      it: `💰 Il tuo investimento può rendere di più (${roiRounded}%)`,
+      en: `💰 Your investment potential (${roiRounded}%)`
+    };
+
     // ================= TEMPLATE =================
     const templates = {
 
-      it: {
-        subject: `ROI ${roiRounded}% – Analisi investimento`,
-        html: `
+      it: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
   <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:18px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,0.08)">
 
-    <!-- LOGO GRANDE -->
-    <div style="text-align:center;margin-bottom:30px">
-      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:140px">
+    <div style="text-align:center;margin-bottom:25px">
+      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:120px">
     </div>
 
-    <!-- HEADLINE -->
-    <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:10px">
-      🔎 Analisi investimento B&B
+    <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:5px">
+      Analisi investimento B&B
     </h2>
 
-    <p style="text-align:center;color:#64748b;font-size:14px;margin-bottom:25px">
-      Valutazione basata sui dati inseriti
+    <p style="text-align:center;color:#64748b;font-size:14px">
+      Dati basati sulla tua simulazione
     </p>
 
-    <!-- ROI HERO -->
-    <div style="text-align:center;margin:35px 0">
-      <div style="font-size:48px;font-weight:800;color:#10b981;letter-spacing:-1px">
+    <div style="text-align:center;margin:30px 0">
+      <div style="font-size:46px;font-weight:800;color:#10b981">
         ${roiRounded}%
       </div>
       <div style="color:#64748b;font-size:14px">
-        ROI stimato – ${city}
+        ROI stimato – ${cleanCity}
       </div>
     </div>
 
-    <!-- ALERT -->
-    <div style="background:#fff7ed;padding:18px;border-radius:12px;margin:25px 0;font-size:14px;color:#7c2d12">
-      ⚠️ Il ROI da solo non basta: rischio, mutuo e occupazione determinano il risultato reale
+    <div style="background:#fff7ed;padding:16px;border-radius:12px;margin:20px 0;font-size:14px;color:#7c2d12">
+      ⚠️ Il ROI da solo non basta: rischio, mutuo e occupazione cambiano il risultato reale
     </div>
 
-    <!-- VALUE -->
-    <div style="margin:25px 0">
-      <p style="font-weight:600;color:#0f172a;margin-bottom:10px">Analizza in modo completo:</p>
-      <ul style="color:#334155;font-size:14px;line-height:1.7;padding-left:20px">
-        <li>Profitto reale mensile e annuale</li>
-        <li>Break-even occupancy</li>
-        <li>Impatto mutuo e interessi</li>
-        <li>Scenario rischio investimento</li>
-      </ul>
-    </div>
+    <ul style="color:#334155;font-size:14px;line-height:1.7;padding-left:20px">
+      <li>Profitto reale mensile e annuale</li>
+      <li>Break-even occupancy</li>
+      <li>Impatto mutuo</li>
+      <li>Scenario rischio investimento</li>
+    </ul>
 
-    <!-- CTA -->
     <div style="text-align:center;margin:35px 0">
-      <a href="https://www.rendimentobb.it/dashboard/"
+      <a href="${funnelUrl}"
       style="background:linear-gradient(135deg,#10b981,#059669);
       color:white;
-      padding:16px 30px;
+      padding:16px 28px;
       border-radius:999px;
       text-decoration:none;
       font-weight:700;
-      font-size:15px;
       display:inline-block;
       box-shadow:0 10px 30px rgba(16,185,129,0.4)">
       🔥 Vedi analisi completa
@@ -144,59 +134,48 @@ export default async function handler(req, res) {
     </div>
 
     <p style="text-align:center;font-size:12px;color:#94a3b8">
-      RendimentoBB – motore decisionale per investimenti B&B
+      RendimentoBB – motore decisionale investimenti
     </p>
 
   </div>
 
 </div>
-`
-      },
+`,
 
-      en: {
-        subject: `ROI ${roiRounded}% – Investment analysis`,
-        html: `
+      en: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:40px 20px">
 
   <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:18px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,0.08)">
 
-    <div style="text-align:center;margin-bottom:30px">
-      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:140px">
+    <div style="text-align:center;margin-bottom:25px">
+      <img src="https://www.rendimentobb.it/img/logo-main.png" style="width:120px">
     </div>
 
-    <h2 style="text-align:center;color:#0f172a;font-size:22px;margin-bottom:10px">
-      🔎 B&B Investment Analysis
+    <h2 style="text-align:center;color:#0f172a;font-size:22px">
+      B&B Investment Analysis
     </h2>
 
-    <p style="text-align:center;color:#64748b;font-size:14px;margin-bottom:25px">
-      Based on your input data
-    </p>
-
-    <div style="text-align:center;margin:35px 0">
-      <div style="font-size:48px;font-weight:800;color:#10b981">
+    <div style="text-align:center;margin:30px 0">
+      <div style="font-size:46px;font-weight:800;color:#10b981">
         ${roiRounded}%
       </div>
       <div style="color:#64748b;font-size:14px">
-        Estimated ROI – ${city || "market"}
+        Estimated ROI – ${cleanCity || "market"}
       </div>
-    </div>
-
-    <div style="background:#fff7ed;padding:18px;border-radius:12px;margin:25px 0;font-size:14px">
-      ⚠️ ROI alone is not enough: risk, mortgage and occupancy define real performance
     </div>
 
     <ul style="color:#334155;font-size:14px;line-height:1.7;padding-left:20px">
       <li>Real monthly & yearly profit</li>
       <li>Break-even occupancy</li>
       <li>Mortgage impact</li>
-      <li>Investment risk scenario</li>
+      <li>Risk analysis</li>
     </ul>
 
     <div style="text-align:center;margin:35px 0">
-      <a href="https://www.rendimentobb.it/dashboard/"
+      <a href="${funnelUrl}"
       style="background:linear-gradient(135deg,#10b981,#059669);
       color:white;
-      padding:16px 30px;
+      padding:16px 28px;
       border-radius:999px;
       text-decoration:none;
       font-weight:700;
@@ -205,60 +184,38 @@ export default async function handler(req, res) {
       </a>
     </div>
 
-    <p style="text-align:center;font-size:12px;color:#94a3b8">
-      RendimentoBB – B&B investment decision engine
-    </p>
-
   </div>
 
 </div>
 `
-      }
-
     };
-
-    const selected = templates[lang] || templates.it;
 
     // ================= SEND =================
     await resend.emails.send({
       from: "RendimentoBB <analisi@rendimentobb.it>",
-      to: [email],
-      subject: selected.subject,
-      html: selected.html
+      to: [cleanEmail],
+      subject: subjects[cleanLang],
+      html: templates[cleanLang]
     });
 
     // ================= TRACK =================
     if (db) {
-
       await db.collection("email_logs").add({
-        email,
-        type: "retargeting",
-        score,
+        email: cleanEmail,
         roi: roiRounded,
-        city,
+        city: cleanCity,
+        score,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       });
-
-      await db.collection("users").doc(email).set({
-        email,
-        lastSeen: admin.firestore.FieldValue.serverTimestamp(),
-        lastROI: roiRounded,
-        lastCity: city,
-        score
-      }, { merge: true });
-
     }
 
-    console.log("📨 Email inviata:", email, score);
+    console.log("📨 Email inviata:", cleanEmail, score);
 
-    return res.status(200).json({
-      success: true,
-      score
-    });
+    return res.status(200).json({ success: true });
 
   } catch (err) {
 
-    console.error("💥 Email engine error:", err);
+    console.error("💥 Email error:", err);
 
     return res.status(500).json({
       success: false,
@@ -266,5 +223,4 @@ export default async function handler(req, res) {
     });
 
   }
-
 }
