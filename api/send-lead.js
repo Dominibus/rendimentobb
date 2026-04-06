@@ -34,10 +34,6 @@ export default async function handler(req, res){
       phone,
       city,
       budget,
-      amount,
-      years,
-      name,
-      message,
       roi,
       plan
     } = req.body || {};
@@ -83,7 +79,7 @@ export default async function handler(req, res){
     const priority = roiRounded > 15 ? "URGENT" : "HIGH";
 
     // ================= ANTI DUPLICATE =================
-    if(db){
+    try{
       const existing = await db.collection("leads")
         .where("email","==",email)
         .orderBy("createdAt","desc")
@@ -102,45 +98,43 @@ export default async function handler(req, res){
           }
         }
       }
+    }catch(e){
+      console.warn("⚠️ Index non pronto → skip controllo duplicati");
     }
 
     // ================= SAVE FIRESTORE =================
-    if(db){
+    await db.collection("leads").add({
+      type,
+      email,
+      phone: phone || null,
+      city,
+      budget,
+      roi: roiRounded,
+      value,
+      score,
+      priority,
+      plan: plan || "free",
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
 
-      await db.collection("leads").add({
-        type,
-        email,
-        phone: phone || null,
-        city,
-        budget,
-        roi: roiRounded,
-        value,
-        score,
-        priority,
-        plan: plan || "free",
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
-      });
+    await db.collection("revenue").add({
+      email,
+      value,
+      type,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
 
-      await db.collection("revenue").add({
-        email,
-        value,
-        type,
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
-      });
-
-    }
-
-    // ================= EMAIL ADMIN (🔥 FIX CRITICO) =================
+    // ================= EMAIL ADMIN =================
     try{
 
       const result = await resend.emails.send({
+        // 🔥 USA QUESTO PER SICUREZZA
         from: "RendimentoBB <onboarding@resend.dev>",
-        to: ["domenicodeluca11@gmail.com"],
-        subject: `Lead investimento ${priority} - €${value}`,
+        to: ["rendimentobb@gmail.com"],
         reply_to: email,
+        subject: `🔥 Lead ${priority} - €${value}`,
         html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
-
   <div style="max-width:620px;margin:auto;background:white;padding:30px;border-radius:18px">
 
     <h2 style="text-align:center">💰 Nuovo lead</h2>
@@ -156,39 +150,30 @@ export default async function handler(req, res){
     <p><strong>Priority:</strong> ${priority}</p>
 
   </div>
-
 </div>
 `
       });
 
-      console.log("📨 EMAIL ADMIN OK:", result);
+      console.log("📨 ADMIN EMAIL SENT:", result);
 
     }catch(e){
-      console.error("❌ RESEND ADMIN ERROR:", e);
+      console.error("❌ EMAIL ADMIN ERROR:", e);
     }
 
     // ================= PARTNER =================
-    const partnerMap = {
-      mutui: ["rendimentobb@gmail.com"],
-      immobili: ["rendimentobb@gmail.com"],
-      simulatore: roiRounded > 12 ? ["rendimentobb@gmail.com"] : []
-    };
+    const partners = ["rendimentobb@gmail.com"];
 
-    const partners = partnerMap[type] || [];
-
-    // ================= SEND PARTNERS =================
     await Promise.all(
       partners.map(async (p) => {
 
         try{
-
           const result = await resend.emails.send({
-            from: "RendimentoBB Leads <info@rendimentobb.it>",
+            // 🔥 STESSO MITTENTE (IMPORTANTISSIMO)
+            from: "RendimentoBB <onboarding@resend.dev>",
             to: [p],
             subject: `Lead ${priority} ${city.toUpperCase()} ${roiRounded}%`,
             html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
-
   <div style="max-width:600px;margin:auto;background:white;padding:30px;border-radius:18px">
 
     <h2>🔥 Investment Lead (${priority})</h2>
@@ -198,18 +183,12 @@ export default async function handler(req, res){
     <p><strong>Email:</strong> ${email}</p>
     <p><strong>Città:</strong> ${city}</p>
 
-    <a href="mailto:${email}"
-    style="display:inline-block;margin-top:20px;background:#10b981;color:white;padding:12px 20px;border-radius:8px;text-decoration:none">
-    Contatta lead
-    </a>
-
   </div>
-
 </div>
 `
           });
 
-          console.log("📨 PARTNER EMAIL OK:", result);
+          console.log("📨 PARTNER EMAIL SENT:", result);
 
         }catch(e){
           console.error("❌ PARTNER EMAIL ERROR:", e);
