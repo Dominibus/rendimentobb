@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER FINAL PRO */
+/* RENDIMENTOBB HEADER ULTRA SAAS */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -53,17 +53,34 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <!-- CENTER -->
-      <div class="rb-center">
-        <a href="/tool/">Simulatore</a>
-        <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-        <a href="/mutui/">Mutui</a>
-        <a href="/immobili/">Immobili</a>
-        <a href="/academy/">Academy</a>
-      </div>
+      <nav class="rb-center">
+
+        <a href="/tool/"
+        data-it="Simulatore"
+        data-en="Simulator">Simulatore</a>
+
+        <a href="/aprire-bnb-conviene/"
+        data-it="Aprire un B&B"
+        data-en="Start a B&B">Aprire un B&B</a>
+
+        <a href="/mutui/"
+        data-it="Mutui"
+        data-en="Mortgages">Mutui</a>
+
+        <a href="/immobili/"
+        data-it="Immobili"
+        data-en="Properties">Immobili</a>
+
+        <a href="/academy/"
+        data-it="Academy"
+        data-en="Academy">Academy</a>
+
+      </nav>
 
       <!-- RIGHT -->
       <div class="rb-right">
 
+        <!-- LANGUAGE -->
         <div class="rb-lang">
           <button data-lang="it">IT</button>
           <button data-lang="en">EN</button>
@@ -78,18 +95,18 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
     <!-- MOBILE MENU -->
-<div class="rb-mobile" id="rb-mobile">
+    <div class="rb-mobile" id="rb-mobile">
 
-  <div id="mobile-user-area"></div>
+      <div id="mobile-user-area"></div>
 
-  <a href="/tool/">Simulatore</a>
-  <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-  <a href="/mutui/">Mutui</a>
-  <a href="/immobili/">Immobili</a>
-  <a href="/academy/">Academy</a>
-  <a href="/contact.html">Contatti</a>
+      <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
+      <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
+      <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
+      <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
+      <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
+      <a href="/contact.html" data-it="Contatti" data-en="Contact">Contatti</a>
 
-</div>
+    </div>
 
   </header>
   `;
@@ -98,6 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initHeaderInteractions();
   initUser();
+
+  // 🔥 APPLY LANG SUBITO
+  if(window.setLang){
+    window.setLang(localStorage.getItem("rb_lang") || "it");
+  }
 
 });
 
@@ -125,17 +147,33 @@ function initHeaderInteractions(){
     });
   }
 
+  // LANGUAGE
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
+
     btn.onclick = ()=>{
+
       const lang = btn.dataset.lang;
+
       localStorage.setItem("rb_lang", lang);
 
       if(window.setLang){
         window.setLang(lang);
-      }else{
-        location.reload();
       }
+
+      updateLangButtons(lang);
+
     };
+
+  });
+
+  updateLangButtons(localStorage.getItem("rb_lang") || "it");
+
+}
+
+function updateLangButtons(lang){
+
+  document.querySelectorAll(".rb-lang button").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 
 }
@@ -158,11 +196,9 @@ function initUser(){
     clearInterval(waitFirebase);
 
     try{
-
       onAuthStateChanged(auth, (user)=>{
         renderUser(user);
       });
-
     }catch(e){
       renderUser(null);
     }
@@ -191,6 +227,8 @@ function renderUser(user){
     window.currentPlan === "investor" ||
     window.currentPlan === "pro_yearly";
 
+  const lang = localStorage.getItem("rb_lang") || "it";
+
   if(user){
 
     const email = user.email || "";
@@ -199,37 +237,49 @@ function renderUser(user){
 
     html += `<span class="rb-email">${email}</span>`;
 
-    // 🔥 DASHBOARD SOLO PRO + ADMIN
     if(isPro || isAdmin){
-      html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+      html += `<a href="/dashboard/" class="rb-btn"
+      data-it="Dashboard"
+      data-en="Dashboard">Dashboard</a>`;
     }
 
-    // 🔥 LEADS SOLO ADMIN
     if(isAdmin){
-      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`; 
+      html += `<a href="/dashboard-leads/" class="rb-btn"
+      data-it="Leads"
+      data-en="Leads">Leads</a>`;
     }
 
-    html += `<button id="logout" class="rb-btn red">Logout</button>`;
+    html += `<button id="logout" class="rb-btn red"
+    data-it="Logout"
+    data-en="Logout">Logout</button>`;
+
     html += `</div>`;
 
     el.innerHTML = html;
 
     // MOBILE
     if(mobileEl){
+
       let mobileHTML = `
-        <div class="rb-mobile-user">
-          <div class="rb-email">${email}</div>
+      <div class="rb-mobile-user">
+        <div class="rb-email">${email}</div>
       `;
 
       if(isPro || isAdmin){
-        mobileHTML += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+        mobileHTML += `<a href="/dashboard/" class="rb-btn"
+        data-it="Dashboard"
+        data-en="Dashboard">Dashboard</a>`;
       }
 
       if(isAdmin){
-        mobileHTML += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
+        mobileHTML += `<a href="/dashboard-leads/" class="rb-btn"
+        data-it="Leads"
+        data-en="Leads">Leads</a>`;
       }
 
-      mobileHTML += `<button id="logout-mobile" class="rb-btn red">Logout</button></div>`;
+      mobileHTML += `<button id="logout-mobile" class="rb-btn red"
+      data-it="Logout"
+      data-en="Logout">Logout</button></div>`;
 
       mobileEl.innerHTML = mobileHTML;
     }
@@ -243,8 +293,17 @@ function renderUser(user){
 
   } else {
 
-    el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+    el.innerHTML = `
+      <a href="/login/" class="rb-login"
+      data-it="Accedi"
+      data-en="Login">Accedi</a>
+    `;
 
+  }
+
+  // 🔥 RIAPPLICA TRADUZIONE DOPO RENDER DINAMICO
+  if(window.setLang){
+    window.setLang(lang);
   }
 
 }
