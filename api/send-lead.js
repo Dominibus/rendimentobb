@@ -17,7 +17,7 @@ if (!admin.apps.length) {
       })
     });
   } catch (e) {
-    console.error("Firebase init error:", e.message);
+    console.error("🔥 Firebase init error:", e);
   }
 }
 
@@ -64,7 +64,7 @@ export default async function handler(req, res){
     if(roiRounded > 12) score = "hot";
     else if(roiRounded > 8) score = "warm";
 
-    // ================= VALUE ENGINE 💰 =================
+    // ================= VALUE =================
     let value = 15;
 
     if(type === "mutui") value = 40;
@@ -86,9 +86,8 @@ export default async function handler(req, res){
     // ================= PRIORITY =================
     const priority = roiRounded > 15 ? "URGENT" : "HIGH";
 
-    // ================= ANTI DUPLICATE (🔥 CRITICO) =================
+    // ================= ANTI DUPLICATE =================
     if(db){
-
       const existing = await db.collection("leads")
         .where("email","==",email)
         .orderBy("createdAt","desc")
@@ -101,7 +100,6 @@ export default async function handler(req, res){
         if(last?.createdAt?.toMillis){
           const diff = Date.now() - last.createdAt.toMillis();
 
-          // blocco 20 minuti
           if(diff < 20 * 60 * 1000){
             console.log("⛔ Lead duplicato bloccato");
             return res.status(200).json({ skipped:true });
@@ -136,19 +134,20 @@ export default async function handler(req, res){
 
     }
 
-    // ================= EMAIL ADMIN =================
+    // ================= EMAIL ADMIN (🔥 FIX CRITICO) =================
     try{
 
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from: "RendimentoBB <info@rendimentobb.it>",
         to: ["rendimentobb@gmail.com"],
-        subject: `💰 ${priority} Lead – €${value}`,
+        subject: `Lead investimento ${priority} - €${value}`,
+        reply_to: email,
         html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
 
   <div style="max-width:620px;margin:auto;background:white;padding:30px;border-radius:18px">
 
-    <h2 style="text-align:center">Nuovo lead monetizzato</h2>
+    <h2 style="text-align:center">💰 Nuovo lead</h2>
 
     <div style="text-align:center;font-size:34px;color:#10b981;font-weight:800;margin:20px 0">
       €${value}
@@ -166,28 +165,32 @@ export default async function handler(req, res){
 `
       });
 
-   }catch(e){
-  console.error("❌ RESEND ERROR:", e);
-   }
+      console.log("📨 EMAIL ADMIN OK:", result);
 
-    // ================= PARTNER ROUTING =================
+    }catch(e){
+      console.error("❌ RESEND ADMIN ERROR:", e);
+    }
+
+    // ================= PARTNER =================
     const partnerMap = {
-      mutui: ["broker@email.com"],
-      immobili: ["agenzia@email.com"],
-      simulatore: roiRounded > 12 ? ["investor@email.com"] : []
+      mutui: ["rendimentobb@gmail.com"],
+      immobili: ["rendimentobb@gmail.com"],
+      simulatore: roiRounded > 12 ? ["rendimentobb@gmail.com"] : []
     };
 
     const partners = partnerMap[type] || [];
 
     // ================= SEND PARTNERS =================
     await Promise.all(
-      partners.map(p => {
+      partners.map(async (p) => {
 
-        return resend.emails.send({
-          from: "RendimentoBB Leads <lead@rendimentobb.it>",
-          to: [p],
-          subject: `🔥 ${priority} Lead – ${city.toUpperCase()} (${roiRounded}%)`,
-          html: `
+        try{
+
+          const result = await resend.emails.send({
+            from: "RendimentoBB Leads <info@rendimentobb.it>",
+            to: [p],
+            subject: `Lead ${priority} ${city.toUpperCase()} ${roiRounded}%`,
+            html: `
 <div style="font-family:Inter,Arial,sans-serif;background:#f1f5f9;padding:30px">
 
   <div style="max-width:600px;margin:auto;background:white;padding:30px;border-radius:18px">
@@ -198,7 +201,6 @@ export default async function handler(req, res){
 
     <p><strong>Email:</strong> ${email}</p>
     <p><strong>Città:</strong> ${city}</p>
-    <p><strong>Budget:</strong> €${budget || "-"}</p>
 
     <a href="mailto:${email}"
     style="display:inline-block;margin-top:20px;background:#10b981;color:white;padding:12px 20px;border-radius:8px;text-decoration:none">
@@ -209,7 +211,13 @@ export default async function handler(req, res){
 
 </div>
 `
-        });
+          });
+
+          console.log("📨 PARTNER EMAIL OK:", result);
+
+        }catch(e){
+          console.error("❌ PARTNER EMAIL ERROR:", e);
+        }
 
       })
     );
