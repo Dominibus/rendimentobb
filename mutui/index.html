@@ -194,7 +194,7 @@ onclick="saveLead()"></button>
 
 <script>
 
-/* ================= LANG HELPER ================= */
+/* ================= LANG ================= */
 function t(it,en){
 return (window.currentLang === "en") ? en : it;
 }
@@ -202,15 +202,10 @@ return (window.currentLang === "en") ? en : it;
 /* ================= CALCOLO ================= */
 function calculate(){
 
-const amountEl = document.getElementById("amount");
-const rateEl   = document.getElementById("rate");
-const yearsEl  = document.getElementById("years");
-const incomeEl = document.getElementById("income");
-
-const amount = parseFloat(amountEl.value || 200000);
-const rate   = parseFloat(rateEl.value || 3.5);
-const years  = parseFloat(yearsEl.value || 20);
-const income = parseFloat(incomeEl.value || 30000);
+const amount = parseFloat(document.getElementById("amount").value || 200000);
+const rate   = parseFloat(document.getElementById("rate").value || 3.5);
+const years  = parseFloat(document.getElementById("years").value || 20);
+const income = parseFloat(document.getElementById("income").value || 30000);
 
 const monthlyRate = rate/100/12;
 const n = years*12;
@@ -227,8 +222,8 @@ alertBox.style.display="block";
 if(roi < 0){
   alertBox.className="roi-alert roi-bad";
   alertBox.innerHTML = t(
-    "⚠️ Il mutuo sta distruggendo il tuo ROI",
-    "⚠️ Mortgage is destroying your ROI"
+    "⚠️ Stai perdendo soldi con questo mutuo",
+    "⚠️ You are losing money with this mortgage"
   );
 }else{
   alertBox.className="roi-alert roi-good";
@@ -243,7 +238,7 @@ document.getElementById("monthly").innerText = "€"+monthly.toFixed(0);
 document.getElementById("yearly").innerText  = "€"+yearly.toFixed(0);
 document.getElementById("impact").innerText  = roi.toFixed(1)+"%";
 
-/* ===== EXTRA (🔥 VALORE) ===== */
+/* ===== EXTRA ===== */
 renderExtra(roi, yearly);
 
 /* ===== BANK ===== */
@@ -252,27 +247,49 @@ renderBanks(amount);
 }
 
 
-/* ================= EXTRA (CASH + RISCHIO) ================= */
+/* ================= EXTRA ================= */
 function renderExtra(roi, yearly){
 
+const extra = document.getElementById("extra");
+
+/* 🔥 SCORE */
+let score = "C";
+if(roi > 15) score = "A";
+else if(roi > 8) score = "B";
+
+/* 🔥 PERDITA */
+const loss = yearly * 0.3;
+
+/* 🔥 RISCHIO */
 const risk =
 roi < 5 ? t("ALTO","HIGH") :
 roi < 15 ? t("MEDIO","MEDIUM") :
 t("BASSO","LOW");
 
-const el = document.getElementById("banks");
-
-el.insertAdjacentHTML("beforebegin",`
-<div class="bank-card" style="margin-top:20px;">
-<b>${t("Confronto CASH","Cash comparison")}</b><br>
-${t("Senza mutuo guadagno stimato:","Estimated without mortgage:")}
-€${(yearly*1.4).toFixed(0)}
-
-<br><br>
-
-<b>${t("Rischio investimento","Investment risk")}:</b> ${risk}
+extra.innerHTML = `
+<div style="font-weight:700;margin-bottom:10px;">
+🔥 ${t("Investment Score","Investment Score")}: ${score}
 </div>
-`);
+
+<div>
+💸 ${t("Stai perdendo circa","You are losing about")}
+<strong>€${loss.toFixed(0)}/anno</strong>
+</div>
+
+<br>
+
+<div>
+${t("Confronto senza mutuo","Cash comparison")}:
+€${(yearly*1.4).toFixed(0)}
+</div>
+
+<br>
+
+<div>
+${t("Rischio investimento","Investment risk")}:
+<strong>${risk}</strong>
+</div>
+`;
 
 }
 
@@ -281,11 +298,11 @@ ${t("Senza mutuo guadagno stimato:","Estimated without mortgage:")}
 function renderBanks(amount){
 
 const banks = [
-{name:"Intesa Sanpaolo", rate:3.1},
-{name:"UniCredit", rate:3.3},
-{name:"BNL BNP Paribas", rate:3.5},
-{name:"Credit Agricole", rate:3.4},
-{name:"Banco BPM", rate:3.7}
+{name:"Intesa Sanpaolo", rate:3.1, url:"#"},
+{name:"UniCredit", rate:3.3, url:"#"},
+{name:"Credit Agricole", rate:3.4, url:"#"},
+{name:"BNL BNP Paribas", rate:3.5, url:"#"},
+{name:"Banco BPM", rate:3.7, url:"#"}
 ];
 
 banks.sort((a,b)=>a.rate-b.rate);
@@ -300,7 +317,7 @@ html+=`
 <p>${b.rate}%</p>
 
 <button class="btn-main"
-onclick="selectMortgage(${b.rate})">
+onclick="selectMortgage(${b.rate}, '${b.name}')">
 ${t("Usa questo mutuo","Use this mortgage")}
 </button>
 </div>
@@ -314,30 +331,68 @@ document.getElementById("banks").innerHTML = html;
 
 
 /* ================= SELECT ================= */
-function selectMortgage(rate){
+function selectMortgage(rate, bank){
+
 localStorage.setItem("mortgage_rate",rate);
+
+/* 🔥 FUTURO: redirect partner */
+console.log("🏦 Selected bank:", bank);
+
 window.location.href="/tool/";
+
 }
 
 
-/* ================= LEAD + SCORING ================= */
-function saveLead(){
+/* ================= LEAD ================= */
+async function saveLead(){
 
 const email = document.getElementById("email").value;
 const phone = document.getElementById("phone").value;
 
-if(!email) return;
+if(!email){
+alert(t("Inserisci email","Enter email"));
+return;
+}
 
-/* 🔥 LEAD SCORING */
-const score =
-(email ? 40 : 0) +
-(phone ? 40 : 0) +
-(Math.random()*20);
+const payload = {
+  type:"mutui",
+  email,
+  phone,
+  city: window.currentCity || "unknown",
+  roi: parseFloat(document.getElementById("impact").innerText) || 0,
+  amount: parseFloat(document.getElementById("amount").value || 0),
+  years: parseFloat(document.getElementById("years").value || 0),
+  plan: window.currentPlan || "free"
+};
 
-console.log("🔥 Lead mutuo:", email);
-console.log("🔥 Score:", score);
+try{
 
-document.getElementById("success").style.display="block";
+const res = await fetch("/api/send-lead",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify(payload)
+});
+
+const data = await res.json();
+
+console.log("🔥 Lead sent:", data);
+
+/* UI */
+const success = document.getElementById("success");
+success.style.display="block";
+
+success.innerHTML = `
+✔ ${t("Lead inviato","Lead sent")}
+<br>
+💰 €${data.value || 0}
+`;
+
+}catch(e){
+
+console.error("❌ Lead error:", e);
+alert("Errore invio");
+
+}
 
 }
 
