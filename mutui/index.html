@@ -5,94 +5,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title
-data-it="Mutuo B&B – Simulatore ROI + confronto banche"
+<title data-it="Mutuo B&B – Simulatore ROI + confronto banche"
 data-en="B&B Mortgage – ROI simulator + bank comparison">
 Mutuo B&B
 </title>
 
 <meta name="description"
-data-it="Calcola il vero impatto del mutuo sul tuo investimento B&B. Simula rata, ROI e confronta le migliori banche."
-data-en="Calculate the real impact of a mortgage on your B&B investment. Simulate payments, ROI and compare banks.">
+data-it="Calcola il vero impatto del mutuo sul tuo investimento B&B. Confronta banche reali e scopri se stai perdendo soldi."
+data-en="Calculate real mortgage impact on your B&B investment. Compare real banks and avoid losing money.">
 
 <link rel="stylesheet" href="/css/style.css">
 <link rel="icon" href="/img/favicon.png">
 
 <style>
 
-/* ===== PAGE BACKGROUND (🔥 AIRBNB STYLE) ===== */
+/* ===== BACKGROUND ===== */
 body{
-display:flex;
-flex-direction:column;
 padding-top:60px;
-min-height:100vh;
-
-/* 🔥 FORZA VISUALE */
 background:
 radial-gradient(circle at 20% 20%, rgba(16,185,129,0.08), transparent 40%),
 radial-gradient(circle at 80% 80%, rgba(59,130,246,0.08), transparent 40%),
-linear-gradient(to bottom,#f8fafc,#e2e8f0) !important;
-
-background-attachment: fixed;
-background-size: cover;
+linear-gradient(to bottom,#f8fafc,#e2e8f0);
 }
 
-/* ===== HERO LIGHT ===== */
+/* ===== HERO ===== */
 .hero-mutui{
-padding:120px 20px 140px;
+padding:120px 20px;
 text-align:center;
 color:white;
-
 background:
-linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.75)),
+linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.8)),
 url("/img/milan-bg.jpg") center/cover;
 }
 
 .hero-mutui h1{
-font-size:46px;
+font-size:44px;
 font-weight:800;
-color:white;
 }
 
 .hero-mutui p{
 color:#cbd5f5;
-margin-top:10px;
 }
 
-/* ===== TOOL CARD ===== */
+/* ===== TOOL ===== */
 .tool-box{
 max-width:900px;
-margin:-100px auto 0;
-background:rgba(255,255,255,0.92);
-transform:translateY(-20px);  
-backdrop-filter:blur(10px);
-
+margin:-80px auto 0;
+background:white;
 padding:30px;
 border-radius:20px;
-
-box-shadow:0 25px 80px rgba(0,0,0,0.12);
-border:1px solid rgba(255,255,255,0.6);
+box-shadow:0 30px 80px rgba(0,0,0,0.1);
 }
 
-/* ===== INPUT ===== */
+/* INPUT */
 input{
 width:100%;
 padding:14px;
 border-radius:12px;
 border:1px solid #e2e8f0;
-background:#f8fafc;
-transition:0.2s;
+margin-bottom:10px;
 }
 
-input:focus{
-outline:none;
-border-color:#10b981;
-background:white;
-}
-
-/* ===== BUTTON ===== */
+/* BUTTON */
 .btn-main{
-margin-top:10px;
 width:100%;
 padding:14px;
 border:none;
@@ -101,102 +76,63 @@ background:linear-gradient(135deg,#10b981,#059669);
 color:white;
 font-weight:600;
 cursor:pointer;
-transition:0.2s;
 }
 
-.btn-main:hover{
-transform:translateY(-2px);
-box-shadow:0 10px 25px rgba(16,185,129,0.3);
-}
-
-/* ===== KPI ===== */
+/* KPI */
 .kpi-grid{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:15px;
-margin-top:25px;
+margin-top:20px;
 }
 
 .kpi{
-background:linear-gradient(135deg,#ffffff,#f8fafc);
-padding:18px;
+background:#f8fafc;
+padding:20px;
 border-radius:14px;
 text-align:center;
-
-border:1px solid #e2e8f0;
-box-shadow:0 10px 25px rgba(0,0,0,0.05);
 }
 
-.kpi div{
-font-size:22px;
-font-weight:700;
-color:#0f172a;
-}
-
-/* ===== BANK CARDS ===== */
-.bank-card{
-background:white;
-border:1px solid #e2e8f0;
-padding:20px;
-border-radius:16px;
-margin-top:15px;
-transition:.3s;
-box-shadow:0 10px 30px rgba(0,0,0,0.04);
-}
-
-.bank-card:hover{
-transform:translateY(-3px);
-}
-
-.bank-card.best{
-border:2px solid #10b981;
-box-shadow:0 15px 40px rgba(16,185,129,0.2);
-}
-
-/* ===== LEAD LIGHT ===== */
-.lead-box{
-margin-top:60px;
-padding:50px;
-border-radius:20px;
-
-background:linear-gradient(135deg,#ffffff,#f8fafc);
-
-color:#0f172a;
-text-align:center;
-
-border:1px solid #e2e8f0;
-box-shadow:0 20px 60px rgba(0,0,0,0.08);
-}
-
-.lead-box h2{
-font-size:28px;
-font-weight:700;
-}
-
-.success-msg{
-color:#10b981;
-margin-top:10px;
-display:none;
-}
-
+/* ALERT */
 .roi-alert{
 margin-top:20px;
 padding:15px;
 border-radius:12px;
 font-weight:600;
-text-align:center;
 display:none;
 }
 
-.roi-bad{
-background:#fee2e2;
-color:#b91c1c;
+.roi-bad{background:#fee2e2;color:#b91c1c;}
+.roi-good{background:#dcfce7;color:#166534;}
+
+/* BANK */
+.bank-card{
+background:white;
+padding:20px;
+border-radius:16px;
+margin-top:15px;
+border:1px solid #e2e8f0;
 }
 
-.roi-good{
-background:#dcfce7;
-color:#166534;
-}  
+.bank-card.best{
+border:2px solid #10b981;
+}
+
+/* LEAD */
+.lead-box{
+margin-top:60px;
+padding:40px;
+background:white;
+border-radius:20px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.08);
+}
+
+.success-msg{
+color:#10b981;
+display:none;
+margin-top:10px;
+}
 
 </style>
 
@@ -206,18 +142,13 @@ color:#166534;
 
 <div id="global-header"></div>
 
-<main>
-
-<!-- HERO -->
 <section class="hero-mutui">
-<h1
-data-it="Il mutuo può distruggere il tuo ROI"
+<h1 data-it="Il mutuo può distruggere il tuo ROI"
 data-en="A mortgage can destroy your ROI">
 Mutuo B&B
 </h1>
 
-<p
-data-it="Simula prima di perdere migliaia di euro"
+<p data-it="Simula prima di perdere migliaia di euro"
 data-en="Simulate before losing thousands of euros">
 Analisi reale
 </p>
@@ -225,77 +156,50 @@ Analisi reale
 
 <div class="container">
 
-<!-- TOOL -->
 <div class="tool-box">
 
 <h3 data-it="Simulatore mutuo" data-en="Mortgage simulator">Simulatore</h3>
 
-<div class="grid">
 <input id="amount" placeholder="€ 200000">
 <input id="years" placeholder="20">
-
 <input id="rate" placeholder="3.5%">
 <input id="income" placeholder="Ricavi annui (€)">
-</div>
 
-<button class="btn-main" onclick="calculate()"
-data-it="Calcola impatto"
-data-en="Calculate impact">
-Calcola
+<button class="btn-main" onclick="calculate()">
+Calcola impatto
 </button>
 
-<!-- KPI -->
+<div id="roi-alert" class="roi-alert"></div>
+
 <div class="kpi-grid">
-<div class="kpi">
-<div id="monthly">-</div>
-<small data-it="Rata mensile" data-en="Monthly payment">Rata</small>
-</div>
-
-<div class="kpi">
-<div id="yearly">-</div>
-<small data-it="Costo annuo" data-en="Yearly cost">Costo</small>
-</div>
-
-<div class="kpi">
-<div id="impact">-</div>
-<small data-it="Impatto su ROI" data-en="ROI impact">ROI</small>
-</div>
+<div class="kpi"><div id="monthly">-</div><small>Monthly</small></div>
+<div class="kpi"><div id="yearly">-</div><small>Yearly</small></div>
+<div class="kpi"><div id="impact">-</div><small>ROI</small></div>
 </div>
 
 </div>
 
-<div id="roi-alert" class="roi-alert"></div>  
-
-<!-- BANKS -->
 <div id="banks"></div>
 
-<!-- LEAD -->
 <div class="lead-box">
 
-<h2
-data-it="Ricevi offerte mutuo reali"
-data-en="Get real mortgage offers">
-Lead
+<h2 data-it="Ricevi offerte reali"
+data-en="Get real offers">
+Offerte mutuo
 </h2>
 
 <input id="email" placeholder="Email">
 <input id="phone" placeholder="Telefono">
 
-<button onclick="saveLead()" class="btn-main"
-data-it="Ricevi offerte"
-data-en="Get offers">
-Invia
+<button class="btn-main" onclick="saveLead()">
+Ricevi offerte
 </button>
 
-<div id="success" class="success-msg">
-OK
-</div>
+<div id="success" class="success-msg">✔ Lead inviato</div>
 
 </div>
 
 </div>
-
-</main>
 
 <div id="global-footer"></div>
 
@@ -305,10 +209,11 @@ OK
 
 <script>
 
+/* ================= CALCOLO ================= */
 function calculate(){
 
-const amount = parseFloat(amountInput());
-const rate = parseFloat(rateInput());
+const amount = parseFloat(document.getElementById("amount").value || 200000);
+const rate = parseFloat(document.getElementById("rate").value || 3.5);
 const years = parseFloat(document.getElementById("years").value || 20);
 const income = parseFloat(document.getElementById("income").value || 30000);
 
@@ -318,63 +223,41 @@ const n = years*12;
 const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly*12;
 
-const impact = ((income - yearly)/income*100).toFixed(1);
+const impact = ((income - yearly)/income*100);
 
 const alertBox = document.getElementById("roi-alert");
 
-if(alertBox){
-
+/* 🔥 FIX ERROR QUI */
 if(impact < 0){
   alertBox.style.display="block";
   alertBox.className="roi-alert roi-bad";
-  alertBox.innerHTML = window.currentLang==="en"
-    ? "⚠️ Mortgage is destroying your ROI"
-    : "⚠️ Il mutuo sta distruggendo il tuo ROI";
+  alertBox.innerHTML = "⚠️ Il mutuo sta distruggendo il tuo ROI";
 }else{
   alertBox.style.display="block";
   alertBox.className="roi-alert roi-good";
-  alertBox.innerHTML = window.currentLang==="en"
-    ? "✅ Sustainable mortgage"
-    : "✅ Mutuo sostenibile";
+  alertBox.innerHTML = "✅ Mutuo sostenibile";
 }
 
-}
-  alertBox.style.display="block";
-  alertBox.className="roi-alert roi-bad";
-  alertBox.innerHTML = window.currentLang==="en"
-  ? "⚠️ <strong>Mortgage is destroying your ROI</strong>"
-  : "⚠️ <strong>Il mutuo sta distruggendo il tuo ROI</strong>";
-}else{
-  alertBox.style.display="block";
-  alertBox.className="roi-alert roi-good";
-  alertBox.innerHTML = window.currentLang==="en"
-    ? "✅ Sustainable mortgage"
-    : "✅ Mutuo sostenibile";
-}  
-
+/* KPI */
 document.getElementById("monthly").innerText = "€"+monthly.toFixed(0);
 document.getElementById("yearly").innerText = "€"+yearly.toFixed(0);
-document.getElementById("impact").innerText = impact+"%";
+document.getElementById("impact").innerText = impact.toFixed(1)+"%";
 
+/* BANKS */
 renderBanks(amount);
 
 }
 
-function amountInput(){
-return document.getElementById("amount").value || 200000;
-}
 
-function rateInput(){
-return document.getElementById("rate").value || 3.5;
-}
-
+/* ================= BANCHE REALI ================= */
 function renderBanks(amount){
 
 const banks = [
 {name:"Intesa Sanpaolo", rate:3.1},
-{name:"UniCredit", rate:3.4},
-{name:"BNL BNP", rate:3.6},
-{name:"Banco BPM", rate:3.8}
+{name:"UniCredit", rate:3.3},
+{name:"BNL BNP Paribas", rate:3.5},
+{name:"Banco BPM", rate:3.7},
+{name:"Credit Agricole", rate:3.4}
 ];
 
 banks.sort((a,b)=>a.rate-b.rate);
@@ -383,29 +266,42 @@ let html="";
 
 banks.forEach((b,i)=>{
 
-const yearly = amount * (b.rate/100);
-
 html+=`
 <div class="bank-card ${i===0?"best":""}">
 <h3>${b.name}</h3>
 <p>${b.rate}%</p>
-<p>€${yearly.toFixed(0)}/anno</p>
 
 <button class="btn-main" onclick="selectMortgage(${b.rate})">
-${window.currentLang==="en"?"Use mortgage":"Usa mutuo"}
+Usa questo mutuo
 </button>
 </div>
 `;
 
 });
 
-document.getElementById("banks").innerHTML=html;
+document.getElementById("banks").innerHTML = html;
 
 }
 
+
+/* ================= SELECT ================= */
 function selectMortgage(rate){
 localStorage.setItem("mortgage_rate",rate);
 window.location.href="/tool/";
+}
+
+
+/* ================= LEAD ================= */
+function saveLead(){
+
+const email = document.getElementById("email").value;
+
+if(!email) return;
+
+document.getElementById("success").style.display="block";
+
+console.log("🔥 Lead mutuo:", email);
+
 }
 
 </script>
