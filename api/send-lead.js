@@ -9,9 +9,9 @@ if (!admin.apps.length) {
   try {
     admin.initializeApp({
       credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY
+        projectId: process.env.FIREBASE_PROJECT_ID=rendimento-bb,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL=firebase-adminsdk-fbsvc@rendimento-bb.iam.gserviceaccount.com,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDg4SP+8V1MBdIi\n/6jyJHuGpp8HVY4vtvlq+4ByCLtqTeBtzmV1/J3Orsy8Pt/1b8TFQT0t4YYLq6kk\ngYiV/7aFQog4Ujud718W+jqHyYk9e5CG5fvH7kyFsnAS+iY5+UIjzrUfgH1SH/pG\nDAfrD5okDPmz4le6ktPsl82/QQuCi7WjXpQRzB5LNGlt0grHMG0fxwVDzBLhO+1K\nu5kAKoT3m6qmlZH7EVuUMlFFBpE+hWF8g/qHg3py27AS+y+ZZDLsO4rQthkvQWub\nF/g2RTn4ievTtl25+70QzTtHtVz5mY9SMUaj4DbiAFiT9y3lvcsysybV13X19n/u\nx7Q6zqYdAgMBAAECggEAB5AwPJH+lXYj/U8EQ3HsVk4tTrsBvLjBMRLDXP0j3IKW\nV+sXU31gYK6qrnFzk9bN/eULUIs4uGoYwWRlOnJEFRL0mjxTH/qIhAZ8yHYD78ru\nRJ3gjCFcy9RWsPSz1hhRhqXG8V0fbznUb4hWYyv+VFRmuODrGsMhwzUkfi21sY6+\n2ofUb6s1bQlqvSEQgYg2fZKz/74PbvLQXZzV3rgENP4Sioh9ErtcMsvhJsZOGS7f\nqMww2ud+bspA8tlVaCikr8/00vm+oinyBKyhHYYWSKOndZWuySo2vW1mKR1DIkJ1\nDL6qOlS7DcADFKSBjp4kDFLXM0z5UZhfC2BZJTozUQKBgQD7u/pU1T/ZF+JxFuBD\nU4xVStTMghjJotqheZ5c44Iat8FOyteieuja0TC7seDJF34lXUT9+KVEEdA5Lrlx\n6UiLZb5iEUHJS31ytTwcQcMSLaczSMS55DBIAUx6y7jnwoZYCdjx/QYyiShEzZtT\no5jTeHiK1V1OrrQGGG6WhXwHBQKBgQDksKqnPkrova9WQXsQiJlO94PgeXO8L6i/\nAE2hSUA5MnHTW6HMDRs2blQSWm+RMtHxdeMjTOCS1c46ntj4EgLlIBd1pJQVhM8U\n3+YkmsOREeBARIFw3aJuTs3wQavxBZFjtBUCXUx9bdbMywh/DUarNldkD/FXeE7t\nAPJTjSyeOQKBgDnZ0ESwoTSt1X8xx6YRTD3Jra+18iZcg6v6PBeSvTKQqh8GZJnV\nby/iRTXNQiBUgsvpbFKFUs2a3mRVxY5VEzPd1OvKlXjCHXlAByljP4Ys8bDKd1NV\nCndxvPa3XK3+OUuAL9gk0sjIVnXBXoHRJezrUaBuOjw7z+lasgdrc75VAoGALA/J\n4Y1D+5HIfZMCNg5Lk4Zm91IPNXvtRFe3nVKyuBJ7EeD+zITd8F/TfPHFuzESeDZh\nfASs5D2jjXHblfhKbIEBZB5AleDP0VLOUdErywCpt1g7pFZfnGc8kITmrvqGp7Ij\nth/pw+Ts1OptiaUyL3y528KimlrIwitDhUuXBCkCgYBIp2Sop4uwn6Hh/LnIGhGv\nZDYCJqdriU0+q8VmkQFqPs9Rhh5BGWjjTTtZGbO6M80Ee5qR+8EXfogLbXRUG/lk\nO9b+jHyK89flLLYl+jloL7BzMdSLDdCbDQEHriZ82Ll6BrWZW77VcRT0GzsmDbQk\nCdBgN09mTSTkYgeg9q9bFA==\n-----END PRIVATE KEY-----\n
           ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
           : undefined
       })
