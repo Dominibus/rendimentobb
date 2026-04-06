@@ -9415,3 +9415,129 @@ display:none;
   }
 
 }
+
+/* =========================================
+🔥 HEADER MOBILE FIX DEFINITIVO
+========================================= */
+
+@media (max-width:768px){
+
+/* ===== STRUTTURA HEADER ===== */
+.rb-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+  height:60px;
+}
+
+/* ===== LOGO ===== */
+.rb-left{
+  flex:0 0 auto;
+}
+
+.rb-logo{
+  height:34px;
+}
+
+/* ===== MENU DESKTOP NASCOSTO ===== */
+.rb-center{
+  display:none !important;
+}
+
+/* ===== RIGHT AREA ===== */
+.rb-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+}
+
+/* ===== USER AREA ===== */
+#user-area{
+  display:flex;
+  align-items:center;
+}
+
+/* ===== LOGIN BUTTON ===== */
+.rb-login{
+  padding:6px 10px;
+  font-size:13px;
+  border-radius:8px;
+  background:#10b981;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* ===== LANGUAGE ===== */
+.rb-lang{
+  display:flex;
+  gap:4px;
+}
+
+.rb-lang button{
+  padding:5px 8px;
+  font-size:11px;
+  border-radius:999px;
+  border:none;
+  background:#f1f5f9;
+}
+
+/* ===== HAMBURGER FIX CRITICO ===== */
+#rb-burger{
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+
+  width:36px;
+  height:36px;
+
+  font-size:20px;
+  border:none;
+  background:#f1f5f9;
+  border-radius:8px;
+
+  cursor:pointer;
+
+  z-index:9999;
+}
+
+/* ===== MOBILE MENU ===== */
+.rb-mobile{
+  position:fixed;
+  top:60px;
+  left:0;
+  width:100%;
+
+  background:#fff;
+  padding:20px;
+
+  display:none;
+  flex-direction:column;
+  gap:14px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+
+  z-index:9998;
+}
+
+.rb-mobile.open{
+  display:flex;
+}
+
+/* ===== LINK MENU ===== */
+.rb-mobile a{
+  text-decoration:none;
+  font-weight:600;
+  color:#0f172a;
+}
+
+/* ===== USER MOBILE ===== */
+.rb-mobile-user{
+  border-bottom:1px solid #eee;
+  padding-bottom:12px;
+  margin-bottom:10px;
+}
+
+}
