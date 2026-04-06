@@ -134,7 +134,7 @@ export default async function handler(req, res){
     try{
 
       const result = await resend.emails.send({
-        from: "RendimentoBB <info@rendimentobb.it>",
+        from: "RendimentoBB <onboarding@resend.dev>",
         to: ["domenicodeluca11@gmail.com"],
         subject: `Lead investimento ${priority} - €${value}`,
         reply_to: email,
