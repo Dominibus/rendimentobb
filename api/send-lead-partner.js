@@ -1,83 +1,29 @@
-import { Resend } from "resend";
-import admin from "firebase-admin";
+await resend.emails.send({
+  from: "RendimentoBB Leads <lead@rendimentobb.it>",
+  to: ["rendimentobb@gmail.com"],
+  subject: `🔥 ${priority} Investment Opportunity (${roiRounded}%)`,
+  html: `
+<div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+  <div style="max-width:620px;margin:auto;background:#fff;border-radius:20px;padding:35px">
 
-if (!admin.apps.length) {
-  try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY
-          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-          : undefined
-      })
-    });
-  } catch (e) {
-    console.error("Firebase init error:", e.message);
-  }
-}
+    <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
 
-const db = admin.apps.length ? admin.firestore() : null;
+    <h2 style="margin-top:20px">🔥 Investment Lead</h2>
 
-export default async function handler(req, res){
+    <div style="font-size:44px;color:#10b981;font-weight:800;margin:20px 0">
+      ${roiRounded}%
+    </div>
 
-  if(req.method !== "POST"){
-    return res.status(405).json({ error:"Method not allowed" });
-  }
+    <p><b>Email:</b> ${email}</p>
+    <p><b>City:</b> ${city}</p>
 
-  try{
+    <a href="mailto:${email}"
+    style="display:inline-block;margin-top:20px;background:#10b981;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none">
+    Contatta subito
+    </a>
 
-    const { email, city, roi } = req.body || {};
-
-    const cleanEmail = String(email || "").trim();
-    const roiRounded = Number(Number(roi || 0).toFixed(1));
-    const cleanCity = String(city || "");
-
-    if(!cleanEmail){
-      return res.status(400).json({ error:"Missing email" });
-    }
-
-    const priority = roiRounded > 15 ? "URGENT" : "HIGH";
-
-    // ================= EMAIL =================
-    await resend.emails.send({
-      from: "RendimentoBB Leads <lead@rendimentobb.it>",
-      to: ["rendimentobb@gmail.com"],
-      subject: `🔥 ${priority} Lead – ${cleanCity} (${roiRounded}%)`,
-      html: `
-        <h2>🔥 Lead Partner</h2>
-        <p>Email: ${cleanEmail}</p>
-        <p>ROI: ${roiRounded}%</p>
-        <p>Città: ${cleanCity}</p>
-      `
-    });
-
-    // ================= SAVE =================
-    if(db){
-      try{
-        await db.collection("partner_leads").add({
-          email: cleanEmail,
-          city: cleanCity,
-          roi: roiRounded,
-          priority,
-          createdAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-      }catch(e){
-        console.warn("⚠️ save skip");
-      }
-    }
-
-    return res.status(200).json({ success:true });
-
-  }catch(err){
-
-    console.error("💥 Partner error:", err);
-
-    return res.status(500).json({
-      success:false
-    });
-
-  }
-}
+  </div>
+</div>
+`
+});
