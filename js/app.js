@@ -1673,30 +1673,50 @@ const leadDestination = getLeadDestination({
 })();
 
 // ================= EMAIL UTENTE =================
-if (userEmail && goodROI) {
+console.log("📧 EMAIL CHECK:", {
+  email: userEmail,
+  roi: roi
+});
 
-  fetch("/api/send-lead-email", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: userEmail,
-      lang: window.currentLang || "it",
-      roi: roi,
-      city: window.currentCity
-    })
-  })
-  .then(async res=>{
-    if(!res.ok){
-      console.error("❌ Email API error:", await res.text());
-      return;
-    }
-    console.log("📨 Email utente inviata");
-  })
-  .catch(err => console.warn("Email silent fail", err));
-
+// 🔥 BLOCCO SESSIONE
+if (window.emailUserSent) {
+  console.log("⛔ Email già inviata in questa sessione");
+  return;
 }
+
+// 🔥 CONDIZIONE MINIMA (evita spam inutile)
+if (!userEmail || roi <= 0) {
+  console.log("⛔ condizioni non valide email");
+  return;
+}
+
+// 🔥 SEGNA INVIO
+window.emailUserSent = true;
+
+fetch("/api/send-lead-email", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email: userEmail,
+    lang: window.currentLang || "it",
+    roi: roi,
+    city: window.currentCity
+  })
+})
+.then(async res=>{
+  if(!res.ok){
+    console.error("❌ Email API error:", await res.text());
+    window.emailUserSent = false; // 🔥 retry possibile
+    return;
+  }
+  console.log("📨 Email utente inviata");
+})
+.catch(err => {
+  console.warn("Email silent fail", err);
+  window.emailUserSent = false; // 🔥 retry possibile
+});
 
 // ================= LEAD MONETIZZAZIONE =================
 setTimeout(() => {
