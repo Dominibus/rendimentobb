@@ -196,82 +196,96 @@ onclick="saveLead()"></button>
 
 /* ================= LANG HELPER ================= */
 function t(it,en){
-return (window.currentLang==="en") ? en : it;
+return (window.currentLang === "en") ? en : it;
 }
 
 /* ================= CALCOLO ================= */
 function calculate(){
 
-const amount = parseFloat(amount.value || 200000);
-const rate = parseFloat(rateInput());
-const years = parseFloat(yearsInput());
-const income = parseFloat(incomeInput());
+const amountEl = document.getElementById("amount");
+const rateEl   = document.getElementById("rate");
+const yearsEl  = document.getElementById("years");
+const incomeEl = document.getElementById("income");
+
+const amount = parseFloat(amountEl.value || 200000);
+const rate   = parseFloat(rateEl.value || 3.5);
+const years  = parseFloat(yearsEl.value || 20);
+const income = parseFloat(incomeEl.value || 30000);
 
 const monthlyRate = rate/100/12;
 const n = years*12;
 
-const monthly = amount*(monthlyRate/(1-Math.pow(1+monthlyRate,-n)));
-const yearly = monthly*12;
+const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
+const yearly  = monthly*12;
 
-const roi = ((income-yearly)/income*100);
+const roi = ((income - yearly)/income*100);
 
-/* ALERT */
+/* ===== ALERT ===== */
 const alertBox = document.getElementById("roi-alert");
 alertBox.style.display="block";
 
 if(roi < 0){
-alertBox.className="roi-alert roi-bad";
-alertBox.innerHTML = t(
-"⚠️ Il mutuo distrugge il tuo ROI",
-"⚠️ Mortgage is killing your ROI"
-);
+  alertBox.className="roi-alert roi-bad";
+  alertBox.innerHTML = t(
+    "⚠️ Il mutuo sta distruggendo il tuo ROI",
+    "⚠️ Mortgage is destroying your ROI"
+  );
 }else{
-alertBox.className="roi-alert roi-good";
-alertBox.innerHTML = t(
-"✅ Mutuo sostenibile",
-"✅ Sustainable mortgage"
-);
+  alertBox.className="roi-alert roi-good";
+  alertBox.innerHTML = t(
+    "✅ Mutuo sostenibile",
+    "✅ Sustainable mortgage"
+  );
 }
 
-/* KPI */
-monthlyEl.innerText = "€"+monthly.toFixed(0);
-yearlyEl.innerText = "€"+yearly.toFixed(0);
-impactEl.innerText = roi.toFixed(1)+"%";
+/* ===== KPI ===== */
+document.getElementById("monthly").innerText = "€"+monthly.toFixed(0);
+document.getElementById("yearly").innerText  = "€"+yearly.toFixed(0);
+document.getElementById("impact").innerText  = roi.toFixed(1)+"%";
 
-/* EXTRA */
+/* ===== EXTRA (🔥 VALORE) ===== */
 renderExtra(roi, yearly);
 
-/* BANK */
+/* ===== BANK ===== */
 renderBanks(amount);
 
 }
 
-/* ================= EXTRA ================= */
+
+/* ================= EXTRA (CASH + RISCHIO) ================= */
 function renderExtra(roi, yearly){
 
-const risk = roi < 5 ? "HIGH" : roi < 15 ? "MEDIUM" : "LOW";
+const risk =
+roi < 5 ? t("ALTO","HIGH") :
+roi < 15 ? t("MEDIO","MEDIUM") :
+t("BASSO","LOW");
 
-document.getElementById("extra").innerHTML = `
-<div><b>${t("Confronto CASH","Cash comparison")}</b></div>
-<div>${t("Senza mutuo guadagni circa","Without mortgage you earn")} €${(yearly*1.4).toFixed(0)}</div>
+const el = document.getElementById("banks");
 
-<br>
+el.insertAdjacentHTML("beforebegin",`
+<div class="bank-card" style="margin-top:20px;">
+<b>${t("Confronto CASH","Cash comparison")}</b><br>
+${t("Senza mutuo guadagno stimato:","Estimated without mortgage:")}
+€${(yearly*1.4).toFixed(0)}
 
-<div><b>${t("Rischio investimento","Investment risk")}</b></div>
-<div>${risk}</div>
-`;
+<br><br>
+
+<b>${t("Rischio investimento","Investment risk")}:</b> ${risk}
+</div>
+`);
 
 }
 
-/* ================= BANK ================= */
+
+/* ================= BANCHE ================= */
 function renderBanks(amount){
 
 const banks = [
-{name:"Intesa Sanpaolo",rate:3.1},
-{name:"UniCredit",rate:3.3},
-{name:"BNL BNP Paribas",rate:3.5},
-{name:"Credit Agricole",rate:3.4},
-{name:"Banco BPM",rate:3.7}
+{name:"Intesa Sanpaolo", rate:3.1},
+{name:"UniCredit", rate:3.3},
+{name:"BNL BNP Paribas", rate:3.5},
+{name:"Credit Agricole", rate:3.4},
+{name:"Banco BPM", rate:3.7}
 ];
 
 banks.sort((a,b)=>a.rate-b.rate);
@@ -294,24 +308,17 @@ ${t("Usa questo mutuo","Use this mortgage")}
 
 });
 
-document.getElementById("banks").innerHTML=html;
+document.getElementById("banks").innerHTML = html;
 
 }
 
-/* ================= INPUT HELPERS ================= */
-function rateInput(){return document.getElementById("rate").value||3.5;}
-function yearsInput(){return document.getElementById("years").value||20;}
-function incomeInput(){return document.getElementById("income").value||30000;}
-
-const monthlyEl = document.getElementById("monthly");
-const yearlyEl = document.getElementById("yearly");
-const impactEl = document.getElementById("impact");
 
 /* ================= SELECT ================= */
 function selectMortgage(rate){
 localStorage.setItem("mortgage_rate",rate);
 window.location.href="/tool/";
 }
+
 
 /* ================= LEAD + SCORING ================= */
 function saveLead(){
@@ -321,12 +328,14 @@ const phone = document.getElementById("phone").value;
 
 if(!email) return;
 
+/* 🔥 LEAD SCORING */
 const score =
 (email ? 40 : 0) +
 (phone ? 40 : 0) +
 (Math.random()*20);
 
-console.log("🔥 Lead score:", score);
+console.log("🔥 Lead mutuo:", email);
+console.log("🔥 Score:", score);
 
 document.getElementById("success").style.display="block";
 
