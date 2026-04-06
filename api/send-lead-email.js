@@ -1,74 +1,46 @@
-import { Resend } from "resend";
-import admin from "firebase-admin";
+await resend.emails.send({
+  from: "RendimentoBB <analisi@rendimentobb.it>",
+  to: [email],
+  subject: `💰 Il tuo investimento può rendere ${roiRounded}%`,
+  html: `
+<div style="font-family:Inter,Arial;background:#f1f5f9;padding:40px">
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+  <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px">
 
-if (!admin.apps.length) {
-  try {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY
-          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-          : undefined
-      })
-    });
-  } catch (e) {
-    console.error("Firebase init error:", e.message);
-  }
-}
+    <div style="text-align:center">
+      <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
+    </div>
 
-const db = admin.apps.length ? admin.firestore() : null;
+    <h2 style="text-align:center;margin-top:20px">
+      Analisi investimento
+    </h2>
 
-export default async function handler(req, res) {
+    <div style="text-align:center;margin:30px 0">
+      <div style="font-size:50px;color:#10b981;font-weight:800">
+        ${roiRounded}%
+      </div>
+      <div style="color:#64748b">ROI stimato</div>
+    </div>
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+    <div style="background:#fff7ed;padding:16px;border-radius:12px">
+      ⚠️ Il ROI da solo non basta: mutuo, rischio e occupazione cambiano tutto
+    </div>
 
-  try {
+    <ul style="margin-top:20px">
+      <li>Profitto reale</li>
+      <li>Break-even</li>
+      <li>Analisi rischio</li>
+      <li>Scenario completo</li>
+    </ul>
 
-    const { email, roi, city } = req.body || {};
+    <div style="text-align:center;margin:35px 0">
+      <a href="https://rendimentobb.it/dashboard"
+      style="background:#10b981;color:white;padding:16px 26px;border-radius:999px;text-decoration:none;font-weight:700">
+      🔥 Sblocca analisi completa
+      </a>
+    </div>
 
-    const cleanEmail = String(email || "").trim();
-    const roiRounded = Number(Number(roi || 0).toFixed(1));
-    const cleanCity = String(city || "");
-
-    if (!cleanEmail) {
-      return res.status(400).json({ error: "Email missing" });
-    }
-
-    // ================= EMAIL =================
-    await resend.emails.send({
-      from: "RendimentoBB <analisi@rendimentobb.it>",
-      to: [cleanEmail],
-      subject: `💰 Il tuo investimento (${roiRounded}%)`,
-      html: `
-        <h2>Analisi investimento</h2>
-        <p>ROI: ${roiRounded}%</p>
-        <p>Città: ${cleanCity}</p>
-      `
-    });
-
-    // ================= LOG (SAFE) =================
-    if (db) {
-      try{
-        await db.collection("email_logs").add({
-          email: cleanEmail,
-          roi: roiRounded,
-          city: cleanCity,
-          createdAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-      }catch(e){
-        console.warn("⚠️ log skip");
-      }
-    }
-
-    return res.status(200).json({ success: true });
-
-  } catch (err) {
-    console.error("💥 Email error:", err);
-    return res.status(500).json({ success: false });
-  }
-}
+  </div>
+</div>
+`
+});
