@@ -31,7 +31,6 @@ function clean(v){
   return String(v || "").trim();
 }
 
-// 🔥 FIX LANG ROBUSTO
 function isEN(req){
   const lang = req.headers["accept-language"] || "";
   return lang.toLowerCase().startsWith("en");
@@ -113,7 +112,7 @@ function buildEmail({ roi, city, type, lang }){
       <div style="text-align:center;margin:35px 0">
         <a href="https://rendimentobb.it/dashboard"
         style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:700">
-        🔥 ${t("Sblocca analisi completa","Unlock full analysis")}
+        🔥 ${t("Vedi analisi completa","View full analysis")}
         </a>
       </div>
 
@@ -184,19 +183,22 @@ export default async function handler(req, res){
       }
     }
 
+    // ================= SUBJECT (🔥 MIGLIORATO) =================
+    const subject =
+      type === "mutui"
+        ? (detectedLang === "en"
+            ? "⚠️ Your mortgage may be costing you more than you think"
+            : "⚠️ Il tuo mutuo potrebbe costarti più di quanto pensi")
+        : (detectedLang === "en"
+            ? `💰 You may be overestimating this ${roiRounded}% ROI`
+            : `💰 Attenzione: questo ${roiRounded}% potrebbe ingannarti`);
+
     // ================= EMAIL USER =================
     try{
       await resend.emails.send({
         from: "RendimentoBB <analisi@rendimentobb.it>",
         to: [email],
-        subject:
-          type === "mutui"
-            ? (detectedLang === "en"
-                ? "Your mortgage impact analysis"
-                : "Analisi impatto mutuo")
-            : (detectedLang === "en"
-                ? `Your investment analysis`
-                : `Analisi del tuo investimento`),
+        subject,
         html: buildEmail({
           roi: roiRounded,
           city,
