@@ -272,20 +272,47 @@ function renderUser(user){
 
   const lang = localStorage.getItem("rb_lang") || "it";
 
-  // 🔥 SICUREZZA: fallback admin
+  // ===============================
+  // 🔥 NORMALIZZAZIONE DATI (CRITICA)
+  // ===============================
+
+  const clean = (v) => {
+    return String(v || "")
+      .replace(/"/g, "")
+      .trim()
+      .toLowerCase();
+  };
+
+  const plan = clean(window.currentPlan || window.userPlan);
+  const role = clean(window.userRole);
+
+  // ===============================
+  // 🔥 ADMIN + PRO LOGIC (UNICA VERITÀ)
+  // ===============================
+
   const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
 
-const isAdmin = window.PLAN?.isAdmin() || ADMIN_EMAILS.includes(user?.email);
-const isPro = window.PLAN?.isPro() || isAdmin;
+  const isAdmin =
+    ADMIN_EMAILS.includes(user?.email) ||
+    role === "admin";
 
-  console.log("HEADER DEBUG →", {
+  const isPro =
+    isAdmin ||
+    plan === "pro" ||
+    plan === "investor" ||
+    plan === "pro_yearly";
+
+  console.log("HEADER DEBUG CLEAN →", {
     email: user?.email,
-    plan: window.currentPlan,
-    userPlan: window.userPlan,
-    role: window.userRole,
+    plan,
+    role,
     isAdmin,
     isPro
   });
+
+  // ===============================
+  // USER LOGGATO
+  // ===============================
 
   if(user){
 
@@ -302,7 +329,7 @@ const isPro = window.PLAN?.isPro() || isAdmin;
       data-en="Dashboard">Dashboard</a>`;
     }
 
-    // 🔥 ADMIN AREA
+    // 🔥 ADMIN
     if(isAdmin){
       html += `<a href="/dashboard-leads/" class="rb-btn"
       data-it="Leads"
@@ -318,9 +345,9 @@ const isPro = window.PLAN?.isPro() || isAdmin;
 
     el.innerHTML = html;
 
-    // =====================
+    // ===============================
     // MOBILE
-    // =====================
+    // ===============================
 
     if(mobileEl){
 
@@ -348,9 +375,9 @@ const isPro = window.PLAN?.isPro() || isAdmin;
       mobileEl.innerHTML = mobileHTML;
     }
 
-    // =====================
-    // LOGOUT EVENT
-    // =====================
+    // ===============================
+    // LOGOUT
+    // ===============================
 
     document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
       btn.onclick = async ()=>{
@@ -369,9 +396,9 @@ const isPro = window.PLAN?.isPro() || isAdmin;
 
   }
 
-  // =====================
-  // 🔥 RE-APPLY LANGUAGE
-  // =====================
+  // ===============================
+  // 🔥 RE-APPLY LANG
+  // ===============================
 
   if(window.setLang){
     window.setLang(lang);
