@@ -128,11 +128,17 @@ display:none;
 <div id="global-header"></div>
 
 <section class="hero-mutui">
-<h1 data-it="Il mutuo può distruggere il tuo ROI"
-data-en="A mortgage can destroy your ROI"></h1>
+<h1
+data-it="🔥 Il mutuo può farti perdere migliaia di euro"
+data-en="🔥 A mortgage can make you lose thousands of euros">
+🔥 Il mutuo può farti perdere migliaia di euro
+</h1>
 
-<p data-it="Simula prima di perdere migliaia di euro"
-data-en="Simulate before losing thousands"></p>
+<p
+data-it="Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi"
+data-en="Simulate the real impact on ROI, profit and risk in under 30 seconds">
+Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi
+</p>
 </section>
 
 <div class="container">
@@ -154,9 +160,9 @@ onclick="calculate()"></button>
 <div id="roi-alert" class="roi-alert"></div>
 
 <div class="kpi-grid">
-<div class="kpi"><div id="monthly">-</div><small>Monthly</small></div>
-<div class="kpi"><div id="yearly">-</div><small>Yearly</small></div>
-<div class="kpi"><div id="impact">-</div><small>ROI</small></div>
+<div class="kpi"><div id="monthly">-</div><small data-it="Rata mensile" data-en="Monthly payment">Rata mensile</small></div>
+<div class="kpi"><div id="yearly">-</div><small data-it="Costo annuo mutuo" data-en="Yearly mortgage cost">Costo annuo mutuo</small></div>
+<div class="kpi"><div id="impact">-</div><small data-it="Impatto ROI" data-en="ROI impact">Impatto ROI</small></div>
 </div>
 
 <!-- 🔥 EXTRA -->
@@ -172,15 +178,22 @@ onclick="calculate()"></button>
 <h2 data-it="Ricevi offerte reali"
 data-en="Get real offers"></h2>
 
-<input id="email" placeholder="Email">
-<input id="phone" placeholder="Telefono">
+<input id="email"
+placeholder="Email"
+data-it-placeholder="Email"
+data-en-placeholder="Email">
+
+<input id="phone"
+placeholder="Telefono"
+data-it-placeholder="Telefono"
+data-en-placeholder="Phone">
 
 <button class="btn-main"
 data-it="Ricevi offerte"
 data-en="Get offers"
 onclick="saveLead()"></button>
 
-<div id="success" class="success-msg">✔ Lead inviato</div>
+<div id="success" class="success-msg">✔ ${t("Richiesta inviata","Request sent")}</div>
 
 </div>
 
@@ -222,9 +235,9 @@ alertBox.style.display="block";
 if(roi < 0){
   alertBox.className="roi-alert roi-bad";
   alertBox.innerHTML = t(
-    "⚠️ Stai perdendo soldi con questo mutuo",
-    "⚠️ You are losing money with this mortgage"
-  );
+  "⚠️ Questo mutuo sta distruggendo il tuo profitto",
+  "⚠️ This mortgage is destroying your profit"
+);
 }else{
   alertBox.className="roi-alert roi-good";
   alertBox.innerHTML = t(
@@ -252,44 +265,61 @@ function renderExtra(roi, yearly){
 
 const extra = document.getElementById("extra");
 
-/* 🔥 SCORE */
 let score = "C";
 if(roi > 15) score = "A";
 else if(roi > 8) score = "B";
 
-/* 🔥 PERDITA */
 const loss = yearly * 0.3;
 
-/* 🔥 RISCHIO */
 const risk =
 roi < 5 ? t("ALTO","HIGH") :
 roi < 15 ? t("MEDIO","MEDIUM") :
 t("BASSO","LOW");
 
 extra.innerHTML = `
+
 <div style="font-weight:700;margin-bottom:10px;">
-🔥 ${t("Investment Score","Investment Score")}: ${score}
+🔥 ${t("Punteggio investimento","Investment Score")}: ${score}
 </div>
 
-<div>
-💸 ${t("Stai perdendo circa","You are losing about")}
+<div style="
+background:#fee2e2;
+padding:12px;
+border-radius:10px;
+margin-top:10px;
+font-weight:600;
+color:#b91c1c;
+">
+⚠️ ${t("Stai perdendo circa","You are losing about")}
 <strong>€${loss.toFixed(0)}/anno</strong>
 </div>
 
 <br>
 
 <div>
-${t("Confronto senza mutuo","Cash comparison")}:
+💰 ${t("Confronto senza mutuo","Cash comparison")}:
 €${(yearly*1.4).toFixed(0)}
 </div>
 
 <br>
 
 <div>
-${t("Rischio investimento","Investment risk")}:
+📊 ${t("Rischio investimento","Investment risk")}:
 <strong>${risk}</strong>
 </div>
+
 `;
+
+/* 🔥 CTA dinamica */
+if(roi < 5){
+extra.innerHTML += `
+<div style="margin-top:15px;">
+<button class="btn-main" onclick="window.location.href='/tool/'">
+🔥 ${t("Simula investimento completo","Run full investment analysis")}
+</button>
+</div>
+`;
+}
 
 }
 
@@ -354,12 +384,14 @@ alert(t("Inserisci email","Enter email"));
 return;
 }
 
+const roiValue = parseFloat(document.getElementById("impact").innerText) || 0;
+
 const payload = {
   type:"mutui",
   email,
   phone,
   city: window.currentCity || "unknown",
-  roi: parseFloat(document.getElementById("impact").innerText) || 0,
+  roi: roiValue,
   amount: parseFloat(document.getElementById("amount").value || 0),
   years: parseFloat(document.getElementById("years").value || 0),
   plan: window.currentPlan || "free"
@@ -367,31 +399,59 @@ const payload = {
 
 try{
 
+/* 🔥 SAVE DB */
 const res = await fetch("/api/send-lead",{
   method:"POST",
   headers:{ "Content-Type":"application/json" },
   body: JSON.stringify(payload)
 });
 
+/* 🔥 EMAIL UTENTE (MANCAVA!) */
+await fetch("/api/send-lead-email",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({
+    email,
+    type:"mutui",
+    roi: roiValue,
+    amount: payload.amount,
+    years: payload.years,
+    lang: window.currentLang || "it"
+  })
+});
+
+/* 🔥 FOLLOWUP */
+setTimeout(()=>{
+  fetch("/api/send-followup",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      email,
+      step:2,
+      lang: window.currentLang || "it"
+    })
+  });
+},60000);
+
 const data = await res.json();
 
 console.log("🔥 Lead sent:", data);
 
-/* UI */
+/* UI WOW */
 const success = document.getElementById("success");
 success.style.display="block";
 
 success.innerHTML = `
-✔ ${t("Lead inviato","Lead sent")}
+✔ ${t("Richiesta inviata","Request sent")}
+<br>
+🔥 ${t("Ti abbiamo inviato le migliori offerte","We sent you the best offers")}
 <br>
 💰 €${data.value || 0}
 `;
 
 }catch(e){
-
 console.error("❌ Lead error:", e);
 alert("Errore invio");
-
 }
 
 }
