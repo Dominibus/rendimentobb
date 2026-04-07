@@ -236,12 +236,19 @@ function initUser(){
 
           tries++;
 
-          if(
-              window.currentPlan === "pro" ||
-              window.currentPlan === "investor" ||
-              window.currentPlan === "pro_yearly" ||
-              tries > 20
-            ){
+          const isReady =
+  window.currentPlan &&
+  window.currentPlan !== "free";
+
+const isAdmin =
+  window.userRole === "admin" ||
+  window.currentUser?.email === "rendimentobb@gmail.com";
+
+if(
+  isReady ||
+  isAdmin ||
+  tries > 20
+){
             clearInterval(waitPlan);
             renderUser(user);
           }
@@ -271,6 +278,11 @@ function renderUser(user){
   if(!el) return;
 
   const lang = localStorage.getItem("rb_lang") || "it";
+
+  // 🔥 FORZA RE-RENDER SICURO
+setTimeout(()=>{
+  renderUser(window.currentUser);
+}, 150);
 
   // ===============================
   // 🔥 NORMALIZZAZIONE DATI (CRITICA)
