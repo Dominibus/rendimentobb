@@ -26,15 +26,38 @@ function safeNumber(v){
 }
 
 // ===============================
+// 🔥 ROUTING API (FIX CRITICO)
+// ===============================
+function getEndpoint(type){
+
+  switch(type){
+
+    case "partner":
+      return "/api/send-lead-partner";
+
+    case "work":
+      return "/api/work-email";
+
+    // 👉 mutui + immobili restano qui
+    default:
+      return "/api/send-lead";
+
+  }
+
+}
+
+// ===============================
 // HELPER – INVIO AUTOMATICO API
 // ===============================
 async function sendLead(type, data){
 
   try{
 
-    console.log("📡 SEND LEAD →", type, data);
+    const endpoint = getEndpoint(type);
 
-    const response = await fetch("/api/send-lead",{
+    console.log("📡 SEND LEAD →", type, endpoint, data);
+
+    const response = await fetch(endpoint,{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
@@ -48,13 +71,13 @@ async function sendLead(type, data){
 
     if(!response.ok){
       const text = await response.text();
-      console.error("❌ API Lead error:", text);
+      console.error("❌ API Lead error:", endpoint, text);
       return false;
     }
 
     const result = await response.json();
 
-    console.log("📤 Lead inviato API:", type, result);
+    console.log("📤 Lead inviato API:", type, "→", endpoint, result);
 
     return true;
 
