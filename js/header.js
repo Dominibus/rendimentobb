@@ -196,23 +196,32 @@ function initUser(){
     clearInterval(waitFirebase);
 
     try{
+
       onAuthStateChanged(auth, (user)=>{
 
-  // aspetta che il piano sia pronto
-  let tries = 0;
+        // aspetta che il piano sia pronto
+        let tries = 0;
 
-  const waitPlan = setInterval(()=>{
+        const waitPlan = setInterval(()=>{
 
-    tries++;
+          tries++;
 
-    if(window.currentPlan || tries > 20){
-      clearInterval(waitPlan);
-      renderUser(user);
+          if(window.currentPlan || tries > 20){
+            clearInterval(waitPlan);
+            renderUser(user);
+          }
+
+        },100);
+
+      });
+
+    }catch(e){
+      renderUser(null);
     }
 
   },100);
 
-});
+}
 
 
 /* ===================== */
