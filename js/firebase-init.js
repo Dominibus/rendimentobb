@@ -177,17 +177,24 @@ async function loadUserPlan(uid) {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
 
-    let plan = "free";
+   let plan = "free";
+let role = "user";
 
-    if (docSnap.exists()) {
-      plan = docSnap.data().plan || "free";
-    } else {
+if (docSnap.exists()) {
+  const data = docSnap.data();
+
+  plan = data.plan || "free";
+  role = data.role || "user";
+} else {
       console.warn("⚠️ Documento NON trovato");
     }
 
     // 🔥 SET GLOBALE
     window.currentPlan = plan;
     window.plan = plan;
+
+    window.userPlan = plan;
+    window.userRole = role;
 
     console.log("🔥 Piano finale:", window.currentPlan);
 
