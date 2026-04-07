@@ -8,17 +8,19 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("rb-ui");
 
 // ===============================
-// UI SYSTEM – RENDIMENTOBB CLEAN
+// UI SYSTEM – RENDIMENTOBB CLEAN FINAL
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // apply global UI
+  // apply UI class
   document.body.classList.add("rb-ui");
 
-  // auto button system
+  // assegna SOLO ai bottoni che vuoi tu
   document.querySelectorAll(".rb-auto-btn").forEach(btn => {
-    btn.classList.add("btn-main");
+    if(!btn.classList.contains("btn-outline")){
+      btn.classList.add("btn-main");
+    }
   });
 
 });
