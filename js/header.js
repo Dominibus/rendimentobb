@@ -241,9 +241,24 @@ function renderUser(user){
   if(!el) return;
 
   const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
-  const isAdmin = ADMIN_EMAILS.includes(user?.email);
+  const isAdmin =
+  ADMIN_EMAILS.includes(user?.email) ||
+  window.userRole === "admin";
 
-const plan = window.currentPlan || "";
+  console.log("HEADER DEBUG →", {
+  email: user?.email,
+  plan: window.currentPlan,
+  userPlan: window.userPlan,
+  role: window.userRole,
+  isAdmin,
+  isPro
+});
+
+const plan =
+  window.currentPlan ||
+  window.userPlan ||
+  window.plan ||
+  "";
 
 // 🔥 ADMIN OVERRIDE
 const isPro =
