@@ -178,10 +178,9 @@ if (docSnap.exists()) {
     }
 
     // 🔥 SET GLOBALE
-   window.currentPlan = plan;
-   window.plan = plan;
-   window.userPlan = plan;
-   window.userRole = role;
+   if(window.PLAN){
+  window.PLAN.set(plan, role);
+}
 
 console.log("🔥 Piano finale:", plan, "| ruolo:", role);
 
