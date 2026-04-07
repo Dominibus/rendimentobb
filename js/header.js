@@ -5,7 +5,7 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-/* ===================== */ 
+/* ===================== */  
 /* HERO BG */
 /* ===================== */
 
