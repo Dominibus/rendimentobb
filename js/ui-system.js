@@ -1,48 +1,51 @@
 // ===============================
-// 🔥 UI SYSTEM – RENDIMENTOBB FINAL STABLE
+// 🔥 UI SYSTEM – RENDIMENTOBB ENTERPRISE
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===== APPLY GLOBAL UI =====
   document.body.classList.add("rb-ui");
 
   // ===============================
-  // 🔘 BUTTON AUTO SYSTEM
+  // 🔘 AUTO BUTTON NORMALIZER
   // ===============================
-
   document.querySelectorAll(".rb-auto-btn").forEach(btn => {
 
-    // evita conflitti
-    if(btn.classList.contains("btn-outline")) return;
-
-    // assegna main di default
-    if(!btn.classList.contains("btn-main")){
+    // se non specificato → primary
+    if(
+      !btn.classList.contains("btn-main") &&
+      !btn.classList.contains("btn-outline")
+    ){
       btn.classList.add("btn-main");
     }
 
   });
 
   // ===============================
-  // 🚫 FIX DOPPIE CLASSI
+  // 🚫 HARD FIX CONFLICTS
   // ===============================
-
   document.querySelectorAll(".btn-main.btn-outline").forEach(btn => {
     btn.classList.remove("btn-main");
   });
 
   // ===============================
-  // 🧠 DISABLED STATE (GLOBAL)
+  // ⛔ DISABLED STATE
   // ===============================
+  const syncDisabled = () => {
+    document.querySelectorAll("button, a").forEach(el => {
+      if(el.hasAttribute("disabled")){
+        el.classList.add("is-disabled");
+      } else {
+        el.classList.remove("is-disabled");
+      }
+    });
+  };
 
-  document.querySelectorAll("[disabled]").forEach(el => {
-    el.classList.add("is-disabled");
-  });
+  syncDisabled();
 
   // ===============================
-  // ⚡ LOADING BUTTON (future ready)
+  // ⚡ LOADING SYSTEM
   // ===============================
-
   window.setButtonLoading = (btn, state = true) => {
     if(!btn) return;
 
@@ -53,6 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.classList.remove("is-loading");
       btn.removeAttribute("disabled");
     }
+
+    syncDisabled();
   };
 
 });
