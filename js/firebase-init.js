@@ -73,9 +73,14 @@ window.isProUser = window.isPro;
 
 window.requirePlan = function(required){
 
-  if(window.hasPlan(required)){
+  // 🔥 CONTROLLO REALE (CORE)
+  if(window.hasPlan && window.hasPlan(required)){
     return true;
   }
+
+  // ===============================
+  // UX BLOCCO
+  // ===============================
 
   if(typeof showUpgradeModal === "function"){
 
@@ -88,29 +93,6 @@ window.requirePlan = function(required){
         : "⚠️ You are making decisions without real data"
       );
     },300);
-
-  }else{
-    window.location.href = "/pricing/";
-  }
-
-  return false;
-};
-
-  // ===============================
-  // UX BLOCCO (NO BREAK APP)
-  // ===============================
-
-  if(typeof showUpgradeModal === "function"){
-
-    showUpgradeModal(12);
-
-    setTimeout(()=>{
-      alert(
-        (window.getCurrentLang && getCurrentLang() === "it")
-        ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
-        : "⚠️ You are making decisions without real data"
-      );
-    }, 300);
 
   }else{
     window.location.href = "/pricing/";
@@ -173,10 +155,10 @@ async function loadUserPlan(uid) {
   try{
 
     console.log("🔥 Carico piano per:", uid);
-    console.log("🧠 USER STATE", {
+  console.log("🧠 USER STATE", {
   plan: window.currentPlan,
   role: window.userRole,
-  isAdmin: window.isAdmin(),
+  isAdmin: window.isAdmin ? window.isAdmin() : false,
   isPro: window.isPro()
 });
 
@@ -196,14 +178,10 @@ if (docSnap.exists()) {
     }
 
     // 🔥 SET GLOBALE
-    window.currentPlan = plan;
-    window.plan = plan;
-
-// 🔥 SET GLOBALE UNIFICATO
-window.currentPlan = plan;
-window.plan = plan;
-window.userPlan = plan;
-window.userRole = role;
+   window.currentPlan = plan;
+   window.plan = plan;
+   window.userPlan = plan;
+   window.userRole = role;
 
 console.log("🔥 Piano finale:", plan, "| ruolo:", role);
 
