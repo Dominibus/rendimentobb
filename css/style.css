@@ -9640,127 +9640,32 @@ display:none;
 }
 
 /* =====================================
-🔥 UI SYSTEM – RENDIMENTOBB PRO (FINAL)
+🔥 UI SYSTEM – RENDIMENTOBB ENTERPRISE
 ===================================== */
 
-body.rb-ui{
-  background:#f8fafc;
-  color:#0f172a;
-  -webkit-font-smoothing:antialiased;
-}
-
 /* =====================================
-📦 CARD (PIÙ LIGHT – AIRBNB STYLE)
-===================================== */
-.card{
-  background:white;
-  border-radius:20px;
-  padding:28px;
-
-  border:1px solid rgba(226,232,240,0.7);
-
-  box-shadow:
-  0 10px 30px rgba(2,6,23,0.05),
-  0 2px 6px rgba(2,6,23,0.04);
-
-  transition:all .25s ease;
-}
-
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:
-  0 20px 60px rgba(2,6,23,0.08);
-}
-
-/* =====================================
-🔘 BUTTON BASE (FIX STRUTTURA)
-===================================== */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-
-  text-decoration:none;
-  cursor:pointer;
-  border:none;
-  font-family:inherit;
-
-  transition:all .2s ease;
-}
-
-/* =====================================
-🔥 BUTTON MAIN (STRIPE STYLE)
-===================================== */
-.btn-main{
-  background:linear-gradient(135deg,#10b981,#059669);
-  color:white;
-
-  padding:14px 26px;
-  border-radius:999px;
-
-  font-weight:700;
-  font-size:15px;
-  letter-spacing:-0.2px;
-
-  box-shadow:
-  0 6px 18px rgba(16,185,129,0.25),
-  inset 0 -2px 0 rgba(0,0,0,0.08);
-
-  position:relative;
-  overflow:hidden;
-}
-
-/* hover */
-.btn-main:hover{
-  transform:translateY(-1px);
-  box-shadow:
-  0 10px 28px rgba(16,185,129,0.35),
-  inset 0 -2px 0 rgba(0,0,0,0.1);
-}
-
-/* click */
-.btn-main:active{
-  transform:translateY(1px);
-  box-shadow:
-  0 4px 12px rgba(16,185,129,0.2);
-}
-
-/* shine effect */
-.btn-main::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.4),transparent);
-  transition:.5s;
-}
-
-.btn-main:hover::after{
-  left:100%;
-}
-
-/* =====================================
-🔥 DESIGN TOKENS (CORE SYSTEM)
+🎯 DESIGN TOKENS
 ===================================== */
 :root{
   --rb-bg:#f8fafc;
+  --rb-surface:#ffffff;
   --rb-text:#0f172a;
+  --rb-muted:#64748b;
 
   --rb-primary:#10b981;
   --rb-primary-dark:#059669;
 
   --rb-border:#e2e8f0;
-  --rb-muted:#64748b;
 
   --rb-radius:16px;
+  --rb-radius-lg:20px;
   --rb-radius-full:999px;
 
   --rb-shadow-sm:0 2px 6px rgba(0,0,0,0.04);
-  --rb-shadow-md:0 10px 30px rgba(2,6,23,0.05);
-  --rb-shadow-lg:0 20px 60px rgba(2,6,23,0.08);
+  --rb-shadow-md:0 10px 30px rgba(2,6,23,0.06);
+  --rb-shadow-lg:0 20px 60px rgba(2,6,23,0.10);
+
+  --rb-transition:all .25s ease;
 }
 
 /* =====================================
@@ -9773,21 +9678,21 @@ body.rb-ui{
 }
 
 /* =====================================
-📦 CARD
+📦 CARD (AIRBNB / STRIPE)
 ===================================== */
 .card{
-  background:white;
-  border-radius:20px;
+  background:var(--rb-surface);
+  border-radius:var(--rb-radius-lg);
   padding:28px;
 
   border:1px solid var(--rb-border);
   box-shadow:var(--rb-shadow-md);
 
-  transition:.25s;
+  transition:var(--rb-transition);
 }
 
 .card:hover{
-  transform:translateY(-3px);
+  transform:translateY(-4px);
   box-shadow:var(--rb-shadow-lg);
 }
 
@@ -9804,17 +9709,18 @@ body.rb-ui{
   cursor:pointer;
   border:none;
   text-decoration:none;
+  font-family:inherit;
 
   font-weight:600;
   font-size:15px;
 
   border-radius:var(--rb-radius-full);
 
-  transition:.2s;
+  transition:var(--rb-transition);
 }
 
 /* =====================================
-🔥 PRIMARY CTA
+🔥 PRIMARY CTA (STRIPE LEVEL)
 ===================================== */
 .btn-main{
   background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
@@ -9823,24 +9729,24 @@ body.rb-ui{
   padding:14px 26px;
 
   box-shadow:
-    0 6px 18px rgba(16,185,129,0.25),
-    inset 0 -2px 0 rgba(0,0,0,0.08);
+    0 8px 22px rgba(16,185,129,0.28),
+    inset 0 -2px 0 rgba(0,0,0,0.1);
 
   position:relative;
   overflow:hidden;
 }
 
 .btn-main:hover{
-  transform:translateY(-1px);
+  transform:translateY(-2px) scale(1.01);
   box-shadow:
-    0 12px 30px rgba(16,185,129,0.35);
+    0 16px 40px rgba(16,185,129,0.35);
 }
 
 .btn-main:active{
   transform:translateY(1px);
 }
 
-/* shine effect */
+/* shine */
 .btn-main::after{
   content:"";
   position:absolute;
@@ -9849,7 +9755,7 @@ body.rb-ui{
   width:100%;
   height:100%;
   background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);
-  transition:.5s;
+  transition:.6s;
 }
 
 .btn-main:hover::after{
@@ -9857,7 +9763,7 @@ body.rb-ui{
 }
 
 /* =====================================
-⬜ SECONDARY
+⬜ SECONDARY CTA
 ===================================== */
 .btn-outline{
   background:white;
@@ -9891,11 +9797,12 @@ button:disabled{
 }
 
 /* =====================================
-⏳ LOADING
+⏳ LOADING (CENTER FIX)
 ===================================== */
 .is-loading{
   position:relative;
   pointer-events:none;
+  color:transparent !important;
 }
 
 .is-loading::after{
@@ -9909,24 +9816,33 @@ button:disabled{
   border-radius:50%;
 
   position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+
   animation:spin .6s linear infinite;
 }
 
 @keyframes spin{
-  to{ transform:rotate(360deg); }
+  to{ transform:translate(-50%,-50%) rotate(360deg); }
 }
 
 /* =====================================
-✏️ INPUT
+✏️ INPUT (MODERNO)
 ===================================== */
 input{
+  width:100%;
   border-radius:14px;
   border:1px solid var(--rb-border);
   padding:14px;
 
   background:white;
 
-  transition:.2s;
+  transition:var(--rb-transition);
+}
+
+input:hover{
+  border-color:#cbd5e1;
 }
 
 input:focus{
@@ -9938,14 +9854,60 @@ input:focus{
 }
 
 /* =====================================
-🔤 TYPO
+🔤 TYPOGRAPHY (SaaS)
 ===================================== */
-h1{ font-size:42px; }
-h2{ font-size:30px; }
-h3{ font-size:22px; }
+h1{
+  font-size:42px;
+  line-height:1.2;
+  letter-spacing:-0.5px;
+}
+
+h2{
+  font-size:30px;
+}
+
+h3{
+  font-size:22px;
+}
 
 h1,h2,h3{
   font-weight:700;
+}
+
+/* =====================================
+📐 SECTION SPACING
+===================================== */
+.section{
+  padding:100px 20px;
+}
+
+/* =====================================
+🌍 LANGUAGE BUTTON
+===================================== */
+.lang-btn,
+.rb-lang button{
+  background:#f1f5f9 !important;
+  color:#0f172a !important;
+
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+
+  border:1px solid var(--rb-border);
+}
+
+.lang-btn.active{
+  background:var(--rb-primary) !important;
+  color:white !important;
+}
+
+/* =====================================
+🔥 MICRO INTERACTIONS (SaaS FEEL)
+===================================== */
+.card,
+.btn-main,
+.btn-outline{
+  will-change:transform;
 }
 
 /* =====================================
@@ -9958,12 +9920,17 @@ h1,h2,h3{
 
   .card{
     padding:20px;
+    border-radius:16px;
   }
 
   .btn-main,
   .btn-outline{
     padding:12px 20px;
     font-size:14px;
+  }
+
+  .section{
+    padding:70px 16px;
   }
 
 }
