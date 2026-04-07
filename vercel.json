@@ -11,14 +11,12 @@
     { "source": "/market/napoli", "destination": "/market/napoli/", "permanent": true },
     { "source": "/market/firenze", "destination": "/market/firenze/", "permanent": true },
 
+    { "source": "/immobili/roma", "destination": "/immobili/roma/", "permanent": true },
+    { "source": "/immobili/milano", "destination": "/immobili/milano/", "permanent": true },
+    { "source": "/immobili/napoli", "destination": "/immobili/napoli/", "permanent": true },
+    { "source": "/immobili/firenze", "destination": "/immobili/firenze/", "permanent": true },
+
     { "source": "/mutuo", "destination": "/mutui/", "permanent": true }
 
-  ],
-
-  "cron": [
-    {
-      "path": "/api/cron-funnel",
-      "schedule": "0 * * * *"
-    }
   ]
 }
