@@ -177,15 +177,34 @@ if (docSnap.exists()) {
       console.warn("⚠️ Documento NON trovato");
     }
 
-    // 🔥 SET GLOBALE
-   if(window.PLAN){
-  window.PLAN.set(plan, role);
+// ===============================
+// 🔥 SINGLE SOURCE OF TRUTH (FIX DEFINITIVO)
+// ===============================
+
+const clean = (v)=>String(v || "")
+  .replace(/"/g,"")
+  .trim()
+  .toLowerCase();
+
+// 👉 SET GLOBALE REALE
+window.currentPlan = clean(plan);
+window.userRole = clean(role);
+
+// 👉 COMPATIBILITÀ (se usi PLAN)
+if(window.PLAN && typeof window.PLAN.set === "function"){
+  window.PLAN.set(window.currentPlan, window.userRole);
 }
 
-console.log("🔥 Piano finale:", plan, "| ruolo:", role);
+console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole);
+
 
 // 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
+
+    // 🔥 SYNC IMMEDIATO HEADER/UI
+setTimeout(()=>{
+  document.dispatchEvent(new Event("rb_plan_loaded"));
+}, 50);
 
     // ===============================
     // 🔥 SBLOCCO UI
@@ -271,7 +290,9 @@ window.hasPlan = function(required){
 
     console.error("❌ ERRORE loadUserPlan:", err);
 
-    window.currentPlan = "free";
+    if(!window.currentPlan){
+  window.currentPlan = "free";
+}
 
   }
 
