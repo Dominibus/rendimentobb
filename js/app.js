@@ -383,7 +383,7 @@ ${t("Costo annuo","Yearly cost")}:
 </div>
 
 <div style="margin-top:12px;">
-<button onclick="selectMortgage(${r.rate})" class="btn btn-primary" style="width:100%;">
+<button onclick="selectMortgage(${r.rate})" class="btn-main" style="width:100%;">
 ${t("Simula con questo mutuo","Simulate with this mortgage")}
 </button>
 </div>
@@ -1130,7 +1130,7 @@ function renderSmartInvestmentAlert(roi){
     </p>
 
     <button id="smart-alert-btn"
-      class="btn btn-primary"
+      class="btn-main"
       style="margin:20px auto;display:block;">
       ${t(
         "💰 Scopri quanto puoi guadagnare (o perdere davvero)",
@@ -1245,7 +1245,7 @@ onclick="
     startPlanPurchase('pro');
   }
 "
-class="btn btn-primary"
+class="btn-main"
 style="
 margin:20px auto 10px auto;
 display:block;
