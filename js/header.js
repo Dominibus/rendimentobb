@@ -116,6 +116,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeaderInteractions();
   initUser();
 
+  window.addEventListener("rb_plan_ready", () => {
+  if(window.currentUser){
+    renderUser(window.currentUser);
+  }
+});
+
   // 🔥 APPLY LANG SUBITO
   if(window.setLang){
     window.setLang(localStorage.getItem("rb_lang") || "it");
