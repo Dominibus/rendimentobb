@@ -40,6 +40,18 @@ function buildEmail({ roi, city, score, lang }){
 
   const ctaLink = "https://rendimentobb.it/dashboard";
 
+  const urgency = t(
+    lang,
+    "⚠️ Questo risultato può essere fuorviante",
+    "⚠️ This result may be misleading"
+  );
+
+  const fomo = t(
+    lang,
+    "Le migliori opportunità vengono prese entro poche ore",
+    "Best opportunities get taken within hours"
+  );
+
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
 
@@ -52,49 +64,53 @@ function buildEmail({ roi, city, score, lang }){
 
       <!-- TITLE -->
       <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
-        ${t(lang,
-          "Analisi del tuo investimento",
-          "Your investment analysis")}
+        ${t(lang,"Analisi investimento completata","Investment analysis completed")}
       </h2>
 
-      <p style="text-align:center;color:#64748b;margin-bottom:25px">
-        ${t(lang,
-          "Ecco cosa abbiamo trovato",
-          "Here’s what we found")}
+      <!-- URGENCY -->
+      <p style="text-align:center;color:#dc2626;font-weight:600;margin-bottom:20px">
+        ${urgency}
       </p>
 
       <!-- ROI -->
       <div style="text-align:center;margin:30px 0">
-        <div style="font-size:56px;font-weight:800;color:#10b981">
+        <div style="font-size:60px;font-weight:900;color:#10b981">
           ${roi}%
         </div>
         <div style="color:#64748b">
-          ${t(lang,"ROI stimato","Estimated ROI")} – ${city}
+          ${t(lang,"ROI stimato","Estimated ROI")} – ${city || "-"}
         </div>
       </div>
 
-      <!-- WARNING -->
-      <div style="background:#fff7ed;padding:16px;border-radius:12px;color:#92400e;font-size:14px">
-        ⚠️ ${t(lang,
-          "Il ROI NON è il profitto reale. Mutuo, occupazione e costi possono ridurlo drasticamente.",
-          "ROI is NOT real profit. Mortgage, occupancy and costs can drastically reduce it.")}
+      <!-- CRITICAL WARNING -->
+      <div style="background:#fee2e2;padding:16px;border-radius:12px;color:#991b1b;font-size:14px;font-weight:600">
+        ${t(lang,
+          "Molti investimenti con ROI simile finiscono sotto il 5% reale.",
+          "Many investments with similar ROI end up below 5% real return."
+        )}
       </div>
 
       <!-- VALUE -->
       <div style="margin-top:20px;background:#f8fafc;padding:18px;border-radius:12px">
         <ul style="margin:0;padding-left:18px;color:#334155;font-size:14px;line-height:1.7">
-          <li>${t(lang,"Profitto reale mensile e annuale","Real monthly and yearly profit")}</li>
-          <li>${t(lang,"Break-even occupancy","Break-even occupancy")}</li>
-          <li>${t(lang,"Scenario rischio investimento","Investment risk scenario")}</li>
-          <li>${t(lang,"Impatto mutuo sul cashflow","Mortgage impact on cashflow")}</li>
+          <li>${t(lang,"Profitto reale mensile","Real monthly profit")}</li>
+          <li>${t(lang,"Break-even reale","Real break-even point")}</li>
+          <li>${t(lang,"Scenario rischio","Risk scenario")}</li>
+          <li>${t(lang,"Impatto mutuo","Mortgage impact")}</li>
         </ul>
       </div>
 
       <!-- PSYCHO -->
       <div style="margin-top:25px;font-size:14px;color:#334155">
         🔍 ${t(lang,
-          `Il livello ${score} che hai visto è solo una stima. Senza analisi completa potresti prendere una decisione sbagliata.`,
-          `The ${score} level you saw is only an estimate. Without full analysis you could make a wrong decision.`)}
+          `Il livello ${score} è solo una stima. Senza analisi completa stai rischiando soldi reali.`,
+          `The ${score} level is only an estimate. Without full analysis you are risking real money.`
+        )}
+      </div>
+
+      <!-- FOMO -->
+      <div style="margin-top:15px;font-size:13px;color:#dc2626;text-align:center;font-weight:600">
+        ${fomo}
       </div>
 
       <!-- CTA -->
@@ -104,12 +120,13 @@ function buildEmail({ roi, city, score, lang }){
         style="
         background:linear-gradient(135deg,#10b981,#059669);
         color:white;
-        padding:16px 28px;
+        padding:18px 32px;
         border-radius:999px;
         text-decoration:none;
-        font-weight:700;
+        font-weight:800;
         display:inline-block;
         box-shadow:0 10px 30px rgba(16,185,129,0.4);
+        font-size:16px;
         ">
         🔥 ${t(lang,"Sblocca analisi completa","Unlock full analysis")}
         </a>
@@ -117,7 +134,8 @@ function buildEmail({ roi, city, score, lang }){
         <p style="font-size:12px;color:#94a3b8;margin-top:10px">
           ${t(lang,
             "Analisi avanzata in meno di 30 secondi",
-            "Advanced analysis in under 30 seconds")}
+            "Advanced analysis in under 30 seconds"
+          )}
         </p>
 
       </div>
@@ -125,8 +143,9 @@ function buildEmail({ roi, city, score, lang }){
       <!-- FOOTER -->
       <p style="text-align:center;font-size:12px;color:#94a3b8">
         RendimentoBB – ${t(lang,
-          "motore decisionale investimenti B&B",
-          "decision engine for B&B investments")}
+          "motore decisionale per investimenti B&B",
+          "decision engine for B&B investments"
+        )}
       </p>
 
     </div>
@@ -164,8 +183,8 @@ export default async function handler(req, res){
       t(lang,"RISCHIOSO","RISKY");
 
     const subjects = {
-      it: `💰 Il tuo investimento può rendere ${roiRounded}% (attenzione)` ,
-      en: `💰 Your investment could return ${roiRounded}% (important)`
+      it: `⚠️ ${roiRounded}% può essere fuorviante`,
+      en: `⚠️ ${roiRounded}% may be misleading`
     };
 
     const html = buildEmail({
