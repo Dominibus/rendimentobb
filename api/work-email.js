@@ -50,7 +50,7 @@ function buildWorkEmail({ name, role, lang }){
         ${t("👋 Candidatura ricevuta","👋 Application received")}
       </h2>
 
-      <!-- TEXT -->
+      <!-- INTRO -->
       <p style="text-align:center;color:#64748b;margin-top:10px">
         ${t(
           `Grazie ${name || ""}, abbiamo ricevuto la tua candidatura.`,
@@ -69,17 +69,33 @@ function buildWorkEmail({ name, role, lang }){
       <!-- MESSAGE -->
       <p style="color:#334155;font-size:14px;line-height:1.6">
         ${t(
-          "Il nostro team analizzerà il tuo profilo e, se in linea con la nostra visione, verrai ricontattato.",
-          "Our team will review your profile and, if aligned with our vision, you will be contacted."
+          "Stiamo selezionando persone ambiziose per costruire una piattaforma SaaS che sta cambiando il modo in cui si analizzano gli investimenti B&B.",
+          "We are selecting ambitious people to build a SaaS platform changing how B&B investments are analyzed."
         )}
       </p>
 
       <p style="color:#334155;font-size:14px;line-height:1.6;margin-top:15px">
         ${t(
-          "In RendimentoBB stiamo costruendo una piattaforma SaaS per aiutare le persone a prendere decisioni migliori negli investimenti B&B.",
-          "At RendimentoBB we are building a SaaS platform to help people make better decisions in B&B investments."
+          "Il nostro team analizzerà il tuo profilo. Se sarà in linea con la nostra visione, verrai contattato direttamente.",
+          "Our team will review your profile. If aligned with our vision, you will be contacted directly."
         )}
       </p>
+
+      <!-- EXTRA TRUST -->
+      <div style="margin-top:20px;font-size:13px;color:#64748b">
+        ${t(
+          "Riceviamo molte candidature, quindi contattiamo solo i profili più in linea.",
+          "We receive many applications, so we contact only the most relevant profiles."
+        )}
+      </div>
+
+      <!-- CTA SOFT -->
+      <div style="text-align:center;margin-top:30px">
+        <a href="https://rendimentobb.it"
+        style="background:#10b981;color:white;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:600">
+        ${t("Scopri la piattaforma","Explore the platform")}
+        </a>
+      </div>
 
       <!-- FOOTER -->
       <div style="text-align:center;margin-top:35px;color:#94a3b8;font-size:12px">
@@ -118,8 +134,8 @@ export default async function handler(req, res){
         from: "RendimentoBB Careers <careers@rendimentobb.it>",
         to: [email],
         subject: detectedLang === "en"
-          ? "We received your application"
-          : "Abbiamo ricevuto la tua candidatura",
+          ? "Your application has been received"
+          : "La tua candidatura è stata ricevuta",
         html: buildWorkEmail({
           name,
           role,
@@ -135,14 +151,12 @@ export default async function handler(req, res){
       await resend.emails.send({
         from: "RendimentoBB Careers <careers@rendimentobb.it>",
         to: ["rendimentobb@gmail.com"],
-        subject: detectedLang === "en"
-          ? "📥 New application received"
-          : "📥 Nuova candidatura ricevuta",
+        subject: "💼 Nuova candidatura ricevuta",
         html: `
-          <h2>${detectedLang === "en" ? "New application" : "Nuova candidatura"}</h2>
-          <p><strong>Name:</strong> ${name}</p>
+          <h2>Nuova candidatura</h2>
+          <p><strong>Nome:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Role:</strong> ${role}</p>
+          <p><strong>Ruolo:</strong> ${role}</p>
         `
       });
     }catch(e){
