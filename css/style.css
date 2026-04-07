@@ -9634,10 +9634,9 @@ display:none;
   color:#94a3b8 !important;
 }
 
-/* NON toccare bottoni */
-.immobili-page .btn,
-.immobili-page .btn *{
-  color:#ffffff !important;
+/* FIX SOLO BOTTONI HERO (NON GLOBALI) */
+.hero .btn{
+  color:white !important;
 }
 
 /* =====================================
