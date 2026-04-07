@@ -206,7 +206,12 @@ function initUser(){
 
           tries++;
 
-          if(window.currentPlan || tries > 20){
+          if(
+              window.currentPlan === "pro" ||
+              window.currentPlan === "investor" ||
+              window.currentPlan === "pro_yearly" ||
+              tries > 20
+            ){
             clearInterval(waitPlan);
             renderUser(user);
           }
@@ -238,9 +243,11 @@ function renderUser(user){
   const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
   const isAdmin = ADMIN_EMAILS.includes(user?.email);
 
-  const plan = window.currentPlan || "";
+const plan = window.currentPlan || "";
 
+// 🔥 ADMIN OVERRIDE
 const isPro =
+  isAdmin ||
   plan === "pro" ||
   plan === "investor" ||
   plan === "pro_yearly";
@@ -255,7 +262,7 @@ const isPro =
 
     html += `<span class="rb-email">${email}</span>`;
 
-    if(isPro || isAdmin){
+    if(isPro){
       html += `<a href="/dashboard/" class="rb-btn"
       data-it="Dashboard"
       data-en="Dashboard">Dashboard</a>`;
@@ -283,7 +290,7 @@ const isPro =
         <div class="rb-email">${email}</div>
       `;
 
-      if(isPro || isAdmin){
+      if(isPro){
         mobileHTML += `<a href="/dashboard/" class="rb-btn"
         data-it="Dashboard"
         data-en="Dashboard">Dashboard</a>`;
