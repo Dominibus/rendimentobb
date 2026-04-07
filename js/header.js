@@ -197,13 +197,22 @@ function initUser(){
 
     try{
       onAuthStateChanged(auth, (user)=>{
-        renderUser(user);
-      });
-    }catch(e){
-      renderUser(null);
+
+  // aspetta che il piano sia pronto
+  let tries = 0;
+
+  const waitPlan = setInterval(()=>{
+
+    tries++;
+
+    if(window.currentPlan || tries > 20){
+      clearInterval(waitPlan);
+      renderUser(user);
     }
 
   },100);
+
+});
 
 }
 
@@ -222,10 +231,12 @@ function renderUser(user){
   const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
   const isAdmin = ADMIN_EMAILS.includes(user?.email);
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+  const plan = window.currentPlan || "";
+
+const isPro =
+  plan === "pro" ||
+  plan === "investor" ||
+  plan === "pro_yearly";
 
   const lang = localStorage.getItem("rb_lang") || "it";
 
