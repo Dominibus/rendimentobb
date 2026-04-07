@@ -1,5 +1,5 @@
 // ===============================
-// LEADS ENGINE – RENDIMENTOBB PRO
+// LEADS ENGINE – RENDIMENTOBB PRO (FINAL)
 // ===============================
 
 import { db } from "/js/firebase-init.js";
@@ -11,12 +11,28 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // ===============================
+// HELPER – VALIDAZIONE EMAIL
+// ===============================
+function isValidEmail(email){
+  return typeof email === "string" && email.includes("@");
+}
+
+// ===============================
+// HELPER – SAFE NUMBER
+// ===============================
+function safeNumber(v){
+  const n = Number(v);
+  return isNaN(n) ? 0 : n;
+}
+
+// ===============================
 // HELPER – INVIO AUTOMATICO API
 // ===============================
-
 async function sendLead(type, data){
 
   try{
+
+    console.log("📡 SEND LEAD →", type, data);
 
     const response = await fetch("/api/send-lead",{
       method:"POST",
@@ -24,36 +40,51 @@ async function sendLead(type, data){
       body: JSON.stringify({
         type,
         ...data,
-        plan: window.currentPlan || "free" // 🔥 SUPER IMPORTANT
+        plan: window.currentPlan || "free",
+        lang: window.currentLang || "it",
+        ts: Date.now()
       })
     });
 
     if(!response.ok){
       const text = await response.text();
       console.error("❌ API Lead error:", text);
-      return;
+      return false;
     }
 
-    console.log("📤 Lead inviato API:", type);
+    const result = await response.json();
+
+    console.log("📤 Lead inviato API:", type, result);
+
+    return true;
 
   }catch(err){
     console.error("❌ Errore invio lead:", err);
+    return false;
   }
 
 }
 
 // ===============================
-// VALIDAZIONE BASE
+// BASE TRACK DATA
 // ===============================
+function buildBaseLead(source, value){
 
-function isValidEmail(email){
-  return typeof email === "string" && email.includes("@");
+  return {
+    createdAt: serverTimestamp(),
+    status: "new",
+    source,
+    value,
+    plan: window.currentPlan || "free",
+    lang: window.currentLang || "it",
+    sessionId: window.sessionId || (window.sessionId = Date.now())
+  };
+
 }
 
 // ===============================
 // MUTUI LEAD
 // ===============================
-
 export async function saveLeadMutui(data){
 
   try{
@@ -66,19 +97,16 @@ export async function saveLeadMutui(data){
     const leadData = {
       email: data.email,
       phone: data.phone || null,
-      amount: Number(data.amount || 0),
-      years: Number(data.years || 0),
-      createdAt: serverTimestamp(),
-      status: "new",
-      source: "mutui",
-      value: 30
+      amount: safeNumber(data.amount),
+      years: safeNumber(data.years),
+      ...buildBaseLead("mutui", 30)
     };
 
     await addDoc(collection(db,"leads_mutui"), leadData);
 
-    await sendLead("mutui", leadData);
+    const sent = await sendLead("mutui", leadData);
 
-    console.log("✅ Lead MUTUI salvato");
+    console.log("✅ Lead MUTUI salvato", { sent });
 
   }catch(err){
     console.error("❌ Errore lead mutui:", err);
@@ -89,7 +117,6 @@ export async function saveLeadMutui(data){
 // ===============================
 // IMMOBILI LEAD
 // ===============================
-
 export async function saveLeadImmobili(data){
 
   try{
@@ -102,18 +129,15 @@ export async function saveLeadImmobili(data){
     const leadData = {
       email: data.email,
       city: data.city || window.currentCity || null,
-      budget: Number(data.budget || 0),
-      createdAt: serverTimestamp(),
-      status: "new",
-      source: "immobili",
-      value: 50
+      budget: safeNumber(data.budget),
+      ...buildBaseLead("immobili", 50)
     };
 
     await addDoc(collection(db,"leads_immobili"), leadData);
 
-    await sendLead("immobili", leadData);
+    const sent = await sendLead("immobili", leadData);
 
-    console.log("✅ Lead IMMOBILI salvato");
+    console.log("✅ Lead IMMOBILI salvato", { sent });
 
   }catch(err){
     console.error("❌ Errore lead immobili:", err);
@@ -122,9 +146,8 @@ export async function saveLeadImmobili(data){
 }
 
 // ===============================
-// PARTNER LEAD
+// PARTNER LEAD (🔥 HIGH VALUE)
 // ===============================
-
 export async function savePartnerLead(data){
 
   try{
@@ -138,17 +161,15 @@ export async function savePartnerLead(data){
       name: data.name || "",
       email: data.email,
       message: data.message || "",
-      createdAt: serverTimestamp(),
-      status: "new",
-      source: "partner",
-      value: 100
+      priority: "HIGH",
+      ...buildBaseLead("partner", 100)
     };
 
     await addDoc(collection(db,"leads_partner"), leadData);
 
-    await sendLead("partner", leadData);
+    const sent = await sendLead("partner", leadData);
 
-    console.log("✅ Lead PARTNER salvato");
+    console.log("✅ Lead PARTNER salvato", { sent });
 
   }catch(err){
     console.error("❌ Errore lead partner:", err);
@@ -157,9 +178,8 @@ export async function savePartnerLead(data){
 }
 
 // ===============================
-// WORK LEAD
+// WORK LEAD (💼 TALENT)
 // ===============================
-
 export async function saveWorkLead(data){
 
   try{
@@ -173,17 +193,15 @@ export async function saveWorkLead(data){
       name: data.name || "",
       email: data.email,
       role: data.role || "",
-      createdAt: serverTimestamp(),
-      status: "new",
-      source: "work",
-      value: 10
+      priority: "NORMAL",
+      ...buildBaseLead("work", 10)
     };
 
     await addDoc(collection(db,"leads_work"), leadData);
 
-    await sendLead("work", leadData);
+    const sent = await sendLead("work", leadData);
 
-    console.log("✅ Lead WORK salvato");
+    console.log("✅ Lead WORK salvato", { sent });
 
   }catch(err){
     console.error("❌ Errore lead work:", err);
