@@ -214,8 +214,6 @@ function initUser(){
 
 });
 
-}
-
 
 /* ===================== */
 /* RENDER USER */
