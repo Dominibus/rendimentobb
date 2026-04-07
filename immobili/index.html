@@ -620,14 +620,15 @@ style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:180px"
 
 <div style="margin-bottom:10px;font-size:13px;color:#059669;font-weight:600">
 
-<span data-it="🔥 Accesso immediato alle migliori opportunità"
-      data-en="🔥 Instant access to the best opportunities">
-🔥 Accesso immediato alle migliori opportunità
+<span 
+data-it="🔥 Accesso immediato • Nessuna registrazione • ROI già pronto"
+data-en="🔥 Instant access • No signup • ROI ready">
+🔥 Accesso immediato • Nessuna registrazione • ROI già pronto
 </span>
 
-</div>      
+</div>   
 
-<button onclick="sendLeadImmobili()" class="btn btn-primary">
+<button onclick="window.userClickedLead = true; sendLeadImmobili()" class="btn btn-primary">
 
 <span data-it="Ricevi opportunità" data-en="Get opportunities">
 Ricevi opportunità
@@ -1160,13 +1161,19 @@ window.location.href="/tool/";
 
 window.sendLeadImmobili = async function(){
 
+if(!window.userClickedLead){
+  console.warn("⛔ Bloccato invio automatico");
+  return;
+}  
+
 const email = document.getElementById("lead-email").value;
 const city = document.getElementById("lead-city").value;
 
-if(!email){
-alert("Inserisci email");
-return;
-}
+alert(
+window.currentLang==="en"
+? "Enter your email"
+: "Inserisci email"
+);
 
 try{
 
