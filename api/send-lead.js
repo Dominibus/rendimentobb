@@ -95,8 +95,8 @@ function buildEmail({ roi, city, type, lang }){
 
       <div style="background:#fff7ed;padding:16px;border-radius:12px;color:#92400e">
         ⚠️ ${t(
-          "Il ROI NON è il profitto reale. Mutuo, occupazione e costi possono ridurlo drasticamente.",
-          "ROI is NOT real profit. Mortgage, occupancy and costs can drastically reduce it."
+          "Il ROI NON è il profitto reale.",
+          "ROI is NOT real profit."
         )}
       </div>
 
@@ -117,7 +117,7 @@ function buildEmail({ roi, city, type, lang }){
       </div>
 
       <div style="text-align:center;color:#94a3b8;font-size:13px">
-        RendimentoBB – ${t("Motore decisionale per investimenti B&B","Decision engine for B&B investments")}
+        RendimentoBB – ${t("Motore decisionale","Decision engine")}
       </div>
 
     </div>
@@ -183,22 +183,32 @@ export default async function handler(req, res){
       }
     }
 
-    // ================= SUBJECT (🔥 MIGLIORATO) =================
+    // ================= SUBJECT (ANTI-SPAM) =================
     const subject =
-      type === "mutui"
-        ? (detectedLang === "en"
-            ? "⚠️ Your mortgage may be costing you more than you think"
-            : "⚠️ Il tuo mutuo potrebbe costarti più di quanto pensi")
-        : (detectedLang === "en"
-            ? `💰 You may be overestimating this ${roiRounded}% ROI`
-            : `💰 Attenzione: questo ${roiRounded}% potrebbe ingannarti`);
+      detectedLang === "en"
+        ? `Investment analysis (${roiRounded}%)`
+        : `Analisi investimento (${roiRounded}%)`;
 
     // ================= EMAIL USER =================
     try{
       await resend.emails.send({
-        from: "RendimentoBB <analisi@rendimentobb.it>",
+        from: "RendimentoBB Analisi <analisi@rendimentobb.it>",
         to: [email],
         subject,
+
+        // ✅ TEXT VERSION (ANTI-SPAM)
+        text: `
+Analisi investimento
+
+ROI: ${roiRounded}%
+Città: ${city}
+
+Il ROI non è il profitto reale.
+
+Vai qui:
+https://rendimentobb.it/dashboard
+`,
+
         html: buildEmail({
           roi: roiRounded,
           city,
@@ -213,9 +223,18 @@ export default async function handler(req, res){
     // ================= ADMIN =================
     try{
       await resend.emails.send({
-        from: "RendimentoBB <lead@rendimentobb.it>",
+        from: "RendimentoBB Lead <lead@rendimentobb.it>",
         to: ["rendimentobb@gmail.com"],
-        subject: `🔥 ${priority} Lead – €${value} (${type})`,
+        subject: `Lead ${priority} – €${value}`,
+        text: `
+Nuovo lead
+
+Email: ${email}
+ROI: ${roiRounded}%
+City: ${city}
+Type: ${type}
+Plan: ${plan || "free"}
+`,
         html: `
           <h2>Nuovo Lead</h2>
           <p><strong>Email:</strong> ${email}</p>
