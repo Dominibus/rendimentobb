@@ -9600,3 +9600,42 @@ display:none;
 }
 
 }
+
+/* ===================== */
+/* 🔥 FIX TESTI SOLO IMMOBILI */
+/* ===================== */
+
+.immobili-page section:not(.hero),
+.immobili-page .section-info,
+.immobili-page .form-grid,
+.immobili-page .property-grid,
+.immobili-page #property-search-results{
+  color:#0f172a !important;
+}
+
+.immobili-page section:not(.hero) *{
+  color:#0f172a !important;
+  text-shadow:none !important;
+}
+
+/* LABEL FORM */
+.immobili-page .input-group label{
+  color:#334155 !important;
+  text-shadow:none !important;
+}
+
+/* INPUT */
+.immobili-page input{
+  color:#0f172a !important;
+}
+
+/* PLACEHOLDER */
+.immobili-page input::placeholder{
+  color:#94a3b8 !important;
+}
+
+/* NON toccare bottoni */
+.immobili-page .btn,
+.immobili-page .btn *{
+  color:#ffffff !important;
+}
