@@ -21,46 +21,81 @@ function t(lang, it, en){
   return lang === "en" ? en : it;
 }
 
-function buildFunnelEmail({ roi, city, type, lang, stepType }){
+// ================= TEMPLATE =================
+function buildFunnelEmail({ roi, city, lang, stepType }){
+
+  const hasROI = roi > 0;
 
   let title = "";
   let subtitle = "";
   let warning = "";
-  let cta = t(lang,"Sblocca analisi completa","Unlock full analysis");
+  let urgency = "";
 
   if(stepType === "reminder_1"){
+
     title = t(lang,
       "Stai sottovalutando il rischio",
       "You may be underestimating risk"
     );
 
     subtitle = t(lang,
-      "Molti investitori pensano di avere ROI alto… ma non è così",
-      "Many investors think they have high ROI… but they don’t"
+      "Molti investimenti sembrano profittevoli… ma non lo sono",
+      "Many investments look profitable… but they are not"
     );
 
     warning = t(lang,
-      "Il 72% degli investimenti B&B performa sotto il 5% reale.",
-      "72% of B&B investments perform below 5% real ROI."
+      "Il 72% degli investimenti B&B scende sotto il 5% reale.",
+      "72% of B&B investments drop below 5% real return."
     );
+
+    urgency = t(lang,
+      "⚡ I dati reali cambiano completamente il risultato",
+      "⚡ Real data completely changes the outcome"
+    );
+
   }
 
   if(stepType === "reminder_2"){
+
     title = t(lang,
-      "Ultima occasione per evitare un errore",
-      "Last chance to avoid a costly mistake"
+      "Stai per fare un errore costoso",
+      "You are about to make a costly mistake"
     );
 
     subtitle = t(lang,
-      "Stai per prendere una decisione senza dati reali",
-      "You are about to make a decision without real data"
+      "Questa è l’ultima verifica prima di investire",
+      "This is your last check before investing"
     );
 
     warning = t(lang,
       "Un errore qui può costarti migliaia di euro ogni anno.",
       "A mistake here could cost you thousands every year."
     );
+
+    urgency = t(lang,
+      "⏳ Le migliori opportunità vengono prese entro poche ore",
+      "⏳ Best opportunities get taken within hours"
+    );
+
   }
+
+  const roiBlock = hasROI
+    ? `
+      <div style="text-align:center;margin:30px 0">
+        <div style="font-size:56px;font-weight:900;color:#10b981">
+          ${roi}%
+        </div>
+        <div style="color:#64748b">${city || "-"}</div>
+      </div>
+    `
+    : `
+      <div style="text-align:center;margin:30px 0;color:#64748b">
+        ${t(lang,
+          "Analisi disponibile (calcola ROI per precisione)",
+          "Analysis available (run ROI for accuracy)"
+        )}
+      </div>
+    `;
 
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
@@ -77,17 +112,16 @@ function buildFunnelEmail({ roi, city, type, lang, stepType }){
         ${title}
       </h2>
 
-      <p style="text-align:center;color:#64748b;margin-bottom:25px">
+      <p style="text-align:center;color:#64748b;margin-bottom:20px">
         ${subtitle}
       </p>
 
-      <!-- ROI -->
-      <div style="text-align:center;margin:30px 0">
-        <div style="font-size:52px;font-weight:800;color:#10b981">
-          ${roi}%
-        </div>
-        <div style="color:#64748b">${city}</div>
-      </div>
+      <!-- URGENCY -->
+      <p style="text-align:center;color:#dc2626;font-weight:600">
+        ${urgency}
+      </p>
+
+      ${roiBlock}
 
       <!-- WARNING -->
       <div style="background:#fee2e2;padding:16px;border-radius:12px;color:#991b1b;font-weight:600">
@@ -98,7 +132,7 @@ function buildFunnelEmail({ roi, city, type, lang, stepType }){
       <div style="margin-top:25px;background:#f8fafc;padding:18px;border-radius:12px">
         <ul style="padding-left:18px;margin:0;color:#334155">
           <li>${t(lang,"Profitto reale mensile","Real monthly profit")}</li>
-          <li>${t(lang,"Break-even occupancy","Break-even occupancy")}</li>
+          <li>${t(lang,"Break-even reale","Real break-even")}</li>
           <li>${t(lang,"Scenario rischio","Risk scenario")}</li>
           <li>${t(lang,"Impatto mutuo","Mortgage impact")}</li>
         </ul>
@@ -107,8 +141,8 @@ function buildFunnelEmail({ roi, city, type, lang, stepType }){
       <!-- CTA -->
       <div style="text-align:center;margin:35px 0">
         <a href="https://rendimentobb.it/dashboard"
-        style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:700">
-        🔥 ${cta}
+        style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:800">
+        🔥 ${t(lang,"Sblocca analisi completa","Unlock full analysis")}
         </a>
       </div>
 
@@ -116,7 +150,8 @@ function buildFunnelEmail({ roi, city, type, lang, stepType }){
       <div style="text-align:center;color:#94a3b8;font-size:13px">
         RendimentoBB – ${t(lang,
           "Motore decisionale per investimenti B&B",
-          "Decision engine for B&B investments")}
+          "Decision engine for B&B investments"
+        )}
       </div>
 
     </div>
@@ -131,7 +166,6 @@ export default async function handler(req, res){
   try{
 
     const now = Date.now();
-
     const snapshot = await db.collection("email_funnel").get();
 
     for(const doc of snapshot.docs){
@@ -143,46 +177,40 @@ export default async function handler(req, res){
       const email = data.email;
       const roi   = data.roi;
       const city  = data.city;
-      const type  = data.type || "tool";
       const lang  = data.lang || "it";
 
       const steps = data.steps || [];
-      const sentSteps = data.sentSteps || [];
+      let sentSteps = data.sentSteps || [];
 
       for(let i=0; i<steps.length; i++){
 
         const step = steps[i];
 
-        // skip già inviati
         if(sentSteps.includes(i)) continue;
-
-        // skip instant
         if(step.type === "instant") continue;
 
         const shouldSend = now >= (createdAt + step.delay);
-
         if(!shouldSend) continue;
 
         let subject = "";
 
         if(step.type === "reminder_1"){
           subject = t(lang,
-            "⏳ Hai davvero analizzato questo investimento?",
-            "⏳ Did you really analyze this investment?"
+            "⚠️ Il tuo ROI potrebbe essere sbagliato",
+            "⚠️ Your ROI might be wrong"
           );
         }
 
         if(step.type === "reminder_2"){
           subject = t(lang,
-            "⚠️ Ultima occasione prima di sbagliare investimento",
-            "⚠️ Last chance before making a bad investment"
+            "⏳ Ultimo controllo prima di investire",
+            "⏳ Final check before investing"
           );
         }
 
         const html = buildFunnelEmail({
           roi,
           city,
-          type,
           lang,
           stepType: step.type
         });
@@ -198,8 +226,11 @@ export default async function handler(req, res){
 
           console.log("📩 FUNNEL SENT:", email, step.type);
 
+          // 🔥 FIX CRITICO
+          sentSteps.push(i);
+
           await db.collection("email_funnel").doc(doc.id).update({
-            sentSteps: [...sentSteps, i]
+            sentSteps
           });
 
         }catch(e){
