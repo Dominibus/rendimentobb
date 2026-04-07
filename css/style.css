@@ -9743,7 +9743,115 @@ body.rb-ui{
 }
 
 /* =====================================
-⬜ BUTTON OUTLINE (STRIPE)
+🔥 UI SYSTEM – RENDIMENTOBB PRO FINAL
+===================================== */
+
+body.rb-ui{
+  background:#f8fafc;
+  color:#0f172a;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* =====================================
+📦 CARD
+===================================== */
+.card{
+  background:white;
+  border-radius:20px;
+  padding:28px;
+
+  border:1px solid rgba(226,232,240,0.7);
+
+  box-shadow:
+  0 10px 30px rgba(2,6,23,0.05),
+  0 2px 6px rgba(2,6,23,0.04);
+
+  transition:all .25s ease;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:
+  0 20px 60px rgba(2,6,23,0.08);
+}
+
+/* =====================================
+🔘 BUTTON BASE (ANTI BUG)
+===================================== */
+.btn,
+.btn-main,
+.btn-outline{
+  appearance:none;
+  -webkit-appearance:none;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+
+  text-decoration:none;
+  cursor:pointer;
+  border:none;
+  font-family:inherit;
+
+  transition:all .2s ease;
+}
+
+/* =====================================
+🔥 BUTTON MAIN (PRIMARY)
+===================================== */
+.btn-main{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+
+  padding:14px 26px;
+  border-radius:999px;
+
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:-0.2px;
+
+  box-shadow:
+  0 6px 18px rgba(16,185,129,0.25),
+  inset 0 -2px 0 rgba(0,0,0,0.08);
+
+  position:relative;
+  overflow:hidden;
+}
+
+/* hover */
+.btn-main:hover{
+  transform:translateY(-1px);
+  box-shadow:
+  0 10px 28px rgba(16,185,129,0.35),
+  inset 0 -2px 0 rgba(0,0,0,0.1);
+}
+
+/* click */
+.btn-main:active{
+  transform:translateY(1px);
+  box-shadow:
+  0 4px 12px rgba(16,185,129,0.2);
+}
+
+/* shine effect */
+.btn-main::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.4),transparent);
+  transition:.5s;
+}
+
+.btn-main:hover::after{
+  left:100%;
+}
+
+/* =====================================
+⬜ BUTTON OUTLINE (SECONDARY FIXED)
 ===================================== */
 .btn-outline{
   background:white;
@@ -9754,15 +9862,40 @@ body.rb-ui{
   border-radius:999px;
 
   font-weight:600;
+
+  box-shadow:0 2px 6px rgba(0,0,0,0.04);
+
+  transform:none;
 }
 
+/* hover coerente */
 .btn-outline:hover{
   background:#f8fafc;
-  border-color:#cbd5f5;
+  border-color:#cbd5e1;
+  color:#0f172a;
+
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.06);
+}
+
+/* click */
+.btn-outline:active{
+  transform:translateY(1px);
+  box-shadow:0 2px 6px rgba(0,0,0,0.04);
 }
 
 /* =====================================
-🧠 HERO FIX (ANTI BUG GRID)
+🚫 PROTEZIONE ANTI MIX CLASSI
+===================================== */
+.btn-outline.btn-main{
+  background:white !important;
+  color:#0f172a !important;
+  border:1px solid #e2e8f0 !important;
+  box-shadow:none !important;
+}
+
+/* =====================================
+🧠 HERO FIX (NO BUG GRID)
 ===================================== */
 .hero-grid{
   display:flex !important;
@@ -9791,7 +9924,6 @@ input{
   padding:14px;
 
   font-size:14px;
-
   background:white;
 
   transition:all .2s ease;
@@ -9869,7 +10001,8 @@ h1,h2,h3{
     border-radius:16px;
   }
 
-  .btn-main{
+  .btn-main,
+  .btn-outline{
     padding:12px 20px;
     font-size:14px;
   }
