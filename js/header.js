@@ -246,34 +246,27 @@ function renderUser(user){
 
   if(!el) return;
 
+  const lang = localStorage.getItem("rb_lang") || "it";
+
+  // 🔥 SICUREZZA: fallback admin
   const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
+
   const isAdmin =
-  ADMIN_EMAILS.includes(user?.email) ||
-  window.userRole === "admin";
+    (window.isAdmin && window.isAdmin()) ||
+    ADMIN_EMAILS.includes(user?.email);
+
+  const isPro =
+    (window.isPro && window.isPro()) ||
+    isAdmin;
 
   console.log("HEADER DEBUG →", {
-  email: user?.email,
-  plan: window.currentPlan,
-  userPlan: window.userPlan,
-  role: window.userRole,
-  isAdmin,
-  isPro
-});
-
-const plan =
-  window.currentPlan ||
-  window.userPlan ||
-  window.plan ||
-  "";
-
-// 🔥 ADMIN OVERRIDE
-const isPro =
-  isAdmin ||
-  plan === "pro" ||
-  plan === "investor" ||
-  plan === "pro_yearly";
-
-  const lang = localStorage.getItem("rb_lang") || "it";
+    email: user?.email,
+    plan: window.currentPlan,
+    userPlan: window.userPlan,
+    role: window.userRole,
+    isAdmin,
+    isPro
+  });
 
   if(user){
 
@@ -283,18 +276,21 @@ const isPro =
 
     html += `<span class="rb-email">${email}</span>`;
 
+    // 🔥 DASHBOARD
     if(isPro){
       html += `<a href="/dashboard/" class="rb-btn"
       data-it="Dashboard"
       data-en="Dashboard">Dashboard</a>`;
     }
 
+    // 🔥 ADMIN AREA
     if(isAdmin){
       html += `<a href="/dashboard-leads/" class="rb-btn"
       data-it="Leads"
       data-en="Leads">Leads</a>`;
     }
 
+    // 🔥 LOGOUT
     html += `<button id="logout" class="rb-btn red"
     data-it="Logout"
     data-en="Logout">Logout</button>`;
@@ -303,7 +299,10 @@ const isPro =
 
     el.innerHTML = html;
 
+    // =====================
     // MOBILE
+    // =====================
+
     if(mobileEl){
 
       let mobileHTML = `
@@ -330,6 +329,10 @@ const isPro =
       mobileEl.innerHTML = mobileHTML;
     }
 
+    // =====================
+    // LOGOUT EVENT
+    // =====================
+
     document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
       btn.onclick = async ()=>{
         await signOut(auth);
@@ -347,7 +350,10 @@ const isPro =
 
   }
 
-  // 🔥 RIAPPLICA TRADUZIONE DOPO RENDER DINAMICO
+  // =====================
+  // 🔥 RE-APPLY LANGUAGE
+  // =====================
+
   if(window.setLang){
     window.setLang(lang);
   }
