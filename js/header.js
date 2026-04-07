@@ -279,11 +279,6 @@ function renderUser(user){
 
   const lang = localStorage.getItem("rb_lang") || "it";
 
-  // 🔥 FORZA RE-RENDER SICURO
-setTimeout(()=>{
-  renderUser(window.currentUser);
-}, 150);
-
   // ===============================
   // 🔥 NORMALIZZAZIONE DATI (CRITICA)
   // ===============================
