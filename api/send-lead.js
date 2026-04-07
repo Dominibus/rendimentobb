@@ -31,7 +31,6 @@ function clean(v){
   return String(v || "").trim();
 }
 
-// ================= LANGUAGE =================
 function isEN(req){
   return req.headers["accept-language"]?.includes("en");
 }
@@ -70,13 +69,11 @@ function buildEmail({ roi, city, type, lang }){
 
     <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;padding:40px">
 
-      <!-- LOGO -->
       <div style="text-align:center;margin-bottom:25px">
         <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
       </div>
 
-      <!-- TITLE -->
-      <h2 style="text-align:center;margin-bottom:10px;color:#0f172a">
+      <h2 style="text-align:center;color:#0f172a">
         ${title}
       </h2>
 
@@ -84,20 +81,17 @@ function buildEmail({ roi, city, type, lang }){
         ${subtitle}
       </p>
 
-      <!-- ROI -->
       <div style="text-align:center;margin:30px 0">
         <div style="font-size:56px;font-weight:800;color:#10b981">
           ${roi}%
         </div>
-        <div style="color:#64748b">${city}</div>
+        <div style="color:#64748b">${city || "-"}</div>
       </div>
 
-      <!-- WARNING -->
-      <div style="background:#fff7ed;padding:16px;border-radius:12px;color:#92400e;font-weight:500">
+      <div style="background:#fff7ed;padding:16px;border-radius:12px;color:#92400e">
         ⚠️ ${warning}
       </div>
 
-      <!-- VALUE BLOCK -->
       <div style="margin-top:25px;background:#f8fafc;padding:18px;border-radius:12px">
         <ul style="padding-left:18px;margin:0;color:#334155">
           <li>${t("Profitto reale mensile e annuale","Real monthly and yearly profit")}</li>
@@ -107,15 +101,13 @@ function buildEmail({ roi, city, type, lang }){
         </ul>
       </div>
 
-      <!-- CTA -->
       <div style="text-align:center;margin:35px 0">
         <a href="https://rendimentobb.it/dashboard"
-        style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block">
+        style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:700">
         🔥 ${cta}
         </a>
       </div>
 
-      <!-- FOOTER -->
       <div style="text-align:center;color:#94a3b8;font-size:13px">
         RendimentoBB – ${t("Motore decisionale per investimenti B&B","Decision engine for B&B investments")}
       </div>
@@ -134,17 +126,18 @@ export default async function handler(req, res){
 
   try{
 
-    let { email, city, roi, type } = req.body || {};
+    let { email, city, roi, type, plan, lang } = req.body || {};
 
     email = clean(email);
     city  = clean(city);
     roi   = safe(roi);
+    type  = clean(type || "simulatore");
 
     if(!email){
       return res.status(400).json({ error:"Email richiesta" });
     }
 
-    const lang = isEN(req) ? "en" : "it";
+    const detectedLang = lang || (isEN(req) ? "en" : "it");
 
     const roiRounded = Number(roi.toFixed(1));
 
@@ -174,45 +167,58 @@ export default async function handler(req, res){
           value,
           priority,
           type,
+          plan: plan || "free",
           createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
-      }catch(e){}
+      }catch(e){
+        console.warn("⚠️ Firestore skip");
+      }
     }
 
     // ================= EMAIL USER =================
-    await resend.emails.send({
-      from: "RendimentoBB <analisi@rendimentobb.it>",
-      to: [email],
-      subject: type === "mutui"
-        ? (lang === "en"
-          ? "Your mortgage impact analysis"
-          : "Analisi impatto mutuo")
-        : `💰 ${lang === "en"
-            ? "Your investment ROI"
-            : "Il tuo investimento"} ${roiRounded}%`,
-      html: buildEmail({
-        roi: roiRounded,
-        city,
-        type,
-        lang
-      })
-    });
+    try{
+      await resend.emails.send({
+        from: "RendimentoBB <analisi@rendimentobb.it>",
+        to: [email],
+        subject:
+          type === "mutui"
+            ? (detectedLang === "en"
+                ? "Your mortgage impact analysis"
+                : "Analisi impatto mutuo")
+            : (detectedLang === "en"
+                ? `Your investment ROI ${roiRounded}%`
+                : `Il tuo investimento può rendere ${roiRounded}%`),
+        html: buildEmail({
+          roi: roiRounded,
+          city,
+          type,
+          lang: detectedLang
+        })
+      });
+    }catch(e){
+      console.error("❌ User email error:", e.message);
+    }
 
-    // ================= ADMIN =================
-    await resend.emails.send({
-      from: "RendimentoBB <info@rendimentobb.it>",
-      to: ["rendimentobb@gmail.com"],
-      subject: `🔥 ${priority} Lead – €${value}`,
-      html: `
-        <h2>New Lead</h2>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>ROI:</strong> ${roiRounded}%</p>
-        <p><strong>City:</strong> ${city}</p>
-        <p><strong>Type:</strong> ${type}</p>
-      `
-    });
+    // ================= ADMIN EMAIL =================
+    try{
+      await resend.emails.send({
+        from: "RendimentoBB <lead@rendimentobb.it>",
+        to: ["rendimentobb@gmail.com"],
+        subject: `🔥 ${priority} Lead – €${value} (${type})`,
+        html: `
+          <h2>Nuovo Lead</h2>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>ROI:</strong> ${roiRounded}%</p>
+          <p><strong>City:</strong> ${city}</p>
+          <p><strong>Type:</strong> ${type}</p>
+          <p><strong>Plan:</strong> ${plan || "free"}</p>
+        `
+      });
+    }catch(e){
+      console.error("❌ Admin email error:", e.message);
+    }
 
-    console.log("🚀 Lead + Email OK:", email);
+    console.log("🚀 Lead + Email OK:", email, type);
 
     return res.status(200).json({
       success:true,
