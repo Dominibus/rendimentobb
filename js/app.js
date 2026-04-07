@@ -215,12 +215,6 @@ async function saveAnalysis(data){
 // ================= PLAN SYSTEM =================
 
 // 🔥 FLAG GLOBALE (fonte unica)
-window.__IS_PRO__ = false;
-
-// 🔥 FUNZIONE UNICA PULITA
-window.isPro = function(){
-  return window.__IS_PRO__ === true;
-};
 
 window.isAdmin = function(){
 
@@ -266,7 +260,7 @@ function hasPlan(requiredPlan){
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
   // 🔥 PRO → bypass totale
-if(window.isPro?.()){
+if(window.currentPlan === "pro" || window.currentPlan === "investor" || window.currentPlan === "pro_yearly"){
   return true;
 }
 
@@ -1069,7 +1063,10 @@ function renderSmartInvestmentAlert(roi){
   let isProUser = false;
 
   try{
-    isProUser = typeof window.isPro === "function" && window.isPro();
+    isProUser =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
   }catch(e){
     console.warn("isPro error", e);
   }
@@ -1285,7 +1282,10 @@ if(!window.firebaseReady){
 let isProUser = false;
 
 try{
-  isProUser = typeof window.isPro === "function" && window.isPro();
+  isProUser =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
 }catch(e){
   console.warn("isPro error", e);
 }
@@ -1574,7 +1574,11 @@ const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
 // ================= USER =================
 const userEmail = window.currentUser?.email || null;
-const isFreeUser = !window.isPro?.();
+const isFreeUser = !(
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+);
 const goodROI = roi > 8;
 
 // ================= SESSION TRACK =================
@@ -1893,7 +1897,10 @@ if(revenueHome){
 let isProUser = false;
 
 try{
-  isProUser = typeof window.isPro === "function" && window.isPro();
+  isProUser =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
 }catch(e){
   console.warn("isPro error", e);
 }
@@ -3034,58 +3041,6 @@ document.addEventListener("rb_auth_ready", () => {
 
   console.log("🔥 Firebase READY → HARD SYNC");
 
-  // ================= FIX PLAN (CRITICO) =================
-
-if(window.currentPlan){
-
-const rawPlan = String(window.currentPlan || "");
-
-const plan = rawPlan
-  .toLowerCase()
-  .trim()
-  .replace(/[^a-z_]/g, ""); // 🔥 pulizia totale
-
-window.currentPlan = plan;
-
-// 🔥 FIX DEFINITIVO
-if(
-  plan === "pro" ||
-  plan === "investor" ||
-  plan === "pro_yearly"
-){
-  window.__IS_PRO__ = true;
-}else{
-  window.__IS_PRO__ = false;
-}
-
-console.log("✅ PLAN CLEAN:", plan);
-console.log("✅ IS_PRO:", window.__IS_PRO__);
-
-  console.log("✅ PLAN FIXED:", plan, "IS_PRO:", window.__IS_PRO__);
-
-}else{
-  console.warn("⛔ currentPlan non disponibile");
-}
-
-  // ================= PLAN FIX HARD (CRITICO) =================
-
-if(window.currentPlan){
-
-  const plan = window.currentPlan.toLowerCase().trim();
-
-  window.currentPlan = plan;
-
-  window.__IS_PRO__ = ["pro","investor","pro_yearly"].includes(plan);
-
-  window.isPro = function(){
-    return window.__IS_PRO__ === true;
-  };
-
-  console.log("✅ PLAN FIXED:", plan, "IS_PRO:", window.__IS_PRO__);
-
-}else{
-  console.warn("⛔ currentPlan non ancora disponibile");
-}
 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
@@ -3367,7 +3322,11 @@ window.proUnlocked = false;
 
 function unlockProUI(){
 
-if(window.proUnlocked && window.isPro()){
+if(window.proUnlocked && (
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+)){
   console.log("⛔ già sbloccato → skip");
   return;
 }
@@ -3390,10 +3349,14 @@ if(typeof window.isAdmin === "function" && window.isAdmin()){
     window.currentPlan === "investor" ||
     window.currentPlan === "pro_yearly";
 
-  if(!isPro){
-    console.log("⛔ NOT PRO → skip");
-    return;
-  }
+  if(!(
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+)){
+  console.log("⛔ NOT PRO → skip");
+  return;
+}
 
   window.proUnlocked = true;
 
@@ -3584,92 +3547,3 @@ document.addEventListener("rb_plan_loaded", () => {
 
 });
 
-// ===============================================
-// 🔥 HARD OVERRIDE FIREBASE FUNNEL (CRITICO)
-// ===============================================
-
-(function(){
-
-  console.log("🛡️ FIREBASE OVERRIDE INIT");
-
-  function fixFirebasePlan(){
-
-    if(!window.currentPlan) return;
-
-    // 🔥 FORZA PRO GLOBALMENTE
-    if(["pro","investor","pro_yearly"].includes(window.currentPlan)){
-
-      console.log("✅ FORCE PRO MODE (firebase override)");
-
-      // blocca qualsiasi logica FREE
-      window.__FORCE_PRO__ = true;
-
-      // override funzione funnel
-      window.activateFreeFunnel = function(){
-        console.log("🚫 Funnel bloccato (PRO)");
-      };
-
-      // override check sparsi
-      window.isFreeUser = false;
-
-    }
-
-  }
-
-  // 🔥 HOOK SU FIREBASE READY
-  document.addEventListener("rb_auth_ready", fixFirebasePlan);
-
-  // fallback
-  setTimeout(fixFirebasePlan, 1500);
-
-})();
-
-// ================= FORCE PLAN FIX DEFINITIVO =================
-
-window.forceCorrectPlan = function(){
-
-  console.log("🧠 FORCE PLAN FIX RUN");
-
-  if(!window.currentPlan){
-    console.warn("⛔ nessun piano");
-    return;
-  }
-
-  // 🔥 FORZA PRO MODE GLOBALE
-  if(["pro","investor","pro_yearly"].includes(window.currentPlan)){
-
-    console.log("✅ UTENTE PRO → override totale");
-
-    // override globale
-    window.__FORCE_PRO__ = true;
-
-    // fix isPro
-    window.isPro = function(){
-      return true;
-    };
-
-    // rimuovi overlay
-    document.querySelectorAll(`
-      .results-overlay,
-      .locked-overlay,
-      .home-blur-overlay,
-      .upgrade-overlay,
-      #upgrade-overlay,
-      #upgrade-modal,
-      [data-paywall]
-    `).forEach(el => el.remove());
-
-    // rimuovi blur
-    document.querySelectorAll("*").forEach(el=>{
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-    });
-
-    // forza classe
-    document.body.classList.add("pro-user");
-
-    console.log("🚀 FORCE PRO COMPLETATO");
-  }
-
-};
