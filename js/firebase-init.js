@@ -191,6 +191,13 @@ async function loadUserPlan(uid) {
 
     console.log("🔥 Piano finale:", window.currentPlan);
 
+    // 🔥 FORCE GLOBAL SYNC (CRITICO HEADER)
+window.userPlan = plan;
+window.userRole = docSnap.exists() ? docSnap.data().role : "user";
+
+// 🔥 NOTIFICA HEADER CHE IL PIANO È PRONTO
+window.dispatchEvent(new Event("rb_plan_ready"));
+
     // ===============================
     // 🔥 SBLOCCO UI
     // ===============================
