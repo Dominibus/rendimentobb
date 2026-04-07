@@ -69,21 +69,18 @@ function buildPartnerEmail({ email, city, roi, type, priority, lang }){
 
     <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;padding:40px">
 
-      <!-- LOGO -->
       <div style="text-align:center;margin-bottom:25px">
         <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
       </div>
 
-      <!-- TITLE -->
       <h2 style="text-align:center;color:#0f172a">
-        ${t("🔥 Lead qualificato","🔥 Qualified lead")}
+        ${t("Nuovo lead qualificato","New qualified lead")}
       </h2>
 
       <p style="text-align:center;color:#64748b">
-        ${t("Opportunità ad alta conversione","High conversion opportunity")}
+        ${t("Utente con interesse reale","User with real intent")}
       </p>
 
-      <!-- ROI -->
       <div style="text-align:center;margin:30px 0">
         <div style="font-size:52px;font-weight:800;color:#10b981">
           ${roi}%
@@ -91,28 +88,16 @@ function buildPartnerEmail({ email, city, roi, type, priority, lang }){
         <div style="color:#64748b">${city || "-"}</div>
       </div>
 
-      <!-- INFO -->
       <div style="background:#f8fafc;padding:18px;border-radius:12px;font-size:14px;color:#334155">
-
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>${t("Tipo","Type")}:</strong> ${type}</p>
         <p><strong>Priority:</strong> ${priority}</p>
-
       </div>
 
-      <!-- VALUE -->
-      <div style="margin-top:20px;padding:16px;background:#ecfdf5;border-radius:12px;color:#065f46;font-size:14px">
-        ${t(
-          "Questo utente ha già mostrato interesse concreto. Contatto altamente consigliato.",
-          "This user has shown real intent. Immediate contact recommended."
-        )}
-      </div>
-
-      <!-- CTA -->
       <div style="text-align:center;margin-top:30px">
         <a href="mailto:${email}"
         style="
-        background:linear-gradient(135deg,#10b981,#059669);
+        background:#10b981;
         color:white;
         padding:14px 26px;
         border-radius:999px;
@@ -120,13 +105,12 @@ function buildPartnerEmail({ email, city, roi, type, priority, lang }){
         font-weight:700;
         display:inline-block;
         ">
-        🚀 ${t("Contatta subito","Contact now")}
+        ${t("Contatta utente","Contact user")}
         </a>
       </div>
 
-      <!-- FOOTER -->
       <div style="text-align:center;margin-top:30px;color:#94a3b8;font-size:12px">
-        RendimentoBB – Lead Engine
+        RendimentoBB
       </div>
 
     </div>
@@ -158,29 +142,40 @@ export default async function handler(req, res){
 
     const roiRounded = Number(roi.toFixed(1));
 
-    // ================= PRIORITY =================
     const priority =
       roiRounded > 18 ? "EXTREME" :
       roiRounded > 15 ? "URGENT" :
       roiRounded > 10 ? "HIGH" : "NORMAL";
 
-    // ================= ROUTING =================
     const recipients = getPartners({
       type,
       roi: roiRounded
     });
 
-    // ================= SEND =================
     let sent = false;
 
     try{
 
       await resend.emails.send({
-        from: "RendimentoBB Leads <lead@rendimentobb.it>",
+        from: "RendimentoBB Lead <lead@rendimentobb.it>",
         to: recipients,
-        subject: `${detectedLang === "en"
-          ? "New qualified lead"
-          : "Nuovo lead qualificato"} – ${city} (${roiRounded}%)`,
+
+        // ✅ SUBJECT ANTI-SPAM
+        subject: detectedLang === "en"
+          ? `New lead (${roiRounded}%)`
+          : `Nuovo lead (${roiRounded}%)`,
+
+        // ✅ TEXT VERSION
+        text: `
+Nuovo lead
+
+Email: ${email}
+City: ${city}
+ROI: ${roiRounded}%
+Type: ${type}
+Priority: ${priority}
+`,
+
         html: buildPartnerEmail({
           email,
           city,
