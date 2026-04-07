@@ -20,16 +20,16 @@ function buildEmail({ lang, step }){
         "You may be underestimating risk"
       ),
       text: t(lang,
-        "Molti investitori credono di avere un ROI del 10-12%, ma quando analizzano davvero i dati scoprono che è molto più basso.",
-        "Many investors believe they have 10-12% ROI, but real analysis shows it’s often much lower."
+        "Molti investimenti sembrano profittevoli all’inizio, ma i dati reali raccontano una storia diversa.",
+        "Many investments look profitable at first, but real data tells a different story."
       ),
       highlight: t(lang,
-        "Il problema non è il ROI… è tutto il resto.",
-        "The problem isn’t ROI… it’s everything else."
+        "Il problema non è il ROI… ma ciò che non stai vedendo.",
+        "The problem isn’t ROI… but what you are not seeing."
       ),
       subject: t(lang,
-        "🔥 72% degli investitori sbaglia questo",
-        "🔥 72% of investors get this wrong"
+        "Analisi investimento (attenzione)",
+        "Investment analysis (important)"
       )
     },
 
@@ -39,16 +39,16 @@ function buildEmail({ lang, step }){
         "Final check before investing"
       ),
       text: t(lang,
-        "Un investimento sbagliato può costarti migliaia di euro. Ma evitarlo richiede meno di 30 secondi.",
-        "A wrong investment can cost thousands. Avoiding it takes less than 30 seconds."
+        "Un investimento sbagliato può costarti molto più del previsto.",
+        "A wrong investment can cost much more than expected."
       ),
       highlight: t(lang,
-        "Questa è la differenza tra profitto e perdita.",
-        "This is the difference between profit and loss."
+        "Un controllo ora può evitarti errori costosi.",
+        "A quick check now can prevent costly mistakes."
       ),
       subject: t(lang,
-        "⚠️ Ultimo avviso prima di investire",
-        "⚠️ Final check before investing"
+        "Controllo finale investimento",
+        "Final investment check"
       )
     }
 
@@ -59,27 +59,35 @@ function buildEmail({ lang, step }){
   return {
     subject: c.subject,
 
+    // ✅ VERSIONE TESTO (ANTI-SPAM)
+    text: `
+${c.title}
+
+${c.text}
+
+${c.highlight}
+
+Analizza ora:
+${CTA}
+`,
+
     html: `
     <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
 
       <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:22px;padding:40px">
 
-        <!-- LOGO -->
         <div style="text-align:center;margin-bottom:25px">
           <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
         </div>
 
-        <!-- TITLE -->
         <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
           ${c.title}
         </h2>
 
-        <!-- TEXT -->
         <p style="text-align:center;color:#64748b;font-size:15px">
           ${c.text}
         </p>
 
-        <!-- HIGHLIGHT -->
         <div style="
           margin-top:20px;
           background:#fff7ed;
@@ -89,10 +97,9 @@ function buildEmail({ lang, step }){
           font-weight:600;
           text-align:center;
         ">
-          ⚠️ ${c.highlight}
+          ${c.highlight}
         </div>
 
-        <!-- VALUE -->
         <div style="
           margin-top:25px;
           background:#f8fafc;
@@ -102,45 +109,39 @@ function buildEmail({ lang, step }){
           color:#334155;
         ">
           <ul style="margin:0;padding-left:18px;line-height:1.7">
-            <li>${t(lang,"ROI reale dopo costi","Real ROI after costs")}</li>
-            <li>${t(lang,"Break-even occupancy","Break-even occupancy")}</li>
+            <li>${t(lang,"ROI reale","Real ROI")}</li>
+            <li>${t(lang,"Break-even","Break-even point")}</li>
             <li>${t(lang,"Impatto mutuo","Mortgage impact")}</li>
             <li>${t(lang,"Scenario rischio","Risk scenario")}</li>
           </ul>
         </div>
 
-        <!-- CTA -->
         <div style="text-align:center;margin:35px 0">
 
           <a href="${CTA}"
           style="
-          background:linear-gradient(135deg,#10b981,#059669);
+          background:#10b981;
           color:white;
           padding:16px 28px;
           border-radius:999px;
           text-decoration:none;
           font-weight:700;
           display:inline-block;
-          box-shadow:0 10px 30px rgba(16,185,129,0.4);
           ">
-          🚀 ${t(lang,"Fai ora l’analisi completa","Run full analysis now")}
+          ${t(lang,"Apri analisi","Open analysis")}
           </a>
 
           <p style="font-size:12px;color:#94a3b8;margin-top:10px">
             ${t(lang,
-              "Analisi avanzata in meno di 30 secondi",
-              "Advanced analysis in under 30 seconds"
+              "Disponibile in pochi secondi",
+              "Available in seconds"
             )}
           </p>
 
         </div>
 
-        <!-- FOOTER -->
         <p style="text-align:center;font-size:12px;color:#94a3b8">
-          RendimentoBB – ${t(lang,
-            "motore decisionale investimenti B&B",
-            "decision engine for B&B investments"
-          )}
+          RendimentoBB
         </p>
 
       </div>
@@ -168,9 +169,13 @@ export default async function handler(req, res){
     const emailContent = buildEmail({ lang, step });
 
     await resend.emails.send({
-      from: "RendimentoBB <analisi@rendimentobb.it>",
+      from: "RendimentoBB Analisi <analisi@rendimentobb.it>",
       to: [email],
       subject: emailContent.subject,
+
+      // ✅ FONDAMENTALE
+      text: emailContent.text,
+
       html: emailContent.html
     });
 
