@@ -487,7 +487,7 @@ onAuthStateChanged(auth, async (user) => {
     // 🔥 UPDATE UI
     // ===============================
 
-    updateUserUI(user);
+    // updateUserUI(user);
 
     // ===============================
     // 🔥 EVENTI GLOBALI (UNICO PUNTO)
