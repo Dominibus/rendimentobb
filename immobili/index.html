@@ -5,6 +5,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">      
 
 <title
 data-it="Immobili per B&B – Trova le migliori opportunità investimento 2026"
@@ -180,9 +181,14 @@ flex-direction:column;
 .input-group label{
 font-size:13px;
 margin-bottom:6px;
-color:#e2e8f0; /* 🔥 perché sta nella hero */
-text-shadow:0 2px 8px rgba(0,0,0,0.6);
+color:#334155;
+text-shadow:none;
 }
+
+.hero .input-group label{
+  color:#e2e8f0;
+  text-shadow:0 2px 8px rgba(0,0,0,0.6);
+}      
 
 .input-group input{
 padding:12px;
@@ -234,6 +240,12 @@ box-shadow:0 15px 30px rgba(16,185,129,0.25);
 
 <main>
 
+<h2 style="display:none"
+data-it="Immobili investimento B&B Italia ROI Napoli Roma Milano Firenze"
+data-en="B&B investment properties Italy ROI Naples Rome Milan Florence">
+Immobili investimento B&B Italia ROI Napoli Roma Milano Firenze
+</h2>     
+
 <section class="hero hero-bg rome">  
 
 <div class="container" style="padding-top:60px">
@@ -241,18 +253,30 @@ box-shadow:0 15px 30px rgba(16,185,129,0.25);
 <div class="page-title">
 
 <h1
-data-it="Trova immobili che generano profitto con un B&B"
-data-en="Find properties that generate profit with a B&B">
-Trova immobili che generano profitto con un B&B
+data-it="Scopri immobili che possono rendere fino al 17% con un B&B"
+data-en="Find properties that can generate up to 17% ROI with a B&B">
+Scopri immobili che possono rendere fino al 17% con un B&B
 </h1>
 
+<p
+data-it="Il 72% degli investitori perde soldi per analisi sbagliate. Scopri ROI reale, rischio e profitto prima di comprare."
+data-en="72% of investors lose money due to wrong analysis. Discover real ROI, risk and profit before buying.">
+Il 72% degli investitori perde soldi per analisi sbagliate.
+</p>      
+
 <div style="
-margin-top:10px;
+margin-top:8px;
 font-size:13px;
-color:#10b981;
+color:#059669;
 font-weight:600;
-text-align:center;
 ">
+
+<span data-it="✔ ROI già calcolato • ✔ Nessuna analisi manuale • ✔ Solo opportunità reali"
+      data-en="✔ ROI pre-calculated • ✔ No manual analysis • ✔ Only real opportunities">
+✔ ROI già calcolato • ✔ Nessuna analisi manuale
+</span>
+
+</div>
 
 <span data-it="⚡ Nuove opportunità aggiornate ogni giorno – le migliori durano poche ore"
       data-en="⚡ New opportunities updated daily – best deals disappear fast">
@@ -260,12 +284,6 @@ text-align:center;
 </span>
 
 </div>  
-
-<p
-data-it="Analizza qualsiasi immobile in pochi secondi e scopri ROI, rischio e rendimento reale prima di investire."
-data-en="Analyze any property in seconds and discover ROI, risk and real profitability before investing.">
-Analizza qualsiasi immobile in pochi secondi e scopri ROI reale prima di investire.
-</p>
 
 <div style="margin-top:20px">
 
@@ -276,7 +294,7 @@ Simula investimento
 </a>
 
 </div>
-
+</div>
 
 <section class="section-info">
 
@@ -321,7 +339,10 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
 <!-- ================= #1 NAPOLI ================= -->
 
-<a href="/immobili/napoli" class="property-card" style="border:2px solid #10b981;">
+<a href="/immobili/napoli"
+class="property-card"
+style="border:2px solid #10b981;"
+onclick="localStorage.setItem('selected_city','napoli')">
 
 <div style="
 position:absolute;
@@ -382,7 +403,9 @@ Analizza mercato →
 
 <!-- ================= #2 ROMA ================= -->
 
-<a href="/immobili/roma" class="property-card">
+<a href="/immobili/roma"
+class="property-card"
+onclick="localStorage.setItem('selected_city','roma')">
 
 <div style="
 position:absolute;
@@ -437,7 +460,9 @@ Analizza mercato →
 
 <!-- ================= #3 FIRENZE ================= -->
 
-<a href="/immobili/firenze" class="property-card">
+<a href="/immobili/firenze"
+class="property-card"
+onclick="localStorage.setItem('selected_city','firenze')">
 
 <div style="
 position:absolute;
@@ -492,7 +517,9 @@ Analizza mercato →
 
 <!-- ================= #4 MILANO ================= -->
 
-<a href="/immobili/milano" class="property-card">
+<a href="/immobili/milano"
+class="property-card"
+onclick="localStorage.setItem('selected_city','milano')">
 
 <div style="
 position:absolute;
@@ -581,13 +608,24 @@ Ti inviamo le migliori opportunità B&B con analisi completa.
 
 <input id="lead-email"
 type="email"
-placeholder="Email"
+data-it-placeholder="Email"
+data-en-placeholder="Email"    
 style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:220px">
 
 <input id="lead-city"
 type="text"
-placeholder="Città (Roma, Napoli...)"
+data-it-placeholder="Città (Roma, Napoli...)"
+data-en-placeholder="City (Rome, Naples...)"  
 style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:180px">
+
+<div style="margin-bottom:10px;font-size:13px;color:#059669;font-weight:600">
+
+<span data-it="🔥 Accesso immediato alle migliori opportunità"
+      data-en="🔥 Instant access to the best opportunities">
+🔥 Accesso immediato alle migliori opportunità
+</span>
+
+</div>      
 
 <button onclick="sendLeadImmobili()" class="btn btn-primary">
 
@@ -596,6 +634,13 @@ Ricevi opportunità
 </span>
 
 </button>
+
+<div style="margin-top:8px;font-size:12px;color:#64748b">
+<span data-it="✔ Nessuno spam • ✔ Dati reali • ✔ Cancellati quando vuoi"
+      data-en="✔ No spam • ✔ Real data • ✔ Unsubscribe anytime">
+✔ Nessuno spam • ✔ Dati reali • ✔ Cancellati quando vuoi
+</span>
+</div>      
 
 </div>
 
@@ -1126,27 +1171,15 @@ return;
 try{
 
 const res = await fetch("/api/send-lead", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-type: "immobili",
-email: email.trim(),
-city
-})
-});
-
-const res = await fetch("/api/send-lead", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-type: "immobili",
-email: email.trim(),
-city
-})
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    type: "immobili",
+    email: email.trim(),
+    city
+  })
 });
 
 // 🔥 EMAIL AUTOMATICA (QUI PRECISO)
