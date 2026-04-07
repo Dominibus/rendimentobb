@@ -73,28 +73,28 @@ window.isProUser = window.isPro;
 
 window.requirePlan = function(required){
 
-  const plan = window.currentPlan;
-
-  // 🔓 INVESTOR access
-  if(required === "investor"){
-    if(
-      plan === "investor" ||
-      plan === "pro" ||
-      plan === "pro_yearly"
-    ){
-      return true;
-    }
+  if(window.hasPlan(required)){
+    return true;
   }
 
-  // 🔓 PRO access
-  if(required === "pro"){
-    if(
-      plan === "pro" ||
-      plan === "pro_yearly"
-    ){
-      return true;
-    }
+  if(typeof showUpgradeModal === "function"){
+
+    showUpgradeModal(12);
+
+    setTimeout(()=>{
+      alert(
+        getCurrentLang()==="it"
+        ? "⚠️ Stai prendendo decisioni senza vedere i dati reali"
+        : "⚠️ You are making decisions without real data"
+      );
+    },300);
+
+  }else{
+    window.location.href = "/pricing/";
   }
+
+  return false;
+};
 
   // ===============================
   // UX BLOCCO (NO BREAK APP)
@@ -173,6 +173,12 @@ async function loadUserPlan(uid) {
   try{
 
     console.log("🔥 Carico piano per:", uid);
+    console.log("🧠 USER STATE", {
+  plan: window.currentPlan,
+  role: window.userRole,
+  isAdmin: window.isAdmin(),
+  isPro: window.isPro()
+});
 
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
@@ -193,16 +199,15 @@ if (docSnap.exists()) {
     window.currentPlan = plan;
     window.plan = plan;
 
-    window.userPlan = plan;
-    window.userRole = role;
-
-    console.log("🔥 Piano finale:", window.currentPlan);
-
-    // 🔥 FORCE GLOBAL SYNC (CRITICO HEADER)
+// 🔥 SET GLOBALE UNIFICATO
+window.currentPlan = plan;
+window.plan = plan;
 window.userPlan = plan;
-window.userRole = docSnap.exists() ? docSnap.data().role : "user";
+window.userRole = role;
 
-// 🔥 NOTIFICA HEADER CHE IL PIANO È PRONTO
+console.log("🔥 Piano finale:", plan, "| ruolo:", role);
+
+// 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
 
     // ===============================
@@ -234,6 +239,40 @@ window.dispatchEvent(new Event("rb_plan_ready"));
       },300);
 
     }
+
+    // ===============================
+// ROLE SYSTEM (🔥 CORE SAAS)
+// ===============================
+
+window.isAdmin = function(){
+  return window.userRole === "admin";
+};
+
+window.hasPlan = function(required){
+
+  const plan = window.currentPlan;
+  const role = window.userRole;
+
+  // 🔥 ADMIN SEMPRE ACCESSO
+  if(role === "admin") return true;
+
+  if(required === "investor"){
+    return (
+      plan === "investor" ||
+      plan === "pro" ||
+      plan === "pro_yearly"
+    );
+  }
+
+  if(required === "pro"){
+    return (
+      plan === "pro" ||
+      plan === "pro_yearly"
+    );
+  }
+
+  return false;
+};
 
     // ===============================
     // 🔥 EVENTI GLOBALI
