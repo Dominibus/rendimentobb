@@ -31,8 +31,10 @@ function clean(v){
   return String(v || "").trim();
 }
 
+// 🔥 FIX LANG ROBUSTO
 function isEN(req){
-  return req.headers["accept-language"]?.includes("en");
+  const lang = req.headers["accept-language"] || "";
+  return lang.toLowerCase().startsWith("en");
 }
 
 // ================= EMAIL TEMPLATE =================
@@ -40,29 +42,38 @@ function buildEmail({ roi, city, type, lang }){
 
   const t = (it, en) => lang === "en" ? en : it;
 
-  const title =
-    type === "mutui"
-      ? t("Il tuo mutuo può costarti migliaia di euro",
-          "Your mortgage could cost you thousands")
-      : t("Analisi del tuo investimento",
-          "Your investment analysis");
+  const isMutuo = type === "mutui";
+  const hasROI = roi > 0;
 
-  const subtitle =
-    type === "mutui"
-      ? t("Hai richiesto una simulazione mutuo",
-          "You requested a mortgage simulation")
-      : t("Ecco cosa abbiamo trovato",
-          "Here’s what we found");
+  const title = isMutuo
+    ? t("Il tuo mutuo può costarti migliaia di euro",
+        "Your mortgage could cost you thousands")
+    : t("Analisi del tuo investimento",
+        "Your investment analysis");
 
-  const warning = t(
-    "Il ROI NON è il profitto reale. Mutuo, occupazione e costi possono ridurlo drasticamente.",
-    "ROI is NOT real profit. Mortgage, occupancy and costs can drastically reduce it."
-  );
+  const subtitle = isMutuo
+    ? t("Hai richiesto una simulazione mutuo",
+        "You requested a mortgage simulation")
+    : t("Ecco cosa abbiamo trovato",
+        "Here’s what we found");
 
-  const cta = t(
-    "Sblocca analisi completa",
-    "Unlock full analysis"
-  );
+  const roiBlock = hasROI
+    ? `
+      <div style="text-align:center;margin:30px 0">
+        <div style="font-size:56px;font-weight:800;color:#10b981">
+          ${roi}%
+        </div>
+        <div style="color:#64748b">${city || "-"}</div>
+      </div>
+    `
+    : `
+      <div style="text-align:center;margin:30px 0;color:#64748b">
+        ${t(
+          "Analisi disponibile (calcola ROI per risultati precisi)",
+          "Analysis available (run ROI simulation for precise results)"
+        )}
+      </div>
+    `;
 
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
@@ -81,15 +92,13 @@ function buildEmail({ roi, city, type, lang }){
         ${subtitle}
       </p>
 
-      <div style="text-align:center;margin:30px 0">
-        <div style="font-size:56px;font-weight:800;color:#10b981">
-          ${roi}%
-        </div>
-        <div style="color:#64748b">${city || "-"}</div>
-      </div>
+      ${roiBlock}
 
       <div style="background:#fff7ed;padding:16px;border-radius:12px;color:#92400e">
-        ⚠️ ${warning}
+        ⚠️ ${t(
+          "Il ROI NON è il profitto reale. Mutuo, occupazione e costi possono ridurlo drasticamente.",
+          "ROI is NOT real profit. Mortgage, occupancy and costs can drastically reduce it."
+        )}
       </div>
 
       <div style="margin-top:25px;background:#f8fafc;padding:18px;border-radius:12px">
@@ -104,7 +113,7 @@ function buildEmail({ roi, city, type, lang }){
       <div style="text-align:center;margin:35px 0">
         <a href="https://rendimentobb.it/dashboard"
         style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:700">
-        🔥 ${cta}
+        🔥 ${t("Sblocca analisi completa","Unlock full analysis")}
         </a>
       </div>
 
@@ -186,8 +195,8 @@ export default async function handler(req, res){
                 ? "Your mortgage impact analysis"
                 : "Analisi impatto mutuo")
             : (detectedLang === "en"
-                ? `Your investment ROI ${roiRounded}%`
-                : `Il tuo investimento può rendere ${roiRounded}%`),
+                ? `Your investment analysis`
+                : `Analisi del tuo investimento`),
         html: buildEmail({
           roi: roiRounded,
           city,
@@ -199,7 +208,7 @@ export default async function handler(req, res){
       console.error("❌ User email error:", e.message);
     }
 
-    // ================= ADMIN EMAIL =================
+    // ================= ADMIN =================
     try{
       await resend.emails.send({
         from: "RendimentoBB <lead@rendimentobb.it>",
