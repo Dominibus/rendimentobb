@@ -13,5 +13,12 @@
 
     { "source": "/mutuo", "destination": "/mutui/", "permanent": true }
 
+  ],
+
+  "cron": [
+    {
+      "path": "/api/cron-funnel",
+      "schedule": "0 * * * *"
+    }
   ]
-} 
+}
