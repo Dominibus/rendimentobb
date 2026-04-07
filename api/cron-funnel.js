@@ -52,7 +52,6 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
       "⚡ I dati reali cambiano completamente il risultato",
       "⚡ Real data completely changes the outcome"
     );
-
   }
 
   if(stepType === "reminder_2"){
@@ -76,7 +75,6 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
       "⏳ Le migliori opportunità vengono prese entro poche ore",
       "⏳ Best opportunities get taken within hours"
     );
-
   }
 
   const roiBlock = hasROI
@@ -102,12 +100,10 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
 
     <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;padding:40px">
 
-      <!-- LOGO -->
       <div style="text-align:center;margin-bottom:25px">
         <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
       </div>
 
-      <!-- TITLE -->
       <h2 style="text-align:center;color:#0f172a">
         ${title}
       </h2>
@@ -116,19 +112,16 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
         ${subtitle}
       </p>
 
-      <!-- URGENCY -->
       <p style="text-align:center;color:#dc2626;font-weight:600">
         ${urgency}
       </p>
 
       ${roiBlock}
 
-      <!-- WARNING -->
       <div style="background:#fee2e2;padding:16px;border-radius:12px;color:#991b1b;font-weight:600">
         ⚠️ ${warning}
       </div>
 
-      <!-- VALUE -->
       <div style="margin-top:25px;background:#f8fafc;padding:18px;border-radius:12px">
         <ul style="padding-left:18px;margin:0;color:#334155">
           <li>${t(lang,"Profitto reale mensile","Real monthly profit")}</li>
@@ -138,7 +131,6 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
         </ul>
       </div>
 
-      <!-- CTA -->
       <div style="text-align:center;margin:35px 0">
         <a href="https://rendimentobb.it/dashboard"
         style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:800">
@@ -146,7 +138,6 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
         </a>
       </div>
 
-      <!-- FOOTER -->
       <div style="text-align:center;color:#94a3b8;font-size:13px">
         RendimentoBB – ${t(lang,
           "Motore decisionale per investimenti B&B",
@@ -175,8 +166,8 @@ export default async function handler(req, res){
       const createdAt = data.createdAt?.toMillis?.() || now;
 
       const email = data.email;
-      const roi   = data.roi;
-      const city  = data.city;
+      const roi   = Number(data.roi || 0);
+      const city  = data.city || "";
       const lang  = data.lang || "it";
 
       const steps = data.steps || [];
@@ -208,25 +199,23 @@ export default async function handler(req, res){
           );
         }
 
-        const html = buildFunnelEmail({
-          roi,
-          city,
-          lang,
-          stepType: step.type
-        });
-
         try{
 
           await resend.emails.send({
             from: "RendimentoBB <analisi@rendimentobb.it>",
             to: [email],
             subject,
-            html
+            html: buildFunnelEmail({
+              roi,
+              city,
+              lang,
+              stepType: step.type
+            })
           });
 
           console.log("📩 FUNNEL SENT:", email, step.type);
 
-          // 🔥 FIX CRITICO
+          // 🔥 FIX DUPLICATI
           sentSteps.push(i);
 
           await db.collection("email_funnel").doc(doc.id).update({
@@ -234,7 +223,7 @@ export default async function handler(req, res){
           });
 
         }catch(e){
-          console.error("Email error:", e.message);
+          console.error("❌ Email error:", e.message);
         }
 
       }
