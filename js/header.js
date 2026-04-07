@@ -117,15 +117,39 @@ document.addEventListener("DOMContentLoaded", () => {
   initUser();
 
   window.addEventListener("rb_plan_ready", () => {
-  if(window.currentUser){
-    renderUser(window.currentUser);
-  }
+
+  console.log("🔥 HEADER FORCE RENDER (plan ready)");
+
+  // 🔥 aspetta che isPro sia stabile
+  setTimeout(()=>{
+
+    if(window.currentUser){
+      renderUser(window.currentUser);
+    }
+
+  }, 200);
+
 });
 
   // 🔥 APPLY LANG SUBITO
   if(window.setLang){
     window.setLang(localStorage.getItem("rb_lang") || "it");
   }
+
+});
+
+// 🔥 FIX HARD → quando Firebase è pronto
+document.addEventListener("rb_auth_ready", () => {
+
+  console.log("🔥 HEADER SYNC AUTH READY");
+
+  setTimeout(()=>{
+
+    if(window.currentUser){
+      renderUser(window.currentUser);
+    }
+
+  }, 300);
 
 });
 
@@ -255,9 +279,13 @@ function renderUser(user){
     (window.isAdmin && window.isAdmin()) ||
     ADMIN_EMAILS.includes(user?.email);
 
-  const isPro =
-    (window.isPro && window.isPro()) ||
-    isAdmin;
+  const rawPlan = String(window.currentPlan || "")
+  .toLowerCase()
+  .replace(/[^a-z_]/g,"");
+
+const isPro =
+  ["pro","investor","pro_yearly"].includes(rawPlan) ||
+  isAdmin;
 
   console.log("HEADER DEBUG →", {
     email: user?.email,
