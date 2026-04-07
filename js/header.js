@@ -275,17 +275,8 @@ function renderUser(user){
   // 🔥 SICUREZZA: fallback admin
   const ADMIN_EMAILS = ["rendimentobb@gmail.com"];
 
-  const isAdmin =
-    (window.isAdmin && window.isAdmin()) ||
-    ADMIN_EMAILS.includes(user?.email);
-
-  const rawPlan = String(window.currentPlan || "")
-  .toLowerCase()
-  .replace(/[^a-z_]/g,"");
-
-const isPro =
-  ["pro","investor","pro_yearly"].includes(rawPlan) ||
-  isAdmin;
+const isAdmin = window.PLAN?.isAdmin() || ADMIN_EMAILS.includes(user?.email);
+const isPro = window.PLAN?.isPro() || isAdmin;
 
   console.log("HEADER DEBUG →", {
     email: user?.email,
