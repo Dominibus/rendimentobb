@@ -9641,7 +9641,7 @@ display:none;
 }
 
 /* =====================================
-🔥 UI SYSTEM – GLOBAL DESIGN
+🔥 UI SYSTEM – SaaS PRO
 ===================================== */
 
 body.rb-ui{
@@ -9652,9 +9652,10 @@ body.rb-ui{
 /* ===== CONTAINER ===== */
 .card{
   background:white;
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 20px 60px rgba(2,6,23,0.06);
+  border:1px solid rgba(226,232,240,0.6);
 }
 
 /* ===== BUTTON MAIN ===== */
@@ -9662,17 +9663,17 @@ body.rb-ui{
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
   border:none;
-  padding:14px 22px;
+  padding:14px 24px;
   border-radius:999px;
   font-weight:700;
   cursor:pointer;
   transition:all .25s ease;
-  box-shadow:0 10px 30px rgba(16,185,129,0.3);
+  box-shadow:0 8px 25px rgba(16,185,129,0.25);
 }
 
 .btn-main:hover{
   transform:translateY(-2px);
-  box-shadow:0 15px 40px rgba(16,185,129,0.5);
+  box-shadow:0 12px 35px rgba(16,185,129,0.4);
 }
 
 /* ===== SECONDARY ===== */
@@ -9684,20 +9685,58 @@ body.rb-ui{
 
 /* ===== HERO ===== */
 .section{
-  padding:80px 20px;
+  padding:90px 20px;
 }
 
 /* ===== INPUT ===== */
 input{
-  border-radius:12px;
+  border-radius:14px;
   border:1px solid #e2e8f0;
   padding:14px;
+  transition:all .2s ease;
+}
+
+input:focus{
+  outline:none;
+  border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
 }
 
 /* ===== TITLES ===== */
+h1{
+  font-size:42px;
+  line-height:1.2;
+}
+
+h2{
+  font-size:30px;
+}
+
+h3{
+  font-size:22px;
+}
+
 h1,h2,h3{
   font-weight:700;
-  letter-spacing:-0.3px;
+  letter-spacing:-0.4px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width:768px){
+
+  h1{
+    font-size:30px;
+  }
+
+  h2{
+    font-size:24px;
+  }
+
+  .card{
+    padding:20px;
+    border-radius:18px;
+  }
+
 }
 
 /* ===== FIX LANGUAGE BUTTON ===== */
