@@ -9753,3 +9753,8 @@ h1,h2,h3{
   background:#10b981 !important;
   color:white !important;
 }
+
+/* RESET BOTTONI LEGACY */
+.btn{
+  all:unset;
+}
