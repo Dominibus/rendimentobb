@@ -10003,3 +10003,39 @@ footer a:hover{
 .is-pro [data-paywall]{
   display:none !important;
 }
+
+/* 🔥 CTA FIX UNIVERSALE */
+.btn-main{
+  display:block;
+  margin:20px auto;
+  max-width:320px;
+  width:100%;
+  text-align:center;
+}
+
+/* 🔥 BLOCCO SOVRAPPOSIZIONI */
+.upgrade-box,
+.paywall-box{
+  position:relative;
+  z-index:2;
+  margin-top:20px;
+}
+
+/* 🔥 CARD DISTANZE */
+.kpi-box{
+  margin-bottom:16px;
+}
+
+/* 🔥 MOBILE FIX */
+@media (max-width:768px){
+
+  .btn-main{
+    font-size:14px;
+    padding:14px;
+  }
+
+  .upgrade-box{
+    padding:16px;
+  }
+
+}
