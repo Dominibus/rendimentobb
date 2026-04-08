@@ -43,6 +43,64 @@ window.initAccessControl = function(){
 
     console.log("🧠 RB_USER:", window.RB_USER);
 
+    // ================= APPLY UI STATE =================
+
+function applyAccessUI(){
+
+  const isPro = window.RB_USER.isPro;
+  const isLogged = window.RB_USER.isLogged;
+
+  console.log("🎯 APPLY UI:", { isPro, isLogged });
+
+  // ================= PRO USER =================
+  if(isPro){
+
+    // ❌ NASCONDI CTA UPGRADE
+    document.querySelectorAll(`
+      .upgrade-box,
+      .btn-upgrade,
+      .paywall-box,
+      [data-paywall]
+    `).forEach(el => el.remove());
+
+    // 🔓 SBLOCCA CONTENUTI
+    document.querySelectorAll(`
+      .pro-blur,
+      .locked,
+      .locked-content
+    `).forEach(el=>{
+      el.classList.remove("pro-blur","locked","locked-content");
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+    });
+
+  }
+
+  // ================= FREE USER =================
+  if(!isPro){
+
+    // 🔒 MOSTRA CTA SOLO AI FREE
+    document.querySelectorAll(".upgrade-box").forEach(el=>{
+      el.style.display = "block";
+    });
+
+  }
+
+  // ================= GUEST =================
+  if(!isLogged){
+
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.style.display = "none";
+    });
+
+  }
+
+}
+
+// 🔥 CHIAMATA
+applyAccessUI();
+
     // ================= APPLY BODY CLASS =================
     document.body.classList.remove("is-free","is-pro","is-guest");
 
