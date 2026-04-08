@@ -3553,22 +3553,23 @@ window.handleAnalyzeClick = function(){
   const isLogged = !!window.currentUser;
 
   // ❌ NON LOGGATO
-  if(!isLogged){
+if(!isLogged){
 
-    // 👉 versione semplice
-    alert(
-      window.currentLang === "en"
-      ? "Create a free account to see your ROI analysis"
-      : "Crea un account gratuito per vedere la tua analisi ROI"
-    );
+  showUpgradeModal({
+    title: window.currentLang === "en"
+      ? "🔒 Unlock your analysis"
+      : "🔒 Sblocca la tua analisi",
 
-    window.location.href = "/login/";
-    return;
-  }
+    text: window.currentLang === "en"
+      ? "Create a free account to see your ROI"
+      : "Registrati gratis per vedere il tuo ROI"
+  });
+
+  return;
+}
 
   // ✅ LOGGATO → calcolo normale
   window.userHasClicked = true;
   calculate(true);
 
 };
-
