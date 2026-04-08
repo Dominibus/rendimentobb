@@ -1649,9 +1649,26 @@ const leadDestination = getLeadDestination({
   try {
 
     if (!userEmail) {
-      console.log("⚠️ Nessuna email → skip salvataggio");
-      return;
-    }
+  console.log("⚠️ Nessuna email → skip salvataggio");
+} else {
+
+  // 🔥 salva lead SOLO se c'è email
+  try{
+
+    const { addDoc, collection, serverTimestamp } =
+      await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+
+    await addDoc(collection(db, "leads"), {
+      email: userEmail,
+      roi: roi,
+      createdAt: serverTimestamp()
+    });
+
+  } catch(e){
+    console.log("⚠️ errore salvataggio lead", e);
+  }
+
+}
 
     if (window.leadSaved) {
       console.log("⛔ Lead già salvato");
