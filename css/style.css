@@ -9640,7 +9640,7 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – UI SYSTEM ENTERPRISE PRO
+🔥 RENDIMENTOBB – UI SYSTEM SILICON VALLEY FINAL
 ===================================== */
 
 /* ===================== */
@@ -9690,7 +9690,7 @@ body.rb-ui{
 }
 
 .card:hover{
-  transform:translateY(-4px);
+  transform:translateY(-6px);
   box-shadow:var(--rb-shadow-lg);
 }
 
@@ -9706,11 +9706,29 @@ body.rb-ui{
 
   box-shadow:0 12px 30px rgba(16,185,129,0.35);
   transition:var(--rb-transition);
+  position:relative;
+  overflow:hidden;
 }
 
 .btn-main:hover{
   transform:translateY(-2px);
-  box-shadow:0 18px 45px rgba(16,185,129,0.45);
+  box-shadow:0 20px 50px rgba(16,185,129,0.45);
+}
+
+/* shine effect */
+.btn-main::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  top:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.4),transparent);
+  transition:.6s;
+}
+
+.btn-main:hover::after{
+  left:100%;
 }
 
 .btn-outline{
@@ -9743,7 +9761,7 @@ input:focus{
 /* ===================== */
 /* TYPO */
 /* ===================== */
-h1{ font-size:42px; }
+h1{ font-size:42px; line-height:1.2; }
 h2{ font-size:30px; }
 h3{ font-size:22px; }
 
@@ -9755,7 +9773,7 @@ h3{ font-size:22px; }
 }
 
 /* =====================================
-🔥 HEADER – SILICON VALLEY FIX
+🔥 HEADER – FINAL DEFINITIVO (BUG RISOLTO)
 ===================================== */
 
 .rb-header{
@@ -9779,9 +9797,9 @@ h3{ font-size:22px; }
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:16px;
 
   padding:12px 20px;
+  gap:10px;
 }
 
 /* LOGO */
@@ -9789,12 +9807,18 @@ h3{ font-size:22px; }
   height:42px;
 }
 
+/* ===================== */
 /* MENU */
+/* ===================== */
+
 .rb-center{
   display:flex;
   gap:18px;
+
   flex:1;
   justify-content:center;
+
+  min-width:0;
 }
 
 .rb-center a{
@@ -9808,11 +9832,15 @@ h3{ font-size:22px; }
   color:var(--rb-primary);
 }
 
-/* RIGHT */
+/* ===================== */
+/* RIGHT (🔥 FIX VERO) */
+/* ===================== */
+
 .rb-right{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
+
   flex-shrink:0;
 }
 
@@ -9821,15 +9849,23 @@ h3{ font-size:22px; }
   display:flex;
   align-items:center;
   gap:6px;
+
+  flex-wrap:nowrap;
 }
 
-/* EMAIL (ridotto per spazio) */
-.rb-email{
-  font-size:12px;
-  color:var(--rb-muted);
-  max-width:110px;
-  overflow:hidden;
-  text-overflow:ellipsis;
+/* 🔥 EMAIL NASCOSTA SU DESKTOP (SPAZIO FIX) */
+@media(min-width:768px){
+  .rb-email{
+    display:none;
+  }
+}
+
+/* MOBILE EMAIL */
+@media(max-width:768px){
+  .rb-email{
+    font-size:12px;
+    color:var(--rb-muted);
+  }
 }
 
 /* BOTTONI HEADER */
@@ -9837,8 +9873,10 @@ h3{ font-size:22px; }
   padding:6px 10px;
   font-size:12px;
   border-radius:999px;
+
   background:#f1f5f9;
   border:1px solid var(--rb-border);
+
   white-space:nowrap;
 }
 
@@ -9861,7 +9899,10 @@ h3{ font-size:22px; }
   font-size:12px;
 }
 
+/* ===================== */
 /* LANGUAGE */
+/* ===================== */
+
 .rb-lang{
   display:flex;
   gap:4px;
@@ -9880,7 +9921,10 @@ h3{ font-size:22px; }
   color:white;
 }
 
+/* ===================== */
 /* BURGER */
+/* ===================== */
+
 #rb-burger{
   display:none;
   font-size:20px;
@@ -9915,11 +9959,14 @@ h3{ font-size:22px; }
     top:100%;
     left:0;
     width:100%;
+
     background:white;
     display:none;
     flex-direction:column;
+
     padding:20px;
     gap:14px;
+
     box-shadow:0 10px 30px rgba(0,0,0,0.08);
   }
 
