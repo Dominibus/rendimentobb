@@ -10220,6 +10220,7 @@ body.is-pro .pro-blur{
 }
 
 .smart-box{
+  position:relative;
   background:white;
   padding:28px;
   border-radius:20px;
@@ -10230,4 +10231,14 @@ body.is-pro .pro-blur{
   text-align:center;
 
   box-shadow:0 25px 80px rgba(0,0,0,0.35);
+}
+
+/* ❌ bottone chiusura */
+.smart-close{
+  position:absolute;
+  top:12px;
+  right:16px;
+  cursor:pointer;
+  font-size:18px;
+  color:#64748b;
 }
