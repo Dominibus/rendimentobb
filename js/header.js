@@ -1,9 +1,10 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER – ULTRA FINAL */
+/* RENDIMENTOBB HEADER – FINAL STABLE */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 
 /* ===================== */
 /* HERO BG */
@@ -75,8 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     </div>
 
-    <!-- MOBILE -->
+    <!-- MOBILE MENU -->
     <div class="rb-mobile" id="rb-mobile">
+
       <div id="mobile-user-area"></div>
 
       <a href="/tool/">Simulatore</a>
@@ -84,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="/mutui/">Mutui</a>
       <a href="/immobili/">Immobili</a>
       <a href="/academy/">Academy</a>
+
     </div>
 
   </header>
@@ -92,20 +95,15 @@ document.addEventListener("DOMContentLoaded", () => {
   window.applyCityBackground();
   initHeaderInteractions();
 
-  // 🔥 AUTH LISTENER
   onAuthStateChanged(auth, (user) => {
     waitPlanAndRender(user);
   });
-
-  if(window.setLang){
-    window.setLang(localStorage.getItem("rb_lang") || "it");
-  }
 
 });
 
 
 /* ===================== */
-/* WAIT PLAN – FIX DEFINITIVO */
+/* WAIT PLAN */
 /* ===================== */
 
 function waitPlanAndRender(user){
@@ -123,12 +121,12 @@ function waitPlanAndRender(user){
       (typeof plan === "string" && plan.length > 0) ||
       (typeof role === "string" && role.length > 0);
 
-    if(ready || attempts > 30){
+    if(ready || attempts > 20){
       clearInterval(interval);
       renderUser(user);
     }
 
-  },150);
+  },120);
 
 }
 
@@ -149,13 +147,17 @@ function initHeaderInteractions(){
       mobile.classList.toggle("open");
     };
 
-    document.addEventListener("click",(e)=>{
-      if(!mobile.contains(e.target) && !burger.contains(e.target)){
-        mobile.classList.remove("open");
-      }
+    // 🔥 FIX CLICK BLOCCATO (IL TUO BUG)
+    mobile.onclick = (e)=>{
+      e.stopPropagation();
+    };
+
+    document.addEventListener("click",()=>{
+      mobile.classList.remove("open");
     });
   }
 
+  // LANG
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -167,6 +169,7 @@ function initHeaderInteractions(){
 
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 }
+
 
 function updateLangButtons(lang){
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
@@ -186,10 +189,6 @@ function renderUser(user){
 
   if(!el) return;
 
-  // 🔥 SAFE DEFAULT
-  window.userRole = window.userRole || "";
-  window.currentPlan = window.currentPlan || "";
-
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
   const plan = clean(window.currentPlan);
@@ -205,10 +204,7 @@ function renderUser(user){
     plan === "investor" ||
     plan === "pro_yearly";
 
-  console.log("🚀 HEADER FINAL", {user, plan, role, isAdmin, isPro});
-
-  // ================= LOGGED =================
-
+  // ===== LOGGED =====
   if(user){
 
     let html = `<div class="rb-user">`;
@@ -252,17 +248,12 @@ function renderUser(user){
 
   }
 
-  // ================= NOT LOGGED =================
-
+  // ===== NOT LOGGED =====
   else{
 
     el.innerHTML = `
       <a href="/login/" class="rb-login">Accedi</a>
     `;
-  }
-
-  if(window.setLang){
-    window.setLang(localStorage.getItem("rb_lang") || "it");
   }
 
 }
