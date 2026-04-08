@@ -3548,3 +3548,27 @@ document.addEventListener("rb_plan_loaded", () => {
 
 });
 
+window.handleAnalyzeClick = function(){
+
+  const isLogged = !!window.currentUser;
+
+  // ❌ NON LOGGATO
+  if(!isLogged){
+
+    // 👉 versione semplice
+    alert(
+      window.currentLang === "en"
+      ? "Create a free account to see your ROI analysis"
+      : "Crea un account gratuito per vedere la tua analisi ROI"
+    );
+
+    window.location.href = "/login/";
+    return;
+  }
+
+  // ✅ LOGGATO → calcolo normale
+  window.userHasClicked = true;
+  calculate(true);
+
+};
+
