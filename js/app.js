@@ -1440,21 +1440,17 @@ window.calculate = async function(force = false){
     return;
   }
 
-if(!window.firebaseReady){
+  if(!window.firebaseReady){
+    console.warn("⏳ Firebase non pronto → delay calculate");
+    window.pendingCalculation = true;
+    return;
+  }
 
-  console.warn("⏳ Firebase non pronto → delay calculate");
+  window.isCalculating = true;
+  window.simulationExecuted = false;
 
-  // 🔥 salva richiesta calcolo
-  window.pendingCalculation = true;
-
-  return;
-}
-
-window.isCalculating = true;
-window.simulationExecuted = false;
-
-// 🔥 RESET PAYWALL (OBBLIGATORIO)
-window.paywallShown = false;
+  // 🔥 RESET PAYWALL
+  window.paywallShown = false;
 
   try{
 
@@ -1468,7 +1464,6 @@ window.paywallShown = false;
     }
 
     // ================= INPUT =================
-
     const isTool = !!document.getElementById("price");
 
     const price = isTool
@@ -1504,60 +1499,122 @@ window.paywallShown = false;
       occValue.innerText = occupancy + "%";
     }
 
-    // ================= DEBUG =================
     console.log("🔥 INPUT FINAL:", {
       price, equity, priceNight, occupancy,
       expenses, commission, tax,
       loanAmount, interestRate, loanYears
     });
 
-// ================= CALCOLO =================
+    // ================= CALCOLO =================
 
-// 🔥 reset anti-duplicazione globale
-window.emailSent = false;
+    window.emailSent = false;
 
-// ================= BLOCCO NON LOGGATO =================
+    const isLogged = !!window.currentUser;
+    let result;
 
-const isLogged = !!window.currentUser;
+    if(!isLogged){
 
-let result;
+      console.log("🚫 Utente non loggato → ROI limitato");
 
-if(!isLogged){
+      showRegisterPopup();
 
-  console.log("🚫 Utente non loggato → ROI limitato");
+      result = {
+        roi: 0,
+        revenue: 0,
+        profit: 0,
+        netAfterMortgage: 0,
+        mortgageAnnual: 0
+      };
 
-  showRegisterPopup();
+    }else{
 
-  result = {
-    roi: 0,
-    revenue: 0,
-    profit: 0,
-    netAfterMortgage: 0,
-    mortgageAnnual: 0
-  };
+      result = calculateROI({
+        price,
+        equity,
+        priceNight,
+        occupancy,
+        expenses,
+        commission,
+        tax,
+        loanAmount,
+        interestRate,
+        loanYears
+      });
 
-}else{
+    }
 
-  result = calculateROI({
-    price,
-    equity,
-    priceNight,
-    occupancy,
-    expenses,
-    commission,
-    tax,
-    loanAmount,
-    interestRate,
-    loanYears
-  });
+    // ================= VALIDAZIONE =================
+    if (!result || typeof result !== "object") {
+      console.warn("⛔ risultato non valido");
+      return;
+    }
 
-}
-// ================= VALIDAZIONE =================
-if (!result || typeof result !== "object") {
-  console.warn("⛔ risultato non valido");
-  return;
-}
+    // ================= SESSION =================
+    window.simulationExecuted = true;
+    window.lastAnalysisData = result;
 
+    // ================= SAFE VALUES =================
+    const roi   = Number(result?.roi || 0);
+    const gross = Number(result?.revenue || 0);
+    const net   = Number(result?.netAfterMortgage || result?.profit || 0);
+
+    // ================= ROI UI =================
+    const roiEl = document.getElementById("roi-live");
+    if(roiEl){
+      roiEl.innerText = roi.toFixed(1) + "%";
+    }
+
+    // ================= KPI =================
+    const monthlyEl = document.getElementById("profit-monthly");
+    const annualEl  = document.getElementById("profit-annual");
+
+    if(monthlyEl) monthlyEl.innerText = formatCurrency(net / 12);
+    if(annualEl)  annualEl.innerText  = formatCurrency(net);
+
+    // ================= PAYWALL =================
+    const isProUser = window.isPro && window.isPro();
+
+    if(!isProUser && !window.paywallShown){
+
+      window.paywallShown = true;
+
+      setTimeout(()=>{
+        console.log("🔥 PAYWALL TRIGGER");
+        if(typeof showUpgradeModal === "function"){
+          showUpgradeModal(roi);
+        }
+      },1200);
+
+    }
+
+    // ================= CHART =================
+    setTimeout(()=>{
+      if(typeof renderChart === "function"){
+        renderChart(net);
+      }
+    },200);
+
+    // ================= MARKET =================
+    if(typeof renderMarketBenchmark === "function"){
+      renderMarketBenchmark(window.currentCity || "napoli");
+    }
+
+    if(typeof renderMarketComparison === "function"){
+      renderMarketComparison(
+        gross,
+        window.currentCity || "napoli"
+      );
+    }
+
+    // ================= LANGUAGE =================
+    window.RB_LANG?.apply?.();
+
+  }catch(err){
+    console.error("💥 calculate error:", err);
+  }
+
+  window.isCalculating = false;
+};
 // ================= SESSION =================
 window.simulationExecuted = true;
 window.lastAnalysisData = result;
