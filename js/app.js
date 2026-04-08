@@ -1761,60 +1761,6 @@ function runPostAnalysis(result, context){
   });
 
 }
-setTimeout(() => {
-
-  try {
-
-    if (window.emailSent) {
-      console.log("⛔ già inviato");
-      return;
-    }
-
-    if (!isFreeUser || !goodROI || !userEmail) {
-      console.log("⛔ condizioni non valide");
-      return;
-    }
-
-    window.emailSent = true;
-
-    fetch("/api/send-lead", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        type: "simulatore",
-        email: userEmail,
-        roi: roi,
-        city: window.currentCity || "unknown",
-        budget: price,
-        timestamp: Date.now()
-      })
-    })
-    .then(async res => {
-
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("❌ Lead API error:", text);
-        window.emailSent = false;
-        return;
-      }
-
-      const data = await res.json().catch(() => null);
-
-      console.log("📩 Lead monetizzabile inviato", data);
-
-    })
-    .catch(err => {
-      console.warn("Lead silent fail", err);
-      window.emailSent = false;
-    });
-
-  } catch (e) {
-    console.error("💥 Lead engine error:", e);
-  }
-
-}, 4000);
 
 // ================= UI UNLOCK =================
 
