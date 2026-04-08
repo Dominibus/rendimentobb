@@ -10201,3 +10201,33 @@ body.is-pro .pro-blur{
   font-size:18px;
   font-weight:700;
 }
+
+/* ===================== */
+/* 🔥 SMART PAYWALL OVERLAY */
+/* ===================== */
+
+.smart-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.65);
+  backdrop-filter:blur(6px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:9999;
+}
+
+.smart-box{
+  background:white;
+  padding:28px;
+  border-radius:20px;
+
+  max-width:380px;
+  width:90%;
+
+  text-align:center;
+
+  box-shadow:0 25px 80px rgba(0,0,0,0.35);
+}
