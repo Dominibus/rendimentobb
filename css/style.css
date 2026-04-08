@@ -10092,3 +10092,112 @@ footer a:hover{
   position:relative;
   z-index:20;
 }
+
+/* ===================== */
+/* 🔥 CTA UPGRADE FIX */
+/* ===================== */
+
+.upgrade-box{
+  margin:25px auto;
+  text-align:center;
+}
+
+.upgrade-box button,
+.btn-main{
+  display:block !important;
+  width:100%;
+  max-width:320px;
+  margin:10px auto;
+
+  background:linear-gradient(135deg,#10b981,#059669) !important;
+  color:#ffffff !important;
+
+  border:none !important;
+  border-radius:12px;
+
+  font-weight:700;
+  font-size:15px;
+
+  box-shadow:0 10px 25px rgba(16,185,129,0.35);
+  transition:all .25s ease;
+
+  z-index:20;
+  position:relative;
+}
+
+.upgrade-box button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 40px rgba(16,185,129,0.45);
+}
+
+/* ===================== */
+/* 🔥 FIX VISIBILITÀ */
+/* ===================== */
+
+.results-card button{
+  position:relative;
+  z-index:20;
+}
+
+.results-overlay{
+  pointer-events:none;
+}
+
+.results-overlay .overlay-content{
+  pointer-events:auto;
+}
+
+/* ===================== */
+/* 🔥 ACCESS CONTROL VISIVO */
+/* ===================== */
+
+.is-pro .free-only{
+  display:none !important;
+}
+
+.is-free .pro-only,
+.is-guest .pro-only{
+  display:none !important;
+}
+
+/* ===================== */
+/* 🔥 SBLOCCO PRO */
+/* ===================== */
+
+body.is-pro .pro-blur{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+/* ===================== */
+/* 🔥 RISULTATI GRID */
+/* ===================== */
+
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:16px;
+  margin-top:20px;
+}
+
+.result-item{
+  background:white;
+  padding:18px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.result-item span{
+  font-size:13px;
+  color:#64748b;
+}
+
+.result-item strong{
+  display:block;
+  margin-top:6px;
+  font-size:18px;
+  font-weight:700;
+}
