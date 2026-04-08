@@ -1545,10 +1545,10 @@ const roi   = Number(result?.roi || 0);
 const gross = Number(result?.revenue || 0);
 const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
-// ================= SMART PAYWALL TRIGGER (NUOVO) =================
+// ================= SMART PAYWALL TRIGGER (FIX DEFINITIVO) =================
 
-// 🔥 sicurezza
-const isProUserNow = window.isPro && window.isPro();
+// 🔥 controllo utente PRO
+const isProUserNow = window.isProUser && window.isProUser();
 
 // 🔥 evita doppio trigger
 if(!isProUserNow && !window.paywallShown){
@@ -1557,46 +1557,122 @@ if(!isProUserNow && !window.paywallShown){
 
   setTimeout(()=>{
 
-    // 🔥 CASO 1 → ROI ALTO (MIGLIORE CONVERSIONE)
+    // ================= ROI ALTO =================
     if(roi >= 10){
 
       console.log("🔥 PAYWALL: HIGH ROI");
 
-      if(typeof renderSmartInvestmentAlert === "function"){
-        renderSmartInvestmentAlert(roi);
-      }
+      showPaywallModal();
 
     }
 
-    // 🔥 CASO 2 → ROI MEDIO (SPINTA)
+    // ================= ROI MEDIO =================
     else if(roi >= 6){
 
       console.log("⚡ PAYWALL: MEDIUM ROI");
 
-      if(typeof showUpgradePopup === "function"){
-        showUpgradePopup(roi);
-      }
+      showPaywallModal();
 
     }
 
-    // 🔥 CASO 3 → ROI BASSO (PAURA)
+    // ================= ROI BASSO =================
     else{
 
       console.log("⚠️ PAYWALL: LOW ROI");
 
-      if(typeof showUpgradeModal === "function"){
-        showUpgradeModal(roi);
-      }
+      showPaywallModal();
 
     }
 
-  }, 1200); // 🔥 delay psicologico
+  }, 1200);
 
-}    
+}
+
+
+// ================= 🔥 MODAL UNIFICATA (QUESTA È LA CHIAVE) =================
+
+function showPaywallModal(){
+
+  const lang = window.RB_LANG?.current || "it";
+
+  // prova modal già esistente
+  if(typeof showUpgradeModalCustom === "function"){
+    showUpgradeModalCustom(
+      "🔥 Stai prendendo una decisione senza dati reali",
+      "🔥 You are making a decision without real data"
+    );
+    return;
+  }
+
+  // fallback sicuro (SEMPRE FUNZIONA)
+  const existing = document.getElementById("paywall-overlay");
+  if(existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "paywall-overlay";
+
+  overlay.innerHTML = `
+    <div style="
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.75);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+    ">
+
+      <div style="
+        background:white;
+        padding:30px;
+        border-radius:16px;
+        max-width:420px;
+        width:90%;
+        text-align:center;
+        box-shadow:0 20px 60px rgba(0,0,0,0.25);
+        animation:fadeIn .3s ease;
+      ">
+
+        <h3 style="margin-bottom:10px;">
+          ${lang === "en"
+            ? "🔥 You're investing blindly"
+            : "🔥 Stai investendo alla cieca"}
+        </h3>
+
+        <p style="font-size:14px;color:#64748b;">
+          ${lang === "en"
+            ? "ROI, risk and sustainability are hidden. Unlock before investing."
+            : "ROI reale, rischio e sostenibilità sono nascosti. Sblocca prima di investire."}
+        </p>
+
+        <button onclick="buyPlan('pro')" class="btn btn-primary" style="margin-top:15px;width:100%;">
+          ${lang === "en"
+            ? "🔥 Unlock full analysis – €29"
+            : "🔥 Sblocca analisi completa – 29€"}
+        </button>
+
+        <button onclick="document.getElementById('paywall-overlay').remove()" style="
+          margin-top:10px;
+          background:none;
+          border:none;
+          color:#64748b;
+          cursor:pointer;
+        ">
+          ${lang === "en" ? "Not now" : "Ora no"}
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
 
 // ================= USER =================
 const userEmail = window.currentUser?.email || null;
-const isFreeUser = !(window.isPro && window.isPro());
+const isFreeUser = !(window.isProUser && window.isProUser());
 const goodROI = roi > 8;
 
 // ================= SESSION TRACK =================
@@ -1619,7 +1695,7 @@ const leadDestination = getLeadDestination({
   roi: roi,
   city: window.currentCity
 });
-
+    
 // ================= SAVE LEAD (ASYNC SAFE) =================
 (async () => {
   try {
