@@ -260,7 +260,7 @@ function hasPlan(requiredPlan){
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
   // 🔥 PRO → bypass totale
-if(window.currentPlan === "pro" || window.currentPlan === "investor" || window.currentPlan === "pro_yearly"){
+if(window.isPro && window.isPro()){
   return true;
 }
 
@@ -1063,10 +1063,7 @@ function renderSmartInvestmentAlert(roi){
   let isProUser = false;
 
   try{
-    isProUser =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+    isProUser = window.isPro && window.isPro();
   }catch(e){
     console.warn("isPro error", e);
   }
@@ -1282,10 +1279,7 @@ if(!window.firebaseReady){
 let isProUser = false;
 
 try{
-  isProUser =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+  isProUser = window.isPro && window.isPro();
 }catch(e){
   console.warn("isPro error", e);
 }
@@ -1896,12 +1890,7 @@ if(revenueHome){
 
 let isProUser = false;
 
-try{
-  isProUser =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
-}catch(e){
+let isProUser = window.isPro && window.isPro();
   console.warn("isPro error", e);
 }
 
@@ -1940,11 +1929,7 @@ if(!window.firebaseReady){
   return;
 }
     
-    if(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-){
+    if(window.isPro && window.isPro()){
 
       console.log("🔓 PRO → unlock totale");
 
@@ -3322,11 +3307,7 @@ window.proUnlocked = false;
 
 function unlockProUI(){
 
-if(window.proUnlocked && (
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-)){
+if(window.proUnlocked && window.isPro && window.isPro()){
   console.log("⛔ già sbloccato → skip");
   return;
 }
@@ -3344,16 +3325,9 @@ if(typeof window.isAdmin === "function" && window.isAdmin()){
 
 }
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+  const isPro = window.isPro && window.isPro();
 
-  if(!(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-)){
+  if(!(window.isPro && window.isPro())){
   console.log("⛔ NOT PRO → skip");
   return;
 }
