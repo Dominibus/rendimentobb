@@ -1430,7 +1430,7 @@ function getLeadDestination({roi, city}){
   return null;
 }
 
-// ================= CORE CALCULATE ENGINE (SAAS READY) =================
+// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
 
@@ -1448,20 +1448,9 @@ window.calculate = async function(force = false){
 
   window.isCalculating = true;
   window.simulationExecuted = false;
-
-  // 🔥 RESET PAYWALL
   window.paywallShown = false;
 
   try{
-
-    // ================= SAFETY =================
-    if(typeof window.safeNumber !== "function"){
-      window.safeNumber = function(value){
-        if(value === null || value === undefined) return 0;
-        const num = Number(value);
-        return isNaN(num) ? 0 : num;
-      };
-    }
 
     // ================= INPUT =================
     const isTool = !!document.getElementById("price");
@@ -1499,22 +1488,13 @@ window.calculate = async function(force = false){
       occValue.innerText = occupancy + "%";
     }
 
-    console.log("🔥 INPUT FINAL:", {
-      price, equity, priceNight, occupancy,
-      expenses, commission, tax,
-      loanAmount, interestRate, loanYears
-    });
-
     // ================= CALCOLO =================
-
     window.emailSent = false;
 
     const isLogged = !!window.currentUser;
     let result;
 
     if(!isLogged){
-
-      console.log("🚫 Utente non loggato → ROI limitato");
 
       showRegisterPopup();
 
@@ -1549,51 +1529,31 @@ window.calculate = async function(force = false){
       return;
     }
 
-    // ================= SESSION =================
-    window.simulationExecuted = true;
-    window.lastAnalysisData = result;
-
-    runPostAnalysis(result, {
-  price,
-  gross,
-  occupancy,
-  priceNight,
-  expenses
-});
-
-    // ================= SAFE VALUES =================
+    // ================= SAFE VALUES (PRIMA!) =================
     const roi   = Number(result?.roi || 0);
     const gross = Number(result?.revenue || 0);
     const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
-    // ================= ROI UI =================
+    // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
+    runPostAnalysis(result, {
+      price,
+      gross,
+      occupancy,
+      priceNight,
+      expenses
+    });
+
+    // ================= UI BASE =================
     const roiEl = document.getElementById("roi-live");
     if(roiEl){
       roiEl.innerText = roi.toFixed(1) + "%";
     }
 
-    // ================= KPI =================
     const monthlyEl = document.getElementById("profit-monthly");
     const annualEl  = document.getElementById("profit-annual");
 
     if(monthlyEl) monthlyEl.innerText = formatCurrency(net / 12);
     if(annualEl)  annualEl.innerText  = formatCurrency(net);
-
-    // ================= PAYWALL =================
-    const isProUser = window.isPro && window.isPro();
-
-    if(!isProUser && !window.paywallShown){
-
-      window.paywallShown = true;
-
-      setTimeout(()=>{
-        console.log("🔥 PAYWALL TRIGGER");
-        if(typeof showUpgradeModal === "function"){
-          showUpgradeModal(roi);
-        }
-      },1200);
-
-    }
 
     // ================= CHART =================
     setTimeout(()=>{
@@ -1623,7 +1583,9 @@ window.calculate = async function(force = false){
 
   window.isCalculating = false;
 };
-// ================= POST ANALYSIS ENGINE (FIX DEFINITIVO) =================
+
+
+// ================= POST ANALYSIS ENGINE (SAAS CLEAN) =================
 
 function runPostAnalysis(result, context){
 
@@ -1637,24 +1599,21 @@ function runPostAnalysis(result, context){
     expenses
   } = context || {};
 
-  // ================= SESSION =================
+  // ================= SESSION (UNICA FONTE) =================
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
-  // ================= SAFE VALUES =================
-  const roi   = Number(result?.roi || 0);
-  const net   = Number(result?.netAfterMortgage || result?.profit || 0);
+  const roi = Number(result?.roi || 0);
 
-  // ================= PAYWALL =================
-  const isProUserNow = window.isPro && window.isPro();
+  // ================= PAYWALL (UNICO) =================
+  const isProUser = window.isPro && window.isPro();
 
-  if(!isProUserNow && !window.paywallShown){
+  if(!isProUser && !window.paywallShown){
 
     window.paywallShown = true;
 
     setTimeout(()=>{
-      console.log("🔥 PAYWALL TRIGGER:", roi);
-      showPaywallModal();
+      showUpgradeModal(roi);
     },1200);
 
   }
@@ -1665,10 +1624,7 @@ function runPostAnalysis(result, context){
   // ================= SESSION COUNT =================
   window.simulationCount = (window.simulationCount || 0) + 1;
 
-  const isLogged = !!window.currentUser;
-
-  if(!isLogged && window.simulationCount >= 2){
-    console.log("🚀 Redirect login (utente caldo)");
+  if(!window.currentUser && window.simulationCount >= 2){
     setTimeout(()=> window.location.href="/login/", 800);
   }
 
@@ -1679,7 +1635,9 @@ function runPostAnalysis(result, context){
     leadScore = "hot";
   }
 
-  const leadValue = leadScore === "hot" ? 100 : leadScore === "warm" ? 40 : 0;
+  const leadValue =
+    leadScore === "hot" ? 100 :
+    leadScore === "warm" ? 40 : 0;
 
   const leadDestination = getLeadDestination({
     roi,
@@ -1709,8 +1667,6 @@ function runPostAnalysis(result, context){
       });
 
       window.leadSaved = true;
-
-      console.log("🔥 Lead salvato");
 
       // ================= PARTNER =================
       if(leadScore === "hot"){
@@ -1761,7 +1717,6 @@ function runPostAnalysis(result, context){
   });
 
 }
-
 // ================= UI UNLOCK =================
 
 // 🔥 RESET HARD UI
