@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER – FINAL FIX */
+/* RENDIMENTOBB HEADER – ULTRA FINAL */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -45,10 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="rb-inner">
 
+      <!-- LEFT -->
       <div class="rb-left">
         <a href="/"><img src="/img/logo-main.png" class="rb-logo"></a>
       </div>
 
+      <!-- CENTER -->
       <nav class="rb-center">
         <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
         <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
@@ -57,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
       </nav>
 
+      <!-- RIGHT -->
       <div class="rb-right">
 
         <div class="rb-lang">
@@ -72,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     </div>
 
+    <!-- MOBILE -->
     <div class="rb-mobile" id="rb-mobile">
       <div id="mobile-user-area"></div>
 
@@ -88,14 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
   window.applyCityBackground();
   initHeaderInteractions();
 
-  // 🔥 Firebase listener (UNICO VERO SOURCE)
+  // 🔥 AUTH LISTENER
   onAuthStateChanged(auth, (user) => {
-
-    console.log("🔥 AUTH READY", user);
-
-    // aspetta piano massimo 2 secondi
     waitPlanAndRender(user);
-
   });
 
   if(window.setLang){
@@ -106,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ===================== */
-/* WAIT PLAN (FIX CRITICO) */
+/* WAIT PLAN – FIX DEFINITIVO */
 /* ===================== */
 
 function waitPlanAndRender(user){
@@ -117,15 +116,19 @@ function waitPlanAndRender(user){
 
     attempts++;
 
-    const hasPlan = window.currentPlan !== undefined;
-    const hasRole = window.userRole !== undefined;
+    const plan = window.currentPlan;
+    const role = window.userRole;
 
-    if(hasPlan || hasRole || attempts > 20){
+    const ready =
+      (typeof plan === "string" && plan.length > 0) ||
+      (typeof role === "string" && role.length > 0);
+
+    if(ready || attempts > 30){
       clearInterval(interval);
       renderUser(user);
     }
 
-  },100);
+  },150);
 
 }
 
@@ -183,14 +186,18 @@ function renderUser(user){
 
   if(!el) return;
 
+  // 🔥 SAFE DEFAULT
+  window.userRole = window.userRole || "";
+  window.currentPlan = window.currentPlan || "";
+
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
   const plan = clean(window.currentPlan);
   const role = clean(window.userRole);
 
   const isAdmin =
-    role === "admin" ||
-    user?.email === "rendimentobb@gmail.com";
+    user?.email === "rendimentobb@gmail.com" ||
+    role === "admin";
 
   const isPro =
     isAdmin ||
@@ -198,7 +205,7 @@ function renderUser(user){
     plan === "investor" ||
     plan === "pro_yearly";
 
-  console.log("✅ HEADER STATE", {user, plan, role, isAdmin, isPro});
+  console.log("🚀 HEADER FINAL", {user, plan, role, isAdmin, isPro});
 
   // ================= LOGGED =================
 
@@ -206,10 +213,8 @@ function renderUser(user){
 
     let html = `<div class="rb-user">`;
 
-    html += `<span class="rb-email">${user.email}</span>`;
-
     if(isPro){
-      html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+      html += `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>`;
     }
 
     if(isAdmin){
@@ -223,11 +228,10 @@ function renderUser(user){
 
     if(mobileEl){
 
-      let m = `<div class="rb-mobile-user">
-        <div class="rb-email">${user.email}</div>`;
+      let m = `<div class="rb-mobile-user">`;
 
       if(isPro){
-        m += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
+        m += `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>`;
       }
 
       if(isAdmin){
@@ -255,7 +259,6 @@ function renderUser(user){
     el.innerHTML = `
       <a href="/login/" class="rb-login">Accedi</a>
     `;
-
   }
 
   if(window.setLang){
