@@ -43,7 +43,7 @@ window.initAccessControl = function(){
 
     console.log("🧠 RB_USER:", window.RB_USER);
 
-    // ================= APPLY UI STATE =================
+   // ================= APPLY UI STATE =================
 
 function applyAccessUI(){
 
@@ -55,11 +55,13 @@ function applyAccessUI(){
   // ================= PRO USER =================
   if(isPro){
 
-    // ❌ NASCONDI CTA UPGRADE
+    document.body.classList.add("is-pro");
+    document.body.classList.remove("is-free","is-guest");
+
+    // ❌ NASCONDI CTA + MESSAGGI PAURA
     document.querySelectorAll(`
       .upgrade-box,
-      .btn-upgrade,
-      .paywall-box,
+      .free-only,
       [data-paywall]
     `).forEach(el => el.remove());
 
@@ -78,9 +80,11 @@ function applyAccessUI(){
   }
 
   // ================= FREE USER =================
-  if(!isPro){
+  else if(isLogged){
 
-    // 🔒 MOSTRA CTA SOLO AI FREE
+    document.body.classList.add("is-free");
+    document.body.classList.remove("is-pro","is-guest");
+
     document.querySelectorAll(".upgrade-box").forEach(el=>{
       el.style.display = "block";
     });
@@ -88,7 +92,10 @@ function applyAccessUI(){
   }
 
   // ================= GUEST =================
-  if(!isLogged){
+  else{
+
+    document.body.classList.add("is-guest");
+    document.body.classList.remove("is-pro","is-free");
 
     document.querySelectorAll(".pro-only").forEach(el=>{
       el.style.display = "none";
@@ -97,9 +104,6 @@ function applyAccessUI(){
   }
 
 }
-
-// 🔥 CHIAMATA
-applyAccessUI();
 
     // ================= APPLY BODY CLASS =================
     document.body.classList.remove("is-free","is-pro","is-guest");
