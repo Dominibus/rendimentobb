@@ -2201,6 +2201,25 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
+// 🔥 FIX CTA MULTIPLE
+document.addEventListener("DOMContentLoaded", () => {
+
+  const seen = new Set();
+
+  document.querySelectorAll(".btn-main").forEach(btn => {
+
+    const text = btn.innerText.trim();
+
+    if(seen.has(text)){
+      btn.remove();
+    }else{
+      seen.add(text);
+    }
+
+  });
+
+});
+
 // ================= EXECUTIVE PDF =================
 
 window.generateExecutivePDF = async function(){
