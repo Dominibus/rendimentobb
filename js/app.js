@@ -1474,8 +1474,11 @@ if(!window.firebaseReady){
   return;
 }
 
-  window.isCalculating = true;
-  window.simulationExecuted = false;
+window.isCalculating = true;
+window.simulationExecuted = false;
+
+// 🔥 RESET PAYWALL (OBBLIGATORIO)
+window.paywallShown = false;
 
   try{
 
@@ -1565,6 +1568,55 @@ window.lastAnalysisData = result;
 const roi   = Number(result?.roi || 0);
 const gross = Number(result?.revenue || 0);
 const net   = Number(result?.netAfterMortgage || result?.profit || 0);
+
+// ================= SMART PAYWALL TRIGGER (NUOVO) =================
+
+// 🔥 sicurezza
+const isProUserNow = window.isPro && window.isPro();
+
+// 🔥 evita doppio trigger
+if(!isProUserNow && !window.paywallShown){
+
+  window.paywallShown = true;
+
+  setTimeout(()=>{
+
+    // 🔥 CASO 1 → ROI ALTO (MIGLIORE CONVERSIONE)
+    if(roi >= 10){
+
+      console.log("🔥 PAYWALL: HIGH ROI");
+
+      if(typeof renderSmartInvestmentAlert === "function"){
+        renderSmartInvestmentAlert(roi);
+      }
+
+    }
+
+    // 🔥 CASO 2 → ROI MEDIO (SPINTA)
+    else if(roi >= 6){
+
+      console.log("⚡ PAYWALL: MEDIUM ROI");
+
+      if(typeof showUpgradePopup === "function"){
+        showUpgradePopup(roi);
+      }
+
+    }
+
+    // 🔥 CASO 3 → ROI BASSO (PAURA)
+    else{
+
+      console.log("⚠️ PAYWALL: LOW ROI");
+
+      if(typeof showUpgradeModal === "function"){
+        showUpgradeModal(roi);
+      }
+
+    }
+
+  }, 1200); // 🔥 delay psicologico
+
+}    
 
 // ================= USER =================
 const userEmail = window.currentUser?.email || null;
