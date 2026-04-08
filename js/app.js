@@ -1568,11 +1568,7 @@ const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
 // ================= USER =================
 const userEmail = window.currentUser?.email || null;
-const isFreeUser = !(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-);
+const isFreeUser = !(window.isPro && window.isPro());
 const goodROI = roi > 8;
 
 // ================= SESSION TRACK =================
@@ -1774,13 +1770,23 @@ setTimeout(() => {
 
 // ================= UI UNLOCK =================
 
-// rimuove overlay
-document.querySelectorAll(".results-overlay").forEach(el => el.remove());
+// 🔥 RESET HARD UI
+document.querySelectorAll(`
+  .results-overlay,
+  .locked-overlay,
+  .upgrade-overlay,
+  .home-blur-overlay
+`).forEach(el => el.remove());
 
-// rimuove blur
-document.querySelectorAll(".pro-blur").forEach(el => {
+document.querySelectorAll(`
+  .pro-blur,
+  .locked,
+  .locked-content
+`).forEach(el => {
+  el.classList.remove("pro-blur","locked","locked-content");
   el.style.filter = "none";
   el.style.opacity = "1";
+  el.style.pointerEvents = "auto";
 });
 
     // ================= ROI MAIN UI FIX =================
@@ -1890,7 +1896,9 @@ if(revenueHome){
 
 let isProUser = false;
 
-let isProUser = window.isPro && window.isPro();
+try{
+  isProUser = window.isPro && window.isPro();
+}catch(e){
   console.warn("isPro error", e);
 }
 
