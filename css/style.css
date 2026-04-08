@@ -10076,3 +10076,19 @@ footer a:hover{
 .pro-blur{
   pointer-events: auto !important;
 }
+
+/* 🔥 OVERLAY NON BLOCCA */
+.results-overlay{
+  pointer-events:none;
+}
+
+/* 🔥 SOLO IL BOX INTERNO È CLICCABILE */
+.results-overlay .overlay-content{
+  pointer-events:auto;
+}
+
+/* 🔥 CTA SEMPRE SOPRA */
+.cta-primary{
+  position:relative;
+  z-index:20;
+}
