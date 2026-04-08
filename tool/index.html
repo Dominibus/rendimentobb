@@ -572,7 +572,7 @@ data-en="⚠️ You could lose thousands without this full analysis">
 
 <!-- 🔥 OVERLAY SUPER CONVERSION -->
 
-<div class="results-overlay" data-paywall="true">
+<div class="results-overlay upgrade-box" data-paywall="true">
 
 <div class="overlay-content">
 
@@ -596,7 +596,7 @@ data-it="Il profitto reale può cambiare drasticamente. Scopri rischio, mutuo e 
 data-en="Real profit can change drastically. Discover risk, mortgage and sustainability before investing.">
 </div>
 
-<button class="unlock-btn" onclick="buyPlan('pro')"
+<button class="unlock-btn upgrade-box" onclick="buyPlan('pro')"
 data-it="🔥 Sblocca analisi completa – 29€"
 data-en="🔥 Unlock full analysis – €29">
 🔥 Sblocca analisi completa – 29€
@@ -611,7 +611,7 @@ data-en="🔥 Unlock full analysis – €29">
 <div style="text-align:center;margin-top:30px;">
 
 <button 
-  class="cta-primary" 
+  class="cta-primary upgrade-box" 
   onclick="handleUpgradeClick()"
   style="font-size:18px;padding:16px 26px;">
 
@@ -677,7 +677,7 @@ data-en="⚠️ Full version includes real risk">
 <div class="locked-section" id="advanced-analysis">
 
 <!-- 🔒 OVERLAY MIGLIORATO -->
-<div class="locked-overlay" data-paywall="true">
+<div class="locked-overlay upgrade-box" data-paywall="true">
 
 <div class="overlay-title"
 data-it="🔒 Stai prendendo decisioni al buio"
@@ -750,7 +750,7 @@ data-en="🔥 Unlock full analysis – €29">
 
 <div style="text-align:center;margin-top:30px;">
 
-<button id="pro-btn" onclick="startPlanPurchase('pro')" class="btn btn-primary"
+<button id="pro-btn" class="upgrade-box" onclick="startPlanPurchase('pro')" class="btn btn-primary"
 style="font-size:18px;padding:16px 26px;"
 data-it="💰 Sblocca il vero risultato dell’investimento"
 data-en="💰 Unlock the real investment result">
@@ -766,7 +766,7 @@ data-en="Discover real profit, risk and sustainability before investing">
 
 <!-- 🔒 BLOCCO TUTTE LE SEZIONI SOTTO -->
 
-<div class="results-card" data-paywall="true">
+<div class="results-card upgrade-box" data-paywall="true">
 
 <div class="overlay-content" style="text-align:center;padding:30px;">
 
@@ -794,7 +794,7 @@ data-en="🔥 Unlock now – €29">
 
 <!-- 🔒 PREMIUM DATA SECTION -->
 
-<div class="results-card" data-paywall="true">
+<div class="results-card upgrade-box" data-paywall="true">
 
 <div class="overlay-content" style="text-align:center;padding:40px 20px;">
 
@@ -1119,10 +1119,30 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🔥 Plan loaded:", window.currentPlan);
 
-  if(window.isProUser()){
-    console.log("🚀 PRO → skip paywall");
-    return;
-  }
+ if(window.isProUser()){
+
+  console.log("🚀 PRO → unlock everything");
+
+  // 🔥 rimuove overlay
+  document.querySelectorAll("[data-paywall]").forEach(el => el.remove());
+
+  // 🔥 mostra contenuti pro
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.style.display = "block";
+  });
+
+  // 🔥 rimuove blur
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  // 🔥 NASCONDE CTA UPGRADE
+  document.querySelectorAll(".upgrade-box").forEach(el=>{
+    el.style.display = "none";
+  });
+
+  return;
+}
 
   setTimeout(() => {
     applyPaywall();
