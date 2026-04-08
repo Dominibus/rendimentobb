@@ -3659,6 +3659,9 @@ window.showRegisterPopup = function(){
   // 🔥 blocca scroll
   document.body.style.overflow = "hidden";
 
+  // 🔥 BLOCCA HEADER / MENU
+document.body.classList.add("popup-open");
+
   // 🔥 click fuori = chiudi
   popup.querySelector(".popup-overlay").onclick = (e) => {
     if(e.target.classList.contains("popup-overlay")){
@@ -3680,7 +3683,10 @@ window.closeRegisterPopup = function(){
 
   document.body.style.overflow = "";
 
-  // 🔥 opzionale: sblocca calcolo se vuoi teaser
+  // 🔥 SBLOCCA HEADER / MENU (QUESTA MANCAVA)
+  document.body.classList.remove("popup-open");
+
+  // 🔥 opzionale: reset stato
   window.isCalculating = false;
 
   console.log("✅ Popup chiuso");
