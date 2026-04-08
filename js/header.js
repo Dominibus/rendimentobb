@@ -1,9 +1,9 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER – PREMIUM FINAL */
+/* RENDIMENTOBB HEADER – FINAL FIX */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 /* ===================== */
 /* HERO BG */
@@ -45,14 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="rb-inner">
 
-      <!-- LOGO -->
       <div class="rb-left">
-        <a href="/">
-          <img src="/img/logo-main.png" class="rb-logo">
-        </a>
+        <a href="/"><img src="/img/logo-main.png" class="rb-logo"></a>
       </div>
 
-      <!-- MENU -->
       <nav class="rb-center">
         <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
         <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
@@ -61,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
       </nav>
 
-      <!-- RIGHT -->
       <div class="rb-right">
 
         <div class="rb-lang">
@@ -77,17 +72,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     </div>
 
-    <!-- MOBILE -->
     <div class="rb-mobile" id="rb-mobile">
-
       <div id="mobile-user-area"></div>
 
-      <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-      <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
-      <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
-      <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
-      <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
-
+      <a href="/tool/">Simulatore</a>
+      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+      <a href="/mutui/">Mutui</a>
+      <a href="/immobili/">Immobili</a>
+      <a href="/academy/">Academy</a>
     </div>
 
   </header>
@@ -96,15 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
   window.applyCityBackground();
   initHeaderInteractions();
 
-  // render iniziale
-  renderUser(null);
+  // 🔥 Firebase listener (UNICO VERO SOURCE)
+  onAuthStateChanged(auth, (user) => {
 
-  document.addEventListener("rb_auth_ready", () => {
-    renderUser(window.currentUser);
-  });
+    console.log("🔥 AUTH READY", user);
 
-  document.addEventListener("rb_plan_ready", () => {
-    renderUser(window.currentUser);
+    // aspetta piano massimo 2 secondi
+    waitPlanAndRender(user);
+
   });
 
   if(window.setLang){
@@ -112,6 +103,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+
+/* ===================== */
+/* WAIT PLAN (FIX CRITICO) */
+/* ===================== */
+
+function waitPlanAndRender(user){
+
+  let attempts = 0;
+
+  const interval = setInterval(()=>{
+
+    attempts++;
+
+    const hasPlan = window.currentPlan !== undefined;
+    const hasRole = window.userRole !== undefined;
+
+    if(hasPlan || hasRole || attempts > 20){
+      clearInterval(interval);
+      renderUser(user);
+    }
+
+  },100);
+
+}
 
 
 /* ===================== */
@@ -157,7 +173,7 @@ function updateLangButtons(lang){
 
 
 /* ===================== */
-/* USER RENDER */
+/* RENDER USER */
 /* ===================== */
 
 function renderUser(user){
@@ -182,29 +198,25 @@ function renderUser(user){
     plan === "investor" ||
     plan === "pro_yearly";
 
+  console.log("✅ HEADER STATE", {user, plan, role, isAdmin, isPro});
+
+  // ================= LOGGED =================
+
   if(user){
 
-    const email = user.email;
-
     let html = `<div class="rb-user">`;
-    html += `<span class="rb-email">${email}</span>`;
+
+    html += `<span class="rb-email">${user.email}</span>`;
 
     if(isPro){
-      html += `<a href="/dashboard/" class="rb-btn"
-      data-it="Dashboard"
-      data-en="Dashboard">Dashboard</a>`;
+      html += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
     }
 
     if(isAdmin){
-      html += `<a href="/dashboard-leads/" class="rb-btn"
-      data-it="Leads"
-      data-en="Leads">Leads</a>`;
+      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
     }
 
-    html += `<button id="logout" class="rb-btn red"
-    data-it="Logout"
-    data-en="Logout">Logout</button>`;
-
+    html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
 
     el.innerHTML = html;
@@ -212,23 +224,17 @@ function renderUser(user){
     if(mobileEl){
 
       let m = `<div class="rb-mobile-user">
-      <div class="rb-email">${email}</div>`;
+        <div class="rb-email">${user.email}</div>`;
 
       if(isPro){
-        m += `<a href="/dashboard/" class="rb-btn"
-        data-it="Dashboard"
-        data-en="Dashboard">Dashboard</a>`;
+        m += `<a href="/dashboard/" class="rb-btn">Dashboard</a>`;
       }
 
       if(isAdmin){
-        m += `<a href="/dashboard-leads/" class="rb-btn"
-        data-it="Leads"
-        data-en="Leads">Leads</a>`;
+        m += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
       }
 
-      m += `<button id="logout-mobile" class="rb-btn red"
-      data-it="Logout"
-      data-en="Logout">Logout</button></div>`;
+      m += `<button id="logout-mobile" class="rb-btn red">Logout</button></div>`;
 
       mobileEl.innerHTML = m;
     }
@@ -240,12 +246,14 @@ function renderUser(user){
       };
     });
 
-  } else {
+  }
+
+  // ================= NOT LOGGED =================
+
+  else{
 
     el.innerHTML = `
-      <a href="/login/" class="rb-login"
-      data-it="Accedi"
-      data-en="Login">Accedi</a>
+      <a href="/login/" class="rb-login">Accedi</a>
     `;
 
   }
