@@ -1598,17 +1598,6 @@ window.calculate = async function(force = false){
       );
     }
 
-    // ================= LANGUAGE =================
-    window.RB_LANG?.apply?.();
-
-  }catch(err){
-    console.error("💥 calculate error:", err);
-  }
-
-  window.isCalculating = false;
-};
-
-
 // ================= POST ANALYSIS ENGINE (SAAS CLEAN) =================
 
 function runPostAnalysis(result, context){
@@ -1875,13 +1864,6 @@ if(isProUser){
     );
 
     // ================= PRO UNLOCK =================
-// 🔥 BLOCCO DI SICUREZZA (METTILO QUI)
-if(!window.firebaseReady){
-  console.log("⏳ Firebase non pronto → delay");
-
-  window.pendingCalculation = true;
-  return;
-}
     
     if(window.isPro && window.isPro()){
 
