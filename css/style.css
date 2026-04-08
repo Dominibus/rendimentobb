@@ -9987,3 +9987,19 @@ footer a{
 footer a:hover{
   color:white;
 }
+
+/* ================= ACCESS CONTROL ================= */
+
+.is-pro .free-only{
+  display:none !important;
+}
+
+.is-free .pro-only,
+.is-guest .pro-only{
+  display:none !important;
+}
+
+/* OPTIONAL UX */
+.is-pro [data-paywall]{
+  display:none !important;
+}
