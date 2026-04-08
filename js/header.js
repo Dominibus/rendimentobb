@@ -142,22 +142,34 @@ function initHeaderInteractions(){
 
   if(burger && mobile){
 
+    // ===== TOGGLE MENU =====
     burger.onclick = (e)=>{
       e.stopPropagation();
       mobile.classList.toggle("open");
     };
 
-    // 🔥 FIX CLICK BLOCCATO (IL TUO BUG)
-    mobile.onclick = (e)=>{
-      e.stopPropagation();
-    };
-
-    document.addEventListener("click",()=>{
-      mobile.classList.remove("open");
+    // ===== CLICK LINK → CHIUDE MENU =====
+    mobile.querySelectorAll("a").forEach(link=>{
+      link.onclick = ()=>{
+        mobile.classList.remove("open");
+      };
     });
+
+    // ===== CLICK FUORI → CHIUDE =====
+    document.addEventListener("click",(e)=>{
+
+      // se clicchi dentro menu o burger → non chiudere
+      if(mobile.contains(e.target) || burger.contains(e.target)){
+        return;
+      }
+
+      mobile.classList.remove("open");
+
+    });
+
   }
 
-  // LANG
+  // ===== LANGUAGE =====
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
