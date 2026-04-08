@@ -1516,6 +1516,48 @@ window.paywallShown = false;
 // 🔥 reset anti-duplicazione globale
 window.emailSent = false;
 
+// ================= BLOCCO NON LOGGATO =================
+
+const isLogged = !!window.currentUser;
+
+if(!isLogged){
+
+let result;
+
+// ================= USER NON LOGGATO =================
+if(!isLogged){
+
+  console.log("🚫 Utente non loggato → ROI limitato");
+
+  showRegisterPopup();
+
+  // 🔥 simulazione fake / limitata (UX)
+  result = {
+    roi: 0,
+    revenue: 0,
+    profit: 0,
+    netAfterMortgage: 0,
+    mortgageAnnual: 0
+  };
+
+}else{
+
+  // ================= CALCOLO REALE =================
+  result = calculateROI({
+    price,
+    equity,
+    priceNight,
+    occupancy,
+    expenses,
+    commission,
+    tax,
+    loanAmount,
+    interestRate,
+    loanYears
+  });
+
+}  
+
 // ================= RESULT =================
 const result = calculateROI({
   price,
@@ -1548,7 +1590,7 @@ const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 // ================= SMART PAYWALL TRIGGER (FIX DEFINITIVO) =================
 
 // 🔥 controllo utente PRO
-const isProUserNow = window.isProUser && window.isProUser();
+const isProUserNow = window.isPro && window.isPro();
 
 // 🔥 evita doppio trigger
 if(!isProUserNow && !window.paywallShown){
@@ -1677,6 +1719,19 @@ const goodROI = roi > 8;
 
 // ================= SESSION TRACK =================
 window.simulationCount = (window.simulationCount || 0) + 1;
+
+// ================= FORZA REGISTRAZIONE (FUNNEL) =================
+const isLogged = !!window.currentUser;
+
+if(!isLogged && window.simulationCount >= 2){
+
+  console.log("🚀 Redirect login (utente caldo)");
+
+  setTimeout(()=>{
+    window.location.href = "/login/";
+  }, 800); // piccolo delay UX
+
+} 
 
 // ================= SCORE =================
 let leadScore = getLeadScore(result);
@@ -3694,3 +3749,70 @@ if(!isLogged){
   calculate(true);
 
 };
+
+function showRegisterPopup(){
+
+  if(document.getElementById("register-popup")) return;
+
+  // 🔥 mostra solo una volta
+  if(sessionStorage.getItem("registerPopupShown")) return;
+  sessionStorage.setItem("registerPopupShown", "true");
+
+  const popup = document.createElement("div");
+  popup.id = "register-popup";
+  popup.style.zIndex = "9999";
+
+  popup.innerHTML = `
+    <div class="popup-overlay">
+      <div class="popup-box">
+
+        <h3>
+          🔥 ${t(
+            "Scopri se il tuo investimento è davvero profittevole",
+            "See if your investment is really profitable"
+          )}
+        </h3>
+
+        <p>
+          ${t(
+            "Registrati gratis per ottenere ROI reale, rischio e analisi completa.",
+            "Sign up for free to unlock real ROI, risk and full analysis."
+          )}
+        </p>
+
+        <button onclick="window.location.href='/login/'" class="btn-main">
+          ${t("Registrati gratis", "Sign up free")}
+        </button>
+
+        <div class="popup-small">
+          ${t(
+            "Oppure continua con dati limitati",
+            "Or continue with limited data"
+          )}
+        </div>
+
+        <button onclick="closeRegisterPopup()" class="btn-outline">
+          ${t("Continua senza registrarti", "Continue without account")}
+        </button>
+
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  // 🔥 blocca scroll
+  document.body.style.overflow = "hidden";
+
+  // 🔥 chiusura clic fuori
+  popup.querySelector(".popup-overlay").onclick = (e) => {
+    if(e.target.classList.contains("popup-overlay")){
+      closeRegisterPopup();
+    }
+  };
+}
+
+function closeRegisterPopup(){
+  document.getElementById("register-popup")?.remove();
+  document.body.style.overflow = "";
+}
