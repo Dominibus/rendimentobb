@@ -214,7 +214,7 @@ function renderUser(user){
     }
 
     if(isAdmin){
-      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
+      html += `<a href="/dashboard-leads/" class="rb-btn leads">Leads</a>`;
     }
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
