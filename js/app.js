@@ -3604,17 +3604,18 @@ window.handleAnalyzeClick = function(){
 
 };
 
-function showRegisterPopup(){
+// ================= REGISTER POPUP (FINAL FIX) =================
+
+window.showRegisterPopup = function(){
 
   if(document.getElementById("register-popup")) return;
 
-  // 🔥 mostra solo una volta
+  // 🔥 mostra solo una volta per sessione
   if(sessionStorage.getItem("registerPopupShown")) return;
   sessionStorage.setItem("registerPopupShown", "true");
 
   const popup = document.createElement("div");
   popup.id = "register-popup";
-  popup.style.zIndex = "999999";
 
   popup.innerHTML = `
     <div class="popup-overlay">
@@ -3645,7 +3646,7 @@ function showRegisterPopup(){
           )}
         </div>
 
-        <button onclick="closeRegisterPopup()" class="btn-outline">
+        <button onclick="window.closeRegisterPopup()" class="btn-outline">
           ${t("Continua senza registrarti", "Continue without account")}
         </button>
 
@@ -3658,15 +3659,30 @@ function showRegisterPopup(){
   // 🔥 blocca scroll
   document.body.style.overflow = "hidden";
 
-  // 🔥 chiusura clic fuori
+  // 🔥 click fuori = chiudi
   popup.querySelector(".popup-overlay").onclick = (e) => {
     if(e.target.classList.contains("popup-overlay")){
-      closeRegisterPopup();
+      window.closeRegisterPopup();
     }
   };
-}
+};
 
-function closeRegisterPopup(){
-  document.getElementById("register-popup")?.remove();
+
+// ================= CLOSE POPUP (FIX ERRORE) =================
+
+window.closeRegisterPopup = function(){
+
+  const popup = document.getElementById("register-popup");
+
+  if(popup){
+    popup.remove();
+  }
+
   document.body.style.overflow = "";
-}
+
+  // 🔥 opzionale: sblocca calcolo se vuoi teaser
+  window.isCalculating = false;
+
+  console.log("✅ Popup chiuso");
+
+};
