@@ -9640,12 +9640,12 @@ display:none;
 }
 
 /* =====================================
-🔥 UI SYSTEM – RENDIMENTOBB ENTERPRISE
+🔥 RENDIMENTOBB – UI SYSTEM ENTERPRISE FINAL
 ===================================== */
 
-/* =====================================
-🎯 DESIGN TOKENS
-===================================== */
+/* ===================== */
+/* DESIGN TOKENS */
+/* ===================== */
 :root{
   --rb-bg:#f8fafc;
   --rb-surface:#ffffff;
@@ -9663,31 +9663,29 @@ display:none;
 
   --rb-shadow-sm:0 2px 6px rgba(0,0,0,0.04);
   --rb-shadow-md:0 10px 30px rgba(2,6,23,0.06);
-  --rb-shadow-lg:0 20px 60px rgba(2,6,23,0.10);
+  --rb-shadow-lg:0 20px 60px rgba(2,6,23,0.12);
 
   --rb-transition:all .25s ease;
 }
 
-/* =====================================
-🌍 BASE
-===================================== */
+/* ===================== */
+/* BASE */
+/* ===================== */
 body.rb-ui{
   background:var(--rb-bg);
   color:var(--rb-text);
   -webkit-font-smoothing:antialiased;
 }
 
-/* =====================================
-📦 CARD (AIRBNB / STRIPE)
-===================================== */
+/* ===================== */
+/* CARD */
+/* ===================== */
 .card{
   background:var(--rb-surface);
   border-radius:var(--rb-radius-lg);
   padding:28px;
-
   border:1px solid var(--rb-border);
   box-shadow:var(--rb-shadow-md);
-
   transition:var(--rb-transition);
 }
 
@@ -9696,9 +9694,9 @@ body.rb-ui{
   box-shadow:var(--rb-shadow-lg);
 }
 
-/* =====================================
-🔘 BUTTON BASE
-===================================== */
+/* ===================== */
+/* BUTTONS */
+/* ===================== */
 .btn-main,
 .btn-outline{
   display:inline-flex;
@@ -9708,236 +9706,75 @@ body.rb-ui{
 
   cursor:pointer;
   border:none;
-  text-decoration:none;
-  font-family:inherit;
-
   font-weight:600;
   font-size:15px;
 
-  border-radius:var(--rb-radius-full);
-
+  border-radius:999px;
   transition:var(--rb-transition);
 }
 
-/* =====================================
-🔥 PRIMARY CTA (STRIPE LEVEL)
-===================================== */
+/* PRIMARY */
 .btn-main{
   background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
   color:white;
-
   padding:14px 26px;
 
   box-shadow:
-    0 8px 22px rgba(16,185,129,0.28),
+    0 10px 30px rgba(16,185,129,0.35),
     inset 0 -2px 0 rgba(0,0,0,0.1);
-
-  position:relative;
-  overflow:hidden;
 }
 
 .btn-main:hover{
-  transform:translateY(-2px) scale(1.01);
-  box-shadow:
-    0 16px 40px rgba(16,185,129,0.35);
+  transform:translateY(-2px);
+  box-shadow:0 18px 45px rgba(16,185,129,0.45);
 }
 
-.btn-main:active{
-  transform:translateY(1px);
-}
-
-/* shine */
-.btn-main::after{
-  content:"";
-  position:absolute;
-  left:-100%;
-  top:0;
-  width:100%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.35),transparent);
-  transition:.6s;
-}
-
-.btn-main:hover::after{
-  left:100%;
-}
-
-/* =====================================
-⬜ SECONDARY CTA
-===================================== */
+/* SECONDARY */
 .btn-outline{
   background:white;
   border:1px solid var(--rb-border);
-  color:var(--rb-text);
-
   padding:13px 22px;
-
-  box-shadow:var(--rb-shadow-sm);
 }
 
 .btn-outline:hover{
   background:#f1f5f9;
-  border-color:#cbd5e1;
-
   transform:translateY(-1px);
-  box-shadow:var(--rb-shadow-md);
 }
 
-.btn-outline:active{
-  transform:translateY(1px);
-}
-
-/* =====================================
-⛔ DISABLED
-===================================== */
-.is-disabled,
-button:disabled{
-  opacity:0.5;
-  pointer-events:none;
-}
-
-/* =====================================
-⏳ LOADING (CENTER FIX)
-===================================== */
-.is-loading{
-  position:relative;
-  pointer-events:none;
-  color:transparent !important;
-}
-
-.is-loading::after{
-  content:"";
-  width:16px;
-  height:16px;
-
-  border:2px solid white;
-  border-top-color:transparent;
-
-  border-radius:50%;
-
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-
-  animation:spin .6s linear infinite;
-}
-
-@keyframes spin{
-  to{ transform:translate(-50%,-50%) rotate(360deg); }
-}
-
-/* =====================================
-✏️ INPUT (MODERNO)
-===================================== */
+/* ===================== */
+/* INPUT */
+/* ===================== */
 input{
   width:100%;
   border-radius:14px;
   border:1px solid var(--rb-border);
   padding:14px;
-
-  background:white;
-
   transition:var(--rb-transition);
 }
 
-input:hover{
-  border-color:#cbd5e1;
-}
-
 input:focus{
-  outline:none;
   border-color:var(--rb-primary);
-
-  box-shadow:
-    0 0 0 3px rgba(16,185,129,0.15);
+  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
+  outline:none;
 }
 
-/* =====================================
-🔤 TYPOGRAPHY (SaaS)
-===================================== */
-h1{
-  font-size:42px;
-  line-height:1.2;
-  letter-spacing:-0.5px;
-}
+/* ===================== */
+/* TYPO */
+/* ===================== */
+h1{ font-size:42px; }
+h2{ font-size:30px; }
+h3{ font-size:22px; }
 
-h2{
-  font-size:30px;
-}
-
-h3{
-  font-size:22px;
-}
-
-h1,h2,h3{
-  font-weight:700;
-}
-
-/* =====================================
-📐 SECTION SPACING
-===================================== */
+/* ===================== */
+/* SECTION */
+/* ===================== */
 .section{
   padding:100px 20px;
 }
 
 /* =====================================
-🌍 LANGUAGE BUTTON
+🔥 HEADER – FINAL FIXED (CRITICO)
 ===================================== */
-.lang-btn,
-.rb-lang button{
-  background:#f1f5f9 !important;
-  color:#0f172a !important;
-
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:12px;
-
-  border:1px solid var(--rb-border);
-}
-
-.lang-btn.active{
-  background:var(--rb-primary) !important;
-  color:white !important;
-}
-
-/* =====================================
-🔥 MICRO INTERACTIONS (SaaS FEEL)
-===================================== */
-.card,
-.btn-main,
-.btn-outline{
-  will-change:transform;
-}
-
-/* =====================================
-📱 MOBILE
-===================================== */
-@media (max-width:768px){
-
-  h1{ font-size:30px; }
-  h2{ font-size:24px; }
-
-  .card{
-    padding:20px;
-    border-radius:16px;
-  }
-
-  .btn-main,
-  .btn-outline{
-    padding:12px 20px;
-    font-size:14px;
-  }
-
-  .section{
-    padding:70px 16px;
-  }
-
-}
-
-/* ===================== */
-/* HEADER BASE */
-/* ===================== */
 
 .rb-header{
   position:fixed;
@@ -9949,9 +9786,10 @@ h1,h2,h3{
   background:rgba(255,255,255,0.85);
   backdrop-filter:blur(12px);
 
-  border-bottom:1px solid #e2e8f0;
+  border-bottom:1px solid var(--rb-border);
 }
 
+/* CONTAINER */
 .rb-inner{
   max-width:1200px;
   margin:auto;
@@ -9959,6 +9797,7 @@ h1,h2,h3{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:20px;
 
   padding:12px 20px;
 }
@@ -9968,96 +9807,121 @@ h1,h2,h3{
   height:42px;
 }
 
-/* MENU */
+/* ===================== */
+/* MENU CENTER */
+/* ===================== */
+
 .rb-center{
   display:flex;
-  gap:26px;
+  gap:20px;
+
+  flex:1;
+  justify-content:center;
+
+  min-width:0; /* 🔥 FIX */
 }
 
 .rb-center a{
   text-decoration:none;
-  color:#0f172a;
-  font-weight:500;
+  color:var(--rb-text);
   font-size:14px;
+  white-space:nowrap;
 }
 
 .rb-center a:hover{
-  color:#10b981;
+  color:var(--rb-primary);
 }
 
+/* ===================== */
 /* RIGHT */
+/* ===================== */
+
 .rb-right{
   display:flex;
   align-items:center;
   gap:10px;
-}
 
-/* LANG */
-.rb-lang button{
-  border:none;
-  background:#f1f5f9;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  cursor:pointer;
-}
-
-.rb-lang button.active{
-  background:#10b981;
-  color:white;
+  flex-shrink:0; /* 🔥 FIX DEFINITIVO */
 }
 
 /* USER */
 .rb-user{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
 }
 
+/* EMAIL */
 .rb-email{
   font-size:12px;
-  color:#64748b;
+  color:var(--rb-muted);
+
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-/* BUTTON */
+/* BUTTON HEADER */
 .rb-btn{
-  background:#10b981;
-  color:white;
-  padding:8px 14px;
+  padding:6px 12px;
   border-radius:999px;
   font-size:13px;
-  text-decoration:none;
-  border:none;
+
+  background:#f1f5f9;
+  border:1px solid var(--rb-border);
   cursor:pointer;
 }
 
 .rb-btn.red{
   background:#ef4444;
+  color:white;
+  border:none;
 }
 
 /* LOGIN */
 .rb-login{
-  background:#10b981;
+  background:var(--rb-primary);
   color:white;
   padding:8px 14px;
   border-radius:999px;
   text-decoration:none;
 }
 
+/* ===================== */
+/* LANGUAGE */
+/* ===================== */
+
+.rb-lang button{
+  background:#f1f5f9;
+  border:1px solid var(--rb-border);
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.rb-lang button.active{
+  background:var(--rb-primary);
+  color:white;
+}
+
+/* ===================== */
 /* BURGER */
+/* ===================== */
+
 #rb-burger{
   display:none;
   font-size:20px;
   background:none;
   border:none;
-  cursor:pointer;
 }
 
-/* ===================== */
-/* MOBILE */
-/* ===================== */
+/* =====================================
+📱 MOBILE
+===================================== */
 
-@media (max-width:768px){
+@media(max-width:768px){
 
   .rb-center{
     display:none;
@@ -10082,7 +9946,6 @@ h1,h2,h3{
     width:100%;
 
     background:white;
-
     display:none;
     flex-direction:column;
 
@@ -10096,14 +9959,32 @@ h1,h2,h3{
     display:flex;
   }
 
-  .rb-mobile a{
-    text-decoration:none;
-    color:#0f172a;
-    font-weight:500;
-  }
-
   .rb-mobile-user{
-    border-bottom:1px solid #e2e8f0;
+    border-bottom:1px solid var(--rb-border);
     padding-bottom:10px;
   }
+
+}
+
+/* =====================================
+🔥 FOOTER PREMIUM
+===================================== */
+
+footer{
+  background:#0f172a;
+  color:#cbd5f5;
+  padding:80px 20px;
+}
+
+footer h3{
+  color:white;
+}
+
+footer a{
+  color:#94a3b8;
+  text-decoration:none;
+}
+
+footer a:hover{
+  color:white;
 }
