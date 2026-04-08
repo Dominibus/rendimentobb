@@ -1059,7 +1059,7 @@ function renderSmartInvestmentAlert(roi){
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
 
-  // ================= CHECK PRO SICURO =================
+  // ================= CHECK PRO =================
   let isProUser = false;
 
   try{
@@ -1068,7 +1068,6 @@ function renderSmartInvestmentAlert(roi){
     console.warn("isPro error", e);
   }
 
-  // ✅ PRO → pulisci e STOP
   if(isProUser){
     container.innerHTML = "";
     return;
@@ -1080,70 +1079,47 @@ function renderSmartInvestmentAlert(roi){
     return;
   }
 
-  let badge = "";
+  // ================= RENDER OVERLAY =================
+  container.innerHTML = `
+  
+  <div class="smart-overlay">
 
-  if(roi > 12){
-    badge = `
-    <div style="
-      margin-bottom:12px;
-      padding:10px;
-      border-radius:10px;
-      background:#fef3c7;
-      border:1px solid #f59e0b;
-      font-weight:600;
-    ">
-      ${t("🔥 Investimento ad alto rendimento","🔥 High Yield Investment")}
-    </div>
-    `;
-  }
+    <div class="smart-box fade-up">
 
-  // ================= RENDER =================
-  container.innerHTML = badge + `
-  <div style="
-    margin-top:20px;
-    padding:20px;
-    border-radius:14px;
-    background:#ecfdf5;
-    border:1px solid #10b981;
-    text-align:center;
-  ">
+      <div class="smart-close" onclick="this.closest('.smart-overlay').remove()">✖</div>
 
-    <strong style="font-size:16px;">
-      ${t("Investimento ad alto rendimento","High yield investment")}
-    </strong>
+      <div style="font-weight:700;font-size:18px;margin-bottom:10px;">
+        🔥 ${t("Investimento ad alto rendimento","High yield investment")}
+      </div>
 
-    <p style="margin-top:8px;font-size:14px;">
-      ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong>
-    </p>
+      <div style="font-size:14px;color:#64748b;margin-bottom:15px;">
+        ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong><br>
+        ${t(
+          "Questo investimento potrebbe generare un forte rendimento",
+          "This investment could generate strong returns"
+        )}
+      </div>
 
-    <p style="margin-top:10px;font-size:14px;">
-      ${t(
-        "Questo investimento supera le medie di mercato e mostra forte potenziale.",
-        "This investment outperforms market averages and shows strong potential."
-      )}
-    </p>
+      <button id="smart-alert-btn" class="btn-main">
+        ${t(
+          "💰 Scopri quanto puoi guadagnare davvero",
+          "💰 See real profit potential"
+        )}
+      </button>
 
-    <button id="smart-alert-btn"
-      class="btn-main"
-      style="margin:20px auto;display:block;">
-      ${t(
-        "💰 Scopri quanto puoi guadagnare (o perdere davvero)",
-        "💰 See how much you can really earn (or lose)"
-      )}
-    </button>
+      <div style="margin-top:10px;font-size:12px;color:#94a3b8;">
+        ${t(
+          "Accesso a simulazione completa professionale",
+          "Access full professional simulation"
+        )}
+      </div>
 
-    <div style="margin-top:6px;font-size:12px;color:#64748b;">
-      ${t(
-        "Accesso a tutte le simulazioni professionali",
-        "Access to all professional simulations"
-      )}
     </div>
 
   </div>
   `;
 
-  // ================= BUTTON ACTION (NO INLINE JS = PIÙ STABILE) =================
-
+  // ================= BUTTON =================
   const btn = document.getElementById("smart-alert-btn");
 
   if(btn){
