@@ -10060,3 +10060,19 @@ footer a:hover{
   }
 
 }
+
+/* 🔥 CTA SEMPRE VISIBILE */
+.results-card button{
+  position: relative;
+  z-index: 10;
+}
+
+/* 🔥 FIX OVERLAY CHE BLOCCA */
+.results-card .locked-overlay{
+  pointer-events: none;
+}
+
+/* 🔥 SE HAI BLUR */
+.pro-blur{
+  pointer-events: auto !important;
+}
