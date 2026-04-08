@@ -1516,19 +1516,32 @@ window.calculate = async function(force = false){
     const isLogged = !!window.currentUser;
     let result;
 
-    if(!isLogged){
+   if(!isLogged){
 
-      showRegisterPopup();
+  console.log("🔒 Utente non loggato → blocco intelligente");
 
-      result = {
-        roi: 0,
-        revenue: 0,
-        profit: 0,
-        netAfterMortgage: 0,
-        mortgageAnnual: 0
-      };
+  showRegisterPopup();
 
-    }else{
+  // 🔥 NON CALCOLARE → BLOCCO REALE
+  window.simulationExecuted = false;
+
+  // 🔥 UI PREVIEW (TEASER)
+  const roiEl = document.getElementById("roi-live");
+  if(roiEl){
+    roiEl.innerText = "—";
+  }
+
+  document.querySelectorAll(`
+    #profit-monthly,
+    #profit-annual,
+    #revenue-annual,
+    #break-even
+  `).forEach(el=>{
+    if(el) el.innerText = "—";
+  });
+
+  return; // 🔥 BLOCCO TOTALE
+}else{
 
       result = calculateROI({
         price,
@@ -1621,15 +1634,32 @@ function runPostAnalysis(result, context){
   // ================= PAYWALL (UNICO) =================
   const isProUser = window.isPro && window.isPro();
 
-  if(!isProUser && !window.paywallShown){
+if(!isProUser && !window.paywallShown){
 
-    window.paywallShown = true;
+  window.paywallShown = true;
 
-    setTimeout(()=>{
-      showUpgradeModal(roi);
-    },1200);
+  const highROI = roi > 10;
+  const midROI  = roi > 6;
 
-  }
+  setTimeout(()=>{
+
+    if(highROI){
+
+      showUpgradeModal(roi); // 🔥 HARD SELL
+
+    }else if(midROI){
+
+      renderSmartInvestmentAlert(roi); // 🔥 SOFT PUSH
+
+    }else{
+
+      showUpgradeModal(roi); // 🔥 educazione
+
+    }
+
+  },1000);
+
+}
 
   // ================= USER =================
   const userEmail = window.currentUser?.email || null;
@@ -1838,9 +1868,55 @@ try{
 }
 
 if(isProUser){
+
   if(typeof renderExecutiveKPI === "function"){
     renderExecutiveKPI(result);
   }
+
+}else{
+
+  // 🔒 FREE → dati limitati
+  document.querySelectorAll(`
+    #revenue-forecast,
+    #occupancy-sensitivity,
+    #break-even-kpi,
+    #investment-score,
+    #investment-ranking,
+    #investment-risk-meter,
+    #investment-verdict,
+    #ai-insights
+  `).forEach(el=>{
+
+    if(!el) return;
+
+    el.classList.add("pro-blur");
+
+    if(!el.querySelector(".paywall-mini")){
+
+      const overlay = document.createElement("div");
+
+      overlay.className = "paywall-mini";
+
+      overlay.innerHTML = `
+        <div style="
+          margin-top:10px;
+          padding:10px;
+          font-size:13px;
+          text-align:center;
+          color:#64748b;
+        ">
+          🔒 ${t(
+            "Sblocca analisi avanzata",
+            "Unlock advanced analysis"
+          )}
+        </div>
+      `;
+
+      el.appendChild(overlay);
+    }
+
+  });
+
 }
 
     // ================= CHART =================
@@ -3480,25 +3556,48 @@ window.handleAnalyzeClick = function(){
 
   const isLogged = !!window.currentUser;
 
-  // ❌ NON LOGGATO
-if(!isLogged){
+  // =========================
+  // ❌ NON LOGGATO → BLOCCO + REGISTRAZIONE
+  // =========================
+  if(!isLogged){
 
-  showUpgradeModal({
-    title: window.currentLang === "en"
-      ? "🔒 Unlock your analysis"
-      : "🔒 Sblocca la tua analisi",
+    console.log("🔒 Utente non loggato → popup register");
 
-    text: window.currentLang === "en"
-      ? "Create a free account to see your ROI"
-      : "Registrati gratis per vedere il tuo ROI"
-  });
+    showRegisterPopup(); // 🔥 molto più efficace del vecchio modal
 
-  return;
-}
+    return;
+  }
 
-  // ✅ LOGGATO → calcolo normale
+  // =========================
+  // ✅ LOGGATO → UX PREMIUM
+  // =========================
   window.userHasClicked = true;
-  calculate(true);
+
+  const btn = document.querySelector(".btn-main");
+
+  if(btn){
+    const originalText = btn.innerText;
+
+    btn.innerText = window.currentLang === "en"
+      ? "Analyzing..."
+      : "Analisi in corso...";
+
+    btn.disabled = true;
+
+    // 🔥 piccolo delay → effetto SaaS premium
+    setTimeout(()=>{
+      calculate(true);
+
+      // ripristina bottone
+      setTimeout(()=>{
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }, 800);
+
+    }, 300);
+  }else{
+    calculate(true);
+  }
 
 };
 
