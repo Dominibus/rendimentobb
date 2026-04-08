@@ -9640,7 +9640,7 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – UI SYSTEM ENTERPRISE FINAL
+🔥 RENDIMENTOBB – UI SYSTEM ENTERPRISE PRO
 ===================================== */
 
 /* ===================== */
@@ -9697,31 +9697,15 @@ body.rb-ui{
 /* ===================== */
 /* BUTTONS */
 /* ===================== */
-.btn-main,
-.btn-outline{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-
-  cursor:pointer;
-  border:none;
-  font-weight:600;
-  font-size:15px;
-
-  border-radius:999px;
-  transition:var(--rb-transition);
-}
-
-/* PRIMARY */
 .btn-main{
   background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
   color:white;
   padding:14px 26px;
+  border-radius:999px;
+  font-weight:600;
 
-  box-shadow:
-    0 10px 30px rgba(16,185,129,0.35),
-    inset 0 -2px 0 rgba(0,0,0,0.1);
+  box-shadow:0 12px 30px rgba(16,185,129,0.35);
+  transition:var(--rb-transition);
 }
 
 .btn-main:hover{
@@ -9729,16 +9713,15 @@ body.rb-ui{
   box-shadow:0 18px 45px rgba(16,185,129,0.45);
 }
 
-/* SECONDARY */
 .btn-outline{
   background:white;
   border:1px solid var(--rb-border);
-  padding:13px 22px;
+  padding:12px 22px;
+  border-radius:999px;
 }
 
 .btn-outline:hover{
   background:#f1f5f9;
-  transform:translateY(-1px);
 }
 
 /* ===================== */
@@ -9749,7 +9732,6 @@ input{
   border-radius:14px;
   border:1px solid var(--rb-border);
   padding:14px;
-  transition:var(--rb-transition);
 }
 
 input:focus{
@@ -9773,7 +9755,7 @@ h3{ font-size:22px; }
 }
 
 /* =====================================
-🔥 HEADER – FINAL FIXED (CRITICO)
+🔥 HEADER – SILICON VALLEY FIX
 ===================================== */
 
 .rb-header{
@@ -9791,13 +9773,13 @@ h3{ font-size:22px; }
 
 /* CONTAINER */
 .rb-inner{
-  max-width:1200px;
+  max-width:1300px;
   margin:auto;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:20px;
+  gap:16px;
 
   padding:12px 20px;
 }
@@ -9807,18 +9789,12 @@ h3{ font-size:22px; }
   height:42px;
 }
 
-/* ===================== */
-/* MENU CENTER */
-/* ===================== */
-
+/* MENU */
 .rb-center{
   display:flex;
-  gap:20px;
-
+  gap:18px;
   flex:1;
   justify-content:center;
-
-  min-width:0; /* 🔥 FIX */
 }
 
 .rb-center a{
@@ -9832,45 +9808,42 @@ h3{ font-size:22px; }
   color:var(--rb-primary);
 }
 
-/* ===================== */
 /* RIGHT */
-/* ===================== */
-
 .rb-right{
   display:flex;
   align-items:center;
-  gap:10px;
-
-  flex-shrink:0; /* 🔥 FIX DEFINITIVO */
+  gap:8px;
+  flex-shrink:0;
 }
 
 /* USER */
 .rb-user{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
 }
 
-/* EMAIL */
+/* EMAIL (ridotto per spazio) */
 .rb-email{
   font-size:12px;
   color:var(--rb-muted);
-
-  max-width:140px;
+  max-width:110px;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+
+/* BOTTONI HEADER */
+.rb-btn{
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:999px;
+  background:#f1f5f9;
+  border:1px solid var(--rb-border);
   white-space:nowrap;
 }
 
-/* BUTTON HEADER */
-.rb-btn{
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:13px;
-
-  background:#f1f5f9;
-  border:1px solid var(--rb-border);
-  cursor:pointer;
+.rb-btn:hover{
+  background:#e2e8f0;
 }
 
 .rb-btn.red{
@@ -9883,22 +9856,23 @@ h3{ font-size:22px; }
 .rb-login{
   background:var(--rb-primary);
   color:white;
-  padding:8px 14px;
+  padding:7px 12px;
   border-radius:999px;
-  text-decoration:none;
+  font-size:12px;
 }
 
-/* ===================== */
 /* LANGUAGE */
-/* ===================== */
+.rb-lang{
+  display:flex;
+  gap:4px;
+}
 
 .rb-lang button{
-  background:#f1f5f9;
   border:1px solid var(--rb-border);
+  background:#f1f5f9;
   border-radius:999px;
-  padding:6px 10px;
-  font-size:12px;
-  cursor:pointer;
+  padding:5px 8px;
+  font-size:11px;
 }
 
 .rb-lang button.active{
@@ -9906,10 +9880,7 @@ h3{ font-size:22px; }
   color:white;
 }
 
-/* ===================== */
 /* BURGER */
-/* ===================== */
-
 #rb-burger{
   display:none;
   font-size:20px;
@@ -9944,14 +9915,11 @@ h3{ font-size:22px; }
     top:100%;
     left:0;
     width:100%;
-
     background:white;
     display:none;
     flex-direction:column;
-
     padding:20px;
     gap:14px;
-
     box-shadow:0 10px 30px rgba(0,0,0,0.08);
   }
 
