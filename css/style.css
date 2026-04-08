@@ -9640,12 +9640,9 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – UI SYSTEM FINAL PRODUCTION
+🔥 RENDIMENTOBB – SILICON VALLEY UI FINAL
 ===================================== */
 
-/* ===================== */
-/* DESIGN TOKENS */
-/* ===================== */
 :root{
   --rb-bg:#f8fafc;
   --rb-surface:#ffffff;
@@ -9655,6 +9652,8 @@ display:none;
   --rb-primary:#10b981;
   --rb-primary-dark:#059669;
 
+  --rb-danger:#ef4444;
+
   --rb-border:#e2e8f0;
 
   --rb-radius:16px;
@@ -9663,7 +9662,7 @@ display:none;
 
   --rb-shadow-sm:0 2px 6px rgba(0,0,0,0.04);
   --rb-shadow-md:0 10px 30px rgba(2,6,23,0.06);
-  --rb-shadow-lg:0 20px 60px rgba(2,6,23,0.12);
+  --rb-shadow-lg:0 25px 80px rgba(2,6,23,0.15);
 
   --rb-transition:all .25s ease;
 }
@@ -9676,7 +9675,25 @@ body{
   padding-top:70px;
   background:var(--rb-bg);
   color:var(--rb-text);
-  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:"Inter",system-ui;
+}
+
+/* ===================== */
+/* ANIMAZIONI GLOBAL */
+/* ===================== */
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.fade-up{
+  animation:fadeUp .6s ease forwards;
 }
 
 /* ===================== */
@@ -9715,8 +9732,24 @@ body{
 }
 
 .btn-main:hover{
-  transform:translateY(-2px);
-  box-shadow:0 20px 50px rgba(16,185,129,0.45);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 25px 60px rgba(16,185,129,0.45);
+}
+
+/* shine */
+.btn-main::after{
+  content:"";
+  position:absolute;
+  left:-100%;
+  top:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.4),transparent);
+  transition:.6s;
+}
+
+.btn-main:hover::after{
+  left:100%;
 }
 
 .btn-outline{
@@ -9724,7 +9757,6 @@ body{
   border:1px solid var(--rb-border);
   padding:12px 22px;
   border-radius:999px;
-  cursor:pointer;
 }
 
 .btn-outline:hover{
@@ -9732,78 +9764,36 @@ body{
 }
 
 /* ===================== */
-/* INPUT */
+/* HEADER */
 /* ===================== */
-input{
-  width:100%;
-  border-radius:14px;
-  border:1px solid var(--rb-border);
-  padding:14px;
-}
-
-input:focus{
-  border-color:var(--rb-primary);
-  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
-  outline:none;
-}
-
-/* ===================== */
-/* TYPO */
-/* ===================== */
-h1{ font-size:42px; line-height:1.2; }
-h2{ font-size:30px; }
-h3{ font-size:22px; }
-
-/* ===================== */
-/* SECTION */
-/* ===================== */
-.section{
-  padding:100px 20px;
-}
-
-/* =====================================
-🔥 HEADER – DEFINITIVO (NO BUG)
-===================================== */
-
 .rb-header{
   position:fixed;
   top:0;
-  left:0;
   width:100%;
   z-index:9999;
 
   background:rgba(255,255,255,0.85);
   backdrop-filter:blur(14px);
-
   border-bottom:1px solid var(--rb-border);
 }
 
-/* CONTAINER */
 .rb-inner{
   max-width:1200px;
   margin:auto;
-
   display:flex;
   align-items:center;
   justify-content:space-between;
-
   padding:14px 20px;
-  gap:12px;
 }
 
-/* LOGO */
 .rb-logo{
   height:38px;
 }
 
-/* ===================== */
-/* MENU CENTER */
-/* ===================== */
-
+/* MENU */
 .rb-center{
   display:flex;
   gap:24px;
-
   flex:1;
   justify-content:center;
 }
@@ -9813,32 +9803,23 @@ h3{ font-size:22px; }
   color:var(--rb-text);
   font-size:14px;
   font-weight:500;
+  transition:.2s;
 }
 
 .rb-center a:hover{
   color:var(--rb-primary);
 }
 
-/* ===================== */
 /* RIGHT */
-/* ===================== */
-
 .rb-right{
   display:flex;
   align-items:center;
   gap:8px;
 }
 
-/* USER */
 .rb-user{
   display:flex;
-  align-items:center;
   gap:6px;
-}
-
-/* 🔥 EMAIL NASCOSTA DESKTOP */
-.rb-email{
-  display:none;
 }
 
 /* ===================== */
@@ -9849,24 +9830,35 @@ h3{ font-size:22px; }
   padding:6px 10px;
   font-size:12px;
   border-radius:999px;
-
   background:#f1f5f9;
   border:1px solid var(--rb-border);
   cursor:pointer;
+  transition:.2s;
 }
 
 .rb-btn:hover{
   background:#e2e8f0;
 }
 
+/* 🔥 DASHBOARD */
 .rb-btn.primary{
-  background:var(--rb-primary);
+  background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
   color:white;
   border:none;
 }
 
+/* 🔥 LEADS FIX (ORA VISIBILE) */
+.rb-btn.leads{
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  color:white;
+  border:none;
+  font-weight:600;
+  box-shadow:0 8px 20px rgba(99,102,241,0.35);
+}
+
+/* LOGOUT */
 .rb-btn.red{
-  background:#ef4444;
+  background:var(--rb-danger);
   color:white;
   border:none;
 }
@@ -9883,7 +9875,6 @@ h3{ font-size:22px; }
 /* ===================== */
 /* LANGUAGE */
 /* ===================== */
-
 .rb-lang{
   display:flex;
   gap:4px;
@@ -9895,7 +9886,6 @@ h3{ font-size:22px; }
   border-radius:999px;
   padding:5px 8px;
   font-size:11px;
-  cursor:pointer;
 }
 
 .rb-lang button.active{
@@ -9904,26 +9894,42 @@ h3{ font-size:22px; }
 }
 
 /* ===================== */
-/* BURGER */
+/* HERO (CONVERSION) */
 /* ===================== */
-
-#rb-burger{
-  display:none;
-  font-size:20px;
-  background:none;
-  border:none;
-  cursor:pointer;
+.hero{
+  position:relative;
 }
 
-/* =====================================
-📱 MOBILE
-===================================== */
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(15,23,42,0.4),
+    rgba(15,23,42,0.6)
+  );
+}
+
+.hero h1{
+  position:relative;
+  color:white;
+  text-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.hero p{
+  position:relative;
+  color:#e2e8f0;
+}
+
+/* ===================== */
+/* MOBILE */
+/* ===================== */
+#rb-burger{
+  display:none;
+}
 
 @media(max-width:768px){
-
-  body{
-    padding-top:60px;
-  }
 
   .rb-center{
     display:none;
@@ -9931,52 +9937,27 @@ h3{ font-size:22px; }
 
   #rb-burger{
     display:block;
+    font-size:20px;
   }
 
-  .rb-inner{
-    padding:10px 14px;
-  }
-
-  .rb-logo{
-    height:32px;
-  }
-
-  /* MOBILE MENU */
   .rb-mobile{
     position:fixed;
     top:60px;
     right:0;
     width:260px;
     height:100vh;
-
     background:white;
-
+    padding:20px;
     display:flex;
     flex-direction:column;
-
-    padding:20px;
     gap:14px;
 
-    box-shadow:-10px 0 30px rgba(0,0,0,0.1);
-
     transform:translateX(100%);
-    transition:.3s ease;
-    z-index:9998;
+    transition:.3s;
   }
 
   .rb-mobile.open{
     transform:translateX(0);
-  }
-
-  .rb-mobile a{
-    text-decoration:none;
-    color:#0f172a;
-    font-weight:500;
-  }
-
-  .rb-mobile-user{
-    border-bottom:1px solid var(--rb-border);
-    padding-bottom:12px;
   }
 
   .rb-email{
@@ -9984,13 +9965,11 @@ h3{ font-size:22px; }
     font-size:12px;
     color:var(--rb-muted);
   }
-
 }
 
-/* =====================================
-🔥 FOOTER
-===================================== */
-
+/* ===================== */
+/* FOOTER */
+/* ===================== */
 footer{
   background:#0f172a;
   color:#cbd5f5;
@@ -10003,7 +9982,6 @@ footer h3{
 
 footer a{
   color:#94a3b8;
-  text-decoration:none;
 }
 
 footer a:hover{
