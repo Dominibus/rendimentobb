@@ -1520,18 +1520,14 @@ window.emailSent = false;
 
 const isLogged = !!window.currentUser;
 
-if(!isLogged){
-
 let result;
 
-// ================= USER NON LOGGATO =================
 if(!isLogged){
 
   console.log("🚫 Utente non loggato → ROI limitato");
 
   showRegisterPopup();
 
-  // 🔥 simulazione fake / limitata (UX)
   result = {
     roi: 0,
     revenue: 0,
@@ -1542,7 +1538,6 @@ if(!isLogged){
 
 }else{
 
-  // ================= CALCOLO REALE =================
   result = calculateROI({
     price,
     equity,
@@ -1556,22 +1551,7 @@ if(!isLogged){
     loanYears
   });
 
-}  
-
-// ================= RESULT =================
-const result = calculateROI({
-  price,
-  equity,
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
-});
-
+}
 // ================= VALIDAZIONE =================
 if (!result || typeof result !== "object") {
   console.warn("⛔ risultato non valido");
