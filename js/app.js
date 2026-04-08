@@ -3499,7 +3499,10 @@ function removeGhostOverlays(){
     [data-paywall]
   `).forEach(el => {
 
-    el.remove(); // 🔥 elimina SEMPRE
+    // 🔥 NON TOCCARE REGISTER POPUP
+    if(el.id === "register-popup") return;
+
+    el.remove();
 
   });
 
@@ -3611,7 +3614,7 @@ function showRegisterPopup(){
 
   const popup = document.createElement("div");
   popup.id = "register-popup";
-  popup.style.zIndex = "9999";
+  popup.style.zIndex = "999999";
 
   popup.innerHTML = `
     <div class="popup-overlay">
