@@ -1762,13 +1762,6 @@ result = calculateROI({
     if(monthlyEl) monthlyEl.innerText = formatCurrency(net / 12);
     if(annualEl)  annualEl.innerText  = formatCurrency(net);
 
-    // ================= CHART =================
-    setTimeout(()=>{
-      if(typeof renderChart === "function"){
-        renderChart(net);
-      }
-    },200);
-
     // ================= MARKET =================
     if(typeof renderMarketBenchmark === "function"){
       renderMarketBenchmark(window.currentCity || "napoli");
@@ -1968,28 +1961,34 @@ if(access.canSeeFullAnalysis){
     );
 
     // ================= PRO UNLOCK =================
-    
-            el.classList.remove(
-          "pro-blur",
-          "locked",
-          "locked-content",
-          "premium-lock"
-        );
-        el.style.filter = "none";
-        el.style.opacity = "1";
-        el.style.pointerEvents = "auto";
-      });
 
-      document.querySelectorAll(".pro-only").forEach(el=>{
-        el.style.display = "block";
-        el.style.opacity = "1";
-      });
+document.querySelectorAll(`
+  .pro-blur,
+  .locked,
+  .locked-content,
+  .premium-lock
+`).forEach(el => {
 
-      document.querySelectorAll('[data-paywall], .locked-overlay').forEach(el=>{
-        el.remove();
-      });
+  el.classList.remove(
+    "pro-blur",
+    "locked",
+    "locked-content",
+    "premium-lock"
+  );
 
-    }
+  el.style.filter = "none";
+  el.style.opacity = "1";
+  el.style.pointerEvents = "auto";
+});
+
+document.querySelectorAll(".pro-only").forEach(el=>{
+  el.style.display = "block";
+  el.style.opacity = "1";
+});
+
+document.querySelectorAll('[data-paywall], .locked-overlay').forEach(el=>{
+  el.remove();
+});
 
     // ================= MARKET =================
     if(typeof renderMarketBenchmark === "function"){
