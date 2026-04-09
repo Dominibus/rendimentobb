@@ -140,34 +140,45 @@ function initHeaderInteractions(){
   const burger = document.getElementById("rb-burger");
   const mobile = document.getElementById("rb-mobile");
 
-  if(burger && mobile){
+  if(!burger || !mobile) return;
 
-    // ===== TOGGLE MENU =====
-    burger.onclick = (e)=>{
-      e.stopPropagation();
-      mobile.classList.toggle("open");
-    };
+  // evita duplicazione eventi
+  if(window.rbMenuInitialized) return;
+  window.rbMenuInitialized = true;
 
-    // ===== CLICK LINK → CHIUDE MENU =====
-    mobile.querySelectorAll("a").forEach(link=>{
-      link.onclick = ()=>{
-        mobile.classList.remove("open");
-      };
-    });
+  // ===== TOGGLE =====
+  burger.addEventListener("click",(e)=>{
+    e.stopPropagation();
 
-    // ===== CLICK FUORI → CHIUDE =====
-    document.addEventListener("click",(e)=>{
+    const isOpen = mobile.classList.contains("open");
 
-      // se clicchi dentro menu o burger → non chiudere
-      if(mobile.contains(e.target) || burger.contains(e.target)){
-        return;
-      }
+    // chiudi sempre prima (anti bug)
+    mobile.classList.remove("open");
 
+    // riapri solo se era chiuso
+    if(!isOpen){
+      mobile.classList.add("open");
+    }
+  });
+
+  // ===== CLICK LINK =====
+  mobile.querySelectorAll("a").forEach(link=>{
+    link.addEventListener("click", ()=>{
       mobile.classList.remove("open");
-
     });
+  });
 
-  }
+  // ===== CLICK FUORI =====
+  document.addEventListener("click",(e)=>{
+
+    const clickInsideMenu = mobile.contains(e.target);
+    const clickBurger = burger.contains(e.target);
+
+    if(!clickInsideMenu && !clickBurger){
+      mobile.classList.remove("open");
+    }
+
+  });
 
   // ===== LANGUAGE =====
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
@@ -181,7 +192,6 @@ function initHeaderInteractions(){
 
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 }
-
 
 function updateLangButtons(lang){
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
