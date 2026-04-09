@@ -3350,11 +3350,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function goToMarket(city){
   window.location.href = "/market/" + city;
 }
-// ================= PRO UNLOCK (FINAL FIX DEFINITIVO) =================
-
 function unlockProUI(){
 
-  const access = window.getUserAccess(); // ✅ SEMPRE PRIMA
+  const access = window.getUserAccess();
 
   if(!access.canSeeFullAnalysis){
     console.log("⛔ NOT PRO → skip unlock");
