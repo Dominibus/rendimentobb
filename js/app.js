@@ -1894,49 +1894,57 @@ if(access.canSeeFullAnalysis){
 }
 
 // ================= FREE MODE =================
+const access = window.getUserAccess();
 
-console.log("🔒 FREE MODE → APPLY LOCK");
+// 🔓 SE PRO → NON BLOCCARE MAI
+if(access.canSeeFullAnalysis){
+  console.log("🔓 PRO → skip lock UI");
+} else {
 
-document.querySelectorAll(`
-  #revenue-forecast,
-  #occupancy-sensitivity,
-  #break-even-kpi,
-  #investment-score,
-  #investment-ranking,
-  #investment-risk-meter,
-  #investment-verdict,
-  #ai-insights
-`).forEach(el=>{
+  console.log("🔒 FREE MODE → APPLY LOCK");
 
-  if(!el) return;
+  document.querySelectorAll(`
+    #revenue-forecast,
+    #occupancy-sensitivity,
+    #break-even-kpi,
+    #investment-score,
+    #investment-ranking,
+    #investment-risk-meter,
+    #investment-verdict,
+    #ai-insights
+  `).forEach(el=>{
 
-  el.classList.add("pro-blur");
+    if(!el) return;
 
-  if(!el.querySelector(".paywall-mini")){
+    el.classList.add("pro-blur");
 
-    const overlay = document.createElement("div");
+    if(!el.querySelector(".paywall-mini")){
 
-    overlay.className = "paywall-mini";
+      const overlay = document.createElement("div");
 
-    overlay.innerHTML = `
-      <div style="
-        margin-top:10px;
-        padding:10px;
-        font-size:13px;
-        text-align:center;
-        color:#64748b;
-      ">
-        🔒 ${t(
-          "Sblocca analisi avanzata",
-          "Unlock advanced analysis"
-        )}
-      </div>
-    `;
+      overlay.className = "paywall-mini";
 
-    el.appendChild(overlay);
-  }
+      overlay.innerHTML = `
+        <div style="
+          margin-top:10px;
+          padding:10px;
+          font-size:13px;
+          text-align:center;
+          color:#64748b;
+        ">
+          🔒 ${t(
+            "Sblocca analisi avanzata",
+            "Unlock advanced analysis"
+          )}
+        </div>
+      `;
 
-});
+      el.appendChild(overlay);
+    }
+
+  });
+
+}
     // ================= CHART =================
     setTimeout(()=>{
       if(typeof renderChart === "function"){
