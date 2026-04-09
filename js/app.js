@@ -1890,11 +1890,10 @@ if(access.canSeeFullAnalysis){
 
   window.proUnlocked = true;
 
-  return; // 🔥 QUESTO È IL FIX CHIAVE
+  return;
 }
 
 // ================= FREE MODE =================
-const access = window.getUserAccess();
 
 // 🔓 SE PRO → NON BLOCCARE MAI
 if(access.canSeeFullAnalysis){
