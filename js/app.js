@@ -43,8 +43,10 @@ window.getUserAccess = function(){
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
-  const isPro =
-    plan === "pro" || plan === "pro_yearly";
+ const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly" ||
+  plan === "investor"; // 🔥 allinea tutto
 
   const isInvestor =
     plan === "investor";
@@ -3400,7 +3402,7 @@ function unlockProUI(){
 
   const access = window.getUserAccess();
 
-  if(!access.canSeeFullAnalysis){
+  if(!(access.canSeeFullAnalysis || access.isInvestor)){
     console.log("⛔ NOT PRO → skip unlock");
     return;
   }
