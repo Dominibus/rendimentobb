@@ -9640,7 +9640,7 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – SILICON VALLEY UI FINAL
+🔥 RENDIMENTOBB – SAAS UI PRODUCTION
 ===================================== */
 
 :root{
@@ -9658,7 +9658,6 @@ display:none;
 
   --rb-radius:16px;
   --rb-radius-lg:20px;
-  --rb-radius-full:999px;
 
   --rb-shadow-sm:0 2px 6px rgba(0,0,0,0.04);
   --rb-shadow-md:0 10px 30px rgba(2,6,23,0.06);
@@ -9679,21 +9678,11 @@ body{
 }
 
 /* ===================== */
-/* ANIMAZIONI GLOBAL */
+/* ANIMATION */
 /* ===================== */
 @keyframes fadeUp{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-.fade-up{
-  animation:fadeUp .6s ease forwards;
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
 /* ===================== */
@@ -9702,61 +9691,48 @@ body{
 .card{
   background:var(--rb-surface);
   border-radius:var(--rb-radius-lg);
-  padding:28px;
+  padding:26px;
   border:1px solid var(--rb-border);
   box-shadow:var(--rb-shadow-md);
   transition:var(--rb-transition);
 }
 
 .card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-5px);
   box-shadow:var(--rb-shadow-lg);
 }
 
 /* ===================== */
-/* BUTTONS */
+/* BUTTON */
 /* ===================== */
 .btn-main{
   background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
   color:white;
-  padding:14px 26px;
+  padding:14px 24px;
   border-radius:999px;
-  font-weight:600;
   border:none;
+  font-weight:600;
   cursor:pointer;
+  transition:var(--rb-transition);
+
+  display:block;
+  width:100%;
+  max-width:320px;
+  margin:20px auto;
 
   box-shadow:0 12px 30px rgba(16,185,129,0.35);
-  transition:var(--rb-transition);
-  position:relative;
-  overflow:hidden;
 }
 
 .btn-main:hover{
-  transform:translateY(-2px) scale(1.02);
+  transform:translateY(-2px);
   box-shadow:0 25px 60px rgba(16,185,129,0.45);
-}
-
-/* shine */
-.btn-main::after{
-  content:"";
-  position:absolute;
-  left:-100%;
-  top:0;
-  width:100%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.4),transparent);
-  transition:.6s;
-}
-
-.btn-main:hover::after{
-  left:100%;
 }
 
 .btn-outline{
   background:white;
   border:1px solid var(--rb-border);
-  padding:12px 22px;
   border-radius:999px;
+  padding:12px 20px;
 }
 
 .btn-outline:hover{
@@ -9773,7 +9749,7 @@ body{
   z-index:9999;
 
   background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(16px);
   border-bottom:1px solid var(--rb-border);
 }
 
@@ -9790,7 +9766,7 @@ body{
   height:38px;
 }
 
-/* MENU */
+/* MENU DESKTOP */
 .rb-center{
   display:flex;
   gap:24px;
@@ -9803,7 +9779,6 @@ body{
   color:var(--rb-text);
   font-size:14px;
   font-weight:500;
-  transition:.2s;
 }
 
 .rb-center a:hover{
@@ -9817,15 +9792,6 @@ body{
   gap:8px;
 }
 
-.rb-user{
-  display:flex;
-  gap:6px;
-}
-
-/* ===================== */
-/* BUTTON HEADER */
-/* ===================== */
-
 .rb-btn{
   padding:6px 10px;
   font-size:12px;
@@ -9833,37 +9799,26 @@ body{
   background:#f1f5f9;
   border:1px solid var(--rb-border);
   cursor:pointer;
-  transition:.2s;
 }
 
-.rb-btn:hover{
-  background:#e2e8f0;
-}
-
-/* 🔥 DASHBOARD */
 .rb-btn.primary{
   background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
   color:white;
   border:none;
 }
 
-/* 🔥 LEADS FIX (ORA VISIBILE) */
 .rb-btn.leads{
   background:linear-gradient(135deg,#6366f1,#4f46e5);
   color:white;
   border:none;
-  font-weight:600;
-  box-shadow:0 8px 20px rgba(99,102,241,0.35);
 }
 
-/* LOGOUT */
 .rb-btn.red{
   background:var(--rb-danger);
   color:white;
   border:none;
 }
 
-/* LOGIN */
 .rb-login{
   background:var(--rb-primary);
   color:white;
@@ -9894,7 +9849,7 @@ body{
 }
 
 /* ===================== */
-/* HERO (CONVERSION) */
+/* HERO */
 /* ===================== */
 .hero{
   position:relative;
@@ -9907,28 +9862,81 @@ body{
   background:linear-gradient(
     to bottom,
     rgba(15,23,42,0.4),
-    rgba(15,23,42,0.6)
+    rgba(15,23,42,0.65)
   );
 }
 
-.hero h1{
-  position:relative;
-  color:white;
-  text-shadow:0 10px 40px rgba(0,0,0,0.4);
-}
-
+.hero h1,
 .hero p{
   position:relative;
-  color:#e2e8f0;
+  color:white;
+}
+
+/* ===================== */
+/* MOBILE MENU */
+/* ===================== */
+
+#rb-burger{
+  display:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* overlay sfondo */
+.rb-mobile-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:9997;
+}
+
+/* menu */
+.rb-mobile{
+  position:fixed;
+  top:0;
+  right:0;
+  width:270px;
+  height:100vh;
+
+  background:white;
+  padding:80px 20px 20px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  transform:translateX(100%);
+  transition:.35s ease;
+
+  z-index:9998;
+}
+
+/* stato aperto */
+.rb-mobile.open{
+  transform:translateX(0);
+}
+
+/* overlay attivo */
+.rb-mobile.open ~ .rb-mobile-overlay{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* link mobile */
+.rb-mobile a{
+  text-decoration:none;
+  color:var(--rb-text);
+  font-weight:500;
+  padding:10px 0;
+  border-bottom:1px solid var(--rb-border);
 }
 
 /* ===================== */
 /* MOBILE */
 /* ===================== */
-#rb-burger{
-  display:none;
-}
-
 @media(max-width:768px){
 
   .rb-center{
@@ -9937,243 +9945,13 @@ body{
 
   #rb-burger{
     display:block;
-    font-size:20px;
-  }
-
-  .rb-mobile{
-    position:fixed;
-    top:60px;
-    right:0;
-    width:260px;
-    height:100vh;
-    background:white;
-    padding:20px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-
-    transform:translateX(100%);
-    transition:.3s;
-  }
-
-  .rb-mobile.open{
-    transform:translateX(0);
-  }
-
-  .rb-email{
-    display:block;
-    font-size:12px;
-    color:var(--rb-muted);
-  }
-}
-
-/* ===================== */
-/* FOOTER */
-/* ===================== */
-footer{
-  background:#0f172a;
-  color:#cbd5f5;
-  padding:80px 20px;
-}
-
-footer h3{
-  color:white;
-}
-
-footer a{
-  color:#94a3b8;
-}
-
-footer a:hover{
-  color:white;
-}
-
-/* ================= ACCESS CONTROL ================= */
-
-.is-pro .free-only{
-  display:none !important;
-}
-
-.is-free .pro-only,
-.is-guest .pro-only{
-  display:none !important;
-}
-
-/* OPTIONAL UX */
-.is-pro [data-paywall]{
-  display:none !important;
-}
-
-/* 🔥 CTA FIX UNIVERSALE */
-.btn-main{
-  display:block;
-  margin:20px auto;
-  max-width:320px;
-  width:100%;
-  text-align:center;
-}
-
-/* 🔥 BLOCCO SOVRAPPOSIZIONI */
-.upgrade-box,
-.paywall-box{
-  position:relative;
-  z-index:2;
-  margin-top:20px;
-}
-
-/* 🔥 CARD DISTANZE */
-.kpi-box{
-  margin-bottom:16px;
-}
-
-/* 🔥 MOBILE FIX */
-@media (max-width:768px){
-
-  .btn-main{
-    font-size:14px;
-    padding:14px;
-  }
-
-  .upgrade-box{
-    padding:16px;
   }
 
 }
 
-/* 🔥 FIX CTA OVERLAP MOBILE */
-.upgrade-box{
-  margin:25px auto;
-  text-align:center;
-}
-
-.upgrade-box button{
-  display:block;
-  width:100%;
-  max-width:320px;
-  margin:10px auto;
-}
-
-@media (max-width:768px){
-
-  .upgrade-box{
-    padding:15px;
-  }
-
-}
-
-/* 🔥 CTA SEMPRE VISIBILE */
-.results-card button{
-  position: relative;
-  z-index: 10;
-}
-
-/* 🔥 FIX OVERLAY CHE BLOCCA */
-.results-card .locked-overlay{
-  pointer-events: none;
-}
-
-/* 🔥 SE HAI BLUR */
-.pro-blur{
-  pointer-events: auto !important;
-}
-
-/* 🔥 OVERLAY NON BLOCCA */
-.results-overlay{
-  pointer-events:none;
-}
-
-/* 🔥 SOLO IL BOX INTERNO È CLICCABILE */
-.results-overlay .overlay-content{
-  pointer-events:auto;
-}
-
-/* 🔥 CTA SEMPRE SOPRA */
-.cta-primary{
-  position:relative;
-  z-index:20;
-}
-
 /* ===================== */
-/* 🔥 CTA UPGRADE FIX */
+/* RESULTS GRID */
 /* ===================== */
-
-.upgrade-box{
-  margin:25px auto;
-  text-align:center;
-}
-
-.upgrade-box button,
-.btn-main{
-  display:block !important;
-  width:100%;
-  max-width:320px;
-  margin:10px auto;
-
-  background:linear-gradient(135deg,#10b981,#059669) !important;
-  color:#ffffff !important;
-
-  border:none !important;
-  border-radius:12px;
-
-  font-weight:700;
-  font-size:15px;
-
-  box-shadow:0 10px 25px rgba(16,185,129,0.35);
-  transition:all .25s ease;
-
-  z-index:20;
-  position:relative;
-}
-
-.upgrade-box button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 20px 40px rgba(16,185,129,0.45);
-}
-
-/* ===================== */
-/* 🔥 FIX VISIBILITÀ */
-/* ===================== */
-
-.results-card button{
-  position:relative;
-  z-index:20;
-}
-
-.results-overlay{
-  pointer-events:none;
-}
-
-.results-overlay .overlay-content{
-  pointer-events:auto;
-}
-
-/* ===================== */
-/* 🔥 ACCESS CONTROL VISIVO */
-/* ===================== */
-
-.is-pro .free-only{
-  display:none !important;
-}
-
-.is-free .pro-only,
-.is-guest .pro-only{
-  display:none !important;
-}
-
-/* ===================== */
-/* 🔥 SBLOCCO PRO */
-/* ===================== */
-
-body.is-pro .pro-blur{
-  filter:none !important;
-  opacity:1 !important;
-  pointer-events:auto !important;
-}
-
-/* ===================== */
-/* 🔥 RISULTATI GRID */
-/* ===================== */
-
 .results-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
@@ -10185,103 +9963,51 @@ body.is-pro .pro-blur{
   background:white;
   padding:18px;
   border-radius:12px;
-  border:1px solid #e2e8f0;
+  border:1px solid var(--rb-border);
   text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
-}
-
-.result-item span{
-  font-size:13px;
-  color:#64748b;
-}
-
-.result-item strong{
-  display:block;
-  margin-top:6px;
-  font-size:18px;
-  font-weight:700;
 }
 
 /* ===================== */
-/* 🔥 SMART PAYWALL OVERLAY */
+/* PAYWALL FIX */
 /* ===================== */
+.results-overlay{
+  pointer-events:none;
+}
 
+.results-overlay .overlay-content{
+  pointer-events:auto;
+}
+
+.cta-primary{
+  position:relative;
+  z-index:20;
+}
+
+/* ===================== */
+/* SMART POPUP */
+/* ===================== */
 .smart-overlay{
   position:fixed;
   inset:0;
   background:rgba(15,23,42,0.65);
-  backdrop-filter:blur(6px);
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   z-index:9999;
 }
 
 .smart-box{
-  position:relative;
   background:white;
-  padding:28px;
+  padding:26px;
   border-radius:20px;
-
   max-width:380px;
   width:90%;
-
   text-align:center;
-
-  box-shadow:0 25px 80px rgba(0,0,0,0.35);
 }
 
-/* ❌ bottone chiusura */
-.smart-close{
-  position:absolute;
-  top:12px;
-  right:16px;
-  cursor:pointer;
-  font-size:18px;
-  color:#64748b;
-}
-
-/* =====================================
-🔥 REGISTER POPUP FIX DEFINITIVO
-===================================== */
-
-#register-popup{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999999; /* 🔥 sopra TUTTO */
-}
-
-.popup-overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-}
-
-.popup-box{
-  position:relative;
-  background:white;
-  padding:28px;
-  border-radius:16px;
-  max-width:420px;
-  width:90%;
-  text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.25);
-  z-index:2;
-  animation:fadeUp .3s ease;
-}
-
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
-}
-
-/* ================= REGISTER POPUP CENTER FIX ================= */
-
+/* ===================== */
+/* REGISTER POPUP */
+/* ===================== */
 #register-popup{
   position:fixed;
   inset:0;
@@ -10300,7 +10026,7 @@ body.is-pro .pro-blur{
 .popup-box{
   position:relative;
   background:white;
-  padding:28px;
+  padding:26px;
   border-radius:16px;
   max-width:420px;
   width:90%;
@@ -10310,12 +10036,36 @@ body.is-pro .pro-blur{
   animation:fadeUp .3s ease;
 }
 
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
+/* ===================== */
+/* ACCESS CONTROL */
+/* ===================== */
+.is-pro .free-only{
+  display:none !important;
 }
 
-body.popup-open #rb-burger{
+.is-free .pro-only,
+.is-guest .pro-only{
+  display:none !important;
+}
+
+/* ===================== */
+/* FIX IMPORTANTI */
+/* ===================== */
+
+/* CTA sempre sopra */
+button{
+  position:relative;
+  z-index:5;
+}
+
+/* evita blocchi */
+.locked-overlay{
   pointer-events:none;
-  opacity:0.5;
+}
+
+/* sblocco pro */
+body.is-pro .pro-blur{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
 }
