@@ -1490,143 +1490,6 @@ function getLeadDestination({roi, city}){
   return null;
 }
 
-// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
-
-window.calculate = async function(force = false){
-
-  // ================= GUARD =================
-  if(window.isCalculating && !force){
-    console.warn("⛔ skip calculate (already running)");
-    return;
-  }
-
-  if(!window.firebaseReady){
-    console.warn("⏳ Firebase non pronto → delay calculate");
-    window.pendingCalculation = true;
-    return;
-  }
-
-  window.isCalculating = true;
-  window.simulationExecuted = false;
-  window.paywallShown = false;
-
-  try{
-
-    // ================= INPUT =================
-    const isTool = !!document.getElementById("price");
-
-    const price = isTool
-      ? getValue("price") || 100000
-      : getValue("qr_price") || 100000;
-
-    const equity = isTool
-      ? getValue("equity") || Math.round(price * 0.3)
-      : 0;
-
-    const priceNight = isTool
-      ? getValue("priceNight") || 100
-      : getValue("qr_night") || 100;
-
-    const occupancy = isTool
-      ? getValue("occupancy") || 65
-      : getValue("qr_occ") || 65;
-
-    const expenses = isTool
-      ? getValue("expenses") || 30
-      : getValue("qr_cost") || 30;
-
-    const commission = getValue("commission") || 15;
-    const tax = getValue("tax") || 21;
-
-    const loanAmount = getValue("loanAmount") || (price - equity);
-    const interestRate = getValue("interestRate") || 3.5;
-    const loanYears = getValue("loanYears") || 20;
-
-    // ================= UI SYNC =================
-    const occValue = document.getElementById("occ-value");
-    if(occValue){
-      occValue.innerText = occupancy + "%";
-    }
-
-    // ================= CALCOLO =================
-    window.emailSent = false;
-
-    const isLogged = !!window.currentUser;
-    let result;
-
- if(!isLogged){
-
-  console.log("🔓 Modalità preview attiva");
-  showRegisterPopup();
-
-}
-
-result = calculateROI({
-  price,
-  equity,
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
-});
-
-    // ================= VALIDAZIONE =================
-    if (!result || typeof result !== "object") {
-      console.warn("⛔ risultato non valido");
-      return;
-    }
-
-    // ================= SAFE VALUES (PRIMA!) =================
-    const roi   = Number(result?.roi || 0);
-    const gross = Number(result?.revenue || 0);
-    const net   = Number(result?.netAfterMortgage || result?.profit || 0);
-
-    unlockUI();
-
-    // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
-    runPostAnalysis(result, {
-      price,
-      gross,
-      occupancy,
-      priceNight,
-      expenses
-    });
-
-    // ================= UI BASE =================
-    const roiEl = document.getElementById("roi-live");
-    if(roiEl){
-      roiEl.innerText = roi.toFixed(1) + "%";
-    }
-
-    const monthlyEl = document.getElementById("profit-monthly");
-    const annualEl  = document.getElementById("profit-annual");
-
-    if(monthlyEl) monthlyEl.innerText = formatCurrency(net / 12);
-    if(annualEl)  annualEl.innerText  = formatCurrency(net);
-
-    // ================= CHART =================
-    setTimeout(()=>{
-      if(typeof renderChart === "function"){
-        renderChart(net);
-      }
-    },200);
-
-    // ================= MARKET =================
-    if(typeof renderMarketBenchmark === "function"){
-      renderMarketBenchmark(window.currentCity || "napoli");
-    }
-
-    if(typeof renderMarketComparison === "function"){
-      renderMarketComparison(
-        gross,
-        window.currentCity || "napoli"
-      );
-    }
-
 // ================= POST ANALYSIS ENGINE (SAAS CLEAN) =================
 
 function runPostAnalysis(result, context){
@@ -1776,6 +1639,143 @@ if(!access.canSeeFullAnalysis && !window.paywallShown){
   });
 
 }
+
+// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
+
+window.calculate = async function(force = false){
+
+  // ================= GUARD =================
+  if(window.isCalculating && !force){
+    console.warn("⛔ skip calculate (already running)");
+    return;
+  }
+
+  if(!window.firebaseReady){
+    console.warn("⏳ Firebase non pronto → delay calculate");
+    window.pendingCalculation = true;
+    return;
+  }
+
+  window.isCalculating = true;
+  window.simulationExecuted = false;
+  window.paywallShown = false;
+
+  try{
+
+    // ================= INPUT =================
+    const isTool = !!document.getElementById("price");
+
+    const price = isTool
+      ? getValue("price") || 100000
+      : getValue("qr_price") || 100000;
+
+    const equity = isTool
+      ? getValue("equity") || Math.round(price * 0.3)
+      : 0;
+
+    const priceNight = isTool
+      ? getValue("priceNight") || 100
+      : getValue("qr_night") || 100;
+
+    const occupancy = isTool
+      ? getValue("occupancy") || 65
+      : getValue("qr_occ") || 65;
+
+    const expenses = isTool
+      ? getValue("expenses") || 30
+      : getValue("qr_cost") || 30;
+
+    const commission = getValue("commission") || 15;
+    const tax = getValue("tax") || 21;
+
+    const loanAmount = getValue("loanAmount") || (price - equity);
+    const interestRate = getValue("interestRate") || 3.5;
+    const loanYears = getValue("loanYears") || 20;
+
+    // ================= UI SYNC =================
+    const occValue = document.getElementById("occ-value");
+    if(occValue){
+      occValue.innerText = occupancy + "%";
+    }
+
+    // ================= CALCOLO =================
+    window.emailSent = false;
+
+    const isLogged = !!window.currentUser;
+    let result;
+
+ if(!isLogged){
+
+  console.log("🔓 Modalità preview attiva");
+  showRegisterPopup();
+
+}
+
+result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
+
+    // ================= VALIDAZIONE =================
+    if (!result || typeof result !== "object") {
+      console.warn("⛔ risultato non valido");
+      return;
+    }
+
+    // ================= SAFE VALUES (PRIMA!) =================
+    const roi   = Number(result?.roi || 0);
+    const gross = Number(result?.revenue || 0);
+    const net   = Number(result?.netAfterMortgage || result?.profit || 0);
+
+    unlockUI();
+
+    // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
+    runPostAnalysis(result, {
+      price,
+      gross,
+      occupancy,
+      priceNight,
+      expenses
+    });
+
+    // ================= UI BASE =================
+    const roiEl = document.getElementById("roi-live");
+    if(roiEl){
+      roiEl.innerText = roi.toFixed(1) + "%";
+    }
+
+    const monthlyEl = document.getElementById("profit-monthly");
+    const annualEl  = document.getElementById("profit-annual");
+
+    if(monthlyEl) monthlyEl.innerText = formatCurrency(net / 12);
+    if(annualEl)  annualEl.innerText  = formatCurrency(net);
+
+    // ================= CHART =================
+    setTimeout(()=>{
+      if(typeof renderChart === "function"){
+        renderChart(net);
+      }
+    },200);
+
+    // ================= MARKET =================
+    if(typeof renderMarketBenchmark === "function"){
+      renderMarketBenchmark(window.currentCity || "napoli");
+    }
+
+    if(typeof renderMarketComparison === "function"){
+      renderMarketComparison(
+        gross,
+        window.currentCity || "napoli"
+      );
+    }
 
     // ================= RENDER COMPLETO TOOL =================
 
