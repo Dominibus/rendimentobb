@@ -3420,6 +3420,8 @@ function unlockProUI(){
 
   console.log("✅ PRO SBLOCCATO DEFINITIVO");
 
+  }
+
 // ================= EVENTI =================
 
 // 🔥 QUESTI SONO FONDAMENTALI
