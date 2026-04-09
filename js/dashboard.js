@@ -906,27 +906,57 @@ const trend = avgROI >= marketROI ? "↑" : "↓";
 
 const avgCashflow = count ? (totalCashflow / count) : 0;
 
-// 🔥 SYNC HERO (NUOVA UI SaaS)
-if(typeof syncDashboardHero === "function"){
+// 🔥 SYNC NUOVA HERO SaaS (COLLEGAMENTO UI)
+const avgROI = count ? (totalROI / count) : 0;
 
-  const avgROI = count ? (totalROI / count) : 0;
+// HERO TOP (Stripe style)
+const dbRoi = document.getElementById("db-roi");
+const dbProfit = document.getElementById("db-profit");
+const dbStatus = document.getElementById("db-status");
 
-  let breakEven = 0;
-  if(avgROI > 0){
-    breakEven = Math.round(100 / avgROI);
+// KPI GRID
+const kpiRoi = document.getElementById("kpi-roi");
+const kpiCash = document.getElementById("kpi-cash");
+const kpiInvest = document.getElementById("kpi-invest");
+const kpiBreak = document.getElementById("kpi-break");
+
+// calcoli
+const monthlyProfit = avgCashflow;
+const breakEven = avgROI > 0 ? Math.round(100 / avgROI) : 0;
+
+// ===== HERO =====
+if(dbRoi) dbRoi.innerText = avgROI.toFixed(1) + "%";
+if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
+
+// STATUS INTELLIGENTE (effetto SaaS vero)
+if(dbStatus){
+
+  let status = "Risk";
+  let color = "#ef4444";
+
+  if(avgROI >= 10){
+    status = "Strong";
+    color = "#10b981";
+  }
+  else if(avgROI >= 5){
+    status = "Moderate";
+    color = "#f59e0b";
   }
 
-  syncDashboardHero({
-    roi: avgROI.toFixed(1),
-    cashflow: Math.round(avgCashflow),
-    capital: Math.round(totalCapital),
-    breakEven: breakEven
-  });
+  dbStatus.querySelector("h2").innerText = status;
+  dbStatus.style.background = color;
+  dbStatus.style.color = "white";
+}
 
-}  
+// ===== KPI =====
+if(kpiRoi) kpiRoi.innerText = avgROI.toFixed(1) + "%";
+if(kpiCash) kpiCash.innerText = formatCurrency(monthlyProfit);
+if(kpiInvest) kpiInvest.innerText = formatCurrency(totalCapital);
+if(kpiBreak) kpiBreak.innerText = breakEven + "y";
 
+// ===== PORTFOLIO CLASSICO =====
 const roiEl = document.getElementById("portfolio-roi");
-if(roiEl) roiEl.textContent = avgROIRounded + "%";
+if(roiEl) roiEl.textContent = avgROI.toFixed(1) + "%";
 
 const cashEl = document.getElementById("portfolio-cashflow");
 if(cashEl) cashEl.textContent = formatCurrency(avgCashflow);
