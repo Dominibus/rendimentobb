@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER – PRODUCTION FINAL */
+/* RENDIMENTOBB HEADER – FINAL PRODUCTION */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -40,16 +40,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if(!container) return;
 
   container.innerHTML = `
+
+  <!-- HEADER -->
   <header class="rb-header">
 
     <div class="rb-inner">
 
       <!-- LEFT -->
       <div class="rb-left">
-        <a href="/"><img src="/img/logo-main.png" class="rb-logo"></a>
+        <a href="/">
+          <img src="/img/logo-main.png" class="rb-logo">
+        </a>
       </div>
 
-      <!-- CENTER -->
+      <!-- CENTER DESKTOP -->
       <nav class="rb-center">
         <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
         <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
@@ -68,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div id="user-area"></div>
 
-        <!-- 🔥 HAMBURGER SOLO MOBILE -->
         <button id="rb-burger">☰</button>
 
       </div>
@@ -76,6 +79,22 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
   </header>
+
+  <!-- MOBILE MENU -->
+  <div id="rb-mobile-overlay"></div>
+
+  <div id="rb-mobile" class="rb-mobile-menu">
+
+    <nav>
+      <a href="/tool/">Simulatore</a>
+      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+      <a href="/mutui/">Mutui</a>
+      <a href="/immobili/">Immobili</a>
+      <a href="/academy/">Academy</a>
+    </nav>
+
+  </div>
+
   `;
 
   window.applyCityBackground();
@@ -117,7 +136,7 @@ function waitPlanAndRender(user){
 }
 
 /* ===================== */
-/* MENU MOBILE – FINAL FIX */
+/* MENU MOBILE */
 /* ===================== */
 
 function initHeaderInteractions(){
@@ -127,14 +146,6 @@ function initHeaderInteractions(){
   const overlay = document.getElementById("rb-mobile-overlay");
 
   if(!burger || !mobile || !overlay) return;
-
-  // 🔥 RESET (CRITICO)
-  mobile.classList.remove("open");
-  overlay.classList.remove("open");
-  document.body.classList.remove("menu-open");
-
-  if(window.rbMenuInitialized) return;
-  window.rbMenuInitialized = true;
 
   function openMenu(){
     mobile.classList.add("open");
@@ -148,7 +159,6 @@ function initHeaderInteractions(){
     document.body.classList.remove("menu-open");
   }
 
-  // 🔥 BURGER
   burger.addEventListener("click", (e)=>{
     e.stopPropagation();
 
@@ -159,20 +169,17 @@ function initHeaderInteractions(){
     }
   });
 
-  // 🔥 OVERLAY CLICK
   overlay.addEventListener("click", closeMenu);
 
-  // 🔥 CLICK LINK
   mobile.querySelectorAll("a").forEach(link=>{
     link.addEventListener("click", closeMenu);
   });
 
-  // 🔥 ESC
   document.addEventListener("keydown",(e)=>{
     if(e.key === "Escape") closeMenu();
   });
 
-  // 🔥 LANGUAGE
+  // LANG
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -196,7 +203,7 @@ function updateLangButtons(lang){
 }
 
 /* ===================== */
-/* USER RENDER */
+/* USER */
 /* ===================== */
 
 function renderUser(user){
@@ -221,7 +228,6 @@ function renderUser(user){
     plan === "investor" ||
     plan === "pro_yearly";
 
-  // ===== LOGGED =====
   if(user){
 
     let html = `<div class="rb-user">`;
@@ -231,7 +237,7 @@ function renderUser(user){
     }
 
     if(isAdmin){
-      html += `<a href="/dashboard-leads/" class="rb-btn leads">Leads</a>`;
+      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
     }
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
@@ -239,7 +245,6 @@ function renderUser(user){
 
     el.innerHTML = html;
 
-    // 🔥 MOBILE USER BLOCK
     if(mobileEl){
       mobileEl.insertAdjacentHTML("afterbegin", `
         <div class="rb-mobile-user">
@@ -257,11 +262,10 @@ function renderUser(user){
       };
     });
 
-  }
+  } else {
 
-  // ===== NOT LOGGED =====
-  else{
     el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+
   }
 
 }
