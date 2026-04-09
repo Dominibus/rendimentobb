@@ -1892,6 +1892,12 @@ if(access.canSeeFullAnalysis){
 
 }else{
 
+  // 🔥 HARD GUARD → se già sbloccato NON bloccare più
+  if(window.proUnlocked){
+    console.log("⛔ SKIP LOCK (già PRO sbloccato)");
+    return;
+  }
+
   console.log("🔒 FREE MODE → APPLY LOCK");
 
   document.querySelectorAll(`
