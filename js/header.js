@@ -141,6 +141,11 @@ function initHeaderInteractions(){
   const mobile = document.getElementById("rb-mobile");
   const overlay = document.getElementById("rb-mobile-overlay");
 
+  // 🔥 RESET STATO INIZIALE (FIX MENU BLOCCATO)
+mobile.classList.remove("open");
+overlay.classList.remove("open");
+document.body.classList.remove("menu-open");
+
   if(!burger || !mobile || !overlay) return;
 
   // evita duplicazione eventi
