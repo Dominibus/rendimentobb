@@ -139,16 +139,19 @@ function waitPlanAndRender(user){
       (typeof plan === "string" && plan.length > 0) ||
       (typeof role === "string" && role.length > 0);
 
-    if(ready || attempts > 20){
+    if((ready || attempts > 20) && !window.headerRendered){
+
+      window.headerRendered = true; // 🔥 BLOCCO RENDER MULTIPLO
+
       clearInterval(interval);
       renderUser(user);
       unlockUI();
+
     }
 
   },120);
 
 }
-
 /* =====================
 📱 MENU + LANG
 ===================== */
