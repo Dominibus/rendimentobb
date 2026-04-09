@@ -1176,13 +1176,9 @@ if(isPro){
             }
           }, 1200);
 
-        }
-
-      }
-
     }else{
-      window.location.href="/#pricing";
-    }
+  window.location.href="/#pricing";
+}
 
   }); // 👈 CHIUSURA onAuthStateChanged
 
