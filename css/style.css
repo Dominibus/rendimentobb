@@ -10111,3 +10111,56 @@ body.is-admin [class*="overlay"]{
   pointer-events:none !important;
   opacity:0 !important;
 }
+
+/* ===============================
+🔥 HEADER BUTTONS FIX – PRODUCTION
+=============================== */
+
+.rb-btn{
+  padding:10px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  border:1px solid var(--rb-border);
+  background:#ffffff;
+  color:#0f172a;
+  transition:all .2s ease;
+}
+
+/* DASHBOARD (PRIMARY) */
+.rb-btn.primary{
+  background:#10b981;
+  color:white;
+  border:none;
+}
+
+/* LEADS (SECONDARY IMPORTANTE) */
+.rb-btn.secondary{
+  background:#f8fafc;
+  color:#0f172a;
+  border:1px solid #e2e8f0;
+}
+
+/* LEADS HOVER */
+.rb-btn.secondary:hover{
+  background:#eef2ff;
+  border-color:#c7d2fe;
+}
+
+/* LOCKED (se non admin) */
+.rb-btn.locked{
+  opacity:0.6;
+  position:relative;
+}
+
+.rb-btn.locked::after{
+  content:"🔒";
+  margin-left:6px;
+}
+
+/* LOGOUT */
+.rb-btn.red{
+  background:#ef4444;
+  color:white;
+  border:none;
+}
