@@ -1,10 +1,9 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER – FINAL STABLE */
+/* RENDIMENTOBB HEADER – PRODUCTION FINAL */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 
 /* ===================== */
 /* HERO BG */
@@ -30,7 +29,6 @@ window.applyCityBackground = function(){
 
   hero.classList.add(city);
 };
-
 
 /* ===================== */
 /* INIT HEADER */
@@ -70,22 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div id="user-area"></div>
 
+        <!-- 🔥 HAMBURGER SOLO MOBILE -->
         <button id="rb-burger">☰</button>
 
       </div>
-
-    </div>
-
-    <!-- MOBILE MENU -->
-    <div class="rb-mobile" id="rb-mobile">
-
-      <div id="mobile-user-area"></div>
-
-      <a href="/tool/">Simulatore</a>
-      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-      <a href="/mutui/">Mutui</a>
-      <a href="/immobili/">Immobili</a>
-      <a href="/academy/">Academy</a>
 
     </div>
 
@@ -93,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
 
   window.applyCityBackground();
+
   initHeaderInteractions();
 
   onAuthStateChanged(auth, (user) => {
@@ -100,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
-
 
 /* ===================== */
 /* WAIT PLAN */
@@ -130,9 +116,8 @@ function waitPlanAndRender(user){
 
 }
 
-
 /* ===================== */
-/* INTERACTIONS – FINAL CLEAN */
+/* MENU MOBILE – FINAL FIX */
 /* ===================== */
 
 function initHeaderInteractions(){
@@ -141,35 +126,30 @@ function initHeaderInteractions(){
   const mobile = document.getElementById("rb-mobile");
   const overlay = document.getElementById("rb-mobile-overlay");
 
-  // 🔥 RESET STATO INIZIALE (FIX MENU BLOCCATO)
-mobile.classList.remove("open");
-overlay.classList.remove("open");
-document.body.classList.remove("menu-open");
-
   if(!burger || !mobile || !overlay) return;
 
-  // evita duplicazione eventi
-  if(window.rbMenuInitialized) return;
-  window.rbMenuInitialized = true;
-
-  // ================= OPEN / CLOSE =================
-function openMenu(){
-  mobile.classList.add("open");
-  overlay.classList.add("open");
-
-  setTimeout(()=>{
-    document.body.classList.add("menu-open");
-  },10);
-}
-
-function closeMenu(){
+  // 🔥 RESET (CRITICO)
   mobile.classList.remove("open");
   overlay.classList.remove("open");
   document.body.classList.remove("menu-open");
-}
 
-  // ================= BURGER =================
-  burger.addEventListener("click",(e)=>{
+  if(window.rbMenuInitialized) return;
+  window.rbMenuInitialized = true;
+
+  function openMenu(){
+    mobile.classList.add("open");
+    overlay.classList.add("open");
+    document.body.classList.add("menu-open");
+  }
+
+  function closeMenu(){
+    mobile.classList.remove("open");
+    overlay.classList.remove("open");
+    document.body.classList.remove("menu-open");
+  }
+
+  // 🔥 BURGER
+  burger.addEventListener("click", (e)=>{
     e.stopPropagation();
 
     if(mobile.classList.contains("open")){
@@ -179,22 +159,20 @@ function closeMenu(){
     }
   });
 
-  // ================= CLICK LINK =================
+  // 🔥 OVERLAY CLICK
+  overlay.addEventListener("click", closeMenu);
+
+  // 🔥 CLICK LINK
   mobile.querySelectorAll("a").forEach(link=>{
     link.addEventListener("click", closeMenu);
   });
 
-  // ================= CLICK OUTSIDE =================
-  overlay.addEventListener("click", closeMenu);
-
-  // ================= ESC KEY =================
+  // 🔥 ESC
   document.addEventListener("keydown",(e)=>{
-    if(e.key === "Escape"){
-      closeMenu();
-    }
+    if(e.key === "Escape") closeMenu();
   });
 
-  // ================= LANGUAGE =================
+  // 🔥 LANGUAGE
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -208,7 +186,7 @@ function closeMenu(){
 }
 
 /* ===================== */
-/* LANGUAGE BUTTON STATE */
+/* LANGUAGE */
 /* ===================== */
 
 function updateLangButtons(lang){
@@ -218,13 +196,13 @@ function updateLangButtons(lang){
 }
 
 /* ===================== */
-/* RENDER USER */
+/* USER RENDER */
 /* ===================== */
 
 function renderUser(user){
 
   const el = document.getElementById("user-area");
-  const mobileEl = document.getElementById("mobile-user-area");
+  const mobileEl = document.getElementById("rb-mobile");
 
   if(!el) return;
 
@@ -261,21 +239,15 @@ function renderUser(user){
 
     el.innerHTML = html;
 
+    // 🔥 MOBILE USER BLOCK
     if(mobileEl){
-
-      let m = `<div class="rb-mobile-user">`;
-
-      if(isPro){
-        m += `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>`;
-      }
-
-      if(isAdmin){
-        m += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
-      }
-
-      m += `<button id="logout-mobile" class="rb-btn red">Logout</button></div>`;
-
-      mobileEl.innerHTML = m;
+      mobileEl.insertAdjacentHTML("afterbegin", `
+        <div class="rb-mobile-user">
+          ${isPro ? `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>` : ""}
+          ${isAdmin ? `<a href="/dashboard-leads/" class="rb-btn">Leads</a>` : ""}
+          <button id="logout-mobile" class="rb-btn red">Logout</button>
+        </div>
+      `);
     }
 
     document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
@@ -289,10 +261,7 @@ function renderUser(user){
 
   // ===== NOT LOGGED =====
   else{
-
-    el.innerHTML = `
-      <a href="/login/" class="rb-login">Accedi</a>
-    `;
+    el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
   }
 
 }
