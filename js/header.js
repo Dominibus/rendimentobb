@@ -219,11 +219,14 @@ function renderUser(user){
     user?.email === "rendimentobb@gmail.com" ||
     role === "admin";
 
-  const isPro =
-    isAdmin ||
-    plan === "pro" ||
-    plan === "investor" ||
-    plan === "pro_yearly";
+  const isInvestor = plan === "investor";
+
+const isPro =
+  isAdmin ||
+  plan === "pro" ||
+  plan === "pro_yearly";
+
+const isPaid = isInvestor || isPro;
 
   if(user){
 
@@ -231,13 +234,17 @@ function renderUser(user){
 
     // 🔥 DASHBOARD SEMPRE VISIBILE
     html += `
-      <a href="/dashboard/" 
-         class="rb-btn ${isPro ? "primary" : "locked"}"
-         id="dashboard-link">
-         Dashboard
-         ${!isPro ? `<span class="badge-pro">PRO</span>` : ""}
-      </a>
-    `;
+  <a href="/dashboard/" 
+     class="rb-btn ${isPaid ? "primary" : "locked"}"
+     id="dashboard-link">
+     Dashboard
+
+     ${isInvestor ? `<span class="badge-pro">INVESTOR</span>` : ""}
+     ${isPro ? `<span class="badge-pro">PRO</span>` : ""}
+     ${(!isPaid) ? `<span class="badge-pro">PRO</span>` : ""}
+
+  </a>
+`;
 
     // LEADS
     html += isAdmin
@@ -250,7 +257,7 @@ function renderUser(user){
     el.innerHTML = html;
 
     // 🔥 INTERCEPT CLICK DASHBOARD
-    if(!isPro){
+    if(!isPaid){
       document.getElementById("dashboard-link").onclick = (e)=>{
         e.preventDefault();
         openProModal();
