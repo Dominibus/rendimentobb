@@ -1,27 +1,39 @@
+// ===============================================
+// RENDIMENTOBB – ROI ENGINE PRODUCTION
+// Silicon Valley grade – Stable / Safe / Predictable
+// ===============================================
+
 import { calculateMortgage } from "./mortgage-engine.js";
 
 export function calculateROI(input = {}){
 
-  // ================= SAFE INPUT =================
+  // ================= SAFE PARSER =================
   const safe = (v, def = 0) => {
     const n = Number(v);
     return isNaN(n) ? def : n;
   };
 
-  const priceNight   = safe(input.priceNight, 100);
-  const occupancy    = safe(input.occupancy, 65);
-  const expenses     = safe(input.expenses, 30);
-  const commission   = safe(input.commission, 15);
-  const tax          = safe(input.tax, 21);
-  const equity       = safe(input.equity, 0);
-  const loanAmount   = safe(input.loanAmount, 0);
-  const interestRate = safe(input.interestRate, 3.5);
-  const loanYears    = safe(input.loanYears, 20);
+  const safePositive = (v, def = 0) => {
+    const n = safe(v, def);
+    return n < 0 ? def : n;
+  };
+
+  // ================= INPUT =================
+  const price        = safePositive(input.price, 100000);
+  const equity       = safePositive(input.equity, 0);
+  const loanAmount   = safePositive(input.loanAmount, price - equity);
+
+  const priceNight   = safePositive(input.priceNight, 100);
+  const occupancy    = Math.min(100, safePositive(input.occupancy, 65));
+
+  const expenses     = safePositive(input.expenses, 30); // % or monthly? → handled below
+  const commission   = safePositive(input.commission, 15);
+  const tax          = safePositive(input.tax, 21);
+
+  const interestRate = safePositive(input.interestRate, 3.5);
+  const loanYears    = safePositive(input.loanYears, 20);
 
   // ================= CORE CALC =================
-
-  const mortgageYearly =
-    calculateMortgage(loanAmount, interestRate, loanYears) || 0;
 
   const nights = 365 * (occupancy / 100);
 
@@ -29,7 +41,16 @@ export function calculateROI(input = {}){
 
   const fees = gross * (commission / 100);
 
-  const yearlyExpenses = expenses * 12;
+  // 🔥 gestione smart expenses:
+  // se < 100 → % su revenue
+  // se > 100 → valore mensile
+  let yearlyExpenses = 0;
+
+  if(expenses <= 100){
+    yearlyExpenses = gross * (expenses / 100);
+  }else{
+    yearlyExpenses = expenses * 12;
+  }
 
   const operatingProfit = gross - fees - yearlyExpenses;
 
@@ -38,15 +59,27 @@ export function calculateROI(input = {}){
       ? operatingProfit * (tax / 100)
       : 0;
 
+  // ================= MORTGAGE =================
+  let mortgageYearly = 0;
+
+  try{
+    mortgageYearly =
+      calculateMortgage(loanAmount, interestRate, loanYears) || 0;
+  }catch(e){
+    console.warn("⚠️ Mortgage fallback", e);
+    mortgageYearly = 0;
+  }
+
   const netAfterMortgage =
     operatingProfit - taxCost - mortgageYearly;
 
+  // ================= ROI =================
   const roi =
     equity > 0
       ? (netAfterMortgage / equity) * 100
       : 0;
 
-  // ================= EXTRA KPI (SaaS LEVEL) =================
+  // ================= EXTRA KPI =================
 
   const monthlyProfit = netAfterMortgage / 12;
 
@@ -60,46 +93,70 @@ export function calculateROI(input = {}){
       ? (netAfterMortgage / gross) * 100
       : 0;
 
-  const occupancyRate = occupancy;
-
   const adr = priceNight;
 
-  // ================= RISK SCORE =================
+  // ================= RISK ENGINE =================
 
   let risk = 75;
 
-  if(roi > 12) risk = 30;
-  else if(roi > 6) risk = 55;
+  if(roi >= 15){
+    risk = 25;
+  }
+  else if(roi >= 10){
+    risk = 40;
+  }
+  else if(roi >= 6){
+    risk = 60;
+  }
+  else{
+    risk = 80;
+  }
 
   // ================= SAFETY FINAL =================
 
-  const safeNum = (v) => isFinite(v) ? v : 0;
+  const clean = (v) => isFinite(v) ? v : 0;
 
-  return {
+  const result = {
 
     // CORE
-    gross: safeNum(gross),
-    fees: safeNum(fees),
-    operatingProfit: safeNum(operatingProfit),
-    taxCost: safeNum(taxCost),
-    mortgageYearly: safeNum(mortgageYearly),
-    netAfterMortgage: safeNum(netAfterMortgage),
-    roi: safeNum(roi),
+    price: clean(price),
+    equity: clean(equity),
+    loan: clean(loanAmount),
 
-    // EXTRA (🔥 QUESTO TI SBLOCCA UI)
-    revenue: safeNum(gross),
-    profit: safeNum(netAfterMortgage),
-    monthlyProfit: safeNum(monthlyProfit),
-    breakEvenYears: safeNum(breakEvenYears),
-    profitMargin: safeNum(profitMargin),
+    gross: clean(gross),
+    revenue: clean(gross),
 
-    // MARKET DATA READY
-    occupancy: safeNum(occupancyRate),
-    priceNight: safeNum(adr),
+    fees: clean(fees),
+    expensesYearly: clean(yearlyExpenses),
+
+    operatingProfit: clean(operatingProfit),
+    taxCost: clean(taxCost),
+
+    mortgageYearly: clean(mortgageYearly),
+
+    netAfterMortgage: clean(netAfterMortgage),
+    profit: clean(netAfterMortgage),
+
+    roi: clean(roi),
+
+    // KPI
+    monthlyProfit: clean(monthlyProfit),
+    breakEvenYears: clean(breakEvenYears),
+    profitMargin: clean(profitMargin),
+
+    // MARKET READY
+    occupancy: clean(occupancy),
+    priceNight: clean(adr),
 
     // RISK
-    risk: safeNum(risk)
-
+    risk: clean(risk)
   };
 
+  // ================= DEBUG SAFE =================
+  if(!result || typeof result !== "object"){
+    console.error("⛔ ROI ENGINE FAILED");
+    return {};
+  }
+
+  return result;
 }
