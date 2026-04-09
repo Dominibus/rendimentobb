@@ -3354,10 +3354,7 @@ function goToMarket(city){
 
 function unlockProUI(){
 
-  // NON ridefinire
-// const access = window.getUserAccess(); ❌
-
-// usa quello già esistente
+  const access = window.getUserAccess(); // ✅ SEMPRE PRIMA
 
   if(!access.canSeeFullAnalysis){
     console.log("⛔ NOT PRO → skip unlock");
@@ -3368,36 +3365,21 @@ function unlockProUI(){
 
   window.proUnlocked = true;
 
-  // ================= ADMIN UI =================
-if(typeof window.isAdmin === "function" && window.isAdmin()){
+  // ================= ADMIN =================
+  if(typeof window.isAdmin === "function" && window.isAdmin()){
+    console.log("👑 ADMIN SBLOCCATO");
 
-  console.log("👑 ADMIN SBLOCCATO");
+    document.body.classList.add("admin-user");
 
-  document.body.classList.add("admin-user");
+    document.querySelectorAll(".admin-only").forEach(el=>{
+      el.style.display = "block";
+    });
+  }
 
-  document.querySelectorAll(".admin-only").forEach(el=>{
-    el.style.display = "block";
-  });
-
-}
-
-const access = window.getUserAccess();
-
-if(!access.canSeeFullAnalysis){
-  
-  console.log("⛔ NOT PRO → skip");
-  return;
-}
-
-  window.proUnlocked = true;
-
-  console.log("🔥 UNLOCK PRO UI HARD");
-
-  // 🔥 ATTIVA STATO GLOBALE
+  // ================= PRO STATE =================
   document.body.classList.add("pro-user");
 
-  // ================= REMOVE CLASSI BLOCCO =================
-
+  // ================= REMOVE LOCK =================
   document.querySelectorAll("*").forEach(el=>{
 
     el.classList.remove(
@@ -3410,31 +3392,13 @@ if(!access.canSeeFullAnalysis){
       "pro-only"
     );
 
-    // 🔥 RESET STILI
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
 
   });
 
-  // 🔥 RITENTA FINO A QUANDO DIVENTA PRO
-
-  function unlockAdminUI(){
-
-  if(!window.isAdmin()) return;
-
-  console.log("👑 ADMIN MODE ATTIVO");
-
-  document.body.classList.add("admin-user");
-
-  document.querySelectorAll(".admin-only").forEach(el=>{
-    el.style.display = "block";
-  });
-
-}
-
-  // ================= RIMUOVE OVERLAY (CRITICO) =================
-
+  // ================= REMOVE OVERLAY =================
   document.querySelectorAll(`
     [data-paywall],
     .locked-overlay,
@@ -3445,19 +3409,19 @@ if(!access.canSeeFullAnalysis){
     #upgrade-overlay,
     #upgrade-modal,
     .home-blur-overlay
-  `).forEach(el=>{
-    el.remove();
-  });
+  `).forEach(el=> el.remove());
 
-  // ================= FORCE RE-CALC =================
-
+  // ================= FORCE UPDATE =================
   setTimeout(()=>{
     if(typeof window.quickROI === "function"){
-      console.log("🔄 FORCE quickROI");
       window.quickROI();
     }
   },100);
 
+  document.dispatchEvent(new Event("rb_simulation_updated"));
+
+  console.log("✅ PRO SBLOCCATO DEFINITIVO");
+}
   // ================= EVENT =================
 
   document.dispatchEvent(new Event("rb_simulation_updated"));
