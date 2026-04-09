@@ -187,6 +187,7 @@ function initHeaderInteractions(){
       localStorage.setItem("rb_lang", lang);
       if(window.setLang) window.setLang(lang);
       updateLangButtons(lang);
+      renderUser(auth.currentUser || null);
     };
   });
 
