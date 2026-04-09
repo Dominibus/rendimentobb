@@ -632,7 +632,7 @@ function lockFreeUser(){
       el.style.opacity = "0.6";
     }
   });
-
+ } 
 }
 // ================= BEST INVESTMENT =================
 
