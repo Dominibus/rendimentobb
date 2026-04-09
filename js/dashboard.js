@@ -333,6 +333,12 @@ async function loadDashboard(){
     return;
   }
 
+  if(isInvestor){
+  console.log("👀 INVESTOR → preview mode");
+
+  lockInvestorPreview();
+}
+
   // ================= CREA ANALYSES =================
 
   const analyses = querySnapshot.docs.map(doc => ({
@@ -1115,17 +1121,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
     console.log("PLAN:", window.currentPlan);
 
-    const isPro =
-      isProUser() ||
-      window.currentPlan === "investor" ||
-      window.currentPlan === "pro_yearly";
+    const isAllowed =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "pro_yearly" ||
+  window.currentPlan === "investor";
 
-    // ================= BLOCCO ACCESSO =================
-    if(!isPro){
-      console.log("🚫 ACCESSO NEGATO → FREE USER");
-      window.location.href = "/#pricing";
-      return;
-    }
+if(!isAllowed){
+  window.location.href = "/#pricing";
+  return;
+}
+
+    const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "pro_yearly";
+
+const isInvestor =
+  window.currentPlan === "investor";
 
     // ================= READY =================
     document.dispatchEvent(new Event("rb_auth_ready")); 
@@ -2244,4 +2255,88 @@ function renderROIMarketComparison(count,totalROI){
 
   </div>
   `;
+}
+
+function lockInvestorPreview(){
+
+  const elementsToBlur = [
+    "roi-chart-container",
+    "cashflow-chart-container",
+    "city-roi-chart",
+    "city-distribution-chart",
+    "roi-optimizer",
+    "investment-ranking",
+    "best-investment"
+  ];
+
+  elementsToBlur.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.style.filter = "blur(6px)";
+    el.style.pointerEvents = "none";
+    el.style.opacity = "0.6";
+  });
+
+  showUpgradeOverlay();
+}
+
+function showUpgradeOverlay(){
+
+  if(document.getElementById("pro-overlay")) return;
+
+  const overlay = document.createElement("div");
+  overlay.id = "pro-overlay";
+
+  overlay.innerHTML = `
+  <div style="
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+  ">
+
+    <div style="
+      background:white;
+      padding:30px;
+      border-radius:16px;
+      text-align:center;
+      max-width:420px;
+      width:90%;
+    ">
+
+      <h2>🔒 Dashboard PRO</h2>
+
+      <p style="color:#64748b;margin:10px 0 20px">
+        Sblocca analisi completa, ROI reale e strategia investimento
+      </p>
+
+      <button onclick="goToUpgrade()" style="
+        background:#10b981;
+        color:white;
+        border:none;
+        padding:12px 18px;
+        border-radius:10px;
+        font-weight:600;
+        cursor:pointer;
+      ">
+        🚀 Sblocca PRO
+      </button>
+
+      <div style="margin-top:10px;font-size:12px;color:#64748b">
+        Anteprima attiva
+      </div>
+
+    </div>
+
+  </div>
+  `;
+
+  document.body.appendChild(overlay);
 }
