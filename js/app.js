@@ -1737,6 +1737,10 @@ result = calculateROI({
 
     unlockUI();
 
+    if(window.getUserAccess().canSeeFullAnalysis){
+  unlockProUI();
+}
+
     // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
     runPostAnalysis(result, {
       price,
@@ -1892,9 +1896,9 @@ if(access.canSeeFullAnalysis){
 
 }else{
 
-  // 🔥 HARD GUARD → se già sbloccato NON bloccare più
-  if(window.proUnlocked){
-    console.log("⛔ SKIP LOCK (già PRO sbloccato)");
+  // 🔥 HARD BLOCK DEFINITIVO
+  if(window.getUserAccess().canSeeFullAnalysis || window.proUnlocked){
+    console.log("⛔ LOCK BLOCCATO DEFINITIVO");
     return;
   }
 
@@ -1965,19 +1969,7 @@ if(access.canSeeFullAnalysis){
 
     // ================= PRO UNLOCK =================
     
-    if(window.getUserAccess().canSeeFullAnalysis){
-
-      console.log("🔓 PRO → unlock totale");
-
-      document.body.classList.add("pro-user");
-
-      document.querySelectorAll(`
-        .pro-blur,
-        .locked,
-        .locked-content,
-        .premium-lock
-      `).forEach(el=>{
-        el.classList.remove(
+            el.classList.remove(
           "pro-blur",
           "locked",
           "locked-content",
