@@ -1166,20 +1166,19 @@ if(isPro){
 
 }else{
 
-        if(!window.proOverlayShown){
+  if(!window.proOverlayShown){
 
-          window.proOverlayShown = true;
+    window.proOverlayShown = true;
 
-          setTimeout(()=>{
-            if(typeof showProOverlay === "function"){
-              showProOverlay();
-            }
-          }, 1200);
+    setTimeout(()=>{
+      if(typeof showProOverlay === "function"){
+        showProOverlay();
+      }
+    }, 1200);
 
-    }else{
-  window.location.href="/#pricing";
+  }
 
-  }); // 👈 CHIUSURA onAuthStateChanged
+}); // 👈 CHIUSURA onAuthStateChanged
 
   // 🔥 EVENTO LINGUA (FUORI, NON DENTRO AUTH)
   document.addEventListener("rb_language_changed", () => {
