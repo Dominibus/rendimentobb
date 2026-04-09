@@ -128,6 +128,8 @@ function waitPlanAndRender(user){
 
   let attempts = 0;
 
+  window.headerRendered = false;
+
   const interval = setInterval(()=>{
 
     attempts++;
@@ -139,15 +141,20 @@ function waitPlanAndRender(user){
       (typeof plan === "string" && plan.length > 0) ||
       (typeof role === "string" && role.length > 0);
 
-    if((ready || attempts > 20) && !window.headerRendered){
+    if(ready || attempts > 20){
 
-      window.headerRendered = true; // 🔥 BLOCCO RENDER MULTIPLO
+  clearInterval(interval);
 
-      clearInterval(interval);
-      renderUser(user);
-      unlockUI();
+  // 🔥 PRIMO RENDER
+  renderUser(user);
+  unlockUI();
 
-    }
+  // 🔥 SICUREZZA: re-render dopo micro delay (fix flicker Firebase)
+  setTimeout(()=>{
+    renderUser(auth.currentUser || null);
+  }, 50);
+
+}
 
   },120);
 
@@ -194,6 +201,11 @@ function initHeaderInteractions(){
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 
   initProModal();
+
+  // 🔥 SYNC IMMEDIATO QUANDO CAMBIA PIANO
+window.addEventListener("rb_plan_ready", ()=>{
+  renderUser(auth.currentUser || null);
+});
 }
 
 /* =====================
@@ -245,7 +257,7 @@ const isPaid = isInvestor || isPro;
 
      ${isInvestor ? `<span class="badge-pro">INVESTOR</span>` : ""}
      ${isPro ? `<span class="badge-pro">PRO</span>` : ""}
-     ${(!isPaid) ? `<span class="badge-pro">PRO</span>` : ""}
+     ${(!isPaid) ? `<span class="badge-pro">LOCK</span>` : ""}
 
   </a>
 `;
@@ -289,6 +301,9 @@ const isPaid = isInvestor || isPro;
   }
 
 }
+
+// 🔥 EXPORT GLOBALE (CRITICO)
+window.renderUser = renderUser;
 
 /* =====================
 🔒 MODAL PRO
