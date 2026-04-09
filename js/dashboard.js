@@ -42,14 +42,14 @@ const auth = getAuth(app);
 function isInvestor(){
   return (
     window.currentPlan === "investor" ||
-    window.currentPlan === "pro" ||
+    isProUser() ||
     window.currentPlan === "pro_yearly"
   );
 }
 
 function isProUser(){
   return (
-    window.currentPlan === "pro" ||
+    isProUser() ||
     window.currentPlan === "pro_yearly"
   );
 }
@@ -296,6 +296,11 @@ cutout:"65%"
 // ================= LOAD DASHBOARD =================
 
 async function loadDashboard(){
+
+  if(!window.currentPlan){
+  console.log("⏳ Piano non pronto → blocco render dashboard");
+  return;
+}
 
   window.loadDashboard = loadDashboard; 
 
@@ -557,31 +562,6 @@ async function loadDashboard(){
   renderCashflowChart();
   renderCityROIChart(analyses);
 
-// ================= FIX PLAN (DEFINITIVO) =================
-
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
-
-console.log("CHECK PRO:", isPro, window.currentPlan);
-
-if(!window.currentPlan){
-  console.warn("Plan non pronto → skip");
-}
-else if(isPro){
-
-  console.log("🔥 PRO → UNLOCK FORZATO");
-  unlockProContent();
-
-}
-else{
-
-  console.log("🔒 FREE → LOCK");
-  lockFreeUser();
-
-}
-
 // ================= LOCK FREE USER =================
 
 function lockFreeUser(){
@@ -592,7 +572,7 @@ function lockFreeUser(){
   if(!window.currentPlan) return;
 
   // 🔥 SE PRO → SBLOCCA TUTTO (FIX DEFINITIVO)
-  if(window.currentPlan === "pro"){
+  if(isProUser()){
     console.log("PRO USER → unlock everything");
 
     // rimuove blur inline
@@ -1136,7 +1116,7 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log("PLAN:", window.currentPlan);
 
     const isPro =
-      window.currentPlan === "pro" ||
+      isProUser() ||
       window.currentPlan === "investor" ||
       window.currentPlan === "pro_yearly";
 
@@ -1151,6 +1131,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.dispatchEvent(new Event("rb_auth_ready")); 
 
     await loadDashboard();
+    unlockProContent();
 
     // ================= POST LOAD =================
     if(isPro){
@@ -2101,7 +2082,7 @@ function unlockProContent(){
 
 function renderUpgradeTrigger(best){
 
-  if(window.currentPlan === "pro") return;
+  if(isProUser()) return;
 
   const container = document.getElementById("upgrade-trigger");
   if(!container) return;
@@ -2213,7 +2194,7 @@ function renderROIMarketComparison(count,totalROI){
   <div style="margin-top:16px">
 
     ${
-    window.currentPlan === "pro"
+    isProUser()
     ? `
       <div style="
       padding:12px;
