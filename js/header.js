@@ -1,13 +1,14 @@
-/* ===================== */
-/* RENDIMENTOBB HEADER – FINAL PRODUCTION ULTRA */
-/* ===================== */
+/* =====================================
+🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION
+Silicon Valley UX / Airbnb Style
+===================================== */
 
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-/* ===================== */
-/* HERO BG */
-/* ===================== */
+/* =====================
+🎨 HERO BG
+===================== */
 
 window.applyCityBackground = function(){
 
@@ -30,9 +31,9 @@ window.applyCityBackground = function(){
   hero.classList.add(city);
 };
 
-/* ===================== */
-/* INIT HEADER */
-/* ===================== */
+/* =====================
+🚀 INIT HEADER
+===================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
       </div>
 
-      <!-- CENTER DESKTOP -->
+      <!-- CENTER -->
       <nav class="rb-center">
         <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
         <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
@@ -79,12 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   </header>
 
-  <!-- OVERLAY -->
   <div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
 
-  <!-- MOBILE MENU -->
   <div id="rb-mobile" class="rb-mobile-menu">
-
     <nav>
       <a href="/tool/">Simulatore</a>
       <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
@@ -92,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="/immobili/">Immobili</a>
       <a href="/academy/">Academy</a>
     </nav>
-
   </div>
 
   `;
@@ -107,9 +104,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-/* ===================== */
-/* WAIT PLAN */
-/* ===================== */
+/* =====================
+⏳ WAIT PLAN
+===================== */
 
 function waitPlanAndRender(user){
 
@@ -129,8 +126,6 @@ function waitPlanAndRender(user){
     if(ready || attempts > 20){
       clearInterval(interval);
       renderUser(user);
-
-      // 🔥 FIX CRITICO → RESET UI BLOCCATA
       unlockUI();
     }
 
@@ -138,9 +133,9 @@ function waitPlanAndRender(user){
 
 }
 
-/* ===================== */
-/* MENU MOBILE */
-/* ===================== */
+/* =====================
+📱 MENU MOBILE
+===================== */
 
 function initHeaderInteractions(){
 
@@ -162,29 +157,22 @@ function initHeaderInteractions(){
     document.body.classList.remove("menu-open");
   }
 
-  burger.addEventListener("click", (e)=>{
+  burger.onclick = (e)=>{
     e.stopPropagation();
+    mobile.classList.contains("open") ? closeMenu() : openMenu();
+  };
 
-    if(mobile.classList.contains("open")){
-      closeMenu();
-    }else{
-      openMenu();
-    }
-  });
-
-  overlay.addEventListener("click", closeMenu);
+  overlay.onclick = closeMenu;
 
   mobile.querySelectorAll("a").forEach(link=>{
-    link.addEventListener("click", closeMenu);
+    link.onclick = closeMenu;
   });
 
   document.addEventListener("keydown",(e)=>{
     if(e.key === "Escape") closeMenu();
   });
 
-  /* ===================== */
   /* LANGUAGE */
-  /* ===================== */
 
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
@@ -198,9 +186,9 @@ function initHeaderInteractions(){
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 }
 
-/* ===================== */
-/* LANGUAGE */
-/* ===================== */
+/* =====================
+🌐 LANGUAGE
+===================== */
 
 function updateLangButtons(lang){
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
@@ -208,9 +196,9 @@ function updateLangButtons(lang){
   });
 }
 
-/* ===================== */
-/* USER */
-/* ===================== */
+/* =====================
+👤 USER AREA (FIX LEADS)
+===================== */
 
 function renderUser(user){
 
@@ -242,9 +230,10 @@ function renderUser(user){
       html += `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>`;
     }
 
-    if(isAdmin){
-      html += `<a href="/dashboard-leads/" class="rb-btn">Leads</a>`;
-    }
+    // 🔥 LEADS SEMPRE VISIBILE
+    html += isAdmin
+      ? `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`
+      : `<a href="#" onclick="alert('Admin only')" class="rb-btn secondary locked">Leads</a>`;
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
@@ -255,7 +244,10 @@ function renderUser(user){
       mobileEl.insertAdjacentHTML("afterbegin", `
         <div class="rb-mobile-user">
           ${isPro ? `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>` : ""}
-          ${isAdmin ? `<a href="/dashboard-leads/" class="rb-btn">Leads</a>` : ""}
+          ${isAdmin
+            ? `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`
+            : `<a href="#" class="rb-btn secondary locked">Leads</a>`
+          }
           <button id="logout-mobile" class="rb-btn red">Logout</button>
         </div>
       `);
@@ -276,18 +268,16 @@ function renderUser(user){
 
 }
 
-/* ===================== */
-/* 🔥 UNLOCK UI (CRITICO) */
-/* ===================== */
+/* =====================
+🔓 UNLOCK UI
+===================== */
 
 function unlockUI(){
 
-  // rimuove overlay e blocchi
   document.querySelectorAll(
     ".locked-overlay, .results-overlay, .home-blur-overlay"
   ).forEach(el => el.remove());
 
-  // rimuove blur
   document.querySelectorAll(
     ".pro-blur, .locked-section"
   ).forEach(el=>{
