@@ -3419,15 +3419,6 @@ function unlockProUI(){
   document.dispatchEvent(new Event("rb_simulation_updated"));
 
   console.log("✅ PRO SBLOCCATO DEFINITIVO");
-}
-  // ================= EVENT =================
-
-  document.dispatchEvent(new Event("rb_simulation_updated"));
-
-  console.log("✅ PRO SBLOCCATO DEFINITIVO");
-
-}
-
 
 // ================= EVENTI =================
 
