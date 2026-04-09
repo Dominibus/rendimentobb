@@ -333,7 +333,7 @@ async function loadDashboard(){
     return;
   }
 
-  if(isInvestor){
+  if(isInvestor()){
   console.log("👀 INVESTOR → preview mode");
 
   lockInvestorPreview();
@@ -489,7 +489,7 @@ async function loadDashboard(){
         <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
 
         ${
-        isInvestor()
+        isProUser()
         ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
         : `
         <strong style="filter:blur(4px)">
@@ -1135,36 +1135,34 @@ if(!isAllowed){
   window.currentPlan === "pro" ||
   window.currentPlan === "pro_yearly";
 
-const isInvestor =
-  window.currentPlan === "investor";
+if(isInvestor){
+  console.log("👀 INVESTOR MODE");
+}
 
     // ================= READY =================
     document.dispatchEvent(new Event("rb_auth_ready")); 
 
     await loadDashboard();
-    unlockProContent();
 
-    // ================= POST LOAD =================
-    if(isPro){
+// 🔥 SOLO PRO SBLOCCA
+if(isPro){
+  console.log("🔥 PRO USER → UNLOCK HARD");
+  unlockProContent();
+}else{
 
-      console.log("🔥 PRO USER → UNLOCK HARD");
-      unlockProContent();
+  if(!window.proOverlayShown){
 
-    }else{
+    window.proOverlayShown = true;
 
-      if(!window.proOverlayShown){
-
-        window.proOverlayShown = true;
-
-        setTimeout(()=>{
-          if(typeof showProOverlay === "function"){
-            showProOverlay();
-          }
-        }, 1200);
-
+    setTimeout(()=>{
+      if(typeof showProOverlay === "function"){
+        showProOverlay();
       }
+    }, 1200);
 
-    }
+  }
+
+}
 
   }); // 👈 CHIUSURA onAuthStateChanged
 
