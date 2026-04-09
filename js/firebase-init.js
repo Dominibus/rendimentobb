@@ -201,6 +201,13 @@ console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.u
 // 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
 
+    // 🔥 FIX HEADER IMMEDIATO (CRITICO)
+setTimeout(()=>{
+  if(window.renderUser){
+    window.renderUser(window.currentUser || null);
+  }
+}, 0);
+
     // 🔥 SYNC IMMEDIATO HEADER/UI
 setTimeout(()=>{
   document.dispatchEvent(new Event("rb_plan_loaded"));
