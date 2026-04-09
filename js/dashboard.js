@@ -906,6 +906,25 @@ const trend = avgROI >= marketROI ? "↑" : "↓";
 
 const avgCashflow = count ? (totalCashflow / count) : 0;
 
+// 🔥 SYNC HERO (NUOVA UI SaaS)
+if(typeof syncDashboardHero === "function"){
+
+  const avgROI = count ? (totalROI / count) : 0;
+
+  let breakEven = 0;
+  if(avgROI > 0){
+    breakEven = Math.round(100 / avgROI);
+  }
+
+  syncDashboardHero({
+    roi: avgROI.toFixed(1),
+    cashflow: Math.round(avgCashflow),
+    capital: Math.round(totalCapital),
+    breakEven: breakEven
+  });
+
+}  
+
 const roiEl = document.getElementById("portfolio-roi");
 if(roiEl) roiEl.textContent = avgROIRounded + "%";
 
