@@ -274,6 +274,8 @@ window.isAdmin = function(){
 
 // 🔥 PREMIUM USER (ADMIN + PRO)
 window.isPremiumUser = function(){
+  return window.getUserAccess().canSeeFullAnalysis;
+};
 
   const isAdmin =
     window.currentUser?.email === "rendimentobb@gmail.com" ||
@@ -323,7 +325,7 @@ function hasPlan(requiredPlan){
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
   // 🔥 PRO → bypass totale
-if(window.isPremiumUser()){
+if(window.getUserAccess().canSeeFullAnalysis){
   return true;
 }
 
@@ -1116,7 +1118,9 @@ ${message}
 
 function showUpgradePopup(roi){
 
-  if(!window.firebaseReady || window.isPro?.()){
+  const access = window.getUserAccess();
+
+if(!window.firebaseReady || access.canSeeFullAnalysis){
   return;
 }
 
@@ -1145,15 +1149,9 @@ function renderSmartInvestmentAlert(roi){
   if(!container) return;
 
   // ================= CHECK PRO =================
-  let isProUser = false;
+ const access = window.getUserAccess();
 
-  try{
-    isProUser = window.isPremiumUser();
-  }catch(e){
-    console.warn("isPro error", e);
-  }
-
-  if(isProUser){
+  if(access.canSeeFullAnalysis){
     container.innerHTML = "";
     return;
   }
@@ -1210,11 +1208,8 @@ function renderSmartInvestmentAlert(roi){
   if(btn){
     btn.onclick = () => {
 
-      let isProNow = false;
-
-      try{
-        isProNow = typeof window.isPro === "function" && window.isPro();
-      }catch(e){
+      const isProNow = window.getUserAccess().canSeeFullAnalysis;
+      
         console.warn("isPro click error", e);
       }
 
@@ -1337,15 +1332,9 @@ if(!window.firebaseReady){
   return;
 }
 
-let isProUser = false;
+const access = window.getUserAccess();
 
-try{
-  isProUser = window.isPremiumUser();
-}catch(e){
-  console.warn("isPro error", e);
-}
-
-btn.style.display = isProUser ? "inline-block" : "none";
+btn.style.display = access.canDownloadPDF ? "inline-block" : "none";
 
 console.log("PDF visibility:", window.currentPlan);
 
@@ -1695,15 +1684,9 @@ function runPostAnalysis(result, context){
   const roi = Number(result?.roi || 0);
 
   // ================= PAYWALL (UNICO) =================
-  const isAdmin =
-  window.currentUser?.email === "rendimentobb@gmail.com" ||
-  window.userRole === "admin";
-
-const isProUser =
-  isAdmin ||
-  (window.isPremiumUser());
-
-if(!isProUser && !window.paywallShown){
+const access = window.getUserAccess();
+  
+if(!access.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
@@ -1916,9 +1899,9 @@ if(roiHome){
 
 const profitHome = document.getElementById("profit-live");
 if(profitHome){
-  profitHome.innerText = window.isPro?.() 
-    ? formatCurrency(net)
-    : "—";
+  profitHome.innerText = window.getUserAccess().canSeeFullAnalysis
+  ? formatCurrency(net)
+  : "—";
 }
 
 const revenueHome = document.getElementById("revenue-live");
@@ -1928,15 +1911,9 @@ if(revenueHome){
 
 // ================= KPI =================
 
-let isProUser = false;
+const access = window.getUserAccess();
 
-try{
-  isProUser = window.isPremiumUser();
-}catch(e){
-  console.warn("isPro error", e);
-}
-
-if(isProUser){
+if(access.canSeeFullAnalysis){
 
   if(typeof renderExecutiveKPI === "function"){
     renderExecutiveKPI(result);
@@ -2010,7 +1987,7 @@ if(isProUser){
 
     // ================= PRO UNLOCK =================
     
-    if(window.isPremiumUser()){
+    if(window.getUserAccess().canSeeFullAnalysis){
 
       console.log("🔓 PRO → unlock totale");
 
@@ -3425,9 +3402,10 @@ if(typeof window.isAdmin === "function" && window.isAdmin()){
 
 }
 
-  const isPro = window.isPremiumUser();
+const access = window.getUserAccess();
 
-  if(!(window.isPremiumUser())){
+if(!access.canSeeFullAnalysis){
+  
   console.log("⛔ NOT PRO → skip");
   return;
 }
