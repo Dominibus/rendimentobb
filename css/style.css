@@ -10367,3 +10367,13 @@ body.is-admin [class*="overlay"]{
 .rb-center a:active{
   transform:scale(0.95);
 }
+
+.badge-pro{
+  margin-left:6px;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:600;
+  background:#10b981;
+  color:white;
+}
