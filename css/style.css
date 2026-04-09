@@ -10191,3 +10191,10 @@ body.menu-open{
 body.menu-open{
   overflow:hidden;
 }
+
+/* 🔥 SICUREZZA CLICK */
+.rb-mobile a{
+  display:block;
+  padding:14px;
+  border-radius:10px;
+}
