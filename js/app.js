@@ -559,6 +559,8 @@ function unlockUI(){
     .home-blur-overlay
   `).forEach(el => el.remove());
 
+  document.querySelectorAll(".paywall-mini").forEach(el => el.remove());
+
   document.querySelectorAll(`
     .pro-blur,
     .locked,
@@ -1874,7 +1876,7 @@ if(revenueHome){
 
 const access = window.getUserAccess();
 
-// 🔥 HARD GUARD GLOBALE (ANTI RE-LOCK)
+// 🔓 SE PRO → STOP TOTALE (NO LOCK MAI)
 if(access.canSeeFullAnalysis){
 
   console.log("🔓 FULL ACCESS → FORCE UNLOCK");
@@ -1884,62 +1886,57 @@ if(access.canSeeFullAnalysis){
   }
 
   unlockUI();
+  unlockProUI();
 
   window.proUnlocked = true;
 
-}else{
-
-  // 🔥 HARD BLOCK DEFINITIVO
-  if(window.getUserAccess().canSeeFullAnalysis || window.proUnlocked){
-    console.log("⛔ LOCK BLOCCATO DEFINITIVO");
-    return;
-  }
-
-  console.log("🔒 FREE MODE → APPLY LOCK");
-
-  document.querySelectorAll(`
-    #revenue-forecast,
-    #occupancy-sensitivity,
-    #break-even-kpi,
-    #investment-score,
-    #investment-ranking,
-    #investment-risk-meter,
-    #investment-verdict,
-    #ai-insights
-  `).forEach(el=>{
-
-    if(!el) return;
-
-    el.classList.add("pro-blur");
-
-    if(!el.querySelector(".paywall-mini")){
-
-      const overlay = document.createElement("div");
-
-      overlay.className = "paywall-mini";
-
-      overlay.innerHTML = `
-        <div style="
-          margin-top:10px;
-          padding:10px;
-          font-size:13px;
-          text-align:center;
-          color:#64748b;
-        ">
-          🔒 ${t(
-            "Sblocca analisi avanzata",
-            "Unlock advanced analysis"
-          )}
-        </div>
-      `;
-
-      el.appendChild(overlay);
-    }
-
-  });
-
+  return; // 🔥 QUESTO È IL FIX CHIAVE
 }
 
+// ================= FREE MODE =================
+
+console.log("🔒 FREE MODE → APPLY LOCK");
+
+document.querySelectorAll(`
+  #revenue-forecast,
+  #occupancy-sensitivity,
+  #break-even-kpi,
+  #investment-score,
+  #investment-ranking,
+  #investment-risk-meter,
+  #investment-verdict,
+  #ai-insights
+`).forEach(el=>{
+
+  if(!el) return;
+
+  el.classList.add("pro-blur");
+
+  if(!el.querySelector(".paywall-mini")){
+
+    const overlay = document.createElement("div");
+
+    overlay.className = "paywall-mini";
+
+    overlay.innerHTML = `
+      <div style="
+        margin-top:10px;
+        padding:10px;
+        font-size:13px;
+        text-align:center;
+        color:#64748b;
+      ">
+        🔒 ${t(
+          "Sblocca analisi avanzata",
+          "Unlock advanced analysis"
+        )}
+      </div>
+    `;
+
+    el.appendChild(overlay);
+  }
+
+});
     // ================= CHART =================
     setTimeout(()=>{
       if(typeof renderChart === "function"){
