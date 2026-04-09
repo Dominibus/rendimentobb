@@ -240,8 +240,11 @@ window.isPremiumUser = function(){
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
+  // ⚠️ NON usare window.isPro()
   const isPro =
-    window.isPremiumUser();
+    window.currentPlan === "pro" ||
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro_yearly";
 
   return isAdmin || isPro;
 };
