@@ -10033,30 +10033,81 @@ body.menu-open{
 }
 
 /* ===================== */
-/* ACCESS CONTROL */
+/* ACCESS CONTROL (FIX DEFINITIVO) */
 /* ===================== */
-.is-pro .free-only{
-  display:none !important;
-}
 
-.is-free .pro-only,
-.is-guest .pro-only{
-  display:none !important;
-}
-
-/* ===================== */
-/* FIX CLICK / OVERLAY */
-/* ===================== */
-button{
-  position:relative;
-}
-
-.locked-overlay{
-  pointer-events:none;
-}
-
-body.is-pro .pro-blur{
+/* 🔓 PRO / ADMIN → MAI BLOCCATI */
+body.is-pro .pro-blur,
+body.is-admin .pro-blur{
   filter:none !important;
   opacity:1 !important;
   pointer-events:auto !important;
+}
+
+/* 🔥 RIMOZIONE OVERLAY PER PRO */
+body.is-pro .locked-overlay,
+body.is-pro .paywall-mini,
+body.is-pro .upgrade-overlay,
+body.is-pro .home-blur-overlay,
+body.is-admin .locked-overlay,
+body.is-admin .paywall-mini,
+body.is-admin .upgrade-overlay,
+body.is-admin .home-blur-overlay{
+  display:none !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+/* 🔥 RIMOZIONE QUALSIASI BLUR ANNIDATO */
+body.is-pro .pro-blur *,
+body.is-admin .pro-blur *{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+/* ===================== */
+/* FREE / GUEST LOCK */
+/* ===================== */
+
+body.is-free .pro-only,
+body.is-guest .pro-only{
+  display:none !important;
+}
+
+/* opzionale: nascondi roba free quando pro */
+body.is-pro .free-only{
+  display:none !important;
+}
+
+/* ===================== */
+/* FIX OVERLAY CLICK BUG */
+/* ===================== */
+
+.locked-overlay,
+.paywall-mini,
+.upgrade-overlay{
+  pointer-events:auto;
+}
+
+/* 🔥 IMPORTANTISSIMO → evita blocchi invisibili */
+body.is-pro .locked-overlay,
+body.is-admin .locked-overlay{
+  pointer-events:none !important;
+}
+
+/* ===================== */
+/* EXTRA HARD FIX (ANTI BUG MOBILE/IOS) */
+/* ===================== */
+
+.pro-blur{
+  transition:all .25s ease;
+}
+
+/* se qualcosa rimane sopra → distruggilo */
+body.is-pro [class*="overlay"],
+body.is-admin [class*="overlay"]{
+  display:none !important;
+  pointer-events:none !important;
+  opacity:0 !important;
 }
