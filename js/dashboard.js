@@ -749,10 +749,10 @@ font-size:13px;
 color:#065f46;
 ">
 <strong>💡 Insight:</strong><br>
-' + t(
+${t(
 "Questo investimento supera la media di mercato.",
 "This investment outperforms the market average."
-) + '
+)}
 </div>
 `
 : `
