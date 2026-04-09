@@ -1,5 +1,5 @@
 /* ===================== */
-/* RENDIMENTOBB HEADER – FINAL PRODUCTION */
+/* RENDIMENTOBB HEADER – FINAL PRODUCTION ULTRA */
 /* ===================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   container.innerHTML = `
 
-  <!-- HEADER -->
   <header class="rb-header">
 
     <div class="rb-inner">
@@ -80,9 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   </header>
 
-  <!-- MOBILE MENU -->
-  <div id="rb-mobile-overlay"></div>
+  <!-- OVERLAY -->
+  <div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
 
+  <!-- MOBILE MENU -->
   <div id="rb-mobile" class="rb-mobile-menu">
 
     <nav>
@@ -129,6 +129,9 @@ function waitPlanAndRender(user){
     if(ready || attempts > 20){
       clearInterval(interval);
       renderUser(user);
+
+      // 🔥 FIX CRITICO → RESET UI BLOCCATA
+      unlockUI();
     }
 
   },120);
@@ -179,7 +182,10 @@ function initHeaderInteractions(){
     if(e.key === "Escape") closeMenu();
   });
 
-  // LANG
+  /* ===================== */
+  /* LANGUAGE */
+  /* ===================== */
+
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -267,5 +273,28 @@ function renderUser(user){
     el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
 
   }
+
+}
+
+/* ===================== */
+/* 🔥 UNLOCK UI (CRITICO) */
+/* ===================== */
+
+function unlockUI(){
+
+  // rimuove overlay e blocchi
+  document.querySelectorAll(
+    ".locked-overlay, .results-overlay, .home-blur-overlay"
+  ).forEach(el => el.remove());
+
+  // rimuove blur
+  document.querySelectorAll(
+    ".pro-blur, .locked-section"
+  ).forEach(el=>{
+    el.classList.remove("pro-blur","locked-section");
+    el.style.filter = "none";
+    el.style.pointerEvents = "auto";
+    el.style.opacity = "1";
+  });
 
 }
