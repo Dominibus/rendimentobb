@@ -225,6 +225,27 @@ window.isAdmin = function(){
 
 };
 
+window.isAdmin = function(){
+
+  const email = window.currentUser?.email || "";
+
+  return email === "rendimentobb@gmail.com";
+
+};
+
+// 🔥 PREMIUM USER (ADMIN + PRO)
+window.isPremiumUser = function(){
+
+  const isAdmin =
+    window.currentUser?.email === "rendimentobb@gmail.com" ||
+    window.userRole === "admin";
+
+  const isPro =
+    window.isPremiumUser();
+
+  return isAdmin || isPro;
+};
+
 // ✅ GET PLAN PULITO (NO SIDE EFFECT)
 function getUserPlan(){
   return window.currentPlan || "free";
@@ -260,7 +281,7 @@ function hasPlan(requiredPlan){
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
   // 🔥 PRO → bypass totale
-if(window.isPro && window.isPro()){
+if(window.isPremiumUser()){
   return true;
 }
 
@@ -1085,7 +1106,7 @@ function renderSmartInvestmentAlert(roi){
   let isProUser = false;
 
   try{
-    isProUser = window.isPro && window.isPro();
+    isProUser = window.isPremiumUser();
   }catch(e){
     console.warn("isPro error", e);
   }
@@ -1231,7 +1252,7 @@ ${discover}:
 
 <button 
 onclick="
-  if(window.isPro && window.isPro()){
+  if(window.isPremiumUser()){
     document.querySelector('#advanced-analysis')?.scrollIntoView({behavior:'smooth'});
   } else {
     startPlanPurchase('pro');
@@ -1277,7 +1298,7 @@ if(!window.firebaseReady){
 let isProUser = false;
 
 try{
-  isProUser = window.isPro && window.isPro();
+  isProUser = window.isPremiumUser();
 }catch(e){
   console.warn("isPro error", e);
 }
@@ -1632,7 +1653,13 @@ function runPostAnalysis(result, context){
   const roi = Number(result?.roi || 0);
 
   // ================= PAYWALL (UNICO) =================
-  const isProUser = window.isPro && window.isPro();
+  const isAdmin =
+  window.currentUser?.email === "rendimentobb@gmail.com" ||
+  window.userRole === "admin";
+
+const isProUser =
+  isAdmin ||
+  (window.isPremiumUser());
 
 if(!isProUser && !window.paywallShown){
 
@@ -1862,7 +1889,7 @@ if(revenueHome){
 let isProUser = false;
 
 try{
-  isProUser = window.isPro && window.isPro();
+  isProUser = window.isPremiumUser();
 }catch(e){
   console.warn("isPro error", e);
 }
@@ -1941,7 +1968,7 @@ if(isProUser){
 
     // ================= PRO UNLOCK =================
     
-    if(window.isPro && window.isPro()){
+    if(window.isPremiumUser()){
 
       console.log("🔓 PRO → unlock totale");
 
@@ -3338,7 +3365,7 @@ window.proUnlocked = false;
 
 function unlockProUI(){
 
-if(window.proUnlocked && window.isPro && window.isPro()){
+if(window.proUnlocked && window.isPremiumUser()){
   console.log("⛔ già sbloccato → skip");
   return;
 }
@@ -3356,9 +3383,9 @@ if(typeof window.isAdmin === "function" && window.isAdmin()){
 
 }
 
-  const isPro = window.isPro && window.isPro();
+  const isPro = window.isPremiumUser();
 
-  if(!(window.isPro && window.isPro())){
+  if(!(window.isPremiumUser())){
   console.log("⛔ NOT PRO → skip");
   return;
 }
@@ -3394,7 +3421,7 @@ if(typeof window.isAdmin === "function" && window.isAdmin()){
   // 🔥 RITENTA FINO A QUANDO DIVENTA PRO
 let unlockInterval = setInterval(()=>{
 
-  if(window.isPro && window.isPro()){
+  if(window.isPremiumUser()){
 
     console.log("🔁 Retry unlock PRO");
 
@@ -3521,7 +3548,7 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= UI BASE =================
 
-  if(window.isPro && window.isPro()){
+  if(window.isPremiumUser()){
 
     console.log("🔓 PRO USER DASHBOARD");
 
