@@ -3370,6 +3370,7 @@ function unlockProUI(){
     console.log("👑 ADMIN SBLOCCATO");
 
     document.body.classList.add("admin-user");
+    document.body.classList.add("is-admin");
 
     document.querySelectorAll(".admin-only").forEach(el=>{
       el.style.display = "block";
