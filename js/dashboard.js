@@ -42,14 +42,14 @@ const auth = getAuth(app);
 function isInvestor(){
   return (
     window.currentPlan === "investor" ||
-    isProUser() ||
+    window.currentPlan === "pro" ||
     window.currentPlan === "pro_yearly"
   );
 }
 
 function isProUser(){
   return (
-    isProUser() ||
+    window.currentPlan === "pro" ||
     window.currentPlan === "pro_yearly"
   );
 }
