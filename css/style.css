@@ -9640,7 +9640,7 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – SAAS UI PRODUCTION FINAL
+🔥 RENDIMENTOBB – SAAS UI FINAL PRODUCTION
 ===================================== */
 
 :root{
@@ -9674,7 +9674,8 @@ body{
   padding-top:70px;
   background:var(--rb-bg);
   color:var(--rb-text);
-  font-family:"Inter",system-ui;
+  font-family:"Inter",system-ui,-apple-system;
+  -webkit-font-smoothing:antialiased;
 }
 
 /* ===================== */
@@ -9763,10 +9764,10 @@ body{
 }
 
 .rb-logo{
-  height:38px;
+  height:40px;
 }
 
-/* MENU DESKTOP */
+/* DESKTOP MENU */
 .rb-center{
   display:flex;
   gap:24px;
@@ -9779,10 +9780,12 @@ body{
   color:var(--rb-text);
   font-size:14px;
   font-weight:500;
+  transition:var(--rb-transition);
 }
 
 .rb-center a:hover{
   color:var(--rb-primary);
+  transform:translateY(-1px);
 }
 
 /* RIGHT */
@@ -9792,7 +9795,7 @@ body{
   gap:8px;
 }
 
-/* BUTTON HEADER */
+/* HEADER BUTTONS */
 .rb-btn{
   padding:6px 10px;
   font-size:12px;
@@ -9842,6 +9845,7 @@ body{
   border-radius:999px;
   padding:5px 8px;
   font-size:11px;
+  cursor:pointer;
 }
 
 .rb-lang button.active{
@@ -9854,6 +9858,7 @@ body{
 /* ===================== */
 .hero{
   position:relative;
+  z-index:1;
 }
 
 .hero::after{
@@ -9865,28 +9870,31 @@ body{
     rgba(15,23,42,0.4),
     rgba(15,23,42,0.65)
   );
+  z-index:0;
 }
 
 .hero h1,
 .hero p{
   position:relative;
   color:white;
+  z-index:2;
 }
 
-/* =====================================
-🔥 MOBILE MENU – FINAL FIX
-===================================== */
-
+/* ===================== */
 /* HAMBURGER */
+/* ===================== */
 #rb-burger{
   display:none;
   font-size:22px;
   cursor:pointer;
   background:none;
   border:none;
+  z-index:10000;
 }
 
-/* MOBILE ONLY */
+/* ===================== */
+/* MOBILE */
+/* ===================== */
 @media(max-width:768px){
 
   .rb-center{
@@ -9899,18 +9907,11 @@ body{
 
 }
 
-/* DESKTOP RESET */
-@media(min-width:769px){
+/* ===================== */
+/* MOBILE MENU */
+/* ===================== */
 
-  .rb-mobile,
-  .rb-mobile-overlay{
-    display:none !important;
-  }
-
-}
-
-/* OVERLAY */
-.rb-mobile-overlay{
+#rb-mobile-overlay{
   position:fixed;
   inset:0;
   background:rgba(15,23,42,0.55);
@@ -9924,13 +9925,12 @@ body{
   z-index:9998;
 }
 
-.rb-mobile-overlay.open{
+#rb-mobile-overlay.open{
   opacity:1;
   pointer-events:auto;
 }
 
-/* MENU */
-.rb-mobile{
+#rb-mobile{
   position:fixed;
   top:0;
   right:0;
@@ -9957,12 +9957,12 @@ body{
   box-shadow:-10px 0 40px rgba(0,0,0,0.15);
 }
 
-.rb-mobile.open{
+#rb-mobile.open{
   transform:translateX(0);
 }
 
-/* LINK */
-.rb-mobile a{
+/* LINKS */
+#rb-mobile a{
   display:block;
   padding:14px;
   border-radius:12px;
@@ -9973,7 +9973,7 @@ body{
   border:1px solid var(--rb-border);
 }
 
-.rb-mobile a:hover{
+#rb-mobile a:hover{
   background:#f1f5f9;
 }
 
@@ -9985,13 +9985,13 @@ body{
   gap:10px;
 }
 
-/* BODY LOCK */
+/* LOCK BODY */
 body.menu-open{
   overflow:hidden;
 }
 
 /* ===================== */
-/* RESULTS GRID */
+/* GRID */
 /* ===================== */
 .results-grid{
   display:grid;
@@ -10006,22 +10006,6 @@ body.menu-open{
   border-radius:12px;
   border:1px solid var(--rb-border);
   text-align:center;
-}
-
-/* ===================== */
-/* PAYWALL */
-/* ===================== */
-.results-overlay{
-  pointer-events:none;
-}
-
-.results-overlay .overlay-content{
-  pointer-events:auto;
-}
-
-.cta-primary{
-  position:relative;
-  z-index:20;
 }
 
 /* ===================== */
@@ -10047,38 +10031,7 @@ body.menu-open{
 }
 
 /* ===================== */
-/* REGISTER POPUP */
-/* ===================== */
-#register-popup{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999999;
-}
-
-.popup-overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-}
-
-.popup-box{
-  position:relative;
-  background:white;
-  padding:26px;
-  border-radius:16px;
-  max-width:420px;
-  width:90%;
-  text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.25);
-  z-index:2;
-  animation:fadeUp .3s ease;
-}
-
-/* ===================== */
-/* ACCESS CONTROL */
+/* ACCESS */
 /* ===================== */
 .is-pro .free-only{
   display:none !important;
@@ -10090,7 +10043,7 @@ body.menu-open{
 }
 
 /* ===================== */
-/* FIX */
+/* FIX CLICK */
 /* ===================== */
 button{
   position:relative;
