@@ -1895,7 +1895,6 @@ if(access.canSeeFullAnalysis){
 
 // ================= FREE MODE =================
 
-// 🔓 SE PRO → NON BLOCCARE MAI
 if(access.canSeeFullAnalysis){
   console.log("🔓 PRO → skip lock UI");
 } else {
