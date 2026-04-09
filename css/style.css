@@ -10164,3 +10164,206 @@ body.is-admin [class*="overlay"]{
   color:white;
   border:none;
 }
+
+/* =====================================
+🔥 HEADER ULTRA UX BOOST (FINAL LAYER)
+===================================== */
+
+/* ===== HEADER PIÙ PREMIUM ===== */
+.rb-header{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(226,232,240,0.6);
+}
+
+/* ===== NAV LINK HOVER MICRO UX ===== */
+.rb-center a{
+  position:relative;
+}
+
+.rb-center a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:var(--rb-primary);
+  transition:width .25s ease;
+}
+
+.rb-center a:hover::after{
+  width:100%;
+}
+
+/* ===== USER BUTTON GROUP ===== */
+.rb-user{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* ===== DASHBOARD PRIMARY BOOST ===== */
+.rb-btn.primary{
+  box-shadow:0 8px 20px rgba(16,185,129,0.25);
+}
+
+.rb-btn.primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 14px 35px rgba(16,185,129,0.35);
+}
+
+/* ===== SECONDARY (LEADS) ===== */
+.rb-btn.secondary{
+  font-weight:500;
+}
+
+/* ===== LOCKED UX (IMPORTANTISSIMO) ===== */
+.rb-btn.locked{
+  opacity:0.65;
+  filter:grayscale(0.2);
+  cursor:pointer;
+}
+
+.rb-btn.locked:hover{
+  opacity:0.9;
+  transform:translateY(-1px);
+}
+
+/* ===== ICONA LOCK MIGLIORATA ===== */
+.rb-btn.locked::after{
+  content:"🔒";
+  margin-left:6px;
+  font-size:11px;
+  opacity:0.8;
+}
+
+/* ===== BADGE PRO (CONVERSION) ===== */
+.badge-pro{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  font-size:9px;
+  padding:2px 6px;
+  border-radius:999px;
+  margin-left:6px;
+  font-weight:700;
+  letter-spacing:.3px;
+  box-shadow:0 4px 10px rgba(16,185,129,0.35);
+}
+
+/* MICRO ANIMAZIONE (ATTIRA CLICK) */
+.badge-pro{
+  animation:rbPulse 2.2s infinite;
+}
+
+@keyframes rbPulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
+
+/* ===== LOGIN BUTTON ===== */
+.rb-login{
+  box-shadow:0 6px 16px rgba(16,185,129,0.25);
+}
+
+.rb-login:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 30px rgba(16,185,129,0.35);
+}
+
+/* =====================================
+🔥 MODAL PRO (NUOVO)
+===================================== */
+
+.rb-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.65);
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:3000;
+
+  opacity:0;
+  pointer-events:none;
+  transition:all .3s ease;
+}
+
+.rb-modal.open{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.rb-modal-box{
+  background:white;
+  padding:28px;
+  border-radius:20px;
+  max-width:380px;
+  width:90%;
+  text-align:center;
+
+  box-shadow:0 25px 80px rgba(2,6,23,0.25);
+  animation:fadeUp .35s ease;
+}
+
+/* TITOLI */
+.rb-modal-box h3{
+  margin-bottom:10px;
+  font-size:18px;
+}
+
+/* PARAGRAFI */
+.rb-modal-box p{
+  font-size:14px;
+  color:#64748b;
+  margin-bottom:12px;
+}
+
+/* BOTTONI MODAL */
+.rb-modal-box .rb-btn{
+  width:100%;
+  margin-top:10px;
+}
+
+/* =====================================
+🔥 MOBILE UX BOOST
+===================================== */
+
+@media(max-width:768px){
+
+  .rb-inner{
+    padding:12px 14px;
+  }
+
+  .rb-logo{
+    height:34px;
+  }
+
+  .rb-btn{
+    font-size:12px;
+    padding:8px 10px;
+  }
+
+}
+
+/* =====================================
+🔥 MICRO DETAIL (SILICON VALLEY TOUCH)
+===================================== */
+
+/* click feedback */
+.rb-btn:active{
+  transform:scale(0.96);
+}
+
+/* focus accessibilità */
+.rb-btn:focus{
+  outline:2px solid rgba(16,185,129,0.4);
+}
+
+/* link active */
+.rb-center a:active{
+  transform:scale(0.95);
+}
