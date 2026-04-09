@@ -1102,7 +1102,6 @@ window.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=>{
         loadDashboard();
 
-        // 🔥 overlay SOLO se free
         if(window.currentPlan !== "pro"){
           if(typeof window.showProOverlay === "function"){
             window.showProOverlay();
@@ -1114,73 +1113,71 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if(user){
+    // ================= USER NON LOGGATO =================
+    if(!user){
+      window.location.href="/#pricing";
+      return;
+    }
 
-      window.currentUser = user;
+    // ================= USER OK =================
+    window.currentUser = user;
+    console.log("USER OK:", user.uid);
 
-      console.log("USER OK:", user.uid);
+    // ================= GET PLAN =================
+    const userDoc = await getDoc(doc(db,"users", user.uid));
 
-      // 🔥 PRENDI IL PIANO
-      if(user){
+    if(userDoc.exists()){
+      const data = userDoc.data();
+      window.currentPlan = data.plan || "free";
+    }else{
+      window.currentPlan = "free";
+    }
 
-  window.currentUser = user;
+    console.log("PLAN:", window.currentPlan);
 
-  console.log("USER OK:", user.uid);
+    const isPro =
+      window.currentPlan === "pro" ||
+      window.currentPlan === "investor" ||
+      window.currentPlan === "pro_yearly";
 
-  const userDoc = await getDoc(doc(db,"users", user.uid));
+    // ================= BLOCCO ACCESSO =================
+    if(!isPro){
+      console.log("🚫 ACCESSO NEGATO → FREE USER");
+      window.location.href = "/#pricing";
+      return;
+    }
 
-  if(userDoc.exists()){
-    const data = userDoc.data();
-    window.currentPlan = data.plan || "free";
-  }else{
-    window.currentPlan = "free";
-  }
+    // ================= READY =================
+    document.dispatchEvent(new Event("rb_auth_ready")); 
 
-  // ================= BLOCCO ACCESSO DASHBOARD =================
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+    await loadDashboard();
 
-  if(!isPro){
-    console.log("🚫 ACCESSO NEGATO → FREE USER");
-    window.location.href = "/#pricing";
-    return;
-  }
+    // ================= POST LOAD =================
+    if(isPro){
 
-      // sicurezza
-      window.currentPlan = window.currentPlan || "free";
+      console.log("🔥 PRO USER → UNLOCK HARD");
+      unlockProContent();
 
-      console.log("PLAN:", window.currentPlan);
+    }else{
 
-      document.dispatchEvent(new Event("rb_auth_ready")); 
+      if(!window.proOverlayShown){
 
-      await loadDashboard();
+        window.proOverlayShown = true;
 
-      // 🔥 GESTIONE POST LOAD
-   
-if(isPro){
+        setTimeout(()=>{
+          if(typeof showProOverlay === "function"){
+            showProOverlay();
+          }
+        }, 1200);
 
-  console.log("🔥 PRO USER → UNLOCK HARD");
-  unlockProContent();
-
-}else{
-
-  if(!window.proOverlayShown){
-
-    window.proOverlayShown = true;
-
-    setTimeout(()=>{
-      if(typeof showProOverlay === "function"){
-        showProOverlay();
       }
-    }, 1200);
 
-  }
+    }
 
-}); // 👈 CHIUSURA onAuthStateChanged
+  }); // 👈 CHIUSURA onAuthStateChanged
 
-  // 🔥 EVENTO LINGUA (FUORI, NON DENTRO AUTH)
+
+  // ================= EVENTO LINGUA =================
   document.addEventListener("rb_language_changed", () => {
 
     if(!window.currentUser) return;
