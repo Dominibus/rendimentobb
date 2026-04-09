@@ -1886,7 +1886,6 @@ if(access.canSeeFullAnalysis){
     renderExecutiveKPI(result);
   }
 
-  // 🔥 CLEAN TOTALE
   unlockUI();
 
   window.proUnlocked = true;
@@ -3355,7 +3354,10 @@ function goToMarket(city){
 
 function unlockProUI(){
 
-  const access = window.getUserAccess();
+  // NON ridefinire
+// const access = window.getUserAccess(); ❌
+
+// usa quello già esistente
 
   if(!access.canSeeFullAnalysis){
     console.log("⛔ NOT PRO → skip unlock");
