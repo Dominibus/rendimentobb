@@ -1,6 +1,5 @@
 /* =====================================
-🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION
-Silicon Valley UX / Airbnb Style
+🔥 RENDIMENTOBB HEADER – ULTRA PRODUCTION (FINAL)
 ===================================== */
 
 import { auth } from "/js/firebase-init.js";
@@ -46,14 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <div class="rb-inner">
 
-      <!-- LEFT -->
       <div class="rb-left">
         <a href="/">
           <img src="/img/logo-main.png" class="rb-logo">
         </a>
       </div>
 
-      <!-- CENTER -->
       <nav class="rb-center">
         <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
         <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
@@ -62,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
       </nav>
 
-      <!-- RIGHT -->
       <div class="rb-right">
 
         <div class="rb-lang">
@@ -92,10 +88,30 @@ document.addEventListener("DOMContentLoaded", () => {
     </nav>
   </div>
 
+  <!-- 🔥 MODAL PRO -->
+  <div id="rb-pro-modal" class="rb-modal">
+    <div class="rb-modal-box">
+      <h3 data-it="🔒 Dashboard investimenti" data-en="🔒 Investment dashboard"></h3>
+      <p data-it="Analizza ROI, rischio e scenari reali."
+         data-en="Analyze ROI, risk and real scenarios."></p>
+
+      <p style="color:#ef4444;font-weight:600;"
+         data-it="⚠️ Senza questi dati stai investendo alla cieca"
+         data-en="⚠️ Without this data you're investing blindly">
+      </p>
+
+      <button id="rb-upgrade-btn" class="rb-btn primary"
+        data-it="🔥 Sblocca ora – 29€"
+        data-en="🔥 Unlock now – €29">
+      </button>
+
+      <button id="rb-close-modal" class="rb-btn secondary">OK</button>
+    </div>
+  </div>
+
   `;
 
   window.applyCityBackground();
-
   initHeaderInteractions();
 
   onAuthStateChanged(auth, (user) => {
@@ -134,7 +150,7 @@ function waitPlanAndRender(user){
 }
 
 /* =====================
-📱 MENU MOBILE
+📱 MENU + LANG
 ===================== */
 
 function initHeaderInteractions(){
@@ -142,8 +158,6 @@ function initHeaderInteractions(){
   const burger = document.getElementById("rb-burger");
   const mobile = document.getElementById("rb-mobile");
   const overlay = document.getElementById("rb-mobile-overlay");
-
-  if(!burger || !mobile || !overlay) return;
 
   function openMenu(){
     mobile.classList.add("open");
@@ -164,16 +178,6 @@ function initHeaderInteractions(){
 
   overlay.onclick = closeMenu;
 
-  mobile.querySelectorAll("a").forEach(link=>{
-    link.onclick = closeMenu;
-  });
-
-  document.addEventListener("keydown",(e)=>{
-    if(e.key === "Escape") closeMenu();
-  });
-
-  /* LANGUAGE */
-
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -184,10 +188,12 @@ function initHeaderInteractions(){
   });
 
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
+
+  initProModal();
 }
 
 /* =====================
-🌐 LANGUAGE
+🌐 LANG
 ===================== */
 
 function updateLangButtons(lang){
@@ -197,15 +203,12 @@ function updateLangButtons(lang){
 }
 
 /* =====================
-👤 USER AREA (FIX LEADS)
+👤 USER AREA
 ===================== */
 
 function renderUser(user){
 
   const el = document.getElementById("user-area");
-  const mobileEl = document.getElementById("rb-mobile");
-
-  if(!el) return;
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
@@ -226,39 +229,47 @@ function renderUser(user){
 
     let html = `<div class="rb-user">`;
 
-    if(isPro){
-      html += `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>`;
-    }
+    // 🔥 DASHBOARD SEMPRE VISIBILE
+    html += `
+      <a href="/dashboard/" 
+         class="rb-btn ${isPro ? "primary" : "locked"}"
+         id="dashboard-link">
+         Dashboard
+         ${!isPro ? `<span class="badge-pro">PRO</span>` : ""}
+      </a>
+    `;
 
-    // 🔥 LEADS SEMPRE VISIBILE
+    // LEADS
     html += isAdmin
       ? `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`
-      : `<a href="#" onclick="alert('Admin only')" class="rb-btn secondary locked">Leads</a>`;
+      : `<a href="#" class="rb-btn secondary locked" id="leads-locked">Leads</a>`;
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
 
     el.innerHTML = html;
 
-    if(mobileEl){
-      mobileEl.insertAdjacentHTML("afterbegin", `
-        <div class="rb-mobile-user">
-          ${isPro ? `<a href="/dashboard/" class="rb-btn primary">Dashboard</a>` : ""}
-          ${isAdmin
-            ? `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`
-            : `<a href="#" class="rb-btn secondary locked">Leads</a>`
-          }
-          <button id="logout-mobile" class="rb-btn red">Logout</button>
-        </div>
-      `);
+    // 🔥 INTERCEPT CLICK DASHBOARD
+    if(!isPro){
+      document.getElementById("dashboard-link").onclick = (e)=>{
+        e.preventDefault();
+        openProModal();
+      };
     }
 
-    document.querySelectorAll("#logout, #logout-mobile").forEach(btn=>{
-      btn.onclick = async ()=>{
-        await signOut(auth);
-        location.reload();
+    // LEADS LOCK
+    const leads = document.getElementById("leads-locked");
+    if(leads){
+      leads.onclick = (e)=>{
+        e.preventDefault();
+        openProModal();
       };
-    });
+    }
+
+    document.getElementById("logout").onclick = async ()=>{
+      await signOut(auth);
+      location.reload();
+    };
 
   } else {
 
@@ -266,6 +277,28 @@ function renderUser(user){
 
   }
 
+}
+
+/* =====================
+🔒 MODAL PRO
+===================== */
+
+function initProModal(){
+
+  const modal = document.getElementById("rb-pro-modal");
+
+  document.getElementById("rb-close-modal").onclick = ()=>{
+    modal.classList.remove("open");
+  };
+
+  document.getElementById("rb-upgrade-btn").onclick = ()=>{
+    window.location.href = "/pricing/";
+  };
+
+}
+
+function openProModal(){
+  document.getElementById("rb-pro-modal").classList.add("open");
 }
 
 /* =====================
