@@ -1877,15 +1877,24 @@ if(revenueHome){
 
 const access = window.getUserAccess();
 
+// 🔥 HARD GUARD GLOBALE (ANTI RE-LOCK)
 if(access.canSeeFullAnalysis){
+
+  console.log("🔓 FULL ACCESS → FORCE UNLOCK");
 
   if(typeof renderExecutiveKPI === "function"){
     renderExecutiveKPI(result);
   }
 
+  // 🔥 CLEAN TOTALE
+  unlockUI();
+
+  window.proUnlocked = true;
+
 }else{
 
-  // 🔒 FREE → dati limitati
+  console.log("🔒 FREE MODE → APPLY LOCK");
+
   document.querySelectorAll(`
     #revenue-forecast,
     #occupancy-sensitivity,
