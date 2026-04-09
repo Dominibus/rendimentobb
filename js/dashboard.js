@@ -38,6 +38,22 @@ window.t = function(it,en){
 
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+function isInvestor(){
+  return (
+    window.currentPlan === "investor" ||
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly"
+  );
+}
+
+function isProUser(){
+  return (
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly"
+  );
+}
+
 window.proOverlayShown = false;
 
 // ================= CHART DATA =================
@@ -462,7 +478,7 @@ async function loadDashboard(){
         <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
 
         ${
-        window.currentPlan === "pro"
+        isInvestor()
         ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
         : `
         <strong style="filter:blur(4px)">
@@ -545,7 +561,8 @@ async function loadDashboard(){
 
 const isPro =
   window.currentPlan === "pro" ||
-  (typeof window.isPro === "function" && window.isPro());
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
 
 console.log("CHECK PRO:", isPro, window.currentPlan);
 
@@ -655,7 +672,7 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
-const isPro = window.currentPlan === "pro";
+const isPro = isProUser();
 
 container.innerHTML = `
 
@@ -1141,10 +1158,7 @@ window.addEventListener("DOMContentLoaded", () => {
       await loadDashboard();
 
       // 🔥 GESTIONE POST LOAD
-      const isPro =
-  window.currentPlan === "pro" ||
-  (typeof window.isPro === "function" && window.isPro());
-
+   
 if(isPro){
 
   console.log("🔥 PRO USER → UNLOCK HARD");
