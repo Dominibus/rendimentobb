@@ -867,27 +867,12 @@ Tool
 
 function renderStats(count,totalROI,totalCapital,totalCashflow){
 
-// ================= ANIMATION =================
-
-setTimeout(()=>{
-  document.querySelectorAll(".stats-card").forEach((card,i)=>{
-    card.style.opacity=0;
-    card.style.transform="translateY(10px)";
-
-    setTimeout(()=>{
-      card.style.transition="all 0.4s ease";
-      card.style.opacity=1;
-      card.style.transform="translateY(0)";
-    }, i*120);
-
-  });
-},100);
-
-// ================= KPI HEADER =================
-
-const avgROI = count ? (totalROI/count) : 0;
+// ================= SAFE CALC =================
+const avgROI = count ? (totalROI / count) : 0;
 const avgROIRounded = avgROI.toFixed(1);
+const avgCashflow = count ? (totalCashflow / count) : 0;
 
+// ================= MARKET =================
 const selectedCity =
 document.getElementById("city-select")?.value || "italy";
 
@@ -897,38 +882,27 @@ window.marketData?.["italy"] ||
 { roi:8, occupancy:60, adr:120 };
 
 const marketROI = cityMarket.roi;
-const occupancy = cityMarket.occupancy;
-const adr = cityMarket.adr;
-
 const trend = avgROI >= marketROI ? "↑" : "↓";
 
-// ================= PORTFOLIO =================
+// ================= CALCOLI =================
+const monthlyProfit = avgCashflow;
+const yearlyProfit = (totalCapital * avgROI) / 100;
 
-const avgCashflow = count ? (totalCashflow / count) : 0;
+let breakEvenYears = "-";
+if(yearlyProfit > 0){
+  breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
+}
 
-// 🔥 SYNC NUOVA HERO SaaS (COLLEGAMENTO UI)
-const avgROI = count ? (totalROI / count) : 0;
+const breakEven = avgROI > 0 ? Math.round(100 / avgROI) : 0;
 
-// HERO TOP (Stripe style)
+// ================= HERO =================
 const dbRoi = document.getElementById("db-roi");
 const dbProfit = document.getElementById("db-profit");
 const dbStatus = document.getElementById("db-status");
 
-// KPI GRID
-const kpiRoi = document.getElementById("kpi-roi");
-const kpiCash = document.getElementById("kpi-cash");
-const kpiInvest = document.getElementById("kpi-invest");
-const kpiBreak = document.getElementById("kpi-break");
-
-// calcoli
-const monthlyProfit = avgCashflow;
-const breakEven = avgROI > 0 ? Math.round(100 / avgROI) : 0;
-
-// ===== HERO =====
-if(dbRoi) dbRoi.innerText = avgROI.toFixed(1) + "%";
+if(dbRoi) dbRoi.innerText = avgROIRounded + "%";
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
-// STATUS INTELLIGENTE (effetto SaaS vero)
 if(dbStatus){
 
   let status = "Risk";
@@ -943,20 +917,27 @@ if(dbStatus){
     color = "#f59e0b";
   }
 
-  dbStatus.querySelector("h2").innerText = status;
+  const h2 = dbStatus.querySelector("h2");
+  if(h2) h2.innerText = status;
+
   dbStatus.style.background = color;
   dbStatus.style.color = "white";
 }
 
-// ===== KPI =====
-if(kpiRoi) kpiRoi.innerText = avgROI.toFixed(1) + "%";
+// ================= KPI GRID =================
+const kpiRoi = document.getElementById("kpi-roi");
+const kpiCash = document.getElementById("kpi-cash");
+const kpiInvest = document.getElementById("kpi-invest");
+const kpiBreak = document.getElementById("kpi-break");
+
+if(kpiRoi) kpiRoi.innerText = avgROIRounded + "%";
 if(kpiCash) kpiCash.innerText = formatCurrency(monthlyProfit);
 if(kpiInvest) kpiInvest.innerText = formatCurrency(totalCapital);
 if(kpiBreak) kpiBreak.innerText = breakEven + "y";
 
-// ===== PORTFOLIO CLASSICO =====
+// ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
-if(roiEl) roiEl.textContent = avgROI.toFixed(1) + "%";
+if(roiEl) roiEl.textContent = avgROIRounded + "%";
 
 const cashEl = document.getElementById("portfolio-cashflow");
 if(cashEl) cashEl.textContent = formatCurrency(avgCashflow);
@@ -968,11 +949,9 @@ const countEl = document.getElementById("portfolio-count");
 if(countEl) countEl.textContent = count;
 
 // ================= SCORE =================
-
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
 
-// ================= KPI GRID =================
-
+// ================= KPI CARDS =================
 const kpiContainer = document.getElementById("dashboard-kpi");
 
 if(kpiContainer){
@@ -1008,47 +987,32 @@ ${investmentScore}/100
 </div>
 
 `;
-
 }
 
 // ================= MARKET =================
-
 const performanceEl = document.getElementById("market-performance");
 const userRoiEl = document.getElementById("user-roi-benchmark");
 
 if(userRoiEl){
-userRoiEl.textContent = avgROI + "%";
-userRoiEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
+  userRoiEl.textContent = avgROIRounded + "%";
+  userRoiEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
 
 if(performanceEl){
-performanceEl.textContent = avgROI >= marketROI
-? t("Sopra la media di mercato","Above market average")
-: t("Sotto la media di mercato","Below market average");
+  performanceEl.textContent = avgROI >= marketROI
+    ? t("Sopra la media di mercato","Above market average")
+    : t("Sotto la media di mercato","Below market average");
 
-performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
-}
-
-// ================= PROFIT =================
-
-const yearlyProfit = (totalCapital * avgROI) / 100;
-const monthlyProfit = yearlyProfit / 12;
-
-let breakEvenYears = "-";
-if(yearlyProfit > 0){
-breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
+  performanceEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
 
 // ================= FINAL BLOCK =================
-
 const statsContainer = document.getElementById("dashboard-stats");
-
 if(!statsContainer) return;
 
 statsContainer.innerHTML = `
 
 <div class="analysis-card">
-
 <h3>${t("Account","Account")}</h3>
 
 <div class="metric">
@@ -1062,7 +1026,6 @@ statsContainer.innerHTML = `
 ${window.currentPlan==="pro"?"PRO":"FREE"}
 </strong>
 </div>
-
 </div>
 
 <div class="analysis-card">
@@ -1081,6 +1044,21 @@ ${window.currentPlan==="pro"?"PRO":"FREE"}
 </div>
 
 `;
+
+// ================= ANIMATION =================
+setTimeout(()=>{
+  document.querySelectorAll(".stats-card").forEach((card,i)=>{
+    card.style.opacity=0;
+    card.style.transform="translateY(10px)";
+
+    setTimeout(()=>{
+      card.style.transition="all 0.4s ease";
+      card.style.opacity=1;
+      card.style.transform="translateY(0)";
+    }, i*120);
+
+  });
+},100);
 
 }
 
