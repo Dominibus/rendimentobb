@@ -3378,6 +3378,7 @@ function unlockProUI(){
 
   // ================= PRO STATE =================
   document.body.classList.add("pro-user");
+  document.body.classList.add("is-pro");
 
   // ================= UNLOCK SOLO ELEMENTI BLOCCATI =================
   document.querySelectorAll(`
