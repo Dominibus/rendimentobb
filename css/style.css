@@ -9640,7 +9640,7 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – SAAS UI FINAL PRODUCTION
+🔥 RENDIMENTOBB – SAAS UI FINAL ULTRA
 ===================================== */
 
 :root{
@@ -9669,6 +9669,10 @@ display:none;
 /* ===================== */
 /* BASE */
 /* ===================== */
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   padding-top:70px;
@@ -9676,6 +9680,7 @@ body{
   color:var(--rb-text);
   font-family:"Inter",system-ui,-apple-system;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
 
 /* ===================== */
@@ -9734,6 +9739,7 @@ body{
   border:1px solid var(--rb-border);
   border-radius:999px;
   padding:12px 20px;
+  cursor:pointer;
 }
 
 .btn-outline:hover{
@@ -9747,7 +9753,7 @@ body{
   position:fixed;
   top:0;
   width:100%;
-  z-index:9999;
+  z-index:1000;
 
   background:rgba(255,255,255,0.85);
   backdrop-filter:blur(16px);
@@ -9795,7 +9801,7 @@ body{
   gap:8px;
 }
 
-/* HEADER BUTTONS */
+/* BUTTONS */
 .rb-btn{
   padding:6px 10px;
   font-size:12px;
@@ -9803,16 +9809,11 @@ body{
   background:#f1f5f9;
   border:1px solid var(--rb-border);
   cursor:pointer;
+  transition:var(--rb-transition);
 }
 
 .rb-btn.primary{
   background:linear-gradient(135deg,var(--rb-primary),var(--rb-primary-dark));
-  color:white;
-  border:none;
-}
-
-.rb-btn.leads{
-  background:linear-gradient(135deg,#6366f1,#4f46e5);
   color:white;
   border:none;
 }
@@ -9889,7 +9890,6 @@ body{
   cursor:pointer;
   background:none;
   border:none;
-  z-index:10000;
 }
 
 /* ===================== */
@@ -9908,29 +9908,31 @@ body{
 }
 
 /* ===================== */
-/* MOBILE MENU */
+/* OVERLAY MENU */
 /* ===================== */
-
-#rb-mobile-overlay{
+.rb-menu-overlay{
   position:fixed;
   inset:0;
-  background:rgba(15,23,42,0.55);
-  backdrop-filter:blur(4px);
+  background:rgba(15,23,42,0.45);
+  backdrop-filter:blur(6px);
 
   opacity:0;
   pointer-events:none;
 
-  transition:opacity .3s ease;
+  transition:all .3s ease;
 
-  z-index:9998;
+  z-index:998;
 }
 
-#rb-mobile-overlay.open{
+.rb-menu-overlay.open{
   opacity:1;
   pointer-events:auto;
 }
 
-#rb-mobile{
+/* ===================== */
+/* MOBILE MENU */
+/* ===================== */
+.rb-mobile-menu{
   position:fixed;
   top:0;
   right:0;
@@ -9944,7 +9946,7 @@ body{
   transform:translateX(100%);
   transition:transform .35s cubic-bezier(.4,0,.2,1);
 
-  z-index:9999;
+  z-index:999;
 
   padding:80px 20px 20px;
 
@@ -9957,12 +9959,12 @@ body{
   box-shadow:-10px 0 40px rgba(0,0,0,0.15);
 }
 
-#rb-mobile.open{
+.rb-mobile-menu.open{
   transform:translateX(0);
 }
 
 /* LINKS */
-#rb-mobile a{
+.rb-mobile-menu a{
   display:block;
   padding:14px;
   border-radius:12px;
@@ -9973,7 +9975,7 @@ body{
   border:1px solid var(--rb-border);
 }
 
-#rb-mobile a:hover{
+.rb-mobile-menu a:hover{
   background:#f1f5f9;
 }
 
@@ -10018,7 +10020,7 @@ body.menu-open{
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:9999;
+  z-index:2000;
 }
 
 .smart-box{
@@ -10031,7 +10033,7 @@ body.menu-open{
 }
 
 /* ===================== */
-/* ACCESS */
+/* ACCESS CONTROL */
 /* ===================== */
 .is-pro .free-only{
   display:none !important;
@@ -10043,11 +10045,10 @@ body.menu-open{
 }
 
 /* ===================== */
-/* FIX CLICK */
+/* FIX CLICK / OVERLAY */
 /* ===================== */
 button{
   position:relative;
-  z-index:5;
 }
 
 .locked-overlay{
