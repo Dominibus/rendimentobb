@@ -10118,3 +10118,28 @@ body.is-pro .pro-blur{
 body.menu-open{
   overflow:hidden;
 }
+
+/* 🔥 HAMBURGER SOLO MOBILE */
+#rb-burger{
+  display:none;
+}
+
+@media (max-width:768px){
+  #rb-burger{
+    display:block;
+  }
+}
+
+/* 🔥 RESET MENU DESKTOP */
+@media (min-width:769px){
+
+  .rb-mobile{
+    display:none !important;
+    transform:translateX(100%) !important;
+  }
+
+  .rb-mobile-overlay{
+    display:none !important;
+  }
+
+}
