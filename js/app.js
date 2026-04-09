@@ -3353,14 +3353,18 @@ function goToMarket(city){
 }
 // ================= PRO UNLOCK (FINAL FIX DEFINITIVO) =================
 
-window.proUnlocked = false;
-
 function unlockProUI(){
 
-if(window.proUnlocked && window.isPremiumUser()){
-  console.log("⛔ già sbloccato → skip");
-  return;
-}
+  const access = window.getUserAccess();
+
+  if(!access.canSeeFullAnalysis){
+    console.log("⛔ NOT PRO → skip unlock");
+    return;
+  }
+
+  console.log("🔥 FORCE UNLOCK PRO UI");
+
+  window.proUnlocked = true;
 
   // ================= ADMIN UI =================
 if(typeof window.isAdmin === "function" && window.isAdmin()){
@@ -3412,18 +3416,6 @@ if(!access.canSeeFullAnalysis){
   });
 
   // 🔥 RITENTA FINO A QUANDO DIVENTA PRO
-let unlockInterval = setInterval(()=>{
-
-  if(window.isPremiumUser()){
-
-    console.log("🔁 Retry unlock PRO");
-
-    unlockProUI();
-
-    clearInterval(unlockInterval);
-  }
-
-}, 500);
 
   function unlockAdminUI(){
 
