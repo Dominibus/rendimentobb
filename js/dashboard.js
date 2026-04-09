@@ -1178,7 +1178,6 @@ if(isPro){
 
     }else{
   window.location.href="/#pricing";
-}
 
   }); // 👈 CHIUSURA onAuthStateChanged
 
