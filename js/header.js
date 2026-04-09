@@ -153,17 +153,20 @@ document.body.classList.remove("menu-open");
   window.rbMenuInitialized = true;
 
   // ================= OPEN / CLOSE =================
-  function openMenu(){
-    mobile.classList.add("open");
-    overlay.classList.add("open");
-    document.body.classList.add("menu-open");
-  }
+function openMenu(){
+  mobile.classList.add("open");
+  overlay.classList.add("open");
 
-  function closeMenu(){
-    mobile.classList.remove("open");
-    overlay.classList.remove("open");
-    document.body.classList.remove("menu-open");
-  }
+  setTimeout(()=>{
+    document.body.classList.add("menu-open");
+  },10);
+}
+
+function closeMenu(){
+  mobile.classList.remove("open");
+  overlay.classList.remove("open");
+  document.body.classList.remove("menu-open");
+}
 
   // ================= BURGER =================
   burger.addEventListener("click",(e)=>{
