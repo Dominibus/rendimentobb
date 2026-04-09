@@ -132,55 +132,61 @@ function waitPlanAndRender(user){
 
 
 /* ===================== */
-/* INTERACTIONS */
+/* INTERACTIONS – FINAL CLEAN */
 /* ===================== */
 
 function initHeaderInteractions(){
 
   const burger = document.getElementById("rb-burger");
   const mobile = document.getElementById("rb-mobile");
+  const overlay = document.getElementById("rb-mobile-overlay");
 
-  if(!burger || !mobile) return;
+  if(!burger || !mobile || !overlay) return;
 
   // evita duplicazione eventi
   if(window.rbMenuInitialized) return;
   window.rbMenuInitialized = true;
 
-  // ===== TOGGLE =====
+  // ================= OPEN / CLOSE =================
+  function openMenu(){
+    mobile.classList.add("open");
+    overlay.classList.add("open");
+    document.body.classList.add("menu-open");
+  }
+
+  function closeMenu(){
+    mobile.classList.remove("open");
+    overlay.classList.remove("open");
+    document.body.classList.remove("menu-open");
+  }
+
+  // ================= BURGER =================
   burger.addEventListener("click",(e)=>{
     e.stopPropagation();
 
-    const isOpen = mobile.classList.contains("open");
-
-    // chiudi sempre prima (anti bug)
-    mobile.classList.remove("open");
-
-    // riapri solo se era chiuso
-    if(!isOpen){
-      mobile.classList.add("open");
+    if(mobile.classList.contains("open")){
+      closeMenu();
+    }else{
+      openMenu();
     }
   });
 
-  // ===== CLICK LINK =====
+  // ================= CLICK LINK =================
   mobile.querySelectorAll("a").forEach(link=>{
-    link.addEventListener("click", ()=>{
-      mobile.classList.remove("open");
-    });
+    link.addEventListener("click", closeMenu);
   });
 
-  // ===== CLICK FUORI =====
-  document.addEventListener("click",(e)=>{
+  // ================= CLICK OUTSIDE =================
+  overlay.addEventListener("click", closeMenu);
 
-    const clickInsideMenu = mobile.contains(e.target);
-    const clickBurger = burger.contains(e.target);
-
-    if(!clickInsideMenu && !clickBurger){
-      mobile.classList.remove("open");
+  // ================= ESC KEY =================
+  document.addEventListener("keydown",(e)=>{
+    if(e.key === "Escape"){
+      closeMenu();
     }
-
   });
 
-  // ===== LANGUAGE =====
+  // ================= LANGUAGE =================
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
@@ -193,12 +199,15 @@ function initHeaderInteractions(){
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 }
 
+/* ===================== */
+/* LANGUAGE BUTTON STATE */
+/* ===================== */
+
 function updateLangButtons(lang){
   document.querySelectorAll(".rb-lang button").forEach(btn=>{
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 }
-
 
 /* ===================== */
 /* RENDER USER */
