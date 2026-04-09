@@ -264,24 +264,13 @@ window.isAdmin = function(){
 
 };
 
-window.isAdmin = function(){
-
-  const email = window.currentUser?.email || "";
-
-  return email === "rendimentobb@gmail.com";
-
-};
-
 // 🔥 PREMIUM USER (ADMIN + PRO)
 window.isPremiumUser = function(){
-  return window.getUserAccess().canSeeFullAnalysis;
-};
 
   const isAdmin =
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
-  // ⚠️ NON usare window.isPro()
   const isPro =
     window.currentPlan === "pro" ||
     window.currentPlan === "investor" ||
@@ -1208,20 +1197,17 @@ function renderSmartInvestmentAlert(roi){
   if(btn){
     btn.onclick = () => {
 
-      const isProNow = window.getUserAccess().canSeeFullAnalysis;
-      
-        console.warn("isPro click error", e);
-      }
+  const isProNow = window.getUserAccess().canSeeFullAnalysis;
 
-      if(isProNow){
-        document.querySelector('#advanced-analysis')?.scrollIntoView({
-          behavior:'smooth'
-        });
-      }else{
-        startPlanPurchase('pro');
-      }
+  if(isProNow){
+    document.querySelector('#advanced-analysis')?.scrollIntoView({
+      behavior:'smooth'
+    });
+  }else{
+    startPlanPurchase('pro');
+  }
 
-    };
+};
   }
 
 }
@@ -1568,47 +1554,25 @@ window.calculate = async function(force = false){
     const isLogged = !!window.currentUser;
     let result;
 
-   if(!isLogged){
+ if(!isLogged){
 
-  console.log("🔒 Utente non loggato → blocco intelligente");
-
+  console.log("🔓 Modalità preview attiva");
   showRegisterPopup();
 
-  // 🔥 NON CALCOLARE → BLOCCO REALE
-  window.simulationExecuted = false;
+}
 
-  // 🔥 UI PREVIEW (TEASER)
-  const roiEl = document.getElementById("roi-live");
-  if(roiEl){
-    roiEl.innerText = "—";
-  }
-
-  document.querySelectorAll(`
-    #profit-monthly,
-    #profit-annual,
-    #revenue-annual,
-    #break-even
-  `).forEach(el=>{
-    if(el) el.innerText = "—";
-  });
-
-  return; // 🔥 BLOCCO TOTALE
-}else{
-
-      result = calculateROI({
-        price,
-        equity,
-        priceNight,
-        occupancy,
-        expenses,
-        commission,
-        tax,
-        loanAmount,
-        interestRate,
-        loanYears
-      });
-
-    }
+result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
     // ================= VALIDAZIONE =================
     if (!result || typeof result !== "object") {
