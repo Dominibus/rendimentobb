@@ -1433,38 +1433,47 @@ if(!isPro && roi > 0){
 }
  
 // 🔥 MOSTRA SEMPRE (NO BUG PRO)
+const plan = String(window.currentPlan || "").toLowerCase();
+const isLogged = !!window.currentUser;
+
 const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+  plan === "pro" ||
+  plan === "investor" ||
+  plan === "pro_yearly";
+
+const isFreeUser = isLogged && !isPro;
+const isGuest = !isLogged;
 
 
 // 🔒 BLOCCO DATI AVANZATI
 if(isPro){
 
-  if(elProfit){
-    elProfit.innerText = netAnnual > 0 ? formatCurrency(netAnnual) : "—";
-  }
+  // ✅ PRO → tutto reale
 
-  if(elMonth){
-    elMonth.innerText = netAnnual > 0 ? formatCurrency(netAnnual/12) : "—";
-  }
+  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
+  if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
+  if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
+  if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-  if(elBreak){
-    elBreak.innerText = breakEven > 0 ? breakEven.toFixed(1)+" anni" : "—";
-  }
+}
+else if(isFreeUser){
 
-  if(elRev){
-    elRev.innerText = revenue > 0 ? formatCurrency(revenue) : "—";
-  }
+  // 👤 FREE → teaser (numeri ma non completi)
 
-}else{
+  if(elProfit) elProfit.innerText = "≈ " + formatCurrency(netAnnual * 0.7);
+  if(elMonth)  elMonth.innerText = "≈ " + formatCurrency((netAnnual/12) * 0.7);
+  if(elBreak)  elBreak.innerText = "≈ " + breakEven.toFixed(0)+" anni";
+  if(elRev)    elRev.innerText = "≈ " + formatCurrency(revenue * 0.6);
 
-  // 🔒 FREE → lascia lock
+}
+else{
+
+  // 👻 GUEST → tutto lock
+
   if(elProfit) elProfit.innerText = "🔒";
-  if(elMonth) elMonth.innerText = "🔒";
-  if(elBreak) elBreak.innerText = "🔒";
-  if(elRev) elRev.innerText = "🔒";
+  if(elMonth)  elMonth.innerText = "🔒";
+  if(elBreak)  elBreak.innerText = "🔒";
+  if(elRev)    elRev.innerText = "🔒";
 
 }
 
@@ -1525,10 +1534,16 @@ if(overlay){
 // ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
- const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly";
+ const plan = String(window.currentPlan || "").toLowerCase();
+const isLogged = !!window.currentUser;
+
+const isPro =
+  plan === "pro" ||
+  plan === "investor" ||
+  plan === "pro_yearly";
+
+const isFreeUser = isLogged && !isPro;
+const isGuest = !isLogged;
 
 if(isPro) return; // 🔥 BLOCCA tutto per PRO
 
@@ -1665,10 +1680,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   function unlockHomeProUI(){
 
-    const isPro =
-      window.currentPlan === "pro" ||
-      window.currentPlan === "investor" ||
-      window.currentPlan === "pro_yearly";
+    const plan = String(window.currentPlan || "").toLowerCase();
+const isLogged = !!window.currentUser;
+
+const isPro =
+  plan === "pro" ||
+  plan === "investor" ||
+  plan === "pro_yearly";
+
+const isFreeUser = isLogged && !isPro;
+const isGuest = !isLogged;
 
     if(!isPro) return;
 
