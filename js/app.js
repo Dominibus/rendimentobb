@@ -1876,6 +1876,20 @@ if(revenueHome){
 
 const access = window.getUserAccess();
 
+// 🔥 HARD STOP LOCK (ANTI BUG DEFINITIVO)
+if(
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly"
+){
+  console.log("🟢 HARD BLOCK LOCK → PRO USER");
+
+  unlockUI();
+  unlockProUI();
+
+  return;
+}    
+
 // 🔓 SE PRO → STOP TOTALE (NO LOCK MAI)
 if(access.canSeeFullAnalysis){
 
@@ -1893,56 +1907,62 @@ if(access.canSeeFullAnalysis){
   return;
 }
 
-// ================= FREE MODE =================
+// ================= LOCK SYSTEM (FIX DEFINITIVO) =================
 
-if(access.canSeeFullAnalysis){
-  console.log("🔓 PRO → skip lock UI");
-} else {
+const access = window.getUserAccess();
 
-  console.log("🔒 FREE MODE → APPLY LOCK");
-
-  document.querySelectorAll(`
-    #revenue-forecast,
-    #occupancy-sensitivity,
-    #break-even-kpi,
-    #investment-score,
-    #investment-ranking,
-    #investment-risk-meter,
-    #investment-verdict,
-    #ai-insights
-  `).forEach(el=>{
-
-    if(!el) return;
-
-    el.classList.add("pro-blur");
-
-    if(!el.querySelector(".paywall-mini")){
-
-      const overlay = document.createElement("div");
-
-      overlay.className = "paywall-mini";
-
-      overlay.innerHTML = `
-        <div style="
-          margin-top:10px;
-          padding:10px;
-          font-size:13px;
-          text-align:center;
-          color:#64748b;
-        ">
-          🔒 ${t(
-            "Sblocca analisi avanzata",
-            "Unlock advanced analysis"
-          )}
-        </div>
-      `;
-
-      el.appendChild(overlay);
-    }
-
-  });
-
+// 🔓 PRO / ADMIN / INVESTOR → STOP TOTALE
+if(
+  access.canSeeFullAnalysis ||
+  access.isInvestor
+){
+  console.log("🟢 FULL ACCESS → NO LOCK");
+  return;
 }
+
+// 🔒 SOLO FREE → LOCK
+console.log("🔒 FREE MODE → APPLY LOCK");
+
+document.querySelectorAll(`
+  #revenue-forecast,
+  #occupancy-sensitivity,
+  #break-even-kpi,
+  #investment-score,
+  #investment-ranking,
+  #investment-risk-meter,
+  #investment-verdict,
+  #ai-insights
+`).forEach(el=>{
+
+  if(!el) return;
+
+  el.classList.add("pro-blur");
+
+  if(!el.querySelector(".paywall-mini")){
+
+    const overlay = document.createElement("div");
+
+    overlay.className = "paywall-mini";
+
+    overlay.innerHTML = `
+      <div style="
+        margin-top:10px;
+        padding:10px;
+        font-size:13px;
+        text-align:center;
+        color:#64748b;
+      ">
+        🔒 ${t(
+          "Sblocca analisi avanzata",
+          "Unlock advanced analysis"
+        )}
+      </div>
+    `;
+
+    el.appendChild(overlay);
+  }
+
+});
     // ================= CHART =================
     setTimeout(()=>{
       if(typeof renderChart === "function"){
