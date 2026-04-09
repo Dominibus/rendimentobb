@@ -3358,7 +3358,7 @@ function unlockProUI(){
   window.proUnlocked = true;
 
   // ================= ADMIN =================
-  if(typeof window.isAdmin === "function" && window.isAdmin()){
+  if(window.isAdmin && window.isAdmin()){
     console.log("👑 ADMIN SBLOCCATO");
 
     document.body.classList.add("admin-user");
@@ -3371,17 +3371,19 @@ function unlockProUI(){
   // ================= PRO STATE =================
   document.body.classList.add("pro-user");
 
-  // ================= REMOVE LOCK =================
-  document.querySelectorAll("*").forEach(el=>{
+  // ================= UNLOCK SOLO ELEMENTI BLOCCATI =================
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock
+  `).forEach(el => {
 
     el.classList.remove(
       "pro-blur",
-      "blur-content",
       "locked",
       "locked-content",
-      "pro-lock",
-      "premium-lock",
-      "pro-only"
+      "premium-lock"
     );
 
     el.style.filter = "none";
@@ -3390,7 +3392,13 @@ function unlockProUI(){
 
   });
 
-  // ================= REMOVE OVERLAY =================
+  // ================= SHOW PRO CONTENT =================
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.style.display = "block";
+    el.style.opacity = "1";
+  });
+
+  // ================= REMOVE OVERLAYS =================
   document.querySelectorAll(`
     [data-paywall],
     .locked-overlay,
@@ -3400,22 +3408,12 @@ function unlockProUI(){
     .upgrade-overlay,
     #upgrade-overlay,
     #upgrade-modal,
-    .home-blur-overlay
-  `).forEach(el=> el.remove());
-
-  // ================= FORCE UPDATE =================
-  setTimeout(()=>{
-    if(typeof window.quickROI === "function"){
-      window.quickROI();
-    }
-  },100);
-
-  document.dispatchEvent(new Event("rb_simulation_updated"));
+    .home-blur-overlay,
+    .paywall-mini
+  `).forEach(el => el.remove());
 
   console.log("✅ PRO SBLOCCATO DEFINITIVO");
-
-  }
-
+}
 // ================= EVENTI =================
 
 // 🔥 QUESTI SONO FONDAMENTALI
