@@ -1909,7 +1909,7 @@ if(access.canSeeFullAnalysis){
 
 // ================= LOCK SYSTEM (FIX DEFINITIVO) =================
 
-const access = window.getUserAccess();
+// 🔥 USA QUELLA SOPRA (NON RIDICHIARARE)
 
 // 🔓 PRO / ADMIN / INVESTOR → STOP TOTALE
 if(
