@@ -9640,7 +9640,7 @@ display:none;
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – SAAS UI PRODUCTION
+🔥 RENDIMENTOBB – SAAS UI PRODUCTION FINAL
 ===================================== */
 
 :root{
@@ -9792,6 +9792,7 @@ body{
   gap:8px;
 }
 
+/* BUTTON HEADER */
 .rb-btn{
   padding:6px 10px;
   font-size:12px;
@@ -9872,71 +9873,20 @@ body{
   color:white;
 }
 
-/* ===================== */
-/* MOBILE MENU */
-/* ===================== */
+/* =====================================
+🔥 MOBILE MENU – FINAL FIX
+===================================== */
 
+/* HAMBURGER */
 #rb-burger{
   display:none;
   font-size:22px;
   cursor:pointer;
+  background:none;
+  border:none;
 }
 
-/* overlay sfondo */
-.rb-mobile-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.35);
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
-  z-index:9997;
-}
-
-/* menu */
-.rb-mobile{
-  position:fixed;
-  top:0;
-  right:0;
-  width:270px;
-  height:100vh;
-
-  background:white;
-  padding:80px 20px 20px;
-
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-
-  transform:translateX(100%);
-  transition:.35s ease;
-
-  z-index:9998;
-}
-
-/* stato aperto */
-.rb-mobile.open{
-  transform:translateX(0);
-}
-
-/* overlay attivo */
-.rb-mobile.open ~ .rb-mobile-overlay{
-  opacity:1;
-  pointer-events:auto;
-}
-
-/* link mobile */
-.rb-mobile a{
-  text-decoration:none;
-  color:var(--rb-text);
-  font-weight:500;
-  padding:10px 0;
-  border-bottom:1px solid var(--rb-border);
-}
-
-/* ===================== */
-/* MOBILE */
-/* ===================== */
+/* MOBILE ONLY */
 @media(max-width:768px){
 
   .rb-center{
@@ -9947,6 +9897,97 @@ body{
     display:block;
   }
 
+}
+
+/* DESKTOP RESET */
+@media(min-width:769px){
+
+  .rb-mobile,
+  .rb-mobile-overlay{
+    display:none !important;
+  }
+
+}
+
+/* OVERLAY */
+.rb-mobile-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.55);
+  backdrop-filter:blur(4px);
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:opacity .3s ease;
+
+  z-index:9998;
+}
+
+.rb-mobile-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* MENU */
+.rb-mobile{
+  position:fixed;
+  top:0;
+  right:0;
+
+  width:85%;
+  max-width:320px;
+  height:100vh;
+
+  background:white;
+
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+
+  z-index:9999;
+
+  padding:80px 20px 20px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  overflow-y:auto;
+
+  box-shadow:-10px 0 40px rgba(0,0,0,0.15);
+}
+
+.rb-mobile.open{
+  transform:translateX(0);
+}
+
+/* LINK */
+.rb-mobile a{
+  display:block;
+  padding:14px;
+  border-radius:12px;
+  text-decoration:none;
+  color:var(--rb-text);
+  font-weight:500;
+  background:#f8fafc;
+  border:1px solid var(--rb-border);
+}
+
+.rb-mobile a:hover{
+  background:#f1f5f9;
+}
+
+/* USER MOBILE */
+.rb-mobile-user{
+  margin-bottom:20px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* BODY LOCK */
+body.menu-open{
+  overflow:hidden;
 }
 
 /* ===================== */
@@ -9968,7 +10009,7 @@ body{
 }
 
 /* ===================== */
-/* PAYWALL FIX */
+/* PAYWALL */
 /* ===================== */
 .results-overlay{
   pointer-events:none;
@@ -9984,7 +10025,7 @@ body{
 }
 
 /* ===================== */
-/* SMART POPUP */
+/* POPUP */
 /* ===================== */
 .smart-overlay{
   position:fixed;
@@ -10049,152 +10090,19 @@ body{
 }
 
 /* ===================== */
-/* FIX IMPORTANTI */
+/* FIX */
 /* ===================== */
-
-/* CTA sempre sopra */
 button{
   position:relative;
   z-index:5;
 }
 
-/* evita blocchi */
 .locked-overlay{
   pointer-events:none;
 }
 
-/* sblocco pro */
 body.is-pro .pro-blur{
   filter:none !important;
   opacity:1 !important;
   pointer-events:auto !important;
-}
-
-/* ===============================
-🔥 MOBILE MENU OVERLAY (FIX PRO)
-=============================== */
-
-.rb-mobile-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(15,23,42,0.55);
-  backdrop-filter:blur(4px);
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
-  z-index:9998;
-}
-
-.rb-mobile-overlay.open{
-  opacity:1;
-  pointer-events:auto;
-}
-
-/* drawer più fluido */
-.rb-mobile{
-  position:fixed;
-  top:0;
-  right:0;
-  width:280px;
-  height:100vh;
-  background:white;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-
-  transform:translateX(100%);
-  transition:transform .35s cubic-bezier(.4,0,.2,1);
-  z-index:9999;
-
-  box-shadow:-10px 0 40px rgba(0,0,0,0.15);
-}
-
-.rb-mobile.open{
-  transform:translateX(0);
-}
-
-/* blocco scroll */
-body.menu-open{
-  overflow:hidden;
-}
-
-/* 🔥 HAMBURGER SOLO MOBILE */
-#rb-burger{
-  display:none;
-}
-
-@media (max-width:768px){
-  #rb-burger{
-    display:block;
-  }
-}
-
-/* 🔥 RESET MENU DESKTOP */
-@media (min-width:769px){
-
-  .rb-mobile{
-    display:none !important;
-    transform:translateX(100%) !important;
-  }
-
-  .rb-mobile-overlay{
-    display:none !important;
-  }
-
-}
-
-/* 🔥 MOBILE MENU FIX DEFINITIVO */
-.rb-mobile{
-  position:fixed;
-  top:0;
-  right:0;
-  width:85%;
-  max-width:320px;
-
-  height:100vh;
-  background:white;
-
-  z-index:9999;
-
-  transform:translateX(100%);
-  transition:transform .3s ease;
-
-  overflow-y:auto;
-  padding:20px;
-}
-
-/* MENU APERTO */
-.rb-mobile.open{
-  transform:translateX(0);
-}
-
-.rb-mobile-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.4);
-
-  z-index:9998;
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:opacity .3s ease;
-}
-
-/* OVERLAY ATTIVO */
-.rb-mobile-overlay.open{
-  opacity:1;
-  pointer-events:auto;
-}
-
-body.menu-open{
-  overflow:hidden;
-}
-
-/* 🔥 SICUREZZA CLICK */
-.rb-mobile a{
-  display:block;
-  padding:14px;
-  border-radius:10px;
 }
