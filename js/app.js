@@ -156,6 +156,32 @@ if(elBreak) elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
 if(qrRev) qrRev.innerText = formatCurrency(revenue);
 if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
+// ================= 🔒 HOME LOCK SYSTEM =================
+
+const access = window.getUserAccess();
+
+// 🔓 PRO / INVESTOR → vedono tutto
+if(access.canSeeFullAnalysis || access.isInvestor){
+  return;
+}
+
+// 🔒 FREE → nascondi dati
+const lockIds = [
+  "qr_profit",
+  "qr_month",
+  "qr_break",
+  "qr_rev"
+];
+
+lockIds.forEach(id => {
+  const el = document.getElementById(id);
+
+  if(!el) return;
+
+  el.innerText = "🔒 Pro";
+  el.style.opacity = "0.6";
+});  
+
 };
 
 window.runMortgageComparison = function(){
