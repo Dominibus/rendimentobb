@@ -2249,7 +2249,7 @@ function renderChart(net){
       return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
     }
   }
-}
+},
 
       scales:{
         y:{
