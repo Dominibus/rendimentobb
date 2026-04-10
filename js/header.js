@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   <div id="rb-mobile-overlay" class="rb-menu-overlay"></div>
 
   <div id="rb-mobile" class="rb-mobile-menu">
-    <nav>
+    <nav id="rb-mobile-nav">
       <a href="/tool/">Simulatore</a>
       <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
       <a href="/mutui/">Mutui</a>
@@ -300,6 +300,33 @@ const isPaid = isInvestor || isPro;
 
   }
 
+}
+
+// =====================
+// 📱 MOBILE MENU DYNAMIC
+// =====================
+
+const mobileNav = document.getElementById("rb-mobile-nav");
+
+if(mobileNav){
+
+  let mobileHTML = `
+    <a href="/tool/">Simulatore</a>
+    <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+    <a href="/mutui/">Mutui</a>
+    <a href="/immobili/">Immobili</a>
+    <a href="/academy/">Academy</a>
+  `;
+
+  if(user){
+    mobileHTML += `<a href="/dashboard/">Dashboard</a>`;
+  }
+
+  if(isAdmin){
+    mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
+  }
+
+  mobileNav.innerHTML = mobileHTML;
 }
 
 // 🔥 EXPORT GLOBALE (CRITICO)
