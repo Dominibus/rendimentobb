@@ -152,7 +152,24 @@ function waitPlanAndRender(user){
 
   // 🔥 PRIMO RENDER
   renderUser(user);
+
+// 🔒 SBLOCCA SOLO SE PRO
+const plan = (window.currentPlan || "").toLowerCase();
+const role = (window.userRole || "").toLowerCase();
+
+const isAdmin =
+  role === "admin" ||
+  window.currentUser?.email === "rendimentobb@gmail.com";
+
+const isPro =
+  isAdmin ||
+  plan === "pro" ||
+  plan === "pro_yearly" ||
+  plan === "investor";
+
+if(isPro){
   unlockUI();
+}
 
   // 🔥 SICUREZZA: re-render dopo micro delay (fix flicker Firebase)
   setTimeout(()=>{
@@ -387,6 +404,12 @@ function openProModal(){
 ===================== */
 
 function unlockUI(){
+
+  const plan = (window.currentPlan || "").toLowerCase();
+
+  if(!["pro","pro_yearly","investor"].includes(plan)){
+    return; // ❌ blocca unlock per free
+  }
 
   document.querySelectorAll(
     ".locked-overlay, .results-overlay, .home-blur-overlay"
