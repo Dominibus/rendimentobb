@@ -1589,10 +1589,16 @@ function showProUpgradeModal(){
         margin-bottom:10px;
         cursor:pointer;
       "
-        data-it="🔥 Sblocca PRO – 29€"
-        data-en="🔥 Unlock PRO – €29">
-        ${isEN ? "🔥 Unlock PRO – €29" : "🔥 Sblocca PRO – 29€"}
+        data-it="🔥 Sblocca PRO – €199/anno"
+        data-en="🔥 Unlock PRO – €199/year">
+        ${isEN ? "🔥 Unlock PRO – €199/year" : "🔥 🔥 Sblocca PRO – €199/anno€"}
       </button>
+
+     <p style="color:#10b981;font-size:13px;font-weight:600;"
+      data-it="💰 Risparmi €149 all’anno (miglior scelta)"
+      data-en="💰 Save €149 per year (best value)">
+      💰 Risparmi €149 all’anno (miglior scelta)
+     </p>
 
       <button onclick="this.closest('div').parentNode.remove()" style="
         background:transparent;
@@ -3653,3 +3659,19 @@ window.closeRegisterPopup = function(){
   console.log("✅ Popup chiuso");
 
 };
+
+let scrollTriggered = false;
+
+window.addEventListener("scroll", () => {
+
+  if(scrollTriggered) return;
+
+  if(window.scrollY > 800){
+
+    scrollTriggered = true;
+
+    triggerUpgradeFlow({ action:"scroll" });
+
+  }
+
+});
