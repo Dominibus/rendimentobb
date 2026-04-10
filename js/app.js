@@ -2219,7 +2219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// ================= EXECUTIVE PDF – FINAL ULTRA PRO =================
+// ================= EXECUTIVE PDF – BANK LEVEL =================
 
 window.generateExecutivePDF = async function(){
 
@@ -2288,7 +2288,6 @@ doc.text("ROI", 25, y+10);
 doc.setFontSize(24);
 doc.text(pct(roi), 25, y+22);
 
-// badge
 let badge = "RISKY";
 if(roi > 12) badge = "HIGH PERFORMANCE";
 else if(roi > 6) badge = "BALANCED";
@@ -2362,7 +2361,6 @@ doc.setFontSize(12);
 doc.setTextColor(0);
 doc.text(eur(revenue), 25, y+15);
 
-// profit
 doc.setFillColor(248,250,252);
 doc.roundedRect(110,y,80,20,4,4,"F");
 
@@ -2376,7 +2374,7 @@ doc.text(eur(profit), 115, y+15);
 
 y += 30;
 
-// ================= MARKET COMPARISON =================
+// ================= MARKET =================
 const marketAvg = 28500;
 const diff = revenue - marketAvg;
 
@@ -2392,23 +2390,53 @@ doc.text("Market average: " + eur(marketAvg), 20, y); y+=6;
 const performance = diff >= 0 ? "Above market" : "Below market";
 doc.text("Performance: " + performance, 20, y);
 
-y += 20;
+y += 15;
 
-// ================= CHART =================
+// ================= CHART BANK STYLE =================
 const chartCanvas = document.getElementById("roiChart");
 
 if(chartCanvas){
-  try{
-    const imgData = chartCanvas.toDataURL("image/png", 1.0);
 
+  try{
+
+    // crea canvas HD (fix blur + taglio)
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = chartCanvas.width * 2;
+    tempCanvas.height = chartCanvas.height * 2;
+
+    const ctx = tempCanvas.getContext("2d");
+    ctx.scale(2,2);
+    ctx.drawImage(chartCanvas, 0, 0);
+
+    const imgData = tempCanvas.toDataURL("image/png", 1.0);
+
+    // titolo
     doc.setFontSize(12);
     doc.text("Performance Forecast", 20, y);
 
-    y += 6;
+    y += 8;
 
-    doc.addImage(imgData, "PNG", 20, y, 170, 80);
+    // BOX stile banca
+    doc.setFillColor(255,255,255);
+    doc.setDrawColor(220);
+    doc.roundedRect(15, y-5, 180, 100, 6,6,"FD");
 
-    y += 90;
+    // dimensioni corrette (NO TAGLIO)
+    const imgWidth = 160;
+    const imgHeight = 80;
+
+    doc.addImage(
+      imgData,
+      "PNG",
+      25,
+      y,
+      imgWidth,
+      imgHeight,
+      undefined,
+      "FAST"
+    );
+
+    y += imgHeight + 20;
 
   }catch(e){
     console.warn("Chart error:", e);
@@ -2427,7 +2455,7 @@ y += 12;
 
 let score = Math.min(100, Math.round(roi * 3));
 
-doc.setFontSize(32);
+doc.setFontSize(36);
 doc.text(score + "/100", 20, y);
 
 // ================= RATING =================
