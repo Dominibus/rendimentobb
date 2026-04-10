@@ -10581,3 +10581,23 @@ body.is-admin [class*="overlay"]{
     transform: scale(1);
   }
 }
+
+.locked-blur{
+  filter: blur(6px);
+  pointer-events: none;
+  opacity: 0.6;
+  position: relative;
+}
+
+.locked-blur::after{
+  content:"🔒 Sblocca PRO";
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#10b981;
+  color:white;
+  padding:10px 20px;
+  border-radius:20px;
+  font-weight:600;
+}
