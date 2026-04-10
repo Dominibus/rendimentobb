@@ -2298,7 +2298,13 @@ doc.rect(0,0,210,30,"F");
 
 // LOGO
 if(logoBase64){
-  doc.addImage(logoBase64, "PNG", 20, 8, 28, 12);
+
+  // BOX bianco sotto logo
+  doc.setFillColor(255,255,255);
+  doc.roundedRect(18, 6, 34, 16, 3,3,"F");
+
+  // LOGO sopra
+  doc.addImage(logoBase64, "PNG", 20, 8, 30, 12);
 }
 
 // TITLE
