@@ -1069,9 +1069,9 @@ ROI, rischio, mutuo e scenari reali in un unico strumento.
 </div>
 
 <!-- PRICING -->
-<div class="pricing-preview" style="margin-top:50px">
+<div class="pricing-wrapper">
 
-<h3 style="margin-bottom:20px"
+<h3 class="pricing-title"
 data-it="Scegli il piano"
 data-en="Choose your plan">
 Scegli il piano
@@ -1080,25 +1080,42 @@ Scegli il piano
 <div class="pricing-grid">
 
 <!-- INVESTOR -->
-<div class="plan-card">
+<div class="plan-card plan-investor">
 
 <h3 data-it="Investor" data-en="Investor">Investor</h3>
 
-<p 
+<p class="price"
 data-it="€19 / mese"
 data-en="€19 / month">
 €19 / mese
 </p>
 
+<div class="plan-extra"></div>
+
 <ul>
 <li data-it="✔ Simulazioni illimitate" data-en="✔ Unlimited simulations">✔ Simulazioni illimitate</li>
 <li data-it="✔ ROI avanzato" data-en="✔ Advanced ROI">✔ ROI avanzato</li>
-<li style="opacity:0.5" data-it="✖ Rischio reale" data-en="✖ Real risk">✖ Rischio reale</li>
-<li style="opacity:0.5" data-it="✖ Mutui" data-en="✖ Mortgages">✖ Mutui</li>
-<li style="opacity:0.5" data-it="✖ Report PDF" data-en="✖ PDF report">✖ Report PDF</li>
+
+<li class="disabled"
+data-it="✖ Analisi rischio reale"
+data-en="✖ Real risk analysis">
+✖ Analisi rischio reale
+</li>
+
+<li class="disabled"
+data-it="✖ Previsioni cashflow"
+data-en="✖ Cashflow forecasts">
+✖ Previsioni cashflow
+</li>
+
+<li class="disabled"
+data-it="✖ Report PDF professionale"
+data-en="✖ Professional PDF report">
+✖ Report PDF professionale
+</li>
 </ul>
 
-<button onclick="startPlanPurchase('investor')" class="btn-primary"
+<button onclick="startPlanPurchase('investor')" class="btn"
 data-it="Inizia"
 data-en="Start">
 Inizia
@@ -1107,7 +1124,7 @@ Inizia
 </div>
 
 <!-- PRO -->
-<div class="plan-card featured">
+<div class="plan-card featured plan-pro">
 
 <div class="badge"
 data-it="🔥 Più scelto"
@@ -1117,26 +1134,29 @@ data-en="🔥 Most popular">
 
 <h3 data-it="Pro" data-en="Pro">Pro</h3>
 
-<p 
+<p class="price"
 data-it="€29 / mese"
 data-en="€29 / month">
 €29 / mese
 </p>
 
+<div class="plan-extra"></div>
+
 <ul>
 <li data-it="✔ Tutto incluso" data-en="✔ Everything included">✔ Tutto incluso</li>
-<li data-it="✔ Rischio reale investimento" data-en="✔ Real investment risk">✔ Rischio reale investimento</li>
+<li data-it="✔ Analisi rischio reale" data-en="✔ Real investment risk">✔ Analisi rischio reale</li>
+<li data-it="✔ Previsioni cashflow" data-en="✔ Cashflow forecasts">✔ Previsioni cashflow</li>
 <li data-it="✔ Comparatore mutui" data-en="✔ Mortgage comparator">✔ Comparatore mutui</li>
 <li data-it="✔ Report PDF professionale" data-en="✔ Professional PDF report">✔ Report PDF professionale</li>
 </ul>
 
-<button onclick="startPlanPurchase('pro')" class="btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
 data-it="🔓 Sblocca profitto reale"
 data-en="🔓 Unlock real profit">
 🔓 Sblocca profitto reale
 </button>
 
-<p style="font-size:12px;color:#64748b;margin-top:10px;"
+<p class="note"
 data-it="Accesso immediato • Nessun vincolo • Cancella quando vuoi"
 data-en="Instant access • No commitment • Cancel anytime">
 Accesso immediato • Nessun vincolo • Cancella quando vuoi
@@ -1145,15 +1165,15 @@ Accesso immediato • Nessun vincolo • Cancella quando vuoi
 </div>
 
 <!-- ANNUALE -->
-<div class="plan-card plan-annual">
+<div class="plan-card plan-annual plan-yearly">
 
-<div class="plan-badge"
+<div class="badge highlight"
 data-it="🔥 Miglior valore"
 data-en="🔥 Best value">
 🔥 Miglior valore
 </div>
 
-<div class="badge"
+<div class="badge secondary"
 data-it="💰 Risparmi 149€"
 data-en="💰 Save €149">
 💰 Risparmi 149€
@@ -1161,24 +1181,26 @@ data-en="💰 Save €149">
 
 <h3 data-it="Pro Annuale" data-en="Pro Yearly">Pro Annuale</h3>
 
-<p 
+<p class="price"
 data-it="€199 / anno"
 data-en="€199 / year">
 €199 / anno
 </p>
 
-<p style="font-size:13px;color:#64748b;"
-data-it="Solo 16€/mese"
+<p class="sub"
+data-it="Solo €16/mese"
 data-en="Only €16/month">
-Solo 16€/mese
+Solo €16/mese
 </p>
+
+<div class="plan-extra"></div>
 
 <ul>
 <li data-it="✔ Tutto del piano Pro" data-en="✔ Everything in Pro plan">✔ Tutto del piano Pro</li>
 <li data-it="✔ Accesso completo 12 mesi" data-en="✔ Full access 12 months">✔ Accesso completo 12 mesi</li>
 </ul>
 
-<button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary btn-annual"
+<button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary"
 data-it="Risparmia ora"
 data-en="Save now">
 Risparmia ora
@@ -1188,13 +1210,12 @@ Risparmia ora
 
 </div>
 
-<p style="margin-top:20px;color:#64748b;font-size:14px;"
+<p class="footer-note"
 data-it="✔ Nessun vincolo • ✔ Cancella quando vuoi"
 data-en="✔ No commitment • ✔ Cancel anytime">
 ✔ Nessun vincolo • ✔ Cancella quando vuoi
 </p>
 
-</div>
 </div>
 
 </section>
