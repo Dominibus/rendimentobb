@@ -2180,94 +2180,96 @@ function renderChart(net){
   const optimistic = years.map(y => net * y * 1.2);
 
   // ================= CHART =================
-  roiChartInstance = new Chart(ctx,{
+roiChartInstance = new Chart(ctx,{
 
-    type:"line",
+  type:"line",
 
-    data:{
-      labels: years.map(y => t("Anno ","Year ") + y),
+  data:{
+    labels: years.map(y => t("Anno ","Year ") + y),
 
-      datasets:[
-        {
-          label: t("Scenario prudente","Low scenario"),
-          data: conservative,
-          borderColor:"#ef4444",
-          backgroundColor:"rgba(239,68,68,0.08)",
-          tension:0.4,
-          borderWidth:2,
-          fill:true,
-          pointRadius:0
-        },
-        {
-          label: t("Scenario base","Base scenario"),
-          data: base,
-          borderColor:"#3b82f6",
-          backgroundColor:"rgba(59,130,246,0.15)",
-          tension:0.4,
-          borderWidth:3,
-          fill:true,
-          pointRadius:0
-        },
-        {
-          label: t("Scenario ottimistico","High scenario"),
-          data: optimistic,
-          borderColor:"#10b981",
-          backgroundColor:"rgba(16,185,129,0.12)",
-          tension:0.4,
-          borderWidth:2,
-          fill:true,
-          pointRadius:0
-        }
-      ]
+    datasets:[
+      {
+        label: t("Scenario prudente","Low scenario"),
+        data: conservative,
+        borderColor:"#ef4444",
+        backgroundColor:"rgba(239,68,68,0.08)",
+        tension:0.4,
+        borderWidth:2,
+        fill:true,
+        pointRadius:0
+      },
+      {
+        label: t("Scenario base","Base scenario"),
+        data: base,
+        borderColor:"#3b82f6",
+        backgroundColor:"rgba(59,130,246,0.15)",
+        tension:0.4,
+        borderWidth:3,
+        fill:true,
+        pointRadius:0
+      },
+      {
+        label: t("Scenario ottimistico","High scenario"),
+        data: optimistic,
+        borderColor:"#10b981",
+        backgroundColor:"rgba(16,185,129,0.12)",
+        tension:0.4,
+        borderWidth:2,
+        fill:true,
+        pointRadius:0
+      }
+    ]
+  },
+
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    animation:false,
+    devicePixelRatio:2,
+
+    interaction:{
+      mode:"index",
+      intersect:false
     },
 
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      animation:false,
-      devicePixelRatio:2,
-
-      interaction:{
-        mode:"index",
-        intersect:false
+    plugins:{
+      legend:{
+        display:true,
+        position:"bottom",
+        labels:{
+          font:{
+            size:12
+          },
+          color:"#334155"
+        }
       },
 
-      plugins:{
-        legend:{
-  display:true,
-  position:"bottom",
-  labels:{
-    font:{
-      size:12
-    },
-    color:"#334155"
-  }
-},
-        tooltip:{
-  callbacks:{
-    label:(ctx)=>{
-      return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
-    }
-  }
-},
+      tooltip:{
+        callbacks:{
+          label:(ctx)=>{
+            return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
+          }
+        }
+      }
+    }, // 🔥 QUESTA CHIUSURA MANCAVA
 
-      scales:{
-        y:{
-          ticks:{
-            callback:(v)=>{
-  return formatCurrency(v);
-}
+    scales:{
+      y:{
+        ticks:{
+          callback:(v)=>{
+            return formatCurrency(v);
           }
         }
       }
     }
+  }
 
-  });
+});
 
-  console.log("✅ ROI chart renderizzato");
+console.log("✅ ROI chart renderizzato");
 
-  // 🔓 RESET LOCK
-  window.renderingChart = false;
+// 🔓 RESET LOCK
+window.renderingChart = false;
 }
 
 // ================= CITY ROI CHART (SAFE) =================
