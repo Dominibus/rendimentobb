@@ -2219,26 +2219,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// ================= EXECUTIVE PDF – SAAS VERSION =================
+// ================= EXECUTIVE PDF – FIXED PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 
-const tSafe = (it,en) => {
-  if(typeof t === "function") return t(it,en);
-  return lang==="it"?it:en;
-};
+const tSafe = (it,en)=> lang==="it"?it:en;
 
 // 🔒 CHECK
 if(!hasPlan("pro")){
   alert("🔒 PRO required");
-  document.getElementById("upgrade-modal")?.style.display = "flex";
   return;
 }
 
 if(!window.lastAnalysisData){
-  alert(lang==="it"?"Genera prima l'analisi":"Run analysis first");
+  alert(tSafe("Genera prima l'analisi","Run analysis first"));
   return;
 }
 
@@ -2250,272 +2246,160 @@ if(!window.jspdf){
 const { jsPDF } = window.jspdf;
 const data = window.lastAnalysisData;
 
-// ================= UTILS =================
-const clean = (v)=>isFinite(v)?v:0;
-const eur = (v)=> {
-  const n = Number(clean(v));
-  return "€" + (isFinite(n) ? n.toLocaleString() : "0");
-};
-const pct = (v)=> {
-  const n = Number(clean(v));
-  return isFinite(n) ? n.toFixed(1) + "%" : "0%";
-};
+// ================= SAFE DATA =================
+const safe = (v)=> isFinite(v) ? Number(v) : 0;
 
-// MARGINI SAFE (FIX BORDER BUG)
-const M = {
-  left:20,
-  right:190,
-  width:170
-};
+const roi = safe(data.roi);
+const revenue = safe(data.revenue);
+const profit = safe(data.netAfterMortgage || data.profit);
+const price = safe(data.price);
+const equity = safe(data.equity);
+const loan = safe(data.loan);
 
+// ================= FORMAT =================
+const eur = (v)=> "€" + safe(v).toLocaleString();
+const pct = (v)=> safe(v).toFixed(1) + "%";
+
+// ================= DOC =================
 const doc = new jsPDF();
-
 let y = 20;
 
-// ================= CHART FIX (ROBUSTO) =================
-let chartImage = null;
-
-try{
-
-  const canvas = document.getElementById("roiChart");
-
-  if(canvas){
-
-    await new Promise(r=>setTimeout(r,800)); // più stabile
-
-    if(canvas.width > 0){
-      chartImage = canvas.toDataURL("image/png",1.0);
-    }
-
-  }
-
-}catch(e){
-  console.warn("chart error",e);
-}
-
-// ================= HEADER (STRIPE STYLE) =================
-
-doc.setFillColor(15,23,42); // dark header
+// ================= HEADER =================
+doc.setFillColor(15,23,42);
 doc.rect(0,0,210,30,"F");
 
-doc.setTextColor(255,255,255);
-doc.setFontSize(15);
-doc.text("RendimentoBB", M.left, 14);
+doc.setTextColor(255);
+doc.setFontSize(14);
+doc.text("RendimentoBB", 20, 15);
 
 doc.setFontSize(9);
 doc.setTextColor(180);
-doc.text("Investment Intelligence Report", M.left, 22);
+doc.text("Investment Intelligence Report", 20, 23);
 
-// ================= HERO KPI =================
-
+// ================= KPI =================
 y = 40;
 
 doc.setFillColor(16,185,129);
-doc.roundedRect(M.left,y,M.width,28,6,6,"F");
+doc.roundedRect(20,y,170,28,6,6,"F");
 
 doc.setTextColor(255);
 doc.setFontSize(10);
-doc.text("ROI", M.left+6, y+10);
+doc.text("ROI", 25, y+10);
 
-doc.setFontSize(26);
-doc.text(pct(data.roi), M.left+6, y+22);
+doc.setFontSize(24);
+doc.text(pct(roi), 25, y+22);
 
-// badge
-let badge =
-data.roi > 12 ? "HIGH PERFORMANCE" :
-data.roi > 6 ? "BALANCED" : "RISKY";
+// badge safe
+let badge = "RISKY";
+if(roi > 12) badge = "HIGH PERFORMANCE";
+else if(roi > 6) badge = "BALANCED";
 
 doc.setFontSize(10);
-doc.text(badge, M.right-40, y+22);
+doc.text(badge, 140, y+22);
 
 y += 40;
 
 // ================= SUMMARY =================
-
 doc.setTextColor(0);
 doc.setFontSize(13);
-doc.text("Executive Summary", M.left, y);
+doc.text("Executive Summary", 20, y);
 
 y += 8;
 
 doc.setFontSize(10);
 
-let summary =
-data.roi > 12
-? "High-performing investment above market average."
-: data.roi > 6
-? "Balanced investment with solid ROI."
-: "Risky investment with low return.";
+let summary = "Risky investment with low return.";
+if(roi > 12) summary = "High-performing investment above market average.";
+else if(roi > 6) summary = "Balanced investment with solid ROI.";
 
-doc.text(summary, M.left, y, { maxWidth: M.width });
+doc.text(summary, 20, y, { maxWidth: 170 });
 
 y += 16;
 
 // ================= STRUCTURE =================
-
 doc.setFontSize(13);
-doc.text("Investment Structure", M.left, y);
+doc.text("Investment Structure", 20, y);
+
+y += 8;
+
+doc.setFontSize(10);
+doc.text("Property price: " + eur(price), 20, y); y+=6;
+doc.text("Equity: " + eur(equity), 20, y); y+=6;
+doc.text("Loan: " + eur(loan), 20, y); y+=6;
+
+const ltv = price > 0 ? ((loan/price)*100).toFixed(0) : 0;
+doc.text("LTV: " + ltv + "%", 20, y);
+
+y += 14;
+
+// ================= KPI =================
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y,80,20,4,4,"F");
+
+doc.setFontSize(8);
+doc.setTextColor(120);
+doc.text("Revenue", 25, y+7);
+
+doc.setFontSize(12);
+doc.setTextColor(0);
+doc.text(eur(revenue), 25, y+15);
+
+// right
+doc.setFillColor(248,250,252);
+doc.roundedRect(110,y,80,20,4,4,"F");
+
+doc.setFontSize(8);
+doc.setTextColor(120);
+doc.text("Profit", 115, y+7);
+
+doc.setFontSize(12);
+doc.setTextColor(0);
+doc.text(eur(profit), 115, y+15);
+
+y += 30;
+
+// ================= PAGE 2 =================
+doc.addPage();
+y = 30;
+
+doc.setFontSize(12);
+doc.text("Investment Score", 20, y);
+
+y += 10;
+
+let score = Math.min(100, Math.round(roi * 3));
+
+doc.setFontSize(26);
+doc.text(score + "/100", 20, y);
+
+y += 20;
+
+// ================= INSIGHT =================
+doc.setFontSize(12);
+doc.text("Strategic Insight", 20, y);
 
 y += 8;
 
 doc.setFontSize(10);
 
-doc.text("Property price: " + eur(data.price), M.left, y); y+=6;
-doc.text("Equity: " + eur(data.equity), M.left, y); y+=6;
-doc.text("Loan: " + eur(data.loan), M.left, y); y+=6;
+const insightText = "ROI " + pct(roi) + " indicates " + (score>70 ? "strong potential" : "moderate potential");
 
-const ltv = data.price ? (data.loan/data.price*100).toFixed(0) : 0;
-doc.text("LTV: " + ltv + "%", M.left, y);
+doc.text(insightText, 20, y, { maxWidth: 170 });
 
-y += 14;
-
-// ================= KPI CARDS =================
-
-const boxW = 80;
-
-doc.setFillColor(248,250,252);
-doc.roundedRect(M.left,y,boxW,20,4,4,"F");
-
-doc.setFontSize(8);
-doc.setTextColor(120);
-doc.text("Revenue", M.left+5, y+7);
-
-doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text(eur(data.revenue), M.left+5, y+15);
-
-// right
-doc.setFillColor(248,250,252);
-doc.roundedRect(M.left+boxW+10,y,boxW,20,4,4,"F");
-
-doc.setFontSize(8);
-doc.setTextColor(120);
-doc.text("Profit", M.left+boxW+15, y+7);
-
-doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text(eur(data.profit), M.left+boxW+15, y+15);
-
-y += 30;
-
-// ================= SCENARIOS =================
-
-doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text("Revenue Scenarios", M.left, y);
-
-y+=8;
-
-const low = data.revenue*0.8;
-const base = data.revenue;
-const high = data.revenue*1.2;
-
-doc.setFontSize(10);
-doc.text("Low: "+eur(low), M.left, y); y+=6;
-doc.text("Base: "+eur(base), M.left, y); y+=6;
-doc.text("High: "+eur(high), M.left, y);
-
-y += 12;
-
-// ================= PAGE BREAK =================
-doc.addPage();
-y = 30;
-
-// ================= CHART =================
-
-doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text("Performance Projection", M.left, y);
-
-y += 10;
-
-if(chartImage){
-
-  doc.setFillColor(248,250,252);
-  doc.roundedRect(M.left-5, y-5, M.width+10, 110, 6,6,"F");
-
-  doc.addImage(chartImage,"PNG",M.left,y,170,90);
-
-  y += 100;
-
-}else{
-
-  doc.setTextColor(150);
-  doc.text("Chart not available", M.left, y);
-
-  y += 20;
-}
-
-// ================= SCORE =================
-
-doc.setFontSize(14);
-doc.setTextColor(16,185,129);
-doc.text("Investment Score", M.left, y);
-
-y += 10;
-
-let score = Math.min(100, Math.round(data.roi * 3));
-
-doc.setFontSize(26);
-
-doc.setTextColor(
-score>80?16:score>60?245:239,
-score>80?185:score>60?158:68,
-score>80?129:score>60?11:68
-);
-
-doc.text(score+"/100", M.left, y);
-
-y += 20;
-
-// ================= FINAL =================
-
-doc.setTextColor(0);
-doc.setFontSize(12);
-
-doc.text("Strategic Insight", M.left, y);
-y+=8;
-
-doc.setFontSize(10);
-
-doc.text(
-`ROI ${pct(data.roi)} indicates ${
-score>70?"strong potential":"moderate potential"
-}.`,
-M.left,
-y,
-{ maxWidth: M.width }
-);
-
-y += 30;
-
-// ================= FOOTER FIX =================
-
+// ================= FOOTER =================
 doc.setDrawColor(220);
-doc.line(M.left, 270, M.right, 270);
+doc.line(20, 270, 190, 270);
 
 doc.setFontSize(8);
 doc.setTextColor(120);
 
-doc.text("RendimentoBB ©", M.left, 278);
-doc.text("Confidential", M.right-30, 278);
-
-// ================= PAGINATION FIX =================
-
-const pages = doc.internal.getNumberOfPages();
-
-for(let i=1;i<=pages;i++){
-  doc.setPage(i);
-  doc.setFontSize(8);
-  doc.text(`${i}/${pages}`, M.right-5, 290, { align: "right" });
-}
+doc.text("RendimentoBB ©", 20, 278);
+doc.text("Confidential", 160, 278);
 
 // ================= SAVE =================
-
 doc.save("RendimentoBB-Report.pdf");
 
 };
-
   // ================= AUTO CITY DETECTION =================
 
   function extractCityFromLink(url){
