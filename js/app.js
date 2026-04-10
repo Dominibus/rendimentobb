@@ -604,9 +604,17 @@ function applyAccessControl(){
     console.log("🔓 FULL ACCESS");
 
     unlockUI();
-    unlockProUI();
+unlockProUI();
 
-    return;
+// 🔥 BLOCCA SOLO PER INVESTOR
+if(access.isInvestor){
+  const cashflow = document.getElementById("cashflow-section");
+  if(cashflow){
+    cashflow.classList.add("locked-blur");
+  }
+}
+
+return;
   }
 
   // 🔒 FREE USER
