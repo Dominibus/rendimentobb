@@ -1820,11 +1820,6 @@ result = calculateROI({
     const gross = Number(result?.revenue || 0);
     const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
-    unlockUI();
-
-    if(window.getUserAccess().canSeeFullAnalysis){
-  unlockProUI();
-}
 
     // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
     runPostAnalysis(result, {
@@ -1975,37 +1970,7 @@ if(revenueHome){
       })
     );
 
-    // ================= PRO UNLOCK =================
-
-document.querySelectorAll(`
-  .pro-blur,
-  .locked,
-  .locked-content,
-  .premium-lock
-`).forEach(el => {
-
-  el.classList.remove(
-    "pro-blur",
-    "locked",
-    "locked-content",
-    "premium-lock"
-  );
-
-  el.style.filter = "none";
-  el.style.opacity = "1";
-  el.style.pointerEvents = "auto";
-});
-
-document.querySelectorAll(".pro-only").forEach(el=>{
-  el.style.display = "block";
-  el.style.opacity = "1";
-});
-
-document.querySelectorAll('[data-paywall], .locked-overlay').forEach(el=>{
-  el.remove();
-});
-
-    // ================= MARKET =================
+      // ================= MARKET =================
     if(typeof renderMarketBenchmark === "function"){
       renderMarketBenchmark(window.currentCity || "napoli");
     }
@@ -3224,8 +3189,8 @@ function unlockProUI(){
 // ================= EVENTI =================
 
 // 🔥 QUESTI SONO FONDAMENTALI
-document.addEventListener("rb_plan_loaded", unlockProUI);
-document.addEventListener("rb_auth_ready", unlockProUI);
+document.addEventListener("rb_plan_loaded", applyAccessControl);
+document.addEventListener("rb_auth_ready", applyAccessControl);
 
 
 // ================= FIX CTA DUPLICATE =================
