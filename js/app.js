@@ -2219,7 +2219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// ================= EXECUTIVE PDF – GOLDMAN LEVEL =================
+// ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
 
@@ -2261,22 +2261,53 @@ const pct = (v)=> safe(v).toFixed(1) + "%";
 
 // ================= DOC =================
 const doc = new jsPDF();
+
+// ================= LOGO LOAD =================
+let logoBase64 = null;
+
+try{
+  const res = await fetch("/img/logo-main.png");
+  const blob = await res.blob();
+  const reader = new FileReader();
+  logoBase64 = await new Promise(resolve=>{
+    reader.onloadend = ()=> resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}catch(e){
+  console.warn("Logo load error", e);
+}
+
+// ================= FOOTER =================
+const addFooter = () => {
+  doc.setDrawColor(220);
+  doc.line(20, 270, 190, 270);
+
+  doc.setFontSize(8);
+  doc.setTextColor(120);
+
+  doc.text("RendimentoBB ©", 20, 278);
+  doc.text("Confidential", 160, 278);
+};
+
+// ================= PAGE 1 =================
 let y = 20;
 
-// ================= HEADER =================
+// HEADER
 doc.setFillColor(15,23,42);
 doc.rect(0,0,210,30,"F");
 
+// LOGO
+if(logoBase64){
+  doc.addImage(logoBase64, "PNG", 20, 8, 28, 12);
+}
+
+// TITLE
 doc.setTextColor(255);
-doc.setFontSize(14);
-doc.text("RendimentoBB", 20, 15);
+doc.setFontSize(12);
+doc.text("Investment Intelligence Report", 60, 18);
 
-doc.setFontSize(9);
-doc.setTextColor(180);
-doc.text("Investment Intelligence Report", 20, 23);
-
-// ================= KPI HERO =================
-y = 40;
+// KPI HERO
+y = 45;
 
 doc.setFillColor(16,185,129);
 doc.roundedRect(20,y,170,28,6,6,"F");
@@ -2294,7 +2325,7 @@ doc.text(badge, 140, y+22);
 
 y += 40;
 
-// ================= SUMMARY =================
+// SUMMARY
 doc.setTextColor(0);
 doc.setFontSize(13);
 doc.text("Executive Summary", 20, y);
@@ -2313,7 +2344,7 @@ doc.text(summary, 20, y, { maxWidth: 170 });
 
 y += 14;
 
-// ================= STRUCTURE =================
+// STRUCTURE
 doc.setFontSize(13);
 doc.text("Investment Structure", 20, y);
 
@@ -2329,7 +2360,7 @@ doc.text("LTV: " + ltv + "%", 20, y);
 
 y += 20;
 
-// ================= KPI =================
+// KPI BOX
 doc.setFillColor(248,250,252);
 doc.roundedRect(20,y,80,20,4,4,"F");
 
@@ -2352,70 +2383,54 @@ doc.setFontSize(12);
 doc.setTextColor(0);
 doc.text(eur(profit), 115, y+15);
 
-// ================= FOOTER PAGE 1 =================
-const addFooter = () => {
-  doc.setDrawColor(220);
-  doc.line(20, 270, 190, 270);
-  doc.setFontSize(8);
-  doc.setTextColor(120);
-  doc.text("RendimentoBB ©", 20, 278);
-  doc.text("Confidential", 160, 278);
-};
-
 addFooter();
 
-// ================= PAGE 2 – FULL CHART =================
+// ================= PAGE 2 – CHART =================
 doc.addPage();
 
-// HEADER LIGHT
+// titolo
 doc.setFontSize(16);
 doc.setTextColor(0);
 doc.text("Performance Forecast", 20, 25);
 
-// CHART
+// CHART FIX DEFINITIVO
 const chartCanvas = document.getElementById("roiChart");
 
 if(chartCanvas){
-
   try{
 
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise(r => setTimeout(r, 600));
 
     const imgData = chartCanvas.toDataURL("image/png", 1.0);
 
     const pageWidth = 210;
     const margin = 20;
-
     const usableWidth = pageWidth - (margin * 2);
 
-    const canvasWidth = chartCanvas.width;
-    const canvasHeight = chartCanvas.height;
+    const ratio = chartCanvas.height / chartCanvas.width;
 
-    const ratio = canvasHeight / canvasWidth;
+    const width = usableWidth;
+    const height = width * ratio;
 
-    const finalWidth = usableWidth;
-    const finalHeight = finalWidth * ratio;
+    const startY = 40;
 
-    // CENTRATO PERFETTO
-    doc.addImage(
-      imgData,
-      "PNG",
-      margin,
-      40,
-      finalWidth,
-      finalHeight
-    );
+    // BOX elegante
+    doc.setDrawColor(220);
+    doc.roundedRect(15, startY-5, 180, height + 10, 6,6);
+
+    // IMG
+    doc.addImage(imgData, "PNG", margin, startY, width, height);
 
   }catch(e){
     console.warn("Chart error:", e);
   }
 }
 
-// FOOTER PAGE 2
 addFooter();
 
 // ================= PAGE 3 – SCORE =================
 doc.addPage();
+
 y = 40;
 
 doc.setFontSize(16);
@@ -2425,7 +2440,7 @@ y += 20;
 
 let score = Math.min(100, Math.round(roi * 3));
 
-doc.setFontSize(40);
+doc.setFontSize(42);
 doc.text(score + "/100", 20, y);
 
 y += 20;
@@ -2455,7 +2470,6 @@ const strategy = score > 70
 
 doc.text(strategy, 20, y, { maxWidth: 170 });
 
-// FOOTER PAGE 3
 addFooter();
 
 // ================= SAVE =================
