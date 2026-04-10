@@ -2219,7 +2219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// ================= EXECUTIVE PDF – BANK LEVEL =================
+// ================= EXECUTIVE PDF – GOLDMAN LEVEL =================
 
 window.generateExecutivePDF = async function(){
 
@@ -2288,10 +2288,7 @@ doc.text("ROI", 25, y+10);
 doc.setFontSize(24);
 doc.text(pct(roi), 25, y+22);
 
-let badge = "RISKY";
-if(roi > 12) badge = "HIGH PERFORMANCE";
-else if(roi > 6) badge = "BALANCED";
-
+let badge = roi > 12 ? "HIGH PERFORMANCE" : roi > 6 ? "BALANCED" : "RISKY";
 doc.setFontSize(10);
 doc.text(badge, 140, y+22);
 
@@ -2306,32 +2303,15 @@ y += 8;
 
 doc.setFontSize(10);
 
-let summary = "Risky investment with low return.";
-if(roi > 12) summary = "High-performing investment above market average.";
-else if(roi > 6) summary = "Balanced investment with solid ROI.";
+let summary = roi > 12
+? "High-performing investment above market average."
+: roi > 6
+? "Balanced investment with solid ROI."
+: "Risky investment with low return.";
 
 doc.text(summary, 20, y, { maxWidth: 170 });
 
 y += 14;
-
-// ================= AI INSIGHT =================
-doc.setFillColor(248,250,252);
-doc.roundedRect(20,y,170,28,4,4,"F");
-
-doc.setFontSize(10);
-
-let insight = "Hidden risks detected.";
-if(roi > 12){
-  insight = "Strong investment with high profitability potential.";
-}else if(roi > 6){
-  insight = "Moderate investment dependent on occupancy.";
-}else{
-  insight = "High risk: ROI may not cover costs.";
-}
-
-doc.text(insight, 25, y+12, { maxWidth: 160 });
-
-y += 40;
 
 // ================= STRUCTURE =================
 doc.setFontSize(13);
@@ -2347,7 +2327,7 @@ doc.text("Loan: " + eur(loan), 20, y); y+=6;
 const ltv = price > 0 ? ((loan/price)*100).toFixed(0) : 0;
 doc.text("LTV: " + ltv + "%", 20, y);
 
-y += 14;
+y += 20;
 
 // ================= KPI =================
 doc.setFillColor(248,250,252);
@@ -2372,101 +2352,94 @@ doc.setFontSize(12);
 doc.setTextColor(0);
 doc.text(eur(profit), 115, y+15);
 
-y += 30;
+// ================= FOOTER PAGE 1 =================
+const addFooter = () => {
+  doc.setDrawColor(220);
+  doc.line(20, 270, 190, 270);
+  doc.setFontSize(8);
+  doc.setTextColor(120);
+  doc.text("RendimentoBB ©", 20, 278);
+  doc.text("Confidential", 160, 278);
+};
 
-// ================= MARKET =================
-const marketAvg = 28500;
-const diff = revenue - marketAvg;
+addFooter();
 
-doc.setFontSize(12);
-doc.text("Market Comparison", 20, y);
+// ================= PAGE 2 – FULL CHART =================
+doc.addPage();
 
-y += 8;
+// HEADER LIGHT
+doc.setFontSize(16);
+doc.setTextColor(0);
+doc.text("Performance Forecast", 20, 25);
 
-doc.setFontSize(10);
-doc.text("Your revenue: " + eur(revenue), 20, y); y+=6;
-doc.text("Market average: " + eur(marketAvg), 20, y); y+=6;
-
-const performance = diff >= 0 ? "Above market" : "Below market";
-doc.text("Performance: " + performance, 20, y);
-
-y += 15;
-
-// ================= CHART BANK STYLE FIX REAL =================
+// CHART
 const chartCanvas = document.getElementById("roiChart");
 
 if(chartCanvas){
 
   try{
 
-    await new Promise(r => setTimeout(r, 500)); // assicura render completo
+    await new Promise(r => setTimeout(r, 500));
 
     const imgData = chartCanvas.toDataURL("image/png", 1.0);
 
-    // dimensioni REALI canvas
+    const pageWidth = 210;
+    const margin = 20;
+
+    const usableWidth = pageWidth - (margin * 2);
+
     const canvasWidth = chartCanvas.width;
     const canvasHeight = chartCanvas.height;
 
-    // proporzione corretta
     const ratio = canvasHeight / canvasWidth;
 
-    const pdfWidth = 170;
-    const pdfHeight = pdfWidth * ratio;
+    const finalWidth = usableWidth;
+    const finalHeight = finalWidth * ratio;
 
-    // titolo
-    doc.setFontSize(12);
-    doc.text("Performance Forecast", 20, y);
-
-    y += 8;
-
-    // BOX professionale
-    doc.setFillColor(255,255,255);
-    doc.setDrawColor(220);
-    doc.roundedRect(15, y-5, 180, pdfHeight + 10, 6,6,"FD");
-
-    // immagine PERFETTA (NO TAGLIO)
+    // CENTRATO PERFETTO
     doc.addImage(
       imgData,
       "PNG",
-      20,
-      y,
-      pdfWidth,
-      pdfHeight
+      margin,
+      40,
+      finalWidth,
+      finalHeight
     );
-
-    y += pdfHeight + 20;
 
   }catch(e){
     console.warn("Chart error:", e);
   }
 }
-// ================= PAGE 2 =================
-doc.addPage();
-y = 30;
 
-// ================= SCORE =================
-doc.setFontSize(14);
+// FOOTER PAGE 2
+addFooter();
+
+// ================= PAGE 3 – SCORE =================
+doc.addPage();
+y = 40;
+
+doc.setFontSize(16);
 doc.text("Investment Score", 20, y);
 
-y += 12;
+y += 20;
 
 let score = Math.min(100, Math.round(roi * 3));
 
-doc.setFontSize(36);
+doc.setFontSize(40);
 doc.text(score + "/100", 20, y);
 
-// ================= RATING =================
 y += 20;
 
 doc.setFontSize(12);
 
-let rating = "High Risk";
-if(score > 75) rating = "Excellent Investment";
-else if(score > 55) rating = "Moderate Opportunity";
+let rating = score > 75
+? "Excellent Investment"
+: score > 55
+? "Moderate Opportunity"
+: "High Risk";
 
 doc.text("Rating: " + rating, 20, y);
 
-// ================= STRATEGY =================
 y += 15;
 
 doc.setFontSize(12);
@@ -2482,20 +2455,7 @@ const strategy = score > 70
 
 doc.text(strategy, 20, y, { maxWidth: 170 });
 
-// ================= FOOTER =================
-const addFooter = () => {
-  doc.setDrawColor(220);
-  doc.line(20, 270, 190, 270);
-
-  doc.setFontSize(8);
-  doc.setTextColor(120);
-
-  doc.text("RendimentoBB ©", 20, 278);
-  doc.text("Confidential", 160, 278);
-};
-
-addFooter();
-doc.setPage(1);
+// FOOTER PAGE 3
 addFooter();
 
 // ================= SAVE =================
