@@ -1786,5 +1786,39 @@ window.t = window.t || ((it)=>it);
 
  </script>
 
+ 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const plan = (window.currentPlan || "").toLowerCase();
+
+  const investor = document.querySelector(".plan-investor .plan-extra");
+  const pro = document.querySelector(".plan-pro .plan-extra");
+  const yearly = document.querySelector(".plan-yearly .plan-extra");
+
+  if(investor){
+    investor.innerHTML =
+      plan === "investor"
+        ? "✔ Dashboard limitata attiva"
+        : "✔ Dashboard limitata";
+  }
+
+  if(pro){
+    pro.innerHTML =
+      (plan === "pro" || plan === "pro_yearly")
+        ? "🔥 Accesso completo attivo"
+        : "✔ Accesso completo";
+  }
+
+  if(yearly){
+    yearly.innerHTML =
+      plan === "pro_yearly"
+        ? "🔥 Piano attivo"
+        : "✔ Accesso completo 12 mesi";
+  }
+
+});
+</script>
+ 
 </body>
 </html>
