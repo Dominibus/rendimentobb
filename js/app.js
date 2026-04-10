@@ -401,9 +401,13 @@ window.triggerUpgradeFlow = function(context = {}){
 
   // ================= NOT LOGGED =================
   if(access.isGuest){
-    showRegisterPopup();
-    return;
-  }
+
+  console.log("🔥 GUEST → mostro popup FORZATO");
+
+  showInvestorUpsell(); // 👈 TEMPORANEO TEST
+
+  return;
+}
 
   // ================= FREE USER =================
   if(access.isFree){
@@ -442,7 +446,7 @@ function showInvestorUpsell(roi = 0){
     display:flex;
     align-items:center;
     justify-content:center;
-    z-index:9999;
+    z-index:999999;
   `;
 
   const isEN = window.currentLang === "en";
@@ -484,6 +488,7 @@ function showInvestorUpsell(roi = 0){
     </div>
   `;
 
+  document.body.style.overflow = "hidden";
   document.body.appendChild(modal);
 }
 
