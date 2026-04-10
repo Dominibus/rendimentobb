@@ -2036,6 +2036,12 @@ if(revenueHome){
       }
     },200);
 
+    if(window.currentPlan === "investor"){
+  setTimeout(()=>{
+    showProUpgradeModal();
+  }, 4000);
+}
+
     // ================= EVENT GLOBAL =================
     window.currentRevenue = result.revenue || gross || 0;
 
