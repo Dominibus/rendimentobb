@@ -10601,3 +10601,16 @@ body.is-admin [class*="overlay"]{
   border-radius:20px;
   font-weight:600;
 }
+
+/* =====================================
+🔥 HERO BUTTON FIX (RIDUZIONE)
+===================================== */
+
+.hero-market .btn{
+  max-width: 420px;   /* limita larghezza */
+  width: auto;        /* evita full width */
+  padding: 14px 28px; /* meno alto */
+  font-size: 15px;    /* più elegante */
+  margin: 20px auto 0;
+  display: inline-block;
+}
