@@ -277,6 +277,56 @@ const isPaid = isInvestor || isPro;
 
     el.innerHTML = html;
 
+    // =====================
+// 📱 MOBILE MENU FIX (DINAMICO)
+// =====================
+
+const mobileNav = document.getElementById("rb-mobile-nav");
+
+if(mobileNav){
+
+  let mobileHTML = `
+    <a href="/tool/">Simulatore</a>
+    <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+    <a href="/mutui/">Mutui</a>
+    <a href="/immobili/">Immobili</a>
+    <a href="/academy/">Academy</a>
+  `;
+
+  if(user){
+
+    mobileHTML += `
+      <hr>
+      <a href="/dashboard/">Dashboard</a>
+    `;
+
+    if(isAdmin){
+      mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
+    }
+
+    mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
+
+  } else {
+
+    mobileHTML += `
+      <hr>
+      <a href="/login/">Login</a>
+    `;
+  }
+
+  mobileNav.innerHTML = mobileHTML;
+
+  const mobileLogout = document.getElementById("mobile-logout");
+
+  if(mobileLogout){
+    mobileLogout.onclick = async (e)=>{
+      e.preventDefault();
+      await signOut(auth);
+      location.reload();
+    };
+  }
+}
+
     // 🔥 INTERCEPT CLICK DASHBOARD
     if(!isPaid){
       document.getElementById("dashboard-link").onclick = (e)=>{
@@ -305,45 +355,6 @@ const isPaid = isInvestor || isPro;
 
   }
 
-}
-
-// =====================
-// 📱 MOBILE MENU DYNAMIC
-// =====================
-
-const mobileNav = document.getElementById("rb-mobile-nav");
-
-if(mobileNav){
-
-  let mobileHTML = `
-    <a href="/tool/">Simulatore</a>
-    <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-    <a href="/mutui/">Mutui</a>
-    <a href="/immobili/">Immobili</a>
-    <a href="/academy/">Academy</a>
-  `;
-
-  if(auth.currentUser){
-  mobileHTML += `<a href="/dashboard/">Dashboard</a>`;
-  mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
-}
-
-  if(isAdmin){
-    mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
-  }
-
-  mobileNav.innerHTML = mobileHTML;
-
-  // 🔥 LOGOUT MOBILE
-const mobileLogout = document.getElementById("mobile-logout");
-
-if(mobileLogout){
-  mobileLogout.onclick = async (e)=>{
-    e.preventDefault();
-    await signOut(auth);
-    location.reload();
-  };
-}
 }
 
 // 🔥 EXPORT GLOBALE (CRITICO)
