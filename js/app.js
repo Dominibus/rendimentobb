@@ -44,7 +44,7 @@ window.getUserAccess = function(){
     window.userRole === "admin";
 
 const isPro =
-  ["pro","pro_yearly","investor"].includes(window.currentPlan);
+  ["pro","pro_yearly","investor"].includes(plan);
 
   const isInvestor =
     plan === "investor";
@@ -69,16 +69,6 @@ const isPro =
 };
 
 // ================= SAFE GLOBAL EARLY FIX =================
-
-window.safeNumber = function(value){
-  if(value === null || value === undefined) return 0;
-  const num = Number(value);
-  return isNaN(num) ? 0 : num;
-};
-
-window.safePercent = function(value){
-  return window.safeNumber(value).toFixed(1);
-};
 
 function getLeadScore(result){
 
@@ -159,6 +149,10 @@ if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 // ================= 🔒 HOME LOCK SYSTEM =================
 
 const access = window.getUserAccess();
+
+window.isProUser = function(){
+  return window.getUserAccess().isPro;
+};  
 
 // 🔓 PRO / INVESTOR → vedono tutto
 if(access.canSeeFullAnalysis || access.isInvestor){
@@ -293,12 +287,14 @@ window.isAdmin = function(){
 // 🔥 PREMIUM USER (ADMIN + PRO)
 window.isPremiumUser = function(){
 
+  const plan = window.currentPlan || "free"; // 🔥 AGGIUNGI QUESTO
+
   const isAdmin =
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
-const isPro =
-  ["pro","pro_yearly","investor"].includes(window.currentPlan);
+  const isPro =
+    ["pro","pro_yearly","investor"].includes(plan);
 
   return isAdmin || isPro;
 };
@@ -594,6 +590,67 @@ function unlockUI(){
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
+  });
+
+}
+
+function applyAccessControl(){
+
+  const access = window.getUserAccess();
+
+  // 🔓 PRO / ADMIN / INVESTOR
+  if(access.canSeeFullAnalysis || access.isInvestor){
+
+    console.log("🔓 FULL ACCESS");
+
+    unlockUI();
+    unlockProUI();
+
+    return;
+  }
+
+  // 🔒 FREE USER
+  console.log("🔒 APPLY LOCK");
+
+  document.querySelectorAll(`
+    #revenue-forecast,
+    #occupancy-sensitivity,
+    #break-even-kpi,
+    #investment-score,
+    #investment-ranking,
+    #investment-risk-meter,
+    #investment-verdict,
+    #ai-insights
+  `).forEach(el=>{
+
+    if(!el) return;
+
+    el.classList.add("pro-blur");
+
+    if(!el.querySelector(".paywall-mini")){
+
+      const overlay = document.createElement("div");
+
+      overlay.className = "paywall-mini";
+
+      overlay.innerHTML = `
+        <div style="
+          margin-top:10px;
+          padding:10px;
+          font-size:13px;
+          text-align:center;
+          color:#64748b;
+        ">
+          🔒 ${t(
+            "Sblocca analisi avanzata",
+            "Unlock advanced analysis"
+          )}
+        </div>
+      `;
+
+      el.appendChild(overlay);
+    }
+
   });
 
 }
@@ -1128,6 +1185,8 @@ ${message}
 `;
 
 }
+
+applyAccessControl();
 
 // ================= SMART PAYWALL (SOFT VERSION) =================
 
@@ -1896,97 +1955,6 @@ if(revenueHome){
   revenueHome.innerText = formatCurrency(gross);
 }
 
-// ================= KPI =================
-
-const access = window.getUserAccess();
-
-// 🔥 HARD STOP LOCK (ANTI BUG DEFINITIVO)
-if(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "pro_yearly"
-){
-  console.log("🟢 HARD BLOCK LOCK → PRO USER");
-
-  unlockUI();
-  unlockProUI();
-
-  return;
-}    
-
-// 🔓 SE PRO → STOP TOTALE (NO LOCK MAI)
-if(access.canSeeFullAnalysis){
-
-  console.log("🔓 FULL ACCESS → FORCE UNLOCK");
-
-  if(typeof renderExecutiveKPI === "function"){
-    renderExecutiveKPI(result);
-  }
-
-  unlockUI();
-  unlockProUI();
-
-  window.proUnlocked = true;
-
-  return;
-}
-
-// ================= LOCK SYSTEM (FIX DEFINITIVO) =================
-
-// 🔥 USA QUELLA SOPRA (NON RIDICHIARARE)
-
-// 🔓 PRO / ADMIN / INVESTOR → STOP TOTALE
-if(
-  access.canSeeFullAnalysis ||
-  access.isInvestor
-){
-  console.log("🟢 FULL ACCESS → NO LOCK");
-  return;
-}
-
-// 🔒 SOLO FREE → LOCK
-console.log("🔒 FREE MODE → APPLY LOCK");
-
-document.querySelectorAll(`
-  #revenue-forecast,
-  #occupancy-sensitivity,
-  #break-even-kpi,
-  #investment-score,
-  #investment-ranking,
-  #investment-risk-meter,
-  #investment-verdict,
-  #ai-insights
-`).forEach(el=>{
-
-  if(!el) return;
-
-  el.classList.add("pro-blur");
-
-  if(!el.querySelector(".paywall-mini")){
-
-    const overlay = document.createElement("div");
-
-    overlay.className = "paywall-mini";
-
-    overlay.innerHTML = `
-      <div style="
-        margin-top:10px;
-        padding:10px;
-        font-size:13px;
-        text-align:center;
-        color:#64748b;
-      ">
-        🔒 ${t(
-          "Sblocca analisi avanzata",
-          "Unlock advanced analysis"
-        )}
-      </div>
-    `;
-
-    el.appendChild(overlay);
-  }
-
-});
     // ================= CHART =================
     setTimeout(()=>{
       if(typeof renderChart === "function"){
