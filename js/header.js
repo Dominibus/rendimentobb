@@ -115,8 +115,13 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeaderInteractions();
 
   onAuthStateChanged(auth, (user) => {
-    waitPlanAndRender(user);
-  });
+  waitPlanAndRender(user);
+
+  // 🔥 FORCE UPDATE MENU MOBILE
+  setTimeout(()=>{
+    renderUser(auth.currentUser);
+  }, 200);
+});
 
 });
 
@@ -318,15 +323,27 @@ if(mobileNav){
     <a href="/academy/">Academy</a>
   `;
 
-  if(user){
-    mobileHTML += `<a href="/dashboard/">Dashboard</a>`;
-  }
+  if(auth.currentUser){
+  mobileHTML += `<a href="/dashboard/">Dashboard</a>`;
+  mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
+}
 
   if(isAdmin){
     mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
   }
 
   mobileNav.innerHTML = mobileHTML;
+
+  // 🔥 LOGOUT MOBILE
+const mobileLogout = document.getElementById("mobile-logout");
+
+if(mobileLogout){
+  mobileLogout.onclick = async (e)=>{
+    e.preventDefault();
+    await signOut(auth);
+    location.reload();
+  };
+}
 }
 
 // 🔥 EXPORT GLOBALE (CRITICO)
