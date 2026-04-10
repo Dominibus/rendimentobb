@@ -1225,25 +1225,12 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <script type="module" src="/js/header.js"></script>
 <script src="/js/ui-system.js" defer></script> 
 <script src="/js/footer.js" defer></script>
+
+<!-- 🔥 FIREBASE INIT (UNICO) -->
 <script type="module" src="/js/firebase-init.js"></script>
+
 <script src="/js/market-data.js"></script> 
-<script type="module" src="/js/app.js"></script> 
-
-<!-- 🔹 FIREBASE (MODULE) -->
-<script type="module">
-
-import { app } from "/js/firebase-init.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-const auth = getAuth();
-const db = getFirestore();
-
-window.auth = auth;
-window.db = db;
-window.signOut = signOut;
-
-</script>
+<script type="module" src="/js/app.js"></script>
 
 
 <!-- 🔹 SCRIPT PRINCIPALE -->
