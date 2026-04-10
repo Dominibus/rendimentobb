@@ -1391,6 +1391,77 @@ ${t(
 
 }
 
+function showProUpgradeModal(){
+
+  const modal = document.createElement("div");
+
+  modal.style.position = "fixed";
+  modal.style.top = "0";
+  modal.style.left = "0";
+  modal.style.width = "100%";
+  modal.style.height = "100%";
+  modal.style.background = "rgba(0,0,0,0.6)";
+  modal.style.display = "flex";
+  modal.style.alignItems = "center";
+  modal.style.justifyContent = "center";
+  modal.style.zIndex = "9999";
+
+  modal.innerHTML = `
+    <div style="
+      background:white;
+      padding:30px;
+      border-radius:16px;
+      max-width:420px;
+      width:90%;
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,0.2);
+    ">
+
+      <h2 style="margin-bottom:10px;">
+        🚀 Sblocca il Report Completo
+      </h2>
+
+      <p style="font-size:14px;color:#64748b;margin-bottom:20px;">
+        Stai analizzando un investimento importante.<br>
+        Senza il report completo potresti prendere una decisione sbagliata.
+      </p>
+
+      <ul style="text-align:left;font-size:14px;margin-bottom:20px;">
+        <li>✔ Analisi mutuo reale</li>
+        <li>✔ Scenario rischio completo</li>
+        <li>✔ Cashflow 5 anni</li>
+        <li>✔ Report PDF professionale</li>
+      </ul>
+
+      <button onclick="startPlanPurchase('pro')" style="
+        background:#10b981;
+        color:white;
+        border:none;
+        padding:12px 20px;
+        border-radius:999px;
+        font-weight:600;
+        width:100%;
+        margin-bottom:10px;
+        cursor:pointer;
+      ">
+        🔥 Sblocca PRO – 29€
+      </button>
+
+      <button onclick="this.closest('div').parentNode.remove()" style="
+        background:transparent;
+        border:none;
+        color:#64748b;
+        cursor:pointer;
+      ">
+        Continua senza
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
 // ================= PDF BUTTON VISIBILITY =================
 
 function updatePDFButton(){
@@ -2228,7 +2299,7 @@ const tSafe = (it,en)=> lang==="it"?it:en;
 
 // 🔒 CHECK
 if(!hasPlan("pro")){
-  alert("🔒 PRO required");
+  showProUpgradeModal();
   return;
 }
 
