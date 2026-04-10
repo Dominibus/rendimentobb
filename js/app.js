@@ -172,7 +172,7 @@ lockIds.forEach(id => {
 
   if(!el) return;
 
-  el.innerText = "🔒 Pro";
+  el.innerText = t("🔒 Pro","🔒 Pro");
   el.style.opacity = "0.6";
 });  
 
@@ -188,7 +188,7 @@ const rateB = parseFloat(document.getElementById("rateB").value);
 const rateC = parseFloat(document.getElementById("rateC").value);
 
 if(!amount || !years){
-alert("Inserisci importo e durata");
+alert(t("Inserisci importo e durata","Enter amount and duration"));
 return;
 }
 
@@ -752,47 +752,53 @@ diffPerc = diffPerc.toFixed(1);
   // 🔥 RESET IMPORTANTE (evita residui layout vecchi)
   container.innerHTML = "";
 
-  // 🔥 KPI 1
-  const kpi1 = `
-    <div class="kpi-box">
-      <div class="kpi-label">📊 Your revenue</div>
-      <div class="kpi-value">
-        ${formatCurrency(revenue)}
-      </div>
+  // 🔥 KPI 1-2-3
+const kpi1 = `
+  <div class="kpi-box">
+    <div class="kpi-label">
+      ${t("📊 Ricavi","📊 Your revenue")}
     </div>
-  `;
-
-  // 🔥 KPI 2
-  const kpi2 = `
-    <div class="kpi-box">
-      <div class="kpi-label">🏙 Market average</div>
-      <div class="kpi-value">
-        ${formatCurrency(marketAvg)}
-      </div>
+    <div class="kpi-value">
+      ${formatCurrency(revenue)}
     </div>
-  `;
+  </div>
+`;
 
-  // 🔥 KPI 3 (PERFORMANCE)
-  const kpi3 = `
-    <div class="kpi-box" style="
-      background:${bgColor};
-      border:1px solid ${borderCol};
+const kpi2 = `
+  <div class="kpi-box">
+    <div class="kpi-label">
+      ${t("🏙 Media mercato","🏙 Market average")}
+    </div>
+    <div class="kpi-value">
+      ${formatCurrency(marketAvg)}
+    </div>
+  </div>
+`;
+
+const kpi3 = `
+  <div class="kpi-box" style="
+    background:${bgColor};
+    border:1px solid ${borderCol};
+  ">
+    <div class="kpi-label">
+      ${t("⚡ Performance","⚡ Performance")}
+    </div>
+
+    <div class="kpi-value" style="color:${diffColor}">
+      ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
+    </div>
+
+    <div style="
+      font-size:12px;
+      margin-top:4px;
+      color:#64748b;
     ">
-      <div class="kpi-label">⚡ Performance</div>
-
-      <div class="kpi-value" style="color:${diffColor}">
-        ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
-      </div>
-
-      <div style="
-        font-size:12px;
-        margin-top:4px;
-        color:#64748b;
-      ">
-        ${isPositive ? "Above market" : "Below market"}
-      </div>
+      ${isPositive
+        ? t("Sopra la media","Above market")
+        : t("Sotto la media","Below market")}
     </div>
-  `;
+  </div>
+`;
 
   // 🔥 INSERT DIRETTO (NO WRAPPER → FIX DEFINITIVO)
   container.insertAdjacentHTML("beforeend", kpi1 + kpi2 + kpi3);
@@ -859,21 +865,21 @@ if(!container) return;
 container.innerHTML = `
 
 <div class="kpi-box">
-  <div class="kpi-label">Low</div>
+  <div class="kpi-label">${t("Scenario basso","Low")}</div>
   <div class="kpi-value">
     ${formatCurrency(baseRevenue * 0.8)}
   </div>
 </div>
 
 <div class="kpi-box">
-  <div class="kpi-label">Base</div>
+  <div class="kpi-label">${t("Scenario base","Base")}</div>
   <div class="kpi-value">
     ${formatCurrency(baseRevenue)}
   </div>
 </div>
 
 <div class="kpi-box">
-  <div class="kpi-label">High</div>
+  <div class="kpi-label">${t("Scenario alto","High")}</div>
   <div class="kpi-value">
     ${formatCurrency(baseRevenue * 1.2)}
   </div>
@@ -899,7 +905,7 @@ container.innerHTML = `
 </div>
 
 <div class="kpi-box">
-  <div class="kpi-label">Base</div>
+  <div class="kpi-label">${t("Base","Base")}</div>
   <div class="kpi-value">10.5%</div>
 </div>
 
@@ -1414,6 +1420,8 @@ function showProUpgradeModal(){
   modal.style.justifyContent = "center";
   modal.style.zIndex = "9999";
 
+  const isEN = window.currentLang === "en";
+
   modal.innerHTML = `
     <div style="
       background:white;
@@ -1425,20 +1433,48 @@ function showProUpgradeModal(){
       box-shadow:0 20px 60px rgba(0,0,0,0.2);
     ">
 
-      <h2 style="margin-bottom:10px;">
-        🚀 Sblocca il Report Completo
+      <h2 style="margin-bottom:10px;"
+        data-it="🚀 Sblocca il Report Completo"
+        data-en="🚀 Unlock Full Report">
+        ${isEN ? "🚀 Unlock Full Report" : "🚀 Sblocca il Report Completo"}
       </h2>
 
-      <p style="font-size:14px;color:#64748b;margin-bottom:20px;">
-        Stai analizzando un investimento importante.<br>
-        Senza il report completo potresti prendere una decisione sbagliata.
+      <p style="font-size:14px;color:#64748b;margin-bottom:20px;"
+        data-it="Stai analizzando un investimento importante.<br>Senza il report completo potresti prendere una decisione sbagliata."
+        data-en="You are analyzing an important investment.<br>Without full data you may make a wrong decision.">
+        ${
+          isEN
+          ? "You are analyzing an important investment.<br>Without full data you may make a wrong decision."
+          : "Stai analizzando un investimento importante.<br>Senza il report completo potresti prendere una decisione sbagliata."
+        }
       </p>
 
       <ul style="text-align:left;font-size:14px;margin-bottom:20px;">
-        <li>✔ Analisi mutuo reale</li>
-        <li>✔ Scenario rischio completo</li>
-        <li>✔ Cashflow 5 anni</li>
-        <li>✔ Report PDF professionale</li>
+
+        <li
+          data-it="✔ Analisi mutuo reale"
+          data-en="✔ Real mortgage analysis">
+          ${isEN ? "✔ Real mortgage analysis" : "✔ Analisi mutuo reale"}
+        </li>
+
+        <li
+          data-it="✔ Scenario rischio completo"
+          data-en="✔ Full risk scenario">
+          ${isEN ? "✔ Full risk scenario" : "✔ Scenario rischio completo"}
+        </li>
+
+        <li
+          data-it="✔ Cashflow 5 anni"
+          data-en="✔ 5-year cashflow">
+          ${isEN ? "✔ 5-year cashflow" : "✔ Cashflow 5 anni"}
+        </li>
+
+        <li
+          data-it="✔ Report PDF professionale"
+          data-en="✔ Professional PDF report">
+          ${isEN ? "✔ Professional PDF report" : "✔ Report PDF professionale"}
+        </li>
+
       </ul>
 
       <button onclick="startPlanPurchase('pro')" style="
@@ -1451,8 +1487,10 @@ function showProUpgradeModal(){
         width:100%;
         margin-bottom:10px;
         cursor:pointer;
-      ">
-        🔥 Sblocca PRO – 29€
+      "
+        data-it="🔥 Sblocca PRO – 29€"
+        data-en="🔥 Unlock PRO – €29">
+        ${isEN ? "🔥 Unlock PRO – €29" : "🔥 Sblocca PRO – 29€"}
       </button>
 
       <button onclick="this.closest('div').parentNode.remove()" style="
@@ -1460,8 +1498,10 @@ function showProUpgradeModal(){
         border:none;
         color:#64748b;
         cursor:pointer;
-      ">
-        Continua senza
+      "
+        data-it="Continua senza"
+        data-en="Continue without">
+        ${isEN ? "Continue without" : "Continua senza"}
       </button>
 
     </div>
@@ -2194,20 +2234,29 @@ function renderChart(net){
 
       plugins:{
         legend:{
-          display:true,
-          position:"bottom"
-        },
+  display:true,
+  position:"bottom",
+  labels:{
+    font:{
+      size:12
+    },
+    color:"#334155"
+  }
+},
         tooltip:{
-          callbacks:{
-            label:(ctx)=>formatCurrency(ctx.raw)
-          }
-        }
-      },
+  callbacks:{
+    label:(ctx)=>{
+      return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
+    }
+  }
+}
 
       scales:{
         y:{
           ticks:{
-            callback:(v)=>formatCurrency(v)
+            callback:(v)=>{
+  return formatCurrency(v);
+}
           }
         }
       }
@@ -2395,7 +2444,11 @@ if(logoBase64){
 // TITLE
 doc.setTextColor(255);
 doc.setFontSize(12);
-doc.text("Investment Intelligence Report", 60, 18);
+doc.text(
+  tSafe("Report di investimento","Investment Intelligence Report"),
+  60,
+  18
+);
 
 // KPI HERO
 y = 45;
@@ -2419,7 +2472,7 @@ y += 40;
 // SUMMARY
 doc.setTextColor(0);
 doc.setFontSize(13);
-doc.text("Executive Summary", 20, y);
+doc.text(tSafe("Sintesi investimento","Executive Summary"), 20, y);
 
 y += 8;
 
@@ -2437,7 +2490,7 @@ y += 14;
 
 // STRUCTURE
 doc.setFontSize(13);
-doc.text("Investment Structure", 20, y);
+doc.text(tSafe("Struttura investimento","Investment Structure"), 20, y);
 
 y += 8;
 
@@ -2664,7 +2717,7 @@ window.buyPlan = async function(plan){
   const user = window.currentUser;
 
   if(!user){
-    alert("Devi effettuare il login");
+    alert(t("Devi effettuare il login","You must login"));
     window.location.href = "/login/";
     return;
   }
