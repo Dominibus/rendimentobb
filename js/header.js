@@ -222,8 +222,7 @@ function initHeaderInteractions(){
 
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 
-  initProModal();
-
+ 
   // 🔥 SYNC IMMEDIATO QUANDO CAMBIA PIANO
 window.addEventListener("rb_plan_ready", ()=>{
   renderUser(auth.currentUser || null);
@@ -412,3 +411,34 @@ function renderUser(user){
 
 // 🔥 EXPORT GLOBALE
 window.renderUser = renderUser;
+
+/* =====================
+🔒 MODAL PRO (FIX DEFINITIVO)
+===================== */
+
+window.openProModal = function(){
+  const modal = document.getElementById("rb-pro-modal");
+  if(modal){
+    modal.classList.add("open");
+  }
+};
+
+window.closeProModal = function(){
+  const modal = document.getElementById("rb-pro-modal");
+  if(modal){
+    modal.classList.remove("open");
+  }
+};
+
+// INIT BUTTONS (dopo che il DOM è pronto)
+document.addEventListener("click", (e)=>{
+
+  if(e.target && e.target.id === "rb-close-modal"){
+    closeProModal();
+  }
+
+  if(e.target && e.target.id === "rb-upgrade-btn"){
+    window.location.href = "/pricing/";
+  }
+
+});
