@@ -43,10 +43,8 @@ window.getUserAccess = function(){
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
- const isPro =
-  plan === "pro" ||
-  plan === "pro_yearly" ||
-  plan === "investor"; // 🔥 allinea tutto
+const isPro =
+  ["pro","pro_yearly","investor"].includes(window.currentPlan);
 
   const isInvestor =
     plan === "investor";
@@ -299,10 +297,8 @@ window.isPremiumUser = function(){
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+const isPro =
+  ["pro","pro_yearly","investor"].includes(window.currentPlan);
 
   return isAdmin || isPro;
 };
@@ -2313,12 +2309,20 @@ if(!window.lastAnalysisData){
   return;
 }
 
+if(!window.jspdf){
+  alert("PDF engine non caricato");
+  return;
+}
+
 const { jsPDF } = window.jspdf;
 const data = window.lastAnalysisData;
 
 // ================= UTILS =================
 const clean = (v)=>isFinite(v)?v:0;
-const eur = (v)=>"€"+clean(v).toLocaleString();
+const eur = (v)=> {
+  const n = Number(clean(v));
+  return "€" + (isFinite(n) ? n.toLocaleString() : "0");
+};
 const pct = (v)=> {
   const n = Number(clean(v));
   return isFinite(n) ? n.toFixed(1) + "%" : "0%";
