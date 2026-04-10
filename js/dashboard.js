@@ -333,7 +333,7 @@ async function loadDashboard(){
     return;
   }
 
-  if(isInvestor()){
+  if(window.currentPlan === "investor"){
   console.log("👀 INVESTOR → preview mode");
 
   lockInvestorPreview();
@@ -1135,7 +1135,7 @@ if(!isAllowed){
   window.currentPlan === "pro" ||
   window.currentPlan === "pro_yearly";
 
-if(isInvestor){
+if(window.currentPlan === "investor"){
   console.log("👀 INVESTOR MODE");
 }
 
@@ -1145,7 +1145,7 @@ if(isInvestor){
     await loadDashboard();
 
 // 🔥 SOLO PRO SBLOCCA
-if(isPro){
+if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
   console.log("🔥 PRO USER → UNLOCK HARD");
   unlockProContent();
 }else{
