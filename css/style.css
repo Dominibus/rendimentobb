@@ -10377,3 +10377,9 @@ body.is-admin [class*="overlay"]{
   background:#10b981;
   color:white;
 }
+
+#rb-mobile-nav a:last-child{
+  background:#10b981;
+  color:white;
+  font-weight:600;
+}
