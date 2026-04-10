@@ -391,6 +391,102 @@ if(window.getUserAccess().canSeeFullAnalysis){
   return true;
 }
 
+// ================= FUNNEL POPUP ENGINE =================
+
+window.triggerUpgradeFlow = function(context = {}){
+
+  const access = window.getUserAccess();
+
+  const { action = "generic", roi = 0 } = context;
+
+  // ================= NOT LOGGED =================
+  if(access.isGuest){
+    showRegisterPopup();
+    return;
+  }
+
+  // ================= FREE USER =================
+  if(access.isFree){
+
+    console.log("🔥 FREE → push INVESTOR");
+
+    showInvestorUpsell(roi);
+    return;
+  }
+
+  // ================= INVESTOR =================
+  if(access.isInvestor){
+
+    console.log("🔥 INVESTOR → push PRO");
+
+    showProUpgradeModal();
+    return;
+  }
+
+  // ================= PRO =================
+  console.log("✅ PRO → nessun popup");
+};
+
+
+// ================= INVESTOR POPUP =================
+
+function showInvestorUpsell(roi = 0){
+
+  const modal = document.createElement("div");
+
+  modal.style = `
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+  `;
+
+  const isEN = window.currentLang === "en";
+
+  modal.innerHTML = `
+    <div style="
+      background:white;
+      padding:30px;
+      border-radius:16px;
+      max-width:420px;
+      width:90%;
+      text-align:center;
+    ">
+
+      <h2>📊 ${isEN ? "Unlock Investor Plan" : "Sblocca piano Investor"}</h2>
+
+      <p style="margin:15px 0;color:#64748b;">
+        ${
+          isEN
+          ? "You are using limited data. Investor unlocks advanced insights."
+          : "Stai usando dati limitati. Investor sblocca analisi avanzate."
+        }
+      </p>
+
+      <ul style="text-align:left;font-size:14px;margin-bottom:20px;">
+        <li>✔ ${isEN ? "Unlimited simulations" : "Simulazioni illimitate"}</li>
+        <li>✔ ${isEN ? "Advanced ROI analysis" : "Analisi ROI avanzata"}</li>
+        <li>✔ ${isEN ? "Market comparison" : "Confronto mercato"}</li>
+      </ul>
+
+      <button onclick="startPlanPurchase('investor')" class="btn-main" style="width:100%;margin-bottom:10px;">
+        💰 ${isEN ? "Upgrade to Investor €19" : "Passa a Investor €19"}
+      </button>
+
+      <button onclick="this.closest('div').parentNode.remove()" class="btn-outline">
+        ${isEN ? "Continua gratis" : "Continue free"}
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
 // ================= Function Mutui =================
 
 function renderMortgageResults(results){
@@ -1674,6 +1770,22 @@ container.innerHTML = insights.map(i=>{
 
 }
 
+function triggerSmartReminder(roi){
+
+  const access = window.getUserAccess();
+
+  if(access.canSeeFullAnalysis) return;
+
+  window.reminderCount = (window.reminderCount || 0) + 1;
+
+  // ogni 2 azioni → popup
+  if(window.reminderCount % 2 !== 0) return;
+
+  setTimeout(()=>{
+    triggerUpgradeFlow({ action:"reminder", roi });
+  }, 1500);
+}
+
 // ================= LEAD ROUTING ENGINE =================
 function getLeadDestination({roi, city}){
 
@@ -1713,6 +1825,10 @@ function runPostAnalysis(result, context){
   window.lastAnalysisData = result;
 
   const roi = Number(result?.roi || 0);
+
+  // ================= SMART REMINDER =================
+
+triggerSmartReminder(roi);
 
   // ================= PAYWALL (UNICO) =================
 const access = window.getUserAccess();
@@ -1908,10 +2024,11 @@ window.calculate = async function(force = false){
     const isLogged = !!window.currentUser;
     let result;
 
- if(!isLogged){
+if(!isLogged){
 
-  console.log("🔓 Modalità preview attiva");
-  showRegisterPopup();
+  console.log("🔓 Guest → funnel");
+
+  triggerUpgradeFlow({ action:"calculate" });
 
 }
 
