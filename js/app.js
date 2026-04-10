@@ -2392,23 +2392,26 @@ doc.text("Performance: " + performance, 20, y);
 
 y += 15;
 
-// ================= CHART BANK STYLE =================
+// ================= CHART BANK STYLE FIX REAL =================
 const chartCanvas = document.getElementById("roiChart");
 
 if(chartCanvas){
 
   try{
 
-    // crea canvas HD (fix blur + taglio)
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = chartCanvas.width * 2;
-    tempCanvas.height = chartCanvas.height * 2;
+    await new Promise(r => setTimeout(r, 500)); // assicura render completo
 
-    const ctx = tempCanvas.getContext("2d");
-    ctx.scale(2,2);
-    ctx.drawImage(chartCanvas, 0, 0);
+    const imgData = chartCanvas.toDataURL("image/png", 1.0);
 
-    const imgData = tempCanvas.toDataURL("image/png", 1.0);
+    // dimensioni REALI canvas
+    const canvasWidth = chartCanvas.width;
+    const canvasHeight = chartCanvas.height;
+
+    // proporzione corretta
+    const ratio = canvasHeight / canvasWidth;
+
+    const pdfWidth = 170;
+    const pdfHeight = pdfWidth * ratio;
 
     // titolo
     doc.setFontSize(12);
@@ -2416,33 +2419,27 @@ if(chartCanvas){
 
     y += 8;
 
-    // BOX stile banca
+    // BOX professionale
     doc.setFillColor(255,255,255);
     doc.setDrawColor(220);
-    doc.roundedRect(15, y-5, 180, 100, 6,6,"FD");
+    doc.roundedRect(15, y-5, 180, pdfHeight + 10, 6,6,"FD");
 
-    // dimensioni corrette (NO TAGLIO)
-    const imgWidth = 160;
-    const imgHeight = 80;
-
+    // immagine PERFETTA (NO TAGLIO)
     doc.addImage(
       imgData,
       "PNG",
-      25,
+      20,
       y,
-      imgWidth,
-      imgHeight,
-      undefined,
-      "FAST"
+      pdfWidth,
+      pdfHeight
     );
 
-    y += imgHeight + 20;
+    y += pdfHeight + 20;
 
   }catch(e){
     console.warn("Chart error:", e);
   }
 }
-
 // ================= PAGE 2 =================
 doc.addPage();
 y = 30;
