@@ -259,30 +259,29 @@ function renderUser(user){
 
   const isInvestor = plan === "investor";
 
-const isPro =
-  isAdmin ||
-  plan === "pro" ||
-  plan === "pro_yearly";
+  const isPro =
+    isAdmin ||
+    plan === "pro" ||
+    plan === "pro_yearly";
 
-const isPaid = isInvestor || isPro;
+  const isPaid = isInvestor || isPro;
 
   if(user){
 
     let html = `<div class="rb-user">`;
 
-    // 🔥 DASHBOARD SEMPRE VISIBILE
+    // 🔥 DASHBOARD (ANTI BYPASS)
     html += `
-  <a href="/dashboard/" 
-     class="rb-btn ${isPaid ? "primary" : "locked"}"
-     id="dashboard-link">
-     Dashboard
+      <a href="${isPaid ? "/dashboard/" : "#"}" 
+         class="rb-btn ${isPaid ? "primary" : "locked"}"
+         id="dashboard-link">
+         Dashboard
 
-     ${isInvestor ? `<span class="badge-pro">INVESTOR</span>` : ""}
-     ${isPro ? `<span class="badge-pro">PRO</span>` : ""}
-     ${(!isPaid) ? `<span class="badge-pro">LOCK</span>` : ""}
-
-  </a>
-`;
+         ${isInvestor ? `<span class="badge-pro">INVESTOR</span>` : ""}
+         ${isPro ? `<span class="badge-pro">PRO</span>` : ""}
+         ${(!isPaid) ? `<span class="badge-pro">LOCK</span>` : ""}
+      </a>
+    `;
 
     // LEADS
     html += isAdmin
@@ -295,61 +294,97 @@ const isPaid = isInvestor || isPro;
     el.innerHTML = html;
 
     // =====================
-// 📱 MOBILE MENU FIX (DINAMICO)
-// =====================
+    // 📱 MOBILE MENU DINAMICO (ANTI BYPASS)
+    // =====================
 
-const mobileNav = document.getElementById("rb-mobile-nav");
+    const mobileNav = document.getElementById("rb-mobile-nav");
 
-if(mobileNav){
+    if(mobileNav){
 
-  let mobileHTML = `
-    <a href="/tool/">Simulatore</a>
-    <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-    <a href="/mutui/">Mutui</a>
-    <a href="/immobili/">Immobili</a>
-    <a href="/academy/">Academy</a>
-  `;
+      let mobileHTML = `
+        <a href="/tool/">Simulatore</a>
+        <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
+        <a href="/mutui/">Mutui</a>
+        <a href="/immobili/">Immobili</a>
+        <a href="/academy/">Academy</a>
+      `;
 
-  if(user){
+      if(user){
 
-    mobileHTML += `
-      <hr>
-      <a href="/dashboard/">Dashboard</a>
-    `;
+        mobileHTML += `<hr>`;
 
-    if(isAdmin){
-      mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
+        // 🔥 DASHBOARD MOBILE BLOCCATA SE FREE
+        mobileHTML += `
+          <a href="${isPaid ? "/dashboard/" : "#"}" id="mobile-dashboard">
+            Dashboard
+          </a>
+        `;
+
+        if(isAdmin){
+          mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
+        }
+
+        mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
+
+      } else {
+
+        mobileHTML += `
+          <hr>
+          <a href="/login/">Login</a>
+        `;
+      }
+
+      mobileNav.innerHTML = mobileHTML;
+
+      // 🔥 LOGOUT MOBILE
+      const mobileLogout = document.getElementById("mobile-logout");
+
+      if(mobileLogout){
+        mobileLogout.onclick = async (e)=>{
+          e.preventDefault();
+          await signOut(auth);
+          location.reload();
+        };
+      }
+
+      // 🔥 BLOCCO HARD DASHBOARD MOBILE
+      if(!isPaid){
+        const mobileDash = document.getElementById("mobile-dashboard");
+        if(mobileDash){
+          mobileDash.onclick = (e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            openProModal();
+          };
+        }
+      }
     }
 
-    mobileHTML += `<a href="#" id="mobile-logout">Logout</a>`;
+    // =====================
+    // 🔥 BLOCCO HARD UNIVERSALE
+    // =====================
 
-  } else {
-
-    mobileHTML += `
-      <hr>
-      <a href="/login/">Login</a>
-    `;
-  }
-
-  mobileNav.innerHTML = mobileHTML;
-
-  const mobileLogout = document.getElementById("mobile-logout");
-
-  if(mobileLogout){
-    mobileLogout.onclick = async (e)=>{
-      e.preventDefault();
-      await signOut(auth);
-      location.reload();
-    };
-  }
-}
-
-    // 🔥 INTERCEPT CLICK DASHBOARD
     if(!isPaid){
-      document.getElementById("dashboard-link").onclick = (e)=>{
-        e.preventDefault();
-        openProModal();
-      };
+
+      // DESKTOP BUTTON
+      const dashBtn = document.getElementById("dashboard-link");
+      if(dashBtn){
+        dashBtn.onclick = (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+          openProModal();
+        };
+      }
+
+      // QUALSIASI LINK DASHBOARD (ANTI SCRIPT ESTERNI)
+      document.querySelectorAll('a[href="/dashboard/"]').forEach(link=>{
+        link.addEventListener("click", (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+          openProModal();
+        });
+      });
+
     }
 
     // LEADS LOCK
@@ -361,6 +396,7 @@ if(mobileNav){
       };
     }
 
+    // LOGOUT DESKTOP
     document.getElementById("logout").onclick = async ()=>{
       await signOut(auth);
       location.reload();
@@ -374,54 +410,5 @@ if(mobileNav){
 
 }
 
-// 🔥 EXPORT GLOBALE (CRITICO)
+// 🔥 EXPORT GLOBALE
 window.renderUser = renderUser;
-
-/* =====================
-🔒 MODAL PRO
-===================== */
-
-function initProModal(){
-
-  const modal = document.getElementById("rb-pro-modal");
-
-  document.getElementById("rb-close-modal").onclick = ()=>{
-    modal.classList.remove("open");
-  };
-
-  document.getElementById("rb-upgrade-btn").onclick = ()=>{
-    window.location.href = "/pricing/";
-  };
-
-}
-
-function openProModal(){
-  document.getElementById("rb-pro-modal").classList.add("open");
-}
-
-/* =====================
-🔓 UNLOCK UI
-===================== */
-
-function unlockUI(){
-
-  const plan = (window.currentPlan || "").toLowerCase();
-
-  if(!["pro","pro_yearly","investor"].includes(plan)){
-    return; // ❌ blocca unlock per free
-  }
-
-  document.querySelectorAll(
-    ".locked-overlay, .results-overlay, .home-blur-overlay"
-  ).forEach(el => el.remove());
-
-  document.querySelectorAll(
-    ".pro-blur, .locked-section"
-  ).forEach(el=>{
-    el.classList.remove("pro-blur","locked-section");
-    el.style.filter = "none";
-    el.style.pointerEvents = "auto";
-    el.style.opacity = "1";
-  });
-
-}
