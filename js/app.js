@@ -2319,7 +2319,10 @@ const data = window.lastAnalysisData;
 // ================= UTILS =================
 const clean = (v)=>isFinite(v)?v:0;
 const eur = (v)=>"€"+clean(v).toLocaleString();
-const pct = (v)=>clean(v).toFixed(1)+"%";
+const pct = (v)=> {
+  const n = Number(clean(v));
+  return isFinite(n) ? n.toFixed(1) + "%" : "0%";
+};
 
 // MARGINI SAFE (FIX BORDER BUG)
 const M = {
