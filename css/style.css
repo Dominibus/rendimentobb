@@ -10383,3 +10383,201 @@ body.is-admin [class*="overlay"]{
   color:white;
   font-weight:600;
 }
+
+/* WRAPPER */
+.pricing-wrapper {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+/* TITLE */
+.pricing-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  letter-spacing: -0.5px;
+}
+
+/* GRID */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+/* CARD BASE */
+.plan-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 32px 26px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* HOVER */
+.plan-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.1);
+}
+
+/* FEATURED (PRO) */
+.featured {
+  border: 2px solid #10b981;
+  transform: scale(1.05);
+  box-shadow: 0 20px 60px rgba(16,185,129,0.15);
+}
+
+/* TITLE */
+.plan-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+/* PRICE */
+.price {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.price span {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* SUB TEXT */
+.sub {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+/* EXTRA (stato piano) */
+.plan-extra {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #10b981;
+}
+
+/* LIST */
+.plan-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.plan-card li {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* DISABLED FEATURES */
+.disabled {
+  opacity: 0.45;
+}
+
+/* BUTTON BASE */
+.btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  background: #e2e8f0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* BUTTON HOVER */
+.btn:hover {
+  background: #cbd5e1;
+}
+
+/* PRIMARY BUTTON */
+.btn-primary {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 10px 25px rgba(16,185,129,0.25);
+}
+
+/* PRIMARY HOVER */
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(16,185,129,0.35);
+}
+
+/* BADGES */
+.badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #10b981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* SECONDARY BADGE */
+.badge.secondary {
+  top: 30px;
+  background: #f59e0b;
+}
+
+/* HIGHLIGHT */
+.highlight {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+/* NOTE */
+.note {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+
+/* FOOTER */
+.footer-note {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* ANNUAL SPECIAL GLOW */
+.plan-annual {
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  border: 1px solid rgba(245,158,11,0.2);
+}
+
+/* MICRO ANIMATION */
+.plan-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at top, rgba(16,185,129,0.08), transparent);
+}
+
+.plan-card:hover::after {
+  opacity: 1;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .featured {
+    transform: scale(1);
+  }
+}
