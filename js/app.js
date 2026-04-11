@@ -3073,6 +3073,37 @@ document.addEventListener("rb_auth_ready", () => {
 
   console.log("🔥 Firebase READY → HARD SYNC");
 
+  const t = (it, en) =>
+    (window.currentLang === "en" ? en : it);
+
+  // ===============================
+  // 🔥 AUTO STRIPE DOPO LOGIN (FUNNEL)
+  // ===============================
+
+  const pendingPlan = localStorage.getItem("pending_plan");
+
+  if(pendingPlan && window.currentUser){
+
+    console.log("🔥 AUTO START STRIPE:", pendingPlan);
+
+    // 🔥 pulizia immediata
+    localStorage.removeItem("pending_plan");
+
+    // UX delay naturale
+    setTimeout(()=>{
+
+      if(typeof window.buyPlan === "function"){
+        window.buyPlan(pendingPlan);
+      }else{
+        console.error("❌ buyPlan non trovata");
+        alert(t(
+          "Errore sistema pagamento",
+          "Payment system error"
+        ));
+      }
+
+    }, 500);
+  }
 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
@@ -3113,8 +3144,18 @@ document.addEventListener("rb_auth_ready", () => {
     updatePDFButton();
   }
 
-});
+  // ===============================
+  // 🔥 DEBUG (opzionale ma utile)
+  // ===============================
 
+  console.log(
+    "👤 USER:",
+    window.currentUser ? "LOGGED" : "GUEST",
+    "| PLAN:",
+    window.currentPlan || "free"
+  );
+
+});
 
 // ===============================================
 // APPLY MORTGAGE FROM COMPARATOR
@@ -3676,10 +3717,14 @@ window.addEventListener("scroll", () => {
 
 });
 
-// ================= STRIPE TRIGGER =================
+// ================= START PLAN PURCHASE (FINAL FUNNEL) =================
+
 window.startPlanPurchase = function(plan){
 
   console.log("🚀 CLICK PLAN:", plan);
+
+  const t = (it, en) =>
+    (window.currentLang === "en" ? en : it);
 
   const user = window.currentUser;
 
@@ -3692,9 +3737,9 @@ window.startPlanPurchase = function(plan){
     localStorage.setItem("pending_plan", plan);
 
     const goRegister = confirm(
-      window.t(
-        "Per continuare devi creare un account gratuito.\n\nTi bastano 10 secondi.",
-        "Create a free account to continue.\n\nTakes 10 seconds."
+      t(
+        "🔓 Sblocca l'analisi completa.\n\nRegistrati gratis per continuare (10 secondi).",
+        "🔓 Unlock full analysis.\n\nSign up free to continue (10 seconds)."
       )
     );
 
@@ -3706,8 +3751,64 @@ window.startPlanPurchase = function(plan){
   }
 
   // =========================
-  // ✅ LOGGATO → STRIPE
+  // 🔒 SICUREZZA → piano valido
   // =========================
-  window.buyPlan(plan);
+  if(!plan){
+    console.error("❌ Piano non valido");
+    alert(t("Errore piano","Invalid plan"));
+    return;
+  }
+
+  // =========================
+  // 🔥 BLOCCO SE GIÀ ATTIVO
+  // =========================
+  if(window.currentPlan === plan){
+    alert(
+      t(
+        "Hai già questo piano attivo",
+        "You already have this plan"
+      )
+    );
+    return;
+  }
+
+  // =========================
+  // 🔥 LOGICA GERARCHIA
+  // =========================
+  if(plan === "investor" && window.currentPlan === "pro"){
+    alert(
+      t(
+        "Hai già un piano superiore",
+        "You already have a higher plan"
+      )
+    );
+    return;
+  }
+
+  // =========================
+  // 🔥 FIREBASE NOT READY (ANTI BUG)
+  // =========================
+  if(!window.firebaseReady){
+    alert(
+      t(
+        "Attendi un secondo... caricamento utente",
+        "Wait a moment... loading user"
+      )
+    );
+    return;
+  }
+
+  // =========================
+  // 💳 STRIPE
+  // =========================
+  if(typeof window.buyPlan === "function"){
+    window.buyPlan(plan);
+  }else{
+    console.error("❌ buyPlan non trovata");
+    alert(t(
+      "Errore sistema pagamento",
+      "Payment system error"
+    ));
+  }
 
 };
