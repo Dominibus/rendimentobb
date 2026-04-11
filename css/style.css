@@ -11021,10 +11021,10 @@ body:not(.popup-open) .popup-overlay{
 
   .footer-cta a.btn,
   .footer-cta a.btn-secondary{
-    width:unset !important;
-    max-width:280px;
+    width:auto !important;
+    max-width:260px;
     display:inline-block !important;
-    padding:12px 24px;
+    padding:12px 22px;
   }
 
   .footer-cta{
