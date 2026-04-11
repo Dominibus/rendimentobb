@@ -3675,3 +3675,18 @@ window.addEventListener("scroll", () => {
   }
 
 });
+
+// ================= STRIPE TRIGGER =================
+window.startPlanPurchase = function(plan){
+
+  console.log("🚀 CLICK PLAN:", plan);
+
+  if(typeof window.buyPlan !== "function"){
+    console.error("❌ buyPlan non definita");
+    alert("Errore sistema pagamento");
+    return;
+  }
+
+  window.buyPlan(plan);
+
+};
