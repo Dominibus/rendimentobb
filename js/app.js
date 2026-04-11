@@ -2450,17 +2450,22 @@ document.addEventListener("DOMContentLoaded", ()=>{
 // 🔥 FIX CTA MULTIPLE
 document.addEventListener("DOMContentLoaded", () => {
 
-  const seen = new Set();
-
   document.querySelectorAll(".btn-main").forEach(btn => {
 
-    const text = btn.innerText.trim();
+    // 🔥 NON rimuovere mai bottoni
+    // 🔥 ma evita doppio click bug
 
-    if(seen.has(text)){
-      btn.remove();
-    }else{
-      seen.add(text);
-    }
+    btn.addEventListener("click", (e) => {
+
+      if(btn.dataset.clicked) return;
+
+      btn.dataset.clicked = "true";
+
+      setTimeout(()=>{
+        btn.dataset.clicked = "";
+      }, 2000);
+
+    });
 
   });
 
@@ -3417,6 +3422,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if(found > 1){
         btn.remove();
       }
+
+    }
+
+  });
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".btn-main").forEach(btn => {
+
+    // 🔥 se NON ha onclick → glielo assegno
+    if(!btn.getAttribute("onclick")){
+
+      btn.addEventListener("click", () => {
+
+        console.log("🔥 AUTO CTA CLICK");
+
+        // puoi cambiare piano se serve
+        startPlanPurchase("pro");
+
+      });
 
     }
 
