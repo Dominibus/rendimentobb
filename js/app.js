@@ -2789,56 +2789,6 @@ function handleAutoCityRedirect(){
   }
 
 }
-// ================= SAFE PLAN BUY =================
-
-window.startPlanPurchase = function(plan){
-
-const user = window.currentUser;
-
-if(!user){
-
-const goLogin = confirm(
-t(
-"Devi effettuare il login prima di acquistare il piano.",
-"You must login before purchasing the plan."
-)
-);
-
-if(goLogin){
-window.location.href="/login/";
-}
-
-return;
-
-}
-
-// sicurezza piano
-if(!plan){
-console.error("Piano non specificato");
-return;
-}
-
-// 🔥 SE GIÀ HA IL PIANO → BLOCCA
-if(window.currentPlan === plan){
-alert(
-t(
-"Hai già questo piano attivo",
-"You already have this plan"
-)
-);
-return;
-}
-
-// 🔥 upgrade logico
-if(plan === "investor" && window.currentPlan === "pro"){
-alert("Hai già un piano superiore");
-return;
-}
-
-// utente loggato → Stripe
-window.buyPlan(plan);
-
-};
 
 // ================= STRIPE SUBSCRIPTION =================
 
