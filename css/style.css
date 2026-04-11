@@ -10682,7 +10682,7 @@ body{
 .plan-card,
 .card,
 .kpi-box{
-  overflow:hidden;
+  overflow:visible !important;
 }
 
 .btn-main{
@@ -10692,5 +10692,23 @@ body{
 }
 
 h1,h2,h3,p,li{
+  word-break:break-word;
+}
+
+.plan-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.plan-card ul{
+  flex:1;
+}
+
+.plan-card h2,
+.plan-card h3,
+.plan-card p,
+.plan-card li{
+  white-space:normal;
   word-break:break-word;
 }
