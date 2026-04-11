@@ -10616,68 +10616,81 @@ body.is-admin [class*="overlay"]{
 }
 
 /* =====================================
-🔥 PRICING MOBILE FIX (NO OVERLAP)
+🔥 PRICING MOBILE FIX – FINAL PRODUCTION
 ===================================== */
 
 @media (max-width:768px){
 
-.pricing-grid{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-}
+  .pricing-grid{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
 
-.plan-card{
-  width:100%;
-  max-width:100%;
-  margin:0 auto;
-}
+  .plan-card{
+    width:100%;
+    max-width:100%;
+    margin:0 auto;
+    padding:20px;
+  }
 
-.plan-card.featured{
-  transform:none !important; /* rimuove zoom PRO */
-}
+  /* 🔥 rimuove zoom PRO su mobile */
+  .plan-card.featured{
+    transform:none !important;
+  }
 
-/* badge sopra non deve uscire */
-.plan-card .badge,
-.plan-card .plan-badge{
-  position:relative;
-  top:0;
-  transform:none;
-  margin-bottom:10px;
-}
+  /* 🔥 badge dentro card */
+  .plan-card .badge,
+  .plan-card .plan-badge{
+    position:relative;
+    top:0;
+    transform:none;
+    margin-bottom:10px;
+  }
+
+  /* 🔥 evita tagli testo */
+  .plan-card *{
+    white-space:normal !important;
+    word-break:break-word;
+  }
+
 }
 
 /* =====================================
-🔥 HEADER MOBILE FIX (LANGUAGE)
+🔥 HEADER MOBILE FIX
 ===================================== */
 
 @media (max-width:768px){
 
-.header-right{
-  gap:6px;
+  .header-right{
+    gap:6px;
+  }
+
+  .lang-switch{
+    display:flex;
+    gap:4px;
+  }
+
+  .lang-btn{
+    padding:6px 8px;
+    font-size:12px;
+  }
+
+  .portal-header-inner{
+    padding:0 8px;
+  }
+
+  body{
+    overflow-x:hidden;
+  }
+
 }
 
-.lang-switch{
-  display:flex;
-  gap:4px;
-}
+/* =====================================
+🔥 PRICING FIX DESKTOP + MOBILE
+===================================== */
 
-.lang-btn{
-  padding:6px 8px;
-  font-size:12px;
-}
-
-/* evita overflow */
-.portal-header-inner{
-  padding:0 8px;
-}
-
-/* sicurezza anti overflow */
-body{
-  overflow-x:hidden;
-}
-}
-
+/* 🔥 MAI più contenuti tagliati */
 .pricing-card,
 .plan-card,
 .card,
@@ -10685,30 +10698,61 @@ body{
   overflow:visible !important;
 }
 
-.btn-main{
-  white-space:normal;
-  text-align:center;
-  word-break:break-word;
-}
-
-h1,h2,h3,p,li{
-  word-break:break-word;
-}
-
+/* 🔥 struttura stabile card */
 .plan-card{
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+  height:100%;
 }
 
+/* 🔥 lista centrale */
 .plan-card ul{
   flex:1;
+  margin:15px 0;
 }
 
+/* 🔥 testo sempre leggibile */
+.plan-card h1,
 .plan-card h2,
 .plan-card h3,
 .plan-card p,
 .plan-card li{
-  white-space:normal;
+  white-space:normal !important;
   word-break:break-word;
+}
+
+/* =====================================
+🔥 BUTTON FIX (CRITICO CLICK + UI)
+===================================== */
+
+.btn-main{
+  white-space:normal;
+  text-align:center;
+  word-break:break-word;
+
+  display:block;
+  width:100%;
+  max-width:320px;
+  margin:20px auto 0 auto;
+
+  position:relative;
+  z-index:10; /* 🔥 sopra overlay */
+
+  cursor:pointer;
+}
+
+/* 🔥 evita overlay invisibili sopra bottoni */
+.plan-card,
+.plan-card *{
+  pointer-events:auto;
+}
+
+/* =====================================
+🔥 SAFETY FIX (ANTI OVERLAY BUG)
+===================================== */
+
+.plan-card::before,
+.plan-card::after{
+  pointer-events:none;
 }
