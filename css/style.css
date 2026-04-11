@@ -11068,6 +11068,7 @@ body:not(.popup-open) .popup-overlay{
 
 @media (min-width:1024px){
 
+  /* Bottone dimensione corretta */
   .section .container .btn{
     width:auto !important;
     max-width:320px;
@@ -11076,16 +11077,16 @@ body:not(.popup-open) .popup-overlay{
     padding:12px 24px;
   }
 
+  /* 🔥 CENTRATURA SOLO CTA */
   .section .container{
-    text-align:left;
+    text-align:center;
   }
 
-  .section-soft .btn,
-  .section-light .btn,
-  .section .btn{
-    width:auto !important;
-    max-width:320px;
-    display:inline-flex !important;
+  /* 🔥 testo rimane leggibile */
+  .section .container h2,
+  .section .container p,
+  .section .container ul{
+    text-align:left;
   }
 
 }
