@@ -29,31 +29,39 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ================= LANGUAGE (ULTRA FIX) ================= */
+/* =========================================
+🔥 LANGUAGE SWITCH – FIX DEFINITIVO
+========================================= */
+
 .lang-switch{
-position:fixed;
 
-/* 🔥 SAFE AREA iPhone */
-top:calc(env(safe-area-inset-top, 0px) + 10px);
+  position: relative !important;
 
-/* 🔥 CENTRATO → MAI TAGLIATO */
-left:50%;
-transform:translateX(-50%);
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 
-z-index:9999;
+  margin: 0 auto;
 
-display:flex;
-gap:6px;
+  width: fit-content;
+  max-width: 100%;
 
-background:rgba(15,23,42,0.7);
-backdrop-filter:blur(14px);
+  gap: 4px;
+  padding: 4px;
 
-padding:6px;
-border-radius:999px;
-
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  border-radius: 999px;
 }
 
+/* BOTTONI */
+.lang-btn{
+  padding: 6px 12px;
+  font-size: 13px;
+
+  border-radius: 999px;
+
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 /* BOTTONI */
 .lang-btn{
 background:rgba(255,255,255,0.08);
@@ -226,9 +234,17 @@ font-size:22px;
 
 /* 🔥 ancora più sicuro su mobile */
 .lang-switch{
-max-width:90%;
-overflow:hidden;
-}
+    position: relative !important;
+
+    left: auto !important;
+    right: auto !important;
+
+    transform: none !important;
+
+    margin: 10px auto 0 auto;
+
+    width: fit-content;
+  }
 
 }
 
