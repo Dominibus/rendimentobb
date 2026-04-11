@@ -10899,11 +10899,11 @@ body:not(.popup-open) .popup-overlay{
   display:none !important;
 }
 /* =====================================
-🔥 HERO CTA FIX (DESKTOP + MOBILE)
+🔥 HERO CTA FIX SOLO MARKET (SAFE)
 ===================================== */
 
-.hero-left .btn,
-.hero-left .btn-outline{
+.hero-bg .hero-left .btn,
+.hero-bg .hero-left .btn-outline{
   width:100%;
   max-width:360px;
   margin:0 auto;
@@ -10912,11 +10912,12 @@ body:not(.popup-open) .popup-overlay{
 }
 
 /* spacing tra bottoni */
-.hero-left .btn-outline{
+.hero-bg .hero-left .btn-outline{
   margin-top:14px;
 }
 
-.hero-left .btn:hover,
-.hero-left .btn-outline:hover{
+/* hover */
+.hero-bg .hero-left .btn:hover,
+.hero-bg .hero-left .btn-outline:hover{
   transform:translateY(-2px);
 }
