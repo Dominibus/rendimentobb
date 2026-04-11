@@ -11062,3 +11062,22 @@ body:not(.popup-open) .popup-overlay{
     justify-content:center;
   }
 
+/* =====================================
+🔥 FIX CTA PAGINE CONTENUTO (DESKTOP ONLY)
+===================================== */
+
+@media (min-width:1024px){
+
+  .section .container .btn{
+    width:auto !important;
+    max-width:320px;
+    display:inline-flex !important;
+    justify-content:center;
+    padding:12px 24px;
+  }
+
+  .section .container{
+    text-align:left;
+  }
+
+}
