@@ -1628,41 +1628,43 @@ window.startPlanPurchase = function(plan){
 // ================= BUY PLAN =================
 window.buyPlan = async function(plan){
 
-const user = window.currentUser;
+  const user = window.currentUser;
 
-if(!user){
-  console.warn("Utente non loggato → redirect login") 
-  alert(window.t("Devi effettuare il login","Login required"));
-  window.location.href="/login/";
-  return;
-}
+  // 🔒 login obbligatorio
+  if(!user){
+    alert(window.t(
+      "Devi effettuare il login per continuare",
+      "You must log in to continue"
+    ));
+    window.location.href="/login/";
+    return;
+  }
 
-log("CLICK BUY:", plan);
+  console.log("🔥 STRIPE LINK:", plan);
 
-try{
+  // ================= STRIPE LINKS =================
+  const links = {
+    investor: "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
+    pro: "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
+    pro_yearly: "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+  };
 
-const res = await fetch("/api/create-checkout-session",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify({ plan, uid:user.uid })
-});
+  const url = links[plan];
 
-const data = await res.json();
+  // ❌ piano non valido
+  if(!url){
+    console.error("❌ Piano non trovato:", plan);
+    alert(window.t(
+      "Errore piano. Riprova.",
+      "Plan error. Please try again."
+    ));
+    return;
+  }
 
-if(data.url){
-  window.location.href=data.url;
-}else{
-  error("Stripe error",data);
-  alert("Errore pagamento");
-}
-
-}catch(err){
-  error("Stripe connection error",err);
-  alert("Errore connessione");
-}
+  // 🚀 redirect Stripe
+  window.location.href = url;
 
 };
-
 
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
