@@ -3420,7 +3420,7 @@ document.addEventListener("DOMContentLoaded", () => {
       found++;
 
       if(found > 1){
-        btn.remove();
+        
       }
 
     }
@@ -3448,6 +3448,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   });
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // 🔥 PRO BUTTON
+  const proBtn = document.querySelector(".plan-pro .btn-main");
+
+  if(proBtn){
+    proBtn.onclick = () => {
+      console.log("🔥 CLICK PRO");
+      startPlanPurchase("pro");
+    };
+  }
+
+  // 🔥 INVESTOR BUTTON
+  const investorBtn = document.querySelector(".plan-investor .btn-main");
+
+  if(investorBtn){
+    investorBtn.onclick = () => {
+      console.log("🔥 CLICK INVESTOR");
+      startPlanPurchase("investor");
+    };
+  }
+
+  // 🔥 YEARLY BUTTON
+  const yearlyBtn = document.querySelector(".plan-annual .btn-main");
+
+  if(yearlyBtn){
+    yearlyBtn.onclick = () => {
+      console.log("🔥 CLICK YEARLY");
+      startPlanPurchase("pro_yearly");
+    };
+  }
 
 });
 
