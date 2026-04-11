@@ -10677,3 +10677,20 @@ body{
   overflow-x:hidden;
 }
 }
+
+.pricing-card,
+.plan-card,
+.card,
+.kpi-box{
+  overflow:hidden;
+}
+
+.btn-main{
+  white-space:normal;
+  text-align:center;
+  word-break:break-word;
+}
+
+h1,h2,h3,p,li{
+  word-break:break-word;
+}
