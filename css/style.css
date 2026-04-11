@@ -10898,3 +10898,20 @@ body.is-admin [class*="overlay"]{
 body:not(.popup-open) .popup-overlay{
   display:none !important;
 }
+/* =====================================
+🔥 HERO CTA FIX (DESKTOP + MOBILE)
+===================================== */
+
+.hero-left .btn,
+.hero-left .btn-outline{
+  width:100%;
+  max-width:360px;
+  margin:0 auto;
+  display:block;
+  text-align:center;
+}
+
+/* spacing tra bottoni */
+.hero-left .btn-outline{
+  margin-top:14px;
+}
