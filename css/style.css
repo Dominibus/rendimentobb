@@ -11113,3 +11113,10 @@ body:not(.popup-open) .popup-overlay{
   }
 
 }
+
+.quick-roi-box .btn,
+.quick-roi-box button{
+  display:block;
+  margin:20px auto 0 auto;
+  text-align:center;
+}
