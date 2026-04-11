@@ -10756,3 +10756,61 @@ body.is-admin [class*="overlay"]{
 .plan-card::after{
   pointer-events:none;
 }
+
+/* =====================================
+🔥 FINAL MOBILE TEXT FIX (ULTIMO STEP)
+===================================== */
+
+@media (max-width:768px){
+
+  /* 🔥 TITOLI */
+  .plan-card h2,
+  .plan-card h3{
+    font-size:20px !important;
+    line-height:1.2;
+    text-align:center;
+  }
+
+  /* 🔥 PREZZO */
+  .plan-card .price,
+  .plan-card strong,
+  .plan-card b{
+    font-size:26px !important;
+    line-height:1.2;
+    display:block;
+    text-align:center;
+  }
+
+  /* 🔥 TESTO */
+  .plan-card p,
+  .plan-card li{
+    font-size:14px !important;
+    line-height:1.4;
+    text-align:center;
+  }
+
+  /* 🔥 CARD PIÙ COMPATTA */
+  .plan-card{
+    padding:18px 16px !important;
+  }
+
+  /* 🔥 EVITA OVERFLOW ORIZZONTALE */
+  .pricing-wrapper,
+  .pricing-grid{
+    padding:0 10px;
+  }
+
+  /* 🔥 FIX TESTO LUNGO (tipo "€199 / anno") */
+  .plan-card *{
+    max-width:100%;
+    overflow-wrap:break-word;
+    word-break:break-word;
+  }
+
+  /* 🔥 BOTTONI */
+  .btn-main{
+    font-size:14px;
+    padding:12px;
+  }
+
+}
