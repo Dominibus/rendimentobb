@@ -10915,3 +10915,8 @@ body:not(.popup-open) .popup-overlay{
 .hero-left .btn-outline{
   margin-top:14px;
 }
+
+.hero-left .btn:hover,
+.hero-left .btn-outline:hover{
+  transform:translateY(-2px);
+}
