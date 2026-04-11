@@ -11013,3 +11013,22 @@ body:not(.popup-open) .popup-overlay{
   }
 
 }
+/* =====================================
+🔥 FOOTER CTA FIX — SOLO DESKTOP
+===================================== */
+
+@media (min-width:1024px){
+
+  .footer-cta a.btn,
+  .footer-cta a.btn-secondary{
+    width:unset !important;
+    max-width:280px;
+    display:inline-block !important;
+    padding:12px 24px;
+  }
+
+  .footer-cta{
+    text-align:center;
+  }
+
+}
