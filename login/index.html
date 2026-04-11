@@ -30,27 +30,64 @@ overflow-x:hidden;
 }
 
 /* =========================================
-🔥 LANGUAGE SWITCH – FIX DEFINITIVO
+🔥 LANGUAGE SWITCH – FIX TOTALE (iPhone SAFE)
 ========================================= */
 
 .lang-switch{
 
-  position: relative !important;
-
-  display: flex !important;
-  justify-content: center;
+  display: inline-flex;
   align-items: center;
+
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+
+  padding: 4px;
+
+  width: auto;
+  max-width: 160px;
 
   margin: 0 auto;
 
-  width: fit-content;
-  max-width: 100%;
+  position: relative;
 
-  gap: 4px;
-  padding: 4px;
-
-  border-radius: 999px;
+  overflow: hidden;
 }
+
+/* BOTTONI */
+.lang-btn{
+
+  flex: 1;
+
+  text-align: center;
+
+  padding: 6px 10px;
+
+  font-size: 13px;
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  z-index: 2;
+
+  white-space: nowrap;
+}
+
+/* ATTIVO */
+.lang-btn.active{
+  background: linear-gradient(135deg,#10b981,#059669);
+  color: white;
+}
+
+/* NON ATTIVO */
+.lang-btn:not(.active){
+  color: #cbd5f5;
+  background: transparent;
+}
+
+.lang-switch::before,
+.lang-switch::after{
+  display:none !important;
+}  
 
 /* BOTTONI */
 .lang-btn{
@@ -235,7 +272,7 @@ font-size:22px;
 /* 🔥 ancora più sicuro su mobile */
 .lang-switch{
     position: relative !important;
-
+    max-width: 140px;
     left: auto !important;
     right: auto !important;
 
@@ -244,6 +281,11 @@ font-size:22px;
     margin: 10px auto 0 auto;
 
     width: fit-content;
+  }
+
+  .lang-btn{
+    font-size: 12px;
+    padding: 6px 8px;
   }
 
 }
