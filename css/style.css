@@ -10758,12 +10758,29 @@ body.is-admin [class*="overlay"]{
 }
 
 /* =====================================
-🔥 FINAL MOBILE TEXT FIX (ULTIMO STEP)
+🔥 PRICING MOBILE + BUG FIX DEFINITIVO
 ===================================== */
 
 @media (max-width:768px){
 
-  /* 🔥 TITOLI */
+  /* =====================
+  🔥 CARD BASE FIX
+  ===================== */
+  .plan-card,
+  .pricing-card{
+    padding:18px 16px !important;
+
+    /* 🔥 FIX TAGLIO BADGE */
+    overflow:visible !important;
+
+    /* 🔥 FIX IPHONE CLICK BUG */
+    isolation:isolate;
+    transform:translateZ(0);
+  }
+
+  /* =====================
+  🔥 TITOLI
+  ===================== */
   .plan-card h2,
   .plan-card h3{
     font-size:20px !important;
@@ -10771,7 +10788,9 @@ body.is-admin [class*="overlay"]{
     text-align:center;
   }
 
-  /* 🔥 PREZZO */
+  /* =====================
+  🔥 PREZZO
+  ===================== */
   .plan-card .price,
   .plan-card strong,
   .plan-card b{
@@ -10781,7 +10800,9 @@ body.is-admin [class*="overlay"]{
     text-align:center;
   }
 
-  /* 🔥 TESTO */
+  /* =====================
+  🔥 TESTI
+  ===================== */
   .plan-card p,
   .plan-card li{
     font-size:14px !important;
@@ -10789,28 +10810,91 @@ body.is-admin [class*="overlay"]{
     text-align:center;
   }
 
-  /* 🔥 CARD PIÙ COMPATTA */
-  .plan-card{
-    padding:18px 16px !important;
-  }
-
-  /* 🔥 EVITA OVERFLOW ORIZZONTALE */
-  .pricing-wrapper,
-  .pricing-grid{
-    padding:0 10px;
-  }
-
-  /* 🔥 FIX TESTO LUNGO (tipo "€199 / anno") */
+  /* =====================
+  🔥 FIX TESTO LUNGO
+  ===================== */
   .plan-card *{
     max-width:100%;
     overflow-wrap:break-word;
     word-break:break-word;
   }
 
-  /* 🔥 BOTTONI */
+  /* =====================
+  🔥 WRAPPER
+  ===================== */
+  .pricing-wrapper,
+  .pricing-grid{
+    padding:0 10px;
+  }
+
+  /* =====================
+  🔥 BOTTONI CLICK FIX
+  ===================== */
   .btn-main{
     font-size:14px;
     padding:12px;
+
+    position:relative;
+    z-index:10; /* 🔥 sopra eventuali overlay */
+    pointer-events:auto !important;
   }
 
+  /* =====================
+  🔥 BADGE (PIÙ SCELTO / MIGLIOR VALORE)
+  ===================== */
+  .plan-card .badge,
+  .plan-card .ribbon{
+
+    position:absolute;
+
+    top:-12px;
+
+    left:50%;
+    transform:translateX(-50%);
+
+    max-width:90%;
+    text-align:center;
+
+    font-size:11px;
+    padding:6px 12px;
+
+    white-space:nowrap;
+
+    z-index:20;
+  }
+
+}
+
+/* =====================================
+🔥 GLOBAL FIX (CLICK + OVERLAY BUG)
+===================================== */
+
+/* 🔥 rimuove blocchi invisibili sopra */
+.plan-card,
+.pricing-card{
+  overflow:visible !important;
+}
+
+/* 🔥 FIX CLICK SU IPHONE */
+.btn-main{
+  position:relative;
+  z-index:10;
+  pointer-events:auto !important;
+}
+
+/* =====================================
+🔥 OVERLAY SAFETY (SE PRESENTE)
+===================================== */
+
+.popup-overlay{
+  pointer-events:auto;
+}
+
+.popup-overlay *{
+  pointer-events:auto;
+}
+
+/* 🔥 evita overlay fantasma */
+body:not(.popup-open) .popup-overlay{
+  display:none !important;
 }
