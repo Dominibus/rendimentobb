@@ -1661,6 +1661,11 @@ window.buyPlan = async function(plan){
     return;
   }
 
+ alert(window.t(
+  "Verrai reindirizzato al pagamento sicuro Stripe",
+  "You will be redirected to secure Stripe checkout"
+));
+
   // 🚀 redirect Stripe
   window.location.href = url;
 
