@@ -11080,4 +11080,12 @@ body:not(.popup-open) .popup-overlay{
     text-align:left;
   }
 
+  .section-soft .btn,
+  .section-light .btn,
+  .section .btn{
+    width:auto !important;
+    max-width:320px;
+    display:inline-flex !important;
+  }
+
 }
