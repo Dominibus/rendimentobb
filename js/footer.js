@@ -192,7 +192,7 @@ data-en="✔ ROI up to 18%">
 </div>
 
 <!-- 🔥 EXTRA CTA (MONETIZATION BOOST) -->
-<div style="text-align:center; margin-top:20px;">
+<div class="footer-extra-cta">
 
 <p
 data-it="Sei una banca o agenzia? Ricevi clienti pronti a investire."
