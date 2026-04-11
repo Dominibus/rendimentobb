@@ -11014,21 +11014,33 @@ body:not(.popup-open) .popup-overlay{
 
 }
 /* =====================================
-🔥 FOOTER CTA FIX — SOLO DESKTOP
+🔥 FOOTER CTA FIX — DESKTOP HARD FIX
 ===================================== */
 
 @media (min-width:1024px){
 
+  /* RESET COMPLETO */
   .footer-cta a.btn,
   .footer-cta a.btn-secondary{
+
     width:auto !important;
-    max-width:260px;
-    display:inline-block !important;
-    padding:12px 22px;
+    max-width:260px !important;
+
+    display:inline-flex !important;
+    align-items:center;
+    justify-content:center;
+
+    padding:12px 22px !important;
+
+    flex:unset !important;
   }
 
+  /* forza il contenitore */
   .footer-cta{
-    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
   }
 
 }
