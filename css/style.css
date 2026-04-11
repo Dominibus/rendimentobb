@@ -10614,3 +10614,66 @@ body.is-admin [class*="overlay"]{
   margin: 20px auto 0;
   display: inline-block;
 }
+
+/* =====================================
+🔥 PRICING MOBILE FIX (NO OVERLAP)
+===================================== */
+
+@media (max-width:768px){
+
+.pricing-grid{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.plan-card{
+  width:100%;
+  max-width:100%;
+  margin:0 auto;
+}
+
+.plan-card.featured{
+  transform:none !important; /* rimuove zoom PRO */
+}
+
+/* badge sopra non deve uscire */
+.plan-card .badge,
+.plan-card .plan-badge{
+  position:relative;
+  top:0;
+  transform:none;
+  margin-bottom:10px;
+}
+}
+
+/* =====================================
+🔥 HEADER MOBILE FIX (LANGUAGE)
+===================================== */
+
+@media (max-width:768px){
+
+.header-right{
+  gap:6px;
+}
+
+.lang-switch{
+  display:flex;
+  gap:4px;
+}
+
+.lang-btn{
+  padding:6px 8px;
+  font-size:12px;
+}
+
+/* evita overflow */
+.portal-header-inner{
+  padding:0 8px;
+}
+
+/* sicurezza anti overflow */
+body{
+  overflow-x:hidden;
+}
+}
