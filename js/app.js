@@ -3681,12 +3681,33 @@ window.startPlanPurchase = function(plan){
 
   console.log("🚀 CLICK PLAN:", plan);
 
-  if(typeof window.buyPlan !== "function"){
-    console.error("❌ buyPlan non definita");
-    alert("Errore sistema pagamento");
+  const user = window.currentUser;
+
+  // =========================
+  // 👻 GUEST → SALVA + REGISTER
+  // =========================
+  if(!user){
+
+    // 🔥 salva piano scelto
+    localStorage.setItem("pending_plan", plan);
+
+    const goRegister = confirm(
+      window.t(
+        "Per continuare devi creare un account gratuito.\n\nTi bastano 10 secondi.",
+        "Create a free account to continue.\n\nTakes 10 seconds."
+      )
+    );
+
+    if(goRegister){
+      window.location.href = "/login/";
+    }
+
     return;
   }
 
+  // =========================
+  // ✅ LOGGATO → STRIPE
+  // =========================
   window.buyPlan(plan);
 
 };
