@@ -2223,24 +2223,7 @@ if(revenueHome){
       })
     );
 
-      // ================= MARKET =================
-    if(typeof renderMarketBenchmark === "function"){
-      renderMarketBenchmark(window.currentCity || "napoli");
-    }
-
-    // ================= MARKET COMPARISON (FIX DEFINITIVO) =================
-    if(typeof renderMarketComparison === "function"){
-
-      console.log("🔥 renderMarketComparison RUN");
-
-      renderMarketComparison(
-      gross, // ⚠️ IMPORTANTISSIMO
-      window.currentCity || "napoli"
-    );
-
-  }
-
-    // ================= UPGRADE =================
+     // ================= UPGRADE =================
     if(typeof triggerUpgradeIfNeeded === "function"){
       triggerUpgradeIfNeeded(roi);
     }
