@@ -11049,3 +11049,17 @@ body:not(.popup-open) .popup-overlay{
   }
 
 }
+
+  .footer-extra-cta{
+    text-align:center;
+    margin-top:20px;
+  }
+
+  .footer-extra-cta .btn{
+    width:auto !important;
+    max-width:260px;
+    display:inline-flex !important;
+    justify-content:center;
+  }
+
+}
