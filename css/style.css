@@ -10944,3 +10944,72 @@ body:not(.popup-open) .popup-overlay{
 .market-btn:hover{
   transform:translateY(-2px);
 }
+
+/* =====================================
+🔥 ROI PAGES FIX (GLOBALE + CITTÀ)
+===================================== */
+
+/* ===== HERO ROI ===== */
+.hero-roi .btn{
+  width:auto;
+  max-width:420px;
+  display:inline-block;
+  margin:0 auto;
+}
+
+/* centra CTA */
+.hero-roi .cta{
+  display:flex;
+  justify-content:center;
+}
+
+/* ===== HERO CITTÀ ===== */
+.hero .hero-buttons{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+/* bottoni città */
+.hero .hero-buttons .btn,
+.hero .hero-buttons .btn-outline{
+  width:auto;
+  max-width:280px;
+}
+
+/* ===== CTA BOX (in basso) ===== */
+.cta-box .btn,
+.cta-box .btn-outline{
+  width:auto;
+  max-width:320px;
+  display:inline-block;
+  margin:8px;
+}
+
+/* centra CTA BOX */
+.cta-box{
+  text-align:center;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width:768px){
+
+  .hero .hero-buttons{
+    flex-direction:column;
+  }
+
+  .hero .hero-buttons .btn,
+  .hero .hero-buttons .btn-outline{
+    width:100%;
+    max-width:320px;
+  }
+
+  .cta-box .btn,
+  .cta-box .btn-outline{
+    width:100%;
+    max-width:320px;
+  }
+
+}
