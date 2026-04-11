@@ -10921,3 +10921,26 @@ body:not(.popup-open) .popup-overlay{
 .hero-bg .hero-left .btn-outline:hover{
   transform:translateY(-2px);
 }
+
+/* =====================================
+🔥 MARKET BUTTONS FIX (SOLO HOME)
+===================================== */
+
+.market-buttons{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+}
+
+.market-btn{
+  width:100%;
+  max-width:700px; /* 👈 controlla dimensione desktop */
+  margin:0 auto;
+  display:block;
+}
+
+/* opzionale: effetto più premium */
+.market-btn:hover{
+  transform:translateY(-2px);
+}
