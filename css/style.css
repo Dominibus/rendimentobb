@@ -11024,7 +11024,7 @@ body:not(.popup-open) .popup-overlay{
   .footer-cta a.btn-secondary{
 
     width:auto !important;
-    max-width:260px !important;
+    max-width:220px !important;
 
     display:inline-flex !important;
     align-items:center;
