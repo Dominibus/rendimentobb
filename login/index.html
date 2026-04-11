@@ -29,31 +29,45 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ================= LANGUAGE (FIX DEFINITIVO) ================= */
+/* ================= LANGUAGE (ULTRA FIX) ================= */
 .lang-switch{
 position:fixed;
-top:14px;
-right:14px;
+
+/* 🔥 SAFE AREA iPhone */
+top:calc(env(safe-area-inset-top, 0px) + 10px);
+
+/* 🔥 CENTRATO → MAI TAGLIATO */
+left:50%;
+transform:translateX(-50%);
+
 z-index:9999;
 
 display:flex;
 gap:6px;
 
-background:rgba(15,23,42,0.6);
-backdrop-filter:blur(12px);
+background:rgba(15,23,42,0.7);
+backdrop-filter:blur(14px);
+
 padding:6px;
 border-radius:999px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
+/* BOTTONI */
 .lang-btn{
 background:rgba(255,255,255,0.08);
 border:1px solid rgba(255,255,255,0.2);
 color:white;
-padding:6px 10px;
+
+padding:6px 12px;
 border-radius:999px;
+
 cursor:pointer;
 font-size:12px;
-transition:.2s;
+
+transition:all .2s ease;
+white-space:nowrap;
 }
 
 .lang-btn:hover{
@@ -93,6 +107,10 @@ box-shadow:
 text-align:center;
 
 animation:fadeIn .6s ease;
+
+/* 🔥 FIX IOS CLICK BUG */
+transform:translateZ(0);
+isolation:isolate;
 }
 
 @keyframes fadeIn{
@@ -142,6 +160,7 @@ border:1px solid #e2e8f0;
 background:#f1f5f9;
 cursor:pointer;
 transition:.2s;
+font-weight:600;
 }
 
 .auth-tab.active{
@@ -203,6 +222,12 @@ border-radius:20px;
 
 h2{
 font-size:22px;
+}
+
+/* 🔥 ancora più sicuro su mobile */
+.lang-switch{
+max-width:90%;
+overflow:hidden;
 }
 
 }
