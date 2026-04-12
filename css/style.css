@@ -11566,7 +11566,7 @@ form .btn,
 
 /* =====================================
 🔥 RENDIMENTOBB – GLOBAL CSS ENGINE
-(ULTRA FIXED – NO BREAK – SAAS READY)
+(SILICON VALLEY – CONVERSION READY)
 ===================================== */
 
 /* =====================
@@ -11575,9 +11575,9 @@ form .btn,
 .container,
 .section .container{
   width:100%;
-  max-width:1100px;
+  max-width:1200px;
   margin:0 auto;
-  padding:0 20px;
+  padding:0 24px;
   box-sizing:border-box;
 }
 
@@ -11585,37 +11585,83 @@ form .btn,
 📦 SECTION SPACING
 ===================== */
 .section{
-  padding:80px 0;
+  padding:90px 0;
 }
 
 /* =====================
-📦 GRID SYSTEM (ANTI BUG)
+📦 GRID SYSTEM (SMART)
 ===================== */
 .market-grid,
 .results-grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:20px;
+  gap:24px;
   width:100%;
 }
 
 /* =====================
-📦 CARD SYSTEM
+📦 CARD SYSTEM (UPGRADED)
 ===================== */
 .card,
 .results-card,
 .upgrade-box,
 .simulator-results{
+
   width:100%;
-  max-width:900px;
+  max-width:920px;
   margin:40px auto;
-  padding:28px 22px;
+  padding:32px 26px;
 
-  background:#fff;
+  background:#ffffff;
   border-radius:18px;
-  box-shadow:0 10px 40px rgba(2,6,23,0.08);
 
+  box-shadow:
+    0 10px 30px rgba(2,6,23,0.06),
+    0 2px 6px rgba(2,6,23,0.04);
+
+  transition:all .25s ease;
   box-sizing:border-box;
+}
+
+/* hover effetto SaaS */
+.card:hover,
+.results-card:hover{
+  transform:translateY(-3px);
+  box-shadow:
+    0 20px 60px rgba(2,6,23,0.10),
+    0 5px 15px rgba(2,6,23,0.05);
+}
+
+/* =====================
+🧠 DESKTOP EXPANSION
+===================== */
+@media (min-width:1024px){
+
+  .card,
+  .results-card,
+  .simulator-results{
+    max-width:1100px;
+  }
+
+}
+
+/* =====================
+📊 KPI GRID (SEO BOOST)
+===================== */
+.kpi-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+
+.kpi-item{
+  background:#f8fafc;
+  padding:14px;
+  border-radius:12px;
+  font-weight:600;
+  font-size:14px;
+  border:1px solid #eef2f7;
 }
 
 /* =====================
@@ -11648,17 +11694,18 @@ a.btn{
 }
 
 /* =====================
-🔥 PRIMARY CTA
+🔥 PRIMARY CTA (STRONG)
 ===================== */
 .btn-primary,
 .main-btn{
-  background:#10b981;
+  background:linear-gradient(135deg,#10b981,#059669);
   color:#fff;
 }
 
 .btn-primary:hover,
 .main-btn:hover{
-  background:#059669;
+  transform:translateY(-1px);
+  box-shadow:0 8px 20px rgba(16,185,129,0.25);
 }
 
 /* =====================
@@ -11667,15 +11714,34 @@ a.btn{
 .simulator-container button,
 .simulator-container .btn{
   width:100%;
-  padding:14px;
+  padding:15px;
+  font-size:15px;
 }
 
 /* =====================
 📄 CONTENT CTA CENTER
 ===================== */
 .section .container .btn{
-  margin:20px auto 0 auto;
+  margin:24px auto 0 auto;
   display:flex;
+}
+
+/* =====================
+🧠 TYPOGRAPHY BOOST
+===================== */
+h1{
+  font-size:34px;
+  line-height:1.2;
+}
+
+h2{
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+p{
+  color:#475569;
+  line-height:1.6;
 }
 
 /* =====================
@@ -11725,6 +11791,11 @@ a.btn{
     padding:20px 16px;
   }
 
+  /* KPI mobile stack */
+  .kpi-list{
+    grid-template-columns:1fr;
+  }
+
 }
 
 /* =====================
@@ -11734,7 +11805,7 @@ a.btn{
 /* evita layout stretti tipo academy */
 .section-light .container,
 .section-dark .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:0 auto;
 }
 
