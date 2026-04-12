@@ -11357,3 +11357,31 @@ form .btn,
   }
 
 }
+
+/* =====================================
+🔥 IMMOBILI PAGE – GRID PADDING FIX
+===================================== */
+
+/* contenitore griglia */
+.immobili-page .property-grid{
+  padding:0 20px; /* 👈 spazio laterale */
+  box-sizing:border-box;
+}
+
+/* singole card */
+.immobili-page .property-card{
+  width:100%;
+  max-width:100%;
+}
+
+/* =====================================
+📱 MOBILE FIX PERFETTO
+===================================== */
+
+@media (max-width:768px){
+
+  .immobili-page .property-grid{
+    padding:0 16px; /* leggermente più stretto mobile */
+  }
+
+}
