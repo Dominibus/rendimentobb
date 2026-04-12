@@ -12167,7 +12167,7 @@ body{
 }
 
 /* =====================================
-🔥 MODAL PAYWALL – ULTRA CONVERSION
+🔥 MODAL PAYWALL – ULTRA CONVERSION (ISOLATO)
 ===================================== */
 
 .rb-modal{
@@ -12185,8 +12185,9 @@ body{
   display:flex;
 }
 
-.rb-modal-box{
-  background:white;
+/* 🔥 ISOLAMENTO FORTE */
+.rb-modal .rb-modal-box{
+  background:#ffffff;
   border-radius:20px;
   padding:32px 26px;
   max-width:420px;
@@ -12194,10 +12195,13 @@ body{
   text-align:center;
 
   box-shadow:0 30px 80px rgba(0,0,0,0.25);
+
+  /* ✅ FIX SOLO QUI */
+  color:#0f172a;
 }
 
 /* TITLE */
-.rb-modal-box h3{
+.rb-modal .rb-modal-box h3{
   font-size:20px;
   font-weight:700;
   color:#0f172a;
@@ -12205,27 +12209,27 @@ body{
 }
 
 /* TEXT */
-.rb-modal-box p{
+.rb-modal .rb-modal-box p{
   color:#475569;
   font-size:14px;
   line-height:1.5;
 }
 
 /* LIST */
-.rb-modal-box ul{
+.rb-modal .rb-modal-box ul{
   margin:20px 0;
   text-align:left;
   padding-left:18px;
 }
 
-.rb-modal-box li{
+.rb-modal .rb-modal-box li{
   font-size:14px;
   color:#334155;
   margin-bottom:6px;
 }
 
 /* CTA */
-.rb-modal-box .rb-btn.primary{
+.rb-modal .rb-modal-box .rb-btn.primary{
   width:100%;
   padding:12px;
   font-size:15px;
@@ -12236,13 +12240,13 @@ body{
 }
 
 /* SECONDARY */
-.rb-modal-box .rb-btn.secondary{
+.rb-modal .rb-modal-box .rb-btn.secondary{
   margin-top:10px;
   background:#f1f5f9;
 }
 
 /* LINK CONTINUE */
-.rb-modal-box .continue-free{
+.rb-modal .rb-modal-box .continue-free{
   display:block;
   margin-top:12px;
   font-size:13px;
