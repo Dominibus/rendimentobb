@@ -11566,7 +11566,7 @@ form .btn,
 
 /* =====================================
 🔥 RENDIMENTOBB – GLOBAL CSS ENGINE
-(UNIFICATO – NO BREAK – FINAL)
+(ULTRA FIXED – NO BREAK – SAAS READY)
 ===================================== */
 
 /* =====================
@@ -11582,6 +11582,24 @@ form .btn,
 }
 
 /* =====================
+📦 SECTION SPACING
+===================== */
+.section{
+  padding:80px 0;
+}
+
+/* =====================
+📦 GRID SYSTEM (ANTI BUG)
+===================== */
+.market-grid,
+.results-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+  width:100%;
+}
+
+/* =====================
 📦 CARD SYSTEM
 ===================== */
 .card,
@@ -11591,11 +11609,13 @@ form .btn,
   width:100%;
   max-width:900px;
   margin:40px auto;
-  padding:30px 24px;
+  padding:28px 22px;
 
   background:#fff;
-  border-radius:20px;
+  border-radius:18px;
   box-shadow:0 10px 40px rgba(2,6,23,0.08);
+
+  box-sizing:border-box;
 }
 
 /* =====================
@@ -11655,7 +11675,7 @@ a.btn{
 ===================== */
 .section .container .btn{
   margin:20px auto 0 auto;
-  display:inline-flex;
+  display:flex;
 }
 
 /* =====================
@@ -11664,7 +11684,7 @@ a.btn{
 .rb-header button,
 .rb-header .btn,
 #user-area .rb-btn{
-  width:auto;
+  width:auto !important;
   padding:8px 14px;
   font-size:13px;
 }
@@ -11697,4 +11717,33 @@ a.btn{
     font-size:13px;
   }
 
+  /* CARD PIÙ COMPATTE */
+  .card,
+  .results-card,
+  .upgrade-box{
+    margin:20px auto;
+    padding:20px 16px;
+  }
+
+}
+
+/* =====================
+💣 FIX GLOBALI CRITICI
+===================== */
+
+/* evita layout stretti tipo academy */
+.section-light .container,
+.section-dark .container{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* elimina bug flex vecchi */
+.market-grid{
+  align-items:stretch !important;
+}
+
+/* sicurezza overflow mobile */
+body{
+  overflow-x:hidden;
 }
