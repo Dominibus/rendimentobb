@@ -432,10 +432,21 @@ window.triggerUpgradeFlow = function(context = {}){
 };
 
 
-// ================= INVESTOR POPUP =================
+// ================= INVESTOR POPUP (FIX DEFINITIVO) =================
 
 function showInvestorUpsell(roi = 0){
 
+  console.log("🚀 Investor modal → unified system");
+
+  // 🔥 NON creare più modal custom
+  // 🔥 usa il sistema globale (traduzione + UI coerente)
+
+  if(typeof openProModal === "function"){
+    openProModal("investor");
+    return;
+  }
+
+  // 🔥 FALLBACK (sicurezza se openProModal non esiste)
   const modal = document.createElement("div");
 
   modal.style = `
@@ -449,8 +460,6 @@ function showInvestorUpsell(roi = 0){
     z-index:999999;
   `;
 
-  const isEN = window.currentLang === "en";
-
   modal.innerHTML = `
     <div style="
       background:white;
@@ -461,28 +470,27 @@ function showInvestorUpsell(roi = 0){
       text-align:center;
     ">
 
-      <h2>📊 ${isEN ? "Unlock Investor Plan" : "Sblocca piano Investor"}</h2>
+      <h2 data-it="📊 Sblocca piano Investor" data-en="📊 Unlock Investor Plan"></h2>
 
-      <p style="margin:15px 0;color:#64748b;">
-        ${
-          isEN
-          ? "You are using limited data. Investor unlocks advanced insights."
-          : "Stai usando dati limitati. Investor sblocca analisi avanzate."
-        }
+      <p style="margin:15px 0;color:#64748b;"
+        data-it="Stai usando dati limitati. Investor sblocca analisi avanzate."
+        data-en="You are using limited data. Investor unlocks advanced insights.">
       </p>
 
       <ul style="text-align:left;font-size:14px;margin-bottom:20px;">
-        <li>✔ ${isEN ? "Unlimited simulations" : "Simulazioni illimitate"}</li>
-        <li>✔ ${isEN ? "Advanced ROI analysis" : "Analisi ROI avanzata"}</li>
-        <li>✔ ${isEN ? "Market comparison" : "Confronto mercato"}</li>
+        <li data-it="✔ Simulazioni illimitate" data-en="✔ Unlimited simulations"></li>
+        <li data-it="✔ Analisi ROI avanzata" data-en="✔ Advanced ROI analysis"></li>
+        <li data-it="✔ Confronto mercato" data-en="✔ Market comparison"></li>
       </ul>
 
-      <button onclick="startPlanPurchase('investor')" class="btn-main" style="width:100%;margin-bottom:10px;">
-        💰 ${isEN ? "Upgrade to Investor €19" : "Passa a Investor €19"}
+      <button onclick="startPlanPurchase('investor')" class="btn-main" style="width:100%;margin-bottom:10px;"
+        data-it="💰 Passa a Investor €19"
+        data-en="💰 Upgrade to Investor €19">
       </button>
 
-      <button onclick="this.closest('div').parentNode.remove()" class="btn-outline">
-        ${isEN ? "Continua gratis" : "Continue free"}
+      <button onclick="this.closest('div').parentNode.remove()" class="btn-outline"
+        data-it="Continua gratis"
+        data-en="Continue free">
       </button>
 
     </div>
@@ -490,6 +498,11 @@ function showInvestorUpsell(roi = 0){
 
   document.body.style.overflow = "hidden";
   document.body.appendChild(modal);
+
+  // 🔥 TRADUZIONE IMMEDIATA
+  if(typeof applyStaticTranslations === "function"){
+    applyStaticTranslations();
+  }
 }
 
 // ================= Function Mutui =================
@@ -568,12 +581,17 @@ ${t("Simula con questo mutuo","Simulate with this mortgage")}
 
 document.addEventListener("rb_language_changed", () => {
 
-window.currentLang = getLang();  
+  window.currentLang = getLang();
 
-// aggiorna chart se presente
-if(window.lastROI && typeof renderChart === "function"){
-renderChart(window.lastROI);
-}
+  // 🔥 TRADUZIONE IMMEDIATA (FONDAMENTALE)
+  if(typeof applyStaticTranslations === "function"){
+    applyStaticTranslations();
+  }
+
+  // 🔥 aggiorna chart se presente
+  if(window.lastROI && typeof renderChart === "function"){
+    renderChart(window.lastROI);
+  }
 
 });
 
