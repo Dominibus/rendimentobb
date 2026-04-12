@@ -11473,4 +11473,8 @@ form .btn,
     justify-content:center;
   }
 
+  .simulator-container .upgrade-box button{
+    max-width:280px;
+  }
+
 }
