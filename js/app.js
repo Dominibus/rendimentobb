@@ -524,17 +524,18 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
       text-align:center;
       box-shadow:0 25px 80px rgba(0,0,0,0.25);
       animation:rbFade .25s ease;
+      color:#0f172a;
     ">
 
       <h2 data-it="${config.title_it}" data-en="${config.title_en}"
-          style="font-size:22px;font-weight:700;margin-bottom:10px;">
-      </h2>
+    style="font-size:22px;font-weight:700;margin-bottom:10px;color:#0f172a;">
+</h2>
 
-      <p data-it="${config.desc_it}" data-en="${config.desc_en}"
-         style="color:#64748b;margin-bottom:20px;">
-      </p>
+<p data-it="${config.desc_it}" data-en="${config.desc_en}"
+   style="color:#475569;margin-bottom:20px;font-size:14px;">
+</p>
 
-      <ul style="text-align:left;font-size:14px;margin-bottom:25px;line-height:1.6;">
+<ul style="text-align:left;font-size:14px;margin-bottom:25px;line-height:1.6;color:#0f172a;font-weight:500;">
         ${config.features_it.map((f,i)=>`
           <li data-it="${config.features_it[i]}" data-en="${config.features_en[i]}"></li>
         `).join("")}
