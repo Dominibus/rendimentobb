@@ -1792,33 +1792,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
-  // ⏱ retry intelligente
-  function waitForProAndUnlock(){
-
-    if(window.currentPlan){
-      unlockHomeProUI();
-    }else{
-      setTimeout(waitForProAndUnlock, 300);
-    }
-
-  }
-
-  // 🚀 START
-  waitForProAndUnlock();
-
-  // 🔥 evento piano caricato
-  document.addEventListener("rb_plan_loaded", ()=>{
-    unlockHomeProUI();
-
-    // 🔥 doppia sicurezza (fondamentale)
-    if(typeof quickROI === "function"){
-      quickROI();
-    }
-  });
-
-});
-
-  // ================= RESTORE CITY (FIX DEFINITIVO) =================
+   // ================= RESTORE CITY (FIX DEFINITIVO) =================
 
 document.addEventListener("DOMContentLoaded", () => {
 
