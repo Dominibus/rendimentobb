@@ -1745,29 +1745,28 @@ document.addEventListener("DOMContentLoaded", ()=>{
 function unlockHomeProUI(){
 
   const plan = String(window.currentPlan || "").toLowerCase();
-  const isLogged = !!window.currentUser;
 
   const isPro =
     plan === "pro" ||
     plan === "pro_yearly";
 
-  const isInvestor =
-    plan === "investor";
-
-  const isFreeUser = isLogged && !isPro && !isInvestor;
-  const isGuest = !isLogged;
-
-  // 🔥 SOLO PRO SBLOCCA TUTTO
   if(!isPro) return;
 
   console.log("🔥 FORCE UNLOCK HOME PRO");
 
   document.body.classList.add("pro-user");
 
- // reset SOLO overlay HOME
-document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-  el.style.display = "none";
-});
+  // 🔓 rimuove blur
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  // 🔓 NASCONDE overlay (NON rimuove!)
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.style.display = "none";
+  });
+
+}
 
   // ================= 🔓 UNLOCK UI =================
 
