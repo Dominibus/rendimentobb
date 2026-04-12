@@ -11536,4 +11536,9 @@ form .btn,
 
   }
 
+  .market-card strong{
+  font-size:26px;
+  color:#10b981;
+}
+
 }
