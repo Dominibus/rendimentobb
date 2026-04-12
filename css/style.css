@@ -12287,3 +12287,60 @@ body{
 #rb-upgrade-modal #rb-close-btn{
   color:#64748b !important;
 }
+
+/* =====================================
+🔥 GLOBAL BLUR FIX (RESET TOTALE)
+===================================== */
+
+body,
+section,
+div{
+  filter:none !important;
+  opacity:1 !important;
+}
+
+/* =====================================
+🔒 PAYWALL CORRETTO (SOLO QUI)
+===================================== */
+
+.locked-section{
+  position:relative;
+}
+
+.locked-section .blur-content{
+  filter:blur(6px);
+  opacity:0.5;
+  pointer-events:none;
+}
+
+.locked-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(4px);
+  z-index:10;
+}
+
+/* =====================================
+🚀 SEZIONI SEMPRE VISIBILI
+===================================== */
+
+.hero,
+.section,
+.pricing,
+.simulator-container{
+  filter:none !important;
+  opacity:1 !important;
+}
+/* =====================================
+💰 PRICING SEMPRE PERFETTO
+===================================== */
+
+.pricing-card{
+  opacity:1 !important;
+  filter:none !important;
+  transform:scale(1);
+}
