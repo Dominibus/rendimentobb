@@ -12495,3 +12495,57 @@ body::after{
   opacity:1 !important;
   filter:none !important;
 }
+
+/* =====================================
+🔥 FIX DEFINITIVO TESTI SBIADITI (HOME)
+===================================== */
+
+/* reset totale */
+body,
+main,
+section{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* elimina overlay globali */
+.hero::before,
+.hero::after,
+.section::before,
+.section::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* elimina overlay generici */
+.overlay,
+.hero-overlay,
+.section-overlay{
+  display:none !important;
+}
+
+/* FIX SEO BLOCK (QUELLO DEL TUO SCREEN) */
+.seo-block,
+.seo-block *{
+  opacity:1 !important;
+  filter:none !important;
+  color:#0f172a !important;
+}
+
+/* paragrafi leggibili */
+.seo-block p{
+  color:#334155 !important;
+}
+
+/* titoli */
+.seo-block h1,
+.seo-block h2,
+.seo-block h3{
+  color:#0f172a !important;
+}
+
+/* bottoni */
+.seo-block .btn-outline{
+  color:#0f172a !important;
+  border-color:#cbd5e1 !important;
+}
