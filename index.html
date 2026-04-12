@@ -1559,7 +1559,6 @@ function renderUpgradeCTA(roi){
   // ================= CTA TEXT =================
   let title, subtitle, ctaText, action;
 
-  // 👤 GUEST → LOGIN
   if(isGuest){
     title = window.t("Accedi per vedere analisi completa","Login to unlock full analysis");
     subtitle = window.t(
@@ -1569,8 +1568,6 @@ function renderUpgradeCTA(roi){
     ctaText = window.t("Accedi gratis","Login free");
     action = "window.location.href='/login/'";
   }
-
-  // 🔵 FREE LOGGATO → INVESTOR
   else if(isFreeUser){
     title = window.t("Sblocca analisi avanzata","Unlock advanced analysis");
     subtitle = window.t(
@@ -1580,8 +1577,6 @@ function renderUpgradeCTA(roi){
     ctaText = window.t("Passa a Investor €19","Upgrade to Investor €19");
     action = "startPlanPurchase('investor')";
   }
-
-  // 🟡 INVESTOR → PRO (OBIETTIVO)
   else if(isInvestor){
     title = window.t("Sblocca analisi completa","Unlock full analysis");
     subtitle = window.t(
@@ -1589,10 +1584,15 @@ function renderUpgradeCTA(roi){
       "Upgrade to Pro for real risk, mortgage and PDF report"
     );
     ctaText = window.t("Passa a Pro","Upgrade to Pro");
-    action = "startPlanPurchase('pro_yearly')"; // 🔥 spingi annuale
+    action = "startPlanPurchase('pro_yearly')";
   }
 
-  // ================= RENDER =================
+  // 🔥 FIX CRITICO → niente concatenazioni dentro template
+  const roiText = window.t(
+    `ROI stimato: ${roi.toFixed(1)}%`,
+    `Estimated ROI: ${roi.toFixed(1)}%`
+  );
+
   box.innerHTML = `
   <div style="
     margin-top:20px;
@@ -1605,12 +1605,7 @@ function renderUpgradeCTA(roi){
 
     <h3>🔥 ${title}</h3>
 
-    <p>
-      ${window.t(
-        "ROI stimato: "+roi.toFixed(1)+"%",
-        "Estimated ROI: "+roi.toFixed(1)+"%"
-      )}
-    </p>
+    <p>${roiText}</p>
 
     <p style="opacity:.9">${subtitle}</p>
 
@@ -1623,7 +1618,6 @@ function renderUpgradeCTA(roi){
 
   window.RB_LANG?.apply?.();
 }
-
 
 
 // ================= ANALYZE PROPERTY =================
