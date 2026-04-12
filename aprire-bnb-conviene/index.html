@@ -9,85 +9,30 @@
 <title 
 data-it="Aprire un B&B conviene? Calcola il rendimento | RendimentoBB"
 data-en="Is opening a B&B profitable? Calculate ROI | RendimentoBB">
-Aprire un B&B conviene? Calcola il rendimento | RendimentoBB
+Aprire un B&B conviene?
 </title>
 
 <meta name="description"
-data-it="Scopri se aprire un B&B conviene davvero. Calcola ROI, costi e rendimento con il simulatore professionale RendimentoBB."
-data-en="Discover if opening a B&B is profitable. Calculate ROI, costs and returns with the professional RendimentoBB simulator."
-content="Scopri se aprire un B&B conviene davvero. Calcola ROI, costi e rendimento con il simulatore professionale RendimentoBB.">
+data-it="Scopri se aprire un B&B conviene davvero. Analizza costi, ROI e rischi."
+data-en="Discover if opening a B&B is profitable. Analyze costs, ROI and risks."
+content="Aprire un B&B conviene?">
 
 <link rel="stylesheet" href="/css/style.css">
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="icon" href="/img/favicon.png">
 
 <script src="/js/lang.js" defer></script>
 
-<script>
-(function(){
-
-const lang = localStorage.getItem("rb_lang") || "it";
-
-const faqData = {
-it: {
-q1: "Conviene aprire un B&B nel 2026?",
-a1: "Sì, se supportato da analisi dati su costi, occupazione e rendimento.",
-q2: "Qual è il ROI di un B&B?",
-a2: "Il ROI medio varia tra il 6% e il 18% annuo.",
-q3: "Qual è il rischio principale?",
-a3: "Sopravvalutare l'occupazione e sottovalutare i costi."
-},
-en: {
-q1: "Is opening a B&B profitable in 2026?",
-a1: "Yes, if supported by data analysis on costs, occupancy and returns.",
-q2: "What is the ROI of a B&B?",
-a2: "Average ROI ranges between 6% and 18% annually.",
-q3: "What is the main risk?",
-a3: "Overestimating occupancy and underestimating costs."
-}
-};
-
-const data = faqData[lang];
-
-const jsonLd = {
-"@context": "https://schema.org",
-"@type": "FAQPage",
-"mainEntity": [
-{
-"@type": "Question",
-"name": data.q1,
-"acceptedAnswer": {"@type": "Answer","text": data.a1}
-},
-{
-"@type": "Question",
-"name": data.q2,
-"acceptedAnswer": {"@type": "Answer","text": data.a2}
-},
-{
-"@type": "Question",
-"name": data.q3,
-"acceptedAnswer": {"@type": "Answer","text": data.a3}
-}
-]
-};
-
-const script = document.createElement("script");
-script.type = "application/ld+json";
-script.text = JSON.stringify(jsonLd);
-
-document.head.appendChild(script);
-
-})();
-</script>  
-
 </head>
-
 
 <body>
 
 <div id="global-header"></div>
 
-<section class="hero-market">
+<main>
+
+<!-- HERO -->
+<section class="hero hero-bg">
+<div class="container" style="text-align:center">
 
 <h1
 data-it="Aprire un B&B conviene nel 2026?"
@@ -95,302 +40,224 @@ data-en="Is opening a B&B profitable in 2026?">
 Aprire un B&B conviene nel 2026?
 </h1>
 
-<p
-data-it="Scopri se aprire un Bed & Breakfast è davvero un investimento redditizio: analizza costi, ROI e rischi reali."
-data-en="Discover if opening a Bed & Breakfast is truly a profitable investment: analyze costs, ROI and real risks.">
-Scopri se aprire un Bed & Breakfast è davvero un investimento redditizio.
+<p style="max-width:700px;margin:auto;color:#64748b"
+data-it="Scopri se è davvero profittevole analizzando ROI, costi e rischi reali."
+data-en="Find out if it’s truly profitable by analyzing ROI, costs and real risks.">
+Scopri se è profittevole.
 </p>
 
-<a href="/tool/" class="btn btn-primary"
+<br>
+
+<a href="/tool/" class="btn btn-primary btn-lg"
 data-it="Simula il tuo investimento"
 data-en="Simulate your investment">
 Simula il tuo investimento
 </a>
 
-</section>  
-
-
-<main>
-
-<section class="section">
-
-<div class="container" style="max-width:900px;">
-
 </div>
-
 </section>
 
-
-
+<!-- DECISION CORE -->
 <section class="section section-light">
+<div class="container">
 
-<div class="container" style="max-width:900px;">
+<div class="card" style="max-width:750px;margin:0 auto">
 
 <h2
-data-it="Aprire un Bed & Breakfast conviene nel 2026?"
-data-en="Is opening a Bed & Breakfast profitable in 2026?">
-Aprire un Bed & Breakfast conviene nel 2026?
+data-it="Quando conviene davvero?"
+data-en="When is it actually profitable?">
+Quando conviene davvero?
 </h2>
 
-<p
-data-it="Aprire un Bed & Breakfast può essere molto redditizio, ma solo se analizzato correttamente considerando costi, occupazione e strategia."
-data-en="Opening a Bed & Breakfast can be highly profitable, but only if properly analyzed considering costs, occupancy and strategy.">
-Aprire un Bed & Breakfast è uno degli investimenti immobiliari più diffusi in Italia.
-</p>
+<div class="kpi-list">
 
-<ul>
+<div class="kpi-item"
+data-it="📈 ROI positivo"
+data-en="📈 Positive ROI">
+📈 ROI positivo
+</div>
 
-<li
-data-it="rendimento annuale"
-data-en="annual return">
-rendimento annuale
-</li>
+<div class="kpi-item"
+data-it="📅 Alta occupazione"
+data-en="📅 High occupancy">
+📅 Alta occupazione
+</div>
 
-<li
-data-it="occupazione media"
-data-en="average occupancy">
-occupazione media
-</li>
+<div class="kpi-item"
+data-it="💸 Costi controllati"
+data-en="💸 Controlled costs">
+💸 Costi controllati
+</div>
 
-<li
-data-it="costi di gestione"
-data-en="operating costs">
-costi di gestione
-</li>
-
-<li
-data-it="impatto del mutuo"
-data-en="mortgage impact">
-impatto del mutuo
-</li>
-
-<li
-data-it="rischio dell'investimento"
-data-en="investment risk">
-rischio dell'investimento
-</li>
-
-</ul>
+<div class="kpi-item"
+data-it="🧠 Strategia chiara"
+data-en="🧠 Clear strategy">
+🧠 Strategia chiara
+</div>
 
 </div>
 
+</div>
+
+</div>
 </section>
 
+<!-- NON CONVIENE -->
 <section class="section">
+<div class="container">
 
-<div class="container" style="max-width:900px;">
+<div class="card" style="max-width:750px;margin:0 auto">
 
 <h2
-data-it="Quando NON conviene aprire un B&B"
-data-en="When opening a B&B is NOT profitable">
-Quando NON conviene aprire un B&B
+data-it="Quando NON conviene"
+data-en="When it is NOT profitable">
+Quando NON conviene
 </h2>
 
-<ul>
+<div class="kpi-list">
 
-<li
-data-it="se il tasso di occupazione è basso"
-data-en="if occupancy rate is low">
-se il tasso di occupazione è basso
-</li>
+<div class="kpi-item"
+data-it="📉 Bassa occupazione"
+data-en="📉 Low occupancy">
+📉 Bassa occupazione
+</div>
 
-<li
-data-it="se i costi superano i ricavi"
-data-en="if costs exceed revenues">
-se i costi superano i ricavi
-</li>
+<div class="kpi-item"
+data-it="💸 Costi troppo alti"
+data-en="💸 Costs too high">
+💸 Costi troppo alti
+</div>
 
-<li
-data-it="se il mutuo è troppo elevato"
-data-en="if the mortgage is too high">
-se il mutuo è troppo elevato
-</li>
+<div class="kpi-item"
+data-it="🏦 Mutuo elevato"
+data-en="🏦 High mortgage">
+🏦 Mutuo elevato
+</div>
 
-<li
-data-it="se manca una strategia di gestione"
-data-en="if there is no management strategy">
-se manca una strategia di gestione
-</li>
-
-</ul>
+<div class="kpi-item"
+data-it="❌ Nessuna strategia"
+data-en="❌ No strategy">
+❌ Nessuna strategia
+</div>
 
 </div>
 
-</section>  
-
-
-
-<section class="section">
-
-<div class="container" style="max-width:900px;">
-
-<h2
-data-it="Il rischio di aprire un B&B senza analisi"
-data-en="The risk of opening a B&B without analysis">
-Il rischio di aprire un B&B senza analisi
-</h2>
-
-<p
-data-it="Molti investitori aprono un B&B basandosi su stime generiche o consigli informali."
-data-en="Many investors open a B&B based on generic estimates or informal advice.">
-Molti investitori aprono un B&B basandosi su stime generiche
-o consigli informali.
-</p>
-
-<ul>
-
-<li
-data-it="sopravvalutare l'occupazione annuale"
-data-en="overestimate annual occupancy">
-sopravvalutare l'occupazione annuale
-</li>
-
-<li
-data-it="sottovalutare i costi operativi"
-data-en="underestimate operating costs">
-sottovalutare i costi operativi
-</li>
-
-<li
-data-it="ignorare l'impatto del mutuo"
-data-en="ignore mortgage impact">
-ignorare l'impatto del mutuo
-</li>
-
-<li
-data-it="non calcolare il ROI reale"
-data-en="not calculate real ROI">
-non calcolare il ROI reale
-</li>
-
-</ul>
-
 </div>
 
+</div>
 </section>
 
+<!-- ERRORI -->
+<section class="section section-light">
+<div class="container">
 
-
-<section class="section section-soft">
-
-<div class="container" style="max-width:900px;">
+<div class="card" style="max-width:750px;margin:0 auto">
 
 <h2
-data-it="Simula il rendimento del tuo B&B"
-data-en="Simulate the ROI of your B&B">
-Simula il rendimento del tuo B&B
+data-it="Errori più comuni"
+data-en="Common mistakes">
+Errori più comuni
+</h2>
+
+<div class="kpi-list">
+
+<div class="kpi-item"
+data-it="📊 Sovrastimare occupazione"
+data-en="📊 Overestimate occupancy">
+📊 Sovrastimare occupazione
+</div>
+
+<div class="kpi-item"
+data-it="💰 Sottovalutare costi"
+data-en="💰 Underestimate costs">
+💰 Sottovalutare costi
+</div>
+
+<div class="kpi-item"
+data-it="🏦 Ignorare mutuo"
+data-en="🏦 Ignore mortgage">
+🏦 Ignorare mutuo
+</div>
+
+<div class="kpi-item"
+data-it="❌ Non calcolare ROI"
+data-en="❌ No ROI analysis">
+❌ Non calcolare ROI
+</div>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+<!-- LINK STRATEGICI -->
+<section class="section">
+<div class="container">
+
+<div class="card" style="max-width:750px;margin:0 auto;text-align:center">
+
+<h2
+data-it="Analizza prima di investire"
+data-en="Analyze before investing">
+Analizza prima di investire
 </h2>
 
 <p
-data-it="Con il simulatore RendimentoBB puoi analizzare la sostenibilità del tuo investimento in pochi secondi."
-data-en="With the RendimentoBB simulator you can analyze the sustainability of your investment in seconds.">
-Con il simulatore RendimentoBB puoi analizzare
-la sostenibilità del tuo investimento in pochi secondi.
+data-it="Scopri quanto puoi guadagnare e quanto spenderai realmente."
+data-en="Discover how much you can earn and how much you will spend.">
+Scopri dati reali.
 </p>
 
 <br>
 
-<a href="/tool/" class="btn btn-primary"
-data-it="Prova il simulatore gratuito"
-data-en="Try the free simulator">
-Prova il simulatore gratuito
+<div class="kpi-list">
+
+<a href="/quanto-guadagna-bnb/" class="kpi-item"
+data-it="💰 Guadagni B&B"
+data-en="💰 Earnings">
+💰 Guadagni
+</a>
+
+<a href="/costi-aprire-bnb/" class="kpi-item"
+data-it="💸 Costi B&B"
+data-en="💸 Costs">
+💸 Costi
 </a>
 
 </div>
 
+</div>
+
+</div>
 </section>
 
-
-
-<section class="section section-light">
-
-<div class="container" style="max-width:900px;">
+<!-- CTA -->
+<section class="section section-dark">
+<div class="container" style="text-align:center">
 
 <h2
-data-it="Quanto si guadagna con un B&B?"
-data-en="How much can a B&B earn?">
-Quanto si guadagna con un B&B?
+data-it="Scopri se il tuo investimento è profittevole"
+data-en="Find out if your investment is profitable">
+Scopri se è profittevole
 </h2>
 
 <p
-data-it="Il ROI medio di un B&B in Italia può variare tra il 6% e il 18% annuo, in base alla città, occupazione e costi."
-data-en="The average ROI of a B&B in Italy can range between 6% and 18% annually depending on city, occupancy and costs.">
-Il ROI medio di un B&B in Italia può variare tra il 6% e il 18% annuo.
-</p>
-
-</div>
-
-</section>
-
-<section class="section">
-
-<div class="container" style="max-width:700px;">
-
-<h2
-data-it="Domande frequenti su aprire un B&B"
-data-en="FAQ about opening a B&B">
-Domande frequenti su aprire un B&B
-</h2>
-
-<div class="faq-item">
-<h3
-data-it="Conviene aprire un B&B nel 2026?"
-data-en="Is opening a B&B profitable in 2026?">
-Conviene aprire un B&B nel 2026?
-</h3>
-<p
-data-it="Sì, se supportato da analisi dati su costi, occupazione e rendimento."
-data-en="Yes, if supported by data analysis on costs, occupancy and returns.">
-Dipende dai dati.
-</p>
-</div>
-
-<div class="faq-item">
-<h3
-data-it="Qual è il ROI di un B&B?"
-data-en="What is the ROI of a B&B?">
-Qual è il ROI di un B&B?
-</h3>
-<p
-data-it="Il ROI medio varia tra il 6% e il 18% annuo."
-data-en="Average ROI ranges between 6% and 18% annually.">
-ROI variabile.
-</p>
-</div>
-
-</div>
-
-</section>  
-
-
-
-<section class="section">
-
-<div class="container" style="text-align:center; max-width:900px;">
-
-<h2
-data-it="Vuoi sapere se il tuo B&B sarà redditizio?"
-data-en="Want to know if your B&B will be profitable?">
-Vuoi sapere se il tuo B&B sarà redditizio?
-</h2>
-
-<p
-data-it="Analizza ROI, rischio e sostenibilità finanziaria prima di acquistare un immobile."
-data-en="Analyze ROI, risk and financial sustainability before purchasing a property.">
-Analizza ROI, rischio e sostenibilità finanziaria
-prima di acquistare un immobile.
+data-it="Simula ROI, rischio e rendimento in meno di 30 secondi"
+data-en="Simulate ROI, risk and return in under 30 seconds">
+Analisi completa immediata
 </p>
 
 <br>
 
-<a href="/tool/" class="btn btn-primary"
+<a href="/tool/" class="btn btn-primary btn-lg"
 data-it="Avvia simulazione gratuita"
 data-en="Start free simulation">
 Avvia simulazione gratuita
 </a>
 
 </div>
-
 </section>
 
 </main>
