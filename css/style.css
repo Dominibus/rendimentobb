@@ -12585,3 +12585,45 @@ h1, h2, h3{
   }
 
 }
+
+/* =====================================
+🔥 FIX TESTI BIANCHI (CRITICO)
+===================================== */
+
+/* Sezioni chiare */
+.seo-block h1,
+.seo-block h2,
+.seo-block h3,
+.market-section h1,
+.market-section h2,
+.market-section h3,
+.trust-bar h1,
+.trust-bar h2,
+.trust-bar h3,
+.snapshot-card h1,
+.snapshot-card h2,
+.snapshot-card h3,
+.danger-block h1,
+.danger-block h2,
+.danger-block h3 {
+
+  color: #0f172a !important;
+
+}
+
+/* paragrafi */
+.seo-block p,
+.market-section p,
+.trust-bar p,
+.snapshot-card p {
+
+  color: #475569 !important;
+
+}
+
+/* fallback globale intelligente */
+section:not(.hero) h1,
+section:not(.hero) h2,
+section:not(.hero) h3 {
+  color: #0f172a;
+}
