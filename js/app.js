@@ -918,11 +918,6 @@ function resetGlobalBlur(){
   document.body.style.filter = "none";
   document.body.style.opacity = "1";
 
-  document.querySelectorAll("section, div").forEach(el=>{
-    el.style.filter = "none";
-    el.style.opacity = "1";
-  });
-
 }
 
 function getValue(id){
@@ -1329,6 +1324,12 @@ container.innerHTML = `
 
 `;
 
+}
+
+const resultsCard = document.querySelector(".results-card");
+
+if(resultsCard && !window.isProUser?.()){
+  resultsCard.classList.add("locked-section");
 }
 
 // ================= RISK METER =================
