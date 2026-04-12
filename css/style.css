@@ -11478,3 +11478,62 @@ form .btn,
   }
 
 }
+
+/* =====================================
+🔥 HOME – KPI CARD FIX (ROI / OCCUPAZIONE / BREAK EVEN)
+===================================== */
+
+/* wrapper */
+.market-grid{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+}
+
+/* card */
+.market-card{
+
+  width:100%;
+  max-width:520px; /* 👈 dimensione perfetta desktop */
+
+  margin:0 auto;
+
+  padding:20px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(8px);
+
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+
+  text-align:center;
+
+  transition:all .25s ease;
+}
+
+/* hover premium */
+@media (min-width:1024px){
+  .market-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 25px 60px rgba(0,0,0,0.12);
+  }
+}
+
+/* =====================================
+📱 MOBILE PERFETTO
+===================================== */
+
+@media (max-width:768px){
+
+  .market-card{
+
+    width:calc(100% - 32px); /* 👈 margine reale */
+    max-width:none;
+
+    padding:18px;
+
+  }
+
+}
