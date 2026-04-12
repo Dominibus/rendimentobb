@@ -12253,3 +12253,32 @@ body{
   color:#64748b;
   cursor:pointer;
 }
+
+/* =====================================
+🔥 FIX MODAL TESTO (ISOLAMENTO TOTALE)
+===================================== */
+
+#rb-upgrade-modal,
+#rb-upgrade-modal * {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* TESTO FORZATO */
+#rb-upgrade-modal h2,
+#rb-upgrade-modal h3 {
+  color: #0f172a !important;
+}
+
+#rb-upgrade-modal p {
+  color: #475569 !important;
+}
+
+#rb-upgrade-modal li {
+  color: #334155 !important;
+}
+
+/* CONTINUE FREE */
+#rb-upgrade-modal button:last-child {
+  color: #64748b !important;
+}
