@@ -11820,101 +11820,149 @@ body{
 }
 
 /* =====================================
-🔥 FOOTER SAAS ULTRA (READABILITY BOOST)
+🔥 GLOBAL SaaS POLISH (FINAL PRODUCTION)
+===================================== */
+
+:root{
+  --rb-dark:#0b1220;
+  --rb-darker:#070d18;
+  --rb-text:#e5e7eb;
+  --rb-muted:#94a3b8;
+
+  --rb-primary:#10b981;
+  --rb-primary-dark:#059669;
+}
+
+/* =====================================
+🔥 FOOTER – ULTRA SAAS FINAL
 ===================================== */
 
 .global-footer{
-  box-shadow:0 10px 30px rgba(16,185,129,0.4);
-  background:#0f172a; /* più scuro = più contrasto */
-  color:#e5e7eb;
+  background:linear-gradient(180deg,#0b1220,#070d18);
+  color:var(--rb-text);
+  position:relative;
+  overflow:hidden;
+}
+
+/* glow subtle */
+.global-footer::before{
+  content:"";
+  position:absolute;
+  top:-200px;
+  left:50%;
+  transform:translateX(-50%);
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,rgba(16,185,129,0.15),transparent 70%);
+  filter:blur(80px);
+  pointer-events:none;
 }
 
 /* CONTAINER */
 .footer-container{
   max-width:1200px;
   margin:0 auto;
-  padding:60px 20px 30px;
+  padding:70px 20px 30px;
 }
 
 /* ===== CTA TOP ===== */
+.footer-cta{
+  text-align:center;
+}
+
 .footer-cta h3{
-  font-size:22px;
+  font-size:26px;
   font-weight:700;
   color:#ffffff;
 }
 
 .footer-cta p{
   color:#cbd5e1;
-  margin-top:8px;
+  margin-top:10px;
 }
 
 /* ===== GRID ===== */
 .footer-grid{
-  margin-top:50px;
+  margin-top:60px;
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:30px;
+  gap:40px;
 }
 
 /* TITOLI */
 .footer-col strong{
   display:block;
-  margin-bottom:12px;
-  font-size:14px;
+  margin-bottom:14px;
+  font-size:15px;
+  font-weight:700;
   color:#ffffff;
-  letter-spacing:.5px;
 }
 
 /* TESTO */
 .footer-col p{
   font-size:14px;
   line-height:1.6;
-  color:#94a3b8;
+  color:var(--rb-muted);
 }
 
 /* LINK */
 .footer-col a{
   display:block;
-  margin-bottom:8px;
+  margin-bottom:10px;
   font-size:14px;
   color:#cbd5e1;
   text-decoration:none;
-  transition:all .2s ease;
+  transition:all .25s ease;
 }
 
-/* HOVER ULTRA SAAS */
+/* HOVER PREMIUM */
 .footer-col a:hover{
-  color:#10b981;
+  color:var(--rb-primary);
   transform:translateX(4px);
 }
 
 /* ===== TRUST BAR ===== */
 .footer-trust{
-  margin-top:40px;
+  margin-top:50px;
   display:flex;
   flex-wrap:wrap;
   gap:20px;
   font-size:14px;
   color:#cbd5e1;
+
   border-top:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(6px);
   padding-top:20px;
 }
 
 /* ===== EXTRA CTA ===== */
 .footer-extra-cta{
-  margin-top:30px;
+  margin-top:35px;
   text-align:center;
 }
 
 .footer-extra-cta p{
-  color:#94a3b8;
-  margin-bottom:10px;
+  color:var(--rb-muted);
+  margin-bottom:12px;
+}
+
+/* CTA partner */
+.footer-extra-cta .btn-secondary{
+  background:white;
+  color:#0f172a;
+  font-weight:600;
+  border-radius:999px;
+  padding:10px 20px;
+  box-shadow:0 10px 30px rgba(255,255,255,0.15);
+  transition:.2s;
+}
+
+.footer-extra-cta .btn-secondary:hover{
+  transform:translateY(-2px);
 }
 
 /* ===== COPYRIGHT ===== */
 .footer-bottom{
-  margin-top:30px;
+  margin-top:40px;
   text-align:center;
   font-size:13px;
   color:#64748b;
@@ -11923,7 +11971,7 @@ body{
 }
 
 /* =====================================
-🔥 HEADER SAAS – STRIPE LEVEL
+🔥 HEADER – STRIPE / VERCEL LEVEL FINAL
 ===================================== */
 
 .rb-header{
@@ -11933,16 +11981,17 @@ body{
   width:100%;
   z-index:999;
 
-  backdrop-filter: blur(12px);
-  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.85);
 
-  border-bottom:1px solid rgba(15,23,42,0.06);
+  border-bottom:1px solid rgba(15,23,42,0.05);
+  transition:all .3s ease;
 }
 
-/* DARK HERO AUTO BLEND */
+/* HERO DARK MODE */
 .hero-market ~ .rb-header,
 .hero-bg ~ .rb-header{
-  background: rgba(15,23,42,0.55);
+  background: rgba(15,23,42,0.65);
   border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
@@ -11970,7 +12019,7 @@ body{
 /* NAV */
 .rb-center{
   display:flex;
-  gap:28px;
+  gap:30px;
 }
 
 .rb-center a{
@@ -11979,10 +12028,11 @@ body{
   color:#334155;
   text-decoration:none;
   position:relative;
-  transition:all .2s ease;
+  opacity:.85;
+  transition:all .25s ease;
 }
 
-/* HOVER LINE STRIPE STYLE */
+/* STRIPE LINE */
 .rb-center a::after{
   content:"";
   position:absolute;
@@ -11990,11 +12040,12 @@ body{
   left:0;
   width:0%;
   height:2px;
-  background:#10b981;
+  background:var(--rb-primary);
   transition:width .25s ease;
 }
 
 .rb-center a:hover{
+  opacity:1;
   color:#0f172a;
 }
 
@@ -12002,7 +12053,7 @@ body{
   width:100%;
 }
 
-/* RIGHT AREA */
+/* RIGHT */
 .rb-right{
   display:flex;
   align-items:center;
@@ -12029,27 +12080,27 @@ body{
 }
 
 .rb-lang button.active{
-  background:#10b981;
+  background:var(--rb-primary);
   color:white;
 }
 
 /* LOGIN */
 .rb-login{
-  background:#10b981;
+  background:var(--rb-primary);
   color:white;
-  padding:8px 14px;
+  padding:8px 16px;
   border-radius:999px;
   font-size:13px;
   font-weight:600;
   text-decoration:none;
-  transition:.2s;
+  box-shadow:0 8px 20px rgba(16,185,129,0.25);
 }
 
 .rb-login:hover{
-  background:#059669;
+  background:var(--rb-primary-dark);
 }
 
-/* BUTTONS USER */
+/* BUTTONS */
 .rb-btn{
   padding:8px 14px;
   border-radius:999px;
@@ -12057,16 +12108,17 @@ body{
   font-weight:600;
   cursor:pointer;
   border:none;
+  transition:.2s;
 }
 
 .rb-btn.primary{
-  background:#10b981;
+  background:linear-gradient(135deg,#10b981,#22c55e);
   color:white;
-  box-shadow:0 8px 20px rgba(16,185,129,0.25);
+  box-shadow:0 10px 25px rgba(16,185,129,0.35);
 }
 
 .rb-btn.primary:hover{
-  background:#059669;
+  transform:translateY(-1px);
 }
 
 .rb-btn.secondary{
@@ -12077,6 +12129,7 @@ body{
 .rb-btn.red{
   background:#ef4444;
   color:white;
+  box-shadow:0 6px 15px rgba(239,68,68,0.25);
 }
 
 /* BADGE */
