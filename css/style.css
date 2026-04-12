@@ -11791,3 +11791,140 @@ body:not(.popup-open) .popup-overlay{
     flex-direction:column !important;
   }
 }
+
+/* =====================================
+🧠 STABILIZER SYSTEM – SAFE LAYER
+(non rompe niente, corregge tutto)
+===================================== */
+
+/* =========================
+🎯 LIMITA GLOBAL OVERRIDE
+========================= */
+
+/* evita che i container rompano layout */
+.section .container{
+  text-align:initial !important;
+}
+
+/* evita bottoni deformati globali */
+button,
+.btn{
+  width:auto !important;
+  max-width:none !important;
+}
+
+/* =========================
+🔥 SIMULATORE – LOCK LAYOUT
+========================= */
+
+.simulator-grid{
+  display:flex !important;
+  gap:30px;
+  align-items:stretch;
+}
+
+.simulator-left,
+.simulator-right{
+  flex:1;
+  min-width:0;
+}
+
+/* mobile */
+@media (max-width:1024px){
+  .simulator-grid{
+    flex-direction:column !important;
+  }
+}
+
+/* =========================
+🔥 HERO – NON TOCCARE
+========================= */
+
+.hero,
+.hero *{
+  max-width:none !important;
+}
+
+/* evita hero schiacciato */
+.hero .container{
+  max-width:1100px !important;
+  margin:auto;
+}
+
+/* =========================
+🔥 CARD FIX (NO STRETCH)
+========================= */
+
+.results-card,
+.upgrade-box,
+.card{
+  width:100%;
+  max-width:900px;
+  margin:40px auto;
+}
+
+/* =========================
+🔥 FORM / INPUT FIX
+========================= */
+
+input,
+select{
+  width:100%;
+  max-width:100%;
+}
+
+/* =========================
+🔥 CTA SAFE (solo dove serve)
+========================= */
+
+.results-card .btn,
+.upgrade-box .btn{
+  display:inline-flex;
+  margin:20px auto 0 auto;
+}
+
+/* mobile CTA */
+@media (max-width:768px){
+  .results-card .btn,
+  .upgrade-box .btn{
+    width:100% !important;
+  }
+}
+
+/* =========================
+🔥 HEADER SAFE FIX
+========================= */
+
+.rb-lang button{
+  padding:6px 10px !important;
+  font-size:13px !important;
+}
+
+.rb-header button,
+#user-area .btn{
+  width:auto !important;
+}
+
+/* =========================
+🔥 OVERLAY SAFE
+========================= */
+
+.overlay-content{
+  max-width:400px;
+  margin:auto;
+}
+
+/* =========================
+🔥 ANTI BUG GLOBALI
+========================= */
+
+.section,
+.simulator-container,
+.hero{
+  overflow:visible !important;
+}
+
+/* blocca effetti collaterali */
+*{
+  max-width:100%;
+}
