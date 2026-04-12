@@ -11418,3 +11418,35 @@ form .btn,
   }
 
 }
+
+/* =====================================
+🔥 IMMOBILI – LEAD BOX MOBILE FIX DEFINITIVO
+===================================== */
+
+.immobili-page section[style*="max-width:900px"]{
+
+  width:100% !important;
+  max-width:700px !important;
+
+  margin:60px auto !important;
+
+  padding:30px 20px !important;
+
+  box-sizing:border-box;
+}
+
+/* 📱 MOBILE – FIX REALE */
+@media (max-width:768px){
+
+  .immobili-page section[style*="max-width:900px"]{
+
+    width:calc(100% - 32px) !important; /* 👈 FIX CHIAVE */
+    max-width:none !important;
+
+    margin:40px auto !important;
+
+    padding:24px 16px !important;
+
+  }
+
+}
