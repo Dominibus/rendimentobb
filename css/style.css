@@ -11309,3 +11309,51 @@ form .btn,
     font-size:13px !important;
   }
 }
+
+/* =====================================
+🔥 MUTUI PAGE – LEAD BOX FIX (SAFE)
+===================================== */
+
+.lead-box{
+  max-width:720px; /* 🔥 limita larghezza */
+  margin:60px auto !important;
+
+  padding:30px 24px !important;
+
+  border-radius:20px;
+
+  box-shadow:0 15px 40px rgba(2,6,23,0.08);
+}
+
+/* contenuto interno */
+.lead-box input{
+  width:100%;
+  max-width:100%;
+}
+
+/* bottone centrato e coerente */
+.lead-box .btn{
+  display:inline-flex !important;
+  margin:20px auto 0 auto !important;
+
+  width:auto !important;
+  min-width:200px;
+}
+
+/* =====================================
+📱 MOBILE
+===================================== */
+
+@media (max-width:768px){
+
+  .lead-box{
+    max-width:100%;
+    margin:40px auto;
+    padding:20px !important;
+  }
+
+  .lead-box .btn{
+    width:100% !important;
+  }
+
+}
