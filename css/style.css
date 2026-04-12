@@ -11921,3 +11921,194 @@ body{
   border-top:1px solid rgba(255,255,255,0.05);
   padding-top:15px;
 }
+
+/* =====================================
+🔥 HEADER SAAS – STRIPE LEVEL
+===================================== */
+
+.rb-header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:999;
+
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.7);
+
+  border-bottom:1px solid rgba(15,23,42,0.06);
+}
+
+/* DARK HERO AUTO BLEND */
+.hero-market ~ .rb-header,
+.hero-bg ~ .rb-header{
+  background: rgba(15,23,42,0.55);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+/* CONTAINER */
+.rb-inner{
+  max-width:1200px;
+  margin:0 auto;
+  padding:14px 20px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* LOGO */
+.rb-logo{
+  height:36px;
+  transition:transform .2s ease;
+}
+
+.rb-logo:hover{
+  transform:scale(1.05);
+}
+
+/* NAV */
+.rb-center{
+  display:flex;
+  gap:28px;
+}
+
+.rb-center a{
+  font-size:14px;
+  font-weight:500;
+  color:#334155;
+  text-decoration:none;
+  position:relative;
+  transition:all .2s ease;
+}
+
+/* HOVER LINE STRIPE STYLE */
+.rb-center a::after{
+  content:"";
+  position:absolute;
+  bottom:-6px;
+  left:0;
+  width:0%;
+  height:2px;
+  background:#10b981;
+  transition:width .25s ease;
+}
+
+.rb-center a:hover{
+  color:#0f172a;
+}
+
+.rb-center a:hover::after{
+  width:100%;
+}
+
+/* RIGHT AREA */
+.rb-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* LANGUAGE */
+.rb-lang{
+  display:flex;
+  gap:4px;
+  background:#f1f5f9;
+  padding:4px;
+  border-radius:999px;
+}
+
+.rb-lang button{
+  border:none;
+  background:transparent;
+  padding:6px 10px;
+  font-size:12px;
+  border-radius:999px;
+  cursor:pointer;
+  color:#64748b;
+}
+
+.rb-lang button.active{
+  background:#10b981;
+  color:white;
+}
+
+/* LOGIN */
+.rb-login{
+  background:#10b981;
+  color:white;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  text-decoration:none;
+  transition:.2s;
+}
+
+.rb-login:hover{
+  background:#059669;
+}
+
+/* BUTTONS USER */
+.rb-btn{
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+}
+
+.rb-btn.primary{
+  background:#10b981;
+  color:white;
+  box-shadow:0 8px 20px rgba(16,185,129,0.25);
+}
+
+.rb-btn.primary:hover{
+  background:#059669;
+}
+
+.rb-btn.secondary{
+  background:#f1f5f9;
+  color:#0f172a;
+}
+
+.rb-btn.red{
+  background:#ef4444;
+  color:white;
+}
+
+/* BADGE */
+.badge-pro{
+  margin-left:6px;
+  font-size:10px;
+  background:linear-gradient(135deg,#10b981,#22c55e);
+  color:white;
+  padding:2px 6px;
+  border-radius:6px;
+}
+
+/* BURGER */
+#rb-burger{
+  display:none;
+  font-size:20px;
+  background:none;
+  border:none;
+}
+
+/* =====================
+📱 MOBILE
+===================== */
+
+@media(max-width:768px){
+
+  .rb-center{
+    display:none;
+  }
+
+  #rb-burger{
+    display:block;
+  }
+
+}
