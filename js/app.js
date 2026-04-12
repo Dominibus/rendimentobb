@@ -861,7 +861,7 @@ return;
 
     if(!el) return;
 
-    el.classList.add("pro-blur");
+    el.classList.add("locked-section");
 
     if(!el.querySelector(".paywall-mini")){
 
@@ -887,6 +887,40 @@ return;
       el.appendChild(overlay);
     }
 
+    if(!el.querySelector(".locked-overlay")){
+
+  const overlay = document.createElement("div");
+
+  overlay.className = "locked-overlay";
+
+  overlay.innerHTML = `
+    <div style="
+      background:white;
+      padding:16px;
+      border-radius:12px;
+      text-align:center;
+      font-size:13px;
+      color:#334155;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    ">
+      🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
+    </div>
+  `;
+
+  el.appendChild(overlay);
+}
+  });
+
+}
+
+function resetGlobalBlur(){
+
+  document.body.style.filter = "none";
+  document.body.style.opacity = "1";
+
+  document.querySelectorAll("section, div").forEach(el=>{
+    el.style.filter = "none";
+    el.style.opacity = "1";
   });
 
 }
@@ -1428,6 +1462,7 @@ ${message}
 
 }
 
+resetGlobalBlur();
 applyAccessControl();
 
 // ================= SMART PAYWALL (SOFT VERSION) =================
