@@ -12443,3 +12443,55 @@ body{
 a{
   color:#10b981;
 }
+
+/* =====================================
+🔥 FIX OVERLAY CHE SBALLA TUTTO
+===================================== */
+
+/* Rimuove overlay globali */
+.section::before,
+.section::after,
+.hero::before,
+.hero::after{
+  display:none !important;
+  content:none !important;
+}
+
+/* Fix overlay generici */
+.overlay,
+.hero-overlay,
+.section-overlay{
+  display:none !important;
+}
+
+/* Forza sfondo pulito sezioni */
+.section{
+  background:#ffffff !important;
+  position:relative;
+  z-index:1;
+}
+
+/* Fix container interni */
+.section .container{
+  position:relative;
+  z-index:2;
+}
+
+/* =====================================
+🔥 FIX BACKGROUND STRANI (GRADIENT/FADE)
+===================================== */
+
+body::before,
+body::after{
+  display:none !important;
+}
+
+/* =====================================
+🔥 SICUREZZA TESTO (ANTI FADE)
+===================================== */
+
+.section,
+.section *{
+  opacity:1 !important;
+  filter:none !important;
+}
