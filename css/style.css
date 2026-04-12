@@ -11563,3 +11563,138 @@ form .btn,
     cursor:pointer;
   }
 }
+
+/* =====================================
+🔥 RENDIMENTOBB – GLOBAL CSS ENGINE
+(UNIFICATO – NO BREAK – FINAL)
+===================================== */
+
+/* =====================
+📦 CONTAINER SYSTEM
+===================== */
+.container,
+.section .container{
+  width:100%;
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 20px;
+  box-sizing:border-box;
+}
+
+/* =====================
+📦 CARD SYSTEM
+===================== */
+.card,
+.results-card,
+.upgrade-box,
+.simulator-results{
+  width:100%;
+  max-width:900px;
+  margin:40px auto;
+  padding:30px 24px;
+
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 10px 40px rgba(2,6,23,0.08);
+}
+
+/* =====================
+🎯 BUTTON SYSTEM (CORE)
+===================== */
+button,
+.btn,
+.rb-btn,
+.main-btn,
+a.btn{
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:auto;
+  max-width:100%;
+
+  padding:12px 22px;
+  border-radius:999px;
+
+  font-weight:600;
+  font-size:14px;
+
+  text-decoration:none;
+  white-space:nowrap;
+
+  transition:all .25s ease;
+  cursor:pointer;
+}
+
+/* =====================
+🔥 PRIMARY CTA
+===================== */
+.btn-primary,
+.main-btn{
+  background:#10b981;
+  color:#fff;
+}
+
+.btn-primary:hover,
+.main-btn:hover{
+  background:#059669;
+}
+
+/* =====================
+📊 SIMULATOR (FULL WIDTH)
+===================== */
+.simulator-container button,
+.simulator-container .btn{
+  width:100%;
+  padding:14px;
+}
+
+/* =====================
+📄 CONTENT CTA CENTER
+===================== */
+.section .container .btn{
+  margin:20px auto 0 auto;
+  display:inline-flex;
+}
+
+/* =====================
+🚫 HEADER SAFE ZONE
+===================== */
+.rb-header button,
+.rb-header .btn,
+#user-area .rb-btn{
+  width:auto;
+  padding:8px 14px;
+  font-size:13px;
+}
+
+/* =====================
+🚫 HERO SAFE ZONE
+===================== */
+.hero .btn{
+  width:auto;
+  padding:16px 28px;
+}
+
+/* =====================
+📱 MOBILE SYSTEM
+===================== */
+@media (max-width:768px){
+
+  /* FULL WIDTH SOLO DOVE SERVE */
+  .simulator-container button,
+  .simulator-container .btn,
+  .results-card .btn,
+  .upgrade-box .btn{
+    width:100%;
+  }
+
+  /* HEADER NON SI ROMPE */
+  .rb-header .btn{
+    width:auto;
+    padding:8px 12px;
+    font-size:13px;
+  }
+
+}
