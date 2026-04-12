@@ -1254,13 +1254,22 @@ const formatCurrency = (n)=>Math.round(n).toLocaleString();
 // ================= LOGOUT =================
 window.logout = async function(){
   try{
-    await window.signOut(window.auth);
+
+    // 🔥 usa Firebase correttamente
+    if(window.firebaseAuth){
+      const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
+      await signOut(window.firebaseAuth);
+    }else{
+      console.warn("⚠️ Auth non disponibile");
+    }
+
+    // redirect
     window.location.href = "/";
+
   }catch(err){
-    error("Logout error:", err);
+    console.error("❌ Logout error:", err);
   }
 };
-
 
 // ================= BACKGROUND =================
 window.changeCityBackground = function(city){
@@ -1670,7 +1679,6 @@ window.buyPlan = async function(plan){
 
   console.log("🔥 STRIPE LINK:", plan);
 
-  // ================= STRIPE LINKS =================
   const links = {
     investor: "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
     pro: "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
@@ -1679,7 +1687,6 @@ window.buyPlan = async function(plan){
 
   const url = links[plan];
 
-  // ❌ piano non valido
   if(!url){
     console.error("❌ Piano non trovato:", plan);
     alert(window.t(
@@ -1689,15 +1696,14 @@ window.buyPlan = async function(plan){
     return;
   }
 
- alert(window.t(
-  "Verrai reindirizzato al pagamento sicuro Stripe",
-  "You will be redirected to secure Stripe checkout"
-));
+  alert(window.t(
+    "Verrai reindirizzato al pagamento sicuro Stripe",
+    "You will be redirected to secure Stripe checkout"
+  ));
 
-  // 🚀 redirect Stripe
   window.location.href = url;
 
-  }); // 🔥 CHIUSURA waitForUserReady
+  }); 
 };
 
  // 🔥 WAIT FIREBASE USER READY (CRITICO)
