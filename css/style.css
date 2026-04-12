@@ -12627,3 +12627,40 @@ section:not(.hero) h2,
 section:not(.hero) h3 {
   color: #0f172a;
 }
+
+/* =====================================
+🔥 FIX OVERLAY SBLOCCO (CRITICO)
+===================================== */
+
+.home-blur-overlay{
+  background: rgba(15, 23, 42, 0.75) !important; /* overlay scuro */
+  backdrop-filter: blur(6px);
+}
+
+.home-overlay-content{
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  color: #0f172a !important;
+
+  padding: 20px;
+  border-radius: 16px;
+
+  max-width: 320px;
+  width: 90%;
+
+  text-align: center;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+/* testi dentro overlay */
+.home-overlay-content .overlay-title{
+  font-weight: 700;
+  font-size: 16px;
+  color: #0f172a !important;
+}
+
+.home-overlay-content .overlay-text{
+  margin-top: 6px;
+  font-size: 14px;
+  color: #475569 !important;
+}
