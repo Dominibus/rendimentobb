@@ -12827,31 +12827,64 @@ section:not(.hero) h3 {
 }
 
 /* =====================================
-🔥 HAMBURGER FIX MOBILE (DEFINITIVO)
+🔥 MOBILE MENU FIX (CRITICO)
 ===================================== */
 
-#rb-burger{
-  display: none;
-}
-
-/* MOBILE */
 @media (max-width:768px){
 
-  #rb-burger{
+  /* CONTENITORE MENU */
+  .mobile-menu,
+  .rb-menu,
+  .nav-menu{
+    background: #ffffff !important;
+    color: #0f172a !important;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    width: 85%;
+    max-width: 320px;
+    height: 100vh;
+
+    padding: 80px 20px 20px;
+
+    z-index: 9999;
+
+    box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+  }
+
+  /* LINK MENU */
+  .mobile-menu a,
+  .rb-menu a,
+  .nav-menu a{
     display: block;
+    padding: 14px 16px;
 
-    font-size: 22px;
-    color: #0f172a; /* 🔥 colore visibile */
+    border-radius: 12px;
 
-    background: white;
-    border: 1px solid #e2e8f0;
+    font-weight: 500;
+    font-size: 16px;
 
-    border-radius: 10px;
-    padding: 8px 10px;
+    color: #0f172a !important;
+    background: #f8fafc;
 
-    cursor: pointer;
+    margin-bottom: 10px;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-decoration: none;
+  }
+
+  /* ACTIVE */
+  .mobile-menu a.active,
+  .rb-menu a.active,
+  .nav-menu a.active{
+    background: #10b981;
+    color: white !important;
+  }
+
+  /* HOVER */
+  .mobile-menu a:hover{
+    background: #e2e8f0;
   }
 
 }
