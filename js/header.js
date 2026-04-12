@@ -90,29 +90,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <!-- 🔥 MODAL PRO -->
   <div id="rb-pro-modal" class="rb-modal">
-    <div class="rb-modal-box">
-      <h3 data-it="🔒 Dashboard investimenti" data-en="🔒 Investment dashboard"></h3>
-      <p data-it="Analizza ROI, rischio e scenari reali."
-         data-en="Analyze ROI, risk and real scenarios."></p>
+  <div class="rb-modal-box">
 
-      <p style="color:#ef4444;font-weight:600;"
-         data-it="⚠️ Senza questi dati stai investendo alla cieca"
-         data-en="⚠️ Without this data you're investing blindly">
-      </p>
+    <h3
+      data-it="🚀 Sblocca analisi completa"
+      data-en="🚀 Unlock full analysis">
+      🚀 Sblocca analisi completa
+    </h3>
 
-      <button id="rb-upgrade-btn" class="rb-btn primary"
-        data-it="🔥 Sblocca ora – 29€"
-        data-en="🔥 Unlock now – €29">
-      </button>
+    <p
+      data-it="Stai analizzando un investimento reale. Senza dati completi rischi di perdere migliaia di euro."
+      data-en="You are analyzing a real investment. Without full data you risk losing thousands.">
+    </p>
 
-      <button id="rb-close-modal" class="rb-btn secondary">OK</button>
-    </div>
+    <ul>
+      <li data-it="✔ ROI reale avanzato" data-en="✔ Advanced real ROI"></li>
+      <li data-it="✔ Analisi mutuo completa" data-en="✔ Full mortgage analysis"></li>
+      <li data-it="✔ Scenario rischio" data-en="✔ Risk scenarios"></li>
+      <li data-it="✔ Report professionale" data-en="✔ Professional report"></li>
+    </ul>
+
+    <button id="rb-upgrade-btn" class="rb-btn primary"
+      data-it="🔥 Sblocca ora – €29"
+      data-en="🔥 Unlock now – €29">
+    </button>
+
+    <span class="continue-free"
+      id="rb-close-modal"
+      data-it="Continua senza"
+      data-en="Continue free">
+    </span>
+
   </div>
+</div>
 
   `;
 
+  // 🔥 TRADUZIONE IMMEDIATA HEADER + MODAL
+if(typeof applyStaticTranslations === "function"){
+  applyStaticTranslations();
+}
+
   window.applyCityBackground();
   initHeaderInteractions();
+
+  // 🔥 SYNC TRADUZIONE DINAMICA (HEADER + MODAL)
+document.addEventListener("rb_language_changed", () => {
+  if(typeof applyStaticTranslations === "function"){
+    applyStaticTranslations();
+  }
+});
 
   onAuthStateChanged(auth, (user) => {
   waitPlanAndRender(user);
