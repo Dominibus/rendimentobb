@@ -12761,3 +12761,54 @@ section:not(.hero) h3 {
   }
 
 }
+
+/* =====================================
+🔥 TRUST GRID FIX (DEFINITIVO)
+===================================== */
+
+.trust-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* CARD */
+.trust-item{
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  max-width: 100%;
+  width: 100%;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+  transition: all .2s ease;
+}
+
+/* HOVER (effetto premium) */
+.trust-item:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+}
+
+/* ICON */
+.trust-icon{
+  font-size: 18px;
+}
+
+/* TESTO */
+.trust-item p{
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+}
