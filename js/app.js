@@ -391,120 +391,228 @@ if(window.getUserAccess().canSeeFullAnalysis){
   return true;
 }
 
-// ================= FUNNEL POPUP ENGINE =================
+// =====================================
+// 🔥 FUNNEL + MODAL ENGINE UNIFICATO
+// SILICON VALLEY SAAS – FINAL
+// =====================================
+
+// ================= FUNNEL =================
 
 window.triggerUpgradeFlow = function(context = {}){
 
   const access = window.getUserAccess();
+  const { roi = 0 } = context;
 
-  const { action = "generic", roi = 0 } = context;
-
-  // ================= NOT LOGGED =================
+  // ================= GUEST =================
   if(access.isGuest){
+    console.log("🔥 GUEST → INVESTOR");
+    openUpgradeModal("investor", roi);
+    return;
+  }
 
-  console.log("🔥 GUEST → mostro popup FORZATO");
-
-  showInvestorUpsell(); // 👈 TEMPORANEO TEST
-
-  return;
-}
-
-  // ================= FREE USER =================
+  // ================= FREE =================
   if(access.isFree){
-
-    console.log("🔥 FREE → push INVESTOR");
-
-    showInvestorUpsell(roi);
+    console.log("🔥 FREE → INVESTOR");
+    openUpgradeModal("investor", roi);
     return;
   }
 
   // ================= INVESTOR =================
   if(access.isInvestor){
-
-    console.log("🔥 INVESTOR → push PRO");
-
-    showProUpgradeModal();
+    console.log("🔥 INVESTOR → PRO");
+    openUpgradeModal("pro", roi);
     return;
   }
 
   // ================= PRO =================
-  console.log("✅ PRO → nessun popup");
+  console.log("✅ PRO USER → NO POPUP");
 };
 
 
-// ================= INVESTOR POPUP (FIX DEFINITIVO) =================
 
-function showInvestorUpsell(roi = 0){
+// =====================================
+// 🔥 MODAL UNIFICATO (CORE)
+// =====================================
 
-  console.log("🚀 Investor modal → unified system");
+window.openUpgradeModal = function(type = "investor", roi = 0){
 
-  // 🔥 NON creare più modal custom
-  // 🔥 usa il sistema globale (traduzione + UI coerente)
+  // rimuove eventuali modal già aperti
+  const existing = document.getElementById("rb-upgrade-modal");
+  if(existing) existing.remove();
 
-  if(typeof openProModal === "function"){
-    openProModal("investor");
-    return;
-  }
-
-  // 🔥 FALLBACK (sicurezza se openProModal non esiste)
   const modal = document.createElement("div");
+  modal.id = "rb-upgrade-modal";
 
   modal.style = `
     position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.6);
+    inset:0;
+    background:rgba(2,6,23,0.75);
+    backdrop-filter:blur(6px);
     display:flex;
     align-items:center;
     justify-content:center;
     z-index:999999;
   `;
 
+  // ================= CONFIG =================
+
+  let config = {};
+
+  if(type === "investor"){
+    config = {
+      title_it: "📊 Sblocca piano Investor",
+      title_en: "📊 Unlock Investor Plan",
+
+      desc_it: "Stai usando dati limitati. Investor sblocca analisi avanzate.",
+      desc_en: "You are using limited data. Investor unlocks advanced insights.",
+
+      features_it: [
+        "✔ Simulazioni illimitate",
+        "✔ Analisi ROI avanzata",
+        "✔ Confronto mercato"
+      ],
+      features_en: [
+        "✔ Unlimited simulations",
+        "✔ Advanced ROI analysis",
+        "✔ Market comparison"
+      ],
+
+      cta_it: "💰 Passa a Investor €19",
+      cta_en: "💰 Upgrade to Investor €19",
+
+      action: () => startPlanPurchase("investor")
+    };
+  }
+
+  if(type === "pro"){
+    config = {
+      title_it: "🚀 Sblocca analisi completa",
+      title_en: "🚀 Unlock full analysis",
+
+      desc_it: "Stai analizzando un investimento reale. Senza dati completi rischi di perdere migliaia di euro.",
+      desc_en: "You are analyzing a real investment. Without full data you risk losing thousands.",
+
+      features_it: [
+        "✔ ROI reale avanzato",
+        "✔ Analisi mutuo completa",
+        "✔ Scenario rischio",
+        "✔ Report professionale"
+      ],
+      features_en: [
+        "✔ Advanced real ROI",
+        "✔ Full mortgage analysis",
+        "✔ Risk scenarios",
+        "✔ Professional report"
+      ],
+
+      cta_it: "🔥 Sblocca ora – €29",
+      cta_en: "🔥 Unlock now – €29",
+
+      action: () => startPlanPurchase("pro")
+    };
+  }
+
+  // ================= BUILD UI =================
+
   modal.innerHTML = `
     <div style="
       background:white;
-      padding:30px;
-      border-radius:16px;
-      max-width:420px;
-      width:90%;
+      padding:32px;
+      border-radius:20px;
+      max-width:440px;
+      width:92%;
       text-align:center;
+      box-shadow:0 25px 80px rgba(0,0,0,0.25);
+      animation:rbFade .25s ease;
     ">
 
-      <h2 data-it="📊 Sblocca piano Investor" data-en="📊 Unlock Investor Plan"></h2>
+      <h2 data-it="${config.title_it}" data-en="${config.title_en}"
+          style="font-size:22px;font-weight:700;margin-bottom:10px;">
+      </h2>
 
-      <p style="margin:15px 0;color:#64748b;"
-        data-it="Stai usando dati limitati. Investor sblocca analisi avanzate."
-        data-en="You are using limited data. Investor unlocks advanced insights.">
+      <p data-it="${config.desc_it}" data-en="${config.desc_en}"
+         style="color:#64748b;margin-bottom:20px;">
       </p>
 
-      <ul style="text-align:left;font-size:14px;margin-bottom:20px;">
-        <li data-it="✔ Simulazioni illimitate" data-en="✔ Unlimited simulations"></li>
-        <li data-it="✔ Analisi ROI avanzata" data-en="✔ Advanced ROI analysis"></li>
-        <li data-it="✔ Confronto mercato" data-en="✔ Market comparison"></li>
+      <ul style="text-align:left;font-size:14px;margin-bottom:25px;line-height:1.6;">
+        ${config.features_it.map((f,i)=>`
+          <li data-it="${config.features_it[i]}" data-en="${config.features_en[i]}"></li>
+        `).join("")}
       </ul>
 
-      <button onclick="startPlanPurchase('investor')" class="btn-main" style="width:100%;margin-bottom:10px;"
-        data-it="💰 Passa a Investor €19"
-        data-en="💰 Upgrade to Investor €19">
+      <button id="rb-upgrade-btn"
+        style="
+          width:100%;
+          padding:14px;
+          border:none;
+          border-radius:999px;
+          font-weight:600;
+          font-size:14px;
+          color:white;
+          background:linear-gradient(135deg,#10b981,#22c55e);
+          box-shadow:0 10px 30px rgba(16,185,129,0.35);
+          cursor:pointer;
+        "
+        data-it="${config.cta_it}"
+        data-en="${config.cta_en}">
       </button>
 
-      <button onclick="this.closest('div').parentNode.remove()" class="btn-outline"
-        data-it="Continua gratis"
+      <button id="rb-close-btn"
+        style="
+          margin-top:12px;
+          background:none;
+          border:none;
+          color:#64748b;
+          cursor:pointer;
+        "
+        data-it="Continua senza"
         data-en="Continue free">
       </button>
 
     </div>
   `;
 
-  document.body.style.overflow = "hidden";
   document.body.appendChild(modal);
+  document.body.style.overflow = "hidden";
 
-  // 🔥 TRADUZIONE IMMEDIATA
+  // ================= EVENTS =================
+
+  modal.querySelector("#rb-upgrade-btn").onclick = () => {
+    config.action();
+  };
+
+  modal.querySelector("#rb-close-btn").onclick = () => {
+    modal.remove();
+    document.body.style.overflow = "";
+  };
+
+  modal.onclick = (e) => {
+    if(e.target === modal){
+      modal.remove();
+      document.body.style.overflow = "";
+    }
+  };
+
+  // ================= TRANSLATION =================
+
   if(typeof applyStaticTranslations === "function"){
     applyStaticTranslations();
   }
+};
+
+
+
+// =====================================
+// 🔥 LEGACY COMPATIBILITY (NO BREAK)
+// =====================================
+
+function showInvestorUpsell(roi = 0){
+  openUpgradeModal("investor", roi);
 }
 
+function showProUpgradeModal(){
+  openUpgradeModal("pro");
+}
 // ================= Function Mutui =================
 
 function renderMortgageResults(results){
