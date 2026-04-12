@@ -227,6 +227,22 @@ function initHeaderInteractions(){
 window.addEventListener("rb_plan_ready", ()=>{
   renderUser(auth.currentUser || null);
 });
+
+  // 🔥 HEADER SCROLL EFFECT
+window.addEventListener("scroll", () => {
+
+  const header = document.querySelector(".rb-header");
+  if(!header) return;
+
+  if(window.scrollY > 20){
+    header.style.background = "rgba(255,255,255,0.95)";
+    header.style.boxShadow = "0 10px 30px rgba(2,6,23,0.08)";
+  } else {
+    header.style.background = "rgba(255,255,255,0.7)";
+    header.style.boxShadow = "none";
+  }
+
+});
 }
 
 /* =====================
@@ -394,7 +410,12 @@ function renderUser(user){
 
   } else {
 
-    el.innerHTML = `<a href="/login/" class="rb-login">Accedi</a>`;
+    el.innerHTML = `
+     <a href="/login/" class="rb-login"
+     data-it="Accedi"
+     data-en="Login">
+     Accedi
+     </a>`;
 
   }
 
