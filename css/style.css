@@ -12165,3 +12165,87 @@ body{
   }
 
 }
+
+/* =====================================
+🔥 MODAL PAYWALL – ULTRA CONVERSION
+===================================== */
+
+.rb-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,0.75);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.rb-modal.open{
+  display:flex;
+}
+
+.rb-modal-box{
+  background:white;
+  border-radius:20px;
+  padding:32px 26px;
+  max-width:420px;
+  width:90%;
+  text-align:center;
+
+  box-shadow:0 30px 80px rgba(0,0,0,0.25);
+}
+
+/* TITLE */
+.rb-modal-box h3{
+  font-size:20px;
+  font-weight:700;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+
+/* TEXT */
+.rb-modal-box p{
+  color:#475569;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* LIST */
+.rb-modal-box ul{
+  margin:20px 0;
+  text-align:left;
+  padding-left:18px;
+}
+
+.rb-modal-box li{
+  font-size:14px;
+  color:#334155;
+  margin-bottom:6px;
+}
+
+/* CTA */
+.rb-modal-box .rb-btn.primary{
+  width:100%;
+  padding:12px;
+  font-size:15px;
+  margin-top:10px;
+
+  background:linear-gradient(135deg,#10b981,#22c55e);
+  box-shadow:0 15px 40px rgba(16,185,129,0.35);
+}
+
+/* SECONDARY */
+.rb-modal-box .rb-btn.secondary{
+  margin-top:10px;
+  background:#f1f5f9;
+}
+
+/* LINK CONTINUE */
+.rb-modal-box .continue-free{
+  display:block;
+  margin-top:12px;
+  font-size:13px;
+  color:#64748b;
+  cursor:pointer;
+}
