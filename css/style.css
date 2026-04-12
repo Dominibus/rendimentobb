@@ -11818,3 +11818,104 @@ p{
 body{
   overflow-x:hidden;
 }
+
+/* =====================================
+🔥 FOOTER SAAS ULTRA (READABILITY BOOST)
+===================================== */
+
+.global-footer{
+  background:#0f172a; /* più scuro = più contrasto */
+  color:#e5e7eb;
+}
+
+/* CONTAINER */
+.footer-container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:60px 20px 30px;
+}
+
+/* ===== CTA TOP ===== */
+.footer-cta h3{
+  font-size:22px;
+  font-weight:700;
+  color:#ffffff;
+}
+
+.footer-cta p{
+  color:#cbd5e1;
+  margin-top:8px;
+}
+
+/* ===== GRID ===== */
+.footer-grid{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:30px;
+}
+
+/* TITOLI */
+.footer-col strong{
+  display:block;
+  margin-bottom:12px;
+  font-size:14px;
+  color:#ffffff;
+  letter-spacing:.5px;
+}
+
+/* TESTO */
+.footer-col p{
+  font-size:14px;
+  line-height:1.6;
+  color:#94a3b8;
+}
+
+/* LINK */
+.footer-col a{
+  display:block;
+  margin-bottom:8px;
+  font-size:14px;
+  color:#cbd5e1;
+  text-decoration:none;
+  transition:all .2s ease;
+}
+
+/* HOVER ULTRA SAAS */
+.footer-col a:hover{
+  color:#10b981;
+  transform:translateX(4px);
+}
+
+/* ===== TRUST BAR ===== */
+.footer-trust{
+  margin-top:40px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  font-size:14px;
+  color:#cbd5e1;
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding-top:20px;
+}
+
+/* ===== EXTRA CTA ===== */
+.footer-extra-cta{
+  margin-top:30px;
+  text-align:center;
+}
+
+.footer-extra-cta p{
+  color:#94a3b8;
+  margin-bottom:10px;
+}
+
+/* ===== COPYRIGHT ===== */
+.footer-bottom{
+  margin-top:30px;
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+  border-top:1px solid rgba(255,255,255,0.05);
+  padding-top:15px;
+}
