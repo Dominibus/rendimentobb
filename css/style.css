@@ -12935,3 +12935,93 @@ section:not(.hero) h3 {
   }
 
 }
+
+/* =====================================
+🔥 FIX MENU MOBILE – VISIBILITÀ TOTALE
+===================================== */
+
+/* CONTENITORE MENU */
+.rb-mobile-menu{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+
+  background:#ffffff !important; /* 🔥 FORZA BIANCO */
+
+  z-index:9999;
+  transition:all .3s ease;
+
+  padding:80px 20px 20px;
+  box-shadow:-20px 0 60px rgba(0,0,0,0.2);
+}
+
+/* APERTO */
+.rb-mobile-menu.open{
+  right:0;
+}
+
+/* OVERLAY */
+.rb-menu-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,0.6);
+  backdrop-filter:blur(4px);
+
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+
+  z-index:9998;
+}
+
+.rb-menu-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* NAV */
+#rb-mobile-nav{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* LINK MENU */
+#rb-mobile-nav a{
+  display:block;
+  padding:16px;
+
+  border-radius:12px;
+
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+
+  color:#0f172a !important;  /* 🔥 FIX TESTO */
+  font-weight:600;
+
+  text-decoration:none;
+  font-size:15px;
+
+  transition:all .2s ease;
+}
+
+/* HOVER */
+#rb-mobile-nav a:hover{
+  background:#10b981;
+  color:white !important;
+}
+
+/* SEPARATORE */
+#rb-mobile-nav hr{
+  border:none;
+  border-top:1px solid #e2e8f0;
+  margin:10px 0;
+}
+
+/* BLOCCO SCROLL */
+body.menu-open{
+  overflow:hidden;
+}
