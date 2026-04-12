@@ -11495,3 +11495,281 @@ button.btn-primary{
   }
 
 }
+
+/* =====================================
+🚀 RENDIMENTOBB DESIGN SYSTEM – FINAL
+(STABILE + CENTRALIZZATO + WOW)
+===================================== */
+
+/* =====================================
+🎯 LAYOUT SYSTEM (UNICO)
+===================================== */
+
+/* container globale */
+.container,
+.section .container{
+  width:100%;
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* varianti */
+.container-wide{
+  max-width:1300px;
+}
+
+.container-narrow{
+  max-width:900px;
+}
+
+/* =====================================
+🔥 SIMULATORE – FIX DEFINITIVO
+===================================== */
+
+.simulator-container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:40px 20px;
+}
+
+.simulator-grid{
+  display:flex;
+  gap:30px;
+  align-items:stretch;
+}
+
+.simulator-left,
+.simulator-right{
+  flex:1;
+  min-width:0;
+}
+
+/* card */
+.simulator-left,
+.simulator-right{
+  background:#fff;
+  border-radius:20px;
+  padding:24px;
+
+  box-shadow:0 10px 40px rgba(2,6,23,0.08);
+}
+
+/* mobile */
+@media (max-width:1024px){
+  .simulator-grid{
+    flex-direction:column;
+  }
+}
+
+/* =====================================
+💎 CARD SYSTEM (UNIFICATO)
+===================================== */
+
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:24px;
+
+  box-shadow:0 10px 40px rgba(2,6,23,0.08);
+  transition:all .25s ease;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(2,6,23,0.12);
+}
+
+/* =====================================
+🔥 BUTTON SYSTEM (PREMIUM)
+===================================== */
+
+.btn,
+.btn-primary,
+button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:14px 24px;
+  border-radius:999px;
+
+  font-weight:600;
+  font-size:15px;
+
+  cursor:pointer;
+  transition:all .25s ease;
+}
+
+/* primary */
+.btn-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:#fff;
+
+  box-shadow:0 10px 25px rgba(16,185,129,0.25);
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 20px 50px rgba(16,185,129,0.35);
+}
+
+/* outline */
+.btn-outline{
+  background:#fff;
+  border:1px solid #e2e8f0;
+  color:#0f172a;
+}
+
+.btn-outline:hover{
+  background:#f8fafc;
+  transform:translateY(-2px);
+}
+
+/* mobile full width SOLO CTA */
+@media (max-width:768px){
+  .results-card .btn,
+  .upgrade-box .btn{
+    width:100% !important;
+  }
+}
+
+/* =====================================
+🔥 RESULTS / KPI GRID
+===================================== */
+
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.result-item{
+  background:#f8fafc;
+  border-radius:16px;
+  padding:18px;
+
+  box-shadow:0 4px 15px rgba(2,6,23,0.05);
+}
+
+/* =====================================
+🔥 OVERLAY SYSTEM (STABILE)
+===================================== */
+
+[data-paywall="true"]{
+  position:relative;
+}
+
+/* blur */
+.pro-only,
+.pro-blur{
+  filter:blur(5px);
+  opacity:0.6;
+  pointer-events:none;
+}
+
+/* overlay */
+.overlay-content{
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+
+  padding:20px;
+
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(6px);
+
+  z-index:5;
+}
+
+/* =====================================
+🔥 HERO SYSTEM
+===================================== */
+
+.hero,
+.hero-left{
+  text-align:center;
+}
+
+.hero .container{
+  max-width:1100px;
+}
+
+/* bottoni hero */
+.hero .btn,
+.hero .btn-outline{
+  margin:10px auto;
+}
+
+/* =====================================
+🔥 CTA BOX (UNIFICATO)
+===================================== */
+
+.cta-box{
+  text-align:center;
+}
+
+.cta-box .btn{
+  margin:10px;
+}
+
+/* =====================================
+🔥 FIX GLOBALI CRITICI
+===================================== */
+
+/* evita tagli */
+.section,
+.hero,
+.simulator-container{
+  overflow:visible !important;
+}
+
+/* immagini safe */
+img{
+  max-width:100%;
+  height:auto;
+}
+
+/* anti overlay bug */
+body:not(.popup-open) .popup-overlay{
+  display:none !important;
+}
+
+/* fix click */
+.btn{
+  position:relative;
+  z-index:2;
+}
+
+/* =====================================
+🔥 HEADER SAFE (NON TOCCARE)
+===================================== */
+
+.rb-header button,
+.rb-lang button,
+#user-area .rb-btn{
+  width:auto !important;
+  padding:8px 14px;
+  font-size:14px;
+}
+
+/* =====================================
+🔥 WOW EFFECT (SUBTLE SAAS)
+===================================== */
+
+/* glow hover su card importanti */
+.results-card:hover,
+.simulator-right:hover{
+  box-shadow:0 30px 80px rgba(16,185,129,0.15);
+  transform:translateY(-3px);
+}
+
+/* micro animazione */
+*{
+  transition:background .2s ease, box-shadow .2s ease, transform .2s ease;
+}
