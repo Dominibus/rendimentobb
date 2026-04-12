@@ -11542,3 +11542,24 @@ form .btn,
 }
 
 }
+/* =====================================
+🔥 HAMBURGER VISIBILITY FIX
+===================================== */
+
+/* DESKTOP → NASCOSTO */
+@media (min-width:1024px){
+  #rb-burger{
+    display:none !important;
+  }
+}
+
+/* MOBILE → VISIBILE */
+@media (max-width:1023px){
+  #rb-burger{
+    display:block;
+    font-size:22px;
+    background:none;
+    border:none;
+    cursor:pointer;
+  }
+}
