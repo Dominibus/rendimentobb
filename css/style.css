@@ -11385,3 +11385,36 @@ form .btn,
   }
 
 }
+
+/* =====================================
+🔥 IMMOBILI – LEAD BOX PERFECT FIX
+===================================== */
+
+.immobili-page section[style*="max-width:900px"]{
+
+  width:100% !important;
+  max-width:700px !important; /* 👈 più elegante desktop */
+
+  margin:60px auto !important;
+
+  padding:30px 20px !important;
+
+  box-sizing:border-box;
+
+}
+
+/* =====================================
+📱 MOBILE FIX
+===================================== */
+
+@media (max-width:768px){
+
+  .immobili-page section[style*="max-width:900px"]{
+
+    max-width:100% !important;
+    margin:40px 16px !important; /* 👈 spazio laterale vero */
+
+    padding:24px 16px !important;
+  }
+
+}
