@@ -12167,7 +12167,7 @@ body{
 }
 
 /* =====================================
-🔥 MODAL PAYWALL – ULTRA CONVERSION (ISOLATO)
+🔥 MODAL PAYWALL – ULTRA CONVERSION
 ===================================== */
 
 .rb-modal{
@@ -12185,7 +12185,7 @@ body{
   display:flex;
 }
 
-/* 🔥 ISOLAMENTO FORTE */
+/* BOX */
 .rb-modal .rb-modal-box{
   background:#ffffff;
   border-radius:20px;
@@ -12195,8 +12195,6 @@ body{
   text-align:center;
 
   box-shadow:0 30px 80px rgba(0,0,0,0.25);
-
-  /* ✅ FIX SOLO QUI */
   color:#0f172a;
 }
 
@@ -12204,7 +12202,6 @@ body{
 .rb-modal .rb-modal-box h3{
   font-size:20px;
   font-weight:700;
-  color:#0f172a;
   margin-bottom:10px;
 }
 
@@ -12245,7 +12242,7 @@ body{
   background:#f1f5f9;
 }
 
-/* LINK CONTINUE */
+/* LINK */
 .rb-modal .rb-modal-box .continue-free{
   display:block;
   margin-top:12px;
@@ -12255,52 +12252,31 @@ body{
 }
 
 /* =====================================
-🔥 FIX MODAL – ISOLATO (SAFE)
+🔥 FIX MODAL ISOLATO
 ===================================== */
 
-/* SOLO overlay */
 #rb-upgrade-modal{
   opacity:1 !important;
 }
 
-/* SOLO BOX INTERNO */
 #rb-upgrade-modal > div{
   opacity:1 !important;
   filter:none !important;
 }
 
-/* TESTI SOLO NEL MODAL */
-#rb-upgrade-modal h2,
-#rb-upgrade-modal h3{
-  color:#0f172a !important;
-}
-
-#rb-upgrade-modal p{
-  color:#475569 !important;
-}
-
-#rb-upgrade-modal li{
-  color:#334155 !important;
-}
-
-/* bottone secondario */
-#rb-upgrade-modal #rb-close-btn{
-  color:#64748b !important;
-}
-
 /* =====================================
-🔥 GLOBAL BLUR FIX (RESET TOTALE)
+🚨 FIX CRITICO – RIMUOVE BLUR GLOBALE
 ===================================== */
 
 body,
-section,
-div{
+body *{
   filter:none !important;
-  opacity:1 !important;
 }
 
+/* ⚠️ NON TOCCARE OPACITY GLOBALE */
+
 /* =====================================
-🔒 PAYWALL CORRETTO (SOLO QUI)
+🔒 PAYWALL SOLO RISULTATI
 ===================================== */
 
 .locked-section{
@@ -12309,16 +12285,18 @@ div{
 
 .locked-section .blur-content{
   filter:blur(6px);
-  opacity:0.5;
+  opacity:0.4;
   pointer-events:none;
 }
 
+/* OVERLAY */
 .locked-overlay{
   position:absolute;
   inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
+
   background:rgba(255,255,255,0.75);
   backdrop-filter:blur(4px);
   z-index:10;
@@ -12333,14 +12311,13 @@ div{
 .pricing,
 .simulator-container{
   filter:none !important;
-  opacity:1 !important;
 }
+
 /* =====================================
 💰 PRICING SEMPRE PERFETTO
 ===================================== */
 
 .pricing-card{
-  opacity:1 !important;
   filter:none !important;
   transform:scale(1);
 }
