@@ -13025,3 +13025,10 @@ section:not(.hero) h3 {
 body.menu-open{
   overflow:hidden;
 }
+
+#rb-burger{
+  font-size:22px;
+  color:#0f172a !important;
+  background:none;
+  border:none;
+}
