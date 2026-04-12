@@ -12549,3 +12549,39 @@ section{
   color:#0f172a !important;
   border-color:#cbd5e1 !important;
 }
+
+/* =====================================
+🔥 FIX HEADINGS GLOBAL (H2 / H3)
+RISOLVE: bande blu / spacing / glitch layout
+===================================== */
+
+h1, h2, h3{
+  background: none !important;
+  background-image: none !important;
+
+  display: block;
+  width: 100%;
+
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  box-shadow: none !important;
+}
+
+/* 🔥 CENTRATURA AUTOMATICA SOLO SE IL CONTAINER È CENTER */
+.container[style*="text-align:center"] h2,
+.container[style*="text-align:center"] h3{
+  text-align: center;
+}
+
+/* 🔥 FIX MOBILE (evita tagli o overflow) */
+@media (max-width:768px){
+
+  h2, h3{
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+}
