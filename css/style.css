@@ -12888,3 +12888,50 @@ section:not(.hero) h3 {
   }
 
 }
+
+/* =====================================
+🔥 MOBILE MENU FIX (ULTRA DEFINITIVO)
+===================================== */
+
+@media (max-width:768px){
+
+  /* CONTENITORE MENU */
+  .mobile-menu,
+  .rb-menu,
+  .nav-menu{
+
+    background: #ffffff !important;
+
+    opacity: 1 !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+
+    z-index: 9999;
+  }
+
+  /* FORZA TUTTI I CONTENUTI */
+  .mobile-menu *,
+  .rb-menu *,
+  .nav-menu *{
+
+    color: #0f172a !important;
+
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  /* LINK */
+  .mobile-menu a,
+  .rb-menu a,
+  .nav-menu a{
+    background: #f8fafc !important;
+    color: #0f172a !important;
+  }
+
+  /* ACTIVE */
+  .mobile-menu a.active{
+    background: #10b981 !important;
+    color: white !important;
+  }
+
+}
