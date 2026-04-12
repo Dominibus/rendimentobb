@@ -1,152 +1,275 @@
-// =======================================
-// 🔥 RENDIMENTOBB – UI SYSTEM 2.0 PRO
-// Compatibile LANG ENGINE 7.0
-// =======================================
+export function renderExecutiveKPI(result){
 
-document.addEventListener("DOMContentLoaded", () => {
+// ================= SAFE ELEMENT =================
+const roiEl = document.getElementById("roi-live");
+const profitEl = document.getElementById("profit-live");
+const revenueEl = document.getElementById("revenue-live");
 
-  document.body.classList.add("rb-ui");
+// ================= SAFE DATA =================
+const roi = Number(result?.roi) || 0;
+const profit = Number(result?.netAfterMortgage || result?.profit) || 0;
+const revenue = Number(result?.gross || result?.revenue) || 0;
 
-  /* ===============================
-  🔘 BUTTON NORMALIZER (DEFINITIVO)
-  =============================== */
+// ================= PLAN CHECK =================
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "investor" ||
+  window.currentPlan === "pro_yearly";
 
-  function normalizeButtons(){
+const isAdmin = window.currentUser?.email === "rendimentobb@gmail.com";
 
-    document.querySelectorAll("button, a").forEach(btn => {
+// ================= ROI COLOR =================
+function getROIColor(value){
+  if(value < 5) return "#ef4444";
+  if(value < 10) return "#f59e0b";
+  return "#10b981";
+}
 
-      // skip se già processato
-      if(btn.dataset.rbReady) return;
+// ================= ANIMATION =================
+function animateValue(el, start, end, duration){
 
-      // auto opt-in
-      if(btn.classList.contains("rb-auto-btn") || btn.classList.contains("btn")){
-        
-        // evita conflitti
-        if(btn.classList.contains("btn-main") && btn.classList.contains("btn-outline")){
-          btn.classList.remove("btn-main");
-        }
+  if(!el) return;
 
-        // assegna default SOLO se non ha stile
-        if(
-          !btn.classList.contains("btn-main") &&
-          !btn.classList.contains("btn-outline") &&
-          !btn.classList.contains("btn-primary")
-        ){
-          btn.classList.add("btn-main");
-        }
+  let startTime = null;
 
-      }
+  function animation(currentTime){
+    if(!startTime) startTime = currentTime;
 
-      btn.dataset.rbReady = "1";
+    const progress = Math.min((currentTime - startTime)/duration,1);
+    const current = start + (end-start)*progress;
 
-    });
+    el.innerText = current.toFixed(1) + "%";
 
+    if(progress < 1){
+      requestAnimationFrame(animation);
+    }
   }
 
-  normalizeButtons();
+  requestAnimationFrame(animation);
+}
 
+// ================= ROI BADGE =================
 
-  /* ===============================
-  ⛔ DISABLED STATE (LIVE SAFE)
-  =============================== */
+const badgeEl = document.getElementById("roi-badge");
 
-  function syncDisabled(){
+if(badgeEl){
 
-    document.querySelectorAll("button, a").forEach(el => {
+  let textIT = "";
+  let textEN = "";
+  let color = "#10b981";
 
-      if(el.hasAttribute("disabled")){
-        el.classList.add("is-disabled");
-      } else {
-        el.classList.remove("is-disabled");
-      }
-
-    });
-
+  if(roi < 5){
+    textIT = "❌ Investimento rischioso";
+    textEN = "❌ Risky investment";
+    color = "#ef4444";
+  }
+  else if(roi < 10){
+    textIT = "⚠️ Da ottimizzare";
+    textEN = "⚠️ Needs optimization";
+    color = "#f59e0b";
+  }
+  else{
+    textIT = "🔥 Investimento interessante";
+    textEN = "🔥 Strong investment";
+    color = "#10b981";
   }
 
-  syncDisabled();
+  badgeEl.innerHTML = `
+    <span data-it="${textIT}" data-en="${textEN}"></span>
+  `;
+  badgeEl.style.color = color;
+}
 
-  const observer = new MutationObserver(() => {
-    syncDisabled();
-  });
+// ================= RISK BAR =================
 
-  observer.observe(document.body,{
-    attributes:true,
-    subtree:true,
-    attributeFilter:["disabled"]
-  });
+const riskEl = document.getElementById("risk-bar");
 
+if(riskEl){
 
-  /* ===============================
-  ⚡ LOADING SYSTEM (BILINGUE SAFE)
-  =============================== */
+  let risk = 100 - roi;
+  if(risk < 20) risk = 20;
+  if(risk > 90) risk = 90;
 
-  window.setButtonLoading = (btn, state = true) => {
+  let color = "#10b981";
+  if(risk > 70) color = "#ef4444";
+  else if(risk > 40) color = "#f59e0b";
 
-    if(!btn) return;
+  riskEl.innerHTML = `
+    <div style="margin-top:10px">
+      <div style="font-size:12px;margin-bottom:6px;opacity:0.7"
+      data-it="Livello rischio investimento"
+      data-en="Investment risk level"></div>
 
-    if(state){
+      <div style="background:#e5e7eb;height:8px;border-radius:6px;overflow:hidden">
+        <div style="
+          width:${risk}%;
+          height:100%;
+          background:${color};
+          transition:width 0.6s ease;
+        "></div>
+      </div>
+    </div>
+  `;
+}
 
-      btn.classList.add("is-loading");
-      btn.setAttribute("disabled", true);
+// ================= ROI =================
 
-      // NON toccare innerHTML → salva solo stato
-      btn.dataset.loading = "1";
+if(roiEl){
+  roiEl.style.color = getROIColor(roi);
+  animateValue(roiEl, 0, roi, 800);
+}
 
-    } else {
+// ================= AI VERDICT =================
 
-      btn.classList.remove("is-loading");
-      btn.removeAttribute("disabled");
-      delete btn.dataset.loading;
+const verdictEl = document.getElementById("roi-verdict");
 
-      // 🔥 RIAPPLICA TRADUZIONE
-      if(window.applyTranslations){
-        applyTranslations();
-      }
+if(verdictEl){
 
-    }
+  let textIT = "";
+  let textEN = "";
 
-  };
+  if(roi < 5){
+    textIT = "❌ Alto rischio: questo investimento potrebbe non essere sostenibile";
+    textEN = "❌ High risk: this investment may not be sustainable";
+  }
+  else if(roi < 10){
+    textIT = "⚠️ Margine basso: serve ottimizzazione";
+    textEN = "⚠️ Low margin: needs optimization";
+  }
+  else{
+    textIT = "🔥 Ottimo potenziale: sopra media mercato";
+    textEN = "🔥 Strong potential: above market average";
+  }
 
+  verdictEl.innerHTML = `
+    <span data-it="${textIT}" data-en="${textEN}"></span>
+  `;
+}
 
-  /* ===============================
-  🧠 AUTO CARD ENHANCER
-  =============================== */
+// ================= STATUS =================
 
-  document.querySelectorAll(".card").forEach(card=>{
-    if(!card.classList.contains("rb-card")){
-      card.classList.add("rb-card");
-    }
-  });
+const statusEl = document.getElementById("investment-status");
 
+if(statusEl){
 
-  /* ===============================
-  🌐 FIX LINGUA SU ELEMENTI DINAMICI
-  =============================== */
+  let textIT = "";
+  let textEN = "";
+  let color = "#10b981";
 
-  document.addEventListener("rb_language_changed", () => {
+  if(roi < 5){
+    textIT = "❌ Investimento rischioso";
+    textEN = "❌ Risky investment";
+    color = "#ef4444";
+  }
+  else if(roi < 10){
+    textIT = "⚠️ Da ottimizzare";
+    textEN = "⚠️ Needs optimization";
+    color = "#f59e0b";
+  }
+  else{
+    textIT = "🔥 Investimento interessante";
+    textEN = "🔥 Strong investment";
+    color = "#10b981";
+  }
 
-    // riapplica su tutto (inclusi elementi JS)
-    if(window.applyTranslations){
-      applyTranslations();
-    }
+  statusEl.innerHTML = `
+    <div data-it="${textIT}" data-en="${textEN}"
+    style="font-weight:600;margin-top:8px;color:${color};font-size:14px;"></div>
+  `;
+}
 
-  });
+// ================= PROFIT / REVENUE =================
 
+if(profitEl){
+  profitEl.innerText = profit.toLocaleString(
+    window.currentLang === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  );
+}
 
-  /* ===============================
-  💰 CTA TRACK (MONETIZZAZIONE)
-  =============================== */
+if(revenueEl){
+  revenueEl.innerText = revenue.toLocaleString(
+    window.currentLang === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  );
+}
 
-  document.querySelectorAll("button, a").forEach(btn=>{
+// ================= PRO BADGE =================
 
-    if(
-      btn.innerText.toLowerCase().includes("sblocca") ||
-      btn.innerText.toLowerCase().includes("unlock")
-    ){
-      btn.classList.add("cta-upgrade");
-    }
+const container = document.getElementById("executive-kpi");
 
-  });
+if(isPro && container && !container.querySelector(".pro-badge")){
 
-});
+  const proBadge = document.createElement("div");
+  proBadge.classList.add("pro-badge");
+
+  proBadge.innerHTML = `
+  <div data-it="🚀 Analisi PRO attiva"
+       data-en="🚀 PRO Analysis active"
+  style="
+  margin-bottom:12px;
+  padding:12px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  font-size:13px;
+  font-weight:600;
+  text-align:center;
+  "></div>
+  `;
+
+  container.prepend(proBadge);
+}
+
+// ================= FREE → UPSELL =================
+
+if(!isPro && !isAdmin){
+
+  const upsell = document.getElementById("smart-upsell");
+
+  if(upsell){
+
+    upsell.innerHTML = `
+    <div style="
+    margin-top:15px;
+    padding:16px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    text-align:center;
+    ">
+
+    <div style="font-weight:600;font-size:15px;"
+    data-it="🚨 Stai prendendo una decisione al buio"
+    data-en="🚨 You are making a decision blindly"></div>
+
+    <div style="font-size:13px;margin-top:6px;opacity:0.8;"
+    data-it="Potresti perdere migliaia di euro"
+    data-en="You could lose thousands"></div>
+
+    <button onclick="openUpgradeModal()" class="btn-primary"
+    data-it="🔥 Sblocca analisi completa"
+    data-en="🔥 Unlock full analysis"></button>
+
+    </div>
+    `;
+  }
+}
+
+// ================= APPLY LANG =================
+if(window.applyTranslations){
+  applyTranslations();
+}
+
+// ================= MONTHLY =================
+
+const monthlyEl = document.getElementById("profit-monthly");
+
+if(monthlyEl){
+  monthlyEl.innerText = (profit/12).toLocaleString(
+    window.currentLang === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  );
+}
+
+}
