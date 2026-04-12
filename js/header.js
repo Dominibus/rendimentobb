@@ -283,9 +283,9 @@ function renderUser(user){
     `;
 
     // LEADS
-    html += isAdmin
-      ? `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`
-      : `<a href="#" class="rb-btn secondary locked" id="leads-locked">Leads</a>`;
+    if(isAdmin){
+  html += `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`;
+}
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
@@ -386,16 +386,7 @@ function renderUser(user){
 
     }
 
-    // LEADS LOCK
-    const leads = document.getElementById("leads-locked");
-    if(leads){
-      leads.onclick = (e)=>{
-        e.preventDefault();
-        openProModal();
-      };
-    }
-
-    // LOGOUT DESKTOP
+      // LOGOUT DESKTOP
     document.getElementById("logout").onclick = async ()=>{
       await signOut(auth);
       location.reload();
