@@ -12629,19 +12629,36 @@ section:not(.hero) h3 {
 }
 
 /* =====================================
-🔥 FIX OVERLAY SBLOCCO (CRITICO)
+🔥 FIX OVERLAY SBLOCCO (ULTRA DEFINITIVO)
 ===================================== */
 
-.home-blur-overlay{
-  background: rgba(15, 23, 42, 0.75) !important; /* overlay scuro */
-  backdrop-filter: blur(6px);
+/* 🔥 CONTENITORE PADRE (fondamentale) */
+.investment-panel{
+  position: relative;
 }
 
+/* 🔥 OVERLAY */
+.home-blur-overlay{
+  position: absolute;
+  inset: 0; /* top:0 left:0 right:0 bottom:0 */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(8px);
+
+  z-index: 20;
+  border-radius: 16px;
+}
+
+/* 🔥 BOX CENTRALE */
 .home-overlay-content{
   background: linear-gradient(135deg, #ffffff, #f8fafc);
   color: #0f172a !important;
 
-  padding: 20px;
+  padding: 22px;
   border-radius: 16px;
 
   max-width: 320px;
@@ -12649,18 +12666,36 @@ section:not(.hero) h3 {
 
   text-align: center;
 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
 }
 
-/* testi dentro overlay */
+/* 🔥 TITOLI */
 .home-overlay-content .overlay-title{
   font-weight: 700;
   font-size: 16px;
   color: #0f172a !important;
 }
 
+/* 🔥 TESTO */
 .home-overlay-content .overlay-text{
   margin-top: 6px;
   font-size: 14px;
   color: #475569 !important;
+}
+
+/* 🔥 CTA BUTTON */
+.home-overlay-content .btn{
+  margin-top: 14px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* 🔥 MOBILE FIX */
+@media (max-width:768px){
+
+  .home-overlay-content{
+    max-width: 90%;
+    padding: 18px;
+  }
+
 }
