@@ -494,7 +494,7 @@ onAuthStateChanged(auth, async (user) => {
     // 🔥 UPDATE UI
     // ===============================
 
-    // updateUserUI(user);
+    updateUserUI(user);
 
     // ===============================
     // 🔥 EVENTI GLOBALI (UNICO PUNTO)
@@ -556,7 +556,7 @@ console.error("Errore attivazione piano:",err);
 
 document.addEventListener("rb_language_changed", () => {
 
-  updateUserUI(currentUser);
+  updateUserUI(window.currentUser);
 
 });
 
