@@ -1,6 +1,5 @@
 /* =====================================
-🔥 RENDIMENTOBB – UI ENGINE PRO
-Silicon Valley SaaS / Conversion Focus
+🔥 RENDIMENTOBB – UI ENGINE PRO BILINGUE
 ===================================== */
 
 
@@ -15,24 +14,27 @@ window.UI_STATE = {
 
 
 /* =====================
-🧹 RESET UI (CRITICO)
+🌐 TRIGGER LANGUAGE
+===================== */
+
+document.addEventListener("rb_language_changed", () => {
+  if(window.UI_STATE.lastData){
+    renderAll(window.UI_STATE.lastData);
+  }
+});
+
+
+/* =====================
+🧹 RESET UI
 ===================== */
 
 export function clearUI(){
 
-  const sections = [
-    "results",
-    "roi-dashboard",
-    "investment-metrics",
-    "advanced-analysis"
-  ];
-
-  sections.forEach(id=>{
+  ["results","roi-dashboard","investment-metrics","advanced-analysis"]
+  .forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.innerHTML = "";
   });
-
-  window.UI_STATE.rendered = false;
 
 }
 
@@ -51,17 +53,15 @@ export function renderAll(data){
 
   renderHeroResult(data);
   renderMainMetrics(data);
-  renderCharts(data);
+  renderCharts();
   renderRiskSection(data);
-  renderUpgradeBlock(data);
-
-  window.UI_STATE.rendered = true;
+  renderUpgradeBlock();
 
 }
 
 
 /* =====================
-🔥 HERO RESULT (IMPATTO)
+🔥 HERO RESULT
 ===================== */
 
 function renderHeroResult(data){
@@ -72,14 +72,29 @@ function renderHeroResult(data){
   const roi = Number(data.roi || 0).toFixed(1);
   const profit = Number(data.netAfterMortgage || 0).toLocaleString();
 
+  const label =
+    roi > 12 ? {
+      it:"🔥 Investimento eccellente",
+      en:"🔥 Excellent investment"
+    } :
+    roi > 7 ? {
+      it:"👍 Investimento valido",
+      en:"👍 Good investment"
+    } : {
+      it:"⚠️ Investimento rischioso",
+      en:"⚠️ Risky investment"
+    };
+
   container.innerHTML = `
     <div class="rb-hero-result">
 
-      <h2>🔥 Investimento ${roi > 12 ? "eccellente" : roi > 7 ? "valido" : "rischioso"}</h2>
+      <h2 data-it="${label.it}" data-en="${label.en}"></h2>
 
       <div class="rb-roi-big">${roi}%</div>
 
-      <p>Profitto annuo stimato</p>
+      <p data-it="Profitto annuo stimato"
+         data-en="Estimated yearly profit"></p>
+
       <strong>${profit} €</strong>
 
       ${!isProUser() ? renderInlineUpgrade() : ""}
@@ -91,7 +106,7 @@ function renderHeroResult(data){
 
 
 /* =====================
-📊 METRICHE PRINCIPALI
+📊 METRICHE
 ===================== */
 
 function renderMainMetrics(data){
@@ -101,15 +116,14 @@ function renderMainMetrics(data){
 
   const monthly = Math.round((data.netAfterMortgage || 0) / 12);
   const yearly = Math.round(data.netAfterMortgage || 0);
-  const breakEven = data.breakEven || "—";
 
   container.innerHTML = `
     <div class="rb-metrics-grid">
 
-      ${metricCard("Profitto mensile", monthly + " €")}
-      ${metricCard("Profitto annuo", yearly + " €")}
-      ${metricCard("Break-even", breakEven)}
-      ${metricCard("ROI stimato", data.roi.toFixed(1) + "%")}
+      ${metricCard("Profitto mensile","Monthly profit", monthly+" €")}
+      ${metricCard("Profitto annuo","Yearly profit", yearly+" €")}
+      ${metricCard("Break-even","Break-even", data.breakEven || "—")}
+      ${metricCard("ROI stimato","Estimated ROI", data.roi.toFixed(1)+"%")}
 
     </div>
   `;
@@ -117,10 +131,10 @@ function renderMainMetrics(data){
 }
 
 
-function metricCard(title, value){
+function metricCard(it,en,value){
   return `
     <div class="rb-card">
-      <div class="rb-card-title">${title}</div>
+      <div class="rb-card-title" data-it="${it}" data-en="${en}"></div>
       <div class="rb-card-value">${value}</div>
     </div>
   `;
@@ -128,10 +142,10 @@ function metricCard(title, value){
 
 
 /* =====================
-📈 CHARTS
+📈 CHART
 ===================== */
 
-function renderCharts(data){
+function renderCharts(){
 
   const container = document.getElementById("results");
   if(!container) return;
@@ -139,7 +153,8 @@ function renderCharts(data){
   container.innerHTML = `
     <div class="rb-chart-box">
 
-      <h3>Previsione ricavi</h3>
+      <h3 data-it="Previsione ricavi"
+          data-en="Revenue forecast"></h3>
 
       <canvas id="roiChart"></canvas>
 
@@ -162,14 +177,28 @@ function renderRiskSection(data){
 
   const risk = data.riskScore || 50;
 
+  const label =
+    risk < 40 ? {
+      it:"Basso rischio",
+      en:"Low risk"
+    } :
+    risk < 70 ? {
+      it:"Rischio medio",
+      en:"Medium risk"
+    } : {
+      it:"Alto rischio",
+      en:"High risk"
+    };
+
   container.innerHTML = `
     <div class="rb-risk-box">
 
-      <h3>⚠️ Analisi rischio</h3>
+      <h3 data-it="⚠️ Analisi rischio"
+          data-en="⚠️ Risk analysis"></h3>
 
       <div class="rb-risk-value">${risk}/100</div>
 
-      <p>${risk < 40 ? "Basso rischio" : risk < 70 ? "Rischio medio" : "Alto rischio"}</p>
+      <p data-it="${label.it}" data-en="${label.en}"></p>
 
       ${!isProUser() ? renderUpgradeCTA() : ""}
 
@@ -180,23 +209,7 @@ function renderRiskSection(data){
 
 
 /* =====================
-💰 BLOCCO UPGRADE (CORE)
-===================== */
-
-function renderUpgradeBlock(){
-
-  const container = document.getElementById("results");
-  if(!container) return;
-
-  if(isProUser()) return;
-
-  container.innerHTML += renderUpgradeCTA();
-
-}
-
-
-/* =====================
-🔥 CTA PRINCIPALE
+💰 CTA UPGRADE
 ===================== */
 
 export function renderUpgradeCTA(){
@@ -204,24 +217,26 @@ export function renderUpgradeCTA(){
   return `
     <div class="rb-upgrade">
 
-      <h2>🚫 Stai prendendo una decisione al buio</h2>
+      <h2 data-it="🚫 Stai prendendo una decisione al buio"
+          data-en="🚫 You are making a decision blindly"></h2>
 
-      <p>
-      Senza questi dati potresti perdere migliaia di euro:
-      </p>
+      <p data-it="Senza questi dati potresti perdere migliaia di euro"
+         data-en="Without this data you could lose thousands"></p>
 
       <ul>
-        <li>✔ ROI reale</li>
-        <li>✔ Mutuo e cashflow</li>
-        <li>✔ Scenario rischio</li>
-        <li>✔ Report professionale</li>
+        <li data-it="✔ ROI reale" data-en="✔ Real ROI"></li>
+        <li data-it="✔ Mutuo e cashflow" data-en="✔ Mortgage & cashflow"></li>
+        <li data-it="✔ Scenario rischio" data-en="✔ Risk scenarios"></li>
+        <li data-it="✔ Report professionale" data-en="✔ Professional report"></li>
       </ul>
 
-      <button onclick="startPlanPurchase('pro')" class="btn-primary">
-        🔥 Sblocca ora – 29€
-      </button>
+      <button onclick="startPlanPurchase('pro')" class="btn-primary"
+        data-it="🔥 Sblocca ora – 29€"
+        data-en="🔥 Unlock now – €29"></button>
 
-      <p class="rb-note">✔ Accesso immediato • Nessun vincolo</p>
+      <p class="rb-note"
+        data-it="✔ Accesso immediato • Nessun vincolo"
+        data-en="✔ Instant access • No commitment"></p>
 
     </div>
   `;
@@ -230,14 +245,15 @@ export function renderUpgradeCTA(){
 
 
 /* =====================
-🟢 CTA INLINE (soft)
+🟢 INLINE UPGRADE
 ===================== */
 
 function renderInlineUpgrade(){
 
   return `
-    <div class="rb-inline-upgrade">
-      🔒 Dati parziali – sblocca analisi completa
+    <div class="rb-inline-upgrade"
+      data-it="🔒 Dati parziali – sblocca analisi completa"
+      data-en="🔒 Partial data – unlock full analysis">
     </div>
   `;
 
@@ -245,7 +261,7 @@ function renderInlineUpgrade(){
 
 
 /* =====================
-🔒 OVERLAY BLUR
+🔒 OVERLAY
 ===================== */
 
 function renderBlurOverlay(){
@@ -255,11 +271,12 @@ function renderBlurOverlay(){
 
       <div class="rb-overlay-content">
 
-        <h3>🔒 Analisi completa bloccata</h3>
+        <h3 data-it="🔒 Analisi completa bloccata"
+            data-en="🔒 Full analysis locked"></h3>
 
-        <button onclick="startPlanPurchase('pro')" class="btn-primary">
-          Sblocca ora
-        </button>
+        <button onclick="startPlanPurchase('pro')" class="btn-primary"
+          data-it="Sblocca ora"
+          data-en="Unlock now"></button>
 
       </div>
 
@@ -274,11 +291,5 @@ function renderBlurOverlay(){
 ===================== */
 
 function isProUser(){
-
-  return [
-    "pro",
-    "investor",
-    "pro_yearly"
-  ].includes(window.currentPlan);
-
+  return ["pro","investor","pro_yearly"].includes(window.currentPlan);
 }
