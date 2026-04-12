@@ -12203,6 +12203,7 @@ body{
   font-size:20px;
   font-weight:700;
   margin-bottom:10px;
+  color:#0f172a;
 }
 
 /* TEXT */
@@ -12265,15 +12266,12 @@ body{
 }
 
 /* =====================================
-🚨 FIX CRITICO – RIMUOVE BLUR GLOBALE
+🚨 FIX CRITICO – SOLO BODY (NON DISTRUGGE UI)
 ===================================== */
 
-body,
-body *{
+body{
   filter:none !important;
 }
-
-/* ⚠️ NON TOCCARE OPACITY GLOBALE */
 
 /* =====================================
 🔒 PAYWALL SOLO RISULTATI
@@ -12311,13 +12309,46 @@ body *{
 .pricing,
 .simulator-container{
   filter:none !important;
+  opacity:1;
 }
 
 /* =====================================
-💰 PRICING SEMPRE PERFETTO
+💰 PRICING FIX (LEGGIBILITÀ)
 ===================================== */
 
-.pricing-card{
+.plan-card,
+.plan-card *{
+  opacity:1 !important;
   filter:none !important;
-  transform:scale(1);
+  color:#0f172a !important;
+}
+
+/* =====================================
+🔥 HERO CARD FIX (TESTI VISIBILI)
+===================================== */
+
+.market-card{
+  background:rgba(255,255,255,0.92) !important;
+  backdrop-filter:blur(8px);
+}
+
+.market-card strong,
+.market-card div{
+  color:#0f172a !important;
+  opacity:1 !important;
+}
+
+/* =====================================
+🔥 FORM FIX (SIMULATORE)
+===================================== */
+
+.simulator-container,
+.simulator-container *{
+  color:#0f172a !important;
+  opacity:1 !important;
+}
+
+.simulator-container input{
+  background:#ffffff !important;
+  color:#0f172a !important;
 }
