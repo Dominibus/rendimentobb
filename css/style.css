@@ -12825,3 +12825,33 @@ section:not(.hero) h3 {
     display: block;
   }
 }
+
+/* =====================================
+🔥 HAMBURGER FIX MOBILE (DEFINITIVO)
+===================================== */
+
+#rb-burger{
+  display: none;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+  #rb-burger{
+    display: block;
+
+    font-size: 22px;
+    color: #0f172a; /* 🔥 colore visibile */
+
+    background: white;
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+    padding: 8px 10px;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+}
