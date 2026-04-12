@@ -1254,18 +1254,8 @@ const formatCurrency = (n)=>Math.round(n).toLocaleString();
 // ================= LOGOUT =================
 window.logout = async function(){
   try{
-
-    // 🔥 usa Firebase correttamente
-    if(window.firebaseAuth){
-      const { signOut } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js");
-      await signOut(window.firebaseAuth);
-    }else{
-      console.warn("⚠️ Auth non disponibile");
-    }
-
-    // redirect
+    await logoutUser();
     window.location.href = "/";
-
   }catch(err){
     console.error("❌ Logout error:", err);
   }
