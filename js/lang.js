@@ -32,10 +32,8 @@
 
       // bottoni safe
       if(el.tagName === "A" || el.tagName === "BUTTON"){
-        if(el.children.length === 0){
-          el.textContent = text;
-        }
-      } else {
+  el.textContent = text;
+}else {
         el.innerHTML = text;
       }
 
@@ -124,6 +122,9 @@
   // ===============================
 
   window.applyTranslations = applyTranslations;
+
+  // 🔥 alias globale per compatibilità popup / componenti dinamici
+window.applyStaticTranslations = applyTranslations;
 
   window.setLang = function(lang){
 
