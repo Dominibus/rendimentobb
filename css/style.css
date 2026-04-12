@@ -12255,30 +12255,35 @@ body{
 }
 
 /* =====================================
-🔥 FIX MODAL TESTO (ISOLAMENTO TOTALE)
+🔥 FIX MODAL – ISOLATO (SAFE)
 ===================================== */
 
-#rb-upgrade-modal,
-#rb-upgrade-modal * {
-  opacity: 1 !important;
-  filter: none !important;
+/* SOLO overlay */
+#rb-upgrade-modal{
+  opacity:1 !important;
 }
 
-/* TESTO FORZATO */
+/* SOLO BOX INTERNO */
+#rb-upgrade-modal > div{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* TESTI SOLO NEL MODAL */
 #rb-upgrade-modal h2,
-#rb-upgrade-modal h3 {
-  color: #0f172a !important;
+#rb-upgrade-modal h3{
+  color:#0f172a !important;
 }
 
-#rb-upgrade-modal p {
-  color: #475569 !important;
+#rb-upgrade-modal p{
+  color:#475569 !important;
 }
 
-#rb-upgrade-modal li {
-  color: #334155 !important;
+#rb-upgrade-modal li{
+  color:#334155 !important;
 }
 
-/* CONTINUE FREE */
-#rb-upgrade-modal button:last-child {
-  color: #64748b !important;
+/* bottone secondario */
+#rb-upgrade-modal #rb-close-btn{
+  color:#64748b !important;
 }
