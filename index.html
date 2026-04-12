@@ -1731,70 +1731,66 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   });
 
- // ================= SBLOCCO HOME PRO =================
-function unlockHomeProUI(){
+  // ================= 🔓 SBLOCCO PRO =================
+  function unlockHomeProUI(){
 
-  const plan = String(window.currentPlan || "").toLowerCase();
+    const plan = String(window.currentPlan || "").toLowerCase();
 
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+    const isPro =
+      plan === "pro" ||
+      plan === "pro_yearly";
 
-  if(!isPro) return;
+    if(!isPro) return;
 
-  console.log("🔥 FORCE UNLOCK HOME PRO");
+    console.log("🔥 FORCE UNLOCK HOME PRO");
 
-  document.body.classList.add("pro-user");
+    document.body.classList.add("pro-user");
 
-  // 🔓 rimuove blur
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
+    // 🔓 rimuove blur
+    document.querySelectorAll(".pro-blur").forEach(el=>{
+      el.classList.remove("pro-blur");
+    });
+
+    // 🔓 NASCONDE overlay
+    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+      el.style.display = "none";
+    });
+
+    // 🔓 riattiva click
+    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+      el.classList.remove("pro-locked","locked-section");
+    });
+
+    document.querySelectorAll("button, a").forEach(el=>{
+      el.disabled = false;
+      el.style.pointerEvents = "auto";
+    });
+
+  }
+
+  // ================= WAIT PRO =================
+  function waitForProAndUnlock(){
+
+    if(window.currentPlan){
+      unlockHomeProUI();
+    }else{
+      setTimeout(waitForProAndUnlock, 300);
+    }
+
+  }
+
+  waitForProAndUnlock();
+
+  // ================= EVENT =================
+  document.addEventListener("rb_plan_loaded", ()=>{
+    unlockHomeProUI();
+
+    if(typeof quickROI === "function"){
+      quickROI();
+    }
   });
 
-  // 🔓 NASCONDE overlay (NON rimuove!)
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.style.display = "none";
-  });
-
-}
-
-  // ================= 🔓 UNLOCK UI =================
-
-  // rimuove blur
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
-
-  // rimuove overlay
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.remove();
-  });
-
-  // 🔓 riattiva click (fix mobile / overlay bug)
-  document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-  el.classList.remove("pro-locked","locked-section");
 });
-
-  // 🔥 FIX BOTTONI DISABILITATI
-  document.querySelectorAll("button, a").forEach(el=>{
-    el.disabled = false;
-    el.style.pointerEvents = "auto";
-  });
-
-  // ================= 🔁 RENDER AGGIORNATO =================
-
-  // ricalcolo completo con dati PRO
-  if(typeof quickROI === "function"){
-    quickROI();
-  }
-
-  // eventuali CTA → nascoste
-  const upgradeBox = document.getElementById("upgrade-box");
-  if(upgradeBox){
-    upgradeBox.innerHTML = "";
-  }
-
-}
 
   // ⏱ retry intelligente
   function waitForProAndUnlock(){
