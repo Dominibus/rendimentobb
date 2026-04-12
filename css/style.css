@@ -11336,3 +11336,162 @@ img{
   max-width:100%;
   height:auto;
 }
+
+/* =====================================
+🔥 FIX CONFLITTI GLOBALI (CRITICO)
+===================================== */
+
+/* ===== LIMITA NORMALIZER SOLO A CTA ===== */
+.results-card .btn,
+.upgrade-box .btn,
+.cta-primary,
+button.btn-primary{
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:auto !important;
+  min-width:200px;
+  max-width:320px;
+
+  padding:14px 24px;
+
+}
+
+/* 🚫 NON TOCCARE HERO */
+.hero .btn,
+.hero-roi .btn,
+.hero-buttons .btn{
+  width:auto !important;
+  min-width:auto !important;
+  max-width:none !important;
+  padding:16px 32px;
+}
+
+/* 🚫 NON TOCCARE HEADER */
+.rb-header button,
+.rb-lang button,
+#user-area .rb-btn{
+  width:auto !important;
+  min-width:auto !important;
+  max-width:none !important;
+  padding:8px 14px;
+  font-size:14px;
+}
+
+/* =====================================
+🔥 FIX HEADER LINGUA (ENORME)
+===================================== */
+
+.rb-lang{
+  display:flex;
+  gap:6px;
+}
+
+.rb-lang button{
+  padding:6px 10px !important;
+  border-radius:999px;
+  font-size:13px;
+  background:#f1f5f9;
+}
+
+.rb-lang button.active{
+  background:#10b981;
+  color:white;
+}
+
+/* =====================================
+🔥 FIX HERO TAGLIATO
+===================================== */
+
+.hero,
+.hero-roi{
+  overflow:visible !important;
+}
+
+.hero .container,
+.hero-roi .container{
+  max-width:1100px;
+  margin:auto;
+}
+
+/* =====================================
+🔥 FIX SIMULATORE TAGLIATO
+===================================== */
+
+.simulator-container{
+  max-width:1200px;
+  margin:auto;
+}
+
+.simulator-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+}
+
+@media (max-width:1024px){
+  .simulator-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* =====================================
+🔥 FIX OVERLAY PRO (NON DEVE ROMPERE)
+===================================== */
+
+[data-paywall="true"]{
+  position:relative;
+}
+
+.overlay-content{
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+
+  padding:20px;
+
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(4px);
+}
+
+/* =====================================
+🔥 FIX CARD STRETCH / TAGLI
+===================================== */
+
+.results-card,
+.upgrade-box{
+  width:100%;
+  max-width:900px;
+  margin:40px auto;
+}
+
+/* =====================================
+🔥 MOBILE SAFE
+===================================== */
+
+@media (max-width:768px){
+
+  /* SOLO CTA FULL WIDTH */
+  .results-card .btn,
+  .upgrade-box .btn{
+    width:100% !important;
+    max-width:100%;
+  }
+
+  /* HEADER FIX */
+  .rb-right{
+    gap:8px;
+  }
+
+  .rb-lang button{
+    padding:5px 8px !important;
+    font-size:12px;
+  }
+
+}
