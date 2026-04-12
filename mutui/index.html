@@ -350,7 +350,11 @@ data-it="Ricevi offerte"
 data-en="Get offers"
 onclick="saveLead()"></button>
 
-<div id="success" class="success-msg">✔ ${t("Richiesta inviata","Request sent")}</div>
+<div id="success" class="success-msg"
+data-it="✔ Richiesta inviata"
+data-en="✔ Request sent">
+✔ Richiesta inviata
+</div>
 
 </div>
 
@@ -542,7 +546,10 @@ alert(t("Inserisci email","Enter email"));
 return;
 }
 
-const roiValue = parseFloat(document.getElementById("impact").innerText) || 0;
+const impactEl = document.getElementById("impact");
+const roiValue = impactEl && !isNaN(parseFloat(impactEl.innerText))
+  ? parseFloat(impactEl.innerText)
+  : 0;
 
 const payload = {
   type:"mutui",
