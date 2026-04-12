@@ -12352,3 +12352,94 @@ body{
   background:#ffffff !important;
   color:#0f172a !important;
 }
+
+/* =====================================
+🔥 FIX TESTI INVISIBILI (SEZIONI BASSE)
+===================================== */
+
+/* tutte le sezioni contenuto */
+.section,
+.section *{
+  opacity:1 !important;
+}
+
+/* testi principali */
+.section h1,
+.section h2,
+.section h3,
+.section h4{
+  color:#0f172a !important;
+}
+
+/* paragrafi */
+.section p{
+  color:#334155 !important;
+}
+
+/* descrizioni leggere */
+.section small,
+.section span{
+  color:#475569 !important;
+}
+
+/* bottoni secondari */
+.section .btn-outline{
+  color:#0f172a !important;
+  border-color:#cbd5e1 !important;
+}
+
+/* =====================================
+🔥 FAQ + GUIDE + CONTENT BLOCK
+===================================== */
+
+.faq-card,
+.faq-card *{
+  opacity:1 !important;
+  color:#0f172a !important;
+}
+
+.faq-card p{
+  color:#475569 !important;
+}
+
+/* =====================================
+🔥 EXECUTIVE / SNAPSHOT / ROI TEXT
+===================================== */
+
+.executive,
+.executive *{
+  opacity:1 !important;
+}
+
+.executive p{
+  color:#334155 !important;
+}
+
+/* =====================================
+🔥 CITY / MARKET SECTION
+===================================== */
+
+.market-section,
+.market-section *{
+  opacity:1 !important;
+}
+
+.market-section p{
+  color:#475569 !important;
+}
+
+/* =====================================
+🔥 PRICING EXTRA FIX (solo sicurezza)
+===================================== */
+
+.plan-card p{
+  color:#475569 !important;
+}
+
+/* =====================================
+🔥 LINK VISIBILI
+===================================== */
+
+a{
+  color:#10b981;
+}
