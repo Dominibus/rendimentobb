@@ -12812,3 +12812,16 @@ section:not(.hero) h3 {
   font-size: 14px;
   color: #475569;
 }
+/* =====================================
+🔥 HAMBURGER SOLO MOBILE (SICUREZZA)
+===================================== */
+
+#rb-burger{
+  display: none;
+}
+
+@media (max-width:768px){
+  #rb-burger{
+    display: block;
+  }
+}
