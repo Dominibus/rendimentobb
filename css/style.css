@@ -11450,3 +11450,27 @@ form .btn,
   }
 
 }
+
+/* =====================================
+🔥 SIMULATORE – FIX BUTTON DESKTOP (NO FULL WIDTH)
+===================================== */
+
+@media (min-width:1024px){
+
+  .simulator-container button,
+  .simulator-container .btn,
+  .simulator-container .btn-primary,
+  .simulator-container .btn-main{
+
+    width:auto !important;
+    min-width:220px;
+    max-width:320px;
+
+    margin-left:auto !important;
+    margin-right:auto !important;
+
+    display:inline-flex !important;
+    justify-content:center;
+  }
+
+}
