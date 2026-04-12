@@ -1764,6 +1764,11 @@ function unlockHomeProUI(){
 
   document.body.classList.add("pro-user");
 
+ // reset SOLO overlay HOME
+document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+  el.style.display = "none";
+});
+
   // ================= 🔓 UNLOCK UI =================
 
   // rimuove blur
@@ -1778,10 +1783,8 @@ function unlockHomeProUI(){
 
   // 🔓 riattiva click (fix mobile / overlay bug)
   document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-    el.style.pointerEvents = "auto";
-    el.style.opacity = "1";
-    el.classList.remove("pro-locked","locked-section");
-  });
+  el.classList.remove("pro-locked","locked-section");
+});
 
   // 🔥 FIX BOTTONI DISABILITATI
   document.querySelectorAll("button, a").forEach(el=>{
