@@ -17,8 +17,8 @@
 
 /* ===== BASE ===== */
 body{
-  font-family: system-ui;
-  background:#f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(180deg,#f8fafc,#eef2f7);
   margin:0;
   padding:40px 20px;
   display:flex;
@@ -29,28 +29,34 @@ body{
 /* ===== CONTAINER ===== */
 .page{
   width:100%;
-  max-width:920px;
+  max-width:980px;
 }
 
 /* ===== NAV ===== */
 .report-nav{
   display:flex;
   gap:10px;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
 /* ===== BUTTON NAV ===== */
 .nav-btn{
   padding:10px 16px;
-  border-radius:10px;
+  border-radius:999px;
   font-size:13px;
   font-weight:600;
   text-decoration:none;
+  transition:all .2s ease;
 }
 
 .nav-btn.primary{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+  background:#0f172a;
   color:white;
+}
+
+.nav-btn.primary:hover{
+  transform:translateY(-1px);
+  opacity:.9;
 }
 
 .nav-btn.secondary{
@@ -58,16 +64,29 @@ body{
   color:#0f172a;
 }
 
+.nav-btn.secondary:hover{
+  background:#cbd5e1;
+}
+
 /* ===== CARD ===== */
 .report{
   background:white;
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 25px 80px rgba(0,0,0,0.1);
+  padding:35px;
+  border-radius:22px;
+  box-shadow:
+    0 10px 30px rgba(2,6,23,0.06),
+    0 30px 80px rgba(2,6,23,0.08);
   position:relative;
+  border:1px solid #e2e8f0;
 }
 
-/* ===== KPI ===== */
+/* ===== TITLE ===== */
+h1{
+  font-size:22px;
+  margin-bottom:10px;
+}
+
+/* ===== KPI GRID ===== */
 .kpi-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -75,10 +94,18 @@ body{
   margin-top:20px;
 }
 
+/* ===== KPI CARD ===== */
 .kpi{
-  background:#f1f5f9;
-  padding:16px;
-  border-radius:12px;
+  background:#f8fafc;
+  padding:18px;
+  border-radius:14px;
+  border:1px solid #e2e8f0;
+  transition:all .2s ease;
+}
+
+.kpi:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
 }
 
 .kpi span{
@@ -88,17 +115,19 @@ body{
 
 .kpi strong{
   display:block;
-  margin-top:5px;
-  font-size:16px;
+  margin-top:6px;
+  font-size:18px;
+  font-weight:700;
 }
 
 /* ===== VERDICT ===== */
 .verdict{
   margin-top:30px;
-  padding:20px;
-  border-radius:14px;
+  padding:22px;
+  border-radius:16px;
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
+  box-shadow:0 10px 30px rgba(16,185,129,0.25);
 }
 
 /* ===== CHART ===== */
@@ -109,7 +138,7 @@ body{
 /* ===== BUTTON ===== */
 .btn{
   margin-top:25px;
-  background:#10b981;
+  background:linear-gradient(135deg,#10b981,#059669);
   color:white;
   border:none;
   padding:14px;
@@ -117,14 +146,20 @@ body{
   cursor:pointer;
   width:100%;
   font-weight:600;
+  transition:all .2s ease;
 }
 
-/* ===== OVERLAY ===== */
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 25px rgba(16,185,129,0.3);
+}
+
+/* ===== OVERLAY PRO ===== */
 .lock-overlay{
   position:absolute;
   inset:0;
   background:rgba(15,23,42,0.85);
-  backdrop-filter:blur(6px);
+  backdrop-filter:blur(10px);
   display:none;
   align-items:center;
   justify-content:center;
@@ -133,15 +168,47 @@ body{
   border-radius:20px;
   z-index:10;
   text-align:center;
+  padding:30px;
+}
+
+.lock-overlay h2{
+  font-size:20px;
+  margin-bottom:10px;
+}
+
+.lock-overlay p{
+  opacity:.8;
+  font-size:14px;
+  margin-bottom:15px;
+}
+
+.lock-overlay button{
+  background:linear-gradient(135deg,#10b981,#059669);
+  border:none;
+  padding:12px 22px;
+  border-radius:999px;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+
+.lock-overlay button:hover{
+  transform:translateY(-1px);
 }
 
 /* ===== MOBILE ===== */
 @media (max-width:768px){
+
+  .report{
+    padding:25px;
+  }
+
   .kpi-grid{
     grid-template-columns:1fr;
   }
-}
 
+}
 </style>
 
 </head>
@@ -150,42 +217,89 @@ body{
 
 <div class="page">
 
+<!-- NAV -->
 <div class="report-nav">
-  <a href="/dashboard/" class="nav-btn primary">← Dashboard</a>
-  <a href="/" class="nav-btn secondary">Home</a>
+  <a href="/dashboard/" class="nav-btn primary"
+     data-it="← Dashboard"
+     data-en="← Dashboard">← Dashboard</a>
+
+  <a href="/" class="nav-btn secondary"
+     data-it="Home"
+     data-en="Home">Home</a>
 </div>
 
+<!-- REPORT -->
 <div class="report">
 
-<h1>📄 Analisi investimento</h1>
+<h1 
+  data-it="📄 Analisi investimento"
+  data-en="📄 Investment analysis">
+📄 Analisi investimento
+</h1>
 
+<!-- KPI -->
 <div class="kpi-grid">
-  <div class="kpi"><span>Prezzo</span><strong id="price"></strong></div>
-  <div class="kpi"><span>Equity</span><strong id="equity"></strong></div>
-  <div class="kpi"><span>ROI</span><strong id="roi"></strong></div>
-  <div class="kpi"><span>Rischio</span><strong id="risk"></strong></div>
+  <div class="kpi">
+    <span data-it="Prezzo" data-en="Price">Prezzo</span>
+    <strong id="price"></strong>
+  </div>
+
+  <div class="kpi">
+    <span data-it="Equity" data-en="Equity">Equity</span>
+    <strong id="equity"></strong>
+  </div>
+
+  <div class="kpi">
+    <span data-it="ROI" data-en="ROI">ROI</span>
+    <strong id="roi"></strong>
+  </div>
+
+  <div class="kpi">
+    <span data-it="Rischio" data-en="Risk">Rischio</span>
+    <strong id="risk"></strong>
+  </div>
 </div>
 
+<!-- VERDICT -->
 <div class="verdict">
   <h2 id="verdict"></h2>
   <p id="verdict-text"></p>
 </div>
 
+<!-- CHART -->
 <div class="chart-box">
   <canvas id="roiChart"></canvas>
 </div>
 
-<button class="btn" onclick="generatePDF()">📥 Scarica PDF</button>
+<!-- CTA -->
+<button class="btn" onclick="generatePDF()"
+data-it="📥 Scarica report PDF professionale"
+data-en="📥 Download professional PDF report">
+📥 Scarica report PDF professionale
+</button>
 
 <!-- OVERLAY -->
 <div id="upgradeOverlay" class="lock-overlay">
-  <h2>🔒 Report PRO</h2>
-  <p>Accesso riservato ai piani PRO</p>
-  <button onclick="window.location.href='/pricing/'">🚀 Sblocca</button>
+  <h2 
+    data-it="🔒 Report PRO"
+    data-en="🔒 PRO Report">
+  🔒 Report PRO
+  </h2>
+
+  <p 
+    data-it="Accesso riservato a investitori e professionisti"
+    data-en="Access reserved for investors and professionals">
+  Accesso riservato a investitori e professionisti
+  </p>
+
+  <button onclick="window.location.href='/pricing/'"
+    data-it="🚀 Sblocca PRO"
+    data-en="🚀 Unlock PRO">
+    🚀 Sblocca PRO
+  </button>
 </div>
 
 </div>
-
 </div>
 
 <script>
@@ -198,12 +312,17 @@ const roi = Number(params.get("roi") || 0);
 const equity = Number(params.get("equity") || 0);
 const risk = Number(params.get("risk") || 0);
 
+// ================= LANG =================
+const lang = window.currentLang || "it";
+
 // ================= USER =================
 let isPro = false;
 
 function checkUserPlan(){
+
   const plan = window.currentPlan || "free";
 
+  // 🔒 INVESTOR NON È PRO
   isPro = (plan === "pro" || plan === "pro_yearly");
 
   console.log("PLAN:", plan, "| isPro:", isPro);
@@ -211,40 +330,56 @@ function checkUserPlan(){
 
 // ================= FORMAT =================
 function euro(v){
-  return new Intl.NumberFormat("it-IT",{
-    style:"currency",
-    currency:"EUR"
-  }).format(v);
+  return new Intl.NumberFormat(
+    lang === "en" ? "en-US" : "it-IT",
+    {style:"currency",currency:"EUR"}
+  ).format(v);
 }
 
 // ================= RENDER =================
-document.getElementById("price").innerText = euro(price);
-document.getElementById("equity").innerText = euro(equity);
-document.getElementById("roi").innerText = roi.toFixed(1)+"%";
-document.getElementById("risk").innerText = risk+"/100";
+function renderData(){
+
+  document.getElementById("price").innerText = euro(price);
+  document.getElementById("equity").innerText = euro(equity);
+  document.getElementById("roi").innerText = roi.toFixed(1)+"%";
+  document.getElementById("risk").innerText = risk+"/100";
+
+}
 
 // ================= VERDICT =================
-let verdict="",text="";
+function renderVerdict(){
 
-if(roi >= 12){
-  verdict = "AAA INVESTMENT";
-  text = "Top-tier ROI. Institutional-grade opportunity.";
-}
-else if(roi >= 8){
-  verdict = "STRONG INVESTMENT";
-  text = "High ROI with controlled risk.";
-}
-else if(roi >= 5){
-  verdict = "OPTIMIZE";
-  text = "Good investment but needs optimization.";
-}
-else{
-  verdict = "HIGH RISK";
-  text = "Low ROI or unstable fundamentals.";
-}
+  let verdict="", text="";
 
-document.getElementById("verdict").innerText = verdict;
-document.getElementById("verdict-text").innerText = text;
+  if(roi >= 12){
+    verdict = "AAA INVESTMENT";
+    text = lang === "en"
+      ? "Top-tier ROI. Institutional-grade opportunity."
+      : "ROI elevato. Opportunità di livello istituzionale.";
+  }
+  else if(roi >= 8){
+    verdict = lang === "en" ? "STRONG INVESTMENT" : "INVESTIMENTO FORTE";
+    text = lang === "en"
+      ? "High ROI with controlled risk."
+      : "ROI elevato con rischio controllato.";
+  }
+  else if(roi >= 5){
+    verdict = lang === "en" ? "OPTIMIZE" : "DA OTTIMIZZARE";
+    text = lang === "en"
+      ? "Good investment but needs optimization."
+      : "Buon investimento ma da ottimizzare.";
+  }
+  else{
+    verdict = lang === "en" ? "HIGH RISK" : "ALTO RISCHIO";
+    text = lang === "en"
+      ? "Low ROI or unstable fundamentals."
+      : "ROI basso o fondamentali instabili.";
+  }
+
+  document.getElementById("verdict").innerText = verdict;
+  document.getElementById("verdict-text").innerText = text;
+
+}
 
 // ================= CHART =================
 let roiChartInstance = null;
@@ -260,7 +395,9 @@ function renderChart(){
   roiChartInstance = new Chart(canvas,{
     type:"bar",
     data:{
-      labels:["ROI %","Risk","Benchmark"],
+      labels: lang === "en"
+        ? ["ROI %","Risk","Benchmark"]
+        : ["ROI %","Rischio","Benchmark"],
       datasets:[{
         data:[roi, risk, 8],
         backgroundColor:["#10b981","#ef4444","#3b82f6"],
@@ -272,6 +409,7 @@ function renderChart(){
       scales:{y:{beginAtZero:true}}
     }
   });
+
 }
 
 // ================= LOCK =================
@@ -287,6 +425,7 @@ function applyLock(){
       btn.onclick = null;
       btn.style.opacity = "0.5";
     }
+
   } else {
     overlay.style.display = "none";
     renderAdvanced();
@@ -311,15 +450,15 @@ function renderAdvanced(){
     <h3>📊 Investment Score</h3>
     <div style="font-size:28px;font-weight:700">${score.toFixed(0)}/100</div>
     <div style="margin-top:15px;font-size:13px">
-      Annual profit: ${euro(annualProfit)}<br>
-      Break-even: ${breakEven.toFixed(1)} years
+      ${lang==="en"?"Annual profit":"Profitto annuo"}: ${euro(annualProfit)}<br>
+      ${lang==="en"?"Break-even":"Pareggio"}: ${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}
     </div>
   `;
 
   document.querySelector(".report").appendChild(box);
 }
 
-// ================= PDF =================
+// ================= PDF (NEXT STEP MIGLIORABILE) =================
 async function generatePDF(){
 
   if(!isPro){
@@ -330,25 +469,33 @@ async function generatePDF(){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
+  doc.setFontSize(18);
   doc.text("RendimentoBB Report",20,20);
-  doc.text("Prezzo: "+euro(price),20,40);
+
+  doc.setFontSize(12);
+  doc.text("Price: "+euro(price),20,40);
   doc.text("ROI: "+roi.toFixed(1)+"%",20,50);
 
-  doc.save("report.pdf");
+  doc.save("RendimentoBB-report.pdf");
 }
 
 // ================= INIT =================
-document.addEventListener("rb_auth_ready", () => {
-  checkUserPlan();
-  applyLock();
-  renderChart();
-});
+function init(){
 
-setTimeout(()=>{
   checkUserPlan();
-  applyLock();
+  renderData();
+  renderVerdict();
   renderChart();
-},800);
+  applyLock();
+
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
+
+}
+
+document.addEventListener("rb_auth_ready", init);
+setTimeout(init,800);
 
 </script>
 
