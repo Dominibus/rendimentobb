@@ -5,32 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div style="margin-bottom:20px;display:flex;gap:10px">
-
-<a href="/dashboard/" style="
-background:#0f172a;
-color:white;
-padding:8px 14px;
-border-radius:8px;
-text-decoration:none;
-font-size:13px;
-">
-← Dashboard
-</a>
-
-<a href="/" style="
-background:#e2e8f0;
-color:#0f172a;
-padding:8px 14px;
-border-radius:8px;
-text-decoration:none;
-font-size:13px;
-">
-Home
-</a>
-
-</div>  
-
 <title
 data-it="Report investimento B&B"
 data-en="B&B Investment Report">
@@ -42,12 +16,47 @@ Report investimento B&B
 
 <style>
 
+/* ===== BASE ===== */
 body{
   font-family: system-ui;
   background:#f8fafc;
   padding:30px;
+  color:#0f172a;
 }
 
+/* ===== NAV ===== */
+.report-nav{
+  max-width:900px;
+  margin:0 auto 20px auto;
+  display:flex;
+  gap:10px;
+}
+
+.nav-btn{
+  padding:10px 16px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:600;
+  text-decoration:none;
+  transition:.2s ease;
+}
+
+.nav-btn.primary{
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+}
+
+.nav-btn.secondary{
+  background:#e2e8f0;
+  color:#0f172a;
+}
+
+.nav-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.1);
+}
+
+/* ===== CARD ===== */
 .report{
   max-width:900px;
   margin:auto;
@@ -57,20 +66,19 @@ body{
   box-shadow:0 25px 80px rgba(0,0,0,0.1);
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 .header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
 }
 
 .logo{
-  font-weight:700;
+  font-weight:800;
   color:#10b981;
 }
 
-/* KPI GRID */
+/* ===== KPI ===== */
 .kpi-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -79,7 +87,7 @@ body{
 }
 
 .kpi{
-  background:#f8fafc;
+  background:#f1f5f9;
   padding:16px;
   border-radius:12px;
 }
@@ -95,35 +103,37 @@ body{
   margin-top:4px;
 }
 
-/* VERDICT */
+/* ===== VERDICT ===== */
 .verdict{
   margin-top:30px;
   padding:20px;
   border-radius:14px;
-  background:rgba(16,185,129,0.08);
+  background:#ecfdf5;
 }
 
 .verdict h2{
   margin:0;
-  font-size:24px;
+  font-size:22px;
   color:#10b981;
 }
 
 .verdict p{
   margin-top:10px;
-  color:#475569;
+  color:#334155;
 }
 
-/* SECTION */
-.section{
-  margin-top:30px;
+/* ===== LOCK ===== */
+.lock{
+  margin-top:20px;
+  padding:14px;
+  background:#fff7ed;
+  border-radius:10px;
+  color:#9a3412;
+  font-size:13px;
+  text-align:center;
 }
 
-.section h3{
-  margin-bottom:10px;
-}
-
-/* BUTTON */
+/* ===== BUTTON ===== */
 .btn{
   margin-top:25px;
   background:#10b981;
@@ -134,6 +144,12 @@ body{
   cursor:pointer;
   width:100%;
   font-weight:600;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 25px rgba(16,185,129,0.3);
 }
 
 </style>
@@ -142,45 +158,28 @@ body{
 
 <body>
 
+<!-- NAV -->
+<div class="report-nav">
+  <a href="/dashboard/" class="nav-btn primary">← Dashboard</a>
+  <a href="/" class="nav-btn secondary">Home</a>
+</div>
+
 <div class="report">
 
 <!-- HEADER -->
 <div class="header">
   <div class="logo">RendimentoBB</div>
-  <div data-it="Report professionale" data-en="Professional report">
-    Report professionale
-  </div>
+  <div data-it="Report professionale" data-en="Professional report"></div>
 </div>
 
-<h1
-data-it="📄 Analisi investimento"
-data-en="📄 Investment Analysis">
-📄 Analisi investimento
-</h1>
+<h1 data-it="📄 Analisi investimento" data-en="📄 Investment Analysis"></h1>
 
 <!-- KPI -->
 <div class="kpi-grid">
-
-<div class="kpi">
-  <span data-it="Prezzo immobile" data-en="Property price"></span>
-  <strong id="price"></strong>
-</div>
-
-<div class="kpi">
-  <span data-it="Equity investita" data-en="Equity invested"></span>
-  <strong id="equity"></strong>
-</div>
-
-<div class="kpi">
-  <span>ROI</span>
-  <strong id="roi"></strong>
-</div>
-
-<div class="kpi">
-  <span data-it="Rischio" data-en="Risk"></span>
-  <strong id="risk"></strong>
-</div>
-
+  <div class="kpi"><span data-it="Prezzo immobile" data-en="Property price"></span><strong id="price"></strong></div>
+  <div class="kpi"><span data-it="Equity investita" data-en="Equity invested"></span><strong id="equity"></strong></div>
+  <div class="kpi"><span>ROI</span><strong id="roi"></strong></div>
+  <div class="kpi"><span data-it="Rischio" data-en="Risk"></span><strong id="risk"></strong></div>
 </div>
 
 <!-- VERDICT -->
@@ -189,16 +188,12 @@ data-en="📄 Investment Analysis">
   <p id="verdict-text"></p>
 </div>
 
-<!-- STRATEGY -->
-<div class="section">
-  <h3 data-it="Strategia consigliata" data-en="Recommended strategy"></h3>
-  <p id="strategy"></p>
-</div>
+<!-- LOCK -->
+<div id="lock-msg" class="lock" style="display:none"></div>
 
 <button class="btn" onclick="generatePDF()"
 data-it="📥 Scarica PDF professionale"
 data-en="📥 Download professional PDF">
-📥 Scarica PDF professionale
 </button>
 
 </div>
@@ -206,16 +201,16 @@ data-en="📥 Download professional PDF">
 <script>
 
 // ================= PARAMS =================
-
 const params = new URLSearchParams(window.location.search);
 
 const price = Number(params.get("price") || 0);
 const roi = Number(params.get("roi") || 0);
 const equity = Number(params.get("equity") || 0);
 const risk = Number(params.get("risk") || 0);
+const source = params.get("source") || "free";
+const isPro = source === "pro";
 
 // ================= FORMAT =================
-
 function euro(v){
   return new Intl.NumberFormat(
     window.currentLang === "en" ? "en-US" : "it-IT",
@@ -224,179 +219,101 @@ function euro(v){
 }
 
 // ================= RENDER =================
-
 document.getElementById("price").innerText = euro(price);
 document.getElementById("equity").innerText = euro(equity);
-document.getElementById("roi").innerText = roi.toFixed(1) + "%";
-document.getElementById("risk").innerText = risk + "/100";
+document.getElementById("roi").innerText = roi.toFixed(1)+"%";
+document.getElementById("risk").innerText = risk+"/100";
 
 // ================= VERDICT =================
-
-let verdict = "";
-let text = "";
-let strategy = "";
+let verdict="",text="";
 
 if(roi >= 10){
   verdict = t("✅ INVESTIMENTO FORTE","✅ STRONG INVESTMENT");
-  text = t(
-    "ROI elevato e rischio controllato.",
-    "High ROI and controlled risk."
-  );
-  strategy = t(
-    "Procedere con l'investimento.",
-    "Proceed with investment."
-  );
+  text = t("ROI elevato e rischio controllato.","High ROI and controlled risk.");
 }
 else if(roi >= 5){
   verdict = t("⚙️ OTTIMIZZARE","⚙️ OPTIMIZE");
-  text = t(
-    "Buon investimento ma migliorabile.",
-    "Good investment but improvable."
-  );
-  strategy = t(
-    "Ottimizzare prezzo e occupazione.",
-    "Optimize pricing and occupancy."
-  );
+  text = t("Buon investimento ma migliorabile.","Good but improvable.");
 }
 else{
   verdict = t("❌ EVITARE","❌ AVOID");
-  text = t(
-    "ROI basso o rischio elevato.",
-    "Low ROI or high risk."
-  );
-  strategy = t(
-    "Rivalutare completamente l'investimento.",
-    "Re-evaluate investment."
-  );
+  text = t("ROI basso o rischio elevato.","Low ROI or high risk.");
 }
 
 document.getElementById("verdict").innerText = verdict;
 document.getElementById("verdict-text").innerText = text;
-document.getElementById("strategy").innerText = strategy;
+
+// ================= LOCK INVESTOR =================
+if(!isPro){
+  document.getElementById("lock-msg").style.display="block";
+  document.getElementById("lock-msg").innerText =
+    t("🔒 PDF completo disponibile solo per utenti PRO",
+      "🔒 Full PDF available only for PRO users");
+}
 
 // ================= PDF =================
-
 async function generatePDF(){
+
+  if(!isPro){
+    alert(
+      window.currentLang === "en"
+      ? "Upgrade to PRO to download full report"
+      : "Passa a PRO per scaricare il report completo"
+    );
+    return;
+  }
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
   let y = 20;
 
-  const green = [16,185,129];
-  const dark = [15,23,42];
-  const gray = [100,116,139];
-
-  // ================= HEADER =================
+  doc.setFont("helvetica","bold");
   doc.setFontSize(18);
-  doc.setTextColor(...dark);
-  doc.text("RendimentoBB – Investment Report", 20, y);
+  doc.text("RendimentoBB – Investment Report",20,y);
 
-  y += 8;
+  y+=10;
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(11);
+  doc.text("Professional B&B investment analysis",20,y);
+
+  y+=15;
+
+  doc.setDrawColor(230,230,230);
+  doc.roundedRect(20,y,170,45,4,4);
+
+  doc.text("Price: "+euro(price),25,y+10);
+  doc.text("Equity: "+euro(equity),25,y+18);
+  doc.text("ROI: "+roi.toFixed(1)+"%",25,y+26);
+  doc.text("Risk: "+risk+"/100",25,y+34);
+
+  y+=60;
+
+  doc.setFillColor(240,249,245);
+  doc.roundedRect(20,y,170,30,4,4,"F");
+
+  doc.setTextColor(16,185,129);
+  doc.setFontSize(16);
+  doc.text("STRONG INVESTMENT",25,y+12);
+
+  doc.setTextColor(0,0,0);
+  doc.setFontSize(11);
+  doc.text("High ROI and controlled risk.",25,y+22);
+
+  y+=45;
+
+  doc.setFontSize(12);
+  doc.text("Professional Insights",20,y);
+
+  y+=10;
 
   doc.setFontSize(10);
-  doc.setTextColor(...gray);
-  doc.text("Professional B&B investment analysis", 20, y);
+  doc.text("• ROI above market benchmark",20,y); y+=6;
+  doc.text("• Risk level sustainable",20,y); y+=6;
+  doc.text("• Strong candidate for funding",20,y);
 
-  y += 15;
-
-  // ================= KPI BOX =================
-  doc.setFillColor(248,250,252);
-  doc.roundedRect(20, y, 170, 45, 4, 4, "F");
-
-  doc.setFontSize(11);
-  doc.setTextColor(...dark);
-
-  doc.text("Property price", 25, y+10);
-  doc.text(euro(price), 120, y+10);
-
-  doc.text("Equity", 25, y+18);
-  doc.text(euro(equity), 120, y+18);
-
-  doc.text("ROI", 25, y+26);
-  doc.text(roi.toFixed(1)+"%", 120, y+26);
-
-  doc.text("Risk", 25, y+34);
-  doc.text(risk+"/100", 120, y+34);
-
-  y += 60;
-
-  // ================= VERDICT =================
-  let verdictTitle = "";
-  let verdictColor = green;
-  let verdictText = "";
-
-  if(roi >= 10){
-    verdictTitle = "STRONG INVESTMENT";
-    verdictText = "High ROI and controlled risk. Excellent candidate.";
-  } else if(roi >= 5){
-    verdictTitle = "OPTIMIZE";
-    verdictColor = [245,158,11];
-    verdictText = "Good opportunity but requires optimization.";
-  } else{
-    verdictTitle = "HIGH RISK";
-    verdictColor = [239,68,68];
-    verdictText = "Low ROI or high risk.";
-  }
-
-  doc.setFillColor(...verdictColor, 0.1);
-  doc.roundedRect(20, y, 170, 35, 4, 4, "F");
-
-  doc.setTextColor(...verdictColor);
-  doc.setFontSize(16);
-  doc.text(verdictTitle, 25, y+12);
-
-  doc.setFontSize(11);
-  doc.setTextColor(...dark);
-  doc.text(verdictText, 25, y+22);
-
-  y += 50;
-
-  // ================= STRATEGY =================
-  doc.setFontSize(14);
-  doc.setTextColor(...dark);
-  doc.text("Strategic Recommendation", 20, y);
-
-  y += 10;
-
-  doc.setFontSize(11);
-
-  let strategy = "";
-
-  if(roi >= 10){
-    strategy = "Proceed with investment. Strong fundamentals.";
-  } else if(roi >= 5){
-    strategy = "Optimize pricing and occupancy.";
-  } else{
-    strategy = "Re-evaluate investment conditions.";
-  }
-
-  doc.text(strategy, 20, y);
-
-  y += 20;
-
-  // ================= ANALYSIS =================
-  doc.setFontSize(14);
-  doc.text("Analysis Breakdown", 20, y);
-
-  y += 10;
-
-  doc.setFontSize(11);
-
-  doc.text("• ROI vs market benchmark", 20, y);
-  y += 7;
-  doc.text("• Risk evaluation", 20, y);
-  y += 7;
-  doc.text("• Investment sustainability", 20, y);
-
-  y += 20;
-
-  // ================= FOOTER =================
-  doc.setFontSize(9);
-  doc.setTextColor(...gray);
-  doc.text("Generated by RendimentoBB.com", 20, 285);
-
-  doc.save("RendimentoBB-Investment-Report.pdf");
+  doc.save("RendimentoBB-Report.pdf");
 }
 
 </script>
