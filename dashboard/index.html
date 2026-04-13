@@ -682,15 +682,24 @@ z-index:9999;
   box-shadow:0 30px 80px rgba(0,0,0,0.25);
   ">
 
-    <h2 style="margin-bottom:10px">
+    <h2 
+    data-it="🔒 Dashboard PRO"
+    data-en="🔒 PRO Dashboard"
+    style="margin-bottom:10px">
       🔒 Dashboard PRO
     </h2>
 
-    <p style="font-size:14px;color:#64748b;margin-bottom:20px">
+    <p 
+    data-it="Sblocca analisi avanzata, ROI strategico e simulazioni complete"
+    data-en="Unlock advanced analysis, strategic ROI and full simulations"
+    style="font-size:14px;color:#64748b;margin-bottom:20px">
       Sblocca analisi avanzata, ROI strategico e simulazioni complete
     </p>
 
-    <button onclick="goToUpgrade()" style="
+    <button onclick="goToUpgrade()" 
+    data-it="🚀 Sblocca PRO"
+    data-en="🚀 Unlock PRO"
+    style="
     background:#10b981;
     border:none;
     padding:12px 16px;
@@ -703,7 +712,10 @@ z-index:9999;
       🚀 Sblocca PRO
     </button>
 
-    <button onclick="closeOverlay()" style="
+    <button onclick="closeOverlay()" 
+    data-it="👀 Visualizza anteprima gratuita"
+    data-en="👀 View free preview"
+    style="
     margin-top:10px;
     background:none;
     border:none;
@@ -714,7 +726,10 @@ z-index:9999;
       👀 Visualizza anteprima gratuita
     </button>
 
-    <div style="
+    <div 
+    data-it="💰 Hai già dati reali pronti nella dashboard"
+    data-en="💰 You already have real data available in your dashboard"
+    style="
     margin-top:12px;
     font-size:13px;
     color:#0f172a;
@@ -725,7 +740,7 @@ z-index:9999;
 
   </div>
 
-</div> <!-- 🔥 QUESTO MANCAVA -->
+</div>
 
 <div id="global-header"></div>
 
@@ -733,40 +748,42 @@ z-index:9999;
 
 <div class="dashboard-container">
 <div class="dashboard-layout">
-
 <div class="dashboard-main">  
 
-<!-- 🔥 NEW SaaS HERO -->
+<!-- HERO -->
 <div class="rb-dashboard">
 
 <div class="rb-hero">
 
   <div class="rb-hero-left">
-    <h1>📊 Controllo investimenti</h1>
-    <p>Analizza performance, rischio e crescita del tuo portfolio</p>
+    <h1 
+    data-it="📊 Controllo investimenti"
+    data-en="📊 Investment control">
+    📊 Controllo investimenti
+    </h1>
+
+    <p
+    data-it="Analizza performance, rischio e crescita del tuo portfolio"
+    data-en="Analyze performance, risk and growth of your portfolio">
+    Analizza performance, rischio e crescita del tuo portfolio
+    </p>
   </div>
 
   <div class="rb-hero-right">
 
     <div class="rb-hero-card">
-      <span>ROI medio</span>
+      <span data-it="ROI medio" data-en="Average ROI">ROI medio</span>
       <h2 id="db-roi">—</h2>
-      <div id="roi-message" style="
-      font-size:13px;
-      margin-top:6px;
-      font-weight:600;
-      color:#10b981;
-   ">
-</div>
+      <div id="roi-message" style="font-size:13px;margin-top:6px;font-weight:600;color:#10b981;"></div>
     </div>
 
     <div class="rb-hero-card">
-      <span>Profitto mensile</span>
+      <span data-it="Profitto mensile" data-en="Monthly profit">Profitto mensile</span>
       <h2 id="db-profit">—</h2>
     </div>
 
     <div class="rb-hero-card status good" id="db-status">
-      <span>Stato</span>
+      <span data-it="Stato" data-en="Status">Stato</span>
       <h2>—</h2>
     </div>
 
@@ -774,26 +791,26 @@ z-index:9999;
 
 </div>
 
-<!-- KPI STRIPE -->
+<!-- KPI GRID -->
 <div class="rb-kpi-grid">
 
   <div class="rb-kpi">
-    <span>ROI medio</span>
+    <span data-it="ROI medio" data-en="Average ROI">ROI medio</span>
     <h3 id="kpi-roi">—</h3>
   </div>
 
   <div class="rb-kpi">
-    <span>Cashflow</span>
+    <span data-it="Cashflow" data-en="Cashflow">Cashflow</span>
     <h3 id="kpi-cash">—</h3>
   </div>
 
   <div class="rb-kpi">
-    <span>Capitale</span>
+    <span data-it="Capitale" data-en="Capital">Capitale</span>
     <h3 id="kpi-invest">—</h3>
   </div>
 
   <div class="rb-kpi">
-    <span>Break-even</span>
+    <span data-it="Break-even" data-en="Break-even">Break-even</span>
     <h3 id="kpi-break">—</h3>
   </div>
 
@@ -802,10 +819,9 @@ z-index:9999;
 </div>  
 
 <!-- WELCOME -->
-
 <div class="dashboard-welcome">
 
-<h1
+<h1 
 data-it="La tua dashboard investimenti"
 data-en="Your investment dashboard">
 La tua dashboard investimenti
@@ -829,24 +845,17 @@ Home
 
 </div>
 
-<!-- KPI DASHBOARD -->
-
+<!-- KPI -->
 <div id="dashboard-kpi" class="stats-grid"></div>
 
-<!-- 🔥 INVESTMENT VERDICT (CORE SaaS) -->
+<!-- VERDICT -->
 <div id="investment-verdict" class="analysis-card" style="margin-bottom:40px"></div>  
-<div id="upgrade-trigger" style="
-margin-bottom:30px;
-display:none;
-"></div>  
+<div id="upgrade-trigger" style="margin-bottom:30px;display:none;"></div>  
 
-<!-- PORTFOLIO PERFORMANCE -->
-
+<!-- PORTFOLIO -->
 <div class="analysis-card" id="portfolio-performance">
 
-<h3
-data-it="Performance Portfolio"
-data-en="Portfolio Performance">
+<h3 data-it="Performance Portfolio" data-en="Portfolio Performance">
 Performance Portfolio
 </h3>
 
@@ -877,7 +886,6 @@ Performance Portfolio
 </div>  
 
 <!-- MARKET HERO -->
-
 <div class="analysis-card" style="margin-bottom:40px;padding:0;overflow:hidden">
 
 <div id="market-hero-bg" style="
@@ -893,11 +901,17 @@ color:white;
 
 <div>
 
-<h2 id="market-hero-title" style="font-size:26px;font-weight:600">
+<h2 id="market-hero-title"
+data-it="Investire in un B&B a Napoli"
+data-en="Investing in a B&B in Naples"
+style="font-size:26px;font-weight:600">
 Investire in un B&B a Napoli
 </h2>
 
-<div style="font-size:14px;opacity:0.9">
+<div 
+data-it="Mercato turistico ad alta domanda e ROI superiore alla media italiana"
+data-en="High-demand tourism market with above-average ROI"
+style="font-size:14px;opacity:0.9">
 Mercato turistico ad alta domanda e ROI superiore alla media italiana
 </div>
 
@@ -908,45 +922,30 @@ Mercato turistico ad alta domanda e ROI superiore alla media italiana
 <div class="market-hero-stats">
 
 <div>
-
-<div style="font-size:13px;color:#64748b">
+<div data-it="ROI medio" data-en="Average ROI" style="font-size:13px;color:#64748b">
 ROI medio
 </div>
-
-<div style="font-size:22px;font-weight:600;color:#10b981">
-16.7%
-</div>
-
+<div style="font-size:22px;font-weight:600;color:#10b981">16.7%</div>
 </div>
 
 <div>
-
-<div style="font-size:13px;color:#64748b">
+<div data-it="Occupazione media" data-en="Average occupancy" style="font-size:13px;color:#64748b">
 Occupazione media
 </div>
-
-<div style="font-size:22px;font-weight:600">
-74%
-</div>
-
+<div style="font-size:22px;font-weight:600">74%</div>
 </div>
 
 <div>
-
-<div style="font-size:13px;color:#64748b">
+<div data-it="Prezzo medio notte" data-en="Average nightly rate" style="font-size:13px;color:#64748b">
 Prezzo medio notte
 </div>
-
-<div style="font-size:22px;font-weight:600">
-€147
+<div style="font-size:22px;font-weight:600">€147</div>
 </div>
 
 </div>
 
 </div>
-
-</div>  
-
+  
 <!-- INVESTMENT SCORE -->
 
 <div id="investment-score"></div>
