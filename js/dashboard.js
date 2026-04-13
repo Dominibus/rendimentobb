@@ -2066,11 +2066,17 @@ text-align:center;
 ">
 
 <div style="font-size:14px;font-weight:600;margin-bottom:8px">
-💡 Hai già il dato chiave
+💡 ${t(
+  "Hai già il dato chiave",
+  "You already have the key data"
+)}
 </div>
 
 <div style="font-size:13px;color:#64748b;margin-bottom:12px">
-Ma ti manca la strategia per trasformarlo in profitto reale
+${t(
+  "Ti manca la strategia per trasformarlo in profitto reale",
+  "You are missing the strategy to turn it into real profit"
+)}
 </div>
 
 <button onclick="goToUpgrade()" style="
