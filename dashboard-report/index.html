@@ -275,8 +275,7 @@ function checkUserPlan(){
 
   isPro = (
     plan === "pro" ||
-    plan === "pro_yearly" ||
-    plan === "investor"   // 🔥 QUESTO TI MANCAVA
+    plan === "pro_yearly" 
   );
 
   return true;
@@ -455,10 +454,10 @@ setTimeout(initReport, 500);
 
 </script>
 
-<div id="global-footer"></div>
+<div id="footer"></div>
 
 <script type="module" src="/js/header.js"></script>
-<script type="module" src="/js/footer.js"></script>
+<script src="/js/footer.js" defer></script>
 <script>
 document.addEventListener("rb_language_changed", () => {
   if(typeof applyTranslations === "function"){
