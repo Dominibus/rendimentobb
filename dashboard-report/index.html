@@ -188,6 +188,23 @@ data-en="📥 Download professional PDF">
 
 <script>
 
+function showUpgradePopup(){
+
+  const lang = window.currentLang === "en";
+
+  const msg = lang
+    ? "Unlock the full professional investment report"
+    : "Sblocca il report professionale completo";
+
+  const cta = lang
+    ? "Upgrade to PRO"
+    : "Passa a PRO";
+
+  if(confirm(msg)){
+    window.location.href = "/pricing/";
+  }
+}  
+
 // ================= PARAMS =================
 const params = new URLSearchParams(window.location.search);
 
@@ -198,8 +215,13 @@ const risk = Number(params.get("risk") || 0);
 
 // ================= USER PLAN (REAL FIX) =================
 let isPro = false;
+let isInvestor = false;
 
 function checkUserPlan(){
+
+  if(window.currentPlan === "investor"){
+    isInvestor = true;
+  }
 
   if(
     window.currentPlan === "pro" ||
@@ -208,7 +230,6 @@ function checkUserPlan(){
     isPro = true;
   }
 
-  // 🔥 fallback sicurezza
   if(window.isProUser && window.isProUser()){
     isPro = true;
   }
