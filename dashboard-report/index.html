@@ -199,17 +199,10 @@ function checkUserPlan(){
 
   const plan = window.currentPlan || "free";
 
-  // 🔥 SOLO PRO SBLOCCA
-  if(plan === "pro" || plan === "pro_yearly"){
-    isPro = true;
-  }
+  // 🔒 SOLO PRO VERO
+  isPro = (plan === "pro" || plan === "pro_yearly");
 
-  // sicurezza extra
-  if(window.isProUser && window.isProUser()){
-    isPro = true;
-  }
-
-  console.log("PLAN:", plan, "isPro:", isPro);
+  console.log("PLAN:", plan, "| isPro:", isPro);
 }
 
 // ================= FORMAT =================
@@ -220,7 +213,7 @@ function euro(v){
   }).format(v);
 }
 
-// ================= RENDER BASE =================
+// ================= RENDER =================
 document.getElementById("price").innerText = euro(price);
 document.getElementById("equity").innerText = euro(equity);
 document.getElementById("roi").innerText = roi.toFixed(1)+"%";
@@ -249,7 +242,7 @@ else{
 document.getElementById("verdict").innerText = verdict;
 document.getElementById("verdict-text").innerText = text;
 
-// ================= CHART =================
+// ================= CHART FIX =================
 let roiChartInstance = null;
 
 function renderChart(){
@@ -277,53 +270,32 @@ function renderChart(){
   });
 }
 
-// ================= LOCK UI =================
+// ================= LOCK =================
 function applyLock(){
 
   const overlay = document.getElementById("upgradeOverlay");
-  const btn = document.querySelector(".btn");
 
   if(!isPro){
 
-    // 🔥 BLOCCO VISIVO
     overlay.style.display = "flex";
 
-    // 🔥 DISABILITA PDF
+    // 🔥 DISABILITA CLICK PDF REALMENTE
+    const btn = document.querySelector(".btn");
     if(btn){
+      btn.onclick = null;
       btn.style.opacity = "0.5";
       btn.style.cursor = "not-allowed";
-    }
-
-    // 🔥 CREA TEASER PRO (se non esiste)
-    if(!document.getElementById("proTeaser")){
-      
-      const teaser = document.createElement("div");
-      teaser.id = "proTeaser";
-      teaser.style.marginTop = "25px";
-      teaser.style.padding = "20px";
-      teaser.style.borderRadius = "12px";
-      teaser.style.background = "#fff7ed";
-      teaser.style.textAlign = "center";
-      teaser.innerHTML = `
-        <strong>🔒 Analisi avanzata PRO</strong><br>
-        <span style="font-size:13px;opacity:.7">
-        Score investimento, confronto mercato e strategia completa disponibili solo in PRO
-        </span>
-      `;
-
-      document.querySelector(".report").appendChild(teaser);
     }
 
   } else {
 
     overlay.style.display = "none";
 
-    // 🔥 SBLOCCA DATI AVANZATI
     renderAdvanced();
   }
 }
 
-// ================= ADVANCED PRO =================
+// ================= ADVANCED =================
 function renderAdvanced(){
 
   if(document.getElementById("advancedBox")) return;
@@ -340,7 +312,6 @@ function renderAdvanced(){
   box.innerHTML = `
     <h3>📊 Investment Score</h3>
     <div style="font-size:28px;font-weight:700">${score.toFixed(0)}/100</div>
-
     <div style="margin-top:15px;font-size:13px">
       Annual profit: ${euro(annualProfit)}<br>
       Break-even: ${breakEven.toFixed(1)} years
@@ -350,10 +321,9 @@ function renderAdvanced(){
   document.querySelector(".report").appendChild(box);
 }
 
-// ================= PDF =================
+// ================= PDF PRO (RIPRISTINATO) =================
 async function generatePDF(){
 
-  // 🔒 BLOCCO ASSOLUTO
   if(!isPro){
     document.getElementById("upgradeOverlay").style.display="flex";
     return;
@@ -364,25 +334,52 @@ async function generatePDF(){
 
   let y = 20;
 
+  const green = [16,185,129];
+  const dark = [15,23,42];
+  const gray = [100,116,139];
+
   doc.setFont("helvetica","bold");
   doc.setFontSize(20);
+  doc.setTextColor(...dark);
   doc.text("RendimentoBB",20,y);
 
   doc.setFontSize(12);
+  doc.setTextColor(...gray);
   doc.text("Investment Intelligence Report",20,y+8);
 
   y += 20;
 
-  doc.text("ROI: " + roi.toFixed(1)+"%",20,y);
-  doc.text("Risk: " + risk,20,y+10);
+  doc.setFillColor(248,250,252);
+  doc.roundedRect(20,y,170,55,6,6,"F");
 
-  y += 30;
+  doc.setFontSize(11);
+  doc.setTextColor(...dark);
 
-  let score = Math.min(100, Math.max(0, roi*5 - risk));
-  doc.setFontSize(18);
-  doc.text("Score: " + score.toFixed(0)+"/100",20,y);
+  doc.text("Property price",25,y+10);
+  doc.text(euro(price),120,y+10);
 
-  doc.save("RendimentoBB-Pro-Report.pdf");
+  doc.text("Equity invested",25,y+18);
+  doc.text(euro(equity),120,y+18);
+
+  doc.text("ROI",25,y+26);
+  doc.text(roi.toFixed(1)+"%",120,y+26);
+
+  doc.text("Risk score",25,y+34);
+  doc.text(risk+"/100",120,y+34);
+
+  y += 70;
+
+  doc.setFillColor(...green);
+  doc.roundedRect(20,y,170,30,6,6,"F");
+
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(16);
+  doc.text(verdict,25,y+13);
+
+  doc.setFontSize(10);
+  doc.text(text,25,y+23);
+
+  doc.save("RendimentoBB-Investment-Report.pdf");
 }
 
 // ================= INIT =================
