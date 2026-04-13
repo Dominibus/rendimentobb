@@ -570,6 +570,16 @@ if(typeof applyTranslations === "function"){
   renderRevenueSimulator(); 
   renderBestInvestment(analyses);
 
+// 🔥 helper testo report (traduzione)
+const helper = document.getElementById("report-helper-text");
+
+if(helper){
+  helper.innerHTML = t(
+    "Perfetto per convincere banca o investitori",
+    "Perfect to convince banks or investors"
+  );
+}
+  
   const best = analyses[0];
   renderInvestmentVerdict(best);  
   renderUpgradeTrigger(best);
