@@ -642,8 +642,31 @@ const banks = [
 
 banks.sort((a,b)=>a.rate-b.rate);
 
-let html="<h3 style='margin-top:40px'>🏦 "+t("Migliori mutui disponibili","Best mortgage options")+"</h3>";
+/* 🔥 INIT HTML */
+let html = "<h3 style='margin-top:40px'>🏦 " +
+t("Migliori mutui disponibili","Best mortgage options") +
+"</h3>";
 
+/* 🔒 BLOCCO PAYWALL (QUI GIUSTO) */
+if(!isProUser()){
+  html += `
+  <div style="
+    background:#111827;
+    color:white;
+    padding:20px;
+    border-radius:14px;
+    margin-top:20px;
+    text-align:center;
+  ">
+    🔒 ${t(
+      "Le migliori offerte reali sono disponibili nel piano Investor",
+      "Real mortgage offers are available in Investor plan"
+    )}
+  </div>
+  `;
+}
+
+/* 🔥 LISTA BANCHE */
 banks.forEach((b,i)=>{
 
 const locked = !isProUser() && i > 0;
@@ -690,9 +713,11 @@ ${t("Seleziona mutuo","Select mortgage")}
 </div>
 `;
 });
-document.getElementById("banks").innerHTML = html;
-}
 
+/* 🔥 RENDER */
+document.getElementById("banks").innerHTML = html;
+
+}
 function goToPricing(){
   window.location.href = "/#pricing";
 }  
