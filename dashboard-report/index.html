@@ -254,8 +254,24 @@ const lang = window.currentLang || "it";
 let isPro = false;
 
 function checkUserPlan(){
-  const plan = window.currentPlan || "free";
-  isPro = (plan === "pro" || plan === "pro_yearly");
+
+  const plan = window.currentPlan;
+
+  // 🔥 aspetta davvero firebase
+  if(!plan){
+    console.log("⏳ Piano non ancora pronto...");
+    return false;
+  }
+
+  console.log("🔥 Piano rilevato:", plan);
+
+  isPro = (
+    plan === "pro" ||
+    plan === "pro_yearly" ||
+    plan === "investor"   // 🔥 QUESTO TI MANCAVA
+  );
+
+  return true;
 }
 
 // ================= FORMAT =================
@@ -408,24 +424,33 @@ async function generatePDF(){
 }
 
 // ================= INIT =================
-document.addEventListener("rb_auth_ready", () => {
-  checkUserPlan();
-  applyLock();
-  renderChart();
-});
+function initReport(){
 
-setTimeout(()=>{
-  checkUserPlan();
+  const ready = checkUserPlan();
+
+  if(!ready){
+    // 🔥 retry intelligente
+    setTimeout(initReport, 300);
+    return;
+  }
+
   applyLock();
   renderChart();
-},800);
+
+}
+
+// 🔥 avvio reale
+document.addEventListener("rb_auth_ready", initReport);
+
+// fallback
+setTimeout(initReport, 500);
 
 </script>
 
 <div id="global-footer"></div>
 
 <script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js"></script> 
+<script defer src="/js/footer.js"></script>
 <script>
 document.addEventListener("rb_language_changed", () => {
   if(typeof applyTranslations === "function"){
