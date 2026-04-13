@@ -963,29 +963,90 @@ if(kpiContainer){
 kpiContainer.innerHTML = `
 
 <div class="stats-card">
-<h3>${t("Capitale portfolio","Portfolio capital")}</h3>
-<div style="font-size:28px;font-weight:700">
+<h3 style="
+font-size:13px;
+color:#64748b;
+font-weight:500;
+margin-bottom:6px;
+text-transform:uppercase;
+letter-spacing:0.5px;
+">
+${t("Capitale portfolio","Portfolio capital")}
+</h3>
+
+<div style="
+font-size:34px;
+font-weight:900;
+letter-spacing:-0.5px;
+">
 ${formatCurrency(totalCapital)}
 </div>
 </div>
 
+
 <div class="stats-card">
-<h3>${t("ROI medio","Average ROI")}</h3>
-<div style="font-size:28px;font-weight:700;color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};">
+<h3 style="
+font-size:13px;
+color:#64748b;
+font-weight:500;
+margin-bottom:6px;
+text-transform:uppercase;
+letter-spacing:0.5px;
+">
+${t("ROI medio","Average ROI")}
+</h3>
+
+<div style="
+font-size:34px;
+font-weight:900;
+letter-spacing:-0.5px;
+color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
+">
 ${avgROIRounded}% ${trend}
 </div>
 </div>
 
+
 <div class="stats-card">
-<h3>${t("Analisi salvate","Saved analyses")}</h3>
-<div style="font-size:28px;font-weight:700">
+<h3 style="
+font-size:13px;
+color:#64748b;
+font-weight:500;
+margin-bottom:6px;
+text-transform:uppercase;
+letter-spacing:0.5px;
+">
+${t("Analisi salvate","Saved analyses")}
+</h3>
+
+<div style="
+font-size:34px;
+font-weight:900;
+letter-spacing:-0.5px;
+">
 ${count}
 </div>
 </div>
 
+
 <div class="stats-card">
-<h3>${t("Investment Score","Investment Score")}</h3>
-<div style="font-size:28px;font-weight:700;color:#2563eb">
+<h3 style="
+font-size:13px;
+color:#64748b;
+font-weight:500;
+margin-bottom:6px;
+text-transform:uppercase;
+letter-spacing:0.5px;
+">
+${t("Investment Score","Investment Score")}
+</h3>
+
+<div style="
+font-size:34px;
+font-weight:900;
+letter-spacing:-0.5px;
+color:#2563eb;
+">
 ${investmentScore}/100
 </div>
 </div>
@@ -1879,9 +1940,23 @@ container.innerHTML = `
 
 <div style="display:flex;flex-direction:column;gap:10px;">
 
-<h2 style="font-size:22px;font-weight:700;color:${verdict.color};">
+<h2 style="
+font-size:30px;
+font-weight:900;
+color:${verdict.color};
+letter-spacing:-0.5px;
+">
 ${verdict.title}
 </h2>
+
+<div style="
+font-size:18px;
+font-weight:700;
+margin-top:4px;
+color:#0f172a;
+">
+👉 ${verdict.action}
+</div>
 
 <div style="font-size:14px;color:#64748b;">
 ${verdict.subtitle}
@@ -2119,9 +2194,11 @@ function renderUpgradeTrigger(best){
     </div>
 
     <div style="
-    font-size:32px;
-    font-weight:800;
-    color:#10b981;
+    font-size:44px;
+    font-weight:900;
+    background:linear-gradient(135deg,#10b981,#34d399);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
     margin-bottom:10px;
     ">
       ${formatCurrency(potentialProfit)}
