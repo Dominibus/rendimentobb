@@ -643,12 +643,12 @@ const banks = [
 
 banks.sort((a,b)=>a.rate-b.rate);
 
-/* 🔥 INIT HTML */
+/* HEADER */
 let html = "<h3 style='margin-top:40px'>🏦 " +
 t("Migliori mutui disponibili","Best mortgage options") +
 "</h3>";
 
-/* 🔒 BLOCCO PAYWALL */
+/* PAYWALL HEADER */
 if(!isProUser()){
   html += `
   <div style="
@@ -659,7 +659,6 @@ if(!isProUser()){
     margin-top:20px;
     text-align:center;
   ">
-
     🔒 ${t(
       "Le migliori offerte reali sono disponibili nel piano Investor",
       "Real mortgage offers are available in Investor plan"
@@ -679,24 +678,22 @@ if(!isProUser()){
         )}
       </div>
     </div>
-
   </div>
   `;
 }
 
-/* 🔥 LISTA BANCHE */
+/* LISTA */
 banks.forEach((b,i)=>{
 
 const monthlyRate = b.rate/100/12;
 const n = 20*12;
-
 const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly * 12;
 
 const locked = !isProUser();
 
 html += `
-<div class="bank-card ${i===0?"best":""} ${locked?"locked":""}">
+<div class="bank-card ${i===0?"best":""}">
 
 <h3>${b.name}</h3>
 
@@ -709,39 +706,14 @@ html += `
 </div>
 
 <div style="font-size:14px;margin-bottom:10px;color:#0f172a">
-
-${locked
-? `
-🔒 ${t("Sblocca per vedere il costo reale","Unlock to see real cost")}
-`
-: `
-💸 ${t("Costo annuo","Yearly cost")}: <strong>€${yearly.toFixed(0)}</strong>
-`
-}
-
+  ${
+    locked
+    ? `🔒 ${t("Sblocca per vedere il costo reale","Unlock to see real cost")}`
+    : `💸 ${t("Costo annuo","Yearly cost")}: <strong>€${yearly.toFixed(0)}</strong>`
+  }
 </div>
 
-if(!isProUser()){
-  html += `
-  <div style="
-    background:#fef3c7;
-    color:#92400e;
-    padding:12px;
-    border-radius:10px;
-    margin-top:15px;
-    text-align:center;
-    font-weight:600;
-  ">
-    ⚠️ ${t(
-      "Stai guardando dati limitati",
-      "You are viewing limited data"
-    )}
-  </div>
-  `;
-}
-
 ${i===0 ? `
-
 <div style="
   background:#dcfce7;
   padding:10px;
@@ -750,34 +722,22 @@ ${i===0 ? `
   font-weight:600;
   color:#166534;
 ">
+  ${
+    locked
+    ? `🔒 ${t("Sblocca per vedere quanto puoi risparmiare","Unlock to see your savings")}`
+    : `💰 ${t("Puoi risparmiare fino a","You can save up to")} <strong>€${(yearly*0.15).toFixed(0)}/anno</strong>`
+  }
 
-${locked
-? `
-🔒 ${t("Sblocca per vedere quanto puoi risparmiare","Unlock to see your savings")}
-`
-: `
-💰 ${t("Puoi risparmiare fino a","You can save up to")}
-<strong>€${(yearly*0.15).toFixed(0)}/anno</strong>
-`
-}
-
-<br>
-
-<span style="font-size:12px;color:#166534">
-⏳ ${t("Offerta limitata","Limited offer")}
-</span>
-
+  <br>
+  <span style="font-size:12px;color:#166534">
+    ⏳ ${t("Offerta limitata","Limited offer")}
+  </span>
 </div>
-
 ` : ""}
 
 ${
 locked
 ? `
-<div style="margin-top:10px;color:#ef4444;font-weight:600">
-🔒 ${t("Sblocca per vedere tutte le offerte","Unlock to see all offers")}
-</div>
-
 <button class="btn-main"
 onclick="startPlanPurchase('investor')">
 ${t("Sblocca ora","Unlock now")}
@@ -793,9 +753,10 @@ ${t("Seleziona mutuo","Select mortgage")}
 
 </div>
 `;
+
 });
 
-/* 🔥 RENDER */
+/* RENDER */
 document.getElementById("banks").innerHTML = html;
 
 }
