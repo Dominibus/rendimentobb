@@ -1167,11 +1167,11 @@ window.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=>{
         loadDashboard();
 
-        if(window.currentPlan !== "pro"){
-          if(typeof window.showProOverlay === "function"){
-            window.showProOverlay();
-          }
-        }
+        if(window.currentPlan === "investor"){
+  if(typeof window.showProOverlay === "function"){
+    window.showProOverlay();
+  }
+}
 
       },300);
 
