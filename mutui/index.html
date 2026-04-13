@@ -19,7 +19,7 @@ data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
 <style>
 
 /* =====================================
-🔥 MUTUI – SAAS PRODUCTION FINAL
+🔥 MUTUI – SAAS ULTRA PRO (FINAL)
 ===================================== */
 
 /* ===== BASE ===== */
@@ -30,7 +30,7 @@ body{
 }
 
 /* =====================================
-🔥 HERO MUTUI – FINAL PERFECT BALANCE
+🔥 HERO – PERFECT SaaS BALANCE
 ===================================== */
 
 .hero-mutui{
@@ -40,51 +40,41 @@ body{
 
   background:
   linear-gradient(
-    rgba(2,6,23,.45),
-    rgba(2,6,23,.55)
+    rgba(2,6,23,.35),
+    rgba(2,6,23,.45)
   ),
   url("/img/milan-bg.jpg") center/cover;
 
   overflow:hidden;
 }
 
-/* 🔥 SOLO GLOW LEGGERO (no doppio scuro) */
+/* glow leggero premium */
 .hero-mutui::before{
   content:"";
   position:absolute;
   inset:0;
-
   background:
     radial-gradient(circle at 30% 30%, rgba(16,185,129,0.18), transparent 60%);
-
   z-index:1;
 }
 
-/* ❌ RIMUOVI COMPLETAMENTE ::after */
-/* COMMENTALO O ELIMINALO */
-/*
-.hero-mutui::after{
-  display:none;
-}
-*/
-
-/* 🔥 TESTO SUPER LEGGIBILE */
+/* ===== TESTO HERO ===== */
 .hero-mutui h1,
 .hero-mutui p{
   position:relative;
   z-index:2;
-  color:white;
+  color:#ffffff;
 }
 
 /* TITLE */
 .hero-mutui h1{
-  font-size:42px;
+  font-size:44px;
   font-weight:800;
   margin-bottom:15px;
 
   text-shadow:
-    0 6px 20px rgba(0,0,0,.8),
-    0 2px 6px rgba(0,0,0,.6);
+    0 10px 30px rgba(0,0,0,.9),
+    0 3px 10px rgba(0,0,0,.7);
 }
 
 /* SUBTITLE */
@@ -93,25 +83,13 @@ body{
   opacity:.95;
 
   text-shadow:
-    0 4px 12px rgba(0,0,0,.7);
+    0 5px 18px rgba(0,0,0,.8);
 }
 
-/* titolo */
-.hero-mutui h1{
-  font-size:42px;
-  font-weight:800;
-  margin-bottom:15px;
-  text-shadow:0 5px 25px rgba(0,0,0,.6);
-}
+/* =====================================
+🔥 TOOL BOX
+===================================== */
 
-/* sottotitolo */
-.hero-mutui p{
-  font-size:18px;
-  opacity:.95;
-  text-shadow:0 3px 15px rgba(0,0,0,.5);
-}
-
-/* ===== TOOL BOX ===== */
 .tool-box{
   max-width:900px;
   margin:-100px auto 0;
@@ -122,14 +100,14 @@ body{
   border-radius:20px;
 
   box-shadow:
-  0 40px 100px rgba(2,6,23,.15),
-  0 10px 30px rgba(2,6,23,.08);
+    0 50px 120px rgba(2,6,23,.15),
+    0 20px 40px rgba(2,6,23,.08);
 
   position:relative;
   z-index:10;
 }
 
-/* ===== INPUT ===== */
+/* INPUT */
 .tool-box input{
   width:100%;
   padding:14px;
@@ -140,7 +118,7 @@ body{
   background:white;
   margin-bottom:12px;
 
-  transition:all .2s ease;
+  transition:.2s;
 }
 
 .tool-box input:focus{
@@ -149,7 +127,7 @@ body{
   box-shadow:0 0 0 3px rgba(16,185,129,.15);
 }
 
-/* ===== BUTTON ===== */
+/* BUTTON */
 .btn-main{
   width:100%;
   padding:14px;
@@ -161,41 +139,22 @@ body{
   color:white;
 
   font-weight:700;
-  letter-spacing:.3px;
 
-  box-shadow:0 10px 25px rgba(16,185,129,.3);
+  box-shadow:0 10px 25px rgba(16,185,129,.35);
   cursor:pointer;
 
-  transition:all .25s ease;
+  transition:.25s;
 }
 
 .btn-main:hover{
   transform:translateY(-2px);
-  box-shadow:0 15px 35px rgba(16,185,129,.4);
+  box-shadow:0 18px 40px rgba(16,185,129,.45);
 }
 
-/* ===== ALERT ===== */
-.roi-alert{
-  margin-top:15px;
-  padding:14px;
-  border-radius:10px;
+/* =====================================
+🔥 KPI
+===================================== */
 
-  display:none;
-  font-weight:600;
-  text-align:center;
-}
-
-.roi-bad{
-  background:#fee2e2;
-  color:#b91c1c;
-}
-
-.roi-good{
-  background:#dcfce7;
-  color:#166534;
-}
-
-/* ===== KPI ===== */
 .kpi-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -211,6 +170,7 @@ body{
   text-align:center;
 
   border:1px solid #e2e8f0;
+
   box-shadow:0 10px 25px rgba(0,0,0,.05);
 }
 
@@ -220,7 +180,37 @@ body{
   color:#0f172a;
 }
 
-/* ===== EXTRA ===== */
+.kpi small{
+  color:#64748b;
+}
+
+/* =====================================
+🔥 ALERT
+===================================== */
+
+.roi-alert{
+  margin-top:15px;
+  padding:14px;
+  border-radius:10px;
+  display:none;
+  font-weight:600;
+  text-align:center;
+}
+
+.roi-bad{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.roi-good{
+  background:#dcfce7;
+  color:#166534;
+}
+
+/* =====================================
+🔥 EXTRA + DECISION
+===================================== */
+
 .extra-box{
   margin-top:20px;
   padding:20px;
@@ -229,9 +219,18 @@ body{
   background:#f1f5f9;
 
   border:1px solid #e2e8f0;
+  color:#0f172a;
 }
 
-/* ===== BANCHE ===== */
+#decision-box{
+  background:white;
+  border:1px solid #e2e8f0;
+}
+
+/* =====================================
+🔥 BANK CARDS
+===================================== */
+
 .bank-card{
   background:white;
   padding:20px;
@@ -240,134 +239,22 @@ body{
   margin-top:15px;
 
   border:1px solid #e2e8f0;
-  box-shadow:0 10px 25px rgba(0,0,0,.05);
 
-  transition:all .25s ease;
+  box-shadow:0 10px 25px rgba(0,0,0,.05);
+  transition:.25s;
 }
 
 .bank-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 40px rgba(0,0,0,.1);
+  transform:translateY(-4px);
+  box-shadow:0 25px 50px rgba(0,0,0,.12);
 }
 
 .bank-card.best{
   border:2px solid #10b981;
-  box-shadow:0 15px 35px rgba(16,185,129,.2);
-}
-
- /* =====================================
-🔥 FIX CONTRASTO MUTUI (CRITICO)
-===================================== */
-
-/* TOOL BOX TEXT */
-.tool-box h1,
-.tool-box h2,
-.tool-box h3,
-.tool-box p,
-.tool-box small,
-.tool-box div{
-  color:#0f172a !important;
-}
-
-/* INPUT TEXT */
-.tool-box input{
-  color:#0f172a !important;
-}
-
-/* EXTRA BOX */
-.extra-box{
-  color:#0f172a !important;
-}
-
-/* KPI LABEL */
-.kpi small{
-  color:#64748b !important;
-}
-
-/* =====================
-🏦 BANK CARDS FIX
-===================== */
-
-.bank-card h3{
-  color:#0f172a !important;
-}
-
-.bank-card p{
-  color:#0f172a !important;
-}
-
-.bank-card{
-  color:#0f172a !important;
-}
-
-/* BEST CARD */
-.bank-card.best{
   background:#f0fdf4;
 }
 
-/* =====================
-🔥 LEAD BOX
-===================== */
-
-.lead-box input{
-  color:#0f172a !important;
-}
-
-.lead-box{
-  color:#0f172a !important;
-}
-
-/* =====================
-🔥 DECISION BOX
-===================== */
-
-#decision-box{
-  background:white;
-  border:1px solid #e2e8f0;
-  color:#0f172a;
-}
-
-/* =====================
-🔥 TITOLI GENERICI FIX
-===================== */
-
-.container h1,
-.container h2,
-.container h3{
-  color:#0f172a !important;
-}  
-
-/* ===== LEAD BOX ===== */
-.lead-box{
-  margin-top:60px;
-  padding:45px;
-
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-
-  border-radius:20px;
-  text-align:center;
-
-  box-shadow:
-  0 30px 80px rgba(2,6,23,.12);
-
-  border:1px solid #e2e8f0;
-}
-
-/* titolo lead */
-.lead-box h2{
-  color:#0f172a !important;
-  font-weight:700;
-  margin-bottom:15px;
-}
-
-/* messaggio successo */
-.success-msg{
-  color:#10b981;
-  display:none;
-  margin-top:15px;
-  font-weight:600;
-}
-
+/* LOCK */
 .bank-card.locked{
   opacity:0.6;
   filter:blur(2px);
@@ -385,9 +272,49 @@ body{
   font-size:12px;
   padding:4px 8px;
   border-radius:8px;
-}  
+}
 
-/* ===== MOBILE ===== */
+/* =====================================
+🔥 LEAD BOX
+===================================== */
+
+.lead-box{
+  margin-top:60px;
+  padding:45px;
+
+  background:linear-gradient(180deg,#ffffff,#f8fafc);
+
+  border-radius:20px;
+  text-align:center;
+
+  box-shadow:
+    0 40px 100px rgba(2,6,23,.12);
+
+  border:1px solid #e2e8f0;
+}
+
+.lead-box h2{
+  color:#0f172a;
+  font-weight:700;
+  margin-bottom:15px;
+}
+
+.lead-box input{
+  color:#0f172a;
+}
+
+/* SUCCESS */
+.success-msg{
+  color:#10b981;
+  display:none;
+  margin-top:15px;
+  font-weight:600;
+}
+
+/* =====================================
+🔥 MOBILE
+===================================== */
+
 @media(max-width:768px){
 
   .hero-mutui{
@@ -395,7 +322,7 @@ body{
   }
 
   .hero-mutui h1{
-    font-size:28px;
+    font-size:30px;
   }
 
   .hero-mutui p{
@@ -410,11 +337,8 @@ body{
   .kpi-grid{
     grid-template-columns:1fr;
   }
-
-  .btn-main{
-    width:100%;
-  }
 }
+
 </style>
 </head>
 
