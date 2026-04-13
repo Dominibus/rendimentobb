@@ -11,10 +11,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // ===============================
-// 🧠 GLOBAL GUARD (ANTI DUPLICATI)
+// 🧠 GLOBAL LOCK (ANTI DUPLICATI)
 // ===============================
-if(!window.leadLock){
-  window.leadLock = {};
+if(!window.__leadLock){
+  window.__leadLock = {};
 }
 
 // ===============================
@@ -29,8 +29,9 @@ function safeNumber(v){
   return isNaN(n) ? 0 : n;
 }
 
-function getCity(){
+function getCity(data){
   return (
+    data.city ||
     window.currentCity ||
     document.getElementById("market-city")?.value ||
     "unknown"
@@ -40,7 +41,7 @@ function getCity(){
 // ===============================
 // 🎯 SCORING ENGINE
 // ===============================
-function calculateLeadScore(roi){
+function calculateScore(roi){
 
   if(roi > 60) return { score:"extreme", value:140 };
   if(roi > 40) return { score:"high", value:70 };
@@ -50,56 +51,75 @@ function calculateLeadScore(roi){
 }
 
 // ===============================
-// 🔥 CORE SEND
+// 🌐 BASE LEAD
+// ===============================
+function buildBaseLead(type, data){
+
+  const roi = safeNumber(data.roi);
+  const { score, value } = calculateScore(roi);
+
+  return {
+    type,
+    email: data.email,
+    phone: data.phone || null,
+    city: getCity(data),
+
+    roi,
+    score,
+    value,
+
+    plan: window.currentPlan || "free",
+    lang: window.currentLang || "it",
+
+    createdAt: serverTimestamp(),
+    sessionId: window.sessionId || (window.sessionId = Date.now())
+  };
+}
+
+// ===============================
+// 📡 SEND CORE (UNICO ENDPOINT)
 // ===============================
 async function sendLead(data){
 
   try{
 
-    // 🔒 anti spam stesso utente
     const key = data.email + "_" + data.type;
 
-    if(window.leadLock[key]){
-      console.warn("⛔ Lead duplicato bloccato");
+    // 🔒 anti doppio invio
+    if(window.__leadLock[key]){
+      console.warn("⛔ Lead duplicato bloccato:", key);
       return;
     }
 
-    window.leadLock[key] = true;
+    window.__leadLock[key] = true;
 
     console.log("📡 SEND LEAD →", data);
 
-    const res = await fetch("/api/send-lead",{
+    const response = await fetch("/api/send-lead",{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        ...data,
+        ts: Date.now()
+      })
     });
 
-    const result = await res.json();
+    if(!response.ok){
+      const txt = await response.text();
+      console.error("❌ API error:", txt);
+      return false;
+    }
 
-    console.log("✅ Lead API result:", result);
+    const result = await response.json();
+
+    console.log("✅ Lead inviato:", result);
 
     return result;
 
   }catch(err){
     console.error("❌ sendLead error:", err);
+    return false;
   }
-
-}
-
-// ===============================
-// 🧱 BASE DATA
-// ===============================
-function baseLead(type, extra){
-
-  return {
-    type,
-    city: getCity(),
-    plan: window.currentPlan || "free",
-    lang: window.currentLang || "it",
-    sessionId: window.sessionId || (window.sessionId = Date.now()),
-    createdAt: serverTimestamp(),
-    ...extra
-  };
 
 }
 
@@ -110,26 +130,22 @@ export async function saveLeadMutui(data){
 
   try{
 
-    if(!isValidEmail(data.email)) return;
-
-    const roi = safeNumber(data.roi);
-    const { score, value } = calculateLeadScore(roi);
-
-    // ❌ BLOCCO LEAD SCARSI
-    if(score === "low"){
-      console.log("⛔ Lead mutui scartato (basso valore)");
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida");
       return;
     }
 
-    const lead = baseLead("mutui",{
-      email: data.email,
-      phone: data.phone || null,
+    const lead = buildBaseLead("mutui",{
+      ...data,
       amount: safeNumber(data.amount),
-      years: safeNumber(data.years),
-      roi,
-      score,
-      value
+      years: safeNumber(data.years)
     });
+
+    // 🔥 BLOCCO LEAD INUTILI
+    if(lead.score === "low"){
+      console.log("⛔ Lead mutui scartato (low)");
+      return;
+    }
 
     await addDoc(collection(db,"leads_mutui"), lead);
 
@@ -148,24 +164,20 @@ export async function saveLeadImmobili(data){
 
   try{
 
-    if(!isValidEmail(data.email)) return;
-
-    const roi = safeNumber(data.roi);
-    const { score, value } = calculateLeadScore(roi);
-
-    if(score === "low"){
-      console.log("⛔ Lead immobili scartato");
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida");
       return;
     }
 
-    const lead = baseLead("immobili",{
-      email: data.email,
-      city: data.city || getCity(),
-      budget: safeNumber(data.budget),
-      roi,
-      score,
-      value
+    const lead = buildBaseLead("immobili",{
+      ...data,
+      budget: safeNumber(data.budget)
     });
+
+    if(lead.score === "low"){
+      console.log("⛔ Lead immobili scartato");
+      return;
+    }
 
     await addDoc(collection(db,"leads_immobili"), lead);
 
@@ -178,21 +190,23 @@ export async function saveLeadImmobili(data){
 }
 
 // ===============================
-// 🤝 PARTNER (HIGH VALUE ONLY)
+// 🤝 PARTNER LEAD (HIGH ONLY)
 // ===============================
 export async function savePartnerLead(data){
 
   try{
 
-    if(!isValidEmail(data.email)) return;
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida");
+      return;
+    }
 
-    const lead = baseLead("partner",{
+    const lead = {
+      ...buildBaseLead("partner", data),
       name: data.name || "",
-      email: data.email,
       message: data.message || "",
-      score:"high",
-      value:100
-    });
+      priority: "HIGH"
+    };
 
     await addDoc(collection(db,"leads_partner"), lead);
 
@@ -205,21 +219,24 @@ export async function savePartnerLead(data){
 }
 
 // ===============================
-// 💼 WORK
+// 💼 WORK LEAD
 // ===============================
 export async function saveWorkLead(data){
 
   try{
 
-    if(!isValidEmail(data.email)) return;
+    if(!isValidEmail(data.email)){
+      console.warn("⛔ Email non valida");
+      return;
+    }
 
-    const lead = baseLead("work",{
+    const lead = {
+      ...buildBaseLead("work", data),
       name: data.name || "",
-      email: data.email,
       role: data.role || "",
-      score:"low",
-      value:10
-    });
+      priority: "LOW",
+      value: 10
+    };
 
     await addDoc(collection(db,"leads_work"), lead);
 
