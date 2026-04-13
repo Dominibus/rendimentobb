@@ -5,9 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title data-it="Report investimento B&B" data-en="B&B Investment Report">
-Report investimento B&B
-</title>
+<title>Report investimento B&B</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -19,20 +17,26 @@ Report investimento B&B
 
 /* ===== BASE ===== */
 body{
-  font-family:system-ui;
+  font-family: system-ui;
   background:#f8fafc;
   margin:0;
-  padding-top:80px;
+  padding:40px 20px;
+  display:flex;
+  justify-content:center;
   color:#0f172a;
+}
+
+/* ===== CONTAINER ===== */
+.page{
+  width:100%;
+  max-width:920px;
 }
 
 /* ===== NAV ===== */
 .report-nav{
-  max-width:900px;
-  margin:20px auto;
   display:flex;
   gap:10px;
-  padding:0 20px;
+  margin-bottom:20px;
 }
 
 /* ===== BUTTON NAV ===== */
@@ -42,7 +46,6 @@ body{
   font-size:13px;
   font-weight:600;
   text-decoration:none;
-  transition:all .2s ease;
 }
 
 .nav-btn.primary{
@@ -57,14 +60,11 @@ body{
 
 /* ===== CARD ===== */
 .report{
-  max-width:920px;
-  margin:20px auto 60px auto;
   background:white;
-  padding:40px;
-  border-radius:24px;
-  box-shadow:0 30px 100px rgba(2,6,23,0.12);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 25px 80px rgba(0,0,0,0.1);
   position:relative;
-  border:1px solid #e2e8f0;
 }
 
 /* ===== KPI ===== */
@@ -76,18 +76,34 @@ body{
 }
 
 .kpi{
-  background:#f8fafc;
-  padding:18px;
-  border-radius:14px;
+  background:#f1f5f9;
+  padding:16px;
+  border-radius:12px;
+}
+
+.kpi span{
+  font-size:12px;
+  color:#64748b;
+}
+
+.kpi strong{
+  display:block;
+  margin-top:5px;
+  font-size:16px;
 }
 
 /* ===== VERDICT ===== */
 .verdict{
   margin-top:30px;
-  padding:24px;
-  border-radius:16px;
+  padding:20px;
+  border-radius:14px;
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
+}
+
+/* ===== CHART ===== */
+.chart-box{
+  margin-top:30px;
 }
 
 /* ===== BUTTON ===== */
@@ -119,14 +135,20 @@ body{
   text-align:center;
 }
 
+/* ===== MOBILE ===== */
+@media (max-width:768px){
+  .kpi-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 
 </head>
 
 <body>
 
-<!-- HEADER CORRETTO -->
-<div id="global-header"></div>
+<div class="page">
 
 <div class="report-nav">
   <a href="/dashboard/" class="nav-btn primary">← Dashboard</a>
@@ -149,91 +171,184 @@ body{
   <p id="verdict-text"></p>
 </div>
 
-<canvas id="roiChart" style="margin-top:30px;"></canvas>
+<div class="chart-box">
+  <canvas id="roiChart"></canvas>
+</div>
 
 <button class="btn" onclick="generatePDF()">📥 Scarica PDF</button>
 
+<!-- OVERLAY -->
 <div id="upgradeOverlay" class="lock-overlay">
   <h2>🔒 Report PRO</h2>
-  <button onclick="location.href='/pricing/'">🚀 Sblocca</button>
+  <p>Accesso riservato ai piani PRO</p>
+  <button onclick="window.location.href='/pricing/'">🚀 Sblocca</button>
 </div>
 
 </div>
 
-<!-- FOOTER CORRETTO -->
-<div id="global-footer"></div>
-
-<script type="module" src="/js/header.js"></script>
-<script src="/js/footer.js" defer></script>
+</div>
 
 <script>
 
-// PARAMS
-const p = new URLSearchParams(location.search);
+// ================= PARAMS =================
+const params = new URLSearchParams(window.location.search);
 
-const price = Number(p.get("price")||0);
-const roi = Number(p.get("roi")||0);
-const equity = Number(p.get("equity")||0);
-const risk = Number(p.get("risk")||0);
+const price = Number(params.get("price") || 0);
+const roi = Number(params.get("roi") || 0);
+const equity = Number(params.get("equity") || 0);
+const risk = Number(params.get("risk") || 0);
 
-// FORMAT
-const euro = v => new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR"}).format(v);
+// ================= USER =================
+let isPro = false;
 
-// RENDER
-priceEl = document.getElementById("price");
-equityEl = document.getElementById("equity");
-roiEl = document.getElementById("roi");
-riskEl = document.getElementById("risk");
+function checkUserPlan(){
+  const plan = window.currentPlan || "free";
 
-priceEl.innerText = euro(price);
-equityEl.innerText = euro(equity);
-roiEl.innerText = roi.toFixed(1)+"%";
-riskEl.innerText = risk+"/100";
+  isPro = (plan === "pro" || plan === "pro_yearly");
 
-// VERDICT
-let verdict = "HIGH RISK";
-let text = "Investimento rischioso";
+  console.log("PLAN:", plan, "| isPro:", isPro);
+}
 
-if(roi>=12){ verdict="AAA INVESTMENT"; text="Top investimento"; }
-else if(roi>=8){ verdict="STRONG"; text="Ottimo investimento"; }
+// ================= FORMAT =================
+function euro(v){
+  return new Intl.NumberFormat("it-IT",{
+    style:"currency",
+    currency:"EUR"
+  }).format(v);
+}
+
+// ================= RENDER =================
+document.getElementById("price").innerText = euro(price);
+document.getElementById("equity").innerText = euro(equity);
+document.getElementById("roi").innerText = roi.toFixed(1)+"%";
+document.getElementById("risk").innerText = risk+"/100";
+
+// ================= VERDICT =================
+let verdict="",text="";
+
+if(roi >= 12){
+  verdict = "AAA INVESTMENT";
+  text = "Top-tier ROI. Institutional-grade opportunity.";
+}
+else if(roi >= 8){
+  verdict = "STRONG INVESTMENT";
+  text = "High ROI with controlled risk.";
+}
+else if(roi >= 5){
+  verdict = "OPTIMIZE";
+  text = "Good investment but needs optimization.";
+}
+else{
+  verdict = "HIGH RISK";
+  text = "Low ROI or unstable fundamentals.";
+}
 
 document.getElementById("verdict").innerText = verdict;
 document.getElementById("verdict-text").innerText = text;
 
-// CHART
-new Chart(document.getElementById("roiChart"),{
-  type:"bar",
-  data:{
-    labels:["ROI","Rischio","Benchmark"],
-    datasets:[{data:[roi,risk,8],borderRadius:8}]
-  },
-  options:{plugins:{legend:{display:false}}}
-});
+// ================= CHART =================
+let roiChartInstance = null;
 
-// 🔥 USER PLAN (FIX DEFINITIVO)
-function init(){
+function renderChart(){
 
-  const plan = window.currentPlan;
+  const canvas = document.getElementById("roiChart");
 
-  if(!plan){
-    setTimeout(init,300);
-    return;
+  if(roiChartInstance){
+    roiChartInstance.destroy();
   }
 
-  const isPro = (
-    plan === "pro" ||
-    plan === "pro_yearly"
-  );
+  roiChartInstance = new Chart(canvas,{
+    type:"bar",
+    data:{
+      labels:["ROI %","Risk","Benchmark"],
+      datasets:[{
+        data:[roi, risk, 8],
+        backgroundColor:["#10b981","#ef4444","#3b82f6"],
+        borderRadius:8
+      }]
+    },
+    options:{
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+}
+
+// ================= LOCK =================
+function applyLock(){
+
+  const overlay = document.getElementById("upgradeOverlay");
+
+  if(!isPro){
+    overlay.style.display = "flex";
+
+    const btn = document.querySelector(".btn");
+    if(btn){
+      btn.onclick = null;
+      btn.style.opacity = "0.5";
+    }
+  } else {
+    overlay.style.display = "none";
+    renderAdvanced();
+  }
+}
+
+// ================= ADVANCED =================
+function renderAdvanced(){
+
+  if(document.getElementById("advancedBox")) return;
+
+  const box = document.createElement("div");
+
+  box.id = "advancedBox";
+  box.className = "verdict";
+
+  let score = Math.min(100, Math.max(0, roi*5 - risk));
+  const annualProfit = price * (roi/100);
+  const breakEven = equity / annualProfit;
+
+  box.innerHTML = `
+    <h3>📊 Investment Score</h3>
+    <div style="font-size:28px;font-weight:700">${score.toFixed(0)}/100</div>
+    <div style="margin-top:15px;font-size:13px">
+      Annual profit: ${euro(annualProfit)}<br>
+      Break-even: ${breakEven.toFixed(1)} years
+    </div>
+  `;
+
+  document.querySelector(".report").appendChild(box);
+}
+
+// ================= PDF =================
+async function generatePDF(){
 
   if(!isPro){
     document.getElementById("upgradeOverlay").style.display="flex";
+    return;
   }
 
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.text("RendimentoBB Report",20,20);
+  doc.text("Prezzo: "+euro(price),20,40);
+  doc.text("ROI: "+roi.toFixed(1)+"%",20,50);
+
+  doc.save("report.pdf");
 }
 
-// SYNC CON FIREBASE
-document.addEventListener("rb_auth_ready", init);
-setTimeout(init,600);
+// ================= INIT =================
+document.addEventListener("rb_auth_ready", () => {
+  checkUserPlan();
+  applyLock();
+  renderChart();
+});
+
+setTimeout(()=>{
+  checkUserPlan();
+  applyLock();
+  renderChart();
+},800);
 
 </script>
 
