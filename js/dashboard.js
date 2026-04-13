@@ -983,13 +983,22 @@ const roiMsg = document.getElementById("roi-message");
 
 if(roiMsg){
   if(avgROI >= 10){
-    roiMsg.innerText = "🔥 ROI sopra mercato";
+    roiMsg.innerText = t(
+  "🔥 ROI sopra mercato (ottimo investimento)",
+  "🔥 Above market ROI (strong investment)"
+);
   }else if(avgROI >= 5){
-    roiMsg.innerText = "📊 ROI nella media";
+    roiMsg.innerText = t(
+      "📊 ROI nella media",
+      "📊 Average ROI"
+    );
   }else{
-    roiMsg.innerText = "⚠️ ROI basso";
+    roiMsg.innerText = t(
+      "⚠️ ROI basso",
+      "⚠️ Low ROI"
+    );
   }
-}  
+}
 
 // ================= KPI CARDS =================
 const kpiContainer = document.getElementById("dashboard-kpi");
