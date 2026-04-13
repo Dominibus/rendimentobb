@@ -923,7 +923,8 @@ if(dbStatus){
   const h2 = dbStatus.querySelector("h2");
   if(h2) h2.innerText = status;
 
-  dbStatus.style.background = color;
+  dbStatus.style.background = `linear-gradient(135deg, ${color}, ${color}cc)`;
+  dbStatus.style.boxShadow = `0 10px 30px ${color}55`;
   dbStatus.style.color = "white";
 }
 
