@@ -36,9 +36,9 @@ body{
   text-align:center;
 
   background:
-  linear-gradient(rgba(2,6,23,.75), rgba(2,6,23,.9)),
+  linear-gradient(rgba(2,6,23,.45), rgba(2,6,23,.65)),
   url("/img/milan-bg.jpg") center/cover;
-
+ 
   overflow:hidden;
 }
 
@@ -47,7 +47,7 @@ body{
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(circle at center, rgba(16,185,129,0.15), transparent 70%);
+  background:radial-gradient(circle at center, rgba(16,185,129,0.25), transparent 70%);
   pointer-events:none;
 }
 
@@ -488,8 +488,8 @@ const rate   = parseFloat(document.getElementById("rate").value || 3.5);
 const years  = parseFloat(document.getElementById("years").value || 20);
 const income = parseFloat(document.getElementById("income").value || 30000);
 
-const monthlyRate = b.rate/100/12;
-const n = 20*12;
+const monthlyRate = rate/100/12;
+const n = years*12;
 
 const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly*12;
@@ -668,6 +668,12 @@ if(!isProUser()){
 
 /* 🔥 LISTA BANCHE */
 banks.forEach((b,i)=>{
+
+const monthlyRate = b.rate/100/12;
+const n = 20*12;
+
+const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
+const yearly = monthly * 12;
 
 const locked = !isProUser() && i > 0;
 
