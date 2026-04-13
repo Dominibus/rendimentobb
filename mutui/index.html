@@ -488,11 +488,11 @@ const rate   = parseFloat(document.getElementById("rate").value || 3.5);
 const years  = parseFloat(document.getElementById("years").value || 20);
 const income = parseFloat(document.getElementById("income").value || 30000);
 
-const monthlyRate = rate/100/12;
-const n = years*12;
+const monthlyRate = b.rate/100/12;
+const n = 20*12;
 
 const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
-const yearly  = monthly*12;
+const yearly = monthly*12;
 
 const roi = ((income - yearly)/income*100);
 
@@ -684,10 +684,28 @@ html+=`
   ${t("Tasso fisso medio","Average fixed rate")}
 </div>
 
+<div style="font-size:14px;margin-bottom:10px;color:#0f172a">
+  💸 ${t("Costo annuo","Yearly cost")}: <strong>€${yearly.toFixed(0)}</strong>
+</div>
+
 ${i===0 ? `
+
 <div style="color:#10b981;font-weight:600">
 🔥 ${t("Migliore offerta","Best offer")}
 </div>
+
+<div style="
+  background:#dcfce7;
+  padding:10px;
+  border-radius:10px;
+  margin:10px 0;
+  font-weight:600;
+  color:#166534;
+">
+💰 ${t("Puoi risparmiare fino a","You can save up to")}
+<strong>€${(yearly*0.15).toFixed(0)}/anno</strong>
+</div>
+
 ` : ""}
 
 ${
