@@ -958,6 +958,19 @@ if(countEl) countEl.textContent = count;
 
 // ================= SCORE =================
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
+  
+// ================= ROI =================
+const roiMsg = document.getElementById("roi-message");
+
+if(roiMsg){
+  if(avgROI >= 10){
+    roiMsg.innerText = "🔥 ROI sopra mercato";
+  }else if(avgROI >= 5){
+    roiMsg.innerText = "📊 ROI nella media";
+  }else{
+    roiMsg.innerText = "⚠️ ROI basso";
+  }
+}  
 
 // ================= KPI CARDS =================
 const kpiContainer = document.getElementById("dashboard-kpi");
@@ -1954,13 +1967,53 @@ ${verdict.title}
 </h2>
 
 <div style="
-font-size:18px;
-font-weight:700;
-margin-top:4px;
-color:#0f172a;
+font-size:20px;
+font-weight:800;
+color:${verdict.color};
+margin-top:6px;
 ">
-👉 ${verdict.action}
+${verdict.action === "Procedere"
+  ? "✅ COMPRA"
+  : verdict.action === "Ottimizzare"
+  ? "⚙️ OTTIMIZZA"
+  : "❌ EVITA"}
 </div>
+
+${
+!isProUser()
+? `
+<div style="
+margin-top:16px;
+padding:16px;
+border-radius:12px;
+background:rgba(0,0,0,0.04);
+text-align:center;
+">
+
+<div style="font-size:14px;font-weight:600;margin-bottom:8px">
+💡 Hai già il dato chiave
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-bottom:12px">
+Ma ti manca la strategia per trasformarlo in profitto reale
+</div>
+
+<button onclick="goToUpgrade()" style="
+background:#10b981;
+color:white;
+border:none;
+padding:12px 16px;
+border-radius:10px;
+font-weight:700;
+cursor:pointer;
+">
+🚀 Sblocca strategia completa
+</button>
+
+</div>
+`
+: ""
+}
 
 <div style="font-size:14px;color:#64748b;">
 ${verdict.subtitle}
