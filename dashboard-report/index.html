@@ -15,48 +15,65 @@
 
 <style>
 
+/* ================================
+🔥 RENDIMENTOBB – FINTECH UI (PRO)
+================================ */
+
+/* ===== RESET ===== */
+*{
+  box-sizing:border-box;
+}
+
 /* ===== BASE ===== */
 body{
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(180deg,#f8fafc,#eef2f7);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+
+  background:
+    radial-gradient(circle at 20% 20%,rgba(16,185,129,0.06),transparent 40%),
+    radial-gradient(circle at 80% 0%,rgba(59,130,246,0.06),transparent 40%),
+    linear-gradient(180deg,#f8fafc,#eef2f7);
+
   margin:0;
-  padding:40px 20px;
+  padding:50px 20px;
+
   display:flex;
   justify-content:center;
+
   color:#0f172a;
 }
 
 /* ===== CONTAINER ===== */
 .page{
   width:100%;
-  max-width:980px;
+  max-width:1000px;
 }
 
 /* ===== NAV ===== */
 .report-nav{
   display:flex;
   gap:10px;
-  margin-bottom:25px;
+  margin-bottom:30px;
 }
 
 /* ===== BUTTON NAV ===== */
 .nav-btn{
-  padding:10px 16px;
+  padding:10px 18px;
   border-radius:999px;
   font-size:13px;
   font-weight:600;
   text-decoration:none;
-  transition:all .2s ease;
+  transition:all .25s ease;
 }
 
 .nav-btn.primary{
   background:#0f172a;
   color:white;
+  box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
 .nav-btn.primary:hover{
-  transform:translateY(-1px);
-  opacity:.9;
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 .nav-btn.secondary{
@@ -68,44 +85,67 @@ body{
   background:#cbd5e1;
 }
 
-/* ===== CARD ===== */
+/* ===== REPORT CARD ===== */
 .report{
-  background:white;
-  padding:35px;
-  border-radius:22px;
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
+
+  padding:40px;
+  border-radius:24px;
+
   box-shadow:
-    0 10px 30px rgba(2,6,23,0.06),
-    0 30px 80px rgba(2,6,23,0.08);
+    0 15px 40px rgba(2,6,23,0.08),
+    0 40px 120px rgba(2,6,23,0.10);
+
+  border:1px solid rgba(255,255,255,0.6);
+
   position:relative;
-  border:1px solid #e2e8f0;
 }
 
 /* ===== TITLE ===== */
 h1{
-  font-size:22px;
-  margin-bottom:10px;
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:5px;
 }
 
 /* ===== KPI GRID ===== */
 .kpi-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:15px;
-  margin-top:20px;
+  gap:18px;
+  margin-top:25px;
 }
 
 /* ===== KPI CARD ===== */
 .kpi{
-  background:#f8fafc;
+  background:linear-gradient(180deg,#ffffff,#f8fafc);
   padding:18px;
-  border-radius:14px;
+  border-radius:16px;
+
   border:1px solid #e2e8f0;
-  transition:all .2s ease;
+
+  transition:all .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.kpi::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.3),transparent);
+  opacity:0;
+  transition:.3s;
 }
 
 .kpi:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px rgba(2,6,23,0.10);
+}
+
+.kpi:hover::after{
+  opacity:1;
 }
 
 .kpi span{
@@ -116,89 +156,146 @@ h1{
 .kpi strong{
   display:block;
   margin-top:6px;
-  font-size:18px;
+  font-size:20px;
   font-weight:700;
 }
 
-/* ===== VERDICT ===== */
+/* ===== VERDICT (CORE VISUAL) ===== */
 .verdict{
-  margin-top:30px;
-  padding:22px;
-  border-radius:16px;
-  background:linear-gradient(135deg,#10b981,#059669);
+  margin-top:35px;
+  padding:28px;
+  border-radius:18px;
+
+  background:linear-gradient(135deg,#059669,#10b981);
+
   color:white;
-  box-shadow:0 10px 30px rgba(16,185,129,0.25);
+
+  box-shadow:
+    0 15px 40px rgba(16,185,129,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+
+  position:relative;
+  overflow:hidden;
+}
+
+.verdict::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.2),transparent);
+}
+
+.verdict h2{
+  font-size:20px;
+  margin-bottom:6px;
+}
+
+.verdict p{
+  opacity:.9;
+  font-size:14px;
 }
 
 /* ===== CHART ===== */
 .chart-box{
-  margin-top:30px;
+  margin-top:35px;
+  padding:20px;
+  border-radius:16px;
+
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+
+  box-shadow:0 10px 30px rgba(2,6,23,0.05);
 }
 
-/* ===== BUTTON ===== */
+/* ===== CTA BUTTON ===== */
 .btn{
-  margin-top:25px;
+  margin-top:30px;
+
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
+
   border:none;
-  padding:14px;
-  border-radius:12px;
+  padding:15px;
+
+  border-radius:14px;
+
   cursor:pointer;
   width:100%;
+
   font-weight:600;
-  transition:all .2s ease;
+  font-size:14px;
+
+  transition:all .25s ease;
+
+  box-shadow:0 10px 25px rgba(16,185,129,0.25);
 }
 
 .btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 10px 25px rgba(16,185,129,0.3);
+  transform:translateY(-2px);
+  box-shadow:0 20px 40px rgba(16,185,129,0.40);
 }
 
 /* ===== OVERLAY PRO ===== */
 .lock-overlay{
   position:absolute;
   inset:0;
-  background:rgba(15,23,42,0.85);
-  backdrop-filter:blur(10px);
+
+  background:rgba(15,23,42,0.75);
+  backdrop-filter:blur(14px);
+
   display:none;
   align-items:center;
   justify-content:center;
   flex-direction:column;
+
   color:white;
-  border-radius:20px;
+
+  border-radius:24px;
   z-index:10;
   text-align:center;
+
   padding:30px;
 }
 
 .lock-overlay h2{
-  font-size:20px;
+  font-size:22px;
   margin-bottom:10px;
 }
 
 .lock-overlay p{
-  opacity:.8;
+  opacity:.85;
   font-size:14px;
-  margin-bottom:15px;
+  margin-bottom:20px;
 }
 
 .lock-overlay button{
   background:linear-gradient(135deg,#10b981,#059669);
+
   border:none;
-  padding:12px 22px;
+  padding:13px 24px;
+
   border-radius:999px;
   color:white;
+
   font-weight:600;
   cursor:pointer;
-  transition:all .2s ease;
+
+  transition:all .25s ease;
+
+  box-shadow:0 10px 25px rgba(16,185,129,0.3);
 }
 
 .lock-overlay button:hover{
-  transform:translateY(-1px);
+  transform:translateY(-2px);
+  box-shadow:0 20px 40px rgba(16,185,129,0.5);
 }
 
 /* ===== MOBILE ===== */
 @media (max-width:768px){
+
+  body{
+    padding:30px 15px;
+  }
 
   .report{
     padding:25px;
@@ -209,6 +306,7 @@ h1{
   }
 
 }
+
 </style>
 
 </head>
@@ -230,6 +328,22 @@ h1{
 
 <!-- REPORT -->
 <div class="report">
+
+<!-- HEADER REPORT -->
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+  <div>
+    <div style="font-weight:700;font-size:18px;">RendimentoBB</div>
+    <div style="font-size:12px;color:#64748b;"
+         data-it="Investment Intelligence Report"
+         data-en="Investment Intelligence Report">
+      Investment Intelligence Report
+    </div>
+  </div>
+
+  <div style="font-size:11px;background:#ecfdf5;color:#059669;padding:6px 10px;border-radius:999px;font-weight:600;">
+    LIVE ANALYSIS
+  </div>
+</div>
 
 <h1 
   data-it="📄 Analisi investimento"
@@ -280,18 +394,11 @@ data-en="📥 Download professional PDF report">
 
 <!-- OVERLAY -->
 <div id="upgradeOverlay" class="lock-overlay">
-  <h2 
-    data-it="🔒 Report PRO"
-    data-en="🔒 PRO Report">
-  🔒 Report PRO
-  </h2>
-
-  <p 
-    data-it="Accesso riservato a investitori e professionisti"
-    data-en="Access reserved for investors and professionals">
-  Accesso riservato a investitori e professionisti
+  <h2 data-it="🔒 Report PRO" data-en="🔒 PRO Report">🔒 Report PRO</h2>
+  <p data-it="Accesso riservato a investitori e professionisti"
+     data-en="Access reserved for investors and professionals">
+     Accesso riservato a investitori e professionisti
   </p>
-
   <button onclick="window.location.href='/pricing/'"
     data-it="🚀 Sblocca PRO"
     data-en="🚀 Unlock PRO">
@@ -319,13 +426,8 @@ const lang = window.currentLang || "it";
 let isPro = false;
 
 function checkUserPlan(){
-
   const plan = window.currentPlan || "free";
-
-  // 🔒 INVESTOR NON È PRO
   isPro = (plan === "pro" || plan === "pro_yearly");
-
-  console.log("PLAN:", plan, "| isPro:", isPro);
 }
 
 // ================= FORMAT =================
@@ -338,12 +440,10 @@ function euro(v){
 
 // ================= RENDER =================
 function renderData(){
-
   document.getElementById("price").innerText = euro(price);
   document.getElementById("equity").innerText = euro(equity);
   document.getElementById("roi").innerText = roi.toFixed(1)+"%";
   document.getElementById("risk").innerText = risk+"/100";
-
 }
 
 // ================= VERDICT =================
@@ -353,32 +453,31 @@ function renderVerdict(){
 
   if(roi >= 12){
     verdict = "AAA INVESTMENT";
-    text = lang === "en"
+    text = lang==="en"
       ? "Top-tier ROI. Institutional-grade opportunity."
       : "ROI elevato. Opportunità di livello istituzionale.";
   }
   else if(roi >= 8){
-    verdict = lang === "en" ? "STRONG INVESTMENT" : "INVESTIMENTO FORTE";
-    text = lang === "en"
+    verdict = lang==="en" ? "STRONG INVESTMENT" : "INVESTIMENTO FORTE";
+    text = lang==="en"
       ? "High ROI with controlled risk."
       : "ROI elevato con rischio controllato.";
   }
   else if(roi >= 5){
-    verdict = lang === "en" ? "OPTIMIZE" : "DA OTTIMIZZARE";
-    text = lang === "en"
+    verdict = lang==="en" ? "OPTIMIZE" : "DA OTTIMIZZARE";
+    text = lang==="en"
       ? "Good investment but needs optimization."
       : "Buon investimento ma da ottimizzare.";
   }
   else{
-    verdict = lang === "en" ? "HIGH RISK" : "ALTO RISCHIO";
-    text = lang === "en"
+    verdict = lang==="en" ? "HIGH RISK" : "ALTO RISCHIO";
+    text = lang==="en"
       ? "Low ROI or unstable fundamentals."
       : "ROI basso o fondamentali instabili.";
   }
 
   document.getElementById("verdict").innerText = verdict;
   document.getElementById("verdict-text").innerText = text;
-
 }
 
 // ================= CHART =================
@@ -395,21 +494,22 @@ function renderChart(){
   roiChartInstance = new Chart(canvas,{
     type:"bar",
     data:{
-      labels: lang === "en"
-        ? ["ROI %","Risk","Benchmark"]
-        : ["ROI %","Rischio","Benchmark"],
+      labels: lang==="en"
+        ? ["ROI","Risk","Benchmark"]
+        : ["ROI","Rischio","Benchmark"],
       datasets:[{
         data:[roi, risk, 8],
         backgroundColor:["#10b981","#ef4444","#3b82f6"],
-        borderRadius:8
+        borderRadius:10
       }]
     },
     options:{
       plugins:{legend:{display:false}},
-      scales:{y:{beginAtZero:true}}
+      scales:{
+        y:{beginAtZero:true}
+      }
     }
   });
-
 }
 
 // ================= LOCK =================
@@ -438,7 +538,6 @@ function renderAdvanced(){
   if(document.getElementById("advancedBox")) return;
 
   const box = document.createElement("div");
-
   box.id = "advancedBox";
   box.className = "verdict";
 
@@ -448,8 +547,8 @@ function renderAdvanced(){
 
   box.innerHTML = `
     <h3>📊 Investment Score</h3>
-    <div style="font-size:28px;font-weight:700">${score.toFixed(0)}/100</div>
-    <div style="margin-top:15px;font-size:13px">
+    <div style="font-size:30px;font-weight:800">${score.toFixed(0)}/100</div>
+    <div style="margin-top:10px;font-size:13px">
       ${lang==="en"?"Annual profit":"Profitto annuo"}: ${euro(annualProfit)}<br>
       ${lang==="en"?"Break-even":"Pareggio"}: ${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}
     </div>
@@ -458,7 +557,7 @@ function renderAdvanced(){
   document.querySelector(".report").appendChild(box);
 }
 
-// ================= PDF (NEXT STEP MIGLIORABILE) =================
+// ================= PDF (UPGRADE SERIO) =================
 async function generatePDF(){
 
   if(!isPro){
@@ -469,14 +568,22 @@ async function generatePDF(){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
+  // HEADER
   doc.setFontSize(18);
   doc.text("RendimentoBB Report",20,20);
 
+  // BOX DATI
   doc.setFontSize(12);
   doc.text("Price: "+euro(price),20,40);
-  doc.text("ROI: "+roi.toFixed(1)+"%",20,50);
+  doc.text("Equity: "+euro(equity),20,50);
+  doc.text("ROI: "+roi.toFixed(1)+"%",20,60);
+  doc.text("Risk: "+risk+"/100",20,70);
 
-  doc.save("RendimentoBB-report.pdf");
+  // VERDICT
+  doc.setFontSize(14);
+  doc.text("Evaluation: "+document.getElementById("verdict").innerText,20,90);
+
+  doc.save("RendimentoBB-Pro-Report.pdf");
 }
 
 // ================= INIT =================
@@ -491,7 +598,6 @@ function init(){
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
-
 }
 
 document.addEventListener("rb_auth_ready", init);
