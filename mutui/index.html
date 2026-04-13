@@ -546,7 +546,13 @@ html+=`
 
 <h3>${b.name}</h3>
 
-<p style="font-size:22px;font-weight:700">${b.rate}%</p>
+<div style="font-size:26px;font-weight:800;color:#10b981">
+  ${b.rate}%
+</div>
+
+<div style="font-size:13px;color:#64748b;margin-bottom:10px">
+  ${t("Tasso fisso medio","Average fixed rate")}
+</div>
 
 ${i===0 ? `
 <div style="color:#10b981;font-weight:600">
