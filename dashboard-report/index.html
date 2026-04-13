@@ -15,12 +15,14 @@ Report investimento B&B
 <script src="/js/lang.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
+<style>
+
 /* ===== BASE ===== */
 body{
   font-family:system-ui;
   background:#f8fafc;
   margin:0;
-  padding-top:80px; /* 🔥 spazio per header sticky */
+  padding-top:80px;
   color:#0f172a;
 }
 
@@ -48,18 +50,9 @@ body{
   color:white;
 }
 
-.nav-btn.primary:hover{
-  transform:translateY(-1px);
-  opacity:.9;
-}
-
 .nav-btn.secondary{
   background:#e2e8f0;
   color:#0f172a;
-}
-
-.nav-btn.secondary:hover{
-  background:#cbd5e1;
 }
 
 /* ===== CARD ===== */
@@ -72,12 +65,6 @@ body{
   box-shadow:0 30px 100px rgba(2,6,23,0.12);
   position:relative;
   border:1px solid #e2e8f0;
-}
-
-/* ===== TITLE ===== */
-h1{
-  font-size:26px;
-  margin-bottom:10px;
 }
 
 /* ===== KPI ===== */
@@ -94,18 +81,6 @@ h1{
   border-radius:14px;
 }
 
-.kpi span{
-  display:block;
-  font-size:13px;
-  color:#64748b;
-}
-
-.kpi strong{
-  display:block;
-  margin-top:5px;
-  font-size:16px;
-}
-
 /* ===== VERDICT ===== */
 .verdict{
   margin-top:30px;
@@ -113,11 +88,6 @@ h1{
   border-radius:16px;
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
-}
-
-/* ===== CHART ===== */
-canvas{
-  margin-top:30px;
 }
 
 /* ===== BUTTON ===== */
@@ -131,11 +101,6 @@ canvas{
   cursor:pointer;
   width:100%;
   font-weight:600;
-  transition:all .2s ease;
-}
-
-.btn:hover{
-  background:#059669;
 }
 
 /* ===== OVERLAY ===== */
@@ -152,22 +117,9 @@ canvas{
   border-radius:20px;
   z-index:10;
   text-align:center;
-  padding:20px;
 }
 
-/* ===== MOBILE FIX ===== */
-@media (max-width:768px){
-
-  .report{
-    padding:25px;
-    margin:10px 15px 40px 15px;
-  }
-
-  .kpi-grid{
-    grid-template-columns:1fr;
-  }
-
-}
+</style>
 
 </head>
 
@@ -209,7 +161,7 @@ canvas{
 </div>
 
 <!-- FOOTER CORRETTO -->
-<div id="footer"></div>
+<div id="global-footer"></div>
 
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js" defer></script>
