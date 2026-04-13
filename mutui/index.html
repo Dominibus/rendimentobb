@@ -546,25 +546,6 @@ function renderExtra(roi, yearly){
 
 const extra = document.getElementById("extra");
 
-if(!isProUser()){
-  extra.insertAdjacentHTML("afterbegin", `
-    <div style="
-      background:#111827;
-      color:white;
-      padding:12px;
-      border-radius:10px;
-      margin-bottom:15px;
-      text-align:center;
-      font-weight:600;
-    ">
-      🔒 ${t(
-        "Sblocca i numeri reali del tuo investimento",
-        "Unlock real investment numbers"
-      )}
-    </div>
-  `);
-}  
-
 let score = "C";
 if(roi > 15) score = "A";
 else if(roi > 8) score = "B";
@@ -577,6 +558,23 @@ roi < 15 ? t("MEDIO","MEDIUM") :
 t("BASSO","LOW");
 
 extra.innerHTML = `
+
+${!isProUser() ? `
+<div style="
+  background:#111827;
+  color:white;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:15px;
+  text-align:center;
+  font-weight:600;
+">
+  🔒 ${t(
+    "Sblocca i numeri reali del tuo investimento",
+    "Unlock real investment numbers"
+  )}
+</div>
+` : ""}
 
 <div style="font-weight:700;margin-bottom:10px;">
 🔥 ${t("Punteggio investimento","Investment Score")}: ${score}
@@ -796,6 +794,23 @@ document.getElementById("banks").innerHTML = html;
 function goToPricing(){
   window.location.href = "/#pricing";
 }
+
+function startPlanPurchase(plan){
+
+  if(!window.currentUser){
+    alert(t(
+      "Accedi per continuare",
+      "Login to continue"
+    ));
+    window.location.href="/login/";
+    return;
+  }
+
+  // Stripe checkout (quando vuoi)
+  window.location.href = "/api/create-checkout-session?plan=" + plan;
+
+}
+  
 /* ================= SELECT ================= */
 function selectMortgage(rate, bank){
 
