@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title
+data-it="Report investimento B&B"
+data-en="B&B Investment Report">
+Report investimento B&B
+</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="/js/lang.js"></script>
+
+<style>
+
+body{
+  font-family: system-ui;
+  background:#f8fafc;
+  padding:30px;
+}
+
+.report{
+  max-width:900px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.1);
+}
+
+h1{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.metric{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid #e2e8f0;
+}
+
+.score{
+  font-size:36px;
+  font-weight:800;
+  color:#10b981;
+}
+
+.btn{
+  margin-top:20px;
+  background:#10b981;
+  color:white;
+  border:none;
+  padding:14px;
+  border-radius:10px;
+  cursor:pointer;
+  width:100%;
+  font-weight:600;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="report" id="report">
+
+<h1
+data-it="📄 Report investimento"
+data-en="📄 Investment Report">
+📄 Report investimento
+</h1>
+
+<div class="metric">
+<span data-it="Prezzo immobile" data-en="Property price">Prezzo immobile</span>
+<strong id="price"></strong>
+</div>
+
+<div class="metric">
+<span data-it="Equity investita" data-en="Equity invested">Equity investita</span>
+<strong id="equity"></strong>
+</div>
+
+<div class="metric">
+<span>ROI</span>
+<strong id="roi"></strong>
+</div>
+
+<div class="metric">
+<span data-it="Rischio" data-en="Risk">Rischio</span>
+<strong id="risk"></strong>
+</div>
+
+<hr style="margin:20px 0">
+
+<div class="score" id="verdict"></div>
+
+<p id="verdict-text"></p>
+
+<button class="btn" onclick="generatePDF()"
+data-it="📥 Scarica PDF professionale"
+data-en="📥 Download professional PDF">
+📥 Scarica PDF professionale
+</button>
+
+</div>
+
+<script>
+
+// ================= GET PARAMS =================
+
+const params = new URLSearchParams(window.location.search);
+
+const price = Number(params.get("price") || 0);
+const roi = Number(params.get("roi") || 0);
+const equity = Number(params.get("equity") || 0);
+const risk = Number(params.get("risk") || 0);
+
+// ================= FORMAT =================
+
+function euro(v){
+  return new Intl.NumberFormat(
+    window.currentLang === "en" ? "en-US" : "it-IT",
+    {style:"currency", currency:"EUR"}
+  ).format(v);
+}
+
+// ================= RENDER =================
+
+document.getElementById("price").innerText = euro(price);
+document.getElementById("equity").innerText = euro(equity);
+document.getElementById("roi").innerText = roi.toFixed(1) + "%";
+document.getElementById("risk").innerText = risk + "/100";
+
+// ================= VERDICT =================
+
+let verdict = "";
+let text = "";
+
+if(roi >= 10){
+  verdict = t("✅ INVESTIMENTO FORTE","✅ STRONG INVESTMENT");
+  text = t(
+    "ROI elevato e rischio controllato. Ottimo candidato per finanziamento.",
+    "High ROI and controlled risk. Strong candidate for funding."
+  );
+}
+else if(roi >= 5){
+  verdict = t("⚙️ OTTIMIZZARE","⚙️ OPTIMIZE");
+  text = t(
+    "Buon investimento ma migliorabile.",
+    "Good investment but can be improved."
+  );
+}
+else{
+  verdict = t("❌ EVITARE","❌ AVOID");
+  text = t(
+    "ROI basso o rischio elevato.",
+    "Low ROI or high risk."
+  );
+}
+
+document.getElementById("verdict").innerText = verdict;
+document.getElementById("verdict-text").innerText = text;
+
+// ================= PDF =================
+
+async function generatePDF(){
+
+  const { jsPDF } = window.jspdf;
+
+  const doc = new jsPDF();
+
+  doc.text("B&B Investment Report", 20, 20);
+
+  doc.text("Price: " + euro(price), 20, 40);
+  doc.text("Equity: " + euro(equity), 20, 50);
+  doc.text("ROI: " + roi + "%", 20, 60);
+  doc.text("Risk: " + risk + "/100", 20, 70);
+
+  doc.text(verdict, 20, 90);
+  doc.text(text, 20, 100);
+
+  doc.save("report-investment.pdf");
+}
+
+</script>
+
+</body>
+</html>
