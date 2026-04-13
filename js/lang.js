@@ -1,5 +1,5 @@
 // ===============================================
-// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 7.0 PRO
+// RENDIMENTOBB – GLOBAL LANGUAGE ENGINE 8.0 (FIXED)
 // ===============================================
 
 (function(){
@@ -17,12 +17,12 @@
 
 
   // ===============================
-  // CORE TRANSLATION ENGINE
+  // CORE TRANSLATION ENGINE (FIXED)
   // ===============================
 
   function applyTranslations(){
 
-    const lang = RB_LANG.current;
+    const lang = window.RB_LANG.current;
 
     // ================= TEXT =================
     document.querySelectorAll("[data-it], [data-en]").forEach(el => {
@@ -30,22 +30,27 @@
       const text = el.getAttribute("data-" + lang);
       if(!text) return;
 
-      // bottoni safe
-      if(el.tagName === "A" || el.tagName === "BUTTON"){
-  el.textContent = text;
-}else {
-        el.innerHTML = text;
+      // 🔥 FIX: evita di rompere HTML interno (icone, span ecc.)
+      if(el.children.length === 0){
+        el.textContent = text;
+      }else{
+        // aggiorna SOLO testo diretto (no figli)
+        el.childNodes.forEach(node=>{
+          if(node.nodeType === Node.TEXT_NODE){
+            node.textContent = text;
+          }
+        });
       }
 
     });
 
     // ================= PLACEHOLDER =================
-    document.querySelectorAll("[data-placeholder-it]").forEach(el => {
+    document.querySelectorAll("[data-placeholder-it], [data-placeholder-en]").forEach(el => {
       const ph = el.getAttribute("data-placeholder-" + lang);
       if(ph) el.setAttribute("placeholder", ph);
     });
 
-    document.querySelectorAll("[data-it-placeholder]").forEach(el => {
+    document.querySelectorAll("[data-it-placeholder], [data-en-placeholder]").forEach(el => {
       const ph = el.getAttribute("data-" + lang + "-placeholder");
       if(ph) el.setAttribute("placeholder", ph);
     });
@@ -73,13 +78,13 @@
 
   function updateLanguageUI(){
 
-    document.documentElement.setAttribute("lang", RB_LANG.current);
+    document.documentElement.setAttribute("lang", window.RB_LANG.current);
 
     document.querySelectorAll("[id^='btn-']").forEach(btn=>{
       btn.classList.remove("active");
     });
 
-    const activeBtn = document.getElementById("btn-" + RB_LANG.current);
+    const activeBtn = document.getElementById("btn-" + window.RB_LANG.current);
     if(activeBtn){
       activeBtn.classList.add("active");
     }
@@ -88,13 +93,26 @@
 
 
   // ===============================
-  // RERENDER DYNAMIC
+  // RERENDER DYNAMIC (KEY FIX)
   // ===============================
 
   function rerenderDynamic(){
 
-    window.currentLang = RB_LANG.current;
+    window.currentLang = window.RB_LANG.current;
 
+    // 🔥 EVENTO GLOBALE
+    document.dispatchEvent(
+      new CustomEvent("rb_language_changed", {
+        detail: { lang: window.RB_LANG.current }
+      })
+    );
+
+    // 🔥 FIX CRITICO: ritraduci dopo render dinamici
+    setTimeout(applyTranslations, 50);
+    setTimeout(applyTranslations, 150);
+    setTimeout(applyTranslations, 300);
+
+    // ================= TOOL HOOK =================
     if(typeof calculate === "function"){
       if(window.simulationExecuted || document.readyState === "complete"){
         calculate(true);
@@ -109,11 +127,6 @@
       compareMortgages();
     }
 
-    document.dispatchEvent(
-      new CustomEvent("rb_language_changed", {
-        detail: { lang: RB_LANG.current }
-      })
-    );
   }
 
 
@@ -122,15 +135,13 @@
   // ===============================
 
   window.applyTranslations = applyTranslations;
-
-  // 🔥 alias globale per compatibilità popup / componenti dinamici
-window.applyStaticTranslations = applyTranslations;
+  window.applyStaticTranslations = applyTranslations;
 
   window.setLang = function(lang){
 
-    if(!RB_LANG.supported.includes(lang)) return;
+    if(!window.RB_LANG.supported.includes(lang)) return;
 
-    RB_LANG.current = lang;
+    window.RB_LANG.current = lang;
     window.currentLang = lang;
 
     localStorage.setItem("rb_lang", lang);
@@ -142,29 +153,29 @@ window.applyStaticTranslations = applyTranslations;
 
 
   // ===============================
-  // AUTO INIT (SMART)
+  // AUTO INIT
   // ===============================
 
   function initLang(){
 
     const saved = localStorage.getItem("rb_lang");
 
-    if(saved && RB_LANG.supported.includes(saved)){
-      RB_LANG.current = saved;
+    if(saved && window.RB_LANG.supported.includes(saved)){
+      window.RB_LANG.current = saved;
     } else {
-      RB_LANG.current =
+      window.RB_LANG.current =
         navigator.language.startsWith("en") ? "en" : "it";
     }
 
-    window.currentLang = RB_LANG.current;
+    window.currentLang = window.RB_LANG.current;
 
     applyTranslations();
     updateLanguageUI();
-    rerenderDynamic();
 
-    // 🔥 retry per header dinamico (KEY FIX)
+    // 🔥 doppio passaggio per contenuti async
     setTimeout(applyTranslations, 100);
     setTimeout(applyTranslations, 300);
+
   }
 
   window.addEventListener("DOMContentLoaded", initLang);
@@ -180,52 +191,3 @@ window.applyStaticTranslations = applyTranslations;
   };
 
 })();
-
-
-// ===============================
-// TEXT MAP
-// ===============================
-
-window.RB_TEXT = {
-
-  risk: {
-    it: "Rischio",
-    en: "Risk"
-  },
-
-  breakEven: {
-    it: "Break-even",
-    en: "Break-even"
-  },
-
-  monthlyProfit: {
-    it: "Profitto mensile",
-    en: "Monthly profit"
-  },
-
-  roi: {
-    it: "ROI",
-    en: "ROI"
-  },
-
-  annualProfit: {
-    it: "Profitto annuo",
-    en: "Annual profit"
-  },
-
-  revenue: {
-    it: "Ricavi",
-    en: "Revenue"
-  },
-
-  partialProfit: {
-    it: "Profitto stimato (parziale)",
-    en: "Estimated profit (partial)"
-  }
-
-};
-
-window.tt = function(key){
-  const lang = window.RB_LANG.current || "it";
-  return window.RB_TEXT?.[key]?.[lang] || key;
-};
