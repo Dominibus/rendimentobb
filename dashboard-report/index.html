@@ -196,15 +196,34 @@ const roi = Number(params.get("roi") || 0);
 const equity = Number(params.get("equity") || 0);
 const risk = Number(params.get("risk") || 0);
 
-// ================= USER PLAN REAL =================
+// ================= USER PLAN (REAL FIX) =================
 let isPro = false;
 
-if(
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly"
-){
-  isPro = true;
+function checkUserPlan(){
+
+  if(
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly"
+  ){
+    isPro = true;
+  }
+
+  // 🔥 fallback sicurezza
+  if(window.isProUser && window.isProUser()){
+    isPro = true;
+  }
 }
+
+// aspetta firebase
+document.addEventListener("rb_auth_ready", () => {
+  checkUserPlan();
+  applyLockState();
+});
+
+setTimeout(()=>{
+  checkUserPlan();
+  applyLockState();
+},1000);
 
 // ================= FORMAT =================
 function euro(v){
@@ -223,34 +242,53 @@ document.getElementById("risk").innerText = risk+"/100";
 // ================= VERDICT =================
 let verdict="",text="";
 
-if(roi >= 10){
+if(roi >= 12){
+  verdict = "AAA INVESTMENT";
+  text = "Top-tier ROI. Institutional-grade opportunity.";
+}
+else if(roi >= 8){
   verdict = "STRONG INVESTMENT";
-  text = "High ROI, low risk profile. Excellent candidate for funding.";
+  text = "High ROI with controlled risk. Funding-ready.";
 }
 else if(roi >= 5){
   verdict = "OPTIMIZE";
-  text = "Good investment but requires optimization.";
+  text = "Good investment but needs optimization.";
 }
 else{
   verdict = "HIGH RISK";
-  text = "Low ROI or high risk. Re-evaluation recommended.";
+  text = "Low ROI or unstable fundamentals.";
 }
 
 document.getElementById("verdict").innerText = verdict;
 document.getElementById("verdict-text").innerText = text;
 
-// ================= LOCK =================
-if(!isPro){
-  document.getElementById("lock-msg").style.display="block";
-  document.getElementById("lock-msg").innerText =
-    "🔒 Full professional PDF available only for PRO users";
+// ================= LOCK STATE =================
+function applyLockState(){
+
+  const lock = document.getElementById("lock-msg");
+
+  if(!isPro){
+
+    lock.style.display="block";
+    lock.innerText =
+      "🔒 Full bank-grade PDF available only for PRO users";
+
+  } else {
+    lock.style.display="none";
+  }
 }
 
-// ================= PDF =================
+// ================= PDF (LEVEL 10/10) =================
 async function generatePDF(){
 
   if(!isPro){
-    window.location.href = "/pricing/";
+
+    // 🔥 FIX REALE
+    alert("Upgrade to PRO to unlock full investment report");
+
+    // 👉 redirect corretto
+    window.location.href = "/"; 
+
     return;
   }
 
@@ -259,64 +297,105 @@ async function generatePDF(){
 
   let y = 20;
 
-  // HEADER
+  // ===== HEADER =====
   doc.setFont("helvetica","bold");
   doc.setFontSize(18);
-  doc.text("RendimentoBB Investment Report",20,y);
+  doc.text("RendimentoBB – Investment Intelligence Report",20,y);
 
-  y+=10;
+  y+=8;
 
-  doc.setFontSize(11);
-  doc.setTextColor(100);
-  doc.text("Professional B&B investment analysis",20,y);
+  doc.setFontSize(10);
+  doc.setTextColor(120);
+  doc.text("Professional B&B investment analysis (Bank-ready)",20,y);
 
   y+=15;
 
-  // KPI BOX
+  // ===== KPI BOX =====
   doc.setFillColor(245,247,250);
-  doc.roundedRect(20,y,170,45,5,5,"F");
+  doc.roundedRect(20,y,170,50,6,6,"F");
 
   doc.setTextColor(0);
+  doc.setFontSize(11);
+
   doc.text("Property price: "+euro(price),25,y+10);
-  doc.text("Equity: "+euro(equity),25,y+18);
+  doc.text("Equity invested: "+euro(equity),25,y+18);
   doc.text("ROI: "+roi.toFixed(1)+"%",25,y+26);
-  doc.text("Risk: "+risk+"/100",25,y+34);
+  doc.text("Risk score: "+risk+"/100",25,y+34);
 
-  y+=60;
+  y+=65;
 
-  // VERDICT BLOCK (PRO STYLE)
+  // ===== SCORE BLOCK =====
   doc.setFillColor(16,185,129);
   doc.roundedRect(20,y,170,30,6,6,"F");
 
-  doc.setTextColor(255,255,255);
+  doc.setTextColor(255);
   doc.setFontSize(16);
-  doc.text(verdict,25,y+14);
+  doc.text(verdict,25,y+13);
 
   doc.setFontSize(10);
-  doc.text(text,25,y+24);
+  doc.text(text,25,y+23);
 
-  y+=50;
+  y+=45;
 
-  // INSIGHTS
+  // ===== INVESTMENT SCORE =====
   doc.setTextColor(0);
   doc.setFontSize(12);
-  doc.text("Strategic Insights",20,y);
+  doc.text("Investment Score",20,y);
 
   y+=10;
 
+  let score = Math.min(100, Math.max(0, roi*5 - risk));
+
+  doc.setFontSize(24);
+  doc.text(score.toFixed(0)+"/100",20,y);
+
+  y+=15;
+
+  // ===== STRATEGY =====
+  doc.setFontSize(12);
+  doc.text("Strategic Recommendation",20,y);
+
+  y+=8;
+
   doc.setFontSize(10);
-  doc.text("• ROI above market benchmark",20,y); y+=6;
-  doc.text("• Risk profile sustainable",20,y); y+=6;
-  doc.text("• Suitable for financing / bank approval",20,y);
 
-  y+=20;
+  let strategy = "";
 
-  // FOOTER
+  if(roi >= 12){
+    strategy = "Proceed immediately. High-value asset.";
+  }
+  else if(roi >= 8){
+    strategy = "Proceed with investment. Strong fundamentals.";
+  }
+  else if(roi >= 5){
+    strategy = "Optimize pricing and occupancy.";
+  }
+  else{
+    strategy = "Re-evaluate investment.";
+  }
+
+  doc.text(strategy,20,y);
+
+  y+=15;
+
+  // ===== ANALYSIS =====
+  doc.setFontSize(12);
+  doc.text("Analysis Breakdown",20,y);
+
+  y+=8;
+
+  doc.setFontSize(10);
+  doc.text("• ROI vs market benchmark",20,y); y+=6;
+  doc.text("• Risk and sustainability",20,y); y+=6;
+  doc.text("• Financial viability assessment",20,y); y+=6;
+  doc.text("• Bank funding compatibility",20,y);
+
+  // ===== FOOTER =====
   doc.setFontSize(9);
   doc.setTextColor(120);
   doc.text("Generated by RendimentoBB.com",20,285);
 
-  doc.save("RendimentoBB-Report.pdf");
+  doc.save("RendimentoBB-Investment-Report.pdf");
 }
 
 </script>
