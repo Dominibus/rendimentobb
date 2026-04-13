@@ -224,16 +224,54 @@ p,
   font-weight:700;
 }
 
-/* ===== HERO KPI (TOP CARDS) ===== */
-.rb-hero-card span{
-  color:#94a3b8;
-  font-size:13px;
+/* ===== HERO KPI FIX ULTRA VISIBILE ===== */
+
+.rb-hero{
+  position:relative;
+  z-index:2;
 }
 
+/* overlay migliorato */
+#market-hero-bg::after{
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,0.65),
+    rgba(0,0,0,0.25)
+  );
+}
+
+/* LABEL (ROI, Profitto, Stato) */
+.rb-hero-card span{
+  color:rgba(255,255,255,0.85) !important;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.3px;
+}
+
+/* NUMERI GRANDI */
 .rb-hero-card h2{
-  color:#0f172a;
-  font-size:26px;
-  font-weight:800;
+  color:#ffffff !important;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-0.5px;
+  text-shadow:0 4px 20px rgba(0,0,0,0.6);
+}
+
+/* CARD HERO */
+.rb-hero-card{
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(10px);
+  padding:14px 18px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+/* STATUS BAR */
+#db-status{
+  background:linear-gradient(135deg,#10b981,#34d399);
+  color:white;
+  font-weight:700;
+  box-shadow:0 10px 30px rgba(16,185,129,0.4);
 }
 
 /* ===== STATUS BAR ===== */
@@ -326,6 +364,14 @@ canvas{
 grid-template-columns:1fr;
 gap:14px;
 }
+
+.rb-hero-card h2{
+  font-size:22px;
+}
+
+.rb-hero-card span{
+  font-size:12px;
+}  
 
 }
 
