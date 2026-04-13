@@ -1,5 +1,5 @@
 // ===============================
-// LEADS ENGINE – RENDIMENTOBB PRO (FINAL)
+// 🚀 LEADS ENGINE – RENDIMENTOBB ULTRA (FINAL)
 // ===============================
 
 import { db } from "/js/firebase-init.js";
@@ -11,223 +11,222 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // ===============================
-// HELPER – VALIDAZIONE EMAIL
+// 🧠 GLOBAL GUARD (ANTI DUPLICATI)
+// ===============================
+if(!window.leadLock){
+  window.leadLock = {};
+}
+
+// ===============================
+// HELPERS
 // ===============================
 function isValidEmail(email){
   return typeof email === "string" && email.includes("@");
 }
 
-// ===============================
-// HELPER – SAFE NUMBER
-// ===============================
 function safeNumber(v){
   const n = Number(v);
   return isNaN(n) ? 0 : n;
 }
 
-// ===============================
-// 🔥 ROUTING API (FIX CRITICO)
-// ===============================
-function getEndpoint(type){
-
-  switch(type){
-
-    case "partner":
-      return "/api/send-lead-partner";
-
-    case "work":
-      return "/api/work-email";
-
-    // 👉 mutui + immobili restano qui
-    default:
-      return "/api/send-lead";
-
-  }
-
+function getCity(){
+  return (
+    window.currentCity ||
+    document.getElementById("market-city")?.value ||
+    "unknown"
+  );
 }
 
 // ===============================
-// HELPER – INVIO AUTOMATICO API
+// 🎯 SCORING ENGINE
 // ===============================
-async function sendLead(type, data){
+function calculateLeadScore(roi){
+
+  if(roi > 60) return { score:"extreme", value:140 };
+  if(roi > 40) return { score:"high", value:70 };
+  if(roi > 20) return { score:"medium", value:30 };
+
+  return { score:"low", value:0 };
+}
+
+// ===============================
+// 🔥 CORE SEND
+// ===============================
+async function sendLead(data){
 
   try{
 
-    const endpoint = getEndpoint(type);
+    // 🔒 anti spam stesso utente
+    const key = data.email + "_" + data.type;
 
-    console.log("📡 SEND LEAD →", type, endpoint, data);
-
-    const response = await fetch(endpoint,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        type,
-        ...data,
-        plan: window.currentPlan || "free",
-        lang: window.currentLang || "it",
-        ts: Date.now()
-      })
-    });
-
-    if(!response.ok){
-      const text = await response.text();
-      console.error("❌ API Lead error:", endpoint, text);
-      return false;
+    if(window.leadLock[key]){
+      console.warn("⛔ Lead duplicato bloccato");
+      return;
     }
 
-    const result = await response.json();
+    window.leadLock[key] = true;
 
-    console.log("📤 Lead inviato API:", type, "→", endpoint, result);
+    console.log("📡 SEND LEAD →", data);
 
-    return true;
+    const res = await fetch("/api/send-lead",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    console.log("✅ Lead API result:", result);
+
+    return result;
 
   }catch(err){
-    console.error("❌ Errore invio lead:", err);
-    return false;
+    console.error("❌ sendLead error:", err);
   }
 
 }
 
 // ===============================
-// BASE TRACK DATA
+// 🧱 BASE DATA
 // ===============================
-function buildBaseLead(source, value){
+function baseLead(type, extra){
 
   return {
-    createdAt: serverTimestamp(),
-    status: "new",
-    source,
-    value,
+    type,
+    city: getCity(),
     plan: window.currentPlan || "free",
     lang: window.currentLang || "it",
-    sessionId: window.sessionId || (window.sessionId = Date.now())
+    sessionId: window.sessionId || (window.sessionId = Date.now()),
+    createdAt: serverTimestamp(),
+    ...extra
   };
 
 }
 
 // ===============================
-// MUTUI LEAD
+// 💰 MUTUI LEAD
 // ===============================
 export async function saveLeadMutui(data){
 
   try{
 
-    if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida → skip mutui");
+    if(!isValidEmail(data.email)) return;
+
+    const roi = safeNumber(data.roi);
+    const { score, value } = calculateLeadScore(roi);
+
+    // ❌ BLOCCO LEAD SCARSI
+    if(score === "low"){
+      console.log("⛔ Lead mutui scartato (basso valore)");
       return;
     }
 
-    const leadData = {
+    const lead = baseLead("mutui",{
       email: data.email,
       phone: data.phone || null,
       amount: safeNumber(data.amount),
       years: safeNumber(data.years),
-      ...buildBaseLead("mutui", 30)
-    };
+      roi,
+      score,
+      value
+    });
 
-    await addDoc(collection(db,"leads_mutui"), leadData);
+    await addDoc(collection(db,"leads_mutui"), lead);
 
-    const sent = await sendLead("mutui", leadData);
-
-    console.log("✅ Lead MUTUI salvato", { sent });
+    await sendLead(lead);
 
   }catch(err){
-    console.error("❌ Errore lead mutui:", err);
+    console.error("❌ mutui error:", err);
   }
 
 }
 
 // ===============================
-// IMMOBILI LEAD
+// 🏠 IMMOBILI LEAD
 // ===============================
 export async function saveLeadImmobili(data){
 
   try{
 
-    if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida → skip immobili");
+    if(!isValidEmail(data.email)) return;
+
+    const roi = safeNumber(data.roi);
+    const { score, value } = calculateLeadScore(roi);
+
+    if(score === "low"){
+      console.log("⛔ Lead immobili scartato");
       return;
     }
 
-    const leadData = {
+    const lead = baseLead("immobili",{
       email: data.email,
-      city: data.city || window.currentCity || null,
+      city: data.city || getCity(),
       budget: safeNumber(data.budget),
-      ...buildBaseLead("immobili", 50)
-    };
+      roi,
+      score,
+      value
+    });
 
-    await addDoc(collection(db,"leads_immobili"), leadData);
+    await addDoc(collection(db,"leads_immobili"), lead);
 
-    const sent = await sendLead("immobili", leadData);
-
-    console.log("✅ Lead IMMOBILI salvato", { sent });
+    await sendLead(lead);
 
   }catch(err){
-    console.error("❌ Errore lead immobili:", err);
+    console.error("❌ immobili error:", err);
   }
 
 }
 
 // ===============================
-// PARTNER LEAD (🔥 HIGH VALUE)
+// 🤝 PARTNER (HIGH VALUE ONLY)
 // ===============================
 export async function savePartnerLead(data){
 
   try{
 
-    if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida → skip partner");
-      return;
-    }
+    if(!isValidEmail(data.email)) return;
 
-    const leadData = {
+    const lead = baseLead("partner",{
       name: data.name || "",
       email: data.email,
       message: data.message || "",
-      priority: "HIGH",
-      ...buildBaseLead("partner", 100)
-    };
+      score:"high",
+      value:100
+    });
 
-    await addDoc(collection(db,"leads_partner"), leadData);
+    await addDoc(collection(db,"leads_partner"), lead);
 
-    const sent = await sendLead("partner", leadData);
-
-    console.log("✅ Lead PARTNER salvato", { sent });
+    await sendLead(lead);
 
   }catch(err){
-    console.error("❌ Errore lead partner:", err);
+    console.error("❌ partner error:", err);
   }
 
 }
 
 // ===============================
-// WORK LEAD (💼 TALENT)
+// 💼 WORK
 // ===============================
 export async function saveWorkLead(data){
 
   try{
 
-    if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida → skip work");
-      return;
-    }
+    if(!isValidEmail(data.email)) return;
 
-    const leadData = {
+    const lead = baseLead("work",{
       name: data.name || "",
       email: data.email,
       role: data.role || "",
-      priority: "NORMAL",
-      ...buildBaseLead("work", 10)
-    };
+      score:"low",
+      value:10
+    });
 
-    await addDoc(collection(db,"leads_work"), leadData);
+    await addDoc(collection(db,"leads_work"), lead);
 
-    const sent = await sendLead("work", leadData);
-
-    console.log("✅ Lead WORK salvato", { sent });
+    await sendLead(lead);
 
   }catch(err){
-    console.error("❌ Errore lead work:", err);
+    console.error("❌ work error:", err);
   }
 
 }
