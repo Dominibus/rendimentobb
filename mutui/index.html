@@ -799,9 +799,11 @@ function startPlanPurchase(plan){
 
   if(!window.currentUser){
     showUpgradeModal();
-    window.location.href="/login/";
     return;
   }
+
+  window.location.href = "/api/create-checkout-session?plan=" + plan;
+}
 
   // Stripe checkout (quando vuoi)
   window.location.href = "/api/create-checkout-session?plan=" + plan;
@@ -917,7 +919,7 @@ alert("Errore invio");
 
 </script>
 
-  <!-- 🔥 UPGRADE MODAL -->
+<!-- 🔥 UPGRADE MODAL -->
 <div id="upgrade-modal" style="
 position:fixed;
 inset:0;
@@ -938,20 +940,23 @@ z-index:9999;
   box-shadow:0 30px 80px rgba(0,0,0,.3);
   ">
 
-    <h3 style="margin-bottom:10px;">
-      🔒 ${t("Sblocca i dati reali","Unlock real data")}
+    <h3 style="margin-bottom:10px;"
+      data-it="🔒 Sblocca i dati reali"
+      data-en="🔒 Unlock real data">
+      🔒 Sblocca i dati reali
     </h3>
 
-    <p style="color:#64748b;margin-bottom:20px;">
-      ${t(
-        "Stai prendendo decisioni senza dati completi",
-        "You are making decisions without full data"
-      )}
+    <p style="color:#64748b;margin-bottom:20px;"
+      data-it="Stai prendendo decisioni senza dati completi"
+      data-en="You are making decisions without full data">
+      Stai prendendo decisioni senza dati completi
     </p>
 
     <button class="btn-main"
-      onclick="startPlanPurchase('investor')">
-      🔓 ${t("Sblocca ora","Unlock now")}
+      onclick="startPlanPurchase('investor')"
+      data-it="🔓 Sblocca ora"
+      data-en="🔓 Unlock now">
+      🔓 Sblocca ora
     </button>
 
     <div style="margin-top:10px;">
@@ -960,8 +965,10 @@ z-index:9999;
         border:none;
         color:#64748b;
         cursor:pointer;
-      ">
-        ${t("Chiudi","Close")}
+      "
+      data-it="Chiudi"
+      data-en="Close">
+        Chiudi
       </button>
     </div>
 
