@@ -977,27 +977,16 @@ Prezzo medio notte
 <button id="download-report" class="btn-dashboard"
 data-it="📄 Scarica report professionale (banca / mutuo)"
 data-en="📄 Download professional report (bank / mortgage)">
-📄 📄 Scarica report professionale (banca / mutuo)
-
-  const btn = document.getElementById("download-report");
-
-if(btn){
-  btn.insertAdjacentHTML("afterend", `
-    <div style="
-    font-size:12px;
-    color:#64748b;
-    margin-top:6px;
-    text-align:center;
-    ">
-    ${t(
-      "Perfetto per presentazioni a banche o investitori",
-      "Perfect for banks and investors presentations"
-    )}
-    </div>
-  `);
-}
-  
+📄 Scarica report professionale (banca / mutuo)
 </button>
+
+<div id="report-helper-text" style="
+font-size:12px;
+color:#64748b;
+margin-top:6px;
+text-align:center;
+"></div>
+  
 </div>  
 
 <div id="investment-ranking" class="analysis-card"></div>
