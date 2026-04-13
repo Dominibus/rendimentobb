@@ -22,7 +22,7 @@ Report investimento B&B
 body{
   font-family: system-ui;
   background:#f8fafc;
-  padding:30px;
+  margin:0; /* 🔥 CRITICO */
   color:#0f172a;
 }
 
@@ -143,6 +143,14 @@ h1{
 <body>
 
 <div id="global-header"></div>  
+
+<script>
+setTimeout(() => {
+  if(!document.querySelector("#global-header").innerHTML){
+    console.warn("⚠️ Header non caricato");
+  }
+},1000);
+</script>  
 
 <div class="report-nav">
   <a href="/dashboard/" class="nav-btn primary"
@@ -450,7 +458,7 @@ setTimeout(initReport, 500);
 <div id="global-footer"></div>
 
 <script type="module" src="/js/header.js"></script>
-<script defer src="/js/footer.js"></script>
+<script type="module" src="/js/footer.js"></script>
 <script>
 document.addEventListener("rb_language_changed", () => {
   if(typeof applyTranslations === "function"){
