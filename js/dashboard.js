@@ -903,7 +903,11 @@ const dbRoi = document.getElementById("db-roi");
 const dbProfit = document.getElementById("db-profit");
 const dbStatus = document.getElementById("db-status");
 
-if(dbRoi) dbRoi.innerText = avgROIRounded + "%";
+if(dbRoi){
+  dbRoi.innerText = avgROI > 0
+    ? avgROIRounded + "%"
+    : "--";
+}
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
 if(dbStatus){
