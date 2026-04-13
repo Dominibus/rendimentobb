@@ -1269,7 +1269,7 @@ if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
 
 });
 
-
+});
 // ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
