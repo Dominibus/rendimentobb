@@ -249,6 +249,25 @@ body{
   font-weight:600;
 }
 
+.bank-card.locked{
+  opacity:0.6;
+  filter:blur(2px);
+  pointer-events:none;
+  position:relative;
+}
+
+.bank-card.locked::after{
+  content:"🔒 PRO";
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#ef4444;
+  color:white;
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:8px;
+}  
+
 /* ===== MOBILE ===== */
 @media(max-width:768px){
 
@@ -369,6 +388,10 @@ data-en="✔ Request sent">
 <script src="/js/footer.js" defer></script>
 
 <script>
+
+function isProUser(){
+  return ["investor","pro","pro_yearly"].includes(window.currentPlan);
+}  
 
 /* ================= LANG ================= */
 function t(it,en){
@@ -541,8 +564,10 @@ let html="<h3 style='margin-top:40px'>🏦 "+t("Migliori mutui disponibili","Bes
 
 banks.forEach((b,i)=>{
 
+const locked = !isProUser() && i > 0;
+
 html+=`
-<div class="bank-card ${i===0?"best":""}">
+<div class="bank-card ${i===0?"best":""} ${locked?"locked":""}">
 
 <h3>${b.name}</h3>
 
@@ -560,18 +585,35 @@ ${i===0 ? `
 </div>
 ` : ""}
 
+${
+locked
+? `
+<div style="margin-top:10px;color:#ef4444;font-weight:600">
+🔒 ${t("Sblocca per vedere tutte le offerte","Unlock to see all offers")}
+</div>
+
+<button class="btn-main"
+onclick="goToPricing()">
+${t("Sblocca ora","Unlock now")}
+</button>
+`
+: `
 <button class="btn-main"
 onclick="selectMortgage(${b.rate}, '${b.name}')">
 ${t("Seleziona mutuo","Select mortgage")}
 </button>
+`
+}
 
 </div>
 `;
 });
-
 document.getElementById("banks").innerHTML = html;
 }
 
+function goToPricing(){
+  window.location.href = "/#pricing";
+}  
 
 /* ================= SELECT ================= */
 function selectMortgage(rate, bank){
