@@ -33,7 +33,8 @@ onAuthStateChanged
 // ================= TRANSLATION HELPER =================
 
 window.t = function(it,en){
-  return window.RB_LANG?.current === "en" ? en : it;
+  if(!window.RB_LANG) return it;
+  return window.RB_LANG.current === "en" ? en : it;
 };
 
 const db = getFirestore(app);
@@ -1865,21 +1866,27 @@ if(stats && market){
 
 stats.innerHTML = `
 <div>
-<div style="font-size:13px;color:#64748b">ROI medio</div>
+<div style="font-size:13px;color:#64748b">
+${t("ROI medio","Average ROI")}
+</div>
 <div style="font-size:22px;font-weight:600;color:#10b981">
 ${market.roi}%
 </div>
 </div>
 
 <div>
-<div style="font-size:13px;color:#64748b">Occupazione</div>
+<div style="font-size:13px;color:#64748b">
+${t("Occupazione","Occupancy")}
+</div>
 <div style="font-size:22px;font-weight:600">
 ${market.occupancy}%
 </div>
 </div>
 
 <div>
-<div style="font-size:13px;color:#64748b">ADR</div>
+<div style="font-size:13px;color:#64748b">
+${t("Prezzo medio notte","Average nightly rate")}
+</div>
 <div style="font-size:22px;font-weight:600">
 €${market.adr}
 </div>
@@ -1907,7 +1914,10 @@ hero.style.backgroundImage = `url('${image}')`;
 /* ================= TITOLO SAFE ================= */
 
 const cityName = names[city] || "Italia";
-title.innerText = "Investire in un B&B a " + cityName;
+title.innerText = t(
+  "Investire in un B&B a " + cityName,
+  "Investing in a B&B in " + cityName
+);
 
 /* ================= DESCRIZIONE RANDOM ================= */
 
@@ -1937,32 +1947,36 @@ const risk = result.risk || 50;
 if(roi >= 10 && cashflow > 0 && risk < 70){
 return {
 type:"excellent",
-title:"🔥 Ottimo investimento",
-subtitle:"ROI sopra la media e cashflow positivo",
-color:"#10b981",
-action:"Procedere",
-message:"Investimento solido con ottimo equilibrio tra rendimento e rischio."
+title: t("🔥 Ottimo investimento","🔥 Excellent investment"),
+subtitle: t("ROI sopra la media e cashflow positivo","Above-average ROI and positive cashflow"),
+action: t("Procedere","Proceed"),
+message: t("Investimento solido con ottimo equilibrio tra rendimento e rischio.",
+           "Solid investment with great balance between return and risk.")
 };
 }
 
 if(roi >= 7){
 return {
 type:"good",
-title:"📊 Buon investimento",
-subtitle:"Margine interessante ma migliorabile",
-color:"#f59e0b",
-action:"Ottimizzare",
-message:"Buona opportunità ma ottimizzabile su pricing o occupazione."
+title: t("📊 Buon investimento","📊 Good investment"),
+subtitle: t("Margine interessante ma migliorabile","Interesting margin but improvable"),
+action: t("Ottimizzare","Optimize"),
+message: t(
+  "Buona opportunità ma ottimizzabile su pricing o occupazione.",
+  "Good opportunity but can be optimized on pricing or occupancy."
+)
 };
 }
 
 return {
 type:"risk",
-title:"⚠️ Investimento rischioso",
-subtitle:"ROI basso o cashflow negativo",
-color:"#ef4444",
-action:"Evitare",
-message:"Rendimento insufficiente o rischio elevato rispetto al mercato."
+title: t("⚠️ Investimento rischioso","⚠️ Risky investment"),
+subtitle: t("ROI basso o cashflow negativo","Low ROI or negative cashflow"),
+action: t("Evitare","Avoid"),
+message: t(
+  "Rendimento insufficiente o rischio elevato rispetto al mercato.",
+  "Insufficient return or high risk compared to the market."
+)
 };
 
 }
