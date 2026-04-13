@@ -13032,3 +13032,86 @@ body.menu-open{
   background:none;
   border:none;
 }
+
+ /* =====================================
+🔥 FIX CONTRASTO MUTUI (CRITICO)
+===================================== */
+
+/* TOOL BOX TEXT */
+.tool-box h1,
+.tool-box h2,
+.tool-box h3,
+.tool-box p,
+.tool-box small,
+.tool-box div{
+  color:#0f172a !important;
+}
+
+/* INPUT TEXT */
+.tool-box input{
+  color:#0f172a !important;
+}
+
+/* EXTRA BOX */
+.extra-box{
+  color:#0f172a !important;
+}
+
+/* KPI LABEL */
+.kpi small{
+  color:#64748b !important;
+}
+
+/* =====================
+🏦 BANK CARDS FIX
+===================== */
+
+.bank-card h3{
+  color:#0f172a !important;
+}
+
+.bank-card p{
+  color:#0f172a !important;
+}
+
+.bank-card{
+  color:#0f172a !important;
+}
+
+/* BEST CARD */
+.bank-card.best{
+  background:#f0fdf4;
+}
+
+/* =====================
+🔥 LEAD BOX
+===================== */
+
+.lead-box input{
+  color:#0f172a !important;
+}
+
+.lead-box{
+  color:#0f172a !important;
+}
+
+/* =====================
+🔥 DECISION BOX
+===================== */
+
+#decision-box{
+  background:white;
+  border:1px solid #e2e8f0;
+  color:#0f172a;
+}
+
+/* =====================
+🔥 TITOLI GENERICI FIX
+===================== */
+
+.container h1,
+.container h2,
+.container h3{
+  color:#0f172a !important;
+}
+
