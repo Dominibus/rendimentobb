@@ -12,6 +12,7 @@ Report investimento B&B
 </title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/js/lang.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
@@ -39,7 +40,6 @@ body{
   font-size:13px;
   font-weight:600;
   text-decoration:none;
-  transition:.2s ease;
 }
 
 .nav-btn.primary{
@@ -52,11 +52,6 @@ body{
   color:#0f172a;
 }
 
-.nav-btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 6px 18px rgba(0,0,0,0.1);
-}
-
 /* ===== CARD ===== */
 .report{
   max-width:900px;
@@ -65,18 +60,7 @@ body{
   padding:30px;
   border-radius:20px;
   box-shadow:0 25px 80px rgba(0,0,0,0.1);
-}
-
-/* ===== HEADER ===== */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-weight:800;
-  color:#10b981;
+  position:relative;
 }
 
 /* ===== KPI ===== */
@@ -93,17 +77,6 @@ body{
   border-radius:12px;
 }
 
-.kpi span{
-  font-size:12px;
-  color:#64748b;
-}
-
-.kpi strong{
-  display:block;
-  font-size:20px;
-  margin-top:4px;
-}
-
 /* ===== VERDICT ===== */
 .verdict{
   margin-top:30px;
@@ -112,15 +85,9 @@ body{
   background:#ecfdf5;
 }
 
-/* ===== LOCK ===== */
-.lock{
-  margin-top:20px;
-  padding:14px;
-  background:#fff7ed;
-  border-radius:10px;
-  color:#9a3412;
-  font-size:13px;
-  text-align:center;
+/* ===== CHART ===== */
+.chart-box{
+  margin-top:30px;
 }
 
 /* ===== BUTTON ===== */
@@ -134,12 +101,32 @@ body{
   cursor:pointer;
   width:100%;
   font-weight:600;
-  transition:.2s;
 }
 
-.btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 10px 25px rgba(16,185,129,0.3);
+/* ===== OVERLAY PRO ===== */
+.lock-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(15,23,42,0.85);
+  backdrop-filter:blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  color:white;
+  border-radius:20px;
+  z-index:10;
+  text-align:center;
+}
+
+.lock-overlay button{
+  margin-top:15px;
+  background:#10b981;
+  border:none;
+  padding:12px 20px;
+  border-radius:10px;
+  color:white;
+  font-weight:600;
 }
 
 </style>
@@ -148,7 +135,6 @@ body{
 
 <body>
 
-<!-- NAV -->
 <div class="report-nav">
   <a href="/dashboard/" class="nav-btn primary">← Dashboard</a>
   <a href="/" class="nav-btn secondary">Home</a>
@@ -158,100 +144,45 @@ body{
 
 <div class="header">
   <div class="logo">RendimentoBB</div>
-  <div data-it="Report professionale" data-en="Professional report"></div>
+  <div>Professional report</div>
 </div>
 
-<h1 data-it="📄 Analisi investimento" data-en="📄 Investment Analysis"></h1>
+<h1>📄 Analisi investimento</h1>
 
-<!-- KPI -->
 <div class="kpi-grid">
-  <div class="kpi"><span data-it="Prezzo immobile" data-en="Property price"></span><strong id="price"></strong></div>
-  <div class="kpi"><span data-it="Equity investita" data-en="Equity invested"></span><strong id="equity"></strong></div>
+  <div class="kpi"><span>Prezzo</span><strong id="price"></strong></div>
+  <div class="kpi"><span>Equity</span><strong id="equity"></strong></div>
   <div class="kpi"><span>ROI</span><strong id="roi"></strong></div>
-  <div class="kpi"><span data-it="Rischio" data-en="Risk"></span><strong id="risk"></strong></div>
+  <div class="kpi"><span>Rischio</span><strong id="risk"></strong></div>
 </div>
 
-<!-- VERDICT -->
 <div class="verdict">
   <h2 id="verdict"></h2>
   <p id="verdict-text"></p>
 </div>
 
-<div id="lock-msg" class="lock" style="display:none"></div>
+<div class="chart-box">
+  <canvas id="roiChart"></canvas>
+</div>
 
-<button class="btn" onclick="generatePDF()"
-data-it="📥 Scarica PDF professionale"
-data-en="📥 Download professional PDF">
+<button class="btn" onclick="generatePDF()">
+📥 Scarica PDF professionale
 </button>
+
+<!-- OVERLAY -->
+<div id="upgradeOverlay" class="lock-overlay" style="display:none">
+  <h2>🔒 Report PRO</h2>
+  <p style="opacity:.8">
+    Questo report è usato da investitori e immobiliari
+  </p>
+  <button onclick="window.location.href='/pricing/'">
+    🚀 Sblocca PRO
+  </button>
+</div>
 
 </div>
 
 <script>
-
-// 🔒 HARD LOCK PAGE (CRITICO)
-let pageLocked = true;
-
-document.addEventListener("rb_auth_ready", () => {
-
-  checkUserPlan();
-
-  if(!isPro){
-    pageLocked = true;
-
-    // blocca subito tutto
-    document.body.innerHTML = `
-      <div style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        height:100vh;
-        background:#0f172a;
-        color:white;
-        flex-direction:column;
-        text-align:center;
-        padding:20px;
-      ">
-        <h2>🔒 PRO Report</h2>
-        <p style="opacity:0.7;margin:10px 0 20px 0">
-          Questo report professionale è disponibile solo per utenti PRO
-        </p>
-        <button onclick="window.location.href='/pricing/'"
-        style="
-          background:#10b981;
-          border:none;
-          padding:14px 20px;
-          border-radius:10px;
-          color:white;
-          font-weight:600;
-          cursor:pointer;
-        ">
-          🚀 Sblocca PRO
-        </button>
-      </div>
-    `;
-
-  } else {
-    pageLocked = false;
-  }
-
-});  
-
-function showUpgradePopup(){
-
-  const lang = window.currentLang === "en";
-
-  const msg = lang
-    ? "Unlock the full professional investment report"
-    : "Sblocca il report professionale completo";
-
-  const cta = lang
-    ? "Upgrade to PRO"
-    : "Passa a PRO";
-
-  if(confirm(msg)){
-    window.location.href = "/pricing/";
-  }
-}  
 
 // ================= PARAMS =================
 const params = new URLSearchParams(window.location.search);
@@ -261,45 +192,26 @@ const roi = Number(params.get("roi") || 0);
 const equity = Number(params.get("equity") || 0);
 const risk = Number(params.get("risk") || 0);
 
-// ================= USER PLAN (REAL FIX) =================
+// ================= USER =================
 let isPro = false;
-let isInvestor = false;
 
 function checkUserPlan(){
 
-  if(window.currentPlan === "investor"){
-    isInvestor = true;
-  }
-
   if(
     window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly"
+    window.currentPlan === "pro_yearly" ||
+    (window.isProUser && window.isProUser())
   ){
-    isPro = true;
-  }
-
-  if(window.isProUser && window.isProUser()){
     isPro = true;
   }
 }
 
-// aspetta firebase
-document.addEventListener("rb_auth_ready", () => {
-  checkUserPlan();
-  applyLockState();
-});
-
-setTimeout(()=>{
-  checkUserPlan();
-  applyLockState();
-},1000);
-
 // ================= FORMAT =================
 function euro(v){
-  return new Intl.NumberFormat(
-    window.currentLang === "en" ? "en-US" : "it-IT",
-    {style:"currency", currency:"EUR"}
-  ).format(v);
+  return new Intl.NumberFormat("it-IT",{
+    style:"currency",
+    currency:"EUR"
+  }).format(v);
 }
 
 // ================= RENDER =================
@@ -317,7 +229,7 @@ if(roi >= 12){
 }
 else if(roi >= 8){
   verdict = "STRONG INVESTMENT";
-  text = "High ROI with controlled risk. Funding-ready.";
+  text = "High ROI with controlled risk.";
 }
 else if(roi >= 5){
   verdict = "OPTIMIZE";
@@ -331,171 +243,65 @@ else{
 document.getElementById("verdict").innerText = verdict;
 document.getElementById("verdict-text").innerText = text;
 
-// ================= LOCK STATE =================
-function applyLockState(){
+// ================= CHART =================
+function renderChart(){
+  new Chart(document.getElementById("roiChart"),{
+    type:"bar",
+    data:{
+      labels:["ROI","Rischio","Benchmark"],
+      datasets:[{
+        data:[roi, risk, 8],
+        borderRadius:8
+      }]
+    },
+    options:{
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true}}
+    }
+  });
+}
 
-  const lock = document.getElementById("lock-msg");
+// ================= LOCK =================
+function applyLock(){
+  const overlay = document.getElementById("upgradeOverlay");
 
   if(!isPro){
-
-    lock.style.display="block";
-    lock.innerText =
-      "🔒 Full bank-grade PDF available only for PRO users";
-
+    overlay.style.display = "flex";
   } else {
-    lock.style.display="none";
+    overlay.style.display = "none";
   }
 }
 
-const btn = document.querySelector(".btn");
-
-if(!isPro && btn){
-  btn.style.opacity = "0.5";
-  btn.style.pointerEvents = "none";
-}
-  
-// ================= PDF ULTRA PRO =================
+// ================= PDF =================
 async function generatePDF(){
 
- if(!isPro || pageLocked){
-  showUpgradePopup();
-  return;
-}
+  if(!isPro){
+    document.getElementById("upgradeOverlay").style.display="flex";
+    return;
+  }
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  let y = 20;
+  doc.text("RendimentoBB Report",20,20);
+  doc.text("ROI: " + roi + "%",20,40);
+  doc.text("Risk: " + risk,20,50);
 
-  // ================= COLORS =================
-  const green = [16,185,129];
-  const dark = [15,23,42];
-  const gray = [100,116,139];
-
-  // ================= HEADER =================
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(20);
-  doc.setTextColor(...dark);
-  doc.text("RendimentoBB",20,y);
-
-  doc.setFontSize(12);
-  doc.setTextColor(...gray);
-  doc.text("Investment Intelligence Report",20,y+8);
-
-  y += 20;
-
-  // ================= KPI CARD =================
-  doc.setFillColor(248,250,252);
-  doc.roundedRect(20,y,170,55,6,6,"F");
-
-  doc.setFontSize(11);
-  doc.setTextColor(...dark);
-
-  doc.text("Property price",25,y+10);
-  doc.text(euro(price),120,y+10);
-
-  doc.text("Equity invested",25,y+18);
-  doc.text(euro(equity),120,y+18);
-
-  doc.text("ROI",25,y+26);
-  doc.text(roi.toFixed(1)+"%",120,y+26);
-
-  doc.text("Risk score",25,y+34);
-  doc.text(risk+"/100",120,y+34);
-
-  y += 70;
-
-  // ================= VERDICT =================
-  let verdictColor = green;
-  let verdictTitle = verdict;
-  let verdictDesc = text;
-
-  doc.setFillColor(...verdictColor);
-  doc.roundedRect(20,y,170,30,6,6,"F");
-
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(16);
-  doc.text(verdictTitle,25,y+13);
-
-  doc.setFontSize(10);
-  doc.text(verdictDesc,25,y+23);
-
-  y += 45;
-
-  // ================= SCORE =================
-  let score = Math.min(100, Math.max(0, roi*5 - risk));
-
-  doc.setTextColor(...dark);
-  doc.setFontSize(14);
-  doc.text("Investment Score",20,y);
-
-  doc.setFontSize(28);
-  doc.text(score.toFixed(0)+"/100",20,y+12);
-
-  y += 25;
-
-  // ================= ADVANCED METRICS =================
-  const annualProfit = (price * (roi/100));
-  const breakEvenYears = equity / annualProfit;
-
-  doc.setFontSize(12);
-  doc.text("Financial Metrics",20,y);
-
-  y += 10;
-
-  doc.setFontSize(10);
-
-  doc.text("Estimated annual profit: " + euro(annualProfit),20,y); y+=6;
-  doc.text("Break-even time: " + breakEvenYears.toFixed(1) + " years",20,y); y+=6;
-  doc.text("Capital efficiency: HIGH",20,y);
-
-  y += 15;
-
-  // ================= STRATEGY =================
-  doc.setFontSize(12);
-  doc.text("Strategic Recommendation",20,y);
-
-  y += 8;
-
-  let strategy = "";
-
-  if(roi >= 12){
-    strategy = "Proceed immediately. Institutional-grade asset.";
-  }
-  else if(roi >= 8){
-    strategy = "Proceed with investment. Strong fundamentals.";
-  }
-  else if(roi >= 5){
-    strategy = "Optimize pricing and occupancy strategy.";
-  }
-  else{
-    strategy = "Re-evaluate investment conditions.";
-  }
-
-  doc.setFontSize(10);
-  doc.text(strategy,20,y);
-
-  y += 15;
-
-  // ================= ANALYSIS =================
-  doc.setFontSize(12);
-  doc.text("Analysis Breakdown",20,y);
-
-  y += 8;
-
-  doc.setFontSize(10);
-  doc.text("• ROI vs market benchmark",20,y); y+=6;
-  doc.text("• Risk and sustainability analysis",20,y); y+=6;
-  doc.text("• Financial viability assessment",20,y); y+=6;
-  doc.text("• Bank funding compatibility",20,y);
-
-  // ================= FOOTER =================
-  doc.setFontSize(9);
-  doc.setTextColor(...gray);
-  doc.text("Generated by RendimentoBB.com",20,285);
-
-  doc.save("RendimentoBB-Investment-Report.pdf");
+  doc.save("report.pdf");
 }
+
+// ================= INIT =================
+document.addEventListener("rb_auth_ready", () => {
+  checkUserPlan();
+  applyLock();
+  renderChart();
+});
+
+setTimeout(()=>{
+  checkUserPlan();
+  applyLock();
+  renderChart();
+},1000);
 
 </script>
 
