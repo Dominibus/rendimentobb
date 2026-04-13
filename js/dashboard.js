@@ -924,7 +924,14 @@ if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 
 if(dbStatus){
 
-  let status = "Risk";
+  let status = t("Rischio","Risk");
+
+if(avgROI >= 10){
+  status = t("Forte","Strong");
+}
+else if(avgROI >= 5){
+  status = t("Moderato","Moderate");
+}
   let color = "#ef4444";
 
   if(avgROI >= 10){
@@ -1352,12 +1359,22 @@ const ctx = canvas.getContext("2d");
 
 /* dati demo */
 
+const avgROI = roiValues.length
+  ? roiValues.reduce((a,b)=>a+b,0) / roiValues.length
+  : 0;
+
+const avgInvestment = 120000;
+
+// profitto medio realistico
+const yearlyProfit = (avgInvestment * avgROI) / 100;
+
+// simulazione realistica 5 anni
 const yearlyCashflow = [
--13860,
--8200,
--2500,
-3200,
-8200
+  -avgInvestment * 0.1,
+  yearlyProfit * 0.3,
+  yearlyProfit * 0.6,
+  yearlyProfit,
+  yearlyProfit * 1.2
 ];
 
 /* colori positivo/negativo */
@@ -1397,7 +1414,15 @@ data:breakEven,
 borderColor:"#94a3b8",
 borderDash:[6,6],
 pointRadius:0
-}
+},
+
+{
+label:"Market ROI",
+data:new Array(roiValues.length).fill(8.4),
+borderColor:"#f59e0b",
+borderDash:[4,4],
+pointRadius:0
+}  
 
 ]
 
@@ -1408,7 +1433,7 @@ responsive:true,
 maintainAspectRatio:false,
 
 plugins:{
-legend:{display:false},
+legend:{display:true},
 
 tooltip:{
 callbacks:{
@@ -2288,8 +2313,11 @@ function renderUpgradeTrigger(best){
   ">
 
     <div style="font-size:20px;font-weight:700;margin-bottom:10px">
-      💰 ${t("Questo investimento può generare","This investment can generate")}
-    </div>
+⚠️ ${t(
+"Stai rischiando di perdere questo profitto",
+"You are risking losing this profit"
+)}
+</div>
 
     <div style="
     font-size:44px;
@@ -2452,4 +2480,32 @@ function lockInvestorPreview(){
   if(typeof showProOverlay === "function"){
   showProOverlay();
 }
+
+  const banner = document.createElement("div");
+
+banner.innerHTML = `
+<div style="
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#0f172a;
+color:white;
+padding:14px 20px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+z-index:9999;
+font-size:14px;
+">
+
+👀 ${t(
+"Modalità preview attiva – stai vedendo solo il 30% dei dati",
+"Preview mode active – you are seeing only 30% of the data"
+)}
+
+</div>
+`;
+
+document.body.appendChild(banner);
+  
 }
