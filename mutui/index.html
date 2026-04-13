@@ -516,9 +516,9 @@ if(roi < 0){
 }
 
 /* ===== KPI ===== */
-document.getElementById("monthly").innerText = "€"+monthly.toFixed(0);
-document.getElementById("yearly").innerText  = "€"+yearly.toFixed(0);
-document.getElementById("impact").innerText  = roi.toFixed(1)+"%";
+document.getElementById("monthly").innerText = lockValue("€"+monthly.toFixed(0));
+document.getElementById("yearly").innerText  = lockValue("€"+yearly.toFixed(0));
+document.getElementById("impact").innerText  = lockValue(roi.toFixed(1), "%");
 
 document.querySelector(".lead-box").scrollIntoView({
   behavior:"smooth"
@@ -534,11 +534,36 @@ renderDecision(roi);
   
 }
 
+function lockValue(value, suffix=""){
+  return !isProUser()
+    ? "🔒 ---"
+    : value + suffix;
+}
+
 
 /* ================= EXTRA ================= */
 function renderExtra(roi, yearly){
 
 const extra = document.getElementById("extra");
+
+if(!isProUser()){
+  extra.insertAdjacentHTML("afterbegin", `
+    <div style="
+      background:#111827;
+      color:white;
+      padding:12px;
+      border-radius:10px;
+      margin-bottom:15px;
+      text-align:center;
+      font-weight:600;
+    ">
+      🔒 ${t(
+        "Sblocca i numeri reali del tuo investimento",
+        "Unlock real investment numbers"
+      )}
+    </div>
+  `);
+}  
 
 let score = "C";
 if(roi > 15) score = "A";
@@ -566,14 +591,20 @@ font-weight:600;
 color:#b91c1c;
 ">
 ⚠️ ${t("Stai perdendo circa","You are losing about")}
-<strong>€${loss.toFixed(0)}/anno</strong>
+<strong>
+${!isProUser()
+  ? "🔒 ---"
+  : "€"+loss.toFixed(0)+"/anno"}
+</strong>
 </div>
 
 <br>
 
 <div>
 💰 ${t("Costo reale mutuo","Real mortgage cost")}:
-€${yearly.toFixed(0)}
+${!isProUser()
+  ? "🔒 ---"
+  : "€"+yearly.toFixed(0)}
 </div>
 
 <br>
