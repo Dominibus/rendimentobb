@@ -297,6 +297,9 @@ cutout:"65%"
 
 async function loadDashboard(){
 
+  roiValues = [];
+  labels = [];
+
   if(!window.currentPlan){
   console.log("⏳ Piano non pronto → blocco render dashboard");
   return;
@@ -1249,14 +1252,22 @@ if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
   // ================= EVENTO LINGUA =================
   document.addEventListener("rb_language_changed", () => {
 
-    if(!window.currentUser) return;
+  console.log("🌍 Cambio lingua → rerender dashboard");
 
+  // 🔥 reset dati
+  const list = document.getElementById("analysis-list");
+  if(list) list.innerHTML = "";
+
+  // 🔥 reset UI principali
+  document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
+    .forEach(el => { if(el) el.innerHTML = ""; });
+
+  // 🔥 ricarica forzata
+  setTimeout(()=>{
     loadDashboard();
-    console.log("Query UID:", window.currentUser?.uid);
+  }, 50);
 
-  });
-
-}); // 👈 CHIUSURA DOMContentLoaded
+});
 
 
 // ================= CITY DISTRIBUTION =================
