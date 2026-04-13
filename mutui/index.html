@@ -536,7 +536,7 @@ renderDecision(roi);
 
 function lockValue(value, suffix=""){
   return !isProUser()
-    ? "🔒 ---"
+    ? "🔒 Pro"
     : value + suffix;
 }
 
@@ -591,21 +591,21 @@ color:#b91c1c;
 ⚠️ ${t("Stai perdendo circa","You are losing about")}
 <strong>
 ${!isProUser()
-  ? "🔒 ---"
+  ? "🔒 Pro"
   : "€"+loss.toFixed(0)+"/anno"}
 </strong>
 </div>
 
-<br>
+<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
 
 <div>
 💰 ${t("Costo reale mutuo","Real mortgage cost")}:
 ${!isProUser()
-  ? "🔒 ---"
+  ? "🔒 Pro"
   : "€"+yearly.toFixed(0)}
 </div>
 
-<br>
+<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
 
 <div>
 📊 ${t("Rischio investimento","Investment risk")}:
@@ -757,7 +757,7 @@ ${i===0 ? `
     : `💰 ${t("Puoi risparmiare fino a","You can save up to")} <strong>€${(yearly*0.15).toFixed(0)}/anno</strong>`
   }
 
-  <br>
+  <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
   <span style="font-size:12px;color:#166534">
     ⏳ ${t("Offerta limitata","Limited offer")}
   </span>
@@ -798,10 +798,7 @@ function goToPricing(){
 function startPlanPurchase(plan){
 
   if(!window.currentUser){
-    alert(t(
-      "Accedi per continuare",
-      "Login to continue"
-    ));
+    showUpgradeModal();
     window.location.href="/login/";
     return;
   }
@@ -809,6 +806,14 @@ function startPlanPurchase(plan){
   // Stripe checkout (quando vuoi)
   window.location.href = "/api/create-checkout-session?plan=" + plan;
 
+}
+
+  function showUpgradeModal(){
+  document.getElementById("upgrade-modal").style.display = "flex";
+}
+
+function closeUpgradeModal(){
+  document.getElementById("upgrade-modal").style.display = "none";
 }
   
 /* ================= SELECT ================= */
@@ -897,9 +902,9 @@ success.style.display="block";
 
 success.innerHTML = `
 ✔ ${t("Richiesta inviata","Request sent")}
-<br>
+<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
 🔥 ${t("Ti abbiamo inviato le migliori offerte","We sent you the best offers")}
-<br>
+<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
 💰 €${data.value || 0}
 `;
 
@@ -912,5 +917,55 @@ alert("Errore invio");
 
 </script>
 
+  <!-- 🔥 UPGRADE MODAL -->
+<div id="upgrade-modal" style="
+position:fixed;
+inset:0;
+background:rgba(2,6,23,.75);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+  <div style="
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  max-width:420px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.3);
+  ">
+
+    <h3 style="margin-bottom:10px;">
+      🔒 ${t("Sblocca i dati reali","Unlock real data")}
+    </h3>
+
+    <p style="color:#64748b;margin-bottom:20px;">
+      ${t(
+        "Stai prendendo decisioni senza dati completi",
+        "You are making decisions without full data"
+      )}
+    </p>
+
+    <button class="btn-main"
+      onclick="startPlanPurchase('investor')">
+      🔓 ${t("Sblocca ora","Unlock now")}
+    </button>
+
+    <div style="margin-top:10px;">
+      <button onclick="closeUpgradeModal()" style="
+        background:none;
+        border:none;
+        color:#64748b;
+        cursor:pointer;
+      ">
+        ${t("Chiudi","Close")}
+      </button>
+    </div>
+
+  </div>
+</div>
 </body>
 </html>
