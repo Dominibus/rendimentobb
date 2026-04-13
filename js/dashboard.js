@@ -2419,5 +2419,7 @@ function lockInvestorPreview(){
     el.style.opacity = "0.6";
   });
 
-  showUpgradeOverlay();
+  if(typeof showProOverlay === "function"){
+  showProOverlay();
+}
 }
