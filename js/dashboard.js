@@ -2340,13 +2340,10 @@ function renderROIMarketComparison(count,totalROI){
 function lockInvestorPreview(){
 
   const elementsToBlur = [
-    "roi-chart-container",
-    "cashflow-chart-container",
-    "city-roi-chart",
-    "city-distribution-chart",
     "roi-optimizer",
     "investment-ranking",
-    "best-investment"
+    "roi-target-calculator",
+    "revenue-simulator"
   ];
 
   elementsToBlur.forEach(id=>{
@@ -2359,64 +2356,4 @@ function lockInvestorPreview(){
   });
 
   showUpgradeOverlay();
-}
-
-function showUpgradeOverlay(){
-
-  if(document.getElementById("pro-overlay")) return;
-
-  const overlay = document.createElement("div");
-  overlay.id = "pro-overlay";
-
-  overlay.innerHTML = `
-  <div style="
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-  ">
-
-    <div style="
-      background:white;
-      padding:30px;
-      border-radius:16px;
-      text-align:center;
-      max-width:420px;
-      width:90%;
-    ">
-
-      <h2>🔒 Dashboard PRO</h2>
-
-      <p style="color:#64748b;margin:10px 0 20px">
-        Sblocca analisi completa, ROI reale e strategia investimento
-      </p>
-
-      <button onclick="goToUpgrade()" style="
-        background:#10b981;
-        color:white;
-        border:none;
-        padding:12px 18px;
-        border-radius:10px;
-        font-weight:600;
-        cursor:pointer;
-      ">
-        🚀 Sblocca PRO
-      </button>
-
-      <div style="margin-top:10px;font-size:12px;color:#64748b">
-        Anteprima attiva
-      </div>
-
-    </div>
-
-  </div>
-  `;
-
-  document.body.appendChild(overlay);
 }
