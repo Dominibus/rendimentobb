@@ -414,12 +414,18 @@ document.getElementById("monthly").innerText = "€"+monthly.toFixed(0);
 document.getElementById("yearly").innerText  = "€"+yearly.toFixed(0);
 document.getElementById("impact").innerText  = roi.toFixed(1)+"%";
 
+document.querySelector(".lead-box").scrollIntoView({
+  behavior:"smooth"
+});  
+
 /* ===== EXTRA ===== */
 renderExtra(roi, yearly);
 
 /* ===== BANK ===== */
 renderBanks(amount);
 
+renderDecision(roi);
+  
 }
 
 
@@ -460,8 +466,8 @@ color:#b91c1c;
 <br>
 
 <div>
-💰 ${t("Confronto senza mutuo","Cash comparison")}:
-€${(yearly*1.4).toFixed(0)}
+💰 ${t("Costo reale mutuo","Real mortgage cost")}:
+€${yearly.toFixed(0)}
 </div>
 
 <br>
@@ -472,54 +478,92 @@ color:#b91c1c;
 </div>
 
 `;
+}
 
-/* 🔥 CTA dinamica */
+function renderDecision(roi){
+
+const box = document.getElementById("decision-box");
+box.style.display = "block";
+
+let verdict, color;
+
 if(roi < 5){
-extra.innerHTML += `
-<div style="margin-top:15px;">
-<button class="btn-main" onclick="window.location.href='/tool/'">
-🔥 ${t("Simula investimento completo","Run full investment analysis")}
-</button>
+  verdict = t(
+    "❌ NON fare questo mutuo",
+    "❌ DO NOT take this mortgage"
+  );
+  color = "#ef4444";
+}
+else if(roi < 12){
+  verdict = t(
+    "⚠️ Operazione rischiosa",
+    "⚠️ Risky investment"
+  );
+  color = "#f59e0b";
+}
+else{
+  verdict = t(
+    "✅ Mutuo sostenibile",
+    "✅ Sustainable investment"
+  );
+  color = "#10b981";
+}
+
+box.innerHTML = `
+<div style="text-align:center;font-weight:700;font-size:18px;color:${color}">
+${verdict}
+</div>
+
+<div style="margin-top:10px;text-align:center;color:#64748b">
+${t(
+  "Questa è una valutazione reale basata sui dati inseriti",
+  "This is a real evaluation based on your data"
+)}
 </div>
 `;
-}
-
-}
+}  
 
 
 /* ================= BANCHE ================= */
 function renderBanks(amount){
 
 const banks = [
-{name:"Intesa Sanpaolo", rate:3.1, url:"#"},
-{name:"UniCredit", rate:3.3, url:"#"},
-{name:"Credit Agricole", rate:3.4, url:"#"},
-{name:"BNL BNP Paribas", rate:3.5, url:"#"},
-{name:"Banco BPM", rate:3.7, url:"#"}
+{name:"Intesa Sanpaolo", rate:3.1},
+{name:"UniCredit", rate:3.3},
+{name:"Credit Agricole", rate:3.4},
+{name:"BNL BNP Paribas", rate:3.5},
+{name:"Banco BPM", rate:3.7}
 ];
 
 banks.sort((a,b)=>a.rate-b.rate);
 
-let html="";
+let html="<h3 style='margin-top:40px'>🏦 "+t("Migliori mutui disponibili","Best mortgage options")+"</h3>";
 
 banks.forEach((b,i)=>{
 
 html+=`
 <div class="bank-card ${i===0?"best":""}">
+
 <h3>${b.name}</h3>
-<p>${b.rate}%</p>
+
+<p style="font-size:22px;font-weight:700">${b.rate}%</p>
+
+${i===0 ? `
+<div style="color:#10b981;font-weight:600">
+🔥 ${t("Migliore offerta","Best offer")}
+</div>
+` : ""}
 
 <button class="btn-main"
 onclick="selectMortgage(${b.rate}, '${b.name}')">
-${t("Usa questo mutuo","Use this mortgage")}
+${t("Seleziona mutuo","Select mortgage")}
 </button>
+
 </div>
 `;
-
 });
 
 document.getElementById("banks").innerHTML = html;
-
 }
 
 
