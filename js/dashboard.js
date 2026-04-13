@@ -2011,11 +2011,13 @@ font-weight:800;
 color:${verdict.color};
 margin-top:6px;
 ">
-${verdict.action === "Procedere"
-  ? "✅ COMPRA"
-  : verdict.action === "Ottimizzare"
-  ? "⚙️ OTTIMIZZA"
-  : "❌ EVITA"}
+${
+verdict.type === "excellent"
+  ? `✅ ${t("COMPRA","BUY")}`
+  : verdict.type === "good"
+  ? `⚙️ ${t("OTTIMIZZA","OPTIMIZE")}`
+  : `❌ ${t("EVITA","AVOID")}`
+}
 </div>
 
 ${
