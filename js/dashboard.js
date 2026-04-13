@@ -340,7 +340,15 @@ async function loadDashboard(){
   console.log("👀 INVESTOR → preview mode");
 
   lockInvestorPreview();
+
+// ================= FIX TRADUZIONE FINALE =================
+if(typeof applyTranslations === "function"){
+  setTimeout(()=>{
+    applyTranslations();
+  }, 100);
 }
+    
+}  
 
   // ================= CREA ANALYSES =================
 
@@ -1252,20 +1260,26 @@ if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
   // ================= EVENTO LINGUA =================
   document.addEventListener("rb_language_changed", () => {
 
-  console.log("🌍 Cambio lingua → rerender dashboard");
+console.log("🌍 Cambio lingua → rerender dashboard");
 
-  // 🔥 reset dati
-  const list = document.getElementById("analysis-list");
-  if(list) list.innerHTML = "";
+// reset
+const list = document.getElementById("analysis-list");
+if(list) list.innerHTML = "";
 
-  // 🔥 reset UI principali
-  document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
-    .forEach(el => { if(el) el.innerHTML = ""; });
+document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
+  .forEach(el => { if(el) el.innerHTML = ""; });
 
-  // 🔥 ricarica forzata
-  setTimeout(()=>{
-    loadDashboard();
-  }, 50);
+// reload
+setTimeout(()=>{
+  loadDashboard();
+}, 50);
+
+// 🔥 FIX TRADUZIONE DOPO RENDER
+setTimeout(()=>{
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
+}, 150);
 
 });
 
