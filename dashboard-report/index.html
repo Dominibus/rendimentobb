@@ -188,6 +188,54 @@ data-en="📥 Download professional PDF">
 
 <script>
 
+// 🔒 HARD LOCK PAGE (CRITICO)
+let pageLocked = true;
+
+document.addEventListener("rb_auth_ready", () => {
+
+  checkUserPlan();
+
+  if(!isPro){
+    pageLocked = true;
+
+    // blocca subito tutto
+    document.body.innerHTML = `
+      <div style="
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        height:100vh;
+        background:#0f172a;
+        color:white;
+        flex-direction:column;
+        text-align:center;
+        padding:20px;
+      ">
+        <h2>🔒 PRO Report</h2>
+        <p style="opacity:0.7;margin:10px 0 20px 0">
+          Questo report professionale è disponibile solo per utenti PRO
+        </p>
+        <button onclick="window.location.href='/pricing/'"
+        style="
+          background:#10b981;
+          border:none;
+          padding:14px 20px;
+          border-radius:10px;
+          color:white;
+          font-weight:600;
+          cursor:pointer;
+        ">
+          🚀 Sblocca PRO
+        </button>
+      </div>
+    `;
+
+  } else {
+    pageLocked = false;
+  }
+
+});  
+
 function showUpgradePopup(){
 
   const lang = window.currentLang === "en";
@@ -299,14 +347,20 @@ function applyLockState(){
   }
 }
 
+const btn = document.querySelector(".btn");
+
+if(!isPro && btn){
+  btn.style.opacity = "0.5";
+  btn.style.pointerEvents = "none";
+}
+  
 // ================= PDF ULTRA PRO =================
 async function generatePDF(){
 
-  if(!isPro){
-    alert("Upgrade to PRO to unlock full investment report");
-    window.location.href = "/";
-    return;
-  }
+ if(!isPro || pageLocked){
+  showUpgradePopup();
+  return;
+}
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
