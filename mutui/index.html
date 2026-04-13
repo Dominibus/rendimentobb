@@ -799,15 +799,14 @@ function startPlanPurchase(plan){
 
   if(!window.currentUser){
     showUpgradeModal();
+
+    // 🔥 salva intento (marketing)
+    localStorage.setItem("pending_plan", plan);
+
     return;
   }
 
   window.location.href = "/api/create-checkout-session?plan=" + plan;
-}
-
-  // Stripe checkout (quando vuoi)
-  window.location.href = "/api/create-checkout-session?plan=" + plan;
-
 }
 
   function showUpgradeModal(){
