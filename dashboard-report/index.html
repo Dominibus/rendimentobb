@@ -214,7 +214,7 @@ function euro(v){
   }).format(v);
 }
 
-// ================= RENDER =================
+// ================= RENDER BASE =================
 document.getElementById("price").innerText = euro(price);
 document.getElementById("equity").innerText = euro(equity);
 document.getElementById("roi").innerText = roi.toFixed(1)+"%";
@@ -243,7 +243,7 @@ else{
 document.getElementById("verdict").innerText = verdict;
 document.getElementById("verdict-text").innerText = text;
 
-// ================= CHART FIX (CRITICO) =================
+// ================= CHART FIX =================
 let roiChartInstance = null;
 
 function renderChart(){
@@ -251,7 +251,6 @@ function renderChart(){
   const canvas = document.getElementById("roiChart");
   if(!canvas) return;
 
-  // 🔥 FIX: distrugge grafico precedente
   if(roiChartInstance){
     roiChartInstance.destroy();
   }
@@ -272,21 +271,31 @@ function renderChart(){
   });
 }
 
-// ================= LOCK =================
+// ================= LOCK STRATEGICO =================
 function applyLock(){
+
   const overlay = document.getElementById("upgradeOverlay");
 
   if(!isPro){
+
     overlay.style.display = "flex";
+
+    // 🔥 NASCONDI DATI AVANZATI (SE PRESENTI)
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.style.filter = "blur(6px)";
+      el.style.pointerEvents = "none";
+      el.style.opacity = "0.5";
+    });
+
   } else {
     overlay.style.display = "none";
   }
 }
 
-// ================= PDF (VERSIONE PRO VERA) =================
+// ================= PDF =================
 async function generatePDF(){
 
-  // 🔒 BLOCCO TOTALE INVESTOR
+  // 🔒 BLOCCO TOTALE
   if(!isPro){
     document.getElementById("upgradeOverlay").style.display="flex";
     return;
@@ -386,7 +395,6 @@ document.addEventListener("rb_auth_ready", () => {
   renderChart();
 });
 
-// fallback (UNA SOLA VOLTA)
 setTimeout(()=>{
   checkUserPlan();
   applyLock();
