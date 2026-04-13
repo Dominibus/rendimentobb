@@ -1810,38 +1810,45 @@ console.error("Delete error:",err);
 
 }
 
+// ================= DOWNLOAD REPORT DASHBOARD =================
+
 function downloadReport(){
 
-if(!window.bestInvestmentData){
-alert("Nessuna analisi disponibile");
-return;
+  if(!window.bestInvestmentData){
+    alert(window.currentLang === "en"
+      ? "No analysis available"
+      : "Nessuna analisi disponibile");
+    return;
+  }
+
+  const data = window.bestInvestmentData;
+
+  const params = new URLSearchParams({
+    price: data.price || 0,
+    roi: data.roi || 0,
+    equity: data.equity || 0,
+    risk: data.risk || 0,
+    city: data.city || "italy",
+    source: "dashboard" // 🔥 fondamentale
+  });
+
+  // 🚀 NUOVO FLOW → PDF DASHBOARD
+  window.location.href =
+    "/dashboard-report/?" + params.toString();
 }
 
-const data = window.bestInvestmentData;
 
-const params = new URLSearchParams({
-
-price:data.price,
-roi:data.roi,
-equity:data.equity,
-risk:data.risk
-
-});
-
-window.location.href =
-"/tool/?report=1&" + params.toString();
-
-}
+// ================= GLOBAL CLICK HANDLER =================
 
 document.addEventListener("click",(e)=>{
 
-if(e.target.closest(".delete-analysis")){
-deleteAnalysis(e);
-}
+  if(e.target.closest(".delete-analysis")){
+    deleteAnalysis(e);
+  }
 
-if(e.target.id === "download-report"){
-downloadReport();
-}
+  if(e.target.id === "download-report"){
+    downloadReport();
+  }
 
 });
 
