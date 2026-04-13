@@ -2421,4 +2421,3 @@ function lockInvestorPreview(){
 
   showUpgradeOverlay();
 }
-});
