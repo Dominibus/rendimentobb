@@ -1271,26 +1271,6 @@ Firenze – Centro
 
 <script>
 
-document.addEventListener("rb_language_changed", function(){
-
-const oldScript = document.querySelector("script[src='/js/dashboard.js']");
-
-if(!oldScript) return;
-
-const newScript = document.createElement("script");
-
-newScript.type = "module";
-newScript.src = "/js/dashboard.js?v=" + Date.now();
-
-oldScript.remove();
-document.body.appendChild(newScript);
-
-});
-
-</script>
-
-<script>
-
 window.showProOverlay = function(){
   const overlay = document.getElementById("pro-overlay");
   const main = document.querySelector("main");
