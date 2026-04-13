@@ -34,9 +34,10 @@ body{
   position:relative;
   padding:140px 20px 120px;
   text-align:center;
+  backdrop-filter: saturate(1.2);
 
   background:
-  linear-gradient(rgba(2,6,23,.45), rgba(2,6,23,.65)),
+  linear-gradient(rgba(2,6,23,.35), rgba(2,6,23,.55)),
   url("/img/milan-bg.jpg") center/cover;
  
   overflow:hidden;
@@ -658,6 +659,27 @@ if(!isProUser()){
     margin-top:20px;
     text-align:center;
   ">
+
+html += `
+<div style="
+  text-align:center;
+  margin-top:15px;
+">
+  <button class="btn-main"
+    style="max-width:280px"
+    onclick="startPlanPurchase('investor')">
+    🔓 ${t("Sblocca tutte le offerte","Unlock all offers")}
+  </button>
+
+  <div style="margin-top:8px;font-size:13px;color:#9ca3af">
+    ${t(
+      "Accesso immediato alle migliori banche",
+      "Instant access to best banks"
+    )}
+  </div>
+</div>
+`;
+  
     🔒 ${t(
       "Le migliori offerte reali sono disponibili nel piano Investor",
       "Real mortgage offers are available in Investor plan"
@@ -710,7 +732,10 @@ ${i===0 ? `
 ">
 💰 ${t("Puoi risparmiare fino a","You can save up to")}
 <strong>€${(yearly*0.15).toFixed(0)}/anno</strong>
-</div>
+<br>
+<span style="font-size:12px;color:#166534">
+⏳ ${t("Offerta limitata","Limited offer")}
+</span>
 
 ` : ""}
 
