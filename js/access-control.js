@@ -26,27 +26,30 @@ function applyAccessUI(){
   // RESET
   document.body.classList.remove("is-pro","is-free","is-guest");
 
-  // ================= PRO / INVESTOR =================
-  if(isPro){
+if(isPro){
 
-    document.body.classList.add("is-pro");
+  document.body.classList.add("is-pro");
 
-    // ❌ NASCONDI CTA FREE
-    el.style.display = "none";
+  // 🔥 NASCONDI CTA FREE (FIX)
+  document.querySelectorAll(`
+    .upgrade-box,
+    .free-only,
+    [data-paywall]
+  `).forEach(el => el.remove());
 
-    // 🔓 SBLOCCA CONTENUTI
-    document.querySelectorAll(`
-      .pro-blur,
-      .locked,
-      .locked-content
-    `).forEach(el=>{
-      el.classList.remove("pro-blur","locked","locked-content");
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-    });
+  // 🔓 SBLOCCA CONTENUTI
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content
+  `).forEach(el=>{
+    el.classList.remove("pro-blur","locked","locked-content");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
 
-  }
+}
 
   // ================= FREE =================
   else if(isLogged){
@@ -62,13 +65,14 @@ function applyAccessUI(){
   // ================= GUEST =================
   else{
 
-    document.body.classList.add("is-guest");
+  document.body.classList.add("is-guest");
 
-    document.querySelectorAll(".pro-only").forEach(el=>{
-      el.style.display = "none";
-    });
-
-  }
+  document.querySelectorAll(`
+    .pro-only,
+    .investor-only
+  `).forEach(el=>{
+    el.style.display = "none";
+  });
 
 }
 
@@ -82,7 +86,7 @@ window.initAccessControl = function(){
     const user = window.currentUser || null;
     const plan = (window.currentPlan || "free").toLowerCase();
 
-    const isLogged = !!(user && user.uid);
+    const userLogged = !!(user && user.uid);
 
     const isAdmin =
       user?.email === "rendimentobb@gmail.com";
@@ -99,13 +103,13 @@ window.initAccessControl = function(){
       isPro || isInvestor || isAdmin;
 
     // ================= SET GLOBAL =================
-    window.RB_USER = {
-      isLogged,
-      isPro: hasFullAccess,
-      isInvestor,
-      isAdmin,
-      plan
-    };
+window.RB_USER = {
+  isLogged: userLogged,
+  isPro: hasFullAccess,
+  isInvestor,
+  isAdmin,
+  plan
+};
 
     console.log("🧠 RB_USER:", window.RB_USER);
 
