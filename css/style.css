@@ -13309,3 +13309,34 @@ body.menu-open{
   width:100%;
   text-align:center;
 }
+/* =====================================
+🔥 FIX DEFINITIVO MARKET GRID
+===================================== */
+
+#market-comparison{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:22px !important;
+
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+/* 🔥 QUESTA È LA CHIAVE */
+#market-comparison .kpi-box{
+  width:100% !important;
+  max-width:none !important;
+
+  display:flex !important;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+}
+
+/* 🔥 FORZA ANCHE FIGLI */
+#market-comparison .kpi-box *{
+  width:auto;
+}
