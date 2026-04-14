@@ -13181,3 +13181,27 @@ body.menu-open{
     grid-template-columns:1fr !important;
   }
 }
+
+/* ============================= */
+/* 🔥 FIX SOLO MARKET COMPARISON */
+/* ============================= */
+
+.market-kpi-wrapper{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.market-kpi-wrapper .kpi-box{
+  width:100%;
+  text-align:center;
+}
+
+@media (max-width:768px){
+  .market-kpi-wrapper{
+    grid-template-columns:1fr;
+  }
+}
