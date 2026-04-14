@@ -1078,8 +1078,14 @@ data-en="Choose your plan">
 Scegli il piano
 </h3>
 
+<p class="pricing-sub"
+data-it="Scegli il livello di analisi per evitare errori costosi"
+data-en="Choose your analysis level to avoid costly mistakes">
+Scegli il livello di analisi per evitare errori costosi
+</p>
+
 <!-- 🔥 PSYCHO TRIGGER -->
-<p style="margin-top:10px;color:#ef4444;font-weight:600"
+<p class="pricing-alert"
 data-it="⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo"
 data-en="⚠️ Without full analysis you can lose thousands even with positive ROI">
 ⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo
@@ -1092,47 +1098,45 @@ data-en="⚠️ Without full analysis you can lose thousands even with positive 
 
 <h3 data-it="Investor" data-en="Investor">Investor</h3>
 
-<p class="price"
-data-it="€19 / mese"
-data-en="€19 / month">
-€19 / mese
+<p class="price">
+<span data-it="€19 / mese" data-en="€19 / month">€19 / mese</span>
 </p>
 
-<div class="plan-extra"></div>
+<div class="plan-extra"
+data-it="Per iniziare"
+data-en="For getting started">
+Per iniziare
+</div>
 
 <ul>
-<li data-it="✔ Simulazioni illimitate" data-en="✔ Unlimited simulations">✔ Simulazioni illimitate</li>
 
-<li data-it="✔ ROI avanzato" data-en="✔ Advanced ROI">
-✔ ROI avanzato
+<li data-it="✔ Simulazioni limitate" data-en="✔ Limited simulations">
+✔ Simulazioni limitate
 </li>
 
-<li data-it="✔ Analisi parziale (senza rischio completo)" 
-data-en="✔ Partial analysis (no full risk)">
-✔ Analisi parziale (senza rischio completo)
+<li data-it="✔ Accesso dashboard (limitato)" data-en="✔ Dashboard access (limited)">
+✔ Accesso dashboard (limitato)
 </li>
 
-<li class="disabled"
-data-it="✖ Analisi rischio reale completa"
-data-en="✖ Full risk analysis">
-✖ Analisi rischio reale completa
+<li data-it="⚠️ Analisi incompleta (senza rischio reale)" data-en="⚠️ Incomplete analysis (no real risk)">
+⚠️ Analisi incompleta (senza rischio reale)
 </li>
 
 <li class="disabled"
-data-it="✖ Previsioni cashflow"
-data-en="✖ Cashflow forecasts">
-✖ Previsioni cashflow
+data-it="✖ Report PDF non disponibile"
+data-en="✖ PDF reports not available">
+✖ Report PDF non disponibile
 </li>
 
 <li class="disabled"
-data-it="✖ Report PDF professionale"
-data-en="✖ Professional PDF report">
-✖ Report PDF professionale
+data-it="✖ Dashboard avanzata bloccata"
+data-en="✖ Advanced dashboard locked">
+✖ Dashboard avanzata bloccata
 </li>
 
 </ul>
 
-<button onclick="startPlanPurchase('investor')" class="btn"
+<button onclick="startPlanPurchase('investor')" class="btn btn-outline"
 data-it="Inizia"
 data-en="Start">
 Inizia
@@ -1151,49 +1155,55 @@ data-en="🔥 Most popular">
 
 <h3 data-it="Pro" data-en="Pro">Pro</h3>
 
-<p class="price"
-data-it="€29 / mese"
-data-en="€29 / month">
-€29 / mese
+<p class="price">
+<span data-it="€29 / mese" data-en="€29 / month">€29 / mese</span>
 </p>
 
-<div class="plan-extra"></div>
+<div class="plan-extra"
+data-it="Per decisioni reali"
+data-en="For real decisions">
+Per decisioni reali
+</div>
 
 <ul>
 
-<li
-data-it="✔ Profitto reale (non solo ROI stimato)"
-data-en="✔ Real profit (not just estimated ROI)">
-✔ Profitto reale (non solo ROI stimato)
+<li data-it="✔ Simulazioni illimitate" data-en="✔ Unlimited simulations">
+✔ Simulazioni illimitate
 </li>
 
-<li data-it="✔ Analisi rischio reale completa" data-en="✔ Full risk analysis">
-✔ Analisi rischio reale completa
+<li data-it="✔ Analisi reale completa (ROI + rischio)" data-en="✔ Full real analysis (ROI + risk)">
+✔ Analisi reale completa (ROI + rischio)
 </li>
 
-<li data-it="✔ Previsioni cashflow" data-en="✔ Cashflow forecasts">
-✔ Previsioni cashflow
-</li>
-
-<li data-it="✔ Simulazione mutuo completa" data-en="✔ Full mortgage simulation">
-✔ Simulazione mutuo completa
+<li data-it="✔ Dashboard completa" data-en="✔ Full dashboard access">
+✔ Dashboard completa
 </li>
 
 <li data-it="✔ Report PDF professionale" data-en="✔ Professional PDF report">
 ✔ Report PDF professionale
 </li>
 
+<li data-it="✔ Previsioni e scenari avanzati" data-en="✔ Forecast & advanced scenarios">
+✔ Previsioni e scenari avanzati
+</li>
+
 </ul>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary btn-glow">
 
 <span
-data-it="🔓 Evita perdite e sblocca profitto reale"
-data-en="🔓 Avoid losses and unlock real profit">
-🔓 Evita perdite e sblocca profitto reale
+data-it="🚀 Evita errori e sblocca analisi completa"
+data-en="🚀 Avoid mistakes and unlock full analysis">
+🚀 Evita errori e sblocca analisi completa
 </span>
 
 </button>
+
+<p class="plan-warning"
+data-it="Il 72% degli investitori sbaglia senza questa analisi"
+data-en="72% of investors fail without this analysis">
+Il 72% degli investitori sbaglia senza questa analisi
+</p>
 
 <p class="note"
 data-it="Accesso immediato • Nessun vincolo • Cancella quando vuoi"
@@ -1220,10 +1230,8 @@ data-en="💰 Save €149">
 
 <h3 data-it="Pro Annuale" data-en="Pro Yearly">Pro Annuale</h3>
 
-<p class="price"
-data-it="€199 / anno"
-data-en="€199 / year">
-€199 / anno
+<p class="price">
+<span data-it="€199 / anno" data-en="€199 / year">€199 / anno</span>
 </p>
 
 <p class="sub"
@@ -1232,19 +1240,28 @@ data-en="Only €16/month">
 Solo €16/mese
 </p>
 
-<div class="plan-extra"></div>
+<div class="plan-extra"
+data-it="Scelta intelligente"
+data-en="Smart choice">
+Scelta intelligente
+</div>
 
 <ul>
-<li data-it="✔ Tutto del piano Pro" data-en="✔ Everything in Pro plan">
-✔ Tutto del piano Pro
+
+<li data-it="✔ Tutto incluso nel piano Pro" data-en="✔ Everything in Pro plan">
+✔ Tutto incluso nel piano Pro
 </li>
 
-<li data-it="✔ Accesso completo 12 mesi" data-en="✔ Full access 12 months">
+<li data-it="✔ Accesso completo 12 mesi" data-en="✔ Full 12-month access">
 ✔ Accesso completo 12 mesi
 </li>
 
-<li data-it="✔ Dashboard + Report PDF inclusi" data-en="✔ Dashboard + PDF reports included">
-✔ Dashboard + Report PDF inclusi
+<li data-it="✔ Dashboard + PDF inclusi" data-en="✔ Dashboard + PDF included">
+✔ Dashboard + PDF inclusi
+</li>
+
+<li data-it="💰 Risparmi oltre il 40%" data-en="💰 Save over 40%">
+💰 Risparmi oltre il 40%
 </li>
 
 </ul>
@@ -1266,7 +1283,6 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 </p>
 
 </div>
-
 </section>
 </main>
 
