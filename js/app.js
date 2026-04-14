@@ -1921,6 +1921,54 @@ function runPostAnalysis(result, context){
 
 triggerSmartReminder(roi);
 
+// ================= MORTGAGE LEAD TRIGGER =================
+
+const mortgageBox = document.getElementById("mortgage-lead-box");
+const mortgageBtn = document.getElementById("mortgage-lead-btn");
+
+if(mortgageBox && mortgageBtn){
+
+  const access = window.getUserAccess();
+
+  // 🔥 mostra SOLO se ha senso (ROI medio-alto)
+  if(result.roi > 6){
+
+    mortgageBox.style.display = "block";
+
+    mortgageBtn.onclick = () => {
+
+      // 🔒 NON LOGGATO → lead
+      if(!window.currentUser){
+
+        localStorage.setItem("lead_type", "mutuo");
+
+        alert("Inserisci email per ricevere le migliori offerte mutuo");
+
+        window.location.href = "/login/";
+        return;
+      }
+
+      // 🔥 UTENTE → lead diretto
+      fetch("/api/send-lead-partner",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          email: window.currentUser.email,
+          type:"mutuo",
+          roi: result.roi,
+          city: window.currentCity
+        })
+      });
+
+      alert("🏦 Richiesta inviata. Le banche ti contatteranno.");
+    };
+
+  }else{
+    mortgageBox.style.display = "none";
+  }
+
+}  
+
   // ================= PAYWALL (UNICO) =================
 const access = window.getUserAccess();
   
