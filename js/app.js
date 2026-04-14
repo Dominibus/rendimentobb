@@ -150,16 +150,16 @@ if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
 const access = window.getUserAccess();
 
-// 🔐 check pro user
 window.isProUser = function(){
   return window.getUserAccess().isPro;
-};
+};  
 
-// 🔓 PRO / INVESTOR → accesso completo
-const isPremium =
-  access.canSeeFullAnalysis || access.isInvestor;
+// 🔓 PRO / INVESTOR → vedono tutto
+if(access.canSeeFullAnalysis || access.isInvestor){
+  return;
+}
 
-// 🔒 FREE → blocca alcune metriche
+// 🔒 FREE → nascondi dati
 const lockIds = [
   "qr_profit",
   "qr_month",
@@ -167,51 +167,16 @@ const lockIds = [
   "qr_rev"
 ];
 
-if(!isPremium){
+lockIds.forEach(id => {
+  const el = document.getElementById(id);
 
-  lockIds.forEach(id => {
+  if(!el) return;
 
-    const el = document.getElementById(id);
-    if(!el) return;
+  el.innerText = t("🔒 Pro","🔒 Pro");
+  el.style.opacity = "0.6";
+});  
 
-    el.innerText = t("🔒 Pro","🔒 Pro");
-    el.style.opacity = "0.6";
-
-  });
-
-}
-
-// =====================================
-// 🔥 HOME BLUR INTELLIGENTE (SAFE)
-// NON TOCCA TOOL
-// =====================================
-
-setTimeout(()=>{
-
-  const overlay = document.querySelector(".home-blur-overlay");
-  if(!overlay) return;
-
-  const access = window.getUserAccess();
-  const isPremium = access.canSeeFullAnalysis || access.isInvestor;
-
-  // 🔥 MOSTRA SOLO DOPO CALCOLO
-  if(!window.simulationExecuted){
-    overlay.style.display = "none";
-    overlay.classList.remove("active");
-    return;
-  }
-
-  // 🔒 FREE → mostra overlay
-  if(!isPremium){
-    overlay.style.display = "flex";
-    overlay.classList.add("active");
-  } else {
-    // 🔓 PRO → mai blur
-    overlay.style.display = "none";
-    overlay.classList.remove("active");
-  }
-
-}, 100);
+};
 
 window.runMortgageComparison = function(){
 
@@ -3068,48 +3033,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("🚀 App init");
 
+  // ===============================
+  // MUTUI → TOOL SYNC
+  // ===============================
+
   applySelectedMortgage();
+
+  // ===============================
+  // CHECK RATE UPDATE (se esiste)
+  // ===============================
 
   if(typeof checkMortgageRateUpdate === "function"){
     checkMortgageRateUpdate();
   }
 
+  // ===============================
+  // AUTO CITY REDIRECT (se esiste)
+  // ===============================
+
   if(typeof handleAutoCityRedirect === "function"){
     handleAutoCityRedirect();
   }
-
-  // ===============================
-  // 🔥 FIX ANALYZE BUTTON
-  // ===============================
-
-  const btn = document.getElementById("analyze-btn");
-
-  if(btn){
-
-    console.log("✅ Analyze button bind OK");
-
-   btn.addEventListener("click", () => {
-
-  console.log("🔥 ANALYZE CLICK");
-
-  // 🔥 se user NON pronto → fallback diretto
-  if(!window.currentUser){
-
-    console.warn("⚠️ User non pronto → fallback calculate");
-
-    calculate(true);
-    return;
-  }
-
-  // 🔥 se esiste handler → usa UX premium
-  if(typeof window.handleAnalyzeClick === "function"){
-    window.handleAnalyzeClick();
-  }else{
-    console.warn("⚠️ handler mancante → fallback");
-    console.log("👤 USER:", window.currentUser);
-    calculate(true);
-  }
-     
 
 });
 
@@ -3524,63 +3468,48 @@ document.addEventListener("DOMContentLoaded", () => {
   ctas.forEach(btn => {
 
     if(btn.innerText.includes("Scopri") || btn.innerText.includes("Find out")){
+
       found++;
 
-      // 👉 qui eventualmente log o gestione futura
       if(found > 1){
-        console.warn("⚠️ CTA duplicate trovate");
+        
       }
+
     }
 
   });
 
 });
 
-
-// ================= AUTO CTA (SAFE VERSION) =================
 document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".btn-main").forEach(btn => {
 
-    // 🔴 CRITICO: NON TOCCARE BOTTONI CORE
-    if(
-      btn.id === "analyze-btn" ||           // simulatore
-      btn.id === "rb-upgrade-btn" ||        // modal upgrade
-      btn.closest("#rb-upgrade-modal")      // dentro modal
-    ){
-      return;
+    // 🔥 se NON ha onclick → glielo assegno
+    if(!btn.getAttribute("onclick")){
+
+      btn.addEventListener("click", () => {
+
+        console.log("🔥 AUTO CTA CLICK");
+
+        // puoi cambiare piano se serve
+        startPlanPurchase("pro");
+
+      });
+
     }
-
-    // 🔴 se ha già onclick → NON toccare
-    if(btn.getAttribute("onclick")) return;
-
-    // 🔴 evita doppio bind
-    if(btn.dataset.bound) return;
-
-    btn.dataset.bound = "true";
-
-    btn.addEventListener("click", () => {
-
-      console.log("🔥 AUTO CTA CLICK SAFE");
-
-      startPlanPurchase("pro");
-
-    });
 
   });
 
 });
 
-
-// ================= PLAN BUTTONS (FORZATI E SICURI) =================
 document.addEventListener("DOMContentLoaded", () => {
 
   // 🔥 PRO BUTTON
   const proBtn = document.querySelector(".plan-pro .btn-main");
 
   if(proBtn){
-    proBtn.onclick = (e) => {
-      e.stopPropagation();
+    proBtn.onclick = () => {
       console.log("🔥 CLICK PRO");
       startPlanPurchase("pro");
     };
@@ -3590,8 +3519,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const investorBtn = document.querySelector(".plan-investor .btn-main");
 
   if(investorBtn){
-    investorBtn.onclick = (e) => {
-      e.stopPropagation();
+    investorBtn.onclick = () => {
       console.log("🔥 CLICK INVESTOR");
       startPlanPurchase("investor");
     };
@@ -3601,8 +3529,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearlyBtn = document.querySelector(".plan-annual .btn-main");
 
   if(yearlyBtn){
-    yearlyBtn.onclick = (e) => {
-      e.stopPropagation();
+    yearlyBtn.onclick = () => {
       console.log("🔥 CLICK YEARLY");
       startPlanPurchase("pro_yearly");
     };
@@ -3703,7 +3630,7 @@ window.handleAnalyzeClick = function(){
   // =========================
   window.userHasClicked = true;
 
-  const btn = document.getElementById("analyze-btn");
+  const btn = document.querySelector(".btn-main");
 
   if(btn){
     const originalText = btn.innerText;
@@ -3852,6 +3779,7 @@ window.startPlanPurchase = function(plan){
   // =========================
   if(!user){
 
+    // 🔥 salva piano scelto
     localStorage.setItem("pending_plan", plan);
 
     const goRegister = confirm(
@@ -3923,12 +3851,10 @@ window.startPlanPurchase = function(plan){
     window.buyPlan(plan);
   }else{
     console.error("❌ buyPlan non trovata");
-    alert(
-      t(
-        "Errore sistema pagamento",
-        "Payment system error"
-      )
-    );
+    alert(t(
+      "Errore sistema pagamento",
+      "Payment system error"
+    ));
   }
 
-}; // ✅ SOLO QUESTA CHIUSURA
+};
