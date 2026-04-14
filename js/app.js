@@ -44,7 +44,7 @@ window.getUserAccess = function(){
     window.userRole === "admin";
 
 const isPro =
-  ["pro","pro_yearly"].includes(plan);
+  ["pro","pro_yearly","investor"].includes(plan);
 
   const isInvestor =
     plan === "investor";
@@ -746,7 +746,7 @@ function safeRender(id, callback){
     return;
   }
 
-  container.style.display = "";
+  container.style.display = "grid";
 
   try{
     callback(container);
@@ -826,49 +826,24 @@ function applyAccessControl(){
 
   const access = window.getUserAccess();
 
-// 🔓 PRO / ADMIN → FULL CLEAN
-if(access.canSeeFullAnalysis){
+  // 🔓 PRO / ADMIN / INVESTOR
+  if(access.canSeeFullAnalysis || access.isInvestor){
 
-  console.log("🔓 FULL PRO ACCESS");
+    console.log("🔓 FULL ACCESS");
 
-  unlockUI();
-  unlockProUI();
+    unlockUI();
+unlockProUI();
 
-  // 🔥 RESET BLUR COMPLETO
-  document.querySelectorAll("*").forEach(el=>{
-    el.classList.remove("locked-blur","pro-blur","blurred");
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
-
-  // 🔥 👉 QUESTA È LA RIGA CHE MI HAI CHIESTO
-  document.querySelectorAll(".locked-section").forEach(el=>{
-    el.classList.remove("locked-section");
-  });
-
-  return;
-}
-
-// 🟡 INVESTOR → ACCESSO LIMITATO
+// 🔥 BLOCCA SOLO PER INVESTOR
 if(access.isInvestor){
-
-  console.log("🟡 INVESTOR LIMITED ACCESS");
-
-  unlockUI();
-
-  // 🔒 blocca elementi avanzati
-  document.querySelectorAll(`
-    #ai-insights,
-    #investment-ranking,
-    #investment-verdict
-  `).forEach(el=>{
-    if(!el) return;
-    el.classList.add("locked-blur");
-  });
-
-  return;
+  const cashflow = document.getElementById("cashflow-section");
+  if(cashflow){
+    cashflow.classList.add("locked-blur");
+  }
 }
+
+return;
+  }
 
   // 🔒 FREE USER
   console.log("🔒 APPLY LOCK");
@@ -1008,26 +983,22 @@ function renderMarketComparison(userRevenue, cityKey){
   const container = document.getElementById("market-comparison");
   if(!container) return;
 
-  // ================= RESET SICURO =================
-  container.innerHTML = "";
-  container.className = "kpi-grid";
-container.style.display = "";
-
-  // ================= SAFE DATA =================
-  const revenue   = window.safeNumber(userRevenue);
+  // 🔥 sicurezza numeri
+  const revenue = window.safeNumber(userRevenue);
   const marketAvg = 28500;
 
   const diff = revenue - marketAvg;
-
+  
   let diffPerc = marketAvg > 0
-    ? (diff / marketAvg) * 100
-    : 0;
+  ? (diff / marketAvg) * 100
+  : 0;
 
-  if(Math.abs(diffPerc) < 0.1 && diff !== 0){
-    diffPerc = diff > 0 ? 0.1 : -0.1;
-  }
+// 🔥 evita 0.0% fake (UX SaaS)
+if(Math.abs(diffPerc) < 0.1 && diff !== 0){
+  diffPerc = diff > 0 ? 0.1 : -0.1;
+}
 
-  diffPerc = diffPerc.toFixed(1);
+diffPerc = diffPerc.toFixed(1);
 
   const isPositive = diff >= 0;
 
@@ -1035,37 +1006,37 @@ container.style.display = "";
   const bgColor   = isPositive ? "#ecfdf5" : "#fef2f2";
   const borderCol = isPositive ? "#10b981" : "#ef4444";
 
-  // ================= CARD 1 =================
-  const card1 = document.createElement("div");
-  card1.className = "kpi-box";
-  card1.innerHTML = `
+  // 🔥 RESET IMPORTANTE (evita residui layout vecchi)
+  container.innerHTML = "";
+
+  // 🔥 KPI 1-2-3
+const kpi1 = `
+  <div class="kpi-box">
     <div class="kpi-label">
-      ${t("📊 Ricavi stimati","📊 Estimated revenue")}
+      ${t("📊 Ricavi","📊 Your revenue")}
     </div>
     <div class="kpi-value">
       ${formatCurrency(revenue)}
     </div>
-  `;
+  </div>
+`;
 
-  // ================= CARD 2 =================
-  const card2 = document.createElement("div");
-  card2.className = "kpi-box";
-  card2.innerHTML = `
+const kpi2 = `
+  <div class="kpi-box">
     <div class="kpi-label">
       ${t("🏙 Media mercato","🏙 Market average")}
     </div>
     <div class="kpi-value">
       ${formatCurrency(marketAvg)}
     </div>
-  `;
+  </div>
+`;
 
-  // ================= CARD 3 =================
-  const card3 = document.createElement("div");
-  card3.className = "kpi-box";
-  card3.style.background = bgColor;
-  card3.style.border = "1px solid " + borderCol;
-
-  card3.innerHTML = `
+const kpi3 = `
+  <div class="kpi-box" style="
+    background:${bgColor};
+    border:1px solid ${borderCol};
+  ">
     <div class="kpi-label">
       ${t("⚡ Performance","⚡ Performance")}
     </div>
@@ -1074,17 +1045,20 @@ container.style.display = "";
       ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
     </div>
 
-    <div class="kpi-sub">
+    <div style="
+      font-size:12px;
+      margin-top:4px;
+      color:#64748b;
+    ">
       ${isPositive
         ? t("Sopra la media","Above market")
         : t("Sotto la media","Below market")}
     </div>
-  `;
+  </div>
+`;
 
-  // ================= APPEND REALE (FIX CRITICO) =================
-  container.appendChild(card1);
-  container.appendChild(card2);
-  container.appendChild(card3);
+  // 🔥 INSERT DIRETTO (NO WRAPPER → FIX DEFINITIVO)
+  container.insertAdjacentHTML("beforeend", kpi1 + kpi2 + kpi3);
 
 }
 // ================= ROI VS MARKET =================
@@ -2065,35 +2039,6 @@ window.calculate = async function(force = false){
     return;
   }
 
-  // ===============================
-// 🚫 LIMIT SIMULAZIONI (FREE + INVESTOR)
-// ===============================
-window.simulationCount = window.simulationCount || 0;
-
-const plan = window.currentPlan || "free";
-
-let limit = 3; // free
-
-if(plan === "investor"){
-  limit = 10;
-}
-
-if(plan === "pro" || plan === "pro_yearly"){
-  limit = Infinity;
-}
-
-if(window.simulationCount >= limit){
-
-  console.log("⛔ Limite simulazioni raggiunto:", plan);
-
-  triggerUpgradeFlow({ action:"limit" });
-
-  return;
-}
-
-// registra simulazione
-window.simulationCount++;
-
   window.isCalculating = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
@@ -2586,9 +2531,7 @@ const lang = window.RB_LANG?.current || window.currentLang || "it";
 const tSafe = (it,en)=> lang==="it"?it:en;
 
 // 🔒 CHECK
-const access = window.getUserAccess();
-
-if(!access.canDownloadPDF){
+if(!hasPlan("pro")){
   showProUpgradeModal();
   return;
 }
