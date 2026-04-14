@@ -1499,21 +1499,15 @@ if(!isLogged){
 
   console.log("🔥 ROI:", roi);
 
-  // ================= PLAN =================
-  const access = window.getUserAccess?.() || {};
-const isPro = access.isPro;
-const isInvestor = access.isInvestor;
-const isLogged = access.isLogged;
+ // ================= PLAN =================
+const access = window.getUserAccess?.() || {};
 
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+const isPro = !!access.isPro;
+const isInvestor = !!access.isInvestor;
+const isLogged = !!access.isLogged;
 
-  const isInvestor =
-    plan === "investor";
-
-  const isFreeUser = isLogged && !isPro && !isInvestor;
-  const isGuest = !isLogged;
+const isFreeUser = isLogged && !isPro && !isInvestor;
+const isGuest = !isLogged;
 
   // ================= ELEMENTI =================
   const elRoi   = document.getElementById("qr_roi");
@@ -1648,19 +1642,13 @@ const isLogged = access.isLogged;
 function renderUpgradeCTA(roi){
 
   const access = window.getUserAccess?.() || {};
-const isPro = access.isPro;
-const isInvestor = access.isInvestor;
-const isLogged = access.isLogged;
 
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+const isPro = !!access.isPro;
+const isInvestor = !!access.isInvestor;
+const isLogged = !!access.isLogged;
 
-  const isInvestor =
-    plan === "investor";
-
-  const isFreeUser = isLogged && !isPro && !isInvestor;
-  const isGuest = !isLogged;
+const isFreeUser = isLogged && !isPro && !isInvestor;
+const isGuest = !isLogged;
 
   // 🔥 PRO NON DEVE VEDERE NULLA
   if(isPro) return;
@@ -1856,10 +1844,8 @@ const isPro = access.isPro;
 const isInvestor = access.isInvestor;
 const isLogged = access.isLogged;
 
-    const isPro =
-  plan === "pro" ||
-  plan === "pro_yearly" ||
-  plan === "investor";
+    const access = window.getUserAccess?.() || {};
+const isPro = access.isPro || access.isInvestor;
 
     if(!isPro) return;
 
