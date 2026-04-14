@@ -1685,7 +1685,7 @@ const access = window.getUserAccess();
 
 btn.style.display = access.canDownloadPDF ? "inline-block" : "none";
 
-console.log("PDF visibility:", window.currentPlan);
+console.log("PDF visibility:", window.getUserAccess());
 
 }
 
@@ -2256,7 +2256,7 @@ if(revenueHome){
       }
     },200);
 
-    if(window.currentPlan === "investor"){
+    if(window.getUserAccess().isInvestor){
   setTimeout(()=>{
     showProUpgradeModal();
   }, 4000);
@@ -3808,8 +3808,12 @@ window.startPlanPurchase = function(plan){
   // =========================
   // 🔥 BLOCCO SE GIÀ ATTIVO
   // =========================
-  if(window.currentPlan === plan){
-    alert(
+  const access = window.getUserAccess();
+
+if(
+  (plan === "pro" && access.isPro) ||
+  (plan === "investor" && access.isInvestor)
+){alert(
       t(
         "Hai già questo piano attivo",
         "You already have this plan"
@@ -3821,7 +3825,7 @@ window.startPlanPurchase = function(plan){
   // =========================
   // 🔥 LOGICA GERARCHIA
   // =========================
-  if(plan === "investor" && window.currentPlan === "pro"){
+  if(plan === "investor" && window.getUserAccess().isPro){
     alert(
       t(
         "Hai già un piano superiore",
