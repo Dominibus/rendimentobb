@@ -166,10 +166,14 @@ function waitPlanAndRender(user){
 
     attempts++;
 
-    const access = window.getUserAccess();
+    let access = null;
+
+if(typeof window.getUserAccess === "function"){
+  access = window.getUserAccess();
+}
 
 const ready =
-  access !== undefined &&
+  access &&
   typeof access === "object";
 
     if(ready || attempts > 20){
@@ -180,13 +184,15 @@ const ready =
   renderUser(user);
 
 // 🔒 SBLOCCA SOLO SE PRO
-const access = window.getUserAccess();
+const access = (typeof window.getUserAccess === "function")
+  ? window.getUserAccess()
+  : { isPro:false, isInvestor:false, hasPlan:false };
 
 const isAdmin =
   (window.userRole || "").toLowerCase() === "admin" ||
   window.currentUser?.email === "rendimentobb@gmail.com";
 
-const isPro = isAdmin || access.hasPlan;
+const isPro = isAdmin || access.isPro;
 
 if(isPro){
   unlockUI();
@@ -307,9 +313,10 @@ const isPaid = access.hasPlan;
          id="dashboard-link">
          Dashboard
 
-         ${isInvestor ? `<span class="badge-pro">INVESTOR</span>` : ""}
-         ${isPro ? `<span class="badge-pro">PRO</span>` : ""}
+         ${isAdmin ? `<span class="badge-pro">ADMIN</span>` : ""}
          ${(!isPaid) ? `<span class="badge-pro">LOCK</span>` : ""}
+         ${(isPaid && isInvestor) ? `<span class="badge-pro">INVESTOR</span>` : ""}
+         ${(isPaid && isPro) ? `<span class="badge-pro">PRO</span>` : ""}
       </a>
     `;
 
