@@ -1534,14 +1534,18 @@ window.quickROI = function(){
 
     elRoi.innerText = roi ? roi.toFixed(1)+"%" : "—";
 
-    // 🎨 COLOR LOGIC (tipo fintech)
+    // 🎨 COLOR LOGIC (fintech style)
     if(roi > 15){
-      elRoi.style.color = "#10b981"; // verde forte
+      elRoi.style.color = "#10b981";
     }else if(roi > 8){
-      elRoi.style.color = "#f59e0b"; // giallo
+      elRoi.style.color = "#f59e0b";
     }else{
-      elRoi.style.color = "#ef4444"; // rosso
+      elRoi.style.color = "#ef4444";
     }
+
+    // 💎 MICRO ANIMAZIONE (effetto SaaS)
+    elRoi.style.transform = "scale(1.05)";
+    setTimeout(()=> elRoi.style.transform = "scale(1)", 200);
   }
 
   // ================= SHOCK TRIGGER =================
@@ -1568,7 +1572,7 @@ window.quickROI = function(){
   }
   else if(isInvestor){
 
-    // 🟡 FRUSTRATION STRATEGICA
+    // 🟡 FRUSTRAZIONE → UPGRADE
     if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
     if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
     if(elBreak)  elBreak.innerText = "🔒";
@@ -1577,16 +1581,16 @@ window.quickROI = function(){
   }
   else if(isFreeUser){
 
-    // 🔵 DUBBIO → conversione
-    if(elProfit) elProfit.innerText = "⚠️ Dato incompleto";
-    if(elMonth)  elMonth.innerText = "⚠️ Dato incompleto";
+    // 🔵 DUBBIO FORTE
+    if(elProfit) elProfit.innerText = "⚠️ Non affidabile";
+    if(elMonth)  elMonth.innerText = "⚠️ Non affidabile";
     if(elBreak)  elBreak.innerText = "🔒";
-    if(elRev)    elRev.innerText = "⚠️ Dato incompleto";
+    if(elRev)    elRev.innerText = "⚠️ Non affidabile";
 
   }
   else{
 
-    // ⚫ GUEST → LOCK TOTALE
+    // ⚫ GUEST → LOCK
     if(elProfit) elProfit.innerText = "🔒";
     if(elMonth)  elMonth.innerText = "🔒";
     if(elBreak)  elBreak.innerText = "🔒";
@@ -1632,11 +1636,21 @@ window.quickROI = function(){
     renderUpgradeCTA(roi);
   }
 
+  // ================= CONVERSION BOOST =================
+  if(!isPro && roi > 12){
+
+    setTimeout(()=>{
+      if(typeof renderUpgradeCTA === "function"){
+        renderUpgradeCTA(roi);
+      }
+    }, 1200);
+
+  }
+
   // ================= LANG =================
   window.RB_LANG?.apply?.();
 
 };
-
 // ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
