@@ -1065,7 +1065,9 @@ function applyPaywall(){
   ];
 
   // 🔥 PRO USER → SBLOCCA TUTTO
-  if(window.isProUser()){
+  const access = window.getUserAccess();
+
+if(access.isPro || access.isInvestor){
 
     console.log("🚀 PRO attivo → sblocco UI");
 
