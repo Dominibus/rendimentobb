@@ -32,11 +32,7 @@ function applyAccessUI(){
     document.body.classList.add("is-pro");
 
     // ❌ NASCONDI CTA FREE
-    document.querySelectorAll(`
-      .upgrade-box,
-      .free-only,
-      [data-paywall]
-    `).forEach(el => el.remove());
+    el.style.display = "none";
 
     // 🔓 SBLOCCA CONTENUTI
     document.querySelectorAll(`
@@ -213,3 +209,12 @@ setTimeout(() => {
   }
 
 }, 800);
+
+// 🔥 INIT IMMEDIATO (CRITICO TOOL + HEADER)
+document.addEventListener("DOMContentLoaded", () => {
+
+  console.log("⚡ AccessControl DOM init");
+
+  window.initAccessControl();
+
+});
