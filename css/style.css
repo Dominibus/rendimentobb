@@ -13155,3 +13155,16 @@ body.menu-open{
     grid-template-columns:1fr;
   }
 }
+/* =====================================
+📦 RESULTS CARD ALIGN FIX
+===================================== */
+
+.results-card{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+}
+
+.results-card > *{
+  width:100%;
+}
