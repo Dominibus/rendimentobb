@@ -13127,25 +13127,29 @@ body.menu-open{
 }
 
 /* =====================================
-📊 MARKET COMPARISON FIX (DESKTOP)
+📊 MARKET COMPARISON – FULL WIDTH FIX
 ===================================== */
 
 #market-comparison{
+  width:100%;
+  max-width:100%;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:16px;
-  width:100%;
 }
 
+/* CARD INTERNE */
 #market-comparison > div{
-  background:white;
-  padding:16px;
-  border-radius:12px;
-  text-align:center;
-  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  width:100%;
+  min-width:0;
 }
 
-/* MOBILE FIX */
+/* 🔥 TESTO NON SI ROMPE */
+#market-comparison *{
+  white-space:normal;
+}
+
+/* MOBILE */
 @media(max-width:768px){
   #market-comparison{
     grid-template-columns:1fr;
