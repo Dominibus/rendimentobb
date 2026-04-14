@@ -13033,49 +13033,104 @@ body.menu-open{
   border:none;
 }
 
-/* 🎯 HOME – FIX METRIC CARD (PRO CLEAN) */
+/* =====================================
+🚀 HOME METRICS – SILICON VALLEY STYLE
+===================================== */
 
 .investment-metrics{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:20px;
+  gap:18px;
+  margin-top:25px;
 }
 
+/* 🎯 CARD BASE */
 .metric-card{
   background:#ffffff;
   border:1px solid #e2e8f0;
-  border-radius:14px;
+  border-radius:16px;
 
-  padding:14px;
-  text-align:center;
+  padding:18px;
 
   display:flex;
   flex-direction:column;
   justify-content:center;
+  align-items:center;
 
-  min-height:85px;
+  min-height:100px;
+
+  /* 💎 effetto SaaS */
+  box-shadow:0 10px 25px rgba(2,6,23,0.06);
+
+  transition:all .2s ease;
 }
 
-/* 🔥 LABEL */
+/* 🔥 HOVER MICRO UX */
+.metric-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px rgba(2,6,23,0.08);
+}
+
+/* 🔤 LABEL */
 .metric-card span{
   font-size:12px;
   color:#64748b;
-  margin-bottom:6px;
+  margin-bottom:8px;
 }
 
-/* 🔥 NUMERO */
+/* 🔢 NUMERO */
 .metric-card strong{
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
   color:#0f172a;
-
-  opacity:1 !important; /* 💣 fix numeri sbiaditi */
+  letter-spacing:-0.3px;
+  opacity:1 !important;
 }
 
-/* 🎯 BOX ROI (più importante) */
+/* =====================
+🔥 ROI CARD (MAIN)
+===================== */
+
 .metric-card.roi-highlight{
   grid-column:span 2;
+
+  background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
   border:2px solid #10b981;
-  background:#ecfdf5;
+
+  padding:22px;
+}
+
+/* NUMERO ROI */
+.metric-card.roi-highlight strong{
+  font-size:28px;
+  color:#059669;
+}
+
+/* =====================
+📱 MOBILE FIX
+===================== */
+
+@media (max-width:768px){
+
+  .investment-metrics{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .metric-card.roi-highlight{
+    grid-column:span 1;
+  }
+
+  .metric-card{
+    min-height:90px;
+    padding:16px;
+  }
+
+  .metric-card strong{
+    font-size:20px;
+  }
+
+  .metric-card.roi-highlight strong{
+    font-size:24px;
+  }
 }
