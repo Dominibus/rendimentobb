@@ -13233,3 +13233,74 @@ body.menu-open{
   }
 
 }
+
+/* =====================================
+🔥 PRICING FIX DEFINITIVO (DESKTOP + MOBILE)
+===================================== */
+
+/* GRID PERFETTA */
+.pricing-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr)) !important;
+  gap:30px;
+  margin-top:40px;
+  align-items:stretch;
+  justify-items:center;
+}
+
+/* CARD UNIFORMI */
+.plan-card{
+  width:100%;
+  max-width:340px;
+
+  display:flex;
+  flex-direction:column;
+
+  padding:30px 26px;
+  border-radius:20px;
+
+  height:100%;
+}
+
+/* CONTENUTO INTERNO */
+.plan-card ul{
+  flex:1;
+}
+
+/* 🔥 FIX BOTTONE (QUESTO È IL BUG) */
+.plan-card .btn{
+  width:100%;
+  margin-top:20px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  padding:14px 16px;
+
+  font-size:14px;
+  white-space:nowrap; /* 🔥 evita taglio */
+}
+
+/* 🔥 PRO CARD CENTRATA */
+.plan-card.featured{
+  transform:scale(1.05);
+  z-index:2;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+  .pricing-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .plan-card{
+    max-width:100%;
+  }
+
+  .plan-card.featured{
+    transform:none;
+  }
+
+}
