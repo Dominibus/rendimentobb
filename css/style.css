@@ -13269,3 +13269,23 @@ body.menu-open{
     grid-template-columns:1fr !important;
   }
 }
+
+/* =====================================
+🔥 FIX GRID MARKET (FORZA ASSOLUTA)
+===================================== */
+
+#market-comparison{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:22px !important;
+
+  width:100% !important;
+  max-width:1000px !important;
+  margin:0 auto !important;
+}
+
+/* ❌ ELIMINA GRID INTERNI */
+#market-comparison > div{
+  display:block !important;
+  width:100% !important;
+}
