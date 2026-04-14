@@ -3088,19 +3088,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("✅ Analyze button bind OK");
 
-    btn.addEventListener("click", () => {
+   btn.addEventListener("click", () => {
 
-      if(typeof window.handleAnalyzeClick === "function"){
-        window.handleAnalyzeClick();
-      }else{
-        console.error("❌ handleAnalyzeClick NON trovata");
-      }
+  console.log("🔥 ANALYZE CLICK");
 
-    });
+  // 🔥 se user NON pronto → fallback diretto
+  if(!window.currentUser){
 
-  }else{
-    console.warn("⚠️ analyze-btn NON trovato");
+    console.warn("⚠️ User non pronto → fallback calculate");
+
+    calculate(true);
+    return;
   }
+
+  // 🔥 se esiste handler → usa UX premium
+  if(typeof window.handleAnalyzeClick === "function"){
+    window.handleAnalyzeClick();
+  }else{
+    console.warn("⚠️ handler mancante → fallback");
+    console.log("👤 USER:", window.currentUser);
+    calculate(true);
+  }
+     
 
 });
 
