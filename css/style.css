@@ -13134,3 +13134,29 @@ body.menu-open{
     font-size:24px;
   }
 }
+/* 🎯 LAYOUT PRO HOME */
+
+.investment-panel{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:25px;
+  align-items:start;
+}
+
+/* colonna destra */
+.investment-score,
+.investment-metrics{
+  width:100%;
+}
+
+/* KPI sotto score */
+.investment-score{
+  margin-bottom:15px;
+}
+
+/* mobile */
+@media(max-width:768px){
+  .investment-panel{
+    grid-template-columns:1fr;
+  }
+}
