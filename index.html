@@ -1544,7 +1544,9 @@ window.quickROI = function(){
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
   if(overlay){
-    overlay.style.display = isPro ? "none" : "flex";
+    setTimeout(()=>{
+  overlay.style.display = isPro ? "none" : "flex";
+}, 800);
   }
 
   // ================= PSICOLOGIA =================
