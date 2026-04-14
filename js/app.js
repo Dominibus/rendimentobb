@@ -3068,35 +3068,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("🚀 App init");
 
-  // ===============================
-  // MUTUI → TOOL SYNC
-  // ===============================
-
   applySelectedMortgage();
-
-  // ===============================
-  // CHECK RATE UPDATE (se esiste)
-  // ===============================
 
   if(typeof checkMortgageRateUpdate === "function"){
     checkMortgageRateUpdate();
   }
 
-  // ===============================
-  // AUTO CITY REDIRECT (se esiste)
-  // ===============================
-
   if(typeof handleAutoCityRedirect === "function"){
     handleAutoCityRedirect();
   }
 
-});
-
-  // ======================================
+  // ===============================
+  // 🔥 FIX ANALYZE BUTTON
+  // ===============================
 
   const btn = document.getElementById("analyze-btn");
 
   if(btn){
+
+    console.log("✅ Analyze button bind OK");
+
     btn.addEventListener("click", () => {
 
       if(typeof window.handleAnalyzeClick === "function"){
@@ -3106,7 +3097,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
     });
+
+  }else{
+    console.warn("⚠️ analyze-btn NON trovato");
   }
+
+});
 
 // ================= FIREBASE SYNC FIX (CRITICO) =================
 
