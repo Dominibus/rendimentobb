@@ -481,14 +481,34 @@ Non include rischio, mutuo e costi reali
 
 </div>
 
-<!-- 🔒 BLOCCATI / 🔓 SBLOCCATI DINAMICAMENTE -->
-<div class="metric-card pro-blur">
+<!-- 👁 VISIBILE (TEASER INTELLIGENTE) -->
+<div class="metric-card">
   <span data-it="Profitto annuo" data-en="Annual profit">
     Profitto annuo
   </span>
-  <strong id="qr_profit">🔒</strong>
+  <strong id="qr_profit">—</strong>
+
+  <div style="margin-top:6px;font-size:12px;color:#64748b;text-align:center"
+  data-it="Stima parziale"
+  data-en="Partial estimate">
+  Stima parziale
+  </div>
 </div>
 
+<div class="metric-card">
+  <span data-it="Ricavo annuo" data-en="Annual revenue">
+    Ricavo annuo
+  </span>
+  <strong id="qr_rev">—</strong>
+
+  <div style="margin-top:6px;font-size:12px;color:#64748b;text-align:center"
+  data-it="Dati non completi"
+  data-en="Incomplete data">
+  Dati non completi
+  </div>
+</div>
+
+<!-- 🔒 BLOCCATI -->
 <div class="metric-card pro-blur">
   <span data-it="Profitto mensile" data-en="Monthly profit">
     Profitto mensile
@@ -497,45 +517,41 @@ Non include rischio, mutuo e costi reali
 </div>
 
 <div class="metric-card pro-blur">
-  <span data-it="Break-even" data-en="Break-even">
-    Break-even
+  <span data-it="Break-even reale" data-en="Real break-even">
+    Break-even reale
   </span>
   <strong id="qr_break">🔒</strong>
 </div>
 
-<div class="metric-card pro-blur">
-  <span data-it="Ricavo annuo" data-en="Annual revenue">
-    Ricavo annuo
-  </span>
-  <strong id="qr_rev">🔒</strong>
-</div>
-
-<!-- 🔥 OVERLAY SOLO SUI DATI IMPORTANTI -->
+<!-- 🔥 OVERLAY INTELLIGENTE -->
 <div class="home-blur-overlay">
 
 <div class="home-overlay-content">
 
 <div class="overlay-title"
-data-it="⚠️ Stai rischiando soldi reali"
-data-en="⚠️ You are risking real money">
+data-it="⚠️ Stai prendendo una decisione incompleta"
+data-en="⚠️ You are making an incomplete decision">
+⚠️ Stai prendendo una decisione incompleta
 </div>
 
 <div class="overlay-text"
-data-it="Questo investimento può sembrare profittevole… ma senza analisi completa potresti perdere migliaia di euro"
-data-en="This investment may look profitable… but without full analysis you may lose thousands of euros">
+data-it="Il ROI può sembrare positivo… ma senza rischio, mutuo e costi reali potresti perdere migliaia di euro"
+data-en="ROI may look positive… but without risk, mortgage and real costs you may lose thousands">
+Il ROI può sembrare positivo… ma senza analisi completa potresti perdere migliaia di euro
 </div>
 
 <div style="margin-top:10px;font-size:13px;opacity:0.85"
 data-it="Il 72% degli investitori sbaglia proprio qui"
 data-en="72% of investors fail at this exact point">
+Il 72% degli investitori sbaglia proprio qui
 </div>
 
 <button onclick="startPlanPurchase('pro')" class="btn btn-primary" style="margin-top:14px">
 
 <span
-data-it="🔓 Sblocca analisi reale"
-data-en="🔓 Unlock real analysis">
-🔓 Sblocca analisi reale
+data-it="🔓 Sblocca analisi completa"
+data-en="🔓 Unlock full analysis">
+🔓 Sblocca analisi completa
 </span>
 
 </button>
@@ -1135,7 +1151,10 @@ data-en="€19 / month">
 
 <li data-it="✔ ROI avanzato" data-en="✔ Advanced ROI analysis">✔ ROI avanzato</li>
 
-<li data-it="✔ Dashboard base investimenti" data-en="✔ Basic investment dashboard">✔ Dashboard base investimenti</li>
+<li data-it="✔ Dashboard limitata (no report e PDF)"
+data-en="✔ Limited dashboard (no reports & PDF)">
+✔ Dashboard limitata (no report e PDF)
+</li>
 
 <li data-it="✔ Analisi profitto reale (limitata)" data-en="✔ Real profit analysis (limited)">✔ Analisi profitto reale (limitata)</li>
 
@@ -1182,7 +1201,10 @@ data-en="€29 / month">
 
 <ul>
 
-<li data-it="✔ Dashboard completa investimenti" data-en="✔ Full investment dashboard">✔ Dashboard completa investimenti</li>
+<li data-it="✔ Dashboard completa + report e PDF"
+data-en="✔ Full dashboard + reports & PDF">
+✔ Dashboard completa + report e PDF
+</li>
 
 <li data-it="✔ Profitto reale e ROI avanzato" data-en="✔ Real profit & advanced ROI">✔ Profitto reale e ROI avanzato</li>
 
@@ -1250,10 +1272,6 @@ Solo €16/mese
 ✔ Dashboard + Report PDF inclusi
 </li> 
 
-<li data-it="✔ Dashboard + Report PDF inclusi" data-en="✔ Dashboard + PDF reports included">
-✔ Dashboard + Report PDF inclusi
-</li> 
- 
 </ul>
 
 <button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary"
@@ -1515,23 +1533,29 @@ window.quickROI = function(){
   }
   else if(isInvestor){
 
-    // 🟡 INVESTOR → parziale (spinta a PRO)
-    if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
-    if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
-    if(elBreak)  elBreak.innerText = "🔒";
-    if(elRev)    elRev.innerText = formatCurrency(revenue);
+  // 🟡 INVESTOR → limitato (NO dashboard completa)
 
-  }
-  else if(isFreeUser){
+  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
 
-    // 🔵 FREE → teaser
-    if(elProfit) elProfit.innerText = "≈ " + formatCurrency(netAnnual * 0.7);
-    if(elMonth)  elMonth.innerText = "≈ " + formatCurrency((netAnnual/12) * 0.7);
-    if(elBreak)  elBreak.innerText = "≈ " + breakEven.toFixed(0)+" anni";
-    if(elRev)    elRev.innerText = "≈ " + formatCurrency(revenue * 0.6);
+  if(elMonth)  elMonth.innerText = "🔒";
 
-  }
-  else{
+  if(elBreak)  elBreak.innerText = "🔒";
+
+  if(elRev)    elRev.innerText = formatCurrency(revenue);
+
+}else if(isFreeUser){
+
+  // 🔵 FREE → teaser intelligente (mostra valore ma ridotto)
+
+  if(elProfit) elProfit.innerText = "≈ " + formatCurrency(netAnnual * 0.7);
+
+  if(elMonth)  elMonth.innerText = "🔒";
+
+  if(elBreak)  elBreak.innerText = "🔒";
+
+  if(elRev)    elRev.innerText = "≈ " + formatCurrency(revenue * 0.7);
+
+}else{
 
     // ⚫ GUEST → tutto lock
     if(elProfit) elProfit.innerText = "🔒";
