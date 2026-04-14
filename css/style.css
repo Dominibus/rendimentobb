@@ -5941,50 +5941,54 @@ body.pro-user #profit-monthly::after{
     margin:0 auto;
   }
 
-  /* ===================================== */
-  /* 💣 FIX DEFINITIVO PERFORMANCE (IL TUO BUG) */
-  /* ===================================== */
+ /* ===================================== */
+/* 💣 FIX DEFINITIVO PERFORMANCE (CORRETTO) */
+/* ===================================== */
 
-  #market-comparison{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
-    width:100%;
-    max-width:1000px;
-    margin:0 auto;
-  }
-
-  /* 🔥 FORZA IL CONTENUTO (ANCHE SE GENERATO DA JS) */
-  #market-comparison .kpi-box,
-  #market-comparison .metric,
-  #market-comparison div{
-    width:100% !important;
-    max-width:none !important;
-    text-align:center;
-  }
-
-  /* 🔥 BENCHMARK */
-  #market-benchmark{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
-    justify-items:center;
-    text-align:center;
-    max-width:1000px;
-    margin:0 auto;
-  }
-
-  /* 🔥 PERFORMANCE WRAPPER */
-  #market-performance,
-  .performance-card{
-    width:100%;
-    max-width:1000px;
-    margin:0 auto;
-    text-align:center;
-  }
-
+#market-comparison{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
 }
 
+/* ✅ SOLO LE CARD (NON I DIV INTERNI) */
+#market-comparison .kpi-box{
+  width:100% !important;
+  text-align:center;
+}
+
+/* ❌ NON TOCCARE PIÙ I DIV GENERICI */
+/* ELIMINATO: #market-comparison div */
+
+/* 🔥 BENCHMARK */
+#market-benchmark{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+  justify-items:center;
+  text-align:center;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+/* 🔥 PERFORMANCE WRAPPER */
+#market-performance,
+.performance-card{
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+  text-align:center;
+}
+
+/* 📱 MOBILE */
+@media(max-width:768px){
+  #market-comparison{
+    grid-template-columns:1fr;
+  }
+}
 /* ============================= */
 /* KPI CARD (DESIGN SYSTEM) */
 /* ============================= */
