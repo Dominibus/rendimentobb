@@ -13119,82 +13119,93 @@ body.menu-open{
   }
 }
 
-/* KPI GRID SAFE */
+/* =====================================
+🔥 MARKET COMPARISON FIX DEFINITIVO
+===================================== */
+
+/* FORZA GRID (FIX BUG LAYOUT) */
 #market-comparison{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:22px !important;
+
   width:100%;
-  max-width:100%;
+  max-width:1000px;
+  margin:0 auto;
 }
 
-/* CARD SaaS */
-.kpi-card{
+/* FORZA CARD INTERNE */
+#market-comparison .kpi-box{
+  display:block !important;
+  width:100% !important;
+  text-align:center;
+}
+
+/* =====================================
+📦 KPI CARD DESIGN SYSTEM
+===================================== */
+
+.kpi-box{
   background:white;
   border-radius:16px;
-  padding:18px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.05);
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.06);
+
+  width:100%;
   text-align:center;
-  transition:all .2s ease;
+
+  transition:all .25s ease;
+  animation:fadeInBlur .4s ease;
 }
 
-.kpi-card:hover{
-  transform:translateY(-2px);
+.kpi-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 25px 60px rgba(0,0,0,0.10);
 }
 
 /* LABEL */
 .kpi-label{
-  font-size:13px;
+  font-size:12px;
   color:#64748b;
   margin-bottom:6px;
+  letter-spacing:0.3px;
 }
 
 /* VALUE */
 .kpi-value{
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
+  color:#0f172a;
 }
 
-/* SUB */
+/* SUB TEXT */
 .kpi-sub{
   font-size:12px;
   margin-top:4px;
   color:#64748b;
 }
 
-/* COLORI */
-.kpi-card.up .kpi-value{
+/* COLORI PERFORMANCE */
+.kpi-box.up .kpi-value{
   color:#10b981;
 }
 
-.kpi-card.down .kpi-value{
+.kpi-box.down .kpi-value{
   color:#ef4444;
 }
 
-/* MOBILE FIX */
+/* =====================================
+📱 MOBILE FIX
+===================================== */
+
 @media(max-width:768px){
+
   #market-comparison{
     grid-template-columns:1fr !important;
   }
-}
 
-/* ============================= */
-/* 🔥 FIX SOLO MARKET COMPARISON */
-/* ============================= */
-
-.market-kpi-wrapper{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px;
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-}
-
-.market-kpi-wrapper .kpi-box{
-  width:100%;
-  text-align:center;
-}
-
-@media (max-width:768px){
-  .market-kpi-wrapper{
-    grid-template-columns:1fr;
+  .kpi-box{
+    padding:16px;
   }
+
 }
