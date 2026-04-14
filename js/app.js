@@ -3092,6 +3092,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+  // ======================================
+
+  const btn = document.getElementById("analyze-btn");
+
+  if(btn){
+    btn.addEventListener("click", () => {
+
+      if(typeof window.handleAnalyzeClick === "function"){
+        window.handleAnalyzeClick();
+      }else{
+        console.error("❌ handleAnalyzeClick NON trovata");
+      }
+
+    });
+  }
+
+});
+
 // ================= FIREBASE SYNC FIX (CRITICO) =================
 
 document.addEventListener("rb_auth_ready", () => {
@@ -3665,7 +3683,7 @@ window.handleAnalyzeClick = function(){
   // =========================
   window.userHasClicked = true;
 
-  const btn = document.querySelector(".btn-main");
+  const btn = document.getElementById("analyze-btn");
 
   if(btn){
     const originalText = btn.innerText;
