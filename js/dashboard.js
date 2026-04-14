@@ -1284,22 +1284,50 @@ if(window.currentPlan === "investor"){
     await loadDashboard();
 
 // 🔥 SOLO PRO SBLOCCA
-if(window.currentPlan === "pro" || window.currentPlan === "pro_yearly"){
-  console.log("🔥 PRO USER → UNLOCK HARD");
+const plan = String(window.currentPlan || "").toLowerCase();
+
+const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly";
+
+const isInvestor =
+  plan === "investor";
+
+// ================= PRO =================
+if(isPro){
+
+  console.log("🔥 PRO → FULL UNLOCK");
+
   unlockProContent();
-}else{
 
-  if(!window.proOverlayShown){
+  // 🔥 BLOCCA QUALSIASI LOCK FUTURO
+  document.body.classList.add("is-pro");
 
-    window.proOverlayShown = true;
+  return; // 💣 BLOCCA FLUSSO (IMPORTANTISSIMO)
+}
 
-    setTimeout(()=>{
-      if(typeof showProOverlay === "function"){
-        showProOverlay();
-      }
-    }, 1200);
+// ================= INVESTOR =================
+if(isInvestor){
 
-  }
+  console.log("👀 INVESTOR → PARTIAL ACCESS");
+
+  // NON bloccare tutto!
+  // SOLO preview leggera
+  lockInvestorPreview();
+
+  return;
+}
+
+// ================= FREE =================
+if(!window.proOverlayShown){
+
+  window.proOverlayShown = true;
+
+  setTimeout(()=>{
+    if(typeof showProOverlay === "function"){
+      showProOverlay();
+    }
+  }, 1200);
 
 }
 
@@ -2535,11 +2563,9 @@ function renderROIMarketComparison(count,totalROI){
 function lockInvestorPreview(){
 
   const elementsToBlur = [
-    "roi-optimizer",
-    "investment-ranking",
-    "roi-target-calculator",
-    "revenue-simulator"
-  ];
+  "roi-target-calculator",
+  "revenue-simulator"
+];
 
   elementsToBlur.forEach(id=>{
     const el = document.getElementById(id);
