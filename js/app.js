@@ -826,13 +826,21 @@ function applyAccessControl(){
 
   const access = window.getUserAccess();
 
-  // 🔓 PRO / ADMIN / INVESTOR
+// 🔓 PRO / ADMIN → FULL CLEAN
 if(access.canSeeFullAnalysis){
 
   console.log("🔓 FULL PRO ACCESS");
 
   unlockUI();
   unlockProUI();
+
+  // 🔥 RESET TOTALE (QUESTO TI MANCAVA)
+  document.querySelectorAll("*").forEach(el=>{
+    el.classList.remove("locked-blur","pro-blur","blurred");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
 
   return;
 }
