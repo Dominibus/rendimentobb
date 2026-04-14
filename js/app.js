@@ -827,23 +827,35 @@ function applyAccessControl(){
   const access = window.getUserAccess();
 
   // 🔓 PRO / ADMIN / INVESTOR
-  if(access.canSeeFullAnalysis || access.isInvestor){
+if(access.canSeeFullAnalysis){
 
-    console.log("🔓 FULL ACCESS");
+  console.log("🔓 FULL PRO ACCESS");
 
-    unlockUI();
-unlockProUI();
+  unlockUI();
+  unlockProUI();
 
-// 🔥 BLOCCA SOLO PER INVESTOR
-if(access.isInvestor){
-  const cashflow = document.getElementById("cashflow-section");
-  if(cashflow){
-    cashflow.classList.add("locked-blur");
-  }
+  return;
 }
 
-return;
-  }
+// 🟡 INVESTOR → ACCESSO LIMITATO
+if(access.isInvestor){
+
+  console.log("🟡 INVESTOR LIMITED ACCESS");
+
+  unlockUI();
+
+  // 🔒 blocca elementi avanzati
+  document.querySelectorAll(`
+    #ai-insights,
+    #investment-ranking,
+    #investment-verdict
+  `).forEach(el=>{
+    if(!el) return;
+    el.classList.add("locked-blur");
+  });
+
+  return;
+}
 
   // 🔒 FREE USER
   console.log("🔒 APPLY LOCK");
@@ -2039,6 +2051,35 @@ window.calculate = async function(force = false){
     return;
   }
 
+  // ===============================
+// 🚫 LIMIT SIMULAZIONI (FREE + INVESTOR)
+// ===============================
+window.simulationCount = window.simulationCount || 0;
+
+const plan = window.currentPlan || "free";
+
+let limit = 3; // free
+
+if(plan === "investor"){
+  limit = 10;
+}
+
+if(plan === "pro" || plan === "pro_yearly"){
+  limit = Infinity;
+}
+
+if(window.simulationCount >= limit){
+
+  console.log("⛔ Limite simulazioni raggiunto:", plan);
+
+  triggerUpgradeFlow({ action:"limit" });
+
+  return;
+}
+
+// registra simulazione
+window.simulationCount++;
+
   window.isCalculating = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
@@ -2531,7 +2572,9 @@ const lang = window.RB_LANG?.current || window.currentLang || "it";
 const tSafe = (it,en)=> lang==="it"?it:en;
 
 // 🔒 CHECK
-if(!hasPlan("pro")){
+const access = window.getUserAccess();
+
+if(!access.canDownloadPDF){
   showProUpgradeModal();
   return;
 }
