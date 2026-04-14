@@ -13109,9 +13109,8 @@ body.menu-open{
 }
 
 /* =====================================
-✨ ANIMAZIONE FADE (PREMIUM FEEL)
+✨ ANIMAZIONE
 ===================================== */
-
 @keyframes fadeInBlur{
   from{
     opacity:0;
@@ -13124,30 +13123,46 @@ body.menu-open{
 }
 
 /* =====================================
-🔥 MARKET COMPARISON – FIX DEFINITIVO
+🔥 KPI GRID SYSTEM (UNICO – GLOBALE)
 ===================================== */
 
-/* CONTAINER GRID (FORZATO) */
-#market-comparison{
-  display:grid !important;
-  grid-template-columns:repeat(3, minmax(0,1fr)) !important;
-  gap:20px !important;
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:22px;
 
   width:100%;
   max-width:1000px;
-  margin:20px auto 0 auto;
+  margin:0 auto;
 
   align-items:stretch;
 }
 
-/* RESET QUALSIASI STILE INTERNO STRANO */
+/* MOBILE */
+@media(max-width:768px){
+  .kpi-grid{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+}
+
+/* =====================================
+🔥 MARKET COMPARISON (FIX VERO)
+===================================== */
+
+/* ⚠️ usa SOLO kpi-grid */
+#market-comparison{
+  margin-top:20px;
+}
+
+/* 🔥 RIMUOVE QUALSIASI CASINO INTERNO */
 #market-comparison > *{
-  width:100% !important;
+  width:100%;
   min-width:0;
 }
 
 /* =====================================
-📦 KPI CARD – DESIGN SYSTEM
+📦 KPI CARD
 ===================================== */
 
 .kpi-box{
@@ -13161,13 +13176,13 @@ body.menu-open{
 
   box-shadow:0 10px 30px rgba(2,6,23,0.06);
 
-  transition:all .25s ease;
-  animation:fadeInBlur .4s ease;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+
+  transition:all .25s ease;
+  animation:fadeInBlur .4s ease;
 }
 
 /* HOVER */
@@ -13183,7 +13198,6 @@ body.menu-open{
 .kpi-label{
   font-size:12px;
   color:#64748b;
-
   margin-bottom:6px;
   letter-spacing:0.3px;
 }
@@ -13196,7 +13210,6 @@ body.menu-open{
   font-size:22px;
   font-weight:700;
   color:#0f172a;
-
   line-height:1.2;
 }
 
@@ -13220,123 +13233,4 @@ body.menu-open{
 
 .kpi-box.down .kpi-value{
   color:#ef4444;
-}
-
-/* =====================================
-📱 MOBILE FIX
-===================================== */
-
-@media(max-width:768px){
-
-  #market-comparison{
-    grid-template-columns:1fr !important;
-    gap:16px !important;
-  }
-
-  .kpi-box{
-    padding:16px;
-  }
-
-}
-
-/* =====================================
-🔥 KPI GRID SYSTEM (FIX DEFINITIVO)
-===================================== */
-
-.kpi-grid{
-  display:grid !important;
-  grid-template-columns:repeat(3, 1fr) !important;
-  gap:20px !important;
-
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-
-  align-items:stretch;
-}
-
-/* sicurezza: forza ogni card */
-.kpi-grid .kpi-box{
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .kpi-grid{
-    grid-template-columns:1fr !important;
-  }
-}
-
-/* =====================================
-🔥 FIX GRID MARKET (FORZA ASSOLUTA)
-===================================== */
-
-#market-comparison{
-  display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:22px !important;
-
-  width:100% !important;
-  max-width:1000px !important;
-  margin:0 auto !important;
-}
-
-/* ❌ ELIMINA GRID INTERNI */
-#market-comparison > div{
-  display:block !important;
-  width:100% !important;
-}
-
-  /* =====================================
-🔥 MARKET COMPARISON FINAL FIX
-===================================== */
-
-#market-comparison.kpi-grid{
-  display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:22px !important;
-
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-}
-
-/* CARD */
-#market-comparison .kpi-box{
-  width:100%;
-  text-align:center;
-}
-/* =====================================
-🔥 FIX DEFINITIVO MARKET GRID
-===================================== */
-
-#market-comparison{
-  display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:22px !important;
-
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-}
-
-/* 🔥 QUESTA È LA CHIAVE */
-#market-comparison .kpi-box{
-  width:100% !important;
-  max-width:none !important;
-
-  display:flex !important;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  text-align:center;
-}
-
-/* 🔥 FORZA ANCHE FIGLI */
-#market-comparison .kpi-box *{
-  width:auto;
 }
