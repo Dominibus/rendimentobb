@@ -3852,7 +3852,6 @@ window.startPlanPurchase = function(plan){
   // =========================
   if(!user){
 
-    // 🔥 salva piano scelto
     localStorage.setItem("pending_plan", plan);
 
     const goRegister = confirm(
@@ -3924,12 +3923,12 @@ window.startPlanPurchase = function(plan){
     window.buyPlan(plan);
   }else{
     console.error("❌ buyPlan non trovata");
-    alert(t(
-      "Errore sistema pagamento",
-      "Payment system error"
-    ));
+    alert(
+      t(
+        "Errore sistema pagamento",
+        "Payment system error"
+      )
+    );
   }
 
-};
-
-};   
+}; // ✅ SOLO QUESTA CHIUSURA
