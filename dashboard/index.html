@@ -697,11 +697,17 @@ z-index:9999;
   ">
 
     <h2 
-    data-it="🔒 Dashboard PRO"
-    data-en="🔒 PRO Dashboard"
-    style="margin-bottom:10px">
-      🔒 Dashboard PRO
-    </h2>
+data-it="🔒 Stai per prendere una decisione senza dati reali"
+data-en="🔒 You are about to make a decision without real data">
+🔒 Stai per prendere una decisione senza dati reali
+</h2>
+
+<p 
+data-it="Il 72% degli investitori perde soldi proprio qui."
+data-en="72% of investors lose money right here."
+style="font-size:14px;color:#64748b;margin-bottom:20px">
+Il 72% degli investitori perde soldi proprio qui.
+</p>
 
     <p 
     data-it="Sblocca analisi avanzata, ROI strategico e simulazioni complete"
@@ -865,6 +871,42 @@ Home
 <!-- VERDICT -->
 <div id="investment-verdict" class="analysis-card" style="margin-bottom:40px"></div>  
 <div id="upgrade-trigger" style="margin-bottom:30px;display:none;"></div>  
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const access = window.getUserAccess();
+  const box = document.getElementById("upgrade-trigger");
+
+  if(!box || access.canSeeFullAnalysis) return;
+
+  box.style.display = "block";
+
+  box.innerHTML = `
+    <div style="
+      padding:20px;
+      border-radius:14px;
+      background:linear-gradient(135deg,#0f172a,#10b981);
+      color:white;
+      text-align:center;
+    ">
+
+      <h3>🔒 Stai vedendo solo il 40% della dashboard</h3>
+
+      <p style="margin-top:6px;opacity:0.9">
+        ROI reale, rischio e simulazioni complete sono bloccate
+      </p>
+
+      <button onclick="startPlanPurchase('pro')" 
+      class="btn btn-primary" style="margin-top:10px">
+        🔓 Sblocca dashboard completa
+      </button>
+
+    </div>
+  `;
+
+});
+</script>  
 
 <!-- PORTFOLIO -->
 <div class="analysis-card" id="portfolio-performance">
@@ -1323,7 +1365,72 @@ window.closeOverlay = function(){
 
 };
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const access = window.getUserAccess();
+
+  if(!access.canSeeFullAnalysis){
+
+    console.warn("⛔ Dashboard locked → overlay");
+
+    // mostra overlay
+    const overlay = document.getElementById("pro-overlay");
+    if(overlay){
+      overlay.style.display = "flex";
+    }
+
+    // blocca interazione
+    document.querySelector("main").style.pointerEvents = "none";
+    document.querySelector("main").style.opacity = "0.6";
+
+  }
+
+});
 </script>  
 
+</script>  
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const access = window.getUserAccess();
+
+  if(access.canSeeFullAnalysis) return;
+
+  // 🔒 blocco card dopo le prime 2
+  document.querySelectorAll(".analysis-card").forEach((el, i) => {
+
+    if(i > 2){
+      el.style.opacity = "0.4";
+      el.style.pointerEvents = "none";
+      el.style.filter = "blur(1px)";
+    }
+
+  });
+
+});
+</script>  
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const access = window.getUserAccess();
+  const btn = document.getElementById("download-report");
+
+  if(!btn) return;
+
+  if(!access.canDownloadPDF){
+
+    btn.innerText = window.currentLang === "en"
+      ? "🔒 Unlock professional report"
+      : "🔒 Sblocca report professionale";
+
+    btn.onclick = () => startPlanPurchase("pro");
+
+  }
+
+});
+</script>  
 </body>
 </html>
