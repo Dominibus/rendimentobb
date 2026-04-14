@@ -834,12 +834,17 @@ if(access.canSeeFullAnalysis){
   unlockUI();
   unlockProUI();
 
-  // 🔥 RESET TOTALE (QUESTO TI MANCAVA)
+  // 🔥 RESET BLUR COMPLETO
   document.querySelectorAll("*").forEach(el=>{
     el.classList.remove("locked-blur","pro-blur","blurred");
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
+  });
+
+  // 🔥 👉 QUESTA È LA RIGA CHE MI HAI CHIESTO
+  document.querySelectorAll(".locked-section").forEach(el=>{
+    el.classList.remove("locked-section");
   });
 
   return;
