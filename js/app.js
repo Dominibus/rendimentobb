@@ -154,10 +154,12 @@ window.isProUser = function(){
   return window.getUserAccess().isPro;
 };  
 
-// 🔓 PRO / INVESTOR → vedono tutto
-if(access.canSeeFullAnalysis || access.isInvestor){
-  return;
-}
+// 🔓 PRO / INVESTOR → vedono tutto (NO RETURN HARD)
+// 🇮🇹 NON blocchiamo la funzione → serve per UI dinamica
+// 🇬🇧 Do NOT hard return → needed for UI logic
+
+const isPremium =
+  access.canSeeFullAnalysis || access.isInvestor;
 
 // 🔒 FREE → nascondi dati
 const lockIds = [
@@ -167,7 +169,17 @@ const lockIds = [
   "qr_rev"
 ];
 
-lockIds.forEach(id => {
+if(!isPremium){
+  lockIds.forEach(id => {
+
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.innerText = t("🔒 Pro","🔒 Pro");
+    el.style.opacity = "0.6";
+
+  });
+}
   const el = document.getElementById(id);
 
   if(!el) return;
@@ -177,6 +189,42 @@ lockIds.forEach(id => {
 });  
 
 };
+
+// =====================================
+// 🔥 HOME BLUR INTELLIGENTE (SAFE)
+// NON TOCCA TOOL
+// =====================================
+
+setTimeout(()=>{
+
+  const overlay = document.querySelector(".home-blur-overlay");
+  if(!overlay) return;
+
+  const hasInput =
+    document.getElementById("qr_price")?.value ||
+    document.getElementById("qr_night")?.value;
+
+  // 🇮🇹 Nessun input → niente blur
+  // 🇬🇧 No input → no blur
+  if(!hasInput){
+    overlay.style.display = "none";
+    overlay.classList.remove("active");
+    return;
+  }
+
+  // 🇮🇹 FREE → mostra blur
+  // 🇬🇧 Free user → show blur
+  if(!isPremium){
+    overlay.style.display = "flex";
+    overlay.classList.add("active");
+  } else {
+    // 🇮🇹 PRO → sempre libero
+    // 🇬🇧 PRO → always unlocked
+    overlay.style.display = "none";
+    overlay.classList.remove("active");
+  }
+
+}, 80);
 
 window.runMortgageComparison = function(){
 
