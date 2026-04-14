@@ -13126,45 +13126,58 @@ body.menu-open{
   }
 }
 
-/* =====================================
-📊 MARKET COMPARISON – FULL WIDTH FIX
-===================================== */
-
+/* KPI GRID SAFE */
 #market-comparison{
   width:100%;
   max-width:100%;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
 }
 
-/* CARD INTERNE */
-#market-comparison > div{
-  width:100%;
-  min-width:0;
+/* CARD SaaS */
+.kpi-card{
+  background:white;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.05);
+  text-align:center;
+  transition:all .2s ease;
 }
 
-/* 🔥 TESTO NON SI ROMPE */
-#market-comparison *{
-  white-space:normal;
+.kpi-card:hover{
+  transform:translateY(-2px);
 }
 
-/* MOBILE */
+/* LABEL */
+.kpi-label{
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:6px;
+}
+
+/* VALUE */
+.kpi-value{
+  font-size:20px;
+  font-weight:700;
+}
+
+/* SUB */
+.kpi-sub{
+  font-size:12px;
+  margin-top:4px;
+  color:#64748b;
+}
+
+/* COLORI */
+.kpi-card.up .kpi-value{
+  color:#10b981;
+}
+
+.kpi-card.down .kpi-value{
+  color:#ef4444;
+}
+
+/* MOBILE FIX */
 @media(max-width:768px){
   #market-comparison{
-    grid-template-columns:1fr;
+    grid-template-columns:1fr !important;
   }
-}
-/* =====================================
-📦 RESULTS CARD ALIGN FIX
-===================================== */
-
-.results-card{
-  width:100%;
-  max-width:900px;
-  margin:0 auto;
-}
-
-.results-card > *{
-  width:100%;
 }
