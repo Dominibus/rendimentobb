@@ -12,7 +12,7 @@ window.RB_USER = {
   plan: "free"
 };
 
-// ================= INIT ================= 
+// ================= INIT =================
 window.initAccessControl = function(){
 
   try{
