@@ -13160,3 +13160,35 @@ body.menu-open{
     grid-template-columns:1fr;
   }
 }
+/* =====================================
+🎯 ALIGNMENT FIX – STRUTTURA KPI
+===================================== */
+
+/* colonna destra compatta */
+.investment-metrics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  align-content:start;
+}
+
+/* ROI sempre sopra e pieno */
+.metric-card.roi-highlight{
+  grid-column:span 2;
+}
+
+/* KPI sotto ordinati */
+.metric-card{
+  width:100%;
+}
+
+/* forza allineamento a sinistra (NON centro) */
+.metric-card{
+  align-items:flex-start;
+  text-align:left;
+}
+
+/* numero allineato bene */
+.metric-card strong{
+  margin-top:2px;
+}
