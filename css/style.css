@@ -13120,72 +13120,96 @@ body.menu-open{
 }
 
 /* =====================================
-🔥 MARKET COMPARISON FIX DEFINITIVO
+🔥 MARKET COMPARISON – FIX DEFINITIVO
 ===================================== */
 
-/* FORZA GRID (FIX BUG LAYOUT) */
+/* CONTAINER GRID (FORZATO) */
 #market-comparison{
   display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:22px !important;
+  grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+  gap:20px !important;
 
   width:100%;
   max-width:1000px;
-  margin:0 auto;
+  margin:20px auto 0 auto;
+
+  align-items:stretch;
 }
 
-/* FORZA CARD INTERNE */
-#market-comparison .kpi-box{
-  display:block !important;
+/* RESET QUALSIASI STILE INTERNO STRANO */
+#market-comparison > *{
   width:100% !important;
-  text-align:center;
+  min-width:0;
 }
 
 /* =====================================
-📦 KPI CARD DESIGN SYSTEM
+📦 KPI CARD – DESIGN SYSTEM
 ===================================== */
 
 .kpi-box{
-  background:white;
+  background:#ffffff;
   border-radius:16px;
-  padding:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.06);
 
+  padding:20px;
   width:100%;
+
   text-align:center;
+
+  box-shadow:0 10px 30px rgba(2,6,23,0.06);
 
   transition:all .25s ease;
   animation:fadeInBlur .4s ease;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
 
+/* HOVER */
 .kpi-box:hover{
-  transform:translateY(-3px);
-  box-shadow:0 25px 60px rgba(0,0,0,0.10);
+  transform:translateY(-4px);
+  box-shadow:0 25px 60px rgba(2,6,23,0.12);
 }
 
-/* LABEL */
+/* =====================================
+🏷 LABEL
+===================================== */
+
 .kpi-label{
   font-size:12px;
   color:#64748b;
+
   margin-bottom:6px;
   letter-spacing:0.3px;
 }
 
-/* VALUE */
+/* =====================================
+💰 VALUE
+===================================== */
+
 .kpi-value{
   font-size:22px;
   font-weight:700;
   color:#0f172a;
+
+  line-height:1.2;
 }
 
-/* SUB TEXT */
+/* =====================================
+📊 SUB TEXT
+===================================== */
+
 .kpi-sub{
   font-size:12px;
-  margin-top:4px;
+  margin-top:6px;
   color:#64748b;
 }
 
-/* COLORI PERFORMANCE */
+/* =====================================
+🎯 PERFORMANCE COLOR
+===================================== */
+
 .kpi-box.up .kpi-value{
   color:#10b981;
 }
@@ -13202,6 +13226,7 @@ body.menu-open{
 
   #market-comparison{
     grid-template-columns:1fr !important;
+    gap:16px !important;
   }
 
   .kpi-box{
