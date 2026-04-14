@@ -249,27 +249,28 @@ function initHeaderInteractions(){
 
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 
- 
-  // 🔥 SYNC IMMEDIATO QUANDO CAMBIA PIANO
-window.addEventListener("rb_plan_ready", ()=>{
-  renderUser(auth.currentUser || null);
-});
+  // 🔥 SYNC PLAN
+  window.addEventListener("rb_plan_ready", ()=>{
+    renderUser(auth.currentUser || null);
+  });
 
-  // 🔥 HEADER SCROLL EFFECT
-window.addEventListener("scroll", () => {
+  // 🔥 HEADER SCROLL UX (SaaS feel)
+  window.addEventListener("scroll", () => {
 
-  const header = document.querySelector(".rb-header");
-  if(!header) return;
+    const header = document.querySelector(".rb-header");
+    if(!header) return;
 
-  if(window.scrollY > 20){
-    header.style.background = "rgba(255,255,255,0.95)";
-    header.style.boxShadow = "0 10px 30px rgba(2,6,23,0.08)";
-  } else {
-    header.style.background = "rgba(255,255,255,0.7)";
-    header.style.boxShadow = "none";
-  }
+    if(window.scrollY > 20){
+      header.style.background = "rgba(255,255,255,0.96)";
+      header.style.boxShadow = "0 12px 40px rgba(2,6,23,0.08)";
+      header.style.backdropFilter = "blur(10px)";
+    } else {
+      header.style.background = "rgba(255,255,255,0.7)";
+      header.style.boxShadow = "none";
+      header.style.backdropFilter = "blur(6px)";
+    }
 
-});
+  });
 }
 
 /* =====================
@@ -283,47 +284,68 @@ function updateLangButtons(lang){
 }
 
 /* =====================
-👤 USER AREA
+👤 USER AREA (FIXED + SaaS LOGIC)
 ===================== */
 
 function renderUser(user){
 
   const el = document.getElementById("user-area");
+  if(!el) return;
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
- const access = window.getUserAccess();
+  const access = window.getUserAccess();
 
-const isAdmin =
-  user?.email === "rendimentobb@gmail.com" ||
-  clean(window.userRole) === "admin";
+  const isAdmin =
+    user?.email === "rendimentobb@gmail.com" ||
+    clean(window.userRole) === "admin";
 
-const isInvestor = access.isInvestor;
-const isPro = access.isPro;
-const isPaid = access.hasPlan;
+  const isInvestor = access.isInvestor;
+  const isPro = access.isPro;
+  const isPaid = access.hasPlan;
+
+  const isProOnly = isPro && !isInvestor;
 
   if(user){
 
     let html = `<div class="rb-user">`;
 
-    // 🔥 DASHBOARD (ANTI BYPASS)
+    // =====================
+    // 🎯 BADGE LOGIC (CLEAN)
+    // =====================
+    let badge = "";
+
+    if(isAdmin){
+      badge = `<span class="badge-pro">ADMIN</span>`;
+    }
+    else if(isProOnly){
+      badge = `<span class="badge-pro">PRO</span>`;
+    }
+    else if(isInvestor){
+      badge = `<span class="badge-pro">INVESTOR</span>`;
+    }
+    else{
+      badge = `<span class="badge-pro">LOCK</span>`;
+    }
+
+    // =====================
+    // 🔥 DASHBOARD BUTTON
+    // =====================
     html += `
       <a href="${isPaid ? "/dashboard/" : "#"}" 
          class="rb-btn ${isPaid ? "primary" : "locked"}"
          id="dashboard-link">
-         Dashboard
 
-         ${isAdmin ? `<span class="badge-pro">ADMIN</span>` : ""}
-         ${(!isPaid) ? `<span class="badge-pro">LOCK</span>` : ""}
-         ${(isPaid && isInvestor) ? `<span class="badge-pro">INVESTOR</span>` : ""}
-         ${(isPaid && isPro) ? `<span class="badge-pro">PRO</span>` : ""}
+         <span data-it="Dashboard" data-en="Dashboard">Dashboard</span>
+         ${badge}
+
       </a>
     `;
 
-    // LEADS
+    // ADMIN ONLY
     if(isAdmin){
-  html += `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`;
-}
+      html += `<a href="/dashboard-leads/" class="rb-btn secondary">Leads</a>`;
+    }
 
     html += `<button id="logout" class="rb-btn red">Logout</button>`;
     html += `</div>`;
@@ -331,7 +353,7 @@ const isPaid = access.hasPlan;
     el.innerHTML = html;
 
     // =====================
-    // 📱 MOBILE MENU DINAMICO (ANTI BYPASS)
+    // 📱 MOBILE MENU
     // =====================
 
     const mobileNav = document.getElementById("rb-mobile-nav");
@@ -350,7 +372,6 @@ const isPaid = access.hasPlan;
 
         mobileHTML += `<hr>`;
 
-        // 🔥 DASHBOARD MOBILE BLOCCATA SE FREE
         mobileHTML += `
           <a href="${isPaid ? "/dashboard/" : "#"}" id="mobile-dashboard">
             Dashboard
@@ -373,9 +394,8 @@ const isPaid = access.hasPlan;
 
       mobileNav.innerHTML = mobileHTML;
 
-      // 🔥 LOGOUT MOBILE
+      // LOGOUT MOBILE
       const mobileLogout = document.getElementById("mobile-logout");
-
       if(mobileLogout){
         mobileLogout.onclick = async (e)=>{
           e.preventDefault();
@@ -384,7 +404,7 @@ const isPaid = access.hasPlan;
         };
       }
 
-      // 🔥 BLOCCO HARD DASHBOARD MOBILE
+      // BLOCCO MOBILE DASHBOARD
       if(!isPaid){
         const mobileDash = document.getElementById("mobile-dashboard");
         if(mobileDash){
@@ -398,13 +418,12 @@ const isPaid = access.hasPlan;
     }
 
     // =====================
-    // 🔥 BLOCCO HARD UNIVERSALE
+    // 🔒 HARD BLOCK (FREE)
     // =====================
-
     if(!isPaid){
 
-      // DESKTOP BUTTON
       const dashBtn = document.getElementById("dashboard-link");
+
       if(dashBtn){
         dashBtn.onclick = (e)=>{
           e.preventDefault();
@@ -413,7 +432,6 @@ const isPaid = access.hasPlan;
         };
       }
 
-      // QUALSIASI LINK DASHBOARD (ANTI SCRIPT ESTERNI)
       document.querySelectorAll('a[href="/dashboard/"]').forEach(link=>{
         link.addEventListener("click", (e)=>{
           e.preventDefault();
@@ -424,7 +442,7 @@ const isPaid = access.hasPlan;
 
     }
 
-      // LOGOUT DESKTOP
+    // LOGOUT
     document.getElementById("logout").onclick = async ()=>{
       await signOut(auth);
       location.reload();
@@ -438,16 +456,15 @@ const isPaid = access.hasPlan;
      data-en="Login">
      Accedi
      </a>`;
-
   }
 
 }
 
-// 🔥 EXPORT GLOBALE
+// EXPORT
 window.renderUser = renderUser;
 
 /* =====================
-🔒 MODAL PRO (FIX DEFINITIVO)
+🔒 MODAL PRO
 ===================== */
 
 window.openProModal = function(){
@@ -464,7 +481,7 @@ window.closeProModal = function(){
   }
 };
 
-// INIT BUTTONS (dopo che il DOM è pronto)
+// EVENTS
 document.addEventListener("click", (e)=>{
 
   if(e.target && e.target.id === "rb-close-modal"){
@@ -472,7 +489,7 @@ document.addEventListener("click", (e)=>{
   }
 
   if(e.target && e.target.id === "rb-upgrade-btn"){
-    window.location.href = "/pricing/";
+    window.location.href = "/#pricing";
   }
 
 });
