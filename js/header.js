@@ -166,12 +166,11 @@ function waitPlanAndRender(user){
 
     attempts++;
 
-    const plan = window.currentPlan;
-    const role = window.userRole;
+    const access = window.getUserAccess();
 
-    const ready =
-      (typeof plan === "string" && plan.length > 0) ||
-      (typeof role === "string" && role.length > 0);
+const ready =
+  access !== undefined &&
+  typeof access === "object";
 
     if(ready || attempts > 20){
 
@@ -181,18 +180,13 @@ function waitPlanAndRender(user){
   renderUser(user);
 
 // 🔒 SBLOCCA SOLO SE PRO
-const plan = (window.currentPlan || "").toLowerCase();
-const role = (window.userRole || "").toLowerCase();
+const access = window.getUserAccess();
 
 const isAdmin =
-  role === "admin" ||
+  (window.userRole || "").toLowerCase() === "admin" ||
   window.currentUser?.email === "rendimentobb@gmail.com";
 
-const isPro =
-  isAdmin ||
-  plan === "pro" ||
-  plan === "pro_yearly" ||
-  plan === "investor";
+const isPro = isAdmin || access.hasPlan;
 
 if(isPro){
   unlockUI();
@@ -292,21 +286,15 @@ function renderUser(user){
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
-  const plan = clean(window.currentPlan);
-  const role = clean(window.userRole);
+ const access = window.getUserAccess();
 
-  const isAdmin =
-    user?.email === "rendimentobb@gmail.com" ||
-    role === "admin";
+const isAdmin =
+  user?.email === "rendimentobb@gmail.com" ||
+  clean(window.userRole) === "admin";
 
-  const isInvestor = plan === "investor";
-
-  const isPro =
-    isAdmin ||
-    plan === "pro" ||
-    plan === "pro_yearly";
-
-  const isPaid = isInvestor || isPro;
+const isInvestor = access.isInvestor;
+const isPro = access.isPro;
+const isPaid = access.hasPlan;
 
   if(user){
 
