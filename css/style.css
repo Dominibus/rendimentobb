@@ -5954,13 +5954,6 @@ body.pro-user #profit-monthly::after{
     margin:0 auto;
   }
 
-  /* 🔥 FORZA OGNI ELEMENTO INTERNO */
-  #market-comparison > *{
-    width:100%;
-    display:flex;
-    justify-content:center;
-  }
-
   /* 🔥 FORZA IL CONTENUTO (ANCHE SE GENERATO DA JS) */
   #market-comparison .kpi-box,
   #market-comparison .metric,
