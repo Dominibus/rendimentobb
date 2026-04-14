@@ -2160,10 +2160,10 @@ window.calculate = async function(force = false){
     // ================= CALCOLO =================
     window.emailSent = false;
 
-    const isLogged = !!window.currentUser;
+    const userLogged = !!window.currentUser;
     let result;
 
-if(!isLogged){
+if(!userLogged){
 
   console.log("🔓 Guest → funnel");
 
