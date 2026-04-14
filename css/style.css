@@ -13182,3 +13182,23 @@ body.menu-open{
 .plan-annual .btn{
   background:#f59e0b;
 }
+
+.roi-shock{
+  margin-top:25px;
+  padding:22px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#ef4444,#0f172a);
+  color:white;
+  text-align:center;
+}
+
+.roi-shock h3{
+  font-size:20px;
+  font-weight:700;
+}
+
+.roi-shock p{
+  margin-top:8px;
+  opacity:0.9;
+  font-size:14px;
+}
