@@ -746,7 +746,8 @@ function safeRender(id, callback){
     return;
   }
 
-  container.style.display = "grid";
+  // ❌ RIMUOVI QUESTA RIGA
+// container.style.display = "grid";
 
   try{
     callback(container);
