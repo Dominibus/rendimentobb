@@ -5941,54 +5941,57 @@ body.pro-user #profit-monthly::after{
     margin:0 auto;
   }
 
- /* ===================================== */
-/* 💣 FIX DEFINITIVO PERFORMANCE (CORRETTO) */
-/* ===================================== */
+  /* ===================================== */
+  /* 💣 FIX DEFINITIVO PERFORMANCE (IL TUO BUG) */
+  /* ===================================== */
 
-#market-comparison{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px;
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-}
-
-/* ✅ SOLO LE CARD (NON I DIV INTERNI) */
-#market-comparison .kpi-box{
-  width:100% !important;
-  text-align:center;
-}
-
-/* ❌ NON TOCCARE PIÙ I DIV GENERICI */
-/* ELIMINATO: #market-comparison div */
-
-/* 🔥 BENCHMARK */
-#market-benchmark{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px;
-  justify-items:center;
-  text-align:center;
-  max-width:1000px;
-  margin:0 auto;
-}
-
-/* 🔥 PERFORMANCE WRAPPER */
-#market-performance,
-.performance-card{
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-  text-align:center;
-}
-
-/* 📱 MOBILE */
-@media(max-width:768px){
   #market-comparison{
-    grid-template-columns:1fr;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    width:100%;
+    max-width:1000px;
+    margin:0 auto;
   }
+
+  /* 🔥 FORZA OGNI ELEMENTO INTERNO */
+  #market-comparison > *{
+    width:100%;
+    display:flex;
+    justify-content:center;
+  }
+
+  /* 🔥 FORZA IL CONTENUTO (ANCHE SE GENERATO DA JS) */
+  #market-comparison .kpi-box,
+  #market-comparison .metric,
+  #market-comparison div{
+    width:100% !important;
+    max-width:none !important;
+    text-align:center;
+  }
+
+  /* 🔥 BENCHMARK */
+  #market-benchmark{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    justify-items:center;
+    text-align:center;
+    max-width:1000px;
+    margin:0 auto;
+  }
+
+  /* 🔥 PERFORMANCE WRAPPER */
+  #market-performance,
+  .performance-card{
+    width:100%;
+    max-width:1000px;
+    margin:0 auto;
+    text-align:center;
+  }
+
 }
+
 /* ============================= */
 /* KPI CARD (DESIGN SYSTEM) */
 /* ============================= */
@@ -13028,222 +13031,4 @@ body.menu-open{
   color:#0f172a !important;
   background:none;
   border:none;
-}
-
-/* =====================================
-🔥 FIX BLUR HOME – ULTRA SaaS (FINAL)
-===================================== */
-
-@media (min-width:1024px){
-
-  /* CONTENITORE */
-  .investment-metrics{
-    position:relative;
-    overflow:hidden;
-    border-radius:16px;
-  }
-
-  /* CONTENUTO SOTTO (BLURRATO) */
-  .investment-metrics > *:not(.home-blur-overlay){
-    filter:blur(3px);
-    opacity:0.6;
-    pointer-events:none;
-    user-select:none;
-  }
-
-  /* OVERLAY */
-  .home-blur-overlay{
-    position:absolute;
-    inset:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:linear-gradient(
-      180deg,
-      rgba(15,23,42,0.65),
-      rgba(15,23,42,0.85)
-    );
-
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-
-    border-radius:16px;
-    z-index:10;
-
-    animation:fadeInBlur .4s ease;
-  }
-
-  /* BOX CONTENUTO */
-  .home-overlay-content{
-    max-width:420px;
-    padding:28px;
-
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.08);
-
-    backdrop-filter:blur(8px);
-
-    border-radius:16px;
-
-    text-align:center;
-
-    box-shadow:0 20px 50px rgba(0,0,0,0.25);
-  }
-
-  /* TESTO */
-  .home-overlay-content .overlay-text{
-    font-size:14px;
-    line-height:1.5;
-    color:#e2e8f0;
-    margin-bottom:16px;
-  }
-
-  /* CTA */
-  .home-overlay-content .btn{
-    width:100%;
-    justify-content:center;
-  }
-
-}
-
-/* =====================================
-✨ ANIMAZIONE
-===================================== */
-@keyframes fadeInBlur{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-/* =====================================
-🔥 KPI GRID SYSTEM (UNICO – GLOBALE)
-===================================== */
-
-.kpi-grid{
-  display:grid;
-  grid-template-columns:repeat(3, minmax(0,1fr));
-  gap:22px;
-
-  width:100%;
-  max-width:1000px;
-  margin:0 auto;
-
-  align-items:stretch;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .kpi-grid{
-    grid-template-columns:1fr;
-    gap:16px;
-  }
-}
-
-/* =====================================
-🔥 MARKET COMPARISON (FIX VERO)
-===================================== */
-
-/* ⚠️ usa SOLO kpi-grid */
-#market-comparison{
-  margin-top:20px;
-}
-
-/* 🔥 RIMUOVE QUALSIASI CASINO INTERNO */
-#market-comparison > *{
-  width:100%;
-  min-width:0;
-}
-
-/* =====================================
-📦 KPI CARD
-===================================== */
-
-.kpi-box{
-  background:#ffffff;
-  border-radius:16px;
-
-  padding:20px;
-  width:100%;
-
-  text-align:center;
-
-  box-shadow:0 10px 30px rgba(2,6,23,0.06);
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  transition:all .25s ease;
-  animation:fadeInBlur .4s ease;
-}
-
-/* HOVER */
-.kpi-box:hover{
-  transform:translateY(-4px);
-  box-shadow:0 25px 60px rgba(2,6,23,0.12);
-}
-
-/* =====================================
-🏷 LABEL
-===================================== */
-
-.kpi-label{
-  font-size:12px;
-  color:#64748b;
-  margin-bottom:6px;
-  letter-spacing:0.3px;
-}
-
-/* =====================================
-💰 VALUE
-===================================== */
-
-.kpi-value{
-  font-size:22px;
-  font-weight:700;
-  color:#0f172a;
-  line-height:1.2;
-}
-
-/* =====================================
-📊 SUB TEXT
-===================================== */
-
-.kpi-sub{
-  font-size:12px;
-  margin-top:6px;
-  color:#64748b;
-}
-
-/* =====================================
-🎯 PERFORMANCE COLOR
-===================================== */
-
-.kpi-box.up .kpi-value{
-  color:#10b981;
-}
-
-.kpi-box.down .kpi-value{
-  color:#ef4444;
-}
-/* =====================================
-🎯 CENTER PERFORMANCE BOX (FIX VELOCE)
-===================================== */
-
-#market-comparison{
-  display:flex !important;
-  justify-content:center !important;
-}
-
-#market-comparison .kpi-box{
-  max-width:320px;
-  width:100%;
 }
