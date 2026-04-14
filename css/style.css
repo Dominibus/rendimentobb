@@ -13148,3 +13148,37 @@ body.menu-open{
     font-size:24px;
   }
 }
+
+/* =====================================
+🔥 PRICING – VISUAL HIERARCHY FIX
+===================================== */
+
+/* PRO DOMINA */
+.plan-pro{
+  transform:scale(1.05);
+  box-shadow:0 25px 80px rgba(16,185,129,0.25);
+  border:2px solid #10b981;
+  z-index:2;
+}
+
+/* INVESTOR PIÙ DEBOLE */
+.plan-investor{
+  opacity:0.75;
+  transform:scale(0.96);
+}
+
+/* ANNUALE PREMIUM */
+.plan-annual{
+  border:2px solid #f59e0b;
+  box-shadow:0 20px 60px rgba(245,158,11,0.2);
+}
+
+/* BOTTONI GERARCHIA */
+.plan-investor .btn{
+  background:#e2e8f0;
+  color:#64748b;
+}
+
+.plan-annual .btn{
+  background:#f59e0b;
+}
