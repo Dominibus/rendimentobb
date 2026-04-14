@@ -1012,6 +1012,7 @@ function renderMarketComparison(userRevenue, cityKey){
   // ================= RESET SICURO =================
   container.innerHTML = "";
   container.className = "kpi-grid";
+  container.style.display = "grid";
 
   // ================= SAFE DATA =================
   const revenue   = window.safeNumber(userRevenue);
