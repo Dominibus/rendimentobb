@@ -41,11 +41,15 @@ window.initAccessControl = function(){
       plan
     };
 
+    applyAccessUI();
+
     console.log("🧠 RB_USER:", window.RB_USER);
 
    // ================= APPLY UI STATE =================
 
 function applyAccessUI(){
+
+  if(!window.RB_USER) return;
 
   const isPro = window.RB_USER.isPro;
   const isLogged = window.RB_USER.isLogged;
@@ -162,7 +166,7 @@ window.requirePro = function(){
 // ================= AUTO INIT =================
 
 // 🔥 quando firebase ha caricato utente + piano
-document.addEventListener("rb_plan_loaded", () => {
+document.addEventListener("rb_plan_ready", () => {
 
   console.log("🔥 AccessControl init after plan");
 
@@ -176,3 +180,21 @@ setTimeout(() => {
     window.initAccessControl();
   }
 }, 1000);
+
+// =====================
+// 🔥 GLOBAL ACCESS (CORE)
+// =====================
+
+window.getUserAccess = function(){
+
+  const u = window.RB_USER || {};
+
+  return {
+    isLogged: u.isLogged || false,
+    isPro: u.isPro || false,
+    isInvestor: u.isInvestor || false,
+    isAdmin: u.isAdmin || false,
+    hasPlan: u.isPro || u.isInvestor || u.isAdmin
+  };
+
+};
