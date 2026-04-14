@@ -3108,8 +3108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-});
-
 // ================= FIREBASE SYNC FIX (CRITICO) =================
 
 document.addEventListener("rb_auth_ready", () => {
