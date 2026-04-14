@@ -1018,7 +1018,6 @@ function renderMarketComparison(userRevenue, cityKey){
     ? (diff / marketAvg) * 100
     : 0;
 
-  // 🔥 evita 0.0% fake (UX più credibile)
   if(Math.abs(diffPerc) < 0.1 && diff !== 0){
     diffPerc = diff > 0 ? 0.1 : -0.1;
   }
@@ -1027,24 +1026,14 @@ function renderMarketComparison(userRevenue, cityKey){
 
   const isPositive = diff >= 0;
 
-  // ================= COLORS =================
   const diffColor = isPositive ? "#10b981" : "#ef4444";
   const bgColor   = isPositive ? "#ecfdf5" : "#fef2f2";
   const borderCol = isPositive ? "#10b981" : "#ef4444";
 
-  // ================= RESET =================
-  container.innerHTML = "";
+  // ================= RENDER =================
+  container.innerHTML = `
 
-  // 🔥 🔥 🔥 FIX CRITICO GRID (QUESTO MANCAVA)
-  container.style.display = "grid";
-  container.style.gridTemplateColumns = "repeat(3, 1fr)";
-  container.style.gap = "16px";
-  container.style.marginTop = "10px";
-
-  // ================= KPI =================
-
-  const kpi1 = `
-    <div class="kpi-card">
+    <div class="kpi-box">
       <div class="kpi-label">
         ${t("📊 Ricavi stimati","📊 Estimated revenue")}
       </div>
@@ -1052,10 +1041,8 @@ function renderMarketComparison(userRevenue, cityKey){
         ${formatCurrency(revenue)}
       </div>
     </div>
-  `;
 
-  const kpi2 = `
-    <div class="kpi-card">
+    <div class="kpi-box">
       <div class="kpi-label">
         ${t("🏙 Media mercato","🏙 Market average")}
       </div>
@@ -1063,10 +1050,8 @@ function renderMarketComparison(userRevenue, cityKey){
         ${formatCurrency(marketAvg)}
       </div>
     </div>
-  `;
 
-  const kpi3 = `
-    <div class="kpi-card ${isPositive ? "up" : "down"}" style="
+    <div class="kpi-box" style="
       background:${bgColor};
       border:1px solid ${borderCol};
     ">
@@ -1084,17 +1069,8 @@ function renderMarketComparison(userRevenue, cityKey){
           : t("Sotto la media","Below market")}
       </div>
     </div>
+
   `;
-
-  // ================= RENDER =================
-  container.innerHTML = `
-  <div class="market-kpi-wrapper">
-    ${kpi1}
-    ${kpi2}
-    ${kpi3}
-  </div>
-`;
-
 }
 // ================= ROI VS MARKET =================
 
