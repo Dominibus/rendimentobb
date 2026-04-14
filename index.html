@@ -148,22 +148,10 @@ Scopri se stai per essere uno di loro prima di investire.
 
 </h1>
 
-<p>
-
-<span
+<p
 data-it="Simula ROI, profitto reale e rischio in 30 secondi. Evita errori da migliaia di euro."
 data-en="Simulate ROI, real profit and risk in 30 seconds. Avoid costly investment mistakes.">
 Simula ROI, profitto reale e rischio in 30 secondi. Evita errori da migliaia di euro.
-</span>
-
-<br><br>
-
-<strong style="color:#facc15"
-data-it="⚠️ Senza analisi completa potresti perdere soldi anche con ROI positivo"
-data-en="⚠️ Without full analysis you may lose money even with positive ROI">
-⚠️ Senza analisi completa potresti perdere soldi anche con ROI positivo
-</strong>
-
 </p>
 
 </div>
@@ -173,9 +161,9 @@ data-en="⚠️ Without full analysis you may lose money even with positive ROI"
 <div style="display:flex;gap:10px;flex-wrap:wrap">
 
 <button onclick="document.getElementById('qr_price')?.scrollIntoView({behavior:'smooth'})" class="btn btn-primary btn-lg"
-data-it="Analizza rischio investimento"
-data-en="Analyze investment risk now"
-Analizza rischio investimento
+data-it="Analizza investimento ora"
+data-en="Analyze investment now">
+Analizza investimento ora
 </button>
 
 <button onclick="startPlanPurchase('pro')" class="btn-outline"
@@ -187,11 +175,11 @@ Sblocca analisi PRO
 </div>
 
 <p
-data-it="🔥 Oltre 1.200 investitori hanno evitato perdite reali grazie a questa analisi"
-data-en="🔥 Over 1,200 investors avoided real losses using this analysis"
+data-it="🔥 Oltre 1.200 investitori hanno già evitato errori costosi"
+data-en="🔥 Over 1,200 investors have already avoided costly mistakes"
 style="margin-top:12px;font-size:14px;color:#e2e8f0;">
-🔥 Oltre 1.200 investitori hanno evitato perdite reali grazie a questa analisi
-</p>
+🔥 Oltre 1.200 investitori hanno già evitato errori costosi
+</p> 
 
 <div class="micro-trust">
 
@@ -467,12 +455,6 @@ data-en="⚠️ This number can be misleading">
 ⚠️ Questo numero può essere fuorviante
 </div>
 
-<div style="margin-top:8px;font-size:13px;text-align:center;color:#ef4444;font-weight:600"
-data-it="Molti investimenti con ROI positivo generano perdite reali"
-data-en="Many investments with positive ROI generate real losses">
-Molti investimenti con ROI positivo generano perdite reali
-</div> 
-
 <div style="margin-top:6px;font-size:13px;text-align:center;color:#64748b"
 data-it="Non include rischio, mutuo e costi reali"
 data-en="Does not include risk, mortgage and real costs">
@@ -481,34 +463,14 @@ Non include rischio, mutuo e costi reali
 
 </div>
 
-<!-- 👁 VISIBILE (TEASER INTELLIGENTE) -->
-<div class="metric-card">
+<!-- 🔒 BLOCCATI / 🔓 SBLOCCATI DINAMICAMENTE -->
+<div class="metric-card pro-blur">
   <span data-it="Profitto annuo" data-en="Annual profit">
     Profitto annuo
   </span>
-  <strong id="qr_profit">—</strong>
-
-  <div style="margin-top:6px;font-size:12px;color:#64748b;text-align:center"
-  data-it="Stima parziale"
-  data-en="Partial estimate">
-  Stima parziale
-  </div>
+  <strong id="qr_profit">🔒</strong>
 </div>
 
-<div class="metric-card">
-  <span data-it="Ricavo annuo" data-en="Annual revenue">
-    Ricavo annuo
-  </span>
-  <strong id="qr_rev">—</strong>
-
-  <div style="margin-top:6px;font-size:12px;color:#64748b;text-align:center"
-  data-it="Dati non completi"
-  data-en="Incomplete data">
-  Dati non completi
-  </div>
-</div>
-
-<!-- 🔒 BLOCCATI -->
 <div class="metric-card pro-blur">
   <span data-it="Profitto mensile" data-en="Monthly profit">
     Profitto mensile
@@ -517,43 +479,42 @@ Non include rischio, mutuo e costi reali
 </div>
 
 <div class="metric-card pro-blur">
-  <span data-it="Break-even reale" data-en="Real break-even">
-    Break-even reale
+  <span data-it="Break-even" data-en="Break-even">
+    Break-even
   </span>
   <strong id="qr_break">🔒</strong>
 </div>
 
-<!-- 🔥 OVERLAY INTELLIGENTE -->
+<div class="metric-card pro-blur">
+  <span data-it="Ricavo annuo" data-en="Annual revenue">
+    Ricavo annuo
+  </span>
+  <strong id="qr_rev">🔒</strong>
+</div>
+
+<!-- 🔥 OVERLAY SOLO SUI DATI IMPORTANTI -->
 <div class="home-blur-overlay">
 
 <div class="home-overlay-content">
 
 <div class="overlay-title"
-data-it="⚠️ Stai prendendo una decisione incompleta"
-data-en="⚠️ You are making an incomplete decision">
-⚠️ Stai prendendo una decisione incompleta
+data-it="🔓 Stai prendendo una decisione incompleta"
+data-en="🔓 You are making an incomplete decision">
 </div>
 
 <div class="overlay-text"
-data-it="Il ROI può sembrare positivo… ma senza rischio, mutuo e costi reali potresti perdere migliaia di euro"
-data-en="ROI may look positive… but without risk, mortgage and real costs you may lose thousands">
-Il ROI può sembrare positivo… ma senza analisi completa potresti perdere migliaia di euro
+data-it="Potresti sembrare profittevole… ma perdere soldi reali"
+data-en="You may look profitable… but lose real money">
 </div>
 
 <div style="margin-top:10px;font-size:13px;opacity:0.85"
 data-it="Il 72% degli investitori sbaglia proprio qui"
-data-en="72% of investors fail at this exact point">
-Il 72% degli investitori sbaglia proprio qui
+data-en="72% of investors fail right here">
 </div>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary" style="margin-top:14px">
-
-<span
-data-it="🔓 Sblocca analisi completa"
-data-en="🔓 Unlock full analysis">
-🔓 Sblocca analisi completa
-</span>
-
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
+style="margin-top:14px">
+<span data-it="🔓 Sblocca profitto reale" data-en="🔓 Unlock real profit"></span>
 </button>
 
 </div>
@@ -568,14 +529,10 @@ data-en="🔓 Unlock full analysis">
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
 
 <button onclick="startPlanPurchase('pro')" 
-class="btn btn-primary btn-lg block">
-
-<span
-data-it="🔓 Evita perdite → scopri profitto reale"
-data-en="🔓 Avoid losses → unlock real profit">
-🔓 Evita perdite → scopri profitto reale
-</span>
-
+class="btn btn-primary btn-lg block"
+data-it="🔓 Scopri profitto reale e rischio"
+data-en="🔓 Unlock real profit & risk">
+🔓 Scopri profitto reale e rischio
 </button>
 
 <p style="margin-top:10px;font-size:13px;color:#64748b;"
@@ -716,12 +673,6 @@ data-it="Un errore può costarti 10.000€ – 30.000€ nei primi anni"
 data-en="One mistake can cost you €10,000–€30,000 in the first years">
 Un errore può costarti 10.000€ – 30.000€ nei primi anni
 </p>
-
-<p style="margin-top:10px;font-weight:700;color:#f87171"
-data-it="E questo è esattamente ciò che succede senza analisi avanzata"
-data-en="And this is exactly what happens without advanced analysis">
-E questo è esattamente ciò che succede senza analisi avanzata
-</p> 
 
 <!-- CTA -->
 <div style="margin-top:35px">
@@ -920,12 +871,6 @@ data-it="🔓 Ottieni analisi completa"
 data-en="🔓 Get full analysis">
 🔓 Ottieni analisi completa
 </button>
-
-<p style="margin-top:8px;font-size:13px;color:#64748b"
-data-it="Usato da investitori per evitare errori da migliaia di euro"
-data-en="Used by investors to avoid costly mistakes">
-Usato da investitori per evitare errori da migliaia di euro
-</p> 
 
 </div>
 
@@ -1148,22 +1093,19 @@ data-en="€19 / month">
 <div class="plan-extra"></div>
 
 <ul>
-
 <li data-it="✔ Simulazioni illimitate" data-en="✔ Unlimited simulations">✔ Simulazioni illimitate</li>
-
-<li data-it="✔ ROI avanzato" data-en="✔ Advanced ROI analysis">✔ ROI avanzato</li>
-
-<li data-it="✔ Dashboard limitata (no report e PDF)"
-data-en="✔ Limited dashboard (no reports & PDF)">
-✔ Dashboard limitata (no report e PDF)
-</li>
-
-<li data-it="✔ Analisi profitto reale (limitata)" data-en="✔ Real profit analysis (limited)">✔ Analisi profitto reale (limitata)</li>
+<li data-it="✔ ROI avanzato" data-en="✔ Advanced ROI">✔ ROI avanzato</li>
 
 <li class="disabled"
-data-it="✖ Analisi rischio reale completa"
-data-en="✖ Full risk analysis">
-✖ Analisi rischio reale completa
+data-it="✖ Analisi rischio reale"
+data-en="✖ Real risk analysis">
+✖ Analisi rischio reale
+</li>
+
+<li class="disabled"
+data-it="✖ Previsioni cashflow"
+data-en="✖ Cashflow forecasts">
+✖ Previsioni cashflow
 </li>
 
 <li class="disabled"
@@ -1171,7 +1113,6 @@ data-it="✖ Report PDF professionale"
 data-en="✖ Professional PDF report">
 ✖ Report PDF professionale
 </li>
-
 </ul>
 
 <button onclick="startPlanPurchase('investor')" class="btn"
@@ -1202,32 +1143,17 @@ data-en="€29 / month">
 <div class="plan-extra"></div>
 
 <ul>
-
-<li data-it="✔ Dashboard completa + report e PDF"
-data-en="✔ Full dashboard + reports & PDF">
-✔ Dashboard completa + report e PDF
-</li>
-
-<li data-it="✔ Profitto reale e ROI avanzato" data-en="✔ Real profit & advanced ROI">✔ Profitto reale e ROI avanzato</li>
-
-<li data-it="✔ Analisi rischio reale" data-en="✔ Real risk analysis">✔ Analisi rischio reale</li>
-
+<li data-it="✔ Tutto incluso" data-en="✔ Everything included">✔ Tutto incluso</li>
+<li data-it="✔ Analisi rischio reale" data-en="✔ Real investment risk">✔ Analisi rischio reale</li>
 <li data-it="✔ Previsioni cashflow" data-en="✔ Cashflow forecasts">✔ Previsioni cashflow</li>
-
-<li data-it="✔ Simulazione mutuo completa" data-en="✔ Full mortgage simulation">✔ Simulazione mutuo completa</li>
-
+<li data-it="✔ Comparatore mutui" data-en="✔ Mortgage comparator">✔ Comparatore mutui</li>
 <li data-it="✔ Report PDF professionale" data-en="✔ Professional PDF report">✔ Report PDF professionale</li>
-
 </ul>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
-
-<span
-data-it="🔓 Evita perdite e sblocca profitto reale"
-data-en="🔓 Avoid losses and unlock real profit">
-🔓 Evita perdite e sblocca profitto reale
-</span>
-
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
+data-it="🔓 Sblocca profitto reale"
+data-en="🔓 Unlock real profit">
+🔓 Sblocca profitto reale
 </button>
 
 <p class="note"
@@ -1272,10 +1198,6 @@ Solo €16/mese
 <ul>
 <li data-it="✔ Tutto del piano Pro" data-en="✔ Everything in Pro plan">✔ Tutto del piano Pro</li>
 <li data-it="✔ Accesso completo 12 mesi" data-en="✔ Full access 12 months">✔ Accesso completo 12 mesi</li>
-<li data-it="✔ Dashboard + Report PDF inclusi" data-en="✔ Dashboard + PDF reports included">
-✔ Dashboard + Report PDF inclusi
-</li> 
-
 </ul>
 
 <button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary"
@@ -1537,29 +1459,23 @@ window.quickROI = function(){
   }
   else if(isInvestor){
 
-  // 🟡 INVESTOR → limitato (NO dashboard completa)
+    // 🟡 INVESTOR → parziale (spinta a PRO)
+    if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
+    if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
+    if(elBreak)  elBreak.innerText = "🔒";
+    if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
+  }
+  else if(isFreeUser){
 
-  if(elMonth)  elMonth.innerText = "🔒";
+    // 🔵 FREE → teaser
+    if(elProfit) elProfit.innerText = "≈ " + formatCurrency(netAnnual * 0.7);
+    if(elMonth)  elMonth.innerText = "≈ " + formatCurrency((netAnnual/12) * 0.7);
+    if(elBreak)  elBreak.innerText = "≈ " + breakEven.toFixed(0)+" anni";
+    if(elRev)    elRev.innerText = "≈ " + formatCurrency(revenue * 0.6);
 
-  if(elBreak)  elBreak.innerText = "🔒";
-
-  if(elRev)    elRev.innerText = formatCurrency(revenue);
-
-}else if(isFreeUser){
-
-  // 🔵 FREE → teaser intelligente (mostra valore ma ridotto)
-
-  if(elProfit) elProfit.innerText = "≈ " + formatCurrency(netAnnual * 0.7);
-
-  if(elMonth)  elMonth.innerText = "🔒";
-
-  if(elBreak)  elBreak.innerText = "🔒";
-
-  if(elRev)    elRev.innerText = "≈ " + formatCurrency(revenue * 0.7);
-
-}else{
+  }
+  else{
 
     // ⚫ GUEST → tutto lock
     if(elProfit) elProfit.innerText = "🔒";
@@ -1571,23 +1487,9 @@ window.quickROI = function(){
 
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
-
-if(overlay){
-
-  // 🔥 mostra overlay SOLO dopo interazione reale
-  const hasUserInput =
-    document.getElementById("qr_price")?.value ||
-    document.getElementById("qr_night")?.value;
-
-  if(!hasUserInput){
-    overlay.style.display = "none";
-  } else {
-    setTimeout(()=>{
-      overlay.style.display = isPro ? "none" : "flex";
-    }, 800);
+  if(overlay){
+    overlay.style.display = isPro ? "none" : "flex";
   }
-
-}
 
   // ================= PSICOLOGIA =================
   const psych = document.getElementById("roi-psychology");
