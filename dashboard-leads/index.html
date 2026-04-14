@@ -216,7 +216,13 @@ orderBy
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 function isAdmin(user){
-  return user?.email === "rendimentobb@gmail.com";
+  const email = (user?.email || "").toLowerCase();
+  const role = (window.userRole || "").toLowerCase();
+
+  return (
+    email === "rendimentobb@gmail.com" ||
+    role === "admin"
+  );
 }
 
 let currentFilter = "all";
@@ -226,9 +232,27 @@ let leadsData = [];
 onAuthStateChanged(auth, async (user)=>{
 
   if(!user || !isAdmin(user)){
-    window.location.href = "/";
-    return;
-  }
+
+  console.warn("⛔ Accesso negato Lead Dashboard");
+
+  document.body.innerHTML = `
+    <div style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      flex-direction:column;
+      background:#0f172a;
+      color:white;
+      text-align:center;
+    ">
+      <h2>🔒 Accesso riservato</h2>
+      <p>Area amministratore</p>
+    </div>
+  `;
+
+  return;
+}
 
   await loadLeads();
 
