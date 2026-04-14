@@ -44,7 +44,7 @@ window.getUserAccess = function(){
     window.userRole === "admin";
 
 const isPro =
-  ["pro","pro_yearly","investor"].includes(plan);
+  ["pro","pro_yearly"].includes(plan);
 
   const isInvestor =
     plan === "investor";
