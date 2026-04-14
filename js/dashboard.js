@@ -41,18 +41,11 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 function isInvestor(){
-  return (
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly"
-  );
+  return window.RB_USER?.isInvestor === true;
 }
 
 function isProUser(){
-  return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly"
-  );
+  return window.RB_USER?.isPro === true;
 }
 
 window.proOverlayShown = false;
@@ -302,7 +295,9 @@ async function loadDashboard(){
   labels = [];
 
   if(!window.currentPlan){
-  console.log("⏳ Piano non pronto → blocco render dashboard");
+  console.warn("⚠️ Piano non pronto → retry");
+
+  setTimeout(loadDashboard, 200);
   return;
 }
 
