@@ -13289,3 +13289,23 @@ body.menu-open{
   display:block !important;
   width:100% !important;
 }
+
+  /* =====================================
+🔥 MARKET COMPARISON FINAL FIX
+===================================== */
+
+#market-comparison.kpi-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:22px !important;
+
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+/* CARD */
+#market-comparison .kpi-box{
+  width:100%;
+  text-align:center;
+}
