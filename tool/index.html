@@ -764,8 +764,6 @@ data-en="🔥 Unlock full analysis – €29">
 
 </div>
 
-<!-- 🔥 SMART PAYWALL (FUORI DAL BLUR = CORRETTO) -->
-<div id="smart-investment-alert"></div>  
 
 <!-- ================= CTA SOTTO ================= -->
 
@@ -977,14 +975,8 @@ data-en="📄 Download Executive Report PDF">
 
 <script>
 
-/* ================= GLOBAL PLAN CHECK ================= */
-
-window.isProUser = function(){
-  return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly"
-  );
+  window.isProUser = function(){
+  return window.getUserAccess().isPro;
 };
 
 /* ================= CITY HANDLER ================= */
@@ -1138,7 +1130,7 @@ function applyPaywall(){
 
 document.addEventListener("rb_plan_loaded", () => {
 
-  console.log("🔥 Plan loaded:", window.currentPlan);
+  console.log("🔥 Plan loaded:", window.getUserAccess());
 
  if(window.isProUser()){
 
@@ -1151,6 +1143,10 @@ document.addEventListener("rb_plan_loaded", () => {
   document.querySelectorAll(".pro-only").forEach(el=>{
     el.style.display = "block";
   });
+
+ document.querySelectorAll(".free-only").forEach(el=>{
+  el.style.display = "none";
+});  
 
   // 🔥 rimuove blur
   document.querySelectorAll(".pro-blur").forEach(el=>{
@@ -1234,10 +1230,7 @@ window.handleUpgradeClick = function(){
 
   console.log("🔥 CTA CLICK");
 
-  const isPro =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "investor" ||
-    window.currentPlan === "pro_yearly";
+  const isPro = window.getUserAccess().isPro;
 
   // ================= 🟢 UTENTE PRO =================
   if(isPro){
