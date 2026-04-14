@@ -1839,11 +1839,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   function unlockHomeProUI(){
 
     const access = window.getUserAccess?.() || {};
-const isPro = access.isPro;
-const isInvestor = access.isInvestor;
-const isLogged = access.isLogged;
-
-    const access = window.getUserAccess?.() || {};
 const isPro = access.isPro || access.isInvestor;
 
     if(!isPro) return;
