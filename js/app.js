@@ -1009,6 +1009,10 @@ function renderMarketComparison(userRevenue, cityKey){
   const container = document.getElementById("market-comparison");
   if(!container) return;
 
+  // ================= RESET SICURO =================
+  container.innerHTML = "";
+  container.className = "kpi-grid";
+
   // ================= SAFE DATA =================
   const revenue   = window.safeNumber(userRevenue);
   const marketAvg = 28500;
@@ -1031,47 +1035,57 @@ function renderMarketComparison(userRevenue, cityKey){
   const bgColor   = isPositive ? "#ecfdf5" : "#fef2f2";
   const borderCol = isPositive ? "#10b981" : "#ef4444";
 
-  // ================= RENDER =================
-  container.innerHTML = `
-
-    <div class="kpi-box">
-      <div class="kpi-label">
-        ${t("📊 Ricavi stimati","📊 Estimated revenue")}
-      </div>
-      <div class="kpi-value">
-        ${formatCurrency(revenue)}
-      </div>
+  // ================= CARD 1 =================
+  const card1 = document.createElement("div");
+  card1.className = "kpi-box";
+  card1.innerHTML = `
+    <div class="kpi-label">
+      ${t("📊 Ricavi stimati","📊 Estimated revenue")}
     </div>
-
-    <div class="kpi-box">
-      <div class="kpi-label">
-        ${t("🏙 Media mercato","🏙 Market average")}
-      </div>
-      <div class="kpi-value">
-        ${formatCurrency(marketAvg)}
-      </div>
+    <div class="kpi-value">
+      ${formatCurrency(revenue)}
     </div>
-
-    <div class="kpi-box" style="
-      background:${bgColor};
-      border:1px solid ${borderCol};
-    ">
-      <div class="kpi-label">
-        ${t("⚡ Performance","⚡ Performance")}
-      </div>
-
-      <div class="kpi-value" style="color:${diffColor}">
-        ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
-      </div>
-
-      <div class="kpi-sub">
-        ${isPositive
-          ? t("Sopra la media","Above market")
-          : t("Sotto la media","Below market")}
-      </div>
-    </div>
-
   `;
+
+  // ================= CARD 2 =================
+  const card2 = document.createElement("div");
+  card2.className = "kpi-box";
+  card2.innerHTML = `
+    <div class="kpi-label">
+      ${t("🏙 Media mercato","🏙 Market average")}
+    </div>
+    <div class="kpi-value">
+      ${formatCurrency(marketAvg)}
+    </div>
+  `;
+
+  // ================= CARD 3 =================
+  const card3 = document.createElement("div");
+  card3.className = "kpi-box";
+  card3.style.background = bgColor;
+  card3.style.border = "1px solid " + borderCol;
+
+  card3.innerHTML = `
+    <div class="kpi-label">
+      ${t("⚡ Performance","⚡ Performance")}
+    </div>
+
+    <div class="kpi-value" style="color:${diffColor}">
+      ${isPositive ? "▲ +" : "▼ "}${diffPerc}%
+    </div>
+
+    <div class="kpi-sub">
+      ${isPositive
+        ? t("Sopra la media","Above market")
+        : t("Sotto la media","Below market")}
+    </div>
+  `;
+
+  // ================= APPEND REALE (FIX CRITICO) =================
+  container.appendChild(card1);
+  container.appendChild(card2);
+  container.appendChild(card3);
+
 }
 // ================= ROI VS MARKET =================
 
