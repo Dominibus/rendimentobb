@@ -1,6 +1,6 @@
 // ========================================
 // 🔐 RENDIMENTOBB ACCESS CONTROL SYSTEM
-// SINGLE SOURCE OF TRUTH
+// SINGLE SOURCE OF TRUTH (FINAL PRODUCTION)
 // ========================================
 
 // ================= USER STATE =================
@@ -10,59 +10,28 @@ window.RB_USER = {
   isInvestor: false,
   isAdmin: false,
   plan: "free"
-};
+}; // ✅ FIX CRITICO
 
-// ================= INIT =================
-window.initAccessControl = function(){
-
-  try{
-
-    const user = window.currentUser || null;
-    const plan = window.currentPlan || "free";
-
-    const isLogged = !!(user && user.uid);
-
-    const isPro =
-      plan === "pro" ||
-      plan === "pro_yearly";
-
-    const isInvestor =
-      plan === "investor";
-
-    const isAdmin =
-      (user?.email === "rendimentobb@gmail.com");
-
-    // ================= SET GLOBAL =================
-    window.RB_USER = {
-      isLogged,
-      isPro: isPro || isInvestor,
-      isInvestor,
-      isAdmin,
-      plan
-    };
-
-    applyAccessUI();
-
-    console.log("🧠 RB_USER:", window.RB_USER);
-
-   // ================= APPLY UI STATE =================
-
+// ========================================
+// 🔧 APPLY UI (GLOBALE - NON ANNIDATA)
+// ========================================
 function applyAccessUI(){
 
   if(!window.RB_USER) return;
 
-  const isPro = window.RB_USER.isPro;
-  const isLogged = window.RB_USER.isLogged;
+  const { isPro, isLogged } = window.RB_USER;
 
-  console.log("🎯 APPLY UI:", { isPro, isLogged });
+  console.log("🎯 APPLY UI:", window.RB_USER);
 
-  // ================= PRO USER =================
+  // RESET
+  document.body.classList.remove("is-pro","is-free","is-guest");
+
+  // ================= PRO / INVESTOR =================
   if(isPro){
 
     document.body.classList.add("is-pro");
-    document.body.classList.remove("is-free","is-guest");
 
-    // ❌ NASCONDI CTA + MESSAGGI PAURA
+    // ❌ NASCONDI CTA FREE
     document.querySelectorAll(`
       .upgrade-box,
       .free-only,
@@ -83,11 +52,10 @@ function applyAccessUI(){
 
   }
 
-  // ================= FREE USER =================
+  // ================= FREE =================
   else if(isLogged){
 
     document.body.classList.add("is-free");
-    document.body.classList.remove("is-pro","is-guest");
 
     document.querySelectorAll(".upgrade-box").forEach(el=>{
       el.style.display = "block";
@@ -99,7 +67,6 @@ function applyAccessUI(){
   else{
 
     document.body.classList.add("is-guest");
-    document.body.classList.remove("is-pro","is-free");
 
     document.querySelectorAll(".pro-only").forEach(el=>{
       el.style.display = "none";
@@ -109,19 +76,52 @@ function applyAccessUI(){
 
 }
 
-    // ================= APPLY BODY CLASS =================
-    document.body.classList.remove("is-free","is-pro","is-guest");
+// ========================================
+// 🚀 INIT ACCESS CONTROL
+// ========================================
+window.initAccessControl = function(){
 
-    if(!isLogged){
-      document.body.classList.add("is-guest");
-    } else if(window.RB_USER.isPro){
-      document.body.classList.add("is-pro");
-    } else {
-      document.body.classList.add("is-free");
-    }
+  try{
+
+    const user = window.currentUser || null;
+    const plan = (window.currentPlan || "free").toLowerCase();
+
+    const isLogged = !!(user && user.uid);
+
+    const isAdmin =
+      user?.email === "rendimentobb@gmail.com";
+
+    const isPro =
+      plan === "pro" ||
+      plan === "pro_yearly";
+
+    const isInvestor =
+      plan === "investor";
+
+    // 🔥 LOGICA UNIFICATA
+    const hasFullAccess =
+      isPro || isInvestor || isAdmin;
+
+    // ================= SET GLOBAL =================
+    window.RB_USER = {
+      isLogged,
+      isPro: hasFullAccess,
+      isInvestor,
+      isAdmin,
+      plan
+    };
+
+    console.log("🧠 RB_USER:", window.RB_USER);
+
+    // ================= APPLY UI =================
+    applyAccessUI();
 
     // ================= EVENT =================
-    document.dispatchEvent(new CustomEvent("rb_access_ready"));
+    document.dispatchEvent(
+      new CustomEvent("rb_access_ready", {
+        detail: window.RB_USER
+      })
+    );
 
   }catch(e){
     console.error("❌ AccessControl error:", e);
@@ -129,10 +129,15 @@ function applyAccessUI(){
 
 };
 
-// ================= HELPERS =================
-
+// ========================================
+// 🧠 HELPERS
+// ========================================
 window.isPro = function(){
   return window.RB_USER?.isPro === true;
+};
+
+window.isInvestor = function(){
+  return window.RB_USER?.isInvestor === true;
 };
 
 window.isLogged = function(){
@@ -143,8 +148,9 @@ window.isFree = function(){
   return !window.RB_USER?.isPro;
 };
 
-// ================= REQUIRE =================
-
+// ========================================
+// 🔒 REQUIRE PLAN
+// ========================================
 window.requirePro = function(){
 
   if(window.isPro()) return true;
@@ -163,28 +169,9 @@ window.requirePro = function(){
   return false;
 };
 
-// ================= AUTO INIT =================
-
-// 🔥 quando firebase ha caricato utente + piano
-document.addEventListener("rb_plan_ready", () => {
-
-  console.log("🔥 AccessControl init after plan");
-
-  window.initAccessControl();
-
-});
-
-// fallback sicurezza
-setTimeout(() => {
-  if(!window.RB_USER || !window.RB_USER.plan){
-    window.initAccessControl();
-  }
-}, 1000);
-
-// =====================
-// 🔥 GLOBAL ACCESS (CORE)
-// =====================
-
+// ========================================
+// 🔥 GLOBAL ACCESS (CORE SYSTEM)
+// ========================================
 window.getUserAccess = function(){
 
   const u = window.RB_USER || {};
@@ -194,7 +181,35 @@ window.getUserAccess = function(){
     isPro: u.isPro || false,
     isInvestor: u.isInvestor || false,
     isAdmin: u.isAdmin || false,
-    hasPlan: u.isPro || u.isInvestor || u.isAdmin
+
+    // 🔥 KEY FLAGS
+    hasPlan: u.isPro || u.isInvestor || u.isAdmin,
+    canSeeFullAnalysis: u.isPro || u.isInvestor || u.isAdmin
   };
 
 };
+
+// ========================================
+// ⚡ AUTO INIT
+// ========================================
+
+// 🔥 quando Firebase ha caricato piano
+document.addEventListener("rb_plan_ready", () => {
+
+  console.log("🔥 AccessControl init after plan");
+
+  window.initAccessControl();
+
+});
+
+// 🔒 fallback sicurezza (anti bug)
+setTimeout(() => {
+
+  if(!window.RB_USER || !window.RB_USER.plan){
+
+    console.warn("⚠️ Fallback init access control");
+
+    window.initAccessControl();
+  }
+
+}, 800);
