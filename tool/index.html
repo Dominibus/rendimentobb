@@ -1142,7 +1142,7 @@ if(access.isPro || access.isInvestor){
 
 /* ================= AUTO INIT ================= */
 
-document.addEventListener("rb_plan_loaded", () => {
+document.addEventListener("rb_access_ready", () => {
 
   console.log("🔥 Plan loaded:", window.getUserAccess());
 
@@ -1321,6 +1321,42 @@ document.addEventListener("DOMContentLoaded", () => {
   if(savedBg && typeof changeCityBackground === "function"){
     console.log("🌆 Ripristino background città:", savedBg);
     changeCityBackground(savedBg);
+  }
+
+});
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+  const btn = document.getElementById("analyze-btn");
+
+  if(btn){
+    btn.addEventListener("click", () => {
+
+      // 🔒 BLOCCO SOLO GUEST
+      const access = window.getUserAccess();
+
+      if(!access.isLogged){
+
+        window.showUpgradeModalCustom(
+          "🔒 Registrati per vedere l'anteprima",
+          "🔒 Sign up to see preview"
+        );
+
+        return;
+      }
+
+      btn.classList.add("is-loading");
+
+setTimeout(()=>{
+  btn.classList.remove("is-loading");
+}, 600);
+
+      // ✅ esegui simulazione
+      if(typeof calculate === "function"){
+        calculate();
+      }
+
+    });
   }
 
 });
