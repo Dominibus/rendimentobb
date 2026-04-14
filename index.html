@@ -468,23 +468,58 @@ Analizza immobile
 
 <!-- ROI VISIBILE -->
 <div class="metric-card roi-highlight">
+
 <span data-it="ROI stimato" data-en="Estimated ROI">ROI stimato</span>
+
 <strong id="qr_roi" class="roi-big"></strong>
 
-<div style="margin-top:10px;font-size:14px;text-align:center;color:#ef4444;font-weight:600"
-data-it="⚠️ Questo numero può essere fuorviante"
-data-en="⚠️ This number can be misleading">
+<!-- 🔥 SHOCK (PRIORITÀ MASSIMA) -->
+<div id="roi-shock-block" style="
+display:none;
+margin-top:12px;
+padding:12px;
+border-radius:10px;
+background:rgba(239,68,68,0.12);
+color:#dc2626;
+font-size:13px;
+font-weight:700;
+text-align:center;
+">
+
+<span 
+data-it="⚠️ Potresti perdere migliaia di € senza analisi completa"
+data-en="⚠️ You could lose thousands without full analysis">
+⚠️ Potresti perdere migliaia di € senza analisi completa
+</span>
+
+</div>
+
+<!-- ⚠️ WARNING SECONDARIO -->
+<div style="
+margin-top:10px;
+font-size:13px;
+text-align:center;
+color:#f59e0b;
+font-weight:600;
+"
+data-it="Questo numero può essere fuorviante"
+data-en="This number can be misleading">
 ⚠️ Questo numero può essere fuorviante
 </div>
 
-<div style="margin-top:6px;font-size:13px;text-align:center;color:#64748b"
-data-it="Non include rischio, mutuo e costi reali"
-data-en="Does not include risk, mortgage and real costs">
-Non include rischio, mutuo e costi reali
+<!-- ℹ️ INFO (LEGGERA) -->
+<div style="
+margin-top:4px;
+font-size:12px;
+text-align:center;
+color:#64748b;
+"
+data-it="Dati incompleti: rischio, mutuo e costi reali esclusi"
+data-en="Incomplete data: risk, mortgage and real costs excluded">
+Dati incompleti: rischio, mutuo e costi reali esclusi
 </div>
 
 </div>
-
 <!-- 🔒 BLOCCATI / 🔓 SBLOCCATI DINAMICAMENTE -->
 <div class="metric-card pro-blur">
   <span data-it="Profitto annuo" data-en="Annual profit">
