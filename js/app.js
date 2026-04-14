@@ -1087,7 +1087,13 @@ function renderMarketComparison(userRevenue, cityKey){
   `;
 
   // ================= RENDER =================
-  container.insertAdjacentHTML("beforeend", kpi1 + kpi2 + kpi3);
+  container.innerHTML = `
+  <div class="market-kpi-wrapper">
+    ${kpi1}
+    ${kpi2}
+    ${kpi3}
+  </div>
+`;
 
 }
 // ================= ROI VS MARKET =================
