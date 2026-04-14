@@ -150,18 +150,16 @@ if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
 const access = window.getUserAccess();
 
+// 🔐 check pro user
 window.isProUser = function(){
   return window.getUserAccess().isPro;
-};  
+};
 
-// 🔓 PRO / INVESTOR → vedono tutto (NO RETURN HARD)
-// 🇮🇹 NON blocchiamo la funzione → serve per UI dinamica
-// 🇬🇧 Do NOT hard return → needed for UI logic
-
+// 🔓 PRO / INVESTOR → accesso completo
 const isPremium =
   access.canSeeFullAnalysis || access.isInvestor;
 
-// 🔒 FREE → nascondi dati
+// 🔒 FREE → blocca alcune metriche
 const lockIds = [
   "qr_profit",
   "qr_month",
@@ -170,6 +168,7 @@ const lockIds = [
 ];
 
 if(!isPremium){
+
   lockIds.forEach(id => {
 
     const el = document.getElementById(id);
@@ -179,16 +178,8 @@ if(!isPremium){
     el.style.opacity = "0.6";
 
   });
+
 }
-  const el = document.getElementById(id);
-
-  if(!el) return;
-
-  el.innerText = t("🔒 Pro","🔒 Pro");
-  el.style.opacity = "0.6";
-});  
-
-};
 
 // =====================================
 // 🔥 HOME BLUR INTELLIGENTE (SAFE)
@@ -203,14 +194,14 @@ setTimeout(()=>{
   const access = window.getUserAccess();
   const isPremium = access.canSeeFullAnalysis || access.isInvestor;
 
-  // 🔥 MOSTRA SOLO DOPO CALCOLO (NON SU INPUT)
+  // 🔥 MOSTRA SOLO DOPO CALCOLO
   if(!window.simulationExecuted){
     overlay.style.display = "none";
     overlay.classList.remove("active");
     return;
   }
 
-  // 🔥 FREE → mostra
+  // 🔒 FREE → mostra overlay
   if(!isPremium){
     overlay.style.display = "flex";
     overlay.classList.add("active");
