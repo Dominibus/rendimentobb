@@ -962,15 +962,32 @@ else if(avgROI >= 5){
 }
 
 // ================= KPI GRID =================
-const kpiRoi = document.getElementById("kpi-roi");
-const kpiCash = document.getElementById("kpi-cash");
-const kpiInvest = document.getElementById("kpi-invest");
-const kpiBreak = document.getElementById("kpi-break");
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "pro_yearly";
+
+const isInvestor =
+  window.currentPlan === "investor";
 
 if(kpiRoi) kpiRoi.innerText = avgROIRounded + "%";
-if(kpiCash) kpiCash.innerText = formatCurrency(monthlyProfit);
-if(kpiInvest) kpiInvest.innerText = formatCurrency(totalCapital);
-if(kpiBreak) kpiBreak.innerText = breakEven + "y";
+
+if(kpiCash){
+  kpiCash.innerText = isPro || isInvestor
+    ? formatCurrency(monthlyProfit)
+    : "🔒";
+}
+
+if(kpiInvest){
+  kpiInvest.innerText = isPro || isInvestor
+    ? formatCurrency(totalCapital)
+    : "🔒";
+}
+
+if(kpiBreak){
+  kpiBreak.innerText = isPro
+    ? breakEven + "y"
+    : "🔒";
+}
 
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
@@ -1102,7 +1119,11 @@ font-weight:900;
 letter-spacing:-0.5px;
 color:#2563eb;
 ">
-${investmentScore}/100
+${
+isPro
+? `${investmentScore}/100`
+: "🔒"
+}
 </div>
 </div>
 
@@ -1241,7 +1262,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const isAllowed =
   window.currentPlan === "pro" ||
   window.currentPlan === "pro_yearly" ||
-  window.currentPlan === "investor";
+  window.currentPlan === "investor" ||
+  window.currentPlan === "free";
 
 if(!isAllowed){
   window.location.href = "/#pricing";
@@ -1847,8 +1869,26 @@ document.addEventListener("click",(e)=>{
   }
 
   if(e.target.id === "download-report"){
-    downloadReport();
+
+  const plan = String(window.currentPlan || "").toLowerCase();
+
+  const canDownload =
+    plan === "pro" ||
+    plan === "pro_yearly";
+
+  if(!canDownload){
+
+    if(typeof startPlanPurchase === "function"){
+      startPlanPurchase("pro");
+    }else{
+      window.location.href = "/#pricing";
+    }
+
+    return;
   }
+
+  downloadReport();
+}
 
 });
 
@@ -2329,6 +2369,7 @@ function renderUpgradeTrigger(best){
 
   if(!best) return;
   if(best.roi < 6) return;
+  if(window.currentPlan === "pro") return;
 
   const potentialProfit = Math.round((best.price * best.roi) / 100);
 
