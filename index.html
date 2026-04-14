@@ -568,12 +568,14 @@ data-en="🔓 Unlock full analysis">
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
 
 <button onclick="startPlanPurchase('pro')" 
-class="btn btn-primary btn-lg block"
+class="btn btn-primary btn-lg block">
+
 <span
 data-it="🔓 Evita perdite → scopri profitto reale"
 data-en="🔓 Avoid losses → unlock real profit">
 🔓 Evita perdite → scopri profitto reale
 </span>
+
 </button>
 
 <p style="margin-top:10px;font-size:13px;color:#64748b;"
@@ -1218,12 +1220,14 @@ data-en="✔ Full dashboard + reports & PDF">
 
 </ul>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary">
+
 <span
 data-it="🔓 Evita perdite e sblocca profitto reale"
 data-en="🔓 Avoid losses and unlock real profit">
 🔓 Evita perdite e sblocca profitto reale
 </span>
+
 </button>
 
 <p class="note"
@@ -1567,11 +1571,23 @@ window.quickROI = function(){
 
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
-  if(overlay){
+
+if(overlay){
+
+  // 🔥 mostra overlay SOLO dopo interazione reale
+  const hasUserInput =
+    document.getElementById("qr_price")?.value ||
+    document.getElementById("qr_night")?.value;
+
+  if(!hasUserInput){
+    overlay.style.display = "none";
+  } else {
     setTimeout(()=>{
-  overlay.style.display = isPro ? "none" : "flex";
-}, 800);
+      overlay.style.display = isPro ? "none" : "flex";
+    }, 800);
   }
+
+}
 
   // ================= PSICOLOGIA =================
   const psych = document.getElementById("roi-psychology");
