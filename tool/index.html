@@ -411,8 +411,6 @@ data-it="Potenziale rendimento"
 data-en="Potential return">
 </div>
 
-<div class="roi-value">
-
   <div class="roi-value" style="position:relative;">
 
   <!-- ROI -->
@@ -977,18 +975,10 @@ data-en="📄 Download Executive Report PDF">
 
   window.isProUser = function(){
 
-  if(typeof window.getUserAccess === "function"){
-    return window.getUserAccess().isPro;
-  }
+  const access = window.getUserAccess?.() || {};
 
-  // fallback sicurezza (evita crash)
-  const plan = String(window.currentPlan || "").toLowerCase();
+  return !!(access.isPro || access.isInvestor);
 
-  return (
-    plan === "pro" ||
-    plan === "pro_yearly" ||
-    plan === "investor"
-  );
 };
 
 /* ================= CITY HANDLER ================= */
@@ -1065,13 +1055,16 @@ function applyPaywall(){
   ];
 
   // 🔥 PRO USER → SBLOCCA TUTTO
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
 
 if(access.isPro || access.isInvestor){
 
     console.log("🚀 PRO attivo → sblocco UI");
 
-    document.querySelectorAll("[data-paywall]").forEach(el => el.remove());
+    // 🔥 rimuove TUTTO il paywall
+document.querySelectorAll("[data-paywall], .locked-overlay, .upgrade-box").forEach(el=>{
+  el.remove();
+});
 
     document.querySelectorAll(".results-card").forEach(card=>{
       card.style.filter = "none";
@@ -1155,8 +1148,8 @@ document.addEventListener("rb_access_ready", () => {
 
   // 🔥 mostra contenuti pro
   document.querySelectorAll(".pro-only").forEach(el=>{
-    el.style.display = "block";
-  });
+  el.classList.remove("pro-only");
+});
 
  document.querySelectorAll(".free-only").forEach(el=>{
   el.style.display = "none";
