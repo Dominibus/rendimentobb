@@ -1419,6 +1419,19 @@ window.quickROI = function(){
   const costEl  = document.getElementById("qr_cost");
 
   let price = safeNum(priceEl?.value,250000);
+ // ================= GUEST BLOCK (UX FIX) =================
+const isLogged = !!window.currentUser;
+
+if(!isLogged){
+
+  alert(window.t(
+    "Registrati gratis per vedere i risultati della simulazione",
+    "Sign up for free to see simulation results"
+  ));
+
+  window.location.href = "/login/";
+  return;
+}
   let reno  = safeNum(renoEl?.value,30000);
   let night = safeNum(nightEl?.value,110);
   let occ   = safeNum(occEl?.value,65);
@@ -1487,8 +1500,10 @@ window.quickROI = function(){
   console.log("🔥 ROI:", roi);
 
   // ================= PLAN =================
-  const plan = String(window.currentPlan || "").toLowerCase();
-  const isLogged = !!window.currentUser;
+  const access = window.getUserAccess?.() || {};
+const isPro = access.isPro;
+const isInvestor = access.isInvestor;
+const isLogged = access.isLogged;
 
   const isPro =
     plan === "pro" ||
@@ -1560,7 +1575,7 @@ window.quickROI = function(){
   else if(isFreeUser){
 
     // 🔵 DUBBIO FORTE
-    if(elProfit) elProfit.innerText = "⚠️ Non affidabile";
+    if(elProfit) elProfit.innerText = "~ " + formatCurrency(netAnnual);
     if(elMonth)  elMonth.innerText = "⚠️ Non affidabile";
     if(elBreak)  elBreak.innerText = "🔒";
     if(elRev)    elRev.innerText = "⚠️ Non affidabile";
@@ -1632,8 +1647,10 @@ window.quickROI = function(){
 // ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
-  const plan = String(window.currentPlan || "").toLowerCase();
-  const isLogged = !!window.currentUser;
+  const access = window.getUserAccess?.() || {};
+const isPro = access.isPro;
+const isInvestor = access.isInvestor;
+const isLogged = access.isLogged;
 
   const isPro =
     plan === "pro" ||
@@ -1834,11 +1851,15 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // ================= 🔓 SBLOCCO PRO =================
   function unlockHomeProUI(){
 
-    const plan = String(window.currentPlan || "").toLowerCase();
+    const access = window.getUserAccess?.() || {};
+const isPro = access.isPro;
+const isInvestor = access.isInvestor;
+const isLogged = access.isLogged;
 
     const isPro =
-      plan === "pro" ||
-      plan === "pro_yearly";
+  plan === "pro" ||
+  plan === "pro_yearly" ||
+  plan === "investor";
 
     if(!isPro) return;
 
