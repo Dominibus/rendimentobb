@@ -13034,37 +13034,94 @@ body.menu-open{
 }
 
 /* =====================================
-🔥 FIX BLUR HOME (DESKTOP ONLY)
+🔥 FIX BLUR HOME – ULTRA SaaS (FINAL)
 ===================================== */
 
 @media (min-width:1024px){
 
+  /* CONTENITORE */
   .investment-metrics{
     position:relative;
+    overflow:hidden;
+    border-radius:16px;
   }
 
+  /* CONTENUTO SOTTO (BLURRATO) */
+  .investment-metrics > *:not(.home-blur-overlay){
+    filter:blur(3px);
+    opacity:0.6;
+    pointer-events:none;
+    user-select:none;
+  }
+
+  /* OVERLAY */
   .home-blur-overlay{
     position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
+    inset:0;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    background:rgba(15,23,42,0.75);
-    backdrop-filter:blur(6px);
+    background:linear-gradient(
+      180deg,
+      rgba(15,23,42,0.65),
+      rgba(15,23,42,0.85)
+    );
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
 
     border-radius:16px;
-    z-index:5;
+    z-index:10;
+
+    animation:fadeInBlur .4s ease;
   }
 
+  /* BOX CONTENUTO */
   .home-overlay-content{
     max-width:420px;
-    padding:25px;
+    padding:28px;
+
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(8px);
+
+    border-radius:16px;
+
     text-align:center;
+
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
   }
 
+  /* TESTO */
+  .home-overlay-content .overlay-text{
+    font-size:14px;
+    line-height:1.5;
+    color:#e2e8f0;
+    margin-bottom:16px;
+  }
+
+  /* CTA */
+  .home-overlay-content .btn{
+    width:100%;
+    justify-content:center;
+  }
+
+}
+
+/* =====================================
+✨ ANIMAZIONE FADE (PREMIUM FEEL)
+===================================== */
+
+@keyframes fadeInBlur{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
