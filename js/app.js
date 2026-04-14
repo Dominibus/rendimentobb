@@ -154,9 +154,21 @@ window.isProUser = function(){
   return window.getUserAccess().isPro;
 };  
 
-// 🔓 PRO / INVESTOR → vedono tutto
-if(access.canSeeFullAnalysis || access.isInvestor){
-  return;
+// ================= SHOCK ENGINE =================
+
+const shock = document.getElementById("roi-shock-block");
+
+// mostra SOLO a non PRO
+if(!access.canSeeFullAnalysis && roi > 0){
+
+  if(shock){
+    shock.style.display = "block";
+  }
+
+}else{
+  if(shock){
+    shock.style.display = "none";
+  }
 }
 
 // 🔒 FREE → nascondi dati
@@ -168,12 +180,13 @@ const lockIds = [
 ];
 
 lockIds.forEach(id => {
-  const el = document.getElementById(id);
 
+  const el = document.getElementById(id);
   if(!el) return;
 
-  el.innerText = t("🔒 Pro","🔒 Pro");
-  el.style.opacity = "0.6";
+  el.innerText = "🔒";
+  el.style.opacity = "0.5";
+
 });  
 
 };
@@ -827,7 +840,22 @@ function applyAccessControl(){
   const access = window.getUserAccess();
 
   // 🔓 PRO / ADMIN / INVESTOR
-  if(access.canSeeFullAnalysis || access.isInvestor){
+  if(access.canSeeFullAnalysis){
+
+    // 🟡 INVESTOR → semi lock (frustrazione controllata)
+if(access.isInvestor){
+
+  document.querySelectorAll(`
+    #investment-score,
+    #investment-ranking,
+    #investment-verdict
+  `).forEach(el=>{
+    if(el){
+      el.classList.add("locked-section");
+    }
+  });
+
+}
 
     console.log("🔓 FULL ACCESS");
 
