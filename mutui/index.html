@@ -479,9 +479,36 @@ data-en="✔ Request sent">
 
 <script>
 
-function isProUser(){
-  return ["investor","pro","pro_yearly"].includes(window.currentPlan);
+function getAccess(){
+
+  const plan = String(window.currentPlan || "").toLowerCase();
+  const isLogged = !!window.currentUser;
+
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly";
+
+  const isInvestor =
+    plan === "investor";
+
+  return {
+    isLogged,
+    isPro,
+    isInvestor
+  };
 }  
+
+function getAccess(){
+
+  const plan = String(window.currentPlan || "").toLowerCase();
+
+  return {
+    isPro: plan === "pro" || plan === "pro_yearly",
+    isInvestor: plan === "investor",
+    isLogged: !!window.currentUser
+  };
+
+} 
 
 /* ================= LANG ================= */
 function t(it,en){
@@ -542,11 +569,13 @@ renderDecision(roi);
 }
 
 function lockValue(value, suffix=""){
-  return !isProUser()
+
+  const access = getAccess();
+
+  return !access.isPro
     ? "🔒 Pro"
     : value + suffix;
 }
-
 
 /* ================= EXTRA ================= */
 function renderExtra(roi, yearly){
@@ -566,7 +595,7 @@ t("BASSO","LOW");
 
 extra.innerHTML = `
 
-${!isProUser() ? `
+${!getAccess().isPro ? `
 <div style="
   background:#111827;
   color:white;
@@ -597,7 +626,7 @@ color:#b91c1c;
 ">
 ⚠️ ${t("Stai perdendo circa","You are losing about")}
 <strong>
-${!isProUser()
+${!getAccess().isPro
   ? "🔒 Pro"
   : "€"+loss.toFixed(0)+"/anno"}
 </strong>
@@ -607,7 +636,7 @@ ${!isProUser()
 
 <div>
 💰 ${t("Costo reale mutuo","Real mortgage cost")}:
-${!isProUser()
+${!getAccess().isPro
   ? "🔒 Pro"
   : "€"+yearly.toFixed(0)}
 </div>
@@ -726,7 +755,8 @@ const n = 20*12;
 const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly * 12;
 
-const locked = !isProUser();
+const access = getAccess();
+const locked = !access.isInvestor && !access.isPro;
 
 html += `
 <div class="bank-card ${i===0?"best":""}">
