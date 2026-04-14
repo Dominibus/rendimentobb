@@ -13060,3 +13060,24 @@ body.menu-open{
   }
 
 }
+
+/* FIX CENTRATURA BOTTONI PRICING */
+.plan-card .btn{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+/* FIX OVERLAY MOBILE/DESKTOP */
+.home-blur-overlay{
+  backdrop-filter: blur(6px);
+}
+
+/* FIX METRIC GRID */
+.investment-metrics{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+}
