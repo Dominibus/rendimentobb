@@ -3519,48 +3519,63 @@ document.addEventListener("DOMContentLoaded", () => {
   ctas.forEach(btn => {
 
     if(btn.innerText.includes("Scopri") || btn.innerText.includes("Find out")){
-
       found++;
 
+      // 👉 qui eventualmente log o gestione futura
       if(found > 1){
-        
+        console.warn("⚠️ CTA duplicate trovate");
       }
-
     }
 
   });
 
 });
 
+
+// ================= AUTO CTA (SAFE VERSION) =================
 document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll(".btn-main").forEach(btn => {
 
-    // 🔥 se NON ha onclick → glielo assegno
-    if(!btn.getAttribute("onclick")){
-
-      btn.addEventListener("click", () => {
-
-        console.log("🔥 AUTO CTA CLICK");
-
-        // puoi cambiare piano se serve
-        startPlanPurchase("pro");
-
-      });
-
+    // 🔴 CRITICO: NON TOCCARE BOTTONI CORE
+    if(
+      btn.id === "analyze-btn" ||           // simulatore
+      btn.id === "rb-upgrade-btn" ||        // modal upgrade
+      btn.closest("#rb-upgrade-modal")      // dentro modal
+    ){
+      return;
     }
+
+    // 🔴 se ha già onclick → NON toccare
+    if(btn.getAttribute("onclick")) return;
+
+    // 🔴 evita doppio bind
+    if(btn.dataset.bound) return;
+
+    btn.dataset.bound = "true";
+
+    btn.addEventListener("click", () => {
+
+      console.log("🔥 AUTO CTA CLICK SAFE");
+
+      startPlanPurchase("pro");
+
+    });
 
   });
 
 });
 
+
+// ================= PLAN BUTTONS (FORZATI E SICURI) =================
 document.addEventListener("DOMContentLoaded", () => {
 
   // 🔥 PRO BUTTON
   const proBtn = document.querySelector(".plan-pro .btn-main");
 
   if(proBtn){
-    proBtn.onclick = () => {
+    proBtn.onclick = (e) => {
+      e.stopPropagation();
       console.log("🔥 CLICK PRO");
       startPlanPurchase("pro");
     };
@@ -3570,7 +3585,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const investorBtn = document.querySelector(".plan-investor .btn-main");
 
   if(investorBtn){
-    investorBtn.onclick = () => {
+    investorBtn.onclick = (e) => {
+      e.stopPropagation();
       console.log("🔥 CLICK INVESTOR");
       startPlanPurchase("investor");
     };
@@ -3580,7 +3596,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearlyBtn = document.querySelector(".plan-annual .btn-main");
 
   if(yearlyBtn){
-    yearlyBtn.onclick = () => {
+    yearlyBtn.onclick = (e) => {
+      e.stopPropagation();
       console.log("🔥 CLICK YEARLY");
       startPlanPurchase("pro_yearly");
     };
