@@ -3687,12 +3687,12 @@ document.addEventListener("rb_plan_loaded", () => {
 
 window.handleAnalyzeClick = function(){
 
-  const isLogged = !!window.currentUser;
+  const userLogged = !!window.currentUser;
 
   // =========================
   // ❌ NON LOGGATO → BLOCCO + REGISTRAZIONE
   // =========================
-  if(!isLogged){
+  if(!userLogged){
 
     console.log("🔒 Utente non loggato → popup register");
 
