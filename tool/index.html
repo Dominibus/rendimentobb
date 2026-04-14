@@ -976,7 +976,19 @@ data-en="📄 Download Executive Report PDF">
 <script>
 
   window.isProUser = function(){
-  return window.getUserAccess().isPro;
+
+  if(typeof window.getUserAccess === "function"){
+    return window.getUserAccess().isPro;
+  }
+
+  // fallback sicurezza (evita crash)
+  const plan = String(window.currentPlan || "").toLowerCase();
+
+  return (
+    plan === "pro" ||
+    plan === "pro_yearly" ||
+    plan === "investor"
+  );
 };
 
 /* ================= CITY HANDLER ================= */
