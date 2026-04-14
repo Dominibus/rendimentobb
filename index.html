@@ -1395,7 +1395,7 @@ window.startAnalysis = function(){
 
 };
 
-// ================= QUICK ROI (SYNC ENGINE) =================
+// ================= QUICK ROI (ULTRA CONVERSION ENGINE) =================
 window.quickROI = function(){
 
   // ================= INPUT =================
@@ -1453,7 +1453,7 @@ window.quickROI = function(){
       breakEvenYears: net>0 ? investment/net : 99
     };
 
-    console.warn("⚠️ ROI engine non trovato → fallback attivo");
+    console.warn("⚠️ ROI engine fallback attivo");
   }
 
   // ================= NORMALIZZAZIONE =================
@@ -1471,9 +1471,9 @@ window.quickROI = function(){
     safeNum(result?.breakEvenYears) ||
     safeNum(result?.breakEven);
 
-  console.log("🔥 QUICK ROI RESULT:", result);
+  console.log("🔥 ROI:", roi);
 
-  // ================= PLAN LOGIC =================
+  // ================= PLAN =================
   const plan = String(window.currentPlan || "").toLowerCase();
   const isLogged = !!window.currentUser;
 
@@ -1487,36 +1487,44 @@ window.quickROI = function(){
   const isFreeUser = isLogged && !isPro && !isInvestor;
   const isGuest = !isLogged;
 
-  // ================= OUTPUT =================
+  // ================= ELEMENTI =================
   const elRoi   = document.getElementById("qr_roi");
   const elProfit= document.getElementById("qr_profit");
   const elMonth = document.getElementById("qr_month");
   const elBreak = document.getElementById("qr_break");
   const elRev   = document.getElementById("qr_rev");
 
+  // ================= ROI DISPLAY =================
   if(elRoi){
+
     elRoi.innerText = roi ? roi.toFixed(1)+"%" : "—";
+
+    // 🎨 COLOR LOGIC (tipo fintech)
+    if(roi > 15){
+      elRoi.style.color = "#10b981"; // verde forte
+    }else if(roi > 8){
+      elRoi.style.color = "#f59e0b"; // giallo
+    }else{
+      elRoi.style.color = "#ef4444"; // rosso
+    }
   }
 
-  // ================= PSYCHO ALERT (solo free/guest) =================
-  if(!isPro && !isInvestor && roi > 0){
+  // ================= SHOCK TRIGGER =================
+  if(!isPro && roi > 0){
 
-    setTimeout(()=>{
-      alert(
-        window.t(
-          "⚠️ Il ROI positivo NON significa profitto reale.\n\nMolti investimenti apparentemente buoni generano perdite.",
-          "⚠️ Positive ROI does NOT mean real profit.\n\nMany good-looking investments lose money."
-        )
-      );
-    }, 800);
+    const shock = document.getElementById("roi-shock-block");
+
+    if(shock){
+      shock.style.display = "block";
+    }
 
   }
 
-  // ================= DATI PER PIANO =================
+  // ================= DATA BY PLAN =================
 
   if(isPro){
 
-    // 🟢 PRO → tutto reale
+    // 🟢 FULL POWER
     if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
     if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
     if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
@@ -1525,7 +1533,7 @@ window.quickROI = function(){
   }
   else if(isInvestor){
 
-    // 🟡 INVESTOR → parziale (spinta a PRO)
+    // 🟡 FRUSTRATION STRATEGICA
     if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
     if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
     if(elBreak)  elBreak.innerText = "🔒";
@@ -1534,16 +1542,16 @@ window.quickROI = function(){
   }
   else if(isFreeUser){
 
-    // 🔵 FREE → teaser
-    if(elProfit) elProfit.innerText = "≈ " + formatCurrency(netAnnual * 0.7);
-    if(elMonth)  elMonth.innerText = "≈ " + formatCurrency((netAnnual/12) * 0.7);
-    if(elBreak)  elBreak.innerText = "≈ " + breakEven.toFixed(0)+" anni";
-    if(elRev)    elRev.innerText = "≈ " + formatCurrency(revenue * 0.6);
+    // 🔵 DUBBIO → conversione
+    if(elProfit) elProfit.innerText = "⚠️ Dato incompleto";
+    if(elMonth)  elMonth.innerText = "⚠️ Dato incompleto";
+    if(elBreak)  elBreak.innerText = "🔒";
+    if(elRev)    elRev.innerText = "⚠️ Dato incompleto";
 
   }
   else{
 
-    // ⚫ GUEST → tutto lock
+    // ⚫ GUEST → LOCK TOTALE
     if(elProfit) elProfit.innerText = "🔒";
     if(elMonth)  elMonth.innerText = "🔒";
     if(elBreak)  elBreak.innerText = "🔒";
@@ -1557,7 +1565,7 @@ window.quickROI = function(){
     overlay.style.display = isPro ? "none" : "flex";
   }
 
-  // ================= PSICOLOGIA =================
+  // ================= PSYCHO LABEL =================
   const psych = document.getElementById("roi-psychology");
 
   if(psych){
@@ -1571,8 +1579,8 @@ window.quickROI = function(){
       psych.setAttribute("data-en","✅ Good investment");
     }
     else{
-      psych.setAttribute("data-it","⚠️ Margine basso");
-      psych.setAttribute("data-en","⚠️ Low margin");
+      psych.setAttribute("data-it","⚠️ Rischio elevato");
+      psych.setAttribute("data-en","⚠️ High risk");
     }
 
   }
@@ -1584,7 +1592,7 @@ window.quickROI = function(){
     })
   );
 
-  // ================= CTA =================
+  // ================= CTA DINAMICA =================
   if(typeof renderUpgradeCTA === "function"){
     renderUpgradeCTA(roi);
   }
@@ -1593,7 +1601,6 @@ window.quickROI = function(){
   window.RB_LANG?.apply?.();
 
 };
-
 
 // ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
