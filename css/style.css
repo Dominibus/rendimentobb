@@ -13032,3 +13032,35 @@ body.menu-open{
   background:none;
   border:none;
 }
+
+/* =============================
+🔥 FIX BLUR DESKTOP (PREMIUM LOOK)
+============================= */
+
+@media (min-width:1024px){
+
+  .pro-blur{
+    filter: blur(4px);
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+
+  .home-blur-overlay{
+    background: rgba(15,23,42,0.55);
+    backdrop-filter: blur(6px);
+  }
+
+}
+
+/* =============================
+🔥 MOBILE → PIÙ PULITO
+============================= */
+
+@media (max-width:768px){
+
+  .pro-blur{
+    filter: blur(6px);
+    opacity: 0.4;
+  }
+
+}
