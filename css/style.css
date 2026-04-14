@@ -13234,3 +13234,16 @@ body.menu-open{
 .kpi-box.down .kpi-value{
   color:#ef4444;
 }
+/* =====================================
+🎯 CENTER PERFORMANCE BOX (FIX VELOCE)
+===================================== */
+
+#market-comparison{
+  display:flex !important;
+  justify-content:center !important;
+}
+
+#market-comparison .kpi-box{
+  max-width:320px;
+  width:100%;
+}
