@@ -13234,3 +13234,34 @@ body.menu-open{
   }
 
 }
+
+/* =====================================
+🔥 KPI GRID SYSTEM (FIX DEFINITIVO)
+===================================== */
+
+.kpi-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3, 1fr) !important;
+  gap:20px !important;
+
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+
+  align-items:stretch;
+}
+
+/* sicurezza: forza ogni card */
+.kpi-grid .kpi-box{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .kpi-grid{
+    grid-template-columns:1fr !important;
+  }
+}
