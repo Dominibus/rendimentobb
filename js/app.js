@@ -200,31 +200,27 @@ setTimeout(()=>{
   const overlay = document.querySelector(".home-blur-overlay");
   if(!overlay) return;
 
-  const hasInput =
-    document.getElementById("qr_price")?.value ||
-    document.getElementById("qr_night")?.value;
+  const access = window.getUserAccess();
+  const isPremium = access.canSeeFullAnalysis || access.isInvestor;
 
-  // 🇮🇹 Nessun input → niente blur
-  // 🇬🇧 No input → no blur
-  if(!hasInput){
+  // 🔥 MOSTRA SOLO DOPO CALCOLO (NON SU INPUT)
+  if(!window.simulationExecuted){
     overlay.style.display = "none";
     overlay.classList.remove("active");
     return;
   }
 
-  // 🇮🇹 FREE → mostra blur
-  // 🇬🇧 Free user → show blur
+  // 🔥 FREE → mostra
   if(!isPremium){
     overlay.style.display = "flex";
     overlay.classList.add("active");
   } else {
-    // 🇮🇹 PRO → sempre libero
-    // 🇬🇧 PRO → always unlocked
+    // 🔓 PRO → mai blur
     overlay.style.display = "none";
     overlay.classList.remove("active");
   }
 
-}, 80);
+}, 100);
 
 window.runMortgageComparison = function(){
 
