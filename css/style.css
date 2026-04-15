@@ -13376,3 +13376,89 @@ body.menu-open{
   transform:translateY(-4px);
   box-shadow:0 20px 60px rgba(2,6,23,0.12);
 }
+
+/* =====================================
+🔥 FIX CONTRASTI GLOBALI (NO TESTO SBIADITO)
+===================================== */
+
+.section{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+.section *{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* =====================================
+🔥 FIX TEXT COLOR (LEGGIBILITÀ)
+===================================== */
+
+.section-dark{
+  background:#0f172a;
+  color:#ffffff;
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark p{
+  color:#ffffff !important;
+}
+
+/* =====================================
+🔥 CTA ULTRA CENTER (SILICON VALLEY STYLE)
+===================================== */
+
+.cta-container{
+  text-align:center !important;
+  max-width:720px;
+  margin:0 auto;
+}
+
+/* FORZA CENTRO ANCHE SU DESKTOP */
+@media (min-width:1024px){
+
+  .cta-section .container{
+    text-align:center !important;
+  }
+
+  .cta-section h2,
+  .cta-section p{
+    text-align:center !important;
+  }
+
+}
+
+/* =====================================
+🔥 SPAZIATURE PRO
+===================================== */
+
+.cta-section h2{
+  font-size:32px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.cta-section p{
+  font-size:16px;
+  opacity:0.85;
+  margin-bottom:28px;
+}
+
+/* =====================================
+🔥 BUTTON STYLE (STRIPE LEVEL)
+===================================== */
+
+.cta-section .btn{
+  padding:14px 28px;
+  font-size:16px;
+  border-radius:999px;
+  box-shadow:0 10px 30px rgba(16,185,129,0.3);
+  transition:all .25s ease;
+}
+
+.cta-section .btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 40px rgba(16,185,129,0.4);
+}
