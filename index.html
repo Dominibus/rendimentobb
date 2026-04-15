@@ -1419,8 +1419,17 @@ window.quickROI = function(){
   const costEl  = document.getElementById("qr_cost");
 
   let price = safeNum(priceEl?.value,250000);
- // ================= GUEST BLOCK (UX FIX) =================
+// ================= PLAN =================
+const access = window.getUserAccess?.() || {};
 
+const isPro = !!access.isPro;
+const isInvestor = !!access.isInvestor;
+const isLogged = !!access.isLogged;
+
+const isFreeUser = isLogged && !isPro && !isInvestor;
+const isGuest = !isLogged;
+
+// ================= GUEST BLOCK =================
 if(!isLogged){
 
   alert(window.t(
@@ -1497,16 +1506,6 @@ if(!isLogged){
     safeNum(result?.breakEven);
 
   console.log("🔥 ROI:", roi);
-
- // ================= PLAN =================
-const access = window.getUserAccess?.() || {};
-
-const isPro = !!access.isPro;
-const isInvestor = !!access.isInvestor;
-const isLogged = !!access.isLogged;
-
-const isFreeUser = isLogged && !isPro && !isInvestor;
-const isGuest = !isLogged;
 
   // ================= ELEMENTI =================
   const elRoi   = document.getElementById("qr_roi");
