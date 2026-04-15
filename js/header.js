@@ -23,9 +23,14 @@ window.applyCityBackground = function(){
 
   let city = "rome";
 
-  if(path.includes("milano")) city = "milan";
-  else if(path.includes("napoli")) city = "naples";
-  else if(path.includes("firenze")) city = "florence";
+// 🔥 FIX MARKET GENERALE (CRITICO)
+if(path === "/market/" || path === "/market"){
+  city = "rome"; // fallback elegante
+}
+else if(path.includes("milano")) city = "milan";
+else if(path.includes("napoli")) city = "naples";
+else if(path.includes("firenze")) city = "florence";
+else if(path.includes("roma")) city = "rome";
 
   hero.classList.add(city);
 };
