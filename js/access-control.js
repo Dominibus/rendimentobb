@@ -1,6 +1,6 @@
 // ========================================
 // 🔐 RENDIMENTOBB ACCESS CONTROL SYSTEM
-// SINGLE SOURCE OF TRUTH (FINAL PRODUCTION)
+// FINAL PRODUCTION (FIX TIMING + UNLOCK)
 // ========================================
 
 // ================= USER STATE =================
@@ -9,15 +9,19 @@ window.RB_USER = {
   isPro: false,
   isInvestor: false,
   isAdmin: false,
-  plan: "free"
-}; // ✅ FIX CRITICO
+  plan: "free",
+  ready: false // 🔥 FIX TIMING
+};
 
 // ========================================
-// 🔧 APPLY UI (GLOBALE - NON ANNIDATA)
+// 🔧 APPLY UI
 // ========================================
 function applyAccessUI(){
 
-  if(!window.RB_USER) return;
+  if(!window.RB_USER || !window.RB_USER.ready){
+    console.warn("⏳ RB_USER non pronto → skip UI");
+    return;
+  }
 
   const { isPro, isLogged } = window.RB_USER;
 
@@ -26,30 +30,35 @@ function applyAccessUI(){
   // RESET
   document.body.classList.remove("is-pro","is-free","is-guest");
 
-if(isPro){
+  // ================= PRO =================
+  if(isPro){
 
-  document.body.classList.add("is-pro");
+    document.body.classList.add("is-pro");
 
-  // 🔥 NASCONDI CTA FREE (FIX)
-  document.querySelectorAll(`
-    .upgrade-box,
-    .free-only,
-    [data-paywall]
-  `).forEach(el => el.remove());
+    // 🔥 RIMUOVE PAYWALL
+    document.querySelectorAll(`
+      .upgrade-box,
+      .free-only,
+      [data-paywall]
+    `).forEach(el => el.remove());
 
-  // 🔓 SBLOCCA CONTENUTI
-  document.querySelectorAll(`
-    .pro-blur,
-    .locked,
-    .locked-content
-  `).forEach(el=>{
-    el.classList.remove("pro-blur","locked","locked-content");
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
+    // 🔓 SBLOCCA TUTTO
+    document.querySelectorAll(`
+      .pro-blur,
+      .locked,
+      .locked-content
+    `).forEach(el=>{
+      el.classList.remove("pro-blur","locked","locked-content");
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+    });
 
-}
+    // 🔥 CHIUDI POPUP SE ESISTE
+    const popup = document.querySelector("#upgrade-popup");
+    if(popup) popup.style.display = "none";
+
+  }
 
   // ================= FREE =================
   else if(isLogged){
@@ -65,16 +74,17 @@ if(isPro){
   // ================= GUEST =================
   else{
 
-  document.body.classList.add("is-guest");
+    document.body.classList.add("is-guest");
 
-  document.querySelectorAll(`
-    .pro-only,
-    .investor-only
-  `).forEach(el=>{
-    el.style.display = "none";
-  });
+    document.querySelectorAll(`
+      .pro-only,
+      .investor-only
+    `).forEach(el=>{
+      el.style.display = "none";
+    });
 
-}
+  }
+
 }
 
 // ========================================
@@ -99,18 +109,18 @@ window.initAccessControl = function(){
     const isInvestor =
       plan === "investor";
 
-    // 🔥 LOGICA UNIFICATA
     const hasFullAccess =
       isPro || isInvestor || isAdmin;
 
     // ================= SET GLOBAL =================
-window.RB_USER = {
-  isLogged: userLogged,
-  isPro: hasFullAccess,
-  isInvestor,
-  isAdmin,
-  plan
-};
+    window.RB_USER = {
+      isLogged: userLogged,
+      isPro: hasFullAccess,
+      isInvestor,
+      isAdmin,
+      plan,
+      ready: true // 🔥 CRUCIALE
+    };
 
     console.log("🧠 RB_USER:", window.RB_USER);
 
@@ -133,21 +143,10 @@ window.RB_USER = {
 // ========================================
 // 🧠 HELPERS
 // ========================================
-window.isPro = function(){
-  return window.RB_USER?.isPro === true;
-};
-
-window.isInvestor = function(){
-  return window.RB_USER?.isInvestor === true;
-};
-
-window.isLogged = function(){
-  return window.RB_USER?.isLogged === true;
-};
-
-window.isFree = function(){
-  return !window.RB_USER?.isPro;
-};
+window.isPro = () => window.RB_USER?.isPro === true;
+window.isInvestor = () => window.RB_USER?.isInvestor === true;
+window.isLogged = () => window.RB_USER?.isLogged === true;
+window.isFree = () => !window.RB_USER?.isPro;
 
 // ========================================
 // 🔒 REQUIRE PLAN
@@ -158,12 +157,11 @@ window.requirePro = function(){
 
   const lang = window.currentLang || "it";
 
-  const msg =
+  alert(
     lang === "en"
-    ? "This feature requires PRO plan"
-    : "Questa funzione richiede il piano PRO";
-
-  alert(msg);
+      ? "This feature requires PRO plan"
+      : "Questa funzione richiede il piano PRO"
+  );
 
   window.location.href = "/pricing/";
 
@@ -171,7 +169,7 @@ window.requirePro = function(){
 };
 
 // ========================================
-// 🔥 GLOBAL ACCESS (CORE SYSTEM)
+// 🔥 GLOBAL ACCESS
 // ========================================
 window.getUserAccess = function(){
 
@@ -182,8 +180,6 @@ window.getUserAccess = function(){
     isPro: u.isPro || false,
     isInvestor: u.isInvestor || false,
     isAdmin: u.isAdmin || false,
-
-    // 🔥 KEY FLAGS
     hasPlan: u.isPro || u.isInvestor || u.isAdmin,
     canSeeFullAnalysis: u.isPro || u.isInvestor || u.isAdmin
   };
@@ -191,35 +187,29 @@ window.getUserAccess = function(){
 };
 
 // ========================================
-// ⚡ AUTO INIT
+// ⚡ EVENTI CORRETTI (FIX TIMING)
 // ========================================
 
-// 🔥 quando Firebase ha caricato piano
+// 🔥 SOLO quando Firebase ha caricato piano
 document.addEventListener("rb_plan_ready", () => {
 
-  console.log("🔥 AccessControl init after plan");
+  console.log("🔥 AccessControl init AFTER plan");
 
   window.initAccessControl();
 
 });
 
-// 🔒 fallback sicurezza (anti bug)
+// ❌ NON inizializzare subito (ERA IL BUG)
+// document.addEventListener("DOMContentLoaded", ... ) → RIMOSSO
+
+// 🔒 fallback sicurezza (solo se proprio non arriva Firebase)
 setTimeout(() => {
 
-  if(!window.RB_USER || !window.RB_USER.plan){
+  if(!window.RB_USER.ready){
 
-    console.warn("⚠️ Fallback init access control");
+    console.warn("⚠️ Fallback access control");
 
     window.initAccessControl();
   }
 
-}, 800);
-
-// 🔥 INIT IMMEDIATO (CRITICO TOOL + HEADER)
-document.addEventListener("DOMContentLoaded", () => {
-
-  console.log("⚡ AccessControl DOM init");
-
-  window.initAccessControl();
-
-});
+}, 1500);
