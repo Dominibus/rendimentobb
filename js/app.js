@@ -3118,7 +3118,7 @@ document.addEventListener("rb_auth_ready", () => {
     (window.currentLang === "en" ? en : it);
 
   // ===============================
-  // 🔥 AUTO STRIPE DOPO LOGIN (FUNNEL)
+  // 🔥 AUTO STRIPE DOPO LOGIN
   // ===============================
 
   const pendingPlan = localStorage.getItem("pending_plan");
@@ -3144,9 +3144,61 @@ document.addEventListener("rb_auth_ready", () => {
     }, 500);
   }
 
-  // 🔥🔥🔥 QUESTO È IL FIX VERO
+  // ===============================
+  // 🔥 FIX UI + ACCESS
+  // ===============================
+
   resetGlobalBlur();
   applyAccessControl();
+
+  // ===============================
+  // 🔥 CASO 1 → CALCOLO MAI PARTITO
+  // ===============================
+
+  if(window.pendingCalculation && typeof window.calculate === "function"){
+
+    console.log("🚀 RUN pending calculation");
+
+    window.pendingCalculation = false;
+
+    setTimeout(()=>{
+      window.calculate(true);
+    },50);
+
+  }
+
+  // ===============================
+  // 🔥 CASO 2 → RESYNC PRO
+  // ===============================
+
+  if(window.simulationExecuted && typeof window.calculate === "function"){
+
+    console.log("🔁 Re-run calculate (PRO sync)");
+
+    setTimeout(()=>{
+      window.calculate(true);
+    },50);
+
+  }
+
+  // ===============================
+  // 🔥 PDF BUTTON
+  // ===============================
+
+  if(typeof updatePDFButton === "function"){
+    updatePDFButton();
+  }
+
+  // ===============================
+  // 🔥 DEBUG
+  // ===============================
+
+  console.log(
+    "👤 USER:",
+    window.currentUser ? "LOGGED" : "GUEST",
+    "| PLAN:",
+    window.currentPlan || "free"
+  );
 
 });
 
