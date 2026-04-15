@@ -936,19 +936,16 @@ if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
 if(dbStatus){
 
   let status = t("Rischio","Risk");
+let color = "#ef4444";
 
 if(avgROI >= 10){
   status = t("Forte","Strong");
+  color = "#10b981";
 }
 else if(avgROI >= 5){
   status = t("Moderato","Moderate");
+  color = "#f59e0b";
 }
-  let color = "#ef4444";
-
-  if(avgROI >= 10){
-    status = "Strong";
-    color = "#10b981";
-  }
   else if(avgROI >= 5){
     status = "Moderate";
     color = "#f59e0b";
@@ -961,6 +958,11 @@ else if(avgROI >= 5){
   dbStatus.style.boxShadow = `0 10px 30px ${color}55`;
   dbStatus.style.color = "white";
 }
+
+const kpiRoi = document.getElementById("kpi-roi");
+const kpiCash = document.getElementById("kpi-cash");
+const kpiInvest = document.getElementById("kpi-invest");
+const kpiBreak = document.getElementById("kpi-break");  
 
 // ================= KPI GRID =================
 const isProPlan =
