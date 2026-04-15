@@ -13347,3 +13347,17 @@ body.menu-open{
   }
 
 }
+
+/* =====================================
+🔥 MARKET FIX (SAFE - SOLO MARKET)
+===================================== */
+
+.market-page .market-kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:20px;
+  margin-top:30px;
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
+}
