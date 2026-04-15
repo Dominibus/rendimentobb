@@ -13349,7 +13349,7 @@ body.menu-open{
 }
 
 /* =====================================
-🔥 MARKET FIX (SAFE - SOLO MARKET)
+🔥 MARKET CITY FIX (SAFE)
 ===================================== */
 
 .market-page .market-kpi-grid{
@@ -13360,4 +13360,19 @@ body.menu-open{
   max-width:900px;
   margin-left:auto;
   margin-right:auto;
+}
+
+/* 🔥 CARD KPI LOOK SaaS */
+.market-page .market-kpi-grid .card{
+  text-align:center;
+  padding:20px;
+  border-radius:16px;
+  background:white;
+  box-shadow:0 10px 30px rgba(2,6,23,0.06);
+  transition:all .25s ease;
+}
+
+.market-page .market-kpi-grid .card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(2,6,23,0.12);
 }
