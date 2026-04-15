@@ -294,7 +294,14 @@ function renderUser(user){
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
-  const access = window.getUserAccess();
+  const access = (typeof window.getUserAccess === "function")
+  ? window.getUserAccess()
+  : {
+      isLogged:false,
+      isPro:false,
+      isInvestor:false,
+      hasPlan:false
+    };
 
   const isAdmin =
     user?.email === "rendimentobb@gmail.com" ||
