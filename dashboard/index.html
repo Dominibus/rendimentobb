@@ -913,17 +913,26 @@ Home
 <div id="upgrade-trigger" style="margin-bottom:30px;display:none;"></div>  
 
 <script>
-// ================= GUEST BLOCK =================
-if(!access.isLogged){
+document.addEventListener("DOMContentLoaded", () => {
 
-  alert(window.t(
-    "Devi effettuare il login per accedere alla dashboard",
-    "You must log in to access the dashboard"
-  ));
+  const access = window.getUserAccess?.();
+  if(!access) return;
 
-  window.location.href = "/login/";
-  return;
-}
+  // 🔒 GUEST BLOCK FIX
+  if(!access.isLogged){
+
+    alert(window.t(
+      "Devi effettuare il login per accedere alla dashboard",
+      "You must log in to access the dashboard"
+    ));
+
+    window.location.href = "/login/";
+    return; // ✅ ORA È LEGALE (dentro funzione)
+
+  }
+
+});
+</script>
   
 document.addEventListener("DOMContentLoaded", () => {
 
