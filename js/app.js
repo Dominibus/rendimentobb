@@ -800,49 +800,51 @@ function applyAccessControl(){
 
   const access = window.getUserAccess();
 
-  // 🔥 BLOCCO DEFINITIVO PRO (ANTI-FLICKER)
-  if(access.isPro || access.canSeeFullAnalysis){
+  // ===============================
+  // 🔥 PRO / ADMIN → SBLOCCO TOTALE
+  // ===============================
+  if(access.isPro || access.isAdmin || access.canSeeFullAnalysis){
 
-    console.log("🟢 PRO → STOP LOCK SYSTEM");
+    console.log("🟢 PRO → FULL UNLOCK");
 
     unlockUI();
     unlockProUI();
 
-    return; // 🔥 CRITICO: FERMA TUTTO
+    return; // ⛔ STOP ASSOLUTO
   }
 
-    // 🟡 INVESTOR → semi lock (frustrazione controllata)
-if(access.isInvestor){
+  // ===============================
+  // 🟡 INVESTOR → ACCESSO PARZIALE
+  // ===============================
+  if(access.isInvestor){
 
-  document.querySelectorAll(`
-    #investment-score,
-    #investment-ranking,
-    #investment-verdict
-  `).forEach(el=>{
-    if(el){
-      el.classList.add("locked-section");
+    console.log("🟡 INVESTOR → PARTIAL LOCK");
+
+    unlockUI(); // base sbloccata
+
+    // 🔒 blocchi mirati
+    document.querySelectorAll(`
+      #investment-score,
+      #investment-ranking,
+      #investment-verdict
+    `).forEach(el=>{
+      if(el){
+        el.classList.add("locked-section");
+      }
+    });
+
+    // 🔒 cashflow blur
+    const cashflow = document.getElementById("cashflow-section");
+    if(cashflow){
+      cashflow.classList.add("locked-blur");
     }
-  });
 
-}
-
-    console.log("🔓 FULL ACCESS");
-
-    unlockUI();
-unlockProUI();
-
-// 🔥 BLOCCA SOLO PER INVESTOR
-if(access.isInvestor){
-  const cashflow = document.getElementById("cashflow-section");
-  if(cashflow){
-    cashflow.classList.add("locked-blur");
-  }
-}
-
-return;
+    return;
   }
 
-  // 🔒 FREE USER
+  // ===============================
+  // 🔒 FREE USER → LOCK COMPLETO
+  // ===============================
   console.log("🔒 APPLY LOCK");
 
   document.querySelectorAll(`
@@ -860,6 +862,7 @@ return;
 
     el.classList.add("locked-section");
 
+    // mini label
     if(!el.querySelector(".paywall-mini")){
 
       const overlay = document.createElement("div");
@@ -884,28 +887,30 @@ return;
       el.appendChild(overlay);
     }
 
+    // overlay principale
     if(!el.querySelector(".locked-overlay")){
 
-  const overlay = document.createElement("div");
+      const overlay = document.createElement("div");
 
-  overlay.className = "locked-overlay";
+      overlay.className = "locked-overlay";
 
-  overlay.innerHTML = `
-    <div style="
-      background:white;
-      padding:16px;
-      border-radius:12px;
-      text-align:center;
-      font-size:13px;
-      color:#334155;
-      box-shadow:0 10px 30px rgba(0,0,0,0.1);
-    ">
-      🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
-    </div>
-  `;
+      overlay.innerHTML = `
+        <div style="
+          background:white;
+          padding:16px;
+          border-radius:12px;
+          text-align:center;
+          font-size:13px;
+          color:#334155;
+          box-shadow:0 10px 30px rgba(0,0,0,0.1);
+        ">
+          🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
+        </div>
+      `;
 
-  el.appendChild(overlay);
-}
+      el.appendChild(overlay);
+    }
+
   });
 
 }
