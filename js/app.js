@@ -29,45 +29,6 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
-// ===============================
-// 🧠 USER ACCESS ENGINE (MASTER)
-// ===============================
-
-window.getUserAccess = function(){
-
-  const isLogged = !!window.currentUser;
-
-  const plan = window.currentPlan || "free";
-
-  const isAdmin =
-    window.currentUser?.email === "rendimentobb@gmail.com" ||
-    window.userRole === "admin";
-
-const isPro =
-  ["pro","pro_yearly","investor"].includes(plan);
-
-  const isInvestor =
-    plan === "investor";
-
-  return {
-
-    isLogged,
-    isAdmin,
-    isPro,
-    isInvestor,
-
-    // 🔥 LIVELLI ACCESSO
-    canSeeFullAnalysis: isAdmin || isPro,
-    canSeeAdvanced: isAdmin || isPro || isInvestor,
-    canDownloadPDF: isAdmin || isPro,
-    canSeeLeads: isAdmin,
-
-    // 🎯 UX STATES
-    isGuest: !isLogged,
-    isFree: isLogged && !isPro && !isInvestor
-  };
-};
-
 // ================= SAFE GLOBAL EARLY FIX =================
 
 function getLeadScore(result){
@@ -838,6 +799,16 @@ function unlockUI(){
 function applyAccessControl(){
 
   const access = window.getUserAccess();
+
+    // 🔥 FIX DEFINITIVO PRO (ANTI BUG)
+  if(access.canSeeFullAnalysis){
+    console.log("🟢 PRO DETECTED → FORCE UNLOCK");
+
+    unlockUI();
+    unlockProUI();
+
+    return;
+  }
 
   // 🔓 PRO / ADMIN / INVESTOR
   if(access.canSeeFullAnalysis){
@@ -2165,7 +2136,9 @@ window.calculate = async function(force = false){
     const userLogged = !!window.currentUser;
     let result;
 
-if(!userLogged){
+const access = window.getUserAccess();
+
+if(!userLogged && !access.isPro){
 
   console.log("🔓 Guest → funnel");
 
