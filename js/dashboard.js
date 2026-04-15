@@ -623,7 +623,9 @@ if(helper){
   );
 }
 
-const best = analyses[0];
+// 🔥 FIX CRITICO → serve per il report
+const best = analyses[0] || null;
+window.bestInvestmentData = best;
 
 renderInvestmentVerdict(best);  
 renderUpgradeTrigger(best);
@@ -634,7 +636,7 @@ renderChart();
 renderCashflowChart();
 renderCityROIChart(analyses);
 
-// 🔥 gestione accessi UI
+// 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
 
 } // ✅ CHIUSURA loadDashboard
