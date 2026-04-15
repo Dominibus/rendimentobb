@@ -1,6 +1,6 @@
 // =============================================== 
 // RENDIMENTOBB – EXECUTIVE ENGINE 16.0
-// PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine 
+// PRO Firebase + Mortgage Comparator + Forecast + Investment Score + Sensitivity Engine
 // ===============================================
 // ================= FIRESTORE ================
 import { calculateROI } from "./roi-engine.js";
