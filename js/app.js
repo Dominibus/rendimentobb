@@ -1354,11 +1354,15 @@ container.innerHTML = `
 
 }
 
-const resultsCard = document.querySelector(".results-card");
+document.addEventListener("rb_auth_ready", () => {
 
-if(resultsCard && !window.isProUser?.()){
-  resultsCard.classList.add("locked-section");
-}
+  const resultsCard = document.querySelector(".results-card");
+
+  if(resultsCard && !window.getUserAccess().canSeeFullAnalysis){
+    resultsCard.classList.add("locked-section");
+  }
+
+});
 
 // ================= RISK METER =================
 
@@ -1491,8 +1495,6 @@ ${message}
 
 }
 
-resetGlobalBlur();
-applyAccessControl();
 
 // ================= SMART PAYWALL (SOFT VERSION) =================
 
@@ -3152,10 +3154,8 @@ document.addEventListener("rb_auth_ready", () => {
 
     console.log("🔥 AUTO START STRIPE:", pendingPlan);
 
-    // 🔥 pulizia immediata
     localStorage.removeItem("pending_plan");
 
-    // UX delay naturale
     setTimeout(()=>{
 
       if(typeof window.buyPlan === "function"){
@@ -3170,6 +3170,12 @@ document.addEventListener("rb_auth_ready", () => {
 
     }, 500);
   }
+
+  // 🔥🔥🔥 QUESTO È IL FIX VERO
+  resetGlobalBlur();
+  applyAccessControl();
+
+});
 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
