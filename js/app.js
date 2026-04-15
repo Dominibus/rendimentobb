@@ -800,17 +800,25 @@ function applyAccessControl(){
 
   const access = window.getUserAccess();
 
+  // 🛑 BLOCCO GLOBALE SE GIÀ SBLOCCATO
+  if(window.proUnlocked){
+    console.log("⛔ SKIP → già PRO sbloccato");
+    return;
+  }
+
   // ===============================
-  // 🔥 PRO / ADMIN → SBLOCCO TOTALE
+  // 🔥 PRO / ADMIN
   // ===============================
   if(access.isPro || access.isAdmin || access.canSeeFullAnalysis){
 
-    console.log("🟢 PRO → FULL UNLOCK");
+    console.log("🟢 PRO → LOCK SYSTEM DISABLED");
+
+    window.proUnlocked = true; // 🔥 CRITICO
 
     unlockUI();
     unlockProUI();
 
-    return; // ⛔ STOP ASSOLUTO
+    return;
   }
 
   // ===============================
