@@ -675,7 +675,9 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
-const isPro = isProUser();
+const isProPlan =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "pro_yearly";
 
 container.innerHTML = `
 
@@ -957,7 +959,7 @@ else if(avgROI >= 5){
 }
 
 // ================= KPI GRID =================
-const isPro =
+const isProPlan =
   window.currentPlan === "pro" ||
   window.currentPlan === "pro_yearly";
 
@@ -967,7 +969,7 @@ const isInvestor =
 if(kpiRoi) kpiRoi.innerText = avgROIRounded + "%";
 
 if(kpiCash){
-  kpiCash.innerText = isPro || isInvestor
+  kpiCash.innerText = isProPlan || isInvestor
     ? formatCurrency(monthlyProfit)
     : "🔒";
 }
@@ -1242,19 +1244,23 @@ window.addEventListener("DOMContentLoaded", () => {
     window.currentUser = user;
     console.log("USER OK:", user.uid);
 
-    // ================= GET PLAN =================
-    const userDoc = await getDoc(doc(db,"users", user.uid));
+ // ================= GET PLAN =================
+const userDoc = await getDoc(doc(db,"users", user.uid));
 
-    if(userDoc.exists()){
-      const data = userDoc.data();
-      window.currentPlan = data.plan || "free";
-    }else{
-      window.currentPlan = "free";
-    }
+if(userDoc.exists()){
+  const data = userDoc.data();
+  window.currentPlan = data.plan || "free";
+}else{
+  window.currentPlan = "free";
+}
 
-    console.log("PLAN:", window.currentPlan);
+console.log("PLAN:", window.currentPlan);
 
-    const isAllowed =
+// 🔥 SINCRONIZZA HEADER + UI
+document.dispatchEvent(new Event("rb_plan_ready"));
+
+// ================= VALIDAZIONE ACCESSO =================
+const isAllowed =
   window.currentPlan === "pro" ||
   window.currentPlan === "pro_yearly" ||
   window.currentPlan === "investor" ||
@@ -1265,11 +1271,18 @@ if(!isAllowed){
   return;
 }
 
-    const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly";
+// ================= FLAG PULITI (NO DUPLICATI) =================
+const plan = String(window.currentPlan || "").toLowerCase();
 
-if(window.currentPlan === "investor"){
+const isProPlan =
+  plan === "pro" ||
+  plan === "pro_yearly";
+
+const isInvestorPlan =
+  plan === "investor";
+
+// DEBUG
+if(isInvestorPlan){
   console.log("👀 INVESTOR MODE");
 }
 
@@ -1281,7 +1294,7 @@ if(window.currentPlan === "investor"){
 // 🔥 SOLO PRO SBLOCCA
 const plan = String(window.currentPlan || "").toLowerCase();
 
-const isPro =
+const isProPlan =
   plan === "pro" ||
   plan === "pro_yearly";
 
@@ -1289,7 +1302,7 @@ const isInvestor =
   plan === "investor";
 
 // ================= PRO =================
-if(isPro){
+if(isProPlan){
 
   console.log("🔥 PRO → FULL UNLOCK");
 
@@ -1298,8 +1311,7 @@ if(isPro){
   // 🔥 BLOCCA QUALSIASI LOCK FUTURO
   document.body.classList.add("is-pro");
 
-  return; // 💣 BLOCCA FLUSSO (IMPORTANTISSIMO)
-}
+}  
 
 // ================= INVESTOR =================
 if(isInvestor){
