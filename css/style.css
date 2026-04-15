@@ -13222,3 +13222,19 @@ body.menu-open{
   opacity:0.9;
   font-size:14px;
 }
+
+/* =====================================
+🔥 CTA MARKET
+===================================== */
+
+.market-page .section-dark .container{
+  text-align:center !important;
+}
+
+.market-page .section-dark p{
+  text-align:center !important;
+}
+
+.market-page .btn{
+  margin-top:20px;
+}
