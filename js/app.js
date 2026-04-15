@@ -3202,58 +3202,6 @@ document.addEventListener("rb_auth_ready", () => {
 
 });
 
-  // ===============================
-  // 🔥 CASO 1 → CALCOLO MAI PARTITO
-  // ===============================
-
-  if(window.pendingCalculation && typeof window.calculate === "function"){
-
-    console.log("🚀 RUN pending calculation");
-
-    window.pendingCalculation = false;
-
-    setTimeout(()=>{
-      window.calculate(true);
-    },50);
-
-    return;
-  }
-
-  // ===============================
-  // 🔥 CASO 2 → GIÀ ESEGUITO (RESYNC PRO)
-  // ===============================
-
-  if(window.simulationExecuted && typeof window.calculate === "function"){
-
-    console.log("🔁 Re-run calculate (PRO sync)");
-
-    setTimeout(()=>{
-      window.calculate(true);
-    },50);
-
-  }
-
-  // ===============================
-  // 🔥 PDF BUTTON
-  // ===============================
-
-  if(typeof updatePDFButton === "function"){
-    updatePDFButton();
-  }
-
-  // ===============================
-  // 🔥 DEBUG (opzionale ma utile)
-  // ===============================
-
-  console.log(
-    "👤 USER:",
-    window.currentUser ? "LOGGED" : "GUEST",
-    "| PLAN:",
-    window.currentPlan || "free"
-  );
-
-});
-
 // ===============================================
 // APPLY MORTGAGE FROM COMPARATOR
 // ===============================================
