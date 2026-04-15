@@ -800,18 +800,16 @@ function applyAccessControl(){
 
   const access = window.getUserAccess();
 
-    // 🔥 FIX DEFINITIVO PRO (ANTI BUG)
-  if(access.canSeeFullAnalysis){
-    console.log("🟢 PRO DETECTED → FORCE UNLOCK");
+  // 🔥 BLOCCO DEFINITIVO PRO (ANTI-FLICKER)
+  if(access.isPro || access.canSeeFullAnalysis){
+
+    console.log("🟢 PRO → STOP LOCK SYSTEM");
 
     unlockUI();
     unlockProUI();
 
-    return;
+    return; // 🔥 CRITICO: FERMA TUTTO
   }
-
-  // 🔓 PRO / ADMIN / INVESTOR
-  if(access.canSeeFullAnalysis){
 
     // 🟡 INVESTOR → semi lock (frustrazione controllata)
 if(access.isInvestor){
