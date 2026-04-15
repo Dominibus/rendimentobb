@@ -1417,78 +1417,43 @@ window.closeOverlay = function(){
   }
 };
 
-// ================= ACCESS CONTROL =================
+// ================= ACCESS CONTROL (SAFE – NO CONFLICT) =================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const access = window.getUserAccess?.() || {};
+  const access = window.getUserAccess?.();
+  if(!access) return;
 
-  // 🔒 DASHBOARD LOCK
-  if(!access.canSeeFullAnalysis && access.isLogged){
-
-    console.warn("⛔ Dashboard locked → overlay");
-
-    const overlay = document.getElementById("pro-overlay");
-    if(overlay) overlay.style.display = "flex";
-
-    const main = document.querySelector("main");
-    if(main){
-      main.style.pointerEvents = "none";
-      main.style.opacity = "0.6";
-    }
-  }
-
-  // 🔒 CARD LIMIT
-  document.querySelectorAll(".analysis-card").forEach((el, i) => {
-    if(!access.canSeeFullAnalysis && i > 2){
-      el.style.opacity = "0.4";
-      el.style.pointerEvents = "none";
-      el.style.filter = "blur(1px)";
-    }
-  });
-
-  // 🔒 PDF LOCK
+  // ================= PDF LOCK (OK tenerlo) =================
   const btn = document.getElementById("download-report");
 
   if(btn && !access.canDownloadPDF){
+
     btn.innerText = window.currentLang === "en"
       ? "🔒 Unlock professional report"
       : "🔒 Sblocca report professionale";
 
-    btn.onclick = () => startPlanPurchase("pro");
+    btn.onclick = () => {
+      if(typeof startPlanPurchase === "function"){
+        startPlanPurchase("pro");
+      }else{
+        window.location.href = "/#pricing";
+      }
+    };
+
   }
 
 });
-
+  
 </script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.();
+  if(!access) return;
 
-  if(access.canSeeFullAnalysis) return;
-
-  // 🔒 blocco card dopo le prime 2
-  document.querySelectorAll(".analysis-card").forEach((el, i) => {
-
-    if(i > 2){
-      el.style.opacity = "0.4";
-      el.style.pointerEvents = "none";
-      el.style.filter = "blur(1px)";
-    }
-
-  });
-
-});
-</script>  
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const access = window.getUserAccess();
   const btn = document.getElementById("download-report");
-
   if(!btn) return;
 
   if(!access.canDownloadPDF){
@@ -1497,11 +1462,19 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "🔒 Unlock professional report"
       : "🔒 Sblocca report professionale";
 
-    btn.onclick = () => startPlanPurchase("pro");
+    btn.onclick = () => {
+
+      if(typeof startPlanPurchase === "function"){
+        startPlanPurchase("pro");
+      }else{
+        window.location.href = "/#pricing";
+      }
+
+    };
 
   }
 
 });
-</script>  
+</script>
 </body>
 </html>
