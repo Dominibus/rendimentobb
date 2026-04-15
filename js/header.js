@@ -203,11 +203,6 @@ if(isPro){
   unlockUI();
 }
 
-  // 🔥 SICUREZZA: re-render dopo micro delay (fix flicker Firebase)
-  setTimeout(()=>{
-    renderUser(auth.currentUser || null);
-  }, 50);
-
 }
 
   },120);
@@ -314,7 +309,7 @@ function renderUser(user){
 
   const isInvestor = access.isInvestor;
   const isPro = access.isPro;
-  const isPaid = access.hasPlan;
+  const isPaid = access.isInvestor || access.isPro || access.isAdmin;
 
   const isProOnly = isPro && !isInvestor;
 
@@ -327,18 +322,18 @@ function renderUser(user){
     // =====================
     let badge = "";
 
-    if(isAdmin){
-      badge = `<span class="badge-pro">ADMIN</span>`;
-    }
-    else if(isProOnly){
-      badge = `<span class="badge-pro">PRO</span>`;
-    }
-    else if(isInvestor){
-      badge = `<span class="badge-pro">INVESTOR</span>`;
-    }
-    else{
-      badge = `<span class="badge-pro">LOCK</span>`;
-    }
+if(isAdmin){
+  badge = `<span class="badge-pro">ADMIN</span>`;
+}
+else if(access.isPro){
+  badge = `<span class="badge-pro">PRO</span>`;
+}
+else if(access.isInvestor){
+  badge = `<span class="badge-pro">INVESTOR</span>`;
+}
+else{
+  badge = `<span class="badge-pro">FREE</span>`;
+}
 
     // =====================
     // 🔥 DASHBOARD BUTTON
