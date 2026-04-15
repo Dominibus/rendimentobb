@@ -61,6 +61,54 @@ function safeCity(city){
   return city;
 }
 
+// ================= LOCK FREE USER =================
+
+function lockFreeUser(){
+
+  console.log("PLAN:", window.currentPlan);
+
+  if(!window.currentPlan) return;
+
+  const isProPlan =
+    window.currentPlan === "pro" ||
+    window.currentPlan === "pro_yearly";
+
+  if(isProPlan){
+    console.log("PRO USER → unlock everything");
+
+    document.querySelectorAll(".pro-blur").forEach(el=>{
+      el.style.filter = "none";
+      el.style.pointerEvents = "auto";
+      el.style.opacity = "1";
+    });
+
+    return;
+  }
+
+  console.log("FREE USER → limit UI");
+
+  const elementsToLock = [
+    "roi-chart-container",
+    "cashflow-chart-container",
+    "city-roi-chart",
+    "city-distribution-chart",
+    "roi-optimizer",
+    "investment-ranking",
+    "best-investment"
+  ];
+
+  elementsToLock.forEach(id=>{
+    const el = document.getElementById(id);
+
+    if(el){
+      el.style.filter = "blur(6px)";
+      el.style.pointerEvents = "none";
+      el.style.opacity = "0.6";
+    }
+  });
+
+}
+
 // ================= UTIL =================
 
 function formatCurrency(value){
@@ -555,15 +603,15 @@ if(typeof applyTranslations === "function"){
 
   });
 
-  // ================= RENDER ENGINE =================
+// ================= RENDER ENGINE =================
 
-  renderStats(count,totalROI,totalCapital,totalCashflow);
-  renderInsight(count,totalROI,totalCapital);
-  renderROIOptimizer(count,totalROI,totalCapital);
-  renderROITargetCalculator(analyses); 
-  renderROIMarketComparison(count,totalROI);
-  renderRevenueSimulator(); 
-  renderBestInvestment(analyses);
+renderStats(count,totalROI,totalCapital,totalCashflow);
+renderInsight(count,totalROI,totalCapital);
+renderROIOptimizer(count,totalROI,totalCapital);
+renderROITargetCalculator(analyses); 
+renderROIMarketComparison(count,totalROI);
+renderRevenueSimulator(); 
+renderBestInvestment(analyses);
 
 // 🔥 helper testo report (traduzione)
 const helper = document.getElementById("report-helper-text");
@@ -574,69 +622,23 @@ if(helper){
     "Perfect to convince banks or investors"
   );
 }
-  
-  const best = analyses[0];
-  renderInvestmentVerdict(best);  
-  renderUpgradeTrigger(best);
 
-  renderInvestmentRanking(analyses);
-  renderCityDistribution(analyses); 
-  renderChart();
-  renderCashflowChart();
-  renderCityROIChart(analyses);
+const best = analyses[0];
 
-// ================= LOCK FREE USER =================
+renderInvestmentVerdict(best);  
+renderUpgradeTrigger(best);
 
-function lockFreeUser(){
+renderInvestmentRanking(analyses);
+renderCityDistribution(analyses); 
+renderChart();
+renderCashflowChart();
+renderCityROIChart(analyses);
 
-  console.log("PLAN:", window.currentPlan);
+// 🔥 gestione accessi UI
+lockFreeUser();
 
-  // sicurezza: se non è ancora definito → NON bloccare
-  if(!window.currentPlan) return;
+} // ✅ CHIUSURA loadDashboard
 
-  // 🔥 SE PRO → SBLOCCA TUTTO (FIX DEFINITIVO)
-  if(isProUser()){
-    console.log("PRO USER → unlock everything");
-
-    // rimuove blur inline
-    document.querySelectorAll("*").forEach(el=>{
-      el.style.filter = "";
-      el.style.pointerEvents = "";
-      el.style.opacity = "";
-    });
-
-    // 🔥 rimuove anche classi CSS (CRUCIALE)
-    document.querySelectorAll(".pro-lock").forEach(el=>{
-      el.classList.remove("pro-blur");
-    });
-
-    return;
-  }
-
-  console.log("FREE USER → limit UI");
-
-  // 🔥 CONTENITORI REALI (corretti)
-  const elementsToLock = [
-    "roi-chart-container",
-    "cashflow-chart-container",
-    "city-roi-chart",
-    "city-distribution-chart",
-    "roi-optimizer",
-    "investment-ranking",
-    "best-investment"
-  ];
-
-  elementsToLock.forEach(id=>{
-    const el = document.getElementById(id);
-
-    if(el){
-      el.style.filter = "blur(6px)";
-      el.style.pointerEvents = "none";
-      el.style.opacity = "0.6";
-    }
-  });
- } 
-}
 // ================= BEST INVESTMENT =================
 
 function renderBestInvestment(analyses){
@@ -732,7 +734,7 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <!-- 🔒 BLOCCO PRO -->
 ${
-isPro
+isProPlan
 ? `
 <!-- CONTENUTO PRO -->
 <div class="metric">
@@ -975,13 +977,13 @@ if(kpiCash){
 }
 
 if(kpiInvest){
-  kpiInvest.innerText = isPro || isInvestor
+  kpiInvest.innerText = isProPlan || isInvestor
     ? formatCurrency(totalCapital)
     : "🔒";
 }
 
 if(kpiBreak){
-  kpiBreak.innerText = isPro
+  kpiBreak.innerText = isProPlan
     ? breakEven + "y"
     : "🔒";
 }
@@ -1117,7 +1119,7 @@ letter-spacing:-0.5px;
 color:#2563eb;
 ">
 ${
-isPro
+isProPlan
 ? `${investmentScore}/100`
 : "🔒"
 }
@@ -1290,13 +1292,6 @@ if(isInvestorPlan){
     document.dispatchEvent(new Event("rb_auth_ready")); 
 
     await loadDashboard();
-
-// 🔥 SOLO PRO SBLOCCA
-const plan = String(window.currentPlan || "").toLowerCase();
-
-const isProPlan =
-  plan === "pro" ||
-  plan === "pro_yearly";
 
 const isInvestor =
   plan === "investor";
