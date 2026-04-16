@@ -686,6 +686,13 @@ text-shadow:0 4px 20px rgba(0,0,0,0.4);
 .analysis-card .metric{
   margin-bottom:10px;
 }  
+
+#roi-message{
+  font-size:14px;
+  font-weight:700;
+  color:#10b981;
+  text-shadow:0 2px 8px rgba(0,0,0,0.4);
+}  
 </style>
 
 </head>
@@ -922,17 +929,27 @@ Stai per investire €250k+. Il tasso giusto può farti guadagnare o perdere mig
     border:1px solid #10b981;
     margin-bottom:15px;
   ">
-    <strong id="mortgage-label"></strong>
+    <strong id="mortgage-label"
+data-it="📉 Risparmio stimato:"
+data-en="📉 Estimated savings:">
+📉 Risparmio stimato:
+</strong>
     <span id="mortgage-saving">€4.200 / anno</span>
   </div>
 
   <button id="mortgage-lead-btn" class="btn-dashboard" style="width:100%">
-    🔥 Trova il miglior mutuo ora
+    🔥 <span id="mortgage-btn-text"
+data-it="Trova il miglior mutuo ora"
+data-en="Find the best mortgage now">
+Trova il miglior mutuo ora
+</span>
   </button>
 
-  <div style="font-size:12px;color:#64748b;margin-top:8px;text-align:center">
-    Confronto reale banche italiane
-  </div>
+ <div style="font-size:12px;color:#64748b;margin-top:8px;text-align:center"
+data-it="Confronto reale banche italiane"
+data-en="Real comparison of Italian banks">
+Confronto reale banche italiane
+</div>
 
 </div>  
 <div id="upgrade-trigger" style="margin-bottom:30px;display:none;"></div>  
@@ -1185,12 +1202,28 @@ Le tue analisi investimento
     <span data-it="Seleziona città" data-en="Select city">Seleziona città</span>
 
    <select id="city-select">
-     <option value="italy">Italia</option>
-     <option value="roma">Roma</option>
-     <option value="napoli">Napoli</option>
-     <option value="milano">Milano</option>
-     <option value="firenze">Firenze</option>
-  </select>
+
+  <option value="italy"
+  data-it="Italia"
+  data-en="Italy">Italia</option>
+
+  <option value="roma"
+  data-it="Roma"
+  data-en="Rome">Roma</option>
+
+  <option value="napoli"
+  data-it="Napoli"
+  data-en="Naples">Napoli</option>
+
+  <option value="milano"
+  data-it="Milano"
+  data-en="Milan">Milano</option>
+
+  <option value="firenze"
+  data-it="Firenze"
+  data-en="Florence">Firenze</option>
+
+</select>
   </div>
 
 </div>
