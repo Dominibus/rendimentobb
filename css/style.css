@@ -14755,3 +14755,116 @@ NON ROMPE ALTRO
 .hero *{
   opacity:1 !important;
 }
+
+/* =====================================
+🔥 HERO + MARKET GLOBAL FIX (DEFINITIVO)
+===================================== */
+
+/* ================= HERO BASE ================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:520px;
+  display:flex;
+  align-items:center;
+}
+
+/* overlay più leggero (fix leggibilità) */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    to bottom,
+    rgba(15,23,42,0.45) 0%,
+    rgba(15,23,42,0.25) 50%,
+    rgba(15,23,42,0.45) 100%
+  );
+
+  z-index:0;
+}
+
+/* contenuto sopra */
+.hero > *{
+  position:relative;
+  z-index:1;
+}
+
+/* ================= TESTI HERO ================= */
+
+.hero h1,
+.hero h2,
+.hero h3{
+  color:#ffffff !important;
+  text-shadow:0 2px 12px rgba(0,0,0,0.45);
+}
+
+.hero p{
+  color:#e2e8f0 !important;
+}
+
+/* ================= MARKET BACKGROUND FIX ================= */
+
+/* 🔥 fallback (CRITICO → evita bianco) */
+.market-page .hero-bg{
+  background-image:url("/img/rome-bg.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+
+/* città SEO */
+.market-page .hero-bg.rome{
+  background-image:url("/img/rome-bg.jpg");
+}
+
+.market-page .hero-bg.naples{
+  background-image:url("/img/naples-bg.jpg");
+}
+
+.market-page .hero-bg.milan{
+  background-image:url("/img/milan-bg.jpg");
+}
+
+.market-page .hero-bg.florence{
+  background-image:url("/img/florence-bg.jpg");
+}
+
+/* ================= TRUST BAR FIX ================= */
+
+.hero-trust{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+.hero-trust span{
+  color:#ffffff !important;
+  font-weight:500;
+  font-size:13px;
+
+  background:rgba(0,0,0,0.35);
+  padding:6px 12px;
+  border-radius:999px;
+
+  backdrop-filter:blur(6px);
+}
+
+/* ================= CITY SEARCH BOX ================= */
+
+.city-search-box{
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* ================= SAFETY ================= */
+
+/* evita testo invisibile */
+.hero *{
+  opacity:1 !important;
+}
