@@ -1420,15 +1420,6 @@ window.quickROI = function(){
   const costEl  = document.getElementById("qr_cost");
 
   let price = safeNum(priceEl?.value,250000);
-// ================= PLAN =================
-const access = window.getUserAccess?.() || {};
-
-const isPro = !!access.isPro;
-const isInvestor = !!access.isInvestor;
-const isLogged = !!access.isLogged;
-
-const isFreeUser = isLogged && !isPro && !isInvestor;
-const isGuest = !isLogged;
 
 // ================= GUEST BLOCK =================
 if(!isLogged){
@@ -1559,18 +1550,16 @@ const isGuestUser = !isLoggedUser;
 
 // ================= DATA RENDER =================
 
-if(isProUser){
+if(isPro){
 
-  // 🟢 FULL POWER
   if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
   if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
   if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
   if(elRev)    elRev.innerText = formatCurrency(revenue);
 
 }
-else if(isInvestorUser){
+else if(isInvestor){
 
-  // 🟡 PARZIALE
   if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
   if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
   if(elBreak)  elBreak.innerText = "🔒";
@@ -1579,7 +1568,6 @@ else if(isInvestorUser){
 }
 else if(isFreeUser){
 
-  // 🔵 FREE
   if(elProfit) elProfit.innerText = "~ " + formatCurrency(netAnnual);
   if(elMonth)  elMonth.innerText = "⚠️ Non affidabile";
   if(elBreak)  elBreak.innerText = "🔒";
@@ -1588,7 +1576,6 @@ else if(isFreeUser){
 }
 else{
 
-  // ⚫ GUEST
   if(elProfit) elProfit.innerText = "🔒";
   if(elMonth)  elMonth.innerText = "🔒";
   if(elBreak)  elBreak.innerText = "🔒";
