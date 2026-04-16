@@ -1315,18 +1315,22 @@ window.addEventListener("DOMContentLoaded", () => {
       // ================= EVENTO LINGUA =================
       document.addEventListener("rb_language_changed", () => {
 
-  console.log("🌍 Cambio lingua → update UI live");
+  console.log("🌍 Cambio lingua → update live");
 
-  // 🔥 aggiorna testi statici (data-it / data-en)
-  if(typeof applyTranslations === "function"){
-    applyTranslations();
-  }
+  // 🔥 1. aggiorna header
+  renderHeader();
 
-  // 🔥 aggiorna SOLO le parti dinamiche
+  // 🔥 2. aggiorna KPI dinamici
   updateDynamicTexts();
 
-  // 🔥 aggiorna header
-  renderHeader();
+  // 🔥 3. aggiorna eventuali testi dinamici manuali
+  const helper = document.getElementById("report-helper-text");
+  if(helper){
+    helper.innerHTML = t(
+      "Perfetto per convincere banca o investitori",
+      "Perfect to convince banks or investors"
+    );
+  }
 
 });
 
