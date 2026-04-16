@@ -664,6 +664,8 @@ setTimeout(forceTranslate, 50);
 setTimeout(forceTranslate, 200);
 setTimeout(forceTranslate, 500);
 
+} // ✅ CHIUSURA loadDashboard  
+
 // ================= BEST INVESTMENT =================
 
 function renderBestInvestment(analyses){
