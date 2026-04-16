@@ -1206,11 +1206,11 @@ loadDashboard();
 
 window.addEventListener("DOMContentLoaded", () => {
 
-  onAuthStateChanged(auth, async (user)=>{
+  onAuthStateChanged(auth, async (user) => {
 
     // ================= USER NON LOGGATO =================
     if(!user){
-      window.location.href="/#pricing";
+      window.location.href = "/#pricing";
       return;
     }
 
@@ -1221,7 +1221,7 @@ window.addEventListener("DOMContentLoaded", () => {
     try{
 
       // ================= GET PLAN =================
-      const userDoc = await getDoc(doc(db,"users", user.uid));
+      const userDoc = await getDoc(doc(db, "users", user.uid));
 
       if(userDoc.exists()){
         const data = userDoc.data();
@@ -1245,7 +1245,6 @@ window.addEventListener("DOMContentLoaded", () => {
       const isInvestor =
         plan === "investor";
 
-      // DEBUG
       if(isInvestor){
         console.log("👀 INVESTOR MODE");
       }
@@ -1253,72 +1252,73 @@ window.addEventListener("DOMContentLoaded", () => {
       // ================= READY =================
       document.dispatchEvent(new Event("rb_auth_ready"));
 
-// ================= LOAD DASHBOARD =================
-await loadDashboard();
+      // ================= LOAD DASHBOARD =================
+      await loadDashboard();
 
-// ================= PRO =================
-if(pro){
+      // ================= PRO =================
+      if(pro){
 
-  console.log("🔥 PRO → FULL UNLOCK");
+        console.log("🔥 PRO → FULL UNLOCK");
 
-  unlockProContent();
-  document.body.classList.add("is-pro");
+        unlockProContent();
+        document.body.classList.add("is-pro");
 
-  return;
-}
-
-// ================= INVESTOR =================
-if(isInvestor){
-
-  console.log("👀 INVESTOR → PARTIAL ACCESS");
-
-  lockInvestorPreview();
-  return;
-}
-
-// ================= FREE =================
-console.log("🆓 FREE USER");
-
-if(!window.proOverlayShown){
-
-  window.proOverlayShown = true;
-
-  setTimeout(()=>{
-    if(typeof showProOverlay === "function"){
-      showProOverlay();
-    }
-  },1200);
-}
-
-
-  // ================= EVENTO LINGUA =================
-  document.addEventListener("rb_language_changed", () => {
-
-    console.log("🌍 Cambio lingua → rerender dashboard");
-
-    const list = document.getElementById("analysis-list");
-    if(list) list.innerHTML = "";
-
-    document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
-      .forEach(el => { if(el) el.innerHTML = ""; });
-
-    setTimeout(()=>{
-      loadDashboard();
-    },50);
-
-    setTimeout(()=>{
-      if(typeof applyTranslations === "function"){
-        applyTranslations();
+        return;
       }
-    },150);
 
-  });
+      // ================= INVESTOR =================
+      if(isInvestor){
 
-      }catch(err){
-  console.error("Errore init dashboard:", err);
-}
+        console.log("👀 INVESTOR → PARTIAL ACCESS");
 
-});
+        lockInvestorPreview();
+        return;
+      }
+
+      // ================= FREE =================
+      console.log("🆓 FREE USER");
+
+      if(!window.proOverlayShown){
+
+        window.proOverlayShown = true;
+
+        setTimeout(()=>{
+          if(typeof showProOverlay === "function"){
+            showProOverlay();
+          }
+        },1200);
+      }
+
+      // ================= EVENTO LINGUA =================
+      document.addEventListener("rb_language_changed", () => {
+
+        console.log("🌍 Cambio lingua → rerender dashboard");
+
+        const list = document.getElementById("analysis-list");
+        if(list) list.innerHTML = "";
+
+        document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
+          .forEach(el => { if(el) el.innerHTML = ""; });
+
+        setTimeout(()=>{
+          loadDashboard();
+        },50);
+
+        setTimeout(()=>{
+          if(typeof applyTranslations === "function"){
+            applyTranslations();
+          }
+        },150);
+
+      });
+
+    } catch(err){
+      console.error("Errore init dashboard:", err);
+    }
+
+  }); // ✅ CHIUDE onAuthStateChanged
+
+}); // ✅ CHIUDE DOMContentLoaded  
 // ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
