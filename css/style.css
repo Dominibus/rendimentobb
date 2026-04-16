@@ -13880,3 +13880,171 @@ body[class*="roi"] .cta-box{
   text-align:center;
   box-shadow:0 20px 50px rgba(16,185,129,0.25);
 }
+
+/* =====================================
+🧠 GLOBAL FIX ENGINE (SAFE OVERRIDE)
+RISOLVE: overlay rotti, hero invisibile,
+testi sbiaditi, menu mobile, senza distruggere UI
+===================================== */
+
+/* =========================
+RESET VISIVO BASE (SOFT)
+========================= */
+
+body,
+main,
+section{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* =========================
+HERO FIX DEFINITIVO
+========================= */
+
+/* ripristina overlay SOLO hero */
+.hero::before,
+.hero-bg::before,
+.hero-market::before{
+  content:"" !important;
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    rgba(2,6,23,0.55),
+    rgba(2,6,23,0.75)
+  ) !important;
+
+  display:block !important;
+  z-index:1;
+}
+
+/* contenuto sopra overlay */
+.hero > *,
+.hero-bg > *,
+.hero-market > *{
+  position:relative;
+  z-index:2;
+}
+
+/* evita testo bianco rotto */
+.hero *,
+.hero-bg *,
+.hero-market *{
+  color:inherit !important;
+}
+
+/* =========================
+SECTION FIX (NON TOCCA HERO)
+========================= */
+
+.section{
+  position:relative;
+  z-index:1;
+}
+
+/* blocca solo overlay FAKE */
+.section .overlay,
+.section .section-overlay{
+  display:none !important;
+}
+
+/* =========================
+TEXT VISIBILITY FIX (SMART)
+========================= */
+
+/* evita globali distruttivi */
+.section *{
+  filter:none !important;
+}
+
+/* titoli */
+.section h1,
+.section h2,
+.section h3{
+  color:#0f172a !important;
+}
+
+/* paragrafi */
+.section p{
+  color:#475569 !important;
+}
+
+/* dark mode safe */
+.section-dark h1,
+.section-dark h2,
+.section-dark p{
+  color:#ffffff !important;
+}
+
+/* =========================
+HEADER FIX (SOPRA HERO)
+========================= */
+
+.rb-header{
+  z-index:1000 !important;
+}
+
+/* =========================
+MENU MOBILE FIX DEFINITIVO
+========================= */
+
+.rb-mobile-menu{
+  z-index:9999 !important;
+  background:#ffffff !important;
+  opacity:1 !important;
+  filter:none !important;
+}
+
+.rb-menu-overlay{
+  z-index:9998 !important;
+}
+
+/* =========================
+LOCK / PAYWALL SAFE
+========================= */
+
+.locked-section .blur-content{
+  filter:blur(6px);
+  opacity:0.4;
+}
+
+.locked-overlay{
+  z-index:5;
+}
+
+/* =========================
+ANTI BUG GLOBALI (MA NON DISTRUTTIVI)
+========================= */
+
+/* NON tocchiamo più ::before globali */
+/* sovrascriviamo solo se servono */
+
+/* fix elementi che spariscono */
+.market-card,
+.plan-card,
+.simulator-container,
+.results-card{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* =========================
+CTA / BUTTON SAFE
+========================= */
+
+.btn{
+  position:relative;
+  z-index:2;
+}
+
+/* =========================
+ULTIMO FIX SICUREZZA HERO
+========================= */
+
+/* se qualche vecchio codice li ha nascosti */
+.hero::after,
+.hero-bg::after,
+.hero-market::after{
+  display:none !important;
+}
