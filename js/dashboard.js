@@ -1218,11 +1218,42 @@ function updateDynamicTexts(){
 
 function reloadDashboardLanguage(){
 
-if(!window.currentUser) return;
+  if(!window.currentUser) return;
 
-loadDashboard();
+  loadDashboard();
 
 }
+
+
+// ================= LANGUAGE LIVE GLOBAL FIX =================
+
+document.addEventListener("rb_language_changed", () => {
+
+  console.log("🌍 Cambio lingua globale FIX");
+
+  // 🔥 header
+  renderHeader();
+
+  // 🔥 testi dinamici KPI
+  updateDynamicTexts();
+
+  // 🔥 helper report
+  const helper = document.getElementById("report-helper-text");
+  if(helper){
+    helper.innerHTML = t(
+      "Perfetto per convincere banca o investitori",
+      "Perfect to convince banks or investors"
+    );
+  }
+
+  // 🔥 TRADUZIONE COMPLETA (fondamentale)
+  setTimeout(()=>{
+    if(typeof applyTranslations === "function"){
+      applyTranslations();
+    }
+  },50);
+
+});
 
 
 // ================= INIT =================
@@ -1312,35 +1343,13 @@ window.addEventListener("DOMContentLoaded", () => {
         },1200);
       }
 
-      // ================= EVENTO LINGUA =================
-      document.addEventListener("rb_language_changed", () => {
-
-  console.log("🌍 Cambio lingua → update live");
-
-  // 🔥 1. aggiorna header
-  renderHeader();
-
-  // 🔥 2. aggiorna KPI dinamici
-  updateDynamicTexts();
-
-  // 🔥 3. aggiorna eventuali testi dinamici manuali
-  const helper = document.getElementById("report-helper-text");
-  if(helper){
-    helper.innerHTML = t(
-      "Perfetto per convincere banca o investitori",
-      "Perfect to convince banks or investors"
-    );
-  }
-
-});
-
     } catch(err){
       console.error("Errore init dashboard:", err);
     }
 
-  }); // ✅ CHIUDE onAuthStateChanged
+  });
 
-}); // ✅ CHIUDE DOMContentLoaded  
+});  
 // ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
