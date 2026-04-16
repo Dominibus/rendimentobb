@@ -13882,54 +13882,84 @@ body[class*="roi"] .cta-box{
 }
 
 /* =====================================
-🔥 HERO GLOBAL FIX (SAFE PRODUCTION)
+🔥 HERO SAFE SYSTEM (NON DISTRUTTIVO)
+NON rompe città, NON cambia layout
 ===================================== */
 
-/* forza leggibilità testo SOLO nelle hero */
-.hero,
-.hero-bg{
-  color:#ffffff;
+/* base */
+.hero{
+  position:relative;
+  overflow:hidden;
 }
 
-/* titoli e testi */
+/* overlay sempre presente */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    rgba(15,23,42,0.45),
+    rgba(15,23,42,0.65)
+  );
+  z-index:0;
+}
+
+/* contenuto sopra */
+.hero > *{
+  position:relative;
+  z-index:1;
+}
+
+/* =====================================
+🔥 BACKGROUND SOLO SE MANCA
+===================================== */
+
+/* se NON c'è una città → fallback */
+.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence){
+  background-image:url("/img/rome-bg.jpg");
+  background-size:cover;
+  background-position:center;
+}
+
+/* città restano INTACT */
+.hero-bg.rome{ background-image:url("/img/rome-bg.jpg"); }
+.hero-bg.naples{ background-image:url("/img/naples-bg.jpg"); }
+.hero-bg.milan{ background-image:url("/img/milan-bg.jpg"); }
+.hero-bg.florence{ background-image:url("/img/florence-bg.jpg"); }
+
+/* =====================================
+🔥 TESTI (fix vero problema)
+===================================== */
+
 .hero h1,
 .hero h2,
-.hero h3,
-.hero p,
-.hero .page-title,
-.hero .subtitle{
+.hero h3{
   color:#ffffff !important;
 }
 
-/* migliora contrasto overlay SENZA scurire troppo */
-.hero-bg{
-  background:
-  linear-gradient(
-    rgba(0,0,0,0.35),
-    rgba(0,0,0,0.55)
-  ),
-  var(--hero-img, url("/img/rome-bg.jpg"));
+/* fix paragrafi SOLO se sbagliati */
+.hero p{
+  color:#e2e8f0;
 }
 
-/* mantiene immagini dinamiche città */
-.hero-bg.rome{ --hero-img:url("/img/rome-bg.jpg"); }
-.hero-bg.naples{ --hero-img:url("/img/naples-bg.jpg"); }
-.hero-bg.milan{ --hero-img:url("/img/milan-bg.jpg"); }
-.hero-bg.florence{ --hero-img:url("/img/florence-bg.jpg"); }
-
-/* CTA sempre leggibile */
-.hero .btn-primary{
-  background:#10b981;
-  color:#ffffff !important;
+/* override inline (tuo caso reale) */
+.hero p[style*="color"]{
+  color:#e2e8f0 !important;
 }
+
+/* =====================================
+🔥 BOTTONI SAFE
+===================================== */
 
 .hero .btn-outline{
-  background:rgba(255,255,255,0.9);
+  background:rgba(255,255,255,0.92);
   color:#0f172a !important;
-  border:1px solid #e2e8f0;
 }
 
-/* evita effetti strani da regole globali */
-.hero *{
-  text-shadow:0 2px 10px rgba(0,0,0,0.25);
+.hero .btn-primary{
+  color:#ffffff !important;
 }
+
+/* =====================================
+🔥 NON TOCCA ALTRO
+===================================== */
