@@ -1229,29 +1229,10 @@ function reloadDashboardLanguage(){
 
 document.addEventListener("rb_language_changed", () => {
 
-  console.log("🌍 Cambio lingua globale FIX");
+  console.log("🌍 Cambio lingua → RELOAD DASHBOARD");
 
-  // 🔥 header
-  renderHeader();
-
-  // 🔥 testi dinamici KPI
-  updateDynamicTexts();
-
-  // 🔥 helper report
-  const helper = document.getElementById("report-helper-text");
-  if(helper){
-    helper.innerHTML = t(
-      "Perfetto per convincere banca o investitori",
-      "Perfect to convince banks or investors"
-    );
-  }
-
-  // 🔥 TRADUZIONE COMPLETA (fondamentale)
-  setTimeout(()=>{
-    if(typeof applyTranslations === "function"){
-      applyTranslations();
-    }
-  },50);
+  // 🔥 QUESTA È LA CHIAVE
+  loadDashboard();
 
 });
 
