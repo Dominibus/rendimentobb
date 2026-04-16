@@ -14868,3 +14868,74 @@ NON ROMPE ALTRO
 .hero *{
   opacity:1 !important;
 }
+
+/* =====================================
+🔥 MARKET HERO FIX DEFINITIVO (VERO)
+===================================== */
+
+/* reset overlay SOLO su market */
+.market-page .hero::before{
+  background:linear-gradient(
+    to bottom,
+    rgba(15,23,42,0.35),
+    rgba(15,23,42,0.15),
+    rgba(15,23,42,0.35)
+  ) !important;
+}
+
+/* FORZA background visibile */
+.market-page .hero-bg{
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* FIX CRITICO: evita layer che coprono */
+.market-page .hero{
+  isolation:isolate;
+}
+
+/* =====================================
+🔥 TESTI FINALMENTE LEGGIBILI
+===================================== */
+
+.market-page .hero h1{
+  color:#ffffff !important;
+  text-shadow:0 6px 25px rgba(0,0,0,0.7);
+}
+
+.market-page .hero p{
+  color:#e2e8f0 !important;
+}
+
+/* override inline (importantissimo) */
+.market-page .hero-left p{
+  color:#e2e8f0 !important;
+}
+
+/* =====================================
+🔥 BOTTONI FIX
+===================================== */
+
+.market-page .hero .btn-primary{
+  box-shadow:0 10px 30px rgba(0,0,0,0.35);
+}
+
+.market-page .hero .btn-outline{
+  background:rgba(255,255,255,0.9);
+  color:#0f172a !important;
+}
+
+/* =====================================
+🔥 GRID BUG FIX (QUESTO TI STAVA SPACCANDO)
+===================================== */
+
+.market-page .hero-grid{
+  display:flex !important;
+  justify-content:center;
+}
+
+.market-page .hero-left{
+  width:100%;
+  max-width:700px;
+  text-align:center;
+}
