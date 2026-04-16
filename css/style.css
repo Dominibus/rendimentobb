@@ -14192,3 +14192,78 @@ NON TOCCA MARKET GENERALE
 .market-page a:hover{
   color:#10b981;
 }
+
+/* =====================================
+🔥 BUTTON VISIBILITY FIX (GLOBAL SAFE)
+===================================== */
+
+/* PRIMARY */
+.btn-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:#ffffff !important;
+  border:none;
+  box-shadow:0 10px 25px rgba(16,185,129,0.35);
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 35px rgba(16,185,129,0.45);
+}
+
+/* OUTLINE → VISIBILE SU BIANCO */
+.btn-outline{
+  background:#ffffff;
+  color:#0f172a !important;
+  border:1px solid #e2e8f0;
+}
+
+.btn-outline:hover{
+  background:#f8fafc;
+  border-color:#cbd5e1;
+}
+
+/* =====================================
+🔥 KPI BUTTON / LINK FIX
+===================================== */
+
+.kpi-item{
+  background:#ffffff;
+  color:#0f172a !important;
+  border:1px solid #e2e8f0;
+}
+
+.kpi-item:hover{
+  background:#f8fafc;
+}
+
+/* LINK KPI (tipo ROI città) */
+a.kpi-item{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* =====================================
+🔥 CTA DARK SECTION FIX
+===================================== */
+
+.section-dark .btn-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:#ffffff !important;
+}
+
+/* =====================================
+🔥 HERO BUTTON FIX (IMPORTANTE)
+===================================== */
+
+.hero .btn-primary{
+  color:#ffffff !important;
+}
+
+.hero .btn-outline{
+  background:rgba(255,255,255,0.95);
+  color:#0f172a !important;
+  border:none;
+}
