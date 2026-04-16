@@ -14645,3 +14645,113 @@ NON ROMPE ALTRO
 .section-light{
   background:#f1f5f9;
 }
+
+/* =====================================
+🔥 HERO MASTER FIX (DEFINITIVO)
+===================================== */
+
+/* base hero */
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+/* overlay UNIFICATO (più forte per leggibilità) */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  /* 🔥 gradiente intelligente (top + bottom leggibili) */
+  background:linear-gradient(
+    to bottom,
+    rgba(15,23,42,0.65) 0%,
+    rgba(15,23,42,0.45) 40%,
+    rgba(15,23,42,0.65) 100%
+  );
+
+  z-index:0;
+}
+
+/* contenuto sopra overlay */
+.hero > *{
+  position:relative;
+  z-index:1;
+}
+
+/* =====================================
+🔥 TESTI HERO SEMPRE LEGGIBILI
+===================================== */
+
+.hero h1,
+.hero h2,
+.hero h3{
+  color:#ffffff !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.4);
+}
+
+.hero p{
+  color:#e2e8f0 !important;
+}
+
+/* =====================================
+🔥 TRUST BAR FIX (IL TUO BUG HOME)
+===================================== */
+
+.hero-trust{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+
+  margin-top:20px;
+}
+
+.hero-trust span{
+  color:#ffffff !important;
+  font-weight:500;
+  font-size:14px;
+
+  background:rgba(0,0,0,0.35);
+  padding:6px 12px;
+  border-radius:999px;
+
+  backdrop-filter:blur(6px);
+}
+
+/* =====================================
+🔥 MICRO TRUST (ROI / BREAK EVEN / RISK)
+===================================== */
+
+.micro-trust p{
+  color:#e2e8f0 !important;
+}
+
+.micro-trust strong{
+  color:#ffffff !important;
+}
+
+/* =====================================
+🔥 MARKET PAGE HERO FIX
+===================================== */
+
+.market-page .hero p{
+  color:#e2e8f0 !important;
+}
+
+/* =====================================
+🔥 CITY SEARCH BOX (SE NECESSARIO)
+===================================== */
+
+.city-search-box{
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+}
+
+/* =====================================
+🔥 SAFETY (evita roba invisibile)
+===================================== */
+
+.hero *{
+  opacity:1 !important;
+}
