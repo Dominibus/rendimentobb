@@ -594,27 +594,6 @@ async function loadDashboard(){
 
 renderStats(count,totalROI,totalCapital,totalCashflow);
 
-// 🔥 FIX TRADUZIONE LABEL MUTUO (REATTIVO)
-function updateMortgageLabel(){
-
-  const mortgageLabel = document.getElementById("mortgage-label");
-
-  if(mortgageLabel){
-    mortgageLabel.innerText = t(
-      "📉 Risparmio stimato:",
-      "📉 Estimated savings:"
-    );
-  }
-
-}
-
-// 👉 esegui subito
-updateMortgageLabel();
-
-// 👉 aggiorna al cambio lingua
-document.addEventListener("rb_language_changed", updateMortgageLabel);
-
-
 // ================= CONTINUA RENDER =================
 
 renderInsight(count,totalROI,totalCapital);
