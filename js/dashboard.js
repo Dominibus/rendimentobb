@@ -593,6 +593,30 @@ async function loadDashboard(){
 // ================= RENDER ENGINE =================
 
 renderStats(count,totalROI,totalCapital,totalCashflow);
+
+// 🔥 FIX TRADUZIONE LABEL MUTUO (REATTIVO)
+function updateMortgageLabel(){
+
+  const mortgageLabel = document.getElementById("mortgage-label");
+
+  if(mortgageLabel){
+    mortgageLabel.innerText = t(
+      "📉 Risparmio stimato:",
+      "📉 Estimated savings:"
+    );
+  }
+
+}
+
+// 👉 esegui subito
+updateMortgageLabel();
+
+// 👉 aggiorna al cambio lingua
+document.addEventListener("rb_language_changed", updateMortgageLabel);
+
+
+// ================= CONTINUA RENDER =================
+
 renderInsight(count,totalROI,totalCapital);
 renderROIOptimizer(count,totalROI,totalCapital);
 renderROITargetCalculator(analyses); 
@@ -621,28 +645,24 @@ renderInvestmentRanking(analyses);
 renderCityDistribution(analyses); 
 renderChart();
 renderCashflowChart();
-
 renderCityROIChart(analyses);
 
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
 
-// 🔥 FIX TRADUZIONE FORZATA (QUI PRECISO)
-setTimeout(()=>{
-  function forceTranslate(){
+
+// ================= 🔥 TRADUZIONE FORZATA FINALE =================
+
+function forceTranslate(){
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
 }
 
-// 🔥 chiamata immediata
-forceTranslate();
-
-// 🔥 doppio fallback (fondamentale)
-setTimeout(forceTranslate, 100);
-setTimeout(forceTranslate, 400);  
-
-} // ✅ CHIUSURA loadDashboard
+// 👉 esecuzione multipla (fondamentale per DOM dinamico)
+setTimeout(forceTranslate, 50);
+setTimeout(forceTranslate, 200);
+setTimeout(forceTranslate, 500);
 
 // ================= BEST INVESTMENT =================
 
