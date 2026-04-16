@@ -14110,3 +14110,85 @@ ANTI BUG GRAVE (IL TUO)
 /* =========================
 FINE (NON TOCCA ALTRO)
 ========================= */
+
+/* =====================================
+🔥 MARKET CITY UPGRADE (ROMA / NAPOLI / ECC)
+NON TOCCA MARKET GENERALE
+===================================== */
+
+/* HERO PIÙ PROFONDO */
+.market-page .hero{
+  min-height:460px;
+}
+
+/* 🔥 SEZIONI TESTO → PIÙ LEGGIBILI */
+.market-page .section p{
+  font-size:16px;
+  line-height:1.7;
+  color:#334155;
+}
+
+/* 🔥 LISTE PIÙ PREMIUM */
+.market-page ul{
+  padding-left:20px;
+}
+
+.market-page ul li{
+  margin-bottom:8px;
+  color:#0f172a;
+}
+
+/* =====================================
+🔥 KPI CITY → PIÙ "BANCA"
+===================================== */
+
+.market-page .market-kpi-grid{
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+}
+
+.market-page .market-kpi-grid .card{
+  text-align:center;
+  border:1px solid #e2e8f0;
+}
+
+.market-page .market-kpi-grid strong{
+  font-size:22px;
+}
+
+/* =====================================
+🔥 BLOCCO INSIGHT (GUADAGNI) → HIGHLIGHT
+===================================== */
+
+.market-page .section:nth-of-type(3){
+  background:#f8fafc;
+  border-radius:20px;
+  margin:40px auto;
+}
+
+/* =====================================
+🔥 CTA DARK → PIÙ IMPATTO
+===================================== */
+
+.market-page .section-dark{
+  position:relative;
+  overflow:hidden;
+}
+
+.market-page .section-dark::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(16,185,129,0.15), transparent 70%);
+}
+
+/* =====================================
+🔥 LINK INTERNI (SEO + UX)
+===================================== */
+
+.market-page a{
+  transition:all .2s ease;
+}
+
+.market-page a:hover{
+  color:#10b981;
+}
