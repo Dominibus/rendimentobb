@@ -1545,106 +1545,129 @@ if(!isLogged){
 
   }
 
-  // ================= DATA BY PLAN =================
+ // ================= DATA BY PLAN =================
 
-  if(isPro){
+// 🔥 sempre aggiornato (no variabili vecchie)
+const access = window.getUserAccess?.() || {};
 
-    // 🟢 FULL POWER
-    if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
-    if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
-    if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
-    if(elRev)    elRev.innerText = formatCurrency(revenue);
+const isProUser = !!access.isPro;
+const isInvestorUser = !!access.isInvestor;
+const isLoggedUser = !!access.isLogged;
 
-  }
-  else if(isInvestor){
+const isFreeUser = isLoggedUser && !isProUser && !isInvestorUser;
+const isGuestUser = !isLoggedUser;
 
-    // 🟡 FRUSTRAZIONE → UPGRADE
-    if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
-    if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
-    if(elBreak)  elBreak.innerText = "🔒";
-    if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-  }
-  else if(isFreeUser){
+// ================= DATA RENDER =================
 
-    // 🔵 DUBBIO FORTE
-    if(elProfit) elProfit.innerText = "~ " + formatCurrency(netAnnual);
-    if(elMonth)  elMonth.innerText = "⚠️ Non affidabile";
-    if(elBreak)  elBreak.innerText = "🔒";
-    if(elRev)    elRev.innerText = "⚠️ Non affidabile";
+if(isProUser){
 
-  }
-  else{
+  // 🟢 FULL POWER
+  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
+  if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
+  if(elBreak)  elBreak.innerText = breakEven.toFixed(1)+" anni";
+  if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-    // ⚫ GUEST → LOCK
-    if(elProfit) elProfit.innerText = "🔒";
-    if(elMonth)  elMonth.innerText = "🔒";
-    if(elBreak)  elBreak.innerText = "🔒";
-    if(elRev)    elRev.innerText = "🔒";
+}
+else if(isInvestorUser){
 
-  }
+  // 🟡 PARZIALE
+  if(elProfit) elProfit.innerText = formatCurrency(netAnnual);
+  if(elMonth)  elMonth.innerText = formatCurrency(netAnnual/12);
+  if(elBreak)  elBreak.innerText = "🔒";
+  if(elRev)    elRev.innerText = formatCurrency(revenue);
 
-  // ================= OVERLAY =================
-  const overlay = document.querySelector(".home-blur-overlay");
+}
+else if(isFreeUser){
+
+  // 🔵 FREE
+  if(elProfit) elProfit.innerText = "~ " + formatCurrency(netAnnual);
+  if(elMonth)  elMonth.innerText = "⚠️ Non affidabile";
+  if(elBreak)  elBreak.innerText = "🔒";
+  if(elRev)    elRev.innerText = "⚠️ Non affidabile";
+
+}
+else{
+
+  // ⚫ GUEST
+  if(elProfit) elProfit.innerText = "🔒";
+  if(elMonth)  elMonth.innerText = "🔒";
+  if(elBreak)  elBreak.innerText = "🔒";
+  if(elRev)    elRev.innerText = "🔒";
+
+}
+
+
+// ================= OVERLAY FIX DEFINITIVO =================
+
+const overlay = document.querySelector(".home-blur-overlay");
 
 if(overlay){
 
-  const access = window.getUserAccess?.() || {};
-  const isProUser = access.isPro || access.isInvestor;
-
-  if(isProUser){
+  // 🔥 MAI RIATTIVARE overlay se PRO
+  if(isProUser || isInvestorUser){
     overlay.style.display = "none";
+  }else{
+    overlay.style.display = "flex";
   }
 
 }
 
-  // ================= PSYCHO LABEL =================
-  const psych = document.getElementById("roi-psychology");
 
-  if(psych){
+// ================= PSYCHO LABEL =================
 
-    if(roi>15){
-      psych.setAttribute("data-it","🔥 Opportunità sopra la media");
-      psych.setAttribute("data-en","🔥 Above-market opportunity");
-    }
-    else if(roi>10){
-      psych.setAttribute("data-it","✅ Buon investimento");
-      psych.setAttribute("data-en","✅ Good investment");
-    }
-    else{
-      psych.setAttribute("data-it","⚠️ Rischio elevato");
-      psych.setAttribute("data-en","⚠️ High risk");
-    }
+const psych = document.getElementById("roi-psychology");
 
+if(psych){
+
+  if(roi>15){
+    psych.setAttribute("data-it","🔥 Opportunità sopra la media");
+    psych.setAttribute("data-en","🔥 Above-market opportunity");
+  }
+  else if(roi>10){
+    psych.setAttribute("data-it","✅ Buon investimento");
+    psych.setAttribute("data-en","✅ Good investment");
+  }
+  else{
+    psych.setAttribute("data-it","⚠️ Rischio elevato");
+    psych.setAttribute("data-en","⚠️ High risk");
   }
 
-  // ================= EVENT =================
-  document.dispatchEvent(
-    new CustomEvent("rb_simulation_updated", {
-      detail: { roi, revenue, data: result }
-    })
-  );
+}
 
-  // ================= CTA DINAMICA =================
-  if(typeof renderUpgradeCTA === "function"){
-    renderUpgradeCTA(roi);
-  }
 
-  // ================= CONVERSION BOOST =================
-  if(!isPro && roi > 12){
+// ================= EVENT =================
 
-    setTimeout(()=>{
-      if(typeof renderUpgradeCTA === "function"){
-        renderUpgradeCTA(roi);
-      }
-    }, 1200);
+document.dispatchEvent(
+  new CustomEvent("rb_simulation_updated", {
+    detail: { roi, revenue, data: result }
+  })
+);
 
-  }
 
-  // ================= LANG =================
-  window.RB_LANG?.apply?.();
+// ================= CTA DINAMICA =================
 
-};
+if(typeof renderUpgradeCTA === "function"){
+  renderUpgradeCTA(roi);
+}
+
+
+// ================= CONVERSION BOOST =================
+
+if(!isProUser && roi > 12){
+
+  setTimeout(()=>{
+    if(typeof renderUpgradeCTA === "function"){
+      renderUpgradeCTA(roi);
+    }
+  }, 1200);
+
+}
+
+
+// ================= LANG =================
+
+window.RB_LANG?.apply?.();
 // ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
