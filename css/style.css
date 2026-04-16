@@ -14375,24 +14375,21 @@ a.kpi-item{
   color:#e2e8f0 !important;
 }
 
-/* ================= BACKGROUND CITTÀ ================= */
+/* ================= BACKGROUND CITTÀ FIX REALE ================= */
 
-.hero-bg{
+/* fallback sempre attivo */
+.hero{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-}
-
-/* fallback */
-.hero-bg{
   background-image:url("/img/rome-bg.jpg");
 }
 
-/* città */
-.hero-bg.rome{ background-image:url("/img/rome-bg.jpg"); }
-.hero-bg.naples{ background-image:url("/img/naples-bg.jpg"); }
-.hero-bg.milan{ background-image:url("/img/milan-bg.jpg"); }
-.hero-bg.florence{ background-image:url("/img/florence-bg.jpg"); }
+/* città (FORZATE su .hero, non solo hero-bg) */
+.hero.rome{ background-image:url("/img/rome-bg.jpg") !important; }
+.hero.naples{ background-image:url("/img/naples-bg.jpg") !important; }
+.hero.milan{ background-image:url("/img/milan-bg.jpg") !important; }
+.hero.florence{ background-image:url("/img/florence-bg.jpg") !important; }
 
 /* ================= MARKET FIX ================= */
 
