@@ -1421,6 +1421,16 @@ window.quickROI = function(){
 
   let price = safeNum(priceEl?.value,250000);
 
+ // ================= ACCESS =================
+const access = window.getUserAccess?.() || {};
+
+const isPro = !!access.isPro;
+const isInvestor = !!access.isInvestor;
+const isLogged = !!access.isLogged;
+
+const isFreeUser = isLogged && !isPro && !isInvestor;
+const isGuest = !isLogged;
+
 // ================= GUEST BLOCK =================
 if(!isLogged){
 
