@@ -40,12 +40,9 @@ window.t = function(it,en){
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-function isInvestor(){
-  return window.RB_USER?.isInvestor === true;
-}
-
-function isProUser(){
-  return window.RB_USER?.isPro === true;
+function isPro(){
+  const plan = String(window.currentPlan || "").toLowerCase();
+  return plan === "pro" || plan === "pro_yearly";
 }
 
 window.proOverlayShown = false;
@@ -69,11 +66,12 @@ function lockFreeUser(){
 
   if(!window.currentPlan) return;
 
-  const isProPlan =
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly";
+  const plan = String(window.currentPlan || "").toLowerCase();
+  const pro = isPro();
+  const isInvestor = plan === "investor";
 
-  if(isProPlan){
+  // ================= PRO =================
+  if(pro){
     console.log("PRO USER → unlock everything");
 
     document.querySelectorAll(".pro-blur").forEach(el=>{
@@ -85,6 +83,13 @@ function lockFreeUser(){
     return;
   }
 
+  // ================= INVESTOR =================
+  if(isInvestor){
+    console.log("INVESTOR → no full lock (handled separately)");
+    return; // 🔥 NON trattarlo come free
+  }
+
+  // ================= FREE =================
   console.log("FREE USER → limit UI");
 
   const elementsToLock = [
@@ -203,7 +208,7 @@ labels:labels,
 datasets:[
 
 {
-label:"ROI %",
+label: t("ROI %","ROI %"),
 data:roiValues,
 borderColor:"#10b981",
 backgroundColor:gradient,
@@ -217,7 +222,7 @@ fill:true
 },
 
 {
-label:"Average ROI",
+label: t("ROI medio","Average ROI"),
 data:avgLine,
 borderColor:"#94a3b8",
 borderDash:[6,6],
@@ -343,13 +348,9 @@ async function loadDashboard(){
   labels = [];
 
   if(!window.currentPlan){
-  console.warn("⚠️ Piano non pronto → retry");
-
   setTimeout(loadDashboard, 200);
   return;
 }
-
-  window.loadDashboard = loadDashboard; 
 
   if(!window.currentUser){
     showGuestPopup();
@@ -380,19 +381,12 @@ async function loadDashboard(){
     return;
   }
 
-  if(window.currentPlan === "investor"){
-  console.log("👀 INVESTOR → preview mode");
-
-  lockInvestorPreview();
-
-// ================= FIX TRADUZIONE FINALE =================
+ // ================= FIX TRADUZIONE FINALE =================
 if(typeof applyTranslations === "function"){
   setTimeout(()=>{
     applyTranslations();
   }, 100);
 }
-    
-}  
 
   // ================= CREA ANALYSES =================
 
@@ -435,15 +429,15 @@ if(typeof applyTranslations === "function"){
 
   console.log("Città iniziale:", selectedCity);
 
-  citySelect?.addEventListener("change",(e)=>{
+  if(citySelect && !citySelect.dataset.listener){
+  citySelect.dataset.listener = "true";
 
+  citySelect.addEventListener("change",(e)=>{
     const newCity = e.target.value;
-
     updateMarketHero(newCity);
-
     console.log("Città cambiata:", newCity);
-
   });
+}
 
   // ================= RESET =================
 
@@ -505,7 +499,7 @@ if(typeof applyTranslations === "function"){
 
       <div class="metric">
         <span>${t("Città","City")}</span>
-        <strong>${data.city}</strong>
+        <strong>${data.city.charAt(0).toUpperCase() + data.city.slice(1)}</strong>
       </div>
 
       <div class="metric">
@@ -519,7 +513,7 @@ if(typeof applyTranslations === "function"){
       </div>
 
       <div class="metric">
-        <span>ROI</span>
+        <span>${t("ROI annuale","Annual ROI")}</span>
         <strong class="${roiClass}">
           ${roi.toFixed(1)}%
         </strong>
@@ -544,7 +538,7 @@ if(typeof applyTranslations === "function"){
         <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
 
         ${
-        isProUser()
+        isPro()
         ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
         : `
         <strong style="filter:blur(4px)">
@@ -559,7 +553,7 @@ if(typeof applyTranslations === "function"){
       </div>
 
       ${
-      window.currentPlan !== "pro"
+      !isPro()
       ? `
       <div style="margin-top:12px">
         <button onclick="goToUpgrade()" style="
@@ -679,9 +673,7 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
-const isProPlan =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly";
+const pro = isPro();
 
 container.innerHTML = `
 
@@ -736,7 +728,7 @@ ${t("ROI dell'investimento selezionato","Selected investment ROI")}
 
 <!-- 🔒 BLOCCO PRO -->
 ${
-isProPlan
+isPro()
 ? `
 <!-- CONTENUTO PRO -->
 <div class="metric">
@@ -946,10 +938,6 @@ else if(avgROI >= 5){
   status = t("Moderato","Moderate");
   color = "#f59e0b";
 }
-  else if(avgROI >= 5){
-    status = "Moderate";
-    color = "#f59e0b";
-  }
 
   const h2 = dbStatus.querySelector("h2");
   if(h2) h2.innerText = status;
@@ -965,33 +953,30 @@ const kpiInvest = document.getElementById("kpi-invest");
 const kpiBreak = document.getElementById("kpi-break");  
 
 // ================= KPI GRID =================
-const isProPlan =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly";
+const pro = isPro();
+const investor = window.currentPlan === "investor";
 
-const isInvestor =
-  window.currentPlan === "investor";
-
-if(kpiRoi) kpiRoi.innerText = avgROIRounded + "%";
+if(kpiRoi){
+  kpiRoi.innerText = avgROIRounded + "%";
+}
 
 if(kpiCash){
-  kpiCash.innerText = isProPlan || isInvestor
+  kpiCash.innerText = (pro || investor)
     ? formatCurrency(monthlyProfit)
     : "🔒";
 }
 
 if(kpiInvest){
-  kpiInvest.innerText = isProPlan || isInvestor
+  kpiInvest.innerText = (pro || investor)
     ? formatCurrency(totalCapital)
     : "🔒";
 }
 
 if(kpiBreak){
-  kpiBreak.innerText = isProPlan
+  kpiBreak.innerText = pro
     ? breakEven + "y"
     : "🔒";
 }
-
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
 if(roiEl) roiEl.textContent = avgROIRounded + "%";
@@ -1123,7 +1108,7 @@ letter-spacing:-0.5px;
 color:#2563eb;
 ">
 ${
-isProPlan
+isPro()
 ? `${investmentScore}/100`
 : "🔒"
 }
@@ -1166,8 +1151,8 @@ statsContainer.innerHTML = `
 
 <div class="metric">
 <span>${t("Piano","Plan")}</span>
-<strong style="color:${window.currentPlan==="pro"?"#10b981":"#64748b"};">
-${window.currentPlan==="pro"?"PRO":"FREE"}
+<strong style="color:${isPro() ? "#10b981" : "#64748b"};">
+${isPro() ? "PRO" : window.currentPlan.toUpperCase()}
 </strong>
 </div>
 </div>
@@ -1223,23 +1208,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   onAuthStateChanged(auth, async (user)=>{
 
-    if(!window.firebaseReady){
-      console.log("Firebase non pronto, attendo...");
-
-      setTimeout(()=>{
-        loadDashboard();
-
-        if(window.currentPlan === "investor"){
-  if(typeof window.showProOverlay === "function"){
-    window.showProOverlay();
-  }
-}
-
-      },300);
-
-      return;
-    }
-
     // ================= USER NON LOGGATO =================
     if(!user){
       window.location.href="/#pricing";
@@ -1250,81 +1218,67 @@ window.addEventListener("DOMContentLoaded", () => {
     window.currentUser = user;
     console.log("USER OK:", user.uid);
 
- // ================= GET PLAN =================
-const userDoc = await getDoc(doc(db,"users", user.uid));
+    try{
 
-if(userDoc.exists()){
-  const data = userDoc.data();
-  window.currentPlan = data.plan || "free";
-}else{
-  window.currentPlan = "free";
-}
+      // ================= GET PLAN =================
+      const userDoc = await getDoc(doc(db,"users", user.uid));
 
-console.log("PLAN:", window.currentPlan);
+      if(userDoc.exists()){
+        const data = userDoc.data();
+        window.currentPlan = data.plan || "free";
+      }else{
+        window.currentPlan = "free";
+      }
 
-// 🔥 SINCRONIZZA HEADER + UI
-document.dispatchEvent(new Event("rb_plan_ready"));
+      console.log("PLAN:", window.currentPlan);
 
-// ================= VALIDAZIONE ACCESSO =================
-const isAllowed =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly" ||
-  window.currentPlan === "investor" ||
-  window.currentPlan === "free";
+      // 🔥 SYNC HEADER + UI
+      document.dispatchEvent(new Event("rb_plan_ready"));
 
-if(!isAllowed){
-  window.location.href = "/#pricing";
-  return;
-}
+      // ================= FLAGS =================
+      const plan = String(window.currentPlan || "").toLowerCase();
 
-// ================= FLAG PULITI (NO DUPLICATI) =================
-const plan = String(window.currentPlan || "").toLowerCase();
+      const pro =
+        plan === "pro" ||
+        plan === "pro_yearly";
 
-const isProPlan =
-  plan === "pro" ||
-  plan === "pro_yearly";
+      const isInvestor =
+        plan === "investor";
 
-const isInvestorPlan =
-  plan === "investor";
+      // DEBUG
+      if(isInvestor){
+        console.log("👀 INVESTOR MODE");
+      }
 
-// DEBUG
-if(isInvestorPlan){
-  console.log("👀 INVESTOR MODE");
-}
+      // ================= READY =================
+      document.dispatchEvent(new Event("rb_auth_ready"));
 
-    // ================= READY =================
-    document.dispatchEvent(new Event("rb_auth_ready")); 
-
-    await loadDashboard();
-
-const isInvestor =
-  plan === "investor";
+// ================= LOAD DASHBOARD =================
+await loadDashboard();
 
 // ================= PRO =================
-if(isProPlan){
+if(pro){
 
   console.log("🔥 PRO → FULL UNLOCK");
 
   unlockProContent();
-
-  // 🔥 BLOCCA QUALSIASI LOCK FUTURO
   document.body.classList.add("is-pro");
 
-}  
+  return;
+}
 
 // ================= INVESTOR =================
 if(isInvestor){
 
   console.log("👀 INVESTOR → PARTIAL ACCESS");
 
-  // NON bloccare tutto!
-  // SOLO preview leggera
   lockInvestorPreview();
-
   return;
 }
 
 // ================= FREE =================
+console.log("🆓 FREE USER");
+
 if(!window.proOverlayShown){
 
   window.proOverlayShown = true;
@@ -1333,38 +1287,36 @@ if(!window.proOverlayShown){
     if(typeof showProOverlay === "function"){
       showProOverlay();
     }
-  }, 1200);
-
+  },1200);
 }
-
-  }); // 👈 CHIUSURA onAuthStateChanged
 
 
   // ================= EVENTO LINGUA =================
   document.addEventListener("rb_language_changed", () => {
 
-console.log("🌍 Cambio lingua → rerender dashboard");
+    console.log("🌍 Cambio lingua → rerender dashboard");
 
-// reset
-const list = document.getElementById("analysis-list");
-if(list) list.innerHTML = "";
+    const list = document.getElementById("analysis-list");
+    if(list) list.innerHTML = "";
 
-document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
-  .forEach(el => { if(el) el.innerHTML = ""; });
+    document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
+      .forEach(el => { if(el) el.innerHTML = ""; });
 
-// reload
-setTimeout(()=>{
-  loadDashboard();
-}, 50);
+    setTimeout(()=>{
+      loadDashboard();
+    },50);
 
-// 🔥 FIX TRADUZIONE DOPO RENDER
-setTimeout(()=>{
-  if(typeof applyTranslations === "function"){
-    applyTranslations();
-  }
-}, 150);
+    setTimeout(()=>{
+      if(typeof applyTranslations === "function"){
+        applyTranslations();
+      }
+    },150);
 
-});
+  });
+
+      }catch(err){
+  console.error("Errore init dashboard:", err);
+}
 
 });
 // ================= CITY DISTRIBUTION =================
@@ -1472,7 +1424,7 @@ labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
 datasets:[
 
 {
-label:"Cashflow €",
+label: t("Cashflow","Cashflow"),
 data:yearlyCashflow,
 borderColor:"#2563eb",
 backgroundColor:"rgba(37,99,235,0.15)",
@@ -1484,7 +1436,7 @@ fill:true
 },
 
 {
-label:"Break even",
+label: t("Break-even","Break-even"),
 data:breakEven,
 borderColor:"#94a3b8",
 borderDash:[6,6],
@@ -1492,7 +1444,7 @@ pointRadius:0
 },
 
 {
-label:"Market ROI",
+label: t("Benchmark mercato","Market benchmark"),
 data:new Array(roiValues.length).fill(8.4),
 borderColor:"#f59e0b",
 borderDash:[4,4],
@@ -2069,38 +2021,67 @@ const roi = result.roi || 0;
 const cashflow = result.cashflow || 0;
 const risk = result.risk || 50;
 
+// ================= EXCELLENT =================
 if(roi >= 10 && cashflow > 0 && risk < 70){
 return {
 type:"excellent",
-title: t("🔥 Ottimo investimento","🔥 Excellent investment"),
-subtitle: t("ROI sopra la media e cashflow positivo","Above-average ROI and positive cashflow"),
-action: t("Procedere","Proceed"),
-message: t("Investimento solido con ottimo equilibrio tra rendimento e rischio.",
-           "Solid investment with great balance between return and risk.")
-};
-}
+color:"#10b981",
 
-if(roi >= 7){
-return {
-type:"good",
-title: t("📊 Buon investimento","📊 Good investment"),
-subtitle: t("Margine interessante ma migliorabile","Interesting margin but improvable"),
-action: t("Ottimizzare","Optimize"),
+title: t("🔥 Ottimo investimento","🔥 Excellent investment"),
+
+subtitle: t(
+"ROI sopra la media e cashflow positivo",
+"Above-average ROI and positive cashflow"
+),
+
+action: t("Procedere","Proceed"),
+
 message: t(
-  "Buona opportunità ma ottimizzabile su pricing o occupazione.",
-  "Good opportunity but can be optimized on pricing or occupancy."
+"Investimento solido con ottimo equilibrio tra rendimento e rischio.",
+"Solid investment with strong balance between return and risk."
 )
 };
 }
 
+// ================= GOOD =================
+if(roi >= 7){
+return {
+type:"good",
+color:"#f59e0b",
+
+title: t("📊 Buon investimento","📊 Good investment"),
+
+subtitle: t(
+"Margine interessante ma migliorabile",
+"Interesting margin but improvable"
+),
+
+action: t("Ottimizzare","Optimize"),
+
+message: t(
+"Buona opportunità ma migliorabile ottimizzando prezzo medio o occupazione.",
+"Good opportunity but can be improved by optimizing pricing or occupancy."
+)
+};
+}
+
+// ================= RISK =================
 return {
 type:"risk",
+color:"#ef4444",
+
 title: t("⚠️ Investimento rischioso","⚠️ Risky investment"),
-subtitle: t("ROI basso o cashflow negativo","Low ROI or negative cashflow"),
+
+subtitle: t(
+"ROI basso o cashflow negativo",
+"Low ROI or negative cashflow"
+),
+
 action: t("Evitare","Avoid"),
+
 message: t(
-  "Rendimento insufficiente o rischio elevato rispetto al mercato.",
-  "Insufficient return or high risk compared to the market."
+"Rendimento insufficiente o rischio elevato rispetto al mercato.",
+"Insufficient return or high risk compared to the market."
 )
 };
 
@@ -2146,7 +2127,7 @@ verdict.type === "excellent"
 </div>
 
 ${
-!isProUser()
+!isPro()
 ? `
 <div style="
 margin-top:16px;
@@ -2179,7 +2160,10 @@ border-radius:10px;
 font-weight:700;
 cursor:pointer;
 ">
-🚀 Sblocca strategia completa
+🚀 ${t(
+"Sblocca strategia e ROI reale",
+"Unlock strategy & real ROI"
+)}
 </button>
 
 </div>
@@ -2200,7 +2184,7 @@ ${verdict.message}
 </div>
 
 ${
-window.currentPlan !== "pro"
+!isPro()
 ? `
 <div style="
 margin-top:16px;
@@ -2396,14 +2380,14 @@ function unlockProContent(){
 
 function renderUpgradeTrigger(best){
 
-  if(isProUser()) return;
+  if(isPro()) return;
 
   const container = document.getElementById("upgrade-trigger");
   if(!container) return;
 
   if(!best) return;
   if(best.roi < 6) return;
-  if(window.currentPlan === "pro") return;
+  if(isPro()) return;
 
   const potentialProfit = Math.round((best.price * best.roi) / 100);
 
@@ -2514,7 +2498,7 @@ function renderROIMarketComparison(count,totalROI){
   <div style="margin-top:16px">
 
     ${
-    isProUser()
+    isPro()
     ? `
       <div style="
       padding:12px;
@@ -2569,9 +2553,9 @@ function renderROIMarketComparison(count,totalROI){
 function lockInvestorPreview(){
 
   const elementsToBlur = [
-  "roi-target-calculator",
-  "revenue-simulator"
-];
+    "roi-target-calculator",
+    "revenue-simulator"
+  ];
 
   elementsToBlur.forEach(id=>{
     const el = document.getElementById(id);
@@ -2583,34 +2567,37 @@ function lockInvestorPreview(){
   });
 
   if(typeof showProOverlay === "function"){
-  showProOverlay();
-}
+    showProOverlay();
+  }
+
+  // 🔥 SOLO QUI CONTROLLO DUPLICAZIONE
+  if(document.getElementById("investor-banner")) return;
 
   const banner = document.createElement("div");
+  banner.id = "investor-banner";
 
-banner.innerHTML = `
-<div style="
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#0f172a;
-color:white;
-padding:14px 20px;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-z-index:9999;
-font-size:14px;
-">
+  banner.innerHTML = `
+  <div style="
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0f172a;
+  color:white;
+  padding:14px 20px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  z-index:9999;
+  font-size:14px;
+  ">
 
-👀 ${t(
-"Modalità preview attiva – stai vedendo solo il 30% dei dati",
-"Preview mode active – you are seeing only 30% of the data"
-)}
+  👀 ${t(
+  "Modalità preview attiva – stai vedendo solo il 30% dei dati",
+  "Preview mode active – you are seeing only 30% of the data"
+  )}
 
-</div>
-`;
+  </div>
+  `;
 
-document.body.appendChild(banner);
-  
+  document.body.appendChild(banner);
 }
