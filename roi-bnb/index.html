@@ -26,56 +26,63 @@ content="ROI medio B&B in Italia">
 
 /* ================= HERO SAAS DINAMICA ================= */
 .hero-roi{
-padding:120px 20px 100px;
-text-align:center;
-color:white;
-position:relative;
-overflow:hidden;
+  padding:120px 20px 100px;
+  text-align:center;
+  color:white;
+  position:relative;
+  overflow:hidden;
 }
 
-/* 🔥 BACKGROUND DINAMICO (FIX DEFINITIVO) */
+/* 🔥 BACKGROUND DINAMICO (FIX CORRETTO) */
 .hero-roi::before{
-content:"";
-position:absolute;
-inset:0;
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-z-index:-1;
-transition:all .4s ease;
+  content:"";
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  z-index:0; /* ✅ FIX CRITICO */
+  transition:all .4s ease;
+}
+
+/* contenuto sopra */
+.hero-roi > *{
+  position:relative;
+  z-index:1;
 }
 
 /* 🔥 DEFAULT (ROMA) */
 .hero-roi::before{
-background-image:
-linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/rome-bg.jpg");
+  background-image:
+  linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
+  url("/img/rome-bg.jpg");
 }
 
-/* 🔥 CLASSI CITTÀ (SOVRASCRIVONO CORRETTAMENTE) */
+/* 🔥 CLASSI CITTÀ */
 .hero-roi.rome::before{
-background-image:
-linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/rome-bg.jpg");
+  background-image:
+  linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
+  url("/img/rome-bg.jpg");
 }
 
 .hero-roi.milan::before{
-background-image:
-linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/milan-bg.jpg");
+  background-image:
+  linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
+  url("/img/milan-bg.jpg");
 }
 
 .hero-roi.naples::before{
-background-image:
-linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/naples-bg.jpg");
+  background-image:
+  linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
+  url("/img/naples-bg.jpg");
 }
 
 .hero-roi.florence::before{
-background-image:
-linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
-url("/img/florence-bg.jpg");
+  background-image:
+  linear-gradient(rgba(15,23,42,0.7), rgba(15,23,42,0.85)),
+  url("/img/florence-bg.jpg");
 }
+
 /* ================= HERO TEXT ================= */
 .hero-roi h1{
   font-size:42px;
@@ -95,7 +102,7 @@ url("/img/florence-bg.jpg");
 }
 
 .hero-roi .cta{
-margin-top:25px;
+  margin-top:25px;
 }
 
 /* ================= CARDS ================= */
@@ -104,10 +111,8 @@ margin-top:25px;
   padding:26px;
   border-radius:18px;
   margin-top:25px;
-
   border:1px solid #e2e8f0;
   box-shadow:0 15px 40px rgba(2,6,23,0.08);
-
   transition:all .25s ease;
 }
 
@@ -118,11 +123,11 @@ margin-top:25px;
 
 /* ================= KPI ================= */
 .roi-kpi{
-display:flex;
-justify-content:center;
-gap:30px;
-margin-top:30px;
-flex-wrap:wrap;
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-top:30px;
+  flex-wrap:wrap;
 }
 
 .roi-kpi div{
@@ -130,10 +135,8 @@ flex-wrap:wrap;
   padding:24px;
   border-radius:16px;
   min-width:150px;
-
   border:1px solid #e2e8f0;
   box-shadow:0 10px 30px rgba(2,6,23,0.06);
-
   transition:all .2s ease;
 }
 
@@ -145,7 +148,7 @@ flex-wrap:wrap;
 }
 
 .roi-kpi div:hover{
-transform:translateY(-3px);
+  transform:translateY(-3px);
 }
 
 /* ================= CTA BLOCK ================= */
@@ -153,11 +156,9 @@ transform:translateY(-3px);
   margin-top:50px;
   padding:40px;
   border-radius:20px;
-
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
   text-align:center;
-
   box-shadow:0 25px 70px rgba(16,185,129,0.35);
 }
 
@@ -180,13 +181,12 @@ transform:translateY(-3px);
 
 <!-- ================= HERO ================= -->
 
-<!-- 🔥 CAMBIA SOLO QUESTA CLASSE PER PAGINA -->
 <section class="hero-roi" id="hero-roi">
 
 <h1 id="roi-title"
-data-it="ROI B&B nel <span class='year'></span>: scopri se stai per guadagnare o perdere soldi"
-data-en="B&B ROI in <span class='year'></span>: find out if you will profit or lose money">
-ROI B&B nel <span class="year"></span>: scopri se stai per guadagnare o perdere soldi
+data-it="ROI B&B nel 2026: scopri se stai per guadagnare o perdere soldi"
+data-en="B&B ROI in 2026: find out if you will profit or lose money">
+ROI B&B nel 2026: scopri se stai per guadagnare o perdere soldi
 </h1>
 
 <p id="roi-subtitle"
