@@ -2133,7 +2133,7 @@ ${
 margin-top:16px;
 padding:16px;
 border-radius:12px;
-background:rgba(0,0,0,0.04);
+linear-gradient(135deg,#f8fafc,#eef2f7)
 text-align:center;
 ">
 
@@ -2522,7 +2522,7 @@ function renderROIMarketComparison(count,totalROI){
       <div style="
       padding:14px;
       border-radius:12px;
-      background:rgba(0,0,0,0.04);
+      linear-gradient(135deg,#f8fafc,#eef2f7)
       text-align:center;
       ">
 
