@@ -306,9 +306,10 @@ const values = Object.values(cityCount);
 
 /* ricrea canvas */
 
-container.innerHTML = '<canvas id="cityChart"></canvas>';
+// renderCityDistribution
+container.innerHTML = '<canvas id="cityDistributionChart"></canvas>';
 
-const ctx = document.getElementById("cityChart").getContext("2d");
+const ctx = document.getElementById("cityDistributionChart").getContext("2d");
 
 new Chart(ctx,{
 
@@ -348,6 +349,7 @@ async function loadDashboard(){
   labels = [];
 
   if(!window.currentPlan){
+  console.warn("⏳ Plan non pronto → retry");
   setTimeout(loadDashboard, 200);
   return;
 }
@@ -411,9 +413,17 @@ async function loadDashboard(){
 
   if(selectedCity === "italy" && analyses.length > 0){
 
-    analyses.sort((a,b)=> 
-      new Date(b.createdAt) - new Date(a.createdAt)
-    );
+    analyses.sort((a,b)=> {
+  const dateA = a.createdAt?.seconds
+    ? a.createdAt.seconds * 1000
+    : new Date(a.createdAt).getTime();
+
+  const dateB = b.createdAt?.seconds
+    ? b.createdAt.seconds * 1000
+    : new Date(b.createdAt).getTime();
+
+  return dateB - dateA;
+});
 
     selectedCity = analyses[0]?.city || "napoli";
   }
@@ -624,7 +634,7 @@ renderInvestmentRanking(analyses);
 renderCityDistribution(analyses); 
 renderChart();
 renderCashflowChart();
-renderCityROIChart(analyses);
+
 
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
@@ -992,26 +1002,7 @@ if(countEl) countEl.textContent = count;
 const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
   
 // ================= ROI =================
-const roiMsg = document.getElementById("roi-message");
-
-if(roiMsg){
-  if(avgROI >= 10){
-    roiMsg.innerText = t(
-      "🔥 ROI sopra mercato (ottimo investimento)",
-      "🔥 Above market ROI (strong investment)"
-    );
-  }else if(avgROI >= 5){
-    roiMsg.innerText = t(
-      "📊 ROI nella media",
-      "📊 Average ROI"
-    );
-  }else{
-    roiMsg.innerText = t(
-      "⚠️ ROI basso",
-      "⚠️ Low ROI"
-    );
-  }
-}
+updateDynamicTexts();
 
 // ================= KPI CARDS =================
 const kpiContainer = document.getElementById("dashboard-kpi");
@@ -1332,19 +1323,12 @@ window.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
           .forEach(el => { if(el) el.innerHTML = ""; });
 
-        setTimeout(()=>{
-          loadDashboard();
-        },50);
-
-        setTimeout(updateDynamicTexts, 100);
-
-        setTimeout(()=>{
-          if(typeof applyTranslations === "function"){
-            applyTranslations();
-          }
-        },150);
-
-      });
+        setTimeout(async ()=>{
+  await loadDashboard();
+  updateDynamicTexts();
+},50);
+        
+ });
 
     } catch(err){
       console.error("Errore init dashboard:", err);
@@ -1380,6 +1364,7 @@ function renderCityDistribution(analyses){
   const labels = Object.keys(cityCount);
   const values = Object.values(cityCount);
 
+  // 🔥 RESET CANVAS
   container.innerHTML = '<canvas id="cityChart"></canvas>';
 
   const ctx = document.getElementById("cityChart").getContext("2d");
@@ -1389,14 +1374,23 @@ function renderCityDistribution(analyses){
     data:{
       labels:labels,
       datasets:[{
-        data:values
+        data:values,
+        backgroundColor:[
+          "#10b981",
+          "#3b82f6",
+          "#f59e0b",
+          "#6366f1",
+          "#ef4444"
+        ],
+        borderWidth:0
       }]
     },
     options:{
       responsive:true,
       plugins:{
         legend:{position:"bottom"}
-      }
+      },
+      cutout:"65%"
     }
   });
 
@@ -1833,11 +1827,9 @@ if(!confirmDelete) return;
 
 try{
 
-const auth = getAuth();
-
-if(!auth.currentUser){
-alert("Sessione non valida. Ricarica la pagina.");
-return;
+if(!window.currentUser){
+  alert("Sessione non valida. Ricarica la pagina.");
+  return;
 }
 
 await deleteDoc(doc(db,"analyses",id));
@@ -2484,12 +2476,6 @@ function renderUpgradeTrigger(best){
 
   </div>
   `;
-}
-
-if(typeof applyTranslations === "function"){
-  setTimeout(()=>{
-    applyTranslations();
-  }, 50);
 }
 
 // ================= ROI MARKET COMPARISON =================
