@@ -14336,3 +14336,91 @@ NON ROMPE ALTRO
 .hero p{
   color:#e2e8f0 !important;
 }
+
+/* =====================================
+🔥 COSTI PAGE – UPGRADE VISIVO (IMPATTO SOLDI)
+===================================== */
+
+/* CARD GENERALI */
+.section .card{
+  background:#ffffff;
+  border-radius:20px;
+  padding:30px;
+  border:1px solid #e2e8f0;
+  box-shadow:0 15px 40px rgba(2,6,23,0.06);
+}
+
+/* =====================================
+🔥 BLOCCO INTRO (IMPORTANTE)
+===================================== */
+
+.section-light .card{
+  background:linear-gradient(135deg,#ffffff,#f8fafc);
+}
+
+/* =====================================
+🔥 KPI → PIÙ “ECONOMICI”
+===================================== */
+
+.kpi-item{
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  color:#0f172a !important;
+
+  padding:16px;
+  border-radius:12px;
+
+  font-weight:600;
+  font-size:14px;
+
+  transition:all .2s ease;
+}
+
+/* HOVER */
+.kpi-item:hover{
+  border-color:#10b981;
+  transform:translateY(-2px);
+}
+
+/* =====================================
+🔥 COSTI STIMATI → EVIDENZIA NUMERI
+===================================== */
+
+.section-light .kpi-item{
+  background:#f8fafc;
+}
+
+/* NUMERI GRANDI */
+.kpi-item strong,
+.kpi-item br{
+  display:block;
+  margin-bottom:5px;
+  font-size:18px;
+}
+
+/* =====================================
+🔥 COSTI OPERATIVI → PIÙ DISTACCO
+===================================== */
+
+.section .kpi-list{
+  margin-top:20px;
+}
+
+/* =====================================
+🔥 CTA → PIÙ FORTE
+===================================== */
+
+.cta-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(16,185,129,0.15), transparent 70%);
+}
+
+/* =====================================
+🔥 HERO FIX (SEMPRE NECESSARIO)
+===================================== */
+
+.hero p{
+  color:#e2e8f0 !important;
+}
