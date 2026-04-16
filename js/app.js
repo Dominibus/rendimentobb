@@ -171,23 +171,29 @@ if(!access.canSeeFullAnalysis && roi > 0){
   }
 }
 
-// 🔒 FREE → nascondi dati
-const lockIds = [
-  "qr_profit",
-  "qr_month",
-  "qr_break",
-  "qr_rev"
-];
+// 🔒 FREE → nascondi dati SOLO SE NON PRO
+const access = window.getUserAccess();
 
-lockIds.forEach(id => {
+if(!access.canSeeFullAnalysis){
 
-  const el = document.getElementById(id);
-  if(!el) return;
+  const lockIds = [
+    "qr_profit",
+    "qr_month",
+    "qr_break",
+    "qr_rev"
+  ];
 
-  el.innerText = "🔒";
-  el.style.opacity = "0.5";
+  lockIds.forEach(id => {
 
-});  
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.innerText = "🔒";
+    el.style.opacity = "0.5";
+
+  });
+
+}
 
 };
 
