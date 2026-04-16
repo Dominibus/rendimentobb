@@ -14436,3 +14436,36 @@ a.kpi-item{
     rgba(0,0,0,0.55)
   );
 }
+
+/* =====================================
+🔥 HERO BACKGROUND FINAL FIX (NO BUG)
+===================================== */
+
+/* base */
+.hero{
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+}
+
+/* fallback SEMPRE */
+.hero-bg{
+  background-image:url("/img/rome-bg.jpg") !important;
+}
+
+/* città */
+.hero-bg.rome{
+  background-image:url("/img/rome-bg.jpg") !important;
+}
+
+.hero-bg.naples{
+  background-image:url("/img/naples-bg.jpg") !important;
+}
+
+.hero-bg.milan{
+  background-image:url("/img/milan-bg.jpg") !important;
+}
+
+.hero-bg.florence{
+  background-image:url("/img/florence-bg.jpg") !important;
+}
