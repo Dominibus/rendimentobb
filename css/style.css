@@ -14424,3 +14424,108 @@ NON ROMPE ALTRO
 .hero p{
   color:#e2e8f0 !important;
 }
+
+/* =====================================
+🔥 ROI PAGE – FINAL FIX (GERARCHIA + IMPATTO)
+===================================== */
+
+/* SEZIONI PIÙ DISTINTE */
+.section{
+  padding:80px 20px;
+}
+
+.section-light{
+  background:#f1f5f9;
+}
+
+/* =====================================
+🔥 INTRO WARNING (SUPER IMPORTANTE)
+===================================== */
+
+.roi-card{
+  background:#ffffff;
+  border-radius:16px;
+  border:1px solid #e2e8f0;
+  padding:22px;
+  box-shadow:0 10px 30px rgba(2,6,23,0.06);
+}
+
+/* evidenzia WARNING */
+.roi-card p{
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* =====================================
+🔥 KPI PIÙ VISIBILI
+===================================== */
+
+.roi-kpi div{
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  transition:all .2s ease;
+}
+
+.roi-kpi div:hover{
+  transform:translateY(-4px);
+  box-shadow:0 15px 40px rgba(2,6,23,0.1);
+}
+
+/* =====================================
+🔥 LISTA CITTÀ → PIÙ LEGGIBILE
+===================================== */
+
+.roi-card ul{
+  padding-left:20px;
+  line-height:1.8;
+}
+
+.roi-card li{
+  margin-bottom:6px;
+  color:#0f172a;
+}
+
+/* =====================================
+🔥 BOTTONI CITTÀ (FIX IMPORTANTE)
+===================================== */
+
+.btn-outline{
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+  color:#0f172a !important;
+  font-weight:600;
+}
+
+.btn-outline:hover{
+  border-color:#10b981;
+  color:#10b981 !important;
+  background:#f8fafc;
+}
+
+/* =====================================
+🔥 BLOCCO ERRORE (DEVE SPICCARE)
+===================================== */
+
+.section-light .roi-card{
+  border-left:4px solid #ef4444;
+}
+
+/* =====================================
+🔥 CTA BOX → ANCORA PIÙ FORTE
+===================================== */
+
+.cta-box{
+  position:relative;
+  overflow:hidden;
+}
+
+.cta-box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 70%);
+}
+
+.cta-box .btn{
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
