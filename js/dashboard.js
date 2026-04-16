@@ -381,13 +381,6 @@ async function loadDashboard(){
     return;
   }
 
- // ================= FIX TRADUZIONE FINALE =================
-if(typeof applyTranslations === "function"){
-  setTimeout(()=>{
-    applyTranslations();
-  }, 100);
-}
-
   // ================= CREA ANALYSES =================
 
   const analyses = querySnapshot.docs.map(doc => ({
@@ -628,10 +621,18 @@ renderInvestmentRanking(analyses);
 renderCityDistribution(analyses); 
 renderChart();
 renderCashflowChart();
+
 renderCityROIChart(analyses);
 
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
+
+// 🔥 FIX TRADUZIONE FORZATA (QUI PRECISO)
+setTimeout(()=>{
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
+},200);  
 
 } // ✅ CHIUSURA loadDashboard
 
@@ -999,9 +1000,9 @@ const roiMsg = document.getElementById("roi-message");
 if(roiMsg){
   if(avgROI >= 10){
     roiMsg.innerText = t(
-  "🔥 ROI sopra mercato (ottimo investimento)",
-  "🔥 Above market ROI (strong investment)"
-);
+      "🔥 ROI sopra mercato (ottimo investimento)",
+      "🔥 Above market ROI (strong investment)"
+    );
   }else if(avgROI >= 5){
     roiMsg.innerText = t(
       "📊 ROI nella media",
@@ -2133,7 +2134,7 @@ ${
 margin-top:16px;
 padding:16px;
 border-radius:12px;
-linear-gradient(135deg,#f8fafc,#eef2f7)
+background:linear-gradient(135deg,#f8fafc,#eef2f7);
 text-align:center;
 ">
 
@@ -2485,76 +2486,76 @@ function renderROIMarketComparison(count,totalROI){
   const percentage = Math.abs(diff).toFixed(1);
 
   container.innerHTML = `
-  <h3>📊 ${t("Confronto con il mercato","Market comparison")}</h3>
+<h3>📊 ${t("Confronto con il mercato","Market comparison")}</h3>
 
-  <div style="
-  margin-top:14px;
-  font-size:28px;
-  font-weight:700;
-  color:${color};
-  ">
-    ${isBetter ? "+" : "-"}${percentage}%
-  </div>
+<div style="
+margin-top:14px;
+font-size:28px;
+font-weight:700;
+color:${color};
+">
+${isBetter ? "+" : "-"}${percentage}%
+</div>
 
-  <div style="margin-top:6px;color:#64748b;font-size:14px">
-    ${message}
-  </div>
+<div style="margin-top:6px;color:#64748b;font-size:14px">
+${message}
+</div>
 
-  <div style="margin-top:16px">
+<div style="margin-top:16px">
 
-    ${
-    isPro()
-    ? `
-      <div style="
-      padding:12px;
-      border-radius:10px;
-      background:rgba(16,185,129,0.08);
-      font-size:13px;
-      color:#065f46;
-      ">
-        💡 ${t(
-          "Il tuo investimento è sopra il benchmark nazionale.",
-          "Your investment outperforms the national benchmark."
-        )}
-      </div>
-    `
-    : `
-      <div style="
-      padding:14px;
-      border-radius:12px;
-      linear-gradient(135deg,#f8fafc,#eef2f7)
-      text-align:center;
-      ">
+${
+isPro()
+? `
+<div style="
+padding:12px;
+border-radius:10px;
+background:rgba(16,185,129,0.08);
+font-size:13px;
+color:#065f46;
+">
+💡 ${t(
+"Il tuo investimento è sopra il benchmark nazionale.",
+"Your investment outperforms the national benchmark."
+)}
+</div>
+`
+: `
+<div style="
+margin-top:16px;
+padding:16px;
+border-radius:12px;
+background:linear-gradient(135deg,#f8fafc,#eef2f7);
+text-align:center;
+">
 
-        <div style="font-size:20px;margin-bottom:6px">🔒</div>
+<div style="font-size:20px;margin-bottom:6px">🔒</div>
 
-        <div style="font-size:13px;color:#64748b;margin-bottom:10px">
-          ${t(
-            "Sblocca confronto avanzato e analisi strategica",
-            "Unlock advanced comparison and strategy"
-          )}
-        </div>
+<div style="font-size:13px;color:#64748b;margin-bottom:10px">
+${t(
+"Sblocca confronto avanzato e analisi strategica",
+"Unlock advanced comparison and strategy"
+)}
+</div>
 
-        <button onclick="goToUpgrade()" style="
-        background:#10b981;
-        border:none;
-        padding:10px 14px;
-        border-radius:8px;
-        color:white;
-        font-weight:600;
-        cursor:pointer;
-        ">
-          🚀 ${t("Sblocca PRO","Unlock PRO")}
-        </button>
+<button onclick="goToUpgrade()" style="
+background:#10b981;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+color:white;
+font-weight:600;
+cursor:pointer;
+">
+🚀 ${t("Sblocca PRO","Unlock PRO")}
+</button>
 
-      </div>
-    `
-    }
-
-  </div>
-  `;
+</div>
+`
 }
 
+</div>
+`;
+}
 function lockInvestorPreview(){
 
   const elementsToBlur = [
