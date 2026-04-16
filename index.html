@@ -1586,9 +1586,17 @@ if(!isLogged){
 
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
-  if(overlay){
-    overlay.style.display = isPro ? "none" : "flex";
+
+if(overlay){
+
+  const access = window.getUserAccess?.() || {};
+  const isProUser = access.isPro || access.isInvestor;
+
+  if(isProUser){
+    overlay.style.display = "none";
   }
+
+}
 
   // ================= PSYCHO LABEL =================
   const psych = document.getElementById("roi-psychology");
