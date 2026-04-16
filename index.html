@@ -1426,13 +1426,21 @@ window.quickROI = function(){
 
   // ================= ACCESS =================
   const access = window.getUserAccess?.() || {};
-  const isPro = !!access.isPro;
-  const isInvestor = !!access.isInvestor;
-  const isLogged = !!access.isLogged;
 
-  const isFreeUser = isLogged && !isPro && !isInvestor;
+const plan = (window.currentPlan || "").toLowerCase();
 
-  // ================= USER CHECK =================
+const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly" ||
+  access.isAdmin;
+
+const isInvestor = plan === "investor";
+
+const isLogged = !!window.currentUser;
+
+const isFreeUser = isLogged && !isPro && !isInvestor;
+
+   // ================= USER CHECK =================
   if(window.currentUser === undefined){
     console.warn("⏳ User non pronto → skip");
     return;
@@ -1552,10 +1560,15 @@ window.quickROI = function(){
 // ================= CTA DINAMICA (FUORI!!!) =================
 function renderUpgradeCTA(roi){
 
-  const access = window.getUserAccess?.() || {};
-  const isPro = !!access.isPro;
-  const isInvestor = !!access.isInvestor;
-  const isLogged = !!access.isLogged;
+  const plan = (window.currentPlan || "").toLowerCase();
+
+const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly";
+
+const isInvestor = plan === "investor";
+
+const isLogged = !!window.currentUser;
 
   if(isPro) return;
 
@@ -1708,8 +1721,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // ================= 🔓 SBLOCCO PRO =================
   function unlockHomeProUI(){
 
-    const access = window.getUserAccess?.() || {};
-const isPro = access.isPro || access.isInvestor;
+    const plan = (window.currentPlan || "").toLowerCase();
+
+const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly" ||
+  plan === "investor";
 
     if(!isPro) return;
 
