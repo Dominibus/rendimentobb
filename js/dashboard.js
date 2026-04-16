@@ -1315,20 +1315,20 @@ window.addEventListener("DOMContentLoaded", () => {
       // ================= EVENTO LINGUA =================
       document.addEventListener("rb_language_changed", () => {
 
-        console.log("🌍 Cambio lingua → rerender dashboard");
+  console.log("🌍 Cambio lingua → update UI live");
 
-        const list = document.getElementById("analysis-list");
-        if(list) list.innerHTML = "";
+  // 🔥 aggiorna testi statici (data-it / data-en)
+  if(typeof applyTranslations === "function"){
+    applyTranslations();
+  }
 
-        document.querySelectorAll("#dashboard-kpi, #dashboard-stats, #investment-verdict")
-          .forEach(el => { if(el) el.innerHTML = ""; });
-
-        setTimeout(async ()=>{
-  await loadDashboard();
+  // 🔥 aggiorna SOLO le parti dinamiche
   updateDynamicTexts();
-},50);
-        
- });
+
+  // 🔥 aggiorna header
+  renderHeader();
+
+});
 
     } catch(err){
       console.error("Errore init dashboard:", err);
