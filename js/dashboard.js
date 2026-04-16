@@ -629,20 +629,6 @@ renderCityROIChart(analyses);
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
 
-
-// ================= 🔥 TRADUZIONE FORZATA FINALE =================
-
-function forceTranslate(){
-  if(typeof applyTranslations === "function"){
-    applyTranslations();
-  }
-}
-
-// 👉 esecuzione multipla (fondamentale per DOM dinamico)
-setTimeout(forceTranslate, 50);
-setTimeout(forceTranslate, 200);
-setTimeout(forceTranslate, 500);
-
 } // ✅ CHIUSURA loadDashboard  
 
 // ================= BEST INVESTMENT =================
@@ -899,6 +885,8 @@ function renderStats(count,totalROI,totalCapital,totalCashflow){
 const avgROI = count ? (totalROI / count) : 0;
 const avgROIRounded = avgROI.toFixed(1);
 const avgCashflow = count ? (totalCashflow / count) : 0;
+
+  window.__lastAvgROI = avgROI;
 
 // ================= MARKET =================
 const selectedCity =
@@ -1199,6 +1187,40 @@ setTimeout(()=>{
   });
 },100);
 
+  updateDynamicTexts();
+
+}
+
+function updateDynamicTexts(){
+
+  const avgROI = window.__lastAvgROI || 0;
+  const roiMsg = document.getElementById("roi-message");
+
+  if(!roiMsg) return;
+
+  if(avgROI >= 10){
+
+    roiMsg.innerText = t(
+      "🔥 ROI sopra mercato (ottimo investimento)",
+      "🔥 Above market ROI (strong investment)"
+    );
+
+  }else if(avgROI >= 5){
+
+    roiMsg.innerText = t(
+      "📊 ROI nella media",
+      "📊 Average ROI"
+    );
+
+  }else{
+
+    roiMsg.innerText = t(
+      "⚠️ ROI basso",
+      "⚠️ Low ROI"
+    );
+
+  }
+
 }
 
 // ================= LANGUAGE REFRESH =================
@@ -1313,6 +1335,8 @@ window.addEventListener("DOMContentLoaded", () => {
         setTimeout(()=>{
           loadDashboard();
         },50);
+
+        setTimeout(updateDynamicTexts, 100);
 
         setTimeout(()=>{
           if(typeof applyTranslations === "function"){
