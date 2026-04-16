@@ -1432,13 +1432,16 @@ const isFreeUser = isLogged && !isPro && !isInvestor;
 const isGuest = !isLogged;
 
 // ================= GUEST BLOCK =================
-if(!isLogged){
+if(window.currentUser === undefined){
+  console.warn("⏳ User non pronto → skip");
+  return;
+}
 
+if(window.currentUser === null){
   alert(window.t(
     "Registrati gratis per vedere i risultati della simulazione",
     "Sign up for free to see simulation results"
   ));
-
   window.location.href = "/login/";
   return;
 }
@@ -1536,7 +1539,7 @@ if(!isLogged){
   }
 
   // ================= SHOCK TRIGGER =================
-  if(!isPro && roi > 0){
+  if(!isPro && !isInvestor && roi > 0){
 
     const shock = document.getElementById("roi-shock-block");
 
@@ -1550,13 +1553,8 @@ if(!isLogged){
 
 // 🔥 sempre aggiornato (no variabili vecchie)
 
-const isProUser = !!access.isPro;
-const isInvestorUser = !!access.isInvestor;
-const isLoggedUser = !!access.isLogged;
-
-const isFreeUser = isLoggedUser && !isProUser && !isInvestorUser;
-const isGuestUser = !isLoggedUser;
-
+const isProUser = isPro;
+const isInvestorUser = isInvestor;
 
 // ================= DATA RENDER =================
 
