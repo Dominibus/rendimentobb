@@ -629,10 +629,18 @@ lockFreeUser();
 
 // 🔥 FIX TRADUZIONE FORZATA (QUI PRECISO)
 setTimeout(()=>{
+  function forceTranslate(){
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
-},200);  
+}
+
+// 🔥 chiamata immediata
+forceTranslate();
+
+// 🔥 doppio fallback (fondamentale)
+setTimeout(forceTranslate, 100);
+setTimeout(forceTranslate, 400);  
 
 } // ✅ CHIUSURA loadDashboard
 
