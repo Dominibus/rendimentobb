@@ -14267,3 +14267,72 @@ a.kpi-item{
   color:#0f172a !important;
   border:none;
 }
+
+/* =====================================
+🔥 SEO DECISION PAGE FIX (APRIRE BNB)
+NON ROMPE ALTRO
+===================================== */
+
+/* CARD PRINCIPALI */
+.section .card{
+  background:#ffffff;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 15px 40px rgba(2,6,23,0.06);
+  border:1px solid #e2e8f0;
+}
+
+/* KPI → FINALMENTE VISIBILI */
+.section .kpi-item{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  color:#0f172a !important;
+
+  padding:14px;
+  border-radius:12px;
+
+  font-weight:600;
+  font-size:14px;
+
+  transition:all .2s ease;
+}
+
+/* HOVER */
+.section .kpi-item:hover{
+  background:#ffffff;
+  border-color:#10b981;
+  transform:translateY(-2px);
+}
+
+/* LINK KPI (guadagni / costi) */
+.section a.kpi-item{
+  cursor:pointer;
+}
+
+/* =====================================
+🔥 GERARCHIA VISIVA (IMPORTANTISSIMO)
+===================================== */
+
+/* SEZIONI LIGHT PIÙ DISTINTE */
+.section-light{
+  background:#f1f5f9;
+}
+
+/* SPAZI PIÙ PULITI */
+.section{
+  padding:80px 20px;
+}
+
+/* TITOLI PIÙ FORTI */
+.section h2{
+  margin-bottom:20px;
+  font-size:24px;
+}
+
+/* =====================================
+🔥 HERO FIX (COERENZA)
+===================================== */
+
+.hero p{
+  color:#e2e8f0 !important;
+}
