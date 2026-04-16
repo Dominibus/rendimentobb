@@ -13963,3 +13963,150 @@ NON rompe città, NON cambia layout
 /* =====================================
 🔥 NON TOCCA ALTRO
 ===================================== */
+/* =====================================
+🔥 HERO GLOBAL SAFE FIX (VERO DEFINITIVO)
+NON rompe layout / NON rompe città
+===================================== */
+
+/* =========================
+BASE HERO (tutte le varianti)
+========================= */
+
+.hero,
+.hero-bg,
+.hero-market,
+.hero-roi{
+  position:relative;
+  overflow:hidden;
+}
+
+/* =========================
+OVERLAY UNIFICATO (solo se manca)
+========================= */
+
+/* evita doppio overlay */
+.hero::before,
+.hero-bg::before,
+.hero-market::before{
+  z-index:0;
+}
+
+/* aggiungi overlay SOLO se non già forte */
+.hero:not(.hero-roi)::before,
+.hero-bg:not(.hero-roi)::before,
+.hero-market::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    rgba(15,23,42,0.35),
+    rgba(15,23,42,0.55)
+  );
+
+  pointer-events:none;
+}
+
+/* NON toccare hero-roi (ha già il suo sistema) */
+.hero-roi::before{
+  z-index:0;
+}
+
+/* =========================
+CONTENUTO SEMPRE SOPRA
+========================= */
+
+.hero > *,
+.hero-bg > *,
+.hero-market > *,
+.hero-roi > *{
+  position:relative;
+  z-index:1;
+}
+
+/* =========================
+FIX BACKGROUND SOLO SE ASSENTE
+========================= */
+
+/* fallback SOLO se manca */
+.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence){
+  background-image:url("/img/rome-bg.jpg");
+  background-size:cover;
+  background-position:center;
+}
+
+/* NON tocchiamo le città */
+.hero-bg.rome{}
+.hero-bg.naples{}
+.hero-bg.milan{}
+.hero-bg.florence{}
+
+/* =========================
+FIX TESTI (PROBLEMA REALE)
+========================= */
+
+/* titoli sempre leggibili */
+.hero h1,
+.hero h2,
+.hero h3,
+.hero-bg h1,
+.hero-market h1,
+.hero-roi h1{
+  color:#ffffff !important;
+}
+
+/* paragrafi */
+.hero p,
+.hero-bg p,
+.hero-market p,
+.hero-roi p{
+  color:#e2e8f0 !important;
+}
+
+/* fix inline rotti */
+.hero [style*="color"],
+.hero-bg [style*="color"],
+.hero-market [style*="color"]{
+  color:#e2e8f0 !important;
+}
+
+/* =========================
+BOTTONI SAFE
+========================= */
+
+.hero .btn-outline,
+.hero-bg .btn-outline,
+.hero-market .btn-outline{
+  background:rgba(255,255,255,0.92);
+  color:#0f172a !important;
+  border:1px solid #e2e8f0;
+}
+
+.hero .btn-primary,
+.hero-bg .btn-primary,
+.hero-market .btn-primary{
+  color:#ffffff !important;
+}
+
+/* =========================
+ANTI BUG GRAVE (IL TUO)
+========================= */
+
+/* evita overlay che coprono tutto */
+.hero::after,
+.hero-bg::after,
+.hero-market::after{
+  display:none !important;
+}
+
+/* evita trasparenze globali */
+.hero,
+.hero-bg,
+.hero-market{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* =========================
+FINE (NON TOCCA ALTRO)
+========================= */
