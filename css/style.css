@@ -14375,21 +14375,25 @@ a.kpi-item{
   color:#e2e8f0 !important;
 }
 
-/* ================= BACKGROUND CITTÀ FIX REALE ================= */
+/* ================= BACKGROUND FIX CORRETTO ================= */
 
-/* fallback sempre attivo */
+/* base */
 .hero{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
+}
+
+/* fallback SOLO se nessuna città */
+.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence){
   background-image:url("/img/rome-bg.jpg");
 }
 
-/* città (FORZATE su .hero, non solo hero-bg) */
-.hero.rome{ background-image:url("/img/rome-bg.jpg") !important; }
-.hero.naples{ background-image:url("/img/naples-bg.jpg") !important; }
-.hero.milan{ background-image:url("/img/milan-bg.jpg") !important; }
-.hero.florence{ background-image:url("/img/florence-bg.jpg") !important; }
+/* città */
+.hero-bg.rome{ background-image:url("/img/rome-bg.jpg"); }
+.hero-bg.naples{ background-image:url("/img/naples-bg.jpg"); }
+.hero-bg.milan{ background-image:url("/img/milan-bg.jpg"); }
+.hero-bg.florence{ background-image:url("/img/florence-bg.jpg"); }
 
 /* ================= MARKET FIX ================= */
 
@@ -14422,4 +14426,13 @@ a.kpi-item{
 
 .hero *{
   opacity:1 !important;
+}
+
+.hero::before{
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.55)
+  );
 }
