@@ -171,9 +171,6 @@ if(!access.canSeeFullAnalysis && roi > 0){
   }
 }
 
-// 🔒 FREE → nascondi dati SOLO SE NON PRO
-const access = window.getUserAccess();
-
 if(!access.canSeeFullAnalysis){
 
   const lockIds = [
@@ -182,6 +179,9 @@ if(!access.canSeeFullAnalysis){
     "qr_break",
     "qr_rev"
   ];
+
+ // 🔒 BLOCCO SOLO SE NON PRO
+if(!access.canSeeFullAnalysis){
 
   lockIds.forEach(id => {
 
@@ -193,6 +193,23 @@ if(!access.canSeeFullAnalysis){
 
   });
 
+}else{
+
+  // 🔥 PRO → assicurati che NON restino bloccati
+  lockIds.forEach(id => {
+
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    if(el.innerText === "🔒"){
+      el.innerText = "—";
+    }
+
+    el.style.opacity = "1";
+
+  });
+
+}
 }
 
 };
@@ -2194,12 +2211,8 @@ window.calculate = async function(force = false){
 
 const access = window.getUserAccess();
 
-if(!userLogged && !access.isPro){
-
-  console.log("🔓 Guest → funnel");
-
-  triggerUpgradeFlow({ action:"calculate" });
-
+if(!userLogged){
+  console.log("👻 Guest → allowed (UI already handled)");
 }
 
 result = calculateROI({
