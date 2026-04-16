@@ -1721,40 +1721,41 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // ================= 🔓 SBLOCCO PRO =================
   function unlockHomeProUI(){
 
-    const plan = (window.currentPlan || "").toLowerCase();
+  const plan = (window.currentPlan || "").toLowerCase();
 
-const isPro =
-  plan === "pro" ||
-  plan === "pro_yearly" ||
-  plan === "investor";
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly" ||
+    plan === "investor";
 
-    if(!isPro) return;
+  if(!isPro) return;
 
-    console.log("🔥 FORCE UNLOCK HOME PRO");
+  console.log("🔥 FORCE UNLOCK HOME PRO");
 
-    document.body.classList.add("pro-user");
+  document.body.classList.add("pro-user");
 
-    // 🔓 rimuove blur
-    document.querySelectorAll(".pro-blur").forEach(el=>{
-      el.classList.remove("pro-blur");
-    });
+  document.querySelectorAll(".pro-blur").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
 
-    // 🔓 NASCONDE overlay
-    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-      el.style.display = "none";
-    });
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.style.display = "none";
+  });
 
-    // 🔓 riattiva click
-    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-      el.classList.remove("pro-locked","locked-section");
-    });
+  document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+    el.classList.remove("pro-locked","locked-section");
+  });
 
-    document.querySelectorAll("button, a").forEach(el=>{
-      el.disabled = false;
-      el.style.pointerEvents = "auto";
-    });
+  document.querySelectorAll("button, a").forEach(el=>{
+    el.disabled = false;
+    el.style.pointerEvents = "auto";
+  });
 
+  // 🔥 FIX DEFINITIVO
+  if(typeof quickROI === "function"){
+    setTimeout(() => quickROI(), 50);
   }
+}
 
   // ================= WAIT PRO =================
   function waitForProAndUnlock(){
