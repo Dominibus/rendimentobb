@@ -14269,167 +14269,11 @@ a.kpi-item{
 }
 
 /* =====================================
-🔥 SEO DECISION PAGE FIX (APRIRE BNB)
-NON ROMPE ALTRO
+🔥 RENDIMENTOBB UI CORE – CLEAN FINAL
 ===================================== */
 
-/* CARD PRINCIPALI */
-.section .card{
-  background:#ffffff;
-  border-radius:20px;
-  padding:30px;
-  box-shadow:0 15px 40px rgba(2,6,23,0.06);
-  border:1px solid #e2e8f0;
-}
+/* ================= BASE ================= */
 
-/* KPI → FINALMENTE VISIBILI */
-.section .kpi-item{
-  background:#f8fafc;
-  border:1px solid #e2e8f0;
-  color:#0f172a !important;
-
-  padding:14px;
-  border-radius:12px;
-
-  font-weight:600;
-  font-size:14px;
-
-  transition:all .2s ease;
-}
-
-/* HOVER */
-.section .kpi-item:hover{
-  background:#ffffff;
-  border-color:#10b981;
-  transform:translateY(-2px);
-}
-
-/* LINK KPI (guadagni / costi) */
-.section a.kpi-item{
-  cursor:pointer;
-}
-
-/* =====================================
-🔥 GERARCHIA VISIVA (IMPORTANTISSIMO)
-===================================== */
-
-/* SEZIONI LIGHT PIÙ DISTINTE */
-.section-light{
-  background:#f1f5f9;
-}
-
-/* SPAZI PIÙ PULITI */
-.section{
-  padding:80px 20px;
-}
-
-/* TITOLI PIÙ FORTI */
-.section h2{
-  margin-bottom:20px;
-  font-size:24px;
-}
-
-/* =====================================
-🔥 HERO FIX (COERENZA)
-===================================== */
-
-.hero p{
-  color:#e2e8f0 !important;
-}
-
-/* =====================================
-🔥 COSTI PAGE – UPGRADE VISIVO (IMPATTO SOLDI)
-===================================== */
-
-/* CARD GENERALI */
-.section .card{
-  background:#ffffff;
-  border-radius:20px;
-  padding:30px;
-  border:1px solid #e2e8f0;
-  box-shadow:0 15px 40px rgba(2,6,23,0.06);
-}
-
-/* =====================================
-🔥 BLOCCO INTRO (IMPORTANTE)
-===================================== */
-
-.section-light .card{
-  background:linear-gradient(135deg,#ffffff,#f8fafc);
-}
-
-/* =====================================
-🔥 KPI → PIÙ “ECONOMICI”
-===================================== */
-
-.kpi-item{
-  background:#ffffff;
-  border:1px solid #e2e8f0;
-  color:#0f172a !important;
-
-  padding:16px;
-  border-radius:12px;
-
-  font-weight:600;
-  font-size:14px;
-
-  transition:all .2s ease;
-}
-
-/* HOVER */
-.kpi-item:hover{
-  border-color:#10b981;
-  transform:translateY(-2px);
-}
-
-/* =====================================
-🔥 COSTI STIMATI → EVIDENZIA NUMERI
-===================================== */
-
-.section-light .kpi-item{
-  background:#f8fafc;
-}
-
-/* NUMERI GRANDI */
-.kpi-item strong,
-.kpi-item br{
-  display:block;
-  margin-bottom:5px;
-  font-size:18px;
-}
-
-/* =====================================
-🔥 COSTI OPERATIVI → PIÙ DISTACCO
-===================================== */
-
-.section .kpi-list{
-  margin-top:20px;
-}
-
-/* =====================================
-🔥 CTA → PIÙ FORTE
-===================================== */
-
-.cta-section::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at center, rgba(16,185,129,0.15), transparent 70%);
-}
-
-/* =====================================
-🔥 HERO FIX (SEMPRE NECESSARIO)
-===================================== */
-
-.hero p{
-  color:#e2e8f0 !important;
-}
-
-/* =====================================
-🔥 ROI PAGE – FINAL FIX (GERARCHIA + IMPATTO)
-===================================== */
-
-/* SEZIONI PIÙ DISTINTE */
 .section{
   padding:80px 20px;
 }
@@ -14438,56 +14282,41 @@ NON ROMPE ALTRO
   background:#f1f5f9;
 }
 
-/* =====================================
-🔥 INTRO WARNING (SUPER IMPORTANTE)
-===================================== */
+/* ================= CARD ================= */
 
-.roi-card{
+.card{
   background:#ffffff;
   border-radius:16px;
+  padding:24px;
   border:1px solid #e2e8f0;
-  padding:22px;
-  box-shadow:0 10px 30px rgba(2,6,23,0.06);
-}
-
-/* evidenzia WARNING */
-.roi-card p{
-  font-size:15px;
-  line-height:1.6;
-}
-
-/* =====================================
-🔥 KPI PIÙ VISIBILI
-===================================== */
-
-.roi-kpi div{
-  background:#ffffff;
-  border:1px solid #e2e8f0;
+  box-shadow:0 10px 30px rgba(2,6,23,0.05);
   transition:all .2s ease;
 }
 
-.roi-kpi div:hover{
-  transform:translateY(-4px);
-  box-shadow:0 15px 40px rgba(2,6,23,0.1);
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 20px 50px rgba(2,6,23,0.1);
 }
 
-/* =====================================
-🔥 LISTA CITTÀ → PIÙ LEGGIBILE
-===================================== */
+/* ================= KPI ================= */
 
-.roi-card ul{
-  padding-left:20px;
-  line-height:1.8;
-}
-
-.roi-card li{
-  margin-bottom:6px;
+.kpi-item{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  padding:14px;
+  border-radius:12px;
+  font-weight:600;
+  font-size:14px;
   color:#0f172a;
 }
 
-/* =====================================
-🔥 BOTTONI CITTÀ (FIX IMPORTANTE)
-===================================== */
+.kpi-item strong{
+  display:block;
+  font-size:18px;
+  margin-bottom:4px;
+}
+
+/* ================= BUTTON ================= */
 
 .btn-outline{
   background:#ffffff;
@@ -14502,265 +14331,7 @@ NON ROMPE ALTRO
   background:#f8fafc;
 }
 
-/* =====================================
-🔥 BLOCCO ERRORE (DEVE SPICCARE)
-===================================== */
-
-.section-light .roi-card{
-  border-left:4px solid #ef4444;
-}
-
-/* =====================================
-🔥 CTA BOX → ANCORA PIÙ FORTE
-===================================== */
-
-.cta-box{
-  position:relative;
-  overflow:hidden;
-}
-
-.cta-box::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 70%);
-}
-
-.cta-box .btn{
-  box-shadow:0 15px 40px rgba(0,0,0,0.2);
-}
-
-/* =====================================
-🔥 ROI CITY PAGE – UPGRADE PRO
-===================================== */
-
 /* ================= HERO ================= */
-
-.hero .hero-buttons{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
-
-/* barra trust più visibile */
-.hero-trust{
-  margin-top:15px;
-  display:inline-block;
-  background:rgba(16,185,129,0.15);
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:13px;
-  color:#10b981;
-  font-weight:600;
-}
-
-/* ================= TRUST CARDS ================= */
-
-.market-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-  margin-top:30px;
-}
-
-.market-card{
-  background:#ffffff;
-  border:1px solid #e2e8f0;
-  border-radius:16px;
-  padding:22px;
-  text-align:center;
-  transition:all .25s ease;
-  box-shadow:0 10px 30px rgba(2,6,23,0.05);
-}
-
-.market-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 50px rgba(2,6,23,0.1);
-}
-
-/* CARD EVIDENZIATA */
-.market-card.highlight{
-  border:2px solid #10b981;
-  background:linear-gradient(135deg,#ecfdf5,#ffffff);
-}
-
-/* ================= DATI MERCATO ================= */
-
-.market-card strong{
-  display:block;
-  font-size:22px;
-  margin-top:5px;
-}
-
-.market-card span{
-  font-size:13px;
-  color:#64748b;
-}
-
-/* ================= TESTO ================= */
-
-.section p{
-  line-height:1.7;
-  color:#334155;
-}
-
-/* ================= LISTE ================= */
-
-.section ul{
-  padding-left:20px;
-  line-height:1.8;
-}
-
-.section ul li{
-  margin-bottom:6px;
-}
-
-/* ================= CTA BOX ================= */
-
-.cta-box{
-  margin-top:40px;
-  padding:40px;
-  border-radius:20px;
-  background:linear-gradient(135deg,#10b981,#059669);
-  color:white;
-  text-align:center;
-  box-shadow:0 25px 70px rgba(16,185,129,0.35);
-}
-
-.cta-box .btn-outline{
-  margin-top:10px;
-  background:white;
-  color:#0f172a !important;
-  border:none;
-}
-
-/* ================= SEZIONI ================= */
-
-.section{
-  padding:80px 20px;
-}
-
-.section-light{
-  background:#f1f5f9;
-}
-
-/* =====================================
-🔥 HERO MASTER FIX (DEFINITIVO)
-===================================== */
-
-/* base hero */
-.hero{
-  position:relative;
-  overflow:hidden;
-}
-
-/* overlay UNIFICATO (più forte per leggibilità) */
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  /* 🔥 gradiente intelligente (top + bottom leggibili) */
-  background:linear-gradient(
-    to bottom,
-    rgba(15,23,42,0.65) 0%,
-    rgba(15,23,42,0.45) 40%,
-    rgba(15,23,42,0.65) 100%
-  );
-
-  z-index:0;
-}
-
-/* contenuto sopra overlay */
-.hero > *{
-  position:relative;
-  z-index:1;
-}
-
-/* =====================================
-🔥 TESTI HERO SEMPRE LEGGIBILI
-===================================== */
-
-.hero h1,
-.hero h2,
-.hero h3{
-  color:#ffffff !important;
-  text-shadow:0 2px 10px rgba(0,0,0,0.4);
-}
-
-.hero p{
-  color:#e2e8f0 !important;
-}
-
-/* =====================================
-🔥 TRUST BAR FIX (IL TUO BUG HOME)
-===================================== */
-
-.hero-trust{
-  display:flex;
-  gap:20px;
-  justify-content:center;
-  flex-wrap:wrap;
-
-  margin-top:20px;
-}
-
-.hero-trust span{
-  color:#ffffff !important;
-  font-weight:500;
-  font-size:14px;
-
-  background:rgba(0,0,0,0.35);
-  padding:6px 12px;
-  border-radius:999px;
-
-  backdrop-filter:blur(6px);
-}
-
-/* =====================================
-🔥 MICRO TRUST (ROI / BREAK EVEN / RISK)
-===================================== */
-
-.micro-trust p{
-  color:#e2e8f0 !important;
-}
-
-.micro-trust strong{
-  color:#ffffff !important;
-}
-
-/* =====================================
-🔥 MARKET PAGE HERO FIX
-===================================== */
-
-.market-page .hero p{
-  color:#e2e8f0 !important;
-}
-
-/* =====================================
-🔥 CITY SEARCH BOX (SE NECESSARIO)
-===================================== */
-
-.city-search-box{
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-}
-
-/* =====================================
-🔥 SAFETY (evita roba invisibile)
-===================================== */
-
-.hero *{
-  opacity:1 !important;
-}
-
-/* =====================================
-🔥 HERO + MARKET GLOBAL FIX (DEFINITIVO)
-===================================== */
-
-/* ================= HERO BASE ================= */
 
 .hero{
   position:relative;
@@ -14770,7 +14341,7 @@ NON ROMPE ALTRO
   align-items:center;
 }
 
-/* overlay più leggero (fix leggibilità) */
+/* overlay UNICO */
 .hero::before{
   content:"";
   position:absolute;
@@ -14778,9 +14349,9 @@ NON ROMPE ALTRO
 
   background:linear-gradient(
     to bottom,
-    rgba(15,23,42,0.45) 0%,
-    rgba(15,23,42,0.25) 50%,
-    rgba(15,23,42,0.45) 100%
+    rgba(15,23,42,0.5),
+    rgba(15,23,42,0.2),
+    rgba(15,23,42,0.5)
   );
 
   z-index:0;
@@ -14792,145 +14363,45 @@ NON ROMPE ALTRO
   z-index:1;
 }
 
-/* ================= TESTI HERO ================= */
-
+/* testi */
 .hero h1,
 .hero h2,
 .hero h3{
   color:#ffffff !important;
-  text-shadow:0 2px 12px rgba(0,0,0,0.45);
+  text-shadow:0 4px 20px rgba(0,0,0,0.6);
 }
 
 .hero p{
   color:#e2e8f0 !important;
 }
 
-/* ================= MARKET BACKGROUND FIX ================= */
+/* ================= BACKGROUND CITTÀ ================= */
 
-/* 🔥 fallback (CRITICO → evita bianco) */
-.market-page .hero-bg{
-  background-image:url("/img/rome-bg.jpg");
+.hero-bg{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
 }
 
-/* città SEO */
-.market-page .hero-bg.rome{
+/* fallback */
+.hero-bg{
   background-image:url("/img/rome-bg.jpg");
 }
 
-.market-page .hero-bg.naples{
-  background-image:url("/img/naples-bg.jpg");
-}
+/* città */
+.hero-bg.rome{ background-image:url("/img/rome-bg.jpg"); }
+.hero-bg.naples{ background-image:url("/img/naples-bg.jpg"); }
+.hero-bg.milan{ background-image:url("/img/milan-bg.jpg"); }
+.hero-bg.florence{ background-image:url("/img/florence-bg.jpg"); }
 
-.market-page .hero-bg.milan{
-  background-image:url("/img/milan-bg.jpg");
-}
+/* ================= MARKET FIX ================= */
 
-.market-page .hero-bg.florence{
-  background-image:url("/img/florence-bg.jpg");
-}
-
-/* ================= TRUST BAR FIX ================= */
-
-.hero-trust{
-  display:flex;
-  gap:14px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
-
-.hero-trust span{
-  color:#ffffff !important;
-  font-weight:500;
-  font-size:13px;
-
-  background:rgba(0,0,0,0.35);
-  padding:6px 12px;
-  border-radius:999px;
-
-  backdrop-filter:blur(6px);
-}
-
-/* ================= CITY SEARCH BOX ================= */
-
-.city-search-box{
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.15);
-}
-
-/* ================= SAFETY ================= */
-
-/* evita testo invisibile */
-.hero *{
-  opacity:1 !important;
-}
-
-/* =====================================
-🔥 MARKET HERO FIX DEFINITIVO (VERO)
-===================================== */
-
-/* reset overlay SOLO su market */
-.market-page .hero::before{
-  background:linear-gradient(
-    to bottom,
-    rgba(15,23,42,0.35),
-    rgba(15,23,42,0.15),
-    rgba(15,23,42,0.35)
-  ) !important;
-}
-
-/* FORZA background visibile */
-.market-page .hero-bg{
-  background-size:cover !important;
-  background-position:center !important;
-}
-
-/* FIX CRITICO: evita layer che coprono */
 .market-page .hero{
   isolation:isolate;
 }
 
-/* =====================================
-🔥 TESTI FINALMENTE LEGGIBILI
-===================================== */
-
-.market-page .hero h1{
-  color:#ffffff !important;
-  text-shadow:0 6px 25px rgba(0,0,0,0.7);
-}
-
-.market-page .hero p{
-  color:#e2e8f0 !important;
-}
-
-/* override inline (importantissimo) */
-.market-page .hero-left p{
-  color:#e2e8f0 !important;
-}
-
-/* =====================================
-🔥 BOTTONI FIX
-===================================== */
-
-.market-page .hero .btn-primary{
-  box-shadow:0 10px 30px rgba(0,0,0,0.35);
-}
-
-.market-page .hero .btn-outline{
-  background:rgba(255,255,255,0.9);
-  color:#0f172a !important;
-}
-
-/* =====================================
-🔥 GRID BUG FIX (QUESTO TI STAVA SPACCANDO)
-===================================== */
-
 .market-page .hero-grid{
-  display:flex !important;
+  display:flex;
   justify-content:center;
 }
 
@@ -14938,4 +14409,20 @@ NON ROMPE ALTRO
   width:100%;
   max-width:700px;
   text-align:center;
+}
+
+/* overlay leggermente più leggero su market */
+.market-page .hero::before{
+  background:linear-gradient(
+    to bottom,
+    rgba(15,23,42,0.4),
+    rgba(15,23,42,0.15),
+    rgba(15,23,42,0.4)
+  );
+}
+
+/* ================= SAFETY ================= */
+
+.hero *{
+  opacity:1 !important;
 }
