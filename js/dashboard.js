@@ -2452,6 +2452,11 @@ function renderUpgradeTrigger(best){
   `;
 }
 
+if(typeof applyTranslations === "function"){
+  setTimeout(()=>{
+    applyTranslations();
+  }, 50);
+}
 
 // ================= ROI MARKET COMPARISON =================
 
