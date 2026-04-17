@@ -14658,3 +14658,89 @@ ULTRA UI • ALLINEATO • PRODUZIONE
   }
 
 }
+
+/* =====================================
+🔥 SEO KPI FIX (SAFE GLOBAL)
+NON rompe altre sezioni
+===================================== */
+
+/* container */
+.section .kpi-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;
+
+  margin-top:20px;
+}
+
+/* card base */
+.section .kpi-item{
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+
+  border-radius:14px;
+  padding:16px 14px;
+
+  text-align:center;
+  font-weight:600;
+  font-size:14px;
+  color:#0f172a;
+
+  transition:all .25s ease;
+}
+
+/* hover premium */
+.section .kpi-item:hover{
+  transform:translateY(-3px);
+
+  border-color:#10b981;
+
+  box-shadow:
+    0 10px 25px rgba(2,6,23,0.08),
+    0 4px 10px rgba(2,6,23,0.04);
+}
+
+/* icone più leggibili */
+.section .kpi-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+
+/* versione light section */
+.section-light .kpi-item{
+  background:#f8fafc;
+}
+
+/* link (IMPORTANTISSIMO per SEO pages) */
+.section .kpi-item a,
+.section a.kpi-item{
+  text-decoration:none;
+  color:inherit;
+}
+
+/* CTA-like (link strategici) */
+.section a.kpi-item:hover{
+  background:#ecfdf5;
+  border-color:#10b981;
+  color:#065f46;
+}
+
+/* =====================================
+📱 MOBILE
+===================================== */
+
+@media (max-width:768px){
+
+  .section .kpi-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .section .kpi-item{
+    font-size:13px;
+    padding:14px 10px;
+  }
+
+}
