@@ -40,7 +40,7 @@ data-en="Discover the best cities to invest in a B&B in Italy. ROI, occupancy an
 <main>
 
 <!-- HERO -->
-<section class="hero city-random">
+<section class="hero">
 
 <div class="container">
 
@@ -253,7 +253,7 @@ if(window.applyTranslations) applyTranslations();
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const hero = document.querySelector(".hero.city-random");
+  const hero = document.querySelector(".hero");
   if(!hero) return;
 
   const images = [
@@ -266,6 +266,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const random = images[Math.floor(Math.random() * images.length)];
 
   hero.style.backgroundImage = `url(${random})`;
+  hero.style.backgroundSize = "cover";
+  hero.style.backgroundPosition = "center";
+  hero.style.backgroundRepeat = "no-repeat";
 
 });
 </script> 
