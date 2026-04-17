@@ -26,281 +26,223 @@ content="Find the best B&B investment properties in Italy with ROI analysis and 
 
 <style>
 
-/* =====================================
-🚀 IMMOBILI – SAAS UI (FINAL PRODUCTION)
-===================================== */
-
-/* ===== RESET SAFE ===== */
-html,body{
-  overflow-x:hidden;
-}
-
-p{
-  overflow-wrap:break-word;
-  word-wrap:break-word;
-}
-
-/* =====================================
-📦 GRID PROPERTIES
-===================================== */
+/* ================= IMMOBILI – PRO UI ================= */
 
 .property-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:24px;
-  margin-top:50px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:24px;
+margin-top:50px;
 }
 
-/* =====================================
-🏠 CARD (SILICON VALLEY STYLE)
-===================================== */
+/* ===== CARD ===== */
 
 .property-card{
-  position:relative;
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
+position:relative;
 
-  padding:26px;
-  border-radius:18px;
+background:rgba(255,255,255,0.92);
+backdrop-filter:blur(10px);
 
-  border:1px solid rgba(16,185,129,0.08);
+padding:28px;
+border-radius:18px;
 
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.05),
-    0 2px 6px rgba(0,0,0,0.04);
+border:1px solid rgba(16,185,129,0.08);
 
-  text-align:left;
-  text-decoration:none;
-  color:#0f172a;
+box-shadow:
+0 10px 30px rgba(0,0,0,0.04),
+0 1px 2px rgba(0,0,0,0.06);
 
-  cursor:pointer;
+text-align:center;
+text-decoration:none;
+color:#0f172a;
 
-  transition:all .25s cubic-bezier(.4,0,.2,1);
+cursor:pointer;
+
+transition:
+transform .25s ease,
+box-shadow .25s ease,
+border-color .25s ease;
 }
 
-/* hover */
+/* hover pro */
 .property-card:hover{
-  transform:translateY(-6px);
-  box-shadow:
-    0 25px 70px rgba(0,0,0,0.08),
-    0 10px 20px rgba(16,185,129,0.08);
-  border-color:#10b981;
+transform:translateY(-6px) scale(1.01);
+
+box-shadow:
+0 30px 80px rgba(0,0,0,0.08),
+0 10px 20px rgba(16,185,129,0.08);
+
+border-color:#10b981;
 }
 
-/* active mobile */
-.property-card:active{
-  transform:scale(0.98);
-}
+/* ===== BEST BADGE ===== */
 
-/* top accent */
 .property-card::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:3px;
-  background:linear-gradient(90deg,#10b981,#34d399);
-  border-radius:18px 18px 0 0;
-  opacity:0;
-  transition:.3s;
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:3px;
+background:linear-gradient(90deg,#10b981,#34d399);
+border-top-left-radius:18px;
+border-top-right-radius:18px;
+opacity:0;
+transition:opacity .3s;
 }
 
 .property-card:hover::before{
-  opacity:1;
+opacity:1;
 }
 
-/* ===== TEXT ===== */
+/* ===== TITOLI ===== */
 
 .property-card h3{
-  font-size:20px;
-  font-weight:600;
-  margin-bottom:6px;
+margin-bottom:8px;
+font-size:22px;
+font-weight:600;
+color:#0f172a;
 }
+
+/* ===== LABEL ===== */
 
 .market-label{
-  font-size:12px;
-  color:#64748b;
+font-size:13px;
+color:#64748b;
 }
+
+/* ===== ROI ===== */
 
 .property-roi{
-  font-size:24px;
-  font-weight:700;
-  color:#10b981;
-  margin-top:6px;
+font-size:26px;
+color:#10b981;
+font-weight:700;
+margin-top:6px;
 }
+
+/* ===== EXTRA ===== */
 
 .market-extra{
-  font-size:13px;
-  color:#64748b;
-  margin-top:6px;
+margin-top:8px;
+font-size:13px;
+color:#64748b;
 }
+
+/* ===== LINK ===== */
 
 .market-link{
-  margin-top:12px;
-  font-size:14px;
-  font-weight:600;
-  color:#10b981;
+margin-top:14px;
+font-weight:600;
+color:#10b981;
+font-size:14px;
 }
 
-/* =====================================
-🎯 HERO FIX
-===================================== */
+/* ===================== */
+/* 🔥 HERO FIX CORRETTO */
+/* ===================== */
 
+/* SOLO TESTO HERO (NON TUTTO IL CONTAINER) */
 .hero .page-title h1,
 .hero .page-title p,
 .hero .page-title span{
-  color:#fff !important;
-  text-shadow:0 2px 10px rgba(0,0,0,0.7);
+color:#ffffff !important;
+text-shadow:0 2px 10px rgba(0,0,0,0.7);
 }
 
+/* micro testi */
 .hero .page-title div{
-  color:#e2e8f0 !important;
+color:#e2e8f0 !important;
 }
 
-/* =====================================
-📊 FORM
-===================================== */
+/* NON toccare card */
+.hero .property-card,
+.hero .property-card *{
+color:#0f172a !important;
+text-shadow:none !important;
+}
+
+/* ===================== */
+/* SEARCH BOX */
+/* ===================== */
 
 .form-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:16px;
 }
 
 .input-group{
-  display:flex;
-  flex-direction:column;
+display:flex;
+flex-direction:column;
 }
 
+/* LABEL NORMALI */
 .input-group label{
-  font-size:13px;
-  margin-bottom:6px;
-  color:#334155;
+font-size:13px;
+margin-bottom:6px;
+color:#334155;
+text-shadow:none;
+}
+
+/* 🔥 FIX DEFINITIVO LABEL (ANTI BUG BIANCO) */
+.form-grid .input-group label{
+color:#334155 !important;
+text-shadow:none !important;
+}
+
+/* SOLO se dentro hero */
+.hero .input-group label{
+color:#e2e8f0 !important;
+text-shadow:0 2px 8px rgba(0,0,0,0.6);
 }
 
 .input-group input{
-  padding:13px;
-  border-radius:12px;
-  border:1px solid #e2e8f0;
-  font-size:14px;
-  background:#fff;
-  color:#0f172a;
-  transition:.2s;
+padding:12px;
+border-radius:10px;
+border:1px solid #e2e8f0;
+font-size:14px;
+background:#ffffff;
+color:#0f172a;
 }
 
-.input-group input:focus{
-  border-color:#10b981;
-  outline:none;
-  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
-}
-
-/* =====================================
-📘 SECTION INFO
-===================================== */
+/* ===================== */
+/* SECTION INFO */
+/* ===================== */
 
 .section-info{
-  margin-top:80px;
-  text-align:center;
-  max-width:760px;
-  margin-left:auto;
-  margin-right:auto;
+margin-top:80px;
+text-align:center;
+max-width:760px;
+margin-left:auto;
+margin-right:auto;
 }
 
 .section-info p{
-  color:#475569;
+color:#475569;
 }
 
-/* =====================================
-🎯 BUTTON
-===================================== */
+/* ===================== */
+/* BUTTON */
+/* ===================== */
 
 .btn-primary{
-  background:linear-gradient(135deg,#10b981,#059669);
-  border:none;
-  border-radius:12px;
-
-  box-shadow:0 10px 25px rgba(16,185,129,0.25);
-  transition:.2s;
+background:linear-gradient(135deg,#10b981,#059669);
+border:none;
+box-shadow:0 10px 20px rgba(16,185,129,0.2);
 }
 
 .btn-primary:hover{
-  transform:translateY(-2px);
-  box-shadow:0 15px 35px rgba(16,185,129,0.3);
+transform:translateY(-2px);
+box-shadow:0 15px 30px rgba(16,185,129,0.25);
 }
 
-/* =====================================
-📩 LEAD FLEX CLEAN
-===================================== */
+body.immobili-page main section:not(.hero) .form-grid .input-group label,
+body.immobili-page main section:not(.hero) .form-grid .input-group label *{
+  color:#334155 !important;
+  text-shadow:none !important;
+}    
 
-.lead-flex{
-  margin-top:25px;
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-/* =====================================
-📱 MOBILE (VERO FIX)
-===================================== */
-
-@media(max-width:768px){
-
-  /* container */
-  .container{
-    padding:0 16px;
-  }
-
-  /* hero */
-  .page-title h1{
-    font-size:26px;
-    line-height:1.2;
-  }
-
-  .page-title p{
-    font-size:15px;
-  }
-
-  /* grid */
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .property-grid{
-    grid-template-columns:1fr;
-    gap:16px;
-  }
-
-  /* input */
-  input{
-    width:100%;
-    font-size:16px; /* evita zoom iOS */
-  }
-
-  /* button */
-  .btn,
-  .btn-primary{
-    width:100%;
-  }
-
-  /* lead */
-  .lead-flex{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  /* section spacing */
-  section{
-    margin-top:60px !important;
-  }
-
-  h2{
-    font-size:22px;
-    line-height:1.3;
-  }
-
-}
+</style>
 
 </head>
 
@@ -397,10 +339,12 @@ Con RendimentoBB puoi simulare rapidamente la redditività di un immobile trovat
 </section>   
       
 
-<div style="margin-top:6px;font-size:12px;color:#94a3b8;"
-data-it="⚡ Le migliori opportunità vengono prese entro 24h"
-data-en="⚡ The best opportunities are taken within 24h">
-⚡ Le migliori opportunità vengono prese entro 24h
+<div style="text-align:center;margin-bottom:25px;font-size:14px;color:#64748b;">
+<span
+data-it="🔥 +1.247 investitori stanno analizzando immobili in tempo reale"
+data-en="🔥 1,247+ investors are analyzing properties in real time">
+🔥 +1.247 investitori stanno analizzando immobili in tempo reale
+</span>
 </div>
 
 <!-- ================= GRID CITTA – SILICON VALLEY ================= -->
@@ -674,20 +618,20 @@ Ti inviamo le migliori opportunità B&B con analisi completa.
 
 </p>
 
-<div class="lead-flex">
+<div style="margin-top:25px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
 
 <input id="lead-email"
 type="email"
 placeholder="Email"    
 data-it-placeholder="Email"
 data-en-placeholder="Email"    
-style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;width:100%">
+style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:220px">
 
 <input id="lead-city"
 type="text"
 data-it-placeholder="Città (Roma, Napoli...)"
 data-en-placeholder="City (Rome, Naples...)"  
-style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;width:100%">
+style="padding:14px;border-radius:10px;border:1px solid #cbd5e1;min-width:180px">
 
 <div style="margin-bottom:10px;font-size:13px;color:#059669;font-weight:600">
 
@@ -738,7 +682,7 @@ Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B.
 
 </p>
 
-<div style="max-width:800px;margin:auto;margin-top:40px;width:100%">
+<div style="max-width:800px;margin:auto;margin-top:40px">
 
 <div class="form-grid">
 
