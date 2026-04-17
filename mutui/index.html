@@ -524,24 +524,12 @@ document.querySelector(".lead-box").scrollIntoView({
 /* ===== EXTRA ===== */
 renderExtra(roi, yearly);
 
-// 🔥 FORCE EXTRA VISIBILITY + CONTENT (FIX VUOTO)
+// 🔥 FORCE EXTRA VISIBILITY (FIX)
 const extraBox = document.getElementById("extra");
 
 if(extraBox){
   extraBox.style.display = "block";
-
-  // se per qualsiasi motivo è vuoto → fallback visivo
-  if(!extraBox.innerHTML.trim()){
-    extraBox.innerHTML = `
-      <div style="text-align:center;font-weight:600">
-        ${t(
-          "📊 Inserisci i dati e calcola per vedere l'analisi",
-          "📊 Enter data and calculate to see analysis"
-        )}
-      </div>
-    `;
-  }
-}  
+}
 
 /* ===== BANK ===== */
 renderBanks(amount);
