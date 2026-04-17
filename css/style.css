@@ -14426,235 +14426,235 @@ ULTRA UI • ALLINEATO • PRODUZIONE
 }
 
 /* =====================================
-🔥 HERO FIX ULTRA (STRIPE / SAAS)
+🔥 HERO SILICON VALLEY (FINAL)
 ===================================== */
 
-/* HERO PIÙ ALTA */
 .hero{
-  min-height:650px !important;
-  padding:80px 20px;
+  position:relative;
+  padding:120px 20px 80px;
+  color:white;
 }
 
-/* OVERLAY PIÙ FORTE (LEGGIBILITÀ) */
+/* 🔥 OVERLAY PROFESSIONALE */
 .hero::before{
-  background:linear-gradient(
-    rgba(15,23,42,0.55),
-    rgba(15,23,42,0.75)
-  ) !important;
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+    linear-gradient(180deg, rgba(2,6,23,0.65), rgba(2,6,23,0.85)),
+    radial-gradient(circle at 30% 20%, rgba(16,185,129,0.25), transparent 60%);
+
+  z-index:0;
 }
 
-/* CONTENUTO CENTRATO PERFETTO */
-.hero-left{
+/* contenuto sopra */
+.hero > *{
+  position:relative;
+  z-index:2;
+}
+
+/* =====================================
+🧠 TESTI (IMPATTO)
+===================================== */
+
+.hero h1{
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-0.5px;
+  text-align:center;
+
+  max-width:900px;
+  margin:0 auto;
+
+  text-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.hero p{
+  font-size:18px;
+  margin-top:16px;
+  opacity:0.95;
+  text-align:center;
+  max-width:700px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* =====================================
+🔥 CTA (STRIPE STYLE)
+===================================== */
+
+.cta-group{
+  margin-top:30px;
   display:flex;
   flex-direction:column;
   align-items:center;
+  gap:16px;
+}
+
+/* wrapper */
+.cta-group > div{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
   justify-content:center;
 }
 
-/* TITOLO IMPATTO */
-.hero h1{
-  font-size:clamp(36px,5vw,56px) !important;
-  font-weight:800;
-  line-height:1.1;
-  max-width:900px;
+/* PRIMARY */
+.btn-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  border:none;
+  color:white;
+
+  padding:14px 26px;
+  border-radius:999px;
+
+  font-weight:700;
+  font-size:15px;
+
+  box-shadow:
+    0 10px 25px rgba(16,185,129,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+
+  transition:all .25s ease;
 }
 
-/* SOTTOTITOLO PIÙ LEGGIBILE */
-.hero p{
-  font-size:18px !important;
-  line-height:1.7;
-  max-width:650px !important;
-  margin:10px auto 20px;
-  color:#e2e8f0 !important;
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 15px 40px rgba(16,185,129,0.5);
 }
 
-/* =====================================
-🔥 CTA FIX ALLINEAMENTO (NO PIÙ CASINO)
-===================================== */
-
-/* CONTENITORE CTA AUTOMATICO */
-.hero-left a{
-  margin:10px 0;
-}
-
-/* CTA PRIMARY */
-.hero .btn-primary{
-  width:260px;
-  height:52px;
-}
-
-/* CTA SECONDARIA */
-.hero .btn-outline{
-  width:260px;
-  height:52px;
-}
-
-/* RIMUOVE EFFETTO DISALLINEATO */
-.hero br{
-  display:none;
-}
-
-/* SPAZIO PULITO TRA ELEMENTI */
-.hero-left > *{
-  margin-top:12px;
-}
-
-/* TRUST TEXT */
-.hero-left p:last-of-type{
-  font-size:13px !important;
-  opacity:0.9;
-  margin-top:10px;
-}
-
-/* =====================================
-🔥 CTA OUTLINE FIX (ORA SI LEGGE)
-===================================== */
-
-.hero .btn-outline{
-  background:rgba(255,255,255,0.15) !important;
+/* SECONDARY */
+.btn-outline{
+  background:rgba(255,255,255,0.08);
   backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.4) !important;
-  color:#ffffff !important;
+
+  border:1px solid rgba(255,255,255,0.2);
+  color:white;
+
+  padding:14px 26px;
+  border-radius:999px;
+
+  font-weight:600;
+
+  transition:all .25s ease;
 }
 
-.hero .btn-outline:hover{
-  background:rgba(255,255,255,0.25) !important;
+.btn-outline:hover{
+  background:rgba(255,255,255,0.15);
 }
 
 /* =====================================
-🔥 MOBILE FIX (IMPORTANTISSIMO)
+🔥 TRUST MICRO (PIÙ PULITO)
+===================================== */
+
+.micro-trust{
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  flex-wrap:wrap;
+
+  text-align:center;
+  opacity:0.9;
+}
+
+.micro-trust strong{
+  display:block;
+  font-size:18px;
+}
+
+.micro-trust p{
+  font-size:13px;
+  opacity:0.8;
+}
+
+/* =====================================
+🔥 SEARCH BOX (EFFETTO GLASS)
+===================================== */
+
+.city-search-box{
+  margin-top:40px;
+
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(14px);
+
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:18px;
+
+  padding:20px;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.city-search-input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+
+  font-size:15px;
+}
+
+/* =====================================
+🔥 MARKET CARDS (PIÙ PREMIUM)
+===================================== */
+
+.market-grid{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:16px;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.market-card{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:14px;
+
+  padding:16px;
+  text-align:center;
+
+  transition:all .25s ease;
+}
+
+.market-card:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,0.15);
+}
+
+/* =====================================
+📱 MOBILE FIX
 ===================================== */
 
 @media (max-width:768px){
 
   .hero{
-    min-height:520px !important;
-    padding:60px 20px;
+    padding:100px 16px 60px;
   }
 
   .hero h1{
-    font-size:28px !important;
+    font-size:30px;
   }
 
-  .hero p{
-    font-size:16px !important;
-  }
-
-  .hero .btn-primary,
-  .hero .btn-outline{
-    width:100%;
-    max-width:320px;
-  }
-
-}
-
-.hero-cta{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
-  margin-top:20px;
-}
-
-/* CTA uniformi */
-.hero-cta .btn{
-  width:260px;
-  height:52px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* outline fix hero */
-.hero-cta .btn-outline{
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,0.4);
-  color:#fff;
-}
-
-.hero-cta .btn-outline:hover{
-  background:rgba(255,255,255,0.25);
-}
-
-/* mobile */
-@media (max-width:768px){
-  .hero-cta .btn{
-    width:100%;
-    max-width:320px;
-  }
-}
-
-/* =====================================
-🔥 FIX CTA HOME HERO (ALLINEAMENTO PERFETTO)
-SOLO HOME
-===================================== */
-
-.hero .cta-group > div{
-  display:flex !important;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:center;
-  align-items:center;
-}
-
-/* bottoni stessa altezza */
-.hero .cta-group .btn,
-.hero .cta-group .btn-outline{
-  height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0 22px;
-}
-
-/* mobile stack pulito */
-@media (max-width:640px){
-  .hero .cta-group > div{
+  .cta-group > div{
     flex-direction:column;
-  }
-
-  .hero .cta-group .btn,
-  .hero .cta-group .btn-outline{
     width:100%;
-    max-width:320px;
   }
-}
 
-/* =====================================
-🔥 FIX LEGGIBILITÀ HERO HOME
-===================================== */
+  .btn-primary,
+  .btn-outline{
+    width:100%;
+    text-align:center;
+  }
 
-.hero::before{
-  background:linear-gradient(
-    rgba(15,23,42,0.65),
-    rgba(15,23,42,0.75)
-  ) !important;
-}
-
-/* titolo più leggibile */
-.hero h1{
-  text-shadow:0 4px 20px rgba(0,0,0,0.45);
-}
-
-/* sottotitolo */
-.hero p{
-  color:#e2e8f0;
-}
-
-/* micro trust (ROI Break-even Risk) */
-.micro-trust strong{
-  color:#ffffff;
-}
-
-.micro-trust p{
-  color:#cbd5f5;
-}
-
-.hero .cta-group p{
-  background:rgba(0,0,0,0.25);
-  backdrop-filter:blur(6px);
-  padding:6px 12px;
-  border-radius:999px;
-  display:inline-block;
 }
