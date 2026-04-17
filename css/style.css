@@ -14112,8 +14112,8 @@ FINE (NON TOCCA ALTRO)
 ========================= */
 
 /* =====================================
-🔥 RENDIMENTOBB – MARKET + HERO FINAL CLEAN
-ZERO BUG • PRODUZIONE STABILE
+🔥 RENDIMENTOBB – MARKET + HERO FINAL PRO
+ULTRA UI • ALLINEATO • PRODUZIONE
 ===================================== */
 
 
@@ -14136,27 +14136,42 @@ ZERO BUG • PRODUZIONE STABILE
   padding:24px;
   border:1px solid #e2e8f0;
   box-shadow:0 10px 30px rgba(2,6,23,0.05);
-  transition:all .2s ease;
+  transition:all .25s ease;
 }
 
 .card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 50px rgba(2,6,23,0.1);
+  transform:translateY(-4px);
+  box-shadow:0 20px 50px rgba(2,6,23,0.12);
 }
 
 
-/* ================= BUTTON ================= */
+/* ================= CTA SYSTEM ================= */
 
-.btn-primary{
-  background:linear-gradient(135deg,#10b981,#059669);
+.btn,
+.btn-primary,
+.btn-lg{
+  background:linear-gradient(135deg,#10b981,#059669) !important;
   color:#ffffff !important;
-  border:none;
-  box-shadow:0 10px 25px rgba(16,185,129,0.35);
+  border:none !important;
+
+  padding:14px 26px;
+  border-radius:999px;
+
+  font-weight:600;
+  font-size:15px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:0 10px 25px rgba(16,185,129,0.30);
+  transition:all .25s ease;
 }
 
+.btn:hover,
 .btn-primary:hover{
   transform:translateY(-2px);
-  box-shadow:0 15px 35px rgba(16,185,129,0.45);
+  box-shadow:0 15px 35px rgba(16,185,129,0.40);
 }
 
 .btn-outline{
@@ -14174,10 +14189,9 @@ ZERO BUG • PRODUZIONE STABILE
 
 
 /* =====================================
-🔥 HERO UNICO (NO BUG / NO SPLIT)
+🔥 HERO UNICO (STABILE)
 ===================================== */
 
-/* HERO */
 .hero{
   position:relative;
   min-height:520px;
@@ -14207,62 +14221,81 @@ ZERO BUG • PRODUZIONE STABILE
   z-index:1;
 }
 
-/* città */
-.hero-bg.rome{
-  background-image:url("/img/rome-bg.jpg");
+
+/* =====================================
+🔥 HERO TEXT (IMPATTO)
+===================================== */
+
+.hero-grid{
+  display:flex;
+  justify-content:center;
 }
 
-.hero-bg.naples{
-  background-image:url("/img/naples-bg.jpg");
+.hero-left{
+  width:100%;
+  max-width:800px;
+  text-align:center;
+  margin:0 auto;
 }
 
-.hero-bg.milan{
-  background-image:url("/img/milan-bg.jpg");
-}
+.hero h1{
+  font-size:clamp(32px,4vw,52px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-0.5px;
+  margin-bottom:20px;
 
-.hero-bg.florence{
-  background-image:url("/img/florence-bg.jpg");
-}
-
-/* ================= TESTI HERO ================= */
-
-.hero h1,
-.hero h2,
-.hero h3{
   color:#ffffff !important;
   text-shadow:0 4px 20px rgba(0,0,0,0.6);
 }
 
 .hero p{
+  font-size:18px;
+  line-height:1.6;
   color:#e2e8f0 !important;
+
   text-shadow:0 2px 10px rgba(0,0,0,0.4);
+
+  max-width:680px;
+  margin:0 auto;
+}
+
+/* CTA centrata */
+.hero .btn{
+  margin:25px auto 0;
+  display:flex;
 }
 
 
 /* =====================================
-🏙️ BACKGROUND SISTEMA (CORRETTO)
+🔥 INPUT HERO (MODERNO)
 ===================================== */
 
-/* ⚠️ fallback SOLO se JS non carica */
+.hero input,
+.hero .input,
+.hero .search-bar{
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(10px);
+
+  border-radius:999px;
+  border:none;
+
+  padding:16px 24px;
+  text-align:center;
+
+  max-width:500px;
+  margin:20px auto;
+
+  display:block;
+}
+
+
+/* =====================================
+🏙️ BACKGROUND SYSTEM
+===================================== */
+
 .hero:not([style*="background-image"]){
   background-image:url("/img/rome-bg.jpg");
-}
-
-/* città */
-.hero.city-rome{
-  background-image:url("/img/rome-bg.jpg");
-}
-
-.hero.city-naples{
-  background-image:url("/img/naples-bg.jpg");
-}
-
-.hero.city-milan{
-  background-image:url("/img/milan-bg.jpg");
-}
-
-.hero.city-florence{
-  background-image:url("/img/florence-bg.jpg");
 }
 
 
@@ -14275,19 +14308,7 @@ ZERO BUG • PRODUZIONE STABILE
   min-height:460px;
 }
 
-/* layout */
-.market-page .hero-grid{
-  display:flex;
-  justify-content:center;
-}
-
-.market-page .hero-left{
-  width:100%;
-  max-width:700px;
-  text-align:center;
-}
-
-/* overlay leggermente più forte per leggibilità */
+/* overlay leggermente più forte */
 .market-page .hero::before{
   background:linear-gradient(
     rgba(15,23,42,0.30),
@@ -14309,6 +14330,21 @@ ZERO BUG • PRODUZIONE STABILE
 
 .market-kpi-grid .card{
   text-align:center;
+}
+
+/* numeri grandi */
+.market-kpi-grid .card strong{
+  font-size:28px;
+  font-weight:700;
+  color:#10b981;
+  display:block;
+  margin-bottom:6px;
+}
+
+/* label */
+.market-kpi-grid .card p{
+  font-size:14px;
+  opacity:0.7;
 }
 
 
@@ -14333,7 +14369,7 @@ ZERO BUG • PRODUZIONE STABILE
 
 
 /* =====================================
-🔥 CTA EFFECT
+🔥 CTA SECTION EFFECT
 ===================================== */
 
 .section-dark{
@@ -14370,61 +14406,21 @@ ZERO BUG • PRODUZIONE STABILE
   opacity:1 !important;
 }
 
+
 /* =====================================
-🔥 FINAL FIX MARKET HERO (ISOLATO)
-NON TOCCA ALTRE PAGINE
-RISOLVE TUTTO
+🔥 FINAL FIX HERO MARKET
 ===================================== */
 
-/* RESET COMPLETO SOLO MARKET */
 .market-page .hero{
-  background-color: transparent;
+  background-color:transparent;
 }
 
-/* USA SOLO IL JS (se presente) */
 .market-page .hero[style*="background-image"]{
   background-size:cover !important;
   background-position:center !important;
   background-repeat:no-repeat !important;
 }
 
-/* FALLBACK SE JS NON PARTE */
 .market-page .hero:not([style*="background-image"]){
   background-image:url("/img/rome-bg.jpg") !important;
-}
-
-/* DISATTIVA COMPLETAMENTE VECCHIO SISTEMA */
-.market-page .hero-bg.rome,
-.market-page .hero-bg.naples,
-.market-page .hero-bg.milan,
-.market-page .hero-bg.florence,
-.market-page .hero.city-rome,
-.market-page .hero.city-naples,
-.market-page .hero.city-milan,
-.market-page .hero.city-florence{
-  background-image:unset !important;
-}
-
-/* OVERLAY SICURO */
-.market-page .hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    rgba(15,23,42,0.35),
-    rgba(15,23,42,0.55)
-  );
-  z-index:0;
-}
-
-/* TESTI SEMPRE LEGGIBILI */
-.market-page .hero h1,
-.market-page .hero h2,
-.market-page .hero h3{
-  color:#ffffff !important;
-  text-shadow:0 4px 20px rgba(0,0,0,0.6);
-}
-
-.market-page .hero p{
-  color:#e2e8f0 !important;
 }
