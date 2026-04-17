@@ -548,7 +548,18 @@ renderDecision(roi);
 }
 
 function lockValue(value, suffix=""){
-  return value + suffix;
+
+  const access = getAccess();
+
+  // 🔓 PRO vede tutto
+  if(access.isPro){
+    return value + suffix;
+  }
+
+  // 🔥 preview intelligente (conversione)
+  const fake = Math.round(value * 0.75);
+
+  return fake + suffix + " 🔒";
 }
 
 /* ================= EXTRA ================= */
@@ -593,10 +604,10 @@ extra.innerHTML = `
     font-weight:800;
   ">
     ${
-      access.isPro
-      ? "€"+loss.toFixed(0)+"/anno"
-      : "🔒 Pro"
-    }
+  access.isPro
+  ? "€"+loss.toFixed(0)+"/anno"
+  : "€"+Math.round(loss * 0.7)+"/anno 🔒 (" + t("dato stimato","estimated") + ")"
+}
   </div>
 
   <div style="
