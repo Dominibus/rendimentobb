@@ -250,5 +250,24 @@ if(window.applyTranslations) applyTranslations();
 });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const hero = document.querySelector(".hero.city-random");
+  if(!hero) return;
+
+  const images = [
+    "/img/rome-bg.jpg",
+    "/img/naples-bg.jpg",
+    "/img/milan-bg.jpg",
+    "/img/florence-bg.jpg"
+  ];
+
+  const random = images[Math.floor(Math.random() * images.length)];
+
+  hero.style.backgroundImage = `url(${random})`;
+
+});
+</script> 
 </body>
 </html>
