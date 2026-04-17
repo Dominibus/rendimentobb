@@ -14424,3 +14424,126 @@ ULTRA UI • ALLINEATO • PRODUZIONE
 .market-page .hero:not([style*="background-image"]){
   background-image:url("/img/rome-bg.jpg") !important;
 }
+
+/* =====================================
+🔥 HERO FIX ULTRA (STRIPE / SAAS)
+===================================== */
+
+/* HERO PIÙ ALTA */
+.hero{
+  min-height:650px !important;
+  padding:80px 20px;
+}
+
+/* OVERLAY PIÙ FORTE (LEGGIBILITÀ) */
+.hero::before{
+  background:linear-gradient(
+    rgba(15,23,42,0.55),
+    rgba(15,23,42,0.75)
+  ) !important;
+}
+
+/* CONTENUTO CENTRATO PERFETTO */
+.hero-left{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+/* TITOLO IMPATTO */
+.hero h1{
+  font-size:clamp(36px,5vw,56px) !important;
+  font-weight:800;
+  line-height:1.1;
+  max-width:900px;
+}
+
+/* SOTTOTITOLO PIÙ LEGGIBILE */
+.hero p{
+  font-size:18px !important;
+  line-height:1.7;
+  max-width:650px !important;
+  margin:10px auto 20px;
+  color:#e2e8f0 !important;
+}
+
+/* =====================================
+🔥 CTA FIX ALLINEAMENTO (NO PIÙ CASINO)
+===================================== */
+
+/* CONTENITORE CTA AUTOMATICO */
+.hero-left a{
+  margin:10px 0;
+}
+
+/* CTA PRIMARY */
+.hero .btn-primary{
+  width:260px;
+  height:52px;
+}
+
+/* CTA SECONDARIA */
+.hero .btn-outline{
+  width:260px;
+  height:52px;
+}
+
+/* RIMUOVE EFFETTO DISALLINEATO */
+.hero br{
+  display:none;
+}
+
+/* SPAZIO PULITO TRA ELEMENTI */
+.hero-left > *{
+  margin-top:12px;
+}
+
+/* TRUST TEXT */
+.hero-left p:last-of-type{
+  font-size:13px !important;
+  opacity:0.9;
+  margin-top:10px;
+}
+
+/* =====================================
+🔥 CTA OUTLINE FIX (ORA SI LEGGE)
+===================================== */
+
+.hero .btn-outline{
+  background:rgba(255,255,255,0.15) !important;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.4) !important;
+  color:#ffffff !important;
+}
+
+.hero .btn-outline:hover{
+  background:rgba(255,255,255,0.25) !important;
+}
+
+/* =====================================
+🔥 MOBILE FIX (IMPORTANTISSIMO)
+===================================== */
+
+@media (max-width:768px){
+
+  .hero{
+    min-height:520px !important;
+    padding:60px 20px;
+  }
+
+  .hero h1{
+    font-size:28px !important;
+  }
+
+  .hero p{
+    font-size:16px !important;
+  }
+
+  .hero .btn-primary,
+  .hero .btn-outline{
+    width:100%;
+    max-width:320px;
+  }
+
+}
