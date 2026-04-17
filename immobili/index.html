@@ -446,6 +446,69 @@ body.immobili-page main section:not(.hero) .form-grid .input-group label *{
   }
 
 }
+
+/* =====================================
+🔥 GLOBAL MOBILE HARD FIX (ANTI BREAK)
+===================================== */
+
+@media(max-width:768px){
+
+  /* BLOCCA QUALSIASI OVERFLOW */
+  html, body{
+    overflow-x:hidden !important;
+  }
+
+  *{
+    max-width:100% !important;
+  }
+
+  /* FORZA INPUT E FORM */
+  input, button{
+    width:100% !important;
+    min-width:unset !important;
+    box-sizing:border-box;
+  }
+
+  /* FLEX FIX (IMPORTANTISSIMO) */
+  div[style*="display:flex"]{
+    flex-wrap:wrap !important;
+  }
+
+  /* LEAD BOX FIX */
+  section[style*="linear-gradient"] > div{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:12px !important;
+    align-items:stretch !important;
+  }
+
+  /* HERO TEXT SAFE */
+  .page-title{
+    padding:0 10px;
+  }
+
+  /* CTA */
+  .btn,
+  .btn-primary{
+    width:100% !important;
+  }
+
+}  
+
+.lead-flex{
+  margin-top:25px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+@media(max-width:768px){
+  .lead-flex{
+    flex-direction:column;
+    align-items:stretch;
+  }
+}  
 </style>
 
 </head>
