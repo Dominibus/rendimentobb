@@ -14744,3 +14744,20 @@ NON rompe altre sezioni
   }
 
 }
+
+/* =====================================
+🎯 FIX 2 ELEMENTI (LINK STRATEGICI)
+===================================== */
+
+/* quando ci sono SOLO 2 card */
+.section .kpi-list:has(.kpi-item:nth-child(2):last-child){
+  grid-template-columns:repeat(2, 1fr);
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* centratura perfetta */
+.section .kpi-list:has(.kpi-item:nth-child(2):last-child) .kpi-item{
+  width:100%;
+}
