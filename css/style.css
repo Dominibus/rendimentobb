@@ -14372,3 +14372,65 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 .hero *{
   opacity:1 !important;
 }
+
+/* =====================================
+🔥 MARKET HERO FINAL FIX (DEFINITIVO)
+===================================== */
+
+/* BASE HERO */
+.hero{
+  position:relative;
+  overflow:hidden;
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+
+/* OVERLAY UNICO (evita conflitti) */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    rgba(15,23,42,0.35),
+    rgba(15,23,42,0.55)
+  );
+
+  z-index:0;
+}
+
+/* CONTENUTO SOPRA */
+.hero > *{
+  position:relative;
+  z-index:1;
+}
+
+/* =====================================
+🏙️ BACKGROUND CITTÀ (FORZATI)
+===================================== */
+
+.hero-bg.rome{
+  background-image:url("/img/rome-bg.jpg") !important;
+}
+
+.hero-bg.naples{
+  background-image:url("/img/naples-bg.jpg") !important;
+}
+
+.hero-bg.milan{
+  background-image:url("/img/milan-bg.jpg") !important;
+}
+
+.hero-bg.florence{
+  background-image:url("/img/florence-bg.jpg") !important;
+}
+
+/* =====================================
+🧠 FALLBACK (solo se manca classe città)
+===================================== */
+
+.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence){
+  background-image:url("/img/rome-bg.jpg");
+}
