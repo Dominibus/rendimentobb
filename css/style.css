@@ -13320,7 +13320,7 @@ body.menu-open{
 ====================== */
 
 .market-page .hero{
-  background:transparent !important;
+  background-color: transparent;
 }
 
 .market-page .hero-left h1{
@@ -14378,7 +14378,7 @@ RISOLVE TUTTO
 
 /* RESET COMPLETO SOLO MARKET */
 .market-page .hero{
-  background-image:unset !important;
+  background-color: transparent;
 }
 
 /* USA SOLO IL JS (se presente) */
