@@ -14369,3 +14369,62 @@ ZERO BUG • PRODUZIONE STABILE
 .hero *{
   opacity:1 !important;
 }
+
+/* =====================================
+🔥 FINAL FIX MARKET HERO (ISOLATO)
+NON TOCCA ALTRE PAGINE
+RISOLVE TUTTO
+===================================== */
+
+/* RESET COMPLETO SOLO MARKET */
+.market-page .hero{
+  background-image:unset !important;
+}
+
+/* USA SOLO IL JS (se presente) */
+.market-page .hero[style*="background-image"]{
+  background-size:cover !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+}
+
+/* FALLBACK SE JS NON PARTE */
+.market-page .hero:not([style*="background-image"]){
+  background-image:url("/img/rome-bg.jpg") !important;
+}
+
+/* DISATTIVA COMPLETAMENTE VECCHIO SISTEMA */
+.market-page .hero-bg.rome,
+.market-page .hero-bg.naples,
+.market-page .hero-bg.milan,
+.market-page .hero-bg.florence,
+.market-page .hero.city-rome,
+.market-page .hero.city-naples,
+.market-page .hero.city-milan,
+.market-page .hero.city-florence{
+  background-image:unset !important;
+}
+
+/* OVERLAY SICURO */
+.market-page .hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    rgba(15,23,42,0.35),
+    rgba(15,23,42,0.55)
+  );
+  z-index:0;
+}
+
+/* TESTI SEMPRE LEGGIBILI */
+.market-page .hero h1,
+.market-page .hero h2,
+.market-page .hero h3{
+  color:#ffffff !important;
+  text-shadow:0 4px 20px rgba(0,0,0,0.6);
+}
+
+.market-page .hero p{
+  color:#e2e8f0 !important;
+}
