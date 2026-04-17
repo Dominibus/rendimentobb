@@ -14584,3 +14584,77 @@ ULTRA UI • ALLINEATO • PRODUZIONE
     max-width:320px;
   }
 }
+
+/* =====================================
+🔥 FIX CTA HOME HERO (ALLINEAMENTO PERFETTO)
+SOLO HOME
+===================================== */
+
+.hero .cta-group > div{
+  display:flex !important;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+}
+
+/* bottoni stessa altezza */
+.hero .cta-group .btn,
+.hero .cta-group .btn-outline{
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 22px;
+}
+
+/* mobile stack pulito */
+@media (max-width:640px){
+  .hero .cta-group > div{
+    flex-direction:column;
+  }
+
+  .hero .cta-group .btn,
+  .hero .cta-group .btn-outline{
+    width:100%;
+    max-width:320px;
+  }
+}
+
+/* =====================================
+🔥 FIX LEGGIBILITÀ HERO HOME
+===================================== */
+
+.hero::before{
+  background:linear-gradient(
+    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.75)
+  ) !important;
+}
+
+/* titolo più leggibile */
+.hero h1{
+  text-shadow:0 4px 20px rgba(0,0,0,0.45);
+}
+
+/* sottotitolo */
+.hero p{
+  color:#e2e8f0;
+}
+
+/* micro trust (ROI Break-even Risk) */
+.micro-trust strong{
+  color:#ffffff;
+}
+
+.micro-trust p{
+  color:#cbd5f5;
+}
+
+.hero .cta-group p{
+  background:rgba(0,0,0,0.25);
+  backdrop-filter:blur(6px);
+  padding:6px 12px;
+  border-radius:999px;
+  display:inline-block;
+}
