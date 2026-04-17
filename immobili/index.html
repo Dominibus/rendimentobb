@@ -24,492 +24,281 @@ content="Find the best B&B investment properties in Italy with ROI analysis and 
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
 
-<style>
+/* =====================================
+🚀 IMMOBILI – SAAS UI (FINAL PRODUCTION)
+===================================== */
 
-/* ================= IMMOBILI – PRO UI ================= */
+/* ===== RESET SAFE ===== */
+html,body{
+  overflow-x:hidden;
+}
+
+p{
+  overflow-wrap:break-word;
+  word-wrap:break-word;
+}
+
+/* =====================================
+📦 GRID PROPERTIES
+===================================== */
 
 .property-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:24px;
-margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+  margin-top:50px;
 }
 
-/* ===== CARD ===== */
+/* =====================================
+🏠 CARD (SILICON VALLEY STYLE)
+===================================== */
 
 .property-card{
-position:relative;
+  position:relative;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
 
-background:rgba(255,255,255,0.92);
-backdrop-filter:blur(10px);
+  padding:26px;
+  border-radius:18px;
 
-padding:28px;
-border-radius:18px;
+  border:1px solid rgba(16,185,129,0.08);
 
-border:1px solid rgba(16,185,129,0.08);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.05),
+    0 2px 6px rgba(0,0,0,0.04);
 
-box-shadow:
-0 10px 30px rgba(0,0,0,0.04),
-0 1px 2px rgba(0,0,0,0.06);
+  text-align:left;
+  text-decoration:none;
+  color:#0f172a;
 
-text-align:center;
-text-decoration:none;
-color:#0f172a;
+  cursor:pointer;
 
-cursor:pointer;
-
-transition:
-transform .25s ease,
-box-shadow .25s ease,
-border-color .25s ease;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
 }
 
-/* hover pro */
+/* hover */
 .property-card:hover{
-transform:translateY(-6px) scale(1.01);
-
-box-shadow:
-0 30px 80px rgba(0,0,0,0.08),
-0 10px 20px rgba(16,185,129,0.08);
-
-border-color:#10b981;
+  transform:translateY(-6px);
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.08),
+    0 10px 20px rgba(16,185,129,0.08);
+  border-color:#10b981;
 }
 
-/* ===== BEST BADGE ===== */
+/* active mobile */
+.property-card:active{
+  transform:scale(0.98);
+}
 
+/* top accent */
 .property-card::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-right:0;
-height:3px;
-background:linear-gradient(90deg,#10b981,#34d399);
-border-top-left-radius:18px;
-border-top-right-radius:18px;
-opacity:0;
-transition:opacity .3s;
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  background:linear-gradient(90deg,#10b981,#34d399);
+  border-radius:18px 18px 0 0;
+  opacity:0;
+  transition:.3s;
 }
 
 .property-card:hover::before{
-opacity:1;
+  opacity:1;
 }
 
-/* ===== TITOLI ===== */
+/* ===== TEXT ===== */
 
 .property-card h3{
-margin-bottom:8px;
-font-size:22px;
-font-weight:600;
-color:#0f172a;
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:6px;
 }
-
-/* ===== LABEL ===== */
 
 .market-label{
-font-size:13px;
-color:#64748b;
+  font-size:12px;
+  color:#64748b;
 }
-
-/* ===== ROI ===== */
 
 .property-roi{
-font-size:26px;
-color:#10b981;
-font-weight:700;
-margin-top:6px;
+  font-size:24px;
+  font-weight:700;
+  color:#10b981;
+  margin-top:6px;
 }
-
-/* ===== EXTRA ===== */
 
 .market-extra{
-margin-top:8px;
-font-size:13px;
-color:#64748b;
+  font-size:13px;
+  color:#64748b;
+  margin-top:6px;
 }
-
-/* ===== LINK ===== */
 
 .market-link{
-margin-top:14px;
-font-weight:600;
-color:#10b981;
-font-size:14px;
+  margin-top:12px;
+  font-size:14px;
+  font-weight:600;
+  color:#10b981;
 }
 
-/* ===================== */
-/* 🔥 HERO FIX CORRETTO */
-/* ===================== */
+/* =====================================
+🎯 HERO FIX
+===================================== */
 
-/* SOLO TESTO HERO (NON TUTTO IL CONTAINER) */
 .hero .page-title h1,
 .hero .page-title p,
 .hero .page-title span{
-color:#ffffff !important;
-text-shadow:0 2px 10px rgba(0,0,0,0.7);
+  color:#fff !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.7);
 }
 
-/* micro testi */
 .hero .page-title div{
-color:#e2e8f0 !important;
+  color:#e2e8f0 !important;
 }
 
-/* NON toccare card */
-.hero .property-card,
-.hero .property-card *{
-color:#0f172a !important;
-text-shadow:none !important;
-}
-
-/* ===================== */
-/* SEARCH BOX */
-/* ===================== */
+/* =====================================
+📊 FORM
+===================================== */
 
 .form-grid{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:16px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
 }
 
 .input-group{
-display:flex;
-flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
 
-/* LABEL NORMALI */
 .input-group label{
-font-size:13px;
-margin-bottom:6px;
-color:#334155;
-text-shadow:none;
-}
-
-/* 🔥 FIX DEFINITIVO LABEL (ANTI BUG BIANCO) */
-.form-grid .input-group label{
-color:#334155 !important;
-text-shadow:none !important;
-}
-
-/* SOLO se dentro hero */
-.hero .input-group label{
-color:#e2e8f0 !important;
-text-shadow:0 2px 8px rgba(0,0,0,0.6);
+  font-size:13px;
+  margin-bottom:6px;
+  color:#334155;
 }
 
 .input-group input{
-padding:12px;
-border-radius:10px;
-border:1px solid #e2e8f0;
-font-size:14px;
-background:#ffffff;
-color:#0f172a;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  font-size:14px;
+  background:#fff;
+  color:#0f172a;
+  transition:.2s;
 }
 
-/* ===================== */
-/* SECTION INFO */
-/* ===================== */
+.input-group input:focus{
+  border-color:#10b981;
+  outline:none;
+  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
+}
+
+/* =====================================
+📘 SECTION INFO
+===================================== */
 
 .section-info{
-margin-top:80px;
-text-align:center;
-max-width:760px;
-margin-left:auto;
-margin-right:auto;
+  margin-top:80px;
+  text-align:center;
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .section-info p{
-color:#475569;
+  color:#475569;
 }
 
-/* ===================== */
-/* BUTTON */
-/* ===================== */
+/* =====================================
+🎯 BUTTON
+===================================== */
 
 .btn-primary{
-background:linear-gradient(135deg,#10b981,#059669);
-border:none;
-box-shadow:0 10px 20px rgba(16,185,129,0.2);
+  background:linear-gradient(135deg,#10b981,#059669);
+  border:none;
+  border-radius:12px;
+
+  box-shadow:0 10px 25px rgba(16,185,129,0.25);
+  transition:.2s;
 }
 
 .btn-primary:hover{
-transform:translateY(-2px);
-box-shadow:0 15px 30px rgba(16,185,129,0.25);
+  transform:translateY(-2px);
+  box-shadow:0 15px 35px rgba(16,185,129,0.3);
 }
-
-body.immobili-page main section:not(.hero) .form-grid .input-group label,
-body.immobili-page main section:not(.hero) .form-grid .input-group label *{
-  color:#334155 !important;
-  text-shadow:none !important;
-}  
 
 /* =====================================
-🔥 IMMOBILI – MOBILE + SAAS FIX
+📩 LEAD FLEX CLEAN
 ===================================== */
-
-/* ===== GRID SEARCH FIX ===== */
-@media(max-width:768px){
-
-  .form-grid{
-    grid-template-columns:1fr !important;
-  }
-
-  .property-grid{
-    grid-template-columns:1fr !important;
-    gap:18px;
-  }
-
-}
-
-/* ===== LEAD BOX FIX ===== */
-@media(max-width:768px){
-
-  section[style*="linear-gradient"] > div{
-    flex-direction:column !important;
-    align-items:stretch !important;
-  }
-
-  #lead-email,
-  #lead-city{
-    width:100% !important;
-    min-width:unset !important;
-  }
-
-  section[style*="linear-gradient"] button{
-    width:100%;
-  }
-
-}
-
-/* ===== CARD MOBILE PERFETTE ===== */
-@media(max-width:768px){
-
-  .property-card{
-    padding:20px;
-    text-align:left;
-  }
-
-  .property-card h3{
-    font-size:18px;
-  }
-
-  .property-roi{
-    font-size:22px;
-  }
-
-}
-
-/* ===== HERO MOBILE FIX ===== */
-@media(max-width:768px){
-
-  .hero .page-title{
-    text-align:center;
-  }
-
-  .hero .page-title h1{
-    font-size:28px;
-    line-height:1.2;
-  }
-
-  .hero .page-title p{
-    font-size:14px;
-  }
-
-}
-
-/* ===== BUTTON UX ===== */
-.btn-primary{
-  border-radius:12px;
-}
-
-/* ===== MICRO INTERACTION PRO ===== */
-.property-card{
-  will-change:transform;
-}
-
-.property-card:active{
-  transform:scale(0.98);
-}  
 
 .lead-flex{
   margin-top:25px;
   display:flex;
-  gap:10px;
+  gap:12px;
   justify-content:center;
   flex-wrap:wrap;
-}  
-
- .property-card{
-  transition:all .25s cubic-bezier(.4,0,.2,1);
 }
 
-.property-card:hover{
-  transform:translateY(-6px) scale(1.02);
-} 
-
 /* =====================================
-🔥 IMMOBILI – MOBILE FIX DEFINITIVO
+📱 MOBILE (VERO FIX)
 ===================================== */
 
 @media(max-width:768px){
 
-  /* ===== CONTAINER ===== */
+  /* container */
   .container{
-    padding-left:16px !important;
-    padding-right:16px !important;
+    padding:0 16px;
   }
 
-  /* ===== HERO ===== */
-  .hero .container{
-    padding-top:40px !important;
-  }
-
+  /* hero */
   .page-title h1{
-    font-size:28px !important;
+    font-size:26px;
     line-height:1.2;
   }
 
   .page-title p{
-    font-size:15px !important;
-    padding:0 10px;
+    font-size:15px;
   }
 
-  /* ===== GRID INPUT ===== */
+  /* grid */
   .form-grid{
-    grid-template-columns:1fr !important;
-    gap:12px;
+    grid-template-columns:1fr;
   }
 
-  .input-group input{
-    width:100% !important;
+  .property-grid{
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+
+  /* input */
+  input{
+    width:100%;
     font-size:16px; /* evita zoom iOS */
   }
 
-  /* ===== BOTTONI ===== */
-  .btn{
-    width:100% !important;
-    text-align:center;
+  /* button */
+  .btn,
+  .btn-primary{
+    width:100%;
   }
 
-  /* ===== PROPERTY GRID ===== */
-  .property-grid{
-    grid-template-columns:1fr !important;
-    gap:16px;
-    margin-top:30px;
+  /* lead */
+  .lead-flex{
+    flex-direction:column;
+    align-items:stretch;
   }
 
-  .property-card{
-    padding:20px !important;
-  }
-
-  /* ===== LEAD BOX ===== */
-  section[style*="linear-gradient"]{
-    padding:30px 15px !important;
-    border-radius:16px !important;
-  }
-
-  section[style*="linear-gradient"] input{
-    width:100% !important;
-    min-width:unset !important;
-  }
-
-  section[style*="linear-gradient"] button{
-    width:100% !important;
-  }
-
-  /* ===== SEARCH BOX ===== */
-  #property-search-results .property-card{
-    padding:18px !important;
-  }
-
-  /* ===== ANALYZE BOX ===== */
-  #property-link{
-    width:100% !important;
-  }
-
-  /* ===== BLOCCA OVERFLOW (CRITICO) ===== */
-  body{
-    overflow-x:hidden;
-  }
-
-}
-
-  @media(max-width:768px){
-
-  .section-info,
+  /* section spacing */
   section{
     margin-top:60px !important;
   }
 
   h2{
-    font-size:24px !important;
+    font-size:22px;
     line-height:1.3;
   }
 
 }
-
-/* =====================================
-🔥 GLOBAL MOBILE HARD FIX (ANTI BREAK)
-===================================== */
-
-@media(max-width:768px){
-
-  /* BLOCCA QUALSIASI OVERFLOW */
-  html, body{
-    overflow-x:hidden !important;
-  }
-
-  *{
-    max-width:100% !important;
-  }
-
-  /* FORZA INPUT E FORM */
-  input, button{
-    width:100% !important;
-    min-width:unset !important;
-    box-sizing:border-box;
-  }
-
-  /* FLEX FIX (IMPORTANTISSIMO) */
-  div[style*="display:flex"]{
-    flex-wrap:wrap !important;
-  }
-
-  /* LEAD BOX FIX */
-  section[style*="linear-gradient"] > div{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:12px !important;
-    align-items:stretch !important;
-  }
-
-  /* HERO TEXT SAFE */
-  .page-title{
-    padding:0 10px;
-  }
-
-  /* CTA */
-  .btn,
-  .btn-primary{
-    width:100% !important;
-  }
-
-}  
-
-.lead-flex{
-  margin-top:25px;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-@media(max-width:768px){
-  .lead-flex{
-    flex-direction:column;
-    align-items:stretch;
-  }
-}  
-</style>
 
 </head>
 
@@ -947,7 +736,7 @@ Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B.
 
 </p>
 
-<div style="max-width:800px;margin:auto;margin-top:40px">
+<div style="max-width:800px;margin:auto;margin-top:40px;width:100%">
 
 <div class="form-grid">
 
