@@ -14761,3 +14761,41 @@ NON rompe altre sezioni
 .section .kpi-list:has(.kpi-item:nth-child(2):last-child) .kpi-item{
   width:100%;
 }
+
+/* =====================================
+🔥 FIX VISIBILITÀ KPI LINK (CRITICO)
+===================================== */
+
+.section a.kpi-item{
+  opacity:1 !important;
+  color:#0f172a !important;
+  font-weight:600;
+
+  /* reset effetti "disabled" */
+  filter:none !important;
+}
+
+/* testo interno */
+.section a.kpi-item span,
+.section a.kpi-item{
+  color:#0f172a !important;
+}
+
+/* se hai classi tipo disabled/global */
+.kpi-item.disabled,
+.section a.kpi-item.disabled{
+  opacity:1 !important;
+  color:#0f172a !important;
+}
+
+/* migliora leggibilità base */
+.section .kpi-item{
+  color:#0f172a;
+}
+
+/* hover resta premium */
+.section a.kpi-item:hover{
+  background:#ecfdf5;
+  border-color:#10b981;
+  color:#065f46 !important;
+}
