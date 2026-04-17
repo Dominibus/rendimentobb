@@ -14547,3 +14547,40 @@ ULTRA UI • ALLINEATO • PRODUZIONE
   }
 
 }
+
+.hero-cta{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  margin-top:20px;
+}
+
+/* CTA uniformi */
+.hero-cta .btn{
+  width:260px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* outline fix hero */
+.hero-cta .btn-outline{
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.4);
+  color:#fff;
+}
+
+.hero-cta .btn-outline:hover{
+  background:rgba(255,255,255,0.25);
+}
+
+/* mobile */
+@media (max-width:768px){
+  .hero-cta .btn{
+    width:100%;
+    max-width:320px;
+  }
+}
