@@ -14113,7 +14113,7 @@ FINE (NON TOCCA ALTRO)
 
 /* =====================================
 🔥 RENDIMENTOBB – MARKET + HERO FINAL CLEAN
-ZERO BUG • ZERO DUPLICATI • PRODUZIONE
+ZERO BUG • PRODUZIONE STABILE
 ===================================== */
 
 
@@ -14174,7 +14174,7 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🔥 HERO (UNICO E STABILE)
+🔥 HERO UNICO (NO SPLIT / NO REPEAT)
 ===================================== */
 
 .hero{
@@ -14184,13 +14184,14 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   min-height:520px;
   display:flex;
   align-items:center;
+  justify-content:center;
 
-  background-size:cover !important;
-  background-position:center !important;
-  background-repeat:no-repeat !important;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 }
 
-/* overlay UNICO */
+/* overlay */
 .hero::before{
   content:"";
   position:absolute;
@@ -14204,18 +14205,13 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   z-index:0;
 }
 
-/* sicurezza anti overlay doppi */
-.hero::after{
-  display:none !important;
-}
-
 /* contenuto sopra */
 .hero > *{
   position:relative;
   z-index:1;
 }
 
-/* rimuove QUALSIASI background interno (fix split bug) */
+/* fix definitivo split */
 .hero .container,
 .hero-grid,
 .hero-left{
@@ -14236,34 +14232,29 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🏙️ BACKGROUND CITTÀ (UNICO LIVELLO)
+🏙️ BACKGROUND CITTÀ (SISTEMA UNICO)
 ===================================== */
 
-/* reset sicurezza */
+/* fallback default (market generale se JS non carica) */
 .hero{
-  background-image:none !important;
-}
-
-/* fallback */
-.hero-bg{
-  background-image:url("/img/rome-bg.jpg") !important;
+  background-image:url("/img/rome-bg.jpg");
 }
 
 /* città */
-.hero-bg.rome{
-  background-image:url("/img/rome-bg.jpg") !important;
+.hero.city-rome{
+  background-image:url("/img/rome-bg.jpg");
 }
 
-.hero-bg.naples{
-  background-image:url("/img/naples-bg.jpg") !important;
+.hero.city-naples{
+  background-image:url("/img/naples-bg.jpg");
 }
 
-.hero-bg.milan{
-  background-image:url("/img/milan-bg.jpg") !important;
+.hero.city-milan{
+  background-image:url("/img/milan-bg.jpg");
 }
 
-.hero-bg.florence{
-  background-image:url("/img/florence-bg.jpg") !important;
+.hero.city-florence{
+  background-image:url("/img/florence-bg.jpg");
 }
 
 
@@ -14288,7 +14279,7 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   text-align:center;
 }
 
-/* overlay leggermente più soft */
+/* overlay più leggibile */
 .market-page .hero::before{
   background:linear-gradient(
     rgba(15,23,42,0.35),
@@ -14364,7 +14355,7 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🔥 SAFETY (ANTI BUG GLOBALI)
+🔥 SAFETY
 ===================================== */
 
 .hero *{
