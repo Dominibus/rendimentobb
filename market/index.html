@@ -40,7 +40,7 @@ data-en="Discover the best cities to invest in a B&B in Italy. ROI, occupancy an
 <main>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero hero-bg">
 
 <div class="container">
 
@@ -253,24 +253,20 @@ if(window.applyTranslations) applyTranslations();
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const hero = document.querySelector(".hero");
-  if(!hero) return;
-
-  const images = [
-    "/img/rome-bg.jpg",
-    "/img/naples-bg.jpg",
-    "/img/milan-bg.jpg",
-    "/img/florence-bg.jpg"
-  ];
-
-  const random = images[Math.floor(Math.random() * images.length)];
-
-  hero.style.backgroundImage = `url(${random})`;
+ 
   hero.style.backgroundSize = "cover";
   hero.style.backgroundPosition = "center";
   hero.style.backgroundRepeat = "no-repeat";
 
 });
+
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.applyCityBackground){
+    applyCityBackground("rome"); // fallback default
+  }
+});
+</script>
 </script> 
 </body>
 </html>
