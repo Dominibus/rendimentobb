@@ -367,6 +367,10 @@ body{
   }
 }
 
+.extra-box{
+  display:none;
+}  
+
 </style>
 </head>
 
@@ -544,12 +548,7 @@ renderDecision(roi);
 }
 
 function lockValue(value, suffix=""){
-
-  const access = getAccess();
-
-  return !access.isPro
-    ? "🔒 Pro"
-    : value + suffix;
+  return value + suffix;
 }
 
 /* ================= EXTRA ================= */
