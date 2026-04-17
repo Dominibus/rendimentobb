@@ -242,6 +242,120 @@ body.immobili-page main section:not(.hero) .form-grid .input-group label *{
   text-shadow:none !important;
 }    
 
+/* =====================================
+🚑 FIX GLOBALE IMMOBILI (SAFE PATCH)
+NON rompe nulla – corregge overflow mobile
+===================================== */
+
+/* ✅ FIX OVERFLOW ORIZZONTALE */
+html, body{
+  overflow-x:hidden !important;
+}
+
+/* ✅ TESTI LUNGHI NON ESCONO */
+p, span, h1, h2, h3{
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+}
+
+/* ✅ IMMAGINI / ELEMENTI SAFE */
+img, video, canvas{
+  max-width:100%;
+  height:auto;
+}
+
+/* =====================================
+📦 CONTAINER FIX
+===================================== */
+
+.container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding-left:20px;
+  padding-right:20px;
+  box-sizing:border-box;
+}
+
+/* =====================================
+📊 GRID FIX (NON ROMPE DESKTOP)
+===================================== */
+
+.property-grid{
+  width:100%;
+  box-sizing:border-box;
+}
+
+/* =====================================
+📩 LEAD SECTION FIX
+===================================== */
+
+section[style*="linear-gradient"]{
+  width:100%;
+  box-sizing:border-box;
+}
+
+section[style*="linear-gradient"] > div{
+  flex-wrap:wrap;
+}
+
+/* =====================================
+📱 MOBILE FIX REALE (QUI ERA IL BUG)
+===================================== */
+
+@media(max-width:768px){
+
+  /* 🔥 PADDING SICURO */
+  .container{
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+
+  /* 🔥 GRID STACK */
+  .form-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .property-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  /* 🔥 INPUT NON ESCONO */
+  input{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box;
+    font-size:16px; /* evita zoom iOS */
+  }
+
+  /* 🔥 BOTTONI SAFE */
+  .btn,
+  .btn-primary{
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  /* 🔥 LEAD FIX */
+  section[style*="linear-gradient"] > div{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:12px;
+    align-items:stretch;
+  }
+
+  /* 🔥 HERO TEXT */
+  .page-title{
+    padding:0 10px;
+  }
+
+  /* 🔥 CARD NON SBORDANO */
+  .property-card{
+    width:100%;
+    box-sizing:border-box;
+  }
+
+}  
+
 </style>
 
 </head>
