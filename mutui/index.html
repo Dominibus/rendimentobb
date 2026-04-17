@@ -564,70 +564,74 @@ function renderExtra(roi, yearly){
 
 const extra = document.getElementById("extra");
 
-let score = "C";
-if(roi > 15) score = "A";
-else if(roi > 8) score = "B";
-
 const loss = yearly * 0.3;
+const access = getAccess();
 
-const risk =
-roi < 5 ? t("ALTO","HIGH") :
-roi < 15 ? t("MEDIO","MEDIUM") :
-t("BASSO","LOW");
-
+/* ===== BLOCCO PRINCIPALE LEAD ===== */
 extra.innerHTML = `
 
-${!getAccess().isPro ? `
 <div style="
-  background:#111827;
+  background:linear-gradient(135deg,#111827,#1e293b);
   color:white;
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:15px;
+  padding:18px;
+  border-radius:14px;
   text-align:center;
-  font-weight:600;
+  font-weight:700;
+  font-size:16px;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
 ">
-  🔒 ${t(
-    "Sblocca i numeri reali del tuo investimento",
-    "Unlock real investment numbers"
-  )}
-</div>
-` : ""}
 
-<div style="font-weight:700;margin-bottom:10px;">
-🔥 ${t("Punteggio investimento","Investment Score")}: ${score}
-</div>
+  ⚠️ ${
+    access.isPro
+    ? t("Stai perdendo","You are losing")
+    : t("Potresti perdere","You could lose")
+  }
 
-<div style="
-background:#fee2e2;
-padding:12px;
-border-radius:10px;
-margin-top:10px;
-font-weight:600;
-color:#b91c1c;
-">
-⚠️ ${t("Stai perdendo circa","You are losing about")}
-<strong>
-${!getAccess().isPro
-  ? "🔒 Pro"
-  : "€"+loss.toFixed(0)+"/anno"}
-</strong>
-</div>
+  <div style="
+    font-size:28px;
+    margin:10px 0;
+    color:#f87171;
+    font-weight:800;
+  ">
+    ${
+      access.isPro
+      ? "€"+loss.toFixed(0)+"/anno"
+      : "🔒 Pro"
+    }
+  </div>
 
-<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+  <div style="
+    font-size:14px;
+    color:#cbd5f5;
+    margin-bottom:15px;
+    font-weight:500;
+  ">
+    ${
+      t(
+        "a causa di un mutuo non ottimizzato",
+        "due to a non-optimized mortgage"
+      )
+    }
+  </div>
 
-<div>
-💰 ${t("Costo reale mutuo","Real mortgage cost")}:
-${!getAccess().isPro
-  ? "🔒 Pro"
-  : "€"+yearly.toFixed(0)}
-</div>
+  ${
+    access.isInvestor || access.isPro
+    ? `
+    <button class="btn-main"
+      style="max-width:280px"
+      onclick="document.getElementById('banks').scrollIntoView({behavior:'smooth'})">
+      🏦 ${t("Contatta banca ORA","Contact bank NOW")}
+    </button>
+    `
+    : `
+    <button class="btn-main"
+      style="max-width:280px"
+      onclick="startPlanPurchase('investor')">
+      🔓 ${t("Sblocca offerte banche","Unlock bank offers")}
+    </button>
+    `
+  }
 
-<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
-
-<div>
-📊 ${t("Rischio investimento","Investment risk")}:
-<strong>${risk}</strong>
 </div>
 
 `;
@@ -696,7 +700,7 @@ t("Migliori mutui disponibili","Best mortgage options") +
 "</h3>";
 
 /* PAYWALL HEADER */
-if(!isProUser()){
+if(!getAccess().isPro){
   html += `
   <div style="
     background:#111827;
