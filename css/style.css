@@ -14177,10 +14177,9 @@ ZERO BUG • PRODUZIONE STABILE
 🔥 HERO UNICO (NO BUG / NO SPLIT)
 ===================================== */
 
+/* HERO BASE */
 .hero{
   position:relative;
-  overflow:hidden;
-
   min-height:520px;
   display:flex;
   align-items:center;
@@ -14191,25 +14190,29 @@ ZERO BUG • PRODUZIONE STABILE
   background-repeat:no-repeat;
 }
 
-/* overlay (OTTIMIZZATO) */
+/* overlay */
 .hero::before{
   content:"";
   position:absolute;
   inset:0;
-
   background:linear-gradient(
     rgba(15,23,42,0.25),
     rgba(15,23,42,0.45)
   );
-
   z-index:0;
 }
 
-/* contenuto sopra */
+/* contenuto */
 .hero > *{
   position:relative;
   z-index:1;
 }
+
+/* città */
+.hero-bg.rome{ background-image:url("/img/rome-bg.jpg"); }
+.hero-bg.naples{ background-image:url("/img/naples-bg.jpg"); }
+.hero-bg.milan{ background-image:url("/img/milan-bg.jpg"); }
+.hero-bg.florence{ background-image:url("/img/florence-bg.jpg"); }
 
 /* 🔥 FIX DEFINITIVO SPLIT */
 .hero .container,
