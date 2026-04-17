@@ -400,9 +400,9 @@ Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi
 <input id="income" placeholder="Ricavi annui">
 
 <button class="btn-main"
+id="calc-btn"
 data-it="Calcola impatto"
-data-en="Calculate impact"
-onclick="calculate()"></button>
+data-en="Calculate impact"></button>
 
 <div id="roi-alert" class="roi-alert"></div>
 
@@ -481,6 +481,8 @@ return (window.currentLang === "en") ? en : it;
 /* ================= CALCOLO ================= */
 function calculate(){
 
+console.log("🔥 CALCULATE TRIGGERED");
+  
 const amount = parseFloat(document.getElementById("amount").value || 200000);
 const rate   = parseFloat(document.getElementById("rate").value || 3.5);
 const years  = parseFloat(document.getElementById("years").value || 20);
@@ -551,6 +553,13 @@ function lockValue(value, suffix=""){
 function renderExtra(roi, yearly){
 
 const extra = document.getElementById("extra");
+
+if(!extra){
+  console.error("❌ #extra NON trovato");
+  return;
+}
+
+extra.innerHTML = ""; // reset sicurezza
 
 const loss = yearly * 0.3;
 const access = getAccess();
@@ -926,6 +935,21 @@ alert("Errore invio");
 }
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  console.log("✅ DOM READY");
+
+  const btn = document.getElementById("calc-btn");
+
+  if(btn){
+    console.log("✅ Bottone trovato");
+    btn.addEventListener("click", calculate);
+  }else{
+    console.error("❌ Bottone NON trovato");
+  }
+
+});  
 
 </script>
 
