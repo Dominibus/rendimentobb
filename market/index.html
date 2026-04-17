@@ -246,26 +246,16 @@ Avvia simulazione
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-if(window.applyTranslations) applyTranslations();
-});
-</script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
- 
-
-  hero.style.backgroundRepeat = "no-repeat";
-
-});
-
- <script>
-document.addEventListener("DOMContentLoaded", () => {
-  if(window.applyCityBackground){
-    applyCityBackground("rome"); // fallback default
+  if(window.applyTranslations){
+    applyTranslations();
   }
+
+  if(window.applyCityBackground){
+    applyCityBackground("rome"); // fallback
+  }
+
 });
 </script>
-</script> 
 </body>
 </html>
