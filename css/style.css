@@ -14145,25 +14145,6 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 }
 
 
-/* ================= KPI ================= */
-
-.kpi-item{
-  background:#f8fafc;
-  border:1px solid #e2e8f0;
-  padding:14px;
-  border-radius:12px;
-  font-weight:600;
-  font-size:14px;
-  color:#0f172a;
-}
-
-.kpi-item strong{
-  display:block;
-  font-size:18px;
-  margin-bottom:4px;
-}
-
-
 /* ================= BUTTON ================= */
 
 .btn-primary{
@@ -14193,7 +14174,7 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🔥 HERO (UNICO – NO CONFLITTI)
+🔥 HERO (UNICO E STABILE)
 ===================================== */
 
 .hero{
@@ -14216,13 +14197,16 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   inset:0;
 
   background:linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.55),
-    rgba(0,0,0,0.25),
-    rgba(0,0,0,0.55)
+    rgba(15,23,42,0.45),
+    rgba(15,23,42,0.65)
   );
 
   z-index:0;
+}
+
+/* sicurezza anti overlay doppi */
+.hero::after{
+  display:none !important;
 }
 
 /* contenuto sopra */
@@ -14231,7 +14215,14 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   z-index:1;
 }
 
-/* testi leggibili */
+/* rimuove QUALSIASI background interno (fix split bug) */
+.hero .container,
+.hero-grid,
+.hero-left{
+  background:none !important;
+}
+
+/* testi */
 .hero h1,
 .hero h2,
 .hero h3{
@@ -14245,10 +14236,15 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🔥 BACKGROUND CITTÀ (FIX VERO)
+🏙️ BACKGROUND CITTÀ (UNICO LIVELLO)
 ===================================== */
 
-/* fallback SEMPRE (evita bianco) */
+/* reset sicurezza */
+.hero{
+  background-image:none !important;
+}
+
+/* fallback */
 .hero-bg{
   background-image:url("/img/rome-bg.jpg") !important;
 }
@@ -14272,7 +14268,7 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🔥 MARKET PAGE FIX
+🔥 MARKET PAGE
 ===================================== */
 
 .market-page .hero{
@@ -14280,7 +14276,7 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   min-height:460px;
 }
 
-/* layout centrato */
+/* layout */
 .market-page .hero-grid{
   display:flex;
   justify-content:center;
@@ -14292,19 +14288,33 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
   text-align:center;
 }
 
-/* overlay leggermente più leggero */
+/* overlay leggermente più soft */
 .market-page .hero::before{
   background:linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.45),
-    rgba(0,0,0,0.15),
-    rgba(0,0,0,0.45)
+    rgba(15,23,42,0.35),
+    rgba(15,23,42,0.55)
   );
 }
 
 
 /* =====================================
-🔥 CONTENUTI MARKET
+🔥 KPI GRID
+===================================== */
+
+.market-kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:20px;
+  margin-top:30px;
+}
+
+.market-kpi-grid .card{
+  text-align:center;
+}
+
+
+/* =====================================
+🔥 CONTENUTI
 ===================================== */
 
 .market-page .section p{
@@ -14323,31 +14333,16 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 }
 
 
-/* KPI grid */
-.market-page .market-kpi-grid{
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-}
+/* =====================================
+🔥 CTA EFFECT
+===================================== */
 
-.market-page .market-kpi-grid .card{
-  text-align:center;
-}
-
-
-/* insight block */
-.market-page .section:nth-of-type(3){
-  background:#f8fafc;
-  border-radius:20px;
-  margin:40px auto;
-}
-
-
-/* CTA glow */
-.market-page .section-dark{
+.section-dark{
   position:relative;
   overflow:hidden;
 }
 
-.market-page .section-dark::before{
+.section-dark::before{
   content:"";
   position:absolute;
   inset:0;
@@ -14355,7 +14350,10 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 }
 
 
-/* link */
+/* =====================================
+🔥 LINK UX
+===================================== */
+
 .market-page a{
   transition:all .2s ease;
 }
@@ -14366,71 +14364,9 @@ ZERO BUG • ZERO DUPLICATI • PRODUZIONE
 
 
 /* =====================================
-🔥 SAFETY
+🔥 SAFETY (ANTI BUG GLOBALI)
 ===================================== */
 
 .hero *{
   opacity:1 !important;
-}
-
-/* =====================================
-🔥 MARKET HERO FINAL FIX (DEFINITIVO)
-===================================== */
-
-/* BASE HERO */
-.hero{
-  position:relative;
-  overflow:hidden;
-
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-}
-
-/* OVERLAY UNICO (evita conflitti) */
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:linear-gradient(
-    rgba(15,23,42,0.35),
-    rgba(15,23,42,0.55)
-  );
-
-  z-index:0;
-}
-
-/* CONTENUTO SOPRA */
-.hero > *{
-  position:relative;
-  z-index:1;
-}
-
-/* =====================================
-🏙️ BACKGROUND CITTÀ (FORZATI)
-===================================== */
-
-.hero-bg.rome{
-  background-image:url("/img/rome-bg.jpg") !important;
-}
-
-.hero-bg.naples{
-  background-image:url("/img/naples-bg.jpg") !important;
-}
-
-.hero-bg.milan{
-  background-image:url("/img/milan-bg.jpg") !important;
-}
-
-.hero-bg.florence{
-  background-image:url("/img/florence-bg.jpg") !important;
-}
-
-/* =====================================
-🧠 FALLBACK (solo se manca classe città)
-===================================== */
-
-.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence){
-  background-image:url("/img/rome-bg.jpg");
 }
