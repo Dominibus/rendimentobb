@@ -14174,7 +14174,7 @@ ZERO BUG • PRODUZIONE STABILE
 
 
 /* =====================================
-🔥 HERO UNICO (NO SPLIT / NO REPEAT)
+🔥 HERO UNICO (NO BUG / NO SPLIT)
 ===================================== */
 
 .hero{
@@ -14191,15 +14191,15 @@ ZERO BUG • PRODUZIONE STABILE
   background-repeat:no-repeat;
 }
 
-/* overlay */
+/* overlay (OTTIMIZZATO) */
 .hero::before{
   content:"";
   position:absolute;
   inset:0;
 
   background:linear-gradient(
-    rgba(15,23,42,0.45),
-    rgba(15,23,42,0.65)
+    rgba(15,23,42,0.25),
+    rgba(15,23,42,0.45)
   );
 
   z-index:0;
@@ -14211,14 +14211,16 @@ ZERO BUG • PRODUZIONE STABILE
   z-index:1;
 }
 
-/* fix definitivo split */
+/* 🔥 FIX DEFINITIVO SPLIT */
 .hero .container,
 .hero-grid,
 .hero-left{
   background:none !important;
 }
 
-/* testi */
+
+/* ================= TESTI HERO ================= */
+
 .hero h1,
 .hero h2,
 .hero h3{
@@ -14228,15 +14230,16 @@ ZERO BUG • PRODUZIONE STABILE
 
 .hero p{
   color:#e2e8f0 !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.4);
 }
 
 
 /* =====================================
-🏙️ BACKGROUND CITTÀ (SISTEMA UNICO)
+🏙️ BACKGROUND SISTEMA (CORRETTO)
 ===================================== */
 
-/* fallback default (market generale se JS non carica) */
-.hero{
+/* ⚠️ fallback SOLO se JS non carica */
+.hero:not([style*="background-image"]){
   background-image:url("/img/rome-bg.jpg");
 }
 
@@ -14279,11 +14282,11 @@ ZERO BUG • PRODUZIONE STABILE
   text-align:center;
 }
 
-/* overlay più leggibile */
+/* overlay leggermente più forte per leggibilità */
 .market-page .hero::before{
   background:linear-gradient(
-    rgba(15,23,42,0.35),
-    rgba(15,23,42,0.55)
+    rgba(15,23,42,0.30),
+    rgba(15,23,42,0.50)
   );
 }
 
