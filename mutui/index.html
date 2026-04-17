@@ -19,7 +19,7 @@ data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
 <style>
 
 /* =====================================
-🔥 MUTUI – SAAS ULTRA PRO FINAL FIX
+🔥 MUTUI – SAAS FINTECH ULTRA (FINAL)
 ===================================== */
 
 /* ===== BASE ===== */
@@ -30,7 +30,7 @@ body{
 }
 
 /* =====================================
-🔥 HERO – FIX DEFINITIVO LEGGIBILITÀ
+🔥 HERO – FINTECH STRIPE STYLE
 ===================================== */
 
 .hero-mutui{
@@ -38,30 +38,27 @@ body{
   padding:140px 20px 120px;
   text-align:center;
 
-  background-position:center;
-  background-size:cover;
-  filter:saturate(1.1) contrast(1.05);
   background:
    linear-gradient(
-   rgba(2,6,23,.45),
-   rgba(2,6,23,.65)
+   rgba(2,6,23,.65),
+   rgba(2,6,23,.75)
   ),
   url("/img/milan-bg.jpg") center/cover;
 
   overflow:hidden;
 }
 
-/* glow elegante */
+/* glow */
 .hero-mutui::before{
   content:"";
   position:absolute;
   inset:0;
   background:
-    radial-gradient(circle at 30% 30%, rgba(16,185,129,0.15), transparent 60%);
+    radial-gradient(circle at 30% 30%, rgba(16,185,129,0.18), transparent 60%);
   z-index:1;
 }
 
-/* 🔥 FIX CRITICO: testo SEMPRE visibile */
+/* testo */
 .hero-mutui h1,
 .hero-mutui p{
   position:relative;
@@ -69,45 +66,53 @@ body{
   color:#ffffff !important;
 }
 
-/* TITLE */
 .hero-mutui h1{
-  font-size:44px;
+  font-size:48px;
   font-weight:800;
   margin-bottom:15px;
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
 
   text-shadow:
-    0 8px 25px rgba(0,0,0,.9),
-    0 3px 10px rgba(0,0,0,.7);
+    0 10px 30px rgba(0,0,0,.9);
 }
 
-/* SUBTITLE */
 .hero-mutui p{
   font-size:18px;
   opacity:.95;
-
-  text-shadow:
-    0 4px 14px rgba(0,0,0,.85);
+  color:#cbd5f5 !important;
 }
 
 /* =====================================
-🔥 TOOL BOX
+🔥 TOOL BOX – BANK UI
 ===================================== */
 
 .tool-box{
   max-width:900px;
   margin:-100px auto 0;
 
-  background:white;
+  background:#ffffff;
   padding:35px;
 
   border-radius:20px;
 
   box-shadow:
-    0 50px 120px rgba(2,6,23,.15),
-    0 20px 40px rgba(2,6,23,.08);
+    0 60px 140px rgba(2,6,23,.18),
+    0 20px 50px rgba(2,6,23,.08);
+
+  border:1px solid #e2e8f0;
 
   position:relative;
   z-index:10;
+}
+
+/* titolo */
+.tool-box h3{
+  color:#0f172a !important;
+  font-weight:700;
+  font-size:18px;
+  margin-bottom:14px;
 }
 
 /* INPUT */
@@ -128,19 +133,23 @@ body{
   box-shadow:0 0 0 3px rgba(16,185,129,.15);
 }
 
-/* BUTTON */
+/* =====================================
+🔥 CTA – STRIPE CONVERSION
+===================================== */
+
 .btn-main{
   width:100%;
   padding:14px;
   border:none;
-  border-radius:12px;
+  border-radius:999px;
 
   background:linear-gradient(135deg,#10b981,#059669);
   color:white;
 
   font-weight:700;
+  font-size:15px;
 
-  box-shadow:0 10px 25px rgba(16,185,129,.35);
+  box-shadow:0 12px 30px rgba(16,185,129,.35);
   cursor:pointer;
 
   transition:.25s;
@@ -148,31 +157,34 @@ body{
 
 .btn-main:hover{
   transform:translateY(-2px);
-  box-shadow:0 18px 40px rgba(16,185,129,.45);
+  box-shadow:0 20px 45px rgba(16,185,129,.45);
 }
 
 /* =====================================
-🔥 KPI
+🔥 KPI – DASHBOARD BANK
 ===================================== */
 
 .kpi-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-top:20px;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+  margin-top:22px;
 }
 
 .kpi{
-  background:white;
+  background:#f8fafc;
   padding:20px;
   border-radius:14px;
   text-align:center;
+
   border:1px solid #e2e8f0;
-  box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.05);
 }
 
 .kpi div{
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
   color:#0f172a;
 }
@@ -205,7 +217,7 @@ body{
 }
 
 /* =====================================
-🔥 EXTRA + DECISION
+🔥 EXTRA BOX
 ===================================== */
 
 .extra-box{
@@ -223,27 +235,32 @@ body{
 }
 
 /* =====================================
-🔥 BANK CARDS
+🔥 BANK CARDS – LEAD READY
 ===================================== */
 
 .bank-card{
   background:white;
-  padding:20px;
+  padding:22px;
   border-radius:16px;
   margin-top:15px;
+
   border:1px solid #e2e8f0;
-  box-shadow:0 10px 25px rgba(0,0,0,.05);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.06);
+
   transition:.25s;
 }
 
 .bank-card:hover{
   transform:translateY(-4px);
-  box-shadow:0 25px 50px rgba(0,0,0,.12);
+  box-shadow:0 30px 60px rgba(0,0,0,.12);
 }
 
+/* BEST OFFER */
 .bank-card.best{
   border:2px solid #10b981;
-  background:#f0fdf4;
+  background:linear-gradient(to bottom,#f0fdf4,#ffffff);
 }
 
 /* LOCK */
@@ -266,12 +283,31 @@ body{
   border-radius:8px;
 }
 
+/* TESTI */
+#banks,
+#banks *{
+  color:#0f172a !important;
+}
+
+.bank-card p{
+  color:#334155 !important;
+}
+
+.bank-card small,
+.bank-card span{
+  color:#64748b !important;
+}
+
+.bank-card strong{
+  color:#10b981 !important;
+}
+
 /* =====================================
-🔥 LEAD BOX
+🔥 LEAD BOX – CONVERSION
 ===================================== */
 
 .lead-box{
-  margin-top:60px;
+  margin-top:70px;
   padding:45px;
 
   background:linear-gradient(180deg,#ffffff,#f8fafc);
@@ -280,7 +316,7 @@ body{
   text-align:center;
 
   box-shadow:
-    0 40px 100px rgba(2,6,23,.12);
+    0 50px 120px rgba(2,6,23,.15);
 
   border:1px solid #e2e8f0;
 }
@@ -301,61 +337,6 @@ body{
   display:none;
   margin-top:15px;
   font-weight:600;
-}
-
-/* =====================================
-🔥 FIX TESTI CHIARI (CRITICO FINALE)
-===================================== */
-
-/* BANK SECTION */
-#banks,
-#banks h3,
-#banks p,
-#banks div,
-#banks span{
-  color:#0f172a !important;
-}
-
-/* TITOLI SEZIONE */
-#banks h3{
-  font-weight:700;
-}
-
-/* CARD TESTI */
-.bank-card{
-  color:#0f172a !important;
-}
-
-.bank-card h3{
-  color:#0f172a !important;
-}
-
-.bank-card p{
-  color:#334155 !important;
-}
-
-/* LABEL SECONDARIE */
-.bank-card small,
-.bank-card span{
-  color:#64748b !important;
-}
-
-/* FIX VERDE (che resta leggibile) */
-.bank-card .highlight,
-.bank-card strong{
-  color:#10b981 !important;
-}  
-
-/* =====================================
-🔥 FIX TITOLO SIMULATORE (FINALE)
-===================================== */
-
-.tool-box h3{
-  color:#0f172a !important;
-  font-weight:700;
-  font-size:18px;
-  margin-bottom:12px;
-  opacity:.9;
 }
 
 /* =====================================
