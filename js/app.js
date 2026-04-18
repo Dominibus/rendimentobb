@@ -216,9 +216,11 @@ if(!access.canSeeFullAnalysis && roi > 0){
   }
 }
 
-if(!access.canSeeFullAnalysis){
+const lockIds = [
+  // 👉 metti qui gli id reali oppure lascialo vuoto se non usato
+];
 
-  const lockIds = [...]
+if(!access.canSeeFullAnalysis){
 
   lockIds.forEach(id => {
     const el = document.getElementById(id);
@@ -229,6 +231,8 @@ if(!access.canSeeFullAnalysis){
   });
 
 }else{
+
+  // 🔥 PRO / ADMIN → UNLOCK
   lockIds.forEach(id => {
     const el = document.getElementById(id);
     if(!el) return;
@@ -238,21 +242,6 @@ if(!access.canSeeFullAnalysis){
     }
 
     el.style.opacity = "1";
-  });
-}else{
-
-  // 🔥 PRO → assicurati che NON restino bloccati
-  lockIds.forEach(id => {
-
-    const el = document.getElementById(id);
-    if(!el) return;
-
-    if(el.innerText === "🔒"){
-      el.innerText = "—";
-    }
-
-    el.style.opacity = "1";
-
   });
 
 }
