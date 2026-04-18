@@ -4012,10 +4012,11 @@ return;
     return;
   }
 
-  // =========================
-  // 💳 STRIPE
-  // =========================
-  if(typeof window.buyPlan === "function"){
+  // =============================
+// 🔥 STRIPE HANDLER
+// =============================
+
+if(typeof window.buyPlan === "function"){
   window.buyPlan(plan);
 }else{
   console.error("❌ buyPlan non trovata");
@@ -4029,7 +4030,7 @@ return;
   );
 }
 
-};
+}; // ✅ QUESTA CHIUSURA MANCAVA
 
 // =============================
 // 🔥 FORCE PLAN FALLBACK (CRITICAL FIX)
