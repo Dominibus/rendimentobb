@@ -42,19 +42,23 @@ window.onerror = function(msg, url, line, col, error){
   });
 };
 
-// 🔍 DEBUG ALERT SOURCE
-const originalAlert = window.alert;
+// =====================================
+// 🚫 DISABLE ALERT (UX FIX + DEBUG)
+// =====================================
+
 window.alert = function(msg){
-  console.trace("📍 ALERT TRIGGERATO QUI:");
-  originalAlert(msg);
+
+  console.warn("🚫 ALERT BLOCCATO:", msg);
+
+  // 🔍 TRACE per trovare chi lo chiama
+  console.trace("📍 ALERT SOURCE");
+
+  // 🔥 UX → toast moderno
+  if(typeof showToast === "function"){
+    showToast(msg, "warning");
+  }
+
 };
-
-// 🔴 DEBUG MODE → ripristino alert reale
-// window.alert = function(msg){
-//   console.warn("🚫 alert bloccato:", msg);
-//   showToast(msg, "info");
-// };
-
 // ================= SAFE GLOBAL EARLY FIX =================
 
 // 🔥 FIX CRITICO ACCESS SYSTEM (METTERE QUI)
