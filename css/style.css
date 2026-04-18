@@ -14913,16 +14913,16 @@ NON TOCCA ALTRE PAGINE
 }
 
 /* =====================================
-🔥 HERO TRUST CENTER FIX (ROI CITY ONLY)
+🔥 HERO TRUST CENTER FIX (OVERRIDE SAFE)
 ===================================== */
 
-.hero.hero-bg .hero-trust{
-  display:block;              /* ❌ via inline-block */
-  margin:20px auto 0;         /* ✅ centra orizzontalmente */
-  text-align:center;
+.hero.hero-bg .container > .hero-trust{
+  width:90% !important;
+  max-width:520px !important;
 
-  max-width:520px;            /* ✅ larghezza controllata */
-  width:90%;
+  display:block;
+  margin:20px auto 0 !important;
+  text-align:center;
 
   padding:12px 20px;
   border-radius:999px;
