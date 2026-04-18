@@ -1,3 +1,7 @@
+// ===============================
+// 📩 SEND LEAD EMAIL – ULTRA SAAS PRO
+// ===============================
+
 import { Resend } from "resend";
 import admin from "firebase-admin";
 
@@ -15,106 +19,115 @@ if (!admin.apps.length) {
       })
     });
   } catch (e) {
-    console.error("Firebase init error:", e.message);
+    console.error("🔥 Firebase init error:", e.message);
   }
 }
 
 const db = admin.apps.length ? admin.firestore() : null;
 
 // ================= HELPERS =================
-function clean(val){
-  return String(val || "").trim();
+const clean = v => String(v || "").trim();
+const safe = n => isNaN(Number(n)) ? 0 : Number(n);
+
+function detectLang(req, bodyLang){
+  if(bodyLang) return bodyLang;
+  const lang = req.headers["accept-language"] || "";
+  return lang.toLowerCase().startsWith("en") ? "en" : "it";
 }
 
-function safe(val){
-  const n = Number(val);
-  return isNaN(n) ? 0 : n;
-}
+// ================= SCORE =================
+function getScore(roi){
 
-function t(lang, it, en){
-  return lang === "en" ? en : it;
+  if(roi >= 20) return { label:"🔥 EXTREME", urgency:"high" };
+  if(roi >= 15) return { label:"🚀 HIGH", urgency:"high" };
+  if(roi >= 10) return { label:"⚡ GOOD", urgency:"medium" };
+
+  return { label:"⚠️ RISKY", urgency:"low" };
 }
 
 // ================= TEMPLATE =================
 function buildEmail({ roi, city, score, lang }){
 
-  const ctaLink = "https://rendimentobb.it/dashboard";
+  const t = (it,en)=> lang==="en"?en:it;
 
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
 
-    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:22px;padding:40px">
+    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;padding:40px">
 
-      <div style="text-align:center;margin-bottom:25px">
-        <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
+      <!-- LOGO -->
+      <div style="text-align:center;margin-bottom:20px">
+        <img src="https://rendimentobb.it/img/logo-main.png" style="width:110px">
       </div>
 
-      <h2 style="text-align:center;color:#0f172a;margin-bottom:10px">
-        ${t(lang,"Analisi investimento","Investment analysis")}
+      <!-- HEADLINE -->
+      <h2 style="text-align:center;color:#0f172a">
+        ${t(
+          "Il tuo investimento ha potenziale",
+          "Your investment has potential"
+        )}
       </h2>
 
-      <p style="text-align:center;color:#64748b;margin-bottom:20px">
-        ${t(lang,
-          "Ecco il risultato stimato",
-          "Here is your estimated result"
+      <p style="text-align:center;color:#64748b;margin-bottom:25px">
+        ${t(
+          "Ma stai vedendo solo una parte dei dati",
+          "But you're only seeing part of the data"
         )}
       </p>
 
+      <!-- ROI -->
       <div style="text-align:center;margin:30px 0">
-        <div style="font-size:60px;font-weight:900;color:#10b981">
+        <div style="font-size:56px;font-weight:800;color:#10b981">
           ${roi}%
         </div>
-        <div style="color:#64748b">
-          ${t(lang,"ROI stimato","Estimated ROI")} – ${city || "-"}
-        </div>
+        <div style="color:#64748b">${city || "-"}</div>
+        <div style="margin-top:8px;font-weight:600">${score.label}</div>
       </div>
 
-      <div style="background:#fff7ed;padding:16px;border-radius:12px;color:#92400e;font-size:14px">
-        ${t(lang,
-          "Il ROI non rappresenta il profitto reale.",
-          "ROI does not represent real profit."
+      <!-- WARNING -->
+      <div style="background:#fff7ed;padding:14px;border-radius:10px;color:#92400e">
+        ⚠️ ${t(
+          "Il ROI NON è il profitto reale",
+          "ROI is NOT real profit"
         )}
       </div>
 
-      <div style="margin-top:20px;background:#f8fafc;padding:18px;border-radius:12px">
-        <ul style="margin:0;padding-left:18px;color:#334155;font-size:14px;line-height:1.7">
-          <li>${t(lang,"Profitto reale","Real profit")}</li>
-          <li>${t(lang,"Break-even","Break-even point")}</li>
-          <li>${t(lang,"Rischio","Risk analysis")}</li>
-          <li>${t(lang,"Impatto mutuo","Mortgage impact")}</li>
+      <!-- FEATURES -->
+      <div style="margin-top:25px;background:#f8fafc;padding:16px;border-radius:10px">
+        <ul style="padding-left:18px;margin:0;color:#334155">
+          <li>${t("Profitto reale","Real profit")}</li>
+          <li>${t("Break-even","Break-even")}</li>
+          <li>${t("Rischio","Risk analysis")}</li>
+          <li>${t("Impatto mutuo","Mortgage impact")}</li>
         </ul>
       </div>
 
+      <!-- CTA -->
       <div style="text-align:center;margin:35px 0">
 
-        <a href="${ctaLink}"
-        style="
-        background:#10b981;
-        color:white;
-        padding:16px 28px;
-        border-radius:999px;
-        text-decoration:none;
-        font-weight:700;
-        display:inline-block;
-        ">
-        ${t(lang,"Vedi analisi completa","View full analysis")}
+        <a href="https://rendimentobb.it/dashboard"
+        style="background:#10b981;color:white;padding:16px 30px;border-radius:999px;text-decoration:none;font-weight:700;display:inline-block">
+        🔓 ${t(
+          "Sblocca analisi completa",
+          "Unlock full analysis"
+        )}
         </a>
 
         <p style="font-size:12px;color:#94a3b8;margin-top:10px">
-          ${t(lang,
-            "Disponibile in pochi secondi",
-            "Available in seconds"
+          ${t(
+            "Il 72% degli investitori sbaglia senza questi dati",
+            "72% of investors fail without this data"
           )}
         </p>
 
       </div>
 
-      <p style="text-align:center;font-size:12px;color:#94a3b8">
-        RendimentoBB
-      </p>
+      <!-- FOOTER -->
+      <div style="text-align:center;color:#94a3b8;font-size:12px">
+        RendimentoBB • Strategic Engine
+      </div>
 
     </div>
-
   </div>
   `;
 }
@@ -126,11 +139,9 @@ export default async function handler(req, res){
     return res.status(405).json({ error:"Method not allowed" });
   }
 
-  const startTime = Date.now();
-
   try{
 
-    let { email, roi, city, lang = "it" } = req.body || {};
+    let { email, roi, city, lang } = req.body || {};
 
     email = clean(email);
     city  = clean(city);
@@ -140,76 +151,81 @@ export default async function handler(req, res){
       return res.status(400).json({ error:"Email missing" });
     }
 
+    const detectedLang = detectLang(req, lang);
     const roiRounded = Number(roi.toFixed(1));
 
-    const score =
-      roiRounded > 15 ? t(lang,"ALTO","HIGH") :
-      roiRounded > 10 ? t(lang,"BUONO","GOOD") :
-      t(lang,"RISCHIOSO","RISKY");
+    const score = getScore(roiRounded);
 
-    // ✅ SUBJECT ANTI-SPAM
+    // ================= ANTI-SPAM =================
+    if(db){
+      const recent = await db.collection("email_logs")
+        .where("email","==",email)
+        .orderBy("createdAt","desc")
+        .limit(1)
+        .get();
+
+      if(!recent.empty){
+        const last = recent.docs[0].data();
+        const lastTime = last.createdAt?.toMillis?.() || 0;
+
+        if(Date.now() - lastTime < 10 * 60 * 1000){
+          return res.status(200).json({ success:true, spam:true });
+        }
+      }
+    }
+
+    // ================= SUBJECT =================
     const subject =
-      lang === "en"
-        ? `Investment analysis (${roiRounded}%)`
-        : `Analisi investimento (${roiRounded}%)`;
-
-    const html = buildEmail({
-      roi: roiRounded,
-      city,
-      score,
-      lang
-    });
+      detectedLang === "en"
+        ? `Your investment (${roiRounded}%)`
+        : `Il tuo investimento (${roiRounded}%)`;
 
     let sent = false;
 
     try{
 
       await resend.emails.send({
-        from: "RendimentoBB Analisi <analisi@rendimentobb.it>",
+        from: "RendimentoBB <analisi@rendimentobb.it>",
         to: [email],
         subject,
 
-        // ✅ TEXT VERSION (FONDAMENTALE)
         text: `
-Analisi investimento
-
 ROI: ${roiRounded}%
-Città: ${city}
+City: ${city}
 
-Il ROI non rappresenta il profitto reale.
+⚠️ ROI is not real profit
 
-Apri:
+Unlock:
 https://rendimentobb.it/dashboard
-`,
+        `,
 
-        html
+        html: buildEmail({
+          roi: roiRounded,
+          city,
+          score,
+          lang: detectedLang
+        })
       });
 
       sent = true;
 
     }catch(e){
-      console.error("❌ User email error:", e.message);
+      console.error("❌ Email error:", e.message);
     }
 
     // ================= TRACK =================
     if(db){
-      try{
-        await db.collection("email_logs").add({
-          email,
-          roi: roiRounded,
-          city,
-          sent,
-          createdAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-      }catch(e){}
+      await db.collection("email_logs").add({
+        email,
+        roi: roiRounded,
+        city,
+        score: score.label,
+        sent,
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      });
     }
 
-    console.log("📩 USER EMAIL:", {
-      email,
-      roi: roiRounded,
-      sent,
-      duration: Date.now() - startTime
-    });
+    console.log("📩 EMAIL SENT:", email, roiRounded);
 
     return res.status(200).json({
       success:true,
@@ -221,8 +237,7 @@ https://rendimentobb.it/dashboard
     console.error("💥 Email API error:", err);
 
     return res.status(500).json({
-      error:"server error",
-      details: err.message
+      error:"server error"
     });
 
   }
