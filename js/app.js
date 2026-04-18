@@ -4020,11 +4020,11 @@ window.startPlanPurchase = function(plan){
   }
 
   // =========================
-  // 🔥 STRIPE HANDLER
+  // 🔥 STRIPE HANDLER (FIX CRITICO)
   // =========================
   if(typeof window.buyPlan === "function"){
 
-    window.buyPlan(pendingPlan);
+    window.buyPlan(plan); // ✅ FIX QUI
 
   }else{
 
@@ -4041,6 +4041,7 @@ window.startPlanPurchase = function(plan){
   }
 
 }; // ✅ CHIUSURA CORRETTA
+
 
 
 // =============================
