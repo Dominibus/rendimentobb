@@ -409,6 +409,7 @@ Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi
 
 <button class="btn-main"
 id="calc-btn"
+onclick="calculate()"
 data-it="Calcola impatto"
 data-en="Calculate impact">
 Calcola impatto
@@ -1138,6 +1139,21 @@ alert(t("Errore invio","Error sending request"));
 }
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  console.log("✅ DOM READY");
+
+  const btn = document.getElementById("calc-btn");
+
+  if(btn){
+    btn.addEventListener("click", calculate);
+  }else{
+    console.error("❌ Bottone non trovato");
+  }
+
+});
+  
 </script>
 
 <!-- 🔥 UPGRADE MODAL -->
