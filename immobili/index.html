@@ -323,93 +323,124 @@ section[style*="linear-gradient"]{
 
 }
 
-  /* =====================================
-🚑 FIX CONTRASTO GLOBALE (CRITICO)
-RISOLVE TESTI BIANCHI OVUNQUE
+/* =====================================
+🚀 FIX DEFINITIVO UI + CONTRASTO (CLEAN)
 ===================================== */
 
-/* reset totale fuori hero */
-body.immobili-page section:not(.hero),
-body.immobili-page section:not(.hero) *{
-  color:#0f172a !important;
+/* 🔥 BASE TYPO */
+body.immobili-page{
+  color:#0f172a;
+}
+
+/* SOLO fuori hero */
+body.immobili-page main > section:not(.hero){
+  color:#0f172a;
+}
+
+/* testo normale */
+body.immobili-page main > section:not(.hero) p{
+  color:#475569;
+}
+
+/* =====================================
+💣 FIX LABEL (QUI ERA IL BUG)
+===================================== */
+
+/* MASSIMA PRIORITÀ → batte TUTTO */
+body.immobili-page main .input-group label{
+  color:#334155 !important;
   text-shadow:none !important;
 }
 
-/* testi secondari */
-body.immobili-page p{
-  color:#475569 !important;
+/* =====================================
+📊 FORM CLEAN (SILICON STYLE)
+===================================== */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
 }
 
-body.immobili-page .market-label{
-  color:#94a3b8 !important;
+.input-group input{
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+
+  background:#ffffff;
+  color:#0f172a;
+
+  box-shadow:0 6px 18px rgba(0,0,0,0.05);
+  transition:.2s;
 }
 
-body.immobili-page .market-extra{
-  color:#64748b !important;
+.input-group input:focus{
+  border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
+  outline:none;
 }
 
-/* label form */
-body.immobili-page .input-group label{
-  color:#334155 !important;
+/* placeholder */
+input::placeholder{
+  color:#94a3b8;
 }
 
 /* =====================================
-🔥 HERO PROTECTION (NON TOCCARE)
+🧠 TITOLI PIÙ PREMIUM
 ===================================== */
 
-.hero,
-.hero *{
-  text-shadow:0 4px 20px rgba(0,0,0,0.6);
-}
-
-.hero .page-title h1{
-  color:#ffffff !important;
-}
-
-.hero .page-title p{
-  color:#e2e8f0 !important;
-}
-
-.hero .page-title span{
-  color:#cbd5f5 !important;
-}
-
-/* =====================================
-💎 UPGRADE VISIVO (SILICON VALLEY)
-===================================== */
-
-/* sezione info */
-.section-info{
-  max-width:900px;
-  margin:80px auto;
-  text-align:center;
-}
-
-.section-info h2{
-  font-size:28px;
-  margin-bottom:10px;
-}
-
-/* separazione visiva */
-body.immobili-page section{
-  margin-top:80px;
-}
-
-/* titolo sezione */
 body.immobili-page h2{
+  font-size:28px;
   font-weight:600;
   letter-spacing:-0.3px;
 }
 
-/* CTA spacing */
-.btn-primary{
-  border-radius:999px;
-  padding:12px 24px;
+body.immobili-page h3{
+  font-size:22px;
+  font-weight:600;
 }
 
-/* input più puliti */
-input::placeholder{
-  color:#94a3b8;
+/* =====================================
+🟢 CTA UPGRADE
+===================================== */
+
+.btn-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  border:none;
+  border-radius:999px;
+
+  padding:12px 26px;
+
+  box-shadow:0 10px 30px rgba(16,185,129,0.25);
+  transition:.25s;
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(16,185,129,0.35);
+}
+
+/* =====================================
+🧱 SPACING PRO
+===================================== */
+
+body.immobili-page section{
+  margin-top:90px;
+}
+
+/* =====================================
+📱 MOBILE
+===================================== */
+
+@media(max-width:768px){
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .btn-primary{
+    width:100%;
+  }
 }
   
   </style>
