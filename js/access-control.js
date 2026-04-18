@@ -157,13 +157,14 @@ window.requirePro = function(){
 
   const lang = window.currentLang || "it";
 
-  alert(
+  showToast(
     lang === "en"
-      ? "This feature requires PRO plan"
-      : "Questa funzione richiede il piano PRO"
+      ? "Upgrade to PRO to access this feature"
+      : "Passa a PRO per accedere a questa funzione",
+    "warning"
   );
 
-  window.location.href = "/pricing/";
+  openUpgradeModal("pro");
 
   return false;
 };
