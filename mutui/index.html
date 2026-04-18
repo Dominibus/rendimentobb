@@ -19,8 +19,8 @@ data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
 <style>
 
 /* =====================================
-🔥 RENDIMENTOBB – MUTUI UI PRODUCTION
-(SILICON VALLEY CLEAN)
+🔥 RENDIMENTOBB – MUTUI UI FINAL PRODUCTION
+(SILICON VALLEY CLEAN + FIX REALI)
 ===================================== */
 
 :root{
@@ -53,7 +53,7 @@ body{
 }
 
 /* =====================================
-🔥 HERO – STRIPE STYLE
+🔥 HERO – FIX VISIBILITY (CRITICO)
 ===================================== */
 
 .hero-mutui{
@@ -62,7 +62,7 @@ body{
   text-align:center;
 
   background:
-    linear-gradient(rgba(2,6,23,.65),rgba(2,6,23,.75)),
+    linear-gradient(rgba(2,6,23,.35),rgba(2,6,23,.55)),
     url("/img/milan-bg.jpg") center/cover;
 
   overflow:hidden;
@@ -76,14 +76,10 @@ body{
   z-index:1;
 }
 
-.hero-mutui h1,
-.hero-mutui p{
+.hero-mutui h1{
   position:relative;
   z-index:2;
-  color:#fff;
-}
-
-.hero-mutui h1{
+  color:#ffffff !important;
   font-size:48px;
   font-weight:800;
   margin-bottom:15px;
@@ -93,8 +89,10 @@ body{
 }
 
 .hero-mutui p{
+  position:relative;
+  z-index:2;
   font-size:18px;
-  color:#cbd5f5;
+  color:#e2e8f0 !important;
 }
 
 /* =====================================
@@ -154,6 +152,9 @@ body{
   cursor:pointer;
 
   transition:.25s;
+
+  position:relative;
+  z-index:2;
 }
 
 .btn-main:hover{
@@ -214,7 +215,7 @@ body{
 }
 
 /* =====================================
-🔥 EXTRA BOX (CONVERSION BLOCK)
+🔥 EXTRA BOX
 ===================================== */
 
 .extra-box{
@@ -265,7 +266,6 @@ body{
   background:linear-gradient(to bottom,#f0fdf4,#ffffff);
 }
 
-/* TESTI (FIX PULITO) */
 .bank-card h3{
   margin-bottom:6px;
 }
@@ -306,6 +306,20 @@ body{
   margin-top:15px;
   font-weight:600;
   color:var(--rb-primary);
+}
+
+/* =====================================
+🔥 MODAL FIX (CRITICO CLICK)
+===================================== */
+
+#upgrade-modal{
+  pointer-events:auto;
+  z-index:9999;
+}
+
+#upgrade-modal > div{
+  position:relative;
+  z-index:10000;
 }
 
 /* =====================================
@@ -370,7 +384,6 @@ Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi
 
 <button class="btn-main"
 id="calc-btn"
-onclick="calculate()"
 data-it="Calcola impatto"
 data-en="Calculate impact">
 Calcola impatto
@@ -675,7 +688,9 @@ t("Migliori mutui disponibili","Best mortgage options") +
 "</h3>";
 
 /* PAYWALL HEADER */
-if(!getAccess().isPro){
+const access = getAccess();
+
+if(!access.isInvestor && !access.isPro){
   html += `
   <div style="
     background:#111827;
@@ -795,6 +810,8 @@ function goToPricing(){
 
 async function startPlanPurchase(plan){
 
+  console.log("🚀 START PURCHASE:", plan);
+
   if(!window.currentUser){
     showUpgradeModal();
     localStorage.setItem("pending_plan", plan);
@@ -806,23 +823,27 @@ async function startPlanPurchase(plan){
     const res = await fetch("/api/create-checkout-session",{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ plan })
+      body: JSON.stringify({ 
+        plan,
+        email: window.currentUser.email || null
+      })
     });
 
     const data = await res.json();
 
+    console.log("💳 CHECKOUT RESPONSE:", data);
+
     if(data.url){
       window.location.href = data.url;
     }else{
-      alert("Errore pagamento");
+      alert("Errore pagamento (no URL)");
     }
 
   }catch(e){
-    console.error("Checkout error:", e);
+    console.error("❌ Checkout error:", e);
+    alert("Errore connessione pagamento");
   }
-
 }
-
   function showUpgradeModal(){
   document.getElementById("upgrade-modal").style.display = "flex";
 }
@@ -836,16 +857,26 @@ function selectMortgage(rate, bank){
 
   const access = getAccess();
 
-  // 🔓 SOLO PRO → simulatore
+  // 🔓 PRO → simulatore
   if(access.isPro){
     localStorage.setItem("mortgage_rate",rate);
     window.location.href="/tool/";
     return;
   }
 
-  // 💰 TUTTI GLI ALTRI → LEAD (anche investor)
-  saveLeadFromBank(bank, rate);
+  // 🔓 INVESTOR → contatto banca (NO lead interno)
+  if(access.isInvestor){
+    alert(
+      t(
+        "🏦 Verrai contattato dalla banca selezionata",
+        "🏦 The bank will contact you"
+      )
+    );
+    return;
+  }
 
+  // 🔒 FREE → lead
+  saveLeadFromBank(bank, rate);
 }
 
 async function saveLeadFromBank(bank, rate){
@@ -869,7 +900,10 @@ async function saveLeadFromBank(bank, rate){
   plan: window.currentPlan || "free"
 };
 
-  try{
+  if(!email){
+  alert("Inserisci email prima");
+  return;
+}try{
 
     await fetch("/api/send-lead",{
       method:"POST",
