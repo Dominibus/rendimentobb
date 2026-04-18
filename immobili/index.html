@@ -386,6 +386,89 @@ section[style*="linear-gradient"] input{
   box-sizing:border-box;
 }
 
+  /* ===== GRID CLEAN ===== */
+.property-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:28px;
+  margin-top:50px;
+}
+
+/* ===== CARD ===== */
+.property-card{
+  position:relative;
+  background:white;
+  padding:26px;
+  border-radius:18px;
+  border:1px solid #e2e8f0;
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  transition:all .25s ease;
+
+  text-align:center;
+  cursor:pointer;
+}
+
+/* HOVER */
+.property-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 30px 80px rgba(0,0,0,0.08);
+}
+
+/* TOP CARD */
+.property-card.highlight{
+  border:2px solid #10b981;
+  box-shadow:0 20px 60px rgba(16,185,129,0.15);
+}
+
+/* ===== BADGE ===== */
+.card-badge{
+  position:absolute;
+  top:12px;
+  right:12px;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  color:white;
+}
+
+/* COLORS */
+.green{background:#10b981;}
+.blue{background:#3b82f6;}
+.purple{background:#6366f1;}
+.red{background:#ef4444;}
+
+/* ===== SUB ===== */
+.card-sub{
+  font-size:12px;
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+/* ===== ROI ===== */
+.property-roi{
+  font-size:28px;
+  font-weight:700;
+  color:#10b981;
+  margin:6px 0;
+}
+
+/* ===== EXTRA ===== */
+.market-extra{
+  font-size:13px;
+  color:#64748b;
+  margin-top:6px;
+}
+
+/* ===== LINK ===== */
+.market-link{
+  margin-top:14px;
+  font-weight:600;
+  color:#10b981;
+  font-size:14px;
+}
+
 </style>
 
 </head>
