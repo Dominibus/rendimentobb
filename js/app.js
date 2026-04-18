@@ -2013,29 +2013,29 @@ if(mortgageBox && mortgageBtn){
 
       // 🔒 NON LOGGATO → lead
       if(!window.firebaseReady){
-  return;
-}
+        return;
+      }
 
-// 🔥 FIX CRITICO
-if(!window.isUserReady()){
-  return;
-}
+      // 🔥 FIX CRITICO
+      if(!window.isUserReady()){
+        return;
+      }
 
-if(!window.currentUser){
+      if(!window.currentUser){
 
-  localStorage.setItem("lead_type", "mutuo");
+        localStorage.setItem("lead_type", "mutuo");
 
-  showToast(
-  t(
-    "Inserisci email per ricevere le migliori offerte mutuo",
-    "Enter your email to receive the best mortgage offers"
-  ),
-  "info"
-);
+        showToast(
+          t(
+            "Inserisci email per ricevere le migliori offerte mutuo",
+            "Enter your email to receive the best mortgage offers"
+          ),
+          "info"
+        );
 
-  window.location.href = "/login/";
-  return;
-}
+        window.location.href = "/login/";
+        return;
+      }
 
       // 🔥 UTENTE → lead diretto
       fetch("/api/send-lead-partner",{
@@ -2050,19 +2050,20 @@ if(!window.currentUser){
       });
 
       showToast(
-  t(
-    "🏦 Richiesta inviata. Le banche ti contatteranno",
-    "🏦 Request sent. Banks will contact you"
-  ),
-  "success"
+        t(
+          "🏦 Richiesta inviata. Le banche ti contatteranno",
+          "🏦 Request sent. Banks will contact you"
+        ),
+        "success"
+      ); // ✅ QUESTA ERA LA PARENTESI MANCANTE
+
     };
 
   }else{
     mortgageBox.style.display = "none";
   }
 
-}  
-
+}
   // ================= PAYWALL (UNICO) =================
 const access = window.getUserAccess();
   
