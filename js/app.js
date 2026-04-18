@@ -3986,3 +3986,26 @@ if(
   }
 
 };
+
+// =============================
+// 🔥 FORCE PLAN FALLBACK (CRITICAL FIX)
+// =============================
+window.forceCorrectPlan = window.forceCorrectPlan || function(){
+
+  console.warn("⚠️ forceCorrectPlan fallback attivo");
+
+  const plan = window.currentPlan || "free";
+
+  document.body.classList.remove("is-free","is-investor","is-pro","is-admin");
+
+  if(plan === "pro" || plan === "pro_yearly"){
+    document.body.classList.add("is-pro");
+  }
+  else if(plan === "investor"){
+    document.body.classList.add("is-investor");
+  }
+  else{
+    document.body.classList.add("is-free");
+  }
+
+};
