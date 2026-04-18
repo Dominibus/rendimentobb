@@ -197,7 +197,7 @@ const access = window.getUserAccess();
 
 window.isProUser = function(){
   return window.getUserAccess().isPro;
-};  
+};
 
 // ================= SHOCK ENGINE =================
 
@@ -216,8 +216,14 @@ if(!access.canSeeFullAnalysis && roi > 0){
   }
 }
 
+// ================= LOCK KPI SYSTEM =================
+
+// 👉 metti SOLO ID reali se vuoi bloccare qualcosa
 const lockIds = [
-  // 👉 metti qui gli id reali oppure lascialo vuoto se non usato
+  "profit-live",
+  "revenue-live",
+  "profit-monthly",
+  "profit-annual"
 ];
 
 if(!access.canSeeFullAnalysis){
@@ -232,66 +238,52 @@ if(!access.canSeeFullAnalysis){
 
 }else{
 
-  // 🔥 PRO / ADMIN → UNLOCK
+  // 🔓 PRO / ADMIN → UNLOCK
   lockIds.forEach(id => {
     const el = document.getElementById(id);
     if(!el) return;
-
-    if(el.innerText === "🔒"){
-      el.innerText = "—";
-    }
 
     el.style.opacity = "1";
   });
 
 }
-}
 
-};
+// ================= MORTGAGE COMPARISON =================
 
 window.runMortgageComparison = function(){
 
-const amount = parseFloat(document.getElementById("mortgageAmount").value);
-const years = parseFloat(document.getElementById("mortgageYears").value);
+  const amount = parseFloat(document.getElementById("mortgageAmount").value);
+  const years = parseFloat(document.getElementById("mortgageYears").value);
 
-const rateA = parseFloat(document.getElementById("rateA").value);
-const rateB = parseFloat(document.getElementById("rateB").value);
-const rateC = parseFloat(document.getElementById("rateC").value);
+  const rateA = parseFloat(document.getElementById("rateA").value);
+  const rateB = parseFloat(document.getElementById("rateB").value);
+  const rateC = parseFloat(document.getElementById("rateC").value);
 
-if(!amount || !years){
-alert(t("Inserisci importo e durata","Enter amount and duration"));
-return;
-}
+  if(!amount || !years){
+    alert(t("Inserisci importo e durata","Enter amount and duration"));
+    return;
+  }
 
-const banks = [
+  const banks = [
+    { name:{it:"Intesa Sanpaolo",en:"Intesa Sanpaolo"}, rate: rateA || 3.45 },
+    { name:{it:"UniCredit",en:"UniCredit"}, rate: rateB || 3.6 },
+    { name:{it:"BNL",en:"BNL"}, rate: rateC || 3.5 },
+    { name:{it:"Crédit Agricole",en:"Crédit Agricole"}, rate: 3.4 },
+    { name:{it:"Banco BPM",en:"Banco BPM"}, rate: 3.55 },
+    { name:{it:"Mediolanum",en:"Mediolanum"}, rate: 3.48 },
+    { name:{it:"CheBanca!",en:"CheBanca!"}, rate: 3.52 }
+  ];
 
-{ name:{it:"Intesa Sanpaolo",en:"Intesa Sanpaolo"}, rate: rateA || 3.45 },
+  const results = compareMortgagesEngine(
+    amount,
+    years,
+    banks.map(b => ({
+      name: b.name,
+      rate: b.rate
+    }))
+  );
 
-{ name:{it:"UniCredit",en:"UniCredit"}, rate: rateB || 3.6 },
-
-{ name:{it:"BNL",en:"BNL"}, rate: rateC || 3.5 },
-
-{ name:{it:"Crédit Agricole",en:"Crédit Agricole"}, rate: 3.4 },
-
-{ name:{it:"Banco BPM",en:"Banco BPM"}, rate: 3.55 },
-
-{ name:{it:"Mediolanum",en:"Mediolanum"}, rate: 3.48 },
-
-{ name:{it:"CheBanca!",en:"CheBanca!"}, rate: 3.52 }
-
-];
-
-const results = compareMortgagesEngine(
-  amount,
-  years,
-  banks.map(b => ({
-    name: b.name,
-    rate: b.rate
-  }))
-);
-
-renderMortgageResults(results);
-
+  renderMortgageResults(results);
 };
 
 // ================= PLAN DEFAULT =================
@@ -300,11 +292,9 @@ function t(it, en){
   return window.currentLang === "it" ? it : en;
 }
 
-
 // ================= CITY FROM HOMEPAGE =================
 
 const citySelector = document.getElementById("market-city");
-
 
 // ================= SAVE ANALYSIS =================
 
@@ -341,18 +331,12 @@ async function saveAnalysis(data){
 
 }
 
-
 // ================= PLAN SYSTEM =================
 
-// 🔥 FLAG GLOBALE (fonte unica)
-
+// 🔥 ADMIN
 window.isAdmin = function(){
-
   const email = window.currentUser?.email || "";
-
-  // 🔥 QUI METTI LA TUA EMAIL ADMIN
   return email === "rendimentobb@gmail.com";
-
 };
 
 // 🔥 PREMIUM USER (ADMIN + PRO)
@@ -370,22 +354,20 @@ window.isPremiumUser = function(){
   return isAdmin || isPro;
 };
 
-// ✅ GET PLAN PULITO (NO SIDE EFFECT)
+// ✅ GET PLAN
 function getUserPlan(){
   return window.currentPlan || "free";
 }
 
-// 🔥 CHECK GERARCHICO CORRETTO
+// 🔥 GERARCHIA
 function hasPlan(requiredPlan){
 
   const plan = getUserPlan();
 
-  // 🟢 PRO (massimo livello)
   if(requiredPlan === "pro"){
     return plan === "pro" || plan === "pro_yearly";
   }
 
-  // 🟡 INVESTOR (medio livello)
   if(requiredPlan === "investor"){
     return (
       plan === "investor" ||
@@ -394,7 +376,6 @@ function hasPlan(requiredPlan){
     );
   }
 
-  // 🟢 FREE
   if(requiredPlan === "free"){
     return true;
   }
@@ -402,10 +383,9 @@ function hasPlan(requiredPlan){
   return false;
 }
 
-// 🔒 BLOCCO ACCESSO + REDIRECT
+// 🔒 ACCESS CONTROL
 function requirePlan(requiredPlan){
 
-  // 🔥 attende Firebase
   if(!window.isUserReady()){
     console.log("⏳ Skip requirePlan → user non pronto");
     return false;
@@ -413,54 +393,35 @@ function requirePlan(requiredPlan){
 
   const access = window.getUserAccess();
 
-  // 🔥 PRO / ADMIN → bypass totale
+  // 🔓 PRO / ADMIN
   if(access.canSeeFullAnalysis){
     return true;
   }
 
-  // 🔐 NON LOGGATO
+  // 🔒 NON LOGGATO
   if(!window.currentUser){
+    console.log("🔒 USER NOT LOGGED → REGISTER");
+    showRegisterPopup();
+    return false;
+  }
 
-  console.log("🔒 USER NOT LOGGED → REGISTER POPUP");
-
-  showRegisterPopup(); // ✅ UX corretta
-
-  return false;
-}
-
-  // ❌ NON HA IL PIANO
+  // 🔒 NON HA PIANO
   if(!hasPlan(requiredPlan)){
 
-    let message = "";
-
-    if(requiredPlan === "investor"){
-      message = t(
-        "Questa funzione richiede il piano Investor.",
-        "This feature requires the Investor plan."
-      );
-    }
-
-    if(requiredPlan === "pro"){
-      message = t(
-        "Questa funzione richiede il piano Pro.",
-        "This feature requires the Pro plan."
-      );
-    }
-
     showToast(
-  t(
-    "🔒 Sblocca analisi completa per continuare",
-    "🔒 Unlock full analysis to continue"
-  ),
-  "warning"
-);
+      t(
+        "🔒 Sblocca analisi completa per continuare",
+        "🔒 Unlock full analysis to continue"
+      ),
+      "warning"
+    );
 
-openUpgradeModal(requiredPlan);
-return false;
+    openUpgradeModal(requiredPlan);
+    return false;
+  }
 
   return true;
 }
-
 // =====================================
 // 🔥 FUNNEL + MODAL ENGINE UNIFICATO
 // SILICON VALLEY SAAS – FINAL
