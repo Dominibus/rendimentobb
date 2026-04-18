@@ -350,6 +350,20 @@ body{
   }
 }
 
+#upgrade-modal{
+  pointer-events:auto;
+}
+
+#upgrade-modal > div{
+  pointer-events:auto;
+}
+
+/* 🔥 SBLOCCA CLICK GLOBALI */
+button, .btn-main{
+  pointer-events:auto !important;
+  z-index:10;
+}
+
 </style>
 </head>
 
@@ -614,7 +628,7 @@ extra.innerHTML = `
     : `
     <button class="btn-main"
       style="max-width:280px"
-      onclick="startPlanPurchase('investor')">
+      onclick="handleUpgradeClick()">
       🔓 ${t("Sblocca offerte banche","Unlock bank offers")}
     </button>
     `
@@ -708,7 +722,7 @@ if(!access.isInvestor && !access.isPro){
     <div style="margin-top:15px;">
       <button class="btn-main"
         style="max-width:280px"
-        onclick="startPlanPurchase('investor')">
+        onclick="handleUpgradeClick()">
         🔓 ${t("Sblocca tutte le offerte","Unlock all offers")}
       </button>
 
@@ -781,7 +795,7 @@ ${
 locked
 ? `
 <button class="btn-main"
-onclick="startPlanPurchase('investor')">
+onclick="handleUpgradeClick()">
 ${t("Sblocca ora","Unlock now")}
 </button>
 `
@@ -812,7 +826,16 @@ async function startPlanPurchase(plan){
 
   console.log("🚀 START PURCHASE:", plan);
 
-  if(!window.currentUser){
+  const access = getAccess();
+
+  // 🔥 SE INVESTOR → NON deve vedere popup
+  if(access.isInvestor){
+    alert("Hai già accesso Investor");
+    return;
+  }
+
+  // 🔥 SE NON LOGGATO → popup
+  if(!access.isLogged){
     showUpgradeModal();
     localStorage.setItem("pending_plan", plan);
     return;
@@ -824,14 +847,13 @@ async function startPlanPurchase(plan){
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({ 
-        plan,
-        email: window.currentUser.email || null
-      })
+  plan,
+  uid: window.currentUser?.uid || null,
+  email: window.currentUser?.email || null
+})
     });
 
     const data = await res.json();
-
-    console.log("💳 CHECKOUT RESPONSE:", data);
 
     if(data.url){
       window.location.href = data.url;
@@ -857,29 +879,30 @@ function selectMortgage(rate, bank){
 
   const access = getAccess();
 
-  // 🔓 PRO → simulatore
+  // 🔥 PRO → simulatore
   if(access.isPro){
     localStorage.setItem("mortgage_rate",rate);
     window.location.href="/tool/";
     return;
   }
 
-  // 🔓 INVESTOR → contatto banca (NO lead interno)
+  // 🔥 INVESTOR → contatto diretto (NO lead interno)
   if(access.isInvestor){
-    alert(
-      t(
-        "🏦 Verrai contattato dalla banca selezionata",
-        "🏦 The bank will contact you"
-      )
-    );
+    alert("🏦 Verrai contattato dalla banca");
     return;
   }
 
-  // 🔒 FREE → lead
+  // 🔥 FREE → lead
   saveLeadFromBank(bank, rate);
 }
-
 async function saveLeadFromBank(bank, rate){
+
+  const access = getAccess();
+
+if(access.isInvestor){
+  console.log("⛔ Investor → NO lead");
+  return;
+}
 
   const email = document.getElementById("email").value || "";
   const phone = document.getElementById("phone").value || "";
@@ -924,6 +947,17 @@ async function saveLeadFromBank(bank, rate){
 
 }  
 
+function handleUpgradeClick(){
+
+  const access = getAccess();
+
+  if(access.isInvestor){
+    alert("Hai già accesso Investor");
+    return;
+  }
+
+  startPlanPurchase('investor');
+}  
 
 /* ================= LEAD ================= */
 async function saveLead(){
@@ -1066,7 +1100,7 @@ z-index:9999;
     </p>
 
     <button class="btn-main"
-      onclick="startPlanPurchase('investor')"
+      onclick="handleUpgradeClick()"
       data-it="🔓 Sblocca ora"
       data-en="🔓 Unlock now">
       🔓 Sblocca ora
