@@ -49,7 +49,7 @@ window.firebaseAuth = auth;
 // ===============================
 
 window.currentUser = null;
-window.currentPlan = "free";
+window.currentPlan = null;
 window.firebaseReady = false;
 
 // ===============================
