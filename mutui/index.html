@@ -836,10 +836,20 @@ async function startPlanPurchase(plan){
 
   // 🔥 SE NON LOGGATO → popup
   if(!access.isLogged){
-    showUpgradeModal();
-    localStorage.setItem("pending_plan", plan);
-    return;
+
+  document.getElementById("upgrade-modal").style.display = "flex";
+
+  // cambia CTA dinamicamente
+  const btn = document.querySelector("#upgrade-modal .btn-main");
+
+  if(btn){
+    btn.onclick = () => {
+      window.location.href = "/register/";
+    };
   }
+
+  return;
+}
 
   try{
 
