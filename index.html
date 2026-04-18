@@ -1719,59 +1719,66 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 
   // ================= 🔓 SBLOCCO PRO =================
-  function unlockHomeProUI(){
+function unlockHomeUI(){
 
   const plan = (window.currentPlan || "").toLowerCase();
 
   const isPro =
-  plan === "pro" ||
-  plan === "pro_yearly";
+    plan === "pro" ||
+    plan === "pro_yearly";
 
-  if(!isPro) return;
+  const isInvestor = plan === "investor";
 
-  console.log("🔥 FORCE UNLOCK HOME PRO");
+  if(!isPro && !isInvestor) return;
 
-  document.body.classList.add("pro-user");
+  console.log("🔥 UNLOCK HOME UI:", plan);
 
+  // 🔥 entrambi sbloccano UI base
+  document.body.classList.add("paid-user");
+
+  // 🔥 RIMUOVE blur visivo (IMPORTANTISSIMO)
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
+  // 🔥 overlay sparisce
   document.querySelectorAll(".home-blur-overlay").forEach(el=>{
     el.style.display = "none";
   });
 
+  // 🔥 unlock generale
   document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
     el.classList.remove("pro-locked","locked-section");
   });
 
+  // 🔥 fix click
   document.querySelectorAll("button, a").forEach(el=>{
     el.disabled = false;
     el.style.pointerEvents = "auto";
   });
 
-  // 🔥 FIX DEFINITIVO
+  // 🔥 ricalcolo UI
   if(typeof quickROI === "function"){
     setTimeout(() => quickROI(), 50);
   }
 }
 
   // ================= WAIT PRO =================
-  function waitForProAndUnlock(){
+  function waitForUnlock(){
 
     if(window.currentPlan){
-      unlockHomeProUI();
+      unlockHomeUI();
     }else{
-      setTimeout(waitForProAndUnlock, 300);
+      setTimeout(waitForUnlock, 300);
     }
 
   }
 
-  waitForProAndUnlock();
+  waitForUnlock();
 
   // ================= EVENT =================
   document.addEventListener("rb_plan_loaded", ()=>{
-    unlockHomeProUI();
+    unlockHomeUI();
 
     if(typeof quickROI === "function"){
       quickROI();
