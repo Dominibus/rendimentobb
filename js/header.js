@@ -5,6 +5,28 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+// ===============================
+// 🔧 GLOBAL UNLOCK FALLBACK (FIX ERROR)
+// ===============================
+
+window.unlockUI = function(){
+
+  console.log("🔓 unlockUI fallback attivo");
+
+  // rimuove blur globale
+  document.querySelectorAll(".pro-blur, .locked, .blur").forEach(el=>{
+    el.style.filter = "none";
+    el.style.pointerEvents = "auto";
+    el.style.opacity = "1";
+  });
+
+  // rimuove eventuali overlay
+  document.querySelectorAll(".locked-overlay, .results-overlay").forEach(el=>{
+    el.remove();
+  });
+
+};
+
 /* =====================
 🎨 HERO BG
 ===================== */
@@ -309,7 +331,7 @@ function renderUser(user){
 
   const isInvestor = access.isInvestor;
   const isPro = access.isPro;
-  const isPaid = access.isInvestor || access.isPro || access.isAdmin;
+  const isPaid = isAdmin || access.isInvestor || access.isPro;
 
   const isProOnly = isPro && !isInvestor;
 
