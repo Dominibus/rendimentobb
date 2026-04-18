@@ -29,6 +29,11 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
+window.alert = function(msg){
+  console.warn("🚫 alert bloccato:", msg);
+  showToast(msg, "info");
+};
+
 // ================= SAFE GLOBAL EARLY FIX =================
 
 // 🔥 FIX CRITICO ACCESS SYSTEM (METTERE QUI)
@@ -3224,14 +3229,15 @@ document.addEventListener("rb_auth_ready", () => {
     setTimeout(()=>{
 
       if(typeof window.buyPlan === "function"){
-        window.buyPlan(pendingPlan);
-      }else{
-        console.error("❌ buyPlan non trovata");
-        showToast(
-  t("Errore sistema pagamento","Payment system error"),
-  "error"
-);
-      }
+  window.buyPlan(plan);
+}else{
+  console.error("❌ buyPlan non trovata");
+
+  showToast(
+    t("Errore sistema pagamento","Payment system error"),
+    "error"
+  );
+}
 
     }, 500);
   }
