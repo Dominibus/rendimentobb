@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 SEND LEAD – RENDIMENTOBB ULTRA (FINAL)
+// 🚀 SEND LEAD – RENDIMENTOBB ULTRA SAAS (PRO)
 // ===============================
 
 import { Resend } from "resend";
@@ -26,14 +26,8 @@ if (!admin.apps.length) {
 const db = admin.apps.length ? admin.firestore() : null;
 
 // ================= HELPERS =================
-function safe(n){
-  const v = Number(n);
-  return isNaN(v) ? 0 : v;
-}
-
-function clean(v){
-  return String(v || "").trim();
-}
+const safe = n => isNaN(Number(n)) ? 0 : Number(n);
+const clean = v => String(v || "").trim();
 
 function detectLang(req, bodyLang){
   if(bodyLang) return bodyLang;
@@ -41,22 +35,35 @@ function detectLang(req, bodyLang){
   return lang.toLowerCase().startsWith("en") ? "en" : "it";
 }
 
-// ================= SCORE ENGINE =================
+// ================= SCORE ENGINE (UPGRADE) =================
 function getScore(roi){
 
-  if(roi > 20) return { score:"hot", value:140, priority:"EXTREME" };
-  if(roi > 15) return { score:"high", value:100, priority:"URGENT" };
-  if(roi > 10) return { score:"medium", value:60, priority:"HIGH" };
+  if(roi >= 20) return { score:"extreme", value:150, priority:"🔥 EXTREME" };
+  if(roi >= 15) return { score:"hot", value:110, priority:"🚀 HOT" };
+  if(roi >= 10) return { score:"good", value:70, priority:"⚡ GOOD" };
 
   return { score:"low", value:20, priority:"NORMAL" };
 }
 
-// ================= EMAIL TEMPLATE =================
-function buildEmail({ roi, city, type, lang }){
+// ================= PARTNER ROUTING =================
+function getPartnerEmails(type, score){
 
-  const t = (it, en) => lang === "en" ? en : it;
+  const partners = {
+    immobili: ["investor@rendimentobb.it"],
+    mutui: ["broker@rendimentobb.it"],
+    simulatore: ["investor@rendimentobb.it"]
+  };
 
-  const isMutui = type === "mutui";
+  // 🔥 solo lead buoni vanno ai partner
+  if(score === "low") return [];
+
+  return partners[type] || ["rendimentobb@gmail.com"];
+}
+
+// ================= EMAIL TEMPLATE (UPGRADE STRIPE STYLE) =================
+function buildEmail({ roi, city, lang }){
+
+  const t = (it,en)=> lang==="en"?en:it;
 
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
@@ -68,16 +75,11 @@ function buildEmail({ roi, city, type, lang }){
       </div>
 
       <h2 style="text-align:center;color:#0f172a">
-        ${isMutui
-          ? t("Il tuo mutuo può distruggere il profitto",
-              "Your mortgage can destroy your profit")
-          : t("Analisi del tuo investimento",
-              "Your investment analysis")}
+        ${t("Il tuo investimento ha potenziale","Your investment has potential")}
       </h2>
 
       <p style="text-align:center;color:#64748b;margin-bottom:25px">
-        ${t("Ecco cosa abbiamo trovato",
-            "Here’s what we found")}
+        ${t("Ma stai vedendo solo il 30% dei dati","You’re only seeing 30% of the data")}
       </p>
 
       <div style="text-align:center;margin:30px 0">
@@ -88,17 +90,14 @@ function buildEmail({ roi, city, type, lang }){
       </div>
 
       <div style="background:#fff7ed;padding:14px;border-radius:10px;color:#92400e">
-        ⚠️ ${t(
-          "Il ROI NON è il profitto reale",
-          "ROI is NOT real profit"
-        )}
+        ⚠️ ${t("Il ROI NON è il profitto reale","ROI is NOT real profit")}
       </div>
 
       <div style="margin-top:25px;background:#f8fafc;padding:16px;border-radius:10px">
         <ul style="padding-left:18px;margin:0;color:#334155">
           <li>${t("Profitto reale","Real profit")}</li>
           <li>${t("Break-even","Break-even")}</li>
-          <li>${t("Rischio investimento","Investment risk")}</li>
+          <li>${t("Rischio","Risk")}</li>
           <li>${t("Impatto mutuo","Mortgage impact")}</li>
         </ul>
       </div>
@@ -106,12 +105,12 @@ function buildEmail({ roi, city, type, lang }){
       <div style="text-align:center;margin:30px 0">
         <a href="https://rendimentobb.it/dashboard"
         style="background:#10b981;color:white;padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:700">
-        🔥 ${t("Vedi analisi completa","Unlock full analysis")}
+        🔓 ${t("Sblocca analisi completa","Unlock full analysis")}
         </a>
       </div>
 
       <div style="text-align:center;color:#94a3b8;font-size:12px">
-        RendimentoBB
+        RendimentoBB • Strategic Engine
       </div>
 
     </div>
@@ -144,73 +143,92 @@ export default async function handler(req, res){
 
     const { score, value, priority } = getScore(roiRounded);
 
+    // ================= ANTI SPAM =================
+    if(db){
+      const recent = await db.collection("leads")
+        .where("email","==",email)
+        .orderBy("createdAt","desc")
+        .limit(1)
+        .get();
+
+      if(!recent.empty){
+        const last = recent.docs[0].data();
+        const lastTime = last.createdAt?.toMillis?.() || 0;
+
+        if(Date.now() - lastTime < 10 * 60 * 1000){
+          return res.status(200).json({ success:true, spam:true });
+        }
+      }
+    }
+
     // ================= SAVE DB =================
     if(db){
-      try{
-        await db.collection("leads").add({
-          email,
-          city,
-          roi: roiRounded,
-          score,
-          value,
-          priority,
-          type,
-          plan: plan || "free",
-          lang: detectedLang,
-          createdAt: admin.firestore.FieldValue.serverTimestamp()
-        });
-      }catch(e){
-        console.warn("⚠️ Firestore skip");
-      }
+      await db.collection("leads").add({
+        email,
+        city,
+        roi: roiRounded,
+        score,
+        value,
+        priority,
+        type,
+        plan: plan || "free",
+        lang: detectedLang,
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      });
     }
 
     // ================= EMAIL USER =================
-    // 🔥 invia solo se lead valido (no spam)
     if(score !== "low"){
-      try{
-        await resend.emails.send({
-          from: "RendimentoBB <analisi@rendimentobb.it>",
-          to: [email],
-          subject:
-            detectedLang === "en"
-              ? `Investment result (${roiRounded}%)`
-              : `Risultato investimento (${roiRounded}%)`,
+      await resend.emails.send({
+        from: "RendimentoBB <analisi@rendimentobb.it>",
+        to: [email],
+        subject:
+          detectedLang === "en"
+            ? `Your investment (${roiRounded}%)`
+            : `Il tuo investimento (${roiRounded}%)`,
 
-          text: `
-ROI: ${roiRounded}%
-City: ${city}
-
-https://rendimentobb.it/dashboard
-          `,
-
-          html: buildEmail({
-            roi: roiRounded,
-            city,
-            type,
-            lang: detectedLang
-          })
-        });
-      }catch(e){
-        console.error("❌ User email error:", e.message);
-      }
+        html: buildEmail({
+          roi: roiRounded,
+          city,
+          lang: detectedLang
+        })
+      });
     }
 
     // ================= ADMIN =================
-    try{
-      await resend.emails.send({
-        from: "RendimentoBB Lead <lead@rendimentobb.it>",
-        to: ["rendimentobb@gmail.com"],
-        subject: `🔥 ${priority} Lead – €${value}`,
-        text: `
+    await resend.emails.send({
+      from: "RendimentoBB Lead <lead@rendimentobb.it>",
+      to: ["rendimentobb@gmail.com"],
+      subject: `${priority} Lead – €${value}`,
+      text: `
 Email: ${email}
 ROI: ${roiRounded}%
 City: ${city}
 Type: ${type}
 Plan: ${plan || "free"}
+      `
+    });
+
+    // ================= PARTNER =================
+    const partners = getPartnerEmails(type, score);
+
+    if(partners.length){
+      await resend.emails.send({
+        from: "RendimentoBB Partner <lead@rendimentobb.it>",
+        to: partners,
+        subject: `🏦 Lead qualificato (${roiRounded}%)`,
+        text: `
+Nuovo lead:
+
+Email: ${email}
+Città: ${city}
+ROI: ${roiRounded}%
+Tipo: ${type}
+
+Dashboard:
+https://rendimentobb.it/dashboard
         `
       });
-    }catch(e){
-      console.error("❌ Admin email error:", e.message);
     }
 
     console.log("🚀 Lead OK:", email);
