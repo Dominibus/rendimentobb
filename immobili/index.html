@@ -33,6 +33,7 @@ content="Find the best B&B investment properties in Italy with ROI analysis and 
 body.immobili-page{
   background:#f8fafc;
   color:#0f172a;
+  overflow-x:hidden;
 }
 
 /* RESET SAFE */
@@ -316,11 +317,23 @@ body.immobili-page section{
 }
 
 /* =====================================
-📱 MOBILE
+📱 MOBILE CLEAN FIX (NO BREAK UI)
 ===================================== */
 
 @media(max-width:768px){
 
+  /* blocca SOLO lo scroll orizzontale */
+  html, body{
+    overflow-x:hidden;
+  }
+
+  /* container safe */
+  body.immobili-page .container{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  /* grid */
   body.immobili-page .property-grid{
     grid-template-columns:1fr;
   }
@@ -329,19 +342,17 @@ body.immobili-page section{
     grid-template-columns:1fr;
   }
 
+  /* card */
   body.immobili-page .property-card{
-    padding:22px 16px;
-  }
-
-  body.immobili-page .property-roi{
-    font-size:26px;
-  }
-
-  body.immobili-page input{
     width:100%;
-    font-size:16px;
   }
 
+  /* input */
+  body.immobili-page .input-group input{
+    width:100%;
+  }
+
+  /* bottoni */
   body.immobili-page .btn,
   body.immobili-page .btn-primary{
     width:100%;
@@ -350,65 +361,33 @@ body.immobili-page section{
 }
 
   /* =====================================
-🚫 FIX OVERFLOW MOBILE (DEFINITIVO)
+🔒 FINAL OVERFLOW FIX (ULTRA SAFE)
 ===================================== */
 
 @media(max-width:768px){
 
-  /* blocca scroll orizzontale */
+  /* niente scroll orizzontale MA senza rompere layout */
   html, body{
     overflow-x:hidden;
   }
 
-  /* container mai fuori viewport */
-  body.immobili-page .container{
-    max-width:100%;
-    padding-left:16px;
-    padding-right:16px;
+  /* evita sforamenti da box-shadow e border */
+  body.immobili-page section{
+    overflow:hidden;
   }
 
-  /* qualsiasi elemento non può sforare */
-  body.immobili-page *{
-    max-width:100%;
-  }
-
-  /* CARD FIX */
+  /* card mai fuori */
   body.immobili-page .property-card{
-    width:100%;
-    margin:0;
+    max-width:100%;
   }
 
-  /* GRID FIX */
-  body.immobili-page .property-grid{
-    grid-template-columns:1fr;
-    padding:0;
-  }
-
-  /* FORM FIX (QUI ERA IL PROBLEMA PRINCIPALE) */
-  body.immobili-page .form-grid{
-    grid-template-columns:1fr;
-    width:100%;
-  }
-
-  /* INPUT FIX */
-  body.immobili-page .input-group,
-  body.immobili-page .input-group input{
-    width:100%;
-  }
-
-  /* BOTTONI */
-  body.immobili-page .btn,
-  body.immobili-page .btn-primary{
+  /* fix input wrapper */
+  body.immobili-page .input-group{
     width:100%;
   }
 
 }
-
-  /* evita overflow da animazioni */
-body.immobili-page .property-card:hover{
-  transform:none;
-}
-  
+ 
   </style>
 
 </head>
