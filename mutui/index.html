@@ -371,6 +371,25 @@ body{
   display:none;
 }  
 
+/* =====================================
+🔥 FIX VISIBILITY LOCKED BOX
+===================================== */
+
+.extra-box,
+#extra,
+#decision-box{
+  color:#ffffff !important;
+}
+
+.extra-box *{
+  color:#ffffff !important;
+}
+
+/* contrasto per utenti free */
+.extra-box{
+  background:linear-gradient(135deg,#111827,#1e293b) !important;
+}  
+
 </style>
 </head>
 
@@ -839,7 +858,34 @@ function startPlanPurchase(plan){
     return;
   }
 
-  window.location.href = "/api/create-checkout-session?plan=" + plan;
+  async function startPlanPurchase(plan){
+
+  if(!window.currentUser){
+    showUpgradeModal();
+    localStorage.setItem("pending_plan", plan);
+    return;
+  }
+
+  try{
+
+    const res = await fetch("/api/create-checkout-session",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ plan })
+    });
+
+    const data = await res.json();
+
+    if(data.url){
+      window.location.href = data.url;
+    }else{
+      alert("Errore pagamento");
+    }
+
+  }catch(e){
+    console.error("Checkout error:", e);
+  }
+}
 }
 
   function showUpgradeModal(){
@@ -853,14 +899,55 @@ function closeUpgradeModal(){
 /* ================= SELECT ================= */
 function selectMortgage(rate, bank){
 
-localStorage.setItem("mortgage_rate",rate);
+  const access = getAccess();
 
-/* 🔥 FUTURO: redirect partner */
-console.log("🏦 Selected bank:", bank);
+  // 🔓 PRO → esperienza premium
+  if(access.isPro){
+    localStorage.setItem("mortgage_rate",rate);
+    window.location.href="/tool/";
+    return;
+  }
 
-window.location.href="/tool/";
+  // 💰 NON PRO → LEAD + PARTNER
+  saveLeadFromBank(bank, rate);
 
 }
+
+async function saveLeadFromBank(bank, rate){
+
+  const email = document.getElementById("email").value || "";
+  const phone = document.getElementById("phone").value || "";
+
+  const payload = {
+    type:"mutui",
+    email,
+    phone,
+    bank,
+    rate,
+    source:"bank_click",
+    plan: window.currentPlan || "free"
+  };
+
+  try{
+
+    await fetch("/api/send-lead",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    alert(
+      t(
+        "🏦 Ti contatterà un consulente mutui",
+        "🏦 A mortgage advisor will contact you"
+      )
+    );
+
+  }catch(e){
+    console.error(e);
+  }
+
+}  
 
 
 /* ================= LEAD ================= */
