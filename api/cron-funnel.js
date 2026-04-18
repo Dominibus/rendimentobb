@@ -1,3 +1,7 @@
+// ===============================
+// 🚀 EMAIL FUNNEL – ULTRA SAAS FINAL
+// ===============================
+
 import { Resend } from "resend";
 import admin from "firebase-admin";
 
@@ -17,8 +21,15 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 // ================= HELPERS =================
+const safe = n => isNaN(Number(n)) ? 0 : Number(n);
+
 function t(lang, it, en){
   return lang === "en" ? en : it;
+}
+
+// ================= SCORE FILTER =================
+function isLeadWorth(roi){
+  return roi >= 8; // 🔥 filtro base (taglia spam)
 }
 
 // ================= TEMPLATE =================
@@ -26,89 +37,80 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
 
   const hasROI = roi > 0;
 
+  const tLocal = (it,en)=> lang==="en"?en:it;
+
   let title = "";
   let subtitle = "";
-  let warning = "";
   let urgency = "";
+  let warning = "";
 
   if(stepType === "reminder_1"){
-
-    title = t(lang,
+    title = tLocal(
       "Stai sottovalutando il rischio",
       "You may be underestimating risk"
     );
 
-    subtitle = t(lang,
+    subtitle = tLocal(
       "Molti investimenti sembrano profittevoli… ma non lo sono",
       "Many investments look profitable… but they are not"
     );
 
-    warning = t(lang,
-      "Il 72% degli investimenti B&B scende sotto il 5% reale.",
-      "72% of B&B investments drop below 5% real return."
+    urgency = "⚡ " + tLocal(
+      "I dati reali cambiano tutto",
+      "Real data changes everything"
     );
 
-    urgency = t(lang,
-      "⚡ I dati reali cambiano completamente il risultato",
-      "⚡ Real data completely changes the outcome"
+    warning = tLocal(
+      "Il 72% degli investimenti scende sotto il 5% reale.",
+      "72% of investments drop below 5% real return."
     );
   }
 
   if(stepType === "reminder_2"){
-
-    title = t(lang,
+    title = tLocal(
       "Stai per fare un errore costoso",
       "You are about to make a costly mistake"
     );
 
-    subtitle = t(lang,
-      "Questa è l’ultima verifica prima di investire",
-      "This is your last check before investing"
+    subtitle = tLocal(
+      "Ultima verifica prima di investire",
+      "Final check before investing"
     );
 
-    warning = t(lang,
-      "Un errore qui può costarti migliaia di euro ogni anno.",
-      "A mistake here could cost you thousands every year."
+    urgency = "⏳ " + tLocal(
+      "Le migliori opportunità spariscono in ore",
+      "Best opportunities disappear in hours"
     );
 
-    urgency = t(lang,
-      "⏳ Le migliori opportunità vengono prese entro poche ore",
-      "⏳ Best opportunities get taken within hours"
+    warning = tLocal(
+      "Questo errore può costarti migliaia di euro l’anno.",
+      "This mistake can cost you thousands per year."
     );
   }
 
   const roiBlock = hasROI
     ? `
       <div style="text-align:center;margin:30px 0">
-        <div style="font-size:56px;font-weight:900;color:#10b981">
+        <div style="font-size:60px;font-weight:900;color:#10b981">
           ${roi}%
         </div>
         <div style="color:#64748b">${city || "-"}</div>
       </div>
     `
-    : `
-      <div style="text-align:center;margin:30px 0;color:#64748b">
-        ${t(lang,
-          "Analisi disponibile (calcola ROI per precisione)",
-          "Analysis available (run ROI for accuracy)"
-        )}
-      </div>
-    `;
+    : "";
 
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
 
-    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;padding:40px">
+    <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:22px;padding:40px">
 
       <div style="text-align:center;margin-bottom:25px">
         <img src="https://rendimentobb.it/img/logo-main.png" style="width:120px">
       </div>
 
-      <h2 style="text-align:center;color:#0f172a">
-        ${title}
-      </h2>
+      <h2 style="text-align:center;color:#0f172a">${title}</h2>
 
-      <p style="text-align:center;color:#64748b;margin-bottom:20px">
+      <p style="text-align:center;color:#64748b;margin-bottom:15px">
         ${subtitle}
       </p>
 
@@ -124,25 +126,22 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
 
       <div style="margin-top:25px;background:#f8fafc;padding:18px;border-radius:12px">
         <ul style="padding-left:18px;margin:0;color:#334155">
-          <li>${t(lang,"Profitto reale mensile","Real monthly profit")}</li>
-          <li>${t(lang,"Break-even reale","Real break-even")}</li>
-          <li>${t(lang,"Scenario rischio","Risk scenario")}</li>
-          <li>${t(lang,"Impatto mutuo","Mortgage impact")}</li>
+          <li>${tLocal("Profitto reale","Real profit")}</li>
+          <li>${tLocal("Break-even","Break-even")}</li>
+          <li>${tLocal("Rischio","Risk")}</li>
+          <li>${tLocal("Mutuo","Mortgage impact")}</li>
         </ul>
       </div>
 
       <div style="text-align:center;margin:35px 0">
         <a href="https://rendimentobb.it/dashboard"
         style="background:#10b981;color:white;padding:16px 28px;border-radius:999px;text-decoration:none;font-weight:800">
-        🔥 ${t(lang,"Sblocca analisi completa","Unlock full analysis")}
+        🔥 ${tLocal("Sblocca analisi completa","Unlock full analysis")}
         </a>
       </div>
 
-      <div style="text-align:center;color:#94a3b8;font-size:13px">
-        RendimentoBB – ${t(lang,
-          "Motore decisionale per investimenti B&B",
-          "Decision engine for B&B investments"
-        )}
+      <div style="text-align:center;color:#94a3b8;font-size:12px">
+        RendimentoBB Funnel Engine
       </div>
 
     </div>
@@ -157,18 +156,22 @@ export default async function handler(req, res){
   try{
 
     const now = Date.now();
+
     const snapshot = await db.collection("email_funnel").get();
 
     for(const doc of snapshot.docs){
 
       const data = doc.data();
 
-      const createdAt = data.createdAt?.toMillis?.() || now;
-
       const email = data.email;
-      const roi   = Number(data.roi || 0);
+      const roi   = safe(data.roi);
       const city  = data.city || "";
       const lang  = data.lang || "it";
+
+      // 🔥 filtro qualità
+      if(!isLeadWorth(roi)) continue;
+
+      const createdAt = data.createdAt?.toMillis?.() || now;
 
       const steps = data.steps || [];
       let sentSteps = data.sentSteps || [];
@@ -180,23 +183,27 @@ export default async function handler(req, res){
         if(sentSteps.includes(i)) continue;
         if(step.type === "instant") continue;
 
-        const shouldSend = now >= (createdAt + step.delay);
-        if(!shouldSend) continue;
+        const sendAt = createdAt + step.delay;
+
+        if(now < sendAt) continue;
+
+        // 🔥 LOCK ANTI DUPLICATO (prima di inviare)
+        await db.collection("email_funnel").doc(doc.id).update({
+          sending: true
+        });
 
         let subject = "";
 
         if(step.type === "reminder_1"){
-          subject = t(lang,
-            "⚠️ Il tuo ROI potrebbe essere sbagliato",
-            "⚠️ Your ROI might be wrong"
-          );
+          subject = lang === "en"
+            ? "⚠️ Your ROI might be wrong"
+            : "⚠️ Il tuo ROI potrebbe essere sbagliato";
         }
 
         if(step.type === "reminder_2"){
-          subject = t(lang,
-            "⏳ Ultimo controllo prima di investire",
-            "⏳ Final check before investing"
-          );
+          subject = lang === "en"
+            ? "⏳ Final check before investing"
+            : "⏳ Ultimo controllo prima di investire";
         }
 
         try{
@@ -205,6 +212,16 @@ export default async function handler(req, res){
             from: "RendimentoBB <analisi@rendimentobb.it>",
             to: [email],
             subject,
+
+            text: `
+Reminder investimento
+
+ROI: ${roi}%
+City: ${city}
+
+https://rendimentobb.it/dashboard
+            `,
+
             html: buildFunnelEmail({
               roi,
               city,
@@ -215,19 +232,23 @@ export default async function handler(req, res){
 
           console.log("📩 FUNNEL SENT:", email, step.type);
 
-          // 🔥 FIX DUPLICATI
           sentSteps.push(i);
 
           await db.collection("email_funnel").doc(doc.id).update({
-            sentSteps
+            sentSteps,
+            lastSentAt: admin.firestore.FieldValue.serverTimestamp(),
+            sending: false
           });
 
         }catch(e){
-          console.error("❌ Email error:", e.message);
+
+          console.error("❌ Funnel error:", e.message);
+
+          await db.collection("email_funnel").doc(doc.id).update({
+            sending: false
+          });
         }
-
       }
-
     }
 
     return res.status(200).json({ success:true });
