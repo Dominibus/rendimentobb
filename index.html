@@ -1733,31 +1733,36 @@ function unlockHomeUI(){
 
   console.log("🔥 UNLOCK HOME UI:", plan);
 
-  // 🔥 entrambi sbloccano UI base
+  // base per entrambi
   document.body.classList.add("paid-user");
 
-  // 🔥 RIMUOVE blur visivo (IMPORTANTISSIMO)
+  // 🔥 TOGLIE blur SEMPRE (importantissimo)
   document.querySelectorAll(".pro-blur").forEach(el=>{
     el.classList.remove("pro-blur");
   });
 
-  // 🔥 overlay sparisce
+  // 🔥 overlay sparisce per entrambi
   document.querySelectorAll(".home-blur-overlay").forEach(el=>{
     el.style.display = "none";
   });
 
-  // 🔥 unlock generale
-  document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-    el.classList.remove("pro-locked","locked-section");
-  });
+  // ❗ DIFFERENZA QUI
 
-  // 🔥 fix click
-  document.querySelectorAll("button, a").forEach(el=>{
-    el.disabled = false;
-    el.style.pointerEvents = "auto";
-  });
+  if(isPro){
 
-  // 🔥 ricalcolo UI
+    // 🔓 PRO = full unlock
+    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+      el.classList.remove("pro-locked","locked-section");
+    });
+
+    document.querySelectorAll("button, a").forEach(el=>{
+      el.disabled = false;
+      el.style.pointerEvents = "auto";
+    });
+
+  }
+
+  // 🔁 ricalcolo UI SEMPRE
   if(typeof quickROI === "function"){
     setTimeout(() => quickROI(), 50);
   }
