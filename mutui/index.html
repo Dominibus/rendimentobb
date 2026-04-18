@@ -896,7 +896,6 @@ function closeUpgradeModal(){
   document.getElementById("upgrade-modal").style.display = "none";
 }
   
-/* ================= SELECT ================= */
 function selectMortgage(rate, bank){
 
   const access = getAccess();
@@ -908,30 +907,35 @@ function selectMortgage(rate, bank){
     return;
   }
 
-  // 🔥 INVESTOR → contatto diretto (NO lead interno)
- if(access.isInvestor){
+  // 🔥 INVESTOR → contatto diretto
+  if(access.isInvestor){
 
-  const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value;
 
-  // 👉 se NON ha inserito email → portalo giù
-  if(!email){
+    // 👉 se NON ha inserito email → scroll + stop
+    if(!email){
 
-    document.querySelector(".lead-box").scrollIntoView({
-      behavior:"smooth"
-    });
+      document.querySelector(".lead-box").scrollIntoView({
+        behavior:"smooth"
+      });
 
-    alert(t(
-      "Inserisci email prima",
-      "Enter email first"
-    ));
+      alert(t(
+        "Inserisci email prima",
+        "Enter email first"
+      ));
 
-    return;
+      return;
+    }
+
+    saveLeadFromBank(bank, rate);
+
+    return; // 🔴 IMPORTANTISSIMO
   }
 
-
-  // 🔥 FREE → lead
-  saveLeadFromBank(bank, rate);
+  // 🔥 FREE → upgrade
+  handleUpgradeClick();
 }
+  
 async function saveLeadFromBank(bank, rate){
 
   const access = getAccess();
