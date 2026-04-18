@@ -57,10 +57,14 @@ window.firebaseReady = false;
 // ===============================
 
 window.isPro = function(){
+
+  if(window.isAdminUser) return true;
+
+  const plan = String(window.currentPlan || "").toLowerCase();
+
   return (
-    window.currentPlan === "pro" ||
-    window.currentPlan === "pro_yearly" ||
-    window.currentPlan === "investor"
+    plan === "pro" ||
+    plan === "pro_yearly"
   );
 };
 
@@ -74,9 +78,12 @@ window.isProUser = window.isPro;
 window.requirePlan = function(required){
 
   // 🔥 CONTROLLO REALE (CORE)
-  if(window.hasPlan && window.hasPlan(required)){
-    return true;
-  }
+  // 🔥 ADMIN BYPASS
+if(window.isAdminUser) return true;
+
+if(window.hasPlan && window.hasPlan(required)){
+  return true;
+}
 
   // ===============================
   // UX BLOCCO
@@ -190,6 +197,26 @@ const clean = (v)=>String(v || "")
 window.currentPlan = clean(plan);
 window.userRole = clean(role);
 
+    // ===============================
+// 👑 ADMIN OVERRIDE (MASTER KEY)
+// ===============================
+
+window.isAdminUser = window.userRole === "admin";
+
+// 🔥 ADMIN = ACCESSO TOTALE
+if(window.isAdminUser){
+
+  console.log("👑 ADMIN OVERRIDE ATTIVO");
+
+  // forza piano
+  window.currentPlan = "pro";
+
+  // flag UI
+  document.body.classList.add("is-admin");
+  document.body.classList.add("is-pro");
+
+}
+
 // 👉 COMPATIBILITÀ (se usi PLAN)
 if(window.PLAN && typeof window.PLAN.set === "function"){
   window.PLAN.set(window.currentPlan, window.userRole);
@@ -217,7 +244,7 @@ setTimeout(()=>{
     // 🔥 SBLOCCO UI
     // ===============================
 
-    if(window.isPro()){
+    if(window.isPro() || window.isAdminUser){
 
       document.body.classList.add("pro-user");
 
