@@ -14911,3 +14911,27 @@ NON TOCCA ALTRE PAGINE
   }
 
 }
+
+/* =====================================
+🔥 HERO TRUST CENTER FIX (ROI CITY ONLY)
+===================================== */
+
+.hero.hero-bg .hero-trust{
+  display:block;              /* ❌ via inline-block */
+  margin:20px auto 0;         /* ✅ centra orizzontalmente */
+  text-align:center;
+
+  max-width:520px;            /* ✅ larghezza controllata */
+  width:90%;
+
+  padding:12px 20px;
+  border-radius:999px;
+
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+
+  font-weight:600;
+  font-size:13px;
+
+  box-shadow:0 10px 30px rgba(16,185,129,0.35);
+}
