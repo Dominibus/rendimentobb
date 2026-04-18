@@ -375,29 +375,21 @@ function hasPlan(requiredPlan){
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
 
-  // 🔥 FIX CRITICO
+  // 🔥 attende Firebase
   if(!window.isUserReady()){
     console.log("⏳ Skip requirePlan → user non pronto");
     return false;
   }
-  // 🔥 PRO → bypass totale
-if(window.getUserAccess().canSeeFullAnalysis){
-  return true;
-}
 
-  const plan = getUserPlan();
+  const access = window.getUserAccess();
+
+  // 🔥 PRO / ADMIN → bypass totale
+  if(access.canSeeFullAnalysis){
+    return true;
+  }
 
   // 🔐 NON LOGGATO
-  if(!window.firebaseReady){
-  console.log("⏳ Firebase non pronto → skip requirePlan");
-  return false;
-}
-
-if(!window.isUserReady()){
-  return;
-}
-
-if(!window.currentUser)
+  if(!window.currentUser){
 
     alert(
       t(
@@ -406,7 +398,7 @@ if(!window.currentUser)
       )
     );
 
-    window.location.href="/login/";
+    window.location.href = "/login/";
     return false;
   }
 
@@ -431,14 +423,14 @@ if(!window.currentUser)
 
     alert(
       window.currentLang === "it"
-      ? "🔒 Sblocca analisi avanzata, strategia ROI e simulazioni complete."
-      : "🔒 Unlock advanced analysis, ROI strategy and full simulations."
+        ? "🔒 Sblocca analisi avanzata, strategia ROI e simulazioni complete."
+        : "🔒 Unlock advanced analysis, ROI strategy and full simulations."
     );
 
     const goUpgrade = confirm(message);
 
     if(goUpgrade){
-      window.location.href="/pricing/";
+      window.location.href = "/pricing/";
     }
 
     return false;
@@ -2017,7 +2009,7 @@ if(!window.isUserReady()){
   return;
 }
 
-if(!window.currentUser)
+if(!window.currentUser){
 
   localStorage.setItem("lead_type", "mutuo");
 
