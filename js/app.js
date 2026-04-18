@@ -377,7 +377,12 @@ if(window.getUserAccess().canSeeFullAnalysis){
   const plan = getUserPlan();
 
   // 🔐 NON LOGGATO
-  if(!window.currentUser){
+  if(!window.firebaseReady){
+  console.log("⏳ Firebase non pronto → skip requirePlan");
+  return false;
+}
+
+if(!window.currentUser){
 
     alert(
       t(
@@ -1984,7 +1989,11 @@ if(mortgageBox && mortgageBtn){
     mortgageBtn.onclick = () => {
 
       // 🔒 NON LOGGATO → lead
-      if(!window.currentUser){
+      if(!window.firebaseReady){
+  return;
+}
+
+if(!window.currentUser){
 
         localStorage.setItem("lead_type", "mutuo");
 
