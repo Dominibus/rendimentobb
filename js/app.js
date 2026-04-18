@@ -3786,6 +3786,8 @@ document.addEventListener("rb_plan_loaded", () => {
 
 }
 
+});
+
 window.handleAnalyzeClick = function(){
 
   const userLogged = !!window.currentUser;
