@@ -4043,7 +4043,7 @@ window.startPlanPurchase = function(plan){
 // 🔥 FORCE PLAN FALLBACK (CRITICAL FIX)
 // =============================
 
-window.forceCorrectPlan = window.forceCorrectPlan || function(){
+window.forceCorrectPlan = function(){
 
   console.warn("⚠️ forceCorrectPlan fallback attivo");
 
@@ -4058,11 +4058,11 @@ window.forceCorrectPlan = window.forceCorrectPlan || function(){
 
   if(plan === "pro" || plan === "pro_yearly"){
     document.body.classList.add("is-pro");
-  }
+  } 
   else if(plan === "investor"){
     document.body.classList.add("is-investor");
-  }
-  else{
+  } 
+  else {
     document.body.classList.add("is-free");
   }
 
