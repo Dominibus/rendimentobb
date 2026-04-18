@@ -2550,47 +2550,45 @@ roiChartInstance = new Chart(ctx,{
   },
 
   options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    animation:false,
-    devicePixelRatio:2,
+  responsive:true,
+  maintainAspectRatio:false,
+  animation:false,
+  devicePixelRatio:2,
 
-    interaction:{
-      mode:"index",
-      intersect:false
+  interaction:{
+    mode:"index",
+    intersect:false
+  },
+
+  plugins:{
+    legend:{
+      display:true,
+      position:"bottom",
+      labels:{
+        font:{ size:12 },
+        color:"#334155"
+      }
     },
 
-    plugins:{
-      legend:{
-        display:true,
-        position:"bottom",
-        labels:{
-          font:{
-            size:12
-          },
-          color:"#334155"
-        }
-      },
-
-      tooltip:{
-        callbacks:{
-          label:(ctx)=>{
-            return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
-          }
+    tooltip:{
+      callbacks:{
+        label:(ctx)=>{
+          return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
         }
       }
-    }, // 🔥 QUESTA CHIUSURA MANCAVA
+    }
+  },
 
-    scales:{
-      y:{
-        ticks:{
-          callback:(v)=>{
-            return formatCurrency(v);
-          }
+  scales:{
+    y:{
+      ticks:{
+        callback:(v)=>{
+          return formatCurrency(v);
         }
       }
     }
   }
+}
 
 });
 
