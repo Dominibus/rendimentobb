@@ -19,18 +19,41 @@ data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
 <style>
 
 /* =====================================
-🔥 MUTUI – SAAS FINTECH ULTRA (FINAL)
+🔥 RENDIMENTOBB – MUTUI UI PRODUCTION
+(SILICON VALLEY CLEAN)
 ===================================== */
+
+:root{
+  --rb-bg:#f8fafc;
+  --rb-surface:#ffffff;
+  --rb-dark:#0f172a;
+  --rb-muted:#64748b;
+
+  --rb-primary:#10b981;
+  --rb-primary-dark:#059669;
+
+  --rb-danger:#ef4444;
+
+  --rb-border:#e2e8f0;
+
+  --rb-radius:16px;
+  --rb-radius-lg:20px;
+
+  --rb-shadow-sm:0 4px 12px rgba(2,6,23,.06);
+  --rb-shadow-md:0 20px 50px rgba(2,6,23,.10);
+  --rb-shadow-lg:0 60px 140px rgba(2,6,23,.18);
+}
 
 /* ===== BASE ===== */
 body{
   padding-top:60px;
   background:linear-gradient(to bottom,#f8fafc,#e2e8f0);
   font-family:Inter,system-ui;
+  color:var(--rb-dark);
 }
 
 /* =====================================
-🔥 HERO – FINTECH STRIPE STYLE
+🔥 HERO – STRIPE STYLE
 ===================================== */
 
 .hero-mutui{
@@ -39,31 +62,25 @@ body{
   text-align:center;
 
   background:
-   linear-gradient(
-   rgba(2,6,23,.65),
-   rgba(2,6,23,.75)
-  ),
-  url("/img/milan-bg.jpg") center/cover;
+    linear-gradient(rgba(2,6,23,.65),rgba(2,6,23,.75)),
+    url("/img/milan-bg.jpg") center/cover;
 
   overflow:hidden;
 }
 
-/* glow */
 .hero-mutui::before{
   content:"";
   position:absolute;
   inset:0;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(16,185,129,0.18), transparent 60%);
+  background:radial-gradient(circle at 30% 30%, rgba(16,185,129,0.18), transparent 60%);
   z-index:1;
 }
 
-/* testo */
 .hero-mutui h1,
 .hero-mutui p{
   position:relative;
   z-index:2;
-  color:#ffffff !important;
+  color:#fff;
 }
 
 .hero-mutui h1{
@@ -71,47 +88,33 @@ body{
   font-weight:800;
   margin-bottom:15px;
   max-width:900px;
-  margin-left:auto;
-  margin-right:auto;
-
-  text-shadow:
-    0 10px 30px rgba(0,0,0,.9);
+  margin-inline:auto;
+  text-shadow:0 10px 30px rgba(0,0,0,.8);
 }
 
 .hero-mutui p{
   font-size:18px;
-  opacity:.95;
-  color:#cbd5f5 !important;
+  color:#cbd5f5;
 }
 
 /* =====================================
-🔥 TOOL BOX – BANK UI
+🔥 TOOL BOX
 ===================================== */
 
 .tool-box{
   max-width:900px;
   margin:-100px auto 0;
-
-  background:#ffffff;
+  background:var(--rb-surface);
   padding:35px;
-
-  border-radius:20px;
-
-  box-shadow:
-    0 60px 140px rgba(2,6,23,.18),
-    0 20px 50px rgba(2,6,23,.08);
-
-  border:1px solid #e2e8f0;
-
+  border-radius:var(--rb-radius-lg);
+  box-shadow:var(--rb-shadow-lg);
+  border:1px solid var(--rb-border);
   position:relative;
   z-index:10;
 }
 
-/* titolo */
 .tool-box h3{
-  color:#0f172a !important;
   font-weight:700;
-  font-size:18px;
   margin-bottom:14px;
 }
 
@@ -120,21 +123,19 @@ body{
   width:100%;
   padding:14px;
   border-radius:12px;
-  border:1px solid #e2e8f0;
-  background:white;
+  border:1px solid var(--rb-border);
   margin-bottom:12px;
   transition:.2s;
-  color:#0f172a;
 }
 
 .tool-box input:focus{
-  border-color:#10b981;
-  outline:none;
+  border-color:var(--rb-primary);
   box-shadow:0 0 0 3px rgba(16,185,129,.15);
+  outline:none;
 }
 
 /* =====================================
-🔥 CTA – STRIPE CONVERSION
+🔥 BUTTON (GLOBAL CTA)
 ===================================== */
 
 .btn-main{
@@ -144,7 +145,7 @@ body{
   border-radius:999px;
 
   background:linear-gradient(135deg,#10b981,#059669);
-  color:white;
+  color:#fff;
 
   font-weight:700;
   font-size:15px;
@@ -161,7 +162,7 @@ body{
 }
 
 /* =====================================
-🔥 KPI – DASHBOARD BANK
+🔥 KPI GRID
 ===================================== */
 
 .kpi-grid{
@@ -172,25 +173,21 @@ body{
 }
 
 .kpi{
-  background:#f8fafc;
+  background:var(--rb-bg);
   padding:20px;
   border-radius:14px;
   text-align:center;
-
-  border:1px solid #e2e8f0;
-
-  box-shadow:
-    0 10px 25px rgba(0,0,0,.05);
+  border:1px solid var(--rb-border);
+  box-shadow:var(--rb-shadow-sm);
 }
 
 .kpi div{
   font-size:22px;
   font-weight:700;
-  color:#0f172a;
 }
 
 .kpi small{
-  color:#64748b;
+  color:var(--rb-muted);
 }
 
 /* =====================================
@@ -217,126 +214,98 @@ body{
 }
 
 /* =====================================
-🔥 EXTRA BOX
+🔥 EXTRA BOX (CONVERSION BLOCK)
 ===================================== */
 
 .extra-box{
+  display:none;
   margin-top:20px;
-  padding:20px;
+  padding:22px;
   border-radius:14px;
-  background:#f1f5f9;
-  border:1px solid #e2e8f0;
-  color:#0f172a;
+  background:linear-gradient(135deg,#111827,#1e293b);
+  color:#fff;
+  box-shadow:var(--rb-shadow-md);
 }
 
 #decision-box{
-  background:white;
-  border:1px solid #e2e8f0;
+  display:none;
+  margin-top:15px;
+  padding:20px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid var(--rb-border);
+  box-shadow:var(--rb-shadow-sm);
 }
 
 /* =====================================
-🔥 BANK CARDS – LEAD READY
+🔥 BANK CARDS
 ===================================== */
 
+#banks{
+  margin-top:20px;
+}
+
 .bank-card{
-  background:white;
+  background:#fff;
   padding:22px;
   border-radius:16px;
   margin-top:15px;
-
-  border:1px solid #e2e8f0;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.06);
-
+  border:1px solid var(--rb-border);
+  box-shadow:var(--rb-shadow-sm);
   transition:.25s;
 }
 
 .bank-card:hover{
   transform:translateY(-4px);
-  box-shadow:0 30px 60px rgba(0,0,0,.12);
+  box-shadow:var(--rb-shadow-md);
 }
 
-/* BEST OFFER */
 .bank-card.best{
-  border:2px solid #10b981;
+  border:2px solid var(--rb-primary);
   background:linear-gradient(to bottom,#f0fdf4,#ffffff);
 }
 
-/* LOCK */
-.bank-card.locked{
-  opacity:0.6;
-  filter:blur(2px);
-  pointer-events:none;
-  position:relative;
-}
-
-.bank-card.locked::after{
-  content:"🔒 PRO";
-  position:absolute;
-  top:10px;
-  right:10px;
-  background:#ef4444;
-  color:white;
-  font-size:12px;
-  padding:4px 8px;
-  border-radius:8px;
-}
-
-/* TESTI */
-#banks,
-#banks *{
-  color:#0f172a !important;
+/* TESTI (FIX PULITO) */
+.bank-card h3{
+  margin-bottom:6px;
 }
 
 .bank-card p{
-  color:#334155 !important;
+  color:#334155;
 }
 
-.bank-card small,
-.bank-card span{
-  color:#64748b !important;
+.bank-card small{
+  color:var(--rb-muted);
 }
 
 .bank-card strong{
-  color:#10b981 !important;
+  color:var(--rb-primary);
 }
 
 /* =====================================
-🔥 LEAD BOX – CONVERSION
+🔥 LEAD BOX
 ===================================== */
 
 .lead-box{
   margin-top:70px;
   padding:45px;
-
   background:linear-gradient(180deg,#ffffff,#f8fafc);
-
-  border-radius:20px;
+  border-radius:var(--rb-radius-lg);
   text-align:center;
-
-  box-shadow:
-    0 50px 120px rgba(2,6,23,.15);
-
-  border:1px solid #e2e8f0;
+  box-shadow:var(--rb-shadow-lg);
+  border:1px solid var(--rb-border);
 }
 
 .lead-box h2{
-  color:#0f172a;
   font-weight:700;
   margin-bottom:15px;
 }
 
-.lead-box input{
-  color:#0f172a;
-}
-
-/* SUCCESS */
 .success-msg{
-  color:#10b981;
   display:none;
   margin-top:15px;
   font-weight:600;
+  color:var(--rb-primary);
 }
 
 /* =====================================
@@ -366,29 +335,6 @@ body{
     grid-template-columns:1fr;
   }
 }
-
-.extra-box{
-  display:none;
-}  
-
-/* =====================================
-🔥 FIX VISIBILITY LOCKED BOX
-===================================== */
-
-.extra-box,
-#extra,
-#decision-box{
-  color:#ffffff !important;
-}
-
-.extra-box *{
-  color:#ffffff !important;
-}
-
-/* contrasto per utenti free */
-.extra-box{
-  background:linear-gradient(135deg,#111827,#1e293b) !important;
-}  
 
 </style>
 </head>
@@ -847,18 +793,7 @@ function goToPricing(){
   window.location.href = "/#pricing";
 }
 
-function startPlanPurchase(plan){
-
-  if(!window.currentUser){
-    showUpgradeModal();
-
-    // 🔥 salva intento (marketing)
-    localStorage.setItem("pending_plan", plan);
-
-    return;
-  }
-
-  async function startPlanPurchase(plan){
+async function startPlanPurchase(plan){
 
   if(!window.currentUser){
     showUpgradeModal();
@@ -885,7 +820,7 @@ function startPlanPurchase(plan){
   }catch(e){
     console.error("Checkout error:", e);
   }
-}
+
 }
 
   function showUpgradeModal(){
@@ -901,14 +836,14 @@ function selectMortgage(rate, bank){
 
   const access = getAccess();
 
-  // 🔓 PRO → esperienza premium
+  // 🔓 SOLO PRO → simulatore
   if(access.isPro){
     localStorage.setItem("mortgage_rate",rate);
     window.location.href="/tool/";
     return;
   }
 
-  // 💰 NON PRO → LEAD + PARTNER
+  // 💰 TUTTI GLI ALTRI → LEAD (anche investor)
   saveLeadFromBank(bank, rate);
 
 }
@@ -919,14 +854,20 @@ async function saveLeadFromBank(bank, rate){
   const phone = document.getElementById("phone").value || "";
 
   const payload = {
-    type:"mutui",
-    email,
-    phone,
-    bank,
-    rate,
-    source:"bank_click",
-    plan: window.currentPlan || "free"
-  };
+  type:"mutui",
+  email,
+  phone,
+  bank,
+  rate,
+  source:"bank_click",
+
+  city: window.currentCity || "unknown",
+  roi: 0,
+  amount: parseFloat(document.getElementById("amount").value || 0),
+  years: parseFloat(document.getElementById("years").value || 0),
+
+  plan: window.currentPlan || "free"
+};
 
   try{
 
