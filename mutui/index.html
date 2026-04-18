@@ -364,6 +364,17 @@ button, .btn-main{
   z-index:10;
 }
 
+  .success-msg{
+  opacity:0;
+  transform:translateY(10px);
+  transition:all .4s ease;
+}
+
+.success-msg.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
 </style>
 </head>
 
@@ -898,19 +909,25 @@ function selectMortgage(rate, bank){
   }
 
   // 🔥 INVESTOR → contatto diretto (NO lead interno)
-  if(access.isInvestor){
+ if(access.isInvestor){
 
-  saveLeadFromBank(bank, rate);
+  const email = document.getElementById("email").value;
 
-  alert(
-    t(
-      "🏦 Richiesta inviata. Ti contatterà un consulente mutui.",
-      "🏦 Request sent. A mortgage advisor will contact you."
-    )
-  );
+  // 👉 se NON ha inserito email → portalo giù
+  if(!email){
 
-  return;
-}
+    document.querySelector(".lead-box").scrollIntoView({
+      behavior:"smooth"
+    });
+
+    alert(t(
+      "Inserisci email prima",
+      "Enter email first"
+    ));
+
+    return;
+  }
+
 
   // 🔥 FREE → lead
   saveLeadFromBank(bank, rate);
@@ -940,7 +957,7 @@ async function saveLeadFromBank(bank, rate){
 };
 
   if(!email){
-  alert("Inserisci email prima");
+  alert(t("Inserisci email prima","Enter email first"));
   return;
 }try{
 
@@ -999,9 +1016,16 @@ async function saveLead(){
 const email = document.getElementById("email").value;
 const phone = document.getElementById("phone").value;
 
+// 🔴 VALIDAZIONE
 if(!email){
-alert(t("Inserisci email","Enter email"));
-return;
+
+  // 👉 scroll automatico al form
+  document.querySelector(".lead-box").scrollIntoView({
+    behavior:"smooth"
+  });
+
+  alert(t("Inserisci email","Enter email"));
+  return;
 }
 
 const impactEl = document.getElementById("impact");
@@ -1029,7 +1053,7 @@ const res = await fetch("/api/send-lead",{
   body: JSON.stringify(payload)
 });
 
-/* 🔥 EMAIL UTENTE (MANCAVA!) */
+/* 🔥 EMAIL UTENTE */
 await fetch("/api/send-lead-email",{
   method:"POST",
   headers:{ "Content-Type":"application/json" },
@@ -1060,40 +1084,56 @@ const data = await res.json();
 
 console.log("🔥 Lead sent:", data);
 
-/* UI WOW */
-const success = document.getElementById("success");
-success.style.display="block";
+/* =========================
+🔥 UI WOW (NO ALERT)
+========================= */
 
+const success = document.getElementById("success");
+success.style.display = "block";
+
+/* 🔥 attiva animazione */
+setTimeout(() => {
+  success.classList.add("show");
+}, 50);  
+
+/* 👉 scroll su messaggio */
+success.scrollIntoView({
+  behavior:"smooth",
+  block:"center"
+});
+
+/* 👉 contenuto dinamico premium */
 success.innerHTML = `
 ✔ ${t("Richiesta inviata","Request sent")}
+
 <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
-🔥 ${t("Ti abbiamo inviato le migliori offerte","We sent you the best offers")}
+
+🏦 ${t(
+  "Un consulente mutui ti contatterà a breve",
+  "A mortgage advisor will contact you shortly"
+)}
+
 <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+
+🔥 ${t(
+  "Abbiamo trovato le migliori offerte per te",
+  "We found the best offers for you"
+)}
+
+<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+
 💰 €${data.value || 0}
 `;
 
+/* 👉 BONUS: disabilita bottone per evitare spam */
+document.querySelector(".lead-box button").disabled = true;
+
 }catch(e){
 console.error("❌ Lead error:", e);
-alert("Errore invio");
+alert(t("Errore invio","Error sending request"));
 }
 
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  console.log("✅ DOM READY");
-
-  const btn = document.getElementById("calc-btn");
-
-  if(btn){
-    console.log("✅ Bottone trovato");
-    btn.addEventListener("click", calculate);
-  }else{
-    console.error("❌ Bottone NON trovato");
-  }
-
-});  
-
 </script>
 
 <!-- 🔥 UPGRADE MODAL -->
@@ -1121,11 +1161,9 @@ z-index:9999;
     <h3
 data-it="🔒 Sblocca i dati reali"
 data-en="🔒 Unlock real data"
-style="
-  margin-bottom:10px;
-  color:#0f172a;
-  font-weight:700;
-">
+style="margin-bottom:10px;color:#0f172a;font-weight:700;">
+🔒 Sblocca i dati reali
+</h3>
 
     <p style="color:#334155;font-weight:500;margin-bottom:20px;"
       data-it="Stai prendendo decisioni senza dati completi"
