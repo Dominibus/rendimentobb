@@ -169,12 +169,33 @@ document.addEventListener("rb_language_changed", () => {
 });
 
   onAuthStateChanged(auth, (user) => {
+
+  // 🔥 REDIRECT POST LOGIN (IMMOBILI / FUNNEL)
+  if(user){
+
+    const postRedirect = localStorage.getItem("post_login_redirect");
+
+    if(postRedirect){
+      localStorage.removeItem("post_login_redirect");
+      window.location.href = postRedirect;
+      return;
+    }
+
+    const redirect = localStorage.getItem("login_redirect");
+
+    if(redirect){
+      localStorage.removeItem("login_redirect");
+      window.location.href = redirect;
+      return;
+    }
+  }
+
   waitPlanAndRender(user);
 
-  // 🔥 FORCE UPDATE MENU MOBILE
   setTimeout(()=>{
     renderUser(auth.currentUser);
   }, 200);
+
 });
 
 });
