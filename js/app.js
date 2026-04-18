@@ -3836,9 +3836,11 @@ window.handleAnalyzeClick = function(){
 
 window.showRegisterPopup = function(){
 
+  const t = (it, en) =>
+    (window.currentLang === "en" ? en : it);
+
   if(document.getElementById("register-popup")) return;
 
-  // 🔥 mostra solo una volta per sessione
   if(sessionStorage.getItem("registerPopupShown")) return;
   sessionStorage.setItem("registerPopupShown", "true");
 
@@ -4036,8 +4038,6 @@ window.startPlanPurchase = function(plan){
   }
 
 }; // ✅ CHIUSURA CORRETTA
-
-
 
 // =============================
 // 🔥 FORCE PLAN FALLBACK (CRITICAL FIX)
