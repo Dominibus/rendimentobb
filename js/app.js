@@ -70,6 +70,46 @@ window.getUserAccess = function(){
 
 };
 
+window.showToast = function(message, type="info"){
+
+  const existing = document.getElementById("rb-toast");
+  if(existing) existing.remove();
+
+  const toast = document.createElement("div");
+  toast.id = "rb-toast";
+
+  const colors = {
+    info: "#3b82f6",
+    success: "#10b981",
+    error: "#ef4444",
+    warning: "#f59e0b"
+  };
+
+  toast.style = `
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:${colors[type] || "#3b82f6"};
+    color:white;
+    padding:14px 18px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:500;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    z-index:999999;
+    animation:fadeUp .3s ease;
+  `;
+
+  toast.innerText = message;
+
+  document.body.appendChild(toast);
+
+  setTimeout(()=>{
+    toast.remove();
+  },3000);
+};
+
 // 🔥 USER READY FIX (CRITICO)
 window.isUserReady = function(){
   return window.firebaseReady === true;
@@ -178,26 +218,27 @@ if(!access.canSeeFullAnalysis && roi > 0){
 
 if(!access.canSeeFullAnalysis){
 
-  const lockIds = [
-    "qr_profit",
-    "qr_month",
-    "qr_break",
-    "qr_rev"
-  ];
-
- // 🔒 BLOCCO SOLO SE NON PRO
-if(!access.canSeeFullAnalysis){
+  const lockIds = [...]
 
   lockIds.forEach(id => {
-
     const el = document.getElementById(id);
     if(!el) return;
 
     el.innerText = "🔒";
     el.style.opacity = "0.5";
-
   });
 
+}else{
+  lockIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    if(el.innerText === "🔒"){
+      el.innerText = "—";
+    }
+
+    el.style.opacity = "1";
+  });
 }else{
 
   // 🔥 PRO → assicurati che NON restino bloccati
@@ -417,20 +458,16 @@ function requirePlan(requiredPlan){
       );
     }
 
-    alert(
-      window.currentLang === "it"
-        ? "🔒 Sblocca analisi avanzata, strategia ROI e simulazioni complete."
-        : "🔒 Unlock advanced analysis, ROI strategy and full simulations."
-    );
+    showToast(
+  t(
+    "🔒 Sblocca analisi completa per continuare",
+    "🔒 Unlock full analysis to continue"
+  ),
+  "warning"
+);
 
-    const goUpgrade = confirm(message);
-
-    if(goUpgrade){
-      window.location.href = "/pricing/";
-    }
-
-    return false;
-  }
+openUpgradeModal(requiredPlan);
+return false;
 
   return true;
 }
@@ -2001,15 +2038,17 @@ if(!window.isUserReady()){
   return;
 }
 
-if(!window.isUserReady()){
-  return;
-}
-
 if(!window.currentUser){
 
   localStorage.setItem("lead_type", "mutuo");
 
-  alert("Inserisci email per ricevere le migliori offerte mutuo");
+  showToast(
+  t(
+    "Inserisci email per ricevere le migliori offerte mutuo",
+    "Enter your email to receive the best mortgage offers"
+  ),
+  "info"
+);
 
   window.location.href = "/login/";
   return;
@@ -2027,7 +2066,12 @@ if(!window.currentUser){
         })
       });
 
-      alert("🏦 Richiesta inviata. Le banche ti contatteranno.");
+      showToast(
+  t(
+    "🏦 Richiesta inviata. Le banche ti contatteranno",
+    "🏦 Request sent. Banks will contact you"
+  ),
+  "success"
     };
 
   }else{
@@ -2678,7 +2722,10 @@ if(!hasPlan("pro")){
 }
 
 if(!window.lastAnalysisData){
-  alert(tSafe("Genera prima l'analisi","Run analysis first"));
+  showToast(
+  t("Genera prima l'analisi","Run analysis first"),
+  "warning"
+);
   return;
 }
 
@@ -3925,17 +3972,7 @@ window.startPlanPurchase = function(plan){
     // 🔥 salva piano scelto
     localStorage.setItem("pending_plan", plan);
 
-    const goRegister = confirm(
-      t(
-        "🔓 Sblocca l'analisi completa.\n\nRegistrati gratis per continuare (10 secondi).",
-        "🔓 Unlock full analysis.\n\nSign up free to continue (10 seconds)."
-      )
-    );
-
-    if(goRegister){
-      window.location.href = "/login/";
-    }
-
+    showRegisterPopup();
     return;
   }
 
@@ -3944,7 +3981,7 @@ window.startPlanPurchase = function(plan){
   // =========================
   if(!plan){
     console.error("❌ Piano non valido");
-    alert(t("Errore piano","Invalid plan"));
+    showToast(t("Errore piano","Invalid plan"),"error");
     return;
   }
 
@@ -3982,12 +4019,13 @@ if(
   // 🔥 FIREBASE NOT READY (ANTI BUG)
   // =========================
   if(!window.firebaseReady){
-    alert(
-      t(
-        "Attendi un secondo... caricamento utente",
-        "Wait a moment... loading user"
-      )
-    );
+    showToast(
+  t(
+    "Attendi un secondo... caricamento utente",
+    "Wait a moment... loading user"
+  ),
+  "info"
+);
     return;
   }
 
