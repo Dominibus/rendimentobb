@@ -217,14 +217,12 @@ query,
 orderBy
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+// ================= ADMIN CHECK =================
 function isAdmin(user){
   const email = (user?.email || "").toLowerCase();
   const role = (window.userRole || "").toLowerCase();
 
-  return (
-    email === "rendimentobb@gmail.com" ||
-    role === "admin"
-  );
+  return email === "rendimentobb@gmail.com" || role === "admin";
 }
 
 let currentFilter = "all";
@@ -234,53 +232,52 @@ let leadsData = [];
 onAuthStateChanged(auth, async (user)=>{
 
   if(!user || !isAdmin(user)){
-
-  console.warn("⛔ Accesso negato Lead Dashboard");
-
-  document.body.innerHTML = `
-    <div style="
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      height:100vh;
-      flex-direction:column;
-      background:#0f172a;
-      color:white;
-      text-align:center;
-    ">
-      <h2>🔒 Accesso riservato</h2>
-      <p>Area amministratore</p>
-    </div>
-  `;
-
-  return;
-}
+    document.body.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0f172a;color:white;">
+      🔒 Admin only
+    </div>`;
+    return;
+  }
 
   await loadLeads();
-
-  // 🔥 AUTO REFRESH
   setInterval(loadLeads, 10000);
-
 });
 
 // ================= LOAD =================
 async function loadLeads(){
 
-  const q = query(
-    collection(db,"leads"),
-    orderBy("createdAt","desc")
-  );
+  try{
 
-  const snap = await getDocs(q);
+    const q = query(
+      collection(db,"leads"),
+      orderBy("createdAt","desc")
+    );
 
-  leadsData = [];
+    const snap = await getDocs(q);
 
-  snap.forEach(doc=>{
-    leadsData.push(doc.data());
-  });
+    leadsData = [];
 
-  render();
+    snap.forEach(doc=>{
+      leadsData.push(doc.data());
+    });
 
+    render();
+
+  }catch(e){
+    console.error("🔥 Load leads error:", e);
+  }
+
+}
+
+// ================= FORMAT DATE =================
+function formatDate(ts){
+  if(!ts) return "-";
+
+  const d = ts.seconds
+    ? new Date(ts.seconds * 1000)
+    : new Date(ts);
+
+  return d.toLocaleString("it-IT");
 }
 
 // ================= RENDER =================
@@ -289,32 +286,40 @@ function render(){
   const listEl = document.getElementById("leadList");
 
   const filtered = leadsData.filter(l=>{
-    return currentFilter === "all" || l.score === currentFilter;
+    const score = (l.score || "cold").toLowerCase();
+    return currentFilter === "all" || score === currentFilter;
   });
 
   let html = "";
 
   filtered.forEach(d=>{
 
+    const score = (d.score || "cold").toLowerCase();
+
     const badgeColor =
-      d.score === "hot" ? "#10b981" :
-      d.score === "warm" ? "#f59e0b" :
+      score === "hot" ? "#10b981" :
+      score === "warm" ? "#f59e0b" :
       "#64748b";
 
     html += `
-    <div class="lead ${d.score === "hot" ? "hot" : ""}">
+    <div class="lead ${score === "hot" ? "hot" : ""}">
 
       <div>
-        <b>${d.email}</b>
+        <b>${d.email || "-"}</b>
+
         <div class="lead-meta">
-          ${d.type} • ${d.city} • ROI ${d.roi}%
+          ${d.type || "-"} • ${d.city || "-"} • ROI ${d.roi || 0}%
+        </div>
+
+        <div class="lead-meta">
+          ${formatDate(d.createdAt)}
         </div>
       </div>
 
       <div style="text-align:right">
 
         <div class="badge" style="background:${badgeColor}">
-          ${d.score.toUpperCase()}
+          ${score.toUpperCase()}
         </div>
 
         <div class="priority">
@@ -322,14 +327,28 @@ function render(){
         </div>
 
         <div style="font-weight:800;margin-top:6px">
-          €${d.value}
+          €${d.value || 0}
+        </div>
+
+        <!-- 🔥 AZIONI -->
+        <div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">
+
+          <button onclick="copyEmail('${d.email}')"
+            style="font-size:11px;padding:4px 8px;border-radius:6px;border:none;background:#e2e8f0;cursor:pointer;">
+            Copia
+          </button>
+
+          <a href="mailto:${d.email}"
+            style="font-size:11px;padding:4px 8px;border-radius:6px;background:#10b981;color:white;text-decoration:none;">
+            Contatta
+          </a>
+
         </div>
 
       </div>
 
     </div>
     `;
-
   });
 
   listEl.innerHTML = html || "<div class='loader'>Nessun lead</div>";
@@ -337,17 +356,22 @@ function render(){
   // ================= KPI =================
 
   const total = leadsData.length;
-  const totalValue = leadsData.reduce((a,l)=>a+Number(l.value||0),0);
-  const avg = total ? Math.round(totalValue / total) : 0;
-  const hot = leadsData.filter(l=>l.score==="hot").length;
 
-  // top city
+  const totalValue = leadsData.reduce((a,l)=>a+Number(l.value||0),0);
+
+  const avg = total ? Math.round(totalValue / total) : 0;
+
+  const hot = leadsData.filter(l=> (l.score||"") === "hot").length;
+
   const cityMap = {};
+
   leadsData.forEach(l=>{
-    cityMap[l.city] = (cityMap[l.city]||0)+1;
+    const c = l.city || "unknown";
+    cityMap[c] = (cityMap[c]||0)+1;
   });
 
-  const topCity = Object.keys(cityMap).sort((a,b)=>cityMap[b]-cityMap[a])[0] || "-";
+  const topCity = Object.keys(cityMap)
+    .sort((a,b)=>cityMap[b]-cityMap[a])[0] || "-";
 
   document.getElementById("totalLeads").innerText = total;
   document.getElementById("totalValue").innerText = "€"+totalValue;
@@ -357,16 +381,20 @@ function render(){
 
 }
 
+// ================= COPY =================
+window.copyEmail = function(email){
+  navigator.clipboard.writeText(email);
+  alert("Email copiata");
+};
+
 // ================= FILTER =================
 document.querySelectorAll(".filter button").forEach(btn=>{
   btn.addEventListener("click", ()=>{
-
     document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
 
     currentFilter = btn.dataset.filter;
     render();
-
   });
 });
 
