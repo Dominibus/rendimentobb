@@ -323,14 +323,14 @@ window.isAdmin = function(){
 // 🔥 PREMIUM USER (ADMIN + PRO)
 window.isPremiumUser = function(){
 
-  const plan = window.currentPlan || "free"; // 🔥 AGGIUNGI QUESTO
+  const plan = window.currentPlan || "free";
 
   const isAdmin =
     window.currentUser?.email === "rendimentobb@gmail.com" ||
     window.userRole === "admin";
 
   const isPro =
-    ["pro","pro_yearly","investor"].includes(plan);
+    plan === "pro" || plan === "pro_yearly";
 
   return isAdmin || isPro;
 };
@@ -3717,21 +3717,19 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= FORCE PLAN FIX =================
 
-  setTimeout(() => {
+  if(!window.planCorrected){
+
+  window.planCorrected = true;
+
+  setTimeout(()=>{
 
     if(typeof window.forceCorrectPlan === "function"){
-
       window.forceCorrectPlan();
-
-    } else {
-
-      console.warn("⚠️ forceCorrectPlan non disponibile");
-
     }
 
-  }, 100);
+  },100);
 
-});
+}
 
 window.handleAnalyzeClick = function(){
 
