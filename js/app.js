@@ -3255,7 +3255,7 @@ document.addEventListener("rb_auth_ready", () => {
     setTimeout(()=>{
 
       if(typeof window.buyPlan === "function"){
-  window.buyPlan(plan);
+  window.buyPlan(pendingPlan);
 }else{
   console.error("❌ buyPlan non trovata");
 
@@ -3958,7 +3958,6 @@ window.startPlanPurchase = function(plan){
   // =========================
   if(!user){
 
-    // 🔥 salva piano scelto
     localStorage.setItem("pending_plan", plan);
 
     showRegisterPopup();
@@ -3970,7 +3969,12 @@ window.startPlanPurchase = function(plan){
   // =========================
   if(!plan){
     console.error("❌ Piano non valido");
-    showToast(t("Errore piano","Invalid plan"),"error");
+
+    showToast(
+      t("Errore piano","Invalid plan"),
+      "error"
+    );
+
     return;
   }
 
@@ -3979,71 +3983,82 @@ window.startPlanPurchase = function(plan){
   // =========================
   const access = window.getUserAccess();
 
-if(
-  (plan === "pro" && access.isPro) ||
-  (plan === "investor" && access.isInvestor)
-){showToast(
-  t("Hai già questo piano attivo","You already have this plan"),
-  "info"
-);
-return;
-  }
-
-  // =========================
-  // 🔥 LOGICA GERARCHIA
-  // =========================
-  if(plan === "investor" && window.getUserAccess().isPro){
+  if(
+    (plan === "pro" && access.isPro) ||
+    (plan === "investor" && access.isInvestor)
+  ){
     showToast(
-  t("Hai già un piano superiore","You already have a higher plan"),
-  "info"
-);
-return;
-  }
-
-  // =========================
-  // 🔥 FIREBASE NOT READY (ANTI BUG)
-  // =========================
-  if(!window.firebaseReady){
-    showToast(
-  t(
-    "Attendi un secondo... caricamento utente",
-    "Wait a moment... loading user"
-  ),
-  "info"
-);
+      t("Hai già questo piano attivo","You already have this plan"),
+      "info"
+    );
     return;
   }
 
-  // =============================
-// 🔥 STRIPE HANDLER
-// =============================
+  // =========================
+  // 🔥 GERARCHIA PIANI
+  // =========================
+  if(plan === "investor" && access.isPro){
+    showToast(
+      t("Hai già un piano superiore","You already have a higher plan"),
+      "info"
+    );
+    return;
+  }
 
-if(typeof window.buyPlan === "function"){
-  window.buyPlan(plan);
-}else{
-  console.error("❌ buyPlan non trovata");
+  // =========================
+  // 🔥 FIREBASE NOT READY
+  // =========================
+  if(!window.firebaseReady){
+    showToast(
+      t(
+        "Attendi un secondo... caricamento utente",
+        "Wait a moment... loading user"
+      ),
+      "info"
+    );
+    return;
+  }
 
-  showToast(
-    t(
-      "Errore sistema pagamento",
-      "Payment system error"
-    ),
-    "error"
-  );
-}
+  // =========================
+  // 🔥 STRIPE HANDLER
+  // =========================
+  if(typeof window.buyPlan === "function"){
 
-}; // ✅ QUESTA CHIUSURA MANCAVA
+    window.buyPlan(pendingPlan);
+
+  }else{
+
+    console.error("❌ buyPlan non trovata");
+
+    showToast(
+      t(
+        "Errore sistema pagamento",
+        "Payment system error"
+      ),
+      "error"
+    );
+
+  }
+
+}; // ✅ CHIUSURA CORRETTA
+
 
 // =============================
 // 🔥 FORCE PLAN FALLBACK (CRITICAL FIX)
 // =============================
+
 window.forceCorrectPlan = window.forceCorrectPlan || function(){
 
   console.warn("⚠️ forceCorrectPlan fallback attivo");
 
   const plan = window.currentPlan || "free";
 
-  document.body.classList.remove("is-free","is-investor","is-pro","is-admin");
+  document.body.classList.remove(
+    "is-free",
+    "is-investor",
+    "is-pro",
+    "is-admin"
+  );
 
   if(plan === "pro" || plan === "pro_yearly"){
     document.body.classList.add("is-pro");
