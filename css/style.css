@@ -14913,21 +14913,25 @@ NON TOCCA ALTRE PAGINE
 }
 
 /* =====================================
-🔥 HERO CENTER FIX – FINAL PRODUCTION
-Sistema centratura badge + CTA + testo
-NON rompe layout esistente
+🔥 HERO FIX DEFINITIVO (CENTER + MOBILE SAFE)
+Fix reale override layout globale
 ===================================== */
 
-/* container hero centrato */
+/* ===== HERO BASE ===== */
 .hero .container{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
   text-align:center;
 }
 
-/* bottoni centrati sempre */
+/* ⚠️ FIX CRITICO → rimuove width forzato globale */
+.hero .container > *{
+  width:auto !important;
+  max-width:100% !important;
+}
+
+/* ===== BOTTONI ===== */
 .hero-buttons{
   display:flex;
   flex-wrap:wrap;
@@ -14936,47 +14940,72 @@ NON rompe layout esistente
   margin-top:20px;
 }
 
-/* badge investors (quello verde) */
-.hero-trust{
-  display:block;
+.hero-buttons .btn,
+.hero-buttons .btn-outline{
+  width:auto !important;
+  max-width:100%;
+}
 
-  width:fit-content;
+/* ===== BADGE INVESTORS ===== */
+.hero-trust{
+  display:inline-block;
+
+  width:auto !important;
   max-width:90%;
 
-  margin:24px auto 0;
+  margin:22px auto 0;
 
   text-align:center;
 
-  padding:12px 24px;
+  padding:12px 22px;
   border-radius:999px;
 
   background:linear-gradient(135deg,#10b981,#059669);
-  color:#ffffff;
+  color:#fff;
 
   font-weight:600;
   font-size:13px;
+  line-height:1.4;
 
   box-shadow:0 10px 30px rgba(16,185,129,0.35);
+
+  white-space:nowrap; /* desktop */
+  overflow:hidden;
+  text-overflow:ellipsis;
 
   transition:all .25s ease;
 }
 
-/* micro effetto premium */
+/* hover premium */
 .hero-trust:hover{
-  transform:translateY(-2px) scale(1.02);
+  transform:translateY(-2px);
   box-shadow:0 18px 40px rgba(16,185,129,0.45);
 }
 
-/* responsive fix */
+/* ===== MOBILE FIX ===== */
 @media (max-width:768px){
 
   .hero .container{
     padding:0 16px;
   }
 
+  .hero-buttons{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .hero-buttons .btn,
+  .hero-buttons .btn-outline{
+    width:100%;
+    max-width:320px;
+  }
+
   .hero-trust{
+    max-width:95%;
     font-size:12px;
-    padding:10px 18px;
+    padding:10px 16px;
+
+    white-space:normal; /* 🔥 fondamentale mobile */
   }
 
 }
