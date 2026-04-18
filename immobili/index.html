@@ -372,6 +372,20 @@ section[style*="linear-gradient"] input{
   user-select:none;
 }
 
+  /* 🔥 FIX DEFINITIVO GRID */
+.property-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:24px;
+  width:100%;
+}
+
+.property-card{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
 </style>
 
 </head>
@@ -425,6 +439,50 @@ Chiudi
 
 </div>
 </div>
+
+<div id="upgrade-modal" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:16px;
+max-width:320px;
+text-align:center;
+">
+
+<h3 style="margin-bottom:10px">
+🔒 Contenuto Premium
+</h3>
+
+<p style="font-size:14px;color:#64748b;margin-bottom:20px"
+data-it="Passa a PRO per vedere immobili reali e analisi complete"
+data-en="Upgrade to PRO to see real properties and full analysis">
+Passa a PRO per vedere immobili reali
+</p>
+
+<a href="/pricing/" class="btn btn-primary" style="width:100%">
+Upgrade
+</a>
+
+<div onclick="closeUpgradeModal()" style="
+margin-top:10px;
+font-size:13px;
+cursor:pointer;
+color:#64748b;
+">
+Chiudi
+</div>
+
+</div>
+</div>  
 
 <div id="global-header"></div>  
 
@@ -533,8 +591,9 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
 <div
 class="property-card"
-style="border:2px solid #10b981;"
-onclick="handleCityClick('napoli')">
+data-city="napoli"
+onclick="handleCityClick(this)">
+
 
 <div style="
 position:absolute;
@@ -597,8 +656,9 @@ Analizza mercato →
 
 <div
 class="property-card"
-style="border:2px solid #10b981;"
-onclick="handleCityClick('roma')">
+data-city="roma"
+onclick="handleCityClick(this)">
+
 
 <div style="
 position:absolute;
@@ -655,8 +715,8 @@ Analizza mercato →
 
 <div
 class="property-card"
-style="border:2px solid #10b981;"
-onclick="handleCityClick('firenze')">
+data-city="firenze"
+onclick="handleCityClick(this)">
 
 <div style="
 position:absolute;
@@ -713,8 +773,8 @@ Analizza mercato →
 
 <div
 class="property-card"
-style="border:2px solid #10b981;"
-onclick="handleCityClick('milano')">
+data-city="milano"
+onclick="handleCityClick(this)">
 
 <div style="
 position:absolute;
@@ -1356,14 +1416,23 @@ window.openInvestment = function(price){
     localStorage.setItem("property_price", price);
     localStorage.setItem("lead_source", "immobili");
 
-    showLoginModal();
+    window.openInvestment = function(price){
 
-    window.location.href = "/login/";
+  const user = window.currentUser || null;
+  const plan = window.currentPlan || "free";
+
+  localStorage.setItem("property_price", price);
+
+  if(!user){
+    showLoginModal();
     return;
   }
 
-  // ✅ LOGGATO → TOOL
-  localStorage.setItem("property_price", price);
+  if(plan === "free"){
+    showUpgradeModal();
+    return;
+  }
+
   window.location.href="/tool/";
 };
 
@@ -1476,24 +1545,35 @@ window.currentLang==="en"
 
   // ================= CITY CLICK (LEAD + LOGIN FLOW) =================
 
-window.handleCityClick = function(city){
+window.handleCityClick = function(el){
 
+  const city = el.dataset.city;
   const user = window.currentUser || null;
+  const plan = window.currentPlan || "free";
 
+  // 🔥 salva sempre
+  localStorage.setItem("selected_city", city);
+
+  // =====================
   // 👻 NON LOGGATO
+  // =====================
   if(!user){
-
-    localStorage.setItem("selected_city", city);
     localStorage.setItem("lead_source", "immobili_city");
-
     showLoginModal();
-
-    window.location.href = "/login/";
     return;
   }
 
-  // ✅ UTENTE LOGGATO
-  localStorage.setItem("selected_city", city);
+  // =====================
+  // 🧪 FREE USER
+  // =====================
+  if(plan === "free"){
+    showUpgradeModal();
+    return;
+  }
+
+  // =====================
+  // 💰 INVESTOR / PRO
+  // =====================
   window.location.href = "/immobili/" + city;
 };
 
@@ -1509,6 +1589,16 @@ window.closeLoginModal = function(){
 
 window.goToLogin = function(){
   window.location.href = "/login/";
+};
+
+    // ================= UPGRADE MODAL =================
+
+window.showUpgradeModal = function(){
+  document.getElementById("upgrade-modal").style.display = "flex";
+};
+
+window.closeUpgradeModal = function(){
+  document.getElementById("upgrade-modal").style.display = "none";
 };
 
 </script>
