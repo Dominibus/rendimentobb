@@ -225,6 +225,25 @@ function isAdmin(user){
   return email === "rendimentobb@gmail.com" || role === "admin";
 }
 
+// ================= FORMAT € =================
+function formatCurrency(v){
+  return new Intl.NumberFormat("it-IT", {
+    style:"currency",
+    currency:"EUR"
+  }).format(v || 0);
+}
+
+// ================= DATE =================
+function formatDate(ts){
+  if(!ts) return "-";
+
+  const d = ts.seconds
+    ? new Date(ts.seconds * 1000)
+    : new Date(ts);
+
+  return d.toLocaleString("it-IT");
+}
+
 let currentFilter = "all";
 let leadsData = [];
 let loading = false;
@@ -242,7 +261,6 @@ onAuthStateChanged(auth, async (user)=>{
 
   await loadLeads();
 
-  // refresh intelligente
   setInterval(()=>{
     if(!loading) loadLeads();
   }, 10000);
@@ -259,7 +277,7 @@ async function loadLeads(){
     const q = query(
       collection(db,"leads"),
       orderBy("createdAt","desc"),
-      limit(150) // 🔥 PERFORMANCE FIX
+      limit(150)
     );
 
     const snap = await getDocs(q);
@@ -275,17 +293,6 @@ async function loadLeads(){
   loading = false;
 }
 
-// ================= DATE =================
-function formatDate(ts){
-  if(!ts) return "-";
-
-  const d = ts.seconds
-    ? new Date(ts.seconds * 1000)
-    : new Date(ts);
-
-  return d.toLocaleString("it-IT");
-}
-
 // ================= RENDER =================
 function render(){
 
@@ -296,9 +303,8 @@ function render(){
       const score = (l.score || "cold").toLowerCase();
       return currentFilter === "all" || score === currentFilter;
     })
-    .slice(0,50); // 🔥 UI CLEAN
+    .slice(0,50);
 
-  // 🔥 COUNTER
   listEl.innerHTML = `
     <div style="font-size:12px;color:#64748b;margin-bottom:10px">
       ${filtered.length} visibili / ${leadsData.length} totali
@@ -314,6 +320,8 @@ function render(){
 
     const score = (d.score || "cold").toLowerCase();
 
+    const roi = Number(d.roi || 0).toFixed(1);
+
     const badgeColor =
       score === "hot" ? "#10b981" :
       score === "warm" ? "#f59e0b" :
@@ -323,10 +331,10 @@ function render(){
     <div class="lead ${score}">
 
       <div>
-        <b>${d.email || "-"}</b>
+        <b>${d.email || "⚠️ no email"}</b>
 
         <div class="lead-meta">
-          ${d.type || "-"} • ${d.city || "-"} • ROI ${d.roi || 0}%
+          ${d.type || "-"} • ${d.city || "-"} • ROI ${roi}%
         </div>
 
         <div class="lead-meta">
@@ -341,7 +349,7 @@ function render(){
         </div>
 
         <div style="font-size:18px;font-weight:900;margin-top:6px">
-          €${d.value || 0}
+          ${formatCurrency(d.value)}
         </div>
 
         <div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end">
@@ -389,14 +397,15 @@ function updateKPI(){
     .sort((a,b)=>cityMap[b]-cityMap[a])[0] || "-";
 
   document.getElementById("totalLeads").innerText = total;
-  document.getElementById("totalValue").innerText = "€"+totalValue;
-  document.getElementById("avgValue").innerText = "€"+avg;
+  document.getElementById("totalValue").innerText = formatCurrency(totalValue);
+  document.getElementById("avgValue").innerText = formatCurrency(avg);
   document.getElementById("hotLeads").innerText = hot;
   document.getElementById("topCity").innerText = topCity;
 }
 
 // ================= COPY =================
 window.copyEmail = function(email){
+  if(!email) return;
   navigator.clipboard.writeText(email);
 };
 
