@@ -70,6 +70,11 @@ window.getUserAccess = function(){
 
 };
 
+// 🔥 USER READY FIX (CRITICO)
+window.isUserReady = function(){
+  return window.firebaseReady === true;
+};
+
 function getLeadScore(result){
 
   const roi = Number(result?.roi || 0);
@@ -369,6 +374,12 @@ function hasPlan(requiredPlan){
 
 // 🔒 BLOCCO ACCESSO + REDIRECT
 function requirePlan(requiredPlan){
+
+  // 🔥 FIX CRITICO
+  if(!window.isUserReady()){
+    console.log("⏳ Skip requirePlan → user non pronto");
+    return false;
+  }
   // 🔥 PRO → bypass totale
 if(window.getUserAccess().canSeeFullAnalysis){
   return true;
@@ -382,7 +393,11 @@ if(window.getUserAccess().canSeeFullAnalysis){
   return false;
 }
 
-if(!window.currentUser){
+if(!window.isUserReady()){
+  return;
+}
+
+if(!window.currentUser)
 
     alert(
       t(
@@ -1993,15 +2008,24 @@ if(mortgageBox && mortgageBtn){
   return;
 }
 
-if(!window.currentUser){
+// 🔥 FIX CRITICO
+if(!window.isUserReady()){
+  return;
+}
 
-        localStorage.setItem("lead_type", "mutuo");
+if(!window.isUserReady()){
+  return;
+}
 
-        alert("Inserisci email per ricevere le migliori offerte mutuo");
+if(!window.currentUser)
 
-        window.location.href = "/login/";
-        return;
-      }
+  localStorage.setItem("lead_type", "mutuo");
+
+  alert("Inserisci email per ricevere le migliori offerte mutuo");
+
+  window.location.href = "/login/";
+  return;
+}
 
       // 🔥 UTENTE → lead diretto
       fetch("/api/send-lead-partner",{
