@@ -421,7 +421,34 @@ await signInWithEmailAndPassword(auth,email,password);
 await createUserWithEmailAndPassword(auth,email,password);
 }
 
-window.location.href="/tool/";
+// 🔥 REDIRECT INTELLIGENTE SaaS
+const redirect = localStorage.getItem("login_redirect");
+const selectedCity = localStorage.getItem("selected_city");
+
+// pulizia
+localStorage.removeItem("login_redirect");
+
+  console.log("🔥 LOGIN SUCCESS → redirect intelligente");
+
+// =====================
+// 🎯 PRIORITÀ REDIRECT
+// =====================
+
+// 1. Se viene da immobili città
+if(selectedCity){
+  localStorage.removeItem("selected_city");
+  window.location.href = "/immobili/" + selectedCity;
+  return;
+}
+
+// 2. Se viene da pagina specifica
+if(redirect){
+  window.location.href = redirect;
+  return;
+}
+
+// 3. fallback PRO SaaS
+window.location.href = "/dashboard/";
 
 }catch(e){
 showError(e.code);
