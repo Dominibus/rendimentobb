@@ -4011,14 +4011,18 @@ return;
   // 💳 STRIPE
   // =========================
   if(typeof window.buyPlan === "function"){
-    window.buyPlan(plan);
-  }else{
-    console.error("❌ buyPlan non trovata");
-    alert(t(
+  window.buyPlan(plan);
+}else{
+  console.error("❌ buyPlan non trovata");
+
+  showToast(
+    t(
       "Errore sistema pagamento",
       "Payment system error"
-    ));
-  }
+    ),
+    "error"
+  );
+}
 
 };
 
