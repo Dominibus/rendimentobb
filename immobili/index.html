@@ -367,11 +367,64 @@ section[style*="linear-gradient"] input{
   max-width:100%;
 }
 
+  .property-card{
+  cursor:pointer;
+  user-select:none;
+}
+
 </style>
 
 </head>
 
 <body class="immobili-page">
+
+  <div id="login-modal" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:16px;
+max-width:320px;
+text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,0.2);
+">
+
+<div style="font-size:20px;font-weight:600;margin-bottom:10px;">
+🔓 Accesso richiesto
+</div>
+
+<div style="font-size:14px;color:#64748b;margin-bottom:20px;">
+<span data-it="Registrati gratis per vedere le opportunità reali"
+      data-en="Sign up to unlock real opportunities">
+Registrati gratis per vedere le opportunità reali
+</span>
+</div>
+
+<button onclick="goToLogin()" class="btn btn-primary" style="width:100%">
+<span data-it="Vai alla registrazione" data-en="Go to signup">
+Vai alla registrazione
+</span>
+</button>
+
+<div onclick="closeLoginModal()" style="
+margin-top:10px;
+font-size:13px;
+color:#64748b;
+cursor:pointer;
+">
+Chiudi
+</div>
+
+</div>
+</div>
 
 <div id="global-header"></div>  
 
@@ -478,7 +531,7 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
 <!-- ================= #1 NAPOLI ================= -->
 
-<a href="javascript:void(0)"
+<div
 class="property-card"
 style="border:2px solid #10b981;"
 onclick="handleCityClick('napoli')">
@@ -542,7 +595,7 @@ Analizza mercato →
 
 <!-- ================= #2 ROMA ================= -->
 
-<a href="javascript:void(0)"
+<div
 class="property-card"
 style="border:2px solid #10b981;"
 onclick="handleCityClick('roma')">
@@ -600,7 +653,7 @@ Analizza mercato →
 
 <!-- ================= #3 FIRENZE ================= -->
 
-<a href="javascript:void(0)"
+<div
 class="property-card"
 style="border:2px solid #10b981;"
 onclick="handleCityClick('firenze')">
@@ -658,7 +711,7 @@ Analizza mercato →
 
 <!-- ================= #4 MILANO ================= -->
 
-<a href="javascript:void(0)"
+<div
 class="property-card"
 style="border:2px solid #10b981;"
 onclick="handleCityClick('milano')">
@@ -1303,11 +1356,7 @@ window.openInvestment = function(price){
     localStorage.setItem("property_price", price);
     localStorage.setItem("lead_source", "immobili");
 
-    alert(
-      window.currentLang==="en"
-      ? "🔓 Create a free account to receive the full ROI analysis"
-      : "🔓 Registrati gratis per ricevere l'analisi completa ROI"
-    );
+    showLoginModal();
 
     window.location.href = "/login/";
     return;
@@ -1437,11 +1486,7 @@ window.handleCityClick = function(city){
     localStorage.setItem("selected_city", city);
     localStorage.setItem("lead_source", "immobili_city");
 
-    alert(
-      window.currentLang==="en"
-      ? "🔓 Sign up to unlock real investment opportunities"
-      : "🔓 Registrati per sbloccare opportunità reali"
-    );
+    showLoginModal();
 
     window.location.href = "/login/";
     return;
@@ -1450,6 +1495,20 @@ window.handleCityClick = function(city){
   // ✅ UTENTE LOGGATO
   localStorage.setItem("selected_city", city);
   window.location.href = "/immobili/" + city;
+};
+
+  // ================= LOGIN MODAL FUNCTIONS =================
+
+window.showLoginModal = function(){
+  document.getElementById("login-modal").style.display = "flex";
+};
+
+window.closeLoginModal = function(){
+  document.getElementById("login-modal").style.display = "none";
+};
+
+window.goToLogin = function(){
+  window.location.href = "/login/";
 };
 
 </script>
