@@ -29,10 +29,31 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
-window.alert = function(msg){
-  console.warn("🚫 alert bloccato:", msg);
-  showToast(msg, "info");
+// =====================================
+// 🔥 GLOBAL ERROR DEBUG (CRITICO)
+// =====================================
+window.onerror = function(msg, url, line, col, error){
+  console.error("💥 JS ERROR:", {
+    msg,
+    url,
+    line,
+    col,
+    error
+  });
 };
+
+// 🔍 DEBUG ALERT SOURCE
+const originalAlert = window.alert;
+window.alert = function(msg){
+  console.trace("📍 ALERT TRIGGERATO QUI:");
+  originalAlert(msg);
+};
+
+// 🔴 DEBUG MODE → ripristino alert reale
+// window.alert = function(msg){
+//   console.warn("🚫 alert bloccato:", msg);
+//   showToast(msg, "info");
+// };
 
 // ================= SAFE GLOBAL EARLY FIX =================
 
