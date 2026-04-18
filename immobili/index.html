@@ -243,25 +243,25 @@ body.immobili-page main section:not(.hero) .form-grid .input-group label *{
 }    
 
 /* =====================================
-🚑 FIX GLOBALE IMMOBILI (SAFE PATCH)
-NON rompe nulla – corregge overflow mobile
+🚑 FIX IMMOBILI SAFE (SCOPED)
+NON tocca il resto del sito
 ===================================== */
 
-/* ✅ FIX OVERFLOW ORIZZONTALE */
-html, body{
-  overflow-x:hidden !important;
+body.immobili-page{
+  overflow-x:hidden;
 }
 
-/* ✅ TESTI LUNGHI NON ESCONO */
-p, span, h1, h2, h3{
-  word-wrap:break-word;
-  overflow-wrap:break-word;
-}
-
-/* ✅ IMMAGINI / ELEMENTI SAFE */
-img, video, canvas{
+/* SOLO elementi problematici */
+body.immobili-page .property-grid,
+body.immobili-page .form-grid,
+body.immobili-page .container{
   max-width:100%;
-  height:auto;
+  overflow-x:hidden;
+}
+
+/* evita overflow da padding + width */
+body.immobili-page *{
+  box-sizing:border-box;
 }
 
 /* =====================================
@@ -355,6 +355,17 @@ section[style*="linear-gradient"] > div{
   }
 
 }  
+
+  /* 💣 FIX CARD WIDTH REALE */
+.property-card{
+  min-width:0;
+}
+
+/* 💣 FIX FLEX INPUT LEAD */
+section[style*="linear-gradient"] input{
+  width:100%;
+  max-width:100%;
+}
 
 </style>
 
@@ -467,10 +478,10 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
 <!-- ================= #1 NAPOLI ================= -->
 
-<a href="/immobili/napoli"
+<a href="javascript:void(0)"
 class="property-card"
 style="border:2px solid #10b981;"
-onclick="localStorage.setItem('selected_city','napoli')">
+onclick="handleCityClick('napoli')">
 
 <div style="
 position:absolute;
@@ -531,9 +542,10 @@ Analizza mercato →
 
 <!-- ================= #2 ROMA ================= -->
 
-<a href="/immobili/roma"
+<a href="javascript:void(0)"
 class="property-card"
-onclick="localStorage.setItem('selected_city','roma')">
+style="border:2px solid #10b981;"
+onclick="handleCityClick('roma')">
 
 <div style="
 position:absolute;
@@ -588,9 +600,10 @@ Analizza mercato →
 
 <!-- ================= #3 FIRENZE ================= -->
 
-<a href="/immobili/firenze"
+<a href="javascript:void(0)"
 class="property-card"
-onclick="localStorage.setItem('selected_city','firenze')">
+style="border:2px solid #10b981;"
+onclick="handleCityClick('firenze')">
 
 <div style="
 position:absolute;
@@ -645,9 +658,10 @@ Analizza mercato →
 
 <!-- ================= #4 MILANO ================= -->
 
-<a href="/immobili/milano"
+<a href="javascript:void(0)"
 class="property-card"
-onclick="localStorage.setItem('selected_city','milano')">
+style="border:2px solid #10b981;"
+onclick="handleCityClick('milano')">
 
 <div style="
 position:absolute;
@@ -1281,9 +1295,27 @@ badge2
 
 window.openInvestment = function(price){
 
-localStorage.setItem("property_price", price);
-window.location.href="/tool/";
+  const user = window.currentUser || null;
 
+  // 👻 NON LOGGATO → BLOCCO + LOGIN
+  if(!user){
+
+    localStorage.setItem("property_price", price);
+    localStorage.setItem("lead_source", "immobili");
+
+    alert(
+      window.currentLang==="en"
+      ? "🔓 Create a free account to receive the full ROI analysis"
+      : "🔓 Registrati gratis per ricevere l'analisi completa ROI"
+    );
+
+    window.location.href = "/login/";
+    return;
+  }
+
+  // ✅ LOGGATO → TOOL
+  localStorage.setItem("property_price", price);
+  window.location.href="/tool/";
 };
 
 // ================= LEAD IMMOBILI =================
@@ -1296,13 +1328,21 @@ if(!window.userClickedLead){
 }  
 
 const email = document.getElementById("lead-email").value;
-const city = document.getElementById("lead-city").value;
+const city = document.getElementById("lead-city").value || "unknown";
 
-alert(
+if(!email || !email.includes("@")){
+  alert(
+    window.currentLang==="en"
+    ? "Enter a valid email"
+    : "Inserisci una email valida"
+  );
+  return;
+};
+
+  document.getElementById("lead-msg").innerText =
 window.currentLang==="en"
-? "Enter your email"
-: "Inserisci email"
-);
+? "⏳ Sending..."
+: "⏳ Invio in corso...";
 
 try{
 
@@ -1383,7 +1423,34 @@ window.currentLang==="en"
 
 }
 
-};            
+};       
+
+  // ================= CITY CLICK (LEAD + LOGIN FLOW) =================
+
+window.handleCityClick = function(city){
+
+  const user = window.currentUser || null;
+
+  // 👻 NON LOGGATO
+  if(!user){
+
+    localStorage.setItem("selected_city", city);
+    localStorage.setItem("lead_source", "immobili_city");
+
+    alert(
+      window.currentLang==="en"
+      ? "🔓 Sign up to unlock real investment opportunities"
+      : "🔓 Registrati per sbloccare opportunità reali"
+    );
+
+    window.location.href = "/login/";
+    return;
+  }
+
+  // ✅ UTENTE LOGGATO
+  localStorage.setItem("selected_city", city);
+  window.location.href = "/immobili/" + city;
+};
 
 </script>
 
