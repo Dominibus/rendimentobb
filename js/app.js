@@ -325,10 +325,6 @@ function t(it, en){
   return window.currentLang === "it" ? it : en;
 }
 
-// ================= CITY FROM HOMEPAGE =================
-
-const citySelector = document.getElementById("market-city");
-
 // ================= SAVE ANALYSIS =================
 
 async function saveAnalysis(data){
@@ -3419,21 +3415,20 @@ occValue.innerText = occ.value + "%";
 
 });
 
-if(citySelector){
+const citySelectorEl = document.getElementById("market-city");
 
-citySelector.addEventListener("change",()=>{
+if(citySelectorEl){
 
-const city = citySelector.value;
+  citySelectorEl.addEventListener("change",()=>{
 
-window.currentCity = city;
-localStorage.setItem("selected_city", city);
+    const city = citySelectorEl.value;
 
-changeCityBackground(city);
+    window.currentCity = city;
+    localStorage.setItem("selected_city", city);
 
-// non avviare automaticamente la simulazione
-// calculate();
+    changeCityBackground(city);
 
-});
+  });
 
 }
 
