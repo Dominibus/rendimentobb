@@ -837,16 +837,17 @@ async function startPlanPurchase(plan){
   // 🔥 SE NON LOGGATO → popup
   if(!access.isLogged){
 
-  document.getElementById("upgrade-modal").style.display = "flex";
+  alert(
+    t(
+      "🔓 Accedi per sbloccare le offerte reali",
+      "🔓 Login to unlock real offers"
+    )
+  );
 
-  // cambia CTA dinamicamente
-  const btn = document.querySelector("#upgrade-modal .btn-main");
+  // salva intento (importantissimo per funnel)
+  localStorage.setItem("pending_plan", plan);
 
-  if(btn){
-    btn.onclick = () => {
-      window.location.href = "/register/";
-    };
-  }
+  window.location.href = "/login/";
 
   return;
 }
@@ -898,9 +899,18 @@ function selectMortgage(rate, bank){
 
   // 🔥 INVESTOR → contatto diretto (NO lead interno)
   if(access.isInvestor){
-    alert("🏦 Verrai contattato dalla banca");
-    return;
-  }
+
+  saveLeadFromBank(bank, rate);
+
+  alert(
+    t(
+      "🏦 Richiesta inviata. Ti contatterà un consulente mutui.",
+      "🏦 Request sent. A mortgage advisor will contact you."
+    )
+  );
+
+  return;
+}
 
   // 🔥 FREE → lead
   saveLeadFromBank(bank, rate);
@@ -909,10 +919,6 @@ async function saveLeadFromBank(bank, rate){
 
   const access = getAccess();
 
-if(access.isInvestor){
-  console.log("⛔ Investor → NO lead");
-  return;
-}
 
   const email = document.getElementById("email").value || "";
   const phone = document.getElementById("phone").value || "";
@@ -943,6 +949,24 @@ if(access.isInvestor){
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify(payload)
     });
+
+    await fetch("/api/send-lead-email",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({
+    email,
+    type:"mutui",
+    bank,
+    rate,
+    lang: window.currentLang || "it"
+  })
+});
+
+    await fetch("/api/send-lead-partner",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify(payload)
+});
 
     alert(
       t(
@@ -1094,14 +1118,14 @@ z-index:9999;
   box-shadow:0 30px 80px rgba(0,0,0,.3);
   ">
 
-    <h3 style="
-       margin-bottom:10px;
-       color:#0f172a;
-       font-weight:700;
-      data-it="🔒 Sblocca i dati reali"
-      data-en="🔒 Unlock real data">
-      🔒 Sblocca i dati reali
-    </h3>
+    <h3
+data-it="🔒 Sblocca i dati reali"
+data-en="🔒 Unlock real data"
+style="
+  margin-bottom:10px;
+  color:#0f172a;
+  font-weight:700;
+">
 
     <p style="color:#334155;font-weight:500;margin-bottom:20px;"
       data-it="Stai prendendo decisioni senza dati completi"
