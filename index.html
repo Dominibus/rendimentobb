@@ -374,7 +374,7 @@ Scopri in 30 secondi se questo investimento può funzionare… oppure farti perd
 </div>
 
 <!-- CTA CALCOLO -->
-<button onclick="quickROI()" class="btn btn-primary btn-lg"
+<button onclick="triggerROI()" class="btn btn-primary btn-lg"
 data-it="Calcola rendimento"
 data-en="Calculate ROI">
 Calcola rendimento
@@ -1409,6 +1409,16 @@ window.startAnalysis = function(){
 
 };
 
+ window.triggerROI = function(){
+
+  // 👉 questo è IL PEZZO CHE TI MANCA
+  window.userTriggeredSimulation = true;
+
+  // 👉 chiama il calcolo
+  quickROI();
+
+};
+
 // ================= QUICK ROI (ULTRA CONVERSION ENGINE) =================
 window.quickROI = function(){
 
@@ -1446,14 +1456,33 @@ const isFreeUser = isLogged && !isPro && !isInvestor;
     return;
   }
 
-  if(window.currentUser === null){
-    alert(window.t(
-      "Registrati gratis per vedere i risultati della simulazione",
-      "Sign up for free to see simulation results"
-    ));
-    window.location.href = "/login/";
-    return;
+  // ⏳ aspetta firebase
+if(window.currentUser === undefined){
+  console.warn("⏳ User non pronto → skip");
+  return;
+}
+
+// 🔒 blocca SOLO se ha cliccato davvero
+if(window.currentUser === null){
+
+  if(window.userTriggeredSimulation){
+
+    showToast(
+      window.t(
+        "Registrati gratis per vedere i risultati della simulazione",
+        "Sign up for free to see simulation results"
+      ),
+      "warning"
+    );
+
+    setTimeout(()=>{
+      window.location.href = "/login/";
+    }, 800);
+
   }
+
+  return;
+}
 
   // ================= CLAMP =================
   occ = Math.min(Math.max(occ,1),95);
