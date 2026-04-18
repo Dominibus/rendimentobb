@@ -24,452 +24,216 @@ content="Find the best B&B investment properties in Italy with ROI analysis and 
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
 
-<style>
-
-/* ================= IMMOBILI – PRO UI ================= */
-
-.property-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:24px;
-margin-top:50px;
-}
-
-/* ===== CARD ===== */
-
-.property-card{
-position:relative;
-
-background:rgba(255,255,255,0.92);
-backdrop-filter:blur(10px);
-
-padding:28px;
-border-radius:18px;
-
-border:1px solid rgba(16,185,129,0.08);
-
-box-shadow:
-0 10px 30px rgba(0,0,0,0.04),
-0 1px 2px rgba(0,0,0,0.06);
-
-text-align:center;
-text-decoration:none;
-color:#0f172a;
-
-cursor:pointer;
-
-transition:
-transform .25s ease,
-box-shadow .25s ease,
-border-color .25s ease;
-}
-
-/* hover pro */
-.property-card:hover{
-transform:translateY(-6px) scale(1.01);
-
-box-shadow:
-0 30px 80px rgba(0,0,0,0.08),
-0 10px 20px rgba(16,185,129,0.08);
-
-border-color:#10b981;
-}
-
-/* ===== BEST BADGE ===== */
-
-.property-card::before{
-content:"";
-position:absolute;
-top:0;
-left:0;
-right:0;
-height:3px;
-background:linear-gradient(90deg,#10b981,#34d399);
-border-top-left-radius:18px;
-border-top-right-radius:18px;
-opacity:0;
-transition:opacity .3s;
-}
-
-.property-card:hover::before{
-opacity:1;
-}
-
-/* ===== TITOLI ===== */
-
-.property-card h3{
-margin-bottom:8px;
-font-size:22px;
-font-weight:600;
-color:#0f172a;
-}
-
-/* ===== LABEL ===== */
-
-.market-label{
-font-size:13px;
-color:#64748b;
-}
-
-/* ===== ROI ===== */
-
-.property-roi{
-font-size:26px;
-color:#10b981;
-font-weight:700;
-margin-top:6px;
-}
-
-/* ===== EXTRA ===== */
-
-.market-extra{
-margin-top:8px;
-font-size:13px;
-color:#64748b;
-}
-
-/* ===== LINK ===== */
-
-.market-link{
-margin-top:14px;
-font-weight:600;
-color:#10b981;
-font-size:14px;
-}
-
-/* ===================== */
-/* 🔥 HERO FIX CORRETTO */
-/* ===================== */
-
-/* SOLO TESTO HERO (NON TUTTO IL CONTAINER) */
-.hero .page-title h1,
-.hero .page-title p,
-.hero .page-title span{
-color:#ffffff !important;
-text-shadow:0 2px 10px rgba(0,0,0,0.7);
-}
-
-/* micro testi */
-.hero .page-title div{
-color:#e2e8f0 !important;
-}
-
-/* NON toccare card */
-.hero .property-card,
-.hero .property-card *{
-color:#0f172a !important;
-text-shadow:none !important;
-}
-
-/* ===================== */
-/* SEARCH BOX */
-/* ===================== */
-
-.form-grid{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:16px;
-}
-
-.input-group{
-display:flex;
-flex-direction:column;
-}
-
-/* LABEL NORMALI */
-.input-group label{
-font-size:13px;
-margin-bottom:6px;
-color:#334155;
-text-shadow:none;
-}
-
-/* 🔥 FIX DEFINITIVO LABEL (ANTI BUG BIANCO) */
-.form-grid .input-group label{
-color:#334155 !important;
-text-shadow:none !important;
-}
-
-/* SOLO se dentro hero */
-.hero .input-group label{
-color:#e2e8f0 !important;
-text-shadow:0 2px 8px rgba(0,0,0,0.6);
-}
-
-.input-group input{
-padding:12px;
-border-radius:10px;
-border:1px solid #e2e8f0;
-font-size:14px;
-background:#ffffff;
-color:#0f172a;
-}
-
-/* ===================== */
-/* SECTION INFO */
-/* ===================== */
-
-.section-info{
-margin-top:80px;
-text-align:center;
-max-width:760px;
-margin-left:auto;
-margin-right:auto;
-}
-
-.section-info p{
-color:#475569;
-}
-
-/* ===================== */
-/* BUTTON */
-/* ===================== */
-
-.btn-primary{
-background:linear-gradient(135deg,#10b981,#059669);
-border:none;
-box-shadow:0 10px 20px rgba(16,185,129,0.2);
-}
-
-.btn-primary:hover{
-transform:translateY(-2px);
-box-shadow:0 15px 30px rgba(16,185,129,0.25);
-}
-
-body.immobili-page main section:not(.hero) .form-grid .input-group label,
-body.immobili-page main section:not(.hero) .form-grid .input-group label *{
-  color:#334155 !important;
-  text-shadow:none !important;
-}    
-
 /* =====================================
-🚑 FIX IMMOBILI SAFE (SCOPED)
-NON tocca il resto del sito
+🚀 IMMOBILI – FINAL PRODUCTION UI
 ===================================== */
 
-body.immobili-page{
-  overflow-x:hidden;
-}
-
-/* SOLO elementi problematici */
-body.immobili-page .property-grid,
-body.immobili-page .form-grid,
-body.immobili-page .container{
-  max-width:100%;
-  overflow-x:hidden;
-}
-
-/* evita overflow da padding + width */
+/* RESET SICURO */
 body.immobili-page *{
   box-sizing:border-box;
 }
 
-/* =====================================
-📦 CONTAINER FIX
-===================================== */
+/* ================= GRID ================= */
 
-.container{
-  width:100%;
-  max-width:1200px;
-  margin:0 auto;
-  padding-left:20px;
-  padding-right:20px;
-  box-sizing:border-box;
-}
-
-/* =====================================
-📊 GRID FIX (NON ROMPE DESKTOP)
-===================================== */
-
-.property-grid{
-  width:100%;
-  box-sizing:border-box;
-}
-
-/* =====================================
-📩 LEAD SECTION FIX
-===================================== */
-
-section[style*="linear-gradient"]{
-  width:100%;
-  box-sizing:border-box;
-}
-
-section[style*="linear-gradient"] > div{
-  flex-wrap:wrap;
-}
-
-/* =====================================
-📱 MOBILE FIX REALE (QUI ERA IL BUG)
-===================================== */
-
-@media(max-width:768px){
-
-  /* 🔥 PADDING SICURO */
-  .container{
-    padding-left:16px !important;
-    padding-right:16px !important;
-  }
-
-  /* 🔥 GRID STACK */
-  .form-grid{
-    grid-template-columns:1fr !important;
-  }
-
-  .property-grid{
-    grid-template-columns:1fr !important;
-  }
-
-  /* 🔥 INPUT NON ESCONO */
-  input{
-    width:100% !important;
-    max-width:100% !important;
-    box-sizing:border-box;
-    font-size:16px; /* evita zoom iOS */
-  }
-
-  /* 🔥 BOTTONI SAFE */
-  .btn,
-  .btn-primary{
-    width:100% !important;
-    max-width:100% !important;
-  }
-
-  /* 🔥 LEAD FIX */
-  section[style*="linear-gradient"] > div{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:12px;
-    align-items:stretch;
-  }
-
-  /* 🔥 HERO TEXT */
-  .page-title{
-    padding:0 10px;
-  }
-
-  /* 🔥 CARD NON SBORDANO */
-  .property-card{
-    width:100%;
-    box-sizing:border-box;
-  }
-
-}  
-
-  /* 💣 FIX CARD WIDTH REALE */
-.property-card{
-  min-width:0;
-}
-
-/* 💣 FIX FLEX INPUT LEAD */
-section[style*="linear-gradient"] input{
-  width:100%;
-  max-width:100%;
-}
-
-  .property-card{
-  cursor:pointer;
-  user-select:none;
-}
-
-  /* 🔥 FIX DEFINITIVO GRID */
 .property-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:24px;
+  gap:32px;
+  margin-top:60px;
   width:100%;
 }
 
-.property-card{
-  width:100%;
-  max-width:100%;
-  box-sizing:border-box;
-}
+/* ================= CARD ================= */
 
-  /* ===== GRID CLEAN ===== */
-.property-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:28px;
-  margin-top:50px;
-}
-
-/* ===== CARD ===== */
 .property-card{
   position:relative;
-  background:white;
-  padding:26px;
-  border-radius:18px;
+
+  background:#ffffff;
+
+  padding:32px 24px 26px;
+  border-radius:20px;
+
   border:1px solid #e2e8f0;
 
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
-  transition:all .25s ease;
+  box-shadow:0 12px 30px rgba(0,0,0,0.05);
 
   text-align:center;
   cursor:pointer;
+
+  transition: all .25s ease, transform .2s cubic-bezier(.4,0,.2,1);
+
+  /* 🔥 FIX TAGLIO */
+  overflow:visible;
 }
 
-/* HOVER */
+/* hover */
 .property-card:hover{
   transform:translateY(-6px);
   box-shadow:0 30px 80px rgba(0,0,0,0.08);
 }
 
-/* TOP CARD */
+/* ================= TOP CARD ================= */
+
 .property-card.highlight{
   border:2px solid #10b981;
-  box-shadow:0 20px 60px rgba(16,185,129,0.15);
+  box-shadow:0 25px 80px rgba(16,185,129,0.18);
 }
 
-/* ===== BADGE ===== */
+/* ================= BADGE ================= */
+
 .card-badge{
   position:absolute;
-  top:12px;
-  right:12px;
-  padding:5px 10px;
+  top:14px;
+  right:14px;
+
+  padding:6px 10px;
   border-radius:999px;
+
   font-size:11px;
   font-weight:600;
   color:white;
 }
 
-/* COLORS */
+/* colori */
 .green{background:#10b981;}
 .blue{background:#3b82f6;}
 .purple{background:#6366f1;}
 .red{background:#ef4444;}
 
-/* ===== SUB ===== */
-.card-sub{
-  font-size:12px;
+/* ================= TITOLI ================= */
+
+.property-card h3{
+  margin-top:14px;
   margin-bottom:6px;
+
+  font-size:20px;
   font-weight:600;
+  color:#0f172a;
 }
 
-/* ===== ROI ===== */
+/* sottotitolo */
+.card-sub{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+/* label */
+.market-label{
+  font-size:13px;
+  color:#64748b;
+}
+
+/* ROI */
 .property-roi{
-  font-size:28px;
+  font-size:30px;
   font-weight:700;
   color:#10b981;
   margin:6px 0;
 }
 
-/* ===== EXTRA ===== */
+/* extra */
 .market-extra{
   font-size:13px;
-  color:#64748b;
-  margin-top:6px;
+  color:#475569;
+  margin-top:8px;
 }
 
-/* ===== LINK ===== */
+/* link */
 .market-link{
   margin-top:14px;
+  font-size:14px;
   font-weight:600;
   color:#10b981;
+}
+
+/* ================= HERO FIX ================= */
+
+.hero .page-title h1,
+.hero .page-title p,
+.hero .page-title span{
+  color:#ffffff !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.7);
+}
+
+.hero .page-title div{
+  color:#e2e8f0 !important;
+}
+
+/* NON toccare card */
+.hero .property-card,
+.hero .property-card *{
+  color:#0f172a !important;
+  text-shadow:none !important;
+}
+
+/* ================= FORM ================= */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:16px;
+}
+
+.input-group{
+  display:flex;
+  flex-direction:column;
+}
+
+.input-group label{
+  font-size:13px;
+  margin-bottom:6px;
+  color:#334155;
+}
+
+.input-group input{
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
   font-size:14px;
 }
 
-</style>
+/* ================= CONTAINER ================= */
+
+.container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+  .property-grid{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  .property-card{
+    padding:24px 18px;
+  }
+
+  .property-roi{
+    font-size:26px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  input{
+    width:100%;
+    font-size:16px;
+  }
+
+  .btn,
+  .btn-primary{
+    width:100%;
+  }
+
+}
 
 </head>
 
@@ -670,135 +434,139 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
 <div class="property-grid">
 
-<!-- ================= NAPOLI ================= -->
-<div class="property-card highlight" data-city="napoli" onclick="handleCityClick(this)">
+  <!-- ================= NAPOLI ================= -->
+  <div class="property-card highlight" data-city="napoli" onclick="handleCityClick(this)">
 
-  <div class="card-badge green">#1 ROI</div>
+    <div class="card-badge green">#1 ROI</div>
 
-  <h3 data-it="Napoli – Alto rendimento" data-en="Naples – High ROI">
-    Napoli – Alto rendimento
-  </h3>
+    <h3 data-it="Napoli – Alto rendimento" data-en="Naples – High ROI">
+      Napoli – Alto rendimento
+    </h3>
 
-  <div class="card-sub green"
-       data-it="🔥 Miglior rendimento in Italia"
-       data-en="🔥 Best ROI in Italy">
-    🔥 Miglior rendimento in Italia
+    <div class="card-sub green"
+         data-it="🔥 Miglior rendimento in Italia"
+         data-en="🔥 Best ROI in Italy">
+      🔥 Miglior rendimento in Italia
+    </div>
+
+    <p class="market-label"
+       data-it="ROI medio B&B"
+       data-en="Average B&B ROI">
+      ROI medio B&B
+    </p>
+
+    <div class="property-roi">17%</div>
+
+    <div class="market-extra"
+         data-it="✔ Domanda costante tutto l’anno"
+         data-en="✔ Year-round demand">
+      ✔ Domanda costante tutto l’anno
+    </div>
+
+    <div class="market-link"
+         data-it="Analizza mercato →"
+         data-en="Analyze market →">
+      Analizza mercato →
+    </div>
+
   </div>
 
-  <p class="market-label"
-     data-it="ROI medio B&B"
-     data-en="Average B&B ROI">
-    ROI medio B&B
-  </p>
+  <!-- ================= ROMA ================= -->
+  <div class="property-card" data-city="roma" onclick="handleCityClick(this)">
 
-  <div class="property-roi">17%</div>
+    <div class="card-badge blue">#2</div>
 
-  <div class="market-extra"
-       data-it="✔ Domanda costante tutto l’anno"
-       data-en="✔ Year-round demand">
-    ✔ Domanda costante tutto l’anno
+    <h3 data-it="Roma – Investimento stabile" data-en="Rome – Stable investment">
+      Roma – Investimento stabile
+    </h3>
+
+    <p class="market-label"
+       data-it="ROI medio B&B"
+       data-en="Average B&B ROI">
+      ROI medio B&B
+    </p>
+
+    <div class="property-roi">13%</div>
+
+    <div class="market-extra"
+         data-it="✔ Mercato stabile e prevedibile"
+         data-en="✔ Stable and predictable market">
+      ✔ Mercato stabile e prevedibile
+    </div>
+
+    <div class="market-link"
+         data-it="Analizza mercato →"
+         data-en="Analyze market →">
+      Analizza mercato →
+    </div>
+
   </div>
 
-  <div class="market-link"
-       data-it="Analizza mercato →"
-       data-en="Analyze market →">
-    Analizza mercato →
+  <!-- ================= FIRENZE ================= -->
+  <div class="property-card" data-city="firenze" onclick="handleCityClick(this)">
+
+    <div class="card-badge purple">#3</div>
+
+    <h3 data-it="Firenze – Turismo premium" data-en="Florence – Premium tourism">
+      Firenze – Turismo premium
+    </h3>
+
+    <p class="market-label"
+       data-it="ROI medio B&B"
+       data-en="Average B&B ROI">
+      ROI medio B&B
+    </p>
+
+    <div class="property-roi">12%</div>
+
+    <div class="market-extra"
+         data-it="🌍 Clientela internazionale"
+         data-en="🌍 International clients">
+      🌍 Clientela internazionale
+    </div>
+
+    <div class="market-link"
+         data-it="Analizza mercato →"
+         data-en="Analyze market →">
+      Analizza mercato →
+    </div>
+
   </div>
 
-</div>
+  <!-- ================= MILANO ================= -->
+  <div class="property-card" data-city="milano" onclick="handleCityClick(this)">
 
-<!-- ================= ROMA ================= -->
-<div class="property-card" data-city="roma" onclick="handleCityClick(this)">
+    <div class="card-badge red"
+         data-it="ALTO COSTO"
+         data-en="HIGH COST">
+      HIGH COST
+    </div>
 
-  <div class="card-badge blue">#2</div>
+    <h3 data-it="Milano – Alta domanda business" data-en="Milan – Business demand">
+      Milano – Alta domanda business
+    </h3>
 
-  <h3 data-it="Roma – Investimento stabile" data-en="Rome – Stable investment">
-    Roma – Investimento stabile
-  </h3>
+    <p class="market-label"
+       data-it="ROI medio B&B"
+       data-en="Average B&B ROI">
+      ROI medio B&B
+    </p>
 
-  <p class="market-label"
-     data-it="ROI medio B&B"
-     data-en="Average B&B ROI">
-    ROI medio B&B
-  </p>
+    <div class="property-roi">10%</div>
 
-  <div class="property-roi">13%</div>
+    <div class="market-extra"
+         data-it="⚠️ Margini più compressi"
+         data-en="⚠️ Lower margins">
+      ⚠️ Margini più compressi
+    </div>
 
-  <div class="market-extra"
-       data-it="✔ Mercato stabile e prevedibile"
-       data-en="✔ Stable and predictable market">
-    ✔ Mercato stabile e prevedibile
+    <div class="market-link"
+         data-it="Analizza mercato →"
+         data-en="Analyze market →">
+      Analizza mercato →
+    </div>
+
   </div>
-
-  <div class="market-link"
-       data-it="Analizza mercato →"
-       data-en="Analyze market →">
-    Analizza mercato →
-  </div>
-
-</div>
-
-<!-- ================= FIRENZE ================= -->
-<div class="property-card" data-city="firenze" onclick="handleCityClick(this)">
-
-  <div class="card-badge purple">#3</div>
-
-  <h3 data-it="Firenze – Turismo premium" data-en="Florence – Premium tourism">
-    Firenze – Turismo premium
-  </h3>
-
-  <p class="market-label"
-     data-it="ROI medio B&B"
-     data-en="Average B&B ROI">
-    ROI medio B&B
-  </p>
-
-  <div class="property-roi">12%</div>
-
-  <div class="market-extra"
-       data-it="🌍 Clientela internazionale"
-       data-en="🌍 International clients">
-    🌍 Clientela internazionale
-  </div>
-
-  <div class="market-link"
-       data-it="Analizza mercato →"
-       data-en="Analyze market →">
-    Analizza mercato →
-  </div>
-
-</div>
-
-<!-- ================= MILANO ================= -->
-<div class="property-card" data-city="milano" onclick="handleCityClick(this)">
-
-  <div class="card-badge red">HIGH COST</div>
-
-  <h3 data-it="Milano – Alta domanda business" data-en="Milan – Business demand">
-    Milano – Alta domanda business
-  </h3>
-
-  <p class="market-label"
-     data-it="ROI medio B&B"
-     data-en="Average B&B ROI">
-    ROI medio B&B
-  </p>
-
-  <div class="property-roi">10%</div>
-
-  <div class="market-extra"
-       data-it="⚠️ Margini più compressi"
-       data-en="⚠️ Lower margins">
-    ⚠️ Margini più compressi
-  </div>
-
-  <div class="market-link"
-       data-it="Analizza mercato →"
-       data-en="Analyze market →">
-    Analizza mercato →
-  </div>
-
-</div>
 
 </div>
 <!-- ================= LEAD SECTION ================= -->
