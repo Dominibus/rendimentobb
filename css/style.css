@@ -14799,3 +14799,96 @@ NON rompe altre sezioni
   border-color:#10b981;
   color:#065f46 !important;
 }
+
+/* =====================================
+🚫 GLOBAL OVERFLOW CONTROL (SAFE)
+NO SCROLL LATERALE – TUTTO IL PROGETTO
+===================================== */
+
+/* blocco base */
+html, body{
+  overflow-x:hidden;
+  max-width:100%;
+}
+
+/* evita che qualsiasi elemento sfori */
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+/* immagini e media sempre responsive */
+img, video, canvas, svg{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+
+/* container sicuri */
+.container,
+.section,
+main{
+  max-width:100%;
+}
+
+/* =====================================
+📱 MOBILE HARD FIX (CRITICO)
+===================================== */
+
+@media (max-width:768px){
+
+  /* blocco totale overflow */
+  html, body{
+    overflow-x:hidden;
+  }
+
+  /* qualsiasi elemento NON può uscire */
+  body *{
+    max-width:100%;
+  }
+
+  /* grid sempre safe */
+  [class*="grid"]{
+    width:100%;
+  }
+
+  /* fix classico input/button */
+  input, textarea, select, button{
+    max-width:100%;
+  }
+
+  /* fix padding che causa overflow */
+  .container{
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+
+}
+
+/* =====================================
+🧠 FIX ELEMENTI CHE CAUSANO OVERFLOW
+===================================== */
+
+/* elementi con translate / scale */
+[class*="card"]:hover{
+  will-change:transform;
+}
+
+/* evita glitch su mobile */
+@media (max-width:768px){
+  [class*="card"]:hover{
+    transform:none;
+  }
+}
+
+/* =====================================
+🔥 DEBUG MODE (ATTIVA SOLO SE SERVE)
+(per trovare chi sfora)
+===================================== */
+
+/*
+*{
+  outline:1px solid red !important;
+}
+*/
