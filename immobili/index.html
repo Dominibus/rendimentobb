@@ -470,7 +470,6 @@ Passa a PRO per vedere immobili reali
 
 <a href="/pricing/" class="btn btn-primary" style="width:100%">
 Upgrade
-</a>
 
 <div onclick="closeUpgradeModal()" style="
 margin-top:10px;
@@ -539,7 +538,6 @@ font-weight:600;
 data-it="Simula investimento"
 data-en="Simulate investment">
 Simula investimento
-</a>
 
 </div>
 </div>
@@ -649,8 +647,6 @@ data-en="Analyze market →">
 Analizza mercato →
 </div>
 
-</a>
-
 
 <!-- ================= #2 ROMA ================= -->
 
@@ -708,8 +704,6 @@ data-en="Analyze market →">
 Analizza mercato →
 </div>
 
-</a>
-
 
 <!-- ================= #3 FIRENZE ================= -->
 
@@ -766,8 +760,6 @@ data-en="Analyze market →">
 Analizza mercato →
 </div>
 
-</a>
-
 
 <!-- ================= #4 MILANO ================= -->
 
@@ -823,8 +815,6 @@ data-it="Analizza mercato →"
 data-en="Analyze market →">
 Analizza mercato →
 </div>
-
-</a>
 
 </div>
 
@@ -1063,7 +1053,6 @@ Il rendimento di un B&B dipende da turismo, prezzo immobili e occupazione media.
 data-it="Simula investimento"
 data-en="Simulate investment">
 Simula investimento
-</a>
 
 </div>
 
@@ -1404,38 +1393,39 @@ badge2
 
 
 
-// ================= REDIRECT =================
+// ================= OPEN INVESTMENT =================
 
 window.openInvestment = function(price){
 
   const user = window.currentUser || null;
-
-  // 👻 NON LOGGATO → BLOCCO + LOGIN
-  if(!user){
-
-    localStorage.setItem("property_price", price);
-    localStorage.setItem("lead_source", "immobili");
-
-    window.openInvestment = function(price){
-
-  const user = window.currentUser || null;
   const plan = window.currentPlan || "free";
 
+  // salva sempre
   localStorage.setItem("property_price", price);
 
+  // =====================
+  // 👻 NON LOGGATO
+  // =====================
   if(!user){
+    localStorage.setItem("lead_source", "immobili");
     showLoginModal();
     return;
   }
 
+  // =====================
+  // 🧪 FREE USER
+  // =====================
   if(plan === "free"){
     showUpgradeModal();
     return;
   }
 
+  // =====================
+  // 💰 INVESTOR / PRO
+  // =====================
   window.location.href="/tool/";
 };
-
+  
 // ================= LEAD IMMOBILI =================
 
 window.sendLeadImmobili = async function(){
@@ -1577,17 +1567,31 @@ window.handleCityClick = function(el){
   window.location.href = "/immobili/" + city;
 };
 
-  // ================= LOGIN MODAL FUNCTIONS =================
+ // ================= LOGIN MODAL FUNCTIONS =================
 
 window.showLoginModal = function(){
-  document.getElementById("login-modal").style.display = "flex";
+
+  const modal = document.getElementById("login-modal");
+  if(modal){
+    modal.style.display = "flex";
+  }
+
+  // 🔥 salva contesto (importantissimo per funnel)
+  localStorage.setItem("login_redirect", window.location.pathname);
 };
 
 window.closeLoginModal = function(){
-  document.getElementById("login-modal").style.display = "none";
+  const modal = document.getElementById("login-modal");
+  if(modal){
+    modal.style.display = "none";
+  }
 };
 
 window.goToLogin = function(){
+
+  // 🔥 salva pagina corrente
+  localStorage.setItem("login_redirect", window.location.pathname);
+
   window.location.href = "/login/";
 };
 
