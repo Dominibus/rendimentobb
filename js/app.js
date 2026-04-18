@@ -391,16 +391,12 @@ function requirePlan(requiredPlan){
   // 🔐 NON LOGGATO
   if(!window.currentUser){
 
-    alert(
-      t(
-        "Per usare questa funzione devi creare un account gratuito.",
-        "Create a free account to use this feature."
-      )
-    );
+  console.log("🔒 USER NOT LOGGED → REGISTER POPUP");
 
-    window.location.href = "/login/";
-    return false;
-  }
+  showRegisterPopup(); // ✅ UX corretta
+
+  return false;
+}
 
   // ❌ NON HA IL PIANO
   if(!hasPlan(requiredPlan)){
