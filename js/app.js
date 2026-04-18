@@ -260,8 +260,11 @@ window.runMortgageComparison = function(){
   const rateC = parseFloat(document.getElementById("rateC").value);
 
   if(!amount || !years){
-    alert(t("Inserisci importo e durata","Enter amount and duration"));
-    return;
+    showToast(
+  t("Inserisci importo e durata","Enter amount and duration"),
+  "warning"
+);
+return;
   }
 
   const banks = [
@@ -2680,8 +2683,11 @@ if(!window.lastAnalysisData){
 }
 
 if(!window.jspdf){
-  alert("PDF engine non caricato");
-  return;
+  showToast(
+  t("Errore generazione PDF","PDF engine not loaded"),
+  "error"
+);
+return;
 }
 
 const { jsPDF } = window.jspdf;
@@ -2975,9 +2981,8 @@ window.buyPlan = async function(plan){
   const user = window.currentUser;
 
   if(!user){
-    alert(t("Devi effettuare il login","You must login"));
-    window.location.href = "/login/";
-    return;
+    showRegisterPopup();
+return;
   }
 
   const uid = user.uid;
@@ -3222,10 +3227,10 @@ document.addEventListener("rb_auth_ready", () => {
         window.buyPlan(pendingPlan);
       }else{
         console.error("❌ buyPlan non trovata");
-        alert(t(
-          "Errore sistema pagamento",
-          "Payment system error"
-        ));
+        showToast(
+  t("Errore sistema pagamento","Payment system error"),
+  "error"
+);
       }
 
     }, 500);
@@ -3943,26 +3948,22 @@ window.startPlanPurchase = function(plan){
 if(
   (plan === "pro" && access.isPro) ||
   (plan === "investor" && access.isInvestor)
-){alert(
-      t(
-        "Hai già questo piano attivo",
-        "You already have this plan"
-      )
-    );
-    return;
+){showToast(
+  t("Hai già questo piano attivo","You already have this plan"),
+  "info"
+);
+return;
   }
 
   // =========================
   // 🔥 LOGICA GERARCHIA
   // =========================
   if(plan === "investor" && window.getUserAccess().isPro){
-    alert(
-      t(
-        "Hai già un piano superiore",
-        "You already have a higher plan"
-      )
-    );
-    return;
+    showToast(
+  t("Hai già un piano superiore","You already have a higher plan"),
+  "info"
+);
+return;
   }
 
   // =========================
