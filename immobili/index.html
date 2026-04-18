@@ -1448,14 +1448,18 @@ window.handleCityClick = function(el){
   const user = window.currentUser || null;
   const plan = window.currentPlan || "free";
 
-  // 🔥 salva sempre
+  // 🎯 salva sempre città
   localStorage.setItem("selected_city", city);
 
   // =====================
   // 👻 NON LOGGATO
   // =====================
   if(!user){
+
+    // 🔥 salva funnel
     localStorage.setItem("lead_source", "immobili_city");
+    localStorage.setItem("post_login_redirect", "/immobili/" + city + "/");
+
     showLoginModal();
     return;
   }
