@@ -65,41 +65,6 @@ window.alert = function(msg){
 window.getUserAccess = function(){
   return window.RB_USER || {};
 };
-
-  const user = window.currentUser;
-  const plan = window.currentPlan || "free";
-
-  const isLogged = !!user;
-
-  const isAdmin =
-    user?.email === "rendimentobb@gmail.com" ||
-    window.userRole === "admin";
-
-  const isPro =
-    plan === "pro" || plan === "pro_yearly";
-
-  const isInvestor =
-    plan === "investor";
-
-  const isFree =
-    !isLogged || plan === "free";
-
-  return {
-
-    isLogged,
-    isGuest: !isLogged,
-    isFree,
-    isInvestor,
-    isPro,
-    isAdmin,
-
-    // 🔥 PERMESSI
-    canSeeFullAnalysis: isAdmin || isPro,
-    canSeeAdvanced: isAdmin || isPro || isInvestor,
-    canDownloadPDF: isAdmin || isPro
-
-  };
-
 };
 
 window.applyAccessControl = function(){
