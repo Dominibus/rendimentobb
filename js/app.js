@@ -272,9 +272,9 @@ window.isUserReady = function(){
   return window.firebaseReady === true;
 };
 
-function getLeadScore(result){
+function getLeadScore(data){
 
-  const roiValue = roi;
+  const roi = Number(data?.roi || 0);
 
   if(roi >= 12){
     return "hot";
@@ -1988,11 +1988,9 @@ function runPostAnalysis(result, context){
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
-  const roiValue = roi;
+  const roiValue = Number(result?.roi || 0);
 
-  // ================= SMART REMINDER =================
-
-triggerSmartReminder(roi);
+triggerSmartReminder(roiValue);
 }
 
 // ================= MORTGAGE LEAD TRIGGER =================
@@ -2107,18 +2105,16 @@ const midROI  = roi > 6;
   }
 
   // ================= LEAD SCORE =================
-  let leadScore = getLeadScore({ roi });
+  const roi = Number(window.lastAnalysisData?.roi || 0);
 
-  if(window.simulationCount > 3){
-    leadScore = "hot";
-  }
+let leadScore = getLeadScore({ roi });
 
-  const leadValue =
-    leadScore === "hot" ? 100 :
-    leadScore === "warm" ? 40 : 0;
+if(window.simulationCount > 3){
+  leadScore = "hot";
+}
 
-  const leadDestination = getLeadDestination({
-  roi: roiValue,
+const leadDestination = getLeadDestination({
+  roi,
   city: window.currentCity
 });
 
