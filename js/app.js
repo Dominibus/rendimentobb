@@ -2104,17 +2104,17 @@ const midROI  = roi > 6;
     setTimeout(()=> window.location.href="/login/", 800);
   }
 
-  // ================= LEAD SCORE =================
-  const roi = Number(window.lastAnalysisData?.roi || 0);
+// ================= LEAD SCORE =================
+const roiValue = Number(window.lastAnalysisData?.roi || 0);
 
-let leadScore = getLeadScore({ roi });
+let leadScore = getLeadScore({ roi: roiValue });
 
 if(window.simulationCount > 3){
   leadScore = "hot";
 }
 
 const leadDestination = getLeadDestination({
-  roi,
+  roi: roiValue,
   city: window.currentCity
 });
 
