@@ -1518,7 +1518,7 @@ function showUpgradePopup(roi){
 
   const access = window.getUserAccess();
 
-if(!window.firebaseReady || access.canSeeFullAnalysis){
+if(access.canSeeFullAnalysis){
   return;
 }
 
@@ -1542,6 +1542,12 @@ if(!window.firebaseReady || access.canSeeFullAnalysis){
 // ================= SMART INVESTMENT ALERT =================
 
 function renderSmartInvestmentAlert(roi){
+
+  const access = window.getUserAccess();
+
+if(access.canSeeFullAnalysis){
+  return;
+}
 
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
@@ -1624,6 +1630,12 @@ function renderSmartInvestmentAlert(roi){
 // ================= UPGRADE MODAL =================
 
 function showUpgradeModal(roi){
+
+  const access = window.getUserAccess();
+
+if(access.canSeeFullAnalysis){
+  return;
+}
 
 const container = document.getElementById("smart-investment-alert");
 
@@ -2007,13 +2019,14 @@ if(mortgageBox && mortgageBtn){
   }
 
   }
-  // ================= PAYWALL (UNICO) =================
-const accessPaywall = window.RB_USER || {}
+// ================= PAYWALL (UNICO) =================
+const access = window.getUserAccess();
 
 // 🔥 ROI UNICO (NO DUPLICATI)
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
-if(!window.RB_USER?.isPro && !window.RB_USER?.isAdmin && !window.RB_USER?.isInvestor && !window.paywallShown){
+// 🔒 SOLO chi NON è PRO / ADMIN
+if(!access.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
@@ -2024,15 +2037,15 @@ if(!window.RB_USER?.isPro && !window.RB_USER?.isAdmin && !window.RB_USER?.isInve
 
     if(highROI){
 
-      showUpgradeModal(currentROI); // 🔥 HARD SELL
+      showUpgradeModal(currentROI); // 🔥 HARD SELL PRO
 
     }else if(midROI){
 
-      renderSmartInvestmentAlert(currentROI); // 🔥 SOFT PUSH
+      renderSmartInvestmentAlert(currentROI); // 🔥 SOFT
 
     }else{
 
-      showUpgradeModal(currentROI); // 🔥 educazione
+      showUpgradeModal(currentROI); // 🔥 EDUCATION
 
     }
 
