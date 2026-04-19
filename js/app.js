@@ -2061,7 +2061,6 @@ if(mortgageBox && mortgageBtn){
     mortgageBox.style.display = "none";
   }
 
-}
   // ================= PAYWALL (UNICO) =================
 const accessPaywall = window.getUserAccess();
 
