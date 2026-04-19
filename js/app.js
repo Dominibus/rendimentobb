@@ -153,32 +153,11 @@ window.applyAccessControl = function(){
     el.classList.add("locked-section");
 
     // 🔥 overlay con lucchetto
-    if(!el.querySelector(".lock-overlay")){
-      
-      const overlay = document.createElement("div");
-
-      overlay.className = "lock-overlay";
-
-      overlay.innerHTML = `
-        <div style="
-          backdrop-filter:blur(6px);
-          background:rgba(255,255,255,0.7);
-          padding:20px;
-          border-radius:12px;
-          text-align:center;
-        ">
-          🔒
-          <div style="margin-top:8px;font-size:13px;">
-            ${t(
-              "Analisi avanzata PRO",
-              "Advanced PRO analysis"
-            )}
-          </div>
-        </div>
-      `;
-
-      el.appendChild(overlay);
-    }
+    // 🔥 overlay con lucchetto (NUOVO SISTEMA)
+createLockOverlay(
+  el,
+  t("Analisi avanzata PRO","Advanced PRO analysis")
+);
 
   });
 
@@ -418,12 +397,14 @@ const lockIds = [
 if(!access.canSeeFullAnalysis){
 
   lockIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
+  const el = document.getElementById(id);
+  if(!el) return;
 
-    el.innerText = "🔒";
-    el.style.opacity = "0.5";
-  });
+  createLockOverlay(
+    el.parentElement,
+    t("Dati completi disponibili nel piano PRO","Full data available in PRO")
+  );
+});
 
 }else{
 
@@ -517,6 +498,28 @@ async function saveAnalysis(data){
     console.error("Errore salvataggio:", e);
   }
 
+}
+
+// ================= LOCK OVERLAY (GLOBAL) =================
+function createLockOverlay(el, text){
+
+  if(!el || el.querySelector(".lock-overlay")) return;
+
+  const overlay = document.createElement("div");
+  overlay.className = "lock-overlay";
+
+  overlay.innerHTML = `
+    <div class="lock-box">
+      <span class="lock-icon">🔒</span>
+      <div class="lock-text">${text}</div>
+    </div>
+  `;
+
+  overlay.onclick = () => {
+    triggerUpgradeFlow();
+  };
+
+  el.appendChild(overlay);
 }
 
 // ================= PLAN SYSTEM =================
