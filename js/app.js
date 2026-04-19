@@ -150,12 +150,8 @@ document.querySelectorAll(`
   });
 
   const premiumIds = [
-    "investment-verdict",
-    "investment-risk-meter",
-    "ai-insights",
-    "break-even-kpi",
-    "occupancy-sensitivity"
-  ];
+  "ai-insights" // 🔥 SOLO QUESTO BLOCCATO
+];
 
   premiumIds.forEach(id => {
 
@@ -165,9 +161,12 @@ document.querySelectorAll(`
     el.classList.add("locked-section");
 
     createLockOverlay(
-      el,
-      t("Analisi avanzata PRO","Advanced PRO analysis")
-    );
+  el,
+  t(
+    "Insight strategici disponibili nel piano PRO",
+    "Strategic insights available in PRO"
+  )
+);
 
   });
 
