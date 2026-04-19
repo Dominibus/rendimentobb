@@ -2062,133 +2062,130 @@ if(mortgageBox && mortgageBtn){
 }
   // ================= PAYWALL (UNICO) =================
 const accessPaywall = window.getUserAccess();
-  
+
+// 🔥 ROI UNICO (NO DUPLICATI)
+const currentROI = Number(window.lastAnalysisData?.roi || 0);
+
 if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
-  const roi = Number(window.lastAnalysisData?.roi || 0);
-
-const highROI = roi > 10;
-const midROI  = roi > 6;
+  const highROI = currentROI > 10;
+  const midROI  = currentROI > 6;
 
   setTimeout(()=>{
 
     if(highROI){
 
-      showUpgradeModal(roi); // 🔥 HARD SELL
+      showUpgradeModal(currentROI); // 🔥 HARD SELL
 
     }else if(midROI){
 
-      renderSmartInvestmentAlert(roi); // 🔥 SOFT PUSH
+      renderSmartInvestmentAlert(currentROI); // 🔥 SOFT PUSH
 
     }else{
 
-      showUpgradeModal(roi); // 🔥 educazione
+      showUpgradeModal(currentROI); // 🔥 educazione
 
     }
 
   },1000);
-
 }
 
-  // ================= USER =================
-  const userEmail = window.currentUser?.email || null;
+// ================= USER =================
+const userEmail = window.currentUser?.email || null;
 
-  // ================= SESSION COUNT =================
-  window.simulationCount = (window.simulationCount || 0) + 1;
+// ================= SESSION COUNT =================
+window.simulationCount = (window.simulationCount || 0) + 1;
 
-  if(!window.currentUser && window.simulationCount >= 2){
-    setTimeout(()=> window.location.href="/login/", 800);
-  }
+if(!window.currentUser && window.simulationCount >= 2){
+  setTimeout(()=> window.location.href="/login/", 800);
+}
 
 // ================= LEAD SCORE =================
-const roi = Number(window.lastAnalysisData?.roi || 0);
-
-let leadScore = getLeadScore({ roi });
+let leadScore = getLeadScore({ roi: currentROI });
 
 if(window.simulationCount > 3){
   leadScore = "hot";
 }
 
+// ================= DESTINATION =================
 const leadDestination = getLeadDestination({
-  roi,
+  roi: currentROI,
   city: window.currentCity
 });
 
-  // ================= SAVE LEAD =================
-  (async () => {
+// ================= SAVE LEAD =================
+(async () => {
 
-    try{
+  try{
 
-      if(window.leadSaved) return;
+    if(window.leadSaved) return;
 
-      const {
-        addDoc,
-        collection,
-        serverTimestamp
-      } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+    const {
+      addDoc,
+      collection,
+      serverTimestamp
+    } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
 
-      await addDoc(collection(db,"leads"),{
-        email: userEmail,
-        roi,
-        score: leadScore,
-        value: roi,
-        city: window.currentCity || "unknown",
-        createdAt: serverTimestamp()
+    await addDoc(collection(db,"leads"),{
+      email: userEmail,
+      roi: currentROI,
+      score: leadScore,
+      value: currentROI,
+      city: window.currentCity || "unknown",
+      createdAt: serverTimestamp()
+    });
+
+    window.leadSaved = true;
+
+    // ================= PARTNER =================
+    if(leadScore === "hot"){
+      fetch("/api/send-lead-partner",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          email: userEmail,
+          city: window.currentCity,
+          roi: currentROI,
+          score: leadScore,
+          type: leadDestination?.type || "simulator",
+          partners: leadDestination?.emails || []
+        })
       });
-
-      window.leadSaved = true;
-
-      // ================= PARTNER =================
-      if(leadScore === "hot"){
-        fetch("/api/send-lead-partner",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({
-            email:userEmail,
-            city:window.currentCity,
-            roi,
-            score:leadScore,
-            type:leadDestination?.type || "simulator",
-            partners:leadDestination?.emails || []
-          })
-        });
-      }
-
-    }catch(e){
-      console.error("Lead error:", e);
     }
 
-  })();
+  }catch(e){
+    console.error("Lead error:", e);
+  }
 
-  // ================= EMAIL =================
-  if(!userEmail || roi <= 0) return;
+})();
 
-  if(window.emailUserSent) return;
+// ================= EMAIL =================
+if(!userEmail || currentROI <= 0) return;
 
-  window.emailUserSent = true;
+if(window.emailUserSent) return;
 
-  fetch("/api/send-lead-email",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      email:userEmail,
-      lang:window.currentLang || "it",
-      roi,
-      city:window.currentCity
-    })
+window.emailUserSent = true;
+
+fetch("/api/send-lead-email",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    email: userEmail,
+    lang: window.currentLang || "it",
+    roi: currentROI,
+    city: window.currentCity
   })
-  .then(res=>{
-    if(!res.ok){
-      window.emailUserSent = false;
-    }
-  })
-  .catch(()=>{
+})
+.then(res=>{
+  if(!res.ok){
     window.emailUserSent = false;
-  });
-
-}
+  }
+})
+.catch(()=>{
+  window.emailUserSent = false;
+});
 
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
