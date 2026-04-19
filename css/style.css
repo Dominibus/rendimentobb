@@ -15158,3 +15158,15 @@ body.is-investor .upgrade-box.free-only{
 body.is-investor .upgrade-box.pro-only{
   display:block !important;
 }
+
+/* 🔥 VISIBILITÀ PIANI */
+
+body.is-pro .free-only,
+body.is-admin .free-only{
+  display:none !important;
+}
+
+/* opzionale ma consigliato */
+body.is-investor .free-only{
+  display:none !important;
+}
