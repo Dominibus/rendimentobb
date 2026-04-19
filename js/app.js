@@ -3682,10 +3682,14 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= UI BASE =================
 
-  if(!access.canSeeFullAnalysis){
-    console.log("🔒 FREE USER");
-  }
+  if(!access || Object.keys(access).length === 0){
+  console.warn("⏳ ACCESS NON PRONTO → SKIP");
+  return;
+}
 
+if(!access.canSeeFullAnalysis){
+  console.log("🔒 FREE USER");
+}
   // ================= FORCE PLAN FIX =================
 
   if(!window.planCorrected){
@@ -3695,7 +3699,7 @@ document.addEventListener("rb_plan_loaded", () => {
     setTimeout(()=>{
 
       if(typeof window.forceCorrectPlan === "function"){
-        window.forceCorrectPlan();
+        // window.forceCorrectPlan();
       }
 
     },100);
