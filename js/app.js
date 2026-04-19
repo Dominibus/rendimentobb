@@ -3703,10 +3703,8 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= UI BASE =================
 
-   else {
-
+  if(!access.canSeeFullAnalysis){
     console.log("🔒 FREE USER");
-
   }
 
   // ================= FORCE PLAN FIX =================
