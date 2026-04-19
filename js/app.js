@@ -1916,6 +1916,11 @@ function runPostAnalysis(result, context){
 
   const roi = Number(result?.roi || 0);
 
+  if(roi <= 0){
+  console.warn("⛔ ROI non valido → skip UI render");
+  return;
+}
+
 triggerSmartReminder(roi);
 }
 
@@ -1995,7 +2000,11 @@ const accessPaywall = window.getUserAccess();
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
 // 🔒 SOLO chi NON è PRO / ADMIN
-if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
+if(
+  !accessPaywall.canSeeFullAnalysis &&
+  !window.paywallShown &&
+  currentROI > 0
+){
 
   window.paywallShown = true;
 
