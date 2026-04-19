@@ -113,7 +113,7 @@ window.applyAccessControl = function(){
   // ===============================
   // 🔥 PRO / ADMIN
   // ===============================
-  if(access.isPro || access.isAdmin || access.canSeeFullAnalysis){
+  if(access.isPro || access.isAdmin){
 
     console.log("🟢 PRO → LOCK SYSTEM DISABLED");
 
@@ -653,10 +653,9 @@ window.triggerUpgradeFlow = function(context = {}){
 
   // ================= INVESTOR =================
   if(access.isInvestor){
-    console.log("🔥 INVESTOR → PRO");
-    openUpgradeModal("pro", roi);
-    return;
-  }
+  console.log("🟡 INVESTOR → SOLO UI, NO AUTO-UPGRADE");
+  return;
+}
 
   // ================= PRO =================
   console.log("✅ PRO USER → NO POPUP");
@@ -3789,8 +3788,8 @@ function removeGhostOverlays(){
 
 // 🔥 ESECUZIONE FORZATA CONTINUA
 // esegui solo quando serve
-document.addEventListener("rb_plan_loaded", removeGhostOverlays);
-document.addEventListener("rb_auth_ready", removeGhostOverlays);
+// document.addEventListener("rb_plan_loaded", removeGhostOverlays);
+// document.addEventListener("rb_auth_ready", removeGhostOverlays);
 
 // ================= PLAN LOADED HANDLER CLEAN =================
 
