@@ -2041,7 +2041,7 @@ if(mortgageBox && mortgageBtn){
         body:JSON.stringify({
           email: window.currentUser.email,
           type:"mutuo",
-          roi: result.roi,
+          roi: window.lastAnalysisData?.roi || 0,
           city: window.currentCity
         })
       });
@@ -2068,8 +2068,10 @@ if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
-  const highROI = roi > 10;
-  const midROI  = roi > 6;
+  const roi = window.lastAnalysisData?.roi || 0;
+
+const highROI = roi > 10;
+const midROI  = roi > 6;
 
   setTimeout(()=>{
 
