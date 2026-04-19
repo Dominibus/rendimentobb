@@ -134,6 +134,16 @@ window.applyAccessControl = function(){
 
   unlockUI();
 
+    // 🔥 FIX DEFINITIVO BLUR
+document.body.classList.remove("pro-blur");
+
+document.querySelectorAll(`
+  .results-overlay,
+  .home-blur-overlay,
+  .locked-overlay,
+  .upgrade-overlay
+`).forEach(el => el.remove());
+
   // 🔥 PULISCE vecchi overlay (FONDAMENTALE)
   document.querySelectorAll("[data-paywall], .upgrade-box").forEach(el=>{
     el.remove();
@@ -506,6 +516,9 @@ function createLockOverlay(el, text){
   if(!el || el.querySelector(".lock-overlay")) return;
 
   const overlay = document.createElement("div");
+overlay.style.zIndex = "999";
+el.style.position = "relative";
+  
   overlay.className = "lock-overlay";
 
   overlay.innerHTML = `
@@ -2100,7 +2113,7 @@ const accessPaywall = window.getUserAccess()
 // 🔥 ROI UNICO (NO DUPLICATI)
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
-if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
+if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown && !window.getUserAccess().isInvestor){
 
   window.paywallShown = true;
 
@@ -2458,13 +2471,7 @@ if(revenueHome){
       }
     },200);
 
-    if(window.getUserAccess().isInvestor){
-  setTimeout(()=>{
-    showProUpgradeModal();
-  }, 4000);
-}
-
-    // ================= EVENT GLOBAL =================
+       // ================= EVENT GLOBAL =================
     window.currentRevenue = result.revenue || gross || 0;
 
     document.dispatchEvent(
