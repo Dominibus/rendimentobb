@@ -15082,3 +15082,43 @@ Fix titolo invisibile popup
 #upgrade-modal{
   backdrop-filter:blur(6px);
 }
+
+/* ===============================
+🔒 LOCK SYSTEM – PREMIUM UI
+=============================== */
+
+.locked-section{
+  position:relative;
+}
+
+.lock-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+
+.lock-box{
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(8px);
+  border-radius:16px;
+  padding:18px 22px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,0.12);
+  border:1px solid rgba(0,0,0,0.05);
+  cursor:pointer;
+}
+
+.lock-icon{
+  font-size:22px;
+  display:block;
+}
+
+.lock-text{
+  margin-top:6px;
+  font-size:13px;
+  color:#334155;
+  font-weight:500;
+}
