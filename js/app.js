@@ -63,6 +63,8 @@ window.alert = function(msg){
 
 // 🔥 FIX CRITICO ACCESS SYSTEM (METTERE QUI)
 window.getUserAccess = function(){
+  return window.RB_USER || {};
+};
 
   const user = window.currentUser;
   const plan = window.currentPlan || "free";
@@ -101,14 +103,8 @@ window.getUserAccess = function(){
 };
 
 window.applyAccessControl = function(){
-
-  const access = window.getUserAccess();
-
-  // 🛑 BLOCCO GLOBALE SE GIÀ SBLOCCATO
-  if(window.proUnlocked){
-    console.log("⛔ SKIP → già PRO sbloccato");
-    return;
-  }
+  console.warn("⛔ OLD ACCESS SYSTEM DISABLED");
+};
 
   // ===============================
   // 🔥 PRO / ADMIN
@@ -1470,7 +1466,7 @@ document.addEventListener("rb_auth_ready", () => {
 
   const resultsCard = document.querySelector(".results-card");
 
-  if(resultsCard && !window.getUserAccess().canSeeFullAnalysis){
+  if(resultsCard && !window.RB_USER?.isPro && !window.RB_USER?.isAdmin){
     resultsCard.classList.add("locked-section");
   }
 
@@ -2104,12 +2100,12 @@ if(mortgageBox && mortgageBtn){
 
   }
   // ================= PAYWALL (UNICO) =================
-const accessPaywall = window.getUserAccess()
+const accessPaywall = window.RB_USER || {}
 
 // 🔥 ROI UNICO (NO DUPLICATI)
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
-if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown && !window.getUserAccess().isInvestor){
+if(!window.RB_USER?.isPro && !window.RB_USER?.isAdmin && !window.RB_USER?.isInvestor && !window.paywallShown){
 
   window.paywallShown = true;
 
@@ -3668,17 +3664,17 @@ function unlockProUI(){
 // ================= EVENTI =================
 
 // 🔥 QUESTI SONO FONDAMENTALI
-document.addEventListener("rb_plan_loaded", () => {
-  if(typeof window.applyAccessControl === "function"){
-    window.applyAccessControl();
-  }
-});
-document.addEventListener("rb_auth_ready", () => {
-  if(typeof window.applyAccessControl === "function"){
-    window.applyAccessControl();
-  }
-});
+// document.addEventListener("rb_plan_loaded", () => {
+//   if(typeof window.applyAccessControl === "function"){
+//     window.applyAccessControl();
+//   }
+// });
 
+// document.addEventListener("rb_auth_ready", () => {
+//   if(typeof window.applyAccessControl === "function"){
+//     window.applyAccessControl();
+//   }
+// });
 
 // ================= FIX CTA DUPLICATE =================
 document.addEventListener("DOMContentLoaded", () => {
