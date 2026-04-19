@@ -150,8 +150,6 @@ window.applyAccessControl = function(){
 
   });
 
-}
-
 window.showToast = function(message, type="info"){
 
   const existing = document.getElementById("rb-toast");
