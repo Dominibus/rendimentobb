@@ -161,12 +161,21 @@ window.initAccessControl = function(){
 };
 
 // ========================================
-// 🧠 HELPERS
+// 🧠 HELPERS (FIX DEFINITIVO)
 // ========================================
+
 window.isPro = () => window.RB_USER?.isPro === true;
-window.isInvestor = () => window.RB_USER?.isInvestor === true;
+
+window.isInvestor = () =>
+  window.RB_USER?.isInvestor === true &&
+  !window.RB_USER?.isPro;
+
 window.isLogged = () => window.RB_USER?.isLogged === true;
-window.isFree = () => !window.RB_USER?.isPro;
+
+window.isFree = () =>
+  window.isLogged() &&
+  !window.isPro() &&
+  !window.isInvestor();
 
 // ========================================
 // 🔒 REQUIRE PLAN
