@@ -2007,13 +2007,13 @@ if(mortgageBox && mortgageBtn){
 
   }
 // ================= PAYWALL (UNICO) =================
-const access = window.getUserAccess();
+const accessPaywall = window.getUserAccess();
 
 // 🔥 ROI UNICO (NO DUPLICATI)
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
 // 🔒 SOLO chi NON è PRO / ADMIN
-if(!access.canSeeFullAnalysis && !window.paywallShown){
+if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
