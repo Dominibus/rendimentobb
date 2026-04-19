@@ -378,11 +378,9 @@ window.isProUser = function(){
 
 // ================= SHOCK ENGINE =================
 
-const access = window.getUserAccess(); // 🔥 AGGIUNTO
-
 const shock = document.getElementById("roi-shock-block");
 
-if(!access.canSeeFullAnalysis && roi > 0){
+if(!window.getUserAccess().canSeeFullAnalysis && roi > 0){
 
   if(shock){
     shock.style.display = "block";
@@ -402,7 +400,7 @@ const lockIds = [
   "profit-annual"
 ];
 
-if(!access.canSeeFullAnalysis){
+if(!window.getUserAccess().canSeeFullAnalysis){
 
   lockIds.forEach(id => {
     const el = document.getElementById(id);
