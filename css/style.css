@@ -15083,42 +15083,47 @@ Fix titolo invisibile popup
   backdrop-filter:blur(6px);
 }
 
-/* ===============================
-🔒 LOCK SYSTEM – PREMIUM UI
-=============================== */
+/* =========================
+🔥 LOCK OVERLAY SYSTEM (PRO)
+========================= */
 
 .locked-section{
   position:relative;
 }
 
+/* overlay */
 .lock-overlay{
   position:absolute;
   inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:10;
-}
-
-.lock-box{
-  background:rgba(255,255,255,0.85);
-  backdrop-filter:blur(8px);
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(4px);
   border-radius:16px;
-  padding:18px 22px;
+  z-index:20;
+}
+
+/* box centrale */
+.lock-box{
+  background:white;
+  padding:14px 18px;
+  border-radius:12px;
   text-align:center;
-  box-shadow:0 10px 40px rgba(0,0,0,0.12);
-  border:1px solid rgba(0,0,0,0.05);
-  cursor:pointer;
-}
-
-.lock-icon{
-  font-size:22px;
-  display:block;
-}
-
-.lock-text{
-  margin-top:6px;
   font-size:13px;
-  color:#334155;
+  color:#0f172a;
   font-weight:500;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* icona */
+.lock-icon{
+  display:block;
+  font-size:18px;
+  margin-bottom:4px;
+}
+
+/* testo */
+.lock-text{
+  font-size:13px;
 }
