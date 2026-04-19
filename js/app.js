@@ -344,9 +344,7 @@ if(access.isFree){
     el.style.opacity = "1";
   });
 
-}
-
-  }; 
+} 
 
 // ================= MORTGAGE COMPARISON =================
 
