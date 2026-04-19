@@ -63,7 +63,18 @@ window.alert = function(msg){
 
 // 🔥 USA SOLO RB_USER (gestito da access-control.js)
 window.getUserAccess = function(){
-  return window.RB_USER || {};
+
+  if(!window.RB_USER){
+    return {
+      isFree: true,
+      isPro: false,
+      isInvestor: false,
+      isAdmin: false,
+      canSeeFullAnalysis: false
+    };
+  }
+
+  return window.RB_USER;
 };
 
 // ❌ DISABILITA vecchio sistema (evita conflitti)
@@ -3182,10 +3193,7 @@ document.addEventListener("rb_auth_ready", () => {
   // ===============================
 
   resetGlobalBlur();
-  if(typeof window.applyAccessControl === "function"){
-  window.applyAccessControl();
-}
-
+ 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
   // ===============================
