@@ -82,125 +82,158 @@ window.applyAccessControl = function(){
   console.warn("⛔ OLD ACCESS SYSTEM DISABLED");
 };
 
-  // ===============================
-  // 🔥 PRO / ADMIN
-  // ===============================
+// =====================================
+// 🔐 ACCESS CONTROL – FINAL (FREE / INVESTOR / PRO)
+// =====================================
 
-  // ===============================
-  // 🟡 INVESTOR → ACCESSO PARZIALE
-  // ===============================
-  
-  // ===============================
-  // 🔒 FREE USER → LOCK COMPLETO
-  // ===============================
-  document.addEventListener("rb_auth_ready", () => {
+document.addEventListener("rb_auth_ready", () => {
 
   const access = window.getUserAccess();
 
+  if(!access) return;
+
+  console.log("🎯 ACCESS CONTROL:", access);
+
+  // ===============================
+  // 🔴 FREE USER → LOCK FORTE
+  // ===============================
   if(access.isFree){
 
-    console.log("🔒 APPLY LOCK");
+    console.log("🔒 FREE LOCK");
 
-    document.querySelectorAll(`
-      #revenue-forecast,
-      #occupancy-sensitivity,
-      #break-even-kpi,
-      #investment-score,
-      #investment-ranking,
-      #investment-risk-meter,
-      #investment-verdict,
-      #ai-insights
-    `).forEach(el=>{
+    lockSections([
+      "revenue-forecast",
+      "occupancy-sensitivity",
+      "break-even-kpi",
+      "investment-score",
+      "investment-ranking",
+      "investment-risk-meter",
+      "investment-verdict",
+      "ai-insights"
+    ], "pro");
 
-      if(!el) return;
+  }
 
-      el.classList.add("locked-section");
+  // ===============================
+  // 🟡 INVESTOR → ACCESSO PARZIALE (WOW MODE)
+  // ===============================
+  else if(access.isInvestor){
 
-      if(!el.querySelector(".paywall-mini")){
-        const overlay = document.createElement("div");
+    console.log("🟡 INVESTOR PARTIAL UNLOCK");
 
-        overlay.className = "paywall-mini";
-        overlay.innerHTML = `
-          <div style="margin-top:10px;padding:10px;font-size:13px;text-align:center;color:#64748b;">
-            🔒 ${t("Sblocca analisi avanzata","Unlock advanced analysis")}
-          </div>
-        `;
+    // 🔓 sblocca TUTTO base
+    unlockSections([
+      "revenue-forecast",
+      "occupancy-sensitivity",
+      "break-even-kpi",
+      "investment-score",
+      "investment-ranking",
+      "investment-risk-meter",
+      "investment-verdict"
+    ]);
 
-        el.appendChild(overlay);
-      }
+    // 🔒 blocca SOLO roba premium vera
+    lockSections([
+      "ai-insights"
+    ], "pro");
 
-    });
+  }
+
+  // ===============================
+  // 🟢 PRO / ADMIN → SBLOCCO TOTALE
+  // ===============================
+  else if(access.isPro || access.isAdmin){
+
+    console.log("🟢 FULL UNLOCK");
+
+    unlockSections([
+      "revenue-forecast",
+      "occupancy-sensitivity",
+      "break-even-kpi",
+      "investment-score",
+      "investment-ranking",
+      "investment-risk-meter",
+      "investment-verdict",
+      "ai-insights"
+    ]);
 
   }
 
 });
 
-window.showToast = function(message, type="info"){
 
-  const existing = document.getElementById("rb-toast");
-  if(existing) existing.remove();
+// =====================================
+// 🔒 LOCK FUNCTION
+// =====================================
 
-  const toast = document.createElement("div");
-  toast.id = "rb-toast";
+function lockSections(ids, plan = "pro"){
 
-  const colors = {
-    info: "#3b82f6",
-    success: "#10b981",
-    error: "#ef4444",
-    warning: "#f59e0b"
-  };
+  ids.forEach(id => {
 
-  toast.style = `
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:${colors[type] || "#3b82f6"};
-    color:white;
-    padding:14px 18px;
-    border-radius:12px;
-    font-size:14px;
-    font-weight:500;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-    z-index:999999;
-    animation:fadeUp .3s ease;
-  `;
+    const el = document.getElementById(id);
+    if(!el) return;
 
-  toast.innerText = message;
+    el.classList.add("locked-section");
 
-  document.body.appendChild(toast);
+    // evita duplicati
+    if(el.querySelector(".paywall-mini")) return;
 
-  setTimeout(()=>{
-    toast.remove();
-  },3000);
-};
+    const overlay = document.createElement("div");
+    overlay.className = "paywall-mini";
 
-// 🔥 USER READY FIX (CRITICO)
-window.isUserReady = function(){
-  return window.firebaseReady === true;
-};
+    // 🔥 messaggio dinamico (importante UX)
+    let message = "";
 
-function getLeadScore(data){
+    if(plan === "pro"){
+      message = t(
+        "🔒 Sblocca analisi PRO completa",
+        "🔒 Unlock full PRO analysis"
+      );
+    }else{
+      message = t(
+        "🔒 Funzione premium",
+        "🔒 Premium feature"
+      );
+    }
 
-  const roi = Number(data?.roi || 0);
+    overlay.innerHTML = `
+      <div style="
+        margin-top:10px;
+        padding:10px;
+        font-size:13px;
+        text-align:center;
+        color:#64748b;
+      ">
+        ${message}
+      </div>
+    `;
 
-  if(roi >= 12){
-    return "hot";
-  }
+    el.appendChild(overlay);
 
-  if(roi >= 8){
-    return "warm";
-  }
+  });
 
-  return "cold";
 }
 
-window.quickROI = function(){
 
-  const safeNum = (v, def=0)=>{
-    const n = parseFloat(v);
-    return isNaN(n) ? def : n;
-  };
+// =====================================
+// 🔓 UNLOCK FUNCTION
+// =====================================
+
+function unlockSections(ids){
+
+  ids.forEach(id => {
+
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.classList.remove("locked-section");
+
+    const overlay = el.querySelector(".paywall-mini");
+    if(overlay) overlay.remove();
+
+  });
+
+}
 
   // ================= INPUT =================
 
