@@ -2107,7 +2107,7 @@ const midROI  = roi > 6;
   }
 
   // ================= LEAD SCORE =================
-  let leadScore = getLeadScore(result);
+  let leadScore = getLeadScore({ roi });
 
   if(window.simulationCount > 3){
     leadScore = "hot";
@@ -2118,9 +2118,9 @@ const midROI  = roi > 6;
     leadScore === "warm" ? 40 : 0;
 
   const leadDestination = getLeadDestination({
-    roi,
-    city: window.currentCity
-  });
+  roi: roiValue,
+  city: window.currentCity
+});
 
   // ================= SAVE LEAD =================
   (async () => {
