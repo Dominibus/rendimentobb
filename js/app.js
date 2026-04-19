@@ -82,6 +82,11 @@ window.applyAccessControl = function(){
   // ===============================
   // 🔒 FREE USER → LOCK COMPLETO
   // ===============================
+  const access = window.getUserAccess();
+
+// 🔒 Applica lock SOLO se NON è PRO
+if(!access.canSeeFullAnalysis){
+
   console.log("🔒 APPLY LOCK");
 
   document.querySelectorAll(`
@@ -101,7 +106,6 @@ window.applyAccessControl = function(){
 
     // mini label
     if(!el.querySelector(".paywall-mini")){
-
       const overlay = document.createElement("div");
 
       overlay.className = "paywall-mini";
@@ -126,7 +130,6 @@ window.applyAccessControl = function(){
 
     // overlay principale
     if(!el.querySelector(".locked-overlay")){
-
       const overlay = document.createElement("div");
 
       overlay.className = "locked-overlay";
@@ -149,6 +152,8 @@ window.applyAccessControl = function(){
     }
 
   });
+
+}
 
 window.showToast = function(message, type="info"){
 
