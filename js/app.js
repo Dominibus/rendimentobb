@@ -306,7 +306,7 @@ function getLeadScore(data){
   return "cold";
 }
 
-window.quickROI = function(){}
+window.quickROI = function(){
 
   const safeNum = (v, def=0)=>{
     const n = parseFloat(v);
@@ -378,9 +378,10 @@ window.isProUser = function(){
 
 // ================= SHOCK ENGINE =================
 
+access = window.getUserAccess(); // 🔥 AGGIUNTO
+
 const shock = document.getElementById("roi-shock-block");
 
-// mostra SOLO a non PRO
 if(!access.canSeeFullAnalysis && roi > 0){
 
   if(shock){
@@ -394,6 +395,8 @@ if(!access.canSeeFullAnalysis && roi > 0){
 }
 
 // ================= LOCK KPI SYSTEM =================
+
+access = window.getUserAccess(); // 🔥 AGGIUNTO
 
 // 👉 metti SOLO ID reali se vuoi bloccare qualcosa
 const lockIds = [
@@ -426,6 +429,7 @@ if(!access.canSeeFullAnalysis){
   });
 
 }
+  };
 
 // ================= MORTGAGE COMPARISON =================
 
