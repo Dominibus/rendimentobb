@@ -289,8 +289,6 @@ const lockIds = [
   "profit-annual"
 ];
 
-const access = window.getUserAccess();
-
 // 🔒 SOLO FREE (NON INVESTOR)
 if(access.isFree){
 
