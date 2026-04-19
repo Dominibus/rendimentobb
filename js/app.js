@@ -3798,9 +3798,11 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🚀 PLAN LOADED → SYNC");
 
+  const access = window.getUserAccess();
+
   // ================= UI BASE =================
 
-  if(window.isPremiumUser()){
+  if(access.isPro || access.isAdmin){
 
     console.log("🔓 PRO USER DASHBOARD");
 
@@ -3810,7 +3812,14 @@ document.addEventListener("rb_plan_loaded", () => {
       .results-overlay
     `).forEach(el => el.remove());
 
-  }else{
+  } else if(access.isInvestor){
+
+    console.log("🟡 INVESTOR SYNC OK");
+
+    // 🔥 NON rimuovere tutto → lascia smart lock attivo
+    // qui NON facciamo nulla apposta
+
+  } else {
 
     console.log("🔒 FREE USER");
 
@@ -3820,69 +3829,19 @@ document.addEventListener("rb_plan_loaded", () => {
 
   if(!window.planCorrected){
 
-  window.planCorrected = true;
+    window.planCorrected = true;
 
-  setTimeout(()=>{
+    setTimeout(()=>{
 
-    if(typeof window.forceCorrectPlan === "function"){
-      window.forceCorrectPlan();
-    }
+      if(typeof window.forceCorrectPlan === "function"){
+        window.forceCorrectPlan();
+      }
 
-  },100);
+    },100);
 
-}
+  }
 
 });
-
-window.handleAnalyzeClick = function(){
-
-  const userLogged = !!window.currentUser;
-
-  // =========================
-  // ❌ NON LOGGATO → BLOCCO + REGISTRAZIONE
-  // =========================
-  if(!userLogged){
-
-    console.log("🔒 Utente non loggato → popup register");
-
-    showRegisterPopup(); // 🔥 molto più efficace del vecchio modal
-
-    return;
-  }
-
-  // =========================
-  // ✅ LOGGATO → UX PREMIUM
-  // =========================
-  window.userHasClicked = true;
-
-  const btn = document.querySelector(".btn-main");
-
-  if(btn){
-    const originalText = btn.innerText;
-
-    btn.innerText = window.currentLang === "en"
-      ? "Analyzing..."
-      : "Analisi in corso...";
-
-    btn.disabled = true;
-
-    // 🔥 piccolo delay → effetto SaaS premium
-    setTimeout(()=>{
-      calculate(true);
-
-      // ripristina bottone
-      setTimeout(()=>{
-        btn.innerText = originalText;
-        btn.disabled = false;
-      }, 800);
-
-    }, 300);
-  }else{
-    calculate(true);
-  }
-
-};
-
 // ================= REGISTER POPUP (FINAL FIX) =================
 
 window.showRegisterPopup = function(){
