@@ -287,7 +287,7 @@ function getLeadScore(data){
   return "cold";
 }
 
-window.quickROI = function(){
+window.quickROI = function(){}
 
   const safeNum = (v, def=0)=>{
     const n = parseFloat(v);
