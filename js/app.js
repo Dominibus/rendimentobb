@@ -97,7 +97,7 @@ window.applyAccessControl = function(){
 
   const access = window.getUserAccess();
 
-  if(!access.canSeeFullAnalysis){
+  if(access.isFree){
 
     console.log("🔒 APPLY LOCK");
 
