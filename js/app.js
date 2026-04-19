@@ -3560,7 +3560,7 @@ function unlockProUI(){
 
   const access = window.getUserAccess();
 
-  if(!(access.canSeeFullAnalysis || access.isInvestor)){
+  if(!access.canSeeFullAnalysis){
     console.log("⛔ NOT PRO → skip unlock");
     return;
   }
