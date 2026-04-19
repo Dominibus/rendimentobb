@@ -307,10 +307,8 @@ window.quickROI = function(){
   const investment = price + reno;
   const revenue = night * 365 * (occ/100);
   const net = revenue - (revenue*(cost/100));
-  const roi = investment > 0 ? (net/investment)*100 : 0;
-
-  // 🔥 FIX ANTI-CRASH (QUI ESATTO)
-const roiValue = isFinite(roi) ? roi : 0;
+  let roi = investment > 0 ? (net/investment)*100 : 0;
+roi = isFinite(roi) ? roi : 0;
 
   // ================= ROI =================
 
@@ -1988,9 +1986,9 @@ function runPostAnalysis(result, context){
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
-  const roiValue = Number(result?.roi || 0);
+  const roi = Number(result?.roi || 0);
 
-triggerSmartReminder(roiValue);
+triggerSmartReminder(roi);
 }
 
 // ================= MORTGAGE LEAD TRIGGER =================
@@ -2069,7 +2067,7 @@ if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
-  const roi = window.lastAnalysisData?.roi || 0;
+  const roi = Number(window.lastAnalysisData?.roi || 0);
 
 const highROI = roi > 10;
 const midROI  = roi > 6;
@@ -2105,9 +2103,9 @@ const midROI  = roi > 6;
   }
 
 // ================= LEAD SCORE =================
-const roiValue = Number(window.lastAnalysisData?.roi || 0);
+const roi = Number(window.lastAnalysisData?.roi || 0);
 
-let leadScore = getLeadScore({ roi: roiValue });
+let leadScore = getLeadScore({ roi });
 
 if(window.simulationCount > 3){
   leadScore = "hot";
