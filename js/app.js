@@ -134,8 +134,10 @@ window.applyAccessControl = function(){
 
   unlockUI();
 
-  // 🔓 lascia vedere tutto base
-  // 🔒 blocca SOLO cose ad alto valore
+  // 🔥 PULISCE vecchi overlay (FONDAMENTALE)
+  document.querySelectorAll("[data-paywall], .upgrade-box").forEach(el=>{
+    el.remove();
+  });
 
   const premiumIds = [
     "investment-verdict",
@@ -152,12 +154,10 @@ window.applyAccessControl = function(){
 
     el.classList.add("locked-section");
 
-    // 🔥 overlay con lucchetto
-    // 🔥 overlay con lucchetto (NUOVO SISTEMA)
-createLockOverlay(
-  el,
-  t("Analisi avanzata PRO","Advanced PRO analysis")
-);
+    createLockOverlay(
+      el,
+      t("Analisi avanzata PRO","Advanced PRO analysis")
+    );
 
   });
 
