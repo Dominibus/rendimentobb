@@ -2235,17 +2235,40 @@ result = calculateROI({
       expenses
     });
 
-    // ================= UI BASE =================
-    const roiEl = document.getElementById("roi-live");
-    if(roiEl){
-      roiEl.innerText = roi.toFixed(1) + "%";
-    }
+// ================= UI BASE (FIX REAL DATA ONLY) =================
 
-    const monthlyEl = document.getElementById("profit-monthly");
-    const annualEl  = document.getElementById("profit-annual");
+const roiEl = document.getElementById("roi-live");
+const monthlyEl = document.getElementById("profit-monthly");
+const annualEl = document.getElementById("profit-annual");
 
-    if(monthlyEl) monthlyEl.innerText = formatCurrency(net / 12);
-    if(annualEl)  annualEl.innerText  = formatCurrency(net);
+// 🚨 NON mostrare dati fake
+if(roi <= 0 || net <= 0){
+  console.warn("⛔ Dati non validi → skip UI render");
+  return;
+}
+
+// ================= ROI =================
+
+if(roiEl){
+
+  roiEl.style.opacity = "0";
+
+  setTimeout(()=>{
+    roiEl.innerText = roi.toFixed(1) + "%";
+    roiEl.style.opacity = "1";
+  },150);
+
+}
+
+// ================= PROFITTI =================
+
+if(monthlyEl){
+  monthlyEl.innerText = formatCurrency(net / 12);
+}
+
+if(annualEl){
+  annualEl.innerText = formatCurrency(net);
+}
 
     // ================= MARKET =================
     if(typeof renderMarketBenchmark === "function"){
