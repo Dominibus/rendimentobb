@@ -60,6 +60,30 @@ function applyAccessUI(){
 
   }
 
+    // ================= INVESTOR =================
+else if(window.RB_USER.isInvestor){
+
+  document.body.classList.add("is-investor");
+
+  console.log("🟡 INVESTOR UI");
+
+  // 🔓 niente blur globale
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked-content
+  `).forEach(el=>{
+    el.classList.remove("pro-blur","locked-content");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+  });
+
+  // 🔒 lascia solo blocchi PRO
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.style.display = "none";
+  });
+
+}
+
   // ================= FREE =================
   else if(isLogged){
 
@@ -109,18 +133,14 @@ window.initAccessControl = function(){
     const isInvestor =
       plan === "investor";
 
-    const hasFullAccess =
-      isPro || isInvestor || isAdmin;
-
-    // ================= SET GLOBAL =================
     window.RB_USER = {
-      isLogged: userLogged,
-      isPro: hasFullAccess,
-      isInvestor,
-      isAdmin,
-      plan,
-      ready: true // 🔥 CRUCIALE
-    };
+  isLogged: userLogged,
+  isPro: isPro || isAdmin,      // 🔥 SOLO PRO + ADMIN
+  isInvestor: isInvestor,
+  isAdmin: isAdmin,
+  plan,
+  ready: true
+};
 
     console.log("🧠 RB_USER:", window.RB_USER);
 
@@ -182,7 +202,8 @@ window.getUserAccess = function(){
     isInvestor: u.isInvestor || false,
     isAdmin: u.isAdmin || false,
     hasPlan: u.isPro || u.isInvestor || u.isAdmin,
-    canSeeFullAnalysis: u.isPro || u.isInvestor || u.isAdmin
+    canSeeFullAnalysis: u.isPro || u.isAdmin,
+    canSeeAdvanced: u.isPro || u.isInvestor || u.isAdmin
   };
 
 };
