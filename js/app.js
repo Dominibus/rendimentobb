@@ -1990,6 +1990,7 @@ function runPostAnalysis(result, context){
   // ================= SMART REMINDER =================
 
 triggerSmartReminder(roi);
+}
 
 // ================= MORTGAGE LEAD TRIGGER =================
 
@@ -2701,7 +2702,7 @@ if(!hasPlan("pro")){
 
 if(!window.lastAnalysisData){
   showToast(
-  t("Genera prima l'analisi","Run analysis first"),
+  tSafe("Genera prima l'analisi","Run analysis first"),
   "warning"
 );
   return;
@@ -2709,7 +2710,7 @@ if(!window.lastAnalysisData){
 
 if(!window.jspdf){
   showToast(
-  t("Errore generazione PDF","PDF engine not loaded"),
+  tSafe("Errore generazione PDF","PDF engine not loaded"),
   "error"
 );
 return;
