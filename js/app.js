@@ -3688,7 +3688,17 @@ document.addEventListener("rb_plan_loaded", () => {
 }
 
 if(access.isFree){
-  console.log("🔒
+  console.log("🔒 FREE USER");
+}
+else if(access.isInvestor){
+  console.log("🟡 INVESTOR USER");
+}
+else if(access.isPro){
+  console.log("🟢 PRO USER");
+}
+else if(access.isAdmin){
+  console.log("👑 ADMIN USER");
+}
   // ================= FORCE PLAN FIX =================
 
   if(!window.planCorrected){
