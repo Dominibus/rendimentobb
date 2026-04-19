@@ -1051,20 +1051,20 @@ function applyPaywall(){
     "revenue-forecast",
     "market-comparison",
     "occupancy-sensitivity",
-    "strategic-insight"
+    "strategic-insight",
+    "ai-insights"
   ];
 
-  // 🔥 PRO USER → SBLOCCA TUTTO
   const access = window.getUserAccess?.() || {};
 
-if(access.isPro || access.isInvestor){
+  // ================= 🟢 PRO =================
+  if(access.isPro || access.isAdmin){
 
-    console.log("🚀 PRO attivo → sblocco UI");
+    console.log("🟢 PRO → FULL UNLOCK");
 
-    // 🔥 rimuove TUTTO il paywall
-document.querySelectorAll("[data-paywall], .locked-overlay, .upgrade-box").forEach(el=>{
-  el.remove();
-});
+    document.querySelectorAll("[data-paywall], .locked-overlay").forEach(el=>{
+      el.remove();
+    });
 
     document.querySelectorAll(".results-card").forEach(card=>{
       card.style.filter = "none";
@@ -1075,7 +1075,72 @@ document.querySelectorAll("[data-paywall], .locked-overlay, .upgrade-box").forEa
     return;
   }
 
-  // 🔒 FREE USER
+  // ================= 🟡 INVESTOR =================
+  if(access.isInvestor){
+
+    console.log("🟡 INVESTOR → PARTIAL LOCK");
+
+    proSections.forEach(id => {
+
+      const inner = document.getElementById(id);
+      if(!inner) return;
+
+      const card = inner.closest(".results-card");
+      if(!card) return;
+
+      if(card.querySelector("[data-paywall]")) return;
+
+      const lock = document.createElement("div");
+      lock.setAttribute("data-paywall","true");
+
+      const lang = window.RB_LANG?.current || "it";
+
+      lock.innerHTML = `
+        <div style="
+          position:absolute;
+          inset:0;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          flex-direction:column;
+          gap:12px;
+          background:rgba(255,255,255,0.85);
+          backdrop-filter:blur(4px);
+          border-radius:16px;
+          text-align:center;
+          padding:20px;
+        ">
+
+          <div style="font-weight:600;font-size:15px;">
+            ${lang === "en" 
+              ? "🔒 PRO feature" 
+              : "🔒 Funzione PRO"}
+          </div>
+
+          <div style="font-size:13px;color:#64748b;">
+            ${lang === "en"
+              ? "Upgrade to PRO to unlock full analysis"
+              : "Passa a PRO per sbloccare l'analisi completa"}
+          </div>
+
+          <button onclick="buyPlan('pro')" class="btn btn-primary">
+            ${lang === "en" ? "🔥 Upgrade to PRO" : "🔥 Passa a PRO"}
+          </button>
+
+        </div>
+      `;
+
+      card.style.position = "relative";
+      card.appendChild(lock);
+
+    });
+
+    return;
+  }
+
+  // ================= 🔴 FREE =================
+  console.log("🔴 FREE → FULL LOCK");
+
   proSections.forEach(id => {
 
     const inner = document.getElementById(id);
@@ -1085,8 +1150,6 @@ document.querySelectorAll("[data-paywall], .locked-overlay, .upgrade-box").forEa
     if(!card) return;
 
     if(card.querySelector("[data-paywall]")) return;
-
-    card.dataset.locked = "true";
 
     const lock = document.createElement("div");
     lock.setAttribute("data-paywall","true");
@@ -1102,25 +1165,29 @@ document.querySelectorAll("[data-paywall], .locked-overlay, .upgrade-box").forEa
         justify-content:center;
         flex-direction:column;
         gap:15px;
-        background:rgba(255,255,255,0.85);
-        backdrop-filter:blur(4px);
+        background:rgba(255,255,255,0.9);
+        backdrop-filter:blur(6px);
         border-radius:16px;
         text-align:center;
         padding:20px;
       ">
 
         <div style="font-weight:600;font-size:16px;">
-          ${lang === "en" ? "🔒 Advanced analysis locked" : "🔒 Analisi avanzata bloccata"}
+          ${lang === "en" 
+            ? "🔒 Full analysis locked" 
+            : "🔒 Analisi completa bloccata"}
         </div>
 
-        <div style="font-size:13px;color:#64748b;max-width:260px;">
+        <div style="font-size:13px;color:#64748b;">
           ${lang === "en"
-            ? "You are seeing only part of the data. Unlock full analysis before investing."
-            : "Stai vedendo solo una parte dei dati. Sblocca l’analisi completa prima di investire"}
+            ? "You are seeing only a preview"
+            : "Stai vedendo solo un'anteprima"}
         </div>
 
         <button onclick="buyPlan('pro')" class="btn btn-primary">
-          ${lang === "en" ? "🔥 Unlock full analysis – €29" : "🔥 Sblocca analisi completa – 29€"}
+          ${lang === "en" 
+            ? "🔥 Unlock full analysis – €29" 
+            : "🔥 Sblocca analisi completa – 29€"}
         </button>
 
       </div>
@@ -1129,45 +1196,45 @@ document.querySelectorAll("[data-paywall], .locked-overlay, .upgrade-box").forEa
     card.style.position = "relative";
     card.appendChild(lock);
 
-  }); // ✅ CHIUSURA forEach
+  });
 
-} // ✅ CHIUSURA FUNZIONE
+}
 
 /* ================= AUTO INIT ================= */
 
 document.addEventListener("rb_access_ready", () => {
 
-  console.log("🔥 Plan loaded:", window.getUserAccess());
+  const access = window.getUserAccess();
 
- if(window.isProUser()){
+  console.log("🔥 Plan loaded:", access);
 
-  console.log("🚀 PRO → unlock everything");
+  // SOLO PRO
+  if(access.isPro || access.isAdmin){
 
-  // 🔥 rimuove overlay
-  document.querySelectorAll("[data-paywall]").forEach(el => el.remove());
+    console.log("🟢 PRO → unlock everything");
 
-  // 🔥 mostra contenuti pro
-  document.querySelectorAll(".pro-only").forEach(el=>{
-  el.classList.remove("pro-only");
-});
+    document.querySelectorAll("[data-paywall]").forEach(el => el.remove());
 
- document.querySelectorAll(".free-only").forEach(el=>{
-  el.style.display = "none";
-});  
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.classList.remove("pro-only");
+    });
 
-  // 🔥 rimuove blur
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
+    document.querySelectorAll(".free-only").forEach(el=>{
+      el.style.display = "none";
+    });
 
-  // 🔥 NASCONDE CTA UPGRADE
-  document.querySelectorAll(".upgrade-box").forEach(el=>{
-    el.style.display = "none";
-  });
+    document.querySelectorAll(".pro-blur").forEach(el=>{
+      el.classList.remove("pro-blur");
+    });
 
-  return;
-}
+    document.querySelectorAll(".upgrade-box").forEach(el=>{
+      el.style.display = "none";
+    });
 
+    return;
+  }
+
+  // INVESTOR + FREE → passa da qui
   setTimeout(() => {
     applyPaywall();
   }, 50);
