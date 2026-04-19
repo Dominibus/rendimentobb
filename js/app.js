@@ -2002,7 +2002,7 @@ if(mortgageBox && mortgageBtn){
   const access = window.getUserAccess();
 
   // 🔥 mostra SOLO se ha senso (ROI medio-alto)
-  if(result.roi > 6){
+  if(window.lastAnalysisData?.roi > 6){
 
     mortgageBox.style.display = "block";
 
@@ -2062,9 +2062,9 @@ if(mortgageBox && mortgageBtn){
 
 }
   // ================= PAYWALL (UNICO) =================
-const access = window.getUserAccess();
+const accessPaywall = window.getUserAccess();
   
-if(!access.canSeeFullAnalysis && !window.paywallShown){
+if(!accessPaywall.canSeeFullAnalysis && !window.paywallShown){
 
   window.paywallShown = true;
 
