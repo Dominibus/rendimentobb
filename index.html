@@ -1569,7 +1569,17 @@ if(window.currentUser === null){
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
   if(overlay){
-    overlay.style.display = (isPro || isInvestor) ? "none" : "flex";
+    if(overlay){
+  if(isPro){
+    overlay.style.display = "none";
+  }
+  else if(isInvestor){
+    overlay.style.display = "none";
+  }
+  else{
+    overlay.style.display = "flex";
+  }
+}
   }
 
   // ================= EVENT =================
@@ -1581,6 +1591,30 @@ if(window.currentUser === null){
   if(typeof renderUpgradeCTA === "function"){
     renderUpgradeCTA(roi);
   }
+
+ // ================= UI VISIVA PER PIANO =================
+
+document.querySelectorAll(".metric-card").forEach(el=>{
+  el.classList.remove("pro-blur");
+});
+
+// FREE → tutto blur tranne ROI
+if(!isPro && !isInvestor){
+
+  document.querySelectorAll(".metric-card:not(.roi-highlight)")
+    .forEach(el=> el.classList.add("pro-blur"));
+
+}
+
+// INVESTOR → solo alcuni blur
+if(isInvestor){
+
+  document.querySelectorAll("#qr_break, #qr_rev")
+    .forEach(el=>{
+      el.closest(".metric-card")?.classList.add("pro-blur");
+    });
+
+}
 
   window.RB_LANG?.apply?.();
 };
@@ -1760,36 +1794,42 @@ function unlockHomeUI(){
 
   if(!isPro && !isInvestor) return;
 
-  console.log("🔥 UNLOCK HOME UI:", plan);
+console.log("🔥 UNLOCK HOME UI:", plan);
 
-  // base per entrambi
-  document.body.classList.add("paid-user");
+// base per entrambi
+document.body.classList.add("paid-user");
 
-  // 🔥 TOGLIE blur SEMPRE (importantissimo)
-  document.querySelectorAll(".pro-blur").forEach(el=>{
-    el.classList.remove("pro-blur");
+// 🔥 RESET BLUR
+document.querySelectorAll(".metric-card").forEach(el=>{
+  el.classList.remove("pro-blur");
+});
+
+// 🔥 INVESTOR → parziale
+if(isInvestor){
+  document.querySelectorAll("#qr_break, #qr_rev")
+    .forEach(el=>{
+      el.closest(".metric-card")?.classList.add("pro-blur");
+    });
+}
+
+// 🔥 overlay OFF per utenti paganti
+document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+  el.style.display = "none";
+});
+
+// 🔥 PRO → full unlock
+if(isPro){
+
+  document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+    el.classList.remove("pro-locked","locked-section");
   });
 
-  // 🔥 overlay sparisce per entrambi
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.style.display = "none";
+  document.querySelectorAll("button, a").forEach(el=>{
+    el.disabled = false;
+    el.style.pointerEvents = "auto";
   });
 
-  // ❗ DIFFERENZA QUI
-
-  if(isPro){
-
-    // 🔓 PRO = full unlock
-    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-      el.classList.remove("pro-locked","locked-section");
-    });
-
-    document.querySelectorAll("button, a").forEach(el=>{
-      el.disabled = false;
-      el.style.pointerEvents = "auto";
-    });
-
-  }
+}
 
   // 🔁 ricalcolo UI SEMPRE
   if(typeof quickROI === "function"){
