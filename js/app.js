@@ -82,78 +82,47 @@ window.applyAccessControl = function(){
   // ===============================
   // 🔒 FREE USER → LOCK COMPLETO
   // ===============================
+  document.addEventListener("rb_auth_ready", () => {
+
   const access = window.getUserAccess();
 
-// 🔒 Applica lock SOLO se NON è PRO
-if(!access.canSeeFullAnalysis){
+  if(!access.canSeeFullAnalysis){
 
-  console.log("🔒 APPLY LOCK");
+    console.log("🔒 APPLY LOCK");
 
-  document.querySelectorAll(`
-    #revenue-forecast,
-    #occupancy-sensitivity,
-    #break-even-kpi,
-    #investment-score,
-    #investment-ranking,
-    #investment-risk-meter,
-    #investment-verdict,
-    #ai-insights
-  `).forEach(el=>{
+    document.querySelectorAll(`
+      #revenue-forecast,
+      #occupancy-sensitivity,
+      #break-even-kpi,
+      #investment-score,
+      #investment-ranking,
+      #investment-risk-meter,
+      #investment-verdict,
+      #ai-insights
+    `).forEach(el=>{
 
-    if(!el) return;
+      if(!el) return;
 
-    el.classList.add("locked-section");
+      el.classList.add("locked-section");
 
-    // mini label
-    if(!el.querySelector(".paywall-mini")){
-      const overlay = document.createElement("div");
+      if(!el.querySelector(".paywall-mini")){
+        const overlay = document.createElement("div");
 
-      overlay.className = "paywall-mini";
+        overlay.className = "paywall-mini";
+        overlay.innerHTML = `
+          <div style="margin-top:10px;padding:10px;font-size:13px;text-align:center;color:#64748b;">
+            🔒 ${t("Sblocca analisi avanzata","Unlock advanced analysis")}
+          </div>
+        `;
 
-      overlay.innerHTML = `
-        <div style="
-          margin-top:10px;
-          padding:10px;
-          font-size:13px;
-          text-align:center;
-          color:#64748b;
-        ">
-          🔒 ${t(
-            "Sblocca analisi avanzata",
-            "Unlock advanced analysis"
-          )}
-        </div>
-      `;
+        el.appendChild(overlay);
+      }
 
-      el.appendChild(overlay);
-    }
+    });
 
-    // overlay principale
-    if(!el.querySelector(".locked-overlay")){
-      const overlay = document.createElement("div");
+  }
 
-      overlay.className = "locked-overlay";
-
-      overlay.innerHTML = `
-        <div style="
-          background:white;
-          padding:16px;
-          border-radius:12px;
-          text-align:center;
-          font-size:13px;
-          color:#334155;
-          box-shadow:0 10px 30px rgba(0,0,0,0.1);
-        ">
-          🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
-        </div>
-      `;
-
-      el.appendChild(overlay);
-    }
-
-  });
-
-}
+});
 
 window.showToast = function(message, type="info"){
 
@@ -1374,9 +1343,11 @@ document.addEventListener("rb_auth_ready", () => {
 
   const resultsCard = document.querySelector(".results-card");
 
-  if(resultsCard && !window.RB_USER?.isPro && !window.RB_USER?.isAdmin){
-    resultsCard.classList.add("locked-section");
-  }
+  const access = window.getUserAccess();
+
+if(resultsCard && !access.canSeeFullAnalysis){
+  resultsCard.classList.add("locked-section");
+}
 
 });
 
