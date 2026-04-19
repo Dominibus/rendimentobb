@@ -1545,7 +1545,6 @@ function renderSmartInvestmentAlert(roi){
 
   const access = window.getUserAccess();
 
-  // 🔒 PRO → NON FARE NULLA
   if(access.canSeeFullAnalysis){
     return;
   }
@@ -1553,13 +1552,11 @@ function renderSmartInvestmentAlert(roi){
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
 
-  // 🔒 ROI troppo basso → nascondi
   if(!roi || roi < 10){
     container.innerHTML = "";
     return;
   }
 
-  // 🔥 RENDER
   container.innerHTML = `
     <div class="smart-overlay">
       <div class="smart-box fade-up">
@@ -1595,24 +1592,24 @@ function renderSmartInvestmentAlert(roi){
       </div>
     </div>
   `;
-}
-  // ================= BUTTON =================
+
+  // ✅ BUTTON DENTRO LA FUNZIONE
   const btn = document.getElementById("smart-alert-btn");
 
   if(btn){
     btn.onclick = () => {
 
-  const isProNow = window.getUserAccess().canSeeFullAnalysis;
+      const isProNow = window.getUserAccess().canSeeFullAnalysis;
 
-  if(isProNow){
-    document.querySelector('#advanced-analysis')?.scrollIntoView({
-      behavior:'smooth'
-    });
-  }else{
-    startPlanPurchase('pro');
-  }
+      if(isProNow){
+        document.querySelector('#advanced-analysis')?.scrollIntoView({
+          behavior:'smooth'
+        });
+      }else{
+        startPlanPurchase('pro');
+      }
 
-};
+    };
   }
 
 }
