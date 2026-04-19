@@ -23,91 +23,119 @@ function applyAccessUI(){
     return;
   }
 
-  const { isPro, isLogged } = window.RB_USER;
+  const { isPro, isInvestor, isLogged } = window.RB_USER;
 
   console.log("🎯 APPLY UI:", window.RB_USER);
 
-  // RESET
-  document.body.classList.remove("is-pro","is-free","is-guest");
+  // ========================================
+  // 🔥 RESET TOTALE (CRITICO)
+  // ========================================
 
-  // ================= PRO =================
+  document.body.classList.remove(
+    "is-pro",
+    "is-free",
+    "is-guest",
+    "is-investor"
+  );
+
+  // 🔥 RIMUOVE TUTTI GLI OVERLAY RESIDUI
+  document.querySelectorAll(`
+    .locked-overlay,
+    .upgrade-overlay,
+    .home-blur-overlay,
+    .paywall-mini,
+    [data-paywall]
+  `).forEach(el => el.remove());
+
+  // 🔥 RESET STILI BLOCCATI
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content
+  `).forEach(el=>{
+    el.classList.remove("pro-blur","locked","locked-content");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+  // ========================================
+  // 🟢 PRO / ADMIN
+  // ========================================
   if(isPro){
 
     document.body.classList.add("is-pro");
 
-    // 🔥 RIMUOVE PAYWALL
+    console.log("🟢 PRO UI");
+
+    // rimuove paywall
     document.querySelectorAll(`
       .upgrade-box,
-      .free-only,
-      [data-paywall]
+      .free-only
     `).forEach(el => el.remove());
 
-    // 🔓 SBLOCCA TUTTO
-    document.querySelectorAll(`
-      .pro-blur,
-      .locked,
-      .locked-content
-    `).forEach(el=>{
-      el.classList.remove("pro-blur","locked","locked-content");
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-    });
-
-    // 🔥 CHIUDI POPUP SE ESISTE
     const popup = document.querySelector("#upgrade-popup");
     if(popup) popup.style.display = "none";
 
+    return;
   }
 
-    // ================= INVESTOR =================
-else if(window.RB_USER.isInvestor){
+  // ========================================
+  // 🟡 INVESTOR
+  // ========================================
+  if(isInvestor){
 
-  document.body.classList.add("is-investor");
+    document.body.classList.add("is-investor");
 
-  console.log("🟡 INVESTOR UI");
+    console.log("🟡 INVESTOR UI");
 
-  // 🔓 niente blur globale
-  document.querySelectorAll(`
-    .pro-blur,
-    .locked-content
-  `).forEach(el=>{
-    el.classList.remove("pro-blur","locked-content");
-    el.style.filter = "none";
-    el.style.opacity = "1";
-  });
+    // 🔓 MOSTRA contenuti base + avanzati
+    document.querySelectorAll(".investor-only").forEach(el=>{
+      el.style.display = "block";
+    });
 
-  // 🔒 lascia solo blocchi PRO
-  document.querySelectorAll(".pro-only").forEach(el=>{
-    el.style.display = "none";
-  });
+    // 🔒 NASCONDI SOLO PRO
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.style.display = "none";
+    });
 
-}
+    // 🔥 NASCONDI upgrade free
+    document.querySelectorAll(".upgrade-box.free-only").forEach(el=>{
+      el.style.display = "none";
+    });
 
-  // ================= FREE =================
-  else if(isLogged){
+    return;
+  }
+
+  // ========================================
+  // 🔓 FREE LOGGATO
+  // ========================================
+  if(isLogged){
 
     document.body.classList.add("is-free");
+
+    console.log("🔵 FREE USER");
 
     document.querySelectorAll(".upgrade-box").forEach(el=>{
       el.style.display = "block";
     });
 
+    return;
   }
 
-  // ================= GUEST =================
-  else{
+  // ========================================
+  // 👻 GUEST
+  // ========================================
+  document.body.classList.add("is-guest");
 
-    document.body.classList.add("is-guest");
+  console.log("👻 GUEST");
 
-    document.querySelectorAll(`
-      .pro-only,
-      .investor-only
-    `).forEach(el=>{
-      el.style.display = "none";
-    });
-
-  }
+  document.querySelectorAll(`
+    .pro-only,
+    .investor-only
+  `).forEach(el=>{
+    el.style.display = "none";
+  });
 
 }
 
