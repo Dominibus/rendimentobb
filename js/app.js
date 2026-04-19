@@ -2166,31 +2166,33 @@ if(!userEmail || currentROI <= 0){
   console.log("⛔ Skip email → no user o ROI 0");
 } else {
 
-  if(window.emailUserSent) return;
+  if(window.emailUserSent){
+    console.log("⛔ Email già inviata");
+  } else {
 
-  window.emailUserSent = true;
+    window.emailUserSent = true;
 
-  fetch("/api/send-lead-email",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      email: userEmail,
-      lang: window.currentLang || "it",
-      roi: currentROI,
-      city: window.currentCity
+    fetch("/api/send-lead-email",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        email: userEmail,
+        lang: window.currentLang || "it",
+        roi: currentROI,
+        city: window.currentCity
+      })
     })
-  })
-  .then(res=>{
-    if(!res.ok){
+    .then(res=>{
+      if(!res.ok){
+        window.emailUserSent = false;
+      }
+    })
+    .catch(()=>{
       window.emailUserSent = false;
-    }
-  })
-  .catch(()=>{
-    window.emailUserSent = false;
-  });
+    });
 
+  }
 }
-
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
