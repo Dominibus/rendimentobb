@@ -368,19 +368,19 @@ if(elBreak) elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
 if(qrRev) qrRev.innerText = formatCurrency(revenue);
 if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
-// ================= 🔒 HOME LOCK SYSTEM =================
+// ================= HOME LOCK SYSTEM =================
 
 const access = window.getUserAccess();
 
 window.isProUser = function(){
-  return window.getUserAccess().isPro;
+  return access.isPro;
 };
 
 // ================= SHOCK ENGINE =================
 
 const shock = document.getElementById("roi-shock-block");
 
-if(!window.getUserAccess().canSeeFullAnalysis && roi > 0){
+if(!access.canSeeFullAnalysis && roi > 0){
 
   if(shock){
     shock.style.display = "block";
@@ -422,6 +422,8 @@ if(!window.getUserAccess().canSeeFullAnalysis){
   });
 
 }
+
+  }; 
 
 // ================= MORTGAGE COMPARISON =================
 
