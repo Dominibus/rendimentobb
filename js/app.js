@@ -274,7 +274,7 @@ window.isUserReady = function(){
 
 function getLeadScore(result){
 
-  const roi = Number(result?.roi || 0);
+  const roiValue = roi;
 
   if(roi >= 12){
     return "hot";
@@ -309,11 +309,14 @@ window.quickROI = function(){
   const net = revenue - (revenue*(cost/100));
   const roi = investment > 0 ? (net/investment)*100 : 0;
 
+  // 🔥 FIX ANTI-CRASH (QUI ESATTO)
+const roiValue = isFinite(roi) ? roi : 0;
+
   // ================= ROI =================
 
   const roiEl = document.getElementById("qr_roi");
   if(roiEl){
-    roiEl.innerText = roi.toFixed(1)+"%";
+    roiEl.innerText = roiValue.toFixed(1)+"%";
   }
 
   // ================= KPI UNIVERSALE (HOME + TOOL) =================
@@ -1985,7 +1988,7 @@ function runPostAnalysis(result, context){
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
-  const roi = Number(result?.roi || 0);
+  const roiValue = roi;
 
   // ================= SMART REMINDER =================
 
