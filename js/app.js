@@ -349,6 +349,8 @@ window.isProUser = function(){
 
 // ================= SHOCK ENGINE =================
 
+const access = window.getUserAccess();
+
 const shock = document.getElementById("roi-shock-block");
 
 if(!access.canSeeFullAnalysis){
@@ -708,6 +710,7 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
     };
   }
 
+  };
 
 
 // ================= GLOBAL HERO BACKGROUND =================
