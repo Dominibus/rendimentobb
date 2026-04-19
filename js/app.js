@@ -1359,7 +1359,7 @@ document.addEventListener("rb_auth_ready", () => {
 
   const access = window.getUserAccess();
 
-if(resultsCard && !access.canSeeFullAnalysis){
+if(resultsCard && access.isFree){
   resultsCard.classList.add("locked-section");
 }
 
