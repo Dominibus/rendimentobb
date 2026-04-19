@@ -314,7 +314,7 @@ roi = isFinite(roi) ? roi : 0;
 
   const roiEl = document.getElementById("qr_roi");
   if(roiEl){
-    roiEl.innerText = roiValue.toFixed(1)+"%";
+    roiEl.innerText = roi.toFixed(1)+"%";
   }
 
   // ================= KPI UNIVERSALE (HOME + TOOL) =================
@@ -2112,7 +2112,7 @@ if(window.simulationCount > 3){
 }
 
 const leadDestination = getLeadDestination({
-  roi: roiValue,
+  roi,
   city: window.currentCity
 });
 
@@ -2133,7 +2133,7 @@ const leadDestination = getLeadDestination({
         email: userEmail,
         roi,
         score: leadScore,
-        value: leadValue,
+        value: roi,
         city: window.currentCity || "unknown",
         createdAt: serverTimestamp()
       });
