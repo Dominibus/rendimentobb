@@ -15127,3 +15127,34 @@ Fix titolo invisibile popup
 .lock-text{
   font-size:13px;
 }
+
+/* =====================================
+🟡 INVESTOR ACCESS (MID-TIER)
+===================================== */
+
+body.is-investor .pro-blur,
+body.is-investor .locked-content{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+/* 🔒 BLOCCA SOLO CONTENUTI PRO */
+body.is-investor .pro-only{
+  display:none !important;
+}
+
+/* 🔓 MOSTRA CONTENUTI INVESTOR */
+body.is-investor .investor-only{
+  display:block !important;
+}
+
+/* 🔥 NO PAYWALL BASE */
+body.is-investor .upgrade-box.free-only{
+  display:none !important;
+}
+
+/* 🔥 CTA PRO (UPSELL) RESTA */
+body.is-investor .upgrade-box.pro-only{
+  display:block !important;
+}
