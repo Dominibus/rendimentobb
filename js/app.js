@@ -3625,7 +3625,11 @@ function unlockProUI(){
 // ================= EVENTI =================
 
 // 🔥 QUESTI SONO FONDAMENTALI
-document.addEventListener("rb_plan_loaded", applyAccessControl);
+document.addEventListener("rb_plan_loaded", () => {
+  if(typeof window.applyAccessControl === "function"){
+    window.applyAccessControl();
+  }
+});
 document.addEventListener("rb_auth_ready", () => {
   if(typeof window.applyAccessControl === "function"){
     window.applyAccessControl();
@@ -4068,4 +4072,8 @@ window.forceCorrectPlan = function(){
   }
 
 };
-console.log("END FILE");
+try {
+  console.log("END FILE SAFE");
+} catch(e) {
+  console.error("Final error:", e);
+}
