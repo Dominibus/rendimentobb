@@ -378,7 +378,7 @@ window.isProUser = function(){
 
 // ================= SHOCK ENGINE =================
 
-access = window.getUserAccess(); // 🔥 AGGIUNTO
+const access = window.getUserAccess(); // 🔥 AGGIUNTO
 
 const shock = document.getElementById("roi-shock-block");
 
@@ -393,10 +393,6 @@ if(!access.canSeeFullAnalysis && roi > 0){
     shock.style.display = "none";
   }
 }
-
-// ================= LOCK KPI SYSTEM =================
-
-let access = window.getUserAccess(); // ✅ FIX
 
 // 👉 metti SOLO ID reali se vuoi bloccare qualcosa
 const lockIds = [
