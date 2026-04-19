@@ -1545,67 +1545,57 @@ function renderSmartInvestmentAlert(roi){
 
   const access = window.getUserAccess();
 
-if(access.canSeeFullAnalysis){
-  return;
-}
+  // 🔒 PRO → NON FARE NULLA
+  if(access.canSeeFullAnalysis){
+    return;
+  }
 
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
 
-  // ================= CHECK PRO =================
- const access = window.getUserAccess();
-
-  if(access.canSeeFullAnalysis){
-    container.innerHTML = "";
-    return;
-  }
-
-  // ================= ROI CHECK =================
+  // 🔒 ROI troppo basso → nascondi
   if(!roi || roi < 10){
     container.innerHTML = "";
     return;
   }
 
-  // ================= RENDER OVERLAY =================
+  // 🔥 RENDER
   container.innerHTML = `
-  
-  <div class="smart-overlay">
+    <div class="smart-overlay">
+      <div class="smart-box fade-up">
 
-    <div class="smart-box fade-up">
+        <div class="smart-close" onclick="this.closest('.smart-overlay').remove()">✖</div>
 
-      <div class="smart-close" onclick="this.closest('.smart-overlay').remove()">✖</div>
+        <div style="font-weight:700;font-size:18px;margin-bottom:10px;">
+          🔥 ${t("Investimento ad alto rendimento","High yield investment")}
+        </div>
 
-      <div style="font-weight:700;font-size:18px;margin-bottom:10px;">
-        🔥 ${t("Investimento ad alto rendimento","High yield investment")}
+        <div style="font-size:14px;color:#64748b;margin-bottom:15px;">
+          ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong><br>
+          ${t(
+            "Questo investimento potrebbe generare un forte rendimento",
+            "This investment could generate strong returns"
+          )}
+        </div>
+
+        <button id="smart-alert-btn" class="btn-main">
+          ${t(
+            "💰 Scopri quanto puoi guadagnare davvero",
+            "💰 See real profit potential"
+          )}
+        </button>
+
+        <div style="margin-top:10px;font-size:12px;color:#94a3b8;">
+          ${t(
+            "Accesso a simulazione completa professionale",
+            "Access full professional simulation"
+          )}
+        </div>
+
       </div>
-
-      <div style="font-size:14px;color:#64748b;margin-bottom:15px;">
-        ROI stimato: <strong>${safeNumber(roi).toFixed(1)}%</strong><br>
-        ${t(
-          "Questo investimento potrebbe generare un forte rendimento",
-          "This investment could generate strong returns"
-        )}
-      </div>
-
-      <button id="smart-alert-btn" class="btn-main">
-        ${t(
-          "💰 Scopri quanto puoi guadagnare davvero",
-          "💰 See real profit potential"
-        )}
-      </button>
-
-      <div style="margin-top:10px;font-size:12px;color:#94a3b8;">
-        ${t(
-          "Accesso a simulazione completa professionale",
-          "Access full professional simulation"
-        )}
-      </div>
-
     </div>
-
-  </div>
   `;
-
+}
   // ================= BUTTON =================
   const btn = document.getElementById("smart-alert-btn");
 
