@@ -396,7 +396,7 @@ if(!access.canSeeFullAnalysis && roi > 0){
 
 // ================= LOCK KPI SYSTEM =================
 
-access = window.getUserAccess(); // 🔥 AGGIUNTO
+let access = window.getUserAccess(); // ✅ FIX
 
 // 👉 metti SOLO ID reali se vuoi bloccare qualcosa
 const lockIds = [
@@ -409,18 +409,17 @@ const lockIds = [
 if(!access.canSeeFullAnalysis){
 
   lockIds.forEach(id => {
-  const el = document.getElementById(id);
-  if(!el) return;
+    const el = document.getElementById(id);
+    if(!el) return;
 
-  createLockOverlay(
-    el.parentElement,
-    t("Dati completi disponibili nel piano PRO","Full data available in PRO")
-  );
-});
+    createLockOverlay(
+      el.parentElement,
+      t("Dati completi disponibili nel piano PRO","Full data available in PRO")
+    );
+  });
 
 }else{
 
-  // 🔓 PRO / ADMIN → UNLOCK
   lockIds.forEach(id => {
     const el = document.getElementById(id);
     if(!el) return;
@@ -429,7 +428,6 @@ if(!access.canSeeFullAnalysis){
   });
 
 }
-  };
 
 // ================= MORTGAGE COMPARISON =================
 
