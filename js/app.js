@@ -304,9 +304,7 @@ if(elBreak) elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
 if(qrRev) qrRev.innerText = formatCurrency(revenue);
 if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
-};
-
-const access = window.getUserAccess();
+  const access = window.getUserAccess();
 
 // 🟡 INVESTOR → teaser intelligente
 if(access.isInvestor){
@@ -348,19 +346,20 @@ if(access.isInvestor){
   }
 
 }
+
+};
+
 // ================= HOME LOCK SYSTEM =================
 
-const access = window.getUserAccess();
-
 window.isProUser = function(){
-  return access.isPro;
+  return window.getUserAccess().isPro;
 };
 
 // ================= SHOCK ENGINE =================
 
 const shock = document.getElementById("roi-shock-block");
 
-if(!access.canSeeFullAnalysis && roi > 0){
+if(!access.canSeeFullAnalysis){
 
   if(shock){
     shock.style.display = "block";
