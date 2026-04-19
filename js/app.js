@@ -61,12 +61,12 @@ window.alert = function(msg){
 };
 // ================= SAFE GLOBAL EARLY FIX =================
 
-// 🔥 FIX CRITICO ACCESS SYSTEM (METTERE QUI)
+// 🔥 USA SOLO RB_USER (gestito da access-control.js)
 window.getUserAccess = function(){
   return window.RB_USER || {};
 };
-};
 
+// ❌ DISABILITA vecchio sistema (evita conflitti)
 window.applyAccessControl = function(){
   console.warn("⛔ OLD ACCESS SYSTEM DISABLED");
 };
@@ -74,66 +74,11 @@ window.applyAccessControl = function(){
   // ===============================
   // 🔥 PRO / ADMIN
   // ===============================
-  if(access.isPro || access.isAdmin){
-
-    console.log("🟢 PRO → LOCK SYSTEM DISABLED");
-
-    window.proUnlocked = true; // 🔥 CRITICO
-
-    unlockUI();
-    unlockProUI();
-
-    return;
-  }
 
   // ===============================
   // 🟡 INVESTOR → ACCESSO PARZIALE
   // ===============================
-  if(access.isInvestor){
-
-  console.log("🟡 INVESTOR → SMART LOCK");
-
-  unlockUI();
-
-    // 🔥 FIX DEFINITIVO BLUR
-document.body.classList.remove("pro-blur");
-
-document.querySelectorAll(`
-  .results-overlay,
-  .home-blur-overlay,
-  .locked-overlay,
-  .upgrade-overlay
-`).forEach(el => el.remove());
-
-  // 🔥 PULISCE vecchi overlay (FONDAMENTALE)
-  document.querySelectorAll("[data-paywall], .upgrade-box").forEach(el=>{
-    el.remove();
-  });
-
-  const premiumIds = [
-  "ai-insights" // 🔥 SOLO QUESTO BLOCCATO
-];
-
-  premiumIds.forEach(id => {
-
-    const el = document.getElementById(id);
-    if(!el) return;
-
-    el.classList.add("locked-section");
-
-    createLockOverlay(
-  el,
-  t(
-    "Insight strategici disponibili nel piano PRO",
-    "Strategic insights available in PRO"
-  )
-);
-
-  });
-
-  return;
-}
-
+  
   // ===============================
   // 🔒 FREE USER → LOCK COMPLETO
   // ===============================
@@ -610,12 +555,7 @@ window.triggerUpgradeFlow = function(context = {}){
     return;
   }
 
-  // ================= INVESTOR =================
-  if(access.isInvestor){
-  console.log("🟡 INVESTOR → SOLO UI, NO AUTO-UPGRADE");
-  return;
-}
-
+ 
   // ================= PRO =================
   console.log("✅ PRO USER → NO POPUP");
 };
@@ -3760,24 +3700,7 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= UI BASE =================
 
-  if(access.isPro || access.isAdmin){
-
-    console.log("🔓 PRO USER DASHBOARD");
-
-    document.querySelectorAll(`
-      .locked,
-      .locked-overlay,
-      .results-overlay
-    `).forEach(el => el.remove());
-
-  } else if(access.isInvestor){
-
-    console.log("🟡 INVESTOR SYNC OK");
-
-    // 🔥 NON rimuovere tutto → lascia smart lock attivo
-    // qui NON facciamo nulla apposta
-
-  } else {
+   else {
 
     console.log("🔒 FREE USER");
 
