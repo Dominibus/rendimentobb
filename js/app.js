@@ -130,29 +130,60 @@ window.applyAccessControl = function(){
   // ===============================
   if(access.isInvestor){
 
-    console.log("🟡 INVESTOR → PARTIAL LOCK");
+  console.log("🟡 INVESTOR → SMART LOCK");
 
-    unlockUI(); // base sbloccata
+  unlockUI();
 
-    // 🔒 blocchi mirati
-    document.querySelectorAll(`
-      #investment-score,
-      #investment-ranking,
-      #investment-verdict
-    `).forEach(el=>{
-      if(el){
-        el.classList.add("locked-section");
-      }
-    });
+  // 🔓 lascia vedere tutto base
+  // 🔒 blocca SOLO cose ad alto valore
 
-    // 🔒 cashflow blur
-    const cashflow = document.getElementById("cashflow-section");
-    if(cashflow){
-      cashflow.classList.add("locked-blur");
+  const premiumIds = [
+    "investment-verdict",
+    "investment-risk-meter",
+    "ai-insights",
+    "break-even-kpi",
+    "occupancy-sensitivity"
+  ];
+
+  premiumIds.forEach(id => {
+
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.classList.add("locked-section");
+
+    // 🔥 overlay con lucchetto
+    if(!el.querySelector(".lock-overlay")){
+      
+      const overlay = document.createElement("div");
+
+      overlay.className = "lock-overlay";
+
+      overlay.innerHTML = `
+        <div style="
+          backdrop-filter:blur(6px);
+          background:rgba(255,255,255,0.7);
+          padding:20px;
+          border-radius:12px;
+          text-align:center;
+        ">
+          🔒
+          <div style="margin-top:8px;font-size:13px;">
+            ${t(
+              "Analisi avanzata PRO",
+              "Advanced PRO analysis"
+            )}
+          </div>
+        </div>
+      `;
+
+      el.appendChild(overlay);
     }
 
-    return;
-  }
+  });
+
+  return;
+}
 
   // ===============================
   // 🔒 FREE USER → LOCK COMPLETO
