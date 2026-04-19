@@ -100,6 +100,133 @@ window.getUserAccess = function(){
 
 };
 
+window.applyAccessControl = function(){
+
+  const access = window.getUserAccess();
+
+  // 🛑 BLOCCO GLOBALE SE GIÀ SBLOCCATO
+  if(window.proUnlocked){
+    console.log("⛔ SKIP → già PRO sbloccato");
+    return;
+  }
+
+  // ===============================
+  // 🔥 PRO / ADMIN
+  // ===============================
+  if(access.isPro || access.isAdmin || access.canSeeFullAnalysis){
+
+    console.log("🟢 PRO → LOCK SYSTEM DISABLED");
+
+    window.proUnlocked = true; // 🔥 CRITICO
+
+    unlockUI();
+    unlockProUI();
+
+    return;
+  }
+
+  // ===============================
+  // 🟡 INVESTOR → ACCESSO PARZIALE
+  // ===============================
+  if(access.isInvestor){
+
+    console.log("🟡 INVESTOR → PARTIAL LOCK");
+
+    unlockUI(); // base sbloccata
+
+    // 🔒 blocchi mirati
+    document.querySelectorAll(`
+      #investment-score,
+      #investment-ranking,
+      #investment-verdict
+    `).forEach(el=>{
+      if(el){
+        el.classList.add("locked-section");
+      }
+    });
+
+    // 🔒 cashflow blur
+    const cashflow = document.getElementById("cashflow-section");
+    if(cashflow){
+      cashflow.classList.add("locked-blur");
+    }
+
+    return;
+  }
+
+  // ===============================
+  // 🔒 FREE USER → LOCK COMPLETO
+  // ===============================
+  console.log("🔒 APPLY LOCK");
+
+  document.querySelectorAll(`
+    #revenue-forecast,
+    #occupancy-sensitivity,
+    #break-even-kpi,
+    #investment-score,
+    #investment-ranking,
+    #investment-risk-meter,
+    #investment-verdict,
+    #ai-insights
+  `).forEach(el=>{
+
+    if(!el) return;
+
+    el.classList.add("locked-section");
+
+    // mini label
+    if(!el.querySelector(".paywall-mini")){
+
+      const overlay = document.createElement("div");
+
+      overlay.className = "paywall-mini";
+
+      overlay.innerHTML = `
+        <div style="
+          margin-top:10px;
+          padding:10px;
+          font-size:13px;
+          text-align:center;
+          color:#64748b;
+        ">
+          🔒 ${t(
+            "Sblocca analisi avanzata",
+            "Unlock advanced analysis"
+          )}
+        </div>
+      `;
+
+      el.appendChild(overlay);
+    }
+
+    // overlay principale
+    if(!el.querySelector(".locked-overlay")){
+
+      const overlay = document.createElement("div");
+
+      overlay.className = "locked-overlay";
+
+      overlay.innerHTML = `
+        <div style="
+          background:white;
+          padding:16px;
+          border-radius:12px;
+          text-align:center;
+          font-size:13px;
+          color:#334155;
+          box-shadow:0 10px 30px rgba(0,0,0,0.1);
+        ">
+          🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
+        </div>
+      `;
+
+      el.appendChild(overlay);
+    }
+
+  });
+
+}
+
 window.showToast = function(message, type="info"){
 
   const existing = document.getElementById("rb-toast");
@@ -878,133 +1005,6 @@ function unlockUI(){
     el.style.filter = "none";
     el.style.opacity = "1";
     el.style.pointerEvents = "auto";
-  });
-
-}
-
-window.applyAccessControl = function(){
-
-  const access = window.getUserAccess();
-
-  // 🛑 BLOCCO GLOBALE SE GIÀ SBLOCCATO
-  if(window.proUnlocked){
-    console.log("⛔ SKIP → già PRO sbloccato");
-    return;
-  }
-
-  // ===============================
-  // 🔥 PRO / ADMIN
-  // ===============================
-  if(access.isPro || access.isAdmin || access.canSeeFullAnalysis){
-
-    console.log("🟢 PRO → LOCK SYSTEM DISABLED");
-
-    window.proUnlocked = true; // 🔥 CRITICO
-
-    unlockUI();
-    unlockProUI();
-
-    return;
-  }
-
-  // ===============================
-  // 🟡 INVESTOR → ACCESSO PARZIALE
-  // ===============================
-  if(access.isInvestor){
-
-    console.log("🟡 INVESTOR → PARTIAL LOCK");
-
-    unlockUI(); // base sbloccata
-
-    // 🔒 blocchi mirati
-    document.querySelectorAll(`
-      #investment-score,
-      #investment-ranking,
-      #investment-verdict
-    `).forEach(el=>{
-      if(el){
-        el.classList.add("locked-section");
-      }
-    });
-
-    // 🔒 cashflow blur
-    const cashflow = document.getElementById("cashflow-section");
-    if(cashflow){
-      cashflow.classList.add("locked-blur");
-    }
-
-    return;
-  }
-
-  // ===============================
-  // 🔒 FREE USER → LOCK COMPLETO
-  // ===============================
-  console.log("🔒 APPLY LOCK");
-
-  document.querySelectorAll(`
-    #revenue-forecast,
-    #occupancy-sensitivity,
-    #break-even-kpi,
-    #investment-score,
-    #investment-ranking,
-    #investment-risk-meter,
-    #investment-verdict,
-    #ai-insights
-  `).forEach(el=>{
-
-    if(!el) return;
-
-    el.classList.add("locked-section");
-
-    // mini label
-    if(!el.querySelector(".paywall-mini")){
-
-      const overlay = document.createElement("div");
-
-      overlay.className = "paywall-mini";
-
-      overlay.innerHTML = `
-        <div style="
-          margin-top:10px;
-          padding:10px;
-          font-size:13px;
-          text-align:center;
-          color:#64748b;
-        ">
-          🔒 ${t(
-            "Sblocca analisi avanzata",
-            "Unlock advanced analysis"
-          )}
-        </div>
-      `;
-
-      el.appendChild(overlay);
-    }
-
-    // overlay principale
-    if(!el.querySelector(".locked-overlay")){
-
-      const overlay = document.createElement("div");
-
-      overlay.className = "locked-overlay";
-
-      overlay.innerHTML = `
-        <div style="
-          background:white;
-          padding:16px;
-          border-radius:12px;
-          text-align:center;
-          font-size:13px;
-          color:#334155;
-          box-shadow:0 10px 30px rgba(0,0,0,0.1);
-        ">
-          🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
-        </div>
-      `;
-
-      el.appendChild(overlay);
-    }
-
   });
 
 }
@@ -3270,7 +3270,9 @@ document.addEventListener("rb_auth_ready", () => {
   // ===============================
 
   resetGlobalBlur();
-  applyAccessControl();
+  if(typeof window.applyAccessControl === "function"){
+  window.applyAccessControl();
+}
 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
@@ -3630,7 +3632,11 @@ function unlockProUI(){
 
 // 🔥 QUESTI SONO FONDAMENTALI
 document.addEventListener("rb_plan_loaded", applyAccessControl);
-document.addEventListener("rb_auth_ready", applyAccessControl);
+document.addEventListener("rb_auth_ready", () => {
+  if(typeof window.applyAccessControl === "function"){
+    window.applyAccessControl();
+  }
+});
 
 
 // ================= FIX CTA DUPLICATE =================
