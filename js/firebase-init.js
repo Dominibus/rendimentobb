@@ -224,6 +224,30 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
 
 console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole);
 
+// ===============================
+// 🔥 RB_USER SYNC (CRITICO)
+// ===============================
+
+const isAdmin = window.userRole === "admin";
+
+const isPro =
+  window.currentPlan === "pro" ||
+  window.currentPlan === "pro_yearly";
+
+const isInvestor =
+  window.currentPlan === "investor";
+
+window.RB_USER = {
+  isFree: !isPro && !isInvestor && !isAdmin,
+  isPro,
+  isInvestor,
+  isAdmin,
+  canSeeFullAnalysis: isPro || isAdmin,
+  canDownloadPDF: isPro || isAdmin
+};
+
+console.log("🧠 RB_USER SYNC:", window.RB_USER);
+
 
 // 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
