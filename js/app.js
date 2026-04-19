@@ -235,6 +235,20 @@ function unlockSections(ids){
 
 }
 
+function formatCurrency(v){
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0
+  }).format(v || 0);
+}
+
+window.quickROI = function(){
+
+  const safeNum = (v, def=0)=>{
+    const n = parseFloat(v);
+    return isNaN(n) ? def : n;
+  };
   // ================= INPUT =================
 
   const price = safeNum(document.getElementById("qr_price")?.value,250000);
@@ -290,6 +304,50 @@ if(elBreak) elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
 if(qrRev) qrRev.innerText = formatCurrency(revenue);
 if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
+};
+
+const access = window.getUserAccess();
+
+// 🟡 INVESTOR → teaser intelligente
+if(access.isInvestor){
+
+  const verdict = document.getElementById("investment-verdict");
+
+  if(verdict && !verdict.querySelector(".investor-upsell")){
+
+    const upsell = document.createElement("div");
+
+    upsell.className = "investor-upsell";
+
+    upsell.innerHTML = `
+      <div style="
+        margin-top:15px;
+        padding:12px;
+        border-radius:10px;
+        background:rgba(16,185,129,0.08);
+        font-size:13px;
+        text-align:center;
+        color:#065f46;
+        font-weight:500;
+      ">
+        🔥 ${t(
+          "Stai vedendo solo una parte del potenziale reale",
+          "You are only seeing part of the real potential"
+        )}
+        <br>
+        <span style="opacity:.8;">
+          ${t(
+            "Sblocca analisi completa + AI insights",
+            "Unlock full analysis + AI insights"
+          )}
+        </span>
+      </div>
+    `;
+
+    verdict.appendChild(upsell);
+  }
+
+}
 // ================= HOME LOCK SYSTEM =================
 
 const access = window.getUserAccess();
