@@ -289,7 +289,10 @@ const lockIds = [
   "profit-annual"
 ];
 
-if(!window.getUserAccess().canSeeFullAnalysis){
+const access = window.getUserAccess();
+
+// 🔒 SOLO FREE (NON INVESTOR)
+if(access.isFree){
 
   lockIds.forEach(id => {
     const el = document.getElementById(id);
@@ -301,7 +304,7 @@ if(!window.getUserAccess().canSeeFullAnalysis){
     );
   });
 
-}else{
+}else if(access.isPro || access.isAdmin){
 
   lockIds.forEach(id => {
     const el = document.getElementById(id);
