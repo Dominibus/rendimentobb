@@ -3687,9 +3687,8 @@ document.addEventListener("rb_plan_loaded", () => {
   return;
 }
 
-if(!access.canSeeFullAnalysis){
-  console.log("🔒 FREE USER");
-}
+if(access.isFree){
+  console.log("🔒
   // ================= FORCE PLAN FIX =================
 
   if(!window.planCorrected){
