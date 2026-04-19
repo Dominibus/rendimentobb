@@ -227,8 +227,6 @@ window.applyAccessControl = function(){
 
 }
 
-}; // 🔥 CHIUSURA CORRETTA
-
 window.showToast = function(message, type="info"){
 
   const existing = document.getElementById("rb-toast");
@@ -2061,8 +2059,9 @@ if(mortgageBox && mortgageBtn){
     mortgageBox.style.display = "none";
   }
 
+  }
   // ================= PAYWALL (UNICO) =================
-const accessPaywall = window.getUserAccess();
+const accessPaywall = window.getUserAccess()
 
 // 🔥 ROI UNICO (NO DUPLICATI)
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
