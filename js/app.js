@@ -882,7 +882,7 @@ function unlockUI(){
 
 }
 
-function applyAccessControl(){
+window.applyAccessControl = function(){
 
   const access = window.getUserAccess();
 
