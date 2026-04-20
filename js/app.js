@@ -29,6 +29,12 @@ import {
 import { app } from "./firebase-init.js";
 const db = getFirestore(app);
 
+let roiChartInstance = null;
+
+// ================= GLOBAL STATE =================
+
+window.roiChartInstance = null;
+
 // =====================================
 // 🔥 GLOBAL ERROR DEBUG (CRITICO)
 // =====================================
@@ -2290,12 +2296,13 @@ function renderChart(net){
     return;
   }
 
-  // 🔥 destroy precedente
-  if(roiChartInstance){
-    roiChartInstance.destroy();
-    roiChartInstance = null;
-  }
+  // 🔥 destroy precedente (SAFE)
+if(window.roiChartInstance){
+  window.roiChartInstance.destroy();
+  window.roiChartInstance = null;
+}
 
+  window.roiChartInstance = new Chart(ctx,{
   // ================= DATA =================
   const years = Array.from({length:10}, (_,i)=>i+1);
 
