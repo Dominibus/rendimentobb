@@ -1658,6 +1658,31 @@ function getLeadDestination({roi, city}){
   return null;
 }
 
+// ================= GLOBAL BLUR RESET =================
+function resetGlobalBlur(){
+
+  console.log("🧹 Reset global blur");
+
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock
+  `).forEach(el => {
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+}
+
 // ================= POST ANALYSIS ENGINE (SAAS CLEAN) =================
 
 function runPostAnalysis(result, context){
@@ -2992,7 +3017,9 @@ document.addEventListener("rb_auth_ready", () => {
   // 🔥 FIX UI + ACCESS
   // ===============================
 
+  if(typeof resetGlobalBlur === "function"){
   resetGlobalBlur();
+}
  
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
