@@ -3871,7 +3871,7 @@ try {
 }
 
 // =====================================
-// 💣 FINAL GLOBAL UI FIX (INVESTOR)
+// 🟡 FINAL GLOBAL UI FIX (INVESTOR CLEAN)
 // =====================================
 
 document.addEventListener("rb_auth_ready", () => {
@@ -3882,59 +3882,29 @@ document.addEventListener("rb_auth_ready", () => {
 
     if(!access || !access.isInvestor) return;
 
-    console.log("💣 HARD CLEAN UI (INVESTOR)");
+    console.log("🟡 CLEAN INVESTOR UI");
 
-    // 🔥 rimuove QUALSIASI overlay visivo
+    // 🔥 rimuove SOLO overlay leggeri (NON quelli PRO)
     document.querySelectorAll(`
-  .lock-overlay,
-  .paywall-mini,
-  .home-blur-overlay,
-  .upgrade-overlay,
-  .results-overlay,
-  #upgrade-overlay,
-  [data-paywall],
-  [class*="lock"],
-  [class*="blur"]
-`).forEach(el=>{
-      if(el.id !== "register-popup"){
-        el.remove();
-      }
-    });
-
-    // 🔥 kill ricorsivo (blocchi che tornano dopo render)
-setTimeout(()=>{
-  document.querySelectorAll(`
-    .paywall-mini,
-    [class*="lock"],
-    [class*="blur"]
-  `).forEach(el=>{
-    el.remove();
-  });
-}, 1200);
-
-    // 🔥 rimuove blur FORZATO
-    document.querySelectorAll("*").forEach(el=>{
-      el.style.filter = "none";
-      el.style.backdropFilter = "none";
-    });
-
-    // 🔥 forza visibilità contenuti
-    document.querySelectorAll(`
-      .hidden,
-      .blur,
-      .blurred,
-      .opacity-0
+      .paywall-mini,
+      .home-blur-overlay
     `).forEach(el=>{
-      el.classList.remove(
-        "hidden",
-        "blur",
-        "blurred",
-        "opacity-0"
-      );
-
-      el.style.opacity = "1";
+      el.remove();
     });
 
-  }, 800);
+    // 🔥 rimuove eventuali lock residui MA NON GLOBALI
+    document.querySelectorAll(`
+      .locked-section
+    `).forEach(el=>{
+      el.classList.remove("locked-section");
+    });
+
+    // ❌ IMPORTANTISSIMO:
+    // NON usare:
+    // [class*="lock"]
+    // [class*="blur"]
+    // perché rompe PRO / logica piani
+
+  }, 500);
 
 });
