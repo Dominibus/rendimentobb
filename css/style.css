@@ -15170,3 +15170,58 @@ body.is-admin .free-only{
 body.is-investor .free-only{
   display:none !important;
 }
+
+/* =====================================
+🔥 ACCESS CONTROL SYSTEM (FIX DEFINITIVO)
+===================================== */
+
+/* 🔒 BASE LOCK */
+.locked-section {
+  filter: blur(6px);
+  opacity: 0.5;
+  pointer-events: none;
+  position: relative;
+}
+
+/* 🔓 PRO / ADMIN → SBLOCCO TOTALE */
+body.is-pro *,
+body.is-admin * {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  backdrop-filter: none !important;
+}
+
+/* 🟡 INVESTOR → NO BLUR */
+body.is-investor .locked-section {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* 🔥 OVERLAY MINI */
+.paywall-mini {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 13px;
+  text-align: center;
+  color: #64748b;
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+}
+
+/* 🔥 OVERLAY GLOBALI */
+.lock-overlay,
+.home-blur-overlay,
+.upgrade-overlay,
+.results-overlay {
+  backdrop-filter: blur(6px);
+}
+
+/* 🔓 PRO RIMUOVE TUTTO */
+body.is-pro .lock-overlay,
+body.is-pro .home-blur-overlay,
+body.is-pro .upgrade-overlay,
+body.is-pro .results-overlay {
+  display: none !important;
+}
