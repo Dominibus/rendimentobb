@@ -3744,36 +3744,22 @@ window.startPlanPurchase = function(plan){
 
   const user = window.currentUser;
 
-  // =========================
-  // 👻 GUEST → SALVA + REGISTER
-  // =========================
+  // 👻 GUEST → REGISTER
   if(!user){
-
     localStorage.setItem("pending_plan", plan);
-
     showRegisterPopup();
     return;
   }
 
-  // =========================
-  // 🔒 SICUREZZA → piano valido
-  // =========================
   if(!plan){
     console.error("❌ Piano non valido");
-
-    showToast(
-      t("Errore piano","Invalid plan"),
-      "error"
-    );
-
+    showToast(t("Errore piano","Invalid plan"),"error");
     return;
   }
 
-  // =========================
-  // 🔥 BLOCCO SE GIÀ ATTIVO
-  // =========================
   const access = window.getUserAccess();
 
+  // già attivo
   if(
     (plan === "pro" && access.isPro) ||
     (plan === "investor" && access.isInvestor)
@@ -3785,9 +3771,7 @@ window.startPlanPurchase = function(plan){
     return;
   }
 
-  // =========================
-  // 🔥 GERARCHIA PIANI
-  // =========================
+  // gerarchia
   if(plan === "investor" && access.isPro){
     showToast(
       t("Hai già un piano superiore","You already have a higher plan"),
@@ -3796,50 +3780,29 @@ window.startPlanPurchase = function(plan){
     return;
   }
 
-  // =========================
-  // 🔥 FIREBASE NOT READY
-  // =========================
   if(!window.firebaseReady){
     showToast(
-      t(
-        "Attendi un secondo... caricamento utente",
-        "Wait a moment... loading user"
-      ),
+      t("Attendi un secondo...","Wait a moment..."),
       "info"
     );
     return;
   }
 
-  // =========================
-  // 🔥 STRIPE HANDLER (FIX CRITICO)
-  // =========================
   if(typeof window.buyPlan === "function"){
-
-    window.buyPlan(plan); // ✅ FIX QUI
-
+    window.buyPlan(plan);
   }else{
-
     console.error("❌ buyPlan non trovata");
-
-    showToast(
-      t(
-        "Errore sistema pagamento",
-        "Payment system error"
-      ),
-      "error"
-    );
-
+    showToast(t("Errore pagamento","Payment error"),"error");
   }
 
-}; // ✅ CHIUSURA CORRETTA
+};
+
 
 // =============================
-// 🔥 FORCE PLAN FALLBACK (CRITICAL FIX)
+// 🔥 FORCE PLAN FALLBACK
 // =============================
 
 window.forceCorrectPlan = function(){
-
-  console.warn("⚠️ forceCorrectPlan fallback attivo");
 
   const plan = window.currentPlan || "free";
 
@@ -3861,24 +3824,48 @@ window.forceCorrectPlan = function(){
   }
 
 };
-try {
-  console.log("END FILE SAFE");
-} catch(e) {
-  console.error("Final error:", e);
+
+
+// =============================
+// 🔥 BASE UI UNLOCK (CRITICO)
+// =============================
+
+function unlockBaseUI(){
+
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay
+  `).forEach(el => el.remove());
+
+  document.body.classList.remove("no-scroll");
+  document.body.style.pointerEvents = "auto";
+
 }
+
+
+// =============================
+// 🔥 GLOBAL ACCESS CONTROL (UNICO)
+// =============================
 
 document.addEventListener("rb_auth_ready", () => {
 
   setTimeout(()=>{
 
     const access = window.getUserAccess();
-    // 🔥 FIX CRITICO → RESET SEMPRE PRIMA DI RIAPPLICARE LOCK
-resetGlobalBlur();
-removeGhostOverlays?.();
     if(!access) return;
 
+    console.log("🎯 ACCESS FINAL:", access);
+
     // ===============================
-    // 🎯 SYNC BODY STATE (FONDAMENTALE)
+    // RESET SEMPRE (UNA SOLA VOLTA)
+    // ===============================
+    resetGlobalBlur();
+    removeGhostOverlays?.();
+    unlockBaseUI();
+
+    // ===============================
+    // BODY STATE
     // ===============================
     document.body.classList.remove(
       "is-free",
@@ -3897,77 +3884,62 @@ removeGhostOverlays?.();
     // ===============================
     if(access.isInvestor){
 
-  console.log("🟡 INVESTOR CLEAN");
+      console.log("🟡 INVESTOR OK");
 
-  // 🔥 RESET UI
-  document.body.classList.remove("no-scroll");
-  document.body.style.pointerEvents = "auto";
+      // 🔓 SBLOCCA BASE
+      [
+        "revenue-forecast",
+        "occupancy-sensitivity",
+        "break-even-kpi"
+      ].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){
+          el.classList.remove("locked-section");
+        }
+      });
 
-  document.querySelectorAll(".results-overlay").forEach(el => el.remove());
+      // 🔒 SOLO PREMIUM
+      [
+        "investment-score",
+        "investment-ranking",
+        "investment-risk-meter",
+        "investment-verdict",
+        "ai-insights"
+      ].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el && !el.querySelector(".paywall-mini")){
 
-  // 🔓 SBLOCCA BASE
-  [
-    "revenue-forecast",
-    "occupancy-sensitivity",
-    "break-even-kpi"
-  ].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){
-      el.classList.remove("locked-section");
+          const overlay = document.createElement("div");
+          overlay.className = "paywall-mini";
+
+          overlay.innerHTML = `
+            <div style="
+              margin-top:10px;
+              padding:10px;
+              font-size:13px;
+              text-align:center;
+              color:#64748b;
+            ">
+              🔒 ${window.currentLang === "en"
+                ? "Unlock PRO analysis"
+                : "Sblocca analisi PRO completa"}
+            </div>
+          `;
+
+          el.appendChild(overlay);
+        }
+      });
+
+      return;
     }
-  });
-
-  // 🔒 BLOCCA SOLO PREMIUM
-  [
-    "investment-score",
-    "investment-ranking",
-    "investment-risk-meter",
-    "investment-verdict",
-    "ai-insights"
-  ].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){
-
-      if(!el.querySelector(".paywall-mini")){
-
-        const overlay = document.createElement("div");
-        overlay.className = "paywall-mini";
-
-        overlay.innerHTML = `
-          <div style="
-            margin-top:10px;
-            padding:10px;
-            font-size:13px;
-            text-align:center;
-            color:#64748b;
-          ">
-            🔒 ${window.currentLang === "en"
-              ? "Unlock PRO analysis"
-              : "Sblocca analisi PRO completa"}
-          </div>
-        `;
-
-        el.appendChild(overlay);
-      }
-    }
-  });
-
-}
 
     // ===============================
     // 🟢 PRO / ADMIN
     // ===============================
     if(access.isPro || access.isAdmin){
 
-      // 🔥 FORCE CALCULATION FIX
-if(typeof window.calculate === "function"){
-  console.log("🔥 FORCE RE-RUN CALCULATION");
-  window.calculate(true);
-}
+      console.log("🟢 PRO FULL UNLOCK");
 
-      console.log("🟢 HARD UNLOCK PRO");
-
-      // 🔥 RESET TOTALE
       document.querySelectorAll("*").forEach(el=>{
 
         el.classList.remove(
@@ -3982,26 +3954,42 @@ if(typeof window.calculate === "function"){
           el.style.filter = "none";
           el.style.opacity = "1";
           el.style.pointerEvents = "auto";
-          el.style.backdropFilter = "none";
         }
 
       });
 
-      // 🔥 RIMUOVE OVERLAY
       document.querySelectorAll(`
         .lock-overlay,
         .paywall-mini,
         .home-blur-overlay,
         .upgrade-overlay,
         .results-overlay,
-        #upgrade-overlay,
         [data-paywall]
-      `).forEach(el=>{
-        el.remove();
-      });
+      `).forEach(el=> el.remove());
 
+      // 🔥 ricalcolo
+      if(typeof window.calculate === "function"){
+        window.calculate(true);
+      }
+
+      return;
     }
 
-  }, 300);
+    // ===============================
+    // 🔴 FREE
+    // ===============================
+    if(access.isFree){
+      console.log("🔒 FREE USER");
+      // qui eventuale lock leggero
+    }
+
+  },300);
 
 });
+
+
+try {
+  console.log("END FILE SAFE");
+} catch(e) {
+  console.error("Final error:", e);
+}
