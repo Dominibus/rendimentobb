@@ -1168,8 +1168,8 @@ document.addEventListener("rb_auth_ready", () => {
 
   // 🔴 FREE → blocca
   if(resultsCard && access.isFree){
-    resultsCard.classList.add("locked-section");
-  }
+  resultsCard.classList.remove("locked-section");
+}
 
   // 🟡 INVESTOR → SBLOCCA (FIX CRITICO)
   if(resultsCard && access.isInvestor){
@@ -1804,9 +1804,9 @@ function runPostAnalysis(result, context){
 
   // ================= PAYWALL LOGIC =================
 
-  if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 0){
-    showUpgradeModal(roi);
-  }
+  if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 10){
+  showUpgradeModal(roi);
+}
   else if(access.isInvestor && roi > 0){
     renderSmartInvestmentAlert(roi);
   }
