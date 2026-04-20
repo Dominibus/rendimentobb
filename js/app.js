@@ -1624,6 +1624,20 @@ function triggerSmartReminder(roi){
   }, 1500);
 }
 
+// ================= LEAD SCORE ENGINE =================
+function getLeadScore({ roi = 0 }){
+
+  if(roi >= 12){
+    return "hot";
+  }
+
+  if(roi >= 6){
+    return "warm";
+  }
+
+  return "cold";
+}
+
 // ================= LEAD ROUTING ENGINE =================
 function getLeadDestination({roi, city}){
 
@@ -1789,7 +1803,13 @@ if(!window.currentUser && window.simulationCount >= 2){
 }
 
 // ================= LEAD SCORE =================
-let leadScore = getLeadScore({ roi: currentROI });
+let leadScore = "cold";
+
+try{
+  leadScore = getLeadScore({ roi: currentROI });
+}catch(e){
+  console.warn("LeadScore fallback:", e);
+}
 
 if(window.simulationCount > 3){
   leadScore = "hot";
