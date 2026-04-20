@@ -128,11 +128,12 @@ document.addEventListener("rb_auth_ready", () => {
   // ===============================
   else if(access.isInvestor){
 
-    console.log("🟡 INVESTOR PARTIAL");
+  console.log("🟡 INVESTOR PARTIAL (SAFE)");
 
-    applyPartialLock();
+  // ❌ NON usare applyPartialLock
+  // ✅ gestito dal nuovo sistema UI
 
-  }
+}
 
   // ===============================
   // 🟢 PRO / ADMIN → SBLOCCO TOTALE
