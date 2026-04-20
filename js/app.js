@@ -42,6 +42,18 @@ window.onerror = function(msg, url, line, col, error){
   });
 };
 
+// ================= SAFE GLOBAL UTILS =================
+
+window.safeNumber = window.safeNumber || function(v, d=0){
+  const n = Number(v);
+  return isNaN(n) ? d : n;
+};
+
+window.formatCurrency = window.formatCurrency || function(v){
+  const n = Number(v);
+  return isNaN(n) ? "€0" : "€" + n.toLocaleString("it-IT");
+};
+
 // =====================================
 // 🚫 DISABLE ALERT (UX FIX + DEBUG)
 // =====================================
@@ -1947,6 +1959,16 @@ function formatCurrency(value){
   });
 
 }
+
+window.safeNumber = function(value, def = 0){
+
+  const n = Number(value);
+
+  return isNaN(n) || !isFinite(n)
+    ? def
+    : n;
+
+};
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
