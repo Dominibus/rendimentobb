@@ -15228,3 +15228,17 @@ body.is-admin .results-overlay{
   opacity:1 !important;
   pointer-events:auto !important;
 }
+/* ===============================
+🟢 FREE USER – UX CORRETTA
+============================== */
+
+/* ❌ togli overlay globale */
+body.is-free .home-blur-overlay,
+body.is-free .results-overlay{
+  display:none !important;
+}
+
+/* ✅ contenuto sempre leggibile */
+body.is-free{
+  filter:none !important;
+}
