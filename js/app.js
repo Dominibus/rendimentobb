@@ -620,65 +620,67 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
     z-index:999999;
   `;
 
-  // ================= CONFIG =================
+ // ================= CONFIG =================
 
-  let config = {};
+let config = {};
 
-  if(type === "investor"){
-    config = {
-      title_it: "📊 Sblocca piano Investor",
-      title_en: "📊 Unlock Investor Plan",
+if(type === "investor"){
+  config = {
+    title_it: "📊 Sblocca piano Investor",
+    title_en: "📊 Unlock Investor Plan",
 
-      desc_it: "Stai usando dati limitati. Investor sblocca analisi avanzate.",
-      desc_en: "You are using limited data. Investor unlocks advanced insights.",
+    desc_it: "Stai usando dati limitati. Investor sblocca analisi avanzate.",
+    desc_en: "You are using limited data. Investor unlocks advanced insights.",
 
-      features_it: [
-        "✔ Simulazioni illimitate",
-        "✔ Analisi ROI avanzata",
-        "✔ Confronto mercato"
-      ],
-      features_en: [
-        "✔ Unlimited simulations",
-        "✔ Advanced ROI analysis",
-        "✔ Market comparison"
-      ],
+    // ❌ tolti i ✔ dalle stringhe
+    features_it: [
+      "Simulazioni illimitate",
+      "Analisi ROI avanzata",
+      "Confronto mercato"
+    ],
+    features_en: [
+      "Unlimited simulations",
+      "Advanced ROI analysis",
+      "Market comparison"
+    ],
 
-      cta_it: "💰 Passa a Investor €19",
-      cta_en: "💰 Upgrade to Investor €19",
+    cta_it: "💰 Passa a Investor €19",
+    cta_en: "💰 Upgrade to Investor €19",
 
-      action: () => startPlanPurchase("investor")
-    };
-  }
+    action: () => startPlanPurchase("investor")
+  };
+}
 
-  if(type === "pro"){
-    config = {
-      title_it: "🚀 Sblocca analisi completa",
-      title_en: "🚀 Unlock full analysis",
+if(type === "pro"){
+  config = {
+    title_it: "🚀 Sblocca analisi completa",
+    title_en: "🚀 Unlock full analysis",
 
-      desc_it: "Stai prendendo decisioni senza vedere tutti i dati reali.",
-      desc_en: "You are making decisions without full real data.",
+    desc_it: "Stai prendendo decisioni senza vedere tutti i dati reali.",
+    desc_en: "You are making decisions without full real data.",
 
-      features_it: [
-        "✔ ROI reale completo",
-        "✔ Analisi rischio avanzata",
-        "✔ Break-even reale",
-        "✔ Report PDF professionale"
-      ],
-      features_en: [
-        "✔ Full real ROI",
-        "✔ Advanced risk analysis",
-        "✔ Real break-even",
-        "✔ Professional PDF report"
-      ],
+    // ❌ tolti i ✔ anche qui
+    features_it: [
+      "ROI reale completo",
+      "Analisi rischio avanzata",
+      "Break-even reale",
+      "Report PDF professionale"
+    ],
+    features_en: [
+      "Full real ROI",
+      "Advanced risk analysis",
+      "Real break-even",
+      "Professional PDF report"
+    ],
 
-      cta_it: "🔥 Passa a PRO – €29",
-      cta_en: "🔥 Upgrade to PRO – €29",
+    cta_it: "🔥 Passa a PRO – €29",
+    cta_en: "🔥 Upgrade to PRO – €29",
 
-      action: () => startPlanPurchase("pro")
-    };
-  }
+    action: () => startPlanPurchase("pro")
+  };
+}
 
-  const lang = window.currentLang === "en" ? "en" : "it";
+const lang = window.currentLang === "en" ? "en" : "it";
 
   // ================= UI =================
 
@@ -707,11 +709,23 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   list.style.marginBottom = "20px";
 
   config["features_" + lang].forEach(f => {
-    const item = document.createElement("div");
-    item.textContent = f;
-    item.style.margin = "6px 0";
-    list.appendChild(item);
-  });
+
+  const item = document.createElement("div");
+
+  item.innerHTML = `
+    <span style="color:#10b981;font-weight:600;">✔</span>
+    <span style="color:#0f172a;margin-left:6px;font-weight:500;">
+      ${f.replace("✔","").trim()}
+    </span>
+  `;
+
+  item.style.margin = "6px 0";
+  item.style.display = "flex";
+  item.style.alignItems = "center";
+
+  list.appendChild(item);
+
+});
 
   const cta = document.createElement("button");
   cta.textContent = config["cta_" + lang];
