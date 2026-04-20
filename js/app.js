@@ -3898,62 +3898,60 @@ removeGhostOverlays?.();
 
   console.log("🟡 INVESTOR CLEAN");
 
-  // 🔥 ULTRA FIX → rimuove blur globale rimasto
+  // 🔥 RESET UI
   document.body.classList.remove("no-scroll");
   document.body.style.pointerEvents = "auto";
 
   document.querySelectorAll(".results-overlay").forEach(el => el.remove());
-}
 
-      // 🔓 SBLOCCA BASE
-      [
-        "revenue-forecast",
-        "occupancy-sensitivity",
-        "break-even-kpi"
-      ].forEach(id=>{
-        const el = document.getElementById(id);
-        if(el){
-          el.classList.remove("locked-section");
-        }
-      });
-
-      // 🔒 BLOCCA SOLO PREMIUM
-      [
-        "investment-score",
-        "investment-ranking",
-        "investment-risk-meter",
-        "investment-verdict",
-        "ai-insights"
-      ].forEach(id=>{
-        const el = document.getElementById(id);
-        if(el){
-
-          // evita duplicati
-          if(!el.querySelector(".paywall-mini")){
-
-            const overlay = document.createElement("div");
-            overlay.className = "paywall-mini";
-
-            overlay.innerHTML = `
-              <div style="
-                margin-top:10px;
-                padding:10px;
-                font-size:13px;
-                text-align:center;
-                color:#64748b;
-              ">
-                🔒 ${window.currentLang === "en"
-                  ? "Unlock PRO analysis"
-                  : "Sblocca analisi PRO completa"}
-              </div>
-            `;
-
-            el.appendChild(overlay);
-          }
-        }
-      });
-
+  // 🔓 SBLOCCA BASE
+  [
+    "revenue-forecast",
+    "occupancy-sensitivity",
+    "break-even-kpi"
+  ].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.classList.remove("locked-section");
     }
+  });
+
+  // 🔒 BLOCCA SOLO PREMIUM
+  [
+    "investment-score",
+    "investment-ranking",
+    "investment-risk-meter",
+    "investment-verdict",
+    "ai-insights"
+  ].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+
+      if(!el.querySelector(".paywall-mini")){
+
+        const overlay = document.createElement("div");
+        overlay.className = "paywall-mini";
+
+        overlay.innerHTML = `
+          <div style="
+            margin-top:10px;
+            padding:10px;
+            font-size:13px;
+            text-align:center;
+            color:#64748b;
+          ">
+            🔒 ${window.currentLang === "en"
+              ? "Unlock PRO analysis"
+              : "Sblocca analisi PRO completa"}
+          </div>
+        `;
+
+        el.appendChild(overlay);
+      }
+    }
+  });
+
+}
 
     // ===============================
     // 🟢 PRO / ADMIN
