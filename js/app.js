@@ -83,6 +83,10 @@ window.alert = function(msg){
 window.getUserAccess = function(){
 
   if(!window.RB_USER){
+  console.warn("⚠️ RB_USER not ready → fallback FREE");
+}
+
+  if(!window.RB_USER){
     return {
       isFree: true,
       isPro: false,
@@ -365,71 +369,6 @@ window.isProUser = function(){
   return window.getUserAccess().isPro;
 };
 
-// ================= SHOCK ENGINE =================
-
-const access = window.getUserAccess();
-
-const lockIds = [
-  "profit-live",
-  "revenue-live",
-  "profit-monthly",
-  "profit-annual"
-];
-
-// 🔴 FREE → lock totale
-if(access.isFree){
-
-  lockIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-
-    createLockOverlay(
-      el.parentElement,
-      t("Dati completi disponibili nel piano PRO","Full data available in PRO")
-    );
-  });
-
-}
-
-// 🟡 INVESTOR → DEVE VEDERE (NO LOCK)
-else if(access.isInvestor){
-
-  console.log("🟡 INVESTOR FULL CLEAN UI");
-
-  lockIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-
-    el.style.opacity = "1";
-    el.style.filter = "none";
-    el.style.pointerEvents = "auto";
-  });
-
-  // 🔥 RIMUOVE TUTTI I BLOCCHI VISIVI
-  document.querySelectorAll(`
-    .locked-section,
-    .lock-overlay,
-    .paywall-mini,
-    .upgrade-overlay,
-    .results-overlay,
-    .home-blur-overlay,
-    .premium-lock,
-    .pro-blur
-  `).forEach(el => el.remove());
-
-}
-
-// 🟢 PRO / ADMIN → full
-else if(access.isPro || access.isAdmin){
-
-  lockIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-
-    el.style.opacity = "1";
-  });
-
-}
 // ================= MORTGAGE COMPARISON =================
 
 window.runMortgageComparison = function(){
@@ -1846,6 +1785,16 @@ function runPostAnalysis(result, context){
 triggerSmartReminder(roi);
 }
 
+// 🔥 PAYWALL CORRETTO
+const access = window.getUserAccess();
+
+if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 0){
+  showUpgradeModal(roi);
+}
+else if(access.isInvestor && roi > 0){
+  renderSmartInvestmentAlert(roi);
+}
+
 // ================= MORTGAGE LEAD TRIGGER =================
 
 const mortgageBox = document.getElementById("mortgage-lead-box");
@@ -1919,23 +1868,6 @@ if(mortgageBox && mortgageBtn){
 
 const accessPaywall = window.getUserAccess();
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
-
-// 🔒 SOLO FREE / GUEST
-if(
-  !accessPaywall.canSeeFullAnalysis &&
-  !accessPaywall.isInvestor &&
-  !window.paywallShown &&
-  currentROI > 0
-){
-  showUpgradeModal(currentROI);
-}
-
-// 🟡 INVESTOR → SOLO SOFT
-else if(accessPaywall.isInvestor && currentROI > 0){
-
-  renderSmartInvestmentAlert(currentROI);
-
-}
 
 // ================= USER =================
 const userEmail = window.currentUser?.email || null;
@@ -2056,27 +1988,6 @@ function getValue(id){
   return isNaN(v) ? 0 : v;
 }
 
-function formatCurrency(value){
-
-  const v = Number(value);
-
-  if(!isFinite(v)) return "€0";
-
-  return "€" + v.toLocaleString("it-IT", {
-    maximumFractionDigits: 0
-  });
-
-}
-
-window.safeNumber = function(value, def = 0){
-
-  const n = Number(value);
-
-  return isNaN(n) || !isFinite(n)
-    ? def
-    : n;
-
-};
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
@@ -3216,12 +3127,9 @@ setTimeout(()=>{
     console.log("🔥 FORCE CLEAN INVESTOR UI");
 
     document.querySelectorAll(`
-      .locked-section,
-      .lock-overlay,
-      .paywall-mini,
-      .upgrade-overlay,
-      .results-overlay
-    `).forEach(el => el.remove());
+  .lock-overlay,
+  .paywall-mini
+`).forEach(el => el.remove());
 
   }
 
@@ -3561,28 +3469,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if(found > 1){
         
       }
-
-    }
-
-  });
-
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  document.querySelectorAll(".btn-main").forEach(btn => {
-
-    // 🔥 se NON ha onclick → glielo assegno
-    if(!btn.getAttribute("onclick")){
-
-      btn.addEventListener("click", () => {
-
-        console.log("🔥 AUTO CTA CLICK");
-
-        // puoi cambiare piano se serve
-        startPlanPurchase("pro");
-
-      });
 
     }
 
