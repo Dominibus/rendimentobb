@@ -1924,6 +1924,17 @@ if(!userEmail || currentROI <= 0){
 
   }
 }
+
+function getValue(id){
+
+  const el = document.getElementById(id);
+
+  if(!el) return 0;
+
+  const v = parseFloat(el.value);
+
+  return isNaN(v) ? 0 : v;
+}
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
@@ -3176,7 +3187,7 @@ if(citySelectorEl){
     window.currentCity = city;
     localStorage.setItem("selected_city", city);
 
-    changeCityBackground(city);
+    applyCityBackground(city);
 
   });
 
