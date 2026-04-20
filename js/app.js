@@ -138,18 +138,16 @@ document.addEventListener("rb_auth_ready", () => {
   // ===============================
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR FULL UNLOCK (FIX)");
+  console.log("🟡 INVESTOR FULL UNLOCK (REAL)");
 
-  unlockSections([
-    "revenue-forecast",
-    "occupancy-sensitivity",
-    "break-even-kpi",
-    "investment-score",
-    "investment-ranking",
-    "investment-risk-meter",
-    "investment-verdict",
-    "ai-insights" // 🔥 AGGIUNTO
-  ]);
+  // 🔥 rimuove qualsiasi lock
+  document.querySelectorAll(`
+    .locked-section,
+    .paywall-mini
+  `).forEach(el=>{
+    el.classList.remove("locked-section");
+    el.remove();
+  });
 
 }
 
@@ -3888,17 +3886,31 @@ document.addEventListener("rb_auth_ready", () => {
 
     // 🔥 rimuove QUALSIASI overlay visivo
     document.querySelectorAll(`
-      .results-overlay,
-      .home-blur-overlay,
-      .locked-overlay,
-      .upgrade-overlay,
-      #upgrade-overlay,
-      [data-paywall]
-    `).forEach(el=>{
+  .lock-overlay,
+  .paywall-mini,
+  .home-blur-overlay,
+  .upgrade-overlay,
+  .results-overlay,
+  #upgrade-overlay,
+  [data-paywall],
+  [class*="lock"],
+  [class*="blur"]
+`).forEach(el=>{
       if(el.id !== "register-popup"){
         el.remove();
       }
     });
+
+    // 🔥 kill ricorsivo (blocchi che tornano dopo render)
+setTimeout(()=>{
+  document.querySelectorAll(`
+    .paywall-mini,
+    [class*="lock"],
+    [class*="blur"]
+  `).forEach(el=>{
+    el.remove();
+  });
+}, 1200);
 
     // 🔥 rimuove blur FORZATO
     document.querySelectorAll("*").forEach(el=>{
