@@ -3871,6 +3871,9 @@ document.addEventListener("rb_auth_ready", () => {
   setTimeout(()=>{
 
     const access = window.getUserAccess();
+    // 🔥 FIX CRITICO → RESET SEMPRE PRIMA DI RIAPPLICARE LOCK
+resetGlobalBlur();
+removeGhostOverlays?.();
     if(!access) return;
 
     // ===============================
@@ -3893,7 +3896,14 @@ document.addEventListener("rb_auth_ready", () => {
     // ===============================
     if(access.isInvestor){
 
-      console.log("🟡 INVESTOR CLEAN");
+  console.log("🟡 INVESTOR CLEAN");
+
+  // 🔥 ULTRA FIX → rimuove blur globale rimasto
+  document.body.classList.remove("no-scroll");
+  document.body.style.pointerEvents = "auto";
+
+  document.querySelectorAll(".results-overlay").forEach(el => el.remove());
+}
 
       // 🔓 SBLOCCA BASE
       [
