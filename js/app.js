@@ -1763,7 +1763,7 @@ function runPostAnalysis(result, context){
   const access = window.getUserAccess() || {};
 
   if(access.isInvestor){
-    resetGlobalBlur(); // 🔥 FORZA SBLOCCO UI
+    resetGlobalBlur();
   }
 
   if(!result) return;
@@ -1788,9 +1788,7 @@ function runPostAnalysis(result, context){
 
   triggerSmartReminder(roi);
 
-  // 🔥 PAYWALL CORRETTO (QUI DENTRO)
-  const access = window.getUserAccess();
-
+  // 🔥 USA QUELLO GIÀ DEFINITO
   if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 0){
     showUpgradeModal(roi);
   }
@@ -1799,7 +1797,6 @@ function runPostAnalysis(result, context){
   }
 
 }
-
 // ================= MORTGAGE LEAD TRIGGER =================
 
 const mortgageBox = document.getElementById("mortgage-lead-box");
