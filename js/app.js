@@ -3831,13 +3831,28 @@ document.addEventListener("rb_auth_ready", () => {
     if(!access) return;
 
     // ===============================
-    // 🟡 INVESTOR (LOGICA REALE)
+    // 🎯 SYNC BODY STATE (FONDAMENTALE)
+    // ===============================
+    document.body.classList.remove(
+      "is-free",
+      "is-investor",
+      "is-pro",
+      "is-admin"
+    );
+
+    if(access.isAdmin) document.body.classList.add("is-admin");
+    else if(access.isPro) document.body.classList.add("is-pro");
+    else if(access.isInvestor) document.body.classList.add("is-investor");
+    else document.body.classList.add("is-free");
+
+    // ===============================
+    // 🟡 INVESTOR
     // ===============================
     if(access.isInvestor){
 
       console.log("🟡 INVESTOR CLEAN");
 
-      // 🔓 sblocca base
+      // 🔓 SBLOCCA BASE
       [
         "revenue-forecast",
         "occupancy-sensitivity",
@@ -3849,7 +3864,7 @@ document.addEventListener("rb_auth_ready", () => {
         }
       });
 
-      // 🔒 blocca SOLO premium
+      // 🔒 BLOCCA SOLO PREMIUM
       [
         "investment-score",
         "investment-ranking",
@@ -3858,39 +3873,45 @@ document.addEventListener("rb_auth_ready", () => {
         "ai-insights"
       ].forEach(id=>{
         const el = document.getElementById(id);
-        if(el && !el.querySelector(".paywall-mini")){
+        if(el){
 
-          const overlay = document.createElement("div");
-          overlay.className = "paywall-mini";
+          // evita duplicati
+          if(!el.querySelector(".paywall-mini")){
 
-          overlay.innerHTML = `
-            <div style="
-              margin-top:10px;
-              padding:10px;
-              font-size:13px;
-              text-align:center;
-              color:#64748b;
-            ">
-              🔒 ${window.currentLang === "en"
-                ? "Unlock PRO analysis"
-                : "Sblocca analisi PRO completa"}
-            </div>
-          `;
+            const overlay = document.createElement("div");
+            overlay.className = "paywall-mini";
 
-          el.appendChild(overlay);
+            overlay.innerHTML = `
+              <div style="
+                margin-top:10px;
+                padding:10px;
+                font-size:13px;
+                text-align:center;
+                color:#64748b;
+              ">
+                🔒 ${window.currentLang === "en"
+                  ? "Unlock PRO analysis"
+                  : "Sblocca analisi PRO completa"}
+              </div>
+            `;
+
+            el.appendChild(overlay);
+          }
         }
       });
 
     }
 
     // ===============================
-    // 🟢 PRO / ADMIN (FIX VERO)
+    // 🟢 PRO / ADMIN
     // ===============================
     if(access.isPro || access.isAdmin){
 
       console.log("🟢 HARD UNLOCK PRO");
 
+      // 🔥 RESET TOTALE
       document.querySelectorAll("*").forEach(el=>{
+
         el.classList.remove(
           "locked-section",
           "pro-blur",
@@ -3899,17 +3920,23 @@ document.addEventListener("rb_auth_ready", () => {
           "locked-content"
         );
 
-        el.style.filter = "none";
-        el.style.opacity = "1";
-        el.style.pointerEvents = "auto";
+        if(el.style){
+          el.style.filter = "none";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+          el.style.backdropFilter = "none";
+        }
+
       });
 
+      // 🔥 RIMUOVE OVERLAY
       document.querySelectorAll(`
         .lock-overlay,
         .paywall-mini,
         .home-blur-overlay,
         .upgrade-overlay,
         .results-overlay,
+        #upgrade-overlay,
         [data-paywall]
       `).forEach(el=>{
         el.remove();
