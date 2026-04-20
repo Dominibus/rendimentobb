@@ -3871,3 +3871,58 @@ try {
 } catch(e) {
   console.error("Final error:", e);
 }
+
+// =====================================
+// 💣 FINAL GLOBAL UI FIX (INVESTOR)
+// =====================================
+
+document.addEventListener("rb_auth_ready", () => {
+
+  setTimeout(()=>{
+
+    const access = window.getUserAccess();
+
+    if(!access || !access.isInvestor) return;
+
+    console.log("💣 HARD CLEAN UI (INVESTOR)");
+
+    // 🔥 rimuove QUALSIASI overlay visivo
+    document.querySelectorAll(`
+      .results-overlay,
+      .home-blur-overlay,
+      .locked-overlay,
+      .upgrade-overlay,
+      #upgrade-overlay,
+      [data-paywall]
+    `).forEach(el=>{
+      if(el.id !== "register-popup"){
+        el.remove();
+      }
+    });
+
+    // 🔥 rimuove blur FORZATO
+    document.querySelectorAll("*").forEach(el=>{
+      el.style.filter = "none";
+      el.style.backdropFilter = "none";
+    });
+
+    // 🔥 forza visibilità contenuti
+    document.querySelectorAll(`
+      .hidden,
+      .blur,
+      .blurred,
+      .opacity-0
+    `).forEach(el=>{
+      el.classList.remove(
+        "hidden",
+        "blur",
+        "blurred",
+        "opacity-0"
+      );
+
+      el.style.opacity = "1";
+    });
+
+  }, 800);
+
+});
