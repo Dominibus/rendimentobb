@@ -1709,24 +1709,41 @@ function getLeadDestination({roi, city}){
 // ================= GLOBAL BLUR RESET =================
 function resetGlobalBlur(){
 
-  console.log("🧹 Reset global blur");
+  console.log("🧹 HARD RESET UI");
 
-  document.querySelectorAll(`
-    .pro-blur,
-    .locked,
-    .locked-content,
-    .premium-lock
-  `).forEach(el => {
+  document.querySelectorAll("*").forEach(el=>{
+
     el.classList.remove(
       "pro-blur",
       "locked",
       "locked-content",
-      "premium-lock"
+      "premium-lock",
+      "locked-section"
     );
 
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
+    // 🔥 RESET FORZATO
+    if(el.style){
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+      el.style.backdropFilter = "none";
+    }
+
+  });
+
+  // 🔥 RIMUOVE OVERLAY
+  document.querySelectorAll(`
+    .lock-overlay,
+    .paywall-mini,
+    .home-blur-overlay,
+    .upgrade-overlay,
+    .results-overlay,
+    #upgrade-overlay,
+    [data-paywall]
+  `).forEach(el=>{
+    if(el.id !== "register-popup"){
+      el.remove();
+    }
   });
 
 }
