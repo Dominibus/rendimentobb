@@ -1771,28 +1771,28 @@ function runPostAnalysis(result, context){
     expenses
   } = context || {};
 
-  // ================= SESSION (UNICA FONTE) =================
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
   const roi = Number(result?.roi || 0);
 
   if(roi <= 0){
-  console.warn("⛔ ROI non valido → skip UI render");
-  return;
-}
+    console.warn("⛔ ROI non valido → skip UI render");
+    return;
+  }
 
-triggerSmartReminder(roi);
-}
+  triggerSmartReminder(roi);
 
-// 🔥 PAYWALL CORRETTO
-const access = window.getUserAccess();
+  // 🔥 PAYWALL CORRETTO (QUI DENTRO)
+  const access = window.getUserAccess();
 
-if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 0){
-  showUpgradeModal(roi);
-}
-else if(access.isInvestor && roi > 0){
-  renderSmartInvestmentAlert(roi);
+  if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 0){
+    showUpgradeModal(roi);
+  }
+  else if(access.isInvestor && roi > 0){
+    renderSmartInvestmentAlert(roi);
+  }
+
 }
 
 // ================= MORTGAGE LEAD TRIGGER =================
