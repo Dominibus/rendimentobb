@@ -83,7 +83,14 @@ window.alert = function(msg){
 window.getUserAccess = function(){
 
   if(!window.RB_USER){
-    return null; // 🔥 CAMBIO CRITICO
+    return {
+      isFree: true,
+      isInvestor: false,
+      isPro: false,
+      isAdmin: false,
+      canSeeFullAnalysis: false,
+      isLogged: false
+    };
   }
 
   return window.RB_USER;
@@ -3118,6 +3125,7 @@ setTimeout(()=>{
   const access = window.getUserAccess();
 
   if(access.isInvestor){
+    if(!access) return;
 
     console.log("🔥 FORCE CLEAN INVESTOR UI");
 
