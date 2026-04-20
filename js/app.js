@@ -1809,30 +1809,25 @@ if(mortgageBox && mortgageBtn){
 
   }
 // ================= PAYWALL (UNICO) =================
-const accessPaywall = window.getUserAccess();
 
-// 🔥 ROI UNICO (NO DUPLICATI)
+const accessPaywall = window.getUserAccess();
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
-// 🔒 SOLO chi NON è PRO / ADMIN
+// 🔒 SOLO FREE / GUEST
 if(
   !accessPaywall.canSeeFullAnalysis &&
-  !accessPaywall.isInvestor && // 🔥 QUESTA È LA CHIAVE
+  !accessPaywall.isInvestor &&
   !window.paywallShown &&
   currentROI > 0
 ){
   showUpgradeModal(currentROI);
-}else if(midROI){
+}
 
-      renderSmartInvestmentAlert(currentROI); // 🔥 SOFT
+// 🟡 INVESTOR → SOLO SOFT
+else if(accessPaywall.isInvestor && currentROI > 0){
 
-    }else{
+  renderSmartInvestmentAlert(currentROI);
 
-      showUpgradeModal(currentROI); // 🔥 EDUCATION
-
-    }
-
-  },1000);
 }
 
 // ================= USER =================
