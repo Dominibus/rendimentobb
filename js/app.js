@@ -83,17 +83,7 @@ window.alert = function(msg){
 window.getUserAccess = function(){
 
   if(!window.RB_USER){
-  console.warn("⚠️ RB_USER not ready → fallback FREE");
-}
-
-  if(!window.RB_USER){
-    return {
-      isFree: true,
-      isPro: false,
-      isInvestor: false,
-      isAdmin: false,
-      canSeeFullAnalysis: false
-    };
+    return null; // 🔥 CAMBIO CRITICO
   }
 
   return window.RB_USER;
@@ -319,6 +309,7 @@ if(qrRev) qrRev.innerText = formatCurrency(revenue);
 if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
   const access = window.getUserAccess();
+  if(!access) return;
 
 // 🟡 INVESTOR → teaser intelligente
 if(access.isInvestor){
@@ -579,7 +570,7 @@ window.triggerUpgradeFlow = function(context = {}){
   const { roi = 0 } = context;
 
   // 👻 GUEST
-  if(!access.isLogged){
+  if(!access || access.isLogged === false){
     console.log("🔥 GUEST → INVESTOR");
     openUpgradeModal("investor", roi);
     return;
@@ -616,6 +607,7 @@ window.triggerUpgradeFlow = function(context = {}){
 window.openUpgradeModal = function(type = "investor", roi = 0){
 
   const access = window.getUserAccess();
+  if(!access) return;
 
   // 🟡 INVESTOR → BLOCCA COMPLETAMENTE IL MODAL
   if(access.isInvestor){
@@ -1865,6 +1857,7 @@ if(mortgageBox && mortgageBtn){
 
   }
 // ================= PAYWALL (UNICO) =================
+document.addEventListener("rb_auth_ready", () => {
 
 const accessPaywall = window.getUserAccess();
 const currentROI = Number(window.lastAnalysisData?.roi || 0);
@@ -1976,6 +1969,8 @@ if(!userEmail || currentROI <= 0){
 
   }
 }
+
+});  
 
 function getValue(id){
 
