@@ -15084,14 +15084,28 @@ Fix titolo invisibile popup
 }
 
 /* =========================
-🔥 LOCK OVERLAY SYSTEM (PRO)
+🔥 LOCK OVERLAY SYSTEM (CLEAN FINAL)
 ========================= */
+
+/* ===============================
+🔒 BASE LOCK (SOLO SE USATO)
+============================== */
 
 .locked-section{
   position:relative;
 }
 
-/* overlay */
+/* ❌ NIENTE BLUR DI DEFAULT */
+.locked-section{
+  filter:none;
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* ===============================
+🔒 OVERLAY (UNICO SISTEMA VISIVO)
+============================== */
+
 .lock-overlay{
   position:absolute;
   inset:0;
@@ -15104,7 +15118,6 @@ Fix titolo invisibile popup
   z-index:20;
 }
 
-/* box centrale */
 .lock-box{
   background:white;
   padding:14px 18px;
@@ -15116,121 +15129,102 @@ Fix titolo invisibile popup
   box-shadow:0 10px 30px rgba(0,0,0,0.15);
 }
 
-/* icona */
 .lock-icon{
   display:block;
   font-size:18px;
   margin-bottom:4px;
 }
 
-/* testo */
 .lock-text{
   font-size:13px;
 }
 
-/* =====================================
-🟡 INVESTOR ACCESS (MID-TIER)
-===================================== */
+/* ===============================
+🟡 INVESTOR (MID TIER)
+============================== */
 
-body.is-investor .pro-blur,
-body.is-investor .locked-content{
+/* 🚫 MAI blur globale */
+body.is-investor *{
+  filter:none !important;
+  backdrop-filter:none !important;
+}
+
+/* 🔓 base sempre visibile */
+body.is-investor .locked-section{
   filter:none !important;
   opacity:1 !important;
   pointer-events:auto !important;
 }
 
-/* 🔒 BLOCCA SOLO CONTENUTI PRO */
+/* 🔒 blocchi PRO gestiti SOLO via overlay */
 body.is-investor .pro-only{
   display:none !important;
 }
 
-/* 🔓 MOSTRA CONTENUTI INVESTOR */
+/* 🔓 contenuti investor */
 body.is-investor .investor-only{
   display:block !important;
 }
 
-/* 🔥 NO PAYWALL BASE */
+/* 🔥 niente paywall free */
 body.is-investor .upgrade-box.free-only{
   display:none !important;
 }
 
-/* 🔥 CTA PRO (UPSELL) RESTA */
+/* 🔥 CTA upgrade */
 body.is-investor .upgrade-box.pro-only{
   display:block !important;
 }
 
-/* 🔥 VISIBILITÀ PIANI */
+/* ===============================
+🟢 PRO / ADMIN (FULL UNLOCK)
+============================== */
 
-body.is-pro .free-only,
-body.is-admin .free-only{
-  display:none !important;
-}
-
-/* opzionale ma consigliato */
-body.is-investor .free-only{
-  display:none !important;
-}
-
-/* =====================================
-🔥 ACCESS CONTROL SYSTEM (FIX DEFINITIVO)
-===================================== */
-
-/* 🔒 BASE LOCK */
-.locked-section {
-  filter: blur(6px);
-  opacity: 0.5;
-  pointer-events: none;
-  position: relative;
-}
-
-/* 🔓 PRO / ADMIN → SBLOCCO TOTALE */
+/* 🔓 sblocco totale */
 body.is-pro *,
-body.is-admin * {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  backdrop-filter: none !important;
+body.is-admin *{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  backdrop-filter:none !important;
 }
 
-/* 🟡 INVESTOR → NO BLUR */
-body.is-investor .locked-section {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* 🔥 OVERLAY MINI */
-.paywall-mini {
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 13px;
-  text-align: center;
-  color: #64748b;
-  background: rgba(255,255,255,0.7);
-  border-radius: 10px;
-}
-
-/* 🔥 OVERLAY GLOBALI */
-.lock-overlay,
-.home-blur-overlay,
-.upgrade-overlay,
-.results-overlay {
-  backdrop-filter: blur(6px);
-}
-
-/* 🔓 PRO RIMUOVE TUTTO */
+/* ❌ rimuove overlay */
 body.is-pro .lock-overlay,
+body.is-admin .lock-overlay,
 body.is-pro .home-blur-overlay,
+body.is-admin .home-blur-overlay,
 body.is-pro .upgrade-overlay,
-body.is-pro .results-overlay {
-  display: none !important;
+body.is-admin .upgrade-overlay,
+body.is-pro .results-overlay,
+body.is-admin .results-overlay{
+  display:none !important;
 }
 
-/* 🟡 INVESTOR NON DEVE AVERE BLUR GLOBALE */
-body.is-investor .pro-blur,
-body.is-investor .locked,
-body.is-investor [data-paywall]{
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
+/* ===============================
+🔥 MINI PAYWALL (SOLO UI)
+============================== */
+
+.paywall-mini{
+  margin-top:10px;
+  padding:10px;
+  font-size:13px;
+  text-align:center;
+  color:#64748b;
+  background:rgba(255,255,255,0.7);
+  border-radius:10px;
+}
+
+/* ===============================
+🔥 SICUREZZA EXTRA (ANTI BUG)
+============================== */
+
+/* ❌ evita vecchi sistemi */
+.pro-blur,
+.locked,
+.locked-content,
+[data-paywall]{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
 }
