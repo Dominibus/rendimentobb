@@ -2259,13 +2259,9 @@ if(revenueHome){
 
 function renderChart(net){
 
-  // 🔒 ANTI DOUBLE RENDER
-  if(window.renderingChart){
-    return;
-  }
+  if(window.renderingChart) return;
   window.renderingChart = true;
 
-  // 🛑 sicurezza dati
   net = Number(net);
   if(!net || net <= 0){
     console.warn("⛔ renderChart skip → net non valido:", net);
@@ -2274,7 +2270,6 @@ function renderChart(net){
   }
 
   const canvas = document.getElementById("roiChart");
-
   if(!canvas){
     console.warn("⛔ Canvas non presente → skip chart");
     window.renderingChart = false;
@@ -2289,20 +2284,18 @@ function renderChart(net){
   }
 
   const ctx = canvas.getContext("2d");
-
   if(!ctx){
     console.warn("⛔ ctx non disponibile");
     window.renderingChart = false;
     return;
   }
 
-  // 🔥 destroy precedente (SAFE)
-if(window.roiChartInstance){
-  window.roiChartInstance.destroy();
-  window.roiChartInstance = null;
-}
+  // 🔥 DESTROY PRECEDENTE
+  if(window.roiChartInstance){
+    window.roiChartInstance.destroy();
+    window.roiChartInstance = null;
+  }
 
-  window.roiChartInstance = new Chart(ctx,{
   // ================= DATA =================
   const years = Array.from({length:10}, (_,i)=>i+1);
 
@@ -2311,96 +2304,83 @@ if(window.roiChartInstance){
   const optimistic = years.map(y => net * y * 1.2);
 
   // ================= CHART =================
-roiChartInstance = new Chart(ctx,{
-
-  type:"line",
-
-  data:{
-    labels: years.map(y => t("Anno ","Year ") + y),
-
-    datasets:[
-      {
-        label: t("Scenario prudente","Low scenario"),
-        data: conservative,
-        borderColor:"#ef4444",
-        backgroundColor:"rgba(239,68,68,0.08)",
-        tension:0.4,
-        borderWidth:2,
-        fill:true,
-        pointRadius:0
-      },
-      {
-        label: t("Scenario base","Base scenario"),
-        data: base,
-        borderColor:"#3b82f6",
-        backgroundColor:"rgba(59,130,246,0.15)",
-        tension:0.4,
-        borderWidth:3,
-        fill:true,
-        pointRadius:0
-      },
-      {
-        label: t("Scenario ottimistico","High scenario"),
-        data: optimistic,
-        borderColor:"#10b981",
-        backgroundColor:"rgba(16,185,129,0.12)",
-        tension:0.4,
-        borderWidth:2,
-        fill:true,
-        pointRadius:0
-      }
-    ]
-  },
-
-  options:{
-  responsive:true,
-  maintainAspectRatio:false,
-  animation:false,
-  devicePixelRatio:2,
-
-  interaction:{
-    mode:"index",
-    intersect:false
-  },
-
-  plugins:{
-    legend:{
-      display:true,
-      position:"bottom",
-      labels:{
-        font:{ size:12 },
-        color:"#334155"
-      }
+  window.roiChartInstance = new Chart(ctx,{
+    type:"line",
+    data:{
+      labels: years.map(y => t("Anno ","Year ") + y),
+      datasets:[
+        {
+          label: t("Scenario prudente","Low scenario"),
+          data: conservative,
+          borderColor:"#ef4444",
+          backgroundColor:"rgba(239,68,68,0.08)",
+          tension:0.4,
+          borderWidth:2,
+          fill:true,
+          pointRadius:0
+        },
+        {
+          label: t("Scenario base","Base scenario"),
+          data: base,
+          borderColor:"#3b82f6",
+          backgroundColor:"rgba(59,130,246,0.15)",
+          tension:0.4,
+          borderWidth:3,
+          fill:true,
+          pointRadius:0
+        },
+        {
+          label: t("Scenario ottimistico","High scenario"),
+          data: optimistic,
+          borderColor:"#10b981",
+          backgroundColor:"rgba(16,185,129,0.12)",
+          tension:0.4,
+          borderWidth:2,
+          fill:true,
+          pointRadius:0
+        }
+      ]
     },
-
-    tooltip:{
-      callbacks:{
-        label:(ctx)=>{
-          return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:false,
+      devicePixelRatio:2,
+      interaction:{
+        mode:"index",
+        intersect:false
+      },
+      plugins:{
+        legend:{
+          display:true,
+          position:"bottom",
+          labels:{
+            font:{ size:12 },
+            color:"#334155"
+          }
+        },
+        tooltip:{
+          callbacks:{
+            label:(ctx)=>{
+              return `${ctx.dataset.label}: ${formatCurrency(ctx.raw)}`;
+            }
+          }
+        }
+      },
+      scales:{
+        y:{
+          ticks:{
+            callback:(v)=> formatCurrency(v)
+          }
         }
       }
     }
-  },
+  });
 
-  scales:{
-    y:{
-      ticks:{
-        callback:(v)=>{
-          return formatCurrency(v);
-        }
-      }
-    }
-  }
+  console.log("✅ ROI chart renderizzato");
+
+  window.renderingChart = false;
 }
-
-});
-
-console.log("✅ ROI chart renderizzato");
-
-// 🔓 RESET LOCK
-window.renderingChart = false;
-}
-
 // ================= CITY ROI CHART (SAFE) =================
 function renderCityROIChart(){
 
