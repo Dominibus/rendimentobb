@@ -134,24 +134,6 @@ document.addEventListener("rb_auth_ready", () => {
   }
 
   // ===============================
-  // 🟡 INVESTOR → ACCESSO PARZIALE (WOW MODE)
-  // ===============================
-else if(access.isInvestor){
-
-  console.log("🟡 INVESTOR FULL UNLOCK (REAL)");
-
-  // 🔥 rimuove qualsiasi lock
-  document.querySelectorAll(`
-    .locked-section,
-    .paywall-mini
-  `).forEach(el=>{
-    el.classList.remove("locked-section");
-    el.remove();
-  });
-
-}
-
-  // ===============================
   // 🟢 PRO / ADMIN → SBLOCCO TOTALE
   // ===============================
   else if(access.isPro || access.isAdmin){
@@ -2268,67 +2250,7 @@ if(revenueHome){
   console.error("💥 calculate error:", err);
 }
 
-// 🔥 FIX INVESTOR UI (CRITICO)
-setTimeout(()=>{
-  const access = window.getUserAccess();
-
-  if(access && access.isInvestor){
-    console.log("🔥 FORCE UNLOCK INVESTOR UI");
-
-    document.querySelectorAll(".locked-section").forEach(el=>{
-      el.classList.remove("locked-section");
-    });
-  }
-}, 300);
-
 window.isCalculating = false;
-
-// ================= FINAL INVESTOR FIX (UNICO PUNTO VERITÀ) =================
-
-setTimeout(()=>{
-
-  const access = window.getUserAccess();
-  if(!access || !access.isInvestor) return;
-
-  console.log("🔥 FINAL INVESTOR UNLOCK");
-
-  // 🔓 rimuove TUTTI i lock logici
-  document.querySelectorAll(`
-    .locked-section,
-    .locked,
-    .premium-lock,
-    .pro-blur,
-    .locked-content
-  `).forEach(el=>{
-    el.classList.remove(
-      "locked-section",
-      "locked",
-      "premium-lock",
-      "pro-blur",
-      "locked-content"
-    );
-
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
-
-  // 💣 rimuove TUTTI overlay possibili
-  document.querySelectorAll(`
-    .lock-overlay,
-    .paywall-mini,
-    .home-blur-overlay,
-    .upgrade-overlay,
-    .results-overlay,
-    #upgrade-overlay,
-    [data-paywall]
-  `).forEach(el=>{
-    if(el.id !== "register-popup"){
-      el.remove();
-    }
-  });
-
-}, 500);
 
 };
 
@@ -3884,36 +3806,21 @@ try {
   console.error("Final error:", e);
 }
 
-// =====================================
-// 🟡 FINAL GLOBAL UI FIX (INVESTOR SMART)
-// =====================================
-
 document.addEventListener("rb_auth_ready", () => {
 
   setTimeout(()=>{
 
     const access = window.getUserAccess();
-
     if(!access) return;
 
     // ===============================
-    // 🟡 INVESTOR (PARZIALE – COERENTE CON PIANO)
+    // 🟡 INVESTOR (LOGICA REALE)
     // ===============================
     if(access.isInvestor){
 
-      console.log("🟡 INVESTOR UI SMART");
+      console.log("🟡 INVESTOR CLEAN");
 
-      // ✅ rimuove SOLO overlay base (UX pulita)
-      document.querySelectorAll(`
-        .home-blur-overlay
-      `).forEach(el=>{
-        el.remove();
-      });
-
-      // ❌ NON rimuovere:
-      // .paywall-mini → serve per upsell PRO
-
-      // 🔓 sblocca SOLO contenuti base
+      // 🔓 sblocca base
       [
         "revenue-forecast",
         "occupancy-sensitivity",
@@ -3925,7 +3832,7 @@ document.addEventListener("rb_auth_ready", () => {
         }
       });
 
-      // 🔒 mantiene lock PRO (coerente con piano €19)
+      // 🔒 blocca SOLO premium
       [
         "investment-score",
         "investment-ranking",
@@ -3935,7 +3842,7 @@ document.addEventListener("rb_auth_ready", () => {
       ].forEach(id=>{
         const el = document.getElementById(id);
         if(el && !el.querySelector(".paywall-mini")){
-          
+
           const overlay = document.createElement("div");
           overlay.className = "paywall-mini";
 
@@ -3960,20 +3867,13 @@ document.addEventListener("rb_auth_ready", () => {
     }
 
     // ===============================
-    // 🟢 PRO / ADMIN (SBLOCCO TOTALE)
+    // 🟢 PRO / ADMIN (FIX VERO)
     // ===============================
     if(access.isPro || access.isAdmin){
 
-      console.log("🟢 PRO FULL UNLOCK");
+      console.log("🟢 HARD UNLOCK PRO");
 
-      // 🔥 rimuove TUTTI i blocchi
-      document.querySelectorAll(`
-        .locked-section,
-        .pro-blur,
-        .locked,
-        .premium-lock,
-        .locked-content
-      `).forEach(el=>{
+      document.querySelectorAll("*").forEach(el=>{
         el.classList.remove(
           "locked-section",
           "pro-blur",
@@ -3987,7 +3887,6 @@ document.addEventListener("rb_auth_ready", () => {
         el.style.pointerEvents = "auto";
       });
 
-      // 🔥 elimina overlay
       document.querySelectorAll(`
         .lock-overlay,
         .paywall-mini,
@@ -4001,6 +3900,6 @@ document.addEventListener("rb_auth_ready", () => {
 
     }
 
-  }, 400);
+  }, 300);
 
 });
