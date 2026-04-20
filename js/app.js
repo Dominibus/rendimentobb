@@ -695,10 +695,16 @@ const lang = window.currentLang === "en" ? "en" : "it";
     text-align:center;
     box-shadow:0 20px 60px rgba(0,0,0,0.25);
     animation:fadeIn .3s ease;
+    
   `;
 
   const title = document.createElement("h3");
-  title.textContent = config["title_" + lang];
+title.textContent = config["title_" + lang];
+
+// FIX VISIVO
+title.style.color = "#0f172a";
+title.style.fontWeight = "700";
+title.style.marginBottom = "10px";
 
   const desc = document.createElement("p");
   desc.textContent = config["desc_" + lang];
