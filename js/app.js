@@ -1760,6 +1760,10 @@ function resetGlobalBlur(){
 
 function runPostAnalysis(result, context){
 
+  if(access.isInvestor){
+  resetGlobalBlur(); // 🔥 FORZA SBLOCCO UI
+}
+
   if(!result) return;
 
   const {
@@ -2102,7 +2106,12 @@ const annualEl = document.getElementById("profit-annual");
 
 // 🚨 NON mostrare dati fake
 if(roi <= 0 || net <= 0){
-  console.warn("⛔ Dati non validi → skip UI render");
+  console.warn("⛔ Dati non validi → render fallback");
+
+  // 🔥 MOSTRA COMUNQUE UI (fondamentale per investor)
+  const roiEl = document.getElementById("roi-live");
+  if(roiEl) roiEl.innerText = "—";
+
   return;
 }
 
@@ -2267,10 +2276,23 @@ if(revenueHome){
     window.RB_LANG?.apply?.();
 
   }catch(err){
-    console.error("💥 calculate error:", err);
-  }
+  console.error("💥 calculate error:", err);
+}
 
-  window.isCalculating = false;
+// 🔥 FIX INVESTOR UI (CRITICO)
+setTimeout(()=>{
+  const access = window.getUserAccess();
+
+  if(access && access.isInvestor){
+    console.log("🔥 FORCE UNLOCK INVESTOR UI");
+
+    document.querySelectorAll(".locked-section").forEach(el=>{
+      el.classList.remove("locked-section");
+    });
+  }
+}, 300);
+
+window.isCalculating = false;
 };
 
 function renderChart(net){
