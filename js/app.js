@@ -3907,6 +3907,12 @@ document.addEventListener("rb_auth_ready", () => {
     // ===============================
     if(access.isPro || access.isAdmin){
 
+      // 🔥 FORCE CALCULATION FIX
+if(typeof window.runSimulation === "function"){
+  console.log("🔥 FORCE RE-RUN SIMULATION");
+  window.runSimulation();
+}
+
       console.log("🟢 HARD UNLOCK PRO");
 
       // 🔥 RESET TOTALE
