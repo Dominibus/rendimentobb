@@ -136,27 +136,22 @@ document.addEventListener("rb_auth_ready", () => {
   // ===============================
   // 🟡 INVESTOR → ACCESSO PARZIALE (WOW MODE)
   // ===============================
-  else if(access.isInvestor){
+else if(access.isInvestor){
 
-    console.log("🟡 INVESTOR PARTIAL UNLOCK");
+  console.log("🟡 INVESTOR FULL UNLOCK (FIX)");
 
-    // 🔓 sblocca TUTTO base
-    unlockSections([
-      "revenue-forecast",
-      "occupancy-sensitivity",
-      "break-even-kpi",
-      "investment-score",
-      "investment-ranking",
-      "investment-risk-meter",
-      "investment-verdict"
-    ]);
+  unlockSections([
+    "revenue-forecast",
+    "occupancy-sensitivity",
+    "break-even-kpi",
+    "investment-score",
+    "investment-ranking",
+    "investment-risk-meter",
+    "investment-verdict",
+    "ai-insights" // 🔥 AGGIUNTO
+  ]);
 
-    // 🔒 blocca SOLO roba premium vera
-    lockSections([
-      "ai-insights"
-    ], "pro");
-
-  }
+}
 
   // ===============================
   // 🟢 PRO / ADMIN → SBLOCCO TOTALE
