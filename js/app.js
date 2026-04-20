@@ -369,21 +369,6 @@ window.isProUser = function(){
 
 const access = window.getUserAccess();
 
-const shock = document.getElementById("roi-shock-block");
-
-if(!access.canSeeFullAnalysis){
-
-  if(shock){
-    shock.style.display = "block";
-  }
-
-}else{
-  if(shock){
-    shock.style.display = "none";
-  }
-}
-
-// 👉 metti SOLO ID reali se vuoi bloccare qualcosa
 const lockIds = [
   "profit-live",
   "revenue-live",
@@ -391,7 +376,7 @@ const lockIds = [
   "profit-annual"
 ];
 
-// 🔒 SOLO FREE (NON INVESTOR)
+// 🔴 FREE → lock totale
 if(access.isFree){
 
   lockIds.forEach(id => {
@@ -404,7 +389,10 @@ if(access.isFree){
     );
   });
 
-}else if(access.isPro || access.isAdmin){
+}
+
+// 🟡 INVESTOR → DEVE VEDERE (NO LOCK)
+else if(access.isInvestor){
 
   lockIds.forEach(id => {
     const el = document.getElementById(id);
@@ -413,8 +401,19 @@ if(access.isFree){
     el.style.opacity = "1";
   });
 
-} 
+}
 
+// 🟢 PRO / ADMIN → full
+else if(access.isPro || access.isAdmin){
+
+  lockIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.style.opacity = "1";
+  });
+
+}
 // ================= MORTGAGE COMPARISON =================
 
 window.runMortgageComparison = function(){
@@ -1122,9 +1121,15 @@ document.addEventListener("rb_auth_ready", () => {
 
   const access = window.getUserAccess();
 
-if(resultsCard && access.isFree){
-  resultsCard.classList.add("locked-section");
-}
+  // 🔴 FREE → blocca
+  if(resultsCard && access.isFree){
+    resultsCard.classList.add("locked-section");
+  }
+
+  // 🟡 INVESTOR → SBLOCCA (FIX CRITICO)
+  if(resultsCard && access.isInvestor){
+    resultsCard.classList.remove("locked-section");
+  }
 
 });
 
@@ -3103,6 +3108,26 @@ document.addEventListener("rb_auth_ready", () => {
   );
 
 });
+
+setTimeout(()=>{
+
+  const access = window.getUserAccess();
+
+  if(access.isInvestor){
+
+    console.log("🔥 FORCE CLEAN INVESTOR UI");
+
+    document.querySelectorAll(`
+      .locked-section,
+      .lock-overlay,
+      .paywall-mini,
+      .upgrade-overlay,
+      .results-overlay
+    `).forEach(el => el.remove());
+
+  }
+
+}, 300);
 
 // ===============================================
 // APPLY MORTGAGE FROM COMPARATOR
