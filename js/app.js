@@ -2289,6 +2289,54 @@ setTimeout(()=>{
 }, 300);
 
 window.isCalculating = false;
+
+// ================= FINAL INVESTOR FIX (UNICO PUNTO VERITÀ) =================
+
+setTimeout(()=>{
+
+  const access = window.getUserAccess();
+  if(!access || !access.isInvestor) return;
+
+  console.log("🔥 FINAL INVESTOR UNLOCK");
+
+  // 🔓 rimuove TUTTI i lock logici
+  document.querySelectorAll(`
+    .locked-section,
+    .locked,
+    .premium-lock,
+    .pro-blur,
+    .locked-content
+  `).forEach(el=>{
+    el.classList.remove(
+      "locked-section",
+      "locked",
+      "premium-lock",
+      "pro-blur",
+      "locked-content"
+    );
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+  // 💣 rimuove TUTTI overlay possibili
+  document.querySelectorAll(`
+    .lock-overlay,
+    .paywall-mini,
+    .home-blur-overlay,
+    .upgrade-overlay,
+    .results-overlay,
+    #upgrade-overlay,
+    [data-paywall]
+  `).forEach(el=>{
+    if(el.id !== "register-popup"){
+      el.remove();
+    }
+  });
+
+}, 500);
+
 };
 
 function renderChart(net){
@@ -3138,23 +3186,6 @@ document.addEventListener("rb_auth_ready", () => {
 
 });
 
-setTimeout(()=>{
-
-  const access = window.getUserAccess();
-
-  if(access.isInvestor){
-    if(!access) return;
-
-    console.log("🔥 FORCE CLEAN INVESTOR UI");
-
-    document.querySelectorAll(`
-  .lock-overlay,
-  .paywall-mini
-`).forEach(el => el.remove());
-
-  }
-
-}, 300);
 
 // ===============================================
 // APPLY MORTGAGE FROM COMPARATOR
