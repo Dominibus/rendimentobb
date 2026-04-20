@@ -1935,6 +1935,18 @@ function getValue(id){
 
   return isNaN(v) ? 0 : v;
 }
+
+function formatCurrency(value){
+
+  const v = Number(value);
+
+  if(!isFinite(v)) return "€0";
+
+  return "€" + v.toLocaleString("it-IT", {
+    maximumFractionDigits: 0
+  });
+
+}
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
@@ -3288,7 +3300,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🔥 TOOL / MARKET (NON TOCCARE)
   if(!window.location.pathname.startsWith("/roi-bnb/")){
-    changeCityBackground(selectedCity);
+    applyCityBackground(selectedCity);
   }
 
   // 🔥 ROI (FORZATO + LOCK)
