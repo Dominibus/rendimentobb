@@ -257,107 +257,95 @@ function unlockSections(ids){
   });
 
 }
-  // ================= INPUT =================
 
-  const price = safeNum(document.getElementById("qr_price")?.value,250000);
-  const reno  = safeNum(document.getElementById("qr_reno")?.value,30000);
-  const night = safeNum(document.getElementById("qr_night")?.value,110);
-  const occ   = safeNum(document.getElementById("qr_occ")?.value,65);
-  const cost  = safeNum(document.getElementById("qr_cost")?.value,35);
+// ================= KPI UNIVERSALE (HOME + TOOL) =================
 
-  // ================= CALCOLO =================
+function renderUniversalKPI({ net, revenue, investment }){
 
-  const investment = price + reno;
-  const revenue = night * 365 * (occ/100);
-  const net = revenue - (revenue*(cost/100));
-  let roi = investment > 0 ? (net/investment)*100 : 0;
-roi = isFinite(roi) ? roi : 0;
+  if(!net && net !== 0) return;
 
-  // ================= ROI =================
+  // 🏠 HOME (qr_*)
+  const qrProfit = document.getElementById("qr_profit");
+  const qrMonth  = document.getElementById("qr_month");
+  const qrBreak  = document.getElementById("qr_break");
+  const qrRev    = document.getElementById("qr_rev");
 
-  const roiEl = document.getElementById("qr_roi");
-  if(roiEl){
-    roiEl.innerText = roi.toFixed(1)+"%";
+  // 🛠 TOOL (standard)
+  const elMonthly = document.getElementById("profit-monthly");
+  const elAnnual  = document.getElementById("profit-annual");
+  const elBreak   = document.getElementById("break-even");
+  const elRevenue = document.getElementById("revenue-annual");
+
+  // ===== PROFIT =====
+  if(qrProfit) qrProfit.innerText = formatCurrency(net);
+  if(elAnnual) elAnnual.innerText = formatCurrency(net);
+
+  // ===== MONTH =====
+  const monthly = net / 12;
+
+  if(qrMonth) qrMonth.innerText = formatCurrency(monthly);
+  if(elMonthly) elMonthly.innerText = formatCurrency(monthly);
+
+  // ===== BREAK EVEN =====
+  const payback = net > 0 ? (investment / net) : 0;
+  const paybackText = payback ? payback.toFixed(1) + " anni" : "-";
+
+  if(qrBreak) qrBreak.innerText = paybackText;
+  if(elBreak) elBreak.innerText = paybackText;
+
+  // ===== REVENUE =====
+  if(qrRev) qrRev.innerText = formatCurrency(revenue);
+  if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
+
+  // ================= ACCESS CONTROL (SAFE) =================
+
+  const access = window.getUserAccess?.();
+
+  if(!access){
+    console.warn("⛔ access non disponibile");
+    return;
   }
 
-  // ================= KPI UNIVERSALE (HOME + TOOL) =================
+  // 🟡 INVESTOR → teaser intelligente
+  if(access.isInvestor){
 
-// 🏠 HOME (qr_*)
-const qrProfit = document.getElementById("qr_profit");
-const qrMonth  = document.getElementById("qr_month");
-const qrBreak  = document.getElementById("qr_break");
-const qrRev    = document.getElementById("qr_rev");
+    const verdict = document.getElementById("investment-verdict");
 
-// 🛠 TOOL (standard)
-const elMonthly = document.getElementById("profit-monthly");
-const elAnnual  = document.getElementById("profit-annual");
-const elBreak   = document.getElementById("break-even");
-const elRevenue = document.getElementById("revenue-annual");
+    if(verdict && !verdict.querySelector(".investor-upsell")){
 
-// ===== PROFIT =====
-if(qrProfit) qrProfit.innerText = formatCurrency(net);
-if(elAnnual) elAnnual.innerText = formatCurrency(net);
+      const upsell = document.createElement("div");
+      upsell.className = "investor-upsell";
 
-// ===== MONTH =====
-if(qrMonth) qrMonth.innerText = formatCurrency(net / 12);
-if(elMonthly) elMonthly.innerText = formatCurrency(net / 12);
-
-// ===== BREAK EVEN =====
-const payback = net > 0 ? investment / net : 0;
-
-if(qrBreak) qrBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
-if(elBreak) elBreak.innerText = payback ? payback.toFixed(1)+" anni" : "-";
-
-// ===== REVENUE =====
-if(qrRev) qrRev.innerText = formatCurrency(revenue);
-if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
-
-  const access = window.getUserAccess();
-  if(!access) return;
-
-// 🟡 INVESTOR → teaser intelligente
-if(access.isInvestor){
-
-  const verdict = document.getElementById("investment-verdict");
-
-  if(verdict && !verdict.querySelector(".investor-upsell")){
-
-    const upsell = document.createElement("div");
-
-    upsell.className = "investor-upsell";
-
-    upsell.innerHTML = `
-      <div style="
-        margin-top:15px;
-        padding:12px;
-        border-radius:10px;
-        background:rgba(16,185,129,0.08);
-        font-size:13px;
-        text-align:center;
-        color:#065f46;
-        font-weight:500;
-      ">
-        🔥 ${t(
-          "Stai vedendo solo una parte del potenziale reale",
-          "You are only seeing part of the real potential"
-        )}
-        <br>
-        <span style="opacity:.8;">
-          ${t(
-            "Sblocca analisi completa + AI insights",
-            "Unlock full analysis + AI insights"
+      upsell.innerHTML = `
+        <div style="
+          margin-top:15px;
+          padding:12px;
+          border-radius:10px;
+          background:rgba(16,185,129,0.08);
+          font-size:13px;
+          text-align:center;
+          color:#065f46;
+          font-weight:500;
+        ">
+          🔥 ${t(
+            "Stai vedendo solo una parte del potenziale reale",
+            "You are only seeing part of the real potential"
           )}
-        </span>
-      </div>
-    `;
+          <br>
+          <span style="opacity:.8;">
+            ${t(
+              "Sblocca analisi completa + AI insights",
+              "Unlock full analysis + AI insights"
+            )}
+          </span>
+        </div>
+      `;
 
-    verdict.appendChild(upsell);
+      verdict.appendChild(upsell);
+    }
   }
 
 }
-
-};
-
 // ================= HOME LOCK SYSTEM =================
 
 window.isProUser = function(){
@@ -2126,6 +2114,12 @@ result = calculateROI({
     const roi   = Number(result?.roi || 0);
     const gross = Number(result?.revenue || 0);
     const net   = Number(result?.netAfterMortgage || result?.profit || 0);
+
+    renderUniversalKPI({
+  net,
+  revenue: gross,
+  investment: price
+});
 
 
     // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
