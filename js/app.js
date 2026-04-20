@@ -1762,8 +1762,10 @@ function runPostAnalysis(result, context){
 
   const access = window.getUserAccess() || {};
 
+  // 🔥 FIX: sblocco UI per investor SEMPRE
   if(access.isInvestor){
     resetGlobalBlur();
+    removeGhostOverlays?.();
   }
 
   if(!result) return;
@@ -1781,14 +1783,15 @@ function runPostAnalysis(result, context){
 
   const roi = Number(result?.roi || 0);
 
+  // 🔥 FIX CRITICO → NON bloccare mai UI
   if(roi <= 0){
-    console.warn("⛔ ROI non valido → skip UI render");
-    return;
+    console.warn("⚠️ ROI basso → continuo render per UX");
   }
 
   triggerSmartReminder(roi);
 
-  // 🔥 USA QUELLO GIÀ DEFINITO
+  // ================= PAYWALL LOGIC =================
+
   if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 0){
     showUpgradeModal(roi);
   }
@@ -1797,6 +1800,8 @@ function runPostAnalysis(result, context){
   }
 
 }
+
+
 // ================= MORTGAGE LEAD TRIGGER =================
 
 const mortgageBox = document.getElementById("mortgage-lead-box");
@@ -1806,22 +1811,14 @@ if(mortgageBox && mortgageBtn){
 
   const access = window.getUserAccess();
 
-  // 🔥 mostra SOLO se ha senso (ROI medio-alto)
   if(window.lastAnalysisData?.roi > 6){
 
     mortgageBox.style.display = "block";
 
     mortgageBtn.onclick = () => {
 
-      // 🔒 NON LOGGATO → lead
-      if(!window.firebaseReady){
-        return;
-      }
-
-      // 🔥 FIX CRITICO
-      if(!window.isUserReady()){
-        return;
-      }
+      if(!window.firebaseReady) return;
+      if(!window.isUserReady()) return;
 
       if(!window.currentUser){
 
@@ -1839,7 +1836,6 @@ if(mortgageBox && mortgageBtn){
         return;
       }
 
-      // 🔥 UTENTE → lead diretto
       fetch("/api/send-lead-partner",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -1857,7 +1853,7 @@ if(mortgageBox && mortgageBtn){
           "🏦 Request sent. Banks will contact you"
         ),
         "success"
-      ); // ✅ QUESTA ERA LA PARENTESI MANCANTE
+      );
 
     };
 
@@ -1865,134 +1861,135 @@ if(mortgageBox && mortgageBtn){
     mortgageBox.style.display = "none";
   }
 
-  }
+}
+
+
 // ================= PAYWALL (UNICO) =================
+
 document.addEventListener("rb_auth_ready", () => {
 
-const accessPaywall = window.getUserAccess();
-const currentROI = Number(window.lastAnalysisData?.roi || 0);
+  const access = window.getUserAccess();
+  const currentROI = Number(window.lastAnalysisData?.roi || 0);
 
-// ================= USER =================
-const userEmail = window.currentUser?.email || null;
+  const userEmail = window.currentUser?.email || null;
 
-// ================= SESSION COUNT =================
-window.simulationCount = (window.simulationCount || 0) + 1;
+  window.simulationCount = (window.simulationCount || 0) + 1;
 
-if(!window.currentUser && window.simulationCount >= 2){
-  setTimeout(()=> window.location.href="/login/", 800);
-}
+  // 🔥 redirect guest intelligente
+  if(!window.currentUser && window.simulationCount >= 2){
+    setTimeout(()=> window.location.href="/login/", 800);
+  }
 
-// ================= LEAD SCORE =================
-let leadScore = "cold";
-
-try{
-  leadScore = getLeadScore({ roi: currentROI });
-}catch(e){
-  console.warn("LeadScore fallback:", e);
-}
-
-if(window.simulationCount > 3){
-  leadScore = "hot";
-}
-
-// ================= DESTINATION =================
-const leadDestination = getLeadDestination({
-  roi: currentROI,
-  city: window.currentCity
-});
-
-// ================= SAVE LEAD =================
-(async () => {
+  let leadScore = "cold";
 
   try{
+    leadScore = getLeadScore({ roi: currentROI });
+  }catch(e){
+    console.warn("LeadScore fallback:", e);
+  }
 
-    if(window.leadSaved) return;
+  if(window.simulationCount > 3){
+    leadScore = "hot";
+  }
 
-    const {
-      addDoc,
-      collection,
-      serverTimestamp
-    } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+  const leadDestination = getLeadDestination({
+    roi: currentROI,
+    city: window.currentCity
+  });
 
-    await addDoc(collection(db,"leads"),{
-      email: userEmail,
-      roi: currentROI,
-      score: leadScore,
-      value: currentROI,
-      city: window.currentCity || "unknown",
-      createdAt: serverTimestamp()
-    });
+  // ================= SAVE LEAD =================
 
-    window.leadSaved = true;
+  (async () => {
 
-    // ================= PARTNER =================
-    if(leadScore === "hot"){
-      fetch("/api/send-lead-partner",{
+    try{
+
+      if(window.leadSaved) return;
+
+      const {
+        addDoc,
+        collection,
+        serverTimestamp
+      } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
+
+      await addDoc(collection(db,"leads"),{
+        email: userEmail,
+        roi: currentROI,
+        score: leadScore,
+        value: currentROI,
+        city: window.currentCity || "unknown",
+        createdAt: serverTimestamp()
+      });
+
+      window.leadSaved = true;
+
+      if(leadScore === "hot"){
+        fetch("/api/send-lead-partner",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            email: userEmail,
+            city: window.currentCity,
+            roi: currentROI,
+            score: leadScore,
+            type: leadDestination?.type || "simulator",
+            partners: leadDestination?.emails || []
+          })
+        });
+      }
+
+    }catch(e){
+      console.error("Lead error:", e);
+    }
+
+  })();
+
+  // ================= EMAIL =================
+
+  if(!userEmail || currentROI <= 0){
+    console.log("⛔ Skip email → no user o ROI 0");
+  } else {
+
+    if(window.emailUserSent){
+      console.log("⛔ Email già inviata");
+    } else {
+
+      window.emailUserSent = true;
+
+      fetch("/api/send-lead-email",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           email: userEmail,
-          city: window.currentCity,
+          lang: window.currentLang || "it",
           roi: currentROI,
-          score: leadScore,
-          type: leadDestination?.type || "simulator",
-          partners: leadDestination?.emails || []
+          city: window.currentCity
         })
-      });
-    }
-
-  }catch(e){
-    console.error("Lead error:", e);
-  }
-
-})();
-
-// ================= EMAIL =================
-if(!userEmail || currentROI <= 0){
-  console.log("⛔ Skip email → no user o ROI 0");
-} else {
-
-  if(window.emailUserSent){
-    console.log("⛔ Email già inviata");
-  } else {
-
-    window.emailUserSent = true;
-
-    fetch("/api/send-lead-email",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        email: userEmail,
-        lang: window.currentLang || "it",
-        roi: currentROI,
-        city: window.currentCity
       })
-    })
-    .then(res=>{
-      if(!res.ok){
+      .then(res=>{
+        if(!res.ok){
+          window.emailUserSent = false;
+        }
+      })
+      .catch(()=>{
         window.emailUserSent = false;
-      }
-    })
-    .catch(()=>{
-      window.emailUserSent = false;
-    });
+      });
 
+    }
   }
-}
 
-});  
+});
+
+
+// ================= SAFE INPUT =================
 
 function getValue(id){
 
   const el = document.getElementById(id);
-
   if(!el) return 0;
 
   const v = parseFloat(el.value);
-
   return isNaN(v) ? 0 : v;
 }
-
 // ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
