@@ -108,28 +108,29 @@ window.applyAccessControl = function(){
 document.addEventListener("rb_auth_ready", () => {
 
   const access = window.getUserAccess();
-
   if(!access) return;
 
   console.log("🎯 ACCESS CONTROL:", access);
 
   // ===============================
-  // 🔴 FREE USER → LOCK FORTE
+  // 🔴 FREE → LOCK COMPLETO
   // ===============================
   if(access.isFree){
 
     console.log("🔒 FREE LOCK");
 
-    lockSections([
-      "revenue-forecast",
-      "occupancy-sensitivity",
-      "break-even-kpi",
-      "investment-score",
-      "investment-ranking",
-      "investment-risk-meter",
-      "investment-verdict",
-      "ai-insights"
-    ], "pro");
+    applyFullLock();
+
+  }
+
+  // ===============================
+  // 🟡 INVESTOR → LOCK PARZIALE
+  // ===============================
+  else if(access.isInvestor){
+
+    console.log("🟡 INVESTOR PARTIAL");
+
+    applyPartialLock();
 
   }
 
@@ -139,6 +140,8 @@ document.addEventListener("rb_auth_ready", () => {
   else if(access.isPro || access.isAdmin){
 
     console.log("🟢 FULL UNLOCK");
+
+    resetGlobalBlur(); // 🔥 fondamentale
 
     unlockSections([
       "revenue-forecast",
@@ -155,10 +158,42 @@ document.addEventListener("rb_auth_ready", () => {
 
 });
 
+function applyFullLock(){
 
-// =====================================
-// 🔒 LOCK FUNCTION
-// =====================================
+  lockSections([
+    "revenue-forecast",
+    "occupancy-sensitivity",
+    "break-even-kpi",
+    "investment-score",
+    "investment-ranking",
+    "investment-risk-meter",
+    "investment-verdict",
+    "ai-insights"
+  ], "pro");
+
+}
+
+function applyPartialLock(){
+
+  console.log("🟡 APPLY PARTIAL LOCK");
+
+  // 🔓 SBLOCCA base
+  unlockSections([
+    "revenue-forecast",
+    "occupancy-sensitivity",
+    "break-even-kpi"
+  ]);
+
+  // 🔒 BLOCCA solo PRO
+  lockSections([
+    "investment-score",
+    "investment-ranking",
+    "investment-risk-meter",
+    "investment-verdict",
+    "ai-insights"
+  ], "pro");
+
+}
 
 function lockSections(ids, plan = "pro"){
 
@@ -175,7 +210,6 @@ function lockSections(ids, plan = "pro"){
     const overlay = document.createElement("div");
     overlay.className = "paywall-mini";
 
-    // 🔥 messaggio dinamico (importante UX)
     let message = "";
 
     if(plan === "pro"){
@@ -208,11 +242,6 @@ function lockSections(ids, plan = "pro"){
 
 }
 
-
-// =====================================
-// 🔓 UNLOCK FUNCTION
-// =====================================
-
 function unlockSections(ids){
 
   ids.forEach(id => {
@@ -228,13 +257,6 @@ function unlockSections(ids){
   });
 
 }
-
-window.quickROI = function(){
-
-  const safeNum = (v, def=0)=>{
-    const n = parseFloat(v);
-    return isNaN(n) ? def : n;
-  };
   // ================= INPUT =================
 
   const price = safeNum(document.getElementById("qr_price")?.value,250000);
@@ -1730,6 +1752,15 @@ function getLeadDestination({roi, city}){
 function resetGlobalBlur(){
 
   console.log("🧹 HARD RESET UI");
+
+  // 🔥 FIX OVERLAY BLOCCATO
+document.querySelectorAll(
+  ".locked-overlay, .results-overlay, .upgrade-overlay"
+).forEach(el => el.remove());
+
+// 🔥 SBLOCCA SCROLL / CLICK
+document.body.classList.remove("no-scroll");
+document.body.style.pointerEvents = "auto";
 
   document.querySelectorAll("*").forEach(el=>{
 
