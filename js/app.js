@@ -3093,14 +3093,12 @@ document.addEventListener("rb_auth_ready", () => {
     }, 500);
   }
 
-  // ===============================
-  // 🔥 FIX UI + ACCESS
-  // ===============================
+  const access = window.getUserAccess();
 
-  if(typeof resetGlobalBlur === "function"){
+if(access.isPro || access.isAdmin){
   resetGlobalBlur();
 }
- 
+
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
   // ===============================
