@@ -15242,3 +15242,9 @@ body.is-free .results-overlay{
 body.is-free{
   filter:none !important;
 }
+
+.locked-section{
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.6;
+}
