@@ -1760,9 +1760,11 @@ function resetGlobalBlur(){
 
 function runPostAnalysis(result, context){
 
+  const access = window.getUserAccess() || {};
+
   if(access.isInvestor){
-  resetGlobalBlur(); // 🔥 FORZA SBLOCCO UI
-}
+    resetGlobalBlur(); // 🔥 FORZA SBLOCCO UI
+  }
 
   if(!result) return;
 
