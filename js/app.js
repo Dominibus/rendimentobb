@@ -394,12 +394,28 @@ if(access.isFree){
 // 🟡 INVESTOR → DEVE VEDERE (NO LOCK)
 else if(access.isInvestor){
 
+  console.log("🟡 INVESTOR FULL CLEAN UI");
+
   lockIds.forEach(id => {
     const el = document.getElementById(id);
     if(!el) return;
 
     el.style.opacity = "1";
+    el.style.filter = "none";
+    el.style.pointerEvents = "auto";
   });
+
+  // 🔥 RIMUOVE TUTTI I BLOCCHI VISIVI
+  document.querySelectorAll(`
+    .locked-section,
+    .lock-overlay,
+    .paywall-mini,
+    .upgrade-overlay,
+    .results-overlay,
+    .home-blur-overlay,
+    .premium-lock,
+    .pro-blur
+  `).forEach(el => el.remove());
 
 }
 
@@ -2298,9 +2314,10 @@ if(roiHome){
 
 const profitHome = document.getElementById("profit-live");
 if(profitHome){
-  profitHome.innerText = window.getUserAccess().canSeeFullAnalysis
-  ? formatCurrency(net)
-  : "—";
+  profitHome.innerText =
+    (access.canSeeFullAnalysis || access.isInvestor)
+    ? formatCurrency(net)
+    : "—";
 }
 
 const revenueHome = document.getElementById("revenue-live");
