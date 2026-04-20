@@ -2548,6 +2548,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.generateExecutivePDF = async function(){
 
+const access = window.getUserAccess();
+
+// 🟡 INVESTOR → UPSELL PRO
+if(access.isInvestor){
+  openUpgradeModal("pro");
+  return;
+}
+
+// 🔴 FREE → UPSELL INVESTOR
+if(access.isFree){
+  openUpgradeModal("investor");
+  return;
+}
+
 const lang = window.RB_LANG?.current || window.currentLang || "it";
 const tSafe = (it,en)=> lang==="it"?it:en;
 
@@ -3871,7 +3885,7 @@ try {
 }
 
 // =====================================
-// 🟡 FINAL GLOBAL UI FIX (INVESTOR CLEAN)
+// 🟡 FINAL GLOBAL UI FIX (INVESTOR SMART)
 // =====================================
 
 document.addEventListener("rb_auth_ready", () => {
@@ -3880,31 +3894,113 @@ document.addEventListener("rb_auth_ready", () => {
 
     const access = window.getUserAccess();
 
-    if(!access || !access.isInvestor) return;
+    if(!access) return;
 
-    console.log("🟡 CLEAN INVESTOR UI");
+    // ===============================
+    // 🟡 INVESTOR (PARZIALE – COERENTE CON PIANO)
+    // ===============================
+    if(access.isInvestor){
 
-    // 🔥 rimuove SOLO overlay leggeri (NON quelli PRO)
-    document.querySelectorAll(`
-      .paywall-mini,
-      .home-blur-overlay
-    `).forEach(el=>{
-      el.remove();
-    });
+      console.log("🟡 INVESTOR UI SMART");
 
-    // 🔥 rimuove eventuali lock residui MA NON GLOBALI
-    document.querySelectorAll(`
-      .locked-section
-    `).forEach(el=>{
-      el.classList.remove("locked-section");
-    });
+      // ✅ rimuove SOLO overlay base (UX pulita)
+      document.querySelectorAll(`
+        .home-blur-overlay
+      `).forEach(el=>{
+        el.remove();
+      });
 
-    // ❌ IMPORTANTISSIMO:
-    // NON usare:
-    // [class*="lock"]
-    // [class*="blur"]
-    // perché rompe PRO / logica piani
+      // ❌ NON rimuovere:
+      // .paywall-mini → serve per upsell PRO
 
-  }, 500);
+      // 🔓 sblocca SOLO contenuti base
+      [
+        "revenue-forecast",
+        "occupancy-sensitivity",
+        "break-even-kpi"
+      ].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){
+          el.classList.remove("locked-section");
+        }
+      });
+
+      // 🔒 mantiene lock PRO (coerente con piano €19)
+      [
+        "investment-score",
+        "investment-ranking",
+        "investment-risk-meter",
+        "investment-verdict",
+        "ai-insights"
+      ].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el && !el.querySelector(".paywall-mini")){
+          
+          const overlay = document.createElement("div");
+          overlay.className = "paywall-mini";
+
+          overlay.innerHTML = `
+            <div style="
+              margin-top:10px;
+              padding:10px;
+              font-size:13px;
+              text-align:center;
+              color:#64748b;
+            ">
+              🔒 ${window.currentLang === "en"
+                ? "Unlock PRO analysis"
+                : "Sblocca analisi PRO completa"}
+            </div>
+          `;
+
+          el.appendChild(overlay);
+        }
+      });
+
+    }
+
+    // ===============================
+    // 🟢 PRO / ADMIN (SBLOCCO TOTALE)
+    // ===============================
+    if(access.isPro || access.isAdmin){
+
+      console.log("🟢 PRO FULL UNLOCK");
+
+      // 🔥 rimuove TUTTI i blocchi
+      document.querySelectorAll(`
+        .locked-section,
+        .pro-blur,
+        .locked,
+        .premium-lock,
+        .locked-content
+      `).forEach(el=>{
+        el.classList.remove(
+          "locked-section",
+          "pro-blur",
+          "locked",
+          "premium-lock",
+          "locked-content"
+        );
+
+        el.style.filter = "none";
+        el.style.opacity = "1";
+        el.style.pointerEvents = "auto";
+      });
+
+      // 🔥 elimina overlay
+      document.querySelectorAll(`
+        .lock-overlay,
+        .paywall-mini,
+        .home-blur-overlay,
+        .upgrade-overlay,
+        .results-overlay,
+        [data-paywall]
+      `).forEach(el=>{
+        el.remove();
+      });
+
+    }
+
+  }, 400);
 
 });
