@@ -654,7 +654,24 @@ window.triggerUpgradeFlow = function(context = {}){
 // 🔥 MODAL UNIFICATO (CORE)
 // =====================================
 
+// =====================================
+// 🔥 MODAL UNIFICATO (CORE)
+// =====================================
+
 window.openUpgradeModal = function(type = "investor", roi = 0){
+
+  const access = window.getUserAccess();
+
+  // 🟡 INVESTOR → BLOCCA COMPLETAMENTE IL MODAL
+  if(access.isInvestor){
+    console.log("🟡 INVESTOR → modal bloccato");
+    return;
+  }
+
+  // 🟢 PRO / ADMIN → NIENTE MODAL
+  if(access.canSeeFullAnalysis){
+    return;
+  }
 
   // rimuove eventuali modal già aperti
   const existing = document.getElementById("rb-upgrade-modal");
@@ -709,31 +726,105 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
       title_it: "🚀 Sblocca analisi completa",
       title_en: "🚀 Unlock full analysis",
 
-      desc_it: "Stai analizzando un investimento reale. Senza dati completi rischi di perdere migliaia di euro.",
-      desc_en: "You are analyzing a real investment. Without full data you risk losing thousands.",
+      desc_it: "Stai prendendo decisioni senza vedere tutti i dati reali.",
+      desc_en: "You are making decisions without full real data.",
 
       features_it: [
-        "✔ ROI reale avanzato",
-        "✔ Analisi mutuo completa",
-        "✔ Scenario rischio",
-        "✔ Report professionale"
+        "✔ ROI reale completo",
+        "✔ Analisi rischio avanzata",
+        "✔ Break-even reale",
+        "✔ Report PDF professionale"
       ],
       features_en: [
-        "✔ Advanced real ROI",
-        "✔ Full mortgage analysis",
-        "✔ Risk scenarios",
-        "✔ Professional report"
+        "✔ Full real ROI",
+        "✔ Advanced risk analysis",
+        "✔ Real break-even",
+        "✔ Professional PDF report"
       ],
 
-      cta_it: "🔥 Sblocca ora – €29",
-      cta_en: "🔥 Unlock now – €29",
+      cta_it: "🔥 Passa a PRO – €29",
+      cta_en: "🔥 Upgrade to PRO – €29",
 
       action: () => startPlanPurchase("pro")
     };
   }
 
+  const lang = window.currentLang === "en" ? "en" : "it";
+
+  // ================= UI =================
+
+  const box = document.createElement("div");
+
+  box.style = `
+    background:white;
+    padding:28px;
+    border-radius:16px;
+    max-width:420px;
+    width:90%;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.25);
+    animation:fadeIn .3s ease;
+  `;
+
+  const title = document.createElement("h3");
+  title.textContent = config["title_" + lang];
+
+  const desc = document.createElement("p");
+  desc.textContent = config["desc_" + lang];
+  desc.style.margin = "10px 0 20px";
+
+  const list = document.createElement("div");
+  list.style.textAlign = "left";
+  list.style.marginBottom = "20px";
+
+  config["features_" + lang].forEach(f => {
+    const item = document.createElement("div");
+    item.textContent = f;
+    item.style.margin = "6px 0";
+    list.appendChild(item);
+  });
+
+  const cta = document.createElement("button");
+  cta.textContent = config["cta_" + lang];
+
+  cta.style = `
+    background:#10b981;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    width:100%;
+    margin-bottom:10px;
+  `;
+
+  cta.onclick = () => {
+    modal.remove();
+    config.action();
   };
 
+  const close = document.createElement("button");
+  close.textContent = lang === "en" ? "Maybe later" : "Ora no";
+
+  close.style = `
+    background:none;
+    border:none;
+    color:#64748b;
+    cursor:pointer;
+  `;
+
+  close.onclick = () => modal.remove();
+
+  box.appendChild(title);
+  box.appendChild(desc);
+  box.appendChild(list);
+  box.appendChild(cta);
+  box.appendChild(close);
+
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+};
 
 // ================= GLOBAL HERO BACKGROUND =================
 
