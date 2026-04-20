@@ -589,11 +589,10 @@ function requirePlan(requiredPlan){
   }
 
   // 🔒 NON LOGGATO
-  if(!window.currentUser){
-    console.log("🔒 USER NOT LOGGED → REGISTER");
-    showRegisterPopup();
-    return false;
-  }
+  if(!window.currentUser && !access.isLogged){
+  showRegisterPopup();
+  return false;
+}
 
   // 🔒 NON HA PIANO
   if(!hasPlan(requiredPlan)){
@@ -624,26 +623,32 @@ window.triggerUpgradeFlow = function(context = {}){
   const access = window.getUserAccess();
   const { roi = 0 } = context;
 
-  // ================= GUEST =================
-  if(access.isGuest){
+  // 👻 GUEST
+  if(!access.isLogged){
     console.log("🔥 GUEST → INVESTOR");
     openUpgradeModal("investor", roi);
     return;
   }
 
-  // ================= FREE =================
+  // 🔴 FREE
   if(access.isFree){
     console.log("🔥 FREE → INVESTOR");
     openUpgradeModal("investor", roi);
     return;
   }
 
- 
-  // ================= PRO =================
+  // 🟡 INVESTOR → SOLO PRO UPSELL (NO BLOCCO)
+  if(access.isInvestor){
+    console.log("🟡 INVESTOR → PRO UPSELL");
+
+    // ⚠️ IMPORTANTISSIMO:
+    // niente modal aggressivo automatico
+    return;
+  }
+
+  // 🟢 PRO
   console.log("✅ PRO USER → NO POPUP");
 };
-
-
 
 // =====================================
 // 🔥 MODAL UNIFICATO (CORE)
@@ -1812,22 +1817,12 @@ const currentROI = Number(window.lastAnalysisData?.roi || 0);
 // 🔒 SOLO chi NON è PRO / ADMIN
 if(
   !accessPaywall.canSeeFullAnalysis &&
+  !accessPaywall.isInvestor && // 🔥 QUESTA È LA CHIAVE
   !window.paywallShown &&
   currentROI > 0
 ){
-
-  window.paywallShown = true;
-
-  const highROI = currentROI > 10;
-  const midROI  = currentROI > 6;
-
-  setTimeout(()=>{
-
-    if(highROI){
-
-      showUpgradeModal(currentROI); // 🔥 HARD SELL PRO
-
-    }else if(midROI){
+  showUpgradeModal(currentROI);
+}else if(midROI){
 
       renderSmartInvestmentAlert(currentROI); // 🔥 SOFT
 
