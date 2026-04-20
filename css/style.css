@@ -15225,3 +15225,12 @@ body.is-pro .upgrade-overlay,
 body.is-pro .results-overlay {
   display: none !important;
 }
+
+/* 🟡 INVESTOR NON DEVE AVERE BLUR GLOBALE */
+body.is-investor .pro-blur,
+body.is-investor .locked,
+body.is-investor [data-paywall]{
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
