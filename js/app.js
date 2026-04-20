@@ -3961,9 +3961,9 @@ removeGhostOverlays?.();
     if(access.isPro || access.isAdmin){
 
       // 🔥 FORCE CALCULATION FIX
-if(typeof window.runSimulation === "function"){
-  console.log("🔥 FORCE RE-RUN SIMULATION");
-  window.runSimulation();
+if(typeof window.calculate === "function"){
+  console.log("🔥 FORCE RE-RUN CALCULATION");
+  window.calculate(true);
 }
 
       console.log("🟢 HARD UNLOCK PRO");
