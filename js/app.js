@@ -3713,8 +3713,12 @@ document.addEventListener("rb_auth_ready", () => {
 
   setTimeout(()=>{
 
-    const access = window.getUserAccess();
-    if(!access) return;
+    if(!window.RB_USER){
+  console.warn("⏳ RB_USER non pronto → skip access control");
+  return;
+}
+
+const access = window.getUserAccess();
 
     console.log("🎯 ACCESS FINAL:", access);
 
