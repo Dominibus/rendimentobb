@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =====================
-// ⏳ WAIT PLAN (FIX TIMING BUG)
+// ⏳ WAIT PLAN (FIX TIMING BUG DEFINITIVO)
 // =====================
 
 function waitPlanAndRender(user){
@@ -158,27 +158,82 @@ function waitPlanAndRender(user){
 
       console.log("🎯 HEADER READY:", access);
 
+      // 🔥 render utente
       renderUser(user);
 
-      // 🔥 FIX CRITICO → RESET DOPO PLAN
+      // 🔥 FIX CRITICO → RESET DOPO PLAN (ANTI BLUR BUG)
       setTimeout(()=>{
 
-        if(access.isInvestor){
-          document.body.classList.remove("is-free");
-          document.body.classList.add("is-investor");
+        const isAdmin =
+          (window.userRole || "").toLowerCase() === "admin" ||
+          window.currentUser?.email === "rendimentobb@gmail.com";
+
+        const isPro = isAdmin || access.isPro;
+        const isInvestor = access.isInvestor;
+
+        console.log("🔓 FORCE UI STATE:", {
+          isPro,
+          isInvestor
+        });
+
+        // ===============================
+        // 💣 RESET CLASSI BODY
+        // ===============================
+        document.body.classList.remove(
+          "is-free",
+          "is-investor",
+          "is-pro",
+          "is-admin"
+        );
+
+        if(isAdmin) document.body.classList.add("is-admin");
+        else if(isPro) document.body.classList.add("is-pro");
+        else if(isInvestor) document.body.classList.add("is-investor");
+        else document.body.classList.add("is-free");
+
+        // ===============================
+        // 💣 RESET UI TOTALE (BLUR FIX)
+        // ===============================
+        document.querySelectorAll(".locked-section").forEach(el=>{
+          el.classList.remove("is-locked");
+          el.style.filter = "none";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+        });
+
+        // vecchi sistemi
+        document.querySelectorAll(`
+          .pro-blur,
+          .locked,
+          .blur
+        `).forEach(el=>{
+          el.style.filter = "none";
+          el.style.pointerEvents = "auto";
+          el.style.opacity = "1";
+        });
+
+        // overlay
+        document.querySelectorAll(`
+          .locked-overlay,
+          .results-overlay,
+          .home-blur-overlay,
+          .upgrade-overlay
+        `).forEach(el=> el.remove());
+
+        // fallback globale
+        if(typeof unlockUI === "function"){
+          unlockUI();
         }
 
-        // 💣 RESET TOTALE UI
-        unlockUI();
+        console.log("✅ UI RESET COMPLETATO");
 
-      },100);
+      },120);
 
     }
 
   },120);
 
 }
-
 // =====================
 // 📱 INTERAZIONI
 // =====================
