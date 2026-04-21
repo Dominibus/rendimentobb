@@ -103,9 +103,16 @@ window.applyAccessControl = function(){
 
 // ================= KPI UNIVERSALE (HOME + TOOL) =================
 
-function renderUniversalKPI({ net, revenue, investment }){
+function renderUniversalKPI(data = {}){
 
-  if(!net && net !== 0) return;
+  const {
+    net = 0,
+    revenue = 0,
+    investment = 0
+  } = data;
+
+  // 🔒 SAFE CHECK (evita crash)
+  if(net === null || net === undefined) return;
 
   // 🏠 HOME (qr_*)
   const qrProfit = document.getElementById("qr_profit");
@@ -149,7 +156,7 @@ function renderUniversalKPI({ net, revenue, investment }){
     return;
   }
 
-  // 🟡 INVESTOR → teaser intelligente
+  // 🟡 INVESTOR → teaser intelligente (NO DUPLICATI)
   if(access.isInvestor){
 
     const verdict = document.getElementById("investment-verdict");
@@ -187,11 +194,13 @@ function renderUniversalKPI({ net, revenue, investment }){
       verdict.appendChild(upsell);
     }
   }
-
 }
 
- // 🔥 ROI MESSAGE (HOME)
+
+// ================= ROI MESSAGE (HOME) =================
+
 function updateROIMessage(roi){
+
   const msg = document.getElementById("hidden-roi-msg");
   if(!msg) return;
 
@@ -207,12 +216,6 @@ function updateROIMessage(roi){
 
   msg.style.display = "block";
 }
-
-    renderUniversalKPI({
-  net,
-  revenue: gross,
-  investment: price
-});
 // ================= HOME LOCK SYSTEM =================
 
 window.isProUser = function(){
