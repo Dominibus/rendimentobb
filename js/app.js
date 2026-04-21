@@ -2210,9 +2210,9 @@ if(typeof renderBreakEvenOccupancy === "function"){
   );
 }
 
-// ================= ACCESS (USA QUELLO GIÀ ESISTENTE) =================
-// ⚠️ NON ridefinire access se già sopra
-const access = window.getUserAccess();
+// ================= ACCESS =================
+// ❌ NON ridefinire access
+// const access = window.getUserAccess(); ← ELIMINA QUESTA RIGA
 
 // ================= SCORE =================
 const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
