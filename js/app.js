@@ -557,8 +557,8 @@ if(type === "investor"){
     title_it: "📊 Sblocca piano Investor",
     title_en: "📊 Unlock Investor Plan",
 
-    desc_it: "Stai usando dati limitati. Investor sblocca analisi avanzate.",
-    desc_en: "You are using limited data. Investor unlocks advanced insights.",
+    desc_it: "Stai usando dati incompleti e rischi di prendere una decisione sbagliata.",
+    desc_en: "You're using incomplete data and risk making the wrong decision.",
 
     // ❌ tolti i ✔ dalle stringhe
     features_it: [
@@ -584,8 +584,8 @@ if(type === "pro"){
     title_it: "🚀 Sblocca analisi completa",
     title_en: "🚀 Unlock full analysis",
 
-    desc_it: "Stai prendendo decisioni senza vedere tutti i dati reali.",
-    desc_en: "You are making decisions without full real data.",
+    desc_it: "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti.",
+    desc_en: "You're making a decision without seeing the real risk, mortgage, and hidden costs.",
 
     // ❌ tolti i ✔ anche qui
     features_it: [
@@ -703,6 +703,23 @@ title.style.marginBottom = "10px";
   document.body.appendChild(modal);
 };
 
+const warning = document.createElement("div");
+
+warning.innerHTML = `
+  <div style="
+    margin-top:10px;
+    font-size:13px;
+    color:#ef4444;
+    font-weight:600;
+  ">
+    ⚠️ ${t(
+      "Il 72% degli investitori perde soldi in questa fase",
+      "72% of investors lose money at this stage"
+    )}
+  </div>
+`;
+
+box.appendChild(warning);
 // ================= GLOBAL HERO BACKGROUND =================
 
 window.applyCityBackground = function(city){
@@ -1763,8 +1780,8 @@ function runPostAnalysis(result, context){
 
   console.log("🟡 INVESTOR → NO SMART OVERLAY");
 
-  // ❌ NON creare overlay invasivi
-  // renderSmartInvestmentAlert(roi);
+
+  renderSmartInvestmentAlert(roi);
 
 }
 
@@ -2097,6 +2114,7 @@ if(roiEl){
     // 🔴 FREE → preview (non affidabile)
     if(access.isFree){
   roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+  roiEl.style.color = "#f59e0b";
 }
 else if(access.isInvestor){
   roiEl.innerText = roi.toFixed(1) + "%";
@@ -2121,27 +2139,28 @@ if(hiddenBox){
   if(access.isFree){
 
     hiddenBox.innerHTML = `
-      <div style="
-        margin-top:12px;
-        padding:12px;
-        border-radius:10px;
-        background:#fff7ed;
-        color:#9a3412;
-        font-size:13px;
-        text-align:center;
-      ">
-        📊 ${t(
-          "Abbiamo calcolato il tuo investimento reale, ma alcuni dati sono nascosti",
-          "We calculated your real investment, but some data is hidden"
-        )}
-        <br>
-        ${t(
-          "👉 È qui che il 72% degli investitori sbaglia",
-          "👉 This is where 72% of investors fail"
-        )}
-      </div>
-    `;
-
+  <div style="
+    margin-top:12px;
+    padding:14px;
+    border-radius:10px;
+    background:#fff7ed;
+    color:#9a3412;
+    font-size:13px;
+    text-align:center;
+  ">
+    ⚠️ ${t(
+      "Questo ROI NON include rischio reale, mutuo e stagionalità",
+      "This ROI does NOT include real risk, mortgage and seasonality"
+    )}
+    <br>
+    <strong>
+    ${t(
+      "👉 Potresti perdere soldi senza questa analisi",
+      "👉 You could lose money without this analysis"
+    )}
+    </strong>
+  </div>
+`;
   }else{
     hiddenBox.innerHTML = "";
   }
@@ -2261,16 +2280,16 @@ if(access.isFree){
 
         <div style="font-weight:700;margin-bottom:6px;">
           🔒 ${t(
-            "Qui stai prendendo una decisione alla cieca",
-            "You are making a blind decision here"
-          )}
+              "Stai prendendo una decisione senza dati reali",
+              "You are making a decision without real data"
+         )}
         </div>
 
         <div style="font-size:12px;margin-bottom:10px;">
           ${t(
-            "Il 72% degli investitori perde soldi proprio in questa fase",
-            "72% of investors lose money at this stage"
-          )}
+             "Il 72% degli investitori perde soldi proprio qui",
+             "72% of investors lose money right here"
+        )}
         </div>
 
         <button 
@@ -2287,8 +2306,8 @@ if(access.isFree){
           "
         >
           ${t(
-            "Sblocca analisi completa",
-            "Unlock full analysis"
+            "Scopri se stai perdendo soldi",
+            "Find out if you're losing money"
           )}
         </button>
 
