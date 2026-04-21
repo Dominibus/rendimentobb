@@ -1447,6 +1447,25 @@ window.startAnalysis = function(){
 // ================= QUICK ROI (ULTRA CONVERSION ENGINE) =================
 window.quickROI = function(){
 
+ } else {
+  const investment = price + reno;
+  const revenue = night * 365 * (occ/100);
+  const net = revenue - (revenue*(cost/100));
+
+  result = {
+    roi: (net/investment)*100,
+    netAnnual: net,
+    revenue,
+    breakEvenYears: net>0 ? investment/net : 99
+  };
+
+  console.warn("⚠️ ROI fallback");
+}
+ 
+ if(window.__roiRunning) return;
+ window.__roiRunning = true;
+ setTimeout(()=> window.__roiRunning = false, 200);
+
   const priceEl = document.getElementById("qr_price");
   const renoEl  = document.getElementById("qr_reno");
   const nightEl = document.getElementById("qr_night");
