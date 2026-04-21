@@ -3718,16 +3718,10 @@ document.addEventListener("rb_auth_ready", () => {
 
     console.log("🎯 ACCESS FINAL:", access);
 
-    // ===============================
-    // RESET SEMPRE (UNA SOLA VOLTA)
-    // ===============================
     resetGlobalBlur();
     removeGhostOverlays?.();
     unlockBaseUI();
 
-    // ===============================
-    // BODY STATE
-    // ===============================
     document.body.classList.remove(
       "is-free",
       "is-investor",
@@ -3759,7 +3753,7 @@ document.addEventListener("rb_auth_ready", () => {
         }
       });
 
-      // 🔒 SOLO PREMIUM
+      // 🔒 SOLO PREMIUM (NO OVERLAY)
       [
         "investment-score",
         "investment-ranking",
@@ -3768,18 +3762,10 @@ document.addEventListener("rb_auth_ready", () => {
         "ai-insights"
       ].forEach(id=>{
         const el = document.getElementById(id);
-        if(el && !el.querySelector(".paywall-mini")){
 
-          const overlay = document.createElement("div");
-          overlay.className = "paywall-mini";
-overlay.style.position = "relative";
-overlay.style.background = "transparent";
-overlay.style.pointerEvents = "auto";
-overlay.style.height = "auto";
-overlay.style.width = "100%";
-
-          overlay.innerHTML = `
-            <div style="
+        if(el && !el.querySelector(".upgrade-msg")){
+          el.insertAdjacentHTML("beforeend", `
+            <div class="upgrade-msg" style="
               margin-top:10px;
               padding:10px;
               font-size:13px;
@@ -3790,21 +3776,7 @@ overlay.style.width = "100%";
                 ? "Unlock PRO analysis"
                 : "Sblocca analisi PRO completa"}
             </div>
-          `;
-
-          el.insertAdjacentHTML("beforeend", `
-  <div style="
-    margin-top:10px;
-    padding:10px;
-    font-size:13px;
-    text-align:center;
-    color:#64748b;
-  ">
-    🔒 ${window.currentLang === "en"
-      ? "Unlock PRO analysis"
-      : "Sblocca analisi PRO completa"}
-  </div>
-`);
+          `);
         }
       });
 
@@ -3842,10 +3814,10 @@ overlay.style.width = "100%";
         .home-blur-overlay,
         .upgrade-overlay,
         .results-overlay,
+        .upgrade-msg,
         [data-paywall]
       `).forEach(el=> el.remove());
 
-      // 🔥 ricalcolo
       if(typeof window.calculate === "function"){
         window.calculate(true);
       }
@@ -3858,7 +3830,6 @@ overlay.style.width = "100%";
     // ===============================
     if(access.isFree){
       console.log("🔒 FREE USER");
-      // qui eventuale lock leggero
     }
 
   },300);
