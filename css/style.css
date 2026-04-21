@@ -15247,3 +15247,29 @@ body.is-admin .results-overlay{
   opacity:0.6;
   pointer-events:none;
 }
+
+/* =====================================
+🔥 ACCESS CONTROL VISIVO (FINAL)
+===================================== */
+
+/* RESET TOTALE */
+body.is-investor *,
+body.is-pro *,
+body.is-admin *{
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* KILL OVERLAY */
+body.is-investor #rb-mobile-overlay,
+body.is-investor .upgrade-overlay,
+body.is-investor .locked-overlay,
+body.is-investor .home-blur-overlay{
+  display: none !important;
+}
+
+/* STESSO PER PRO/ADMIN */
+body.is-pro #rb-mobile-overlay,
+body.is-admin #rb-mobile-overlay{
+  display: none !important;
+}
