@@ -1584,6 +1584,18 @@ function resetGlobalBlur(){
 
   console.log("🧹 HARD RESET UI");
 
+// 💣 KILL TUTTO (anche smart alert)
+document.querySelectorAll(`
+  .smart-overlay,
+  .paywall-mini
+`).forEach(el => el.remove());
+
+// 💣 svuota anche il container
+const smartBox = document.getElementById("smart-investment-alert");
+if(smartBox){
+  smartBox.innerHTML = "";
+}
+  
 document.querySelectorAll(".smart-overlay").forEach(el => el.remove());
 
   // 🔥 FIX OVERLAY BLOCCATO
@@ -1672,8 +1684,13 @@ function runPostAnalysis(result, context){
   showUpgradeModal(roi);
 }
   else if(access.isInvestor && roi > 0){
-    renderSmartInvestmentAlert(roi);
-  }
+
+  console.log("🟡 INVESTOR → NO SMART OVERLAY");
+
+  // ❌ NON creare overlay invasivi
+  // renderSmartInvestmentAlert(roi);
+
+}
 
 }
 
