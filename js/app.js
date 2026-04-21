@@ -2208,13 +2208,6 @@ if(monthlyEl && annualEl){
       renderMarketBenchmark(window.currentCity || "napoli");
     }
 
-    if(typeof renderMarketComparison === "function"){
-      renderMarketComparison(
-        gross,
-        window.currentCity || "napoli"
-      );
-    }
-
   // ================= RENDER COMPLETO TOOL (SMART ACCESS CONTROL) =================
 
 // revenue forecast
