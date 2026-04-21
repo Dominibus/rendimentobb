@@ -1765,11 +1765,37 @@ function waitForUserReady(callback){
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
 
-  // ================= AUTO ROI =================
-  if(document.getElementById("qr_price")){
-    quickROI();
+  // ================= WAIT ROI ENGINE =================
+  function waitForROIEngine(callback){
+
+    let tries = 0;
+
+    const interval = setInterval(()=>{
+
+      if(typeof calculateROI === "function"){
+        clearInterval(interval);
+        callback();
+      }
+
+      if(tries > 20){
+        clearInterval(interval);
+        console.warn("❌ ROI engine non caricato");
+      }
+
+      tries++;
+
+    }, 200);
+
   }
 
+  // ================= AUTO ROI (FIX ENGINE READY) =================
+  if(document.getElementById("qr_price")){
+    waitForROIEngine(() => {
+      quickROI();
+    });
+  }
+
+  // ================= INPUT LISTENERS =================
   ["qr_price","qr_reno","qr_night","qr_occ","qr_cost"].forEach(id=>{
     document.getElementById(id)?.addEventListener("input", quickROI);
   });
@@ -1781,6 +1807,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
       selectCity(e.target.value.toLowerCase());
     }
   });
+
+});
 
   // ================= 🔓 SBLOCCO PRO =================
 function unlockHomeUI(){
