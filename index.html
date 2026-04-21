@@ -1486,10 +1486,10 @@ window.quickROI = function(){
   const isFreeUser = isLogged && !isPro && !isInvestor;
 
   // ================= USER CHECK =================
-  if(window.currentUser === undefined){
-    console.warn("⏳ User non pronto → skip");
-    return;
-  }
+  if(window.currentUser === undefined || !window.currentPlan){
+  console.warn("⏳ User o piano non pronti → skip");
+  return;
+}
 
   // 🔒 GUEST (ma calcolo attivo)
   if(window.currentUser === null){
@@ -1826,10 +1826,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   // ================= AUTO ROI (FIX ENGINE READY) =================
   if(document.getElementById("qr_price")){
-    waitForROIEngine(() => {
+  waitForROIEngine(() => {
+
+    waitForUnlock(); // 👈 AGGIUNGI QUESTO
+
+    setTimeout(() => {
       quickROI();
-    });
-  }
+    }, 200);
+
+  });
+}
 
   // ================= INPUT LISTENERS =================
   ["qr_price","qr_reno","qr_night","qr_occ","qr_cost"].forEach(id=>{
