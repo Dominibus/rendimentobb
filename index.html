@@ -1513,11 +1513,13 @@ window.quickROI = function(){
 // ================= CALCOLO REALE =================
 let result;
 
+const investment = price + reno; // 🔥 base reale investimento
+
 if(typeof calculateROI === "function"){
 
   result = calculateROI({
     price,
-    equity: 0,
+    equity: investment, // ✅ FIX CRITICO
     priceNight: night,
     occupancy: occ,
     expenses: cost,
@@ -1532,7 +1534,6 @@ if(typeof calculateROI === "function"){
 
   console.warn("⚠️ ROI engine non presente → uso fallback");
 
-  const investment = price + reno;
   const revenue = night * 365 * (occ/100);
   const net = revenue - (revenue*(cost/100));
 
