@@ -15249,10 +15249,13 @@ body.is-admin .results-overlay{
 }
 
 /* =====================================
-🔥 ACCESS CONTROL VISIVO (FINAL)
+🔥 ACCESS CONTROL VISIVO (FINAL FIX)
 ===================================== */
 
-/* RESET TOTALE */
+/* =========================
+🧼 RESET GLOBALE (TUTTI)
+========================= */
+body.is-free *,
 body.is-investor *,
 body.is-pro *,
 body.is-admin *{
@@ -15260,16 +15263,44 @@ body.is-admin *{
   backdrop-filter: none !important;
 }
 
-/* KILL OVERLAY */
-body.is-investor #rb-mobile-overlay,
-body.is-investor .upgrade-overlay,
-body.is-investor .locked-overlay,
-body.is-investor .home-blur-overlay{
+/* =========================
+🚫 NO BLUR GLOBALE (FREE)
+========================= */
+body.is-free{
+  filter: none !important;
+}
+
+/* =========================
+🔒 BLUR SOLO ELEMENTI LOCKATI
+========================= */
+.pro-blur,
+.locked-content{
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* =========================
+🧹 KILL OVERLAY GLOBALI
+========================= */
+#rb-mobile-overlay,
+.home-blur-overlay{
   display: none !important;
 }
 
-/* STESSO PER PRO/ADMIN */
-body.is-pro #rb-mobile-overlay,
-body.is-admin #rb-mobile-overlay{
-  display: none !important;
+/* =========================
+🧹 OVERLAY SOLO SE SERVONO (GESTIONE JS)
+========================= */
+.upgrade-overlay,
+.locked-overlay{
+  display: none;
+}
+
+/* =========================
+👑 PRO / ADMIN FULL CLEAN
+========================= */
+body.is-pro *,
+body.is-admin *{
+  filter: none !important;
+  backdrop-filter: none !important;
 }
