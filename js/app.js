@@ -1977,6 +1977,14 @@ result = calculateROI({
     const gross = Number(result?.revenue || 0);
     const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
+    // 🔥 ROI MESSAGE (HOME)
+const msg = document.getElementById("hidden-roi-msg");
+
+if(msg && roi > 12){
+  msg.innerHTML = "🔥 Questo investimento potrebbe essere sopra la media";
+  msg.style.display = "block";
+}
+
     renderUniversalKPI({
   net,
   revenue: gross,
