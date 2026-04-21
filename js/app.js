@@ -1980,8 +1980,20 @@ result = calculateROI({
     // 🔥 ROI MESSAGE (HOME)
 const msg = document.getElementById("hidden-roi-msg");
 
-if(msg && roi > 12){
-  msg.innerHTML = "🔥 Questo investimento potrebbe essere sopra la media";
+if(msg){
+
+  if(roi > 12){
+    msg.innerHTML = "🔥 Investimento sopra la media";
+  }
+
+  else if(roi > 6){
+    msg.innerHTML = "👍 Investimento nella media";
+  }
+
+  else{
+    msg.innerHTML = "⚠️ Rendimento basso, attenzione";
+  }
+
   msg.style.display = "block";
 }
 
