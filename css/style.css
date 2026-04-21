@@ -15143,10 +15143,11 @@ Fix titolo invisibile popup
 🟡 INVESTOR (MID TIER)
 ============================== */
 
-/* 🚫 MAI blur globale */
-body.is-investor *{
+/* NON rompere tutta la UI */
+body.is-investor .locked-section{
   filter:none !important;
-  backdrop-filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
 }
 
 /* 🔓 base sempre visibile */
