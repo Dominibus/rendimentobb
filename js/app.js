@@ -60,6 +60,42 @@ window.formatCurrency = window.formatCurrency || function(v){
   return isNaN(n) ? "€0" : "€" + n.toLocaleString("it-IT");
 };
 
+// ================= SAFE TOAST SYSTEM =================
+
+window.showToast = window.showToast || function(message, type = "info"){
+
+  console.log("🔔 TOAST:", type, message);
+
+  const toast = document.createElement("div");
+
+  toast.innerText = message;
+
+  toast.style = `
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#0f172a;
+    color:white;
+    padding:10px 16px;
+    border-radius:8px;
+    font-size:13px;
+    z-index:999999;
+    opacity:0;
+    transition:all .3s ease;
+  `;
+
+  document.body.appendChild(toast);
+
+  setTimeout(()=> toast.style.opacity = "1", 10);
+
+  setTimeout(()=>{
+    toast.style.opacity = "0";
+    setTimeout(()=> toast.remove(), 300);
+  }, 2500);
+
+};
+
 // =====================================
 // 🚫 DISABLE ALERT (UX FIX + DEBUG)
 // =====================================
