@@ -1486,8 +1486,8 @@ window.quickROI = function(){
   const isFreeUser = isLogged && !isPro && !isInvestor;
 
   // ================= USER CHECK =================
-  if(window.currentUser === undefined || !window.currentPlan){
-  console.warn("⏳ User o piano non pronti → skip");
+  if(window.currentUser === undefined){
+  console.warn("⏳ User non pronto → skip");
   return;
 }
 
@@ -1638,21 +1638,33 @@ if(shock){
   }
 
   // ================= BLUR UI =================
-  document.querySelectorAll(".metric-card").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
+  // RESET
+document.querySelectorAll(".metric-card").forEach(el=>{
+  el.classList.remove("pro-blur");
+});
 
-  if(!isPro){
-    document.querySelectorAll(".metric-card:not(.roi-highlight)")
-      .forEach(el=> el.classList.add("pro-blur"));
-  }
+// 🔓 PRO → tutto libero
+if(isPro){
+  // niente blur
+}
 
-  if(isInvestor){
-    document.querySelectorAll("#qr_break, #qr_rev")
-      .forEach(el=>{
-        el.closest(".metric-card")?.classList.add("pro-blur");
-      });
-  }
+// 🟡 INVESTOR → SOLO PARZIALE
+else if(isInvestor){
+
+  document.querySelectorAll("#qr_break, #qr_rev")
+    .forEach(el=>{
+      el.closest(".metric-card")?.classList.add("pro-blur");
+    });
+
+}
+
+// 🔒 FREE / GUEST → tutto blur
+else{
+
+  document.querySelectorAll(".metric-card:not(.roi-highlight)")
+    .forEach(el=> el.classList.add("pro-blur"));
+
+}
 
   window.RB_LANG?.apply?.();
 };
