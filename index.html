@@ -1492,6 +1492,9 @@ if(window.currentUser === null){
 
   if(window.userTriggeredSimulation){
 
+   if(window.popupAlreadyShown) return;
+    window.popupAlreadyShown = true;
+
     showToast(
       window.t(
         "Simulazione base attiva. Registrati per sbloccare dati completi",
