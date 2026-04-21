@@ -1540,23 +1540,10 @@ if(typeof calculateROI === "function"){
   };
 }
 
-  const result = calculateROI({
-    price,
-    equity: 0,
-    priceNight: night,
-    occupancy: occ,
-    expenses: cost,
-    commission: 0,
-    tax: 0,
-    loanAmount: 0,
-    interestRate: 0,
-    loanYears: 0
-  });
-
-  const roi = safeNum(result?.roi);
-  const netAnnual = safeNum(result?.netAnnual || result?.net || 0);
-  const revenue = safeNum(result?.revenue);
-  const breakEven = safeNum(result?.breakEvenYears || 0);
+  const roi = safeNum(result?.roi, 0);
+  const netAnnual = safeNum(result?.netAnnual || result?.net || 0, 0);
+  const revenue   = safeNum(result?.revenue, 0);
+  const breakEven = safeNum(result?.breakEvenYears || 0, 0);
 
   console.log("🔥 ROI:", roi);
 
