@@ -1551,20 +1551,8 @@ if(window.currentUser === null){
 
   console.log("🔥 ROI:", roi);
 
- const msg = document.getElementById("hidden-roi-msg");
-
-if(msg){
-  if(roi > 12){
-    msg.innerHTML = "🔥 Investimento sopra la media";
-  }
-  else if(roi > 6){
-    msg.innerHTML = "👍 Investimento nella media";
-  }
-  else{
-    msg.innerHTML = "⚠️ Rendimento basso";
-  }
-
-  msg.style.display = "block";
+if(typeof updateROIMessage === "function"){
+  updateROIMessage(roi);
 }
 
   // ================= UI =================
