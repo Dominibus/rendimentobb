@@ -1450,9 +1450,14 @@ window.startAnalysis = function(){
   quickROI();
 
 };
-
+ 
+let lastRun = 0;
 // ================= QUICK ROI (ULTRA CONVERSION ENGINE) =================
 window.quickROI = function(){
+
+ const now = Date.now();
+if(now - lastRun < 150) return;
+lastRun = now;
 
   // 🔥 anti loop
   if(window.__roiRunning) return;
@@ -1835,23 +1840,29 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   }
 
-  // ================= AUTO ROI (FIX ENGINE READY) =================
+  // ================= AUTO ROI =================
   if(document.getElementById("qr_price")){
-  waitForROIEngine(() => {
+    waitForROIEngine(() => {
 
-    waitForUnlock(); // 👈 AGGIUNGI QUESTO
+      waitForUnlock();
 
-    setTimeout(() => {
-      quickROI();
-    }, 200);
+      setTimeout(() => {
+        quickROI();
+      }, 200);
 
-  });
-}
+    });
+  }
 
-  // ================= INPUT LISTENERS =================
-  ["qr_price","qr_reno","qr_night","qr_occ","qr_cost"].forEach(id=>{
-    document.getElementById(id)?.addEventListener("input", quickROI);
-  });
+  // ================= INPUT LISTENERS (ANTI DUPLICATI) =================
+  if(!window.__roiListenersAttached){
+
+    window.__roiListenersAttached = true;
+
+    ["qr_price","qr_reno","qr_night","qr_occ","qr_cost"].forEach(id=>{
+      document.getElementById(id)?.addEventListener("input", quickROI);
+    });
+
+  }
 
   // ================= ENTER SEARCH =================
   document.querySelector(".city-search-input")
@@ -1861,83 +1872,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   });
 
-});
-
-  // ================= 🔓 SBLOCCO PRO =================
-function unlockHomeUI(){
-
-  const plan = (window.currentPlan || "").toLowerCase();
-
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
-
-  const isInvestor = plan === "investor";
-
-  if(!isPro && !isInvestor) return;
-
-console.log("🔥 UNLOCK HOME UI:", plan);
-
-// base per entrambi
-document.body.classList.add("paid-user");
-
-// 🔥 RESET BLUR
-document.querySelectorAll(".metric-card").forEach(el=>{
-  el.classList.remove("pro-blur");
-});
-
-// 🔥 INVESTOR → parziale
-if(isInvestor){
-  document.querySelectorAll("#qr_break, #qr_rev")
-    .forEach(el=>{
-      el.closest(".metric-card")?.classList.add("pro-blur");
-    });
-}
-
-// 🔥 overlay OFF per utenti paganti
-document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-  el.style.display = "none";
-});
-
-// 🔥 PRO → full unlock
-if(isPro){
-
-  document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-    el.classList.remove("pro-locked","locked-section");
-  });
-
-  document.querySelectorAll("button, a").forEach(el=>{
-    el.disabled = false;
-    el.style.pointerEvents = "auto";
-  });
-
-}
-// ❌ NON ricalcolare qui
-// quickROI viene già gestito dal flusso principale
-}
-
-  // ================= WAIT PRO =================
-  function waitForUnlock(){
-
-    if(window.currentPlan){
-      unlockHomeUI();
-    }else{
-      setTimeout(waitForUnlock, 300);
-    }
-
-  }
-
-  waitForUnlock();
-
-  // ================= EVENT =================
- document.addEventListener("rb_plan_loaded", ()=>{
-  unlockHomeUI();
-});
-
-   // ================= RESTORE CITY (FIX DEFINITIVO) =================
-
-document.addEventListener("DOMContentLoaded", () => {
-
+  // ================= 🌆 RESTORE CITY (UNICO) =================
   const saved = localStorage.getItem("selected_city");
 
   const map = {
@@ -1954,44 +1889,81 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+
+// ================= 🔓 SBLOCCO PRO =================
+function unlockHomeUI(){
+
+  const plan = (window.currentPlan || "").toLowerCase();
+
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly";
+
+  const isInvestor = plan === "investor";
+
+  if(!isPro && !isInvestor) return;
+
+  console.log("🔥 UNLOCK HOME UI:", plan);
+
+  document.body.classList.add("paid-user");
+
+  // 🔥 RESET BLUR
+  document.querySelectorAll(".metric-card").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  // 🔥 INVESTOR → parziale
+  if(isInvestor){
+    document.querySelectorAll("#qr_break, #qr_rev")
+      .forEach(el=>{
+        el.closest(".metric-card")?.classList.add("pro-blur");
+      });
+  }
+
+  // 🔥 overlay OFF
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.style.display = "none";
+  });
+
+  // 🔥 PRO → full unlock
+  if(isPro){
+
+    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+      el.classList.remove("pro-locked","locked-section");
+    });
+
+    document.querySelectorAll("button, a").forEach(el=>{
+      el.disabled = false;
+      el.style.pointerEvents = "auto";
+    });
+
+  }
+
+}
+
+
+// ================= WAIT PLAN =================
+function waitForUnlock(){
+
+  if(window.currentPlan){
+    unlockHomeUI();
+  }else{
+    setTimeout(waitForUnlock, 300);
+  }
+
+}
+
+
+// ================= EVENT =================
+document.addEventListener("rb_plan_loaded", ()=>{
+  unlockHomeUI();
+});
+
+
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
 
  </script>
-
- 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const plan = (window.currentPlan || "").toLowerCase();
-
-  const investor = document.querySelector(".plan-investor .plan-extra");
-  const pro = document.querySelector(".plan-pro .plan-extra");
-  const yearly = document.querySelector(".plan-yearly .plan-extra");
-
-  if(investor){
-    investor.innerHTML =
-      plan === "investor"
-        ? "✔ Dashboard limitata attiva"
-        : "✔ Dashboard limitata";
-  }
-
-  if(pro){
-    pro.innerHTML =
-      (plan === "pro" || plan === "pro_yearly")
-        ? "🔥 Accesso completo attivo"
-        : "✔ Accesso completo";
-  }
-
-  if(yearly){
-    yearly.innerHTML =
-      plan === "pro_yearly"
-        ? "🔥 Piano attivo"
-        : "✔ Accesso completo 12 mesi";
-  }
-
-});
-</script>
  
 </body>
 </html>
