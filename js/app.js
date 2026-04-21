@@ -1107,24 +1107,6 @@ container.innerHTML = `
 
 }
 
-document.addEventListener("rb_auth_ready", () => {
-
-  const resultsCard = document.querySelector(".results-card");
-
-  const access = window.getUserAccess();
-
-  // 🔴 FREE → blocca
-  if(resultsCard && access.isFree){
-  resultsCard.classList.remove("locked-section");
-}
-
-  // 🟡 INVESTOR → SBLOCCA (FIX CRITICO)
-  if(resultsCard && access.isInvestor){
-    resultsCard.classList.remove("locked-section");
-  }
-
-});
-
 // ================= RISK METER =================
 
 function renderRiskMeter(riskScore){
@@ -1742,14 +1724,17 @@ document.body.style.pointerEvents = "auto";
 
 function runPostAnalysis(result, context){
 
+  if(!result){
+    console.warn("⛔ skip postAnalysis → result nullo");
+    return;
+  }
+
   const access = window.getUserAccess() || {};
 
-  // 🔥 FIX: sblocco UI per investor SEMPRE
+  // 🔥 DEBUG INVESTOR
   if(access.isInvestor){
-  console.log("🟡 INVESTOR SAFE UNLOCK");
-}
-
-  if(!result) return;
+    console.log("🟡 INVESTOR SAFE UNLOCK");
+  }
 
   const {
     price,
@@ -1766,26 +1751,121 @@ function runPostAnalysis(result, context){
 
   updateROIMessage(roi);
 
-  // 🔥 FIX CRITICO → NON bloccare mai UI
   if(roi <= 0){
     console.warn("⚠️ ROI basso → continuo render per UX");
   }
 
   triggerSmartReminder(roi);
 
-  // ================= PAYWALL LOGIC =================
+  // ================= PAYWALL =================
 
   if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 10){
-  showUpgradeModal(roi);
-}
+    showUpgradeModal(roi);
+  }
   else if(access.isInvestor && roi > 0){
+    console.log("🟡 INVESTOR → NO SMART OVERLAY");
+    renderSmartInvestmentAlert(roi);
+  }
 
-  console.log("🟡 INVESTOR → NO SMART OVERLAY");
+  // ================= LEAD ENGINE =================
 
+  if(roi <= 0){
+    console.log("⛔ skip lead → ROI 0");
+    return;
+  }
 
-  renderSmartInvestmentAlert(roi);
+  const userEmail = window.currentUser?.email;
 
-}
+  let leadScore = "cold";
+
+  try{
+    leadScore = getLeadScore({ roi });
+  }catch(e){
+    console.warn("LeadScore fallback:", e);
+  }
+
+  window.simulationCount = (window.simulationCount || 0) + 1;
+
+  if(window.simulationCount > 3){
+    leadScore = "hot";
+  }
+
+  const leadDestination = getLeadDestination({
+    roi,
+    city: window.currentCity
+  });
+
+  console.log("🎯 LEAD:", {
+    roi,
+    score: leadScore,
+    destination: leadDestination
+  });
+
+  // ================= SAVE LEAD FIRESTORE =================
+
+  if(userEmail && !window.leadSaved){
+
+    window.leadSaved = true;
+
+    addDoc(collection(db,"leads"),{
+      email: userEmail,
+      roi: roi,
+      score: leadScore,
+      value: roi,
+      city: window.currentCity || "unknown",
+      createdAt: serverTimestamp()
+    }).catch(e=>{
+      console.error("Lead error:", e);
+      window.leadSaved = false;
+    });
+
+  }
+
+  // ================= PARTNER ROUTING =================
+
+  if(leadScore === "hot" && leadDestination){
+
+    fetch("/api/send-lead-partner",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        email: userEmail,
+        city: window.currentCity,
+        roi,
+        score: leadScore,
+        type: leadDestination.type,
+        partners: leadDestination.emails
+      })
+    });
+
+  }
+
+  // ================= EMAIL USER =================
+
+  if(userEmail && !window.emailUserSent){
+
+    window.emailUserSent = true;
+
+    fetch("/api/send-lead-email",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        email: userEmail,
+        lang: window.currentLang || "it",
+        roi,
+        city: window.currentCity
+      })
+    })
+    .then(res=>{
+      if(!res.ok){
+        window.emailUserSent = false;
+      }
+    })
+    .catch(()=>{
+      window.emailUserSent = false;
+    });
+
+  }
 
 }
 
@@ -1796,8 +1876,6 @@ const mortgageBox = document.getElementById("mortgage-lead-box");
 const mortgageBtn = document.getElementById("mortgage-lead-btn");
 
 if(mortgageBox && mortgageBtn){
-
-  const access = window.getUserAccess();
 
   if(window.lastAnalysisData?.roi > 6){
 
@@ -1850,126 +1928,6 @@ if(mortgageBox && mortgageBtn){
   }
 
 }
-
-
-// ================= PAYWALL (UNICO) =================
-
-document.addEventListener("rb_auth_ready", () => {
-
-  const access = window.getUserAccess();
-  const currentROI = Number(window.lastAnalysisData?.roi || 0);
-
-  const userEmail = window.currentUser?.email || null;
-
-  window.simulationCount = (window.simulationCount || 0) + 1;
-
-  // 🔥 redirect guest intelligente
-  if(!window.currentUser && window.simulationCount >= 2){
-
-  setTimeout(()=>{
-    showRegisterPopup();
-  }, 800);
-
-}
-
-  let leadScore = "cold";
-
-  try{
-    leadScore = getLeadScore({ roi: currentROI });
-  }catch(e){
-    console.warn("LeadScore fallback:", e);
-  }
-
-  if(window.simulationCount > 3){
-    leadScore = "hot";
-  }
-
-  const leadDestination = getLeadDestination({
-    roi: currentROI,
-    city: window.currentCity
-  });
-
-  // ================= SAVE LEAD =================
-
-  (async () => {
-
-    try{
-
-      if(window.leadSaved) return;
-
-      const {
-        addDoc,
-        collection,
-        serverTimestamp
-      } = await import("https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js");
-
-      await addDoc(collection(db,"leads"),{
-        email: userEmail,
-        roi: currentROI,
-        score: leadScore,
-        value: currentROI,
-        city: window.currentCity || "unknown",
-        createdAt: serverTimestamp()
-      });
-
-      window.leadSaved = true;
-
-      if(leadScore === "hot"){
-        fetch("/api/send-lead-partner",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({
-            email: userEmail,
-            city: window.currentCity,
-            roi: currentROI,
-            score: leadScore,
-            type: leadDestination?.type || "simulator",
-            partners: leadDestination?.emails || []
-          })
-        });
-      }
-
-    }catch(e){
-      console.error("Lead error:", e);
-    }
-
-  })();
-
-  // ================= EMAIL =================
-
-  if(!userEmail || currentROI <= 0){
-    console.log("⛔ Skip email → no user o ROI 0");
-  } else {
-
-    if(window.emailUserSent){
-      console.log("⛔ Email già inviata");
-    } else {
-
-      window.emailUserSent = true;
-
-      fetch("/api/send-lead-email",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          email: userEmail,
-          lang: window.currentLang || "it",
-          roi: currentROI,
-          city: window.currentCity
-        })
-      })
-      .then(res=>{
-        if(!res.ok){
-          window.emailUserSent = false;
-        }
-      })
-      .catch(()=>{
-        window.emailUserSent = false;
-      });
-
-    }
-  }
-
-});
 
 
 // ================= SAFE INPUT =================
@@ -2230,10 +2188,6 @@ if(typeof renderBreakEvenOccupancy === "function"){
     result.mortgageAnnual || 0
   );
 }
-
-// ================= ACCESS =================
-// ❌ NON ridefinire access
-// const access = window.getUserAccess(); ← ELIMINA QUESTA RIGA
 
 // ================= SCORE =================
 const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
@@ -3240,13 +3194,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ================= FIREBASE SYNC FIX (CRITICO) =================
 
-document.addEventListener("rb_auth_ready", () => {
-
-  console.log("🔥 Firebase READY → HARD SYNC");
-
-  const t = (it, en) =>
-    (window.currentLang === "en" ? en : it);
-
   // ===============================
   // 🔥 AUTO STRIPE DOPO LOGIN
   // ===============================
@@ -3274,12 +3221,6 @@ document.addEventListener("rb_auth_ready", () => {
 
     }, 500);
   }
-
-  const access = window.getUserAccess();
-
-if(access.isPro || access.isAdmin){
-  resetGlobalBlur();
-}
 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
@@ -3330,7 +3271,7 @@ if(access.isPro || access.isAdmin){
     window.currentPlan || "free"
   );
 
-});
+
 
 
 // ===============================================
@@ -3636,20 +3577,6 @@ function unlockProUI(){
 
   console.log("✅ PRO SBLOCCATO DEFINITIVO");
 }
-// ================= EVENTI =================
-
-// 🔥 QUESTI SONO FONDAMENTALI
-// document.addEventListener("rb_plan_loaded", () => {
-//   if(typeof window.applyAccessControl === "function"){
-//     window.applyAccessControl();
-//   }
-// });
-
-// document.addEventListener("rb_auth_ready", () => {
-//   if(typeof window.applyAccessControl === "function"){
-//     window.applyAccessControl();
-//   }
-// });
 
 // ================= FIX CTA DUPLICATE =================
 document.addEventListener("DOMContentLoaded", () => {
@@ -3742,41 +3669,65 @@ function removeGhostOverlays(){
 
 document.addEventListener("rb_plan_loaded", () => {
 
-  console.log("🚀 PLAN LOADED → SYNC");
+  console.log("🚀 PLAN LOADED → FULL SYNC");
 
   const access = window.getUserAccess();
 
-  // ================= UI BASE =================
-
   if(!access || Object.keys(access).length === 0){
-  console.warn("⏳ ACCESS NON PRONTO → SKIP");
-  return;
-}
+    console.warn("⏳ ACCESS NON PRONTO → SKIP");
+    return;
+  }
 
-if(access.isFree){
-  console.log("🔒 FREE USER");
-}
-else if(access.isInvestor){
-  console.log("🟡 INVESTOR USER");
-}
-else if(access.isPro){
-  console.log("🟢 PRO USER");
-}
-else if(access.isAdmin){
-  console.log("👑 ADMIN USER");
-}
-  // ================= FORCE PLAN FIX =================
+  console.log("🎯 ACCESS FINAL:", access);
 
+  // 🔥 FIX PRO/ADMIN
+  if(access.isPro || access.isAdmin){
+    resetGlobalBlur();
+  }
+
+});
+
+  // ================= RESET BASE =================
+  resetGlobalBlur();
+  removeGhostOverlays?.();
+  unlockBaseUI();
+
+  // ================= BODY CLASS =================
+  document.body.classList.remove(
+    "is-free",
+    "is-investor",
+    "is-pro",
+    "is-admin"
+  );
+
+  if(access.isAdmin) document.body.classList.add("is-admin");
+  else if(access.isPro) document.body.classList.add("is-pro");
+  else if(access.isInvestor) document.body.classList.add("is-investor");
+  else document.body.classList.add("is-free");
+
+  // ================= DEBUG =================
+  if(access.isFree){
+    console.log("🔒 FREE USER");
+  }
+  else if(access.isInvestor){
+    console.log("🟡 INVESTOR USER");
+  }
+  else if(access.isPro){
+    console.log("🟢 PRO USER");
+  }
+  else if(access.isAdmin){
+    console.log("👑 ADMIN USER");
+  }
+
+  // ================= OPTIONAL FIX =================
   if(!window.planCorrected){
 
     window.planCorrected = true;
 
     setTimeout(()=>{
-
       if(typeof window.forceCorrectPlan === "function"){
         // window.forceCorrectPlan();
       }
-
     },100);
 
   }
@@ -3997,177 +3948,4 @@ function unlockBaseUI(){
   document.body.classList.remove("no-scroll");
   document.body.style.pointerEvents = "auto";
 
-}
-
-
-// =============================
-// 🔥 GLOBAL ACCESS CONTROL (UNICO – FINAL FIX)
-// =============================
-
-document.addEventListener("rb_auth_ready", () => {
-
-  setTimeout(()=>{
-
-    if(!window.RB_USER){
-  console.warn("⏳ RB_USER non pronto → skip access control");
-  return;
-}
-
-const access = window.getUserAccess();
-
-    console.log("🎯 ACCESS FINAL:", access);
-
-    // 🔥 RESET BASE (SEMPRE)
-    resetGlobalBlur();
-    removeGhostOverlays?.();
-    unlockBaseUI();
-
-    // ===============================
-    // 🔥 RESET CLASSI BODY
-    // ===============================
-    document.body.classList.remove(
-      "is-free",
-      "is-investor",
-      "is-pro",
-      "is-admin"
-    );
-
-    if(access.isAdmin) document.body.classList.add("is-admin");
-    else if(access.isPro) document.body.classList.add("is-pro");
-    else if(access.isInvestor) document.body.classList.add("is-investor");
-    else document.body.classList.add("is-free");
-
-    // ===============================
-    // 🟡 INVESTOR (FIX DEFINITIVO)
-    // ===============================
-    if(access.isInvestor){
-
-      console.log("🟡 INVESTOR FORCE UNLOCK");
-
-      // 🔥 SBLOCCO FORZATO COMPLETO
-      document.querySelectorAll("*").forEach(el=>{
-
-        el.classList.remove(
-          "pro-blur",
-          "locked",
-          "locked-section",
-          "premium-lock",
-          "locked-content"
-        );
-
-        if(el.style){
-          el.style.filter = "none";
-          el.style.opacity = "1";
-          el.style.pointerEvents = "auto";
-        }
-
-      });
-
-      // 🔥 RIMUOVE OVERLAY BLOCCANTI
-      document.querySelectorAll(`
-        .lock-overlay,
-        .results-overlay,
-        .home-blur-overlay,
-        .upgrade-overlay
-      `).forEach(el => el.remove());
-
-      // 🔓 SBLOCCA SOLO KPI BASE
-      [
-        "revenue-forecast",
-        "occupancy-sensitivity",
-        "break-even-kpi"
-      ].forEach(id=>{
-        const el = document.getElementById(id);
-        if(el){
-          el.classList.remove("locked-section");
-        }
-      });
-
-      // 🔒 SOLO MESSAGGIO (NO BLOCCO UI)
-      [
-        "investment-score",
-        "investment-ranking",
-        "investment-risk-meter",
-        "investment-verdict",
-        "ai-insights"
-      ].forEach(id=>{
-        const el = document.getElementById(id);
-
-        if(el && !el.querySelector(".upgrade-msg")){
-          el.insertAdjacentHTML("beforeend", `
-            <div class="upgrade-msg" style="
-              margin-top:10px;
-              padding:10px;
-              font-size:13px;
-              text-align:center;
-              color:#64748b;
-            ">
-              🔒 ${window.currentLang === "en"
-                ? "Unlock PRO analysis"
-                : "Sblocca analisi PRO completa"}
-            </div>
-          `);
-        }
-      });
-
-      return;
-    }
-
-    // ===============================
-    // 🟢 PRO / ADMIN
-    // ===============================
-    if(access.isPro || access.isAdmin){
-
-      console.log("🟢 PRO FULL UNLOCK");
-
-      document.querySelectorAll("*").forEach(el=>{
-
-        el.classList.remove(
-          "locked-section",
-          "pro-blur",
-          "locked",
-          "premium-lock",
-          "locked-content"
-        );
-
-        if(el.style){
-          el.style.filter = "none";
-          el.style.opacity = "1";
-          el.style.pointerEvents = "auto";
-        }
-
-      });
-
-      document.querySelectorAll(`
-        .lock-overlay,
-        .paywall-mini,
-        .home-blur-overlay,
-        .upgrade-overlay,
-        .results-overlay,
-        .upgrade-msg,
-        [data-paywall]
-      `).forEach(el=> el.remove());
-
-      if(typeof window.calculate === "function"){
-        window.calculate(true);
-      }
-
-      return;
-    }
-
-    // ===============================
-    // 🔴 FREE
-    // ===============================
-    if(access.isFree){
-      console.log("🔒 FREE USER");
-    }
-
-  },300);
-
-});
-
-try {
-  console.log("END FILE SAFE");
-} catch(e) {
-  console.error("Final error:", e);
 }
