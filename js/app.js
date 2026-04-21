@@ -2187,7 +2187,7 @@ if(monthlyEl && annualEl){
       );
     }
 
-    // ================= RENDER COMPLETO TOOL =================
+   // ================= RENDER COMPLETO TOOL (SMART ACCESS CONTROL) =================
 
 // revenue forecast
 if(typeof renderRevenueForecast === "function"){
@@ -2210,45 +2210,149 @@ if(typeof renderBreakEvenOccupancy === "function"){
   );
 }
 
-// investment score
+// ================= ACCESS =================
+const access = window.getUserAccess();
+
+// ================= SCORE =================
 const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
 
 if(typeof renderInvestmentScore === "function"){
   renderInvestmentScore(roi, riskScore);
 }
 
-// ================= SCORE CERCHIO (FIX) =================
+// ================= SCORE CERCHIO =================
 const investmentScore = Math.min(100, Math.round(roi * 3));
 
 if(typeof window.updateInvestmentScore === "function"){
   window.updateInvestmentScore(investmentScore);
 }
 
-// ranking
-if(typeof renderInvestmentRanking === "function"){
-  renderInvestmentRanking(roi);
-}
+// ======================================================
+// 🔴 FREE → BLOCCO INTELLIGENTE (CONVERSION MODE)
+// ======================================================
 
-// risk meter
-if(typeof renderRiskMeter === "function"){
-  renderRiskMeter(riskScore);
-}
+if(access.isFree){
 
-// verdict
-if(typeof renderInvestmentVerdict === "function"){
-  const payback = net > 0 ? (price / net) : 0;
-  renderInvestmentVerdict(roi, payback);
-}
+  console.log("🔒 FREE → LIMITED DATA");
 
-// AI insights
-if(typeof generateInsights === "function" && typeof renderInsights === "function"){
-  const insights = generateInsights({
-    roi,
-    occupancy,
-    priceNight,
-    expenses
+  const lockedSections = [
+    "investment-ranking",
+    "investment-risk-meter",
+    "investment-verdict",
+    "ai-insights"
+  ];
+
+  lockedSections.forEach(id => {
+
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.innerHTML = `
+      <div style="
+        padding:16px;
+        border-radius:12px;
+        background:#f8fafc;
+        text-align:center;
+        font-size:13px;
+        color:#64748b;
+        border:1px dashed #e2e8f0;
+      ">
+
+        <div style="font-weight:600;margin-bottom:6px;">
+          🔒 ${t(
+            "Dati avanzati nascosti",
+            "Advanced data locked"
+          )}
+        </div>
+
+        <div style="font-size:12px;">
+          ${t(
+            "Qui è dove gli investitori prendono decisioni sbagliate",
+            "This is where investors make wrong decisions"
+          )}
+        </div>
+
+      </div>
+    `;
   });
-  renderInsights(insights);
+
+}
+
+// ======================================================
+// 🟡 INVESTOR → PARZIALE (VALORE + UPSELL)
+// ======================================================
+
+else if(access.isInvestor){
+
+  console.log("🟡 INVESTOR → PARTIAL DATA");
+
+  if(typeof renderInvestmentRanking === "function"){
+    renderInvestmentRanking(roi);
+  }
+
+  if(typeof renderRiskMeter === "function"){
+    renderRiskMeter(riskScore);
+  }
+
+  if(typeof renderInvestmentVerdict === "function"){
+    const payback = net > 0 ? (price / net) : 0;
+    renderInvestmentVerdict(roi, payback);
+  }
+
+  // 🔒 AI insights bloccati
+  const aiBox = document.getElementById("ai-insights");
+
+  if(aiBox){
+    aiBox.innerHTML = `
+      <div style="
+        padding:14px;
+        border-radius:10px;
+        background:#ecfdf5;
+        text-align:center;
+        font-size:13px;
+        color:#065f46;
+      ">
+        🔒 ${t(
+          "Sblocca AI insights avanzati con PRO",
+          "Unlock advanced AI insights with PRO"
+        )}
+      </div>
+    `;
+  }
+
+}
+
+// ======================================================
+// 🟢 PRO / ADMIN → FULL
+// ======================================================
+
+else{
+
+  console.log("🟢 PRO → FULL DATA");
+
+  if(typeof renderInvestmentRanking === "function"){
+    renderInvestmentRanking(roi);
+  }
+
+  if(typeof renderRiskMeter === "function"){
+    renderRiskMeter(riskScore);
+  }
+
+  if(typeof renderInvestmentVerdict === "function"){
+    const payback = net > 0 ? (price / net) : 0;
+    renderInvestmentVerdict(roi, payback);
+  }
+
+  if(typeof generateInsights === "function" && typeof renderInsights === "function"){
+    const insights = generateInsights({
+      roi,
+      occupancy,
+      priceNight,
+      expenses
+    });
+    renderInsights(insights);
+  }
+
 }
 
     // ================= KPI TOOL (CORRETTO) =================
