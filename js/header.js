@@ -222,7 +222,7 @@ if(typeof window.getUserAccess === "function"){
 
 const ready =
   access &&
-  typeof access === "object";
+  typeof access.isFree !== "undefined";
 
     if(ready || attempts > 20){
 
@@ -230,6 +230,8 @@ const ready =
 
   // 🔥 PRIMO RENDER
   renderUser(user);
+
+      document.dispatchEvent(new Event("rb_auth_ready"));
 
 // 🔒 SBLOCCA SOLO SE PRO
 const access = (typeof window.getUserAccess === "function")
