@@ -3666,27 +3666,6 @@ function removeGhostOverlays(){
 // document.addEventListener("rb_auth_ready", removeGhostOverlays);
 
 // ================= PLAN LOADED HANDLER CLEAN =================
-
-document.addEventListener("rb_plan_loaded", () => {
-
-  console.log("🚀 PLAN LOADED → FULL SYNC");
-
-  const access = window.getUserAccess();
-
-  if(!access || Object.keys(access).length === 0){
-    console.warn("⏳ ACCESS NON PRONTO → SKIP");
-    return;
-  }
-
-  console.log("🎯 ACCESS FINAL:", access);
-
-  // 🔥 FIX PRO/ADMIN
-  if(access.isPro || access.isAdmin){
-    resetGlobalBlur();
-  }
-
-});
-
 document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🚀 PLAN LOADED → FULL SYNC");
@@ -3718,7 +3697,7 @@ document.addEventListener("rb_plan_loaded", () => {
   else if(access.isInvestor) document.body.classList.add("is-investor");
   else document.body.classList.add("is-free");
 
-  // 🔥 PRO UNLOCK (QUI DENTRO, NON FUORI)
+  // ✅ QUI DENTRO (corretto)
   if(access.isPro || access.isAdmin){
     unlockProUI();
   }
