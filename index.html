@@ -490,9 +490,9 @@ text-align:center;
 ">
 
 <span 
-data-it="⚠️ Potresti perdere migliaia di € senza analisi completa"
-data-en="⚠️ You could lose thousands without full analysis">
-⚠️ Potresti perdere migliaia di € senza analisi completa
+data-it="⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale"
+data-en="⚠️ Without full analysis you could lose up to 30% of your real profit">
+⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale
 </span>
 
 </div>
@@ -590,10 +590,16 @@ style="margin-top:14px">
 
 <button onclick="startPlanPurchase('pro')" 
 class="btn btn-primary btn-lg block"
-data-it="🔓 Scopri profitto reale e rischio"
-data-en="🔓 Unlock real profit & risk">
-🔓 Scopri profitto reale e rischio
+data-it="🔓 Scopri se stai davvero guadagnando"
+data-en="🔓 Find out if you're really making money">
+🔓 Scopri se stai davvero guadagnando
 </button>
+
+<p style="margin-top:8px;font-size:13px;color:#ef4444;font-weight:600;text-align:center"
+data-it="🔥 Il 72% degli investitori sbaglia proprio qui"
+data-en="🔥 72% of investors fail right here">
+🔥 Il 72% degli investitori sbaglia proprio qui
+</p> 
 
 <p style="margin-top:10px;font-size:13px;color:#64748b;"
 data-it="Analisi avanzata con scenari realistici"
@@ -1556,6 +1562,17 @@ console.log("🔥 ROI:", roi);
 
 if(typeof updateROIMessage === "function"){
   updateROIMessage(roi);
+}
+
+// 🔥 SHOCK DINAMICO (AGGIUNGI QUI)
+const shock = document.getElementById("roi-shock-block");
+
+if(shock){
+  if(roi > 10){
+    shock.style.display = "block";
+  } else {
+    shock.style.display = "none";
+  }
 }
 
   // ================= UI =================
