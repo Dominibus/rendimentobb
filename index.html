@@ -1447,24 +1447,10 @@ window.startAnalysis = function(){
 // ================= QUICK ROI (ULTRA CONVERSION ENGINE) =================
 window.quickROI = function(){
 
- } else {
-  const investment = price + reno;
-  const revenue = night * 365 * (occ/100);
-  const net = revenue - (revenue*(cost/100));
-
-  result = {
-    roi: (net/investment)*100,
-    netAnnual: net,
-    revenue,
-    breakEvenYears: net>0 ? investment/net : 99
-  };
-
-  console.warn("⚠️ ROI fallback");
-}
- 
- if(window.__roiRunning) return;
- window.__roiRunning = true;
- setTimeout(()=> window.__roiRunning = false, 200);
+  // 🔥 anti loop
+  if(window.__roiRunning) return;
+  window.__roiRunning = true;
+  setTimeout(()=> window.__roiRunning = false, 200);
 
   const priceEl = document.getElementById("qr_price");
   const renoEl  = document.getElementById("qr_reno");
@@ -1481,91 +1467,91 @@ window.quickROI = function(){
   // ================= ACCESS =================
   const access = window.getUserAccess?.() || {};
 
-const plan = (window.currentPlan || "").toLowerCase();
+  const plan = (window.currentPlan || "").toLowerCase();
 
-const isPro =
-  plan === "pro" ||
-  plan === "pro_yearly" ||
-  access.isAdmin;
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly" ||
+    access.isAdmin;
 
-const isInvestor = plan === "investor";
+  const isInvestor = plan === "investor";
+  const isLogged = !!window.currentUser;
+  const isFreeUser = isLogged && !isPro && !isInvestor;
 
-const isLogged = !!window.currentUser;
-
-const isFreeUser = isLogged && !isPro && !isInvestor;
-
-   // ================= USER CHECK =================
+  // ================= USER CHECK =================
   if(window.currentUser === undefined){
     console.warn("⏳ User non pronto → skip");
     return;
   }
 
-  // ⏳ aspetta firebase
-if(window.currentUser === undefined){
-  console.warn("⏳ User non pronto → skip");
-  return;
-}
+  // 🔒 GUEST (ma calcolo attivo)
+  if(window.currentUser === null){
 
-// 🔒 GUEST → NON bloccare simulazione
-if(window.currentUser === null){
+    if(window.userTriggeredSimulation && !window.popupAlreadyShown){
 
-  if(window.userTriggeredSimulation){
+      window.popupAlreadyShown = true;
 
-   if(window.popupAlreadyShown) return;
-    window.popupAlreadyShown = true;
+      showToast(
+        window.t(
+          "Simulazione base attiva. Registrati per sbloccare dati completi",
+          "Basic simulation active. Sign up to unlock full data"
+        ),
+        "info"
+      );
 
-    showToast(
-      window.t(
-        "Simulazione base attiva. Registrati per sbloccare dati completi",
-        "Basic simulation active. Sign up to unlock full data"
-      ),
-      "info"
-    );
-
-    // 🔥 QUI VA LA MIGLIORIA
-    setTimeout(()=>{
-      showRegisterPopup?.();
-    }, 1500);
-
+      setTimeout(()=>{
+        showRegisterPopup?.();
+      }, 1500);
+    }
   }
-
-  // 👉 NON fare return → continua il calcolo
-}
 
   // ================= CLAMP =================
   occ = Math.min(Math.max(occ,1),95);
   cost = Math.min(Math.max(cost,1),90);
 
-  // ================= CALCOLO =================
+  // ================= CALCOLO REALE =================
   let result;
 
-  if(typeof calculateROI === "function"){
-    result = calculateROI({
-      price,
-      equity: 0,
-      priceNight: night,
-      occupancy: occ,
-      expenses: cost,
-      commission: 0,
-      tax: 0,
-      loanAmount: 0,
-      interestRate: 0,
-      loanYears: 0
-    });
-  } else {
-    const investment = price + reno;
-    const revenue = night * 365 * (occ/100);
-    const net = revenue - (revenue*(cost/100));
+if(typeof calculateROI === "function"){
+  result = calculateROI({
+    price,
+    equity: 0,
+    priceNight: night,
+    occupancy: occ,
+    expenses: cost,
+    commission: 0,
+    tax: 0,
+    loanAmount: 0,
+    interestRate: 0,
+    loanYears: 0
+  });
+} else {
+  console.warn("⚠️ ROI engine non pronto → fallback leggero");
 
-    result = {
-      roi: (net/investment)*100,
-      netAnnual: net,
-      revenue,
-      breakEvenYears: net>0 ? investment/net : 99
-    };
+  const investment = price + reno;
+  const revenue = night * 365 * (occ/100);
+  const net = revenue - (revenue*(cost/100));
 
-    console.warn("⚠️ ROI fallback");
-  }
+  result = {
+    roi: (net/investment)*100,
+    netAnnual: net,
+    revenue,
+    breakEvenYears: net>0 ? investment/net : 99
+  };
+}
+
+  const result = calculateROI({
+    price,
+    equity: 0,
+    priceNight: night,
+    occupancy: occ,
+    expenses: cost,
+    commission: 0,
+    tax: 0,
+    loanAmount: 0,
+    interestRate: 0,
+    loanYears: 0
+  });
 
   const roi = safeNum(result?.roi);
   const netAnnual = safeNum(result?.netAnnual || result?.net || 0);
@@ -1574,9 +1560,9 @@ if(window.currentUser === null){
 
   console.log("🔥 ROI:", roi);
 
-if(typeof updateROIMessage === "function"){
-  updateROIMessage(roi);
-}
+  if(typeof updateROIMessage === "function"){
+    updateROIMessage(roi);
+  }
 
   // ================= UI =================
   const elRoi   = document.getElementById("qr_roi");
@@ -1611,7 +1597,8 @@ if(typeof updateROIMessage === "function"){
     elMonth.innerText  = "⚠️";
     elBreak.innerText  = "🔒";
     elRev.innerText    = "⚠️";
-  } else {
+  } 
+  else{
     elProfit.innerText = "🔒";
     elMonth.innerText  = "🔒";
     elBreak.innerText  = "🔒";
@@ -1620,19 +1607,14 @@ if(typeof updateROIMessage === "function"){
 
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
+
   if(overlay){
-    if(overlay){
-  if(isPro){
+  if(isPro || isInvestor){
     overlay.style.display = "none";
-  }
-  else if(isInvestor){
-    overlay.style.display = "none";
-  }
-  else{
+  } else {
     overlay.style.display = "flex";
   }
 }
-  }
 
   // ================= EVENT =================
   document.dispatchEvent(new CustomEvent("rb_simulation_updated", {
@@ -1644,33 +1626,25 @@ if(typeof updateROIMessage === "function"){
     renderUpgradeCTA(roi);
   }
 
- // ================= UI VISIVA PER PIANO =================
+  // ================= BLUR UI =================
+  document.querySelectorAll(".metric-card").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
 
-document.querySelectorAll(".metric-card").forEach(el=>{
-  el.classList.remove("pro-blur");
-});
+  if(!isPro){
+    document.querySelectorAll(".metric-card:not(.roi-highlight)")
+      .forEach(el=> el.classList.add("pro-blur"));
+  }
 
-// FREE → tutto blur tranne ROI
-if(!isPro && !isInvestor){
-
-  document.querySelectorAll(".metric-card:not(.roi-highlight)")
-    .forEach(el=> el.classList.add("pro-blur"));
-
-}
-
-// INVESTOR → solo alcuni blur
-if(isInvestor){
-
-  document.querySelectorAll("#qr_break, #qr_rev")
-    .forEach(el=>{
-      el.closest(".metric-card")?.classList.add("pro-blur");
-    });
-
-}
+  if(isInvestor){
+    document.querySelectorAll("#qr_break, #qr_rev")
+      .forEach(el=>{
+        el.closest(".metric-card")?.classList.add("pro-blur");
+      });
+  }
 
   window.RB_LANG?.apply?.();
 };
-
 
 // ================= CTA DINAMICA (FUORI!!!) =================
 function renderUpgradeCTA(roi){
