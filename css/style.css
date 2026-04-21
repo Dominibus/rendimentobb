@@ -15229,22 +15229,20 @@ body.is-admin .results-overlay{
   pointer-events:auto !important;
 }
 /* ===============================
-🟢 FREE USER – UX CORRETTA
+🔒 LOCK SOLO SE SERVE (CONTROLLO REALE)
 ============================== */
 
-/* ❌ togli overlay globale */
-body.is-free .home-blur-overlay,
-body.is-free .results-overlay{
-  display:none !important;
-}
-
-/* ✅ contenuto sempre leggibile */
-body.is-free{
-  filter:none !important;
-}
-
+/* base SEMPRE attivo */
 .locked-section{
+  position:relative;
+  filter:none;
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* 🔒 SOLO quando viene attivato via classe */
+.locked-section.is-locked{
   filter: blur(4px);
-  pointer-events: none;
-  opacity: 0.6;
+  opacity:0.6;
+  pointer-events:none;
 }
