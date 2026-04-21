@@ -721,7 +721,7 @@ box.appendChild(warning); // ✅ ora è dentro → niente errore
 
 modal.appendChild(box);
 document.body.appendChild(modal);
-
+};
 // ================= GLOBAL HERO BACKGROUND =================
 
 window.applyCityBackground = function(city){
