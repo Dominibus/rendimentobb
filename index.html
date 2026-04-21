@@ -1487,8 +1487,7 @@ window.quickROI = function(){
 
   // ================= USER CHECK =================
   if(window.currentUser === undefined){
-  console.warn("⏳ User non pronto → skip");
-  return;
+  console.warn("⏳ User non pronto → continuo");
 }
 
   // 🔒 GUEST (ma calcolo attivo)
@@ -1525,7 +1524,7 @@ if(typeof calculateROI === "function"){
 
   result = calculateROI({
     price,
-    equity: investment, // ✅ FIX CRITICO
+    equity: price * 0.3, // ✅ FIX CRITICO
     priceNight: night,
     occupancy: occ,
     expenses: cost,
@@ -1913,11 +1912,8 @@ if(isPro){
   });
 
 }
-
-  // 🔁 ricalcolo UI SEMPRE
-  if(typeof quickROI === "function"){
-    setTimeout(() => quickROI(), 50);
-  }
+// ❌ NON ricalcolare qui
+// quickROI viene già gestito dal flusso principale
 }
 
   // ================= WAIT PRO =================
@@ -1934,13 +1930,9 @@ if(isPro){
   waitForUnlock();
 
   // ================= EVENT =================
-  document.addEventListener("rb_plan_loaded", ()=>{
-    unlockHomeUI();
-
-    if(typeof quickROI === "function"){
-      quickROI();
-    }
-  });
+ document.addEventListener("rb_plan_loaded", ()=>{
+  unlockHomeUI();
+});
 
    // ================= RESTORE CITY (FIX DEFINITIVO) =================
 
