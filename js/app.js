@@ -2010,27 +2010,94 @@ if(roi <= 0 || net <= 0){
   return;
 }
 
-// ================= ROI =================
+// ================= ROI (SMART ACCESS) =================
 
 if(roiEl){
+
+  const access = window.getUserAccess();
 
   roiEl.style.opacity = "0";
 
   setTimeout(()=>{
-    roiEl.innerText = roi.toFixed(1) + "%";
+
+    // 🔴 FREE → preview (non affidabile)
+    if(access.isFree){
+      roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+    }
+    // 🟡 INVESTOR / 🟢 PRO
+    else{
+      roiEl.innerText = roi.toFixed(1) + "%";
+    }
+
     roiEl.style.opacity = "1";
+
   },150);
 
 }
 
-// ================= PROFITTI =================
+    // ================= HIDDEN DATA MESSAGE =================
 
-if(monthlyEl){
-  monthlyEl.innerText = formatCurrency(net / 12);
+const hiddenBox = document.getElementById("hidden-roi-msg");
+
+if(hiddenBox){
+
+  const access = window.getUserAccess();
+
+  if(access.isFree){
+
+    hiddenBox.innerHTML = `
+      <div style="
+        margin-top:12px;
+        padding:12px;
+        border-radius:10px;
+        background:#fff7ed;
+        color:#9a3412;
+        font-size:13px;
+        text-align:center;
+      ">
+        📊 ${t(
+          "Abbiamo calcolato il tuo investimento reale, ma alcuni dati sono nascosti",
+          "We calculated your real investment, but some data is hidden"
+        )}
+        <br>
+        ${t(
+          "👉 È qui che il 72% degli investitori sbaglia",
+          "👉 This is where 72% of investors fail"
+        )}
+      </div>
+    `;
+
+  }else{
+    hiddenBox.innerHTML = "";
+  }
+
 }
 
-if(annualEl){
-  annualEl.innerText = formatCurrency(net);
+// ================= PROFITTI (SMART LOCK) =================
+
+if(monthlyEl && annualEl){
+
+  const access = window.getUserAccess();
+
+  // 🔴 FREE → NASCONDI
+  if(access.isFree){
+
+    monthlyEl.innerText = t(
+      "🔒 Disponibile nella versione completa",
+      "🔒 Available in full version"
+    );
+
+    annualEl.innerText = "—";
+
+  }
+  // 🟡 INVESTOR / 🟢 PRO
+  else{
+
+    monthlyEl.innerText = formatCurrency(net / 12);
+    annualEl.innerText = formatCurrency(net);
+
+  }
+
 }
 
     // ================= MARKET =================
