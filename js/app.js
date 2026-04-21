@@ -610,39 +610,39 @@ if(type === "pro"){
 
 const lang = window.currentLang === "en" ? "en" : "it";
 
-  // ================= UI =================
+// ================= UI =================
 
-  const box = document.createElement("div");
+const box = document.createElement("div");
 
-  box.style = `
-    background:white;
-    padding:28px;
-    border-radius:16px;
-    max-width:420px;
-    width:90%;
-    text-align:center;
-    box-shadow:0 20px 60px rgba(0,0,0,0.25);
-    animation:fadeIn .3s ease;
-    
-  `;
+box.style = `
+  background:white;
+  padding:28px;
+  border-radius:16px;
+  max-width:420px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  animation:fadeIn .3s ease;
+`;
 
-  const title = document.createElement("h3");
+// ===== TITLE =====
+const title = document.createElement("h3");
 title.textContent = config["title_" + lang];
-
-// FIX VISIVO
 title.style.color = "#0f172a";
 title.style.fontWeight = "700";
 title.style.marginBottom = "10px";
 
-  const desc = document.createElement("p");
-  desc.textContent = config["desc_" + lang];
-  desc.style.margin = "10px 0 20px";
+// ===== DESC =====
+const desc = document.createElement("p");
+desc.textContent = config["desc_" + lang];
+desc.style.margin = "10px 0 20px";
 
-  const list = document.createElement("div");
-  list.style.textAlign = "left";
-  list.style.marginBottom = "20px";
+// ===== FEATURES =====
+const list = document.createElement("div");
+list.style.textAlign = "left";
+list.style.marginBottom = "20px";
 
-  config["features_" + lang].forEach(f => {
+config["features_" + lang].forEach(f => {
 
   const item = document.createElement("div");
 
@@ -658,51 +658,43 @@ title.style.marginBottom = "10px";
   item.style.alignItems = "center";
 
   list.appendChild(item);
-
 });
 
-  const cta = document.createElement("button");
-  cta.textContent = config["cta_" + lang];
+// ===== CTA =====
+const cta = document.createElement("button");
+cta.textContent = config["cta_" + lang];
 
-  cta.style = `
-    background:#10b981;
-    color:white;
-    border:none;
-    padding:12px 18px;
-    border-radius:10px;
-    font-weight:600;
-    cursor:pointer;
-    width:100%;
-    margin-bottom:10px;
-  `;
+cta.style = `
+  background:#10b981;
+  color:white;
+  border:none;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  width:100%;
+  margin-bottom:10px;
+`;
 
-  cta.onclick = () => {
-    modal.remove();
-    config.action();
-  };
-
-  const close = document.createElement("button");
-  close.textContent = lang === "en" ? "Maybe later" : "Ora no";
-
-  close.style = `
-    background:none;
-    border:none;
-    color:#64748b;
-    cursor:pointer;
-  `;
-
-  close.onclick = () => modal.remove();
-
-  box.appendChild(title);
-  box.appendChild(desc);
-  box.appendChild(list);
-  box.appendChild(cta);
-  box.appendChild(close);
-
-  modal.appendChild(box);
-  document.body.appendChild(modal);
+cta.onclick = () => {
+  modal.remove();
+  config.action();
 };
 
+// ===== CLOSE =====
+const close = document.createElement("button");
+close.textContent = lang === "en" ? "Maybe later" : "Ora no";
+
+close.style = `
+  background:none;
+  border:none;
+  color:#64748b;
+  cursor:pointer;
+`;
+
+close.onclick = () => modal.remove();
+
+// ===== WARNING (FIX ERRORE QUI) =====
 const warning = document.createElement("div");
 
 warning.innerHTML = `
@@ -719,7 +711,17 @@ warning.innerHTML = `
   </div>
 `;
 
-box.appendChild(warning);
+// ===== APPEND =====
+box.appendChild(title);
+box.appendChild(desc);
+box.appendChild(list);
+box.appendChild(cta);
+box.appendChild(close);
+box.appendChild(warning); // ✅ ora è dentro → niente errore
+
+modal.appendChild(box);
+document.body.appendChild(modal);
+
 // ================= GLOBAL HERO BACKGROUND =================
 
 window.applyCityBackground = function(city){
