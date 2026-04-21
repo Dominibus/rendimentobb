@@ -3772,6 +3772,11 @@ document.addEventListener("rb_auth_ready", () => {
 
           const overlay = document.createElement("div");
           overlay.className = "paywall-mini";
+overlay.style.position = "relative";
+overlay.style.background = "transparent";
+overlay.style.pointerEvents = "auto";
+overlay.style.height = "auto";
+overlay.style.width = "100%";
 
           overlay.innerHTML = `
             <div style="
@@ -3787,7 +3792,19 @@ document.addEventListener("rb_auth_ready", () => {
             </div>
           `;
 
-          el.appendChild(overlay);
+          el.insertAdjacentHTML("beforeend", `
+  <div style="
+    margin-top:10px;
+    padding:10px;
+    font-size:13px;
+    text-align:center;
+    color:#64748b;
+  ">
+    🔒 ${window.currentLang === "en"
+      ? "Unlock PRO analysis"
+      : "Sblocca analisi PRO completa"}
+  </div>
+`);
         }
       });
 
