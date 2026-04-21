@@ -1510,46 +1510,34 @@ window.quickROI = function(){
   cost = Math.min(Math.max(cost,1),90);
 
   // ================= CALCOLO REALE =================
-  let result;
-
-if(typeof calculateROI === "function"){
-  result = calculateROI({
-    price,
-    equity: 0,
-    priceNight: night,
-    occupancy: occ,
-    expenses: cost,
-    commission: 0,
-    tax: 0,
-    loanAmount: 0,
-    interestRate: 0,
-    loanYears: 0
-  });
-} else {
-  console.warn("⚠️ ROI engine non pronto → fallback leggero");
-
-  const investment = price + reno;
-  const revenue = night * 365 * (occ/100);
-  const net = revenue - (revenue*(cost/100));
-
-  result = {
-    roi: (net/investment)*100,
-    netAnnual: net,
-    revenue,
-    breakEvenYears: net>0 ? investment/net : 99
-  };
+if(typeof calculateROI !== "function"){
+  console.warn("⏳ ROI engine non pronto → skip");
+  return;
 }
 
-  const roi = safeNum(result?.roi, 0);
-  const netAnnual = safeNum(result?.netAnnual || result?.net || 0, 0);
-  const revenue   = safeNum(result?.revenue, 0);
-  const breakEven = safeNum(result?.breakEvenYears || 0, 0);
+const result = calculateROI({
+  price,
+  equity: 0,
+  priceNight: night,
+  occupancy: occ,
+  expenses: cost,
+  commission: 0,
+  tax: 0,
+  loanAmount: 0,
+  interestRate: 0,
+  loanYears: 0
+});
 
-  console.log("🔥 ROI:", roi);
+const roi = safeNum(result?.roi, 0);
+const netAnnual = safeNum(result?.netAnnual || result?.net || 0, 0);
+const revenue   = safeNum(result?.revenue, 0);
+const breakEven = safeNum(result?.breakEvenYears || 0, 0);
 
-  if(typeof updateROIMessage === "function"){
-    updateROIMessage(roi);
-  }
+console.log("🔥 ROI:", roi);
+
+if(typeof updateROIMessage === "function"){
+  updateROIMessage(roi);
+}
 
   // ================= UI =================
   const elRoi   = document.getElementById("qr_roi");
