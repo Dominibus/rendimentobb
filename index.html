@@ -1781,8 +1781,15 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   });
 
-  // ================= 🔓 SBLOCCO PRO =================
+window.__RB_HOME_UNLOCKED__ = window.__RB_HOME_UNLOCKED__ || false;
+
 function unlockHomeUI(){
+
+  if(window.__RB_HOME_UNLOCKED__){
+    return;
+  }
+
+  window.__RB_HOME_UNLOCKED__ = true;
 
   const plan = (window.currentPlan || "").toLowerCase();
 
@@ -1794,49 +1801,43 @@ function unlockHomeUI(){
 
   if(!isPro && !isInvestor) return;
 
-console.log("🔥 UNLOCK HOME UI:", plan);
+  console.log("✅ UNLOCK HOME UI (ONCE):", plan);
 
-// base per entrambi
-document.body.classList.add("paid-user");
+  document.body.classList.add("paid-user");
 
-// 🔥 RESET BLUR
-document.querySelectorAll(".metric-card").forEach(el=>{
-  el.classList.remove("pro-blur");
-});
-
-// 🔥 INVESTOR → parziale
-if(isInvestor){
-  document.querySelectorAll("#qr_break, #qr_rev")
-    .forEach(el=>{
-      el.closest(".metric-card")?.classList.add("pro-blur");
-    });
-}
-
-// 🔥 overlay OFF per utenti paganti
-document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-  el.style.display = "none";
-});
-
-// 🔥 PRO → full unlock
-if(isPro){
-
-  document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-    el.classList.remove("pro-locked","locked-section");
+  // 🔥 RESET BLUR
+  document.querySelectorAll(".metric-card").forEach(el=>{
+    el.classList.remove("pro-blur");
   });
 
-  document.querySelectorAll("button, a").forEach(el=>{
-    el.disabled = false;
-    el.style.pointerEvents = "auto";
-  });
-
-}
-
-  // 🔁 ricalcolo UI SEMPRE
-  if(typeof quickROI === "function"){
-    setTimeout(() => quickROI(), 50);
+  // 🔥 INVESTOR → parziale
+  if(isInvestor){
+    document.querySelectorAll("#qr_break, #qr_rev")
+      .forEach(el=>{
+        el.closest(".metric-card")?.classList.add("pro-blur");
+      });
   }
-}
 
+  // 🔥 overlay OFF
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.style.display = "none";
+  });
+
+  // 🔥 PRO unlock totale
+  if(isPro){
+
+    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+      el.classList.remove("pro-locked","locked-section");
+    });
+
+    document.querySelectorAll("button, a").forEach(el=>{
+      el.disabled = false;
+      el.style.pointerEvents = "auto";
+    });
+
+  }
+
+}
   // ================= WAIT PRO =================
   function waitForUnlock(){
 
@@ -1852,13 +1853,8 @@ if(isPro){
 
   // ================= EVENT =================
   document.addEventListener("rb_plan_loaded", ()=>{
-    unlockHomeUI();
-
-    if(typeof quickROI === "function"){
-      quickROI();
-    }
-  });
-
+  unlockHomeUI();
+});
 });
 
    // ================= RESTORE CITY (FIX DEFINITIVO) =================
