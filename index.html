@@ -1335,6 +1335,7 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <script type="module" src="/js/firebase-init.js"></script>
 
 <script src="/js/market-data.js"></script> 
+<script src="/js/roi-engine.js"></script> 
 <script type="module" src="/js/app.js"></script>
 
 
@@ -1509,25 +1510,42 @@ window.quickROI = function(){
   occ = Math.min(Math.max(occ,1),95);
   cost = Math.min(Math.max(cost,1),90);
 
-  // ================= CALCOLO REALE =================
-if(typeof calculateROI !== "function"){
-  console.warn("⏳ ROI engine non pronto → skip");
-  return;
+// ================= CALCOLO REALE =================
+let result;
+
+if(typeof calculateROI === "function"){
+
+  result = calculateROI({
+    price,
+    equity: 0,
+    priceNight: night,
+    occupancy: occ,
+    expenses: cost,
+    commission: 0,
+    tax: 0,
+    loanAmount: 0,
+    interestRate: 0,
+    loanYears: 0
+  });
+
+} else {
+
+  console.warn("⚠️ ROI engine non presente → uso fallback");
+
+  const investment = price + reno;
+  const revenue = night * 365 * (occ/100);
+  const net = revenue - (revenue*(cost/100));
+
+  result = {
+    roi: investment > 0 ? (net/investment)*100 : 0,
+    netAnnual: net,
+    revenue,
+    breakEvenYears: net > 0 ? investment/net : 99
+  };
+
 }
 
-const result = calculateROI({
-  price,
-  equity: 0,
-  priceNight: night,
-  occupancy: occ,
-  expenses: cost,
-  commission: 0,
-  tax: 0,
-  loanAmount: 0,
-  interestRate: 0,
-  loanYears: 0
-});
-
+// ✅ QUI USI RESULT (NON LO RIDEFINISCI)
 const roi = safeNum(result?.roi, 0);
 const netAnnual = safeNum(result?.netAnnual || result?.net || 0, 0);
 const revenue   = safeNum(result?.revenue, 0);
