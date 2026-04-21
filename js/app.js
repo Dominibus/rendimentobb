@@ -3706,7 +3706,7 @@ function unlockBaseUI(){
 
 
 // =============================
-// 🔥 GLOBAL ACCESS CONTROL (UNICO)
+// 🔥 GLOBAL ACCESS CONTROL (UNICO – FINAL FIX)
 // =============================
 
 document.addEventListener("rb_auth_ready", () => {
@@ -3718,10 +3718,14 @@ document.addEventListener("rb_auth_ready", () => {
 
     console.log("🎯 ACCESS FINAL:", access);
 
+    // 🔥 RESET BASE (SEMPRE)
     resetGlobalBlur();
     removeGhostOverlays?.();
     unlockBaseUI();
 
+    // ===============================
+    // 🔥 RESET CLASSI BODY
+    // ===============================
     document.body.classList.remove(
       "is-free",
       "is-investor",
@@ -3735,13 +3739,40 @@ document.addEventListener("rb_auth_ready", () => {
     else document.body.classList.add("is-free");
 
     // ===============================
-    // 🟡 INVESTOR
+    // 🟡 INVESTOR (FIX DEFINITIVO)
     // ===============================
     if(access.isInvestor){
 
-      console.log("🟡 INVESTOR OK");
+      console.log("🟡 INVESTOR FORCE UNLOCK");
 
-      // 🔓 SBLOCCA BASE
+      // 🔥 SBLOCCO FORZATO COMPLETO
+      document.querySelectorAll("*").forEach(el=>{
+
+        el.classList.remove(
+          "pro-blur",
+          "locked",
+          "locked-section",
+          "premium-lock",
+          "locked-content"
+        );
+
+        if(el.style){
+          el.style.filter = "none";
+          el.style.opacity = "1";
+          el.style.pointerEvents = "auto";
+        }
+
+      });
+
+      // 🔥 RIMUOVE OVERLAY BLOCCANTI
+      document.querySelectorAll(`
+        .lock-overlay,
+        .results-overlay,
+        .home-blur-overlay,
+        .upgrade-overlay
+      `).forEach(el => el.remove());
+
+      // 🔓 SBLOCCA SOLO KPI BASE
       [
         "revenue-forecast",
         "occupancy-sensitivity",
@@ -3753,7 +3784,7 @@ document.addEventListener("rb_auth_ready", () => {
         }
       });
 
-      // 🔒 SOLO PREMIUM (NO OVERLAY)
+      // 🔒 SOLO MESSAGGIO (NO BLOCCO UI)
       [
         "investment-score",
         "investment-ranking",
@@ -3835,7 +3866,6 @@ document.addEventListener("rb_auth_ready", () => {
   },300);
 
 });
-
 
 try {
   console.log("END FILE SAFE");
