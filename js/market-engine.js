@@ -33,11 +33,10 @@ function getText(){
   };
 }
 
-/* ================= 🔥 CITY ENGINE FIX ================= */
+/* ================= CITY ENGINE ================= */
 
 function getSafeCity(inputCity){
 
-  // 🔥 1. PRIORITÀ ASSOLUTA → URL (SEO)
   const path = window.location.pathname.toLowerCase();
 
   if(path.includes("/milano")) return "milan";
@@ -45,48 +44,50 @@ function getSafeCity(inputCity){
   if(path.includes("/napoli")) return "naples";
   if(path.includes("/firenze")) return "florence";
 
-  // 🔥 2. parametro esplicito
   if(inputCity) return inputCity;
 
-  // 🔥 3. global state (simulatore/dashboard)
   if(window.currentCity) return window.currentCity;
 
-  // 🔥 4. storage (solo fallback)
   const stored = localStorage.getItem("selected_city");
   if(stored) return stored;
 
-  // 🔥 5. DEFAULT SAFE
   return "rome";
 }
 
-/* ================= MAIN FUNCTION ================= */
+/* ================= CORE RENDER ================= */
 
-export function renderMarketBenchmark(inputCity){
+function renderMarketBenchmark(inputCity){
+
+  // 🔒 ANTI LOOP HARD LOCK
+  if(window.__marketRendering) return;
+  window.__marketRendering = true;
+
+  setTimeout(() => {
+    window.__marketRendering = false;
+  }, 200);
 
   const city = getSafeCity(inputCity);
 
-  console.log("📊 Render Market FIXED:", city);
+  console.log("📊 Render Market:", city);
 
-  // 🔥 SYNC GLOBAL CITY (IMPORTANTISSIMO)
   window.currentCity = city;
 
-  // 🔥 BACKGROUND SYNC (fix definitivo)
+  // 🔥 sync background
   if(window.applyCityBackground){
     applyCityBackground(city);
   }
 
-  /* ================= WAIT DATA ================= */
+  /* ================= DATA CHECK ================= */
 
   if(!window.RB_MARKET_DATA){
-    console.warn("⏳ RB_MARKET_DATA non pronto → retry");
-    setTimeout(() => renderMarketBenchmark(city), 300);
+    console.warn("⏳ MARKET DATA non pronto");
     return;
   }
 
   const data = window.RB_MARKET_DATA[city];
 
   if(!data){
-    console.warn("❌ Dati mercato mancanti per:", city);
+    console.warn("❌ Dati mancanti:", city);
     return;
   }
 
@@ -110,7 +111,7 @@ export function renderMarketBenchmark(inputCity){
     userRevenue = data.annualRevenue;
   }
 
-  /* ================= CALCOLI ================= */
+  /* ================= CALCOLO ================= */
 
   const marketRevenue = Number(data.annualRevenue);
 
@@ -202,19 +203,28 @@ export function renderMarketBenchmark(inputCity){
   `;
 }
 
-/* ================= AUTO UPDATE ================= */
+/* ================= EVENTS (SAFE) ================= */
 
 // 🔥 lingua
-document.addEventListener("rb_language_changed", () => {
-  renderMarketBenchmark();
-});
+if(!window.__marketLangListener){
+  window.__marketLangListener = true;
+
+  document.addEventListener("rb_language_changed", () => {
+    renderMarketBenchmark();
+  });
+}
 
 // 🔥 simulazione
-document.addEventListener("rb_simulation_updated", (e) => {
+if(!window.__marketSimulationListener){
+  window.__marketSimulationListener = true;
 
-  if(e?.detail?.revenue){
-    window.currentRevenue = e.detail.revenue;
-  }
+  document.addEventListener("rb_simulation_updated", (e) => {
 
-  renderMarketBenchmark();
-});
+    if(e?.detail?.revenue){
+      window.currentRevenue = e.detail.revenue;
+    }
+
+    renderMarketBenchmark();
+
+  });
+}
