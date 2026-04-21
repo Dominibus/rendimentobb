@@ -1671,6 +1671,8 @@ function runPostAnalysis(result, context){
 
   const roi = Number(result?.roi || 0);
 
+  updateROIMessage(roi);
+
   // 🔥 FIX CRITICO → NON bloccare mai UI
   if(roi <= 0){
     console.warn("⚠️ ROI basso → continuo render per UX");
@@ -1978,20 +1980,18 @@ result = calculateROI({
     const net   = Number(result?.netAfterMortgage || result?.profit || 0);
 
     // 🔥 ROI MESSAGE (HOME)
-const msg = document.getElementById("hidden-roi-msg");
-
-if(msg){
+function updateROIMessage(roi){
+  const msg = document.getElementById("hidden-roi-msg");
+  if(!msg) return;
 
   if(roi > 12){
     msg.innerHTML = "🔥 Investimento sopra la media";
   }
-
   else if(roi > 6){
     msg.innerHTML = "👍 Investimento nella media";
   }
-
   else{
-    msg.innerHTML = "⚠️ Rendimento basso, attenzione";
+    msg.innerHTML = "⚠️ Rendimento basso";
   }
 
   msg.style.display = "block";
