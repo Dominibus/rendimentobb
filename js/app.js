@@ -1835,8 +1835,12 @@ document.addEventListener("rb_auth_ready", () => {
 
   // 🔥 redirect guest intelligente
   if(!window.currentUser && window.simulationCount >= 2){
-    setTimeout(()=> window.location.href="/login/", 800);
-  }
+
+  setTimeout(()=>{
+    showRegisterPopup();
+  }, 800);
+
+}
 
   let leadScore = "cold";
 
