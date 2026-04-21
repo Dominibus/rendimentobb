@@ -1781,86 +1781,72 @@ document.addEventListener("DOMContentLoaded", ()=>{
     }
   });
 
-window.__RB_HOME_UNLOCKED__ = window.__RB_HOME_UNLOCKED__ || false;
+  // ================= UNLOCK SYSTEM =================
+  window.__RB_HOME_UNLOCKED__ = false;
 
-function unlockHomeUI(){
+  function unlockHomeUI(){
 
-  if(window.__RB_HOME_UNLOCKED__){
-    return;
-  }
+    if(window.__RB_HOME_UNLOCKED__) return;
 
-  window.__RB_HOME_UNLOCKED__ = true;
+    const plan = (window.currentPlan || "").toLowerCase();
 
-  const plan = (window.currentPlan || "").toLowerCase();
+    const isPro =
+      plan === "pro" ||
+      plan === "pro_yearly";
 
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+    const isInvestor = plan === "investor";
 
-  const isInvestor = plan === "investor";
+    console.log("✅ UNLOCK HOME UI:", plan);
 
-  if(!isPro && !isInvestor) return;
+    window.__RB_HOME_UNLOCKED__ = true;
 
-  console.log("✅ UNLOCK HOME UI (ONCE):", plan);
+    document.body.classList.add("paid-user");
 
-  document.body.classList.add("paid-user");
+    // 🔥 FIX OVERLAY DEFINITIVO
+    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+      el.remove();
+    });
 
-  // 🔥 RESET BLUR
-  document.querySelectorAll(".metric-card").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
+    // RESET BLUR
+    document.querySelectorAll(".metric-card").forEach(el=>{
+      el.classList.remove("pro-blur");
+    });
 
-  // 🔥 INVESTOR → parziale
-  if(isInvestor){
-    document.querySelectorAll("#qr_break, #qr_rev")
-      .forEach(el=>{
-        el.closest(".metric-card")?.classList.add("pro-blur");
+    // INVESTOR LIMIT
+    if(isInvestor){
+      document.querySelectorAll("#qr_break, #qr_rev")
+        .forEach(el=>{
+          el.closest(".metric-card")?.classList.add("pro-blur");
+        });
+    }
+
+    // PRO FULL
+    if(isPro){
+      document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
+        el.classList.remove("pro-locked","locked-section");
       });
-  }
 
-  // 🔥 overlay OFF
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.style.display = "none";
-  });
-
-  // 🔥 PRO unlock totale
-  if(isPro){
-
-    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-      el.classList.remove("pro-locked","locked-section");
-    });
-
-    document.querySelectorAll("button, a").forEach(el=>{
-      el.disabled = false;
-      el.style.pointerEvents = "auto";
-    });
-
-  }
-
-}
-  // ================= WAIT PRO =================
-  function waitForUnlock(){
-
-    if(window.currentPlan){
-      unlockHomeUI();
-    }else{
-      setTimeout(waitForUnlock, 300);
+      document.querySelectorAll("button, a").forEach(el=>{
+        el.disabled = false;
+        el.style.pointerEvents = "auto";
+      });
     }
 
   }
 
+  function waitForUnlock(){
+    if(window.currentPlan !== undefined){
+      unlockHomeUI();
+    }else{
+      setTimeout(waitForUnlock, 300);
+    }
+  }
+
   waitForUnlock();
 
-  // ================= EVENT =================
-  document.addEventListener("rb_plan_loaded", ()=>{
-  unlockHomeUI();
-});
-});
+  document.addEventListener("rb_plan_loaded", unlockHomeUI);
 
-   // ================= RESTORE CITY (FIX DEFINITIVO) =================
-
-document.addEventListener("DOMContentLoaded", () => {
-
+  // ================= RESTORE CITY =================
   const saved = localStorage.getItem("selected_city");
 
   const map = {
@@ -1879,41 +1865,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
-
- </script>
-
  
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  const plan = (window.currentPlan || "").toLowerCase();
-
-  const investor = document.querySelector(".plan-investor .plan-extra");
-  const pro = document.querySelector(".plan-pro .plan-extra");
-  const yearly = document.querySelector(".plan-yearly .plan-extra");
-
-  if(investor){
-    investor.innerHTML =
-      plan === "investor"
-        ? "✔ Dashboard limitata attiva"
-        : "✔ Dashboard limitata";
-  }
-
-  if(pro){
-    pro.innerHTML =
-      (plan === "pro" || plan === "pro_yearly")
-        ? "🔥 Accesso completo attivo"
-        : "✔ Accesso completo";
-  }
-
-  if(yearly){
-    yearly.innerHTML =
-      plan === "pro_yearly"
-        ? "🔥 Piano attivo"
-        : "✔ Accesso completo 12 mesi";
-  }
-
-});
 </script>
  
 </body>
