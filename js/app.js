@@ -255,7 +255,11 @@ function updateROIMessage(roi){
 // ================= HOME LOCK SYSTEM =================
 
 window.isProUser = function(){
-  return window.getUserAccess().isPro;
+
+  const access = window.getUserAccess?.() || {};
+
+  return !!(access.isPro || access.isAdmin);
+
 };
 
 // ================= MORTGAGE COMPARISON =================
@@ -386,6 +390,14 @@ window.isPremiumUser = function(){
     plan === "pro" || plan === "pro_yearly";
 
   return isAdmin || isPro;
+};
+
+window.canUserAccessFull = function(){
+
+  const access = window.getUserAccess?.() || {};
+
+  return !!(access.isPro || access.isAdmin);
+
 };
 
 // ✅ GET PLAN
@@ -1715,9 +1727,8 @@ function runPostAnalysis(result, context){
 
   // 🔥 FIX: sblocco UI per investor SEMPRE
   if(access.isInvestor){
-    resetGlobalBlur();
-    removeGhostOverlays?.();
-  }
+  console.log("🟡 INVESTOR SAFE UNLOCK");
+}
 
   if(!result) return;
 
@@ -2085,13 +2096,14 @@ if(roiEl){
 
     // 🔴 FREE → preview (non affidabile)
     if(access.isFree){
-      roiEl.innerText = "~ " + roi.toFixed(1) + "%";
-    }
-    // 🟡 INVESTOR / 🟢 PRO
-    else{
-      roiEl.innerText = roi.toFixed(1) + "%";
-    }
-
+  roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+}
+else if(access.isInvestor){
+  roiEl.innerText = roi.toFixed(1) + "%";
+}
+else{
+  roiEl.innerText = roi.toFixed(1) + "%";
+}
     roiEl.style.opacity = "1";
 
   },150);
@@ -2525,6 +2537,7 @@ document.addEventListener("DOMContentLoaded", () => {
 window.generateExecutivePDF = async function(){
 
 const access = window.getUserAccess();
+console.log("📄 PDF ACCESS:", access);  
 
 // 🟡 INVESTOR → UPSELL PRO
 if(access.isInvestor){
@@ -2542,8 +2555,8 @@ const lang = window.RB_LANG?.current || window.currentLang || "it";
 const tSafe = (it,en)=> lang==="it"?it:en;
 
 // 🔒 CHECK
-if(!hasPlan("pro")){
-  showProUpgradeModal();
+if(!access.canSeeFullAnalysis){
+  openUpgradeModal("pro");
   return;
 }
 
