@@ -2187,7 +2187,7 @@ if(monthlyEl && annualEl){
       );
     }
 
-   // ================= RENDER COMPLETO TOOL (SMART ACCESS CONTROL) =================
+  // ================= RENDER COMPLETO TOOL (SMART ACCESS CONTROL) =================
 
 // revenue forecast
 if(typeof renderRevenueForecast === "function"){
@@ -2210,7 +2210,8 @@ if(typeof renderBreakEvenOccupancy === "function"){
   );
 }
 
-// ================= ACCESS =================
+// ================= ACCESS (USA QUELLO GIÀ ESISTENTE) =================
+// ⚠️ NON ridefinire access se già sopra
 const access = window.getUserAccess();
 
 // ================= SCORE =================
@@ -2249,28 +2250,47 @@ if(access.isFree){
 
     el.innerHTML = `
       <div style="
-        padding:16px;
+        padding:18px;
         border-radius:12px;
-        background:#f8fafc;
+        background:#fff7ed;
         text-align:center;
         font-size:13px;
-        color:#64748b;
-        border:1px dashed #e2e8f0;
+        color:#9a3412;
+        border:1px solid #fdba74;
       ">
 
-        <div style="font-weight:600;margin-bottom:6px;">
+        <div style="font-weight:700;margin-bottom:6px;">
           🔒 ${t(
-            "Dati avanzati nascosti",
-            "Advanced data locked"
+            "Qui stai prendendo una decisione alla cieca",
+            "You are making a blind decision here"
           )}
         </div>
 
-        <div style="font-size:12px;">
+        <div style="font-size:12px;margin-bottom:10px;">
           ${t(
-            "Qui è dove gli investitori prendono decisioni sbagliate",
-            "This is where investors make wrong decisions"
+            "Il 72% degli investitori perde soldi proprio in questa fase",
+            "72% of investors lose money at this stage"
           )}
         </div>
+
+        <button 
+          onclick="triggerUpgradeFlow({roi:${roi}})"
+          style="
+            margin-top:8px;
+            background:#10b981;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:8px;
+            font-size:12px;
+            cursor:pointer;
+          "
+        >
+          ${t(
+            "Sblocca analisi completa",
+            "Unlock full analysis"
+          )}
+        </button>
 
       </div>
     `;
@@ -2299,7 +2319,7 @@ else if(access.isInvestor){
     renderInvestmentVerdict(roi, payback);
   }
 
-  // 🔒 AI insights bloccati
+  // 🔒 AI insights limitati
   const aiBox = document.getElementById("ai-insights");
 
   if(aiBox){
@@ -2311,11 +2331,19 @@ else if(access.isInvestor){
         text-align:center;
         font-size:13px;
         color:#065f46;
+        border:1px solid #10b981;
       ">
         🔒 ${t(
-          "Sblocca AI insights avanzati con PRO",
-          "Unlock advanced AI insights with PRO"
+          "Stai vedendo solo una parte dell’analisi",
+          "You are seeing only part of the analysis"
         )}
+        <br>
+        <span style="font-size:12px;opacity:.8;">
+          ${t(
+            "Sblocca AI insights avanzati con PRO",
+            "Unlock advanced AI insights with PRO"
+          )}
+        </span>
       </div>
     `;
   }
@@ -2354,7 +2382,6 @@ else{
   }
 
 }
-
     // ================= KPI TOOL (CORRETTO) =================
 
 const roiTool = document.getElementById("roi-preview");
