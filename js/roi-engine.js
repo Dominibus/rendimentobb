@@ -5,7 +5,8 @@
 
 import { calculateMortgage } from "./mortgage-engine.js";
 
-export function calculateROI(input = {}){
+// ================= CORE ENGINE =================
+function calculateROI(input = {}){
 
   // ================= SAFE PARSER =================
   const safe = (v, def = 0) => {
@@ -26,7 +27,7 @@ export function calculateROI(input = {}){
   const priceNight   = safePositive(input.priceNight, 100);
   const occupancy    = Math.min(100, safePositive(input.occupancy, 65));
 
-  const expenses     = safePositive(input.expenses, 30); // % or monthly? → handled below
+  const expenses     = safePositive(input.expenses, 30);
   const commission   = safePositive(input.commission, 15);
   const tax          = safePositive(input.tax, 21);
 
@@ -34,21 +35,16 @@ export function calculateROI(input = {}){
   const loanYears    = safePositive(input.loanYears, 20);
 
   // ================= CORE CALC =================
-
   const nights = 365 * (occupancy / 100);
-
   const gross = priceNight * nights;
 
   const fees = gross * (commission / 100);
 
-  // 🔥 gestione smart expenses:
-  // se < 100 → % su revenue
-  // se > 100 → valore mensile
+  // 🔥 gestione smart expenses
   let yearlyExpenses = 0;
-
   if(expenses <= 100){
     yearlyExpenses = gross * (expenses / 100);
-  }else{
+  } else {
     yearlyExpenses = expenses * 12;
   }
 
@@ -79,8 +75,7 @@ export function calculateROI(input = {}){
       ? (netAfterMortgage / equity) * 100
       : 0;
 
-  // ================= EXTRA KPI =================
-
+  // ================= KPI =================
   const monthlyProfit = netAfterMortgage / 12;
 
   const breakEvenYears =
@@ -95,30 +90,18 @@ export function calculateROI(input = {}){
 
   const adr = priceNight;
 
-  // ================= RISK ENGINE =================
-
+  // ================= RISK =================
   let risk = 75;
 
-  if(roi >= 15){
-    risk = 25;
-  }
-  else if(roi >= 10){
-    risk = 40;
-  }
-  else if(roi >= 6){
-    risk = 60;
-  }
-  else{
-    risk = 80;
-  }
+  if(roi >= 15) risk = 25;
+  else if(roi >= 10) risk = 40;
+  else if(roi >= 6) risk = 60;
+  else risk = 80;
 
-  // ================= SAFETY FINAL =================
-
+  // ================= SAFETY =================
   const clean = (v) => isFinite(v) ? v : 0;
 
   const result = {
-
-    // CORE
     price: clean(price),
     equity: clean(equity),
     loan: clean(loanAmount),
@@ -139,20 +122,16 @@ export function calculateROI(input = {}){
 
     roi: clean(roi),
 
-    // KPI
     monthlyProfit: clean(monthlyProfit),
     breakEvenYears: clean(breakEvenYears),
     profitMargin: clean(profitMargin),
 
-    // MARKET READY
     occupancy: clean(occupancy),
     priceNight: clean(adr),
 
-    // RISK
     risk: clean(risk)
   };
 
-  // ================= DEBUG SAFE =================
   if(!result || typeof result !== "object"){
     console.error("⛔ ROI ENGINE FAILED");
     return {};
@@ -160,3 +139,9 @@ export function calculateROI(input = {}){
 
   return result;
 }
+
+// ================= EXPORT (MODERN) =================
+export { calculateROI };
+
+// ================= GLOBAL FIX (CRITICO) =================
+window.calculateROI = calculateROI;
