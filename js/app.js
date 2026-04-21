@@ -3731,8 +3731,6 @@ document.addEventListener("rb_plan_loaded", () => {
     },100);
 
   }
-
-});
 // ================= REGISTER POPUP (FINAL FIX) =================
 
 window.showRegisterPopup = function(){
