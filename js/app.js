@@ -3718,9 +3718,7 @@ document.addEventListener("rb_plan_loaded", () => {
   else if(access.isInvestor) document.body.classList.add("is-investor");
   else document.body.classList.add("is-free");
 
-});
-
-  // 🔥 PRO UNLOCK
+  // 🔥 PRO UNLOCK (QUI DENTRO, NON FUORI)
   if(access.isPro || access.isAdmin){
     unlockProUI();
   }
