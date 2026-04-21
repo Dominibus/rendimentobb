@@ -2002,6 +2002,13 @@ window.calculate = async function(force = false){
   window.simulationExecuted = false;
   window.paywallShown = false;
 
+  // 🧹 CLEAN UI (evita duplicati)
+document.querySelectorAll(`
+  .smart-overlay,
+  .upgrade-msg,
+  .investor-upsell
+`).forEach(el => el.remove());
+
   try{
 
     // ================= INPUT =================
