@@ -1487,26 +1487,27 @@ if(window.currentUser === undefined){
   return;
 }
 
-// 🔒 blocca SOLO se ha cliccato davvero
+// 🔒 GUEST → NON bloccare simulazione
 if(window.currentUser === null){
 
   if(window.userTriggeredSimulation){
 
     showToast(
       window.t(
-        "Registrati gratis per vedere i risultati della simulazione",
-        "Sign up for free to see simulation results"
+        "Simulazione base attiva. Registrati per sbloccare dati completi",
+        "Basic simulation active. Sign up to unlock full data"
       ),
-      "warning"
+      "info"
     );
 
+    // 🔥 QUI VA LA MIGLIORIA
     setTimeout(()=>{
-      window.location.href = "/login/";
-    }, 800);
+      showRegisterPopup?.();
+    }, 1500);
 
   }
 
-  return;
+  // 👉 NON fare return → continua il calcolo
 }
 
   // ================= CLAMP =================
