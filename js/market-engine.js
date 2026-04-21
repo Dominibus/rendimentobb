@@ -56,7 +56,7 @@ function getSafeCity(inputCity){
 
 /* ================= CORE RENDER ================= */
 
-function renderMarketBenchmark(inputCity){
+export function renderMarketBenchmark(inputCity){
 
   // 🔒 ANTI LOOP HARD LOCK
   if(window.__marketRendering) return;
