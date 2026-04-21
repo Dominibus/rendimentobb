@@ -189,6 +189,30 @@ function renderUniversalKPI({ net, revenue, investment }){
   }
 
 }
+
+ // 🔥 ROI MESSAGE (HOME)
+function updateROIMessage(roi){
+  const msg = document.getElementById("hidden-roi-msg");
+  if(!msg) return;
+
+  if(roi > 12){
+    msg.innerHTML = "🔥 Investimento sopra la media";
+  }
+  else if(roi > 6){
+    msg.innerHTML = "👍 Investimento nella media";
+  }
+  else{
+    msg.innerHTML = "⚠️ Rendimento basso";
+  }
+
+  msg.style.display = "block";
+}
+
+    renderUniversalKPI({
+  net,
+  revenue: gross,
+  investment: price
+});
 // ================= HOME LOCK SYSTEM =================
 
 window.isProUser = function(){
@@ -1978,30 +2002,6 @@ result = calculateROI({
     const roi   = Number(result?.roi || 0);
     const gross = Number(result?.revenue || 0);
     const net   = Number(result?.netAfterMortgage || result?.profit || 0);
-
-    // 🔥 ROI MESSAGE (HOME)
-function updateROIMessage(roi){
-  const msg = document.getElementById("hidden-roi-msg");
-  if(!msg) return;
-
-  if(roi > 12){
-    msg.innerHTML = "🔥 Investimento sopra la media";
-  }
-  else if(roi > 6){
-    msg.innerHTML = "👍 Investimento nella media";
-  }
-  else{
-    msg.innerHTML = "⚠️ Rendimento basso";
-  }
-
-  msg.style.display = "block";
-}
-
-    renderUniversalKPI({
-  net,
-  revenue: gross,
-  investment: price
-});
 
 
     // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
