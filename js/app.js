@@ -1584,6 +1584,8 @@ function resetGlobalBlur(){
 
   console.log("🧹 HARD RESET UI");
 
+document.querySelectorAll(".smart-overlay").forEach(el => el.remove());
+
   // 🔥 FIX OVERLAY BLOCCATO
 document.querySelectorAll(
   ".locked-overlay, .results-overlay, .upgrade-overlay"
@@ -3405,12 +3407,12 @@ function removeGhostOverlays(){
     .locked-overlay,
     .home-blur-overlay,
     .upgrade-overlay,
+    .smart-overlay,
     #upgrade-overlay,
     #upgrade-modal,
     [data-paywall]
   `).forEach(el => {
 
-    // 🔥 NON TOCCARE REGISTER POPUP
     if(el.id === "register-popup") return;
 
     el.remove();
