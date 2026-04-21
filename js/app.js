@@ -3693,6 +3693,25 @@ document.addEventListener("rb_plan_loaded", () => {
   unlockBaseUI();
 
   // ================= BODY CLASS =================
+document.addEventListener("rb_plan_loaded", () => {
+
+  console.log("🚀 PLAN LOADED → FULL SYNC");
+
+  const access = window.getUserAccess();
+
+  if(!access){
+    console.warn("⛔ access non disponibile");
+    return;
+  }
+
+  console.log("🎯 ACCESS FINAL:", access);
+
+  // 🔥 RESET UI
+  resetGlobalBlur();
+  removeGhostOverlays?.();
+  unlockBaseUI();
+
+  // 🔥 BODY CLASS FIX
   document.body.classList.remove(
     "is-free",
     "is-investor",
@@ -3704,6 +3723,13 @@ document.addEventListener("rb_plan_loaded", () => {
   else if(access.isPro) document.body.classList.add("is-pro");
   else if(access.isInvestor) document.body.classList.add("is-investor");
   else document.body.classList.add("is-free");
+
+  // 🔥 PRO UNLOCK
+  if(access.isPro || access.isAdmin){
+    unlockProUI();
+  }
+
+});
 
   // ================= DEBUG =================
   if(access.isFree){
