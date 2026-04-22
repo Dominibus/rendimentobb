@@ -3724,6 +3724,8 @@ function removeGhostOverlays(){
 // ================= PLAN LOADED HANDLER CLEAN =================
 document.addEventListener("rb_plan_loaded", () => {
 
+  if(window.__planAlreadyApplied) return;
+  window.__planAlreadyApplied = true;
   console.log("🚀 PLAN LOADED → FULL SYNC");
   document.body.classList.remove("app-loading");
   document.body.style.visibility = "visible";
@@ -3738,7 +3740,7 @@ document.addEventListener("rb_plan_loaded", () => {
   console.log("🎯 ACCESS FINAL:", access);
 
   // RESET
-  resetGlobalBlur();
+  // resetGlobalBlur();
   removeGhostOverlays?.();
   unlockBaseUI();
 
