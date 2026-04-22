@@ -4364,44 +4364,58 @@ function unlockBaseUI(){
 
 function forceUnlockUI(){
 
-  console.log("🔥 FORCE UNLOCK UI");
+  const access = window.getUserAccess();
 
-  // 🔓 rimuove blur / lock
-  document.querySelectorAll(`
-    .pro-blur,
-    .locked,
-    .locked-content,
-    .premium-lock
-  `).forEach(el => {
+  console.log("🔥 FORCE UNLOCK UI SAFE:", access);
 
-    el.classList.remove(
-      "pro-blur",
-      "locked",
-      "locked-content",
-      "premium-lock"
-    );
+  // 🟢 SOLO PRO / ADMIN
+  if(access.isPro || access.isAdmin){
 
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
+    document.querySelectorAll(`
+      .pro-blur,
+      .locked,
+      .locked-content,
+      .premium-lock
+    `).forEach(el => {
 
-  });
+      el.classList.remove(
+        "pro-blur",
+        "locked",
+        "locked-content",
+        "premium-lock"
+      );
 
-  // 🧹 rimuove TUTTI gli overlay residui
-  document.querySelectorAll(`
-    .home-blur-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .lock-overlay,
-    .smart-overlay,
-    .paywall-mini,
-    [data-paywall]
-  `).forEach(el => {
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
 
-    if(el.id === "register-popup") return;
+    });
 
-    el.remove();
+    document.querySelectorAll(`
+      .home-blur-overlay,
+      .results-overlay,
+      .upgrade-overlay,
+      .lock-overlay,
+      .smart-overlay,
+      .paywall-mini,
+      [data-paywall]
+    `).forEach(el => {
 
-  });
+      if(el.id === "register-popup") return;
+      el.remove();
+
+    });
+
+  }
+
+  // 🟡 INVESTOR → NON TOCCARE LOCK
+  else if(access.isInvestor){
+    console.log("🟡 INVESTOR → no force unlock");
+  }
+
+  // 🔴 FREE → NON TOCCARE
+  else{
+    console.log("🔴 FREE → no force unlock");
+  }
 
 }
