@@ -15315,3 +15315,15 @@ body.modal-open{
 .investment-panel{
   overflow:visible !important;
 }
+
+/* =====================================
+🔥 POPUP NON BLOCCA CLICK GLOBALI
+===================================== */
+
+.home-blur-overlay{
+  pointer-events:none;
+}
+
+.home-overlay-content{
+  pointer-events:auto;
+}
