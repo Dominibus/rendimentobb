@@ -191,6 +191,7 @@ document.addEventListener("rb_language_changed", () => {
   }
 
   waitPlanAndRender(user);
+  window.currentUser = user;  
 
 });
 
