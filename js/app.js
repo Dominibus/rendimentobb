@@ -2882,6 +2882,7 @@ setTimeout(()=>{
   }
 
 }, 400);
+});  
 // ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
