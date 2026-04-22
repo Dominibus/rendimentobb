@@ -2326,8 +2326,6 @@ const hiddenBox = document.getElementById("hidden-roi-msg");
 
 if(hiddenBox){
 
-  const access = window.getUserAccess?.() || {};
-
   if(access.isFree){
 
     hiddenBox.innerHTML = `
@@ -2363,8 +2361,7 @@ if(hiddenBox){
 
 if(monthlyEl && annualEl){
 
-  const access = window.getUserAccess();
-
+  // 🔴 FREE → bloccato
   if(access.isFree){
     monthlyEl.innerText = t(
       "🔒 Disponibile nella versione completa",
@@ -2372,6 +2369,16 @@ if(monthlyEl && annualEl){
     );
     annualEl.innerText = "—";
   }
+
+  // 🟡 INVESTOR → dati reali (ma già limitati altrove)
+  else if(access.isInvestor){
+    const safeNet = Math.max(0, net);
+
+    monthlyEl.innerText = formatCurrency(safeNet / 12);
+    annualEl.innerText = formatCurrency(safeNet);
+  }
+
+  // 🟢 PRO / ADMIN
   else{
     const safeNet = Math.max(0, net);
 
