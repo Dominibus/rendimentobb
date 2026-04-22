@@ -3177,7 +3177,7 @@ Date.now()
 
 document.addEventListener("DOMContentLoaded", () => {
   
-document.body.style.visibility = "hidden";
+document.body.classList.add("app-loading");
   console.log("🚀 App init");
 
   // =====================================
