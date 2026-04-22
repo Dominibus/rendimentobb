@@ -148,7 +148,9 @@ function renderUniversalKPI(data = {}){
   } = data;
 
   // 🔒 SAFE CHECK (evita crash)
-  if(net === null || net === undefined) return;
+  if(net === null || net === undefined){
+  console.warn("⚠️ net mancante → continuo render");
+}
 
   // 🏠 HOME (qr_*)
   const qrProfit = document.getElementById("qr_profit");
@@ -2058,14 +2060,13 @@ const monthlyEl = document.getElementById("profit-monthly");
 const annualEl = document.getElementById("profit-annual");
 
 // 🚨 NON mostrare dati fake
-if(roi <= 0 || net <= 0){
-  console.warn("⛔ Dati non validi → render fallback");
+if(roi <= 0){
+  console.warn("⛔ ROI non valido → fallback leggero");
 
-  // 🔥 MOSTRA COMUNQUE UI (fondamentale per investor)
   const roiEl = document.getElementById("roi-live");
   if(roiEl) roiEl.innerText = "—";
 
-  return;
+  // ❗ NON BLOCCARE TUTTO
 }
 
 // ================= ROI (SMART ACCESS) =================
@@ -2140,23 +2141,18 @@ if(monthlyEl && annualEl){
 
   const access = window.getUserAccess();
 
-  // 🔴 FREE → NASCONDI
   if(access.isFree){
-
     monthlyEl.innerText = t(
       "🔒 Disponibile nella versione completa",
       "🔒 Available in full version"
     );
-
     annualEl.innerText = "—";
-
   }
-  // 🟡 INVESTOR / 🟢 PRO
   else{
+    const safeNet = Math.max(0, net);
 
-    monthlyEl.innerText = formatCurrency(net / 12);
-    annualEl.innerText = formatCurrency(net);
-
+    monthlyEl.innerText = formatCurrency(safeNet / 12);
+    annualEl.innerText = formatCurrency(safeNet);
   }
 
 }
