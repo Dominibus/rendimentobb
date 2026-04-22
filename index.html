@@ -1470,12 +1470,18 @@ window.quickROI = function(){
   cost = Math.min(Math.max(cost,1),90);
 
   // ================= ACCESS (FIX STABILE) =================
-  const access = window.getUserAccess?.() || {};
+  const plan = (window.currentPlan || "").toLowerCase();
 
-  const isPro = access.isPro || access.isAdmin;
-  const isInvestor = access.isInvestor;
-  const isLogged = !!window.currentUser;
-  const isFreeUser = access.isFree;
+const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly" ||
+  window.userRole === "admin";
+
+const isInvestor = plan === "investor";
+
+const isLogged = !!window.currentUser;
+
+const isFreeUser = isLogged && !isPro && !isInvestor;
 
   // ================= GUEST POPUP =================
   if(window.currentUser === null){
