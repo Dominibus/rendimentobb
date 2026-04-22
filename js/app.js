@@ -2886,11 +2886,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   });
 
- // =====================================
-// 🔥 HOME OVERLAY CONTROL (FINAL)
+});
+
+// =====================================
+// 🔥 HOME OVERLAY CONTROL (FINAL FIX)
 // =====================================
 
-setTimeout(()=>{
+document.addEventListener("rb_plan_loaded", () => {
 
   const access = window.getUserAccess?.();
   const overlay = document.querySelector(".home-blur-overlay");
@@ -2899,33 +2901,23 @@ setTimeout(()=>{
 
   console.log("🎯 OVERLAY CHECK:", access);
 
-  // =====================================
-  // 🔥 FIX CLICK CTA (SEMPRE ATTIVO)
-  // =====================================
-
+  // ================= CTA =================
   const buttons = overlay.querySelectorAll("button");
 
   buttons.forEach(btn => {
     btn.onclick = () => {
       console.log("🔥 CLICK OVERLAY CTA");
-
       triggerUpgradeFlow({ source:"home_overlay" });
     };
   });
 
-  // =====================================
-  // 🟢 PRO / ADMIN → rimuovi overlay
-  // =====================================
-
+  // ================= 🟢 PRO / ADMIN =================
   if(access.isPro || access.isAdmin){
     overlay.remove();
     return;
   }
 
-  // =====================================
-  // 🟡 INVESTOR → overlay soft
-  // =====================================
-
+  // ================= 🟡 INVESTOR =================
   if(access.isInvestor){
 
     overlay.style.background = "rgba(255,255,255,0.85)";
@@ -2944,23 +2936,18 @@ setTimeout(()=>{
     return;
   }
 
-  // =====================================
-  // 🔴 FREE → overlay + lock KPI
-  // =====================================
-
+  // ================= 🔴 FREE =================
   if(access.isFree){
 
     console.log("🔒 HOME OVERLAY FREE ACTIVE");
 
-    // 🔒 forza blur KPI (sicurezza)
     document.querySelectorAll(".metric-card").forEach(el=>{
       el.classList.add("pro-blur");
     });
 
   }
 
-}, 400);
-});  
+});
 // ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
@@ -3484,65 +3471,6 @@ Date.now()
 }
 
 // ===============================================
-// RENDIMENTOBB – APP CORE (CLEAN + UX + SYNC)
-// FIX: WAIT FIREBASE READY (NO FREE FLASH)
-// ===============================================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  console.log("🚀 App init (WAIT FIREBASE)");
-
-  document.body.classList.add("app-loading");
-
-  waitForFirebaseReady(() => {
-
-    console.log("🔥 APP START REALE");
-
-    const access = window.getUserAccess?.();
-
-    if(!access){
-      console.warn("⛔ ACCESS non disponibile");
-      return;
-    }
-
-    console.log("🔐 INITIAL ACCESS (REAL):", access);
-
-    // ================= RESET CLASSI =================
-    document.body.classList.remove(
-      "is-free",
-      "is-investor",
-      "is-pro",
-      "is-admin"
-    );
-
-    // ================= SET CORRETTO =================
-    if(access.isAdmin){
-      document.body.classList.add("is-admin");
-    }
-    else if(access.isPro){
-      document.body.classList.add("is-pro");
-    }
-    else if(access.isInvestor){
-      document.body.classList.add("is-investor");
-    }
-    else{
-      document.body.classList.add("is-free");
-    }
-
-    // ================= UNLOCK PRO =================
-    if(access.isPro || access.isAdmin){
-      unlockProUI();
-    }
-
-    // ================= FINE LOADING =================
-    document.body.classList.remove("app-loading");
-    document.body.classList.add("app-ready");
-
-  });
-
-});
-
-// ===============================================
 // 🔥 WAIT FIREBASE READY (CRITICO)
 // ===============================================
 
@@ -3713,14 +3641,14 @@ document.addEventListener("rb_auth_ready", () => {
   // 🔥 DEBUG
   // ===============================
 
+  if(window.firebaseReady){
   console.log(
     "👤 USER:",
     window.currentUser ? "LOGGED" : "GUEST",
     "| PLAN:",
-    window.currentPlan || "free"
+    window.currentPlan
   );
-
-
+}
 
 
 // ===============================================
