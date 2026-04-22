@@ -197,14 +197,12 @@ document.addEventListener("rb_language_changed", () => {
 });
 
 /* =====================
-⏳ WAIT PLAN (FINAL FIX)
+⏳ WAIT PLAN (FINAL FIX CLEAN)
 ===================== */
 
 function waitPlanAndRender(user){
 
   let attempts = 0;
-
-  window.headerRendered = false;
 
   const interval = setInterval(()=>{
 
@@ -216,18 +214,22 @@ function waitPlanAndRender(user){
       access = window.getUserAccess();
     }
 
+    // ✅ READY MINIMA (NON BLOCCANTE)
     const ready =
-  access &&
-  window.currentUser &&               // 👈 CRITICO
-  window.RB_USER &&                  // 👈 CRITICO
-  typeof access.isInvestor !== "undefined";
+      access &&
+      typeof access.isFree !== "undefined";
 
-    // 🔴 NON FORZARE PIÙ IL RENDER (fix critico)
     if(!ready){
+
       if(attempts > 40){
-        console.warn("⚠️ HEADER: piano non pronto dopo molti tentativi");
+        console.warn("⚠️ HEADER FALLBACK RENDER");
+
+        // 🔥 Fallback: render comunque
+        renderUser(user);
+
         clearInterval(interval);
       }
+
       return;
     }
 
@@ -236,10 +238,7 @@ function waitPlanAndRender(user){
 
     console.log("✅ HEADER READY:", access);
 
-    // 🔥 RENDER CORRETTO
     renderUser(user);
-
-    document.dispatchEvent(new Event("rb_auth_ready"));
 
     // =====================
     // 🔓 UNLOCK SOLO PRO / ADMIN
@@ -251,7 +250,7 @@ function waitPlanAndRender(user){
 
     const isPro = isAdmin || access.isPro;
 
-    if(isPro){
+    if(isPro && typeof unlockUI === "function"){
       unlockUI();
     }
 
