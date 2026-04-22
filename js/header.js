@@ -217,10 +217,10 @@ function waitPlanAndRender(user){
     }
 
     const ready =
-      access &&
-      typeof access.isFree !== "undefined" &&
-      typeof access.isInvestor !== "undefined" &&
-      typeof access.isPro !== "undefined";
+  access &&
+  window.currentUser &&               // 👈 CRITICO
+  window.RB_USER &&                  // 👈 CRITICO
+  typeof access.isInvestor !== "undefined";
 
     // 🔴 NON FORZARE PIÙ IL RENDER (fix critico)
     if(!ready){
