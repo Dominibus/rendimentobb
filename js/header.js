@@ -197,7 +197,7 @@ document.addEventListener("rb_language_changed", () => {
 });
 
 /* =====================
-⏳ WAIT PLAN
+⏳ WAIT PLAN (FINAL FIX)
 ===================== */
 
 function waitPlanAndRender(user){
@@ -212,41 +212,48 @@ function waitPlanAndRender(user){
 
     let access = null;
 
-if(typeof window.getUserAccess === "function"){
-  access = window.getUserAccess();
-}
+    if(typeof window.getUserAccess === "function"){
+      access = window.getUserAccess();
+    }
 
-const ready =
-  access &&
-  typeof access.isFree !== "undefined" &&
-  typeof access.isInvestor !== "undefined" &&
-  typeof access.isPro !== "undefined";
+    const ready =
+      access &&
+      typeof access.isFree !== "undefined" &&
+      typeof access.isInvestor !== "undefined" &&
+      typeof access.isPro !== "undefined";
 
-    if(ready || attempts > 20){
+    // 🔴 NON FORZARE PIÙ IL RENDER (fix critico)
+    if(!ready){
+      if(attempts > 40){
+        console.warn("⚠️ HEADER: piano non pronto dopo molti tentativi");
+        clearInterval(interval);
+      }
+      return;
+    }
 
-  clearInterval(interval);
+    // ✅ READY → procedi
+    clearInterval(interval);
 
-  // 🔥 PRIMO RENDER
-  renderUser(user);
+    console.log("✅ HEADER READY:", access);
 
-      document.dispatchEvent(new Event("rb_auth_ready"));
+    // 🔥 RENDER CORRETTO
+    renderUser(user);
 
-// 🔒 SBLOCCA SOLO SE PRO
-const access = (typeof window.getUserAccess === "function")
-  ? window.getUserAccess()
-  : { isPro:false, isInvestor:false, hasPlan:false };
+    document.dispatchEvent(new Event("rb_auth_ready"));
 
-const isAdmin =
-  (window.userRole || "").toLowerCase() === "admin" ||
-  window.currentUser?.email === "rendimentobb@gmail.com";
+    // =====================
+    // 🔓 UNLOCK SOLO PRO / ADMIN
+    // =====================
 
-const isPro = isAdmin || access.isPro;
+    const isAdmin =
+      (window.userRole || "").toLowerCase() === "admin" ||
+      window.currentUser?.email === "rendimentobb@gmail.com";
 
-if(isPro){
-  unlockUI();
-}
+    const isPro = isAdmin || access.isPro;
 
-}
+    if(isPro){
+      unlockUI();
+    }
 
   },120);
 
