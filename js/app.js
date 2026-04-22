@@ -371,6 +371,55 @@ el.style.position = "relative";
   el.appendChild(overlay);
 }
 
+// ================= SMART LOCK ENGINE =================
+function applySmartLock(el, {
+  type = "blur", // blur | hide | overlay
+  message = "",
+  cta = "Sblocca",
+  plan = "pro"
+} = {}){
+
+  if(!el) return;
+
+  const access = window.getUserAccess();
+
+  // PRO → skip
+  if(access.canSeeFullAnalysis) return;
+
+  // reset sicurezza
+  el.classList.remove("pro-blur");
+
+  // ================= TYPE: BLUR =================
+  if(type === "blur"){
+    el.classList.add("pro-blur");
+  }
+
+  // ================= TYPE: HIDE =================
+  if(type === "hide"){
+    el.style.display = "none";
+  }
+
+  // ================= OVERLAY =================
+  if(type === "overlay"){
+
+    createLockOverlay(el, `
+      ${message}
+      <br>
+      <span style="font-size:12px;opacity:.8;">
+        ${cta}
+      </span>
+    `);
+
+  }
+
+  // click → upgrade
+  el.style.cursor = "pointer";
+  el.onclick = () => {
+    triggerUpgradeFlow({ source:"lock", plan });
+  };
+
+}
+
 // ================= PLAN SYSTEM =================
 
 // 🔥 ADMIN
@@ -2234,52 +2283,84 @@ if(access.isFree){
     const el = document.getElementById(id);
     if(!el) return;
 
-    el.innerHTML = `
+    // 🔥 NON distruggiamo il contenuto → applichiamo overlay sopra
+    el.style.position = "relative";
+
+    // 🔥 evita duplicati
+    if(el.querySelector(".lock-overlay")) return;
+
+    const overlay = document.createElement("div");
+    overlay.className = "lock-overlay";
+
+    overlay.style = `
+      position:absolute;
+      inset:0;
+      background:rgba(255,247,237,0.92);
+      backdrop-filter:blur(6px);
+      border-radius:12px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+
+      z-index:10;
+      cursor:pointer;
+    `;
+
+    overlay.innerHTML = `
       <div style="
         padding:18px;
-        border-radius:12px;
-        background:#fff7ed;
-        text-align:center;
-        font-size:13px;
-        color:#9a3412;
-        border:1px solid #fdba74;
+        max-width:260px;
       ">
 
-        <div style="font-weight:700;margin-bottom:6px;">
+        <div style="
+          font-weight:700;
+          margin-bottom:8px;
+          color:#9a3412;
+        ">
           🔒 ${t(
-              "Stai prendendo una decisione senza dati reali",
-              "You are making a decision without real data"
-         )}
+            "Stai prendendo una decisione senza dati reali",
+            "You are making a decision without real data"
+          )}
         </div>
 
-        <div style="font-size:12px;margin-bottom:10px;">
+        <div style="
+          font-size:12px;
+          margin-bottom:12px;
+          color:#7c2d12;
+        ">
           ${t(
-             "Il 72% degli investitori perde soldi proprio qui",
-             "72% of investors lose money right here"
-        )}
+            "Il 72% degli investitori perde soldi proprio qui",
+            "72% of investors lose money right here"
+          )}
         </div>
 
-        <button 
-          onclick="triggerUpgradeFlow({roi:${roi}})"
-          style="
-            margin-top:8px;
-            background:#10b981;
-            color:white;
-            border:none;
-            padding:8px 12px;
-            border-radius:8px;
-            font-size:12px;
-            cursor:pointer;
-          "
-        >
+        <div style="
+          background:#10b981;
+          color:white;
+          padding:8px 12px;
+          border-radius:8px;
+          font-size:12px;
+          font-weight:600;
+          display:inline-block;
+        ">
           ${t(
             "Scopri se stai perdendo soldi",
             "Find out if you're losing money"
           )}
-        </button>
+        </div>
 
       </div>
     `;
+
+    // 🔥 CLICK → funnel
+    overlay.onclick = () => {
+      triggerUpgradeFlow({ roi });
+    };
+
+    el.appendChild(overlay);
+
   });
 
 }
