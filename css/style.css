@@ -15222,3 +15222,50 @@ body.is-admin .locked-overlay{
 .app-loading .hero {
   opacity: 0.9;
 }
+
+/* =====================================
+🔥 GLOBAL MODAL FIX (ULTRA SAFE)
+===================================== */
+
+.global-modal,
+.lock-modal,
+.upgrade-modal{
+  position:fixed !important;
+  inset:0 !important;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:99999 !important;
+}
+
+/* sfondo scuro */
+.global-modal::before,
+.lock-modal::before,
+.upgrade-modal::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(4px);
+  z-index:0;
+}
+
+/* contenuto sopra */
+.global-modal > *,
+.lock-modal > *,
+.upgrade-modal > *{
+  position:relative;
+  z-index:1;
+}
+
+/* evita tagli modali */
+body.modal-open{
+  overflow:hidden;
+}
+
+.section,
+.investment-panel{
+  overflow:visible !important;
+}
