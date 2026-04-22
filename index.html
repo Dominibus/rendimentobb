@@ -1562,34 +1562,45 @@ netAnnual = safeNum(netAnnual, 0);
                  "#ef4444";
   }
 
-  // ================= LOGICA PIANI =================
-  if(isPro){
-    elProfit.innerText = formatCurrency(netAnnual);
-    elMonth.innerText  = formatCurrency(netAnnual/12);
-    elBreak.innerText  = breakEven.toFixed(1)+" anni";
-    elRev.innerText    = formatCurrency(revenue);
-  }
+ // ================= LOGICA PIANI (STABILE E UNIFICATA) =================
 
-  else if(isInvestor){
-    elProfit.innerText = formatCurrency(netAnnual);
-    elMonth.innerText  = formatCurrency(netAnnual/12);
-    elBreak.innerText  = "🔒";
-    elRev.innerText    = formatCurrency(revenue);
-  }
+// 👉 base = comportamento PRO (sempre calcolato)
+const profitVal = formatCurrency(netAnnual);
+const monthVal  = formatCurrency(netAnnual/12);
+const breakVal  = breakEven.toFixed(1) + " anni";
+const revVal    = formatCurrency(revenue);
 
-  else if(isFreeUser){
-    elProfit.innerText = "~ " + formatCurrency(netAnnual);
-    elMonth.innerText  = "⚠️";
-    elBreak.innerText  = "🔒";
-    elRev.innerText    = "⚠️";
-  }
+// 🔴 DEFAULT → tutto bloccato
+elProfit.innerText = "🔒";
+elMonth.innerText  = "🔒";
+elBreak.innerText  = "🔒";
+elRev.innerText    = "🔒";
 
-  else{
-    elProfit.innerText = "🔒";
-    elMonth.innerText  = "🔒";
-    elBreak.innerText  = "🔒";
-    elRev.innerText    = "🔒";
-  }
+// 🟢 PRO → tutto visibile
+if(isPro){
+  elProfit.innerText = profitVal;
+  elMonth.innerText  = monthVal;
+  elBreak.innerText  = breakVal;
+  elRev.innerText    = revVal;
+}
+
+// 🟡 INVESTOR → come PRO ma con limiti
+else if(isInvestor){
+  elProfit.innerText = profitVal;
+  elMonth.innerText  = monthVal;
+  elRev.innerText    = revVal;
+
+  // 🔒 limite chiave
+  elBreak.innerText  = "🔒";
+}
+
+// 🔵 FREE USER → preview
+else if(isFreeUser){
+  elProfit.innerText = "~ " + profitVal;
+  elMonth.innerText  = "⚠️";
+  elBreak.innerText  = "🔒";
+  elRev.innerText    = "⚠️";
+}
 
   // ================= OVERLAY =================
   const overlay = document.querySelector(".home-blur-overlay");
