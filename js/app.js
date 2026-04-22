@@ -3168,6 +3168,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("🚀 App init");
 
+  // =====================================
+// 🔥 INITIAL ACCESS SYNC (CRITICO)
+// =====================================
+
+setTimeout(() => {
+
+  const access = window.getUserAccess?.();
+
+  if(!access){
+    console.warn("⛔ ACCESS non pronto (init)");
+    return;
+  }
+
+  console.log("🔐 INITIAL ACCESS:", access);
+
+  // reset classi
+  document.body.classList.remove(
+    "is-free",
+    "is-investor",
+    "is-pro",
+    "is-admin"
+  );
+
+  // assegna classe corretta
+  if(access.isAdmin){
+    document.body.classList.add("is-admin");
+  }
+  else if(access.isPro){
+    document.body.classList.add("is-pro");
+  }
+  else if(access.isInvestor){
+    document.body.classList.add("is-investor");
+  }
+  else{
+    document.body.classList.add("is-free");
+  }
+
+  // 🔓 unlock immediato se PRO
+  if(access.isPro || access.isAdmin){
+    unlockProUI();
+  }
+
+}, 300);
+
   // ===============================
   // MUTUI → TOOL SYNC
   // ===============================
