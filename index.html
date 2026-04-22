@@ -1869,7 +1869,7 @@ const isFreeUser = access.isFree;
   // niente unlock per free
   if(!isPro && !isInvestor) return;
 
-  console.log("🔥 UNLOCK HOME UI:", plan);
+  console.log("🔥 UNLOCK HOME UI:", {isPro, isInvestor});
 
   // ================= BASE =================
   document.body.classList.add("paid-user");
