@@ -3725,6 +3725,7 @@ function removeGhostOverlays(){
 document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🚀 PLAN LOADED → FULL SYNC");
+  document.body.classList.remove("app-loading");
   document.body.style.visibility = "visible";
 
   const access = window.getUserAccess();
