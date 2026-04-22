@@ -1818,9 +1818,8 @@ if(overlay){
 
       waitForUnlock();
 
-      setTimeout(() => {
-        quickROI();
-      }, 200);
+      // ❌ NON calcolare subito → aspetta il piano
+     // quickROI();
 
     });
   }
@@ -1945,7 +1944,18 @@ function waitForUnlock(){
 
 // ================= EVENT =================
 document.addEventListener("rb_plan_loaded", ()=>{
+
   unlockHomeUI();
+
+  // 🔥 FIX CRITICO → ricalcola ROI con piano corretto
+  console.log("🔄 Re-run ROI after plan loaded");
+
+  setTimeout(() => {
+    if(typeof quickROI === "function"){
+      quickROI();
+    }
+  }, 100);
+
 });
 
 
