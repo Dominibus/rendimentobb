@@ -2214,8 +2214,6 @@ const net = Number(
     });
 
     // ================= SMART PAYWALL (MODAL) =================
-       const access = window.getUserAccess();
-
 if(!access.isInvestor){
   showUpgradePopup(roi);
 }
@@ -2234,8 +2232,6 @@ if(roi <= 0){
 // ================= ROI (SMART ACCESS) =================
 
 if(roiEl){
-
-  const access = window.getUserAccess();
 
   roiEl.style.opacity = "0";
 
@@ -2262,18 +2258,15 @@ else{
 // 🔓 UNLOCK RESULTS (FINAL CORRECT)
 // =====================================
 
-const accessFinal = window.getUserAccess?.() || {};
-
-console.log("🔓 UNLOCK RESULTS:", accessFinal);
+console.log("🔓 UNLOCK RESULTS:", access);
 
 const cards = document.querySelectorAll(".metric-card");
 
 // 🟢 PRO / ADMIN → tutto sbloccato
-if(accessFinal.isPro || accessFinal.isAdmin){
+if(access.isPro || access.isAdmin){
 
   cards.forEach(el=>{
-    el.classList.remove("pro-blur");
-    el.classList.remove("locked");
+    el.classList.remove("pro-blur", "locked");
 
     const lock = el.querySelector(".lock-overlay");
     if(lock) lock.remove();
@@ -2283,13 +2276,12 @@ if(accessFinal.isPro || accessFinal.isAdmin){
 }
 
 
-// 🟡 INVESTOR → niente blur + lucchetti su alcune
-else if(accessFinal.isInvestor){
+// 🟡 INVESTOR → parziale (NO blur, solo blocchi PRO)
+else if(access.isInvestor){
 
   cards.forEach(el=>{
     el.classList.remove("pro-blur");
 
-    // 👉 DECIDI QUI cosa bloccare davvero
     if(el.classList.contains("pro-only")){
       el.classList.add("locked");
 
@@ -2304,6 +2296,7 @@ else if(accessFinal.isInvestor){
   });
 
   const overlay = document.querySelector(".home-blur-overlay");
+
   if(overlay){
     overlay.style.opacity = "0.1";
     overlay.style.pointerEvents = "none";
@@ -2311,12 +2304,11 @@ else if(accessFinal.isInvestor){
 }
 
 
-// 🔴 FREE → tutto bloccato + lucchetti
+// 🔴 FREE → tutto bloccato
 else{
 
   cards.forEach(el=>{
-    el.classList.add("pro-blur");
-    el.classList.add("locked");
+    el.classList.add("pro-blur", "locked");
 
     if(!el.querySelector(".lock-overlay")){
       el.insertAdjacentHTML("beforeend", `
@@ -2328,7 +2320,6 @@ else{
   });
 
 }
-
     // ================= HIDDEN DATA MESSAGE =================
 
 const hiddenBox = document.getElementById("hidden-roi-msg");
