@@ -15083,27 +15083,31 @@ Fix titolo invisibile popup
   backdrop-filter:blur(6px);
 }
 
-/* =========================
-🔥 LOCK OVERLAY SYSTEM (CLEAN FINAL)
-========================= */
+/* =====================================
+🔥 RENDIMENTOBB – ACCESS CONTROL CLEAN FINAL
+NO BUG • NO CONFLITTI • SCALABILE
+===================================== */
 
 /* ===============================
-🔒 BASE LOCK (SOLO SE USATO)
+🧼 RESET BASE (SAFE)
 ============================== */
 
 .locked-section{
   position:relative;
 }
 
-/* ❌ NIENTE BLUR DI DEFAULT */
-.locked-section{
-  filter:none;
-  opacity:1;
-  pointer-events:auto;
+/* ===============================
+🔒 LOCK ATTIVO SOLO VIA JS
+============================== */
+
+.locked-section.is-locked{
+  filter: blur(4px);
+  opacity:0.6;
+  pointer-events:none;
 }
 
 /* ===============================
-🔒 OVERLAY (UNICO SISTEMA VISIVO)
+🔒 OVERLAY (UNICO SISTEMA)
 ============================== */
 
 .lock-overlay{
@@ -15129,59 +15133,43 @@ Fix titolo invisibile popup
   box-shadow:0 10px 30px rgba(0,0,0,0.15);
 }
 
-.lock-icon{
-  display:block;
-  font-size:18px;
-  margin-bottom:4px;
-}
-
-.lock-text{
-  font-size:13px;
-}
-
 /* ===============================
-🟡 INVESTOR (MID TIER)
+🔴 FREE USER
 ============================== */
 
-/* NON rompere tutta la UI */
-body.is-investor .locked-section{
-  filter:none !important;
-  opacity:1 !important;
-  pointer-events:auto !important;
-}
-
-/* 🔓 base sempre visibile */
-body.is-investor .locked-section{
-  filter:none !important;
-  opacity:1 !important;
-  pointer-events:auto !important;
-}
-
-/* 🔒 blocchi PRO gestiti SOLO via overlay */
-body.is-investor .pro-only{
+body.is-free .pro-only,
+body.is-free .investor-only{
   display:none !important;
 }
 
-/* 🔓 contenuti investor */
+/* opzionale blur leggero KPI */
+body.is-free .blur-free{
+  filter: blur(6px);
+  pointer-events:none;
+  opacity:0.6;
+}
+
+/* ===============================
+🟡 INVESTOR
+============================== */
+
+/* vede base */
 body.is-investor .investor-only{
   display:block !important;
 }
 
-/* 🔥 niente paywall free */
-body.is-investor .upgrade-box.free-only{
+/* NON vede contenuti PRO */
+body.is-investor .pro-only{
   display:none !important;
 }
 
-/* 🔥 CTA upgrade */
-body.is-investor .upgrade-box.pro-only{
-  display:block !important;
-}
+/* nessun reset globale (IMPORTANTE) */
 
 /* ===============================
-🟢 PRO / ADMIN (FULL UNLOCK)
+🟢 PRO / ADMIN
 ============================== */
 
-/* 🔓 sblocco totale */
+/* sblocco totale SOLO QUI */
 body.is-pro *,
 body.is-admin *{
   filter:none !important;
@@ -15190,11 +15178,9 @@ body.is-admin *{
   backdrop-filter:none !important;
 }
 
-/* ❌ rimuove overlay */
+/* rimuove overlay */
 body.is-pro .lock-overlay,
 body.is-admin .lock-overlay,
-body.is-pro .home-blur-overlay,
-body.is-admin .home-blur-overlay,
 body.is-pro .upgrade-overlay,
 body.is-admin .upgrade-overlay,
 body.is-pro .results-overlay,
@@ -15203,7 +15189,21 @@ body.is-admin .results-overlay{
 }
 
 /* ===============================
-🔥 MINI PAYWALL (SOLO UI)
+🎯 CLASSI UTILI UI (CONTROLLO PRECISO)
+============================== */
+
+/* elementi PRO */
+.pro-only{
+  display:none;
+}
+
+/* elementi investor */
+.investor-only{
+  display:none;
+}
+
+/* ===============================
+🔥 MINI PAYWALL UI
 ============================== */
 
 .paywall-mini{
@@ -15217,10 +15217,10 @@ body.is-admin .results-overlay{
 }
 
 /* ===============================
-🔥 SICUREZZA EXTRA (ANTI BUG)
+🧹 SICUREZZA (NO VECCHI SISTEMI)
 ============================== */
 
-/* ❌ evita vecchi sistemi */
+/* NON usare più questi per lock */
 .pro-blur,
 .locked,
 .locked-content,
@@ -15228,79 +15228,4 @@ body.is-admin .results-overlay{
   filter:none !important;
   opacity:1 !important;
   pointer-events:auto !important;
-}
-/* ===============================
-🔒 LOCK SOLO SE SERVE (CONTROLLO REALE)
-============================== */
-
-/* base SEMPRE attivo */
-.locked-section{
-  position:relative;
-  filter:none;
-  opacity:1;
-  pointer-events:auto;
-}
-
-/* 🔒 SOLO quando viene attivato via classe */
-.locked-section.is-locked{
-  filter: blur(4px);
-  opacity:0.6;
-  pointer-events:none;
-}
-
-/* =====================================
-🔥 ACCESS CONTROL VISIVO (FINAL FIX)
-===================================== */
-
-/* =========================
-🧼 RESET GLOBALE (TUTTI)
-========================= */
-body.is-free *,
-body.is-investor *,
-body.is-pro *,
-body.is-admin *{
-  filter: none !important;
-  backdrop-filter: none !important;
-}
-
-/* =========================
-🚫 NO BLUR GLOBALE (FREE)
-========================= */
-body.is-free{
-  filter: none !important;
-}
-
-/* =========================
-🔒 BLUR SOLO ELEMENTI LOCKATI
-========================= */
-.pro-blur,
-.locked-content{
-  filter: blur(6px);
-  pointer-events: none;
-  user-select: none;
-}
-
-/* =========================
-🧹 KILL OVERLAY GLOBALI
-========================= */
-#rb-mobile-overlay,
-.home-blur-overlay{
-  display: none !important;
-}
-
-/* =========================
-🧹 OVERLAY SOLO SE SERVONO (GESTIONE JS)
-========================= */
-.upgrade-overlay,
-.locked-overlay{
-  display: none;
-}
-
-/* =========================
-👑 PRO / ADMIN FULL CLEAN
-========================= */
-body.is-pro *,
-body.is-admin *{
-  filter: none !important;
-  backdrop-filter: none !important;
 }
