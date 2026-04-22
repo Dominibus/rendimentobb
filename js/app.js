@@ -118,18 +118,25 @@ window.alert = function(msg){
 // 🔥 USA SOLO RB_USER (gestito da access-control.js)
 window.getUserAccess = function(){
 
-  if(!window.RB_USER){
-    return {
-      isFree: true,
-      isInvestor: false,
-      isPro: false,
-      isAdmin: false,
-      canSeeFullAnalysis: false,
-      isLogged: false
-    };
-  }
+  const plan = window.currentPlan || "free";
+  const role = window.userRole || "user";
+  const isLogged = !!window.currentUser;
 
-  return window.RB_USER;
+  const isAdmin = role === "admin";
+  const isPro =
+    plan === "pro" || plan === "pro_yearly";
+  const isInvestor =
+    plan === "investor";
+
+  return {
+    isLogged,
+    isAdmin,
+    isPro,
+    isInvestor,
+    isFree: !isAdmin && !isPro && !isInvestor,
+    canSeeFullAnalysis: isAdmin || isPro,
+    canDownloadPDF: isAdmin || isPro
+  };
 };
 
 // ❌ DISABILITA vecchio sistema (evita conflitti)
@@ -3478,57 +3485,98 @@ Date.now()
 
 // ===============================================
 // RENDIMENTOBB – APP CORE (CLEAN + UX + SYNC)
+// FIX: WAIT FIREBASE READY (NO FREE FLASH)
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  
-document.body.classList.add("app-loading");
-  console.log("🚀 App init");
 
-  // =====================================
-// 🔥 INITIAL ACCESS SYNC (CRITICO)
+  console.log("🚀 App init (WAIT FIREBASE)");
+
+  document.body.classList.add("app-loading");
+
+  waitForFirebaseReady(() => {
+
+    console.log("🔥 APP START REALE");
+
+    const access = window.getUserAccess?.();
+
+    if(!access){
+      console.warn("⛔ ACCESS non disponibile");
+      return;
+    }
+
+    console.log("🔐 INITIAL ACCESS (REAL):", access);
+
+    // ================= RESET CLASSI =================
+    document.body.classList.remove(
+      "is-free",
+      "is-investor",
+      "is-pro",
+      "is-admin"
+    );
+
+    // ================= SET CORRETTO =================
+    if(access.isAdmin){
+      document.body.classList.add("is-admin");
+    }
+    else if(access.isPro){
+      document.body.classList.add("is-pro");
+    }
+    else if(access.isInvestor){
+      document.body.classList.add("is-investor");
+    }
+    else{
+      document.body.classList.add("is-free");
+    }
+
+    // ================= UNLOCK PRO =================
+    if(access.isPro || access.isAdmin){
+      unlockProUI();
+    }
+
+    // ================= FINE LOADING =================
+    document.body.classList.remove("app-loading");
+    document.body.classList.add("app-ready");
+
+  });
+
+});
+
+// =====================================
+// 🔥 WAIT FIREBASE READY (CRITICO)
 // =====================================
 
-setTimeout(() => {
+function waitForFirebaseReady(callback){
 
-  const access = window.getUserAccess?.();
+  let attempts = 0;
 
-  if(!access){
-    console.warn("⛔ ACCESS non pronto (init)");
-    return;
-  }
+  const interval = setInterval(()=>{
 
-  console.log("🔐 INITIAL ACCESS:", access);
+    attempts++;
 
-  // reset classi
-  document.body.classList.remove(
-    "is-free",
-    "is-investor",
-    "is-pro",
-    "is-admin"
-  );
+    // ✅ FIREBASE PRONTO DAVVERO
+    if(window.firebaseReady && window.currentPlan){
 
-  // assegna classe corretta
-  if(access.isAdmin){
-    document.body.classList.add("is-admin");
-  }
-  else if(access.isPro){
-    document.body.classList.add("is-pro");
-  }
-  else if(access.isInvestor){
-    document.body.classList.add("is-investor");
-  }
-  else{
-    document.body.classList.add("is-free");
-  }
+      clearInterval(interval);
 
-  // 🔓 unlock immediato se PRO
-  if(access.isPro || access.isAdmin){
-    unlockProUI();
-  }
+      console.log("✅ FIREBASE READY:", {
+        user: window.currentUser,
+        plan: window.currentPlan
+      });
 
-}, 300);
+      callback();
+    }
 
+    // fallback sicurezza
+    if(attempts > 50){
+      clearInterval(interval);
+      console.warn("⚠️ Firebase timeout → continuo comunque");
+      callback();
+    }
+
+  }, 100);
+
+}
   // ===============================
   // MUTUI → TOOL SYNC
   // ===============================
