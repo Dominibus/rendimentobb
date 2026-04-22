@@ -2246,49 +2246,77 @@ else{
   },150);
 
 }
-if(!accessFinal || accessFinal.isLogged === false){
-  console.warn("⏳ access non pronto → skip unlock");
-  return;
-}
     
 // =====================================
-// 🔓 UNLOCK RESULTS (FIX DEFINITIVO)
+// 🔓 UNLOCK RESULTS (FINAL CORRECT)
 // =====================================
 
-const accessFinal = window.getUserAccess?.();
-
-if(!accessFinal || accessFinal.isLogged === false){
-  console.warn("⏳ access non pronto → skip unlock");
-  return;
-}
+const accessFinal = window.getUserAccess?.() || {};
 
 console.log("🔓 UNLOCK RESULTS:", accessFinal);
 
-// 🟢 PRO / ADMIN → sblocca tutto
+const cards = document.querySelectorAll(".metric-card");
+
+// 🟢 PRO / ADMIN → tutto sbloccato
 if(accessFinal.isPro || accessFinal.isAdmin){
 
-  document.querySelectorAll(".metric-card").forEach(el=>{
+  cards.forEach(el=>{
     el.classList.remove("pro-blur");
+    el.classList.remove("locked");
+
+    const lock = el.querySelector(".lock-overlay");
+    if(lock) lock.remove();
   });
 
   document.querySelector(".home-blur-overlay")?.remove();
 }
 
-// 🟡 INVESTOR → sblocca ma mantiene upsell leggero
+
+// 🟡 INVESTOR → niente blur + lucchetti su alcune
 else if(accessFinal.isInvestor){
 
-  document.querySelectorAll(".metric-card").forEach(el=>{
+  cards.forEach(el=>{
     el.classList.remove("pro-blur");
+
+    // 👉 DECIDI QUI cosa bloccare davvero
+    if(el.classList.contains("pro-only")){
+      el.classList.add("locked");
+
+      if(!el.querySelector(".lock-overlay")){
+        el.insertAdjacentHTML("beforeend", `
+          <div class="lock-overlay">
+            🔒 Pro
+          </div>
+        `);
+      }
+    }
   });
 
   const overlay = document.querySelector(".home-blur-overlay");
   if(overlay){
-    overlay.style.opacity = "0.15";
+    overlay.style.opacity = "0.1";
     overlay.style.pointerEvents = "none";
   }
 }
 
-// 🔴 FREE → resta bloccato (non fare nulla)
+
+// 🔴 FREE → tutto bloccato + lucchetti
+else{
+
+  cards.forEach(el=>{
+    el.classList.add("pro-blur");
+    el.classList.add("locked");
+
+    if(!el.querySelector(".lock-overlay")){
+      el.insertAdjacentHTML("beforeend", `
+        <div class="lock-overlay">
+          🔒 Sblocca
+        </div>
+      `);
+    }
+  });
+
+}
 
     // ================= HIDDEN DATA MESSAGE =================
 
