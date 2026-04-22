@@ -192,10 +192,6 @@ document.addEventListener("rb_language_changed", () => {
 
   waitPlanAndRender(user);
 
-  setTimeout(()=>{
-    renderUser(auth.currentUser);
-  }, 200);
-
 });
 
 });
@@ -222,7 +218,9 @@ if(typeof window.getUserAccess === "function"){
 
 const ready =
   access &&
-  typeof access.isFree !== "undefined";
+  typeof access.isFree !== "undefined" &&
+  typeof access.isInvestor !== "undefined" &&
+  typeof access.isPro !== "undefined";
 
     if(ready || attempts > 20){
 
