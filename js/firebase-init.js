@@ -246,6 +246,39 @@ window.RB_USER = {
   canDownloadPDF: isPro || isAdmin
 };
 
+    // ===============================
+// 🔥 SINGLE SOURCE ACCESS (CRITICO)
+// ===============================
+
+window.getUserAccess = function(){
+
+  const plan = String(window.currentPlan || "").toLowerCase();
+  const role = String(window.userRole || "").toLowerCase();
+  const isLogged = !!window.currentUser;
+
+  const isAdmin = role === "admin";
+
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly";
+
+  const isInvestor =
+    plan === "investor";
+
+  return {
+    isLogged,
+    isAdmin,
+    isPro,
+    isInvestor,
+    isFree: !isLogged || (!isPro && !isInvestor && !isAdmin),
+
+    // 🔥 CAPACITÀ
+    canSeeFullAnalysis: isPro || isAdmin,
+    canDownloadPDF: isPro || isAdmin
+  };
+
+};
+
 console.log("🧠 RB_USER SYNC:", window.RB_USER);
 
 
