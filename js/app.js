@@ -2020,7 +2020,6 @@ if(!userLogged){
 }
 
 result = calculateROI({
-  console.log("📊 RESULT RAW:", result);
   price,
   equity,
   priceNight,
@@ -2032,6 +2031,8 @@ result = calculateROI({
   interestRate,
   loanYears
 });
+
+console.log("📊 RESULT RAW:", result);
 
     // ================= VALIDAZIONE =================
    if (!result || typeof result !== "object") {
