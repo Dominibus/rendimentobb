@@ -2265,7 +2265,7 @@ const cards = document.querySelectorAll(".metric-card");
 // 🟢 PRO / ADMIN → tutto sbloccato
 if(access.isPro || access.isAdmin){
 
-  cards.forEach(el=>{
+  cards.forEach(el => {
     el.classList.remove("pro-blur", "locked");
 
     const lock = el.querySelector(".lock-overlay");
@@ -2276,35 +2276,59 @@ if(access.isPro || access.isAdmin){
 }
 
 
-// 🟡 INVESTOR → parziale (NO blur, solo blocchi PRO)
+// 🟡 INVESTOR → parziale (NO blur, blocco SOLO PRO)
 else if(access.isInvestor){
 
-  cards.forEach(el=>{
+  console.log("🟡 INVESTOR → PARTIAL UNLOCK");
+
+  cards.forEach(el => {
+
+    // rimuove blur globale
     el.classList.remove("pro-blur");
 
+    // blocca solo contenuti PRO
     if(el.classList.contains("pro-only")){
+
       el.classList.add("locked");
 
+      // crea overlay solo se non esiste
       if(!el.querySelector(".lock-overlay")){
-        else if(access.isInvestor){
+        el.insertAdjacentHTML("beforeend", `
+          <div class="lock-overlay">
+            🔒 PRO
+          </div>
+        `);
+      }
 
-  console.log("🟡 INVESTOR → SKIP CARD LOCK (gestito da forceUnlockUI)");
+    } else {
 
-}
+      // sicurezza: sblocca eventuali lock residui
+      el.classList.remove("locked");
 
+      const lock = el.querySelector(".lock-overlay");
+      if(lock) lock.remove();
+    }
+
+  });
+
+  // overlay home attenuato (non bloccante)
   const overlay = document.querySelector(".home-blur-overlay");
 
   if(overlay){
     overlay.style.opacity = "0.1";
     overlay.style.pointerEvents = "none";
   }
+
 }
 
 
 // 🔴 FREE → tutto bloccato
 else{
 
-  cards.forEach(el=>{
+  console.log("🔴 FREE → FULL LOCK");
+
+  cards.forEach(el => {
+
     el.classList.add("pro-blur", "locked");
 
     if(!el.querySelector(".lock-overlay")){
@@ -2314,6 +2338,7 @@ else{
         </div>
       `);
     }
+
   });
 
 }
