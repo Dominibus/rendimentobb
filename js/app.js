@@ -3176,7 +3176,8 @@ Date.now()
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", () => {
-
+  
+document.body.style.visibility = "hidden";
   console.log("🚀 App init");
 
   // =====================================
@@ -3724,6 +3725,7 @@ function removeGhostOverlays(){
 document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🚀 PLAN LOADED → FULL SYNC");
+  document.body.style.visibility = "visible";
 
   const access = window.getUserAccess();
 
