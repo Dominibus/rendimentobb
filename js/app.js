@@ -1290,30 +1290,114 @@ ${message}
 }
 
 
-// ================= SMART PAYWALL (SOFT VERSION) =================
+// ================= SMART PAYWALL (REAL MODAL VERSION) =================
 
 function showUpgradePopup(roi){
 
   const access = window.getUserAccess();
 
-if(access.canSeeFullAnalysis){
-  return;
-}
+  if(access.canSeeFullAnalysis){
+    return;
+  }
 
-  // 🔥 sicurezza ROI
   const safeROI = Number(roi || 0);
 
-  if(safeROI > 8){
+  if(safeROI <= 8) return;
 
-    console.log("Soft paywall attivo ROI:", safeROI);
+  console.log("🔥 SMART PAYWALL ATTIVO:", safeROI);
 
-    const upgradeBox = document.getElementById("upgrade-box");
+  // 🔥 evita duplicati
+  if(document.querySelector(".upgrade-modal")) return;
 
-    if(upgradeBox){
-      upgradeBox.style.display = "block";
-    }
+  // ================= CREA MODAL =================
+  const popup = document.createElement("div");
 
-  }
+  popup.className = "upgrade-modal";
+
+  popup.style.position = "fixed";
+  popup.style.inset = "0";
+  popup.style.zIndex = "99999";
+  popup.style.display = "flex";
+  popup.style.alignItems = "center";
+  popup.style.justifyContent = "center";
+
+  // ================= CONTENUTO =================
+  popup.innerHTML = `
+    <div style="
+      background:white;
+      padding:30px;
+      border-radius:16px;
+      max-width:420px;
+      width:90%;
+      text-align:center;
+      box-shadow:0 30px 80px rgba(0,0,0,0.25);
+    ">
+
+      <h2 style="margin-bottom:10px;">
+        🔒 ${t(
+          "Stai per perdere soldi",
+          "You are about to lose money"
+        )}
+      </h2>
+
+      <p style="font-size:14px;color:#64748b;margin-bottom:20px">
+        ${t(
+          "Il tuo ROI stimato è alto, ma senza analisi completa potresti sbagliare investimento.",
+          "Your ROI looks high, but without full analysis you could make a wrong investment."
+        )}
+      </p>
+
+      <div style="
+        font-size:26px;
+        font-weight:700;
+        color:#10b981;
+        margin-bottom:20px;
+      ">
+        ROI ${safeROI.toFixed(1)}%
+      </div>
+
+      <button onclick="triggerUpgradeFlow({roi:${safeROI}})" style="
+        background:#10b981;
+        color:white;
+        border:none;
+        padding:12px 18px;
+        border-radius:10px;
+        font-size:14px;
+        cursor:pointer;
+        width:100%;
+        margin-bottom:10px;
+      ">
+        ${t(
+          "Sblocca analisi completa",
+          "Unlock full analysis"
+        )}
+      </button>
+
+      <div id="close-modal" style="
+        font-size:12px;
+        color:#64748b;
+        cursor:pointer;
+      ">
+        ${t(
+          "Continua senza (rischioso)",
+          "Continue anyway (risky)"
+        )}
+      </div>
+
+    </div>
+  `;
+
+// 🔥 append con delay (effetto premium)
+setTimeout(()=>{
+  document.body.appendChild(popup);
+  document.body.classList.add("modal-open");
+}, 800);
+
+// 🔥 chiusura
+popup.querySelector("#close-modal").onclick = () => {
+  popup.remove();
+  document.body.classList.remove("modal-open");
+};
 
 }
 
