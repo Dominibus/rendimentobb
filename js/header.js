@@ -381,7 +381,7 @@ function renderUser(user){
 
   const isInvestor = access.isInvestor;
   const isPro = access.isPro;
-  const isPaid = isAdmin || access.isInvestor || access.isPro;
+  const isPaid = isAdmin || access?.isInvestor || access?.isPro;
 
   const isProOnly = isPro && !isInvestor;
 
