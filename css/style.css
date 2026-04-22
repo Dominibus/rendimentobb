@@ -15084,8 +15084,8 @@ Fix titolo invisibile popup
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – ACCESS CONTROL FINAL V2
-COERENTE CON HTML ATTUALE + ZERO BUG
+🔥 RENDIMENTOBB – ACCESS CONTROL FINAL V3
+FIX INVESTOR BLUR + SISTEMA STABILE
 ===================================== */
 
 /* ===============================
@@ -15097,7 +15097,7 @@ COERENTE CON HTML ATTUALE + ZERO BUG
 }
 
 /* ===============================
-🔒 LOCK ATTIVO SOLO VIA JS
+🔒 LOCK SOLO QUANDO SERVE
 ============================== */
 
 .locked-section.is-locked{
@@ -15107,7 +15107,7 @@ COERENTE CON HTML ATTUALE + ZERO BUG
 }
 
 /* ===============================
-🔒 OVERLAY UNIFICATO
+🔒 OVERLAY
 ============================== */
 
 .lock-overlay,
@@ -15123,7 +15123,6 @@ COERENTE CON HTML ATTUALE + ZERO BUG
   z-index:20;
 }
 
-/* box interno */
 .lock-box{
   background:white;
   padding:14px 18px;
@@ -15136,18 +15135,18 @@ COERENTE CON HTML ATTUALE + ZERO BUG
 }
 
 /* ===============================
-🔥 COMPATIBILITÀ HTML ATTUALE
+🔥 COMPATIBILITÀ HTML
 ============================== */
 
-/* 👉 il tuo simulatore usa blur-content */
+/* NON bloccare globalmente */
 .blur-content{
   position:relative;
 }
 
-/* 👉 evita click sotto overlay */
-.locked-section .blur-content{
+/* ❌ RIMOSSO BUG CRITICO */
+/* .locked-section .blur-content{
   pointer-events:none;
-}
+} */
 
 /* ===============================
 🔴 FREE USER
@@ -15158,7 +15157,7 @@ body.is-free .investor-only{
   display:none !important;
 }
 
-/* blur teaser */
+/* blur SOLO elementi specifici */
 body.is-free .blur-free{
   filter: blur(6px);
   pointer-events:none;
@@ -15166,7 +15165,7 @@ body.is-free .blur-free{
 }
 
 /* ===============================
-🟡 INVESTOR
+🟡 INVESTOR (FIX BUG)
 ============================== */
 
 body.is-investor .investor-only{
@@ -15177,11 +15176,15 @@ body.is-investor .pro-only{
   display:none !important;
 }
 
+/* 🔥 CRITICO: nessun blur globale */
+body.is-investor{
+  filter:none !important;
+}
+
 /* ===============================
 🟢 PRO / ADMIN
 ============================== */
 
-/* 🔥 SBLOCCO TOTALE */
 body.is-pro *,
 body.is-admin *{
   filter:none !important;
@@ -15190,7 +15193,7 @@ body.is-admin *{
   backdrop-filter:none !important;
 }
 
-/* 🔥 rimuove overlay */
+/* rimuove overlay */
 body.is-pro .lock-overlay,
 body.is-admin .lock-overlay,
 body.is-pro .locked-overlay,
@@ -15211,7 +15214,7 @@ body.is-admin .locked-overlay{
 }
 
 /* ===============================
-🔥 MINI PAYWALL UI
+🔥 MINI PAYWALL
 ============================== */
 
 .paywall-mini{
@@ -15225,47 +15228,42 @@ body.is-admin .locked-overlay{
 }
 
 /* ===============================
-🚫 BLOCCO VECCHI SISTEMI (MA SAFE)
+🚫 COMPATIBILITÀ VECCHI SISTEMI
 ============================== */
 
-/* 👉 usati nei tuoi file (:contentReference[oaicite:1]{index=1} e :contentReference[oaicite:2]{index=2}) */
+/* blur SOLO se usato manualmente */
 .pro-blur{
   filter: blur(6px);
   opacity:0.7;
 }
 
-/* 👉 disattiva sistemi legacy rotti */
+/* NON rompere layout */
 .locked{
   all:unset;
 }
 
-/* 👉 IMPORTANTISSIMO: NON rompere data-paywall */
-[data-paywall]{
-  position:relative;
-}
-
 /* ===============================
-🔥 FIX UX CRITICI
+🔥 FIX UX
 ============================== */
 
-/* evita overlay multipli */
+/* evita overlay duplicati */
 .locked-overlay + .locked-overlay{
   display:none !important;
 }
 
-/* evita click fantasma */
+/* blocca solo quando LOCK ATTIVO */
 .locked-section.is-locked *{
   pointer-events:none !important;
 }
 
-/* tranne overlay */
+/* overlay cliccabile */
 .locked-section.is-locked .lock-overlay,
 .locked-section.is-locked .locked-overlay{
   pointer-events:auto !important;
 }
 
 /* ===============================
-🔥 TRANSIZIONI SMOOTH
+🔥 SMOOTH UX
 ============================== */
 
 .locked-section,
