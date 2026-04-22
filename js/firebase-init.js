@@ -285,13 +285,6 @@ console.log("🧠 RB_USER SYNC:", window.RB_USER);
 // 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
 
-    document.addEventListener("rb_plan_ready", () => {
-
-  console.log("🔥 PLAN READY → FORCE ACCESS CONTROL");
-
-  document.dispatchEvent(new Event("rb_auth_ready"));
-
-});
 
     // 🔥 FIX HEADER IMMEDIATO (CRITICO)
 setTimeout(()=>{
@@ -302,7 +295,7 @@ setTimeout(()=>{
 
     // 🔥 SYNC IMMEDIATO HEADER/UI
 setTimeout(()=>{
-  document.dispatchEvent(new Event("rb_plan_loaded"));
+  
 }, 50);
 
     // ===============================
@@ -508,8 +501,6 @@ onAuthStateChanged(auth, async (user) => {
 
     updateUserUI(null);
 
-    document.dispatchEvent(new Event("rb_plan_loaded"));
-
     document.dispatchEvent(
       new CustomEvent("rb_auth_ready", {
         detail: {
@@ -592,8 +583,6 @@ onAuthStateChanged(auth, async (user) => {
     // 🔥 EVENTI GLOBALI (UNICO PUNTO)
     // ===============================
 
-    document.dispatchEvent(new Event("rb_plan_loaded"));
-
     document.dispatchEvent(
       new CustomEvent("rb_auth_ready", {
         detail: {
@@ -610,7 +599,6 @@ onAuthStateChanged(auth, async (user) => {
     window.currentPlan = "free";
     window.firebaseReady = true;
 
-    document.dispatchEvent(new Event("rb_plan_loaded"));
   }
 
 });
