@@ -15276,3 +15276,42 @@ body.modal-open{
 .container{
   overflow:visible !important;
 }
+/* =====================================
+🔥 HOME OVERLAY FIX (CRITICO)
+===================================== */
+
+/* contenitore metriche */
+.investment-metrics{
+  position:relative;
+  max-width:520px;
+  margin:0 auto;
+}
+
+/* overlay LIMITATO SOLO AL BOX */
+.home-blur-overlay{
+  position:absolute;
+  inset:0;
+
+  border-radius:16px;
+  
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(6px);
+
+  z-index:10;
+}
+
+/* contenuto */
+.home-overlay-content{
+  padding:20px;
+  max-width:260px;
+}
+
+/* evita che esploda fuori */
+.investment-panel{
+  overflow:visible !important;
+}
