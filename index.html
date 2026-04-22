@@ -1805,13 +1805,7 @@ if(overlay){
 
   // ================= AUTO ROI =================
   if(document.getElementById("qr_price")){
-  waitForROIEngine(() => {
-
-    // 🔥 sostituisce waitForUnlock
-    unlockHomeUI();
-
-  });
-}
+  }
 
   // ================= INPUT LISTENERS (ANTI DUPLICATI) =================
   if(!window.__roiListenersAttached){
@@ -1921,7 +1915,28 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
 });
 
+// ================= PLAN SYNC (FIX CRITICO) =================
+document.addEventListener("rb_plan_loaded", ()=>{
 
+  // 🔒 evita loop multipli
+  if(window.__planSynced) return;
+  window.__planSynced = true;
+
+  console.log("🔄 PLAN LOADED → SYNC HOME (ONCE)");
+
+  // 🔓 sblocca UI correttamente
+  if(typeof unlockHomeUI === "function"){
+    unlockHomeUI();
+  }
+
+  // 🔁 ricalcola ROI con access corretto
+  setTimeout(()=>{
+    if(typeof quickROI === "function"){
+      quickROI();
+    }
+  }, 100);
+
+});
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
  </script>
