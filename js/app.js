@@ -2020,6 +2020,7 @@ if(!userLogged){
 }
 
 result = calculateROI({
+  console.log("📊 RESULT RAW:", result);
   price,
   equity,
   priceNight,
@@ -2033,15 +2034,33 @@ result = calculateROI({
 });
 
     // ================= VALIDAZIONE =================
-    if (!result || typeof result !== "object") {
-      console.warn("⛔ risultato non valido");
-      return;
-    }
+   if (!result || typeof result !== "object") {
+  console.error("💥 RESULT INVALID:", result);
+  return;
+}
 
     // ================= SAFE VALUES (PRIMA!) =================
-    const roi   = Number(result?.roi || 0);
-    const gross = Number(result?.revenue || 0);
-    const net   = Number(result?.netAfterMortgage || result?.profit || 0);
+    const roi = Number(result?.roi ?? result?.ROI ?? 0);
+
+const gross = Number(
+  result?.revenue ??
+  result?.gross ??
+  result?.fatturato ??
+  0
+);
+
+const net = Number(
+  result?.netAfterMortgage ??
+  result?.profit ??
+  result?.net ??
+  result?.utile ??
+  0
+);
+
+  if(!roi && !gross && !net){
+  console.error("💥 RESULT EMPTY → CHECK ROI ENGINE", result);
+  return;
+}
 
 
     // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
@@ -2061,12 +2080,7 @@ const annualEl = document.getElementById("profit-annual");
 
 // 🚨 NON mostrare dati fake
 if(roi <= 0){
-  console.warn("⛔ ROI non valido → fallback leggero");
-
-  const roiEl = document.getElementById("roi-live");
-  if(roiEl) roiEl.innerText = "—";
-
-  // ❗ NON BLOCCARE TUTTO
+  console.warn("⚠️ ROI 0 → continuo comunque render");
 }
 
 // ================= ROI (SMART ACCESS) =================
