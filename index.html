@@ -1906,8 +1906,12 @@ if(overlay){
 });
 
 
-// ================= 🔓 SBLOCCO PRO =================
+// ================= 🔓 SBLOCCO HOME UI (FINAL CLEAN) =================
 function unlockHomeUI(){
+
+  // 🔒 anti-duplicazione (CRITICO)
+  if(window.__homeUnlocked) return;
+  window.__homeUnlocked = true;
 
   const plan = (window.currentPlan || "").toLowerCase();
 
@@ -1917,37 +1921,51 @@ function unlockHomeUI(){
 
   const isInvestor = plan === "investor";
 
+  // niente unlock per free
   if(!isPro && !isInvestor) return;
 
   console.log("🔥 UNLOCK HOME UI:", plan);
 
+  // ================= BASE =================
   document.body.classList.add("paid-user");
 
-  // 🔥 RESET BLUR
-  document.querySelectorAll(".metric-card").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
+  // 🔥 rimuove eventuali overlay legacy
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .locked-overlay,
+    .upgrade-overlay
+  `).forEach(el => el.remove());
 
-  // 🔥 INVESTOR → parziale
+  // ================= INVESTOR =================
   if(isInvestor){
-    document.querySelectorAll("#qr_break, #qr_rev")
-      .forEach(el=>{
-        el.closest(".metric-card")?.classList.add("pro-blur");
-      });
+
+    console.log("🟡 INVESTOR UI");
+
+    // 👉 qui NON usiamo più blur
+    // 👉 eventuali blocchi li gestirai con createLockOverlay()
+
+    return;
   }
 
-  // 🔥 overlay OFF
-  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-    el.style.display = "none";
-  });
-
-  // 🔥 PRO → full unlock
+  // ================= PRO =================
   if(isPro){
 
-    document.querySelectorAll(".pro-locked, .locked-section").forEach(el=>{
-      el.classList.remove("pro-locked","locked-section");
+    console.log("🟢 PRO UI FULL UNLOCK");
+
+    // 🔓 rimuove qualsiasi lock vecchio
+    document.querySelectorAll(`
+      .pro-locked,
+      .locked-section,
+      .premium-lock
+    `).forEach(el=>{
+      el.classList.remove(
+        "pro-locked",
+        "locked-section",
+        "premium-lock"
+      );
     });
 
+    // 🔓 riattiva interazioni
     document.querySelectorAll("button, a").forEach(el=>{
       el.disabled = false;
       el.style.pointerEvents = "auto";
@@ -1956,7 +1974,6 @@ function unlockHomeUI(){
   }
 
 }
-
 
 // ================= WAIT PLAN =================
 function waitForUnlock(){
