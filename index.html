@@ -524,28 +524,28 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
 </div>
 <!-- 🔒 BLOCCATI / 🔓 SBLOCCATI DINAMICAMENTE -->
-<div class="metric-card pro-blur">
+<div class="metric-card pro-only">
   <span data-it="Profitto annuo" data-en="Annual profit">
     Profitto annuo
   </span>
   <strong id="qr_profit">🔒</strong>
 </div>
 
-<div class="metric-card pro-blur">
+<div class="metric-card pro-only">
   <span data-it="Profitto mensile" data-en="Monthly profit">
     Profitto mensile
   </span>
   <strong id="qr_month">🔒</strong>
 </div>
 
-<div class="metric-card pro-blur">
+<div class="metric-card pro-only">
   <span data-it="Break-even" data-en="Break-even">
     Break-even
   </span>
   <strong id="qr_break">🔒</strong>
 </div>
 
-<div class="metric-card pro-blur">
+<div class="metric-card pro-only">
   <span data-it="Ricavo annuo" data-en="Annual revenue">
     Ricavo annuo
   </span>
@@ -1642,8 +1642,9 @@ if(shock){
     renderUpgradeCTA(roi);
   }
 
-  // ================= BLUR UI =================
-  // RESET
+// ================= BLUR UI =================
+
+// RESET SEMPRE
 document.querySelectorAll(".metric-card").forEach(el=>{
   el.classList.remove("pro-blur");
 });
@@ -1653,26 +1654,33 @@ if(isPro){
   // niente blur
 }
 
-// 🟡 INVESTOR → SOLO PARZIALE
+// 🟡 INVESTOR → parziale
 else if(isInvestor){
 
-  document.querySelectorAll("#qr_break, #qr_rev")
-    .forEach(el=>{
-      el.closest(".metric-card")?.classList.add("pro-blur");
-    });
+  // blocca SOLO i dati pro
+  document.querySelectorAll(".metric-card.pro-only")
+    .forEach(el=> el.classList.add("pro-blur"));
 
+  // 👉 sblocchi selettivi
+  document.querySelector("#qr_profit")
+    ?.closest(".metric-card")
+    ?.classList.remove("pro-blur");
+
+  document.querySelector("#qr_month")
+    ?.closest(".metric-card")
+    ?.classList.remove("pro-blur");
 }
 
-// 🔒 FREE / GUEST → tutto blur
+// 🔒 FREE / GUEST → blocca tutto tranne ROI
 else{
 
-  document.querySelectorAll(".metric-card:not(.roi-highlight)")
+  document.querySelectorAll(".metric-card.pro-only")
     .forEach(el=> el.classList.add("pro-blur"));
 
 }
 
-  window.RB_LANG?.apply?.();
-};
+// 🔥 forza aggiornamento lingua/UI
+window.RB_LANG?.apply?.();
 
 // ================= CTA DINAMICA (FUORI!!!) =================
 function renderUpgradeCTA(roi){
