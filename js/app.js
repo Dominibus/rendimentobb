@@ -2286,14 +2286,11 @@ else if(access.isInvestor){
       el.classList.add("locked");
 
       if(!el.querySelector(".lock-overlay")){
-        el.insertAdjacentHTML("beforeend", `
-          <div class="lock-overlay">
-            🔒 Pro
-          </div>
-        `);
-      }
-    }
-  });
+        else if(access.isInvestor){
+
+  console.log("🟡 INVESTOR → SKIP CARD LOCK (gestito da forceUnlockUI)");
+
+}
 
   const overlay = document.querySelector(".home-blur-overlay");
 
@@ -4118,10 +4115,7 @@ document.addEventListener("rb_plan_loaded", () => {
 }
 
 if(access.isInvestor){
-  console.log("🟡 INVESTOR → FORCE UNLOCK (BLOCK 2)");
-
-  unlockBaseUI();
-  forceUnlockUI();
+  console.log("🟡 INVESTOR → SKIP SECOND UNLOCK");
 }
 
 });
