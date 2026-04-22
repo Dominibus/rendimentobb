@@ -4047,25 +4047,39 @@ document.addEventListener("rb_plan_loaded", () => {
 
   if(window.__planAlreadyApplied) return;
   window.__planAlreadyApplied = true;
+
   console.log("🚀 PLAN LOADED → FULL SYNC");
+
   document.body.classList.remove("app-loading");
   document.body.style.visibility = "visible";
 
   const access = window.getUserAccess();
 
-  if(!access || Object.keys(access).length === 0){
-    console.warn("⏳ ACCESS NON PRONTO → SKIP");
+  if(!access){
+    console.warn("⛔ ACCESS NON DISPONIBILE");
     return;
+  }
+
+  // ================= DEBUG CORRETTO =================
+  if(access.isFree){
+    console.log("🔒 FREE USER");
+  }
+  else if(access.isInvestor){
+    console.log("🟡 INVESTOR USER");
+  }
+  else if(access.isPro){
+    console.log("🟢 PRO USER");
+  }
+  else if(access.isAdmin){
+    console.log("👑 ADMIN USER");
   }
 
   console.log("🎯 ACCESS FINAL:", access);
 
-  // RESET
-  // resetGlobalBlur();
+  // ================= RESET UI =================
   removeGhostOverlays?.();
   unlockBaseUI();
 
-  // BODY CLASS
   document.body.classList.remove(
     "is-free",
     "is-investor",
@@ -4073,33 +4087,26 @@ document.addEventListener("rb_plan_loaded", () => {
     "is-admin"
   );
 
-  if(access.isAdmin) document.body.classList.add("is-admin");
-  else if(access.isPro) document.body.classList.add("is-pro");
-  else if(access.isInvestor) document.body.classList.add("is-investor");
-  else document.body.classList.add("is-free");
+  // ================= SET CLASSE =================
+  if(access.isAdmin){
+    document.body.classList.add("is-admin");
+  }
+  else if(access.isPro){
+    document.body.classList.add("is-pro");
+  }
+  else if(access.isInvestor){
+    document.body.classList.add("is-investor");
+  }
+  else{
+    document.body.classList.add("is-free");
+  }
 
-  // ✅ QUI DENTRO (corretto)
+  // ================= UNLOCK =================
   if(access.isPro || access.isAdmin){
     unlockProUI();
   }
 
 });
-
-  // ================= DEBUG =================
-const access = window.getUserAccess();
-
-if(access.isFree){
-  console.log("🔒 FREE USER");
-}
-else if(access.isInvestor){
-  console.log("🟡 INVESTOR USER");
-}
-else if(access.isPro){
-  console.log("🟢 PRO USER");
-}
-else if(access.isAdmin){
-  console.log("👑 ADMIN USER");
-}
 
   // ================= OPTIONAL FIX =================
   if(!window.planCorrected){
