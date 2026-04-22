@@ -3545,8 +3545,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if(access.isPro || access.isAdmin){
-      unlockProUI();
-    }
+  unlockProUI();
+  forceUnlockUI();
+}
+
+if(access.isInvestor){
+  console.log("🟡 INVESTOR → FORCE UNLOCK (BLOCK 1)");
+
+  unlockBaseUI();
+  forceUnlockUI();
+}
 
     // ================= TOOL SYNC =================
     applySelectedMortgage();
@@ -4103,8 +4111,16 @@ document.addEventListener("rb_plan_loaded", () => {
 
   // ================= UNLOCK =================
   if(access.isPro || access.isAdmin){
-    unlockProUI();
-  }
+  unlockProUI();
+  forceUnlockUI();
+}
+
+if(access.isInvestor){
+  console.log("🟡 INVESTOR → FORCE UNLOCK (BLOCK 2)");
+
+  unlockBaseUI();
+  forceUnlockUI();
+}
 
 });
 
@@ -4326,6 +4342,8 @@ window.forceCorrectPlan = function(){
 
 function unlockBaseUI(){
 
+  console.log("🧹 BASE UI UNLOCK");
+
   document.querySelectorAll(`
     .home-blur-overlay,
     .results-overlay,
@@ -4334,5 +4352,54 @@ function unlockBaseUI(){
 
   document.body.classList.remove("no-scroll");
   document.body.style.pointerEvents = "auto";
+
+}
+
+
+// =============================
+// 🔥 FORCE UNLOCK UI (FIX DEFINITIVO)
+// =============================
+
+function forceUnlockUI(){
+
+  console.log("🔥 FORCE UNLOCK UI");
+
+  // 🔓 rimuove blur / lock
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock
+  `).forEach(el => {
+
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+
+  });
+
+  // 🧹 rimuove TUTTI gli overlay residui
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .lock-overlay,
+    .smart-overlay,
+    .paywall-mini,
+    [data-paywall]
+  `).forEach(el => {
+
+    if(el.id === "register-popup") return;
+
+    el.remove();
+
+  });
 
 }
