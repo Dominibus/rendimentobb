@@ -3542,9 +3542,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// =====================================
+// ===============================================
 // 🔥 WAIT FIREBASE READY (CRITICO)
-// =====================================
+// ===============================================
 
 function waitForFirebaseReady(callback){
 
@@ -3554,7 +3554,6 @@ function waitForFirebaseReady(callback){
 
     attempts++;
 
-    // ✅ FIREBASE PRONTO DAVVERO
     if(window.firebaseReady && window.currentPlan){
 
       clearInterval(interval);
@@ -3567,7 +3566,6 @@ function waitForFirebaseReady(callback){
       callback();
     }
 
-    // fallback sicurezza
     if(attempts > 50){
       clearInterval(interval);
       console.warn("⚠️ Firebase timeout → continuo comunque");
@@ -3577,35 +3575,75 @@ function waitForFirebaseReady(callback){
   }, 100);
 
 }
-  // ===============================
-  // MUTUI → TOOL SYNC
-  // ===============================
 
-  applySelectedMortgage();
 
-  // ===============================
-  // CHECK RATE UPDATE (se esiste)
-  // ===============================
+// ===============================================
+// 🚀 APP INIT CORRETTO (DOPO FIREBASE)
+// ===============================================
 
-  if(typeof checkMortgageRateUpdate === "function"){
-    checkMortgageRateUpdate();
-  }
+document.addEventListener("DOMContentLoaded", () => {
 
-  // ===============================
-  // AUTO CITY REDIRECT (se esiste)
-  // ===============================
+  console.log("🚀 App init (WAIT FIREBASE)");
 
-  if(typeof handleAutoCityRedirect === "function"){
-    handleAutoCityRedirect();
-  }
+  document.body.classList.add("app-loading");
+
+  waitForFirebaseReady(() => {
+
+    console.log("🔥 APP START REALE");
+
+    const access = window.getUserAccess?.();
+
+    console.log("🔐 ACCESS:", access);
+
+    // ================= RESET CLASSI =================
+    document.body.classList.remove(
+      "is-free",
+      "is-investor",
+      "is-pro",
+      "is-admin"
+    );
+
+    if(access.isAdmin){
+      document.body.classList.add("is-admin");
+    }
+    else if(access.isPro){
+      document.body.classList.add("is-pro");
+    }
+    else if(access.isInvestor){
+      document.body.classList.add("is-investor");
+    }
+    else{
+      document.body.classList.add("is-free");
+    }
+
+    if(access.isPro || access.isAdmin){
+      unlockProUI();
+    }
+
+    // ================= TOOL SYNC =================
+    applySelectedMortgage();
+
+    if(typeof checkMortgageRateUpdate === "function"){
+      checkMortgageRateUpdate();
+    }
+
+    if(typeof handleAutoCityRedirect === "function"){
+      handleAutoCityRedirect();
+    }
+
+    document.body.classList.remove("app-loading");
+    document.body.classList.add("app-ready");
+
+  });
 
 });
 
-// ================= FIREBASE SYNC FIX (CRITICO) =================
 
-  // ===============================
-  // 🔥 AUTO STRIPE DOPO LOGIN
-  // ===============================
+// ===============================================
+// 🔥 AUTO STRIPE DOPO LOGIN
+// ===============================================
+
+document.addEventListener("rb_auth_ready", () => {
 
   const pendingPlan = localStorage.getItem("pending_plan");
 
@@ -3618,18 +3656,20 @@ function waitForFirebaseReady(callback){
     setTimeout(()=>{
 
       if(typeof window.buyPlan === "function"){
-  window.buyPlan(pendingPlan);
-}else{
-  console.error("❌ buyPlan non trovata");
+        window.buyPlan(pendingPlan);
+      }else{
+        console.error("❌ buyPlan non trovata");
 
-  showToast(
-    t("Errore sistema pagamento","Payment system error"),
-    "error"
-  );
-}
+        showToast(
+          t("Errore sistema pagamento","Payment system error"),
+          "error"
+        );
+      }
 
     }, 500);
   }
+
+});
 
   // ===============================
   // 🔥 CASO 1 → CALCOLO MAI PARTITO
