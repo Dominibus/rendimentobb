@@ -2808,45 +2808,80 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   });
 
+ // =====================================
+// 🔥 HOME OVERLAY CONTROL (FINAL)
+// =====================================
+
+setTimeout(()=>{
+
+  const access = window.getUserAccess?.();
+  const overlay = document.querySelector(".home-blur-overlay");
+
+  if(!overlay || !access) return;
+
+  console.log("🎯 OVERLAY CHECK:", access);
+
   // =====================================
-  // 🔥 HOME OVERLAY CONTROL (CRITICO)
+  // 🔥 FIX CLICK CTA (SEMPRE ATTIVO)
   // =====================================
 
-  setTimeout(()=>{
+  const buttons = overlay.querySelectorAll("button");
 
-    const access = window.getUserAccess?.();
-    const overlay = document.querySelector(".home-blur-overlay");
+  buttons.forEach(btn => {
+    btn.onclick = () => {
+      console.log("🔥 CLICK OVERLAY CTA");
 
-    if(!overlay || !access) return;
+      triggerUpgradeFlow({ source:"home_overlay" });
+    };
+  });
 
-    console.log("🎯 OVERLAY CHECK:", access);
+  // =====================================
+  // 🟢 PRO / ADMIN → rimuovi overlay
+  // =====================================
 
-    // 🟢 PRO / ADMIN → rimuovi completamente
-    if(access.isPro || access.isAdmin){
-      overlay.remove();
-      return;
+  if(access.isPro || access.isAdmin){
+    overlay.remove();
+    return;
+  }
+
+  // =====================================
+  // 🟡 INVESTOR → overlay soft
+  // =====================================
+
+  if(access.isInvestor){
+
+    overlay.style.background = "rgba(255,255,255,0.85)";
+
+    const title = overlay.querySelector(".overlay-title");
+    const text  = overlay.querySelector(".overlay-text");
+
+    if(title){
+      title.innerText = "🚀 Sblocca il vero potenziale";
     }
 
-    // 🟡 INVESTOR → overlay soft
-    if(access.isInvestor){
-
-      overlay.style.background = "rgba(255,255,255,0.85)";
-
-      const title = overlay.querySelector(".overlay-title");
-      const text = overlay.querySelector(".overlay-text");
-
-      if(title) title.innerText = "🚀 Sblocca il vero potenziale";
-      if(text) text.innerText = "Stai usando solo il 30% delle capacità";
-
-      return;
+    if(text){
+      text.innerText = "Stai usando solo il 30% delle capacità";
     }
 
-    // 🔴 FREE → lasciamo aggressivo
+    return;
+  }
+
+  // =====================================
+  // 🔴 FREE → overlay + lock KPI
+  // =====================================
+
+  if(access.isFree){
+
     console.log("🔒 HOME OVERLAY FREE ACTIVE");
 
-  }, 500); // leggermente più alto per sicurezza Firebase
+    // 🔒 forza blur KPI (sicurezza)
+    document.querySelectorAll(".metric-card").forEach(el=>{
+      el.classList.add("pro-blur");
+    });
 
-});
+  }
+
+}, 400);
 // ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
