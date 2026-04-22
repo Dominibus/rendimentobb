@@ -4359,16 +4359,18 @@ function unlockBaseUI(){
 
 
 // =============================
-// 🔥 FORCE UNLOCK UI (FIX DEFINITIVO)
+// 🔥 FORCE UNLOCK UI (FINAL FIX REALE)
 // =============================
 
 function forceUnlockUI(){
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
 
   console.log("🔥 FORCE UNLOCK UI SAFE:", access);
 
-  // 🟢 SOLO PRO / ADMIN
+  // =========================
+  // 🟢 PRO / ADMIN → FULL UNLOCK
+  // =========================
   if(access.isPro || access.isAdmin){
 
     document.querySelectorAll(`
@@ -4408,14 +4410,49 @@ function forceUnlockUI(){
 
   }
 
-  // 🟡 INVESTOR → NON TOCCARE LOCK
+  // =========================
+  // 🟡 INVESTOR → PARTIAL UNLOCK (QUESTO MANCAVA)
+  // =========================
   else if(access.isInvestor){
-    console.log("🟡 INVESTOR → no force unlock");
+
+    console.log("🟡 INVESTOR → PARTIAL UNLOCK");
+
+    // 🔓 rimuove blur globale
+    document.querySelectorAll(`
+      .pro-blur,
+      .locked-content
+    `).forEach(el => {
+
+      el.classList.remove("pro-blur", "locked-content");
+      el.style.filter = "none";
+      el.style.opacity = "1";
+
+    });
+
+    // 🔒 mantiene blocco SOLO su pro-only
+    document.querySelectorAll(".pro-only").forEach(el => {
+      el.classList.add("locked");
+    });
+
+    // 🔥 nasconde overlay globale (altrimenti sembra free)
+    document.querySelectorAll(`
+      .home-blur-overlay,
+      .results-overlay
+    `).forEach(el => el.remove());
+
   }
 
-  // 🔴 FREE → NON TOCCARE
+  // =========================
+  // 🔴 FREE → LOCK NORMALE
+  // =========================
   else{
-    console.log("🔴 FREE → no force unlock");
+
+    console.log("🔴 FREE → no unlock");
+
+    document.querySelectorAll(".pro-only").forEach(el => {
+      el.classList.add("pro-blur");
+    });
+
   }
 
 }
