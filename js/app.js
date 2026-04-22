@@ -1292,7 +1292,7 @@ ${message}
 
 // ================= SMART PAYWALL (REAL MODAL VERSION) =================
 
-function showUpgradePopup(roi){
+window.showUpgradePopup = function(roi){
 
   const access = window.getUserAccess();
 
