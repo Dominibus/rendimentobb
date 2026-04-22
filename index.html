@@ -1923,14 +1923,15 @@ const isFreeUser = access.isFree;
 // ================= WAIT PLAN =================
 function waitForUnlock(){
 
-  if(window.currentPlan){
+  const access = window.getUserAccess?.();
+
+  if(access && (access.isPro || access.isInvestor)){
     unlockHomeUI();
   }else{
     setTimeout(waitForUnlock, 300);
   }
 
 }
-
 
 // ================= EVENT =================
 document.addEventListener("rb_plan_loaded", ()=>{
