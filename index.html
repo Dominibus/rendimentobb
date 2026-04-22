@@ -1474,7 +1474,7 @@ window.quickROI = function(){
 
   const isPro = access.isPro || access.isAdmin;
   const isInvestor = access.isInvestor;
-  const isLogged = access.isLogged;
+  const isLogged = !!window.currentUser;
   const isFreeUser = access.isFree;
 
   // ================= GUEST POPUP =================
@@ -1528,13 +1528,18 @@ window.quickROI = function(){
   // ================= FIX DATI (CRITICO) =================
   const roi = safeNum(result?.roi, 0);
 
-  const netAnnual = safeNum(
-    result?.netAnnual ??
-    result?.net ??
-    result?.annualProfit ??
-    result?.cashflow ??
-    0
-  );
+  let netAnnual =
+  result?.netAnnual ??
+  result?.net ??
+  result?.annualProfit ??
+  result?.cashflow;
+
+if(!netAnnual && result?.revenue){
+  // 🔥 fallback intelligente (CRITICO)
+  netAnnual = result.revenue * (1 - (cost/100));
+}
+
+netAnnual = safeNum(netAnnual, 0);
 
   const revenue = safeNum(result?.revenue, 0);
   const breakEven = safeNum(result?.breakEvenYears ?? result?.breakEven ?? 0);
