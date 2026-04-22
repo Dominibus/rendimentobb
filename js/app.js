@@ -1303,9 +1303,9 @@ window.showUpgradePopup = function(roi){
 
   const access = window.getUserAccess();
 
-  if(access.canSeeFullAnalysis){
-    return;
-  }
+  if(access.canSeeFullAnalysis || access.isInvestor){
+  return;
+}
 
   const safeROI = Number(roi || 0);
 
@@ -1414,9 +1414,9 @@ function renderSmartInvestmentAlert(roi){
 
   const access = window.getUserAccess();
 
-  if(access.canSeeFullAnalysis){
-    return;
-  }
+  if(access.canSeeFullAnalysis || access.isInvestor){
+  return;
+}
 
   const container = document.getElementById("smart-investment-alert");
   if(!container) return;
@@ -2214,7 +2214,11 @@ const net = Number(
     });
 
     // ================= SMART PAYWALL (MODAL) =================
-       showUpgradePopup(roi);
+       const access = window.getUserAccess();
+
+if(!access.isInvestor){
+  showUpgradePopup(roi);
+}
 
 // ================= UI BASE (FIX REAL DATA ONLY) =================
 
