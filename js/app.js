@@ -1895,8 +1895,8 @@ function runPostAnalysis(result, context){
   // ================= PAYWALL =================
 
   if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 10){
-    showUpgradeModal(roi);
-  }
+  // showUpgradeModal(roi); ❌ DISABILITATO
+}
   else if(access.isInvestor && roi > 0){
     console.log("🟡 INVESTOR → NO SMART OVERLAY");
     renderSmartInvestmentAlert(roi);
@@ -2205,6 +2205,9 @@ const net = Number(
       priceNight,
       expenses
     });
+
+    // ================= SMART PAYWALL (MODAL) =================
+       showUpgradePopup(roi);
 
 // ================= UI BASE (FIX REAL DATA ONLY) =================
 
