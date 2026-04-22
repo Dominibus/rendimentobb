@@ -1805,15 +1805,13 @@ if(overlay){
 
   // ================= AUTO ROI =================
   if(document.getElementById("qr_price")){
-    waitForROIEngine(() => {
+  waitForROIEngine(() => {
 
-      waitForUnlock();
+    // 🔥 sostituisce waitForUnlock
+    unlockHomeUI();
 
-      // ❌ NON calcolare subito → aspetta il piano
-     // quickROI();
-
-    });
-  }
+  });
+}
 
   // ================= INPUT LISTENERS (ANTI DUPLICATI) =================
   if(!window.__roiListenersAttached){
