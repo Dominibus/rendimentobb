@@ -2246,6 +2246,49 @@ else{
   },150);
 
 }
+if(!accessFinal || accessFinal.isLogged === false){
+  console.warn("⏳ access non pronto → skip unlock");
+  return;
+}
+    
+// =====================================
+// 🔓 UNLOCK RESULTS (FIX DEFINITIVO)
+// =====================================
+
+const accessFinal = window.getUserAccess?.();
+
+if(!accessFinal || accessFinal.isLogged === false){
+  console.warn("⏳ access non pronto → skip unlock");
+  return;
+}
+
+console.log("🔓 UNLOCK RESULTS:", accessFinal);
+
+// 🟢 PRO / ADMIN → sblocca tutto
+if(accessFinal.isPro || accessFinal.isAdmin){
+
+  document.querySelectorAll(".metric-card").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  document.querySelector(".home-blur-overlay")?.remove();
+}
+
+// 🟡 INVESTOR → sblocca ma mantiene upsell leggero
+else if(accessFinal.isInvestor){
+
+  document.querySelectorAll(".metric-card").forEach(el=>{
+    el.classList.remove("pro-blur");
+  });
+
+  const overlay = document.querySelector(".home-blur-overlay");
+  if(overlay){
+    overlay.style.opacity = "0.15";
+    overlay.style.pointerEvents = "none";
+  }
+}
+
+// 🔴 FREE → resta bloccato (non fare nulla)
 
     // ================= HIDDEN DATA MESSAGE =================
 
@@ -2253,7 +2296,7 @@ const hiddenBox = document.getElementById("hidden-roi-msg");
 
 if(hiddenBox){
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
 
   if(access.isFree){
 
