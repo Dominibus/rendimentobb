@@ -15260,3 +15260,19 @@ body.is-admin .locked-overlay{
   pointer-events:auto;
   cursor:pointer;
 }
+
+/* =====================================
+🔥 APP LOADING STATE (NO BLANK SCREEN)
+===================================== */
+
+.app-loading .blur-content,
+.app-loading .premium-lock,
+.app-loading .locked-section {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* opzionale: micro skeleton feel */
+.app-loading .hero {
+  opacity: 0.9;
+}
