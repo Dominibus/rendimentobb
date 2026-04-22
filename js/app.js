@@ -2788,20 +2788,13 @@ function renderCityROIChart(){
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
 
-  // dashboard chart
+  // ================= INIT BASE =================
   renderCityROIChart();
 
-});
-
-// 🔥 FIX CTA MULTIPLE
-document.addEventListener("DOMContentLoaded", () => {
-
+  // ================= FIX CTA =================
   document.querySelectorAll(".btn-main").forEach(btn => {
 
-    // 🔥 NON rimuovere mai bottoni
-    // 🔥 ma evita doppio click bug
-
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", () => {
 
       if(btn.dataset.clicked) return;
 
@@ -2815,8 +2808,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-});
+  // =====================================
+  // 🔥 HOME OVERLAY CONTROL (CRITICO)
+  // =====================================
 
+  setTimeout(()=>{
+
+    const access = window.getUserAccess?.();
+    const overlay = document.querySelector(".home-blur-overlay");
+
+    if(!overlay || !access) return;
+
+    console.log("🎯 OVERLAY CHECK:", access);
+
+    // 🟢 PRO / ADMIN → rimuovi completamente
+    if(access.isPro || access.isAdmin){
+      overlay.remove();
+      return;
+    }
+
+    // 🟡 INVESTOR → overlay soft
+    if(access.isInvestor){
+
+      overlay.style.background = "rgba(255,255,255,0.85)";
+
+      const title = overlay.querySelector(".overlay-title");
+      const text = overlay.querySelector(".overlay-text");
+
+      if(title) title.innerText = "🚀 Sblocca il vero potenziale";
+      if(text) text.innerText = "Stai usando solo il 30% delle capacità";
+
+      return;
+    }
+
+    // 🔴 FREE → lasciamo aggressivo
+    console.log("🔒 HOME OVERLAY FREE ACTIVE");
+
+  }, 500); // leggermente più alto per sicurezza Firebase
+
+});
 // ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
