@@ -115,28 +115,20 @@ window.alert = function(msg){
 };
 // ================= SAFE GLOBAL EARLY FIX =================
 
-// 🔥 USA SOLO RB_USER (gestito da access-control.js)
+// 🔥 USA SOLO FIREBASE (SINGLE SOURCE OF TRUTH)
 window.getUserAccess = function(){
-
-  const plan = window.currentPlan || "free";
-  const role = window.userRole || "user";
-  const isLogged = !!window.currentUser;
-
-  const isAdmin = role === "admin";
-  const isPro =
-    plan === "pro" || plan === "pro_yearly";
-  const isInvestor =
-    plan === "investor";
-
-  return {
-    isLogged,
-    isAdmin,
-    isPro,
-    isInvestor,
-    isFree: !isAdmin && !isPro && !isInvestor,
-    canSeeFullAnalysis: isAdmin || isPro,
-    canDownloadPDF: isAdmin || isPro
-  };
+  return window.RB_USER
+    ? {
+        ...window.RB_USER,
+        isLogged: !!window.currentUser
+      }
+    : {
+        isLogged: false,
+        isFree: true,
+        isPro: false,
+        isInvestor: false,
+        isAdmin: false
+      };
 };
 
 // ❌ DISABILITA vecchio sistema (evita conflitti)
@@ -3576,7 +3568,6 @@ document.addEventListener("DOMContentLoaded", () => {
 if(access.isInvestor){
   console.log("🟡 INVESTOR → FORCE UNLOCK (BLOCK 1)");
 
-  unlockBaseUI();
   forceUnlockUI();
 }
 
