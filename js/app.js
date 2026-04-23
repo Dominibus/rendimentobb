@@ -117,18 +117,26 @@ window.alert = function(msg){
 
 // 🔥 USA SOLO FIREBASE (SINGLE SOURCE OF TRUTH)
 window.getUserAccess = function(){
-  return window.RB_USER
-    ? {
-        ...window.RB_USER,
-        isLogged: !!window.currentUser
-      }
-    : {
-        isLogged: false,
-        isFree: true,
-        isPro: false,
-        isInvestor: false,
-        isAdmin: false
-      };
+
+  if(!window.RB_USER){
+    return {
+      isLogged: !!window.currentUser,
+      isFree: true,
+      isPro: false,
+      isInvestor: false,
+      isAdmin: false,
+      canSeeFullAnalysis: false
+    };
+  }
+
+  return {
+    ...window.RB_USER,
+    isLogged: !!window.currentUser,
+    canSeeFullAnalysis: !!(
+      window.RB_USER.isPro ||
+      window.RB_USER.isAdmin
+    )
+  };
 };
 
 // ❌ DISABILITA vecchio sistema (evita conflitti)
@@ -537,6 +545,9 @@ function requirePlan(requiredPlan){
 // =====================================
 
 // ================= FUNNEL =================
+
+if(window.__upgradeShown) return;
+window.__upgradeShown = true;
 
 window.triggerUpgradeFlow = function(context = {}){
 
@@ -1349,8 +1360,8 @@ window.showUpgradePopup = function(roi){
 
       <h2 style="margin-bottom:10px;">
         🔒 ${t(
-          "Stai per perdere soldi",
-          "You are about to lose money"
+          "Stai vedendo solo una parte dei dati",
+          "You're only seeing part of the data"
         )}
       </h2>
 
