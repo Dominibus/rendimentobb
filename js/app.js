@@ -2266,7 +2266,6 @@ else{
 
 console.log("🔓 UNLOCK RESULTS:", access);
     // 🔥 USA SOLO IL SISTEMA CENTRALE
-forceUnlockUI();
 
 const cards = document.querySelectorAll(".metric-card");
 
@@ -2284,42 +2283,27 @@ if(access.isPro || access.isAdmin){
 }
 
 
-// 🟡 INVESTOR → parziale (NO blur, blocco SOLO PRO)
+// 🟡 INVESTOR → parziale (SOLO blur su PRO)
 else if(access.isInvestor){
 
   console.log("🟡 INVESTOR → PARTIAL UNLOCK");
 
   cards.forEach(el => {
 
-    // rimuove blur globale
-    el.classList.remove("pro-blur");
+    // 🔥 reset totale
+    el.classList.remove("locked", "pro-blur");
 
-    // blocca solo contenuti PRO
+    const lock = el.querySelector(".lock-overlay");
+    if(lock) lock.remove();
+
+    // 🔒 blocca SOLO contenuti PRO
     if(el.classList.contains("pro-only")){
-
-      el.classList.add("locked");
-
-      // crea overlay solo se non esiste
-      if(!el.querySelector(".lock-overlay")){
-        el.insertAdjacentHTML("beforeend", `
-          <div class="lock-overlay">
-            🔒 PRO
-          </div>
-        `);
-      }
-
-    } else {
-
-      // sicurezza: sblocca eventuali lock residui
-      el.classList.remove("locked");
-
-      const lock = el.querySelector(".lock-overlay");
-      if(lock) lock.remove();
+      el.classList.add("pro-blur");
     }
 
   });
 
-  // overlay home attenuato (non bloccante)
+  // overlay home soft
   const overlay = document.querySelector(".home-blur-overlay");
 
   if(overlay){
@@ -2329,7 +2313,9 @@ else if(access.isInvestor){
 
 }
 
-
+    setTimeout(() => {
+  forceUnlockUI();
+}, 50);
     // ================= HIDDEN DATA MESSAGE =================
 
 const hiddenBox = document.getElementById("hidden-roi-msg");
@@ -3559,25 +3545,17 @@ document.addEventListener("DOMContentLoaded", () => {
    if(access.isPro || access.isAdmin){
 
   unlockProUI();
-  forceUnlockUI();
 
-}
-else if(access.isInvestor){
-
-  console.log("🟡 INVESTOR → FULL PARTIAL UNLOCK");
+}else{
 
   unlockBaseUI();
-  forceUnlockUI(); // 🔥 QUESTA È LA CHIAVE
 
 }
-else{
 
-  console.log("🔴 FREE USER");
-
-  unlockBaseUI();
+// 🔥 SOLO UNA VOLTA (SINCRONIZZAZIONE FINALE)
+setTimeout(()=>{
   forceUnlockUI();
-
-}
+}, 50);
 
     // ================= TOOL SYNC =================
     applySelectedMortgage();
@@ -4146,21 +4124,14 @@ if(access.isInvestor){
   // ================= UNLOCK =================
   if(access.isPro || access.isAdmin){
   unlockProUI();
-  forceUnlockUI();
+}else{
+  unlockBaseUI();
 }
 
-if(access.isPro || access.isAdmin){
-  unlockProUI();
+// 🔥 UNA SOLA VOLTA
+setTimeout(()=>{
   forceUnlockUI();
-}
-else if(access.isInvestor){
-  unlockBaseUI();
-  forceUnlockUI(); // 🔥 MANCAVA QUI
-}
-else{
-  unlockBaseUI();
-  forceUnlockUI();
-}
+}, 50);
 
 });
 
