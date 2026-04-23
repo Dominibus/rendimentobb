@@ -1871,23 +1871,31 @@ function unlockHomeUI(){
   // ================= INVESTOR =================
   if(isInvestor){
 
-    console.log("🟡 INVESTOR UI (SAFE)");
+  console.log("🟡 INVESTOR → CLEAN + PARTIAL LOCK");
 
-    // blocca SOLO elementi pro
-    document.querySelectorAll(".metric-card.pro-only").forEach(el => {
+  // 🔥 1. RESET COMPLETO (CRITICO)
+  document.querySelectorAll(".metric-card").forEach(el=>{
+    el.classList.remove("locked", "pro-blur");
 
-      el.classList.add("locked");
+    const lock = el.querySelector(".lock-overlay");
+    if(lock) lock.remove();
+  });
 
-      if(!el.querySelector(".lock-overlay")){
-        el.insertAdjacentHTML("beforeend", `
-          <div class="lock-overlay">🔒 Pro</div>
-        `);
-      }
+  // 🔥 2. BLOCCA SOLO PRO
+  document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
 
-    });
+    el.classList.add("locked");
 
-    return;
-  }
+    if(!el.querySelector(".lock-overlay")){
+      el.insertAdjacentHTML("beforeend", `
+        <div class="lock-overlay">🔒 Pro</div>
+      `);
+    }
+
+  });
+
+  return;
+}
 
   // ================= PRO =================
   if(isPro){
@@ -1908,23 +1916,6 @@ function unlockHomeUI(){
   }
 
 }
-
-
-// ================= EVENT PLAN READY =================
-document.addEventListener("rb_plan_loaded", ()=>{
-
-  console.log("🔄 PLAN LOADED → SYNC HOME");
-
-  unlockHomeUI();
-
-  // 🔥 ricalcolo dati con piano corretto
-  setTimeout(() => {
-    if(typeof quickROI === "function"){
-      quickROI();
-    }
-  }, 100);
-
-});
 
 // ================= PLAN SYNC (FIX CRITICO) =================
 document.addEventListener("rb_plan_loaded", ()=>{
