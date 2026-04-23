@@ -15460,3 +15460,13 @@ body.is-investor .hero::before {
   opacity: 0 !important;
   backdrop-filter: none !important;
 }
+
+/* =========================
+🟡 INVESTOR UNLOCK FIX
+========================= */
+
+body.is-investor .locked-section {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
