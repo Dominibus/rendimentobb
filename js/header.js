@@ -312,11 +312,6 @@ function initHeaderInteractions(){
 
   updateLangButtons(localStorage.getItem("rb_lang") || "it");
 
-  // 🔥 SYNC PLAN
-  window.addEventListener("rb_plan_ready", ()=>{
-    renderUser(auth.currentUser || null);
-  });
-
   // 🔥 HEADER SCROLL UX
   window.addEventListener("scroll", () => {
     const header = document.querySelector(".rb-header");
