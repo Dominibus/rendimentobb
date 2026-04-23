@@ -195,6 +195,23 @@ document.addEventListener("rb_language_changed", () => {
 
       renderUser(user);
 
+      // 🔥 FIX CRITICO INVESTOR UI
+if(RB.isInvestor && !RB.isPro){
+
+  console.log("🟡 HEADER → FORCE INVESTOR UI CLEAN");
+
+  // rimuove SOLO blocchi FREE hard
+  document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
+    el.remove();
+  });
+
+  document.querySelectorAll(".blur.locked").forEach(el=>{
+    el.classList.remove("locked");
+    el.style.filter = "blur(4px)"; // 👈 mantiene teaser
+  });
+
+}
+
       if(RB.isPro || RB.isAdmin){
         unlockUI();
       }
