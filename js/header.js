@@ -228,7 +228,9 @@ onAuthStateChanged(auth, (user) => {
       // 🟡 INVESTOR → PARTIAL UNLOCK (QUESTO MANCAVA)
       else if(RB.isInvestor){
         console.log("🟡 INVESTOR → PARTIAL UNLOCK");
-        unlockBaseUI?.(); // 👈 IMPORTANTISSIMO
+        if(typeof window.unlockBaseUI === "function"){
+  window.unlockBaseUI();
+}
       }
 
       // 🔴 FREE → BLOCCATO
