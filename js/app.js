@@ -4106,6 +4106,17 @@ document.addEventListener("rb_plan_loaded", () => {
 
   console.log("🎯 ACCESS FINAL:", access);
 
+// 🔥 FIX OVERLAY HOME INVESTOR (CRITICO)
+if(access.isInvestor){
+
+  console.log("🟡 FIX HOME OVERLAY INVESTOR");
+
+  document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+    el.style.display = "none";
+  });
+
+}
+
   // ================= RESET UI =================
   removeGhostOverlays?.();
   unlockBaseUI();
