@@ -215,14 +215,8 @@ function waitPlanAndRender(user){
 
     // 🔥 READY VERO (NON FAKE)
     const ready =
-      access &&
-      access.isLogged === true &&          // 👈 UTENTE REALE
-      (
-        access.isInvestor === true ||
-        access.isPro === true ||
-        access.isAdmin === true ||
-        access.isFree === true
-      );
+  access &&
+  typeof access.isFree !== "undefined";
 
     if(!ready){
 
