@@ -1776,49 +1776,20 @@ function waitForUserReady(callback){
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
 
- // 🔥 FIX OVERLAY HOME (CRITICO)
-const overlay = document.querySelector(".home-blur-overlay");
+  // 🔥 FIX OVERLAY HOME (CRITICO)
+  const overlay = document.querySelector(".home-blur-overlay");
 
-if(overlay){
+  if(overlay){
+    const access = window.getUserAccess?.() || {};
 
-  const access = window.getUserAccess?.() || {};
-
-  if(access.isPro || access.isInvestor){
-    overlay.style.display = "none";
-  } else {
-    overlay.style.display = "flex";
+    if(access.isPro || access.isInvestor){
+      overlay.style.display = "none";
+    } else {
+      overlay.style.display = "flex";
+    }
   }
 
-}
-
-  // ================= WAIT ROI ENGINE =================
-  function waitForROIEngine(callback){
-
-    let tries = 0;
-
-    const interval = setInterval(()=>{
-
-      if(typeof calculateROI === "function"){
-        clearInterval(interval);
-        callback();
-      }
-
-      if(tries > 20){
-        clearInterval(interval);
-        console.warn("❌ ROI engine non caricato");
-      }
-
-      tries++;
-
-    }, 200);
-
-  }
-
-  // ================= AUTO ROI =================
-  if(document.getElementById("qr_price")){
-  }
-
-  // ================= INPUT LISTENERS (ANTI DUPLICATI) =================
+  // ================= INPUT LISTENERS =================
   if(!window.__roiListenersAttached){
 
     window.__roiListenersAttached = true;
@@ -1837,7 +1808,7 @@ if(overlay){
     }
   });
 
-  // ================= 🌆 RESTORE CITY (UNICO) =================
+  // ================= RESTORE CITY =================
   const saved = localStorage.getItem("selected_city");
 
   const map = {
@@ -1855,7 +1826,7 @@ if(overlay){
 });
 
 
-// ================= 🔓 HOME UI SYNC (LEAN – APP DRIVEN) =================
+// ================= 🔓 HOME UI SYNC =================
 function unlockHomeUI(){
 
   const access = window.getUserAccess?.() || {};
@@ -1863,51 +1834,43 @@ function unlockHomeUI(){
 
   console.log("🔥 HOME UI SYNC:", access);
 
-  // ================= BASE =================
   document.body.classList.toggle("paid-user", isPro || isInvestor);
-
-  // ❌ NON rimuoviamo overlay globali → gestiti da app.js
 
   // ================= INVESTOR =================
   if(isInvestor){
 
-  console.log("🟡 INVESTOR → CLEAN + PARTIAL LOCK");
+    console.log("🟡 INVESTOR → CLEAN + PARTIAL LOCK");
 
-  // 🔥 1. RESET COMPLETO (CRITICO)
-  document.querySelectorAll(".metric-card").forEach(el=>{
-    el.classList.remove("locked", "pro-blur");
+    document.querySelectorAll(".metric-card").forEach(el=>{
+      el.classList.remove("locked","pro-blur");
 
-    const lock = el.querySelector(".lock-overlay");
-    if(lock) lock.remove();
-  });
+      const lock = el.querySelector(".lock-overlay");
+      if(lock) lock.remove();
+    });
 
-  // 🔥 2. BLOCCA SOLO PRO
-  document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+    document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+      el.classList.add("locked");
 
-    el.classList.add("locked");
+      if(!el.querySelector(".lock-overlay")){
+        el.insertAdjacentHTML("beforeend", `
+          <div class="lock-overlay">🔒 Pro</div>
+        `);
+      }
+    });
 
-    if(!el.querySelector(".lock-overlay")){
-      el.insertAdjacentHTML("beforeend", `
-        <div class="lock-overlay">🔒 Pro</div>
-      `);
-    }
-
-  });
-
-  return;
-}
+    return;
+  }
 
   // ================= PRO =================
   if(isPro){
 
     console.log("🟢 PRO UI FULL");
 
-    // rimuove blocchi
     document.querySelectorAll(`
       .metric-card,
       .pro-only
     `).forEach(el=>{
-      el.classList.remove("locked", "pro-blur");
+      el.classList.remove("locked","pro-blur");
 
       const lock = el.querySelector(".lock-overlay");
       if(lock) lock.remove();
@@ -1917,31 +1880,67 @@ function unlockHomeUI(){
 
 }
 
-// ================= PLAN SYNC (FIX CRITICO) =================
+
+// ================= PLAN SYNC =================
 document.addEventListener("rb_plan_loaded", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
   console.log("🔄 PLAN LOADED → SYNC HOME", access);
 
-  // ❌ NON bloccare più il sync
-  // window.__planSynced = true;
-
-  // 🔥 aspetta che sia davvero pronto
   if(!access.isLogged){
     console.log("⏳ WAIT USER READY...");
     return;
   }
 
-  // 🔓 UI
+  // 🔓 primo sync
   unlockHomeUI?.();
 
-  // 🔁 ricalcolo FORZATO (CRITICO)
   setTimeout(()=>{
     quickROI?.();
   }, 150);
 
 });
+
+
+// ================= 💣 FINAL OVERRIDE (RISOLVE DEFINITIVO) =================
+document.addEventListener("rb_plan_loaded", ()=>{
+
+  setTimeout(()=>{
+
+    const access = window.getUserAccess?.() || {};
+
+    console.log("🧨 FORCE FINAL HOME FIX:", access);
+
+    if(access.isInvestor){
+
+      // 🔥 RESET COMPLETO
+      document.querySelectorAll(".metric-card").forEach(el=>{
+        el.classList.remove("locked","pro-blur");
+
+        const lock = el.querySelector(".lock-overlay");
+        if(lock) lock.remove();
+      });
+
+      // 🔒 blocca SOLO pro
+      document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+        el.classList.add("pro-blur");
+      });
+
+      // 🔥 overlay OFF
+      const overlay = document.querySelector(".home-blur-overlay");
+      if(overlay) overlay.style.display = "none";
+
+      // 🔥 refresh UI dati
+      quickROI?.();
+
+    }
+
+  }, 300); // CRITICO
+
+});
+
+
 // ================= FALLBACK =================
 window.t = window.t || ((it)=>it);
  </script>
