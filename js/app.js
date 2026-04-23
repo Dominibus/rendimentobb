@@ -4450,32 +4450,54 @@ function forceUnlockUI(){
   // =========================
   else if(access.isInvestor){
 
-    console.log("🟡 INVESTOR → PARTIAL UNLOCK");
+  console.log("🟡 INVESTOR → ULTRA CLEAN UNLOCK");
 
-    // 🔓 rimuove blur globale
-    document.querySelectorAll(`
-      .pro-blur,
-      .locked-content
-    `).forEach(el => {
+  // 🔓 RIMUOVE TUTTI I BLUR GLOBALI
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock
+  `).forEach(el => {
 
-      el.classList.remove("pro-blur", "locked-content");
-      el.style.filter = "none";
-      el.style.opacity = "1";
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
 
-    });
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
 
-    // 🔒 mantiene blocco SOLO su pro-only
-    document.querySelectorAll(".pro-only").forEach(el => {
-      el.classList.add("locked");
-    });
+  });
 
-    // 🔥 nasconde overlay globale (altrimenti sembra free)
-    document.querySelectorAll(`
-      .home-blur-overlay,
-      .results-overlay
-    `).forEach(el => el.remove());
+  // 🔒 RIAPPLICA SOLO PRO-ONLY
+  document.querySelectorAll(".pro-only").forEach(el => {
 
-  }
+    el.classList.add("locked");
+
+    if(!el.querySelector(".lock-overlay")){
+      el.insertAdjacentHTML("beforeend", `
+        <div class="lock-overlay">
+          🔒 PRO
+        </div>
+      `);
+    }
+
+  });
+
+  // 💣 KILL TOTALE OVERLAY (QUESTO ERA IL BUG)
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .paywall-mini,
+    .smart-overlay
+  `).forEach(el => el.remove());
+
+}
 
   // =========================
   // 🔴 FREE → LOCK NORMALE
