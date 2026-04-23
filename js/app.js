@@ -4509,12 +4509,13 @@ function forceUnlockUI(){
       el.style.display = "none";
     });
 
-    // 🔥 HARD REMOVE GLOBAL OVERLAY
-document.querySelectorAll(`
-  .home-blur-overlay,
-  .hero::before
-`).forEach(el => {
-  el.remove();
+ // 🔓 SBLOCCO locked-section (CRITICO)
+document.querySelectorAll(".locked-section").forEach(el=>{
+  el.classList.remove("locked-section");
+
+  el.style.filter = "none";
+  el.style.opacity = "1";
+  el.style.pointerEvents = "auto";
 });
 
   }
