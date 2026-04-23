@@ -4509,6 +4509,14 @@ function forceUnlockUI(){
       el.style.display = "none";
     });
 
+    // 🔥 HARD REMOVE GLOBAL OVERLAY
+document.querySelectorAll(`
+  .home-blur-overlay,
+  .hero::before
+`).forEach(el => {
+  el.remove();
+});
+
   }
 
   // =========================
