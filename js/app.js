@@ -2265,6 +2265,8 @@ else{
 // =====================================
 
 console.log("🔓 UNLOCK RESULTS:", access);
+    // 🔥 USA SOLO IL SISTEMA CENTRALE
+forceUnlockUI();
 
 const cards = document.querySelectorAll(".metric-card");
 
@@ -2328,26 +2330,6 @@ else if(access.isInvestor){
 }
 
 
-// 🔴 FREE → tutto bloccato
-else{
-
-  console.log("🔴 FREE → FULL LOCK");
-
-  cards.forEach(el => {
-
-    el.classList.add("pro-blur", "locked");
-
-    if(!el.querySelector(".lock-overlay")){
-      el.insertAdjacentHTML("beforeend", `
-        <div class="lock-overlay">
-          🔒 Sblocca
-        </div>
-      `);
-    }
-
-  });
-
-}
     // ================= HIDDEN DATA MESSAGE =================
 
 const hiddenBox = document.getElementById("hidden-roi-msg");
@@ -3574,16 +3556,27 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.add("is-free");
     }
 
-    if(access.isPro || access.isAdmin){
+   if(access.isPro || access.isAdmin){
+
   unlockProUI();
   forceUnlockUI();
+
 }
+else if(access.isInvestor){
 
-if(access.isInvestor){
-  console.log("🟡 INVESTOR → INIT CLEAN (NO FORCE UNLOCK)");
+  console.log("🟡 INVESTOR → FULL PARTIAL UNLOCK");
 
-  // 🔥 SOLO rimuove overlay base
   unlockBaseUI();
+  forceUnlockUI(); // 🔥 QUESTA È LA CHIAVE
+
+}
+else{
+
+  console.log("🔴 FREE USER");
+
+  unlockBaseUI();
+  forceUnlockUI();
+
 }
 
     // ================= TOOL SYNC =================
@@ -4156,8 +4149,17 @@ if(access.isInvestor){
   forceUnlockUI();
 }
 
-if(access.isInvestor){
-  console.log("🟡 INVESTOR → SKIP SECOND UNLOCK");
+if(access.isPro || access.isAdmin){
+  unlockProUI();
+  forceUnlockUI();
+}
+else if(access.isInvestor){
+  unlockBaseUI();
+  forceUnlockUI(); // 🔥 MANCAVA QUI
+}
+else{
+  unlockBaseUI();
+  forceUnlockUI();
 }
 
 });
@@ -4281,7 +4283,7 @@ window.addEventListener("scroll", () => {
 
 });
 
-// ================= START PLAN PURCHASE (FINAL FUNNEL) =================
+// ================= START PLAN PURCHASE (FINAL CLEAN) =================
 
 window.startPlanPurchase = function(plan){
 
@@ -4295,41 +4297,42 @@ window.startPlanPurchase = function(plan){
   // 👻 GUEST → REGISTER
   if(!user){
     localStorage.setItem("pending_plan", plan);
-    showRegisterPopup();
+    showRegisterPopup?.();
     return;
   }
 
   if(!plan){
     console.error("❌ Piano non valido");
-    showToast(t("Errore piano","Invalid plan"),"error");
+    showToast?.(t("Errore piano","Invalid plan"),"error");
     return;
   }
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
 
   // già attivo
   if(
     (plan === "pro" && access.isPro) ||
     (plan === "investor" && access.isInvestor)
   ){
-    showToast(
+    showToast?.(
       t("Hai già questo piano attivo","You already have this plan"),
       "info"
     );
     return;
   }
 
-  // gerarchia
+  // downgrade blocco
   if(plan === "investor" && access.isPro){
-    showToast(
+    showToast?.(
       t("Hai già un piano superiore","You already have a higher plan"),
       "info"
     );
     return;
   }
 
+  // firebase non pronto
   if(!window.firebaseReady){
-    showToast(
+    showToast?.(
       t("Attendi un secondo...","Wait a moment..."),
       "info"
     );
@@ -4340,19 +4343,19 @@ window.startPlanPurchase = function(plan){
     window.buyPlan(plan);
   }else{
     console.error("❌ buyPlan non trovata");
-    showToast(t("Errore pagamento","Payment error"),"error");
+    showToast?.(t("Errore pagamento","Payment error"),"error");
   }
 
 };
 
 
 // =============================
-// 🔥 FORCE PLAN FALLBACK
+// 🔥 PLAN CLASS SYNC (SEMPLICE)
 // =============================
 
 window.forceCorrectPlan = function(){
 
-  const plan = window.currentPlan || "free";
+  const access = window.getUserAccess?.() || {};
 
   document.body.classList.remove(
     "is-free",
@@ -4361,13 +4364,16 @@ window.forceCorrectPlan = function(){
     "is-admin"
   );
 
-  if(plan === "pro" || plan === "pro_yearly"){
+  if(access.isAdmin){
+    document.body.classList.add("is-admin");
+  }
+  else if(access.isPro){
     document.body.classList.add("is-pro");
-  } 
-  else if(plan === "investor"){
+  }
+  else if(access.isInvestor){
     document.body.classList.add("is-investor");
-  } 
-  else {
+  }
+  else{
     document.body.classList.add("is-free");
   }
 
@@ -4375,34 +4381,36 @@ window.forceCorrectPlan = function(){
 
 
 // =============================
-// 🔥 BASE UI UNLOCK (CRITICO)
+// 🔥 BASE UI UNLOCK (SAFE)
 // =============================
 
 function unlockBaseUI(){
 
-  console.log("🧹 BASE UI UNLOCK");
-
   document.querySelectorAll(`
     .home-blur-overlay,
     .results-overlay,
-    .upgrade-overlay
-  `).forEach(el => el.remove());
+    .upgrade-overlay,
+    .lock-overlay,
+    .smart-overlay,
+    .paywall-mini
+  `).forEach(el => {
+    if(el.id !== "register-popup") el.remove();
+  });
 
   document.body.classList.remove("no-scroll");
   document.body.style.pointerEvents = "auto";
-
 }
 
 
 // =============================
-// 🔥 FORCE UNLOCK UI (FINAL FIX REALE)
+// 🔥 FINAL UI CONTROL (UNICO PUNTO VERITÀ)
 // =============================
 
 function forceUnlockUI(){
 
   const access = window.getUserAccess?.() || {};
 
-  console.log("🔥 FORCE UNLOCK UI SAFE:", access);
+  console.log("🔥 FINAL UI CONTROL:", access);
 
   // =========================
   // 🟢 PRO / ADMIN → FULL UNLOCK
@@ -4447,23 +4455,40 @@ function forceUnlockUI(){
   }
 
   // =========================
-  // 🟡 INVESTOR → NON GESTITO QUI
+  // 🟡 INVESTOR → PARTIAL UNLOCK (QUI STA LA FIX)
   // =========================
   else if(access.isInvestor){
 
-    console.log("🛑 SKIP forceUnlockUI for INVESTOR");
-    return;
+    console.log("🟡 INVESTOR → PARTIAL UNLOCK CLEAN");
+
+    // 🔥 reset totale
+    document.querySelectorAll(".metric-card").forEach(el=>{
+      el.classList.remove("locked","pro-blur");
+
+      const lock = el.querySelector(".lock-overlay");
+      if(lock) lock.remove();
+    });
+
+    // 🔒 blocca SOLO PRO
+    document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+      el.classList.add("pro-blur");
+    });
+
+    // 🔥 overlay OFF
+    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
+      el.style.display = "none";
+    });
 
   }
 
   // =========================
-  // 🔴 FREE → LOCK BASE
+  // 🔴 FREE → LOCK
   // =========================
   else{
 
-    console.log("🔴 FREE → no unlock");
+    console.log("🔴 FREE USER");
 
-    document.querySelectorAll(".pro-only").forEach(el => {
+    document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
       el.classList.add("pro-blur");
     });
 
