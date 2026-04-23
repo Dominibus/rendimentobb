@@ -190,15 +190,16 @@ document.addEventListener("rb_language_changed", () => {
     }
   }
 
-  window.currentUser = user;
+window.currentUser = user;
 
-// 🔥 render immediato SEMPRE
+// 🔥 render immediato (guest / fallback)
 renderUser(user);
 
-// 🔥 sync quando piano pronto (CRITICO)
-window.addEventListener("rb_plan_ready", () => {
+// 🔥 aggiorna quando piano è pronto (VERO FIX)
+document.addEventListener("rb_plan_loaded", () => {
+  console.log("🔥 HEADER SYNC PLAN");
   renderUser(window.currentUser);
-});  
+});
 
 });
 
