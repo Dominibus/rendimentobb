@@ -4372,6 +4372,11 @@ window.forceCorrectPlan = function(){
 
 function unlockBaseUI(){
 
+  const access = window.getUserAccess?.() || {};
+
+  console.log("🧹 unlockBaseUI FIX:", access);
+
+  // 🔥 RIMUOVE OVERLAY
   document.querySelectorAll(`
     .home-blur-overlay,
     .results-overlay,
@@ -4383,10 +4388,46 @@ function unlockBaseUI(){
     if(el.id !== "register-popup") el.remove();
   });
 
+  // 🔥 RESET BASE UI
   document.body.classList.remove("no-scroll");
   document.body.style.pointerEvents = "auto";
-}
 
+  // =====================================
+  // 🟡 INVESTOR → SBLOCCA DAVVERO
+  // =====================================
+  if(access.isInvestor){
+
+    console.log("🟡 unlockBaseUI → FIX INVESTOR");
+
+    document.querySelectorAll(`
+      .results-card,
+      .metric-card
+    `).forEach(el => {
+
+      el.classList.remove(
+        "locked",
+        "locked-section",
+        "pro-blur"
+      );
+
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+
+      // 🔥 rimuove overlay interni
+      const lock = el.querySelector(".lock-overlay");
+      if(lock) lock.remove();
+
+    });
+
+    // 🔒 lascia solo PRO bloccati
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.classList.add("pro-blur");
+    });
+
+  }
+
+}
 
 // =============================
 // 🔥 FINAL UI CONTROL (UNICO PUNTO VERITÀ)
@@ -4448,7 +4489,10 @@ function forceUnlockUI(){
     console.log("🟡 INVESTOR → PARTIAL UNLOCK CLEAN");
 
     // 🔥 reset totale
-    document.querySelectorAll(".metric-card").forEach(el=>{
+    document.querySelectorAll(`
+  .metric-card,
+  .results-card
+`).forEach(el=>{
       el.classList.remove("locked","pro-blur");
 
       const lock = el.querySelector(".lock-overlay");
