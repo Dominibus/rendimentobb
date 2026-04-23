@@ -4481,44 +4481,62 @@ function forceUnlockUI(){
 
   }
 
-  // =========================
-  // 🟡 INVESTOR → PARTIAL UNLOCK (QUI STA LA FIX)
-  // =========================
-  else if(access.isInvestor){
+ // =========================
+// 🟡 INVESTOR → PARTIAL UNLOCK (FIX COMPLETO)
+// =========================
+else if(access.isInvestor){
 
-    console.log("🟡 INVESTOR → PARTIAL UNLOCK CLEAN");
+  console.log("🟡 INVESTOR → PARTIAL UNLOCK CLEAN");
 
-    // 🔥 reset totale
-    document.querySelectorAll(`
-  .metric-card,
-  .results-card
-`).forEach(el=>{
-      el.classList.remove("locked","pro-blur");
+  // ================= RESET BASE =================
+  document.querySelectorAll(`
+    .metric-card,
+    .results-card
+  `).forEach(el=>{
+    el.classList.remove("locked","pro-blur");
 
-      const lock = el.querySelector(".lock-overlay");
-      if(lock) lock.remove();
-    });
+    const lock = el.querySelector(".lock-overlay");
+    if(lock) lock.remove();
 
-    // 🔒 blocca SOLO PRO
-    document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
-      el.classList.add("pro-blur");
-    });
+    // sicurezza extra
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
 
-    // 🔥 overlay OFF
-    document.querySelectorAll(".home-blur-overlay").forEach(el=>{
-      el.style.display = "none";
-    });
+  // ================= SOLO CONTENUTI PRO =================
+  document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+    el.classList.add("pro-blur");
+  });
 
- // 🔓 SBLOCCO locked-section (CRITICO)
-document.querySelectorAll(".locked-section").forEach(el=>{
-  el.classList.remove("locked-section");
+  // ================= REMOVE OVERLAY GLOBAL =================
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .smart-overlay,
+    .paywall-mini
+  `).forEach(el=>{
+    if(el.id !== "register-popup"){
+      el.remove();
+    }
+  });
 
-  el.style.filter = "none";
-  el.style.opacity = "1";
-  el.style.pointerEvents = "auto";
-});
+  // ================= SBLOCCO locked-section =================
+  document.querySelectorAll(".locked-section").forEach(el=>{
+    el.classList.remove("locked-section");
 
-  }
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
+  // ================= 💣 FIX FINALE (BLUR-CONTENT) =================
+  document.querySelectorAll(".blur-content").forEach(el=>{
+    el.remove();
+  });
+
+}
 
   // =========================
   // 🔴 FREE → LOCK
