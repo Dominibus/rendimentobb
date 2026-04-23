@@ -15327,3 +15327,57 @@ body.modal-open{
 .home-overlay-content{
   pointer-events:auto;
 }
+
+/* =====================================
+🔥 INVESTOR FINAL OVERRIDE (MASTER FIX)
+Sovrascrive TUTTI i bug precedenti
+===================================== */
+
+/* ✅ rimuove QUALSIASI blur residuo */
+body.is-investor *{
+  filter:none !important;
+  backdrop-filter:none !important;
+}
+
+/* ✅ ripristina interazioni */
+body.is-investor *{
+  pointer-events:auto !important;
+  opacity:1 !important;
+}
+
+/* ✅ disattiva lock visivo (ma NON logico) */
+body.is-investor .locked-section.is-locked{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+/* ✅ nasconde overlay globali */
+body.is-investor .lock-overlay,
+body.is-investor .locked-overlay{
+  display:none !important;
+}
+
+/* ✅ nasconde overlay home */
+body.is-investor .home-blur-overlay{
+  display:none !important;
+}
+
+/* ✅ evita bug doppi overlay */
+body.is-investor .locked-overlay + .locked-overlay{
+  display:none !important;
+}
+
+/* =====================================
+🎯 MANTIENE LOGICA PIANI
+===================================== */
+
+/* investor vede solo roba investor */
+body.is-investor .investor-only{
+  display:block !important;
+}
+
+/* investor NON vede roba pro */
+body.is-investor .pro-only{
+  display:none !important;
+}
