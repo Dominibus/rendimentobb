@@ -190,8 +190,8 @@ document.addEventListener("rb_language_changed", () => {
     }
   }
 
-  waitPlanAndRender(user);
   window.currentUser = user;  
+  waitPlanAndRender(user);  
 
 });
 
@@ -209,42 +209,39 @@ function waitPlanAndRender(user){
 
     attempts++;
 
-    let access = null;
+    const access = (typeof window.getUserAccess === "function")
+      ? window.getUserAccess()
+      : null;
 
-    if(typeof window.getUserAccess === "function"){
-      access = window.getUserAccess();
-    }
-
-    // ✅ READY MINIMA (NON BLOCCANTE)
+    // 🔥 READY VERO (NON FAKE)
     const ready =
       access &&
-      typeof access.isFree !== "undefined";
+      access.isLogged === true &&          // 👈 UTENTE REALE
+      (
+        access.isInvestor === true ||
+        access.isPro === true ||
+        access.isAdmin === true ||
+        access.isFree === true
+      );
 
     if(!ready){
 
       if(attempts > 40){
         console.warn("⚠️ HEADER FALLBACK RENDER");
-
-        // 🔥 Fallback: render comunque
         renderUser(user);
-
         clearInterval(interval);
       }
 
       return;
     }
 
-    // ✅ READY → procedi
     clearInterval(interval);
 
-    console.log("✅ HEADER READY:", access);
+    console.log("✅ HEADER READY (FIXED):", access);
 
     renderUser(user);
 
-    // =====================
-    // 🔓 UNLOCK SOLO PRO / ADMIN
-    // =====================
-
+    // 🔓 unlock solo PRO / ADMIN
     const isAdmin =
       (window.userRole || "").toLowerCase() === "admin" ||
       window.currentUser?.email === "rendimentobb@gmail.com";
