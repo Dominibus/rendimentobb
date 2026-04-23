@@ -372,6 +372,13 @@ el.style.position = "relative";
 
 // ================= SMART LOCK ENGINE =================
 function applySmartLock(el, {
+
+  const access = window.getUserAccess();
+
+// 🟡 INVESTOR → NO LOCK HARD
+if(access.isInvestor){
+  return;
+}
   type = "blur", // blur | hide | overlay
   message = "",
   cta = "Sblocca",
