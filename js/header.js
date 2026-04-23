@@ -168,46 +168,50 @@ document.addEventListener("rb_language_changed", () => {
   }
 });
 
-  onAuthStateChanged(auth, (user) => {
+ onAuthStateChanged(auth, (user) => {
 
   window.currentUser = user;
 
- // 🔥 NON render subito → evita flash FREE
-// renderUser(user);
+  // 👻 GUEST → render immediato
+  if(!user){
+    renderUser(null);
+    return;
+  }
 
-  // 🔥 aspetta RB_USER vero (fix definitivo)
+  // 🔥 utente loggato → aspetta RB_USER
   let attempts = 0;
 
   const interval = setInterval(()=>{
 
-  attempts++;
+    attempts++;
 
-  const RB = window.RB_USER;
+    const RB = window.RB_USER;
 
-  // ✅ quando RB_USER è pronto
-  if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
+    if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
 
-    console.log("✅ HEADER SYNC RB_USER:", RB);
+      console.log("✅ HEADER SYNC RB_USER:", RB);
 
-    clearInterval(interval);
+      clearInterval(interval);
 
-    renderUser(user);
+      renderUser(user);
 
-    // unlock solo pro/admin
-    if(RB.isPro || RB.isAdmin){
-      unlockUI();
+      if(RB.isPro || RB.isAdmin){
+        unlockUI();
+      }
+
+      return;
     }
 
-    return;
-  }
+    if(attempts > 40){
+      console.warn("⚠️ HEADER fallback");
 
-  // ⛔ fallback sicurezza
-  if(attempts > 40){
-    console.warn("⚠️ HEADER fallback");
-    clearInterval(interval);
-  }
+      clearInterval(interval);
 
-}, 120);
+      // 🔥 fallback → comunque render
+      renderUser(user);
+    }
+
+  }, 120);
 
 });
 
