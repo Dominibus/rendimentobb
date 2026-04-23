@@ -15441,3 +15441,11 @@ body.is-investor .pro-only{
   color:#0f172a;
   font-weight:600;
 }
+
+.modal-open{
+  overflow:hidden;
+}
+
+.modal-open *:not(#rb-upgrade-modal):not(#rb-upgrade-modal *){
+  pointer-events:none;
+}
