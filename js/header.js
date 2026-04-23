@@ -474,22 +474,21 @@ else{
 
     }
 
-    // LOGOUT
-    document.getElementById("logout").onclick = async ()=>{
-      await signOut(auth);
-      location.reload();
-    };
-    }; // fine logout
+   // LOGOUT
+document.getElementById("logout").onclick = async ()=>{
+  await signOut(auth);
+  location.reload();
+};
 
-  } else {
+} else {
 
-    el.innerHTML = `
-     <a href="/login/" class="rb-login"
-     data-it="Accedi"
-     data-en="Login">
-     Accedi
-     </a>`;
+  el.innerHTML = `
+   <a href="/login/" class="rb-login"
+   data-it="Accedi"
+   data-en="Login">
+   Accedi
+   </a>`;
 
-  }
+}
 
-} // 🔥 CHIUSURA renderUser
+}
