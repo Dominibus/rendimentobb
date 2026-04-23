@@ -180,32 +180,34 @@ document.addEventListener("rb_language_changed", () => {
 
   const interval = setInterval(()=>{
 
-    attempts++;
+  attempts++;
 
-    const RB = window.RB_USER;
+  const RB = window.RB_USER;
 
-    if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
+  // ✅ quando RB_USER è pronto
+  if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
 
-      console.log("✅ HEADER SYNC RB_USER:", RB);
+    console.log("✅ HEADER SYNC RB_USER:", RB);
 
-      clearInterval(interval);
+    clearInterval(interval);
 
-      // render corretto SOLO quando RB_USER è pronto
-renderUser(user);
+    renderUser(user);
 
-// unlock pro/admin
-if(RB.isPro || RB.isAdmin){
-  unlockUI();
-}
-
-return;
-
-    if(attempts > 40){
-      console.warn("⚠️ HEADER fallback");
-      clearInterval(interval);
+    // unlock solo pro/admin
+    if(RB.isPro || RB.isAdmin){
+      unlockUI();
     }
 
-  } 120);
+    return;
+  }
+
+  // ⛔ fallback sicurezza
+  if(attempts > 40){
+    console.warn("⚠️ HEADER fallback");
+    clearInterval(interval);
+  }
+
+}, 120);
 
 });
 
