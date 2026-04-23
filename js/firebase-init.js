@@ -286,13 +286,6 @@ console.log("🧠 RB_USER SYNC:", window.RB_USER);
 window.dispatchEvent(new Event("rb_plan_ready"));
 
 
-    // 🔥 FIX HEADER IMMEDIATO (CRITICO)
-setTimeout(()=>{
-  if(window.renderUser){
-    window.renderUser(window.currentUser || null);
-  }
-}, 0);
-
     // 🔥 SYNC IMMEDIATO HEADER/UI
 setTimeout(()=>{
   
