@@ -2533,7 +2533,7 @@ if(document.getElementById("rb-upgrade-modal")){
 
 }
 
-
+}
 // ======================================================
 // 🟡 INVESTOR → PARZIALE (NO OVERLAY, SOLO PRO LOCK)
 // ======================================================
