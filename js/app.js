@@ -3580,9 +3580,10 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
 if(access.isInvestor){
-  console.log("🟡 INVESTOR → FORCE UNLOCK (BLOCK 1)");
+  console.log("🟡 INVESTOR → INIT CLEAN (NO FORCE UNLOCK)");
 
-  forceUnlockUI();
+  // 🔥 SOLO rimuove overlay base
+  unlockBaseUI();
 }
 
     // ================= TOOL SYNC =================
@@ -4446,34 +4447,13 @@ function forceUnlockUI(){
   }
 
   // 🟡 INVESTOR → PARTIAL UNLOCK (FIX DEFINITIVO)
+// 🟡 INVESTOR → NON GESTITO QUI
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → PARTIAL UNLOCK FIX");
+  console.log("🛑 SKIP forceUnlockUI for INVESTOR");
 
-  // 🔥 1. PULIZIA TOTALE OVERLAY (QUESTO TI MANCAVA)
-  document.querySelectorAll(`
-    .home-blur-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .paywall-mini,
-    .smart-overlay,
-    .lock-overlay
-  `).forEach(el => el.remove());
-
-  // 🔥 2. RIMUOVE TUTTI I BLUR GLOBALI
-  document.querySelectorAll(`
-    .pro-blur,
-    .locked-content
-  `).forEach(el => {
-    el.classList.remove("pro-blur","locked-content");
-    el.style.filter = "none";
-    el.style.opacity = "1";
-  });
-
-  // 🔒 3. BLOCCA SOLO PRO (CORRETTO)
-  document.querySelectorAll(".pro-only").forEach(el => {
-
-    el.classList.add("locked");
+  return;
+}
 
     if(!el.querySelector(".lock-overlay")){
       el.insertAdjacentHTML("beforeend", `
