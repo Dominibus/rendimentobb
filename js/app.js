@@ -2325,9 +2325,11 @@ else if(access.isInvestor){
     if(!window.__uiUnlocked){
   window.__uiUnlocked = true;
 
-  setTimeout(() => {
-    forceUnlockUI();
-  }, 50);
+  if(!access.isInvestor){
+    setTimeout(() => {
+      forceUnlockUI();
+    }, 50);
+  }
 }
     // ================= HIDDEN DATA MESSAGE =================
 
@@ -4396,36 +4398,9 @@ function unlockBaseUI(){
   // 🟡 INVESTOR → SBLOCCA DAVVERO
   // =====================================
   if(access.isInvestor){
-
-    console.log("🟡 unlockBaseUI → FIX INVESTOR");
-
-    document.querySelectorAll(`
-      .results-card,
-      .metric-card
-    `).forEach(el => {
-
-      el.classList.remove(
-        "locked",
-        "locked-section",
-        "pro-blur"
-      );
-
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-
-      // 🔥 rimuove overlay interni
-      const lock = el.querySelector(".lock-overlay");
-      if(lock) lock.remove();
-
-    });
-
-    // 🔒 lascia solo PRO bloccati
-    document.querySelectorAll(".pro-only").forEach(el=>{
-      el.classList.add("pro-blur");
-    });
-
-  }
+  console.log("🟡 unlockBaseUI → SKIP (gestito da calculate)");
+  return;
+}
 
 }
 
@@ -4488,91 +4463,9 @@ function forceUnlockUI(){
   // 🟡 INVESTOR → PARTIAL UNLOCK (FIX REALE + ANTI OVERRIDE)
   // =========================
   else if(access.isInvestor){
-
-    console.log("🟡 INVESTOR → PARTIAL UNLOCK FINAL");
-
-    // ================= RESET BASE =================
-    document.querySelectorAll(`
-      .metric-card,
-      .results-card,
-      #advanced-analysis
-    `).forEach(el=>{
-
-      el.classList.remove(
-        "locked",
-        "pro-blur",
-        "locked-section"
-      );
-
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-
-      const lock = el.querySelector(".lock-overlay");
-      if(lock) lock.remove();
-
-    });
-
-    // ================= SOLO PRO =================
-    document.querySelectorAll(`
-      .metric-card.pro-only,
-      .pro-only
-    `).forEach(el=>{
-      el.classList.add("pro-blur");
-    });
-
-    // ================= 💣 DISTRUZIONE OVERLAY =================
-    document.querySelectorAll(`
-      .home-blur-overlay,
-      .results-overlay,
-      .upgrade-overlay,
-      .smart-overlay,
-      .paywall-mini,
-      .lock-overlay,
-      .blur-content
-    `).forEach(el=>{
-      if(el.id !== "register-popup"){
-        el.remove();
-      }
-    });
-
-    // ================= 💣 FORCE CLEAN GLOBALE =================
-    document.querySelectorAll("*").forEach(el=>{
-      if(
-        el.style?.filter === "blur(10px)" ||
-        el.style?.filter === "blur(6px)"
-      ){
-        el.style.filter = "none";
-      }
-    });
-
-    // ================= 💣 ANTI RE-INJECTION =================
-    // Se qualche script reinserisce blur → lo distrugge subito
-    const observer = new MutationObserver((mutations)=>{
-      mutations.forEach(m=>{
-        m.addedNodes.forEach(node=>{
-          if(node.nodeType === 1){
-
-            if(node.classList?.contains("blur-content")){
-              node.remove();
-            }
-
-            if(node.classList?.contains("lock-overlay")){
-              node.remove();
-            }
-
-          }
-        });
-      });
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-
-  }
-
+  console.log("🟡 INVESTOR → SKIP forceUnlockUI");
+  return;
+}
   // =========================
   // 🔴 FREE → LOCK
   // =========================
