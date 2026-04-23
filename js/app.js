@@ -4448,14 +4448,16 @@ function forceUnlockUI(){
       .pro-blur,
       .locked,
       .locked-content,
-      .premium-lock
+      .premium-lock,
+      .locked-section
     `).forEach(el => {
 
       el.classList.remove(
         "pro-blur",
         "locked",
         "locked-content",
-        "premium-lock"
+        "premium-lock",
+        "locked-section"
       );
 
       el.style.filter = "none";
@@ -4471,6 +4473,7 @@ function forceUnlockUI(){
       .lock-overlay,
       .smart-overlay,
       .paywall-mini,
+      .blur-content,
       [data-paywall]
     `).forEach(el => {
 
@@ -4481,62 +4484,94 @@ function forceUnlockUI(){
 
   }
 
- // =========================
-// 🟡 INVESTOR → PARTIAL UNLOCK (FIX COMPLETO)
-// =========================
-else if(access.isInvestor){
+  // =========================
+  // 🟡 INVESTOR → PARTIAL UNLOCK (FIX REALE + ANTI OVERRIDE)
+  // =========================
+  else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → PARTIAL UNLOCK CLEAN");
+    console.log("🟡 INVESTOR → PARTIAL UNLOCK FINAL");
 
-  // ================= RESET BASE =================
-  document.querySelectorAll(`
-    .metric-card,
-    .results-card
-  `).forEach(el=>{
-    el.classList.remove("locked","pro-blur");
+    // ================= RESET BASE =================
+    document.querySelectorAll(`
+      .metric-card,
+      .results-card,
+      #advanced-analysis
+    `).forEach(el=>{
 
-    const lock = el.querySelector(".lock-overlay");
-    if(lock) lock.remove();
+      el.classList.remove(
+        "locked",
+        "pro-blur",
+        "locked-section"
+      );
 
-    // sicurezza extra
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
+      el.style.filter = "none";
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
 
-  // ================= SOLO CONTENUTI PRO =================
-  document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
-    el.classList.add("pro-blur");
-  });
+      const lock = el.querySelector(".lock-overlay");
+      if(lock) lock.remove();
 
-  // ================= REMOVE OVERLAY GLOBAL =================
-  document.querySelectorAll(`
-    .home-blur-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .smart-overlay,
-    .paywall-mini
-  `).forEach(el=>{
-    if(el.id !== "register-popup"){
-      el.remove();
-    }
-  });
+    });
 
-  // ================= SBLOCCO locked-section =================
-  document.querySelectorAll(".locked-section").forEach(el=>{
-    el.classList.remove("locked-section");
+    // ================= SOLO PRO =================
+    document.querySelectorAll(`
+      .metric-card.pro-only,
+      .pro-only
+    `).forEach(el=>{
+      el.classList.add("pro-blur");
+    });
 
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
+    // ================= 💣 DISTRUZIONE OVERLAY =================
+    document.querySelectorAll(`
+      .home-blur-overlay,
+      .results-overlay,
+      .upgrade-overlay,
+      .smart-overlay,
+      .paywall-mini,
+      .lock-overlay,
+      .blur-content
+    `).forEach(el=>{
+      if(el.id !== "register-popup"){
+        el.remove();
+      }
+    });
 
-  // ================= 💣 FIX FINALE (BLUR-CONTENT) =================
-  document.querySelectorAll(".blur-content").forEach(el=>{
-    el.remove();
-  });
+    // ================= 💣 FORCE CLEAN GLOBALE =================
+    document.querySelectorAll("*").forEach(el=>{
+      if(
+        el.style?.filter === "blur(10px)" ||
+        el.style?.filter === "blur(6px)"
+      ){
+        el.style.filter = "none";
+      }
+    });
 
-}
+    // ================= 💣 ANTI RE-INJECTION =================
+    // Se qualche script reinserisce blur → lo distrugge subito
+    const observer = new MutationObserver((mutations)=>{
+      mutations.forEach(m=>{
+        m.addedNodes.forEach(node=>{
+          if(node.nodeType === 1){
+
+            if(node.classList?.contains("blur-content")){
+              node.remove();
+            }
+
+            if(node.classList?.contains("lock-overlay")){
+              node.remove();
+            }
+
+          }
+        });
+      });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+  }
 
   // =========================
   // 🔴 FREE → LOCK
