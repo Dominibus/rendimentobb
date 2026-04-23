@@ -1561,70 +1561,81 @@ const monthVal  = formatCurrency(netAnnual/12);
 const breakVal  = breakEven.toFixed(1) + " anni";
 const revVal    = formatCurrency(revenue);
 
-// 🔴 DEFAULT → tutto bloccato
-elProfit.innerText = "🔒";
-elMonth.innerText  = "🔒";
-elBreak.innerText  = "🔒";
-elRev.innerText    = "🔒";
+// 🔴 DEFAULT → tutto bloccato (SAFE)
+if(elProfit) elProfit.innerText = "🔒";
+if(elMonth)  elMonth.innerText  = "🔒";
+if(elBreak)  elBreak.innerText  = "🔒";
+if(elRev)    elRev.innerText    = "🔒";
 
 // 🟢 PRO → tutto visibile
 if(isPro){
-  elProfit.innerText = profitVal;
-  elMonth.innerText  = monthVal;
-  elBreak.innerText  = breakVal;
-  elRev.innerText    = revVal;
+
+  if(elProfit) elProfit.innerText = profitVal;
+  if(elMonth)  elMonth.innerText  = monthVal;
+  if(elBreak)  elBreak.innerText  = breakVal;
+  if(elRev)    elRev.innerText    = revVal;
+
 }
 
-// 🟡 INVESTOR → come PRO ma con limiti
+// 🟡 INVESTOR → dati visibili ma incompleti (conversion mode)
 else if(isInvestor){
-  elProfit.innerText = profitVal;
-  elMonth.innerText  = monthVal;
-  elRev.innerText    = revVal;
 
-  // 🔒 limite chiave
-  elBreak.innerText  = "🔒";
+  if(elProfit) elProfit.innerText = "~ " + profitVal;
+  if(elMonth)  elMonth.innerText  = "~ " + monthVal;
+  if(elRev)    elRev.innerText    = "~ " + revVal;
+
+  // 🔒 dato chiave nascosto
+  if(elBreak)  elBreak.innerText  = "🔒";
+
 }
 
-// 🔵 FREE USER → preview
-else if(isFreeUser){
-  elProfit.innerText = "~ " + profitVal;
-  elMonth.innerText  = "⚠️";
-  elBreak.innerText  = "🔒";
-  elRev.innerText    = "⚠️";
+// 🔵 FREE USER → teaser aggressivo
+else{
+
+  if(elProfit) elProfit.innerText = "~ " + profitVal;
+  if(elMonth)  elMonth.innerText  = "⚠️";
+  if(elBreak)  elBreak.innerText  = "🔒";
+  if(elRev)    elRev.innerText    = "⚠️";
+
 }
 
-  // ================= OVERLAY =================
-  const overlay = document.querySelector(".home-blur-overlay");
+// ================= OVERLAY =================
+const overlay = document.querySelector(".home-blur-overlay");
 
-  if(overlay){
-    overlay.style.display = (isPro || isInvestor) ? "none" : "flex";
-  }
+if(overlay){
+  overlay.style.display = (isPro || isInvestor) ? "none" : "flex";
+}
 
-  // ================= BLUR =================
-  document.querySelectorAll(".metric-card").forEach(el=>{
-    el.classList.remove("pro-blur");
-  });
+// ================= BLUR (SOLO PRO-ONLY) =================
 
-  if(isInvestor){
-    document.querySelectorAll(".metric-card.pro-only")
-      .forEach(el=> el.classList.add("pro-blur"));
+// reset
+document.querySelectorAll(".metric-card").forEach(el=>{
+  el.classList.remove("pro-blur");
+});
 
-    document.querySelector("#qr_profit")?.closest(".metric-card")?.classList.remove("pro-blur");
-    document.querySelector("#qr_month")?.closest(".metric-card")?.classList.remove("pro-blur");
-  }
+// investor → blocca SOLO campi pro-only
+if(isInvestor){
 
-  if(!isPro && !isInvestor){
-    document.querySelectorAll(".metric-card.pro-only")
-      .forEach(el=> el.classList.add("pro-blur"));
-  }
+  document.querySelectorAll(".metric-card.pro-only")
+    .forEach(el => el.classList.add("pro-blur"));
 
-  // ================= EVENT =================
-  document.dispatchEvent(new CustomEvent("rb_simulation_updated", {
-    detail: { roi, revenue, data: result }
-  }));
+}
 
-  window.RB_LANG?.apply?.();
-};
+// free → blocca pro-only
+if(!isPro && !isInvestor){
+
+  document.querySelectorAll(".metric-card.pro-only")
+    .forEach(el => el.classList.add("pro-blur"));
+
+}
+
+// ================= EVENT =================
+document.dispatchEvent(new CustomEvent("rb_simulation_updated", {
+  detail: { roi, revenue, data: result }
+}));
+
+// ================= LANG REFRESH =================
+window.RB_LANG?.apply?.();
  
 // ================= CTA DINAMICA (FUORI!!!) =================
 function renderUpgradeCTA(roi){
