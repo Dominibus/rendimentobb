@@ -153,22 +153,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   `;
 
-  // 🔥 TRADUZIONE IMMEDIATA HEADER + MODAL
+// 🔥 TRADUZIONE IMMEDIATA HEADER + MODAL
 if(typeof applyStaticTranslations === "function"){
   applyStaticTranslations();
 }
 
-  window.applyCityBackground();
-  initHeaderInteractions();
+window.applyCityBackground();
+initHeaderInteractions();
 
-  // 🔥 SYNC TRADUZIONE DINAMICA (HEADER + MODAL)
+// 🔥 SYNC TRADUZIONE DINAMICA (HEADER + MODAL)
 document.addEventListener("rb_language_changed", () => {
   if(typeof applyStaticTranslations === "function"){
     applyStaticTranslations();
   }
 });
 
- onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, (user) => {
 
   window.currentUser = user;
 
@@ -195,30 +195,46 @@ document.addEventListener("rb_language_changed", () => {
 
       renderUser(user);
 
-      // 🔥 FIX CRITICO INVESTOR UI
-if(RB.isInvestor && !RB.isPro){
+      // ===============================
+      // 🔥 INVESTOR CLEAN (TEASER MODE)
+      // ===============================
+      if(RB.isInvestor && !RB.isPro){
 
-  console.log("🟡 HEADER → FORCE INVESTOR UI CLEAN");
+        console.log("🟡 HEADER → FORCE INVESTOR UI CLEAN");
 
-  // rimuove SOLO blocchi FREE hard
-  document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
-    el.remove();
-  });
+        // rimuove SOLO blocchi hard
+        document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
+          el.remove();
+        });
 
-  document.querySelectorAll(".blur.locked").forEach(el=>{
-    el.classList.remove("locked");
-    el.style.filter = "blur(4px)"; // 👈 mantiene teaser
-  });
+        // mantiene blur leggero (teaser)
+        document.querySelectorAll(".blur.locked").forEach(el=>{
+          el.classList.remove("locked");
+          el.style.filter = "blur(4px)";
+        });
 
-}
+      }
 
+      // ===============================
+      // 🔥 ACCESS CONTROL UI
+      // ===============================
+
+      // 🟢 PRO / ADMIN → FULL
       if(RB.isPro || RB.isAdmin){
-  console.log("🟢 PRO → FULL UNLOCK");
-  unlockUI();
-}
-else{
-  console.log("🟡 INVESTOR/FREE → NO unlockUI");
-}
+        console.log("🟢 PRO → FULL UNLOCK");
+        unlockUI();
+      }
+
+      // 🟡 INVESTOR → PARTIAL UNLOCK (QUESTO MANCAVA)
+      else if(RB.isInvestor){
+        console.log("🟡 INVESTOR → PARTIAL UNLOCK");
+        unlockBaseUI?.(); // 👈 IMPORTANTISSIMO
+      }
+
+      // 🔴 FREE → BLOCCATO
+      else{
+        console.log("🔴 FREE → NO unlockUI");
+      }
 
       return;
     }
@@ -228,13 +244,10 @@ else{
 
       clearInterval(interval);
 
-      // 🔥 fallback → comunque render
       renderUser(user);
     }
 
   }, 120);
-
-});
 
 });
 /* =====================
