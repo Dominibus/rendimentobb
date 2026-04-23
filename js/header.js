@@ -170,91 +170,46 @@ document.addEventListener("rb_language_changed", () => {
 
   onAuthStateChanged(auth, (user) => {
 
-  // 🔥 REDIRECT POST LOGIN (IMMOBILI / FUNNEL)
-  if(user){
+  window.currentUser = user;
 
-    const postRedirect = localStorage.getItem("post_login_redirect");
+  // render base subito (guest o utente)
+  renderUser(user);
 
-    if(postRedirect){
-      localStorage.removeItem("post_login_redirect");
-      window.location.href = postRedirect;
-      return;
-    }
-
-    const redirect = localStorage.getItem("login_redirect");
-
-    if(redirect){
-      localStorage.removeItem("login_redirect");
-      window.location.href = redirect;
-      return;
-    }
-  }
-
-  window.currentUser = user;  
-  waitPlanAndRender(user);  
-
-});
-
-});
-
-/* =====================
-⏳ WAIT PLAN (FINAL FIX CLEAN)
-===================== */
-
-function waitPlanAndRender(user){
-
+  // 🔥 aspetta RB_USER vero (fix definitivo)
   let attempts = 0;
 
   const interval = setInterval(()=>{
 
     attempts++;
 
-    const access = (typeof window.getUserAccess === "function")
-      ? window.getUserAccess()
-      : null;
+    const RB = window.RB_USER;
 
-    // 🔥 READY VERO (NON FAKE)
-    const ready =
-      access &&
-      access.isLogged === true &&          // 👈 UTENTE REALE
-      (
-        access.isInvestor === true ||
-        access.isPro === true ||
-        access.isAdmin === true ||
-        access.isFree === true
-      );
+    if(RB && RB.isFree !== undefined){
 
-    if(!ready){
+      console.log("✅ HEADER SYNC RB_USER:", RB);
 
-      if(attempts > 40){
-        console.warn("⚠️ HEADER FALLBACK RENDER");
-        renderUser(user);
-        clearInterval(interval);
+      clearInterval(interval);
+
+      renderUser(user); // 🔥 render corretto (investor incluso)
+
+      // unlock pro/admin
+      if(RB.isPro || RB.isAdmin){
+        unlockUI();
       }
 
       return;
     }
 
-    clearInterval(interval);
-
-    console.log("✅ HEADER READY (FIXED):", access);
-
-    renderUser(user);
-
-    // 🔓 unlock solo PRO / ADMIN
-    const isAdmin =
-      (window.userRole || "").toLowerCase() === "admin" ||
-      window.currentUser?.email === "rendimentobb@gmail.com";
-
-    const isPro = isAdmin || access.isPro;
-
-    if(isPro && typeof unlockUI === "function"){
-      unlockUI();
+    if(attempts > 40){
+      console.warn("⚠️ HEADER fallback");
+      clearInterval(interval);
     }
 
-  },120);
+  }, 120);
 
-}
+});
+
+});
 /* =====================
 📱 MENU + LANG
 ===================== */
@@ -363,14 +318,15 @@ function renderUser(user){
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
-  const access = (typeof window.getUserAccess === "function")
-  ? window.getUserAccess()
-  : {
-      isLogged:false,
-      isPro:false,
-      isInvestor:false,
-      hasPlan:false
-    };
+  const RB = window.RB_USER || {};
+
+const access = {
+  isInvestor: RB.isInvestor == true,
+  isPro: RB.isPro == true,
+  isAdmin: RB.isAdmin == true,
+  isFree: RB.isFree == true
+};
+  console.log("👤 HEADER ACCESS:", access, "RAW:", RB);
 
   const isAdmin =
     user?.email === "rendimentobb@gmail.com" ||
