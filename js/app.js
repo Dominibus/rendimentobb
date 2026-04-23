@@ -2229,7 +2229,7 @@ const net = Number(
     });
 
     // ================= SMART PAYWALL (MODAL) =================
-if(access.isFree && roi > 10){
+if(access.isFree && !access.isInvestor && roi > 10){
   triggerUpgradeFlow({ roi });
 }
 
@@ -2322,9 +2322,13 @@ else if(access.isInvestor){
 
 }
 
-    setTimeout(() => {
-  forceUnlockUI();
-}, 50);
+    if(!window.__uiUnlocked){
+  window.__uiUnlocked = true;
+
+  setTimeout(() => {
+    forceUnlockUI();
+  }, 50);
+}
     // ================= HIDDEN DATA MESSAGE =================
 
 const hiddenBox = document.getElementById("hidden-roi-msg");
@@ -2452,8 +2456,8 @@ if(access.isFree){
 
   // ❌ evita doppio sistema
 if(document.getElementById("rb-upgrade-modal")){
-  return;
-}
+  console.warn("⛔ modal attivo → skip overlay free");
+} else {
 
   lockedSections.forEach(id => {
 
