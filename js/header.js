@@ -479,3 +479,17 @@ else{
       await signOut(auth);
       location.reload();
     };
+    }; // fine logout
+
+  } else {
+
+    el.innerHTML = `
+     <a href="/login/" class="rb-login"
+     data-it="Accedi"
+     data-en="Login">
+     Accedi
+     </a>`;
+
+  }
+
+} // 🔥 CHIUSURA renderUser
