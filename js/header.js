@@ -27,6 +27,38 @@ window.unlockUI = function(){
 
 };
 
+// ===============================
+// 🔥 GLOBAL PRO MODAL (FIX)
+// ===============================
+window.openProModal = function(){
+
+  console.log("🔥 OPEN PRO MODAL");
+
+  const modal = document.getElementById("rb-pro-modal");
+  if(!modal) return;
+
+  modal.classList.add("open");
+
+  // chiusura
+  const close = document.getElementById("rb-close-modal");
+  if(close){
+    close.onclick = () => modal.classList.remove("open");
+  }
+
+  // upgrade click
+  const btn = document.getElementById("rb-upgrade-btn");
+  if(btn){
+    btn.onclick = () => {
+      if(typeof window.startPlanPurchase === "function"){
+        window.startPlanPurchase("pro");
+      } else {
+        alert("Upgrade PRO");
+      }
+    };
+  }
+
+};
+
 /* =====================
 🎨 HERO BG
 ===================== */
