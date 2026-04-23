@@ -15450,22 +15450,49 @@ body.is-investor .pro-only{
   pointer-events:none;
 }
 
-/* =========================
-🟡 INVESTOR → NO GLOBAL BLUR
-========================= */
+/* =====================================
+🟡 INVESTOR – FULL UI UNLOCK (FINAL FIX)
+===================================== */
 
+/* 🔥 RIMUOVE OVERLAY GLOBALI */
 body.is-investor .home-blur-overlay,
-body.is-investor .hero::before {
+body.is-investor .results-overlay,
+body.is-investor .upgrade-overlay,
+body.is-investor .smart-overlay,
+body.is-investor .paywall-mini {
   display: none !important;
   opacity: 0 !important;
   backdrop-filter: none !important;
+  pointer-events: none !important;
 }
 
-/* =========================
-🟡 INVESTOR UNLOCK FIX
-========================= */
+/* 🔥 RIMUOVE OVERLAY HERO (pseudo-elemento) */
+body.is-investor .hero::before,
+body.is-investor .hero::after {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+}
 
+/* 🔓 SBLOCCA SEZIONI BLOCCATE */
 body.is-investor .locked-section {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* 💣 KILL DEFINITIVO BLUR CONTENT */
+body.is-investor .blur-content {
+  display: none !important;
+  opacity: 0 !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* 🔥 SICUREZZA EXTRA (ANTI-BUG) */
+body.is-investor .results-card,
+body.is-investor .metric-card,
+body.is-investor #advanced-analysis {
   filter: none !important;
   opacity: 1 !important;
   pointer-events: auto !important;
