@@ -464,19 +464,23 @@ Analizza immobile
 
 </div>  
 
-<!-- 🔥 RISULTATI FREEMIUM -->
+<!-- ================= 🔥 RISULTATI FREEMIUM (SaaS PRO) ================= -->
 <div class="investment-metrics">
 
-<!-- ROI VISIBILE -->
+<!-- ================= ROI ================= -->
 <div class="metric-card roi-highlight">
 
-<span data-it="ROI stimato" data-en="Estimated ROI">ROI stimato</span>
+<span
+data-it="ROI stimato"
+data-en="Estimated ROI">
+ROI stimato
+</span>
 
 <strong id="qr_roi" class="roi-big"></strong>
 
- <div id="hidden-roi-msg"></div>
+<div id="hidden-roi-msg"></div>
 
-<!-- 🔥 SHOCK (PRIORITÀ MASSIMA) -->
+<!-- 🔥 SHOCK (PRIMARY TRIGGER) -->
 <div id="roi-shock-block" style="
 display:none;
 margin-top:12px;
@@ -497,7 +501,7 @@ data-en="⚠️ Without full analysis you could lose up to 30% of your real prof
 
 </div>
 
-<!-- ⚠️ WARNING SECONDARIO -->
+<!-- ⚠️ WARNING -->
 <div style="
 margin-top:10px;
 font-size:13px;
@@ -505,12 +509,12 @@ text-align:center;
 color:#f59e0b;
 font-weight:600;
 "
-data-it="Questo numero può essere fuorviante"
-data-en="This number can be misleading">
-⚠️ Questo numero può essere fuorviante
+data-it="⚠️ Questo numero può farti perdere soldi"
+data-en="⚠️ This number can lead to real losses">
+⚠️ Questo numero può farti perdere soldi
 </div>
 
-<!-- ℹ️ INFO (LEGGERA) -->
+<!-- ℹ️ INFO -->
 <div style="
 margin-top:4px;
 font-size:12px;
@@ -523,87 +527,182 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 </div>
 
 </div>
+
+
+<!-- ================= METRICS ================= -->
+
 <div class="metric-card">
-  <span>Profitto annuo</span>
+  <span
+    data-it="Profitto annuo"
+    data-en="Annual profit">
+    Profitto annuo
+  </span>
+
   <strong id="qr_profit">🔒</strong>
+
+  <div class="metric-hint"
+    data-it="Stima basata su dati parziali"
+    data-en="Estimate based on partial data">
+  </div>
 </div>
 
 <div class="metric-card">
-  <span>Profitto mensile</span>
+  <span
+    data-it="Profitto mensile"
+    data-en="Monthly profit">
+    Profitto mensile
+  </span>
+
   <strong id="qr_month">🔒</strong>
+
+  <div class="metric-hint"
+    data-it="Cashflow medio stimato"
+    data-en="Estimated monthly cashflow">
+  </div>
 </div>
 
 <div class="metric-card pro-only">
-  <span>Break-even</span>
+  <span
+    data-it="Break-even"
+    data-en="Break-even">
+    Break-even
+  </span>
+
   <strong id="qr_break">🔒</strong>
+
+  <!-- 🔥 CORE CONVERSION -->
+  <div class="metric-critical"
+    data-it="🔒 Dato critico per capire se perdi soldi"
+    data-en="🔒 Critical data to understand if you lose money">
+  </div>
 </div>
 
 <div class="metric-card">
-  <span>Ricavo annuo</span>
+  <span
+    data-it="Ricavo annuo"
+    data-en="Annual revenue">
+    Ricavo annuo
+  </span>
+
   <strong id="qr_rev">🔒</strong>
+
+  <div class="metric-hint"
+    data-it="Entrate lorde stimate"
+    data-en="Estimated gross revenue">
+  </div>
 </div>
- 
-<!-- 🔥 OVERLAY SOLO SUI DATI IMPORTANTI -->
+
+
+<!-- ================= OVERLAY ================= -->
+
 <div class="home-blur-overlay dynamic-overlay">
 
-<div class="home-overlay-content">
+  <div class="home-overlay-content">
 
-<div class="overlay-title"
-data-it="🔓 Stai prendendo una decisione incompleta"
-data-en="🔓 You are making an incomplete decision">
+    <!-- HEADLINE -->
+    <div class="overlay-title"
+      data-it="🔓 Stai prendendo una decisione senza dati completi"
+      data-en="🔓 You are making a decision without full data">
+      🔓 Stai prendendo una decisione senza dati completi
+    </div>
+
+    <!-- SUBTEXT -->
+    <div class="overlay-text"
+      data-it="Può sembrare profittevole… ma potresti perdere soldi reali"
+      data-en="It may look profitable… but you could lose real money">
+      Può sembrare profittevole… ma potresti perdere soldi reali
+    </div>
+
+    <!-- STAT -->
+    <div style="
+      margin-top:10px;
+      font-size:13px;
+      opacity:0.85;
+    "
+    data-it="Il 72% degli investitori sbaglia proprio in questa fase"
+    data-en="72% of investors fail at this exact step">
+      Il 72% degli investitori sbaglia proprio in questa fase
+    </div>
+
+    <!-- 🔥 MISSING HOOK -->
+    <div style="
+      margin-top:10px;
+      font-size:13px;
+      color:#f59e0b;
+      font-weight:600;
+    "
+    data-it="Ti manca il dato che determina se guadagni o perdi"
+    data-en="You're missing the data that determines profit or loss">
+      Ti manca il dato che determina se guadagni o perdi
+    </div>
+
+    <!-- CTA -->
+    <button 
+      onclick="startPlanPurchase('pro')" 
+      class="btn btn-primary"
+      style="margin-top:16px">
+
+      <span
+        data-it="🔓 Sblocca analisi completa"
+        data-en="🔓 Unlock full analysis">
+        🔓 Sblocca analisi completa
+      </span>
+
+    </button>
+
+    <!-- TRUST -->
+    <div style="
+      margin-top:10px;
+      font-size:12px;
+      opacity:0.7;
+    "
+    data-it="ROI reale • Break-even • Analisi rischio completa"
+    data-en="Real ROI • Break-even • Full risk analysis">
+      ROI reale • Break-even • Analisi rischio completa
+    </div>
+
+  </div>
+
 </div>
 
-<div class="overlay-text"
-data-it="Potresti sembrare profittevole… ma perdere soldi reali"
-data-en="You may look profitable… but lose real money">
 </div>
 
-<div style="margin-top:10px;font-size:13px;opacity:0.85"
-data-it="Il 72% degli investitori sbaglia proprio qui"
-data-en="72% of investors fail right here">
-</div>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
-style="margin-top:14px">
-<span data-it="🔓 Sblocca profitto reale" data-en="🔓 Unlock real profit"></span>
-</button>
+<!-- ================= CTA FINALE ================= -->
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- CTA FINALE -->
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
 
-<button onclick="startPlanPurchase('pro')" 
-class="btn btn-primary btn-lg block"
-data-it="🔓 Scopri se stai davvero guadagnando"
-data-en="🔓 Find out if you're really making money">
-🔓 Scopri se stai davvero guadagnando
+<button 
+  onclick="startPlanPurchase('pro')" 
+  class="btn btn-primary btn-lg block"
+  data-it="🔓 Scopri se stai davvero guadagnando"
+  data-en="🔓 Find out if you're really making money">
+  🔓 Scopri se stai davvero guadagnando
 </button>
 
-<p style="margin-top:8px;font-size:13px;color:#ef4444;font-weight:600;text-align:center"
+<p style="
+margin-top:8px;
+font-size:13px;
+color:#ef4444;
+font-weight:600;
+text-align:center
+"
 data-it="🔥 Il 72% degli investitori sbaglia proprio qui"
 data-en="🔥 72% of investors fail right here">
 🔥 Il 72% degli investitori sbaglia proprio qui
 </p> 
 
-<p style="margin-top:10px;font-size:13px;color:#64748b;"
-data-it="Analisi avanzata con scenari realistici"
-data-en="Advanced analysis with realistic scenarios">
-Analisi avanzata con scenari realistici
+<p style="
+margin-top:10px;
+font-size:13px;
+color:#64748b;
+"
+data-it="Analisi completa con scenari realistici, rischio e mutuo inclusi"
+data-en="Full analysis with realistic scenarios, risk and mortgage included">
+Analisi completa con scenari realistici, rischio e mutuo inclusi
 </p>
 
 </div>
-
-</div>
-
-</div>  
-
 </section>
 
 <section class="seo-block">
