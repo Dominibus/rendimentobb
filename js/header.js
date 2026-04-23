@@ -318,14 +318,20 @@ function renderUser(user){
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
-  const access = (typeof window.getUserAccess === "function")
+const accessRaw = (typeof window.getUserAccess === "function")
   ? window.getUserAccess()
-  : {
-      isLogged:false,
-      isPro:false,
-      isInvestor:false,
-      hasPlan:false
-    };
+  : {};
+
+const RB = window.RB_USER || {};
+
+// 🔥 FORZA DATI REALI (FIX INVESTOR)
+const access = {
+  ...accessRaw,
+  isInvestor: RB.isInvestor === true,
+  isPro: RB.isPro === true,
+  isAdmin: RB.isAdmin === true,
+  isFree: RB.isFree === true
+};
 
   const isAdmin =
     user?.email === "rendimentobb@gmail.com" ||
