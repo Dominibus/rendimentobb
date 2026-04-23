@@ -1475,7 +1475,7 @@ window.quickROI = function(){
   const isPro = access.isPro;
   const isInvestor = access.isInvestor;
   const isLogged = access.isLogged;
-  const isFreeUser = access.isFree;
+  const isFreeUser = !isPro && !isInvestor;
 
   // ================= GUEST POPUP =================
   if(window.currentUser === null){
@@ -1643,7 +1643,7 @@ const access = window.getUserAccess?.() || {};
 const isPro = access.isPro;
 const isInvestor = access.isInvestor;
 const isLogged = access.isLogged;
-const isFreeUser = access.isFree;
+const isFreeUser = !isPro && !isInvestor;
 
   if(isPro) return;
 
@@ -1920,23 +1920,26 @@ function unlockHomeUI(){
 // ================= PLAN SYNC (FIX CRITICO) =================
 document.addEventListener("rb_plan_loaded", ()=>{
 
-  // 🔒 evita loop multipli
-  if(window.__planSynced) return;
-  window.__planSynced = true;
+  const access = window.getUserAccess?.() || {};
 
-  console.log("🔄 PLAN LOADED → SYNC HOME (ONCE)");
+  console.log("🔄 PLAN LOADED → SYNC HOME", access);
 
-  // 🔓 sblocca UI correttamente
-  if(typeof unlockHomeUI === "function"){
-    unlockHomeUI();
+  // ❌ NON bloccare più il sync
+  // window.__planSynced = true;
+
+  // 🔥 aspetta che sia davvero pronto
+  if(!access.isLogged){
+    console.log("⏳ WAIT USER READY...");
+    return;
   }
 
-  // 🔁 ricalcola ROI con access corretto
+  // 🔓 UI
+  unlockHomeUI?.();
+
+  // 🔁 ricalcolo FORZATO (CRITICO)
   setTimeout(()=>{
-    if(typeof quickROI === "function"){
-      quickROI();
-    }
-  }, 100);
+    quickROI?.();
+  }, 150);
 
 });
 // ================= FALLBACK =================
