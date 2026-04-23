@@ -546,10 +546,14 @@ function requirePlan(requiredPlan){
 
 // ================= FUNNEL =================
 
-if(window.__upgradeShown) return;
-window.__upgradeShown = true;
-
 window.triggerUpgradeFlow = function(context = {}){
+
+  if(window.__upgradeShown){
+    console.log("⛔ Upgrade già mostrato");
+    return;
+  }
+
+  window.__upgradeShown = true;
 
   const access = window.getUserAccess();
   const { roi = 0 } = context;
@@ -568,22 +572,15 @@ window.triggerUpgradeFlow = function(context = {}){
     return;
   }
 
-  // 🟡 INVESTOR → SOLO PRO UPSELL (NO BLOCCO)
+  // 🟡 INVESTOR
   if(access.isInvestor){
     console.log("🟡 INVESTOR → PRO UPSELL");
-
-    // ⚠️ IMPORTANTISSIMO:
-    // niente modal aggressivo automatico
     return;
   }
 
   // 🟢 PRO
   console.log("✅ PRO USER → NO POPUP");
 };
-
-// =====================================
-// 🔥 MODAL UNIFICATO (CORE)
-// =====================================
 
 // =====================================
 // 🔥 MODAL UNIFICATO (CORE)
