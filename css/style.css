@@ -15383,3 +15383,51 @@ body.is-investor .pro-only{
 .metric-critical {
   min-height:16px;
 }
+
+/* ================= FIX LEGGIBILITÀ METRICHE ================= */
+
+/* testo principale numeri */
+.metric-card strong{
+  color:#0f172a;
+  font-weight:600;
+}
+
+/* label sopra */
+.metric-card span{
+  color:#334155;
+  font-weight:500;
+}
+
+/* hint sotto */
+.metric-hint{
+  color:#475569; /* più scuro */
+  font-size:12px;
+  margin-top:4px;
+  opacity:0.9;
+}
+
+/* testo critico (break-even locked) */
+.metric-critical{
+  color:#dc2626;
+  font-size:12px;
+  font-weight:600;
+  margin-top:4px;
+}
+
+/* stato LOCK */
+.metric-card strong:contains("🔒"){
+  color:#64748b;
+  opacity:1;
+}
+
+/* miglioriamo contrasto card */
+.metric-card{
+  background:#ffffff;
+  border:1px solid #e2e8f0;
+}
+
+/* stato disabilitato (free/investor blur) */
+.metric-card.pro-blur{
+  opacity:0.6;
+  filter:blur(0.3px); /* meno aggressivo */
+}
