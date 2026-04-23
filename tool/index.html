@@ -994,11 +994,8 @@ data-en="📄 Download Executive Report PDF">
 <script>
 
   window.isProUser = function(){
-
   const access = window.getUserAccess?.() || {};
-
-  return !!(access.isPro || access.isInvestor);
-
+  return !!(access.isPro || access.isAdmin);
 };
 
 /* ================= CITY HANDLER ================= */
@@ -1222,7 +1219,7 @@ function applyPaywall(){
 
 /* ================= AUTO INIT ================= */
 
-document.addEventListener("rb_access_ready", () => {
+document.addEventListener("rb_plan_loaded", () => {
 
   const access = window.getUserAccess();
 
@@ -1254,10 +1251,7 @@ document.addEventListener("rb_access_ready", () => {
     return;
   }
 
-  // INVESTOR + FREE → passa da qui
-  setTimeout(() => {
-    applyPaywall();
-  }, 50);
+  console.log("⛔ applyPaywall DISABLED → gestito da app.js");
 
 });
 
