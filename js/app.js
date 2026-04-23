@@ -2462,7 +2462,7 @@ if(typeof window.updateInvestmentScore === "function"){
 // 🔴 FREE → BLOCCO INTELLIGENTE (CONVERSION MODE)
 // ======================================================
 
-if(access.isFree){
+if(access.isFree && !access.isInvestor){
 
   console.log("🔒 FREE → LIMITED DATA");
 
