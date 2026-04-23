@@ -172,8 +172,8 @@ document.addEventListener("rb_language_changed", () => {
 
   window.currentUser = user;
 
-  // render base subito (guest o utente)
-  renderUser(user);
+ // 🔥 NON render subito → evita flash FREE
+// renderUser(user);
 
   // 🔥 aspetta RB_USER vero (fix definitivo)
   let attempts = 0;
@@ -184,21 +184,21 @@ document.addEventListener("rb_language_changed", () => {
 
     const RB = window.RB_USER;
 
-    if(RB && RB.isFree !== undefined){
+    if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
 
       console.log("✅ HEADER SYNC RB_USER:", RB);
 
       clearInterval(interval);
 
-      renderUser(user); // 🔥 render corretto (investor incluso)
+      // render corretto SOLO quando RB_USER è pronto
+renderUser(user);
 
-      // unlock pro/admin
-      if(RB.isPro || RB.isAdmin){
-        unlockUI();
-      }
+// unlock pro/admin
+if(RB.isPro || RB.isAdmin){
+  unlockUI();
+}
 
-      return;
-    }
+return;
 
     if(attempts > 40){
       console.warn("⚠️ HEADER fallback");
