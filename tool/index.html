@@ -1079,14 +1079,30 @@ function applyPaywall(){
 
     console.log("🟢 PRO → FULL UNLOCK");
 
+    // rimuove TUTTI i lock
     document.querySelectorAll("[data-paywall], .locked-overlay").forEach(el=>{
       el.remove();
     });
 
+    // reset UI
     document.querySelectorAll(".results-card").forEach(card=>{
       card.style.filter = "none";
       card.style.pointerEvents = "auto";
       card.dataset.locked = "false";
+    });
+
+    // mostra tutto
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.style.opacity = "1";
+      el.style.pointerEvents = "auto";
+    });
+
+    document.querySelectorAll(".free-only").forEach(el=>{
+      el.style.display = "none";
+    });
+
+    document.querySelectorAll(".blur-content").forEach(el=>{
+      el.style.filter = "none";
     });
 
     return;
@@ -1095,8 +1111,30 @@ function applyPaywall(){
   // ================= 🟡 INVESTOR =================
   if(access.isInvestor){
 
-    console.log("🟡 INVESTOR → PARTIAL LOCK");
+    console.log("🟡 INVESTOR → PARTIAL UNLOCK CLEAN");
 
+    // ❌ rimuove overlay FREE
+    document.querySelectorAll(".free-only").forEach(el=>{
+      el.style.display = "none";
+    });
+
+    // ❌ rimuove blur globale
+    document.querySelectorAll(".blur-content").forEach(el=>{
+      el.style.filter = "none";
+    });
+
+    // ❌ rimuove eventuali lock statici
+    document.querySelectorAll(".locked-section").forEach(el=>{
+      el.classList.remove("locked-section");
+    });
+
+    // 👁️ PRO = teaser visivo
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.style.opacity = "0.4";
+      el.style.pointerEvents = "none";
+    });
+
+    // 🔒 blocco SOLO sezioni avanzate
     proSections.forEach(id => {
 
       const inner = document.getElementById(id);
@@ -1129,9 +1167,7 @@ function applyPaywall(){
         ">
 
           <div style="font-weight:600;font-size:15px;">
-            ${lang === "en" 
-              ? "🔒 PRO feature" 
-              : "🔒 Funzione PRO"}
+            ${lang === "en" ? "🔒 PRO feature" : "🔒 Funzione PRO"}
           </div>
 
           <div style="font-size:13px;color:#64748b;">
@@ -1216,7 +1252,6 @@ function applyPaywall(){
   });
 
 }
-
 /* ================= AUTO INIT ================= */
 
 document.addEventListener("rb_plan_loaded", () => {
