@@ -213,8 +213,12 @@ if(RB.isInvestor && !RB.isPro){
 }
 
       if(RB.isPro || RB.isAdmin){
-        unlockUI();
-      }
+  console.log("🟢 PRO → FULL UNLOCK");
+  unlockUI();
+}
+else{
+  console.log("🟡 INVESTOR/FREE → NO unlockUI");
+}
 
       return;
     }
