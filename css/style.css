@@ -15431,3 +15431,13 @@ body.is-investor .pro-only{
   opacity:0.6;
   filter:blur(0.3px); /* meno aggressivo */
 }
+
+.metric-card{
+  background:#ffffff;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.metric-card strong{
+  color:#0f172a;
+  font-weight:600;
+}
