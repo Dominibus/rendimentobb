@@ -372,13 +372,6 @@ el.style.position = "relative";
 
 // ================= SMART LOCK ENGINE =================
 function applySmartLock(el, {
-
-  const access = window.getUserAccess();
-
-// 🟡 INVESTOR → NO LOCK HARD
-if(access.isInvestor){
-  return;
-}
   type = "blur", // blur | hide | overlay
   message = "",
   cta = "Sblocca",
@@ -389,8 +382,15 @@ if(access.isInvestor){
 
   const access = window.getUserAccess();
 
-  // PRO → skip
-  if(access.canSeeFullAnalysis) return;
+  // 🟡 INVESTOR → NO LOCK HARD
+  if(access.isInvestor){
+    return;
+  }
+
+  // 🟢 PRO / ADMIN → skip totale
+  if(access.canSeeFullAnalysis){
+    return;
+  }
 
   // reset sicurezza
   el.classList.remove("pro-blur");
@@ -426,6 +426,7 @@ if(access.isInvestor){
 
 }
 
+
 // ================= PLAN SYSTEM =================
 
 // 🔥 ADMIN
@@ -433,6 +434,7 @@ window.isAdmin = function(){
   const email = window.currentUser?.email || "";
   return email === "rendimentobb@gmail.com";
 };
+
 
 // 🔥 PREMIUM USER (ADMIN + PRO)
 window.isPremiumUser = function(){
@@ -449,6 +451,8 @@ window.isPremiumUser = function(){
   return isAdmin || isPro;
 };
 
+
+// 🔓 ACCESS COMPLETO
 window.canUserAccessFull = function(){
 
   const access = window.getUserAccess?.() || {};
@@ -457,12 +461,14 @@ window.canUserAccessFull = function(){
 
 };
 
+
 // ✅ GET PLAN
 function getUserPlan(){
   return window.currentPlan || "free";
 }
 
-// 🔥 GERARCHIA
+
+// 🔥 GERARCHIA PIANI
 function hasPlan(requiredPlan){
 
   const plan = getUserPlan();
@@ -486,6 +492,7 @@ function hasPlan(requiredPlan){
   return false;
 }
 
+
 // 🔒 ACCESS CONTROL
 function requirePlan(requiredPlan){
 
@@ -503,9 +510,9 @@ function requirePlan(requiredPlan){
 
   // 🔒 NON LOGGATO
   if(!window.currentUser && !access.isLogged){
-  showRegisterPopup();
-  return false;
-}
+    showRegisterPopup();
+    return false;
+  }
 
   // 🔒 NON HA PIANO
   if(!hasPlan(requiredPlan)){
