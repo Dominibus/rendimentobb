@@ -4445,35 +4445,32 @@ function forceUnlockUI(){
 
   }
 
-  // =========================
-  // 🟡 INVESTOR → PARTIAL UNLOCK (QUESTO MANCAVA)
-  // =========================
-  else if(access.isInvestor){
+  // 🟡 INVESTOR → PARTIAL UNLOCK (FIX DEFINITIVO)
+else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → ULTRA CLEAN UNLOCK");
+  console.log("🟡 INVESTOR → PARTIAL UNLOCK FIX");
 
-  // 🔓 RIMUOVE TUTTI I BLUR GLOBALI
+  // 🔥 1. PULIZIA TOTALE OVERLAY (QUESTO TI MANCAVA)
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .paywall-mini,
+    .smart-overlay,
+    .lock-overlay
+  `).forEach(el => el.remove());
+
+  // 🔥 2. RIMUOVE TUTTI I BLUR GLOBALI
   document.querySelectorAll(`
     .pro-blur,
-    .locked,
-    .locked-content,
-    .premium-lock
+    .locked-content
   `).forEach(el => {
-
-    el.classList.remove(
-      "pro-blur",
-      "locked",
-      "locked-content",
-      "premium-lock"
-    );
-
+    el.classList.remove("pro-blur","locked-content");
     el.style.filter = "none";
     el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-
   });
 
-  // 🔒 RIAPPLICA SOLO PRO-ONLY
+  // 🔒 3. BLOCCA SOLO PRO (CORRETTO)
   document.querySelectorAll(".pro-only").forEach(el => {
 
     el.classList.add("locked");
@@ -4487,15 +4484,6 @@ function forceUnlockUI(){
     }
 
   });
-
-  // 💣 KILL TOTALE OVERLAY (QUESTO ERA IL BUG)
-  document.querySelectorAll(`
-    .home-blur-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .paywall-mini,
-    .smart-overlay
-  `).forEach(el => el.remove());
 
 }
 
