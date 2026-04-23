@@ -4470,18 +4470,3 @@ function forceUnlockUI(){
   }
 
 }
-
-  // =========================
-  // 🔴 FREE → LOCK NORMALE
-  // =========================
-  else{
-
-    console.log("🔴 FREE → no unlock");
-
-    document.querySelectorAll(".pro-only").forEach(el => {
-      el.classList.add("pro-blur");
-    });
-
-  }
-
-}
