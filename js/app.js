@@ -2114,6 +2114,7 @@ window.calculate = async function(force = false){
   }
 
   window.isCalculating = true;
+  window.__preventRecalculate = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
 
@@ -3645,15 +3646,21 @@ document.addEventListener("rb_auth_ready", () => {
   // 🔥 CASO 2 → RESYNC PRO
   // ===============================
 
-  if(window.simulationExecuted && typeof window.calculate === "function"){
+  if(
+  window.simulationExecuted &&
+  typeof window.calculate === "function" &&
+  !window.__preventRecalculate
+){
 
-    console.log("🔁 Re-run calculate (PRO sync)");
+  window.__preventRecalculate = true;
 
-    setTimeout(()=>{
-      window.calculate(true);
-    },50);
+  console.log("🔁 Re-run calculate (SAFE)");
 
-  }
+  setTimeout(()=>{
+    window.calculate(true);
+  },50);
+
+}
 
   // ===============================
   // 🔥 PDF BUTTON
