@@ -2430,7 +2430,7 @@ if(typeof window.updateInvestmentScore === "function"){
 // 🔴 FREE → BLOCCO INTELLIGENTE (CONVERSION MODE)
 // ======================================================
 
-if(access.isFree && !access.isInvestor){
+if(access.isFree){
 
   console.log("🔒 FREE → LIMITED DATA");
 
@@ -2446,10 +2446,9 @@ if(access.isFree && !access.isInvestor){
     const el = document.getElementById(id);
     if(!el) return;
 
-    // 🔥 NON distruggiamo il contenuto → applichiamo overlay sopra
     el.style.position = "relative";
 
-    // 🔥 evita duplicati
+    // evita duplicati
     if(el.querySelector(".lock-overlay")) return;
 
     const overlay = document.createElement("div");
@@ -2472,27 +2471,16 @@ if(access.isFree && !access.isInvestor){
     `;
 
     overlay.innerHTML = `
-      <div style="
-        padding:18px;
-        max-width:260px;
-      ">
+      <div style="padding:18px;max-width:260px;">
 
-        <div style="
-          font-weight:700;
-          margin-bottom:8px;
-          color:#9a3412;
-        ">
+        <div style="font-weight:700;margin-bottom:8px;color:#9a3412;">
           🔒 ${t(
             "Stai prendendo una decisione senza dati reali",
             "You are making a decision without real data"
           )}
         </div>
 
-        <div style="
-          font-size:12px;
-          margin-bottom:12px;
-          color:#7c2d12;
-        ">
+        <div style="font-size:12px;margin-bottom:12px;color:#7c2d12;">
           ${t(
             "Il 72% degli investitori perde soldi proprio qui",
             "72% of investors lose money right here"
@@ -2517,7 +2505,6 @@ if(access.isFree && !access.isInvestor){
       </div>
     `;
 
-    // 🔥 CLICK → funnel
     overlay.onclick = () => {
       triggerUpgradeFlow({ roi });
     };
@@ -2528,14 +2515,16 @@ if(access.isFree && !access.isInvestor){
 
 }
 
+
 // ======================================================
-// 🟡 INVESTOR → PARZIALE (VALORE + UPSELL)
+// 🟡 INVESTOR → PARZIALE (NO OVERLAY, SOLO PRO LOCK)
 // ======================================================
 
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → PARTIAL DATA");
+  console.log("🟡 INVESTOR → CLEAN PARTIAL");
 
+  // 🔥 render normale (NO blocchi)
   if(typeof renderInvestmentRanking === "function"){
     renderInvestmentRanking(roi);
   }
@@ -2549,7 +2538,10 @@ else if(access.isInvestor){
     renderInvestmentVerdict(roi, payback);
   }
 
-  // 🔒 AI insights limitati
+  // 🔥 rimuove qualsiasi overlay FREE (CRITICO)
+  document.querySelectorAll(".lock-overlay").forEach(el => el.remove());
+
+  // 🔒 AI limitata (UPSELL)
   const aiBox = document.getElementById("ai-insights");
 
   if(aiBox){
@@ -2579,6 +2571,7 @@ else if(access.isInvestor){
   }
 
 }
+
 
 // ======================================================
 // 🟢 PRO / ADMIN → FULL
