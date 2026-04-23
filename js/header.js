@@ -227,10 +227,13 @@ function waitPlanAndRender(user){
     if(!ready){
 
       if(attempts > 40){
-        console.warn("⚠️ HEADER FALLBACK RENDER");
-        renderUser(user);
-        clearInterval(interval);
-      }
+  console.warn("⚠️ HEADER FALLBACK RENDER");
+
+  // 🔥 FORZA STATO GUEST CORRETTO
+  renderUser(null);
+
+  clearInterval(interval);
+}
 
       return;
     }
@@ -355,6 +358,16 @@ function renderUser(user){
 
   const el = document.getElementById("user-area");
   if(!el) return;
+
+  if(!user){
+  el.innerHTML = `
+    <a href="/login/" class="rb-login"
+    data-it="Accedi"
+    data-en="Login">
+    Accedi
+    </a>`;
+  return;
+}
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
