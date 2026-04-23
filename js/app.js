@@ -2618,7 +2618,7 @@ if(riskTool){
   riskTool.innerText = riskScore + " / 100";
 }
 
-// ================= KPI HOME (SE PRESENTE) =================
+// ================= KPI HOME (FIX INVESTOR) =================
 
 const roiHome = document.getElementById("qr_roi");
 if(roiHome){
@@ -2627,10 +2627,14 @@ if(roiHome){
 
 const profitHome = document.getElementById("profit-live");
 if(profitHome){
-  profitHome.innerText =
-    (access.canSeeFullAnalysis || access.isInvestor)
-    ? formatCurrency(net)
-    : "—";
+
+  if(access.isFree){
+    profitHome.innerText = "—";
+  }
+  else{
+    profitHome.innerText = formatCurrency(net);
+  }
+
 }
 
 const revenueHome = document.getElementById("revenue-live");
