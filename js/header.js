@@ -190,68 +190,20 @@ document.addEventListener("rb_language_changed", () => {
     }
   }
 
-  window.currentUser = user;  
-  waitPlanAndRender(user);  
+  window.currentUser = user;
+
+// 🔥 render immediato SEMPRE
+renderUser(user);
+
+// 🔥 sync quando piano pronto (CRITICO)
+window.addEventListener("rb_plan_ready", () => {
+  renderUser(window.currentUser);
+});  
 
 });
 
 });
 
-/* =====================
-⏳ WAIT PLAN (FINAL FIX CLEAN)
-===================== */
-
-function waitPlanAndRender(user){
-
-  let attempts = 0;
-
-  const interval = setInterval(()=>{
-
-    attempts++;
-
-    const access = (typeof window.getUserAccess === "function")
-      ? window.getUserAccess()
-      : null;
-
-    // 🔥 READY VERO (NON FAKE)
-    const ready =
-  access &&
-  typeof access.isFree !== "undefined";
-
-    if(!ready){
-
-      if(attempts > 40){
-  console.warn("⚠️ HEADER FALLBACK RENDER");
-
-  // 🔥 FORZA STATO GUEST CORRETTO
-  renderUser(null);
-
-  clearInterval(interval);
-}
-
-      return;
-    }
-
-    clearInterval(interval);
-
-    console.log("✅ HEADER READY (FIXED):", access);
-
-    renderUser(user);
-
-    // 🔓 unlock solo PRO / ADMIN
-    const isAdmin =
-      (window.userRole || "").toLowerCase() === "admin" ||
-      window.currentUser?.email === "rendimentobb@gmail.com";
-
-    const isPro = isAdmin || access.isPro;
-
-    if(isPro && typeof unlockUI === "function"){
-      unlockUI();
-    }
-
-  },120);
-
-}
 /* =====================
 📱 MENU + LANG
 ===================== */
