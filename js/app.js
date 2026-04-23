@@ -4446,24 +4446,28 @@ function forceUnlockUI(){
 
   }
 
-  // 🟡 INVESTOR → PARTIAL UNLOCK (FIX DEFINITIVO)
-// 🟡 INVESTOR → NON GESTITO QUI
-else if(access.isInvestor){
+  // =========================
+  // 🟡 INVESTOR → NON GESTITO QUI
+  // =========================
+  else if(access.isInvestor){
 
-  console.log("🛑 SKIP forceUnlockUI for INVESTOR");
+    console.log("🛑 SKIP forceUnlockUI for INVESTOR");
+    return;
 
-  return;
-}
+  }
 
-    if(!el.querySelector(".lock-overlay")){
-      el.insertAdjacentHTML("beforeend", `
-        <div class="lock-overlay">
-          🔒 PRO
-        </div>
-      `);
-    }
+  // =========================
+  // 🔴 FREE → LOCK BASE
+  // =========================
+  else{
 
-  });
+    console.log("🔴 FREE → no unlock");
+
+    document.querySelectorAll(".pro-only").forEach(el => {
+      el.classList.add("pro-blur");
+    });
+
+  }
 
 }
 
