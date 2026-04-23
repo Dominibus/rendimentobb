@@ -205,7 +205,7 @@ return;
       clearInterval(interval);
     }
 
-  }, 120);
+  } 120);
 
 });
 
