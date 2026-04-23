@@ -785,6 +785,7 @@ box.appendChild(warning); // ✅ ora è dentro → niente errore
 
 modal.appendChild(box);
 document.body.appendChild(modal);
+  document.body.classList.add("modal-open");
 };
 // ================= GLOBAL HERO BACKGROUND =================
 
@@ -2220,8 +2221,8 @@ const net = Number(
     });
 
     // ================= SMART PAYWALL (MODAL) =================
-if(!access.isInvestor){
-  showUpgradePopup(roi);
+if(access.isFree && roi > 10){
+  triggerUpgradeFlow({ roi });
 }
 
 // ================= UI BASE (FIX REAL DATA ONLY) =================
@@ -2440,6 +2441,11 @@ if(access.isFree){
     "investment-verdict",
     "ai-insights"
   ];
+
+  // ❌ evita doppio sistema
+if(document.getElementById("rb-upgrade-modal")){
+  return;
+}
 
   lockedSections.forEach(id => {
 
