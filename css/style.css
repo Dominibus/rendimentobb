@@ -15378,3 +15378,8 @@ body.is-investor .pro-only{
   opacity:0.6;
   pointer-events:none;
 }
+
+.metric-hint,
+.metric-critical {
+  min-height:16px;
+}
