@@ -2107,10 +2107,8 @@ window.calculate = async function(force = false){
   }
 
   if(!window.firebaseReady){
-    console.warn("⏳ Firebase non pronto → delay calculate");
-    window.pendingCalculation = true;
-    return;
-  }
+  console.warn("⏳ Firebase non pronto → continuo senza save");
+}
 
   window.isCalculating = true;
   window.__preventRecalculate = true;
