@@ -15497,3 +15497,52 @@ body.is-investor #advanced-analysis {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+/* =====================================
+🔥 RENDIMENTOBB – FIX OVERLAY SIMULATORE (FINAL)
+NON rompe altre pagine
+===================================== */
+
+/* 1. BLOCCA SBORDI */
+.simulator-container{
+  position:relative;
+  overflow:hidden;
+}
+
+/* 2. ELIMINA QUALSIASI OVERLAY SPORCO SUL TOOL */
+body.app-ready .simulator-container::before,
+body.app-ready .simulator-container::after{
+  display:none !important;
+  content:none !important;
+}
+
+/* 3. FIX HERO OVERLAY (SOLO VISIVO, NON INVASIVO) */
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* 4. ASSICURA CONTENUTO SOPRA */
+.simulator-container > *{
+  position:relative;
+  z-index:1;
+}
+
+/* 5. SICUREZZA EXTRA – BLOCCA OVERLAY GLOBALI */
+section::before,
+.container::before{
+  max-width:100% !important;
+}
+
+/* 6. FIX LARGHEZZA (evita effetto bande laterali) */
+.simulator-container{
+  max-width:1200px;
+  margin:0 auto;
+}
