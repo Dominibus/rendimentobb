@@ -15497,3 +15497,47 @@ body.is-investor #advanced-analysis {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
+/* =====================================
+🟡 INVESTOR TOOL – REAL FIX (NO BREAK)
+===================================== */
+
+/* 🔥 NON NASCONDERE CONTENUTO */
+body.is-investor .blur-content {
+  filter: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
+/* 🔥 RIMUOVE SOLO OVERLAY BLOCCANTI */
+body.is-investor .locked-overlay,
+body.is-investor .home-blur-overlay,
+body.is-investor .upgrade-overlay,
+body.is-investor .smart-overlay,
+body.is-investor .paywall-mini {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 🔓 SBLOCCA CARD */
+body.is-investor .results-card,
+body.is-investor .metric-card {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* 🔒 BLOCCA SOLO PRO */
+body.is-investor .pro-only {
+  opacity: 0.35 !important;
+  pointer-events: none !important;
+}
+
+/* 🔥 SICUREZZA: NO HERO BREAK */
+body.is-investor .tool-hero::before,
+body.is-investor .tool-hero::after {
+  display: block !important;
+  opacity: 1 !important;
+  background: inherit !important;
+}
