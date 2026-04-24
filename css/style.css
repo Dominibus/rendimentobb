@@ -15264,7 +15264,7 @@ body.is-admin .locked-overlay{
 }
 
 /* ================= BODY LOCK ================= */
-body.modal-open{
+body.modal-open:not(.is-free){
   overflow:hidden;
   touch-action:none;
 }
@@ -15508,9 +15508,9 @@ body.is-investor .pro-only {
 🧼 BLUR CONTENT (NON NASCONDERE!)
 =============================== */
 body.is-investor .blur-content {
+  display: block !important;
   filter: none !important;
   opacity: 1 !important;
-  backdrop-filter: none !important;
 }
 
 /* ===============================
