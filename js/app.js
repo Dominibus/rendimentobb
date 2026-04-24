@@ -4073,6 +4073,7 @@ else if(access.isInvestor){
 
   console.log("🟡 INVESTOR → CLEAN PARTIAL UI");
 
+  // ✅ RIMUOVE SOLO OVERLAY FASTIDIOSI
   document.querySelectorAll(`
     .lock-overlay,
     .home-blur-overlay,
@@ -4085,20 +4086,8 @@ else if(access.isInvestor){
     if(el.id !== "register-popup") el.remove();
   });
 
-  document.querySelectorAll("*").forEach(el=>{
-    el.classList.remove(
-      "pro-blur",
-      "locked",
-      "locked-content",
-      "premium-lock",
-      "locked-section"
-    );
-
-    if(el.style){
-      el.style.filter = "none";
-      el.style.pointerEvents = "auto";
-    }
-  });
+  // ❌ NON TOCCARE CLASSI GLOBALI
+  // ❌ NON usare querySelectorAll("*")
 
 }
 
