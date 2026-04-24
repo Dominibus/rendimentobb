@@ -37,27 +37,52 @@ window.openProModal = function(){
   const modal = document.getElementById("rb-pro-modal");
   if(!modal) return;
 
+  // 🔥 OPEN
   modal.classList.add("open");
+  document.body.classList.add("modal-open");
 
-  // chiusura
-  const close = document.getElementById("rb-close-modal");
-  if(close){
-    close.onclick = () => modal.classList.remove("open");
+  // 🔥 CLOSE HANDLER
+  function closeModal(){
+    modal.classList.remove("open");
+    document.body.classList.remove("modal-open");
+    console.log("🔓 CLOSE PRO MODAL");
   }
 
-  // upgrade click
+  // chiusura click
+  const close = document.getElementById("rb-close-modal");
+  if(close){
+    close.onclick = closeModal;
+  }
+
+  // click fuori (overlay)
+  modal.onclick = (e)=>{
+    if(e.target === modal){
+      closeModal();
+    }
+  };
+
+  // upgrade
   const btn = document.getElementById("rb-upgrade-btn");
   if(btn){
     btn.onclick = () => {
-      if(typeof window.startPlanPurchase === "function"){
-        window.startPlanPurchase("pro");
-      } else {
-        alert("Upgrade PRO");
-      }
+      closeModal();
+      window.startPlanPurchase?.("pro");
     };
   }
 
 };
+
+// 💣 SAFETY RESET (ANTI-GHOST MODAL)
+document.addEventListener("rb_plan_loaded", ()=>{
+  document.body.classList.remove("modal-open");
+
+  const modal = document.getElementById("rb-pro-modal");
+  if(modal){
+    modal.classList.remove("open");
+  }
+
+  console.log("🧹 CLEAN MODAL AFTER PLAN LOAD");
+});
 
 /* =====================
 🎨 HERO BG
