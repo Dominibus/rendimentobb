@@ -548,8 +548,9 @@ function requirePlan(requiredPlan){
 
 window.triggerUpgradeFlow = function(context = {}){
 
+  // 🔥 HARD BLOCK PRIMA DI FIREBASE
   if(!window.firebaseReady){
-    console.warn("⏳ skip upgrade → firebase non pronto");
+    console.warn("⛔ BLOCK upgrade → Firebase non pronto");
     return;
   }
 
