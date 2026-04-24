@@ -113,6 +113,42 @@ window.alert = function(msg){
   }
 
 };
+
+// =====================================
+// 💣 GLOBAL MODAL FIX (CRITICO)
+// =====================================
+
+window.forceCloseAllModals = function(){
+
+  console.log("🧹 FORCE CLOSE MODALS");
+
+  // rimuove stato globale
+  document.body.classList.remove("modal-open");
+
+  // chiude tutti i modal possibili
+  document.querySelectorAll(`
+    #rb-upgrade-modal,
+    #rb-pro-modal,
+    .upgrade-modal
+  `).forEach(modal => {
+    modal.remove();
+  });
+
+};
+
+// 🔥 AUTO FIX CONTINUO
+setInterval(() => {
+
+  const modalOpen =
+    document.querySelector("#rb-upgrade-modal") ||
+    document.querySelector(".upgrade-modal") ||
+    document.querySelector("#rb-pro-modal.open");
+
+  if(!modalOpen){
+    document.body.classList.remove("modal-open");
+  }
+
+}, 500);
 // ================= SAFE GLOBAL EARLY FIX =================
 
 // 🔥 USA SOLO FIREBASE (SINGLE SOURCE OF TRUTH)
@@ -756,6 +792,7 @@ cta.style = `
 
 cta.onclick = () => {
   modal.remove();
+  document.body.classList.remove("modal-open");
   config.action();
 };
 
@@ -770,7 +807,10 @@ close.style = `
   cursor:pointer;
 `;
 
-close.onclick = () => modal.remove();
+close.onclick = () => {
+  modal.remove();
+  document.body.classList.remove("modal-open");
+};
 
 // ===== WARNING (FIX ERRORE QUI) =====
 const warning = document.createElement("div");
@@ -3146,6 +3186,10 @@ setTimeout(()=>{
   });
 
 });
+
+setTimeout(() => {
+  forceCloseAllModals();
+}, 300);
 
 
 // ===============================================
