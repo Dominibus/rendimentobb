@@ -3163,25 +3163,17 @@ document.addEventListener("rb_auth_ready", () => {
 
   }
 
-  // ===============================
-  // 🔥 CASO 2 → RESYNC PRO
-  // ===============================
-
-  if(
-  window.simulationExecuted &&
-  typeof window.calculate === "function" &&
-  !window.__preventRecalculate
-){
-
-  window.__preventRecalculate = true;
-
-  console.log("🔁 Re-run calculate (SAFE)");
-
-  setTimeout(()=>{
-    window.calculate(true);
-  },50);
-
-}
+ // 🔥 DISABILITATO (BUG DOUBLE CALCULATE)
+// if(
+//   window.simulationExecuted &&
+//   typeof window.calculate === "function" &&
+//   !window.__preventRecalculate
+// ){
+//   window.__preventRecalculate = true;
+//   setTimeout(()=>{
+//     window.calculate(true);
+//   },50);
+// }
 
   // ===============================
   // 🔥 PDF BUTTON
