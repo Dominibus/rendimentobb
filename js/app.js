@@ -2064,8 +2064,8 @@ window.calculate = async function(force = false){
   }
 
   if(!window.firebaseReady){
-  console.warn("⏳ Firebase non pronto → continuo senza save");
-}
+    console.warn("⏳ Firebase non pronto → continuo senza save");
+  }
 
   window.isCalculating = true;
   window.__preventRecalculate = true;
@@ -2077,6 +2077,8 @@ window.calculate = async function(force = false){
     .upgrade-msg,
     .investor-upsell
   `).forEach(el => el.remove());
+
+  console.log("🚀 CALCULATE START");
 
   try{
 
@@ -2096,7 +2098,7 @@ window.calculate = async function(force = false){
     const interestRate = getValue("interestRate") || 3.5;
     const loanYears = getValue("loanYears") || 20;
 
-    const access = window.getUserAccess();
+    const access = window.getUserAccess?.() || {};
 
     // ================= CALCOLO =================
     const result = calculateROI({
@@ -2135,50 +2137,41 @@ window.calculate = async function(force = false){
       expenses
     });
 
-    // ================= RESULTS RENDER (MANCAVA) =================
+    // ================= RESULTS =================
+    const resultsBox = document.getElementById("results");
 
-const resultsBox = document.getElementById("results");
+    if(resultsBox){
+      resultsBox.innerHTML = `
+        <div class="blur-content">
+          <div style="margin-top:20px">
 
-if(resultsBox){
+            <div class="kpi-box">
+              <div class="kpi-label">
+                ${t("ROI stimato","Estimated ROI")}
+              </div>
+              <div class="kpi-value">
+                ${roi.toFixed(1)}%
+              </div>
+            </div>
 
-  resultsBox.innerHTML = `
-    <div class="blur-content">
+            <div class="kpi-box">
+              <div class="kpi-label">
+                ${t("Profitto annuo","Annual profit")}
+              </div>
+              <div class="kpi-value">
+                ${formatCurrency(net)}
+              </div>
+            </div>
 
-      <div style="margin-top:20px">
-
-        <div class="kpi-box">
-          <div class="kpi-label">
-            ${t("ROI stimato","Estimated ROI")}
-          </div>
-          <div class="kpi-value">
-            ${roi.toFixed(1)}%
           </div>
         </div>
+      `;
+    }
 
-        <div class="kpi-box">
-          <div class="kpi-label">
-            ${t("Profitto annuo","Annual profit")}
-          </div>
-          <div class="kpi-value">
-            ${formatCurrency(net)}
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-    if(
-  window.firebaseReady &&
-  access.isFree &&
-  !access.isInvestor &&
-  roi > 10
-){
-  triggerUpgradeFlow({ roi });
-}
+    // ================= FUNNEL =================
+    if(window.firebaseReady && access.isFree && !access.isInvestor && roi > 10){
+      triggerUpgradeFlow({ roi });
+    }
 
     // ================= ROI =================
     const roiEl = document.getElementById("roi-live");
@@ -2202,7 +2195,6 @@ if(resultsBox){
     const annualEl = document.getElementById("profit-annual");
 
     if(monthlyEl && annualEl){
-
       if(access.isFree){
         monthlyEl.innerText = "🔒";
         annualEl.innerText = "—";
@@ -2220,11 +2212,9 @@ if(resultsBox){
 
     // ================= SCORE =================
     const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
-
     renderInvestmentScore?.(roi, riskScore);
 
-    // ================= INVESTOR / PRO / FREE =================
-
+    // ================= ACCESS UI =================
     if(access.isFree){
 
       ["investment-ranking","investment-risk-meter","investment-verdict","ai-insights"]
@@ -2237,26 +2227,19 @@ if(resultsBox){
         const overlay = document.createElement("div");
         overlay.className = "lock-overlay";
         overlay.style = "position:absolute;inset:0;background:rgba(255,247,237,0.92);display:flex;align-items:center;justify-content:center;cursor:pointer;";
-
         overlay.innerHTML = "🔒 Upgrade";
-
         overlay.onclick = ()=> triggerUpgradeFlow({ roi });
 
         el.appendChild(overlay);
       });
 
-    }
-
-    else if(access.isInvestor){
+    } else if(access.isInvestor){
 
       document.querySelectorAll(".lock-overlay").forEach(el=>el.remove());
-
       renderInvestmentRanking?.(roi);
       renderRiskMeter?.(riskScore);
 
-    }
-
-    else{
+    } else {
 
       renderInvestmentRanking?.(roi);
       renderRiskMeter?.(riskScore);
@@ -2270,7 +2253,6 @@ if(resultsBox){
           expenses
         }));
       }
-
     }
 
     // ================= CHART =================
@@ -2285,11 +2267,17 @@ if(resultsBox){
 
     window.RB_LANG?.apply?.();
 
-  }catch(err){
-    console.error("💥 calculate error:", err);
-  }
+  } catch(err){
 
-  window.isCalculating = false;
+    console.error("💥 calculate error:", err);
+
+  } finally {
+
+    // 🔥 FIX CRITICO → SBLOCCA SEMPRE
+    window.isCalculating = false;
+
+    console.log("✅ CALCULATE END");
+  }
 };
 
 function renderChart(net){
