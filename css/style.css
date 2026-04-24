@@ -15451,93 +15451,75 @@ body.is-investor .pro-only{
 }
 
 /* =====================================
-🟡 INVESTOR – FULL UI UNLOCK (FINAL FIX)
+🟡 INVESTOR – TEASER MODE (FINAL CLEAN)
+NO CONFLICT – NO BREAK – SILICON VALLEY STYLE
 ===================================== */
 
-/* 🔥 RIMUOVE OVERLAY GLOBALI */
+/* ===============================
+🔥 RIMUOVE SOLO OVERLAY INVASIVI
+=============================== */
 body.is-investor .home-blur-overlay,
 body.is-investor .results-overlay,
 body.is-investor .upgrade-overlay,
 body.is-investor .smart-overlay,
-body.is-investor .paywall-mini {
+body.is-investor .paywall-mini,
+body.is-investor .lock-overlay,
+body.is-investor [data-paywall] {
   display: none !important;
   opacity: 0 !important;
-  backdrop-filter: none !important;
   pointer-events: none !important;
+  backdrop-filter: none !important;
 }
 
-/* 🔥 RIMUOVE OVERLAY HERO (pseudo-elemento) */
+/* ===============================
+🔥 HERO SAFE (NON ROMPE UI)
+=============================== */
 body.is-investor .hero::before,
-body.is-investor .hero::after {
-  display: none !important;
-  opacity: 0 !important;
-  background: none !important;
+body.is-investor .hero::after,
+body.is-investor .tool-hero::before,
+body.is-investor .tool-hero::after {
+  opacity: 1 !important;
+  display: block !important;
+  background: inherit !important;
 }
 
-/* 🔓 SBLOCCA SEZIONI BLOCCATE */
+/* ===============================
+🔓 CONTENUTO BASE VISIBILE
+=============================== */
+body.is-investor .results-card,
+body.is-investor .metric-card,
 body.is-investor .locked-section {
   filter: none !important;
   opacity: 1 !important;
   pointer-events: auto !important;
 }
 
-/* 💣 KILL DEFINITIVO BLUR CONTENT */
-body.is-investor .blur-content {
-  display: none !important;
-  opacity: 0 !important;
-  backdrop-filter: none !important;
-  filter: none !important;
-}
-
-/* 🔥 SICUREZZA EXTRA (ANTI-BUG) */
-body.is-investor .results-card,
-body.is-investor .metric-card,
-body.is-investor #advanced-analysis {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* =====================================
-🟡 INVESTOR TOOL – REAL FIX (NO BREAK)
-===================================== */
-
-/* 🔥 NON NASCONDERE CONTENUTO */
-body.is-investor .blur-content {
-  filter: none !important;
-  opacity: 1 !important;
-  backdrop-filter: none !important;
-}
-
-/* 🔥 RIMUOVE SOLO OVERLAY BLOCCANTI */
-body.is-investor .locked-overlay,
-body.is-investor .home-blur-overlay,
-body.is-investor .upgrade-overlay,
-body.is-investor .smart-overlay,
-body.is-investor .paywall-mini {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* 🔓 SBLOCCA CARD */
-body.is-investor .results-card,
-body.is-investor .metric-card {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* 🔒 BLOCCA SOLO PRO */
+/* ===============================
+🧠 TEASER MODE → BLOCCA SOLO PRO
+=============================== */
 body.is-investor .pro-only {
+  filter: blur(6px);
   opacity: 0.35 !important;
   pointer-events: none !important;
+  user-select: none;
 }
 
-/* 🔥 SICUREZZA: NO HERO BREAK */
-body.is-investor .tool-hero::before,
-body.is-investor .tool-hero::after {
-  display: block !important;
+/* ===============================
+🧼 BLUR CONTENT (NON NASCONDERE!)
+=============================== */
+body.is-investor .blur-content {
+  filter: none !important;
   opacity: 1 !important;
-  background: inherit !important;
+  backdrop-filter: none !important;
+}
+
+/* ===============================
+🚫 SICUREZZA EXTRA (ANTI BUG)
+Rimuove solo effetti, NON contenuto
+=============================== */
+body.is-investor .locked,
+body.is-investor .premium-lock {
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
