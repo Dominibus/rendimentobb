@@ -2097,7 +2097,7 @@ function getValue(id){
   const v = parseFloat(el.value);
   return isNaN(v) ? 0 : v;
 }
-// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
+// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL FIXED) =================
 
 window.calculate = async function(force = false){
 
@@ -2114,16 +2114,58 @@ window.calculate = async function(force = false){
   }
 
   window.isCalculating = true;
+
+  // 💣 HARD LOCK ANTI-DOPPIO TRIGGER
+  if(window.__calcLock){
+    console.warn("⛔ HARD LOCK calculate → skip");
+    return;
+  }
+  window.__calcLock = true;
+
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
 
+  // 💣 RESET UI HARD (PRIMA DI QUALSIASI RENDER)
+  document.querySelectorAll(`
+    .lock-overlay,
+    .locked-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .home-blur-overlay,
+    .smart-overlay,
+    .paywall-mini,
+    [data-paywall]
+  `).forEach(el => {
+    if(el.id !== "register-popup") el.remove();
+  });
+
+  document.querySelectorAll(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock,
+    .locked-section
+  `).forEach(el => {
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock",
+      "locked-section"
+    );
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+  });
+
   // 🧹 CLEAN UI (evita duplicati)
-document.querySelectorAll(`
-  .smart-overlay,
-  .upgrade-msg,
-  .investor-upsell
-`).forEach(el => el.remove());
+  document.querySelectorAll(`
+    .smart-overlay,
+    .upgrade-msg,
+    .investor-upsell
+  `).forEach(el => el.remove());
 
   try{
 
@@ -2169,58 +2211,57 @@ document.querySelectorAll(`
     const userLogged = !!window.currentUser;
     let result;
 
-const access = window.getUserAccess();
+    const access = window.getUserAccess();
 
-if(!userLogged){
-  console.log("👻 Guest → allowed (UI already handled)");
-}
+    if(!userLogged){
+      console.log("👻 Guest → allowed (UI already handled)");
+    }
 
-result = calculateROI({
-  price,
-  equity,
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
-});
+    result = calculateROI({
+      price,
+      equity,
+      priceNight,
+      occupancy,
+      expenses,
+      commission,
+      tax,
+      loanAmount,
+      interestRate,
+      loanYears
+    });
 
-console.log("📊 RESULT RAW:", result);
+    console.log("📊 RESULT RAW:", result);
 
     // ================= VALIDAZIONE =================
-   if (!result || typeof result !== "object") {
-  console.error("💥 RESULT INVALID:", result);
-  return;
-}
+    if (!result || typeof result !== "object") {
+      console.error("💥 RESULT INVALID:", result);
+      return;
+    }
 
-    // ================= SAFE VALUES (PRIMA!) =================
+    // ================= SAFE VALUES =================
     const roi = Number(result?.roi ?? result?.ROI ?? 0);
 
-const gross = Number(
-  result?.revenue ??
-  result?.gross ??
-  result?.fatturato ??
-  0
-);
+    const gross = Number(
+      result?.revenue ??
+      result?.gross ??
+      result?.fatturato ??
+      0
+    );
 
-const net = Number(
-  result?.netAfterMortgage ??
-  result?.profit ??
-  result?.net ??
-  result?.utile ??
-  0
-);
+    const net = Number(
+      result?.netAfterMortgage ??
+      result?.profit ??
+      result?.net ??
+      result?.utile ??
+      0
+    );
 
-  if(!roi && !gross && !net){
-  console.error("💥 RESULT EMPTY → CHECK ROI ENGINE", result);
-  return;
-}
+    if(!roi && !gross && !net){
+      console.error("💥 RESULT EMPTY → CHECK ROI ENGINE", result);
+      return;
+    }
 
-
-    // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
+    // ================= POST ANALYSIS =================
     runPostAnalysis(result, {
       price,
       gross,
@@ -2229,129 +2270,90 @@ const net = Number(
       expenses
     });
 
-    // ================= SMART PAYWALL (MODAL) =================
-if(access.isFree && !access.isInvestor && roi > 10){
-  triggerUpgradeFlow({ roi });
-}
-
-// ================= UI BASE (FIX REAL DATA ONLY) =================
-
-const roiEl = document.getElementById("roi-live");
-const monthlyEl = document.getElementById("profit-monthly");
-const annualEl = document.getElementById("profit-annual");
-
-// 🚨 NON mostrare dati fake
-if(roi <= 0){
-  console.warn("⚠️ ROI 0 → continuo comunque render");
-}
-
-// ================= ROI (SMART ACCESS) =================
-
-if(roiEl){
-
-  roiEl.style.opacity = "0";
-
-  setTimeout(()=>{
-
-    // 🔴 FREE → preview (non affidabile)
-    if(access.isFree){
-  roiEl.innerText = "~ " + roi.toFixed(1) + "%";
-  roiEl.style.color = "#f59e0b";
-}
-else if(access.isInvestor){
-  roiEl.innerText = roi.toFixed(1) + "%";
-}
-else{
-  roiEl.innerText = roi.toFixed(1) + "%";
-}
-    roiEl.style.opacity = "1";
-
-  },150);
-
-}
-    
-// =====================================
-// 🔓 UNLOCK RESULTS (FINAL FIXED)
-// =====================================
-
-console.log("🔓 UNLOCK RESULTS:", access);
-
-const cards = document.querySelectorAll(".metric-card");
-
-
-// 🟢 PRO / ADMIN → FULL UNLOCK
-if(access.isPro || access.isAdmin){
-
-  console.log("🟢 UNLOCK → PRO FULL");
-
-  cards.forEach(el => {
-    el.classList.remove("pro-blur", "locked");
-
-    const lock = el.querySelector(".lock-overlay");
-    if(lock) lock.remove();
-  });
-
-  document.querySelectorAll(`
-    .home-blur-overlay,
-    .lock-overlay,
-    .locked-overlay,
-    .results-overlay,
-    .upgrade-overlay
-  `).forEach(el => el?.remove());
-
-}
-
-
-// 🟡 INVESTOR → GESTITO DA BLOCCO PRO-LIKE (NO OVERRIDE)
-else if(access.isInvestor){
-
-  console.log("🟡 INVESTOR → SKIP (gestito da PRO-LIKE)");
-
-  // 💣 NON fare nulla qui
-  // evita conflitti con:
-  // "🟡 INVESTOR → PRO-LIKE UNLOCK"
-
-}
-
-
-// 🔴 FREE → lascia invariato (gestito sopra)
-else{
-
-  console.log("🔒 FREE → LOCK ACTIVE");
-
-  cards.forEach(el => {
-
-    if(!el.classList.contains("locked")){
-      el.classList.add("locked");
+    // ================= PAYWALL =================
+    if(access.isFree && !access.isInvestor && roi > 10){
+      triggerUpgradeFlow({ roi });
     }
 
-  });
+    // ================= ROI UI =================
+    const roiEl = document.getElementById("roi-live");
 
-}
+    if(roiEl){
 
+      roiEl.style.opacity = "0";
 
-// =====================================
-// 🔒 SAFE UNLOCK SYSTEM (ANTI CONFLICT)
-// =====================================
+      setTimeout(()=>{
 
-if(!window.__uiUnlocked){
+        if(access.isFree){
+          roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+          roiEl.style.color = "#f59e0b";
+        }
+        else{
+          roiEl.innerText = roi.toFixed(1) + "%";
+        }
 
-  window.__uiUnlocked = true;
+        roiEl.style.opacity = "1";
 
-  // 💣 NON forzare unlock su investor
-  if(!access.isInvestor){
+      },150);
 
-    setTimeout(() => {
-      forceUnlockUI();
-    }, 50);
+    }
 
-  } else {
+    // =====================================
+    // 🔓 UNLOCK RESULTS
+    // =====================================
 
-    console.log("🟡 INVESTOR → SKIP forceUnlockUI");
+    console.log("🔓 UNLOCK RESULTS:", access);
 
+    const cards = document.querySelectorAll(".metric-card");
+
+    if(access.isPro || access.isAdmin){
+
+      cards.forEach(el => {
+        el.classList.remove("pro-blur", "locked");
+
+        const lock = el.querySelector(".lock-overlay");
+        if(lock) lock.remove();
+      });
+
+    }
+    else if(access.isInvestor){
+
+      console.log("🟡 INVESTOR → SKIP");
+
+    }
+    else{
+
+      cards.forEach(el => {
+        el.classList.add("locked");
+      });
+
+    }
+
+    // ================= SAFE UNLOCK =================
+    if(!window.__uiUnlocked){
+
+      window.__uiUnlocked = true;
+
+      if(!access.isInvestor){
+        setTimeout(() => {
+          forceUnlockUI();
+        }, 50);
+      }
+
+    }
+
+  }catch(err){
+    console.error("💥 calculate error:", err);
   }
 
-}
+  // ================= RESET =================
+  window.isCalculating = false;
+
+  setTimeout(() => {
+    window.__calcLock = false;
+  }, 150);
+
+};
     // ================= HIDDEN DATA MESSAGE =================
 
 const hiddenBox = document.getElementById("hidden-roi-msg");
