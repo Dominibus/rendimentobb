@@ -2097,7 +2097,7 @@ function getValue(id){
   const v = parseFloat(el.value);
   return isNaN(v) ? 0 : v;
 }
-// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL FIXED) =================
+// ================= CORE CALCULATE ENGINE (SAAS READY – FINAL) =================
 
 window.calculate = async function(force = false){
 
@@ -2114,58 +2114,16 @@ window.calculate = async function(force = false){
   }
 
   window.isCalculating = true;
-
-  // 💣 HARD LOCK ANTI-DOPPIO TRIGGER
-  if(window.__calcLock){
-    console.warn("⛔ HARD LOCK calculate → skip");
-    return;
-  }
-  window.__calcLock = true;
-
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
 
-  // 💣 RESET UI HARD (PRIMA DI QUALSIASI RENDER)
-  document.querySelectorAll(`
-    .lock-overlay,
-    .locked-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .home-blur-overlay,
-    .smart-overlay,
-    .paywall-mini,
-    [data-paywall]
-  `).forEach(el => {
-    if(el.id !== "register-popup") el.remove();
-  });
-
-  document.querySelectorAll(`
-    .pro-blur,
-    .locked,
-    .locked-content,
-    .premium-lock,
-    .locked-section
-  `).forEach(el => {
-    el.classList.remove(
-      "pro-blur",
-      "locked",
-      "locked-content",
-      "premium-lock",
-      "locked-section"
-    );
-
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
-  });
-
   // 🧹 CLEAN UI (evita duplicati)
-  document.querySelectorAll(`
-    .smart-overlay,
-    .upgrade-msg,
-    .investor-upsell
-  `).forEach(el => el.remove());
+document.querySelectorAll(`
+  .smart-overlay,
+  .upgrade-msg,
+  .investor-upsell
+`).forEach(el => el.remove());
 
   try{
 
@@ -2211,57 +2169,58 @@ window.calculate = async function(force = false){
     const userLogged = !!window.currentUser;
     let result;
 
-    const access = window.getUserAccess();
+const access = window.getUserAccess();
 
-    if(!userLogged){
-      console.log("👻 Guest → allowed (UI already handled)");
-    }
+if(!userLogged){
+  console.log("👻 Guest → allowed (UI already handled)");
+}
 
-    result = calculateROI({
-      price,
-      equity,
-      priceNight,
-      occupancy,
-      expenses,
-      commission,
-      tax,
-      loanAmount,
-      interestRate,
-      loanYears
-    });
+result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
-    console.log("📊 RESULT RAW:", result);
+console.log("📊 RESULT RAW:", result);
 
     // ================= VALIDAZIONE =================
-    if (!result || typeof result !== "object") {
-      console.error("💥 RESULT INVALID:", result);
-      return;
-    }
+   if (!result || typeof result !== "object") {
+  console.error("💥 RESULT INVALID:", result);
+  return;
+}
 
-    // ================= SAFE VALUES =================
+    // ================= SAFE VALUES (PRIMA!) =================
     const roi = Number(result?.roi ?? result?.ROI ?? 0);
 
-    const gross = Number(
-      result?.revenue ??
-      result?.gross ??
-      result?.fatturato ??
-      0
-    );
+const gross = Number(
+  result?.revenue ??
+  result?.gross ??
+  result?.fatturato ??
+  0
+);
 
-    const net = Number(
-      result?.netAfterMortgage ??
-      result?.profit ??
-      result?.net ??
-      result?.utile ??
-      0
-    );
+const net = Number(
+  result?.netAfterMortgage ??
+  result?.profit ??
+  result?.net ??
+  result?.utile ??
+  0
+);
 
-    if(!roi && !gross && !net){
-      console.error("💥 RESULT EMPTY → CHECK ROI ENGINE", result);
-      return;
-    }
+  if(!roi && !gross && !net){
+  console.error("💥 RESULT EMPTY → CHECK ROI ENGINE", result);
+  return;
+}
 
-    // ================= POST ANALYSIS =================
+
+    // ================= POST ANALYSIS (UNICA LOGICA BUSINESS) =================
     runPostAnalysis(result, {
       price,
       gross,
@@ -2270,90 +2229,109 @@ window.calculate = async function(force = false){
       expenses
     });
 
-    // ================= PAYWALL =================
-    if(access.isFree && !access.isInvestor && roi > 10){
-      triggerUpgradeFlow({ roi });
+    // ================= SMART PAYWALL (MODAL) =================
+if(access.isFree && !access.isInvestor && roi > 10){
+  triggerUpgradeFlow({ roi });
+}
+
+// ================= UI BASE (FIX REAL DATA ONLY) =================
+
+const roiEl = document.getElementById("roi-live");
+const monthlyEl = document.getElementById("profit-monthly");
+const annualEl = document.getElementById("profit-annual");
+
+// 🚨 NON mostrare dati fake
+if(roi <= 0){
+  console.warn("⚠️ ROI 0 → continuo comunque render");
+}
+
+// ================= ROI (SMART ACCESS) =================
+
+if(roiEl){
+
+  roiEl.style.opacity = "0";
+
+  setTimeout(()=>{
+
+    // 🔴 FREE → preview (non affidabile)
+    if(access.isFree){
+  roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+  roiEl.style.color = "#f59e0b";
+}
+else if(access.isInvestor){
+  roiEl.innerText = roi.toFixed(1) + "%";
+}
+else{
+  roiEl.innerText = roi.toFixed(1) + "%";
+}
+    roiEl.style.opacity = "1";
+
+  },150);
+
+}
+    
+// =====================================
+// 🔓 UNLOCK RESULTS (FINAL CORRECT)
+// =====================================
+
+console.log("🔓 UNLOCK RESULTS:", access);
+    // 🔥 USA SOLO IL SISTEMA CENTRALE
+
+const cards = document.querySelectorAll(".metric-card");
+
+// 🟢 PRO / ADMIN → tutto sbloccato
+if(access.isPro || access.isAdmin){
+
+  cards.forEach(el => {
+    el.classList.remove("pro-blur", "locked");
+
+    const lock = el.querySelector(".lock-overlay");
+    if(lock) lock.remove();
+  });
+
+  document.querySelector(".home-blur-overlay")?.remove();
+}
+
+
+// 🟡 INVESTOR → parziale (SOLO blur su PRO)
+else if(access.isInvestor){
+
+  console.log("🟡 INVESTOR → PARTIAL UNLOCK");
+
+  cards.forEach(el => {
+
+    // 🔥 reset totale
+    el.classList.remove("locked", "pro-blur");
+
+    const lock = el.querySelector(".lock-overlay");
+    if(lock) lock.remove();
+
+    // 🔒 blocca SOLO contenuti PRO
+    if(el.classList.contains("pro-only")){
+      el.classList.add("pro-blur");
     }
 
-    // ================= ROI UI =================
-    const roiEl = document.getElementById("roi-live");
+  });
 
-    if(roiEl){
+  // overlay home soft
+  const overlay = document.querySelector(".home-blur-overlay");
 
-      roiEl.style.opacity = "0";
-
-      setTimeout(()=>{
-
-        if(access.isFree){
-          roiEl.innerText = "~ " + roi.toFixed(1) + "%";
-          roiEl.style.color = "#f59e0b";
-        }
-        else{
-          roiEl.innerText = roi.toFixed(1) + "%";
-        }
-
-        roiEl.style.opacity = "1";
-
-      },150);
-
-    }
-
-    // =====================================
-    // 🔓 UNLOCK RESULTS
-    // =====================================
-
-    console.log("🔓 UNLOCK RESULTS:", access);
-
-    const cards = document.querySelectorAll(".metric-card");
-
-    if(access.isPro || access.isAdmin){
-
-      cards.forEach(el => {
-        el.classList.remove("pro-blur", "locked");
-
-        const lock = el.querySelector(".lock-overlay");
-        if(lock) lock.remove();
-      });
-
-    }
-    else if(access.isInvestor){
-
-      console.log("🟡 INVESTOR → SKIP");
-
-    }
-    else{
-
-      cards.forEach(el => {
-        el.classList.add("locked");
-      });
-
-    }
-
-    // ================= SAFE UNLOCK =================
-    if(!window.__uiUnlocked){
-
-      window.__uiUnlocked = true;
-
-      if(!access.isInvestor){
-        setTimeout(() => {
-          forceUnlockUI();
-        }, 50);
-      }
-
-    }
-
-  }catch(err){
-    console.error("💥 calculate error:", err);
+  if(overlay){
+    overlay.style.opacity = "0.1";
+    overlay.style.pointerEvents = "none";
   }
 
-  // ================= RESET =================
-  window.isCalculating = false;
+}
 
-  setTimeout(() => {
-    window.__calcLock = false;
-  }, 150);
+    if(!window.__uiUnlocked){
+  window.__uiUnlocked = true;
 
-};
+  if(!access.isInvestor){
+    setTimeout(() => {
+      forceUnlockUI();
+    }, 50);
+  }
+}
     // ================= HIDDEN DATA MESSAGE =================
 
 const hiddenBox = document.getElementById("hidden-roi-msg");
@@ -2480,110 +2458,94 @@ if(access.isFree){
   ];
 
   // ❌ evita doppio sistema
-  if(document.getElementById("rb-upgrade-modal")){
-    console.warn("⛔ modal attivo → skip overlay free");
-  } else {
+if(document.getElementById("rb-upgrade-modal")){
+  console.warn("⛔ modal attivo → skip overlay free");
+} else {
 
-    lockedSections.forEach(id => {
+  lockedSections.forEach(id => {
 
-      const el = document.getElementById(id);
-      if(!el) return;
+    const el = document.getElementById(id);
+    if(!el) return;
 
-      el.style.position = "relative";
+    el.style.position = "relative";
 
-      if(el.querySelector(".lock-overlay")) return;
+    // evita duplicati
+    if(el.querySelector(".lock-overlay")) return;
 
-      const overlay = document.createElement("div");
-      overlay.className = "lock-overlay";
+    const overlay = document.createElement("div");
+    overlay.className = "lock-overlay";
 
-      overlay.style = `
-        position:absolute;
-        inset:0;
-        background:rgba(255,247,237,0.92);
-        backdrop-filter:blur(6px);
-        border-radius:12px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        text-align:center;
-        z-index:10;
-        cursor:pointer;
-      `;
+    overlay.style = `
+      position:absolute;
+      inset:0;
+      background:rgba(255,247,237,0.92);
+      backdrop-filter:blur(6px);
+      border-radius:12px;
 
-      overlay.innerHTML = `
-        <div style="padding:18px;max-width:260px;">
-          <div style="font-weight:700;margin-bottom:8px;color:#9a3412;">
-            🔒 ${t(
-              "Stai prendendo una decisione senza dati reali",
-              "You are making a decision without real data"
-            )}
-          </div>
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
 
-          <div style="font-size:12px;margin-bottom:12px;color:#7c2d12;">
-            ${t(
-              "Il 72% degli investitori perde soldi proprio qui",
-              "72% of investors lose money right here"
-            )}
-          </div>
+      z-index:10;
+      cursor:pointer;
+    `;
 
-          <div style="
-            background:#10b981;
-            color:white;
-            padding:8px 12px;
-            border-radius:8px;
-            font-size:12px;
-            font-weight:600;
-            display:inline-block;
-          ">
-            ${t(
-              "Scopri se stai perdendo soldi",
-              "Find out if you're losing money"
-            )}
-          </div>
+    overlay.innerHTML = `
+      <div style="padding:18px;max-width:260px;">
+
+        <div style="font-weight:700;margin-bottom:8px;color:#9a3412;">
+          🔒 ${t(
+            "Stai prendendo una decisione senza dati reali",
+            "You are making a decision without real data"
+          )}
         </div>
-      `;
 
-      overlay.onclick = () => {
-        triggerUpgradeFlow({ roi });
-      };
+        <div style="font-size:12px;margin-bottom:12px;color:#7c2d12;">
+          ${t(
+            "Il 72% degli investitori perde soldi proprio qui",
+            "72% of investors lose money right here"
+          )}
+        </div>
 
-      el.appendChild(overlay);
+        <div style="
+          background:#10b981;
+          color:white;
+          padding:8px 12px;
+          border-radius:8px;
+          font-size:12px;
+          font-weight:600;
+          display:inline-block;
+        ">
+          ${t(
+            "Scopri se stai perdendo soldi",
+            "Find out if you're losing money"
+          )}
+        </div>
 
-    });
+      </div>
+    `;
 
-  }
+    overlay.onclick = () => {
+      triggerUpgradeFlow({ roi });
+    };
+
+    el.appendChild(overlay);
+
+  });
 
 }
 
-
+}
 // ======================================================
-// 🟡 INVESTOR → PRO-LIKE (FIX REALE)
+// 🟡 INVESTOR → PARZIALE (NO OVERLAY, SOLO PRO LOCK)
 // ======================================================
 
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → PRO-LIKE UNLOCK");
+  console.log("🟡 INVESTOR → CLEAN PARTIAL");
 
-  // 💣 RESET TOTALE (QUESTO RISOLVE IL TUO BUG)
-  document.querySelectorAll(`
-    .lock-overlay,
-    .locked-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .home-blur-overlay,
-    [data-paywall]
-  `).forEach(el => el.remove());
-
-  document.querySelectorAll(".blur-content").forEach(el=>{
-    el.style.filter = "none";
-  });
-
-  document.querySelectorAll(".free-only").forEach(el=>{
-    el.style.display = "none";
-  });
-
-  // ================= DATI REALI (COME PRO) =================
-
+  // 🔥 render normale (NO blocchi)
   if(typeof renderInvestmentRanking === "function"){
     renderInvestmentRanking(roi);
   }
@@ -2597,15 +2559,10 @@ else if(access.isInvestor){
     renderInvestmentVerdict(roi, payback);
   }
 
-  // ================= BLOCCO SOLO PRO FEATURES =================
+  // 🔥 rimuove qualsiasi overlay FREE (CRITICO)
+  document.querySelectorAll(".lock-overlay").forEach(el => el.remove());
 
-  document.querySelectorAll(".pro-only").forEach(el=>{
-    el.style.opacity = "0.35";
-    el.style.pointerEvents = "none";
-  });
-
-  // ================= AI LIMITATA (UPSELL) =================
-
+  // 🔒 AI limitata (UPSELL)
   const aiBox = document.getElementById("ai-insights");
 
   if(aiBox){
@@ -2644,20 +2601,6 @@ else if(access.isInvestor){
 else{
 
   console.log("🟢 PRO → FULL DATA");
-
-  // 💣 sicurezza (evita bug strani)
-  document.querySelectorAll(`
-    .lock-overlay,
-    .locked-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .home-blur-overlay,
-    [data-paywall]
-  `).forEach(el => el.remove());
-
-  document.querySelectorAll(".blur-content").forEach(el=>{
-    el.style.filter = "none";
-  });
 
   if(typeof renderInvestmentRanking === "function"){
     renderInvestmentRanking(roi);
