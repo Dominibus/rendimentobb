@@ -15523,3 +15523,32 @@ body.is-investor .premium-lock {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
+/* ===============================
+🟡 INVESTOR TEASER (REALI)
+=============================== */
+body.is-investor .investor-teaser {
+  position: relative;
+  overflow: hidden;
+}
+
+/* overlay visivo */
+body.is-investor .investor-teaser::after {
+  content: "🔒 Sblocca analisi completa";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(4px);
+}
+
+/* PRO vede tutto */
+body.is-pro .investor-teaser::after,
+body.is-admin .investor-teaser::after {
+  display: none;
+}
