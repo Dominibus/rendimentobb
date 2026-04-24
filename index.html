@@ -1436,6 +1436,39 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 
  <script>
 
+/* ================= 💣 KILL MODAL-OPEN (GLOBAL) ================= */
+
+(function(){
+
+  function killModal(){
+
+    const access = window.getUserAccess?.() || {};
+
+    // SOLO guest
+    if(!access.isLogged){
+
+      if(document.body.classList.contains("modal-open")){
+        document.body.classList.remove("modal-open");
+        console.log("💣 modal-open RIMOSSO");
+      }
+
+    }
+
+  }
+
+  // 🔥 loop intelligente (leggero ma efficace)
+  setInterval(killModal, 200);
+
+  // 🔥 anche sugli eventi importanti
+  document.addEventListener("rb_plan_loaded", killModal);
+  document.addEventListener("DOMContentLoaded", killModal);
+
+})();
+
+</script>
+
+ <script>
+
 /* ================= FIX GLOBAL MODAL LOCK ================= */
 
 function forceUnlockUI(){
