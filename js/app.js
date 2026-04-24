@@ -548,6 +548,11 @@ function requirePlan(requiredPlan){
 
 window.triggerUpgradeFlow = function(context = {}){
 
+  if(!window.firebaseReady){
+    console.warn("⏳ skip upgrade → firebase non pronto");
+    return;
+  }
+
   if(window.__upgradeShown){
     console.log("⛔ Upgrade già mostrato");
     return;
@@ -2178,9 +2183,14 @@ window.calculate = async function(force = false){
       expenses
     });
 
-    if(access.isFree && !access.isInvestor && roi > 10){
-      triggerUpgradeFlow({ roi });
-    }
+    if(
+  window.firebaseReady &&
+  access.isFree &&
+  !access.isInvestor &&
+  roi > 10
+){
+  triggerUpgradeFlow({ roi });
+}
 
     // ================= ROI =================
     const roiEl = document.getElementById("roi-live");
@@ -3672,6 +3682,8 @@ function removeGhostOverlays(){
 
 // ================= PLAN LOADED HANDLER CLEAN =================
 document.addEventListener("rb_plan_loaded", () => {
+  
+  window.__upgradeShown = false;
 
   if(window.__planAlreadyApplied) return;
   window.__planAlreadyApplied = true;
