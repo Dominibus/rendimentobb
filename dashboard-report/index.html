@@ -444,11 +444,13 @@ const lang = window.currentLang || "it";
 // ================= USER =================
 function checkUserPlan(){
 
-  const plan = String(window.currentPlan || "").toLowerCase();
+  const user = window.RB_USER || {};
 
   isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+    user.isAdmin ||
+    user.isPro ||
+    user.plan === "pro" ||
+    user.plan === "pro_yearly";
 
 }
 
@@ -538,24 +540,30 @@ function renderChart(){
 function applyLock(){
 
   const overlay = document.getElementById("upgradeOverlay");
+  const btn = document.querySelector(".btn");
 
   if(!isPro){
 
-  overlay.style.display = "flex";
+    overlay.style.display = "flex";
 
-  // 🔥 pressione psicologica
-  setTimeout(()=>{
-    overlay.style.animation = "pulse 1.2s infinite";
-  },500);
+    setTimeout(()=>{
+      overlay.style.animation = "pulse 1.2s infinite";
+    },500);
 
-    const btn = document.querySelector(".btn");
     if(btn){
-      btn.onclick = null;
+      btn.disabled = true;
       btn.style.opacity = "0.5";
     }
 
   } else {
+
     overlay.style.display = "none";
+
+    if(btn){
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    }
+
     renderAdvanced();
   }
 }
@@ -591,6 +599,11 @@ async function generatePDF(){
   if(!isPro){
     document.getElementById("upgradeOverlay").style.display="flex";
     return;
+  }
+
+  if(btn){
+    btn.innerText = "⏳ Generazione report...";
+    btn.disabled = true;
   }
 
   const { jsPDF } = window.jspdf;
@@ -751,8 +764,13 @@ function init(){
   }
 }
 
-document.addEventListener("rb_auth_ready", init);
-setTimeout(init,800);
+document.addEventListener("rb_auth_ready", () => {
+  init();
+});
+setTimeout(() => {
+  if(!window.RB_USER) return;
+  init();
+},1000);
 
 </script>
 
