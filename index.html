@@ -1434,6 +1434,37 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <script type="module" src="/js/roi-engine.js"></script>
 <script type="module" src="/js/app.js"></script>
 
+ <script>
+
+/* ================= FIX GLOBAL MODAL LOCK ================= */
+
+function forceUnlockUI(){
+
+  const access = window.getUserAccess?.() || {};
+
+  // 👉 SOLO utente NON loggato
+  if(!access.isLogged){
+
+    if(document.body.classList.contains("modal-open")){
+      console.log("💣 REMOVE GHOST MODAL (HOME)");
+      document.body.classList.remove("modal-open");
+    }
+
+  }
+
+}
+
+// 🔥 run subito
+forceUnlockUI();
+
+// 🔥 dopo Firebase / header
+document.addEventListener("rb_plan_loaded", forceUnlockUI);
+
+// 🔥 fallback sicurezza
+setTimeout(forceUnlockUI, 500);
+setTimeout(forceUnlockUI, 1000);
+
+</script>
 
 <!-- 🔹 SCRIPT PRINCIPALE -->
 <script>
