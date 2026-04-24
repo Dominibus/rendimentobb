@@ -2485,6 +2485,39 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
+// ================= ANALYZE BUTTON FIX (CRITICO) =================
+
+const analyzeBtn = document.getElementById("analyze-btn");
+
+if(analyzeBtn){
+
+  analyzeBtn.addEventListener("click", () => {
+
+    console.log("🔥 CLICK ANALYZE");
+
+    // 🔥 RIMUOVE overlay che possono bloccare click
+    document.querySelectorAll(`
+      .lock-overlay,
+      .results-overlay,
+      .upgrade-overlay,
+      .smart-overlay,
+      .paywall-mini,
+      .home-blur-overlay
+    `).forEach(el => {
+      if(el.id !== "register-popup") el.remove();
+    });
+
+    if(typeof window.calculate === "function"){
+      console.log("🚀 CALCULATE TRIGGER");
+      window.calculate();
+    } else {
+      console.error("❌ calculate non trovata");
+    }
+
+  });
+
+}
+
 // ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
