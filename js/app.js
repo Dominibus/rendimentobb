@@ -4002,7 +4002,10 @@ function unlockBaseUI(){
   // 🟡 INVESTOR → SBLOCCA DAVVERO
   // =====================================
   if(access.isInvestor){
-  console.log("🟡 unlockBaseUI → SKIP (gestito da calculate)");
+  console.log("🟡 unlockBaseUI → CLEAN");
+
+  document.querySelectorAll(".lock-overlay").forEach(el=>el.remove());
+
   return;
 }
 
@@ -4066,10 +4069,46 @@ function forceUnlockUI(){
   // =========================
   // 🟡 INVESTOR → PARTIAL UNLOCK (FIX REALE + ANTI OVERRIDE)
   // =========================
-  else if(access.isInvestor){
-  console.log("🟡 INVESTOR → SKIP forceUnlockUI");
+ else if(access.isInvestor){
+
+  console.log("🟡 INVESTOR → CLEAN PARTIAL UI");
+
+  // 🔥 RIMUOVE TUTTI I LOCK VISIVI
+  document.querySelectorAll(`
+    .lock-overlay,
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .smart-overlay,
+    .paywall-mini,
+    [data-paywall]
+  `).forEach(el => {
+    if(el.id !== "register-popup") el.remove();
+  });
+
+  // 🔥 SBLOCCA INTERAZIONI
+  document.querySelectorAll("*").forEach(el=>{
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock",
+      "locked-section"
+    );
+
+    if(el.style){
+      el.style.filter = "none";
+      el.style.pointerEvents = "auto";
+    }
+  });
+
   return;
 }
+   document.querySelectorAll(`
+  .home-blur-overlay,
+  .results-overlay,
+  .upgrade-overlay
+`).forEach(el => el.remove());
   // =========================
   // 🔴 FREE → LOCK
   // =========================
