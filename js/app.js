@@ -2458,94 +2458,110 @@ if(access.isFree){
   ];
 
   // ❌ evita doppio sistema
-if(document.getElementById("rb-upgrade-modal")){
-  console.warn("⛔ modal attivo → skip overlay free");
-} else {
+  if(document.getElementById("rb-upgrade-modal")){
+    console.warn("⛔ modal attivo → skip overlay free");
+  } else {
 
-  lockedSections.forEach(id => {
+    lockedSections.forEach(id => {
 
-    const el = document.getElementById(id);
-    if(!el) return;
+      const el = document.getElementById(id);
+      if(!el) return;
 
-    el.style.position = "relative";
+      el.style.position = "relative";
 
-    // evita duplicati
-    if(el.querySelector(".lock-overlay")) return;
+      if(el.querySelector(".lock-overlay")) return;
 
-    const overlay = document.createElement("div");
-    overlay.className = "lock-overlay";
+      const overlay = document.createElement("div");
+      overlay.className = "lock-overlay";
 
-    overlay.style = `
-      position:absolute;
-      inset:0;
-      background:rgba(255,247,237,0.92);
-      backdrop-filter:blur(6px);
-      border-radius:12px;
+      overlay.style = `
+        position:absolute;
+        inset:0;
+        background:rgba(255,247,237,0.92);
+        backdrop-filter:blur(6px);
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        z-index:10;
+        cursor:pointer;
+      `;
 
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
+      overlay.innerHTML = `
+        <div style="padding:18px;max-width:260px;">
+          <div style="font-weight:700;margin-bottom:8px;color:#9a3412;">
+            🔒 ${t(
+              "Stai prendendo una decisione senza dati reali",
+              "You are making a decision without real data"
+            )}
+          </div>
 
-      z-index:10;
-      cursor:pointer;
-    `;
+          <div style="font-size:12px;margin-bottom:12px;color:#7c2d12;">
+            ${t(
+              "Il 72% degli investitori perde soldi proprio qui",
+              "72% of investors lose money right here"
+            )}
+          </div>
 
-    overlay.innerHTML = `
-      <div style="padding:18px;max-width:260px;">
-
-        <div style="font-weight:700;margin-bottom:8px;color:#9a3412;">
-          🔒 ${t(
-            "Stai prendendo una decisione senza dati reali",
-            "You are making a decision without real data"
-          )}
+          <div style="
+            background:#10b981;
+            color:white;
+            padding:8px 12px;
+            border-radius:8px;
+            font-size:12px;
+            font-weight:600;
+            display:inline-block;
+          ">
+            ${t(
+              "Scopri se stai perdendo soldi",
+              "Find out if you're losing money"
+            )}
+          </div>
         </div>
+      `;
 
-        <div style="font-size:12px;margin-bottom:12px;color:#7c2d12;">
-          ${t(
-            "Il 72% degli investitori perde soldi proprio qui",
-            "72% of investors lose money right here"
-          )}
-        </div>
+      overlay.onclick = () => {
+        triggerUpgradeFlow({ roi });
+      };
 
-        <div style="
-          background:#10b981;
-          color:white;
-          padding:8px 12px;
-          border-radius:8px;
-          font-size:12px;
-          font-weight:600;
-          display:inline-block;
-        ">
-          ${t(
-            "Scopri se stai perdendo soldi",
-            "Find out if you're losing money"
-          )}
-        </div>
+      el.appendChild(overlay);
 
-      </div>
-    `;
+    });
 
-    overlay.onclick = () => {
-      triggerUpgradeFlow({ roi });
-    };
-
-    el.appendChild(overlay);
-
-  });
+  }
 
 }
 
-}
+
 // ======================================================
-// 🟡 INVESTOR → PARZIALE (NO OVERLAY, SOLO PRO LOCK)
+// 🟡 INVESTOR → PRO-LIKE (FIX REALE)
 // ======================================================
 
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → CLEAN PARTIAL");
+  console.log("🟡 INVESTOR → PRO-LIKE UNLOCK");
 
-  // 🔥 render normale (NO blocchi)
+  // 💣 RESET TOTALE (QUESTO RISOLVE IL TUO BUG)
+  document.querySelectorAll(`
+    .lock-overlay,
+    .locked-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .home-blur-overlay,
+    [data-paywall]
+  `).forEach(el => el.remove());
+
+  document.querySelectorAll(".blur-content").forEach(el=>{
+    el.style.filter = "none";
+  });
+
+  document.querySelectorAll(".free-only").forEach(el=>{
+    el.style.display = "none";
+  });
+
+  // ================= DATI REALI (COME PRO) =================
+
   if(typeof renderInvestmentRanking === "function"){
     renderInvestmentRanking(roi);
   }
@@ -2559,10 +2575,15 @@ else if(access.isInvestor){
     renderInvestmentVerdict(roi, payback);
   }
 
-  // 🔥 rimuove qualsiasi overlay FREE (CRITICO)
-  document.querySelectorAll(".lock-overlay").forEach(el => el.remove());
+  // ================= BLOCCO SOLO PRO FEATURES =================
 
-  // 🔒 AI limitata (UPSELL)
+  document.querySelectorAll(".pro-only").forEach(el=>{
+    el.style.opacity = "0.35";
+    el.style.pointerEvents = "none";
+  });
+
+  // ================= AI LIMITATA (UPSELL) =================
+
   const aiBox = document.getElementById("ai-insights");
 
   if(aiBox){
@@ -2601,6 +2622,20 @@ else if(access.isInvestor){
 else{
 
   console.log("🟢 PRO → FULL DATA");
+
+  // 💣 sicurezza (evita bug strani)
+  document.querySelectorAll(`
+    .lock-overlay,
+    .locked-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .home-blur-overlay,
+    [data-paywall]
+  `).forEach(el => el.remove());
+
+  document.querySelectorAll(".blur-content").forEach(el=>{
+    el.style.filter = "none";
+  });
 
   if(typeof renderInvestmentRanking === "function"){
     renderInvestmentRanking(roi);
