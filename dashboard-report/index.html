@@ -327,32 +327,40 @@ h1{
   margin-top:140px;
 }
 
-  /* 🔒 PROTEZIONE HEADER FOOTER */
-/* 🔒 PROTEZIONE SENZA ROMPERE */
-#global-header,
-#global-footer{
-  all: unset;
-  display:block;
-}
-
+ 
   body{
   overflow-x:hidden;
 }
 
-/* poi riattivi display */
-.rb-header{
-  all: unset;
+
+
+  /* =====================================
+🎯 REPORT → FOOTER LIGHT MODE
+===================================== */
+
+body.report-page #global-footer{
+  background:#f8fafc !important;
+  color:#0f172a !important;
 }
 
-.global-footer{
-  all: unset;
+body.report-page #global-footer a{
+  color:#334155 !important;
+}
+
+body.report-page #global-footer h4{
+  color:#0f172a !important;
+}
+
+body.report-page #global-footer .footer-bottom{
+  border-top:1px solid #e2e8f0 !important;
+  color:#64748b !important;
 }
 
 </style>
 
 </head>
 
-<body>
+<body class="report-page theme-light">
 
 <style>
 #global-header:empty,
