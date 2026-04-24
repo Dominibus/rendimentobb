@@ -1474,10 +1474,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if(btn){
     btn.addEventListener("click", () => {
 
-      const access = window.getUserAccess();
+      const access = window.getUserAccess?.();
 
-      // 🔒 SOLO GUEST BLOCCATI
-      if(!access.isLogged){
+// ⏳ FIX CRITICO: aspetta RB_USER
+if(!access || access.isLogged === undefined){
+  console.warn("⏳ Access not ready → skip click");
+  return;
+}
+
+if(!access.isLogged){
 
         window.showUpgradeModalCustom(
           "🔒 Registrati per vedere l'anteprima",
