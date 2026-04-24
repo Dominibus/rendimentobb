@@ -1223,7 +1223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 💣 HARD FIX MODAL STUCK (DEFINITIVO)
 document.addEventListener("DOMContentLoaded", () => {
 
-  const modal = document.getElementById("rb-pro-modal");
+  const modal = document.getElementById("upgrade-modal");
 
   if(!modal || !modal.classList.contains("open")){
     document.body.classList.remove("modal-open");
@@ -1234,7 +1234,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 🔥 SICUREZZA EXTRA (ANTI BUG ASYNC)
 setTimeout(()=>{
-  const modal = document.getElementById("rb-pro-modal");
+  const modal = document.getElementById("upgrade-modal");
   if(!modal || !modal.classList.contains("open")){
     document.body.classList.remove("modal-open");
   }
@@ -1253,8 +1253,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const access = window.getUserAccess?.();
 
 // ⏳ FIX CRITICO: aspetta RB_USER
-if(!access || access.isLogged === undefined){
-  console.warn("⏳ Access not ready → skip click");
+if(!access){
+  console.warn("⏳ Access not ready → retry");
+
+  setTimeout(()=>{
+    btn.click();
+  },150);
+
   return;
 }
 
