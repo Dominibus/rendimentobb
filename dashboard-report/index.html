@@ -14,6 +14,8 @@
 <script src="/js/lang.js"></script>
 <script type="module" src="/js/firebase-init.js"></script>
 
+  <link rel="stylesheet" href="/css/style.css">
+
 <style>
 
 /* ================================
@@ -313,11 +315,51 @@ h1{
   100%{transform:scale(1);}
 }  
 
+  .rb-header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:1000;
+}
+
+.page{
+  margin-top:140px;
+}
+
+  /* 🔒 PROTEZIONE HEADER FOOTER */
+/* 🔒 PROTEZIONE SENZA ROMPERE */
+#global-header,
+#global-footer{
+  all: unset;
+  display:block;
+}
+
+  body{
+  overflow-x:hidden;
+}
+
+/* poi riattivi display */
+.rb-header{
+  all: unset;
+}
+
+.global-footer{
+  all: unset;
+}
+
 </style>
 
 </head>
 
 <body>
+
+<style>
+#global-header:empty,
+#global-footer:empty{
+  display:none;
+}
+</style>  
 
 <!-- GLOBAL HEADER -->
 <div id="global-header"></div>  
@@ -431,6 +473,8 @@ data-en="📥 Download professional PDF report">
 
 <script>
 
+let isPro = false;  
+
 // ================= PARAMS =================
 const params = new URLSearchParams(window.location.search);
 
@@ -447,17 +491,13 @@ function checkUserPlan(){
 
   const user = window.RB_USER || {};
 
-  let isPro = false;
-
-function checkUserPlan(){
-  const user = window.RB_USER || {};
-
   isPro =
     user.isAdmin ||
     user.isPro ||
     user.plan === "pro" ||
     user.plan === "pro_yearly";
-}
+
+  console.log("🔐 REPORT ACCESS:", { isPro, user });
 
 }
 
@@ -796,6 +836,7 @@ document.addEventListener("rb_auth_ready", init);
 </script>
 
 
+<!-- 👇 AGGIUNGI QUESTO -->
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js"></script>
 <!-- GLOBAL FOOTER -->
