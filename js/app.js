@@ -1821,45 +1821,15 @@ function getLeadDestination({roi, city}){
 // ================= GLOBAL BLUR RESET =================
 function resetGlobalBlur(){
 
-  console.log("🧹 HARD RESET UI");
+  console.log("🧹 SAFE RESET");
 
-// 💣 KILL TUTTO (anche smart alert)
-document.querySelectorAll(`
-  .smart-overlay,
-  .paywall-mini
-`).forEach(el => el.remove());
-
-// 💣 svuota anche il container
-const smartBox = document.getElementById("smart-investment-alert");
-if(smartBox){
-  smartBox.innerHTML = "";
-}
-  
-document.querySelectorAll(".smart-overlay").forEach(el => el.remove());
-
-  // 🔥 FIX OVERLAY BLOCCATO
-document.querySelectorAll(
-  ".locked-overlay, .results-overlay, .upgrade-overlay"
-).forEach(el => el.remove());
-
-// 🔥 SBLOCCA SCROLL / CLICK
-document.body.classList.remove("no-scroll");
-document.body.style.pointerEvents = "auto";
-
-
-  // 🔥 RIMUOVE OVERLAY
   document.querySelectorAll(`
     .lock-overlay,
-    .paywall-mini,
-    .home-blur-overlay,
     .upgrade-overlay,
     .results-overlay,
-    #upgrade-overlay,
-    [data-paywall]
-  `).forEach(el=>{
-    if(el.id !== "register-popup"){
-      el.remove();
-    }
+    .smart-overlay
+  `).forEach(el => {
+    if(el.id !== "register-popup") el.remove();
   });
 
 }
