@@ -2491,66 +2491,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
-// =====================================
-// 🔥 HOME OVERLAY CONTROL (FINAL FIX)
-// =====================================
-
-document.addEventListener("rb_plan_loaded", () => {
-
-  const access = window.getUserAccess?.();
-  const overlay = document.querySelector(".home-blur-overlay");
-
-  if(!overlay || !access) return;
-
-  console.log("🎯 OVERLAY CHECK:", access);
-
-  // ================= CTA =================
-  const buttons = overlay.querySelectorAll("button");
-
-  buttons.forEach(btn => {
-    btn.onclick = () => {
-      console.log("🔥 CLICK OVERLAY CTA");
-      triggerUpgradeFlow({ source:"home_overlay" });
-    };
-  });
-
-  // ================= 🟢 PRO / ADMIN =================
-  if(access.isPro || access.isAdmin){
-    overlay.remove();
-    return;
-  }
-
-  // ================= 🟡 INVESTOR =================
-  if(access.isInvestor){
-
-    overlay.style.background = "rgba(255,255,255,0.85)";
-
-    const title = overlay.querySelector(".overlay-title");
-    const text  = overlay.querySelector(".overlay-text");
-
-    if(title){
-      title.innerText = "🚀 Sblocca il vero potenziale";
-    }
-
-    if(text){
-      text.innerText = "Stai usando solo il 30% delle capacità";
-    }
-
-    return;
-  }
-
-  // ================= 🔴 FREE =================
-  if(access.isFree){
-
-    console.log("🔒 HOME OVERLAY FREE ACTIVE");
-
-    document.querySelectorAll(".metric-card").forEach(el=>{
-      el.classList.add("pro-blur");
-    });
-
-  }
-
-});
 // ================= EXECUTIVE PDF – FINAL PRODUCTION =================
 
 window.generateExecutivePDF = async function(){
