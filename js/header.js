@@ -230,22 +230,17 @@ onAuthStateChanged(auth, (user) => {
       // ===============================
       // 🔥 INVESTOR CLEAN (TEASER MODE)
       // ===============================
-      if(RB.isInvestor && !RB.isPro){
+     if(RB.isInvestor && !RB.isPro){
 
-        console.log("🟡 HEADER → FORCE INVESTOR UI CLEAN");
+  console.log("🟡 HEADER → SAFE CLEAN (NO LOCK)");
 
-        // rimuove SOLO blocchi hard
-        document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
-          el.remove();
-        });
+  // rimuove SOLO hard lock
+  document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
+    el.remove();
+  });
 
-        // mantiene blur leggero (teaser)
-        document.querySelectorAll(".blur.locked").forEach(el=>{
-          el.classList.remove("locked");
-          el.style.filter = "blur(4px)";
-        });
-
-      }
+  // ❌ NON applicare blur qui (lo gestisce app.js)
+}
 
       // ===============================
       // 🔥 ACCESS CONTROL UI
@@ -257,13 +252,21 @@ onAuthStateChanged(auth, (user) => {
         unlockUI();
       }
 
-      // 🟡 INVESTOR → PARTIAL UNLOCK (QUESTO MANCAVA)
-      else if(RB.isInvestor){
-        console.log("🟡 INVESTOR → PARTIAL UNLOCK");
-        if(typeof window.unlockBaseUI === "function"){
-  window.unlockBaseUI();
+     else if(RB.isInvestor){
+
+  console.log("🟡 HEADER → INVESTOR SAFE MODE (NO OVERRIDE)");
+
+  // 💣 NON toccare UI → gestita da app.js (PRO-LIKE)
+
+  // pulizia SOLO sicurezza (no override logica)
+  document.querySelectorAll(`
+    .locked-overlay,
+    .hard-lock
+  `).forEach(el=>{
+    el.remove();
+  });
+
 }
-      }
 
       // 🔴 FREE → BLOCCATO
       else{
