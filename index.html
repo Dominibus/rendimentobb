@@ -1436,69 +1436,39 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 
  <script>
 
-/* ================= 💣 KILL MODAL-OPEN (GLOBAL) ================= */
+/* ================= 💣 FIX MODAL-OPEN REALE ================= */
 
 (function(){
 
-  function killModal(){
+  function fixModal(){
 
-    const access = window.getUserAccess?.() || {};
+    // 👉 controlla se esiste davvero un modal visibile
+    const realModal = document.querySelector(
+      ".modal.show, .modal.active, .popup.show, .overlay.show"
+    );
 
-    // SOLO guest
-    if(!access.isLogged){
+    // 👉 se NON esiste → rimuovi blocco
+    if(!realModal){
 
       if(document.body.classList.contains("modal-open")){
         document.body.classList.remove("modal-open");
-        console.log("💣 modal-open RIMOSSO");
+        console.log("💣 FIX modal-open (no real modal)");
       }
 
     }
 
   }
 
-  // 🔥 loop intelligente (leggero ma efficace)
-  setInterval(killModal, 200);
+  // 🔥 loop leggero ma stabile
+  setInterval(fixModal, 300);
 
-  // 🔥 anche sugli eventi importanti
-  document.addEventListener("rb_plan_loaded", killModal);
-  document.addEventListener("DOMContentLoaded", killModal);
+  // 🔥 eventi chiave
+  document.addEventListener("rb_plan_loaded", fixModal);
+  document.addEventListener("DOMContentLoaded", fixModal);
 
 })();
 
 </script>
-
- <script>
-
-/* ================= FIX GLOBAL MODAL LOCK ================= */
-
-function forceUnlockUI(){
-
-  const access = window.getUserAccess?.() || {};
-
-  // 👉 SOLO utente NON loggato
-  if(!access.isLogged){
-
-    if(document.body.classList.contains("modal-open")){
-      console.log("💣 REMOVE GHOST MODAL (HOME)");
-      document.body.classList.remove("modal-open");
-    }
-
-  }
-
-}
-
-// 🔥 run subito
-forceUnlockUI();
-
-// 🔥 dopo Firebase / header
-document.addEventListener("rb_plan_loaded", forceUnlockUI);
-
-// 🔥 fallback sicurezza
-setTimeout(forceUnlockUI, 500);
-setTimeout(forceUnlockUI, 1000);
-
-</script>
-
 <!-- 🔹 SCRIPT PRINCIPALE -->
 <script>
 
