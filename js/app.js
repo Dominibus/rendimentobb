@@ -2271,16 +2271,18 @@ else{
 }
     
 // =====================================
-// 🔓 UNLOCK RESULTS (FINAL CORRECT)
+// 🔓 UNLOCK RESULTS (FINAL FIXED)
 // =====================================
 
 console.log("🔓 UNLOCK RESULTS:", access);
-    // 🔥 USA SOLO IL SISTEMA CENTRALE
 
 const cards = document.querySelectorAll(".metric-card");
 
-// 🟢 PRO / ADMIN → tutto sbloccato
+
+// 🟢 PRO / ADMIN → FULL UNLOCK
 if(access.isPro || access.isAdmin){
+
+  console.log("🟢 UNLOCK → PRO FULL");
 
   cards.forEach(el => {
     el.classList.remove("pro-blur", "locked");
@@ -2289,48 +2291,66 @@ if(access.isPro || access.isAdmin){
     if(lock) lock.remove();
   });
 
-  document.querySelector(".home-blur-overlay")?.remove();
+  document.querySelectorAll(`
+    .home-blur-overlay,
+    .lock-overlay,
+    .locked-overlay,
+    .results-overlay,
+    .upgrade-overlay
+  `).forEach(el => el?.remove());
+
 }
 
 
-// 🟡 INVESTOR → parziale (SOLO blur su PRO)
+// 🟡 INVESTOR → GESTITO DA BLOCCO PRO-LIKE (NO OVERRIDE)
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → PARTIAL UNLOCK");
+  console.log("🟡 INVESTOR → SKIP (gestito da PRO-LIKE)");
+
+  // 💣 NON fare nulla qui
+  // evita conflitti con:
+  // "🟡 INVESTOR → PRO-LIKE UNLOCK"
+
+}
+
+
+// 🔴 FREE → lascia invariato (gestito sopra)
+else{
+
+  console.log("🔒 FREE → LOCK ACTIVE");
 
   cards.forEach(el => {
 
-    // 🔥 reset totale
-    el.classList.remove("locked", "pro-blur");
-
-    const lock = el.querySelector(".lock-overlay");
-    if(lock) lock.remove();
-
-    // 🔒 blocca SOLO contenuti PRO
-    if(el.classList.contains("pro-only")){
-      el.classList.add("pro-blur");
+    if(!el.classList.contains("locked")){
+      el.classList.add("locked");
     }
 
   });
 
-  // overlay home soft
-  const overlay = document.querySelector(".home-blur-overlay");
-
-  if(overlay){
-    overlay.style.opacity = "0.1";
-    overlay.style.pointerEvents = "none";
-  }
-
 }
 
-    if(!window.__uiUnlocked){
+
+// =====================================
+// 🔒 SAFE UNLOCK SYSTEM (ANTI CONFLICT)
+// =====================================
+
+if(!window.__uiUnlocked){
+
   window.__uiUnlocked = true;
 
+  // 💣 NON forzare unlock su investor
   if(!access.isInvestor){
+
     setTimeout(() => {
       forceUnlockUI();
     }, 50);
+
+  } else {
+
+    console.log("🟡 INVESTOR → SKIP forceUnlockUI");
+
   }
+
 }
     // ================= HIDDEN DATA MESSAGE =================
 
