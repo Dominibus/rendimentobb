@@ -3955,6 +3955,9 @@ function forceUnlockUI(){
 
   console.log("🔥 FINAL UI CONTROL:", access);
 
+  const t = (it, en) =>
+    (window.currentLang === "en" ? en : it);
+
   // =========================
   // 🟢 PRO / ADMIN → FULL UNLOCK
   // =========================
@@ -3998,49 +4001,80 @@ function forceUnlockUI(){
 
     });
 
+    console.log("🟢 PRO → FULL UNLOCK OK");
   }
 
-// =========================
-// 🟡 INVESTOR → PARTIAL UNLOCK
-// =========================
-else if(access.isInvestor){
+  // =========================
+  // 🟡 INVESTOR → PARTIAL UNLOCK (CORRETTO)
+  // =========================
+  else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → CLEAN PARTIAL UI SAFE");
+    console.log("🟡 INVESTOR → CLEAN PARTIAL UI");
 
+    // 🔥 RIMUOVE SOLO OVERLAY INVASIVI
+    document.querySelectorAll(`
+      .lock-overlay,
+      .results-overlay,
+      .upgrade-overlay,
+      .smart-overlay,
+      .paywall-mini,
+      [data-paywall]
+    `).forEach(el => {
+      if(el.id !== "register-popup") el.remove();
+    });
+
+    // =========================
+    // 🔥 HOME OVERLAY (TEASER MODE)
+    // =========================
+    document.querySelectorAll(".home-blur-overlay").forEach(overlay => {
+
+      overlay.style.display = "block";
+      overlay.style.pointerEvents = "auto";
+      overlay.style.background = "rgba(255,255,255,0.85)";
+
+      const title = overlay.querySelector(".overlay-title");
+      const text  = overlay.querySelector(".overlay-text");
+
+      if(title){
+        title.innerText = t(
+          "🚀 Sblocca il vero potenziale",
+          "🚀 Unlock full potential"
+        );
+      }
+
+      if(text){
+        text.innerText = t(
+          "Stai usando solo il 30% delle capacità",
+          "You're using only 30% of the platform"
+        );
+      }
+
+    });
+
+    console.log("🟡 INVESTOR → TEASER MODE OK");
+  }
+
+  // =========================
+  // 🔴 FREE → LOCK BASE
+  // =========================
+  else{
+
+    console.log("🔴 FREE USER");
+
+    document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+      el.classList.add("pro-blur");
+    });
+
+  }
+
+  // =========================
+  // 🔥 CLEAN EXTRA (ANTI GLITCH)
+  // =========================
   document.querySelectorAll(`
-    .lock-overlay,
-    .home-blur-overlay,
     .results-overlay,
-    .upgrade-overlay,
-    .smart-overlay,
-    .paywall-mini
+    .upgrade-overlay
   `).forEach(el => {
-
-    el.style.display = "none";
-    el.style.pointerEvents = "none";
-
+    if(el.id !== "register-popup") el.remove();
   });
-
-}
-
-// =========================
-// 🔴 FREE → LOCK
-// =========================
-else{
-
-  console.log("🔴 FREE USER");
-
-  document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
-    el.classList.add("pro-blur");
-  });
-
-}
-
-// 🔥 CLEAN EXTRA (FUORI DAL BLOCCO IF)
-document.querySelectorAll(`
-  .home-blur-overlay,
-  .results-overlay,
-  .upgrade-overlay
-`).forEach(el => el.remove());
 
 }
