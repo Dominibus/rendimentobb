@@ -2135,6 +2135,42 @@ window.calculate = async function(force = false){
       expenses
     });
 
+    // ================= RESULTS RENDER (MANCAVA) =================
+
+const resultsBox = document.getElementById("results");
+
+if(resultsBox){
+
+  resultsBox.innerHTML = `
+    <div class="blur-content">
+
+      <div style="margin-top:20px">
+
+        <div class="kpi-box">
+          <div class="kpi-label">
+            ${t("ROI stimato","Estimated ROI")}
+          </div>
+          <div class="kpi-value">
+            ${roi.toFixed(1)}%
+          </div>
+        </div>
+
+        <div class="kpi-box">
+          <div class="kpi-label">
+            ${t("Profitto annuo","Annual profit")}
+          </div>
+          <div class="kpi-value">
+            ${formatCurrency(net)}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
     if(
   window.firebaseReady &&
   access.isFree &&
