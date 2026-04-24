@@ -1445,14 +1445,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const access = window.getUserAccess();
 
       if(!access.isLogged){
-
-        window.showUpgradeModalCustom(
-          "🔒 Registrati per vedere l'anteprima",
-          "🔒 Sign up to see preview"
-        );
-
-        return;
-      }
+  window.showUpgradeModalCustom(...)
+  // ❌ NON bloccare tutto
+  setTimeout(()=> calculate(), 200);
+  return;
+}
 
       btn.classList.add("is-loading");
 
