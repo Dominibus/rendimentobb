@@ -1846,25 +1846,6 @@ document.querySelectorAll(
 document.body.classList.remove("no-scroll");
 document.body.style.pointerEvents = "auto";
 
-  document.querySelectorAll("*").forEach(el=>{
-
-    el.classList.remove(
-      "pro-blur",
-      "locked",
-      "locked-content",
-      "premium-lock",
-      "locked-section"
-    );
-
-    // 🔥 RESET FORZATO
-    if(el.style){
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-      el.style.backdropFilter = "none";
-    }
-
-  });
 
   // 🔥 RIMUOVE OVERLAY
   document.querySelectorAll(`
@@ -3995,15 +3976,17 @@ function unlockBaseUI(){
 
   // 🔥 RIMUOVE OVERLAY
   document.querySelectorAll(`
-    .home-blur-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .lock-overlay,
-    .smart-overlay,
-    .paywall-mini
-  `).forEach(el => {
-    if(el.id !== "register-popup") el.remove();
-  });
+  .home-blur-overlay,
+  .results-overlay,
+  .upgrade-overlay,
+  .lock-overlay,
+  .smart-overlay,
+  .paywall-mini
+`).forEach(el => {
+  if(el.id !== "register-popup"){
+    el.style.display = "none";
+  }
+});
 
   // 🔥 RESET BASE UI
   document.body.classList.remove("no-scroll");
@@ -4082,23 +4065,21 @@ function forceUnlockUI(){
 // =========================
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR → CLEAN PARTIAL UI");
+  console.log("🟡 INVESTOR → CLEAN PARTIAL UI SAFE");
 
-  // ✅ RIMUOVE SOLO OVERLAY FASTIDIOSI
   document.querySelectorAll(`
     .lock-overlay,
     .home-blur-overlay,
     .results-overlay,
     .upgrade-overlay,
     .smart-overlay,
-    .paywall-mini,
-    [data-paywall]
+    .paywall-mini
   `).forEach(el => {
-    if(el.id !== "register-popup") el.remove();
-  });
 
-  // ❌ NON TOCCARE CLASSI GLOBALI
-  // ❌ NON usare querySelectorAll("*")
+    el.style.display = "none";
+    el.style.pointerEvents = "none";
+
+  });
 
 }
 
