@@ -1395,6 +1395,7 @@ window.openUpgradeModal = function(){
 
   if(modal){
     modal.style.display = "flex";
+    document.body.classList.add("modal-open");
   }
 
 };
@@ -1405,11 +1406,12 @@ window.closeUpgradeModal = function(){
 
   if(modal){
     modal.style.display = "none";
+    document.body.classList.remove("modal-open");
   }
 
 };
 
-  window.showUpgradeModalCustom = function(titleIT, titleEN){
+window.showUpgradeModalCustom = function(titleIT, titleEN){
 
   console.log("🔥 OPEN UPGRADE MODAL");
 
@@ -1424,10 +1426,11 @@ window.closeUpgradeModal = function(){
   }
 
   modal.style.display = "flex";
-
+  document.body.classList.add("modal-open");
 };
 
-  // ================= 🔥 RESTORE CITY BACKGROUND =================
+
+// ================= 🔥 RESTORE CITY BACKGROUND =================
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -1440,53 +1443,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
- /* ================= FIX MODAL GHOST (HARD FIX) ================= */
 
-setInterval(() => {
+// 💣 HARD FIX MODAL STUCK (DEFINITIVO)
+document.addEventListener("DOMContentLoaded", () => {
 
-  const access = window.getUserAccess?.();
+  const modal = document.getElementById("rb-pro-modal");
 
-  if(access && !access.isLogged){
+  if(!modal || !modal.classList.contains("open")){
     document.body.classList.remove("modal-open");
   }
 
-}, 300);
+});
 
-  // ================= ANALYZE BUTTON =================
 
-  document.addEventListener("DOMContentLoaded", () => {
+// 🔥 SICUREZZA EXTRA (ANTI BUG ASYNC)
+setTimeout(()=>{
+  const modal = document.getElementById("rb-pro-modal");
+  if(!modal || !modal.classList.contains("open")){
+    document.body.classList.remove("modal-open");
+  }
+}, 500);
+
+
+// ================= ANALYZE BUTTON =================
+
+document.addEventListener("DOMContentLoaded", () => {
 
   const btn = document.getElementById("analyze-btn");
 
   if(btn){
     btn.addEventListener("click", () => {
 
-      // 🔒 BLOCCO SOLO GUEST
       const access = window.getUserAccess();
 
+      // 🔒 SOLO GUEST BLOCCATI
       if(!access.isLogged){
 
-  window.showUpgradeModalCustom(
-    "🔒 Registrati per vedere l'anteprima",
-    "🔒 Sign up to see preview"
-  );
+        window.showUpgradeModalCustom(
+          "🔒 Registrati per vedere l'anteprima",
+          "🔒 Sign up to see preview"
+        );
 
-  setTimeout(()=>{
-    if(typeof calculate === "function"){
-      calculate();
-    }
-  },200);
+        setTimeout(()=>{
+          if(typeof calculate === "function"){
+            calculate();
+          }
+        },200);
 
-  return;
-}
+        return;
+      }
 
       btn.classList.add("is-loading");
 
-setTimeout(()=>{
-  btn.classList.remove("is-loading");
-}, 600);
+      setTimeout(()=>{
+        btn.classList.remove("is-loading");
+      }, 600);
 
-      // ✅ esegui simulazione
       if(typeof calculate === "function"){
         calculate();
       }
@@ -1495,11 +1507,3 @@ setTimeout(()=>{
   }
 
 });
-
-  </script>
-
-
-  <div id="global-footer"></div>
-  
-  </body>
-</html>
