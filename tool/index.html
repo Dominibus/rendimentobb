@@ -1440,9 +1440,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-  /* ================= FIX MODAL GHOST ================= */
+ /* ================= FIX MODAL GHOST (HARD FIX) ================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+setInterval(() => {
 
   const access = window.getUserAccess?.();
 
@@ -1450,7 +1450,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("modal-open");
   }
 
-});
+}, 300);
 
   // ================= ANALYZE BUTTON =================
 
