@@ -4066,14 +4066,13 @@ function forceUnlockUI(){
 
   }
 
-  // =========================
-  // 🟡 INVESTOR → PARTIAL UNLOCK (FIX REALE + ANTI OVERRIDE)
-  // =========================
- else if(access.isInvestor){
+// =========================
+// 🟡 INVESTOR → PARTIAL UNLOCK
+// =========================
+else if(access.isInvestor){
 
   console.log("🟡 INVESTOR → CLEAN PARTIAL UI");
 
-  // 🔥 RIMUOVE TUTTI I LOCK VISIVI
   document.querySelectorAll(`
     .lock-overlay,
     .home-blur-overlay,
@@ -4086,7 +4085,6 @@ function forceUnlockUI(){
     if(el.id !== "register-popup") el.remove();
   });
 
-  // 🔥 SBLOCCA INTERAZIONI
   document.querySelectorAll("*").forEach(el=>{
     el.classList.remove(
       "pro-blur",
@@ -4102,24 +4100,26 @@ function forceUnlockUI(){
     }
   });
 
-  return;
 }
-   document.querySelectorAll(`
+
+// =========================
+// 🔴 FREE → LOCK
+// =========================
+else{
+
+  console.log("🔴 FREE USER");
+
+  document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
+    el.classList.add("pro-blur");
+  });
+
+}
+
+// 🔥 CLEAN EXTRA (FUORI DAL BLOCCO IF)
+document.querySelectorAll(`
   .home-blur-overlay,
   .results-overlay,
   .upgrade-overlay
 `).forEach(el => el.remove());
-  // =========================
-  // 🔴 FREE → LOCK
-  // =========================
-  else{
-
-    console.log("🔴 FREE USER");
-
-    document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
-      el.classList.add("pro-blur");
-    });
-
-  }
 
 }
