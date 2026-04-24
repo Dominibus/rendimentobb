@@ -15546,3 +15546,29 @@ section::before,
   max-width:1200px;
   margin:0 auto;
 }
+
+/* =====================================
+🔥 TOOL HERO FIX – RENDIMENTOBB
+Elimina bande laterali arancioni
+===================================== */
+
+.tool-hero{
+  background:none !important;
+}
+
+/* kill overlay */
+.tool-hero::before{
+  display:none !important;
+  content:none !important;
+}
+
+/* porta il contenuto a piena larghezza visiva */
+.simulator-container{
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* opzionale: sfondo pulito tipo SaaS */
+body.app-ready .tool-hero{
+  background:#f8fafc !important;
+}
