@@ -2235,6 +2235,11 @@ try{
 // ================= ADVANCED METRICS =================
 const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
 
+// 🔥 FIX PREVIEW KPI (QUESTO TI MANCAVA)
+if(typeof updatePreviewMetrics === "function"){
+  updatePreviewMetrics(roi, riskScore);
+}
+
 try{
   renderBreakEvenOccupancy?.(
     priceNight,
@@ -2263,7 +2268,6 @@ try{
 }catch(e){
   console.warn("⚠️ ADVANCED METRICS SKIPPED:", e);
 }
-
     // ================= ACCESS CONTROL UI =================
 
     // 🔒 FREE
