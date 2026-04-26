@@ -12304,20 +12304,30 @@ body{
 }
 
 /* =====================================
-🔥 FORM FIX (SIMULATORE)
+🔥 FORM FIX (SAFE VERSION)
 ===================================== */
 
+/* 🔤 SOLO COLORE (NON TOCCARE OPACITY) */
 .simulator-container,
 .simulator-container *{
+  color:#0f172a !important;
+}
+
+/* 🔥 NON FORZARE OPACITY GLOBALMENTE */
+
+/* 🟢 INPUT SEMPRE VISIBILI */
+.simulator-container input{
+  background:#ffffff !important;
   color:#0f172a !important;
   opacity:1 !important;
 }
 
-.simulator-container input{
-  background:#ffffff !important;
-  color:#0f172a !important;
+/* 🟢 LABEL / TESTO IMPORTANTI */
+.simulator-container label,
+.simulator-container span,
+.simulator-container strong{
+  opacity:1;
 }
-
 /* =====================================
 🔥 FIX TESTI INVISIBILI (SEZIONI BASSE)
 ===================================== */
@@ -15683,97 +15693,61 @@ body.pro #risk-preview {
 }
 
 /* =====================================
-🔥 RENDIMENTOBB – LOCK SYSTEM SAFE (SCOPED)
-SOLO SIMULATORE – NON TOCCA ALTRO
+🔥 FIX DEFINITIVO BLUR + LOCK (ANTI CONFLITTO)
 ===================================== */
 
-/* 🎯 scope SOLO simulatore */
-.simulator-container {
-
-  /* reset leggero (NO wildcard distruttivo) */
-  color: inherit;
+/* 🔒 wrapper obbligatorio */
+.simulator-container .blur-content{
+  position:relative;
 }
 
-/* =========================
-🔒 BLUR SOLO PER CONTENUTI LOCK
-========================= */
-.simulator-container .pro-blur {
-  filter: blur(6px);
-  pointer-events: none;
-  user-select: none;
-  transition: filter .3s ease;
+/* 🔒 BLUR FORZATO */
+.simulator-container .pro-blur,
+.simulator-container .blur-content.pro-blur,
+.simulator-container .blur-content .pro-blur{
+
+  filter: blur(6px) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  user-select: none !important;
 }
 
-/* =========================
-🔓 INVESTOR → NO BLUR (MA NON SBLOCCA TUTTO)
-========================= */
-body.is-investor .simulator-container .pro-blur {
-  filter: none;
+/* 🔒 FREE USER → BLUR ATTIVO */
+body:not(.is-pro):not(.is-admin) .simulator-container .blur-content{
+  filter: blur(6px) !important;
 }
 
-/* =========================
-🔒 OVERLAY PROFESSIONALE
-========================= */
-.simulator-container .lock-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-  border-radius: 16px;
+/* 🟡 INVESTOR → NO BLUR MA LOCK PARZIALE */
+body.is-investor .simulator-container .blur-content{
+  filter: none !important;
 }
 
-/* box interno stile SaaS */
-.simulator-container .lock-box {
-  background: white;
-  padding: 18px 22px;
-  border-radius: 14px;
-  text-align: center;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.12);
-  max-width: 260px;
+/* 🔒 OVERLAY SEMPRE SOPRA */
+.simulator-container .locked-overlay,
+.simulator-container .lock-overlay{
+
+  position:absolute !important;
+  inset:0 !important;
+  z-index:999 !important;
+
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(6px);
+
+  border-radius:16px;
 }
 
-/* icona */
-.simulator-container .lock-icon {
-  font-size: 20px;
-  display: block;
-  margin-bottom: 6px;
+/* 🔥 BLOCCA CLICK SOTTO */
+.simulator-container .locked-overlay ~ *,
+.simulator-container .lock-overlay ~ *{
+  pointer-events:none !important;
 }
 
-/* testo */
-.simulator-container .lock-text {
-  font-size: 13px;
-  color: #334155;
-  line-height: 1.4;
-}
-
-/* =========================
-🟢 CTA MICRO (effetto premium)
-========================= */
-.simulator-container .lock-text span {
-  display: inline-block;
-  margin-top: 6px;
-  font-size: 12px;
-  color: #10b981;
-  font-weight: 600;
-}
-
-/* =========================
-🧼 FIX BUG OPACITY / COLOR
-(evita override globali)
-========================= */
-.simulator-container .results-card,
-.simulator-container .metric-card,
-.simulator-container .investment-panel {
-  opacity: 1;
-}
-
-/* =========================
-🛑 BLOCCA CLICK SOLO SE LOCKED
-========================= */
-.simulator-container .pro-blur * {
-  pointer-events: none;
+/* 🔥 FIX CRITICO: rimuove override globali */
+.simulator-container *{
+  opacity: unset !important;
+  color: unset !important;
 }
