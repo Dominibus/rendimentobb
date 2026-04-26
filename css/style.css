@@ -15587,3 +15587,14 @@ body.is-investor .simulator-container .pro-blur{
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
+/* =====================================
+💣 FIX MIRATO RESULT ITEM (INVESTOR)
+NON TOCCA ALTRO
+===================================== */
+
+body.is-investor .result-item.pro-only{
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
