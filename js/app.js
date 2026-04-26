@@ -577,16 +577,21 @@ function requirePlan(requiredPlan){
 }
 // =====================================
 // 🔥 FUNNEL + MODAL ENGINE UNIFICATO
-// SILICON VALLEY SAAS – FINAL
+// SILICON VALLEY SAAS – FINAL FIXED
 // =====================================
 
 // ================= FUNNEL =================
 
 window.triggerUpgradeFlow = function(context = {}){
 
-  // 🔥 HARD BLOCK PRIMA DI FIREBASE
+  // 🔁 WAIT FIREBASE (FIX CRITICO)
   if(!window.firebaseReady){
-    console.warn("⛔ BLOCK upgrade → Firebase non pronto");
+    console.warn("⛔ Firebase non pronto → retry");
+
+    setTimeout(()=>{
+      window.triggerUpgradeFlow(context);
+    }, 300);
+
     return;
   }
 
@@ -617,12 +622,14 @@ window.triggerUpgradeFlow = function(context = {}){
   // 🟡 INVESTOR
   if(access.isInvestor){
     console.log("🟡 INVESTOR → PRO UPSELL");
+    openUpgradeModal("pro", roi);
     return;
   }
 
   // 🟢 PRO
   console.log("✅ PRO USER → NO POPUP");
 };
+
 
 // =====================================
 // 🔥 MODAL UNIFICATO (CORE)
@@ -633,18 +640,17 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   const access = window.getUserAccess();
   if(!access) return;
 
-  // 🟡 INVESTOR → BLOCCA COMPLETAMENTE IL MODAL
-  if(access.isInvestor){
-    console.log("🟡 INVESTOR → modal bloccato");
-    return;
-  }
-
-  // 🟢 PRO / ADMIN → NIENTE MODAL
+  // 🟢 PRO → niente modal
   if(access.canSeeFullAnalysis){
     return;
   }
 
-  // rimuove eventuali modal già aperti
+  // 🟡 INVESTOR → forza PRO (FIX)
+  if(access.isInvestor){
+    type = "pro";
+  }
+
+  // cleanup modal esistente
   const existing = document.getElementById("rb-upgrade-modal");
   if(existing) existing.remove();
 
@@ -655,191 +661,201 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
     position:fixed;
     inset:0;
     background:rgba(2,6,23,0.75);
-    backdrop-filter:blur(6px);
+    backdrop-filter:blur(8px);
     display:flex;
     align-items:center;
     justify-content:center;
     z-index:999999;
   `;
 
- // ================= CONFIG =================
+  // ================= CONFIG =================
 
-let config = {};
+  let config = null;
 
-if(type === "investor"){
-  config = {
-    title_it: "📊 Sblocca piano Investor",
-    title_en: "📊 Unlock Investor Plan",
+  if(type === "investor"){
+    config = {
+      title_it: "📊 Sblocca piano Investor",
+      title_en: "📊 Unlock Investor Plan",
 
-    desc_it: "Stai usando dati incompleti e rischi di prendere una decisione sbagliata.",
-    desc_en: "You're using incomplete data and risk making the wrong decision.",
+      desc_it: "Stai usando dati incompleti e rischi di prendere una decisione sbagliata.",
+      desc_en: "You're using incomplete data and risk making the wrong decision.",
 
-    // ❌ tolti i ✔ dalle stringhe
-    features_it: [
-      "Simulazioni illimitate",
-      "Analisi ROI avanzata",
-      "Confronto mercato"
-    ],
-    features_en: [
-      "Unlimited simulations",
-      "Advanced ROI analysis",
-      "Market comparison"
-    ],
+      features_it: [
+        "Simulazioni illimitate",
+        "Analisi ROI avanzata",
+        "Confronto mercato"
+      ],
+      features_en: [
+        "Unlimited simulations",
+        "Advanced ROI analysis",
+        "Market comparison"
+      ],
 
-    cta_it: "💰 Passa a Investor €19",
-    cta_en: "💰 Upgrade to Investor €19",
+      cta_it: "💰 Passa a Investor €19",
+      cta_en: "💰 Upgrade to Investor €19",
 
-    action: () => startPlanPurchase("investor")
+      action: () => startPlanPurchase("investor")
+    };
+  }
+
+  if(type === "pro"){
+    config = {
+      title_it: "🚀 Sblocca analisi completa",
+      title_en: "🚀 Unlock full analysis",
+
+      desc_it: "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti.",
+      desc_en: "You're making a decision without seeing the real risk, mortgage, and hidden costs.",
+
+      features_it: [
+        "ROI reale completo",
+        "Analisi rischio avanzata",
+        "Break-even reale",
+        "Report PDF professionale"
+      ],
+      features_en: [
+        "Full real ROI",
+        "Advanced risk analysis",
+        "Real break-even",
+        "Professional PDF report"
+      ],
+
+      cta_it: "🔥 Passa a PRO – €29",
+      cta_en: "🔥 Upgrade to PRO – €29",
+
+      action: () => startPlanPurchase("pro")
+    };
+  }
+
+  // sicurezza fallback
+  if(!config){
+    console.warn("⚠️ Config modal mancante");
+    return;
+  }
+
+  const lang = window.currentLang === "en" ? "en" : "it";
+
+  // safe translation fallback
+  const safeT = (it,en)=>{
+    if(typeof window.t === "function") return window.t(it,en);
+    return lang === "en" ? en : it;
   };
-}
 
-if(type === "pro"){
-  config = {
-    title_it: "🚀 Sblocca analisi completa",
-    title_en: "🚀 Unlock full analysis",
+  // ================= UI =================
 
-    desc_it: "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti.",
-    desc_en: "You're making a decision without seeing the real risk, mortgage, and hidden costs.",
+  const box = document.createElement("div");
 
-    // ❌ tolti i ✔ anche qui
-    features_it: [
-      "ROI reale completo",
-      "Analisi rischio avanzata",
-      "Break-even reale",
-      "Report PDF professionale"
-    ],
-    features_en: [
-      "Full real ROI",
-      "Advanced risk analysis",
-      "Real break-even",
-      "Professional PDF report"
-    ],
-
-    cta_it: "🔥 Passa a PRO – €29",
-    cta_en: "🔥 Upgrade to PRO – €29",
-
-    action: () => startPlanPurchase("pro")
-  };
-}
-
-const lang = window.currentLang === "en" ? "en" : "it";
-
-// ================= UI =================
-
-const box = document.createElement("div");
-
-box.style = `
-  background:white;
-  padding:28px;
-  border-radius:16px;
-  max-width:420px;
-  width:90%;
-  text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.25);
-  animation:fadeIn .3s ease;
-`;
-
-// ===== TITLE =====
-const title = document.createElement("h3");
-title.textContent = config["title_" + lang];
-title.style.color = "#0f172a";
-title.style.fontWeight = "700";
-title.style.marginBottom = "10px";
-
-// ===== DESC =====
-const desc = document.createElement("p");
-desc.textContent = config["desc_" + lang];
-desc.style.margin = "10px 0 20px";
-
-// ===== FEATURES =====
-const list = document.createElement("div");
-list.style.textAlign = "left";
-list.style.marginBottom = "20px";
-
-config["features_" + lang].forEach(f => {
-
-  const item = document.createElement("div");
-
-  item.innerHTML = `
-    <span style="color:#10b981;font-weight:600;">✔</span>
-    <span style="color:#0f172a;margin-left:6px;font-weight:500;">
-      ${f.replace("✔","").trim()}
-    </span>
+  box.style = `
+    background:white;
+    padding:28px;
+    border-radius:16px;
+    max-width:420px;
+    width:90%;
+    text-align:center;
+    box-shadow:0 30px 80px rgba(0,0,0,0.25);
+    animation:fadeIn .3s ease;
   `;
 
-  item.style.margin = "6px 0";
-  item.style.display = "flex";
-  item.style.alignItems = "center";
+  // TITLE
+  const title = document.createElement("h3");
+  title.textContent = config["title_" + lang];
+  title.style.marginBottom = "10px";
 
-  list.appendChild(item);
-});
+  // DESC
+  const desc = document.createElement("p");
+  desc.textContent = config["desc_" + lang];
+  desc.style.margin = "10px 0 20px";
 
-// ===== CTA =====
-const cta = document.createElement("button");
-cta.textContent = config["cta_" + lang];
+  // FEATURES
+  const list = document.createElement("div");
+  list.style.textAlign = "left";
+  list.style.marginBottom = "20px";
 
-cta.style = `
-  background:#10b981;
-  color:white;
-  border:none;
-  padding:12px 18px;
-  border-radius:10px;
-  font-weight:600;
-  cursor:pointer;
-  width:100%;
-  margin-bottom:10px;
-`;
+  config["features_" + lang].forEach(f => {
+    const item = document.createElement("div");
 
-cta.onclick = () => {
-  modal.remove();
-  document.body.classList.remove("modal-open");
-  config.action();
-};
+    item.innerHTML = `
+      <span style="color:#10b981;font-weight:600;">✔</span>
+      <span style="margin-left:6px;">${f}</span>
+    `;
 
-// ===== CLOSE =====
-const close = document.createElement("button");
-close.textContent = lang === "en" ? "Maybe later" : "Ora no";
+    item.style.margin = "6px 0";
+    list.appendChild(item);
+  });
 
-close.style = `
-  background:none;
-  border:none;
-  color:#64748b;
-  cursor:pointer;
-`;
+  // CTA
+  const cta = document.createElement("button");
+  cta.textContent = config["cta_" + lang];
 
-close.onclick = () => {
-  modal.remove();
-  document.body.classList.remove("modal-open");
-};
-
-// ===== WARNING (FIX ERRORE QUI) =====
-const warning = document.createElement("div");
-
-warning.innerHTML = `
-  <div style="
-    margin-top:10px;
-    font-size:13px;
-    color:#ef4444;
+  cta.style = `
+    background:#10b981;
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:10px;
     font-weight:600;
-  ">
-    ⚠️ ${t(
-      "Il 72% degli investitori perde soldi in questa fase",
-      "72% of investors lose money at this stage"
-    )}
-  </div>
-`;
+    cursor:pointer;
+    width:100%;
+    margin-bottom:10px;
+  `;
 
-// ===== APPEND =====
-box.appendChild(title);
-box.appendChild(desc);
-box.appendChild(list);
-box.appendChild(cta);
-box.appendChild(close);
-box.appendChild(warning); // ✅ ora è dentro → niente errore
+  cta.onclick = () => {
+    modal.remove();
+    window.__upgradeShown = false;
+    config.action();
+  };
 
-modal.appendChild(box);
-document.body.appendChild(modal);
-  document.body.classList.add("modal-open");
+  // CLOSE
+  const close = document.createElement("button");
+  close.textContent = lang === "en" ? "Maybe later" : "Ora no";
+
+  close.style = `
+    background:none;
+    border:none;
+    color:#64748b;
+    cursor:pointer;
+  `;
+
+  close.onclick = () => {
+    modal.remove();
+    window.__upgradeShown = false;
+  };
+
+  // WARNING
+  const warning = document.createElement("div");
+
+  warning.innerHTML = `
+    <div style="
+      margin-top:10px;
+      font-size:13px;
+      color:#ef4444;
+      font-weight:600;
+    ">
+      ⚠️ ${safeT(
+        "Il 72% degli investitori perde soldi in questa fase",
+        "72% of investors lose money at this stage"
+      )}
+    </div>
+  `;
+
+  // APPEND
+  box.appendChild(title);
+  box.appendChild(desc);
+  box.appendChild(list);
+  box.appendChild(cta);
+  box.appendChild(close);
+  box.appendChild(warning);
+
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+
+  // chiusura click fuori
+  modal.addEventListener("click",(e)=>{
+    if(e.target === modal){
+      modal.remove();
+      window.__upgradeShown = false;
+    }
+  });
+
 };
 // ================= GLOBAL HERO BACKGROUND =================
 
