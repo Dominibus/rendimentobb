@@ -742,121 +742,163 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
   // ================= UI =================
 
-  const box = document.createElement("div");
+const box = document.createElement("div");
 
-  box.style = `
-    background:white;
-    padding:28px;
-    border-radius:16px;
-    max-width:420px;
-    width:90%;
-    text-align:center;
-    box-shadow:0 30px 80px rgba(0,0,0,0.25);
-    animation:fadeIn .3s ease;
-  `;
+box.style = `
+  background:#ffffff;
+  color:#0f172a;
+  padding:30px;
+  border-radius:18px;
+  max-width:420px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,0.25);
+  animation:fadeIn .3s ease;
+`;
 
-  // TITLE
-  const title = document.createElement("h3");
-  title.textContent = config["title_" + lang];
-  title.style.marginBottom = "10px";
+// ================= TITLE =================
+const title = document.createElement("h3");
+title.textContent = config["title_" + lang];
 
-  // DESC
-  const desc = document.createElement("p");
-  desc.textContent = config["desc_" + lang];
-  desc.style.margin = "10px 0 20px";
+title.style = `
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:10px;
+  color:#0f172a;
+`;
 
-  // FEATURES
-  const list = document.createElement("div");
-  list.style.textAlign = "left";
-  list.style.marginBottom = "20px";
+// ================= DESC =================
+const desc = document.createElement("p");
+desc.textContent = config["desc_" + lang];
 
-  config["features_" + lang].forEach(f => {
-    const item = document.createElement("div");
+desc.style = `
+  margin:10px 0 20px;
+  font-size:14px;
+  color:#475569;
+`;
 
-    item.innerHTML = `
-      <span style="color:#10b981;font-weight:600;">✔</span>
-      <span style="margin-left:6px;">${f}</span>
-    `;
+// ================= FEATURES =================
+const list = document.createElement("div");
 
-    item.style.margin = "6px 0";
-    list.appendChild(item);
-  });
+list.style = `
+  text-align:left;
+  margin-bottom:22px;
+`;
 
-  // CTA
-  const cta = document.createElement("button");
-  cta.textContent = config["cta_" + lang];
+config["features_" + lang].forEach(f => {
 
-  cta.style = `
-    background:#10b981;
-    color:white;
-    border:none;
-    padding:12px;
-    border-radius:10px;
-    font-weight:600;
-    cursor:pointer;
-    width:100%;
-    margin-bottom:10px;
-  `;
+  const item = document.createElement("div");
 
-  cta.onclick = () => {
-    modal.remove();
-    window.__upgradeShown = false;
-    config.action();
-  };
-
-  // CLOSE
-  const close = document.createElement("button");
-  close.textContent = lang === "en" ? "Maybe later" : "Ora no";
-
-  close.style = `
-    background:none;
-    border:none;
-    color:#64748b;
-    cursor:pointer;
-  `;
-
-  close.onclick = () => {
-    modal.remove();
-    window.__upgradeShown = false;
-  };
-
-  // WARNING
-  const warning = document.createElement("div");
-
-  warning.innerHTML = `
-    <div style="
-      margin-top:10px;
-      font-size:13px;
-      color:#ef4444;
-      font-weight:600;
+  item.innerHTML = `
+    <span style="
+      color:#10b981;
+      font-weight:700;
+      margin-right:6px;
+    ">✔</span>
+    <span style="
+      color:#0f172a;
+      font-weight:500;
+      font-size:14px;
     ">
-      ⚠️ ${safeT(
-        "Il 72% degli investitori perde soldi in questa fase",
-        "72% of investors lose money at this stage"
-      )}
-    </div>
+      ${f}
+    </span>
   `;
 
-  // APPEND
-  box.appendChild(title);
-  box.appendChild(desc);
-  box.appendChild(list);
-  box.appendChild(cta);
-  box.appendChild(close);
-  box.appendChild(warning);
+  item.style = `
+    margin:8px 0;
+    display:flex;
+    align-items:center;
+  `;
 
-  modal.appendChild(box);
-  document.body.appendChild(modal);
+  list.appendChild(item);
+});
 
-  // chiusura click fuori
-  modal.addEventListener("click",(e)=>{
-    if(e.target === modal){
-      modal.remove();
-      window.__upgradeShown = false;
-    }
-  });
+// ================= CTA =================
+const cta = document.createElement("button");
+cta.textContent = config["cta_" + lang];
 
+cta.style = `
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  border:none;
+  padding:14px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  width:100%;
+  margin-bottom:12px;
+  box-shadow:0 10px 25px rgba(16,185,129,0.35);
+  transition:all .2s ease;
+`;
+
+cta.onmouseenter = () => {
+  cta.style.transform = "translateY(-2px)";
 };
+
+cta.onmouseleave = () => {
+  cta.style.transform = "translateY(0)";
+};
+
+cta.onclick = () => {
+  modal.remove();
+  window.__upgradeShown = false;
+  config.action();
+};
+
+// ================= CLOSE =================
+const close = document.createElement("button");
+close.textContent = lang === "en" ? "Maybe later" : "Ora no";
+
+close.style = `
+  background:none;
+  border:none;
+  color:#64748b;
+  cursor:pointer;
+  font-size:13px;
+  margin-bottom:10px;
+`;
+
+close.onclick = () => {
+  modal.remove();
+  window.__upgradeShown = false;
+};
+
+// ================= WARNING =================
+const warning = document.createElement("div");
+
+warning.innerHTML = `
+  <div style="
+    margin-top:12px;
+    font-size:13px;
+    color:#ef4444;
+    font-weight:600;
+  ">
+    ⚠️ ${safeT(
+      "Il 72% degli investitori perde soldi in questa fase",
+      "72% of investors lose money at this stage"
+    )}
+  </div>
+`;
+
+// ================= APPEND =================
+box.appendChild(title);
+box.appendChild(desc);
+box.appendChild(list);
+box.appendChild(cta);
+box.appendChild(close);
+box.appendChild(warning);
+
+modal.appendChild(box);
+document.body.appendChild(modal);
+
+// ================= CLICK OUTSIDE CLOSE =================
+modal.addEventListener("click",(e)=>{
+  if(e.target === modal){
+    modal.remove();
+    window.__upgradeShown = false;
+  }
+});
 // ================= GLOBAL HERO BACKGROUND =================
 
 window.applyCityBackground = function(city){
