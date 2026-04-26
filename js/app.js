@@ -2334,26 +2334,6 @@ window.calculate = async function(force = false){
   window.isCalculating = false;
 };
 
-    // ================= EVENT =================
-    document.dispatchEvent(new CustomEvent("rb_simulation_updated",{
-      detail:{ roi, data: result }
-    }));
-
-    window.RB_LANG?.apply?.();
-
-  } catch(err){
-
-    console.error("💥 calculate error:", err);
-
-  } finally {
-
-    // 🔥 FIX CRITICO → SBLOCCA SEMPRE
-    window.isCalculating = false;
-
-    console.log("✅ CALCULATE END");
-  }
-};
-
 function renderChart(net){
 
   if(window.renderingChart) return;
