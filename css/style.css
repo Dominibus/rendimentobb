@@ -15462,6 +15462,7 @@ body.is-investor .pro-only{
 
 /* =====================================
 🔥 RENDIMENTOBB – ACCESS CONTROL FINAL FIX
++ RESULT ITEM UI FIX (EMPTY STATE)
 NO CONFLICT – JS SYNC – PRODUCTION SAFE
 ===================================== */
 
@@ -15476,8 +15477,6 @@ NO CONFLICT – JS SYNC – PRODUCTION SAFE
 /* ===============================
 🔴 FREE USER (VERO BLOCCO)
 =============================== */
-
-/* SOLO FREE → blur reale */
 body.is-free .simulator-container .blur-content{
   filter: blur(6px) !important;
   pointer-events: none !important;
@@ -15488,7 +15487,7 @@ body.is-free .simulator-container .blur-content{
 🟡 INVESTOR (TEASER MODE REALE)
 =============================== */
 
-/* 🔥 RIMUOVE QUALSIASI BLUR */
+/* 🔥 NO BLUR */
 body.is-investor .simulator-container .blur-content,
 body.is-investor .blur-content,
 body.is-investor .pro-blur{
@@ -15497,7 +15496,7 @@ body.is-investor .pro-blur{
   pointer-events: auto !important;
 }
 
-/* 🔥 BLOCCA SOLO PRO FEATURE */
+/* 🔒 SOLO PRO LOCK */
 body.is-investor .pro-only,
 body.is-investor [data-plan="pro"]{
   filter: blur(6px) !important;
@@ -15506,9 +15505,8 @@ body.is-investor [data-plan="pro"]{
 }
 
 /* ===============================
-🟢 PRO / ADMIN (FULL UNLOCK)
+🟢 PRO / ADMIN
 =============================== */
-
 body.is-pro .blur-content,
 body.is-admin .blur-content,
 body.is-pro .pro-blur,
@@ -15519,10 +15517,8 @@ body.is-admin .pro-blur{
 }
 
 /* ===============================
-🔥 PRO BLUR (USATO DAL JS)
-NON TOCCARE LOGICA JS
+🔥 PRO BLUR (JS BASE)
 =============================== */
-
 .simulator-container .pro-blur{
   filter: blur(6px);
   pointer-events: none;
@@ -15530,56 +15526,38 @@ NON TOCCARE LOGICA JS
 }
 
 /* ===============================
-🔒 LOCK OVERLAY (COERENTE CON JS)
+🔒 LOCK OVERLAY
 =============================== */
-
 .simulator-container .lock-overlay,
 .simulator-container .locked-overlay{
-
   position:absolute;
   inset:0;
   z-index:50;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   background:rgba(255,255,255,0.75);
   backdrop-filter:blur(6px);
-
   border-radius:16px;
 }
 
 /* ===============================
-🔥 CLICK BLOCK SOLO SE SERVE
+🚫 FIX CRITICO (RIMUOVE BUG)
 =============================== */
-
-.simulator-container .lock-overlay ~ *,
-.simulator-container .locked-overlay ~ *{
-  pointer-events:none;
-}
-
-/* ===============================
-🚫 FIX CRITICO (ERA IL TUO BUG)
-=============================== */
-
-/* ❌ ELIMINA QUESTA LOGICA SBAGLIATA */
 body:not(.is-pro):not(.is-admin) .simulator-container .blur-content{
   filter: unset !important;
 }
 
 /* ===============================
-🧼 ANTI GLOBAL OVERRIDE (SAFE)
+🧼 CLEAN TEXT
 =============================== */
-
 .simulator-container .blur-content *{
   text-shadow: none;
 }
 
 /* =====================================
-💣 FIX INVESTOR DEFINITIVO (PRIORITÀ MASSIMA)
+💣 INVESTOR HARD FIX
 ===================================== */
-
 body.is-investor .pro-blur,
 body.is-investor .blur-content.pro-blur,
 body.is-investor .simulator-container .pro-blur{
@@ -15589,10 +15567,52 @@ body.is-investor .simulator-container .pro-blur{
 }
 
 /* =====================================
-💣 FIX MIRATO RESULT ITEM (INVESTOR)
-NON TOCCA ALTRO
+💣 RESULT ITEM FIX (QUELLO CHE TI SERVE)
+RISOLVE SFASAMENTO SENZA DATI
 ===================================== */
 
+.simulator-container .result-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:60px;
+  text-align:center;
+}
+
+/* label */
+.simulator-container .result-item span{
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:4px;
+}
+
+/* valore */
+.simulator-container .result-item strong{
+  display:block;
+  font-size:16px;
+  font-weight:600;
+  color:#0f172a;
+  line-height:1;
+  min-height:18px;
+}
+
+/* stato vuoto elegante */
+.simulator-container .result-item strong:empty::after{
+  content:"—";
+  color:#94a3b8;
+}
+
+/* "sblocca" allineato */
+.simulator-container .result-item .lock-hint{
+  font-size:12px;
+  color:#10b981;
+  margin-top:4px;
+}
+
+/* =====================================
+💣 INVESTOR RESULT FIX
+===================================== */
 body.is-investor .result-item.pro-only{
   filter: none !important;
   opacity: 1 !important;
