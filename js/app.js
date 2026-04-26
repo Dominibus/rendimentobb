@@ -154,9 +154,12 @@ setInterval(() => {
 // 🔥 USA SOLO FIREBASE (SINGLE SOURCE OF TRUTH)
 window.getUserAccess = function(){
 
+  const user = window.currentUser;
+
+  // 🔴 RB_USER NON PRONTO
   if(!window.RB_USER){
     return {
-      isLogged: !!window.currentUser,
+      isLogged: !!user,
       isFree: true,
       isPro: false,
       isInvestor: false,
@@ -165,19 +168,33 @@ window.getUserAccess = function(){
     };
   }
 
-  return {
-    ...window.RB_USER,
-    isLogged: !!window.currentUser,
-    canSeeFullAnalysis: !!(
-      window.RB_USER.isPro ||
-      window.RB_USER.isAdmin
-    )
-  };
-};
+  // 🔥 NORMALIZZAZIONE
+  const isAdmin    = !!window.RB_USER.isAdmin;
+  const isPro      = !!window.RB_USER.isPro;
+  const isInvestor = !!window.RB_USER.isInvestor;
 
-// ❌ DISABILITA vecchio sistema (evita conflitti)
-window.applyAccessControl = function(){
-  console.warn("⛔ OLD ACCESS SYSTEM DISABLED");
+  const isFree = !isAdmin && !isPro && !isInvestor;
+
+  // 🔍 DEBUG QUI (CRITICO)
+  console.log("🔐 ACCESS:", {
+    user: window.currentUser?.email,
+    RB_USER: window.RB_USER,
+    computed: {
+      isFree,
+      isInvestor,
+      isPro,
+      isAdmin
+    }
+  });
+
+  return {
+    isLogged: !!user,
+    isFree,
+    isPro,
+    isInvestor,
+    isAdmin,
+    canSeeFullAnalysis: (isPro || isAdmin)
+  };
 };
 
 // ================= KPI UNIVERSALE (HOME + TOOL) =================
@@ -2387,6 +2404,10 @@ if(profitYear > 0){
     "⚠️ This investment could generate a loss"
   );
 }
+
+} // ✅ CHIUSURA if(headline)
+
+} // ✅ CHIUSURA if(isTool)    
 
   renderROIMarketComparison?.(roi, window.currentCity);
 
