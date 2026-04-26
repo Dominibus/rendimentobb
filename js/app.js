@@ -406,130 +406,194 @@ async function saveAnalysis(data){
 
 }
 
-// ================= LOCK OVERLAY (GLOBAL) =================
-function createLockOverlay(el, text){
+// =====================================
+// 🔒 LOCK OVERLAY – SAAS CLEAN VERSION
+// =====================================
+function createLockOverlay(el, {
+  message = "",
+  cta = "",
+  plan = "pro"
+} = {}){
 
   if(!el || el.querySelector(".lock-overlay")) return;
 
+  el.style.position = "relative";
+
   const overlay = document.createElement("div");
-overlay.style.zIndex = "999";
-el.style.position = "relative";
-  
   overlay.className = "lock-overlay";
 
+  overlay.style = `
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(4px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    z-index:20;
+    border-radius:12px;
+    padding:16px;
+    cursor:pointer;
+  `;
+
   overlay.innerHTML = `
-    <div class="lock-box">
-      <span class="lock-icon">🔒</span>
-      <div class="lock-text">${text}</div>
+    <div style="max-width:260px;">
+      <div style="font-size:20px;margin-bottom:6px;">🔒</div>
+
+      <div style="
+        font-size:14px;
+        font-weight:600;
+        color:#0f172a;
+        margin-bottom:6px;
+      ">
+        ${message}
+      </div>
+
+      <div style="
+        font-size:12px;
+        color:#64748b;
+      ">
+        ${cta}
+      </div>
     </div>
   `;
 
   overlay.onclick = () => {
-    triggerUpgradeFlow();
+    triggerUpgradeFlow({ source:"lock_overlay", plan });
   };
 
   el.appendChild(overlay);
 }
 
-// ================= SMART LOCK ENGINE =================
+
+// =====================================
+// 🧠 SMART LOCK ENGINE – FINAL
+// =====================================
 function applySmartLock(el, {
-  type = "blur", // blur | hide | overlay
+  type = "blur", // blur | hide | overlay | advanced
   message = "",
-  cta = "Sblocca",
+  cta = "",
   plan = "pro"
 } = {}){
 
   if(!el) return;
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
 
-  // 🟡 INVESTOR → NO LOCK HARD
-  if(access.isInvestor){
-    return;
-  }
+  const tSafe = (it,en)=>
+    (window.currentLang === "en" ? en : it);
 
-  // 🟢 PRO / ADMIN → skip totale
+  // =============================
+  // 🟢 PRO / ADMIN → FULL ACCESS
+  // =============================
   if(access.canSeeFullAnalysis){
     return;
   }
 
-  // reset sicurezza
+  // =============================
+  // 🟡 INVESTOR → PARTIAL LOCK
+  // =============================
+  if(access.isInvestor){
+
+    const isAdvanced =
+      type === "advanced" ||
+      type === "overlay" ||
+      plan === "pro";
+
+    if(isAdvanced){
+
+      createLockOverlay(el, {
+        message: message || tSafe(
+          "Sblocca analisi avanzata",
+          "Unlock advanced analysis"
+        ),
+        cta: cta || tSafe(
+          "Include AI insights, scenari e report completo",
+          "Includes AI insights, scenarios and full report"
+        ),
+        plan:"pro"
+      });
+
+      return;
+    }
+
+    // 🔓 tutto il resto libero
+    return;
+  }
+
+  // =============================
+  // 🔴 FREE USER
+  // =============================
+
   el.classList.remove("pro-blur");
 
-  // ================= TYPE: BLUR =================
   if(type === "blur"){
     el.classList.add("pro-blur");
   }
 
-  // ================= TYPE: HIDE =================
   if(type === "hide"){
     el.style.display = "none";
   }
 
-  // ================= OVERLAY =================
   if(type === "overlay"){
 
-    createLockOverlay(el, `
-      ${message}
-      <br>
-      <span style="font-size:12px;opacity:.8;">
-        ${cta}
-      </span>
-    `);
+    createLockOverlay(el, {
+      message: message || tSafe(
+        "Sblocca analisi completa",
+        "Unlock full analysis"
+      ),
+      cta: cta || tSafe(
+        "ROI reale, rischio e simulazioni avanzate",
+        "Real ROI, risk and advanced simulations"
+      ),
+      plan:"investor"
+    });
 
   }
 
-  // click → upgrade
   el.style.cursor = "pointer";
-  el.onclick = () => {
-    triggerUpgradeFlow({ source:"lock", plan });
-  };
 
+  el.onclick = () => {
+    triggerUpgradeFlow({ source:"free_lock", plan });
+  };
 }
 
 
-// ================= PLAN SYSTEM =================
+// =====================================
+// 👑 PLAN SYSTEM – CLEAN VERSION
+// =====================================
 
-// 🔥 ADMIN
+// ADMIN
 window.isAdmin = function(){
   const email = window.currentUser?.email || "";
   return email === "rendimentobb@gmail.com";
 };
 
-
-// 🔥 PREMIUM USER (ADMIN + PRO)
+// PREMIUM (PRO + ADMIN)
 window.isPremiumUser = function(){
 
   const plan = window.currentPlan || "free";
 
-  const isAdmin =
-    window.currentUser?.email === "rendimentobb@gmail.com" ||
-    window.userRole === "admin";
-
-  const isPro =
-    plan === "pro" || plan === "pro_yearly";
-
-  return isAdmin || isPro;
+  return (
+    plan === "pro" ||
+    plan === "pro_yearly" ||
+    window.isAdmin()
+  );
 };
 
-
-// 🔓 ACCESS COMPLETO
+// FULL ACCESS
 window.canUserAccessFull = function(){
-
   const access = window.getUserAccess?.() || {};
-
   return !!(access.isPro || access.isAdmin);
-
 };
 
-
-// ✅ GET PLAN
+// GET PLAN
 function getUserPlan(){
   return window.currentPlan || "free";
 }
 
-
-// 🔥 GERARCHIA PIANI
+// PLAN HIERARCHY
 function hasPlan(requiredPlan){
 
   const plan = getUserPlan();
@@ -546,42 +610,43 @@ function hasPlan(requiredPlan){
     );
   }
 
-  if(requiredPlan === "free"){
-    return true;
-  }
-
-  return false;
+  return true;
 }
 
 
-// 🔒 ACCESS CONTROL
+// =====================================
+// 🔐 ACCESS CONTROL – UX CLEAN
+// =====================================
 function requirePlan(requiredPlan){
 
+  const tSafe = (it,en)=>
+    (window.currentLang === "en" ? en : it);
+
   if(!window.isUserReady()){
-    console.log("⏳ Skip requirePlan → user non pronto");
+    console.log("⏳ user non pronto");
     return false;
   }
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
 
-  // 🔓 PRO / ADMIN
+  // PRO / ADMIN
   if(access.canSeeFullAnalysis){
     return true;
   }
 
-  // 🔒 NON LOGGATO
-  if(!window.currentUser && !access.isLogged){
-    showRegisterPopup();
+  // GUEST
+  if(!window.currentUser){
+    showRegisterPopup?.();
     return false;
   }
 
-  // 🔒 NON HA PIANO
+  // NO PLAN
   if(!hasPlan(requiredPlan)){
 
     showToast(
-      t(
-        "🔒 Sblocca analisi completa per continuare",
-        "🔒 Unlock full analysis to continue"
+      tSafe(
+        "🔒 Sblocca funzionalità avanzate",
+        "🔒 Unlock advanced features"
       ),
       "warning"
     );
