@@ -15635,3 +15635,22 @@ Non interferisce con resto sito
 #rb-upgrade-modal{
   z-index:999999 !important;
 }
+
+/* =====================================
+🔥 PRECISION TARGET SOLO MODAL BOX
+===================================== */
+
+#rb-upgrade-modal .rb-upgrade-box h3{
+  font-size:20px;
+  font-weight:700;
+  color:#0f172a !important;
+}
+
+#rb-upgrade-modal .rb-upgrade-box p{
+  font-size:14px;
+  color:#475569 !important;
+}
+
+#rb-upgrade-modal .rb-upgrade-box button{
+  font-weight:600;
+}
