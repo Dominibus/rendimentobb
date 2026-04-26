@@ -2306,6 +2306,32 @@ renderUniversalKPI({
   investment: price
 });
 
+// =====================================
+// 💣 FIX PROFIT MONTHLY (INVESTOR BUG)
+// =====================================
+setTimeout(() => {
+
+  const el = document.getElementById("profit-monthly");
+  if(!el) return;
+
+  const accessNow = window.getUserAccess?.();
+
+  if(accessNow?.isInvestor){
+
+    // 🔥 rimuove il lock che si riattiva dopo
+    el.classList.remove("pro-blur");
+
+    // 🔥 forza visibilità
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+
+    console.log("🟡 FIX INVESTOR profit-monthly OK");
+
+  }
+
+}, 120);    
+
 // ================= ROI LIVE =================
 const roiEl = document.getElementById("roi-live");
 
