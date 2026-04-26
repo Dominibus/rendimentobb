@@ -2089,7 +2089,7 @@ function getValue(id){
   const v = parseFloat(el.value);
   return isNaN(v) ? 0 : v;
 }
-// ================= CORE CALCULATE ENGINE (FIX DEFINITIVO) =================
+// ================= CORE CALCULATE ENGINE (FINAL PRODUCTION SAAS) =================
 
 window.calculate = async function(force = false){
 
@@ -2098,15 +2098,12 @@ window.calculate = async function(force = false){
     return;
   }
 
-  if(!window.firebaseReady){
-    console.warn("⏳ Firebase non pronto → continuo senza save");
-  }
-
   window.isCalculating = true;
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
   window.paywallShown = false;
 
+  // 🧹 CLEAN UI (NO RESIDUI BUG)
   document.querySelectorAll(`
     .smart-overlay,
     .upgrade-msg,
@@ -2120,18 +2117,18 @@ window.calculate = async function(force = false){
     // ================= INPUT =================
     const isTool = !!document.getElementById("price");
 
-    const price = isTool ? getValue("price") || 100000 : getValue("qr_price") || 100000;
-    const equity = isTool ? getValue("equity") || Math.round(price * 0.3) : 0;
-    const priceNight = isTool ? getValue("priceNight") || 100 : getValue("qr_night") || 100;
-    const occupancy = isTool ? getValue("occupancy") || 65 : getValue("qr_occ") || 65;
-    const expenses = isTool ? getValue("expenses") || 30 : getValue("qr_cost") || 30;
+    const price       = isTool ? getValue("price")       || 100000 : getValue("qr_price") || 100000;
+    const equity      = isTool ? getValue("equity")      || Math.round(price * 0.3) : 0;
+    const priceNight  = isTool ? getValue("priceNight")  || 100 : getValue("qr_night") || 100;
+    const occupancy   = isTool ? getValue("occupancy")   || 65  : getValue("qr_occ") || 65;
+    const expenses    = isTool ? getValue("expenses")    || 30  : getValue("qr_cost") || 30;
 
-    const commission = getValue("commission") || 15;
-    const tax = getValue("tax") || 21;
+    const commission  = getValue("commission") || 15;
+    const tax         = getValue("tax") || 21;
 
-    const loanAmount = getValue("loanAmount") || (price - equity);
-    const interestRate = getValue("interestRate") || 3.5;
-    const loanYears = getValue("loanYears") || 20;
+    const loanAmount  = getValue("loanAmount") || (price - equity);
+    const interestRate= getValue("interestRate") || 3.5;
+    const loanYears   = getValue("loanYears") || 20;
 
     const access = window.getUserAccess?.() || {};
 
@@ -2154,16 +2151,16 @@ window.calculate = async function(force = false){
       return;
     }
 
-    const roi = Number(result?.roi ?? 0);
+    const roi   = Number(result?.roi ?? 0);
     const gross = Number(result?.revenue ?? 0);
-    const net = Number(result?.netAfterMortgage ?? result?.net ?? 0);
+    const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
     if(!roi && !gross && !net){
       console.error("💥 RESULT EMPTY");
       return;
     }
 
-    // ================= POST =================
+    // ================= POST ANALYSIS =================
     runPostAnalysis(result, {
       price,
       gross,
@@ -2172,43 +2169,14 @@ window.calculate = async function(force = false){
       expenses
     });
 
-    // ================= RESULTS =================
-    const resultsBox = document.getElementById("results");
+    // ================= KPI CORE =================
+    renderUniversalKPI({
+      net,
+      revenue: gross,
+      investment: price
+    });
 
-    if(resultsBox){
-      resultsBox.innerHTML = `
-        <div class="blur-content">
-          <div style="margin-top:20px">
-
-            <div class="kpi-box">
-              <div class="kpi-label">
-                ${t("ROI stimato","Estimated ROI")}
-              </div>
-              <div class="kpi-value">
-                ${roi.toFixed(1)}%
-              </div>
-            </div>
-
-            <div class="kpi-box">
-              <div class="kpi-label">
-                ${t("Profitto annuo","Annual profit")}
-              </div>
-              <div class="kpi-value">
-                ${formatCurrency(net)}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      `;
-    }
-
-    // ================= FUNNEL =================
-    if(window.firebaseReady && access.isFree && !access.isInvestor && roi > 10){
-      triggerUpgradeFlow({ roi });
-    }
-
-    // ================= ROI =================
+    // ================= ROI LIVE =================
     const roiEl = document.getElementById("roi-live");
 
     if(roiEl){
@@ -2220,80 +2188,151 @@ window.calculate = async function(force = false){
           roiEl.style.color = "#f59e0b";
         }else{
           roiEl.innerText = roi.toFixed(1) + "%";
+          roiEl.style.color = "#10b981";
         }
         roiEl.style.opacity = "1";
       },150);
     }
 
-    // ================= PROFIT =================
-    const monthlyEl = document.getElementById("profit-monthly");
-    const annualEl = document.getElementById("profit-annual");
-
-    if(monthlyEl && annualEl){
-      if(access.isFree){
-        monthlyEl.innerText = "🔒";
-        annualEl.innerText = "—";
-      }else{
-        const safeNet = Math.max(0, net);
-        monthlyEl.innerText = formatCurrency(safeNet / 12);
-        annualEl.innerText = formatCurrency(safeNet);
-      }
-    }
-
     // ================= MARKET =================
-    if(typeof renderMarketBenchmark === "function"){
-      renderMarketBenchmark(window.currentCity || "napoli");
+    renderMarketBenchmark?.(window.currentCity || "roma");
+    renderMarketComparison?.(gross, window.currentCity);
+    renderRevenueForecast?.(gross);
+    renderOccupancySensitivity?.();
+
+    // ================= ADVANCED METRICS =================
+    const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
+
+    renderBreakEvenOccupancy?.(
+      priceNight,
+      expenses,
+      commission,
+      tax,
+      0
+    );
+
+    renderInvestmentScore?.(roi, riskScore);
+    renderInvestmentRanking?.(roi);
+    renderRiskMeter?.(riskScore);
+    renderInvestmentVerdict?.(roi, net > 0 ? price/net : 0);
+
+    renderROIMarketComparison?.(roi, window.currentCity);
+
+    if(typeof generateInsights === "function"){
+      renderInsights(generateInsights({
+        roi,
+        occupancy,
+        priceNight,
+        expenses
+      }));
     }
 
-    // ================= SCORE =================
-    const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
-    renderInvestmentScore?.(roi, riskScore);
+    // ================= ACCESS CONTROL UI =================
 
-    // ================= ACCESS UI =================
+    // 🔒 FREE
     if(access.isFree){
 
-      ["investment-ranking","investment-risk-meter","investment-verdict","ai-insights"]
-      .forEach(id=>{
-        const el = document.getElementById(id);
-        if(!el) return;
-
-        if(el.querySelector(".lock-overlay")) return;
+      document.querySelectorAll(`
+        #investment-ranking,
+        #investment-risk-meter,
+        #investment-verdict,
+        #ai-insights
+      `).forEach(el=>{
+        if(!el || el.querySelector(".lock-overlay")) return;
 
         const overlay = document.createElement("div");
         overlay.className = "lock-overlay";
-        overlay.style = "position:absolute;inset:0;background:rgba(255,247,237,0.92);display:flex;align-items:center;justify-content:center;cursor:pointer;";
-        overlay.innerHTML = "🔒 Upgrade";
+        overlay.style = `
+          position:absolute;
+          inset:0;
+          background:rgba(255,247,237,0.95);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-weight:600;
+          cursor:pointer;
+          z-index:10;
+        `;
+
+        overlay.innerHTML = `
+          🔒 ${t("Sblocca analisi completa","Unlock full analysis")}
+        `;
+
         overlay.onclick = ()=> triggerUpgradeFlow({ roi });
 
+        el.style.position = "relative";
         el.appendChild(overlay);
       });
 
-    } else if(access.isInvestor){
+    }
+
+    // 🟡 INVESTOR
+    else if(access.isInvestor){
 
       document.querySelectorAll(".lock-overlay").forEach(el=>el.remove());
-      renderInvestmentRanking?.(roi);
-      renderRiskMeter?.(riskScore);
 
-    } else {
+      // teaser intelligente
+      const verdict = document.getElementById("investment-verdict");
 
-      renderInvestmentRanking?.(roi);
-      renderRiskMeter?.(riskScore);
-      renderInvestmentVerdict?.(roi, net > 0 ? price/net : 0);
+      if(verdict && !verdict.querySelector(".investor-upsell")){
+        const upsell = document.createElement("div");
+        upsell.className = "investor-upsell";
 
-      if(typeof generateInsights === "function"){
-        renderInsights(generateInsights({
-          roi,
-          occupancy,
-          priceNight,
-          expenses
-        }));
+        upsell.innerHTML = `
+          <div style="
+            margin-top:15px;
+            padding:12px;
+            border-radius:10px;
+            background:rgba(16,185,129,0.08);
+            font-size:13px;
+            text-align:center;
+            color:#065f46;
+          ">
+            🔥 ${t(
+              "Stai vedendo solo una parte del potenziale reale",
+              "You are only seeing part of the real potential"
+            )}
+          </div>
+        `;
+
+        verdict.appendChild(upsell);
       }
+
+    }
+
+    // 🟢 PRO / ADMIN
+    else if(access.canSeeFullAnalysis){
+
+      // 💣 SBLOCCO TOTALE
+      document.querySelectorAll(`
+        .locked-overlay,
+        .upgrade-box,
+        [data-paywall="true"]
+      `).forEach(el => el.remove());
+
+      document.querySelectorAll(".blur-content").forEach(el=>{
+        el.style.filter = "none";
+        el.style.pointerEvents = "auto";
+      });
+
     }
 
     // ================= CHART =================
     setTimeout(()=>{
       renderChart?.(net);
     },200);
+
+    // ================= FUNNEL =================
+    if(window.firebaseReady && access.isFree && !access.isInvestor && roi > 10){
+      triggerUpgradeFlow({ roi });
+    }
+
+  }catch(err){
+    console.error("💥 CALCULATE ERROR:", err);
+  }
+
+  window.isCalculating = false;
+};
 
     // ================= EVENT =================
     document.dispatchEvent(new CustomEvent("rb_simulation_updated",{
