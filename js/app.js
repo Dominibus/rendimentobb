@@ -743,6 +743,8 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   // ================= UI =================
 
 const box = document.createElement("div");
+ 
+box.classList.add("rb-upgrade-box"); 
 
 box.style = `
   background:#ffffff;
