@@ -15654,3 +15654,30 @@ Non interferisce con resto sito
 #rb-upgrade-modal .rb-upgrade-box button{
   font-weight:600;
 }
+
+/* =====================================
+🔥 PRO UNLOCK FULL (NON TOCCA FREE/INVESTOR)
+===================================== */
+
+body.pro .locked-section,
+body.pro .paywall-mini,
+body.pro .home-blur-overlay {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* contenuto sempre visibile */
+body.pro .locked-section * {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* preview KPI sempre visibili */
+body.pro #roi-preview,
+body.pro #risk-preview {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
