@@ -2132,99 +2132,137 @@ window.calculate = async function(force = false){
     const access = window.getUserAccess?.() || {};
 
     // ================= CALCOLO =================
-    const result = calculateROI({
-      price,
-      equity,
-      priceNight,
-      occupancy,
-      expenses,
-      commission,
-      tax,
-      loanAmount,
-      interestRate,
-      loanYears
-    });
+const result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
-    if (!result || typeof result !== "object") {
-      console.error("💥 RESULT INVALID:", result);
-      return;
+if (!result || typeof result !== "object") {
+  console.error("💥 RESULT INVALID:", result);
+  return;
+}
+
+const roi   = Number(result?.roi ?? 0);
+const gross = Number(result?.revenue ?? 0);
+const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
+
+if(!roi && !gross && !net){
+  console.error("💥 RESULT EMPTY");
+  return;
+}
+
+// ================= UI FINAL RENDER (CRITICO) =================
+try {
+
+  const profit = Number(result?.netAfterMortgage ?? result?.net ?? 0);
+  const revenue = gross; // 🔥 FIX: usa revenue corretto
+  const risk = Number(result?.risk ?? 0);
+
+  // 🔥 KPI LIVE (TOP CARD)
+  const profitEl = document.getElementById("profit-live");
+  if(profitEl){
+    profitEl.innerText = formatCurrency(profit);
+  }
+
+  const revenueEl = document.getElementById("revenue-live");
+  if(revenueEl){
+    revenueEl.innerText = formatCurrency(revenue);
+  }
+
+  // 🔥 KPI PREVIEW (BOX SOTTO)
+  if(typeof updatePreviewMetrics === "function"){
+    updatePreviewMetrics(roi, risk);
+  }
+
+  console.log("✅ UI FINAL RENDER OK");
+
+} catch(e){
+  console.error("💥 UI FINAL RENDER ERROR:", e);
+}
+
+// ================= POST ANALYSIS =================
+runPostAnalysis(result, {
+  price,
+  gross,
+  occupancy,
+  priceNight,
+  expenses
+});
+
+// ================= KPI CORE =================
+renderUniversalKPI({
+  net,
+  revenue: gross,
+  investment: price
+});
+
+// ================= ROI LIVE =================
+const roiEl = document.getElementById("roi-live");
+
+if(roiEl){
+  roiEl.style.opacity = "0";
+
+  setTimeout(()=>{
+    if(access.isFree){
+      roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+      roiEl.style.color = "#f59e0b";
+    }else{
+      roiEl.innerText = roi.toFixed(1) + "%";
+      roiEl.style.color = "#10b981";
     }
+    roiEl.style.opacity = "1";
+  },150);
+}
 
-    const roi   = Number(result?.roi ?? 0);
-    const gross = Number(result?.revenue ?? 0);
-    const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
+// ================= MARKET =================
+try{
+  renderMarketBenchmark?.(window.currentCity || "roma");
+  renderMarketComparison?.(gross, window.currentCity);
+  renderRevenueForecast?.(gross);
+  renderOccupancySensitivity?.();
+}catch(e){
+  console.warn("⚠️ MARKET RENDER SKIPPED:", e);
+}
 
-    if(!roi && !gross && !net){
-      console.error("💥 RESULT EMPTY");
-      return;
-    }
+// ================= ADVANCED METRICS =================
+const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
 
-    // ================= POST ANALYSIS =================
-    runPostAnalysis(result, {
-      price,
-      gross,
+try{
+  renderBreakEvenOccupancy?.(
+    priceNight,
+    expenses,
+    commission,
+    tax,
+    0
+  );
+
+  renderInvestmentScore?.(roi, riskScore);
+  renderInvestmentRanking?.(roi);
+  renderRiskMeter?.(riskScore);
+  renderInvestmentVerdict?.(roi, net > 0 ? price/net : 0);
+
+  renderROIMarketComparison?.(roi, window.currentCity);
+
+  if(typeof generateInsights === "function"){
+    renderInsights(generateInsights({
+      roi,
       occupancy,
       priceNight,
       expenses
-    });
+    }));
+  }
 
-    // ================= KPI CORE =================
-    renderUniversalKPI({
-      net,
-      revenue: gross,
-      investment: price
-    });
-
-    // ================= ROI LIVE =================
-    const roiEl = document.getElementById("roi-live");
-
-    if(roiEl){
-      roiEl.style.opacity = "0";
-
-      setTimeout(()=>{
-        if(access.isFree){
-          roiEl.innerText = "~ " + roi.toFixed(1) + "%";
-          roiEl.style.color = "#f59e0b";
-        }else{
-          roiEl.innerText = roi.toFixed(1) + "%";
-          roiEl.style.color = "#10b981";
-        }
-        roiEl.style.opacity = "1";
-      },150);
-    }
-
-    // ================= MARKET =================
-    renderMarketBenchmark?.(window.currentCity || "roma");
-    renderMarketComparison?.(gross, window.currentCity);
-    renderRevenueForecast?.(gross);
-    renderOccupancySensitivity?.();
-
-    // ================= ADVANCED METRICS =================
-    const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
-
-    renderBreakEvenOccupancy?.(
-      priceNight,
-      expenses,
-      commission,
-      tax,
-      0
-    );
-
-    renderInvestmentScore?.(roi, riskScore);
-    renderInvestmentRanking?.(roi);
-    renderRiskMeter?.(riskScore);
-    renderInvestmentVerdict?.(roi, net > 0 ? price/net : 0);
-
-    renderROIMarketComparison?.(roi, window.currentCity);
-
-    if(typeof generateInsights === "function"){
-      renderInsights(generateInsights({
-        roi,
-        occupancy,
-        priceNight,
-        expenses
-      }));
-    }
+}catch(e){
+  console.warn("⚠️ ADVANCED METRICS SKIPPED:", e);
+}
 
     // ================= ACCESS CONTROL UI =================
 
