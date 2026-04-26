@@ -2268,6 +2268,58 @@ if(roiPreviewEl){
 
   }
 }
+
+ // 🔥 RISK PREVIEW (MATCH ROI STYLE)
+const riskPreviewEl = document.getElementById("risk-preview");
+
+if(riskPreviewEl){
+
+  if(riskPreviewEl.dataset.animating !== "true"){
+
+    riskPreviewEl.dataset.animating = "true";
+
+    if(riskScore !== null && riskScore !== undefined){
+
+      riskPreviewEl.innerText = "0";
+
+      // colore dinamico rischio (opposto ROI)
+      let color = "#ef4444";
+      if(riskScore < 40) color = "#10b981";
+      else if(riskScore < 65) color = "#f59e0b";
+
+      riskPreviewEl.style.color = color;
+
+      // animazione numero
+      let start = 0;
+      const end = riskScore;
+      const duration = 800;
+      let startTime = null;
+
+      function animateRisk(currentTime){
+        if(!startTime) startTime = currentTime;
+
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const value = start + (end - start) * progress;
+
+        riskPreviewEl.innerText = Math.round(value);
+
+        if(progress < 1){
+          requestAnimationFrame(animateRisk);
+        }
+      }
+
+      requestAnimationFrame(animateRisk);
+
+    }else{
+      riskPreviewEl.innerText = "—";
+      riskPreviewEl.style.color = "#64748b";
+    }
+
+    setTimeout(()=>{
+      riskPreviewEl.dataset.animating = "false";
+    }, 900);
+  }
+}   
     
 try{
   renderBreakEvenOccupancy?.(
