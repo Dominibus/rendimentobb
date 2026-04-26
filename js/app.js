@@ -2117,7 +2117,11 @@ window.calculate = async function(force = false){
     const isTool = !!document.getElementById("price");
 
     const price       = isTool ? getValue("price")       || 100000 : getValue("qr_price") || 100000;
-    const equity      = isTool ? getValue("equity")      || Math.round(price * 0.3) : 0;
+    const equityInput = getValue("equity");
+
+    const equity = isTool
+    ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
+    : Math.round(price * 0.3);
     const priceNight  = isTool ? getValue("priceNight")  || 100 : getValue("qr_night") || 100;
     const occupancy   = isTool ? getValue("occupancy")   || 65  : getValue("qr_occ") || 65;
     const expenses    = isTool ? getValue("expenses")    || 30  : getValue("qr_cost") || 30;
@@ -2154,6 +2158,22 @@ const roi   = Number(result?.roi ?? 0);
 const gross = Number(result?.revenue ?? 0);
 const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
+if(!access.canSeeFullAnalysis && roi > 10 && !window._roiToastShown){
+
+  window._roiToastShown = true;
+
+  setTimeout(()=>{
+    showToast(
+      t(
+        "🔥 Questo investimento potrebbe farti guadagnare molto",
+        "🔥 This investment could generate strong returns"
+      ),
+      "success"
+    );
+  }, 800);
+
+}
+    
 if(!roi && !gross && !net){
   console.error("💥 RESULT EMPTY");
   return;
@@ -2208,6 +2228,7 @@ renderUniversalKPI({
 const roiEl = document.getElementById("roi-live");
 
 if(roiEl){
+
   roiEl.style.opacity = "0";
 
   setTimeout(()=>{
@@ -2220,6 +2241,18 @@ if(roiEl){
     }
     roiEl.style.opacity = "1";
   },150);
+}
+
+    if(!isTool){
+  const disclaimer = document.getElementById("home-disclaimer");
+
+  if(disclaimer){
+    disclaimer.innerText = t(
+      "Stima basata su parametri medi di mercato",
+      "Estimate based on market average assumptions"
+    );
+    disclaimer.style.display = "block";
+  }
 }
 
 // ================= MARKET =================
@@ -2334,6 +2367,26 @@ try{
   renderInvestmentRanking?.(roi);
   renderRiskMeter?.(riskScore);
   renderInvestmentVerdict?.(roi, net > 0 ? price/net : 0);
+
+  if(isTool){
+
+  const headline = document.getElementById("investment-headline");
+
+  if(headline && roi > 0){
+
+    const profitYear = Math.round(net);
+
+if(profitYear > 0){
+  headline.innerText = t(
+    `🔥 Questo investimento può generare €${profitYear.toLocaleString()} / anno`,
+    `🔥 This investment could generate €${profitYear.toLocaleString()} / year`
+  );
+}else{
+  headline.innerText = t(
+    "⚠️ Questo investimento potrebbe generare una perdita",
+    "⚠️ This investment could generate a loss"
+  );
+}
 
   renderROIMarketComparison?.(roi, window.currentCity);
 
