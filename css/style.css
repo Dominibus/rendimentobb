@@ -15552,3 +15552,86 @@ body.is-pro .investor-teaser::after,
 body.is-admin .investor-teaser::after {
   display: none;
 }
+
+/* =====================================
+🔥 RB UPGRADE MODAL – SAFE ISOLATION FIX
+Non interferisce con resto sito
+===================================== */
+
+/* overlay */
+#rb-upgrade-modal{
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* box principale */
+#rb-upgrade-modal > div{
+  background:#ffffff !important;
+  color:#0f172a !important;
+}
+
+/* titolo */
+#rb-upgrade-modal h1,
+#rb-upgrade-modal h2,
+#rb-upgrade-modal h3{
+  all: unset;
+  display:block;
+
+  font-size:20px;
+  font-weight:700;
+  color:#0f172a !important;
+  margin-bottom:10px;
+}
+
+/* descrizione */
+#rb-upgrade-modal p{
+  all: unset;
+  display:block;
+
+  font-size:14px;
+  color:#475569 !important;
+  margin:10px 0 20px;
+  line-height:1.4;
+}
+
+/* lista features */
+#rb-upgrade-modal div{
+  color:#0f172a;
+}
+
+/* fix testo dentro features */
+#rb-upgrade-modal span{
+  color:#0f172a !important;
+}
+
+/* CTA button */
+#rb-upgrade-modal button{
+  font-family: inherit;
+}
+
+/* bottone principale */
+#rb-upgrade-modal button:first-of-type{
+  background:linear-gradient(135deg,#10b981,#059669) !important;
+  color:white !important;
+}
+
+/* bottone secondario */
+#rb-upgrade-modal button:last-of-type{
+  color:#64748b !important;
+}
+
+/* warning */
+#rb-upgrade-modal .rb-warning,
+#rb-upgrade-modal div[style*="color:#ef4444"]{
+  color:#ef4444 !important;
+}
+
+/* FIX SUPER AGGRESSIVO CONTRO CSS GLOBALI */
+#rb-upgrade-modal *{
+  text-shadow:none !important;
+  background-image:none !important;
+}
+
+/* evita che overlay globali coprano testo */
+#rb-upgrade-modal{
+  z-index:999999 !important;
+}
