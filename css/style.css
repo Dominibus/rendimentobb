@@ -15461,293 +15461,117 @@ body.is-investor .pro-only{
 }
 
 /* =====================================
-🟡 INVESTOR – TEASER MODE (FINAL CLEAN)
-NO CONFLICT – NO BREAK – SILICON VALLEY STYLE
+🔥 RENDIMENTOBB – ACCESS CONTROL FINAL FIX
+NO CONFLICT – JS SYNC – PRODUCTION SAFE
 ===================================== */
 
 /* ===============================
-🔥 RIMUOVE SOLO OVERLAY INVASIVI
+🔒 BASE STRUCTURE
 =============================== */
-body.is-investor .home-blur-overlay,
-body.is-investor .results-overlay,
-body.is-investor .upgrade-overlay,
-body.is-investor .smart-overlay,
-body.is-investor .paywall-mini,
-body.is-investor .lock-overlay,
-body.is-investor [data-paywall] {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  backdrop-filter: none !important;
-}
-
-/* ===============================
-🔥 HERO SAFE (NON ROMPE UI)
-=============================== */
-body.is-investor .hero::before,
-body.is-investor .hero::after,
-body.is-investor .tool-hero::before,
-body.is-investor .tool-hero::after {
-  opacity: 1 !important;
-  display: block !important;
-  background: inherit !important;
-}
-
-/* ===============================
-🔓 CONTENUTO BASE VISIBILE
-=============================== */
-body.is-investor .results-card,
-body.is-investor .metric-card,
-body.is-investor .locked-section {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* ===============================
-🧠 TEASER MODE → BLOCCA SOLO PRO
-=============================== */
-body.is-investor .pro-only {
-  filter: blur(6px);
-  opacity: 0.35 !important;
-  pointer-events: none !important;
-  user-select: none;
-}
-
-/* ===============================
-🧼 BLUR CONTENT (NON NASCONDERE!)
-=============================== */
-body.is-investor .blur-content {
-  display: block !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-/* ===============================
-🚫 SICUREZZA EXTRA (ANTI BUG)
-Rimuove solo effetti, NON contenuto
-=============================== */
-body.is-investor .locked,
-body.is-investor .premium-lock {
-  filter: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* ===============================
-🟡 INVESTOR TEASER (REALI)
-=============================== */
-body.is-investor .investor-teaser {
-  position: relative;
-  overflow: hidden;
-}
-
-/* overlay visivo */
-body.is-investor .investor-teaser::after {
-  content: "🔒 Sblocca analisi completa";
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-  color: #0f172a;
-  background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(4px);
-}
-
-/* PRO vede tutto */
-body.is-pro .investor-teaser::after,
-body.is-admin .investor-teaser::after {
-  display: none;
-}
-
-/* =====================================
-🔥 RB UPGRADE MODAL – SAFE ISOLATION FIX
-Non interferisce con resto sito
-===================================== */
-
-/* overlay */
-#rb-upgrade-modal{
-  font-family: system-ui, -apple-system, sans-serif;
-}
-
-/* box principale */
-#rb-upgrade-modal > div{
-  background:#ffffff !important;
-  color:#0f172a !important;
-}
-
-/* titolo */
-#rb-upgrade-modal h1,
-#rb-upgrade-modal h2,
-#rb-upgrade-modal h3{
-  all: unset;
-  display:block;
-
-  font-size:20px;
-  font-weight:700;
-  color:#0f172a !important;
-  margin-bottom:10px;
-}
-
-/* descrizione */
-#rb-upgrade-modal p{
-  all: unset;
-  display:block;
-
-  font-size:14px;
-  color:#475569 !important;
-  margin:10px 0 20px;
-  line-height:1.4;
-}
-
-/* lista features */
-#rb-upgrade-modal div{
-  color:#0f172a;
-}
-
-/* fix testo dentro features */
-#rb-upgrade-modal span{
-  color:#0f172a !important;
-}
-
-/* CTA button */
-#rb-upgrade-modal button{
-  font-family: inherit;
-}
-
-/* bottone principale */
-#rb-upgrade-modal button:first-of-type{
-  background:linear-gradient(135deg,#10b981,#059669) !important;
-  color:white !important;
-}
-
-/* bottone secondario */
-#rb-upgrade-modal button:last-of-type{
-  color:#64748b !important;
-}
-
-/* warning */
-#rb-upgrade-modal .rb-warning,
-#rb-upgrade-modal div[style*="color:#ef4444"]{
-  color:#ef4444 !important;
-}
-
-/* FIX SUPER AGGRESSIVO CONTRO CSS GLOBALI */
-#rb-upgrade-modal *{
-  text-shadow:none !important;
-  background-image:none !important;
-}
-
-/* evita che overlay globali coprano testo */
-#rb-upgrade-modal{
-  z-index:999999 !important;
-}
-
-/* =====================================
-🔥 PRECISION TARGET SOLO MODAL BOX
-===================================== */
-
-#rb-upgrade-modal .rb-upgrade-box h3{
-  font-size:20px;
-  font-weight:700;
-  color:#0f172a !important;
-}
-
-#rb-upgrade-modal .rb-upgrade-box p{
-  font-size:14px;
-  color:#475569 !important;
-}
-
-#rb-upgrade-modal .rb-upgrade-box button{
-  font-weight:600;
-}
-
-/* =====================================
-🔥 PRO UNLOCK FULL (NON TOCCA FREE/INVESTOR)
-===================================== */
-
-body.pro .locked-section,
-body.pro .paywall-mini,
-body.pro .home-blur-overlay {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-/* contenuto sempre visibile */
-body.pro .locked-section * {
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-/* preview KPI sempre visibili */
-body.pro #roi-preview,
-body.pro #risk-preview {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* =====================================
-🔥 FIX DEFINITIVO BLUR + LOCK (ANTI CONFLITTO)
-===================================== */
-
-/* 🔒 wrapper obbligatorio */
 .simulator-container .blur-content{
-  position:relative;
+  position: relative;
+  transition: filter .3s ease, opacity .3s ease;
 }
 
-/* 🔒 BLUR FORZATO */
-.simulator-container .pro-blur,
-.simulator-container .blur-content.pro-blur,
-.simulator-container .blur-content .pro-blur{
+/* ===============================
+🔴 FREE USER (VERO BLOCCO)
+=============================== */
 
+/* SOLO FREE → blur reale */
+body.is-free .simulator-container .blur-content{
   filter: blur(6px) !important;
-  opacity: 1 !important;
   pointer-events: none !important;
   user-select: none !important;
 }
 
-/* 🔒 FREE USER → BLUR ATTIVO */
-body:not(.is-pro):not(.is-admin) .simulator-container .blur-content{
-  filter: blur(6px) !important;
-}
+/* ===============================
+🟡 INVESTOR (TEASER MODE REALE)
+=============================== */
 
-/* 🟡 INVESTOR → NO BLUR MA LOCK PARZIALE */
-body.is-investor .simulator-container .blur-content{
+/* 🔥 RIMUOVE QUALSIASI BLUR */
+body.is-investor .simulator-container .blur-content,
+body.is-investor .blur-content,
+body.is-investor .pro-blur{
   filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
-/* 🔒 OVERLAY SEMPRE SOPRA */
-.simulator-container .locked-overlay,
-.simulator-container .lock-overlay{
+/* 🔥 BLOCCA SOLO PRO FEATURE */
+body.is-investor .pro-only,
+body.is-investor [data-plan="pro"]{
+  filter: blur(6px) !important;
+  opacity: 0.4 !important;
+  pointer-events: none !important;
+}
 
-  position:absolute !important;
-  inset:0 !important;
-  z-index:999 !important;
+/* ===============================
+🟢 PRO / ADMIN (FULL UNLOCK)
+=============================== */
 
-  display:flex !important;
+body.is-pro .blur-content,
+body.is-admin .blur-content,
+body.is-pro .pro-blur,
+body.is-admin .pro-blur{
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* ===============================
+🔥 PRO BLUR (USATO DAL JS)
+NON TOCCARE LOGICA JS
+=============================== */
+
+.simulator-container .pro-blur{
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ===============================
+🔒 LOCK OVERLAY (COERENTE CON JS)
+=============================== */
+
+.simulator-container .lock-overlay,
+.simulator-container .locked-overlay{
+
+  position:absolute;
+  inset:0;
+  z-index:50;
+
+  display:flex;
   align-items:center;
   justify-content:center;
 
-  background:rgba(255,255,255,0.7);
+  background:rgba(255,255,255,0.75);
   backdrop-filter:blur(6px);
 
   border-radius:16px;
 }
 
-/* 🔥 BLOCCA CLICK SOTTO */
-.simulator-container .locked-overlay ~ *,
-.simulator-container .lock-overlay ~ *{
-  pointer-events:none !important;
+/* ===============================
+🔥 CLICK BLOCK SOLO SE SERVE
+=============================== */
+
+.simulator-container .lock-overlay ~ *,
+.simulator-container .locked-overlay ~ *{
+  pointer-events:none;
 }
 
-/* 🔥 FIX CRITICO: rimuove override globali */
-.simulator-container *{
-  opacity: unset !important;
-  color: unset !important;
+/* ===============================
+🚫 FIX CRITICO (ERA IL TUO BUG)
+=============================== */
+
+/* ❌ ELIMINA QUESTA LOGICA SBAGLIATA */
+body:not(.is-pro):not(.is-admin) .simulator-container .blur-content{
+  filter: unset !important;
+}
+
+/* ===============================
+🧼 ANTI GLOBAL OVERRIDE (SAFE)
+=============================== */
+
+.simulator-container .blur-content *{
+  text-shadow: none;
 }
