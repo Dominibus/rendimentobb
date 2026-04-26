@@ -901,6 +901,7 @@ modal.addEventListener("click",(e)=>{
     window.__upgradeShown = false;
   }
 });
+};  
 // ================= GLOBAL HERO BACKGROUND =================
 
 window.applyCityBackground = function(city){
