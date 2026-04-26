@@ -962,49 +962,48 @@ function renderROIMarketComparison(roi, cityKey){
 
   if(!window.RB_MARKET_DATA) return;
 
-  safeRender("roi-market-comparison", (container) => {
+  const container = document.getElementById("roi-market-comparison");
+  if(!container) return;
 
-    const market = window.RB_MARKET_DATA[cityKey];
-    if(!market) return;
+  const market = window.RB_MARKET_DATA[cityKey];
+  if(!market) return;
 
-    const marketROI = market.roi;
+  const marketROI = market.roi;
 
-    let message = "";
-    let color = "#ef4444";
-    let badge = "";
+  let message = "";
+  let color = "#ef4444";
+  let badge = "";
 
-    if(roi > marketROI){
-      message = t("ROI sopra la media","ROI above average");
-      color = "#10b981";
+  if(roi > marketROI){
+    message = t("ROI sopra la media","ROI above average");
+    color = "#10b981";
 
-      badge = `
-      <div style="margin-bottom:12px;padding:12px;border-radius:10px;background:#ecfdf5;border:1px solid #10b981;font-weight:600;">
-        ${t("ROI sopra la media","ROI above average")}
-      </div>`;
-    }else{
-      message = t("ROI sotto la media","ROI below average");
-    }
+    badge = `
+    <div style="margin-bottom:12px;padding:12px;border-radius:10px;background:#ecfdf5;border:1px solid #10b981;font-weight:600;">
+      ${t("ROI sopra la media","ROI above average")}
+    </div>`;
+  }else{
+    message = t("ROI sotto la media","ROI below average");
+  }
 
-    container.innerHTML = badge + `
-      <div class="kpi-box">
-        <span>${t("ROI investimento","Your ROI")}</span>
-        <strong>${safeNumber(roi).toFixed(1)}%</strong>
-      </div>
+  container.innerHTML = badge + `
+    <div class="kpi-box">
+      <span>${t("ROI investimento","Your ROI")}</span>
+      <strong>${safeNumber(roi).toFixed(1)}%</strong>
+    </div>
 
-      <div class="kpi-box">
-        <span>${t("ROI medio città","City average ROI")} ${cityKey}</span>
-        <strong>${marketROI}%</strong>
-      </div>
+    <div class="kpi-box">
+      <span>${t("ROI medio città","City average ROI")} ${cityKey}</span>
+      <strong>${marketROI}%</strong>
+    </div>
 
-      <div class="kpi-box">
-        <span>${t("Confronto mercato","Market comparison")}</span>
-        <strong style="color:${color}">
-          ${message}
-        </strong>
-      </div>
-    `;
-  });
-
+    <div class="kpi-box">
+      <span>${t("Confronto mercato","Market comparison")}</span>
+      <strong style="color:${color}">
+        ${message}
+      </strong>
+    </div>
+  `;
 }
 
 // ================= REVENUE FORECAST =================
