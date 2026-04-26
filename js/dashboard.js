@@ -1865,24 +1865,21 @@ function downloadReport(){
     "/dashboard-report/?" + params.toString();
 }
 
+// ================= REPORT CLICK HANDLER (FIX FLOW) =================
+function handleReportClick(){
 
-// ================= GLOBAL CLICK HANDLER =================
+  const user = window.RB_USER || {};
 
-document.addEventListener("click",(e)=>{
+  const isPro =
+    user.isAdmin ||
+    user.isPro ||
+    user.plan === "pro" ||
+    user.plan === "pro_yearly";
 
-  if(e.target.closest(".delete-analysis")){
-    deleteAnalysis(e);
-  }
+  console.log("📊 REPORT CLICK:", user);
 
-  if(e.target.id === "download-report"){
-
-  const plan = String(window.currentPlan || "").toLowerCase();
-
-  const canDownload =
-    plan === "pro" ||
-    plan === "pro_yearly";
-
-  if(!canDownload){
+  // 🔒 NON PRO → upgrade
+  if(!isPro){
 
     if(typeof startPlanPurchase === "function"){
       startPlanPurchase("pro");
@@ -1893,7 +1890,24 @@ document.addEventListener("click",(e)=>{
     return;
   }
 
-  downloadReport();
+  // ✅ PRO → redirect report
+  const data = window.bestInvestmentData || {};
+
+  window.location.href =
+    `/report.html?roi=${data.roi || 0}&price=${data.price || 0}&equity=${data.equity || 0}&risk=${data.risk || 0}`;
+}
+
+
+// ================= GLOBAL CLICK HANDLER =================
+
+document.addEventListener("click",(e)=>{
+
+  if(e.target.closest(".delete-analysis")){
+    deleteAnalysis(e);
+  }
+
+  if(e.target.id === "download-report"){
+  handleReportClick();
 }
 
 });
