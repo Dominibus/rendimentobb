@@ -2235,11 +2235,40 @@ try{
 // ================= ADVANCED METRICS =================
 const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
 
-// 🔥 FIX PREVIEW KPI (QUESTO TI MANCAVA)
+// 🔥 FIX PREVIEW KPI
 if(typeof updatePreviewMetrics === "function"){
   updatePreviewMetrics(roi, riskScore);
 }
 
+// 🔥 ROI PREVIEW + ANIMAZIONE (SAFE)
+const roiPreviewEl = document.getElementById("roi-preview");
+
+if(roiPreviewEl){
+
+  // 🔥 evita doppia animazione SENZA bloccare il resto
+  if(roiPreviewEl.dataset.animating !== "true"){
+
+    roiPreviewEl.dataset.animating = "true";
+
+    if(roi && roi > 0){
+
+      roiPreviewEl.innerText = "0%";
+      roiPreviewEl.style.color = getROIColor(roi);
+
+      animateValue(roiPreviewEl, 0, roi, 800);
+
+    }else{
+      roiPreviewEl.innerText = "—";
+      roiPreviewEl.style.color = "#64748b";
+    }
+
+    setTimeout(()=>{
+      roiPreviewEl.dataset.animating = "false";
+    }, 900);
+
+  }
+}
+    
 try{
   renderBreakEvenOccupancy?.(
     priceNight,
