@@ -15575,3 +15575,15 @@ body:not(.is-pro):not(.is-admin) .simulator-container .blur-content{
 .simulator-container .blur-content *{
   text-shadow: none;
 }
+
+/* =====================================
+💣 FIX INVESTOR DEFINITIVO (PRIORITÀ MASSIMA)
+===================================== */
+
+body.is-investor .pro-blur,
+body.is-investor .blur-content.pro-blur,
+body.is-investor .simulator-container .pro-blur{
+  filter: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
