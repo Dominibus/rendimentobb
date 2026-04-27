@@ -2240,6 +2240,32 @@ const roi   = Number(result?.roi ?? 0);
 const gross = Number(result?.revenue ?? 0);
 const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
+// =====================================
+// 💸 LOSS VISUAL (CONVERSION BOOST)
+// =====================================
+
+try{
+
+  const lossEl = document.getElementById("money-loss");
+
+  if(lossEl){
+
+    // 🔥 stima errore investitore medio
+    const estimatedLoss = Math.max(0, net * 0.25);
+
+    const text = t(
+      `💸 Potresti perdere ${formatCurrency(estimatedLoss)} / anno senza analisi completa`,
+      `💸 You could lose ${formatCurrency(estimatedLoss)} / year without full analysis`
+    );
+
+    lossEl.innerText = text;
+    lossEl.style.display = "block";
+  }
+
+}catch(e){
+  console.warn("⚠️ loss render error", e);
+}    
+
 if(!access.canSeeFullAnalysis && roi > 10 && !window._roiToastShown){
 
   window._roiToastShown = true;
