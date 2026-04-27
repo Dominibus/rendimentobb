@@ -427,8 +427,6 @@ function renderUser(user){
   const el = document.getElementById("user-area");
   if(!el) return;
 
-  const clean = (v)=>String(v || "").toLowerCase().trim();
-
   const access = window.getUserAccess?.() || {
   isLogged: !!user,
   isFree: true,
@@ -436,7 +434,7 @@ function renderUser(user){
   isInvestor: false,
   isAdmin: false
 };
-  console.log("👤 HEADER ACCESS:", access, "RAW:", RB);
+  console.log("👤 HEADER ACCESS:", access, "PLAN:", window.currentPlan);
 
   const isAdmin = access.isAdmin;
 
