@@ -804,8 +804,8 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
       proof_it: "Usato da centinaia di investitori per evitare errori costosi",
       proof_en: "Used by hundreds of investors to avoid costly mistakes",
 
-      cta_it: "Passa a Investor – €19",
-      cta_en: "Upgrade to Investor – €19",
+      cta_it: "Sblocca Investor ora – €19",
+      cta_en: "Unlock Investor now – €19",
 
       warning_it: "⚠️ Senza analisi avanzata potresti sovrastimare i guadagni",
       warning_en: "⚠️ Without advanced analysis you may overestimate returns",
@@ -818,14 +818,14 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   if(type === "pro"){
 
     const dynamicTextIT =
-      safeROI > 12
-        ? `Questo investimento è sopra la media (${Math.round(safeROI)}%). Senza analisi completa rischi di sottovalutarlo o prendere una decisione sbagliata.`
-        : "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti.";
+  safeROI > 12
+    ? `Questo investimento è sopra la media (${Math.round(safeROI)}%). Senza analisi completa rischi di sottovalutarlo o prendere una decisione sbagliata. Questo è il punto esatto in cui gli investitori fanno errori costosi.`
+    : "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti. Questo è il punto in cui gli investitori perdono soldi.";
 
     const dynamicTextEN =
-      safeROI > 12
-        ? `This investment is above average (${Math.round(safeROI)}%). Without full analysis you may underestimate it or make the wrong decision.`
-        : "You're making a decision without seeing real risk, mortgage and hidden costs.";
+  safeROI > 12
+    ? `This investment is above average (${Math.round(safeROI)}%). Without full analysis you may underestimate it or make the wrong decision. This is exactly where investors make costly mistakes.`
+    : "You're making a decision without seeing real risk, mortgage and hidden costs. This is where investors lose money.";
 
     config = {
       title_it: "🚀 Sblocca analisi completa",
@@ -852,8 +852,8 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
       proof_it: "Strumenti usati da investitori e consulenti immobiliari",
       proof_en: "Tools used by investors and real estate professionals",
 
-      cta_it: "Passa a PRO – €29",
-      cta_en: "Upgrade to PRO – €29",
+      cta_it: "Sblocca analisi completa – €29",
+      cta_en: "Unlock full analysis – €29",
 
       warning_it: "⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo",
       warning_en: "⚠️ Without full analysis you can lose thousands even with a positive ROI",
@@ -901,9 +901,17 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   // ================= 🔥 LOSS BOX =================
   const lossBox = document.createElement("div");
 
-  const estimatedLoss = Math.max(0, safeROI * 800);
+  const estimatedLoss = Math.max(
+  0,
+  (window.lastAnalysisData?.net || 0) * 0.25
+);
 
-  if(estimatedLoss > 1000 && !access.canSeeFullAnalysis && safeROI > 6){
+  if(
+  estimatedLoss > 1000 &&
+  estimatedLoss < 50000 &&
+  !access.canSeeFullAnalysis &&
+  safeROI > 6
+){
     lossBox.innerHTML = `
       <div style="
         margin-bottom:16px;
