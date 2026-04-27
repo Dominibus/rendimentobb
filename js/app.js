@@ -2604,20 +2604,28 @@ if(roiEl){
   roiEl.style.opacity = "0";
 
   setTimeout(()=>{
+
     if(access.isFree){
-  roiEl.innerText = "—";
-  roiEl.style.color = "#64748b";
-}
-  roiEl.style.color = getROIColor(roi);
-}else{
+
+      roiEl.innerText = "—";
+      roiEl.style.color = "#64748b";
+
+    }else{
+
       roiEl.innerText = roi.toFixed(1) + "%";
-      roiEl.style.color = "#10b981";
+      roiEl.style.color = getROIColor(roi);
+
     }
+
     roiEl.style.opacity = "1";
+
   },150);
 }
 
-    if(!isTool){
+
+// ================= DISCLAIMER HOME =================
+if(!isTool){
+
   const disclaimer = document.getElementById("home-disclaimer");
 
   if(disclaimer){
@@ -2627,6 +2635,7 @@ if(roiEl){
     );
     disclaimer.style.display = "block";
   }
+
 }
 
 // ================= MARKET =================
