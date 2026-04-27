@@ -2251,7 +2251,7 @@ try{
 
   if(lossEl && lossValueEl){
 
-  const estimatedLoss = Math.max(0, net * 0.25);
+  const estimatedLoss = Math.max(0, net * 0.3);
 
   // 🔥 aggiorna numero
   lossValueEl.innerText = formatCurrency(estimatedLoss);
