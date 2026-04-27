@@ -695,15 +695,17 @@ window.triggerUpgradeFlow = function(context = {}){
 };
 
 // =====================================
-// 🔥 MODAL UNIFICATO
+// 🔥 MODAL UNIFICATO – FINAL PRODUCTION
 // =====================================
 
 window.openUpgradeModal = function(type = "investor", roi = 0){
 
-  const access = window.getUserAccess();
+  const access = window.getUserAccess?.() || {};
   if(!access || access.canSeeFullAnalysis) return;
 
   if(access.isInvestor) type = "pro";
+
+  const safeROI = Number(roi || 0);
 
   document.getElementById("rb-upgrade-modal")?.remove();
 
@@ -725,43 +727,53 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
   let config = null;
 
+  // ================= INVESTOR =================
   if(type === "investor"){
     config = {
       title_it: "📊 Sblocca piano Investor",
       title_en: "📊 Unlock Investor Plan",
 
-      desc_it: "Stai usando dati incompleti e rischi di prendere una decisione sbagliata.",
-      desc_en: "You're using incomplete data and risk making the wrong decision.",
+      desc_it: "Stai analizzando un investimento con dati incompleti. Questo è il punto in cui molti investitori sbagliano.",
+      desc_en: "You're analyzing an investment with incomplete data. This is where most investors make mistakes.",
 
       features_it: [
         "Simulazioni illimitate",
         "Analisi ROI avanzata",
-        "Confronto mercato"
+        "Confronto con mercato reale",
+        "Indicatori base di rischio"
       ],
       features_en: [
         "Unlimited simulations",
         "Advanced ROI analysis",
-        "Market comparison"
+        "Real market comparison",
+        "Basic risk indicators"
       ],
 
-      cta_it: "Passa a Investor €19",
-      cta_en: "Upgrade to Investor €19",
+      proof_it: "Usato da centinaia di investitori per evitare errori costosi",
+      proof_en: "Used by hundreds of investors to avoid costly mistakes",
+
+      cta_it: "Passa a Investor – €19",
+      cta_en: "Upgrade to Investor – €19",
+
+      warning_it: "⚠️ Senza analisi avanzata potresti sovrastimare i guadagni",
+      warning_en: "⚠️ Without advanced analysis you may overestimate returns",
 
       action: () => startPlanPurchase("investor")
     };
   }
 
+  // ================= PRO =================
   if(type === "pro"){
 
     const dynamicTextIT =
-      roi > 12
-      ? "Stai davanti a un investimento sopra la media. Senza analisi completa rischi di sottovalutarlo."
-      : "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti.";
+      safeROI > 12
+        ? `Questo investimento è sopra la media (${Math.round(safeROI)}%). Senza analisi completa rischi di sottovalutarlo o prendere una decisione sbagliata.`
+        : "Stai prendendo una decisione senza vedere rischio reale, mutuo e costi nascosti.";
 
     const dynamicTextEN =
-      roi > 12
-      ? "This investment is above average. Without full data you may underestimate it."
-      : "You're making a decision without seeing real risk, mortgage and hidden costs.";
+      safeROI > 12
+        ? `This investment is above average (${Math.round(safeROI)}%). Without full analysis you may underestimate it or make the wrong decision.`
+        : "You're making a decision without seeing real risk, mortgage and hidden costs.";
 
     config = {
       title_it: "🚀 Sblocca analisi completa",
@@ -771,20 +783,28 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
       desc_en: dynamicTextEN,
 
       features_it: [
-        "ROI reale completo",
+        "ROI reale completo (netto)",
         "Analisi rischio avanzata",
         "Break-even reale",
+        "Simulazione mutuo integrata",
         "Report PDF professionale"
       ],
       features_en: [
-        "Full real ROI",
+        "Full real ROI (net)",
         "Advanced risk analysis",
         "Real break-even",
+        "Integrated mortgage simulation",
         "Professional PDF report"
       ],
 
+      proof_it: "Strumenti usati da investitori e consulenti immobiliari",
+      proof_en: "Tools used by investors and real estate professionals",
+
       cta_it: "Passa a PRO – €29",
       cta_en: "Upgrade to PRO – €29",
+
+      warning_it: "⚠️ Senza analisi completa puoi perdere migliaia di euro anche con ROI positivo",
+      warning_en: "⚠️ Without full analysis you can lose thousands even with a positive ROI",
 
       action: () => startPlanPurchase("pro")
     };
@@ -807,32 +827,58 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   box.style = `
     background:#ffffff;
     color:#0f172a;
-    padding:30px;
+    padding:28px;
     border-radius:18px;
     max-width:420px;
     width:90%;
     text-align:center;
     box-shadow:0 30px 80px rgba(0,0,0,0.25);
+    animation:fadeIn .25s ease;
   `;
 
   // ================= TITLE =================
   const title = document.createElement("h3");
   title.textContent = config["title_" + lang];
-  title.style = "font-size:20px;font-weight:700;margin-bottom:10px;";
+  title.style = "font-size:20px;font-weight:700;margin-bottom:8px;";
 
   // ================= DESC =================
   const desc = document.createElement("p");
   desc.textContent = config["desc_" + lang];
-  desc.style = "margin:10px 0 20px;font-size:14px;color:#475569;";
+  desc.style = "margin:8px 0 18px;font-size:14px;color:#475569;line-height:1.4;";
+
+  // ================= 🔥 LOSS BOX =================
+  const lossBox = document.createElement("div");
+
+  const estimatedLoss = Math.max(0, safeROI * 800);
+
+  if(estimatedLoss > 1000 && !access.canSeeFullAnalysis && safeROI > 6){
+    lossBox.innerHTML = `
+      <div style="
+        margin-bottom:16px;
+        padding:12px;
+        border-radius:10px;
+        background:rgba(239,68,68,0.08);
+        border:1px solid rgba(239,68,68,0.2);
+        font-size:14px;
+        font-weight:600;
+        color:#dc2626;
+      ">
+        💸 ${safeT(
+          `Potresti perdere fino a €${estimatedLoss.toLocaleString()} senza analisi completa`,
+          `You could lose up to €${estimatedLoss.toLocaleString()} without full analysis`
+        )}
+      </div>
+    `;
+  }
 
   // ================= FEATURES =================
   const list = document.createElement("div");
-  list.style = "text-align:left;margin-bottom:18px;";
+  list.style = "text-align:left;margin-bottom:16px;";
 
   config["features_" + lang].forEach(f=>{
     const item = document.createElement("div");
     item.innerHTML = `✔ ${f}`;
-    item.style = "margin:6px 0;font-size:14px;";
+    item.style = "margin:6px 0;font-size:14px;color:#0f172a;";
     list.appendChild(item);
   });
 
@@ -840,10 +886,7 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   const proof = document.createElement("div");
   proof.innerHTML = `
     <div style="font-size:12px;color:#64748b;margin-bottom:12px;">
-      ⭐ ${safeT(
-        "Oltre 1.200 investitori usano già RendimentoBB",
-        "1,200+ investors already use RendimentoBB"
-      )}
+      ⭐ ${config["proof_" + lang]}
     </div>
   `;
 
@@ -852,7 +895,7 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
   cta.innerHTML = `
     🔓 ${config["cta_" + lang]}
-    <div style="font-size:11px;opacity:.8;margin-top:2px;">
+    <div style="font-size:11px;opacity:.85;margin-top:2px;">
       ${safeT(
         "Accesso immediato • Nessun vincolo",
         "Instant access • No commitment"
@@ -860,17 +903,30 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
     </div>
   `;
 
-  cta.style = `
-    background:linear-gradient(135deg,#10b981,#059669);
-    color:white;
-    border:none;
-    padding:14px;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-    width:100%;
-    margin-bottom:10px;
-  `;
+  // 🎨 colore diverso PRO vs INVESTOR
+  cta.style = type === "pro"
+    ? `
+      background:linear-gradient(135deg,#6366f1,#4f46e5);
+      color:white;
+      border:none;
+      padding:14px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      width:100%;
+      margin-bottom:10px;
+    `
+    : `
+      background:linear-gradient(135deg,#10b981,#059669);
+      color:white;
+      border:none;
+      padding:14px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      width:100%;
+      margin-bottom:10px;
+    `;
 
   cta.onclick = ()=>{
     modal.remove();
@@ -880,8 +936,16 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
   // ================= CLOSE =================
   const close = document.createElement("button");
-  close.textContent = lang==="en"?"Maybe later":"Ora no";
-  close.style = "background:none;border:none;color:#64748b;cursor:pointer;font-size:13px;";
+  close.textContent = lang==="en" ? "Maybe later" : "Ora no";
+  close.style = `
+    background:none;
+    border:none;
+    color:#64748b;
+    cursor:pointer;
+    font-size:13px;
+    margin-bottom:6px;
+  `;
+
   close.onclick = ()=>{
     modal.remove();
     window.__upgradeShown = false;
@@ -890,11 +954,8 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   // ================= WARNING =================
   const warning = document.createElement("div");
   warning.innerHTML = `
-    <div style="margin-top:12px;font-size:13px;color:#ef4444;font-weight:600;">
-      ⚠️ ${safeT(
-        "Il 72% degli investitori perde soldi in questa fase",
-        "72% of investors lose money at this stage"
-      )}
+    <div style="margin-top:10px;font-size:13px;color:#ef4444;font-weight:600;">
+      ⚠️ ${config["warning_" + lang]}
     </div>
     <div style="font-size:11px;color:#64748b;margin-top:4px;">
       ${safeT(
@@ -905,11 +966,12 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   `;
 
   // ================= APPEND =================
-  box.append(title, desc, list, proof, cta, close, warning);
+  box.append(title, desc, lossBox, list, proof, cta, close, warning);
+
   modal.appendChild(box);
   document.body.appendChild(modal);
 
-  // click outside
+  // ================= CLICK OUTSIDE =================
   modal.addEventListener("click",(e)=>{
     if(e.target === modal){
       modal.remove();
