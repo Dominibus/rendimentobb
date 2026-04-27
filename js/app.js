@@ -267,6 +267,23 @@ function renderUniversalKPI(data = {}){
 
   const access = window.getUserAccess?.();
 
+  // 🔴 FREE → LIMITA DATI (NO REAL NUMBERS)
+if(access.isFree){
+
+  console.log("🔒 KPI LIMITATI (FREE)");
+
+  if(qrProfit) qrProfit.innerText = "—";
+  if(elAnnual) elAnnual.innerText = "—";
+
+  if(qrMonth) qrMonth.innerText = "—";
+  if(elMonthly) elMonthly.innerText = "—";
+
+  if(qrBreak) qrBreak.innerText = "—";
+  if(elBreak) elBreak.innerText = "—";
+
+  return; // 💥 BLOCCO TOTALE
+}
+
   if(!access){
     console.warn("⛔ access non disponibile");
     return;
@@ -1360,6 +1377,16 @@ ${occRounded.toFixed(1)}%
 
 }
 // ================= INVESTMENT SCORE =================
+const access = window.getUserAccess?.() || {};
+
+if(access.isFree){
+  container.innerHTML = `
+    <div class="kpi-box">
+      🔒 ${t("Sblocca valutazione completa","Unlock full score")}
+    </div>
+  `;
+  return;
+}
 
 function renderInvestmentScore(roi, riskScore){
 
@@ -1996,6 +2023,18 @@ function generateInsights(data){
   return insights;
 }
 
+const access = window.getUserAccess?.() || {};
+
+// 🔴 FREE → NON vedere insights
+if(access.isFree){
+  container.innerHTML = `
+    <div style="color:#64748b;font-size:14px;">
+      🔒 ${t("Sblocca per vedere insights AI","Unlock to see AI insights")}
+    </div>
+  `;
+  return;
+}
+
 function renderInsights(insights){
 
   const container = document.getElementById("ai-insights");
@@ -2563,7 +2602,9 @@ if(roiEl){
 
   setTimeout(()=>{
     if(access.isFree){
-  roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+  roiEl.innerText = "—";
+  roiEl.style.color = "#64748b";
+}
   roiEl.style.color = getROIColor(roi);
 }else{
       roiEl.innerText = roi.toFixed(1) + "%";
@@ -2587,10 +2628,37 @@ if(roiEl){
 
 // ================= MARKET =================
 try{
-  renderMarketBenchmark?.(window.currentCity || "roma");
-  renderMarketComparison?.(gross, window.currentCity);
-  renderRevenueForecast?.(gross);
-  renderOccupancySensitivity?.();
+
+  const access = window.getUserAccess?.() || {};
+
+  // 🔴 FREE → NON renderizzare dati reali
+  if(access.isFree){
+
+    console.log("🔒 MARKET BLOCCATO (FREE)");
+
+    renderMarketComparison?.(0, window.currentCity);
+
+  }
+
+  // 🟡 INVESTOR → parziale
+  else if(access.isInvestor){
+
+    renderMarketBenchmark?.(window.currentCity || "roma");
+    renderMarketComparison?.(gross * 0.6, window.currentCity); // teaser
+    renderRevenueForecast?.(gross);
+
+  }
+
+  // 🟢 PRO / ADMIN → full
+  else{
+
+    renderMarketBenchmark?.(window.currentCity || "roma");
+    renderMarketComparison?.(gross, window.currentCity);
+    renderRevenueForecast?.(gross);
+    renderOccupancySensitivity?.();
+
+  }
+
 }catch(e){
   console.warn("⚠️ MARKET RENDER SKIPPED:", e);
 }
