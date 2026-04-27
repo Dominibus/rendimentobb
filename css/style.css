@@ -13854,17 +13854,38 @@ NON rompe città, NON cambia layout
 ===================================== */
 
 /* se NON c'è una città → fallback */
-.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence){
+.hero-bg:not(.rome):not(.naples):not(.milan):not(.florence),
+.hero-roi:not(.rome):not(.naples):not(.milan):not(.florence),
+.hero:not(.rome):not(.naples):not(.milan):not(.florence){
   background-image:url("/img/rome-bg.jpg");
   background-size:cover;
   background-position:center;
 }
 
 /* città restano INTACT */
-.hero-bg.rome{ background-image:url("/img/rome-bg.jpg"); }
-.hero-bg.naples{ background-image:url("/img/naples-bg.jpg"); }
-.hero-bg.milan{ background-image:url("/img/milan-bg.jpg"); }
-.hero-bg.florence{ background-image:url("/img/florence-bg.jpg"); }
+.hero-bg.rome,
+.hero-roi.rome,
+.hero.rome{
+  background-image:url("/img/rome-bg.jpg");
+}
+
+.hero-bg.naples,
+.hero-roi.naples,
+.hero.naples{
+  background-image:url("/img/naples-bg.jpg");
+}
+
+.hero-bg.milan,
+.hero-roi.milan,
+.hero.milan{
+  background-image:url("/img/milan-bg.jpg");
+}
+
+.hero-bg.florence,
+.hero-roi.florence,
+.hero.florence{
+  background-image:url("/img/florence-bg.jpg");
+}
 
 /* =====================================
 🔥 TESTI (fix vero problema)
