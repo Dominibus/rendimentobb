@@ -61,14 +61,6 @@ window.isPro = function(){
   return access.isPro || access.isAdmin;
 };
 
-  const plan = String(window.currentPlan || "").toLowerCase();
-
-  return (
-    plan === "pro" ||
-    plan === "pro_yearly"
-  );
-};
-
 // compatibilità vecchio codice
 window.isProUser = window.isPro;
 
@@ -202,7 +194,8 @@ window.userRole = clean(role);
 // 👑 ADMIN OVERRIDE (MASTER KEY)
 // ===============================
 
-const isAdmin = window.isAdminUser;
+const isAdmin = window.userRole === "admin";
+window.isAdminUser = isAdmin;
 
 // 🔥 ADMIN = ACCESSO TOTALE
 if(window.isAdminUser){
@@ -225,18 +218,6 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
 
 console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole);
 
-// ===============================
-// 🔥 RB_USER SYNC (CRITICO)
-// ===============================
-
-const isAdmin = window.isAdminUser;
-
-const isPro =
-  window.currentPlan === "pro" ||
-  window.currentPlan === "pro_yearly";
-
-const isInvestor =
-  window.currentPlan === "investor";
 
 // 🔥 SINGLE SOURCE OF TRUTH
 window.getUserAccess = function(){
@@ -268,40 +249,15 @@ window.getUserAccess = function(){
 };
 
 // 🔥 RB_USER = MIRROR (NON LOGICA)
-window.RB_USER = window.getUserAccess();
+Object.defineProperty(window, "RB_USER", {
+  get(){
+    return window.getUserAccess();
+  }
+});
 
     // ===============================
 // 🔥 SINGLE SOURCE ACCESS (CRITICO)
 // ===============================
-
-window.getUserAccess = function(){
-
-  const plan = String(window.currentPlan || "").toLowerCase();
-  const role = String(window.userRole || "").toLowerCase();
-  const isLogged = !!window.currentUser;
-
-  const isAdmin = role === "admin";
-
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
-
-  const isInvestor =
-    plan === "investor";
-
-  return {
-    isLogged,
-    isAdmin,
-    isPro,
-    isInvestor,
-    isFree: !isLogged || (!isPro && !isInvestor && !isAdmin),
-
-    // 🔥 CAPACITÀ
-    canSeeFullAnalysis: isPro || isAdmin,
-    canDownloadPDF: isPro || isAdmin
-  };
-
-};
 
 console.log("🧠 RB_USER SYNC:", window.RB_USER);
 
