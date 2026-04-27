@@ -2492,38 +2492,47 @@ try {
   }
 
   console.log("✅ UI FINAL RENDER OK");
+
   setTimeout(()=>{
 
-  const access = window.getUserAccess();
+    const access = window.getUserAccess();
 
-  console.log("🎯 APPLY FINAL LOCK:", access);
+    // =====================================
+    // 🔥 FIX CRITICO → PRO / ADMIN NON DEVONO ESSERE TOCCATI
+    // =====================================
+    if(access.isPro || access.isAdmin){
+      console.log("🟢 SKIP LOCK → PRO");
+      return;
+    }
 
-  // 🔴 FREE → blocca sezioni
-  if(access.isFree){
+    console.log("🎯 APPLY FINAL LOCK:", access);
 
-    applySmartLock(document.getElementById("investment-score"), {
-      type:"overlay",
-      plan:"investor"
-    });
+    // 🔴 FREE → blocca sezioni
+    if(access.isFree){
 
-    applySmartLock(document.getElementById("ai-insights"), {
-      type:"overlay",
-      plan:"investor"
-    });
+      applySmartLock(document.getElementById("investment-score"), {
+        type:"overlay",
+        plan:"investor"
+      });
 
-  }
+      applySmartLock(document.getElementById("ai-insights"), {
+        type:"overlay",
+        plan:"investor"
+      });
 
-  // 🟡 INVESTOR → blocca SOLO advanced
-  if(access.isInvestor){
+    }
 
-    applySmartLock(document.getElementById("ai-insights"), {
-      type:"advanced",
-      plan:"pro"
-    });
+    // 🟡 INVESTOR → blocca SOLO advanced
+    else if(access.isInvestor){
 
-  }
+      applySmartLock(document.getElementById("ai-insights"), {
+        type:"advanced",
+        plan:"pro"
+      });
 
-}, 100);
+    }
+
+  }, 100);
 
 } catch(e){
   console.error("💥 UI FINAL RENDER ERROR:", e);
