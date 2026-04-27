@@ -2241,30 +2241,44 @@ const gross = Number(result?.revenue ?? 0);
 const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
 // =====================================
-// 💸 LOSS VISUAL (CONVERSION BOOST)
+// 💸 LOSS VISUAL (BILINGUE + SaaS CLEAN)
 // =====================================
 
 try{
 
   const lossEl = document.getElementById("money-loss");
+  const lossValueEl = document.getElementById("money-loss-value");
 
-  if(lossEl){
+  if(lossEl && lossValueEl){
 
-    // 🔥 stima errore investitore medio
-    const estimatedLoss = Math.max(0, net * 0.25);
+  const estimatedLoss = Math.max(0, net * 0.25);
 
-    const text = t(
-      `💸 Potresti perdere ${formatCurrency(estimatedLoss)} / anno senza analisi completa`,
-      `💸 You could lose ${formatCurrency(estimatedLoss)} / year without full analysis`
-    );
+  // 🔥 aggiorna numero
+  lossValueEl.innerText = formatCurrency(estimatedLoss);
 
-    lossEl.innerText = text;
+  // =====================================
+  // 🔥 MICRO MIGLIORIA (QUI È IL PUNTO)
+  // =====================================
+  if(estimatedLoss > 1000 && !access.canSeeFullAnalysis){
+
     lossEl.style.display = "block";
+
+    // =====================================
+    // 🚀 BONUS → ATTIVA BLOCCO SHOCK (QUI)
+    // =====================================
+    const shock = document.getElementById("roi-shock-block");
+
+    if(shock){
+      shock.style.display = "block";
+    }
+
   }
+
+}
 
 }catch(e){
   console.warn("⚠️ loss render error", e);
-}    
+}
 
 if(!access.canSeeFullAnalysis && roi > 10 && !window._roiToastShown){
 
