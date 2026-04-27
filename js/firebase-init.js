@@ -57,8 +57,9 @@ window.firebaseReady = false;
 // ===============================
 
 window.isPro = function(){
-
-  if(window.isAdminUser) return true;
+  const access = window.getUserAccess?.() || {};
+  return access.isPro || access.isAdmin;
+};
 
   const plan = String(window.currentPlan || "").toLowerCase();
 
@@ -201,7 +202,7 @@ window.userRole = clean(role);
 // 👑 ADMIN OVERRIDE (MASTER KEY)
 // ===============================
 
-window.isAdminUser = window.userRole === "admin";
+const isAdmin = window.isAdminUser;
 
 // 🔥 ADMIN = ACCESSO TOTALE
 if(window.isAdminUser){
@@ -228,7 +229,7 @@ console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.u
 // 🔥 RB_USER SYNC (CRITICO)
 // ===============================
 
-const isAdmin = window.userRole === "admin";
+const isAdmin = window.isAdminUser;
 
 const isPro =
   window.currentPlan === "pro" ||
@@ -237,14 +238,37 @@ const isPro =
 const isInvestor =
   window.currentPlan === "investor";
 
-window.RB_USER = {
-  isFree: !isPro && !isInvestor && !isAdmin,
-  isPro,
-  isInvestor,
-  isAdmin,
-  canSeeFullAnalysis: isPro || isAdmin,
-  canDownloadPDF: isPro || isAdmin
+// 🔥 SINGLE SOURCE OF TRUTH
+window.getUserAccess = function(){
+
+  const plan = String(window.currentPlan || "").toLowerCase();
+  const role = String(window.userRole || "").toLowerCase();
+  const isLogged = !!window.currentUser;
+
+  const isAdmin = role === "admin";
+
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly";
+
+  const isInvestor =
+    plan === "investor";
+
+  const isFree = !isLogged || (!isPro && !isInvestor && !isAdmin);
+
+  return {
+    isLogged,
+    isAdmin,
+    isPro,
+    isInvestor,
+    isFree,
+    canSeeFullAnalysis: isPro || isAdmin,
+    canDownloadPDF: isPro || isAdmin
+  };
 };
+
+// 🔥 RB_USER = MIRROR (NON LOGICA)
+window.RB_USER = window.getUserAccess();
 
     // ===============================
 // 🔥 SINGLE SOURCE ACCESS (CRITICO)
@@ -492,6 +516,16 @@ onAuthStateChanged(auth, async (user) => {
     window.userReady = false;
     window.firebaseReady = true;
 
+   // 🔥 FIX CRITICO → RB_USER PER GUEST
+  window.RB_USER = {
+  isFree: true,
+  isPro: false,
+  isInvestor: false,
+  isAdmin: false,
+  canSeeFullAnalysis: false,
+  canDownloadPDF: false
+   };
+    
     updateUserUI(null);
 
     document.dispatchEvent(
@@ -563,6 +597,11 @@ onAuthStateChanged(auth, async (user) => {
     // ===============================
 
     window.firebaseReady = true;
+
+// 🔥 GARANTISCE SYNC UI
+setTimeout(()=>{
+  window.dispatchEvent(new Event("rb_plan_ready"));
+}, 50);
 
     console.log("✅ Firebase READY con piano:", window.currentPlan);
 
