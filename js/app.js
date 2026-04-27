@@ -3816,23 +3816,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function removeGhostOverlays(){
 
-  document.querySelectorAll(`
-    .results-overlay,
-    .locked-overlay,
-    .home-blur-overlay,
-    .upgrade-overlay,
-    .smart-overlay,
-    #upgrade-overlay,
-    #upgrade-modal,
-    [data-paywall]
-  `).forEach(el => {
+  const access = window.getUserAccess?.() || {};
 
-    if(el.id === "register-popup") return;
+  if(!access.isPro && !access.isAdmin) return;
 
-    el.remove();
-
-  });
-
+  document.querySelectorAll(`...`).forEach(el => el.remove());
 }
 
 // 🔥 ESECUZIONE FORZATA CONTINUA
@@ -4068,41 +4056,45 @@ function unlockBaseUI(){
 
   console.log("🧹 BASE UI RESET:", access);
 
-  // 🔥 HIDE OVERLAY (NON DISTRUTTIVO)
-  document.querySelectorAll(`
-    .home-blur-overlay,
-    .results-overlay,
-    .upgrade-overlay,
-    .lock-overlay,
-    .smart-overlay,
-    .paywall-mini
-  `).forEach(el => {
-    if(el.id !== "register-popup"){
-      el.style.display = "none";
-    }
-  });
-
-  // 🔥 RESET INTERAZIONI
-  document.body.classList.remove("no-scroll");
-  document.body.style.pointerEvents = "auto";
-
-  // 🟡 INVESTOR → rimuove overlay bloccanti residui
-  if(access.isInvestor){
-
-    console.log("🟡 INVESTOR BASE CLEAN");
+  // 🟢 SOLO PRO/ADMIN → pulizia totale
+  if(access.isPro || access.isAdmin){
 
     document.querySelectorAll(`
-      .lock-overlay,
+      .home-blur-overlay,
       .results-overlay,
-      .upgrade-overlay
-    `).forEach(el=>{
-      if(el.id !== "register-popup") el.remove();
+      .upgrade-overlay,
+      .lock-overlay,
+      .smart-overlay,
+      .paywall-mini
+    `).forEach(el => {
+      if(el.id !== "register-popup"){
+        el.remove();
+      }
     });
 
+    return;
   }
 
-}
+  // 🟡 INVESTOR → pulizia parziale
+  if(access.isInvestor){
 
+    document.querySelectorAll(`
+      .results-overlay,
+      .upgrade-overlay,
+      .smart-overlay
+    `).forEach(el => {
+      if(el.id !== "register-popup"){
+        el.remove();
+      }
+    });
+
+    return;
+  }
+
+  // 🔴 FREE → NON TOCCARE NULLA
+  console.log("🔴 FREE → nessun unlock");
+
+}
 
 // =============================
 // 🔥 FINAL UI CONTROL (UNICO PUNTO VERITÀ)
