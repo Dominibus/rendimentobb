@@ -2670,7 +2670,9 @@ if(profitYear > 0){
 
 // ================= CHART =================
 setTimeout(()=>{
-  renderChart?.(net);
+  if(typeof window.renderChart === "function"){
+    window.renderChart(net);
+  }
 },200);
 
 // ================= FUNNEL =================
