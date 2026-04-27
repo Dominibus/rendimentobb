@@ -2544,6 +2544,10 @@ try {
     // =====================================
     if(access.isPro || access.isAdmin){
       console.log("🟢 SKIP LOCK → PRO");
+
+      document.querySelectorAll(".blur-content").forEach(el=>{
+  el.classList.remove("blur-content");
+});
       return;
     }
 
@@ -4286,35 +4290,39 @@ function forceUnlockUI(){
   // =========================
   // 🟢 PRO / ADMIN → FULL UNLOCK
   // =========================
-  if(access.isPro || access.isAdmin){
+if(access.isPro || access.isAdmin){
 
-    console.log("🟢 FULL UNLOCK");
+  console.log("🟢 FULL UNLOCK");
 
-    unlockElements(`
-      .pro-blur,
-      .locked,
-      .locked-content,
-      .premium-lock,
-      .locked-section
-    `);
+  unlockElements(`
+    .pro-blur,
+    .locked,
+    .locked-content,
+    .premium-lock,
+    .locked-section
+  `);
 
-    safeRemove(`
-      .home-blur-overlay,
-      .results-overlay,
-      .upgrade-overlay,
-      .lock-overlay,
-      .smart-overlay,
-      .paywall-mini,
-      .blur-content,
-      [data-paywall]
-    `);
+  safeRemove(`
+    .home-blur-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .lock-overlay,
+    .smart-overlay,
+    .paywall-mini,
+    .blur-content,
+    [data-paywall]
+  `);
 
-    document.body.classList.add("is-pro");
-    document.body.classList.remove("is-free","is-investor");
+  // ✅ FIX DEFINITIVO
+  document.querySelectorAll(".blur-content").forEach(el=>{
+    el.classList.remove("blur-content");
+  });
 
-    return;
-  }
+  document.body.classList.add("is-pro");
+  document.body.classList.remove("is-free","is-investor");
 
+  return;
+}
   // =========================
   // 🟡 INVESTOR → PARTIAL UNLOCK
   // =========================
