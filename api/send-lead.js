@@ -35,39 +35,31 @@ function detectLang(req, bodyLang){
   return lang.toLowerCase().startsWith("en") ? "en" : "it";
 }
 
-// ================= SCORE ENGINE (UPGRADE) =================
+// ================= SCORE =================
 function getScore(roi){
-
   if(roi >= 20) return { score:"extreme", value:150, priority:"🔥 EXTREME" };
   if(roi >= 15) return { score:"hot", value:110, priority:"🚀 HOT" };
   if(roi >= 10) return { score:"good", value:70, priority:"⚡ GOOD" };
-
   return { score:"low", value:20, priority:"NORMAL" };
 }
 
 // ================= PARTNER ROUTING =================
 function getPartnerEmails(type, score){
-
   const partners = {
     immobili: ["investor@rendimentobb.it"],
     mutui: ["broker@rendimentobb.it"],
     simulatore: ["investor@rendimentobb.it"]
   };
-
-  // 🔥 solo lead buoni vanno ai partner
   if(score === "low") return [];
-
   return partners[type] || ["rendimentobb@gmail.com"];
 }
 
-// ================= EMAIL TEMPLATE (UPGRADE STRIPE STYLE) =================
+// ================= TEMPLATE =================
 function buildEmail({ roi, city, lang }){
-
   const t = (it,en)=> lang==="en"?en:it;
 
   return `
   <div style="font-family:Inter,Arial;background:#0f172a;padding:40px">
-
     <div style="max-width:640px;margin:auto;background:#ffffff;border-radius:20px;padding:40px">
 
       <div style="text-align:center;margin-bottom:20px">
@@ -86,7 +78,8 @@ function buildEmail({ roi, city, lang }){
         <div style="font-size:52px;font-weight:800;color:#10b981">
           ${roi}%
         </div>
-        <div style="color:#64748b">${city || "-"}</div>
+        <div style="color:#64748b">${city || "-"}
+        </div>
       </div>
 
       <div style="background:#fff7ed;padding:14px;border-radius:10px;color:#92400e">
@@ -107,10 +100,6 @@ function buildEmail({ roi, city, lang }){
         style="background:#10b981;color:white;padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:700">
         🔓 ${t("Sblocca analisi completa","Unlock full analysis")}
         </a>
-      </div>
-
-      <div style="text-align:center;color:#94a3b8;font-size:12px">
-        RendimentoBB • Strategic Engine
       </div>
 
     </div>
@@ -140,28 +129,9 @@ export default async function handler(req, res){
 
     const detectedLang = detectLang(req, lang);
     const roiRounded = Number(roi.toFixed(1));
-
     const { score, value, priority } = getScore(roiRounded);
 
-    // ================= ANTI SPAM =================
-    if(db){
-      const recent = await db.collection("leads")
-        .where("email","==",email)
-        .orderBy("createdAt","desc")
-        .limit(1)
-        .get();
-
-      if(!recent.empty){
-        const last = recent.docs[0].data();
-        const lastTime = last.createdAt?.toMillis?.() || 0;
-
-        if(Date.now() - lastTime < 10 * 60 * 1000){
-          return res.status(200).json({ success:true, spam:true });
-        }
-      }
-    }
-
-    // ================= SAVE DB =================
+    // ================= DB =================
     if(db){
       await db.collection("leads").add({
         email,
@@ -177,58 +147,57 @@ export default async function handler(req, res){
       });
     }
 
-    // ================= EMAIL USER =================
+    // ================= USER EMAIL =================
     if(score !== "low"){
-      await resend.emails.send({
-        from: "RendimentoBB <analisi@rendimentobb.it>",
-        to: [email],
-        subject:
-          detectedLang === "en"
+      try{
+        const r = await resend.emails.send({
+          from: "RendimentoBB <analisi@rendimentobb.it>",
+          to: [email],
+          subject: detectedLang === "en"
             ? `Your investment (${roiRounded}%)`
             : `Il tuo investimento (${roiRounded}%)`,
+          html: buildEmail({ roi: roiRounded, city, lang: detectedLang })
+        });
 
-        html: buildEmail({
-          roi: roiRounded,
-          city,
-          lang: detectedLang
-        })
-      });
+        console.log("📩 USER EMAIL OK:", r);
+
+      }catch(e){
+        console.error("❌ USER EMAIL ERROR:", e);
+      }
     }
 
     // ================= ADMIN =================
-    await resend.emails.send({
-      from: "RendimentoBB Lead <lead@rendimentobb.it>",
-      to: ["rendimentobb@gmail.com"],
-      subject: `${priority} Lead – €${value}`,
-      text: `
-Email: ${email}
-ROI: ${roiRounded}%
-City: ${city}
-Type: ${type}
-Plan: ${plan || "free"}
-      `
-    });
+    try{
+      const r = await resend.emails.send({
+        from: "RendimentoBB Lead <lead@rendimentobb.it>",
+        to: ["rendimentobb@gmail.com"],
+        subject: `${priority} Lead – €${value}`,
+        text: `Email: ${email}\nROI: ${roiRounded}%`
+      });
+
+      console.log("📩 ADMIN EMAIL OK:", r);
+
+    }catch(e){
+      console.error("❌ ADMIN EMAIL ERROR:", e);
+    }
 
     // ================= PARTNER =================
     const partners = getPartnerEmails(type, score);
 
     if(partners.length){
-      await resend.emails.send({
-        from: "RendimentoBB Partner <lead@rendimentobb.it>",
-        to: partners,
-        subject: `🏦 Lead qualificato (${roiRounded}%)`,
-        text: `
-Nuovo lead:
+      try{
+        const r = await resend.emails.send({
+          from: "RendimentoBB Partner <lead@rendimentobb.it>",
+          to: partners,
+          subject: `🏦 Lead (${roiRounded}%)`,
+          text: `Email: ${email}\nROI: ${roiRounded}%`
+        });
 
-Email: ${email}
-Città: ${city}
-ROI: ${roiRounded}%
-Tipo: ${type}
+        console.log("📩 PARTNER EMAIL OK:", r);
 
-Dashboard:
-https://rendimentobb.it/dashboard
-        `
-      });
+      }catch(e){
+        console.error("❌ PARTNER EMAIL ERROR:", e);
+      }
     }
 
     console.log("🚀 Lead OK:", email);
@@ -242,11 +211,11 @@ https://rendimentobb.it/dashboard
 
   }catch(err){
 
-    console.error("💥 ERROR:", err);
+    console.error("💥 ERROR GENERALE:", err);
 
-    return res.status(500).json({
-      error:"server error"
+    return res.status(200).json({
+      success:false,
+      error:"handled"
     });
-
   }
 }
