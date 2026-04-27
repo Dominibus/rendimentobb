@@ -2785,7 +2785,7 @@ function renderCityROIChart(){
 document.addEventListener("DOMContentLoaded", ()=>{
 
   // ================= INIT BASE =================
-  renderCityROIChart();
+  setTimeout(renderCityROIChart, 300);
 
   // ================= FIX CTA =================
   document.querySelectorAll(".btn-main").forEach(btn => {
@@ -3593,6 +3593,7 @@ if(citySelectorEl){
     window.__CITY_LOCKED__ = false;
 
     window.currentCity = city;
+    window.__CURRENT_BG_CITY__ = city;
     localStorage.setItem("selected_city", city);
 
     applyCityBackground(city);
@@ -4289,14 +4290,20 @@ setInterval(()=>{
   // 🟡 INVESTOR → blocca SOLO overlay aggressivi
   if(access.isInvestor){
 
-    document.querySelectorAll(`
-      .results-overlay,
-      .upgrade-overlay,
-      .smart-overlay
-    `).forEach(el=>{
-      if(el.id !== "register-popup") el.remove();
-    });
+  // 🔥 NON rimuovere i lock overlay
+  document.querySelectorAll(`
+    .results-overlay,
+    .upgrade-overlay,
+    .smart-overlay
+  `).forEach(el=>{
+    if(
+      el.id !== "register-popup" &&
+      !el.classList.contains("lock-overlay") // 🔥 FIX
+    ){
+      el.remove();
+    }
+  });
 
-  }
+}
 
 }, 400);
