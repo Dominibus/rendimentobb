@@ -62,6 +62,10 @@ window.safeNumber = window.safeNumber || function(v, d=0){
   return isNaN(n) ? d : n;
 };
 
+// ================= GLOBAL TRANSLATION (UNIFICATO) =================
+window.t = window.t || function(it, en){
+  return window.currentLang === "en" ? en : it;
+};
 window.formatCurrency = window.formatCurrency || function(v){
   const n = Number(v);
   return isNaN(n) ? "€0" : "€" + n.toLocaleString("it-IT");
@@ -144,18 +148,24 @@ window.forceCloseAllModals = function(){
 };
 
 // 🔥 AUTO FIX CONTINUO
-setInterval(() => {
+let modalGuard = setInterval(() => {
+
+  if(!document.body.classList.contains("modal-open")) return;
 
   const modalOpen =
     document.querySelector("#rb-upgrade-modal") ||
-    document.querySelector(".upgrade-modal") ||
-    document.querySelector("#rb-pro-modal.open");
+    document.querySelector(".upgrade-modal");
 
   if(!modalOpen){
     document.body.classList.remove("modal-open");
   }
 
-}, 500);
+}, 800);
+
+// 🔥 STOP dopo 10s
+setTimeout(()=>{
+  clearInterval(modalGuard);
+},10000);
 // ================= SAFE GLOBAL EARLY FIX =================
 
 // 🔥 USA SOLO FIREBASE (SINGLE SOURCE OF TRUTH)
@@ -165,15 +175,16 @@ window.getUserAccess = function(){
 
   // 🔴 RB_USER NON PRONTO
   if(!window.RB_USER){
-    return {
-      isLogged: !!user,
-      isFree: true,
-      isPro: false,
-      isInvestor: false,
-      isAdmin: false,
-      canSeeFullAnalysis: false
-    };
-  }
+  return {
+    isLogged: !!user,
+    isFree: true, // fallback realistico
+    isPro: false,
+    isInvestor: false,
+    isAdmin: false,
+    canSeeFullAnalysis: false,
+    isLoading: true
+  };
+}
 
   // 🔥 NORMALIZZAZIONE
   const isAdmin    = !!window.RB_USER.isAdmin;
@@ -309,17 +320,45 @@ function updateROIMessage(roi){
   const msg = document.getElementById("hidden-roi-msg");
   if(!msg) return;
 
+  let text = "";
+  let color = "#64748b";
+
   if(roi > 12){
-    msg.innerHTML = "🔥 Investimento sopra la media";
+    text = t(
+      "🔥 Investimento sopra la media",
+      "🔥 Above average investment"
+    );
+    color = "#10b981"; // green SaaS
   }
   else if(roi > 6){
-    msg.innerHTML = "👍 Investimento nella media";
+    text = t(
+      "👍 Investimento nella media",
+      "👍 Average investment"
+    );
+    color = "#f59e0b"; // amber SaaS
   }
   else{
-    msg.innerHTML = "⚠️ Rendimento basso";
+    text = t(
+      "⚠️ Rendimento basso",
+      "⚠️ Low return"
+    );
+    color = "#ef4444"; // red SaaS
   }
 
+  msg.innerHTML = text;
+
+  // 🔥 UX PRO
   msg.style.display = "block";
+  msg.style.opacity = "0";
+  msg.style.transform = "translateY(6px)";
+  msg.style.color = color;
+
+  setTimeout(()=>{
+    msg.style.transition = "all .3s ease";
+    msg.style.opacity = "1";
+    msg.style.transform = "translateY(0)";
+  }, 50);
+
 }
 // ================= HOME LOCK SYSTEM =================
 
@@ -371,12 +410,6 @@ return;
 
   renderMortgageResults(results);
 };
-
-// ================= PLAN DEFAULT =================
-
-function t(it, en){
-  return window.currentLang === "it" ? it : en;
-}
 
 // ================= SAVE ANALYSIS =================
 
@@ -488,9 +521,6 @@ function applySmartLock(el, {
 
   const access = window.getUserAccess?.() || {};
 
-  const tSafe = (it,en)=>
-    (window.currentLang === "en" ? en : it);
-
   // =============================
   // 🟢 PRO / ADMIN → FULL ACCESS
   // =============================
@@ -511,11 +541,11 @@ function applySmartLock(el, {
     if(isAdvanced){
 
       createLockOverlay(el, {
-        message: message || tSafe(
+        message: message || t(
           "Sblocca analisi avanzata",
           "Unlock advanced analysis"
         ),
-        cta: cta || tSafe(
+        cta: cta || t(
           "Include AI insights, scenari e report completo",
           "Includes AI insights, scenarios and full report"
         ),
@@ -546,11 +576,11 @@ function applySmartLock(el, {
   if(type === "overlay"){
 
     createLockOverlay(el, {
-      message: message || tSafe(
+      message: message || t(
         "Sblocca analisi completa",
         "Unlock full analysis"
       ),
-      cta: cta || tSafe(
+      cta: cta || t(
         "ROI reale, rischio e simulazioni avanzate",
         "Real ROI, risk and advanced simulations"
       ),
@@ -561,11 +591,18 @@ function applySmartLock(el, {
 
   el.style.cursor = "pointer";
 
-  el.onclick = () => {
-    triggerUpgradeFlow({ source:"free_lock", plan });
-  };
-}
+  if(!el.dataset.lockBound){
 
+    el.dataset.lockBound = "true";
+
+    el.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      triggerUpgradeFlow({ source:"free_lock", plan });
+    });
+
+  }
+
+}
 
 // =====================================
 // 👑 PLAN SYSTEM – CLEAN VERSION
@@ -626,10 +663,7 @@ function hasPlan(requiredPlan){
 // =====================================
 function requirePlan(requiredPlan){
 
-  const tSafe = (it,en)=>
-    (window.currentLang === "en" ? en : it);
-
-  if(!window.isUserReady()){
+  if(!window.firebaseReady || !window.currentUser){
     console.log("⏳ user non pronto");
     return false;
   }
@@ -651,7 +685,7 @@ function requirePlan(requiredPlan){
   if(!hasPlan(requiredPlan)){
 
     showToast(
-      tSafe(
+      t(
         "🔒 Sblocca funzionalità avanzate",
         "🔒 Unlock advanced features"
       ),
@@ -866,10 +900,7 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
   const lang = window.currentLang === "en" ? "en" : "it";
 
-  const safeT = (it,en)=>{
-    if(typeof window.t === "function") return window.t(it,en);
-    return lang === "en" ? en : it;
-  };
+  const safeT = t;
 
   // ================= BOX =================
 
@@ -1040,21 +1071,14 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   });
 
 };
-// ================= GLOBAL HERO BACKGROUND =================
-
 window.applyCityBackground = function(city){
 
-  // 🔥 SUPPORTA SIA TOOL (.hero-bg) CHE ROI (.hero-roi)
   const hero =
     document.querySelector(".hero-bg") ||
     document.querySelector(".hero-roi");
 
   if(!hero) return;
 
-  // 🔥 SALVA STATO (CRITICO)
-  window.__CURRENT_BG_CITY__ = city;
-
-  // 🔥 MAP IT → EN (coerente con CSS)
   const map = {
     roma:"rome",
     napoli:"naples",
@@ -1064,10 +1088,10 @@ window.applyCityBackground = function(city){
 
   const cityClass = map[city] || "rome";
 
-  // 🔥 PULIZIA CLASSI (evita accumulo / override)
+  // 🔥 pulizia totale
   hero.classList.remove("rome","naples","milan","florence");
 
-  // 🔥 APPLICA CLASSE
+  // 🔥 applicazione
   hero.classList.add(cityClass);
 
   console.log("🎯 BG aggiornato:", cityClass);
@@ -1075,41 +1099,6 @@ window.applyCityBackground = function(city){
 };
 
 
-// =====================================
-// 💣 BACKGROUND LOCK SYSTEM (ANTI BUG)
-// =====================================
-
-setInterval(()=>{
-
-  const hero =
-    document.querySelector(".hero-bg") ||
-    document.querySelector(".hero-roi");
-
-  if(!hero) return;
-
-  const city = window.__CURRENT_BG_CITY__;
-  if(!city) return;
-
-  const map = {
-    roma:"rome",
-    napoli:"naples",
-    milano:"milan",
-    firenze:"florence"
-  };
-
-  const expected = map[city] || "rome";
-
-  // 🔥 se qualche script lo cambia → lo ripristina
-  if(!hero.classList.contains(expected)){
-
-    hero.classList.remove("rome","naples","milan","florence");
-    hero.classList.add(expected);
-
-    console.log("🔁 BG RE-APPLY (fix override)");
-
-  }
-
-}, 300);
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
 window.simulationExecuted = false;
@@ -2503,6 +2492,38 @@ try {
   }
 
   console.log("✅ UI FINAL RENDER OK");
+  setTimeout(()=>{
+
+  const access = window.getUserAccess();
+
+  console.log("🎯 APPLY FINAL LOCK:", access);
+
+  // 🔴 FREE → blocca sezioni
+  if(access.isFree){
+
+    applySmartLock(document.getElementById("investment-score"), {
+      type:"overlay",
+      plan:"investor"
+    });
+
+    applySmartLock(document.getElementById("ai-insights"), {
+      type:"overlay",
+      plan:"investor"
+    });
+
+  }
+
+  // 🟡 INVESTOR → blocca SOLO advanced
+  if(access.isInvestor){
+
+    applySmartLock(document.getElementById("ai-insights"), {
+      type:"advanced",
+      plan:"pro"
+    });
+
+  }
+
+}, 100);
 
 } catch(e){
   console.error("💥 UI FINAL RENDER ERROR:", e);
@@ -2526,6 +2547,7 @@ renderUniversalKPI({
 
 // ================= ROI LIVE =================
 const roiEl = document.getElementById("roi-live");
+const access = window.getUserAccess?.() || {};   
 
 if(roiEl){
 
@@ -2533,9 +2555,9 @@ if(roiEl){
 
   setTimeout(()=>{
     if(access.isFree){
-      roiEl.innerText = "~ " + roi.toFixed(1) + "%";
-      roiEl.style.color = "#f59e0b";
-    }else{
+  roiEl.innerText = "~ " + roi.toFixed(1) + "%";
+  roiEl.style.color = getROIColor(roi);
+}else{
       roiEl.innerText = roi.toFixed(1) + "%";
       roiEl.style.color = "#10b981";
     }
@@ -2869,7 +2891,7 @@ if(access.isFree){
 }
 
 const lang = window.RB_LANG?.current || window.currentLang || "it";
-const tSafe = (it,en)=> lang==="it"?it:en;
+const tSafe = t;
 
 // 🔒 CHECK
 if(!access.canSeeFullAnalysis){
@@ -3587,20 +3609,15 @@ if(citySelectorEl){
 
   citySelectorEl.addEventListener("change",()=>{
 
-    const city = citySelectorEl.value;
+  const city = citySelectorEl.value;
 
-    // 🔥 SBLOCCA eventuali lock (CRITICO)
-    window.__CITY_LOCKED__ = false;
+  window.currentCity = city;
 
-    window.currentCity = city;
-    window.__CURRENT_BG_CITY__ = city;
-    localStorage.setItem("selected_city", city);
+  localStorage.setItem("selected_city", city);
 
-    applyCityBackground(city);
+  applyCityBackground(city); // 🔥 unico sistema
 
-    console.log("📍 City cambiata manualmente:", city);
-
-  });
+});
 
 }
 
@@ -3671,12 +3688,10 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 
 // ================= SAVE =================
 
-// 🔥 NON salvare nelle ROI (evita contaminazioni)
-if(!window.location.pathname.startsWith("/roi-bnb/")){
-  localStorage.setItem("selected_city", selectedCity);
-}
-
 window.currentCity = selectedCity;
+
+// 🔥 FIX BACKGROUND IMMEDIATO
+applyCityBackground(selectedCity);
 
 // ================= UI SYNC =================
 
@@ -3687,8 +3702,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("⛔ Override bloccati (ROI page)");
   }
 
-  window.currentCity = selectedCity;
-
   const citySelector = document.getElementById("market-city");
 
   if(citySelector && !window.__CITY_LOCKED__){
@@ -3698,23 +3711,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================= BACKGROUND =================
 
   // 🔥 TOOL / MARKET (NON TOCCARE)
-  if(!window.location.pathname.startsWith("/roi-bnb/")){
-    applyCityBackground(selectedCity);
-  }
-
-  // 🔥 ROI (FORZATO + LOCK)
   if(window.applyCityBackground){
 
-    applyCityBackground(selectedCity);
+  applyCityBackground(selectedCity);
 
-    // 🔥 RIAPPLICA DOPO → anti script esterni
+  // 🔒 solo ROI → anti override
+  if(window.__CITY_LOCKED__){
     setTimeout(()=>{
-      if(window.__CITY_LOCKED__){
-        applyCityBackground(selectedCity);
-        console.log("🔁 Re-apply BG (anti override)");
-      }
+      applyCityBackground(selectedCity);
+      console.log("🔁 Re-apply BG (ROI lock)");
     },200);
   }
+
+}
 
   console.log("🔥 Città attiva finale:", selectedCity);
 
@@ -3865,7 +3874,13 @@ function removeGhostOverlays(){
 
   if(!access.isPro && !access.isAdmin) return;
 
-  document.querySelectorAll(`...`).forEach(el => el.remove());
+  document.querySelectorAll(`
+  .lock-overlay,
+  .upgrade-overlay,
+  .results-overlay,
+  .smart-overlay,
+  .paywall-mini
+`).forEach(el => el.remove());
 }
 
 // 🔥 ESECUZIONE FORZATA CONTINUA
@@ -4266,15 +4281,17 @@ function forceUnlockUI(){
 // =====================================
 
 // 🔥 impedisce che altri script rimettano overlay dopo 200-500ms
-setInterval(()=>{
+let overlayGuardActive = window.innerWidth > 768;
+
+const overlayGuard = setInterval(()=>{
+
+  if(!overlayGuardActive) return;
 
   if(!window.__UI_LOCK_STATE__) return;
 
   const access = window.__UI_LOCK_STATE__;
 
-  // 🟢 PRO → nessun overlay deve esistere
   if(access.isPro || access.isAdmin){
-
     document.querySelectorAll(`
       .lock-overlay,
       .upgrade-overlay,
@@ -4284,26 +4301,28 @@ setInterval(()=>{
     `).forEach(el=>{
       if(el.id !== "register-popup") el.remove();
     });
-
   }
 
-  // 🟡 INVESTOR → blocca SOLO overlay aggressivi
   if(access.isInvestor){
-
-  // 🔥 NON rimuovere i lock overlay
-  document.querySelectorAll(`
-    .results-overlay,
-    .upgrade-overlay,
-    .smart-overlay
-  `).forEach(el=>{
-    if(
-      el.id !== "register-popup" &&
-      !el.classList.contains("lock-overlay") // 🔥 FIX
-    ){
-      el.remove();
-    }
-  });
-
-}
+    document.querySelectorAll(`
+      .results-overlay,
+      .upgrade-overlay,
+      .smart-overlay
+    `).forEach(el=>{
+      if(
+        el.id !== "register-popup" &&
+        !el.classList.contains("lock-overlay")
+      ){
+        el.remove();
+      }
+    });
+  }
 
 }, 400);
+
+// 🔥 STOP DOPO 5 SECONDI (BASTA)
+setTimeout(()=>{
+  overlayGuardActive = false;
+  clearInterval(overlayGuard);
+  console.log("🛑 Overlay guard stopped");
+}, 5000);
