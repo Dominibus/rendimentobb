@@ -2546,8 +2546,7 @@ renderUniversalKPI({
 });
 
 // ================= ROI LIVE =================
-const roiEl = document.getElementById("roi-live");
-const access = window.getUserAccess?.() || {};   
+const roiEl = document.getElementById("roi-live");  
 
 if(roiEl){
 
