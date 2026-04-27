@@ -15618,3 +15618,14 @@ body.is-investor .result-item.pro-only{
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
