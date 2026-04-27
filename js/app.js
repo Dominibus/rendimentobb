@@ -1377,21 +1377,23 @@ ${occRounded.toFixed(1)}%
 
 }
 // ================= INVESTMENT SCORE =================
-const access = window.getUserAccess?.() || {};
-
-if(access.isFree){
-  container.innerHTML = `
-    <div class="kpi-box">
-      🔒 ${t("Sblocca valutazione completa","Unlock full score")}
-    </div>
-  `;
-  return;
-}
 
 function renderInvestmentScore(roi, riskScore){
 
 const container = document.getElementById("investment-score");
 if(!container) return;
+
+const access = window.getUserAccess?.() || {};
+
+  // 🔴 FREE → blocco
+  if(access.isFree){
+    container.innerHTML = `
+      <div class="kpi-box">
+        🔒 ${t("Sblocca valutazione completa","Unlock full score")}
+      </div>
+    `;
+    return;
+  }  
 
 let grade = "C";
 let recommendation = t("Alto rischio","High risk");
@@ -2023,22 +2025,23 @@ function generateInsights(data){
   return insights;
 }
 
-const access = window.getUserAccess?.() || {};
-
-// 🔴 FREE → NON vedere insights
-if(access.isFree){
-  container.innerHTML = `
-    <div style="color:#64748b;font-size:14px;">
-      🔒 ${t("Sblocca per vedere insights AI","Unlock to see AI insights")}
-    </div>
-  `;
-  return;
-}
 
 function renderInsights(insights){
 
   const container = document.getElementById("ai-insights");
   if(!container) return;
+
+  const access = window.getUserAccess?.() || {};
+
+  // 🔴 FREE → blocco
+  if(access.isFree){
+    container.innerHTML = `
+      <div style="color:#64748b;font-size:14px;">
+        🔒 ${t("Sblocca per vedere insights AI","Unlock to see AI insights")}
+      </div>
+    `;
+    return;
+  }
 
   if(!insights.length){
   container.innerHTML = `
