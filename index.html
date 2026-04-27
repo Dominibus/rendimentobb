@@ -163,18 +163,25 @@ Simula ROI reale, costi nascosti e rischio in 30 secondi. Evita errori che posso
 <button 
 onclick="document.getElementById('qr_price')?.scrollIntoView({behavior:'smooth'})" 
 class="btn btn-primary btn-lg"
-data-it="🔓 Scopri se stai perdendo soldi"
-data-en="🔓 Check if you're losing money">
-🔓 Scopri se stai perdendo soldi
+data-it="🔍 Simula gratis il tuo investimento"
+data-en="🔍 Run your free simulation">
+🔍 Simula gratis il tuo investimento
 </button>
 
 <button 
 onclick="startPlanPurchase('pro')" 
 class="btn-outline"
-data-it="🚀 Sblocca analisi completa"
-data-en="🚀 Unlock full analysis">
-🚀 Sblocca analisi completa
+data-it="🔓 Vedi il profitto reale"
+data-en="🔓 See real profit">
+🔓 Vedi il profitto reale
 </button>
+
+<p style="margin-top:8px;font-size:13px;color:#facc15">
+<span data-it="⚠️ Bastano 30 secondi per evitare errori da €10.000+"
+      data-en="⚠️ 30 seconds can prevent €10,000+ mistakes">
+⚠️ Bastano 30 secondi per evitare errori da €10.000+
+</span>
+</p> 
 
 </div>
 
@@ -492,6 +499,21 @@ font-size:13px;
 font-weight:700;
 text-align:center;
 ">
+
+<div id="money-loss" style="
+margin-top:10px;
+font-size:14px;
+color:#ef4444;
+font-weight:700;
+text-align:center;
+display:none;
+">
+<span 
+data-it="💸 Potresti perdere €0/anno senza analisi completa"
+data-en="💸 You could lose €0/year without full analysis">
+💸 Potresti perdere €0/anno senza analisi completa
+</span>
+</div> 
 
 <span 
 data-it="⚠️ Senza analisi completa potresti perdere fino al 30% del profitto reale"
