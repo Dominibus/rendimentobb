@@ -35,6 +35,13 @@ let roiChartInstance = null;
 
 window.roiChartInstance = null;
 
+// ================= FUNNEL STATE =================
+window.funnelState = {
+  shown: false,
+  lastTrigger: null,
+  counter: 0
+};
+
 // =====================================
 // 🔥 GLOBAL ERROR DEBUG (CRITICO)
 // =====================================
@@ -690,6 +697,51 @@ window.triggerUpgradeFlow = function(context = {}){
   if(access.isInvestor){
     openUpgradeModal("pro", roi);
     return;
+  }
+
+};
+
+// =====================================
+// 🔥 FUNNEL TRIGGER ENGINE (SaaS)
+// =====================================
+window.triggerFunnel = function({type = "generic", roi = 0} = {}){
+
+  const access = window.getUserAccess?.() || {};
+  if(access.canSeeFullAnalysis) return;
+
+  // ❌ anti spam
+  if(window.funnelState.shown && type !== "reminder") return;
+
+  // 🔥 ROI alto → immediato
+  if(type === "roi"){
+    if(roi > 10){
+      openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
+      window.funnelState.shown = true;
+      return;
+    }
+  }
+
+  // 🟡 ROI medio → delay
+  if(type === "roi_soft"){
+    if(roi > 6){
+      setTimeout(()=>{
+        openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
+      }, 2000);
+      window.funnelState.shown = true;
+      return;
+    }
+  }
+
+  // 📜 SCROLL
+  if(type === "scroll"){
+    openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
+    window.funnelState.shown = true;
+    return;
+  }
+
+  // 🧠 REMINDER
+  if(type === "reminder"){
+    openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
   }
 
 };
@@ -1948,18 +2000,22 @@ container.innerHTML = insights.map(i=>{
 
 function triggerSmartReminder(roi){
 
-  const access = window.getUserAccess();
-
+  const access = window.getUserAccess?.() || {};
   if(access.canSeeFullAnalysis) return;
 
-  window.reminderCount = (window.reminderCount || 0) + 1;
+  window.funnelState.counter++;
 
-  // ogni 2 azioni → popup
-  if(window.reminderCount % 2 !== 0) return;
+  // ogni 2 azioni
+  if(window.funnelState.counter % 2 !== 0) return;
 
   setTimeout(()=>{
-    triggerUpgradeFlow({ action:"reminder", roi });
-  }, 1500);
+
+    triggerFunnel({
+      type:"reminder",
+      roi
+    });
+
+  }, 2000);
 }
 
 // ================= LEAD SCORE ENGINE =================
@@ -2048,6 +2104,18 @@ function runPostAnalysis(result, context){
   }
 
   triggerSmartReminder(roi);
+
+  // ================= FUNNEL TRIGGER =================
+
+// 🔥 ROI alto → subito
+if(roi > 10){
+  triggerFunnel({ type:"roi", roi });
+}
+
+// 🟡 ROI medio → delay
+else if(roi > 6){
+  triggerFunnel({ type:"roi_soft", roi });
+}
 
   // ================= PAYWALL =================
 
@@ -2954,6 +3022,16 @@ if(analyzeBtn){
     if(typeof window.calculate === "function"){
       console.log("🚀 CALCULATE TRIGGER");
       window.calculate();
+    setTimeout(()=>{
+
+  const roi = window.lastAnalysisData?.roi || 0;
+
+  if(roi > 6){
+    triggerFunnel({ type:"roi", roi });
+  }
+
+}, 1500);
+      
     } else {
       console.error("❌ calculate non trovata");
     }
@@ -4264,11 +4342,13 @@ window.addEventListener("scroll", () => {
 
   if(scrollTriggered) return;
 
-  if(window.scrollY > 800){
+  if(window.scrollY > 600){
 
     scrollTriggered = true;
 
-    triggerUpgradeFlow({ action:"scroll" });
+    const roi = window.lastAnalysisData?.roi || 0;
+
+    triggerFunnel({ type:"scroll", roi });
 
   }
 
