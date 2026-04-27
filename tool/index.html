@@ -1240,5 +1240,95 @@ setTimeout(()=>{
   }
 }, 500);
 
+// ===============================================
+// 🔥 ACCESS CONTROL RENDIMENTOBB (FIX DEFINITIVO)
+// ===============================================
 
+document.addEventListener("rb_plan_loaded", applyAccessControl);
+document.addEventListener("DOMContentLoaded", applyAccessControl);
+
+function applyAccessControl(){
+
+  const access = window.getUserAccess?.() || {};
+
+  console.log("🔐 ACCESS:", access);
+
+  // =========================
+  // 👻 NON LOGGATO
+  // =========================
+  if(!access.isLogged){
+
+    hide("roiChart");
+    hide("market-benchmark");
+    hide("market-comparison");
+    hide("occupancy-sensitivity");
+
+    hideSection("advanced-analysis");
+
+    return;
+  }
+
+  // =========================
+  // 🆓 FREE LOGGATO
+  // =========================
+  if(access.isFree){
+
+    blur("roiChart");
+    blur("market-benchmark");
+    blur("market-comparison");
+
+    hide("occupancy-sensitivity");
+
+    return;
+  }
+
+  // =========================
+  // 💰 INVESTOR
+  // =========================
+  if(access.isInvestor){
+
+    hide("occupancy-sensitivity");
+    hideSection("advanced-analysis");
+
+    return;
+  }
+
+  // =========================
+  // 🚀 PRO
+  // =========================
+  if(access.isPro || access.isAdmin){
+
+    console.log("✅ FULL ACCESS");
+
+    return;
+  }
+
+}
+
+// ================= UTIL =================
+
+function hide(id){
+  const el = document.getElementById(id);
+  if(el) el.style.display = "none";
+}
+
+function hideSection(id){
+  const el = document.getElementById(id);
+  if(el) el.remove();
+}
+
+function blur(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  el.style.filter = "blur(6px)";
+  el.style.pointerEvents = "none";
+
+  if(!el.querySelector(".paywall-mini")){
+    const overlay = document.createElement("div");
+    overlay.className = "paywall-mini";
+    overlay.innerHTML = "🔒 Sblocca analisi completa";
+    el.appendChild(overlay);
+  }
+}
 
