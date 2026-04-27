@@ -1044,33 +1044,72 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
 window.applyCityBackground = function(city){
 
-// 🔥 SUPPORTA SIA TOOL (.hero-bg) CHE ROI (.hero-roi)
-const hero =
-  document.querySelector(".hero-bg") ||
-  document.querySelector(".hero-roi");
+  // 🔥 SUPPORTA SIA TOOL (.hero-bg) CHE ROI (.hero-roi)
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero-roi");
 
-if(!hero) return;
+  if(!hero) return;
 
-// 🔥 PULIZIA CLASSI (evita accumulo / override)
-hero.classList.remove("rome","naples","milan","florence");
+  // 🔥 SALVA STATO (CRITICO)
+  window.__CURRENT_BG_CITY__ = city;
 
-// 🔥 MAP IT → EN (coerente con CSS)
-const map = {
-  roma:"rome",
-  napoli:"naples",
-  milano:"milan",
-  firenze:"florence"
+  // 🔥 MAP IT → EN (coerente con CSS)
+  const map = {
+    roma:"rome",
+    napoli:"naples",
+    milano:"milan",
+    firenze:"florence"
+  };
+
+  const cityClass = map[city] || "rome";
+
+  // 🔥 PULIZIA CLASSI (evita accumulo / override)
+  hero.classList.remove("rome","naples","milan","florence");
+
+  // 🔥 APPLICA CLASSE
+  hero.classList.add(cityClass);
+
+  console.log("🎯 BG aggiornato:", cityClass);
+
 };
 
-// 🔥 APPLICA CLASSE CORRETTA
-const cityClass = map[city] || "rome";
 
-hero.classList.add(cityClass);
+// =====================================
+// 💣 BACKGROUND LOCK SYSTEM (ANTI BUG)
+// =====================================
 
-console.log("🎯 BG aggiornato:", cityClass);
+setInterval(()=>{
 
-};
+  const hero =
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero-roi");
 
+  if(!hero) return;
+
+  const city = window.__CURRENT_BG_CITY__;
+  if(!city) return;
+
+  const map = {
+    roma:"rome",
+    napoli:"naples",
+    milano:"milan",
+    firenze:"florence"
+  };
+
+  const expected = map[city] || "rome";
+
+  // 🔥 se qualche script lo cambia → lo ripristina
+  if(!hero.classList.contains(expected)){
+
+    hero.classList.remove("rome","naples","milan","florence");
+    hero.classList.add(expected);
+
+    console.log("🔁 BG RE-APPLY (fix override)");
+
+  }
+
+}, 300);
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
 window.simulationExecuted = false;
@@ -3550,10 +3589,15 @@ if(citySelectorEl){
 
     const city = citySelectorEl.value;
 
+    // 🔥 SBLOCCA eventuali lock (CRITICO)
+    window.__CITY_LOCKED__ = false;
+
     window.currentCity = city;
     localStorage.setItem("selected_city", city);
 
     applyCityBackground(city);
+
+    console.log("📍 City cambiata manualmente:", city);
 
   });
 
