@@ -231,9 +231,12 @@ onAuthStateChanged(auth, (user) => {
 
   // 👻 GUEST → render immediato
   if(!user){
+  // 🔥 aspetta comunque RB_USER fallback
+  setTimeout(()=>{
     renderUser(null);
-    return;
-  }
+  }, 100);
+  return;
+}
 
   // 🔥 utente loggato → aspetta RB_USER
   let attempts = 0;
@@ -243,6 +246,10 @@ onAuthStateChanged(auth, (user) => {
     attempts++;
 
     const RB = window.RB_USER;
+
+    if(!window.getUserAccess){
+  return;
+}
 
     if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
 
@@ -422,19 +429,16 @@ function renderUser(user){
 
   const clean = (v)=>String(v || "").toLowerCase().trim();
 
-  const RB = window.RB_USER || {};
-
-const access = {
-  isInvestor: RB.isInvestor == true,
-  isPro: RB.isPro == true,
-  isAdmin: RB.isAdmin == true,
-  isFree: RB.isFree == true
+  const access = window.getUserAccess?.() || {
+  isLogged: !!user,
+  isFree: true,
+  isPro: false,
+  isInvestor: false,
+  isAdmin: false
 };
   console.log("👤 HEADER ACCESS:", access, "RAW:", RB);
 
-  const isAdmin =
-    user?.email === "rendimentobb@gmail.com" ||
-    clean(window.userRole) === "admin";
+  const isAdmin = access.isAdmin;
 
   const isInvestor = access.isInvestor;
   const isPro = access.isPro;
