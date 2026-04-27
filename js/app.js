@@ -4097,7 +4097,7 @@ function unlockBaseUI(){
 }
 
 // =============================
-// 🔥 FINAL UI CONTROL (UNICO PUNTO VERITÀ)
+// 🔥 FINAL UI CONTROL (LOCKED + ANTI OVERRIDE)
 // =============================
 
 function forceUnlockUI(){
@@ -4106,21 +4106,21 @@ function forceUnlockUI(){
 
   console.log("🔥 FINAL UI CONTROL:", access);
 
-  // =========================
-  // 🟢 PRO / ADMIN → FULL UNLOCK
-  // =========================
-  if(access.isPro || access.isAdmin){
+  // 🔥 FLAG GLOBALE (ANTI RE-APPLY)
+  window.__UI_LOCK_STATE__ = access;
 
-    console.log("🟢 FULL UNLOCK");
+  // funzione safe remove
+  const safeRemove = (selector) => {
+    document.querySelectorAll(selector).forEach(el => {
+      if(el.id !== "register-popup"){
+        el.remove();
+      }
+    });
+  };
 
-    document.querySelectorAll(`
-      .pro-blur,
-      .locked,
-      .locked-content,
-      .premium-lock,
-      .locked-section
-    `).forEach(el => {
-
+  // funzione unlock elementi
+  const unlockElements = (selector) => {
+    document.querySelectorAll(selector).forEach(el => {
       el.classList.remove(
         "pro-blur",
         "locked",
@@ -4132,10 +4132,25 @@ function forceUnlockUI(){
       el.style.filter = "none";
       el.style.opacity = "1";
       el.style.pointerEvents = "auto";
-
     });
+  };
 
-    document.querySelectorAll(`
+  // =========================
+  // 🟢 PRO / ADMIN → FULL UNLOCK
+  // =========================
+  if(access.isPro || access.isAdmin){
+
+    console.log("🟢 FULL UNLOCK");
+
+    unlockElements(`
+      .pro-blur,
+      .locked,
+      .locked-content,
+      .premium-lock,
+      .locked-section
+    `);
+
+    safeRemove(`
       .home-blur-overlay,
       .results-overlay,
       .upgrade-overlay,
@@ -4144,47 +4159,39 @@ function forceUnlockUI(){
       .paywall-mini,
       .blur-content,
       [data-paywall]
-    `).forEach(el => {
+    `);
 
-      if(el.id !== "register-popup"){
-        el.remove();
-      }
-
-    });
+    document.body.classList.add("is-pro");
+    document.body.classList.remove("is-free","is-investor");
 
     return;
   }
 
   // =========================
-  // 🟡 INVESTOR → PARTIAL UNLOCK (CORRETTO)
+  // 🟡 INVESTOR → PARTIAL UNLOCK
   // =========================
   if(access.isInvestor){
 
     console.log("🟡 INVESTOR SAFE UI");
 
     // 🔥 rimuove SOLO overlay invasivi
-    document.querySelectorAll(`
-      .lock-overlay,
+    safeRemove(`
       .results-overlay,
       .upgrade-overlay,
       .smart-overlay,
       .paywall-mini,
       [data-paywall]
-    `).forEach(el => {
-      if(el.id !== "register-popup") el.remove();
-    });
+    `);
 
-    // 🔥 rimuove blur residui
-    document.querySelectorAll(`
+    // 🔥 unlock base
+    unlockElements(`
       .pro-blur,
       .locked,
       .locked-section
-    `).forEach(el=>{
-      el.classList.remove("pro-blur","locked","locked-section");
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
-    });
+    `);
+
+    document.body.classList.add("is-investor");
+    document.body.classList.remove("is-free","is-pro");
 
     return;
   }
@@ -4194,16 +4201,58 @@ function forceUnlockUI(){
   // =========================
   console.log("🔴 FREE UI");
 
+  document.body.classList.add("is-free");
+  document.body.classList.remove("is-pro","is-investor");
+
   document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
     el.classList.add("pro-blur");
   });
 
-  // 🔥 pulizia finale anti glitch
-  document.querySelectorAll(`
+  safeRemove(`
     .results-overlay,
     .upgrade-overlay
-  `).forEach(el => {
-    if(el.id !== "register-popup") el.remove();
-  });
+  );
 
 }
+
+
+// =====================================
+// 💣 ANTI-OVERRIDE SYSTEM (CRITICO)
+// =====================================
+
+// 🔥 impedisce che altri script rimettano overlay dopo 200-500ms
+setInterval(()=>{
+
+  if(!window.__UI_LOCK_STATE__) return;
+
+  const access = window.__UI_LOCK_STATE__;
+
+  // 🟢 PRO → nessun overlay deve esistere
+  if(access.isPro || access.isAdmin){
+
+    document.querySelectorAll(`
+      .lock-overlay,
+      .upgrade-overlay,
+      .results-overlay,
+      .smart-overlay,
+      .paywall-mini
+    `).forEach(el=>{
+      if(el.id !== "register-popup") el.remove();
+    });
+
+  }
+
+  // 🟡 INVESTOR → blocca SOLO overlay aggressivi
+  if(access.isInvestor){
+
+    document.querySelectorAll(`
+      .results-overlay,
+      .upgrade-overlay,
+      .smart-overlay
+    `).forEach(el=>{
+      if(el.id !== "register-popup") el.remove();
+    });
+
+  }
+
+}, 400);
