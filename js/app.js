@@ -2262,6 +2262,7 @@ try{
   if(estimatedLoss > 1000 && !access.canSeeFullAnalysis){
 
     lossEl.style.display = "block";
+    lossEl.style.animation = "fadeUp .4s ease";
 
     // =====================================
     // 🚀 BONUS → ATTIVA BLOCCO SHOCK (QUI)
