@@ -1895,7 +1895,7 @@ if(!window.firebaseReady){
 
 const access = window.getUserAccess();
 
-btn.style.display = access.canDownloadPDF ? "inline-block" : "none";
+btn.style.display = access.canSeeFullAnalysis ? "inline-block" : "none";
 
 console.log("PDF visibility:", window.getUserAccess());
 
@@ -4253,9 +4253,9 @@ function forceUnlockUI(){
   });
 
   safeRemove(`
-    .results-overlay,
-    .upgrade-overlay
-  );
+  .results-overlay,
+  .upgrade-overlay
+`);
 
 }
 
