@@ -16123,3 +16123,32 @@ NESSUN CONFLITTO • DESIGN SaaS
   }
 
 }
+
+/* =====================================
+🔥 FIX CENTRATURA SMART HUB (CRITICO)
+===================================== */
+
+.home-page .smart-investment-hub{
+  width:100%;
+  display:block; /* rimuove comportamenti strani */
+  padding-left:0;
+  padding-right:0;
+}
+
+/* centra davvero il contenuto interno */
+.home-page .smart-investment-hub .container{
+  margin-left:auto;
+  margin-right:auto;
+  display:block;
+  text-align:left; /* evita effetto “shift” */
+}
+
+/* FIX layout interno */
+.home-page .smart-investment-hub .hub-buttons{
+  justify-content:flex-start; /* allineamento corretto */
+}
+
+/* CTA allineata */
+.home-page .smart-investment-hub .btn{
+  display:inline-block;
+}
