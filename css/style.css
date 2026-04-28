@@ -15907,37 +15907,32 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🔥 HOME FINAL – OVERRIDE REALE STABILE
-Zero conflitti • Layout demo • Safe
+🔥 HOME FIX REALE (STABILE + LEGGIBILE)
+NON rompe layout • corregge errori attuali
 ===================================== */
 
 /* ===== CONTAINER SEMPRE CENTRATO ===== */
 .home-page .container{
-  max-width:1200px;
-  margin-left:auto !important;
-  margin-right:auto !important;
-  padding-left:20px;
-  padding-right:20px;
+  max-width:1100px;
+  margin:0 auto !important;
+  padding:0 16px;
 }
 
 /* =====================================
-🔥 HERO (FIX DEFINITIVO)
+🔥 HERO (NON TOCCA STRUTTURA)
 ===================================== */
 
 .home-page .hero{
   position:relative;
-  padding:120px 0 140px;
-  min-height:85vh;
 }
 
-/* overlay */
 .home-page .hero::before{
   content:"";
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(2,6,23,0.75),
-    rgba(2,6,23,0.9)
+    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.85)
   );
   z-index:0;
 }
@@ -15947,25 +15942,9 @@ Zero conflitti • Layout demo • Safe
   z-index:1;
 }
 
-/* FIX CENTRATURA HERO (CRITICO) */
-.home-page .hero .container{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-}
-
-@media(max-width:768px){
-  .home-page .hero .container{
-    align-items:center;
-    text-align:center;
-  }
-}
-
-/* testo */
+/* testo leggibile */
 .home-page .hero h1{
-  color:#fff !important;
-  font-size:42px;
-  line-height:1.2;
+  color:#ffffff !important;
 }
 
 .home-page .hero p{
@@ -15973,62 +15952,43 @@ Zero conflitti • Layout demo • Safe
 }
 
 /* =====================================
-🔥 SEARCH BOX (STILE DEMO)
+🔥 SEARCH BOX (SOLO STILE)
 ===================================== */
 
 .home-page .city-search-box{
-  margin-top:40px;
-  background:#ffffff !important;
-  border-radius:18px;
-  padding:24px;
-  box-shadow:0 25px 80px rgba(0,0,0,0.25);
-  max-width:650px;
+  background:#ffffff;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  max-width:600px;
 }
 
 /* =====================================
-🔥 KPI BOX SOTTO HERO
+🔥 KPI BOX
 ===================================== */
 
 .home-page .investment-metrics{
   display:flex;
   justify-content:center;
-  gap:20px;
   flex-wrap:wrap;
-  margin-top:30px;
+  gap:14px;
 }
 
 .home-page .metric-card{
   background:#ffffff;
-  border-radius:14px;
-  padding:16px 20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  text-align:center;
-  min-width:120px;
+  border-radius:12px;
+  padding:12px 16px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
 }
 
 /* =====================================
-🔥 SMART HUB (FIX CENTRATURA + CARD)
+🔥 SMART HUB (CENTRATO DAVVERO)
 ===================================== */
 
 .home-page .smart-investment-hub{
   text-align:center;
 }
 
-.home-page .smart-investment-hub .container{
-  display:block;
-}
-
-/* card grande */
-.home-page .hub-card{
-  background:#ffffff !important;
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.08);
-  max-width:800px;
-  margin:20px auto;
-}
-
-/* bottoni città */
 .home-page .hub-buttons{
   display:flex;
   justify-content:center;
@@ -16036,41 +15996,43 @@ Zero conflitti • Layout demo • Safe
   gap:10px;
 }
 
+/* card */
+.home-page .hub-card{
+  background:#ffffff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+  margin:20px auto;
+  max-width:700px;
+}
+
 /* =====================================
-🔥 SIMULATORE + ANALISI (EFFETTO DEMO)
+🔥 SIMULATORE (FIX VERO QUI)
 ===================================== */
 
-.home-page .quick-roi-section{
-  margin-top:60px;
-}
+/* ❌ RIMOSSO grid che rompeva tutto */
+/* ✅ TORNA layout naturale */
 
 .home-page .quick-roi-section .container{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:30px;
+  display:block !important;
 }
 
-@media(max-width:900px){
-  .home-page .quick-roi-section .container{
-    grid-template-columns:1fr;
-  }
-}
-
-/* CARD */
-.home-page .quick-roi-box,
-.home-page .results-card{
+/* centrato */
+.home-page .quick-roi-box{
   background:#ffffff;
-  border-radius:18px;
+  border-radius:16px;
   padding:25px;
   box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  max-width:600px;
+  margin:0 auto;
 }
 
 /* =====================================
-🔥 INPUT (FIX LUNGHEZZA + DESIGN)
+🔥 INPUT NORMALI
 ===================================== */
 
 .home-page .roi-field input{
-  width:100% !important;
+  width:100%;
   padding:12px;
   border-radius:10px;
   border:1px solid #e5e7eb;
@@ -16084,6 +16046,27 @@ Zero conflitti • Layout demo • Safe
 }
 
 /* =====================================
+🔥 TESTI LEGGIBILI (FIX CRITICO)
+===================================== */
+
+.home-page h2{
+  color:#0f172a !important;
+}
+
+.home-page p{
+  color:#475569 !important;
+}
+
+.home-page small{
+  color:#64748b !important;
+}
+
+/* valori */
+.home-page strong{
+  color:#0f172a;
+}
+
+/* =====================================
 🔥 MARKET BUTTONS
 ===================================== */
 
@@ -16092,27 +16075,14 @@ Zero conflitti • Layout demo • Safe
   justify-content:center;
   flex-wrap:wrap;
   gap:10px;
-  margin-top:20px;
 }
 
 .home-page .market-btn{
   background:#10b981;
   color:#fff;
   border:none;
-  padding:10px 18px;
+  padding:8px 16px;
   border-radius:999px;
-}
-
-/* =====================================
-🔥 TESTI GLOBALI
-===================================== */
-
-.home-page h2{
-  color:#0f172a;
-}
-
-.home-page p{
-  color:#475569;
 }
 
 /* =====================================
@@ -16130,14 +16100,14 @@ Zero conflitti • Layout demo • Safe
 @media(max-width:768px){
 
   .home-page .hero h1{
-    font-size:26px;
+    font-size:24px;
   }
 
   .home-page .hero p{
     font-size:14px;
   }
 
-  .home-page .city-search-box{
+  .home-page .quick-roi-box{
     padding:18px;
   }
 
