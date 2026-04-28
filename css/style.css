@@ -15878,3 +15878,30 @@ body.rb-ui-popup-open #register-popup{
   font-size: 13px;
   font-weight: 500;  /* meno pesante → più leggibile */
 }
+
+/* ================= 🔒 UPGRADE POPUP BUTTON FIX ================= */
+
+.rb-upgrade-modal .btn,
+.rb-upgrade-box .btn{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  padding: 12px 14px;
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+/* testo dentro bottone */
+.rb-upgrade-modal .btn,
+.rb-upgrade-box .btn{
+  font-size: 13px;       /* 🔥 ridotto */
+  white-space: normal;   /* 🔥 permette andare a capo */
+  line-height: 1.3;
+}
