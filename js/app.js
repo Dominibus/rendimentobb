@@ -549,6 +549,11 @@ function applySmartLock(el, {
   // 🟡 INVESTOR → PARTIAL LOCK
   // =============================
   if(access.isInvestor){
+    // 🔥 RESET HARD (INVESTOR NON DEVE AVERE BLUR BASE)
+    el.classList.remove("pro-blur");
+    el.classList.remove("blur-content");
+    el.style.filter = "none";
+    el.style.opacity = "1";
 
     const isAdvanced =
       type === "advanced" ||
@@ -2537,7 +2542,18 @@ try {
 
   setTimeout(()=>{
 
-    const access = window.getUserAccess();
+    // 🔥 GLOBAL CLEAN INVESTOR (ANTI BUG)
+const access = window.getUserAccess?.();
+
+if(access?.isInvestor){
+
+  document.querySelectorAll(".pro-blur, .blur-content").forEach(el=>{
+    el.classList.remove("pro-blur","blur-content");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+  });
+
+}
 
     // =====================================
     // 🔥 FIX CRITICO → PRO / ADMIN NON DEVONO ESSERE TOCCATI
