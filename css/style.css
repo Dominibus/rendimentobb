@@ -15907,8 +15907,8 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME FINAL SYSTEM (CENTER + READABILITY FIX)
-STABILE • NO CONFLITTI • MOBILE PERFETTO
+🏠 HOME FINAL FIX (OVERRIDE REALE)
+FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
 ===================================== */
 
 /* ================= BASE ================= */
@@ -15921,7 +15921,6 @@ STABILE • NO CONFLITTI • MOBILE PERFETTO
   max-width:1100px;
   margin:0 auto;
   padding:0 16px;
-  display:block;
 }
 
 /* ================= HERO ================= */
@@ -15950,7 +15949,7 @@ STABILE • NO CONFLITTI • MOBILE PERFETTO
 
 /* TESTO */
 .home-page .hero h1{
-  color:#ffffff;
+  color:#fff;
   text-shadow:0 3px 20px rgba(0,0,0,0.8);
 }
 
@@ -15990,12 +15989,6 @@ STABILE • NO CONFLITTI • MOBILE PERFETTO
   justify-content:center;
 }
 
-.home-page .market-btn{
-  border-radius:999px;
-  padding:10px 16px;
-  font-size:14px;
-}
-
 /* ================= ROI ================= */
 
 .home-page .quick-roi-box{
@@ -16003,12 +15996,6 @@ STABILE • NO CONFLITTI • MOBILE PERFETTO
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,0.08);
   text-align:center;
-}
-
-.home-page .roi-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
 }
 
 /* ================= METRICS ================= */
@@ -16027,59 +16014,61 @@ STABILE • NO CONFLITTI • MOBILE PERFETTO
 }
 
 /* =====================================
-🔥 MARKET FIX DEFINITIVO
+🔥 MARKET FIX VERO (FORZATO)
 ===================================== */
 
-/* CENTRA TUTTO DAVVERO */
-.home-page .market-section{
-  text-align:center;
+/* RESET COMPLETO (CRITICO) */
+.home-page .market-buttons{
+  all:unset;
 }
 
-.home-page .market-section .container{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-/* BOTTONI ORIZZONTALI */
+/* RICOSTRUZIONE PULITA */
 .home-page .market-buttons{
   display:flex !important;
   flex-direction:row !important;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:12px;
+  justify-content:center !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+  gap:12px !important;
+
   width:100%;
   max-width:600px;
+  margin:20px auto 10px auto !important;
 }
 
-/* BOTTONI STILE PILL (COMPATTI) */
+/* BOTTONI */
 .home-page .market-buttons .market-btn{
-  background:#10b981;
-  color:white;
-  border:none;
-  padding:8px 16px;
-  font-size:13px;
-  border-radius:999px;
-  box-shadow:0 5px 15px rgba(16,185,129,0.3);
+  background:#10b981 !important;
+  color:#fff !important;
+  border:none !important;
+
+  padding:8px 16px !important;
+  font-size:13px !important;
+  border-radius:999px !important;
+
+  box-shadow:0 6px 18px rgba(16,185,129,0.3);
+  cursor:pointer;
 }
 
 /* hover */
 .home-page .market-buttons .market-btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 10px 20px rgba(16,185,129,0.4);
 }
 
-/* TESTO LEGGIBILE */
+/* FIX TESTO */
+.home-page .market-section{
+  text-align:center !important;
+}
+
 .home-page .market-section h2{
-  color:#0f172a;
+  color:#0f172a !important;
 }
 
 .home-page .market-section p{
-  color:#475569;
+  color:#475569 !important;
 }
 
-/* LINK CENTRATO */
+/* LINK */
 .home-page .market-section a{
   display:inline-block;
   margin:10px auto;
@@ -16110,14 +16099,9 @@ STABILE • NO CONFLITTI • MOBILE PERFETTO
     font-size:14px;
   }
 
-  /* 2 bottoni per riga */
   .home-page .market-buttons .market-btn{
     flex:1;
     min-width:45%;
-  }
-
-  .quick-roi-section{
-    margin-top:-20px;
   }
 
 }
