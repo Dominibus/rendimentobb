@@ -2069,20 +2069,21 @@ const isFreeUser = !isPro && !isInvestor;
 // ================= ANALYZE PROPERTY =================
 window.analyzeProperty = function(){
 
-const input = document.getElementById("listing_url");
-const url = input?.value;
+  const input = document.getElementById("listing_url");
+  const url = input?.value?.trim();
 
-if(!url){
-  alert(window.t("Inserisci un link valido","Enter a valid URL"));
-  return;
-}
+  if(!url){
+    alert(window.t("Inserisci un link valido","Enter a valid URL"));
+    return;
+  }
 
-// simulazione
-quickROI();
+  // 🔥 salva link (ponte tra pagine)
+  localStorage.setItem("listing_url", url);
 
-// scroll UX
-document.querySelector(".investment-metrics")
-?.scrollIntoView({behavior:"smooth"}); 
+  console.log("🔗 PROPERTY URL:", url);
+
+  // 🔥 redirect al simulatore (CORE UX)
+  window.location.href = `/tool/?listing=${encodeURIComponent(url)}`;
 
 };
 
