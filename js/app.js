@@ -2444,6 +2444,11 @@ const result = calculateROI({
   loanYears
 });
 
+ // 🔥 FORCE BG UPDATE DOPO CALCOLO
+if(window.currentCity){
+  applyCityBackground(window.currentCity);
+}   
+
 if (!result || typeof result !== "object") {
   console.error("💥 RESULT INVALID:", result);
   return;
@@ -2452,6 +2457,35 @@ if (!result || typeof result !== "object") {
 const roi   = Number(result?.roi ?? 0);
 const gross = Number(result?.revenue ?? 0);
 const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
+
+// ================= SCORE CIRCLE =================
+const scoreCircle = document.getElementById("score-circle");
+
+if(scoreCircle){
+
+  const access = window.getUserAccess?.() || {};
+
+  if(access.isFree){
+    scoreCircle.innerText = "—";
+  }else{
+
+    let grade = "C";
+
+    if(roi > 12) grade = "A";
+    else if(roi > 6) grade = "B";
+
+    scoreCircle.innerText = grade;
+
+    // 🎨 colore
+    let color = "#ef4444";
+    if(grade === "A") color = "#10b981";
+    else if(grade === "B") color = "#f59e0b";
+
+    scoreCircle.style.background = color + "20";
+    scoreCircle.style.color = color;
+  }
+}
+        
 
 // =====================================
 // 💸 LOSS VISUAL (BILINGUE + SaaS CLEAN)
@@ -3723,11 +3757,14 @@ if(citySelectorEl){
 
   localStorage.setItem("selected_city", city);
 
-  applyCityBackground(city); // 🔥 unico sistema
+  applyCityBackground(city);
+
+  // 🔥 FIX HARD (ANTI OVERRIDE BUG)
+  setTimeout(()=>{
+    applyCityBackground(city);
+  },100);
 
 });
-
-}
 
 // ================= CITY ROUTING FIX =================
 
