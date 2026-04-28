@@ -16259,3 +16259,27 @@ copre TUTTE le sezioni con background
   z-index:2;
   position:relative;
 }
+/* =====================================
+🔥 FIX KPI HUB (ROI / OCCUPAZIONE / BREAK-EVEN)
+ULTRA MIRATO • NON rompe nulla
+===================================== */
+
+/* label (ROI medio, Occupazione, Break-even) */
+.home-page .hub-card span,
+.home-page .hub-metric span{
+  color:#64748b !important; /* grigio leggibile */
+  opacity:1 !important;
+}
+
+/* valori (12.8%, 68%, 6.5 anni) */
+.home-page .hub-card strong,
+.home-page .hub-metric strong{
+  color:#0f172a !important; /* nero forte */
+  font-weight:700;
+  opacity:1 !important;
+}
+
+/* highlight ROI (verde) */
+.home-page .hub-metric:first-child strong{
+  color:#10b981 !important;
+}
