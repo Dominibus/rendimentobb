@@ -16093,3 +16093,8 @@ NON TOCCA ALTRE PAGINE
   font-weight:600;
   color:#10b981;
 }
+/* 🔥 HIDE OLD MARKET BLOCK (HOME ONLY) */
+.home-page .market-section,
+.home-page .snapshot-card{
+  display:none;
+}
