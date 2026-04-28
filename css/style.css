@@ -15650,3 +15650,15 @@ body.is-investor .result-item.pro-only{
     transform:translateY(0);
   }
 }
+
+/* 🔥 SOLO FREE USER */
+body.is-free .blur-content *{
+  opacity:0.3;
+  filter:blur(3px);
+}
+
+/* 🔥 INVESTOR NON DEVE ESSERE BLURRATO */
+body.is-investor .blur-content *{
+  opacity:1 !important;
+  filter:none !important;
+}
