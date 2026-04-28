@@ -15907,8 +15907,8 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME FINAL FIX (OVERRIDE REALE)
-FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
+🏠 HOME REAL FIX (CENTER + STRUCTURE FIX)
+RISOLVE SHIFT A SINISTRA + MARKET + TESTI
 ===================================== */
 
 /* ================= BASE ================= */
@@ -15917,10 +15917,14 @@ FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
   padding:60px 0;
 }
 
+/* 🔥 FIX VERO: container SEMPRE centrato */
 .home-page .container{
   max-width:1100px;
-  margin:0 auto;
-  padding:0 16px;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  padding-left:16px;
+  padding-right:16px;
+  width:100%;
 }
 
 /* ================= HERO ================= */
@@ -15947,7 +15951,6 @@ FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
   z-index:1;
 }
 
-/* TESTO */
 .home-page .hero h1{
   color:#fff;
   text-shadow:0 3px 20px rgba(0,0,0,0.8);
@@ -15957,83 +15960,43 @@ FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
   color:#e2e8f0;
 }
 
-/* ================= HERO ALIGN ================= */
+/* ================= FIX STRUTTURA SEZIONE (CRITICO) ================= */
 
-.home-page .hero-left{
+/* 🔥 QUESTO è il vero problema */
+.home-page .smart-investment-hub{
+  display:flex !important;
+  justify-content:center !important;
+  width:100%;
+}
+
+/* centra contenuto interno */
+.home-page .smart-investment-hub .container{
   display:flex;
   flex-direction:column;
-  gap:14px;
-}
-
-@media(max-width:768px){
-  .home-page .hero-left{
-    align-items:center;
-    text-align:center;
-  }
-}
-
-/* ================= BOTTONI HERO ================= */
-
-.home-page .city-search-box{
-  margin-top:20px;
-  padding:16px;
-  background:rgba(255,255,255,0.14);
-  border-radius:14px;
-  backdrop-filter:blur(8px);
-}
-
-.home-page .city-quick{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  justify-content:center;
-}
-
-/* ================= ROI ================= */
-
-.home-page .quick-roi-box{
-  padding:24px;
-  border-radius:18px;
-  box-shadow:0 25px 60px rgba(0,0,0,0.08);
+  align-items:center;
   text-align:center;
 }
 
-/* ================= METRICS ================= */
+/* ================= MARKET FIX REALE ================= */
 
-.home-page .investment-metrics{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-}
-
-.home-page .metric-card{
-  padding:16px;
-  border-radius:14px;
-  background:white;
+.home-page .market-section{
   text-align:center;
+  width:100%;
 }
 
-/* =====================================
-🔥 MARKET FIX VERO (FORZATO)
-===================================== */
-
-/* RESET COMPLETO (CRITICO) */
-.home-page .market-buttons{
-  all:unset;
-}
-
-/* RICOSTRUZIONE PULITA */
+/* 🔥 RESET layout rotto */
 .home-page .market-buttons{
   display:flex !important;
   flex-direction:row !important;
   justify-content:center !important;
   align-items:center !important;
   flex-wrap:wrap !important;
+
   gap:12px !important;
+  margin:20px auto !important;
 
   width:100%;
   max-width:600px;
-  margin:20px auto 10px auto !important;
 }
 
 /* BOTTONI */
@@ -16047,7 +16010,6 @@ FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
   border-radius:999px !important;
 
   box-shadow:0 6px 18px rgba(16,185,129,0.3);
-  cursor:pointer;
 }
 
 /* hover */
@@ -16055,11 +16017,7 @@ FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
   transform:translateY(-2px);
 }
 
-/* FIX TESTO */
-.home-page .market-section{
-  text-align:center !important;
-}
-
+/* TESTI */
 .home-page .market-section h2{
   color:#0f172a !important;
 }
@@ -16068,23 +16026,10 @@ FORZA CENTRATURA + FIX MARKET + LEGGIBILITÀ
   color:#475569 !important;
 }
 
-/* LINK */
-.home-page .market-section a{
-  display:inline-block;
-  margin:10px auto;
-}
+/* ================= ROI ================= */
 
-/* ================= OVERLAY ================= */
-
-.home-page .home-blur-overlay{
-  opacity:0;
-  transform:scale(0.96);
-  transition:.25s;
-}
-
-.home-page .home-blur-overlay.active{
-  opacity:1;
-  transform:scale(1);
+.home-page .quick-roi-box{
+  text-align:center;
 }
 
 /* ================= MOBILE ================= */
