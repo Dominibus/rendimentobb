@@ -15874,3 +15874,7 @@ body.rb-ui-popup-open #register-popup{
   text-align: center;
   white-space: nowrap;
 }
+.home-blur-overlay .home-overlay-content .btn span{
+  font-size: 13px;
+  font-weight: 500;  /* meno pesante → più leggibile */
+}
