@@ -16370,3 +16370,29 @@ Allinea micro trust sotto bottoni
   background:linear-gradient(90deg,#10b981,transparent);
   opacity:0.3;
 }
+
+/* =====================================
+🔥 ROI CITY – MICRO TRUST FIX (DEFINITIVO)
+Funziona anche senza classi
+===================================== */
+
+/* prende SOLO quel paragrafo sotto i bottoni */
+.section .container > div p[style*="font-size:13px"]{
+  
+  display:block;
+  width:100%;
+  
+  text-align:center !important;
+  
+  margin-top:12px !important;
+  
+  font-size:13px !important;
+  color:#64748b !important;
+  
+  line-height:1.5;
+}
+
+/* opzionale: migliora spaziatura con bottoni */
+.section .container > div a{
+  margin:6px;
+}
