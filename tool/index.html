@@ -322,38 +322,68 @@ data-en="Results are based on average market data. Real risk is calculated in th
   data-en="Enter the data and see if this investment could work">
   </div>
 
-  <!-- 🔥 TUTTI GLI INPUT DEVONO STARE QUI DENTRO -->
-  <div class="input-group">
+ <!-- 🔥 INPUT GROUP – CITY + LOCATION (SILICON VALLEY UX) -->
+<div class="input-group">
 
-    <label data-it="Città mercato" data-en="City Market"></label>
+  <!-- LABEL -->
+  <label 
+    data-it="Città mercato" 
+    data-en="City Market">
+    Città mercato
+  </label>
 
-    <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
-      <input  
-  type="text"  
-  id="custom-location"
-  placeholder="Es. Portici (NA)"
-  style="
-    width:100%;
-    margin-top:10px;
-    padding:10px;
-    border-radius:10px;
-    border:1px solid #e2e8f0;
-  "
-/>
-      <option value="">Seleziona città</option>
-      <option value="milano">Milano</option>
-      <option value="roma">Roma</option>
-      <option value="napoli">Napoli</option>
-      <option value="firenze">Firenze</option>
-    </select>
+  <!-- SELECT (SOLO OPTION → FIX CRITICO) -->
+  <select 
+    id="market-city" 
+    class="market-select" 
+    onchange="applyMarketData(this.value)">
+    
+    <option value="">
+      Seleziona città
+    </option>
 
-    <div style="font-size:12px;color:#64748b;margin-top:6px;"
+    <option value="milano">Milano</option>
+    <option value="roma">Roma</option>
+    <option value="napoli">Napoli</option>
+    <option value="firenze">Firenze</option>
+
+  </select>
+
+  <!-- 🔥 CUSTOM LOCATION (FUORI DAL SELECT) -->
+  <input  
+    type="text"  
+    id="custom-location"
+    placeholder="Es. Portici (NA)"
+    data-it-placeholder="Es. Portici (NA)"
+    data-en-placeholder="e.g. Portici (NA)"
+    style="
+      width:100%;
+      margin-top:10px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      font-size:14px;
+      background:#ffffff;
+      transition:all .2s ease;
+    "
+  />
+
+  <!-- 🔥 HELPER TEXT (SMART UX) -->
+  <div 
+    id="location-helper"
+    style="
+      font-size:12px;
+      color:#64748b;
+      margin-top:6px;
+    "
     data-it="💡 I dati di mercato verranno applicati automaticamente"
     data-en="💡 Market data will be applied automatically">
-    </div>
+    
+    💡 I dati di mercato verranno applicati automaticamente
 
   </div>
 
+</div>
 <div class="input-group">
 <label data-it="Prezzo immobile (€)"
 data-en="Property price (€)"></label>
