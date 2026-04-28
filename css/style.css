@@ -16406,3 +16406,36 @@ NON TOCCA ALTRE PAGINE
   }
 
 }
+
+/* =====================================
+🔥 FIX BOTTONI MARKET HERO (CRITICO)
+===================================== */
+
+.city-search-box,
+.city-quick,
+.market-btn{
+  position:relative;
+  z-index:5;
+}
+
+@media(max-width:768px){
+
+  .city-quick{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+  }
+
+  .market-btn{
+    flex:1;
+    min-width:40%;
+  }
+
+}
+
+.market-btn{
+  border-radius:999px;
+  font-size:14px;
+  padding:10px 14px;
+}
