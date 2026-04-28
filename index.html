@@ -1653,8 +1653,13 @@ else{
 
     // ⏱ delay naturale (CRITICO UX)
     setTimeout(()=>{
-      overlay.style.display = "flex";
-    }, 1800);
+  overlay.style.display = "flex";
+
+  requestAnimationFrame(()=>{
+    overlay.classList.add("active");
+  });
+
+},1800);
 
   } else {
     overlay.style.display = "none";
