@@ -16183,3 +16183,145 @@ NON TOCCA ALTRE PAGINE
 .home-page .hub-metric:first-child strong{
   color:#10b981 !important;
 }
+/* =====================================
+🔥 HERO OVERLAY FIX (HOME ONLY)
+===================================== */
+
+.home-page .hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    rgba(15,23,42,0.55),
+    rgba(15,23,42,0.75)
+  );
+  z-index:0;
+}
+
+.home-page .hero > *{
+  position:relative;
+  z-index:1;
+}
+
+/* testo leggibile */
+.home-page .hero h1{
+  color:white;
+  text-shadow:0 2px 10px rgba(0,0,0,0.4);
+}
+
+.home-page .hero p{
+  color:#e2e8f0;
+}
+
+/* =====================================
+🔥 HERO COMPACT (NO BREAK)
+===================================== */
+
+.home-page .hero{
+  padding:60px 0 40px;
+}
+
+.home-page .hero-grid{
+  align-items:center;
+  gap:40px;
+}
+
+.home-page .hero-right img{
+  max-width:100%;
+  border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* =====================================
+🔥 QUICK ROI CARD UPGRADE
+===================================== */
+
+.home-page .quick-roi-box{
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  padding:30px;
+}
+
+.home-page .roi-grid{
+  gap:14px;
+}
+
+.home-page .roi-field input{
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+  padding:12px;
+}
+/* =====================================
+🔥 SMART HUB (SILICON STYLE)
+===================================== */
+
+.home-page .hub-buttons{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.home-page .hub-btn{
+  padding:8px 16px;
+  border-radius:999px;
+  background:#f1f5f9;
+  border:none;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.home-page .hub-btn.active{
+  background:#10b981;
+  color:white;
+}
+
+.home-page .hub-card{
+  margin:25px auto;
+  max-width:600px;
+  display:flex;
+  justify-content:space-around;
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.08);
+}
+
+/* =====================================
+🔥 MARKET BUTTON FIX
+===================================== */
+
+.home-page .market-buttons{
+  display:flex !important;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.home-page .market-btn{
+  border-radius:999px;
+  padding:10px 16px;
+}
+
+/* =====================================
+🔥 MOBILE FIX
+===================================== */
+
+@media(max-width:768px){
+
+  .home-page .hero-grid{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .home-page .hero-right{
+    order:-1;
+  }
+
+  .home-page .hub-card{
+    flex-direction:column;
+    gap:10px;
+  }
+
+}
