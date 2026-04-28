@@ -15837,16 +15837,40 @@ body.rb-ui-popup-open #register-popup{
   margin: 0;
 }
 
-/* ================= 🔥 FIX ALLINEAMENTO TESTO BOTTONE OVERLAY ================= */
+/* ================= 🔒 HOME ONLY – OVERLAY BUTTON FIX ================= */
 
-.home-blur-overlay .btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* limita SOLO alla home */
+.home-blur-overlay .home-overlay-content{
+
+  max-width: 260px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+
+  overflow: hidden; /* 🔥 evita uscita bottone */
 }
 
-.home-blur-overlay .btn span{
-  display: inline-block;
-  text-align: center;
+/* bottone sempre dentro */
+.home-blur-overlay .home-overlay-content .btn{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  padding: 12px 16px;
+
+  box-sizing: border-box; /* 🔥 CRITICO */
+}
+
+/* testo centrato PERFETTO */
+.home-blur-overlay .home-overlay-content .btn span{
+
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
 }
