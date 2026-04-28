@@ -13,18 +13,88 @@ Termini di Servizio – RendimentoBB
 </title>
 
 <link rel="stylesheet" href="/css/style.css">
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="icon" href="/img/favicon.png">
 
-<script type="module" src="/js/lang.js"></script>
+<style>
+
+/* =====================================
+🔥 LEGAL PAGE – SILICON VALLEY STYLE
+===================================== */
+
+body{
+  background:#f8fafc;
+}
+
+.legal-wrapper{
+  max-width:900px;
+  margin:80px auto;
+  padding:0 20px;
+}
+
+.legal-card{
+  background:white;
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+}
+
+.legal-card h1{
+  font-size:34px;
+  font-weight:800;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+
+.back-home{
+  display:inline-block;
+  margin-bottom:25px;
+  color:#10b981;
+  font-weight:600;
+  text-decoration:none;
+}
+
+.legal-card p{
+  color:#475569;
+  line-height:1.7;
+  margin-bottom:15px;
+  font-size:15px;
+}
+
+.legal-card h3{
+  margin-top:30px;
+  margin-bottom:10px;
+  font-size:18px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+.legal-highlight{
+  background:#fff7ed;
+  border-left:4px solid #f97316;
+  padding:15px;
+  border-radius:10px;
+  margin:20px 0;
+  color:#7c2d12;
+  font-size:14px;
+}
+
+.legal-email{
+  margin-top:10px;
+  font-weight:600;
+  color:#0f172a;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<main>
+<div id="global-header"></div>
 
-<div class="legal-container">
+<div class="legal-wrapper">
+
+<div class="legal-card">
 
 <h1
 data-it="Termini di Servizio"
@@ -39,10 +109,16 @@ data-en="← Back to Home">
 </a>
 
 <p
-data-it="Utilizzando RendimentoBB accetti i seguenti termini."
-data-en="By using RendimentoBB you agree to the following terms.">
+data-it="Utilizzando RendimentoBB accetti i seguenti termini e condizioni."
+data-en="By using RendimentoBB you agree to the following terms and conditions.">
 Utilizzando RendimentoBB accetti i seguenti termini.
 </p>
+
+<div class="legal-highlight"
+data-it="⚠️ Le analisi non costituiscono consulenza finanziaria."
+data-en="⚠️ Analyses do not constitute financial advice.">
+⚠️ Le analisi non costituiscono consulenza finanziaria.
+</div>
 
 <h3
 data-it="Servizio"
@@ -51,10 +127,9 @@ Servizio
 </h3>
 
 <p
-data-it="RendimentoBB fornisce strumenti di analisi finanziaria per investimenti in strutture ricettive."
-data-en="RendimentoBB provides financial analysis tools for investments in hospitality properties.">
-RendimentoBB fornisce strumenti di analisi finanziaria
-per investimenti in strutture ricettive.
+data-it="RendimentoBB fornisce strumenti di analisi finanziaria per investimenti in immobili e strutture ricettive."
+data-en="RendimentoBB provides financial analysis tools for real estate and hospitality investments.">
+RendimentoBB fornisce strumenti di analisi finanziaria.
 </p>
 
 <h3
@@ -64,10 +139,9 @@ Limitazione di responsabilità
 </h3>
 
 <p
-data-it="Le analisi generate hanno finalità informative e non costituiscono consulenza finanziaria."
-data-en="The generated analyses are for informational purposes only and do not constitute financial advice.">
-Le analisi generate hanno finalità informative
-e non costituiscono consulenza finanziaria.
+data-it="Le informazioni fornite sono a scopo informativo e non garantiscono risultati economici."
+data-en="Information provided is for informational purposes only and does not guarantee financial results.">
+Le analisi non garantiscono risultati.
 </p>
 
 <h3
@@ -77,23 +151,33 @@ Account
 </h3>
 
 <p
-data-it="Gli utenti sono responsabili della sicurezza delle proprie credenziali di accesso."
-data-en="Users are responsible for maintaining the security of their login credentials.">
-Gli utenti sono responsabili della sicurezza
-delle proprie credenziali di accesso.
+data-it="Gli utenti sono responsabili della sicurezza delle proprie credenziali e attività."
+data-en="Users are responsible for the security of their credentials and activity.">
+Responsabilità credenziali utente.
 </p>
 
 <h3
-data-it="Versione PRO"
-data-en="PRO Version">
-Versione PRO
+data-it="Piani e pagamenti"
+data-en="Plans & Payments">
+Piani e pagamenti
 </h3>
 
 <p
-data-it="La versione PRO fornisce funzionalità avanzate come report PDF e analisi strategica."
-data-en="The PRO version provides advanced features such as PDF reports and strategic analysis.">
-La versione PRO fornisce funzionalità avanzate
-come report PDF e analisi strategica.
+data-it="Alcune funzionalità sono disponibili solo nei piani a pagamento (Investor e PRO)."
+data-en="Some features are available only in paid plans (Investor and PRO).">
+Funzionalità premium disponibili nei piani.
+</p>
+
+<h3
+data-it="Modifiche"
+data-en="Changes">
+Modifiche
+</h3>
+
+<p
+data-it="RendimentoBB può aggiornare questi termini in qualsiasi momento."
+data-en="RendimentoBB may update these terms at any time.">
+Termini aggiornabili.
 </p>
 
 <h3
@@ -102,17 +186,22 @@ data-en="Contact">
 Contatti
 </h3>
 
-<p>support@rendimentobb.com</p>
+<p class="legal-email">
+support@rendimentobb.com
+</p>
 
 </div>
 
-</main>
+</div>
 
-<script src="/js/lang.js" defer></script>
+<div id="global-footer"></div>
 
-<script src="/js/header.js" defer></script>
+<!-- FIX MODULE -->
+<script type="module" src="/js/header.js"></script>
+
 <script src="/js/ui-system.js" defer></script>  
-<script src="/js/footer.js" defer></script>  
+<script src="/js/footer.js" defer></script>
+<script src="/js/lang.js" defer></script>  
 
 </body>
 </html>
