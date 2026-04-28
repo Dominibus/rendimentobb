@@ -2988,25 +2988,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if(finalUrl){
 
-    console.log("📥 AUTO LOAD PROPERTY:", finalUrl);
+  console.log("📥 AUTO LOAD PROPERTY:", finalUrl);
 
-    // 👉 input tool
-    const input = document.getElementById("listing_url");
-    if(input) input.value = finalUrl;
+  // 🔥 FIX PROMEMORIA
+  localStorage.setItem("property_link", finalUrl);
 
-    // 👉 trigger analisi (SAFE DELAY)
-setTimeout(() => {
-  if(typeof analyzePropertyFromTool === "function"){
-    analyzePropertyFromTool(finalUrl);
-  } else {
-    console.warn("⚠️ analyzePropertyFromTool non trovata");
-  }
-}, 300);
+  // 👉 input tool
+  const input = document.getElementById("listing_url");
+  if(input) input.value = finalUrl;
 
-    // 👉 cleanup
-    localStorage.removeItem("listing_url");
+  // 👉 trigger analisi (SAFE)
+  setTimeout(() => {
+    if(typeof analyzePropertyFromTool === "function"){
+      analyzePropertyFromTool(finalUrl);
+    } else {
+      console.warn("⚠️ analyzePropertyFromTool non trovata");
+    }
+  }, 300);
 
-  }
+  // 👉 cleanup SOLO listing_url (non property_link!)
+  localStorage.removeItem("listing_url");
+
+}
 
 });
 // ================= ANALYZE BUTTON FIX (CRITICO) =================
