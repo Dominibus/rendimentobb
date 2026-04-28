@@ -2975,7 +2975,40 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 
 });
+// ================= AUTO LOAD PROPERTY FROM TOOL (NUOVO) =================
 
+document.addEventListener("DOMContentLoaded", () => {
+
+  const params = new URLSearchParams(window.location.search);
+  const urlFromQuery = params.get("listing");
+
+  const savedUrl = localStorage.getItem("listing_url");
+
+  const finalUrl = urlFromQuery || savedUrl;
+
+  if(finalUrl){
+
+    console.log("📥 AUTO LOAD PROPERTY:", finalUrl);
+
+    // 👉 input tool
+    const input = document.getElementById("listing_url");
+    if(input) input.value = finalUrl;
+
+    // 👉 trigger analisi (SAFE DELAY)
+setTimeout(() => {
+  if(typeof analyzePropertyFromTool === "function"){
+    analyzePropertyFromTool(finalUrl);
+  } else {
+    console.warn("⚠️ analyzePropertyFromTool non trovata");
+  }
+}, 300);
+
+    // 👉 cleanup
+    localStorage.removeItem("listing_url");
+
+  }
+
+});
 // ================= ANALYZE BUTTON FIX (CRITICO) =================
 
 const analyzeBtn = document.getElementById("analyze-btn");
