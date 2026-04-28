@@ -15907,8 +15907,8 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME REAL FIX (CENTER + STRUCTURE FIX)
-RISOLVE SHIFT A SINISTRA + MARKET + TESTI
+🏠 HOME FINAL CLEAN (STABILE + UI PRO)
+NESSUN CONFLITTO • DESIGN SaaS
 ===================================== */
 
 /* ================= BASE ================= */
@@ -15917,17 +15917,15 @@ RISOLVE SHIFT A SINISTRA + MARKET + TESTI
   padding:60px 0;
 }
 
-/* 🔥 FIX VERO: container SEMPRE centrato */
 .home-page .container{
   max-width:1100px;
-  margin-left:auto !important;
-  margin-right:auto !important;
-  padding-left:16px;
-  padding-right:16px;
-  width:100%;
+  margin:0 auto;
+  padding:0 16px;
 }
 
-/* ================= HERO ================= */
+/* =====================================
+🔥 HERO (LEGGIBILITÀ PERFETTA)
+===================================== */
 
 .home-page .hero{
   position:relative;
@@ -15939,11 +15937,10 @@ RISOLVE SHIFT A SINISTRA + MARKET + TESTI
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(15,23,42,0.7),
-    rgba(15,23,42,0.85)
+    rgba(15,23,42,0.75),
+    rgba(15,23,42,0.9)
   );
   z-index:0;
-  pointer-events:none;
 }
 
 .home-page .hero > *{
@@ -15952,87 +15949,159 @@ RISOLVE SHIFT A SINISTRA + MARKET + TESTI
 }
 
 .home-page .hero h1{
-  color:#fff;
-  text-shadow:0 3px 20px rgba(0,0,0,0.8);
+  color:#ffffff;
+  text-shadow:0 4px 20px rgba(0,0,0,0.8);
 }
 
 .home-page .hero p{
   color:#e2e8f0;
 }
 
-/* ================= FIX STRUTTURA SEZIONE (CRITICO) ================= */
+/* =====================================
+🔥 BLOCCO SCURO (FIX ORRENDO CHE AVEVI)
+===================================== */
 
-/* 🔥 QUESTO è il vero problema */
-.home-page .smart-investment-hub{
-  display:flex !important;
-  justify-content:center !important;
-  width:100%;
-}
-
-/* centra contenuto interno */
-.home-page .smart-investment-hub .container{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+.home-page .danger-block{
+  background:#0f172a;
+  color:#e2e8f0;
   text-align:center;
 }
 
-/* ================= MARKET FIX REALE ================= */
+.home-page .danger-block p{
+  color:#cbd5e1;
+  max-width:700px;
+  margin:8px auto;
+  line-height:1.5;
+}
+
+/* CTA */
+.home-page .danger-block .btn{
+  margin-top:15px;
+}
+
+/* =====================================
+🔥 SMART HUB (CARD VISIBILE)
+===================================== */
+
+.home-page .hub-card{
+  background:#ffffff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+.home-page .hub-metric span{
+  color:#64748b;
+  font-size:13px;
+}
+
+.home-page .hub-metric strong{
+  color:#0f172a;
+  font-size:20px;
+  font-weight:700;
+}
+
+.home-page .hub-metric:first-child strong{
+  color:#10b981;
+}
+
+/* =====================================
+🔥 MARKET (PULITO E COMPATTO)
+===================================== */
 
 .home-page .market-section{
   text-align:center;
-  width:100%;
 }
 
-/* 🔥 RESET layout rotto */
 .home-page .market-buttons{
-  display:flex !important;
-  flex-direction:row !important;
-  justify-content:center !important;
-  align-items:center !important;
-  flex-wrap:wrap !important;
-
-  gap:12px !important;
-  margin:20px auto !important;
-
-  width:100%;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:20px auto;
   max-width:600px;
 }
 
-/* BOTTONI */
-.home-page .market-buttons .market-btn{
-  background:#10b981 !important;
-  color:#fff !important;
-  border:none !important;
-
-  padding:8px 16px !important;
-  font-size:13px !important;
-  border-radius:999px !important;
-
-  box-shadow:0 6px 18px rgba(16,185,129,0.3);
+.home-page .market-btn{
+  background:#10b981;
+  color:#fff;
+  border:none;
+  padding:8px 16px;
+  font-size:13px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-/* hover */
-.home-page .market-buttons .market-btn:hover{
+.home-page .market-btn:hover{
   transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(16,185,129,0.3);
 }
 
-/* TESTI */
-.home-page .market-section h2{
-  color:#0f172a !important;
+/* =====================================
+🔥 TESTI GENERALI (LEGGIBILI)
+===================================== */
+
+.home-page h2{
+  color:#0f172a;
 }
 
-.home-page .market-section p{
-  color:#475569 !important;
+.home-page p{
+  color:#475569;
 }
 
-/* ================= ROI ================= */
+.home-page small{
+  color:#64748b;
+}
+
+/* =====================================
+🔥 SIMULATORE (QUI ERA IL DISASTRO)
+===================================== */
 
 .home-page .quick-roi-box{
-  text-align:center;
+  background:#ffffff;
+  border-radius:18px;
+  padding:30px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  max-width:600px;
+  margin:0 auto;
 }
 
-/* ================= MOBILE ================= */
+/* 🔥 GRID INPUT */
+.home-page .roi-grid{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* 🔥 INPUT NORMALI (NON LUNGHI 2000px) */
+.home-page .roi-field input{
+  width:100%;
+  max-width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+  background:#f9fafb;
+  transition:0.2s;
+}
+
+.home-page .roi-field input:focus{
+  border-color:#10b981;
+  background:#ffffff;
+  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
+}
+
+/* =====================================
+🔥 CTA BUTTONS
+===================================== */
+
+.home-page .btn-primary{
+  box-shadow:0 10px 25px rgba(16,185,129,0.25);
+}
+
+/* =====================================
+🔥 MOBILE
+===================================== */
 
 @media(max-width:768px){
 
@@ -16044,145 +16113,13 @@ RISOLVE SHIFT A SINISTRA + MARKET + TESTI
     font-size:14px;
   }
 
-  .home-page .market-buttons .market-btn{
+  .home-page .market-btn{
     flex:1;
     min-width:45%;
   }
 
-}
-/* =====================================
-🔥 TEXT VISIBILITY FIX (CRITICO)
-RISOLVE TESTI NON LEGGIBILI
-===================================== */
+  .home-page .quick-roi-box{
+    padding:20px;
+  }
 
-/* 🔥 RESET OPACITY (PROBLEMA PRINCIPALE) */
-.home-page .smart-investment-hub *,
-.home-page .market-section *{
-  opacity:1 !important;
-}
-
-/* ================= HUB CARD ================= */
-
-.home-page .hub-card{
-  background:#ffffff !important;
-  box-shadow:0 20px 50px rgba(0,0,0,0.08);
-}
-
-/* label */
-.home-page .hub-metric span{
-  color:#475569 !important;
-  font-size:13px;
-}
-
-/* valori */
-.home-page .hub-metric strong{
-  color:#0f172a !important;
-  font-weight:700;
-  font-size:20px;
-}
-
-/* primo valore (ROI highlight) */
-.home-page .hub-metric:first-child strong{
-  color:#10b981 !important;
-}
-
-/* ================= TESTI GENERALI ================= */
-
-.home-page h2{
-  color:#0f172a !important;
-}
-
-.home-page p{
-  color:#475569 !important;
-}
-
-/* sottotitolo piccolo */
-.home-page small,
-.home-page .subtitle{
-  color:#64748b !important;
-}
-
-/* ================= MARKET TEXT ================= */
-
-.home-page .market-section h2{
-  color:#0f172a !important;
-}
-
-.home-page .market-section p{
-  color:#475569 !important;
-}
-
-/* ================= CTA ================= */
-
-.home-page .btn,
-.home-page .btn-primary{
-  opacity:1 !important;
-}
-
-/* ================= FIX EXTRA (se ereditato blur) ================= */
-
-.home-page .smart-investment-hub{
-  filter:none !important;
-  backdrop-filter:none !important;
-}
-
-/* =====================================
-🔥 HERO TEXT FIX (LEGGIBILITÀ REALE)
-===================================== */
-
-/* overlay più forte */
-.home-page .hero::before{
-  background:linear-gradient(
-    rgba(15,23,42,0.75),
-    rgba(15,23,42,0.9)
-  ) !important;
-}
-
-/* titolo */
-.home-page .hero h1{
-  color:#ffffff !important;
-  text-shadow:0 4px 20px rgba(0,0,0,0.8);
-}
-
-/* sottotitolo */
-.home-page .hero p{
-  color:#e2e8f0 !important;
-  text-shadow:0 2px 10px rgba(0,0,0,0.6);
-}
-
-/* 🔥 RIGA GIALLA (QUELLA PROBLEMATICA) */
-.home-page .hero p[style*="color"]{
-  color:#fbbf24 !important; /* giallo leggibile */
-  background:rgba(0,0,0,0.35);
-  padding:6px 10px;
-  border-radius:8px;
-  display:inline-block;
-  text-shadow:none;
-}
-
-/* trust line sotto */
-.home-page .hero .micro-trust,
-.home-page .hero .hero-trust{
-  color:#cbd5f5 !important;
-  text-shadow:0 2px 10px rgba(0,0,0,0.6);
-}
-
-/* box centrale (quello grigio) */
-.home-page .hero .hero-card,
-.home-page .hero div[style*="background:rgba"]{
-  background:rgba(15,23,42,0.55) !important;
-  backdrop-filter:blur(8px);
-  border-radius:14px;
-  color:#ffffff !important;
-}
-
-/* metriche sotto (ROI / Risk / Break even) */
-.home-page .hero .metric,
-.home-page .hero .metric *{
-  color:#ffffff !important;
-}
-
-/* highlight verde */
-.home-page .hero .metric strong{
-  color:#10b981 !important;
 }
