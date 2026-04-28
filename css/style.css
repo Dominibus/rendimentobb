@@ -16165,3 +16165,21 @@ NON TOCCA ALTRE PAGINE
     flex-direction:column;
   }
 }
+/* 🔥 FIX VISIBILITY HUB METRICS */
+.home-page .hub-card{
+  opacity:1 !important;
+}
+
+.home-page .hub-metric span{
+  color:#475569 !important; /* più scuro */
+  opacity:1 !important;
+}
+
+.home-page .hub-metric strong{
+  color:#0f172a !important; /* nero SaaS */
+  opacity:1 !important;
+  font-weight:700;
+}
+.home-page .hub-metric:first-child strong{
+  color:#10b981 !important;
+}
