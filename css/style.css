@@ -15907,8 +15907,8 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME FINAL SYSTEM (FIX REALI + MARKET COMPACT)
-NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
+🏠 HOME FINAL SYSTEM (CENTER + READABILITY FIX)
+STABILE • NO CONFLITTI • MOBILE PERFETTO
 ===================================== */
 
 /* ================= BASE ================= */
@@ -15921,6 +15921,7 @@ NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
   max-width:1100px;
   margin:0 auto;
   padding:0 16px;
+  display:block;
 }
 
 /* ================= HERO ================= */
@@ -15935,8 +15936,8 @@ NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(15,23,42,0.65),
-    rgba(15,23,42,0.8)
+    rgba(15,23,42,0.7),
+    rgba(15,23,42,0.85)
   );
   z-index:0;
   pointer-events:none;
@@ -15947,17 +15948,17 @@ NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
   z-index:1;
 }
 
-/* testo leggibile */
+/* TESTO */
 .home-page .hero h1{
-  color:#fff;
-  text-shadow:0 3px 15px rgba(0,0,0,0.7);
+  color:#ffffff;
+  text-shadow:0 3px 20px rgba(0,0,0,0.8);
 }
 
 .home-page .hero p{
   color:#e2e8f0;
 }
 
-/* ================= HERO ALLINEAMENTO ================= */
+/* ================= HERO ALIGN ================= */
 
 .home-page .hero-left{
   display:flex;
@@ -15977,7 +15978,7 @@ NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
 .home-page .city-search-box{
   margin-top:20px;
   padding:16px;
-  background:rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.14);
   border-radius:14px;
   backdrop-filter:blur(8px);
 }
@@ -16025,49 +16026,63 @@ NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
   text-align:center;
 }
 
-/* ================= 🔥 MARKET SECTION FIX (CRITICO) ================= */
+/* =====================================
+🔥 MARKET FIX DEFINITIVO
+===================================== */
 
-/* titolo centrato */
-.home-page .market-section .container{
+/* CENTRA TUTTO DAVVERO */
+.home-page .market-section{
   text-align:center;
 }
 
-/* 🔥 BOTTONI ORIZZONTALI COMPATTI */
-.home-page .market-buttons{
-  display:flex !important;
-  flex-direction:row !important; /* FIX CRITICO */
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:15px;
+.home-page .market-section .container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
-/* pill stile academy */
+/* BOTTONI ORIZZONTALI */
+.home-page .market-buttons{
+  display:flex !important;
+  flex-direction:row !important;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  width:100%;
+  max-width:600px;
+}
+
+/* BOTTONI STILE PILL (COMPATTI) */
 .home-page .market-buttons .market-btn{
-  background:#f1f5f9;
-  color:#0f172a;
+  background:#10b981;
+  color:white;
   border:none;
-  padding:8px 14px;
+  padding:8px 16px;
   font-size:13px;
   border-radius:999px;
-  transition:.2s;
+  box-shadow:0 5px 15px rgba(16,185,129,0.3);
 }
 
 /* hover */
 .home-page .market-buttons .market-btn:hover{
-  background:#10b981;
-  color:white;
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(16,185,129,0.4);
 }
 
-/* CTA centrata */
-.home-page .market-section .btn-outline{
-  margin-top:10px;
-  display:inline-block;
+/* TESTO LEGGIBILE */
+.home-page .market-section h2{
+  color:#0f172a;
 }
 
-/* testo più leggibile */
 .home-page .market-section p{
   color:#475569;
+}
+
+/* LINK CENTRATO */
+.home-page .market-section a{
+  display:inline-block;
+  margin:10px auto;
 }
 
 /* ================= OVERLAY ================= */
@@ -16095,7 +16110,7 @@ NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
     font-size:14px;
   }
 
-  /* bottoni sempre 2 per riga */
+  /* 2 bottoni per riga */
   .home-page .market-buttons .market-btn{
     flex:1;
     min-width:45%;
