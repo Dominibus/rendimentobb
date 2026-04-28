@@ -15907,8 +15907,8 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME FINAL FIX (ALLINEAMENTO + LEGGIBILITÀ)
-STABILE • MOBILE PERFETTO • NO BREAK
+🏠 HOME FINAL SYSTEM (FIX REALI + MARKET COMPACT)
+NO CONFLITTI • ALLINEATO • MOBILE PERFETTO
 ===================================== */
 
 /* ================= BASE ================= */
@@ -15919,8 +15919,8 @@ STABILE • MOBILE PERFETTO • NO BREAK
 
 .home-page .container{
   max-width:1100px;
-  padding:0 16px;
   margin:0 auto;
+  padding:0 16px;
 }
 
 /* ================= HERO ================= */
@@ -15930,14 +15930,13 @@ STABILE • MOBILE PERFETTO • NO BREAK
   overflow:hidden;
 }
 
-/* overlay PIÙ FORTE → leggibilità */
 .home-page .hero::before{
   content:"";
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(15,23,42,0.6),
-    rgba(15,23,42,0.75)
+    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.8)
   );
   z-index:0;
   pointer-events:none;
@@ -15948,22 +15947,22 @@ STABILE • MOBILE PERFETTO • NO BREAK
   z-index:1;
 }
 
-/* 🔥 TESTO LEGGIBILE */
+/* testo leggibile */
 .home-page .hero h1{
-  color:#ffffff;
-  text-shadow:0 3px 15px rgba(0,0,0,0.6);
+  color:#fff;
+  text-shadow:0 3px 15px rgba(0,0,0,0.7);
 }
 
 .home-page .hero p{
   color:#e2e8f0;
 }
 
-/* ================= 🔥 FIX CENTRATURA HERO ================= */
+/* ================= HERO ALLINEAMENTO ================= */
 
 .home-page .hero-left{
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
+  gap:14px;
 }
 
 @media(max-width:768px){
@@ -15976,9 +15975,7 @@ STABILE • MOBILE PERFETTO • NO BREAK
 /* ================= BOTTONI HERO ================= */
 
 .home-page .city-search-box{
-  position:relative;
-  z-index:5;
-  margin-top:25px;
+  margin-top:20px;
   padding:16px;
   background:rgba(255,255,255,0.12);
   border-radius:14px;
@@ -15998,24 +15995,14 @@ STABILE • MOBILE PERFETTO • NO BREAK
   font-size:14px;
 }
 
-/* ================= HERO IMAGE ================= */
-
-.home-page .hero-right img{
-  max-width:100%;
-  border-radius:16px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.25);
-}
-
-/* ================= ROI BOX ================= */
+/* ================= ROI ================= */
 
 .home-page .quick-roi-box{
-  padding:26px;
+  padding:24px;
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,0.08);
-  text-align:center; /* 🔥 FIX centratura */
+  text-align:center;
 }
-
-/* ================= ROI GRID ================= */
 
 .home-page .roi-grid{
   display:grid;
@@ -16029,20 +16016,58 @@ STABILE • MOBILE PERFETTO • NO BREAK
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
   gap:12px;
-  margin-top:20px;
 }
 
 .home-page .metric-card{
   padding:16px;
   border-radius:14px;
-  text-align:center;
   background:white;
+  text-align:center;
 }
 
-.home-page .metric-card strong{
-  display:block;
-  font-size:18px;
-  margin-top:6px;
+/* ================= 🔥 MARKET SECTION FIX (CRITICO) ================= */
+
+/* titolo centrato */
+.home-page .market-section .container{
+  text-align:center;
+}
+
+/* 🔥 BOTTONI ORIZZONTALI COMPATTI */
+.home-page .market-buttons{
+  display:flex !important;
+  flex-direction:row !important; /* FIX CRITICO */
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:15px;
+}
+
+/* pill stile academy */
+.home-page .market-buttons .market-btn{
+  background:#f1f5f9;
+  color:#0f172a;
+  border:none;
+  padding:8px 14px;
+  font-size:13px;
+  border-radius:999px;
+  transition:.2s;
+}
+
+/* hover */
+.home-page .market-buttons .market-btn:hover{
+  background:#10b981;
+  color:white;
+}
+
+/* CTA centrata */
+.home-page .market-section .btn-outline{
+  margin-top:10px;
+  display:inline-block;
+}
+
+/* testo più leggibile */
+.home-page .market-section p{
+  color:#475569;
 }
 
 /* ================= OVERLAY ================= */
@@ -16058,64 +16083,26 @@ STABILE • MOBILE PERFETTO • NO BREAK
   transform:scale(1);
 }
 
-/* ================= HUB ================= */
-
-.home-page .hub-buttons{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.home-page .hub-btn{
-  padding:10px 16px;
-  border-radius:999px;
-  background:#f1f5f9;
-  border:none;
-}
-
-.home-page .hub-btn.active{
-  background:#10b981;
-  color:white;
-}
-
-.home-page .hub-card{
-  margin:25px auto;
-  max-width:600px;
-  display:flex;
-  justify-content:space-around;
-  background:white;
-  border-radius:16px;
-  padding:20px;
-}
-
 /* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
   .home-page .hero h1{
     font-size:24px;
-    line-height:1.3;
   }
 
   .home-page .hero p{
     font-size:14px;
   }
 
-  .home-page .market-btn{
+  /* bottoni sempre 2 per riga */
+  .home-page .market-buttons .market-btn{
     flex:1;
-    min-width:40%;
-  }
-
-  .home-page .hub-card{
-    flex-direction:column;
-    gap:10px;
+    min-width:45%;
   }
 
   .quick-roi-section{
     margin-top:-20px;
-    position:relative;
-    z-index:2;
   }
 
 }
