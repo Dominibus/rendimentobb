@@ -713,12 +713,10 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
 
-<button 
-  onclick="startPlanPurchase('pro')" 
-  class="btn btn-primary btn-lg block"
-  data-it="🔓 Scopri se stai davvero guadagnando"
-  data-en="🔓 Find out if you're really making money">
-  🔓 Scopri se stai davvero guadagnando
+<button onclick="startPlanPurchase('pro')" class="btn btn-primary btn-lg block"
+data-it="🔍 Analizza meglio questo investimento"
+data-en="🔍 Analyze this investment deeper">
+🔍 Analizza meglio questo investimento
 </button>
 
 <p style="
@@ -1603,7 +1601,7 @@ data-en="✔ No commitment • ✔ Cancel anytime">
   }
 
   // 🔥 loop leggero ma stabile
-  setInterval(fixModal, 300);
+  setInterval(fixModal, 800);
 
   // 🔥 eventi chiave
   document.addEventListener("rb_plan_loaded", fixModal);
@@ -1644,14 +1642,25 @@ function updateOverlayVisibility(){
   console.log("🎯 OVERLAY STATE:", access);
 
   // 🟢 PRO + INVESTOR → NO OVERLAY
-  if(isPro || isInvestor){
+if(isPro || isInvestor){
+  overlay.style.display = "none";
+}
+
+// 🔴 FREE → mostra SOLO dopo interazione
+else{
+
+  if(window.userTriggeredSimulation){
+
+    // ⏱ delay naturale (CRITICO UX)
+    setTimeout(()=>{
+      overlay.style.display = "flex";
+    }, 1800);
+
+  } else {
     overlay.style.display = "none";
   }
 
-  // 🔴 FREE → OVERLAY ATTIVO
-  else{
-    overlay.style.display = "flex";
-  }
+}
 
 } 
 
@@ -1883,13 +1892,20 @@ if(isPro){
 else if(isInvestor){
 
   if(elProfit) elProfit.innerText = "~ " + profitVal;
-  if(elMonth)  elMonth.innerText  = "~ " + monthVal;
-  if(elRev)    elRev.innerText    = "~ " + revVal;
+if(elMonth)  elMonth.innerText  = "~ " + monthVal;
+if(elRev)    elRev.innerText    = "~ " + revVal;
 
-  // 🔒 dato chiave nascosto
-  if(elBreak)  elBreak.innerText  = "🔒";
+// 🔒 SOLO dato critico bloccato
+if(elBreak)  elBreak.innerText  = "🔒";
 
-}
+// 🔥 UX BOOST (IMPORTANTE)
+document.querySelectorAll(".metric-hint").forEach(el=>{
+  if(!el.innerText.includes("stimato")){
+    el.innerText += " (dato stimato)";
+  }
+});
+
+} 
 
 // 🔵 FREE USER → teaser aggressivo
 else{
