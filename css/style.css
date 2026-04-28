@@ -16032,3 +16032,64 @@ NON TOCCA ALTRE PAGINE
   }
 
 }
+
+/* =====================================
+🔥 HOME COMPACT MODE (REAL REDUCTION)
+===================================== */
+
+/* riduce spazio verticale globale */
+.home-page section{
+  padding:50px 0;
+}
+
+/* riduce margini interni */
+.home-page h2{
+  margin-bottom:10px;
+}
+
+.home-page p{
+  margin-bottom:8px;
+}
+
+/* blocchi troppo grandi */
+.home-page .feature-card{
+  padding:14px;
+}
+
+/* griglie più compatte */
+.home-page .container{
+  max-width:1000px;
+}
+
+/* ================= COLLAPSIBLE ================= */
+
+.home-page .collapsible{
+  max-height:220px;
+  overflow:hidden;
+  position:relative;
+}
+
+.home-page .collapsible::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:80px;
+  background:linear-gradient(to bottom,transparent,white);
+}
+
+.home-page .collapsible.expanded{
+  max-height:none;
+}
+
+.home-page .collapsible.expanded::after{
+  display:none;
+}
+
+.home-page .expand-btn{
+  margin-top:15px;
+  cursor:pointer;
+  font-weight:600;
+  color:#10b981;
+}
