@@ -177,7 +177,7 @@ window.getUserAccess = function(){
   if(!window.RB_USER){
   return {
     isLogged: !!user,
-    isFree: true, // fallback realistico
+    isFree: false, // ❌ NON forzare free
     isPro: false,
     isInvestor: false,
     isAdmin: false,
@@ -281,13 +281,18 @@ if(access.isFree){
   if(qrBreak) qrBreak.innerText = "—";
   if(elBreak) elBreak.innerText = "—";
 
-  return; // 💥 BLOCCO TOTALE
+  // ❌ RIMUOVI RETURN
 }
 
   if(!access){
-    console.warn("⛔ access non disponibile");
-    return;
-  }
+  console.warn("⛔ access non disponibile");
+  return;
+}
+
+// 🔥 AGGIUNGI QUESTO SUBITO DOPO
+if(access.isFree){
+  return;
+}
 
   // 🟡 INVESTOR → teaser intelligente (NO DUPLICATI)
   if(access.isInvestor){
@@ -2410,6 +2415,10 @@ window.calculate = async function(force = false){
     .investor-upsell
   `).forEach(el => el.remove());
 
+  document.querySelectorAll(`
+  .lock-overlay
+`).forEach(el => el.remove());
+
   console.log("🚀 CALCULATE START");
 
   try{
@@ -2634,7 +2643,7 @@ if(access?.isInvestor){
 
     }
 
-  }, 100);
+  }, 400);
 
 } catch(e){
   console.error("💥 UI FINAL RENDER ERROR:", e);
