@@ -16050,3 +16050,139 @@ RISOLVE SHIFT A SINISTRA + MARKET + TESTI
   }
 
 }
+/* =====================================
+🔥 TEXT VISIBILITY FIX (CRITICO)
+RISOLVE TESTI NON LEGGIBILI
+===================================== */
+
+/* 🔥 RESET OPACITY (PROBLEMA PRINCIPALE) */
+.home-page .smart-investment-hub *,
+.home-page .market-section *{
+  opacity:1 !important;
+}
+
+/* ================= HUB CARD ================= */
+
+.home-page .hub-card{
+  background:#ffffff !important;
+  box-shadow:0 20px 50px rgba(0,0,0,0.08);
+}
+
+/* label */
+.home-page .hub-metric span{
+  color:#475569 !important;
+  font-size:13px;
+}
+
+/* valori */
+.home-page .hub-metric strong{
+  color:#0f172a !important;
+  font-weight:700;
+  font-size:20px;
+}
+
+/* primo valore (ROI highlight) */
+.home-page .hub-metric:first-child strong{
+  color:#10b981 !important;
+}
+
+/* ================= TESTI GENERALI ================= */
+
+.home-page h2{
+  color:#0f172a !important;
+}
+
+.home-page p{
+  color:#475569 !important;
+}
+
+/* sottotitolo piccolo */
+.home-page small,
+.home-page .subtitle{
+  color:#64748b !important;
+}
+
+/* ================= MARKET TEXT ================= */
+
+.home-page .market-section h2{
+  color:#0f172a !important;
+}
+
+.home-page .market-section p{
+  color:#475569 !important;
+}
+
+/* ================= CTA ================= */
+
+.home-page .btn,
+.home-page .btn-primary{
+  opacity:1 !important;
+}
+
+/* ================= FIX EXTRA (se ereditato blur) ================= */
+
+.home-page .smart-investment-hub{
+  filter:none !important;
+  backdrop-filter:none !important;
+}
+
+/* =====================================
+🔥 HERO TEXT FIX (LEGGIBILITÀ REALE)
+===================================== */
+
+/* overlay più forte */
+.home-page .hero::before{
+  background:linear-gradient(
+    rgba(15,23,42,0.75),
+    rgba(15,23,42,0.9)
+  ) !important;
+}
+
+/* titolo */
+.home-page .hero h1{
+  color:#ffffff !important;
+  text-shadow:0 4px 20px rgba(0,0,0,0.8);
+}
+
+/* sottotitolo */
+.home-page .hero p{
+  color:#e2e8f0 !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.6);
+}
+
+/* 🔥 RIGA GIALLA (QUELLA PROBLEMATICA) */
+.home-page .hero p[style*="color"]{
+  color:#fbbf24 !important; /* giallo leggibile */
+  background:rgba(0,0,0,0.35);
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-block;
+  text-shadow:none;
+}
+
+/* trust line sotto */
+.home-page .hero .micro-trust,
+.home-page .hero .hero-trust{
+  color:#cbd5f5 !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.6);
+}
+
+/* box centrale (quello grigio) */
+.home-page .hero .hero-card,
+.home-page .hero div[style*="background:rgba"]{
+  background:rgba(15,23,42,0.55) !important;
+  backdrop-filter:blur(8px);
+  border-radius:14px;
+  color:#ffffff !important;
+}
+
+/* metriche sotto (ROI / Risk / Break even) */
+.home-page .hero .metric,
+.home-page .hero .metric *{
+  color:#ffffff !important;
+}
+
+/* highlight verde */
+.home-page .hero .metric strong{
+  color:#10b981 !important;
+}
