@@ -1003,50 +1003,56 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
     </div>
   `;
 
-  // ================= CTA =================
-  const cta = document.createElement("button");
+ // ================= CTA =================
+const cta = document.createElement("button");
 
-  cta.innerHTML = `
+cta.innerHTML = `
+  <div style="font-size:14px;font-weight:700;line-height:1.2;">
     🔓 ${config["cta_" + lang]}
-    <div style="font-size:11px;opacity:.85;margin-top:2px;">
-      ${safeT(
-        "Accesso immediato • Nessun vincolo",
-        "Instant access • No commitment"
-      )}
-    </div>
+  </div>
+  <div style="font-size:11px;opacity:.85;margin-top:4px;">
+    ${safeT(
+      "Accesso immediato • Nessun vincolo",
+      "Instant access • No commitment"
+    )}
+  </div>
+`;
+
+// 🎨 colore diverso PRO vs INVESTOR
+cta.style = type === "pro"
+  ? `
+    background:linear-gradient(135deg,#6366f1,#4f46e5);
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+    width:100%;
+    margin-bottom:10px;
+    white-space:normal;
+    line-height:1.2;
+  `
+  : `
+    background:linear-gradient(135deg,#10b981,#059669);
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+    width:100%;
+    margin-bottom:10px;
+    white-space:normal;
+    line-height:1.2;
   `;
 
-  // 🎨 colore diverso PRO vs INVESTOR
-  cta.style = type === "pro"
-    ? `
-      background:linear-gradient(135deg,#6366f1,#4f46e5);
-      color:white;
-      border:none;
-      padding:14px;
-      border-radius:12px;
-      font-weight:700;
-      cursor:pointer;
-      width:100%;
-      margin-bottom:10px;
-    `
-    : `
-      background:linear-gradient(135deg,#10b981,#059669);
-      color:white;
-      border:none;
-      padding:14px;
-      border-radius:12px;
-      font-weight:700;
-      cursor:pointer;
-      width:100%;
-      margin-bottom:10px;
-    `;
-
-  cta.onclick = ()=>{
-    modal.remove();
-    window.__upgradeShown = false;
-    config.action();
-  };
-
+cta.onclick = ()=>{
+  modal.remove();
+  window.__upgradeShown = false;
+  config.action();
+};
+  
   // ================= CLOSE =================
   const close = document.createElement("button");
   close.textContent = lang==="en" ? "Maybe later" : "Ora no";
