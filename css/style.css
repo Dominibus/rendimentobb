@@ -15907,286 +15907,31 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME ONLY OPTIMIZATION (SAFE)
-NON TOCCA ALTRE PAGINE
+🏠 HOME CLEAN SYSTEM (UNICO BLOCCO STABILE)
+NO CONFLITTI • NO DUPLICATI • MOBILE SAFE
 ===================================== */
 
-.home-page section{
-  padding:70px 0;
-}
+/* ================= BASE ================= */
 
-.home-page .container{
-  max-width:1100px;
-}
-
-/* ================= HERO ================= */
-
-.home-page .hero .micro-trust{
-  margin-top:18px;
-  opacity:0.85;
-}
-
-.home-page .hero .hero-trust{
-  margin-top:18px;
-  opacity:0.85;
-}
-
-.home-page .hero .market-grid{
-  margin-top:20px;
-  opacity:0.9;
-}
-
-/* blocco psicologico più soft */
-.home-page .hero-left > div[style*="background:rgba(255,255,255,0.08)"]{
-  opacity:0.85;
-  font-size:13px;
-}
-
-/* ================= CTA ================= */
-
-.home-page .btn-primary{
-  box-shadow:0 10px 25px rgba(16,185,129,0.25);
-}
-
-.home-page .btn-outline{
-  opacity:0.8;
-  transform:scale(0.96);
-}
-
-/* ================= SEARCH BOX ================= */
-
-.home-page .city-search-box{
-  margin-top:30px;
-  padding:18px;
-  background:rgba(255,255,255,0.08);
-  border-radius:14px;
-  backdrop-filter:blur(6px);
-}
-
-/* ================= ROI BOX ================= */
-
-.home-page .quick-roi-box{
-  padding:26px;
-  border-radius:18px;
-  box-shadow:0 25px 60px rgba(0,0,0,0.08);
-}
-
-.home-page .roi-field input{
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-  transition:all .2s ease;
-}
-
-.home-page .roi-field input:focus{
-  border-color:#10b981;
-  box-shadow:0 0 0 3px rgba(16,185,129,0.15);
-}
-
-/* ================= METRICS ================= */
-
-.home-page .metric-card{
-  padding:18px;
-  border-radius:14px;
-  transition:all .2s ease;
-}
-
-.home-page .metric-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.06);
-}
-
-/* ================= OVERLAY ================= */
-
-.home-page .home-blur-overlay{
-  opacity:0;
-  transform:scale(0.96);
-  transition:all .25s ease;
-}
-
-.home-page .home-blur-overlay.active{
-  opacity:1;
-  transform:scale(1);
-}
-
-/* ================= MOBILE ================= */
-
-@media(max-width:768px){
-
-  .home-page .hero h1{
-    font-size:26px;
-    line-height:1.3;
-  }
-
-  .home-page .hero p{
-    font-size:14px;
-  }
-
-  .home-page .hero-grid{
-    gap:25px;
-  }
-
-  .home-page .hero-right img{
-    max-width:90%;
-    margin:0 auto;
-    display:block;
-  }
-
-}
-
-/* =====================================
-🔥 HOME COMPACT MODE (REAL REDUCTION)
-===================================== */
-
-/* riduce spazio verticale globale */
 .home-page section{
   padding:50px 0;
 }
 
-/* riduce margini interni */
-.home-page h2{
-  margin-bottom:10px;
-}
-
-.home-page p{
-  margin-bottom:8px;
-}
-
-/* blocchi troppo grandi */
-.home-page .feature-card{
-  padding:14px;
-}
-
-/* griglie più compatte */
 .home-page .container{
   max-width:1000px;
+  padding-left:16px;
+  padding-right:16px;
 }
 
-/* ================= COLLAPSIBLE ================= */
+/* ================= HERO ================= */
 
-.home-page .collapsible{
-  max-height:220px;
-  overflow:hidden;
+.home-page .hero{
   position:relative;
+  padding:60px 0 40px;
+  overflow:hidden;
 }
 
-.home-page .collapsible::after{
-  content:"";
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  height:80px;
-  background:linear-gradient(to bottom,transparent,white);
-}
-
-.home-page .collapsible.expanded{
-  max-height:none;
-}
-
-.home-page .collapsible.expanded::after{
-  display:none;
-}
-
-.home-page .expand-btn{
-  margin-top:15px;
-  cursor:pointer;
-  font-weight:600;
-  color:#10b981;
-}
-/* 🔥 HIDE OLD MARKET BLOCK (HOME ONLY) */
-.home-page .market-section,
-.home-page .snapshot-card{
-  display:none;
-}
-
-/* =====================================
-🔥 SMART INVESTMENT HUB
-===================================== */
-
-.home-page .smart-investment-hub{
-  text-align:center;
-  padding:70px 0;
-}
-
-.home-page .hub-buttons{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
-
-.home-page .hub-btn{
-  padding:10px 16px;
-  border-radius:999px;
-  border:1px solid #e5e7eb;
-  background:white;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.home-page .hub-btn.active,
-.home-page .hub-btn:hover{
-  background:#10b981;
-  color:white;
-  border-color:#10b981;
-}
-
-.home-page .hub-card{
-  margin-top:25px;
-  padding:22px;
-  border-radius:16px;
-  background:white;
-  box-shadow:0 20px 50px rgba(0,0,0,0.08);
-  display:flex;
-  justify-content:space-around;
-  flex-wrap:wrap;
-  gap:20px;
-}
-
-.home-page .hub-metric{
-  text-align:center;
-}
-
-.home-page .hub-metric span{
-  font-size:13px;
-  color:#64748b;
-}
-
-.home-page .hub-metric strong{
-  display:block;
-  font-size:22px;
-  margin-top:6px;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-  .home-page .hub-card{
-    flex-direction:column;
-  }
-}
-/* 🔥 FIX VISIBILITY HUB METRICS */
-.home-page .hub-card{
-  opacity:1 !important;
-}
-
-.home-page .hub-metric span{
-  color:#475569 !important; /* più scuro */
-  opacity:1 !important;
-}
-
-.home-page .hub-metric strong{
-  color:#0f172a !important; /* nero SaaS */
-  opacity:1 !important;
-  font-weight:700;
-}
-.home-page .hub-metric:first-child strong{
-  color:#10b981 !important;
-}
-/* =====================================
-🔥 HERO OVERLAY FIX (HOME ONLY)
-===================================== */
-
+/* overlay */
 .home-page .hero::before{
   content:"";
   position:absolute;
@@ -16195,15 +15940,16 @@ NON TOCCA ALTRE PAGINE
     rgba(15,23,42,0.55),
     rgba(15,23,42,0.75)
   );
-  z-index:0;
-}
-
-.home-page .hero > *{
-  position:relative;
   z-index:1;
 }
 
-/* testo leggibile */
+/* contenuto sopra overlay */
+.home-page .hero > *{
+  position:relative;
+  z-index:2;
+}
+
+/* testo */
 .home-page .hero h1{
   color:white;
   text-shadow:0 2px 10px rgba(0,0,0,0.4);
@@ -16213,17 +15959,52 @@ NON TOCCA ALTRE PAGINE
   color:#e2e8f0;
 }
 
-/* =====================================
-🔥 HERO COMPACT (NO BREAK)
-===================================== */
+/* ================= 🔥 FIX CRITICO BOTTONI HERO ================= */
 
-.home-page .hero{
-  padding:60px 0 40px;
+/* wrapper sopra tutto */
+.home-page .city-search-box{
+  position:relative;
+  z-index:5;
 }
 
+/* container bottoni */
+.home-page .city-quick{
+  position:relative;
+  z-index:6;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+}
+
+/* bottoni */
+.home-page .market-btn{
+  position:relative;
+  z-index:7;
+  border-radius:999px;
+  padding:10px 14px;
+  font-size:14px;
+  background:#10b981;
+  color:white;
+  border:none;
+}
+
+/* 🔥 ULTRA FIX (blocchi invisibili sopra) */
+.home-page .hero *{
+  pointer-events:auto;
+}
+
+.home-page .hero::before{
+  pointer-events:none; /* CRITICO */
+}
+
+/* ================= HERO GRID ================= */
+
 .home-page .hero-grid{
-  align-items:center;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:40px;
+  align-items:center;
 }
 
 .home-page .hero-right img{
@@ -16232,44 +16013,63 @@ NON TOCCA ALTRE PAGINE
   box-shadow:0 20px 60px rgba(0,0,0,0.25);
 }
 
-/* =====================================
-🔥 QUICK ROI CARD UPGRADE
-===================================== */
+/* ================= SEARCH BOX ================= */
+
+.home-page .city-search-box{
+  margin-top:25px;
+  padding:16px;
+  background:rgba(255,255,255,0.08);
+  border-radius:14px;
+  backdrop-filter:blur(6px);
+}
+
+/* ================= ROI ================= */
 
 .home-page .quick-roi-box{
+  padding:26px;
   border-radius:20px;
   box-shadow:0 20px 60px rgba(0,0,0,0.08);
-  padding:30px;
 }
 
-.home-page .roi-grid{
-  gap:14px;
+/* ================= METRICS ================= */
+
+.home-page .metric-card{
+  padding:18px;
+  border-radius:14px;
+  transition:.2s;
 }
 
-.home-page .roi-field input{
-  border-radius:10px;
-  border:1px solid #e2e8f0;
-  padding:12px;
+.home-page .metric-card:hover{
+  transform:translateY(-3px);
 }
-/* =====================================
-🔥 SMART HUB (SILICON STYLE)
-===================================== */
+
+/* ================= OVERLAY ================= */
+
+.home-page .home-blur-overlay{
+  opacity:0;
+  transform:scale(0.96);
+  transition:.25s;
+}
+
+.home-page .home-blur-overlay.active{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* ================= HUB ================= */
 
 .home-page .hub-buttons{
   display:flex;
   gap:10px;
   justify-content:center;
   flex-wrap:wrap;
-  margin-top:15px;
 }
 
 .home-page .hub-btn{
-  padding:8px 16px;
+  padding:10px 16px;
   border-radius:999px;
   background:#f1f5f9;
   border:none;
-  cursor:pointer;
-  transition:0.2s;
 }
 
 .home-page .hub-btn.active{
@@ -16285,28 +16085,16 @@ NON TOCCA ALTRE PAGINE
   background:white;
   border-radius:16px;
   padding:20px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.08);
 }
 
-/* =====================================
-🔥 MARKET BUTTON FIX
-===================================== */
+/* ================= HIDE OLD ================= */
 
-.home-page .market-buttons{
-  display:flex !important;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
+.home-page .market-section,
+.home-page .snapshot-card{
+  display:none;
 }
 
-.home-page .market-btn{
-  border-radius:999px;
-  padding:10px 16px;
-}
-
-/* =====================================
-🔥 MOBILE FIX
-===================================== */
+/* ================= MOBILE ================= */
 
 @media(max-width:768px){
 
@@ -16319,123 +16107,28 @@ NON TOCCA ALTRE PAGINE
     order:-1;
   }
 
-  .home-page .hub-card{
-    flex-direction:column;
-    gap:10px;
-  }
-
-}
-/* =====================================
-🔥 MOBILE SPACING FIX
-===================================== */
-
-@media(max-width:768px){
-
-  section{
-    padding:50px 0 !important;
-  }
-
-  .container{
-    padding-left:16px;
-    padding-right:16px;
-  }
-
-}
-/* =====================================
-🔥 HERO MOBILE CLEAN
-===================================== */
-
-@media(max-width:768px){
-
   .home-page .hero h1{
     font-size:24px;
-    line-height:1.3;
   }
 
   .home-page .hero p{
     font-size:14px;
   }
 
-  .home-page .hero .micro-trust{
-    display:none; /* taglia rumore */
+  .home-page .hub-card{
+    flex-direction:column;
+    gap:10px;
   }
 
-}
-
-/* =====================================
-🔥 HUB BUTTON MOBILE UX
-===================================== */
-
-@media(max-width:768px){
-
-  .hub-buttons{
-    gap:8px;
-  }
-
-  .hub-btn{
+  .home-page .market-btn{
     flex:1;
     min-width:40%;
-    padding:12px;
-    font-size:14px;
   }
-
-}
-
-@media(max-width:768px){
-
-  .hub-card{
-    padding:16px;
-  }
-
-  .hub-metric strong{
-    font-size:18px;
-  }
-
-}
-
-/* =====================================
-🔥 SECTIONS ORDER PRIORITY (MOBILE)
-===================================== */
-
-@media(max-width:768px){
 
   .quick-roi-section{
     margin-top:-40px;
     position:relative;
-    z-index:2;
+    z-index:3;
   }
 
-}
-
-/* =====================================
-🔥 FIX BOTTONI MARKET HERO (CRITICO)
-===================================== */
-
-.city-search-box,
-.city-quick,
-.market-btn{
-  position:relative;
-  z-index:5;
-}
-
-@media(max-width:768px){
-
-  .city-quick{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    justify-content:center;
-  }
-
-  .market-btn{
-    flex:1;
-    min-width:40%;
-  }
-
-}
-
-.market-btn{
-  border-radius:999px;
-  font-size:14px;
-  padding:10px 14px;
 }
