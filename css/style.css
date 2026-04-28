@@ -15836,3 +15836,17 @@ body.rb-ui-popup-open #register-popup{
   color: #94a3b8;    /* migliora leggibilità */
   margin: 0;
 }
+
+/* ================= 🔥 FIX ALLINEAMENTO TESTO BOTTONE OVERLAY ================= */
+
+.home-blur-overlay .btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-blur-overlay .btn span{
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
