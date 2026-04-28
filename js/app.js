@@ -2383,7 +2383,21 @@ if(mortgageBox && mortgageBtn){
 
 }
 
+// ================= LOCATION → CITY MAPPING =================
+function mapLocationToCity(input){
 
+  if(!input) return "roma";
+
+  const val = input.toLowerCase();
+
+  if(val.includes("napoli") || val.includes("(na)")) return "napoli";
+  if(val.includes("milano") || val.includes("(mi)")) return "milano";
+  if(val.includes("firenze") || val.includes("(fi)")) return "firenze";
+  if(val.includes("roma") || val.includes("(rm)")) return "roma";
+
+  // fallback intelligente
+  return "roma";
+}
 // ================= SAFE INPUT =================
 
 function getValue(id){
@@ -2438,6 +2452,32 @@ window.calculate = async function(force = false){
 
     const commission  = getValue("commission") || 15;
     const tax         = getValue("tax") || 21;
+
+    // ================= CUSTOM LOCATION =================
+const customLocation = document.getElementById("custom-location")?.value;
+
+// 🔥 override città se presente
+if(customLocation){
+
+  const mappedCity = mapLocationToCity(customLocation);
+
+  // ⚠️ NON override se CITY LOCK attivo (ROI pages)
+  if(!window.__CITY_LOCKED__){
+
+    window.currentCity = mappedCity;
+    localStorage.setItem("selected_city", mappedCity);
+
+    console.log("📍 Località:", customLocation);
+    console.log("🏙 Benchmark city:", mappedCity);
+
+    // 🔥 aggiorna subito background
+    if(typeof applyCityBackground === "function"){
+      applyCityBackground(mappedCity);
+    }
+
+  }
+
+}
 
     const loanAmount  = getValue("loanAmount") || (price - equity);
     const interestRate= getValue("interestRate") || 3.5;
