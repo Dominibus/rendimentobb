@@ -15907,20 +15907,20 @@ body.rb-ui-popup-open #register-popup{
 }
 
 /* =====================================
-🏠 HOME CLEAN SYSTEM (STABILE E NON DISTRUTTIVO)
-FIX REALI • NO BREAK LAYOUT
+🏠 HOME FINAL FIX (ALLINEAMENTO + LEGGIBILITÀ)
+STABILE • MOBILE PERFETTO • NO BREAK
 ===================================== */
 
 /* ================= BASE ================= */
 
 .home-page section{
-  padding:60px 0; /* meno aggressivo */
+  padding:60px 0;
 }
 
 .home-page .container{
   max-width:1100px;
-  padding-left:16px;
-  padding-right:16px;
+  padding:0 16px;
+  margin:0 auto;
 }
 
 /* ================= HERO ================= */
@@ -15930,67 +15930,75 @@ FIX REALI • NO BREAK LAYOUT
   overflow:hidden;
 }
 
-/* overlay */
+/* overlay PIÙ FORTE → leggibilità */
 .home-page .hero::before{
   content:"";
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(15,23,42,0.45),
-    rgba(15,23,42,0.65)
+    rgba(15,23,42,0.6),
+    rgba(15,23,42,0.75)
   );
   z-index:0;
-
-  /* 🔥 FIX VERO */
   pointer-events:none;
 }
 
-/* contenuto sopra */
 .home-page .hero > *{
   position:relative;
   z-index:1;
 }
 
-/* testo */
+/* 🔥 TESTO LEGGIBILE */
 .home-page .hero h1{
-  color:white;
-  text-shadow:0 2px 10px rgba(0,0,0,0.4);
+  color:#ffffff;
+  text-shadow:0 3px 15px rgba(0,0,0,0.6);
 }
 
 .home-page .hero p{
   color:#e2e8f0;
 }
 
-/* ================= 🔥 FIX BOTTONI HERO (DEFINITIVO) ================= */
+/* ================= 🔥 FIX CENTRATURA HERO ================= */
+
+.home-page .hero-left{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+@media(max-width:768px){
+  .home-page .hero-left{
+    align-items:center;
+    text-align:center;
+  }
+}
+
+/* ================= BOTTONI HERO ================= */
 
 .home-page .city-search-box{
   position:relative;
   z-index:5;
   margin-top:25px;
   padding:16px;
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.12);
   border-radius:14px;
-  backdrop-filter:blur(6px);
+  backdrop-filter:blur(8px);
 }
 
 .home-page .city-quick{
-  position:relative;
-  z-index:6;
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  gap:10px;
   justify-content:center;
 }
 
 .home-page .market-btn{
-  position:relative;
-  z-index:7;
   border-radius:999px;
-  padding:10px 14px;
+  padding:10px 16px;
   font-size:14px;
 }
 
-/* ================= HERO VISUAL ================= */
+/* ================= HERO IMAGE ================= */
 
 .home-page .hero-right img{
   max-width:100%;
@@ -15998,27 +16006,43 @@ FIX REALI • NO BREAK LAYOUT
   box-shadow:0 20px 60px rgba(0,0,0,0.25);
 }
 
-/* ⚠️ NON tocchiamo hero-grid → lasciamo il tuo layout originale */
-
-/* ================= ROI ================= */
+/* ================= ROI BOX ================= */
 
 .home-page .quick-roi-box{
   padding:26px;
   border-radius:18px;
   box-shadow:0 25px 60px rgba(0,0,0,0.08);
+  text-align:center; /* 🔥 FIX centratura */
+}
+
+/* ================= ROI GRID ================= */
+
+.home-page .roi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
 }
 
 /* ================= METRICS ================= */
 
-.home-page .metric-card{
-  padding:18px;
-  border-radius:14px;
-  transition:.2s;
+.home-page .investment-metrics{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin-top:20px;
 }
 
-.home-page .metric-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+.home-page .metric-card{
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  background:white;
+}
+
+.home-page .metric-card strong{
+  display:block;
+  font-size:18px;
+  margin-top:6px;
 }
 
 /* ================= OVERLAY ================= */
@@ -16065,14 +16089,9 @@ FIX REALI • NO BREAK LAYOUT
   padding:20px;
 }
 
-/* ❌ NON NASCONDIAMO PIÙ MARKET */
-/* (rimosso display:none che ti distruggeva tutto) */
-
 /* ================= MOBILE ================= */
 
 @media(max-width:768px){
-
-  /* NON tocchiamo struttura layout */
 
   .home-page .hero h1{
     font-size:24px;
@@ -16094,7 +16113,7 @@ FIX REALI • NO BREAK LAYOUT
   }
 
   .quick-roi-section{
-    margin-top:-30px;
+    margin-top:-20px;
     position:relative;
     z-index:2;
   }
