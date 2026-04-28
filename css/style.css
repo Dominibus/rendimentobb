@@ -16098,3 +16098,70 @@ NON TOCCA ALTRE PAGINE
 .home-page .snapshot-card{
   display:none;
 }
+
+/* =====================================
+🔥 SMART INVESTMENT HUB
+===================================== */
+
+.home-page .smart-investment-hub{
+  text-align:center;
+  padding:70px 0;
+}
+
+.home-page .hub-buttons{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+.home-page .hub-btn{
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid #e5e7eb;
+  background:white;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.home-page .hub-btn.active,
+.home-page .hub-btn:hover{
+  background:#10b981;
+  color:white;
+  border-color:#10b981;
+}
+
+.home-page .hub-card{
+  margin-top:25px;
+  padding:22px;
+  border-radius:16px;
+  background:white;
+  box-shadow:0 20px 50px rgba(0,0,0,0.08);
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.home-page .hub-metric{
+  text-align:center;
+}
+
+.home-page .hub-metric span{
+  font-size:13px;
+  color:#64748b;
+}
+
+.home-page .hub-metric strong{
+  display:block;
+  font-size:22px;
+  margin-top:6px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .home-page .hub-card{
+    flex-direction:column;
+  }
+}
