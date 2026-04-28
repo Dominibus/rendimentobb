@@ -16112,3 +16112,73 @@ NON rompe layout • corregge errori attuali
   }
 
 }
+/* =====================================
+🔥 FIX LEGGIBILITÀ TESTI SU BACKGROUND
+SAFE • NON rompe nulla
+===================================== */
+
+/* ===== HERO / TOOL HERO OVERLAY PIÙ FORTE ===== */
+
+.tool-hero .hero-bg::after{
+  background:linear-gradient(
+    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.85)
+  ) !important;
+}
+
+/* ===== TESTO SOPRA HERO ===== */
+
+.tool-hero h1,
+.tool-hero h2,
+.tool-hero h3{
+  color:#ffffff !important;
+  text-shadow:0 2px 12px rgba(0,0,0,0.6);
+}
+
+.tool-hero p,
+.tool-hero span{
+  color:#e2e8f0 !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* ===== BOX SOPRA IMMAGINE (QUELLO CHE NON SI LEGGE) ===== */
+
+.tool-hero .info-box,
+.tool-hero .risk-box,
+.tool-hero .overlay-box{
+  background:rgba(15,23,42,0.55) !important;
+  backdrop-filter:blur(6px);
+  border-radius:14px;
+  padding:16px;
+}
+
+/* testo dentro box */
+.tool-hero .info-box *,
+.tool-hero .risk-box *,
+.tool-hero .overlay-box *{
+  color:#ffffff !important;
+}
+
+/* ===== KPI SOTTO HERO (ROI / RISK / BREAK EVEN) ===== */
+
+.tool-hero .kpi-item{
+  color:#ffffff !important;
+}
+
+.tool-hero .kpi-item span{
+  color:#cbd5e1 !important;
+}
+
+/* ===== CTA TEXT ===== */
+
+.tool-hero .btn{
+  position:relative;
+  z-index:2;
+}
+
+/* ===== MICRO TEXT (tipo “1200 utenti…”) ===== */
+
+.tool-hero small{
+  color:#cbd5e1 !important;
+  text-shadow:0 2px 8px rgba(0,0,0,0.5);
+}
