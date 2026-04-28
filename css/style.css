@@ -16283,3 +16283,52 @@ ULTRA MIRATO • NON rompe nulla
 .home-page .hub-metric:first-child strong{
   color:#10b981 !important;
 }
+
+/* =====================================
+🔥 FOOTER FIX HOME (DEFINITIVO)
+colpisce SOLO homepage
+===================================== */
+
+/* forza visibilità footer */
+.home-page .global-footer{
+  position:relative;
+  z-index:2;
+  background:#020617 !important; /* blu scuro pulito */
+}
+
+/* titoli colonne */
+.home-page .global-footer h3,
+.home-page .global-footer h4{
+  color:#ffffff !important;
+}
+
+/* link */
+.home-page .global-footer a{
+  color:#cbd5e1 !important;
+}
+
+/* hover */
+.home-page .global-footer a:hover{
+  color:#ffffff !important;
+}
+
+/* paragrafi */
+.home-page .global-footer p{
+  color:#94a3b8 !important;
+}
+
+/* micro text (copyright + righe sotto) */
+.home-page .footer-bottom p{
+  color:#64748b !important;
+}
+
+/* separatori */
+.home-page .footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+
+/* trust line sopra footer */
+.home-page .global-footer .trust-line,
+.home-page .global-footer small{
+  color:#cbd5e1 !important;
+}
