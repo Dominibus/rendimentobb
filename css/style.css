@@ -15814,3 +15814,25 @@ body.rb-ui-popup-open #register-popup{
     min-width:260px;
   }
 }
+
+/* ================= 🔥 FOOTER FIX ================= */
+
+.global-footer{
+  position: relative;
+  z-index: 1;
+}
+
+.footer-bottom{
+  margin-top: 30px;
+  padding-top: 20px;
+  padding-bottom: 30px; /* 🔥 spazio sotto (CRITICO) */
+  border-top: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+}
+
+.footer-bottom p{
+  font-size: 13px;
+  line-height: 1.6;  /* 🔥 evita taglio testo */
+  color: #94a3b8;    /* migliora leggibilità */
+  margin: 0;
+}
