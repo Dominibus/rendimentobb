@@ -328,6 +328,18 @@ data-en="Results are based on average market data. Real risk is calculated in th
     <label data-it="Città mercato" data-en="City Market"></label>
 
     <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
+      <input  
+  type="text"  
+  id="custom-location"
+  placeholder="Es. Portici (NA)"
+  style="
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #e2e8f0;
+  "
+/>
       <option value="">Seleziona città</option>
       <option value="milano">Milano</option>
       <option value="roma">Roma</option>
