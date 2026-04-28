@@ -299,7 +299,9 @@ data-en="Results are based on average market data. Real risk is calculated in th
 </div>  
 
 <section class="tool-hero">
-
+<!-- 🔥 BACKGROUND DINAMICO -->
+  <div class="hero-bg"></div>
+  
 <div class="container simulator-container">
   <div class="simulator-grid">
 
@@ -1013,9 +1015,9 @@ window.applyMarketData = function(city){
     renderMarketBenchmark(city);
   }
 
-  if(typeof changeCityBackground === "function"){
-    changeCityBackground(city);
-  }
+  if(typeof applyCityBackground === "function"){
+  applyCityBackground(city);
+}
 
   console.log("📍 City selected:", city);
 };
@@ -1210,12 +1212,12 @@ window.showUpgradeModalCustom = function(titleIT, titleEN){
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const savedBg = localStorage.getItem("selected_city_bg");
+  const savedCity = localStorage.getItem("selected_city");
 
-  if(savedBg && typeof changeCityBackground === "function"){
-    console.log("🌆 Ripristino background città:", savedBg);
-    changeCityBackground(savedBg);
-  }
+if(savedCity && typeof applyCityBackground === "function"){
+  console.log("🌆 Restore BG:", savedCity);
+  applyCityBackground(savedCity);
+}
 
 });
 
