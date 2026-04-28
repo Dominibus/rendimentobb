@@ -16161,3 +16161,105 @@ RISOLVE SHIFT SINISTRA
 .home-page .smart-investment-hub{
   text-align:center;
 }
+/* =====================================
+🔥 HOME OVERRIDE – SAFE (NON DISTRUTTIVO)
+Lavora SOLO su .home-page
+===================================== */
+
+.home-page .hero{
+  padding:120px 0 100px;
+  min-height:85vh;
+}
+
+/* ===== HERO GRID (layout demo) ===== */
+.home-page .hero-grid{
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:60px;
+  max-width:1200px;
+  margin:60px auto;
+  align-items:center;
+  text-align:left;
+}
+
+@media (max-width:900px){
+  .home-page .hero-grid{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+}
+
+/* ===== HERO BACKGROUND (dark premium) ===== */
+.home-page .hero-bg{
+  background:
+  linear-gradient(
+    rgba(2,6,23,0.75),
+    rgba(2,6,23,0.85)
+  ),
+  url("/img/rome-bg.jpg");
+
+  background-size:cover;
+  background-position:center;
+}
+
+/* ===== TEXT FIX ===== */
+.home-page .hero-bg h1{
+  color:#ffffff !important;
+}
+
+.home-page .hero-bg p{
+  color:#e2e8f0 !important;
+}
+
+/* ===== REMOVE WHITE BOX (CRITICO) ===== */
+.home-page .hero-left{
+  background:transparent !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  border-radius:0 !important;
+}
+
+/* ===== SEARCH FLOAT EFFECT ===== */
+.home-page .city-search-box{
+  margin-top:30px;
+  transform:translateY(20px);
+}
+
+/* ===== MARKET GRID ALIGN ===== */
+.home-page .market-grid{
+  margin-top:30px;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* ===== HERO RIGHT IMAGE ===== */
+.home-page .hero-right img{
+  max-width:480px;
+  width:100%;
+}
+
+/* ===== TRUST BAR ===== */
+.home-page .hero-trust{
+  color:#e2e8f0;
+}
+
+/* ===== MICRO TRUST ===== */
+.home-page .micro-trust strong{
+  color:#10b981;
+}
+
+.home-page .micro-trust p{
+  color:#94a3b8;
+}
+
+/* ===== CTA ALIGN ===== */
+.home-page .cta-group{
+  align-items:flex-start;
+}
+
+@media (max-width:900px){
+  .home-page .cta-group{
+    align-items:center;
+  }
+}
