@@ -13,18 +13,107 @@ Privacy Policy – RendimentoBB
 </title>
 
 <link rel="stylesheet" href="/css/style.css">
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="icon" href="/img/favicon.png">
 
-<script type="module" src="/js/lang.js"></script>
+<style>
+
+/* =====================================
+🔥 LEGAL PAGE – SILICON VALLEY STYLE
+===================================== */
+
+body{
+  background:#f8fafc;
+}
+
+/* container */
+.legal-wrapper{
+  max-width:900px;
+  margin:80px auto;
+  padding:0 20px;
+}
+
+/* card */
+.legal-card{
+  background:white;
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+}
+
+/* title */
+.legal-card h1{
+  font-size:34px;
+  font-weight:800;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+
+/* back */
+.back-home{
+  display:inline-block;
+  margin-bottom:25px;
+  color:#10b981;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* text */
+.legal-card p{
+  color:#475569;
+  line-height:1.7;
+  margin-bottom:15px;
+  font-size:15px;
+}
+
+/* section */
+.legal-card h3{
+  margin-top:30px;
+  margin-bottom:10px;
+  font-size:18px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+/* list */
+.legal-card ul{
+  margin-left:20px;
+  margin-bottom:20px;
+}
+
+.legal-card li{
+  margin-bottom:8px;
+  color:#475569;
+}
+
+/* highlight box */
+.legal-highlight{
+  background:#ecfdf5;
+  border-left:4px solid #10b981;
+  padding:15px;
+  border-radius:10px;
+  margin:20px 0;
+  color:#065f46;
+  font-size:14px;
+}
+
+/* email */
+.legal-email{
+  margin-top:10px;
+  font-weight:600;
+  color:#0f172a;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<main>
+<div id="global-header"></div>
 
-<div class="legal-container">
+<div class="legal-wrapper">
+
+<div class="legal-card">
 
 <h1
 data-it="Privacy Policy"
@@ -39,10 +128,16 @@ data-en="← Back to Home">
 </a>
 
 <p
-data-it="Questa informativa descrive come RendimentoBB raccoglie e utilizza i dati degli utenti che utilizzano il sito."
-data-en="This policy explains how RendimentoBB collects and uses user data when using the website.">
-Questa informativa descrive come RendimentoBB raccoglie e utilizza i dati degli utenti che utilizzano il sito.
+data-it="Questa informativa descrive come RendimentoBB raccoglie e utilizza i dati degli utenti che utilizzano la piattaforma."
+data-en="This policy explains how RendimentoBB collects and uses user data when using the platform.">
+Questa informativa descrive come RendimentoBB raccoglie e utilizza i dati degli utenti.
 </p>
+
+<div class="legal-highlight"
+data-it="✔ I tuoi dati non vengono venduti a terzi. Vengono utilizzati solo per migliorare il servizio."
+data-en="✔ Your data is never sold. It is used only to improve the service.">
+✔ I tuoi dati non vengono venduti a terzi.
+</div>
 
 <h3
 data-it="Dati raccolti"
@@ -51,31 +146,26 @@ Dati raccolti
 </h3>
 
 <p
-data-it="Il sito può raccogliere:"
-data-en="The website may collect:">
+data-it="Il sito può raccogliere le seguenti informazioni:"
+data-en="The platform may collect the following information:">
 Il sito può raccogliere:
 </p>
 
 <ul>
-
-<li
-data-it="Email dell’utente per la creazione dell’account"
-data-en="User email for account creation">
-Email dell’utente per la creazione dell’account
+<li data-it="Email per la creazione dell’account"
+    data-en="Email for account creation">
+Email account
 </li>
 
-<li
-data-it="Dati inseriti nelle simulazioni finanziarie"
-data-en="Data entered in financial simulations">
-Dati inseriti nelle simulazioni finanziarie
+<li data-it="Dati inseriti nelle simulazioni (prezzi, costi, ROI)"
+    data-en="Data entered in simulations (prices, costs, ROI)">
+Dati simulazione
 </li>
 
-<li
-data-it="Dati tecnici di utilizzo del sito"
-data-en="Technical usage data">
-Dati tecnici di utilizzo del sito
+<li data-it="Dati tecnici (browser, dispositivo, utilizzo)"
+    data-en="Technical data (browser, device, usage)">
+Dati tecnici
 </li>
-
 </ul>
 
 <h3
@@ -85,9 +175,9 @@ Finalità
 </h3>
 
 <p
-data-it="I dati vengono utilizzati esclusivamente per fornire il servizio di analisi finanziaria e migliorare la piattaforma."
-data-en="Data is used exclusively to provide the financial analysis service and improve the platform.">
-I dati vengono utilizzati esclusivamente per fornire il servizio di analisi finanziaria e migliorare la piattaforma.
+data-it="I dati vengono utilizzati esclusivamente per fornire il servizio, migliorare l’esperienza utente e analizzare le performance della piattaforma."
+data-en="Data is used exclusively to provide the service, improve user experience and analyze platform performance.">
+I dati vengono utilizzati per migliorare il servizio.
 </p>
 
 <h3
@@ -97,9 +187,9 @@ Pagamenti
 </h3>
 
 <p
-data-it="I pagamenti vengono gestiti tramite Stripe. RendimentoBB non memorizza i dati delle carte di pagamento."
-data-en="Payments are processed through Stripe. RendimentoBB does not store credit card data.">
-I pagamenti vengono gestiti tramite Stripe. RendimentoBB non memorizza i dati delle carte di pagamento.
+data-it="I pagamenti sono gestiti da Stripe. RendimentoBB non memorizza i dati delle carte."
+data-en="Payments are handled by Stripe. RendimentoBB does not store card data.">
+Pagamenti gestiti tramite Stripe.
 </p>
 
 <h3
@@ -109,23 +199,25 @@ Contatti
 </h3>
 
 <p
-data-it="Per qualsiasi richiesta relativa alla privacy:"
-data-en="For any privacy related request:">
-Per qualsiasi richiesta relativa alla privacy:
+data-it="Per qualsiasi richiesta relativa alla privacy puoi contattarci:"
+data-en="For any privacy-related request you can contact us:">
+Contattaci:
 </p>
 
-<p>
+<p class="legal-email">
 support@rendimentobb.com
 </p>
 
 </div>
 
-</main>
+</div>
 
-<script src="/js/lang.js" defer></script> 
-<script src="/js/header.js" defer></script>
+<div id="global-footer"></div>
+
+<script type="module" src="/js/header.js"></script>
 <script src="/js/ui-system.js" defer></script>  
-<script src="/js/footer.js" defer></script>  
+<script src="/js/footer.js" defer></script>
+<script src="/js/lang.js" defer></script>  
 
 </body>
 </html>
