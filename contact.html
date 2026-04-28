@@ -13,23 +13,100 @@ Contatti – RendimentoBB
 </title>
 
 <link rel="stylesheet" href="/css/style.css">
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">  
+<link rel="icon" href="/img/favicon.png">
 
-<script type="module" src="/js/lang.js"></script>
+<style>
+
+/* =====================================
+🔥 CONTACT PAGE – SAAS STYLE
+===================================== */
+
+body{
+  background:#f8fafc;
+}
+
+.contact-wrapper{
+  max-width:900px;
+  margin:80px auto;
+  padding:0 20px;
+}
+
+.contact-card{
+  background:white;
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  text-align:center;
+}
+
+.contact-card h1{
+  font-size:34px;
+  font-weight:800;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+
+.back-home{
+  display:inline-block;
+  margin-bottom:25px;
+  color:#10b981;
+  font-weight:600;
+  text-decoration:none;
+}
+
+.contact-card p{
+  color:#475569;
+  font-size:16px;
+  margin-bottom:20px;
+}
+
+.contact-email{
+  font-size:20px;
+  font-weight:700;
+  color:#0f172a;
+  margin-top:10px;
+}
+
+.contact-box{
+  margin-top:30px;
+  padding:20px;
+  background:#f1f5f9;
+  border-radius:12px;
+}
+
+.contact-brand{
+  margin-top:20px;
+  font-size:14px;
+  color:#64748b;
+}
+
+.contact-cta{
+  margin-top:30px;
+  display:inline-block;
+  padding:14px 28px;
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  border-radius:10px;
+  font-weight:600;
+  text-decoration:none;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<main>
+<div id="global-header"></div>
 
-<div class="legal-container">
+<div class="contact-wrapper">
+
+<div class="contact-card">
 
 <h1
-data-it="Contatti"
-data-en="Contact">
-Contatti
+data-it="Contattaci"
+data-en="Contact us">
+Contattaci
 </h1>
 
 <a href="/" class="back-home"
@@ -39,38 +116,49 @@ data-en="← Back to Home">
 </a>
 
 <p
-data-it="Per assistenza o informazioni puoi contattarci tramite email."
-data-en="For assistance or information you can contact us by email.">
-Per assistenza o informazioni puoi contattarci tramite email.
+data-it="Hai bisogno di supporto o informazioni? Il nostro team risponde entro 24 ore."
+data-en="Need support or information? Our team replies within 24 hours.">
+Hai bisogno di supporto o informazioni?
 </p>
 
-<p>
+<div class="contact-box">
 
-<strong
-data-it="Email:"
-data-en="Email:">
-Email:
-</strong>
+<div
+data-it="Scrivici direttamente a:"
+data-en="Email us directly at:">
+Scrivici direttamente a:
+</div>
 
+<div class="contact-email">
 support@rendimentobb.com
-
-</p>
-
-<p
-data-it="RendimentoBB – Strategic B&B Investment Decision Engine"
-data-en="RendimentoBB – Strategic B&B Investment Decision Engine">
-RendimentoBB – Strategic B&B Investment Decision Engine
-</p>
+</div>
 
 </div>
 
-</main>
+<a href="/tool/" class="contact-cta"
+data-it="🚀 Torna al simulatore"
+data-en="🚀 Back to simulator">
+🚀 Torna al simulatore
+</a>
 
-<script src="/js/lang.js" defer></script>
-  
-<script src="/js/header.js" defer></script>
+<div class="contact-brand"
+data-it="RendimentoBB – Motore decisionale per investimenti B&B basato su dati reali"
+data-en="RendimentoBB – Data-driven B&B investment decision engine">
+RendimentoBB – Strategic B&B Investment Decision Engine
+</div>
+
+</div>
+
+</div>
+
+<div id="global-footer"></div>
+
+<!-- ✅ FIX MODULE -->
+<script type="module" src="/js/header.js"></script>
+
 <script src="/js/ui-system.js" defer></script>  
 <script src="/js/footer.js" defer></script>
+<script src="/js/lang.js" defer></script>
 
 </body>
 </html>
