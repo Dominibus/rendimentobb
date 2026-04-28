@@ -16182,3 +16182,80 @@ SAFE • NON rompe nulla
   color:#cbd5e1 !important;
   text-shadow:0 2px 8px rgba(0,0,0,0.5);
 }
+
+/* =====================================
+🔥 FIX UNIVERSALE LEGGIBILITÀ (FUNZIONA DAVVERO)
+copre TUTTE le sezioni con background
+===================================== */
+
+/* ===== SEZIONI SCURE (tipo quella blu) ===== */
+.home-page .danger-block,
+.home-page section[style*="#0f172a"],
+.home-page section[style*="#111"],
+.home-page section[style*="dark"]{
+  position:relative;
+}
+
+/* overlay forte sopra background */
+.home-page .danger-block::before,
+.home-page section[style*="#0f172a"]::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    rgba(2,6,23,0.65),
+    rgba(2,6,23,0.85)
+  );
+  z-index:0;
+}
+
+/* porta contenuto sopra */
+.home-page .danger-block *,
+.home-page section[style*="#0f172a"] *{
+  position:relative;
+  z-index:1;
+}
+
+/* ===== TESTI LEGGIBILI ===== */
+.home-page .danger-block h1,
+.home-page .danger-block h2,
+.home-page .danger-block h3{
+  color:#ffffff !important;
+  text-shadow:0 2px 10px rgba(0,0,0,0.6);
+}
+
+.home-page .danger-block p,
+.home-page .danger-block span{
+  color:#cbd5e1 !important;
+}
+
+/* ===== BOX SOPRA IMMAGINE (QUELLO ROTTO) ===== */
+.home-page .danger-block div[style*="background"],
+.home-page .danger-block .box,
+.home-page .danger-block .card{
+  background:rgba(15,23,42,0.55) !important;
+  backdrop-filter:blur(6px);
+  border-radius:12px;
+}
+
+/* testo dentro */
+.home-page .danger-block div[style*="background"] *,
+.home-page .danger-block .box *,
+.home-page .danger-block .card *{
+  color:#ffffff !important;
+}
+
+/* ===== KPI (ROI / BREAK EVEN / RISK) ===== */
+.home-page .danger-block strong{
+  color:#ffffff !important;
+}
+
+.home-page .danger-block small{
+  color:#cbd5e1 !important;
+}
+
+/* ===== CTA ===== */
+.home-page .danger-block .btn{
+  z-index:2;
+  position:relative;
+}
