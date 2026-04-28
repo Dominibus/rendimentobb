@@ -2398,6 +2398,42 @@ function mapLocationToCity(input){
   // fallback intelligente
   return "roma";
 }
+
+// ================= LOCATION HELPER UX =================
+const locationInput = document.getElementById("custom-location");
+const helper = document.getElementById("location-helper");
+
+if(locationInput && helper){
+
+  locationInput.addEventListener("input", () => {
+
+    const val = locationInput.value;
+
+    if(!val){
+      helper.innerText = t(
+        "💡 I dati di mercato verranno applicati automaticamente",
+        "💡 Market data will be applied automatically"
+      );
+      return;
+    }
+
+    const mapped = mapLocationToCity(val);
+
+    const cityLabel = {
+      napoli: "Napoli",
+      milano: "Milano",
+      roma: "Roma",
+      firenze: "Firenze"
+    };
+
+    helper.innerText = t(
+      `📍 Analisi basata su mercato ${cityLabel[mapped]}`,
+      `📍 Analysis based on ${cityLabel[mapped]} market`
+    );
+
+  });
+
+}
 // ================= SAFE INPUT =================
 
 function getValue(id){
