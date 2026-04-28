@@ -16125,30 +16125,39 @@ NESSUN CONFLITTO • DESIGN SaaS
 }
 
 /* =====================================
-🔥 FIX CENTRATURA SMART HUB (CRITICO)
+🔥 FIX CENTRATURA REALE (DEFINITIVO)
+RISOLVE SHIFT SINISTRA
 ===================================== */
 
+/* SECTION neutra */
 .home-page .smart-investment-hub{
   width:100%;
-  display:block; /* rimuove comportamenti strani */
-  padding-left:0;
-  padding-right:0;
 }
 
-/* centra davvero il contenuto interno */
+/* container sempre centrato */
 .home-page .smart-investment-hub .container{
-  margin-left:auto;
-  margin-right:auto;
-  display:block;
-  text-align:left; /* evita effetto “shift” */
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 16px;
 }
 
-/* FIX layout interno */
+/* 🔥 QUESTO ERA IL PROBLEMA */
 .home-page .smart-investment-hub .hub-buttons{
-  justify-content:flex-start; /* allineamento corretto */
+  display:flex;
+  justify-content:center; /* ← PRIMA ERA flex-start */
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
 }
 
-/* CTA allineata */
+/* allinea anche CTA */
 .home-page .smart-investment-hub .btn{
   display:inline-block;
+  margin-top:15px;
+}
+
+/* centra tutto il blocco testo */
+.home-page .smart-investment-hub{
+  text-align:center;
 }
