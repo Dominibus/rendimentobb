@@ -1629,6 +1629,32 @@ const safeNum = (v, def=0)=>{
 
 const formatCurrency = (n)=>Math.round(n).toLocaleString();
 
+// ================= 🧠 OVERLAY CONTROL (UNICA FONTE) =================
+function updateOverlayVisibility(){
+
+  const overlay = document.querySelector(".home-blur-overlay");
+  if(!overlay) return;
+
+  const access = window.getUserAccess?.() || {};
+
+  const isPro = access.isPro;
+  const isInvestor = access.isInvestor;
+
+  // 🔥 LOG DEBUG
+  console.log("🎯 OVERLAY STATE:", access);
+
+  // 🟢 PRO + INVESTOR → NO OVERLAY
+  if(isPro || isInvestor){
+    overlay.style.display = "none";
+  }
+
+  // 🔴 FREE → OVERLAY ATTIVO
+  else{
+    overlay.style.display = "flex";
+  }
+
+} 
+
 
 // ================= LOGOUT =================
 window.logout = async function(){
@@ -1875,12 +1901,8 @@ else{
 
 }
 
-// ================= OVERLAY =================
-const overlay = document.querySelector(".home-blur-overlay");
-
-if(overlay){
-  overlay.style.display = (isPro || isInvestor) ? "none" : "flex";
-}
+// ================= OVERLAY (CENTRALIZZATO) =================
+updateOverlayVisibility();
 
 // ================= BLUR (SOLO PRO-ONLY) =================
 
@@ -2055,18 +2077,7 @@ function waitForUserReady(callback){
 // ================= INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
 
-  // 🔥 FIX OVERLAY HOME (CRITICO)
-  const overlay = document.querySelector(".home-blur-overlay");
-
-  if(overlay){
-    const access = window.getUserAccess?.() || {};
-
-    if(access.isPro || access.isInvestor){
-      overlay.style.display = "none";
-    } else {
-      overlay.style.display = "flex";
-    }
-  }
+ updateOverlayVisibility();
 
   // ================= INPUT LISTENERS =================
   if(!window.__roiListenersAttached){
@@ -2174,6 +2185,7 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
   // 🔓 primo sync
   unlockHomeUI?.();
+  updateOverlayVisibility();
 
   setTimeout(()=>{
     quickROI?.();
@@ -2206,9 +2218,7 @@ document.addEventListener("rb_plan_loaded", ()=>{
         el.classList.add("pro-blur");
       });
 
-      // 🔥 overlay OFF
-      const overlay = document.querySelector(".home-blur-overlay");
-      if(overlay) overlay.style.display = "none";
+      updateOverlayVisibility();
 
       // 🔥 refresh UI dati
       quickROI?.();
