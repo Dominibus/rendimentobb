@@ -109,9 +109,10 @@ input:focus{
 
 .simulator-grid{
   display:grid;
-  grid-template-columns:420px 1fr;
+  grid-template-columns:1fr;
   gap:30px;
-  align-items:start;
+  max-width:760px;
+  margin:auto;
 }
 
 .simulator-left,
@@ -197,7 +198,22 @@ input:focus{
 .blur-content{
   filter:blur(6px);
   pointer-events:none;
+  transition:0.3s;
 }
+
+/* 🔥 SAFE UNLOCK */
+body.pro-user .blur-content{
+  filter:none !important;
+  pointer-events:auto !important;
+}
+
+body.pro-user .pro-only{
+  display:block !important;
+}
+
+.pro-only{
+  display:none;
+}  
 
 .free-only{
   position:relative;
@@ -294,14 +310,20 @@ body.pro-user .blur-content{
 
   /* 🔥 CRITICO: NON bloccare mobile */
   .locked-overlay{
-    position:relative !important;
-    inset:auto !important;
+    position:relative;
+    inset:auto;
     margin-top:15px;
     background:white;
     border:1px solid #e2e8f0;
   }
 
+  /* 🔒 MOBILE: leggera preview ma non tutto */
   .blur-content{
+    filter:blur(3px);
+    pointer-events:none;
+  }
+
+  body.pro-user .blur-content{
     filter:none !important;
     pointer-events:auto !important;
   }
