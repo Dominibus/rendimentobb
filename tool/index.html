@@ -575,81 +575,79 @@ data-en="🔍 Analyze investment">
 </div>
 </div>
 
-<!-- RIGHT SIDE – DASHBOARD -->
-
 <div class="simulator-right">
 
-<div class="roi-dashboard">
+  <div class="roi-dashboard">
 
-<div class="roi-main">
+    <div class="roi-main">
 
-<!-- 🔥 LABEL PIÙ INTELLIGENTE -->
-<div class="roi-label"
-data-it="Potenziale rendimento"
-data-en="Potential return">
-</div>
+      <!-- LABEL -->
+      <div class="roi-label"
+        data-it="Potenziale rendimento"
+        data-en="Potential return">
+      </div>
 
-  <div class="roi-value" style="position:relative;">
+      <!-- ROI VALUE -->
+      <div class="roi-value" style="position:relative;">
 
-  <!-- ROI -->
-  <span id="roi-live" style="
-  font-size:48px;
-  font-weight:800;
-  letter-spacing:-1px;
-">--</span>
+        <span id="roi-live" style="
+          font-size:48px;
+          font-weight:800;
+          letter-spacing:-1px;
+        ">--</span>
 
-  <!-- 🔥 GLOW EFFECT -->
-  <div id="roi-glow" style="
-    position:absolute;
-    inset:0;
-    background:radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
-    z-index:-1;
-    filter:blur(20px);
-  "></div>
+        <div id="roi-glow" style="
+          position:absolute;
+          inset:0;
+          background:radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
+          z-index:-1;
+          filter:blur(20px);
+        "></div>
 
-  <!-- LABEL -->
-  <div style="font-size:12px;color:#64748b;margin-top:6px;"
-  data-it="Basato su dati medi (rischio reale non incluso)"
-  data-en="Based on averages (real risk not included)">
-  </div>
+        <div style="font-size:12px;color:#64748b;margin-top:6px;"
+          data-it="Basato su dati medi (rischio reale non incluso)"
+          data-en="Based on averages (real risk not included)">
+        </div>
 
-  <!-- BADGE -->
-  <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
+        <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
 
-  <!-- 🔥 AI VERDICT -->
-  <div id="roi-verdict" style="
-    margin-top:10px;
-    padding:10px;
-    border-radius:10px;
-    background:#f8fafc;
-    font-size:13px;
-    font-weight:500;
-  ">
-  </div>
+        <div id="roi-verdict" style="
+          margin-top:10px;
+          padding:10px;
+          border-radius:10px;
+          background:#f8fafc;
+          font-size:13px;
+          font-weight:500;
+        "></div>
 
-  <div id="roi-shock-block" style="
-display:block;
-margin-top:12px;
-padding:14px;
-border-radius:12px;
-background:linear-gradient(135deg,#fee2e2,#fff1f2);
-color:#dc2626;
-font-size:13px;
-font-weight:600;
-text-align:center;
-">
+        <div id="roi-shock-block" style="
+          margin-top:12px;
+          padding:14px;
+          border-radius:12px;
+          background:linear-gradient(135deg,#fee2e2,#fff1f2);
+          color:#dc2626;
+          font-size:13px;
+          font-weight:600;
+          text-align:center;
+        ">
+          <span
+            data-it="⚠️ Questo ROI NON include mutuo, tasse e rischio reale"
+            data-en="⚠️ This ROI does NOT include mortgage, taxes and real risk">
+          </span>
 
-<span 
-data-it="⚠️ Questo ROI NON include mutuo, tasse e rischio reale"
-data-en="⚠️ This ROI does NOT include mortgage, taxes and real risk">
-</span>
+          <div style="margin-top:6px;font-size:12px;font-weight:500;"
+            data-it="Potresti passare da profitto a perdita"
+            data-en="You could go from profit to loss">
+          </div>
+        </div>
 
-<div style="margin-top:6px;font-size:12px;font-weight:500;">
-data-it="Potresti passare da profitto a perdita"
-data-en="You could go from profit to loss"
-</div>
+      </div> <!-- ✅ roi-value -->
 
-</div>
+    </div> <!-- ✅ roi-main -->
+
+  </div> <!-- ✅ roi-dashboard -->
+
+</div> <!-- ✅ simulator-right -->
 
   <!-- RISK BAR -->
   <div id="risk-bar"></div>
