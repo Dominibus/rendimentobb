@@ -883,7 +883,7 @@ data-en="🔥 Looks profitable… but without risk analysis you could make a wro
 
   <div class="metric-card">
     <span data-it="ROI stimato" data-en="Estimated ROI">ROI</span>
-    <strong id="roi-preview">—</strong>
+    
   </div>
 
   <div class="metric-card">
@@ -1238,7 +1238,7 @@ window.updateInvestmentScore = function(score){
 
 function updatePreviewMetrics(roi,risk){
 
-  const roiEl = document.getElementById("roi-preview");
+  const roiEl = document.getElementById("roi-preview-live");
   const riskEl = document.getElementById("risk-preview");
 
   const safeROI = Number(roi || 0).toFixed(1);
