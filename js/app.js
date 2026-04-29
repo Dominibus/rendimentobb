@@ -2383,39 +2383,74 @@ if(mortgageBox && mortgageBtn){
 
 }
 
-// ================= LOCATION → CITY MAPPING =================
-// ================= LOCATION → CITY MAPPING PRO =================
+// ================= LOCATION → CITY MAPPING PREMIUM =================
+
 function mapLocationToCity(input){
 
   if(!input) return "roma";
 
   const val = input.toLowerCase().trim();
 
-  // 🔥 province mapping (VERO FIX)
+  // 🔥 database reale (top comuni strategici)
+  const cityMap = {
+    // NAPOLI AREA
+    "portici": "napoli",
+    "ercolano": "napoli",
+    "pompei": "napoli",
+    "torre del greco": "napoli",
+    "pozzuoli": "napoli",
+    "salerno": "napoli",
+    "avellino": "napoli",
+
+    // MILANO AREA
+    "sesto san giovanni": "milano",
+    "lambrate": "milano",
+    "cologno monzese": "milano",
+    "monza": "milano",
+    "rho": "milano",
+    "legnano": "milano",
+    "bergamo": "milano",
+
+    // ROMA AREA
+    "fiumicino": "roma",
+    "ostia": "roma",
+    "tivoli": "roma",
+    "guidonia": "roma",
+    "ciampino": "roma",
+    "latina": "roma",
+
+    // FIRENZE AREA
+    "prato": "firenze",
+    "pistoia": "firenze",
+    "scandicci": "firenze"
+  };
+
+  // 🔍 match diretto città
+  for(const city in cityMap){
+    if(val.includes(city)){
+      return cityMap[city];
+    }
+  }
+
+  // 🔥 province mapping (forte)
   const provinceMap = {
     na: "napoli",
     sa: "napoli",
     av: "napoli",
-    bn: "napoli",
     ce: "napoli",
 
     mi: "milano",
     mb: "milano",
     bg: "milano",
-    bs: "milano",
 
     rm: "roma",
     lt: "roma",
     fr: "roma",
-    vt: "roma",
-    ri: "roma",
 
     fi: "firenze",
-    po: "firenze",
-    pt: "firenze"
+    po: "firenze"
   };
 
-  // 🔍 cerca sigla provincia tipo (NA)
   const match = val.match(/\((.*?)\)/);
 
   if(match){
@@ -2425,18 +2460,14 @@ function mapLocationToCity(input){
     }
   }
 
-  // 🔥 città dirette
+  // 🔥 città principali
   if(val.includes("napoli")) return "napoli";
   if(val.includes("milano")) return "milano";
   if(val.includes("roma")) return "roma";
   if(val.includes("firenze")) return "firenze";
 
-  // 🔥 fallback intelligente (NO SEMPRE ROMA)
-  if(val.length > 3){
-    return "napoli"; // 👉 fallback migliore per sud (puoi cambiarlo)
-  }
-
-  return "roma";
+  // ❌ fallback NON più Napoli fisso
+  return window.currentCity || "roma";
 }
 
 // ================= LOCATION HELPER UX (FIX REALE) =================
@@ -2460,11 +2491,11 @@ if(locationInput && helper){
     const mapped = mapLocationToCity(val);
 
     const cityLabel = {
-      napoli: "Napoli",
-      milano: "Milano",
-      roma: "Roma",
-      firenze: "Firenze"
-    };
+  napoli: "Napoli",
+  milano: "Milano",
+  roma: "Roma",
+  firenze: "Firenze"
+ };
 
     helper.innerText = t(
       `📍 Analisi basata su mercato ${cityLabel[mapped]}`,
@@ -2534,24 +2565,28 @@ window.calculate = async function(force = false){
     const commission  = getValue("commission") || 15;
     const tax         = getValue("tax") || 21;
 
-    // ================= CUSTOM LOCATION =================
+   // ================= CUSTOM LOCATION (PREMIUM FIX) =================
+
 const customLocation = document.getElementById("custom-location")?.value;
 
-// 🔥 override città se presente
-if(customLocation){
+// 🔥 override città se utente inserisce località
+if(customLocation && customLocation.trim() !== ""){
 
   const mappedCity = mapLocationToCity(customLocation);
 
   // ⚠️ NON override se CITY LOCK attivo (ROI pages)
   if(!window.__CITY_LOCKED__){
 
+    // 🔥 aggiorna città globale
     window.currentCity = mappedCity;
+
+    // 🔥 salva per coerenza UX
     localStorage.setItem("selected_city", mappedCity);
 
-    console.log("📍 Località:", customLocation);
-    console.log("🏙 Benchmark city:", mappedCity);
+    console.log("📍 Località inserita:", customLocation);
+    console.log("🏙 Città benchmark:", mappedCity);
 
-    // 🔥 aggiorna subito background
+    // 🔥 aggiorna UI subito (CRITICO)
     if(typeof applyCityBackground === "function"){
       applyCityBackground(mappedCity);
     }
@@ -2559,7 +2594,6 @@ if(customLocation){
   }
 
 }
-
     const loanAmount  = getValue("loanAmount") || (price - equity);
     const interestRate= getValue("interestRate") || 3.5;
     const loanYears   = getValue("loanYears") || 20;
