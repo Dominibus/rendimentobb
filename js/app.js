@@ -2384,22 +2384,62 @@ if(mortgageBox && mortgageBtn){
 }
 
 // ================= LOCATION → CITY MAPPING =================
+// ================= LOCATION → CITY MAPPING PRO =================
 function mapLocationToCity(input){
 
   if(!input) return "roma";
 
-  const val = input.toLowerCase();
+  const val = input.toLowerCase().trim();
 
-  if(val.includes("napoli") || val.includes("(na)")) return "napoli";
-  if(val.includes("milano") || val.includes("(mi)")) return "milano";
-  if(val.includes("firenze") || val.includes("(fi)")) return "firenze";
-  if(val.includes("roma") || val.includes("(rm)")) return "roma";
+  // 🔥 province mapping (VERO FIX)
+  const provinceMap = {
+    na: "napoli",
+    sa: "napoli",
+    av: "napoli",
+    bn: "napoli",
+    ce: "napoli",
 
-  // fallback intelligente
+    mi: "milano",
+    mb: "milano",
+    bg: "milano",
+    bs: "milano",
+
+    rm: "roma",
+    lt: "roma",
+    fr: "roma",
+    vt: "roma",
+    ri: "roma",
+
+    fi: "firenze",
+    po: "firenze",
+    pt: "firenze"
+  };
+
+  // 🔍 cerca sigla provincia tipo (NA)
+  const match = val.match(/\((.*?)\)/);
+
+  if(match){
+    const prov = match[1].toLowerCase();
+    if(provinceMap[prov]){
+      return provinceMap[prov];
+    }
+  }
+
+  // 🔥 città dirette
+  if(val.includes("napoli")) return "napoli";
+  if(val.includes("milano")) return "milano";
+  if(val.includes("roma")) return "roma";
+  if(val.includes("firenze")) return "firenze";
+
+  // 🔥 fallback intelligente (NO SEMPRE ROMA)
+  if(val.length > 3){
+    return "napoli"; // 👉 fallback migliore per sud (puoi cambiarlo)
+  }
+
   return "roma";
 }
 
-// ================= LOCATION HELPER UX =================
+// ================= LOCATION HELPER UX (FIX REALE) =================
 const locationInput = document.getElementById("custom-location");
 const helper = document.getElementById("location-helper");
 
@@ -2430,6 +2470,11 @@ if(locationInput && helper){
       `📍 Analisi basata su mercato ${cityLabel[mapped]}`,
       `📍 Analysis based on ${cityLabel[mapped]} market`
     );
+
+    // 🔥 SYNC REALE SUBITO
+    if(!window.__CITY_LOCKED__){
+      window.currentCity = mapped;
+    }
 
   });
 
