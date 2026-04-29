@@ -286,12 +286,7 @@ if(access.isFree){
 
   if(!access){
   console.warn("⛔ access non disponibile");
-  return;
-}
-
-// 🔥 AGGIUNGI QUESTO SUBITO DOPO
-if(access.isFree){
-  return;
+  // ❌ NON bloccare render
 }
 
   // 🟡 INVESTOR → teaser intelligente (NO DUPLICATI)
@@ -2383,7 +2378,7 @@ if(mortgageBox && mortgageBtn){
 
 }
 
-// ================= LOCATION → CITY MAPPING PREMIUM =================
+// ================= LOCATION → CITY MAPPING PRO =================
 
 function mapLocationToCity(input){
 
@@ -2391,61 +2386,44 @@ function mapLocationToCity(input){
 
   const val = input.toLowerCase().trim();
 
-  // 🔥 database reale (top comuni strategici)
+  // ================= DATABASE MIRATO =================
   const cityMap = {
-    // NAPOLI AREA
+
+    // NAPOLI
     "portici": "napoli",
     "ercolano": "napoli",
     "pompei": "napoli",
-    "torre del greco": "napoli",
-    "pozzuoli": "napoli",
-    "salerno": "napoli",
-    "avellino": "napoli",
 
-    // MILANO AREA
+    // MILANO
     "sesto san giovanni": "milano",
     "lambrate": "milano",
-    "cologno monzese": "milano",
     "monza": "milano",
-    "rho": "milano",
-    "legnano": "milano",
-    "bergamo": "milano",
 
-    // ROMA AREA
+    // ROMA
     "fiumicino": "roma",
     "ostia": "roma",
-    "tivoli": "roma",
-    "guidonia": "roma",
-    "ciampino": "roma",
-    "latina": "roma",
 
-    // FIRENZE AREA
+    // FIRENZE
     "prato": "firenze",
-    "pistoia": "firenze",
-    "scandicci": "firenze"
+    "pistoia": "firenze"
   };
 
-  // 🔍 match diretto città
   for(const city in cityMap){
     if(val.includes(city)){
       return cityMap[city];
     }
   }
 
-  // 🔥 province mapping (forte)
+  // ================= PROVINCE =================
   const provinceMap = {
     na: "napoli",
     sa: "napoli",
-    av: "napoli",
-    ce: "napoli",
 
     mi: "milano",
     mb: "milano",
-    bg: "milano",
 
     rm: "roma",
     lt: "roma",
-    fr: "roma",
 
     fi: "firenze",
     po: "firenze"
@@ -2460,17 +2438,45 @@ function mapLocationToCity(input){
     }
   }
 
-  // 🔥 città principali
-  if(val.includes("napoli")) return "napoli";
-  if(val.includes("milano")) return "milano";
-  if(val.includes("roma")) return "roma";
-  if(val.includes("firenze")) return "firenze";
+  // ================= REGION LOGIC (🔥 QUI È IL FIX) =================
 
-  // ❌ fallback NON più Napoli fisso
-  return window.currentCity || "roma";
+  if(val.includes("pisa") || val.includes("livorno") || val.includes("lucca")){
+    return "firenze";
+  }
+
+  if(val.includes("torino") || val.includes("novara")){
+    return "milano";
+  }
+
+  if(val.includes("bologna") || val.includes("modena")){
+    return "firenze";
+  }
+
+  if(val.includes("napoli") || val.includes("salerno")){
+    return "napoli";
+  }
+
+  if(val.includes("milano")){
+    return "milano";
+  }
+
+  if(val.includes("roma")){
+    return "roma";
+  }
+
+  if(val.includes("firenze")){
+    return "firenze";
+  }
+
+  // ================= FALLBACK INTELLIGENTE =================
+
+  console.log("⚠️ città non riconosciuta → fallback ROMA");
+
+  return "roma";
 }
 
-// ================= LOCATION HELPER UX (FIX REALE) =================
+// ================= LOCATION HELPER UX (FINAL PREMIUM) =================
+
 const locationInput = document.getElementById("custom-location");
 const helper = document.getElementById("location-helper");
 
@@ -2478,34 +2484,56 @@ if(locationInput && helper){
 
   locationInput.addEventListener("input", () => {
 
-    const val = locationInput.value;
+    const val = locationInput.value?.trim();
 
+    // ================= EMPTY STATE =================
     if(!val){
+
       helper.innerText = t(
         "💡 I dati di mercato verranno applicati automaticamente",
         "💡 Market data will be applied automatically"
       );
+
       return;
     }
 
-    const mapped = mapLocationToCity(val);
+    // ================= MAPPING =================
+    const mapped = mapLocationToCity(val) || "roma";
 
+    // ================= LABEL =================
     const cityLabel = {
-  napoli: "Napoli",
-  milano: "Milano",
-  roma: "Roma",
-  firenze: "Firenze"
- };
+      napoli: "Napoli",
+      milano: "Milano",
+      roma: "Roma",
+      firenze: "Firenze"
+    };
 
+    const label = cityLabel[mapped] || "Roma";
+
+    // ================= UX MESSAGE =================
     helper.innerText = t(
-      `📍 Analisi basata su mercato ${cityLabel[mapped]}`,
-      `📍 Analysis based on ${cityLabel[mapped]} market`
+      `📍 Analisi basata su mercato ${label}`,
+      `📍 Analysis based on ${label} market`
     );
 
-    // 🔥 SYNC REALE SUBITO
+    // ================= SYNC REALE (CRITICO) =================
     if(!window.__CITY_LOCKED__){
+
+      // 🔥 aggiorna città globale
       window.currentCity = mapped;
+
+      // 🔥 salva (coerenza UX)
+      localStorage.setItem("selected_city", mapped);
+
+      // 🔥 aggiorna background live (effetto premium)
+      if(typeof applyCityBackground === "function"){
+        applyCityBackground(mapped);
+      }
+
     }
+
+    console.log("📍 INPUT:", val);
+    console.log("🏙 MAPPED:", mapped);
 
   });
 
@@ -2542,7 +2570,9 @@ window.calculate = async function(force = false){
   `).forEach(el => el.remove());
 
   document.querySelectorAll(`
-  .lock-overlay
+  .lock-overlay,
+  .results-overlay,
+  .upgrade-overlay
 `).forEach(el => el.remove());
 
   console.log("🚀 CALCULATE START");
@@ -2579,6 +2609,11 @@ if(customLocation && customLocation.trim() !== ""){
 
     // 🔥 aggiorna città globale
     window.currentCity = mappedCity;
+
+// 🔥 NON ereditare città precedente
+if(!mappedCity){
+  window.currentCity = "roma";
+}
 
     // 🔥 salva per coerenza UX
     localStorage.setItem("selected_city", mappedCity);
@@ -2776,17 +2811,13 @@ if(access?.isInvestor){
     // 🔴 FREE → blocca sezioni
     if(access.isFree){
 
-      applySmartLock(document.getElementById("investment-score"), {
-        type:"overlay",
-        plan:"investor"
-      });
+  // 🔥 NON bloccare KPI core
+  applySmartLock(document.getElementById("ai-insights"), {
+    type:"overlay",
+    plan:"investor"
+  });
 
-      applySmartLock(document.getElementById("ai-insights"), {
-        type:"overlay",
-        plan:"investor"
-      });
-
-    }
+}
 
     // 🟡 INVESTOR → blocca SOLO advanced
     else if(access.isInvestor){
