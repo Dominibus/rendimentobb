@@ -63,23 +63,22 @@ content="Calculate ROI, real risk and sustainability before investing in a B&B. 
 <style>
 
 /* ============================= */
-/* MICRO UX BOOST (IMPORTANTE) */
+/* 🔥 MICRO UX BOOST */
 /* ============================= */
 
-/* smooth rendering */
 body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
 
-/* input focus premium */
+/* input premium */
 input:focus{
   outline:none;
   border-color:#10b981;
   box-shadow:0 0 0 3px rgba(16,185,129,0.15);
 }
 
-/* subtle hover lift */
+/* hover SaaS */
 .tool-card:hover,
 .results-card:hover{
   transform:translateY(-2px);
@@ -87,130 +86,21 @@ input:focus{
 }
 
 /* ============================= */
-/* MARKET SELECT */
+/* 🔥 MARKET SELECT */
 /* ============================= */
 
 .market-select{
-margin-top:15px;
-padding:12px;
-border-radius:12px;
-border:1px solid #e2e8f0;
-width:100%;
-font-size:14px;
+  margin-top:15px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  width:100%;
+  font-size:14px;
 }
 
 /* ============================= */
-/* MOBILE OPTIMIZATION */
+/* 🔥 SIMULATOR LAYOUT PRO */
 /* ============================= */
-
-@media (max-width:768px){
-
-.container{
-padding-left:20px;
-padding-right:20px;
-}
-
-.portal-header-inner{
-flex-direction:column;
-gap:15px;
-text-align:center;
-}
-
-.page-title h1{
-font-size:26px;
-line-height:1.3;
-}
-
-.page-title p{
-font-size:15px;
-}
-
-.form-grid{
-grid-template-columns:1fr;
-gap:18px;
-}
-
-.tool-card{
-padding:20px;
-}
-
-.results-card{
-padding:20px;
-}
-
-.kpi-grid{
-grid-template-columns:1fr;
-gap:15px;
-}
-
-.btn{
-width:100%;
-padding:14px;
-font-size:16px;
-}
-
-.market-select{
-font-size:16px;
-}
-
-input{
-font-size:16px;
-}
-
-}
-
-/* ============================= */
-/* INVESTMENT SCORE */
-/* ============================= */
-
-.score-circle{
-width:90px;
-height:90px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:22px;
-font-weight:700;
-margin:auto;
-background:#e2e8f0;
-color:#0f172a;
-transition:0.3s;
-}
-
-.score-good{ background:#10b981; color:white; }
-.score-medium{ background:#f59e0b; color:white; }
-.score-bad{ background:#ef4444; color:white; }
-
-.investment-panel{
-display:grid;
-grid-template-columns:220px 1fr;
-gap:30px;
-align-items:center;
-margin-top:20px;
-}
-
-.metric-card{
-background:#f8fafc;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-.metric-card span{
-display:block;
-font-size:13px;
-color:#64748b;
-margin-bottom:6px;
-}
-
-.metric-card strong{
-font-size:18px;
-}
-
-/* =====================================
-🔥 SIMULATORE PRO LAYOUT (ISOLATO)
-===================================== */
 
 .simulator-container{
   max-width:1200px;
@@ -219,7 +109,7 @@ font-size:18px;
 
 .simulator-grid{
   display:grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns:420px 1fr;
   gap:30px;
   align-items:start;
 }
@@ -236,7 +126,10 @@ font-size:18px;
   box-shadow:0 20px 50px rgba(0,0,0,0.08);
 }
 
-/* 🔥 KPI PIÙ PULITI */
+/* ============================= */
+/* 🔥 KPI GRID */
+/* ============================= */
+
 .roi-metrics{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -244,24 +137,178 @@ font-size:18px;
   margin-top:15px;
 }
 
-/* 🔥 MOBILE */
-@media(max-width:900px){
+/* ============================= */
+/* 🔥 SCORE */
+/* ============================= */
+
+.score-circle{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:700;
+  margin:auto;
+  background:#e2e8f0;
+  color:#0f172a;
+  transition:0.3s;
+}
+
+.score-good{ background:#10b981; color:white; }
+.score-medium{ background:#f59e0b; color:white; }
+.score-bad{ background:#ef4444; color:white; }
+
+.investment-panel{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:30px;
+  align-items:center;
+  margin-top:20px;
+}
+
+/* ============================= */
+/* 🔥 METRIC CARD */
+/* ============================= */
+
+.metric-card{
+  background:#f8fafc;
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.metric-card span{
+  display:block;
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:6px;
+}
+
+.metric-card strong{
+  font-size:18px;
+}
+
+/* ============================= */
+/* 🔥 BLUR SYSTEM (FIX REALE) */
+/* ============================= */
+
+.blur-content{
+  filter:blur(6px);
+  pointer-events:none;
+}
+
+.free-only{
+  position:relative;
+  z-index:2;
+}
+
+/* ============================= */
+/* 🔥 LOCK OVERLAY */
+/* ============================= */
+
+.locked-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(4px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  border-radius:12px;
+}
+
+/* ============================= */
+/* 🔥 PRO USER FIX */
+/* ============================= */
+
+body.pro-user .locked-overlay,
+body.pro-user .upgrade-box,
+body.pro-user [data-paywall="true"]{
+  display:none !important;
+}
+
+body.pro-user .blur-content{
+  filter:none !important;
+  pointer-events:auto !important;
+}
+
+/* ============================= */
+/* 🔥 MOBILE FIX (CRITICO) */
+/* ============================= */
+
+@media (max-width:1024px){
+
   .simulator-grid{
     grid-template-columns:1fr;
   }
+
 }
 
-/* 🔥 FREE vede comunque qualcosa */
-.free-only{
-  opacity:1;
-}
+@media (max-width:768px){
 
-.blur-content{
-  filter:none;
-}  
+  .container{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .portal-header-inner{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+
+  .page-title h1{
+    font-size:26px;
+    line-height:1.3;
+  }
+
+  .page-title p{
+    font-size:15px;
+  }
+
+  .tool-card{
+    padding:20px;
+  }
+
+  .results-card{
+    padding:20px;
+  }
+
+  .kpi-grid{
+    grid-template-columns:1fr;
+    gap:15px;
+  }
+
+  .btn{
+    width:100%;
+    padding:14px;
+    font-size:16px;
+  }
+
+  input{
+    font-size:16px;
+  }
+
+  /* 🔥 CRITICO: NON bloccare mobile */
+  .locked-overlay{
+    position:relative !important;
+    inset:auto !important;
+    margin-top:15px;
+    background:white;
+    border:1px solid #e2e8f0;
+  }
+
+  .blur-content{
+    filter:none !important;
+    pointer-events:auto !important;
+  }
+
+}
 
 </style>
-
 </head>
 
 <body>
@@ -1173,11 +1220,42 @@ function applyPaywall(){
   console.log("⛔ PAYWALL DISABLED → gestito SOLO da app.js");
   return;
 }
-/* ================= AUTO INIT ================= */
 
-document.addEventListener("rb_plan_loaded", () => {
-  console.log("⛔ PAYWALL HANDLED BY app.js ONLY");
-});
+/* ================= AUTO INIT PRO FIX HARD ================= */
+
+function applyProAccess(){
+
+  const access = window.getUserAccess?.();
+
+  if(!access){
+    console.log("⏳ Access not ready");
+    return false;
+  }
+
+  console.log("👤 ACCESS:", access);
+
+  if(access.isPro || access.isAdmin){
+    document.body.classList.add("pro-user");
+    console.log("✅ PRO MODE ATTIVO");
+  }
+
+  return true;
+}
+
+// 🔥 retry finché Firebase non è pronto
+let tries = 0;
+
+const interval = setInterval(()=>{
+
+  const done = applyProAccess();
+
+  if(done || tries > 10){
+    clearInterval(interval);
+  }
+
+  tries++;
+
+}, 300);
 
 /* ================= CITY LOAD ================= */
 
