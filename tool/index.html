@@ -208,6 +208,58 @@ margin-bottom:6px;
 font-size:18px;
 }
 
+/* =====================================
+🔥 SIMULATORE PRO LAYOUT (ISOLATO)
+===================================== */
+
+.simulator-container{
+  max-width:1200px;
+  margin:auto;
+}
+
+.simulator-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:30px;
+  align-items:start;
+}
+
+.simulator-left,
+.simulator-right{
+  width:100%;
+}
+
+.roi-dashboard{
+  background:white;
+  border-radius:16px;
+  padding:25px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.08);
+}
+
+/* 🔥 KPI PIÙ PULITI */
+.roi-metrics{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-top:15px;
+}
+
+/* 🔥 MOBILE */
+@media(max-width:900px){
+  .simulator-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* 🔥 FREE vede comunque qualcosa */
+.free-only{
+  opacity:1;
+}
+
+.blur-content{
+  filter:none;
+}  
+
 </style>
 
 </head>
@@ -494,11 +546,11 @@ data-en="Potential return">
   </div>
 
   <div id="roi-shock-block" style="
-display:none;
+display:block;
 margin-top:12px;
-padding:12px;
+padding:14px;
 border-radius:12px;
-background:rgba(239,68,68,0.08);
+background:linear-gradient(135deg,#fee2e2,#fff1f2);
 color:#dc2626;
 font-size:13px;
 font-weight:600;
@@ -506,12 +558,16 @@ text-align:center;
 ">
 
 <span 
-data-it="⚠️ Senza analisi completa potresti perdere fino al 30% del profitto"
-data-en="⚠️ Without full analysis you could lose up to 30% of profit">
-⚠️ Senza analisi completa potresti perdere fino al 30% del profitto
+data-it="⚠️ Questo ROI NON include mutuo, tasse e rischio reale"
+data-en="⚠️ This ROI does NOT include mortgage, taxes and real risk">
 </span>
 
-</div>  
+<div style="margin-top:6px;font-size:12px;font-weight:500;">
+data-it="Potresti passare da profitto a perdita"
+data-en="You could go from profit to loss"
+</div>
+
+</div>
 
   <!-- RISK BAR -->
   <div id="risk-bar"></div>
@@ -542,16 +598,23 @@ data-en="🔥 Looks profitable… but without risk analysis you could make a wro
 
 <div class="roi-metrics">
 
-  <!-- 🔥 FREE (TEASER) -->
+  <!-- 🔥 FREE (VALORE REALE) -->
   <div class="metric">
-    <span data-it="Profitto stimato (parziale)"
-          data-en="Estimated profit (partial)"></span>
+    <span data-it="Profitto stimato"
+          data-en="Estimated profit"></span>
     <strong id="profit-live">—</strong>
 
-    <div style="font-size:11px;color:#ef4444;margin-top:4px;"
-    data-it="⚠️ Non include tasse, mutuo e rischio"
-    data-en="⚠️ Does not include taxes, mortgage and risk">
+    <div style="font-size:11px;color:#64748b;margin-top:4px;"
+    data-it="Dati medi di mercato"
+    data-en="Based on market averages">
     </div>
+  </div>
+
+  <!-- 🔥 FREE -->
+  <div class="metric">
+    <span data-it="ROI stimato"
+          data-en="Estimated ROI"></span>
+    <strong id="roi-preview-live">—</strong>
   </div>
 
   <!-- 🔒 PRO -->
