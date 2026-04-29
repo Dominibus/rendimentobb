@@ -343,6 +343,126 @@ body.pro-user .blur-content{
 
 }
 
+/* ===================================== */
+/* 🔥 SIMULATOR SAFE SYSTEM (ISOLATO) */
+/* NON TOCCA ALTRE PAGINE */
+/* ===================================== */
+
+.tool-page .tool-hero{
+  position:relative;
+  overflow:hidden;
+}
+
+/* 🔥 overlay leggibilità (CRITICO) */
+.tool-page .tool-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.75)
+  );
+  z-index:0;
+}
+
+/* contenuto sopra background */
+.tool-page .tool-hero > *{
+  position:relative;
+  z-index:1;
+}
+
+/* ===================================== */
+/* 🔥 LAYOUT FIX (NO OVERLAP) */
+/* ===================================== */
+
+.tool-page .simulator-container{
+  position:relative;
+  z-index:5;
+}
+
+.tool-page .simulator-grid{
+  position:relative;
+  z-index:5;
+}
+
+/* ROI sempre sopra */
+.tool-page .roi-dashboard{
+  position:relative;
+  z-index:10;
+}
+
+/* RESULTS sempre sotto */
+.tool-page #results{
+  position:relative;
+  z-index:1;
+  margin-top:60px;
+}
+
+/* ===================================== */
+/* 🔥 TEXT VISIBILITY FIX */
+/* ===================================== */
+
+/* evita override globale brutale */
+.tool-page .simulator-container{
+  color:#0f172a;
+}
+
+/* testo sopra hero = bianco */
+.tool-page .tool-hero,
+.tool-page .tool-hero *{
+  color:#ffffff;
+}
+
+/* card tornano leggibili */
+.tool-page .tool-card,
+.tool-page .roi-dashboard,
+.tool-page .results-card{
+  color:#0f172a;
+}
+
+/* ===================================== */
+/* 🔥 ROI VISIBILITY FIX */
+/* ===================================== */
+
+.tool-page #roi-live{
+  color:#0f172a !important;
+  opacity:1 !important;
+}
+
+/* glow non deve coprire */
+.tool-page #roi-glow{
+  z-index:0;
+}
+
+/* ===================================== */
+/* 🔥 CTA FIX (leggibilità sempre) */
+/* ===================================== */
+
+.tool-page .cta-primary{
+  background:#10b981;
+  color:white !important;
+  box-shadow:0 10px 25px rgba(16,185,129,0.3);
+}
+
+.tool-page #cta-urgency{
+  color:#ef4444 !important;
+  text-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* ===================================== */
+/* 🔥 HARD FIX OVERLAY BUG */
+/* ===================================== */
+
+/* evita overlay che coprono tutto */
+.tool-page .locked-overlay{
+  z-index:3;
+}
+
+/* ROI NON deve essere bloccato */
+.tool-page .roi-dashboard .locked-overlay{
+  display:none !important;
+}  
+
 </style>
 </head>
 
