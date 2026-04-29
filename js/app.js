@@ -2794,24 +2794,39 @@ if(access?.isInvestor){
 
 }
 
-    // =====================================
-    // 🔥 FIX CRITICO → PRO / ADMIN NON DEVONO ESSERE TOCCATI
-    // =====================================
-    if(access.isPro || access.isAdmin){
-      console.log("🟢 SKIP LOCK → PRO");
+// =====================================
+// 🔥 FIX CRITICO → PRO / ADMIN FULL UNLOCK REALE
+// =====================================
+if(access.isPro || access.isAdmin){
 
-      document.querySelectorAll(".blur-content").forEach(el=>{
-  el.classList.remove("blur-content");
-});
-      return;
-    }
+  console.log("🟢 SKIP LOCK → PRO");
 
-    console.log("🎯 APPLY FINAL LOCK:", access);
+  // 🔥 rimuove TUTTI gli overlay
+  document.querySelectorAll(".lock-overlay").forEach(el=>{
+    el.remove();
+  });
 
-    // 🔴 FREE → blocca sezioni
-    if(access.isFree){
+  // 🔥 rimuove blur + blocchi interazione
+  document.querySelectorAll(".blur-content").forEach(el=>{
+    el.classList.remove("blur-content");
+    el.style.filter = "none";
+    el.style.pointerEvents = "auto";
+    el.style.opacity = "1";
+  });
 
-  // 🔥 NON bloccare KPI core
+  // 🔥 fallback extra sicurezza (se qualcosa rimane)
+  document.querySelectorAll('[style*="blur"]').forEach(el=>{
+    el.style.filter = "none";
+  });
+
+  return; // 💣 BLOCCA qualsiasi lock dopo
+}
+
+console.log("🎯 APPLY FINAL LOCK:", access);
+
+// 🔴 FREE → blocca sezioni
+if(access.isFree){
+
   applySmartLock(document.getElementById("ai-insights"), {
     type:"overlay",
     plan:"investor"
@@ -2819,20 +2834,14 @@ if(access?.isInvestor){
 
 }
 
-    // 🟡 INVESTOR → blocca SOLO advanced
-    else if(access.isInvestor){
+// 🟡 INVESTOR → blocca SOLO advanced
+else if(access.isInvestor){
 
-      applySmartLock(document.getElementById("ai-insights"), {
-        type:"advanced",
-        plan:"pro"
-      });
+  applySmartLock(document.getElementById("ai-insights"), {
+    type:"advanced",
+    plan:"pro"
+  });
 
-    }
-
-  }, 400);
-
-} catch(e){
-  console.error("💥 UI FINAL RENDER ERROR:", e);
 }
 
 // ================= POST ANALYSIS =================
