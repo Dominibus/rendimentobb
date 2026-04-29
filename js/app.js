@@ -2778,11 +2778,6 @@ try {
     revenueEl.innerText = formatCurrency(revenue);
   }
 
-  // ================= KPI PREVIEW =================
-  if(typeof updatePreviewMetrics === "function"){
-    updatePreviewMetrics(roi, risk);
-  }
-
   console.log("✅ UI FINAL RENDER OK");
 
   // ================= POST RENDER CONTROL =================
@@ -2964,6 +2959,10 @@ const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
 if(typeof updatePreviewMetrics === "function"){
   updatePreviewMetrics(roi, riskScore);
 }
+    console.log("🎯 PREVIEW UPDATE:", {
+  roi,
+  riskScore
+});
 
 // 🔥 ROI PREVIEW + ANIMAZIONE (SAFE)
 const roiPreviewEl = document.getElementById("roi-preview");
