@@ -270,18 +270,19 @@ function renderUniversalKPI(data = {}){
   // 🔴 FREE → LIMITA DATI (NO REAL NUMBERS)
 if(access.isFree){
 
-  console.log("🔒 KPI LIMITATI (FREE)");
+  console.log("🔒 KPI LIMITED VIEW (FREE)");
 
-  if(qrProfit) qrProfit.innerText = "—";
-  if(elAnnual) elAnnual.innerText = "—";
+  [
+    qrProfit, elAnnual,
+    qrMonth, elMonthly,
+    qrBreak, elBreak
+  ].forEach(el=>{
+    if(!el) return;
 
-  if(qrMonth) qrMonth.innerText = "—";
-  if(elMonthly) elMonthly.innerText = "—";
+    el.style.opacity = "0.6";
+    el.style.filter = "blur(2px)";
+  });
 
-  if(qrBreak) qrBreak.innerText = "—";
-  if(elBreak) elBreak.innerText = "—";
-
-  // ❌ RIMUOVI RETURN
 }
 
   if(!access){
