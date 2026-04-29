@@ -344,22 +344,21 @@ body.pro-user .blur-content{
 }
 
 /* ===================================== */
-/* 🔥 SIMULATOR SAFE SYSTEM (ISOLATO) */
-/* NON TOCCA ALTRE PAGINE */
+/* 🔥 TOOL PAGE FIX (PULITO E STABILE) */
 /* ===================================== */
 
+/* HERO: solo overlay, NON tocca testi */
 .tool-page .tool-hero{
   position:relative;
   overflow:hidden;
 }
 
-/* 🔥 overlay leggibilità (CRITICO) */
 .tool-page .tool-hero::before{
   content:"";
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.55),
     rgba(15,23,42,0.75)
   );
   z-index:0;
@@ -372,48 +371,38 @@ body.pro-user .blur-content{
 }
 
 /* ===================================== */
-/* 🔥 LAYOUT FIX (NO OVERLAP) */
+/* 🔥 LAYOUT (NO OVERLAP) */
 /* ===================================== */
 
 .tool-page .simulator-container{
   position:relative;
-  z-index:5;
+  z-index:2;
 }
 
 .tool-page .simulator-grid{
   position:relative;
-  z-index:5;
+  z-index:2;
 }
 
-/* ROI sempre sopra */
+/* ROI sopra */
 .tool-page .roi-dashboard{
   position:relative;
-  z-index:10;
+  z-index:3;
 }
 
-/* RESULTS sempre sotto */
+/* RESULTS sotto ma visibili */
 .tool-page #results{
   position:relative;
-  z-index:1;
+  z-index:2;
   margin-top:60px;
 }
 
 /* ===================================== */
-/* 🔥 TEXT VISIBILITY FIX */
+/* 🔥 TEXT FIX (CRITICO) */
 /* ===================================== */
 
-/* evita override globale brutale */
-.tool-page .simulator-container{
-  color:#0f172a;
-}
+/* NON forzare tutto bianco (rimosso bug) */
 
-/* testo sopra hero = bianco */
-.tool-page .tool-hero,
-.tool-page .tool-hero *{
-  color:#ffffff;
-}
-
-/* card tornano leggibili */
 .tool-page .tool-card,
 .tool-page .roi-dashboard,
 .tool-page .results-card{
@@ -421,47 +410,71 @@ body.pro-user .blur-content{
 }
 
 /* ===================================== */
-/* 🔥 ROI VISIBILITY FIX */
+/* 🔥 ROI FIX */
 /* ===================================== */
 
-.tool-page #roi-live{
+.tool-page #roi-live,
+.tool-page #roi-preview-live{
   color:#0f172a !important;
   opacity:1 !important;
+  position:relative;
+  z-index:5;
 }
 
-/* glow non deve coprire */
+/* glow non interferisce */
 .tool-page #roi-glow{
   z-index:0;
+  pointer-events:none;
 }
 
 /* ===================================== */
-/* 🔥 CTA FIX (leggibilità sempre) */
+/* 🔥 BLUR FIX (SOLO DOVE SERVE) */
+/* ===================================== */
+
+/* blur SOLO risultati locked */
+#results .blur-content{
+  filter:blur(6px);
+  pointer-events:none;
+}
+
+/* PRO unlock */
+body.pro-user #results .blur-content{
+  filter:none !important;
+  pointer-events:auto !important;
+}
+
+/* ===================================== */
+/* 🔥 OVERLAY FIX */
+/* ===================================== */
+
+.tool-page .locked-overlay{
+  z-index:2;
+}
+
+/* ROI mai bloccato */
+.tool-page .roi-dashboard .locked-overlay{
+  display:none !important;
+}
+
+/* ===================================== */
+/* 🔥 CHART SAFE */
+/* ===================================== */
+
+.tool-page canvas{
+  display:block;
+  max-width:100%;
+}
+
+/* ===================================== */
+/* 🔥 CTA */
 /* ===================================== */
 
 .tool-page .cta-primary{
   background:#10b981;
-  color:white !important;
-  box-shadow:0 10px 25px rgba(16,185,129,0.3);
+  color:white;
+  position:relative;
+  z-index:5;
 }
-
-.tool-page #cta-urgency{
-  color:#ef4444 !important;
-  text-shadow:0 2px 6px rgba(0,0,0,0.4);
-}
-
-/* ===================================== */
-/* 🔥 HARD FIX OVERLAY BUG */
-/* ===================================== */
-
-/* evita overlay che coprono tutto */
-.tool-page .locked-overlay{
-  z-index:3;
-}
-
-/* ROI NON deve essere bloccato */
-.tool-page .roi-dashboard .locked-overlay{
-  display:none !important;
-}  
 
 </style>
 </head>
