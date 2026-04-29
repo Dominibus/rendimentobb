@@ -523,239 +523,184 @@ data-en="Results are based on average market data. Real risk is calculated in th
       </div>
     </div>
 
-    <!-- ================= RIGHT ================= -->
-    <div class="simulator-right">
+<!-- ================= RIGHT ================= -->
+<div class="simulator-right">
 
-      <div class="roi-dashboard">
+  <div class="roi-dashboard">
 
-        <div class="roi-main">
+    <div class="roi-main">
 
-          <div class="roi-label"
-            data-it="Potenziale rendimento"
-            data-en="Potential return">
-          </div>
+      <!-- LABEL -->
+      <div class="roi-label"
+        data-it="Potenziale rendimento"
+        data-en="Potential return">
+      </div>
 
-          <div class="roi-value" style="position:relative;">
+      <!-- ROI -->
+      <div class="roi-value" style="position:relative;">
 
-            <span id="roi-live" style="font-size:48px;font-weight:800;">--</span>
+        <span id="roi-live" style="font-size:48px;font-weight:800;">--</span>
 
-            <div id="roi-glow" style="
-              position:absolute;
-              inset:0;
-              background:radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
-              z-index:-1;
-              filter:blur(20px);
-            "></div>
+        <div id="roi-glow" style="
+          position:absolute;
+          inset:0;
+          background:radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
+          z-index:-1;
+          filter:blur(20px);
+        "></div>
 
-            <div style="font-size:12px;color:#64748b;margin-top:6px;"
-              data-it="Basato su dati medi"
-              data-en="Based on averages">
-            </div>
+        <div style="font-size:12px;color:#64748b;margin-top:6px;"
+          data-it="Basato su dati medi"
+          data-en="Based on averages">
+        </div>
 
-            <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
+        <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
 
-            <div id="roi-verdict" style="
-              margin-top:10px;
-              padding:10px;
-              border-radius:10px;
-              background:#f8fafc;
-              font-size:13px;
-            "></div>
+        <div id="roi-verdict" style="
+          margin-top:10px;
+          padding:10px;
+          border-radius:10px;
+          background:#f8fafc;
+          font-size:13px;
+        "></div>
 
-            <div style="
-              margin-top:12px;
-              padding:12px;
-              border-radius:10px;
-              background:#fee2e2;
-              font-size:13px;
-              text-align:center;
-            "
-            data-it="⚠️ ROI senza mutuo e rischio reale"
-            data-en="⚠️ ROI without mortgage and real risk">
-            </div>
-
-          </div>
-
-          <div id="risk-bar" style="margin-top:15px;"></div>
-
-          <div style="margin-top:10px;font-size:13px;color:#ef4444;"
-            data-it="🔓 Il ROI reale può cambiare"
-            data-en="🔓 Real ROI may change">
-          </div>
-
-          <div style="font-size:12px;color:#10b981;margin-top:6px;">
-            🔥 +<span id="live-users">1247</span> 
-            <span data-it="investitori attivi" data-en="investors active"></span>
-          </div>
-
+        <div style="
+          margin-top:12px;
+          padding:12px;
+          border-radius:10px;
+          background:#fee2e2;
+          font-size:13px;
+          text-align:center;
+        "
+        data-it="⚠️ ROI senza mutuo e rischio reale"
+        data-en="⚠️ ROI without mortgage and real risk">
         </div>
 
       </div>
 
+      <!-- KPI PREVIEW (🔥 QUI, NON FUORI) -->
+      <div class="roi-metrics">
+
+        <div class="metric">
+          <span data-it="Profitto stimato" data-en="Estimated profit"></span>
+          <strong id="profit-live">—</strong>
+        </div>
+
+        <div class="metric">
+          <span data-it="ROI stimato" data-en="Estimated ROI"></span>
+          <strong id="roi-preview-live">—</strong>
+        </div>
+
+        <div class="metric pro-only">
+          <span data-it="Ricavi annui" data-en="Annual revenue"></span>
+          <strong id="revenue-live">—</strong>
+        </div>
+
+      </div>
+
+      <!-- CHART -->
+      <div class="roi-chart" style="margin-top:20px;">
+        <canvas id="roiChart"></canvas>
+      </div>
+
+      <!-- RISK -->
+      <div id="risk-bar" style="margin-top:15px;"></div>
+
+      <!-- URGENCY -->
+      <div style="margin-top:10px;font-size:13px;color:#ef4444;"
+        data-it="🔓 Il ROI reale può cambiare"
+        data-en="🔓 Real ROI may change">
+      </div>
+
+      <!-- SOCIAL PROOF -->
+      <div style="font-size:12px;color:#10b981;margin-top:6px;">
+        🔥 +<span id="live-users">1247</span>
+        <span data-it="investitori attivi" data-en="investors active"></span>
+      </div>
+
     </div>
 
-  </div> <!-- 🔴 NON TOCCARE QUESTA CHIUSURA -->
-
-  <!-- ================= RESULTS FUORI ================= -->
-
-  <div id="results" class="results-card" style="margin-top:40px;">
-    <!-- risultati -->
   </div>
 
 </div>
 
-<!-- 🔥 PSICOLOGIA FORTE -->
-<div style="margin-top:12px;font-weight:600;font-size:15px;"
-data-it="🔥 Sembra profittevole… ma senza analisi rischio potresti sbagliare investimento"
-data-en="🔥 Looks profitable… but without risk analysis you could make a wrong investment">
-</div>
+</div> <!-- ✅ CHIUSURA simulator-grid (NON TOCCARE) -->
 
-<div class="roi-metrics">
+<!-- ================= RESULTS (UNICO BLOCCO) ================= -->
 
-  <!-- 🔥 FREE (VALORE REALE) -->
-  <div class="metric">
-    <span data-it="Profitto stimato"
-          data-en="Estimated profit"></span>
-    <strong id="profit-live">—</strong>
-
-    <div style="font-size:11px;color:#64748b;margin-top:4px;"
-    data-it="Dati medi di mercato"
-    data-en="Based on market averages">
-    </div>
-  </div>
-
-  <!-- 🔥 FREE -->
-  <div class="metric">
-    <span data-it="ROI stimato"
-          data-en="Estimated ROI"></span>
-    <strong id="roi-preview-live">—</strong>
-  </div>
-
-  <!-- 🔒 PRO -->
-  <div class="metric pro-only">
-    <span data-it="Ricavi annui"
-          data-en="Annual revenue"></span>
-    <strong id="revenue-live">—</strong>
-  </div>
-
-</div>
-
-<div class="roi-chart">
-  <canvas id="roiChart"></canvas>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="mortgage-banner"></div>
-
-<!-- RESULTS -->
-<div id="results" class="results-card simulator-results">
+<div id="results" class="results-card simulator-results" style="margin-top:40px;">
 
   <div class="blur-content">
 
-    <!-- 🔥 PAURA IMMEDIATA -->
+    <!-- WARNING -->
     <div class="free-only"
-    style="text-align:center;margin-bottom:10px;font-weight:600;color:#ef4444;"
-    data-it="⚠️ Stai prendendo decisioni senza vedere i dati reali"
-    data-en="⚠️ You are making decisions without real data">
-    ⚠️ Stai prendendo decisioni senza vedere i dati reali
+      style="text-align:center;margin-bottom:10px;font-weight:600;color:#ef4444;"
+      data-it="⚠️ Stai prendendo decisioni senza vedere i dati reali"
+      data-en="⚠️ You are making decisions without real data">
     </div>
 
     <h3
-    data-it="Sintesi investimento"
-    data-en="Investment summary">
-    Sintesi investimento
+      data-it="Sintesi investimento"
+      data-en="Investment summary">
     </h3>
 
+    <!-- SCORE -->
     <div id="investment-grade-panel" class="investment-panel">
 
       <div class="investment-score">
         <div id="score-circle" class="score-circle">—</div>
 
         <div class="score-label"
-        data-it="Valutazione investimento"
-        data-en="Investment grade">
-        Valutazione investimento
+          data-it="Valutazione investimento"
+          data-en="Investment grade">
         </div>
       </div>
 
     </div>
 
-    <!-- 🔥 PAURA -->
-    <div class="free-only"
-    style="margin:20px 0;font-weight:600;color:#ef4444;text-align:center;"
-    data-it="⚠️ Potresti perdere migliaia di euro senza questa analisi completa"
-    data-en="⚠️ You could lose thousands without this full analysis">
-    ⚠️ Potresti perdere migliaia di euro senza questa analisi completa
-    </div>
-
-    <!-- 🔥 RISULTATI -->
+    <!-- RESULTS -->
     <div class="results-grid">
 
       <div class="result-item">
-        <span data-it="Profitto mensile" data-en="Monthly profit">Profitto mensile</span>
-        <strong id="profit-monthly" class="pro-blur"></strong>
+        <span data-it="Profitto mensile" data-en="Monthly profit"></span>
+        <strong id="profit-monthly"></strong>
       </div>
 
       <div class="result-item pro-only">
-        <span data-it="Profitto annuo" data-en="Annual profit">Profitto annuo</span>
-        <strong id="profit-annual" class="pro-blur"></strong>
+        <span data-it="Profitto annuo" data-en="Annual profit"></span>
+        <strong id="profit-annual"></strong>
       </div>
 
       <div class="result-item pro-only">
-        <span data-it="Break-even" data-en="Break-even">Break-even</span>
-        <strong id="break-even" class="pro-blur"></strong>
+        <span data-it="Break-even" data-en="Break-even"></span>
+        <strong id="break-even"></strong>
       </div>
 
       <div class="result-item pro-only">
-        <span data-it="Ricavi annui" data-en="Annual revenue">Ricavi annui</span>
-        <strong id="revenue-annual" class="pro-blur"></strong>
+        <span data-it="Ricavi annui" data-en="Annual revenue"></span>
+        <strong id="revenue-annual"></strong>
       </div>
 
     </div>
 
-    <!-- 🔥 CTA UPGRADE -->
-    <div class="upgrade-box free-only">
+  </div>
 
-      <div style="margin-bottom:10px;font-weight:600;"
-      data-it="🔥 Sblocca l'analisi completa"
-      data-en="🔥 Unlock full analysis">
-      🔥 Sblocca l'analisi completa
-      </div>
-
-      <button class="btn-main"
-      onclick="buyPlan('pro')"
-      data-it="🔥 Sblocca ora – 29€"
-      data-en="🔥 Unlock now – €29">
-      🔥 Sblocca ora – 29€
-      </button>
-
-    </div>
-
-  </div> <!-- ✅ FINE BLUR-CONTENT -->
-
-
-  <!-- 🔒 OVERLAY -->
+  <!-- LOCK -->
   <div class="locked-overlay free-only">
 
     <div style="text-align:center">
 
       <p style="font-weight:600;margin-bottom:10px;"
-      data-it="🔒 Sblocca analisi completa"
-      data-en="🔒 Unlock full analysis">
-      🔒 Sblocca analisi completa
+        data-it="🔒 Sblocca analisi completa"
+        data-en="🔒 Unlock full analysis">
       </p>
 
       <button class="btn btn-primary"
-      onclick="buyPlan('pro')"
-      style="padding:12px 20px;">
+        onclick="buyPlan('pro')"
+        style="padding:12px 20px;">
 
         <span data-it="🔥 Sblocca ora – 29€"
               data-en="🔥 Unlock now – €29">
-        🔥 Sblocca ora – 29€
         </span>
 
       </button>
@@ -764,7 +709,7 @@ data-en="🔥 Looks profitable… but without risk analysis you could make a wro
 
   </div>
 
-</div> <!-- ✅ FINE RESULTS -->
+</div>
 
 
 
