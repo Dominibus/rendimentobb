@@ -434,238 +434,172 @@ data-en="Results are based on average market data. Real risk is calculated in th
 
 <section class="tool-hero">
 <!-- 🔥 BACKGROUND DINAMICO -->
-  <div class="hero-bg"></div>
-  
+<div class="hero-bg"></div>
+
 <div class="container simulator-container">
+
   <div class="simulator-grid">
 
-<!-- LEFT SIDE – INPUTS -->
+    <!-- ================= LEFT ================= -->
+    <div class="simulator-left">
 
-<div class="simulator-left">
+      <div class="tool-card">
 
-<div class="tool-card">
+        <h3 
+          data-it="💰 Simula il tuo investimento B&B"
+          data-en="💰 Simulate your B&B investment">
+        </h3>
 
-  <!-- TITLE -->
-  <h3 
-  data-it="💰 Simula il tuo investimento B&B"
-  data-en="💰 Simulate your B&B investment"></h3>
-
-  <!-- MICRO COPY -->
-  <div style="font-size:13px;color:#64748b;margin-bottom:15px;"
-  data-it="Inserisci i dati e scopri se questo investimento può funzionare"
-  data-en="Enter the data and see if this investment could work">
-  </div>
-
- <!-- 🔥 INPUT GROUP – CITY + LOCATION (SILICON VALLEY UX) -->
-<div class="input-group">
-
-  <!-- LABEL -->
-  <label 
-    data-it="Città mercato" 
-    data-en="City Market">
-    Città mercato
-  </label>
-
-  <!-- SELECT (SOLO OPTION → FIX CRITICO) -->
-  <select 
-    id="market-city" 
-    class="market-select" 
-    onchange="applyMarketData(this.value)">
-    
-    <option value="">
-      Seleziona città
-    </option>
-
-    <option value="milano">Milano</option>
-    <option value="roma">Roma</option>
-    <option value="napoli">Napoli</option>
-    <option value="firenze">Firenze</option>
-
-  </select>
-
-  <!-- 🔥 CUSTOM LOCATION (FUORI DAL SELECT) -->
-  <input  
-    type="text"  
-    id="custom-location"
-    placeholder="Es. Portici (NA)"
-    data-it-placeholder="Es. Portici (NA)"
-    data-en-placeholder="e.g. Portici (NA)"
-    style="
-      width:100%;
-      margin-top:10px;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid #e2e8f0;
-      font-size:14px;
-      background:#ffffff;
-      transition:all .2s ease;
-    "
-  />
-
-  <!-- 🔥 HELPER TEXT (SMART UX) -->
-  <div 
-    id="location-helper"
-    style="
-      font-size:12px;
-      color:#64748b;
-      margin-top:6px;
-    "
-    data-it="💡 I dati di mercato verranno applicati automaticamente"
-    data-en="💡 Market data will be applied automatically">
-    
-    💡 I dati di mercato verranno applicati automaticamente
-
-  </div>
-
-</div>
-<div class="input-group">
-<label data-it="Prezzo immobile (€)"
-data-en="Property price (€)"></label>
-<input type="number" id="price" placeholder="150000">
-</div>
-
-<div class="input-group">
-<label data-it="Capitale proprio investito (€)"
-data-en="Equity invested (€)"></label>
-<input type="number" id="equity" placeholder="30000">
-</div>
-
-<div class="input-group">
-<label data-it="Prezzo medio notte (€)"
-data-en="Average nightly price (€)"></label>
-<input type="number" id="priceNight" placeholder="120">
-</div>
-
-<div class="input-group">
-<label data-it="Occupazione media (%)"
-data-en="Average occupancy (%)"></label>
-
-<input
-type="range"
-id="occupancy"
-min="30"
-max="90"
-value="70"
-oninput="calculate()">
-
-<div class="range-value">
-<span id="occ-value">70%</span>
-</div>
-
-<div style="font-size:12px;color:#64748b;margin-top:5px;"
-data-it="💡 L’occupazione è il fattore più importante"
-data-en="💡 Occupancy is the most important factor">
-</div>
-</div>
-
-<div class="input-group">
-<label data-it="Costi operativi mensili (€)"
-data-en="Monthly operating costs (€)"></label>
-<input type="number" id="expenses" placeholder="1200">
-</div>
-
-<button id="analyze-btn"
-class="btn btn-primary"
-style="margin-top:10px;font-size:16px;"
-data-it="🔍 Analizza investimento"
-data-en="🔍 Analyze investment">
-🔍 Analizza investimento
-</button>
-
-</div>
-</div>
-
-<div class="simulator-right">
-
-  <div class="roi-dashboard">
-
-    <div class="roi-main">
-
-      <!-- LABEL -->
-      <div class="roi-label"
-        data-it="Potenziale rendimento"
-        data-en="Potential return">
-      </div>
-
-      <!-- ROI VALUE -->
-      <div class="roi-value" style="position:relative;">
-
-        <span id="roi-live" style="
-          font-size:48px;
-          font-weight:800;
-          letter-spacing:-1px;
-        ">--</span>
-
-        <div id="roi-glow" style="
-          position:absolute;
-          inset:0;
-          background:radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
-          z-index:-1;
-          filter:blur(20px);
-        "></div>
-
-        <div style="font-size:12px;color:#64748b;margin-top:6px;"
-          data-it="Basato su dati medi (rischio reale non incluso)"
-          data-en="Based on averages (real risk not included)">
+        <div style="font-size:13px;color:#64748b;margin-bottom:15px;"
+          data-it="Inserisci i dati e scopri se questo investimento può funzionare"
+          data-en="Enter the data and see if this investment could work">
         </div>
 
-        <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
+        <!-- CITY -->
+        <div class="input-group">
 
-        <div id="roi-verdict" style="
-          margin-top:10px;
-          padding:10px;
-          border-radius:10px;
-          background:#f8fafc;
-          font-size:13px;
-          font-weight:500;
-        "></div>
+          <label data-it="Città mercato" data-en="City Market"></label>
 
-        <div id="roi-shock-block" style="
-          margin-top:12px;
-          padding:14px;
-          border-radius:12px;
-          background:linear-gradient(135deg,#fee2e2,#fff1f2);
-          color:#dc2626;
-          font-size:13px;
-          font-weight:600;
-          text-align:center;
-        ">
-          <span
-            data-it="⚠️ Questo ROI NON include mutuo, tasse e rischio reale"
-            data-en="⚠️ This ROI does NOT include mortgage, taxes and real risk">
-          </span>
+          <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
+            <option value="">Seleziona città</option>
+            <option value="milano">Milano</option>
+            <option value="roma">Roma</option>
+            <option value="napoli">Napoli</option>
+            <option value="firenze">Firenze</option>
+          </select>
 
-          <div style="margin-top:6px;font-size:12px;font-weight:500;"
-            data-it="Potresti passare da profitto a perdita"
-            data-en="You could go from profit to loss">
+          <input  
+            type="text"  
+            id="custom-location"
+            placeholder="Es. Portici (NA)"
+            data-it-placeholder="Es. Portici (NA)"
+            data-en-placeholder="e.g. Portici (NA)"
+            style="width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1px solid #e2e8f0;"
+          />
+
+          <div style="font-size:12px;color:#64748b;margin-top:6px;"
+            data-it="💡 I dati di mercato verranno applicati automaticamente"
+            data-en="💡 Market data will be applied automatically">
+          </div>
+
+        </div>
+
+        <!-- INPUTS -->
+        <div class="input-group">
+          <label data-it="Prezzo immobile (€)" data-en="Property price (€)"></label>
+          <input type="number" id="price" placeholder="150000">
+        </div>
+
+        <div class="input-group">
+          <label data-it="Capitale proprio (€)" data-en="Equity (€)"></label>
+          <input type="number" id="equity" placeholder="30000">
+        </div>
+
+        <div class="input-group">
+          <label data-it="Prezzo notte (€)" data-en="Night price (€)"></label>
+          <input type="number" id="priceNight" placeholder="120">
+        </div>
+
+        <div class="input-group">
+          <label data-it="Occupazione (%)" data-en="Occupancy (%)"></label>
+
+          <input type="range" id="occupancy" min="30" max="90" value="70" oninput="calculate()">
+
+          <div class="range-value">
+            <span id="occ-value">70%</span>
           </div>
         </div>
 
-      </div> <!-- ✅ roi-value -->
+        <div class="input-group">
+          <label data-it="Costi mensili (€)" data-en="Monthly costs (€)"></label>
+          <input type="number" id="expenses" placeholder="1200">
+        </div>
 
-    </div> <!-- ✅ roi-main -->
+        <button id="analyze-btn" class="btn btn-primary" style="margin-top:10px;"
+          data-it="🔍 Analizza investimento"
+          data-en="🔍 Analyze investment">
+        </button>
 
-  </div> <!-- ✅ roi-dashboard -->
+      </div>
+    </div>
 
-</div> <!-- ✅ simulator-right -->
+    <!-- ================= RIGHT ================= -->
+    <div class="simulator-right">
 
-  <!-- RISK BAR -->
-  <div id="risk-bar"></div>
+      <div class="roi-dashboard">
 
-  <!-- 🔥 URGENCY -->
-  <div style="margin-top:10px;font-size:13px;font-weight:600;color:#ef4444;"
-  data-it="🔓 Il ROI reale potrebbe cambiare drasticamente"
-  data-en="🔓 Real ROI could change drastically">
-  </div>
+        <div class="roi-main">
 
-  <!-- 🔥 LIVE USERS -->
-  <div style="font-size:12px;color:#10b981;margin-top:6px;">
-    🔥 +<span id="live-users">1247</span> 
-    <span 
-    data-it="investitori stanno analizzando ora" 
-    data-en="investors are analyzing now">
-    investitori stanno analizzando ora
-    </span>
+          <div class="roi-label"
+            data-it="Potenziale rendimento"
+            data-en="Potential return">
+          </div>
+
+          <div class="roi-value" style="position:relative;">
+
+            <span id="roi-live" style="font-size:48px;font-weight:800;">--</span>
+
+            <div id="roi-glow" style="
+              position:absolute;
+              inset:0;
+              background:radial-gradient(circle, rgba(16,185,129,0.15), transparent 70%);
+              z-index:-1;
+              filter:blur(20px);
+            "></div>
+
+            <div style="font-size:12px;color:#64748b;margin-top:6px;"
+              data-it="Basato su dati medi"
+              data-en="Based on averages">
+            </div>
+
+            <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
+
+            <div id="roi-verdict" style="
+              margin-top:10px;
+              padding:10px;
+              border-radius:10px;
+              background:#f8fafc;
+              font-size:13px;
+            "></div>
+
+            <div style="
+              margin-top:12px;
+              padding:12px;
+              border-radius:10px;
+              background:#fee2e2;
+              font-size:13px;
+              text-align:center;
+            "
+            data-it="⚠️ ROI senza mutuo e rischio reale"
+            data-en="⚠️ ROI without mortgage and real risk">
+            </div>
+
+          </div>
+
+          <div id="risk-bar" style="margin-top:15px;"></div>
+
+          <div style="margin-top:10px;font-size:13px;color:#ef4444;"
+            data-it="🔓 Il ROI reale può cambiare"
+            data-en="🔓 Real ROI may change">
+          </div>
+
+          <div style="font-size:12px;color:#10b981;margin-top:6px;">
+            🔥 +<span id="live-users">1247</span> 
+            <span data-it="investitori attivi" data-en="investors active"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div> <!-- 🔴 NON TOCCARE QUESTA CHIUSURA -->
+
+  <!-- ================= RESULTS FUORI ================= -->
+
+  <div id="results" class="results-card" style="margin-top:40px;">
+    <!-- risultati -->
   </div>
 
 </div>
