@@ -232,8 +232,15 @@ body.pro-user .pro-only{
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:20;
+  z-index:5; /* 🔥 abbassato */
   border-radius:12px;
+  pointer-events:auto;
+}
+
+/* 🔥 HARD KILL PRO */
+body.pro-user .locked-overlay{
+  display:none !important;
+  pointer-events:none !important;
 }
 
 /* ============================= */
@@ -318,12 +325,18 @@ body.pro-user .blur-content{
   }
 
   /* 🔒 MOBILE: leggera preview ma non tutto */
-  .blur-content{
+  /* 🔓 INPUT SEMPRE ATTIVI */
+  .simulator-left{
+    pointer-events:auto !important;
+  }
+
+  /* 🔒 BLOCCA SOLO I RISULTATI */
+  #results .blur-content{
     filter:blur(3px);
     pointer-events:none;
   }
 
-  body.pro-user .blur-content{
+  body.pro-user #results .blur-content{
     filter:none !important;
     pointer-events:auto !important;
   }
@@ -333,7 +346,7 @@ body.pro-user .blur-content{
 </style>
 </head>
 
-<body>
+<body class="tool-page">
 
 <div id="upgrade-modal" style="
 position:fixed;
