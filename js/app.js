@@ -2843,6 +2843,7 @@ else if(access.isInvestor){
   });
 
 }
+}, 400);    
 
 // ================= POST ANALYSIS =================
 runPostAnalysis(result, {
