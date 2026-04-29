@@ -2661,7 +2661,12 @@ if (!result || typeof result !== "object") {
 }
 
 const roi   = Number(result?.roi ?? 0);
-const gross = Number(result?.revenue ?? 0);
+const gross = Number(
+  result?.revenue ??
+  result?.gross ??
+  result?.annualRevenue ??
+  0
+);
 const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
 // ================= SCORE CIRCLE =================
@@ -2759,7 +2764,7 @@ if(!roi && !gross && !net){
 try {
 
   const profit = Number(result?.netAfterMortgage ?? result?.net ?? 0);
-  const revenue = gross;
+  const revenue = gross || 0;
   const risk = Number(result?.risk ?? 0);
 
   // ================= KPI LIVE =================
