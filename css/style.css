@@ -16088,3 +16088,130 @@ NON tocca altre pagine
   }
 
 }
+
+/* =========================================
+🔥 TOOL PAGE ISOLATION (SAFE - NON DISTRUTTIVO)
+========================================= */
+
+body.tool-page .simulator-container{
+  max-width:1200px;
+  margin:auto;
+}
+
+/* =========================================
+🔥 LAYOUT FIX (NO PIÙ 2 COLONNE ROTTE)
+========================================= */
+
+body.tool-page .simulator-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:30px;
+  max-width:760px;
+  margin:auto;
+}
+
+/* =========================================
+🔥 CARD SEMPRE LEGGIBILI (NO OVERLAY BG)
+========================================= */
+
+body.tool-page .roi-dashboard,
+body.tool-page .tool-card,
+body.tool-page .results-card{
+  position:relative;
+  z-index:2;
+  background:#ffffff;
+}
+
+/* =========================================
+🔥 OVERLAY FIX (PRO NON BLOCCATO)
+========================================= */
+
+body.tool-page .locked-overlay{
+  z-index:5;
+}
+
+body.tool-page.pro-user .locked-overlay{
+  display:none !important;
+  pointer-events:none !important;
+}
+
+/* =========================================
+🔥 BLUR SYSTEM CORRETTO
+========================================= */
+
+body.tool-page .blur-content{
+  filter:blur(6px);
+  pointer-events:none;
+}
+
+body.tool-page.pro-user .blur-content{
+  filter:none !important;
+  pointer-events:auto !important;
+}
+
+/* =========================================
+🔥 PRO UNLOCK TOTALE
+========================================= */
+
+body.tool-page .pro-only{
+  display:none;
+}
+
+body.tool-page.pro-user .pro-only{
+  display:block !important;
+}
+
+/* =========================================
+🔥 COLOR FIX (rimuove override distruttivi)
+========================================= */
+
+body.tool-page .simulator-container{
+  color:#0f172a;
+}
+
+body.tool-page .simulator-container span,
+body.tool-page .simulator-container p,
+body.tool-page .simulator-container label{
+  color:#64748b;
+}
+
+/* =========================================
+🔥 MOBILE FIX REALE (CRITICO)
+========================================= */
+
+@media (max-width:768px){
+
+  /* INPUT SEMPRE USABILI */
+  body.tool-page .simulator-left{
+    pointer-events:auto !important;
+  }
+
+  /* BLOCCA SOLO RISULTATI */
+  body.tool-page #results .blur-content{
+    filter:blur(3px);
+    pointer-events:none;
+  }
+
+  body.tool-page.pro-user #results .blur-content{
+    filter:none !important;
+    pointer-events:auto !important;
+  }
+
+  /* overlay non invasivo */
+  body.tool-page .locked-overlay{
+    position:relative;
+    inset:auto;
+    margin-top:15px;
+    border:1px solid #e2e8f0;
+    background:#ffffff;
+  }
+
+}
+
+/* =========================================
+🔥 EXTRA: evita layer invisibili sopra
+========================================= */
+
+body.tool-page .roi-dashboard{
+  isolation:isolate;
+}
