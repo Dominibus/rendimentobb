@@ -476,6 +476,28 @@ body.pro-user #results .blur-content{
   z-index:5;
 }
 
+/* ===================================== */
+/* 🔥 ROI FIX DEFINITIVO */
+/* ===================================== */
+
+/* crea layer indipendente */
+.tool-page .roi-value{
+  position:relative;
+  z-index:20;
+}
+
+/* numero ROI SEMPRE sopra tutto */
+#roi-live{
+  position:relative;
+  z-index:30;
+  display:inline-block;
+}
+
+/* evita qualsiasi overlay sopra */
+.tool-page .roi-dashboard{
+  isolation:isolate;
+}
+
 </style>
 </head>
 
