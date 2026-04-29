@@ -2843,7 +2843,11 @@ else if(access.isInvestor){
   });
 
 }
-}, 400);    
+}, 400);   
+
+} catch(e){
+  console.error("💥 UI FINAL RENDER ERROR:", e);
+}  
 
 // ================= POST ANALYSIS =================
 runPostAnalysis(result, {
