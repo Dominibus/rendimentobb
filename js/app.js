@@ -2754,14 +2754,14 @@ if(!roi && !gross && !net){
   return;
 }
 
-// ================= UI FINAL RENDER (CRITICO) =================
+// ================= UI FINAL RENDER (CRITICO – FIX STABILE) =================
 try {
 
   const profit = Number(result?.netAfterMortgage ?? result?.net ?? 0);
-  const revenue = gross; // 🔥 FIX: usa revenue corretto
+  const revenue = gross;
   const risk = Number(result?.risk ?? 0);
 
-  // 🔥 KPI LIVE (TOP CARD)
+  // ================= KPI LIVE =================
   const profitEl = document.getElementById("profit-live");
   if(profitEl){
     profitEl.innerText = formatCurrency(profit);
@@ -2772,83 +2772,90 @@ try {
     revenueEl.innerText = formatCurrency(revenue);
   }
 
-  // 🔥 KPI PREVIEW (BOX SOTTO)
+  // ================= KPI PREVIEW =================
   if(typeof updatePreviewMetrics === "function"){
     updatePreviewMetrics(roi, risk);
   }
 
   console.log("✅ UI FINAL RENDER OK");
 
+  // ================= POST RENDER CONTROL =================
   setTimeout(()=>{
 
-    // 🔥 GLOBAL CLEAN INVESTOR (ANTI BUG)
-const access = window.getUserAccess?.();
+    const access = window.getUserAccess?.() || {};
 
-if(access?.isInvestor){
+    console.log("🎯 FINAL UI CONTROL:", access);
 
-  document.querySelectorAll(".pro-blur, .blur-content").forEach(el=>{
-    el.classList.remove("pro-blur","blur-content");
-    el.style.filter = "none";
-    el.style.opacity = "1";
-  });
+    // ================= 🟢 PRO / ADMIN =================
+    if(access.isPro || access.isAdmin){
 
-}
+      console.log("🟢 FULL UNLOCK SAFE");
 
-// =====================================
-// 🔥 FIX CRITICO → PRO / ADMIN FULL UNLOCK REALE
-// =====================================
-if(access.isPro || access.isAdmin){
+      // 🔥 rimuove SOLO overlay veri (NON rompe layout)
+      document.querySelectorAll(`
+        .lock-overlay,
+        .upgrade-overlay,
+        .results-overlay,
+        .smart-overlay,
+        .paywall-mini
+      `).forEach(el=>{
+        if(el.id !== "register-popup") el.remove();
+      });
 
-  console.log("🟢 SKIP LOCK → PRO");
+      // 🔥 reset blur SENZA forzare style inline distruttivi
+      document.querySelectorAll(`
+        .blur-content,
+        .pro-blur
+      `).forEach(el=>{
+        el.classList.remove("blur-content","pro-blur");
+        el.style.filter = "";
+        el.style.opacity = "";
+        el.style.pointerEvents = "";
+      });
 
-  // 🔥 rimuove TUTTI gli overlay
-  document.querySelectorAll(".lock-overlay").forEach(el=>{
-    el.remove();
-  });
+      // ❌ NIENTE RETURN → continua flusso
+    }
 
-  // 🔥 rimuove blur + blocchi interazione
-  document.querySelectorAll(".blur-content").forEach(el=>{
-    el.classList.remove("blur-content");
-    el.style.filter = "none";
-    el.style.pointerEvents = "auto";
-    el.style.opacity = "1";
-  });
+    // ================= 🟡 INVESTOR =================
+    if(access.isInvestor){
 
-  // 🔥 fallback extra sicurezza (se qualcosa rimane)
-  document.querySelectorAll('[style*="blur"]').forEach(el=>{
-    el.style.filter = "none";
-  });
+      console.log("🟡 INVESTOR CLEAN");
 
-  return; // 💣 BLOCCA qualsiasi lock dopo
-}
+      // 🔥 niente blur base
+      document.querySelectorAll(`
+        .pro-blur,
+        .blur-content
+      `).forEach(el=>{
+        el.classList.remove("pro-blur","blur-content");
+        el.style.filter = "";
+        el.style.opacity = "";
+      });
 
-console.log("🎯 APPLY FINAL LOCK:", access);
+      // 🔒 blocca SOLO advanced
+      applySmartLock(document.getElementById("ai-insights"), {
+        type:"advanced",
+        plan:"pro"
+      });
 
-// 🔴 FREE → blocca sezioni
-if(access.isFree){
+    }
 
-  applySmartLock(document.getElementById("ai-insights"), {
-    type:"overlay",
-    plan:"investor"
-  });
+    // ================= 🔴 FREE =================
+    if(access.isFree){
 
-}
+      console.log("🔴 FREE LOCK");
 
-// 🟡 INVESTOR → blocca SOLO advanced
-else if(access.isInvestor){
+      applySmartLock(document.getElementById("ai-insights"), {
+        type:"overlay",
+        plan:"investor"
+      });
 
-  applySmartLock(document.getElementById("ai-insights"), {
-    type:"advanced",
-    plan:"pro"
-  });
+    }
 
-}
-}, 400);   
+  }, 200); // 🔥 ridotto timing (più stabile)
 
 } catch(e){
   console.error("💥 UI FINAL RENDER ERROR:", e);
-}  
-
+}
 // ================= POST ANALYSIS =================
 runPostAnalysis(result, {
   price,
