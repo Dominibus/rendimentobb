@@ -1133,8 +1133,14 @@ window.applyCityBackground = function(city){
 
   const cityClass = map[city] || "rome";
 
-  // 🔥 evita re-apply inutile (CRITICO)
+  // 🔥 FIX CRITICO → NON applicare se già impostato
   if(hero.dataset.cityApplied === cityClass){
+    return;
+  }
+
+  // 🔥 BLOCCO ANTI OVERRIDE
+  if(hero.dataset.cityLocked === "true"){
+    console.log("⛔ BG LOCK ATTIVO → skip", cityClass);
     return;
   }
 
@@ -4161,6 +4167,15 @@ document.addEventListener("DOMContentLoaded", () => {
 }
 
   console.log("🔥 Città attiva finale:", selectedCity);
+
+  const hero =
+  document.querySelector(".hero-bg") ||
+  document.querySelector(".hero-roi");
+
+if(hero){
+  hero.dataset.cityLocked = "true";
+  console.log("🔒 BG LOCKED:", selectedCity);
+}
 
 });
 
