@@ -82,17 +82,17 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 HERO FIX (QUESTO RISOLVE IL CASINO) */
+/* 🔥 HERO FIX */
 /* ============================= */
 
 .tool-hero{
   position:relative;
   padding-top:120px;
-  padding-bottom:80px; /* 🔥 CREA SPAZIO REALE SOTTO */
+  padding-bottom:80px;
 }
 
 /* ============================= */
-/* 🔥 LAYOUT CORRETTO */
+/* 🔥 LAYOUT FIX DEFINITIVO */
 /* ============================= */
 
 .simulator-container{
@@ -106,23 +106,33 @@ input:focus{
   display:flex;
   flex-direction:column;
   gap:40px;
+  align-items:center; /* 🔥 centra tutto */
 }
 
 /* ============================= */
-/* 🔥 FORM */
+/* 🔥 FORM (FIX OVERLAP) */
 /* ============================= */
 
 .simulator-left{
   position:relative;
-  z-index:2;
-
-  /* 🔥 NIENTE MARGIN NEGATIVO */
+  z-index:auto !important; /* 🔥 FIX CRITICO */
   margin-top:0;
+}
+
+.tool-card{
+  position:relative;
+  z-index:1;
+  transform:none !important; /* 🔥 blocca qualsiasi spinta */
 }
 
 /* ============================= */
 /* 🔥 ROI DASHBOARD */
 /* ============================= */
+
+.simulator-right{
+  position:relative;
+  z-index:1;
+}
 
 .roi-dashboard{
   background:rgba(255,255,255,0.95);
@@ -145,7 +155,7 @@ input:focus{
 
 #results{
   position:relative;
-  margin-top:40px; /* 🔥 spazio vero */
+  margin-top:40px;
 }
 
 /* ============================= */
