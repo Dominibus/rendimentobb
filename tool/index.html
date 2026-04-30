@@ -71,9 +71,9 @@ body{
   text-rendering:optimizeLegibility;
 }
 
-/* ============================= */
-/* 🔥 INPUT */
-/* ============================= */
+input, select{
+  pointer-events:auto;
+}
 
 input:focus{
   outline:none;
@@ -82,35 +82,31 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 CARD HOVER (SAFE) */
-/* ============================= */
-
-.tool-card:hover,
-.results-card:hover{
-  transform:translateY(-2px);
-  transition:0.25s ease;
-}
-
-/* evita glitch ROI */
-.tool-page .roi-dashboard,
-.tool-page #results{
-  transform:none !important;
-}
-
-/* ============================= */
-/* 🔥 SIMULATOR LAYOUT */
+/* 🔥 LAYOUT FIX (CRITICO) */
 /* ============================= */
 
 .simulator-container{
   max-width:1100px;
   margin:auto;
   padding:0 20px;
+  position:relative;
+  z-index:1;
 }
 
 .simulator-grid{
   display:flex;
   flex-direction:column;
   gap:30px;
+  position:relative;
+}
+
+/* ============================= */
+/* 🔥 FORM SEMPRE SOPRA */
+/* ============================= */
+
+.simulator-left{
+  position:relative;
+  z-index:10;
 }
 
 /* ============================= */
@@ -125,114 +121,34 @@ input:focus{
   padding:30px;
 
   box-shadow:0 25px 70px rgba(0,0,0,0.08);
+
+  position:relative;
+  z-index:5;
+  margin-top:0;
 }
 
 /* ============================= */
-/* 🔥 SCORE (SILICON STYLE) */
+/* 🔥 RESULTS */
 /* ============================= */
 
-.score-circle{
-  width:90px;
-  height:90px;
-
-  border-radius:50%;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-size:32px;
-  font-weight:800;
-  color:white;
-
-  margin:auto;
-
-  background:radial-gradient(circle at 30% 30%,#34d399,#059669);
-
-  box-shadow:
-    0 10px 30px rgba(16,185,129,0.4),
-    inset 0 2px 6px rgba(255,255,255,0.3);
+#results{
+  position:relative;
+  z-index:4;
+  margin-top:30px;
 }
 
 /* ============================= */
-/* 🔥 KPI GRID */
+/* 🔥 CARD */
 /* ============================= */
 
-.roi-metrics{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:20px;
-}
-
-/* ============================= */
-/* 🔥 METRIC CARD */
-/* ============================= */
-
+.results-card,
 .metric-card{
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-
-  border-radius:14px;
-  padding:16px;
-
-  border:1px solid #e2e8f0;
-
-  text-align:center;
-
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
-
-  transition:0.25s;
-}
-
-.metric-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.08);
-}
-
-.metric-card span{
-  font-size:12px;
-  color:#64748b;
-}
-
-.metric-card strong{
-  font-size:20px;
-  font-weight:700;
-  color:#0f172a;
+  position:relative;
+  z-index:1;
 }
 
 /* ============================= */
-/* 🔥 RESULTS CARD */
-/* ============================= */
-
-.results-card{
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
-
-  border-radius:20px;
-  padding:30px;
-
-  box-shadow:0 25px 70px rgba(0,0,0,0.08);
-
-  margin-top:40px;
-}
-
-/* ============================= */
-/* 🔥 BLUR SYSTEM */
-/* ============================= */
-
-.blur-content{
-  filter:blur(6px);
-  pointer-events:none;
-}
-
-/* PRO unlock */
-body.pro-user .blur-content{
-  filter:none !important;
-  pointer-events:auto !important;
-}
-
-/* ============================= */
-/* 🔥 OVERLAY */
+/* 🔥 OVERLAY FIX (CRITICO) */
 /* ============================= */
 
 .locked-overlay{
@@ -247,61 +163,66 @@ body.pro-user .blur-content{
   justify-content:center;
 
   border-radius:14px;
-  z-index:5;
+  z-index:2;
+
+  /* 🔥 NON blocca tutto */
+  pointer-events:auto;
 }
 
-/* PRO rimuove tutto */
+/* PRO unlock */
 body.pro-user .locked-overlay{
   display:none !important;
 }
 
 /* ============================= */
-/* 🔥 TOOL HERO */
+/* 🔥 BLUR */
 /* ============================= */
 
-.tool-page .tool-hero{
+.blur-content{
+  filter:blur(6px);
+}
+
+body.pro-user .blur-content{
+  filter:none !important;
+}
+
+/* ============================= */
+/* 🔥 KPI */
+/* ============================= */
+
+.metric-card{
+  background:linear-gradient(180deg,#ffffff,#f8fafc);
+  border-radius:14px;
+  padding:16px;
+  border:1px solid #e2e8f0;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.metric-card span{
+  font-size:12px;
+  color:#64748b;
+}
+
+.metric-card strong{
+  font-size:20px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+/* ============================= */
+/* 🔥 FIX CLICK BUG (VERO) */
+/* ============================= */
+
+.simulator-left,
+.simulator-left *{
+  pointer-events:auto !important;
   position:relative;
-  overflow:hidden;
-}
-
-.tool-page .tool-hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-
-  background:linear-gradient(
-    rgba(15,23,42,0.35),
-    rgba(15,23,42,0.6)
-  );
-
-  z-index:0;
-}
-
-.tool-page .tool-hero > *{
-  position:relative;
-  z-index:1;
+  z-index:10;
 }
 
 /* ============================= */
-/* 🔥 ROI VISIBILITY FIX */
-/* ============================= */
-
-#roi-live{
-  position:relative;
-  z-index:20;
-  color:#0f172a !important;
-}
-
-/* ============================= */
-/* 🔥 SPACING */
-/* ============================= */
-
-.tool-page #results{
-  margin-top:60px;
-}
-
-/* ============================= */
-/* 🔥 MOBILE FIX */
+/* 🔥 MOBILE */
 /* ============================= */
 
 @media (max-width:768px){
@@ -315,74 +236,13 @@ body.pro-user .locked-overlay{
     padding:20px;
   }
 
-  .roi-metrics{
-    grid-template-columns:1fr;
-  }
-
-  h1{ font-size:24px; }
-  h2{ font-size:20px; }
-  h3{ font-size:16px; }
-
-  /* 🔥 NON BLOCCARE MOBILE */
-  .simulator-left{
-    pointer-events:auto !important;
-  }
-
-  /* 🔒 blocca solo risultati */
-  #results .blur-content{
-    filter:blur(3px);
-  }
-
-  body.pro-user #results .blur-content{
-    filter:none !important;
-  }
-
-  /* 🔥 overlay NON rompe layout */
   .locked-overlay{
     position:relative;
-    margin-top:15px;
     inset:auto;
+    margin-top:15px;
   }
 
 }
-
-/* ============================= */
-/* 🔥 PRO HARD UNLOCK */
-/* ============================= */
-
-body.pro-user .pro-only{
-  display:block !important;
-}
-
-.pro-only{
-  display:none;
-}
-
-/* ===================================== */
-/* 🔥 FIX OVERLAP DEFINITIVO */
-/* ===================================== */
-
-.tool-page .simulator-grid{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-
-/* blocca ROI nel flow */
-.tool-page .roi-dashboard{
-  position:relative !important;
-  top:auto !important;
-  transform:none !important;
-  margin-top:-80px; /* effetto leggero sovrapposto */
-  z-index:3;
-}
-
-/* card sotto */
-.tool-page #results{
-  position:relative;
-  z-index:2;
-  margin-top:40px;
-}  
 
 </style>
 </head>
