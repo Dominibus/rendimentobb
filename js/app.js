@@ -2726,7 +2726,7 @@ if(!finalScore || finalScore === 0){
   ));
 }
 
-updateInvestmentScore(finalScore);
+renderInvestmentScore(safeROI, Math.round(risk));
 
     // ================= 🔥 RISK PREVIEW =================
 
