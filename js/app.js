@@ -2658,8 +2658,6 @@ window.calculate = async function(force = false){
         window.currentCity = mappedCity;
         localStorage.setItem("selected_city", mappedCity);
 
-        console.log("📍 City:", mappedCity);
-
         if(typeof applyCityBackground === "function"){
           applyCityBackground(mappedCity);
         }
@@ -2684,34 +2682,16 @@ window.calculate = async function(force = false){
       loanYears
     });
 
-    if(window.currentCity && !window.__CITY_LOCKED__){
-      applyCityBackground(window.currentCity);
-    }
-
     if (!result || typeof result !== "object") {
       console.error("💥 RESULT INVALID:", result);
       return;
     }
 
-    // ================= ROI =================
+    // ================= KPI BASE =================
     const roi = Number(result?.roi ?? 0);
     const safeROI = isFinite(roi) ? roi : 0;
     const roiText = safeROI.toFixed(1) + "%";
 
-    // ================= KPI =================
-    ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-
-      if(access.isFree){
-        el.innerText = "—";
-        el.style.color = "#64748b";
-      }else{
-        el.innerText = roiText;
-      }
-    });
-
-    // ================= REVENUE =================
     const gross = Number(
       result?.revenue ??
       result?.gross ??
@@ -2724,6 +2704,32 @@ window.calculate = async function(force = false){
       result?.net ??
       0
     );
+
+    // ================= 🔥 UPDATE KPI (SEMPRE) =================
+
+    // ROI
+    ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.innerText = roiText;
+    });
+
+    // PROFITTO (🔥 SEMPRE VISIBILE)
+    const profitEl = document.getElementById("profit-live");
+    if(profitEl){
+      profitEl.innerText = formatCurrency(net || 0);
+    }
+
+    // RICAVI (puoi bloccare solo FREE)
+    const revenueEl = document.getElementById("revenue-live");
+    if(revenueEl){
+      if(access.isFree){
+        revenueEl.innerText = "—";
+        revenueEl.style.color = "#64748b";
+      }else{
+        revenueEl.innerText = formatCurrency(gross || 0);
+      }
+    }
 
     // ================= ROI ANIMATION =================
     const roiMain = document.getElementById("roi-live");
