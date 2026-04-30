@@ -3798,9 +3798,9 @@ break;
 
 }
 
-if(detectedCity && !window.currentCity){
-window.currentCity = detectedCity;
-console.log("Città rilevata da link:", detectedCity);
+if(detectedCity && !localStorage.getItem("selected_city")){
+  window.currentCity = detectedCity;
+  console.log("Città rilevata da link:", detectedCity);
 }
 
 }
@@ -4055,6 +4055,7 @@ if(citySelectorEl){
   window.currentCity = city;
 
   localStorage.setItem("selected_city", city);
+  console.log("🏙 CURRENT CITY:", window.currentCity);  
 
   applyCityBackground(city);
 
