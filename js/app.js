@@ -1147,7 +1147,7 @@ window.applyCityBackground = function(city){
 
 // 💣 FIX REALE
 hero.style.background = `
-  linear-gradient(rgba(255,255,255,0.45), rgba(255,255,255,0.7)),
+  linear-gradient(rgba(15,23,42,0.55), rgba(15,23,42,0.75)),
   url(${bgMap[cityClass]})
 `;
 
