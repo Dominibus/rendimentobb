@@ -1129,10 +1129,14 @@ window.applyCityBackground = function(city){
 
   const cityClass = map[city] || "rome";
 
-  // 🔥 pulizia totale
-  hero.classList.remove("rome","naples","milan","florence");
+  // 🔥 evita re-apply inutile (CRITICO)
+  if(hero.dataset.cityApplied === cityClass){
+    return;
+  }
 
-  // 🔥 applicazione
+  hero.dataset.cityApplied = cityClass;
+
+  hero.classList.remove("rome","naples","milan","florence");
   hero.classList.add(cityClass);
 
   console.log("🎯 BG aggiornato:", cityClass);
