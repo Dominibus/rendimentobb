@@ -16232,3 +16232,36 @@ NON TOCCA ALTRE PAGINE
   }
 
 }
+
+/* =====================================
+🔥 FIX LAYER SIMULATORE (CRITICO)
+===================================== */
+
+.simulator-container,
+.tool-container,
+.input-container{
+  position:relative;
+  z-index:10;
+}
+
+.results-container,
+#results,
+.roi-box,
+.analysis-box{
+  position:relative;
+  z-index:1;
+}
+
+/* 🔥 BLOCCA OVERLAY CHE RUBANO CLICK */
+.lock-overlay{
+  pointer-events:auto;
+}
+
+/* 🔥 MAI bloccare input */
+input,
+button,
+select,
+textarea{
+  position:relative;
+  z-index:15;
+}
