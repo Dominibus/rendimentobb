@@ -175,11 +175,17 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 TESTO HERO SOLO HEADER */
+/* 🔥 TESTI HERO (SOLO HERO) */
 /* ============================= */
 
-/* 🔥 SOLO HERO (non rompe le card) */
 .tool-hero .simulator-container{
+  color:#e2e8f0;
+}
+
+/* 🔥 FIX MIRATO HERO TESTI SECONDARI */
+.tool-hero p,
+.tool-hero span,
+.tool-hero div{
   color:#e2e8f0;
 }
 
@@ -190,6 +196,7 @@ input:focus{
 #results{
   position:relative;
   margin-top:40px;
+  color:#0f172a;
 }
 
 /* ============================= */
@@ -208,10 +215,6 @@ input:focus{
   color:#0f172a;
 }
 
-.metric-card:hover{
-  transform:translateY(-3px);
-}
-
 .metric-card span{
   font-size:12px;
   color:#64748b;
@@ -224,22 +227,13 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 FIX TESTI CHIARI (CRITICO) */
+/* 🔥 FIX TESTI CARD (CHIARO → SCURO) */
 /* ============================= */
 
-/* 🔥 TUTTI i paragrafi normali */
-.simulator-container p{
-  color:#475569 !important;
-}
-
-/* 🔥 descrizioni secondarie */
-.simulator-container [style*="font-size:13px"]{
-  color:#64748b !important;
-}
-
-/* 🔥 badge / alert */
-.simulator-container [style*="font-size:12px"]{
-  color:#64748b !important;
+.results-card p,
+.results-card span,
+.results-card div{
+  color:#334155;
 }
 
 /* ============================= */
@@ -322,17 +316,6 @@ body.pro-user .blur-content{
   .simulator-container{
     padding:0 16px;
     margin-top:-40px;
-  }
-
-  .roi-dashboard,
-  .results-card{
-    padding:20px;
-  }
-
-  .locked-overlay{
-    position:relative;
-    inset:auto;
-    margin-top:15px;
   }
 
 }
