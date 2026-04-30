@@ -2224,9 +2224,17 @@ function runPostAnalysis(result, context){
 
   const roiEl = document.getElementById("roi-live");
 
-  if(roiEl && roi > 0){
+  const access = window.getUserAccess?.() || {};
+
+if(roiEl && roi > 0){
+
+  if(access.isFree){
+    roiEl.innerText = "—";
+  }else{
     roiEl.innerText = roi.toFixed(1) + "%";
   }
+
+}
 
   updateROIMessage(roi);
 
@@ -2706,9 +2714,17 @@ const safeROI = isFinite(roi) ? roi : 0;
 const roiText = safeROI.toFixed(1) + "%";
 
 // 🔥 UPDATE KPI (SEMPRE)
+const access = window.getUserAccess?.() || {};
+
 ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
   const el = document.getElementById(id);
-  if(el){
+  if(!el) return;
+
+  // 🔴 FREE → NO NUMERO REALE
+  if(access.isFree){
+    el.innerText = "—";
+    el.style.color = "#64748b";
+  }else{
     el.innerText = roiText;
   }
 });
