@@ -162,11 +162,11 @@ input:focus{
 .score-bad{ background:#ef4444; color:white; }
 
 .investment-panel{
-  display:grid;
-  grid-template-columns:220px 1fr;
-  gap:30px;
+  display:flex;
+  flex-direction:column;
   align-items:center;
-  margin-top:20px;
+  text-align:center;
+  gap:15px;
 }
 
 /* ============================= */
@@ -409,6 +409,17 @@ body.pro-user .blur-content{
   color:#0f172a;
 }
 
+/* auto contrast su bg scuro */
+.tool-hero::before{
+  mix-blend-mode:multiply;
+}
+
+.tool-page .results-card,
+.tool-page .roi-dashboard{
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(6px);
+}  
+
 /* ===================================== */
 /* 🔥 ROI FIX */
 /* ===================================== */
@@ -515,6 +526,8 @@ body.pro-user #results .blur-content{
   .simulator-left,
   .simulator-left *{
     pointer-events:auto !important;
+    position:relative;
+    z-index:5;
   }
 
   /* 🔥 RIMUOVE QUALSIASI BLOCCO SOPRA INPUT */
@@ -738,7 +751,9 @@ data-en="Results are based on average market data. Real risk is calculated in th
       <!-- ROI -->
       <div class="roi-value" style="position:relative;">
 
-        <span id="roi-live" style="font-size:48px;font-weight:800;">--</span>
+        <span id="roi-live" style="font-size:48px;font-weight:800; display:block;">
+        0%
+        </span>
 
         <div id="roi-glow" style="
           position:absolute;
@@ -1317,6 +1332,8 @@ window.updateInvestmentScore = function(score){
     circle.classList.add("score-bad");
   }
 
+  circle.style.boxShadow = "0 0 20px rgba(16,185,129,0.4)";
+
 }
 
 /* ================= KPI PREVIEW ================= */
@@ -1328,6 +1345,11 @@ function updatePreviewMetrics(roi,risk){
 
   const safeROI = Number(roi || 0).toFixed(1);
   const safeRisk = Math.round(risk || 0);
+
+  const mainROI = document.getElementById("roi-live");
+if(mainROI && roi){
+  mainROI.innerText = safeROI + "%";
+}
 
   if(roiEl) roiEl.innerText = safeROI + "%";
   if(riskEl) riskEl.innerText = safeRisk + "/100";
