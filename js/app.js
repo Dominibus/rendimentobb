@@ -2619,22 +2619,10 @@ if(!access.isFree){
     const commission  = getValue("commission") || 15;
     const tax         = getValue("tax") || 21;
 
-   // ================= CUSTOM LOCATION (PREMIUM FIX) =================
+  // ================= CUSTOM LOCATION (FIX DEFINITIVO) =================
 
 const customLocation = document.getElementById("custom-location")?.value;
 
-// 🔥 override città se utente inserisce località
-if(customLocation && customLocation.trim() !== ""){
-
-  const mappedCity = mapLocationToCity(customLocation);
-
-  // ⚠️ NON override se CITY LOCK attivo (ROI pages)
-  if(!window.__CITY_LOCKED__){
-
-    // 🔥 aggiorna città globale
-    window.currentCity = mappedCity;
-
-// 🔥 NON ereditare città precedente
 if(customLocation && customLocation.trim() !== ""){
 
   const mappedCity = mapLocationToCity(customLocation);
