@@ -16477,3 +16477,20 @@ body *{
   }
 
 }
+
+/* ============================= */
+/* 🔥 ACCESS CONTROL UI GLOBAL */
+/* ============================= */
+
+.pro-only{
+  display:none !important;
+}
+
+body.pro-user .pro-only{
+  display:block !important;
+}
+
+/* opzionale */
+body.pro-user .pro-only-inline{
+  display:inline !important;
+}
