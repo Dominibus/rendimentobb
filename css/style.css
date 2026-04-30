@@ -16232,3 +16232,26 @@ NON TOCCA ALTRE PAGINE
   }
 
 }
+
+/* ===================================== */
+/* 🔥 HARD FIX STACKING BUG */
+/* ===================================== */
+
+.simulator-container,
+.simulator-grid,
+.simulator-left,
+.simulator-right,
+.roi-dashboard,
+#results{
+  transform:none !important;
+}
+
+/* evita overlay fuori controllo */
+.locked-overlay{
+  z-index:3;
+}
+
+/* sicurezza totale click */
+body *{
+  pointer-events:auto;
+}
