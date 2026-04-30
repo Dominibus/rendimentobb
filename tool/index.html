@@ -82,31 +82,29 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 LAYOUT FIX (CRITICO) */
+/* 🔥 LAYOUT CORRETTO (NO OVERLAP) */
 /* ============================= */
 
 .simulator-container{
   max-width:1100px;
   margin:auto;
-  padding:0 20px;
+  padding:40px 20px;
   position:relative;
-  z-index:1;
 }
 
 .simulator-grid{
   display:flex;
   flex-direction:column;
   gap:30px;
-  position:relative;
 }
 
 /* ============================= */
-/* 🔥 FORM SEMPRE SOPRA */
+/* 🔥 FORM */
 /* ============================= */
 
 .simulator-left{
   position:relative;
-  z-index:10;
+  z-index:2;
 }
 
 /* ============================= */
@@ -123,7 +121,9 @@ input:focus{
   box-shadow:0 25px 70px rgba(0,0,0,0.08);
 
   position:relative;
-  z-index:5;
+  z-index:1;
+
+  /* 🔥 niente overlap */
   margin-top:0;
 }
 
@@ -133,7 +133,6 @@ input:focus{
 
 #results{
   position:relative;
-  z-index:4;
   margin-top:30px;
 }
 
@@ -144,11 +143,10 @@ input:focus{
 .results-card,
 .metric-card{
   position:relative;
-  z-index:1;
 }
 
 /* ============================= */
-/* 🔥 OVERLAY FIX (CRITICO) */
+/* 🔥 OVERLAY FIX */
 /* ============================= */
 
 .locked-overlay{
@@ -163,13 +161,11 @@ input:focus{
   justify-content:center;
 
   border-radius:14px;
-  z-index:2;
+  z-index:5;
 
-  /* 🔥 NON blocca tutto */
   pointer-events:auto;
 }
 
-/* PRO unlock */
 body.pro-user .locked-overlay{
   display:none !important;
 }
@@ -211,14 +207,12 @@ body.pro-user .blur-content{
 }
 
 /* ============================= */
-/* 🔥 FIX CLICK BUG (VERO) */
+/* 🔥 FIX CLICK */
 /* ============================= */
 
 .simulator-left,
 .simulator-left *{
   pointer-events:auto !important;
-  position:relative;
-  z-index:10;
 }
 
 /* ============================= */
@@ -228,7 +222,7 @@ body.pro-user .blur-content{
 @media (max-width:768px){
 
   .simulator-container{
-    padding:0 16px;
+    padding:20px 16px;
   }
 
   .roi-dashboard,
