@@ -2245,24 +2245,36 @@ function runPostAnalysis(result, context){
 
   console.log("📊 FINAL ROI:", roi);
 
-  // ================= 🔥 ROI UI LOCK (CRITICO) =================
+  // ================= 🔥 ROI UI LOCK =================
 
   const roiEl = document.getElementById("roi-live");
 
-if(roiEl && roi > 0){
-
-  if(access.isFree){
-    roiEl.innerText = "—";
-  }else{
-    roiEl.innerText = roi.toFixed(1) + "%";
+  if(roiEl && roi > 0){
+    if(access.isFree){
+      roiEl.innerText = "—";
+    }else{
+      roiEl.innerText = roi.toFixed(1) + "%";
+    }
   }
-
-}
 
   updateROIMessage(roi);
 
   if(roi <= 0){
     console.warn("⚠️ Low ROI → UI still rendered for UX");
+  }
+
+  // ================= 🔓 FIX BLUR (🔥 QUESTO È IL FIX) =================
+
+  if(access.isPro || access.isAdmin){
+    console.log("🟢 REMOVE BLUR FOR PRO");
+
+    document.querySelectorAll(".blur-content").forEach(el=>{
+      el.classList.remove("blur-content");
+    });
+
+    document.querySelectorAll(".locked-section").forEach(el=>{
+      el.classList.remove("locked-section");
+    });
   }
 
   // ================= SMART REMINDER =================
@@ -2281,7 +2293,7 @@ if(roiEl && roi > 0){
   // ================= PAYWALL =================
 
   if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 10){
-    // showUpgradeModal(roi); // disabilitato volontariamente
+    // showUpgradeModal(roi);
   }
   else if(access.isInvestor && roi > 0){
     console.log("🟡 INVESTOR → partial unlock");
@@ -2389,7 +2401,6 @@ if(roiEl && roi > 0){
   }
 
 }
-
 
 // ================= MORTGAGE LEAD TRIGGER =================
 
