@@ -16284,3 +16284,94 @@ body *{
   position:relative;
   z-index:1;
 }
+
+<style>
+
+/* ===================================== */
+/* 🔥 FIX TESTI SEZIONI SCURE (HOME ONLY) */
+/* ===================================== */
+
+/* 🧠 DANGER BLOCK */
+.home-page .danger-block{
+  background:linear-gradient(180deg,#020617 0%, #020617 100%);
+}
+
+.home-page .danger-block h2{
+  color:#ffffff !important;
+}
+
+.home-page .danger-block p{
+  color:#cbd5f5 !important;
+}
+
+/* glow leggero sul titolo */
+.home-page .danger-block h2{
+  text-shadow:0 0 20px rgba(16,185,129,0.25);
+}
+
+/* ===================================== */
+/* 🔥 CTA GLOW VERDE (CONVERSION BOOST) */
+/* ===================================== */
+
+.home-page .danger-block .cta-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  box-shadow:0 10px 30px rgba(16,185,129,0.35);
+  transition:all 0.3s ease;
+}
+
+.home-page .danger-block .cta-primary:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 20px 50px rgba(16,185,129,0.5);
+}
+
+/* ===================================== */
+/* 🔥 FOOTER FIX */
+/* ===================================== */
+
+.home-page .global-footer{
+  background:#020617;
+}
+
+.home-page .global-footer strong{
+  color:#ffffff !important;
+}
+
+.home-page .global-footer p,
+.home-page .global-footer a{
+  color:#94a3b8 !important;
+}
+
+/* hover link più premium */
+.home-page .global-footer a:hover{
+  color:#10b981 !important;
+}
+
+/* ===================================== */
+/* 🔥 HERO MICRO TRUST FIX */
+/* ===================================== */
+
+.home-page .micro-trust strong{
+  color:#ffffff !important;
+}
+
+.home-page .micro-trust p{
+  color:#e2e8f0 !important;
+}
+
+/* glow leggero KPI hero */
+.home-page .micro-trust strong{
+  text-shadow:0 0 12px rgba(16,185,129,0.35);
+}
+
+/* ===================================== */
+/* 🔥 PROTEZIONE CONTRO REGOLE GLOBALI */
+/* ===================================== */
+
+/* evita che .home-page strong scuro rovini sezioni dark */
+.home-page .danger-block strong,
+.home-page .global-footer strong{
+  color:#ffffff !important;
+}
+
+</style>
