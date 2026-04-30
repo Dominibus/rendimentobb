@@ -83,7 +83,14 @@ input:focus{
 .results-card:hover{
   transform:translateY(-2px);
   transition:0.25s ease;
+  z-index:10;
+  position:relative;
 }
+
+ .tool-page .roi-dashboard,
+.tool-page #results{
+  transform:none !important;
+} 
 
 /* ============================= */
 /* 🔥 MARKET SELECT */
@@ -143,13 +150,14 @@ input:focus{
 /* ============================= */
 
 .score-circle{
-  width:90px;
-  height:90px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  width:110px;
+  height:110px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
+  font-size:26px;
   font-weight:700;
   margin:auto;
   background:#e2e8f0;
@@ -316,7 +324,7 @@ body.pro-user .blur-content{
   }
 
   /* 🔥 CRITICO: NON bloccare mobile */
-  .locked-overlay{
+  .tool-page .locked-overlay{
     position:relative;
     inset:auto;
     margin-top:15px;
@@ -358,8 +366,8 @@ body.pro-user .blur-content{
   position:absolute;
   inset:0;
   background:linear-gradient(
-    rgba(15,23,42,0.55),
-    rgba(15,23,42,0.75)
+    rgba(15,23,42,0.35),
+    rgba(15,23,42,0.55)
   );
   z-index:0;
 }
@@ -387,15 +395,9 @@ body.pro-user .blur-content{
 /* ROI sopra */
 .tool-page .roi-dashboard{
   position:relative;
-  z-index:3;
+  z-index:2;
 }
 
-/* RESULTS sotto ma visibili */
-.tool-page #results{
-  position:relative;
-  z-index:2;
-  margin-top:60px;
-}
 
 /* ===================================== */
 /* 🔥 TEXT FIX (CRITICO) */
@@ -504,56 +506,34 @@ body.pro-user #results .blur-content{
   display:inline-block;
 }
 
-/* evita qualsiasi overlay sopra */
-.tool-page .roi-dashboard{
-  position:relative;
-  z-index:1;
-}
-
  .tool-page #results{
   position:relative;
   z-index:0;
   margin-top:80px; /* più respiro */
 } 
 
-/* =====================================
-🔥 SBLOCCO SIMULATORE MOBILE (CRITICO)
-===================================== */
-
 @media (max-width:768px){
 
   /* 🔓 INPUT SEMPRE USABILI */
-  .simulator-left,
-  .simulator-left *{
+  .tool-page .simulator-left,
+  .tool-page .simulator-left *{
     pointer-events:auto !important;
+    z-index:5 !important;
     position:relative;
-    z-index:5;
   }
 
-  /* 🔥 RIMUOVE QUALSIASI BLOCCO SOPRA INPUT */
-  .simulator-left .blur-content{
+  /* 🔥 RIMUOVE BLOCCO INPUT */
+  .tool-page .simulator-left .blur-content{
     filter:none !important;
     pointer-events:auto !important;
   }
 
-  /* 🔥 OVERLAY NON DEVE BLOCCARE INPUT */
-  .simulator-left .locked-overlay{
+  /* 🔥 OVERLAY OFF */
+  .tool-page .simulator-left .locked-overlay{
     display:none !important;
   }
 
-  /* 🔒 RISULTATI RESTANO BLOCCATI */
-  #results .blur-content{
-    filter:blur(4px);
-    pointer-events:none;
-  }
-
-  /* 🔓 PRO sempre libero */
-  body.pro-user #results .blur-content{
-    filter:none !important;
-    pointer-events:auto !important;
-  }
-
-}  
+}
 
 </style>
 </head>
@@ -1342,17 +1322,22 @@ function updatePreviewMetrics(roi,risk){
 
   const roiEl = document.getElementById("roi-preview-live");
   const riskEl = document.getElementById("risk-preview");
-
-  const safeROI = Number(roi || 0).toFixed(1);
-  const safeRisk = Math.round(risk || 0);
-
   const mainROI = document.getElementById("roi-live");
-if(mainROI && roi){
-  mainROI.innerText = safeROI + "%";
-}
 
-  if(roiEl) roiEl.innerText = safeROI + "%";
-  if(riskEl) riskEl.innerText = safeRisk + "/100";
+  const safeROI = Number(roi ?? 0);
+  const safeRisk = Math.round(Number(risk ?? 0));
+
+  if(mainROI){
+    mainROI.innerText = safeROI.toFixed(1) + "%";
+  }
+
+  if(roiEl){
+    roiEl.innerText = safeROI.toFixed(1) + "%";
+  }
+
+  if(riskEl){
+    riskEl.innerText = safeRisk + "/100";
+  }
 
 }
 
