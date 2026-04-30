@@ -16285,8 +16285,6 @@ body *{
   z-index:1;
 }
 
-<style>
-
 /* ===================================== */
 /* 🔥 FIX TESTI SEZIONI SCURE (HOME ONLY) */
 /* ===================================== */
@@ -16298,15 +16296,11 @@ body *{
 
 .home-page .danger-block h2{
   color:#ffffff !important;
+  text-shadow:0 0 20px rgba(16,185,129,0.25);
 }
 
 .home-page .danger-block p{
   color:#cbd5f5 !important;
-}
-
-/* glow leggero sul titolo */
-.home-page .danger-block h2{
-  text-shadow:0 0 20px rgba(16,185,129,0.25);
 }
 
 /* ===================================== */
@@ -16315,7 +16309,7 @@ body *{
 
 .home-page .danger-block .cta-primary{
   background:linear-gradient(135deg,#10b981,#059669);
-  color:white;
+  color:#ffffff !important;
   box-shadow:0 10px 30px rgba(16,185,129,0.35);
   transition:all 0.3s ease;
 }
@@ -16326,25 +16320,68 @@ body *{
 }
 
 /* ===================================== */
-/* 🔥 FOOTER FIX */
+/* 🔥 FOOTER BASE */
 /* ===================================== */
 
 .home-page .global-footer{
   background:#020617;
 }
 
-.home-page .global-footer strong{
-  color:#ffffff !important;
-}
-
+/* testi normali */
 .home-page .global-footer p,
 .home-page .global-footer a{
   color:#94a3b8 !important;
 }
 
-/* hover link più premium */
+/* titoli */
+.home-page .global-footer strong{
+  color:#ffffff !important;
+}
+
+/* hover link */
 .home-page .global-footer a:hover{
   color:#10b981 !important;
+}
+
+/* ===================================== */
+/* 🔥 FIX BOTTONI FOOTER (CRITICO) */
+/* ===================================== */
+
+/* CTA principale */
+.home-page .global-footer .btn-primary,
+.home-page .global-footer .btn-primary *{
+  color:#ffffff !important;
+}
+
+/* CTA secondaria */
+.home-page .global-footer .btn-secondary,
+.home-page .global-footer .btn-secondary *{
+  color:#ffffff !important;
+}
+
+/* evita override da strong globali */
+.home-page .global-footer .btn-primary strong,
+.home-page .global-footer .btn-secondary strong{
+  color:inherit !important;
+}
+
+/* stile premium */
+.home-page .global-footer .btn-primary{
+  background:linear-gradient(135deg,#10b981,#059669);
+  box-shadow:0 10px 30px rgba(16,185,129,0.35);
+  border:none;
+}
+
+.home-page .global-footer .btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(16,185,129,0.5);
+}
+
+/* secondario elegante */
+.home-page .global-footer .btn-secondary{
+  background:rgba(16,185,129,0.1);
+  border:1px solid rgba(16,185,129,0.4);
+  backdrop-filter:blur(6px);
 }
 
 /* ===================================== */
@@ -16353,25 +16390,25 @@ body *{
 
 .home-page .micro-trust strong{
   color:#ffffff !important;
+  text-shadow:0 0 12px rgba(16,185,129,0.35);
 }
 
 .home-page .micro-trust p{
   color:#e2e8f0 !important;
 }
 
-/* glow leggero KPI hero */
-.home-page .micro-trust strong{
-  text-shadow:0 0 12px rgba(16,185,129,0.35);
-}
-
 /* ===================================== */
-/* 🔥 PROTEZIONE CONTRO REGOLE GLOBALI */
+/* 🔥 PROTEZIONE CONTRO GLOBAL BUG */
 /* ===================================== */
 
-/* evita che .home-page strong scuro rovini sezioni dark */
+/* blocca override di .home-page strong globale */
 .home-page .danger-block strong,
 .home-page .global-footer strong{
   color:#ffffff !important;
 }
 
-</style>
+/* extra sicurezza su bottoni */
+.home-page .global-footer a.btn-primary,
+.home-page .global-footer a.btn-secondary{
+  color:#ffffff !important;
+}
