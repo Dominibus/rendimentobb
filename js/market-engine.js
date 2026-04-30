@@ -33,23 +33,23 @@ function getText(){
   };
 }
 
-/* ================= CITY ENGINE ================= */
+/* ================= CITY ENGINE (FIX DEFINITIVO) ================= */
 
 function getSafeCity(inputCity){
 
-  const path = window.location.pathname.toLowerCase();
+  // 🔥 PRIORITÀ ASSOLUTA → SINGLE SOURCE
+  if(window.__FINAL_CITY__){
+    return window.__FINAL_CITY__;
+  }
 
-  if(path.includes("/milano")) return "milan";
-  if(path.includes("/roma")) return "rome";
-  if(path.includes("/napoli")) return "naples";
-  if(path.includes("/firenze")) return "florence";
+  // 👉 fallback controllato
+  if(inputCity){
+    return inputCity;
+  }
 
-  if(inputCity) return inputCity;
-
-  if(window.currentCity) return window.currentCity;
-
-  const stored = localStorage.getItem("selected_city");
-  if(stored) return stored;
+  if(window.currentCity){
+    return window.currentCity;
+  }
 
   return "rome";
 }
@@ -58,24 +58,17 @@ function getSafeCity(inputCity){
 
 export function renderMarketBenchmark(inputCity){
 
-  // 🔒 ANTI LOOP HARD LOCK
+  // 🔒 anti loop
   if(window.__marketRendering) return;
   window.__marketRendering = true;
 
-  setTimeout(() => {
+  setTimeout(()=>{
     window.__marketRendering = false;
-  }, 200);
+  },200);
 
   const city = getSafeCity(inputCity);
 
   console.log("📊 Render Market:", city);
-
-  window.currentCity = city;
-
-  // 🔥 sync background
-  if(window.applyCityBackground){
-    applyCityBackground(city);
-  }
 
   /* ================= DATA CHECK ================= */
 
@@ -132,7 +125,6 @@ export function renderMarketBenchmark(inputCity){
   if(!container) return;
 
   container.innerHTML = `
-
   <div style="
     padding:22px;
     border-radius:18px;
@@ -210,7 +202,7 @@ if(!window.__marketLangListener){
   window.__marketLangListener = true;
 
   document.addEventListener("rb_language_changed", () => {
-    renderMarketBenchmark();
+    renderMarketBenchmark(window.__FINAL_CITY__);
   });
 }
 
@@ -224,7 +216,7 @@ if(!window.__marketSimulationListener){
       window.currentRevenue = e.detail.revenue;
     }
 
-    renderMarketBenchmark();
+    renderMarketBenchmark(window.__FINAL_CITY__);
 
   });
 }
