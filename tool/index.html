@@ -63,7 +63,7 @@ content="Calculate ROI, real risk and sustainability before investing in a B&B. 
 <style>
 
 /* ============================= */
-/* 🔥 BASE UX (PREMIUM CLEAN) */
+/* 🔥 BASE UX */
 /* ============================= */
 
 body{
@@ -73,7 +73,7 @@ body{
 }
 
 /* ============================= */
-/* 🔥 INPUT UX */
+/* 🔥 INPUT */
 /* ============================= */
 
 input, select{
@@ -88,7 +88,7 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 HERO SYSTEM (CRITICO) */
+/* 🔥 HERO */
 /* ============================= */
 
 .tool-hero{
@@ -98,7 +98,6 @@ input:focus{
   overflow:hidden;
 }
 
-/* background */
 .hero-bg{
   position:absolute;
   inset:0;
@@ -107,17 +106,14 @@ input:focus{
   z-index:0;
 }
 
-/* overlay PRO (leggibilità totale) */
 .hero-bg::after{
   content:"";
   position:absolute;
   inset:0;
-
   background:linear-gradient(
     rgba(15,23,42,0.55),
     rgba(15,23,42,0.75)
   );
-
   z-index:1;
 }
 
@@ -152,61 +148,39 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 TOOL CARD */
+/* 🔥 CARD */
 /* ============================= */
 
 .tool-card{
-  position:relative;
-  z-index:2;
-
   background:rgba(255,255,255,0.98);
   backdrop-filter:blur(12px);
-
   border-radius:18px;
   padding:24px;
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.12),
-    0 0 0 1px rgba(255,255,255,0.2) inset;
-
+  box-shadow:0 20px 60px rgba(0,0,0,0.12);
   margin-bottom:40px;
+  color:#0f172a;
 }
 
 /* ============================= */
 /* 🔥 ROI DASHBOARD */
 /* ============================= */
 
-.simulator-right{
-  position:relative;
-  z-index:2;
-}
-
 .roi-dashboard{
   background:rgba(255,255,255,0.95);
   backdrop-filter:blur(12px);
-
   border-radius:22px;
   padding:30px;
-
-  box-shadow:
-    0 30px 80px rgba(0,0,0,0.12),
-    0 0 0 1px rgba(255,255,255,0.25) inset;
-}
-
-/* ============================= */
-/* 🔥 TESTO SU HERO */
-/* ============================= */
-
-.simulator-container{
-  color:#f8fafc;
-}
-
-/* override card interne */
-.tool-card,
-.roi-dashboard,
-.results-card,
-.metric-card{
+  box-shadow:0 30px 80px rgba(0,0,0,0.12);
   color:#0f172a;
+}
+
+/* ============================= */
+/* 🔥 TESTO HERO SOLO HEADER */
+/* ============================= */
+
+/* 🔥 SOLO HERO (non rompe le card) */
+.tool-hero .simulator-container{
+  color:#e2e8f0;
 }
 
 /* ============================= */
@@ -219,31 +193,23 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 METRIC CARD (ULTRA PRO) */
+/* 🔥 METRIC */
 /* ============================= */
 
 .metric-card{
   background:rgba(255,255,255,0.92);
   backdrop-filter:blur(10px);
-
   border-radius:14px;
   padding:16px;
-
   border:1px solid rgba(255,255,255,0.4);
-
   text-align:center;
-
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.12),
-    0 0 0 1px rgba(255,255,255,0.2) inset;
-
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
   transition:all 0.25s ease;
+  color:#0f172a;
 }
 
 .metric-card:hover{
   transform:translateY(-3px);
-  box-shadow:
-    0 20px 40px rgba(0,0,0,0.15);
 }
 
 .metric-card span{
@@ -258,16 +224,31 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 CTA / TEXT FIX */
+/* 🔥 FIX TESTI CHIARI (CRITICO) */
+/* ============================= */
+
+/* 🔥 TUTTI i paragrafi normali */
+.simulator-container p{
+  color:#475569 !important;
+}
+
+/* 🔥 descrizioni secondarie */
+.simulator-container [style*="font-size:13px"]{
+  color:#64748b !important;
+}
+
+/* 🔥 badge / alert */
+.simulator-container [style*="font-size:12px"]{
+  color:#64748b !important;
+}
+
+/* ============================= */
+/* 🔥 CTA */
 /* ============================= */
 
 #cta-urgency{
-  color:#f87171 !important;
+  color:#ef4444 !important;
   text-shadow:0 2px 8px rgba(0,0,0,0.6);
-}
-
-.simulator-container [style*="color:#64748b"]{
-  color:#cbd5f5 !important;
 }
 
 /* ============================= */
@@ -277,14 +258,11 @@ input:focus{
 .locked-overlay{
   position:absolute;
   inset:0;
-
   background:rgba(255,255,255,0.9);
   backdrop-filter:blur(6px);
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   border-radius:14px;
   z-index:5;
 }
@@ -314,21 +292,10 @@ body.pro-user .blur-content{
 }
 
 @keyframes roiPop{
-  0%{
-    transform: translateY(20px) scale(0.8);
-    opacity:0;
-  }
-  40%{
-    transform: translateY(-6px) scale(1.05);
-    opacity:1;
-  }
-  70%{
-    transform: translateY(2px) scale(0.98);
-  }
-  100%{
-    transform: translateY(0) scale(1);
-    opacity:1;
-  }
+  0%{transform:translateY(20px) scale(0.8);opacity:0;}
+  40%{transform:translateY(-6px) scale(1.05);opacity:1;}
+  70%{transform:translateY(2px) scale(0.98);}
+  100%{transform:translateY(0) scale(1);opacity:1;}
 }
 
 .roi-glow-active{
@@ -336,18 +303,9 @@ body.pro-user .blur-content{
 }
 
 @keyframes roiGlowPulse{
-  0%{
-    opacity:0;
-    transform:scale(0.8);
-  }
-  50%{
-    opacity:1;
-    transform:scale(1.2);
-  }
-  100%{
-    opacity:0.6;
-    transform:scale(1);
-  }
+  0%{opacity:0;transform:scale(0.8);}
+  50%{opacity:1;transform:scale(1.2);}
+  100%{opacity:0.6;transform:scale(1);}
 }
 
 /* ============================= */
