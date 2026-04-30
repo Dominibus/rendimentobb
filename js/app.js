@@ -1423,10 +1423,12 @@ ${occRounded.toFixed(1)}%
 
 function renderInvestmentScore(roi, riskScore){
 
-const container = document.getElementById("investment-score");
-if(!container) return;
+  const container = document.getElementById("investment-score");
+  const circle = document.getElementById("score-circle");
 
-const access = window.getUserAccess?.() || {};
+  if(!container) return;
+
+  const access = window.getUserAccess?.() || {};
 
   // 🔴 FREE → blocco
   if(access.isFree){
@@ -1435,54 +1437,77 @@ const access = window.getUserAccess?.() || {};
         🔒 ${t("Sblocca valutazione completa","Unlock full score")}
       </div>
     `;
+
+    if(circle) circle.innerHTML = "—";
     return;
-  }  
+  }
 
-let grade = "C";
-let recommendation = t("Alto rischio","High risk");
+  // ================= SCORE CALCOLO =================
+  let score = Math.max(0, Math.min(100,
+    (roi * 2) - riskScore
+  ));
 
-if(roi > 12){
-grade = "A";
-recommendation = t(
-"Investimento sicuro",
-"Safe investment"
-);
-}
+  score = Math.round(score);
 
-else if(roi > 6){
-grade = "B";
-recommendation = t(
-"Rendimento moderato",
-"Moderate return"
-);
-}
+  // ================= CERCHIO =================
+  if(circle){
 
-let gradeColor = "#ef4444";
+    let color = "#ef4444";
 
-if(grade === "A") gradeColor = "#10b981";
-else if(grade === "B") gradeColor = "#f59e0b";
+    if(score > 70) color = "#10b981";
+    else if(score > 40) color = "#f59e0b";
 
-container.innerHTML = `
+    circle.innerHTML = `
+      <div style="
+        font-size:20px;
+        font-weight:700;
+        color:${color};
+      ">
+        ${score}
+      </div>
+    `;
 
-<div class="kpi-box">
-<span>${t("Valutazione","Grade")}</span>
-<strong style="color:${gradeColor};font-size:22px;">
-${grade}
-</strong>
-</div>
+    // effetto glow premium
+    circle.style.boxShadow = `0 0 20px ${color}40`;
+  }
 
-<div class="kpi-box">
-<span>${t("Indice rischio","Risk score")}</span>
-<strong>${riskScore} / 100</strong>
-</div>
+  // ================= KPI BOX =================
+  let grade = "C";
+  let recommendation = t("Alto rischio","High risk");
 
-<div class="kpi-box">
-<span>${t("Raccomandazione","Recommendation")}</span>
-<strong>${recommendation}</strong>
-</div>
+  if(roi > 12){
+    grade = "A";
+    recommendation = t("Investimento sicuro","Safe investment");
+  }
+  else if(roi > 6){
+    grade = "B";
+    recommendation = t("Rendimento moderato","Moderate return");
+  }
 
-`;
+  let gradeColor = "#ef4444";
+  if(grade === "A") gradeColor = "#10b981";
+  else if(grade === "B") gradeColor = "#f59e0b";
 
+  container.innerHTML = `
+
+  <div class="kpi-box">
+    <span>${t("Valutazione","Grade")}</span>
+    <strong style="color:${gradeColor};font-size:22px;">
+      ${grade}
+    </strong>
+  </div>
+
+  <div class="kpi-box">
+    <span>${t("Indice rischio","Risk score")}</span>
+    <strong>${riskScore} / 100</strong>
+  </div>
+
+  <div class="kpi-box">
+    <span>${t("Raccomandazione","Recommendation")}</span>
+    <strong>${recommendation}</strong>
+  </div>
+
+  `;
 }
 
 // ================= INVESTMENT RANKING =================
