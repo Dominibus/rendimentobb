@@ -2691,13 +2691,13 @@ if(scoreCircle){
 
   if(access.isFree){
 
-  scoreCircle.innerText = "—";
+    scoreCircle.innerText = "—";
 
-  if(scoreROI){
-    scoreROI.innerText = "—";
-  }
+    if(scoreROI){
+      scoreROI.innerText = "—";
+    }
 
-}else{
+  }else{
 
     let grade = "C";
 
@@ -2705,16 +2705,20 @@ if(scoreCircle){
     else if(roi > 6) grade = "B";
 
     scoreCircle.innerText = grade;
-    if(scoreROI){
-    scoreROI.innerText = roi.toFixed(1) + "%";
 
-    // 🎨 colore
+    // 🎨 colore (SEMPRE applicato)
     let color = "#ef4444";
     if(grade === "A") color = "#10b981";
     else if(grade === "B") color = "#f59e0b";
 
     scoreCircle.style.background = color + "20";
     scoreCircle.style.color = color;
+
+    // 🔢 ROI sotto
+    if(scoreROI){
+      scoreROI.innerText = roi.toFixed(1) + "%";
+    }
+
   }
 }
         
