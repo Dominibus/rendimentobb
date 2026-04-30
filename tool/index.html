@@ -1148,8 +1148,15 @@ function applyProAccess(){
   console.log("👤 ACCESS:", access);
 
   if(access.isPro || access.isAdmin){
+
     document.body.classList.add("pro-user");
     console.log("✅ PRO MODE ATTIVO");
+
+    // 🔥 FIX UI IMMEDIATO (CRITICO)
+    document.querySelectorAll(".pro-only").forEach(el=>{
+      el.style.display = "block";
+    });
+
   }
 
   return true;
