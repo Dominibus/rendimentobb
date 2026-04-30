@@ -2705,6 +2705,31 @@ window.calculate = async function(force = false){
       0
     );
 
+    // ================= 🔥 RISK PREVIEW =================
+
+const risk = Number(
+  result?.risk ??
+  result?.riskScore ??
+  result?.risk_index ??
+  0
+);
+
+const riskEl = document.getElementById("risk-preview");
+
+if(riskEl){
+  const safeRisk = Math.round(risk);
+
+  if(access.isFree){
+    riskEl.innerText = safeRisk + "/100"; // teaser
+  }
+  else if(access.isInvestor){
+    riskEl.innerText = safeRisk + "/100"; // quasi completo
+  }
+  else{
+    riskEl.innerText = safeRisk + "/100"; // pro completo
+  }
+}
+
     // ================= 🔥 UPDATE KPI (SEMPRE) =================
 
     // ROI
