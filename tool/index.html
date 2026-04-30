@@ -110,21 +110,38 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 FORM (FIX OVERLAP) */
+/* 🔥 FORM (FIX POSIZIONE REALE) */
 /* ============================= */
 
 .simulator-left{
   position:relative;
-  z-index:auto !important; /* 🔥 FIX CRITICO */
-  margin-top:0;
+  z-index:2; /* sopra al bg ma NON sopra altri blocchi */
+  margin-top:-120px; /* 🔥 ALZA IL SIMULATORE */
 }
+
+/* ============================= */
+/* 🔥 CARD SIMULATORE */
+/* ============================= */
 
 .tool-card{
   position:relative;
   z-index:1;
-  transform:none !important; /* 🔥 blocca qualsiasi spinta */
+
+  transform:none !important; /* blocca effetti strani */
+  top:auto !important;
+  
+  margin-bottom:40px; /* 🔥 evita che tocchi il ROI sotto */
 }
 
+/* ============================= */
+/* 🔥 SICUREZZA EXTRA */
+/* ============================= */
+
+.simulator-right,
+.roi-dashboard{
+  position:relative;
+  z-index:1;
+}
 /* ============================= */
 /* 🔥 ROI DASHBOARD */
 /* ============================= */
