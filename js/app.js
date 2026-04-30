@@ -2599,8 +2599,6 @@ function getValue(id){
   const v = parseFloat(el.value);
   return isNaN(v) ? 0 : v;
 }
-// ================= CORE CALCULATE ENGINE (FINAL PRODUCTION SAAS) =================
-
 window.calculate = async function(force = false){
 
   if(window.isCalculating && !force){
@@ -2613,7 +2611,7 @@ window.calculate = async function(force = false){
   window.simulationExecuted = false;
   window.paywallShown = false;
 
-  // 🧹 CLEAN UI (NO RESIDUI BUG)
+  // 🧹 CLEAN UI
   document.querySelectorAll(`
     .smart-overlay,
     .upgrade-msg,
@@ -2622,642 +2620,198 @@ window.calculate = async function(force = false){
 
   const access = window.getUserAccess?.() || {};
 
-if(!access.isFree){
-  document.querySelectorAll(`
-    .results-overlay,
-    .upgrade-overlay
-  `).forEach(el => el.remove());
-}
+  if(!access.isFree){
+    document.querySelectorAll(`
+      .results-overlay,
+      .upgrade-overlay
+    `).forEach(el => el.remove());
+  }
 
-  console.log("🚀 CALCULATE START");
+  console.log("🚀 CALCULATE START", access);
 
   try{
 
     // ================= INPUT =================
     const isTool = !!document.getElementById("price");
 
-    const price       = isTool ? getValue("price")       || 100000 : getValue("qr_price") || 100000;
+    const price       = isTool ? getValue("price") || 100000 : getValue("qr_price") || 100000;
     const equityInput = getValue("equity");
 
     const equity = isTool
-    ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
-    : Math.round(price * 0.3);
-    const priceNight  = isTool ? getValue("priceNight")  || 100 : getValue("qr_night") || 100;
-    const occupancy   = isTool ? getValue("occupancy")   || 65  : getValue("qr_occ") || 65;
-    const expenses    = isTool ? getValue("expenses")    || 30  : getValue("qr_cost") || 30;
+      ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
+      : Math.round(price * 0.3);
+
+    const priceNight  = isTool ? getValue("priceNight") || 100 : getValue("qr_night") || 100;
+    const occupancy   = isTool ? getValue("occupancy") || 65 : getValue("qr_occ") || 65;
+    const expenses    = isTool ? getValue("expenses") || 30 : getValue("qr_cost") || 30;
 
     const commission  = getValue("commission") || 15;
     const tax         = getValue("tax") || 21;
 
-  // ================= CUSTOM LOCATION (FIX DEFINITIVO) =================
+    // ================= LOCATION =================
+    const customLocation = document.getElementById("custom-location")?.value;
 
-const customLocation = document.getElementById("custom-location")?.value;
+    if(customLocation?.trim()){
+      const mappedCity = mapLocationToCity(customLocation);
 
-if(customLocation && customLocation.trim() !== ""){
+      if(!window.__CITY_LOCKED__ && mappedCity){
+        window.currentCity = mappedCity;
+        localStorage.setItem("selected_city", mappedCity);
 
-  const mappedCity = mapLocationToCity(customLocation);
+        console.log("📍 City:", mappedCity);
 
-  if(!window.__CITY_LOCKED__ && mappedCity){
-
-    window.currentCity = mappedCity;
-
-    localStorage.setItem("selected_city", mappedCity);
-
-    console.log("📍 Località inserita:", customLocation);
-    console.log("🏙 Città benchmark:", mappedCity);
-
-    if(typeof applyCityBackground === "function"){
-      applyCityBackground(mappedCity);
-    }
-
-  }
-
-}
-    const loanAmount  = getValue("loanAmount") || (price - equity);
-    const interestRate= getValue("interestRate") || 3.5;
-    const loanYears   = getValue("loanYears") || 20;
-
-    const access = window.getUserAccess?.() || {};
-
-    // ================= CALCOLO =================
-const result = calculateROI({
-  price,
-  equity,
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  loanAmount,
-  interestRate,
-  loanYears
-});
-
-// 🔥 FORCE BG UPDATE DOPO CALCOLO
-if(window.currentCity && !window.__CITY_LOCKED__){
-  applyCityBackground(window.currentCity);
-}
-
-// 🔒 VALIDAZIONE RESULT
-if (!result || typeof result !== "object") {
-  console.error("💥 RESULT INVALID:", result);
-  return;
-}
-
-// ================= ROI =================
-const roi = Number(result?.roi ?? 0);
-const safeROI = isFinite(roi) ? roi : 0;
-
-// 🔥 FORMAT
-const roiText = safeROI.toFixed(1) + "%";
-
-// 🔥 UPDATE KPI (SEMPRE)
-const access = window.getUserAccess?.() || {};
-
-["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
-  const el = document.getElementById(id);
-  if(!el) return;
-
-  // 🔴 FREE → NO NUMERO REALE
-  if(access.isFree){
-    el.innerText = "—";
-    el.style.color = "#64748b";
-  }else{
-    el.innerText = roiText;
-  }
-});
-
-// ================= MAIN ROI UX =================
-const roiMain = document.getElementById("roi-live");
-const roiGlow = document.getElementById("roi-glow");
-
-if(roiMain){
-
-  // 🔥 EVITA ANIMAZIONI INUTILI
-  const lastROI = parseFloat(roiMain.dataset.last || "NaN");
-
-  const changed = Math.abs(lastROI - safeROI) > 0.1;
-
-  if(changed){
-
-    // ================= 🎨 COLORE DINAMICO =================
-    let color;
-
-    if(safeROI > 20){
-      color = "#16a34a"; // verde forte
-    }
-    else if(safeROI > 10){
-      color = "#f59e0b"; // arancio
-    }
-    else{
-      color = "#ef4444"; // rosso
-    }
-
-    roiMain.style.color = color;
-
-    // ================= 🚀 ANIMAZIONE =================
-    roiMain.classList.remove("roi-animate");
-    void roiMain.offsetWidth; // force reflow
-    roiMain.classList.add("roi-animate");
-
-    // ================= ✨ GLOW DINAMICO =================
-    if(roiGlow){
-
-      roiGlow.style.background = `
-        radial-gradient(circle,
-          ${color}33,
-          transparent 70%
-        )
-      `;
-
-      roiGlow.classList.remove("roi-glow-active");
-      void roiGlow.offsetWidth;
-      roiGlow.classList.add("roi-glow-active");
-    }
-
-    // salva stato
-    roiMain.dataset.last = safeROI;
-  }
-}
-
-// ================= REVENUE =================
-const gross = Number(
-  result?.revenue ??
-  result?.gross ??
-  result?.annualRevenue ??
-  0
-);
-
-// ================= NET =================
-const net = Number(
-  result?.netAfterMortgage ??
-  result?.net ??
-  0
-);
-// ================= SCORE CIRCLE =================
-const scoreCircle = document.getElementById("score-circle");
-const scoreROI = document.getElementById("score-roi");    
-
-if(scoreCircle){
-
-  const access = window.getUserAccess?.() || {};
-
-  if(access.isFree){
-
-    scoreCircle.innerText = "—";
-
-    if(scoreROI){
-      scoreROI.innerText = "—";
-    }
-
-  }else{
-
-    let grade = "C";
-
-    if(roi > 12) grade = "A";
-    else if(roi > 6) grade = "B";
-
-    scoreCircle.innerText = grade;
-
-    // 🎨 colore (SEMPRE applicato)
-    let color = "#ef4444";
-    if(grade === "A") color = "#10b981";
-    else if(grade === "B") color = "#f59e0b";
-
-    scoreCircle.style.background = color + "20";
-    scoreCircle.style.color = color;
-
-    // 🔢 ROI sotto
-    if(scoreROI){
-      scoreROI.innerText = roi.toFixed(1) + "%";
-    }
-
-  }
-}
-        
-
-// =====================================
-// 💸 LOSS VISUAL (BILINGUE + SaaS CLEAN)
-// =====================================
-
-try{
-
-  const lossEl = document.getElementById("money-loss");
-  const lossValueEl = document.getElementById("money-loss-value");
-
-  if(lossEl && lossValueEl){
-
-  const estimatedLoss = Math.max(0, net * 0.3);
-
-  // 🔥 aggiorna numero
-  lossValueEl.innerText = formatCurrency(estimatedLoss);
-
-  // =====================================
-  // 🔥 MICRO MIGLIORIA (QUI È IL PUNTO)
-  // =====================================
-  if(estimatedLoss > 1000 && !access.canSeeFullAnalysis){
-
-    lossEl.style.display = "block";
-    lossEl.style.animation = "fadeUp .4s ease";
-
-    // =====================================
-    // 🚀 BONUS → ATTIVA BLOCCO SHOCK (QUI)
-    // =====================================
-    const shock = document.getElementById("roi-shock-block");
-
-    if(shock){
-      shock.style.display = "block";
-    }
-
-  }
-
-}
-
-}catch(e){
-  console.warn("⚠️ loss render error", e);
-}
-
-if(!access.canSeeFullAnalysis && roi > 10 && !window._roiToastShown){
-
-  window._roiToastShown = true;
-
-  setTimeout(()=>{
-    showToast(
-      t(
-        "🔥 Questo investimento potrebbe farti guadagnare molto",
-        "🔥 This investment could generate strong returns"
-      ),
-      "success"
-    );
-  }, 800);
-
-}
-    
-if(!roi && !gross && !net){
-  console.error("💥 RESULT EMPTY");
-  return;
-}
-
-// ================= UI FINAL RENDER (CRITICO – FIX STABILE) =================
-try {
-
-  const profit = Number(result?.netAfterMortgage ?? result?.net ?? 0);
-  const revenue = gross || 0;
-  const risk = Number(result?.risk ?? 0);
-
-  // ================= KPI LIVE =================
-  const profitEl = document.getElementById("profit-live");
-  if(profitEl){
-    profitEl.innerText = formatCurrency(profit);
-  }
-
-  const revenueEl = document.getElementById("revenue-live");
-  if(revenueEl){
-    revenueEl.innerText = formatCurrency(revenue);
-  }
-
-  console.log("✅ UI FINAL RENDER OK");
-
-  // ================= POST RENDER CONTROL =================
-  setTimeout(()=>{
-
-    const access = window.getUserAccess?.() || {};
-
-    console.log("🎯 FINAL UI CONTROL:", access);
-
-    // ================= 🟢 PRO / ADMIN =================
-    if(access.isPro || access.isAdmin){
-
-      console.log("🟢 FULL UNLOCK SAFE");
-
-      // 🔥 rimuove SOLO overlay veri (NON rompe layout)
-      document.querySelectorAll(`
-        .lock-overlay,
-        .upgrade-overlay,
-        .results-overlay,
-        .smart-overlay,
-        .paywall-mini
-      `).forEach(el=>{
-        if(el.id !== "register-popup") el.remove();
-      });
-
-      // 🔥 reset blur SENZA forzare style inline distruttivi
-      document.querySelectorAll(`
-        .blur-content,
-        .pro-blur
-      `).forEach(el=>{
-        el.classList.remove("blur-content","pro-blur");
-        el.style.filter = "";
-        el.style.opacity = "";
-        el.style.pointerEvents = "";
-      });
-
-      // ❌ NIENTE RETURN → continua flusso
-    }
-
-    // ================= 🟡 INVESTOR =================
-    if(access.isInvestor){
-
-      console.log("🟡 INVESTOR CLEAN");
-
-      // 🔥 niente blur base
-      document.querySelectorAll(`
-        .pro-blur,
-        .blur-content
-      `).forEach(el=>{
-        el.classList.remove("pro-blur","blur-content");
-        el.style.filter = "";
-        el.style.opacity = "";
-      });
-
-      // 🔒 blocca SOLO advanced
-      applySmartLock(document.getElementById("ai-insights"), {
-        type:"advanced",
-        plan:"pro"
-      });
-
-    }
-
-    // ================= 🔴 FREE =================
-    if(access.isFree){
-
-      console.log("🔴 FREE LOCK");
-
-      applySmartLock(document.getElementById("ai-insights"), {
-        type:"overlay",
-        plan:"investor"
-      });
-
-    }
-
-  }, 200); // 🔥 ridotto timing (più stabile)
-
-} catch(e){
-  console.error("💥 UI FINAL RENDER ERROR:", e);
-}
-// ================= POST ANALYSIS =================
-runPostAnalysis(result, {
-  price,
-  gross,
-  occupancy,
-  priceNight,
-  expenses
-});
-
-// ================= KPI CORE =================
-renderUniversalKPI({
-  net,
-  revenue: gross,
-  investment: price
-});
-
-// ================= ROI LIVE =================
-const roiEl = document.getElementById("roi-live");  
-
-if(roiEl){
-
-  roiEl.style.opacity = "0";
-
-  setTimeout(()=>{
-
-    if(access.isFree){
-
-      roiEl.innerText = "—";
-      roiEl.style.color = "#64748b";
-
-    }else{
-
-      roiEl.innerText = roi.toFixed(1) + "%";
-      roiEl.style.color = getROIColor(roi);
-
-    }
-
-    roiEl.style.opacity = "1";
-
-  },150);
-}
-
-
-// ================= DISCLAIMER HOME =================
-if(!isTool){
-
-  const disclaimer = document.getElementById("home-disclaimer");
-
-  if(disclaimer){
-    disclaimer.innerText = t(
-      "Stima basata su parametri medi di mercato",
-      "Estimate based on market average assumptions"
-    );
-    disclaimer.style.display = "block";
-  }
-
-}
-
-// ================= MARKET =================
-try{
-
-  const access = window.getUserAccess?.() || {};
-
-  // 🔴 FREE → NON renderizzare dati reali
-  if(access.isFree){
-
-    console.log("🔒 MARKET BLOCCATO (FREE)");
-
-    renderMarketComparison?.(0, window.currentCity);
-
-  }
-
-  // 🟡 INVESTOR → parziale
-  else if(access.isInvestor){
-
-    renderMarketBenchmark?.(window.currentCity || "roma");
-    renderMarketComparison?.(gross * 0.6, window.currentCity); // teaser
-    renderRevenueForecast?.(gross);
-
-  }
-
-  // 🟢 PRO / ADMIN → full
-  else{
-
-    renderMarketBenchmark?.(window.currentCity || "roma");
-    renderMarketComparison?.(gross, window.currentCity);
-    renderRevenueForecast?.(gross);
-    renderOccupancySensitivity?.();
-
-  }
-
-}catch(e){
-  console.warn("⚠️ MARKET RENDER SKIPPED:", e);
-}
-
-// ================= ADVANCED METRICS =================
-const riskScore = roi > 12 ? 30 : roi > 6 ? 55 : 75;
-
-// 🔥 FIX PREVIEW KPI
-if(typeof updatePreviewMetrics === "function"){
-  updatePreviewMetrics(roi, riskScore);
-}
-    console.log("🎯 PREVIEW UPDATE:", {
-  roi,
-  riskScore
-});
-
-// 🔥 ROI PREVIEW + ANIMAZIONE (FIX REALE)
-
-const roiPreviewEl = document.getElementById("roi-preview");
-const roiPreviewLive = document.getElementById("roi-preview-live");
-
-// funzione unica per aggiornare entrambi
-function updateROIPreview(el){
-  if(!el) return;
-
-  if(el.dataset.animating === "true") return;
-
-  el.dataset.animating = "true";
-
-  if(roi && roi > 0){
-
-    el.innerText = "0%";
-    el.style.color = getROIColor(roi);
-
-    animateValue(el, 0, roi, 800);
-
-  }else{
-    el.innerText = "—";
-    el.style.color = "#64748b";
-  }
-
-  setTimeout(()=>{
-    el.dataset.animating = "false";
-  }, 900);
-}
-
-// 🔥 aggiorna ENTRAMBI
-updateROIPreview(roiPreviewEl);
-updateROIPreview(roiPreviewLive);
-
- // 🔥 RISK PREVIEW (MATCH ROI STYLE)
-const riskPreviewEl = document.getElementById("risk-preview");
-
-if(riskPreviewEl){
-
-  if(riskPreviewEl.dataset.animating !== "true"){
-
-    riskPreviewEl.dataset.animating = "true";
-
-    if(riskScore !== null && riskScore !== undefined){
-
-      riskPreviewEl.innerText = "0";
-
-      // colore dinamico rischio (opposto ROI)
-      let color = "#ef4444";
-      if(riskScore < 40) color = "#10b981";
-      else if(riskScore < 65) color = "#f59e0b";
-
-      riskPreviewEl.style.color = color;
-
-      // animazione numero
-      let start = 0;
-      const end = riskScore;
-      const duration = 800;
-      let startTime = null;
-
-      function animateRisk(currentTime){
-        if(!startTime) startTime = currentTime;
-
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-        const value = start + (end - start) * progress;
-
-        riskPreviewEl.innerText = Math.round(value);
-
-        if(progress < 1){
-          requestAnimationFrame(animateRisk);
+        if(typeof applyCityBackground === "function"){
+          applyCityBackground(mappedCity);
         }
       }
-
-      requestAnimationFrame(animateRisk);
-
-    }else{
-      riskPreviewEl.innerText = "—";
-      riskPreviewEl.style.color = "#64748b";
     }
 
-    setTimeout(()=>{
-      riskPreviewEl.dataset.animating = "false";
-    }, 900);
-  }
-}   
-    
-try{
-  renderBreakEvenOccupancy?.(
-    priceNight,
-    expenses,
-    commission,
-    tax,
-    0
-  );
+    const loanAmount   = getValue("loanAmount") || (price - equity);
+    const interestRate = getValue("interestRate") || 3.5;
+    const loanYears    = getValue("loanYears") || 20;
 
-  renderInvestmentScore?.(roi, riskScore);
-  renderInvestmentRanking?.(roi);
-  renderRiskMeter?.(riskScore);
-  renderInvestmentVerdict?.(roi, net > 0 ? price/net : 0);
+    // ================= CALCOLO =================
+    const result = calculateROI({
+      price,
+      equity,
+      priceNight,
+      occupancy,
+      expenses,
+      commission,
+      tax,
+      loanAmount,
+      interestRate,
+      loanYears
+    });
 
-  if(isTool){
+    if(window.currentCity && !window.__CITY_LOCKED__){
+      applyCityBackground(window.currentCity);
+    }
 
-  const headline = document.getElementById("investment-headline");
+    if (!result || typeof result !== "object") {
+      console.error("💥 RESULT INVALID:", result);
+      return;
+    }
 
-  if(headline && roi > 0){
+    // ================= ROI =================
+    const roi = Number(result?.roi ?? 0);
+    const safeROI = isFinite(roi) ? roi : 0;
+    const roiText = safeROI.toFixed(1) + "%";
 
-    const profitYear = Math.round(net);
+    // ================= KPI =================
+    ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
 
-if(profitYear > 0){
-  headline.innerText = t(
-    `🔥 Questo investimento può generare €${profitYear.toLocaleString()} / anno`,
-    `🔥 This investment could generate €${profitYear.toLocaleString()} / year`
-  );
-}else{
-  headline.innerText = t(
-    "⚠️ Questo investimento potrebbe generare una perdita",
-    "⚠️ This investment could generate a loss"
-  );
-}
+      if(access.isFree){
+        el.innerText = "—";
+        el.style.color = "#64748b";
+      }else{
+        el.innerText = roiText;
+      }
+    });
 
-} // ✅ CHIUSURA if(headline)
+    // ================= REVENUE =================
+    const gross = Number(
+      result?.revenue ??
+      result?.gross ??
+      result?.annualRevenue ??
+      0
+    );
 
-} // ✅ CHIUSURA if(isTool)    
+    const net = Number(
+      result?.netAfterMortgage ??
+      result?.net ??
+      0
+    );
 
-  renderROIMarketComparison?.(roi, window.currentCity);
+    // ================= ROI ANIMATION =================
+    const roiMain = document.getElementById("roi-live");
 
-  if(typeof generateInsights === "function"){
-    renderInsights(generateInsights({
-      roi,
+    if(roiMain){
+      const lastROI = parseFloat(roiMain.dataset.last || "NaN");
+      const changed = Math.abs(lastROI - safeROI) > 0.1;
+
+      if(changed){
+
+        let color =
+          safeROI > 20 ? "#16a34a" :
+          safeROI > 10 ? "#f59e0b" :
+          "#ef4444";
+
+        roiMain.style.color = color;
+
+        roiMain.classList.remove("roi-animate");
+        void roiMain.offsetWidth;
+        roiMain.classList.add("roi-animate");
+
+        roiMain.dataset.last = safeROI;
+      }
+    }
+
+    // ================= LOSS =================
+    try{
+      const lossEl = document.getElementById("money-loss");
+      const lossValueEl = document.getElementById("money-loss-value");
+
+      if(lossEl && lossValueEl){
+
+        const estimatedLoss = Math.max(0, net * 0.3);
+        lossValueEl.innerText = formatCurrency(estimatedLoss);
+
+        if(estimatedLoss > 1000 && !access.canSeeFullAnalysis){
+          lossEl.style.display = "block";
+        }
+      }
+    }catch(e){
+      console.warn("⚠️ loss error", e);
+    }
+
+    // ================= RENDER BASE =================
+    renderUniversalKPI({
+      net,
+      revenue: gross,
+      investment: price
+    });
+
+    runPostAnalysis(result, {
+      price,
+      gross,
       occupancy,
       priceNight,
       expenses
-    }));
+    });
+
+    // ================= MARKET =================
+    try{
+      if(access.isFree){
+        renderMarketComparison?.(0, window.currentCity);
+      }
+      else if(access.isInvestor){
+        renderMarketBenchmark?.(window.currentCity || "roma");
+        renderMarketComparison?.(gross * 0.6, window.currentCity);
+        renderRevenueForecast?.(gross);
+      }
+      else{
+        renderMarketBenchmark?.(window.currentCity || "roma");
+        renderMarketComparison?.(gross, window.currentCity);
+        renderRevenueForecast?.(gross);
+        renderOccupancySensitivity?.();
+      }
+    }catch(e){
+      console.warn("⚠️ MARKET ERROR", e);
+    }
+
+    // ================= FUNNEL =================
+    if(window.firebaseReady && access.isFree && roi > 10){
+      triggerUpgradeFlow({ roi });
+    }
+
+  } catch(err){
+    console.error("💥 CALCULATE ERROR:", err);
   }
 
-}catch(e){
-  console.warn("⚠️ ADVANCED METRICS SKIPPED:", e);
-}
-
-// ================= CHART =================
-setTimeout(()=>{
-  if(typeof window.renderChart === "function"){
-    window.renderChart(net);
-  }
-},200);
-
-// ================= FUNNEL =================
-if(window.firebaseReady && access.isFree && !access.isInvestor && roi > 10){
-  triggerUpgradeFlow({ roi });
-}
-
-} catch(err){
-  console.error("💥 CALCULATE ERROR:", err);
-}
-
-window.isCalculating = false;
+  window.isCalculating = false;
 };
 // ================= CITY ROI CHART (SAFE) =================
 function renderCityROIChart(){
