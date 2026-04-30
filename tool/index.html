@@ -63,16 +63,22 @@ content="Calculate ROI, real risk and sustainability before investing in a B&B. 
 <style>
 
 /* ============================= */
-/* 🔥 BASE UX */
+/* 🔥 BASE UX (PREMIUM CLEAN) */
 /* ============================= */
 
 body{
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
+  background:#f8fafc;
 }
+
+/* ============================= */
+/* 🔥 INPUT UX */
+/* ============================= */
 
 input, select{
   pointer-events:auto;
+  transition:all 0.2s ease;
 }
 
 input:focus{
@@ -82,90 +88,125 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 HERO FIX */
+/* 🔥 HERO SYSTEM (CRITICO) */
 /* ============================= */
 
 .tool-hero{
   position:relative;
   padding-top:120px;
   padding-bottom:80px;
+  overflow:hidden;
+}
+
+/* background */
+.hero-bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  z-index:0;
+}
+
+/* overlay PRO (leggibilità totale) */
+.hero-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    rgba(15,23,42,0.55),
+    rgba(15,23,42,0.75)
+  );
+
+  z-index:1;
 }
 
 /* ============================= */
-/* 🔥 LAYOUT FIX DEFINITIVO */
+/* 🔥 LAYOUT */
 /* ============================= */
 
 .simulator-container{
   max-width:1100px;
   margin:auto;
-  margin-top:-90px; /* 🔥 AGGIUNGI QUESTO */
+  margin-top:-90px;
   padding:0 20px;
   position:relative;
-  z-index:5; /* 🔥 SICUREZZA OVERLAY */
+  z-index:2;
 }
 
 .simulator-grid{
   display:flex;
   flex-direction:column;
   gap:40px;
-  align-items:center; /* 🔥 centra tutto */
+  align-items:center;
 }
 
 /* ============================= */
-/* 🔥 FORM (FIX POSIZIONE REALE) */
+/* 🔥 FORM */
 /* ============================= */
 
 .simulator-left{
   position:relative;
-  z-index:2; /* sopra al bg ma NON sopra altri blocchi */
-  margin-top:-120px; /* 🔥 ALZA IL SIMULATORE */
+  z-index:2;
+  margin-top:-120px;
 }
 
 /* ============================= */
-/* 🔥 CARD SIMULATORE */
+/* 🔥 TOOL CARD */
 /* ============================= */
 
 .tool-card{
   position:relative;
-  z-index:1;
+  z-index:2;
 
-  transform:none !important; /* blocca effetti strani */
-  top:auto !important;
-  
-  margin-bottom:40px; /* 🔥 evita che tocchi il ROI sotto */
+  background:rgba(255,255,255,0.98);
+  backdrop-filter:blur(12px);
+
+  border-radius:18px;
+  padding:24px;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.12),
+    0 0 0 1px rgba(255,255,255,0.2) inset;
+
+  margin-bottom:40px;
 }
 
-/* ============================= */
-/* 🔥 SICUREZZA EXTRA */
-/* ============================= */
-
-.simulator-right,
-.roi-dashboard{
-  position:relative;
-  z-index:1;
-}
 /* ============================= */
 /* 🔥 ROI DASHBOARD */
 /* ============================= */
 
 .simulator-right{
   position:relative;
-  z-index:1;
+  z-index:2;
 }
 
 .roi-dashboard{
   background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(12px);
 
-  border-radius:20px;
+  border-radius:22px;
   padding:30px;
 
-  box-shadow:0 25px 70px rgba(0,0,0,0.08);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.12),
+    0 0 0 1px rgba(255,255,255,0.25) inset;
+}
 
-  position:relative;
-  z-index:1;
+/* ============================= */
+/* 🔥 TESTO SU HERO */
+/* ============================= */
 
-  margin-top:0;
+.simulator-container{
+  color:#f8fafc;
+}
+
+/* override card interne */
+.tool-card,
+.roi-dashboard,
+.results-card,
+.metric-card{
+  color:#0f172a;
 }
 
 /* ============================= */
@@ -178,16 +219,59 @@ input:focus{
 }
 
 /* ============================= */
-/* 🔥 CARD */
+/* 🔥 METRIC CARD (ULTRA PRO) */
 /* ============================= */
 
-.results-card,
 .metric-card{
-  position:relative;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(10px);
+
+  border-radius:14px;
+  padding:16px;
+
+  border:1px solid rgba(255,255,255,0.4);
+
+  text-align:center;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.12),
+    0 0 0 1px rgba(255,255,255,0.2) inset;
+
+  transition:all 0.25s ease;
+}
+
+.metric-card:hover{
+  transform:translateY(-3px);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.15);
+}
+
+.metric-card span{
+  font-size:12px;
+  color:#64748b;
+}
+
+.metric-card strong{
+  font-size:22px;
+  font-weight:700;
+  color:#0f172a;
 }
 
 /* ============================= */
-/* 🔥 OVERLAY FIX */
+/* 🔥 CTA / TEXT FIX */
+/* ============================= */
+
+#cta-urgency{
+  color:#f87171 !important;
+  text-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+
+.simulator-container [style*="color:#64748b"]{
+  color:#cbd5f5 !important;
+}
+
+/* ============================= */
+/* 🔥 OVERLAY */
 /* ============================= */
 
 .locked-overlay{
@@ -203,8 +287,6 @@ input:focus{
 
   border-radius:14px;
   z-index:5;
-
-  pointer-events:auto;
 }
 
 body.pro-user .locked-overlay{
@@ -224,69 +306,7 @@ body.pro-user .blur-content{
 }
 
 /* ============================= */
-/* 🔥 KPI */
-/* ============================= */
-
-.metric-card{
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-  border-radius:14px;
-  padding:16px;
-  border:1px solid #e2e8f0;
-  text-align:center;
-  box-shadow:0 10px 25px rgba(0,0,0,0.05);
-}
-
-.metric-card span{
-  font-size:12px;
-  color:#64748b;
-}
-
-.metric-card strong{
-  font-size:20px;
-  font-weight:700;
-  color:#0f172a;
-}
-
-/* ============================= */
-/* 🔥 FIX CLICK */
-/* ============================= */
-
-.simulator-left,
-.simulator-left *{
-  pointer-events:auto !important;
-}
-
-/* ============================= */
-/* 🔥 MOBILE */
-/* ============================= */
-
-@media (max-width:768px){
-
-  .tool-hero{
-    padding-top:80px;
-    padding-bottom:60px;
-  }
-
-  .simulator-container{
-  padding:0 16px;
-  margin-top:-40px; /* 🔥 PIÙ LEGGERO SU MOBILE */
-}
-
-  .roi-dashboard,
-  .results-card{
-    padding:20px;
-  }
-
-  .locked-overlay{
-    position:relative;
-    inset:auto;
-    margin-top:15px;
-  }
-
-}
-
-/* ============================= */
-/* 🚀 ROI ANIMATION */
+/* 🔥 ROI ANIMATION */
 /* ============================= */
 
 .roi-animate{
@@ -311,7 +331,6 @@ body.pro-user .blur-content{
   }
 }
 
-/* glow dinamico */
 .roi-glow-active{
   animation: roiGlowPulse 1s ease-out;
 }
@@ -329,7 +348,36 @@ body.pro-user .blur-content{
     opacity:0.6;
     transform:scale(1);
   }
-}  
+}
+
+/* ============================= */
+/* 🔥 MOBILE */
+/* ============================= */
+
+@media (max-width:768px){
+
+  .tool-hero{
+    padding-top:80px;
+    padding-bottom:60px;
+  }
+
+  .simulator-container{
+    padding:0 16px;
+    margin-top:-40px;
+  }
+
+  .roi-dashboard,
+  .results-card{
+    padding:20px;
+  }
+
+  .locked-overlay{
+    position:relative;
+    inset:auto;
+    margin-top:15px;
+  }
+
+}
 
 </style>
 </head>
