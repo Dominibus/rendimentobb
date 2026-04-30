@@ -358,6 +358,32 @@ body.pro-user .pro-only{
   display:none;
 }
 
+/* ===================================== */
+/* 🔥 FIX OVERLAP DEFINITIVO */
+/* ===================================== */
+
+.tool-page .simulator-grid{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* blocca ROI nel flow */
+.tool-page .roi-dashboard{
+  position:relative !important;
+  top:auto !important;
+  transform:none !important;
+  margin-top:-80px; /* effetto leggero sovrapposto */
+  z-index:3;
+}
+
+/* card sotto */
+.tool-page #results{
+  position:relative;
+  z-index:2;
+  margin-top:40px;
+}  
+
 </style>
 </head>
 
