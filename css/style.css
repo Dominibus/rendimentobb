@@ -16215,3 +16215,20 @@ body.tool-page .simulator-container label{
 body.tool-page .roi-dashboard{
   isolation:isolate;
 }
+
+/* =====================================
+🔥 FIX SIMULATORE MOBILE (SAFE)
+NON TOCCA ALTRE PAGINE
+===================================== */
+
+@media (max-width:768px){
+
+  .lock-overlay{
+    position:relative !important;
+    inset:auto !important;
+    height:auto !important;
+    max-height:100%;
+    pointer-events:auto;
+  }
+
+}
