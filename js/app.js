@@ -2705,6 +2705,29 @@ window.calculate = async function(force = false){
       0
     );
 
+    // ================= 🔥 INVESTMENT SCORE =================
+
+// prova a recuperare score dal motore
+const score = Number(
+  result?.score ??
+  result?.investmentScore ??
+  result?.rating ??
+  0
+);
+
+// fallback intelligente se non esiste
+let finalScore = score;
+
+if(!finalScore || finalScore === 0){
+
+  // calcolo base fallback (molto importante)
+  finalScore = Math.max(0, Math.min(100,
+    (safeROI * 2) - (result?.risk || 30)
+  ));
+}
+
+updateInvestmentScore(finalScore);
+
     // ================= 🔥 RISK PREVIEW =================
 
 const risk = Number(
