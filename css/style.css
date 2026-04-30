@@ -16446,38 +16446,34 @@ body *{
 }
 
 /* ===================================== */
-/* 🔥 FIX MOBILE SIMULATORE (DEFINITIVO) */
+/* 🔥 MOBILE PAYWALL CORRETTO */
 /* ===================================== */
 
 @media (max-width:768px){
 
-  /* evita che overlay distrugga layout */
+  /* overlay torna sopra ma NON rompe layout */
   .locked-overlay{
-    position:relative !important;
-    inset:auto !important;
-    height:auto !important;
-    min-height:60px;
-    margin-top:12px;
-    border-radius:12px;
+    position:absolute !important;
+    inset:0 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px);
+
+    z-index:5;
   }
 
-  /* evita contenuto schiacciato */
-  .results-card,
-  .roi-dashboard,
-  .simulator-right{
-    overflow:visible !important;
+  /* container sicuro */
+  .results-card{
+    position:relative;
+    overflow:hidden;
   }
 
-  /* forza visibilità contenuti */
-  #results{
-    display:block !important;
-    opacity:1 !important;
-    visibility:visible !important;
-  }
-
-  /* evita collapse container */
+  /* blur più forte → non leggibile */
   .blur-content{
-    filter:blur(4px); /* meno aggressivo su mobile */
+    filter:blur(8px) !important;
   }
 
 }
