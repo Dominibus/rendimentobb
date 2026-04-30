@@ -2700,26 +2700,70 @@ if (!result || typeof result !== "object") {
 
 // ================= ROI =================
 const roi = Number(result?.roi ?? 0);
+const safeROI = isFinite(roi) ? roi : 0;
 
-// 🔥 UPDATE TUTTI I ROI (SAFE + CLEAN)
-if(roi > 0){
+// 🔥 FORMAT
+const roiText = safeROI.toFixed(1) + "%";
 
-  ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){
-      el.innerText = roi.toFixed(1) + "%";
+// 🔥 UPDATE KPI (SEMPRE)
+["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el){
+    el.innerText = roiText;
+  }
+});
+
+// ================= MAIN ROI UX =================
+const roiMain = document.getElementById("roi-live");
+const roiGlow = document.getElementById("roi-glow");
+
+if(roiMain){
+
+  // 🔥 EVITA ANIMAZIONI INUTILI
+  const lastROI = parseFloat(roiMain.dataset.last || "NaN");
+
+  const changed = Math.abs(lastROI - safeROI) > 0.1;
+
+  if(changed){
+
+    // ================= 🎨 COLORE DINAMICO =================
+    let color;
+
+    if(safeROI > 20){
+      color = "#16a34a"; // verde forte
     }
-  });
-
-}else{
-
-  ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){
-      el.innerText = "—";
+    else if(safeROI > 10){
+      color = "#f59e0b"; // arancio
     }
-  });
+    else{
+      color = "#ef4444"; // rosso
+    }
 
+    roiMain.style.color = color;
+
+    // ================= 🚀 ANIMAZIONE =================
+    roiMain.classList.remove("roi-animate");
+    void roiMain.offsetWidth; // force reflow
+    roiMain.classList.add("roi-animate");
+
+    // ================= ✨ GLOW DINAMICO =================
+    if(roiGlow){
+
+      roiGlow.style.background = `
+        radial-gradient(circle,
+          ${color}33,
+          transparent 70%
+        )
+      `;
+
+      roiGlow.classList.remove("roi-glow-active");
+      void roiGlow.offsetWidth;
+      roiGlow.classList.add("roi-glow-active");
+    }
+
+    // salva stato
+    roiMain.dataset.last = safeROI;
+  }
 }
 
 // ================= REVENUE =================
