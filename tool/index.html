@@ -98,8 +98,10 @@ input:focus{
 .simulator-container{
   max-width:1100px;
   margin:auto;
+  margin-top:-90px; /* 🔥 AGGIUNGI QUESTO */
   padding:0 20px;
   position:relative;
+  z-index:5; /* 🔥 SICUREZZA OVERLAY */
 }
 
 .simulator-grid{
@@ -266,8 +268,9 @@ body.pro-user .blur-content{
   }
 
   .simulator-container{
-    padding:0 16px;
-  }
+  padding:0 16px;
+  margin-top:-40px; /* 🔥 PIÙ LEGGERO SU MOBILE */
+}
 
   .roi-dashboard,
   .results-card{
