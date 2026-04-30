@@ -2224,8 +2224,6 @@ function runPostAnalysis(result, context){
 
   const roiEl = document.getElementById("roi-live");
 
-  const access = window.getUserAccess?.() || {};
-
 if(roiEl && roi > 0){
 
   if(access.isFree){
