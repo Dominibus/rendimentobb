@@ -2668,68 +2668,44 @@ window.calculate = async function(force = false){
     const interestRate = getValue("interestRate") || 3.5;
     const loanYears    = getValue("loanYears") || 20;
 
-    // ================= CALCOLO =================
-    const result = calculateROI({
-      price,
-      equity,
-      priceNight,
-      occupancy,
-      expenses,
-      commission,
-      tax,
-      loanAmount,
-      interestRate,
-      loanYears
-    });
+   // ================= CALCOLO =================
+const result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
 
-    if (!result || typeof result !== "object") {
-      console.error("💥 RESULT INVALID:", result);
-      return;
-    }
+if (!result || typeof result !== "object") {
+  console.error("💥 RESULT INVALID:", result);
+  return;
+}
 
-    // ================= KPI BASE =================
-    const roi = Number(result?.roi ?? 0);
-    const safeROI = isFinite(roi) ? roi : 0;
-    const roiText = safeROI.toFixed(1) + "%";
+// ================= KPI BASE =================
+const roi = Number(result?.roi ?? 0);
+const safeROI = isFinite(roi) ? roi : 0;
+const roiText = safeROI.toFixed(1) + "%";
 
-    const gross = Number(
-      result?.revenue ??
-      result?.gross ??
-      result?.annualRevenue ??
-      0
-    );
-
-    const net = Number(
-      result?.netAfterMortgage ??
-      result?.net ??
-      0
-    );
-
-    // ================= 🔥 INVESTMENT SCORE =================
-
-// prova a recuperare score dal motore
-const score = Number(
-  result?.score ??
-  result?.investmentScore ??
-  result?.rating ??
+const gross = Number(
+  result?.revenue ??
+  result?.gross ??
+  result?.annualRevenue ??
   0
 );
 
-// fallback intelligente se non esiste
-let finalScore = score;
+const net = Number(
+  result?.netAfterMortgage ??
+  result?.net ??
+  0
+);
 
-if(!finalScore || finalScore === 0){
-
-  // calcolo base fallback (molto importante)
-  finalScore = Math.max(0, Math.min(100,
-    (safeROI * 2) - (result?.risk || 30)
-  ));
-}
-
-renderInvestmentScore(safeROI, Math.round(risk));
-
-    // ================= 🔥 RISK PREVIEW =================
-
+// ================= 🔥 RISK (PRIMA DI USARLO) =================
 const risk = Number(
   result?.risk ??
   result?.riskScore ??
@@ -2737,6 +2713,10 @@ const risk = Number(
   0
 );
 
+// ================= 🔥 INVESTMENT SCORE =================
+renderInvestmentScore(safeROI, Math.round(risk));
+
+// ================= 🔥 RISK PREVIEW =================
 const riskEl = document.getElementById("risk-preview");
 
 if(riskEl){
@@ -2752,7 +2732,6 @@ if(riskEl){
     riskEl.innerText = safeRisk + "/100"; // pro completo
   }
 }
-
     // ================= 🔥 UPDATE KPI (SEMPRE) =================
 
     // ROI
