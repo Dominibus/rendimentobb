@@ -33,25 +33,22 @@ function getText(){
   };
 }
 
-/* ================= CITY ENGINE (FIX DEFINITIVO) ================= */
+/* ================= CITY ENGINE (FIX REALE) ================= */
 
 function getSafeCity(inputCity){
 
-  // 🔥 PRIORITÀ ASSOLUTA → SINGLE SOURCE
-  if(window.__FINAL_CITY__){
-    return window.__FINAL_CITY__;
-  }
-
-  // 👉 fallback controllato
-  if(inputCity){
-    return inputCity;
-  }
-
+  // 🔒 PRIORITÀ 1 → app.js (LA TUA VERA SOURCE)
   if(window.currentCity){
     return window.currentCity;
   }
 
-  return "rome";
+  // 👉 fallback SOLO se chiamato manualmente
+  if(inputCity){
+    return inputCity;
+  }
+
+  // 👉 fallback estremo
+  return "roma";
 }
 
 /* ================= CORE RENDER ================= */
@@ -195,18 +192,18 @@ export function renderMarketBenchmark(inputCity){
   `;
 }
 
-/* ================= EVENTS (SAFE) ================= */
+/* ================= EVENTS ================= */
 
-// 🔥 lingua
+// lingua
 if(!window.__marketLangListener){
   window.__marketLangListener = true;
 
   document.addEventListener("rb_language_changed", () => {
-    renderMarketBenchmark(window.__FINAL_CITY__);
+    renderMarketBenchmark(window.currentCity);
   });
 }
 
-// 🔥 simulazione
+// simulazione
 if(!window.__marketSimulationListener){
   window.__marketSimulationListener = true;
 
@@ -216,7 +213,7 @@ if(!window.__marketSimulationListener){
       window.currentRevenue = e.detail.revenue;
     }
 
-    renderMarketBenchmark(window.__FINAL_CITY__);
+    renderMarketBenchmark(window.currentCity);
 
   });
 }
