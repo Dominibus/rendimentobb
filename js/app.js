@@ -1139,10 +1139,10 @@ window.applyCityBackground = function(city){
   }
 
   // 🔥 BLOCCO ANTI OVERRIDE
-  if(hero.dataset.cityLocked === "true"){
-    console.log("⛔ BG LOCK ATTIVO → skip", cityClass);
-    return;
-  }
+  if(hero.dataset.cityLocked === "true" && window.location.pathname.startsWith("/roi-bnb/")){
+  console.log("⛔ BG LOCK ATTIVO (ROI) → skip", cityClass);
+  return;
+}
 
   hero.dataset.cityApplied = cityClass;
 
@@ -2545,6 +2545,10 @@ if(locationInput && helper){
 
     // ================= SYNC REALE (CRITICO) =================
     if(!window.__CITY_LOCKED__){
+
+      if(window.__CITY_LOCKED__ && window.location.pathname.includes("/tool")){
+  window.__CITY_LOCKED__ = false;
+}
 
       // 🔥 aggiorna città globale
       window.currentCity = mapped;
@@ -4130,6 +4134,7 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 // ================= SAVE =================
 
 window.currentCity = selectedCity;
+window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 🔥 FIX BACKGROUND IMMEDIATO
 applyCityBackground(selectedCity);
@@ -4173,8 +4178,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".hero-roi");
 
 if(hero){
-  hero.dataset.cityLocked = "true";
-  console.log("🔒 BG LOCKED:", selectedCity);
+  // 🔥 LOCK SOLO PER ROI PAGE
+  if(window.location.pathname.startsWith("/roi-bnb/")){
+    hero.dataset.cityLocked = "true";
+    console.log("🔒 BG LOCKED (ROI):", selectedCity);
+  } else {
+    hero.dataset.cityLocked = "false";
+  }
 }
 
 });
