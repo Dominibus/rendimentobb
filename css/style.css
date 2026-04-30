@@ -16258,3 +16258,29 @@ NON TOCCA ALTRE PAGINE
 body *{
   pointer-events:auto;
 }
+
+/* =====================================
+🔥 HERO OVERLAY DEFINITIVO (UNICO)
+===================================== */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+
+  background:linear-gradient(
+    rgba(15,23,42,0.65),
+    rgba(15,23,42,0.85)
+  );
+}
+
+.hero > *{
+  position:relative;
+  z-index:1;
+}
