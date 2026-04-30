@@ -482,7 +482,12 @@ function createLockOverlay(el, {
 
   overlay.style = `
     position:absolute;
-    inset:0;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    max-height:100%;
+    overflow:hidden;
     background:rgba(255,255,255,0.92);
     backdrop-filter:blur(4px);
     display:flex;
@@ -598,6 +603,11 @@ function applySmartLock(el, {
 
   if(type === "overlay"){
 
+  // 🔥 FIX MOBILE: NON bloccare UX
+  if(window.innerWidth < 768){
+    type = "blur";
+  }else{
+
     createLockOverlay(el, {
       message: message || t(
         "Sblocca analisi completa",
@@ -611,6 +621,8 @@ function applySmartLock(el, {
     });
 
   }
+
+}
 
   el.style.cursor = "pointer";
 
@@ -2671,14 +2683,21 @@ const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
 // ================= SCORE CIRCLE =================
 const scoreCircle = document.getElementById("score-circle");
+const scoreROI = document.getElementById("score-roi");    
 
 if(scoreCircle){
 
   const access = window.getUserAccess?.() || {};
 
   if(access.isFree){
-    scoreCircle.innerText = "—";
-  }else{
+
+  scoreCircle.innerText = "—";
+
+  if(scoreROI){
+    scoreROI.innerText = "—";
+  }
+
+}else{
 
     let grade = "C";
 
@@ -2686,6 +2705,8 @@ if(scoreCircle){
     else if(roi > 6) grade = "B";
 
     scoreCircle.innerText = grade;
+    if(scoreROI){
+    scoreROI.innerText = roi.toFixed(1) + "%";
 
     // 🎨 colore
     let color = "#ef4444";
