@@ -2687,25 +2687,55 @@ const result = calculateROI({
   loanYears
 });
 
- // 🔥 FORCE BG UPDATE DOPO CALCOLO
+// 🔥 FORCE BG UPDATE DOPO CALCOLO
 if(window.currentCity && !window.__CITY_LOCKED__){
   applyCityBackground(window.currentCity);
 }
 
+// 🔒 VALIDAZIONE RESULT
 if (!result || typeof result !== "object") {
   console.error("💥 RESULT INVALID:", result);
   return;
 }
 
-const roi   = Number(result?.roi ?? 0);
+// ================= ROI =================
+const roi = Number(result?.roi ?? 0);
+
+// 🔥 UPDATE TUTTI I ROI (SAFE + CLEAN)
+if(roi > 0){
+
+  ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.innerText = roi.toFixed(1) + "%";
+    }
+  });
+
+}else{
+
+  ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.innerText = "—";
+    }
+  });
+
+}
+
+// ================= REVENUE =================
 const gross = Number(
   result?.revenue ??
   result?.gross ??
   result?.annualRevenue ??
   0
 );
-const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
 
+// ================= NET =================
+const net = Number(
+  result?.netAfterMortgage ??
+  result?.net ??
+  0
+);
 // ================= SCORE CIRCLE =================
 const scoreCircle = document.getElementById("score-circle");
 const scoreROI = document.getElementById("score-roi");    
