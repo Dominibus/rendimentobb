@@ -498,7 +498,8 @@ function createLockOverlay(el, {
     align-items:center;
     justify-content:center;
     text-align:center;
-    z-index:20;
+    z-index:5;
+    pointer-events:auto;
     border-radius:12px;
     padding:16px;
     cursor:pointer;
