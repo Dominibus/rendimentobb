@@ -495,8 +495,15 @@ body.pro-user #results .blur-content{
 
 /* evita qualsiasi overlay sopra */
 .tool-page .roi-dashboard{
-  isolation:isolate;
+  position:relative;
+  z-index:1;
 }
+
+ .tool-page #results{
+  position:relative;
+  z-index:0;
+  margin-top:80px; /* più respiro */
+} 
 
 /* =====================================
 🔥 SBLOCCO SIMULATORE MOBILE (CRITICO)
