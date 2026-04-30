@@ -2188,21 +2188,19 @@ function resetGlobalBlur(){
 
 }
 
-// ================= POST ANALYSIS ENGINE (SAAS CLEAN) =================
+// ================= POST ANALYSIS ENGINE (FINAL PRO CLEAN) =================
 
 function runPostAnalysis(result, context){
 
   if(!result){
-    console.warn("⛔ skip postAnalysis → result nullo");
+    console.warn("⛔ postAnalysis skipped → null result");
     return;
   }
 
-  const access = window.getUserAccess() || {};
+  const access = window.getUserAccess?.() || {};
 
-  // 🔥 DEBUG INVESTOR
-  if(access.isInvestor){
-    console.log("🟡 INVESTOR SAFE UNLOCK");
-  }
+  const t = (it, en) =>
+    (window.currentLang === "en" ? en : it);
 
   const {
     price,
@@ -2212,45 +2210,56 @@ function runPostAnalysis(result, context){
     expenses
   } = context || {};
 
+  // ================= GLOBAL STATE =================
+
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
   const roi = Number(result?.roi || 0);
 
+  console.log("📊 FINAL ROI:", roi);
+
+  // ================= 🔥 ROI UI LOCK (CRITICO) =================
+
+  const roiEl = document.getElementById("roi-live");
+
+  if(roiEl && roi > 0){
+    roiEl.innerText = roi.toFixed(1) + "%";
+  }
+
   updateROIMessage(roi);
 
   if(roi <= 0){
-    console.warn("⚠️ ROI basso → continuo render per UX");
+    console.warn("⚠️ Low ROI → UI still rendered for UX");
   }
+
+  // ================= SMART REMINDER =================
 
   triggerSmartReminder(roi);
 
-  // ================= FUNNEL TRIGGER =================
+  // ================= FUNNEL =================
 
-// 🔥 ROI alto → subito
-if(roi > 10){
-  triggerFunnel({ type:"roi", roi });
-}
-
-// 🟡 ROI medio → delay
-else if(roi > 6){
-  triggerFunnel({ type:"roi_soft", roi });
-}
+  if(roi > 10){
+    triggerFunnel({ type:"roi", roi });
+  }
+  else if(roi > 6){
+    triggerFunnel({ type:"roi_soft", roi });
+  }
 
   // ================= PAYWALL =================
 
   if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 10){
-  // showUpgradeModal(roi); ❌ DISABILITATO
-}
+    // showUpgradeModal(roi); // disabilitato volontariamente
+  }
   else if(access.isInvestor && roi > 0){
-    console.log("🟡 INVESTOR → NO SMART OVERLAY");
+    console.log("🟡 INVESTOR → partial unlock");
     renderSmartInvestmentAlert(roi);
   }
 
   // ================= LEAD ENGINE =================
 
   if(roi <= 0){
-    console.log("⛔ skip lead → ROI 0");
+    console.log("⛔ lead skipped → ROI 0");
     return;
   }
 
@@ -2281,7 +2290,7 @@ else if(roi > 6){
     destination: leadDestination
   });
 
-  // ================= SAVE LEAD FIRESTORE =================
+  // ================= SAVE LEAD =================
 
   if(userEmail && !window.leadSaved){
 
@@ -2289,7 +2298,7 @@ else if(roi > 6){
 
     addDoc(collection(db,"leads"),{
       email: userEmail,
-      roi: roi,
+      roi,
       score: leadScore,
       value: roi,
       city: window.currentCity || "unknown",
@@ -2316,7 +2325,7 @@ else if(roi > 6){
         type: leadDestination.type,
         partners: leadDestination.emails
       })
-    });
+    }).catch(()=>{});
 
   }
 
