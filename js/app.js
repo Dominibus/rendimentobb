@@ -177,13 +177,17 @@ window.getUserAccess = function(){
   if(!window.RB_USER){
   return {
     isLogged: !!user,
-    isFree: false, // ❌ NON forzare free
+    isFree: false,
     isPro: false,
     isInvestor: false,
     isAdmin: false,
     canSeeFullAnalysis: false,
     isLoading: true
   };
+}
+
+  if(window.RB_USER && window.RB_USER.plan === undefined){
+  console.warn("⚠️ RB_USER senza piano → skip");
 }
 
   // 🔥 NORMALIZZAZIONE
@@ -2586,11 +2590,14 @@ window.calculate = async function(force = false){
     .investor-upsell
   `).forEach(el => el.remove());
 
+  const access = window.getUserAccess?.() || {};
+
+if(!access.isFree){
   document.querySelectorAll(`
-  .lock-overlay,
-  .results-overlay,
-  .upgrade-overlay
-`).forEach(el => el.remove());
+    .results-overlay,
+    .upgrade-overlay
+  `).forEach(el => el.remove());
+}
 
   console.log("🚀 CALCULATE START");
 
@@ -2628,17 +2635,19 @@ if(customLocation && customLocation.trim() !== ""){
     window.currentCity = mappedCity;
 
 // 🔥 NON ereditare città precedente
-if(!mappedCity){
-  window.currentCity = "roma";
-}
+if(customLocation && customLocation.trim() !== ""){
 
-    // 🔥 salva per coerenza UX
+  const mappedCity = mapLocationToCity(customLocation);
+
+  if(!window.__CITY_LOCKED__ && mappedCity){
+
+    window.currentCity = mappedCity;
+
     localStorage.setItem("selected_city", mappedCity);
 
     console.log("📍 Località inserita:", customLocation);
     console.log("🏙 Città benchmark:", mappedCity);
 
-    // 🔥 aggiorna UI subito (CRITICO)
     if(typeof applyCityBackground === "function"){
       applyCityBackground(mappedCity);
     }
@@ -2667,9 +2676,9 @@ const result = calculateROI({
 });
 
  // 🔥 FORCE BG UPDATE DOPO CALCOLO
-if(window.currentCity){
+if(window.currentCity && !window.__CITY_LOCKED__){
   applyCityBackground(window.currentCity);
-}   
+}
 
 if (!result || typeof result !== "object") {
   console.error("💥 RESULT INVALID:", result);
@@ -4723,7 +4732,7 @@ if(access.isPro || access.isAdmin){
 // =====================================
 
 // 🔥 impedisce che altri script rimettano overlay dopo 200-500ms
-let overlayGuardActive = window.innerWidth > 768;
+let overlayGuardActive = true;
 
 const overlayGuard = setInterval(()=>{
 
@@ -4732,6 +4741,8 @@ const overlayGuard = setInterval(()=>{
   if(!window.__UI_LOCK_STATE__) return;
 
   const access = window.__UI_LOCK_STATE__;
+
+  if(access.isFree) return;
 
   if(access.isPro || access.isAdmin){
     document.querySelectorAll(`
