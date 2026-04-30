@@ -1137,6 +1137,22 @@ window.applyCityBackground = function(city){
 
   const cityClass = map[city] || "rome";
 
+  const bgMap = {
+  rome: "/img/rome-bg.jpg",
+  naples: "/img/naples-bg.jpg",
+  milan: "/img/milan-bg.jpg",
+  florence: "/img/florence-bg.jpg"
+};
+
+// 💣 FIX REALE
+hero.style.background = `
+  linear-gradient(rgba(255,255,255,0.45), rgba(255,255,255,0.7)),
+  url(${bgMap[cityClass]})
+`;
+
+hero.style.backgroundSize = "cover";
+hero.style.backgroundPosition = "center";
+
   hero.classList.remove("rome","naples","milan","florence");
   hero.classList.add(cityClass);
 };
