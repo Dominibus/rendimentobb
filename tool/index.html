@@ -498,6 +498,43 @@ body.pro-user #results .blur-content{
   isolation:isolate;
 }
 
+/* =====================================
+🔥 SBLOCCO SIMULATORE MOBILE (CRITICO)
+===================================== */
+
+@media (max-width:768px){
+
+  /* 🔓 INPUT SEMPRE USABILI */
+  .simulator-left,
+  .simulator-left *{
+    pointer-events:auto !important;
+  }
+
+  /* 🔥 RIMUOVE QUALSIASI BLOCCO SOPRA INPUT */
+  .simulator-left .blur-content{
+    filter:none !important;
+    pointer-events:auto !important;
+  }
+
+  /* 🔥 OVERLAY NON DEVE BLOCCARE INPUT */
+  .simulator-left .locked-overlay{
+    display:none !important;
+  }
+
+  /* 🔒 RISULTATI RESTANO BLOCCATI */
+  #results .blur-content{
+    filter:blur(4px);
+    pointer-events:none;
+  }
+
+  /* 🔓 PRO sempre libero */
+  body.pro-user #results .blur-content{
+    filter:none !important;
+    pointer-events:auto !important;
+  }
+
+}  
+
 </style>
 </head>
 
