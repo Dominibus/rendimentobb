@@ -1,6 +1,6 @@
 // ========================================
 // 🔐 RENDIMENTOBB ACCESS CONTROL SYSTEM
-// CLEAN VERSION (NO UI CONFLICT)
+// FINAL STABLE VERSION (NO CONFLICT / NO DOUBLE INIT)
 // ========================================
 
 // ================= USER STATE =================
@@ -10,11 +10,18 @@ window.RB_USER = {
   isInvestor: false,
   isAdmin: false,
   plan: "free",
-  ready: false
+  ready: false,
+  initialized: false // 🔥 anti doppio init
 };
 
 // ========================================
-// 🔧 SAFE UI INIT (SOLO STATICO, NO TOOL)
+// 🌐 TRANSLATION HELPER (SAFE)
+// ========================================
+const t = (it, en) =>
+  (window.currentLang === "en" ? en : it);
+
+// ========================================
+// 🔧 SAFE UI INIT (SOLO CLASSI, ZERO DOM)
 // ========================================
 function applyAccessUI(){
 
@@ -23,9 +30,9 @@ function applyAccessUI(){
     return;
   }
 
-  // 🔥 BLOCCO TOTALE se simulazione attiva
+  // 🔥 NON interferire durante simulazione
   if(window.simulationExecuted){
-    console.warn("⛔ UI control locked → handled by calculate()");
+    console.warn("⛔ UI locked → handled by simulator");
     return;
   }
 
@@ -33,7 +40,7 @@ function applyAccessUI(){
 
   console.log("🎯 APPLY ACCESS UI:", window.RB_USER);
 
-  // ================= RESET BASE =================
+  // reset classi
   document.body.classList.remove(
     "is-pro",
     "is-free",
@@ -41,41 +48,44 @@ function applyAccessUI(){
     "is-investor"
   );
 
-  // ================= PRO / ADMIN =================
   if(isPro){
     document.body.classList.add("is-pro");
     console.log("🟢 PRO MODE");
     return;
   }
 
-  // ================= INVESTOR =================
   if(isInvestor){
     document.body.classList.add("is-investor");
     console.log("🟡 INVESTOR MODE");
     return;
   }
 
-  // ================= FREE LOGGED =================
   if(isLogged){
     document.body.classList.add("is-free");
     console.log("🔵 FREE USER");
     return;
   }
 
-  // ================= GUEST =================
   document.body.classList.add("is-guest");
   console.log("👻 GUEST MODE");
 }
 
 // ========================================
-// 🚀 INIT ACCESS CONTROL
+// 🚀 INIT ACCESS CONTROL (ANTI BUG)
 // ========================================
 window.initAccessControl = function(){
+
+  // 🔥 BLOCCO HARD anti doppio init
+  if(window.RB_USER.initialized){
+    console.warn("⛔ AccessControl già inizializzato → skip");
+    return;
+  }
 
   try{
 
     const user = window.currentUser || null;
-    const plan = (window.currentPlan || "free").toLowerCase();
+    const planRaw = window.currentPlan || "free";
+    const plan = planRaw.toLowerCase();
 
     const userLogged = !!(user && user.uid);
 
@@ -95,15 +105,16 @@ window.initAccessControl = function(){
       isInvestor: isInvestor,
       isAdmin: isAdmin,
       plan,
-      ready: true
+      ready: true,
+      initialized: true // 🔥 segna init fatto
     };
 
-    console.log("🧠 RB_USER:", window.RB_USER);
+    console.log("🧠 RB_USER FINAL:", window.RB_USER);
 
-    // 🔥 SOLO classi base (NO overlay / NO reset DOM)
+    // 🔥 SOLO classi → NO overlay → NO DOM
     applyAccessUI();
 
-    // ================= EVENT =================
+    // 🔥 EVENT UNICO (NO DUPLICATI)
     document.dispatchEvent(
       new CustomEvent("rb_access_ready", {
         detail: window.RB_USER
@@ -119,14 +130,14 @@ window.initAccessControl = function(){
 // ========================================
 // 🧠 HELPERS
 // ========================================
-
 window.isPro = () => window.RB_USER?.isPro === true;
 
 window.isInvestor = () =>
   window.RB_USER?.isInvestor === true &&
   !window.RB_USER?.isPro;
 
-window.isLogged = () => window.RB_USER?.isLogged === true;
+window.isLogged = () =>
+  window.RB_USER?.isLogged === true;
 
 window.isFree = () =>
   window.isLogged() &&
@@ -134,14 +145,11 @@ window.isFree = () =>
   !window.isInvestor();
 
 // ========================================
-// 🔒 REQUIRE PLAN (BILINGUE)
+// 🔒 REQUIRE PRO (BILINGUE)
 // ========================================
 window.requirePro = function(){
 
   if(window.isPro()) return true;
-
-  const t = (it, en) =>
-    (window.currentLang === "en" ? en : it);
 
   showToast(
     t(
@@ -151,13 +159,15 @@ window.requirePro = function(){
     "warning"
   );
 
-  openUpgradeModal("pro");
+  if(typeof openUpgradeModal === "function"){
+    openUpgradeModal("pro");
+  }
 
   return false;
 };
 
 // ========================================
-// 🔥 GLOBAL ACCESS (UNICO STANDARD)
+// 🔥 GLOBAL ACCESS STANDARD
 // ========================================
 window.getUserAccess = function(){
 
@@ -176,26 +186,29 @@ window.getUserAccess = function(){
 };
 
 // ========================================
-// ⚡ EVENTI (TIMING FIX)
+// ⚡ EVENTI (FIX DEFINITIVO)
 // ========================================
 
-// 🔥 SOLO dopo Firebase / plan ready
+// 🔥 SOLO quando Firebase è pronto
 document.addEventListener("rb_plan_ready", () => {
 
-  console.log("🔥 AccessControl init AFTER plan");
+  console.log("🔥 AccessControl → plan ready");
 
   window.initAccessControl();
 
 });
 
-// 🔒 fallback sicuro (NO override tool)
+// ========================================
+// 🔒 FALLBACK SAFE (ANTI RACE CONDITION)
+// ========================================
 setTimeout(() => {
 
-  if(!window.RB_USER.ready && !window.simulationExecuted){
+  if(window.RB_USER.initialized) return;
 
-    console.warn("⚠️ Fallback access control");
+  if(window.simulationExecuted) return;
 
-    window.initAccessControl();
-  }
+  console.warn("⚠️ Fallback AccessControl");
 
-}, 1500);
+  window.initAccessControl();
+
+}, 1200);
