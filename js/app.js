@@ -3014,34 +3014,39 @@ if(typeof updatePreviewMetrics === "function"){
   riskScore
 });
 
-// 🔥 ROI PREVIEW + ANIMAZIONE (SAFE)
+// 🔥 ROI PREVIEW + ANIMAZIONE (FIX REALE)
+
 const roiPreviewEl = document.getElementById("roi-preview");
+const roiPreviewLive = document.getElementById("roi-preview-live");
 
-if(roiPreviewEl){
+// funzione unica per aggiornare entrambi
+function updateROIPreview(el){
+  if(!el) return;
 
-  // 🔥 evita doppia animazione SENZA bloccare il resto
-  if(roiPreviewEl.dataset.animating !== "true"){
+  if(el.dataset.animating === "true") return;
 
-    roiPreviewEl.dataset.animating = "true";
+  el.dataset.animating = "true";
 
-    if(roi && roi > 0){
+  if(roi && roi > 0){
 
-      roiPreviewEl.innerText = "0%";
-      roiPreviewEl.style.color = getROIColor(roi);
+    el.innerText = "0%";
+    el.style.color = getROIColor(roi);
 
-      animateValue(roiPreviewEl, 0, roi, 800);
+    animateValue(el, 0, roi, 800);
 
-    }else{
-      roiPreviewEl.innerText = "—";
-      roiPreviewEl.style.color = "#64748b";
-    }
-
-    setTimeout(()=>{
-      roiPreviewEl.dataset.animating = "false";
-    }, 900);
-
+  }else{
+    el.innerText = "—";
+    el.style.color = "#64748b";
   }
+
+  setTimeout(()=>{
+    el.dataset.animating = "false";
+  }, 900);
 }
+
+// 🔥 aggiorna ENTRAMBI
+updateROIPreview(roiPreviewEl);
+updateROIPreview(roiPreviewLive);
 
  // 🔥 RISK PREVIEW (MATCH ROI STYLE)
 const riskPreviewEl = document.getElementById("risk-preview");
