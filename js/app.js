@@ -1119,10 +1119,14 @@ cta.onclick = ()=>{
 window.applyCityBackground = function(city){
 
   const hero =
+    document.querySelector(".tool-hero") ||
     document.querySelector(".hero-bg") ||
     document.querySelector(".hero-roi");
 
   if(!hero) return;
+
+  // 💣 FIX CRITICO
+  hero.style.background = "none";
 
   const map = {
     roma:"rome",
@@ -1133,24 +1137,8 @@ window.applyCityBackground = function(city){
 
   const cityClass = map[city] || "rome";
 
-  // 🔥 FIX CRITICO → NON applicare se già impostato
-  if(hero.dataset.cityApplied === cityClass){
-    return;
-  }
-
-  // 🔥 BLOCCO ANTI OVERRIDE
-  if(hero.dataset.cityLocked === "true" && window.location.pathname.startsWith("/roi-bnb/")){
-  console.log("⛔ BG LOCK ATTIVO (ROI) → skip", cityClass);
-  return;
-}
-
-  hero.dataset.cityApplied = cityClass;
-
   hero.classList.remove("rome","naples","milan","florence");
   hero.classList.add(cityClass);
-
-  console.log("🎯 BG aggiornato:", cityClass);
-
 };
 
 
@@ -4175,6 +4163,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🔥 Città attiva finale:", selectedCity);
 
   const hero =
+  document.querySelector(".tool-hero") ||
   document.querySelector(".hero-bg") ||
   document.querySelector(".hero-roi");
 
