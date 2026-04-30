@@ -16265,3 +16265,55 @@ textarea{
   position:relative;
   z-index:15;
 }
+/* =====================================
+🔥 INPUT SEMPRE CLICCABILI
+===================================== */
+
+.tool-container *{
+  pointer-events:auto;
+}
+
+.results-overlay,
+.lock-overlay{
+  pointer-events:auto;
+}
+
+/* 🔥 MA NON BLOCCARE TUTTO */
+.results-container{
+  pointer-events:none;
+}
+
+.results-container *{
+  pointer-events:auto;
+}
+/* =====================================
+🔥 FIX STACK ORDER
+===================================== */
+
+.tool-layout{
+  display:flex;
+  flex-direction:column;
+}
+
+.results-container{
+  margin-top:20px;
+  position:relative;
+}
+/* =====================================
+🔥 TEXT READABILITY FIX
+===================================== */
+
+.kpi-box,
+.analysis-box{
+  background:white;
+  color:#0f172a;
+}
+
+.kpi-label{
+  color:#64748b;
+}
+
+.kpi-value{
+  color:#0f172a;
+  font-weight:700;
+}
