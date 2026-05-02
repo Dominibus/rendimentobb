@@ -3307,93 +3307,146 @@ doc.text(eur(profit), 115, y+15);
 
 addFooter();
 
-// ================= PAGE 2 – CHART =================
+// ================= PAGE 2 – EXECUTIVE DECISION =================
 doc.addPage();
 
-// titolo
-doc.setFontSize(16);
-doc.setTextColor(0);
-doc.text("Performance Forecast", 20, 25);
-
-// CHART FIX DEFINITIVO
-const chartCanvas = document.getElementById("roiChart");
-
-if(chartCanvas){
-  try{
-
-    await new Promise(r => setTimeout(r, 600));
-
-    const imgData = chartCanvas.toDataURL("image/png", 1.0);
-
-    const pageWidth = 210;
-    const margin = 20;
-    const usableWidth = pageWidth - (margin * 2);
-
-    const ratio = chartCanvas.height / chartCanvas.width;
-
-    const width = usableWidth;
-    const height = width * ratio;
-
-    const startY = 40;
-
-    // BOX elegante
-    doc.setDrawColor(220);
-    doc.roundedRect(15, startY-5, 180, height + 10, 6,6);
-
-    // IMG
-    doc.addImage(imgData, "PNG", margin, startY, width, height);
-
-  }catch(e){
-    console.warn("Chart error:", e);
-  }
-}
-
-addFooter();
-
-// ================= PAGE 3 – SCORE =================
-doc.addPage();
-
-y = 40;
+let y = 30;
 
 doc.setFontSize(16);
-doc.text("Investment Score", 20, y);
-
-y += 20;
-
-let score = Math.min(100, Math.round(roi * 3));
-
-doc.setFontSize(42);
-doc.text(score + "/100", 20, y);
-
-y += 20;
-
-doc.setFontSize(12);
-
-let rating = score > 75
-? "Excellent Investment"
-: score > 55
-? "Moderate Opportunity"
-: "High Risk";
-
-doc.text("Rating: " + rating, 20, y);
+doc.text("Investment Decision", 20, y);
 
 y += 15;
 
-doc.setFontSize(12);
-doc.text("Strategic Insight", 20, y);
+let decision = "";
+let decisionColor = [239,68,68];
+
+if(roi > 12){
+  decision = "STRONG BUY";
+  decisionColor = [16,185,129];
+}
+else if(roi > 6){
+  decision = "MODERATE BUY";
+  decisionColor = [245,158,11];
+}
+else{
+  decision = "HIGH RISK";
+}
+
+doc.setFillColor(...decisionColor);
+doc.roundedRect(20, y, 170, 20, 6,6,"F");
+
+doc.setTextColor(255);
+doc.setFontSize(14);
+doc.text(decision, 25, y+13);
+
+y += 35;
+
+// ================= SCENARIOS =================
+doc.setTextColor(0);
+doc.setFontSize(14);
+doc.text("Financial Scenarios", 20, y);
+
+y += 10;
+
+const low = revenue * 0.8;
+const base = revenue;
+const high = revenue * 1.2;
+
+doc.setFontSize(10);
+
+doc.text("Low case: " + eur(low), 20, y); y+=6;
+doc.text("Base case: " + eur(base), 20, y); y+=6;
+doc.text("High case: " + eur(high), 20, y); y+=10;
+
+// ================= BREAK EVEN =================
+const breakEvenYears = profit > 0 ? (price / profit).toFixed(1) : "-";
+
+doc.text("Break-even: " + breakEvenYears + " years", 20, y);
+
+addFooter();
+
+// ================= PAGE 3 – RISK =================
+doc.addPage();
+
+y = 30;
+
+doc.setFontSize(16);
+doc.text("Risk Analysis", 20, y);
+
+y += 15;
+
+doc.setFontSize(10);
+
+let risks = [];
+
+if(roi < 6){
+  risks.push("Low ROI → weak profitability");
+}
+
+if(data.occupancy < 60){
+  risks.push("Low occupancy → unstable revenue");
+}
+
+if(data.expenses > 2000){
+  risks.push("High operational costs");
+}
+
+if(!risks.length){
+  risks.push("No critical risks detected");
+}
+
+risks.forEach(r=>{
+  doc.text("• " + r, 20, y);
+  y+=6;
+});
+
+y += 10;
+
+// ================= STRATEGY =================
+doc.setFontSize(14);
+doc.text("Strategic Recommendation", 20, y);
 
 y += 8;
 
 doc.setFontSize(10);
 
-const strategy = score > 70
-  ? "Aggressive expansion recommended."
-  : "Optimize pricing and occupancy.";
+let strategy = roi > 12
+  ? "Expand portfolio or reinvest profits."
+  : roi > 6
+  ? "Optimize pricing and occupancy."
+  : "Re-evaluate investment conditions.";
 
-doc.text(strategy, 20, y, { maxWidth: 170 });
+doc.text(strategy, 20, y, { maxWidth:170 });
 
 addFooter();
 
+// ================= PAGE 4 – CASHFLOW =================
+doc.addPage();
+
+y = 30;
+
+doc.setFontSize(16);
+doc.text("Cashflow Overview", 20, y);
+
+y += 15;
+
+doc.setFontSize(10);
+
+const monthly = profit / 12;
+
+doc.text("Annual Revenue: " + eur(revenue), 20, y); y+=6;
+doc.text("Annual Profit: " + eur(profit), 20, y); y+=6;
+doc.text("Monthly Profit: " + eur(monthly), 20, y); y+=10;
+
+// ================= VISUAL BOX =================
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y,170,25,6,6,"F");
+
+doc.setFontSize(12);
+doc.setTextColor(0);
+doc.text("Cashflow is " + (profit > 0 ? "POSITIVE" : "NEGATIVE"), 25, y+15);
+
+addFooter();  
 // ================= SAVE =================
 doc.save("RendimentoBB-Executive-Report.pdf");
 
