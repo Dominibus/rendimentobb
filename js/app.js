@@ -274,21 +274,28 @@ function renderUniversalKPI(data = {}){
   // 🔴 FREE → LIMITA DATI (NO REAL NUMBERS)
 if(access.isFree){
 
-  console.log("🔒 KPI LIMITED VIEW (FREE)");
+  console.log("🔒 KPI HARD LOCK (FREE)");
 
   [
     qrProfit, elAnnual,
     qrMonth, elMonthly,
-    qrBreak, elBreak
+    qrBreak, elBreak,
+    qrRev, elRevenue
   ].forEach(el=>{
     if(!el) return;
 
-    el.style.opacity = "0.6";
-    el.style.filter = "blur(2px)";
+    el.innerText = "—";
+    el.style.filter = "blur(6px)";
+    el.style.opacity = "0.4";
+    // 🔥 RESET VISIVO INVESTOR (CRITICO)
+   el.style.filter = "none";
+   el.style.opacity = "1";
+
+  // rimuove blur ereditati
+  el.classList.remove("pro-blur","blur-content");
   });
 
 }
-
   if(!access){
   console.warn("⛔ access non disponibile");
   // ❌ NON bloccare render
@@ -2214,6 +2221,16 @@ function resetGlobalBlur(){
 
 }
 
+function removeAllBlur(){
+
+  document.querySelectorAll(".blur-content, .pro-blur").forEach(el=>{
+    el.classList.remove("blur-content","pro-blur");
+    el.style.filter = "none";
+    el.style.opacity = "1";
+  });
+
+}
+
 // ================= POST ANALYSIS ENGINE (FINAL PRO CLEAN) =================
 
 function runPostAnalysis(result, context){
@@ -2655,6 +2672,10 @@ window.calculate = async function(force = false){
   `).forEach(el => el.remove());
 
   const access = window.getUserAccess?.() || {};
+
+  if(access.isInvestor || access.isPro || access.isAdmin){
+  removeAllBlur();
+}
 
   if(!access.isFree){
     document.querySelectorAll(`
