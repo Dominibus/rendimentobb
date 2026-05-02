@@ -113,14 +113,20 @@ window.goToUpgradeFlow = function(){
 
   const access = window.getUserAccess?.();
 
-  // fallback sicurezza
+  // 🛑 access non pronto → NON fare redirect
   if(!access){
-    window.location.href = "/#pricing-investor";
+    console.log("⏳ Access non pronto → skip upgrade flow");
+    return;
+  }
+
+  // 🛑 utenti paganti → NO redirect
+  if(access.isInvestor || access.isPro || access.isAdmin){
+    console.log("⛔ Upgrade flow bloccato (utente pagante)");
     return;
   }
 
   // ===============================
-  // 🔥 INVESTOR → PRO
+  // 🔥 INVESTOR → PRO (NON SERVE PIÙ QUI)
   // ===============================
   if(access.isInvestor){
     window.location.href = "/#pricing-pro";
@@ -132,14 +138,6 @@ window.goToUpgradeFlow = function(){
   // ===============================
   if(access.isFree || !access.isLogged){
     window.location.href = "/#pricing-investor";
-    return;
-  }
-
-  // ===============================
-  // 🔥 PRO / ADMIN → NIENTE
-  // ===============================
-  if(access.isPro || access.isAdmin){
-    console.log("✅ PRO user → no upgrade needed");
     return;
   }
 
