@@ -1883,9 +1883,9 @@ function handleReportClick(){
 
     if(typeof startPlanPurchase === "function"){
       startPlanPurchase("pro", {
-  source: "dashboard",
-  trigger: "roi_block",
-});
+        source: "dashboard",
+        trigger: "roi_block",
+      });
     }else{
       window.location.href = "/#pricing";
     }
@@ -1893,11 +1893,21 @@ function handleReportClick(){
     return;
   }
 
-  // ✅ PRO → redirect report
+  // ✅ PRO → DASHBOARD REPORT
   const data = window.bestInvestmentData || {};
 
+  const params = new URLSearchParams({
+    price: data.price || 0,
+    roi: data.roi || 0,
+    equity: data.equity || 0,
+    risk: data.risk || 0,
+    city: data.city || "italy",
+    source: "dashboard",
+    ts: Date.now() // evita cache
+  });
+
   window.location.href =
-    `/report.html?roi=${data.roi || 0}&price=${data.price || 0}&equity=${data.equity || 0}&risk=${data.risk || 0}`;
+    "/dashboard-report/?" + params.toString();
 }
 
 
