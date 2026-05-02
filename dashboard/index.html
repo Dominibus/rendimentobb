@@ -602,10 +602,10 @@ Opportunità investimento
 </h3>
 
     <!-- CTA -->
-    <div class="upgrade-box">
+    <div class="upgrade-box" id="upgrade-box-static" style="display:none;">
       <h3>🚀 Sblocca PRO</h3>
       <p>Analisi completa + report banca</p>
-      <button onclick="startPlanPurchase('pro')">Vai PRO</button>
+      <button onclick="window.location.href='/#pricing'">Vai PRO</button>
     </div>
 
   </div>
@@ -621,7 +621,7 @@ Opportunità investimento
 document.addEventListener("DOMContentLoaded", () => {
 
   const access = window.getUserAccess?.();
-  if(!access) return;
+  if(!access || !access.isLogged) return;
 
  // =====================================
   // 🔒 GUEST BLOCK
@@ -644,6 +644,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const box = document.getElementById("upgrade-trigger");
 if(!box) return;
+
+  const staticBox = document.getElementById("upgrade-box-static");
+
+if(staticBox && (access.isPro || access.isAdmin)){
+  staticBox.style.display = "none";
+}
 
 // 🔥 PRO E ADMIN NON DEVONO MAI VEDERE CTA
 if(access.isPro || access.isAdmin){
@@ -687,9 +693,9 @@ if(!access.canSeeFullAnalysis){
       </p>
 
       <button 
-      onclick="startPlanPurchase('pro')" 
-      class="btn btn-primary"
-      style="margin-top:14px;padding:12px 18px;font-weight:600">
+  onclick="window.startPlanPurchase?.('pro')" 
+  class="btn btn-primary"
+  style="margin-top:14px;padding:12px 18px;font-weight:600">
 
         🔓 <span
         data-it="Sblocca dashboard completa"
