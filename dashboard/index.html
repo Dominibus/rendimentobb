@@ -448,7 +448,7 @@ z-index:9999;
 <main>
 
 <div class="dashboard-container">
-<div class="dashboard-layout">
+<div>
 <div class="dashboard-main">  
 
 <!-- HERO -->
@@ -491,6 +491,8 @@ z-index:9999;
   </div>
 
 </div>
+
+  </div> 
 
 <!-- KPI GRID -->
 <div class="rb-kpi-grid">
@@ -547,10 +549,10 @@ z-index:9999;
   </div>
 
   <!-- RIGHT SIDEBAR -->
-  <div class="sidebar">
+<div class="sidebar">
 
-    <!-- UPGRADE -->
-    <div id="upgrade-trigger"></div>
+  <!-- UPGRADE (SMART CONTAINER) -->
+  <div id="upgrade-trigger" style="display:none;"></div>
 
     <!-- MUTUO -->
     <div id="mortgage-lead-box" class="card"></div>
@@ -566,36 +568,7 @@ z-index:9999;
 
 </div>
 
-<h1 
-data-it="La tua dashboard investimenti"
-data-en="Your investment dashboard">
-La tua dashboard investimenti
-</h1>
-
-<div class="dashboard-actions">
-
-<a href="/tool/" class="btn-dashboard"
-data-it="Nuova analisi"
-data-en="New analysis">
-Nuova analisi
-</a>
-
-<a href="/" class="btn-dashboard"
-data-it="Home"
-data-en="Home">
-Home
-</a>
-
 </div>
-
-</div>
-
-<!-- KPI -->
-<div id="dashboard-kpi" class="stats-grid"></div>
-
-<!-- VERDICT -->
-<div id="investment-verdict" class="analysis-card" style="margin-bottom:40px"></div>  
-<div id="mortgage-lead-box" class="analysis-card" style="margin-bottom:30px">
 
 <h3
 data-it="🏦 Miglior mutuo per questo investimento"
@@ -668,10 +641,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // =====================================
 
   const box = document.getElementById("upgrade-trigger");
+if(!box) return;
 
-  if(!box || access.canSeeFullAnalysis) return;
+// 🔥 PRO E ADMIN NON DEVONO MAI VEDERE CTA
+if(access.isPro || access.isAdmin){
+  box.style.display = "none";
+  return;
+}
 
+// 🔥 SOLO FREE / INVESTOR
+if(!access.canSeeFullAnalysis){
   box.style.display = "block";
+}
 
   box.innerHTML = `
 
@@ -989,23 +970,6 @@ Performance rispetto al mercato
 
 </div>  
 
-<!-- CHARTS -->
-
-<div class="dashboard-charts">
-
-<!-- CASHFLOW PROJECTION -->
-
-<div class="analysis-card">
-
-<h3
-data-it="Proiezione Cashflow"
-data-en="Cashflow Projection">
-💰 Proiezione Cashflow
-</h3>
-
-<div id="cashflow-chart-container" style="height:300px;margin-top:20px;"></div>
-
-</div>
 
 <!-- ROI TREND -->
 
