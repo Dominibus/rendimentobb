@@ -693,7 +693,7 @@ if(!access.canSeeFullAnalysis){
       </p>
 
       <button 
-  onclick="window.startPlanPurchase?.('pro')" 
+  onclick="goToUpgradeFlow()" 
   class="btn btn-primary"
   style="margin-top:14px;padding:12px 18px;font-weight:600">
 
@@ -1184,12 +1184,8 @@ document.addEventListener("DOMContentLoaded", () => {
       : "🔒 Sblocca report professionale";
 
     btn.onclick = () => {
-      if(typeof startPlanPurchase === "function"){
-        startPlanPurchase("pro");
-      }else{
-        window.location.href = "/#pricing";
-      }
-    };
+  goToUpgradeFlow();
+};
 
   }
 
@@ -1213,14 +1209,8 @@ document.addEventListener("DOMContentLoaded", () => {
       : "🔒 Sblocca report professionale";
 
     btn.onclick = () => {
-
-      if(typeof startPlanPurchase === "function"){
-        startPlanPurchase("pro");
-      }else{
-        window.location.href = "/#pricing";
-      }
-
-    };
+  goToUpgradeFlow();
+};
 
   }
 
