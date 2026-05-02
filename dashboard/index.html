@@ -348,6 +348,12 @@ body{
   color:#0f172a;
 }
 
+  #pro-overlay{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
 </style>
 </head>
 
@@ -1167,34 +1173,33 @@ window.closeOverlay = function(){
   }
 };
 
-// ================= ACCESS CONTROL (SAFE – NO CONFLICT) =================
+<!-- ================= ACCESS CONTROL (FINAL FIX) ================= -->
+<script>
 
-document.addEventListener("DOMContentLoaded", () => {
+// ================= UPGRADE FLOW (CORE) =================
+window.goToUpgradeFlow = function(){
 
-  const access = window.getUserAccess?.();
-  if(!access) return;
+  const access = window.getUserAccess?.() || {};
 
-  // ================= PDF LOCK (OK tenerlo) =================
-  const btn = document.getElementById("download-report");
-
-  if(btn && !access.canDownloadPDF){
-
-    btn.innerText = window.currentLang === "en"
-      ? "🔒 Unlock professional report"
-      : "🔒 Sblocca report professionale";
-
-    btn.onclick = () => {
-  goToUpgradeFlow();
-};
-
+  // 🟢 PRO / ADMIN → niente blocco
+  if(access.isPro || access.isAdmin){
+    return;
   }
 
-});
-  
-</script>
+  // 🟡 INVESTOR → mostra overlay PRO (popup)
+  if(access.isInvestor){
+    showProOverlay();
+    return;
+  }
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+  // 🔴 FREE → redirect pricing
+  window.location.href = "/#pricing";
+
+};
+
+
+// ================= PDF LOCK (STABILE + FIREBASE SAFE) =================
+document.addEventListener("rb_plan_loaded", () => {
 
   const access = window.getUserAccess?.();
   if(!access) return;
@@ -1202,6 +1207,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("download-report");
   if(!btn) return;
 
+  // 🔒 blocco solo se NON può scaricare
   if(!access.canDownloadPDF){
 
     btn.innerText = window.currentLang === "en"
@@ -1209,12 +1215,13 @@ document.addEventListener("DOMContentLoaded", () => {
       : "🔒 Sblocca report professionale";
 
     btn.onclick = () => {
-  goToUpgradeFlow();
-};
+      goToUpgradeFlow();
+    };
 
   }
 
 });
+
 </script>
 </body>
 </html>
