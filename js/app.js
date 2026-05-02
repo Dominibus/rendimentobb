@@ -3110,7 +3110,7 @@ if(analyzeBtn){
 
 }
 
-// ================= EXECUTIVE PDF – BANK GRADE FINAL =================
+// ================= EXECUTIVE PDF – BANK GRADE FINAL (SILICON VALLEY) =================
 
 window.generateExecutivePDF = async function(){
 
@@ -3197,8 +3197,9 @@ const footer = ()=>{
   doc.line(20,270,190,270);
   doc.setFontSize(8);
   doc.setTextColor(120);
-  doc.text("RendimentoBB ©",20,278);
-  doc.text("Confidential",160,278);
+
+  doc.text("RendimentoBB • Investment Intelligence Platform",20,278);
+  doc.text("www.rendimentobb.com",140,278);
 };
 
 // ================= PAGE 1 =================
@@ -3238,7 +3239,21 @@ doc.setTextColor(0);
 doc.setFontSize(12);
 doc.text(summary,20,y,{maxWidth:170});
 
-y += 20;
+y += 18;
+
+// 🔥 CREDIBILITY FIX
+if(roi > 40){
+doc.setFontSize(10);
+doc.setTextColor(120);
+doc.text(
+tSafe(
+"⚠️ ROI elevato – verificare sostenibilità operativa.",
+"⚠️ High ROI – operational sustainability should be verified."
+),
+20,y
+);
+y+=12;
+}
 
 // KPI GRID
 doc.setFontSize(10);
@@ -3255,7 +3270,7 @@ doc.text("Loan: "+eur(loan),20,y);
 
 y+=20;
 
-// GRAFICO VERO (NON FUFFA)
+// SCENARIO CHART
 const maxVal = high;
 
 [low,base,high].forEach((v,i)=>{
@@ -3266,10 +3281,35 @@ const maxVal = high;
 
   doc.setTextColor(0);
   doc.setFontSize(9);
-  doc.text(["Low","Base","High"][i]+" "+eur(v),145,y+6);
+  doc.text(
+    (["Low","Base","High"][i])+" "+eur(v),
+    145,
+    y+6
+  );
 
   y+=12;
 });
+
+// 🔥 WHY IT WORKS (KEY SECTION)
+y+=10;
+
+doc.setFontSize(11);
+doc.text(
+tSafe(
+"Perché questo investimento funziona:",
+"Why this investment works:"
+),
+20,y
+);
+
+y+=8;
+
+doc.setFontSize(10);
+
+doc.text("• ROI sopra benchmark di mercato",20,y); y+=6;
+doc.text("• Cashflow positivo",20,y); y+=6;
+doc.text("• Break-even rapido",20,y); y+=6;
+doc.text("• Struttura rischio equilibrata",20,y);
 
 footer();
 
@@ -3278,7 +3318,10 @@ doc.addPage();
 y = 30;
 
 doc.setFontSize(16);
-doc.text("Investment Decision",20,y);
+doc.text(
+tSafe("Decisione investimento","Investment Decision"),
+20,y
+);
 
 y+=15;
 
@@ -3294,7 +3337,11 @@ y+=40;
 doc.setTextColor(0);
 doc.setFontSize(12);
 
-doc.text("Break-even: "+breakEven+" years",20,y);
+doc.text(
+tSafe("Break-even","Break-even")+": "+breakEven+" "+
+tSafe("anni","years"),
+20,y
+);
 
 y+=15;
 
@@ -3309,28 +3356,35 @@ doc.addPage();
 y = 30;
 
 doc.setFontSize(16);
-doc.text("Risk & Strategy",20,y);
+doc.text(
+tSafe("Rischio e Strategia","Risk & Strategy"),
+20,y
+);
 
 y+=15;
 
 doc.setFontSize(11);
 
 if(roi < 6){
-  doc.text("• Low ROI risk",20,y); y+=8;
+  doc.text("• "+tSafe("ROI basso","Low ROI"),20,y); y+=8;
 }
 if(data.occupancy < 60){
-  doc.text("• Low occupancy risk",20,y); y+=8;
+  doc.text("• "+tSafe("Occupazione bassa","Low occupancy"),20,y); y+=8;
 }
 if(data.expenses > 2000){
-  doc.text("• High cost structure",20,y); y+=8;
+  doc.text("• "+tSafe("Costi elevati","High costs"),20,y); y+=8;
 }
 
+y+=6;
+
+doc.setFontSize(12);
+
 if(roi > 12){
-  doc.text("Strategy: Scale investment",20,y);
+  doc.text(tSafe("Strategia: espandere investimento","Strategy: scale investment"),20,y);
 }else if(roi > 6){
-  doc.text("Strategy: Optimize performance",20,y);
+  doc.text(tSafe("Strategia: ottimizzare performance","Strategy: optimize performance"),20,y);
 }else{
-  doc.text("Strategy: Re-evaluate deal",20,y);
+  doc.text(tSafe("Strategia: rivalutare operazione","Strategy: re-evaluate deal"),20,y);
 }
 
 footer();
@@ -3340,7 +3394,10 @@ doc.addPage();
 y = 30;
 
 doc.setFontSize(16);
-doc.text("Cashflow Overview",20,y);
+doc.text(
+tSafe("Cashflow Overview","Cashflow Overview"),
+20,y
+);
 
 y+=15;
 
@@ -3359,8 +3416,32 @@ doc.setFontSize(14);
 doc.setTextColor(0);
 
 doc.text(
-  profit > 0 ? "POSITIVE CASHFLOW" : "NEGATIVE CASHFLOW",
-  25,y+18
+profit > 0
+? tSafe("CASHFLOW POSITIVO","POSITIVE CASHFLOW")
+: tSafe("CASHFLOW NEGATIVO","NEGATIVE CASHFLOW"),
+25,y+18
+);
+
+// 🔥 FINAL CTA (CONVERSION MACHINE)
+y+=50;
+
+doc.setFontSize(11);
+doc.setTextColor(0);
+
+doc.text(
+tSafe(
+"Prossimo passo: usa questo report per ottenere finanziamenti o validare l’investimento.",
+"Next step: use this report to secure financing or validate your investment."
+),
+20,y,{maxWidth:170}
+);
+
+y+=12;
+
+doc.setTextColor(16,185,129);
+doc.text(
+"👉 www.rendimentobb.com",
+20,y
 );
 
 footer();
