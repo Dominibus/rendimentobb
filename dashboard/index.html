@@ -1140,8 +1140,8 @@ Firenze – Centro
 <script src="/js/lang.js" defer></script>
 <script src="/js/footer.js" defer></script>
 <script src="/js/market-data.js"></script>  <!-- 🔥 AGGIUNGI QUESTO -->
-<script type="module" src="/js/dashboard.js"></script> 
 <script type="module" src="/js/firebase-init.js"></script>
+<script type="module" src="/js/dashboard.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -1173,32 +1173,26 @@ window.closeOverlay = function(){
   }
 };
 
-<!-- ================= ACCESS CONTROL (FINAL FIX) ================= -->
-<script>
+// ================= ACCESS CONTROL (FINAL FIX) =================
 
-// ================= UPGRADE FLOW (CORE) =================
+// ================= UPGRADE FLOW =================
 window.goToUpgradeFlow = function(){
 
   const access = window.getUserAccess?.() || {};
 
-  // 🟢 PRO / ADMIN → niente blocco
   if(access.isPro || access.isAdmin){
     return;
   }
 
-  // 🟡 INVESTOR → mostra overlay PRO (popup)
   if(access.isInvestor){
     showProOverlay();
     return;
   }
 
-  // 🔴 FREE → redirect pricing
   window.location.href = "/#pricing";
-
 };
 
-
-// ================= PDF LOCK (STABILE + FIREBASE SAFE) =================
+// ================= PDF LOCK =================
 document.addEventListener("rb_plan_loaded", () => {
 
   const access = window.getUserAccess?.();
@@ -1207,7 +1201,6 @@ document.addEventListener("rb_plan_loaded", () => {
   const btn = document.getElementById("download-report");
   if(!btn) return;
 
-  // 🔒 blocco solo se NON può scaricare
   if(!access.canDownloadPDF){
 
     btn.innerText = window.currentLang === "en"
