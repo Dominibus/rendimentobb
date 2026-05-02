@@ -3287,6 +3287,25 @@ doc.setFontSize(12);
 doc.setTextColor(0);
 doc.text(eur(profit),115,y+15);
 
+// ================= SIMPLE BAR CHART =================
+const chartData = [revenue * 0.8, revenue, revenue * 1.2];
+const labels = ["Low","Base","High"];
+
+let chartY = y + 10;
+
+chartData.forEach((val, i)=>{
+  const barWidth = (val / (revenue*1.2)) * 100;
+
+  doc.setFillColor(59,130,246);
+  doc.rect(20, chartY, barWidth, 6, "F");
+
+  doc.setFontSize(8);
+  doc.setTextColor(100);
+  doc.text(labels[i], 125, chartY+5);
+
+  chartY += 10;
+});  
+
 addFooter();
 
 // ================= PAGE 2 =================
@@ -3314,6 +3333,25 @@ doc.setFontSize(14);
 doc.text(decision,25,y+13);
 
 y += 35;
+
+// ================= AI INSIGHT =================
+y += 30;
+
+doc.setFontSize(14);
+doc.setTextColor(0);
+doc.text(tSafe("Insight AI","AI Insight"),20,y);
+
+y += 8;
+
+doc.setFontSize(10);
+
+let insight = roi > 12
+? tSafe("Questo investimento supera significativamente la media di mercato. Alta probabilità di rendimento stabile e scalabilità.","This investment significantly outperforms market averages. Strong scalability potential.")
+: roi > 6
+? tSafe("Investimento stabile ma sensibile a occupazione e pricing.","Stable investment but sensitive to occupancy and pricing.")
+: tSafe("Elevato rischio: margini troppo bassi per sostenibilità.","High risk: margins too low for sustainability.");
+
+doc.text(insight,20,y,{maxWidth:170});  
 
 // SCENARIOS
 doc.setTextColor(0);
@@ -3392,7 +3430,7 @@ y += 15;
 
 doc.setFontSize(10);
 
-const monthly = profit / 12;
+const monthly = Math.round(profit / 12);
 
 doc.text(tSafe("Ricavi annui","Annual Revenue")+": "+eur(revenue),20,y); y+=6;
 doc.text(tSafe("Profitto annuo","Annual Profit")+": "+eur(profit),20,y); y+=6;
@@ -3412,7 +3450,7 @@ doc.text(
 addFooter();
 
 // ================= SAVE =================
-doc.save(`RendimentoBB-${roi.toFixed(1)}ROI-Report.pdf`);
+doc.save(`RendimentoBB-Investment-Report-${roi.toFixed(1)}ROI.pdf`);
 
 };
   // ================= AUTO CITY DETECTION =================
