@@ -678,7 +678,7 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
     <!-- CTA -->
     <button 
-      onclick="startPlanPurchase('pro')" 
+      onclick="triggerUpgradeFlow({source:'home-overlay'})" 
       class="btn btn-primary"
       style="margin-top:16px">
 
@@ -1546,7 +1546,7 @@ data-en="€29 / month">
 
 </ul>
 
-<button onclick="startPlanPurchase('pro')" class="btn btn-primary"
+<button onclick="triggerUpgradeFlow({source:'dashboard'})" class="btn btn-primary"
 data-it="🔓 Sblocca profitto reale"
 data-en="🔓 Unlock real profit">
 🔓 Sblocca profitto reale
@@ -2080,13 +2080,13 @@ const isFreeUser = !isPro && !isInvestor;
     title = "Sblocca analisi avanzata";
     subtitle = "Vedi ROI reale e simulazioni complete";
     ctaText = "Passa a Investor";
-    action = "startPlanPurchase('investor')";
+    action = "triggerUpgradeFlow({source:'roi-box'})";
   }
   else{
     title = "Passa a Pro";
     subtitle = "Sblocca tutto";
     ctaText = "Upgrade Pro";
-    action = "startPlanPurchase('pro_yearly')";
+    action = "triggerUpgradeFlow({source:'roi-box'})";
   }
 
   box.innerHTML = `
