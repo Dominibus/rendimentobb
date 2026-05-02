@@ -776,9 +776,9 @@ window.triggerUpgradeFlow = function(context = {}){
   }
 
   if(access.isInvestor){
-    openUpgradeModal("pro", roi);
-    return;
-  }
+  console.log("🟡 INVESTOR → NO AUTO MODAL");
+  return;
+}
 
 };
 
@@ -788,41 +788,42 @@ window.triggerUpgradeFlow = function(context = {}){
 window.triggerFunnel = function({type = "generic", roi = 0} = {}){
 
   const access = window.getUserAccess?.() || {};
+
+  // 🟢 PRO / ADMIN → niente funnel
   if(access.canSeeFullAnalysis) return;
+
+  // 🟡 INVESTOR → niente popup (solo UI teaser)
+  if(access.isInvestor) return;
 
   // ❌ anti spam
   if(window.funnelState.shown && type !== "reminder") return;
 
   // 🔥 ROI alto → immediato
-  if(type === "roi"){
-    if(roi > 10){
-      openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
-      window.funnelState.shown = true;
-      return;
-    }
+  if(type === "roi" && roi > 10){
+    openUpgradeModal("investor", roi);
+    window.funnelState.shown = true;
+    return;
   }
 
   // 🟡 ROI medio → delay
-  if(type === "roi_soft"){
-    if(roi > 6){
-      setTimeout(()=>{
-        openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
-      }, 2000);
-      window.funnelState.shown = true;
-      return;
-    }
+  if(type === "roi_soft" && roi > 6){
+    setTimeout(()=>{
+      openUpgradeModal("investor", roi);
+    }, 2000);
+    window.funnelState.shown = true;
+    return;
   }
 
   // 📜 SCROLL
   if(type === "scroll"){
-    openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
+    openUpgradeModal("investor", roi);
     window.funnelState.shown = true;
     return;
   }
 
   // 🧠 REMINDER
   if(type === "reminder"){
-    openUpgradeModal(access.isInvestor ? "pro" : "investor", roi);
+    openUpgradeModal("investor", roi);
   }
 
 };
@@ -2154,7 +2155,7 @@ container.innerHTML = insights.map(i=>{
 function triggerSmartReminder(roi){
 
   const access = window.getUserAccess?.() || {};
-  if(access.canSeeFullAnalysis) return;
+  if(access.canSeeFullAnalysis || access.isInvestor) return;
 
   window.funnelState.counter++;
 
@@ -2300,9 +2301,9 @@ function runPostAnalysis(result, context){
 
   // ================= FUNNEL =================
 
-  if(roi > 10){
-    triggerFunnel({ type:"roi", roi });
-  }
+  if(roi > 10 && access.isFree){
+  triggerFunnel({ type:"roi", roi });
+}
   else if(roi > 6){
     triggerFunnel({ type:"roi_soft", roi });
   }
@@ -2930,8 +2931,8 @@ if(riskEl){
 
     // ================= FUNNEL =================
     if(window.firebaseReady && access.isFree && roi > 10){
-      triggerUpgradeFlow({ roi });
-    }
+  triggerUpgradeFlow({ roi });
+}
 
   } catch(err){
     console.error("💥 CALCULATE ERROR:", err);
@@ -4252,7 +4253,11 @@ window.addEventListener("scroll", () => {
 
     const roi = window.lastAnalysisData?.roi || 0;
 
-    triggerFunnel({ type:"scroll", roi });
+    const access = window.getUserAccess?.() || {};
+
+if(access.isFree){
+  triggerFunnel({ type:"scroll", roi });
+}
 
   }
 
