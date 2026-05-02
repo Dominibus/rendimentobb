@@ -104,3 +104,43 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
+// ===============================
+// 🚀 SMART UPGRADE FLOW (GLOBAL)
+// ===============================
+
+window.goToUpgradeFlow = function(){
+
+  const access = window.getUserAccess?.();
+
+  // fallback sicurezza
+  if(!access){
+    window.location.href = "/#pricing-investor";
+    return;
+  }
+
+  // ===============================
+  // 🔥 INVESTOR → PRO
+  // ===============================
+  if(access.isInvestor){
+    window.location.href = "/#pricing-pro";
+    return;
+  }
+
+  // ===============================
+  // 🔥 FREE / GUEST → INVESTOR
+  // ===============================
+  if(access.isFree || !access.isLogged){
+    window.location.href = "/#pricing-investor";
+    return;
+  }
+
+  // ===============================
+  // 🔥 PRO / ADMIN → NIENTE
+  // ===============================
+  if(access.isPro || access.isAdmin){
+    console.log("✅ PRO user → no upgrade needed");
+    return;
+  }
+
+};
