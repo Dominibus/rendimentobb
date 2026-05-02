@@ -2875,12 +2875,48 @@ if(riskEl){
     // ================= MARKET =================
     try{
       if(access.isFree){
-        renderMarketComparison?.(0, window.currentCity);
-      }
+  renderMarketComparison?.(0, window.currentCity);
+
+  // 🔥 LOCK SEZIONI AVANZATE (FREE)
+  document.querySelectorAll(`
+    #market-comparison,
+    #revenue-forecast,
+    #occupancy-sensitivity,
+    #investment-ranking,
+    #investment-risk-meter,
+    #ai-insights
+  `).forEach(el=>{
+    if(el){
+      applySmartLock(el, { type:"blur" });
+    }
+  });
+}
       else if(access.isInvestor){
         renderMarketBenchmark?.(window.currentCity || "roma");
         renderMarketComparison?.(gross * 0.6, window.currentCity);
         renderRevenueForecast?.(gross);
+        // 🔥 PRO PREVIEW (INVESTOR)
+  const aiBox = document.getElementById("ai-insights");
+
+  if(aiBox && !aiBox.querySelector(".pro-preview")){
+    aiBox.innerHTML += `
+      <div class="pro-preview" style="
+        margin-top:15px;
+        padding:14px;
+        border-radius:10px;
+        background:rgba(99,102,241,0.08);
+        text-align:center;
+        font-size:13px;
+        color:#3730a3;
+        font-weight:500;
+      ">
+        🔮 ${t(
+          "Analisi AI completa disponibile nel piano PRO",
+          "Full AI analysis available in PRO plan"
+        )}
+      </div>
+    `;
+  }
       }
       else{
         renderMarketBenchmark?.(window.currentCity || "roma");
