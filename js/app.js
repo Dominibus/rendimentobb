@@ -776,7 +776,16 @@ window.triggerUpgradeFlow = function(context = {}){
   }
 
   if(access.isInvestor){
-  console.log("🟡 INVESTOR → NO AUTO MODAL");
+
+  // ❌ blocca funnel automatico
+  if(context.auto){
+    console.log("🟡 INVESTOR → skip auto funnel");
+    return;
+  }
+
+  // ✅ consenti solo azione utente
+  console.log("🟡 INVESTOR → OPEN PRO MODAL");
+  openUpgradeModal("pro", context.roi || 0);
   return;
 }
 
@@ -2165,9 +2174,10 @@ function triggerSmartReminder(roi){
   setTimeout(()=>{
 
     triggerFunnel({
-      type:"reminder",
-      roi
-    });
+  type:"reminder",
+  roi,
+  auto:true
+});
 
   }, 2000);
 }
@@ -2305,7 +2315,7 @@ function runPostAnalysis(result, context){
   triggerFunnel({ type:"roi", roi });
 }
   else if(roi > 6){
-    triggerFunnel({ type:"roi_soft", roi });
+    triggerFunnel({ type:"roi_soft", roi, auto:true });
   }
 
   // ================= PAYWALL =================
@@ -3087,7 +3097,7 @@ if(analyzeBtn){
   const roi = window.lastAnalysisData?.roi || 0;
 
   if(roi > 6){
-    triggerFunnel({ type:"roi", roi });
+    triggerFunnel({ type:"roi", roi, auto:true });
   }
 
 }, 1500);
@@ -4256,7 +4266,7 @@ window.addEventListener("scroll", () => {
     const access = window.getUserAccess?.() || {};
 
 if(access.isFree){
-  triggerFunnel({ type:"scroll", roi });
+  triggerFunnel({ type:"scroll", roi, auto:true });
 }
 
   }
