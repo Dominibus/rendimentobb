@@ -290,6 +290,25 @@ body{
   opacity:1 !important;
 }
 
+  .dashboard-grid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:24px;
+  margin-top:30px;
+}
+
+.dashboard-main-col{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+@media(max-width:1024px){
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 
@@ -500,8 +519,52 @@ z-index:9999;
 
 </div>  
 
-<!-- WELCOME -->
-<div class="dashboard-welcome">
+<!-- ================= MAIN GRID ================= -->
+
+<div class="dashboard-grid">
+
+  <!-- LEFT (MAIN DATA) -->
+  <div class="dashboard-main-col">
+
+    <!-- KPI -->
+    <div id="dashboard-kpi" class="kpi-grid"></div>
+
+    <!-- VERDICT -->
+    <div id="investment-verdict" class="card"></div>
+
+    <!-- CHART GRANDE -->
+    <div class="card">
+      <h3>📈 Andamento ROI</h3>
+      <div id="roi-chart-container" class="chart-big"></div>
+    </div>
+
+    <!-- CASHFLOW -->
+    <div class="card">
+      <h3>💰 Cashflow</h3>
+      <div id="cashflow-chart-container" class="chart-big"></div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- UPGRADE -->
+    <div id="upgrade-trigger"></div>
+
+    <!-- MUTUO -->
+    <div id="mortgage-lead-box" class="card"></div>
+
+    <!-- CTA -->
+    <div class="upgrade-box">
+      <h3>🚀 Sblocca PRO</h3>
+      <p>Analisi completa + report banca</p>
+      <button onclick="startPlanPurchase('pro')">Vai PRO</button>
+    </div>
+
+  </div>
+
+</div>
 
 <h1 
 data-it="La tua dashboard investimenti"
