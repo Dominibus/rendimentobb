@@ -1882,7 +1882,10 @@ function handleReportClick(){
   if(!isPro){
 
     if(typeof startPlanPurchase === "function"){
-      startPlanPurchase("pro");
+      startPlanPurchase("pro", {
+  source: "dashboard",
+  trigger: "roi_block",
+});
     }else{
       window.location.href = "/#pricing";
     }
@@ -1914,8 +1917,43 @@ document.addEventListener("click",(e)=>{
 
 // ================= UPGRADE =================
 window.goToUpgrade = function(){
-  window.location.href = "/#pricing";
-}
+
+  const access = window.getUserAccess?.();
+
+  if(!access){
+    window.location.href = "/#pricing";
+    return;
+  }
+
+  // 🔒 NON LOGGATO → INVESTOR
+  if(!access.isLogged || access.isFree){
+    if(typeof startPlanPurchase === "function"){
+      startPlanPurchase("investor");
+    }else{
+      window.location.href = "/#pricing";
+    }
+    return;
+  }
+
+  // 🟡 INVESTOR → PRO (🔥 FIX PRINCIPALE)
+  if(access.isInvestor){
+    if(typeof startPlanPurchase === "function"){
+      startPlanPurchase("pro", {
+  source: "dashboard",
+  trigger: "roi_block",
+});
+    }else{
+      window.location.href = "/#pricing";
+    }
+    return;
+  }
+
+  // 🟢 PRO → niente
+  if(access.isPro || access.isAdmin){
+    return;
+  }
+
+};
 
 // ================= HERO MARKET BACKGROUND =================
 
