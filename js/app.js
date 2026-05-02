@@ -3237,16 +3237,9 @@ doc.text(tSafe("Sintesi","Executive Summary"),20,y);
 y += 8;
 
 doc.setFontSize(10);
-
-let summary = roi > 12
-? tSafe("Investimento sopra la media con alta redditività.","High-performing investment above market average.")
-: roi > 6
-? tSafe("Investimento bilanciato con ROI stabile.","Balanced investment with solid ROI.")
-: tSafe("Investimento rischioso con rendimento basso.","Risky investment with low return.");
-
 doc.text(summary,20,y,{maxWidth:170});
 
-y += 14;
+y += 16;
 
 // STRUCTURE
 doc.setFontSize(13);
@@ -3262,7 +3255,7 @@ doc.text(tSafe("Mutuo","Loan")+": "+eur(loan),20,y); y+=6;
 const ltv = price > 0 ? ((loan/price)*100).toFixed(0) : 0;
 doc.text("LTV: "+ltv+"%",20,y);
 
-y += 20;
+y += 18;
 
 // KPI BOX
 doc.setFillColor(248,250,252);
@@ -3287,24 +3280,24 @@ doc.setFontSize(12);
 doc.setTextColor(0);
 doc.text(eur(profit),115,y+15);
 
-// ================= SIMPLE BAR CHART =================
+// CHART
+y += 30;
+
 const chartData = [revenue * 0.8, revenue, revenue * 1.2];
 const labels = ["Low","Base","High"];
-
-let chartY = y + 10;
 
 chartData.forEach((val, i)=>{
   const barWidth = (val / (revenue*1.2)) * 100;
 
   doc.setFillColor(59,130,246);
-  doc.rect(20, chartY, barWidth, 6, "F");
+  doc.rect(20, y, barWidth, 6, "F");
 
   doc.setFontSize(8);
   doc.setTextColor(100);
-  doc.text(labels[i], 125, chartY+5);
+  doc.text(labels[i], 125, y+5);
 
-  chartY += 10;
-});  
+  y += 10;
+});
 
 addFooter();
 
@@ -3317,14 +3310,6 @@ doc.text(tSafe("Decisione investimento","Investment Decision"),20,y);
 
 y += 15;
 
-let decision = roi > 12
-? tSafe("ACQUISTO FORTE","STRONG BUY")
-: roi > 6
-? tSafe("ACQUISTO MODERATO","MODERATE BUY")
-: tSafe("ALTO RISCHIO","HIGH RISK");
-
-let decisionColor = roi > 12 ? [16,185,129] : roi > 6 ? [245,158,11] : [239,68,68];
-
 doc.setFillColor(...decisionColor);
 doc.roundedRect(20,y,170,20,6,6,"F");
 
@@ -3332,50 +3317,37 @@ doc.setTextColor(255);
 doc.setFontSize(14);
 doc.text(decision,25,y+13);
 
-y += 35;
-
-// ================= AI INSIGHT =================
 y += 30;
 
-doc.setFontSize(14);
+// AI INSIGHT
 doc.setTextColor(0);
+doc.setFontSize(14);
 doc.text(tSafe("Insight AI","AI Insight"),20,y);
 
 y += 8;
 
 doc.setFontSize(10);
+doc.text(insight,20,y,{maxWidth:170});
 
-let insight = roi > 12
-? tSafe("Questo investimento supera significativamente la media di mercato. Alta probabilità di rendimento stabile e scalabilità.","This investment significantly outperforms market averages. Strong scalability potential.")
-: roi > 6
-? tSafe("Investimento stabile ma sensibile a occupazione e pricing.","Stable investment but sensitive to occupancy and pricing.")
-: tSafe("Elevato rischio: margini troppo bassi per sostenibilità.","High risk: margins too low for sustainability.");
-
-doc.text(insight,20,y,{maxWidth:170});  
+y += 20;
 
 // SCENARIOS
-doc.setTextColor(0);
 doc.setFontSize(14);
 doc.text(tSafe("Scenari finanziari","Financial Scenarios"),20,y);
 
 y += 10;
 
-const low = revenue * 0.8;
-const base = revenue;
-const high = revenue * 1.2;
-
 doc.setFontSize(10);
-
 doc.text(tSafe("Scenario basso","Low case")+": "+eur(low),20,y); y+=6;
 doc.text(tSafe("Scenario base","Base case")+": "+eur(base),20,y); y+=6;
-doc.text(tSafe("Scenario alto","High case")+": "+eur(high),20,y); y+=10;
+doc.text(tSafe("Scenario alto","High case")+": "+eur(high),20,y);
+
+y += 12;
 
 // BREAK EVEN
-const breakEvenYears = profit > 0 ? (price / profit).toFixed(1) : "-";
 doc.text(tSafe("Break-even","Break-even")+": "+breakEvenYears+" "+tSafe("anni","years"),20,y);
 
 addFooter();
-
 // ================= PAGE 3 =================
 doc.addPage();
 y = 30;
@@ -3387,16 +3359,9 @@ y += 15;
 
 doc.setFontSize(10);
 
-let risks = [];
-
-if(roi < 6) risks.push(tSafe("ROI basso → redditività debole","Low ROI → weak profitability"));
-if(data.occupancy < 60) risks.push(tSafe("Occupazione bassa","Low occupancy"));
-if(data.expenses > 2000) risks.push(tSafe("Costi elevati","High costs"));
-if(!risks.length) risks.push(tSafe("Nessun rischio critico","No critical risks"));
-
 risks.forEach(r=>{
   doc.text("• "+r,20,y);
-  y+=6;
+  y+=7;
 });
 
 y += 10;
@@ -3408,17 +3373,9 @@ doc.text(tSafe("Strategia","Strategic Recommendation"),20,y);
 y += 8;
 
 doc.setFontSize(10);
-
-let strategy = roi > 12
-? tSafe("Espandere il portafoglio o reinvestire.","Expand portfolio or reinvest.")
-: roi > 6
-? tSafe("Ottimizzare pricing e occupazione.","Optimize pricing and occupancy.")
-: tSafe("Rivalutare l'investimento.","Re-evaluate investment.");
-
 doc.text(strategy,20,y,{maxWidth:170});
 
 addFooter();
-
 // ================= PAGE 4 =================
 doc.addPage();
 y = 30;
@@ -3430,17 +3387,19 @@ y += 15;
 
 doc.setFontSize(10);
 
-const monthly = Math.round(profit / 12);
-
 doc.text(tSafe("Ricavi annui","Annual Revenue")+": "+eur(revenue),20,y); y+=6;
 doc.text(tSafe("Profitto annuo","Annual Profit")+": "+eur(profit),20,y); y+=6;
-doc.text(tSafe("Profitto mensile","Monthly Profit")+": "+eur(monthly),20,y); y+=10;
+doc.text(tSafe("Profitto mensile","Monthly Profit")+": "+eur(monthly),20,y);
 
+y += 15;
+
+// BOX
 doc.setFillColor(248,250,252);
 doc.roundedRect(20,y,170,25,6,6,"F");
 
 doc.setFontSize(12);
 doc.setTextColor(0);
+
 doc.text(
   tSafe("Cashflow","Cashflow")+" "+
   (profit > 0 ? tSafe("positivo","POSITIVE") : tSafe("negativo","NEGATIVE")),
