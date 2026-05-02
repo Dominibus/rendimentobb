@@ -53,6 +53,33 @@ flex-direction:column;
 gap:28px;
 }
 
+/* =====================================
+🔥 FIX LAYOUT DASHBOARD (CRITICO)
+===================================== */
+
+.dashboard-layout{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap:30px;
+  align-items:start;
+}
+
+.dashboard-side{
+  position:sticky;
+  top:100px;
+}
+
+/* mobile */
+@media (max-width:1024px){
+  .dashboard-layout{
+    grid-template-columns:1fr;
+  }
+
+  .dashboard-side{
+    position:relative;
+    top:auto;
+  }
+}  
 .dashboard-side{
 display:flex;
 flex-direction:column;
