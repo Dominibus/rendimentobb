@@ -3310,7 +3310,7 @@ addFooter();
 // ================= PAGE 2 – EXECUTIVE DECISION =================
 doc.addPage();
 
-let y = 30;
+y = 30;
 
 doc.setFontSize(16);
 doc.text("Investment Decision", 20, y);
