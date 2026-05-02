@@ -648,37 +648,60 @@ function renderAdvanced(){
   document.querySelector(".report").appendChild(box);
 }
 
-// ================= PDF – ULTRA PRO (BANK LEVEL) =================
+// ================= PDF – ULTRA PRO (BANK / FINTECH LEVEL FINAL) =================
 async function generatePDF(){
+
+  const access = window.getUserAccess?.() || {};
+  const tSafe = window.t || ((it,en)=>it);
+
+  // 🔒 ACCESS CONTROL
+  if(!access.isPro && !access.isAdmin){
+    showUpgradeModal?.();
+    return;
+  }
 
   const btn = document.querySelector(".btn");
 
-  // 🔒 BLOCCO ACCESSO
-  if(!isPro){
-  showUpgradeModal();
-  return;
-}
-
-  // ⏳ LOADING UX
+  // ⏳ LOADING
   if(btn){
-    btn.innerText = "⏳ Generazione report...";
+    btn.innerText = tSafe("⏳ Generazione report...","⏳ Generating report...");
     btn.disabled = true;
   }
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  let y = 20;
+  // ================= SAFE DATA =================
+  const safe = v => isFinite(v) ? Number(v) : 0;
 
+  const roi = safe(window.lastAnalysisData?.roi);
+  const price = safe(window.lastAnalysisData?.price);
+  const equity = safe(window.lastAnalysisData?.equity);
+  const risk = safe(window.lastAnalysisData?.risk);
+  const revenue = safe(window.lastAnalysisData?.revenue);
+
+  const annualProfit = price * (roi/100);
+  const monthlyProfit = annualProfit / 12;
+  const loan = price - equity;
+
+  const breakEven = annualProfit > 0
+    ? (equity / annualProfit)
+    : 0;
+
+  const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
+
+  // ================= COLORS =================
   const green = [16,185,129];
   const dark = [15,23,42];
   const gray = [100,116,139];
 
-  // ================= HEADER (UPGRADE FINTECH) =================
-  doc.setFillColor(15,23,42);
+  let y = 20;
+
+  // ================= HEADER =================
+  doc.setFillColor(...dark);
   doc.rect(0,0,210,30,"F");
 
-  doc.setTextColor(255,255,255);
+  doc.setTextColor(255);
   doc.setFont("helvetica","bold");
   doc.setFontSize(16);
   doc.text("RendimentoBB",20,18);
@@ -688,38 +711,40 @@ async function generatePDF(){
 
   y = 40;
 
-  // ================= KPI CARD =================
+  // ================= KPI BLOCK =================
   doc.setFillColor(255,255,255);
-  doc.setDrawColor(230,230,230);
+  doc.setDrawColor(230);
   doc.roundedRect(20,y,170,60,6,6,"FD");
 
   doc.setFontSize(11);
   doc.setTextColor(...dark);
 
-  doc.text("Property price",25,y+12);
-  doc.text(euro(price),120,y+12);
+  doc.text(tSafe("Prezzo immobile","Property price"),25,y+12);
+  doc.text(eur(price),120,y+12);
 
-  doc.text("Equity invested",25,y+22);
-  doc.text(euro(equity),120,y+22);
+  doc.text(tSafe("Equity investita","Equity invested"),25,y+22);
+  doc.text(eur(equity),120,y+22);
 
   doc.text("ROI",25,y+32);
   doc.text(roi.toFixed(1)+"%",120,y+32);
 
-  doc.text("Risk score",25,y+42);
+  doc.text(tSafe("Indice rischio","Risk score"),25,y+42);
   doc.text(risk+"/100",120,y+42);
 
   y += 75;
 
   // ================= VERDICT =================
+  const verdictText = document.getElementById("verdict")?.innerText || "";
+
   doc.setFillColor(...green);
   doc.roundedRect(20,y,170,30,6,6,"F");
 
-  doc.setTextColor(255,255,255);
+  doc.setTextColor(255);
   doc.setFontSize(10);
-  doc.text("AI Investment Evaluation",25,y+8);
+  doc.text(tSafe("Valutazione investimento","Investment evaluation"),25,y+8);
 
   doc.setFontSize(16);
-  doc.text(document.getElementById("verdict").innerText,25,y+18);
+  doc.text(verdictText,25,y+18);
 
   y += 45;
 
@@ -732,10 +757,8 @@ async function generatePDF(){
     y += 80;
   }
 
-  // ================= SCORE =================
+  // ================= INVESTMENT SCORE =================
   let score = Math.min(100, Math.max(0, roi*5 - risk));
-  const annualProfit = price * (roi/100);
-  const breakEven = equity / annualProfit;
 
   doc.setTextColor(...dark);
   doc.setFontSize(14);
@@ -747,46 +770,70 @@ async function generatePDF(){
 
   doc.setFontSize(10);
   doc.setTextColor(...gray);
-  doc.text("Annual profit: "+euro(annualProfit),20,y+30);
-  doc.text("Break-even: "+breakEven.toFixed(1)+" years",20,y+38);
+  doc.text(
+    tSafe("Profitto annuo","Annual profit")+": "+eur(annualProfit),
+    20,y+30
+  );
+
+  doc.text(
+    tSafe("Break-even","Break-even")+": "+breakEven.toFixed(1)+" "+
+    tSafe("anni","years"),
+    20,y+38
+  );
 
   y += 50;
 
   // ================= MORTGAGE =================
   doc.setTextColor(...dark);
   doc.setFontSize(14);
-  doc.text("Mortgage Simulation",20,y);
+  doc.text(
+    tSafe("Simulazione mutuo","Mortgage simulation"),
+    20,y
+  );
 
-  const loan = price - equity;
   const rate = 0.04;
   const yearlyInterest = loan * rate;
 
   doc.setFontSize(10);
   doc.setTextColor(...gray);
 
-  doc.text("Loan amount: "+euro(loan),20,y+12);
-  doc.text("Avg interest (4%): "+euro(yearlyInterest),20,y+20);
-  doc.text("Net after financing: "+euro(annualProfit - yearlyInterest),20,y+28);
+  doc.text(tSafe("Importo mutuo","Loan amount")+": "+eur(loan),20,y+12);
+  doc.text("Interest (4%): "+eur(yearlyInterest),20,y+20);
+
+  doc.text(
+    tSafe("Netto dopo mutuo","Net after financing")+": "+
+    eur(annualProfit - yearlyInterest),
+    20,y+28
+  );
 
   y += 45;
 
   // ================= MARKET =================
   doc.setFontSize(14);
   doc.setTextColor(...dark);
-  doc.text("Market Benchmark",20,y);
+  doc.text(
+    tSafe("Benchmark mercato","Market benchmark"),
+    20,y
+  );
 
   doc.setFontSize(10);
   doc.setTextColor(...gray);
 
-  doc.text("Average ROI market: 8%",20,y+12);
+  doc.text("Average ROI: 8%",20,y+12);
   doc.text("Your ROI: "+roi.toFixed(1)+"%",20,y+20);
 
   if(roi > 8){
     doc.setTextColor(...green);
-    doc.text("✔ Above market performance",20,y+30);
+    doc.text(
+      tSafe("✔ Sopra la media","✔ Above market"),
+      20,y+30
+    );
   } else {
     doc.setTextColor(200,50,50);
-    doc.text("⚠ Below market performance",20,y+30);
+    doc.text(
+      tSafe("⚠ Sotto la media","⚠ Below market"),
+      20,y+30
+    );
   }
 
   y += 45;
@@ -794,26 +841,55 @@ async function generatePDF(){
   // ================= RISK =================
   doc.setTextColor(...dark);
   doc.setFontSize(14);
-  doc.text("Risk Analysis",20,y);
+  doc.text(
+    tSafe("Analisi rischio","Risk analysis"),
+    20,y
+  );
 
   doc.setFontSize(10);
   doc.setTextColor(...gray);
 
-  let riskLabel = "Medium";
-  if(risk < 40) riskLabel = "Low";
-  if(risk > 70) riskLabel = "High";
+  let riskLabel = tSafe("Medio","Medium");
+  if(risk < 40) riskLabel = tSafe("Basso","Low");
+  if(risk > 70) riskLabel = tSafe("Alto","High");
 
-  doc.text("Risk score: "+risk+"/100 ("+riskLabel+")",20,y+12);
+  doc.text(
+    tSafe("Indice rischio","Risk score")+": "+
+    risk+"/100 ("+riskLabel+")",
+    20,y+12
+  );
 
   y += 35;
 
+  // ================= FINAL CTA =================
+  doc.setFontSize(11);
+  doc.setTextColor(...dark);
+
+  doc.text(
+    tSafe(
+      "Usa questo report per ottenere finanziamenti o validare l’investimento.",
+      "Use this report to secure financing or validate your investment."
+    ),
+    20,y,{maxWidth:170}
+  );
+
+  y += 10;
+
+  doc.setTextColor(...green);
+  doc.text("www.rendimentobb.com",20,y);
+
+  y += 15;
+
   // ================= FOOTER =================
-  doc.setDrawColor(200,200,200);
+  doc.setDrawColor(200);
   doc.line(20,y,190,y);
 
   doc.setFontSize(8);
-  doc.setTextColor(150,150,150);
-  doc.text("Generated by RendimentoBB • Confidential Investment Report",20,y+8);
+  doc.setTextColor(150);
+  doc.text(
+    "RendimentoBB • Confidential Investment Report",
+    20,y+8
+  );
 
   // ================= SAVE =================
   const fileName = `RendimentoBB_Report_${roi.toFixed(0)}ROI.pdf`;
@@ -821,9 +897,10 @@ async function generatePDF(){
 
   // 🔁 RESET BUTTON
   if(btn){
-    btn.innerText = "📥 Scarica report PDF professionale";
+    btn.innerText = tSafe("📄 Scarica report","📄 Download report");
     btn.disabled = false;
   }
+
 }
 
 function showUpgradeModal(){
