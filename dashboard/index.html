@@ -309,6 +309,45 @@ body{
   }
 }
 
+.rb-hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+
+  padding:24px;
+  border-radius:16px;
+
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+.rb-hero-right{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.rb-hero-card{
+  background:rgba(255,255,255,0.08);
+  padding:14px 16px;
+  border-radius:12px;
+  min-width:140px;
+}
+
+  canvas{
+  max-height:100% !important;
+}
+
+.card h3{
+  margin-bottom:12px;
+  font-weight:700;
+  color:#0f172a;
+}
+
 </style>
 </head>
 
@@ -448,7 +487,6 @@ z-index:9999;
 <main>
 
 <div class="dashboard-container">
-<div>
 <div class="dashboard-main">  
 
 <!-- HERO -->
@@ -555,6 +593,14 @@ z-index:9999;
     <!-- MUTUO -->
     <div id="mortgage-lead-box" class="card"></div>
 
+  <div class="analysis-card">
+
+<h3
+data-it="Opportunità investimento"
+data-en="Investment opportunities">
+Opportunità investimento
+</h3>
+
     <!-- CTA -->
     <div class="upgrade-box">
       <h3>🚀 Sblocca PRO</h3>
@@ -568,12 +614,6 @@ z-index:9999;
 
 </div>
 
-
- <div style="font-size:12px;color:#64748b;margin-top:8px;text-align:center"
-data-it="Confronto reale banche italiane"
-data-en="Real comparison of Italian banks">
-Confronto reale banche italiane
-</div>
 
 </div>  
 
@@ -1000,14 +1040,6 @@ Le tue analisi investimento
 
 <div id="analysis-list" class="analysis-grid"></div>
 </div> <!-- CHIUDE dashboard-main -->
-
-<div class="analysis-card">
-
-<h3
-data-it="Opportunità investimento"
-data-en="Investment opportunities">
-Opportunità investimento
-</h3>
 
 <!-- NAPOLI -->
 
