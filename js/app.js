@@ -3110,7 +3110,7 @@ if(analyzeBtn){
 
 }
 
-// ================= EXECUTIVE PDF – FINAL PRODUCTION =================
+// ================= EXECUTIVE PDF – FINAL PRODUCTION (BANK READY) =================
 
 window.generateExecutivePDF = async function(){
 
@@ -3156,25 +3156,52 @@ const profit = safe(data.netAfterMortgage || data.profit);
 const price = safe(data.price);
 const equity = safe(data.equity);
 const loan = safe(data.loan);
+const monthly = Math.round(profit / 12);
 
 // ================= FORMAT =================
 const eur = (v)=> "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
 const pct = (v)=> safe(v).toFixed(1) + "%";
 
+// ================= BUSINESS LOGIC =================
+let summary = roi > 12
+? tSafe("Investimento sopra la media con alta redditività.","High-performing investment above market average.")
+: roi > 6
+? tSafe("Investimento bilanciato con ROI stabile.","Balanced investment with solid ROI.")
+: tSafe("Investimento rischioso con rendimento basso.","Risky investment with low return.");
+
+let decision = roi > 12
+? tSafe("ACQUISTO FORTE","STRONG BUY")
+: roi > 6
+? tSafe("ACQUISTO MODERATO","MODERATE BUY")
+: tSafe("ALTO RISCHIO","HIGH RISK");
+
+let decisionColor = roi > 12 ? [16,185,129] : roi > 6 ? [245,158,11] : [239,68,68];
+
+let insight = roi > 12
+? tSafe("Performance superiore alla media con alta scalabilità.","Above market performance with strong scalability.")
+: roi > 6
+? tSafe("Investimento stabile ma sensibile al mercato.","Stable but sensitive to market variables.")
+: tSafe("Margini insufficienti per sostenibilità.","Margins too low for sustainability.");
+
+let strategy = roi > 12
+? tSafe("Espandere il portafoglio o reinvestire.","Expand portfolio or reinvest.")
+: roi > 6
+? tSafe("Ottimizzare pricing e occupazione.","Optimize pricing and occupancy.")
+: tSafe("Rivalutare investimento.","Re-evaluate investment.");
+
+let risks = [];
+if(roi < 6) risks.push(tSafe("ROI basso","Low ROI"));
+if(data.occupancy < 60) risks.push(tSafe("Occupazione bassa","Low occupancy"));
+if(data.expenses > 2000) risks.push(tSafe("Costi elevati","High costs"));
+if(!risks.length) risks.push(tSafe("Nessun rischio critico","No critical risks"));
+
+const low = revenue * 0.8;
+const base = revenue;
+const high = revenue * 1.2;
+const breakEvenYears = profit > 0 ? (price / profit).toFixed(1) : "-";
+
 // ================= DOC =================
 const doc = new jsPDF();
-
-// ================= LOGO =================
-let logoBase64 = null;
-try{
-  const res = await fetch("/img/logo-main.png");
-  const blob = await res.blob();
-  const reader = new FileReader();
-  logoBase64 = await new Promise(resolve=>{
-    reader.onloadend = ()=> resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
-}catch(e){}
 
 // ================= FOOTER =================
 const addFooter = () => {
@@ -3189,115 +3216,37 @@ const addFooter = () => {
 // ================= PAGE 1 =================
 let y = 20;
 
-// HEADER
 doc.setFillColor(15,23,42);
 doc.rect(0,0,210,30,"F");
 
-// LOGO
-if(logoBase64){
-  doc.setFillColor(255,255,255);
-  doc.roundedRect(18, 6, 34, 16, 3,3,"F");
-  doc.addImage(logoBase64, "PNG", 20, 8, 30, 12);
-}
-
-// TITLE
 doc.setTextColor(255);
 doc.setFontSize(12);
-doc.text(tSafe("Report investimento","Investment Intelligence Report"),60,18);
+doc.text(tSafe("Investment Report","Investment Report"),60,18);
 
-// KPI HERO
 y = 45;
 
 doc.setFillColor(16,185,129);
 doc.roundedRect(20,y,170,28,6,6,"F");
 
 doc.setTextColor(255);
-doc.setFontSize(10);
-doc.text("ROI",25,y+10);
-
 doc.setFontSize(24);
-doc.text(pct(roi),25,y+22);
-
-let badge = roi > 12
-? tSafe("ALTA PERFORMANCE","HIGH PERFORMANCE")
-: roi > 6
-? tSafe("EQUILIBRATO","BALANCED")
-: tSafe("RISCHIOSO","RISKY");
-
-doc.setFontSize(10);
-doc.text(badge,140,y+22);
+doc.text(pct(roi),25,y+20);
 
 y += 40;
 
-// SUMMARY
 doc.setTextColor(0);
-doc.setFontSize(13);
-doc.text(tSafe("Sintesi","Executive Summary"),20,y);
-
-y += 8;
-
-doc.setFontSize(10);
+doc.setFontSize(12);
 doc.text(summary,20,y,{maxWidth:170});
 
-y += 16;
-
-// STRUCTURE
-doc.setFontSize(13);
-doc.text(tSafe("Struttura investimento","Investment Structure"),20,y);
-
-y += 8;
+y += 15;
 
 doc.setFontSize(10);
-doc.text(tSafe("Prezzo immobile","Property price")+": "+eur(price),20,y); y+=6;
-doc.text(tSafe("Equity","Equity")+": "+eur(equity),20,y); y+=6;
-doc.text(tSafe("Mutuo","Loan")+": "+eur(loan),20,y); y+=6;
+doc.text("Price: "+eur(price),20,y); y+=6;
+doc.text("Equity: "+eur(equity),20,y); y+=6;
+doc.text("Loan: "+eur(loan),20,y); y+=10;
 
-const ltv = price > 0 ? ((loan/price)*100).toFixed(0) : 0;
-doc.text("LTV: "+ltv+"%",20,y);
-
-y += 18;
-
-// KPI BOX
-doc.setFillColor(248,250,252);
-doc.roundedRect(20,y,80,20,4,4,"F");
-
-doc.setFontSize(8);
-doc.setTextColor(120);
-doc.text(tSafe("Ricavi","Revenue"),25,y+7);
-
-doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text(eur(revenue),25,y+15);
-
-doc.setFillColor(248,250,252);
-doc.roundedRect(110,y,80,20,4,4,"F");
-
-doc.setFontSize(8);
-doc.setTextColor(120);
-doc.text(tSafe("Profitto","Profit"),115,y+7);
-
-doc.setFontSize(12);
-doc.setTextColor(0);
-doc.text(eur(profit),115,y+15);
-
-// CHART
-y += 30;
-
-const chartData = [revenue * 0.8, revenue, revenue * 1.2];
-const labels = ["Low","Base","High"];
-
-chartData.forEach((val, i)=>{
-  const barWidth = (val / (revenue*1.2)) * 100;
-
-  doc.setFillColor(59,130,246);
-  doc.rect(20, y, barWidth, 6, "F");
-
-  doc.setFontSize(8);
-  doc.setTextColor(100);
-  doc.text(labels[i], 125, y+5);
-
-  y += 10;
-});
+doc.text("Revenue: "+eur(revenue),20,y); y+=6;
+doc.text("Profit: "+eur(profit),20,y);
 
 addFooter();
 
@@ -3306,7 +3255,7 @@ doc.addPage();
 y = 30;
 
 doc.setFontSize(16);
-doc.text(tSafe("Decisione investimento","Investment Decision"),20,y);
+doc.text(tSafe("Decision","Decision"),20,y);
 
 y += 15;
 
@@ -3319,46 +3268,30 @@ doc.text(decision,25,y+13);
 
 y += 30;
 
-// AI INSIGHT
 doc.setTextColor(0);
-doc.setFontSize(14);
-doc.text(tSafe("Insight AI","AI Insight"),20,y);
-
-y += 8;
-
-doc.setFontSize(10);
+doc.setFontSize(12);
 doc.text(insight,20,y,{maxWidth:170});
 
 y += 20;
 
-// SCENARIOS
-doc.setFontSize(14);
-doc.text(tSafe("Scenari finanziari","Financial Scenarios"),20,y);
+doc.text("Low: "+eur(low),20,y); y+=6;
+doc.text("Base: "+eur(base),20,y); y+=6;
+doc.text("High: "+eur(high),20,y); y+=10;
 
-y += 10;
-
-doc.setFontSize(10);
-doc.text(tSafe("Scenario basso","Low case")+": "+eur(low),20,y); y+=6;
-doc.text(tSafe("Scenario base","Base case")+": "+eur(base),20,y); y+=6;
-doc.text(tSafe("Scenario alto","High case")+": "+eur(high),20,y);
-
-y += 12;
-
-// BREAK EVEN
-doc.text(tSafe("Break-even","Break-even")+": "+breakEvenYears+" "+tSafe("anni","years"),20,y);
+doc.text("Break-even: "+breakEvenYears+" years",20,y);
 
 addFooter();
+
 // ================= PAGE 3 =================
 doc.addPage();
 y = 30;
 
 doc.setFontSize(16);
-doc.text(tSafe("Analisi rischio","Risk Analysis"),20,y);
+doc.text("Risk Analysis",20,y);
 
 y += 15;
 
 doc.setFontSize(10);
-
 risks.forEach(r=>{
   doc.text("• "+r,20,y);
   y+=7;
@@ -3366,43 +3299,34 @@ risks.forEach(r=>{
 
 y += 10;
 
-// STRATEGY
-doc.setFontSize(14);
-doc.text(tSafe("Strategia","Strategic Recommendation"),20,y);
-
-y += 8;
-
-doc.setFontSize(10);
+doc.setFontSize(12);
 doc.text(strategy,20,y,{maxWidth:170});
 
 addFooter();
+
 // ================= PAGE 4 =================
 doc.addPage();
 y = 30;
 
 doc.setFontSize(16);
-doc.text(tSafe("Flusso di cassa","Cashflow Overview"),20,y);
+doc.text("Cashflow",20,y);
 
 y += 15;
 
 doc.setFontSize(10);
-
-doc.text(tSafe("Ricavi annui","Annual Revenue")+": "+eur(revenue),20,y); y+=6;
-doc.text(tSafe("Profitto annuo","Annual Profit")+": "+eur(profit),20,y); y+=6;
-doc.text(tSafe("Profitto mensile","Monthly Profit")+": "+eur(monthly),20,y);
+doc.text("Annual Revenue: "+eur(revenue),20,y); y+=6;
+doc.text("Annual Profit: "+eur(profit),20,y); y+=6;
+doc.text("Monthly Profit: "+eur(monthly),20,y);
 
 y += 15;
 
-// BOX
 doc.setFillColor(248,250,252);
 doc.roundedRect(20,y,170,25,6,6,"F");
 
 doc.setFontSize(12);
 doc.setTextColor(0);
-
 doc.text(
-  tSafe("Cashflow","Cashflow")+" "+
-  (profit > 0 ? tSafe("positivo","POSITIVE") : tSafe("negativo","NEGATIVE")),
+  profit > 0 ? "POSITIVE CASHFLOW" : "NEGATIVE CASHFLOW",
   25,y+15
 );
 
