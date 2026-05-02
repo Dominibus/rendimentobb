@@ -2599,9 +2599,10 @@ function lockInvestorPreview(){
     el.style.opacity = "0.6";
   });
 
-  if(typeof showProOverlay === "function"){
-    showProOverlay();
-  }
+  // ❌ NON bloccare tutta la dashboard
+// showProOverlay();
+
+// ✅ SOLO teaser, niente overlay globale
 
   // 🔥 SOLO QUI CONTROLLO DUPLICAZIONE
   if(document.getElementById("investor-banner")) return;
