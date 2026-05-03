@@ -173,6 +173,8 @@ if (docSnap.exists()) {
 
   plan = data.plan || "free";
   role = data.role || "user";
+  
+  window.userName = data.name || "";
 } else {
       console.warn("⚠️ Documento NON trovato");
     }
@@ -251,7 +253,12 @@ window.getUserAccess = function(){
 // 🔥 RB_USER = MIRROR (NON LOGICA)
 Object.defineProperty(window, "RB_USER", {
   get(){
-    return window.getUserAccess();
+    const access = window.getUserAccess();
+    return {
+      ...access,
+      name: window.userName || "",
+      email: window.currentUser?.email || ""
+    };
   }
 });
 
@@ -662,24 +669,36 @@ document.dispatchEvent(
 
   if (registerAction) {
 
-    registerAction.addEventListener("click", async () => {
+  registerAction.addEventListener("click", async () => {
 
-      const email = document.getElementById("auth-email").value;
-      const password = document.getElementById("auth-password").value;
+    const email = document.getElementById("auth-email").value;
+    const password = document.getElementById("auth-password").value;
 
-      try {
+    // 🔥 PRENDI NOME (devi avere input con id="auth-name")
+    const name = document.getElementById("auth-name")?.value || "";
 
-        await registerUser(email, password);
+    try {
 
-      } catch (err) {
+      const user = await registerUser(email, password);
 
-        alert(err.message);
+      // 🔥 SALVA SU FIRESTORE
+      await setDoc(doc(db, "users", user.uid), {
+        email: email,
+        name: name, // 👈 QUESTO È IL FIX
+        plan: "free",
+        role: "user",
+        createdAt: new Date()
+      });
 
-      }
+    } catch (err) {
 
-    });
+      alert(err.message);
 
-  }
+    }
+
+  });
+
+}
 
   if (loginAction) {
 
