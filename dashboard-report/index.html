@@ -668,8 +668,8 @@ function renderAdvanced(){
 async function generatePDF(){
 
   try{
-    console.log("PDF ACCESS:", access);
     const access = window.getUserAccess?.() || {};
+    console.log("PDF ACCESS:", access);
     if(!access.isPro && !access.isAdmin){
       showUpgradeModal?.();
       return;
@@ -693,16 +693,10 @@ async function generatePDF(){
 
     const selectedValue = document.getElementById("simulationSelector")?.value;
 
-let selectedSimulation = null;
-
-if(selectedValue !== "" && dashboardList.length){
-
-  selectedSimulation = dashboardList.find(s =>
-    (s.id && s.id == selectedValue) ||
-    (!s.id && dashboardList.indexOf(s) == selectedValue)
-  );
-
-}
+const selectedSimulation =
+  selectedValue !== ""
+    ? dashboardList[Number(selectedValue)]
+    : null;
 
 const fallback =
   selectedSimulation ||
@@ -893,7 +887,7 @@ function goToPricing(){
   window.location.href = "/#pricing";
 }  
 
-  function populateSimulations(){
+ function populateSimulations(){
 
   const list = window.dashboardSimulations || [];
   const select = document.getElementById("simulationSelector");
@@ -910,15 +904,21 @@ function goToPricing(){
 
     const opt = document.createElement("option");
 
-    opt.value = sim.id || index;
+    opt.value = index.toString();
 
     opt.innerText =
       `${sim.city || "City"} – ROI ${(sim.roi || 0).toFixed(1)}%`;
 
     select.appendChild(opt);
-    console.log("SIM LIST:", list);
+
   });
-  
+
+  // ✅ SOLO UNA VOLTA, DOPO il loop
+  if(list.length){
+    select.value = "0";
+  }
+
+  console.log("SIM LIST:", list);
 }
 // ================= INIT =================
 function init(){
