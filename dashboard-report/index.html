@@ -343,6 +343,11 @@ body.report-page #global-footer .footer-bottom{
   display:none !important;
 }
 
+  .btn{
+  transform:translateZ(0);
+  will-change:transform;
+}
+
 </style>
 
 </head>
@@ -946,12 +951,13 @@ function populateSimulations(){
 // ================= INIT =================
 function init(){
 
+  if(window.__reportStarted) return; // 🔥 BLOCCO HARD
+  window.__reportStarted = true;
+
   if(!window.getUserAccess){
     console.warn("⏳ Access non pronto → skip");
     return;
   }
-
-  window.__reportStarted = true;
 
   loadSimulations();
 
@@ -977,13 +983,6 @@ document.addEventListener("rb_auth_ready", ()=>{
   setTimeout(init, 50);
 });
 
-// fallback sicurezza
-window.addEventListener("load", ()=>{
-  if(!window.__reportStarted){
-    window.__reportStarted = true;
-    init();
-  }
-});
 
 </script>
 
