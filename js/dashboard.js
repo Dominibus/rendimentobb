@@ -385,15 +385,18 @@ async function loadDashboard(){
 
   // ================= CREA ANALYSES =================
 
-  const analyses = querySnapshot.docs.map(doc => ({
-    id: doc.id,
-    roi: doc.data().roi || 0,
-    price: doc.data().propertyPrice || doc.data().price || 0,
-    equity: doc.data().equity || 0,
-    risk: doc.data().risk || 0,
-    city: doc.data().city || "italy",
-    createdAt: doc.data().createdAt
-  }));
+const analyses = querySnapshot.docs.map(doc => ({
+  id: doc.id,
+  roi: doc.data().roi || 0,
+  price: doc.data().propertyPrice || doc.data().price || 0,
+  equity: doc.data().equity || 0,
+  risk: doc.data().risk || 0,
+  city: doc.data().city || "italy",
+  createdAt: doc.data().createdAt
+}));
+
+// 🔥 FIX → rende disponibili al report
+window.dashboardSimulations = analyses;
 
   // ================= URL PARAMS =================
 
@@ -1895,6 +1898,11 @@ function handleReportClick(){
 
   // ✅ PRO → DASHBOARD REPORT
   const data = window.bestInvestmentData || {};
+  // 🔥 FIX CRITICO → salva simulazioni per report
+localStorage.setItem(
+  "rb_simulations",
+  JSON.stringify(window.dashboardSimulations || [])
+);
 
   const params = new URLSearchParams({
     price: data.price || 0,
