@@ -455,12 +455,25 @@ style="justify-content:space-between;align-items:center;">
   <canvas id="roiChart"></canvas>
 </div>
 
+<!-- SELECT SIMULAZIONE -->
+<select id="simulationSelector"
+data-it="Seleziona simulazione"
+data-en="Select simulation"
+style="
+  margin-top:20px;
+  padding:12px;
+  border-radius:10px;
+  width:100%;
+">
+  <option value=""
+    data-it="Seleziona simulazione"
+    data-en="Select simulation">
+    Seleziona simulazione
+  </option>
+</select>
+
 <!-- CTA -->
 <button class="btn" onclick="generatePDF()"
-data-it="📥 Scarica report PDF professionale"
-data-en="📥 Download professional PDF report">
-📥 Scarica report PDF professionale
-</button>
 
 <!-- OVERLAY -->
 <div id="upgradeOverlay" class="lock-overlay">
@@ -672,30 +685,39 @@ async function generatePDF(){
     };
 
     // ================= DATA ENGINE (REAL FIX) =================
-    const params = new URLSearchParams(window.location.search);
+    
     const dashboardList = window.dashboardSimulations || [];
 
-    const selectedId = params.get("id");
-    const selectedSimulation = dashboardList.find(s => s.id === selectedId);
+    const selectedValue = document.getElementById("simulationSelector")?.value;
 
-    const bestSimulation =
-      window.bestInvestmentData ||
-      dashboardList.sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
-      {};
+let selectedSimulation = null;
+
+if(selectedValue !== "" && dashboardList.length){
+
+  selectedSimulation = dashboardList.find(s =>
+    (s.id && s.id == selectedValue) ||
+    (!s.id && dashboardList.indexOf(s) == selectedValue)
+  );
+
+}
+
+const fallback =
+  selectedSimulation ||
+  window.bestInvestmentData ||
+  dashboardList.sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
+  {};
 
     const rawData = {
-      price: Number(params.get("price")) || selectedSimulation?.price || bestSimulation.price || 0,
-      roi: Number(params.get("roi")) || selectedSimulation?.roi || bestSimulation.roi || 0,
-      equity: Number(params.get("equity")) || selectedSimulation?.equity || bestSimulation.equity || 0,
-      risk: Number(params.get("risk")) || selectedSimulation?.risk || bestSimulation.risk || 0,
-      city: params.get("city") || selectedSimulation?.city || bestSimulation.city || "—",
-
-      revenue:
-        selectedSimulation?.revenue ||
-        bestSimulation.revenue ||
-        (Number(params.get("price")) * Number(params.get("roi")) / 100) ||
-        0
-    };
+  price: fallback.price || 0,
+  roi: fallback.roi || 0,
+  equity: fallback.equity || 0,
+  risk: fallback.risk || 0,
+  city: fallback.city || "—",
+  revenue:
+    fallback.revenue ||
+    (fallback.price * fallback.roi / 100) ||
+    0
+};
 
     // ================= NORMALIZZAZIONE =================
     const roi = safe(rawData.roi);
@@ -867,10 +889,39 @@ function showUpgradeModal(){
 function goToPricing(){
   window.location.href = "/#pricing";
 }  
+
+  function populateSimulations(){
+
+  const list = window.dashboardSimulations || [];
+  const select = document.getElementById("simulationSelector");
+
+  if(!select) return;
+
+  select.innerHTML = `
+    <option value="">
+      ${lang === "en" ? "Select simulation" : "Seleziona simulazione"}
+    </option>
+  `;
+
+  list.forEach((sim, index)=>{
+
+    const opt = document.createElement("option");
+
+    opt.value = sim.id || index;
+
+    opt.innerText =
+      `${sim.city || "City"} – ROI ${(sim.roi || 0).toFixed(1)}%`;
+
+    select.appendChild(opt);
+
+  });
+
+}
 // ================= INIT =================
 function init(){
 
   checkUserPlan();
+  populateSimulations();
   renderData();
   renderVerdict();
   renderChart();
