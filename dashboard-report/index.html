@@ -327,6 +327,17 @@ body.report-page #global-footer .footer-bottom{
   color:#64748b !important;
 }
 
+  .report{
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .4s ease, transform .4s ease;
+}
+
+.report.ready{
+  opacity:1;
+  transform:translateY(0);
+}
+
 </style>
 
 </head>
@@ -550,29 +561,36 @@ function renderChart(){
 
   const canvas = document.getElementById("roiChart");
 
+  if(!canvas) return;
+
   if(roiChartInstance){
     roiChartInstance.destroy();
+    roiChartInstance = null;
   }
 
-  roiChartInstance = new Chart(canvas,{
-    type:"bar",
-    data:{
-      labels: lang==="en"
-        ? ["ROI","Risk","Benchmark"]
-        : ["ROI","Rischio","Benchmark"],
-      datasets:[{
-        data:[roi, risk, 8],
-        backgroundColor:["#10b981","#ef4444","#3b82f6"],
-        borderRadius:10
-      }]
-    },
-    options:{
-      plugins:{legend:{display:false}},
-      scales:{
-        y:{beginAtZero:true}
+  requestAnimationFrame(()=>{
+    roiChartInstance = new Chart(canvas,{
+      type:"bar",
+      data:{
+        labels: lang==="en"
+          ? ["ROI","Risk","Benchmark"]
+          : ["ROI","Rischio","Benchmark"],
+        datasets:[{
+          data:[roi, risk, 8],
+          backgroundColor:["#10b981","#ef4444","#3b82f6"],
+          borderRadius:10
+        }]
+      },
+      options:{
+        animation:false, // 🔥 STOP flicker
+        plugins:{legend:{display:false}},
+        scales:{
+          y:{beginAtZero:true}
+        }
       }
-    }
+    });
   });
+
 }
 
 // ================= LOCK =================
@@ -584,10 +602,6 @@ function applyLock(){
   if(!isPro){
 
     overlay.style.display = "flex";
-
-    setTimeout(()=>{
-      overlay.style.animation = "pulse 1.2s infinite";
-    },500);
 
     if(btn){
       btn.disabled = true;
@@ -912,26 +926,22 @@ function init(){
   populateSimulations();
   renderData();
   renderVerdict();
+
+  // 👉 PRIMA dati
   renderChart();
+
+  // 👉 POI lock
   applyLock();
+
+  // 👉 FINALMENTE MOSTRA
+  requestAnimationFrame(()=>{
+    document.querySelector(".report")?.classList.add("ready");
+  });
 
   if(typeof applyTranslations === "function"){
     applyTranslations();
   }
 }
-
-document.addEventListener("click", (e)=>{
-  const modal = document.getElementById("upgradeModal");
-  if(e.target === modal){
-    modal.style.display = "none";
-  }
-});  
-
-document.addEventListener("rb_auth_ready", ()=>{
-  setTimeout(init, 50);
-});
-
-</script>
 
 
 <!-- 👇 AGGIUNGI QUESTO -->
