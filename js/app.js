@@ -2720,17 +2720,32 @@ window.calculate = async function(force = false){
     const customLocation = document.getElementById("custom-location")?.value;
 
     if(customLocation?.trim()){
-      const mappedCity = mapLocationToCity(customLocation);
 
-      if(!window.__CITY_LOCKED__ && mappedCity){
-        window.currentCity = mappedCity;
-        localStorage.setItem("selected_city", mappedCity);
+  // 🔥 NON sovrascrivere se già selezionata manualmente
+  if(!window.currentCity || window.__CITY_FROM_INPUT__){
 
-        if(typeof applyCityBackground === "function"){
-          applyCityBackground(mappedCity);
-        }
+    const mappedCity = mapLocationToCity(customLocation);
+
+    if(!window.__CITY_LOCKED__ && mappedCity){
+
+      window.currentCity = mappedCity;
+      localStorage.setItem("selected_city", mappedCity);
+
+      window.__CITY_FROM_INPUT__ = true;
+
+      if(typeof applyCityBackground === "function"){
+        applyCityBackground(mappedCity);
       }
+
+      console.log("🏙 CITY FROM INPUT:", mappedCity);
+
     }
+
+  } else {
+    console.log("⛔ CITY override bloccato (già selezionata)");
+  }
+
+}
 
     const loanAmount   = getValue("loanAmount") || (price - equity);
     const interestRate = getValue("interestRate") || 3.5;
@@ -3815,22 +3830,26 @@ if(citySelectorEl){
 
   citySelectorEl.addEventListener("change",()=>{
 
-  const city = citySelectorEl.value;
+    const city = citySelectorEl.value;
 
-  window.currentCity = city;
+    window.currentCity = city;
 
-  localStorage.setItem("selected_city", city);
-  console.log("🏙 CURRENT CITY:", window.currentCity);  
+    // 🔥 QUESTO È IL FIX
+    window.__CITY_FROM_INPUT__ = false;
 
-  applyCityBackground(city);
+    localStorage.setItem("selected_city", city);
+    console.log("🏙 CURRENT CITY:", window.currentCity);  
 
-  // 🔥 FIX HARD (ANTI OVERRIDE BUG)
-  setTimeout(()=>{
     applyCityBackground(city);
-  },100);
 
-});
-}  
+    // 🔥 FIX HARD (ANTI OVERRIDE BUG)
+    setTimeout(()=>{
+      applyCityBackground(city);
+    },100);
+
+  });
+
+}
 
 // ================= CITY ROUTING FIX =================
 
