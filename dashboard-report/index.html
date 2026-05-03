@@ -667,7 +667,7 @@ function renderAdvanced(){
 
 }
 
-// ================= PDF – BANK LEVEL FINAL (BILINGUE PRO) =================
+// ================= PDF – BANK LEVEL FINAL PRO (TRUE BILINGUAL) =================
 async function generatePDF(){
 
   try{
@@ -710,7 +710,6 @@ async function generatePDF(){
     const risk = safe(fallback.risk);
     const city = fallback.city || "—";
 
-    const revenue = fallback.revenue || (price * roi / 100);
     const annualProfit = safe(price * (roi/100));
     const monthlyProfit = safe(annualProfit / 12);
     const loan = safe(price - equity);
@@ -720,10 +719,7 @@ async function generatePDF(){
     const interestRate = 0.04;
     const annualDebtService = loan * interestRate;
 
-    const dscr = annualDebtService > 0
-      ? annualProfit / annualDebtService
-      : 0;
-
+    const dscr = annualDebtService > 0 ? annualProfit / annualDebtService : 0;
     const capRate = price > 0 ? (annualProfit / price) * 100 : 0;
     const roe = equity > 0 ? (annualProfit / equity) * 100 : 0;
     const ltv = price > 0 ? (loan / price) * 100 : 0;
@@ -731,10 +727,10 @@ async function generatePDF(){
     // ================= FORMAT =================
     const eur = v => "€ " + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
 
+    const dark = [15,23,42];
     const green = [16,185,129];
     const blue = [59,130,246];
     const amber = [245,158,11];
-    const dark = [15,23,42];
     const red = [220,38,38];
 
     // ================= USER =================
@@ -744,11 +740,15 @@ async function generatePDF(){
         ? profile.name + " " + profile.surname
         : profile.name || profile.email || "Private Client";
 
+    // ================= FOOTER =================
     const addFooter = ()=>{
-      doc.setFontSize(9);
-      doc.setTextColor(150,150,150);
+      doc.setFontSize(8);
+      doc.setTextColor(130,130,130);
       doc.text(
-        t("RendimentoBB – Report riservato","RendimentoBB – Confidential Report"),
+        t(
+          "Documento confidenziale – Uso esclusivo del cliente",
+          "Confidential document – For client use only"
+        ),
         20,
         285
       );
@@ -756,44 +756,47 @@ async function generatePDF(){
 
     // ================= HEADER =================
     doc.setFillColor(...dark);
-    doc.rect(0,0,210,32,"F");
+    doc.rect(0,0,210,30,"F");
 
     doc.setTextColor(255,255,255);
-    doc.setFontSize(16);
-    doc.text("RendimentoBB",20,18);
+    doc.setFontSize(14);
+    doc.text("RendimentoBB",20,17);
 
     doc.setFontSize(9);
-    doc.text(t("Advanced investment report","Advanced investment report"),20,25);
+    doc.text(
+      t("Analisi investimento immobiliare","Real estate investment analysis"),
+      20,
+      24
+    );
 
-    doc.setFontSize(9);
-    doc.text(new Date().toLocaleDateString(),170,18);
+    doc.text(new Date().toLocaleDateString(),170,17);
 
     // ================= PAGE 1 =================
     let y = 45;
 
     doc.setTextColor(...dark);
-    doc.setFontSize(20);
-    doc.text("Executive Summary",20,y);
+    doc.setFontSize(18);
+    doc.text(t("Executive Summary","Executive Summary"),20,y);
 
-    doc.setFontSize(40);
+    doc.setFontSize(38);
     doc.setTextColor(...green);
     doc.text(roi.toFixed(1)+"%",20,y+20);
 
     doc.setTextColor(...dark);
     doc.setFontSize(11);
 
-    doc.text(`Client: ${clientName}`,120,y);
-    doc.text(`City: ${city}`,120,y+8);
+    doc.text(`${t("Cliente","Client")}: ${clientName}`,120,y);
+    doc.text(`${t("Località","Location")}: ${city}`,120,y+8);
 
-    doc.text(`Price: ${eur(price)}`,20,y+50);
-    doc.text(`Equity: ${eur(equity)}`,20,y+60);
-    doc.text(`Profit: ${eur(annualProfit)}`,20,y+70);
+    doc.text(`${t("Prezzo","Purchase Price")}: ${eur(price)}`,20,y+50);
+    doc.text(`${t("Capitale proprio","Equity")}: ${eur(equity)}`,20,y+60);
+    doc.text(`${t("Profitto annuo","Annual Profit")}: ${eur(annualProfit)}`,20,y+70);
 
     const verdict =
-      roi > 12 ? "INSTITUTIONAL GRADE" :
-      roi > 8 ? "STRONG INVESTMENT" :
-      roi > 5 ? "OPTIMIZE" :
-      "HIGH RISK";
+      roi > 12 ? t("Operazione istituzionale","Institutional grade") :
+      roi > 8 ? t("Investimento solido","Strong investment") :
+      roi > 5 ? t("Ottimizzazione necessaria","Optimization needed") :
+      t("Alto rischio","High risk");
 
     const verdictColor =
       roi > 12 ? green :
@@ -802,20 +805,20 @@ async function generatePDF(){
       red;
 
     doc.setFillColor(...verdictColor);
-    doc.roundedRect(20,y+85,170,20,6,6,"F");
+    doc.roundedRect(20,y+85,170,18,5,5,"F");
 
     doc.setTextColor(255,255,255);
-    doc.setFontSize(14);
-    doc.text(verdict,25,y+98);
+    doc.setFontSize(12);
+    doc.text(verdict,25,y+97);
 
     addFooter();
 
     // ================= PAGE 2 =================
     doc.addPage();
 
-    doc.setFontSize(16);
+    doc.setFontSize(15);
     doc.setTextColor(...dark);
-    doc.text("Performance",20,20);
+    doc.text(t("Performance","Performance"),20,20);
 
     try{
       const canvas = document.getElementById("roiChart");
@@ -827,22 +830,21 @@ async function generatePDF(){
 
     const score = Math.min(100, Math.max(0, roi*5 - risk));
 
-    doc.setFontSize(12);
-    doc.text(`Score: ${score}/100`,20,115);
-    doc.text(`Break-even: ${breakEven.toFixed(1)} years`,20,125);
-    doc.text(`Monthly: ${eur(monthlyProfit)}`,20,135);
+    doc.setFontSize(11);
+    doc.text(`${t("Punteggio","Score")}: ${score}/100`,20,115);
+    doc.text(`${t("Break-even","Break-even")}: ${breakEven.toFixed(1)} ${t("anni","years")}`,20,125);
+    doc.text(`${t("Profitto mensile","Monthly profit")}: ${eur(monthlyProfit)}`,20,135);
 
     addFooter();
 
     // ================= PAGE 3 =================
     doc.addPage();
 
-    doc.setFontSize(16);
-    doc.setTextColor(...dark);
-    doc.text("Financing Analysis",20,20);
+    doc.setFontSize(15);
+    doc.text(t("Analisi finanziamento","Financing analysis"),20,20);
 
-    doc.setFontSize(12);
-    doc.text(`Loan: ${eur(loan)}`,20,40);
+    doc.setFontSize(11);
+    doc.text(`${t("Mutuo","Loan")}: ${eur(loan)}`,20,40);
     doc.text(`LTV: ${ltv.toFixed(1)}%`,20,50);
     doc.text(`DSCR: ${dscr.toFixed(2)}`,20,60);
 
@@ -850,9 +852,9 @@ async function generatePDF(){
     doc.text(`ROE: ${roe.toFixed(1)}%`,20,85);
 
     const decision =
-      dscr > 1.5 ? "APPROVED" :
-      dscr > 1.2 ? "REVIEW" :
-      "REJECTED";
+      dscr > 1.5 ? t("Approvato","Approved") :
+      dscr > 1.2 ? t("Da valutare","Review") :
+      t("Non approvato","Rejected");
 
     doc.setTextColor(...(dscr > 1.2 ? green : red));
     doc.text(decision,20,100);
@@ -862,14 +864,14 @@ async function generatePDF(){
     // ================= PAGE 4 =================
     doc.addPage();
 
-    doc.setFontSize(16);
+    doc.setFontSize(15);
     doc.setTextColor(...dark);
-    doc.text("Risk Analysis",20,20);
+    doc.text(t("Analisi rischio","Risk analysis"),20,20);
 
     const riskScore = Math.min(100, Math.max(0, risk));
 
-    doc.setFontSize(12);
-    doc.text(`Risk Score: ${riskScore}/100`,20,40);
+    doc.setFontSize(11);
+    doc.text(`${t("Indice rischio","Risk score")}: ${riskScore}/100`,20,40);
 
     doc.setTextColor(...(
       riskScore < 30 ? green :
@@ -878,9 +880,9 @@ async function generatePDF(){
     ));
 
     doc.text(
-      riskScore < 30 ? "LOW RISK" :
-      riskScore < 60 ? "MEDIUM RISK" :
-      "HIGH RISK",
+      riskScore < 30 ? t("Basso rischio","Low risk") :
+      riskScore < 60 ? t("Rischio medio","Medium risk") :
+      t("Alto rischio","High risk"),
       20,
       55
     );
@@ -890,37 +892,40 @@ async function generatePDF(){
     // ================= PAGE 5 =================
     doc.addPage();
 
-    doc.setFontSize(16);
+    doc.setFontSize(15);
     doc.setTextColor(...dark);
-    doc.text("Market Comparison",20,20);
+    doc.text(t("Confronto mercato","Market comparison"),20,20);
 
     const marketROI = 8.4;
     const diff = roi - marketROI;
 
-    doc.setFontSize(12);
-    doc.text(`Your ROI: ${roi.toFixed(1)}%`,20,40);
-    doc.text(`Market ROI: ${marketROI}%`,20,50);
+    doc.setFontSize(11);
+    doc.text(`${t("ROI progetto","Project ROI")}: ${roi.toFixed(1)}%`,20,40);
+    doc.text(`${t("ROI medio mercato","Market ROI")}: ${marketROI}%`,20,50);
 
     doc.setTextColor(...(diff > 0 ? green : red));
-    doc.text(`${diff > 0 ? "+" : ""}${diff.toFixed(1)}% vs market`,20,70);
+    doc.text(`${diff > 0 ? "+" : ""}${diff.toFixed(1)}%`,20,70);
 
-    doc.setTextColor(100,100,100);
-    doc.text("Outperformance vs benchmark",20,85);
+    doc.setTextColor(120,120,120);
+    doc.text(t("Confronto rispetto benchmark","Outperformance vs benchmark"),20,85);
 
     addFooter();
 
-    // ================= FINAL =================
+    // ================= PAGE 6 =================
     doc.addPage();
 
     doc.setFontSize(14);
     doc.setTextColor(...dark);
-    doc.text("Disclaimer",20,20);
+    doc.text(t("Disclaimer","Disclaimer"),20,20);
 
-    doc.setFontSize(10);
-    doc.setTextColor(100,100,100);
+    doc.setFontSize(9);
+    doc.setTextColor(120,120,120);
 
     doc.text(
-      "This report is a simulation and not financial advice. Investment decisions must be validated independently.",
+      t(
+        "Il presente documento è una simulazione basata su dati stimati. Non costituisce consulenza finanziaria. Ogni decisione di investimento deve essere verificata autonomamente.",
+        "This document is a simulation based on estimated data. It does not constitute financial advice. Investment decisions must be independently validated."
+      ),
       20,
       40,
       {maxWidth:170}
