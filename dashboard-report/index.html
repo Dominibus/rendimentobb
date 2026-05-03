@@ -734,14 +734,16 @@ const fallback =
     const red = [220,38,38];
 
     // ================= CLIENT =================
-    const clientName =
-  window.RB_USER?.name ||
-  window.RB_USER?.displayName ||
-  window.RB_USER?.fullName ||
-  window.RB_USER?.email ||
-  window.firebaseUser?.displayName ||
-  window.firebaseUser?.email ||
-  "Private Client";
+    const profile = window.userProfile || {};
+
+const clientName =
+  (profile.name && profile.surname)
+    ? profile.name + " " + profile.surname
+    : profile.name
+    ? profile.name
+    : profile.email
+    ? profile.email
+    : "Private Client";
 
     // ================= HEADER =================
     doc.setFillColor(...dark);
