@@ -430,7 +430,24 @@ try{
 if(mode==="login"){
 await signInWithEmailAndPassword(auth,email,password);
 }else{
-await createUserWithEmailAndPassword(auth,email,password);
+const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+const user = userCredential.user;
+
+// 🔥 PRENDI NOME
+const name = document.getElementById("name")?.value || "";
+
+// 🔥 SALVA SU FIRESTORE
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const db = getFirestore(app);
+
+await setDoc(doc(db, "users", user.uid), {
+  email: email,
+  name: name,
+  plan: "free",
+  role: "user",
+  createdAt: new Date()
+});
 }
 
 // 🔥 REDIRECT INTELLIGENTE SaaS
