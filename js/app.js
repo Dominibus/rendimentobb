@@ -2647,7 +2647,7 @@ if(locationInput && helper){
       window.currentCity = mapped;
 
       // 🔥 salva (coerenza UX)
-      localStorage.setItem("selected_city", mapped);
+      sessionStorage.setItem("tool_city", mapped);
 
       // 🔥 aggiorna background live (effetto premium)
       if(typeof applyCityBackground === "function"){
@@ -2749,7 +2749,7 @@ if(customLocation && customLocation.trim() !== "" && window.__CITY_FROM_INPUT__ 
   else if(!window.__CITY_LOCKED__ && !window.__CITY_MANUAL__){
 
     window.currentCity = mappedCity;
-    localStorage.setItem("selected_city", mappedCity);
+    sessionStorage.setItem("tool_city", mappedCity);
 
     window.__CITY_FROM_INPUT__ = true;
 
@@ -3856,7 +3856,7 @@ if(citySelectorEl){
     window.__CITY_MANUAL__ = true;
     window.__CITY_FROM_INPUT__ = false;
 
-    localStorage.setItem("selected_city", city);
+    sessionStorage.setItem("tool_city", city);
     console.log("🏙 CURRENT CITY:", window.currentCity);
 
     // 🔥 SBLOCCA PRIMA
@@ -3906,7 +3906,11 @@ function getCityFromPath(){
 
 const params = new URLSearchParams(window.location.search);
 const cityFromQuery = params.get("city");
-const cityFromStorage = localStorage.getItem("selected_city");
+const isToolPage = window.location.pathname.includes("/tool");
+
+const cityFromStorage = isToolPage
+  ? sessionStorage.getItem("tool_city")
+  : localStorage.getItem("selected_city");
 
 // ================= PRIORITÀ =================
 
@@ -3918,6 +3922,7 @@ if(!selectedCity){
   selectedCity =
     cityFromQuery ||
     cityFromStorage ||
+    (isToolPage ? sessionStorage.getItem("tool_city") : null) ||
     null;
 }
 
