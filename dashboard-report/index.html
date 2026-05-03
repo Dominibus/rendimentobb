@@ -834,7 +834,8 @@ async function generatePDF(){
       dscr > 1.2 ? "REVIEW" :
       "REJECTED";
 
-    doc.setTextColor(dscr > 1.2 ? ...green : ...red);
+    const decisionColor = dscr > 1.2 ? green : red;
+    doc.setTextColor(...decisionColor);
     doc.text(decision,20,75);
 
     addFooter();
@@ -867,7 +868,8 @@ async function generatePDF(){
     doc.text(`${t("ROI tuo","Your ROI")}: ${roi.toFixed(1)}%`,20,40);
     doc.text(`${t("ROI mercato","Market ROI")}: ${marketROI}%`,20,50);
 
-    doc.setTextColor(diff > 0 ? ...green : ...red);
+    const diffColor = diff > 0 ? green : red;
+    doc.setTextColor(...diffColor);
     doc.text(`${diff > 0 ? "+" : ""}${diff.toFixed(1)}% vs market`,20,70);
 
     addFooter();
