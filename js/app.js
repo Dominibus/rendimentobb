@@ -3875,8 +3875,8 @@ if(citySelectorEl){
 
 // ================= CITY ROUTING FIX =================
 
-// 🔒 BLOCCO ANTI-OVERRIDE
-window.__CITY_LOCKED__ = false;
+// 🔥 LOCK solo per ROI pages
+window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 1. prendi path (/roma, /milano ecc)
 function getCityFromPath(){
@@ -3950,9 +3950,13 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 
 // ================= SAVE =================
 
-// 🔥 NON sovrascrivere se utente ha già scelto
-if(!window.__CITY_MANUAL__){
+// 🔥 TOOL deve SEMPRE aggiornare città
+if(window.location.pathname.includes("/tool")){
   window.currentCity = selectedCity;
+}else{
+  if(!window.__CITY_MANUAL__){
+    window.currentCity = selectedCity;
+  }
 } else {
   console.log("⛔ SKIP ROUTING OVERRIDE → manual city attiva");
 }
@@ -3960,7 +3964,7 @@ if(!window.__CITY_MANUAL__){
 window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 🔥 APPLY SUBITO (UNA SOLA VOLTA)
-applyCityBackground(window.currentCity || selectedCity);
+applyCityBackground(selectedCity);
 
 
 // ================= UI SYNC =================
@@ -3978,7 +3982,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🔥 APPLY UNA SOLA VOLTA (NO SPAM)
-  applyCityBackground(window.currentCity || selectedCity);
+  applyCityBackground(selectedCity);
 
   console.log("🔥 Città attiva finale:", selectedCity);
 
