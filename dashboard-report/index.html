@@ -917,6 +917,8 @@ function loadSimulations(){
 
   console.log("SIM LIST:", list);
 }
+<script>
+
 // ================= INIT =================
 function init(){
 
@@ -942,6 +944,13 @@ function init(){
     applyTranslations();
   }
 }
+
+// ✅ EVENTO AVVIO (FONDAMENTALE)
+document.addEventListener("rb_auth_ready", ()=>{
+  setTimeout(init, 50);
+});
+
+</script>
 
 
 <!-- 👇 AGGIUNGI QUESTO -->
