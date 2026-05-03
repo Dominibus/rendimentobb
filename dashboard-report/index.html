@@ -667,12 +667,11 @@ function renderAdvanced(){
 
 }
 
-// ================= PDF – BANK LEVEL FINAL =================
+// ================= PDF – BANK LEVEL FINAL (BILINGUE PRO) =================
 async function generatePDF(){
 
   try{
     const access = window.getUserAccess?.() || {};
-    console.log("PDF ACCESS:", access);
     if(!access.isPro && !access.isAdmin){
       showUpgradeModal?.();
       return;
@@ -684,71 +683,61 @@ async function generatePDF(){
     const lang = window.currentLang || "it";
     const t = (it,en)=> lang==="en"?en:it;
 
-    // ================= SAFE =================
     const safe = v => {
       const n = Number(v);
       return isFinite(n) ? n : 0;
     };
 
-    // ================= DATA ENGINE (REAL FIX) =================
-    
     const dashboardList = window.dashboardSimulations || [];
-
     const selectedValue = document.getElementById("simulationSelector")?.value;
 
-const selectedSimulation =
-  selectedValue !== ""
-    ? dashboardList[Number(selectedValue)]
-    : null;
+    const selectedSimulation =
+      selectedValue !== ""
+        ? dashboardList[Number(selectedValue)]
+        : null;
 
-const fallback =
-  selectedSimulation ||
-  window.bestInvestmentData ||
-  dashboardList.sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
-  {};
+    const fallback =
+      selectedSimulation ||
+      window.bestInvestmentData ||
+      dashboardList.sort((a,b)=> (b?.roi||0)-(a?.roi||0))[0] ||
+      {};
 
-    const rawData = {
-  price: fallback.price || 0,
-  roi: fallback.roi || 0,
-  equity: fallback.equity || 0,
-  risk: fallback.risk || 0,
-  city: fallback.city || "—",
-  revenue:
-    fallback.revenue ||
-    (fallback.price * fallback.roi / 100) ||
-    0
-};
+    const roi = safe(fallback.roi);
+    const price = safe(fallback.price);
+    const equity = safe(fallback.equity);
+    const risk = safe(fallback.risk);
+    const city = fallback.city || "—";
 
-    // ================= NORMALIZZAZIONE =================
-    const roi = safe(rawData.roi);
-    const price = safe(rawData.price);
-    const equity = safe(rawData.equity);
-    const risk = safe(rawData.risk);
-    const revenue = safe(rawData.revenue);
-    const city = rawData.city || "—";
-
+    const revenue = fallback.revenue || (price * roi / 100);
     const annualProfit = safe(price * (roi/100));
     const monthlyProfit = safe(annualProfit / 12);
     const loan = safe(price - equity);
-    const breakEven = annualProfit > 0 ? safe(equity / annualProfit) : 0;
+    const breakEven = annualProfit > 0 ? equity / annualProfit : 0;
 
-    const eur = v => "EUR " + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
+    const eur = v => "€ " + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
 
     const green = [16,185,129];
     const dark = [15,23,42];
     const red = [220,38,38];
 
-    // ================= CLIENT =================
     const profile = window.userProfile || {};
+    const clientName =
+      (profile.name && profile.surname)
+        ? profile.name + " " + profile.surname
+        : profile.name || profile.email || "Private Client";
 
-const clientName =
-  (profile.name && profile.surname)
-    ? profile.name + " " + profile.surname
-    : profile.name
-    ? profile.name
-    : profile.email
-    ? profile.email
-    : "Private Client";
+    const addFooter = ()=>{
+      doc.setFontSize(9);
+      doc.setTextColor(150,150,150);
+      doc.text(
+        t(
+          "RendimentoBB – Report riservato",
+          "RendimentoBB – Confidential Report"
+        ),
+        20,
+        285
+      );
+    };
 
     // ================= HEADER =================
     doc.setFillColor(...dark);
@@ -759,42 +748,49 @@ const clientName =
     doc.text("RendimentoBB",20,18);
 
     doc.setFontSize(9);
-    doc.text("Investment Intelligence Report",20,25);
+    doc.text(
+      t("Report investimento avanzato","Advanced investment report"),
+      20,
+      25
+    );
 
-    // ================= PAGE 1 =================
+    // ================= PAGE 1 — EXECUTIVE =================
     let y = 45;
 
     doc.setTextColor(...dark);
-    doc.setFontSize(18);
-    doc.text(t("Sintesi investimento","Investment Summary"),20,y);
+    doc.setFontSize(20);
+    doc.text(t("Executive Summary","Executive Summary"),20,y);
 
-    y += 12;
+    doc.setFontSize(40);
+    doc.setTextColor(...green);
+    doc.text(roi.toFixed(1)+"%",20,y+20);
 
+    doc.setTextColor(...dark);
     doc.setFontSize(11);
-    doc.text(`${t("Cliente","Client")}: ${clientName}`,20,y);
-    doc.text(`${t("Città","City")}: ${city}`,20,y+8);
 
-    y += 20;
+    doc.text(`${t("Cliente","Client")}: ${clientName}`,120,y);
+    doc.text(`${t("Città","City")}: ${city}`,120,y+8);
 
-    doc.text(`ROI: ${roi.toFixed(1)}%`,20,y);
-    doc.text(`${t("Prezzo","Price")}: ${eur(price)}`,20,y+10);
-    doc.text(`Equity: ${eur(equity)}`,20,y+20);
-    doc.text(`${t("Profitto annuo","Annual profit")}: ${eur(annualProfit)}`,20,y+30);
+    doc.text(`${t("Prezzo","Price")}: ${eur(price)}`,20,y+50);
+    doc.text(`Equity: ${eur(equity)}`,20,y+60);
+    doc.text(`${t("Profitto","Profit")}: ${eur(annualProfit)}`,20,y+70);
 
-    // VERDICT
     let verdict =
       roi > 12 ? "AAA INVESTMENT" :
       roi > 8 ? "STRONG INVESTMENT" :
-      roi > 5 ? "OPTIMIZE" :
-      "HIGH RISK";
+      roi > 5 ? t("DA OTTIMIZZARE","OPTIMIZE") :
+      t("ALTO RISCHIO","HIGH RISK");
 
     doc.setFillColor(...green);
-    doc.roundedRect(20,y+40,170,18,5,5,"F");
+    doc.roundedRect(20,y+85,170,20,6,6,"F");
 
     doc.setTextColor(255,255,255);
-    doc.text(verdict,25,y+52);
+    doc.setFontSize(14);
+    doc.text(verdict,25,y+98);
 
-    // ================= PAGE 2 =================
+    addFooter();
+
+    // ================= PAGE 2 — PERFORMANCE =================
     doc.addPage();
 
     doc.setTextColor(...dark);
@@ -807,18 +803,18 @@ const clientName =
         const imgData = chartCanvas.toDataURL("image/png");
         doc.addImage(imgData,"PNG",20,30,170,70);
       }
-    }catch(e){
-      console.warn("Chart skipped");
-    }
+    }catch(e){}
 
-    let score = Math.min(100, Math.max(0, roi*5 - risk));
+    const score = Math.min(100, Math.max(0, roi*5 - risk));
 
     doc.setFontSize(12);
     doc.text(`Investment Score: ${score}/100`,20,115);
     doc.text(`${t("Pareggio","Break-even")}: ${breakEven.toFixed(1)} ${t("anni","years")}`,20,125);
     doc.text(`${t("Mensile","Monthly")}: ${eur(monthlyProfit)}`,20,135);
 
-    // ================= PAGE 3 (BANK DECISION) =================
+    addFooter();
+
+    // ================= PAGE 3 — FINANCING =================
     doc.addPage();
 
     doc.setFontSize(16);
@@ -829,7 +825,7 @@ const clientName =
     const dscr = annualProfit > 0 ? annualProfit/(loan*0.04) : 0;
 
     doc.setFontSize(12);
-    doc.text(`${t("Importo mutuo","Loan amount")}: ${eur(loan)}`,20,40);
+    doc.text(`${t("Mutuo","Loan")}: ${eur(loan)}`,20,40);
     doc.text(`LTV: ${ltv.toFixed(1)}%`,20,50);
     doc.text(`DSCR: ${dscr.toFixed(2)}`,20,60);
 
@@ -838,45 +834,45 @@ const clientName =
       dscr > 1.2 ? "REVIEW" :
       "REJECTED";
 
-    const decisionColor =
-      dscr > 1.2 ? green : red;
-
-    doc.setTextColor(...decisionColor);
+    doc.setTextColor(dscr > 1.2 ? ...green : ...red);
     doc.text(decision,20,75);
 
-    // ================= PAGE 4 (SCENARI € REALI) =================
+    addFooter();
+
+    // ================= PAGE 4 — SCENARI =================
     doc.addPage();
 
     doc.setTextColor(...dark);
     doc.setFontSize(16);
     doc.text(t("Scenari investimento","Investment scenarios"),20,20);
 
-    const lowRev = revenue * 0.8;
-    const baseRev = revenue;
-    const highRev = revenue * 1.2;
-
     doc.setFontSize(12);
-    doc.text(`LOW: ${eur(lowRev)}`,20,40);
-    doc.text(`BASE: ${eur(baseRev)}`,20,50);
-    doc.text(`HIGH: ${eur(highRev)}`,20,60);
+    doc.text(`LOW: ${eur(revenue * 0.8)}`,20,40);
+    doc.text(`BASE: ${eur(revenue)}`,20,50);
+    doc.text(`HIGH: ${eur(revenue * 1.2)}`,20,60);
 
-    // ================= PAGE 5 =================
+    addFooter();
+
+    // ================= PAGE 5 — MARKET =================
     doc.addPage();
 
     doc.setFontSize(16);
     doc.setTextColor(...dark);
-    doc.text("Cashflow",20,20);
+    doc.text(t("Confronto mercato","Market comparison"),20,20);
+
+    const marketROI = 8.4;
+    const diff = roi - marketROI;
 
     doc.setFontSize(12);
-    doc.text(`${t("Ricavi","Revenue")}: ${eur(revenue)}`,20,40);
-    doc.text(`${t("Profitto","Profit")}: ${eur(annualProfit)}`,20,50);
-    doc.text(`${t("Mensile","Monthly")}: ${eur(monthlyProfit)}`,20,60);
+    doc.text(`${t("ROI tuo","Your ROI")}: ${roi.toFixed(1)}%`,20,40);
+    doc.text(`${t("ROI mercato","Market ROI")}: ${marketROI}%`,20,50);
 
-    // ================= FOOTER =================
-    doc.setFontSize(9);
-    doc.setTextColor(150,150,150);
-    doc.text("RendimentoBB - Confidential Investment Report",20,285);
+    doc.setTextColor(diff > 0 ? ...green : ...red);
+    doc.text(`${diff > 0 ? "+" : ""}${diff.toFixed(1)}% vs market`,20,70);
 
+    addFooter();
+
+    // ================= SAVE =================
     doc.save(`RendimentoBB_${roi.toFixed(0)}ROI.pdf`);
 
   }catch(err){
