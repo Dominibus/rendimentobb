@@ -671,6 +671,7 @@ function renderAdvanced(){
 async function generatePDF(){
 
   try{
+
     const access = window.getUserAccess?.() || {};
     if(!access.isPro && !access.isAdmin){
       showUpgradeModal?.();
@@ -853,7 +854,7 @@ async function generatePDF(){
       dscr > 1.2 ? "REVIEW" :
       "REJECTED";
 
-    doc.setTextColor(dscr > 1.2 ? ...green : ...red);
+    doc.setTextColor(...(dscr > 1.2 ? green : red));
     doc.text(decision,20,100);
 
     addFooter();
@@ -870,11 +871,11 @@ async function generatePDF(){
     doc.setFontSize(12);
     doc.text(`Risk Score: ${riskScore}/100`,20,40);
 
-    doc.setTextColor(
-      riskScore < 30 ? ...green :
-      riskScore < 60 ? ...amber :
-      ...red
-    );
+    doc.setTextColor(...(
+      riskScore < 30 ? green :
+      riskScore < 60 ? amber :
+      red
+    ));
 
     doc.text(
       riskScore < 30 ? "LOW RISK" :
@@ -900,7 +901,7 @@ async function generatePDF(){
     doc.text(`Your ROI: ${roi.toFixed(1)}%`,20,40);
     doc.text(`Market ROI: ${marketROI}%`,20,50);
 
-    doc.setTextColor(diff > 0 ? ...green : ...red);
+    doc.setTextColor(...(diff > 0 ? green : red));
     doc.text(`${diff > 0 ? "+" : ""}${diff.toFixed(1)}% vs market`,20,70);
 
     doc.setTextColor(100,100,100);
@@ -908,7 +909,7 @@ async function generatePDF(){
 
     addFooter();
 
-    // ================= PAGE FINAL =================
+    // ================= FINAL =================
     doc.addPage();
 
     doc.setFontSize(14);
@@ -935,7 +936,6 @@ async function generatePDF(){
   }
 
 }
-
 // ================= MODAL =================
 function showUpgradeModal(){
   const modal = document.getElementById("upgradeModal");
