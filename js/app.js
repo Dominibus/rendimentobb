@@ -2493,7 +2493,7 @@ if(mortgageBox && mortgageBtn){
 
 function mapLocationToCity(input){
 
-  if(!input) return "roma";
+  if(!input || input.trim() === "") return null;
 
   const val = input.toLowerCase().trim();
 
@@ -2716,33 +2716,34 @@ window.calculate = async function(force = false){
     const commission  = getValue("commission") || 15;
     const tax         = getValue("tax") || 21;
 
-    // ================= LOCATION =================
-    const customLocation = document.getElementById("custom-location")?.value;
+// ================= LOCATION =================
+const customLocation = document.getElementById("custom-location")?.value;
 
-    if(customLocation?.trim() && window.__CITY_FROM_INPUT__ !== false){
+if(customLocation && customLocation.trim() !== "" && window.__CITY_FROM_INPUT__ !== false){
 
-  // 🔥 NON sovrascrivere se già selezionata manualmente
-  if(!window.currentCity || window.__CITY_FROM_INPUT__){
+  const mappedCity = mapLocationToCity(customLocation);
 
-    const mappedCity = mapLocationToCity(customLocation);
+  // 🔴 se NON trova città → NON fare nulla
+  if(!mappedCity){
+    console.log("⛔ no mapping → skip city override");
+  }
 
-    if(!window.__CITY_LOCKED__ && mappedCity){
+  // 🟢 se trova città e non è lockata
+  else if(!window.__CITY_LOCKED__){
 
-      window.currentCity = mappedCity;
-      localStorage.setItem("selected_city", mappedCity);
+    window.currentCity = mappedCity;
+    localStorage.setItem("selected_city", mappedCity);
 
-      window.__CITY_FROM_INPUT__ = true;
+    window.__CITY_FROM_INPUT__ = true;
 
-      if(typeof applyCityBackground === "function"){
-        applyCityBackground(mappedCity);
-      }
-
-      console.log("🏙 CITY FROM INPUT:", mappedCity);
-
+    if(typeof applyCityBackground === "function"){
+      applyCityBackground(mappedCity);
     }
 
+    console.log("🏙 CITY FROM INPUT:", mappedCity);
+
   } else {
-    console.log("⛔ CITY override bloccato (già selezionata)");
+    console.log("⛔ CITY LOCKED → skip override");
   }
 
 }
@@ -3919,11 +3920,7 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 // ================= SAVE =================
 
 window.currentCity = selectedCity;
-Object.defineProperty(window, "currentCity", {
-  writable: true,
-  configurable: true,
-  value: selectedCity
-});
+
 window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 🔥 FIX BACKGROUND IMMEDIATO
