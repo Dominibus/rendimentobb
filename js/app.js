@@ -3953,11 +3953,11 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 // 🔥 TOOL deve SEMPRE aggiornare città
 if(window.location.pathname.includes("/tool")){
   window.currentCity = selectedCity;
-}else{
-  if(!window.__CITY_MANUAL__){
-    window.currentCity = selectedCity;
-  }
-} else {
+}
+else if(!window.__CITY_MANUAL__){
+  window.currentCity = selectedCity;
+}
+else{
   console.log("⛔ SKIP ROUTING OVERRIDE → manual city attiva");
 }
 
