@@ -1125,15 +1125,19 @@ cta.onclick = ()=>{
   modal.appendChild(box);
   document.body.appendChild(modal);
 
-  // ================= CLICK OUTSIDE =================
-  modal.addEventListener("click",(e)=>{
-    if(e.target === modal){
-      modal.remove();
-      window.__upgradeShown = false;
-    }
-  });
+// ================= CLICK OUTSIDE =================
+modal.addEventListener("click",(e)=>{
+  if(e.target === modal){
+    modal.remove();
+    window.__upgradeShown = false;
+  }
+});
 
 };
+
+// =====================================
+// 🎯 APPLY CITY BACKGROUND (FIX DEFINITIVO)
+// =====================================
 window.applyCityBackground = function(city){
 
   const hero =
@@ -1142,9 +1146,6 @@ window.applyCityBackground = function(city){
     document.querySelector(".hero-roi");
 
   if(!hero) return;
-
-  // 💣 FIX CRITICO
-  hero.style.background = "none";
 
   const map = {
     roma:"rome",
@@ -1156,23 +1157,27 @@ window.applyCityBackground = function(city){
   const cityClass = map[city] || "rome";
 
   const bgMap = {
-  rome: "/img/rome-bg.jpg",
-  naples: "/img/naples-bg.jpg",
-  milan: "/img/milan-bg.jpg",
-  florence: "/img/florence-bg.jpg"
-};
+    rome: "/img/rome-bg.jpg",
+    naples: "/img/naples-bg.jpg",
+    milan: "/img/milan-bg.jpg",
+    florence: "/img/florence-bg.jpg"
+  };
 
-// 💣 FIX REALE
-hero.style.background = `
-  linear-gradient(rgba(15,23,42,0.30), rgba(15,23,42,0.50)),
-  url(${bgMap[cityClass]})
-`;
+  // 🔥 FIX VERO: NON usare background = none
+  hero.style.backgroundImage = `
+    linear-gradient(rgba(15,23,42,0.30), rgba(15,23,42,0.50)),
+    url(${bgMap[cityClass]})
+  `;
 
-hero.style.backgroundSize = "cover";
-hero.style.backgroundPosition = "center";
+  hero.style.backgroundSize = "cover";
+  hero.style.backgroundPosition = "center";
+  hero.style.backgroundRepeat = "no-repeat";
 
+  // sync classi
   hero.classList.remove("rome","naples","milan","florence");
   hero.classList.add(cityClass);
+
+  console.log("🎯 BG aggiornato:", cityClass);
 };
 
 
