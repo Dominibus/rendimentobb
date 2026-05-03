@@ -541,6 +541,12 @@ onAuthStateChanged(auth, async (user) => {
     const freshSnap = await getDoc(userRef);
     const userData = freshSnap.data();
 
+    window.userProfile = {
+  name: userData?.name || "",
+  surname: userData?.surname || "",
+  email: userData?.email || window.currentUser?.email || ""
+};
+
     window.isAdmin = () => userData?.role === "admin";
 
     window.getUserData = () => ({
