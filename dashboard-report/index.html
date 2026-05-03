@@ -858,6 +858,9 @@ const fallback =
   }
 
 }
+<script>
+
+// ================= MODAL =================
 function showUpgradeModal(){
   const modal = document.getElementById("upgradeModal");
   if(modal){
@@ -867,7 +870,9 @@ function showUpgradeModal(){
 
 function goToPricing(){
   window.location.href = "/#pricing";
-}  
+}
+
+// ================= STORAGE =================
 function loadSimulations(){
 
   const raw = localStorage.getItem("rb_simulations");
@@ -884,7 +889,9 @@ function loadSimulations(){
   }
 
 }
- function populateSimulations(){
+
+// ================= SELECT =================
+function populateSimulations(){
 
   const list = window.dashboardSimulations || [];
   const select = document.getElementById("simulationSelector");
@@ -900,7 +907,6 @@ function loadSimulations(){
   list.forEach((sim, index)=>{
 
     const opt = document.createElement("option");
-
     opt.value = index.toString();
 
     opt.innerText =
@@ -910,14 +916,12 @@ function loadSimulations(){
 
   });
 
-  // ✅ SOLO UNA VOLTA, DOPO il loop
   if(list.length){
     select.value = "0";
   }
 
   console.log("SIM LIST:", list);
 }
-<script>
 
 // ================= INIT =================
 function init(){
@@ -929,13 +933,9 @@ function init(){
   renderData();
   renderVerdict();
 
-  // 👉 PRIMA dati
   renderChart();
-
-  // 👉 POI lock
   applyLock();
 
-  // 👉 FINALMENTE MOSTRA
   requestAnimationFrame(()=>{
     document.querySelector(".report")?.classList.add("ready");
   });
@@ -945,20 +945,27 @@ function init(){
   }
 }
 
-// ✅ EVENTO AVVIO (FONDAMENTALE)
+// ================= START =================
 document.addEventListener("rb_auth_ready", ()=>{
   setTimeout(init, 50);
 });
 
+// fallback sicurezza
+window.addEventListener("load", ()=>{
+  if(!window.__reportStarted){
+    window.__reportStarted = true;
+    init();
+  }
+});
+
 </script>
 
-
-<!-- 👇 AGGIUNGI QUESTO -->
+<!-- HEADER / FOOTER -->
 <script type="module" src="/js/header.js"></script>
 <script src="/js/footer.js"></script>
-<!-- GLOBAL FOOTER -->
-<div id="global-footer"></div>  
 
+<div id="global-footer"></div>
+  
 <!-- 🔥 UPGRADE MODAL (SAAS PREMIUM) -->
 <div id="upgradeModal" style="
   position:fixed;
