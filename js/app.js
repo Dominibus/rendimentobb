@@ -1135,9 +1135,6 @@ modal.addEventListener("click",(e)=>{
 
 };
 
-// =====================================
-// 🎯 APPLY CITY BACKGROUND (FIX DEFINITIVO)
-// =====================================
 window.applyCityBackground = function(city){
 
   const hero =
@@ -1146,6 +1143,12 @@ window.applyCityBackground = function(city){
     document.querySelector(".hero-roi");
 
   if(!hero) return;
+
+  // 🔒 ANTI OVERRIDE (FIX DEFINITIVO)
+  if(hero.dataset.bgLocked === "true"){
+    console.log("⛔ BG LOCKED → skip", city);
+    return;
+  }
 
   const map = {
     roma:"rome",
@@ -1163,7 +1166,6 @@ window.applyCityBackground = function(city){
     florence: "/img/florence-bg.jpg"
   };
 
-  // 🔥 FIX VERO: NON usare background = none
   hero.style.backgroundImage = `
     linear-gradient(rgba(15,23,42,0.30), rgba(15,23,42,0.50)),
     url(${bgMap[cityClass]})
@@ -1173,11 +1175,13 @@ window.applyCityBackground = function(city){
   hero.style.backgroundPosition = "center";
   hero.style.backgroundRepeat = "no-repeat";
 
-  // sync classi
   hero.classList.remove("rome","naples","milan","florence");
   hero.classList.add(cityClass);
 
-  console.log("🎯 BG aggiornato:", cityClass);
+  // 🔥 BLOCCO DOPO PRIMA APPLICAZIONE
+  hero.dataset.bgLocked = "true";
+
+  console.log("🎯 BG SET (LOCKED):", cityClass);
 };
 
 
@@ -3841,18 +3845,23 @@ if(citySelectorEl){
     window.currentCity = city;
     selectedCity = city;
 
-    // 🔥 QUESTO È IL FIX
     window.__CITY_FROM_INPUT__ = false;
 
     localStorage.setItem("selected_city", city);
-    console.log("🏙 CURRENT CITY:", window.currentCity);  
+    console.log("🏙 CURRENT CITY:", window.currentCity);
 
+    // 🔥 SBLOCCA PRIMA
+    const hero =
+      document.querySelector(".tool-hero") ||
+      document.querySelector(".hero-bg") ||
+      document.querySelector(".hero-roi");
+
+    if(hero){
+      hero.dataset.bgLocked = "false";
+    }
+
+    // 🔥 POI APPLICA
     applyCityBackground(city);
-
-    // 🔥 FIX HARD (ANTI OVERRIDE BUG)
-    setTimeout(()=>{
-      applyCityBackground(city);
-    },100);
 
   });
 
