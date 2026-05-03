@@ -631,8 +631,11 @@ function renderAdvanced(){
   box.className = "verdict";
 
   let score = Math.min(100, Math.max(0, roi*5 - risk));
+
   const annualProfit = price * (roi/100);
-  const breakEven = equity / annualProfit;
+
+  // 🔥 FIX divisione sicura
+  const breakEven = annualProfit > 0 ? (equity / annualProfit) : 0;
 
   box.innerHTML = `
     <h3>📊 Investment Score</h3>
@@ -643,7 +646,12 @@ function renderAdvanced(){
     </div>
   `;
 
-  document.querySelector(".report").appendChild(box);
+  // 🔥 FIX sicurezza DOM
+  const reportEl = document.querySelector(".report");
+  if(reportEl){
+    reportEl.appendChild(box);
+  }
+
 }
 
 // ================= PDF – BANK LEVEL FINAL =================
@@ -858,7 +866,6 @@ const fallback =
   }
 
 }
-<script>
 
 // ================= MODAL =================
 function showUpgradeModal(){
@@ -926,6 +933,7 @@ function populateSimulations(){
 // ================= INIT =================
 function init(){
 
+  window.__reportStarted = true;
   loadSimulations();
 
   checkUserPlan();
