@@ -3834,6 +3834,7 @@ if(citySelectorEl){
     const city = citySelectorEl.value;
 
     window.currentCity = city;
+    selectedCity = city;
 
     // 🔥 QUESTO È IL FIX
     window.__CITY_FROM_INPUT__ = false;
@@ -3929,7 +3930,7 @@ window.currentCity = selectedCity;
 window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 🔥 FIX BACKGROUND IMMEDIATO
-applyCityBackground(selectedCity);
+applyCityBackground(window.currentCity || selectedCity);
 
 // ================= UI SYNC =================
 
@@ -3951,12 +3952,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔥 TOOL / MARKET (NON TOCCARE)
   if(window.applyCityBackground){
 
-  applyCityBackground(selectedCity);
+  applyCityBackground(window.currentCity || selectedCity);
 
   // 🔒 solo ROI → anti override
   if(window.__CITY_LOCKED__){
     setTimeout(()=>{
-      applyCityBackground(selectedCity);
+      applyCityBackground(window.currentCity || selectedCity);
       console.log("🔁 Re-apply BG (ROI lock)");
     },200);
   }
