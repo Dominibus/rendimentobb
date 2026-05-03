@@ -186,8 +186,16 @@ window.getUserAccess = function(){
   };
 }
 
-  if(window.RB_USER && window.RB_USER.plan === undefined){
-  console.warn("⚠️ RB_USER senza piano → skip");
+  if(!window.RB_USER || window.RB_USER.plan === undefined){
+  return {
+    isLogged: !!user,
+    isFree: true,
+    isPro: false,
+    isInvestor: false,
+    isAdmin: false,
+    canSeeFullAnalysis: false,
+    isLoading: true
+  };
 }
 
   // 🔥 NORMALIZZAZIONE
@@ -285,11 +293,8 @@ if(access.isFree){
     if(!el) return;
 
     el.innerText = "—";
-    el.style.filter = "blur(6px)";
-    el.style.opacity = "0.4";
-    // 🔥 RESET VISIVO INVESTOR (CRITICO)
-   el.style.filter = "none";
-   el.style.opacity = "1";
+el.style.filter = "blur(6px)";
+el.style.opacity = "0.4";
 
   // rimuove blur ereditati
   el.classList.remove("pro-blur","blur-content");
@@ -753,6 +758,12 @@ function requirePlan(requiredPlan){
 // ================= FUNNEL =================
 
 window.triggerUpgradeFlow = function(context = {}){
+  if(window.__upgradeLoopGuard) return;
+window.__upgradeLoopGuard = true;
+
+setTimeout(()=>{
+  window.__upgradeLoopGuard = false;
+}, 2000);
 
   if(!window.firebaseReady){
     setTimeout(()=> window.triggerUpgradeFlow(context), 300);
@@ -1137,6 +1148,11 @@ modal.addEventListener("click",(e)=>{
 
 window.applyCityBackground = function(city){
 
+  if(window.__BG_LOCK__){
+  console.log("⛔ BG LOCK → skip");
+  return;
+}
+
   const hero =
     document.querySelector(".tool-hero") ||
     document.querySelector(".hero-bg") ||
@@ -1180,6 +1196,7 @@ window.applyCityBackground = function(city){
 
   // 🔥 salva stato (non blocca più)
   hero.dataset.currentBg = cityClass;
+  window.__BG_LOCK__ = true;
 
   console.log("🎯 BG SET:", cityClass);
 };
