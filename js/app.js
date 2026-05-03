@@ -3110,14 +3110,13 @@ if(analyzeBtn){
 
 }
 
-// ================= EXECUTIVE PDF – FINAL BANK GRADE =================
+// ================= EXECUTIVE PDF – FINAL BANK LEVEL FIXED =================
 
 window.generateExecutivePDF = async function(){
 
 const access = window.getUserAccess();
 const tSafe = t;
 
-// 🔒 PAYWALL
 if(access.isInvestor){ openUpgradeModal("pro"); return; }
 if(access.isFree){ openUpgradeModal("investor"); return; }
 
@@ -3159,12 +3158,11 @@ else if(roi >= 6) rating = "BBB";
 // ================= COLORS =================
 const green = [16,185,129];
 const dark = [15,23,42];
-const gray = [100,116,139];
 
-// ================= LOGO =================
+// ================= LOGO FIX (QUELLO GIUSTO) =================
 let logo = null;
 try{
-  const res = await fetch("/img/logo-main.png");
+  const res = await fetch("/img/logo-report.png"); // 🔥 QUESTO è il tuo logo giusto
   const blob = await res.blob();
   const reader = new FileReader();
   logo = await new Promise(r=>{
@@ -3175,60 +3173,47 @@ try{
 
 // ================= HEADER =================
 doc.setFillColor(...dark);
-doc.rect(0,0,210,30,"F");
+doc.rect(0,0,210,32,"F");
 
 if(logo){
-  doc.addImage(logo,"PNG",20,8,30,12);
+  doc.addImage(logo,"PNG",20,6,60,18); // 🔥 grande e visibile
 }
 
 doc.setTextColor(255);
 doc.setFontSize(11);
 doc.text(
 tSafe("Report investimento","Investment Report"),
-60,18
+150,18,
+{align:"right"}
 );
 
 // ================= HERO =================
-let y = 45;
+let y = 50;
 
 doc.setFillColor(...green);
-doc.roundedRect(20,y,170,32,6,6,"F");
+doc.roundedRect(20,y,170,30,6,6,"F");
 
 doc.setTextColor(255);
-doc.setFontSize(24);
-doc.text(pct(roi),25,y+22);
+doc.setFontSize(26);
+doc.text(pct(roi),25,y+20);
 
 doc.setFontSize(10);
 doc.text("ROI",25,y+10);
 
 // RATING
 doc.setFillColor(255,255,255);
-doc.roundedRect(150,y+6,30,20,4,4,"F");
+doc.roundedRect(150,y+6,30,18,4,4,"F");
 
-doc.setTextColor(...dark);
-doc.setFontSize(14);
-doc.text(rating,158,y+20);
-
-y += 45;
-
-// ================= SUMMARY =================
 doc.setTextColor(0);
-doc.setFontSize(11);
+doc.setFontSize(14);
+doc.text(rating,158,y+18);
 
-doc.text(
-roi > 12
-? tSafe("Investimento sopra la media","Above market investment")
-: roi > 6
-? tSafe("Investimento bilanciato","Balanced investment")
-: tSafe("Investimento rischioso","Risky investment"),
-20,y
-);
-
-y += 12;
+y += 40;
 
 // ================= KPI =================
 const row = (label,val)=>{
   doc.setFontSize(10);
+  doc.setTextColor(0);
   doc.text(label,20,y);
   doc.text(val,190,y,{align:"right"});
   y+=8;
@@ -3240,15 +3225,43 @@ row(tSafe("Equity","Equity"), eur(equity));
 row(tSafe("Profitto","Profit"), eur(profit));
 row(tSafe("Mutuo","Loan"), eur(loan));
 
-// ================= CHART =================
-const canvas = document.getElementById("roiChart");
+// ================= ROI CHART (VERO) =================
+const chart = document.getElementById("roiChart");
 
-if(canvas){
-  const img = canvas.toDataURL("image/png");
+if(chart){
+  const img = chart.toDataURL("image/png",1.0);
   doc.addImage(img,"PNG",20,y+10,170,70);
 }
 
 y += 90;
+
+// ================= SCENARIO (BARRA) =================
+const low = revenue * 0.8;
+const base = revenue;
+const high = revenue * 1.2;
+
+const maxVal = high;
+
+doc.setFontSize(11);
+doc.text(tSafe("Scenario ricavi","Revenue scenario"),20,y);
+
+y+=8;
+
+[low,base,high].forEach((v,i)=>{
+  const w = (v/maxVal)*120;
+
+  doc.setFillColor(59,130,246);
+  doc.rect(20,y,w,6,"F");
+
+  doc.setFontSize(9);
+  doc.text(
+    ["Low","Base","High"][i]+" "+eur(v),
+    145,
+    y+5
+  );
+
+  y+=10;
+});
 
 // ================= PAGE 2 – MUTUO =================
 doc.addPage();
@@ -3269,17 +3282,6 @@ row("LTV", ltv.toFixed(1)+"%");
 row(tSafe("Interessi annui","Yearly interest"), eur(interest));
 row(tSafe("Profitto netto","Net profit"), eur(net));
 
-y+=10;
-
-doc.setFontSize(10);
-doc.text(
-tSafe(
-"Finanziamento sostenibile solo con cashflow positivo",
-"Financing sustainable only with positive cashflow"
-),
-20,y,{maxWidth:170}
-);
-
 // ================= PAGE 3 – MARKET =================
 doc.addPage();
 y=30;
@@ -3297,9 +3299,9 @@ row(tSafe("ROI mercato","Market ROI"), pct(marketROI));
 y+=10;
 
 doc.setTextColor(
-roi > marketROI ? green[0] : 200,
-roi > marketROI ? green[1] : 50,
-roi > marketROI ? green[2] : 50
+roi > marketROI ? 16 : 200,
+roi > marketROI ? 185 : 50,
+roi > marketROI ? 129 : 50
 );
 
 doc.text(
@@ -3322,21 +3324,6 @@ y+=12;
 row(tSafe("Ricavi annui","Annual revenue"), eur(revenue));
 row(tSafe("Profitto annuo","Annual profit"), eur(profit));
 row(tSafe("Profitto mensile","Monthly profit"), eur(monthly));
-
-y+=10;
-
-doc.setFillColor(248,250,252);
-doc.roundedRect(20,y,170,26,6,6,"F");
-
-doc.setTextColor(0);
-doc.setFontSize(12);
-
-doc.text(
-profit > 0
-? tSafe("CASHFLOW POSITIVO","POSITIVE CASHFLOW")
-: tSafe("CASHFLOW NEGATIVO","NEGATIVE CASHFLOW"),
-25,y+17
-);
 
 // ================= FOOTER =================
 doc.setDrawColor(220);
