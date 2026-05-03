@@ -666,20 +666,31 @@ async function generatePDF(){
     const t = (it,en)=> lang==="en"?en:it;
 
     // ================= SAFE =================
-    const safe = v => {
-      const n = Number(v);
-      return isFinite(n) ? n : 0;
-    };
+   const safe = v => {
+   const n = Number(v);
+   return isFinite(n) ? n : 0;
+};
 
-    const data = window.lastAnalysisData || window.dashboardData || {};
+// ================= DATA SOURCE FIX (DEFINITIVO) =================
+const params = new URLSearchParams(window.location.search);
 
-    const roi = safe(data.roi);
-    const price = safe(data.price);
-    const equity = safe(data.equity);
-    const risk = safe(data.risk);
-    const revenue = safe(data.revenue);
-    const city = data.city || new URLSearchParams(window.location.search).get("city") || "—";
+const rawData = {
+  price: Number(params.get("price")) || window.bestInvestmentData?.price || 0,
+  roi: Number(params.get("roi")) || window.bestInvestmentData?.roi || 0,
+  equity: Number(params.get("equity")) || window.bestInvestmentData?.equity || 0,
+  risk: Number(params.get("risk")) || window.bestInvestmentData?.risk || 0,
+  city: params.get("city") || window.bestInvestmentData?.city || "—",
+  revenue: window.bestInvestmentData?.revenue || 0
+};
 
+// ================= VARIABILI =================
+const roi = safe(rawData.roi);
+const price = safe(rawData.price);
+const equity = safe(rawData.equity);
+const risk = safe(rawData.risk);
+const revenue = safe(rawData.revenue);
+const city = rawData.city || "—";
+    
     const annualProfit = safe(price * (roi/100));
     const monthlyProfit = safe(annualProfit / 12);
     const loan = safe(price - equity);
@@ -775,8 +786,11 @@ async function generatePDF(){
     doc.text(`LTV: ${ltv.toFixed(1)}%`,20,50);
     doc.text(`DSCR: ${dscr.toFixed(2)}`,20,60);
 
-    const color = dscr > 1.2 ? green : red;
-    doc.setTextColor(color[0],color[1],color[2]);
+    if(dscr > 1.2){
+    doc.setTextColor(green[0],green[1],green[2]);
+    }else{
+    doc.setTextColor(red[0],red[1],red[2]);
+   }
 
     doc.text(
       dscr > 1.2
