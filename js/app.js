@@ -2609,7 +2609,7 @@ if(locationInput && helper){
     }
 
     // ================= MAPPING =================
-    const mapped = mapLocationToCity(val) || "roma";
+    const mapped = mapLocationToCity(val);
 
     // ================= LABEL =================
     const cityLabel = {
@@ -3892,12 +3892,17 @@ const cityFromStorage = localStorage.getItem("selected_city");
 // 🔥 PATH SEMPRE PRIORITARIO
 let selectedCity = getCityFromPath();
 
-// fallback SOLO se non trovato
+// 🔥 NON forzare Roma subito
 if(!selectedCity){
   selectedCity =
     cityFromQuery ||
     cityFromStorage ||
-    "roma";
+    null;
+}
+
+// 🔥 fallback SOLO ALLA FINE (quando serve davvero)
+if(!selectedCity){
+  selectedCity = "roma";
 }
 
 // ================= LOCK HARD (CRITICO) =================
