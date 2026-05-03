@@ -3110,25 +3110,20 @@ if(analyzeBtn){
 
 }
 
-// ================= EXECUTIVE PDF – FINAL BANK + COVER =================
+// ================= EXECUTIVE PDF – FINAL BANK REAL =================
 
 window.generateExecutivePDF = async function(){
 
 const access = window.getUserAccess();
 const isEN = window.currentLang === "en";
-
 const T = (it,en)=> isEN ? en : it;
 
 if(access.isInvestor){ openUpgradeModal("pro"); return; }
 if(access.isFree){ openUpgradeModal("investor"); return; }
-
-if(!access.canSeeFullAnalysis){
-  openUpgradeModal("pro");
-  return;
-}
+if(!access.canSeeFullAnalysis){ openUpgradeModal("pro"); return; }
 
 if(!window.lastAnalysisData){
-  showToast(T("Genera prima l'analisi","Run analysis first"));
+  showToast(T("Genera prima analisi","Run analysis first"));
   return;
 }
 
@@ -3160,6 +3155,7 @@ else if(roi >= 6) rating = "BBB";
 // ================= COLORS =================
 const green = [16,185,129];
 const dark = [15,23,42];
+const gray = [100,116,139];
 
 // ================= LOGO =================
 let logo = null;
@@ -3174,102 +3170,84 @@ try{
 }catch(e){}
 
 // ===================================================
-// 🧠 PAGE 1 – COVER (MCKINSEY STYLE)
+// 🧠 PAGE 1 – COVER (LIGHT PROFESSIONAL)
 // ===================================================
 
-doc.setFillColor(...dark);
+doc.setFillColor(245,247,250);
 doc.rect(0,0,210,297,"F");
 
 if(logo){
-  doc.addImage(logo,"PNG",20,20,60,20);
+  doc.addImage(logo,"PNG",20,30,60,18);
 }
 
-doc.setTextColor(255);
-doc.setFontSize(22);
+doc.setTextColor(...dark);
+doc.setFontSize(20);
 
-doc.text(
-T("Investment Report","Investment Report"),
-20,100
-);
+doc.text(T("Investment Report","Investment Report"),20,90);
 
-doc.setFontSize(14);
+doc.setFontSize(12);
+doc.setTextColor(...gray);
+
 doc.text(
 T("Analisi investimento B&B","B&B Investment Analysis"),
+20,105
+);
+
+doc.text(
+T("Documento riservato","Confidential document"),
 20,115
 );
 
-doc.setFontSize(10);
-doc.text(
-T("Documento riservato – uso bancario","Confidential – banking use"),
-20,130
-);
-
-doc.setFontSize(26);
+// ROI grande
 doc.setTextColor(...green);
-doc.text(pct(roi),20,180);
+doc.setFontSize(28);
+doc.text(pct(roi),20,170);
 
-doc.setFontSize(12);
-doc.setTextColor(200);
-doc.text("ROI",20,190);
+doc.setFontSize(11);
+doc.setTextColor(...gray);
+doc.text("ROI",20,180);
 
 // ===================================================
-// PAGE 2 – EXECUTIVE
+// PAGE 2 – EXECUTIVE + GRAFICO
 // ===================================================
 
 doc.addPage();
 
-doc.setFillColor(...dark);
-doc.rect(0,0,210,30,"F");
-
 if(logo){
-  doc.addImage(logo,"PNG",20,7,45,14);
+  doc.addImage(logo,"PNG",20,10,40,12);
 }
 
-doc.setTextColor(255);
-doc.setFontSize(11);
-doc.text(T("Executive Summary","Executive Summary"),190,18,{align:"right"});
+doc.setTextColor(...dark);
+doc.setFontSize(14);
+doc.text(T("Executive Summary","Executive Summary"),20,30);
 
 let y = 45;
 
-// HERO
+// HERO BOX
 doc.setFillColor(...green);
-doc.roundedRect(20,y,170,28,6,6,"F");
+doc.roundedRect(20,y,170,25,6,6,"F");
 
 doc.setTextColor(255);
-doc.setFontSize(24);
-doc.text(pct(roi),25,y+19);
+doc.setFontSize(20);
+doc.text(pct(roi),25,y+17);
 
 doc.setFontSize(9);
-doc.text("ROI",25,y+10);
+doc.text("ROI",25,y+9);
 
 // RATING
 doc.setFillColor(255,255,255);
-doc.roundedRect(150,y+5,30,16,4,4,"F");
+doc.roundedRect(150,y+4,30,14,4,4,"F");
 
-doc.setTextColor(0);
-doc.setFontSize(13);
-doc.text(rating,158,y+17);
-
-y+=38;
-
-// SUMMARY
 doc.setTextColor(0);
 doc.setFontSize(11);
+doc.text(rating,160,y+14);
 
-doc.text(
-roi > 12
-? T("Investimento sopra benchmark.","Above benchmark investment.")
-: roi > 6
-? T("Investimento bilanciato.","Balanced investment.")
-: T("Investimento rischioso.","Risky investment."),
-20,y,{maxWidth:170}
-);
-
-y+=12;
+y += 32;
 
 // KPI
 const row = (label,val)=>{
   doc.setFontSize(10);
+  doc.setTextColor(...dark);
   doc.text(label,20,y);
   doc.text(val,190,y,{align:"right"});
   y+=7;
@@ -3281,15 +3259,25 @@ row(T("Equity","Equity"), eur(equity));
 row(T("Profitto","Profit"), eur(profit));
 row(T("Mutuo","Loan"), eur(loan));
 
+// ================= CHART FIX =================
+const chart = document.getElementById("roiChart");
+
+if(chart){
+  const img = chart.toDataURL("image/png",1.0);
+  doc.addImage(img,"PNG",20,y+10,170,60);
+}
+
+y += 75;
+
 // ===================================================
-// PAGE 3 – LOAN REQUEST (🔥 BANCA)
+// PAGE 3 – LOAN (BANCA)
 // ===================================================
 
 doc.addPage();
 y = 30;
 
 doc.setFontSize(14);
-doc.text(T("Richiesta finanziamento","Loan request"),20,y);
+doc.text(T("Loan Request","Loan Request"),20,y);
 
 y+=12;
 
@@ -3299,19 +3287,26 @@ const net = profit - interest;
 const ltv = (loan/price)*100;
 const dscr = profit / interest;
 
-row(T("Importo richiesto","Requested loan"), eur(loan));
+row(T("Importo","Loan"), eur(loan));
 row("LTV", ltv.toFixed(1)+"%");
 row("DSCR", dscr.toFixed(2));
 row(T("Cashflow netto","Net cashflow"), eur(net));
 
+// BOX DECISION
 y+=10;
 
+doc.setFillColor(dscr > 1.5 ? 16 : 200, dscr > 1.5 ? 185 : 50, dscr > 1.5 ? 129 : 50);
+
+doc.roundedRect(20,y,170,18,6,6,"F");
+
+doc.setTextColor(255);
 doc.setFontSize(11);
+
 doc.text(
 dscr > 1.5
-? T("Investimento sostenibile per il credito.","Investment sustainable for financing.")
-: T("Rischio elevato per il credito.","High credit risk."),
-20,y,{maxWidth:170}
+? T("Sostenibile per finanziamento","Financing sustainable")
+: T("Rischio elevato credito","High credit risk"),
+25,y+12
 );
 
 // ===================================================
@@ -3322,7 +3317,8 @@ doc.addPage();
 y=30;
 
 doc.setFontSize(14);
-doc.text(T("Confronto mercato","Market comparison"),20,y);
+doc.setTextColor(...dark);
+doc.text(T("Market Comparison","Market Comparison"),20,y);
 
 y+=12;
 
