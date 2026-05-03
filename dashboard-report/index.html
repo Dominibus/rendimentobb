@@ -252,6 +252,9 @@ h1{
 
   color:white;
 
+  transition:none !important;
+  animation:none !important;
+
   border-radius:24px;
   z-index:10;
   text-align:center;
@@ -474,6 +477,10 @@ style="
 
 <!-- CTA -->
 <button class="btn" onclick="generatePDF()"
+data-it="📥 Scarica report PDF professionale"
+data-en="📥 Download professional PDF report">
+📥 Scarica report PDF professionale
+</button>
 
 <!-- OVERLAY -->
 <div id="upgradeOverlay" class="lock-overlay">
@@ -482,7 +489,7 @@ style="
      data-en="Access reserved for investors and professionals">
      Accesso riservato a investitori e professionisti
   </p>
-  <button onclick="startPlanPurchase('pro')"
+  <button onclick="goToPricing()"
     data-it="🚀 Sblocca PRO"
     data-en="🚀 Unlock PRO">
     🚀 Sblocca PRO
@@ -510,15 +517,11 @@ const lang = window.currentLang || "it";
 // ================= USER =================
 function checkUserPlan(){
 
-  const user = window.RB_USER || {};
+  const access = window.getUserAccess?.() || {};
 
-  isPro =
-    user.isAdmin ||
-    user.isPro ||
-    user.plan === "pro" ||
-    user.plan === "pro_yearly";
+  isPro = access.isPro || access.isAdmin;
 
-  console.log("🔐 REPORT ACCESS:", { isPro, user });
+  console.log("🔐 REPORT ACCESS FIX:", access);
 
 }
 
@@ -665,7 +668,7 @@ function renderAdvanced(){
 async function generatePDF(){
 
   try{
-
+    console.log("PDF ACCESS:", access);
     const access = window.getUserAccess?.() || {};
     if(!access.isPro && !access.isAdmin){
       showUpgradeModal?.();
@@ -913,9 +916,9 @@ function goToPricing(){
       `${sim.city || "City"} – ROI ${(sim.roi || 0).toFixed(1)}%`;
 
     select.appendChild(opt);
-
+    console.log("SIM LIST:", list);
   });
-
+  
 }
 // ================= INIT =================
 function init(){
@@ -939,7 +942,9 @@ document.addEventListener("click", (e)=>{
   }
 });  
 
-document.addEventListener("rb_auth_ready", init);
+document.addEventListener("rb_auth_ready", ()=>{
+  setTimeout(init, 50);
+});
 
 </script>
 
