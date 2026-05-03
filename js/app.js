@@ -2661,6 +2661,7 @@ if(locationInput && helper){
     hero.dataset.bgLocked = "false";
   }
 
+  window.__CITY_MANUAL__ = true;
   applyCityBackground(mapped);
 }
 
@@ -2748,7 +2749,7 @@ if(customLocation && customLocation.trim() !== "" && window.__CITY_FROM_INPUT__ 
   }
 
   // 🟢 se trova città e non è lockata
-  else if(!window.__CITY_LOCKED__){
+  else if(!window.__CITY_LOCKED__ && !window.__CITY_MANUAL__){
 
     window.currentCity = mappedCity;
     localStorage.setItem("selected_city", mappedCity);
@@ -3855,6 +3856,7 @@ if(citySelectorEl){
     window.currentCity = city;
     selectedCity = city;
 
+    window.__CITY_MANUAL__ = true;
     window.__CITY_FROM_INPUT__ = false;
 
     localStorage.setItem("selected_city", city);
