@@ -727,10 +727,13 @@ const fallback =
 
     // ================= CLIENT =================
     const clientName =
-      window.RB_USER?.name ||
-      window.RB_USER?.displayName ||
-      window.RB_USER?.email ||
-      "Private Client";
+  window.RB_USER?.name ||
+  window.RB_USER?.displayName ||
+  window.RB_USER?.fullName ||
+  window.RB_USER?.email ||
+  window.firebaseUser?.displayName ||
+  window.firebaseUser?.email ||
+  "Private Client";
 
     // ================= HEADER =================
     doc.setFillColor(...dark);
