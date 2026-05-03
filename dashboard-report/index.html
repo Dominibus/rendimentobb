@@ -677,7 +677,7 @@ async function generatePDF(){
   const loan = price - equity;
   const breakEven = annualProfit > 0 ? equity / annualProfit : 0;
 
-  const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
+  const eur = v => "EUR " + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
 
   const green = [16,185,129];
   const dark = [15,23,42];
@@ -714,10 +714,10 @@ async function generatePDF(){
 
   // VERDICT
   let verdict = roi > 10
-    ? t("INVESTIMENTO ECCELLENTE","EXCELLENT INVESTMENT")
+    ? t("Investimento eccellente","Excellent investment")
     : roi > 6
-    ? t("INVESTIMENTO SOLIDO","STRONG INVESTMENT")
-    : t("ALTO RISCHIO","HIGH RISK");
+    ? t("Investimento solido","Strong investment")
+    : t("Alto rischio","High risk");
 
   doc.setFillColor(...green);
   doc.roundedRect(20,y+40,170,18,5,5,"F");
@@ -733,7 +733,6 @@ async function generatePDF(){
   doc.setFontSize(16);
   doc.text(t("Performance","Performance"),20,20);
 
-  // chart
   const chartCanvas = document.getElementById("roiChart");
   if(chartCanvas){
     const imgData = chartCanvas.toDataURL("image/png");
@@ -762,13 +761,13 @@ async function generatePDF(){
   doc.text("LTV: "+ltv.toFixed(1)+"%",20,50);
   doc.text("DSCR: "+dscr.toFixed(2),20,60);
 
-  if(dscr > 1.2){
-    doc.setTextColor(...green);
-    doc.text("✔ "+t("Sostenibile per finanziamento","Financeable"),20,75);
-  } else {
-    doc.setTextColor(...red);
-    doc.text("⚠ "+t("Rischio elevato","High risk"),20,75);
-  }
+  doc.setTextColor(dscr > 1.2 ? green : red);
+  doc.text(
+    dscr > 1.2
+      ? t("Sostenibile per finanziamento","Financeable")
+      : t("Rischio elevato","High risk"),
+    20,75
+  );
 
   // ================= PAGE 4 =================
   doc.addPage();
@@ -781,13 +780,13 @@ async function generatePDF(){
   doc.text("ROI: "+roi.toFixed(1)+"%",20,40);
   doc.text(t("Media mercato","Market avg")+": 8.4%",20,50);
 
-  if(roi > 8){
-    doc.setTextColor(...green);
-    doc.text("✔ "+t("Sopra la media","Above market"),20,65);
-  } else {
-    doc.setTextColor(...red);
-    doc.text("⚠ "+t("Sotto la media","Below market"),20,65);
-  }
+  doc.setTextColor(roi > 8 ? green : red);
+  doc.text(
+    roi > 8
+      ? t("Sopra la media","Above market")
+      : t("Sotto la media","Below market"),
+    20,65
+  );
 
   // ================= PAGE 5 =================
   doc.addPage();
@@ -804,7 +803,7 @@ async function generatePDF(){
   // ================= FOOTER =================
   doc.setFontSize(9);
   doc.setTextColor(150);
-  doc.text("RendimentoBB • Confidential Investment Report",20,285);
+  doc.text("RendimentoBB - Confidential Investment Report",20,285);
 
   doc.save(`RendimentoBB_${roi.toFixed(0)}ROI.pdf`);
 }
