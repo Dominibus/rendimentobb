@@ -2719,7 +2719,7 @@ window.calculate = async function(force = false){
     // ================= LOCATION =================
     const customLocation = document.getElementById("custom-location")?.value;
 
-    if(customLocation?.trim()){
+    if(customLocation?.trim() && window.__CITY_FROM_INPUT__ !== false){
 
   // 🔥 NON sovrascrivere se già selezionata manualmente
   if(!window.currentCity || window.__CITY_FROM_INPUT__){
@@ -3919,6 +3919,11 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 // ================= SAVE =================
 
 window.currentCity = selectedCity;
+Object.defineProperty(window, "currentCity", {
+  writable: true,
+  configurable: true,
+  value: selectedCity
+});
 window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 🔥 FIX BACKGROUND IMMEDIATO
