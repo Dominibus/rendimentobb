@@ -3951,12 +3951,19 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
 
 // ================= SAVE =================
 
-window.currentCity = selectedCity;
+// 🔥 NON sovrascrivere se utente ha già scelto
+if(!window.__CITY_MANUAL__){
+  window.currentCity = selectedCity;
+} else {
+  console.log("⛔ SKIP ROUTING OVERRIDE → manual city attiva");
+}
 
 window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
 
 // 🔥 FIX BACKGROUND IMMEDIATO
-applyCityBackground(window.currentCity || selectedCity);
+if(!window.__CITY_MANUAL__){
+  applyCityBackground(window.currentCity || selectedCity);
+}
 
 // ================= UI SYNC =================
 
@@ -3978,12 +3985,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔥 TOOL / MARKET (NON TOCCARE)
   if(window.applyCityBackground){
 
+  if(!window.__CITY_MANUAL__){
   applyCityBackground(window.currentCity || selectedCity);
+}
 
   // 🔒 solo ROI → anti override
   if(window.__CITY_LOCKED__){
     setTimeout(()=>{
-      applyCityBackground(window.currentCity || selectedCity);
+      if(!window.__CITY_MANUAL__){
+  applyCityBackground(window.currentCity || selectedCity);
+}
       console.log("🔁 Re-apply BG (ROI lock)");
     },200);
   }
