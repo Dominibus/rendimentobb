@@ -648,7 +648,7 @@ function renderAdvanced(){
   document.querySelector(".report").appendChild(box);
 }
 
-// ================= PDF – ULTRA PRO (BANK / FINTECH LEVEL FINAL) =================
+// ================= PDF – SILICON VALLEY BANK LEVEL =================
 async function generatePDF(){
 
   const access = window.getUserAccess?.() || {};
@@ -659,6 +659,9 @@ async function generatePDF(){
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
+
+  const lang = window.currentLang || "it";
+  const t = (it,en)=> lang==="en"?en:it;
 
   const safe = v => isFinite(v) ? Number(v) : 0;
 
@@ -680,105 +683,162 @@ async function generatePDF(){
 
   const green = [16,185,129];
   const dark = [15,23,42];
+  const red = [220,38,38];
   const gray = [100,116,139];
 
   let y = 20;
 
-  // ================= PAGE 1 =================
+  // ================= HEADER =================
   doc.setFillColor(...dark);
-  doc.rect(0,0,210,30,"F");
+  doc.rect(0,0,210,28,"F");
 
   doc.setTextColor(255);
-  doc.setFontSize(16);
-  doc.text("RendimentoBB",20,18);
+  doc.setFontSize(15);
+  doc.text("RendimentoBB",20,16);
 
-  doc.setFontSize(10);
-  doc.text("Executive Investment Report",20,24);
+  doc.setFontSize(9);
+  doc.text("Investment Intelligence Report",20,22);
 
-  y = 45;
+  // ================= TITLE =================
+  y = 40;
 
   doc.setTextColor(...dark);
-  doc.setFontSize(14);
-  doc.text("Executive Summary",20,y);
+  doc.setFontSize(16);
+  doc.text(t("Executive Summary","Executive Summary"),20,y);
 
+  // ================= KPI BOX =================
   y += 10;
 
-  doc.setFontSize(11);
+  doc.setDrawColor(230);
+  doc.roundedRect(20,y,170,50,6,6);
 
-  doc.text("ROI: "+roi.toFixed(1)+"%",20,y);
-  doc.text("Prezzo: "+eur(price),20,y+8);
-  doc.text("Equity: "+eur(equity),20,y+16);
-  doc.text("Profitto: "+eur(annualProfit),20,y+24);
-  doc.text("Mutuo: "+eur(loan),20,y+32);
+  doc.setFontSize(10);
+
+  doc.text("ROI",25,y+12);
+  doc.text(roi.toFixed(1)+"%",120,y+12);
+
+  doc.text(t("Prezzo","Price"),25,y+22);
+  doc.text(eur(price),120,y+22);
+
+  doc.text("Equity",25,y+32);
+  doc.text(eur(equity),120,y+32);
+
+  doc.text(t("Profitto","Profit"),25,y+42);
+  doc.text(eur(annualProfit),120,y+42);
+
+  y += 65;
+
+  // ================= VERDICT =================
+  let verdict = "";
+  let verdictColor = green;
+
+  if(roi >= 12){
+    verdict = t("INVESTIMENTO TOP","TOP INVESTMENT");
+  } else if(roi >= 8){
+    verdict = t("INVESTIMENTO FORTE","STRONG INVESTMENT");
+  } else if(roi >= 5){
+    verdict = t("DA OTTIMIZZARE","OPTIMIZE");
+  } else {
+    verdict = t("ALTO RISCHIO","HIGH RISK");
+    verdictColor = red;
+  }
+
+  doc.setFillColor(...verdictColor);
+  doc.roundedRect(20,y,170,25,6,6,"F");
+
+  doc.setTextColor(255);
+  doc.setFontSize(14);
+  doc.text(verdict,25,y+16);
+
+  y += 40;
 
   // ================= CHART =================
   const chartCanvas = document.getElementById("roiChart");
   if(chartCanvas){
     const imgData = chartCanvas.toDataURL("image/png");
-    doc.addImage(imgData,"PNG",110,45,80,60);
+    doc.addImage(imgData,"PNG",20,y,170,60);
+    y += 70;
   }
 
   // ================= PAGE 2 =================
   doc.addPage();
 
-  doc.setFontSize(14);
-  doc.text("Richiesta finanziamento",20,20);
+  y = 20;
 
-  doc.setFontSize(11);
+  doc.setTextColor(...dark);
+  doc.setFontSize(15);
+  doc.text(t("Analisi finanziamento","Financing Analysis"),20,y);
+
+  y += 15;
 
   const ltv = price > 0 ? (loan/price)*100 : 0;
   const dscr = annualProfit > 0 ? (annualProfit / (loan*0.04)) : 0;
 
-  doc.text("Importo richiesto: "+eur(loan),20,40);
-  doc.text("LTV: "+ltv.toFixed(1)+"%",20,50);
-  doc.text("DSCR: "+dscr.toFixed(2),20,60);
-  doc.text("Cashflow netto: "+eur(annualProfit - (loan*0.04)),20,70);
+  doc.setFontSize(11);
+
+  doc.text(t("Importo mutuo","Loan amount")+": "+eur(loan),20,y);
+  doc.text("LTV: "+ltv.toFixed(1)+"%",20,y+10);
+  doc.text("DSCR: "+dscr.toFixed(2),20,y+20);
+
+  doc.text(
+    t("Cashflow netto","Net cashflow")+": "+
+    eur(annualProfit - (loan*0.04)),
+    20,y+30
+  );
 
   if(dscr > 1.2){
     doc.setTextColor(...green);
-    doc.text("✔ Sostenibile per finanziamento",20,85);
+    doc.text("✔ "+t("Finanziabile","Financeable"),20,y+45);
   } else {
-    doc.setTextColor(200,50,50);
-    doc.text("⚠ Rischio finanziamento",20,85);
+    doc.setTextColor(...red);
+    doc.text("⚠ "+t("Rischio banca","Bank risk"),20,y+45);
   }
 
   // ================= PAGE 3 =================
   doc.addPage();
 
+  y = 20;
+
   doc.setTextColor(...dark);
-  doc.setFontSize(14);
-  doc.text("Confronto mercato",20,20);
+  doc.setFontSize(15);
+  doc.text(t("Benchmark mercato","Market Benchmark"),20,y);
+
+  y += 15;
 
   doc.setFontSize(11);
-  doc.text("ROI tuo: "+roi.toFixed(1)+"%",20,40);
-  doc.text("ROI mercato: 8.4%",20,50);
+  doc.text("ROI: "+roi.toFixed(1)+"%",20,y);
+  doc.text("Market: 8.4%",20,y+10);
 
   if(roi > 8){
     doc.setTextColor(...green);
-    doc.text("✔ Sopra la media",20,65);
+    doc.text("✔ "+t("Sopra la media","Above market"),20,y+25);
   } else {
-    doc.setTextColor(200,50,50);
-    doc.text("⚠ Sotto la media",20,65);
+    doc.setTextColor(...red);
+    doc.text("⚠ "+t("Sotto la media","Below market"),20,y+25);
   }
 
   // ================= PAGE 4 =================
   doc.addPage();
 
+  y = 20;
+
   doc.setTextColor(...dark);
-  doc.setFontSize(14);
-  doc.text("Cashflow",20,20);
+  doc.setFontSize(15);
+  doc.text(t("Cashflow","Cashflow"),20,y);
+
+  y += 15;
 
   doc.setFontSize(11);
-  doc.text("Ricavi: "+eur(revenue),20,40);
-  doc.text("Profitto: "+eur(annualProfit),20,50);
-  doc.text("Mensile: "+eur(monthlyProfit),20,60);
+  doc.text(t("Ricavi","Revenue")+": "+eur(revenue),20,y);
+  doc.text(t("Profitto","Profit")+": "+eur(annualProfit),20,y+10);
+  doc.text(t("Mensile","Monthly")+": "+eur(monthlyProfit),20,y+20);
 
   // ================= FOOTER =================
-  doc.setFontSize(9);
+  doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text("RendimentoBB • Confidential Investment Report",20,280);
+  doc.text("RendimentoBB • Confidential Investment Report",20,285);
 
-  doc.save(`RendimentoBB_Executive_${roi.toFixed(0)}ROI.pdf`);
+  doc.save(`RendimentoBB_Pro_${roi.toFixed(0)}ROI.pdf`);
 }
 
 function showUpgradeModal(){
