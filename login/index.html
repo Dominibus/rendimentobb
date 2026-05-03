@@ -322,6 +322,7 @@ Accedi al tuo account
 
 <div id="login-message" class="message"></div>
 
+<input id="name" type="text" placeholder="Nome">  
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 
@@ -362,6 +363,12 @@ getAuth,
 signInWithEmailAndPassword,
 createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+  import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const auth = getAuth(app);
 
@@ -436,9 +443,7 @@ const user = userCredential.user;
 // 🔥 PRENDI NOME
 const name = document.getElementById("name")?.value || "";
 
-// 🔥 SALVA SU FIRESTORE
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
+// 🔥 FIRESTORE
 const db = getFirestore(app);
 
 await setDoc(doc(db, "users", user.uid), {
