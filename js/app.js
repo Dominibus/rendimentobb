@@ -3110,7 +3110,7 @@ if(analyzeBtn){
 
 }
 
-// ================= EXECUTIVE PDF – FINAL BANK REAL =================
+// ================= EXECUTIVE PDF – BANK READY FINAL REAL =================
 
 window.generateExecutivePDF = async function(){
 
@@ -3157,7 +3157,7 @@ const green = [16,185,129];
 const dark = [15,23,42];
 const gray = [100,116,139];
 
-// ================= LOGO =================
+// ================= LOGO CLEAN =================
 let logo = null;
 try{
   const res = await fetch("/img/logo-report.png");
@@ -3169,38 +3169,39 @@ try{
   });
 }catch(e){}
 
+// ================= FOOTER =================
+const footer = ()=>{
+  doc.setDrawColor(220);
+  doc.line(20,270,190,270);
+  doc.setFontSize(8);
+  doc.setTextColor(...gray);
+  doc.text("RendimentoBB – Confidential Investment Report",20,278);
+  doc.text("www.rendimentobb.com",140,278);
+};
+
 // ===================================================
-// 🧠 PAGE 1 – COVER (LIGHT PROFESSIONAL)
+// 🧠 PAGE 1 – COVER (CONSULTING STYLE)
 // ===================================================
 
 doc.setFillColor(245,247,250);
 doc.rect(0,0,210,297,"F");
 
 if(logo){
-  doc.addImage(logo,"PNG",20,30,60,18);
+  doc.addImage(logo,"PNG",20,25,50,14);
 }
 
 doc.setTextColor(...dark);
 doc.setFontSize(20);
-
 doc.text(T("Investment Report","Investment Report"),20,90);
 
 doc.setFontSize(12);
 doc.setTextColor(...gray);
+doc.text(T("B&B Investment Analysis","B&B Investment Analysis"),20,105);
+doc.text(T("Confidential document","Confidential document"),20,115);
 
-doc.text(
-T("Analisi investimento B&B","B&B Investment Analysis"),
-20,105
-);
-
-doc.text(
-T("Documento riservato","Confidential document"),
-20,115
-);
-
-// ROI grande
+// ROI HERO
 doc.setTextColor(...green);
-doc.setFontSize(28);
+doc.setFontSize(32);
 doc.text(pct(roi),20,170);
 
 doc.setFontSize(11);
@@ -3208,7 +3209,7 @@ doc.setTextColor(...gray);
 doc.text("ROI",20,180);
 
 // ===================================================
-// PAGE 2 – EXECUTIVE + GRAFICO
+// 📊 PAGE 2 – EXECUTIVE + KPI + CHART
 // ===================================================
 
 doc.addPage();
@@ -3244,7 +3245,7 @@ doc.text(rating,160,y+14);
 
 y += 32;
 
-// KPI
+// KPI GRID
 const row = (label,val)=>{
   doc.setFontSize(10);
   doc.setTextColor(...dark);
@@ -3253,30 +3254,33 @@ const row = (label,val)=>{
   y+=7;
 };
 
-row(T("Prezzo","Price"), eur(price));
-row(T("Ricavi","Revenue"), eur(revenue));
+row(T("Price","Price"), eur(price));
+row(T("Revenue","Revenue"), eur(revenue));
 row(T("Equity","Equity"), eur(equity));
-row(T("Profitto","Profit"), eur(profit));
-row(T("Mutuo","Loan"), eur(loan));
+row(T("Profit","Profit"), eur(profit));
+row(T("Loan","Loan"), eur(loan));
 
-// ================= CHART FIX =================
+// ================= CHART REAL =================
 const chart = document.getElementById("roiChart");
 
 if(chart){
-  const img = chart.toDataURL("image/png",1.0);
-  doc.addImage(img,"PNG",20,y+10,170,60);
+  try{
+    const img = chart.toDataURL("image/png",1.0);
+    doc.addImage(img,"PNG",20,y+10,170,60);
+  }catch(e){}
 }
 
-y += 75;
+footer();
 
 // ===================================================
-// PAGE 3 – LOAN (BANCA)
+// 🏦 PAGE 3 – LOAN REQUEST (BANCA VERA)
 // ===================================================
 
 doc.addPage();
 y = 30;
 
 doc.setFontSize(14);
+doc.setTextColor(...dark);
 doc.text(T("Loan Request","Loan Request"),20,y);
 
 y+=12;
@@ -3287,30 +3291,30 @@ const net = profit - interest;
 const ltv = (loan/price)*100;
 const dscr = profit / interest;
 
-row(T("Importo","Loan"), eur(loan));
+row(T("Requested loan","Requested loan"), eur(loan));
 row("LTV", ltv.toFixed(1)+"%");
 row("DSCR", dscr.toFixed(2));
-row(T("Cashflow netto","Net cashflow"), eur(net));
+row(T("Net cashflow","Net cashflow"), eur(net));
 
-// BOX DECISION
+// DECISION BOX
 y+=10;
 
 doc.setFillColor(dscr > 1.5 ? 16 : 200, dscr > 1.5 ? 185 : 50, dscr > 1.5 ? 129 : 50);
-
 doc.roundedRect(20,y,170,18,6,6,"F");
 
 doc.setTextColor(255);
 doc.setFontSize(11);
-
 doc.text(
 dscr > 1.5
-? T("Sostenibile per finanziamento","Financing sustainable")
-: T("Rischio elevato credito","High credit risk"),
+? T("Financing sustainable","Financing sustainable")
+: T("High credit risk","High credit risk"),
 25,y+12
 );
 
+footer();
+
 // ===================================================
-// PAGE 4 – MARKET
+// 🌍 PAGE 4 – MARKET
 // ===================================================
 
 doc.addPage();
@@ -3324,11 +3328,13 @@ y+=12;
 
 const marketROI = 8.4;
 
-row(T("ROI tuo","Your ROI"), pct(roi));
-row(T("ROI mercato","Market ROI"), pct(marketROI));
+row(T("Your ROI","Your ROI"), pct(roi));
+row(T("Market ROI","Market ROI"), pct(marketROI));
+
+footer();
 
 // ===================================================
-// PAGE 5 – CASHFLOW
+// 💰 PAGE 5 – CASHFLOW
 // ===================================================
 
 doc.addPage();
@@ -3339,19 +3345,11 @@ doc.text(T("Cashflow","Cashflow"),20,y);
 
 y+=12;
 
-row(T("Ricavi","Revenue"), eur(revenue));
-row(T("Profitto","Profit"), eur(profit));
-row(T("Mensile","Monthly"), eur(monthly));
+row(T("Revenue","Revenue"), eur(revenue));
+row(T("Profit","Profit"), eur(profit));
+row(T("Monthly","Monthly"), eur(monthly));
 
-// FOOTER
-doc.setDrawColor(220);
-doc.line(20,270,190,270);
-
-doc.setFontSize(8);
-doc.setTextColor(120);
-
-doc.text("RendimentoBB",20,278);
-doc.text("www.rendimentobb.com",140,278);
+footer();
 
 // SAVE
 doc.save(`RendimentoBB-Report-${roi.toFixed(1)}.pdf`);
