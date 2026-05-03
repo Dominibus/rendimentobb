@@ -886,7 +886,22 @@ function showUpgradeModal(){
 function goToPricing(){
   window.location.href = "/#pricing";
 }  
+function loadSimulations(){
 
+  const raw = localStorage.getItem("rb_simulations");
+
+  if(raw){
+    try{
+      window.dashboardSimulations = JSON.parse(raw);
+    }catch(e){
+      console.warn("Sim parse error");
+      window.dashboardSimulations = [];
+    }
+  } else {
+    window.dashboardSimulations = [];
+  }
+
+}
  function populateSimulations(){
 
   const list = window.dashboardSimulations || [];
@@ -922,6 +937,8 @@ function goToPricing(){
 }
 // ================= INIT =================
 function init(){
+
+  loadSimulations();
 
   checkUserPlan();
   populateSimulations();
