@@ -338,6 +338,11 @@ body.report-page #global-footer .footer-bottom{
   transform:translateY(0);
 }
 
+  /* 🔥 NO FLASH OVERLAY */
+#upgradeOverlay{
+  display:none !important;
+}
+
 </style>
 
 </head>
@@ -462,7 +467,7 @@ data-en="📥 Download professional PDF report">
 </button>
 
 <!-- OVERLAY -->
-<div id="upgradeOverlay" class="lock-overlay">
+<div id="upgradeOverlay" class="lock-overlay" style="display:none;">
   <h2 data-it="🔒 Report PRO" data-en="🔒 PRO Report">🔒 Report PRO</h2>
   <p data-it="Accesso riservato a investitori e professionisti"
      data-en="Access reserved for investors and professionals">
@@ -599,6 +604,11 @@ function applyLock(){
   const overlay = document.getElementById("upgradeOverlay");
   const btn = document.querySelector(".btn");
 
+  if(!overlay) return;
+
+  // 🔥 default SEMPRE nascosto
+  overlay.style.display = "none";
+
   if(!isPro){
 
     overlay.style.display = "flex";
@@ -609,8 +619,6 @@ function applyLock(){
     }
 
   } else {
-
-    overlay.style.display = "none";
 
     if(btn){
       btn.disabled = false;
@@ -936,7 +944,13 @@ function populateSimulations(){
 // ================= INIT =================
 function init(){
 
+  if(!window.getUserAccess){
+    console.warn("⏳ Access non pronto → skip");
+    return;
+  }
+
   window.__reportStarted = true;
+
   loadSimulations();
 
   checkUserPlan();
