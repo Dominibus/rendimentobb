@@ -2651,8 +2651,18 @@ if(locationInput && helper){
 
       // 🔥 aggiorna background live (effetto premium)
       if(typeof applyCityBackground === "function"){
-        applyCityBackground(mapped);
-      }
+
+  const hero =
+    document.querySelector(".tool-hero") ||
+    document.querySelector(".hero-bg") ||
+    document.querySelector(".hero-roi");
+
+  if(hero){
+    hero.dataset.bgLocked = "false";
+  }
+
+  applyCityBackground(mapped);
+}
 
     }
 
