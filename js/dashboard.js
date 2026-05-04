@@ -110,7 +110,8 @@ function lockFreeUser(){
 
   const plan = String(window.currentPlan || "").toLowerCase();
   const pro = isPro();
-  const isInvestor = plan === "investor";
+  const access = window.getUserAccess?.() || {};
+  const isInvestor = access.isInvestor;
 
   // ================= PRO =================
   if(pro){
