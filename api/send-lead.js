@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 SEND LEAD – RENDIMENTOBB CORE ENGINE (BANK + BILINGUAL)
+// 🚀 SEND LEAD – RENDIMENTOBB ELITE (BANK STYLE)
 // ===============================
 
 import { Resend } from "resend";
@@ -38,14 +38,14 @@ function t(lang, it, en){
 function getScore({roi, price}){
 
   if(roi >= 15 && price > 100000){
-    return { score:"hot", value:100 };
+    return { score:"hot", value:100, label:"🔥 HOT" };
   }
 
   if(roi >= 10){
-    return { score:"warm", value:60 };
+    return { score:"warm", value:60, label:"⚡ WARM" };
   }
 
-  return { score:"cold", value:20 };
+  return { score:"cold", value:20, label:"❄️ LOW" };
 }
 
 // ================= HANDLER =================
@@ -82,11 +82,12 @@ export default async function handler(req, res){
 
     const detectedLang = detectLang(req, lang);
 
-    // ================= CALCOLI =================
+    // ================= FORMAT =================
+    const roiRounded = Number(roi.toFixed(1));
     const loan = price - equity;
     const dscr = loan > 0 ? (profit / (loan * 0.04)) : 0;
 
-    const { score, value } = getScore({roi, price});
+    const { score, value, label } = getScore({roi: roiRounded, price});
 
     // ================= ANTI DUPLICATO =================
     const key = `${email}_${Math.floor(Date.now()/600000)}`;
@@ -105,7 +106,7 @@ export default async function handler(req, res){
       key,
       email,
       city,
-      roi,
+      roi: roiRounded,
       price,
       equity,
       loan,
@@ -124,13 +125,11 @@ export default async function handler(req, res){
       await resend.emails.send({
         from: "RendimentoBB <analisi@rendimentobb.it>",
         to: [email],
-
         subject: t(
           detectedLang,
-          `Analisi investimento (${roi}%)`,
-          `Investment analysis (${roi}%)`
+          `Analisi investimento (${roiRounded}%)`,
+          `Investment analysis (${roiRounded}%)`
         ),
-
         html: `
         <div style="font-family:Inter;background:#0f172a;padding:40px">
           <div style="max-width:640px;margin:auto;background:white;border-radius:16px;padding:30px;text-align:center">
@@ -140,22 +139,14 @@ export default async function handler(req, res){
             </h2>
 
             <div style="font-size:52px;font-weight:800;color:#10b981">
-              ${roi}%
+              ${roiRounded}%
             </div>
 
             <p style="color:#64748b">${city}</p>
 
-            <div style="margin-top:20px;font-size:14px;color:#334155">
-              ${t(
-                detectedLang,
-                "Questa è una stima preliminare. L’analisi completa include indicatori finanziari, rischio e sostenibilità.",
-                "This is a preliminary estimate. Full analysis includes financial indicators, risk and sustainability."
-              )}
-            </div>
-
             <a href="https://rendimentobb.it/dashboard"
             style="display:inline-block;margin-top:25px;background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none">
-            ${t(detectedLang,"Accedi all’analisi completa","Access full analysis")}
+            ${t(detectedLang,"Analisi completa","Full analysis")}
             </a>
 
           </div>
@@ -164,32 +155,61 @@ export default async function handler(req, res){
       });
     }
 
-    // ================= ADMIN =================
+    // ================= ADMIN EMAIL (🔥 QUI CAMBIA TUTTO) =================
     await resend.emails.send({
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
 
-      subject: `[${type.toUpperCase()}][${score.toUpperCase()}] ROI ${roi}% – €${value}`,
+      subject: `🔥 ${label} | ${city} | ROI ${roiRounded}% | €${value}`,
 
-      text: `
-NEW QUALIFIED LEAD
+      html: `
+      <div style="font-family:Inter;background:#f8fafc;padding:30px">
 
-Email: ${email}
-City: ${city}
+        <div style="max-width:700px;margin:auto;background:white;border-radius:16px;padding:30px">
 
-ROI: ${roi}%
-Purchase Price: €${price}
-Equity: €${equity}
-Loan: €${loan}
+          <h2 style="margin-bottom:10px">
+            🚀 Nuovo Lead Qualificato
+          </h2>
 
-Annual Profit: €${profit}
-DSCR: ${dscr.toFixed(2)}
+          <div style="font-size:20px;font-weight:700;margin-bottom:20px;color:#10b981">
+            ${label} – ROI ${roiRounded}%
+          </div>
 
-Type: ${type}
-Estimated Value: €${value}
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px">
 
-Status: NEW
-`
+            <div><strong>Email:</strong><br>${email}</div>
+            <div><strong>Città:</strong><br>${city}</div>
+
+            <div><strong>Prezzo:</strong><br>€${price}</div>
+            <div><strong>Equity:</strong><br>€${equity}</div>
+
+            <div><strong>Mutuo:</strong><br>€${loan}</div>
+            <div><strong>Profitto:</strong><br>€${profit}</div>
+
+            <div><strong>DSCR:</strong><br>${dscr.toFixed(2)}</div>
+            <div><strong>Tipo:</strong><br>${type}</div>
+
+          </div>
+
+          <div style="margin-top:25px;padding:15px;background:#f1f5f9;border-radius:10px">
+
+            <strong>Valore stimato lead:</strong> €${value}
+
+          </div>
+
+          <div style="margin-top:20px;text-align:center">
+
+            <a href="mailto:${email}"
+            style="background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:600">
+            ✉️ Contatta subito
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+      `
     });
 
     return res.status(200).json({
