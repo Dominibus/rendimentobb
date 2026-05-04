@@ -67,12 +67,24 @@ function triggerPlanPopup(plan){
 
     // 🔥 FREE → INVESTOR
     if(plan === "free"){
-      showInvestorOverlay?.();
+
+      if(typeof showInvestorOverlay === "function"){
+        showInvestorOverlay();
+      }else{
+        console.warn("⚠️ showInvestorOverlay non definita");
+      }
+
     }
 
     // 🟡 INVESTOR → PRO
     else if(plan === "investor"){
-      showProOverlay?.();
+
+      if(typeof showProOverlay === "function"){
+        showProOverlay();
+      }else{
+        console.warn("⚠️ showProOverlay non definita");
+      }
+
     }
 
   },1000);
@@ -2584,6 +2596,77 @@ function showGuestPopup(){
   `;
 
   document.body.appendChild(popup);
+}
+
+function showInvestorOverlay(){
+
+  closeAllOverlays();
+
+  const overlay = document.createElement("div");
+  overlay.id = "investor-overlay";
+
+  overlay.innerHTML = `
+  <div style="
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,0.7);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+  ">
+
+    <div style="
+      background:white;
+      padding:30px;
+      border-radius:16px;
+      max-width:420px;
+      width:90%;
+      text-align:center;
+      box-shadow:0 30px 80px rgba(0,0,0,0.25);
+      position:relative;
+    ">
+
+      <button onclick="document.getElementById('investor-overlay').remove()" style="
+        position:absolute;
+        top:12px;
+        right:12px;
+        border:none;
+        background:none;
+        font-size:18px;
+        cursor:pointer;
+      ">✕</button>
+
+      <h2 style="margin-bottom:10px">
+        🔒 ${t("Sblocca dati reali","Unlock real data")}
+      </h2>
+
+      <p style="font-size:14px;color:#64748b;margin-bottom:20px">
+        ${t(
+          "Stai vedendo solo una simulazione. I dati reali sono disponibili con Investor.",
+          "You are seeing simulated data. Real data is available with Investor."
+        )}
+      </p>
+
+      <button onclick="goToUpgrade()" style="
+        background:#10b981;
+        color:white;
+        border:none;
+        padding:14px;
+        border-radius:10px;
+        font-weight:700;
+        cursor:pointer;
+        width:100%;
+      ">
+        🚀 ${t("Passa a Investor","Upgrade to Investor")}
+      </button>
+
+    </div>
+  </div>
+  `;
+
+  document.body.appendChild(overlay);
 }
 
 function unlockProContent(){
