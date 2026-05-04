@@ -55,25 +55,27 @@ function closeAllOverlays(){
 // 🔥 POPUP PLAN CONTROL (NUOVO - PRECISO)
 function triggerPlanPopup(plan){
 
-  if(window.proOverlayShown) return;
-
-  window.proOverlayShown = true;
-
   setTimeout(()=>{
 
-    if(plan === "free"){
-      if(typeof showInvestorOverlay === "function"){
-        showInvestorOverlay();
-      }else{
-        showProOverlay?.();
-      }
+    // evita duplicazioni
+    if(
+      document.getElementById("pro-overlay") ||
+      document.getElementById("investor-overlay")
+    ){
+      return;
     }
 
+    // 🔥 FREE → INVESTOR
+    if(plan === "free"){
+      showInvestorOverlay?.();
+    }
+
+    // 🟡 INVESTOR → PRO
     else if(plan === "investor"){
       showProOverlay?.();
     }
 
-  },800);
+  },1000);
 
 }
 // ================= CHART DATA =================
@@ -1421,11 +1423,10 @@ window.addEventListener("DOMContentLoaded", () => {
       document.dispatchEvent(new Event("rb_auth_ready"));
 
       // ================= LOAD DASHBOARD =================
-      // 🔥 POPUP PRIMA
-triggerPlanPopup(plan);
-
-// poi render
 await loadDashboard();
+
+// 🔥 POPUP DOPO RENDER (fix reale)
+triggerPlanPopup(plan);
 
       // ================= PRO =================
       if(pro){
@@ -1445,47 +1446,7 @@ await loadDashboard();
 
         lockInvestorPreview();
       }
-
-      // ================= POPUP LOGIC (CORRETTA) =================
-      if(!window.proOverlayShown){
-
-        window.proOverlayShown = true;
-
-        setTimeout(()=>{
-
-          // 🆓 FREE → popup INVESTOR
-          if(plan === "free"){
-            console.log("🆓 FREE → popup INVESTOR");
-
-            if(typeof showInvestorOverlay === "function"){
-              showInvestorOverlay();
-            }else if(typeof showProOverlay === "function"){
-              showProOverlay(); // fallback
-            }
-          }
-
-          // 🟡 INVESTOR → popup PRO
-          else if(plan === "investor"){
-            console.log("🟡 INVESTOR → popup PRO");
-
-            if(typeof showProOverlay === "function"){
-              showProOverlay();
-            }
-          }
-
-        },1200);
-
-      }
-
-    } catch(err){
-      console.error("Errore init dashboard:", err);
-    }
-
-  });
-
-});
-
-}  
+  
 // ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
