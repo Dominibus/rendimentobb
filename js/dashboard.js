@@ -51,6 +51,31 @@ function closeAllOverlays(){
   document.getElementById("pro-overlay")?.remove();
   document.getElementById("investor-banner")?.remove();
 }
+
+// 🔥 POPUP PLAN CONTROL (NUOVO - PRECISO)
+function triggerPlanPopup(plan){
+
+  if(window.proOverlayShown) return;
+
+  window.proOverlayShown = true;
+
+  setTimeout(()=>{
+
+    if(plan === "free"){
+      if(typeof showInvestorOverlay === "function"){
+        showInvestorOverlay();
+      }else{
+        showProOverlay?.();
+      }
+    }
+
+    else if(plan === "investor"){
+      showProOverlay?.();
+    }
+
+  },800);
+
+}
 // ================= CHART DATA =================
 
 let roiValues = [];
@@ -114,7 +139,7 @@ function lockFreeUser(){
 
     if(el){
       el.style.filter = "blur(6px)";
-      el.style.pointerEvents = "none";
+      el.classList.add("rb-locked");
       el.style.opacity = "0.6";
     }
   });
@@ -1327,6 +1352,8 @@ document.addEventListener("rb_language_changed", () => {
 
 
 // ================= INIT =================
+if(window.__dashboardAuthInit) return;
+window.__dashboardAuthInit = true;
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -1359,31 +1386,30 @@ window.addEventListener("DOMContentLoaded", () => {
       // 🔥 SYNC HEADER + UI
       document.dispatchEvent(new Event("rb_plan_ready"));
 
-const plan = String(window.currentPlan || "").toLowerCase();
+      const plan = String(window.currentPlan || "").toLowerCase();
 
-if(plan === "free"){
+      // ================= FREE ACCESS CONTROL =================
+      if(plan === "free"){
 
-  const fromLogin = localStorage.getItem("just_logged");
+        const fromLogin = localStorage.getItem("just_logged");
 
-  if(!fromLogin){
-    console.log("⛔ FREE → redirect to tool");
-    window.location.href = "/tool/";
-    return;
-  }
+        if(!fromLogin){
+          console.log("⛔ FREE → redirect to tool");
+          window.location.href = "/tool/";
+          return;
+        }
 
-  console.log("🆓 FREE → accesso temporaneo dashboard");
-  localStorage.removeItem("just_logged");
-}
+        console.log("🆓 FREE → accesso temporaneo dashboard");
+        localStorage.removeItem("just_logged");
+      }
 
-// ================= FLAGS =================
-// ❌ NON ridefinire plan
+      // ================= FLAGS =================
+      const pro =
+        plan === "pro" ||
+        plan === "pro_yearly";
 
-const pro =
-  plan === "pro" ||
-  plan === "pro_yearly";
-
-const isInvestor =
-  plan === "investor";
+      const isInvestor =
+        plan === "investor";
 
       if(isInvestor){
         console.log("👀 INVESTOR MODE");
@@ -1393,7 +1419,11 @@ const isInvestor =
       document.dispatchEvent(new Event("rb_auth_ready"));
 
       // ================= LOAD DASHBOARD =================
-      await loadDashboard();
+      // 🔥 POPUP PRIMA
+triggerPlanPopup(plan);
+
+// poi render
+await loadDashboard();
 
       // ================= PRO =================
       if(pro){
@@ -1412,21 +1442,37 @@ const isInvestor =
         console.log("👀 INVESTOR → PARTIAL ACCESS");
 
         lockInvestorPreview();
-        return;
       }
 
-      // ================= FREE =================
-      console.log("🆓 FREE USER");
-
+      // ================= POPUP LOGIC (CORRETTA) =================
       if(!window.proOverlayShown){
 
         window.proOverlayShown = true;
 
         setTimeout(()=>{
-          if(typeof showProOverlay === "function"){
-            showProOverlay();
+
+          // 🆓 FREE → popup INVESTOR
+          if(plan === "free"){
+            console.log("🆓 FREE → popup INVESTOR");
+
+            if(typeof showInvestorOverlay === "function"){
+              showInvestorOverlay();
+            }else if(typeof showProOverlay === "function"){
+              showProOverlay(); // fallback
+            }
           }
+
+          // 🟡 INVESTOR → popup PRO
+          else if(plan === "investor"){
+            console.log("🟡 INVESTOR → popup PRO");
+
+            if(typeof showProOverlay === "function"){
+              showProOverlay();
+            }
+          }
+
         },1200);
+
       }
 
     } catch(err){
@@ -1435,7 +1481,7 @@ const isInvestor =
 
   });
 
-});  
+});
 // ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
@@ -2791,7 +2837,7 @@ function lockInvestorPreview(){
     if(!el) return;
 
     el.style.filter = "blur(6px)";
-    el.style.pointerEvents = "none";
+    el.classList.add("rb-locked");
     el.style.opacity = "0.6";
   });
 
