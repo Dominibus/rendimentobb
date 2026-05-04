@@ -140,7 +140,7 @@ export default async function handler(req, res){
 });
 
     // ================= USER EMAIL =================
-    if(score !== "cold"){
+    if(true){
 
       let subject = t(
         detectedLang,
