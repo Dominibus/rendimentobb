@@ -297,43 +297,73 @@ data-en="🔥 1,200+ users are analyzing investments right now">
 <script src="/js/lang.js" defer></script>
 
 <!-- HERO RANDOM BG -->
-<script>
-
-const images = [
-"/img/rome-bg.jpg",
-"/img/milan-bg.jpg",
-"/img/florence-bg.jpg",
-"/img/naples-bg.jpg"
-];
-
-const random = images[Math.floor(Math.random()*images.length)];
-document.getElementById("heroBg").style.backgroundImage = `url('${random}')`;
-
-</script>
-
-<!-- FIREBASE -->
 <script type="module">
-
-import { savePartnerLead } from "/js/leads.js";
 
 window.savePartner = async function(){
 
-const name = document.getElementById("name").value;
-const email = document.getElementById("email").value;
-const message = document.getElementById("message").value;
+  const t = (it,en)=> window.currentLang === "en" ? en : it;
 
-if(!email || !email.includes("@")){
-alert("Email non valida");
-return;
-}
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
 
-await savePartnerLead({
-name,
-email,
-message
-});
+  if(!email || !email.includes("@")){
+    alert(t("Email non valida","Invalid email"));
+    return;
+  }
 
-document.getElementById("success").style.display="block";
+  try{
+
+    console.log("📡 SEND PARTNER LEAD...");
+
+    const res = await fetch("/api/send-lead",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        email,
+        city: "partner",
+        roi: 0,
+        price: 0,
+        equity: 0,
+        profit: 0,
+        type: "partner",
+        lang: window.currentLang || "it",
+
+        // 🔥 extra dati
+        name,
+        message
+      })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error("API error");
+    }
+
+    console.log("✅ PARTNER LEAD SENT:", data);
+
+    document.getElementById("success").style.display="block";
+
+    // UX PRO
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("message").value = "";
+
+  }catch(err){
+
+    console.error("❌ PARTNER ERROR:", err);
+
+    alert(
+      t(
+        "Errore invio richiesta. Riprova.",
+        "Error sending request. Try again."
+      )
+    );
+
+  }
 
 };
 
