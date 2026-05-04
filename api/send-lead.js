@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 SEND LEAD – RENDIMENTOBB BANK READY (BILINGUE)
+// 🚀 SEND LEAD – RENDIMENTOBB CORE ENGINE (BANK + BILINGUAL)
 // ===============================
 
 import { Resend } from "resend";
@@ -36,12 +36,15 @@ function t(lang, it, en){
 
 // ================= SCORE =================
 function getScore({roi, price}){
+
   if(roi >= 15 && price > 100000){
     return { score:"hot", value:100 };
   }
+
   if(roi >= 10){
     return { score:"warm", value:60 };
   }
+
   return { score:"cold", value:20 };
 }
 
@@ -121,20 +124,22 @@ export default async function handler(req, res){
       await resend.emails.send({
         from: "RendimentoBB <analisi@rendimentobb.it>",
         to: [email],
+
         subject: t(
           detectedLang,
           `Analisi investimento (${roi}%)`,
           `Investment analysis (${roi}%)`
         ),
+
         html: `
         <div style="font-family:Inter;background:#0f172a;padding:40px">
           <div style="max-width:640px;margin:auto;background:white;border-radius:16px;padding:30px;text-align:center">
 
             <h2 style="color:#0f172a">
-              ${t(detectedLang,"Analisi investimento","Investment analysis")}
+              ${t(detectedLang,"Sintesi investimento","Investment summary")}
             </h2>
 
-            <div style="font-size:48px;font-weight:800;color:#10b981">
+            <div style="font-size:52px;font-weight:800;color:#10b981">
               ${roi}%
             </div>
 
@@ -143,14 +148,14 @@ export default async function handler(req, res){
             <div style="margin-top:20px;font-size:14px;color:#334155">
               ${t(
                 detectedLang,
-                "Questa è una stima preliminare. L’analisi completa include profitto reale, rischio e impatto finanziario.",
-                "This is a preliminary estimate. Full analysis includes real profit, risk and financing impact."
+                "Questa è una stima preliminare. L’analisi completa include indicatori finanziari, rischio e sostenibilità.",
+                "This is a preliminary estimate. Full analysis includes financial indicators, risk and sustainability."
               )}
             </div>
 
             <a href="https://rendimentobb.it/dashboard"
             style="display:inline-block;margin-top:25px;background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none">
-            ${t(detectedLang,"Sblocca analisi completa","Unlock full analysis")}
+            ${t(detectedLang,"Accedi all’analisi completa","Access full analysis")}
             </a>
 
           </div>
@@ -164,16 +169,16 @@ export default async function handler(req, res){
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
 
-      subject: `[${type.toUpperCase()}] ${score.toUpperCase()} – €${value}`,
+      subject: `[${type.toUpperCase()}][${score.toUpperCase()}] ROI ${roi}% – €${value}`,
 
       text: `
-NEW LEAD
+NEW QUALIFIED LEAD
 
 Email: ${email}
 City: ${city}
 
 ROI: ${roi}%
-Price: €${price}
+Purchase Price: €${price}
 Equity: €${equity}
 Loan: €${loan}
 
