@@ -55,7 +55,9 @@ function calculateScore(roi){
 // ===============================
 function buildBaseLead(type, data){
 
-  const roi = safeNumber(data.roi);
+  const roi = safeNumber(
+  data.roi ?? window.lastROI ?? 10
+  );
   const { score, value } = calculateScore(roi);
 
   return {
