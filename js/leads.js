@@ -112,7 +112,16 @@ async function sendLead(data){
 
   try{
 
-    const key = data.email + "_" + data.type + "_" + Math.round(data.roi || 0);
+    const key = [
+  data.email,
+  data.type,
+  Math.round(data.roi || 0),
+  window.location.pathname
+].join("_");
+
+    setTimeout(()=>{
+  delete window.__leadLock[key];
+}, 10000);
 
     // 🔒 ANTI DUPLICATO
     if(window.__leadLock[key]){
