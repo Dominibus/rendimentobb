@@ -2615,8 +2615,8 @@ function showInvestorOverlay(){
 <div style="
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at center, rgba(15,23,42,0.75), rgba(15,23,42,0.92));
-  backdrop-filter:blur(8px);
+  background:radial-gradient(circle at center, rgba(15,23,42,0.78), rgba(15,23,42,0.95));
+  backdrop-filter:blur(10px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -2625,12 +2625,12 @@ function showInvestorOverlay(){
 
   <div style="
     background:white;
-    padding:34px;
-    border-radius:18px;
+    padding:36px;
+    border-radius:20px;
     max-width:440px;
     width:92%;
     text-align:center;
-    box-shadow:0 40px 100px rgba(0,0,0,0.35);
+    box-shadow:0 50px 120px rgba(0,0,0,0.4);
     position:relative;
     animation:fadeIn 0.35s ease;
   ">
@@ -2638,8 +2638,8 @@ function showInvestorOverlay(){
     <!-- CLOSE -->
     <button onclick="document.getElementById('investor-overlay').remove()" style="
       position:absolute;
-      top:12px;
-      right:12px;
+      top:14px;
+      right:14px;
       border:none;
       background:none;
       font-size:18px;
@@ -2647,27 +2647,32 @@ function showInvestorOverlay(){
       color:#94a3b8;
     ">✕</button>
 
-    <!-- WARNING -->
+    <!-- BADGE -->
     <div style="
-      font-size:13px;
+      font-size:12px;
       color:#f59e0b;
       font-weight:700;
-      margin-bottom:6px;
-      letter-spacing:0.5px;
+      margin-bottom:8px;
+      letter-spacing:0.6px;
     ">
       ⚠️ ${t("ATTENZIONE","WARNING")}
     </div>
 
-    <!-- TITLE -->
+    <!-- TITLE DINAMICO -->
     <h2 style="
-      font-size:24px;
+      font-size:26px;
       font-weight:900;
-      line-height:1.3;
+      line-height:1.25;
       margin-bottom:10px;
+      letter-spacing:-0.5px;
     ">
       ${t(
-        "Stai prendendo una decisione alla cieca",
-        "You are making a blind investment decision"
+        isInvestor
+          ? "Stai perdendo dati critici"
+          : "Stai prendendo una decisione alla cieca",
+        isInvestor
+          ? "You are missing critical data"
+          : "You are making a blind investment decision"
       )}
     </h2>
 
@@ -2675,7 +2680,7 @@ function showInvestorOverlay(){
     <p style="
       font-size:14px;
       color:#64748b;
-      margin-bottom:18px;
+      margin-bottom:20px;
       line-height:1.5;
     ">
       ${t(
@@ -2687,17 +2692,18 @@ function showInvestorOverlay(){
     <!-- MONEY BLOCK -->
     <div style="
       background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
-      border-radius:14px;
-      padding:20px;
-      margin-bottom:14px;
+      border-radius:16px;
+      padding:22px;
+      margin-bottom:16px;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);
     ">
 
       <div id="rb-profit-number" style="
-        font-size:40px;
+        font-size:42px;
         font-weight:900;
         color:#10b981;
         margin-bottom:6px;
-        letter-spacing:-0.5px;
+        letter-spacing:-1px;
       ">
         ${formatCurrency(0)}
       </div>
@@ -2705,11 +2711,32 @@ function showInvestorOverlay(){
       <div style="
         font-size:13px;
         color:#065f46;
+        font-weight:600;
       ">
         ${t(
           "profitto reale che stai ignorando",
           "real profit you are ignoring"
         )}
+      </div>
+
+      <!-- 🔥 NUOVO TRIGGER PSICOLOGICO -->
+      <div style="
+        font-size:12px;
+        color:#ef4444;
+        margin-top:8px;
+        font-weight:600;
+      ">
+        ${
+          isInvestor
+          ? t(
+              "Stai vedendo solo una parte dei dati reali",
+              "You are seeing only a fraction of real data"
+            )
+          : t(
+              "Dato stimato senza analisi completa",
+              "Estimated data without full analysis"
+            )
+        }
       </div>
 
     </div>
@@ -2727,11 +2754,11 @@ function showInvestorOverlay(){
       )}
     </div>
 
-    <!-- PSYCHO -->
+    <!-- EXPLANATION -->
     <div style="
       font-size:13px;
       color:#475569;
-      margin-bottom:22px;
+      margin-bottom:24px;
       line-height:1.5;
     ">
       ${t(
@@ -2746,13 +2773,13 @@ function showInvestorOverlay(){
       color:white;
       border:none;
       padding:16px;
-      border-radius:12px;
+      border-radius:14px;
       font-weight:900;
       cursor:pointer;
       width:100%;
       font-size:16px;
-      box-shadow:0 12px 30px rgba(16,185,129,0.4);
-      transition:0.2s;
+      box-shadow:0 15px 35px rgba(16,185,129,0.45);
+      transition:all 0.2s ease;
     ">
       🚀 ${
         isInvestor
@@ -2763,7 +2790,7 @@ function showInvestorOverlay(){
 
     <!-- TRUST -->
     <div style="
-      margin-top:14px;
+      margin-top:16px;
       font-size:11px;
       color:#94a3b8;
     ">
