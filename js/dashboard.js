@@ -680,6 +680,33 @@ renderCashflowChart();
 // 🔥 gestione accessi UI (DOPO tutto il render)
 lockFreeUser();
 
+  // ================= DEMO DATA BADGE =================
+if(window.isDemoData){
+
+  const badge = document.createElement("div");
+
+  badge.innerHTML = `
+  <div style="
+    position:fixed;
+    top:100px;
+    right:30px;
+    opacity:0.85;
+    background:rgba(15,23,42,0.9);
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:12px;
+    z-index:9999;
+    backdrop-filter:blur(6px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  ">
+    🧪 ${t("Dati demo","Demo data")}
+  </div>
+  `;
+
+  document.body.appendChild(badge);
+}
+
 } // ✅ CHIUSURA loadDashboard  
 
 // ================= BEST INVESTMENT =================
