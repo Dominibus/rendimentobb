@@ -191,12 +191,74 @@ export default async function handler(req, res){
     </div>
     `;
 
-    await resend.emails.send({
-      from: "RendimentoBB <analisi@rendimentobb.it>",
-      to: [email],
-      subject,
-      html: userHtml
-    });
+    const userHtml = `
+<div style="font-family:Arial;padding:20px;color:#111">
+
+  <p>${t(detectedLang,"Ciao,","Hi,")}</p>
+
+  <p>
+    ${t(
+      detectedLang,
+      "Abbiamo ricevuto la tua richiesta su RendimentoBB.",
+      "We received your request on RendimentoBB."
+    )}
+  </p>
+
+  ${
+    (type === "simulatore" || type === "generic")
+    ? `
+      <p>
+        ${t(detectedLang,"ROI stimato:","Estimated ROI:")}
+        <strong>${roiRounded}%</strong>
+      </p>
+    `
+    : ""
+  }
+
+  <p>
+    ${t(
+      detectedLang,
+      "Puoi continuare da qui:",
+      "You can continue here:"
+    )}
+  </p>
+
+  <p>
+    <a href="https://rendimentobb.it/dashboard">
+      https://rendimentobb.it/dashboard
+    </a>
+  </p>
+
+  <br>
+
+  <p style="font-size:12px;color:#666">
+    RendimentoBB<br>
+    https://rendimentobb.it
+  </p>
+
+</div>
+`;
+
+subject = t(
+  detectedLang,
+  "Abbiamo ricevuto la tua richiesta",
+  "We received your request"
+);
+
+await resend.emails.send({
+  from: "RendimentoBB <analisi@rendimentobb.it>",
+  to: [email],
+  subject,
+  html: userHtml,
+  text: `
+${t(detectedLang,
+"Abbiamo ricevuto la tua richiesta su RendimentoBB.",
+"We received your request on RendimentoBB."
+)}
+
+https://rendimentobb.it/dashboard
+`
+});
 
     // ================= ADMIN EMAIL =================
     await resend.emails.send({
