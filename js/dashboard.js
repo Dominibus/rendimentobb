@@ -46,7 +46,11 @@ function isPro(){
 }
 
 window.proOverlayShown = false;
-
+function closeAllOverlays(){
+  document.getElementById("guest-popup")?.remove();
+  document.getElementById("pro-overlay")?.remove();
+  document.getElementById("investor-banner")?.remove();
+}
 // ================= CHART DATA =================
 
 let roiValues = [];
@@ -64,7 +68,10 @@ function lockFreeUser(){
 
   console.log("PLAN:", window.currentPlan);
 
-  if(!window.currentPlan) return;
+  if(!window.currentPlan){
+  console.warn("Plan non pronto → skip lock");
+  return;
+}
 
   const plan = String(window.currentPlan || "").toLowerCase();
   const pro = isPro();
@@ -713,6 +720,13 @@ if(window.isDemoData){
 
 } // ✅ CHIUSURA loadDashboard  
 
+async function loadDashboard(){
+
+  closeAllOverlays(); // 🔥 FIX CRITICO
+
+  roiValues = [];
+  labels = [];
+
 // ================= BEST INVESTMENT =================
 
 function renderBestInvestment(analyses){
@@ -1034,7 +1048,7 @@ const kpiBreak = document.getElementById("kpi-break");
 
 // ================= KPI GRID =================
 const pro = isPro();
-const investor = window.currentPlan === "investor";
+const investor = String(window.currentPlan || "").toLowerCase() === "investor";
 
 if(kpiRoi){
   kpiRoi.innerText = avgROIRounded + "%";
@@ -2415,8 +2429,7 @@ color:#065f46;
 
 function showGuestPopup(){
 
-  // 🔥 sempre pulito (no duplicati)
-  document.getElementById("guest-popup")?.remove();
+  closeAllOverlays(); // 🔥 FIX VERO
 
   const popup = document.createElement("div");
   popup.id = "guest-popup";
