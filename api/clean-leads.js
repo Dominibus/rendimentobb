@@ -14,6 +14,10 @@ const db = admin.firestore();
 
 export default async function handler(req, res){
 
+  if(req.query.key !== process.env.ADMIN_KEY){
+  return res.status(401).json({ error:"unauthorized" });
+}
+
   try{
 
     const snapshot = await db.collection("leads").get();
