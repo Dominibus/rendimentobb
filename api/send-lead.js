@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 SEND LEAD – RENDIMENTOBB CORE SYSTEM (FINAL)
+// 🚀 SEND LEAD – RENDIMENTOBB CORE SYSTEM (SILICON FINAL)
 // ===============================
 
 import { Resend } from "resend";
@@ -34,8 +34,16 @@ function t(lang, it, en){
   return lang === "en" ? en : it;
 }
 
-// ================= SCORE =================
-function getScore({roi}){
+// ================= SCORE INTELLIGENTE =================
+function getScore({roi, type}){
+
+  if(type === "partner" || type === "work"){
+    return { score:"lead", value:20, label:"🤝 LEAD" };
+  }
+
+  if(type === "immobili"){
+    return { score:"deal", value:50, label:"🏠 DEAL" };
+  }
 
   if(roi >= 20){
     return { score:"extreme", value:150, label:"🔥 EXTREME" };
@@ -62,34 +70,35 @@ export default async function handler(req, res){
   try{
 
     let {
-  email,
-  city,
-  roi,
-  price,
-  equity,
-  profit,
-  type,
-  lang,
-  source,
-  funnel,
+      email,
+      city,
+      roi,
+      price,
+      equity,
+      profit,
+      type,
+      lang,
+      source,
+      funnel,
 
-  phone,
-  bank,
-  rate,
-  name,
-  role,
-  message
-} = req.body || {};
+      phone,
+      bank,
+      rate,
+      name,
+      role,
+      message
+    } = req.body || {};
 
     // ================= CLEAN =================
     email = clean(email);
-    city  = clean(city);
+    city  = clean(city || type);
     roi   = safe(roi);
     price = safe(price);
     equity = safe(equity);
     profit = safe(profit);
     type  = clean(type || "generic");
-    source = clean(source || "unknown");
+    source = clean(source || `${type}_page`);
+    funnel = clean(funnel || "unknown");
 
     if(!email){
       return res.status(400).json({ error:"Missing email" });
@@ -102,108 +111,99 @@ export default async function handler(req, res){
     const loan = price - equity;
     const dscr = loan > 0 ? (profit / (loan * 0.04)) : 0;
 
-    const { score, value, label } = getScore({roi: roiRounded});
-
-    // ================= ANTI DUPLICATO =================
-    const existing = await db.collection("leads")
-      .where("email","==",email)
-      .where("type","==",type)
-      .where("roi","==",roiRounded)
-      .limit(1)
-      .get();
-
-    if(!existing.empty){
-  console.log("⚠️ Duplicate lead → email comunque inviata");
-      console.log("📧 sending email to:", email);
-}
+    const { score, value, label } = getScore({
+      roi: roiRounded,
+      type
+    });
 
     // ================= DB =================
     await db.collection("leads").add({
-  email,
-  city,
+      email,
+      city,
 
-  roi: roiRounded,
-  price,
-  equity,
-  loan,
-  profit,
-  dscr: Number(dscr.toFixed(2)),
+      roi: roiRounded,
+      price,
+      equity,
+      loan,
+      profit,
+      dscr: Number(dscr.toFixed(2)),
 
-  score,
-  value,
-  type,
+      score,
+      value,
+      type,
 
-  // 🔥 TRACKING
-  source: source || "unknown",
-  funnel: funnel || "unknown",
+      source,
+      funnel,
 
-  status: "new",
-  lang: detectedLang,
+      status: "new",
+      lang: detectedLang,
 
-  createdAt: admin.firestore.FieldValue.serverTimestamp()
-});
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
 
     // ================= USER EMAIL =================
-    if(true){
 
-      let subject = t(
-        detectedLang,
-        `Il tuo investimento (${roiRounded}%)`,
-        `Your investment (${roiRounded}%)`
-      );
+    let cta = "https://rendimentobb.it/dashboard";
 
-      let content = `
-      <div style="font-family:Inter;background:#0f172a;padding:40px">
-        <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px;text-align:center">
+    if(type === "mutui") cta = "https://rendimentobb.it/mutui/";
+    if(type === "immobili") cta = "https://rendimentobb.it/immobili/";
 
-          <h2>${t(detectedLang,"Analisi iniziale","Initial analysis")}</h2>
+    let subject = t(
+      detectedLang,
+      `Il tuo investimento (${roiRounded}%)`,
+      `Your investment (${roiRounded}%)`
+    );
 
-          <div style="font-size:50px;font-weight:800;color:#10b981">
-            ${roiRounded}%
-          </div>
-
-          <p style="color:#64748b">${city}</p>
-
-          <p style="font-size:14px;color:#334155">
-            ${t(
-              detectedLang,
-              "Questa è una stima iniziale. I dati reali possono cambiare completamente il risultato.",
-              "This is a preliminary estimate. Real data can completely change the outcome."
-            )}
-          </p>
-
-          <a href="https://rendimentobb.it/dashboard"
-          style="margin-top:20px;display:inline-block;background:#10b981;color:white;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:700">
-          ${t(detectedLang,"Analisi completa","Full analysis")}
-          </a>
-
-        </div>
-      </div>
-      `;
-
-      // 🔥 PERSONALIZZAZIONE PER TIPO
-      if(type === "mutui"){
-        subject = t(detectedLang,"Richiesta mutuo ricevuta","Mortgage request received");
-      }
-
-      if(type === "immobili"){
-        subject = t(detectedLang,"Opportunità immobili ricevute","Property opportunities received");
-      }
-
-      await resend.emails.send({
-        from: "RendimentoBB <analisi@rendimentobb.it>",
-        to: [email],
-        subject,
-        html: content
-      });
+    if(type === "mutui"){
+      subject = t(detectedLang,"Richiesta mutuo ricevuta","Mortgage request received");
     }
+
+    if(type === "immobili"){
+      subject = t(detectedLang,"Opportunità immobili ricevute","Property opportunities received");
+    }
+
+    const userHtml = `
+    <div style="font-family:Inter;background:#0f172a;padding:40px">
+      <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px;text-align:center">
+
+        <h2>${t(detectedLang,"Analisi iniziale","Initial analysis")}</h2>
+
+        <div style="font-size:50px;font-weight:800;color:#10b981">
+          ${roiRounded}%
+        </div>
+
+        <p style="color:#64748b">${city}</p>
+
+        <p style="font-size:14px;color:#334155">
+          ${t(
+            detectedLang,
+            "Questa è una stima iniziale. I dati reali possono cambiare completamente il risultato.",
+            "This is a preliminary estimate. Real data can completely change the outcome."
+          )}
+        </p>
+
+        <a href="${cta}"
+        style="margin-top:20px;display:inline-block;background:#10b981;color:white;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:700">
+        ${t(detectedLang,"Vai all'analisi completa","View full analysis")}
+        </a>
+
+      </div>
+    </div>
+    `;
+
+    await resend.emails.send({
+      from: "RendimentoBB <analisi@rendimentobb.it>",
+      to: [email],
+      subject,
+      html: userHtml
+    });
 
     // ================= ADMIN EMAIL =================
     await resend.emails.send({
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
 
-      subject: `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value}`,
+      subject: `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value} | ${source}`,
 
       html: `
       <div style="font-family:Inter;background:#f8fafc;padding:30px">
@@ -221,7 +221,7 @@ export default async function handler(req, res){
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Città:</strong> ${city}</p>
             <p><strong>Fonte:</strong> ${source}</p>
-            <p><strong>Piano:</strong> ${req.body.plan || "unknown"}</p>
+            <p><strong>Funnel:</strong> ${funnel}</p>
 
             ${phone ? `<p><strong>Telefono:</strong> ${phone}</p>` : ""}
             ${bank ? `<p><strong>Banca:</strong> ${bank}</p>` : ""}
