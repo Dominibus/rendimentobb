@@ -1293,34 +1293,31 @@ window.addEventListener("DOMContentLoaded", () => {
       // 🔥 SYNC HEADER + UI
       document.dispatchEvent(new Event("rb_plan_ready"));
 
-      const plan = String(window.currentPlan || "").toLowerCase();
+const plan = String(window.currentPlan || "").toLowerCase();
 
 if(plan === "free"){
 
   const fromLogin = localStorage.getItem("just_logged");
 
-  // 🔥 entra solo 1 volta dopo login
   if(!fromLogin){
     console.log("⛔ FREE → redirect to tool");
     window.location.href = "/tool/";
     return;
   }
 
-  // ✅ entra ma solo una volta
   console.log("🆓 FREE → accesso temporaneo dashboard");
-
   localStorage.removeItem("just_logged");
 }
 
-      // ================= FLAGS =================
-      const plan = String(window.currentPlan || "").toLowerCase();
+// ================= FLAGS =================
+// ❌ NON ridefinire plan
 
-      const pro =
-        plan === "pro" ||
-        plan === "pro_yearly";
+const pro =
+  plan === "pro" ||
+  plan === "pro_yearly";
 
-      const isInvestor =
-        plan === "investor";
+const isInvestor =
+  plan === "investor";
 
       if(isInvestor){
         console.log("👀 INVESTOR MODE");
