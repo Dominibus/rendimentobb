@@ -113,11 +113,9 @@ export default async function handler(req, res){
       .get();
 
     if(!existing.empty){
-      return res.status(200).json({
-        success:true,
-        duplicate:true
-      });
-    }
+  console.log("⚠️ Duplicate lead → email comunque inviata");
+      console.log("📧 sending email to:", email);
+}
 
     // ================= DB =================
     await db.collection("leads").add({
