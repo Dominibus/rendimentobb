@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 LEADS ENGINE – RENDIMENTOBB ULTRA (SILICON VALLEY FINAL)
+// 🚀 LEADS ENGINE – RENDIMENTOBB (SILICON FINAL)
 // ===============================
 
 import { db } from "/js/firebase-init.js";
@@ -29,25 +29,46 @@ function safeNumber(v){
   return isNaN(n) ? 0 : n;
 }
 
+function clean(v){
+  return String(v || "").trim();
+}
+
 function getCity(data){
-  return (
+  return clean(
     data.city ||
     window.currentCity ||
     document.getElementById("market-city")?.value ||
+    data.type || 
     "unknown"
   );
 }
 
-// ===============================
-// 🎯 SCORING ENGINE (LEAD VALUE)
-// ===============================
-function calculateScore(roi){
+function getLang(){
+  return window.currentLang || "it";
+}
 
-  if(roi > 60) return { score:"extreme", value:140 };
-  if(roi > 40) return { score:"high", value:70 };
-  if(roi > 20) return { score:"medium", value:30 };
+function getPlan(){
+  return window.currentPlan || "free";
+}
 
-  return { score:"low", value:10 }; // 🔥 NON 0 → sempre utile
+// ===============================
+// 🎯 SCORE ALLINEATO BACKEND
+// ===============================
+function calculateScore({roi, type}){
+
+  if(type === "partner" || type === "work"){
+    return { score:"lead", value:20 };
+  }
+
+  if(type === "immobili"){
+    return { score:"deal", value:50 };
+  }
+
+  if(roi >= 20) return { score:"extreme", value:150 };
+  if(roi >= 15) return { score:"hot", value:100 };
+  if(roi >= 10) return { score:"warm", value:60 };
+
+  return { score:"cold", value:20 };
 }
 
 // ===============================
@@ -56,26 +77,28 @@ function calculateScore(roi){
 function buildBaseLead(type, data){
 
   const roi = safeNumber(
-  data.roi ?? window.lastROI ?? 10
+    data.roi ?? window.lastROI ?? 0
   );
-  const { score, value } = calculateScore(roi);
+
+  const { score, value } = calculateScore({ roi, type });
 
   return {
     type,
-    email: data.email,
-    phone: data.phone || null,
-    city: getCity(data),
+    email: clean(data.email),
+    phone: clean(data.phone),
+
+    city: getCity({ ...data, type }),
 
     roi,
     score,
     value,
 
-    plan: window.currentPlan || "free",
-    lang: window.currentLang || "it",
+    plan: getPlan(),
+    lang: getLang(),
 
-    // 🔥 TRACKING CORE
+    // 🔥 TRACKING PRO
     source: window.location.pathname,
-    funnel: window.currentPlan || "free",
+    funnel: getPlan(),
 
     createdAt: serverTimestamp(),
     sessionId: window.sessionId || (window.sessionId = Date.now())
@@ -93,7 +116,7 @@ async function sendLead(data){
 
     // 🔒 ANTI DUPLICATO
     if(window.__leadLock[key]){
-      console.warn("⛔ Lead duplicato bloccato:", key);
+      console.warn("⛔ Duplicate lead blocked:", key);
       return;
     }
 
@@ -102,17 +125,13 @@ async function sendLead(data){
     console.log("📡 SEND LEAD →", data);
 
     const response = await fetch("/api/send-lead",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify({
-    ...data,
-
-    // 🔥 TRACKING
-    source: window.location.pathname,
-    funnel: window.currentPlan || "free",
-    timestamp: Date.now()
-  })
-});
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        ...data,
+        timestamp: Date.now()
+      })
+    });
 
     if(!response.ok){
       const txt = await response.text();
@@ -122,7 +141,7 @@ async function sendLead(data){
 
     const result = await response.json();
 
-    console.log("✅ Lead inviato:", result);
+    console.log("✅ Lead sent:", result);
 
     return result;
 
@@ -130,7 +149,6 @@ async function sendLead(data){
     console.error("❌ sendLead error:", err);
     return false;
   }
-
 }
 
 // ===============================
@@ -141,7 +159,7 @@ export async function saveLeadMutui(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida");
+      console.warn("⛔ Invalid email");
       return;
     }
 
@@ -151,18 +169,12 @@ export async function saveLeadMutui(data){
       years: safeNumber(data.years)
     });
 
-    // 🔥 NON bloccare più → conversione futura
-    if(lead.score === "low"){
-      console.log("⚠️ Lead mutui low (salvato comunque)");
-    }
-
     await addDoc(collection(db,"leads_mutui"), lead);
     await sendLead(lead);
 
   }catch(err){
     console.error("❌ mutui error:", err);
   }
-
 }
 
 // ===============================
@@ -173,7 +185,7 @@ export async function saveLeadImmobili(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida");
+      console.warn("⛔ Invalid email");
       return;
     }
 
@@ -182,17 +194,12 @@ export async function saveLeadImmobili(data){
       budget: safeNumber(data.budget)
     });
 
-    if(lead.score === "low"){
-      console.log("⚠️ Lead immobili low (salvato comunque)");
-    }
-
     await addDoc(collection(db,"leads_immobili"), lead);
     await sendLead(lead);
 
   }catch(err){
     console.error("❌ immobili error:", err);
   }
-
 }
 
 // ===============================
@@ -203,14 +210,14 @@ export async function savePartnerLead(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida");
+      console.warn("⛔ Invalid email");
       return;
     }
 
     const lead = {
       ...buildBaseLead("partner", data),
-      name: data.name || "",
-      message: data.message || "",
+      name: clean(data.name),
+      message: clean(data.message),
       priority: "HIGH"
     };
 
@@ -220,7 +227,6 @@ export async function savePartnerLead(data){
   }catch(err){
     console.error("❌ partner error:", err);
   }
-
 }
 
 // ===============================
@@ -231,14 +237,14 @@ export async function saveWorkLead(data){
   try{
 
     if(!isValidEmail(data.email)){
-      console.warn("⛔ Email non valida");
+      console.warn("⛔ Invalid email");
       return;
     }
 
     const lead = {
       ...buildBaseLead("work", data),
-      name: data.name || "",
-      role: data.role || "",
+      name: clean(data.name),
+      role: clean(data.role),
       priority: "LOW",
       value: 10
     };
@@ -249,5 +255,4 @@ export async function saveWorkLead(data){
   }catch(err){
     console.error("❌ work error:", err);
   }
-
 }
