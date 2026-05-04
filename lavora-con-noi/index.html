@@ -311,31 +311,77 @@ document.getElementById("heroBg").style.backgroundImage = `url('${random}')`;
 
 </script>
 
-<!-- FIREBASE -->
 <script type="module">
-
-import { saveWorkLead } from "/js/leads.js";
 
 window.saveWork = async function(){
 
-const name = document.getElementById("name").value;
-const email = document.getElementById("email").value;
-const role = document.getElementById("role").value;
+  const t = (it,en)=> window.currentLang === "en" ? en : it;
 
-if(!email || !email.includes("@")){
-alert("Email non valida");
-return;
-}
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const role = document.getElementById("role").value.trim();
 
-await saveWorkLead({
-name,
-email,
-role
-});
+  if(!email || !email.includes("@")){
+    alert(t("Email non valida","Invalid email"));
+    return;
+  }
 
-document.getElementById("success").style.display="block";
+  try{
+
+    console.log("📡 SEND WORK LEAD...");
+
+    const res = await fetch("/api/send-lead",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        email,
+        city: "career",
+        roi: 0,
+        price: 0,
+        equity: 0,
+        profit: 0,
+        type: "career",
+        lang: window.currentLang || "it",
+
+        // 🔥 extra dati
+        name,
+        role
+      })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error("API error");
+    }
+
+    console.log("✅ WORK LEAD SENT:", data);
+
+    document.getElementById("success").style.display="block";
+
+    // UX PRO
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("role").value = "";
+
+  }catch(err){
+
+    console.error("❌ WORK ERROR:", err);
+
+    alert(
+      t(
+        "Errore invio candidatura. Riprova.",
+        "Error sending application. Try again."
+      )
+    );
+
+  }
 
 };
+
+</script>
 
 </script>
 
