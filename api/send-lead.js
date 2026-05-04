@@ -62,22 +62,18 @@ export default async function handler(req, res){
   try{
 
     let {
-      email,
-      city,
-      roi,
-      price,
-      equity,
-      profit,
-      type,
-      lang,
-      source,
-      phone,
-      bank,
-      rate,
-      name,
-      message,
-      role
-    } = req.body || {};
+  email,
+  city,
+  roi,
+  price,
+  equity,
+  profit,
+  type,
+  lang,
+
+  source,
+  funnel
+} = req.body || {};
 
     // ================= CLEAN =================
     email = clean(email);
@@ -119,28 +115,29 @@ export default async function handler(req, res){
 
     // ================= DB =================
     await db.collection("leads").add({
-      email,
-      city,
-      roi: roiRounded,
-      price,
-      equity,
-      loan,
-      profit,
-      dscr: Number(dscr.toFixed(2)),
-      score,
-      value,
-      type,
-      source,
-      phone: clean(phone),
-      bank: clean(bank),
-      rate: safe(rate),
-      name: clean(name),
-      message: clean(message),
-      role: clean(role),
-      status: "new",
-      lang: detectedLang,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+  email,
+  city,
+
+  roi: roiRounded,
+  price,
+  equity,
+  loan,
+  profit,
+  dscr: Number(dscr.toFixed(2)),
+
+  score,
+  value,
+  type,
+
+  // 🔥 TRACKING
+  source: source || "unknown",
+  funnel: funnel || "unknown",
+
+  status: "new",
+  lang: detectedLang,
+
+  createdAt: admin.firestore.FieldValue.serverTimestamp()
+});
 
     // ================= USER EMAIL =================
     if(score !== "cold"){
