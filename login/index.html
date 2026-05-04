@@ -322,7 +322,15 @@ Accedi al tuo account
 
 <div id="login-message" class="message"></div>
 
-<input id="name" type="text" placeholder="Nome">  
+<input id="name" type="text" placeholder="Nome">
+
+<select id="role" style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px solid #cbd5e1;">
+  <option value="">Seleziona profilo</option>
+  <option value="investor">Investitore</option>
+  <option value="agency">Agenzia immobiliare</option>
+  <option value="broker">Broker mutui</option>
+  <option value="curious">Curioso / studio</option>
+</select> 
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 
@@ -345,6 +353,20 @@ color:#64748b;
 
 <button id="authBtn" class="btn">Login</button>
 
+<div style="margin-top:12px;font-size:13px;">
+
+  <!-- RESET PASSWORD -->
+  <div id="forgot-password" style="cursor:pointer;color:#10b981;margin-bottom:8px;">
+    🔑 Password dimenticata?
+  </div>
+
+  <!-- DELETE ACCOUNT -->
+  <div id="delete-account" style="cursor:pointer;color:#ef4444;display:none;">
+    🗑 Elimina account
+  </div>
+
+</div>  
+
 <a href="/" class="back-home">
 ← Torna alla Home
 </a>
@@ -361,7 +383,10 @@ import { app } from "/js/firebase-init.js";
 import {
 getAuth,
 signInWithEmailAndPassword,
-createUserWithEmailAndPassword
+createUserWithEmailAndPassword,
+sendPasswordResetEmail,
+deleteUser,
+onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   import {
@@ -442,15 +467,17 @@ const user = userCredential.user;
 
 // 🔥 PRENDI NOME
 const name = document.getElementById("name")?.value || "";
+const role = document.getElementById("role")?.value || "unknown";
 
 // 🔥 FIRESTORE
 const db = getFirestore(app);
 
 await setDoc(doc(db, "users", user.uid), {
-  email: email,
-  name: name,
+  email,
+  name,
+  role,
   plan: "free",
-  role: "user",
+  source: "auth_register",
   createdAt: new Date()
 });
 }
@@ -490,6 +517,78 @@ showError(e.code);
 
 };
 
+// ================= RESET PASSWORD =================
+document.getElementById("forgot-password").onclick = async ()=>{
+
+  const email = document.getElementById("email").value.trim();
+
+  if(!email){
+    showError("empty");
+    return;
+  }
+
+  try{
+
+    await sendPasswordResetEmail(auth, email);
+
+    showSuccess(
+      "📩 Email inviata per il reset password",
+      "📩 Password reset email sent"
+    );
+
+  }catch(e){
+    showError(e.code);
+  }
+
+};  
+
+// ================= DELETE ACCOUNT =================
+document.getElementById("delete-account").onclick = async ()=>{
+
+  const user = auth.currentUser;
+
+  if(!user){
+    alert("Devi essere loggato");
+    return;
+  }
+
+  const confirmDelete = confirm(
+    window.RB_LANG?.current === "en"
+    ? "Are you sure you want to delete your account?"
+    : "Sei sicuro di voler eliminare il tuo account?"
+  );
+
+  if(!confirmDelete) return;
+
+  try{
+
+    await deleteUser(user);
+
+    alert(
+      window.RB_LANG?.current === "en"
+      ? "Account deleted"
+      : "Account eliminato"
+    );
+
+    window.location.href = "/";
+
+  }catch(e){
+
+    alert(
+      window.RB_LANG?.current === "en"
+      ? "Re-login required"
+      : "Effettua di nuovo il login prima"
+    );
+
+  }
+
+};
+
+// ================= AUTH STATE =================
+onAuthStateChanged(auth, (user)=>{
+  document.getElementById("delete-account").style.display = user ? "block" : "none";
+});  
+
 // ===== ERROR =====
 function showError(code){
 
@@ -510,6 +609,18 @@ ${lang==="en"?msg.en:msg.it}
 </div>`;
 
 }
+
+function showSuccess(it, en){
+
+  const lang = window.RB_LANG?.current || "it";
+
+  messageBox.innerHTML = `
+  <div style="background:#dcfce7;color:#166534;padding:10px;border-radius:10px;">
+  ${lang==="en"?en:it}
+  </div>
+  `;
+
+}  
 
 updateUI();
 
