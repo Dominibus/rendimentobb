@@ -93,17 +93,20 @@ export default async function handler(req, res){
 
     const { score, value, label } = getScore({roi: roiRounded, price});
 
-    // ================= ANTI DUPLICATO =================
-    const key = `${email}_${Math.floor(Date.now()/600000)}`;
+    // ================= ANTI DUPLICATO INTELLIGENTE =================
+const existing = await db.collection("leads")
+  .where("email","==",email)
+  .where("roi","==",roiRounded)
+  .limit(1)
+  .get();
 
-    const existing = await db.collection("leads")
-      .where("key","==",key)
-      .limit(1)
-      .get();
-
-    if(!existing.empty){
-      return res.status(200).json({ success:true, duplicate:true });
-    }
+if(!existing.empty){
+  return res.status(200).json({
+    success:true,
+    duplicate:true,
+    reason:"same_roi"
+  });
+}
 
     // ================= DB =================
     await db.collection("leads").add({
