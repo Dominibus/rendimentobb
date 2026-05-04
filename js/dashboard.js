@@ -2612,102 +2612,152 @@ function showInvestorOverlay(){
   overlay.id = "investor-overlay";
 
   overlay.innerHTML = `
+<div style="
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(15,23,42,0.75), rgba(15,23,42,0.9));
+  backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999999;
+">
+
   <div style="
-    position:fixed;
-    inset:0;
-    background:rgba(15,23,42,0.75);
-    backdrop-filter:blur(6px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:999999;
+    background:white;
+    padding:34px;
+    border-radius:18px;
+    max-width:440px;
+    width:92%;
+    text-align:center;
+    box-shadow:0 40px 100px rgba(0,0,0,0.35);
+    position:relative;
+    animation:fadeIn 0.35s ease;
   ">
 
+    <!-- CLOSE -->
+    <button onclick="document.getElementById('investor-overlay').remove()" style="
+      position:absolute;
+      top:12px;
+      right:12px;
+      border:none;
+      background:none;
+      font-size:18px;
+      cursor:pointer;
+      color:#94a3b8;
+    ">✕</button>
+
+    <!-- WARNING -->
     <div style="
-      background:white;
-      padding:30px;
-      border-radius:16px;
-      max-width:420px;
-      width:90%;
-      text-align:center;
-      box-shadow:0 30px 80px rgba(0,0,0,0.25);
-      position:relative;
+      font-size:13px;
+      color:#f59e0b;
+      font-weight:700;
+      margin-bottom:6px;
+      letter-spacing:0.5px;
+    ">
+      ⚠️ ${t("ATTENZIONE","WARNING")}
+    </div>
+
+    <!-- TITLE -->
+    <h2 style="
+      font-size:24px;
+      font-weight:800;
+      line-height:1.3;
+      margin-bottom:10px;
+    ">
+      ${t(
+        "Stai prendendo decisioni alla cieca",
+        "You are making decisions blindly"
+      )}
+    </h2>
+
+    <!-- SUB -->
+    <p style="
+      font-size:14px;
+      color:#64748b;
+      margin-bottom:18px;
+      line-height:1.5;
+    ">
+      ${t(
+        "Il 72% degli investitori perde soldi proprio qui.",
+        "72% of investors lose money at this exact step."
+      )}
+    </p>
+
+    <!-- MONEY BLOCK -->
+    <div style="
+      background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
+      border-radius:14px;
+      padding:18px;
+      margin-bottom:16px;
     ">
 
-      <!-- CLOSE -->
-      <button onclick="document.getElementById('investor-overlay').remove()" style="
-        position:absolute;
-        top:12px;
-        right:12px;
-        border:none;
-        background:none;
-        font-size:18px;
-        cursor:pointer;
-      ">✕</button>
-
-      <!-- TITLE -->
-      <h2 style="margin-bottom:10px">
-        ⚠️ ${t(
-          "Stai prendendo decisioni senza dati reali",
-          "You are making decisions without real data"
-        )}
-      </h2>
-
-      <!-- LOSS -->
-      <p style="font-size:14px;color:#64748b;margin-bottom:14px">
-        ${t(
-          "Il 72% degli investitori B&B perde soldi proprio qui.",
-          "72% of B&B investors lose money right here."
-        )}
-      </p>
-
-      <!-- MONEY -->
       <div style="
-        font-size:34px;
+        font-size:36px;
         font-weight:900;
         color:#10b981;
-        margin-bottom:10px;
+        margin-bottom:6px;
       ">
         ${formatCurrency(potentialProfit)}
       </div>
 
-      <div style="font-size:13px;color:#64748b;margin-bottom:20px">
-        ${t(
-          "profitto annuo stimato che potresti perdere senza analisi completa",
-          "estimated yearly profit you may lose without full analysis"
-        )}
-      </div>
-
-      <!-- CTA -->
-      <button onclick="goToUpgrade()" style="
-        background:#10b981;
-        color:white;
-        border:none;
-        padding:14px;
-        border-radius:10px;
-        font-weight:700;
-        cursor:pointer;
-        width:100%;
-        font-size:15px;
-      ">
-        🚀 ${t("Sblocca dati reali","Unlock real data")}
-      </button>
-
-      <!-- TRUST -->
       <div style="
-        margin-top:14px;
-        font-size:11px;
-        color:#94a3b8;
+        font-size:13px;
+        color:#065f46;
       ">
         ${t(
-          "Accesso immediato • Nessuna carta per iniziare",
-          "Instant access • No card required"
+          "profitto reale stimato che stai ignorando",
+          "real profit you are currently ignoring"
         )}
       </div>
 
     </div>
+
+    <!-- PSYCHO TRIGGER -->
+    <div style="
+      font-size:13px;
+      color:#475569;
+      margin-bottom:20px;
+      line-height:1.5;
+    ">
+      ${t(
+        "Senza analisi completa non stai ottimizzando prezzo, occupazione e rischio.",
+        "Without full analysis you are not optimizing price, occupancy and risk."
+      )}
+    </div>
+
+    <!-- CTA -->
+    <button onclick="goToUpgrade()" style="
+      background:linear-gradient(135deg,#10b981,#34d399);
+      color:white;
+      border:none;
+      padding:15px;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      width:100%;
+      font-size:16px;
+      box-shadow:0 12px 30px rgba(16,185,129,0.4);
+      transition:0.2s;
+    ">
+      🚀 ${t("Sblocca analisi reale","Unlock real analysis")}
+    </button>
+
+    <!-- TRUST -->
+    <div style="
+      margin-top:14px;
+      font-size:11px;
+      color:#94a3b8;
+    ">
+      ${t(
+        "Accesso immediato • Nessuna carta richiesta",
+        "Instant access • No credit card required"
+      )}
+    </div>
+
   </div>
-  `;
+</div>
+`;
 
   document.body.appendChild(overlay);
 }
