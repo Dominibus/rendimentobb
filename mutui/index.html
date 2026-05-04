@@ -942,56 +942,42 @@ function selectMortgage(rate, bank){
   
 async function saveLeadFromBank(bank, rate){
 
-  const access = getAccess();
-
-
-  const email = document.getElementById("email").value || "";
-  const phone = document.getElementById("phone").value || "";
-
-  const payload = {
-  type:"mutui",
-  email,
-  phone,
-  bank,
-  rate,
-  source:"bank_click",
-
-  city: window.currentCity || "unknown",
-  roi: 0,
-  amount: parseFloat(document.getElementById("amount").value || 0),
-  years: parseFloat(document.getElementById("years").value || 0),
-
-  plan: window.currentPlan || "free"
-};
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
 
   if(!email){
-  alert(t("Inserisci email prima","Enter email first"));
-  return;
-}try{
+    alert(t("Inserisci email prima","Enter email first"));
+    return;
+  }
 
-    await fetch("/api/send-lead",{
+  try{
+
+    console.log("📡 SEND BANK LEAD...");
+
+    const res = await fetch("/api/send-lead",{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        email,
+        phone,
+        type:"mutui_bank",
+        bank,
+        rate,
+        city: window.currentCity || "unknown",
+        roi: 0,
+        price: parseFloat(document.getElementById("amount").value || 0),
+        equity: 0,
+        profit: 0,
+        years: parseFloat(document.getElementById("years").value || 0),
+        lang: window.currentLang || "it"
+      })
     });
 
-    await fetch("/api/send-lead-email",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify({
-    email,
-    type:"mutui",
-    bank,
-    rate,
-    lang: window.currentLang || "it"
-  })
-});
+    const data = await res.json();
 
-    await fetch("/api/send-lead-partner",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify(payload)
-});
+    if(!res.ok){
+      throw new Error("API error");
+    }
 
     alert(
       t(
@@ -1001,10 +987,10 @@ async function saveLeadFromBank(bank, rate){
     );
 
   }catch(e){
-    console.error(e);
+    console.error("❌ BANK ERROR:", e);
   }
 
-}  
+}
 
 function handleUpgradeClick(){
 
@@ -1021,72 +1007,77 @@ function handleUpgradeClick(){
 /* ================= LEAD ================= */
 async function saveLead(){
 
-const email = document.getElementById("email").value;
-const phone = document.getElementById("phone").value;
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
 
-// 🔴 VALIDAZIONE
-if(!email){
+  if(!email){
+    document.querySelector(".lead-box").scrollIntoView({behavior:"smooth"});
+    alert(t("Inserisci email","Enter email"));
+    return;
+  }
 
-  // 👉 scroll automatico al form
-  document.querySelector(".lead-box").scrollIntoView({
-    behavior:"smooth"
-  });
+  const impactEl = document.getElementById("impact");
+  const roiValue = impactEl && !isNaN(parseFloat(impactEl.innerText))
+    ? parseFloat(impactEl.innerText)
+    : 0;
 
-  alert(t("Inserisci email","Enter email"));
-  return;
+  try{
+
+    console.log("📡 SEND MUTUI LEAD...");
+
+    const res = await fetch("/api/send-lead",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        email,
+        phone,
+        type:"mutui",
+        city: window.currentCity || "unknown",
+        roi: roiValue,
+        price: parseFloat(document.getElementById("amount").value || 0),
+        equity: 0,
+        profit: 0,
+        years: parseFloat(document.getElementById("years").value || 0),
+        lang: window.currentLang || "it"
+      })
+    });
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw new Error("API error");
+    }
+
+    console.log("✅ MUTUI LEAD:", data);
+
+    const success = document.getElementById("success");
+    success.style.display = "block";
+
+    setTimeout(()=> success.classList.add("show"), 50);
+
+    success.innerHTML = `
+    ✔ ${t("Richiesta inviata","Request sent")}
+
+    <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+
+    🏦 ${t(
+      "Un consulente mutui ti contatterà a breve",
+      "A mortgage advisor will contact you shortly"
+    )}
+
+    <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+
+    💰 €${data.value || 0}
+    `;
+
+    document.querySelector(".lead-box button").disabled = true;
+
+  }catch(e){
+    console.error("❌ MUTUI ERROR:", e);
+    alert(t("Errore invio","Error sending request"));
+  }
+
 }
-
-const impactEl = document.getElementById("impact");
-const roiValue = impactEl && !isNaN(parseFloat(impactEl.innerText))
-  ? parseFloat(impactEl.innerText)
-  : 0;
-
-const payload = {
-  type:"mutui",
-  email,
-  phone,
-  city: window.currentCity || "unknown",
-  roi: roiValue,
-  amount: parseFloat(document.getElementById("amount").value || 0),
-  years: parseFloat(document.getElementById("years").value || 0),
-  plan: window.currentPlan || "free"
-};
-
-try{
-
-/* 🔥 SAVE DB */
-const res = await fetch("/api/send-lead",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify(payload)
-});
-
-/* 🔥 EMAIL UTENTE */
-await fetch("/api/send-lead-email",{
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify({
-    email,
-    type:"mutui",
-    roi: roiValue,
-    amount: payload.amount,
-    years: payload.years,
-    lang: window.currentLang || "it"
-  })
-});
-
-/* 🔥 FOLLOWUP */
-setTimeout(()=>{
-  fetch("/api/send-followup",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      email,
-      step:2,
-      lang: window.currentLang || "it"
-    })
-  });
-},60000);
 
 const data = await res.json();
 
