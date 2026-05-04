@@ -1446,6 +1446,16 @@ triggerPlanPopup(plan);
 
         lockInvestorPreview();
       }
+
+          } catch(err){
+      console.error("❌ DASHBOARD INIT ERROR:", err);
+    }
+
+  }); // chiude onAuthStateChanged
+
+}); // chiude DOMContentLoaded
+
+} // chiude __dashboardAuthInit
   
 // ================= CITY DISTRIBUTION =================
 
