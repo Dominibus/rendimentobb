@@ -50,6 +50,7 @@ function closeAllOverlays(){
   document.getElementById("guest-popup")?.remove();
   document.getElementById("pro-overlay")?.remove();
   document.getElementById("investor-banner")?.remove();
+  document.getElementById("investor-overlay")?.remove(); // 🔥 FIX
 }
 
 // 🔥 POPUP PLAN CONTROL (NUOVO - PRECISO)
@@ -57,16 +58,17 @@ function triggerPlanPopup(plan){
 
   setTimeout(()=>{
 
-    // evita duplicazioni
+    // 🔒 evita duplicazioni
     if(
-      document.getElementById("pro-overlay") ||
       document.getElementById("investor-overlay")
     ){
       return;
     }
 
-    // 🔥 FREE → INVESTOR
-    if(plan === "free"){
+    const currentPlan = String(plan || "").toLowerCase();
+
+    // 🔥 FREE + INVESTOR → STESSO OVERLAY (FORTE)
+    if(currentPlan === "free" || currentPlan === "investor"){
 
       if(typeof showInvestorOverlay === "function"){
         showInvestorOverlay();
@@ -76,15 +78,9 @@ function triggerPlanPopup(plan){
 
     }
 
-    // 🟡 INVESTOR → PRO
-    else if(plan === "investor"){
-
-      if(typeof showProOverlay === "function"){
-        showProOverlay();
-      }else{
-        console.warn("⚠️ showProOverlay non definita");
-      }
-
+    // 🟢 PRO / ADMIN → niente popup
+    else{
+      console.log("PRO/ADMIN → no popup");
     }
 
   },1000);
@@ -2615,7 +2611,7 @@ function showInvestorOverlay(){
 <div style="
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at center, rgba(15,23,42,0.75), rgba(15,23,42,0.9));
+  background:radial-gradient(circle at center, rgba(15,23,42,0.75), rgba(15,23,42,0.92));
   backdrop-filter:blur(8px);
   display:flex;
   align-items:center;
@@ -2661,13 +2657,13 @@ function showInvestorOverlay(){
     <!-- TITLE -->
     <h2 style="
       font-size:24px;
-      font-weight:800;
+      font-weight:900;
       line-height:1.3;
       margin-bottom:10px;
     ">
       ${t(
-        "Stai prendendo decisioni alla cieca",
-        "You are making decisions blindly"
+        "Stai prendendo una decisione alla cieca",
+        "You are making a blind investment decision"
       )}
     </h2>
 
@@ -2688,17 +2684,18 @@ function showInvestorOverlay(){
     <div style="
       background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
       border-radius:14px;
-      padding:18px;
-      margin-bottom:16px;
+      padding:20px;
+      margin-bottom:14px;
     ">
 
-      <div style="
-        font-size:36px;
+      <div id="rb-profit-number" style="
+        font-size:40px;
         font-weight:900;
         color:#10b981;
         margin-bottom:6px;
+        letter-spacing:-0.5px;
       ">
-        ${formatCurrency(potentialProfit)}
+        ${formatCurrency(0)}
       </div>
 
       <div style="
@@ -2706,23 +2703,36 @@ function showInvestorOverlay(){
         color:#065f46;
       ">
         ${t(
-          "profitto reale stimato che stai ignorando",
-          "real profit you are currently ignoring"
+          "profitto reale che stai ignorando",
+          "real profit you are ignoring"
         )}
       </div>
 
+    </div>
+
+    <!-- URGENCY -->
+    <div style="
+      font-size:13px;
+      color:#ef4444;
+      margin-bottom:18px;
+      font-weight:600;
+    ">
+      ⚠️ ${t(
+        "Senza analisi avanzata potresti sovrastimare i guadagni",
+        "Without advanced analysis you may overestimate profits"
+      )}
     </div>
 
     <!-- PSYCHO TRIGGER -->
     <div style="
       font-size:13px;
       color:#475569;
-      margin-bottom:20px;
+      margin-bottom:22px;
       line-height:1.5;
     ">
       ${t(
-        "Senza analisi completa non stai ottimizzando prezzo, occupazione e rischio.",
-        "Without full analysis you are not optimizing price, occupancy and risk."
+        "Stai decidendo senza dati su prezzo, occupazione e rischio reale.",
+        "You are deciding without real data on pricing, occupancy and risk."
       )}
     </div>
 
@@ -2731,9 +2741,9 @@ function showInvestorOverlay(){
       background:linear-gradient(135deg,#10b981,#34d399);
       color:white;
       border:none;
-      padding:15px;
+      padding:16px;
       border-radius:12px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       width:100%;
       font-size:16px;
@@ -2757,9 +2767,39 @@ function showInvestorOverlay(){
 
   </div>
 </div>
+
+<style>
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(0.96);}
+  to{opacity:1; transform:scale(1);}
+}
+</style>
 `;
 
   document.body.appendChild(overlay);
+
+  // 🔥 ANIMAZIONE NUMERO (GAME CHANGER)
+  setTimeout(()=>{
+    const el = document.getElementById("rb-profit-number");
+    if(!el) return;
+
+    let current = 0;
+    const target = potentialProfit;
+    const step = target / 25;
+
+    const interval = setInterval(()=>{
+      current += step;
+
+      if(current >= target){
+        current = target;
+        clearInterval(interval);
+      }
+
+      el.innerText = formatCurrency(Math.round(current));
+    }, 20);
+
+  }, 300);
+
 }
 
 function unlockProContent(){
