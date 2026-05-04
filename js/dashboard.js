@@ -1352,8 +1352,10 @@ document.addEventListener("rb_language_changed", () => {
 
 
 // ================= INIT =================
-if(window.__dashboardAuthInit) return;
-window.__dashboardAuthInit = true;
+if(window.__dashboardAuthInit){
+  console.warn("Dashboard auth già inizializzato → skip");
+}else{
+  window.__dashboardAuthInit = true;
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -1482,6 +1484,8 @@ await loadDashboard();
   });
 
 });
+
+}  
 // ================= CITY DISTRIBUTION =================
 
 function renderCityDistribution(analyses){
