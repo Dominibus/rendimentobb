@@ -395,6 +395,26 @@ const analyses = querySnapshot.docs.map(doc => ({
   createdAt: doc.data().createdAt
 }));
 
+const plan = String(window.currentPlan || "").toLowerCase();
+
+if(plan === "free"){
+  console.log("🆓 FREE → NO REAL DATA");
+
+  // ❌ cancella dati reali
+  analyses.length = 0;
+
+  // 👉 oppure mock controllato (più potente UX)
+  // analyses.push({
+  //   roi: 12.4,
+  //   price: 180000,
+  //   equity: 40000,
+  //   risk: 35,
+  //   city: "roma",
+  //   createdAt: new Date()
+  // });
+
+}  
+
 // 🔥 FIX → rende disponibili al report
 window.dashboardSimulations = analyses;
 
@@ -1272,6 +1292,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // 🔥 SYNC HEADER + UI
       document.dispatchEvent(new Event("rb_plan_ready"));
+
+      const plan = String(window.currentPlan || "").toLowerCase();
+
+if(plan === "free"){
+
+  const fromLogin = localStorage.getItem("just_logged");
+
+  // 🔥 entra solo 1 volta dopo login
+  if(!fromLogin){
+    console.log("⛔ FREE → redirect to tool");
+    window.location.href = "/tool/";
+    return;
+  }
+
+  // ✅ entra ma solo una volta
+  console.log("🆓 FREE → accesso temporaneo dashboard");
+
+  localStorage.removeItem("just_logged");
+}
 
       // ================= FLAGS =================
       const plan = String(window.currentPlan || "").toLowerCase();
