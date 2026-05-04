@@ -2388,6 +2388,47 @@ function runPostAnalysis(result, context){
     destination: leadDestination
   });
 
+  // ================= SEND MAIN LEAD (🔥 FIX CRITICO) =================
+
+try{
+
+  const userEmail = window.currentUser?.email;
+
+  if(userEmail){
+
+    console.log("📡 SEND MAIN LEAD API...");
+
+    fetch("/api/send-lead",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        email: userEmail,
+        city: window.currentCity || "unknown",
+        roi: roi,
+        price: price || 0,
+        equity: equity || 0,
+        profit: result?.netAfterMortgage || result?.net || 0,
+        type: "simulatore",
+        lang: window.currentLang || "it"
+      })
+    })
+    .then(res=>{
+      console.log("📡 send-lead response:", res.status);
+    })
+    .catch(err=>{
+      console.error("❌ send-lead error:", err);
+    });
+
+  }else{
+    console.warn("❌ NO EMAIL → lead not sent");
+  }
+
+}catch(e){
+  console.error("💥 SEND LEAD FAIL:", e);
+}
+
   // ================= SAVE LEAD =================
 
   if(userEmail && !window.leadSaved){
