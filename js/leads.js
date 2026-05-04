@@ -99,9 +99,14 @@ async function sendLead(data){
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
-        ...data,
-        ts: Date.now()
-      })
+  email,
+  type,
+
+  // 🔥 TRACKING
+  source: window.location.pathname,
+  funnel: window.currentPlan || "free",
+  timestamp: Date.now()
+})
     });
 
     if(!response.ok){
