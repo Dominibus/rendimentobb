@@ -2602,6 +2602,12 @@ function showInvestorOverlay(){
 
   closeAllOverlays();
 
+  const best = window.bestInvestmentData || {};
+  const roi = best.roi || 0;
+  const price = best.price || 0;
+
+  const potentialProfit = Math.round((price * roi) / 100);
+
   const overlay = document.createElement("div");
   overlay.id = "investor-overlay";
 
@@ -2609,7 +2615,7 @@ function showInvestorOverlay(){
   <div style="
     position:fixed;
     inset:0;
-    background:rgba(15,23,42,0.7);
+    background:rgba(15,23,42,0.75);
     backdrop-filter:blur(6px);
     display:flex;
     align-items:center;
@@ -2628,6 +2634,7 @@ function showInvestorOverlay(){
       position:relative;
     ">
 
+      <!-- CLOSE -->
       <button onclick="document.getElementById('investor-overlay').remove()" style="
         position:absolute;
         top:12px;
@@ -2638,17 +2645,40 @@ function showInvestorOverlay(){
         cursor:pointer;
       ">✕</button>
 
+      <!-- TITLE -->
       <h2 style="margin-bottom:10px">
-        🔒 ${t("Sblocca dati reali","Unlock real data")}
+        ⚠️ ${t(
+          "Stai prendendo decisioni senza dati reali",
+          "You are making decisions without real data"
+        )}
       </h2>
 
-      <p style="font-size:14px;color:#64748b;margin-bottom:20px">
+      <!-- LOSS -->
+      <p style="font-size:14px;color:#64748b;margin-bottom:14px">
         ${t(
-          "Stai vedendo solo una simulazione. I dati reali sono disponibili con Investor.",
-          "You are seeing simulated data. Real data is available with Investor."
+          "Il 72% degli investitori B&B perde soldi proprio qui.",
+          "72% of B&B investors lose money right here."
         )}
       </p>
 
+      <!-- MONEY -->
+      <div style="
+        font-size:34px;
+        font-weight:900;
+        color:#10b981;
+        margin-bottom:10px;
+      ">
+        ${formatCurrency(potentialProfit)}
+      </div>
+
+      <div style="font-size:13px;color:#64748b;margin-bottom:20px">
+        ${t(
+          "profitto annuo stimato che potresti perdere senza analisi completa",
+          "estimated yearly profit you may lose without full analysis"
+        )}
+      </div>
+
+      <!-- CTA -->
       <button onclick="goToUpgrade()" style="
         background:#10b981;
         color:white;
@@ -2658,9 +2688,22 @@ function showInvestorOverlay(){
         font-weight:700;
         cursor:pointer;
         width:100%;
+        font-size:15px;
       ">
-        🚀 ${t("Passa a Investor","Upgrade to Investor")}
+        🚀 ${t("Sblocca dati reali","Unlock real data")}
       </button>
+
+      <!-- TRUST -->
+      <div style="
+        margin-top:14px;
+        font-size:11px;
+        color:#94a3b8;
+      ">
+        ${t(
+          "Accesso immediato • Nessuna carta per iniziare",
+          "Instant access • No card required"
+        )}
+      </div>
 
     </div>
   </div>
