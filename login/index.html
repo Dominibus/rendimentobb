@@ -464,6 +464,7 @@ await signInWithEmailAndPassword(auth,email,password);
 }else{
 const userCredential = await createUserWithEmailAndPassword(auth,email,password);
 const user = userCredential.user;
+const leadSource = localStorage.getItem("lead_source") || "direct";  
 
 // 🔥 PRENDI NOME
 const name = document.getElementById("name")?.value || "";
@@ -475,11 +476,21 @@ const db = getFirestore(app);
 await setDoc(doc(db, "users", user.uid), {
   email,
   name,
-  role,
+
   plan: "free",
+
+  // 🔥 TRACKING
   source: "auth_register",
-  createdAt: new Date()
+  funnel: leadSource,
+
+  createdAt: new Date(),
+  lastLogin: new Date(),
+
+  leadConverted: true
 });
+
+  localStorage.removeItem("lead_source");
+  
 }
 
 // 🔥 REDIRECT INTELLIGENTE SaaS
