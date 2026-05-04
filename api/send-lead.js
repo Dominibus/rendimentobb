@@ -245,6 +245,38 @@ subject = t(
   "We received your request"
 );
 
+ if(type === "mutui"){
+  subject = t(
+    detectedLang,
+    "Richiesta mutuo ricevuta",
+    "Mortgage request received"
+  );
+}
+
+if(type === "immobili"){
+  subject = t(
+    detectedLang,
+    "Richiesta immobili ricevuta",
+    "Property request received"
+  );
+}
+
+if(type === "partner"){
+  subject = t(
+    detectedLang,
+    "Richiesta partnership ricevuta",
+    "Partnership request received"
+  );
+}
+
+if(type === "work"){
+  subject = t(
+    detectedLang,
+    "Candidatura ricevuta",
+    "Application received"
+  );
+}   
+
 await resend.emails.send({
   from: "RendimentoBB <analisi@rendimentobb.it>",
   to: [email],
