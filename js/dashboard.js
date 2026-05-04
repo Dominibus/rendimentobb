@@ -2750,7 +2750,11 @@ function showInvestorOverlay(){
       box-shadow:0 12px 30px rgba(16,185,129,0.4);
       transition:0.2s;
     ">
-      🚀 ${t("Sblocca analisi reale","Unlock real analysis")}
+      🚀 ${
+  isInvestor
+  ? t("Passa a PRO e sblocca tutto","Upgrade to PRO and unlock everything")
+  : t("Sblocca analisi reale","Unlock real analysis")
+}
     </button>
 
     <!-- TRUST -->
