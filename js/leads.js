@@ -100,17 +100,17 @@ async function sendLead(data){
     console.log("📡 SEND LEAD →", data);
 
     const response = await fetch("/api/send-lead",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        ...data,
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({
+    ...data,
 
-        // 🔥 SERVER TRACKING ALLINEATO
-        source: data.source || window.location.pathname,
-        funnel: data.funnel || window.currentPlan || "free",
-        timestamp: Date.now()
-      })
-    });
+    // 🔥 TRACKING
+    source: window.location.pathname,
+    funnel: window.currentPlan || "free",
+    timestamp: Date.now()
+  })
+});
 
     if(!response.ok){
       const txt = await response.text();
