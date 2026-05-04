@@ -540,9 +540,16 @@ return;
 try{
 
 if(mode==="login"){
-await signInWithEmailAndPassword(auth,email,password);
+  await signInWithEmailAndPassword(auth,email,password);
+
+  // 🔥 QUI
+  localStorage.setItem("just_logged", "1");
+}
 }else{
 const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+
+// 🔥 QUI
+localStorage.setItem("just_logged", "1");
 const user = userCredential.user;
 const leadSource = localStorage.getItem("lead_source") || "direct";  
 
