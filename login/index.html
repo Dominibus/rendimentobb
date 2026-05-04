@@ -493,6 +493,13 @@ btn.innerText = mode==="login"
 ? (lang==="en"?"Login":"Accedi")
 : (lang==="en"?"Sign up":"Registrati");
 
+  // 🔥 CTA più aggressiva in register
+if(mode === "register"){
+  btn.style.background = "linear-gradient(135deg,#f59e0b,#ef4444)";
+}else{
+  btn.style.background = "linear-gradient(135deg,#10b981,#059669)";
+}
+
 tabLogin.classList.toggle("active",mode==="login");
 tabRegister.classList.toggle("active",mode==="register");
 
@@ -503,12 +510,6 @@ document.getElementById("name").style.display = isRegister ? "block" : "none";
 document.getElementById("role").style.display = isRegister ? "block" : "none";  
 
 }
-
-// ================= UX SMART =================
-const isRegister = mode === "register";
-
-document.getElementById("name").style.display = isRegister ? "block" : "none";
-document.getElementById("role").style.display = isRegister ? "block" : "none";  
 
 // ===== AUTH =====
 btn.onclick=async()=>{
@@ -562,6 +563,11 @@ await setDoc(doc(db, "users", user.uid), {
 
   leadConverted: true
 });
+
+  // ================= INVESTOR FUNNEL =================
+if(mode === "register" && role === "investor"){
+  localStorage.setItem("show_investor_modal", "1");
+}
 
   // ================= AUTO LEAD =================
 try{
