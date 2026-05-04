@@ -1074,61 +1074,6 @@ async function saveLead(){
 
 }
 
-const data = await res.json();
-
-console.log("🔥 Lead sent:", data);
-
-/* =========================
-🔥 UI WOW (NO ALERT)
-========================= */
-
-const success = document.getElementById("success");
-success.style.display = "block";
-
-/* 🔥 attiva animazione */
-setTimeout(() => {
-  success.classList.add("show");
-}, 50);  
-
-/* 👉 scroll su messaggio */
-success.scrollIntoView({
-  behavior:"smooth",
-  block:"center"
-});
-
-/* 👉 contenuto dinamico premium */
-success.innerHTML = `
-✔ ${t("Richiesta inviata","Request sent")}
-
-<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
-
-🏦 ${t(
-  "Un consulente mutui ti contatterà a breve",
-  "A mortgage advisor will contact you shortly"
-)}
-
-<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
-
-🔥 ${t(
-  "Abbiamo trovato le migliori offerte per te",
-  "We found the best offers for you"
-)}
-
-<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
-
-💰 €${data.value || 0}
-`;
-
-/* 👉 BONUS: disabilita bottone per evitare spam */
-document.querySelector(".lead-box button").disabled = true;
-
-}catch(e){
-console.error("❌ Lead error:", e);
-alert(t("Errore invio","Error sending request"));
-}
-
-}
-
 document.addEventListener("DOMContentLoaded", () => {
 
   console.log("✅ DOM READY");
