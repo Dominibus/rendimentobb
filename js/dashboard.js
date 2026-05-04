@@ -397,8 +397,12 @@ const analyses = querySnapshot.docs.map(doc => ({
 
 const plan = String(window.currentPlan || "").toLowerCase();
 
+  window.isDemoData = false;
+
 if(plan === "free"){
   console.log("🆓 FREE → FAKE SMART DATA");
+  
+  window.isDemoData = true;
 
   // ❌ rimuovi dati reali
   analyses.length = 0;
@@ -696,7 +700,7 @@ if(window.isDemoData){
     padding:8px 12px;
     border-radius:8px;
     font-size:12px;
-    z-index:9999;
+    z-index:999999;
     backdrop-filter:blur(6px);
     box-shadow:0 10px 30px rgba(0,0,0,0.2);
   ">
@@ -2430,7 +2434,7 @@ background:rgba(0,0,0,0.6);
 display:flex;
 align-items:center;
 justify-content:center;
-z-index:9999;
+z-index:999999;
 ">
 
 <div style="
@@ -2758,7 +2762,7 @@ function lockInvestorPreview(){
   padding:14px 20px;
   border-radius:12px;
   box-shadow:0 10px 30px rgba(0,0,0,0.3);
-  z-index:9999;
+  z-index:999999;
   font-size:14px;
   ">
 
