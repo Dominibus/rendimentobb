@@ -1369,16 +1369,13 @@ window.sendLeadImmobili = async function(){
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        type: "immobili",
-        email,
-        city,
-        roi: 0,
-        price: 0,
-        equity: 0,
-        profit: 0,
-        lang: window.currentLang || "it",
-        source: "immobili_page"
-      })
+  type: "immobili",
+  email: email.trim(),
+  city,
+
+  source: "immobili_page",
+  funnel: window.currentPlan || "free"
+})
     });
 
     const data = await res.json();
@@ -1442,6 +1439,7 @@ window.handleCityClick = function(el){
     localStorage.setItem("lead_source", "immobili_city");
     localStorage.setItem("post_login_redirect", "/immobili/" + city + "/");
 
+    localStorage.setItem("lead_source", "immobili");
     showLoginModal();
     return;
   }
