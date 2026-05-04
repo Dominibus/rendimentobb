@@ -1337,108 +1337,90 @@ window.openInvestment = function(price){
 
 window.sendLeadImmobili = async function(){
 
-if(!window.userClickedLead){
-  console.warn("⛔ Bloccato invio automatico");
-  return;
-}  
+  if(!window.userClickedLead){
+    console.warn("⛔ Bloccato invio automatico");
+    return;
+  }
 
-const email = document.getElementById("lead-email").value;
-const city = document.getElementById("lead-city").value || "unknown";
+  const email = document.getElementById("lead-email").value.trim();
+  const city  = document.getElementById("lead-city").value.trim() || "unknown";
 
-if(!email || !email.includes("@")){
-  alert(
+  if(!email || !email.includes("@")){
+    alert(
+      window.currentLang==="en"
+      ? "Enter a valid email"
+      : "Inserisci una email valida"
+    );
+    return;
+  }
+
+  const msgBox = document.getElementById("lead-msg");
+
+  msgBox.innerText =
     window.currentLang==="en"
-    ? "Enter a valid email"
-    : "Inserisci una email valida"
-  );
-  return;
-};
+    ? "⏳ Sending..."
+    : "⏳ Invio in corso...";
 
-  document.getElementById("lead-msg").innerText =
-window.currentLang==="en"
-? "⏳ Sending..."
-: "⏳ Invio in corso...";
+  try{
 
-try{
+    console.log("📡 SEND IMMOBILI LEAD...");
 
-const res = await fetch("/api/send-lead", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    type: "immobili",
-    email: email.trim(),
-    city
-  })
-});
+    const res = await fetch("/api/send-lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "immobili",
+        email,
+        city,
+        roi: 0,
+        price: 0,
+        equity: 0,
+        profit: 0,
+        lang: window.currentLang || "it",
+        source: "immobili_page"
+      })
+    });
 
-// 🔥 EMAIL AUTOMATICA (QUI PRECISO)
-await fetch("/api/send-lead-email", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-email: email.trim(),
-lang: window.currentLang || "it"
-})
-});      
+    const data = await res.json();
 
-// 🔥 FOLLOW-UP 24h (test: 60 sec)
-setTimeout(() => {
-  fetch("/api/send-followup", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email,
-      lang: window.currentLang || "it",
-      step: 2
-    })
-  });
-}, 60000); // cambia poi a 86400000 (24h)
+    if(!res.ok){
+      throw new Error("API error");
+    }
 
+    console.log("✅ IMMOBILI LEAD:", data);
 
-// 🔥 FOLLOW-UP 72h (test: 2 min)
-setTimeout(() => {
-  fetch("/api/send-followup", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email,
-      lang: window.currentLang || "it",
-      step: 3
-    })
-  });
-}, 120000); // cambia poi a 259200000 (72h)      
+    msgBox.innerHTML = `
+    ✔ ${
+      window.currentLang==="en"
+      ? "Request sent successfully"
+      : "Richiesta inviata con successo"
+    }
 
-const data = await res.json();
+    <div style="margin:10px 0;border-top:1px solid #bbf7d0;"></div>
 
-if(data.success){
+    ${
+      window.currentLang==="en"
+      ? "You will receive selected opportunities soon"
+      : "Riceverai presto opportunità selezionate"
+    }
 
-document.getElementById("lead-msg").innerText =
-window.currentLang==="en"
-? "✔ Request sent successfully"
-: "✔ Richiesta inviata con successo";
+    <div style="margin:10px 0;border-top:1px solid #bbf7d0;"></div>
 
-}else{
-throw new Error("fail");
-}
+    💰 €${data.value || 0}
+    `;
 
-}catch(e){
+  }catch(e){
 
-document.getElementById("lead-msg").innerText =
-window.currentLang==="en"
-? "❌ Error, try again"
-: "❌ Errore, riprova";
+    console.error("❌ IMMOBILI ERROR:", e);
 
-}
+    msgBox.innerText =
+      window.currentLang==="en"
+      ? "❌ Error, try again"
+      : "❌ Errore, riprova";
 
-};       
+  }
+
+};   
 
   // ================= CITY CLICK (LEAD + LOGIN FLOW) =================
 
