@@ -110,22 +110,21 @@ if(!existing.empty){
 
     // ================= DB =================
     await db.collection("leads").add({
-      key,
-      email,
-      city,
-      roi: roiRounded,
-      price,
-      equity,
-      loan,
-      profit,
-      dscr: Number(dscr.toFixed(2)),
-      score,
-      value,
-      type,
-      status: "new",
-      lang: detectedLang,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+  email,
+  city,
+  roi: roiRounded,
+  price,
+  equity,
+  loan,
+  profit,
+  dscr: Number(dscr.toFixed(2)),
+  score,
+  value,
+  type,
+  status: "new",
+  lang: detectedLang,
+  createdAt: admin.firestore.FieldValue.serverTimestamp()
+});
 
     // ================= USER EMAIL (🔥 CONVERSION) =================
     if(score !== "cold"){
