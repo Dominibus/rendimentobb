@@ -302,8 +302,8 @@ font-size:22px;
 
 <!-- LANGUAGE SWITCH -->
 <div class="lang-switch">
-<button onclick="changeLang('it')" class="lang-btn" id="btn-it">IT</button>
-<button onclick="changeLang('en')" class="lang-btn" id="btn-en">EN</button>
+  <button onclick="changeLang('it')" class="lang-btn" id="btn-it">IT</button>
+  <button onclick="changeLang('en')" class="lang-btn" id="btn-en">EN</button>
 </div>
 
 <main class="login-wrapper">
@@ -316,58 +316,110 @@ font-size:22px;
 Accedi al tuo account
 </div>
 
-<div style="font-size:12px;color:#10b981;margin-bottom:12px;">
-✔️ Gratis – nessuna carta richiesta
+<!-- 🔥 VALUE MESSAGE -->
+<div style="font-size:12px;color:#10b981;margin-bottom:12px;"
+data-it="⚡ Accesso gratuito • Analisi in 30 secondi"
+data-en="⚡ Free access • Analysis in 30 seconds">
+⚡ Accesso gratuito • Analisi in 30 secondi
 </div>
 
 <div id="login-message" class="message"></div>
 
-<input id="name" type="text" placeholder="Nome">
+<!-- 🔥 NAME (REGISTER ONLY VIA JS) -->
+<input id="name" type="text"
+placeholder="Nome"
+data-it="Nome"
+data-en="Name">
 
-<select id="role" style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px solid #cbd5e1;">
-  <option value="">Seleziona profilo</option>
-  <option value="investor">Investitore</option>
-  <option value="agency">Agenzia immobiliare</option>
-  <option value="broker">Broker mutui</option>
-  <option value="curious">Curioso / studio</option>
-</select> 
-<input id="email" type="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+<!-- 🔥 ROLE (REGISTER ONLY VIA JS) -->
+<select id="role"
+style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px solid #cbd5e1;">
 
+  <option value=""
+    data-it="Seleziona profilo"
+    data-en="Select profile">
+    Seleziona profilo
+  </option>
+
+  <option value="investor"
+    data-it="Investitore"
+    data-en="Investor">
+    Investitore
+  </option>
+
+  <option value="agency"
+    data-it="Agenzia immobiliare"
+    data-en="Real estate agency">
+    Agenzia immobiliare
+  </option>
+
+  <option value="broker"
+    data-it="Broker mutui"
+    data-en="Mortgage broker">
+    Broker mutui
+  </option>
+
+  <option value="curious"
+    data-it="Curioso / studio"
+    data-en="Curious / research">
+    Curioso / studio
+  </option>
+
+</select>
+
+<!-- 🔥 EMAIL -->
+<input id="email" type="email"
+placeholder="Email"
+data-it="Email"
+data-en="Email">
+
+<!-- 🔥 PASSWORD -->
+<input id="password" type="password"
+placeholder="Password"
+data-it="Password"
+data-en="Password">
+
+<!-- 🔥 TABS -->
 <div class="auth-tabs">
-<button id="tab-login" class="auth-tab active">Login</button>
-<button id="tab-register" class="auth-tab">Sign up</button>
+  <button id="tab-login" class="auth-tab active">Login</button>
+  <button id="tab-register" class="auth-tab">Sign up</button>
 </div>
 
-<div style="
-margin-bottom:12px;
-font-size:12px;
-color:#64748b;
-">
-<span data-it="🔒 Accesso sicuro • Nessuna carta richiesta"
-      data-en="🔒 Secure access • No credit card required">
-🔒 Accesso sicuro • Nessuna carta richiesta
-</span>
+<!-- 🔥 TRUST -->
+<div style="margin-bottom:12px;font-size:12px;color:#64748b;">
+  <span 
+    data-it="🔒 Accesso sicuro • Nessuna carta richiesta"
+    data-en="🔒 Secure access • No credit card required">
+    🔒 Accesso sicuro • Nessuna carta richiesta
+  </span>
 </div>
 
-
+<!-- 🔥 CTA -->
 <button id="authBtn" class="btn">Login</button>
 
+<!-- 🔥 ACTIONS -->
 <div style="margin-top:12px;font-size:13px;">
 
-  <!-- RESET PASSWORD -->
-  <div id="forgot-password" style="cursor:pointer;color:#10b981;margin-bottom:8px;">
+  <div id="forgot-password"
+    style="cursor:pointer;color:#10b981;margin-bottom:8px;"
+    data-it="🔑 Password dimenticata?"
+    data-en="🔑 Forgot password?">
     🔑 Password dimenticata?
   </div>
 
-  <!-- DELETE ACCOUNT -->
-  <div id="delete-account" style="cursor:pointer;color:#ef4444;display:none;">
+  <div id="delete-account"
+    style="cursor:pointer;color:#ef4444;display:none;"
+    data-it="🗑 Elimina account"
+    data-en="🗑 Delete account">
     🗑 Elimina account
   </div>
 
-</div>  
+</div>
 
-<a href="/" class="back-home">
+<!-- 🔙 BACK -->
+<a href="/" class="back-home"
+   data-it="← Torna alla Home"
+   data-en="← Back to Home">
 ← Torna alla Home
 </a>
 
@@ -444,7 +496,19 @@ btn.innerText = mode==="login"
 tabLogin.classList.toggle("active",mode==="login");
 tabRegister.classList.toggle("active",mode==="register");
 
+// ================= 🔥 UX SMART =================
+const isRegister = mode === "register";
+
+document.getElementById("name").style.display = isRegister ? "block" : "none";
+document.getElementById("role").style.display = isRegister ? "block" : "none";  
+
 }
+
+// ================= UX SMART =================
+const isRegister = mode === "register";
+
+document.getElementById("name").style.display = isRegister ? "block" : "none";
+document.getElementById("role").style.display = isRegister ? "block" : "none";  
 
 // ===== AUTH =====
 btn.onclick=async()=>{
@@ -473,21 +537,55 @@ const role = document.getElementById("role")?.value || "unknown";
 // 🔥 FIRESTORE
 const db = getFirestore(app);
 
+const pageSource = window.location.pathname;
+
 await setDoc(doc(db, "users", user.uid), {
   email,
   name,
+  role, // 🔥 fondamentale
 
   plan: "free",
 
-  // 🔥 TRACKING
-  source: "auth_register",
+  // 🔥 TRACKING REALE
+  source: pageSource,
   funnel: leadSource,
+
+  // 🔥 LEAD INTELLIGENCE
+  intentScore:
+    role === "investor" ? 100 :
+    role === "agency" ? 80 :
+    role === "broker" ? 90 :
+    30,
 
   createdAt: new Date(),
   lastLogin: new Date(),
 
   leadConverted: true
 });
+
+  // ================= AUTO LEAD =================
+try{
+
+  await fetch("/api/send-lead", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      email,
+      name,
+      role,
+
+      type: "auth",
+
+      source: pageSource,
+      funnel: leadSource,
+
+      lang: window.currentLang || "it"
+    })
+  });
+
+}catch(e){
+  console.warn("Lead auth non inviato", e);
+}
 
   localStorage.removeItem("lead_source");
   
