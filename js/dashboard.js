@@ -2415,99 +2415,138 @@ color:#065f46;
 
 function showGuestPopup(){
 
-const existing = document.getElementById("guest-popup");
-if(existing) return;
+  // 🔥 sempre pulito (no duplicati)
+  document.getElementById("guest-popup")?.remove();
 
-const popup = document.createElement("div");
+  const popup = document.createElement("div");
+  popup.id = "guest-popup";
 
-popup.id = "guest-popup";
+  popup.innerHTML = `
 
-popup.innerHTML = `
+  <div style="
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,0.65);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+    animation:fadeIn 0.25s ease;
+  ">
 
-<div style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:999999;
-">
+    <div style="
+      background:white;
+      padding:30px;
+      border-radius:16px;
+      max-width:420px;
+      width:90%;
+      text-align:center;
+      box-shadow:0 30px 80px rgba(0,0,0,0.25);
+      position:relative;
+    ">
 
-<div style="
-background:white;
-padding:28px;
-border-radius:14px;
-max-width:420px;
-width:90%;
-text-align:center;
-box-shadow:0 20px 60px rgba(0,0,0,0.3);
-">
+      <!-- ❌ CLOSE -->
+      <button onclick="document.getElementById('guest-popup').remove()" style="
+        position:absolute;
+        top:12px;
+        right:12px;
+        background:none;
+        border:none;
+        font-size:18px;
+        cursor:pointer;
+        color:#64748b;
+      ">✕</button>
 
-<h2 style="margin-bottom:10px">
-🚀 ${t("Scopri la tua redditività","Discover your ROI")}
-</h2>
+      <!-- 🚀 TITLE -->
+      <h2 style="margin-bottom:10px;font-size:22px;font-weight:700;">
+        🚀 ${t("Scopri la tua redditività reale","Discover your real ROI")}
+      </h2>
 
-<p style="color:#64748b;font-size:14px;margin-bottom:20px">
-${t(
-"Analizza investimenti B&B, calcola ROI e scopri se conviene davvero.",
-"Analyze B&B investments, calculate ROI and see if it's worth it."
-)}
-</p>
+      <!-- 💬 SUB -->
+      <p style="color:#64748b;font-size:14px;margin-bottom:20px;line-height:1.5">
+        ${t(
+        "Il 72% degli investitori B&B perde soldi. Scopri se il tuo investimento è davvero profittevole.",
+        "72% of B&B investors lose money. Find out if your investment is actually profitable."
+        )}
+      </p>
 
-<div style="
-display:flex;
-flex-direction:column;
-gap:10px;
-">
+      <!-- CTA -->
+      <div style="
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+      ">
 
-<button onclick="window.location.href='/login/'" style="
-background:#10b981;
-color:white;
-border:none;
-padding:12px;
-border-radius:8px;
-font-weight:600;
-cursor:pointer;
-">
-${t("Accedi","Login")}
-</button>
+        <!-- LOGIN -->
+        <button onclick="window.location.href='/login/'" style="
+          background:#10b981;
+          color:white;
+          border:none;
+          padding:14px;
+          border-radius:10px;
+          font-weight:700;
+          cursor:pointer;
+          font-size:14px;
+          box-shadow:0 10px 25px rgba(16,185,129,0.3);
+          transition:0.2s;
+        ">
+          🔓 ${t("Accedi e analizza","Login & analyze")}
+        </button>
 
-<button onclick="window.location.href='/login/'" style="
-background:#0f172a;
-color:white;
-border:none;
-padding:12px;
-border-radius:8px;
-font-weight:600;
-cursor:pointer;
-">
-${t("Registrati gratis","Register free")}
-</button>
+        <!-- REGISTER -->
+        <button onclick="window.location.href='/login/'" style="
+          background:#0f172a;
+          color:white;
+          border:none;
+          padding:14px;
+          border-radius:10px;
+          font-weight:700;
+          cursor:pointer;
+          font-size:14px;
+        ">
+          🚀 ${t("Registrati gratis","Create free account")}
+        </button>
 
-<button onclick="document.getElementById('guest-popup').remove()" style="
-background:none;
-border:none;
-color:#64748b;
-margin-top:6px;
-cursor:pointer;
-font-size:12px;
-">
-${t("Continua come ospite","Continue as guest")}
-</button>
+        <!-- GUEST -->
+        <button onclick="document.getElementById('guest-popup').remove()" style="
+          background:none;
+          border:none;
+          color:#64748b;
+          margin-top:6px;
+          cursor:pointer;
+          font-size:12px;
+        ">
+          ${t("Continua senza account","Continue as guest")}
+        </button>
 
-</div>
+      </div>
 
-</div>
-</div>
+      <!-- TRUST -->
+      <div style="
+        margin-top:18px;
+        font-size:11px;
+        color:#94a3b8;
+      ">
+        ${t(
+        "Nessuna carta richiesta • Accesso immediato",
+        "No credit card required • Instant access"
+        )}
+      </div>
 
-`;
+    </div>
+  </div>
 
-document.body.appendChild(popup);
+  <style>
+  @keyframes fadeIn{
+    from{opacity:0; transform:scale(0.98);}
+    to{opacity:1; transform:scale(1);}
+  }
+  </style>
 
+  `;
+
+  document.body.appendChild(popup);
 }
 
 function unlockProContent(){
@@ -2762,7 +2801,7 @@ function lockInvestorPreview(){
   padding:14px 20px;
   border-radius:12px;
   box-shadow:0 10px 30px rgba(0,0,0,0.3);
-  z-index:999999;
+  z-index:10000;
   font-size:14px;
   ">
 
