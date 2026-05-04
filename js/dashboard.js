@@ -398,22 +398,40 @@ const analyses = querySnapshot.docs.map(doc => ({
 const plan = String(window.currentPlan || "").toLowerCase();
 
 if(plan === "free"){
-  console.log("🆓 FREE → NO REAL DATA");
+  console.log("🆓 FREE → FAKE SMART DATA");
 
-  // ❌ cancella dati reali
+  // ❌ rimuovi dati reali
   analyses.length = 0;
 
-  // 👉 oppure mock controllato (più potente UX)
-  // analyses.push({
-  //   roi: 12.4,
-  //   price: 180000,
-  //   equity: 40000,
-  //   risk: 35,
-  //   city: "roma",
-  //   createdAt: new Date()
-  // });
+  // 🔥 dati finti realistici (UX + conversione)
+  analyses.push({
+    roi: 11.8,
+    price: 165000,
+    equity: 35000,
+    risk: 42,
+    city: "roma",
+    createdAt: new Date()
+  });
 
-}  
+  analyses.push({
+    roi: 9.6,
+    price: 140000,
+    equity: 30000,
+    risk: 55,
+    city: "napoli",
+    createdAt: new Date()
+  });
+
+  analyses.push({
+    roi: 13.2,
+    price: 210000,
+    equity: 50000,
+    risk: 38,
+    city: "milano",
+    createdAt: new Date()
+  });
+
+}
 
 // 🔥 FIX → rende disponibili al report
 window.dashboardSimulations = analyses;
