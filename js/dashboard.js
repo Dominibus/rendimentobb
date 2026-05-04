@@ -352,6 +352,16 @@ cutout:"65%"
 
 async function loadDashboard(){
 
+  if(window.__dashboardLoaded && !window.__forceReload){
+    console.warn("Dashboard già inizializzata → skip");
+    return;
+  }
+
+  window.__dashboardLoaded = true;
+  window.__forceReload = false;
+
+  closeAllOverlays();
+
   roiValues = [];
   labels = [];
 
@@ -719,13 +729,6 @@ if(window.isDemoData){
 }
 
 } // ✅ CHIUSURA loadDashboard  
-
-async function loadDashboard(){
-
-  closeAllOverlays(); // 🔥 FIX CRITICO
-
-  roiValues = [];
-  labels = [];
 
 // ================= BEST INVESTMENT =================
 
@@ -1317,7 +1320,7 @@ document.addEventListener("rb_language_changed", () => {
 
   console.log("🌍 Cambio lingua → RELOAD DASHBOARD");
 
-  // 🔥 QUESTA È LA CHIAVE
+  window.__forceReload = true;
   loadDashboard();
 
 });
