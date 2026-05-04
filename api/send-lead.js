@@ -70,9 +70,15 @@ export default async function handler(req, res){
   profit,
   type,
   lang,
-
   source,
-  funnel
+  funnel,
+
+  phone,
+  bank,
+  rate,
+  name,
+  role,
+  message
 } = req.body || {};
 
     // ================= CLEAN =================
