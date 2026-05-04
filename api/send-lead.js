@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 SEND LEAD – RENDIMENTOBB BANK ELITE FINAL
+// 🚀 SEND LEAD – RENDIMENTOBB CORE SYSTEM (FINAL)
 // ===============================
 
 import { Resend } from "resend";
@@ -35,7 +35,7 @@ function t(lang, it, en){
 }
 
 // ================= SCORE =================
-function getScore({roi, price}){
+function getScore({roi}){
 
   if(roi >= 20){
     return { score:"extreme", value:150, label:"🔥 EXTREME" };
@@ -69,16 +69,25 @@ export default async function handler(req, res){
       equity,
       profit,
       type,
-      lang
+      lang,
+      source,
+      phone,
+      bank,
+      rate,
+      name,
+      message,
+      role
     } = req.body || {};
 
+    // ================= CLEAN =================
     email = clean(email);
     city  = clean(city);
     roi   = safe(roi);
     price = safe(price);
     equity = safe(equity);
     profit = safe(profit);
-    type  = clean(type || "simulatore");
+    type  = clean(type || "generic");
+    source = clean(source || "unknown");
 
     if(!email){
       return res.status(400).json({ error:"Missing email" });
@@ -91,139 +100,146 @@ export default async function handler(req, res){
     const loan = price - equity;
     const dscr = loan > 0 ? (profit / (loan * 0.04)) : 0;
 
-    const { score, value, label } = getScore({roi: roiRounded, price});
+    const { score, value, label } = getScore({roi: roiRounded});
 
-    // ================= ANTI DUPLICATO INTELLIGENTE =================
-const existing = await db.collection("leads")
-  .where("email","==",email)
-  .where("roi","==",roiRounded)
-  .limit(1)
-  .get();
+    // ================= ANTI DUPLICATO =================
+    const existing = await db.collection("leads")
+      .where("email","==",email)
+      .where("type","==",type)
+      .where("roi","==",roiRounded)
+      .limit(1)
+      .get();
 
-if(!existing.empty){
-  return res.status(200).json({
-    success:true,
-    duplicate:true,
-    reason:"same_roi"
-  });
-}
-
-    // ================= DB =================
-    await db.collection("leads").add({
-  email,
-  city,
-  roi: roiRounded,
-  price,
-  equity,
-  loan,
-  profit,
-  dscr: Number(dscr.toFixed(2)),
-  score,
-  value,
-  type,
-  status: "new",
-  lang: detectedLang,
-  createdAt: admin.firestore.FieldValue.serverTimestamp()
-});
-
-    // ================= USER EMAIL (🔥 CONVERSION) =================
-    if(score !== "cold"){
-      await resend.emails.send({
-        from: "RendimentoBB <analisi@rendimentobb.it>",
-        to: [email],
-        subject: t(
-          detectedLang,
-          `Il tuo investimento (${roiRounded}%)`,
-          `Your investment (${roiRounded}%)`
-        ),
-        html: `
-        <div style="font-family:Inter;background:#0f172a;padding:40px">
-          <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px;text-align:center">
-
-            <h2 style="color:#0f172a;margin-bottom:10px">
-              ${t(detectedLang,"Sintesi investimento","Investment summary")}
-            </h2>
-
-            <div style="font-size:56px;font-weight:800;color:#10b981">
-              ${roiRounded}%
-            </div>
-
-            <div style="color:#64748b;margin-bottom:20px">${city}</div>
-
-            <p style="font-size:14px;color:#334155;line-height:1.6">
-              ${t(
-                detectedLang,
-                "Hai trovato un'opportunità interessante. Ma questa è solo una stima iniziale.",
-                "You found an interesting opportunity. But this is only a preliminary estimate."
-              )}
-            </p>
-
-            <div style="background:#fff7ed;padding:15px;border-radius:10px;margin-top:15px;font-size:13px">
-              ⚠️ ${t(
-                detectedLang,
-                "Il ROI NON rappresenta il profitto reale",
-                "ROI does NOT represent real profit"
-              )}
-            </div>
-
-            <a href="https://rendimentobb.it/dashboard"
-            style="display:inline-block;margin-top:25px;background:#10b981;color:white;padding:14px 26px;border-radius:999px;text-decoration:none;font-weight:700">
-            ${t(detectedLang,"Analisi completa","Full analysis")}
-            </a>
-
-          </div>
-        </div>
-        `
+    if(!existing.empty){
+      return res.status(200).json({
+        success:true,
+        duplicate:true
       });
     }
 
-    // ================= ADMIN EMAIL (🔥 SALES READY) =================
+    // ================= DB =================
+    await db.collection("leads").add({
+      email,
+      city,
+      roi: roiRounded,
+      price,
+      equity,
+      loan,
+      profit,
+      dscr: Number(dscr.toFixed(2)),
+      score,
+      value,
+      type,
+      source,
+      phone: clean(phone),
+      bank: clean(bank),
+      rate: safe(rate),
+      name: clean(name),
+      message: clean(message),
+      role: clean(role),
+      status: "new",
+      lang: detectedLang,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    // ================= USER EMAIL =================
+    if(score !== "cold"){
+
+      let subject = t(
+        detectedLang,
+        `Il tuo investimento (${roiRounded}%)`,
+        `Your investment (${roiRounded}%)`
+      );
+
+      let content = `
+      <div style="font-family:Inter;background:#0f172a;padding:40px">
+        <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px;text-align:center">
+
+          <h2>${t(detectedLang,"Analisi iniziale","Initial analysis")}</h2>
+
+          <div style="font-size:50px;font-weight:800;color:#10b981">
+            ${roiRounded}%
+          </div>
+
+          <p style="color:#64748b">${city}</p>
+
+          <p style="font-size:14px;color:#334155">
+            ${t(
+              detectedLang,
+              "Questa è una stima iniziale. I dati reali possono cambiare completamente il risultato.",
+              "This is a preliminary estimate. Real data can completely change the outcome."
+            )}
+          </p>
+
+          <a href="https://rendimentobb.it/dashboard"
+          style="margin-top:20px;display:inline-block;background:#10b981;color:white;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:700">
+          ${t(detectedLang,"Analisi completa","Full analysis")}
+          </a>
+
+        </div>
+      </div>
+      `;
+
+      // 🔥 PERSONALIZZAZIONE PER TIPO
+      if(type === "mutui"){
+        subject = t(detectedLang,"Richiesta mutuo ricevuta","Mortgage request received");
+      }
+
+      if(type === "immobili"){
+        subject = t(detectedLang,"Opportunità immobili ricevute","Property opportunities received");
+      }
+
+      await resend.emails.send({
+        from: "RendimentoBB <analisi@rendimentobb.it>",
+        to: [email],
+        subject,
+        html: content
+      });
+    }
+
+    // ================= ADMIN EMAIL =================
     await resend.emails.send({
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
 
-      subject: `${label} | ${city} | ROI ${roiRounded}% | €${value}`,
+      subject: `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value}`,
 
       html: `
       <div style="font-family:Inter;background:#f8fafc;padding:30px">
 
         <div style="max-width:720px;margin:auto;background:white;border-radius:20px;padding:35px">
 
-          <h2 style="margin-bottom:5px">🚀 Nuovo Lead</h2>
+          <h2>🚀 Nuovo Lead (${type})</h2>
 
-          <div style="font-size:22px;font-weight:800;color:#10b981;margin-bottom:20px">
+          <div style="font-size:20px;font-weight:800;color:#10b981;margin-bottom:20px">
             ${label} – ROI ${roiRounded}%
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;font-size:14px">
+          <div style="font-size:14px">
 
-            <div><strong>Email</strong><br>${email}</div>
-            <div><strong>Città</strong><br>${city}</div>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Città:</strong> ${city}</p>
+            <p><strong>Fonte:</strong> ${source}</p>
+            <p><strong>Piano:</strong> ${req.body.plan || "unknown"}</p>
 
-            <div><strong>Prezzo</strong><br>€${price}</div>
-            <div><strong>Equity</strong><br>€${equity}</div>
-
-            <div><strong>Mutuo</strong><br>€${loan}</div>
-            <div><strong>Profitto</strong><br>€${profit}</div>
-
-            <div><strong>DSCR</strong><br>${dscr.toFixed(2)}</div>
-            <div><strong>Tipo</strong><br>${type}</div>
-
-          </div>
-
-          <div style="margin-top:25px;padding:18px;background:#ecfdf5;border-radius:12px">
-
-            <strong>💰 Valore lead stimato:</strong> €${value}
+            ${phone ? `<p><strong>Telefono:</strong> ${phone}</p>` : ""}
+            ${bank ? `<p><strong>Banca:</strong> ${bank}</p>` : ""}
+            ${rate ? `<p><strong>Tasso:</strong> ${rate}%</p>` : ""}
+            ${name ? `<p><strong>Nome:</strong> ${name}</p>` : ""}
+            ${role ? `<p><strong>Ruolo:</strong> ${role}</p>` : ""}
+            ${message ? `<p><strong>Messaggio:</strong> ${message}</p>` : ""}
 
           </div>
 
-          <div style="margin-top:25px;text-align:center">
+          <div style="margin-top:20px;padding:15px;background:#ecfdf5;border-radius:10px">
+            💰 Valore lead stimato: €${value}
+          </div>
 
+          <div style="margin-top:20px;text-align:center">
             <a href="mailto:${email}"
-            style="background:#10b981;color:white;padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:700">
+            style="background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700">
             Contatta subito
             </a>
-
           </div>
 
         </div>
