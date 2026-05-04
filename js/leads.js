@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 LEADS ENGINE – RENDIMENTOBB ULTRA (FINAL)
+// 🚀 LEADS ENGINE – RENDIMENTOBB ULTRA (SILICON VALLEY FINAL)
 // ===============================
 
 import { db } from "/js/firebase-init.js";
@@ -18,7 +18,7 @@ if(!window.__leadLock){
 }
 
 // ===============================
-// HELPERS
+// 🌍 HELPERS
 // ===============================
 function isValidEmail(email){
   return typeof email === "string" && email.includes("@");
@@ -39,7 +39,7 @@ function getCity(data){
 }
 
 // ===============================
-// 🎯 SCORING ENGINE
+// 🎯 SCORING ENGINE (LEAD VALUE)
 // ===============================
 function calculateScore(roi){
 
@@ -47,11 +47,11 @@ function calculateScore(roi){
   if(roi > 40) return { score:"high", value:70 };
   if(roi > 20) return { score:"medium", value:30 };
 
-  return { score:"low", value:0 };
+  return { score:"low", value:10 }; // 🔥 NON 0 → sempre utile
 }
 
 // ===============================
-// 🌐 BASE LEAD
+// 🌐 BASE LEAD STRUCTURE
 // ===============================
 function buildBaseLead(type, data){
 
@@ -71,21 +71,25 @@ function buildBaseLead(type, data){
     plan: window.currentPlan || "free",
     lang: window.currentLang || "it",
 
+    // 🔥 TRACKING CORE
+    source: window.location.pathname,
+    funnel: window.currentPlan || "free",
+
     createdAt: serverTimestamp(),
     sessionId: window.sessionId || (window.sessionId = Date.now())
   };
 }
 
 // ===============================
-// 📡 SEND CORE (UNICO ENDPOINT)
+// 📡 SEND CORE (API VERCEL)
 // ===============================
 async function sendLead(data){
 
   try{
 
-    const key = data.email + "_" + data.type;
+    const key = data.email + "_" + data.type + "_" + Math.round(data.roi || 0);
 
-    // 🔒 anti doppio invio
+    // 🔒 ANTI DUPLICATO
     if(window.__leadLock[key]){
       console.warn("⛔ Lead duplicato bloccato:", key);
       return;
@@ -99,14 +103,13 @@ async function sendLead(data){
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
-  email,
-  type,
+        ...data,
 
-  // 🔥 TRACKING
-  source: window.location.pathname,
-  funnel: window.currentPlan || "free",
-  timestamp: Date.now()
-})
+        // 🔥 SERVER TRACKING ALLINEATO
+        source: data.source || window.location.pathname,
+        funnel: data.funnel || window.currentPlan || "free",
+        timestamp: Date.now()
+      })
     });
 
     if(!response.ok){
@@ -146,14 +149,12 @@ export async function saveLeadMutui(data){
       years: safeNumber(data.years)
     });
 
-    // 🔥 BLOCCO LEAD INUTILI
+    // 🔥 NON bloccare più → conversione futura
     if(lead.score === "low"){
-      console.log("⛔ Lead mutui scartato (low)");
-      return;
+      console.log("⚠️ Lead mutui low (salvato comunque)");
     }
 
     await addDoc(collection(db,"leads_mutui"), lead);
-
     await sendLead(lead);
 
   }catch(err){
@@ -180,12 +181,10 @@ export async function saveLeadImmobili(data){
     });
 
     if(lead.score === "low"){
-      console.log("⛔ Lead immobili scartato");
-      return;
+      console.log("⚠️ Lead immobili low (salvato comunque)");
     }
 
     await addDoc(collection(db,"leads_immobili"), lead);
-
     await sendLead(lead);
 
   }catch(err){
@@ -195,7 +194,7 @@ export async function saveLeadImmobili(data){
 }
 
 // ===============================
-// 🤝 PARTNER LEAD (HIGH ONLY)
+// 🤝 PARTNER LEAD
 // ===============================
 export async function savePartnerLead(data){
 
@@ -214,7 +213,6 @@ export async function savePartnerLead(data){
     };
 
     await addDoc(collection(db,"leads_partner"), lead);
-
     await sendLead(lead);
 
   }catch(err){
@@ -244,7 +242,6 @@ export async function saveWorkLead(data){
     };
 
     await addDoc(collection(db,"leads_work"), lead);
-
     await sendLead(lead);
 
   }catch(err){
