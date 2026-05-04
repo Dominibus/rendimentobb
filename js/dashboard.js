@@ -2605,6 +2605,9 @@ function showInvestorOverlay(){
 
   const potentialProfit = Math.round((price * roi) / 100);
 
+  // 🔥 SOURCE OF TRUTH
+  const isInvestor = window.RB_USER?.isInvestor;
+
   const overlay = document.createElement("div");
   overlay.id = "investor-overlay";
 
@@ -2724,7 +2727,7 @@ function showInvestorOverlay(){
       )}
     </div>
 
-    <!-- PSYCHO TRIGGER -->
+    <!-- PSYCHO -->
     <div style="
       font-size:13px;
       color:#475569;
@@ -2752,10 +2755,10 @@ function showInvestorOverlay(){
       transition:0.2s;
     ">
       🚀 ${
-  isInvestor
-  ? t("Passa a PRO e sblocca tutto","Upgrade to PRO and unlock everything")
-  : t("Sblocca analisi reale","Unlock real analysis")
-}
+        isInvestor
+        ? t("Passa a PRO e sblocca tutto","Upgrade to PRO and unlock everything")
+        : t("Sblocca analisi reale","Unlock real analysis")
+      }
     </button>
 
     <!-- TRUST -->
@@ -2783,7 +2786,7 @@ function showInvestorOverlay(){
 
   document.body.appendChild(overlay);
 
-  // 🔥 ANIMAZIONE NUMERO (GAME CHANGER)
+  // 🔥 ANIMAZIONE NUMERO
   setTimeout(()=>{
     const el = document.getElementById("rb-profit-number");
     if(!el) return;
@@ -2806,7 +2809,6 @@ function showInvestorOverlay(){
   }, 300);
 
 }
-
 function unlockProContent(){
 
   console.log("🔥 UNLOCK PRO COMPLETO");
