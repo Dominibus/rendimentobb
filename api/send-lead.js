@@ -1,5 +1,5 @@
 // ===============================
-// 🚀 SEND LEAD – RENDIMENTOBB ELITE (BANK STYLE)
+// 🚀 SEND LEAD – RENDIMENTOBB BANK ELITE FINAL
 // ===============================
 
 import { Resend } from "resend";
@@ -37,8 +37,12 @@ function t(lang, it, en){
 // ================= SCORE =================
 function getScore({roi, price}){
 
-  if(roi >= 15 && price > 100000){
-    return { score:"hot", value:100, label:"🔥 HOT" };
+  if(roi >= 20){
+    return { score:"extreme", value:150, label:"🔥 EXTREME" };
+  }
+
+  if(roi >= 15){
+    return { score:"hot", value:100, label:"🚀 HOT" };
   }
 
   if(roi >= 10){
@@ -82,7 +86,7 @@ export default async function handler(req, res){
 
     const detectedLang = detectLang(req, lang);
 
-    // ================= FORMAT =================
+    // ================= CALCOLI =================
     const roiRounded = Number(roi.toFixed(1));
     const loan = price - equity;
     const dscr = loan > 0 ? (profit / (loan * 0.04)) : 0;
@@ -120,32 +124,48 @@ export default async function handler(req, res){
       createdAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    // ================= USER EMAIL =================
+    // ================= USER EMAIL (🔥 CONVERSION) =================
     if(score !== "cold"){
       await resend.emails.send({
         from: "RendimentoBB <analisi@rendimentobb.it>",
         to: [email],
         subject: t(
           detectedLang,
-          `Analisi investimento (${roiRounded}%)`,
-          `Investment analysis (${roiRounded}%)`
+          `Il tuo investimento (${roiRounded}%)`,
+          `Your investment (${roiRounded}%)`
         ),
         html: `
         <div style="font-family:Inter;background:#0f172a;padding:40px">
-          <div style="max-width:640px;margin:auto;background:white;border-radius:16px;padding:30px;text-align:center">
+          <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px;text-align:center">
 
-            <h2 style="color:#0f172a">
+            <h2 style="color:#0f172a;margin-bottom:10px">
               ${t(detectedLang,"Sintesi investimento","Investment summary")}
             </h2>
 
-            <div style="font-size:52px;font-weight:800;color:#10b981">
+            <div style="font-size:56px;font-weight:800;color:#10b981">
               ${roiRounded}%
             </div>
 
-            <p style="color:#64748b">${city}</p>
+            <div style="color:#64748b;margin-bottom:20px">${city}</div>
+
+            <p style="font-size:14px;color:#334155;line-height:1.6">
+              ${t(
+                detectedLang,
+                "Hai trovato un'opportunità interessante. Ma questa è solo una stima iniziale.",
+                "You found an interesting opportunity. But this is only a preliminary estimate."
+              )}
+            </p>
+
+            <div style="background:#fff7ed;padding:15px;border-radius:10px;margin-top:15px;font-size:13px">
+              ⚠️ ${t(
+                detectedLang,
+                "Il ROI NON rappresenta il profitto reale",
+                "ROI does NOT represent real profit"
+              )}
+            </div>
 
             <a href="https://rendimentobb.it/dashboard"
-            style="display:inline-block;margin-top:25px;background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none">
+            style="display:inline-block;margin-top:25px;background:#10b981;color:white;padding:14px 26px;border-radius:999px;text-decoration:none;font-weight:700">
             ${t(detectedLang,"Analisi completa","Full analysis")}
             </a>
 
@@ -155,53 +175,51 @@ export default async function handler(req, res){
       });
     }
 
-    // ================= ADMIN EMAIL (🔥 QUI CAMBIA TUTTO) =================
+    // ================= ADMIN EMAIL (🔥 SALES READY) =================
     await resend.emails.send({
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
 
-      subject: `🔥 ${label} | ${city} | ROI ${roiRounded}% | €${value}`,
+      subject: `${label} | ${city} | ROI ${roiRounded}% | €${value}`,
 
       html: `
       <div style="font-family:Inter;background:#f8fafc;padding:30px">
 
-        <div style="max-width:700px;margin:auto;background:white;border-radius:16px;padding:30px">
+        <div style="max-width:720px;margin:auto;background:white;border-radius:20px;padding:35px">
 
-          <h2 style="margin-bottom:10px">
-            🚀 Nuovo Lead Qualificato
-          </h2>
+          <h2 style="margin-bottom:5px">🚀 Nuovo Lead</h2>
 
-          <div style="font-size:20px;font-weight:700;margin-bottom:20px;color:#10b981">
+          <div style="font-size:22px;font-weight:800;color:#10b981;margin-bottom:20px">
             ${label} – ROI ${roiRounded}%
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;font-size:14px">
 
-            <div><strong>Email:</strong><br>${email}</div>
-            <div><strong>Città:</strong><br>${city}</div>
+            <div><strong>Email</strong><br>${email}</div>
+            <div><strong>Città</strong><br>${city}</div>
 
-            <div><strong>Prezzo:</strong><br>€${price}</div>
-            <div><strong>Equity:</strong><br>€${equity}</div>
+            <div><strong>Prezzo</strong><br>€${price}</div>
+            <div><strong>Equity</strong><br>€${equity}</div>
 
-            <div><strong>Mutuo:</strong><br>€${loan}</div>
-            <div><strong>Profitto:</strong><br>€${profit}</div>
+            <div><strong>Mutuo</strong><br>€${loan}</div>
+            <div><strong>Profitto</strong><br>€${profit}</div>
 
-            <div><strong>DSCR:</strong><br>${dscr.toFixed(2)}</div>
-            <div><strong>Tipo:</strong><br>${type}</div>
-
-          </div>
-
-          <div style="margin-top:25px;padding:15px;background:#f1f5f9;border-radius:10px">
-
-            <strong>Valore stimato lead:</strong> €${value}
+            <div><strong>DSCR</strong><br>${dscr.toFixed(2)}</div>
+            <div><strong>Tipo</strong><br>${type}</div>
 
           </div>
 
-          <div style="margin-top:20px;text-align:center">
+          <div style="margin-top:25px;padding:18px;background:#ecfdf5;border-radius:12px">
+
+            <strong>💰 Valore lead stimato:</strong> €${value}
+
+          </div>
+
+          <div style="margin-top:25px;text-align:center">
 
             <a href="mailto:${email}"
-            style="background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:600">
-            ✉️ Contatta subito
+            style="background:#10b981;color:white;padding:14px 24px;border-radius:999px;text-decoration:none;font-weight:700">
+            Contatta subito
             </a>
 
           </div>
