@@ -295,6 +295,11 @@ font-size:22px;
 
 }
 
+#switch-action:hover{
+  text-decoration: underline;
+  opacity: 0.85;
+}  
+
 </style>
 </head>
 
@@ -316,22 +321,22 @@ font-size:22px;
 Accedi al tuo account
 </div>
 
-<!-- 🔥 VALUE MESSAGE -->
-<div style="font-size:12px;color:#10b981;margin-bottom:12px;"
-data-it="⚡ Accesso gratuito • Analisi in 30 secondi"
-data-en="⚡ Free access • Analysis in 30 seconds">
-⚡ Accesso gratuito • Analisi in 30 secondi
+<!-- 🔥 VALUE MESSAGE (CONVERSION BOOST) -->
+<div style="font-size:12px;color:#10b981;margin-bottom:14px;"
+data-it="⚡ Accesso gratuito • Il 72% degli investitori perde soldi senza analisi"
+data-en="⚡ Free access • 72% of investors lose money without analysis">
+⚡ Accesso gratuito • Il 72% degli investitori perde soldi senza analisi
 </div>
 
 <div id="login-message" class="message"></div>
 
-<!-- 🔥 NAME (REGISTER ONLY VIA JS) -->
+<!-- 🔥 NAME (REGISTER ONLY) -->
 <input id="name" type="text"
 placeholder="Nome"
 data-it="Nome"
 data-en="Name">
 
-<!-- 🔥 ROLE (REGISTER ONLY VIA JS) -->
+<!-- 🔥 ROLE (REGISTER ONLY) -->
 <select id="role"
 style="width:100%;padding:14px;margin-bottom:14px;border-radius:14px;border:1px solid #cbd5e1;">
 
@@ -379,10 +384,27 @@ placeholder="Password"
 data-it="Password"
 data-en="Password">
 
-<!-- 🔥 TABS -->
-<div class="auth-tabs">
-  <button id="tab-login" class="auth-tab active">Login</button>
-  <button id="tab-register" class="auth-tab">Sign up</button>
+<!-- 🔥 SWITCH (STRIPE STYLE CLEAN) -->
+<div style="
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-bottom:18px;
+  font-size:13px;
+  color:#64748b;
+">
+
+  <span id="switch-text"
+    data-it="Non hai un account?"
+    data-en="Don't have an account?">
+  </span>
+
+  <span id="switch-action"
+    data-it="Registrati"
+    data-en="Sign up"
+    style="color:#10b981; cursor:pointer; font-weight:600; transition:0.2s;">
+  </span>
+
 </div>
 
 <!-- 🔥 TRUST -->
@@ -453,8 +475,6 @@ let mode="login";
 
 const title=document.getElementById("auth-title");
 const subtitle=document.getElementById("auth-subtitle");
-const tabLogin=document.getElementById("tab-login");
-const tabRegister=document.getElementById("tab-register");
 const btn=document.getElementById("authBtn");
 const messageBox=document.getElementById("login-message");
 
@@ -473,8 +493,13 @@ document.getElementById("btn-en").classList.toggle("active",lang==="en");
 };
 
 // ===== SWITCH =====
-tabLogin.onclick=()=>{mode="login";updateUI();}
-tabRegister.onclick=()=>{mode="register";updateUI();}
+const switchText = document.getElementById("switch-text");
+const switchAction = document.getElementById("switch-action");
+
+switchAction.onclick = () => {
+  mode = mode === "login" ? "register" : "login";
+  updateUI();
+};
 
 // ===== UI =====
 function updateUI(){
@@ -500,9 +525,6 @@ if(mode === "register"){
   btn.style.background = "linear-gradient(135deg,#10b981,#059669)";
 }
 
-tabLogin.classList.toggle("active",mode==="login");
-tabRegister.classList.toggle("active",mode==="register");
-
 // ================= 🔥 UX SMART =================
 const isRegister = mode === "register";
 
@@ -514,6 +536,15 @@ const t = (it,en)=> lang==="en"?en:it;
 document.getElementById("email").placeholder = t("Email","Email");
 document.getElementById("password").placeholder = t("Password","Password");
 document.getElementById("name").placeholder = t("Nome","Name");
+
+// ================= 🔥 SWITCH TEXT (BILINGUE)
+if(mode === "login"){
+  switchText.innerText = t("Non hai un account?","Don't have an account?");
+  switchAction.innerText = t("Registrati","Sign up");
+}else{
+  switchText.innerText = t("Hai già un account?","Already have an account?");
+  switchAction.innerText = t("Accedi","Login");
+}  
 
 // 🔥 ri-applica traduzioni globali
 if(window.applyStaticTranslations){
@@ -539,117 +570,93 @@ return;
 
 try{
 
-if(mode==="login"){
-  await signInWithEmailAndPassword(auth,email,password);
+  if(mode==="login"){
 
-  // 🔥 QUI
-  localStorage.setItem("just_logged", "1");
-}
-}else{
-const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+    await signInWithEmailAndPassword(auth,email,password);
 
-// 🔥 QUI
-localStorage.setItem("just_logged", "1");
-const user = userCredential.user;
-const leadSource = localStorage.getItem("lead_source") || "direct";  
+    // 🔥 FLAG LOGIN
+    localStorage.setItem("just_logged", "1");
 
-// 🔥 PRENDI NOME
-const name = document.getElementById("name")?.value || "";
-const role = document.getElementById("role")?.value || "unknown";
+  }else{
 
-// 🔥 FIRESTORE
-const db = getFirestore(app);
+    const userCredential = await createUserWithEmailAndPassword(auth,email,password);
 
-const pageSource = window.location.pathname;
+    // 🔥 FLAG REGISTER
+    localStorage.setItem("just_logged", "1");
 
-await setDoc(doc(db, "users", user.uid), {
-  email,
-  name,
-  role, // 🔥 fondamentale
+    const user = userCredential.user;
+    const leadSource = localStorage.getItem("lead_source") || "direct";  
 
-  plan: "free",
+    const name = document.getElementById("name")?.value || "";
+    const role = document.getElementById("role")?.value || "unknown";
 
-  // 🔥 TRACKING REALE
-  source: pageSource,
-  funnel: leadSource,
+    const db = getFirestore(app);
+    const pageSource = window.location.pathname;
 
-  // 🔥 LEAD INTELLIGENCE
-  intentScore:
-    role === "investor" ? 100 :
-    role === "agency" ? 80 :
-    role === "broker" ? 90 :
-    30,
-
-  createdAt: new Date(),
-  lastLogin: new Date(),
-
-  leadConverted: true
-});
-
-  // ================= INVESTOR FUNNEL =================
-if(mode === "register" && role === "investor"){
-  localStorage.setItem("show_investor_modal", "1");
-}
-
-  // ================= AUTO LEAD =================
-try{
-
-  await fetch("/api/send-lead", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
+    await setDoc(doc(db, "users", user.uid), {
       email,
       name,
       role,
-
-      type: "auth",
-
+      plan: "free",
       source: pageSource,
       funnel: leadSource,
+      intentScore:
+        role === "investor" ? 100 :
+        role === "agency" ? 80 :
+        role === "broker" ? 90 :
+        30,
+      createdAt: new Date(),
+      lastLogin: new Date(),
+      leadConverted: true
+    });
 
-      lang: window.currentLang || "it"
-    })
-  });
+    if(mode === "register" && role === "investor"){
+  localStorage.setItem("show_investor_modal", "1");
+}
+
+    try{
+      await fetch("/api/send-lead", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+          email,
+          name,
+          role,
+          type: "auth",
+          source: pageSource,
+          funnel: leadSource,
+          lang: window.currentLang || "it"
+        })
+      });
+    }catch(e){
+      console.warn("Lead auth non inviato", e);
+    }
+
+    localStorage.removeItem("lead_source");
+
+  }
+
+  // 🔥 REDIRECT (RESTA FUORI dall’if)
+  const redirect = localStorage.getItem("login_redirect");
+  const selectedCity = localStorage.getItem("selected_city");
+
+  localStorage.removeItem("login_redirect");
+
+  if(selectedCity){
+    localStorage.removeItem("selected_city");
+    window.location.href = "/immobili/" + selectedCity;
+    return;
+  }
+
+  if(redirect){
+    window.location.href = redirect;
+    return;
+  }
+
+  window.location.href = "/dashboard/";
 
 }catch(e){
-  console.warn("Lead auth non inviato", e);
-}
-
-  localStorage.removeItem("lead_source");
-  
-}
-
-// 🔥 REDIRECT INTELLIGENTE SaaS
-const redirect = localStorage.getItem("login_redirect");
-const selectedCity = localStorage.getItem("selected_city");
-
-// pulizia
-localStorage.removeItem("login_redirect");
-
-  console.log("🔥 LOGIN SUCCESS → redirect intelligente");
-
-// =====================
-// 🎯 PRIORITÀ REDIRECT
-// =====================
-
-// 1. Se viene da immobili città
-if(selectedCity){
-  localStorage.removeItem("selected_city");
-  window.location.href = "/immobili/" + selectedCity;
-  return;
-}
-
-// 2. Se viene da pagina specifica
-if(redirect){
-  window.location.href = redirect;
-  return;
-}
-
-// 3. fallback PRO SaaS
-window.location.href = "/dashboard/";
-
-}catch(e){
-showError(e.code);
+  showError(e.code);
 }
 
 };
