@@ -2389,6 +2389,7 @@ const CITY_DB = [
 
   input.addEventListener("input", function(){
 
+  const liveBox = document.getElementById("city-live-roi"); 
   const value = input.value.toLowerCase().trim();
 
   if(!value){
@@ -2423,8 +2424,6 @@ const CITY_DB = [
     palermo: 13.6,
     catania: 12.3
   };
-
-  const liveBox = document.getElementById("city-live-roi");
 
   const match = CITY_DB.find(c =>
     c.name.toLowerCase().includes(value)
