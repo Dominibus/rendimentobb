@@ -13,9 +13,7 @@ RendimentoBB – Calculate B&B ROI, risk and profit in 30 seconds
 </title>
 
 <meta name="description"
-data-it="Scopri se un B&B è davvero profittevole prima di investire. Analizza ROI, rischio, mutuo e sostenibilità in pochi secondi con dati reali."
-data-en="Find out if a B&B is truly profitable before investing. Analyze ROI, risk, mortgage impact and sustainability in seconds with real data."
-content="Find out if a B&B is truly profitable before investing. Analyze ROI, risk, mortgage impact and sustainability in seconds with real data.">
+content="Calcola ROI, rischio e profitto di un B&B in pochi secondi. Evita errori e investi con dati reali.">
 
 <meta name="keywords" content="ROI B&B, rendimento bed and breakfast, investimento B&B Italia, calcolo ROI affitti brevi, aprire B&B investimento">
 <meta name="robots" content="index, follow">
@@ -140,10 +138,18 @@ Il 72% degli investitori B&B perde soldi.
 
 <br>
 
+<span style="color:#10b981"
+data-it="Non perché il mercato non funziona."
+data-en="Not because the market doesn't work.">
+Non perché il mercato non funziona.
+</span>
+
+<br>
+
 <span
-data-it="Scopri se stai per perdere migliaia di euro prima ancora di iniziare."
-data-en="Find out if you're about to lose thousands before you even start.">
-Scopri se stai per perdere migliaia di euro prima ancora di iniziare.
+data-it="Ma perché analizzano dati sbagliati."
+data-en="But because they analyze the wrong data.">
+Ma perché analizzano dati sbagliati.
 </span>
 
 </h1>
@@ -189,10 +195,10 @@ data-en="⚠️ 72% of investors fail without this data">
 </div>
 
 <p
-data-it="🔥 Oltre 1.200 investitori hanno evitato errori da migliaia di euro"
-data-en="🔥 Over 1,200 investors avoided costly mistakes"
+data-it="🔥 Oltre 1.200 investitori hanno evitato perdite reali da migliaia di euro"
+data-en="🔥 Over 1,200 investors have avoided mistakes worth thousands of euros"
 style="margin-top:14px;font-size:14px;color:#e2e8f0;">
-🔥 Oltre 1.200 investitori hanno evitato errori da migliaia di euro
+🔥 Oltre 1.200 investitori hanno evitato perdite reali da migliaia di euro
 </p> 
 
 <!-- 🔥 BLOCCO PSICOLOGICO (CORE CONVERSION) -->
@@ -207,10 +213,35 @@ backdrop-filter:blur(8px);
 line-height:1.5;
 ">
 
+<span
+data-it="💸 Senza analisi reale rischi:"
+data-en="💸 Without real analysis you risk:">
 💸 Senza analisi reale rischi:
-<br>+ ROI falsato fino al 30%
-<br>+ Costi nascosti non calcolati
-<br>+ Break-even completamente errato
+</span>
+
+<br>
+
+<span
+data-it="+ ROI falsato fino al 30%"
+data-en="+ ROI distorted up to 30%">
++ ROI falsato fino al 30%
+</span>
+
+<br>
+
+<span
+data-it="+ Costi nascosti non calcolati"
+data-en="+ Hidden costs not included">
++ Costi nascosti non calcolati
+</span>
+
+<br>
+
+<span
+data-it="+ Break-even completamente errato"
+data-en="+ Completely wrong break-even">
++ Break-even completamente errato
+</span>
 
 </div>
 
@@ -286,21 +317,21 @@ autocomplete="off">
 <div class="hero-trust">
 
 <span
-data-it="✓ Analisi gratuita"
-data-en="✓ Free analysis">
-✓ Analisi gratuita
+data-it="✓ Basato su dati reali"
+data-en="✓ Based on real data">
+✓ Basato su dati reali
 </span>
 
 <span
-data-it="✓ Risultati in 30 secondi"
-data-en="✓ Results in 30 seconds">
-✓ Risultati in 30 secondi
+data-it="✓ Usato da investitori reali"
+data-en="✓ Used by real investors">
+✓ Usato da investitori reali
 </span>
 
 <span
-data-it="✓ Dati reali di mercato"
-data-en="✓ Real market data">
-✓ Dati reali di mercato
+data-it="✓ Evita errori da €10.000+"
+data-en="✓ Avoid €10,000+ mistakes">
+✓ Evita errori da €10.000+
 </span>
 
 </div>
@@ -363,11 +394,11 @@ data-en="6–9 years">
 <div class="quick-roi-box roi-card">
 
 <!-- HEADLINE -->
-<h3
+<h2
 data-it="Simulatore ROI immediato"
 data-en="Instant ROI simulator">
 Simulatore ROI immediato
-</h3>
+</h2>
 
 <p
 style="margin-top:6px;font-size:14px;color:#64748b"
@@ -381,7 +412,7 @@ Scopri in 30 secondi se questo investimento può funzionare… oppure farti perd
 
 <div class="roi-field">
 <label data-it="Prezzo immobile (€)" data-en="Property price (€)">Prezzo immobile (€)</label>
-<input id="qr_price" type="number" placeholder="250000">
+<input id="qr_price" type="number" inputmode="numeric" placeholder="250000">
 </div>
 
 <div class="roi-field">
@@ -961,9 +992,9 @@ Con RendimentoBB puoi simulare ROI, rischio e sostenibilità prima di acquistare
 <div style="margin-top:15px;text-align:center">
 
 <button onclick="document.getElementById('qr_price')?.scrollIntoView({behavior:'smooth'})" class="btn-outline"
-data-it="Prova simulazione"
-data-en="Try simulation">
-Prova simulazione
+data-it="🔍 Scopri se stai perdendo soldi (gratis)"
+data-en="🔍 Find out if you're losing money (free)">
+🔍 Scopri se stai perdendo soldi (gratis)
 </button>
 
 </div>
@@ -1114,8 +1145,7 @@ Seleziona una città e scopri subito il potenziale reale
 <!-- 🔥 DYNAMIC CARD -->
 <div class="hub-card" id="hub-card">
 
-<div class="hub-metric">
-<span>ROI medio</span>
+<span data-it="ROI medio" data-en="Average ROI">ROI medio</span>
 <strong>12.8%</strong>
 </div>
 
@@ -1844,7 +1874,7 @@ else{
     overlay.classList.add("active");
   });
 
-},1800);
+},900);
 
   } else {
     overlay.style.display = "none";
