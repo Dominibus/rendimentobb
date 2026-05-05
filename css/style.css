@@ -16744,3 +16744,12 @@ body.pro-user .pro-only-inline{
   }
 
 }
+
+.city-search-icon{
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.city-search-icon:hover{
+  transform:scale(1.1);
+}
