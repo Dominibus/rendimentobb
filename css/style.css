@@ -16686,3 +16686,18 @@ NON TOCCA ALTRE PAGINE
   transform:scale(1.08);
   box-shadow:0 15px 40px rgba(16,185,129,0.45);
 }
+
+/* ============================= */
+/* 🔥 HERO FOCUS MODE (STEP 3) */
+/* ============================= */
+
+@media (min-width:768px){
+
+  .hero .city-search-box,
+  .hero .hero-trust,
+  .hero .market-grid,
+  .hero .micro-trust{
+    display:none;
+  }
+
+}
