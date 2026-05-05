@@ -195,6 +195,14 @@ body{
   transform:translateY(-6px) scale(1.01);
 }  
 
+.about-box{
+  transition:all 0.2s ease;
+}
+
+.about-box:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}  
 </style>
 
 </head>
@@ -291,30 +299,31 @@ body{
 
       <div class="about-grid">
 
-        <div class="about-box">
-          📊 
-      <strong data-it="ROI reale" data-en="Real ROI">ROI reale</strong><br>
-      <span data-it="Calcolo basato su costi reali" data-en="Based on real costs">
+  <div class="about-box">
+    📊 
+    <strong data-it="ROI reale" data-en="Real ROI">ROI reale</strong><br>
+    <span data-it="Calcolo basato su costi reali" data-en="Based on real costs">
       Calcolo basato su costi reali
-      </span>
+    </span>
+  </div>
 
-        <div class="about-box">
-          ⚠️ 
-     <strong data-it="Analisi rischio" data-en="Risk analysis">Analisi rischio</strong><br>
-     <span data-it="Individua investimenti sbagliati" data-en="Detects bad investments">
-     Individua investimenti sbagliati
-     </span>
+  <div class="about-box">
+    ⚠️ 
+    <strong data-it="Analisi rischio" data-en="Risk analysis">Analisi rischio</strong><br>
+    <span data-it="Individua investimenti sbagliati" data-en="Detects bad investments">
+      Individua investimenti sbagliati
+    </span>
+  </div>
 
-        <div class="about-box">
-          💰 
+  <div class="about-box">
+    💰 
     <strong data-it="Cashflow reale" data-en="Real cashflow">Cashflow reale</strong><br>
     <span data-it="Simula profitto sostenibile" data-en="Simulates sustainable profit">
-    Simula profitto sostenibile
+      Simula profitto sostenibile
     </span>
+  </div>
 
-      </div>
-
-    </div>
+</div>
 
   </div>
 </section>
