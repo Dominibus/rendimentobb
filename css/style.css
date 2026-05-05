@@ -16808,3 +16808,15 @@ body.pro-user .pro-only-inline{
   color:#10b981;
   font-size:13px;
 }
+
+.roi-big{
+  font-size:28px;
+  font-weight:800;
+  line-height:1.1;
+}
+
+.roi-big div{
+  font-size:11px;
+  font-weight:500;
+  margin-top:4px;
+}
