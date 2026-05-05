@@ -120,6 +120,12 @@ content="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and in
 
 <body class="home-page">
 
+<script>
+window.updateOverlayVisibility = window.updateOverlayVisibility || function(){
+  console.warn("⚠️ updateOverlayVisibility chiamata prima del load");
+};
+</script> 
+
 <div id="global-header"></div>
 
 <main>
@@ -1846,7 +1852,9 @@ data-en="✔ No commitment • ✔ Cancel anytime">
   // 🔥 quando piano pronto
 document.addEventListener("rb_plan_loaded", blockUpgradeModal);
 document.addEventListener("DOMContentLoaded", blockUpgradeModal);
-document.addEventListener("rb_plan_loaded", updateOverlayVisibility); 
+document.addEventListener("rb_plan_loaded", ()=>{
+  window.updateOverlayVisibility?.();
+});
  
 })();
 </script>
@@ -1905,7 +1913,7 @@ const safeNum = (v, def=0)=>{
 const formatCurrency = (n)=>Math.round(n).toLocaleString();
 
 // ================= 🧠 OVERLAY CONTROL (UNICA FONTE) =================
-function updateOverlayVisibility(){
+window.updateOverlayVisibility = function(){
 
   const overlay = document.querySelector(".home-blur-overlay");
   if(!overlay) return;
