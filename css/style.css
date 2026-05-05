@@ -16798,3 +16798,18 @@ NON ROMPE ALTRE PAGINE
   box-shadow:0 20px 50px rgba(0,0,0,0.25);
   transition:0.25s ease;
 }
+
+/* ===============================
+🔥 HOMEPAGE CONVERSION MODE (SAFE)
+NON ROMPE JS / HTML
+=============================== */
+
+.home-page .seo-block,
+.home-page .smart-investment-hub,
+.home-page .market-section,
+.home-page .trust-bar,
+.home-page .snapshot-card + section,
+.home-page .feature-card a,
+.home-page .faq-item:nth-child(n+3) {
+  display: none !important;
+}
