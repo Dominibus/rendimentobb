@@ -16867,3 +16867,24 @@ NON ROMPE JS / HTML
 .home-page .danger-block + section {
   display:none !important;
 }
+
+/* ===============================
+🔥 FIX CONTRASTO CONVERSION PUSH
+=============================== */
+
+.home-page .conversion-push{
+  background:linear-gradient(135deg,#0f172a,#020617);
+}
+
+.home-page .conversion-push h3{
+  color:#ffffff;
+}
+
+.home-page .conversion-push p{
+  color:#e2e8f0; /* grigio chiaro leggibile */
+  opacity:1; /* ❗ rimuove effetto sbiadito */
+}
+
+.home-page .conversion-push p[style*="color:#ef4444"]{
+  color:#ef4444 !important; /* rosso rimane forte */
+}
