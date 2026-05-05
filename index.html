@@ -1944,36 +1944,36 @@ function updateOverlayVisibility(){
   const isPro = access.isPro;
   const isInvestor = access.isInvestor;
 
-  // 🔥 LOG DEBUG
   console.log("🎯 OVERLAY STATE:", access);
 
-  // 🟢 PRO + INVESTOR → NO OVERLAY
-if(isPro || isInvestor){
-  overlay.style.display = "none";
-}
+  // 🟢 PRO + INVESTOR → SEMPRE OFF
+  if(isPro || isInvestor){
+    overlay.style.display = "none";
+    overlay.classList.remove("active"); // 🔥 FIX
+    return;
+  }
 
-// 🔴 FREE → mostra SOLO dopo interazione
-else{
-
+  // 🔴 FREE
   if(window.userTriggeredSimulation){
 
-    // ⏱ delay naturale (CRITICO UX)
     setTimeout(()=>{
-  overlay.style.display = "flex";
+      overlay.style.display = "flex";
 
-  requestAnimationFrame(()=>{
-    overlay.classList.add("active");
-  });
+      requestAnimationFrame(()=>{
+        overlay.classList.add("active");
+      });
 
-},900);
+    },900);
 
   } else {
+
+    // 🔥 FIX CRITICO
     overlay.style.display = "none";
+    overlay.classList.remove("active");
+
   }
 
 }
-
-} 
 
 
 // ================= LOGOUT =================
@@ -2531,6 +2531,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
 });
+
+ window.userTriggeredSimulation = false;
 
 
 // ================= 🔓 HOME UI SYNC =================
