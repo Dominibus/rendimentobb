@@ -16494,3 +16494,26 @@ body.pro-user .pro-only{
 body.pro-user .pro-only-inline{
   display:inline !important;
 }
+
+.mobile-cta{
+  display:block;
+  background:linear-gradient(135deg,#10b981,#34d399);
+  color:white;
+  text-align:center;
+  padding:14px;
+  border-radius:12px;
+  font-weight:700;
+  margin-top:12px;
+  text-decoration:none;
+  box-shadow:0 10px 25px rgba(16,185,129,0.35);
+  transition:all 0.2s ease;
+}
+
+.mobile-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 35px rgba(16,185,129,0.45);
+}
+
+.mobile-cta:active{
+  transform:scale(0.98);
+}
