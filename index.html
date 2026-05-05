@@ -2066,32 +2066,20 @@ window.quickROI = function(){
   occ = Math.min(Math.max(occ,1),95);
   cost = Math.min(Math.max(cost,1),90);
 
-  // ================= ACCESS (FIX STABILE) =================
-  const access = window.getUserAccess?.() || {};
+  // ================= LANG SAFE =================
+  const lang = window.currentLang || "it";
 
+  const labels = {
+    notProfitable: lang === "en" ? "Not profitable" : "Non profittevole",
+    weak: lang === "en" ? "Weak return" : "Rendimento debole",
+    average: lang === "en" ? "Average investment" : "Investimento medio",
+    good: lang === "en" ? "Good investment" : "Buon investimento"
+  };
+
+  // ================= ACCESS =================
+  const access = window.getUserAccess?.() || {};
   const isPro = access.isPro;
   const isInvestor = access.isInvestor;
-  const isLogged = access.isLogged;
-  const isFreeUser = !isPro && !isInvestor;
-
-  // ================= GUEST POPUP =================
-  if(window.currentUser === null){
-    if(window.userTriggeredSimulation && !window.popupAlreadyShown){
-      window.popupAlreadyShown = true;
-
-      showToast(
-        window.t(
-          "Simulazione base attiva. Registrati per sbloccare dati completi",
-          "Basic simulation active. Sign up to unlock full data"
-        ),
-        "info"
-      );
-
-      setTimeout(()=>{
-        showRegisterPopup?.();
-      }, 1500);
-    }
-  }
 
   // ================= CALCOLO =================
   let result;
@@ -2122,27 +2110,23 @@ window.quickROI = function(){
     };
   }
 
-  // ================= FIX DATI (CRITICO) =================
+  // ================= DATI =================
   const roi = safeNum(result?.roi, 0);
 
   let netAnnual =
-  result?.netAnnual ??
-  result?.net ??
-  result?.annualProfit ??
-  result?.cashflow;
+    result?.netAnnual ??
+    result?.net ??
+    result?.annualProfit ??
+    result?.cashflow;
 
-if(!netAnnual && result?.revenue){
-  // 🔥 fallback intelligente (CRITICO)
-  netAnnual = result.revenue * (1 - (cost/100));
-}
+  if(!netAnnual && result?.revenue){
+    netAnnual = result.revenue * (1 - (cost/100));
+  }
 
-netAnnual = safeNum(netAnnual, 0);
+  netAnnual = safeNum(netAnnual, 0);
 
   const revenue = safeNum(result?.revenue, 0);
   const breakEven = safeNum(result?.breakEvenYears ?? result?.breakEven ?? 0);
-
-  console.log("🧠 ACCESS:", {isPro, isInvestor, isLogged});
-  console.log("🔥 DATA:", {roi, netAnnual, revenue, breakEven});
 
   // ================= UI =================
   const elRoi   = document.getElementById("qr_roi");
@@ -2151,13 +2135,113 @@ netAnnual = safeNum(netAnnual, 0);
   const elBreak = document.getElementById("qr_break");
   const elRev   = document.getElementById("qr_rev");
 
+  // ================= ROI UX =================
   if(elRoi){
-    elRoi.innerText = roi ? roi.toFixed(1)+"%" : "—";
-    elRoi.style.color =
-      roi > 15 ? "#10b981" :
-      roi > 8  ? "#f59e0b" :
-                 "#ef4444";
+
+    if(roi <= 0){
+
+      elRoi.innerHTML = `
+        <span style="color:#ef4444;font-weight:800">
+          ❌ ${labels.notProfitable}
+        </span>
+      `;
+
+    } 
+    else if(roi < 6){
+
+      elRoi.innerHTML = `
+        <span style="color:#f59e0b;font-weight:800">${roi.toFixed(1)}%</span>
+        <div style="font-size:11px;color:#f59e0b">${labels.weak}</div>
+      `;
+
+    } 
+    else if(roi < 12){
+
+      elRoi.innerHTML = `
+        <span style="color:#f59e0b;font-weight:800">${roi.toFixed(1)}%</span>
+        <div style="font-size:11px;color:#64748b">${labels.average}</div>
+      `;
+
+    } 
+    else{
+
+      elRoi.innerHTML = `
+        <span style="color:#10b981;font-weight:800">${roi.toFixed(1)}%</span>
+        <div style="font-size:11px;color:#10b981">${labels.good}</div>
+      `;
+
+    }
+
   }
+
+  // ================= ROI SHOCK =================
+  const shock = document.getElementById("roi-shock-block");
+
+  if(shock){
+
+    if(roi <= 0){
+      shock.style.display = "block";
+      shock.style.background = "rgba(239,68,68,0.12)";
+    } 
+    else if(roi < 6){
+      shock.style.display = "block";
+      shock.style.background = "rgba(245,158,11,0.12)";
+    } 
+    else{
+      shock.style.display = "none";
+    }
+
+  }
+
+  // ================= FORMAT =================
+  const format = (n)=> Math.round(n).toLocaleString();
+
+  const profitVal = format(netAnnual);
+  const monthVal  = format(netAnnual/12);
+  const breakVal  = breakEven.toFixed(1) + (lang==="en" ? " years" : " anni");
+  const revVal    = format(revenue);
+
+  // ================= DEFAULT LOCK =================
+  if(elProfit) elProfit.innerText = "🔒";
+  if(elMonth)  elMonth.innerText  = "🔒";
+  if(elBreak)  elBreak.innerText  = "🔒";
+  if(elRev)    elRev.innerText    = "🔒";
+
+  // ================= PRO =================
+  if(isPro){
+
+    if(elProfit) elProfit.innerText = profitVal;
+    if(elMonth)  elMonth.innerText  = monthVal;
+    if(elBreak)  elBreak.innerText  = breakVal;
+    if(elRev)    elRev.innerText    = revVal;
+
+  }
+
+  // ================= INVESTOR =================
+  else if(isInvestor){
+
+    if(elProfit) elProfit.innerText = "~ " + profitVal;
+    if(elMonth)  elMonth.innerText  = "~ " + monthVal;
+    if(elRev)    elRev.innerText    = "~ " + revVal;
+
+    if(elBreak)  elBreak.innerText  = "🔒";
+
+  }
+
+  // ================= FREE =================
+  else{
+
+    if(elProfit) elProfit.innerText = "~ " + profitVal;
+    if(elMonth)  elMonth.innerText  = "⚠️";
+    if(elRev)    elRev.innerText    = "⚠️";
+    if(elBreak)  elBreak.innerText  = "🔒";
+
+  }
+
+  // ================= OVERLAY =================
+  updateOverlayVisibility?.();
+
+};
 
  // ================= LOGICA PIANI (STABILE E UNIFICATA) =================
 
