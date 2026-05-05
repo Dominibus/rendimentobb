@@ -16854,3 +16854,16 @@ NON ROMPE JS / HTML
 .home-page .conversion-push p{
   font-size:14px;
 }
+
+/* ===============================
+🔥 HOMEPAGE CLEAN (SAFE)
+=============================== */
+
+.home-page .seo-block,
+.home-page .smart-investment-hub,
+.home-page .market-section,
+.home-page .trust-bar,
+.home-page .snapshot-card + section,
+.home-page .danger-block + section {
+  display:none !important;
+}
