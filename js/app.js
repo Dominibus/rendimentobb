@@ -3174,7 +3174,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
   // ================= ENTER =================
-  input.addEventListener("keypress",(e)=>{
+  input.addEventListener("keydown",(e)=>{
     if(e.key === "Enter"){
       runSearch();
     }
@@ -3198,6 +3198,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   const data = window.RB_CITY_DATA || [];
 
+  // ================= RENDER =================
   function renderList(list){
 
     if(!list.length){
@@ -3223,6 +3224,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     box.style.display = "block";
   }
 
+  // ================= INPUT =================
   input.addEventListener("input", ()=>{
 
     const val = input.value.toLowerCase().trim();
@@ -3232,16 +3234,37 @@ document.addEventListener("DOMContentLoaded", ()=>{
       return;
     }
 
-    const filtered = data.filter(c =>
+    let filtered = data.filter(c =>
       c.name.includes(val) ||
       c.label.it.toLowerCase().includes(val)
     );
+
+    // 🔥 fallback intelligente (input libero sempre valido)
+    if(filtered.length === 0){
+      filtered = [{
+        name: val,
+        label: {
+          it: `Cerca "${val}"`,
+          en: `Search "${val}"`
+        },
+        roi: "—"
+      }];
+    }
 
     renderList(filtered);
 
   });
 
-  // CLICK SUGGERIMENTO
+  // ================= FOCUS =================
+  input.addEventListener("focus", ()=>{
+
+    if(input.value.length >= 2){
+      input.dispatchEvent(new Event("input"));
+    }
+
+  });
+
+  // ================= CLICK SUGGERIMENTO =================
   box.addEventListener("click",(e)=>{
 
     const item = e.target.closest(".city-suggestion-item");
@@ -3254,11 +3277,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     if(typeof window.selectCity === "function"){
       window.selectCity(city);
+    } else {
+      window.location.href = `/tool/?city=${encodeURIComponent(city)}`;
     }
 
   });
 
-  // CHIUSURA CLICK OUTSIDE
+  // ================= CLICK OUTSIDE =================
   document.addEventListener("click",(e)=>{
     if(!e.target.closest(".city-input-wrapper")){
       box.style.display = "none";
@@ -3266,6 +3291,45 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 
 })();
+
+// =====================================
+// 🌍 GOOGLE PLACES FALLBACK (READY)
+// =====================================
+
+window.initCityAutocomplete = function(){
+
+  if(!window.google || !google.maps || !google.maps.places){
+    console.warn("⚠️ Google Places non caricato");
+    return;
+  }
+
+  const input = document.getElementById("city-search-input");
+  if(!input) return;
+
+  const autocomplete = new google.maps.places.Autocomplete(input,{
+    types:["(cities)"],
+    componentRestrictions:{ country:"it" }
+  });
+
+  autocomplete.addListener("place_changed", ()=>{
+
+    const place = autocomplete.getPlace();
+
+    if(!place || !place.name) return;
+
+    const city = place.name.toLowerCase();
+
+    console.log("🌍 GOOGLE CITY:", city);
+
+    if(typeof window.selectCity === "function"){
+      window.selectCity(city);
+    } else {
+      window.location.href = `/tool/?city=${encodeURIComponent(city)}`;
+    }
+
+  });
+
+};
 
 // ================= 🌆 AUTO LOAD CITY FROM URL (FINAL FIX) =================
 (function(){
