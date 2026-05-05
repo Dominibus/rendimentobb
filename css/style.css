@@ -16520,7 +16520,6 @@ body.pro-user .pro-only-inline{
 
 /* =====================================
 🔥 HOMEPAGE HERO FINAL (SAFE – NO BREAK)
-AGISCE SOLO SU .home-page
 ===================================== */
 
 /* ===== HERO OVERLAY ===== */
@@ -16561,7 +16560,7 @@ AGISCE SOLO SU .home-page
   text-shadow:0 2px 12px rgba(0,0,0,0.8) !important;
 }
 
-/* ===== SPACING HERO (FIX URTO) ===== */
+/* ===== SPACING HERO ===== */
 .home-page .hero{
   padding:120px 0 90px;
 }
@@ -16570,7 +16569,7 @@ AGISCE SOLO SU .home-page
   max-width:720px;
 }
 
-/* ===== CTA RESPIRO ===== */
+/* ===== CTA ===== */
 .home-page .cta-group{
   margin-top:10px;
 }
@@ -16579,7 +16578,6 @@ AGISCE SOLO SU .home-page
   margin-top:10px;
 }
 
-/* ===== DISTANZE BLOCCI ===== */
 .home-page .cta-group + p{
   margin-top:18px !important;
 }
@@ -16593,65 +16591,8 @@ AGISCE SOLO SU .home-page
 }
 
 /* =====================================
-🔥 FIX METRICHE HUB (SOLO HOME)
+🔥 ROI WARNING (FINAL CLEAN)
 ===================================== */
-
-.home-page .hub-metric{
-  position:relative;
-  z-index:2;
-}
-
-.home-page .hub-metric span{
-  color:#64748b !important;   /* miglior contrasto reale */
-  opacity:1 !important;
-  font-weight:500;
-}
-
-.home-page .hub-metric strong{
-  color:#0f172a !important;
-  font-size:18px;
-}
-
-/* =====================================
-🔥 HOMEPAGE – BLOCCO PSICOLOGICO FIX
-NON TOCCA ALTRE PAGINE
-===================================== */
-
-.home-page .quick-roi-section > div:first-child{
-  max-width:900px;
-  margin:40px auto 20px auto;
-  padding:20px 24px;
-  text-align:center;
-
-  background:linear-gradient(
-    rgba(15,23,42,0.92),
-    rgba(15,23,42,0.85)
-  ) !important;
-
-  color:#ffffff !important;
-
-  border-radius:16px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.25);
-}
-
-/* testo */
-.home-page .quick-roi-section > div:first-child span{
-  display:block;
-  margin:6px 0;
-  font-size:14px;
-  line-height:1.6;
-  color:#e2e8f0;
-}
-
-/* prima riga (titolo) */
-.home-page .quick-roi-section > div:first-child span:first-child{
-  font-weight:700;
-  color:#fca5a5; /* rosso soft = attenzione */
-}
-
-/* ============================= */
-/* 🔥 ROI WARNING – SILICON VALLEY */
-/* ============================= */
 
 .home-page .roi-warning-card{
   margin:20px auto 10px;
@@ -16661,68 +16602,58 @@ NON TOCCA ALTRE PAGINE
 
   background:linear-gradient(
     135deg,
-    rgba(15,23,42,0.85),
-    rgba(30,41,59,0.85)
+    rgba(15,23,42,0.95),
+    rgba(30,41,59,0.95)
   );
 
   backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.06);
 
-  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  color:#f8fafc;
 
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.05);
-
-  color:#f1f5f9;
-
-  transition:0.3s ease;
+  transition:0.25s ease;
 }
 
 .home-page .roi-warning-card:hover{
   transform:translateY(-2px);
-  box-shadow:
-    0 30px 80px rgba(0,0,0,0.35);
+  box-shadow:0 30px 80px rgba(0,0,0,0.35);
 }
 
-/* HEADER */
-.roi-warning-header{
+.home-page .roi-warning-header{
   display:flex;
-  gap:14px;
+  gap:10px;
   align-items:flex-start;
 }
 
-.roi-warning-icon{
+.home-page .roi-warning-icon{
   font-size:22px;
-  margin-top:2px;
 }
 
-/* TITLE */
-.roi-warning-header strong{
+.home-page .roi-warning-header strong{
+  color:#ffffff;
   font-size:16px;
   font-weight:700;
-  display:block;
 }
 
-.roi-warning-header p{
-  font-size:13px;
+.home-page .roi-warning-header p{
   color:#cbd5f5;
+  font-size:14px;
   margin-top:4px;
 }
 
-/* LIST */
-.roi-warning-list{
+.home-page .roi-warning-list{
   margin-top:14px;
   display:grid;
   gap:10px;
 }
 
-.roi-warning-item{
+.home-page .roi-warning-item{
   display:flex;
   gap:10px;
   align-items:center;
 
-  font-size:13px;
+  font-size:14px;
   color:#e2e8f0;
 
   padding:10px;
@@ -16732,132 +16663,48 @@ NON TOCCA ALTRE PAGINE
   border:1px solid rgba(255,255,255,0.05);
 }
 
-/* MOBILE */
-@media (max-width:768px){
-
-  .roi-warning-card{
-    padding:16px;
-  }
-
-  .roi-warning-header{
-    flex-direction:column;
-  }
-
-}
 /* =====================================
-🔥 FIX ROI WARNING READABILITY (HOME ONLY)
-NON ROMPE ALTRE PAGINE
+🔥 CONVERSION PUSH (FINAL PRO)
 ===================================== */
 
-.home-page .roi-warning-card{
-  background: linear-gradient(
-    135deg,
-    rgba(15,23,42,0.95),
-    rgba(30,41,59,0.95)
-  );
-  color:#f8fafc;
-  border:1px solid rgba(255,255,255,0.06);
-}
-
-/* titolo */
-.home-page .roi-warning-header strong{
-  color:#ffffff !important;
-  font-size:16px;
-  font-weight:700;
-}
-
-/* sottotesto */
-.home-page .roi-warning-header p{
-  color:#cbd5f5 !important;
-  font-size:14px;
-  margin-top:4px;
-}
-
-/* lista */
-.home-page .roi-warning-item span{
-  color:#e2e8f0 !important;
-  font-size:14px;
-}
-
-/* icona */
-.home-page .roi-warning-icon{
-  font-size:22px;
-  margin-right:10px;
-}
-
-/* spacing migliore */
-.home-page .roi-warning-header{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-}
-
-/* hover SaaS feel */
-.home-page .roi-warning-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.25);
-  transition:0.25s ease;
-}
-
-/* ===============================
-🔥 HOMEPAGE CONVERSION MODE (SAFE)
-NON ROMPE JS / HTML
-=============================== */
-
-.home-page .seo-block,
-.home-page .smart-investment-hub,
-.home-page .market-section,
-.home-page .trust-bar,
-.home-page .snapshot-card + section,
-.home-page .feature-card a,
-.home-page .faq-item:nth-child(n+3) {
-  display: none !important;
-}
-
 .home-page .conversion-push{
-  margin-top:30px;
-  padding:20px;
-  border-radius:14px;
-  background:#0f172a;
-  color:white;
-  text-align:center;
-}
-
-.home-page .conversion-push h3{
-  margin-bottom:10px;
-  font-size:18px;
-}
-
-.home-page .conversion-push p{
-  font-size:14px;
-  opacity:0.85;
-}
-
-.home-page .conversion-push{
-  margin-top:30px;
+  margin:30px auto;
   padding:22px;
   border-radius:14px;
-  background:#0f172a;
-  color:white;
-  text-align:center;
+
   max-width:500px;
-  margin-left:auto;
-  margin-right:auto;
-  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  text-align:center;
+
+  background:linear-gradient(135deg,#0f172a,#020617);
+  color:#ffffff;
+
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+
+  backdrop-filter:blur(6px);
 }
 
 .home-page .conversion-push h3{
   font-size:18px;
   margin-bottom:10px;
+  color:#ffffff;
 }
 
 .home-page .conversion-push p{
   font-size:14px;
+  color:#e2e8f0;
+  opacity:1; /* FIX leggibilità */
 }
 
-/* ===============================
+/* rosso evidenza */
+.home-page .conversion-push p[style*="ef4444"]{
+  color:#ef4444 !important;
+  font-weight:600;
+}
+
+/* =====================================
 🔥 HOMEPAGE CLEAN (SAFE)
-=============================== */
+===================================== */
 
 .home-page .seo-block,
 .home-page .smart-investment-hub,
@@ -16868,23 +16715,32 @@ NON ROMPE JS / HTML
   display:none !important;
 }
 
-/* ===============================
-🔥 FIX CONTRASTO CONVERSION PUSH
-=============================== */
+/* =====================================
+🔥 HUB METRIC FIX
+===================================== */
 
-.home-page .conversion-push{
-  background:linear-gradient(135deg,#0f172a,#020617);
+.home-page .hub-metric span{
+  color:#64748b !important;
+  opacity:1 !important;
 }
 
-.home-page .conversion-push h3{
-  color:#ffffff;
+.home-page .hub-metric strong{
+  color:#0f172a !important;
+  font-size:18px;
 }
 
-.home-page .conversion-push p{
-  color:#e2e8f0; /* grigio chiaro leggibile */
-  opacity:1; /* ❗ rimuove effetto sbiadito */
-}
+/* =====================================
+🔥 MOBILE
+===================================== */
 
-.home-page .conversion-push p[style*="color:#ef4444"]{
-  color:#ef4444 !important; /* rosso rimane forte */
+@media (max-width:768px){
+
+  .home-page .roi-warning-card{
+    padding:16px;
+  }
+
+  .home-page .roi-warning-header{
+    flex-direction:column;
+  }
+
 }
