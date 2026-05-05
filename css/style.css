@@ -16611,3 +16611,40 @@ AGISCE SOLO SU .home-page
   color:#0f172a !important;
   font-size:18px;
 }
+
+/* =====================================
+🔥 HOMEPAGE – BLOCCO PSICOLOGICO FIX
+NON TOCCA ALTRE PAGINE
+===================================== */
+
+.home-page .quick-roi-section > div:first-child{
+  max-width:900px;
+  margin:40px auto 20px auto;
+  padding:20px 24px;
+  text-align:center;
+
+  background:linear-gradient(
+    rgba(15,23,42,0.92),
+    rgba(15,23,42,0.85)
+  ) !important;
+
+  color:#ffffff !important;
+
+  border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+
+/* testo */
+.home-page .quick-roi-section > div:first-child span{
+  display:block;
+  margin:6px 0;
+  font-size:14px;
+  line-height:1.6;
+  color:#e2e8f0;
+}
+
+/* prima riga (titolo) */
+.home-page .quick-roi-section > div:first-child span:first-child{
+  font-weight:700;
+  color:#fca5a5; /* rosso soft = attenzione */
+}
