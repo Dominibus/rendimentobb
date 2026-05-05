@@ -21,7 +21,12 @@ data-en="Discover who is behind RendimentoBB and why it's the tool for B&B inves
 /* ================= BASE ================= */
 body{
   background:#f8fafc;
-  font-family:system-ui;
+}
+
+/* ================= HEADER FIX ================= */
+#global-header{
+  position:relative;
+  z-index:9999;
 }
 
 /* ================= HERO ================= */
@@ -38,15 +43,15 @@ body{
 
 /* ================= TITLES ================= */
 .about-title{
-  font-size:34px;
+  font-size:36px;
   font-weight:900;
   color:#0f172a;
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
 
 .about-sub{
   font-size:16px;
-  color:#475569;
+  color:#334155;
   line-height:1.6;
 }
 
@@ -55,7 +60,7 @@ body{
   background:white;
   padding:32px;
   border-radius:18px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+  box-shadow:0 20px 60px rgba(2,6,23,0.08);
   margin-bottom:28px;
   transition:0.25s;
 }
@@ -73,10 +78,12 @@ body{
 }
 
 .about-box{
-  background:#f8fafc;
+  background:#f1f5f9;
   padding:22px;
   border-radius:14px;
   border:1px solid #e2e8f0;
+  font-size:14px;
+  color:#1e293b;
 }
 
 /* ================= TEXT ================= */
@@ -114,12 +121,6 @@ body{
   transform:translateY(-2px);
 }
 
-/* ================= HEADER FIX ================= */
-#header{
-  position:relative;
-  z-index:1000;
-}
-
 </style>
 
 </head>
@@ -127,7 +128,7 @@ body{
 <body>
 
 <!-- HEADER -->
-<div id="header"></div>
+<div id="global-header"></div>
 
 <!-- HERO -->
 <section class="about-hero">
@@ -163,7 +164,7 @@ body{
       <p class="about-text"
       data-it="La maggior parte degli investitori guarda solo i guadagni potenziali e ignora costi, rischio e sostenibilità."
       data-en="Most investors only look at potential profits and ignore costs, risk and sustainability.">
-      La maggior parte degli investitori guarda solo i guadagni potenziali.
+      La maggior parte degli investitori guarda solo i guadagni potenziali e ignora costi, rischio e sostenibilità.
       </p>
 
     </div>
@@ -186,36 +187,24 @@ body{
       <p class="about-text"
       data-it="RendimentoBB è un motore decisionale che simula ROI reale, rischio e sostenibilità prima di investire."
       data-en="RendimentoBB is a decision engine that simulates real ROI, risk and sustainability before investing.">
-      RendimentoBB è un motore decisionale professionale.
+      RendimentoBB è un motore decisionale che simula ROI reale, rischio e sostenibilità prima di investire.
       </p>
 
       <div class="about-grid">
 
         <div class="about-box">
-          📊 <strong data-it="ROI reale" data-en="Real ROI"></strong><br>
-          <span class="about-text"
-          data-it="Calcolo basato su costi reali"
-          data-en="Based on real costs">
+          📊 <strong>ROI reale</strong><br>
           Calcolo basato su costi reali
-          </span>
         </div>
 
         <div class="about-box">
-          ⚠️ <strong data-it="Analisi rischio" data-en="Risk analysis"></strong><br>
-          <span class="about-text"
-          data-it="Individua investimenti sbagliati"
-          data-en="Detects bad investments">
+          ⚠️ <strong>Analisi rischio</strong><br>
           Individua investimenti sbagliati
-          </span>
         </div>
 
         <div class="about-box">
-          💰 <strong data-it="Cashflow reale" data-en="Real cashflow"></strong><br>
-          <span class="about-text"
-          data-it="Simula profitto sostenibile"
-          data-en="Simulates sustainable profit">
+          💰 <strong>Cashflow reale</strong><br>
           Simula profitto sostenibile
-          </span>
         </div>
 
       </div>
@@ -255,7 +244,7 @@ body{
 <!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- JS FIX IMPORT -->
+<!-- JS -->
 <script type="module" src="/js/header.js"></script>
 <script type="module" src="/js/footer.js"></script>
 <script src="/js/lang.js"></script>
