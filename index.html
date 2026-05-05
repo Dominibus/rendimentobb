@@ -2,6 +2,10 @@
 <html lang="it">
 <head>
 
+<script>
+document.documentElement.lang = window.currentLang || "it";
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -109,6 +113,7 @@ content="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and in
 </script>
 
 <!-- ================= CSS ================= -->
+<link rel="preload" href="/css/style.css" as="style">
 <link rel="stylesheet" href="/css/style.css">
 
 </head>
@@ -799,36 +804,6 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
   </button>
 
 </div>
-
-  <!-- 🔥 CONVERSION BOOST (SAFE) -->
-<div class="conversion-push">
-
-  <h3
-  data-it="⚠️ Stai guardando solo una parte dei dati"
-  data-en="⚠️ You are only seeing part of the data">
-  ⚠️ Stai guardando solo una parte dei dati
-  </h3>
-
-  <p
-  data-it="Il ROI può sembrare positivo… ma senza analisi completa potresti perdere migliaia di euro ogni anno"
-  data-en="ROI may look positive… but without full analysis you could lose thousands every year">
-  Il ROI può sembrare positivo… ma senza analisi completa potresti perdere migliaia di euro ogni anno
-  </p>
-
-  <button 
-  onclick="triggerUpgradeFlow({source:'home-conversion'})" 
-  class="btn btn-primary">
-  
-    <span
-    data-it="🔓 Sblocca analisi completa"
-    data-en="🔓 Unlock full analysis">
-    🔓 Sblocca analisi completa
-    </span>
-
-  </button>
-
-</div>
-
 
 <!-- ================= CTA FINALE ================= -->
 
@@ -1869,11 +1844,10 @@ data-en="✔ No commitment • ✔ Cancel anytime">
   }
 
   // 🔥 quando piano pronto
-  document.addEventListener("rb_plan_loaded", blockUpgradeModal);
-
-  // 🔥 fallback (copre caricamento iniziale)
-  setInterval(blockUpgradeModal, 500);
-
+document.addEventListener("rb_plan_loaded", blockUpgradeModal);
+document.addEventListener("DOMContentLoaded", blockUpgradeModal);
+document.addEventListener("rb_plan_loaded", updateOverlayVisibility); 
+ 
 })();
 </script>
 
@@ -1906,10 +1880,7 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 
   }
 
-  // 🔥 loop leggero ma stabile
-  setInterval(fixModal, 800);
-
-  // 🔥 eventi chiave
+    // 🔥 eventi chiave
   document.addEventListener("rb_plan_loaded", fixModal);
   document.addEventListener("DOMContentLoaded", fixModal);
 
@@ -2478,7 +2449,9 @@ const CITY_DB = [
 })();
 </script>
 
- // 🔥 WAIT FIREBASE USER READY (CRITICO)
+<script>
+
+// 🔥 WAIT FIREBASE USER READY (CRITICO)
 function waitForUserReady(callback){
 
   if(window.currentUser !== undefined){
