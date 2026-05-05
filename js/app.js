@@ -3121,6 +3121,76 @@ document.addEventListener("DOMContentLoaded", ()=>{
   });
 
 });
+
+// ================= 🌆 AUTO LOAD CITY FROM URL (HOME → TOOL SYNC) =================
+(function(){
+
+  const params = new URLSearchParams(window.location.search);
+  const cityParam = params.get("city");
+
+  if(!cityParam) return;
+
+  const city = cityParam.toLowerCase().trim();
+
+  console.log("🌆 City from URL:", city);
+
+  // ================= SAVE GLOBAL =================
+  localStorage.setItem("selected_city", city);
+
+  // ================= UI SYNC (INPUT) =================
+  const input =
+    document.querySelector("#city") ||
+    document.querySelector("#city_input") ||
+    document.querySelector(".city-input");
+
+  if(input){
+    input.value = city;
+    input.dispatchEvent(new Event("input"));
+    input.dispatchEvent(new Event("change"));
+  }
+
+  // ================= MARKET ENGINE =================
+  if(typeof renderMarketBenchmark === "function"){
+    renderMarketBenchmark(city);
+  }
+
+  // ================= BACKGROUND SYNC =================
+  if(typeof changeCityBackground === "function"){
+
+    const map = {
+      roma: "rome",
+      napoli: "naples",
+      milano: "milan",
+      firenze: "florence"
+    };
+
+    changeCityBackground(map[city] || city);
+  }
+
+  // ================= UX BOOST (SCROLL) =================
+  setTimeout(()=>{
+
+    const target =
+      document.querySelector("#simulation-section") ||
+      document.querySelector(".simulation-container") ||
+      document.querySelector("#simulator");
+
+    if(target){
+      target.scrollIntoView({behavior:"smooth"});
+    }
+
+  }, 400);
+
+  // ================= AUTO TRIGGER CALC =================
+  setTimeout(()=>{
+
+    if(typeof calculate === "function"){
+      calculate(true);
+    }
+
+  }, 600);
+
+})();
 // ================= AUTO LOAD PROPERTY FROM TOOL (NUOVO) =================
 
 document.addEventListener("DOMContentLoaded", () => {
