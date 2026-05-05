@@ -3185,6 +3185,88 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 })();
 
+// =====================================
+// 🔥 SMART CITY AUTOCOMPLETE (AIRBNB UX)
+// =====================================
+
+(function(){
+
+  const input = document.getElementById("city-search-input");
+  const box   = document.getElementById("city-suggestions");
+
+  if(!input || !box) return;
+
+  const data = window.RB_CITY_DATA || [];
+
+  function renderList(list){
+
+    if(!list.length){
+      box.style.display = "none";
+      return;
+    }
+
+    box.innerHTML = list.map(city=>{
+
+      const label = window.t(
+        city.label.it,
+        city.label.en
+      );
+
+      return `
+        <div class="city-suggestion-item" data-city="${city.name}">
+          <span>${label}</span>
+          <span class="city-roi">${city.roi}</span>
+        </div>
+      `;
+    }).join("");
+
+    box.style.display = "block";
+  }
+
+  input.addEventListener("input", ()=>{
+
+    const val = input.value.toLowerCase().trim();
+
+    if(val.length < 2){
+      box.style.display = "none";
+      return;
+    }
+
+    const filtered = data.filter(c =>
+      c.name.includes(val) ||
+      c.label.it.toLowerCase().includes(val)
+    );
+
+    renderList(filtered);
+
+  });
+
+  // CLICK SUGGERIMENTO
+  box.addEventListener("click",(e)=>{
+
+    const item = e.target.closest(".city-suggestion-item");
+    if(!item) return;
+
+    const city = item.dataset.city;
+
+    input.value = city;
+    box.style.display = "none";
+
+    if(typeof window.selectCity === "function"){
+      window.selectCity(city);
+    }
+
+  });
+
+  // CHIUSURA CLICK OUTSIDE
+  document.addEventListener("click",(e)=>{
+    if(!e.target.closest(".city-input-wrapper")){
+      box.style.display = "none";
+    }
+  });
+
+})();
+
 // ================= 🌆 AUTO LOAD CITY FROM URL (FINAL FIX) =================
 (function(){
 
