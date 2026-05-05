@@ -2386,8 +2386,6 @@ window.buyPlan = async function(plan){
   }); 
 };
 
- <script>
-
 // ================= 🌍 CITY DATABASE (SMART) =================
 
 const CITY_DB = [
@@ -2444,19 +2442,33 @@ const CITY_DB = [
 
     const city = item.dataset.slug;
 
+    // 🔥 UX FIX
+    input.value = item.innerText;
+    box.style.display = "none";
+
     selectCity(city);
 
   });
 
-  // ENTER
+  // ENTER (FIX CLEAN)
   input.addEventListener("keypress", function(e){
     if(e.key === "Enter"){
+
       const value = input.value.toLowerCase().trim();
-      if(value) selectCity(value);
+      if(!value) return;
+
+      const match = CITY_DB.find(c =>
+        c.name.toLowerCase().includes(value)
+      );
+
+      if(match){
+        selectCity(match.slug);
+      }
+
     }
   });
 
-  // CLICK OUTSIDE
+  // CLICK OUTSIDE (FIX SAFE)
   document.addEventListener("click", function(e){
     if(!box.contains(e.target) && e.target !== input){
       box.style.display = "none";
@@ -2502,14 +2514,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
 
   }
-
-  // ================= ENTER SEARCH =================
-  document.querySelector(".city-search-input")
-  ?.addEventListener("keypress",(e)=>{
-    if(e.key==="Enter"){
-      selectCity(e.target.value.toLowerCase());
-    }
-  });
 
   // ================= RESTORE CITY =================
   const saved = localStorage.getItem("selected_city");
