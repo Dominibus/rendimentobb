@@ -2562,10 +2562,19 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
 });
 
+</script>
+<!-- ================= JS ================= -->
 
-// ================= FALLBACK =================
-window.t = window.t || ((it)=>it);
- </script>
- 
+<script>
+  window.t = window.t || ((it)=>it);
+</script>
+
+<!-- Google Places -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=LA_TUA_API_KEY&libraries=places&callback=initCityAutocomplete"
+  async
+  defer>
+</script>
+
 </body>
 </html>
