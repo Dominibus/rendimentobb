@@ -16648,3 +16648,99 @@ NON TOCCA ALTRE PAGINE
   font-weight:700;
   color:#fca5a5; /* rosso soft = attenzione */
 }
+
+/* ============================= */
+/* 🔥 ROI WARNING – SILICON VALLEY */
+/* ============================= */
+
+.home-page .roi-warning-card{
+  margin:20px auto 10px;
+  max-width:900px;
+  padding:20px;
+  border-radius:16px;
+
+  background:linear-gradient(
+    135deg,
+    rgba(15,23,42,0.85),
+    rgba(30,41,59,0.85)
+  );
+
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+
+  color:#f1f5f9;
+
+  transition:0.3s ease;
+}
+
+.home-page .roi-warning-card:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.35);
+}
+
+/* HEADER */
+.roi-warning-header{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+
+.roi-warning-icon{
+  font-size:22px;
+  margin-top:2px;
+}
+
+/* TITLE */
+.roi-warning-header strong{
+  font-size:16px;
+  font-weight:700;
+  display:block;
+}
+
+.roi-warning-header p{
+  font-size:13px;
+  color:#cbd5f5;
+  margin-top:4px;
+}
+
+/* LIST */
+.roi-warning-list{
+  margin-top:14px;
+  display:grid;
+  gap:10px;
+}
+
+.roi-warning-item{
+  display:flex;
+  gap:10px;
+  align-items:center;
+
+  font-size:13px;
+  color:#e2e8f0;
+
+  padding:10px;
+  border-radius:10px;
+
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+  .roi-warning-card{
+    padding:16px;
+  }
+
+  .roi-warning-header{
+    flex-direction:column;
+  }
+
+}
