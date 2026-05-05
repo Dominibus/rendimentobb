@@ -16519,11 +16519,11 @@ body.pro-user .pro-only-inline{
 }
 
 /* =====================================
-🔥 HERO TEXT FIX (REAL WORKING)
-HOME ONLY – SAFE OVERRIDE
+🔥 HERO TEXT FIX – FINAL PRODUCTION SAFE
+FIX LABEL VISIBILITY + NO SIDE EFFECTS
 ===================================== */
 
-/* overlay più forte */
+/* overlay */
 .hero::before{
   content:"";
   position:absolute;
@@ -16535,8 +16535,8 @@ HOME ONLY – SAFE OVERRIDE
   z-index:0;
 }
 
-/* forza tutto il testo sopra */
-.hero *{
+/* SOLO contenuto diretto sopra overlay */
+.hero > *{
   position:relative;
   z-index:1;
 }
@@ -16553,12 +16553,31 @@ HOME ONLY – SAFE OVERRIDE
   text-shadow:0 2px 10px rgba(0,0,0,0.65) !important;
 }
 
-/* evidenze verdi */
-.hero h1 span{
+/* evidenze */
+.hero h1 span,
+.hero p span{
   text-shadow:0 2px 12px rgba(0,0,0,0.8) !important;
 }
 
-/* warning */
-.hero p span{
-  text-shadow:0 2px 12px rgba(0,0,0,0.8) !important;
+/* =====================================
+🔥 FIX METRICHE (QUELLO CHE TI MANCA)
+===================================== */
+
+/* container metriche */
+.hub-metric{
+  position:relative;
+  z-index:2; /* sopra overlay */
+}
+
+/* label tipo "Occupazione" / "Break-even" */
+.hub-metric span{
+  color:#94a3b8 !important;   /* grigio SaaS leggibile */
+  opacity:1 !important;
+  font-weight:500;
+}
+
+/* valore tipo 68% / 6.5 anni */
+.hub-metric strong{
+  color:#0f172a !important;
+  font-size:18px;
 }
