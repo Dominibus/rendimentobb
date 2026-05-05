@@ -2003,7 +2003,10 @@ window.selectCity = function(city){
 
   if(!city) return;
 
-  // 🔥 mapping IT → EN (fondamentale per sfondo)
+  // 🔥 NORMALIZZAZIONE (CRITICO)
+  const cleanCity = city.toLowerCase().trim();
+
+  // 🔥 mapping IT → EN (background + coerenza)
   const map = {
     roma: "rome",
     napoli: "naples",
@@ -2011,14 +2014,16 @@ window.selectCity = function(city){
     firenze: "florence"
   };
 
-  const cityBg = map[city] || city;
+  const cityBg = map[cleanCity] || cleanCity;
 
-  // salva entrambe
-  localStorage.setItem("selected_city", city);
+  // 🔥 SAVE (fonte unica)
+  localStorage.setItem("selected_city", cleanCity);
   localStorage.setItem("selected_city_bg", cityBg);
 
-  // redirect al simulatore
-  window.location.href = `/tool/?city=${encodeURIComponent(city)}`;
+  console.log("🌆 Selected city:", cleanCity);
+
+  // 🔥 REDIRECT (PULITO)
+  window.location.href = `/tool/?city=${encodeURIComponent(cleanCity)}`;
 
 };
 
