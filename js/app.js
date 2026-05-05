@@ -71,6 +71,23 @@ window.formatCurrency = window.formatCurrency || function(v){
   return isNaN(n) ? "€0" : "€" + n.toLocaleString("it-IT");
 };
 
+// =====================================
+// 🌍 CITY DATASET (SMART SEARCH CORE)
+// =====================================
+
+window.RB_CITY_DATA = [
+  {name:"roma", label:{it:"Roma", en:"Rome"}, roi:"12.8%"},
+  {name:"milano", label:{it:"Milano", en:"Milan"}, roi:"11.2%"},
+  {name:"napoli", label:{it:"Napoli", en:"Naples"}, roi:"14.5%"},
+  {name:"firenze", label:{it:"Firenze", en:"Florence"}, roi:"10.9%"},
+  {name:"torino", label:{it:"Torino", en:"Turin"}, roi:"9.6%"},
+  {name:"bologna", label:{it:"Bologna", en:"Bologna"}, roi:"10.4%"},
+  {name:"venezia", label:{it:"Venezia", en:"Venice"}, roi:"13.2%"},
+  {name:"verona", label:{it:"Verona", en:"Verona"}, roi:"11.1%"},
+  {name:"palermo", label:{it:"Palermo", en:"Palermo"}, roi:"15.3%"},
+  {name:"bari", label:{it:"Bari", en:"Bari"}, roi:"12.1%"}
+];
+
 // ================= SAFE TOAST SYSTEM =================
 
 window.showToast = window.showToast || function(message, type = "info"){
