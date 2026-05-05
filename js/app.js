@@ -3122,6 +3122,52 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
+// =====================================
+// 🔥 SMART SEARCH TRIGGER (ENTER + ICON)
+// =====================================
+
+(function(){
+
+  const input = document.getElementById("city-search-input");
+  const btn   = document.getElementById("city-search-btn");
+
+  if(!input) return;
+
+  // ================= NORMALIZE =================
+  function getCity(){
+    return input.value?.toLowerCase().trim();
+  }
+
+  // ================= ACTION =================
+  function runSearch(){
+
+    const city = getCity();
+
+    if(!city) return;
+
+    console.log("🔍 SEARCH CITY:", city);
+
+    // 🔥 usa il tuo sistema già esistente
+    if(typeof window.selectCity === "function"){
+      window.selectCity(city);
+    } else {
+      window.location.href = `/tool/?city=${encodeURIComponent(city)}`;
+    }
+
+  }
+
+  // ================= ENTER =================
+  input.addEventListener("keypress",(e)=>{
+    if(e.key === "Enter"){
+      runSearch();
+    }
+  });
+
+  // ================= CLICK ICON =================
+  btn?.addEventListener("click", runSearch);
+
+})();
+
 // ================= 🌆 AUTO LOAD CITY FROM URL (FINAL FIX) =================
 (function(){
 
