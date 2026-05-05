@@ -165,12 +165,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div id="rb-mobile" class="rb-mobile-menu">
     <nav id="rb-mobile-nav">
-      <a href="/tool/">Simulatore</a>
-      <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-      <a href="/mutui/">Mutui</a>
-      <a href="/immobili/">Immobili</a>
-      <a href="/academy/">Academy</a>
-    </nav>
+  <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
+  <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
+  <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
+  <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
+  <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
+  <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
+</nav>
   </div>
 
   <!-- 🔥 MODAL PRO -->
@@ -500,12 +501,19 @@ else{
     if(mobileNav){
 
       let mobileHTML = `
-        <a href="/tool/">Simulatore</a>
-        <a href="/aprire-bnb-conviene/">Aprire un B&B</a>
-        <a href="/mutui/">Mutui</a>
-        <a href="/immobili/">Immobili</a>
-        <a href="/academy/">Academy</a>
-      `;
+  <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
+  <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
+  <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
+  <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
+  <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
+  <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
+
+  <hr>
+
+  <a href="/tool/" class="mobile-cta">
+    🚀 <span data-it="Simula ora" data-en="Run simulation">Simula ora</span>
+  </a>
+`;
 
       if(user){
 
