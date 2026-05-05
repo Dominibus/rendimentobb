@@ -121,6 +121,37 @@ body{
   transform:translateY(-2px);
 }
 
+/* ================= FIX VISIBILITÀ TESTI ================= */
+
+/* CTA DARK → testo deve essere BIANCO FORTE */
+.cta-box h2,
+.cta-box p,
+.cta-box span{
+  color:#ffffff !important;
+  opacity:1 !important;
+}
+
+/* testo secondario leggibile */
+.cta-box p{
+  color:rgba(255,255,255,0.85) !important;
+}
+
+/* fix generale headings dentro about */
+.about-card h2,
+.about-card h3{
+  color:#0f172a !important;
+}
+
+/* fix testo box */
+.about-box{
+  color:#0f172a;
+}
+
+/* rimuove qualsiasi trasparenza globale */
+.cta-box *{
+  opacity:1 !important;
+}  
+
 </style>
 
 </head>
@@ -226,7 +257,7 @@ body{
       Scopri se il tuo investimento conviene davvero
       </h2>
 
-      <p style="opacity:0.8;margin-bottom:24px"
+      <p style="margin-bottom:24px"
       data-it="Simula il tuo ROI in meno di 30 secondi"
       data-en="Simulate your ROI in less than 30 seconds">
       Simula il tuo ROI in meno di 30 secondi
