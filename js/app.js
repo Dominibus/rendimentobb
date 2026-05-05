@@ -3122,7 +3122,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 });
 
-// ================= 🌆 AUTO LOAD CITY FROM URL (HOME → TOOL SYNC) =================
+// ================= 🌆 AUTO LOAD CITY FROM URL (FINAL FIX) =================
 (function(){
 
   const params = new URLSearchParams(window.location.search);
@@ -3134,19 +3134,37 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   console.log("🌆 City from URL:", city);
 
-  // ================= SAVE GLOBAL =================
+  // ================= SAVE =================
   localStorage.setItem("selected_city", city);
 
-  // ================= UI SYNC (INPUT) =================
-  const input =
-    document.querySelector("#city") ||
-    document.querySelector("#city_input") ||
-    document.querySelector(".city-input");
+  // ================= UI SYNC (INPUT REALE) =================
 
-  if(input){
-    input.value = city;
-    input.dispatchEvent(new Event("input"));
-    input.dispatchEvent(new Event("change"));
+  // 🔥 input testuale (quello visibile tipo "Portici")
+  const textInput = document.querySelector("input[placeholder*='Portici']");
+
+  if(textInput){
+    textInput.value = city;
+    textInput.dispatchEvent(new Event("input"));
+    textInput.dispatchEvent(new Event("change"));
+  }
+
+  // 🔥 select città (se presente)
+  const selectInput = document.querySelector("select");
+
+  if(selectInput){
+
+    const options = [...selectInput.options];
+
+    const match = options.find(opt =>
+      opt.value?.toLowerCase() === city ||
+      opt.textContent?.toLowerCase().includes(city)
+    );
+
+    if(match){
+      selectInput.value = match.value;
+      selectInput.dispatchEvent(new Event("change"));
+    }
+
   }
 
   // ================= MARKET ENGINE =================
@@ -3163,6 +3181,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
       milano: "milan",
       firenze: "florence"
     };
+
+    if(!map[city]){
+      console.warn("⚠️ City non mappata:", city);
+    }
 
     changeCityBackground(map[city] || city);
   }
@@ -3181,14 +3203,15 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   }, 400);
 
-  // ================= AUTO TRIGGER CALC =================
+  // ================= AUTO TRIGGER CALC (FORZATO) =================
   setTimeout(()=>{
 
     if(typeof calculate === "function"){
+      console.log("🚀 AUTO CALCULATE TRIGGER");
       calculate(true);
     }
 
-  }, 600);
+  }, 800);
 
 })();
 // ================= AUTO LOAD PROPERTY FROM TOOL (NUOVO) =================
