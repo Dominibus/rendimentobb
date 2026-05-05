@@ -263,6 +263,8 @@ data-en-placeholder="Enter city or area to start"
 placeholder="Inserisci città o zona per iniziare"
 autocomplete="off">
 
+ <div id="city-live-roi" class="city-live-roi"></div>
+
 </div>
 
 <div class="city-quick">
@@ -2387,27 +2389,61 @@ const CITY_DB = [
 
   input.addEventListener("input", function(){
 
-    const value = input.value.toLowerCase().trim();
+  const value = input.value.toLowerCase().trim();
 
-    if(!value){
-      box.innerHTML = "";
-      box.style.display = "none";
-      return;
-    }
+  if(!value){
+    box.innerHTML = "";
+    box.style.display = "none";
+    liveBox.classList.remove("active");
+    return;
+  }
 
-    const results = CITY_DB.filter(c =>
-      c.name.toLowerCase().includes(value)
-    ).slice(0,6);
+  const results = CITY_DB.filter(c =>
+    c.name.toLowerCase().includes(value)
+  ).slice(0,6);
 
-    box.innerHTML = results.map(c => `
-      <div class="city-item" data-slug="${c.slug}">
-        ${c.name}
-      </div>
-    `).join("");
+  box.innerHTML = results.map(c => `
+    <div class="city-item" data-slug="${c.slug}">
+      ${c.name}
+    </div>
+  `).join("");
 
-    box.style.display = results.length ? "block" : "none";
+  box.style.display = results.length ? "block" : "none";
 
-  });
+  // 🔥 LIVE ROI
+  const ROI_PREVIEW = {
+    roma: 12.8,
+    milano: 11.2,
+    napoli: 14.1,
+    firenze: 10.9,
+    bologna: 10.4,
+    torino: 9.8,
+    venezia: 11.5,
+    verona: 10.2,
+    palermo: 13.6,
+    catania: 12.3
+  };
+
+  const liveBox = document.getElementById("city-live-roi");
+
+  const match = CITY_DB.find(c =>
+    c.name.toLowerCase().includes(value)
+  );
+
+  if(match && ROI_PREVIEW[match.slug]){
+
+    liveBox.innerHTML = `
+      ${t("ROI medio","Average ROI")} ${match.name}: 
+      <strong>${ROI_PREVIEW[match.slug]}%</strong>
+    `;
+
+    liveBox.classList.add("active");
+
+  } else {
+    liveBox.classList.remove("active");
+  }
+
+});
 
   // CLICK
   box.addEventListener("click", function(e){
