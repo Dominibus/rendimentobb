@@ -16753,3 +16753,34 @@ body.pro-user .pro-only-inline{
 .city-search-icon:hover{
   transform:scale(1.1);
 }
+
+.city-suggestions{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.12);
+  margin-top:6px;
+  z-index:50;
+  overflow:hidden;
+  display:none;
+}
+
+.city-suggestion-item{
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.city-suggestion-item:hover{
+  background:#f8fafc;
+}
+
+.city-roi{
+  font-weight:600;
+  color:#10b981;
+}
