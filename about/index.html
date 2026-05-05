@@ -31,9 +31,12 @@ body{
 
 /* ================= HERO ================= */
 .about-hero{
-  padding:140px 20px 80px;
+  padding:160px 20px 100px;
   text-align:center;
-  background:linear-gradient(135deg,#f8fafc,#eef2f7);
+  background:
+    radial-gradient(circle at 20% 30%, rgba(16,185,129,0.08), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(59,130,246,0.08), transparent 40%),
+    linear-gradient(135deg,#f8fafc,#eef2f7);
   border-bottom:1px solid #e2e8f0;
 }
 
@@ -157,14 +160,16 @@ body{
   display:flex;
   justify-content:space-between;
   gap:20px;
-  background:white;
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(12px);
   padding:26px;
   border-radius:16px;
   box-shadow:0 10px 40px rgba(2,6,23,0.06);
-  margin-top:-40px;
+  margin-top:-50px;
   position:relative;
   z-index:2;
   text-align:center;
+  border:1px solid rgba(226,232,240,0.6);
 }
 
 .trust-bar strong{
@@ -175,6 +180,19 @@ body{
 .trust-bar span{
   font-size:13px;
   color:#64748b;
+}  
+
+.about-card{
+  background:white;
+  padding:32px;
+  border-radius:18px;
+  box-shadow:0 20px 60px rgba(2,6,23,0.08);
+  margin-bottom:28px;
+  transition:all 0.25s ease;
+}
+
+.about-card:hover{
+  transform:translateY(-6px) scale(1.01);
 }  
 
 </style>
@@ -274,19 +292,25 @@ body{
       <div class="about-grid">
 
         <div class="about-box">
-          📊 <strong>ROI reale</strong><br>
-          Calcolo basato su costi reali
-        </div>
+          📊 
+      <strong data-it="ROI reale" data-en="Real ROI">ROI reale</strong><br>
+      <span data-it="Calcolo basato su costi reali" data-en="Based on real costs">
+      Calcolo basato su costi reali
+      </span>
 
         <div class="about-box">
-          ⚠️ <strong>Analisi rischio</strong><br>
-          Individua investimenti sbagliati
-        </div>
+          ⚠️ 
+     <strong data-it="Analisi rischio" data-en="Risk analysis">Analisi rischio</strong><br>
+     <span data-it="Individua investimenti sbagliati" data-en="Detects bad investments">
+     Individua investimenti sbagliati
+     </span>
 
         <div class="about-box">
-          💰 <strong>Cashflow reale</strong><br>
-          Simula profitto sostenibile
-        </div>
+          💰 
+    <strong data-it="Cashflow reale" data-en="Real cashflow">Cashflow reale</strong><br>
+    <span data-it="Simula profitto sostenibile" data-en="Simulates sustainable profit">
+    Simula profitto sostenibile
+    </span>
 
       </div>
 
@@ -349,15 +373,15 @@ body{
     <div class="cta-box">
 
       <h2 style="font-size:28px;font-weight:900;margin-bottom:12px"
-      data-it="Scopri se il tuo investimento conviene davvero"
-      data-en="Find out if your investment really makes sense">
-      Scopri se il tuo investimento conviene davvero
+      data-it="Stai per prendere una decisione da migliaia di euro"
+      data-en="You are about to make a multi-thousand euro decision">
+      Stai per prendere una decisione da migliaia di euro
       </h2>
 
       <p style="margin-bottom:24px"
-      data-it="Simula il tuo ROI in meno di 30 secondi"
-      data-en="Simulate your ROI in less than 30 seconds">
-      Simula il tuo ROI in meno di 30 secondi
+      data-it="Simula il tuo ROI reale prima di investire"
+      data-en="Simulate your real ROI before investing">
+      Simula il tuo ROI reale prima di investire
       </p>
 
       <a href="/tool/" class="btn-main">
