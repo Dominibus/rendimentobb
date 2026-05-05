@@ -2386,6 +2386,86 @@ window.buyPlan = async function(plan){
   }); 
 };
 
+ <script>
+
+// ================= 🌍 CITY DATABASE (SMART) =================
+
+const CITY_DB = [
+  {name:"Roma", slug:"roma"},
+  {name:"Milano", slug:"milano"},
+  {name:"Napoli", slug:"napoli"},
+  {name:"Firenze", slug:"firenze"},
+  {name:"Torino", slug:"torino"},
+  {name:"Bologna", slug:"bologna"},
+  {name:"Venezia", slug:"venezia"},
+  {name:"Verona", slug:"verona"},
+  {name:"Palermo", slug:"palermo"},
+  {name:"Catania", slug:"catania"}
+];
+
+// ================= 🔍 AUTOCOMPLETE ENGINE =================
+
+(function(){
+
+  const input = document.getElementById("city-search-input");
+  const box   = document.getElementById("city-suggestions");
+
+  if(!input || !box) return;
+
+  input.addEventListener("input", function(){
+
+    const value = input.value.toLowerCase().trim();
+
+    if(!value){
+      box.innerHTML = "";
+      box.style.display = "none";
+      return;
+    }
+
+    const results = CITY_DB.filter(c =>
+      c.name.toLowerCase().includes(value)
+    ).slice(0,6);
+
+    box.innerHTML = results.map(c => `
+      <div class="city-item" data-slug="${c.slug}">
+        ${c.name}
+      </div>
+    `).join("");
+
+    box.style.display = results.length ? "block" : "none";
+
+  });
+
+  // CLICK
+  box.addEventListener("click", function(e){
+
+    const item = e.target.closest(".city-item");
+    if(!item) return;
+
+    const city = item.dataset.slug;
+
+    selectCity(city);
+
+  });
+
+  // ENTER
+  input.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+      const value = input.value.toLowerCase().trim();
+      if(value) selectCity(value);
+    }
+  });
+
+  // CLICK OUTSIDE
+  document.addEventListener("click", function(e){
+    if(!box.contains(e.target) && e.target !== input){
+      box.style.display = "none";
+    }
+  });
+
+})();
+</script>
+
  // 🔥 WAIT FIREBASE USER READY (CRITICO)
 function waitForUserReady(callback){
 
@@ -2563,17 +2643,11 @@ document.addEventListener("rb_plan_loaded", ()=>{
 });
 
 </script>
+
 <!-- ================= JS ================= -->
 
 <script>
   window.t = window.t || ((it)=>it);
-</script>
-
-<!-- Google Places -->
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=LA_TUA_API_KEY&libraries=places&callback=initCityAutocomplete"
-  async
-  defer>
 </script>
 
 </body>
