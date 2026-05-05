@@ -16648,3 +16648,22 @@ NON TOCCA ALTRE PAGINE
   font-weight:700;
   color:#fca5a5; /* rosso soft = attenzione */
 }
+
+/* ============================= */
+/* 🔥 HERO CLEAN (STEP 1) */
+/* ============================= */
+
+.home-page .hero-secondary{
+  display:none;
+}
+
+/* desktop → riappare ma più sotto */
+@media (min-width:1024px){
+
+  .home-page .hero-secondary{
+    display:grid;
+    margin-top:40px;
+    opacity:0.85;
+  }
+
+}
