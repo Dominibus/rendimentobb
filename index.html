@@ -1836,24 +1836,40 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 
   function blockUpgradeModal(){
 
-    const access = window.getUserAccess?.();
+  const access = window.getUserAccess?.();
+  if(!access) return;
 
-    // ❗ se access NON pronto → NON fare nulla
-    if(!access) return;
+  const modal = document.getElementById("rb-upgrade-modal");
 
-    // 🟡 INVESTOR / 🟢 PRO → distruggi modal
-    if(access.isInvestor || access.isPro || access.isAdmin){
+  if(!modal) return;
 
-      const modal = document.getElementById("rb-upgrade-modal");
-
-      if(modal){
-        modal.remove();
-        console.log("🛑 Modal rimosso (utente pagante)");
-      }
-
-    }
-
+  // 🟢 PRO / ADMIN → NO MODAL
+  if(access.isPro || access.isAdmin){
+    modal.remove();
+    console.log("🛑 Modal rimosso (PRO)");
+    return;
   }
+
+  // 🟡 INVESTOR → MOSTRA SOLO PRO
+  if(access.isInvestor){
+    modal.dataset.forcePlan = "pro";
+    console.log("🟡 Investor → forza PRO");
+    return;
+  }
+
+  // 🔴 FREE → mostra investor
+  if(access.isLogged){
+    modal.dataset.forcePlan = "investor";
+    console.log("🔴 Free logged → Investor");
+  }
+
+  // ⚫ NON LOGGATO → login
+  else{
+    modal.dataset.forceLogin = "true";
+    console.log("⚫ Guest → Login");
+  }
+
+}
 
   // 🔥 quando piano pronto
 document.addEventListener("rb_plan_loaded", blockUpgradeModal);
@@ -2360,19 +2376,22 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   console.log("🚀 UPGRADE FLOW:", {plan, source, access});
 
-  // 🔒 NON LOGGATO → LOGIN
+  // ⚫ NON LOGGATO
   if(!access.isLogged){
     window.location.href = "/login/";
     return;
   }
 
-  // 🟡 INVESTOR → spingi a PRO
+  // 🟡 INVESTOR → SOLO PRO
   if(access.isInvestor){
     return window.buyPlan("pro");
   }
 
-  // 🔴 FREE → Investor o piano richiesto
-  return window.buyPlan(plan);
+  // 🔴 FREE LOGGATO → INVESTOR
+  if(access.isFree){
+    return window.buyPlan("investor");
+  }
+
 };
 
 // ================= 🌍 CITY DATABASE (SMART) =================
@@ -2697,21 +2716,9 @@ document.addEventListener("click", function(e){
   const btn = e.target.closest("button");
   if(!btn) return;
 
-  // 🔥 lascia passare i bottoni corretti
-  if(btn.getAttribute("onclick")?.includes("triggerUpgradeFlow")){
+  // ❌ NON bloccare se è un upgrade reale
+  if(btn.onclick && btn.onclick.toString().includes("triggerUpgradeFlow")){
     return;
-  }
-
-  const text = btn.innerText.toLowerCase();
-
-  // 🔥 blocca SOLO handler legacy (senza triggerUpgradeFlow)
-  if(
-    text.includes("inizia") ||
-    text.includes("sblocca") ||
-    text.includes("upgrade")
-  ){
-    e.stopImmediatePropagation();
-    console.log("🛑 blocked legacy ONLY");
   }
 
 }, true);
