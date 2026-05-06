@@ -2378,22 +2378,19 @@ window.startPlanPurchase = function(plan){
   };
 
   // ================= FREE =================
-  if(access.isFree){
+if(access.isFree){
 
-    // FREE può comprare SOLO investor
-    if(plan !== "investor"){
+  // 🔥 FREE può scegliere QUALSIASI piano
+  const url = links[plan];
 
-      showUpgradeModal({
-        mode:"investor"
-      });
-
-      return;
-    }
-
-    // 🔥 STRIPE DIRETTO
-    window.location.href = links.investor;
+  if(!url){
+    console.error("❌ Piano non trovato:", plan);
     return;
   }
+
+  window.location.href = url;
+  return;
+}
 
   // ================= INVESTOR =================
   if(access.isInvestor){
