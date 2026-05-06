@@ -16853,3 +16853,13 @@ body.pro-user .pro-only-inline{
 .city-suggestions:empty{
   display:none !important; /* 💣 elimina barra fantasma */
 }
+
+.city-suggestions{
+  position:absolute;
+  z-index:20;
+}
+
+.city-live-roi{
+  position:relative;
+  z-index:5;
+}
