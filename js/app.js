@@ -4874,3 +4874,27 @@ document.addEventListener("rb_plan_ready", () => {
   }
 
 });
+
+// ================= 🔥 HOME FUNNEL FIX =================
+
+setTimeout(()=>{
+
+  const access = window.getUserAccess?.() || {};
+
+  console.log("🔥 HOME FUNNEL CHECK", access);
+
+  // SOLO FREE / GUEST
+  if(!access.isPro && !access.isInvestor && !access.isAdmin){
+
+    // evita spam
+    if(sessionStorage.getItem("home_funnel_shown")) return;
+
+    sessionStorage.setItem("home_funnel_shown","1");
+
+    console.log("🔥 OPEN MODAL HOMEPAGE");
+
+    openUpgradeModal("investor", 8);
+
+  }
+
+}, 800);
