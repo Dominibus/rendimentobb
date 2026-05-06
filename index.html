@@ -1842,36 +1842,48 @@ function blockUpgradeModal(){
   const access = window.getUserAccess?.();
   if(!access) return;
 
-  // 🟢 PRO / ADMIN → NO MODAL
+  console.log("🧠 MODAL ACCESS:", access);
+
+  // 🔥 RESET TOTALE
+  delete modal.dataset.forcePlan;
+  delete modal.dataset.forceLogin;
+
+  // ================= PRO / ADMIN =================
   if(access.isPro || access.isAdmin){
-    modal.remove();
-    console.log("🛑 Modal rimosso (PRO)");
+
+    modal.style.display = "none";
+
+    console.log("🟢 PRO/ADMIN → NO MODAL");
     return;
   }
 
-  // 🟡 INVESTOR → MOSTRA SOLO PRO
+  // ================= INVESTOR =================
   if(access.isInvestor){
+
     modal.dataset.forcePlan = "pro";
-    console.log("🟡 Investor → forza PRO");
+
+    console.log("🟡 INVESTOR → SOLO PRO");
     return;
   }
 
-  // 🔴 FREE LOGGATO → investor
-  if(access.isLogged){
-    modal.dataset.forcePlan = "investor";
-    console.log("🔴 Free logged → Investor");
+  // ================= GUEST =================
+  if(!access.isLogged){
+
+    modal.dataset.forceLogin = "true";
+
+    console.log("⚫ GUEST → LOGIN");
+    return;
   }
 
-  // ⚫ NON LOGGATO → login
-  else{
-    modal.dataset.forceLogin = "true";
-    console.log("⚫ Guest → Login");
-  }
+  // ================= FREE LOGGATO =================
+  // 🔥 NON FORZARE INVESTOR
+  // il piano scelto deve restare quello cliccato
+
+  console.log("🔴 FREE LOGGED → piano libero");
 
 }
 
-  // 🔥 quando piano pronto
-// 🔥 WAIT REAL AUTH READY
+// 🔥 FIREBASE READY
 document.addEventListener("firebase_ready", ()=>{
 
   console.log("🔥 FIREBASE READY → MODAL SYNC");
@@ -1885,13 +1897,13 @@ document.addEventListener("firebase_ready", ()=>{
 
 });
 
+// 🔥 DOM READY
 document.addEventListener("DOMContentLoaded", ()=>{
 
   setTimeout(()=>{
 
     const access = window.getUserAccess?.();
 
-    // 🔥 evita sync prematuro
     if(!access) return;
 
     blockUpgradeModal();
@@ -1900,7 +1912,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   },300);
 
 });
- 
+
 })();
 </script>
 
@@ -1908,7 +1920,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 <script type="module" src="/js/roi-engine.js"></script>
 <script type="module" src="/js/app.js"></script>
 
- <script>
+<script>
 
 /* ================= 💣 FIX MODAL-OPEN REALE ================= */
 
@@ -1918,28 +1930,32 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     // 👉 controlla se esiste davvero un modal visibile
     const realModal = document.querySelector(
-      ".modal.show, .modal.active, .popup.show, .overlay.show"
+      ".modal.show, .modal.active, .popup.show, .overlay.show, .rb-modal.show"
     );
 
     // 👉 se NON esiste → rimuovi blocco
     if(!realModal){
 
       if(document.body.classList.contains("modal-open")){
+
         document.body.classList.remove("modal-open");
+
         console.log("💣 FIX modal-open (no real modal)");
+
       }
 
     }
 
   }
 
-    // 🔥 eventi chiave
-  document.addEventListener("rb_plan_loaded", fixModal);
+  // 🔥 eventi chiave
+  document.addEventListener("firebase_ready", fixModal);
   document.addEventListener("DOMContentLoaded", fixModal);
 
 })();
 
 </script>
+
 <!-- 🔹 SCRIPT PRINCIPALE -->
 <script>
 
@@ -1972,8 +1988,10 @@ window.updateOverlayVisibility = function(){
 
   // 🟢 PRO + INVESTOR → SEMPRE OFF
   if(isPro || isInvestor){
+
     overlay.style.display = "none";
-    overlay.classList.remove("active"); // 🔥 FIX
+    overlay.classList.remove("active");
+
     return;
   }
 
@@ -1981,6 +1999,7 @@ window.updateOverlayVisibility = function(){
   if(window.userTriggeredSimulation){
 
     setTimeout(()=>{
+
       overlay.style.display = "flex";
 
       requestAnimationFrame(()=>{
@@ -1991,7 +2010,6 @@ window.updateOverlayVisibility = function(){
 
   } else {
 
-    // 🔥 FIX CRITICO
     overlay.style.display = "none";
     overlay.classList.remove("active");
 
