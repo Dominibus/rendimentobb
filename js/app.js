@@ -128,14 +128,12 @@ window.showToast = window.showToast || function(message, type = "info"){
 // 🚫 DISABLE ALERT (UX FIX + DEBUG)
 // =====================================
 
-window.alert = function(msg){
+window.rbAlert = function(msg){
 
   console.warn("🚫 ALERT BLOCCATO:", msg);
 
-  // 🔍 TRACE per trovare chi lo chiama
   console.trace("📍 ALERT SOURCE");
 
-  // 🔥 UX → toast moderno
   if(typeof showToast === "function"){
     showToast(msg, "warning");
   }
@@ -183,55 +181,6 @@ let modalGuard = setInterval(() => {
 setTimeout(()=>{
   clearInterval(modalGuard);
 },10000);
-// ================= SAFE GLOBAL EARLY FIX =================
-
-// 🔥 USA SOLO FIREBASE (SINGLE SOURCE OF TRUTH)
-window.getUserAccess = function(){
-
-  const user = window.currentUser;
-
-  // ⏳ NON PRONTO → NON DECIDERE
-  if(
-  !window.RB_USER ||
-  window.RB_USER.plan === undefined ||
-  window.RB_USER.plan === null
-){
-    return {
-      isLogged: !!user,
-      isFree: false,
-      isPro: false,
-      isInvestor: false,
-      isAdmin: false,
-      canSeeFullAnalysis: false,
-      isLoading: true
-    };
-  }
-
-  // 🔥 NORMALIZZAZIONE SICURA
-  const isAdmin    = !!window.RB_USER.isAdmin;
-  const isPro      = !!window.RB_USER.isPro;
-  const isInvestor = !!window.RB_USER.isInvestor;
-
-  const isFree = !isAdmin && !isPro && !isInvestor;
-
-  console.log("🔐 ACCESS FIX:", {
-    plan: window.RB_USER.plan,
-    isFree,
-    isInvestor,
-    isPro,
-    isAdmin
-  });
-
-  return {
-    isLogged: !!user,
-    isFree,
-    isPro,
-    isInvestor,
-    isAdmin,
-    canSeeFullAnalysis: (isPro || isAdmin),
-    isLoading: false
-  };
-};
 
 // ================= KPI UNIVERSALE (HOME + TOOL) =================
 
@@ -283,7 +232,7 @@ function renderUniversalKPI(data = {}){
 
   // ================= ACCESS CONTROL (SAFE) =================
 
-  const access = window.getUserAccess?.();
+  const access = window.getUserAccess?.() || {};
 
   // 🔴 FREE → LIMITA DATI (NO REAL NUMBERS)
 if(access.isFree){
@@ -546,7 +495,7 @@ function createLockOverlay(el, {
   `;
 
   overlay.onclick = () => {
-    triggerUpgradeFlow({ source:"lock_overlay", plan });
+    triggerFunnel({ type:"lock_overlay", roi:0 });
   };
 
   el.appendChild(overlay);
@@ -628,8 +577,11 @@ function applySmartLock(el, {
 
   // 🔥 FIX MOBILE: NON bloccare UX
   if(window.innerWidth < 768){
-    type = "blur";
-  }else{
+
+  el.classList.add("pro-blur");
+  return;
+
+}else{
 
     createLockOverlay(el, {
       message: message || t(
@@ -655,7 +607,7 @@ function applySmartLock(el, {
 
     el.addEventListener("click", (e)=>{
       e.stopPropagation();
-      triggerUpgradeFlow({ source:"free_lock", plan });
+      triggerFunnel({ type:"free_lock", roi:0 });
     });
 
   }
@@ -756,70 +708,6 @@ function requirePlan(requiredPlan){
 
   return true;
 }
-// =====================================
-// 🔥 FUNNEL + MODAL ENGINE UNIFICATO
-// SILICON VALLEY SAAS – FINAL PRODUCTION
-// =====================================
-
-// ================= FUNNEL =================
-
-window.triggerUpgradeFlow = function(context = {}){
-  if(window.__upgradeLoopGuard) return;
-window.__upgradeLoopGuard = true;
-
-setTimeout(()=>{
-  window.__upgradeLoopGuard = false;
-}, 2000);
-
-  if(!window.firebaseReady){
-    setTimeout(()=> window.triggerUpgradeFlow(context), 300);
-    return;
-  }
-
-  if(window.__upgradeShown) return;
-  window.__upgradeShown = true;
-
-  const access = window.getUserAccess();
-  const { roi = 0 } = context;
-
-  // 👻 GUEST → LOGIN/REGISTER
-if(!access || !access.isLogged){
-
-  showToast(
-    t(
-      "Devi creare un account per continuare",
-      "You need to create an account to continue"
-    ),
-    "warning"
-  );
-
-  setTimeout(()=>{
-    window.location.href = "/login/";
-  }, 700);
-
-  return;
-}
-
-  if(access.isFree){
-    openUpgradeModal("investor", roi);
-    return;
-  }
-
-  if(access.isInvestor){
-
-  // ❌ blocca funnel automatico
-  if(context.auto){
-    console.log("🟡 INVESTOR → skip auto funnel");
-    return;
-  }
-
-  // ✅ consenti solo azione utente
-  console.log("🟡 INVESTOR → OPEN PRO MODAL");
-  openUpgradeModal("pro", context.roi || 0);
-  return;
-}
-
-};
 
 // =====================================
 // 🔥 FUNNEL TRIGGER ENGINE (SaaS)
@@ -883,7 +771,7 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
   const oldModal = document.getElementById("rb-upgrade-modal");
 
 if(oldModal){
-  oldModal.classList.remove("show");
+  oldModal.remove();
 }
 
   const modal = document.createElement("div");
@@ -1118,7 +1006,6 @@ cta.style = type === "pro"
 
 cta.onclick = ()=>{
   modal.remove();
-  window.__upgradeShown = false;
   config.action();
 };
   
@@ -1136,7 +1023,6 @@ cta.onclick = ()=>{
 
   close.onclick = ()=>{
     modal.remove();
-    window.__upgradeShown = false;
   };
 
   // ================= WARNING =================
@@ -1163,79 +1049,9 @@ cta.onclick = ()=>{
 modal.addEventListener("click",(e)=>{
   if(e.target === modal){
     modal.remove();
-    window.__upgradeShown = false;
   }
 });
 
-};
-
-// =====================================
-// 💳 PLAN PURCHASE FLOW FINAL
-// =====================================
-
-window.startPlanPurchase = function(plan){
-
-  const access = window.getUserAccess?.() || {};
-
-  // 👻 GUEST
-  if(!access.isLogged){
-
-    showToast(
-      t(
-        "Devi effettuare il login per continuare",
-        "You must log in to continue"
-      ),
-      "warning"
-    );
-
-    setTimeout(()=>{
-      window.location.href = "/login/";
-    },700);
-
-    return;
-  }
-
-  // 🔵 FREE → SOLO INVESTOR
-  if(access.isFree){
-
-    if(plan !== "investor"){
-      openUpgradeModal("investor");
-      return;
-    }
-
-  }
-
-  // 🟡 INVESTOR → SOLO PRO
-  if(access.isInvestor){
-
-    if(plan !== "pro"){
-      openUpgradeModal("pro");
-      return;
-    }
-
-  }
-
-  // 🟢 PRO / ADMIN
-  const links = {
-
-    investor:
-      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
-
-    pro:
-      "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
-
-    pro_yearly:
-      "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
-  };
-
-  const url = links[plan];
-
-  if(!url){
-    console.error("❌ Piano non trovato:", plan);
-    return;
-  }
-
-  window.location.href = url;
 };
 
 window.applyCityBackground = function(city){
@@ -1882,7 +1698,7 @@ window.showUpgradePopup = function(roi){
         ROI ${safeROI.toFixed(1)}%
       </div>
 
-      <button onclick="triggerUpgradeFlow({roi:${safeROI}})" style="
+      <button onclick="triggerFunnel({roi:${safeROI}})" style="
         background:#10b981;
         color:white;
         border:none;
@@ -2294,7 +2110,6 @@ function triggerSmartReminder(roi){
     triggerFunnel({
   type:"reminder",
   roi,
-  auto:true
 });
 
   }, 2000);
@@ -2375,12 +2190,13 @@ function runPostAnalysis(result, context){
     (window.currentLang === "en" ? en : it);
 
   const {
-    price,
-    gross,
-    occupancy,
-    priceNight,
-    expenses
-  } = context || {};
+  price,
+  gross,
+  occupancy,
+  priceNight,
+  expenses,
+  equity
+} = context || {};
 
   // ================= GLOBAL STATE =================
 
@@ -2433,7 +2249,7 @@ function runPostAnalysis(result, context){
   triggerFunnel({ type:"roi", roi });
 }
   else if(roi > 6){
-    triggerFunnel({ type:"roi_soft", roi, auto:true });
+    triggerFunnel({ type:"roi_soft", roi });
   }
 
   // ================= PAYWALL =================
@@ -2442,9 +2258,8 @@ function runPostAnalysis(result, context){
     // showUpgradeModal(roi);
   }
   else if(access.isInvestor && roi > 0){
-    console.log("🟡 INVESTOR → partial unlock");
-    renderSmartInvestmentAlert(roi);
-  }
+  console.log("🟡 INVESTOR → partial unlock");
+}
 
   // ================= LEAD ENGINE =================
 
@@ -2586,22 +2401,6 @@ try{
     });
 
   }
-
-}
-
-// ================= AUTO PAYWALL (FIX DEFINITIVO) =================
-const access = window.getUserAccess?.() || {};
-
-if(access.isFree && window.simulationExecuted && !window.paywallShown){
-
-  window.paywallShown = true;
-
-  setTimeout(()=>{
-    triggerUpgradeFlow({
-      roi: Number(result?.roi || 0),
-      source: "auto"
-    });
-  }, 800); // delay naturale UX
 
 }
 
@@ -2823,7 +2622,7 @@ if(locationInput && helper){
     document.querySelector(".hero-bg") ||
     document.querySelector(".hero-roi");
 
-
+  window.__BG_LOCK__ = false;
   window.__CITY_MANUAL__ = true;
   applyCityBackground(mapped);
 }
@@ -2994,12 +2793,13 @@ if(access.isLoading || !window.RB_USER){
     });
 
     runPostAnalysis(result, {
-      price,
-      gross,
-      occupancy,
-      priceNight,
-      expenses
-    });
+  price,
+  gross,
+  occupancy,
+  priceNight,
+  expenses,
+  equity
+});
 
     // ================= MARKET =================
     if(access.isFree){
@@ -3044,7 +2844,7 @@ if(window.firebaseReady && isFreeUser && roi > 10){
     access
   });
 
-  triggerUpgradeFlow({ roi });
+  triggerFunnel({ roi });
 
 }
 
@@ -3071,7 +2871,13 @@ function renderCityROIChart(){
 
   const ctx = canvas.getContext("2d");
 
-  new Chart(ctx,{
+// 🔥 DESTROY PRECEDENTE
+if(window.roiChartInstance){
+  window.roiChartInstance.destroy();
+}
+
+// 🔥 CREA NUOVO CHART
+window.roiChartInstance = new Chart(ctx,{
 
     type:"doughnut",
 
@@ -3486,7 +3292,7 @@ if(analyzeBtn){
   const roi = window.lastAnalysisData?.roi || 0;
 
   if(roi > 6){
-    triggerFunnel({ type:"roi", roi, auto:true });
+    triggerFunnel({ type:"roi", roi });
   }
 
 }, 1500);
@@ -4223,6 +4029,7 @@ if(citySelectorEl){
 
     
     // 🔥 POI APPLICA
+    window.__BG_LOCK__ = false;
     applyCityBackground(city);
 
   });
@@ -4630,7 +4437,7 @@ window.addEventListener("scroll", () => {
     const access = window.getUserAccess?.() || {};
 
 if(access.isFree){
-  triggerFunnel({ type:"scroll", roi, auto:true });
+  triggerFunnel({ type:"scroll", roi });
 }
 
   }
@@ -4953,13 +4760,19 @@ document.addEventListener("rb_plan_ready", () => {
 
     sessionStorage.setItem("home_funnel_shown", "true");
 
-    setTimeout(()=>{
+    const handleHomeFunnel = () => {
 
-      console.log("🔥 OPEN HOME FUNNEL");
+  if(window.scrollY > 400){
 
-      openUpgradeModal("investor", 8);
+    window.removeEventListener("scroll", handleHomeFunnel);
 
-    }, 800);
+    openUpgradeModal("investor", 8);
+
+  }
+
+};
+
+window.addEventListener("scroll", handleHomeFunnel);
 
   }
 
