@@ -1834,19 +1834,13 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <script>
 (function(){
 
- function blockUpgradeModal(){
+function blockUpgradeModal(){
 
   const modal = document.getElementById("rb-upgrade-modal");
   if(!modal) return;
-
-  // ❌ NON rimuovere mai automaticamente il modal
 
   const access = window.getUserAccess?.();
   if(!access) return;
-
-  const modal = document.getElementById("rb-upgrade-modal");
-
-  if(!modal) return;
 
   // 🟢 PRO / ADMIN → NO MODAL
   if(access.isPro || access.isAdmin){
@@ -1862,7 +1856,7 @@ data-en="✔ No commitment • ✔ Cancel anytime">
     return;
   }
 
-  // 🔴 FREE → mostra investor
+  // 🔴 FREE LOGGATO → investor
   if(access.isLogged){
     modal.dataset.forcePlan = "investor";
     console.log("🔴 Free logged → Investor");
