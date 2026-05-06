@@ -1834,12 +1834,12 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <script>
 (function(){
 
-  function blockUpgradeModal(){
+ function blockUpgradeModal(){
 
-   if(document.querySelector(".pricing-grid")){
-  modal.remove();
-  return;
-}
+  const modal = document.getElementById("rb-upgrade-modal");
+  if(!modal) return;
+
+  // ❌ NON rimuovere mai automaticamente il modal
 
   const access = window.getUserAccess?.();
   if(!access) return;
@@ -2429,6 +2429,11 @@ window.showUpgradeModal = function({mode} = {}){
 
 };
 
+ window.closeUpgradeModal = function(){
+  const modal = document.getElementById("rb-upgrade-modal");
+  if(modal) modal.classList.remove("show");
+};
+
  // ================= UPGRADE FLOW CENTRAL =================
 window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
@@ -2785,6 +2790,22 @@ document.addEventListener("rb_plan_loaded", ()=>{
 <script>
   window.t = window.t || ((it)=>it);
 </script>
+
+ <!-- 🔥 UPGRADE MODAL -->
+<div id="rb-upgrade-modal" class="rb-modal">
+
+  <div class="rb-modal-box">
+
+    <h2 class="modal-title"></h2>
+    <p class="modal-sub"></p>
+
+    <button class="modal-cta btn btn-primary"></button>
+
+    <button class="rb-modal-close" onclick="closeUpgradeModal()">✕</button>
+
+  </div>
+
+</div>
 
 </body>
 </html>
