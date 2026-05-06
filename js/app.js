@@ -4848,3 +4848,29 @@ document.addEventListener("rb_auth_ready", () => {
   }
 
 });
+
+document.addEventListener("rb_plan_ready", () => {
+
+  console.log("🔥 FUNNEL HOME CHECK");
+
+  const access = window.getUserAccess?.() || {};
+
+  // 🔴 SOLO FREE / GUEST
+  if(!access.isPro && !access.isInvestor && !access.isAdmin){
+
+    // evita spam
+    if(sessionStorage.getItem("home_funnel_shown")) return;
+
+    sessionStorage.setItem("home_funnel_shown", "true");
+
+    setTimeout(()=>{
+
+      console.log("🔥 OPEN HOME FUNNEL");
+
+      openUpgradeModal("investor", 8);
+
+    }, 800);
+
+  }
+
+});
