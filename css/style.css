@@ -16926,3 +16926,38 @@ body.pro-user .pro-only-inline{
   position:relative;
   z-index:60;
 }
+/* =====================================
+🔥 FIX CLICK PRICING DEFINITIVO
+===================================== */
+
+#pricing{
+  position:relative;
+  z-index:9999;
+}
+
+#pricing *{
+  pointer-events:auto;
+}
+
+#pricing .pricing-wrapper,
+#pricing .pricing-grid,
+#pricing .plan-card{
+  position:relative;
+  z-index:9999;
+}
+
+#pricing .plan-card button{
+  position:relative;
+  z-index:10000;
+  pointer-events:auto !important;
+}
+
+#pricing .plan-card::before,
+#pricing .plan-card::after{
+  pointer-events:none !important;
+}
+
+#pricing .badge,
+#pricing .plan-extra{
+  pointer-events:none !important;
+}
