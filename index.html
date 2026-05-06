@@ -2391,6 +2391,11 @@ window.buyPlan = window.startPlanPurchase;
  // ================= MODAL SYSTEM =================
 window.showUpgradeModal = function({mode} = {}){
 
+ // 💣 BLOCK PRICING REDIRECT
+if(window.__pricingRedirect){
+  return;
+}
+
   const modal = document.getElementById("rb-upgrade-modal");
   if(!modal){
     console.warn("❌ Modal non trovato");
@@ -2529,26 +2534,36 @@ window.triggerUpgradeFlow = function({
     return;
   }
 
-  // ================= FREE LOGGATO =================
+// ================= FREE LOGGATO =================
 
-  // pricing → stripe diretto
-  if(source === "pricing"){
+// 🔥 PRICING → MAI APRIRE MODAL
+if(source === "pricing"){
 
-    const freeUrl = stripeLinks[plan];
+  console.log("🔥 DIRECT STRIPE:", plan);
 
-    if(freeUrl){
-      window.location.href = freeUrl;
-    }
+  const freeUrl = stripeLinks[plan];
+
+  if(freeUrl){
+
+    // 💣 blocca funnel/modal globali
+    window.__pricingRedirect = true;
+
+    // 🔥 redirect diretto
+    window.location.href = freeUrl;
 
     return;
   }
+}
 
-  // resto sito → modal investor
-  showUpgradeModal({
-    mode:"investor"
-  });
+// 🔥 evita override pricing
+if(window.__pricingRedirect){
+  return;
+}
 
-};
+// resto sito → modal investor
+showUpgradeModal({
+  mode:"investor"
+});
 // ================= 🌍 CITY DATABASE (SMART) =================
 const CITY_DB = [
   {name:"Roma",slug:"roma"},
