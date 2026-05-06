@@ -2339,29 +2339,68 @@ window.analyzeProperty = function(){
 
 };
 
+// =====================================
+// 💳 PLAN PURCHASE FLOW FINAL
+// =====================================
+
 window.startPlanPurchase = function(plan){
-  return window.buyPlan(plan);
-};
 
-// ================= BUY PLAN =================
-window.buyPlan = function(plan){
+  const access = window.getUserAccess?.() || {};
 
-  const user = window.currentUser;
+  console.log("💳 START PLAN:", {
+    plan,
+    access
+  });
 
-  // 🔒 login obbligatorio
-  if(!user){
-    alert(window.t(
-      "Devi effettuare il login per continuare",
-      "You must log in to continue"
-    ));
-    window.location.href = "/login/";
+  // 👻 GUEST
+  if(!access.isLogged){
+
+    showUpgradeModal({
+      mode: "login"
+    });
+
     return;
   }
 
+  // 🔵 FREE → SOLO INVESTOR
+  if(access.isFree){
+
+    if(plan !== "investor"){
+
+      showUpgradeModal({
+        mode: "investor"
+      });
+
+      return;
+    }
+
+  }
+
+  // 🟡 INVESTOR → SOLO PRO
+  if(access.isInvestor){
+
+    if(plan !== "pro" && plan !== "pro_yearly"){
+
+      showUpgradeModal({
+        mode: "pro"
+      });
+
+      return;
+    }
+
+  }
+
+  // 🟢 STRIPE DIRECT
   const links = {
-    investor: "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
-    pro: "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
-    pro_yearly: "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+
+    investor:
+      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
+
+    pro:
+      "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
+
+    pro_yearly:
+      "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
   };
 
   const url = links[plan];
@@ -2371,9 +2410,11 @@ window.buyPlan = function(plan){
     return;
   }
 
-  // 🔥 REDIRECT DIRETTO (CRITICO)
   window.location.href = url;
 };
+
+// 🔥 compatibilità legacy
+window.buyPlan = window.startPlanPurchase;
 
  // ================= MODAL SYSTEM =================
 window.showUpgradeModal = function({mode} = {}){
@@ -2446,10 +2487,10 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   console.log("🚀 UPGRADE FLOW:", {plan, source, access});
 
-  // 👉 PRICING → sempre diretto
-  if(source === "pricing"){
-    return window.buyPlan(plan);
-  }
+  // 👉 PRICING FLOW
+if(source === "pricing"){
+  return window.startPlanPurchase(plan);
+}
 
   // ================= NOT LOGGED =================
   if(!isLogged){
