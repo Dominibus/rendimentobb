@@ -190,48 +190,32 @@ window.getUserAccess = function(){
 
   const user = window.currentUser;
 
-  // 🔴 RB_USER NON PRONTO
-  if(!window.RB_USER){
-  return {
-    isLogged: !!user,
-    isFree: false,
-    isPro: false,
-    isInvestor: false,
-    isAdmin: false,
-    canSeeFullAnalysis: false,
-    isLoading: true
-  };
-}
-
+  // ⏳ NON PRONTO → NON DECIDERE
   if(!window.RB_USER || window.RB_USER.plan === undefined){
-  return {
-    isLogged: !!user,
-    isFree: true,
-    isPro: false,
-    isInvestor: false,
-    isAdmin: false,
-    canSeeFullAnalysis: false,
-    isLoading: true
-  };
-}
+    return {
+      isLogged: !!user,
+      isFree: false,
+      isPro: false,
+      isInvestor: false,
+      isAdmin: false,
+      canSeeFullAnalysis: false,
+      isLoading: true
+    };
+  }
 
-  // 🔥 NORMALIZZAZIONE
+  // 🔥 NORMALIZZAZIONE SICURA
   const isAdmin    = !!window.RB_USER.isAdmin;
   const isPro      = !!window.RB_USER.isPro;
   const isInvestor = !!window.RB_USER.isInvestor;
 
   const isFree = !isAdmin && !isPro && !isInvestor;
 
-  // 🔍 DEBUG QUI (CRITICO)
-  console.log("🔐 ACCESS:", {
-    user: window.currentUser?.email,
-    RB_USER: window.RB_USER,
-    computed: {
-      isFree,
-      isInvestor,
-      isPro,
-      isAdmin
-    }
+  console.log("🔐 ACCESS FIX:", {
+    plan: window.RB_USER.plan,
+    isFree,
+    isInvestor,
+    isPro,
+    isAdmin
   });
 
   return {
@@ -240,7 +224,8 @@ window.getUserAccess = function(){
     isPro,
     isInvestor,
     isAdmin,
-    canSeeFullAnalysis: (isPro || isAdmin)
+    canSeeFullAnalysis: (isPro || isAdmin),
+    isLoading: false
   };
 };
 
@@ -2761,6 +2746,17 @@ window.calculate = async function(force = false){
     console.warn("⛔ skip calculate (already running)");
     return;
   }
+
+  window.isCalculating = true;
+
+// ✅ FIX ACCESS LOADING (CRITICO)
+const access = window.getUserAccess?.() || {};
+
+if(access.isLoading){
+  console.log("⏳ SKIP calculate → access loading");
+  window.isCalculating = false;
+  return;
+}
 
   window.isCalculating = true;
   window.__preventRecalculate = true;
