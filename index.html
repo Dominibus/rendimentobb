@@ -1830,92 +1830,6 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 <!-- 🔥 FIREBASE INIT (UNICO) -->
 <script type="module" src="/js/firebase-init.js"></script>
 
-<!-- 💣 FIX MODAL DEFINITIVO -->
-<script>
-(function(){
-
-function blockUpgradeModal(){
-
-  const modal = document.getElementById("rb-upgrade-modal");
-  if(!modal) return;
-
-  const access = window.getUserAccess?.();
-  if(!access) return;
-
-  console.log("🧠 MODAL ACCESS:", access);
-
-  // 🔥 RESET TOTALE
-  delete modal.dataset.forcePlan;
-  delete modal.dataset.forceLogin;
-
-  // ================= PRO / ADMIN =================
-  if(access.isPro || access.isAdmin){
-
-    modal.style.display = "none";
-
-    console.log("🟢 PRO/ADMIN → NO MODAL");
-    return;
-  }
-
-  // ================= INVESTOR =================
-  if(access.isInvestor){
-
-    modal.dataset.forcePlan = "pro";
-
-    console.log("🟡 INVESTOR → SOLO PRO");
-    return;
-  }
-
-  // ================= GUEST =================
-  if(!access.isLogged){
-
-    modal.dataset.forceLogin = "true";
-
-    console.log("⚫ GUEST → LOGIN");
-    return;
-  }
-
-  // ================= FREE LOGGATO =================
-  // 🔥 NON FORZARE INVESTOR
-  // il piano scelto deve restare quello cliccato
-
-  console.log("🔴 FREE LOGGED → piano libero");
-
-}
-
-// 🔥 FIREBASE READY
-document.addEventListener("firebase_ready", ()=>{
-
-  console.log("🔥 FIREBASE READY → MODAL SYNC");
-
-  setTimeout(()=>{
-
-    blockUpgradeModal();
-    window.updateOverlayVisibility?.();
-
-  },150);
-
-});
-
-// 🔥 DOM READY
-document.addEventListener("DOMContentLoaded", ()=>{
-
-  setTimeout(()=>{
-
-    const access = window.getUserAccess?.();
-
-    if(!access) return;
-
-    blockUpgradeModal();
-    window.updateOverlayVisibility?.();
-
-  },300);
-
-});
-
-})();
-</script>
-
 <script src="/js/market-data.js"></script> 
 <script type="module" src="/js/roi-engine.js"></script>
 <script type="module" src="/js/app.js"></script>
@@ -2498,7 +2412,7 @@ window.closeUpgradeModal = function(){
 
 
 // =====================================
-// 🚀 SINGLE UPGRADE FLOW (FINAL)
+// 🚀 SINGLE UPGRADE FLOW (FIXED)
 // =====================================
 
 window.triggerUpgradeFlow = function({
@@ -2527,7 +2441,7 @@ window.triggerUpgradeFlow = function({
 
   };
 
-  // ================= ADMIN / PRO =================
+  // ================= PRO / ADMIN =================
   if(access.isAdmin || access.isPro){
     return;
   }
@@ -2535,35 +2449,18 @@ window.triggerUpgradeFlow = function({
   // ================= GUEST =================
   if(!access.isLogged){
 
-    // pricing cards
-    if(source === "pricing"){
-
-      window.location.href = "/login/";
-      return;
-    }
-
-    // resto sito
-    showUpgradeModal({
-      mode:"login"
-    });
-
+    window.location.href = "/login/";
     return;
   }
 
   // ================= INVESTOR =================
   if(access.isInvestor){
 
-    // investor clicca investor
+    // investor non deve comprare investor
     if(plan === "investor"){
-
-      showUpgradeModal({
-        mode:"pro"
-      });
-
-      return;
+      plan = "pro";
     }
 
-    // investor → pro/pro_yearly
     const investorUrl = stripeLinks[plan];
 
     if(investorUrl){
@@ -2576,42 +2473,27 @@ window.triggerUpgradeFlow = function({
 
   // ================= FREE LOGGATO =================
 
-  // 🔥 PRICING = STRIPE DIRETTO
-  if(source === "pricing"){
+  const freeUrl = stripeLinks[plan];
 
-    const freeUrl = stripeLinks[plan];
+  if(freeUrl){
 
-    console.log("🔥 DIRECT STRIPE:", {
-      plan,
-      url: freeUrl
-    });
+    // cleanup modal
+    const modal = document.getElementById("rb-upgrade-modal");
 
-    if(freeUrl){
+    if(modal){
 
-  window.__stripeRedirecting = true;
+      modal.classList.remove("show");
+      modal.style.display = "none";
 
-  const modal =
-    document.getElementById("rb-upgrade-modal");
+    }
 
-  if(modal){
+    document.body.classList.remove("modal-open");
 
-    modal.classList.remove("show");
-    modal.style.display = "none";
+    console.log("🔥 STRIPE REDIRECT:", plan);
+
+    window.location.href = freeUrl;
 
   }
-
-  document.body.classList.remove("modal-open");
-
-  window.location.href = freeUrl;
-
-  return;
-}
-  }
-
-  // 🔥 resto sito → modal investor
-  showUpgradeModal({
-    mode:"investor"
-  });
 
 };
 // ================= 🌍 CITY DATABASE (SMART) =================
