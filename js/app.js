@@ -673,10 +673,16 @@ function hasPlan(requiredPlan){
 // =====================================
 function requirePlan(requiredPlan){
 
-  if(!window.firebaseReady || !window.currentUser){
-    console.log("⏳ user non pronto");
-    return false;
-  }
+  if(!window.firebaseReady){
+  console.log("⏳ firebase non pronto");
+  return false;
+}
+
+// 👻 GUEST
+if(!window.currentUser){
+  showRegisterPopup?.();
+  return false;
+}
 
   const access = window.getUserAccess?.() || {};
 
