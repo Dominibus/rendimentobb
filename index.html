@@ -2265,10 +2265,15 @@ window.quickROI = function(){
 
   }
 
-  // ================= OVERLAY =================
-  updateOverlayVisibility?.();
+ // ================= OVERLAY =================
+updateOverlayVisibility?.();
 
-};
+// 🔥 AUTO TRIGGER UPGRADE (CRITICO)
+if(!isPro && !isInvestor){
+  setTimeout(()=>{
+    triggerUpgradeFlow({source:"auto-after-roi"});
+  },1200);
+}
  
 // ================= CTA DINAMICA (FUORI!!!) =================
 function renderUpgradeCTA(roi){
