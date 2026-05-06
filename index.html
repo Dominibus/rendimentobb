@@ -1688,7 +1688,7 @@ data-en="Limited access • Partial data • No reports">
 Accesso limitato • Dati parziali • Nessun report
 </p> 
 
-<button onclick="startPlanPurchase('investor')" class="btn-outline"
+<button onclick="triggerUpgradeFlow({plan:'investor',source:'pricing'})" class="btn-outline"
 data-it="Inizia"
 data-en="Start">
 Inizia
@@ -1800,7 +1800,7 @@ data-en="✔ Maximum long-term savings">
 </li>
 </ul>
 
-<button onclick="startPlanPurchase('pro_yearly')" class="btn btn-primary"
+<button onclick="triggerUpgradeFlow({plan:'pro_yearly',source:'pricing'})" class="btn btn-primary"
 data-it="Risparmia ora"
 data-en="Save now">
 Risparmia ora
@@ -2351,6 +2351,28 @@ window.buyPlan = function(plan){
 
   // 🔥 REDIRECT DIRETTO (CRITICO)
   window.location.href = url;
+};
+
+ // ================= UPGRADE FLOW CENTRAL =================
+window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
+
+  const access = window.getUserAccess?.() || {};
+
+  console.log("🚀 UPGRADE FLOW:", {plan, source, access});
+
+  // 🔒 NON LOGGATO → LOGIN
+  if(!access.isLogged){
+    window.location.href = "/login/";
+    return;
+  }
+
+  // 🟡 INVESTOR → spingi a PRO
+  if(access.isInvestor){
+    return window.buyPlan("pro");
+  }
+
+  // 🔴 FREE → Investor o piano richiesto
+  return window.buyPlan(plan);
 };
 
 // ================= 🌍 CITY DATABASE (SMART) =================
