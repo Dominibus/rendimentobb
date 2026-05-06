@@ -2483,7 +2483,7 @@ const ROI_PREVIEW = {
     if(results.length){
 
       box.innerHTML = results.map(c => `
-        <div class="city-item" data-slug="${c.slug}">
+        <div class="city-suggestion-item" data-slug="${c.slug}">
           ${c.name}
         </div>
       `).join("");
@@ -2516,7 +2516,7 @@ const ROI_PREVIEW = {
   // ✅ CLICK
   box.addEventListener("click", function(e){
 
-    const item = e.target.closest(".city-item");
+    const item = e.target.closest(".city-suggestion-item");
     if(!item) return;
 
     const city = item.dataset.slug;
