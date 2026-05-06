@@ -778,10 +778,23 @@ setTimeout(()=>{
   const access = window.getUserAccess();
   const { roi = 0 } = context;
 
-  if(!access || access.isLogged === false){
-    openUpgradeModal("investor", roi);
-    return;
-  }
+  // 👻 GUEST → LOGIN/REGISTER
+if(!access || !access.isLogged){
+
+  showToast(
+    t(
+      "Devi creare un account per continuare",
+      "You need to create an account to continue"
+    ),
+    "warning"
+  );
+
+  setTimeout(()=>{
+    window.location.href = "/login/";
+  }, 700);
+
+  return;
+}
 
   if(access.isFree){
     openUpgradeModal("investor", roi);
@@ -1146,6 +1159,75 @@ modal.addEventListener("click",(e)=>{
   }
 });
 
+};
+
+// =====================================
+// 💳 PLAN PURCHASE FLOW FINAL
+// =====================================
+
+window.startPlanPurchase = function(plan){
+
+  const access = window.getUserAccess?.() || {};
+
+  // 👻 GUEST
+  if(!access.isLogged){
+
+    showToast(
+      t(
+        "Devi effettuare il login per continuare",
+        "You must log in to continue"
+      ),
+      "warning"
+    );
+
+    setTimeout(()=>{
+      window.location.href = "/login/";
+    },700);
+
+    return;
+  }
+
+  // 🔵 FREE → SOLO INVESTOR
+  if(access.isFree){
+
+    if(plan !== "investor"){
+      openUpgradeModal("investor");
+      return;
+    }
+
+  }
+
+  // 🟡 INVESTOR → SOLO PRO
+  if(access.isInvestor){
+
+    if(plan !== "pro"){
+      openUpgradeModal("pro");
+      return;
+    }
+
+  }
+
+  // 🟢 PRO / ADMIN
+  const links = {
+
+    investor:
+      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
+
+    pro:
+      "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
+
+    pro_yearly:
+      "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+  };
+
+  const url = links[plan];
+
+  if(!url){
+    console.error("❌ Piano non trovato:", plan);
+    return;
+  }
+
+  window.location.href = url;
 };
 
 window.applyCityBackground = function(city){
