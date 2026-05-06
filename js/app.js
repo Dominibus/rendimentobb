@@ -880,7 +880,11 @@ window.openUpgradeModal = function(type = "investor", roi = 0){
 
   const safeROI = Number(roi || 0);
 
-  document.getElementById("rb-upgrade-modal")?.remove();
+  const oldModal = document.getElementById("rb-upgrade-modal");
+
+if(oldModal){
+  oldModal.classList.remove("show");
+}
 
   const modal = document.createElement("div");
   modal.id = "rb-upgrade-modal";
