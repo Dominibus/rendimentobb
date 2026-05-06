@@ -2714,21 +2714,5 @@ document.addEventListener("rb_plan_loaded", ()=>{
   window.t = window.t || ((it)=>it);
 </script>
 
- <script>
-
-// 💣 KILL SOLO HANDLER SBAGLIATI (FIX REALE)
-document.addEventListener("click", function(e){
-
-  const btn = e.target.closest("button");
-  if(!btn) return;
-
-  // ❌ NON bloccare se è un upgrade reale
-  if(btn.onclick && btn.onclick.toString().includes("triggerUpgradeFlow")){
-    return;
-  }
-
-}, true);
-
-</script>
 </body>
 </html>
