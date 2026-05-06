@@ -1836,6 +1836,11 @@ data-en="✔ No commitment • ✔ Cancel anytime">
 
   function blockUpgradeModal(){
 
+   if(document.querySelector(".pricing-grid")){
+  modal.remove();
+  return;
+}
+
   const access = window.getUserAccess?.();
   if(!access) return;
 
@@ -2376,6 +2381,11 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   console.log("🚀 UPGRADE FLOW FIX:", {plan, source, access});
 
+  // 🔥 FIX CRITICO: pricing deve saltare il modal
+  if(source === "pricing"){
+    return window.buyPlan(plan);
+  }
+
   // ⚫ NON LOGGATO → LOGIN
   if(!access.isLogged){
     window.location.href = "/login/";
@@ -2384,20 +2394,18 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   // 🟢 PRO / ADMIN → niente
   if(access.isPro || access.isAdmin){
-    console.log("🟢 già PRO → skip");
     return;
   }
 
-  // 🟡 INVESTOR → può comprare SOLO PRO
+  // 🟡 INVESTOR → solo PRO
   if(access.isInvestor){
     return window.buyPlan("pro");
   }
 
-  // 🔴 FREE LOGGATO → USA IL PIANO CLICCATO
+  // 🔴 FREE
   return window.buyPlan(plan);
 
 };
-
 // ================= 🌍 CITY DATABASE (SMART) =================
 const CITY_DB = [
   {name:"Roma",slug:"roma"},
