@@ -2322,11 +2322,9 @@ window.startPlanPurchase = function(plan){
 };
 
 // ================= BUY PLAN =================
-window.buyPlan = async function(plan){
+window.buyPlan = function(plan){
 
-  waitForUserReady(() => {
-
-    const user = window.currentUser;
+  const user = window.currentUser;
 
   // 🔒 login obbligatorio
   if(!user){
@@ -2334,11 +2332,9 @@ window.buyPlan = async function(plan){
       "Devi effettuare il login per continuare",
       "You must log in to continue"
     ));
-    window.location.href="/login/";
+    window.location.href = "/login/";
     return;
   }
-
-  console.log("🔥 STRIPE LINK:", plan);
 
   const links = {
     investor: "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
@@ -2350,21 +2346,11 @@ window.buyPlan = async function(plan){
 
   if(!url){
     console.error("❌ Piano non trovato:", plan);
-    alert(window.t(
-      "Errore piano. Riprova.",
-      "Plan error. Please try again."
-    ));
     return;
   }
 
-  alert(window.t(
-    "Verrai reindirizzato al pagamento sicuro Stripe",
-    "You will be redirected to secure Stripe checkout"
-  ));
-
+  // 🔥 REDIRECT DIRETTO (CRITICO)
   window.location.href = url;
-
-  }); 
 };
 
 // ================= 🌍 CITY DATABASE (SMART) =================
