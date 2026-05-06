@@ -16836,3 +16836,20 @@ body.pro-user .pro-only-inline{
   opacity:1;
   transform:translateY(0);
 }
+
+.city-suggestions{
+  position:absolute;
+  top:100%;
+  left:0;
+  width:100%;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  z-index:20;
+
+  display:none;           /* 🔥 default */
+}
+
+.city-suggestions:empty{
+  display:none !important; /* 💣 elimina barra fantasma */
+}
