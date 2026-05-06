@@ -191,7 +191,11 @@ window.getUserAccess = function(){
   const user = window.currentUser;
 
   // ⏳ NON PRONTO → NON DECIDERE
-  if(!window.RB_USER || window.RB_USER.plan === undefined){
+  if(
+  !window.RB_USER ||
+  window.RB_USER.plan === undefined ||
+  window.RB_USER.plan === null
+){
     return {
       isLogged: !!user,
       isFree: false,
