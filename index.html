@@ -2846,5 +2846,83 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
 </div>
 
+<script>
+
+// =====================================
+// 💣 FINAL PRICING OVERRIDE
+// =====================================
+
+window.triggerUpgradeFlow = function({
+  plan = "investor",
+  source
+} = {}){
+
+  const access = window.getUserAccess?.() || {};
+
+  console.log("🚀 FINAL UPGRADE FLOW:", {
+    plan,
+    source,
+    access
+  });
+
+  // ================= PRICING =================
+  if(source === "pricing"){
+
+    const links = {
+
+      investor:
+        "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
+
+      pro:
+        "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
+
+      pro_yearly:
+        "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+    };
+
+    const url = links[plan];
+
+    if(!url){
+      console.error("❌ Piano non trovato:", plan);
+      return;
+    }
+
+    // 👻 guest
+    if(!access.isLogged){
+      window.location.href = "/login/";
+      return;
+    }
+
+    // 🟢 logged → stripe diretto
+    window.location.href = url;
+    return;
+  }
+
+  // ================= NORMAL FUNNEL =================
+
+  // 👻 guest
+  if(!access.isLogged){
+    showUpgradeModal({mode:"login"});
+    return;
+  }
+
+  // 🟢 pro
+  if(access.isPro || access.isAdmin){
+    return;
+  }
+
+  // 🟡 investor
+  if(access.isInvestor){
+    showUpgradeModal({mode:"pro"});
+    return;
+  }
+
+  // 🔴 free
+  showUpgradeModal({mode:"investor"});
+
+};
+
+</script>
+
 </body>
 </html>
