@@ -2494,25 +2494,27 @@ const CITY_DB = [
     return; // 💣 BLOCCA tutto il resto
   }
 
-  // ================= 🔍 CASO 2: SCRITTURA =================
-  if(results.length){
+// ================= 🔍 CASO 2: SCRITTURA =================
+if(results.length){
 
-    box.innerHTML = results.map(c => `
-      <div class="city-item" data-slug="${c.slug}">
-        ${c.name}
-      </div>
-    `).join("");
+  box.innerHTML = ""; // 🔥 reset SICURO (qui dentro)
 
-    box.style.display = "block";
+  box.innerHTML = results.map(c => `
+    <div class="city-item" data-slug="${c.slug}">
+      ${c.name}
+    </div>
+  `).join("");
 
-    liveBox.innerHTML = `
-      <span style="color:#94a3b8;font-size:13px">
-        ${t("Seleziona una città dai suggerimenti","Select a city from suggestions")}
-      </span>
-    `;
-    liveBox.classList.add("active");
+  box.style.display = "block";
 
-  }
+  liveBox.innerHTML = `
+    <span style="color:#94a3b8;font-size:13px">
+      ${t("Seleziona una città dai suggerimenti","Select a city from suggestions")}
+    </span>
+  `;
+  liveBox.classList.add("active");
+
+}
 
   // ================= ❌ CASO 3: NO RISULTATI =================
   else{
@@ -2566,10 +2568,11 @@ box.addEventListener("click", function(e){
 
   // ================= OUTSIDE CLICK =================
   document.addEventListener("click", function(e){
-    if(!box.contains(e.target) && e.target !== input){
-      box.style.display = "none";
-    }
-  });
+  if(!box.contains(e.target) && e.target !== input){
+    box.innerHTML = "";          // 🔥 fondamentale
+    box.style.display = "none";
+  }
+});
 
 })();
 </script>
