@@ -2924,16 +2924,20 @@ window.calculate = async function(force = false){
     }
 
     // ================= FUNNEL =================
-    if(window.firebaseReady && access.isFree && roi > 10){
-      triggerUpgradeFlow({ roi });
-    }
 
-  } catch(err){
-    console.error("💥 CALCULATE ERROR:", err);
-  }
+// 🔥 consideriamo FREE anche utente non loggato
+const isFreeUser = !access.isPro && !access.isInvestor && !access.isAdmin;
 
-  window.isCalculating = false;
-};
+if(window.firebaseReady && isFreeUser && roi > 10){
+
+  console.log("🔥 TRIGGER UPGRADE FLOW", {
+    roi,
+    access
+  });
+
+  triggerUpgradeFlow({ roi });
+
+}
 // ================= CITY ROI CHART (SAFE) =================
 function renderCityROIChart(){
 
