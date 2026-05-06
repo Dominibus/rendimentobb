@@ -2305,9 +2305,24 @@ window.quickROI = function(){
 updateOverlayVisibility?.();
 
 // 🔥 AUTO TRIGGER UPGRADE (CRITICO)
-if(!isPro && !isInvestor && access.isLogged){
+// 🔥 AUTO TRIGGER UPGRADE (SAFE)
+if(
+  !isPro &&
+  !isInvestor &&
+  access.isLogged &&
+  source !== "pricing"
+){
 
-  setTimeout(()=>{
+  // 🔥 evita popup multipli
+  clearTimeout(window.__rbUpgradeTimer);
+
+  window.__rbUpgradeTimer = setTimeout(()=>{
+
+    // 🔥 se utente sta già andando a stripe → skip
+    if(window.__stripeRedirecting){
+      console.log("💳 Stripe redirect attivo → skip modal");
+      return;
+    }
 
     triggerUpgradeFlow({
       source:"auto-after-roi"
@@ -2573,24 +2588,24 @@ window.triggerUpgradeFlow = function({
 
     if(freeUrl){
 
-      // 🔥 reset modal
-      const modal =
-        document.getElementById("rb-upgrade-modal");
+  window.__stripeRedirecting = true;
 
-      if(modal){
+  const modal =
+    document.getElementById("rb-upgrade-modal");
 
-        modal.classList.remove("show");
-        modal.style.display = "none";
+  if(modal){
 
-      }
+    modal.classList.remove("show");
+    modal.style.display = "none";
 
-      document.body.classList.remove("modal-open");
+  }
 
-      // 🔥 redirect diretto
-      window.location.href = freeUrl;
+  document.body.classList.remove("modal-open");
 
-      return;
-    }
+  window.location.href = freeUrl;
+
+  return;
+}
   }
 
   // 🔥 resto sito → modal investor
