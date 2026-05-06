@@ -2374,7 +2374,7 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   const access = window.getUserAccess?.() || {};
 
-  console.log("🚀 UPGRADE FLOW:", {plan, source, access});
+  console.log("🚀 UPGRADE FLOW FIX:", {plan, source, access});
 
   // ⚫ NON LOGGATO → LOGIN
   if(!access.isLogged){
@@ -2382,21 +2382,19 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
     return;
   }
 
-  // 🟡 INVESTOR → può comprare SOLO PRO o YEARLY
+  // 🟢 PRO / ADMIN → niente
+  if(access.isPro || access.isAdmin){
+    console.log("🟢 già PRO → skip");
+    return;
+  }
+
+  // 🟡 INVESTOR → può comprare SOLO PRO
   if(access.isInvestor){
-
-    if(plan === "pro" || plan === "pro_yearly"){
-      return window.buyPlan(plan);
-    }
-
-    // fallback sicurezza
     return window.buyPlan("pro");
   }
 
-  // 🔴 FREE LOGGATO → compra quello cliccato
-  if(access.isFree){
-    return window.buyPlan(plan);
-  }
+  // 🔴 FREE LOGGATO → USA IL PIANO CLICCATO
+  return window.buyPlan(plan);
 
 };
 
