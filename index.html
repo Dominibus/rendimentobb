@@ -2356,45 +2356,14 @@ window.startPlanPurchase = function(plan){
     access
   });
 
-  // 👻 GUEST
+  // ================= GUEST =================
   if(!access.isLogged){
 
-    showUpgradeModal({
-      mode: "login"
-    });
-
+    window.location.href = "/login/";
     return;
   }
 
-  // 🔵 FREE → SOLO INVESTOR
-  if(access.isFree){
-
-    if(plan !== "investor"){
-
-      showUpgradeModal({
-        mode: "investor"
-      });
-
-      return;
-    }
-
-  }
-
-  // 🟡 INVESTOR → SOLO PRO
-  if(access.isInvestor){
-
-    if(plan !== "pro" && plan !== "pro_yearly"){
-
-      showUpgradeModal({
-        mode: "pro"
-      });
-
-      return;
-    }
-
-  }
-
-  // 🟢 STRIPE DIRECT
+  // ================= STRIPE LINKS =================
   const links = {
 
     investor:
@@ -2405,16 +2374,50 @@ window.startPlanPurchase = function(plan){
 
     pro_yearly:
       "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+
   };
 
-  const url = links[plan];
+  // ================= FREE =================
+  if(access.isFree){
 
-  if(!url){
-    console.error("❌ Piano non trovato:", plan);
+    // FREE può comprare SOLO investor
+    if(plan !== "investor"){
+
+      showUpgradeModal({
+        mode:"investor"
+      });
+
+      return;
+    }
+
+    // 🔥 STRIPE DIRETTO
+    window.location.href = links.investor;
     return;
   }
 
-  window.location.href = url;
+  // ================= INVESTOR =================
+  if(access.isInvestor){
+
+    // investor può comprare SOLO pro
+    if(plan !== "pro" && plan !== "pro_yearly"){
+
+      showUpgradeModal({
+        mode:"pro"
+      });
+
+      return;
+    }
+
+    // 🔥 STRIPE DIRETTO
+    window.location.href = links[plan];
+    return;
+  }
+
+  // ================= PRO / ADMIN =================
+  if(access.isPro || access.isAdmin){
+    return;
+  }
+
 };
 
 // 🔥 compatibilità legacy
