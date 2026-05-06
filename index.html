@@ -2457,21 +2457,45 @@ const CITY_DB = [
   // ================= INPUT =================
   input.addEventListener("input", function(){
 
-    const value = input.value.toLowerCase().trim();
+  const value = input.value.toLowerCase().trim();
 
-    // 🔥 RESET COMPLETO
-    if(!value){
-      box.innerHTML = "";
-      box.style.display = "none";
-      liveBox.innerHTML = "";
-      liveBox.classList.remove("active");
-      return;
-    }
+  // RESET
+  if(!value){
+    box.innerHTML = "";
+    box.style.display = "none";
+    liveBox.innerHTML = "";
+    liveBox.classList.remove("active");
+    return;
+  }
 
-    // 🔍 FILTER
-    const results = CITY_DB.filter(c =>
-      c.name.toLowerCase().includes(value)
-    ).slice(0,6);
+  // FILTER
+  const results = CITY_DB.filter(c =>
+    c.name.toLowerCase().includes(value)
+  ).slice(0,6);
+
+  // MATCH PRECISO
+  const match = CITY_DB.find(c =>
+    c.name.toLowerCase() === value
+  );
+
+  // ================= 🎯 CASO 1: MATCH PRECISO =================
+  if(match){
+
+    // 🔥 mostra SOLO ROI (NO dropdown)
+    box.innerHTML = "";
+    box.style.display = "none";
+
+    liveBox.innerHTML = `
+      ${t("ROI medio","Average ROI")} ${match.name}: 
+      <strong>${ROI_PREVIEW[match.slug] || "-"}%</strong>
+    `;
+    liveBox.classList.add("active");
+
+    return; // 💣 BLOCCA tutto il resto
+  }
+
+  // ================= 🔍 CASO 2: SCRITTURA =================
+  if(results.length){
 
     box.innerHTML = results.map(c => `
       <div class="city-item" data-slug="${c.slug}">
@@ -2479,69 +2503,49 @@ const CITY_DB = [
       </div>
     `).join("");
 
-    if(results.length){
-  box.style.display = "block";
-} else {
-  box.innerHTML = "";          // 🔥 elimina nodi residui
-  box.style.display = "none";  // 🔥 nasconde davvero
-}
+    box.style.display = "block";
 
-    // 🔥 MATCH PRECISO
-    const match = CITY_DB.find(c =>
-      c.name.toLowerCase() === value
-    );
+    liveBox.innerHTML = `
+      <span style="color:#94a3b8;font-size:13px">
+        ${t("Seleziona una città dai suggerimenti","Select a city from suggestions")}
+      </span>
+    `;
+    liveBox.classList.add("active");
 
-    // ================= ROI LOGIC =================
-    if(match && ROI_PREVIEW[match.slug]){
+  }
 
-      liveBox.innerHTML = `
-        ${t("ROI medio","Average ROI")} ${match.name}: 
-        <strong>${ROI_PREVIEW[match.slug]}%</strong>
-      `;
-      liveBox.classList.add("active");
+  // ================= ❌ CASO 3: NO RISULTATI =================
+  else{
 
-    } else if(results.length){
-
-      // 👉 suggerimento soft
-      liveBox.innerHTML = `
-        <span style="color:#94a3b8;font-size:13px">
-          ${t("Seleziona una città dai suggerimenti","Select a city from suggestions")}
-        </span>
-      `;
-      liveBox.classList.add("active");
-
-    } else {
-
-      // ❌ NO DATA
-      liveBox.innerHTML = `
-        <span style="color:#f59e0b;font-size:13px">
-          ⚠️ ${t("Nessun dato disponibile","No data available")}
-        </span>
-      `;
-      liveBox.classList.add("active");
-
-    }
-
-   // 💣 FIX DEFINITIVO DROPDOWN
-box.innerHTML = "";
-box.style.display = "none";
-
-  });
-
-  // ================= CLICK =================
-  box.addEventListener("click", function(e){
-
-    const item = e.target.closest(".city-item");
-    if(!item) return;
-
-    const city = item.dataset.slug;
-
-    input.value = item.innerText;
+    box.innerHTML = "";
     box.style.display = "none";
 
-    selectCity(city);
+    liveBox.innerHTML = `
+      <span style="color:#f59e0b;font-size:13px">
+        ⚠️ ${t("Nessun dato disponibile","No data available")}
+      </span>
+    `;
+    liveBox.classList.add("active");
 
-  });
+  }
+
+});
+
+  // ================= CLICK =================
+box.addEventListener("click", function(e){
+
+  const item = e.target.closest(".city-item"); // 👈 UNIFICATO
+  if(!item) return;
+
+  const city = item.dataset.slug;
+
+  input.value = item.innerText.trim();
+  box.innerHTML = "";        // 🔥 elimina residui
+  box.style.display = "none";
+
+  selectCity(city);
+
+});
 
   // ================= ENTER =================
   input.addEventListener("keypress", function(e){
