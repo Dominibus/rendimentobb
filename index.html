@@ -2388,10 +2388,11 @@ window.analyzeProperty = function(){
 // 🔥 compatibilità legacy
 window.buyPlan = window.startPlanPurchase;
 
- // ================= MODAL SYSTEM =================
+// ================= MODAL SYSTEM =================
 window.showUpgradeModal = function({mode} = {}){
 
   const modal = document.getElementById("rb-upgrade-modal");
+
   if(!modal){
     console.warn("❌ Modal non trovato");
     return;
@@ -2401,14 +2402,20 @@ window.showUpgradeModal = function({mode} = {}){
   const subEl   = modal.querySelector(".modal-sub");
   const ctaEl   = modal.querySelector(".modal-cta");
 
+  // 🔥 RESET SICURO
+  modal.style.display = "flex";
   modal.classList.add("show");
 
   // ================= LOGIN =================
   if(mode === "login"){
 
-    titleEl.innerText = "🔒 Devi registrarti per continuare";
-    subEl.innerText   = "Crea un account gratuito per sbloccare l'analisi";
-    ctaEl.innerText   = "Accedi";
+    titleEl.innerText =
+      "🔒 Devi registrarti per continuare";
+
+    subEl.innerText =
+      "Crea un account gratuito per sbloccare l'analisi";
+
+    ctaEl.innerText = "Accedi";
 
     ctaEl.onclick = ()=>{
       window.location.href = "/login/";
@@ -2419,40 +2426,64 @@ window.showUpgradeModal = function({mode} = {}){
   // ================= INVESTOR =================
   else if(mode === "investor"){
 
-    titleEl.innerText = "🔓 Sblocca analisi completa";
-    subEl.innerText   = "Passa a Investor per vedere dati reali";
-    ctaEl.innerText   = "Passa a Investor";
+    titleEl.innerText =
+      "🔓 Sblocca analisi completa";
+
+    subEl.innerText =
+      "Passa a Investor per vedere dati reali";
+
+    ctaEl.innerText =
+      "Passa a Investor";
 
     ctaEl.onclick = ()=>{
-  window.location.href =
-    "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
-};
+      window.location.href =
+        "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
+    };
 
   }
 
   // ================= PRO =================
   else if(mode === "pro"){
 
-    titleEl.innerText = "🚀 Passa a Pro";
-    subEl.innerText   = "Sblocca ROI reale, rischio e PDF";
-    ctaEl.innerText   = "Passa a Pro";
+    titleEl.innerText =
+      "🚀 Passa a Pro";
+
+    subEl.innerText =
+      "Sblocca ROI reale, rischio e PDF";
+
+    ctaEl.innerText =
+      "Passa a Pro";
 
     ctaEl.onclick = ()=>{
-  window.location.href =
-    "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
-};
+      window.location.href =
+        "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
+    };
 
   }
 
 };
 
- window.closeUpgradeModal = function(){
+// ================= CLOSE MODAL =================
+window.closeUpgradeModal = function(){
+
   const modal = document.getElementById("rb-upgrade-modal");
-  if(modal) modal.classList.remove("show");
+
+  if(!modal) return;
+
+  modal.classList.remove("show");
+
+  // 🔥 cleanup totale
+  document.body.classList.remove("modal-open");
+
+  setTimeout(()=>{
+    modal.style.display = "none";
+  },200);
+
 };
 
- // =====================================
-// 🚀 SINGLE UPGRADE FLOW (FIX DEFINITIVO)
+
+// =====================================
+// 🚀 SINGLE UPGRADE FLOW (FINAL)
 // =====================================
 
 window.triggerUpgradeFlow = function({
@@ -2478,16 +2509,15 @@ window.triggerUpgradeFlow = function({
 
     pro_yearly:
       "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+
   };
 
   // ================= ADMIN / PRO =================
-
   if(access.isAdmin || access.isPro){
     return;
   }
 
   // ================= GUEST =================
-
   if(!access.isLogged){
 
     // pricing cards
@@ -2506,7 +2536,6 @@ window.triggerUpgradeFlow = function({
   }
 
   // ================= INVESTOR =================
-
   if(access.isInvestor){
 
     // investor clicca investor
@@ -2523,40 +2552,53 @@ window.triggerUpgradeFlow = function({
     const investorUrl = stripeLinks[plan];
 
     if(investorUrl){
+
       window.location.href = investorUrl;
     }
 
     return;
   }
 
-// ================= FREE LOGGATO =================
+  // ================= FREE LOGGATO =================
 
-// 🔥 PRICING = DIRECT STRIPE
-if(source === "pricing"){
+  // 🔥 PRICING = STRIPE DIRETTO
+  if(source === "pricing"){
 
-  console.log("🔥 DIRECT STRIPE:", plan);
+    const freeUrl = stripeLinks[plan];
 
-  const freeUrl = stripeLinks[plan];
+    console.log("🔥 DIRECT STRIPE:", {
+      plan,
+      url: freeUrl
+    });
 
-  if(freeUrl){
+    if(freeUrl){
 
-    // 🔥 chiudi eventuali modal
-    closeUpgradeModal?.();
+      // 🔥 reset modal
+      const modal =
+        document.getElementById("rb-upgrade-modal");
 
-    // 🔥 redirect immediato
-    window.location.href = freeUrl;
+      if(modal){
 
-    return;
+        modal.classList.remove("show");
+        modal.style.display = "none";
+
+      }
+
+      document.body.classList.remove("modal-open");
+
+      // 🔥 redirect diretto
+      window.location.href = freeUrl;
+
+      return;
+    }
   }
 
-}
+  // 🔥 resto sito → modal investor
+  showUpgradeModal({
+    mode:"investor"
+  });
 
-// resto sito → modal investor
-showUpgradeModal({
-  mode:"investor"
-});
-
- };
+};
 // ================= 🌍 CITY DATABASE (SMART) =================
 const CITY_DB = [
   {name:"Roma",slug:"roma"},
