@@ -2263,7 +2263,9 @@ window.quickROI = function(){
 updateOverlayVisibility?.();
 
 // 🔥 AUTO TRIGGER UPGRADE (CRITICO)
-if(!isPro && !isInvestor){
+const access = window.getUserAccess?.() || {};
+
+if(!isPro && !isInvestor && access.isLogged){
   setTimeout(()=>{
     triggerUpgradeFlow({source:"auto-after-roi"});
   },1200);
@@ -2314,7 +2316,7 @@ const isFreeUser = !isPro && !isInvestor;
     </div>
   `;
 }
-
+}
 
 // ================= ANALYZE PROPERTY =================
 window.analyzeProperty = function(){
@@ -2382,45 +2384,46 @@ window.showUpgradeModal = function({mode} = {}){
     return;
   }
 
+  const titleEl = modal.querySelector(".modal-title");
+  const subEl   = modal.querySelector(".modal-sub");
+  const ctaEl   = modal.querySelector(".modal-cta");
+
   modal.classList.add("show");
 
+  // ================= LOGIN =================
   if(mode === "login"){
 
-    modal.querySelector(".modal-title").innerText =
-      "🔒 Devi registrarti per continuare";
+    titleEl.innerText = "🔒 Devi registrarti per continuare";
+    subEl.innerText   = "Crea un account gratuito per sbloccare l'analisi";
+    ctaEl.innerText   = "Accedi";
 
-    modal.querySelector(".modal-sub").innerText =
-      "Crea un account gratuito per sbloccare l'analisi";
-
-    modal.querySelector(".modal-cta").onclick = ()=>{
+    ctaEl.onclick = ()=>{
       window.location.href = "/login/";
     };
 
   }
 
+  // ================= INVESTOR =================
   else if(mode === "investor"){
 
-    modal.querySelector(".modal-title").innerText =
-      "🔓 Sblocca analisi completa";
+    titleEl.innerText = "🔓 Sblocca analisi completa";
+    subEl.innerText   = "Passa a Investor per vedere dati reali";
+    ctaEl.innerText   = "Passa a Investor";
 
-    modal.querySelector(".modal-sub").innerText =
-      "Passa a Investor per vedere dati reali";
-
-    modal.querySelector(".modal-cta").onclick = ()=>{
+    ctaEl.onclick = ()=>{
       window.buyPlan("investor");
     };
 
   }
 
+  // ================= PRO =================
   else if(mode === "pro"){
 
-    modal.querySelector(".modal-title").innerText =
-      "🚀 Passa a Pro";
+    titleEl.innerText = "🚀 Passa a Pro";
+    subEl.innerText   = "Sblocca ROI reale, rischio e PDF";
+    ctaEl.innerText   = "Passa a Pro";
 
-    modal.querySelector(".modal-sub").innerText =
-      "Sblocca ROI reale, rischio e PDF";
-
-    modal.querySelector(".modal-cta").onclick = ()=>{
+    ctaEl.onclick = ()=>{
       window.buyPlan("pro");
     };
 
@@ -2437,44 +2440,36 @@ window.showUpgradeModal = function({mode} = {}){
 window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   const access = window.getUserAccess?.() || {};
+  const isLogged = access.isLogged;
+  const isPro = access.isPro;
+  const isInvestor = access.isInvestor;
 
-  console.log("🚀 UPGRADE FLOW FIX:", {plan, source, access});
+  console.log("🚀 UPGRADE FLOW:", {plan, source, access});
 
-  // 🔥 pricing → diretto
+  // 👉 PRICING → sempre diretto
   if(source === "pricing"){
     return window.buyPlan(plan);
   }
 
-  // ⚫ NON LOGGATO → MOSTRA POPUP LOGIN
-  if(!access.isLogged){
-
-    showUpgradeModal({
-      mode: "login"
-    });
-
+  // ================= NOT LOGGED =================
+  if(!isLogged){
+    showUpgradeModal({ mode: "login" });
     return;
   }
 
-  // 🟢 PRO / ADMIN → niente
-  if(access.isPro || access.isAdmin){
+  // ================= PRO =================
+  if(isPro || access.isAdmin){
     return;
   }
 
-  // 🟡 INVESTOR → popup PRO
-  if(access.isInvestor){
-
-    showUpgradeModal({
-      mode: "pro"
-    });
-
+  // ================= INVESTOR =================
+  if(isInvestor){
+    showUpgradeModal({ mode: "pro" });
     return;
   }
 
-  // 🔴 FREE LOGGATO → popup INVESTOR
-  showUpgradeModal({
-    mode: "investor"
-  });
-
+  // ================= FREE LOGGED =================
+  showUpgradeModal({ mode: "investor" });
 };
 // ================= 🌍 CITY DATABASE (SMART) =================
 const CITY_DB = [
