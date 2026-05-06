@@ -2343,87 +2343,6 @@ window.analyzeProperty = function(){
 
 };
 
-// =====================================
-// 💳 PLAN PURCHASE FLOW FINAL
-// =====================================
-
-window.startPlanPurchase = function(plan){
-
-  const access = window.getUserAccess?.() || {};
-
-  console.log("💳 START PLAN:", {
-    plan,
-    access
-  });
-
-  // ================= GUEST =================
-  if(!access.isLogged){
-
-    window.location.href = "/login/";
-    return;
-  }
-
-  // ================= STRIPE LINKS =================
-  const links = {
-
-    investor:
-      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
-
-    pro:
-      "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
-
-    pro_yearly:
-      "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
-
-  };
-
-  // ================= FREE LOGGED =================
-if(
-  access.isLogged &&
-  !access.isInvestor &&
-  !access.isPro &&
-  !access.isAdmin
-){
-
-  // 🔥 FREE può scegliere QUALSIASI piano
-  const url = links[plan];
-
-  if(!url){
-    console.error("❌ Piano non trovato:", plan);
-    return;
-  }
-
-  console.log("🟢 FREE USER → STRIPE:", plan);
-
-  window.location.href = url;
-  return;
-}
-
-  // ================= INVESTOR =================
-  if(access.isInvestor){
-
-    // investor può comprare SOLO pro
-    if(plan !== "pro" && plan !== "pro_yearly"){
-
-      showUpgradeModal({
-        mode:"pro"
-      });
-
-      return;
-    }
-
-    // 🔥 STRIPE DIRETTO
-    window.location.href = links[plan];
-    return;
-  }
-
-  // ================= PRO / ADMIN =================
-  if(access.isPro || access.isAdmin){
-    return;
-  }
-
-};
-
 // 🔥 compatibilità legacy
 window.buyPlan = window.startPlanPurchase;
 
@@ -2463,8 +2382,9 @@ window.showUpgradeModal = function({mode} = {}){
     ctaEl.innerText   = "Passa a Investor";
 
     ctaEl.onclick = ()=>{
-      window.buyPlan("investor");
-    };
+  window.location.href =
+    "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
+};
 
   }
 
@@ -2476,8 +2396,9 @@ window.showUpgradeModal = function({mode} = {}){
     ctaEl.innerText   = "Passa a Pro";
 
     ctaEl.onclick = ()=>{
-      window.buyPlan("pro");
-    };
+  window.location.href =
+    "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
+};
 
   }
 
@@ -2488,40 +2409,103 @@ window.showUpgradeModal = function({mode} = {}){
   if(modal) modal.classList.remove("show");
 };
 
- // ================= UPGRADE FLOW CENTRAL =================
-window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
+ // =====================================
+// 🚀 SINGLE UPGRADE FLOW (FIX DEFINITIVO)
+// =====================================
+
+window.triggerUpgradeFlow = function({
+  plan = "investor",
+  source = ""
+} = {}){
 
   const access = window.getUserAccess?.() || {};
-  const isLogged = access.isLogged;
-  const isPro = access.isPro;
-  const isInvestor = access.isInvestor;
 
-  console.log("🚀 UPGRADE FLOW:", {plan, source, access});
+  console.log("🚀 UPGRADE FLOW:", {
+    plan,
+    source,
+    access
+  });
 
-  // 👉 PRICING FLOW
-if(source === "pricing"){
-  return window.startPlanPurchase(plan);
-}
+  const stripeLinks = {
 
-  // ================= NOT LOGGED =================
-  if(!isLogged){
-    showUpgradeModal({ mode: "login" });
+    investor:
+      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
+
+    pro:
+      "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
+
+    pro_yearly:
+      "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
+  };
+
+  // ================= ADMIN / PRO =================
+
+  if(access.isAdmin || access.isPro){
     return;
   }
 
-  // ================= PRO =================
-  if(isPro || access.isAdmin){
+  // ================= GUEST =================
+
+  if(!access.isLogged){
+
+    // pricing cards
+    if(source === "pricing"){
+
+      window.location.href = "/login/";
+      return;
+    }
+
+    // resto sito
+    showUpgradeModal({
+      mode:"login"
+    });
+
     return;
   }
 
   // ================= INVESTOR =================
-  if(isInvestor){
-    showUpgradeModal({ mode: "pro" });
+
+  if(access.isInvestor){
+
+    // investor clicca investor
+    if(plan === "investor"){
+
+      showUpgradeModal({
+        mode:"pro"
+      });
+
+      return;
+    }
+
+    // investor → pro/pro_yearly
+    const investorUrl = stripeLinks[plan];
+
+    if(investorUrl){
+      window.location.href = investorUrl;
+    }
+
     return;
   }
 
-  // ================= FREE LOGGED =================
-  showUpgradeModal({ mode: "investor" });
+  // ================= FREE LOGGATO =================
+
+  // pricing → stripe diretto
+  if(source === "pricing"){
+
+    const freeUrl = stripeLinks[plan];
+
+    if(freeUrl){
+      window.location.href = freeUrl;
+    }
+
+    return;
+  }
+
+  // resto sito → modal investor
+  showUpgradeModal({
+    mode:"investor"
+  });
+
 };
 // ================= 🌍 CITY DATABASE (SMART) =================
 const CITY_DB = [
@@ -2852,84 +2836,6 @@ document.addEventListener("rb_plan_loaded", ()=>{
   </div>
 
 </div>
-
-<script>
-
-// =====================================
-// 💣 FINAL PRICING OVERRIDE
-// =====================================
-
-window.triggerUpgradeFlow = function({
-  plan = "investor",
-  source
-} = {}){
-
-  const access = window.getUserAccess?.() || {};
-
-  console.log("🚀 FINAL UPGRADE FLOW:", {
-    plan,
-    source,
-    access
-  });
-
-  // ================= PRICING =================
-  if(source === "pricing"){
-
-    const links = {
-
-      investor:
-        "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
-
-      pro:
-        "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
-
-      pro_yearly:
-        "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
-    };
-
-    const url = links[plan];
-
-    if(!url){
-      console.error("❌ Piano non trovato:", plan);
-      return;
-    }
-
-    // 👻 guest
-    if(!access.isLogged){
-      window.location.href = "/login/";
-      return;
-    }
-
-    // 🟢 logged → stripe diretto
-    window.location.href = url;
-    return;
-  }
-
-  // ================= NORMAL FUNNEL =================
-
-  // 👻 guest
-  if(!access.isLogged){
-    showUpgradeModal({mode:"login"});
-    return;
-  }
-
-  // 🟢 pro
-  if(access.isPro || access.isAdmin){
-    return;
-  }
-
-  // 🟡 investor
-  if(access.isInvestor){
-    showUpgradeModal({mode:"pro"});
-    return;
-  }
-
-  // 🔴 free
-  showUpgradeModal({mode:"investor"});
-
-};
-
-</script>
 
 </body>
 </html>
