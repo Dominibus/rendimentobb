@@ -2391,11 +2391,6 @@ window.buyPlan = window.startPlanPurchase;
  // ================= MODAL SYSTEM =================
 window.showUpgradeModal = function({mode} = {}){
 
- // 💣 BLOCK PRICING REDIRECT
-if(window.__pricingRedirect){
-  return;
-}
-
   const modal = document.getElementById("rb-upgrade-modal");
   if(!modal){
     console.warn("❌ Modal non trovato");
@@ -2536,7 +2531,7 @@ window.triggerUpgradeFlow = function({
 
 // ================= FREE LOGGATO =================
 
-// 🔥 PRICING → MAI APRIRE MODAL
+// 🔥 PRICING = DIRECT STRIPE
 if(source === "pricing"){
 
   console.log("🔥 DIRECT STRIPE:", plan);
@@ -2545,19 +2540,15 @@ if(source === "pricing"){
 
   if(freeUrl){
 
-    // 💣 blocca funnel/modal globali
-    window.__pricingRedirect = true;
+    // 🔥 chiudi eventuali modal
+    closeUpgradeModal?.();
 
-    // 🔥 redirect diretto
+    // 🔥 redirect immediato
     window.location.href = freeUrl;
 
     return;
   }
-}
 
-// 🔥 evita override pricing
-if(window.__pricingRedirect){
-  return;
 }
 
 // resto sito → modal investor
