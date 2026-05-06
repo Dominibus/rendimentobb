@@ -6684,12 +6684,19 @@ select{
 }
 
 .home-blur-overlay{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:5;
+  position:absolute;
+  inset:0;
+
+  z-index:10;
+
+  pointer-events:none;
+
+  max-height:100%;
+  overflow:hidden;
+}
+
+.home-overlay-content{
+  pointer-events:auto;
 }
 
 .metric-card.roi-highlight{
@@ -16899,4 +16906,23 @@ body.pro-user .pro-only-inline{
   background:none;
   font-size:18px;
   cursor:pointer;
+}
+/* =====================================
+🔥 PRICING CLICK FIX DEFINITIVO
+===================================== */
+
+#pricing{
+  position:relative;
+  z-index:50;
+}
+
+#pricing *{
+  pointer-events:auto !important;
+}
+
+.pricing-grid,
+.plan-card,
+.plan-card button{
+  position:relative;
+  z-index:60;
 }
