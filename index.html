@@ -2384,67 +2384,142 @@ const CITY_DB = [
 
   const input = document.getElementById("city-search-input");
   const box   = document.getElementById("city-suggestions");
+  const liveBox = document.getElementById("city-live-roi");
 
-  if(!input || !box) return;
+  if(!input || !box || !liveBox) return;
 
-  input.addEventListener("input", function(){
+  // ================= 🇮🇹 CITY DB (CAPOLUOGHI) =================
+  const CITY_DB = [
+    {name:"Roma",slug:"roma"},
+    {name:"Milano",slug:"milano"},
+    {name:"Napoli",slug:"napoli"},
+    {name:"Torino",slug:"torino"},
+    {name:"Palermo",slug:"palermo"},
+    {name:"Genova",slug:"genova"},
+    {name:"Bologna",slug:"bologna"},
+    {name:"Firenze",slug:"firenze"},
+    {name:"Bari",slug:"bari"},
+    {name:"Catania",slug:"catania"},
+    {name:"Venezia",slug:"venezia"},
+    {name:"Verona",slug:"verona"},
+    {name:"Messina",slug:"messina"},
+    {name:"Padova",slug:"padova"},
+    {name:"Trieste",slug:"trieste"},
+    {name:"Brescia",slug:"brescia"},
+    {name:"Parma",slug:"parma"},
+    {name:"Taranto",slug:"taranto"},
+    {name:"Modena",slug:"modena"},
+    {name:"Reggio Calabria",slug:"reggio_calabria"},
+    {name:"Perugia",slug:"perugia"},
+    {name:"Livorno",slug:"livorno"},
+    {name:"Ravenna",slug:"ravenna"},
+    {name:"Cagliari",slug:"cagliari"},
+    {name:"Foggia",slug:"foggia"},
+    {name:"Rimini",slug:"rimini"},
+    {name:"Salerno",slug:"salerno"},
+    {name:"Ferrara",slug:"ferrara"},
+    {name:"Sassari",slug:"sassari"},
+    {name:"Latina",slug:"latina"},
+    {name:"Monza",slug:"monza"},
+    {name:"Siracusa",slug:"siracusa"},
+    {name:"Pescara",slug:"pescara"},
+    {name:"Bergamo",slug:"bergamo"},
+    {name:"Forlì",slug:"forli"},
+    {name:"Trento",slug:"trento"},
+    {name:"Vicenza",slug:"vicenza"},
+    {name:"Terni",slug:"terni"},
+    {name:"Bolzano",slug:"bolzano"},
+    {name:"Novara",slug:"novara"},
+    {name:"Piacenza",slug:"piacenza"},
+    {name:"Ancona",slug:"ancona"},
+    {name:"Aosta",slug:"aosta"},
+    {name:"Lecce",slug:"lecce"},
+    {name:"Pisa",slug:"pisa"},
+    {name:"Lucca",slug:"lucca"},
+    {name:"Como",slug:"como"},
+    {name:"Arezzo",slug:"arezzo"}
+  ];
 
-  const liveBox = document.getElementById("city-live-roi"); 
-  const value = input.value.toLowerCase().trim();
-
-  if(!value){
-    box.innerHTML = "";
-    box.style.display = "none";
-    liveBox.classList.remove("active");
-    return;
-  }
-
-  const results = CITY_DB.filter(c =>
-    c.name.toLowerCase().includes(value)
-  ).slice(0,6);
-
-  box.innerHTML = results.map(c => `
-    <div class="city-item" data-slug="${c.slug}">
-      ${c.name}
-    </div>
-  `).join("");
-
-  box.style.display = results.length ? "block" : "none";
-
-  // 🔥 LIVE ROI
+  // ================= 📊 ROI PREVIEW =================
   const ROI_PREVIEW = {
-    roma: 12.8,
-    milano: 11.2,
-    napoli: 14.1,
-    firenze: 10.9,
-    bologna: 10.4,
-    torino: 9.8,
-    venezia: 11.5,
-    verona: 10.2,
-    palermo: 13.6,
-    catania: 12.3
+    roma:12.8,milano:11.2,napoli:14.1,torino:9.8,palermo:13.6,
+    genova:10.1,bologna:10.4,firenze:10.9,bari:11.3,catania:12.3,
+    venezia:11.5,verona:10.2,messina:11.7,padova:10.6,trieste:9.9,
+    brescia:10.3,parma:10.5,taranto:11.8,modena:10.4,reggio_calabria:12.0,
+    perugia:10.2,livorno:10.7,ravenna:10.1,cagliari:11.4,foggia:11.1,
+    rimini:12.6,salerno:12.2,ferrara:9.9,sassari:11.0,latina:10.8,
+    monza:10.6,siracusa:12.5,pescara:11.3,bergamo:10.9,forli:10.2,
+    trento:10.1,vicenza:10.3,terni:9.7,bolzano:10.0,novara:9.8,
+    piacenza:9.9,ancona:10.4,aosta:9.5,lecce:12.7,pisa:11.2,
+    lucca:11.0,como:10.8,arezzo:10.3
   };
 
-  const match = CITY_DB.find(c =>
-    c.name.toLowerCase().includes(value)
-  );
+  // ================= INPUT =================
+  input.addEventListener("input", function(){
 
-  if(match && ROI_PREVIEW[match.slug]){
+    const value = input.value.toLowerCase().trim();
 
-    liveBox.innerHTML = `
-      ${t("ROI medio","Average ROI")} ${match.name}: 
-      <strong>${ROI_PREVIEW[match.slug]}%</strong>
-    `;
+    // 🔥 RESET COMPLETO
+    if(!value){
+      box.innerHTML = "";
+      box.style.display = "none";
+      liveBox.innerHTML = "";
+      liveBox.classList.remove("active");
+      return;
+    }
 
-    liveBox.classList.add("active");
+    // 🔍 FILTER
+    const results = CITY_DB.filter(c =>
+      c.name.toLowerCase().includes(value)
+    ).slice(0,6);
 
-  } else {
-    liveBox.classList.remove("active");
-  }
+    box.innerHTML = results.map(c => `
+      <div class="city-item" data-slug="${c.slug}">
+        ${c.name}
+      </div>
+    `).join("");
 
-});
+    box.style.display = results.length ? "block" : "none";
 
-  // CLICK
+    // 🔥 MATCH PRECISO
+    const match = CITY_DB.find(c =>
+      c.name.toLowerCase() === value
+    );
+
+    // ================= ROI LOGIC =================
+    if(match && ROI_PREVIEW[match.slug]){
+
+      liveBox.innerHTML = `
+        ${t("ROI medio","Average ROI")} ${match.name}: 
+        <strong>${ROI_PREVIEW[match.slug]}%</strong>
+      `;
+      liveBox.classList.add("active");
+
+    } else if(results.length){
+
+      // 👉 suggerimento soft
+      liveBox.innerHTML = `
+        <span style="color:#94a3b8;font-size:13px">
+          ${t("Seleziona una città dai suggerimenti","Select a city from suggestions")}
+        </span>
+      `;
+      liveBox.classList.add("active");
+
+    } else {
+
+      // ❌ NO DATA
+      liveBox.innerHTML = `
+        <span style="color:#f59e0b;font-size:13px">
+          ⚠️ ${t("Nessun dato disponibile","No data available")}
+        </span>
+      `;
+      liveBox.classList.add("active");
+
+    }
+
+  });
+
+  // ================= CLICK =================
   box.addEventListener("click", function(e){
 
     const item = e.target.closest(".city-item");
@@ -2452,7 +2527,6 @@ const CITY_DB = [
 
     const city = item.dataset.slug;
 
-    // 🔥 UX FIX
     input.value = item.innerText;
     box.style.display = "none";
 
@@ -2460,15 +2534,14 @@ const CITY_DB = [
 
   });
 
-  // ENTER (FIX CLEAN)
+  // ================= ENTER =================
   input.addEventListener("keypress", function(e){
     if(e.key === "Enter"){
 
       const value = input.value.toLowerCase().trim();
-      if(!value) return;
 
       const match = CITY_DB.find(c =>
-        c.name.toLowerCase().includes(value)
+        c.name.toLowerCase() === value
       );
 
       if(match){
@@ -2478,7 +2551,7 @@ const CITY_DB = [
     }
   });
 
-  // CLICK OUTSIDE (FIX SAFE)
+  // ================= OUTSIDE CLICK =================
   document.addEventListener("click", function(e){
     if(!box.contains(e.target) && e.target !== input){
       box.style.display = "none";
