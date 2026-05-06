@@ -2479,7 +2479,12 @@ const CITY_DB = [
       </div>
     `).join("");
 
-    box.style.display = results.length ? "block" : "none";
+    if(results.length){
+  box.style.display = "block";
+} else {
+  box.innerHTML = "";          // 🔥 elimina nodi residui
+  box.style.display = "none";  // 🔥 nasconde davvero
+}
 
     // 🔥 MATCH PRECISO
     const match = CITY_DB.find(c =>
@@ -2516,6 +2521,10 @@ const CITY_DB = [
       liveBox.classList.add("active");
 
     }
+
+   // 💣 FIX DEFINITIVO DROPDOWN
+box.innerHTML = "";
+box.style.display = "none";
 
   });
 
