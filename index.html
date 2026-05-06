@@ -1688,7 +1688,7 @@ data-en="Limited access • Partial data • No reports">
 Accesso limitato • Dati parziali • Nessun report
 </p> 
 
-<button onclick="triggerUpgradeFlow({plan:'investor',source:'pricing'})" class="btn-outline"
+<button onclick="event.stopPropagation(); event.stopImmediatePropagation(); triggerUpgradeFlow({plan:'investor',source:'pricing'})" class="btn-outline"
 data-it="Inizia"
 data-en="Start">
 Inizia
@@ -1743,7 +1743,7 @@ data-en="€29 / month">
 
 </ul>
 
-<button onclick="triggerUpgradeFlow({source:'dashboard'})" class="btn btn-primary"
+<button onclick="event.stopPropagation(); event.stopImmediatePropagation(); triggerUpgradeFlow({plan:'pro',source:'pricing'})" class="btn btn-primary"
 data-it="🔓 Sblocca profitto reale"
 data-en="🔓 Unlock real profit">
 🔓 Sblocca profitto reale
@@ -1800,7 +1800,7 @@ data-en="✔ Maximum long-term savings">
 </li>
 </ul>
 
-<button onclick="triggerUpgradeFlow({plan:'pro_yearly',source:'pricing'})" class="btn btn-primary"
+<button onclick="event.stopPropagation(); event.stopImmediatePropagation(); triggerUpgradeFlow({plan:'pro_yearly',source:'pricing'})" class="btn btn-primary"
 data-it="Risparmia ora"
 data-en="Save now">
 Risparmia ora
@@ -2689,5 +2689,29 @@ document.addEventListener("rb_plan_loaded", ()=>{
   window.t = window.t || ((it)=>it);
 </script>
 
+ <script>
+
+// 💣 KILL HANDLER LEGACY (CRITICO)
+document.addEventListener("click", function(e){
+
+  const btn = e.target.closest("button");
+  if(!btn) return;
+
+  const text = btn.innerText.toLowerCase();
+
+  if(
+    text.includes("inizia") ||
+    text.includes("sblocca") ||
+    text.includes("upgrade") ||
+    text.includes("investor") ||
+    text.includes("pro")
+  ){
+    e.stopImmediatePropagation();
+    console.log("🛑 blocked legacy click");
+  }
+
+}, true);
+
+</script>
 </body>
 </html>
