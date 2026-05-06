@@ -2766,14 +2766,17 @@ window.calculate = async function(force = false){
   window.isCalculating = true;
 
   // ✅ ACCESS (UNA SOLA VOLTA)
-  const access = window.getUserAccess?.() || {};
+ const access = window.getUserAccess?.() || {};
 
-  // ✅ FIX LOADING
-  if(access.isLoading){
-    console.log("⏳ SKIP calculate → access loading");
-    window.isCalculating = false;
-    return;
-  }
+// 🔥 BLOCCO REALE
+if(access.isLoading || !window.RB_USER){
+  console.log("⏳ BLOCCO calculate → RB_USER non pronto");
+
+  window.pendingCalculation = true;
+  window.isCalculating = false;
+
+  return;
+}
 
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
@@ -4813,3 +4816,35 @@ if(access.isPro || access.isAdmin){
 `);
 
 }
+
+document.addEventListener("rb_plan_ready", () => {
+
+  console.log("🔥 PLAN READY → re-run calculate");
+
+  if(window.pendingCalculation && typeof window.calculate === "function"){
+
+    window.pendingCalculation = false;
+
+    setTimeout(()=>{
+      window.calculate(true);
+    }, 100);
+
+  }
+
+});
+
+document.addEventListener("rb_auth_ready", () => {
+
+  console.log("🔐 AUTH READY → re-check calculate");
+
+  if(window.pendingCalculation && typeof window.calculate === "function"){
+
+    window.pendingCalculation = false;
+
+    setTimeout(()=>{
+      window.calculate(true);
+    }, 100);
+
+  }
+
+});
