@@ -1871,10 +1871,34 @@ function blockUpgradeModal(){
 }
 
   // 🔥 quando piano pronto
-document.addEventListener("rb_plan_loaded", blockUpgradeModal);
-document.addEventListener("DOMContentLoaded", blockUpgradeModal);
-document.addEventListener("rb_plan_loaded", ()=>{
-  window.updateOverlayVisibility?.();
+// 🔥 WAIT REAL AUTH READY
+document.addEventListener("firebase_ready", ()=>{
+
+  console.log("🔥 FIREBASE READY → MODAL SYNC");
+
+  setTimeout(()=>{
+
+    blockUpgradeModal();
+    window.updateOverlayVisibility?.();
+
+  },150);
+
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+
+  setTimeout(()=>{
+
+    const access = window.getUserAccess?.();
+
+    // 🔥 evita sync prematuro
+    if(!access) return;
+
+    blockUpgradeModal();
+    window.updateOverlayVisibility?.();
+
+  },300);
+
 });
  
 })();
@@ -2756,7 +2780,7 @@ function unlockHomeUI(){
 
 
 // ================= PLAN SYNC =================
-document.addEventListener("rb_plan_loaded", ()=>{
+document.addEventListener("firebase_ready", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
@@ -2779,7 +2803,7 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
 
 // ================= 💣 FINAL OVERRIDE (RISOLVE DEFINITIVO) =================
-document.addEventListener("rb_plan_loaded", ()=>{
+document.addEventListener("firebase_ready", ()=>{
 
   setTimeout(()=>{
 
