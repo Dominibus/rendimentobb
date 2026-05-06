@@ -2377,8 +2377,13 @@ window.startPlanPurchase = function(plan){
 
   };
 
-  // ================= FREE =================
-if(access.isFree){
+  // ================= FREE LOGGED =================
+if(
+  access.isLogged &&
+  !access.isInvestor &&
+  !access.isPro &&
+  !access.isAdmin
+){
 
   // 🔥 FREE può scegliere QUALSIASI piano
   const url = links[plan];
@@ -2387,6 +2392,8 @@ if(access.isFree){
     console.error("❌ Piano non trovato:", plan);
     return;
   }
+
+  console.log("🟢 FREE USER → STRIPE:", plan);
 
   window.location.href = url;
   return;
