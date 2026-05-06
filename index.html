@@ -2494,10 +2494,8 @@ const CITY_DB = [
     return; // 💣 BLOCCA tutto il resto
   }
 
-// ================= 🔍 CASO 2: SCRITTURA =================
+// ================= 🔍 CASO 2 + ❌ CASO 3 (FIX REALE) =================
 if(results.length){
-
-  box.innerHTML = ""; // 🔥 reset SICURO (qui dentro)
 
   box.innerHTML = results.map(c => `
     <div class="city-item" data-slug="${c.slug}">
@@ -2514,24 +2512,19 @@ if(results.length){
   `;
   liveBox.classList.add("active");
 
+} else {
+
+  box.innerHTML = "";
+  box.style.display = "none";
+
+  liveBox.innerHTML = `
+    <span style="color:#f59e0b;font-size:13px">
+      ⚠️ ${t("Nessun dato disponibile","No data available")}
+    </span>
+  `;
+  liveBox.classList.add("active");
+
 }
-
-  // ================= ❌ CASO 3: NO RISULTATI =================
-  else{
-
-    box.innerHTML = "";
-    box.style.display = "none";
-
-    liveBox.innerHTML = `
-      <span style="color:#f59e0b;font-size:13px">
-        ⚠️ ${t("Nessun dato disponibile","No data available")}
-      </span>
-    `;
-    liveBox.classList.add("active");
-
-  }
-
-});
 
   // ================= CLICK =================
 box.addEventListener("click", function(e){
