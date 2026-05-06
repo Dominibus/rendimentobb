@@ -2499,6 +2499,22 @@ try{
 
 }
 
+// ================= AUTO PAYWALL (FIX DEFINITIVO) =================
+const access = window.getUserAccess?.() || {};
+
+if(access.isFree && window.simulationExecuted && !window.paywallShown){
+
+  window.paywallShown = true;
+
+  setTimeout(()=>{
+    triggerUpgradeFlow({
+      roi: Number(result?.roi || 0),
+      source: "auto"
+    });
+  }, 800); // delay naturale UX
+
+}
+
 // ================= MORTGAGE LEAD TRIGGER =================
 
 const mortgageBox = document.getElementById("mortgage-lead-box");
