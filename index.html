@@ -2376,20 +2376,26 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   console.log("🚀 UPGRADE FLOW:", {plan, source, access});
 
-  // ⚫ NON LOGGATO
+  // ⚫ NON LOGGATO → LOGIN
   if(!access.isLogged){
     window.location.href = "/login/";
     return;
   }
 
-  // 🟡 INVESTOR → SOLO PRO
+  // 🟡 INVESTOR → può comprare SOLO PRO o YEARLY
   if(access.isInvestor){
+
+    if(plan === "pro" || plan === "pro_yearly"){
+      return window.buyPlan(plan);
+    }
+
+    // fallback sicurezza
     return window.buyPlan("pro");
   }
 
-  // 🔴 FREE LOGGATO → INVESTOR
+  // 🔴 FREE LOGGATO → compra quello cliccato
   if(access.isFree){
-    return window.buyPlan("investor");
+    return window.buyPlan(plan);
   }
 
 };
