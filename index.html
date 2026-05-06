@@ -2691,23 +2691,27 @@ document.addEventListener("rb_plan_loaded", ()=>{
 
  <script>
 
-// 💣 KILL HANDLER LEGACY (CRITICO)
+// 💣 KILL SOLO HANDLER SBAGLIATI (FIX REALE)
 document.addEventListener("click", function(e){
 
   const btn = e.target.closest("button");
   if(!btn) return;
 
+  // 🔥 lascia passare i bottoni corretti
+  if(btn.getAttribute("onclick")?.includes("triggerUpgradeFlow")){
+    return;
+  }
+
   const text = btn.innerText.toLowerCase();
 
+  // 🔥 blocca SOLO handler legacy (senza triggerUpgradeFlow)
   if(
     text.includes("inizia") ||
     text.includes("sblocca") ||
-    text.includes("upgrade") ||
-    text.includes("investor") ||
-    text.includes("pro")
+    text.includes("upgrade")
   ){
     e.stopImmediatePropagation();
-    console.log("🛑 blocked legacy click");
+    console.log("🛑 blocked legacy ONLY");
   }
 
 }, true);
