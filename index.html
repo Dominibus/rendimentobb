@@ -2374,6 +2374,61 @@ window.buyPlan = function(plan){
   window.location.href = url;
 };
 
+ // ================= MODAL SYSTEM =================
+window.showUpgradeModal = function({mode} = {}){
+
+  const modal = document.getElementById("rb-upgrade-modal");
+  if(!modal){
+    console.warn("❌ Modal non trovato");
+    return;
+  }
+
+  modal.classList.add("show");
+
+  if(mode === "login"){
+
+    modal.querySelector(".modal-title").innerText =
+      "🔒 Devi registrarti per continuare";
+
+    modal.querySelector(".modal-sub").innerText =
+      "Crea un account gratuito per sbloccare l'analisi";
+
+    modal.querySelector(".modal-cta").onclick = ()=>{
+      window.location.href = "/login/";
+    };
+
+  }
+
+  else if(mode === "investor"){
+
+    modal.querySelector(".modal-title").innerText =
+      "🔓 Sblocca analisi completa";
+
+    modal.querySelector(".modal-sub").innerText =
+      "Passa a Investor per vedere dati reali";
+
+    modal.querySelector(".modal-cta").onclick = ()=>{
+      window.buyPlan("investor");
+    };
+
+  }
+
+  else if(mode === "pro"){
+
+    modal.querySelector(".modal-title").innerText =
+      "🚀 Passa a Pro";
+
+    modal.querySelector(".modal-sub").innerText =
+      "Sblocca ROI reale, rischio e PDF";
+
+    modal.querySelector(".modal-cta").onclick = ()=>{
+      window.buyPlan("pro");
+    };
+
+  }
+
+};
+
  // ================= UPGRADE FLOW CENTRAL =================
 window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
@@ -2381,14 +2436,18 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
 
   console.log("🚀 UPGRADE FLOW FIX:", {plan, source, access});
 
-  // 🔥 FIX CRITICO: pricing deve saltare il modal
+  // 🔥 pricing → diretto
   if(source === "pricing"){
     return window.buyPlan(plan);
   }
 
-  // ⚫ NON LOGGATO → LOGIN
+  // ⚫ NON LOGGATO → MOSTRA POPUP LOGIN
   if(!access.isLogged){
-    window.location.href = "/login/";
+
+    showUpgradeModal({
+      mode: "login"
+    });
+
     return;
   }
 
@@ -2397,13 +2456,20 @@ window.triggerUpgradeFlow = function({plan = "investor", source} = {}){
     return;
   }
 
-  // 🟡 INVESTOR → solo PRO
+  // 🟡 INVESTOR → popup PRO
   if(access.isInvestor){
-    return window.buyPlan("pro");
+
+    showUpgradeModal({
+      mode: "pro"
+    });
+
+    return;
   }
 
-  // 🔴 FREE
-  return window.buyPlan(plan);
+  // 🔴 FREE LOGGATO → popup INVESTOR
+  showUpgradeModal({
+    mode: "investor"
+  });
 
 };
 // ================= 🌍 CITY DATABASE (SMART) =================
