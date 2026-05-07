@@ -2224,7 +2224,12 @@ if(document.body.classList.contains("home-page")){
   return;
 }
 
-// ================= TOOL ONLY =================
+// ================= SMART UPGRADE FLOW =================
+
+// 🔥 HOME + TOOL
+// investor riceve upsell PRO soft
+// free riceve investor
+
 if(!isPro){
 
   clearTimeout(window.__rbUpgradeTimer);
@@ -2233,7 +2238,7 @@ if(!isPro){
 
     if(window.__stripeRedirecting) return;
 
-    // GUEST
+    // ================= GUEST =================
     if(!isLogged){
 
       showUpgradeModal({
@@ -2243,23 +2248,28 @@ if(!isPro){
       return;
     }
 
-    // FREE
+    // ================= FREE =================
     if(!isInvestor){
 
       triggerUpgradeFlow({
         plan:"investor",
-        source:"tool-after-roi"
+        source:"after-roi"
       });
 
       return;
     }
 
-    // INVESTOR
-    showUpgradeModal({
-      mode:"pro"
-    });
+    // ================= INVESTOR =================
+    // 🔥 solo se ROI interessante
+    if(roi >= 8){
 
-  },1200);
+      showUpgradeModal({
+        mode:"pro"
+      });
+
+    }
+
+  },1400);
 
 }
  
