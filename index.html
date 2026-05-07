@@ -2298,15 +2298,14 @@ if(!isPro){
 
 }
  
-// ================= CTA DINAMICA (FUORI!!!) =================
+// ================= CTA DINAMICA =================
 function renderUpgradeCTA(roi){
 
-const access = window.getUserAccess?.() || {};
+  const access = window.getUserAccess?.() || {};
 
-const isPro = access.isPro;
-const isInvestor = access.isInvestor;
-const isLogged = access.isLogged;
-const isFreeUser = !isPro && !isInvestor;
+  const isPro = access.isPro;
+  const isInvestor = access.isInvestor;
+  const isLogged = access.isLogged;
 
   if(isPro) return;
 
@@ -2316,34 +2315,57 @@ const isFreeUser = !isPro && !isInvestor;
   let title, subtitle, ctaText, action;
 
   if(!isLogged){
+
     title = "Accedi per vedere analisi completa";
     subtitle = "Stai usando dati limitati";
     ctaText = "Accedi";
     action = "window.location.href='/login/'";
+
   }
   else if(!isInvestor){
+
     title = "Sblocca analisi avanzata";
     subtitle = "Vedi ROI reale e simulazioni complete";
     ctaText = "Passa a Investor";
     action = "triggerUpgradeFlow({source:'roi-box'})";
+
   }
   else{
+
     title = "Passa a Pro";
     subtitle = "Sblocca tutto";
     ctaText = "Upgrade Pro";
     action = "triggerUpgradeFlow({source:'roi-box'})";
+
   }
 
   box.innerHTML = `
-    <div style="padding:20px;border-radius:14px;background:#0f172a;color:white;text-align:center">
+    <div style="
+      padding:20px;
+      border-radius:14px;
+      background:#0f172a;
+      color:white;
+      text-align:center;
+    ">
       <h3>${title}</h3>
+
       <p>ROI: ${roi.toFixed(1)}%</p>
+
       <p>${subtitle}</p>
-      <button onclick="${action}" class="btn btn-primary">${ctaText}</button>
+
+      <button
+        onclick="${action}"
+        class="btn btn-primary"
+      >
+        ${ctaText}
+      </button>
     </div>
   `;
+
 }
-}
+
+// 🔥 CHIUSURA QUICK ROI (CRITICA)
+};
 
 // ================= ANALYZE PROPERTY =================
 window.analyzeProperty = function(){
