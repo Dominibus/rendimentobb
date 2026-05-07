@@ -246,6 +246,8 @@ return {
   canDownloadPDF: isPro || isAdmin
 };
 
+};   
+
 // 🔥 RB_USER = MIRROR (NON LOGICA)
 Object.defineProperty(window, "RB_USER", {
   get(){
