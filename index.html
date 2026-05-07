@@ -2307,59 +2307,292 @@ function renderUpgradeCTA(roi){
   const isInvestor = access.isInvestor;
   const isLogged = access.isLogged;
 
+  const lang = window.currentLang || "it";
+  const t = (it,en)=> lang === "en" ? en : it;
+
   if(isPro) return;
 
   const box = document.getElementById("upgrade-box");
   if(!box) return;
 
-  let title, subtitle, ctaText, action;
+  let title;
+  let subtitle;
+  let ctaText;
+  let action;
+  let accent;
+  let badge;
 
+  // ================= GUEST =================
   if(!isLogged){
 
-    title = "Accedi per vedere analisi completa";
-    subtitle = "Stai usando dati limitati";
-    ctaText = "Accedi";
+    title = t(
+      "🔒 Accedi per vedere l’analisi completa",
+      "🔒 Login to unlock full analysis"
+    );
+
+    subtitle = t(
+      "Stai usando dati limitati e simulazioni parziali.",
+      "You are using limited data and partial simulations."
+    );
+
+    ctaText = t(
+      "Accedi",
+      "Login"
+    );
+
     action = "window.location.href='/login/'";
 
+    accent = "#10b981";
+
+    badge = t(
+      "Accesso gratuito",
+      "Free access"
+    );
+
   }
+
+  // ================= FREE =================
   else if(!isInvestor){
 
-    title = "Sblocca analisi avanzata";
-    subtitle = "Vedi ROI reale e simulazioni complete";
-    ctaText = "Passa a Investor";
-    action = "triggerUpgradeFlow({source:'roi-box'})";
+    title = t(
+      "📊 Sblocca analisi avanzata",
+      "📊 Unlock advanced analysis"
+    );
+
+    subtitle = t(
+      "Ottieni ROI reale, rischio completo e simulazioni professionali.",
+      "Unlock real ROI, full risk analysis and professional simulations."
+    );
+
+    ctaText = t(
+      "Passa a Investor",
+      "Upgrade to Investor"
+    );
+
+    action = "triggerUpgradeFlow({plan:'investor',source:'roi-box'})";
+
+    accent = "#10b981";
+
+    badge = "Investor";
 
   }
+
+  // ================= INVESTOR =================
   else{
 
-    title = "Passa a Pro";
-    subtitle = "Sblocca tutto";
-    ctaText = "Upgrade Pro";
-    action = "triggerUpgradeFlow({source:'roi-box'})";
+    title = t(
+      "🚀 Passa a Pro",
+      "🚀 Upgrade to Pro"
+    );
+
+    subtitle = t(
+      "Stai vedendo solo parte del potenziale reale.",
+      "You are only seeing part of the real potential."
+    );
+
+    ctaText = t(
+      "Sblocca Pro adesso",
+      "Unlock Pro now"
+    );
+
+    action = "triggerUpgradeFlow({plan:'pro',source:'roi-box'})";
+
+    accent = "#7c3aed";
+
+    badge = t(
+      "🔥 Piano consigliato",
+      "🔥 Recommended plan"
+    );
 
   }
 
   box.innerHTML = `
+
     <div style="
-      padding:20px;
-      border-radius:14px;
+      padding:26px;
+      border-radius:22px;
       background:#0f172a;
       color:white;
       text-align:center;
+      box-shadow:0 30px 80px rgba(0,0,0,0.28);
+      position:relative;
+      overflow:hidden;
     ">
-      <h3>${title}</h3>
 
-      <p>ROI: ${roi.toFixed(1)}%</p>
+      <!-- glow -->
+      <div style="
+        position:absolute;
+        inset:auto -80px -80px auto;
+        width:180px;
+        height:180px;
+        background:${accent};
+        opacity:0.12;
+        border-radius:999px;
+        filter:blur(40px);
+      "></div>
 
-      <p>${subtitle}</p>
+      <!-- badge -->
+      <div style="
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        padding:8px 14px;
+        border-radius:999px;
+        background:${accent};
+        color:white;
+        font-size:12px;
+        font-weight:700;
+        margin-bottom:18px;
+      ">
+        ${badge}
+      </div>
 
+      <!-- title -->
+      <h3 style="
+        font-size:28px;
+        font-weight:800;
+        line-height:1.2;
+        margin-bottom:12px;
+      ">
+        ${title}
+      </h3>
+
+      <!-- roi -->
+      <div style="
+        font-size:44px;
+        font-weight:900;
+        line-height:1;
+        margin-bottom:6px;
+        color:${accent};
+      ">
+        ${roi.toFixed(1)}%
+      </div>
+
+      <div style="
+        font-size:13px;
+        opacity:0.75;
+        margin-bottom:20px;
+      ">
+        ${t(
+          "ROI simulato",
+          "Simulated ROI"
+        )}
+      </div>
+
+      <!-- subtitle -->
+      <p style="
+        font-size:15px;
+        line-height:1.6;
+        color:#cbd5e1;
+        margin-bottom:24px;
+      ">
+        ${subtitle}
+      </p>
+
+      <!-- features -->
+      <div style="
+        background:rgba(255,255,255,0.05);
+        border:1px solid rgba(255,255,255,0.08);
+        border-radius:18px;
+        padding:18px;
+        text-align:left;
+        margin-bottom:24px;
+      ">
+
+        <div style="
+          display:flex;
+          gap:10px;
+          align-items:center;
+          margin-bottom:12px;
+          font-size:14px;
+          font-weight:600;
+        ">
+          ✅ ${t(
+            "ROI reale avanzato",
+            "Advanced real ROI"
+          )}
+        </div>
+
+        <div style="
+          display:flex;
+          gap:10px;
+          align-items:center;
+          margin-bottom:12px;
+          font-size:14px;
+          font-weight:600;
+        ">
+          ✅ ${t(
+            "Analisi rischio completa",
+            "Full risk analysis"
+          )}
+        </div>
+
+        <div style="
+          display:flex;
+          gap:10px;
+          align-items:center;
+          margin-bottom:12px;
+          font-size:14px;
+          font-weight:600;
+        ">
+          ✅ ${t(
+            "Forecast e cashflow reali",
+            "Real forecast & cashflow"
+          )}
+        </div>
+
+        <div style="
+          display:flex;
+          gap:10px;
+          align-items:center;
+          font-size:14px;
+          font-weight:600;
+        ">
+          ✅ ${t(
+            "PDF professionale Executive",
+            "Executive professional PDF"
+          )}
+        </div>
+
+      </div>
+
+      <!-- CTA -->
       <button
         onclick="${action}"
-        class="btn btn-primary"
+        class="btn"
+        style="
+          width:100%;
+          background:${accent};
+          color:white;
+          border:none;
+          padding:16px;
+          border-radius:16px;
+          font-size:15px;
+          font-weight:800;
+          cursor:pointer;
+          box-shadow:0 15px 35px rgba(0,0,0,0.25);
+        "
       >
         ${ctaText}
       </button>
+
+      <!-- warning -->
+      <div style="
+        margin-top:16px;
+        font-size:13px;
+        color:#fca5a5;
+        font-weight:600;
+        line-height:1.5;
+      ">
+        ⚠️ ${t(
+          "Senza analisi avanzata potresti sovrastimare il rendimento reale",
+          "Without advanced analysis you may overestimate real profitability"
+        )}
+      </div>
+
     </div>
+
   `;
 
 }
