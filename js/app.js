@@ -4783,3 +4783,33 @@ window.addEventListener("scroll", handleHomeFunnel);
   }
 
 });
+// =============================
+// 🔥 BODY ACCESS CLASS FINAL
+// =============================
+
+window.syncAccessClasses = function(){
+
+  const access = window.getUserAccess?.() || {};
+
+  const isPaid =
+    access.isInvestor ||
+    access.isPro ||
+    access.isAdmin;
+
+  document.body.classList.toggle("is-paid", isPaid);
+
+  console.log("🔥 ACCESS CLASS:", {
+    isPaid,
+    access
+  });
+
+};
+
+// 🔥 sync iniziale
+setTimeout(()=>{
+  window.syncAccessClasses?.();
+}, 500);
+
+// 🔥 sync eventi
+window.addEventListener("rb_plan_ready", window.syncAccessClasses);
+window.addEventListener("rb_auth_ready", window.syncAccessClasses);
