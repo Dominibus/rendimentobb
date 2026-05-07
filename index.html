@@ -737,9 +737,15 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
     <button
 onclick="
 if(!window.currentUser){
+
   window.location.href='/login/';
+
 }else{
-  window.location.href='/pricing/';
+
+  document.getElementById('pricing')?.scrollIntoView({
+    behavior:'smooth'
+  });
+
 }
 "
 class="btn btn-primary"
