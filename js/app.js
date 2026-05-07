@@ -794,6 +794,58 @@ window.triggerFunnel = function({type = "generic", roi = 0} = {}){
 
 };
 
+window.triggerFunnel = function({type = "generic", roi = 0} = {}){
+
+  const access = window.getUserAccess?.() || {};
+
+  // 🟢 PRO / ADMIN → niente funnel
+  if(access.canSeeFullAnalysis) return;
+
+  // 🟡 INVESTOR → niente popup (solo UI teaser)
+  if(access.isInvestor) return;
+
+  // ❌ anti spam
+  if(window.funnelState.shown && type !== "reminder") return;
+
+  // 🔥 ROI alto → immediato
+  if(type === "roi" && roi > 10){
+    openUpgradeModal("investor", roi);
+    window.funnelState.shown = true;
+    return;
+  }
+
+  // 🟡 ROI medio → delay
+  if(type === "roi_soft" && roi > 6){
+    setTimeout(()=>{
+      openUpgradeModal("investor", roi);
+    }, 2000);
+    window.funnelState.shown = true;
+    return;
+  }
+
+  // 📜 SCROLL
+  if(type === "scroll"){
+    openUpgradeModal("investor", roi);
+    window.funnelState.shown = true;
+    return;
+  }
+
+  // 🧠 REMINDER
+  if(type === "reminder"){
+    openUpgradeModal("investor", roi);
+  }
+
+};
+
+// 🔥 COMPATIBILITÀ HOME CTA
+window.triggerUpgradeFlow = function(data = {}){
+  triggerFunnel({
+    type:"scroll",
+    roi: window.lastAnalysisData?.roi || 0,
+    ...data
+  });
+};
+
 // =====================================
 // 🔥 MODAL UNIFICATO – FINAL PRODUCTION
 // =====================================
