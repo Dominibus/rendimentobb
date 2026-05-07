@@ -52,6 +52,71 @@ window.currentUser = null;
 window.currentPlan = null;
 window.firebaseReady = false;
 
+// =====================================
+// 🔥 SINGLE SOURCE OF TRUTH ACCESS
+// =====================================
+
+window.getUserAccess = function(){
+
+  const plan = String(window.currentPlan || "free")
+    .trim()
+    .toLowerCase();
+
+  const role = String(window.userRole || "user")
+    .trim()
+    .toLowerCase();
+
+  const isLogged = !!window.currentUser;
+
+  const isAdmin =
+    role === "admin";
+
+  const isPro =
+    plan === "pro" ||
+    plan === "pro_yearly";
+
+  const isInvestor =
+    plan === "investor";
+
+  const isFree =
+    !isAdmin &&
+    !isPro &&
+    !isInvestor;
+
+  return {
+
+    isLogged,
+    isAdmin,
+    isPro,
+    isInvestor,
+    isFree,
+
+    canSeeFullAnalysis:
+      isAdmin || isPro,
+
+    canDownloadPDF:
+      isAdmin || isPro,
+
+    isPaid:
+      isInvestor || isPro || isAdmin
+
+  };
+
+};
+
+// 🔥 MIRROR GLOBALE
+Object.defineProperty(window, "RB_USER", {
+  get(){
+
+    return {
+      ...window.getUserAccess(),
+      name: window.userName || "",
+      email: window.currentUser?.email || ""
+    };
+
+  }
+});
+
 // ===============================
 // PRO CHECK (FIX DEFINITIVO)
 // ===============================
@@ -214,39 +279,7 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
   window.PLAN.set(window.currentPlan, window.userRole);
 }
 
-console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole);
-
-
-// 🔥 SINGLE SOURCE OF TRUTH
-window.getUserAccess = function(){
-
-  const plan = String(window.currentPlan || "").toLowerCase();
-  const role = String(window.userRole || "").toLowerCase();
-  const isLogged = !!window.currentUser;
-
-  const isAdmin = role === "admin";
-
-const isPro =
-  plan === "pro" ||
-  plan === "pro_yearly";
-
-const isInvestor =
-  plan === "investor";
-
-// 🔥 NUOVO
-const isFree = !isLogged || (!isPro && !isInvestor && !isAdmin);
-
-return {
-  isLogged,
-  isAdmin,
-  isPro,
-  isInvestor,
-  isFree,
-  canSeeFullAnalysis: isPro || isAdmin,
-  canDownloadPDF: isPro || isAdmin
-};
-
-};   
+console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole); 
 
 // 🔥 RB_USER = MIRROR (NON LOGICA)
 Object.defineProperty(window, "RB_USER", {
