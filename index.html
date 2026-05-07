@@ -2053,10 +2053,28 @@ window.quickROI = function(){
     good: lang === "en" ? "Good investment" : "Buon investimento"
   };
 
-  // ================= ACCESS =================
-  const access = window.getUserAccess?.() || {};
-  const isPro = access.isPro;
-  const isInvestor = access.isInvestor;
+  // ================= ACCESS (REAL SOURCE) =================
+const access =
+  window.RB_USER ||
+  window.getUserAccess?.() ||
+  {};
+
+const isLogged =
+  !!access.user ||
+  access.isLogged === true;
+
+const isPro =
+  access.isPro === true;
+
+const isInvestor =
+  access.isInvestor === true;
+
+console.log("🔥 QUICK ROI ACCESS:", {
+  access,
+  isLogged,
+  isInvestor,
+  isPro
+});
 
   // ================= CALCOLO =================
   let result;
@@ -2241,7 +2259,7 @@ if(!isPro){
     }
 
     // ================= GUEST =================
-    if(!access.isLogged){
+    if(!isLogged){
 
       // 🔒 login popup
       showUpgradeModal({
@@ -2450,6 +2468,10 @@ window.triggerUpgradeFlow = function({
 
   const access = window.getUserAccess?.() || {};
 
+ const isLogged =
+  !!access.user ||
+  access.isLogged === true;
+
   console.log("🚀 UPGRADE FLOW:", {
     plan,
     source,
@@ -2475,7 +2497,7 @@ window.triggerUpgradeFlow = function({
   }
 
   // ================= GUEST =================
-  if(!access.isLogged){
+  if(!isLogged){
 
     window.location.href = "/login/";
     return;
@@ -2805,9 +2827,13 @@ document.addEventListener("firebase_ready", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
+  const isLogged =
+    !!access.user ||
+    access.isLogged === true;
+
   console.log("🔄 PLAN LOADED → SYNC HOME", access);
 
-  if(!access.isLogged){
+  if(!isLogged){
     console.log("⏳ WAIT USER READY...");
     return;
   }
