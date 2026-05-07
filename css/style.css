@@ -16964,44 +16964,54 @@ body.pro-user .pro-only-inline{
 
 /* =====================================
 🔥 ACCESS VISIBILITY SYSTEM FINAL
-(SAFE + FLEX FIX)
-NON ROMPE GRID / FLEX / CARD
+(RendimentoBB Production Clean)
+NO LEGACY CONFLICTS
 ===================================== */
 
 /* =============================
-🔴 DEFAULT (FREE)
+🔴 DEFAULT USER (FREE)
 ============================= */
 
-/* contenuti premium nascosti */
+/* premium nascosto */
 .paid-only,
 .pro-only{
   display:none !important;
 }
 
-/* contenuti free visibili */
+/* free visibile */
 .free-only{
-  display:inherit;
+  display:block !important;
+}
+
+/* supporto flex/grid */
+.free-only.flex{
+  display:flex !important;
+}
+
+.free-only.grid{
+  display:grid !important;
+}
+
+.free-only.inline-flex{
+  display:inline-flex !important;
 }
 
 /* =============================
-🟢 INVESTOR / PRO / ADMIN
+🟢 PAID USER
+(INVESTOR / PRO / ADMIN)
 ============================= */
 
 body.is-paid .free-only{
   display:none !important;
 }
 
-/* 🔥 NON usare block */
+/* premium visibile */
 body.is-paid .paid-only,
 body.is-paid .pro-only{
-  display:inherit !important;
+  display:block !important;
 }
 
-/* =============================
-🔥 FLEX SAFE FIX
-(per card/grid/flex layout)
-============================= */
-
+/* preserve layouts */
 body.is-paid .flex.pro-only,
 body.is-paid .flex.paid-only{
   display:flex !important;
@@ -17018,13 +17028,37 @@ body.is-paid .inline-flex.paid-only{
 }
 
 /* =============================
-🔥 EXTRA SAFETY
+🔥 REMOVE OLD BLUR / LOCK
 ============================= */
 
-body.is-pro .pro-only,
-body.is-investor .pro-only,
-body.is-admin .pro-only{
+body.is-paid .pro-blur,
+body.is-paid .blur-content{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  user-select:auto !important;
+}
+
+body.is-paid .locked-overlay,
+body.is-paid .results-overlay,
+body.is-paid .chart-overlay,
+body.is-paid .home-blur-overlay{
+  display:none !important;
+}
+
+/* =============================
+🔥 SAFETY RESET
+============================= */
+
+body.is-paid .pro-only,
+body.is-paid .paid-only{
   visibility:visible !important;
   opacity:1 !important;
-  filter:none !important;
+}
+
+/* rimuove eventuali pseudo elementi legacy */
+body.is-paid .pro-only::after,
+body.is-paid .paid-only::after{
+  display:none !important;
+  content:none !important;
 }
