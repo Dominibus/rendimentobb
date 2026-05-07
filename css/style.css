@@ -17349,12 +17349,17 @@ MOBILE FIX
 
 /* =====================================
 🔥 RENDIMENTOBB HOME OVERLAY FINAL
-FIX COMPLETO:
-- testo leggibile
-- bottone cliccabile
-- KPI visibili dietro
-- niente blur rotto
-- overlay elegante SaaS
+FIX COMPLETO DEFINITIVO
+
+✔ testo leggibile
+✔ bottone cliccabile
+✔ KPI visibili
+✔ blur elegante
+✔ mobile safe
+✔ desktop safe
+✔ overlay non rompe click
+✔ no layer invisibili
+
 DA METTERE A FINE STYLE.CSS
 ===================================== */
 
@@ -17363,13 +17368,17 @@ METRICS CONTAINER
 ========================= */
 
 .home-page .investment-metrics{
-  position:relative;
-  overflow:hidden;
+
+  position:relative !important;
+
+  overflow:visible !important;
+
   padding-bottom:260px;
+
 }
 
 /* =========================
-OVERLAY CONTAINER
+OVERLAY WRAPPER
 ========================= */
 
 .home-page .home-blur-overlay{
@@ -17378,21 +17387,41 @@ OVERLAY CONTAINER
 
   left:0 !important;
   right:0 !important;
+
   bottom:25px !important;
+
   top:auto !important;
 
   display:flex !important;
+
   justify-content:center !important;
+
   align-items:flex-end !important;
 
   background:none !important;
 
-  /* 🔥 CLICK FIX */
-  pointer-events:auto !important;
+  pointer-events:none !important;
 
   z-index:20 !important;
 
   padding:0 20px !important;
+
+}
+
+/* =========================
+REMOVE FAKE LAYERS
+========================= */
+
+.home-page .home-blur-overlay::before,
+.home-page .home-blur-overlay::after,
+.home-page .home-overlay-content::before,
+.home-page .home-overlay-content::after{
+
+  display:none !important;
+
+  content:none !important;
+
+  pointer-events:none !important;
 
 }
 
@@ -17402,11 +17431,23 @@ OVERLAY CARD
 
 .home-page .home-overlay-content{
 
-  position:relative;
-  z-index:50;
+  position:relative !important;
+
+  z-index:999 !important;
+
+  pointer-events:auto !important;
 
   width:100%;
+
   max-width:280px;
+
+  padding:22px 20px;
+
+  border-radius:22px;
+
+  text-align:center;
+
+  overflow:hidden;
 
   background:
     linear-gradient(
@@ -17415,12 +17456,6 @@ OVERLAY CARD
       rgba(15,23,42,0.98)
     ) !important;
 
-  border-radius:22px;
-
-  padding:22px 20px;
-
-  text-align:center;
-
   border:
     1px solid rgba(255,255,255,0.08);
 
@@ -17428,8 +17463,6 @@ OVERLAY CARD
     0 25px 80px rgba(0,0,0,0.35);
 
   backdrop-filter:none !important;
-
-  overflow:hidden;
 
 }
 
@@ -17446,8 +17479,6 @@ TEXT RESET
 
   text-shadow:none !important;
 
-  pointer-events:auto !important;
-
 }
 
 /* =========================
@@ -17459,6 +17490,7 @@ TITLE
   color:#ffffff !important;
 
   font-size:18px !important;
+
   font-weight:800 !important;
 
   line-height:1.35 !important;
@@ -17500,7 +17532,7 @@ SECONDARY TEXT
 }
 
 /* =========================
-YELLOW WARNING
+WARNING TEXT
 ========================= */
 
 .home-page .home-overlay-content [style*="#f59e0b"]{
@@ -17515,20 +17547,27 @@ YELLOW WARNING
 CTA BUTTON
 ========================= */
 
-.home-page .home-overlay-content button{
+.home-page .home-overlay-content button,
+.home-page .home-overlay-content .btn,
+.home-page .home-overlay-content .btn-primary{
 
-  position:relative;
-  z-index:60;
+  position:relative !important;
+
+  z-index:9999 !important;
+
+  pointer-events:auto !important;
+
+  cursor:pointer !important;
+
+  width:100%;
 
   margin-top:16px !important;
 
-  width:100%;
+  padding:13px 18px;
 
   border:none;
 
   border-radius:999px;
-
-  padding:13px 18px;
 
   background:
     linear-gradient(
@@ -17540,26 +17579,25 @@ CTA BUTTON
   color:#ffffff !important;
 
   font-size:14px !important;
-  font-weight:700 !important;
 
-  cursor:pointer;
+  font-weight:700 !important;
 
   box-shadow:
     0 10px 30px rgba(16,185,129,0.35);
 
 }
 
-/* =========================
-REMOVE BROKEN EFFECTS
-========================= */
+/* CTA TEXT */
+.home-page .home-overlay-content button span{
 
-.home-page .home-blur-overlay::before,
-.home-page .home-blur-overlay::after{
-  display:none !important;
+  pointer-events:none !important;
+
+  color:#ffffff !important;
+
 }
 
 /* =========================
-KEEP KPI VISIBLE
+KPI VISIBLE
 ========================= */
 
 .home-page .metric-card{
@@ -17570,10 +17608,12 @@ KEEP KPI VISIBLE
 
   visibility:visible !important;
 
+  overflow:visible !important;
+
 }
 
 /* =========================
-LOCK ONLY PRO DATA
+LOCKED KPI
 ========================= */
 
 .home-page .metric-card.pro-only{
@@ -17583,12 +17623,15 @@ LOCK ONLY PRO DATA
 }
 
 /* =========================
-NO FULLSCREEN OVERLAY
+NO FULL OVERLAY
 ========================= */
 
 .home-page .dynamic-overlay{
+
   min-height:auto !important;
+
   height:auto !important;
+
 }
 
 /* =========================
@@ -17598,20 +17641,29 @@ MOBILE FIX
 @media (max-width:768px){
 
   .home-page .investment-metrics{
+
     padding-bottom:300px;
+
   }
 
   .home-page .home-overlay-content{
+
     max-width:260px;
+
     padding:20px 18px;
+
   }
 
   .home-page .overlay-title{
+
     font-size:16px !important;
+
   }
 
   .home-page .overlay-text{
+
     font-size:13px !important;
+
   }
 
 }
