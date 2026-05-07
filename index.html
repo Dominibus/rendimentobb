@@ -2229,10 +2229,7 @@ if(shock){
 updateOverlayVisibility?.();
 
 // 🔥 AUTO TRIGGER UPGRADE
-if(
-  !isPro &&
-  !isInvestor
-){
+if(!isPro){
 
   clearTimeout(window.__rbUpgradeTimer);
 
@@ -2243,19 +2240,34 @@ if(
       return;
     }
 
-    // 🔒 FREE NON LOGGATO
+    // ================= GUEST =================
     if(!access.isLogged){
 
+      // 🔒 login popup
       showUpgradeModal({
         mode:"login"
+      });
+
+      // 🔥 MA mantiene overlay/teaser investor
+      updateOverlayVisibility?.();
+
+      return;
+    }
+
+    // ================= FREE LOGGATO =================
+    if(!isInvestor){
+
+      triggerUpgradeFlow({
+        plan:"investor",
+        source:"auto-after-roi"
       });
 
       return;
     }
 
-    // 🔓 FREE LOGGATO
-    triggerUpgradeFlow({
-      source:"auto-after-roi"
+    // ================= INVESTOR =================
+    showUpgradeModal({
+      mode:"pro"
     });
 
   },1200);
