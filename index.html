@@ -764,55 +764,6 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 
 </div>
 
- <!-- 🔥 CONVERSION PUSH (FINAL PRO) -->
-<div class="conversion-push free-only">
-
-  <h3
-  data-it="⚠️ Stai prendendo una decisione con dati incompleti"
-  data-en="⚠️ You are making a decision with incomplete data">
-  ⚠️ Stai prendendo una decisione con dati incompleti
-  </h3>
-
-  <p
-  data-it="Il ROI può sembrare positivo… ma senza analisi completa potresti perdere migliaia di euro ogni anno"
-  data-en="ROI may look positive… but without full analysis you could lose thousands every year">
-  Il ROI può sembrare positivo… ma senza analisi completa potresti perdere migliaia di euro ogni anno
-  </p>
-
-  <p
-  style="margin-top:8px;font-size:13px;opacity:1"
-  data-it="Il 72% degli investitori sbaglia proprio in questa fase"
-  data-en="72% of investors fail at this exact step">
-  Il 72% degli investitori sbaglia proprio in questa fase
-  </p>
-
-  <!-- 🔥 MICRO SHOCK -->
-  <p style="
-  margin-top:12px;
-  color:#ef4444;
-  font-weight:600;
-  font-size:13px;
-  "
-  data-it="💸 Senza analisi completa potresti perdere fino al 30% del profitto reale"
-  data-en="💸 Without full analysis you could lose up to 30% of your real profit">
-  💸 Senza analisi completa potresti perdere fino al 30% del profitto reale
-  </p>
-
-  <button 
-  onclick="triggerUpgradeFlow({source:'home-conversion'})" 
-  class="btn btn-primary"
-  style="margin-top:14px">
-
-    <span
-    data-it="🔓 Sblocca analisi completa"
-    data-en="🔓 Unlock full analysis">
-    🔓 Sblocca analisi completa
-    </span>
-
-  </button>
-
-</div>
-
 <!-- ================= CTA FINALE ================= -->
 
 <div class="quick-roi-cta" style="margin-top:30px;text-align:center">
@@ -1909,6 +1860,13 @@ window.updateOverlayVisibility = function(){
     return;
   }
 
+ document.querySelectorAll(`
+  .conversion-push,
+  .roi-warning-card
+`).forEach(el=>{
+  if(el) el.style.display = "none";
+});
+
   // 🔴 FREE
   if(window.userTriggeredSimulation){
 
@@ -2860,7 +2818,7 @@ document.addEventListener("firebase_ready", ()=>{
 
       // 🔒 blocca SOLO pro
       document.querySelectorAll(".metric-card.pro-only").forEach(el=>{
-        el.classList.add("pro-blur");
+        el.classList.add("locked");
       });
 
       updateOverlayVisibility();
