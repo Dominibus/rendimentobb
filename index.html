@@ -2424,25 +2424,214 @@ window.showUpgradeModal = function({mode} = {}){
   }
 
   // ================= PRO =================
-  else if(mode === "pro"){
+else if(mode === "pro"){
 
-    titleEl.innerText =
-      "🚀 Passa a Pro";
+  titleEl.innerHTML = `
+    🚀 ${window.t(
+      "Sblocca piano Pro",
+      "Unlock Pro plan"
+    )}
+  `;
 
-    subEl.innerText =
-      "Sblocca ROI reale, rischio e PDF";
+  subEl.innerHTML = `
+    ${window.t(
+      "Stai analizzando un investimento con dati limitati.<br>Con Pro ottieni ROI reale, rischio avanzato e report professionali.",
+      "You are analyzing an investment with limited data.<br>With Pro you unlock real ROI, advanced risk and professional reports."
+    )}
+  `;
 
-    ctaEl.innerText =
-      "Passa a Pro";
+  // 🔥 STILE MODAL PRO (VIOLA PREMIUM)
+  const box = modal.querySelector(".rb-modal-box");
 
-    ctaEl.onclick = ()=>{
-      window.location.href =
-        "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02";
-    };
+  if(box){
+
+    box.innerHTML = `
+
+      <button class="rb-modal-close" onclick="closeUpgradeModal()">✕</button>
+
+      <div style="
+        text-align:center;
+      ">
+
+        <div style="
+          width:72px;
+          height:72px;
+          margin:0 auto 18px;
+          border-radius:20px;
+          background:linear-gradient(135deg,#7c3aed,#a855f7);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:34px;
+          box-shadow:0 20px 40px rgba(124,58,237,0.35);
+        ">
+          🚀
+        </div>
+
+        <h2 style="
+          font-size:28px;
+          font-weight:800;
+          margin-bottom:10px;
+          color:#0f172a;
+        ">
+          ${window.t(
+            "Passa a Pro",
+            "Upgrade to Pro"
+          )}
+        </h2>
+
+        <p style="
+          color:#64748b;
+          line-height:1.6;
+          font-size:15px;
+          margin-bottom:25px;
+        ">
+          ${window.t(
+            "Stai vedendo solo una parte del potenziale reale.<br><strong>ROI reale, rischio avanzato, cashflow e PDF professionali</strong> sono bloccati.",
+            "You are only seeing part of the real potential.<br><strong>Real ROI, advanced risk, cashflow and professional PDFs</strong> are locked."
+          )}
+        </p>
+
+        <div style="
+          background:#f8fafc;
+          border:1px solid #e2e8f0;
+          border-radius:18px;
+          padding:20px;
+          text-align:left;
+          margin-bottom:22px;
+        ">
+
+          <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-bottom:12px;
+            font-size:14px;
+            font-weight:600;
+            color:#0f172a;
+          ">
+            ✅ ${window.t("ROI reale avanzato","Advanced real ROI")}
+          </div>
+
+          <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-bottom:12px;
+            font-size:14px;
+            font-weight:600;
+            color:#0f172a;
+          ">
+            ✅ ${window.t("Analisi rischio completa","Full risk analysis")}
+          </div>
+
+          <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-bottom:12px;
+            font-size:14px;
+            font-weight:600;
+            color:#0f172a;
+          ">
+            ✅ ${window.t("Forecast e cashflow reali","Real forecast & cashflow")}
+          </div>
+
+          <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            font-size:14px;
+            font-weight:600;
+            color:#0f172a;
+          ">
+            ✅ ${window.t("PDF professionale Executive","Executive professional PDF")}
+          </div>
+
+        </div>
+
+        <div style="
+          background:linear-gradient(135deg,#7c3aed,#9333ea);
+          border-radius:18px;
+          padding:22px;
+          color:white;
+          margin-bottom:18px;
+          box-shadow:0 25px 60px rgba(124,58,237,0.35);
+        ">
+
+          <div style="
+            font-size:14px;
+            opacity:0.9;
+            margin-bottom:6px;
+          ">
+            ${window.t(
+              "🔥 Piano consigliato",
+              "🔥 Recommended plan"
+            )}
+          </div>
+
+          <div style="
+            font-size:34px;
+            font-weight:900;
+            line-height:1;
+          ">
+            €29
+          </div>
+
+          <div style="
+            font-size:14px;
+            opacity:0.9;
+            margin-top:4px;
+            margin-bottom:18px;
+          ">
+            ${window.t(
+              "/ mese • accesso completo",
+              "/ month • full access"
+            )}
+          </div>
+
+          <button
+            onclick="window.location.href='https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02'"
+            class="btn"
+            style="
+              width:100%;
+              background:white;
+              color:#7c3aed;
+              font-weight:800;
+              border:none;
+              padding:15px;
+              border-radius:14px;
+              font-size:15px;
+              cursor:pointer;
+            "
+          >
+            🔓 ${window.t(
+              "Sblocca Pro adesso",
+              "Unlock Pro now"
+            )}
+          </button>
+
+        </div>
+
+        <div style="
+          font-size:13px;
+          color:#ef4444;
+          font-weight:600;
+          line-height:1.5;
+        ">
+          ⚠️ ${window.t(
+            "Senza analisi avanzata potresti sopravvalutare il profitto reale",
+            "Without advanced analysis you may overestimate real profit"
+          )}
+        </div>
+
+      </div>
+
+    `;
 
   }
 
-};
+}
 
 // ================= CLOSE MODAL =================
 window.closeUpgradeModal = function(){
