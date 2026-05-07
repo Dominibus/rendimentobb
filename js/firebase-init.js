@@ -234,24 +234,16 @@ const isInvestor =
   plan === "investor";
 
 // 🔥 NUOVO
-const isGuest = !isLogged;
+const isFree = !isLogged || (!isPro && !isInvestor && !isAdmin);
 
-// 🔥 compatibilità totale
-const isFree =
-  !isPro &&
-  !isInvestor &&
-  !isAdmin;
-
- return {
+return {
   isLogged,
-  isGuest,
   isAdmin,
   isPro,
   isInvestor,
   isFree,
-    canSeeFullAnalysis: isPro || isAdmin,
-    canDownloadPDF: isPro || isAdmin
-  };
+  canSeeFullAnalysis: isPro || isAdmin,
+  canDownloadPDF: isPro || isAdmin
 };
 
 // 🔥 RB_USER = MIRROR (NON LOGICA)
