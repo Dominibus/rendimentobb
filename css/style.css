@@ -16961,3 +16961,11 @@ body.pro-user .pro-only-inline{
 #pricing .plan-extra{
   pointer-events:none !important;
 }
+
+/* =====================================
+🔥 PLAN VISIBILITY SYSTEM
+===================================== */
+
+.paid-user .free-only{
+  display:none !important;
+}
