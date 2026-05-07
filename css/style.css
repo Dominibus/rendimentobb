@@ -17001,3 +17001,24 @@ body.paid-user .free-only{
 body.paid-user .paid-only{
   display:block !important;
 }
+/* =====================================
+🔥 ACCESS SYSTEM FINAL
+===================================== */
+
+/* default */
+.free-only{
+  display:block;
+}
+
+.pro-only{
+  display:none;
+}
+
+/* 🔥 INVESTOR / PRO / ADMIN */
+body.is-paid .free-only{
+  display:none !important;
+}
+
+body.is-paid .pro-only{
+  display:block !important;
+}
