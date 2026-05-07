@@ -226,21 +226,29 @@ window.getUserAccess = function(){
 
   const isAdmin = role === "admin";
 
-  const isPro =
-    plan === "pro" ||
-    plan === "pro_yearly";
+const isPro =
+  plan === "pro" ||
+  plan === "pro_yearly";
 
-  const isInvestor =
-    plan === "investor";
+const isInvestor =
+  plan === "investor";
 
-  const isFree = !isLogged || (!isPro && !isInvestor && !isAdmin);
+// 🔥 NUOVO
+const isGuest = !isLogged;
 
-  return {
-    isLogged,
-    isAdmin,
-    isPro,
-    isInvestor,
-    isFree,
+// 🔥 compatibilità totale
+const isFree =
+  !isPro &&
+  !isInvestor &&
+  !isAdmin;
+
+ return {
+  isLogged,
+  isGuest,
+  isAdmin,
+  isPro,
+  isInvestor,
+  isFree,
     canSeeFullAnalysis: isPro || isAdmin,
     canDownloadPDF: isPro || isAdmin
   };
