@@ -2827,24 +2827,16 @@ document.addEventListener("firebase_ready", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
-  const isLogged =
-    !!access.user ||
-    access.isLogged === true;
-
   console.log("🔄 PLAN LOADED → SYNC HOME", access);
 
-  if(!isLogged){
-    console.log("⏳ WAIT USER READY...");
-    return;
-  }
-
-  // 🔓 primo sync
+  // 🔥 sync SEMPRE
   unlockHomeUI?.();
   updateOverlayVisibility();
 
+  // 🔥 render teaser / roi / overlay
   setTimeout(()=>{
     quickROI?.();
-  }, 150);
+  },150);
 
 });
 
