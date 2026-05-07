@@ -2225,16 +2225,14 @@ if(shock){
 
   }
 
- // ================= OVERLAY =================
+// ================= OVERLAY =================
 updateOverlayVisibility?.();
 
-// 🔥 AUTO TRIGGER UPGRADE (CRITICO)
-// 🔥 AUTO TRIGGER UPGRADE (SAFE)
+// 🔥 AUTO TRIGGER UPGRADE
 if(
   !isPro &&
   !isInvestor &&
-  access.isLogged &&
-  source !== "pricing"
+  access.isLogged
 ){
 
   // 🔥 evita popup multipli
