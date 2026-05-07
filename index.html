@@ -2681,21 +2681,9 @@ window.showUpgradeModal = function({mode} = {}){
   // ================= PRO =================
 else if(mode === "pro"){
 
-  titleEl.innerHTML = `
-    🚀 ${window.t(
-      "Sblocca piano Pro",
-      "Unlock Pro plan"
-    )}
-  `;
+  const lang = window.currentLang || "it";
+  const t = (it,en)=> lang === "en" ? en : it;
 
-  subEl.innerHTML = `
-    ${window.t(
-      "Stai analizzando un investimento con dati limitati.<br>Con Pro ottieni ROI reale, rischio avanzato e report professionali.",
-      "You are analyzing an investment with limited data.<br>With Pro you unlock real ROI, advanced risk and professional reports."
-    )}
-  `;
-
-  // 🔥 STILE MODAL PRO (VIOLA PREMIUM)
   const box = modal.querySelector(".rb-modal-box");
 
   if(box){
@@ -2708,6 +2696,7 @@ else if(mode === "pro"){
         text-align:center;
       ">
 
+        <!-- ICON -->
         <div style="
           width:72px;
           height:72px;
@@ -2723,37 +2712,41 @@ else if(mode === "pro"){
           🚀
         </div>
 
+        <!-- TITLE -->
         <h2 style="
-          font-size:28px;
+          font-size:30px;
           font-weight:800;
-          margin-bottom:10px;
+          margin-bottom:12px;
           color:#0f172a;
+          line-height:1.2;
         ">
-          ${window.t(
+          ${t(
             "Passa a Pro",
             "Upgrade to Pro"
           )}
         </h2>
 
+        <!-- SUB -->
         <p style="
           color:#64748b;
-          line-height:1.6;
+          line-height:1.7;
           font-size:15px;
-          margin-bottom:25px;
+          margin-bottom:24px;
         ">
-          ${window.t(
+          ${t(
             "Stai vedendo solo una parte del potenziale reale.<br><strong>ROI reale, rischio avanzato, cashflow e PDF professionali</strong> sono bloccati.",
             "You are only seeing part of the real potential.<br><strong>Real ROI, advanced risk, cashflow and professional PDFs</strong> are locked."
           )}
         </p>
 
+        <!-- FEATURES -->
         <div style="
           background:#f8fafc;
           border:1px solid #e2e8f0;
           border-radius:18px;
           padding:20px;
           text-align:left;
-          margin-bottom:22px;
+          margin-bottom:24px;
         ">
 
           <div style="
@@ -2765,7 +2758,10 @@ else if(mode === "pro"){
             font-weight:600;
             color:#0f172a;
           ">
-            ✅ ${window.t("ROI reale avanzato","Advanced real ROI")}
+            ✅ ${t(
+              "ROI reale avanzato",
+              "Advanced real ROI"
+            )}
           </div>
 
           <div style="
@@ -2777,7 +2773,10 @@ else if(mode === "pro"){
             font-weight:600;
             color:#0f172a;
           ">
-            ✅ ${window.t("Analisi rischio completa","Full risk analysis")}
+            ✅ ${t(
+              "Analisi rischio completa",
+              "Full risk analysis"
+            )}
           </div>
 
           <div style="
@@ -2789,7 +2788,10 @@ else if(mode === "pro"){
             font-weight:600;
             color:#0f172a;
           ">
-            ✅ ${window.t("Forecast e cashflow reali","Real forecast & cashflow")}
+            ✅ ${t(
+              "Forecast e cashflow reali",
+              "Real forecast & cashflow"
+            )}
           </div>
 
           <div style="
@@ -2800,33 +2802,38 @@ else if(mode === "pro"){
             font-weight:600;
             color:#0f172a;
           ">
-            ✅ ${window.t("PDF professionale Executive","Executive professional PDF")}
+            ✅ ${t(
+              "PDF professionale Executive",
+              "Executive professional PDF"
+            )}
           </div>
 
         </div>
 
+        <!-- PRICE BOX -->
         <div style="
           background:linear-gradient(135deg,#7c3aed,#9333ea);
-          border-radius:18px;
-          padding:22px;
+          border-radius:20px;
+          padding:24px;
           color:white;
           margin-bottom:18px;
           box-shadow:0 25px 60px rgba(124,58,237,0.35);
         ">
 
           <div style="
-            font-size:14px;
+            font-size:13px;
             opacity:0.9;
-            margin-bottom:6px;
+            margin-bottom:8px;
+            font-weight:600;
           ">
-            ${window.t(
+            ${t(
               "🔥 Piano consigliato",
               "🔥 Recommended plan"
             )}
           </div>
 
           <div style="
-            font-size:34px;
+            font-size:42px;
             font-weight:900;
             line-height:1;
           ">
@@ -2836,10 +2843,10 @@ else if(mode === "pro"){
           <div style="
             font-size:14px;
             opacity:0.9;
-            margin-top:4px;
+            margin-top:6px;
             margin-bottom:18px;
           ">
-            ${window.t(
+            ${t(
               "/ mese • accesso completo",
               "/ month • full access"
             )}
@@ -2854,13 +2861,13 @@ else if(mode === "pro"){
               color:#7c3aed;
               font-weight:800;
               border:none;
-              padding:15px;
+              padding:16px;
               border-radius:14px;
               font-size:15px;
               cursor:pointer;
             "
           >
-            🔓 ${window.t(
+            🔓 ${t(
               "Sblocca Pro adesso",
               "Unlock Pro now"
             )}
@@ -2868,15 +2875,16 @@ else if(mode === "pro"){
 
         </div>
 
+        <!-- WARNING -->
         <div style="
           font-size:13px;
           color:#ef4444;
           font-weight:600;
           line-height:1.5;
         ">
-          ⚠️ ${window.t(
-            "Senza analisi avanzata potresti sopravvalutare il profitto reale",
-            "Without advanced analysis you may overestimate real profit"
+          ⚠️ ${t(
+            "Senza analisi avanzata potresti sovrastimare il profitto reale",
+            "Without advanced analysis you may overestimate real profitability"
           )}
         </div>
 
