@@ -281,19 +281,7 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
 
 console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole); 
 
-// 🔥 RB_USER = MIRROR (NON LOGICA)
-Object.defineProperty(window, "RB_USER", {
-  get(){
-    const access = window.getUserAccess();
-    return {
-      ...access,
-      name: window.userName || "",
-      email: window.currentUser?.email || ""
-    };
-  }
-});
-
-    // ===============================
+// ===============================
 // 🔥 SINGLE SOURCE ACCESS (CRITICO)
 // ===============================
 
