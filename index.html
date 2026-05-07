@@ -2823,7 +2823,7 @@ document.querySelectorAll(`
 
 
 // ================= PLAN SYNC =================
-document.addEventListener("rb_plan_ready", ()=>{
+document.addEventListener("firebase_ready", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
@@ -2840,7 +2840,7 @@ document.addEventListener("rb_plan_ready", ()=>{
 
 
 // ================= 💣 FINAL OVERRIDE (RISOLVE DEFINITIVO) =================
-document.addEventListener("rb_plan_ready", ()=>{
+document.addEventListener("firebase_ready", ()=>{
 
   setTimeout(()=>{
 
