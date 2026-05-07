@@ -17346,3 +17346,84 @@ MOBILE FIX
   }
 
 }
+
+/* =====================================
+🔥 OVERLAY TEXT FIX FINAL
+RISOLVE TESTO SFUOCATO / ILLEGGIBILE
+DA METTERE A FINE STYLE.CSS
+===================================== */
+
+.home-page .home-overlay-content{
+
+  position:relative;
+  z-index:50;
+
+  backdrop-filter:none !important;
+
+}
+
+/* TESTI */
+.home-page .home-overlay-content,
+.home-page .home-overlay-content *{
+
+  filter:none !important;
+
+  opacity:1 !important;
+
+  text-shadow:none !important;
+
+}
+
+/* TITOLI */
+.home-page .overlay-title{
+
+  color:#ffffff !important;
+
+  font-size:18px !important;
+  font-weight:800 !important;
+
+  line-height:1.35 !important;
+
+}
+
+/* TESTO */
+.home-page .overlay-text{
+
+  color:#e2e8f0 !important;
+
+  font-size:14px !important;
+
+  line-height:1.6 !important;
+
+}
+
+/* TESTI SECONDARI */
+.home-page .home-overlay-content div,
+.home-page .home-overlay-content span,
+.home-page .home-overlay-content p{
+
+  color:#cbd5e1 !important;
+
+}
+
+/* TESTO GIALLO */
+.home-page .home-overlay-content [style*="#f59e0b"]{
+
+  color:#fbbf24 !important;
+
+}
+
+/* CTA */
+.home-page .home-overlay-content button{
+
+  color:#ffffff !important;
+
+}
+
+/* KPI DIETRO VISIBILI */
+.home-page .metric-card{
+
+  filter:none !important;
+  opacity:1 !important;
+
+}
