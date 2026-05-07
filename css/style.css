@@ -17348,21 +17348,95 @@ MOBILE FIX
 }
 
 /* =====================================
-🔥 OVERLAY TEXT FIX FINAL
-RISOLVE TESTO SFUOCATO / ILLEGGIBILE
+🔥 RENDIMENTOBB HOME OVERLAY FINAL
+FIX COMPLETO:
+- testo leggibile
+- bottone cliccabile
+- KPI visibili dietro
+- niente blur rotto
+- overlay elegante SaaS
 DA METTERE A FINE STYLE.CSS
 ===================================== */
+
+/* =========================
+METRICS CONTAINER
+========================= */
+
+.home-page .investment-metrics{
+  position:relative;
+  overflow:hidden;
+  padding-bottom:260px;
+}
+
+/* =========================
+OVERLAY CONTAINER
+========================= */
+
+.home-page .home-blur-overlay{
+
+  position:absolute !important;
+
+  left:0 !important;
+  right:0 !important;
+  bottom:25px !important;
+  top:auto !important;
+
+  display:flex !important;
+  justify-content:center !important;
+  align-items:flex-end !important;
+
+  background:none !important;
+
+  /* 🔥 CLICK FIX */
+  pointer-events:auto !important;
+
+  z-index:20 !important;
+
+  padding:0 20px !important;
+
+}
+
+/* =========================
+OVERLAY CARD
+========================= */
 
 .home-page .home-overlay-content{
 
   position:relative;
   z-index:50;
 
+  width:100%;
+  max-width:280px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2,6,23,0.96),
+      rgba(15,23,42,0.98)
+    ) !important;
+
+  border-radius:22px;
+
+  padding:22px 20px;
+
+  text-align:center;
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 25px 80px rgba(0,0,0,0.35);
+
   backdrop-filter:none !important;
+
+  overflow:hidden;
 
 }
 
-/* TESTI */
+/* =========================
+TEXT RESET
+========================= */
+
 .home-page .home-overlay-content,
 .home-page .home-overlay-content *{
 
@@ -17372,9 +17446,14 @@ DA METTERE A FINE STYLE.CSS
 
   text-shadow:none !important;
 
+  pointer-events:auto !important;
+
 }
 
-/* TITOLI */
+/* =========================
+TITLE
+========================= */
+
 .home-page .overlay-title{
 
   color:#ffffff !important;
@@ -17384,9 +17463,14 @@ DA METTERE A FINE STYLE.CSS
 
   line-height:1.35 !important;
 
+  margin-bottom:12px !important;
+
 }
 
-/* TESTO */
+/* =========================
+MAIN TEXT
+========================= */
+
 .home-page .overlay-text{
 
   color:#e2e8f0 !important;
@@ -17395,35 +17479,139 @@ DA METTERE A FINE STYLE.CSS
 
   line-height:1.6 !important;
 
+  margin-top:10px !important;
+
 }
 
-/* TESTI SECONDARI */
+/* =========================
+SECONDARY TEXT
+========================= */
+
 .home-page .home-overlay-content div,
 .home-page .home-overlay-content span,
 .home-page .home-overlay-content p{
 
   color:#cbd5e1 !important;
 
+  font-size:13px !important;
+
+  line-height:1.5 !important;
+
 }
 
-/* TESTO GIALLO */
+/* =========================
+YELLOW WARNING
+========================= */
+
 .home-page .home-overlay-content [style*="#f59e0b"]{
 
   color:#fbbf24 !important;
 
+  font-weight:700 !important;
+
 }
 
-/* CTA */
+/* =========================
+CTA BUTTON
+========================= */
+
 .home-page .home-overlay-content button{
+
+  position:relative;
+  z-index:60;
+
+  margin-top:16px !important;
+
+  width:100%;
+
+  border:none;
+
+  border-radius:999px;
+
+  padding:13px 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #10b981,
+      #06b6d4
+    ) !important;
 
   color:#ffffff !important;
 
+  font-size:14px !important;
+  font-weight:700 !important;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 30px rgba(16,185,129,0.35);
+
 }
 
-/* KPI DIETRO VISIBILI */
+/* =========================
+REMOVE BROKEN EFFECTS
+========================= */
+
+.home-page .home-blur-overlay::before,
+.home-page .home-blur-overlay::after{
+  display:none !important;
+}
+
+/* =========================
+KEEP KPI VISIBLE
+========================= */
+
 .home-page .metric-card{
 
   filter:none !important;
+
   opacity:1 !important;
+
+  visibility:visible !important;
+
+}
+
+/* =========================
+LOCK ONLY PRO DATA
+========================= */
+
+.home-page .metric-card.pro-only{
+
+  opacity:0.75;
+
+}
+
+/* =========================
+NO FULLSCREEN OVERLAY
+========================= */
+
+.home-page .dynamic-overlay{
+  min-height:auto !important;
+  height:auto !important;
+}
+
+/* =========================
+MOBILE FIX
+========================= */
+
+@media (max-width:768px){
+
+  .home-page .investment-metrics{
+    padding-bottom:300px;
+  }
+
+  .home-page .home-overlay-content{
+    max-width:260px;
+    padding:20px 18px;
+  }
+
+  .home-page .overlay-title{
+    font-size:16px !important;
+  }
+
+  .home-page .overlay-text{
+    font-size:13px !important;
+  }
 
 }
