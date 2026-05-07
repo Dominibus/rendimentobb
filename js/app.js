@@ -234,8 +234,41 @@ function renderUniversalKPI(data = {}){
 
   const access = window.getUserAccess?.() || {};
 
+  // 🔥 RESET HARD PREMIUM
+if(
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin
+){
+
+  [
+    qrProfit, elAnnual,
+    qrMonth, elMonthly,
+    qrBreak, elBreak,
+    qrRev, elRevenue
+  ].forEach(el=>{
+
+    if(!el) return;
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+
+    el.classList.remove(
+      "pro-blur",
+      "blur-content"
+    );
+
+  });
+
+}
+
   // 🔴 FREE → LIMITA DATI (NO REAL NUMBERS)
-if(access.isFree){
+if(
+  access.isFree &&
+  !access.isInvestor &&
+  !access.isPro &&
+  !access.isAdmin
+){
 
   console.log("🔒 KPI HARD LOCK (FREE)");
 
