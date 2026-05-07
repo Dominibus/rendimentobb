@@ -16980,3 +16980,24 @@ body:not(.paid-user) .paid-only{
 body.paid-user .free-only{
   display:none !important;
 }
+/* ============================= */
+/* 🔒 ACCESS VISIBILITY SYSTEM */
+/* ============================= */
+
+/* default */
+.free-only{
+  display:block;
+}
+
+.paid-only{
+  display:none;
+}
+
+/* 🔥 PRO + INVESTOR */
+body.paid-user .free-only{
+  display:none !important;
+}
+
+body.paid-user .paid-only{
+  display:block !important;
+}
