@@ -207,10 +207,6 @@ if(window.isAdminUser){
   // forza piano
   window.currentPlan = "pro";
 
-  // flag UI
-  document.body.classList.add("is-admin");
-  document.body.classList.add("is-pro");
-
 }
 
 // 👉 COMPATIBILITÀ (se usi PLAN)
@@ -272,41 +268,48 @@ console.log("🧠 RB_USER SYNC:", window.RB_USER);
 // 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
 
+    // =====================================
+// 🔥 FINAL ACCESS CLASS SYSTEM
+// =====================================
+
+window.syncAccessClasses = function(){
+
+  const access = window.getUserAccess?.() || {};
+
+  const isPaid =
+    access.isInvestor ||
+    access.isPro ||
+    access.isAdmin;
+
+  // reset totale
+  document.body.classList.remove(
+    "is-paid",
+    "paid-user",
+    "pro-user",
+    "is-pro",
+    "is-admin"
+  );
+
+  // paid
+  if(isPaid){
+    document.body.classList.add("is-paid");
+  }
+
+  console.log("🔥 ACCESS CLASS:", {
+    isPaid,
+    access
+  });
+
+};
+
+// sync immediato
+setTimeout(syncAccessClasses, 50);
+
 
     // 🔥 SYNC IMMEDIATO HEADER/UI
 setTimeout(()=>{
   
 }, 50);
-
-    // ===============================
-    // 🔥 SBLOCCO UI
-    // ===============================
-
-    if(window.isPro() || window.isAdminUser){
-
-      document.body.classList.add("pro-user");
-
-      if(typeof unlockProUI === "function"){
-        unlockProUI();
-      }
-
-      // 🔥 FORCE UNLOCK VISIVO
-      setTimeout(()=>{
-
-        document.querySelectorAll(".pro-only, .pro-blur").forEach(el=>{
-          el.classList.remove("pro-only","pro-blur");
-          el.style.filter = "none";
-          el.style.opacity = "1";
-          el.style.pointerEvents = "auto";
-        });
-
-        document.querySelectorAll(".locked-overlay, .results-overlay").forEach(el=>{
-          el.remove();
-        });
-
-      },300);
-
-    }
 
     // ===============================
 // ROLE SYSTEM (🔥 CORE SAAS)
@@ -499,6 +502,15 @@ onAuthStateChanged(auth, async (user) => {
         }
       })
     );
+
+    // 🔥 RESET CLASSI ACCESSO
+document.body.classList.remove(
+  "is-paid",
+  "paid-user",
+  "pro-user",
+  "is-pro",
+  "is-admin"
+);
 
     return; // 🔥 CRITICO → STOP QUI
   }
