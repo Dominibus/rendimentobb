@@ -366,7 +366,7 @@ data-en="6–9 years">
  
 <section class="quick-roi-section">
 
-<div class="roi-warning-card">
+<div class="roi-warning-card free-only">
 
 <div class="roi-warning-header">
 
@@ -765,7 +765,7 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
 </div>
 
  <!-- 🔥 CONVERSION PUSH (FINAL PRO) -->
-<div class="conversion-push">
+<div class="conversion-push free-only">
 
   <h3
   data-it="⚠️ Stai prendendo una decisione con dati incompleti"
@@ -2151,10 +2151,18 @@ window.quickROI = function(){
 
   }
 
-  // ================= ROI SHOCK =================
-  const shock = document.getElementById("roi-shock-block");
+// ================= ROI SHOCK =================
+const shock = document.getElementById("roi-shock-block");
 
-  if(shock){
+if(shock){
+
+  // 🔥 PRO NON VEDE PSICOLOGIA FREE
+  if(isPro){
+
+    shock.style.display = "none";
+
+  }
+  else{
 
     if(roi <= 0){
       shock.style.display = "block";
@@ -2169,6 +2177,8 @@ window.quickROI = function(){
     }
 
   }
+
+}
 
   // ================= FORMAT =================
   const format = (n)=> Math.round(n).toLocaleString();
@@ -2726,6 +2736,34 @@ function unlockHomeUI(){
 
   // ================= PRO =================
   if(isPro){
+
+   // 🔥 NASCONDI PSICOLOGIA FREE/UPSELL
+document.querySelectorAll(`
+  .roi-warning-card,
+  .conversion-push,
+  .home-blur-overlay,
+  #roi-shock-block
+`).forEach(el=>{
+  if(el) el.style.display = "none";
+});
+
+// 🔥 NASCONDI WARNING TESTUALI
+document.querySelectorAll(`
+  #hidden-roi-msg,
+  #money-loss,
+  .metric-critical
+`).forEach(el=>{
+  if(el) el.style.display = "none";
+});
+
+// 🔥 PULIZIA TESTI FREE
+document.querySelectorAll(`
+  .roi-highlight [data-it*="dati incompleti"],
+  .roi-highlight [data-it*="può farti perdere soldi"],
+  .roi-highlight [data-it*="profitto reale"]
+`).forEach(el=>{
+  el.style.display = "none";
+});
 
     console.log("🟢 PRO UI FULL");
 
