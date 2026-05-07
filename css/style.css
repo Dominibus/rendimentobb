@@ -16969,3 +16969,14 @@ body.pro-user .pro-only-inline{
 .paid-user .free-only{
   display:none !important;
 }
+/* =====================================
+🔥 PLAN VISIBILITY SYSTEM
+===================================== */
+
+body:not(.paid-user) .paid-only{
+  display:none !important;
+}
+
+body.paid-user .free-only{
+  display:none !important;
+}
