@@ -734,10 +734,16 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
     </div>
 
     <!-- CTA -->
-    <button 
-      onclick="triggerUpgradeFlow({source:'home-overlay'})" 
-      class="btn btn-primary"
-      style="margin-top:16px">
+    <button
+onclick="
+if(!window.currentUser){
+  window.location.href='/login/';
+}else{
+  window.location.href='/pricing/';
+}
+"
+class="btn btn-primary"
+style="margin-top:16px">
 
       <span
         data-it="🔓 Sblocca analisi completa"
