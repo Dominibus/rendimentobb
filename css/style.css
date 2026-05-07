@@ -16963,62 +16963,68 @@ body.pro-user .pro-only-inline{
 }
 
 /* =====================================
-🔥 PLAN VISIBILITY SYSTEM
+🔥 ACCESS VISIBILITY SYSTEM FINAL
+(SAFE + FLEX FIX)
+NON ROMPE GRID / FLEX / CARD
 ===================================== */
 
-.paid-user .free-only{
-  display:none !important;
-}
-/* =====================================
-🔥 PLAN VISIBILITY SYSTEM
-===================================== */
+/* =============================
+🔴 DEFAULT (FREE)
+============================= */
 
-body:not(.paid-user) .paid-only{
-  display:none !important;
-}
-
-body.paid-user .free-only{
-  display:none !important;
-}
-/* ============================= */
-/* 🔒 ACCESS VISIBILITY SYSTEM */
-/* ============================= */
-
-/* default */
-.free-only{
-  display:block;
-}
-
-.paid-only{
-  display:none;
-}
-
-/* 🔥 PRO + INVESTOR */
-body.paid-user .free-only{
-  display:none !important;
-}
-
-body.paid-user .paid-only{
-  display:block !important;
-}
-/* =====================================
-🔥 ACCESS SYSTEM FINAL
-===================================== */
-
-/* default */
-.free-only{
-  display:block;
-}
-
+/* contenuti premium nascosti */
+.paid-only,
 .pro-only{
-  display:none;
+  display:none !important;
 }
 
-/* 🔥 INVESTOR / PRO / ADMIN */
+/* contenuti free visibili */
+.free-only{
+  display:inherit;
+}
+
+/* =============================
+🟢 INVESTOR / PRO / ADMIN
+============================= */
+
 body.is-paid .free-only{
   display:none !important;
 }
 
+/* 🔥 NON usare block */
+body.is-paid .paid-only,
 body.is-paid .pro-only{
-  display:block !important;
+  display:inherit !important;
+}
+
+/* =============================
+🔥 FLEX SAFE FIX
+(per card/grid/flex layout)
+============================= */
+
+body.is-paid .flex.pro-only,
+body.is-paid .flex.paid-only{
+  display:flex !important;
+}
+
+body.is-paid .grid.pro-only,
+body.is-paid .grid.paid-only{
+  display:grid !important;
+}
+
+body.is-paid .inline-flex.pro-only,
+body.is-paid .inline-flex.paid-only{
+  display:inline-flex !important;
+}
+
+/* =============================
+🔥 EXTRA SAFETY
+============================= */
+
+body.is-pro .pro-only,
+body.is-investor .pro-only,
+body.is-admin .pro-only{
+  visibility:visible !important;
+  opacity:1 !important;
+  filter:none !important;
 }
