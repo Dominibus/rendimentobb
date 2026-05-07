@@ -2231,21 +2231,29 @@ updateOverlayVisibility?.();
 // 🔥 AUTO TRIGGER UPGRADE
 if(
   !isPro &&
-  !isInvestor &&
-  access.isLogged
+  !isInvestor
 ){
 
-  // 🔥 evita popup multipli
   clearTimeout(window.__rbUpgradeTimer);
 
   window.__rbUpgradeTimer = setTimeout(()=>{
 
-    // 🔥 se utente sta già andando a stripe → skip
     if(window.__stripeRedirecting){
       console.log("💳 Stripe redirect attivo → skip modal");
       return;
     }
 
+    // 🔒 FREE NON LOGGATO
+    if(!access.isLogged){
+
+      showUpgradeModal({
+        mode:"login"
+      });
+
+      return;
+    }
+
+    // 🔓 FREE LOGGATO
     triggerUpgradeFlow({
       source:"auto-after-roi"
     });
