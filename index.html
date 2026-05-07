@@ -2216,18 +2216,37 @@ if(shock){
 // ================= HOME OVERLAY ONLY =================
 updateOverlayVisibility?.();
 
-// 🔥 HOME PAGE:
-// usa SOLO overlay inline
-// niente popup aggressivi
+// ================= HOME PAGE =================
+// FREE → overlay
+// INVESTOR → popup PRO soft
+// PRO → niente
 
 if(document.body.classList.contains("home-page")){
+
+  // 🔥 INVESTOR → popup PRO soft
+  if(isInvestor && roi >= 8){
+
+    clearTimeout(window.__rbInvestorHomeTimer);
+
+    window.__rbInvestorHomeTimer = setTimeout(()=>{
+
+      if(window.__stripeRedirecting) return;
+
+      showUpgradeModal({
+        mode:"pro"
+      });
+
+    },1400);
+
+  }
+
   return;
 }
 
 // ================= SMART UPGRADE FLOW =================
 
-// 🔥 HOME + TOOL
-// FREE  → Investor
+// 🔥 TOOL ONLY
+// FREE → Investor
 // INVESTOR → Pro
 // PRO → niente
 
@@ -2263,7 +2282,7 @@ if(!isPro){
     // ================= INVESTOR =================
     if(isInvestor){
 
-      // 🔥 mostra upsell PRO solo se ROI buono
+      // 🔥 popup PRO solo se ROI interessante
       if(roi >= 8){
 
         showUpgradeModal({
