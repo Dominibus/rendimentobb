@@ -2823,17 +2823,15 @@ document.querySelectorAll(`
 
 
 // ================= PLAN SYNC =================
-document.addEventListener("firebase_ready", ()=>{
+document.addEventListener("rb_plan_ready", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
   console.log("🔄 PLAN LOADED → SYNC HOME", access);
 
-  // 🔥 sync SEMPRE
   unlockHomeUI?.();
   updateOverlayVisibility();
 
-  // 🔥 render teaser / roi / overlay
   setTimeout(()=>{
     quickROI?.();
   },150);
@@ -2842,7 +2840,7 @@ document.addEventListener("firebase_ready", ()=>{
 
 
 // ================= 💣 FINAL OVERRIDE (RISOLVE DEFINITIVO) =================
-document.addEventListener("firebase_ready", ()=>{
+document.addEventListener("rb_plan_ready", ()=>{
 
   setTimeout(()=>{
 
