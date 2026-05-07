@@ -481,16 +481,6 @@ onAuthStateChanged(auth, async (user) => {
     window.currentPlan = "free";
     window.userReady = false;
     window.firebaseReady = true;
-
-   // 🔥 FIX CRITICO → RB_USER PER GUEST
-  window.RB_USER = {
-  isFree: true,
-  isPro: false,
-  isInvestor: false,
-  isAdmin: false,
-  canSeeFullAnalysis: false,
-  canDownloadPDF: false
-   };
     
     updateUserUI(null);
 
