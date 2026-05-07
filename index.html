@@ -2227,8 +2227,9 @@ if(document.body.classList.contains("home-page")){
 // ================= SMART UPGRADE FLOW =================
 
 // 🔥 HOME + TOOL
-// investor riceve upsell PRO soft
-// free riceve investor
+// FREE  → Investor
+// INVESTOR → Pro
+// PRO → niente
 
 if(!isPro){
 
@@ -2260,13 +2261,18 @@ if(!isPro){
     }
 
     // ================= INVESTOR =================
-    // 🔥 solo se ROI interessante
-    if(roi >= 8){
+    if(isInvestor){
 
-      showUpgradeModal({
-        mode:"pro"
-      });
+      // 🔥 mostra upsell PRO solo se ROI buono
+      if(roi >= 8){
 
+        showUpgradeModal({
+          mode:"pro"
+        });
+
+      }
+
+      return;
     }
 
   },1400);
