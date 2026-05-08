@@ -552,9 +552,11 @@ async function saveAnalysis(data){
     });
 
     console.log("✅ SALVATO FIRESTORE");
+    console.log("💾 SAVE ANALYSIS CALLED");
 
   }catch(e){
     console.error("Errore salvataggio:", e);
+  
   }
 
 }
@@ -2350,6 +2352,7 @@ function runPostAnalysis(result, context){
   const roi = Number(result?.roi || 0);
 
   console.log("📊 FINAL ROI:", roi);
+  console.log("💾 POST ANALYSIS START");
 
   // ================= 🔥 ROI UI LOCK =================
 
@@ -2865,11 +2868,34 @@ window.calculate = async function(force = false){
  const access = window.getUserAccess?.() || {};
 
 // 🔥 BLOCCO REALE
-if(
-  access.isLoading ||
-  !window.firebaseReady ||
-  !window.currentPlan
-){
+if(access.isLoading){
+
+  console.log("⏳ ACCESS LOADING");
+
+  window.pendingCalculation = true;
+  window.isCalculating = false;
+
+  return;
+}
+
+// 🔥 firebase può essere ready anche senza currentPlan
+if(!window.firebaseReady){
+
+  console.log("⏳ FIREBASE NON READY");
+
+  window.pendingCalculation = true;
+  window.isCalculating = false;
+
+  return;
+}
+
+// 🔥 fallback SAFE
+if(!window.currentPlan){
+
+  console.warn("⚠️ currentPlan missing → fallback FREE");
+
+  window.currentPlan = "free";
+}
   console.log("⏳ BLOCCO calculate → piano non pronto");
 
   window.pendingCalculation = true;
