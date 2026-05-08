@@ -230,108 +230,184 @@ function renderUniversalKPI(data = {}){
   if(qrRev) qrRev.innerText = formatCurrency(revenue);
   if(elRevenue) elRevenue.innerText = formatCurrency(revenue);
 
-  // ================= ACCESS CONTROL (SAFE) =================
+ // ================= ACCESS CONTROL (SAFE FINAL FIX) =================
 
-  const access = window.getUserAccess?.() || {};
+const access = window.getUserAccess?.() || {};
 
-  // 🔥 RESET HARD PREMIUM
-if(
-  access.isInvestor ||
-  access.isPro ||
-  access.isAdmin
-){
+// ⛔ evita falso FREE durante bootstrap Firebase
+if(!window.currentPlan){
 
-  [
-    qrProfit, elAnnual,
-    qrMonth, elMonthly,
-    qrBreak, elBreak,
-    qrRev, elRevenue
-  ].forEach(el=>{
+  console.log("⏳ plan non pronto → skip KPI lock");
 
-    if(!el) return;
+}else{
 
-    el.style.filter = "none";
-    el.style.opacity = "1";
+  // =====================================
+  // 🔥 HARD RESET PREMIUM
+  // =====================================
 
-    el.classList.remove(
-      "pro-blur",
-      "blur-content"
-    );
+  if(
+    access.isInvestor ||
+    access.isPro ||
+    access.isAdmin
+  ){
 
-  });
+    console.log("🟢 KPI PREMIUM RESET");
+
+    [
+      qrProfit, elAnnual,
+      qrMonth, elMonthly,
+      qrBreak, elBreak,
+      qrRev, elRevenue
+    ].forEach(el=>{
+
+      if(!el) return;
+
+      // 🔥 salva valore reale
+      if(
+        el.innerText &&
+        el.innerText !== "—" &&
+        !el.dataset.realValue
+      ){
+        el.dataset.realValue = el.innerText;
+      }
+
+      // 💣 RESET HARD INLINE
+      el.style.filter = "none";
+      el.style.webkitFilter = "none";
+      el.style.backdropFilter = "none";
+      el.style.opacity = "1";
+      el.style.visibility = "visible";
+      el.style.pointerEvents = "auto";
+      el.style.color = "#0f172a";
+      el.style.textShadow = "none";
+      el.style.transform = "none";
+
+      // 🔥 restore contenuto
+      if(
+        el.innerText === "—" &&
+        el.dataset.realValue
+      ){
+        el.innerText = el.dataset.realValue;
+      }
+
+      // 🔥 cleanup classi
+      el.classList.remove(
+        "pro-blur",
+        "blur-content",
+        "locked",
+        "locked-content",
+        "premium-lock"
+      );
+
+    });
+
+  }
+
+  // =====================================
+  // 🔴 FREE → LIMITA DATI
+  // =====================================
+
+  if(
+    access.isFree &&
+    !access.isInvestor &&
+    !access.isPro &&
+    !access.isAdmin
+  ){
+
+    console.log("🔒 KPI HARD LOCK (FREE)");
+
+    [
+      qrProfit, elAnnual,
+      qrMonth, elMonthly,
+      qrBreak, elBreak,
+      qrRev, elRevenue
+    ].forEach(el=>{
+
+      if(!el) return;
+
+      // 🔥 salva valore reale prima del lock
+      if(
+        el.innerText &&
+        el.innerText !== "—"
+      ){
+        el.dataset.realValue = el.innerText;
+      }
+
+      el.innerText = "—";
+
+      el.style.filter = "blur(6px)";
+      el.style.webkitFilter = "blur(6px)";
+      el.style.opacity = "0.4";
+
+      // 🔥 cleanup
+      el.classList.remove(
+        "pro-blur",
+        "blur-content"
+      );
+
+    });
+
+  }
 
 }
 
-  // 🔴 FREE → LIMITA DATI (NO REAL NUMBERS)
-if(
-  access.isFree &&
-  !access.isInvestor &&
-  !access.isPro &&
-  !access.isAdmin
-){
+// =====================================
+// ⛔ ACCESS DEBUG
+// =====================================
 
-  console.log("🔒 KPI HARD LOCK (FREE)");
-
-  [
-    qrProfit, elAnnual,
-    qrMonth, elMonthly,
-    qrBreak, elBreak,
-    qrRev, elRevenue
-  ].forEach(el=>{
-    if(!el) return;
-
-    el.innerText = "—";
-el.style.filter = "blur(6px)";
-el.style.opacity = "0.4";
-
-  // rimuove blur ereditati
-  el.classList.remove("pro-blur","blur-content");
-  });
-
-}
-  if(!access){
+if(!access){
   console.warn("⛔ access non disponibile");
   // ❌ NON bloccare render
 }
 
-  // 🟡 INVESTOR → teaser intelligente (NO DUPLICATI)
-  if(access.isInvestor){
+// =====================================
+// 🟡 INVESTOR → teaser intelligente
+// =====================================
 
-    const verdict = document.getElementById("investment-verdict");
+if(access.isInvestor){
 
-    if(verdict && !verdict.querySelector(".investor-upsell")){
+  const verdict = document.getElementById("investment-verdict");
 
-      const upsell = document.createElement("div");
-      upsell.className = "investor-upsell";
+  if(
+    verdict &&
+    !verdict.querySelector(".investor-upsell")
+  ){
 
-      upsell.innerHTML = `
-        <div style="
-          margin-top:15px;
-          padding:12px;
-          border-radius:10px;
-          background:rgba(16,185,129,0.08);
-          font-size:13px;
-          text-align:center;
-          color:#065f46;
-          font-weight:500;
-        ">
-          🔥 ${t(
-            "Stai vedendo solo una parte del potenziale reale",
-            "You are only seeing part of the real potential"
+    const upsell = document.createElement("div");
+
+    upsell.className = "investor-upsell";
+
+    upsell.innerHTML = `
+      <div style="
+        margin-top:15px;
+        padding:12px;
+        border-radius:10px;
+        background:rgba(16,185,129,0.08);
+        font-size:13px;
+        text-align:center;
+        color:#065f46;
+        font-weight:500;
+      ">
+        🔥 ${t(
+          "Stai vedendo solo una parte del potenziale reale",
+          "You are only seeing part of the real potential"
+        )}
+
+        <br>
+
+        <span style="opacity:.8;">
+          ${t(
+            "Sblocca analisi completa + AI insights",
+            "Unlock full analysis + AI insights"
           )}
-          <br>
-          <span style="opacity:.8;">
-            ${t(
-              "Sblocca analisi completa + AI insights",
-              "Unlock full analysis + AI insights"
-            )}
-          </span>
-        </div>
-      `;
+        </span>
+      </div>
+    `;
 
-      verdict.appendChild(upsell);
-    }
+    verdict.appendChild(upsell);
+
   }
+
 }
 
 
