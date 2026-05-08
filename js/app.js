@@ -3865,12 +3865,33 @@ try{
 
 // ================= FOOTER =================
 const footer = ()=>{
-  doc.setDrawColor(220);
-  doc.line(20,270,190,270);
+
+  doc.setDrawColor(230);
+  doc.line(15,270,195,270);
+
   doc.setFontSize(8);
   doc.setTextColor(...gray);
-  doc.text("RendimentoBB – Confidential Investment Report",20,278);
-  doc.text("www.rendimentobb.com",140,278);
+
+  doc.text(
+    "RendimentoBB Executive Investment Report",
+    20,
+    278
+  );
+
+  doc.text(
+    new Date().toLocaleDateString(),
+    105,
+    278,
+    {align:"center"}
+  );
+
+  doc.text(
+    "Confidential",
+    190,
+    278,
+    {align:"right"}
+  );
+
 };
 
 // ===================================================
@@ -3909,6 +3930,30 @@ doc.text(pct(roi),20,170);
 doc.setFontSize(11);
 doc.setTextColor(...gray);
 doc.text("ROI",20,180);
+
+  doc.setFontSize(12);
+doc.setTextColor(...dark);
+
+doc.text(
+  T(
+    "Valutazione professionale investimento immobiliare turistico",
+    "Professional hospitality investment valuation"
+  ),
+  20,
+  205
+);
+
+doc.setFontSize(10);
+doc.setTextColor(...gray);
+
+doc.text(
+  T(
+    "ROI • Cashflow • Benchmark • Sostenibilità finanziaria",
+    "ROI • Cashflow • Benchmark • Financial sustainability"
+  ),
+  20,
+  218
+);
 
 // ===================================================
 // EXECUTIVE
@@ -4068,7 +4113,93 @@ const marketROI =
 row(T("ROI tuo","Your ROI"), pct(roi));
 row(T("ROI mercato","Market ROI"), pct(marketROI));
 
+  y += 15;
+
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y,170,36,5,5,"F");
+
+doc.setFontSize(10);
+doc.setTextColor(...dark);
+
+const marketComment =
+  roi > marketROI
+  ? T(
+      "L'operazione supera significativamente il benchmark medio di mercato.",
+      "The investment significantly outperforms the average market benchmark."
+    )
+  : T(
+      "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
+      "The investment performs in line with or below average market benchmark."
+    );
+
+doc.text(
+  marketComment,
+  25,
+  y + 15,
+  { maxWidth: 155 }
+);
+
 footer();
+
+// ===================================================
+// RISK ANALYSIS
+// ===================================================
+
+doc.addPage();
+
+y = 30;
+
+doc.setFontSize(14);
+doc.setTextColor(...dark);
+
+doc.text(
+  T("Analisi rischio","Risk analysis"),
+  20,
+  y
+);
+
+y += 15;
+
+const riskScore =
+  roi >= 20 ? 28 :
+  roi >= 12 ? 42 :
+  roi >= 8 ? 58 : 74;
+
+const riskLabel =
+  riskScore < 40
+  ? T("Rischio basso","Low risk")
+  : riskScore < 65
+  ? T("Rischio moderato","Moderate risk")
+  : T("Rischio elevato","High risk");
+
+row(
+  T("Indice rischio","Risk score"),
+  riskScore + "/100"
+);
+
+row(
+  T("Valutazione","Assessment"),
+  riskLabel
+);
+
+y += 10;
+
+doc.setFillColor(248,250,252);
+doc.roundedRect(20,y,170,48,5,5,"F");
+
+doc.setFontSize(10);
+
+doc.text(
+  T(
+    "L'analisi considera sostenibilità del cashflow, leva finanziaria, benchmark di mercato e stabilità operativa.",
+    "The analysis considers cashflow sustainability, leverage, market benchmark and operational stability."
+  ),
+  25,
+  y + 15,
+  { maxWidth: 155 }
+);
+
+footer();  
 
 // ===================================================
 // CASHFLOW
