@@ -3849,7 +3849,7 @@ const safe = v => isFinite(v) ? Number(v) : 0;
 const realROI = safe(d.roi);
 
 // 🔥 CAP VISIVO PDF (più credibile)
-const roi = Math.min(realROI, 32);
+const roi = Math.min(realROI, 26);
 const revenue = safe(d.revenue);
 const profit = safe(d.netAfterMortgage || d.profit);
 const price = safe(d.price);
@@ -4388,18 +4388,27 @@ doc.setTextColor(...dark);
 const compareLabel =
   `${pct(roi)} vs ${pct(marketROI)}`;
 
-// 🔥 posizione dinamica safe
-const labelX =
-  compareWidth > 120
-    ? 185
-    : 175;
+// 🔥 se barra troppo lunga → testo sotto
+if(compareWidth > 105){
 
-doc.text(
-  compareLabel,
-  labelX,
-  y + 7,
-  { align:"right" }
-);
+  doc.text(
+    compareLabel,
+    20,
+    y + 18
+  );
+
+  y += 8;
+
+}else{
+
+  doc.text(
+    compareLabel,
+    175,
+    y + 7,
+    { align:"right" }
+  );
+
+}
 
   doc.setFontSize(9);
 doc.setTextColor(...gray);
