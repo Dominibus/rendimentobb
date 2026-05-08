@@ -546,7 +546,8 @@ async function saveAnalysis(data){
       equity: data.equity,
       roi: data.roi,
       risk: data.risk,
-      city: data.city || "italy",
+      marketCity: data.marketCity || data.city || "italy",
+      realCity: data.realCity || data.city || "italy",
       createdAt: serverTimestamp(),
       createdAtClient: new Date()
     });
@@ -2369,13 +2370,24 @@ if(
   result?.roi > 0
 ){
 
-  saveAnalysis({
-    price: context?.price || 0,
-    equity: context?.equity || 0,
-    roi: result?.roi || 0,
-    risk: result?.risk || 0,
-    city: window.currentCity || "roma"
-  });
+  const realCityInput =
+  document.getElementById("custom-location")?.value?.trim();
+
+saveAnalysis({
+  price: context?.price || 0,
+  equity: context?.equity || 0,
+  roi: result?.roi || 0,
+  risk: result?.risk || 0,
+
+  // 🔥 città benchmark usata dal motore
+  marketCity: window.currentCity || "roma",
+
+  // 🔥 città reale inserita utente
+  realCity:
+    realCityInput ||
+    window.currentCity ||
+    "roma"
+});
 
 }
 
