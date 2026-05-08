@@ -2853,10 +2853,6 @@ if(citySelector){
 
   if(val !== ""){
 
-    if(citySelector){
-
-  if(val !== ""){
-
     // 🔥 svuota select
     citySelector.value = "";
 
