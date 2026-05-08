@@ -3902,6 +3902,32 @@ const footer = ()=>{
 
 };
 
+  // ================= ROW HELPER =================
+
+function row(label, value){
+
+  doc.setFontSize(10);
+  doc.setTextColor(...gray);
+
+  doc.text(
+    String(label),
+    20,
+    y
+  );
+
+  doc.setTextColor(...dark);
+
+  doc.text(
+    String(value),
+    190,
+    y,
+    { align:"right" }
+  );
+
+  y += 10;
+
+}
+
 // ===================================================
 // COVER
 // ===================================================
