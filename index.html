@@ -3132,19 +3132,13 @@ if(match){
     // 🔍 RISULTATI
 if(results.length){
 
-  const first = results[0];
+  box.innerHTML = results.map(c => `
+    <div class="city-suggestion-item" data-slug="${c.slug}">
+      ${c.name}
+    </div>
+  `).join("");
 
-  box.innerHTML = "";
-  box.style.display = "none";
-
-  liveBox.innerHTML = `
-    ${t("ROI medio","Average ROI")} ${first.name}: 
-    <strong>${ROI_PREVIEW[first.slug] || "-"}%</strong>
-  `;
-
-  liveBox.classList.add("active");
-
-}
+  box.style.display = "block";
 
       liveBox.innerHTML = `
   <span style="color:#94a3b8;font-size:13px">
@@ -3168,6 +3162,22 @@ liveBox.classList.add("active");
     }
 
   });
+
+ // ✅ CLICK
+box.addEventListener("click", function(e){
+
+  const item = e.target.closest(".city-suggestion-item");
+  if(!item) return;
+
+  const city = item.dataset.slug;
+
+  input.value = item.innerText.trim();
+  box.innerHTML = "";
+  box.style.display = "none";
+
+  selectCity(city);
+
+});
 
 
   // ✅ ENTER
