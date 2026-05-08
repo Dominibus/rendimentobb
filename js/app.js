@@ -4008,7 +4008,7 @@ let y = 45;
 
 // BOX
 doc.setFillColor(15,23,42);
-doc.roundedRect(20,y,170,24,6,6,"F");
+doc.roundedRect(20,y,170,28,6,6,"F");
 
 doc.setTextColor(255);
 doc.setFontSize(18);
@@ -4025,7 +4025,7 @@ doc.setTextColor(0);
 doc.setFontSize(10);
 doc.text(rating,160,y+13);
 
-y+=30;
+y += 36;
 
 // KPI
 const row = (label,val)=>{
@@ -4053,7 +4053,7 @@ y+=5;
 doc.setFontSize(11);
 doc.text(T("Analisi performance","Performance analysis"),20,y);
 
-y+=8;
+y += 18;
 
 const maxVal = revenue * 1.2;
 
@@ -4061,10 +4061,14 @@ const maxVal = revenue * 1.2;
   const w = (v/maxVal)*120;
 
   doc.setFillColor(59,130,246);
-  doc.rect(20,y,w,6,"F");
+  doc.roundedRect(20,y,w,6,3,3,"F");
 
   doc.setFontSize(9);
-  doc.text(["Low","Base","High"][i]+" "+eur(v),145,y+5);
+  doc.text(
+  ["Low","Base","High"][i] + " " + eur(v),
+  160,
+  y + 5
+);
 
   y+=10;
 });
