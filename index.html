@@ -3084,15 +3084,25 @@ if(!input || !box || !liveBox) return;
   input.addEventListener("input", function(){
 
     const value = input.value.toLowerCase().trim();
+    const quickBox = document.querySelector(".city-quick");
 
     // RESET
     if(!value){
-      box.innerHTML = "";
-      box.style.display = "none";
-      liveBox.innerHTML = "";
-      liveBox.classList.remove("active");
-      return;
-    }
+
+  box.innerHTML = "";
+  box.style.display = "none";
+
+  liveBox.innerHTML = "";
+  liveBox.classList.remove("active");
+
+  // 🔥 ripristina città rapide
+  quickBox?.classList.remove("searching");
+
+  return;
+}
+
+   // 🔥 nasconde quick cities durante ricerca
+quickBox?.classList.add("searching");
 
     const results = CITY_DB.filter(c =>
       c.name.toLowerCase().includes(value)
