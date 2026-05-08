@@ -4354,12 +4354,32 @@ const marketROI =
 row(T("ROI tuo","Your ROI"), pct(roi));
 row(T("ROI mercato","Market ROI"), pct(marketROI));
 
-y += 10;
+y += 4;
+
+// ================= MARKET LABEL =================
+
+doc.setFontSize(9);
+doc.setTextColor(...gray);
+
+doc.text(
+  T("Performance mercato","Market performance"),
+  20,
+  y - 12
+);
 
 // ================= MARKET BAR =================
 
 doc.setFillColor(230,230,230);
-doc.roundedRect(20,y,150,10,5,5,"F");
+
+doc.roundedRect(
+  20,
+  y,
+  150,
+  10,
+  5,
+  5,
+  "F"
+);
 
 // ROI vs market
 const compareWidth = Math.min(
@@ -4379,16 +4399,15 @@ doc.roundedRect(
   "F"
 );
 
- doc.setFontSize(8);
-doc.setTextColor(...dark);
+// ================= LABEL VALUE =================
 
-// 🔥 testo sempre fuori barra
+doc.setFontSize(8);
 doc.setTextColor(...dark);
 
 const compareLabel =
   `${pct(roi)} vs ${pct(marketROI)}`;
 
-// 🔥 se barra troppo lunga → testo sotto
+// 🔥 barra lunga → testo sotto
 if(compareWidth > 105){
 
   doc.text(
@@ -4397,7 +4416,7 @@ if(compareWidth > 105){
     y + 18
   );
 
-  y += 8;
+  y += 10;
 
 }else{
 
@@ -4410,33 +4429,35 @@ if(compareWidth > 105){
 
 }
 
-  doc.setFontSize(9);
-doc.setTextColor(...gray);
+y += 18;
 
-doc.text(
-  T("Performance mercato","Market performance"),
-  20,
-  y - 4
-);
-
-y += 18;  
+// ================= COMMENT BOX =================
 
 doc.setFillColor(248,250,252);
-doc.roundedRect(20,y,170,36,5,5,"F");
+
+doc.roundedRect(
+  20,
+  y,
+  170,
+  36,
+  5,
+  5,
+  "F"
+);
 
 doc.setFontSize(10);
 doc.setTextColor(...dark);
 
 const marketComment =
   roi > marketROI
-  ? T(
-      "L'operazione supera significativamente il benchmark medio di mercato.",
-      "The investment significantly outperforms the average market benchmark."
-    )
-  : T(
-      "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
-      "The investment performs in line with or below average market benchmark."
-    );
+    ? T(
+        "L'operazione supera significativamente il benchmark medio di mercato.",
+        "The investment significantly outperforms the average market benchmark."
+      )
+    : T(
+        "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
+        "The investment performs in line with or below average market benchmark."
+      );
 
 doc.text(
   marketComment,
@@ -4446,7 +4467,6 @@ doc.text(
 );
 
 footer();
-
 // ===================================================
 // RISK ANALYSIS
 // ===================================================
