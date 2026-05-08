@@ -258,10 +258,10 @@ per capire se perdi soldi
 id="city-search-input"
 type="text"
 class="city-search-input"
-data-it-placeholder="Inserisci città o zona per iniziare"
-data-en-placeholder="Enter city or area to start"
-placeholder="Inserisci città o zona per iniziare"
+...
 autocomplete="off">
+
+<div id="city-live-roi" class="city-live-roi"></div>
 
 </div>
 
@@ -3076,7 +3076,9 @@ const ROI_PREVIEW = {
 
   const input = document.getElementById("city-search-input");
   const box   = document.getElementById("city-suggestions");
-  if(!input || !box) return;
+  const liveBox = document.getElementById("city-live-roi");
+
+if(!input || !box || !liveBox) return;
 
   // ================= INPUT =================
   input.addEventListener("input", function(){
