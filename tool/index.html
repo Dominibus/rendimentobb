@@ -407,6 +407,22 @@ body.pro-user .upgrade-box[data-paywall="true"]{
   display:none !important;
 }
 
+  .tool-page .metric-card strong,
+.tool-page .metric-card.pro-only strong,
+.tool-page .result-item strong,
+.tool-page #risk-preview,
+.tool-page #break-even,
+.tool-page #profit-monthly,
+.tool-page #profit-annual,
+.tool-page #revenue-annual,
+.tool-page #roi-card-live{
+  filter:none !important;
+  backdrop-filter:none !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  -webkit-filter:none !important;
+}
+
 </style>
 </head>
 
@@ -1295,9 +1311,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const upgrade = params.get("upgrade");
 
-  if(!upgrade || window.isProUser()) return;
+  if(!upgrade) return;
 
   setTimeout(()=>{
+
+    const access = window.getUserAccess?.() || {};
+
+    // 🔥 PRO / ADMIN NON DEVONO MAI VEDERE IL POPUP
+    if(access.isPro || access.isAdmin){
+      console.log("✅ PRO USER → skip upgrade popup");
+      return;
+    }
 
     const lang = window.RB_LANG?.current || "it";
 
@@ -1320,7 +1344,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     showUpgradeModalCustom(msg.it, msg.en);
 
-  },400);
+  },1200);
 
 })();
   // ================= CTA UPGRADE =================
