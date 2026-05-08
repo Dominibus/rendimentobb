@@ -3034,6 +3034,9 @@ if(!isFinite(roi) || roi < 0){
 roi = Math.min(roi, 85);
 
 const safeROI = roi;
+
+  // 🔥 RENDER ROI CHART
+  renderROIChart(safeROI);
     const roiText = safeROI.toFixed(1) + "%";
 
     const gross = Number(result?.revenue ?? result?.gross ?? 0);
@@ -3207,7 +3210,79 @@ window.roiChartInstance = new Chart(ctx,{
 
 }
 
+// ================= MAIN ROI CHART (FIX DEFINITIVO) =================
+function renderROIChart(roi){
 
+  const canvas = document.getElementById("roiChart");
+
+  if(!canvas){
+    console.warn("⛔ roiChart non trovato");
+    return;
+  }
+
+  if(typeof Chart === "undefined"){
+    console.warn("⛔ Chart.js non caricato");
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  // 🔥 destroy vecchio
+  if(window.mainROIChart){
+    window.mainROIChart.destroy();
+  }
+
+  // 🔥 colore dinamico
+  let color = "#ef4444";
+
+  if(roi >= 20){
+    color = "#10b981";
+  }
+  else if(roi >= 10){
+    color = "#f59e0b";
+  }
+
+  window.mainROIChart = new Chart(ctx,{
+
+    type:"doughnut",
+
+    data:{
+      labels:["ROI","Remaining"],
+
+      datasets:[{
+        data:[
+          Math.min(roi,100),
+          Math.max(0,100-roi)
+        ],
+
+        backgroundColor:[
+          color,
+          "#e5e7eb"
+        ],
+
+        borderWidth:0
+      }]
+    },
+
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      cutout:"78%",
+
+      plugins:{
+        legend:{
+          display:false
+        },
+
+        tooltip:{
+          enabled:false
+        }
+      }
+    }
+
+  });
+
+}
 
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
