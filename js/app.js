@@ -4034,50 +4034,182 @@ doc.text(
 
 y += 36;
 
-// KPI
-const row = (label,val)=>{
-  doc.setTextColor(...dark);
-  doc.setFontSize(10);
-  doc.text(label,20,y);
-  doc.text(val,190,y,{align:"right"});
-  y+=7;
-};
+// ===================================================
+// KPI GRID (EXECUTIVE STYLE)
+// ===================================================
 
-row(
-  T("Città simulazione","Simulation city"),
-  city.charAt(0).toUpperCase() + city.slice(1)
+const executiveKPIs = [
+
+  {
+    label:T("Prezzo","Price"),
+    value:eur(price)
+  },
+
+  {
+    label:T("Ricavi","Revenue"),
+    value:eur(revenue)
+  },
+
+  {
+    label:T("Cashflow","Cashflow"),
+    value:eur(profit)
+  },
+
+  {
+    label:"ROI",
+    value:pct(roi)
+  }
+
+];
+
+let startX = 20;
+let startY = y;
+let cardW = 38;
+let cardH = 28;
+let gap = 6;
+
+executiveKPIs.forEach((kpi,index)=>{
+
+  const x = startX + (index * (cardW + gap));
+
+  // card
+  doc.setFillColor(248,250,252);
+
+  doc.roundedRect(
+    x,
+    startY,
+    cardW,
+    cardH,
+    4,
+    4,
+    "F"
+  );
+
+  // label
+  doc.setFontSize(8);
+  doc.setTextColor(...gray);
+
+  doc.text(
+    kpi.label,
+    x + 4,
+    startY + 9
+  );
+
+  // value
+  doc.setFontSize(11);
+  doc.setTextColor(...dark);
+
+  doc.text(
+    kpi.value,
+    x + 4,
+    startY + 20
+  );
+
+});
+
+y += 42;
+
+// ===================================================
+// PERFORMANCE ANALYSIS
+// ===================================================
+
+y += 8;
+
+doc.setFontSize(13);
+doc.setTextColor(...dark);
+
+doc.text(
+  T("Analisi performance","Performance analysis"),
+  20,
+  y
 );
 
-row(T("Prezzo","Price"), eur(price));
-row(T("Ricavi","Revenue"), eur(revenue));
-row(T("Equity","Equity"), eur(equity));
-row(T("Cashflow netto","Net cashflow"), eur(profit));
-row(T("Mutuo","Loan"), eur(loan));
+doc.setFontSize(8);
+doc.setTextColor(...gray);
 
-// ================= GRAFICO FALLBACK =================
-y+=5;
-
-doc.setFontSize(11);
-doc.text(T("Analisi performance","Performance analysis"),20,y);
+doc.text(
+  T(
+    "Scenari previsionali basati su occupazione e mercato",
+    "Forecast scenarios based on occupancy and market"
+  ),
+  20,
+  y + 6
+);
 
 y += 18;
 
-const maxVal = revenue * 1.2;
+const scenarios = [
+  {
+    label:"Low",
+    value: revenue * 0.85,
+    color:[239,68,68]
+  },
+  {
+    label:"Base",
+    value: revenue,
+    color:[59,130,246]
+  },
+  {
+    label:"High",
+    value: revenue * 1.10,
+    color:[16,185,129]
+  }
+];
 
-[revenue*0.85, revenue, revenue*1.10].forEach((v,i)=>{
-  const w = (v/maxVal)*120;
+const maxVal = revenue * 1.15;
 
-  doc.setFillColor(59,130,246);
-  doc.roundedRect(20,y,w,6,3,3,"F");
+scenarios.forEach((s)=>{
 
+  // LABEL
   doc.setFontSize(9);
-  doc.text(
-  ["Low","Base","High"][i] + " " + eur(v),
-  160,
-  y + 5
-);
+  doc.setTextColor(...dark);
 
-  y+=10;
+  doc.text(
+    s.label,
+    20,
+    y + 4
+  );
+
+  // BG BAR
+  doc.setFillColor(230,230,230);
+
+  doc.roundedRect(
+    38,
+    y,
+    92,
+    7,
+    3,
+    3,
+    "F"
+  );
+
+  // VALUE BAR
+  const w = (s.value / maxVal) * 92;
+
+  doc.setFillColor(...s.color);
+
+  doc.roundedRect(
+    38,
+    y,
+    w,
+    7,
+    3,
+    3,
+    "F"
+  );
+
+  // VALUE TEXT
+  doc.setFontSize(9);
+  doc.setTextColor(...dark);
+
+  doc.text(
+    eur(s.value),
+    138,
+    y + 5
+  );
+
+  y += 16;
+
 });
 
 footer();
