@@ -2849,15 +2849,28 @@ if(locationInput && helper){
 const citySelector =
   document.getElementById("market-city");
 
-if(citySelector && val !== ""){
+if(citySelector){
 
-  // 🔥 azzera select visualmente
-  citySelector.value = "";
+  if(val !== ""){
 
-  // 🔥 input manuale prende priorità
-  window.__CITY_MANUAL__ = true;
+    // 🔥 input manuale prioritario
+    citySelector.value = "";
+    citySelector.disabled = true;
+    citySelector.style.opacity = "0.5";
 
-}    
+    window.__CITY_MANUAL__ = true;
+
+  }else{
+
+    // 🔓 riattiva select
+    citySelector.disabled = false;
+    citySelector.style.opacity = "1";
+
+    window.__CITY_MANUAL__ = false;
+
+  }
+
+}   
 
     // ================= EMPTY STATE =================
     if(!val){
@@ -2885,9 +2898,9 @@ if(citySelector && val !== ""){
 
     // ================= UX MESSAGE =================
     helper.innerText = t(
-      `📍 Analisi basata su mercato ${label}`,
-      `📍 Analysis based on ${label} market`
-    );
+  `📍 Mercato automatico rilevato: ${label}`,
+  `📍 Automatic market detected: ${label}`
+);
 
     // ================= SYNC REALE (CRITICO) =================
     if(!window.__CITY_LOCKED__){
