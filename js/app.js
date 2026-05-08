@@ -4473,7 +4473,8 @@ doc.roundedRect(
 doc.setFontSize(10);
 doc.setTextColor(...dark);
 
-const marketComment =
+// 🔥 rinominato per evitare conflitto JS
+const marketBenchmarkComment =
   roi > marketROI
     ? T(
         "L'operazione supera significativamente il benchmark medio di mercato.",
@@ -4485,7 +4486,7 @@ const marketComment =
       );
 
 doc.text(
-  marketComment,
+  marketBenchmarkComment,
   25,
   y + 15,
   { maxWidth: 155 }
