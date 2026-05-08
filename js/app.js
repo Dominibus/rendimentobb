@@ -4961,15 +4961,45 @@ if(access.isPro || access.isAdmin){
 
 document.addEventListener("rb_plan_ready", () => {
 
-  console.log("🔥 PLAN READY → re-run calculate");
+  console.log("🔥 PLAN READY → FULL UI RESYNC");
 
-  if(window.pendingCalculation && typeof window.calculate === "function"){
+  // 🔥 sync classi body
+  window.syncAccessClasses?.();
+
+  // 🔥 unlock definitivo
+  forceUnlockUI?.();
+  unlockBaseUI?.();
+  unlockProUI?.();
+
+  // 🔥 reset blur residui
+  removeAllBlur?.();
+
+  // 🔥 reset overlay
+  document.querySelectorAll(`
+    .lock-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .smart-overlay,
+    .paywall-mini,
+    .home-blur-overlay
+  `).forEach(el=>{
+    if(el.id !== "register-popup"){
+      el.remove();
+    }
+  });
+
+  // 🔥 ricalcolo UI completo
+  if(typeof window.calculate === "function"){
 
     window.pendingCalculation = false;
 
     setTimeout(()=>{
+
+      console.log("🚀 RECALCULATE AFTER PLAN READY");
+
       window.calculate(true);
-    }, 100);
+
+    },150);
 
   }
 
