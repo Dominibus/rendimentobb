@@ -2283,6 +2283,69 @@ function runPostAnalysis(result, context){
   if(access.isPro || access.isAdmin){
     console.log("🟢 REMOVE BLUR FOR PRO");
 
+    // =====================================
+// 🔥 HARD UNLOCK PRO (DEFINITIVO)
+// =====================================
+
+if(access.isPro || access.isAdmin){
+
+  document.body.classList.add("pro-user");
+
+  // 🔓 rimuove blur
+  document.querySelectorAll(`
+    .blur-content,
+    .pro-blur
+  `).forEach(el=>{
+
+    el.classList.remove("blur-content","pro-blur");
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+
+  });
+
+  // 🔓 rimuove overlay
+  document.querySelectorAll(`
+    .locked-overlay,
+    .lock-overlay,
+    .upgrade-overlay,
+    .results-overlay,
+    .smart-overlay
+  `).forEach(el=> el.remove());
+
+  // 🔓 mostra sezioni PRO
+  document.querySelectorAll(`
+    .pro-only,
+    .results-card,
+    .locked-section
+  `).forEach(el=>{
+
+    el.style.display = "block";
+    el.style.opacity = "1";
+    el.style.visibility = "visible";
+
+  });
+
+  // 🔥 SBLOCCA advanced-analysis
+  const advanced = document.getElementById("advanced-analysis");
+
+  if(advanced){
+
+    advanced.classList.remove(
+      "locked-section",
+      "upgrade-box"
+    );
+
+    advanced.style.filter = "none";
+    advanced.style.opacity = "1";
+    advanced.style.pointerEvents = "auto";
+  }
+
+  console.log("✅ HARD UNLOCK PRO COMPLETATO");
+
+}
+
     document.querySelectorAll(".blur-content").forEach(el=>{
       el.classList.remove("blur-content");
     });
