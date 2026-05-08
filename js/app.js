@@ -4334,12 +4334,21 @@ footer();
 // ===================================================
 
 doc.addPage();
-y=30;
+
+y = 30;
 
 doc.setFontSize(14);
-doc.text(T("Confronto mercato","Market comparison"),20,y);
+doc.setTextColor(...dark);
 
-y+=12;
+doc.text(
+  T("Confronto mercato","Market comparison"),
+  20,
+  y
+);
+
+y += 12;
+
+// ================= MARKET DATA =================
 
 const marketROIMap = {
   roma: 8.4,
@@ -4351,10 +4360,21 @@ const marketROIMap = {
 const marketROI =
   marketROIMap[window.currentCity] || 8.4;
 
-row(T("ROI tuo","Your ROI"), pct(roi));
-row(T("ROI mercato","Market ROI"), pct(marketROI));
+// ================= KPI =================
 
-y += 4;
+row(
+  T("ROI tuo","Your ROI"),
+  pct(roi)
+);
+
+row(
+  T("ROI mercato","Market ROI"),
+  pct(marketROI)
+);
+
+// ================= SPACING FIX =================
+
+y += 14;
 
 // ================= MARKET LABEL =================
 
@@ -4364,10 +4384,14 @@ doc.setTextColor(...gray);
 doc.text(
   T("Performance mercato","Market performance"),
   20,
-  y - 12
+  y
 );
 
-// ================= MARKET BAR =================
+// ================= BAR START =================
+
+y += 8;
+
+// ================= MARKET BAR BG =================
 
 doc.setFillColor(230,230,230);
 
@@ -4381,7 +4405,8 @@ doc.roundedRect(
   "F"
 );
 
-// ROI vs market
+// ================= ROI BAR =================
+
 const compareWidth = Math.min(
   135,
   (roi / (marketROI * 2)) * 135
@@ -4416,7 +4441,7 @@ if(compareWidth > 105){
     y + 18
   );
 
-  y += 10;
+  y += 12;
 
 }else{
 
@@ -4427,9 +4452,46 @@ if(compareWidth > 105){
     { align:"right" }
   );
 
+  y += 18;
+
 }
 
-y += 18;
+// ================= COMMENT BOX =================
+
+doc.setFillColor(248,250,252);
+
+doc.roundedRect(
+  20,
+  y,
+  170,
+  36,
+  5,
+  5,
+  "F"
+);
+
+doc.setFontSize(10);
+doc.setTextColor(...dark);
+
+const marketComment =
+  roi > marketROI
+    ? T(
+        "L'operazione supera significativamente il benchmark medio di mercato.",
+        "The investment significantly outperforms the average market benchmark."
+      )
+    : T(
+        "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
+        "The investment performs in line with or below average market benchmark."
+      );
+
+doc.text(
+  marketComment,
+  25,
+  y + 15,
+  { maxWidth: 155 }
+);
+
+footer();
 
 // ================= COMMENT BOX =================
 
