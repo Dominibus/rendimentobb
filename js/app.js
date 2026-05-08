@@ -2749,8 +2749,12 @@ window.calculate = async function(force = false){
  const access = window.getUserAccess?.() || {};
 
 // 🔥 BLOCCO REALE
-if(access.isLoading || !window.RB_USER){
-  console.log("⏳ BLOCCO calculate → RB_USER non pronto");
+if(
+  access.isLoading ||
+  !window.firebaseReady ||
+  !window.currentPlan
+){
+  console.log("⏳ BLOCCO calculate → piano non pronto");
 
   window.pendingCalculation = true;
   window.isCalculating = false;
