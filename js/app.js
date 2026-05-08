@@ -2838,6 +2838,23 @@ if(locationInput && helper){
 
     const val = locationInput.value?.trim();
 
+// =====================================
+// 🔥 RESET SELECT DEFAULT (CRITICO)
+// =====================================
+
+const citySelector =
+  document.getElementById("market-city");
+
+if(citySelector && val !== ""){
+
+  // 🔥 azzera select visualmente
+  citySelector.value = "";
+
+  // 🔥 input manuale prende priorità
+  window.__CITY_MANUAL__ = true;
+
+}    
+
     // ================= EMPTY STATE =================
     if(!val){
 
@@ -3800,13 +3817,17 @@ const equity = safe(d.equity);
 const loan = safe(d.loan);
 const monthly = Math.round(profit/12);
 
+const realCityInput =
+  document.getElementById("custom-location")?.value?.trim();
+
 const city =
+  realCityInput ||
+  d.realCity ||
   window.currentCity ||
   d.marketCity ||
-  d.realCity ||
   sessionStorage.getItem("tool_city") ||
   localStorage.getItem("selected_city") ||
-  "roma";  
+  "roma";
 
 // ================= FORMAT =================
 const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
