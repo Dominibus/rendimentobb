@@ -493,6 +493,15 @@ z-index:10;
 
 }
 
+/* =====================================
+🔥 HERO SEARCH MODE
+nasconde quick buttons durante ricerca
+===================================== */
+
+.city-quick.searching{
+  display:none !important;
+}
+
 /* BOTTONI */
 
 .city-btn{
