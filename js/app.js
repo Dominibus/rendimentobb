@@ -4018,12 +4018,19 @@ doc.setFontSize(9);
 doc.text("ROI",25,y+8);
 
 // RATING
-doc.setFillColor(255,255,255);
-doc.roundedRect(150,y+4,30,12,4,4,"F");
+doc.setFillColor(241,245,249);
+doc.roundedRect(132,y+4,48,12,4,4,"F");
 
 doc.setTextColor(0);
 doc.setFontSize(10);
-doc.text(rating,160,y+13);
+doc.setFontSize(8);
+
+doc.text(
+  rating,
+  156,
+  y + 12,
+  { align:"center" }
+);
 
 y += 36;
 
