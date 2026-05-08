@@ -4438,7 +4438,7 @@ doc.text(
 
 y += 12;
 
-const scenarios = [
+const cashflowFinalScenarios = [
   {
     label:"Low",
     value:profit * 0.8,
@@ -4456,7 +4456,7 @@ const scenarios = [
   }
 ];
 
-scenarios.forEach(s=>{
+cashflowFinalScenarios.forEach(s=>{
 
   doc.setFillColor(...s.color);
 
