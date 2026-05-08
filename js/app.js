@@ -2853,12 +2853,34 @@ if(citySelector){
 
   if(val !== ""){
 
-    // 🔥 input manuale prioritario
+    if(citySelector){
+
+  if(val !== ""){
+
+    // 🔥 svuota select
     citySelector.value = "";
+
+    // 🔥 disabilita select
     citySelector.disabled = true;
     citySelector.style.opacity = "0.5";
 
+    // 🔥 input manuale prioritario
     window.__CITY_MANUAL__ = true;
+
+    // 🔥 mapping reale città
+    const mapped = mapLocationToCity(val);
+
+    if(mapped){
+
+      // 🔥 aggiorna città globale
+      window.currentCity = mapped;
+
+      // 🔥 salva sync
+      sessionStorage.setItem("tool_city", mapped);
+
+      console.log("🏙 CITY FROM INPUT:", mapped);
+
+    }
 
   }else{
 
@@ -2870,7 +2892,7 @@ if(citySelector){
 
   }
 
-}   
+}
 
     // ================= EMPTY STATE =================
     if(!val){
@@ -4345,8 +4367,8 @@ doc.roundedRect(20,y,150,10,5,5,"F");
 
 // ROI vs market
 const compareWidth = Math.min(
-  150,
-  (roi / (marketROI * 2)) * 150
+  135,
+  (roi / (marketROI * 2)) * 135
 );
 
 doc.setFillColor(...green);
@@ -4364,12 +4386,24 @@ doc.roundedRect(
  doc.setFontSize(8);
 doc.setTextColor(...dark);
 
+// 🔥 testo sempre fuori barra
+doc.setTextColor(...dark);
+
+const compareLabel =
+  `${pct(roi)} vs ${pct(marketROI)}`;
+
+// 🔥 posizione dinamica safe
+const labelX =
+  compareWidth > 120
+    ? 185
+    : 175;
+
 doc.text(
-  `${pct(roi)} vs ${pct(marketROI)}`,
-  175,
+  compareLabel,
+  labelX,
   y + 7,
   { align:"right" }
-); 
+);
 
   doc.setFontSize(9);
 doc.setTextColor(...gray);
