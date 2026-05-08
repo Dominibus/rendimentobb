@@ -2366,15 +2366,18 @@ function runPostAnalysis(result, context){
   window.lastAnalysisData = result;
 
   const analysisHash = JSON.stringify({
-  roi: result?.roi,
-  city: window.currentCity,
-  price: context?.price
+  roi: Number(result?.roi || 0).toFixed(2),
+  city: window.currentCity || "roma",
+  price: Number(context?.price || 0),
+  ts: Math.floor(Date.now() / 15000) // 🔥 reset ogni 15 sec
 });
 
 const shouldSave =
   window.__LAST_SAVED_ANALYSIS__ !== analysisHash;
 
-window.__LAST_SAVED_ANALYSIS__ = analysisHash;
+if(shouldSave){
+  window.__LAST_SAVED_ANALYSIS__ = analysisHash;
+}
 
 // ================= SAVE ANALYSIS =================
 
@@ -2991,6 +2994,8 @@ if(!window.currentPlan){
 
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
+  window.leadSaved = false;
+  window.emailUserSent = false;
   window.paywallShown = false;
 
   // 🧹 CLEAN UI
