@@ -17837,3 +17837,54 @@ RESTA NORMALE
   }
 
 }
+/* =====================================
+🔥 HARD UNLOCK PAID USERS
+FIX HOME + TOOL
+===================================== */
+
+body.is-paid .pro-blur,
+body.is-paid .blur-content,
+body.is-paid .locked-content,
+body.is-paid .premium-lock,
+body.is-paid .locked-section{
+
+  filter:none !important;
+  -webkit-filter:none !important;
+  backdrop-filter:none !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+
+  pointer-events:auto !important;
+
+  transform:none !important;
+}
+
+/* 🔥 KPI */
+body.is-paid #profit-annual,
+body.is-paid #profit-monthly,
+body.is-paid #break-even,
+body.is-paid #revenue-annual,
+body.is-paid #qr_profit,
+body.is-paid #qr_month,
+body.is-paid #qr_break,
+body.is-paid #qr_rev{
+
+  filter:none !important;
+  -webkit-filter:none !important;
+
+  opacity:1 !important;
+  color:#0f172a !important;
+
+  text-shadow:none !important;
+}
+
+/* 🔥 OVERLAY */
+body.is-paid .lock-overlay,
+body.is-paid .results-overlay,
+body.is-paid .upgrade-overlay,
+body.is-paid .home-blur-overlay,
+body.is-paid .paywall-mini{
+
+  display:none !important;
+}
