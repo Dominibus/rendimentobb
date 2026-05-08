@@ -17722,3 +17722,7 @@ MOBILE FIX
   }
 
 }
+
+.city-suggestions{
+  display:none !important;
+}
