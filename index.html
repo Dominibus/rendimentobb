@@ -263,8 +263,6 @@ data-en-placeholder="Enter city or area to start"
 placeholder="Inserisci città o zona per iniziare"
 autocomplete="off">
 
- <div id="city-live-roi" class="city-live-roi"></div>
-
 </div>
 
 <div class="city-quick">
@@ -3078,9 +3076,7 @@ const ROI_PREVIEW = {
 
   const input = document.getElementById("city-search-input");
   const box   = document.getElementById("city-suggestions");
-  const liveBox = document.getElementById("city-live-roi");
-
-  if(!input || !box || !liveBox) return;
+  if(!input || !box) return;
 
   // ================= INPUT =================
   input.addEventListener("input", function(){
