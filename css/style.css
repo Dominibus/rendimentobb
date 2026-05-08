@@ -17726,3 +17726,114 @@ MOBILE FIX
 .city-suggestions{
   display:none !important;
 }
+
+/* =====================================
+🔥 TOOL PAGE FINAL ACCESS FIX
+SAFE • LOCAL ONLY • NO GLOBAL BREAK
+DA METTERE A FINE CSS TOOL
+===================================== */
+
+/* =========================
+🟢 PAID USER RESET
+(INVESTOR / PRO / ADMIN)
+========================= */
+
+.tool-page body.is-paid .pro-blur,
+.tool-page body.is-paid .blur-content,
+.tool-page body.is-paid .locked-content,
+.tool-page body.is-paid .premium-lock,
+.tool-page body.is-paid .locked-section{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  user-select:auto !important;
+  backdrop-filter:none !important;
+}
+
+/* =========================
+🟢 REMOVE GHOST OVERLAYS
+========================= */
+
+.tool-page body.is-paid .lock-overlay,
+.tool-page body.is-paid .locked-overlay,
+.tool-page body.is-paid .results-overlay,
+.tool-page body.is-paid .upgrade-overlay,
+.tool-page body.is-paid .smart-overlay,
+.tool-page body.is-paid .home-blur-overlay,
+.tool-page body.is-paid .chart-overlay,
+.tool-page body.is-paid .paywall-mini{
+  display:none !important;
+}
+
+/* =========================
+🟡 INVESTOR
+NO GLOBAL BLUR
+========================= */
+
+.tool-page body.is-investor{
+  filter:none !important;
+}
+
+/* investor vede contenuto base */
+.tool-page body.is-investor .investor-only,
+.tool-page body.is-investor .paid-only{
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* contenuto PRO nascosto MA pulito */
+.tool-page body.is-investor .pro-only{
+  display:none !important;
+}
+
+/* =========================
+🟢 PRO / ADMIN FULL UNLOCK
+========================= */
+
+.tool-page body.is-pro *,
+.tool-page body.is-admin *{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  backdrop-filter:none !important;
+}
+
+/* =========================
+🔴 FREE USERS
+RESTA NORMALE
+========================= */
+
+.tool-page body.is-free .pro-only,
+.tool-page body.is-free .paid-only,
+.tool-page body.is-free .investor-only{
+  display:none !important;
+}
+
+/* =========================
+🔥 FIX METRICHE
+========================= */
+
+.tool-page .metric-card,
+.tool-page .results-card,
+.tool-page .investment-panel{
+  overflow:visible !important;
+}
+
+/* =========================
+🔥 FIX MOBILE TOOL
+========================= */
+
+@media (max-width:768px){
+
+  .tool-page .lock-overlay,
+  .tool-page .locked-overlay{
+    max-height:100% !important;
+    overflow:auto !important;
+  }
+
+  .tool-page .results-grid{
+    overflow:visible !important;
+  }
+
+}
