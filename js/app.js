@@ -410,6 +410,7 @@ if(access.isInvestor){
 
 }
 
+}  
 
 // ================= ROI MESSAGE (HOME) =================
 
