@@ -16920,6 +16920,12 @@ body.pro-user .pro-only-inline{
   transform:translateY(0);
 }
 
+/* 🔥 NASCONDE QUICK CITY DURANTE RICERCA */
+
+.city-quick.searching{
+  display:none !important;
+}
+
 /* ================= 🔥 UPGRADE MODAL ================= */
 
 .rb-modal{
