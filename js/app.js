@@ -2895,7 +2895,7 @@ if(!window.currentPlan){
   console.warn("⚠️ currentPlan missing → fallback FREE");
 
   window.currentPlan = "free";
-}
+
   console.log("⏳ BLOCCO calculate → piano non pronto");
 
   window.pendingCalculation = true;
