@@ -438,15 +438,54 @@ async function loadDashboard(){
 
   // ================= CREA ANALYSES =================
 
-const analyses = querySnapshot.docs.map(doc => ({
-  id: doc.id,
-  roi: doc.data().roi || 0,
-  price: doc.data().propertyPrice || doc.data().price || 0,
-  equity: doc.data().equity || 0,
-  risk: doc.data().risk || 0,
-  city: doc.data().city || "italy",
-  createdAt: doc.data().createdAt
-}));
+const analyses = querySnapshot.docs.map(doc => {
+
+  const data = doc.data();
+
+  const realCity =
+    data.realCity ||
+    data.userCity ||
+    data.city ||
+    "roma";
+
+  const marketCity =
+    data.marketCity ||
+    data.city ||
+    "napoli";
+
+  console.log("🏙 ANALYSIS CITY:", {
+    realCity,
+    marketCity,
+    original: data.city
+  });
+
+  return {
+    id: doc.id,
+
+    roi: data.roi || 0,
+
+    price:
+      data.propertyPrice ||
+      data.price ||
+      0,
+
+    equity: data.equity || 0,
+
+    risk: data.risk || 0,
+
+    // 🔥 città reale UI/PDF
+    city: realCity,
+
+    // 🔥 città benchmark
+    marketCity,
+
+    // 🔥 salva entrambe
+    realCity,
+
+    createdAt: data.createdAt
+  };
+
+});
 
 const plan = String(window.currentPlan || "").toLowerCase();
 
@@ -1991,7 +2030,10 @@ function downloadReport(){
     roi: data.roi || 0,
     equity: data.equity || 0,
     risk: data.risk || 0,
-    city: data.city || "italy",
+    city:
+        data.realCity ||
+        data.city ||
+        "roma",
     source: "dashboard" // 🔥 fondamentale
   });
 
@@ -2041,7 +2083,10 @@ localStorage.setItem(
     roi: data.roi || 0,
     equity: data.equity || 0,
     risk: data.risk || 0,
-    city: data.city || "italy",
+    city:
+         data.realCity ||
+         data.city ||
+         "roma",
     source: "dashboard",
     ts: Date.now() // evita cache
   });
