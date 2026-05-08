@@ -540,17 +540,32 @@ async function saveAnalysis(data){
 
   try{
 
-    await addDoc(collection(db,"analyses"),{
-      uid: window.currentUser.uid,
-      propertyPrice: data.price,
-      equity: data.equity,
-      roi: data.roi,
-      risk: data.risk,
-      marketCity: data.marketCity || data.city || "italy",
-      realCity: data.realCity || data.city || "italy",
-      createdAt: serverTimestamp(),
-      createdAtClient: new Date()
-    });
+    const safeCity =
+  data.marketCity ||
+  data.realCity ||
+  data.city ||
+  window.currentCity ||
+  sessionStorage.getItem("tool_city") ||
+  localStorage.getItem("selected_city") ||
+  "roma";
+
+await addDoc(collection(db,"analyses"),{
+  uid: window.currentUser.uid,
+
+  propertyPrice: data.price,
+  equity: data.equity,
+  roi: data.roi,
+  risk: data.risk,
+
+  // 🔥 città benchmark
+  marketCity: safeCity,
+
+  // 🔥 città reale
+  realCity: safeCity,
+
+  createdAt: serverTimestamp(),
+  createdAtClient: new Date()
+});
 
     console.log("✅ SALVATO FIRESTORE");
     console.log("💾 SAVE ANALYSIS CALLED");
@@ -3785,6 +3800,14 @@ const equity = safe(d.equity);
 const loan = safe(d.loan);
 const monthly = Math.round(profit/12);
 
+const city =
+  window.currentCity ||
+  d.marketCity ||
+  d.realCity ||
+  sessionStorage.getItem("tool_city") ||
+  localStorage.getItem("selected_city") ||
+  "roma";  
+
 // ================= FORMAT =================
 const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
 const pct = v => safe(v).toFixed(1) + "%";
@@ -3848,6 +3871,16 @@ doc.setFontSize(12);
 doc.setTextColor(...gray);
 doc.text(T("Analisi investimento B&B","B&B Investment Analysis"),20,105);
 
+doc.setFontSize(11);
+doc.setTextColor(...gray);
+
+doc.text(
+  T("Mercato:", "Market:") + " " +
+  city.charAt(0).toUpperCase() + city.slice(1),
+  20,
+  115
+);  
+
 doc.setTextColor(...green);
 doc.setFontSize(30);
 doc.text(pct(roi),20,170);
@@ -3901,6 +3934,11 @@ const row = (label,val)=>{
   doc.text(val,190,y,{align:"right"});
   y+=7;
 };
+
+row(
+  T("Città simulazione","Simulation city"),
+  city.charAt(0).toUpperCase() + city.slice(1)
+);
 
 row(T("Prezzo","Price"), eur(price));
 row(T("Ricavi","Revenue"), eur(revenue));
@@ -4564,7 +4602,12 @@ if(!selectedCity){
 
 // 🔥 fallback SOLO ALLA FINE (quando serve davvero)
 if(!selectedCity){
-  selectedCity = "roma";
+
+  selectedCity =
+    sessionStorage.getItem("tool_city") ||
+    localStorage.getItem("selected_city") ||
+    window.currentCity ||
+    "roma";
 }
 
 // ================= LOCK HARD (CRITICO) =================
