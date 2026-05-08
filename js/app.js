@@ -2349,6 +2349,36 @@ function runPostAnalysis(result, context){
   window.simulationExecuted = true;
   window.lastAnalysisData = result;
 
+  const analysisHash = JSON.stringify({
+  roi: result?.roi,
+  city: window.currentCity,
+  price: context?.price
+});
+
+const shouldSave =
+  window.__LAST_SAVED_ANALYSIS__ !== analysisHash;
+
+window.__LAST_SAVED_ANALYSIS__ = analysisHash;
+
+// ================= SAVE ANALYSIS =================
+
+if(
+  shouldSave &&
+  window.currentUser &&
+  window.firebaseReady &&
+  result?.roi > 0
+){
+
+  saveAnalysis({
+    price: context?.price || 0,
+    equity: context?.equity || 0,
+    roi: result?.roi || 0,
+    risk: result?.risk || 0,
+    city: window.currentCity || "roma"
+  });
+
+}
+
   const roi = Number(result?.roi || 0);
 
   console.log("📊 FINAL ROI:", roi);
@@ -2855,12 +2885,23 @@ function getValue(id){
   return isNaN(v) ? 0 : v;
 }
 
+window.__LAST_CALCULATION__ = 0;
+
 window.calculate = async function(force = false){
 
   if(window.isCalculating && !force){
     console.warn("⛔ skip calculate (already running)");
     return;
   }
+
+  const now = Date.now();
+
+if(now - window.__LAST_CALCULATION__ < 1200){
+  console.warn("⛔ calculate throttled");
+  return;
+}
+
+window.__LAST_CALCULATION__ = now;
 
   window.isCalculating = true;
 
