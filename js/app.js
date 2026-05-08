@@ -3013,6 +3013,24 @@ if(access.isPro || access.isAdmin){
 
     renderInvestmentScore(safeROI, Math.round(risk));
 
+    // ================= RISK PREVIEW =================
+
+const riskPreview = document.getElementById("risk-preview");
+
+if(riskPreview){
+
+  if(access.isFree){
+
+    riskPreview.innerText = "—";
+
+  }else{
+
+    riskPreview.innerText = Math.round(risk) + "/100";
+
+  }
+
+}
+
     // ================= UI =================
     ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
       const el = document.getElementById(id);
