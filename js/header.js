@@ -253,13 +253,21 @@ onAuthStateChanged(auth, (user) => {
   return;
 }
 
-    if(RB && (RB.isInvestor !== undefined || RB.isPro !== undefined)){
+    // 🔥 WAIT REAL ACCESS CLASS
+const hasRealAccess =
+  RB &&
+  typeof RB.isFree === "boolean" &&
+  typeof RB.isInvestor === "boolean" &&
+  typeof RB.isPro === "boolean" &&
+  typeof RB.isAdmin === "boolean";
 
-      console.log("✅ HEADER SYNC RB_USER:", RB);
+if(hasRealAccess){
 
-      clearInterval(interval);
+  console.log("✅ HEADER SYNC RB_USER:", RB);
 
-      renderUser(user);
+  clearInterval(interval);
+
+  renderUser(user);
 
       // ===============================
       // 🔥 INVESTOR CLEAN (TEASER MODE)
@@ -436,6 +444,18 @@ function renderUser(user){
   isInvestor: false,
   isAdmin: false
 };
+
+  // ⏳ EVITA FREE DURANTE LOAD
+if(
+  user &&
+  (
+    window.currentPlan === null ||
+    window.currentPlan === undefined
+  )
+){
+  console.log("⏳ HEADER WAIT currentPlan");
+  return;
+}
   console.log("👤 HEADER ACCESS:", access, "PLAN:", window.currentPlan);
 
   const isAdmin = access.isAdmin;
