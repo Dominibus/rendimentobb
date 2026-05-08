@@ -214,14 +214,28 @@ function renderUniversalKPI(data = {}){
   if(elAnnual) elAnnual.innerText = formatCurrency(net);
 
   // ===== MONTH =====
-  const monthly = net / 12;
+  const monthly = Math.max(
+  0,
+  Math.round(net / 12)
+);
 
   if(qrMonth) qrMonth.innerText = formatCurrency(monthly);
   if(elMonthly) elMonthly.innerText = formatCurrency(monthly);
 
   // ===== BREAK EVEN =====
-  const payback = net > 0 ? (investment / net) : 0;
-  const paybackText = payback ? payback.toFixed(1) + " anni" : "-";
+  let payback = net > 0
+  ? (investment / net)
+  : 0;
+
+// 🔥 SAFE BANKING
+if(payback > 0 && payback < 1){
+  payback = 1;
+}
+
+const paybackText =
+  payback > 0
+    ? payback.toFixed(1) + " anni"
+    : "-";
 
   if(qrBreak) qrBreak.innerText = paybackText;
   if(elBreak) elBreak.innerText = paybackText;
@@ -2945,9 +2959,16 @@ if(access.isPro || access.isAdmin){
     const price       = isTool ? getValue("price") || 100000 : getValue("qr_price") || 100000;
     const equityInput = getValue("equity");
 
-    const equity = isTool
-      ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
-      : Math.round(price * 0.3);
+    let equity = isTool
+  ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
+  : Math.round(price * 0.3);
+
+// 🔥 MIN EQUITY REALISTICA
+const minEquity = price * 0.15;
+
+if(equity < minEquity){
+  equity = minEquity;
+}
 
     const priceNight  = isTool ? getValue("priceNight") || 100 : getValue("qr_night") || 100;
     const occupancy   = isTool ? getValue("occupancy") || 65 : getValue("qr_occ") || 65;
@@ -3002,8 +3023,17 @@ if(access.isPro || access.isAdmin){
     }
 
     // ================= KPI =================
-    const roi = Number(result?.roi ?? 0);
-    const safeROI = isFinite(roi) ? roi : 0;
+    let roi = Number(result?.roi ?? 0);
+
+// 🔥 SAFE ROI BANKING
+if(!isFinite(roi) || roi < 0){
+  roi = 0;
+}
+
+// 🔥 HARD CAP REALISTICO
+roi = Math.min(roi, 85);
+
+const safeROI = roi;
     const roiText = safeROI.toFixed(1) + "%";
 
     const gross = Number(result?.revenue ?? result?.gross ?? 0);
@@ -3607,8 +3637,17 @@ const pct = v => safe(v).toFixed(1) + "%";
 
 // ================= RATING =================
 let rating = "CCC";
-if(roi >= 12) rating = "AAA";
-else if(roi >= 6) rating = "BBB";
+let rating = "B";
+
+if(roi >= 18){
+  rating = "AA";
+}
+else if(roi >= 12){
+  rating = "A";
+}
+else if(roi >= 8){
+  rating = "BBB";
+}
 
 // ================= COLORS =================
 const green = [16,185,129];
@@ -3713,7 +3752,7 @@ const row = (label,val)=>{
 row(T("Prezzo","Price"), eur(price));
 row(T("Ricavi","Revenue"), eur(revenue));
 row(T("Equity","Equity"), eur(equity));
-row(T("Profitto","Profit"), eur(profit));
+row(T("Cashflow netto","Net cashflow"), eur(profit));
 row(T("Mutuo","Loan"), eur(loan));
 
 // ================= GRAFICO FALLBACK =================
@@ -3726,7 +3765,7 @@ y+=8;
 
 const maxVal = revenue * 1.2;
 
-[revenue*0.8, revenue, revenue*1.2].forEach((v,i)=>{
+[revenue*0.85, revenue, revenue*1.10].forEach((v,i)=>{
   const w = (v/maxVal)*120;
 
   doc.setFillColor(59,130,246);
@@ -3757,7 +3796,17 @@ const rate = 0.04;
 const interest = loan * rate;
 const net = profit - interest;
 const ltv = (loan/price)*100;
-const dscr = profit / interest;
+let dscr = interest > 0
+  ? profit / interest
+  : 0;
+
+// 🔥 SAFE LIMIT
+if(!isFinite(dscr)){
+  dscr = 0;
+}
+
+// 🔥 HARD CAP
+dscr = Math.min(dscr, 4.5);
 
 row(T("Importo richiesto","Requested loan"), eur(loan));
 row("LTV", ltv.toFixed(1)+"%");
@@ -3794,7 +3843,15 @@ doc.text(T("Confronto mercato","Market comparison"),20,y);
 
 y+=12;
 
-const marketROI = 8.4;
+const marketROIMap = {
+  roma: 8.4,
+  milano: 7.2,
+  napoli: 11.5,
+  firenze: 7.9
+};
+
+const marketROI =
+  marketROIMap[window.currentCity] || 8.4;
 
 row(T("ROI tuo","Your ROI"), pct(roi));
 row(T("ROI mercato","Market ROI"), pct(marketROI));
@@ -3814,7 +3871,7 @@ doc.text(T("Cashflow","Cashflow"),20,y);
 y+=12;
 
 row(T("Ricavi","Revenue"), eur(revenue));
-row(T("Profitto","Profit"), eur(profit));
+row(T("Cashflow netto","Net cashflow"), eur(profit));
 row(T("Mensile","Monthly"), eur(monthly));
 
 footer();
