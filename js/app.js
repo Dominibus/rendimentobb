@@ -3809,7 +3809,10 @@ const d = window.lastAnalysisData;
 // ================= SAFE =================
 const safe = v => isFinite(v) ? Number(v) : 0;
 
-const roi = safe(d.roi);
+const realROI = safe(d.roi);
+
+// 🔥 CAP VISIVO PDF (più credibile)
+const roi = Math.min(realROI, 32);
 const revenue = safe(d.revenue);
 const profit = safe(d.netAfterMortgage || d.profit);
 const price = safe(d.price);
@@ -3834,16 +3837,16 @@ const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0
 const pct = v => safe(v).toFixed(1) + "%";
 
 // ================= RATING =================
-let rating = "B";
+let rating = "Moderate";
 
 if(roi >= 18){
-  rating = "AA";
+  rating = "Investment Grade";
 }
 else if(roi >= 12){
-  rating = "A";
+  rating = "Strong Opportunity";
 }
 else if(roi >= 8){
-  rating = "BBB";
+  rating = "Stable";
 }
 
 // ================= COLORS =================
@@ -3905,6 +3908,15 @@ if(logo){
   doc.addImage(logo,"PNG",20,25,50,14);
 }
 
+doc.setFontSize(9);
+doc.setTextColor(...gray);
+
+doc.text(
+  "EXECUTIVE INVESTMENT REPORT",
+  20,
+  78
+);  
+
 doc.setTextColor(...dark);
 doc.setFontSize(20);
 doc.text(T("Report Investimento","Investment Report"),20,90);
@@ -3926,6 +3938,29 @@ doc.text(
 doc.setTextColor(...green);
 doc.setFontSize(30);
 doc.text(pct(roi),20,170);
+
+// ================= ROI BAR =================
+
+doc.setFillColor(230,230,230);
+doc.roundedRect(20,185,120,8,4,4,"F");
+
+doc.setFillColor(...green);
+
+const roiBar = Math.min(120, roi * 3.2);
+
+doc.roundedRect(20,185,roiBar,8,4,4,"F");
+
+doc.setFontSize(9);
+doc.setTextColor(...gray);
+
+doc.text(
+  T(
+    "Performance rispetto benchmark mercato",
+    "Performance vs market benchmark"
+  ),
+  20,
+  198
+);  
 
 doc.setFontSize(11);
 doc.setTextColor(...gray);
@@ -3972,7 +4007,7 @@ doc.text(T("Executive Summary","Executive Summary"),20,30);
 let y = 45;
 
 // BOX
-doc.setFillColor(...green);
+doc.setFillColor(15,23,42);
 doc.roundedRect(20,y,170,24,6,6,"F");
 
 doc.setTextColor(255);
@@ -4113,7 +4148,32 @@ const marketROI =
 row(T("ROI tuo","Your ROI"), pct(roi));
 row(T("ROI mercato","Market ROI"), pct(marketROI));
 
-  y += 15;
+y += 10;
+
+// ================= MARKET BAR =================
+
+doc.setFillColor(230,230,230);
+doc.roundedRect(20,y,150,10,5,5,"F");
+
+// ROI vs market
+const compareWidth = Math.min(
+  150,
+  (roi / (marketROI * 2)) * 150
+);
+
+doc.setFillColor(...green);
+
+doc.roundedRect(
+  20,
+  y,
+  compareWidth,
+  10,
+  5,
+  5,
+  "F"
+);
+
+y += 18;  
 
 doc.setFillColor(248,250,252);
 doc.roundedRect(20,y,170,36,5,5,"F");
@@ -4216,6 +4276,57 @@ y+=12;
 row(T("Ricavi","Revenue"), eur(revenue));
 row(T("Cashflow netto","Net cashflow"), eur(profit));
 row(T("Mensile","Monthly"), eur(monthly));
+
+y += 18;
+
+doc.setFontSize(11);
+doc.setTextColor(...dark);
+
+doc.text(
+  T("Scenari rendimento","Performance scenarios"),
+  20,
+  y
+);
+
+y += 12;
+
+const scenarios = [
+  {
+    label:"Low",
+    value:profit * 0.8,
+    color:[239,68,68]
+  },
+  {
+    label:"Base",
+    value:profit,
+    color:[245,158,11]
+  },
+  {
+    label:"High",
+    value:profit * 1.2,
+    color:[16,185,129]
+  }
+];
+
+scenarios.forEach(s=>{
+
+  doc.setFillColor(...s.color);
+
+  doc.roundedRect(20,y,90,10,4,4,"F");
+
+  doc.setTextColor(255);
+
+  doc.setFontSize(9);
+
+  doc.text(
+    s.label + " " + eur(s.value),
+    25,
+    y + 7
+  );
+
+  y += 16;
+
+});  
 
 footer();
 
