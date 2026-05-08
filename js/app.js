@@ -4143,7 +4143,7 @@ doc.text(
 
 y += 18;
 
-const scenarios = [
+const cashflowScenarios = [
   {
     label:"Low",
     value: revenue * 0.85,
@@ -4163,7 +4163,7 @@ const scenarios = [
 
 const maxVal = revenue * 1.15;
 
-scenarios.forEach((s)=>{
+cashflowScenarios.forEach(s=>{
 
   // LABEL
   doc.setFontSize(9);
