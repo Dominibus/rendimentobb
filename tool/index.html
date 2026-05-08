@@ -320,6 +320,35 @@ body.pro-user .blur-content{
 
 }
 
+  /* =====================================
+🔥 PRO HARD UNLOCK FIX
+===================================== */
+
+body.pro-user .locked-overlay,
+body.pro-user .lock-overlay,
+body.pro-user .upgrade-overlay,
+body.pro-user .results-overlay,
+body.pro-user .smart-overlay{
+  display:none !important;
+}
+
+body.pro-user .blur-content,
+body.pro-user .pro-blur{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+body.pro-user .locked-section{
+  filter:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+
+body.pro-user .upgrade-box[data-paywall="true"]{
+  display:none !important;
+}
+
 </style>
 </head>
 
