@@ -17839,18 +17839,29 @@ RESTA NORMALE
 }
 /* =====================================
 🔥 HARD UNLOCK PAID USERS
-FIX HOME + TOOL
+FINAL CLEAN FIX
+HOME + TOOL
+===================================== */
+
+/* =====================================
+🟢 RESET GLOBAL BLUR
 ===================================== */
 
 body.is-paid .pro-blur,
 body.is-paid .blur-content,
 body.is-paid .locked-content,
 body.is-paid .premium-lock,
-body.is-paid .locked-section{
+body.is-paid .locked-section,
+body.is-paid .results-card,
+body.is-paid .investment-panel,
+body.is-paid .investment-metrics,
+body.is-paid .kpi-box{
 
   filter:none !important;
   -webkit-filter:none !important;
+
   backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
 
   opacity:1 !important;
   visibility:visible !important;
@@ -17858,9 +17869,13 @@ body.is-paid .locked-section{
   pointer-events:auto !important;
 
   transform:none !important;
+  text-shadow:none !important;
 }
 
-/* 🔥 KPI */
+/* =====================================
+🟢 KPI HOME
+===================================== */
+
 body.is-paid #profit-annual,
 body.is-paid #profit-monthly,
 body.is-paid #break-even,
@@ -17874,46 +17889,113 @@ body.is-paid #qr_rev{
   -webkit-filter:none !important;
 
   opacity:1 !important;
+  visibility:visible !important;
+
   color:#0f172a !important;
 
   text-shadow:none !important;
 }
 
-/* 🔥 OVERLAY */
-body.is-paid .lock-overlay,
-body.is-paid .results-overlay,
-body.is-paid .upgrade-overlay,
-body.is-paid .home-blur-overlay,
-body.is-paid .paywall-mini{
-
-  display:none !important;
-}
-
 /* =====================================
-🔥 TOOL METRIC CARD FIX
+🟢 TOOL METRIC CARD
 ===================================== */
 
 body.is-paid .metric-card{
 
+  position:relative !important;
+
+  filter:none !important;
+  -webkit-filter:none !important;
+
   backdrop-filter:none !important;
   -webkit-backdrop-filter:none !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+
+  background:#ffffff !important;
+
+  color:#0f172a !important;
+
+  pointer-events:auto !important;
+
+  overflow:visible !important;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08) !important;
+}
+
+/* =====================================
+🟢 TOOL TEXT FIX
+===================================== */
+
+body.is-paid .metric-card *,
+body.is-paid .results-card *,
+body.is-paid .investment-panel *,
+body.is-paid .investment-metrics *{
 
   filter:none !important;
   -webkit-filter:none !important;
 
   opacity:1 !important;
+  visibility:visible !important;
 
-  background:rgba(255,255,255,1) !important;
+  color:#0f172a !important;
+
+  text-shadow:none !important;
 }
 
-/* 🔥 TESTI KPI TOOL */
-body.is-paid .metric-card,
-body.is-paid .metric-card span,
-body.is-paid .metric-card strong,
-body.is-paid .metric-card div,
-body.is-paid .metric-card p{
+/* =====================================
+🟢 RISK PREVIEW FIX
+===================================== */
+
+body.is-paid #risk-preview{
+
+  display:block !important;
 
   filter:none !important;
+  -webkit-filter:none !important;
+
   opacity:1 !important;
+  visibility:visible !important;
+
   color:#0f172a !important;
+
+  min-height:auto !important;
+}
+
+/* =====================================
+🟢 REMOVE ALL PAYWALL OVERLAY
+===================================== */
+
+body.is-paid .lock-overlay,
+body.is-paid .results-overlay,
+body.is-paid .upgrade-overlay,
+body.is-paid .home-blur-overlay,
+body.is-paid .paywall-mini,
+body.is-paid .smart-overlay,
+body.is-paid .upgrade-box,
+body.is-paid [data-paywall="true"]{
+
+  display:none !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
+/* =====================================
+🟢 FORCE ADVANCED SECTION
+===================================== */
+
+body.is-paid #advanced-analysis{
+
+  display:block !important;
+
+  filter:none !important;
+  -webkit-filter:none !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+
+  pointer-events:auto !important;
 }
