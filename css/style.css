@@ -16792,38 +16792,73 @@ body.pro-user .pro-only-inline{
 
 /* ================= DROPDOWN ================= */
 
+/* 🔥 FIX DEFINITIVO SOLO SEARCH HOME */
+/* NON TOCCA ALTRE PAGINE */
+
 .city-suggestions{
+
   position:absolute;
-  top:100%;
+
+  top:calc(100% + 6px);
   left:0;
   right:0;
+
   width:100%;
-  margin-top:6px;
 
   background:#ffffff;
+
   border-radius:12px;
+
+  border:1px solid #e2e8f0;
 
   box-shadow:0 20px 40px rgba(0,0,0,0.12);
 
   z-index:50;
+
   overflow:hidden;
 
   display:none;
+
+  /* 🔥 FIX CRITICO */
+  max-height:280px;
+  overflow-y:auto;
+
+  /* 🔥 NON SPINGE IL LAYOUT */
+  pointer-events:auto;
+}
+
+
+/* 🔥 MOSTRA SOLO QUANDO ATTIVO */
+.city-suggestions.show{
+  display:block;
+}
+
+
+/* 🔥 ELIMINA FANTASMI */
+.city-suggestions:empty{
+  display:none !important;
 }
 
 
 /* ================= ITEM ================= */
 
 .city-item{
+
   padding:12px 14px;
+
   cursor:pointer;
+
   font-size:14px;
 
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
 
   transition:background 0.2s ease;
+
+  background:#ffffff;
 }
 
 .city-item:hover{
@@ -16831,13 +16866,16 @@ body.pro-user .pro-only-inline{
 }
 
 
-/* ================= ROI LABEL (FUTURO) ================= */
+/* ================= ROI LABEL ================= */
 
 .city-roi{
   font-weight:600;
   color:#10b981;
   font-size:13px;
 }
+
+
+/* ================= HERO ROI ================= */
 
 .roi-big{
   font-size:28px;
@@ -16851,47 +16889,35 @@ body.pro-user .pro-only-inline{
   margin-top:4px;
 }
 
+
+/* ================= LIVE ROI ================= */
+
 .city-live-roi{
+
+  position:relative;
+
+  z-index:5;
+
   margin-top:6px;
+
   font-size:13px;
+
   font-weight:600;
+
   color:#10b981;
+
   text-align:left;
+
   opacity:0;
+
   transform:translateY(4px);
+
   transition:all 0.2s ease;
 }
 
 .city-live-roi.active{
   opacity:1;
   transform:translateY(0);
-}
-
-.city-suggestions{
-  position:absolute;
-  top:100%;
-  left:0;
-  width:100%;
-  background:white;
-  border-radius:10px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.08);
-  z-index:20;
-
-  display:none;           /* 🔥 default */
-}
-
-.city-suggestions:empty{
-  display:none !important; /* 💣 elimina barra fantasma */
-}
-
-.city-suggestions{
-  position:absolute;
-  z-index:20;
-}
-
-.city-live-roi{
-  position:relative;
-  z-index:5;
 }
 
 /* ================= 🔥 UPGRADE MODAL ================= */
