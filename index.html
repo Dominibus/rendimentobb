@@ -3104,17 +3104,20 @@ const ROI_PREVIEW = {
       c.name.toLowerCase() === value
     );
 
-    // 🎯 MATCH PRECISO
+   // 🎯 MATCH PRECISO
 if(match){
 
   box.innerHTML = "";
   box.style.display = "none";
 
-  // 🔥 niente doppio ROI sotto
-  liveBox.innerHTML = "";
-  liveBox.classList.remove("active");
+  liveBox.innerHTML = `
+    ${t("ROI medio","Average ROI")} ${match.name}: 
+    <strong>${ROI_PREVIEW[match.slug] || "-"}%</strong>
+  `;
+  liveBox.classList.add("active");
 
   return;
+
 }
 
     // 🔍 RISULTATI
@@ -3128,16 +3131,24 @@ if(match){
 
       box.style.display = "block";
 
-      liveBox.innerHTML = "";
-liveBox.classList.remove("active");
+      liveBox.innerHTML = `
+  <span style="color:#94a3b8;font-size:13px">
+    ${t("Seleziona una città dai suggerimenti","Select a city from suggestions")}
+  </span>
+`;
+liveBox.classList.add("active");
 
     } else {
 
       box.innerHTML = "";
       box.style.display = "none";
 
-      liveBox.innerHTML = "";
-liveBox.classList.remove("active");
+      liveBox.innerHTML = `
+  <span style="color:#f59e0b;font-size:13px">
+    ⚠️ ${t("Nessun dato disponibile","No data available")}
+  </span>
+`;
+liveBox.classList.add("active");
 
     }
 
