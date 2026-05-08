@@ -3636,7 +3636,6 @@ const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0
 const pct = v => safe(v).toFixed(1) + "%";
 
 // ================= RATING =================
-let rating = "CCC";
 let rating = "B";
 
 if(roi >= 18){
