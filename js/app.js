@@ -549,6 +549,11 @@ function applySmartLock(el, {
 
   const access = window.getUserAccess?.() || {};
 
+  // 🟢 PRO/ADMIN → MAI LOCK
+if(access.isPro || access.isAdmin){
+  return;
+}
+
   // =============================
   // 🟢 PRO / ADMIN → FULL ACCESS
   // =============================
@@ -751,49 +756,6 @@ if(!window.currentUser){
 // =====================================
 // 🔥 FUNNEL TRIGGER ENGINE (SaaS)
 // =====================================
-window.triggerFunnel = function({type = "generic", roi = 0} = {}){
-
-  const access = window.getUserAccess?.() || {};
-
-  // 🟢 PRO / ADMIN → niente funnel
-  if(access.canSeeFullAnalysis) return;
-
-  // 🟡 INVESTOR → niente popup (solo UI teaser)
-  if(access.isInvestor) return;
-
-  // ❌ anti spam
-  if(window.funnelState.shown && type !== "reminder") return;
-
-  // 🔥 ROI alto → immediato
-  if(type === "roi" && roi > 10){
-    openUpgradeModal("investor", roi);
-    window.funnelState.shown = true;
-    return;
-  }
-
-  // 🟡 ROI medio → delay
-  if(type === "roi_soft" && roi > 6){
-    setTimeout(()=>{
-      openUpgradeModal("investor", roi);
-    }, 2000);
-    window.funnelState.shown = true;
-    return;
-  }
-
-  // 📜 SCROLL
-  if(type === "scroll"){
-    openUpgradeModal("investor", roi);
-    window.funnelState.shown = true;
-    return;
-  }
-
-  // 🧠 REMINDER
-  if(type === "reminder"){
-    openUpgradeModal("investor", roi);
-  }
-
-};
-
 window.triggerFunnel = function({type = "generic", roi = 0} = {}){
 
   const access = window.getUserAccess?.() || {};
@@ -2786,6 +2748,54 @@ if(
   }
 
   console.log("🚀 CALCULATE START", access);
+
+  // =====================================
+// 🔥 HARD RESET PRO/ADMIN
+// =====================================
+
+if(access.isPro || access.isAdmin){
+
+  document.querySelectorAll(`
+    .lock-overlay,
+    .results-overlay,
+    .upgrade-overlay,
+    .smart-overlay,
+    .paywall-mini,
+    .home-blur-overlay,
+    .blur-content,
+    .locked-section,
+    .premium-lock,
+    .pro-blur
+  `).forEach(el => {
+
+    // overlay veri
+    if(
+      el.classList.contains("lock-overlay") ||
+      el.classList.contains("results-overlay") ||
+      el.classList.contains("upgrade-overlay") ||
+      el.classList.contains("smart-overlay") ||
+      el.classList.contains("paywall-mini") ||
+      el.classList.contains("home-blur-overlay")
+    ){
+      el.remove();
+      return;
+    }
+
+    // reset blur
+    el.classList.remove(
+      "blur-content",
+      "locked-section",
+      "premium-lock",
+      "pro-blur"
+    );
+
+    el.style.filter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+
+  });
+
+}
 
   try{
 
