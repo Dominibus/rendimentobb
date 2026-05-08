@@ -90,18 +90,24 @@ body{
 
 /* ===== REPORT CARD ===== */
 .report{
-  background:white;
-  border-radius:18px;
-  padding:30px;
+  background:
+    radial-gradient(circle at top left,
+      rgba(16,185,129,0.06),
+      transparent 30%),
+    white;
 
-  border:1px solid #e2e8f0;
+  border-radius:24px;
+
+  padding:38px;
+
+  border:1px solid rgba(226,232,240,0.8);
 
   box-shadow:
     0 2px 6px rgba(0,0,0,0.04),
-    0 20px 50px rgba(0,0,0,0.06);
+    0 30px 80px rgba(15,23,42,0.08);
 
-  transform:translateZ(0);
-  will-change:transform;
+  position:relative;
+  overflow:hidden;
 }
 
 /* ===== TITLE ===== */
@@ -121,11 +127,17 @@ h1{
 
 /* ===== KPI CARD ===== */
 .kpi{
-  background:white;
+  background:
+  linear-gradient(180deg,
+  rgba(255,255,255,1),
+  rgba(248,250,252,0.9));
   padding:20px;
   border-radius:14px;
 
   border:1px solid #e2e8f0;
+
+  position:relative;
+  overflow:hidden;
 
   box-shadow:0 4px 12px rgba(0,0,0,0.04);
 
@@ -136,6 +148,23 @@ h1{
   transform:translateY(-2px);
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
+
+.kpi::before{
+  content:"";
+
+  position:absolute;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:3px;
+
+  background:linear-gradient(
+    90deg,
+    #10b981,
+    #34d399
+  );
+}  
 
 .kpi span{
   font-size:12px;
@@ -155,10 +184,29 @@ h1{
   padding:22px;
   border-radius:16px;
 
+  position:relative;
+  overflow:hidden;
+
   background:white;
   border:1px solid #e2e8f0;
 
   box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+  .verdict::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:
+  radial-gradient(
+    circle at top right,
+    rgba(16,185,129,0.08),
+    transparent 35%
+  );
+
+  pointer-events:none;
 }
 
 .verdict h2{
@@ -175,16 +223,16 @@ h1{
 
 /* ===== CHART ===== */
 .chart-box{
-  margin-top:30px;
-  padding:22px;
-  border-radius:16px;
+  margin-top:35px;
+  padding:28px;
+  border-radius:22px;
 
-  background:white;
-  border:1px solid #e2e8f0;
-
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.04),
-    0 10px 30px rgba(0,0,0,0.04);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,1),
+      rgba(248,250,252,0.95)
+    );
 }
 
 /* ===== SELECT ===== */
@@ -204,25 +252,35 @@ h1{
 
 /* ===== CTA BUTTON ===== */
 .btn{
-  margin-top:25px;
+  margin-top:35px;
 
-  background:#10b981;
+  background:
+    linear-gradient(
+      135deg,
+      #10b981,
+      #059669
+    );
+
   color:white;
 
   border:none;
-  padding:14px;
 
-  border-radius:10px;
+  padding:18px;
+
+  border-radius:16px;
 
   cursor:pointer;
   width:100%;
 
-  font-weight:600;
-  font-size:14px;
+  font-weight:800;
+  font-size:15px;
 
-  transition:0.25s ease;
+  letter-spacing:.3px;
 
-  box-shadow:0 10px 25px rgba(16,185,129,0.25);
+  transition:0.3s ease;
+
+  box-shadow:
+    0 20px 50px rgba(16,185,129,0.35);
 }
 
 .btn:hover{
@@ -359,6 +417,15 @@ body.report-page #global-footer .footer-bottom{
 #global-footer:empty{
   display:none;
 }
+  @keyframes floatCard{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-2px);}
+  100%{transform:translateY(0);}
+}
+
+.report{
+  animation:floatCard 6s ease-in-out infinite;
+}
 </style>  
 
 <!-- GLOBAL HEADER -->
@@ -392,7 +459,14 @@ style="justify-content:space-between;align-items:center;">
 <div class="report">
 
 <!-- HEADER REPORT -->
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+padding-bottom:22px;
+border-bottom:1px solid #eef2f7;
+">
   <div>
     <div style="font-weight:700;font-size:18px;">RendimentoBB</div>
     <div style="font-size:12px;color:#64748b;"
@@ -412,6 +486,48 @@ style="justify-content:space-between;align-items:center;">
   data-en="📄 Investment analysis">
 📄 Analisi investimento
 </h1>
+
+  <div style="
+margin-top:25px;
+padding:30px;
+border-radius:22px;
+
+background:
+linear-gradient(135deg,#0f172a,#111827);
+
+color:white;
+
+position:relative;
+overflow:hidden;
+">
+
+<div style="
+font-size:12px;
+letter-spacing:1px;
+opacity:.7;
+margin-bottom:10px;
+font-weight:600;
+">
+EXECUTIVE ROI
+</div>
+
+<div id="heroROI" style="
+font-size:68px;
+font-weight:900;
+line-height:1;
+">
+0%
+</div>
+
+<div style="
+margin-top:10px;
+font-size:14px;
+opacity:.8;
+">
+AI Institutional Investment Rating
+</div>
+
+</div>
 
 <!-- KPI -->
 <div class="kpi-grid">
@@ -444,6 +560,32 @@ style="justify-content:space-between;align-items:center;">
 
 <!-- CHART -->
 <div class="chart-box">
+    <div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+">
+
+<div style="
+font-size:18px;
+font-weight:700;
+">
+Performance Analytics
+</div>
+
+<div style="
+font-size:12px;
+padding:6px 10px;
+border-radius:999px;
+background:#ecfdf5;
+color:#059669;
+font-weight:700;
+">
+LIVE DATA
+</div>
+
+</div>
   <canvas id="roiChart"></canvas>
 </div>
 
@@ -464,11 +606,29 @@ style="
   </option>
 </select>
 
+
+  <div style="
+margin-top:25px;
+
+display:flex;
+justify-content:center;
+gap:18px;
+flex-wrap:wrap;
+
+font-size:12px;
+color:#64748b;
+">
+
+<div>🔒 Secure Analysis</div>
+<div>📊 Institutional Grade</div>
+<div>🤖 AI Powered</div>
+
+</div>
 <!-- CTA -->
 <button class="btn" onclick="generatePDF()"
-data-it="📥 Scarica report PDF professionale"
-data-en="📥 Download professional PDF report">
-📥 Scarica report PDF professionale
+data-it="📥 Scarica report PDF istituzionale"
+data-en="📥 Export Institutional PDF Report">
+📥 Scarica report PDF istituzionale
 </button>
 
 <!-- OVERLAY -->
@@ -528,6 +688,11 @@ function renderData(){
   document.getElementById("equity").innerText = euro(equity);
   document.getElementById("roi").innerText = roi.toFixed(1)+"%";
   document.getElementById("risk").innerText = risk+"/100";
+  const heroROI = document.getElementById("heroROI");
+
+if(heroROI){
+  heroROI.innerText = roi.toFixed(1)+"%";
+}
 }
 
 // ================= VERDICT =================
