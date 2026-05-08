@@ -540,14 +540,18 @@ async function saveAnalysis(data){
 
   try{
 
-    const safeCity =
+    const safeMarketCity =
   data.marketCity ||
-  data.realCity ||
-  data.city ||
   window.currentCity ||
   sessionStorage.getItem("tool_city") ||
   localStorage.getItem("selected_city") ||
   "roma";
+
+const safeRealCity =
+  data.realCity ||
+  data.city ||
+  document.getElementById("custom-location")?.value?.trim() ||
+  safeMarketCity;
 
 await addDoc(collection(db,"analyses"),{
   uid: window.currentUser.uid,
@@ -557,11 +561,8 @@ await addDoc(collection(db,"analyses"),{
   roi: data.roi,
   risk: data.risk,
 
-  // 🔥 città benchmark
-  marketCity: safeCity,
-
-  // 🔥 città reale
-  realCity: safeCity,
+ marketCity: safeMarketCity,
+ realCity: safeRealCity,
 
   createdAt: serverTimestamp(),
   createdAtClient: new Date()
@@ -4345,6 +4346,25 @@ doc.roundedRect(
   5,
   5,
   "F"
+);
+
+ doc.setFontSize(8);
+doc.setTextColor(...dark);
+
+doc.text(
+  `${pct(roi)} vs ${pct(marketROI)}`,
+  175,
+  y + 7,
+  { align:"right" }
+); 
+
+  doc.setFontSize(9);
+doc.setTextColor(...gray);
+
+doc.text(
+  T("Performance mercato","Market performance"),
+  20,
+  y - 4
 );
 
 y += 18;  
