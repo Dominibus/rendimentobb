@@ -706,7 +706,11 @@ align-items:center;
     margin-bottom:10px;
     font-weight:600;
     ">
-      EXECUTIVE ROI
+      <span
+data-it="EXECUTIVE ROI"
+data-en="EXECUTIVE ROI">
+EXECUTIVE ROI
+</span>
     </div>
 
     <div id="heroROI" style="
@@ -736,7 +740,11 @@ align-items:center;
     font-size:14px;
     opacity:.8;
     ">
-      AI Institutional Investment Rating
+      <span
+data-it="Valutazione AI investimento istituzionale"
+data-en="AI Institutional Investment Rating">
+Valutazione AI investimento istituzionale
+</span>
     </div>
 
     <!-- STATS -->
@@ -755,7 +763,11 @@ align-items:center;
         opacity:.55;
         letter-spacing:1px;
         ">
-          BANK SCORE
+          <span
+data-it="BANK SCORE"
+data-en="BANK SCORE">
+BANK SCORE
+</span>
         </div>
 
         <div id="bankScoreHero" style="
@@ -774,7 +786,11 @@ align-items:center;
         opacity:.55;
         letter-spacing:1px;
         ">
-          RISK LEVEL
+          <span
+data-it="LIVELLO RISCHIO"
+data-en="RISK LEVEL">
+LIVELLO RISCHIO
+</span>
         </div>
 
         <div id="riskHero" style="
@@ -793,7 +809,11 @@ align-items:center;
         opacity:.55;
         letter-spacing:1px;
         ">
-          MARKET CLASS
+          <span
+data-it="CLASSE MERCATO"
+data-en="MARKET CLASS">
+CLASSE MERCATO
+</span>
         </div>
 
         <div style="
@@ -905,7 +925,11 @@ align-items:center;
     font-weight:800;
     letter-spacing:-0.5px;
     ">
-      Performance Analytics
+      <span
+data-it="Analisi performance"
+data-en="Performance Analytics">
+Analisi performance
+</span>
     </div>
 
     <div style="
@@ -925,7 +949,11 @@ align-items:center;
 
     border:1px solid rgba(16,185,129,0.15);
     ">
-      LIVE DATA
+      <span
+data-it="DATI LIVE"
+data-en="LIVE DATA">
+DATI LIVE
+</span>
     </div>
 
   </div>
@@ -991,9 +1019,23 @@ align-items:center;
       color:#64748b;
       ">
 
-        <div>🔒 Secure Analysis</div>
-        <div>📊 Institutional Grade</div>
-        <div>🤖 AI Powered</div>
+        <div
+data-it="🔒 Analisi sicura"
+data-en="🔒 Secure Analysis">
+🔒 Analisi sicura
+</div>
+
+<div
+data-it="📊 Livello istituzionale"
+data-en="📊 Institutional Grade">
+📊 Livello istituzionale
+</div>
+
+<div
+data-it="🤖 Potenziato AI"
+data-en="🤖 AI Powered">
+🤖 Potenziato AI
+</div>
 
       </div>
 
@@ -1115,11 +1157,11 @@ const riskHero =
 if(riskHero){
 
   riskHero.innerText =
-    risk < 30
-      ? "LOW"
-      : risk < 60
-      ? "MEDIUM"
-      : "HIGH";
+  risk < 30
+    ? (lang==="en" ? "LOW" : "BASSO")
+    : risk < 60
+    ? (lang==="en" ? "MEDIUM" : "MEDIO")
+    : (lang==="en" ? "HIGH" : "ALTO");
 }
 }
 }
@@ -1260,7 +1302,9 @@ letter-spacing:1px;
 color:#64748b;
 font-weight:700;
 ">
-INSTITUTIONAL SCORE
+${lang==="en"
+? "INSTITUTIONAL SCORE"
+: "PUNTEGGIO ISTITUZIONALE"}
 </div>
 
 <div style="
@@ -1398,7 +1442,23 @@ async function generatePDF(){
     const ltv = price > 0 ? (loan / price) * 100 : 0;
 
     // ================= FORMAT =================
-    const eur = v => "€ " + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
+    const eur = v => {
+
+  const locale =
+    lang === "en"
+      ? "en-US"
+      : "it-IT";
+
+  return new Intl.NumberFormat(
+    locale,
+    {
+      style:"currency",
+      currency:"EUR",
+      maximumFractionDigits:0
+    }
+  ).format(safe(v));
+
+};
 
     const dark = [15,23,42];
     const green = [16,185,129];
@@ -1764,10 +1824,25 @@ document.addEventListener("rb_auth_ready", ()=>{
       color:#0f172a;
       line-height:1.6;
     ">
-      ✔ ROI reale (non stimato)<br>
-      ✔ Analisi rischio completa<br>
-      ✔ Simulazione mutuo<br>
-      ✔ Report PDF professionale
+      <div data-it="✔ ROI reale (non stimato)"
+data-en="✔ Real ROI (not estimated)">
+✔ ROI reale (non stimato)
+</div>
+
+<div data-it="✔ Analisi rischio completa"
+data-en="✔ Full risk analysis">
+✔ Analisi rischio completa
+</div>
+
+<div data-it="✔ Simulazione mutuo"
+data-en="✔ Mortgage simulation">
+✔ Simulazione mutuo
+</div>
+
+<div data-it="✔ Report PDF professionale"
+data-en="✔ Professional PDF report">
+✔ Report PDF professionale
+</div>
     </div>
 
     <button onclick="goToPricing()" style="
