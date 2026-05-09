@@ -423,6 +423,319 @@ body.pro-user .upgrade-box[data-paywall="true"]{
   -webkit-filter:none !important;
 }
 
+  /* =====================================
+🔥 TOOL PAGE – PREMIUM FINAL SAFE
+TOCCA SOLO /tool/
+NON IMPATTA ALTRE PAGINE
+===================================== */
+
+.tool-page{
+
+  background:
+  linear-gradient(
+    180deg,
+    #f8fafc 0%,
+    #f1f5f9 100%
+  );
+
+}
+
+/* =====================================
+🔥 HERO GLASS EFFECT
+===================================== */
+
+.tool-page .tool-card,
+.tool-page .roi-dashboard,
+.tool-page .results-card,
+.tool-page .metric-card,
+.tool-page .kpi-box,
+.tool-page .result-item{
+
+  background:
+  rgba(255,255,255,0.92);
+
+  backdrop-filter:
+  blur(14px);
+
+  border:
+  1px solid rgba(255,255,255,0.55);
+
+  box-shadow:
+  0 10px 30px rgba(15,23,42,0.06),
+  0 1px 2px rgba(15,23,42,0.04);
+
+  transition:
+  transform .25s ease,
+  box-shadow .25s ease,
+  border-color .25s ease;
+
+}
+
+/* =====================================
+🔥 HOVER PREMIUM
+===================================== */
+
+.tool-page .results-card:hover,
+.tool-page .metric-card:hover,
+.tool-page .kpi-box:hover,
+.tool-page .tool-card:hover{
+
+  transform:
+  translateY(-2px);
+
+  box-shadow:
+  0 20px 40px rgba(15,23,42,0.10),
+  0 4px 10px rgba(15,23,42,0.06);
+
+  border-color:
+  rgba(16,185,129,0.18);
+
+}
+
+/* =====================================
+🔥 ROI CARD PREMIUM
+===================================== */
+
+.tool-page .roi-dashboard{
+
+  position:relative;
+  overflow:hidden;
+
+  box-shadow:
+  0 25px 60px rgba(15,23,42,0.14),
+  0 0 0 1px rgba(16,185,129,0.05);
+
+}
+
+.tool-page .roi-dashboard::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:0;
+  right:0;
+
+  height:4px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #10b981,
+    #34d399
+  );
+
+}
+
+/* =====================================
+🔥 INPUT PREMIUM
+===================================== */
+
+.tool-page input,
+.tool-page select{
+
+  background:
+  rgba(255,255,255,0.96);
+
+  border:
+  1px solid #e2e8f0;
+
+  transition:
+  border-color .2s ease,
+  box-shadow .2s ease,
+  background .2s ease;
+
+}
+
+.tool-page input:focus,
+.tool-page select:focus{
+
+  border-color:
+  #10b981;
+
+  box-shadow:
+  0 0 0 4px rgba(16,185,129,0.12);
+
+  background:
+  white;
+
+}
+
+/* =====================================
+🔥 BUTTON PREMIUM
+===================================== */
+
+.tool-page .btn,
+.tool-page .btn-primary,
+.tool-page .cta-primary{
+
+  transition:
+  all .25s ease;
+
+  box-shadow:
+  0 10px 25px rgba(16,185,129,0.20);
+
+}
+
+.tool-page .btn:hover,
+.tool-page .btn-primary:hover,
+.tool-page .cta-primary:hover{
+
+  transform:
+  translateY(-1px);
+
+  box-shadow:
+  0 16px 35px rgba(16,185,129,0.30);
+
+  filter:
+  brightness(1.03);
+
+}
+
+/* =====================================
+🔥 SECTION SPACING
+===================================== */
+
+.tool-page .results-card{
+
+  margin-bottom:28px;
+
+}
+
+/* =====================================
+🔥 KPI VALUE PREMIUM
+===================================== */
+
+.tool-page .kpi-value,
+.tool-page strong{
+
+  letter-spacing:
+  -0.5px;
+
+}
+
+/* =====================================
+🔥 ROI NUMBER BOOST
+===================================== */
+
+.tool-page #roi-live{
+
+  text-shadow:
+  0 10px 30px rgba(16,185,129,0.18);
+
+}
+
+/* =====================================
+🔥 MOBILE SAFE
+===================================== */
+
+@media (max-width:768px){
+
+  .tool-page .tool-card,
+  .tool-page .roi-dashboard,
+  .tool-page .results-card{
+
+    border-radius:18px;
+
+  }
+
+}
+
+  /* =====================================
+🔥 TOOL HERO AMBIENT LIGHT
+SAFE
+===================================== */
+
+.tool-page .tool-hero::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:-180px;
+  right:-120px;
+
+  width:420px;
+  height:420px;
+
+  background:
+  radial-gradient(
+    circle,
+    rgba(16,185,129,0.22),
+    transparent 70%
+  );
+
+  filter:blur(40px);
+
+  pointer-events:none;
+
+  z-index:1;
+
+}
+
+.tool-page .tool-hero::after{
+
+  content:"";
+
+  position:absolute;
+
+  bottom:-220px;
+  left:-120px;
+
+  width:360px;
+  height:360px;
+
+  background:
+  radial-gradient(
+    circle,
+    rgba(59,130,246,0.14),
+    transparent 70%
+  );
+
+  filter:blur(50px);
+
+  pointer-events:none;
+
+  z-index:1;
+
+}
+
+  /* =====================================
+🔥 KPI FINTECH LOOK
+SAFE
+===================================== */
+
+.tool-page .metric-card strong,
+.tool-page .kpi-value,
+.tool-page .result-item strong{
+
+  font-size:28px;
+
+  font-weight:800;
+
+  letter-spacing:-1px;
+
+  color:#020617;
+
+}
+
+.tool-page .metric-card span,
+.tool-page .kpi-label,
+.tool-page .result-item span{
+
+  text-transform:uppercase;
+
+  letter-spacing:.5px;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  color:#64748b !important;
+
+}
+
 </style>
 </head>
 
@@ -834,10 +1147,10 @@ data-en="Results are based on average market data. Real risk is calculated in th
   </div>
 
   <div style="margin-top:10px;font-size:13px;color:#64748b;"
-  data-it="Analisi reale con rischio, mutuo e scenari avanzati"
-  data-en="Real analysis with risk, mortgage and advanced scenarios">
-  Analisi reale con rischio, mutuo e scenari avanzati
-  </div>
+data-it="Scopri se il tuo investimento genererà profitto reale o perdite nascoste"
+data-en="Discover whether your investment will generate real profit or hidden losses">
+Scopri se il tuo investimento genererà profitto reale o perdite nascoste
+</div>
 
   <div style="margin-top:8px;font-size:12px;color:#10b981;font-weight:600;"
   data-it="🔥 +1.247 investitori stanno analizzando immobili questa settimana"
