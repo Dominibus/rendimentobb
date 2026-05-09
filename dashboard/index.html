@@ -179,6 +179,7 @@ body{
 .chart-big{
   height:380px;
   width:100%;
+  margin-top:20px;
 }
 
 .chart-medium{
@@ -326,9 +327,25 @@ body{
 }
 
 .rb-hero-right{
+  align-items:stretch;
   display:flex;
   gap:12px;
   flex-wrap:wrap;
+}
+
+  @media(max-width:768px){
+
+  .rb-hero-right{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  #db-status{
+    grid-column:span 2;
+  }
+
 }
 
 .rb-hero-card{
@@ -400,6 +417,135 @@ SAFE
 
   backdrop-filter:
   blur(10px);
+
+}
+
+  /* =====================================
+🔥 VERTICAL RHYTHM FIX
+===================================== */
+
+.analysis-card,
+.card,
+.kpi-grid,
+.stats-grid,
+.dashboard-top-grid,
+#investment-ranking,
+#analysis-list,
+#portfolio-performance,
+#roi-market-comparison,
+#investment-insight,
+#roi-optimizer,
+#roi-target-calculator,
+#revenue-simulator{
+  margin-bottom:28px;
+}
+
+  #market-hero-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    180deg,
+    rgba(15,23,42,0.15),
+    rgba(15,23,42,0.82)
+  );
+}
+
+#market-hero-bg > div{
+  position:relative;
+  z-index:2;
+}
+
+  .analysis-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(260px,1fr));
+
+  gap:18px;
+
+  margin-top:20px;
+
+}
+
+  .opportunity{
+
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  background:white;
+
+  border-radius:18px;
+
+  padding:14px;
+
+  border:
+  1px solid rgba(226,232,240,0.8);
+
+  box-shadow:
+  0 10px 30px rgba(15,23,42,0.05);
+
+  transition:
+  all .25s ease;
+
+  text-decoration:none;
+
+  color:#0f172a;
+
+  margin-bottom:14px;
+
+}
+
+.opportunity:hover{
+
+  transform:
+  translateY(-2px);
+
+  box-shadow:
+  0 20px 50px rgba(15,23,42,0.10);
+
+}
+
+.opportunity img{
+
+  width:90px;
+  height:90px;
+
+  object-fit:cover;
+
+  border-radius:14px;
+
+}
+
+.opportunity-info{
+  flex:1;
+}
+
+.opportunity-price{
+
+  margin-top:6px;
+
+  font-weight:700;
+
+  color:#10b981;
+
+}
+
+.btn-analyze{
+
+  background:#10b981;
+  color:white;
+
+  padding:10px 14px;
+
+  border-radius:10px;
+
+  font-size:13px;
+  font-weight:600;
 
 }
 
@@ -812,6 +958,8 @@ display:flex;
 align-items:flex-end;
 padding:20px;
 color:white;
+position:relative;
+overflow:hidden;  
 ">
 
 <div>
