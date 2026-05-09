@@ -142,6 +142,13 @@ h1{
   box-shadow:0 4px 12px rgba(0,0,0,0.04);
 
   transition:0.25s ease;
+  backdrop-filter:blur(12px);
+
+  min-height:120px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
 .kpi:hover{
@@ -173,9 +180,14 @@ h1{
 
 .kpi strong{
   display:block;
-  margin-top:6px;
-  font-size:22px;
-  font-weight:800;
+  margin-top:10px;
+
+  font-size:30px;
+  font-weight:900;
+
+  letter-spacing:-1px;
+
+  color:#020617;
 }
 
 /* ===== VERDICT (SAAS CLEAN) ===== */
@@ -227,12 +239,39 @@ h1{
   padding:28px;
   border-radius:22px;
 
+  border:1px solid #e2e8f0;
+
+  box-shadow:
+  0 20px 50px rgba(15,23,42,0.06);
+
+  position:relative;
+  overflow:hidden;
+
   background:
     linear-gradient(
       180deg,
       rgba(255,255,255,1),
       rgba(248,250,252,0.95)
     );
+}
+
+  .chart-box::before{
+  content:"";
+
+  position:absolute;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:3px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #10b981,
+    #34d399,
+    #6ee7b7
+  );
 }
 
 /* ===== SELECT ===== */
@@ -476,9 +515,33 @@ border-bottom:1px solid #eef2f7;
     </div>
   </div>
 
-  <div style="font-size:11px;background:#ecfdf5;color:#059669;padding:6px 10px;border-radius:999px;font-weight:600;">
-    AI VERIFIED ANALYSIS
-  </div>
+  <div style="
+font-size:11px;
+
+background:
+linear-gradient(
+135deg,
+#dcfce7,
+#ecfdf5
+);
+
+color:#047857;
+
+padding:8px 14px;
+
+border-radius:999px;
+
+font-weight:800;
+
+letter-spacing:.4px;
+
+border:1px solid rgba(16,185,129,0.15);
+
+box-shadow:
+0 10px 30px rgba(16,185,129,0.12);
+">
+AI VERIFIED • INSTITUTIONAL REPORT
+</div>
 </div>
 
 <h1 
@@ -488,17 +551,32 @@ border-bottom:1px solid #eef2f7;
 </h1>
 
   <div style="
-margin-top:25px;
-padding:30px;
-border-radius:22px;
+margin-top:28px;
+padding:38px;
+border-radius:28px;
 
 background:
-linear-gradient(135deg,#0f172a,#111827);
+radial-gradient(circle at top right,
+rgba(16,185,129,0.22),
+transparent 28%),
+
+linear-gradient(
+135deg,
+#020617 0%,
+#0f172a 45%,
+#111827 100%
+);
 
 color:white;
 
 position:relative;
 overflow:hidden;
+
+border:1px solid rgba(255,255,255,0.06);
+
+box-shadow:
+0 30px 80px rgba(2,6,23,0.45),
+inset 0 1px 0 rgba(255,255,255,0.04);
 ">
 
 <div style="
@@ -512,9 +590,23 @@ EXECUTIVE ROI
 </div>
 
 <div id="heroROI" style="
-font-size:68px;
+font-size:78px;
 font-weight:900;
 line-height:1;
+
+letter-spacing:-3px;
+
+background:linear-gradient(
+180deg,
+#ffffff,
+#d1fae5
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+text-shadow:
+0 10px 30px rgba(16,185,129,0.15);
 ">
 0%
 </div>
@@ -526,6 +618,70 @@ opacity:.8;
 ">
 AI Institutional Investment Rating
 </div>
+
+ <div style="
+margin-top:28px;
+
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+">
+
+<div>
+<div style="
+font-size:11px;
+opacity:.55;
+letter-spacing:1px;
+">
+BANK SCORE
+</div>
+
+<div id="bankScoreHero" style="
+font-size:24px;
+font-weight:800;
+margin-top:4px;
+">
+92/100
+</div>
+</div>
+
+<div>
+<div style="
+font-size:11px;
+opacity:.55;
+letter-spacing:1px;
+">
+RISK LEVEL
+</div>
+
+<div id="riskHero" style="
+font-size:24px;
+font-weight:800;
+margin-top:4px;
+">
+LOW
+</div>
+</div>
+
+<div>
+<div style="
+font-size:11px;
+opacity:.55;
+letter-spacing:1px;
+">
+MARKET CLASS
+</div>
+
+<div style="
+font-size:24px;
+font-weight:800;
+margin-top:4px;
+">
+A+
+</div>
+</div>
+
+</div>   
 
 </div>
 
@@ -692,6 +848,37 @@ function renderData(){
 
 if(heroROI){
   heroROI.innerText = roi.toFixed(1)+"%";
+
+  const bankScoreHero =
+  document.getElementById("bankScoreHero");
+
+if(bankScoreHero){
+
+  const score =
+    Math.min(
+      99,
+      Math.max(
+        40,
+        Math.round((roi*5)-risk)
+      )
+    );
+
+  bankScoreHero.innerText =
+    score + "/100";
+}
+
+const riskHero =
+  document.getElementById("riskHero");
+
+if(riskHero){
+
+  riskHero.innerText =
+    risk < 30
+      ? "LOW"
+      : risk < 60
+      ? "MEDIUM"
+      : "HIGH";
+}
 }
 }
 
@@ -816,13 +1003,92 @@ function renderAdvanced(){
   const breakEven = annualProfit > 0 ? (equity / annualProfit) : 0;
 
   box.innerHTML = `
-    <h3>📊 Investment Score</h3>
-    <div style="font-size:30px;font-weight:800">${score.toFixed(0)}/100</div>
-    <div style="margin-top:10px;font-size:13px">
-      ${lang==="en"?"Annual profit":"Profitto annuo"}: ${euro(annualProfit)}<br>
-      ${lang==="en"?"Break-even":"Pareggio"}: ${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}
-    </div>
-  `;
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+">
+
+<div>
+<div style="
+font-size:12px;
+letter-spacing:1px;
+color:#64748b;
+font-weight:700;
+">
+INSTITUTIONAL SCORE
+</div>
+
+<div style="
+font-size:42px;
+font-weight:900;
+letter-spacing:-2px;
+margin-top:6px;
+">
+${score.toFixed(0)}/100
+</div>
+</div>
+
+<div style="
+width:90px;
+height:90px;
+border-radius:50%;
+
+background:
+conic-gradient(
+#10b981 ${score}%,
+#e2e8f0 ${score}%
+);
+
+display:flex;
+align-items:center;
+justify-content:center;
+">
+
+<div style="
+width:68px;
+height:68px;
+border-radius:50%;
+background:white;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:18px;
+font-weight:800;
+">
+A+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+">
+
+<div class="kpi">
+<span>${lang==="en"?"Annual Profit":"Profitto annuo"}</span>
+<strong style="font-size:22px">
+${euro(annualProfit)}
+</strong>
+</div>
+
+<div class="kpi">
+<span>${lang==="en"?"Break-even":"Pareggio"}</span>
+<strong style="font-size:22px">
+${breakEven.toFixed(1)} ${lang==="en"?"years":"anni"}
+</strong>
+</div>
+
+</div>
+`;
 
   // 🔥 FIX sicurezza DOM
   const reportEl = document.querySelector(".report");
