@@ -18006,3 +18006,31 @@ body.is-paid #advanced-analysis{
 
   pointer-events:auto !important;
 }
+
+/* =====================================
+🔥 FIX SAFE POPUP INTERACTION
+RendimentoBB FINAL
+NON rompe altri modal
+===================================== */
+
+/* mantiene il modal sempre interattivo */
+#rb-upgrade-modal,
+#rb-upgrade-modal *{
+  pointer-events:auto !important;
+}
+
+/* evita layer bloccati dietro overlay */
+#rb-upgrade-modal{
+  z-index:999999 !important;
+}
+
+/* fix mobile/desktop */
+body.modal-open #rb-upgrade-modal{
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* evita blocchi strani del blur globale */
+body.modal-open main{
+  isolation:isolate;
+}
