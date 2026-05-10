@@ -49,7 +49,7 @@ data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
 
 /* ===== BASE ===== */
 body{
-  padding-top:60px;
+  padding-top:80px;
   background:linear-gradient(to bottom,#f8fafc,#e2e8f0);
   font-family:Inter,system-ui;
   color:var(--rb-dark);
@@ -333,7 +333,7 @@ body{
 @media(max-width:768px){
 
   .hero-mutui{
-    padding:100px 20px 80px;
+    padding:90px 20px 60px;
   }
 
   .hero-mutui h1{
@@ -595,11 +595,11 @@ function lockValue(value, suffix=""){
 
   // 💰 valuta €
   if(String(value).includes("€")){
-    return "~€" + fake + suffix + " 🔒";
+    return "≈ €" + fake + " 🔒";
   }
 
   // 📊 percentuale
-  return "~" + fake + suffix + " 🔒";
+  return "≈ " + fake + suffix + " 🔒";
 }
 
 /* ================= EXTRA ================= */
