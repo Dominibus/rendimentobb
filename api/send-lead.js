@@ -156,12 +156,12 @@ existingData.createdAt?.toDate?.();
 
 const leadPayload = {
 
-  phone: clean(phone),
-bank: clean(bank),
-rate: safe(rate),
-name: clean(name),
-role: clean(role),
-message: clean(message),
+  phone: clean(phone || ""),
+bank: clean(bank || ""),
+rate: clean(rate || ""),
+name: clean(name || ""),
+role: clean(role || ""),
+message: clean(message || ""),
   email,
   city,
 
@@ -303,14 +303,14 @@ border:1px solid #e2e8f0;
 </div>
 `;
 
-subject = t(
+let subject = t(
   detectedLang,
   "Abbiamo ricevuto la tua richiesta",
   "We received your request"
 );
 
  if(type === "mutui"){
-  subject = t(
+  let subject = t(
     detectedLang,
     "Richiesta mutuo ricevuta",
     "Mortgage request received"
@@ -318,7 +318,7 @@ subject = t(
 }
 
 if(type === "immobili"){
-  subject = t(
+  let subject = t(
     detectedLang,
     "Richiesta immobili ricevuta",
     "Property request received"
@@ -326,7 +326,7 @@ if(type === "immobili"){
 }
 
 if(type === "partner"){
-  subject = t(
+  let subject = t(
     detectedLang,
     "Richiesta partnership ricevuta",
     "Partnership request received"
@@ -334,7 +334,7 @@ if(type === "partner"){
 }
 
 if(type === "work"){
-  subject = t(
+  let subject = t(
     detectedLang,
     "Candidatura ricevuta",
     "Application received"
