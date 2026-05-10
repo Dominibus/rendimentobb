@@ -412,7 +412,7 @@ Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi
 
 <button class="btn-main"
 id="calc-btn"
-onclick="calculate()"
+
 data-it="Calcola impatto"
 data-en="Calculate impact">
 Calcola impatto
@@ -1050,20 +1050,23 @@ async function saveLead(){
 
     setTimeout(()=> success.classList.add("show"), 50);
 
-    success.innerHTML = `
-    ✔ ${t("Richiesta inviata","Request sent")}
+   success.innerHTML = `
+<div style="font-weight:700;color:#10b981">
 
-    <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+✔ ${t("Richiesta inviata","Request sent")}
 
-    🏦 ${t(
-      "Un consulente mutui ti contatterà a breve",
-      "A mortgage advisor will contact you shortly"
-    )}
+</div>
 
-    <div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
+<div style="margin:15px 0;border-top:1px solid #e2e8f0;"></div>
 
-    successBox.innerHTML = `
-✅ Richiesta premium inviata
+<div style="color:#334155">
+
+🏦 ${t(
+  "Un consulente mutui ti contatterà a breve",
+  "A mortgage advisor will contact you shortly"
+)}
+
+</div>
 `;
 
     document.querySelector(".lead-box button").disabled = true;
