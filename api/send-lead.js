@@ -163,35 +163,6 @@ export default async function handler(req, res){
     }
 
     const userHtml = `
-    <div style="font-family:Inter;background:#0f172a;padding:40px">
-      <div style="max-width:640px;margin:auto;background:white;border-radius:20px;padding:35px;text-align:center">
-
-        <h2>${t(detectedLang,"Analisi iniziale","Initial analysis")}</h2>
-
-        <div style="font-size:50px;font-weight:800;color:#10b981">
-          ${roiRounded}%
-        </div>
-
-        <p style="color:#64748b">${city}</p>
-
-        <p style="font-size:14px;color:#334155">
-          ${t(
-            detectedLang,
-            "Questa è una stima iniziale. I dati reali possono cambiare completamente il risultato.",
-            "This is a preliminary estimate. Real data can completely change the outcome."
-          )}
-        </p>
-
-        <a href="${cta}"
-        style="margin-top:20px;display:inline-block;background:#10b981;color:white;padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:700">
-        ${t(detectedLang,"Vai all'analisi completa","View full analysis")}
-        </a>
-
-      </div>
-    </div>
-    `;
-
-    const userHtml = `
 <div style="font-family:Arial;padding:20px;color:#111">
 
   <p>${t(detectedLang,"Ciao,","Hi,")}</p>
