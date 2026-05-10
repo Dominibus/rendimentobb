@@ -18008,29 +18008,22 @@ body.is-paid #advanced-analysis{
 }
 
 /* =====================================
-🔥 FIX SAFE POPUP INTERACTION
-RendimentoBB FINAL
-NON rompe altri modal
+🔥 FIX MODAL INTERACTION FINAL
+SAFE PATCH
 ===================================== */
 
-/* mantiene il modal sempre interattivo */
+body.rb-ui.modal-open{
+  touch-action:auto !important;
+}
+
+/* mantiene lock scroll ma non blocca click */
+body.rb-ui.modal-open:not(.is-free){
+  overflow:hidden !important;
+  touch-action:auto !important;
+}
+
+/* popup sempre cliccabile */
 #rb-upgrade-modal,
 #rb-upgrade-modal *{
   pointer-events:auto !important;
-}
-
-/* evita layer bloccati dietro overlay */
-#rb-upgrade-modal{
-  z-index:999999 !important;
-}
-
-/* fix mobile/desktop */
-body.modal-open #rb-upgrade-modal{
-  opacity:1 !important;
-  visibility:visible !important;
-}
-
-/* evita blocchi strani del blur globale */
-body.modal-open main{
-  isolation:isolate;
 }
