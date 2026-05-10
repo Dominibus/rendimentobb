@@ -1388,26 +1388,28 @@ window.sendLeadImmobili = async function(){
     console.log("✅ IMMOBILI LEAD:", data);
 
     msgBox.innerHTML = `
-    ✔ ${
-      window.currentLang==="en"
-      ? "Request sent successfully"
-      : "Richiesta inviata con successo"
-    }
+<div style="color:#059669;font-weight:600">
 
-    <div style="margin:10px 0;border-top:1px solid #bbf7d0;"></div>
+✔ ${
+  window.currentLang==="en"
+  ? "Request sent successfully"
+  : "Richiesta inviata con successo"
+}
 
-    ${
-      window.currentLang==="en"
-      ? "You will receive selected opportunities soon"
-      : "Riceverai presto opportunità selezionate"
-    }
+</div>
 
-    <div style="margin:10px 0;border-top:1px solid #bbf7d0;"></div>
+<div style="margin:10px 0;border-top:1px solid #bbf7d0;"></div>
 
-    successBox.innerHTML = `
-✅ Opportunità richieste con successo
+<div style="font-size:13px;color:#475569">
+
+${
+  window.currentLang==="en"
+  ? "You will receive selected opportunities soon"
+  : "Riceverai presto opportunità selezionate"
+}
+
+</div>
 `;
-
   }catch(e){
 
     console.error("❌ IMMOBILI ERROR:", e);
