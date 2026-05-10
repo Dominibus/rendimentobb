@@ -2564,7 +2564,6 @@ if(access.isPro || access.isAdmin){
 
 const leadHash = JSON.stringify({
   email: userEmail,
-  roi: Number(roi).toFixed(1),
   city: window.currentCity || "roma",
   price: Number(price || 0)
 });
@@ -3172,8 +3171,6 @@ if(riskPreview){
       revenue: gross,
       investment: price
     });
-
-    window.__LAST_LEAD_HASH__ = null;
 
     if(!isUIRefresh){
 
