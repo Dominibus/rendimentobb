@@ -38,8 +38,19 @@ Dashboard Analisi – RendimentoBB
 
 body{
   font-family:Inter,system-ui;
-  background:var(--bg);
+
+  background:
+  linear-gradient(
+    180deg,
+    #edf2f9 0%,
+    #f8fafc 35%,
+    #eef4fb 100%
+  );
+
   color:var(--text);
+
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
 
@@ -230,6 +241,7 @@ body{
   transform:translateY(-2px);
   box-shadow:
     0 20px 50px rgba(0,0,0,0.08);
+  will-change:transform;
 }
 
 
@@ -375,6 +387,7 @@ body{
   align-items:center;
   gap:20px;
   flex-wrap:wrap;
+  isolation:isolate;
 
   background:linear-gradient(135deg,#0f172a,#1e293b);
   color:white;
@@ -411,6 +424,28 @@ overflow:hidden;
 
 }
 
+  .rb-hero::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+  linear-gradient(
+    120deg,
+    rgba(255,255,255,0.02),
+    transparent 35%,
+    rgba(16,185,129,0.03)
+  );
+
+  pointer-events:none;
+
+  z-index:-1;
+
+}
+
 .rb-hero-right{
   align-items:stretch;
   display:flex;
@@ -439,6 +474,7 @@ overflow:hidden;
 display:flex;
 flex-direction:column;
 justify-content:center;
+  transition:all .25s ease;
 
   background:
   linear-gradient(
@@ -464,6 +500,22 @@ justify-content:center;
 
   box-shadow:
   inset 0 1px 0 rgba(255,255,255,0.06);
+
+}
+
+  .rb-hero-card:hover{
+
+  transform:translateY(-3px);
+
+  background:
+  linear-gradient(
+    180deg,
+    rgba(255,255,255,0.22),
+    rgba(255,255,255,0.12)
+  );
+
+  box-shadow:
+  0 12px 30px rgba(0,0,0,0.18);
 
 }
 
@@ -839,6 +891,71 @@ linear-gradient(
 
 }
 
+  .rb-kpi h3{
+  letter-spacing:-0.5px;
+  font-weight:900;
+}
+
+  .dashboard-top-grid{
+
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+
+}
+
+  select{
+
+  border:1px solid #dbe3ee;
+
+  border-radius:12px;
+
+  padding:10px 14px;
+
+  background:white;
+
+  font-size:14px;
+
+  min-width:160px;
+
+  color:#0f172a;
+
+}
+
+  .rb-hero-badges{
+
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+
+  margin-top:18px;
+
+}
+
+.rb-badge{
+
+  padding:8px 12px;
+
+  border-radius:999px;
+
+  background:
+  rgba(255,255,255,0.08);
+
+  border:
+  1px solid rgba(255,255,255,0.10);
+
+  backdrop-filter:
+  blur(10px);
+
+  font-size:12px;
+
+  font-weight:600;
+
+  color:
+  rgba(255,255,255,0.92);
+
+}
+
 </style>
 </head>
 
@@ -912,7 +1029,7 @@ z-index:9999;
   </div>
 
   <!-- CTA -->
-  <button onclick="goToUpgrade()" 
+  <button onclick="goToUpgradeFlow()" 
   data-it="🚀 Sblocca PRO"
   data-en="🚀 Unlock PRO"
   style="
@@ -997,6 +1114,24 @@ z-index:9999;
     data-en="Analyze performance, risk and growth of your portfolio">
     Analizza performance, rischio e crescita del tuo portfolio
     </p>
+
+    <div class="rb-hero-badges">
+
+  <div
+  class="rb-badge"
+  data-it="📈 ROI sopra media italiana"
+  data-en="📈 ROI above Italian average">
+  📈 ROI sopra media italiana
+  </div>
+
+  <div
+  class="rb-badge"
+  data-it="🏦 Portfolio monitorato live"
+  data-en="🏦 Portfolio monitored live">
+  🏦 Portfolio monitorato live
+  </div>
+
+</div>
   </div>
 
   <div class="rb-hero-right">
@@ -1063,13 +1198,21 @@ z-index:9999;
 
     <!-- CHART GRANDE -->
     <div class="card">
-      <h3>📈 Andamento ROI</h3>
+      <h3
+data-it="📈 Andamento ROI"
+data-en="📈 ROI Trend">
+📈 Andamento ROI
+</h3>
       <div id="roi-chart-container" class="chart-big"></div>
     </div>
 
     <!-- CASHFLOW -->
     <div class="card">
-      <h3>💰 Cashflow</h3>
+      <h3
+data-it="💰 Cashflow"
+data-en="💰 Cashflow">
+💰 Cashflow
+</h3>
       <div id="cashflow-chart-container" class="chart-big"></div>
     </div>
 
@@ -1094,10 +1237,27 @@ Opportunità investimento
 
     <!-- CTA -->
     <div class="upgrade-box" id="upgrade-box-static" style="display:none;">
-      <h3>🚀 Sblocca PRO</h3>
-      <p>Analisi completa + report banca</p>
-      <button onclick="window.location.href='/#pricing'">Vai PRO</button>
-    </div>
+
+  <h3
+  data-it="🚀 Sblocca PRO"
+  data-en="🚀 Unlock PRO">
+  🚀 Sblocca PRO
+  </h3>
+
+  <p
+  data-it="Analisi completa + report banca"
+  data-en="Full analysis + bank report">
+  Analisi completa + report banca
+  </p>
+
+  <button
+  onclick="window.location.href='/#pricing'"
+  data-it="Vai PRO"
+  data-en="Go PRO">
+  Vai PRO
+  </button>
+
+</div>
 
   </div>
 
@@ -1526,15 +1686,6 @@ Performance rispetto al mercato
 
 </div>
 
-<!-- ANALYSIS TITLE -->
-
-<h2
-data-it="Le tue analisi investimento"
-data-en="Your investment analyses">
-Le tue analisi investimento
-</h2>
-
-
 <!-- LISTA ANALISI -->
 
 <div id="analysis-list" class="analysis-grid"></div>
@@ -1584,7 +1735,12 @@ Roma – Trastevere
 
 </div>
 
-<span class="btn-analyze">Analizza</span>
+<span
+class="btn-analyze"
+data-it="Analizza"
+data-en="Analyze">
+Analizza
+</span>
 
 </a>
 
@@ -1606,7 +1762,12 @@ Firenze – Centro
 
 </div>
 
-<span class="btn-analyze">Analizza</span>
+<span
+class="btn-analyze"
+data-it="Analizza"
+data-en="Analyze">
+Analizza
+</span>
 
 </a>
 
