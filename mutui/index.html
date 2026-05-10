@@ -257,6 +257,7 @@ body{
   border:1px solid var(--rb-border);
   box-shadow:var(--rb-shadow-sm);
   transition:.25s;
+  overflow:hidden;
 }
 
 .bank-card:hover{
@@ -336,7 +337,8 @@ body{
   }
 
   .hero-mutui h1{
-    font-size:30px;
+    font-size:34px;
+    line-height:1.1;
   }
 
   .hero-mutui p{
@@ -448,7 +450,9 @@ data-en-placeholder="Email">
 <input id="phone"
 placeholder="Telefono"
 data-it-placeholder="Telefono"
-data-en-placeholder="Phone">
+data-en-placeholder="Phone"
+inputmode="tel"
+autocomplete="tel">
 
 <button class="btn-main"
 data-it="Ricevi offerte"
@@ -514,7 +518,9 @@ const n = years*12;
 const monthly = amount * (monthlyRate / (1 - Math.pow(1+monthlyRate,-n)));
 const yearly = monthly*12;
 
-const roi = ((income - yearly)/income*100);
+const roi = income > 0
+  ? ((income - yearly) / income * 100)
+  : 0;
 
 /* ===== ALERT ===== */
 const alertBox = document.getElementById("roi-alert");
@@ -540,14 +546,13 @@ const safeYearly  = isFinite(yearly) ? yearly : 0;
 const safeROI     = isFinite(roi) ? roi : 0;
 
 document.getElementById("monthly").innerText =
-  lockValue("€"+safeMonthly.toFixed(0));
+  lockValue(safeMonthly.toFixed(0), "€");
 
 document.getElementById("yearly").innerText =
-  lockValue("€"+safeYearly.toFixed(0));
+  lockValue(safeYearly.toFixed(0), "€");
 
 document.getElementById("impact").innerText =
   lockValue(safeROI.toFixed(1), "%");
-
 document.querySelector(".lead-box").scrollIntoView({
   behavior:"smooth"
 });  
@@ -573,14 +578,27 @@ function lockValue(value, suffix=""){
 
   const access = getAccess();
 
-  // 🔓 PRO vede tutto
+  // 🔓 PRO
   if(access.isPro){
     return value + suffix;
   }
 
-  // 🔥 preview intelligente (conversione)
-  const fake = Math.round(value * 0.75);
+  // 🔥 converte sicurezza
+  const numeric = parseFloat(
+    String(value)
+      .replace("€","")
+      .replace("%","")
+      .replace(",",".")
+  ) || 0;
 
+  const fake = Math.round(numeric * 0.75);
+
+  // 💰 valuta €
+  if(String(value).includes("€")){
+    return "~€" + fake + suffix + " 🔒";
+  }
+
+  // 📊 percentuale
   return "~" + fake + suffix + " 🔒";
 }
 
