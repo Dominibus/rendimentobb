@@ -498,7 +498,13 @@ function calculate(){
 console.log("🔥 CALCULATE TRIGGERED");
   
 const amount = parseFloat(document.getElementById("amount").value || 200000);
-const rate   = parseFloat(document.getElementById("rate").value || 3.5);
+const rateInput = document.getElementById("rate").value || "3.5";
+
+const rate = parseFloat(
+  String(rateInput)
+    .replace("%","")
+    .replace(",",".")
+) || 3.5;
 const years  = parseFloat(document.getElementById("years").value || 20);
 const income = parseFloat(document.getElementById("income").value || 30000);
 
@@ -529,9 +535,18 @@ if(roi < 0){
 }
 
 /* ===== KPI ===== */
-document.getElementById("monthly").innerText = lockValue("€"+monthly.toFixed(0));
-document.getElementById("yearly").innerText  = lockValue("€"+yearly.toFixed(0));
-document.getElementById("impact").innerText  = lockValue(roi.toFixed(1), "%");
+const safeMonthly = isFinite(monthly) ? monthly : 0;
+const safeYearly  = isFinite(yearly) ? yearly : 0;
+const safeROI     = isFinite(roi) ? roi : 0;
+
+document.getElementById("monthly").innerText =
+  lockValue("€"+safeMonthly.toFixed(0));
+
+document.getElementById("yearly").innerText =
+  lockValue("€"+safeYearly.toFixed(0));
+
+document.getElementById("impact").innerText =
+  lockValue(safeROI.toFixed(1), "%");
 
 document.querySelector(".lead-box").scrollIntoView({
   behavior:"smooth"
@@ -566,7 +581,7 @@ function lockValue(value, suffix=""){
   // 🔥 preview intelligente (conversione)
   const fake = Math.round(value * 0.75);
 
-  return fake + suffix + " 🔒";
+  return "~" + fake + suffix + " 🔒";
 }
 
 /* ================= EXTRA ================= */
