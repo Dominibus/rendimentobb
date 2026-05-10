@@ -1272,10 +1272,21 @@ window.applyCityBackground = function(city){
   console.log("🎯 BG SET:", cityClass);
 };
 
-
 // ================= LAST ANALYSIS STORAGE =================
 window.lastAnalysisData = null;
 window.simulationExecuted = false;
+
+// ================= LEAD HASH =================
+window.__LAST_LEAD_HASH__ = null;
+
+// ================= LEAD SESSION RESET =================
+window.resetLeadSession = function(){
+
+  window.__LAST_LEAD_HASH__ = null;
+  window.leadSaved = false;
+  window.emailUserSent = false;
+
+};
 
 // ================= MARKET COMPARISON =================
 
@@ -2549,106 +2560,33 @@ if(access.isPro || access.isAdmin){
     console.warn("LeadScore fallback:", e);
   }
 
-  window.simulationCount = (window.simulationCount || 0) + 1;
+  // ================= LEAD DEDUP ENGINE =================
 
-  if(window.simulationCount > 3){
-    leadScore = "hot";
-  }
+const leadHash = JSON.stringify({
+  email: userEmail,
+  roi: Number(roi).toFixed(1),
+  city: window.currentCity || "roma",
+  price: Number(price || 0)
+});
 
-  const leadDestination = getLeadDestination({
-    roi,
-    city: window.currentCity
-  });
+// 🔥 evita invii duplicati stessa simulazione
+if(window.__LAST_LEAD_HASH__ === leadHash){
 
-  console.log("🎯 LEAD:", {
-    roi,
-    score: leadScore,
-    destination: leadDestination
-  });
+  console.warn("⛔ DUPLICATE LEAD BLOCKED");
 
-  // ================= SEND MAIN LEAD (🔥 FIX CRITICO) =================
-
-try{
-
-  const userEmail = window.currentUser?.email;
-
-  if(userEmail){
-
-    console.log("📡 SEND MAIN LEAD API...");
-
-    fetch("/api/send-lead",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        email: userEmail,
-        city: window.currentCity || "unknown",
-        roi: roi,
-        price: price || 0,
-        equity: equity || 0,
-        profit: result?.netAfterMortgage || result?.net || 0,
-        type: "simulatore",
-        lang: window.currentLang || "it"
-      })
-    })
-    .then(res=>{
-      console.log("📡 send-lead response:", res.status);
-    })
-    .catch(err=>{
-      console.error("❌ send-lead error:", err);
-    });
-
-  }else{
-    console.warn("❌ NO EMAIL → lead not sent");
-  }
-
-}catch(e){
-  console.error("💥 SEND LEAD FAIL:", e);
+  return;
 }
 
-  // ================= SAVE LEAD =================
+window.__LAST_LEAD_HASH__ = leadHash;
 
-  if(userEmail && !window.leadSaved){
+// ================= SCORE =================
 
-    window.leadSaved = true;
+window.simulationCount =
+  (window.simulationCount || 0) + 1;
 
-    addDoc(collection(db,"leads"),{
-      email: userEmail,
-      roi,
-      score: leadScore,
-      value: roi,
-      city: window.currentCity || "unknown",
-      createdAt: serverTimestamp()
-    }).catch(e=>{
-      console.error("Lead error:", e);
-      window.leadSaved = false;
-    });
-
-  }
-
-  // ================= PARTNER ROUTING =================
-
-  if(leadScore === "hot" && leadDestination){
-
-    fetch("/api/send-lead-partner",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        email: userEmail,
-        city: window.currentCity,
-        roi,
-        score: leadScore,
-        type: leadDestination.type,
-        partners: leadDestination.emails
-      })
-    }).catch(()=>{});
-
-  }
-
-  // ================= EMAIL USER =================
-
-  if(userEmail && !window.emailUserSent){
+if(window.simulationCount > 3){
+  leadScore = "hot";
+}
 
     window.emailUserSent = true;
 
@@ -2966,7 +2904,10 @@ function getValue(id){
 
 window.__LAST_CALCULATION__ = 0;
 
-window.calculate = async function(force = false){
+window.calculate = async function(mode = false){
+
+  const isUIRefresh =
+  mode === "ui_refresh";
 
   if(window.isCalculating && !force){
     console.warn("⛔ skip calculate (already running)");
@@ -3026,8 +2967,6 @@ if(!window.currentPlan){
 
   window.__preventRecalculate = true;
   window.simulationExecuted = false;
-  window.leadSaved = false;
-  window.emailUserSent = false;
   window.paywallShown = false;
 
   // 🧹 CLEAN UI
@@ -3236,6 +3175,10 @@ if(riskPreview){
       investment: price
     });
 
+    window.__LAST_LEAD_HASH__ = null;
+
+    if(!isUIRefresh){
+
     runPostAnalysis(result, {
   price,
   gross,
@@ -3244,6 +3187,8 @@ if(riskPreview){
   expenses,
   equity
 });
+
+  }    
 
     // ================= MARKET =================
     if(access.isFree){
@@ -5860,7 +5805,7 @@ document.addEventListener("rb_plan_ready", () => {
 
       console.log("🚀 RECALCULATE AFTER PLAN READY");
 
-      window.calculate(true);
+      window.calculate("ui_refresh");
 
     },150);
 
