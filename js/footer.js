@@ -217,7 +217,7 @@ rel="noopener">
 LinkedIn
 </a>
 
-<a href="https://www.instagram.com/rendimentobb.it/"
+<a href="https://instagram.com/rendimentobb.it"
 target="_blank"
 rel="noopener">
 Instagram
