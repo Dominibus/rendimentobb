@@ -2611,8 +2611,6 @@ if(window.simulationCount > 3){
 
   }
 
-}
-
 // ================= MORTGAGE LEAD TRIGGER =================
 
 const mortgageBox = document.getElementById("mortgage-lead-box");
@@ -2909,7 +2907,7 @@ window.calculate = async function(mode = false){
   const isUIRefresh =
   mode === "ui_refresh";
 
-  if(window.isCalculating && !force){
+  if(window.isCalculating && !mode){
     console.warn("⛔ skip calculate (already running)");
     return;
   }
@@ -3179,16 +3177,16 @@ if(riskPreview){
 
     if(!isUIRefresh){
 
-    runPostAnalysis(result, {
-  price,
-  gross,
-  occupancy,
-  priceNight,
-  expenses,
-  equity
-});
+  runPostAnalysis(result, {
+    price,
+    gross,
+    occupancy,
+    priceNight,
+    expenses,
+    equity
+  });
 
-  }    
+}    
 
     // ================= MARKET =================
     if(access.isFree){
