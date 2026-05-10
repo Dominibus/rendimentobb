@@ -39,12 +39,12 @@ window.openProModal = function(){
 
   // 🔥 OPEN
   modal.classList.add("open");
-  document.body.classList.add("modal-open");
+  document.body.classList.add("rb-ui-modal-open");
 
   // 🔥 CLOSE HANDLER
   function closeModal(){
     modal.classList.remove("open");
-    document.body.classList.remove("modal-open");
+    document.body.classList.remove("rb-ui-modal-open");
     console.log("🔓 CLOSE PRO MODAL");
   }
 
@@ -74,7 +74,7 @@ window.openProModal = function(){
 
 // 💣 SAFETY RESET (ANTI-GHOST MODAL)
 document.addEventListener("rb_plan_loaded", ()=>{
-  document.body.classList.remove("modal-open");
+  document.body.classList.remove("rb-ui-modal-open");
 
   const modal = document.getElementById("rb-pro-modal");
   if(modal){
