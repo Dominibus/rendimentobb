@@ -91,7 +91,7 @@ export default async function handler(req, res){
 
     // ================= CLEAN =================
     email = clean(email);
-    city  = clean(city || type);
+    city = clean(city);
     roi   = safe(roi);
     price = safe(price);
     equity = safe(equity);
@@ -345,7 +345,10 @@ https://rendimentobb.it/dashboard
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
 
-      subject: `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value} | ${source}`,
+      subject:
+type === "immobili"
+? `${label} | ${type.toUpperCase()} | ${city} | €${value} | ${source}`
+: `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value} | ${source}`,
 
       html: `
       <div style="font-family:Inter;background:#f8fafc;padding:30px">
@@ -361,7 +364,7 @@ https://rendimentobb.it/dashboard
           <div style="font-size:14px">
 
             <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Città:</strong> ${city}</p>
+            ${city ? `<p><strong>Città:</strong> ${city}</p>` : ""}
             <p><strong>Fonte:</strong> ${source}</p>
             <p><strong>Funnel:</strong> ${funnel}</p>
 
