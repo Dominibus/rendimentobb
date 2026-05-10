@@ -121,7 +121,6 @@ export default async function handler(req, res){
 const existingLeadQuery = await db
 .collection("leads")
 .where("email","==",email)
-.orderBy("createdAt","desc")
 .limit(1)
 .get();
 
@@ -136,7 +135,9 @@ if(!existingLeadQuery.empty){
   leadId = existingDoc.id;
 
   // 🔥 stessa email entro 1h = update
-  const createdAt = existingData.createdAt?.toDate?.();
+  const createdAt =
+existingData.updatedAt?.toDate?.() ||
+existingData.createdAt?.toDate?.();
 
   if(createdAt){
 
@@ -168,10 +169,13 @@ const leadPayload = {
 
   score,
   value,
-  type,
+  lastType:type,
 
-  source,
-  funnel,
+  lastSource:source,
+  lastFunnel:funnel,
+
+  typesVisited:
+  admin.firestore.FieldValue.arrayUnion(type),
 
   status:"new",
 
@@ -333,7 +337,10 @@ https://rendimentobb.it/dashboard
 `
 });
 
-    // ================= ADMIN EMAIL =================
+   // ================= ADMIN EMAIL =================
+
+    if(!isExistingLead){
+
     await resend.emails.send({
       from: "RendimentoBB Lead <lead@rendimentobb.it>",
       to: ["rendimentobb@gmail.com"],
@@ -383,6 +390,8 @@ https://rendimentobb.it/dashboard
       </div>
       `
     });
+
+      }
 
     return res.status(200).json({
       success:true,
