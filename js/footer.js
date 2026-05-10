@@ -208,6 +208,29 @@ Diventa partner
 
 </div>
 
+<!-- 🔥 SOCIALS -->
+<div class="footer-socials">
+
+<a href="https://www.linkedin.com/in/rendimentobb-italia-6538b3409/"
+target="_blank"
+rel="noopener">
+LinkedIn
+</a>
+
+<a href="https://www.instagram.com/rendimentobb.it/"
+target="_blank"
+rel="noopener">
+Instagram
+</a>
+
+<a href="https://www.tiktok.com/@rendimentobb.it"
+target="_blank"
+rel="noopener">
+TikTok
+</a>
+
+</div>
+
 <!-- 🔥 COPYRIGHT -->
 <div class="footer-bottom">
 
