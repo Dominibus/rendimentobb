@@ -116,30 +116,100 @@ export default async function handler(req, res){
       type
     });
 
-    // ================= DB =================
-    await db.collection("leads").add({
-      email,
-      city,
+    // ================= LEAD DUPLICATE CHECK =================
 
-      roi: roiRounded,
-      price,
-      equity,
-      loan,
-      profit,
-      dscr: Number(dscr.toFixed(2)),
+const existingLeadQuery = await db
+.collection("leads")
+.where("email","==",email)
+.orderBy("createdAt","desc")
+.limit(1)
+.get();
 
-      score,
-      value,
-      type,
+let leadId = null;
+let isExistingLead = false;
 
-      source,
-      funnel,
+if(!existingLeadQuery.empty){
 
-      status: "new",
-      lang: detectedLang,
+  const existingDoc = existingLeadQuery.docs[0];
+  const existingData = existingDoc.data();
 
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+  leadId = existingDoc.id;
+
+  // 🔥 stessa email entro 1h = update
+  const createdAt = existingData.createdAt?.toDate?.();
+
+  if(createdAt){
+
+    const diffMinutes =
+      (Date.now() - createdAt.getTime()) / 1000 / 60;
+
+    if(diffMinutes <= 60){
+      isExistingLead = true;
+    }
+
+  }
+
+}
+
+    // ================= SAVE / UPDATE LEAD =================
+
+const leadPayload = {
+
+  email,
+  city,
+
+  roi: roiRounded,
+  price,
+  equity,
+  loan,
+  profit,
+
+  dscr: Number(dscr.toFixed(2)),
+
+  score,
+  value,
+  type,
+
+  source,
+  funnel,
+
+  status:"new",
+
+  lang: detectedLang,
+
+  lastActivity:
+  admin.firestore.FieldValue.serverTimestamp(),
+
+  updatedAt:
+  admin.firestore.FieldValue.serverTimestamp(),
+
+  visitedSources:
+  admin.firestore.FieldValue.arrayUnion(source),
+
+  visitedFunnels:
+  admin.firestore.FieldValue.arrayUnion(funnel)
+
+};
+
+if(isExistingLead){
+
+  await db
+  .collection("leads")
+  .doc(leadId)
+  .update(leadPayload);
+
+}else{
+
+  await db.collection("leads").add({
+
+    ...leadPayload,
+
+    createdAt:
+    admin.firestore.FieldValue.serverTimestamp()
+
+  });
+
+}
 
     // ================= USER EMAIL =================
 
