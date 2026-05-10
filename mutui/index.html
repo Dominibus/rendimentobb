@@ -1021,21 +1021,20 @@ async function saveLead(){
     console.log("📡 SEND MUTUI LEAD...");
 
     const res = await fetch("/api/send-lead",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        email,
-        phone,
-        type:"mutui",
-        city: window.currentCity || "unknown",
-        roi: roiValue,
-        price: parseFloat(document.getElementById("amount").value || 0),
-        equity: 0,
-        profit: 0,
-        years: parseFloat(document.getElementById("years").value || 0),
-        lang: window.currentLang || "it"
-      })
-    });
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body: JSON.stringify({
+    email,
+    phone,
+    type:"mutui",
+    roi: roiValue,
+    price: parseFloat(document.getElementById("amount").value || 0),
+    equity: 0,
+    profit: 0,
+    years: parseFloat(document.getElementById("years").value || 0),
+    lang: window.currentLang || "it"
+  })
+});
 
     const data = await res.json();
 
