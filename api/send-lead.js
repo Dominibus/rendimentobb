@@ -91,7 +91,7 @@ export default async function handler(req, res){
 
     // ================= CLEAN =================
     email = clean(email);
-    city = clean(city);
+    city = clean(city || "N/A");
     roi   = safe(roi);
     price = safe(price);
     equity = safe(equity);
@@ -156,6 +156,12 @@ existingData.createdAt?.toDate?.();
 
 const leadPayload = {
 
+  phone: clean(phone),
+bank: clean(bank),
+rate: safe(rate),
+name: clean(name),
+role: clean(role),
+message: clean(message),
   email,
   city,
 
@@ -222,35 +228,48 @@ if(isExistingLead){
     if(type === "mutui") cta = "https://rendimentobb.it/mutui/";
     if(type === "immobili") cta = "https://rendimentobb.it/immobili/";
 
-    let subject = t(
-      detectedLang,
-      `Il tuo investimento (${roiRounded}%)`,
-      `Your investment (${roiRounded}%)`
-    );
-
-    if(type === "mutui"){
-      subject = t(detectedLang,"Richiesta mutuo ricevuta","Mortgage request received");
-    }
-
-    if(type === "immobili"){
-      subject = t(detectedLang,"Opportunità immobili ricevute","Property opportunities received");
-    }
-
     const userHtml = `
 <div style="font-family:Arial;padding:20px;color:#111">
 
   <p>${t(detectedLang,"Ciao,","Hi,")}</p>
 
-  <p>
-    ${t(
-      detectedLang,
-      "Abbiamo ricevuto la tua richiesta su RendimentoBB.",
-      "We received your request on RendimentoBB."
-    )}
-  </p>
+  <div style="
+background:#f8fafc;
+padding:18px;
+border-radius:14px;
+margin:20px 0;
+border:1px solid #e2e8f0;
+">
+
+  <div style="
+  font-size:18px;
+  font-weight:700;
+  color:#10b981;
+  margin-bottom:10px;
+  ">
+    ${
+      type === "mutui"
+      ? "🏦 " + t(detectedLang,"Richiesta mutuo analizzata","Mortgage request analyzed")
+      : type === "immobili"
+      ? "🏠 " + t(detectedLang,"Opportunità immobili trovate","Property opportunities found")
+      : "📊 " + t(detectedLang,"Analisi investimento completata","Investment analysis completed")
+    }
+  </div>
+
+  <div style="font-size:14px;color:#334155;line-height:1.6;">
+    ${
+      t(
+        detectedLang,
+        "Il nostro sistema sta elaborando i dati migliori per il tuo investimento B&B.",
+        "Our system is processing the best data for your B&B investment."
+      )
+    }
+  </div>
+
+</div>
 
   ${
-    (type === "simulatore" || type === "generic")
+    roiRounded > 0
     ? `
       <p>
         ${t(detectedLang,"ROI stimato:","Estimated ROI:")}
@@ -269,9 +288,9 @@ if(isExistingLead){
   </p>
 
   <p>
-    <a href="https://rendimentobb.it/dashboard">
-      https://rendimentobb.it/dashboard
-    </a>
+    <a href="${cta}">
+  ${cta}
+</a>
   </p>
 
   <br>
@@ -348,6 +367,10 @@ https://rendimentobb.it/dashboard
       subject:
 type === "immobili"
 ? `${label} | ${type.toUpperCase()} | ${city} | €${value} | ${source}`
+
+: type === "mutui"
+? `${label} | MUTUI | ROI ${roiRounded}% | €${value} | ${source}`
+
 : `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value} | ${source}`,
 
       html: `
