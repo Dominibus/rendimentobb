@@ -18059,3 +18059,30 @@ body.rb-ui-modal-open footer{
 #rb-pro-modal .rb-modal-box{
   pointer-events:auto !important;
 }
+
+/* =========================
+🔥 FOOTER SOCIALS
+========================= */
+
+.footer-socials{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:18px;
+margin-top:30px;
+margin-bottom:10px;
+flex-wrap:wrap;
+}
+
+.footer-socials a{
+color:#94a3b8;
+text-decoration:none;
+font-size:14px;
+font-weight:600;
+transition:0.25s ease;
+}
+
+.footer-socials a:hover{
+color:#10b981;
+transform:translateY(-2px);
+}
