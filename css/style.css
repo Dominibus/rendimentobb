@@ -18027,3 +18027,35 @@ body.rb-ui.modal-open:not(.is-free){
 #rb-upgrade-modal *{
   pointer-events:auto !important;
 }
+
+/* =====================================
+🔥 RB UI MODAL FIX FINAL
+===================================== */
+
+body.rb-ui-modal-open{
+  overflow:hidden !important;
+  touch-action:auto !important;
+}
+
+/* popup cliccabile */
+#rb-pro-modal,
+#rb-pro-modal *{
+  pointer-events:auto !important;
+}
+
+/* background NON cliccabile */
+body.rb-ui-modal-open main,
+body.rb-ui-modal-open header,
+body.rb-ui-modal-open footer{
+  pointer-events:none;
+}
+
+/* modal sopra tutto */
+#rb-pro-modal{
+  z-index:999999 !important;
+  pointer-events:auto !important;
+}
+
+#rb-pro-modal .rb-modal-box{
+  pointer-events:auto !important;
+}
