@@ -16,7 +16,10 @@
     { "source": "/immobili/napoli", "destination": "/immobili/napoli/", "permanent": true },
     { "source": "/immobili/firenze", "destination": "/immobili/firenze/", "permanent": true },
 
-    { "source": "/mutuo", "destination": "/mutui/", "permanent": true }
+    { "source": "/mutuo", "destination": "/mutui/", "permanent": true },
+
+    { "source": "/roi", "destination": "/roi-bnb/", "permanent": true },
+    { "source": "/roi/", "destination": "/roi-bnb/", "permanent": true }
 
   ]
 }
