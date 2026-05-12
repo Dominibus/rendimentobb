@@ -211,7 +211,7 @@ Diventa partner
 <!-- 🔥 SOCIALS -->
 <div class="footer-socials">
 
-<a href="https://www.linkedin.com/in/rendimentobb-italia-6538b3409/"
+<a href="https://www.linkedin.com/in/domenicodelucait/"
 target="_blank"
 rel="noopener">
 LinkedIn
