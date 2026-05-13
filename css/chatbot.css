@@ -528,3 +528,111 @@ body.dark-mode #rb-chat-input{
   color:white;
 
 }
+
+/* =========================================
+   MOBILE FIX – CHATBOT
+========================================= */
+
+@media(max-width:768px){
+
+  .rb-chatbot-window{
+
+    position: fixed;
+
+    top: 70px !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: 90px !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    border-radius: 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 999999;
+
+    overflow: hidden;
+  }
+
+  /* HEADER */
+
+  .rb-chatbot-header{
+
+    min-height: 78px;
+
+    padding: 18px;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+  }
+
+  /* BODY */
+
+  .rb-chatbot-messages{
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
+
+    padding: 14px;
+  }
+
+  /* INPUT AREA */
+
+  .rb-chatbot-input-area{
+
+    position: relative;
+
+    padding: 14px;
+
+    background: #fff;
+
+    flex-shrink: 0;
+
+    border-top: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .rb-chatbot-input{
+
+    height: 54px;
+
+    font-size: 16px;
+  }
+
+  .rb-chatbot-send{
+
+    width: 54px;
+    height: 54px;
+  }
+
+  /* MESSAGE */
+
+  .rb-chatbot-message{
+
+    max-width: 90%;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+  }
+
+  /* FLOAT BUTTON */
+
+  .rb-chatbot-toggle{
+
+    width: 68px;
+    height: 68px;
+
+    bottom: 20px;
+    right: 20px;
+
+    z-index: 999999;
+  }
+
+}
