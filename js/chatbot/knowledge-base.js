@@ -5,73 +5,174 @@
 
 window.rbKnowledgeBase = {
 
-  // ===========================================
-  // ROI
-  // ===========================================
+// ===========================================
+// ROI
+// ===========================================
 
-  roi: {
+roi: {
 
-    keywords: [
-      "roi",
-      "rendimento",
-      "return on investment"
-    ],
+  keywords: [
+    "roi",
+    "rendimento",
+    "return on investment"
+  ],
 
-    it: `
-📈 ROI (Return On Investment)
+  priority: 10,
 
-Il ROI misura quanto rende il tuo investimento rispetto al capitale investito.
+premium: false,
 
-Esempio:
-se investi €100.000 e generi €10.000 annui netti,
-il ROI sarà del 10%.
+version: "1.0",
+
+searchWeight: 10,
+
+relatedQuestions: [
+  "cashflow",
+  "breakEven",
+  "occupancy",
+  "dscr",
+  "mortgageImpact",
+  "riskScore"
+],
+
+recommendationsIT: [
+  "Analizza anche il cashflow reale",
+  "Controlla il DSCR prima di investire",
+  "Verifica il break-even dell'immobile",
+  "Analizza il rischio operativo reale"
+],
+
+recommendationsEN: [
+  "Analyze real cashflow as well",
+  "Check DSCR before investing",
+  "Review property break-even",
+  "Analyze real operational risk"
+],
+
+  category: "profitability",
+
+  importance: "critical",
+
+  riskLevel: "medium",
+
+  benchmark: "8-10%",
+
+  relatedMetrics: [
+    "cashflow",
+    "breakEven",
+    "occupancy",
+    "dscr"
+  ],
+
+  aiTitleIT: "📈 ROI – Return On Investment",
+
+  aiTitleEN: "📈 ROI – Return On Investment",
+
+  aiSummaryIT: `
+Il ROI misura la redditività dell'investimento rispetto al capitale investito.
+
+Nel mercato short rent il ROI è uno degli indicatori principali per valutare la sostenibilità economica di un immobile.
 
 💡 Benchmark settore:
-nel mercato B&B un ROI sopra l'8-10% viene generalmente considerato molto competitivo.
-
-⚠️ Attenzione:
-un ROI elevato non garantisce automaticamente un investimento sicuro.
-
-Costi operativi, mutuo, rischio e stagionalità possono ridurre significativamente il rendimento reale.
+un ROI superiore all'8-10% viene generalmente considerato molto competitivo nel mercato B&B.
 `,
 
-    en: `
-📈 ROI (Return On Investment)
+  aiSummaryEN: `
+ROI measures investment profitability compared to invested capital.
 
-ROI measures how profitable your investment is compared to the invested capital.
-
-Example:
-if you invest €100,000 and generate €10,000 net annual profit,
-your ROI will be 10%.
+In the short rental market, ROI is one of the main indicators used to evaluate property sustainability.
 
 💡 Industry benchmark:
-in the B&B market, ROI above 8-10% is generally considered very strong.
+ROI above 8-10% is generally considered very competitive in the B&B market.
+`,
 
-⚠️ Warning:
-a high ROI does not automatically guarantee a safe investment.
+  aiInsightIT: `
+💡 AI Insight:
+un ROI elevato non garantisce automaticamente un investimento sicuro.
 
-Operational costs, mortgage exposure, risk and seasonality may significantly reduce real profitability.
+Cashflow, rischio operativo, mutuo e stagionalità possono ridurre drasticamente la redditività reale.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+high ROI does not automatically guarantee a safe investment.
+
+Cashflow, operational risk, mortgage exposure and seasonality may drastically reduce real profitability.
+`,
+
+  warningIT: `
+⚠️ ROI molto elevati possono indicare stime troppo ottimistiche o rischio operativo maggiore.
+`,
+
+  warningEN: `
+⚠️ Extremely high ROI projections may indicate unrealistic assumptions or elevated operational risk.
 `
-  },
 
-  // ===========================================
-  // CASHFLOW
-  // ===========================================
+},
+// ===========================================
+// CASHFLOW
+// ===========================================
 
-  cashflow: {
+cashflow: {
 
-    keywords: [
-      "cashflow",
-      "cash flow",
-      "flusso di cassa"
-    ],
+  keywords: [
+    "cashflow",
+    "cash flow",
+    "flusso di cassa"
+  ],
 
-    it: `
-💸 Cashflow
+  priority: 9,
 
+premium: false,
+
+version: "1.0",
+
+searchWeight: 9,
+
+relatedQuestions: [
+  "roi",
+  "dscr",
+  "breakEven",
+  "mortgageImpact",
+  "financialSustainability"
+],
+
+recommendationsIT: [
+  "Verifica la sostenibilità del mutuo",
+  "Analizza il DSCR dell'investimento",
+  "Controlla il break-even reale",
+  "Riduci i costi operativi"
+],
+
+recommendationsEN: [
+  "Review mortgage sustainability",
+  "Analyze investment DSCR",
+  "Check real break-even",
+  "Reduce operational costs"
+],
+
+  category: "financial-sustainability",
+
+  importance: "critical",
+
+  riskLevel: "high",
+
+  benchmark: "positivo e stabile",
+
+  relatedMetrics: [
+    "roi",
+    "dscr",
+    "breakEven",
+    "mortgageImpact"
+  ],
+
+  aiTitleIT: "💸 Cashflow – Liquidità reale",
+
+  aiTitleEN: "💸 Cashflow – Real liquidity",
+
+  aiSummaryIT: `
 Il cashflow rappresenta la liquidità reale generata dall'investimento dopo tutte le spese operative.
 
-Include:
+Include costi come:
 
 • utenze
 • cleaning
@@ -80,17 +181,13 @@ Include:
 • commissioni OTA
 • eventuale mutuo
 
-💡 Un cashflow positivo indica che l'immobile genera liquidità sostenibile.
-
-⚠️ Molti investimenti mostrano ROI elevati ma cashflow molto basso o negativo.
+Un cashflow positivo indica che l'immobile genera liquidità sostenibile nel tempo.
 `,
 
-    en: `
-💸 Cashflow
-
+  aiSummaryEN: `
 Cashflow represents the real liquidity generated by the investment after all operating expenses.
 
-Includes:
+Includes costs such as:
 
 • utilities
 • cleaning
@@ -99,117 +196,631 @@ Includes:
 • OTA commissions
 • mortgage payments
 
-💡 Positive cashflow means the property generates sustainable liquidity.
+Positive cashflow indicates the property generates sustainable long-term liquidity.
+`,
 
-⚠️ Many investments show high ROI but weak or even negative cashflow.
+  aiInsightIT: `
+💡 AI Insight:
+molti investimenti mostrano ROI elevati ma cashflow molto basso o negativo.
+
+Questo può creare problemi di sostenibilità finanziaria anche con occupazione elevata.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+many investments show high ROI but weak or even negative cashflow.
+
+This may create financial sustainability issues even with high occupancy.
+`,
+
+  warningIT: `
+⚠️ Un cashflow negativo aumenta significativamente il rischio operativo dell'investimento.
+`,
+
+  warningEN: `
+⚠️ Negative cashflow significantly increases operational investment risk.
 `
-  },
 
-  // ===========================================
-  // OCCUPANCY
-  // ===========================================
+},
 
-  occupancy: {
+// ===========================================
+// OCCUPANCY
+// ===========================================
 
-    keywords: [
-      "occupazione",
-      "occupancy"
-    ],
+occupancy: {
 
-    it: `
-🏨 Occupazione
+  keywords: [
+    "occupazione",
+    "occupancy",
+    "booking rate",
+    "tasso occupazione"
+  ],
 
-L'occupazione indica la percentuale di notti prenotate durante l'anno.
+  category: "market-performance",
+
+  importance: "high",
+
+  riskLevel: "medium",
+
+  benchmark: "65-70%",
+
+  relatedMetrics: [
+    "roi",
+    "cashflow",
+    "seasonality",
+    "marketDemand"
+  ],
+
+  aiTitleIT: "🏨 Occupazione – Tasso prenotazioni",
+
+  aiTitleEN: "🏨 Occupancy – Booking rate",
+
+  aiSummaryIT: `
+L'occupazione rappresenta la percentuale di notti prenotate durante l'anno.
+
+Nel settore short rent è uno degli indicatori più importanti per stimare sostenibilità e redditività reale.
 
 💡 Benchmark settore:
-nel mercato short rent un valore sopra il 65-70% viene generalmente considerato molto positivo.
-
-⚠️ Attenzione:
-occupazioni troppo elevate potrebbero essere irrealistiche in alcune città o stagioni.
+un'occupazione superiore al 65-70% viene generalmente considerata molto positiva.
 `,
 
-    en: `
-🏨 Occupancy
-
+  aiSummaryEN: `
 Occupancy represents the percentage of booked nights throughout the year.
 
+In the short rental sector it is one of the most important indicators for estimating sustainability and real profitability.
+
 💡 Industry benchmark:
-in the short rental market, occupancy above 65-70% is generally considered very strong.
-
-⚠️ Warning:
-extremely high occupancy assumptions may be unrealistic in certain cities or seasons.
-`
-  },
-
-  // ===========================================
-  // BREAK EVEN
-  // ===========================================
-
-  breakEven: {
-
-    keywords: [
-      "break even",
-      "pareggio"
-    ],
-
-    it: `
-⚖️ Break-even
-
-Il break-even rappresenta il punto in cui ricavi e costi si equivalgono.
-
-💡 Più rapidamente raggiungi il break-even,
-minore sarà il rischio operativo dell'investimento.
-
-⚠️ Break-even troppo elevati aumentano l'esposizione finanziaria.
+occupancy above 65-70% is generally considered very strong.
 `,
 
-    en: `
-⚖️ Break-even
+  aiInsightIT: `
+💡 AI Insight:
+un'occupazione elevata può compensare ROI più bassi e migliorare la stabilità del cashflow.
 
-Break-even represents the point where revenues and costs become equal.
+Le città con forte domanda turistica e business tendono a mantenere occupazione più stabile durante l'anno.
+`,
 
-💡 The faster you reach break-even,
-the lower the operational risk of the investment.
+  aiInsightEN: `
+💡 AI Insight:
+high occupancy may compensate lower ROI and improve cashflow stability.
 
-⚠️ High break-even levels increase financial exposure.
+Cities with strong tourism and business demand tend to maintain more stable occupancy throughout the year.
+`,
+
+  warningIT: `
+⚠️ Occupazioni troppo elevate potrebbero indicare stime irrealistiche o forte esposizione stagionale.
+`,
+
+  warningEN: `
+⚠️ Extremely high occupancy assumptions may indicate unrealistic projections or strong seasonal exposure.
 `
-  },
 
-  // ===========================================
-  // DSCR
-  // ===========================================
+},
 
-  dscr: {
+// ===========================================
+// BREAK EVEN
+// ===========================================
 
-    keywords: [
-      "dscr"
-    ],
+breakEven: {
 
-    it: `
-🏦 DSCR
+  keywords: [
+    "break even",
+    "pareggio",
+    "punto di pareggio"
+  ],
 
-Il DSCR misura la capacità dell'investimento di sostenere il mutuo.
+  category: "financial-risk",
 
-Serve a capire se l'immobile genera abbastanza reddito per coprire le rate.
+  importance: "critical",
+
+  riskLevel: "high",
+
+  benchmark: "6-9 anni",
+
+  relatedMetrics: [
+    "roi",
+    "cashflow",
+    "dscr",
+    "mortgageImpact"
+  ],
+
+  aiTitleIT: "⚖️ Break-even – Recupero investimento",
+
+  aiTitleEN: "⚖️ Break-even – Investment recovery",
+
+  aiSummaryIT: `
+Il break-even rappresenta il tempo necessario per recuperare l'investimento iniziale attraverso i profitti generati dall'immobile.
+
+Nel settore B&B è uno degli indicatori principali per valutare sostenibilità e rischio finanziario.
+
+💡 Benchmark settore:
+un break-even inferiore a 6-9 anni viene generalmente considerato competitivo.
+`,
+
+  aiSummaryEN: `
+Break-even represents the time required to recover the initial investment through the property's generated profits.
+
+In the B&B sector it is one of the main indicators used to evaluate sustainability and financial risk.
+
+💡 Industry benchmark:
+break-even below 6-9 years is generally considered competitive.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+break-even più rapidi riducono l'esposizione finanziaria e aumentano la resilienza dell'investimento.
+
+Immobili con ROI elevato ma break-even troppo lungo possono nascondere rischio operativo maggiore.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+faster break-even reduces financial exposure and improves investment resilience.
+
+Properties with high ROI but excessively long break-even periods may hide elevated operational risk.
+`,
+
+  warningIT: `
+⚠️ Break-even troppo elevati aumentano rischio finanziario, esposizione al mercato e vulnerabilità operativa.
+`,
+
+  warningEN: `
+⚠️ Extremely long break-even periods increase financial risk, market exposure and operational vulnerability.
+`
+
+},
+// ===========================================
+// DSCR
+// ===========================================
+
+dscr: {
+
+  keywords: [
+    "dscr",
+    "debt service coverage ratio",
+    "copertura mutuo"
+  ],
+
+  category: "financial-sustainability",
+
+  importance: "critical",
+
+  riskLevel: "high",
+
+  benchmark: "1.2+",
+
+  relatedMetrics: [
+    "cashflow",
+    "breakEven",
+    "mortgageImpact",
+    "roi"
+  ],
+
+  aiTitleIT: "🏦 DSCR – Sostenibilità mutuo",
+
+  aiTitleEN: "🏦 DSCR – Mortgage sustainability",
+
+  aiSummaryIT: `
+Il DSCR (Debt Service Coverage Ratio) misura la capacità dell'investimento di sostenere il mutuo attraverso i ricavi generati dall'immobile.
+
+È uno degli indicatori più utilizzati da banche e investitori professionali per valutare sostenibilità finanziaria e rischio credito.
 
 💡 Benchmark bancario:
 un DSCR superiore a 1.2 viene generalmente considerato sano.
-
-⚠️ Un DSCR troppo basso indica rischio finanziario elevato.
 `,
 
-    en: `
-🏦 DSCR
+  aiSummaryEN: `
+DSCR (Debt Service Coverage Ratio) measures the investment’s ability to sustain mortgage debt using the income generated by the property.
 
-DSCR measures the investment's ability to sustain mortgage debt.
-
-It evaluates whether the property generates enough income to cover loan payments.
+It is one of the most widely used metrics by banks and professional investors to evaluate financial sustainability and credit risk.
 
 💡 Banking benchmark:
 a DSCR above 1.2 is generally considered healthy.
+`,
 
-⚠️ Low DSCR values indicate elevated financial risk.
+  aiInsightIT: `
+💡 AI Insight:
+un DSCR elevato aumenta la resilienza dell'investimento durante periodi di bassa occupazione o riduzione dei ricavi.
+
+Molti investimenti apparentemente profittevoli diventano fragili quando il DSCR scende sotto livelli sostenibili.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+high DSCR improves investment resilience during low occupancy periods or revenue declines.
+
+Many apparently profitable investments become financially fragile when DSCR falls below sustainable levels.
+`,
+
+  warningIT: `
+⚠️ Un DSCR troppo basso indica rischio finanziario elevato e possibile difficoltà nel sostenere il mutuo.
+`,
+
+  warningEN: `
+⚠️ Low DSCR values indicate elevated financial risk and potential difficulty sustaining mortgage payments.
 `
-  }
 
-};
+},
+
+// ===========================================
+// RISK SCORE
+// ===========================================
+
+riskScore: {
+
+  keywords: [
+    "risk",
+    "risk score",
+    "rischio",
+    "rischio investimento"
+  ],
+
+  category: "risk-analysis",
+
+  importance: "critical",
+
+  riskLevel: "high",
+
+  benchmark: "basso-moderato",
+
+  relatedMetrics: [
+    "roi",
+    "cashflow",
+    "breakEven",
+    "dscr"
+  ],
+
+  aiTitleIT: "⚠️ Risk Score – Rischio investimento",
+
+  aiTitleEN: "⚠️ Risk Score – Investment risk",
+
+  aiSummaryIT: `
+Il Risk Score misura il livello di rischio operativo e finanziario dell'investimento.
+
+L'analisi considera sostenibilità economica, mutuo, cashflow, occupazione e resilienza del mercato.
+`,
+
+  aiSummaryEN: `
+Risk Score measures the operational and financial risk level of the investment.
+
+The analysis considers economic sustainability, mortgage exposure, cashflow, occupancy and market resilience.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+investimenti con ROI elevato possono comunque presentare rischio operativo molto alto.
+
+La sostenibilità reale dipende dall'equilibrio tra profitto, liquidità e stabilità mercato.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+investments with high ROI may still carry elevated operational risk.
+
+Real sustainability depends on the balance between profitability, liquidity and market stability.
+`,
+
+  warningIT: `
+⚠️ Rischio elevato può aumentare volatilità e possibilità di perdita reale nel lungo periodo.
+`,
+
+  warningEN: `
+⚠️ High risk may increase volatility and long-term loss exposure.
+`
+
+},
+
+// ===========================================
+// MARKET DEMAND
+// ===========================================
+
+marketDemand: {
+
+  keywords: [
+    "domanda",
+    "market demand",
+    "richiesta mercato"
+  ],
+
+  category: "market-analysis",
+
+  importance: "high",
+
+  riskLevel: "medium",
+
+  benchmark: "alta domanda stabile",
+
+  relatedMetrics: [
+    "occupancy",
+    "cashflow",
+    "seasonality"
+  ],
+
+  aiTitleIT: "📊 Domanda mercato",
+
+  aiTitleEN: "📊 Market demand",
+
+  aiSummaryIT: `
+La domanda di mercato misura l'interesse reale verso affitti brevi e strutture ricettive in una specifica città o area.
+
+Una domanda elevata migliora occupazione, stabilità e sostenibilità del cashflow.
+`,
+
+  aiSummaryEN: `
+Market demand measures real interest toward short rentals and hospitality properties within a specific city or area.
+
+Strong demand improves occupancy, stability and cashflow sustainability.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+mercati con domanda stabile tendono a mantenere performance migliori anche durante periodi economici più deboli.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+markets with stable demand tend to maintain stronger performance even during weaker economic periods.
+`,
+
+  warningIT: `
+⚠️ Domanda debole o instabile aumenta il rischio operativo e la volatilità dell'investimento.
+`,
+
+  warningEN: `
+⚠️ Weak or unstable demand increases operational risk and investment volatility.
+`
+
+},
+
+// ===========================================
+// SEASONALITY
+// ===========================================
+
+seasonality: {
+
+  keywords: [
+    "stagionalità",
+    "seasonality",
+    "alta stagione",
+    "bassa stagione"
+  ],
+
+  category: "market-risk",
+
+  importance: "high",
+
+  riskLevel: "medium",
+
+  benchmark: "stagionalità moderata",
+
+  relatedMetrics: [
+    "occupancy",
+    "cashflow",
+    "marketDemand"
+  ],
+
+  aiTitleIT: "🌍 Stagionalità mercato",
+
+  aiTitleEN: "🌍 Market seasonality",
+
+  aiSummaryIT: `
+La stagionalità misura quanto il mercato dipende da specifici periodi dell'anno.
+
+Mercati troppo stagionali possono creare forti variazioni di occupazione e cashflow.
+`,
+
+  aiSummaryEN: `
+Seasonality measures how much the market depends on specific periods of the year.
+
+Highly seasonal markets may create significant occupancy and cashflow fluctuations.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+città con domanda business o turismo internazionale tendono ad avere stagionalità più stabile.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+cities with business demand or international tourism generally maintain more stable seasonality.
+`,
+
+  warningIT: `
+⚠️ Elevata stagionalità può aumentare rischio operativo e instabilità finanziaria.
+`,
+
+  warningEN: `
+⚠️ High seasonality may increase operational risk and financial instability.
+`
+
+},
+
+// ===========================================
+// PROPERTY SCORE
+// ===========================================
+
+propertyScore: {
+
+  keywords: [
+    "property score",
+    "score immobile",
+    "investment score"
+  ],
+
+  category: "investment-analysis",
+
+  importance: "high",
+
+  riskLevel: "medium",
+
+  benchmark: "A-B",
+
+  relatedMetrics: [
+    "roi",
+    "cashflow",
+    "riskScore",
+    "occupancy"
+  ],
+
+  aiTitleIT: "🏠 Property Score – Valutazione investimento",
+
+  aiTitleEN: "🏠 Property Score – Investment rating",
+
+  aiSummaryIT: `
+Il Property Score rappresenta una valutazione complessiva dell'investimento basata su redditività, rischio e sostenibilità.
+
+Il sistema utilizza metriche finanziarie e benchmark di mercato per stimare la qualità dell'operazione.
+`,
+
+  aiSummaryEN: `
+Property Score represents an overall investment evaluation based on profitability, risk and sustainability.
+
+The system uses financial metrics and market benchmarks to estimate investment quality.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+un investimento equilibrato tende a mantenere score più stabili anche durante variazioni mercato.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+balanced investments tend to maintain more stable scores during market fluctuations.
+`,
+
+  warningIT: `
+⚠️ Score bassi possono indicare criticità operative o sostenibilità finanziaria debole.
+`,
+
+  warningEN: `
+⚠️ Low scores may indicate operational weaknesses or poor financial sustainability.
+`
+
+},
+
+// ===========================================
+// MORTGAGE IMPACT
+// ===========================================
+
+mortgageImpact: {
+
+  keywords: [
+    "mutuo",
+    "mortgage",
+    "loan",
+    "finanziamento"
+  ],
+
+  category: "financial-risk",
+
+  importance: "critical",
+
+  riskLevel: "high",
+
+  benchmark: "sostenibile",
+
+  relatedMetrics: [
+    "cashflow",
+    "dscr",
+    "breakEven",
+    "roi"
+  ],
+
+  aiTitleIT: "🏦 Impatto mutuo",
+
+  aiTitleEN: "🏦 Mortgage impact",
+
+  aiSummaryIT: `
+Il mutuo può ridurre significativamente il cashflow reale dell'investimento.
+
+Molti immobili con ROI positivo diventano meno sostenibili dopo il finanziamento.
+`,
+
+  aiSummaryEN: `
+Mortgage exposure may significantly reduce real investment cashflow.
+
+Many properties with positive ROI become financially weaker after financing.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+il rapporto tra rata mensile, occupazione e cashflow è uno degli indicatori più critici nel settore short rent.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+the relationship between loan payments, occupancy and cashflow is one of the most critical indicators in the short rental sector.
+`,
+
+  warningIT: `
+⚠️ Mutui troppo aggressivi aumentano rischio operativo e vulnerabilità finanziaria.
+`,
+
+  warningEN: `
+⚠️ Aggressive mortgage structures increase operational and financial risk.
+`
+
+},
+
+// ===========================================
+// FINANCIAL SUSTAINABILITY
+// ===========================================
+
+financialSustainability: {
+
+  keywords: [
+    "sostenibilità",
+    "financial sustainability",
+    "sostenibilità finanziaria"
+  ],
+
+  category: "financial-analysis",
+
+  importance: "critical",
+
+  riskLevel: "medium",
+
+  benchmark: "stabile",
+
+  relatedMetrics: [
+    "cashflow",
+    "dscr",
+    "breakEven",
+    "riskScore"
+  ],
+
+  aiTitleIT: "🧠 Sostenibilità finanziaria",
+
+  aiTitleEN: "🧠 Financial sustainability",
+
+  aiSummaryIT: `
+La sostenibilità finanziaria misura la capacità dell'investimento di mantenere stabilità economica nel lungo periodo.
+
+L'analisi considera cashflow, rischio, mutuo e resilienza del mercato.
+`,
+
+  aiSummaryEN: `
+Financial sustainability measures the investment’s ability to maintain long-term economic stability.
+
+The analysis considers cashflow, risk, mortgage exposure and market resilience.
+`,
+
+  aiInsightIT: `
+💡 AI Insight:
+investimenti sostenibili tendono a resistere meglio a crisi mercato, cali occupazione e aumento costi operativi.
+`,
+
+  aiInsightEN: `
+💡 AI Insight:
+sustainable investments tend to better withstand market crises, occupancy declines and rising operating costs.
+`,
+
+  warningIT: `
+⚠️ Bassa sostenibilità finanziaria aumenta il rischio di perdita reale nel lungo periodo.
+`,
+
+  warningEN: `
+⚠️ Weak financial sustainability increases long-term real loss risk.
+`
+
+},  
