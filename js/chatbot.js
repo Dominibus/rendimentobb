@@ -313,6 +313,20 @@ const wantsEducation =
   detectedIntents.includes("education");
 
 // =====================================
+// 🧠 RESPONSE COMPOSER
+// =====================================
+
+let responsePartsIT = [];
+let responsePartsEN = [];
+
+function addResponse(it,en){
+
+  responsePartsIT.push(it);
+  responsePartsEN.push(en);
+
+}  
+
+// =====================================
 // 🧠 FOLLOW-UP UNDERSTANDING
 // =====================================
 
@@ -416,8 +430,8 @@ if(
   )
 ){
 
-  return window.t(
-
+  addResponse(
+    
 `📈 ROI (Return On Investment)
 
 Il ROI misura quanto rende il tuo investimento rispetto al capitale investito.
@@ -475,7 +489,7 @@ if(
   )
 ){
 
-  return window.t(
+  addResponse(
 
 `💸 Cashflow
 
@@ -525,7 +539,7 @@ if(
   )
 ){
 
-  return window.t(
+  addResponse(
 
 `⚠️ Rischio investimento
 
@@ -571,7 +585,7 @@ if(
   )
 ){
 
-  return window.t(
+  addResponse(
 
 `🏨 Occupazione
 
@@ -610,7 +624,7 @@ if(
   text.includes("dscr")
 ){
 
-  return window.t(
+  addResponse(
 
 `🏦 DSCR
 
@@ -652,7 +666,7 @@ if(
   )
 ){
 
-  return window.t(
+  addResponse(
 
 `⚖️ Break-even
 
@@ -675,6 +689,22 @@ Break-even represents the point where revenues equal costs.
 • the higher the operational stability
 
 ⚠️ Slow break-even increases financial exposure.`
+
+  );
+
+}
+
+// =====================================
+// 🧠 COMBINED EDUCATIONAL RESPONSE
+// =====================================
+
+if(responsePartsIT.length){
+
+  return window.t(
+
+    responsePartsIT.join("\n\n"),
+
+    responsePartsEN.join("\n\n")
 
   );
 
