@@ -1,5 +1,5 @@
 // ===============================================
-// RENDIMENTOBB – AI KNOWLEDGE BASE 1.0
+// RENDIMENTOBB – AI KNOWLEDGE BASE 2.0
 // ===============================================
 
 window.RB_AI_KNOWLEDGE = {
@@ -7,103 +7,113 @@ window.RB_AI_KNOWLEDGE = {
   cities: {
 
     roma: {
-
-      name: {
-        it: "Roma",
-        en: "Rome"
-      },
-
+      aliases: ["roma","rome"],
       roi: "6-9%",
       occupancy: "72%",
       adr: "€140",
-
       risk: {
         it: "medio",
         en: "medium"
-      },
-
-      strengths: {
-        it: [
-          "turismo costante",
-          "alta domanda",
-          "mercato premium"
-        ],
-
-        en: [
-          "stable tourism",
-          "high demand",
-          "premium market"
-        ]
-      },
-
-      weaknesses: {
-        it: [
-          "alta concorrenza",
-          "immobili costosi"
-        ],
-
-        en: [
-          "high competition",
-          "expensive properties"
-        ]
       }
-
     },
 
     milano: {
-
-      name: {
-        it: "Milano",
-        en: "Milan"
-      },
-
+      aliases: ["milano","milan"],
       roi: "5-8%",
       occupancy: "69%",
       adr: "€160",
-
       risk: {
         it: "medio-basso",
         en: "medium-low"
       }
-
     },
 
     napoli: {
-
-      name: {
-        it: "Napoli",
-        en: "Naples"
-      },
-
+      aliases: ["napoli","naples"],
       roi: "7-11%",
       occupancy: "68%",
       adr: "€120",
-
       risk: {
         it: "medio-alto",
         en: "medium-high"
       }
+    },
 
-    }
+    firenze: {
+      aliases: ["firenze","florence"],
+      roi: "6-10%",
+      occupancy: "74%",
+      adr: "€170",
+      risk: {
+        it: "medio",
+        en: "medium"
+      }
+    },
 
-  },
+    torino: {
+      aliases: ["torino","turin"],
+      roi: "5-7%",
+      occupancy: "61%",
+      adr: "€105",
+      risk: {
+        it: "medio-basso",
+        en: "medium-low"
+      }
+    },
 
-  mortgage: {
+    bologna: {
+      aliases: ["bologna"],
+      roi: "6-8%",
+      occupancy: "66%",
+      adr: "€125",
+      risk: {
+        it: "medio",
+        en: "medium"
+      }
+    },
 
-    tips: {
+    venezia: {
+      aliases: ["venezia","venice"],
+      roi: "7-10%",
+      occupancy: "79%",
+      adr: "€210",
+      risk: {
+        it: "medio-alto",
+        en: "medium-high"
+      }
+    },
 
-      it: [
-        "evita rate superiori al 45% del cashflow",
-        "mantieni un fondo emergenza",
-        "attenzione ai tassi variabili"
-      ],
+    bari: {
+      aliases: ["bari"],
+      roi: "6-9%",
+      occupancy: "63%",
+      adr: "€95",
+      risk: {
+        it: "medio",
+        en: "medium"
+      }
+    },
 
-      en: [
-        "avoid installments above 45% of cashflow",
-        "keep an emergency fund",
-        "watch variable interest rates"
-      ]
+    palermo: {
+      aliases: ["palermo"],
+      roi: "7-10%",
+      occupancy: "65%",
+      adr: "€100",
+      risk: {
+        it: "medio-alto",
+        en: "medium-high"
+      }
+    },
 
+    genova: {
+      aliases: ["genova","genoa"],
+      roi: "5-7%",
+      occupancy: "59%",
+      adr: "€110",
+      risk: {
+        it: "medio-basso",
+        en: "medium-low"
+      }
     }
 
   }
