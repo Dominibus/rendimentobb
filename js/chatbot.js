@@ -90,7 +90,7 @@ const lastUserMessage =
 
 const matches = [];
 
-for(const key in window.rbKnowledgeBase){
+for(const key in (window.rbKnowledgeBase || {})){
 
   const item = window.rbKnowledgeBase[key];
 
@@ -752,15 +752,23 @@ if(
   // ❌ NO ANALYSIS YET
   // =====================================
 
-  if(!window.lastAnalysisData){
+if(!window.lastAnalysisData){
+
+  if(wantsEducation){
 
     return window.t(
-      "Prima esegui una simulazione così posso analizzare ROI, rischio e rendimento reale.",
-      "Run a simulation first so I can analyze ROI, risk and real profitability."
+      "Posso spiegarti ROI, cashflow, rischio e sostenibilità anche senza simulazione.",
+      "I can explain ROI, cashflow, risk and sustainability even without a simulation."
     );
 
-  }  
+  }
 
+  return window.t(
+    "Prima esegui una simulazione così posso analizzare ROI, rischio e rendimento reale.",
+    "Run a simulation first so I can analyze ROI, risk and real profitability."
+  );
+
+}
 // =====================================
 // 📊 ROI SIMULATION
 // =====================================
@@ -875,7 +883,10 @@ if(wantsROI){
 // 🧠 STRATEGY INSIGHTS
 // =====================================
 
-if(wantsStrategy){
+if(
+  wantsStrategy &&
+  window.lastAnalysisData
+){
 
   let insightsIT = [];
   let insightsEN = [];
@@ -937,38 +948,32 @@ insightsEN.push(
 
 if(roi >= 15){
 
-  aiSignals.push("high_roi");
-
   insightsIT.push(
-    "🚀 L'investimento mostra segnali molto forti rispetto alla media del mercato."
+    "🚀 La simulazione mostra metriche molto aggressive rispetto alla media mercato."
   );
 
   insightsEN.push(
-    "🚀 The investment shows very strong signals compared to the market average."
+    "🚀 The simulation shows highly aggressive metrics compared to market averages."
   );
 
 }else if(roi >= 8){
 
-  aiSignals.push("medium_roi");
-
   insightsIT.push(
-    "📈 L'investimento appare potenzialmente sostenibile ma richiede ottimizzazione operativa."
+    "📈 La simulazione appare potenzialmente sostenibile."
   );
 
   insightsEN.push(
-    "📈 The investment appears potentially sustainable but requires operational optimization."
+    "📈 The simulation appears potentially sustainable."
   );
 
 }else{
 
-  aiSignals.push("low_roi");
-
   insightsIT.push(
-    "⚠️ L'investimento mostra alcuni segnali di debolezza da monitorare."
+    "⚠️ La simulazione mostra alcune debolezze operative."
   );
 
   insightsEN.push(
-    "⚠️ The investment shows some weaknesses that should be monitored."
+    "⚠️ The simulation shows some operational weaknesses."
   );
 
 }
@@ -1004,24 +1009,21 @@ if(aiTone === "advanced"){
 
 }
 
-  // =================================
-  // 🌍 MARKET DATA
-  // =================================
+// =================================
+// 🌍 MARKET DATA
+// =================================
 
-  const marketData =
-    window.rbMarketData?.[city];
+if(marketData){
 
-  if(marketData){
+  insightsIT.push(
+    `🌍 Mercato ${city}: ROI medio ${marketData.avgROI}.`
+  );
 
-    insightsIT.push(
-      `🌍 Mercato ${city}: ROI medio ${marketData.avgROI}.`
-    );
+  insightsEN.push(
+    `🌍 ${city} market average ROI: ${marketData.avgROI}.`
+  );
 
-    insightsEN.push(
-      `🌍 ${city} market average ROI: ${marketData.avgROI}.`
-    );
-
-  }
+}
 
 // =================================
 // 🧠 AI INVESTMENT SCORE
@@ -1413,13 +1415,19 @@ insightsEN.push(
   ]
 );
 
-  return window.t(
+insightsIT = [...new Set(insightsIT)];
+insightsEN = [...new Set(insightsEN)];
+  
+const finalIT =
+  insightsIT.slice(0,10).join("\n\n");
 
-    insightsIT.join("\n\n"),
+const finalEN =
+  insightsEN.slice(0,10).join("\n\n");
 
-    insightsEN.join("\n\n")
-
-  );
+return window.t(
+  finalIT,
+  finalEN
+);
 
 }
 
