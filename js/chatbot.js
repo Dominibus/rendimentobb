@@ -1044,6 +1044,49 @@ if(risk <= 40)
 if(monthlyCosts <= 1200)
   investmentScore += 20;
 
+// =================================
+// 🎯 SCORE LABEL
+// =================================
+
+let scoreLabelIT = "";
+let scoreLabelEN = "";
+
+let scoreEmoji = "";
+
+if(investmentScore >= 80){
+
+  scoreLabelIT = "Investimento molto forte";
+  scoreLabelEN = "Very strong investment";
+
+  scoreEmoji = "🟢";
+
+}else if(investmentScore >= 60){
+
+  scoreLabelIT = "Investimento interessante";
+  scoreLabelEN = "Promising investment";
+
+  scoreEmoji = "🟡";
+
+}else{
+
+  scoreLabelIT = "Investimento rischioso";
+  scoreLabelEN = "Risky investment";
+
+  scoreEmoji = "🔴";
+
+}
+
+// =================================
+// 📊 SCORE BAR
+// =================================
+
+const scoreBlocks =
+  Math.round(investmentScore / 10);
+
+const scoreBar =
+  "█".repeat(scoreBlocks) +
+  "░".repeat(10 - scoreBlocks);
+
 
  // =================================
 // ROI
@@ -1300,12 +1343,28 @@ if(
     "💡 Always analyze real cashflow and sustainability before investing."
   );
 
-  insightsIT.push(
-  `🧠 AI Investment Score: ${investmentScore}/100`
+insightsIT.push(
+
+`${scoreEmoji} EXECUTIVE SCORE
+
+${investmentScore}/100
+
+${scoreBar}
+
+${scoreLabelIT}`
+
 );
 
 insightsEN.push(
-  `🧠 AI Investment Score: ${investmentScore}/100`
+
+`${scoreEmoji} EXECUTIVE SCORE
+
+${investmentScore}/100
+
+${scoreBar}
+
+${scoreLabelEN}`
+
 );
 
 // =================================
