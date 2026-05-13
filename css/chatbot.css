@@ -921,3 +921,40 @@ body.dark-mode #rb-chat-input{
   }
 
 }
+
+/* ===============================================
+🔥 QUICK ACTIONS
+=============================================== */
+
+.rb-quick-actions{
+
+  display:flex;
+  gap:8px;
+
+  overflow-x:auto;
+
+  padding-bottom:10px;
+
+}
+
+.rb-quick-btn{
+
+  border:none;
+
+  padding:10px 14px;
+
+  border-radius:14px;
+
+  background:
+  rgba(16,185,129,0.10);
+
+  color:#10b981;
+
+  font-size:13px;
+  font-weight:700;
+
+  white-space:nowrap;
+
+  cursor:pointer;
+
+}
