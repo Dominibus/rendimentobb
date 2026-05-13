@@ -67,6 +67,27 @@ Unlock RendimentoBB PRO to access:
   }
 
 // ============================================
+// EDUCATIONAL PRIORITY DETECTION
+// ============================================
+
+const educationalTriggers = [
+
+  "cos'è",
+  "cosa è",
+  "spiegami",
+  "definizione",
+  "meaning",
+  "what is",
+  "explain"
+
+];
+
+const wantsEducation =
+  educationalTriggers.some(trigger =>
+    msg.includes(trigger)
+  );
+
+// ============================================
 // EDUCATIONAL KNOWLEDGE ENGINE
 // ============================================
 
@@ -91,7 +112,10 @@ Object.values(kb).forEach(item=>{
 
 });
 
-if(educationalResponse){
+if(
+  educationalResponse &&
+  wantsEducation
+){
 
   return educationalResponse;
 
