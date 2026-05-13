@@ -38,11 +38,8 @@ const educationalTriggers = [
 
 ];
 
-const wantsEducation =
+const wantsEducationIntent =
   detectIntent(intents.education);
-  educationalTriggers.some(trigger =>
-    text.includes(trigger)
-  );
 
   const data = window.lastAnalysisData || {};
 
@@ -173,6 +170,8 @@ const wantsStrategy =
 const wantsEducationIntent =
   detectIntent(intents.education);
 
+  const wantsEducation =
+  wantsEducationIntent;
 // =====================================
 // 📚 ROI EDUCATIONAL
 // =====================================
