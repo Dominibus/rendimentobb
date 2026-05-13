@@ -112,73 +112,6 @@ for(const key in window.rbKnowledgeBase){
 }
 
 // =====================================
-// 🧠 PRIORITY RESPONSE ENGINE
-// =====================================
-
-if(
-  matches.length &&
-  !wantsStrategy &&
-  !isFollowUp
-){
-
-  matches.sort((a,b)=>
-    b.priority - a.priority
-  );
-
-  const item = matches[0].item;
-
-  const lang = window.currentLang || "it";
-
-  const response = lang === "en"
-
-  ? `
-
-${item.aiTitleEN || ""}
-
-${item.aiSummaryEN || ""}
-
-${item.aiInsightEN || ""}
-
-${item.warningEN || ""}
-
-${item.recommendationsEN?.length
-
-? `
-💡 Recommendations:
-• ${item.recommendationsEN.join("\n• ")}
-`
-
-: ""
-}
-
-`
-
-  : `
-
-${item.aiTitleIT || ""}
-
-${item.aiSummaryIT || ""}
-
-${item.aiInsightIT || ""}
-
-${item.warningIT || ""}
-
-${item.recommendationsIT?.length
-
-? `
-💡 Suggerimenti:
-• ${item.recommendationsIT.join("\n• ")}
-`
-
-: ""
-}
-
-`;
-
-  return response;
-
-}
-// =====================================
 // 🧠 EDUCATIONAL DETECTION
 // =====================================
 
@@ -353,6 +286,74 @@ const isFollowUp =
     text.includes(word)
   );
 
+// =====================================
+// 🧠 PRIORITY RESPONSE ENGINE
+// =====================================
+
+if(
+  matches.length &&
+  !wantsStrategy &&
+  !isFollowUp
+){
+
+  matches.sort((a,b)=>
+    b.priority - a.priority
+  );
+
+  const item = matches[0].item;
+
+  const lang = window.currentLang || "it";
+
+  const response = lang === "en"
+
+  ? `
+
+${item.aiTitleEN || ""}
+
+${item.aiSummaryEN || ""}
+
+${item.aiInsightEN || ""}
+
+${item.warningEN || ""}
+
+${item.recommendationsEN?.length
+
+? `
+💡 Recommendations:
+• ${item.recommendationsEN.join("\n• ")}
+`
+
+: ""
+}
+
+`
+
+  : `
+
+${item.aiTitleIT || ""}
+
+${item.aiSummaryIT || ""}
+
+${item.aiInsightIT || ""}
+
+${item.warningIT || ""}
+
+${item.recommendationsIT?.length
+
+? `
+💡 Suggerimenti:
+• ${item.recommendationsIT.join("\n• ")}
+`
+
+: ""
+}
+
+`;
+
+  return response;
+
+}
+  
   const alreadyTalkedAboutROI =
   lastMessages.some(m =>
     m.text?.toLowerCase()?.includes("roi")
@@ -1156,6 +1157,8 @@ function initRBChatbot(){
 
   function sendMessage(){
 
+    sendBtn.disabled = true;
+
     const text = input.value.trim();
 
     if(!text) return;
@@ -1200,6 +1203,9 @@ function initRBChatbot(){
     input.value = "";
 
     messages.scrollTop = messages.scrollHeight;
+
+    sendBtn.disabled = false;
+    input.focus();
   }
 
   sendBtn.onclick = sendMessage;
