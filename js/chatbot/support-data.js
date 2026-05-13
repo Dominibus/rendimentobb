@@ -1,5 +1,5 @@
 // ===============================================
-// SUPPORT KNOWLEDGE
+// AI SUPPORT KNOWLEDGE ENGINE
 // ===============================================
 
 window.rbSupportKnowledge = {
@@ -9,38 +9,58 @@ window.rbSupportKnowledge = {
     keywords:[
       "pdf",
       "report",
-      "scaricare pdf"
+      "scaricare pdf",
+      "executive report",
+      "analisi pdf",
+      "download report"
     ],
 
-    it: `
-📄 PDF Executive
+    category: "premium-feature",
 
-Il PDF executive include:
+    access: "pro",
 
-• ROI avanzato
-• cashflow
-• rischio
-• sostenibilità finanziaria
-• benchmark mercato
-• analisi investimento
+    aiTitleIT: "📄 Executive Investment Report",
 
-Disponibile nel piano PRO.
+    aiTitleEN: "📄 Executive Investment Report",
+
+    aiSummaryIT: `
+Il report Executive AI genera un'analisi professionale dell'investimento utilizzando ROI reale, rischio operativo e sostenibilità finanziaria.
+
+Il sistema include insight automatici basati sui dati inseriti e benchmark di mercato.
 `,
 
-    en: `
-📄 Executive PDF
+    aiSummaryEN: `
+The Executive AI report generates a professional investment analysis using real ROI, operational risk and financial sustainability.
 
-The executive PDF includes:
+The system includes automatic insights based on user data and market benchmarks.
+`,
 
-• advanced ROI
-• cashflow
-• risk
-• financial sustainability
-• market benchmarks
-• investment analysis
+    featuresIT: [
+      "ROI reale avanzato",
+      "Analisi cashflow",
+      "Rischio operativo",
+      "Benchmark mercato",
+      "Analisi sostenibilità",
+      "Insight AI automatici"
+    ],
 
-Available in the PRO plan.
+    featuresEN: [
+      "Advanced real ROI",
+      "Cashflow analysis",
+      "Operational risk",
+      "Market benchmarks",
+      "Sustainability analysis",
+      "Automatic AI insights"
+    ],
+
+    upgradeMessageIT: `
+🔒 Il report Executive AI è disponibile nel piano PRO.
+`,
+
+    upgradeMessageEN: `
+🔒 Executive AI reports are available in the PRO plan.
 `
+
   }
 
 };
