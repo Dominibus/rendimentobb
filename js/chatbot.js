@@ -84,6 +84,28 @@ const lastUserMessage =
     previousUserMessages.length - 2
   ]?.text?.toLowerCase() || "";
 
+  const conversationContext = {
+
+  talkedAboutROI:
+    lastMessages.some(m =>
+      m.text?.toLowerCase()
+      .includes("roi")
+    ),
+
+  talkedAboutRisk:
+    lastMessages.some(m =>
+      m.text?.toLowerCase()
+      .includes("rischio")
+    ),
+
+  talkedAboutCashflow:
+    lastMessages.some(m =>
+      m.text?.toLowerCase()
+      .includes("cashflow")
+    )
+
+};
+
 // =====================================
 // 🧠 KNOWLEDGE BASE ENGINE
 // =====================================
@@ -431,52 +453,38 @@ if(
 ){
 
   addResponse(
-    
-`📈 ROI (Return On Investment)
 
-Il ROI misura quanto rende il tuo investimento rispetto al capitale investito.
-
-Esempio:
-
-• investimento → €100.000
-• profitto annuo → €10.000
-
-ROI:
-10%
+`📈 ROI misura la redditività del capitale investito.
 
 💡 Nel settore B&B:
 
 • 4-6% → conservativo
-• 7-10% → molto buono
+• 7-10% → competitivo
 • 10%+ → aggressivo
 
-⚠️ Un ROI alto non garantisce automaticamente un investimento sicuro.`,
+📊 ROI attuale simulazione:
+${roi ? roi.toFixed(1) + "%" : "non disponibile"}
 
-`📈 ROI (Return On Investment)
+⚠️ ROI elevato senza cashflow stabile può diventare rischioso.`,
 
-ROI measures how profitable an investment is compared to invested capital.
-
-Example:
-
-• investment → €100,000
-• annual profit → €10,000
-
-ROI:
-10%
+`📈 ROI measures investment profitability compared to invested capital.
 
 💡 In the B&B sector:
 
 • 4-6% → conservative
-• 7-10% → very strong
+• 7-10% → competitive
 • 10%+ → aggressive
 
-⚠️ High ROI does not automatically guarantee a safe investment.`
+📊 Current simulation ROI:
+${roi ? roi.toFixed(1) + "%" : "not available"}
+
+⚠️ High ROI without stable cashflow may become risky.`
 
   );
 
 }
 
-  // =====================================
+// =====================================
 // 📚 CASHFLOW EDUCATIONAL
 // =====================================
 
@@ -491,43 +499,43 @@ if(
 
   addResponse(
 
-`💸 Cashflow
-
-Il cashflow rappresenta il denaro reale che rimane dopo tutte le spese operative.
+`💸 Cashflow = liquidità reale generata ogni mese.
 
 Include:
-
-• utenze
 • cleaning
+• utenze
 • tasse
 • manutenzione
-• eventuale mutuo
+• mutuo
 
-💡 Un cashflow positivo significa che il B&B genera liquidità reale ogni mese.
+📊 Profitto netto stimato:
+${profit
+  ? window.formatCurrency(profit)
+  : "non disponibile"}
 
-⚠️ Molti investimenti mostrano ROI elevati ma cashflow molto bassi.`,
+⚠️ Molti investimenti mostrano ROI elevati ma cashflow debole.`,
 
-`💸 Cashflow
-
-Cashflow represents the real money remaining after all operating expenses.
+`💸 Cashflow = real liquidity generated every month.
 
 Includes:
-
-• utilities
 • cleaning
+• utilities
 • taxes
 • maintenance
-• mortgage payments
+• mortgage
 
-💡 Positive cashflow means the property generates real liquidity every month.
+📊 Estimated net profit:
+${profit
+  ? window.formatCurrency(profit)
+  : "not available"}
 
-⚠️ Many investments show high ROI but weak cashflow.`
+⚠️ Many investments show strong ROI but weak cashflow.`
 
   );
 
 }
 
-  // =====================================
+// =====================================
 // 📚 RISK EDUCATIONAL
 // =====================================
 
@@ -541,39 +549,39 @@ if(
 
   addResponse(
 
-`⚠️ Rischio investimento
+`⚠️ Il rischio misura la stabilità dell'investimento nel tempo.
 
-Il rischio misura quanto un investimento può diventare instabile nel tempo.
-
-Nel settore B&B il rischio dipende da:
-
+Dipende da:
 • occupazione
 • costi operativi
 • mutuo
 • stagionalità
-• regolamentazioni locali
+• regolamentazioni
 
-💡 Un ROI alto con rischio elevato può diventare poco sostenibile.`,
+📊 Rischio stimato:
+${risk}/100
 
-`⚠️ Investment Risk
+💡 ROI alto + rischio alto = investimento aggressivo.`,
 
-Risk measures how unstable an investment may become over time.
+`⚠️ Risk measures long-term investment stability.
 
-In the B&B sector risk depends on:
-
+Depends on:
 • occupancy
 • operating costs
 • mortgage
 • seasonality
-• local regulations
+• regulations
 
-💡 A high ROI with high risk may become unsustainable.`
+📊 Estimated risk:
+${risk}/100
+
+💡 High ROI + high risk = aggressive investment.`
 
   );
 
 }
 
-  // =====================================
+// =====================================
 // 📚 OCCUPANCY EDUCATIONAL
 // =====================================
 
@@ -587,35 +595,37 @@ if(
 
   addResponse(
 
-`🏨 Occupazione
+`🏨 Occupazione = percentuale media di notti prenotate.
 
-L'occupazione indica la percentuale di notti prenotate durante l'anno.
+💡 Nel settore short-rent:
 
-💡 Nel settore short rent:
+• 50% → bassa
+• 65-70% → forte
+• 80%+ → molto aggressiva
 
-• 50% → basso
-• 65-70% → ottimo
-• 80%+ → molto aggressivo
+📊 Occupazione simulata:
+${occupancy || "non disponibile"}%
 
-⚠️ Occupazioni troppo elevate possono essere irrealistiche in alcune città.`,
+⚠️ Occupazioni troppo elevate possono essere irrealistiche.`,
 
-`🏨 Occupancy
+`🏨 Occupancy = average percentage of booked nights.
 
-Occupancy represents the percentage of booked nights during the year.
-
-💡 In the short rental sector:
+💡 In the short-rent sector:
 
 • 50% → low
-• 65-70% → excellent
-• 80%+ → very aggressive
+• 65-70% → strong
+• 80%+ → highly aggressive
 
-⚠️ Extremely high occupancy may be unrealistic in some cities.`
+📊 Simulated occupancy:
+${occupancy || "not available"}%
+
+⚠️ Extremely high occupancy may be unrealistic.`
 
   );
 
 }
 
-  // =====================================
+// =====================================
 // 📚 DSCR EDUCATIONAL
 // =====================================
 
@@ -626,9 +636,7 @@ if(
 
   addResponse(
 
-`🏦 DSCR
-
-Il DSCR misura la capacità dell'investimento di sostenere il mutuo.
+`🏦 DSCR misura la sostenibilità del mutuo.
 
 💡 Generalmente:
 
@@ -636,11 +644,9 @@ Il DSCR misura la capacità dell'investimento di sostenere il mutuo.
 • sopra 1.2 → sostenibile
 • sopra 1.5 → molto forte
 
-Le banche utilizzano spesso questo parametro per valutare finanziamenti immobiliari.`,
+📌 Le banche utilizzano il DSCR per valutare finanziamenti immobiliari.`,
 
-`🏦 DSCR
-
-DSCR measures the investment's ability to sustain mortgage payments.
+`🏦 DSCR measures mortgage sustainability.
 
 💡 Generally:
 
@@ -648,13 +654,13 @@ DSCR measures the investment's ability to sustain mortgage payments.
 • above 1.2 → sustainable
 • above 1.5 → very strong
 
-Banks often use this metric to evaluate real estate financing.`
+📌 Banks often use DSCR to evaluate real estate financing.`
 
   );
 
 }
 
-  // =====================================
+// =====================================
 // 📚 BREAK EVEN EDUCATIONAL
 // =====================================
 
@@ -668,25 +674,23 @@ if(
 
   addResponse(
 
-`⚖️ Break-even
+`⚖️ Break-even = tempo necessario per recuperare l'investimento.
 
-Il break-even rappresenta il punto in cui ricavi e costi si equivalgono.
+💡 Più rapidamente lo raggiungi:
 
-💡 Più rapidamente raggiungi il break-even:
+• minore rischio
+• maggiore sostenibilità
+• migliore stabilità operativa
 
-• minore sarà il rischio
-• maggiore sarà la stabilità operativa
+⚠️ Un break-even lento aumenta l'esposizione finanziaria.`,
 
-⚠️ Un break-even troppo lento aumenta l'esposizione finanziaria.`,
+`⚖️ Break-even = time required to recover the investment.
 
-`⚖️ Break-even
+💡 The faster you reach it:
 
-Break-even represents the point where revenues equal costs.
-
-💡 The faster you reach break-even:
-
-• the lower the risk
-• the higher the operational stability
+• lower risk
+• stronger sustainability
+• better operational stability
 
 ⚠️ Slow break-even increases financial exposure.`
 
@@ -709,7 +713,6 @@ if(responsePartsIT.length){
   );
 
 }
-
   // =====================================
 // 🧠 CONTEXTUAL FOLLOW-UP
 // =====================================
@@ -1575,6 +1578,21 @@ function initRBChatbot(){
 
   const sendBtn = document.getElementById("rb-chat-send");
   const input = document.getElementById("rb-chat-input");
+
+  document
+.querySelectorAll(".rb-quick-btn")
+.forEach(btn=>{
+
+  btn.onclick = ()=>{
+
+    input.value =
+      btn.innerText;
+
+    sendMessage();
+
+  };
+
+});
 
   function escapeHTML(str){
 
