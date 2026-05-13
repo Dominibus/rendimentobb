@@ -39,6 +39,7 @@ const educationalTriggers = [
 ];
 
 const wantsEducation =
+  detectIntent(intents.education);
   educationalTriggers.some(trigger =>
     text.includes(trigger)
   );
@@ -65,6 +66,112 @@ const wantsEducation =
       0
     );
 
+  const occupancy =
+  Number(
+    data.occupancy ||
+    data.occupancyRate ||
+    0
+  );
+
+const nightly =
+  Number(
+    data.pricePerNight ||
+    data.nightPrice ||
+    0
+  );
+
+const monthlyCosts =
+  Number(
+    data.monthlyCosts ||
+    data.monthlyExpenses ||
+    0
+  );
+
+  // =====================================
+// 🧠 INTENT ENGINE
+// =====================================
+
+const intents = {
+
+  roi: [
+    "roi",
+    "rendimento",
+    "return",
+    "profitto",
+    "guadagno",
+    "quanto rende",
+    "quant'è il roi",
+    "quanto rende investimento"
+  ],
+
+  risk: [
+    "rischio",
+    "risk",
+    "sicuro",
+    "pericoloso",
+    "stabile",
+    "rischioso",
+    "rischi ci sono"
+  ],
+
+  cashflow: [
+    "cashflow",
+    "cash flow",
+    "flusso di cassa",
+    "liquidità",
+    "guadagno reale"
+  ],
+
+  strategy: [
+    "strategia",
+    "consigli",
+    "conviene",
+    "che ne pensi",
+    "cosa pensi",
+    "investimento buono",
+    "buon investimento",
+    "cosa leggi",
+    "analizza simulazione",
+    "migliorare",
+    "ottimizzare"
+  ],
+
+  education: [
+    "cos'è",
+    "cosa è",
+    "cosa vuol dire",
+    "significa",
+    "spiegami",
+    "definizione",
+    "what is",
+    "meaning",
+    "explain"
+  ]
+
+};
+
+  function detectIntent(intentList){
+
+  return intentList.some(keyword =>
+    text.includes(keyword)
+  );
+
+}
+
+const wantsROI =
+  detectIntent(intents.roi);
+
+const wantsRisk =
+  detectIntent(intents.risk);
+
+const wantsCashflow =
+  detectIntent(intents.cashflow);
+
+const wantsStrategy =
+  detectIntent(intents.strategy);
+
+const wantsEducationIntent =
+  detectIntent(intents.education);
 
 // =====================================
 // 📚 ROI EDUCATIONAL
@@ -359,11 +466,7 @@ Break-even represents the point where revenues equal costs.
 // 📊 ROI SIMULATION
 // =====================================
 
-if(
-  text.includes("roi") ||
-  text.includes("rendimento") ||
-  text.includes("profit")
-){
+if(wantsROI){
 
     if(access.isFree){
 
@@ -403,10 +506,7 @@ if(
   // ⚠️ RISK
   // =====================================
 
-  if(
-    text.includes("rischio") ||
-    text.includes("risk")
-  ){
+  if(wantsRisk){
 
     if(access.isFree){
 
@@ -446,11 +546,7 @@ if(
   // 💰 CASHFLOW
   // =====================================
 
-  if(
-    text.includes("cashflow") ||
-    text.includes("profitto") ||
-    text.includes("guadagno")
-  ){
+  if(wantsCashflow){
 
     return window.t(
       `Il profitto netto stimato è di ${window.formatCurrency(profit)} annui.`,
@@ -502,35 +598,148 @@ if(
 // 🧠 STRATEGY INSIGHTS
 // =====================================
 
-if(
-  text.includes("meglio") ||
-  text.includes("consigli") ||
-  text.includes("strategia")
-){
+if(wantsStrategy){
+
+  let insightsIT = [];
+  let insightsEN = [];
+
+  // =================================
+  // ROI
+  // =================================
+
+  if(roi >= 15){
+
+    insightsIT.push(
+      "📈 ROI molto elevato rispetto alla media mercato."
+    );
+
+    insightsEN.push(
+      "📈 ROI significantly above market average."
+    );
+
+  }else if(roi >= 8){
+
+    insightsIT.push(
+      "📊 ROI potenzialmente sostenibile."
+    );
+
+    insightsEN.push(
+      "📊 ROI appears potentially sustainable."
+    );
+
+  }else{
+
+    insightsIT.push(
+      "⚠️ ROI piuttosto basso."
+    );
+
+    insightsEN.push(
+      "⚠️ ROI appears relatively low."
+    );
+
+  }
+
+  // =================================
+  // OCCUPANCY
+  // =================================
+
+  if(occupancy < 55){
+
+    insightsIT.push(
+      "🏨 Occupazione stimata piuttosto bassa."
+    );
+
+    insightsEN.push(
+      "🏨 Estimated occupancy appears low."
+    );
+
+  }else if(occupancy >= 70){
+
+    insightsIT.push(
+      "🔥 Occupazione molto forte."
+    );
+
+    insightsEN.push(
+      "🔥 Occupancy is very strong."
+    );
+
+  }
+
+  // =================================
+  // NIGHT PRICE
+  // =================================
+
+  if(nightly < 80){
+
+    insightsIT.push(
+      "🏷️ Prezzo notte relativamente basso."
+    );
+
+    insightsEN.push(
+      "🏷️ Night price appears relatively low."
+    );
+
+  }else if(nightly > 180){
+
+    insightsIT.push(
+      "💎 Prezzo notte premium."
+    );
+
+    insightsEN.push(
+      "💎 Premium nightly pricing detected."
+    );
+
+  }
+
+  // =================================
+  // COSTS
+  // =================================
+
+  if(monthlyCosts > 1500){
+
+    insightsIT.push(
+      "💸 Costi operativi elevati."
+    );
+
+    insightsEN.push(
+      "💸 Operating costs appear high."
+    );
+
+  }
+
+  // =================================
+  // RISK
+  // =================================
+
+  if(risk >= 70){
+
+    insightsIT.push(
+      "⚠️ Il rischio operativo sembra elevato."
+    );
+
+    insightsEN.push(
+      "⚠️ Operational risk appears high."
+    );
+
+  }
+
+  // =================================
+  // FINAL STRATEGY
+  // =================================
+
+  insightsIT.push(
+    "💡 Analizza sempre cashflow reale e sostenibilità prima di investire."
+  );
+
+  insightsEN.push(
+    "💡 Always analyze real cashflow and sustainability before investing."
+  );
 
   return window.t(
 
-`💡 Strategia AI
+    insightsIT.join("\n\n"),
 
-Per migliorare sostenibilità e rendimento:
-
-• aumenta occupazione gradualmente
-• evita mutui troppo aggressivi
-• controlla il cashflow reale
-• monitora stagionalità e costi
-
-⚠️ Un ROI troppo elevato può aumentare il rischio operativo.`,
-
-`💡 AI Strategy
-
-To improve sustainability and profitability:
-
-• increase occupancy gradually
-• avoid aggressive mortgages
-• monitor real cashflow
-• track seasonality and costs
-
-⚠️ Excessively high ROI may increase operational risk.`
+    insightsEN.join("\n\n")
 
   );
 
