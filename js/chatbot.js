@@ -850,6 +850,49 @@ if(wantsStrategy){
   let insightsIT = [];
   let insightsEN = [];
 
+// =================================
+// 🧠 OPENING ANALYSIS
+// =================================
+
+if(roi >= 15){
+
+  insightsIT.push(
+    "🚀 L'investimento mostra segnali molto forti rispetto alla media del mercato."
+  );
+
+  insightsEN.push(
+    "🚀 The investment shows very strong signals compared to the market average."
+  );
+
+}else if(roi >= 8){
+
+  insightsIT.push(
+    "📈 L'investimento appare potenzialmente sostenibile ma richiede ottimizzazione operativa."
+  );
+
+  insightsEN.push(
+    "📈 The investment appears potentially sustainable but requires operational optimization."
+  );
+
+}else{
+
+  insightsIT.push(
+    "⚠️ L'investimento mostra alcuni segnali di debolezza da monitorare."
+  );
+
+  insightsEN.push(
+    "⚠️ The investment shows some weaknesses that should be monitored."
+  );
+
+}  
+
+// =================================
+// 🧠 DYNAMIC RECOMMENDATIONS
+// =================================
+
+let recommendationsIT = [];
+let recommendationsEN = [];
+
   if(aiTone === "executive"){
 
   insightsIT.push(
@@ -946,6 +989,14 @@ if(monthlyCosts <= 1200)
       "⚠️ ROI appears relatively low."
     );
 
+    recommendationsIT.push(
+  "Valuta aumento ADR, occupazione o leva finanziaria."
+);
+
+recommendationsEN.push(
+  "Consider improving ADR, occupancy or financial leverage."
+);
+
   }
 
   // =================================
@@ -961,6 +1012,14 @@ if(monthlyCosts <= 1200)
     insightsEN.push(
       "🏨 Estimated occupancy appears low."
     );
+
+    recommendationsIT.push(
+  "Migliora il listing Airbnb e utilizza pricing dinamico."
+);
+
+recommendationsEN.push(
+  "Improve Airbnb listing quality and use dynamic pricing."
+);
 
   }else if(occupancy >= 70){
 
@@ -1006,6 +1065,14 @@ if(monthlyCosts <= 1200)
 
   if(monthlyCosts > 1500){
 
+    recommendationsIT.push(
+  "Riduci cleaning, utenze e automatizza il check-in."
+);
+
+recommendationsEN.push(
+  "Reduce cleaning, utilities and automate check-in."
+);
+
     insightsIT.push(
       "💸 Costi operativi elevati."
     );
@@ -1021,6 +1088,14 @@ if(monthlyCosts <= 1200)
 // =================================
 
 if(costRatio >= 45){
+
+  recommendationsIT.push(
+  "I costi sono troppo elevati rispetto ai ricavi: ottimizza la gestione operativa."
+);
+
+recommendationsEN.push(
+  "Costs are too high compared to revenue: optimize operations."
+);
 
   insightsIT.push(
     "⚠️ I costi assorbono gran parte dei ricavi."
@@ -1066,6 +1141,66 @@ if(costRatio >= 45){
 
 insightsEN.push(
   `🧠 AI Investment Score: ${investmentScore}/100`
+);
+
+  // =================================
+// 💡 FINAL RECOMMENDATIONS
+// =================================
+
+if(recommendationsIT.length){
+
+  insightsIT.push(
+
+`💡 Suggerimenti AI:
+• ${recommendationsIT.join("\n• ")}`
+  );
+
+}
+
+if(recommendationsEN.length){
+
+  insightsEN.push(
+
+`💡 AI Recommendations:
+• ${recommendationsEN.join("\n• ")}`
+  );
+
+}
+
+  // =================================
+// 🎭 AI ENDINGS
+// =================================
+
+const endingsIT = [
+
+  "📌 Valuta attentamente sostenibilità e cashflow prima di procedere.",
+
+  "📌 Un buon ROI senza stabilità operativa può diventare rischioso.",
+
+  "📌 Ottimizzazione e controllo costi saranno fondamentali."
+
+];
+
+const endingsEN = [
+
+  "📌 Carefully evaluate sustainability and cashflow before proceeding.",
+
+  "📌 Strong ROI without operational stability may become risky.",
+
+  "📌 Optimization and cost control will be essential."
+
+];
+
+insightsIT.push(
+  endingsIT[
+    Math.floor(Math.random()*endingsIT.length)
+  ]
+);
+
+insightsEN.push(
+  endingsEN[
+    Math.floor(Math.random()*endingsEN.length)
+  ]
 );
 
   return window.t(
@@ -1207,8 +1342,12 @@ function initRBChatbot(){
 
     const text = input.value.trim();
 
-    if(!text) return;
+    if(!text){
 
+  sendBtn.disabled = false;
+  return;
+
+}
     window.rbConversationHistory.push({
   role: "user",
   text,
