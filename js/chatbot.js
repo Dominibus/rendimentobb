@@ -13,6 +13,57 @@ document.addEventListener(
 );
 
 // ===============================================
+// 🧠 CONVERSATION MEMORY
+// ===============================================
+
+window.rbConversationHistory =
+  window.rbConversationHistory || [];
+
+// ===============================================
+// 🌍 MARKET AI DATA
+// ===============================================
+
+window.rbMarketData = {
+
+  roma: {
+    avgROI: "8.4%",
+    occupancy: "72%",
+    risk: "medium"
+  },
+
+  milano: {
+    avgROI: "7.1%",
+    occupancy: "68%",
+    risk: "low"
+  },
+
+  napoli: {
+    avgROI: "9.6%",
+    occupancy: "69%",
+    risk: "medium"
+  },
+
+  firenze: {
+    avgROI: "8.9%",
+    occupancy: "74%",
+    risk: "medium-low"
+  },
+
+  venezia: {
+    avgROI: "10.2%",
+    occupancy: "78%",
+    risk: "high"
+  },
+
+  torino: {
+    avgROI: "7.4%",
+    occupancy: "63%",
+    risk: "low"
+  }
+
+};
+
+// ===============================================
 // 🧠 AI RESPONSE ENGINE 1.0
 // ===============================================
 
@@ -20,9 +71,24 @@ window.generateAIResponse = function(message){
 
   const text = message.toLowerCase().trim();
 
+  const lastMessages =
+  window.rbConversationHistory
+    .slice(-6);
+
+const previousUserMessages =
+  [...lastMessages]
+    .filter(m => m.role === "user");
+
+const lastUserMessage =
+  previousUserMessages[
+    previousUserMessages.length - 2
+  ]?.text?.toLowerCase() || "";
+
 // =====================================
 // 🧠 KNOWLEDGE BASE ENGINE
 // =====================================
+
+const matches = [];
 
 for(const key in window.rbKnowledgeBase){
 
@@ -33,7 +99,29 @@ for(const key in window.rbKnowledgeBase){
       text.includes(keyword)
     );
 
-if(matched){
+  if(matched){
+
+    matches.push({
+      key,
+      item,
+      priority: item.priority || 1
+    });
+
+  }
+
+}
+
+// =====================================
+// 🧠 PRIORITY RESPONSE ENGINE
+// =====================================
+
+if(matches.length){
+
+  matches.sort((a,b)=>
+    b.priority - a.priority
+  );
+
+  const item = matches[0].item;
 
   const lang = window.currentLang || "it";
 
@@ -86,9 +174,6 @@ ${item.recommendationsIT?.length
   return response;
 
 }
-
-}  
-
 // =====================================
 // 🧠 EDUCATIONAL DETECTION
 // =====================================
@@ -96,6 +181,12 @@ ${item.recommendationsIT?.length
   const data = window.lastAnalysisData || {};
 
   const access = window.getUserAccess?.() || {};
+
+  const aiTone = access.isPro
+  ? "executive"
+  : access.isInvestor
+  ? "advanced"
+  : "educational";
 
   const roi =
     Number(data.roi || 0);
@@ -107,6 +198,9 @@ ${item.recommendationsIT?.length
 
   const city =
     window.currentCity || "roma";
+
+  const marketData =
+  window.rbMarketData?.[city];
 
   const profit =
     Number(
@@ -135,6 +229,19 @@ const monthlyCosts =
     data.monthlyExpenses ||
     0
   );
+
+  const annualRevenue =
+  Number(
+    data.revenueAnnual ||
+    data.annualRevenue ||
+    data.grossAnnual ||
+    0
+  );
+
+const costRatio =
+  annualRevenue > 0
+    ? (monthlyCosts * 12 / annualRevenue) * 100
+    : 0;
 
   // =====================================
 // 🧠 INTENT ENGINE
@@ -221,6 +328,31 @@ const wantsStrategy =
 
 const wantsEducation =
   detectIntent(intents.education);
+
+// =====================================
+// 🧠 FOLLOW-UP UNDERSTANDING
+// =====================================
+
+const followUpWords = [
+  "e quindi",
+  "quindi",
+  "spiegami meglio",
+  "approfondisci",
+  "why",
+  "why?",
+  "and?",
+  "quindi?"
+];
+
+const isFollowUp =
+  followUpWords.some(word =>
+    text.includes(word)
+  );
+
+  const alreadyTalkedAboutROI =
+  lastMessages.some(m =>
+    m.text?.toLowerCase()?.includes("roi")
+  );
 // =====================================
 // 📚 ROI EDUCATIONAL
 // =====================================
@@ -498,6 +630,44 @@ Break-even represents the point where revenues equal costs.
 }
 
   // =====================================
+// 🧠 CONTEXTUAL FOLLOW-UP
+// =====================================
+
+if(
+  isFollowUp &&
+  (
+    lastUserMessage.includes("roi") ||
+    alreadyTalkedAboutROI
+  )
+){
+
+  return window.t(
+
+`📈 Un ROI elevato può sembrare ottimo inizialmente, ma va sempre confrontato con:
+
+• rischio operativo
+• cashflow reale
+• sostenibilità mutuo
+• occupazione reale
+• costi nascosti
+
+💡 Molti investimenti con ROI aggressivi diventano instabili nel lungo periodo.`,
+
+`📈 High ROI may initially look excellent, but should always be compared with:
+
+• operational risk
+• real cashflow
+• mortgage sustainability
+• real occupancy
+• hidden costs
+
+💡 Many aggressive ROI investments become unstable long-term.`
+
+  );
+
+}
+
+  // =====================================
   // ❌ NO ANALYSIS YET
   // =====================================
 
@@ -620,29 +790,7 @@ if(wantsROI){
 
   }
 
-  // =====================================
-  // 👑 PLAN UPSELL
-  // =====================================
-
-  if(access.isFree){
-
-    return window.t(
-      "Posso aiutarti a stimare il potenziale dell'investimento. Per analisi complete e rischio reale serve il piano Investor o PRO.",
-      "I can help estimate the investment potential. Full analysis and real risk require Investor or PRO plans."
-    );
-
-  }
-
-  if(access.isInvestor){
-
-    return window.t(
-      "Hai accesso all'analisi avanzata base. Il piano PRO sblocca AI insights completi, PDF executive e simulazioni avanzate.",
-      "You have access to advanced analysis. PRO unlocks full AI insights, executive PDF and advanced simulations."
-    );
-
-  }
-
-  // =====================================
+// =====================================
 // 🧠 STRATEGY INSIGHTS
 // =====================================
 
@@ -650,6 +798,44 @@ if(wantsStrategy){
 
   let insightsIT = [];
   let insightsEN = [];
+
+  // =================================
+  // 🌍 MARKET DATA
+  // =================================
+
+  const marketData =
+    window.rbMarketData?.[city];
+
+  if(marketData){
+
+    insightsIT.push(
+      `🌍 Mercato ${city}: ROI medio ${marketData.avgROI}.`
+    );
+
+    insightsEN.push(
+      `🌍 ${city} market average ROI: ${marketData.avgROI}.`
+    );
+
+  }
+
+// =================================
+// 🧠 AI INVESTMENT SCORE
+// =================================
+
+let investmentScore = 0;
+
+if(roi >= 10)
+  investmentScore += 30;
+
+if(occupancy >= 65)
+  investmentScore += 25;
+
+if(risk <= 40)
+  investmentScore += 25;
+
+if(monthlyCosts <= 1200)
+  investmentScore += 20;
+
 
   // =================================
   // ROI
@@ -755,6 +941,22 @@ if(wantsStrategy){
 
   }
 
+// =================================
+// COST RATIO
+// =================================
+
+if(costRatio >= 45){
+
+  insightsIT.push(
+    "⚠️ I costi assorbono gran parte dei ricavi."
+  );
+
+  insightsEN.push(
+    "⚠️ Costs absorb a large portion of revenue."
+  );
+
+}
+
   // =================================
   // RISK
   // =================================
@@ -783,6 +985,14 @@ if(wantsStrategy){
     "💡 Always analyze real cashflow and sustainability before investing."
   );
 
+  insightsIT.push(
+  `🧠 AI Investment Score: ${investmentScore}/100`
+);
+
+insightsEN.push(
+  `🧠 AI Investment Score: ${investmentScore}/100`
+);
+
   return window.t(
 
     insightsIT.join("\n\n"),
@@ -792,6 +1002,28 @@ if(wantsStrategy){
   );
 
 }
+
+  // =====================================
+  // 👑 PLAN UPSELL
+  // =====================================
+
+  if(access.isFree){
+
+    return window.t(
+      "Posso aiutarti a stimare il potenziale dell'investimento. Per analisi complete e rischio reale serve il piano Investor o PRO.",
+      "I can help estimate the investment potential. Full analysis and real risk require Investor or PRO plans."
+    );
+
+  }
+
+  if(access.isInvestor){
+
+    return window.t(
+      "Hai accesso all'analisi avanzata base. Il piano PRO sblocca AI insights completi, PDF executive e simulazioni avanzate.",
+      "You have access to advanced analysis. PRO unlocks full AI insights, executive PDF and advanced simulations."
+    );
+
+  }
 
   // =====================================
   // ✅ DEFAULT
@@ -883,25 +1115,58 @@ function initRBChatbot(){
   const sendBtn = document.getElementById("rb-chat-send");
   const input = document.getElementById("rb-chat-input");
 
+  function escapeHTML(str){
+
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
   function sendMessage(){
 
     const text = input.value.trim();
 
     if(!text) return;
 
+    window.rbConversationHistory.push({
+  role: "user",
+  text,
+  time: Date.now()
+});
+
     const messages = document.getElementById("rb-chat-messages");
 
     messages.innerHTML += `
       <div class="rb-user-message">
-        ${text}
+        ${escapeHTML(text)}
       </div>
     `;
 
     const response = window.generateAIResponse(text);
 
+    window.rbConversationHistory.push({
+  role: "assistant",
+  text: response,
+  time: Date.now()
+});
+
+    if(
+  window.rbConversationHistory.length > 40
+){
+
+  window.rbConversationHistory =
+    window.rbConversationHistory.slice(-40);
+
+}
+
     messages.innerHTML += `
       <div class="rb-bot-message">
-        ${response}
+        ${escapeHTML(response).replace(/
+/g,"<br>")}
       </div>
     `;
 
