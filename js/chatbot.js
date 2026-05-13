@@ -1510,6 +1510,26 @@ function initRBChatbot(){
 
     </div>
 
+    <div class="rb-quick-actions">
+
+  <button class="rb-quick-btn">
+    ROI
+  </button>
+
+  <button class="rb-quick-btn">
+    Cashflow
+  </button>
+
+  <button class="rb-quick-btn">
+    Rischio
+  </button>
+
+  <button class="rb-quick-btn">
+    Conviene?
+  </button>
+
+</div>
+
     <div class="rb-chat-input-area">
 
       <input
