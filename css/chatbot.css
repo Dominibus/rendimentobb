@@ -545,7 +545,7 @@ body.dark-mode #rb-chat-input{
 
     width: auto !important;
     height: auto !important;
-    max-height: calc(100vh - 180px) !important;
+    height: 72vh !important;
 
     border-radius: 24px !important;
 
@@ -566,12 +566,10 @@ body.dark-mode #rb-chat-input{
 
   .rb-chatbot-messages{
     flex: 1 !important;
-
     overflow-y: auto !important;
-
     -webkit-overflow-scrolling: touch !important;
-
     padding: 16px !important;
+    padding-bottom: 40px !important;
   }
 
   .rb-chatbot-input-area{
