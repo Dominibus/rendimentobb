@@ -823,4 +823,6 @@ sustainable investments tend to better withstand market crises, occupancy declin
 ⚠️ Weak financial sustainability increases long-term real loss risk.
 `
 
-},  
+}
+
+};
