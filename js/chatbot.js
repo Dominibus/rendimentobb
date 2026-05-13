@@ -298,19 +298,19 @@ const mainIntent =
 // =====================================
 
 const wantsStrategy =
-  mainIntent === "strategy";
+  detectedIntents.includes("strategy");
 
 const wantsRisk =
-  mainIntent === "risk";
+  detectedIntents.includes("risk");
 
 const wantsROI =
-  mainIntent === "roi";
+  detectedIntents.includes("roi");
 
 const wantsCashflow =
-  mainIntent === "cashflow";
+  detectedIntents.includes("cashflow");
 
 const wantsEducation =
-  mainIntent === "education";
+  detectedIntents.includes("education");
 
 // =====================================
 // 🧠 FOLLOW-UP UNDERSTANDING
@@ -851,6 +851,56 @@ if(wantsStrategy){
   let insightsEN = [];
 
 // =================================
+// 🧠 DYNAMIC OPENERS
+// =================================
+
+const executiveOpenersIT = [
+
+  "🏦 Analisi executive avanzata completata.",
+
+  "🧠 Sto confrontando la simulazione con benchmark short-rent.",
+
+  "📊 La simulazione mostra metriche superiori alla media mercato.",
+
+  "🏨 Analisi strategica investimento in corso.",
+
+  "📈 Elaborazione avanzata sostenibilità investimento."
+
+];
+
+const executiveOpenersEN = [
+
+  "🏦 Advanced executive analysis completed.",
+
+  "🧠 Comparing simulation against short-rent benchmarks.",
+
+  "📊 Simulation shows metrics above market average.",
+
+  "🏨 Strategic investment analysis in progress.",
+
+  "📈 Advanced investment sustainability analysis."
+
+];
+
+insightsIT.push(
+  executiveOpenersIT[
+    Math.floor(
+      Math.random() *
+      executiveOpenersIT.length
+    )
+  ]
+);
+
+insightsEN.push(
+  executiveOpenersEN[
+    Math.floor(
+      Math.random() *
+      executiveOpenersEN.length
+    )
+  ]
+);  
+
+// =================================
 // 🧠 OPENING ANALYSIS
 // =================================
 
@@ -1191,10 +1241,29 @@ const endingsEN = [
 
 ];
 
+const randomEndingIT =
+  endingsIT.filter(
+    e => !insightsIT.includes(e)
+  );
+
 insightsIT.push(
-  endingsIT[
-    Math.floor(Math.random()*endingsIT.length)
-  ]
+
+  randomEndingIT.length
+
+  ? randomEndingIT[
+      Math.floor(
+        Math.random() *
+        randomEndingIT.length
+      )
+    ]
+
+  : endingsIT[
+      Math.floor(
+        Math.random() *
+        endingsIT.length
+      )
+    ]
+
 );
 
 insightsEN.push(
