@@ -3114,10 +3114,31 @@ if(!isFinite(roi) || roi < 0){
   roi = 0;
 }
 
-// 🔥 HARD CAP REALISTICO
-roi = Math.min(roi, 85);
+// =====================================
+// 🔥 ROI ENGINE SPLIT (HOME vs TOOL)
+// =====================================
 
-const safeROI = roi;
+// 🏠 HOME → teaser più aggressivo
+if(!isTool){
+
+  // boost psicologico leggero
+  roi = roi * 1.18;
+
+  // cap marketing
+  roi = Math.min(roi, 38);
+
+}
+
+// 🛠 TOOL → realistico professionale
+else{
+
+  // cap realistico SaaS
+  roi = Math.min(roi, 26);
+
+}
+
+// 🔥 SAFE FINAL
+const safeROI = Math.max(0, roi);
 
   // 🔥 RENDER ROI CHART
   renderROIChart(safeROI);
