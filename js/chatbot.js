@@ -20,6 +20,29 @@ window.generateAIResponse = function(message){
 
   const text = message.toLowerCase().trim();
 
+  // =====================================
+// 🧠 EDUCATIONAL DETECTION
+// =====================================
+
+const educationalTriggers = [
+
+  "cos'è",
+  "cosa è",
+  "cosa vuol dire",
+  "significa",
+  "spiegami",
+  "definizione",
+  "what is",
+  "meaning",
+  "explain"
+
+];
+
+const wantsEducation =
+  educationalTriggers.some(trigger =>
+    text.includes(trigger)
+  );
+
   const data = window.lastAnalysisData || {};
 
   const access = window.getUserAccess?.() || {};
@@ -42,6 +65,65 @@ window.generateAIResponse = function(message){
       0
     );
 
+
+// =====================================
+// 📚 ROI EDUCATIONAL
+// =====================================
+
+if(
+  wantsEducation &&
+  (
+    text.includes("roi") ||
+    text.includes("rendimento")
+  )
+){
+
+  return window.t(
+
+`📈 ROI (Return On Investment)
+
+Il ROI misura quanto rende il tuo investimento rispetto al capitale investito.
+
+Esempio:
+
+• investimento → €100.000
+• profitto annuo → €10.000
+
+ROI:
+10%
+
+💡 Nel settore B&B:
+
+• 4-6% → conservativo
+• 7-10% → molto buono
+• 10%+ → aggressivo
+
+⚠️ Un ROI alto non garantisce automaticamente un investimento sicuro.`,
+
+`📈 ROI (Return On Investment)
+
+ROI measures how profitable an investment is compared to invested capital.
+
+Example:
+
+• investment → €100,000
+• annual profit → €10,000
+
+ROI:
+10%
+
+💡 In the B&B sector:
+
+• 4-6% → conservative
+• 7-10% → very strong
+• 10%+ → aggressive
+
+⚠️ High ROI does not automatically guarantee a safe investment.`
+
+  );
+
+}
+
   // =====================================
   // ❌ NO ANALYSIS YET
   // =====================================
@@ -53,17 +135,17 @@ window.generateAIResponse = function(message){
       "Run a simulation first so I can analyze ROI, risk and real profitability."
     );
 
-  }
+  }  
 
-  // =====================================
-  // 📊 ROI
-  // =====================================
+// =====================================
+// 📊 ROI SIMULATION
+// =====================================
 
-  if(
-    text.includes("roi") ||
-    text.includes("rendimento") ||
-    text.includes("profit")
-  ){
+if(
+  text.includes("roi") ||
+  text.includes("rendimento") ||
+  text.includes("profit")
+){
 
     if(access.isFree){
 
