@@ -1,135 +1,290 @@
 // ===============================================
-// RENDIMENTOBB – AI ENGINE 1.0
+// RENDIMENTOBB – AI ENGINE 3.0
+// Silicon Valley SaaS AI Advisor
 // ===============================================
 
 window.generateAIResponse = function(message){
 
   const msg = message.toLowerCase();
 
-  const lang = window.currentLang || "it";
-
   const kb = window.RB_AI_KNOWLEDGE;
 
   // ============================================
-  // ROMA
+  // ACCESS CONTROL
   // ============================================
 
-  if(msg.includes("roma") || msg.includes("rome")){
+  const access = window.getUserAccess?.() || {};
 
-    const city = kb.cities.roma;
+  const isFree =
+    access.isFree ||
+    (!access.isInvestor &&
+     !access.isPro &&
+     !access.isAdmin);
+
+  const isInvestor = access.isInvestor;
+
+  const isPro =
+    access.isPro ||
+    access.isAdmin;
+
+  // ============================================
+  // MESSAGE LIMIT
+  // ============================================
+
+  window.rbChatCount =
+    window.rbChatCount || 0;
+
+  window.rbChatCount++;
+
+  if(isFree && window.rbChatCount > 5){
 
     return window.t(
 
-`📍 Roma
+`🔒 Hai raggiunto il limite gratuito.
+
+Sblocca RendimentoBB PRO per accedere a:
+
+• AI Investment Advisor
+• analisi rischio
+• benchmark avanzati
+• cashflow reale
+• strategie investimento
+• simulazioni professionali`,
+
+`🔒 You reached the free limit.
+
+Unlock RendimentoBB PRO to access:
+
+• AI Investment Advisor
+• risk analysis
+• advanced benchmarks
+• real cashflow
+• investment strategies
+• professional simulations`
+
+    );
+
+  }
+
+  // ============================================
+  // CITY DETECTION ENGINE
+  // ============================================
+
+  let matchedCity = null;
+
+  Object.entries(kb.cities).forEach(([key, city])=>{
+
+    city.aliases.forEach(alias=>{
+
+      if(msg.includes(alias)){
+        matchedCity = city;
+        matchedCity.key = key;
+      }
+
+    });
+
+  });
+
+  // ============================================
+  // CITY RESPONSE
+  // ============================================
+
+  if(matchedCity){
+
+    // ================= FREE =================
+
+    if(isFree){
+
+      return window.t(
+
+`📍 ${capitalize(matchedCity.key)}
+
+Mercato interessante per investimenti B&B.
+
+Per visualizzare:
+
+• rischio reale
+• sostenibilità
+• cashflow
+• benchmark avanzati
+• strategie AI
+
+sblocca la versione PRO.`,
+
+`📍 ${capitalize(matchedCity.key)}
+
+Interesting market for B&B investments.
+
+To view:
+
+• real risk
+• sustainability
+• cashflow
+• advanced benchmarks
+• AI strategies
+
+unlock the PRO version.`
+
+      );
+
+    }
+
+    // ================= INVESTOR =================
+
+    if(isInvestor){
+
+      return window.t(
+
+`📍 ${capitalize(matchedCity.key)}
 
 ROI medio:
-${city.roi}
+${matchedCity.roi}
 
-Occupazione media:
-${city.occupancy}
+Occupazione:
+${matchedCity.occupancy}
 
-ADR medio:
-${city.adr}
+ADR:
+${matchedCity.adr}
 
 Rischio:
-${city.risk.it}`,
+${matchedCity.risk.it}
 
-`📍 Rome
+💡 Consiglio:
+analizza micro-zona e stagionalità.`,
+
+`📍 ${capitalize(matchedCity.key)}
 
 Average ROI:
-${city.roi}
+${matchedCity.roi}
 
-Average occupancy:
-${city.occupancy}
+Occupancy:
+${matchedCity.occupancy}
 
-Average ADR:
-${city.adr}
+ADR:
+${matchedCity.adr}
 
 Risk:
-${city.risk.en}`
+${matchedCity.risk.en}
 
-    );
+💡 Tip:
+analyze micro-location and seasonality.`
 
-  }
+      );
 
-  // ============================================
-  // MILANO
-  // ============================================
+    }
 
-  if(msg.includes("milano") || msg.includes("milan")){
-
-    const city = kb.cities.milano;
+    // ================= PRO =================
 
     return window.t(
 
-`📍 Milano
+`📍 ${capitalize(matchedCity.key)} – Analisi PRO
 
 ROI medio:
-${city.roi}
+${matchedCity.roi}
 
 Occupazione:
-${city.occupancy}
+${matchedCity.occupancy}
 
 ADR:
-${city.adr}`,
+${matchedCity.adr}
 
-`📍 Milan
+Rischio:
+${matchedCity.risk.it}
+
+📈 Scenario:
+mercato interessante per affitti brevi professionali.
+
+⚠️ Attenzione:
+la redditività può cambiare molto in base a:
+
+• micro-zona
+• mutuo
+• gestione operativa
+• stagionalità
+• tasse locali
+
+💡 Strategia consigliata:
+analizza cashflow e break-even prima di investire.`,
+
+`📍 ${capitalize(matchedCity.key)} – PRO Analysis
 
 Average ROI:
-${city.roi}
+${matchedCity.roi}
 
 Occupancy:
-${city.occupancy}
+${matchedCity.occupancy}
 
 ADR:
-${city.adr}`
+${matchedCity.adr}
+
+Risk:
+${matchedCity.risk.en}
+
+📈 Scenario:
+interesting market for professional short rentals.
+
+⚠️ Warning:
+profitability may change significantly based on:
+
+• micro-location
+• mortgage
+• operations
+• seasonality
+• local taxes
+
+💡 Suggested strategy:
+analyze cashflow and break-even before investing.`
 
     );
 
   }
 
   // ============================================
-  // NAPOLI
+  // UNKNOWN CITY
   // ============================================
 
-  if(msg.includes("napoli") || msg.includes("naples")){
-
-    const city = kb.cities.napoli;
+  if(
+    msg.includes("portici") ||
+    msg.includes("afragola") ||
+    msg.includes("casoria") ||
+    msg.includes("pozzuoli") ||
+    msg.includes("ercolano")
+  ){
 
     return window.t(
 
-`📍 Napoli
+`📍 Non ho ancora dati completi su questa città.
 
-ROI medio:
-${city.roi}
+💡 Inserisci il capoluogo di riferimento.
 
-Occupazione:
-${city.occupancy}
+Esempi:
 
-ADR:
-${city.adr}
+• Napoli
+• Roma
+• Milano
+• Firenze
 
-Mercato ad alto potenziale ma più volatile.`,
+Così posso generare benchmark e analisi più accurate.`,
 
-`📍 Naples
+`📍 I don't yet have complete data for this city.
 
-Average ROI:
-${city.roi}
+💡 Enter the nearest major city.
 
-Occupancy:
-${city.occupancy}
+Examples:
 
-ADR:
-${city.adr}
+• Naples
+• Rome
+• Milan
+• Florence
 
-High potential market with higher volatility.`
+This helps generate more accurate benchmarks and analysis.`
 
     );
 
   }
 
   // ============================================
-  // MUTUI
+  // MORTGAGE
   // ============================================
 
   if(
@@ -138,51 +293,82 @@ High potential market with higher volatility.`
     msg.includes("rata")
   ){
 
-    const tips = kb.mortgage.tips[lang];
+    return window.t(
 
-    return `
-🏦 ${window.t("Consigli mutuo", "Mortgage tips")}
+`🏦 Analisi mutuo B&B
 
-• ${tips.join("\n• ")}
-`;
+Consigli principali:
+
+• evita rate troppo elevate
+• mantieni cashflow positivo
+• attenzione ai tassi variabili
+• considera la stagionalità
+
+💡 Un mutuo sostenibile è spesso più importante del ROI teorico.`,
+
+`🏦 B&B Mortgage Analysis
+
+Main tips:
+
+• avoid excessive installments
+• maintain positive cashflow
+• watch variable interest rates
+• consider seasonality
+
+💡 A sustainable mortgage is often more important than theoretical ROI.`
+
+    );
+
   }
 
   // ============================================
-  // DEFAULT
+  // DEFAULT RESPONSE
   // ============================================
 
   return window.t(
 
 `Posso aiutarti con:
 
-• ROI città
-• mutui
-• rischio investimento
+• ROI città italiane
+• mutui B&B
 • cashflow
-• occupazione media
-• strategie B&B
+• rischio investimento
+• benchmark mercato
+• strategie investimento
 
 Esempi:
 
 "Conviene investire a Napoli?"
-"ROI medio Roma"
+"ROI medio Milano"
 "Come scegliere un mutuo B&B?"`,
 
 `I can help you with:
 
-• city ROI
-• mortgages
-• investment risk
+• Italian city ROI
+• B&B mortgages
 • cashflow
-• occupancy
-• B&B strategies
+• investment risk
+• market benchmarks
+• investment strategies
 
 Examples:
 
 "Is Naples a good investment?"
-"Average ROI Rome"
+"Average ROI Milan"
 "How to choose a B&B mortgage?"`
 
   );
 
 };
+
+// ===============================================
+// HELPERS
+// ===============================================
+
+function capitalize(str){
+
+  if(!str) return "";
+
+  return str.charAt(0).toUpperCase() + str.slice(1);
+
+}
