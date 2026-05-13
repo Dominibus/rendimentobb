@@ -879,6 +879,7 @@ if(wantsStrategy){
 
   let insightsIT = [];
   let insightsEN = [];
+  let aiSignals = [];
 
 // =================================
 // 🧠 DYNAMIC OPENERS
@@ -936,6 +937,8 @@ insightsEN.push(
 
 if(roi >= 15){
 
+  aiSignals.push("high_roi");
+
   insightsIT.push(
     "🚀 L'investimento mostra segnali molto forti rispetto alla media del mercato."
   );
@@ -945,6 +948,8 @@ if(roi >= 15){
   );
 
 }else if(roi >= 8){
+
+  aiSignals.push("medium_roi");
 
   insightsIT.push(
     "📈 L'investimento appare potenzialmente sostenibile ma richiede ottimizzazione operativa."
@@ -956,6 +961,8 @@ if(roi >= 15){
 
 }else{
 
+  aiSignals.push("low_roi");
+
   insightsIT.push(
     "⚠️ L'investimento mostra alcuni segnali di debolezza da monitorare."
   );
@@ -964,7 +971,7 @@ if(roi >= 15){
     "⚠️ The investment shows some weaknesses that should be monitored."
   );
 
-}  
+}
 
 // =================================
 // 🧠 DYNAMIC RECOMMENDATIONS
@@ -1035,133 +1042,145 @@ if(monthlyCosts <= 1200)
   investmentScore += 20;
 
 
-  // =================================
-  // ROI
-  // =================================
+ // =================================
+// ROI
+// =================================
 
-  if(roi >= 15){
+if(roi >= 15){
 
-    insightsIT.push(
-      "📈 ROI molto elevato rispetto alla media mercato."
-    );
+  aiSignals.push("high_roi");
 
-    insightsEN.push(
-      "📈 ROI significantly above market average."
-    );
+  insightsIT.push(
+    "📈 ROI molto elevato rispetto alla media mercato."
+  );
 
-  }else if(roi >= 8){
+  insightsEN.push(
+    "📈 ROI significantly above market average."
+  );
 
-    insightsIT.push(
-      "📊 ROI potenzialmente sostenibile."
-    );
+}else if(roi >= 8){
 
-    insightsEN.push(
-      "📊 ROI appears potentially sustainable."
-    );
+  aiSignals.push("medium_roi");
 
-  }else{
+  insightsIT.push(
+    "📊 ROI potenzialmente sostenibile."
+  );
 
-    insightsIT.push(
-      "⚠️ ROI piuttosto basso."
-    );
+  insightsEN.push(
+    "📊 ROI appears potentially sustainable."
+  );
 
-    insightsEN.push(
-      "⚠️ ROI appears relatively low."
-    );
+}else{
 
-    recommendationsIT.push(
-  "Valuta aumento ADR, occupazione o leva finanziaria."
-);
+  aiSignals.push("low_roi");
 
-recommendationsEN.push(
-  "Consider improving ADR, occupancy or financial leverage."
-);
+  insightsIT.push(
+    "⚠️ ROI piuttosto basso."
+  );
 
-  }
+  insightsEN.push(
+    "⚠️ ROI appears relatively low."
+  );
 
-  // =================================
-  // OCCUPANCY
-  // =================================
+  recommendationsIT.push(
+    "Valuta aumento ADR, occupazione o leva finanziaria."
+  );
 
-  if(occupancy < 55){
+  recommendationsEN.push(
+    "Consider improving ADR, occupancy or financial leverage."
+  );
 
-    insightsIT.push(
-      "🏨 Occupazione stimata piuttosto bassa."
-    );
+}
 
-    insightsEN.push(
-      "🏨 Estimated occupancy appears low."
-    );
+// =================================
+// OCCUPANCY
+// =================================
 
-    recommendationsIT.push(
-  "Migliora il listing Airbnb e utilizza pricing dinamico."
-);
+if(occupancy < 55){
 
-recommendationsEN.push(
-  "Improve Airbnb listing quality and use dynamic pricing."
-);
+  aiSignals.push("low_occupancy");
 
-  }else if(occupancy >= 70){
+  insightsIT.push(
+    "🏨 Occupazione stimata piuttosto bassa."
+  );
 
-    insightsIT.push(
-      "🔥 Occupazione molto forte."
-    );
+  insightsEN.push(
+    "🏨 Estimated occupancy appears low."
+  );
 
-    insightsEN.push(
-      "🔥 Occupancy is very strong."
-    );
+  recommendationsIT.push(
+    "Migliora il listing Airbnb e utilizza pricing dinamico."
+  );
 
-  }
+  recommendationsEN.push(
+    "Improve Airbnb listing quality and use dynamic pricing."
+  );
 
-  // =================================
-  // NIGHT PRICE
-  // =================================
+}else if(occupancy >= 70){
 
-  if(nightly < 80){
+  aiSignals.push("high_occupancy");
 
-    insightsIT.push(
-      "🏷️ Prezzo notte relativamente basso."
-    );
+  insightsIT.push(
+    "🔥 Occupazione molto forte."
+  );
 
-    insightsEN.push(
-      "🏷️ Night price appears relatively low."
-    );
+  insightsEN.push(
+    "🔥 Occupancy is very strong."
+  );
 
-  }else if(nightly > 180){
+}
 
-    insightsIT.push(
-      "💎 Prezzo notte premium."
-    );
+// =================================
+// NIGHT PRICE
+// =================================
 
-    insightsEN.push(
-      "💎 Premium nightly pricing detected."
-    );
+if(nightly < 80){
 
-  }
+  insightsIT.push(
+    "🏷️ Prezzo notte relativamente basso."
+  );
 
-  // =================================
-  // COSTS
-  // =================================
+  insightsEN.push(
+    "🏷️ Night price appears relatively low."
+  );
 
-  if(monthlyCosts > 1500){
+}else if(nightly > 180){
 
-    recommendationsIT.push(
-  "Riduci cleaning, utenze e automatizza il check-in."
-);
+  insightsIT.push(
+    "💎 Prezzo notte premium."
+  );
 
-recommendationsEN.push(
-  "Reduce cleaning, utilities and automate check-in."
-);
+  insightsEN.push(
+    "💎 Premium nightly pricing detected."
+  );
 
-    insightsIT.push(
-      "💸 Costi operativi elevati."
-    );
+}
 
-    insightsEN.push(
-      "💸 Operating costs appear high."
-    );
+// =================================
+// COSTS
+// =================================
 
-  }
+if(monthlyCosts > 1500){
+
+  aiSignals.push("high_costs");
+
+  recommendationsIT.push(
+    "Riduci cleaning, utenze e automatizza il check-in."
+  );
+
+  recommendationsEN.push(
+    "Reduce cleaning, utilities and automate check-in."
+  );
+
+  insightsIT.push(
+    "💸 Costi operativi elevati."
+  );
+
+  insightsEN.push(
+    "💸 Operating costs appear high."
+  );
+
+}
 
 // =================================
 // COST RATIO
@@ -1169,13 +1188,15 @@ recommendationsEN.push(
 
 if(costRatio >= 45){
 
-  recommendationsIT.push(
-  "I costi sono troppo elevati rispetto ai ricavi: ottimizza la gestione operativa."
-);
+  aiSignals.push("bad_cost_ratio");
 
-recommendationsEN.push(
-  "Costs are too high compared to revenue: optimize operations."
-);
+  recommendationsIT.push(
+    "I costi sono troppo elevati rispetto ai ricavi: ottimizza la gestione operativa."
+  );
+
+  recommendationsEN.push(
+    "Costs are too high compared to revenue: optimize operations."
+  );
 
   insightsIT.push(
     "⚠️ I costi assorbono gran parte dei ricavi."
@@ -1187,22 +1208,33 @@ recommendationsEN.push(
 
 }
 
-  // =================================
-  // RISK
-  // =================================
+// =================================
+// RISK
+// =================================
 
-  if(risk >= 70){
+if(risk <= 35){
 
-    insightsIT.push(
-      "⚠️ Il rischio operativo sembra elevato."
-    );
+  aiSignals.push("low_risk");
 
-    insightsEN.push(
-      "⚠️ Operational risk appears high."
-    );
+}else if(risk <= 65){
 
-  }
+  aiSignals.push("medium_risk");
 
+}
+
+if(risk >= 70){
+
+  aiSignals.push("high_risk");
+
+  insightsIT.push(
+    "⚠️ Il rischio operativo sembra elevato."
+  );
+
+  insightsEN.push(
+    "⚠️ Operational risk appears high."
+  );
+
+}
   // =================================
   // FINAL STRATEGY
   // =================================
@@ -1223,7 +1255,7 @@ insightsEN.push(
   `🧠 AI Investment Score: ${investmentScore}/100`
 );
 
-  // =================================
+// =================================
 // 💡 FINAL RECOMMENDATIONS
 // =================================
 
@@ -1247,7 +1279,86 @@ if(recommendationsEN.length){
 
 }
 
-  // =================================
+// =================================
+// 🧠 AI SYNTHESIS ENGINE
+// =================================
+
+if(
+  aiSignals.includes("high_roi") &&
+  aiSignals.includes("high_risk")
+){
+
+  insightsIT.push(
+    "🧠 Il rendimento è molto elevato, ma il rischio operativo potrebbe compromettere la sostenibilità nel lungo periodo."
+  );
+
+  insightsEN.push(
+    "🧠 Returns are very strong, but operational risk may compromise long-term sustainability."
+  );
+
+}
+
+if(
+  aiSignals.includes("high_roi") &&
+  aiSignals.includes("high_occupancy")
+){
+
+  insightsIT.push(
+    "🚀 L'investimento mostra una combinazione molto forte tra rendimento e occupazione."
+  );
+
+  insightsEN.push(
+    "🚀 The investment shows a very strong combination of profitability and occupancy."
+  );
+
+}
+
+if(
+  aiSignals.includes("low_roi") &&
+  aiSignals.includes("high_costs")
+){
+
+  insightsIT.push(
+    "⚠️ I costi operativi stanno probabilmente limitando la redditività complessiva."
+  );
+
+  insightsEN.push(
+    "⚠️ Operating costs are likely limiting overall profitability."
+  );
+
+}
+
+if(
+  aiSignals.includes("bad_cost_ratio") &&
+  aiSignals.includes("medium_roi")
+){
+
+  insightsIT.push(
+    "📉 Il ROI appare discreto, ma i margini potrebbero ridursi rapidamente se i costi aumentano."
+  );
+
+  insightsEN.push(
+    "📉 ROI appears decent, but margins could shrink quickly if costs increase."
+  );
+
+}
+
+if(
+  aiSignals.includes("low_risk") &&
+  aiSignals.includes("medium_roi")
+){
+
+  insightsIT.push(
+    "✅ La simulazione sembra bilanciata tra sostenibilità e stabilità operativa."
+  );
+
+  insightsEN.push(
+    "✅ The simulation appears balanced between sustainability and operational stability."
+  );
+
+}  
+
+// =================================
 // 🎭 AI ENDINGS
 // =================================
 
