@@ -125,6 +125,224 @@ ROI:
 }
 
   // =====================================
+// 📚 CASHFLOW EDUCATIONAL
+// =====================================
+
+if(
+  wantsEducation &&
+  (
+    text.includes("cashflow") ||
+    text.includes("cash flow") ||
+    text.includes("flusso di cassa")
+  )
+){
+
+  return window.t(
+
+`💸 Cashflow
+
+Il cashflow rappresenta il denaro reale che rimane dopo tutte le spese operative.
+
+Include:
+
+• utenze
+• cleaning
+• tasse
+• manutenzione
+• eventuale mutuo
+
+💡 Un cashflow positivo significa che il B&B genera liquidità reale ogni mese.
+
+⚠️ Molti investimenti mostrano ROI elevati ma cashflow molto bassi.`,
+
+`💸 Cashflow
+
+Cashflow represents the real money remaining after all operating expenses.
+
+Includes:
+
+• utilities
+• cleaning
+• taxes
+• maintenance
+• mortgage payments
+
+💡 Positive cashflow means the property generates real liquidity every month.
+
+⚠️ Many investments show high ROI but weak cashflow.`
+
+  );
+
+}
+
+  // =====================================
+// 📚 RISK EDUCATIONAL
+// =====================================
+
+if(
+  wantsEducation &&
+  (
+    text.includes("rischio") ||
+    text.includes("risk")
+  )
+){
+
+  return window.t(
+
+`⚠️ Rischio investimento
+
+Il rischio misura quanto un investimento può diventare instabile nel tempo.
+
+Nel settore B&B il rischio dipende da:
+
+• occupazione
+• costi operativi
+• mutuo
+• stagionalità
+• regolamentazioni locali
+
+💡 Un ROI alto con rischio elevato può diventare poco sostenibile.`,
+
+`⚠️ Investment Risk
+
+Risk measures how unstable an investment may become over time.
+
+In the B&B sector risk depends on:
+
+• occupancy
+• operating costs
+• mortgage
+• seasonality
+• local regulations
+
+💡 A high ROI with high risk may become unsustainable.`
+
+  );
+
+}
+
+  // =====================================
+// 📚 OCCUPANCY EDUCATIONAL
+// =====================================
+
+if(
+  wantsEducation &&
+  (
+    text.includes("occupazione") ||
+    text.includes("occupancy")
+  )
+){
+
+  return window.t(
+
+`🏨 Occupazione
+
+L'occupazione indica la percentuale di notti prenotate durante l'anno.
+
+💡 Nel settore short rent:
+
+• 50% → basso
+• 65-70% → ottimo
+• 80%+ → molto aggressivo
+
+⚠️ Occupazioni troppo elevate possono essere irrealistiche in alcune città.`,
+
+`🏨 Occupancy
+
+Occupancy represents the percentage of booked nights during the year.
+
+💡 In the short rental sector:
+
+• 50% → low
+• 65-70% → excellent
+• 80%+ → very aggressive
+
+⚠️ Extremely high occupancy may be unrealistic in some cities.`
+
+  );
+
+}
+
+  // =====================================
+// 📚 DSCR EDUCATIONAL
+// =====================================
+
+if(
+  wantsEducation &&
+  text.includes("dscr")
+){
+
+  return window.t(
+
+`🏦 DSCR
+
+Il DSCR misura la capacità dell'investimento di sostenere il mutuo.
+
+💡 Generalmente:
+
+• sotto 1 → rischio elevato
+• sopra 1.2 → sostenibile
+• sopra 1.5 → molto forte
+
+Le banche utilizzano spesso questo parametro per valutare finanziamenti immobiliari.`,
+
+`🏦 DSCR
+
+DSCR measures the investment's ability to sustain mortgage payments.
+
+💡 Generally:
+
+• below 1 → high risk
+• above 1.2 → sustainable
+• above 1.5 → very strong
+
+Banks often use this metric to evaluate real estate financing.`
+
+  );
+
+}
+
+  // =====================================
+// 📚 BREAK EVEN EDUCATIONAL
+// =====================================
+
+if(
+  wantsEducation &&
+  (
+    text.includes("break even") ||
+    text.includes("pareggio")
+  )
+){
+
+  return window.t(
+
+`⚖️ Break-even
+
+Il break-even rappresenta il punto in cui ricavi e costi si equivalgono.
+
+💡 Più rapidamente raggiungi il break-even:
+
+• minore sarà il rischio
+• maggiore sarà la stabilità operativa
+
+⚠️ Un break-even troppo lento aumenta l'esposizione finanziaria.`,
+
+`⚖️ Break-even
+
+Break-even represents the point where revenues equal costs.
+
+💡 The faster you reach break-even:
+
+• the lower the risk
+• the higher the operational stability
+
+⚠️ Slow break-even increases financial exposure.`
+
+  );
+
+}
+
+  // =====================================
   // ❌ NO ANALYSIS YET
   // =====================================
 
@@ -279,6 +497,44 @@ if(
     );
 
   }
+
+  // =====================================
+// 🧠 STRATEGY INSIGHTS
+// =====================================
+
+if(
+  text.includes("meglio") ||
+  text.includes("consigli") ||
+  text.includes("strategia")
+){
+
+  return window.t(
+
+`💡 Strategia AI
+
+Per migliorare sostenibilità e rendimento:
+
+• aumenta occupazione gradualmente
+• evita mutui troppo aggressivi
+• controlla il cashflow reale
+• monitora stagionalità e costi
+
+⚠️ Un ROI troppo elevato può aumentare il rischio operativo.`,
+
+`💡 AI Strategy
+
+To improve sustainability and profitability:
+
+• increase occupancy gradually
+• avoid aggressive mortgages
+• monitor real cashflow
+• track seasonality and costs
+
+⚠️ Excessively high ROI may increase operational risk.`
+
+  );
+
+}
 
   // =====================================
   // ✅ DEFAULT
