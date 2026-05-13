@@ -251,20 +251,66 @@ const intents = {
 
 }
 
-const wantsROI =
-  detectIntent(intents.roi);
+// =====================================
+// 🧠 DETECTED INTENTS ENGINE
+// =====================================
 
-const wantsRisk =
-  detectIntent(intents.risk);
+const detectedIntents = [];
 
-const wantsCashflow =
-  detectIntent(intents.cashflow);
+if(detectIntent(intents.strategy))
+  detectedIntents.push("strategy");
+
+if(detectIntent(intents.risk))
+  detectedIntents.push("risk");
+
+if(detectIntent(intents.roi))
+  detectedIntents.push("roi");
+
+if(detectIntent(intents.cashflow))
+  detectedIntents.push("cashflow");
+
+if(detectIntent(intents.education))
+  detectedIntents.push("education");
+
+// =====================================
+// 🧠 INTENT PRIORITY
+// =====================================
+
+const intentPriority = {
+  strategy: 10,
+  risk: 9,
+  roi: 8,
+  cashflow: 7,
+  education: 6
+};
+
+detectedIntents.sort(
+  (a,b)=>
+    intentPriority[b] -
+    intentPriority[a]
+);
+
+const mainIntent =
+  detectedIntents[0] || null;
+
+// =====================================
+// 🧠 MAIN INTENT FLAGS
+// =====================================
 
 const wantsStrategy =
-  detectIntent(intents.strategy);
+  mainIntent === "strategy";
+
+const wantsRisk =
+  mainIntent === "risk";
+
+const wantsROI =
+  mainIntent === "roi";
+
+const wantsCashflow =
+  mainIntent === "cashflow";
 
 const wantsEducation =
-  detectIntent(intents.education);
+  mainIntent === "education";
 
 // =====================================
 // 🧠 FOLLOW-UP UNDERSTANDING
