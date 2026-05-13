@@ -33,14 +33,59 @@ for(const key in window.rbKnowledgeBase){
       text.includes(keyword)
     );
 
-  if(matched){
+if(matched){
 
-    return window.t(
-      item.it,
-      item.en
-    );
+  const lang = window.currentLang || "it";
 
-  }
+  const response = lang === "en"
+
+  ? `
+
+${item.aiTitleEN || ""}
+
+${item.aiSummaryEN || ""}
+
+${item.aiInsightEN || ""}
+
+${item.warningEN || ""}
+
+${item.recommendationsEN?.length
+
+? `
+💡 Recommendations:
+• ${item.recommendationsEN.join("\n• ")}
+`
+
+: ""
+}
+
+`
+
+  : `
+
+${item.aiTitleIT || ""}
+
+${item.aiSummaryIT || ""}
+
+${item.aiInsightIT || ""}
+
+${item.warningIT || ""}
+
+${item.recommendationsIT?.length
+
+? `
+💡 Suggerimenti:
+• ${item.recommendationsIT.join("\n• ")}
+`
+
+: ""
+}
+
+`;
+
+  return response;
+
+}
 
 }  
 
