@@ -7,7 +7,7 @@ window.generateAIResponse = function(message){
 
   const msg = message.toLowerCase();
 
-  const kb = window.RB_AI_KNOWLEDGE;
+  const kb = window.rbKnowledgeBase || {};
 
   // ============================================
   // ACCESS CONTROL
@@ -65,6 +65,37 @@ Unlock RendimentoBB PRO to access:
     );
 
   }
+
+// ============================================
+// EDUCATIONAL KNOWLEDGE ENGINE
+// ============================================
+
+let educationalResponse = null;
+
+Object.values(kb).forEach(item=>{
+
+  if(!item.keywords) return;
+
+  item.keywords.forEach(keyword=>{
+
+    if(msg.includes(keyword.toLowerCase())){
+
+      educationalResponse = window.t(
+        item.it,
+        item.en
+      );
+
+    }
+
+  });
+
+});
+
+if(educationalResponse){
+
+  return educationalResponse;
+
+}
 
   // ============================================
   // CITY DETECTION ENGINE
