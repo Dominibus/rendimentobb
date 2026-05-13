@@ -1,1 +1,530 @@
+/* ===============================================
+🤖 RENDIMENTOBB AI CHATBOT
+Silicon Valley SaaS UI
+=============================================== */
 
+/* ===============================================
+🔥 FLOATING BUTTON
+=============================================== */
+
+#rb-chatbot-button{
+
+  position:fixed;
+
+  bottom:24px;
+  right:24px;
+
+  width:68px;
+  height:68px;
+
+  border-radius:22px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #10b981,
+    #34d399
+  );
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+
+  z-index:999999;
+
+  box-shadow:
+  0 20px 40px rgba(16,185,129,0.28),
+  0 8px 18px rgba(15,23,42,0.18);
+
+  transition:
+  transform .25s ease,
+  box-shadow .25s ease,
+  opacity .25s ease;
+
+  backdrop-filter:blur(12px);
+
+}
+
+#rb-chatbot-button:hover{
+
+  transform:
+  translateY(-3px)
+  scale(1.04);
+
+  box-shadow:
+  0 28px 60px rgba(16,185,129,0.35),
+  0 12px 24px rgba(15,23,42,0.22);
+
+}
+
+#rb-chatbot-button::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:22px;
+
+  border:
+  1px solid rgba(255,255,255,0.25);
+
+}
+
+/* ===============================================
+🔥 CHAT WINDOW
+=============================================== */
+
+#rb-chatbot-window{
+
+  position:fixed;
+
+  bottom:110px;
+  right:24px;
+
+  width:390px;
+  height:620px;
+
+  background:
+  rgba(255,255,255,0.88);
+
+  backdrop-filter:
+  blur(22px);
+
+  border:
+  1px solid rgba(255,255,255,0.35);
+
+  border-radius:30px;
+
+  overflow:hidden;
+
+  display:none;
+  flex-direction:column;
+
+  z-index:999998;
+
+  box-shadow:
+  0 30px 80px rgba(15,23,42,0.18),
+  0 10px 25px rgba(15,23,42,0.08);
+
+  animation:
+  rbChatAppear .25s ease;
+
+}
+
+/* ===============================================
+🔥 OPEN
+=============================================== */
+
+#rb-chatbot-window.open{
+  display:flex;
+}
+
+/* ===============================================
+🔥 HEADER
+=============================================== */
+
+.rb-chat-header{
+
+  position:relative;
+
+  padding:22px;
+
+  background:
+  linear-gradient(
+    135deg,
+    rgba(16,185,129,0.95),
+    rgba(52,211,153,0.92)
+  );
+
+  color:white;
+
+  overflow:hidden;
+
+}
+
+.rb-chat-header::after{
+
+  content:"";
+
+  position:absolute;
+
+  top:-60px;
+  right:-60px;
+
+  width:180px;
+  height:180px;
+
+  background:
+  radial-gradient(
+    circle,
+    rgba(255,255,255,0.18),
+    transparent 70%
+  );
+
+  filter:blur(10px);
+
+}
+
+.rb-chat-title{
+
+  position:relative;
+
+  font-size:18px;
+  font-weight:800;
+
+  letter-spacing:-0.5px;
+
+}
+
+.rb-chat-subtitle{
+
+  position:relative;
+
+  margin-top:4px;
+
+  font-size:12px;
+
+  opacity:0.88;
+
+  font-weight:500;
+
+}
+
+/* ===============================================
+🔥 MESSAGES
+=============================================== */
+
+#rb-chat-messages{
+
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:20px;
+
+  background:
+  linear-gradient(
+    180deg,
+    rgba(248,250,252,0.92),
+    rgba(241,245,249,0.92)
+  );
+
+  scroll-behavior:smooth;
+
+}
+
+/* ===============================================
+🔥 SCROLLBAR
+=============================================== */
+
+#rb-chat-messages::-webkit-scrollbar{
+  width:6px;
+}
+
+#rb-chat-messages::-webkit-scrollbar-thumb{
+
+  background:
+  rgba(148,163,184,0.35);
+
+  border-radius:10px;
+
+}
+
+/* ===============================================
+🔥 USER MESSAGE
+=============================================== */
+
+.rb-user-message{
+
+  margin-left:auto;
+  margin-bottom:14px;
+
+  max-width:82%;
+
+  padding:14px 16px;
+
+  border-radius:18px 18px 6px 18px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #10b981,
+    #34d399
+  );
+
+  color:white;
+
+  font-size:14px;
+  line-height:1.5;
+
+  box-shadow:
+  0 10px 25px rgba(16,185,129,0.20);
+
+  animation:
+  rbMessageAppear .25s ease;
+
+}
+
+/* ===============================================
+🔥 BOT MESSAGE
+=============================================== */
+
+.rb-bot-message{
+
+  margin-bottom:14px;
+
+  max-width:86%;
+
+  padding:16px;
+
+  border-radius:18px 18px 18px 6px;
+
+  background:
+  rgba(255,255,255,0.95);
+
+  border:
+  1px solid rgba(226,232,240,0.9);
+
+  color:#0f172a;
+
+  font-size:14px;
+  line-height:1.6;
+
+  box-shadow:
+  0 10px 25px rgba(15,23,42,0.05);
+
+  white-space:pre-line;
+
+  animation:
+  rbMessageAppear .25s ease;
+
+}
+
+/* ===============================================
+🔥 INPUT AREA
+=============================================== */
+
+.rb-chat-input-area{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:18px;
+
+  background:
+  rgba(255,255,255,0.92);
+
+  border-top:
+  1px solid rgba(226,232,240,0.7);
+
+  backdrop-filter:
+  blur(10px);
+
+}
+
+/* ===============================================
+🔥 INPUT
+=============================================== */
+
+#rb-chat-input{
+
+  flex:1;
+
+  height:52px;
+
+  border:none;
+
+  border-radius:16px;
+
+  padding:0 16px;
+
+  background:
+  rgba(248,250,252,0.95);
+
+  font-size:14px;
+
+  color:#0f172a;
+
+  box-shadow:
+  inset 0 0 0 1px rgba(226,232,240,0.9);
+
+  transition:
+  box-shadow .2s ease,
+  background .2s ease;
+
+}
+
+#rb-chat-input:focus{
+
+  outline:none;
+
+  background:white;
+
+  box-shadow:
+  inset 0 0 0 2px rgba(16,185,129,0.55),
+  0 0 0 4px rgba(16,185,129,0.10);
+
+}
+
+/* ===============================================
+🔥 SEND BUTTON
+=============================================== */
+
+#rb-chat-send{
+
+  width:52px;
+  height:52px;
+
+  border:none;
+
+  border-radius:16px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #10b981,
+    #34d399
+  );
+
+  color:white;
+
+  font-size:18px;
+
+  cursor:pointer;
+
+  transition:
+  transform .2s ease,
+  box-shadow .2s ease;
+
+  box-shadow:
+  0 10px 25px rgba(16,185,129,0.25);
+
+}
+
+#rb-chat-send:hover{
+
+  transform:
+  scale(1.05);
+
+  box-shadow:
+  0 16px 35px rgba(16,185,129,0.35);
+
+}
+
+/* ===============================================
+🔥 ANIMATIONS
+=============================================== */
+
+@keyframes rbChatAppear{
+
+  from{
+    opacity:0;
+    transform:
+    translateY(20px)
+    scale(0.96);
+  }
+
+  to{
+    opacity:1;
+    transform:
+    translateY(0)
+    scale(1);
+  }
+
+}
+
+@keyframes rbMessageAppear{
+
+  from{
+    opacity:0;
+    transform:
+    translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:
+    translateY(0);
+  }
+
+}
+
+/* ===============================================
+🔥 MOBILE
+=============================================== */
+
+@media (max-width:768px){
+
+  #rb-chatbot-button{
+
+    width:62px;
+    height:62px;
+
+    right:18px;
+    bottom:18px;
+
+    border-radius:20px;
+
+  }
+
+  #rb-chatbot-window{
+
+    width:calc(100vw - 20px);
+
+    height:78vh;
+
+    right:10px;
+    bottom:92px;
+
+    border-radius:24px;
+
+  }
+
+  .rb-chat-title{
+    font-size:16px;
+  }
+
+  #rb-chat-input{
+    font-size:16px;
+  }
+
+}
+
+/* ===============================================
+🔥 DARK MODE SAFE
+=============================================== */
+
+body.dark-mode #rb-chatbot-window{
+
+  background:
+  rgba(15,23,42,0.88);
+
+}
+
+body.dark-mode .rb-bot-message{
+
+  background:
+  rgba(30,41,59,0.92);
+
+  color:white;
+
+  border:
+  1px solid rgba(51,65,85,0.8);
+
+}
+
+body.dark-mode #rb-chat-input{
+
+  background:
+  rgba(30,41,59,0.92);
+
+  color:white;
+
+}
