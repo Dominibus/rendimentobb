@@ -115,7 +115,11 @@ for(const key in window.rbKnowledgeBase){
 // 🧠 PRIORITY RESPONSE ENGINE
 // =====================================
 
-if(matches.length){
+if(
+  matches.length &&
+  !wantsStrategy &&
+  !isFollowUp
+){
 
   matches.sort((a,b)=>
     b.priority - a.priority
@@ -799,6 +803,30 @@ if(wantsStrategy){
   let insightsIT = [];
   let insightsEN = [];
 
+  if(aiTone === "executive"){
+
+  insightsIT.push(
+    "🏦 Analisi executive mode attiva."
+  );
+
+  insightsEN.push(
+    "🏦 Executive analysis mode active."
+  );
+
+}
+
+if(aiTone === "advanced"){
+
+  insightsIT.push(
+    "📊 Modalità investor avanzata attiva."
+  );
+
+  insightsEN.push(
+    "📊 Advanced investor mode active."
+  );
+
+}
+
   // =================================
   // 🌍 MARKET DATA
   // =================================
@@ -1165,8 +1193,7 @@ function initRBChatbot(){
 
     messages.innerHTML += `
       <div class="rb-bot-message">
-        ${escapeHTML(response).replace(/
-/g,"<br>")}
+        ${escapeHTML(response).replace(/\n/g,"<br>")}
       </div>
     `;
 
