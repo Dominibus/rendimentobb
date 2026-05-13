@@ -1537,8 +1537,21 @@ function initRBChatbot(){
   const chatWindow = document.getElementById("rb-chatbot-window");
 
   button.onclick = ()=>{
-    chatWindow.classList.toggle("open");
-  };
+
+  const isOpen =
+    chatWindow.classList.contains("open");
+
+  if(isOpen){
+
+    chatWindow.classList.remove("open");
+
+  }else{
+
+    chatWindow.classList.add("open");
+
+  }
+
+};
 
   const sendBtn = document.getElementById("rb-chat-send");
   const input = document.getElementById("rb-chat-input");
