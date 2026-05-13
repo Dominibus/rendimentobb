@@ -1779,6 +1779,95 @@ function initRBChatbot(){
     const text =
       input.value.trim();
 
+  // =====================================
+// 🧠 CHATBOT LIMIT ENGINE
+// =====================================
+
+const access =
+  window.getUserAccess?.() || {};
+
+const today =
+  new Date().toDateString();
+
+window.rbChatUsage =
+  window.rbChatUsage || {
+    date: today,
+    count: 0
+  };
+
+// 🔄 reset daily
+if(window.rbChatUsage.date !== today){
+
+  window.rbChatUsage.date = today;
+  window.rbChatUsage.count = 0;
+
+}
+
+// =====================================
+// 🧠 PLAN LIMITS
+// =====================================
+
+let maxMessages = Infinity;
+
+if(access.isFree){
+
+  maxMessages = 10;
+
+}else if(access.isInvestor){
+
+  maxMessages = 80;
+
+}else if(access.isPro || access.isAdmin){
+
+  maxMessages = Infinity;
+
+}
+
+// =====================================
+// ⛔ LIMIT REACHED
+// =====================================
+
+if(window.rbChatUsage.count >= maxMessages){
+
+  messages.innerHTML += `
+
+    <div class="rb-bot-message">
+
+      ${
+        window.t(
+
+`⚠️ Hai raggiunto il limite giornaliero del tuo piano AI.
+
+🔓 Investor → 80 messaggi/giorno
+👑 PRO → accesso illimitato`,
+
+`⚠️ You reached your AI daily limit.
+
+🔓 Investor → 80 messages/day
+👑 PRO → unlimited access`
+
+        )
+      }
+
+    </div>
+
+  `;
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+  sendBtn.disabled = false;
+
+  return;
+
+}
+
+// =====================================
+// ✅ INCREMENT USAGE
+// =====================================
+
+window.rbChatUsage.count++;  
+
     if(!text){
 
       sendBtn.disabled = false;
