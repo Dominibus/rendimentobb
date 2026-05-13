@@ -813,18 +813,26 @@ body.dark-mode #rb-chat-input{
 
   }
 
-  /* =====================================
-  HIDE BUTTON WHEN OPEN
-  ===================================== */
+/* =====================================
+BUTTON ALWAYS ACCESSIBLE
+===================================== */
 
-  #rb-chatbot-window.open ~ #rb-chatbot-button{
+#rb-chatbot-button{
 
-    opacity:0 !important;
+  transition:
+  transform .25s ease,
+  opacity .25s ease !important;
 
-    pointer-events:none !important;
+}
 
-    transform:scale(.8);
+#rb-chatbot-window.open ~ #rb-chatbot-button{
 
-  }
+  opacity:.92 !important;
+
+  pointer-events:auto !important;
+
+  transform:scale(.92) !important;
+
+}
 
 }
