@@ -835,3 +835,41 @@ body.dark-mode #rb-chat-input{
   }
 
 }
+
+/* =====================================
+📱 KEYBOARD SAFE AREA FIX
+===================================== */
+
+@supports (padding: max(0px)){
+
+  .rb-chat-input-area{
+
+    padding-bottom:
+    max(14px, env(safe-area-inset-bottom)) !important;
+
+  }
+
+  #rb-chatbot-button{
+
+    bottom:
+    calc(18px + env(safe-area-inset-bottom)) !important;
+
+  }
+
+}
+
+/* =====================================
+📱 KEYBOARD OPEN OPTIMIZATION
+===================================== */
+
+#rb-chatbot-window{
+
+  overscroll-behavior:contain !important;
+
+}
+
+#rb-chat-messages{
+
+  overscroll-behavior:contain !important;
+
+}
