@@ -21,6 +21,30 @@ window.generateAIResponse = function(message){
   const text = message.toLowerCase().trim();
 
 // =====================================
+// 🧠 KNOWLEDGE BASE ENGINE
+// =====================================
+
+for(const key in window.rbKnowledgeBase){
+
+  const item = window.rbKnowledgeBase[key];
+
+  const matched =
+    item.keywords.some(keyword =>
+      text.includes(keyword)
+    );
+
+  if(matched){
+
+    return window.t(
+      item.it,
+      item.en
+    );
+
+  }
+
+}  
+
+// =====================================
 // 🧠 EDUCATIONAL DETECTION
 // =====================================
 
