@@ -20,26 +20,9 @@ window.generateAIResponse = function(message){
 
   const text = message.toLowerCase().trim();
 
-  // =====================================
+// =====================================
 // 🧠 EDUCATIONAL DETECTION
 // =====================================
-
-const educationalTriggers = [
-
-  "cos'è",
-  "cosa è",
-  "cosa vuol dire",
-  "significa",
-  "spiegami",
-  "definizione",
-  "what is",
-  "meaning",
-  "explain"
-
-];
-
-const wantsEducationIntent =
-  detectIntent(intents.education);
 
   const data = window.lastAnalysisData || {};
 
@@ -167,11 +150,8 @@ const wantsCashflow =
 const wantsStrategy =
   detectIntent(intents.strategy);
 
-const wantsEducationIntent =
+const wantsEducation =
   detectIntent(intents.education);
-
-  const wantsEducation =
-  wantsEducationIntent;
 // =====================================
 // 📚 ROI EDUCATIONAL
 // =====================================
