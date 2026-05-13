@@ -530,94 +530,222 @@ body.dark-mode #rb-chat-input{
 }
 
 /* =========================================
-   MOBILE FINAL FIX
+📱 MOBILE FINAL FIX – PREMIUM
 ========================================= */
 
 @media screen and (max-width:768px){
 
-  .rb-chatbot-window{
-    position: fixed !important;
+  /* =========================
+  WINDOW
+  ========================= */
 
-    top: 80px !important;
-    left: 12px !important;
-    right: 12px !important;
-    bottom: 95px !important;
+  #rb-chatbot-window{
 
-    width: auto !important;
-    height: auto !important;
-    height: 72vh !important;
+    position:fixed !important;
 
-    border-radius: 24px !important;
+    top:78px !important;
+    left:12px !important;
+    right:12px !important;
+    bottom:92px !important;
 
-    display: flex !important;
-    flex-direction: column !important;
+    width:auto !important;
 
-    overflow: hidden !important;
+    height:calc(100vh - 180px) !important;
+    max-height:760px !important;
 
-    z-index: 999999 !important;
+    border-radius:26px !important;
+
+    display:flex !important;
+    flex-direction:column !important;
+
+    overflow:hidden !important;
+
+    z-index:999999 !important;
+
+    backdrop-filter:blur(24px);
+
   }
 
-  .rb-chatbot-header{
-    padding: 18px !important;
-    min-height: 82px !important;
+  /* =========================
+  HEADER
+  ========================= */
 
-    flex-shrink: 0 !important;
+  .rb-chat-header{
+
+    padding:16px 18px !important;
+
+    min-height:auto !important;
+
+    flex-shrink:0 !important;
+
   }
 
-  .rb-chatbot-messages{
-    flex: 1 !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding: 16px !important;
-    padding-bottom: 40px !important;
+  .rb-chat-title{
+
+    font-size:17px !important;
+    font-weight:800 !important;
+
   }
 
-  .rb-chatbot-input-area{
-    position: relative !important;
+  .rb-chat-subtitle{
 
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
+    font-size:11px !important;
 
-    padding: 14px !important;
+    margin-top:2px !important;
 
-    background: #fff !important;
+    opacity:.82 !important;
 
-    border-top: 1px solid rgba(0,0,0,0.05) !important;
-
-    flex-shrink: 0 !important;
   }
 
-  .rb-chatbot-input{
-    flex: 1 !important;
+  /* =========================
+  MESSAGES
+  ========================= */
 
-    height: 56px !important;
+  #rb-chat-messages{
 
-    font-size: 16px !important;
+    flex:1 !important;
+
+    overflow-y:auto !important;
+
+    -webkit-overflow-scrolling:touch !important;
+
+    padding:16px !important;
+
+    padding-bottom:30px !important;
+
+    scroll-behavior:smooth;
+
   }
 
-  .rb-chatbot-send{
-    width: 56px !important;
-    height: 56px !important;
+  /* =========================
+  USER MESSAGE
+  ========================= */
 
-    flex-shrink: 0 !important;
+  .rb-user-message{
+
+    max-width:90% !important;
+
+    font-size:15px !important;
+
+    line-height:1.6 !important;
+
+    padding:14px 16px !important;
+
+    border-radius:18px 18px 8px 18px !important;
+
   }
 
-  .rb-chatbot-message{
-    max-width: 92% !important;
+  /* =========================
+  BOT MESSAGE
+  ========================= */
 
-    font-size: 15px !important;
-    line-height: 1.7 !important;
+  .rb-bot-message{
+
+    max-width:92% !important;
+
+    font-size:15px !important;
+
+    line-height:1.75 !important;
+
+    padding:16px !important;
+
+    border-radius:18px 18px 18px 8px !important;
+
   }
 
-  .rb-chatbot-toggle{
-    width: 68px !important;
-    height: 68px !important;
+  /* =========================
+  INPUT AREA
+  ========================= */
 
-    bottom: 20px !important;
-    right: 20px !important;
+  .rb-chat-input-area{
 
-    z-index: 999999 !important;
+    position:relative !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    gap:10px !important;
+
+    padding:14px !important;
+
+    background:
+    rgba(255,255,255,0.96) !important;
+
+    border-top:
+    1px solid rgba(226,232,240,0.8) !important;
+
+    flex-shrink:0 !important;
+
+    backdrop-filter:blur(14px);
+
+  }
+
+  /* =========================
+  INPUT
+  ========================= */
+
+  #rb-chat-input{
+
+    flex:1 !important;
+
+    height:56px !important;
+
+    border-radius:18px !important;
+
+    font-size:16px !important;
+
+    padding:0 18px !important;
+
+  }
+
+  /* =========================
+  SEND BUTTON
+  ========================= */
+
+  #rb-chat-send{
+
+    width:56px !important;
+    height:56px !important;
+
+    border-radius:18px !important;
+
+    flex-shrink:0 !important;
+
+    font-size:20px !important;
+
+  }
+
+  /* =========================
+  FLOATING BUTTON
+  ========================= */
+
+  #rb-chatbot-button{
+
+    width:64px !important;
+    height:64px !important;
+
+    right:18px !important;
+    bottom:18px !important;
+
+    border-radius:22px !important;
+
+    z-index:999999 !important;
+
+  }
+
+  /* =========================
+  HIDE FLOATING BUTTON
+  WHEN OPEN
+  ========================= */
+
+  #rb-chatbot-window.open ~ #rb-chatbot-button{
+
+    opacity:0 !important;
+
+    pointer-events:none !important;
+
+    transform:scale(.8);
+
   }
 
 }
