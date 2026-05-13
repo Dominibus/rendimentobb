@@ -1593,28 +1593,63 @@ function initRBChatbot(){
       </div>
     `;
 
-    const response = window.generateAIResponse(text);
+const typingId =
+  "typing-" + Date.now();
 
-    window.rbConversationHistory.push({
-  role: "assistant",
-  text: response,
-  time: Date.now()
-});
+messages.innerHTML += `
+  <div
+    class="rb-bot-message rb-typing"
+    id="${typingId}"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+`;
 
-    if(
-  window.rbConversationHistory.length > 40
-){
+messages.scrollTop =
+  messages.scrollHeight;
 
-  window.rbConversationHistory =
-    window.rbConversationHistory.slice(-40);
+const response =
+  window.generateAIResponse(text);
 
-}
+const thinkingTime =
+  Math.min(
+    2200,
+    Math.max(
+      700,
+      response.length * 8
+    )
+  );
 
-    messages.innerHTML += `
-      <div class="rb-bot-message">
-        ${escapeHTML(response).replace(/\n/g,"<br>")}
-      </div>
-    `;
+setTimeout(()=>{
+
+  document.getElementById(typingId)
+  ?.remove();
+
+  window.rbConversationHistory.push({
+    role: "assistant",
+    text: response,
+    time: Date.now()
+  });
+
+  messages.innerHTML += `
+    <div class="rb-bot-message">
+      ${escapeHTML(response)
+        .replace(/\n/g,"<br>")}
+    </div>
+  `;
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+  sendBtn.disabled = false;
+
+  input.focus();
+
+}, thinkingTime);
+
+input.value = "";
 
     input.value = "";
 
