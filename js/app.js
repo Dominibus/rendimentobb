@@ -2372,10 +2372,17 @@ function runPostAnalysis(result, context){
   equity
 } = context || {};
 
-  // ================= GLOBAL STATE =================
+// ================= GLOBAL STATE =================
 
-  window.simulationExecuted = true;
-  window.lastAnalysisData = result;
+window.simulationExecuted = true;
+window.lastAnalysisData = result;
+
+// 🔥 salva ROI reale (non limitato)
+window.lastAnalysisData.realROI =
+  window.realROI || result.roi || 0;
+
+  window.lastAnalysisData.realROI =
+    window.realROI || result.roi || 0;
 
   const analysisHash = JSON.stringify({
   roi: Number(result?.roi || 0).toFixed(2),
@@ -3129,20 +3136,34 @@ if(!isTool){
 
 }
 
-// 🛠 TOOL → realistico professionale
-else{
+// =====================================
+// 🔥 ROI ENGINE PROFESSIONAL
+// =====================================
 
-  // cap realistico SaaS
-  roi = Math.min(roi, 26);
+// 🏠 HOME → teaser marketing
+if(!isTool){
+
+  roi = roi * 1.08;
 
 }
 
-// 🔥 SAFE FINAL
-const safeROI = Math.max(0, roi);
+// 🔥 ROI REALE (mai limitato)
+const realROI = Math.max(0, roi);
 
-  // 🔥 RENDER ROI CHART
-  renderROIChart(safeROI);
-    const roiText = safeROI.toFixed(1) + "%";
+// 🔥 ROI VISIVO (solo UI/chart)
+const visualROI = Math.min(realROI, 45);
+
+// 🔥 salva ROI reale globale
+window.realROI = realROI;
+
+// 🔥 render chart con cap visivo
+renderROIChart(visualROI);
+
+// 🔥 testo reale
+const roiText = realROI.toFixed(1) + "%";
+
+// 🔥 compatibilità legacy
+const safeROI = realROI;
 
     const gross = Number(result?.revenue ?? result?.gross ?? 0);
     const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
@@ -3807,10 +3828,11 @@ const d = window.lastAnalysisData;
 // ================= SAFE =================
 const safe = v => isFinite(v) ? Number(v) : 0;
 
-const realROI = safe(d.roi);
+const realROI =
+  safe(d.realROI || d.roi);
 
-// 🔥 CAP VISIVO PDF (più credibile)
-const roi = Math.min(realROI, 26);
+// 🔥 cap SOLO grafico PDF
+const roi = Math.min(realROI, 45);
 const revenue = safe(d.revenue);
 const profit = safe(d.netAfterMortgage || d.profit);
 const price = safe(d.price);
