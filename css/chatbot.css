@@ -571,9 +571,9 @@ body.dark-mode #rb-chat-input{
     border:
     1px solid rgba(255,255,255,0.55) !important;
 
-    z-index:999999 !important;
+    /* 🔥 CHAT SOTTO IL BOTTONE */
+    z-index:999998 !important;
 
-    /* 🔥 IMPORTANTISSIMO */
     opacity:0;
 
     visibility:hidden;
@@ -806,33 +806,32 @@ body.dark-mode #rb-chat-input{
 
     border-radius:22px !important;
 
-    z-index:999998 !important;
+    /* 🔥 SOPRA LA CHAT */
+    z-index:999999 !important;
+
+    pointer-events:auto !important;
+
+    transition:
+    transform .25s ease,
+    opacity .25s ease !important;
 
     box-shadow:
     0 10px 30px rgba(16,185,129,0.35) !important;
 
   }
 
-/* =====================================
-BUTTON ALWAYS ACCESSIBLE
-===================================== */
+  /* =====================================
+  BUTTON WHEN CHAT OPEN
+  ===================================== */
 
-#rb-chatbot-button{
+  #rb-chatbot-window.open ~ #rb-chatbot-button{
 
-  transition:
-  transform .25s ease,
-  opacity .25s ease !important;
+    opacity:.92 !important;
 
-}
+    pointer-events:auto !important;
 
-#rb-chatbot-window.open ~ #rb-chatbot-button{
+    transform:scale(.92) !important;
 
-  opacity:.92 !important;
-
-  pointer-events:auto !important;
-
-  transform:scale(.92) !important;
-
-}
+  }
 
 }
