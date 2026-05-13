@@ -84,28 +84,6 @@ const lastUserMessage =
     previousUserMessages.length - 2
   ]?.text?.toLowerCase() || "";
 
-  const conversationContext = {
-
-  talkedAboutROI:
-    lastMessages.some(m =>
-      m.text?.toLowerCase()
-      .includes("roi")
-    ),
-
-  talkedAboutRisk:
-    lastMessages.some(m =>
-      m.text?.toLowerCase()
-      .includes("rischio")
-    ),
-
-  talkedAboutCashflow:
-    lastMessages.some(m =>
-      m.text?.toLowerCase()
-      .includes("cashflow")
-    )
-
-};
-
 // =====================================
 // 🧠 KNOWLEDGE BASE ENGINE
 // =====================================
@@ -909,7 +887,17 @@ const executiveOpenersIT = [
 
   "🏨 Analisi strategica investimento in corso.",
 
-  "📈 Elaborazione avanzata sostenibilità investimento."
+  "📈 Elaborazione avanzata sostenibilità investimento.",
+
+  "🧠 AI predictive engine attivo.",
+
+"📡 Analisi comparativa contro benchmark turistici.",
+
+"🏦 Simulazione finanziaria avanzata completata.",
+
+"📈 Analisi sostenibilità cashflow in corso.",
+
+"🌍 Confronto dati short-rent europei completato."
 
 ];
 
@@ -923,7 +911,17 @@ const executiveOpenersEN = [
 
   "🏨 Strategic investment analysis in progress.",
 
-  "📈 Advanced investment sustainability analysis."
+  "📈 Advanced investment sustainability analysis.",
+
+  "🧠 Predictive AI engine active.",
+
+"📡 Comparative analysis against tourism benchmarks.",
+
+"🏦 Advanced financial simulation completed.",
+
+"📈 Cashflow sustainability analysis in progress.",
+
+"🌍 European short-rent benchmark comparison completed."
 
 ];
 
@@ -1244,6 +1242,56 @@ if(risk >= 70){
   // FINAL STRATEGY
   // =================================
 
+  // =================================
+// 🧠 AI EXECUTIVE REASONING
+// =================================
+
+if(
+  roi >= 10 &&
+  occupancy >= 70 &&
+  risk <= 40
+){
+
+  insightsIT.push(
+    "🧠 L'investimento mostra una struttura molto competitiva rispetto ai benchmark short-rent italiani."
+  );
+
+  insightsEN.push(
+    "🧠 The investment shows a highly competitive structure compared to Italian short-rent benchmarks."
+  );
+
+}
+
+if(
+  risk >= 70 &&
+  monthlyCosts >= 1500
+){
+
+  insightsIT.push(
+    "⚠️ La combinazione tra costi elevati e rischio operativo potrebbe comprimere il cashflow nel lungo periodo."
+  );
+
+  insightsEN.push(
+    "⚠️ The combination of high operating costs and operational risk may compress long-term cashflow."
+  );
+
+}
+
+if(
+  occupancy >= 75 &&
+  nightly <= 90
+){
+
+  insightsIT.push(
+    "💡 L'occupazione è forte ma il prezzo notte potrebbe essere sottovalutato rispetto al mercato."
+  );
+
+  insightsEN.push(
+    "💡 Occupancy is strong but nightly pricing may be undervalued compared to the market."
+  );
+
+}
+
   insightsIT.push(
     "💡 Analizza sempre cashflow reale e sostenibilità prima di investire."
   );
@@ -1456,23 +1504,31 @@ return window.t(
 
   }
 
-  // =====================================
-  // ✅ DEFAULT
-  // =====================================
+// =====================================
+// ✅ DEFAULT
+// =====================================
 
-  return window.t(
-    "Posso aiutarti ad analizzare ROI, rischio, cashflow e sostenibilità dell'investimento.",
-    "I can help analyze ROI, risk, cashflow and investment sustainability."
-  );
+return window.t(
+  "Posso aiutarti ad analizzare ROI, rischio, cashflow e sostenibilità dell'investimento.",
+  "I can help analyze ROI, risk, cashflow and investment sustainability."
+);
 
 };
+
+// ===============================================
+// 🚀 INIT CHATBOT
+// ===============================================
+
 function initRBChatbot(){
 
-  if(document.getElementById("rb-chatbot-wrapper")) return;
+  if(document.getElementById("rb-chatbot-wrapper"))
+    return;
 
-  const wrapper = document.createElement("div");
+  const wrapper =
+    document.createElement("div");
 
-  wrapper.id = "rb-chatbot-wrapper";
+  wrapper.id =
+    "rb-chatbot-wrapper";
 
   wrapper.innerHTML = `
 
@@ -1481,6 +1537,10 @@ function initRBChatbot(){
   </div>
 
   <div id="rb-chatbot-window">
+
+    <!-- =========================
+    HEADER
+    ========================== -->
 
     <div class="rb-chat-header">
 
@@ -1493,45 +1553,60 @@ function initRBChatbot(){
 
       <div class="rb-chat-subtitle">
         ${window.t(
-          "Powered by RendimentoBB",
-          "Powered by RendimentoBB"
+          "Powered by RendimentoBB AI",
+          "Powered by RendimentoBB AI"
         )}
       </div>
 
     </div>
+
+    <!-- =========================
+    MESSAGES
+    ========================== -->
 
     <div id="rb-chat-messages">
 
       <div class="rb-bot-message">
 
         ${window.t(
-          "Ciao 👋 Posso aiutarti ad analizzare investimenti B&B.",
-          "Hi 👋 I can help you analyze B&B investments."
+
+          "👋 Ciao. Posso analizzare ROI, rischio, cashflow e sostenibilità del tuo investimento B&B.",
+
+          "👋 Hi. I can analyze ROI, risk, cashflow and sustainability of your B&B investment."
+
         )}
 
       </div>
 
     </div>
 
+    <!-- =========================
+    QUICK ACTIONS
+    ========================== -->
+
     <div class="rb-quick-actions">
 
-  <button class="rb-quick-btn">
-    ROI
-  </button>
+      <button class="rb-quick-btn">
+        ${window.t("ROI","ROI")}
+      </button>
 
-  <button class="rb-quick-btn">
-    Cashflow
-  </button>
+      <button class="rb-quick-btn">
+        ${window.t("Cashflow","Cashflow")}
+      </button>
 
-  <button class="rb-quick-btn">
-    Rischio
-  </button>
+      <button class="rb-quick-btn">
+        ${window.t("Rischio","Risk")}
+      </button>
 
-  <button class="rb-quick-btn">
-    Conviene?
-  </button>
+      <button class="rb-quick-btn">
+        ${window.t("Conviene?","Worth it?")}
+      </button>
 
-</div>
+    </div>
+
+    <!-- =========================
+    INPUT
+    ========================== -->
 
     <div class="rb-chat-input-area">
 
@@ -1540,8 +1615,8 @@ function initRBChatbot(){
         id="rb-chat-input"
 
         placeholder="${window.t(
-          'Scrivi un messaggio...',
-          'Write a message...'
+          "Scrivi un messaggio...",
+          "Write a message..."
         )}"
       >
 
@@ -1556,28 +1631,64 @@ function initRBChatbot(){
 
   document.body.appendChild(wrapper);
 
-  const button = document.getElementById("rb-chatbot-button");
-  const chatWindow = document.getElementById("rb-chatbot-window");
+  // =========================================
+  // ELEMENTS
+  // =========================================
+
+  const button =
+    document.getElementById(
+      "rb-chatbot-button"
+    );
+
+  const chatWindow =
+    document.getElementById(
+      "rb-chatbot-window"
+    );
+
+  const sendBtn =
+    document.getElementById(
+      "rb-chat-send"
+    );
+
+  const input =
+    document.getElementById(
+      "rb-chat-input"
+    );
+
+  const messages =
+    document.getElementById(
+      "rb-chat-messages"
+    );
+
+  // =========================================
+  // OPEN / CLOSE
+  // =========================================
 
   button.onclick = ()=>{
 
-  const isOpen =
-    chatWindow.classList.contains("open");
+    const isOpen =
+      chatWindow.classList
+      .contains("open");
 
-  if(isOpen){
+    if(isOpen){
 
-    chatWindow.classList.remove("open");
+      chatWindow
+      .classList
+      .remove("open");
 
-  }else{
+    }else{
 
-    chatWindow.classList.add("open");
+      chatWindow
+      .classList
+      .add("open");
 
-  }
+    }
 
-};
+  };
 
-  const sendBtn = document.getElementById("rb-chat-send");
-  const input = document.getElementById("rb-chat-input");
+  // =========================================
+  // QUICK ACTIONS
+  // =========================================
 
   document
 .querySelectorAll(".rb-quick-btn")
@@ -1585,8 +1696,51 @@ function initRBChatbot(){
 
   btn.onclick = ()=>{
 
-    input.value =
-      btn.innerText;
+    const action =
+      btn.innerText.trim().toLowerCase();
+
+    if(
+      action.includes("roi")
+    ){
+
+      input.value = window.t(
+        "Spiegami il ROI",
+        "Explain ROI"
+      );
+
+    }
+
+    else if(
+      action.includes("cash")
+    ){
+
+      input.value = window.t(
+        "Analizza cashflow",
+        "Analyze cashflow"
+      );
+
+    }
+
+    else if(
+      action.includes("risch") ||
+      action.includes("risk")
+    ){
+
+      input.value = window.t(
+        "Analizza il rischio",
+        "Analyze risk"
+      );
+
+    }
+
+    else{
+
+      input.value = window.t(
+        "Conviene investire?",
+        "Is this investment worth it?"
+      );
+
+    }
 
     sendMessage();
 
@@ -1594,115 +1748,207 @@ function initRBChatbot(){
 
 });
 
+  // =========================================
+  // ESCAPE HTML
+  // =========================================
+
   function escapeHTML(str){
 
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    return str
 
-}
+      .replace(/&/g, "&amp;")
+
+      .replace(/</g, "&lt;")
+
+      .replace(/>/g, "&gt;")
+
+      .replace(/"/g, "&quot;")
+
+      .replace(/'/g, "&#039;");
+
+  }
+
+  // =========================================
+  // SEND MESSAGE
+  // =========================================
 
   function sendMessage(){
 
     sendBtn.disabled = true;
 
-    const text = input.value.trim();
+    const text =
+      input.value.trim();
 
     if(!text){
 
-  sendBtn.disabled = false;
-  return;
+      sendBtn.disabled = false;
+      return;
 
-}
+    }
+
+    // =====================================
+    // SAVE USER MESSAGE
+    // =====================================
+
     window.rbConversationHistory.push({
-  role: "user",
-  text,
-  time: Date.now()
-});
 
-    const messages = document.getElementById("rb-chat-messages");
+      role: "user",
+
+      text,
+
+      time: Date.now()
+
+    });
+
+    // =====================================
+    // USER MESSAGE UI
+    // =====================================
 
     messages.innerHTML += `
+
       <div class="rb-user-message">
+
         ${escapeHTML(text)}
+
       </div>
+
     `;
 
-const typingId =
-  "typing-" + Date.now();
+    // =====================================
+    // TYPING EFFECT
+    // =====================================
 
-messages.innerHTML += `
-  <div
-    class="rb-bot-message rb-typing"
-    id="${typingId}"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-`;
+    const typingId =
+      "typing-" + Date.now();
 
-messages.scrollTop =
-  messages.scrollHeight;
+    messages.innerHTML += `
 
-const response =
-  window.generateAIResponse(text);
+      <div
+        class="rb-bot-message rb-typing"
+        id="${typingId}"
+      >
 
-const thinkingTime =
-  Math.min(
-    2200,
-    Math.max(
-      700,
-      response.length * 8
-    )
-  );
+        <span></span>
+        <span></span>
+        <span></span>
 
-setTimeout(()=>{
+      </div>
 
-  document.getElementById(typingId)
-  ?.remove();
+    `;
 
-  window.rbConversationHistory.push({
-    role: "assistant",
-    text: response,
-    time: Date.now()
-  });
+    messages.scrollTop =
+      messages.scrollHeight;
 
-  messages.innerHTML += `
-    <div class="rb-bot-message">
-      ${escapeHTML(response)
-        .replace(/\n/g,"<br>")}
-    </div>
-  `;
+    // =====================================
+    // AI RESPONSE
+    // =====================================
 
-  messages.scrollTop =
-    messages.scrollHeight;
+    const response =
+      window.generateAIResponse(text);
 
-  sendBtn.disabled = false;
+    const thinkingTime =
 
-  input.focus();
+      Math.min(
 
-}, thinkingTime);
+        2200,
 
-input.value = "";
+        Math.max(
+          700,
+          response.length * 8
+        )
+
+      );
+
+    // =====================================
+    // AI DELAY
+    // =====================================
+
+    setTimeout(()=>{
+
+      document
+      .getElementById(typingId)
+      ?.remove();
+
+      // ===============================
+      // SAVE AI MESSAGE
+      // ===============================
+
+      window.rbConversationHistory.push({
+
+        role: "assistant",
+
+        text: response,
+
+        time: Date.now()
+
+      });
+
+      // ===============================
+      // LIMIT MEMORY
+      // ===============================
+
+      if(
+        window.rbConversationHistory
+        .length > 40
+      ){
+
+        window.rbConversationHistory =
+
+          window.rbConversationHistory
+          .slice(-40);
+
+      }
+
+      // ===============================
+      // AI MESSAGE UI
+      // ===============================
+
+      messages.innerHTML += `
+
+        <div class="rb-bot-message">
+
+          ${escapeHTML(response)
+            .replace(/\n/g,"<br>")}
+
+        </div>
+
+      `;
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+      sendBtn.disabled = false;
+
+      input.focus();
+
+    }, thinkingTime);
+
+    // =====================================
+    // RESET INPUT
+    // =====================================
 
     input.value = "";
 
-    messages.scrollTop = messages.scrollHeight;
-
-    sendBtn.disabled = false;
-    input.focus();
   }
 
-  sendBtn.onclick = sendMessage;
+  // =========================================
+  // SEND EVENTS
+  // =========================================
 
-  input.addEventListener("keypress", e=>{
-    if(e.key === "Enter"){
-      sendMessage();
+  sendBtn.onclick =
+    sendMessage;
+
+  input.addEventListener(
+    "keypress",
+    e=>{
+
+      if(e.key === "Enter"){
+
+        sendMessage();
+
+      }
+
     }
-  });
+  );
 
 }
