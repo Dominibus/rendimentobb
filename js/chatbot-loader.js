@@ -34,7 +34,7 @@
     // CORE
     // ===================================
 
-    "/js/chatbot/knowledge/knowledge-base.js",
+    "/js/chatbot/knowledge-base.js",
 
     // ===================================
     // KNOWLEDGE MODULES
