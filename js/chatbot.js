@@ -20,6 +20,25 @@ window.rbConversationHistory =
   window.rbConversationHistory || [];
 
 // ===============================================
+// 🧠 AI CONTEXT MEMORY
+// ===============================================
+
+window.rbAIContextMemory =
+  window.rbAIContextMemory || {
+
+    lastCity: null,
+
+    lastROI: null,
+
+    lastTopic: null,
+
+    lastRisk: null,
+
+    lastCashflow: null
+
+};
+
+// ===============================================
 // 🌍 MARKET AI DATA
 // ===============================================
 
@@ -64,12 +83,268 @@ window.rbMarketData = {
 };
 
 // ===============================================
+// 🧠 AI TOOLS ENGINE
+// ===============================================
+
+window.rbAITools = {
+
+  // =========================================
+  // 🌍 COMPARE CITIES
+  // =========================================
+
+  compareCities(cityA, cityB){
+
+    const a =
+      window.rbMarketData?.[cityA];
+
+    const b =
+      window.rbMarketData?.[cityB];
+
+    if(!a || !b){
+
+      return window.t(
+        "Non ho abbastanza dati per confrontare le città.",
+        "Not enough data to compare cities."
+      );
+
+    }
+
+    return window.t(
+
+`🌍 Confronto mercati
+
+📍 ${cityA}
+• ROI medio: ${a.avgROI}
+• Occupazione: ${a.occupancy}
+• Rischio: ${a.risk}
+
+📍 ${cityB}
+• ROI medio: ${b.avgROI}
+• Occupazione: ${b.occupancy}
+• Rischio: ${b.risk}
+
+💡 ${
+  parseFloat(a.avgROI) >
+  parseFloat(b.avgROI)
+
+  ? cityA + " mostra un ROI medio superiore."
+
+  : cityB + " mostra un ROI medio superiore."
+}`,
+
+`🌍 Market comparison
+
+📍 ${cityA}
+• Average ROI: ${a.avgROI}
+• Occupancy: ${a.occupancy}
+• Risk: ${a.risk}
+
+📍 ${cityB}
+• Average ROI: ${b.avgROI}
+• Occupancy: ${b.occupancy}
+• Risk: ${b.risk}
+
+💡 ${
+  parseFloat(a.avgROI) >
+  parseFloat(b.avgROI)
+
+  ? cityA + " shows a stronger average ROI."
+
+  : cityB + " shows a stronger average ROI."
+}`
+
+    );
+
+  },
+
+  // =========================================
+  // 🏦 MORTGAGE ANALYSIS
+  // =========================================
+
+  analyzeMortgage(percent){
+
+    if(percent >= 90){
+
+      return window.t(
+        "⚠️ Un mutuo al 90% aumenta molto il rischio operativo.",
+        "⚠️ A 90% mortgage significantly increases operational risk."
+      );
+
+    }
+
+    if(percent >= 70){
+
+      return window.t(
+        "📈 La leva finanziaria è aggressiva ma ancora gestibile.",
+        "📈 Financial leverage is aggressive but still manageable."
+      );
+
+    }
+
+    return window.t(
+      "✅ La struttura del mutuo sembra sostenibile.",
+      "✅ Mortgage structure appears sustainable."
+    );
+
+  },
+
+  // =========================================
+  // 💸 HIDDEN COSTS
+  // =========================================
+
+  hiddenCosts(){
+
+    return window.t(
+
+`💸 Costi nascosti short-rent:
+
+• cleaning
+• utenze
+• manutenzione
+• check-in
+• OTA fees
+• tasse
+• vuoti stagionali
+
+⚠️ Molti investitori sottostimano questi costi.`,
+
+`💸 Hidden short-rent costs:
+
+• cleaning
+• utilities
+• maintenance
+• check-in
+• OTA fees
+• taxes
+• seasonal vacancy
+
+⚠️ Many investors underestimate these costs.`
+
+    );
+
+  }
+
+};
+
+// =====================================
+// 🧠 ENTITY EXTRACTION ENGINE
+// =====================================
+
+window.extractAIEntities = function(text){
+
+  text = text.toLowerCase();
+
+  const entities = {};
+
+  // =================================
+  // CITY DETECTION
+  // =================================
+
+  const cities = [
+    "roma",
+    "milano",
+    "napoli",
+    "firenze",
+    "venezia",
+    "torino"
+  ];
+
+  for(const city of cities){
+
+    if(text.includes(city)){
+
+      entities.city = city;
+      break;
+
+    }
+
+  }
+
+  // =================================
+  // PERCENTAGES
+  // =================================
+
+  const percentMatch =
+    text.match(/(\d+)\s?%/);
+
+  if(percentMatch){
+
+    entities.percentage =
+      Number(percentMatch[1]);
+
+  }
+
+  // =================================
+  // MONEY
+  // =================================
+
+  const moneyMatch =
+    text.match(/(\d+)\s?k/);
+
+  if(moneyMatch){
+
+    entities.amount =
+      Number(moneyMatch[1]) * 1000;
+
+  }
+
+  // =================================
+  // MORTGAGE
+  // =================================
+
+  if(
+    text.includes("mutuo") ||
+    text.includes("mortgage")
+  ){
+
+    entities.hasMortgage = true;
+
+  }
+
+  return entities;
+
+};
+
+// ===============================================
 // 🧠 AI RESPONSE ENGINE 1.0
 // ===============================================
 
 window.generateAIResponse = function(message){
 
   const text = message.toLowerCase().trim();
+  const entities =
+  window.extractAIEntities(text);
+
+// =====================================
+// 🧠 AI TOOL EXECUTION
+// =====================================
+
+if(
+  text.includes("meglio") &&
+  entities.city
+){
+
+  const secondCityMatch =
+    text.match(
+      /(roma|milano|napoli|firenze|venezia|torino)/g
+    );
+
+  if(
+    secondCityMatch &&
+    secondCityMatch.length >= 2
+  ){
+
+    return window.rbAITools.compareCities(
+
+      secondCityMatch[0],
+
+      secondCityMatch[1]
+
+    );
+
+  }
+
+}  
 
   const lastMessages =
   window.rbConversationHistory
@@ -294,6 +569,25 @@ const mainIntent =
   detectedIntents[0] || null;
 
 // =====================================
+// 🧠 UPDATE AI MEMORY
+// =====================================
+
+window.rbAIContextMemory.lastCity =
+  entities.city || city;
+
+window.rbAIContextMemory.lastROI =
+  roi || null;
+
+window.rbAIContextMemory.lastRisk =
+  risk || null;
+
+window.rbAIContextMemory.lastCashflow =
+  profit || null;
+
+window.rbAIContextMemory.lastTopic =
+  mainIntent || "general";   
+
+// =====================================
 // 🧠 MAIN INTENT FLAGS
 // =====================================
 
@@ -311,6 +605,24 @@ const wantsCashflow =
 
 const wantsEducation =
   detectedIntents.includes("education");
+
+// =====================================
+// 🧠 SIMPLE MODE DETECTION
+// =====================================
+
+const simpleMode =
+
+  text.includes("semplice") ||
+
+  text.includes("facile") ||
+
+  text.includes("spiegamelo semplice") ||
+
+  text.includes("non capisco") ||
+
+  text.includes("in modo semplice") ||
+
+  text.includes("spiega meglio");  
 
 // =====================================
 // 🧠 RESPONSE COMPOSER
@@ -429,6 +741,45 @@ if(
     text.includes("rendimento")
   )
 ){
+
+if(simpleMode){
+
+  addResponse(
+
+`📈 ROI significa quanto rende davvero il tuo investimento.
+
+💡 Esempio semplice:
+
+Se investi €100.000 e guadagni €10.000 all'anno:
+
+👉 ROI = 10%
+
+Più il ROI è alto, più l'investimento può essere profittevole.
+
+⚠️ Però un ROI alto non basta:
+bisogna controllare anche rischio e costi reali.`,
+
+`📈 ROI means how much your investment actually earns.
+
+💡 Simple example:
+
+If you invest €100,000 and earn €10,000 per year:
+
+👉 ROI = 10%
+
+The higher the ROI, the more profitable the investment may be.
+
+⚠️ But high ROI alone is not enough:
+you also need to check risk and real costs.`
+
+  );
+
+  return window.t(
+    responsePartsIT.join("\n\n"),
+    responsePartsEN.join("\n\n")
+  );
+
+}  
 
   addResponse(
 
@@ -868,6 +1219,44 @@ if(
   wantsStrategy &&
   window.lastAnalysisData
 ){
+
+if(simpleMode){
+
+  return window.t(
+
+`💡 In modo semplice:
+
+L'investimento potrebbe funzionare bene, ma ci sono alcuni aspetti da controllare.
+
+📈 Il rendimento sembra interessante.
+
+⚠️ Però:
+• il mutuo
+• i costi
+• l'occupazione reale
+
+possono cambiare molto il guadagno finale.
+
+👉 Un ROI alto non significa automaticamente guadagno sicuro.`,
+
+`💡 Simple explanation:
+
+The investment may work well, but there are some important things to monitor.
+
+📈 Returns look interesting.
+
+⚠️ However:
+• mortgage
+• costs
+• real occupancy
+
+can strongly affect final profits.
+
+👉 High ROI does not automatically mean safe profit.`
+
+  );
+
+}  
 
   let insightsIT = [];
   let insightsEN = [];
