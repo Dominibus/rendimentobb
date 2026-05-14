@@ -28,40 +28,40 @@
   // 📦 JS FILES
   // ===============================
 
-const scripts = [
+  const scripts = [
 
-  // ===================================
-  // CORE
-  // ===================================
+    // ===================================
+    // CORE
+    // ===================================
 
-  "/js/chatbot/knowledge-base.js",
+    "/js/chatbot/knowledge/knowledge-base.js",
 
-  // ===================================
-  // KNOWLEDGE MODULES
-  // ===================================
+    // ===================================
+    // KNOWLEDGE MODULES
+    // ===================================
 
-  "/js/chatbot/knowledge/real-estate.js",
-  "/js/chatbot/knowledge/mortgages.js",
-  "/js/chatbot/knowledge/shortrent.js",
-  "/js/chatbot/knowledge/finance.js",
-  "/js/chatbot/knowledge/risk.js",
-  "/js/chatbot/knowledge/mistakes.js",
+    "/js/chatbot/knowledge/real-estate.js",
+    "/js/chatbot/knowledge/mortgages.js",
+    "/js/chatbot/knowledge/shortrent.js",
+    "/js/chatbot/knowledge/finance.js",
+    "/js/chatbot/knowledge/risk.js",
+    "/js/chatbot/knowledge/mistakes.js",
 
-  // ===================================
-  // DATA
-  // ===================================
+    // ===================================
+    // DATA
+    // ===================================
 
-  "/js/chatbot/market-data.js",
-  "/js/chatbot/support-data.js",
+    "/js/chatbot/market-data.js",
+    "/js/chatbot/support-data.js",
 
-  // ===================================
-  // AI ENGINE
-  // ===================================
+    // ===================================
+    // AI ENGINE
+    // ===================================
 
-  "/js/ai-engine.js",
-  "/js/chatbot.js"
+    "/js/ai-engine.js",
+    "/js/chatbot.js"
 
-];
+  ];
 
   scripts.forEach(src=>{
 
