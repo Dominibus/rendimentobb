@@ -151,6 +151,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <button data-lang="en">EN</button>
         </div>
 
+        <button id="rb-header-ai-btn" class="rb-header-ai-btn">
+        ✨ AI
+        </button>
+
         <div id="user-area"></div>
 
         <button id="rb-burger">☰</button>
