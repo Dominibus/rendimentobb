@@ -2352,28 +2352,11 @@ function initRBChatbot(){
   // OPEN / CLOSE
   // =========================================
 
-  button.onclick = ()=>{
+ button.onclick = ()=>{
 
-    const isOpen =
-      chatWindow.classList
-      .contains("open");
+  window.toggleRBChatbot();
 
-    if(isOpen){
-
-      chatWindow
-      .classList
-      .remove("open");
-
-    }else{
-
-      chatWindow
-      .classList
-      .add("open");
-
-    }
-
-  };
-
+};
 // =========================================
 // CLOSE BUTTON
 // =========================================
@@ -2385,6 +2368,30 @@ closeBtn.onclick = ()=>{
     .remove("open");
 
 };
+
+// =========================================
+// 🔥 GLOBAL TOGGLE FUNCTION
+// =========================================
+
+window.toggleRBChatbot = function(){
+
+  if(!chatWindow) return;
+
+  chatWindow.classList.toggle("open");
+
+};
+
+// =========================================
+// 🔥 HEADER AI BUTTON
+// =========================================
+
+document
+.getElementById("rb-header-ai-btn")
+?.addEventListener("click", ()=>{
+
+  window.toggleRBChatbot();
+
+});
 
   // =========================================
   // QUICK ACTIONS
