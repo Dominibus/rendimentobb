@@ -421,6 +421,37 @@ function initHeaderInteractions(){
     }
   }, 800);
 
+// =====================================
+// 🤖 HEADER AI BUTTON
+// =====================================
+
+const aiBtn =
+  document.getElementById(
+    "rb-header-ai-btn"
+  );
+
+if(aiBtn){
+
+  aiBtn.onclick = ()=>{
+
+    console.log("🤖 OPEN AI");
+
+    const chatbot =
+      document.getElementById(
+        "rb-chatbot-window"
+      );
+
+    if(!chatbot){
+      console.warn("❌ chatbot not found");
+      return;
+    }
+
+    chatbot.classList.toggle("open");
+
+  };
+
+}
+
 }
 /* =====================
 🌐 LANG
