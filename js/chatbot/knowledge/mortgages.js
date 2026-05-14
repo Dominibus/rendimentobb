@@ -10,6 +10,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   mortgageImpact: {
 
+    priority: 10,
+
     keywords: [
       "mutuo",
       "mortgage",
@@ -23,11 +25,41 @@ Object.assign(window.rbKnowledgeBase, {
       "finanziamento investimento"
     ],
 
-    answerIT:
-      "Il mutuo può ridurre il cashflow mensile a causa della rata, ma può aumentare il ROI leveraged grazie alla leva finanziaria. Tuttavia una leva troppo aggressiva aumenta il rischio operativo e rende l’investimento più vulnerabile durante periodi di bassa occupazione.",
+    aiTitleIT:
+      "🏦 Impatto del Mutuo",
 
-    answerEN:
-      "A mortgage may reduce monthly cashflow because of loan payments, but it can increase leveraged ROI through financial leverage. However, excessive leverage increases operational risk and makes the investment more vulnerable during low occupancy periods.",
+    aiTitleEN:
+      "🏦 Mortgage Impact",
+
+    aiSummaryIT:
+      "Il mutuo può aumentare il ROI leveraged ma ridurre il cashflow mensile.",
+
+    aiSummaryEN:
+      "A mortgage may increase leveraged ROI while reducing monthly cashflow.",
+
+    aiInsightIT:
+      "Una leva finanziaria aggressiva aumenta il rischio operativo e rende l’investimento più vulnerabile durante periodi di bassa occupazione o aumento costi.",
+
+    aiInsightEN:
+      "Aggressive leverage increases operational risk and makes investments more vulnerable during low occupancy periods or rising costs.",
+
+    warningIT:
+      "⚠️ Un mutuo troppo elevato può comprimere il cashflow reale.",
+
+    warningEN:
+      "⚠️ Excessive leverage may compress real cashflow.",
+
+    recommendationsIT: [
+      "Mantieni margini operativi sostenibili.",
+      "Controlla DSCR e cashflow.",
+      "Evita leva troppo aggressiva."
+    ],
+
+    recommendationsEN: [
+      "Maintain sustainable operating margins.",
+      "Monitor DSCR and cashflow.",
+      "Avoid excessive leverage."
+    ],
 
     examples: [
       "mutuo Airbnb",
@@ -53,6 +85,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   fixedRate: {
 
+    priority: 8,
+
     keywords: [
       "tasso fisso",
       "fixed rate",
@@ -61,11 +95,41 @@ Object.assign(window.rbKnowledgeBase, {
       "fixed mortgage"
     ],
 
-    answerIT:
-      "Il tasso fisso mantiene la rata costante nel tempo e protegge l’investimento da aumenti dei tassi di interesse. Offre maggiore stabilità finanziaria ma spesso parte da tassi iniziali leggermente più elevati.",
+    aiTitleIT:
+      "📌 Tasso Fisso",
 
-    answerEN:
-      "A fixed-rate mortgage keeps payments stable over time and protects the investment from interest rate increases. It offers stronger financial stability but often starts with slightly higher rates.",
+    aiTitleEN:
+      "📌 Fixed Rate Mortgage",
+
+    aiSummaryIT:
+      "Il tasso fisso mantiene la rata stabile nel tempo.",
+
+    aiSummaryEN:
+      "A fixed-rate mortgage keeps payments stable over time.",
+
+    aiInsightIT:
+      "Offre maggiore stabilità finanziaria e protezione contro aumenti dei tassi di interesse, ma spesso parte da tassi iniziali leggermente più elevati.",
+
+    aiInsightEN:
+      "It offers stronger financial stability and protection against interest rate increases, but often starts with slightly higher initial rates.",
+
+    warningIT:
+      "⚠️ Un tasso fisso troppo alto può ridurre il cashflow.",
+
+    warningEN:
+      "⚠️ An excessively high fixed rate may reduce cashflow.",
+
+    recommendationsIT: [
+      "Valuta stabilità a lungo termine.",
+      "Confronta TAN e TAEG.",
+      "Analizza sostenibilità rata."
+    ],
+
+    recommendationsEN: [
+      "Evaluate long-term stability.",
+      "Compare APR and total loan cost.",
+      "Analyze payment sustainability."
+    ],
 
     examples: [
       "mutuo tasso fisso",
@@ -88,6 +152,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   variableRate: {
 
+    priority: 8,
+
     keywords: [
       "tasso variabile",
       "variable rate",
@@ -96,11 +162,41 @@ Object.assign(window.rbKnowledgeBase, {
       "euribor"
     ],
 
-    answerIT:
-      "Il tasso variabile può offrire rate iniziali più basse ma aumenta il rischio finanziario in caso di rialzo dei tassi. Investimenti con cashflow debole sono più esposti a questo rischio.",
+    aiTitleIT:
+      "📈 Tasso Variabile",
 
-    answerEN:
-      "A variable-rate mortgage may offer lower initial payments but increases financial risk if interest rates rise. Investments with weak cashflow are more exposed to this risk.",
+    aiTitleEN:
+      "📈 Variable Rate Mortgage",
+
+    aiSummaryIT:
+      "Il tasso variabile può ridurre inizialmente la rata ma aumenta il rischio finanziario.",
+
+    aiSummaryEN:
+      "Variable-rate mortgages may initially reduce payments but increase financial risk.",
+
+    aiInsightIT:
+      "Investimenti con cashflow debole sono più vulnerabili ai rialzi dei tassi di interesse.",
+
+    aiInsightEN:
+      "Investments with weak cashflow are more vulnerable to rising interest rates.",
+
+    warningIT:
+      "⚠️ Rialzi dei tassi possono compromettere la sostenibilità del mutuo.",
+
+    warningEN:
+      "⚠️ Rising rates may compromise mortgage sustainability.",
+
+    recommendationsIT: [
+      "Mantieni cashflow solido.",
+      "Valuta scenari con tassi più alti.",
+      "Controlla esposizione finanziaria."
+    ],
+
+    recommendationsEN: [
+      "Maintain strong cashflow.",
+      "Evaluate higher-rate scenarios.",
+      "Monitor financial exposure."
+    ],
 
     examples: [
       "mutuo variabile",
@@ -123,6 +219,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   ltv: {
 
+    priority: 8,
+
     keywords: [
       "ltv",
       "loan to value",
@@ -132,11 +230,41 @@ Object.assign(window.rbKnowledgeBase, {
       "percentuale finanziata"
     ],
 
-    answerIT:
-      "LTV (Loan To Value) indica la percentuale dell’immobile finanziata dalla banca rispetto al valore totale dell’investimento. Un LTV elevato aumenta leva finanziaria e rischio operativo.",
+    aiTitleIT:
+      "📊 Loan To Value (LTV)",
 
-    answerEN:
-      "LTV (Loan To Value) indicates the percentage of the property financed by the bank compared to total investment value. A high LTV increases leverage and operational risk.",
+    aiTitleEN:
+      "📊 Loan To Value (LTV)",
+
+    aiSummaryIT:
+      "LTV indica la percentuale dell’immobile finanziata dalla banca.",
+
+    aiSummaryEN:
+      "LTV indicates the percentage of the property financed by the bank.",
+
+    aiInsightIT:
+      "Un LTV elevato aumenta leva finanziaria e rischio operativo, riducendo il margine di sicurezza dell’investimento.",
+
+    aiInsightEN:
+      "A high LTV increases leverage and operational risk while reducing the investment safety margin.",
+
+    warningIT:
+      "⚠️ LTV molto elevati aumentano l’esposizione finanziaria.",
+
+    warningEN:
+      "⚠️ Very high LTV levels increase financial exposure.",
+
+    recommendationsIT: [
+      "Mantieni equity sufficiente.",
+      "Evita leverage eccessivo.",
+      "Analizza sostenibilità rata."
+    ],
+
+    recommendationsEN: [
+      "Maintain sufficient equity.",
+      "Avoid excessive leverage.",
+      "Analyze payment sustainability."
+    ],
 
     examples: [
       "LTV 80%",
@@ -159,6 +287,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   mortgagePayment: {
 
+    priority: 7,
+
     keywords: [
       "rata",
       "mortgage payment",
@@ -168,11 +298,41 @@ Object.assign(window.rbKnowledgeBase, {
       "pagamento mutuo"
     ],
 
-    answerIT:
-      "La rata del mutuo impatta direttamente sul cashflow mensile e sulla sostenibilità dell’investimento immobiliare. Una rata troppo elevata può comprimere il margine operativo.",
+    aiTitleIT:
+      "💳 Rata Mutuo",
 
-    answerEN:
-      "Mortgage payments directly impact monthly cashflow and overall investment sustainability. Excessive payments may compress operating margins.",
+    aiTitleEN:
+      "💳 Mortgage Payment",
+
+    aiSummaryIT:
+      "La rata del mutuo influisce direttamente sul cashflow mensile.",
+
+    aiSummaryEN:
+      "Mortgage payments directly impact monthly cashflow.",
+
+    aiInsightIT:
+      "Una rata troppo elevata può comprimere margini operativi e sostenibilità finanziaria.",
+
+    aiInsightEN:
+      "Excessive mortgage payments may compress operating margins and financial sustainability.",
+
+    warningIT:
+      "⚠️ Rate elevate aumentano il rischio operativo.",
+
+    warningEN:
+      "⚠️ High loan payments increase operational risk.",
+
+    recommendationsIT: [
+      "Mantieni cashflow positivo.",
+      "Evita rate troppo aggressive.",
+      "Controlla sostenibilità finanziaria."
+    ],
+
+    recommendationsEN: [
+      "Maintain positive cashflow.",
+      "Avoid overly aggressive payments.",
+      "Monitor financial sustainability."
+    ],
 
     examples: [
       "rata sostenibile",
@@ -196,6 +356,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   fullMortgage: {
 
+    priority: 9,
+
     keywords: [
       "mutuo 100%",
       "100 mortgage",
@@ -205,11 +367,41 @@ Object.assign(window.rbKnowledgeBase, {
       "mutuo completo"
     ],
 
-    answerIT:
-      "Un mutuo al 100% aumenta la leva finanziaria ma può rendere l’investimento molto più rischioso a causa di rate elevate, margini ridotti e maggiore esposizione ai cambiamenti di mercato.",
+    aiTitleIT:
+      "🚨 Mutuo 100%",
 
-    answerEN:
-      "A 100% mortgage increases leverage but may make the investment significantly riskier because of high payments, reduced margins and greater exposure to market changes.",
+    aiTitleEN:
+      "🚨 100% Mortgage",
+
+    aiSummaryIT:
+      "Un mutuo al 100% aumenta fortemente la leva finanziaria.",
+
+    aiSummaryEN:
+      "A 100% mortgage significantly increases leverage.",
+
+    aiInsightIT:
+      "Rate elevate, margini ridotti e maggiore esposizione ai cambiamenti di mercato rendono l’investimento più fragile.",
+
+    aiInsightEN:
+      "High payments, lower margins and stronger exposure to market changes make the investment more fragile.",
+
+    warningIT:
+      "⚠️ Elevata leva finanziaria aumenta il rischio operativo.",
+
+    warningEN:
+      "⚠️ High leverage increases operational risk.",
+
+    recommendationsIT: [
+      "Mantieni riserve liquide.",
+      "Analizza cashflow realistico.",
+      "Evita sovraesposizione finanziaria."
+    ],
+
+    recommendationsEN: [
+      "Maintain liquidity reserves.",
+      "Analyze realistic cashflow.",
+      "Avoid financial overexposure."
+    ],
 
     examples: [
       "finanziamento totale",
@@ -234,6 +426,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   interestRates: {
 
+    priority: 7,
+
     keywords: [
       "tassi",
       "interest rates",
@@ -242,11 +436,41 @@ Object.assign(window.rbKnowledgeBase, {
       "rialzo tassi"
     ],
 
-    answerIT:
-      "L’aumento dei tassi di interesse può ridurre cashflow e sostenibilità del mutuo. Investimenti altamente levereggiati sono generalmente più vulnerabili ai rialzi dei tassi.",
+    aiTitleIT:
+      "📈 Tassi di Interesse",
 
-    answerEN:
-      "Rising interest rates may reduce cashflow and mortgage sustainability. Highly leveraged investments are generally more vulnerable to rate increases.",
+    aiTitleEN:
+      "📈 Interest Rates",
+
+    aiSummaryIT:
+      "L’aumento dei tassi può ridurre cashflow e sostenibilità finanziaria.",
+
+    aiSummaryEN:
+      "Rising rates may reduce cashflow and financial sustainability.",
+
+    aiInsightIT:
+      "Investimenti altamente levereggiati risultano generalmente più vulnerabili ai rialzi dei tassi.",
+
+    aiInsightEN:
+      "Highly leveraged investments are generally more vulnerable to rising interest rates.",
+
+    warningIT:
+      "⚠️ Rialzi dei tassi possono aumentare il rischio operativo.",
+
+    warningEN:
+      "⚠️ Rate increases may raise operational risk.",
+
+    recommendationsIT: [
+      "Valuta scenari stress test.",
+      "Mantieni margini di sicurezza.",
+      "Controlla sostenibilità del mutuo."
+    ],
+
+    recommendationsEN: [
+      "Evaluate stress-test scenarios.",
+      "Maintain safety margins.",
+      "Monitor mortgage sustainability."
+    ],
 
     examples: [
       "rialzo tassi",
