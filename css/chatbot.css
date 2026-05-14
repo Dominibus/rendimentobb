@@ -1185,3 +1185,16 @@ body.dark-mode #rb-chat-input{
   }
 
 }
+
+/* ===============================================
+💻 DESKTOP
+HEADER AI ONLY
+=============================================== */
+
+@media screen and (min-width:769px){
+
+  #rb-chatbot-button{
+    display:none !important;
+  }
+
+}
