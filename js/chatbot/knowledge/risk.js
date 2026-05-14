@@ -10,6 +10,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   riskScore: {
 
+    priority: 10,
+
     keywords: [
       "rischio",
       "risk",
@@ -21,11 +23,41 @@ Object.assign(window.rbKnowledgeBase, {
       "investment sustainability"
     ],
 
-    answerIT:
-      "Il Risk Score valuta la sostenibilità dell’investimento considerando cashflow, occupazione, leva finanziaria, costi operativi, volatilità mercato e stabilità della domanda turistica.",
+    aiTitleIT:
+      "⚠️ Risk Score",
 
-    answerEN:
-      "Risk Score evaluates investment sustainability by analyzing cashflow, occupancy, financial leverage, operating costs, market volatility and tourism demand stability.",
+    aiTitleEN:
+      "⚠️ Risk Score",
+
+    aiSummaryIT:
+      "Il Risk Score valuta la sostenibilità complessiva dell’investimento immobiliare.",
+
+    aiSummaryEN:
+      "Risk Score evaluates the overall sustainability of the real estate investment.",
+
+    aiInsightIT:
+      "Il punteggio considera cashflow, occupazione, leva finanziaria, costi operativi, volatilità del mercato e stabilità della domanda turistica.",
+
+    aiInsightEN:
+      "The score analyzes cashflow, occupancy, financial leverage, operating costs, market volatility and tourism demand stability.",
+
+    warningIT:
+      "⚠️ ROI elevato non significa automaticamente investimento sicuro.",
+
+    warningEN:
+      "⚠️ High ROI does not automatically mean a safe investment.",
+
+    recommendationsIT: [
+      "Analizza cashflow reale.",
+      "Valuta sostenibilità del mutuo.",
+      "Confronta benchmark mercato."
+    ],
+
+    recommendationsEN: [
+      "Analyze real cashflow.",
+      "Evaluate mortgage sustainability.",
+      "Compare market benchmarks."
+    ],
 
     examples: [
       "rischio Airbnb",
@@ -49,6 +81,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   seasonality: {
 
+    priority: 9,
+
     keywords: [
       "stagionalità",
       "seasonality",
@@ -58,11 +92,41 @@ Object.assign(window.rbKnowledgeBase, {
       "turismo stagionale"
     ],
 
-    answerIT:
-      "La stagionalità influenza occupazione, prezzo medio notte e stabilità del cashflow. Mercati troppo stagionali possono generare forti variazioni di redditività durante l’anno.",
+    aiTitleIT:
+      "🌦️ Stagionalità",
 
-    answerEN:
-      "Seasonality impacts occupancy, nightly pricing and cashflow stability. Highly seasonal markets may create strong profitability fluctuations during the year.",
+    aiTitleEN:
+      "🌦️ Seasonality",
+
+    aiSummaryIT:
+      "La stagionalità influenza occupazione, ADR e stabilità del cashflow.",
+
+    aiSummaryEN:
+      "Seasonality impacts occupancy, ADR and cashflow stability.",
+
+    aiInsightIT:
+      "Mercati troppo stagionali possono creare forti variazioni di redditività durante l’anno.",
+
+    aiInsightEN:
+      "Highly seasonal markets may generate strong profitability fluctuations throughout the year.",
+
+    warningIT:
+      "⚠️ Periodi di bassa stagione possono comprimere il cashflow.",
+
+    warningEN:
+      "⚠️ Low-season periods may compress cashflow.",
+
+    recommendationsIT: [
+      "Analizza dati annuali.",
+      "Diversifica la domanda.",
+      "Ottimizza pricing stagionale."
+    ],
+
+    recommendationsEN: [
+      "Analyze yearly data.",
+      "Diversify demand sources.",
+      "Optimize seasonal pricing."
+    ],
 
     examples: [
       "alta stagione",
@@ -85,6 +149,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   marketVolatility: {
 
+    priority: 8,
+
     keywords: [
       "volatilità",
       "market volatility",
@@ -93,11 +159,41 @@ Object.assign(window.rbKnowledgeBase, {
       "instabilità mercato"
     ],
 
-    answerIT:
-      "La volatilità del mercato può influenzare domanda, occupazione e redditività futura dell’investimento immobiliare.",
+    aiTitleIT:
+      "📉 Volatilità Mercato",
 
-    answerEN:
-      "Market volatility may affect demand, occupancy and future profitability of the real estate investment.",
+    aiTitleEN:
+      "📉 Market Volatility",
+
+    aiSummaryIT:
+      "La volatilità del mercato può influenzare domanda e redditività futura.",
+
+    aiSummaryEN:
+      "Market volatility may affect future demand and profitability.",
+
+    aiInsightIT:
+      "Mercati instabili possono generare variazioni improvvise di occupazione e cashflow.",
+
+    aiInsightEN:
+      "Unstable markets may generate sudden occupancy and cashflow changes.",
+
+    warningIT:
+      "⚠️ Elevata volatilità aumenta l’incertezza operativa.",
+
+    warningEN:
+      "⚠️ High volatility increases operational uncertainty.",
+
+    recommendationsIT: [
+      "Confronta trend mercato.",
+      "Mantieni margini solidi.",
+      "Riduci esposizione finanziaria."
+    ],
+
+    recommendationsEN: [
+      "Compare market trends.",
+      "Maintain strong margins.",
+      "Reduce financial exposure."
+    ],
 
     examples: [
       "mercato volatile",
@@ -119,6 +215,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   overLeverage: {
 
+    priority: 9,
+
     keywords: [
       "leva eccessiva",
       "over leverage",
@@ -128,11 +226,41 @@ Object.assign(window.rbKnowledgeBase, {
       "leva finanziaria alta"
     ],
 
-    answerIT:
-      "Una leva finanziaria troppo aggressiva può aumentare il ROI teorico ma rende l’investimento più fragile durante periodi di bassa occupazione o aumento costi.",
+    aiTitleIT:
+      "🏦 Leva Finanziaria Eccessiva",
 
-    answerEN:
-      "Excessive financial leverage may increase theoretical ROI but makes the investment more fragile during low occupancy periods or rising costs.",
+    aiTitleEN:
+      "🏦 Excessive Financial Leverage",
+
+    aiSummaryIT:
+      "Una leva finanziaria aggressiva aumenta il rischio operativo.",
+
+    aiSummaryEN:
+      "Aggressive leverage increases operational risk.",
+
+    aiInsightIT:
+      "Un mutuo troppo elevato può comprimere il cashflow durante periodi di bassa occupazione o aumento costi.",
+
+    aiInsightEN:
+      "An excessively high mortgage may compress cashflow during low occupancy periods or rising costs.",
+
+    warningIT:
+      "⚠️ ROI leveraged elevato può nascondere fragilità finanziarie.",
+
+    warningEN:
+      "⚠️ High leveraged ROI may hide financial fragility.",
+
+    recommendationsIT: [
+      "Mantieni margini di sicurezza.",
+      "Controlla sostenibilità rata.",
+      "Analizza DSCR."
+    ],
+
+    recommendationsEN: [
+      "Maintain safety margins.",
+      "Control payment sustainability.",
+      "Analyze DSCR."
+    ],
 
     examples: [
       "mutuo troppo alto",
@@ -154,6 +282,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   marketSaturation: {
 
+    priority: 8,
+
     keywords: [
       "mercato saturo",
       "market saturation",
@@ -163,11 +293,41 @@ Object.assign(window.rbKnowledgeBase, {
       "concorrenza elevata"
     ],
 
-    answerIT:
-      "Un mercato troppo saturo può ridurre occupazione e prezzo medio notte a causa dell’elevata concorrenza tra immobili short-rent.",
+    aiTitleIT:
+      "🏨 Saturazione Mercato",
 
-    answerEN:
-      "An oversaturated market may reduce occupancy and nightly pricing because of high short-rent competition.",
+    aiTitleEN:
+      "🏨 Market Saturation",
+
+    aiSummaryIT:
+      "Un mercato troppo saturo può ridurre occupazione e redditività.",
+
+    aiSummaryEN:
+      "An oversaturated market may reduce occupancy and profitability.",
+
+    aiInsightIT:
+      "L’eccessiva concorrenza short-rent può comprimere ADR e margini operativi.",
+
+    aiInsightEN:
+      "Excessive short-rent competition may compress ADR and operating margins.",
+
+    warningIT:
+      "⚠️ Mercati saturi aumentano il rischio operativo nel lungo periodo.",
+
+    warningEN:
+      "⚠️ Saturated markets increase long-term operational risk.",
+
+    recommendationsIT: [
+      "Analizza la concorrenza.",
+      "Differenzia il listing.",
+      "Studia nicchie di mercato."
+    ],
+
+    recommendationsEN: [
+      "Analyze competition.",
+      "Differentiate the listing.",
+      "Study market niches."
+    ],
 
     examples: [
       "troppi Airbnb",
@@ -189,6 +349,8 @@ Object.assign(window.rbKnowledgeBase, {
 
   regulationsRisk: {
 
+    priority: 7,
+
     keywords: [
       "regolamentazioni",
       "regulations",
@@ -198,11 +360,41 @@ Object.assign(window.rbKnowledgeBase, {
       "leggi airbnb"
     ],
 
-    answerIT:
-      "Normative locali, licenze e restrizioni sugli affitti brevi possono influenzare redditività e sostenibilità dell’investimento.",
+    aiTitleIT:
+      "📜 Rischio Normativo",
 
-    answerEN:
-      "Local regulations, licenses and short-rent restrictions may impact investment profitability and sustainability.",
+    aiTitleEN:
+      "📜 Regulatory Risk",
+
+    aiSummaryIT:
+      "Normative locali e restrizioni possono influenzare la redditività degli affitti brevi.",
+
+    aiSummaryEN:
+      "Local regulations and restrictions may impact short-rent profitability.",
+
+    aiInsightIT:
+      "Licenze, limiti operativi e nuove normative possono modificare sostenibilità e domanda di mercato.",
+
+    aiInsightEN:
+      "Licenses, operational limits and new regulations may change sustainability and market demand.",
+
+    warningIT:
+      "⚠️ Cambi normativi possono aumentare rapidamente il rischio investimento.",
+
+    warningEN:
+      "⚠️ Regulatory changes may quickly increase investment risk.",
+
+    recommendationsIT: [
+      "Controlla normative locali.",
+      "Verifica licenze richieste.",
+      "Monitora cambi legislativi."
+    ],
+
+    recommendationsEN: [
+      "Check local regulations.",
+      "Verify licensing requirements.",
+      "Monitor legal changes."
+    ],
 
     examples: [
       "licenza Airbnb",
