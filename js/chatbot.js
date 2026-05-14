@@ -2328,6 +2328,22 @@ function initRBChatbot(){
       "rb-chatbot-window"
     );
 
+// =========================================
+// 🔥 AUTO OPEN TOOL PAGE (DESKTOP ONLY)
+// =========================================
+
+const isToolPage =
+  window.location.pathname.includes("/tool");
+
+const isMobile =
+  window.innerWidth <= 768;
+
+if(isToolPage && !isMobile){
+
+  chatWindow.classList.add("open");
+
+}
+
   const sendBtn =
     document.getElementById(
       "rb-chat-send"
