@@ -257,6 +257,11 @@ padding-top:60px;
 <body class="academy-page">
 
 <div id="global-header"></div>
+<!-- 🤖 CHATBOT ROOT -->
+<div id="rb-chatbot-root"></div>
+
+<!-- 🔥 MOBILE MENU ROOT -->
+<div class="rb-mobile-overlay" id="rb-mobile-overlay"></div>  
 
 <main>
 
@@ -387,11 +392,26 @@ data-en="🚀 Start simulation">
 
 </main>
 
+<link rel="stylesheet" href="/css/chatbot.css">
+
 <script src="/js/lang.js" defer></script>
 
+<!-- 🤖 GLOBAL AI CHATBOT -->
+<script src="/js/chatbot-loader.js" defer></script>
+
+<!-- 🤖 CHATBOT DATA -->
+<script src="/js/chatbot/knowledge-base.js" defer></script>
+<script src="/js/chatbot/market-data.js" defer></script>
+<script src="/js/chatbot/support-data.js" defer></script>
+
+<!-- 🤖 CHATBOT ENGINE -->
+<script src="/js/ai-engine.js" defer></script>
+<script src="/js/chatbot.js" defer></script>
+
+<!-- 🔥 UI -->
 <script type="module" src="/js/header.js"></script>
-<script src="/js/ui-system.js" defer></script>  
-<script src="/js/footer.js" defer></script>
+<script src="/js/ui-system.js" defer></script>
+<script type="module" src="/js/footer.js"></script>
 
 </body>
 </html>
