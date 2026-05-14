@@ -2385,14 +2385,21 @@ window.toggleRBChatbot = function(){
 // 🔥 HEADER AI BUTTON
 // =========================================
 
-document
-.getElementById("rb-header-ai-btn")
-?.addEventListener("click", ()=>{
+const headerAiBtn =
+  document.getElementById("rb-header-ai-btn");
 
-  window.toggleRBChatbot();
+if(headerAiBtn){
 
-});
+  // 💣 reset sicurezza anti-duplicati
+  headerAiBtn.onclick = null;
 
+  headerAiBtn.onclick = ()=>{
+
+    window.toggleRBChatbot();
+
+  };
+
+}
   // =========================================
   // QUICK ACTIONS
   // =========================================
