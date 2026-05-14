@@ -2343,6 +2343,11 @@ function initRBChatbot(){
       "rb-chat-messages"
     );
 
+  const closeBtn =
+  document.querySelector(
+    ".rb-chat-close"
+  );
+
   // =========================================
   // OPEN / CLOSE
   // =========================================
@@ -2368,6 +2373,18 @@ function initRBChatbot(){
     }
 
   };
+
+// =========================================
+// CLOSE BUTTON
+// =========================================
+
+closeBtn.onclick = ()=>{
+
+  chatWindow
+    .classList
+    .remove("open");
+
+};
 
   // =========================================
   // QUICK ACTIONS
