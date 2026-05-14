@@ -434,23 +434,35 @@ if(aiBtn){
 
   aiBtn.onclick = ()=>{
 
-    console.log("🤖 OPEN AI");
+    console.log("🤖 HEADER AI CLICK");
 
-    const chatbot =
-      document.getElementById(
-        "rb-chatbot-window"
+    // aspetta chatbot render
+    setTimeout(()=>{
+
+      const chatbot =
+        document.getElementById(
+          "rb-chatbot-window"
+        );
+
+      if(!chatbot){
+
+        console.warn(
+          "❌ chatbot window missing"
+        );
+
+        return;
+
+      }
+
+      chatbot.classList.toggle("open");
+
+      console.log(
+        "✅ chatbot toggled"
       );
 
-    if(!chatbot){
-      console.warn("❌ chatbot not found");
-      return;
-    }
-
-    chatbot.classList.toggle("open");
+    }, 50);
 
   };
-
-}
 
 }
 /* =====================
