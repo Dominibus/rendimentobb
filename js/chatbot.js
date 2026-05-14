@@ -334,6 +334,12 @@ if(
     secondCityMatch.length >= 2
   ){
 
+    window.rbAIContextMemory.lastCity =
+  secondCityMatch[0];
+
+   window.rbAIContextMemory.lastComparedCities =
+  [...new Set(secondCityMatch)].slice(0,2);
+
     return window.rbAITools.compareCities(
 
       secondCityMatch[0],
@@ -370,9 +376,10 @@ for(const key in (window.rbKnowledgeBase || {})){
   const item = window.rbKnowledgeBase[key];
 
   const matched =
-    item.keywords.some(keyword =>
-      text.includes(keyword)
-    );
+  Array.isArray(item.keywords) &&
+  item.keywords.some(keyword =>
+    text.includes(keyword)
+  );
 
   if(matched){
 
@@ -411,8 +418,23 @@ for(const key in (window.rbKnowledgeBase || {})){
   const city =
     window.currentCity || "roma";
 
+// =====================================
+// 🧠 CONTEXT MEMORY
+// =====================================
+
+const memory =
+  window.rbAIContextMemory || {};
+
+const contextualCity =
+
+  entities.city ||
+
+  memory.lastCity ||
+
+  city; 
+
   const marketData =
-  window.rbMarketData?.[city];
+  window.rbMarketData?.[contextualCity];
 
   const profit =
     Number(
@@ -573,7 +595,9 @@ const mainIntent =
 // =====================================
 
 window.rbAIContextMemory.lastCity =
-  entities.city || city;
+  entities.city ||
+  memory.lastCity ||
+  city;
 
 window.rbAIContextMemory.lastROI =
   roi || null;
@@ -585,7 +609,7 @@ window.rbAIContextMemory.lastCashflow =
   profit || null;
 
 window.rbAIContextMemory.lastTopic =
-  mainIntent || "general";   
+  mainIntent || "general";  
 
 // =====================================
 // 🧠 MAIN INTENT FLAGS
@@ -742,44 +766,69 @@ if(
   )
 ){
 
-if(simpleMode){
+  // =================================
+  // 🧠 SIMPLE MODE
+  // =================================
 
-  addResponse(
+  if(simpleMode){
 
-`📈 ROI significa quanto rende davvero il tuo investimento.
+    return window.t(
+
+`📈 Il ROI ti dice se l’investimento può farti guadagnare bene.
 
 💡 Esempio semplice:
 
-Se investi €100.000 e guadagni €10.000 all'anno:
+Se compri un immobile e:
 
-👉 ROI = 10%
+• spendi €100.000
+• guadagni €10.000 all’anno
 
-Più il ROI è alto, più l'investimento può essere profittevole.
+👉 il ROI è circa 10%.
 
-⚠️ Però un ROI alto non basta:
-bisogna controllare anche rischio e costi reali.`,
+Più il ROI è alto, più l’investimento può sembrare interessante.
 
-`📈 ROI means how much your investment actually earns.
+⚠️ Però attenzione:
+
+un ROI alto NON significa automaticamente tanti soldi reali ogni mese.
+
+Mutuo, tasse, cleaning, utenze e periodi vuoti possono ridurre molto il guadagno finale.
+
+💡 Per questo è importante controllare anche:
+• cashflow
+• rischio
+• sostenibilità reale.`,
+
+`📈 ROI tells you if the investment can generate good returns.
 
 💡 Simple example:
 
-If you invest €100,000 and earn €10,000 per year:
+If you buy a property and:
 
-👉 ROI = 10%
+• spend €100,000
+• earn €10,000 per year
 
-The higher the ROI, the more profitable the investment may be.
+👉 ROI is around 10%.
 
-⚠️ But high ROI alone is not enough:
-you also need to check risk and real costs.`
+The higher the ROI, the more attractive the investment may appear.
 
-  );
+⚠️ But be careful:
 
-  return window.t(
-    responsePartsIT.join("\n\n"),
-    responsePartsEN.join("\n\n")
-  );
+high ROI does NOT automatically mean strong real monthly profits.
 
-}  
+Mortgage, taxes, cleaning, utilities and vacancy periods can heavily reduce actual earnings.
+
+💡 That’s why you should also analyze:
+• cashflow
+• risk
+• long-term sustainability.`
+
+    );
+
+  }
+
+  // =================================
+  // 📊 STANDARD EDUCATIONAL MODE
+  // =================================
 
   addResponse(
 
@@ -812,7 +861,6 @@ ${roi ? roi.toFixed(1) + "%" : "not available"}
   );
 
 }
-
 // =====================================
 // 📚 CASHFLOW EDUCATIONAL
 // =====================================
@@ -1119,8 +1167,8 @@ if(wantsROI){
     if(roi >= 15){
 
       return window.t(
-        `Ottimo segnale: il ROI attuale è ${roi.toFixed(1)}%. L'investimento risulta sopra la media del mercato di ${city}.`,
-        `Strong signal: current ROI is ${roi.toFixed(1)}%. The investment is above the ${city} market average.`
+        `Ottimo segnale: il ROI attuale è ${roi.toFixed(1)}%. L'investimento risulta sopra la media del mercato di ${contextualCity}.`,
+        `Strong signal: current ROI is ${roi.toFixed(1)}%. The investment is above the ${contextualCity} market average.`
       );
 
     }
@@ -1142,45 +1190,229 @@ if(wantsROI){
   }
 
   // =====================================
-  // ⚠️ RISK
-  // =====================================
+// ⚠️ RISK
+// =====================================
 
-  if(wantsRisk){
+if(wantsRisk){
 
-    if(access.isFree){
+  // =================================
+  // 🧠 CONTEXTUAL MORTGAGE ANALYSIS
+  // =================================
 
-      return window.t(
-        "L'analisi rischio completa è disponibile nei piani avanzati.",
-        "Full risk analysis is available in advanced plans."
+  if(
+    entities.hasMortgage &&
+    entities.percentage
+  ){
+
+    const mortgageAnalysis =
+
+      window.rbAITools.analyzeMortgage(
+        entities.percentage
       );
 
-    }
+    return window.t(
 
-    if(risk <= 35){
+`${mortgageAnalysis}
+
+📍 Mercato analizzato:
+${contextualCity}
+
+🏦 Mutuo stimato:
+${entities.percentage}%
+
+💡 Un mutuo elevato aumenta il rischio quando:
+
+• l'occupazione cala
+• i costi aumentano
+• il cashflow è debole
+• il mercato rallenta
+
+⚠️ Con leva alta è importante mantenere margini solidi e buona occupazione.`,
+
+`${mortgageAnalysis}
+
+📍 Analyzed market:
+${contextualCity}
+
+🏦 Estimated mortgage:
+${entities.percentage}%
+
+💡 High leverage increases risk when:
+
+• occupancy drops
+• costs increase
+• cashflow weakens
+• the market slows down
+
+⚠️ With high leverage it becomes important to maintain strong margins and occupancy.`
+
+    );
+
+  }
+
+  // =================================
+  // 🔓 FREE PLAN
+  // =================================
+
+  if(access.isFree){
+
+    return window.t(
+      "L'analisi rischio completa è disponibile nei piani avanzati.",
+      "Full risk analysis is available in advanced plans."
+    );
+
+  }
+
+  // =================================
+  // 🟢 LOW RISK
+  // =================================
+
+  if(risk <= 35){
+
+    if(simpleMode){
 
       return window.t(
-        `Il rischio stimato è basso (${risk}/100). La struttura finanziaria sembra solida.`,
-        `Estimated risk is low (${risk}/100). Financial structure appears solid.`
-      );
 
-    }
+`✅ Il rischio sembra abbastanza basso.
 
-    if(risk <= 65){
+💡 In pratica:
 
-      return window.t(
-        `Il rischio stimato è moderato (${risk}/100). Controlla bene occupazione e costi operativi.`,
-        `Estimated risk is moderate (${risk}/100). Carefully monitor occupancy and operating costs.`
+l'investimento appare stabile e meno esposto a problemi finanziari.
+
+Questo può dipendere da:
+• buona occupazione
+• costi sotto controllo
+• mutuo sostenibile
+
+📊 Rischio stimato:
+${risk}/100`,
+
+`✅ Risk appears relatively low.
+
+💡 In simple terms:
+
+the investment looks stable and less exposed to financial issues.
+
+This may depend on:
+• good occupancy
+• controlled costs
+• sustainable mortgage
+
+📊 Estimated risk:
+${risk}/100`
+
       );
 
     }
 
     return window.t(
-      `Il rischio stimato è elevato (${risk}/100). L'investimento potrebbe non essere stabile nel lungo periodo.`,
-      `Estimated risk is high (${risk}/100). The investment may not be stable long-term.`
+      `Il rischio stimato è basso (${risk}/100). La struttura finanziaria sembra solida.`,
+      `Estimated risk is low (${risk}/100). Financial structure appears solid.`
     );
 
   }
 
+  // =================================
+  // 🟡 MEDIUM RISK
+  // =================================
+
+  if(risk <= 65){
+
+    if(simpleMode){
+
+      return window.t(
+
+`⚠️ Il rischio sembra moderato.
+
+💡 Significa che:
+
+l'investimento potrebbe funzionare bene, ma ci sono aspetti da monitorare.
+
+In particolare:
+• occupazione
+• costi operativi
+• sostenibilità del mutuo
+
+📊 Rischio stimato:
+${risk}/100`,
+
+`⚠️ Risk appears moderate.
+
+💡 This means:
+
+the investment may work well, but some areas need monitoring.
+
+Especially:
+• occupancy
+• operating costs
+• mortgage sustainability
+
+📊 Estimated risk:
+${risk}/100`
+
+      );
+
+    }
+
+    return window.t(
+      `Il rischio stimato è moderato (${risk}/100). Controlla bene occupazione e costi operativi.`,
+      `Estimated risk is moderate (${risk}/100). Carefully monitor occupancy and operating costs.`
+    );
+
+  }
+
+  // =================================
+  // 🔴 HIGH RISK
+  // =================================
+
+  if(simpleMode){
+
+    return window.t(
+
+`🚨 Il rischio sembra piuttosto elevato.
+
+💡 In pratica:
+
+potresti avere difficoltà a mantenere profitti stabili nel tempo.
+
+Le cause potrebbero essere:
+• costi troppo alti
+• mutuo pesante
+• occupazione instabile
+• cashflow debole
+
+📊 Rischio stimato:
+${risk}/100
+
+⚠️ Un ROI alto da solo non basta per rendere sicuro un investimento.`,
+
+`🚨 Risk appears quite high.
+
+💡 In simple terms:
+
+it may become difficult to maintain stable profits over time.
+
+Possible causes:
+• high costs
+• heavy mortgage
+• unstable occupancy
+• weak cashflow
+
+📊 Estimated risk:
+${risk}/100
+
+⚠️ High ROI alone is not enough to make an investment safe.`
+
+    );
+
+  }
+
+  return window.t(
+    `Il rischio stimato è elevato (${risk}/100). L'investimento potrebbe non essere stabile nel lungo periodo.`,
+    `Estimated risk is high (${risk}/100). The investment may not be stable long-term.`
+  );
+
+}
   // =====================================
   // 💰 CASHFLOW
   // =====================================
@@ -1201,12 +1433,12 @@ if(wantsROI){
   if(
     text.includes("città") ||
     text.includes("city") ||
-    text.includes(city)
+    text.includes(contextualCity)
   ){
 
     return window.t(
-      `Stai analizzando il mercato di ${city}. I benchmark locali influenzano ROI e rischio.`,
-      `You are analyzing the ${city} market. Local benchmarks affect ROI and risk.`
+      `Stai analizzando il mercato di ${contextualCity}. I benchmark locali influenzano ROI e rischio.`,
+      `You are analyzing the ${contextualCity} market. Local benchmarks affect ROI and risk.`
     );
 
   }
@@ -1406,11 +1638,11 @@ if(aiTone === "advanced"){
 if(marketData){
 
   insightsIT.push(
-    `🌍 Mercato ${city}: ROI medio ${marketData.avgROI}.`
+    `🌍 Mercato ${contextualCity}: ROI medio ${marketData.avgROI}.`
   );
 
   insightsEN.push(
-    `🌍 ${city} market average ROI: ${marketData.avgROI}.`
+    `🌍 ${contextualCity} market average ROI: ${marketData.avgROI}.`
   );
 
 }
@@ -2376,25 +2608,36 @@ window.rbChatUsage.count++;
     messages.scrollTop =
       messages.scrollHeight;
 
-    // =====================================
-    // AI RESPONSE
-    // =====================================
+// =====================================
+// AI RESPONSE
+// =====================================
 
-    const response =
-      window.generateAIResponse(text);
+const response =
+  window.generateAIResponse(text);
 
-    const thinkingTime =
+// =====================================
+// 🛡 SAFE RESPONSE
+// =====================================
 
-      Math.min(
+const safeResponse =
+  String(response || "");
 
-        2200,
+// =====================================
+// 🧠 THINKING TIME
+// =====================================
 
-        Math.max(
-          700,
-          response.length * 8
-        )
+const thinkingTime =
 
-      );
+  Math.min(
+
+    2200,
+
+    Math.max(
+      700,
+      safeResponse.length * 8
+    )
+
+  );
 
     // =====================================
     // AI DELAY
@@ -2414,7 +2657,7 @@ window.rbChatUsage.count++;
 
         role: "assistant",
 
-        text: response,
+        text: safeResponse,
 
         time: Date.now()
 
@@ -2444,8 +2687,8 @@ window.rbChatUsage.count++;
 
         <div class="rb-bot-message">
 
-          ${escapeHTML(response)
-            .replace(/\n/g,"<br>")}
+          ${escapeHTML(safeResponse)
+         .replace(/\n/g,"<br>")}
 
         </div>
 
