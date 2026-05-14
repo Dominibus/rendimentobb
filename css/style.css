@@ -18086,3 +18086,42 @@ transition:0.25s ease;
 color:#10b981;
 transform:translateY(-2px);
 }
+
+.rb-header-ai-btn{
+
+  border:none;
+
+  height:42px;
+
+  padding:0 16px;
+
+  border-radius:14px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #10b981,
+    #34d399
+  );
+
+  color:white;
+
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  box-shadow:
+  0 8px 20px rgba(16,185,129,.22);
+
+  transition:
+  transform .2s ease,
+  opacity .2s ease;
+
+}
+
+.rb-header-ai-btn:hover{
+
+  transform:translateY(-1px);
+
+}
