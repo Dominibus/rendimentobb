@@ -354,7 +354,9 @@ Silicon Valley SaaS UI
 
   max-width:86%;
 
-  padding:16px;
+  line-height:1.8;
+
+  padding:18px;
 
   border-radius:18px 18px 18px 6px;
 
@@ -736,7 +738,7 @@ body.dark-mode #rb-chat-input{
 
     padding:16px !important;
 
-    padding-bottom:30px !important;
+    padding-bottom:50px !important;
 
   }
 
