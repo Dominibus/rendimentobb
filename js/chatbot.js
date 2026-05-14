@@ -2223,6 +2223,9 @@ function initRBChatbot(){
     ========================== -->
 
     <div class="rb-chat-header">
+    <div class="rb-chat-close">
+     ✕
+    </div>
 
       <div class="rb-chat-title">
         ${window.t(
