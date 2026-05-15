@@ -477,52 +477,6 @@ function initHeaderInteractions(){
     }
   }, 800);
 
-// =====================================
-// 🤖 HEADER AI BUTTON
-// =====================================
-
-const aiBtn =
-  document.getElementById(
-    "rb-header-ai-btn"
-  );
-
-if(aiBtn){
-
-  aiBtn.onclick = ()=>{
-
-    console.log("🤖 HEADER AI CLICK");
-
-    // aspetta chatbot render
-    setTimeout(()=>{
-
-      const chatbot =
-        document.getElementById(
-          "rb-chatbot-window"
-        );
-
-      if(!chatbot){
-
-        console.warn(
-          "❌ chatbot window missing"
-        );
-
-        return;
-
-      }
-
-      chatbot.classList.toggle("open");
-
-      console.log(
-        "✅ chatbot toggled"
-      );
-
-    }, 50);
-
-  };
-
-}
-
-}  
 /* =====================
 🌐 LANG
 ===================== */
