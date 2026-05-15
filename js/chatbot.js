@@ -382,6 +382,13 @@ for(const key in (window.rbKnowledgeBase || {})){
   const data = window.lastAnalysisData || {};
 
 // =====================================
+// 🧠 ADVISOR ENGINE
+// =====================================
+
+const advisorResponse =
+  window.rbGenerateAdvisorResponse?.(data);  
+
+// =====================================
 // 💾 SAVE CURRENT INVESTMENT
 // =====================================
 
@@ -1511,6 +1518,25 @@ ${risk}/100
     );
 
   }
+
+// =====================================
+// 🧠 AI ADVISOR AUTO RESPONSE
+// =====================================
+
+if(
+  advisorResponse &&
+  (
+    text.includes("consiglio") ||
+    text.includes("strategia") ||
+    text.includes("conviene") ||
+    text.includes("investment") ||
+    text.includes("worth")
+  )
+){
+
+  return advisorResponse;
+
+}  
 
 // =====================================
 // 🧠 STRATEGY INSIGHTS
