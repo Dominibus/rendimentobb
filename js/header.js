@@ -477,6 +477,8 @@ function initHeaderInteractions(){
     }
   }, 800);
 
+  } 
+
 /* =====================
 🌐 LANG
 ===================== */
