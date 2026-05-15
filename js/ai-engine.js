@@ -400,19 +400,33 @@ window.rbInvestmentMemory =
 
 window.saveInvestmentContext = function(data = {}){
 
+// ===========================================
+// 🔥 MERGE LIVE ANALYSIS
+// ===========================================
+
+data = {
+
+  ...(window.lastAnalysisData || {}),
+
+  ...data
+
+};
+
   const safe = v =>
 
     Number(v || 0);
 
-  const city =
+const city =
 
-    data.city ||
+  data.city ||
 
-    data.market ||
+  data.marketCity ||
 
-    window.currentCity ||
+  data.market ||
 
-    null;
+  window.currentCity ||
+
+  null;
 
   // ===========================================
   // 🌍 MARKET DATA
@@ -428,8 +442,16 @@ window.saveInvestmentContext = function(data = {}){
   // ===========================================
 
   const roi = safe(
-    data.roi
-  );
+
+  data.realROI ??
+
+  data.roi ??
+
+  window.realROI ??
+
+  0
+
+);
 
   const risk = safe(
 
