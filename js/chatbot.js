@@ -724,7 +724,16 @@ const followUpWords = [
   "quindi?"
 ];
 
+// =====================================
+// 🧠 FOLLOW-UP DETECTION
+// =====================================
+
 const isFollowUp =
+
+  window.rbIsFollowUpQuestion?.(text)
+
+  ||
+
   followUpWords.some(word =>
     text.includes(word)
   );
