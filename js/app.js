@@ -2349,350 +2349,439 @@ function removeAllBlur(){
 
 }
 
-// ================= POST ANALYSIS ENGINE (FINAL PRO CLEAN) =================
+// ================= POST ANALYSIS ENGINE (FINAL PRO CLEAN FIXED) =================
 
 function runPostAnalysis(result, context){
 
-  if(!result){
-    console.warn("⛔ postAnalysis skipped → null result");
-    return;
-  }
+  try{
 
-  const access = window.getUserAccess?.() || {};
-
-  const t = (it, en) =>
-    (window.currentLang === "en" ? en : it);
-
-  const {
-  price,
-  gross,
-  occupancy,
-  priceNight,
-  expenses,
-  equity
-} = context || {};
-
-// ================= GLOBAL STATE =================
-
-window.simulationExecuted = true;
-window.lastAnalysisData = result;
-
-// 🔥 salva ROI reale (non limitato)
-window.lastAnalysisData.realROI =
-  window.realROI || result.roi || 0;
-
-  window.lastAnalysisData.realROI =
-    window.realROI || result.roi || 0;
-
-  const analysisHash = JSON.stringify({
-  roi: Number(result?.roi || 0).toFixed(2),
-  city: window.currentCity || "roma",
-  price: Number(context?.price || 0),
-  ts: Math.floor(Date.now() / 15000) // 🔥 reset ogni 15 sec
-});
-
-const shouldSave =
-  window.__LAST_SAVED_ANALYSIS__ !== analysisHash;
-
-if(shouldSave){
-  window.__LAST_SAVED_ANALYSIS__ = analysisHash;
-}
-
-// ================= SAVE ANALYSIS =================
-
-if(
-  shouldSave &&
-  window.currentUser &&
-  window.firebaseReady &&
-  result?.roi > 0
-){
-
-  const realCityInput =
-  document.getElementById("custom-location")?.value?.trim();
-
-saveAnalysis({
-  price: context?.price || 0,
-  equity: context?.equity || 0,
-  roi: result?.roi || 0,
-  risk: result?.risk || 0,
-
-  // 🔥 città benchmark usata dal motore
-  marketCity: window.currentCity || "roma",
-
-  // 🔥 città reale inserita utente
-  realCity:
-    realCityInput ||
-    window.currentCity ||
-    "roma"
-});
-
-}
-
-  const roi = Number(result?.roi || 0);
-
-  console.log("📊 FINAL ROI:", roi);
-
- // =====================================
-// 🤖 CHATBOT LIVE ANALYSIS
-// =====================================
-
-window.lastAnalysisData = {
-
-  city:
-    window.currentCity ||
-
-    market ||
-
-    "roma",
-
-  roi:
-    finalROI ||
-
-    roi ||
-
-    0,
-
-  risk:
-    riskScore ||
-
-    risk ||
-
-    0,
-
-  occupancy:
-    occupancy ||
-
-    occupancyRate ||
-
-    0,
-
-  pricePerNight:
-    nightly ||
-
-    pricePerNight ||
-
-    0,
-
-  monthlyCosts:
-    monthlyCosts ||
-
-    monthlyExpenses ||
-
-    0,
-
-  revenueAnnual:
-    annualRevenue ||
-
-    revenue ||
-
-    0,
-
-  propertyPrice:
-    propertyPrice ||
-
-    purchasePrice ||
-
-    0,
-
-  mortgagePercent:
-    mortgagePercent ||
-
-    leverage ||
-
-    0
-
-};
-
-console.log(
-  "🤖 LIVE ANALYSIS SAVED:",
-  window.lastAnalysisData
-);
-  
-  console.log("💾 POST ANALYSIS START");
-
-  // ================= 🔥 ROI UI LOCK =================
-
-  const roiEl = document.getElementById("roi-live");
-
-  if(roiEl && roi > 0){
-    if(access.isFree){
-      roiEl.innerText = "—";
-    }else{
-      roiEl.innerText = roi.toFixed(1) + "%";
+    if(!result){
+      console.warn("⛔ postAnalysis skipped → null result");
+      return;
     }
-  }
 
-  updateROIMessage(roi);
+    const access = window.getUserAccess?.() || {};
 
-  if(roi <= 0){
-    console.warn("⚠️ Low ROI → UI still rendered for UX");
-  }
+    const t = (it, en) =>
+      (window.currentLang === "en" ? en : it);
 
-  // ================= 🔓 FIX BLUR (🔥 QUESTO È IL FIX) =================
+    const {
+      price = 0,
+      gross = 0,
+      occupancy = 0,
+      priceNight = 0,
+      expenses = 0,
+      equity = 0
+    } = context || {};
 
-  if(access.isPro || access.isAdmin){
-    console.log("🟢 REMOVE BLUR FOR PRO");
+    // ================= GLOBAL STATE =================
+
+    window.simulationExecuted = true;
+
+    // ================= SAFE VARIABLES =================
+
+    const roi = Number(result?.roi || 0);
+
+    const finalROI =
+      Number(
+        result?.finalROI ??
+        result?.roi ??
+        window.finalROI ??
+        window.currentROI ??
+        0
+      );
+
+    const risk =
+      Number(
+        result?.risk ??
+        window.riskScore ??
+        0
+      );
+
+    const riskScore = risk;
+
+    const occupancyRate =
+      Number(
+        occupancy ??
+        result?.occupancy ??
+        0
+      );
+
+    const nightly =
+      Number(
+        priceNight ??
+        result?.pricePerNight ??
+        0
+      );
+
+    const monthlyCosts =
+      Number(
+        expenses ??
+        result?.monthlyCosts ??
+        0
+      );
+
+    const annualRevenue =
+      Number(
+        gross ??
+        result?.revenueAnnual ??
+        0
+      );
+
+    const propertyPrice =
+      Number(
+        price ??
+        result?.propertyPrice ??
+        0
+      );
+
+    const mortgagePercent =
+      Number(
+        result?.mortgagePercent ??
+        0
+      );
+
+    const market =
+      window.currentCity ||
+      "roma";
+
+    // ================= ANALYSIS DATA =================
+
+    window.lastAnalysisData = {
+      ...result,
+
+      realROI:
+        window.realROI ||
+        finalROI ||
+        0
+    };
+
+    // ================= SAVE DEDUP =================
+
+    const analysisHash = JSON.stringify({
+      roi: finalROI.toFixed(2),
+      city: market,
+      price: propertyPrice,
+      ts: Math.floor(Date.now() / 15000)
+    });
+
+    const shouldSave =
+      window.__LAST_SAVED_ANALYSIS__ !== analysisHash;
+
+    if(shouldSave){
+      window.__LAST_SAVED_ANALYSIS__ = analysisHash;
+    }
+
+    // ================= SAVE ANALYSIS =================
+
+    if(
+      shouldSave &&
+      window.currentUser &&
+      window.firebaseReady &&
+      finalROI > 0
+    ){
+
+      const realCityInput =
+        document
+          .getElementById("custom-location")
+          ?.value
+          ?.trim();
+
+      saveAnalysis({
+        price: propertyPrice,
+        equity,
+        roi: finalROI,
+        risk,
+
+        // 🔥 benchmark city
+        marketCity: market,
+
+        // 🔥 real user city
+        realCity:
+          realCityInput ||
+          market ||
+          "roma"
+      });
+
+      console.log("✅ SALVATO FIRESTORE");
+    }
+
+    console.log("📊 FINAL ROI:", finalROI);
 
     // =====================================
-// 🔥 HARD UNLOCK PRO (DEFINITIVO)
-// =====================================
+    // 🤖 CHATBOT LIVE ANALYSIS
+    // =====================================
 
-if(access.isPro || access.isAdmin){
+    window.lastAnalysisData = {
 
-  document.body.classList.add("pro-user");
+      city: market,
 
-  // 🔓 rimuove blur
-  document.querySelectorAll(`
-    .blur-content,
-    .pro-blur
-  `).forEach(el=>{
+      roi: finalROI,
 
-    el.classList.remove("blur-content","pro-blur");
+      risk: riskScore,
 
-    el.style.filter = "none";
-    el.style.opacity = "1";
-    el.style.pointerEvents = "auto";
+      occupancy: occupancyRate,
 
-  });
+      pricePerNight: nightly,
 
-  // 🔓 rimuove overlay
-  document.querySelectorAll(`
-    .locked-overlay,
-    .lock-overlay,
-    .upgrade-overlay,
-    .results-overlay,
-    .smart-overlay
-  `).forEach(el=> el.remove());
+      monthlyCosts,
 
-  // 🔓 mostra sezioni PRO
-  document.querySelectorAll(`
-    .pro-only,
-    .results-card,
-    .locked-section
-  `).forEach(el=>{
+      revenueAnnual: annualRevenue,
 
-    el.style.display = "block";
-    el.style.opacity = "1";
-    el.style.visibility = "visible";
+      propertyPrice,
 
-  });
+      mortgagePercent
+    };
 
-  // 🔥 SBLOCCA advanced-analysis
-  const advanced = document.getElementById("advanced-analysis");
-
-  if(advanced){
-
-    advanced.classList.remove(
-      "locked-section",
-      "upgrade-box"
+    console.log(
+      "🤖 LIVE ANALYSIS SAVED:",
+      window.lastAnalysisData
     );
 
-    advanced.style.filter = "none";
-    advanced.style.opacity = "1";
-    advanced.style.pointerEvents = "auto";
-  }
+    console.log("💾 POST ANALYSIS START");
 
-  console.log("✅ HARD UNLOCK PRO COMPLETATO");
+    // ================= ROI UI =================
 
-}
+    const roiEl =
+      document.getElementById("roi-live");
 
-    document.querySelectorAll(".blur-content").forEach(el=>{
-      el.classList.remove("blur-content");
-    });
+    if(roiEl && finalROI > 0){
 
-    document.querySelectorAll(".locked-section").forEach(el=>{
-      el.classList.remove("locked-section");
-    });
-  }
+      if(access.isFree){
 
-  // ================= SMART REMINDER =================
+        roiEl.innerText = "—";
 
-  triggerSmartReminder(roi);
+      }else{
 
-  // ================= FUNNEL =================
-
-  if(roi > 10 && access.isFree){
-  triggerFunnel({ type:"roi", roi });
-}
-  else if(roi > 6){
-    triggerFunnel({ type:"roi_soft", roi });
-  }
-
-  // ================= PAYWALL =================
-
-  if(!access.canSeeFullAnalysis && !access.isInvestor && roi > 10){
-    // showUpgradeModal(roi);
-  }
-  else if(access.isInvestor && roi > 0){
-  console.log("🟡 INVESTOR → partial unlock");
-}
-
-  // ================= LEAD ENGINE =================
-
-  if(roi <= 0){
-    console.log("⛔ lead skipped → ROI 0");
-    return;
-  }
-
-  const userEmail = window.currentUser?.email;
-
-  let leadScore = "cold";
-
-  try{
-    leadScore = getLeadScore({ roi });
-  }catch(e){
-    console.warn("LeadScore fallback:", e);
-  }
-
-  // ================= LEAD DEDUP ENGINE =================
-
-const leadHash = JSON.stringify({
-  email: userEmail,
-  city: window.currentCity || "roma",
-  price: Number(price || 0)
-});
-
-// 🔥 evita invii duplicati stessa simulazione
-if(window.__LAST_LEAD_HASH__ === leadHash){
-
-  console.warn("⛔ DUPLICATE LEAD BLOCKED");
-
-  return;
-}
-
-window.__LAST_LEAD_HASH__ = leadHash;
-
-// ================= SCORE =================
-
-window.simulationCount =
-  (window.simulationCount || 0) + 1;
-
-if(window.simulationCount > 3){
-  leadScore = "hot";
-}
-
-    window.emailUserSent = true;
-
-    fetch("/api/send-lead-email",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        email: userEmail,
-        lang: window.currentLang || "it",
-        roi,
-        city: window.currentCity
-      })
-    })
-    .then(res=>{
-      if(!res.ok){
-        window.emailUserSent = false;
+        roiEl.innerText =
+          finalROI.toFixed(1) + "%";
       }
-    })
-    .catch(()=>{
-      window.emailUserSent = false;
+    }
+
+    // ================= ROI MESSAGE =================
+
+    if(typeof updateROIMessage === "function"){
+      updateROIMessage(finalROI);
+    }
+
+    if(finalROI <= 0){
+      console.warn("⚠️ Low ROI → UI still rendered");
+    }
+
+    // =====================================
+    // 🔓 HARD UNLOCK PRO
+    // =====================================
+
+    if(access.isPro || access.isAdmin){
+
+      console.log("🟢 REMOVE BLUR FOR PRO");
+
+      document.body.classList.add("pro-user");
+
+      // 🔓 remove blur
+      document.querySelectorAll(`
+        .blur-content,
+        .pro-blur
+      `).forEach(el=>{
+
+        el.classList.remove(
+          "blur-content",
+          "pro-blur"
+        );
+
+        el.style.filter = "none";
+        el.style.opacity = "1";
+        el.style.pointerEvents = "auto";
+      });
+
+      // 🔓 remove overlays
+      document.querySelectorAll(`
+        .locked-overlay,
+        .lock-overlay,
+        .upgrade-overlay,
+        .results-overlay,
+        .smart-overlay
+      `).forEach(el=> el.remove());
+
+      // 🔓 show sections
+      document.querySelectorAll(`
+        .pro-only,
+        .results-card,
+        .locked-section
+      `).forEach(el=>{
+
+        el.style.display = "block";
+        el.style.opacity = "1";
+        el.style.visibility = "visible";
+      });
+
+      // 🔓 advanced analysis
+      const advanced =
+        document.getElementById("advanced-analysis");
+
+      if(advanced){
+
+        advanced.classList.remove(
+          "locked-section",
+          "upgrade-box"
+        );
+
+        advanced.style.filter = "none";
+        advanced.style.opacity = "1";
+        advanced.style.pointerEvents = "auto";
+      }
+
+      console.log("✅ HARD UNLOCK PRO COMPLETATO");
+    }
+
+    // ================= SMART REMINDER =================
+
+    if(typeof triggerSmartReminder === "function"){
+      triggerSmartReminder(finalROI);
+    }
+
+    // ================= FUNNEL =================
+
+    if(
+      finalROI > 10 &&
+      access.isFree
+    ){
+
+      triggerFunnel?.({
+        type:"roi",
+        roi: finalROI
+      });
+
+    }else if(finalROI > 6){
+
+      triggerFunnel?.({
+        type:"roi_soft",
+        roi: finalROI
+      });
+    }
+
+    // ================= INVESTOR =================
+
+    if(
+      !access.canSeeFullAnalysis &&
+      !access.isInvestor &&
+      finalROI > 10
+    ){
+      // showUpgradeModal(finalROI);
+    }
+    else if(access.isInvestor){
+
+      console.log("🟡 INVESTOR → partial unlock");
+    }
+
+    // ================= LEAD ENGINE =================
+
+    if(finalROI <= 0){
+
+      console.log("⛔ lead skipped → ROI 0");
+      return;
+    }
+
+    const userEmail =
+      window.currentUser?.email;
+
+    let leadScore = "cold";
+
+    try{
+
+      if(typeof getLeadScore === "function"){
+
+        leadScore = getLeadScore({
+          roi: finalROI
+        });
+      }
+
+    }catch(e){
+
+      console.warn(
+        "LeadScore fallback:",
+        e
+      );
+    }
+
+    // ================= LEAD DEDUP =================
+
+    const leadHash = JSON.stringify({
+      email: userEmail,
+      city: market,
+      price: propertyPrice
     });
 
+    if(window.__LAST_LEAD_HASH__ === leadHash){
+
+      console.warn("⛔ DUPLICATE LEAD BLOCKED");
+      return;
+    }
+
+    window.__LAST_LEAD_HASH__ = leadHash;
+
+    // ================= SCORE =================
+
+    window.simulationCount =
+      (window.simulationCount || 0) + 1;
+
+    if(window.simulationCount > 3){
+      leadScore = "hot";
+    }
+
+    // ================= EMAIL =================
+
+    if(userEmail){
+
+      window.emailUserSent = true;
+
+      fetch("/api/send-lead-email",{
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          email: userEmail,
+          lang: window.currentLang || "it",
+          roi: finalROI,
+          city: market,
+          leadScore
+        })
+      })
+      .then(res=>{
+
+        if(!res.ok){
+
+          window.emailUserSent = false;
+
+          console.warn(
+            "❌ Email send failed"
+          );
+        }
+      })
+      .catch(err=>{
+
+        console.error(
+          "❌ Email error:",
+          err
+        );
+
+        window.emailUserSent = false;
+      });
+    }
+
+    console.log("✅ POST ANALYSIS COMPLETED");
+
+  }catch(err){
+
+    console.error(
+      "❌ runPostAnalysis ERROR:",
+      err
+    );
   }
+}
 
 // ================= MORTGAGE LEAD TRIGGER =================
 
