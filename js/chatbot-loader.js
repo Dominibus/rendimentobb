@@ -82,7 +82,6 @@
 
   ];
 
-  ];
 
 scripts.forEach(src=>{
 
