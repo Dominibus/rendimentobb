@@ -368,6 +368,41 @@ for(const key in (window.rbKnowledgeBase || {})){
 
   const data = window.lastAnalysisData || {};
 
+// =====================================
+// 💾 SAVE CURRENT INVESTMENT
+// =====================================
+
+window.saveInvestmentContext?.({
+
+  city:
+    window.currentCity,
+
+  propertyPrice:
+    data.propertyPrice,
+
+  mortgage:
+    data.hasMortgage,
+
+  mortgagePercent:
+    data.mortgagePercent,
+
+  occupancy:
+    data.occupancy,
+
+  roi:
+    data.roi,
+
+  risk:
+    data.risk,
+
+  pricePerNight:
+    data.pricePerNight,
+
+  monthlyCosts:
+    data.monthlyCosts
+
+});  
+
   const access = window.getUserAccess?.() || {};
 
   const aiTone = access.isPro
