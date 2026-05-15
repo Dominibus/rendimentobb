@@ -231,81 +231,18 @@ window.rbAITools = {
 };
 
 // =====================================
-// 🧠 ENTITY EXTRACTION ENGINE
+// 🧠 GLOBAL ENTITY ENGINE
 // =====================================
 
 window.extractAIEntities = function(text){
 
-  text = text.toLowerCase();
+  if(window.rbExtractEntities){
 
-  const entities = {};
-
-  // =================================
-  // CITY DETECTION
-  // =================================
-
-  const cities = [
-    "roma",
-    "milano",
-    "napoli",
-    "firenze",
-    "venezia",
-    "torino"
-  ];
-
-  for(const city of cities){
-
-    if(text.includes(city)){
-
-      entities.city = city;
-      break;
-
-    }
+    return window.rbExtractEntities(text);
 
   }
 
-  // =================================
-  // PERCENTAGES
-  // =================================
-
-  const percentMatch =
-    text.match(/(\d+)\s?%/);
-
-  if(percentMatch){
-
-    entities.percentage =
-      Number(percentMatch[1]);
-
-  }
-
-  // =================================
-  // MONEY
-  // =================================
-
-  const moneyMatch =
-    text.match(/(\d+)\s?k/);
-
-  if(moneyMatch){
-
-    entities.amount =
-      Number(moneyMatch[1]) * 1000;
-
-  }
-
-  // =================================
-  // MORTGAGE
-  // =================================
-
-  if(
-    text.includes("mutuo") ||
-    text.includes("mortgage")
-  ){
-
-    entities.hasMortgage = true;
-
-  }
-
-  return entities;
+  return {};
 
 };
 
