@@ -18175,3 +18175,81 @@ transform:translateY(-2px);
   }
 
 }
+
+/* ===============================================
+📱 HEADER MOBILE FINAL FIX
+=============================================== */
+
+@media screen and (max-width:768px){
+
+  .rb-right{
+
+    gap:8px !important;
+
+    flex-wrap:nowrap !important;
+
+  }
+
+  .rb-header-ai-btn{
+
+    min-width:auto !important;
+
+    width:72px !important;
+
+    padding:0 14px !important;
+
+    font-size:15px !important;
+
+    border-radius:16px !important;
+
+    flex-shrink:0 !important;
+
+  }
+
+  #rb-burger{
+
+    width:42px !important;
+
+    height:42px !important;
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+    font-size:28px !important;
+
+    margin-left:2px !important;
+
+    flex-shrink:0 !important;
+
+    z-index:999999 !important;
+
+  }
+
+  .rb-right .rb-login{
+
+    padding:0 16px !important;
+
+    height:44px !important;
+
+    font-size:15px !important;
+
+    border-radius:16px !important;
+
+    flex-shrink:0 !important;
+
+  }
+
+  .rb-lang{
+
+    transform:scale(.92);
+
+    transform-origin:center;
+
+    flex-shrink:0 !important;
+
+  }
+
+}
