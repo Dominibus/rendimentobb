@@ -285,6 +285,19 @@ window.generateAIResponse = function(message){
   window.extractAIEntities(text);
 
 // =====================================
+// 🤝 SUPPORT ENGINE
+// =====================================
+
+const supportResponse =
+  window.rbGenerateSupportResponse?.(text);
+
+if(supportResponse){
+
+  return supportResponse;
+
+}  
+
+// =====================================
 // 🧠 AI TOOL EXECUTION
 // =====================================
 
