@@ -535,60 +535,73 @@ else if(
   const msg =
     String(message).toLowerCase();
 
-  // ===========================================
-  // 📈 ROI
-  // ===========================================
+// ===========================================
+// 🎓 DYNAMIC EDUCATIONAL KNOWLEDGE
+// ===========================================
 
-  if(msg.includes("roi")){
+const topic = Object.keys(
+  window.rbKnowledgeBase || {}
+).find(key =>
 
-    response.textIT =
+  msg.includes(key)
 
-`📈 ROI significa Return On Investment.
+);
 
-Misura quanto un investimento genera profitto rispetto al capitale investito.
+const knowledge =
 
-Formula:
+  window.rbKnowledgeBase?.[topic];
 
-ROI = profitto netto / investimento totale × 100
+// ===========================================
+// 📚 KNOWLEDGE FOUND
+// ===========================================
 
-Esempio:
+if(knowledge){
 
-• Investimento:
-€200.000
+  response.textIT =
 
-• Profitto annuo:
-€24.000
+    knowledge.textIT ||
 
-📊 ROI:
-12%
+    "⚠️ Nessuna spiegazione disponibile.";
 
-💡 Un ROI più elevato può indicare maggiore redditività, ma anche maggiore rischio operativo.`;
+  response.textEN =
 
-    response.textEN =
+    knowledge.textEN ||
 
-`📈 ROI means Return On Investment.
+    "⚠️ No explanation available.";
 
-It measures how profitable an investment is compared to the invested capital.
+}
 
-Formula:
+// ===========================================
+// 🌍 FALLBACK
+// ===========================================
 
-ROI = net profit / total investment × 100
+else{
 
-Example:
+  response.textIT =
 
-• Investment:
-€200,000
+`🎓 Posso spiegarti:
 
-• Annual profit:
-€24,000
+• ROI
+• cashflow
+• rischio
+• DSCR
+• occupazione
+• sostenibilità
+• mutui`;
 
-📊 ROI:
-12%
+  response.textEN =
 
-💡 Higher ROI may indicate higher profitability but also higher operational risk.`;
+`🎓 I can explain:
 
-  }
+• ROI
+• cashflow
+• risk
+• DSCR
+• occupancy
+• sustainability
+• mortgages`;
 
+}
   // ===========================================
   // 💸 CASHFLOW
   // ===========================================
