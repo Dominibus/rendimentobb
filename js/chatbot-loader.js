@@ -63,15 +63,17 @@
 
   ];
 
-  scripts.forEach(src=>{
+scripts.forEach(src=>{
 
-    const s = document.createElement("script");
+  const s = document.createElement("script");
 
-    s.src = src;
-    s.defer = true;
+  s.src = src;
 
-    document.body.appendChild(s);
+  // 🔥 ordine caricamento garantito
+  s.async = false;
 
-  });
+  document.body.appendChild(s);
+
+});
 
 })();
