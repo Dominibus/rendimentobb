@@ -1,1 +1,322 @@
+// ===============================================
+// 🧠 RENDIMENTOBB – MEMORY ENGINE 1.0
+// Silicon Valley Conversational Memory Layer
+// Persistent Context + Session Intelligence
+// ===============================================
 
+// ===============================================
+// 🧠 GLOBAL MEMORY
+// ===============================================
+
+window.rbChatMemory = {
+
+  messages: [],
+
+  entitiesHistory: [],
+
+  intentsHistory: [],
+
+  lastCity: null,
+
+  lastROI: null,
+
+  lastPropertyPrice: null,
+
+  lastOccupancy: null,
+
+  lastMortgage: null,
+
+  lastIntent: null,
+
+  context: {}
+
+};
+
+// ===============================================
+// 💾 SAVE MESSAGE
+// ===============================================
+
+window.rbRememberMessage = function({
+
+  role = "user",
+
+  message = "",
+
+  entities = {},
+
+  intent = {}
+
+} = {}){
+
+  try{
+
+    const memory =
+      window.rbChatMemory;
+
+    // ===========================================
+    // 💬 STORE MESSAGE
+    // ===========================================
+
+    memory.messages.push({
+
+      role,
+
+      message,
+
+      timestamp: Date.now()
+
+    });
+
+    // ===========================================
+    // 🧠 STORE ENTITIES
+    // ===========================================
+
+    if(
+      entities &&
+      Object.keys(entities).length
+    ){
+
+      memory.entitiesHistory.push(
+        entities
+      );
+
+      // =======================================
+      // 🌍 LAST CITY
+      // =======================================
+
+      if(entities.city){
+
+        memory.lastCity =
+          entities.city;
+
+      }
+
+      // =======================================
+      // 📈 LAST ROI
+      // =======================================
+
+      if(entities.roi){
+
+        memory.lastROI =
+          entities.roi;
+
+      }
+
+      // =======================================
+      // 💰 LAST PRICE
+      // =======================================
+
+      if(entities.price){
+
+        memory.lastPropertyPrice =
+          entities.price;
+
+      }
+
+      // =======================================
+      // 🏨 LAST OCCUPANCY
+      // =======================================
+
+      if(entities.occupancy){
+
+        memory.lastOccupancy =
+          entities.occupancy;
+
+      }
+
+      // =======================================
+      // 🏦 LAST MORTGAGE
+      // =======================================
+
+      if(entities.mortgage){
+
+        memory.lastMortgage = true;
+
+      }
+
+    }
+
+    // ===========================================
+    // 🧠 STORE INTENT
+    // ===========================================
+
+    if(intent?.intent){
+
+      memory.intentsHistory.push(
+        intent.intent
+      );
+
+      memory.lastIntent =
+        intent.intent;
+
+    }
+
+    // ===========================================
+    // 🧹 LIMIT MEMORY
+    // ===========================================
+
+    if(memory.messages.length > 50){
+
+      memory.messages.shift();
+
+    }
+
+    if(memory.entitiesHistory.length > 30){
+
+      memory.entitiesHistory.shift();
+
+    }
+
+    if(memory.intentsHistory.length > 30){
+
+      memory.intentsHistory.shift();
+
+    }
+
+    // ===========================================
+    // 💾 SAVE SESSION
+    // ===========================================
+
+    sessionStorage.setItem(
+      "rbChatMemory",
+      JSON.stringify(memory)
+    );
+
+    console.log(
+      "🧠 MEMORY UPDATED:",
+      memory
+    );
+
+  }
+
+  catch(error){
+
+    console.error(
+      "❌ MEMORY ERROR:",
+      error
+    );
+
+  }
+
+};
+
+// ===============================================
+// 📥 LOAD MEMORY
+// ===============================================
+
+window.rbLoadMemory = function(){
+
+  try{
+
+    const saved =
+      sessionStorage.getItem(
+        "rbChatMemory"
+      );
+
+    if(saved){
+
+      window.rbChatMemory =
+        JSON.parse(saved);
+
+      console.log(
+        "🧠 MEMORY LOADED"
+      );
+
+    }
+
+  }
+
+  catch(error){
+
+    console.error(
+      "❌ MEMORY LOAD ERROR:",
+      error
+    );
+
+  }
+
+};
+
+// ===============================================
+// 🧹 CLEAR MEMORY
+// ===============================================
+
+window.rbClearMemory = function(){
+
+  window.rbChatMemory = {
+
+    messages: [],
+
+    entitiesHistory: [],
+
+    intentsHistory: [],
+
+    lastCity: null,
+
+    lastROI: null,
+
+    lastPropertyPrice: null,
+
+    lastOccupancy: null,
+
+    lastMortgage: null,
+
+    lastIntent: null,
+
+    context: {}
+
+  };
+
+  sessionStorage.removeItem(
+    "rbChatMemory"
+  );
+
+  console.log(
+    "🧠 MEMORY CLEARED"
+  );
+
+};
+
+// ===============================================
+// 📊 GET CONTEXT
+// ===============================================
+
+window.rbGetConversationContext = function(){
+
+  return {
+
+    city:
+      window.rbChatMemory.lastCity,
+
+    roi:
+      window.rbChatMemory.lastROI,
+
+    propertyPrice:
+      window.rbChatMemory.lastPropertyPrice,
+
+    occupancy:
+      window.rbChatMemory.lastOccupancy,
+
+    mortgage:
+      window.rbChatMemory.lastMortgage,
+
+    lastIntent:
+      window.rbChatMemory.lastIntent
+
+  };
+
+};
+
+// ===============================================
+// 🚀 AUTO LOAD
+// ===============================================
+
+window.rbLoadMemory();
+
+// ===============================================
+// 🚀 READY
+// ===============================================
+
+console.log(
+  "🧠 MEMORY ENGINE READY"
+);
