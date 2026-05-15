@@ -7,55 +7,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // init iniziale
   initRBChatbot();
 
-  // 🔥 fix pagina tool
-  setTimeout(()=>{
-
-    if(
-      !document.getElementById(
-        "rb-chatbot-wrapper"
-      )
-    ){
-
-      console.warn(
-        "♻️ Re-init chatbot"
-      );
-
-      initRBChatbot();
-
-    }
-
-  },1500);
-
-});
-
-// ===============================================
-// 🔥 TOOL PAGE KEEP ALIVE
-// ===============================================
-
-setInterval(()=>{
-
-  const isToolPage =
-    window.location.pathname.includes("/tool");
-
-  if(!isToolPage)
-    return;
-
-  const exists =
-    document.getElementById(
-      "rb-chatbot-wrapper"
-    );
-
-  if(!exists){
-
-    console.warn(
-      "♻️ Chatbot recreated"
-    );
-
-    initRBChatbot();
-
-  }
-
-},3000);
 
 document.addEventListener(
   "rb_language_changed",
@@ -2444,30 +2395,25 @@ closeBtn.onclick = ()=>{
 
 window.toggleRBChatbot = function(){
 
-  const chatWindow =
-    document.getElementById(
-      "rb-chatbot-window"
-    );
+  const tryOpen = ()=>{
 
-  // 🔥 chatbot non ancora creato
-  if(!chatWindow){
+    const chatWindow =
+      document.getElementById(
+        "rb-chatbot-window"
+      );
 
-    console.warn(
-      "❌ chatbot window missing"
-    );
+    if(!chatWindow){
 
-    // tenta init forzato
-    if(typeof initRBChatbot === "function"){
-
-      initRBChatbot();
+      requestAnimationFrame(tryOpen);
+      return;
 
     }
 
-    return;
+    chatWindow.classList.toggle("open");
 
-  }
+  };
 
-  chatWindow.classList.toggle("open");
+  tryOpen();
 
 };
 
