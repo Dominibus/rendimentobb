@@ -59,8 +59,12 @@
     // ===================================
 
     "/js/chatbot/entity-engine.js",
-    "/js/ai-engine.js",
-    "/js/chatbot.js"
+
+    "/js/chatbot/ai-engine.js",
+
+    "/js/chatbot/reasoning-engine.js",
+
+    "/js/chatbot/chatbot.js"
 
   ];
 
