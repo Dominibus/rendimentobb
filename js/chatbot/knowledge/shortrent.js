@@ -1,11 +1,12 @@
 // ===============================================
-// 🏨 SHORT RENT KNOWLEDGE
+// 🏨 RENDIMENTOBB – SHORT RENT KNOWLEDGE AI
+// SILICON VALLEY INTELLIGENCE LAYER
 // ===============================================
 
 Object.assign(window.rbKnowledgeBase, {
 
   // ===========================================
-  // SHORT RENT
+  // SHORT RENT CORE
   // ===========================================
 
   shortRent: {
@@ -21,64 +22,71 @@ Object.assign(window.rbKnowledgeBase, {
       "vacation rental",
       "locazione turistica",
       "short stay",
-      "case vacanza"
+      "case vacanza",
+      "affitto turistico",
+      "business airbnb",
+      "investimento airbnb"
     ],
 
     aiTitleIT:
-      "🏨 Affitti Brevi",
+      "🏨 Affitti Brevi & Airbnb Business",
 
     aiTitleEN:
-      "🏨 Short-Term Rentals",
+      "🏨 Short-Term Rental & Airbnb Business",
 
     aiSummaryIT:
-      "Gli affitti brevi possono generare rendimenti superiori rispetto agli affitti tradizionali.",
+      "Gli affitti brevi possono generare rendimenti superiori rispetto agli affitti tradizionali grazie a maggiore ADR e flessibilità operativa.",
 
     aiSummaryEN:
-      "Short-term rentals may generate higher returns compared to traditional rentals.",
+      "Short-term rentals may generate higher returns than traditional rentals thanks to higher ADR and operational flexibility.",
 
     aiInsightIT:
-      "Tuttavia comportano maggiore volatilità, gestione operativa, rischio stagionale e dipendenza dalla domanda turistica.",
+      "La redditività reale dipende da occupazione, pricing dinamico, recensioni, automazione, gestione operativa e sostenibilità dei costi.",
 
     aiInsightEN:
-      "However, they involve greater volatility, operational management, seasonal risk and tourism demand dependency.",
+      "Real profitability depends on occupancy, dynamic pricing, reviews, automation, operational management and cost sustainability.",
 
     warningIT:
-      "⚠️ Elevati ricavi potenziali non garantiscono stabilità nel lungo periodo.",
+      "⚠️ Elevati ricavi teorici non garantiscono automaticamente cashflow stabile o sostenibilità nel lungo periodo.",
 
     warningEN:
-      "⚠️ High potential revenue does not guarantee long-term stability.",
+      "⚠️ High theoretical revenue does not automatically guarantee stable cashflow or long-term sustainability.",
 
     recommendationsIT: [
-      "Analizza domanda reale.",
-      "Ottimizza occupazione.",
-      "Controlla costi operativi."
+      "Analizza domanda reale della città.",
+      "Ottimizza occupazione e ADR.",
+      "Controlla cleaning, OTA fees e costi operativi.",
+      "Automatizza gestione e check-in."
     ],
 
     recommendationsEN: [
-      "Analyze real demand.",
-      "Optimize occupancy.",
-      "Control operating costs."
+      "Analyze real city demand.",
+      "Optimize occupancy and ADR.",
+      "Control cleaning, OTA fees and operational costs.",
+      "Automate operations and check-in."
     ],
 
     examples: [
       "investimento Airbnb",
       "short rent investment",
-      "affitti brevi roma",
-      "booking business",
-      "case vacanza"
+      "business Airbnb Roma",
+      "case vacanza profitto",
+      "quanto rende Airbnb"
     ],
 
     related: [
       "occupancy",
-      "seasonality",
       "cashflow",
-      "marketDemand"
+      "dynamicPricing",
+      "marketDemand",
+      "seasonality",
+      "propertyManagement"
     ]
 
   },
 
   // ===========================================
-  // AIRBNB
+  // AIRBNB BUSINESS MODEL
   // ===========================================
 
   airbnbModel: {
@@ -91,64 +99,68 @@ Object.assign(window.rbKnowledgeBase, {
       "guadagno airbnb",
       "business airbnb",
       "airbnb income",
+      "superhost",
       "host",
-      "superhost"
+      "ranking airbnb",
+      "algoritmo airbnb"
     ],
 
     aiTitleIT:
       "🏡 Modello Airbnb",
 
     aiTitleEN:
-      "🏡 Airbnb Model",
+      "🏡 Airbnb Business Model",
 
     aiSummaryIT:
-      "Il modello Airbnb si basa su occupazione, ADR, recensioni e qualità operativa.",
+      "Il modello Airbnb si basa su occupazione, ADR, recensioni, ranking e qualità operativa.",
 
     aiSummaryEN:
-      "The Airbnb model depends on occupancy, ADR, reviews and operational quality.",
+      "The Airbnb model depends on occupancy, ADR, reviews, ranking and operational quality.",
 
     aiInsightIT:
-      "Performance operative deboli possono ridurre rapidamente ranking e redditività.",
+      "Performance operative deboli possono ridurre rapidamente visibilità, ranking piattaforma e redditività.",
 
     aiInsightEN:
-      "Weak operational performance may quickly reduce ranking and profitability.",
+      "Weak operational performance may quickly reduce visibility, platform ranking and profitability.",
 
     warningIT:
-      "⚠️ Recensioni negative possono impattare fortemente le prenotazioni.",
+      "⚠️ Recensioni negative e risposta lenta agli ospiti possono ridurre drasticamente le prenotazioni.",
 
     warningEN:
-      "⚠️ Negative reviews may strongly impact bookings.",
+      "⚠️ Negative reviews and slow guest communication may drastically reduce bookings.",
 
     recommendationsIT: [
       "Migliora guest experience.",
-      "Ottimizza il listing.",
+      "Ottimizza foto e listing.",
+      "Rispondi rapidamente agli ospiti.",
       "Mantieni recensioni elevate."
     ],
 
     recommendationsEN: [
       "Improve guest experience.",
-      "Optimize the listing.",
+      "Optimize photos and listing.",
+      "Reply quickly to guests.",
       "Maintain strong reviews."
     ],
 
     examples: [
-      "host Airbnb",
+      "superhost Airbnb",
+      "ranking Airbnb",
       "guadagni Airbnb",
-      "Airbnb ROI",
-      "superhost"
+      "host Airbnb"
     ],
 
     related: [
+      "guestExperience",
       "occupancy",
       "averageNightPrice",
-      "propertyManagement",
-      "guestExperience"
+      "propertyManagement"
     ]
 
   },
 
   // ===========================================
-  // BOOKING PLATFORMS
+  // OTA PLATFORMS
   // ===========================================
 
   bookingPlatforms: {
@@ -159,10 +171,11 @@ Object.assign(window.rbKnowledgeBase, {
       "booking",
       "booking.com",
       "ota",
-      "platform fees",
-      "commissioni piattaforme",
       "ota fees",
-      "commissioni airbnb"
+      "commissioni airbnb",
+      "commissioni booking",
+      "platform fees",
+      "expedia"
     ],
 
     aiTitleIT:
@@ -172,47 +185,49 @@ Object.assign(window.rbKnowledgeBase, {
       "📲 OTA & Booking Platforms",
 
     aiSummaryIT:
-      "Le piattaforme OTA aumentano visibilità e prenotazioni.",
+      "Le OTA aumentano visibilità, traffico e prenotazioni ma riducono il margine operativo tramite commissioni.",
 
     aiSummaryEN:
-      "OTA platforms improve visibility and bookings.",
+      "OTAs increase visibility, traffic and bookings but reduce operating margins through commissions.",
 
     aiInsightIT:
-      "Commissioni piattaforme e fee operative possono ridurre significativamente il cashflow netto.",
+      "Dipendere esclusivamente dalle piattaforme aumenta il rischio operativo e limita il controllo del business.",
 
     aiInsightEN:
-      "Platform commissions and operational fees may significantly reduce net cashflow.",
+      "Depending entirely on platforms increases operational risk and limits business control.",
 
     warningIT:
-      "⚠️ Dipendere totalmente dalle OTA aumenta il rischio operativo.",
+      "⚠️ OTA fees elevate possono comprimere significativamente il cashflow netto.",
 
     warningEN:
-      "⚠️ Full dependency on OTAs increases operational risk.",
+      "⚠️ High OTA fees may significantly compress net cashflow.",
 
     recommendationsIT: [
-      "Controlla le commissioni.",
       "Diversifica i canali.",
-      "Valuta prenotazioni dirette."
+      "Riduci dipendenza OTA.",
+      "Sviluppa prenotazioni dirette.",
+      "Controlla le commissioni."
     ],
 
     recommendationsEN: [
-      "Control commissions.",
       "Diversify channels.",
-      "Consider direct bookings."
+      "Reduce OTA dependency.",
+      "Develop direct bookings.",
+      "Monitor commissions."
     ],
 
     examples: [
       "commissioni Airbnb",
       "Booking fees",
       "OTA costs",
-      "commissioni Booking"
+      "commissioni piattaforme"
     ],
 
     related: [
-      "hiddenCosts",
       "cashflow",
-      "propertyManagement",
-      "operatingMargin"
+      "operatingMargin",
+      "directBookings",
+      "hiddenCosts"
     ]
 
   },
@@ -231,8 +246,8 @@ Object.assign(window.rbKnowledgeBase, {
       "guest experience",
       "esperienza ospite",
       "rating",
-      "superhost",
-      "customer experience"
+      "customer experience",
+      "superhost"
     ],
 
     aiTitleIT:
@@ -242,47 +257,49 @@ Object.assign(window.rbKnowledgeBase, {
       "⭐ Guest Experience",
 
     aiSummaryIT:
-      "Una buona esperienza ospite migliora occupazione e pricing.",
+      "Una guest experience eccellente migliora occupazione, recensioni, ADR e ranking.",
 
     aiSummaryEN:
-      "Strong guest experience improves occupancy and pricing.",
+      "Excellent guest experience improves occupancy, reviews, ADR and ranking.",
 
     aiInsightIT:
-      "Recensioni positive aumentano ranking piattaforme, ADR e redditività nel lungo periodo.",
+      "Nel settore short-rent le recensioni influenzano direttamente domanda e pricing.",
 
     aiInsightEN:
-      "Positive reviews improve platform ranking, ADR and long-term profitability.",
+      "In the short-rent sector, reviews directly impact demand and pricing.",
 
     warningIT:
-      "⚠️ Guest experience debole può ridurre rapidamente la domanda.",
+      "⚠️ Guest experience debole può ridurre rapidamente il tasso di prenotazione.",
 
     warningEN:
-      "⚠️ Weak guest experience may quickly reduce demand.",
+      "⚠️ Weak guest experience may quickly reduce booking rates.",
 
     recommendationsIT: [
-      "Ottimizza check-in.",
-      "Migliora comunicazione ospiti.",
-      "Mantieni standard elevati."
+      "Ottimizza comunicazione ospiti.",
+      "Automatizza check-in.",
+      "Mantieni standard elevati.",
+      "Riduci problemi operativi."
     ],
 
     recommendationsEN: [
-      "Optimize check-in.",
       "Improve guest communication.",
-      "Maintain high standards."
+      "Automate check-in.",
+      "Maintain high standards.",
+      "Reduce operational issues."
     ],
 
     examples: [
       "Airbnb reviews",
       "guest rating",
-      "esperienza ospiti",
+      "esperienza ospite",
       "superhost rating"
     ],
 
     related: [
       "occupancy",
       "averageNightPrice",
-      "marketDemand",
-      "airbnbModel"
+      "airbnbModel",
+      "propertyManagement"
     ]
 
   },
@@ -297,11 +314,11 @@ Object.assign(window.rbKnowledgeBase, {
 
     keywords: [
       "self check in",
-      "check-in automatico",
       "smart lock",
-      "accesso remoto",
+      "check-in automatico",
       "remote access",
-      "automatic checkin"
+      "automatic checkin",
+      "accesso remoto"
     ],
 
     aiTitleIT:
@@ -311,46 +328,47 @@ Object.assign(window.rbKnowledgeBase, {
       "🔐 Self Check-In",
 
     aiSummaryIT:
-      "Il self check-in migliora automazione e scalabilità.",
+      "Il self check-in migliora automazione, scalabilità e riduzione dei costi operativi.",
 
     aiSummaryEN:
-      "Self check-in improves automation and scalability.",
+      "Self check-in improves automation, scalability and operational efficiency.",
 
     aiInsightIT:
-      "Riduce costi operativi e semplifica l’esperienza ospite.",
+      "Automazione e accesso remoto permettono gestione più efficiente soprattutto su più immobili.",
 
     aiInsightEN:
-      "It reduces operational costs and simplifies guest experience.",
+      "Automation and remote access allow more efficient management, especially across multiple properties.",
 
     warningIT:
-      "⚠️ Sistemi non affidabili possono creare problemi operativi.",
+      "⚠️ Sistemi poco affidabili possono compromettere la guest experience.",
 
     warningEN:
-      "⚠️ Unreliable systems may create operational issues.",
+      "⚠️ Unreliable systems may compromise guest experience.",
 
     recommendationsIT: [
+      "Utilizza smart lock affidabili.",
       "Automatizza accessi.",
-      "Usa smart lock affidabili.",
-      "Riduci gestione manuale."
+      "Riduci gestione manuale.",
+      "Prepara procedure di emergenza."
     ],
 
     recommendationsEN: [
-      "Automate access.",
       "Use reliable smart locks.",
-      "Reduce manual operations."
+      "Automate access.",
+      "Reduce manual operations.",
+      "Prepare emergency procedures."
     ],
 
     examples: [
       "smart lock Airbnb",
-      "check-in automatico",
-      "remote access",
-      "self checkin"
+      "self check-in",
+      "check-in automatico"
     ],
 
     related: [
       "propertyManagement",
-      "cashflow",
-      "guestExperience"
+      "guestExperience",
+      "cashflow"
     ]
 
   },
@@ -380,45 +398,46 @@ Object.assign(window.rbKnowledgeBase, {
       "🧹 Cleaning Operations",
 
     aiSummaryIT:
-      "Pulizie e turnover rappresentano costi operativi chiave.",
+      "Cleaning e turnover rappresentano uno dei principali costi operativi del business short-rent.",
 
     aiSummaryEN:
-      "Cleaning and turnover represent key operational costs.",
+      "Cleaning and turnover are among the main operational costs of the short-rent business.",
 
     aiInsightIT:
-      "Costi cleaning elevati possono comprimere margini e cashflow.",
+      "Turnover elevati aumentano costi, complessità operativa e rischio di problemi logistici.",
 
     aiInsightEN:
-      "High cleaning costs may compress margins and cashflow.",
+      "High turnover increases costs, operational complexity and logistical risks.",
 
     warningIT:
-      "⚠️ Turnover elevato aumenta complessità operativa.",
+      "⚠️ Costi cleaning elevati possono comprimere fortemente il cashflow.",
 
     warningEN:
-      "⚠️ High turnover increases operational complexity.",
+      "⚠️ High cleaning costs may strongly compress cashflow.",
 
     recommendationsIT: [
       "Ottimizza turnover.",
       "Automatizza processi.",
-      "Controlla costi cleaning."
+      "Riduci inefficienze operative.",
+      "Controlla qualità cleaning."
     ],
 
     recommendationsEN: [
       "Optimize turnover.",
-      "Automate processes.",
-      "Control cleaning costs."
+      "Automate operations.",
+      "Reduce operational inefficiencies.",
+      "Monitor cleaning quality."
     ],
 
     examples: [
       "cleaning Airbnb",
       "housekeeping cost",
-      "spese pulizie",
-      "cleaning fees"
+      "spese pulizie"
     ],
 
     related: [
-      "hiddenCosts",
       "cashflow",
+      "hiddenCosts",
       "propertyManagement",
       "operatingMargin"
     ]
@@ -431,14 +450,15 @@ Object.assign(window.rbKnowledgeBase, {
 
   dynamicPricing: {
 
-    priority: 8,
+    priority: 9,
 
     keywords: [
-      "pricing dinamico",
       "dynamic pricing",
+      "pricing dinamico",
       "smart pricing",
+      "ottimizzare prezzo notte",
       "prezzi dinamici",
-      "ottimizzare prezzo notte"
+      "pricing strategy"
     ],
 
     aiTitleIT:
@@ -448,33 +468,35 @@ Object.assign(window.rbKnowledgeBase, {
       "📈 Dynamic Pricing",
 
     aiSummaryIT:
-      "Il dynamic pricing ottimizza ADR e occupazione.",
+      "Il dynamic pricing ottimizza ADR, occupazione e redditività.",
 
     aiSummaryEN:
-      "Dynamic pricing optimizes ADR and occupancy.",
+      "Dynamic pricing optimizes ADR, occupancy and profitability.",
 
     aiInsightIT:
-      "Tariffe adattive permettono di aumentare redditività seguendo la domanda di mercato.",
+      "Adattare il prezzo alla domanda reale permette di massimizzare ricavi e competitività.",
 
     aiInsightEN:
-      "Adaptive pricing helps increase profitability by following market demand.",
+      "Adapting pricing to real demand helps maximize revenue and competitiveness.",
 
     warningIT:
-      "⚠️ Prezzi errati possono ridurre competitività.",
+      "⚠️ Pricing errati possono ridurre sia occupazione che margini.",
 
     warningEN:
-      "⚠️ Incorrect pricing may reduce competitiveness.",
+      "⚠️ Incorrect pricing may reduce both occupancy and margins.",
 
     recommendationsIT: [
-      "Analizza benchmark mercato.",
       "Aggiorna ADR frequentemente.",
-      "Ottimizza pricing stagionale."
+      "Analizza benchmark città.",
+      "Ottimizza pricing stagionale.",
+      "Monitora eventi e domanda."
     ],
 
     recommendationsEN: [
-      "Analyze market benchmarks.",
       "Update ADR frequently.",
-      "Optimize seasonal pricing."
+      "Analyze city benchmarks.",
+      "Optimize seasonal pricing.",
+      "Monitor events and demand."
     ],
 
     examples: [
@@ -486,7 +508,8 @@ Object.assign(window.rbKnowledgeBase, {
     related: [
       "averageNightPrice",
       "occupancy",
-      "marketDemand"
+      "marketDemand",
+      "seasonality"
     ]
 
   },
@@ -503,7 +526,8 @@ Object.assign(window.rbKnowledgeBase, {
       "prenotazioni dirette",
       "direct bookings",
       "booking diretto",
-      "sito prenotazioni"
+      "sito prenotazioni",
+      "booking engine"
     ],
 
     aiTitleIT:
@@ -513,33 +537,35 @@ Object.assign(window.rbKnowledgeBase, {
       "🌐 Direct Bookings",
 
     aiSummaryIT:
-      "Le prenotazioni dirette possono migliorare i margini operativi.",
+      "Le prenotazioni dirette migliorano il margine operativo riducendo le OTA fees.",
 
     aiSummaryEN:
-      "Direct bookings may improve operating margins.",
+      "Direct bookings improve operating margins by reducing OTA fees.",
 
     aiInsightIT:
-      "Riducendo le commissioni OTA aumenta il cashflow netto.",
+      "Un brand forte e un canale diretto aumentano controllo e redditività del business.",
 
     aiInsightEN:
-      "Reducing OTA commissions increases net cashflow.",
+      "A strong brand and direct channel improve business control and profitability.",
 
     warningIT:
-      "⚠️ Richiedono marketing e brand awareness.",
+      "⚠️ Richiedono marketing, branding e acquisizione traffico.",
 
     warningEN:
-      "⚠️ They require marketing and brand awareness.",
+      "⚠️ They require marketing, branding and traffic acquisition.",
 
     recommendationsIT: [
-      "Crea sito diretto.",
+      "Crea un sito diretto.",
       "Riduci dipendenza OTA.",
-      "Investi in branding."
+      "Investi in branding.",
+      "Costruisci fidelizzazione clienti."
     ],
 
     recommendationsEN: [
       "Build a direct website.",
       "Reduce OTA dependency.",
-      "Invest in branding."
+      "Invest in branding.",
+      "Build customer loyalty."
     ],
 
     examples: [
@@ -557,3 +583,8 @@ Object.assign(window.rbKnowledgeBase, {
   }
 
 });
+
+console.log(
+  "🏨 SHORT RENT KNOWLEDGE READY",
+  window.rbKnowledgeBase
+);
