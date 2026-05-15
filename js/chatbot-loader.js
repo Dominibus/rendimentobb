@@ -1,44 +1,194 @@
-// ===============================
-// 🤖 RENDIMENTOBB CHATBOT LOADER
-// ===============================
+// ===============================================
+// 🤖 RENDIMENTOBB – CHATBOT LOADER 2.0
+// Silicon Valley Modular AI Bootstrap
+// Bilingual + Scale Ready
+// ===============================================
 
 (function(){
 
-  // evita doppio caricamento
+  // =============================================
+  // 🛡 GLOBAL LOCK
+  // =============================================
+
   if(window.__rbChatbotLoaded){
+
+    console.warn(
+      "⚠️ RB Chatbot already loaded"
+    );
+
     return;
+
   }
 
   window.__rbChatbotLoaded = true;
 
-  console.log("🤖 Loading RB Chatbot...");
+  console.log(
+    "🤖 Loading RB Chatbot..."
+  );
 
-  // ===============================
-  // 🎨 CSS
-  // ===============================
+  // =============================================
+  // 🌍 LANGUAGE HELPER
+  // =============================================
 
-  const css = document.createElement("link");
+  window.rbT = function(it,en){
 
-  css.rel = "stylesheet";
-  css.href = "/css/chatbot.css";
+    return window.currentLang === "en"
+      ? (en || it)
+      : it;
 
-  document.head.appendChild(css);
+  };
 
-  // ===============================
-  // 📦 JS FILES
-  // ===============================
+  // =============================================
+  // 🎨 CSS LOADER
+  // =============================================
+
+  function loadCSS(href){
+
+    return new Promise(resolve=>{
+
+      const existing =
+        document.querySelector(
+          `link[href="${href}"]`
+        );
+
+      if(existing){
+
+        resolve();
+        return;
+
+      }
+
+      const css =
+        document.createElement("link");
+
+      css.rel = "stylesheet";
+
+      css.href = href;
+
+      css.onload = ()=>{
+
+        console.log(
+          "🎨 CSS Loaded:",
+          href
+        );
+
+        resolve();
+
+      };
+
+      css.onerror = ()=>{
+
+        console.error(
+          "❌ CSS LOAD ERROR:",
+          href
+        );
+
+        resolve();
+
+      };
+
+      document.head.appendChild(css);
+
+    });
+
+  }
+
+  // =============================================
+  // 📦 SCRIPT LOADER
+  // =============================================
+
+  function loadScript(src){
+
+    return new Promise(resolve=>{
+
+      // =========================================
+      // 🛡 DUPLICATE PREVENTION
+      // =========================================
+
+      const existing =
+        document.querySelector(
+          `script[src="${src}"]`
+        );
+
+      if(existing){
+
+        console.warn(
+          "⚠️ Script already loaded:",
+          src
+        );
+
+        resolve();
+
+        return;
+
+      }
+
+      // =========================================
+      // 🚀 SCRIPT
+      // =========================================
+
+      const script =
+        document.createElement("script");
+
+      script.src = src;
+
+      script.async = false;
+
+      script.onload = ()=>{
+
+        console.log(
+          "✅ Loaded:",
+          src
+        );
+
+        resolve();
+
+      };
+
+      script.onerror = ()=>{
+
+        console.error(
+          "❌ SCRIPT LOAD ERROR:",
+          src
+        );
+
+        resolve();
+
+      };
+
+      document.body.appendChild(
+        script
+      );
+
+    });
+
+  }
+
+  // =============================================
+  // 🎨 CSS FILES
+  // =============================================
+
+  const cssFiles = [
+
+    "/css/chatbot.css"
+
+  ];
+
+  // =============================================
+  // 📦 JS ARCHITECTURE
+  // =============================================
 
   const scripts = [
 
-    // ===================================
+    // =========================================
     // 🧠 KNOWLEDGE BASE
-    // ===================================
+    // =========================================
 
     "/js/chatbot/knowledge-base.js",
 
-    // ===================================
+    // =========================================
     // 📚 KNOWLEDGE MODULES
-    // ===================================
+    // =========================================
 
     "/js/chatbot/knowledge/real-estate.js",
     "/js/chatbot/knowledge/mortgages.js",
@@ -50,16 +200,16 @@
     "/js/chatbot/knowledge/markets.js",
     "/js/chatbot/knowledge/roi.js",
 
-    // ===================================
-    // 🌍 DATA LAYERS
-    // ===================================
+    // =========================================
+    // 🌍 DATA
+    // =========================================
 
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js",
 
-    // ===================================
-    // 🧠 CORE AI ARCHITECTURE
-    // ===================================
+    // =========================================
+    // 🧠 CORE AI
+    // =========================================
 
     "/js/chatbot/core/entity-engine.js",
     "/js/chatbot/core/intent-engine.js",
@@ -67,33 +217,117 @@
     "/js/chatbot/core/response-engine.js",
     "/js/chatbot/core/chatbot-orchestrator.js",
 
-    // ===================================
-    // 🧠 ADVANCED AI LAYERS
-    // ===================================
+    // =========================================
+    // 🤝 SUPPORT LAYERS
+    // =========================================
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/advisor-engine.js",
 
-    // ===================================
+    // =========================================
     // 🎨 UI
-    // ===================================
+    // =========================================
 
-    "/js/chatbot/ui/chatbot-ui.js"
+    "/js/chatbot/ui/chatbot-ui.js",
+
+    // =========================================
+    // 🧠 GLOBAL AI HELPERS
+    // =========================================
+
+    "/js/ai-engine.js",
+    "/js/chatbot.js"
 
   ];
 
+  // =============================================
+  // 🚀 BOOTSTRAP
+  // =============================================
 
-scripts.forEach(src=>{
+  async function init(){
 
-  const s = document.createElement("script");
+    console.log(
+      "🚀 Initializing RB AI Architecture..."
+    );
 
-  s.src = src;
+    // =========================================
+    // 🎨 LOAD CSS
+    // =========================================
 
-  // 🔥 ordine caricamento garantito
-  s.async = false;
+    for(const href of cssFiles){
 
-  document.body.appendChild(s);
+      await loadCSS(href);
 
-});
+    }
+
+    // =========================================
+    // 📦 LOAD SCRIPTS
+    // =========================================
+
+    for(const src of scripts){
+
+      await loadScript(src);
+
+    }
+
+    // =========================================
+    // 🤖 INIT UI
+    // =========================================
+
+    if(window.initRBChatbotUI){
+
+      window.initRBChatbotUI();
+
+    }
+
+    // =========================================
+    // ✅ READY
+    // =========================================
+
+    console.log(
+      "🤖 RENDIMENTOBB AI READY"
+    );
+
+    console.log({
+
+      entityEngine:
+        !!window.rbExtractEntities,
+
+      intentEngine:
+        !!window.rbDetectIntent,
+
+      memoryEngine:
+        !!window.rbSaveMemory,
+
+      responseEngine:
+        !!window.rbGenerateResponse,
+
+      orchestrator:
+        !!window.rbProcessAIMessage,
+
+      chatbotUI:
+        !!window.initRBChatbotUI
+
+    });
+
+  }
+
+  // =============================================
+  // 🚀 START
+  // =============================================
+
+  if(document.readyState === "loading"){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      init
+    );
+
+  }
+
+  else{
+
+    init();
+
+  }
 
 })();
