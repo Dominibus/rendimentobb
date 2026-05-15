@@ -18125,3 +18125,53 @@ transform:translateY(-2px);
   transform:translateY(-1px);
 
 }
+
+/* =====================================
+📱 MOBILE HEADER FIX
+===================================== */
+
+@media screen and (max-width:768px){
+
+  .rb-right{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+  }
+
+  #rb-burger{
+
+    display:flex !important;
+
+    align-items:center;
+    justify-content:center;
+
+    width:44px;
+    height:44px;
+
+    flex-shrink:0;
+
+    position:relative;
+
+    z-index:99999;
+
+    font-size:28px;
+
+  }
+
+  .rb-header-ai-btn{
+
+    padding:0 14px !important;
+
+    height:44px !important;
+
+    border-radius:14px !important;
+
+    font-size:14px !important;
+
+    flex-shrink:0;
+
+  }
+
+}
