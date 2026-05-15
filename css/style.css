@@ -18127,13 +18127,13 @@ transform:translateY(-2px);
 }
 
 /* ==================================================
-📱 RENDIMENTOBB — MOBILE HEADER FINAL FIX
-Clean + Responsive + No Overlap
+📱 RENDIMENTOBB — MOBILE HEADER REAL FINAL FIX
+iPhone Safari Safe
 ================================================== */
 
 @media screen and (max-width:768px){
 
-  /* ================= HEADER CONTAINER ================= */
+  /* ================= HEADER ================= */
 
   .rb-inner{
 
@@ -18141,11 +18141,11 @@ Clean + Responsive + No Overlap
     align-items:center;
     justify-content:space-between;
 
-    min-height:72px;
+    min-height:68px;
 
-    padding:0 10px !important;
+    padding:0 8px !important;
 
-    gap:8px !important;
+    gap:4px !important;
 
     overflow:hidden;
 
@@ -18155,27 +18155,25 @@ Clean + Responsive + No Overlap
 
   .rb-left{
 
+    flex:0 0 auto;
+
     display:flex;
     align-items:center;
-
-    flex-shrink:0 !important;
 
   }
 
   .rb-logo{
 
-    width:92px !important;
-    max-width:92px !important;
+    width:74px !important;
+    max-width:74px !important;
 
     height:auto;
 
     display:block;
 
-    object-fit:contain;
-
   }
 
-  /* ================= RIGHT SIDE ================= */
+  /* ================= RIGHT ================= */
 
   .rb-right{
 
@@ -18185,13 +18183,25 @@ Clean + Responsive + No Overlap
 
     justify-content:flex-end;
 
-    gap:6px !important;
+    gap:4px !important;
 
     flex-wrap:nowrap !important;
 
     margin-left:auto !important;
 
-    flex-shrink:0 !important;
+    min-width:0;
+
+  }
+
+  /* ================= LANG ================= */
+
+  .rb-lang{
+
+    transform:scale(.78);
+
+    transform-origin:center;
+
+    flex-shrink:1 !important;
 
   }
 
@@ -18203,16 +18213,16 @@ Clean + Responsive + No Overlap
     align-items:center;
     justify-content:center;
 
-    width:66px !important;
-    min-width:66px !important;
+    width:58px !important;
+    min-width:58px !important;
 
-    height:44px !important;
+    height:40px !important;
 
     padding:0 !important;
 
-    border-radius:16px !important;
+    border-radius:14px !important;
 
-    font-size:15px !important;
+    font-size:14px !important;
 
     line-height:1;
 
@@ -18222,7 +18232,7 @@ Clean + Responsive + No Overlap
 
   }
 
-  /* ================= LOGIN BUTTON ================= */
+  /* ================= LOGIN ================= */
 
   .rb-right .rb-login{
 
@@ -18230,16 +18240,16 @@ Clean + Responsive + No Overlap
     align-items:center;
     justify-content:center;
 
-    width:82px !important;
-    min-width:82px !important;
+    width:72px !important;
+    min-width:72px !important;
 
-    height:44px !important;
+    height:40px !important;
 
-    padding:0 10px !important;
+    padding:0 8px !important;
 
-    border-radius:16px !important;
+    border-radius:14px !important;
 
-    font-size:15px !important;
+    font-size:14px !important;
 
     line-height:1;
 
@@ -18248,18 +18258,6 @@ Clean + Responsive + No Overlap
     overflow:hidden !important;
 
     text-overflow:ellipsis !important;
-
-    flex-shrink:0 !important;
-
-  }
-
-  /* ================= LANGUAGE ================= */
-
-  .rb-lang{
-
-    transform:scale(.92);
-
-    transform-origin:center;
 
     flex-shrink:0 !important;
 
@@ -18274,16 +18272,16 @@ Clean + Responsive + No Overlap
     align-items:center !important;
     justify-content:center !important;
 
-    width:40px !important;
-    min-width:40px !important;
+    width:36px !important;
+    min-width:36px !important;
 
-    height:40px !important;
-
-    margin-left:0 !important;
+    height:36px !important;
 
     padding:0 !important;
 
-    font-size:30px !important;
+    margin-left:0 !important;
+
+    font-size:26px !important;
 
     line-height:1;
 
@@ -18292,8 +18290,6 @@ Clean + Responsive + No Overlap
     z-index:999999 !important;
 
     flex-shrink:0 !important;
-
-    cursor:pointer;
 
   }
 
