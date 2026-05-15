@@ -2431,6 +2431,83 @@ saveAnalysis({
   const roi = Number(result?.roi || 0);
 
   console.log("📊 FINAL ROI:", roi);
+
+ // =====================================
+// 🤖 CHATBOT LIVE ANALYSIS
+// =====================================
+
+window.lastAnalysisData = {
+
+  city:
+    window.currentCity ||
+
+    market ||
+
+    "roma",
+
+  roi:
+    finalROI ||
+
+    roi ||
+
+    0,
+
+  risk:
+    riskScore ||
+
+    risk ||
+
+    0,
+
+  occupancy:
+    occupancy ||
+
+    occupancyRate ||
+
+    0,
+
+  pricePerNight:
+    nightly ||
+
+    pricePerNight ||
+
+    0,
+
+  monthlyCosts:
+    monthlyCosts ||
+
+    monthlyExpenses ||
+
+    0,
+
+  revenueAnnual:
+    annualRevenue ||
+
+    revenue ||
+
+    0,
+
+  propertyPrice:
+    propertyPrice ||
+
+    purchasePrice ||
+
+    0,
+
+  mortgagePercent:
+    mortgagePercent ||
+
+    leverage ||
+
+    0
+
+};
+
+console.log(
+  "🤖 LIVE ANALYSIS SAVED:",
+  window.lastAnalysisData
+);
+  
   console.log("💾 POST ANALYSIS START");
 
   // ================= 🔥 ROI UI LOCK =================
