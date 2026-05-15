@@ -18126,41 +18126,78 @@ transform:translateY(-2px);
 
 }
 
-/* ================= MOBILE HEADER ALIGN FIX ================= */
+/* ==================================================
+📱 MOBILE HEADER — REAL FINAL COMPACT FIX
+================================================== */
 
 @media screen and (max-width:768px){
 
-  /* ===== HEADER ===== */
-
   .rb-inner{
 
-    padding-left:8px !important;
-    padding-right:20px !important;
+    padding:0 8px !important;
+
+    gap:4px !important;
 
   }
 
   /* ===== LOGO ===== */
 
-  .rb-left{
-
-    margin-right:auto !important;
-
-  }
-
   .rb-logo{
 
-    width:80px !important;
-    max-width:80px !important;
+    width:72px !important;
+    max-width:72px !important;
 
   }
 
-  /* ===== RIGHT SIDE ===== */
+  /* ===== RIGHT ===== */
 
   .rb-right{
 
-    gap:5px !important;
+    gap:4px !important;
 
-    padding-right:10px !important;
+    margin-left:auto !important;
+
+  }
+
+  /* ===== LANG ===== */
+
+  .rb-lang{
+
+    transform:scale(.78) !important;
+
+  }
+
+  /* ===== AI ===== */
+
+  .rb-header-ai-btn{
+
+    width:48px !important;
+    min-width:48px !important;
+
+    height:40px !important;
+
+    padding:0 6px !important;
+
+    font-size:13px !important;
+
+    border-radius:14px !important;
+
+  }
+
+  /* ===== LOGIN ===== */
+
+  .rb-right .rb-login{
+
+    width:64px !important;
+    min-width:64px !important;
+
+    height:40px !important;
+
+    padding:0 6px !important;
+
+    font-size:13px !important;
+
+    border-radius:14px !important;
 
   }
 
@@ -18168,9 +18205,16 @@ transform:translateY(-2px);
 
   #rb-burger{
 
-    margin-left:4px !important;
+    width:30px !important;
+    min-width:30px !important;
 
-    transform:translateX(-2px);
+    height:30px !important;
+
+    margin-left:0 !important;
+
+    font-size:26px !important;
+
+    transform:none !important;
 
   }
 
