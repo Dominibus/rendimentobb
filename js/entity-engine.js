@@ -1,36 +1,70 @@
 // ===============================================
-// 🧠 ENTITY ENGINE
+// 🧠 RENDIMENTOBB – ENTITY ENGINE
+// Silicon Valley AI Extraction System
+// Multi-language + Multi-city + Financial Context
 // ===============================================
 
 window.rbExtractEntities = function(message){
 
+  // ===========================================
+  // 🛡️ SAFE GUARD
+  // ===========================================
+
   if(!message){
 
-    return {};
+    return {
+
+      city: null,
+      cities: [],
+      roi: null,
+      occupancy: null,
+      price: null,
+      mortgage: false,
+      risk: null,
+      percentages: [],
+      amounts: [],
+      comparison: false
+
+    };
 
   }
 
-  const text =
-    String(message).toLowerCase();
+  // ===========================================
+  // 🧹 NORMALIZATION
+  // ===========================================
+
+  const text = String(message).toLowerCase().trim();
 
   const entities = {
 
+    // 🌍 Location
     city: null,
+    cities: [],
+
+    // 📈 Metrics
     roi: null,
     occupancy: null,
+    risk: null,
+
+    // 💰 Financial
     price: null,
     mortgage: false,
-    risk: null,
+
+    // 📊 Raw extraction
     percentages: [],
-    amounts: []
+    amounts: [],
+
+    // ⚔️ Comparison mode
+    comparison: false
 
   };
 
   // ===========================================
-  // 🌍 CITY DETECTION
+  // 🌍 CITY DATABASE
   // ===========================================
 
-  const cities = [
+  const CITY_LIST = [
+
     "roma",
     "milano",
     "napoli",
@@ -39,22 +73,48 @@ window.rbExtractEntities = function(message){
     "bologna",
     "venezia",
     "palermo",
-    "bari"
+    "bari",
+    "verona"
+
   ];
 
-  for(const city of cities){
+  // ===========================================
+  // 🏙️ MULTI CITY EXTRACTION
+  // ===========================================
 
-    if(text.includes(city)){
+  const detectedCities = CITY_LIST.filter(city =>
+    text.includes(city)
+  );
 
-      entities.city = city;
-      break;
+  entities.cities = detectedCities;
 
-    }
-
-  }
+  // 🔥 Backward compatibility
+  entities.city = detectedCities[0] || null;
 
   // ===========================================
-  // 📈 PERCENTAGES
+  // ⚔️ COMPARISON DETECTION
+  // ===========================================
+
+  const comparisonWords = [
+
+    "vs",
+    "contro",
+    "oppure",
+    "o",
+    "meglio",
+    "compare",
+    "comparison"
+
+  ];
+
+  entities.comparison =
+    detectedCities.length >= 2 ||
+    comparisonWords.some(word =>
+      text.includes(word)
+    );
+
+  // ===========================================
+  // 📈 PERCENTAGE EXTRACTION
   // ===========================================
 
   const percentageMatches =
@@ -71,7 +131,7 @@ window.rbExtractEntities = function(message){
             .replace(",",".")
         )
 
-      );
+      ).filter(v => !isNaN(v));
 
   }
 
@@ -80,8 +140,12 @@ window.rbExtractEntities = function(message){
   // ===========================================
 
   if(
+
     text.includes("occupazione") ||
-    text.includes("occupancy")
+    text.includes("occupancy") ||
+    text.includes("booking") ||
+    text.includes("prenotazioni")
+
   ){
 
     const occ =
@@ -101,7 +165,13 @@ window.rbExtractEntities = function(message){
   // 📈 ROI DETECTION
   // ===========================================
 
-  if(text.includes("roi")){
+  if(
+
+    text.includes("roi") ||
+    text.includes("return") ||
+    text.includes("rendimento")
+
+  ){
 
     const roi =
       entities.percentages.find(
@@ -126,16 +196,14 @@ window.rbExtractEntities = function(message){
   if(moneyMatches){
 
     entities.amounts =
-      moneyMatches.map(v =>
-
-        parseInt(v)
-
-      );
+      moneyMatches
+        .map(v => parseInt(v))
+        .filter(v => !isNaN(v));
 
   }
 
   // ===========================================
-  // 🏠 PROPERTY PRICE
+  // 🏠 PROPERTY PRICE DETECTION
   // ===========================================
 
   const likelyPrice =
@@ -159,7 +227,10 @@ window.rbExtractEntities = function(message){
     "mortgage",
     "loan",
     "finanziamento",
-    "leva"
+    "leva",
+    "ltv",
+    "rata",
+    "bank"
 
   ];
 
@@ -172,12 +243,31 @@ window.rbExtractEntities = function(message){
   // ⚠️ RISK DETECTION
   // ===========================================
 
-  if(
-    text.includes("rischio") ||
-    text.includes("risk")
-  ){
+  const riskWords = [
 
-    entities.risk = true;
+    "rischio",
+    "risk",
+    "pericolo",
+    "instabile",
+    "volatile"
+
+  ];
+
+  entities.risk =
+    riskWords.some(word =>
+      text.includes(word)
+    );
+
+  // ===========================================
+  // 🧠 DEBUG MODE
+  // ===========================================
+
+  if(window.DEBUG_AI){
+
+    console.log(
+      "🧠 ENTITY ENGINE:",
+      entities
+    );
 
   }
 
@@ -185,4 +275,10 @@ window.rbExtractEntities = function(message){
 
 };
 
-console.log("🧠 ENTITY ENGINE READY");
+// ===============================================
+// 🚀 ENGINE READY
+// ===============================================
+
+console.log(
+  "🧠 ENTITY ENGINE READY"
+);
