@@ -31,13 +31,13 @@
   const scripts = [
 
     // ===================================
-    // CORE
+    // 🧠 KNOWLEDGE BASE
     // ===================================
 
     "/js/chatbot/knowledge-base.js",
 
     // ===================================
-    // KNOWLEDGE MODULES
+    // 📚 KNOWLEDGE MODULES
     // ===================================
 
     "/js/chatbot/knowledge/real-estate.js",
@@ -47,24 +47,40 @@
     "/js/chatbot/knowledge/risk.js",
     "/js/chatbot/knowledge/mistakes.js",
     "/js/chatbot/knowledge/beginner.js",
+    "/js/chatbot/knowledge/markets.js",
+    "/js/chatbot/knowledge/roi.js",
 
     // ===================================
-    // DATA
+    // 🌍 DATA LAYERS
     // ===================================
 
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js",
 
-// ===================================
-// AI ENGINE
-// ===================================
+    // ===================================
+    // 🧠 CORE AI ARCHITECTURE
+    // ===================================
 
-"/js/chatbot/entity-engine.js",
-"/js/chatbot/reasoning-engine.js",
-"/js/chatbot/support-engine.js",  
-"/js/chatbot/advisor-engine.js",    
-"/js/ai-engine.js",
-"/js/chatbot.js"
+    "/js/chatbot/core/entity-engine.js",
+    "/js/chatbot/core/intent-engine.js",
+    "/js/chatbot/core/memory-engine.js",
+    "/js/chatbot/core/response-engine.js",
+    "/js/chatbot/core/chatbot-orchestrator.js",
+
+    // ===================================
+    // 🧠 ADVANCED AI LAYERS
+    // ===================================
+
+    "/js/chatbot/support-engine.js",
+    "/js/chatbot/advisor-engine.js",
+
+    // ===================================
+    // 🎨 UI
+    // ===================================
+
+    "/js/chatbot/ui/chatbot-ui.js"
+
+  ];
 
   ];
 
