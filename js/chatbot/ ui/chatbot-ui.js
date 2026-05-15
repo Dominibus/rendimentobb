@@ -361,26 +361,74 @@ I can help analyze:
         ? window.rbGetMemory()
         : {};
 
-    // =======================================
-    // 🧠 RESPONSE
-    // =======================================
+// =======================================
+// 🧠 AI ORCHESTRATOR
+// =======================================
 
-    const response =
+window.rbProcessAIMessage(text)
 
-      window.rbGenerateResponse({
+.then(result=>{
 
-        message: text,
+  const response =
+    result?.response || {};
 
-        entities,
+  // =====================================
+  // 🌍 LANGUAGE
+  // =====================================
 
-        intent,
+  const finalText =
 
-        memory,
+    window.currentLang === "en"
 
-        analysisData:
-          window.lastAnalysisData || {}
+    ? (
+        response.textEN ||
 
-      });
+        "AI response unavailable."
+      )
+
+    : (
+        response.textIT ||
+
+        "Risposta AI non disponibile."
+      );
+
+  // =====================================
+  // 💬 BOT MESSAGE
+  // =====================================
+
+  setTimeout(()=>{
+
+    addMessage(
+      "bot",
+      finalText
+    );
+
+  }, 500);
+
+})
+
+.catch(error=>{
+
+  console.error(
+    "❌ CHATBOT UI ERROR:",
+    error
+  );
+
+  addMessage(
+
+    "bot",
+
+    window.t(
+
+      "⚠️ Errore AI temporaneo.",
+
+      "⚠️ Temporary AI error."
+
+    )
+
+  );
+
+});
 
     // =======================================
     // 🌍 LANGUAGE
