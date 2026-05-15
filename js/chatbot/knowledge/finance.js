@@ -1,28 +1,53 @@
 // ===============================================
-// 💰 FINANCE KNOWLEDGE
+// 💰 RENDIMENTOBB – FINANCE AI KNOWLEDGE
 // ===============================================
 
-Object.assign(window.rbKnowledgeBase, {
+window.rbKnowledgeBase =
+  window.rbKnowledgeBase || {};
 
-  // ===========================================
-  // ROI
-  // ===========================================
+// ===============================================
+// 💰 FINANCE MODULE
+// ===============================================
+
+window.rbKnowledgeBase.finance = {
+
+  module: "finance",
+
+  version: "2.0",
+
+  aiRoleIT:
+    "Esperto AI di finanza immobiliare e redditività short-rent",
+
+  aiRoleEN:
+    "AI expert in real estate finance and short-rent profitability",
+
+  descriptionIT:
+    "Modulo AI dedicato a ROI, cashflow, sostenibilità finanziaria, break-even, margini operativi e rischio economico.",
+
+  descriptionEN:
+    "AI module focused on ROI, cashflow, financial sustainability, break-even, operating margins and economic risk.",
+
+  // =============================================
+  // 📈 ROI
+  // =============================================
 
   roi: {
 
     priority: 10,
 
+    category: "profitability",
+
+    scoreWeight: 1.6,
+
     keywords: [
       "roi",
       "return on investment",
-      "ritorno investimento",
       "rendimento",
       "investment return",
-      "profitto percentuale",
-      "resa investimento",
-      "quanto rende",
+      "yield",
       "redditività",
-      "yield"
+      "quanto rende",
+      "profitto percentuale"
     ],
 
     aiTitleIT:
@@ -32,42 +57,42 @@ Object.assign(window.rbKnowledgeBase, {
       "📈 ROI – Return On Investment",
 
     aiSummaryIT:
-      "Il ROI misura il rendimento percentuale dell’investimento rispetto al capitale investito.",
+      "Il ROI misura la redditività percentuale dell’investimento rispetto al capitale investito.",
 
     aiSummaryEN:
-      "ROI measures the percentage return generated compared to invested capital.",
+      "ROI measures the percentage profitability generated compared to invested capital.",
 
     aiInsightIT:
-      "Nel settore B&B e short-rent un ROI elevato può sembrare molto interessante, ma deve sempre essere analizzato insieme a cashflow, rischio operativo, occupazione reale, sostenibilità del mutuo e costi nascosti.",
+      "Nel settore B&B e Airbnb un ROI elevato può sembrare molto interessante, ma deve sempre essere analizzato insieme a cashflow, rischio operativo, occupazione reale e sostenibilità del mutuo.",
 
     aiInsightEN:
-      "In the B&B and short-rent sector, a high ROI may look attractive, but it should always be analyzed together with cashflow, operational risk, occupancy, mortgage sustainability and hidden costs.",
+      "In the B&B and Airbnb sector, a high ROI may appear attractive, but it should always be analyzed together with cashflow, operational risk, occupancy and mortgage sustainability.",
 
     warningIT:
-      "⚠️ Un ROI elevato non garantisce automaticamente un investimento sicuro o sostenibile.",
+      "⚠️ ROI elevato non significa automaticamente investimento sicuro.",
 
     warningEN:
-      "⚠️ A high ROI does not automatically guarantee a safe or sustainable investment.",
+      "⚠️ High ROI does not automatically mean a safe investment.",
+
+    benchmarks: {
+
+      weak: "0-4%",
+      average: "5-7%",
+      strong: "8-12%",
+      aggressive: "13%+"
+
+    },
 
     recommendationsIT: [
-      "Analizza sempre il cashflow reale.",
-      "Confronta ROI e rischio operativo.",
-      "Verifica occupazione e sostenibilità del mutuo."
+      "Analizza cashflow reale.",
+      "Verifica rischio operativo.",
+      "Controlla sostenibilità finanziaria."
     ],
 
     recommendationsEN: [
-      "Always analyze real cashflow.",
-      "Compare ROI with operational risk.",
-      "Verify occupancy and mortgage sustainability."
-    ],
-
-    examples: [
-      "ROI 8%",
-      "ROI Airbnb Roma",
-      "buon ROI B&B",
-      "high ROI investment",
-      "quanto rende un Airbnb",
-      "ROI investimento immobiliare"
+      "Analyze real cashflow.",
+      "Verify operational risk.",
+      "Check financial sustainability."
     ],
 
     related: [
@@ -79,24 +104,26 @@ Object.assign(window.rbKnowledgeBase, {
 
   },
 
-  // ===========================================
-  // CASHFLOW
-  // ===========================================
+  // =============================================
+  // 💸 CASHFLOW
+  // =============================================
 
   cashflow: {
 
-    priority: 9,
+    priority: 10,
+
+    category: "liquidity",
+
+    scoreWeight: 1.7,
 
     keywords: [
       "cashflow",
       "cash flow",
-      "flusso cassa",
+      "flusso di cassa",
       "profitto mensile",
       "utile netto",
-      "guadagno mensile",
-      "monthly profit",
       "liquidità",
-      "net profit"
+      "monthly profit"
     ],
 
     aiTitleIT:
@@ -106,110 +133,107 @@ Object.assign(window.rbKnowledgeBase, {
       "💸 Real Estate Cashflow",
 
     aiSummaryIT:
-      "Il Cashflow rappresenta il profitto netto reale generato ogni mese dall’investimento.",
+      "Il cashflow rappresenta il profitto reale generato ogni mese dopo tutte le spese operative.",
 
     aiSummaryEN:
-      "Cashflow represents the real monthly net profit generated by the investment.",
+      "Cashflow represents the real monthly profit generated after all operational expenses.",
 
     aiInsightIT:
-      "Il cashflow considera cleaning, utenze, manutenzione, tasse, OTA fees, gestione operativa e rata del mutuo. Un investimento può avere ROI elevato ma cashflow negativo se i costi operativi sono troppo alti.",
+      "Molti investimenti mostrano ROI elevati ma cashflow debole a causa di mutuo, cleaning, OTA fees, tasse e costi nascosti.",
 
     aiInsightEN:
-      "Cashflow includes cleaning, utilities, maintenance, taxes, OTA fees, operations and mortgage payments. An investment may show high ROI but still generate negative cashflow if operational costs are too high.",
+      "Many investments show high ROI but weak cashflow due to mortgages, cleaning, OTA fees, taxes and hidden costs.",
 
     warningIT:
-      "⚠️ ROI alto con cashflow debole può rendere l’investimento instabile nel lungo periodo.",
+      "⚠️ Cashflow negativo aumenta il rischio operativo.",
 
     warningEN:
-      "⚠️ High ROI with weak cashflow may make the investment unstable long-term.",
+      "⚠️ Negative cashflow increases operational risk.",
+
+    benchmarks: {
+
+      negative: "< 0€",
+      weak: "0€ - 500€",
+      stable: "500€ - 1500€",
+      strong: "1500€+"
+
+    },
 
     recommendationsIT: [
-      "Riduci i costi operativi.",
-      "Ottimizza occupazione e prezzo notte.",
-      "Controlla la sostenibilità della rata mutuo."
+      "Riduci costi operativi.",
+      "Ottimizza occupazione.",
+      "Controlla il peso della rata mutuo."
     ],
 
     recommendationsEN: [
-      "Reduce operational costs.",
-      "Optimize occupancy and nightly pricing.",
-      "Monitor mortgage sustainability."
-    ],
-
-    examples: [
-      "cashflow negativo",
-      "profitto netto Airbnb",
-      "monthly cashflow",
-      "utile B&B",
-      "guadagno reale"
+      "Reduce operating costs.",
+      "Optimize occupancy.",
+      "Monitor mortgage pressure."
     ],
 
     related: [
       "roi",
       "mortgageImpact",
-      "seasonality",
-      "hiddenCosts"
+      "hiddenCosts",
+      "operatingMargin"
     ]
 
   },
 
-  // ===========================================
-  // BREAK EVEN
-  // ===========================================
+  // =============================================
+  // ⚖️ BREAK EVEN
+  // =============================================
 
   breakEven: {
 
-    priority: 7,
+    priority: 8,
+
+    category: "recovery",
+
+    scoreWeight: 1.2,
 
     keywords: [
       "break even",
       "pareggio",
       "punto di pareggio",
       "rientro investimento",
-      "tempo recupero",
-      "recuperare capitale"
+      "tempo recupero"
     ],
 
     aiTitleIT:
-      "⚖️ Break Even",
+      "⚖️ Break-Even",
 
     aiTitleEN:
-      "⚖️ Break Even",
+      "⚖️ Break-Even",
 
     aiSummaryIT:
-      "Il Break Even indica il tempo necessario per recuperare il capitale investito.",
+      "Il break-even misura quanto tempo serve per recuperare il capitale investito.",
 
     aiSummaryEN:
-      "Break-even indicates how long it takes to recover invested capital.",
+      "Break-even measures how long it takes to recover invested capital.",
 
     aiInsightIT:
-      "Un break-even troppo lento aumenta l’esposizione finanziaria e il rischio operativo dell’investimento immobiliare.",
+      "Break-even troppo lenti aumentano esposizione finanziaria e vulnerabilità operativa.",
 
     aiInsightEN:
-      "A slow break-even increases financial exposure and operational risk.",
+      "Slow break-even periods increase financial exposure and operational vulnerability.",
 
     warningIT:
-      "⚠️ Tempi di recupero troppo lunghi possono ridurre la sostenibilità finanziaria.",
+      "⚠️ Tempi lunghi riducono la resilienza dell’investimento.",
 
     warningEN:
-      "⚠️ Excessively long recovery times may reduce financial sustainability.",
+      "⚠️ Long recovery periods reduce investment resilience.",
 
     recommendationsIT: [
-      "Ottimizza occupazione e ADR.",
-      "Riduci costi operativi.",
-      "Analizza sostenibilità cashflow."
+      "Ottimizza pricing.",
+      "Riduci costi.",
+      "Aumenta occupazione reale."
     ],
 
     recommendationsEN: [
-      "Optimize occupancy and ADR.",
-      "Reduce operating costs.",
-      "Analyze cashflow sustainability."
-    ],
-
-    examples: [
-      "break even Airbnb",
-      "quando recupero investimento",
-      "tempo rientro capitale",
-      "anni recupero investimento"
+      "Optimize pricing.",
+      "Reduce costs.",
+      "Increase real occupancy."
     ],
 
     related: [
@@ -220,86 +244,95 @@ Object.assign(window.rbKnowledgeBase, {
 
   },
 
-  // ===========================================
-  // DSCR
-  // ===========================================
+  // =============================================
+  // 🏦 DSCR
+  // =============================================
 
   dscr: {
 
-    priority: 8,
+    priority: 9,
+
+    category: "mortgage",
+
+    scoreWeight: 1.5,
 
     keywords: [
       "dscr",
       "debt service coverage ratio",
-      "sostenibilità mutuo",
       "copertura debito",
-      "copertura rata",
-      "mutuo sostenibile"
+      "sostenibilità mutuo",
+      "copertura rata"
     ],
 
     aiTitleIT:
-      "🏦 DSCR – Sostenibilità Mutuo",
+      "🏦 DSCR – Copertura Mutuo",
 
     aiTitleEN:
-      "🏦 DSCR – Mortgage Sustainability",
+      "🏦 DSCR – Mortgage Coverage",
 
     aiSummaryIT:
-      "Il DSCR misura la capacità dell’investimento di coprire la rata del mutuo tramite il cashflow generato.",
+      "Il DSCR misura la capacità dell’investimento di sostenere la rata del mutuo tramite il cashflow generato.",
 
     aiSummaryEN:
-      "DSCR measures the ability of the investment to cover mortgage payments using generated cashflow.",
+      "DSCR measures the ability of the investment to sustain mortgage payments through generated cashflow.",
 
     aiInsightIT:
-      "Le banche utilizzano spesso questo parametro per valutare la sostenibilità finanziaria di un investimento immobiliare.",
+      "Le banche utilizzano il DSCR per valutare rischio e sostenibilità finanziaria dell’operazione.",
 
     aiInsightEN:
-      "Banks often use this metric to evaluate real estate investment sustainability.",
+      "Banks use DSCR to evaluate financial sustainability and operational risk.",
 
     warningIT:
-      "⚠️ Un DSCR troppo basso aumenta il rischio finanziario e la possibilità di tensioni sul cashflow.",
+      "⚠️ DSCR basso aumenta pressione finanziaria e rischio default.",
 
     warningEN:
-      "⚠️ A low DSCR increases financial risk and cashflow pressure.",
+      "⚠️ Low DSCR increases financial pressure and default risk.",
+
+    benchmarks: {
+
+      dangerous: "< 1",
+      weak: "1 - 1.2",
+      stable: "1.2 - 1.5",
+      strong: "1.5+"
+
+    },
 
     recommendationsIT: [
       "Mantieni cashflow stabile.",
-      "Evita rate troppo aggressive.",
-      "Controlla costi operativi e occupazione."
+      "Evita rate aggressive.",
+      "Riduci leverage eccessivo."
     ],
 
     recommendationsEN: [
       "Maintain stable cashflow.",
-      "Avoid aggressive mortgage payments.",
-      "Monitor occupancy and operational costs."
-    ],
-
-    examples: [
-      "DSCR 1.2",
-      "mutuo sostenibile",
-      "debt coverage",
-      "copertura rata mutuo"
+      "Avoid aggressive payments.",
+      "Reduce excessive leverage."
     ],
 
     related: [
       "mortgageImpact",
       "cashflow",
-      "riskScore",
-      "breakEven"
+      "ltv",
+      "riskScore"
     ]
 
   },
 
-  // ===========================================
-  // OPERATING MARGIN
-  // ===========================================
+  // =============================================
+  // 📊 OPERATING MARGIN
+  // =============================================
 
   operatingMargin: {
 
-    priority: 6,
+    priority: 7,
+
+    category: "efficiency",
+
+    scoreWeight: 1.2,
 
     keywords: [
-      "margine operativo",
       "operating margin",
+      "margine operativo",
       "profit margin",
       "margine profitto"
     ],
@@ -311,47 +344,110 @@ Object.assign(window.rbKnowledgeBase, {
       "📊 Operating Margin",
 
     aiSummaryIT:
-      "Il margine operativo indica quanto profitto rimane dopo aver coperto i costi operativi.",
+      "Il margine operativo rappresenta il profitto disponibile dopo i costi operativi.",
 
     aiSummaryEN:
-      "Operating margin shows how much profit remains after operational expenses.",
+      "Operating margin represents remaining profit after operational expenses.",
 
     aiInsightIT:
-      "Margini troppo bassi rendono l’investimento vulnerabile a stagionalità, aumento costi e calo occupazione.",
+      "Margini troppo bassi rendono l’investimento vulnerabile a cali occupazione, aumento costi e stagionalità.",
 
     aiInsightEN:
-      "Low margins make investments vulnerable to seasonality, rising costs and occupancy drops.",
+      "Low margins make investments vulnerable to occupancy drops, rising costs and seasonality.",
 
     warningIT:
-      "⚠️ Margini ridotti aumentano il rischio operativo nel lungo periodo.",
+      "⚠️ Margini ridotti aumentano il rischio operativo.",
 
     warningEN:
-      "⚠️ Thin margins increase long-term operational risk.",
+      "⚠️ Thin margins increase operational risk.",
 
     recommendationsIT: [
-      "Ottimizza pricing e occupazione.",
+      "Ottimizza pricing.",
       "Riduci cleaning e utenze.",
-      "Automatizza parte della gestione."
+      "Automatizza processi operativi."
     ],
 
     recommendationsEN: [
-      "Optimize pricing and occupancy.",
+      "Optimize pricing.",
       "Reduce cleaning and utilities.",
-      "Automate operational management."
-    ],
-
-    examples: [
-      "margine Airbnb",
-      "profit margin",
-      "margine operativo B&B"
+      "Automate operations."
     ],
 
     related: [
       "cashflow",
-      "riskScore",
+      "roi",
       "hiddenCosts"
+    ]
+
+  },
+
+  // =============================================
+  // 🧾 HIDDEN COSTS
+  // =============================================
+
+  hiddenCosts: {
+
+    priority: 8,
+
+    category: "expenses",
+
+    scoreWeight: 1.3,
+
+    keywords: [
+      "costi nascosti",
+      "hidden costs",
+      "spese impreviste",
+      "unexpected expenses",
+      "extra costs"
+    ],
+
+    aiTitleIT:
+      "🧾 Costi Nascosti",
+
+    aiTitleEN:
+      "🧾 Hidden Costs",
+
+    aiSummaryIT:
+      "I costi nascosti possono ridurre drasticamente il profitto reale dell’investimento.",
+
+    aiSummaryEN:
+      "Hidden costs may drastically reduce real investment profitability.",
+
+    aiInsightIT:
+      "Cleaning, manutenzione, OTA fees, tasse e vuoti operativi spesso vengono sottovalutati nelle simulazioni.",
+
+    aiInsightEN:
+      "Cleaning, maintenance, OTA fees, taxes and vacancy periods are often underestimated in projections.",
+
+    warningIT:
+      "⚠️ Costi non previsti possono trasformare ROI positivi in cashflow negativi.",
+
+    warningEN:
+      "⚠️ Unexpected costs may turn positive ROI into negative cashflow.",
+
+    recommendationsIT: [
+      "Mantieni margini di sicurezza.",
+      "Prevedi riserve liquide.",
+      "Analizza costi operativi reali."
+    ],
+
+    recommendationsEN: [
+      "Maintain safety margins.",
+      "Keep liquidity reserves.",
+      "Analyze real operating expenses."
+    ],
+
+    related: [
+      "cashflow",
+      "operatingMargin",
+      "riskScore"
     ]
 
   }
 
-});
+};
+
+console.log(
+  "💰 FINANCE AI MODULE READY",
+  window.rbKnowledgeBase.finance
+);
