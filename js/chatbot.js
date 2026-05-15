@@ -2,7 +2,60 @@
 // RENDIMENTOBB – AI CHATBOT UI 1.0
 // ===============================================
 
-document.addEventListener("DOMContentLoaded", initRBChatbot);
+document.addEventListener("DOMContentLoaded", ()=>{
+
+  // init iniziale
+  initRBChatbot();
+
+  // 🔥 fix pagina tool
+  setTimeout(()=>{
+
+    if(
+      !document.getElementById(
+        "rb-chatbot-wrapper"
+      )
+    ){
+
+      console.warn(
+        "♻️ Re-init chatbot"
+      );
+
+      initRBChatbot();
+
+    }
+
+  },1500);
+
+});
+
+// ===============================================
+// 🔥 TOOL PAGE KEEP ALIVE
+// ===============================================
+
+setInterval(()=>{
+
+  const isToolPage =
+    window.location.pathname.includes("/tool");
+
+  if(!isToolPage)
+    return;
+
+  const exists =
+    document.getElementById(
+      "rb-chatbot-wrapper"
+    );
+
+  if(!exists){
+
+    console.warn(
+      "♻️ Chatbot recreated"
+    );
+
+    initRBChatbot();
+
+  }
+
+},3000);
 
 document.addEventListener(
   "rb_language_changed",
