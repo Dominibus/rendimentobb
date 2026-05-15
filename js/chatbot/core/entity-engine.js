@@ -1,17 +1,64 @@
 // ===============================================
-// 🧠 RENDIMENTOBB – ENTITY EXTRACTION ENGINE 3.0
-// Silicon Valley AI Parsing Layer
+// 🧠 RENDIMENTOBB AI — ENTITY EXTRACTION ENGINE 4.0
+// Silicon Valley SaaS AI Parsing Layer
+// Bilingual + Modular + Scale Ready
 // ===============================================
 
-window.rbExtractEntities = function(text){
+window.rbExtractEntities = function(input = ""){
 
   // ===========================================
-  // 🧹 NORMALIZE
+  // 🧹 NORMALIZATION
   // ===========================================
 
-  text = String(text || "")
+  const text = String(input)
     .toLowerCase()
     .trim();
+
+  // ===========================================
+  // 🚫 EMPTY SAFETY
+  // ===========================================
+
+  if(!text){
+
+    return {
+
+      city: null,
+
+      price: null,
+      amount: null,
+      roi: null,
+      nightly: null,
+      monthlyCosts: null,
+      yearlyCosts: null,
+      downPayment: null,
+      cashflow: null,
+
+      mortgage: false,
+      mortgagePercent: null,
+      mortgageAmount: null,
+      percentage: null,
+      rate: null,
+      years: null,
+
+      occupancy: null,
+      adr: null,
+      revpar: null,
+
+      risk: null,
+
+      propertyType: null,
+      strategy: null,
+
+      currency: "EUR",
+
+      intentHints: [],
+      detectedTopics: [],
+
+      rawText: text
+
+    };
+
+  }
 
   // ===========================================
   // 🧠 ENTITY OBJECT
@@ -30,14 +77,15 @@ window.rbExtractEntities = function(text){
     // =======================================
 
     price: null,
-
     amount: null,
 
     roi: null,
 
     nightly: null,
+    adr: null,
 
     monthlyCosts: null,
+    yearlyCosts: null,
 
     downPayment: null,
 
@@ -50,6 +98,7 @@ window.rbExtractEntities = function(text){
     mortgage: false,
 
     mortgagePercent: null,
+    mortgageAmount: null,
 
     percentage: null,
 
@@ -63,6 +112,8 @@ window.rbExtractEntities = function(text){
 
     occupancy: null,
 
+    revpar: null,
+
     risk: null,
 
     // =======================================
@@ -74,10 +125,16 @@ window.rbExtractEntities = function(text){
     strategy: null,
 
     // =======================================
-    // 🧠 META
+    // 🌐 SYSTEM
     // =======================================
 
-    intentHints: []
+    currency: "EUR",
+
+    intentHints: [],
+
+    detectedTopics: [],
+
+    rawText: text
 
   };
 
@@ -95,11 +152,7 @@ window.rbExtractEntities = function(text){
 
   for(const cityKey in cities){
 
-    const city = cities[cityKey];
-
-    // =======================================
-    // 🧠 ALIASES
-    // =======================================
+    const city = cities[cityKey] || {};
 
     const aliases = [
 
@@ -121,6 +174,10 @@ window.rbExtractEntities = function(text){
 
       entities.city = cityKey;
 
+      entities.detectedTopics.push(
+        "market"
+      );
+
       break;
 
     }
@@ -128,39 +185,32 @@ window.rbExtractEntities = function(text){
   }
 
   // ===========================================
-  // 💰 PROPERTY PRICE
+  // 💰 PROPERTY PRICE / AMOUNT
   // ===========================================
 
-  const euroPricePatterns = [
+  const pricePatterns = [
 
     /(\d+(?:[\.,]\d+)?)\s?k\b/,
-
     /(\d+(?:[\.,]\d+)?)\s?mila\b/,
-
     /€\s?(\d+(?:[\.,]\d+)?)/,
-
     /(\d+(?:[\.,]\d+)?)\s?euro/,
-
-    /prezzo\s?(\d+(?:[\.,]\d+)?)/
+    /prezzo\s?(\d+(?:[\.,]\d+)?)/,
+    /budget\s?(\d+(?:[\.,]\d+)?)/
 
   ];
 
-  for(const pattern of euroPricePatterns){
+  for(const pattern of pricePatterns){
 
     const match = text.match(pattern);
 
     if(match){
 
-      let value =
+      let value = Number(
 
-        Number(
-          match[1]
-            .replace(",", ".")
-        );
+        match[1]
+          .replace(",", ".")
 
-      // =====================================
-      // K / MILA
-      // =====================================
+      );
 
       if(
         text.includes("k") ||
@@ -171,11 +221,15 @@ window.rbExtractEntities = function(text){
 
       }
 
-      entities.price =
-        Math.round(value);
+      value = Math.round(value);
 
-      entities.amount =
-        Math.round(value);
+      entities.price = value;
+
+      entities.amount = value;
+
+      entities.detectedTopics.push(
+        "investment"
+      );
 
       break;
 
@@ -184,23 +238,41 @@ window.rbExtractEntities = function(text){
   }
 
   // ===========================================
-  // 📈 ROI
+  // 📈 ROI DETECTION
   // ===========================================
 
-  const roiMatch = text.match(
+  const roiPatterns = [
 
-    /roi\s?(\d+(?:[\.,]\d+)?)%?/
+    /roi\s?(\d+(?:[\.,]\d+)?)%?/,
+    /rendimento\s?(\d+(?:[\.,]\d+)?)%?/,
+    /return\s?(\d+(?:[\.,]\d+)?)%?/
 
-  );
+  ];
 
-  if(roiMatch){
+  for(const pattern of roiPatterns){
 
-    entities.roi =
+    const match = text.match(pattern);
 
-      Number(
-        roiMatch[1]
+    if(match){
+
+      entities.roi = Number(
+
+        match[1]
           .replace(",", ".")
+
       );
+
+      entities.intentHints.push(
+        "roi"
+      );
+
+      entities.detectedTopics.push(
+        "finance"
+      );
+
+      break;
+
+    }
 
   }
 
@@ -211,12 +283,10 @@ window.rbExtractEntities = function(text){
   const occupancyPatterns = [
 
     /occupazione\s?(\d+)/,
-
     /occupancy\s?(\d+)/,
-
     /occupato\s?al\s?(\d+)/,
-
-    /booking\s?(\d+)/
+    /booking\s?(\d+)/,
+    /riempimento\s?(\d+)/
 
   ];
 
@@ -229,6 +299,68 @@ window.rbExtractEntities = function(text){
       entities.occupancy =
         Number(match[1]);
 
+      entities.detectedTopics.push(
+        "performance"
+      );
+
+      break;
+
+    }
+
+  }
+
+  // ===========================================
+  // 💸 NIGHTLY / ADR
+  // ===========================================
+
+  const nightlyPatterns = [
+
+    /(?:notte|night|adr)\s?(\d+)/,
+    /prezzo\s?notte\s?(\d+)/,
+    /daily\s?rate\s?(\d+)/
+
+  ];
+
+  for(const pattern of nightlyPatterns){
+
+    const match = text.match(pattern);
+
+    if(match){
+
+      const value =
+        Number(match[1]);
+
+      entities.nightly = value;
+
+      entities.adr = value;
+
+      break;
+
+    }
+
+  }
+
+  // ===========================================
+  // 💸 MONTHLY COSTS
+  // ===========================================
+
+  const costsPatterns = [
+
+    /(?:costi|spese)\s?(\d+)/,
+    /monthly\s?costs\s?(\d+)/,
+    /costi\s?mensili\s?(\d+)/
+
+  ];
+
+  for(const pattern of costsPatterns){
+
+    const match = text.match(pattern);
+
+    if(match){
+
+      entities.monthlyCosts =
+        Number(match[1]);
+
       break;
 
     }
@@ -239,21 +371,21 @@ window.rbExtractEntities = function(text){
   // 🏦 MORTGAGE DETECTION
   // ===========================================
 
-  if(
+  const mortgageWords = [
 
-    text.includes("mutuo") ||
+    "mutuo",
+    "mortgage",
+    "loan",
+    "finanziamento",
+    "ltv",
+    "leva"
 
-    text.includes("mortgage") ||
+  ];
 
-    text.includes("ltv") ||
-
-    text.includes("finanziamento")
-
-  ){
-
-    entities.mortgage = true;
-
-  }
+  entities.mortgage =
+    mortgageWords.some(word =>
+      text.includes(word)
+    );
 
   // ===========================================
   // 🏦 MORTGAGE %
@@ -262,12 +394,10 @@ window.rbExtractEntities = function(text){
   const mortgagePatterns = [
 
     /mutuo\s?(\d+)%/,
-
     /mortgage\s?(\d+)%/,
-
     /ltv\s?(\d+)%/,
-
-    /(\d+)%\s?mutuo/
+    /(\d+)%\s?mutuo/,
+    /loan\s?(\d+)%/
 
   ];
 
@@ -296,22 +426,30 @@ window.rbExtractEntities = function(text){
   // 📉 INTEREST RATE
   // ===========================================
 
-  const rateMatch = text.match(
+  const ratePatterns = [
 
-    /tasso\s?(\d+(?:[\.,]\d+)?)|rate\s?(\d+(?:[\.,]\d+)?)/
+    /tasso\s?(\d+(?:[\.,]\d+)?)/,
+    /rate\s?(\d+(?:[\.,]\d+)?)/,
+    /interest\s?(\d+(?:[\.,]\d+)?)/
 
-  );
+  ];
 
-  if(rateMatch){
+  for(const pattern of ratePatterns){
 
-    entities.rate = Number(
+    const match = text.match(pattern);
 
-      (
-        rateMatch[1] ||
-        rateMatch[2]
-      ).replace(",", ".")
+    if(match){
 
-    );
+      entities.rate = Number(
+
+        match[1]
+          .replace(",", ".")
+
+      );
+
+      break;
+
+    }
 
   }
 
@@ -319,50 +457,25 @@ window.rbExtractEntities = function(text){
   // ⏳ YEARS
   // ===========================================
 
-  const yearsMatch = text.match(
+  const yearsPatterns = [
 
-    /(\d+)\s?anni/
+    /(\d+)\s?anni/,
+    /(\d+)\s?years/
 
-  );
+  ];
 
-  if(yearsMatch){
+  for(const pattern of yearsPatterns){
 
-    entities.years =
-      Number(yearsMatch[1]);
+    const match = text.match(pattern);
 
-  }
+    if(match){
 
-  // ===========================================
-  // 💸 NIGHTLY PRICE
-  // ===========================================
+      entities.years =
+        Number(match[1]);
 
-  const nightlyMatch = text.match(
+      break;
 
-    /(?:notte|night|adr)\s?(\d+)/
-
-  );
-
-  if(nightlyMatch){
-
-    entities.nightly =
-      Number(nightlyMatch[1]);
-
-  }
-
-  // ===========================================
-  // 💸 MONTHLY COSTS
-  // ===========================================
-
-  const costsMatch = text.match(
-
-    /(?:costi|spese)\s?(\d+)/
-
-  );
-
-  if(costsMatch){
-
-    entities.monthlyCosts =
-      Number(costsMatch[1]);
+    }
 
   }
 
@@ -370,40 +483,49 @@ window.rbExtractEntities = function(text){
   // 🏠 PROPERTY TYPE
   // ===========================================
 
-  if(
-    text.includes("villa")
-  ){
+  const propertyMap = {
 
-    entities.propertyType =
-      "villa";
+    villa: [
+      "villa"
+    ],
 
-  }
+    attico: [
+      "attico",
+      "penthouse"
+    ],
 
-  else if(
-    text.includes("attico")
-  ){
+    bnb: [
+      "b&b",
+      "bnb",
+      "bed and breakfast"
+    ],
 
-    entities.propertyType =
-      "attico";
+    appartamento: [
+      "appartamento",
+      "apartment"
+    ],
 
-  }
+    hotel: [
+      "hotel",
+      "albergo"
+    ]
 
-  else if(
-    text.includes("b&b") ||
-    text.includes("bnb")
-  ){
+  };
 
-    entities.propertyType =
-      "bnb";
+  for(const type in propertyMap){
 
-  }
+    const found = propertyMap[type]
+      .some(word =>
+        text.includes(word)
+      );
 
-  else if(
-    text.includes("appartamento")
-  ){
+    if(found){
 
-    entities.propertyType =
-      "appartamento";
+      entities.propertyType = type;
+
+      break;
+
+    }
 
   }
 
@@ -411,31 +533,44 @@ window.rbExtractEntities = function(text){
   // 🧠 STRATEGY DETECTION
   // ===========================================
 
-  if(
-    text.includes("luxury") ||
-    text.includes("lusso")
-  ){
+  const strategyMap = {
 
-    entities.strategy =
-      "luxury";
+    luxury: [
+      "luxury",
+      "lusso"
+    ],
 
-  }
+    business: [
+      "business",
+      "corporate"
+    ],
 
-  else if(
-    text.includes("business")
-  ){
+    tourism: [
+      "turismo",
+      "tourism"
+    ],
 
-    entities.strategy =
-      "business";
+    lowcost: [
+      "economico",
+      "budget"
+    ]
 
-  }
+  };
 
-  else if(
-    text.includes("turismo")
-  ){
+  for(const strategy in strategyMap){
 
-    entities.strategy =
-      "tourism";
+    const found = strategyMap[strategy]
+      .some(word =>
+        text.includes(word)
+      );
+
+    if(found){
+
+      entities.strategy = strategy;
+
+      break;
+
+    }
 
   }
 
@@ -444,7 +579,8 @@ window.rbExtractEntities = function(text){
   // ===========================================
 
   if(
-    text.includes("alto rischio")
+    text.includes("alto rischio") ||
+    text.includes("high risk")
   ){
 
     entities.risk = "high";
@@ -452,10 +588,20 @@ window.rbExtractEntities = function(text){
   }
 
   else if(
-    text.includes("basso rischio")
+    text.includes("basso rischio") ||
+    text.includes("low risk")
   ){
 
     entities.risk = "low";
+
+  }
+
+  else if(
+    text.includes("medium risk") ||
+    text.includes("rischio medio")
+  ){
+
+    entities.risk = "medium";
 
   }
 
@@ -463,49 +609,76 @@ window.rbExtractEntities = function(text){
   // 🧠 INTENT HINTS
   // ===========================================
 
-  if(
-    text.includes("conviene")
-  ){
+  const intentMap = {
 
-    entities.intentHints.push(
-      "strategy"
-    );
+    strategy: [
+      "conviene",
+      "worth",
+      "investire"
+    ],
 
-  }
-
-  if(
-    text.includes("rischio")
-  ){
-
-    entities.intentHints.push(
+    risk: [
+      "rischio",
       "risk"
-    );
+    ],
 
-  }
+    roi: [
+      "roi",
+      "rendimento"
+    ],
 
-  if(
-    text.includes("roi")
-  ){
+    cashflow: [
+      "cashflow",
+      "cash flow"
+    ],
 
-    entities.intentHints.push(
-      "roi"
-    );
+    mortgage: [
+      "mutuo",
+      "mortgage"
+    ],
 
-  }
+    market: [
+      "mercato",
+      "market"
+    ]
 
-  if(
-    text.includes("cashflow") ||
-    text.includes("cash flow")
-  ){
+  };
 
-    entities.intentHints.push(
-      "cashflow"
-    );
+  for(const intent in intentMap){
+
+    const found = intentMap[intent]
+      .some(word =>
+        text.includes(word)
+      );
+
+    if(found){
+
+      entities.intentHints.push(
+        intent
+      );
+
+    }
 
   }
 
   // ===========================================
-  // 🧠 CLEAN NULLS
+  // 🧠 CLEAN DUPLICATES
+  // ===========================================
+
+  entities.intentHints = [
+    ...new Set(
+      entities.intentHints
+    )
+  ];
+
+  entities.detectedTopics = [
+    ...new Set(
+      entities.detectedTopics
+    )
+  ];
+
+  // ===========================================
+  // 🧠 CLEAN UNDEFINED
   // ===========================================
 
   Object.keys(entities).forEach(key=>{
@@ -525,7 +698,7 @@ window.rbExtractEntities = function(text){
   // ===========================================
 
   console.log(
-    "🧠 ENTITY ENGINE:",
+    "🧠 ENTITY ENGINE 4.0:",
     entities
   );
 
@@ -538,5 +711,5 @@ window.rbExtractEntities = function(text){
 // ===============================================
 
 console.log(
-  "🧠 ENTITY ENGINE READY"
+  "🧠 ENTITY ENGINE 4.0 READY"
 );
