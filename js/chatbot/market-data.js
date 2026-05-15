@@ -1,6 +1,6 @@
 // ===============================================
 // 🧠 RENDIMENTOBB – MARKET INTELLIGENCE AI ENGINE
-// Silicon Valley AI Market Layer
+// Silicon Valley Market Intelligence Layer
 // ===============================================
 
 window.rbMarketData = {
@@ -25,6 +25,24 @@ window.rbMarketData = {
     investmentScore: "A",
     liquidity: "alta",
     cashflowStrength: "alta",
+    marketMaturity: "molto alta",
+    competition: "alta",
+    regulationRisk: "medio",
+    tourismStrength: "globale",
+
+    bestAreas: [
+      "Centro Storico",
+      "Trastevere",
+      "Prati",
+      "Monti",
+      "Vaticano"
+    ],
+
+    idealStrategyIT:
+      "Premium short-rent con ottimizzazione ADR e guest experience elevata.",
+
+    idealStrategyEN:
+      "Premium short-rent with ADR optimization and strong guest experience.",
 
     aiSummaryIT: `
 Roma continua a essere uno dei mercati short-rent più forti e resilienti d’Europa grazie al turismo internazionale, alla domanda corporate e alla presenza costante di eventi globali.
@@ -54,13 +72,15 @@ high entry prices and inefficient operations may compress real long-term ROI.
       "Turismo internazionale",
       "Alta occupazione",
       "Mercato resiliente",
-      "Elevata liquidità immobiliare"
+      "Elevata liquidità immobiliare",
+      "Domanda costante"
     ],
 
     weaknesses: [
       "Prezzi immobiliari elevati",
       "Competizione crescente",
-      "Costi operativi elevati"
+      "Costi operativi elevati",
+      "Regolamentazioni future"
     ]
 
   },
@@ -85,6 +105,24 @@ high entry prices and inefficient operations may compress real long-term ROI.
     investmentScore: "B+",
     liquidity: "molto alta",
     cashflowStrength: "media",
+    marketMaturity: "alta",
+    competition: "alta",
+    regulationRisk: "medio",
+    tourismStrength: "business",
+
+    bestAreas: [
+      "Duomo",
+      "Porta Nuova",
+      "Navigli",
+      "CityLife",
+      "Brera"
+    ],
+
+    idealStrategyIT:
+      "Business short-rent premium con focus corporate e occupazione stabile.",
+
+    idealStrategyEN:
+      "Premium business short-rent focused on corporate demand and stable occupancy.",
 
     aiSummaryIT: `
 Milano è uno dei mercati short-rent business-oriented più stabili d’Italia grazie alla domanda corporate, fieristica e luxury.
@@ -114,13 +152,15 @@ high acquisition costs may significantly reduce real net cashflow.
       "Domanda business",
       "Bassa stagionalità",
       "Occupazione stabile",
-      "Mercato premium"
+      "Mercato premium",
+      "Alta liquidità"
     ],
 
     weaknesses: [
       "ROI più basso",
       "Costo ingresso elevato",
-      "Margini compressi"
+      "Margini compressi",
+      "Competizione alta"
     ]
 
   },
@@ -145,6 +185,24 @@ high acquisition costs may significantly reduce real net cashflow.
     investmentScore: "A-",
     liquidity: "media",
     cashflowStrength: "alta",
+    marketMaturity: "media",
+    competition: "media",
+    regulationRisk: "medio-basso",
+    tourismStrength: "forte crescita",
+
+    bestAreas: [
+      "Centro Storico",
+      "Vomero",
+      "Chiaia",
+      "Lungomare",
+      "Spaccanapoli"
+    ],
+
+    idealStrategyIT:
+      "Short-rent ad alta redditività con gestione operativa ottimizzata.",
+
+    idealStrategyEN:
+      "High-profitability short-rent with optimized operational management.",
 
     aiSummaryIT: `
 Napoli è uno dei mercati short-rent con la crescita più aggressiva in Italia grazie all’esplosione del turismo internazionale e ai prezzi immobiliari ancora competitivi rispetto alle grandi capitali europee.
@@ -174,13 +232,15 @@ operations, seasonality and listing quality heavily impact real operational risk
       "ROI elevato",
       "Prezzi immobiliari competitivi",
       "Turismo in crescita",
-      "Cashflow forte"
+      "Cashflow forte",
+      "Elevato potenziale"
     ],
 
     weaknesses: [
       "Mercato volatile",
       "Rischio operativo più alto",
-      "Dipendenza dalla gestione"
+      "Dipendenza dalla gestione",
+      "Forte variabilità"
     ]
 
   },
@@ -205,6 +265,24 @@ operations, seasonality and listing quality heavily impact real operational risk
     investmentScore: "A",
     liquidity: "alta",
     cashflowStrength: "alta",
+    marketMaturity: "alta",
+    competition: "alta",
+    regulationRisk: "alto",
+    tourismStrength: "culturale globale",
+
+    bestAreas: [
+      "Duomo",
+      "Santa Croce",
+      "Oltrarno",
+      "San Lorenzo",
+      "Piazza della Signoria"
+    ],
+
+    idealStrategyIT:
+      "Premium cultural short-rent con ADR elevato e gestione professionale.",
+
+    idealStrategyEN:
+      "Premium cultural short-rent with high ADR and professional management.",
 
     aiSummaryIT: `
 Firenze mantiene uno dei livelli di occupazione più forti nel settore short-rent italiano grazie al turismo culturale internazionale.
@@ -234,13 +312,15 @@ regulations and market saturation may increase operational risk over time.
       "Occupazione molto alta",
       "ADR premium",
       "Turismo culturale",
-      "Cashflow forte"
+      "Cashflow forte",
+      "Domanda globale"
     ],
 
     weaknesses: [
       "Mercato competitivo",
       "Regolamentazioni",
-      "Costo immobili elevato"
+      "Costo immobili elevato",
+      "Saturazione crescente"
     ]
 
   },
@@ -265,6 +345,24 @@ regulations and market saturation may increase operational risk over time.
     investmentScore: "A-",
     liquidity: "media",
     cashflowStrength: "molto alta",
+    marketMaturity: "alta",
+    competition: "molto alta",
+    regulationRisk: "alto",
+    tourismStrength: "globale luxury",
+
+    bestAreas: [
+      "San Marco",
+      "Cannaregio",
+      "Dorsoduro",
+      "Rialto",
+      "Castello"
+    ],
+
+    idealStrategyIT:
+      "Luxury short-rent ad alto ADR con gestione premium.",
+
+    idealStrategyEN:
+      "Luxury short-rent focused on high ADR and premium operations.",
 
     aiSummaryIT: `
 Venezia rimane uno dei mercati short-rent più profittevoli e premium d’Europa grazie alla domanda turistica globale.
@@ -294,16 +392,185 @@ heavy dependence on international tourism and aggressive regulations increase op
       "ADR molto alto",
       "Occupazione fortissima",
       "Mercato luxury",
-      "Margini premium"
+      "Margini premium",
+      "Domanda globale"
     ],
 
     weaknesses: [
       "Alta regolamentazione",
       "Stagionalità elevata",
-      "Mercato volatile"
+      "Mercato volatile",
+      "Dipendenza turismo"
     ]
 
   }
+
+};
+
+// ===============================================
+// 🧠 MARKET HELPERS
+// ===============================================
+
+window.getMarketData = function(city){
+
+  if(!city) return null;
+
+  city = String(city)
+    .toLowerCase()
+    .trim();
+
+  const markets =
+    window.rbMarketData || {};
+
+  for(const key in markets){
+
+    const market = markets[key];
+
+    if(
+      key === city ||
+      market.aliases?.includes(city)
+    ){
+
+      return market;
+
+    }
+
+  }
+
+  return null;
+
+};
+
+// ===============================================
+// 🏆 BEST MARKET ENGINE
+// ===============================================
+
+window.getBestMarketByROI = function(){
+
+  const markets =
+    window.rbMarketData || {};
+
+  let best = null;
+
+  for(const key in markets){
+
+    const market = markets[key];
+
+    const roi =
+      Number(
+        String(market.avgROI)
+          .split("-")[1]
+          ?.replace("%","")
+      );
+
+    if(
+      !best ||
+      roi > best.roi
+    ){
+
+      best = {
+        city: key,
+        roi,
+        data: market
+      };
+
+    }
+
+  }
+
+  return best;
+
+};
+
+// ===============================================
+// 📊 MARKET SCORE ENGINE
+// ===============================================
+
+window.getMarketScore = function(city){
+
+  const market =
+    window.getMarketData(city);
+
+  if(!market) return 50;
+
+  let score = 50;
+
+  // ROI
+  if(
+    market.avgROI?.includes("12")
+  ) score += 20;
+  else if(
+    market.avgROI?.includes("10")
+  ) score += 15;
+  else if(
+    market.avgROI?.includes("8")
+  ) score += 10;
+
+  // OCCUPANCY
+  const occ =
+    Number(
+      String(market.occupancy)
+        .replace("%","")
+    );
+
+  if(occ >= 75) score += 15;
+  else if(occ >= 65) score += 10;
+
+  // RISK
+  if(
+    market.risk === "alto"
+  ) score -= 10;
+
+  if(
+    market.risk === "medio-alto"
+  ) score -= 5;
+
+  return Math.max(
+    1,
+    Math.min(100, score)
+  );
+
+};
+
+// ===============================================
+// 📈 MARKET CLASSIFIER
+// ===============================================
+
+window.classifyMarket = function(city){
+
+  const score =
+    window.getMarketScore(city);
+
+  if(score >= 85){
+
+    return {
+      level: "elite",
+      emoji: "🚀",
+      it: "Mercato premium",
+      en: "Premium market"
+    };
+
+  }
+
+  if(score >= 70){
+
+    return {
+      level: "strong",
+      emoji: "📈",
+      it: "Mercato forte",
+      en: "Strong market"
+    };
+
+  }
+
+  return {
+
+    level: "weak",
+    emoji: "⚠️",
+    it: "Mercato speculativo",
+    en: "Speculative market"
+
+  };
 
 };
 
