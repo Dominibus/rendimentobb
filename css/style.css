@@ -18126,121 +18126,134 @@ transform:translateY(-2px);
 
 }
 
-/* =====================================
-📱 MOBILE HEADER FIX
-===================================== */
+/* ==================================================
+📱 RENDIMENTOBB — MOBILE HEADER FINAL FIX
+Clean + Responsive + No Overlap
+================================================== */
 
 @media screen and (max-width:768px){
 
-  .rb-right{
+  /* ================= HEADER CONTAINER ================= */
+
+  .rb-inner{
 
     display:flex;
     align-items:center;
-    gap:8px;
+    justify-content:space-between;
 
-  }
+    min-height:72px;
 
-  #rb-burger{
-
-    display:flex !important;
-
-    align-items:center;
-    justify-content:center;
-
-    width:44px;
-    height:44px;
-
-    flex-shrink:0;
-
-    position:relative;
-
-    z-index:99999;
-
-    font-size:28px;
-
-  }
-
-  .rb-header-ai-btn{
-
-    padding:0 14px !important;
-
-    height:44px !important;
-
-    border-radius:14px !important;
-
-    font-size:14px !important;
-
-    flex-shrink:0;
-
-  }
-
-}
-
-/* ===============================================
-📱 HEADER MOBILE FINAL FIX
-=============================================== */
-
-@media screen and (max-width:768px){
-
-  .rb-right{
+    padding:0 10px !important;
 
     gap:8px !important;
 
-    flex-wrap:nowrap !important;
+    overflow:hidden;
 
   }
 
-  .rb-header-ai-btn{
+  /* ================= LEFT ================= */
 
-    min-width:auto !important;
+  .rb-left{
 
-    width:72px !important;
-
-    padding:0 14px !important;
-
-    font-size:15px !important;
-
-    border-radius:16px !important;
+    display:flex;
+    align-items:center;
 
     flex-shrink:0 !important;
 
   }
 
-  #rb-burger{
+  .rb-logo{
 
-    width:42px !important;
+    width:92px !important;
+    max-width:92px !important;
 
-    height:42px !important;
+    height:auto;
+
+    display:block;
+
+    object-fit:contain;
+
+  }
+
+  /* ================= RIGHT SIDE ================= */
+
+  .rb-right{
 
     display:flex !important;
 
     align-items:center !important;
 
-    justify-content:center !important;
+    justify-content:flex-end;
 
-    font-size:28px !important;
+    gap:6px !important;
 
-    margin-left:2px !important;
+    flex-wrap:nowrap !important;
+
+    margin-left:auto !important;
 
     flex-shrink:0 !important;
 
-    z-index:999999 !important;
-
   }
 
-  .rb-right .rb-login{
+  /* ================= AI BUTTON ================= */
 
-    padding:0 16px !important;
+  .rb-header-ai-btn{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:66px !important;
+    min-width:66px !important;
 
     height:44px !important;
 
-    font-size:15px !important;
+    padding:0 !important;
 
     border-radius:16px !important;
+
+    font-size:15px !important;
+
+    line-height:1;
+
+    white-space:nowrap;
 
     flex-shrink:0 !important;
 
   }
+
+  /* ================= LOGIN BUTTON ================= */
+
+  .rb-right .rb-login{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:82px !important;
+    min-width:82px !important;
+
+    height:44px !important;
+
+    padding:0 10px !important;
+
+    border-radius:16px !important;
+
+    font-size:15px !important;
+
+    line-height:1;
+
+    white-space:nowrap !important;
+
+    overflow:hidden !important;
+
+    text-overflow:ellipsis !important;
+
+    flex-shrink:0 !important;
+
+  }
+
+  /* ================= LANGUAGE ================= */
 
   .rb-lang{
 
@@ -18252,95 +18265,35 @@ transform:translateY(-2px);
 
   }
 
-}
+  /* ================= BURGER ================= */
 
-/* ===============================================
-📱 HEADER MOBILE – FINAL WIDTH FIX
-=============================================== */
-
-@media screen and (max-width:768px){
-
-  .rb-inner{
-
-    padding:0 10px !important;
-
-    gap:8px !important;
-
-  }
-
-  .rb-left{
-
-    flex-shrink:0 !important;
-
-  }
-
-  .rb-logo{
-
-    width:92px !important;
-
-    max-width:92px !important;
-
-  }
-
-  .rb-right{
+  #rb-burger{
 
     display:flex !important;
 
     align-items:center !important;
-
-    gap:6px !important;
-
-    margin-left:auto !important;
-
-    flex-shrink:0 !important;
-
-  }
-
-  .rb-header-ai-btn{
-
-    width:66px !important;
-
-    min-width:66px !important;
-
-    height:44px !important;
-
-    padding:0 !important;
-
-    font-size:15px !important;
-
-  }
-
-  .rb-login{
-
-    width:82px !important;
-
-    min-width:82px !important;
-
-    height:44px !important;
-
-    padding:0 10px !important;
-
-    font-size:15px !important;
-
-    white-space:nowrap !important;
-
-    overflow:hidden !important;
-
-    text-overflow:ellipsis !important;
-
-  }
-
-  #rb-burger{
+    justify-content:center !important;
 
     width:40px !important;
-
     min-width:40px !important;
 
     height:40px !important;
 
+    margin-left:0 !important;
+
+    padding:0 !important;
+
     font-size:30px !important;
 
-    margin-left:0 !important;
+    line-height:1;
+
+    position:relative;
+
+    z-index:999999 !important;
+
+    flex-shrink:0 !important;
+
+    cursor:pointer;
 
   }
 
