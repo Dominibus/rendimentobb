@@ -18126,307 +18126,51 @@ transform:translateY(-2px);
 
 }
 
-/* ==================================================
-📱 RENDIMENTOBB — MOBILE HEADER PERFECT FIX
-Style simile mockup finale
-================================================== */
+/* ================= MOBILE HEADER ALIGN FIX ================= */
 
 @media screen and (max-width:768px){
 
-  /* ================= HEADER ================= */
+  /* ===== HEADER ===== */
 
   .rb-inner{
 
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    min-height:74px;
-
-    padding:0 14px !important;
-
-    gap:10px !important;
-
-    overflow:visible;
+    padding-left:8px !important;
+    padding-right:20px !important;
 
   }
 
-  /* ================= LEFT ================= */
+  /* ===== LOGO ===== */
 
   .rb-left{
 
-    display:flex;
-    align-items:center;
-
-    flex:0 0 auto;
+    margin-right:auto !important;
 
   }
 
   .rb-logo{
 
-    width:88px !important;
-    max-width:88px !important;
-
-    height:auto;
-
-    display:block;
-
-    object-fit:contain;
+    width:80px !important;
+    max-width:80px !important;
 
   }
 
-  /* ================= RIGHT ================= */
+  /* ===== RIGHT SIDE ===== */
 
   .rb-right{
 
-    display:flex !important;
+    gap:5px !important;
 
-    align-items:center !important;
-
-    justify-content:flex-end;
-
-    gap:10px !important;
-
-    margin-left:auto !important;
-
-    flex-wrap:nowrap !important;
-
-    flex:1;
+    padding-right:10px !important;
 
   }
 
-  /* ================= LANGUAGE ================= */
-
-  .rb-lang{
-
-    transform:scale(.92);
-
-    transform-origin:center;
-
-    flex-shrink:0 !important;
-
-  }
-
-  /* ================= AI BUTTON ================= */
-
-  .rb-header-ai-btn{
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    width:74px !important;
-    min-width:74px !important;
-
-    height:50px !important;
-
-    padding:0 14px !important;
-
-    border-radius:18px !important;
-
-    font-size:15px !important;
-    font-weight:700;
-
-    line-height:1;
-
-    white-space:nowrap;
-
-    flex-shrink:0 !important;
-
-  }
-
-  /* ================= LOGIN BUTTON ================= */
-
-  .rb-right .rb-login{
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    width:88px !important;
-    min-width:88px !important;
-
-    height:50px !important;
-
-    padding:0 14px !important;
-
-    border-radius:18px !important;
-
-    font-size:15px !important;
-    font-weight:700;
-
-    white-space:nowrap !important;
-
-    flex-shrink:0 !important;
-
-  }
-
-  /* ================= BURGER ================= */
+  /* ===== BURGER ===== */
 
   #rb-burger{
 
-    display:flex !important;
+    margin-left:4px !important;
 
-    align-items:center !important;
-    justify-content:center !important;
-
-    width:42px !important;
-    min-width:42px !important;
-
-    height:42px !important;
-
-    margin-left:2px !important;
-
-    padding:0 !important;
-
-    font-size:34px !important;
-
-    line-height:1;
-
-    background:transparent !important;
-
-    border:none !important;
-
-    box-shadow:none !important;
-
-    position:relative;
-
-    z-index:999999 !important;
-
-    flex-shrink:0 !important;
-
-    cursor:pointer;
-
-  }
-
-}
-
-/* ================= AI BUTTON SMALLER ================= */
-
-.rb-header-ai-btn{
-
-  width:58px !important;
-  min-width:58px !important;
-
-  height:46px !important;
-
-  padding:0 10px !important;
-
-  border-radius:16px !important;
-
-  font-size:14px !important;
-
-}
-/* ================= COMPACT MOBILE BUTTONS ================= */
-
-@media screen and (max-width:768px){
-
-  .rb-right{
-
-    gap:6px !important;
-
-  }
-
-  /* ===== AI ===== */
-
-  .rb-header-ai-btn{
-
-    width:50px !important;
-    min-width:50px !important;
-
-    height:42px !important;
-
-    padding:0 8px !important;
-
-    border-radius:14px !important;
-
-    font-size:13px !important;
-
-  }
-
-  /* ===== LOGIN ===== */
-
-  .rb-right .rb-login{
-
-    width:68px !important;
-    min-width:68px !important;
-
-    height:42px !important;
-
-    padding:0 8px !important;
-
-    border-radius:14px !important;
-
-    font-size:13px !important;
-
-  }
-
-}
-
-/* ================= BURGER SAFE AREA FIX ================= */
-
-@media screen and (max-width:768px){
-
-  .rb-inner{
-
-    padding-right:18px !important;
-
-  }
-
-  #rb-burger{
-
-    margin-right:2px !important;
-
-    width:34px !important;
-    min-width:34px !important;
-
-    font-size:30px !important;
-
-  }
-
-}
-
-/* ================= RIGHT SAFE SPACE ================= */
-
-@media screen and (max-width:768px){
-
-  .rb-right{
-
-    padding-right:14px !important;
-
-  }
-
-  #rb-burger{
-
-    width:32px !important;
-    min-width:32px !important;
-
-    height:32px !important;
-
-    font-size:28px !important;
-
-  }
-
-}
-
-/* ================= RIGHT SAFE SPACE ================= */
-
-@media screen and (max-width:768px){
-
-  .rb-right{
-
-    padding-right:14px !important;
-
-  }
-
-  #rb-burger{
-
-    width:32px !important;
-    min-width:32px !important;
-
-    height:32px !important;
-
-    font-size:28px !important;
+    transform:translateX(-2px);
 
   }
 
