@@ -1,27 +1,53 @@
 // ===============================================
-// 🏠 REAL ESTATE KNOWLEDGE
+// 🏠 RENDIMENTOBB – REAL ESTATE AI KNOWLEDGE
 // ===============================================
 
-Object.assign(window.rbKnowledgeBase, {
+window.rbKnowledgeBase =
+  window.rbKnowledgeBase || {};
 
-  // ===========================================
-  // OCCUPANCY
-  // ===========================================
+// ===============================================
+// 🏠 REAL ESTATE MODULE
+// ===============================================
+
+window.rbKnowledgeBase.realEstate = {
+
+  module: "real-estate",
+
+  version: "2.0",
+
+  aiRoleIT:
+    "Esperto investimenti immobiliari short-rent",
+
+  aiRoleEN:
+    "Short-rent real estate investment expert",
+
+  descriptionIT:
+    "Modulo AI dedicato a occupazione, domanda turistica, location, ADR e sostenibilità immobiliare.",
+
+  descriptionEN:
+    "AI module dedicated to occupancy, tourism demand, location, ADR and property sustainability.",
+
+  // =============================================
+  // 🏨 OCCUPANCY
+  // =============================================
 
   occupancy: {
 
     priority: 10,
+
+    category: "performance",
+
+    scoreWeight: 1.4,
 
     keywords: [
       "occupazione",
       "occupancy",
       "tasso occupazione",
       "occupancy rate",
-      "prenotazioni",
       "booking rate",
+      "prenotazioni",
       "riempimento",
-      "notti prenotate",
-      "booking percentage"
+      "notti prenotate"
     ],
 
     aiTitleIT:
@@ -31,68 +57,71 @@ Object.assign(window.rbKnowledgeBase, {
       "🏨 Average Occupancy",
 
     aiSummaryIT:
-      "L’occupazione media è uno dei fattori più importanti per la redditività di un B&B o Airbnb.",
+      "L’occupazione è uno dei fattori principali che determinano redditività e sostenibilità del cashflow.",
 
     aiSummaryEN:
-      "Average occupancy is one of the most important factors for B&B or Airbnb profitability.",
+      "Occupancy is one of the main factors driving profitability and cashflow sustainability.",
 
     aiInsightIT:
-      "Anche piccole variazioni dell’occupazione possono modificare drasticamente cashflow, sostenibilità e ROI dell’investimento.",
+      "Piccole variazioni dell’occupazione possono modificare drasticamente ROI, cashflow e rischio operativo.",
 
     aiInsightEN:
-      "Even small occupancy variations can dramatically impact cashflow, sustainability and ROI.",
+      "Small occupancy variations may dramatically impact ROI, cashflow and operational risk.",
 
     warningIT:
-      "⚠️ Occupazioni troppo ottimistiche possono falsare le simulazioni.",
+      "⚠️ Occupazioni troppo ottimistiche possono rendere le simulazioni irrealistiche.",
 
     warningEN:
-      "⚠️ Overly optimistic occupancy assumptions may distort projections.",
+      "⚠️ Unrealistic occupancy assumptions may distort projections.",
+
+    benchmarks: {
+
+      low: 50,
+      medium: 65,
+      high: 75
+
+    },
 
     recommendationsIT: [
-      "Utilizza benchmark realistici.",
-      "Confronta dati della città.",
-      "Valuta stagionalità e concorrenza."
+      "Confronta benchmark reali della città.",
+      "Analizza stagionalità.",
+      "Ottimizza pricing dinamico."
     ],
 
     recommendationsEN: [
-      "Use realistic benchmarks.",
-      "Compare city market data.",
-      "Evaluate seasonality and competition."
-    ],
-
-    examples: [
-      "occupazione Airbnb Roma",
-      "occupancy rate",
-      "booking percentage",
-      "tasso riempimento",
-      "occupazione media Airbnb"
+      "Compare real city benchmarks.",
+      "Analyze seasonality.",
+      "Optimize dynamic pricing."
     ],
 
     related: [
       "cashflow",
-      "seasonality",
       "roi",
+      "seasonality",
       "marketDemand"
     ]
 
   },
 
-  // ===========================================
-  // MARKET DEMAND
-  // ===========================================
+  // =============================================
+  // 🌍 MARKET DEMAND
+  // =============================================
 
   marketDemand: {
 
     priority: 9,
 
+    category: "market",
+
+    scoreWeight: 1.3,
+
     keywords: [
       "domanda",
       "market demand",
-      "richiesta turistica",
-      "domanda airbnb",
       "tourism demand",
+      "domanda turistica",
       "mercato turistico",
-      "domanda b&b"
+      "richiesta airbnb"
     ],
 
     aiTitleIT:
@@ -102,67 +131,61 @@ Object.assign(window.rbKnowledgeBase, {
       "🌍 Market Demand",
 
     aiSummaryIT:
-      "La domanda di mercato determina il reale potenziale dell’investimento.",
+      "La domanda reale del mercato determina il potenziale operativo dell’investimento.",
 
     aiSummaryEN:
-      "Market demand determines the real investment potential.",
+      "Real market demand determines the operational potential of the investment.",
 
     aiInsightIT:
-      "Città con forte domanda turistica tendono ad avere occupazione, ADR e redditività più elevate.",
+      "Mercati con forte domanda turistica tendono ad avere ADR, occupazione e stabilità superiori.",
 
     aiInsightEN:
-      "Cities with strong tourism demand usually achieve higher occupancy, ADR and profitability.",
+      "Markets with strong tourism demand usually achieve higher ADR, occupancy and stability.",
 
     warningIT:
-      "⚠️ Domanda debole può ridurre rapidamente cashflow e sostenibilità.",
+      "⚠️ Domanda debole aumenta il rischio di cashflow negativo.",
 
     warningEN:
-      "⚠️ Weak demand may quickly reduce cashflow and sustainability.",
+      "⚠️ Weak demand increases negative cashflow risk.",
 
     recommendationsIT: [
-      "Analizza benchmark turistici.",
-      "Studia domanda reale.",
-      "Confronta performance città."
+      "Analizza turismo annuale.",
+      "Confronta trend città.",
+      "Studia domanda internazionale."
     ],
 
     recommendationsEN: [
-      "Analyze tourism benchmarks.",
-      "Study real demand.",
-      "Compare city performance."
-    ],
-
-    examples: [
-      "domanda turistica roma",
-      "airbnb demand",
-      "mercato turistico",
-      "richiesta Airbnb"
+      "Analyze annual tourism.",
+      "Compare city trends.",
+      "Study international demand."
     ],
 
     related: [
       "occupancy",
-      "seasonality",
       "riskScore",
-      "averageNightPrice"
+      "tourismTrend"
     ]
 
   },
 
-  // ===========================================
-  // PROPERTY LOCATION
-  // ===========================================
+  // =============================================
+  // 📍 LOCATION IMPACT
+  // =============================================
 
   locationImpact: {
 
     priority: 8,
 
+    category: "location",
+
+    scoreWeight: 1.2,
+
     keywords: [
-      "location",
       "zona",
+      "location",
       "quartiere",
-      "posizione immobile",
       "property location",
-      "zona turistica",
-      "miglior zona"
+      "zona turistica"
     ],
 
     aiTitleIT:
@@ -172,137 +195,100 @@ Object.assign(window.rbKnowledgeBase, {
       "📍 Property Location",
 
     aiSummaryIT:
-      "La posizione dell’immobile influisce direttamente sulla performance dell’investimento.",
+      "La posizione dell’immobile influenza occupazione, ADR e sostenibilità.",
 
     aiSummaryEN:
-      "Property location directly impacts investment performance.",
+      "Property location directly impacts occupancy, ADR and sustainability.",
 
     aiInsightIT:
-      "Zone centrali o turistiche tendono ad avere maggiore occupazione, ADR più elevato e domanda più stabile.",
+      "Zone centrali o turistiche tendono ad avere maggiore resilienza di mercato.",
 
     aiInsightEN:
-      "Central or tourist areas usually achieve stronger occupancy, higher ADR and more stable demand.",
+      "Central or tourist areas usually achieve stronger market resilience.",
 
     warningIT:
-      "⚠️ Una posizione debole può limitare occupazione e cashflow.",
+      "⚠️ Location deboli possono limitare la crescita del cashflow.",
 
     warningEN:
-      "⚠️ Weak locations may limit occupancy and cashflow.",
-
-    recommendationsIT: [
-      "Analizza domanda della zona.",
-      "Confronta immobili simili.",
-      "Valuta accessibilità e turismo."
-    ],
-
-    recommendationsEN: [
-      "Analyze local demand.",
-      "Compare similar properties.",
-      "Evaluate accessibility and tourism."
-    ],
-
-    examples: [
-      "miglior zona airbnb",
-      "quartiere turistico",
-      "property location",
-      "zona migliore"
-    ],
+      "⚠️ Weak locations may limit cashflow growth.",
 
     related: [
       "occupancy",
       "marketDemand",
-      "riskScore",
       "averageNightPrice"
     ]
 
   },
 
-  // ===========================================
-  // AVERAGE NIGHT PRICE
-  // ===========================================
+  // =============================================
+  // 💎 ADR
+  // =============================================
 
   averageNightPrice: {
 
     priority: 8,
 
+    category: "pricing",
+
+    scoreWeight: 1.2,
+
     keywords: [
-      "prezzo notte",
-      "nightly rate",
-      "average daily rate",
       "adr",
-      "prezzo medio",
-      "tariffa notte",
-      "average price"
+      "average daily rate",
+      "nightly rate",
+      "prezzo notte",
+      "tariffa media"
     ],
 
     aiTitleIT:
-      "💎 Prezzo Medio Notte (ADR)",
+      "💎 ADR / Prezzo Medio Notte",
 
     aiTitleEN:
-      "💎 Average Nightly Rate (ADR)",
+      "💎 ADR / Average Nightly Rate",
 
     aiSummaryIT:
-      "Il prezzo medio per notte influenza direttamente ricavi, cashflow e ROI.",
+      "L’ADR determina la capacità dell’immobile di generare ricavi sostenibili.",
 
     aiSummaryEN:
-      "Average nightly pricing directly impacts revenue, cashflow and ROI.",
+      "ADR determines the property’s ability to generate sustainable revenue.",
 
     aiInsightIT:
-      "Prezzi troppo elevati possono ridurre occupazione e competitività rispetto al mercato.",
+      "ADR elevati aumentano ricavi ma possono ridurre occupazione se fuori mercato.",
 
     aiInsightEN:
-      "Excessively high pricing may reduce occupancy and market competitiveness.",
+      "Higher ADR increases revenue but may reduce occupancy if overpriced.",
 
     warningIT:
-      "⚠️ ADR non realistici possono alterare le proiezioni finanziarie.",
+      "⚠️ Pricing aggressivo aumenta volatilità e rischio operativo.",
 
     warningEN:
-      "⚠️ Unrealistic ADR assumptions may distort financial projections.",
-
-    recommendationsIT: [
-      "Confronta ADR della città.",
-      "Utilizza pricing dinamico.",
-      "Bilancia prezzo e occupazione."
-    ],
-
-    recommendationsEN: [
-      "Compare city ADR benchmarks.",
-      "Use dynamic pricing.",
-      "Balance pricing and occupancy."
-    ],
-
-    examples: [
-      "ADR Airbnb",
-      "prezzo medio roma",
-      "nightly revenue",
-      "average daily rate"
-    ],
+      "⚠️ Aggressive pricing increases volatility and operational risk.",
 
     related: [
       "occupancy",
       "cashflow",
-      "marketDemand",
-      "roi"
+      "marketDemand"
     ]
 
   },
 
-  // ===========================================
-  // PROPERTY MANAGEMENT
-  // ===========================================
+  // =============================================
+  // 🧠 PROPERTY MANAGEMENT
+  // =============================================
 
   propertyManagement: {
 
     priority: 7,
 
+    category: "operations",
+
+    scoreWeight: 1.1,
+
     keywords: [
       "gestione",
       "property management",
-      "gestione airbnb",
       "host management",
-      "management fees",
-      "gestione b&b",
-      "property manager"
+      "gestione airbnb"
     ],
 
     aiTitleIT:
@@ -312,66 +298,48 @@ Object.assign(window.rbKnowledgeBase, {
       "🧠 Property Management",
 
     aiSummaryIT:
-      "La gestione professionale può migliorare performance e qualità operativa.",
+      "La gestione operativa influenza recensioni, occupazione e marginalità.",
 
     aiSummaryEN:
-      "Professional management may improve performance and operational quality.",
+      "Operational management impacts reviews, occupancy and margins.",
 
     aiInsightIT:
-      "Migliori recensioni e occupazione possono aumentare redditività, ma le commissioni riducono il margine operativo.",
+      "Automazione e qualità operativa migliorano sostenibilità e competitività.",
 
     aiInsightEN:
-      "Better reviews and occupancy may increase profitability, but management fees reduce operating margins.",
+      "Automation and operational quality improve sustainability and competitiveness.",
 
     warningIT:
-      "⚠️ Costi di gestione elevati possono comprimere il cashflow.",
+      "⚠️ Commissioni elevate possono comprimere il margine operativo.",
 
     warningEN:
-      "⚠️ High management fees may compress cashflow.",
-
-    recommendationsIT: [
-      "Automatizza processi operativi.",
-      "Controlla costi di gestione.",
-      "Migliora esperienza ospiti."
-    ],
-
-    recommendationsEN: [
-      "Automate operations.",
-      "Control management costs.",
-      "Improve guest experience."
-    ],
-
-    examples: [
-      "gestione Airbnb",
-      "property manager",
-      "management cost",
-      "commissioni gestione"
-    ],
+      "⚠️ High fees may compress operating margins.",
 
     related: [
       "cashflow",
       "occupancy",
-      "hiddenCosts",
       "operatingMargin"
     ]
 
   },
 
-  // ===========================================
-  // MARKET SATURATION
-  // ===========================================
+  // =============================================
+  // ⚠️ MARKET SATURATION
+  // =============================================
 
   marketSaturation: {
 
     priority: 8,
 
+    category: "risk",
+
+    scoreWeight: 1.3,
+
     keywords: [
       "mercato saturo",
-      "market saturation",
-      "troppi airbnb",
-      "alta concorrenza",
       "competition",
-      "competizione"
+      "alta concorrenza",
+      "troppi airbnb"
     ],
 
     aiTitleIT:
@@ -381,63 +349,47 @@ Object.assign(window.rbKnowledgeBase, {
       "⚠️ Market Saturation",
 
     aiSummaryIT:
-      "Un mercato troppo saturo può ridurre occupazione e redditività.",
+      "Mercati saturi possono ridurre ADR e occupazione media.",
 
     aiSummaryEN:
-      "An oversaturated market may reduce occupancy and profitability.",
+      "Saturated markets may reduce ADR and occupancy.",
 
     aiInsightIT:
-      "L’eccessiva concorrenza short-rent può abbassare ADR e margini operativi.",
+      "Competizione eccessiva aumenta il rischio operativo.",
 
     aiInsightEN:
-      "Excessive short-rent competition may reduce ADR and operating margins.",
+      "Excessive competition increases operational risk.",
 
     warningIT:
-      "⚠️ Mercati saturi aumentano il rischio operativo.",
+      "⚠️ Saturazione elevata riduce resilienza del cashflow.",
 
     warningEN:
-      "⚠️ Saturated markets increase operational risk.",
-
-    recommendationsIT: [
-      "Analizza concorrenza locale.",
-      "Differenzia il listing.",
-      "Valuta nicchie turistiche."
-    ],
-
-    recommendationsEN: [
-      "Analyze local competition.",
-      "Differentiate your listing.",
-      "Evaluate tourism niches."
-    ],
-
-    examples: [
-      "troppi Airbnb",
-      "mercato saturo Roma",
-      "alta concorrenza"
-    ],
+      "⚠️ High saturation reduces cashflow resilience.",
 
     related: [
+      "occupancy",
       "riskScore",
-      "marketDemand",
-      "occupancy"
+      "marketDemand"
     ]
 
   },
 
-  // ===========================================
-  // TOURISM TREND
-  // ===========================================
+  // =============================================
+  // 📈 TOURISM TREND
+  // =============================================
 
   tourismTrend: {
 
     priority: 7,
 
+    category: "trend",
+
+    scoreWeight: 1.1,
+
     keywords: [
       "trend turismo",
       "tourism trend",
-      "trend turistico",
-      "crescita turismo",
-      "tourism growth"
+      "crescita turismo"
     ],
 
     aiTitleIT:
@@ -447,40 +399,22 @@ Object.assign(window.rbKnowledgeBase, {
       "📈 Tourism Trend",
 
     aiSummaryIT:
-      "I trend turistici influenzano direttamente domanda e occupazione.",
+      "I trend turistici influenzano direttamente domanda e crescita del mercato.",
 
     aiSummaryEN:
-      "Tourism trends directly impact demand and occupancy.",
+      "Tourism trends directly impact market demand and growth.",
 
     aiInsightIT:
-      "La crescita del turismo può aumentare redditività e sostenibilità degli investimenti short-rent.",
+      "Città in crescita turistica tendono a mantenere maggiore stabilità operativa.",
 
     aiInsightEN:
-      "Tourism growth may improve profitability and sustainability of short-rent investments.",
+      "Growing tourism cities usually maintain stronger operational stability.",
 
     warningIT:
       "⚠️ Cambiamenti nei flussi turistici possono alterare rapidamente il mercato.",
 
     warningEN:
-      "⚠️ Changes in tourism flows may quickly alter market conditions.",
-
-    recommendationsIT: [
-      "Monitora trend turistici.",
-      "Analizza eventi e stagionalità.",
-      "Confronta crescita della città."
-    ],
-
-    recommendationsEN: [
-      "Monitor tourism trends.",
-      "Analyze events and seasonality.",
-      "Compare city growth data."
-    ],
-
-    examples: [
-      "trend Airbnb",
-      "turismo Roma",
-      "crescita turistica"
-    ],
+      "⚠️ Tourism flow changes may rapidly alter market conditions.",
 
     related: [
       "marketDemand",
@@ -490,4 +424,9 @@ Object.assign(window.rbKnowledgeBase, {
 
   }
 
-});
+};
+
+console.log(
+  "🏠 REAL ESTATE AI MODULE READY",
+  window.rbKnowledgeBase.realEstate
+);
