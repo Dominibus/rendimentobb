@@ -314,40 +314,39 @@ window.rbExtractEntities = function(text = ""){
 
   }
 
-  // ===========================================
-  // 💰 PRICE DETECTION
-  // ===========================================
+// ===========================================
+// 💰 PRICE DETECTION
+// ===========================================
 
-  const priceMatch = text.match(
-    /(\d+(?:[\.,]\d+)?)\s?(k|mila|000|€|euro)/i
-  );
+const priceMatch = text.match(
+  /(\d+)\s?(k|mila|milioni|m)?(?=\s?(€|euro|di|appartamento|immobile))/i
+);
 
-  if(priceMatch){
+if(priceMatch){
 
-    let value =
-      parseFloat(
-        priceMatch[1]
-        .replace(",", ".")
-      );
+  let value =
+    Number(priceMatch[1]);
 
-    const unit = priceMatch[2];
+  const unit =
+    (priceMatch[2] || "").toLowerCase();
 
-    if(
-      unit === "k" ||
-      unit === "mila"
-    ){
-
-      value *= 1000;
-
-    }
-
-    entities.price =
-      Math.round(value);
-
-    entities.amount =
-      Math.round(value);
-
+  if(
+    unit === "k" ||
+    unit === "mila"
+  ){
+    value *= 1000;
   }
+
+  if(
+    unit === "m" ||
+    unit === "milioni"
+  ){
+    value *= 1000000;
+  }
+
+  entities.price = value;
+
+}
 
   // ===========================================
   // 🏦 MORTGAGE %
