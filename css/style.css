@@ -18249,3 +18249,32 @@ transform:translateY(-2px);
   }
 
 }
+
+/* ================= LOGIN FINAL REAL FIX ================= */
+
+@media screen and (max-width:768px){
+
+  .rb-right .rb-login{
+
+    width:auto !important;
+    min-width:unset !important;
+    max-width:unset !important;
+
+    height:36px !important;
+
+    padding:0 10px !important;
+
+    border-radius:12px !important;
+
+    font-size:11px !important;
+    font-weight:600 !important;
+
+    line-height:1 !important;
+
+    white-space:nowrap !important;
+
+    flex:0 0 auto !important;
+
+  }
+
+}
