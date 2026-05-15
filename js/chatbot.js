@@ -2802,3 +2802,5 @@ const thinkingTime =
   );
 
 }
+
+});                          
