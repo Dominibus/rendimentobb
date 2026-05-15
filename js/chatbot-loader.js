@@ -54,17 +54,14 @@
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js",
 
-    // ===================================
-    // AI ENGINE
-    // ===================================
+// ===================================
+// AI ENGINE
+// ===================================
 
-    "/js/chatbot/entity-engine.js",
-
-    "/js/chatbot/ai-engine.js",
-
-    "/js/chatbot/reasoning-engine.js",
-
-    "/js/chatbot/chatbot.js"
+"/js/chatbot/entity-engine.js",
+"/js/chatbot/reasoning-engine.js",
+"/js/ai-engine.js",
+"/js/chatbot.js"
 
   ];
 
