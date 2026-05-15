@@ -1,26 +1,52 @@
 // ===============================================
-// 🚨 INVESTOR MISTAKES
+// 🚨 RENDIMENTOBB – INVESTOR MISTAKES AI MODULE
 // ===============================================
 
-Object.assign(window.rbKnowledgeBase, {
+window.rbKnowledgeBase =
+  window.rbKnowledgeBase || {};
 
-  // ===========================================
-  // COMMON MISTAKES
-  // ===========================================
+// ===============================================
+// 🚨 MISTAKES MODULE
+// ===============================================
+
+window.rbKnowledgeBase.mistakes = {
+
+  module: "mistakes",
+
+  version: "2.0",
+
+  aiRoleIT:
+    "Esperto AI di errori investimento short-rent e B&B",
+
+  aiRoleEN:
+    "AI expert in short-rent and B&B investment mistakes",
+
+  descriptionIT:
+    "Modulo AI dedicato agli errori più comuni negli investimenti Airbnb, B&B e short-rent.",
+
+  descriptionEN:
+    "AI module focused on the most common Airbnb, B&B and short-rent investment mistakes.",
+
+  // =============================================
+  // 🚨 COMMON INVESTOR MISTAKES
+  // =============================================
 
   commonMistakes: {
 
     priority: 10,
+
+    category: "investment-errors",
+
+    scoreWeight: 1.7,
 
     keywords: [
       "errori",
       "mistakes",
       "errori investitori",
       "investment mistakes",
-      "errori b&b",
-      "sbagli investimento",
-      "bad investment",
       "errori airbnb",
+      "errore investimento",
+      "bad investment",
       "investimento sbagliato",
       "comprare male"
     ],
@@ -32,71 +58,66 @@ Object.assign(window.rbKnowledgeBase, {
       "🚨 Common Investor Mistakes",
 
     aiSummaryIT:
-      "Molti investitori B&B perdono soldi perché analizzano solo il prezzo dell’immobile.",
+      "Molti investitori short-rent perdono soldi perché analizzano solo il prezzo dell’immobile o il ROI teorico.",
 
     aiSummaryEN:
-      "Many B&B investors lose money because they only analyze the property price.",
+      "Many short-rent investors lose money because they only analyze property price or theoretical ROI.",
 
     aiInsightIT:
-      "Molti ignorano costi nascosti, tasse, mutuo, occupazione reale, rischio operativo, stagionalità e sostenibilità del cashflow.",
+      "I problemi più comuni derivano da cashflow debole, mutui aggressivi, costi nascosti, occupazione irreale e mancanza di analisi mercato.",
 
     aiInsightEN:
-      "Many ignore hidden costs, taxes, mortgage sustainability, real occupancy, operational risk, seasonality and cashflow sustainability.",
+      "The most common problems come from weak cashflow, aggressive leverage, hidden costs, unrealistic occupancy and poor market analysis.",
 
     warningIT:
-      "⚠️ Un ROI elevato da solo non basta per valutare un investimento immobiliare.",
+      "⚠️ ROI elevato senza sostenibilità reale può diventare molto rischioso.",
 
     warningEN:
-      "⚠️ High ROI alone is not enough to evaluate a real estate investment.",
+      "⚠️ High ROI without real sustainability may become highly risky.",
 
     recommendationsIT: [
-      "Analizza sempre il cashflow reale.",
-      "Confronta ROI e rischio operativo.",
-      "Valuta stagionalità e occupazione."
+      "Analizza cashflow reale.",
+      "Confronta ROI e rischio.",
+      "Valuta sostenibilità a lungo termine."
     ],
 
     recommendationsEN: [
-      "Always analyze real cashflow.",
-      "Compare ROI with operational risk.",
-      "Evaluate seasonality and occupancy."
-    ],
-
-    examples: [
-      "errori Airbnb",
-      "investimento sbagliato",
-      "bad B&B investment",
-      "errori ROI",
-      "errori affitti brevi"
+      "Analyze real cashflow.",
+      "Compare ROI with risk.",
+      "Evaluate long-term sustainability."
     ],
 
     related: [
       "riskScore",
       "cashflow",
+      "roi",
       "seasonality",
-      "hiddenCosts",
-      "roi"
+      "hiddenCosts"
     ]
 
   },
 
-  // ===========================================
-  // HIDDEN COSTS
-  // ===========================================
+  // =============================================
+  // 💸 HIDDEN COSTS
+  // =============================================
 
   hiddenCosts: {
 
     priority: 9,
+
+    category: "cost-errors",
+
+    scoreWeight: 1.5,
 
     keywords: [
       "costi nascosti",
       "hidden costs",
       "spese impreviste",
       "extra costs",
-      "costi airbnb",
-      "spese b&b",
-      "spese operative",
+      "spese airbnb",
+      "commissioni booking",
       "ota fees",
-      "commissioni booking"
+      "spese operative"
     ],
 
     aiTitleIT:
@@ -106,67 +127,63 @@ Object.assign(window.rbKnowledgeBase, {
       "💸 Hidden Costs",
 
     aiSummaryIT:
-      "Molti investitori sottovalutano i costi operativi reali degli affitti brevi.",
+      "Molti investitori sottostimano i costi operativi reali degli affitti brevi.",
 
     aiSummaryEN:
-      "Many investors underestimate real short-rent operational costs.",
+      "Many investors underestimate real short-rent operating costs.",
 
     aiInsightIT:
-      "Manutenzione, cleaning, OTA fees, tasse, utenze, marketing, gestione operativa e bassa occupazione possono ridurre drasticamente il cashflow reale.",
+      "Cleaning, manutenzione, tasse, utenze, OTA fees e periodi vuoti possono ridurre drasticamente il profitto reale.",
 
     aiInsightEN:
-      "Maintenance, cleaning, OTA fees, taxes, utilities, marketing, operations and low occupancy periods can drastically reduce real cashflow.",
+      "Cleaning, maintenance, taxes, utilities, OTA fees and vacancy periods may drastically reduce real profitability.",
 
     warningIT:
-      "⚠️ Costi nascosti elevati possono trasformare un ROI interessante in un investimento debole.",
+      "⚠️ Costi nascosti elevati possono trasformare un ROI forte in cashflow negativo.",
 
     warningEN:
-      "⚠️ High hidden costs can turn an attractive ROI into a weak investment.",
+      "⚠️ High hidden costs may turn strong ROI into negative cashflow.",
 
     recommendationsIT: [
-      "Calcola cleaning e utenze realistiche.",
-      "Considera OTA fees e tasse.",
-      "Mantieni margini operativi sostenibili."
+      "Mantieni margini di sicurezza.",
+      "Calcola costi realistici.",
+      "Prevedi riserve liquide."
     ],
 
     recommendationsEN: [
-      "Estimate realistic cleaning and utility costs.",
-      "Include OTA fees and taxes.",
-      "Maintain sustainable operating margins."
-    ],
-
-    examples: [
-      "spese Airbnb",
-      "hidden Airbnb costs",
-      "costi gestione b&b",
-      "commissioni Airbnb",
-      "spese OTA"
+      "Maintain safety margins.",
+      "Estimate realistic costs.",
+      "Keep liquidity reserves."
     ],
 
     related: [
       "cashflow",
-      "riskScore",
-      "operatingMargin"
+      "operatingMargin",
+      "riskScore"
     ]
 
   },
 
-  // ===========================================
-  // OVERVALUED ROI
-  // ===========================================
+  // =============================================
+  // 📈 FAKE ROI
+  // =============================================
 
   fakeROI: {
 
-    priority: 8,
+    priority: 9,
+
+    category: "projection-errors",
+
+    scoreWeight: 1.6,
 
     keywords: [
       "roi falso",
       "fake roi",
       "roi troppo alto",
       "unrealistic roi",
-      "roi sbagliato",
       "roi finto",
-      "roi irrealistico"
+      "roi irrealistico",
+      "high roi risk"
     ],
 
     aiTitleIT:
@@ -176,68 +193,64 @@ Object.assign(window.rbKnowledgeBase, {
       "📈 Unrealistic ROI",
 
     aiSummaryIT:
-      "Un ROI molto elevato può essere fuorviante se non considera rischio e sostenibilità.",
+      "ROI molto elevati possono essere fuorvianti se non considerano rischio e sostenibilità reale.",
 
     aiSummaryEN:
-      "A very high ROI can be misleading if it ignores risk and sustainability.",
+      "Very high ROI projections may be misleading if they ignore real sustainability and risk.",
 
     aiInsightIT:
-      "Tasse, mutuo, occupazione media, costi operativi e sostenibilità nel lungo periodo influenzano il rendimento reale.",
+      "Molti ROI teorici ignorano tasse, mutuo, occupazione media reale, costi operativi e volatilità del mercato.",
 
     aiInsightEN:
-      "Taxes, mortgage impact, occupancy, operating costs and long-term sustainability strongly affect real profitability.",
+      "Many theoretical ROI projections ignore taxes, mortgages, real occupancy, operating costs and market volatility.",
 
     warningIT:
-      "⚠️ ROI aggressivi senza cashflow stabile possono diventare molto rischiosi.",
+      "⚠️ ROI aggressivi senza cashflow stabile possono diventare molto fragili.",
 
     warningEN:
-      "⚠️ Aggressive ROI without stable cashflow can become highly risky.",
+      "⚠️ Aggressive ROI without stable cashflow may become extremely fragile.",
 
     recommendationsIT: [
       "Confronta ROI e cashflow.",
-      "Analizza rischio operativo.",
-      "Utilizza stime realistiche."
+      "Utilizza benchmark realistici.",
+      "Analizza il rischio operativo."
     ],
 
     recommendationsEN: [
       "Compare ROI with cashflow.",
-      "Analyze operational risk.",
-      "Use realistic projections."
-    ],
-
-    examples: [
-      "ROI 20%",
-      "ROI realistico",
-      "high ROI risk",
-      "ROI troppo alto"
+      "Use realistic benchmarks.",
+      "Analyze operational risk."
     ],
 
     related: [
       "roi",
+      "cashflow",
       "riskScore",
-      "mortgageImpact",
-      "cashflow"
+      "mortgageImpact"
     ]
 
   },
 
-  // ===========================================
-  // MARKET ANALYSIS
-  // ===========================================
+  // =============================================
+  // 🌍 MARKET ANALYSIS ERROR
+  // =============================================
 
   marketAnalysisMistake: {
 
     priority: 8,
 
+    category: "market-errors",
+
+    scoreWeight: 1.4,
+
     keywords: [
       "analisi mercato",
       "market analysis",
-      "domanda",
-      "market demand",
-      "errore mercato",
       "mercato saturo",
-      "troppi airbnb",
-      "concorrenza"
+      "competition",
+      "domanda turistica",
+      "errore mercato",
+      "troppi airbnb"
     ],
 
     aiTitleIT:
@@ -247,132 +260,129 @@ Object.assign(window.rbKnowledgeBase, {
       "🌍 Poor Market Analysis",
 
     aiSummaryIT:
-      "Comprare in una città turistica non garantisce automaticamente profitto.",
+      "Comprare in una città turistica non garantisce automaticamente un investimento profittevole.",
 
     aiSummaryEN:
-      "Buying in a tourist city does not automatically guarantee profit.",
+      "Buying in a tourist city does not automatically guarantee a profitable investment.",
 
     aiInsightIT:
-      "Domanda reale, concorrenza, stagionalità, regolamentazioni locali e saturazione del mercato sono fattori decisivi.",
+      "Domanda reale, concorrenza, saturazione mercato, regolamentazioni e stagionalità sono fattori decisivi.",
 
     aiInsightEN:
-      "Real demand, competition, seasonality, local regulations and market saturation are critical factors.",
+      "Real demand, competition, market saturation, regulations and seasonality are critical factors.",
 
     warningIT:
-      "⚠️ Mercati saturi possono ridurre occupazione e cashflow.",
+      "⚠️ Mercati saturi possono comprimere occupazione e margini operativi.",
 
     warningEN:
-      "⚠️ Saturated markets can reduce occupancy and cashflow.",
+      "⚠️ Saturated markets may compress occupancy and operating margins.",
 
     recommendationsIT: [
-      "Analizza benchmark locali.",
-      "Studia domanda reale e occupazione.",
-      "Valuta la concorrenza short-rent."
+      "Analizza benchmark città.",
+      "Studia occupazione reale.",
+      "Valuta domanda e concorrenza."
     ],
 
     recommendationsEN: [
-      "Analyze local benchmarks.",
-      "Study real demand and occupancy.",
-      "Evaluate short-rent competition."
-    ],
-
-    examples: [
-      "mercato saturo",
-      "Airbnb competition",
-      "domanda turistica",
-      "troppi Airbnb"
+      "Analyze city benchmarks.",
+      "Study real occupancy.",
+      "Evaluate demand and competition."
     ],
 
     related: [
+      "marketDemand",
+      "marketSaturation",
       "seasonality",
-      "riskScore",
-      "occupancy",
-      "marketDemand"
+      "occupancy"
     ]
 
   },
 
-  // ===========================================
-  // OVERLEVERAGE
-  // ===========================================
+  // =============================================
+  // 🏦 OVER LEVERAGE
+  // =============================================
 
   overLeverageMistake: {
 
-    priority: 7,
+    priority: 9,
+
+    category: "financial-errors",
+
+    scoreWeight: 1.7,
 
     keywords: [
       "troppo mutuo",
       "over leverage",
       "leva troppo alta",
-      "mutuo elevato",
       "troppo debito",
+      "mutuo elevato",
       "high leverage"
     ],
 
     aiTitleIT:
-      "🏦 Leva Finanziaria Aggressiva",
+      "🏦 Leverage Aggressivo",
 
     aiTitleEN:
-      "🏦 Aggressive Financial Leverage",
+      "🏦 Aggressive Leverage",
 
     aiSummaryIT:
-      "Una leva finanziaria troppo aggressiva può aumentare il rischio operativo.",
+      "Una leva finanziaria troppo aggressiva aumenta fortemente il rischio operativo.",
 
     aiSummaryEN:
-      "Excessive financial leverage can increase operational risk.",
+      "Excessive leverage strongly increases operational risk.",
 
     aiInsightIT:
-      "Una leva elevata può aumentare il ROI teorico ma rendere l’investimento fragile durante bassa occupazione o aumento costi.",
+      "Un mutuo troppo elevato può migliorare il ROI teorico ma rendere fragile il cashflow reale.",
 
     aiInsightEN:
-      "High leverage may improve theoretical ROI but can make investments fragile during occupancy drops or rising costs.",
+      "Excessive leverage may improve theoretical ROI while weakening real cashflow.",
 
     warningIT:
-      "⚠️ Mutui troppo aggressivi aumentano l’esposizione finanziaria.",
+      "⚠️ Leverage aggressivo aumenta vulnerabilità finanziaria.",
 
     warningEN:
-      "⚠️ Aggressive mortgages increase financial exposure.",
+      "⚠️ Aggressive leverage increases financial vulnerability.",
 
     recommendationsIT: [
-      "Mantieni cashflow stabile.",
+      "Mantieni DSCR sostenibile.",
       "Evita rate troppo elevate.",
-      "Controlla il DSCR."
+      "Mantieni liquidità disponibile."
     ],
 
     recommendationsEN: [
-      "Maintain stable cashflow.",
-      "Avoid excessive loan payments.",
-      "Monitor DSCR sustainability."
-    ],
-
-    examples: [
-      "mutuo 100%",
-      "troppo debito",
-      "leva aggressiva"
+      "Maintain sustainable DSCR.",
+      "Avoid excessive payments.",
+      "Maintain liquidity reserves."
     ],
 
     related: [
       "mortgageImpact",
-      "riskScore",
       "cashflow",
-      "dscr"
+      "dscr",
+      "riskScore"
     ]
 
   },
 
-  // ===========================================
-  // BAD OCCUPANCY ESTIMATES
-  // ===========================================
+  // =============================================
+  // 🏨 BAD OCCUPANCY ESTIMATE
+  // =============================================
 
   badOccupancyEstimate: {
 
-    priority: 7,
+    priority: 8,
+
+    category: "projection-errors",
+
+    scoreWeight: 1.4,
 
     keywords: [
       "occupazione troppo alta",
       "occupancy irrealistica",
       "stima occupazione",
-      "occupancy estimate"
+      "occupancy estimate",
+      "occupancy fake",
+      "occupazione falsa"
     ],
 
     aiTitleIT:
@@ -388,42 +398,169 @@ Object.assign(window.rbKnowledgeBase, {
       "Many investors use overly optimistic occupancy assumptions.",
 
     aiInsightIT:
-      "Occupazioni irrealistiche possono falsare ROI, cashflow e sostenibilità finanziaria.",
+      "Occupazioni irreali possono falsare ROI, cashflow e sostenibilità finanziaria.",
 
     aiInsightEN:
-      "Unrealistic occupancy projections can distort ROI, cashflow and financial sustainability.",
+      "Unrealistic occupancy assumptions may distort ROI, cashflow and financial sustainability.",
 
     warningIT:
-      "⚠️ Occupazioni troppo elevate possono generare simulazioni non realistiche.",
+      "⚠️ Occupazioni troppo elevate generano simulazioni poco realistiche.",
 
     warningEN:
-      "⚠️ Excessively high occupancy may create unrealistic projections.",
+      "⚠️ Excessively high occupancy creates unrealistic projections.",
 
     recommendationsIT: [
-      "Utilizza benchmark reali.",
-      "Confronta dati di mercato.",
+      "Usa benchmark reali.",
+      "Confronta dati città.",
       "Mantieni stime conservative."
     ],
 
     recommendationsEN: [
-      "Use real market benchmarks.",
-      "Compare occupancy data.",
+      "Use real benchmarks.",
+      "Compare city data.",
       "Keep projections conservative."
-    ],
-
-    examples: [
-      "occupazione 90%",
-      "occupancy troppo alta",
-      "Airbnb unrealistic occupancy"
     ],
 
     related: [
       "occupancy",
       "cashflow",
       "roi",
-      "riskScore"
+      "seasonality"
+    ]
+
+  },
+
+  // =============================================
+  // 💎 OVERPRICING
+  // =============================================
+
+  overPricing: {
+
+    priority: 7,
+
+    category: "pricing-errors",
+
+    scoreWeight: 1.2,
+
+    keywords: [
+      "prezzo troppo alto",
+      "overpricing",
+      "adr troppo alto",
+      "pricing sbagliato",
+      "night price too high"
+    ],
+
+    aiTitleIT:
+      "💎 Prezzo Notte Eccessivo",
+
+    aiTitleEN:
+      "💎 Excessive Night Pricing",
+
+    aiSummaryIT:
+      "Prezzi troppo elevati possono ridurre occupazione e competitività.",
+
+    aiSummaryEN:
+      "Excessive pricing may reduce occupancy and competitiveness.",
+
+    aiInsightIT:
+      "ADR troppo aggressivi possono comprimere prenotazioni e cashflow nel lungo periodo.",
+
+    aiInsightEN:
+      "Aggressive ADR pricing may reduce bookings and long-term cashflow.",
+
+    warningIT:
+      "⚠️ Prezzi non realistici aumentano il rischio operativo.",
+
+    warningEN:
+      "⚠️ Unrealistic pricing increases operational risk.",
+
+    recommendationsIT: [
+      "Confronta ADR mercato.",
+      "Usa pricing dinamico.",
+      "Ottimizza occupazione."
+    ],
+
+    recommendationsEN: [
+      "Compare market ADR.",
+      "Use dynamic pricing.",
+      "Optimize occupancy."
+    ],
+
+    related: [
+      "averageNightPrice",
+      "occupancy",
+      "cashflow"
+    ]
+
+  },
+
+  // =============================================
+  // 📉 UNDERPRICING
+  // =============================================
+
+  underPricing: {
+
+    priority: 6,
+
+    category: "pricing-errors",
+
+    scoreWeight: 1.1,
+
+    keywords: [
+      "prezzo troppo basso",
+      "underpricing",
+      "adr basso",
+      "night price too low",
+      "prezzo basso airbnb"
+    ],
+
+    aiTitleIT:
+      "📉 Prezzo Notte Troppo Basso",
+
+    aiTitleEN:
+      "📉 Night Price Too Low",
+
+    aiSummaryIT:
+      "Prezzi troppo bassi possono aumentare occupazione ma ridurre drasticamente i margini.",
+
+    aiSummaryEN:
+      "Very low pricing may increase occupancy while drastically reducing margins.",
+
+    aiInsightIT:
+      "Molti host cercano occupazione elevata sacrificando cashflow e redditività reale.",
+
+    aiInsightEN:
+      "Many hosts pursue high occupancy while sacrificing real profitability.",
+
+    warningIT:
+      "⚠️ Occupazione elevata con margini bassi può diventare insostenibile.",
+
+    warningEN:
+      "⚠️ High occupancy with low margins may become unsustainable.",
+
+    recommendationsIT: [
+      "Ottimizza ADR.",
+      "Bilancia prezzo e occupazione.",
+      "Analizza margini operativi."
+    ],
+
+    recommendationsEN: [
+      "Optimize ADR.",
+      "Balance pricing and occupancy.",
+      "Analyze operating margins."
+    ],
+
+    related: [
+      "cashflow",
+      "operatingMargin",
+      "occupancy"
     ]
 
   }
 
-});
+};
+
+console.log(
+  "🚨 INVESTOR MISTAKES AI MODULE READY",
+  window.rbKnowledgeBase.mistakes
+);
