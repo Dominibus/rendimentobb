@@ -18278,3 +18278,40 @@ transform:translateY(-2px);
   }
 
 }
+
+/* ================= ACCESS BUTTON TRUE FINAL FIX ================= */
+
+@media screen and (max-width:768px){
+
+  .rb-right .rb-login{
+
+    all:unset;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    height:36px !important;
+
+    padding:0 8px !important;
+
+    background:#16c784 !important;
+
+    color:#fff !important;
+
+    border-radius:12px !important;
+
+    font-size:11px !important;
+    font-weight:600 !important;
+
+    line-height:1 !important;
+
+    white-space:nowrap !important;
+
+    flex:0 0 auto !important;
+
+    cursor:pointer;
+
+  }
+
+}
