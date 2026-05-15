@@ -1,6 +1,7 @@
 // ===============================================
-// 🤖 RENDIMENTOBB – CHATBOT UI ENGINE 1.0
+// 🤖 RENDIMENTOBB – CHATBOT UI ENGINE 2.0
 // Silicon Valley Conversational Interface
+// Modular + AI Orchestrator Ready
 // ===============================================
 
 window.initRBChatbotUI = function(){
@@ -311,7 +312,7 @@ I can help analyze:
   // ⌨ SEND MESSAGE
   // ===========================================
 
-  function sendMessage(){
+  async function sendMessage(){
 
     const text =
       input.value.trim();
@@ -332,154 +333,148 @@ I can help analyze:
     );
 
     // =======================================
-    // 🧠 ENTITY EXTRACTION
-    // =======================================
-
-    const entities =
-
-      window.rbExtractEntities
-        ? window.rbExtractEntities(text)
-        : {};
-
-    // =======================================
-    // 🧠 INTENT DETECTION
-    // =======================================
-
-    const intent =
-
-      window.rbDetectIntent
-        ? window.rbDetectIntent(text)
-        : {};
-
-    // =======================================
-    // 🧠 MEMORY
-    // =======================================
-
-    const memory =
-
-      window.rbGetMemory
-        ? window.rbGetMemory()
-        : {};
-
-// =======================================
-// 🧠 AI ORCHESTRATOR
-// =======================================
-
-window.rbProcessAIMessage(text)
-
-.then(result=>{
-
-  const response =
-    result?.response || {};
-
-  // =====================================
-  // 🌍 LANGUAGE
-  // =====================================
-
-  const finalText =
-
-    window.currentLang === "en"
-
-    ? (
-        response.textEN ||
-
-        "AI response unavailable."
-      )
-
-    : (
-        response.textIT ||
-
-        "Risposta AI non disponibile."
-      );
-
-  // =====================================
-  // 💬 BOT MESSAGE
-  // =====================================
-
-  setTimeout(()=>{
-
-    addMessage(
-      "bot",
-      finalText
-    );
-
-  }, 500);
-
-})
-
-.catch(error=>{
-
-  console.error(
-    "❌ CHATBOT UI ERROR:",
-    error
-  );
-
-  addMessage(
-
-    "bot",
-
-    window.t(
-
-      "⚠️ Errore AI temporaneo.",
-
-      "⚠️ Temporary AI error."
-
-    )
-
-  );
-
-});
-
-    // =======================================
-    // 🌍 LANGUAGE
-    // =======================================
-
-    const finalText =
-
-      window.currentLang === "en"
-
-      ? response.textEN
-
-      : response.textIT;
-
-    // =======================================
-    // 💬 BOT MESSAGE
-    // =======================================
-
-    setTimeout(()=>{
-
-      addMessage(
-        "bot",
-        finalText
-      );
-
-    }, 500);
-
-    // =======================================
-    // 💾 MEMORY SAVE
-    // =======================================
-
-    if(window.rbSaveMemory){
-
-      window.rbSaveMemory({
-
-        lastMessage: text,
-
-        lastIntent:
-          intent.intent || null,
-
-        lastCity:
-          entities.city || null
-
-      });
-
-    }
-
-    // =======================================
-    // 🧹 RESET
+    // 🧹 RESET INPUT
     // =======================================
 
     input.value = "";
+
+    // =======================================
+    // 🧠 FALLBACK CHECK
+    // =======================================
+
+    if(
+      !window.rbProcessAIMessage
+    ){
+
+      addMessage(
+
+        "bot",
+
+        t(
+          "⚠️ AI Engine non disponibile.",
+          "⚠️ AI Engine unavailable."
+        )
+
+      );
+
+      return;
+
+    }
+
+    try{
+
+      // =====================================
+      // 🧠 PROCESS AI MESSAGE
+      // =====================================
+
+      const result =
+
+        await window.rbProcessAIMessage(
+          text
+        );
+
+      // =====================================
+      // 🧠 SAFE DATA
+      // =====================================
+
+      const response =
+        result?.response || {};
+
+      const entities =
+        result?.entities || {};
+
+      const intent =
+        result?.intent || {};
+
+      // =====================================
+      // 🌍 LANGUAGE
+      // =====================================
+
+      const finalText =
+
+        window.currentLang === "en"
+
+        ? (
+            response.textEN ||
+
+            "AI response unavailable."
+          )
+
+        : (
+            response.textIT ||
+
+            "Risposta AI non disponibile."
+          );
+
+      // =====================================
+      // 💬 BOT MESSAGE
+      // =====================================
+
+      setTimeout(()=>{
+
+        addMessage(
+          "bot",
+          finalText
+        );
+
+      }, 400);
+
+      // =====================================
+      // 💾 MEMORY SAVE
+      // =====================================
+
+      if(window.rbSaveMemory){
+
+        window.rbSaveMemory({
+
+          lastMessage: text,
+
+          lastIntent:
+            intent.intent || null,
+
+          lastCity:
+            entities.city || null,
+
+          timestamp:
+            Date.now()
+
+        });
+
+      }
+
+      // =====================================
+      // 🧠 DEBUG
+      // =====================================
+
+      console.log(
+        "🧠 CHATBOT RESULT:",
+        result
+      );
+
+    }
+
+    catch(error){
+
+      console.error(
+        "❌ CHATBOT UI ERROR:",
+        error
+      );
+
+      addMessage(
+
+        "bot",
+
+        t(
+
+          "⚠️ Errore AI temporaneo.",
+
+          "⚠️ Temporary AI error."
+
+        )
+
+      );
+
+    }
 
   }
 
