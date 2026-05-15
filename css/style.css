@@ -18315,3 +18315,21 @@ transform:translateY(-2px);
   }
 
 }
+
+/* ================= LOGIN TEXT CENTER FIX ================= */
+
+@media screen and (max-width:768px){
+
+  .rb-right .rb-login{
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    line-height:1 !important;
+
+    padding-top:1px !important;
+
+  }
+
+}
