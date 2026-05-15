@@ -177,4 +177,87 @@ window.rbClassifyOccupancy = function(occ){
 
 };
 
+// ===============================================
+// 🧠 INVESTMENT MEMORY ENGINE
+// ===============================================
+
+window.rbInvestmentMemory =
+  window.rbInvestmentMemory || null;
+
+// ===============================================
+// 💾 SAVE INVESTMENT CONTEXT
+// ===============================================
+
+window.saveInvestmentContext = function(data = {}){
+
+  window.rbInvestmentMemory = {
+
+    city:
+      data.city ||
+      data.market ||
+      window.currentCity ||
+      null,
+
+    price:
+      Number(
+        data.price ||
+        data.propertyPrice ||
+        0
+      ),
+
+    mortgage:
+      Boolean(
+        data.mortgage ||
+        data.hasMortgage
+      ),
+
+    mortgagePercent:
+      Number(
+        data.mortgagePercent ||
+        data.ltv ||
+        0
+      ),
+
+    occupancy:
+      Number(
+        data.occupancy ||
+        data.occupancyRate ||
+        0
+      ),
+
+    roi:
+      Number(data.roi || 0),
+
+    risk:
+      Number(
+        data.risk ||
+        data.riskScore ||
+        0
+      ),
+
+    nightly:
+      Number(
+        data.nightly ||
+        data.pricePerNight ||
+        0
+      ),
+
+    monthlyCosts:
+      Number(
+        data.monthlyCosts ||
+        data.monthlyExpenses ||
+        0
+      ),
+
+    updatedAt: Date.now()
+
+  };
+
+  console.log(
+    "🧠 Investment Memory Saved",
+    window.rbInvestmentMemory
+  );
+
+};
+
 console.log("🧠 AI HELPERS READY");
