@@ -375,33 +375,64 @@ for(const key in (window.rbKnowledgeBase || {})){
 window.saveInvestmentContext?.({
 
   city:
-    window.currentCity,
+
+    entities.city ||
+
+    window.currentCity ||
+
+    data.city ||
+
+    null,
 
   propertyPrice:
-    data.propertyPrice,
+
+    entities.price ||
+
+    data.propertyPrice ||
+
+    0,
 
   mortgage:
-    data.hasMortgage,
+
+    entities.mortgage ||
+
+    data.hasMortgage ||
+
+    false,
 
   mortgagePercent:
-    data.mortgagePercent,
+
+    entities.mortgagePercent ||
+
+    entities.percentage ||
+
+    data.mortgagePercent ||
+
+    0,
 
   occupancy:
-    data.occupancy,
+
+    entities.occupancy ||
+
+    entities.percentage ||
+
+    data.occupancy ||
+
+    0,
 
   roi:
-    data.roi,
+    data.roi || 0,
 
   risk:
-    data.risk,
+    data.risk || 0,
 
   pricePerNight:
-    data.pricePerNight,
+    data.pricePerNight || 0,
 
   monthlyCosts:
-    data.monthlyCosts
+    data.monthlyCosts || 0
 
-});  
+});
 
   const access = window.getUserAccess?.() || {};
 
