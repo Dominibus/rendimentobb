@@ -49,29 +49,43 @@ window.rbGenerateResponse = function({
   // 📊 SAFE DATA
   // ===========================================
 
-  const roi =
-    Number(
-      analysisData.roi || 0
-    );
+const liveData = {
 
-  const risk =
-    Number(
-      analysisData.risk || 0
-    );
+  ...(window.lastAnalysisData || {}),
+  ...(window.rbInvestmentMemory || {}),
+  ...(analysisData || {})
 
-  const occupancy =
-    Number(
-      analysisData.occupancy || 0
-    );
+};
+
+const roi =
+  Number(
+    liveData.roi || 0
+  );
+
+const risk =
+  Number(
+    liveData.risk || 0
+  );
+
+const occupancy =
+  Number(
+    liveData.occupancy || 0
+  );
 
   const city =
     entities.city ||
 
-    memory.lastCity ||
+    memory.city ||
 
     window.currentCity ||
 
     "roma";
+
+  const cityLabel =
+
+  window.rbCapitalize?.(city) ||
+
+  city;
 
   // ===========================================
   // 🌍 MARKET DATA
@@ -82,6 +96,54 @@ window.rbGenerateResponse = function({
     window.rbMarketData?.[city] ||
 
     null;
+
+// ===========================================
+// 🚫 NO ANALYSIS SAFETY
+// ===========================================
+
+const hasAnalysis =
+
+  roi > 0 ||
+
+  risk > 0 ||
+
+  occupancy > 0;
+
+if(
+
+  !hasAnalysis &&
+
+  intent.intent !== "education"
+
+){
+
+  return {
+
+    type: "empty",
+
+    confidence: 1,
+
+    textIT:
+      "📊 Esegui prima una simulazione completa così posso analizzare ROI, rischio e sostenibilità.",
+
+    textEN:
+      "📊 Run a full simulation first so I can analyze ROI, risk and sustainability.",
+
+    suggestionsIT: [
+      "Simulare investimento"
+    ],
+
+    suggestionsEN: [
+      "Run investment simulation"
+    ],
+
+    signals: [],
+
+    metadata: {}
+
+  };
+
+}
 
   // ===========================================
   // 📈 ROI RESPONSE
@@ -111,7 +173,7 @@ window.rbGenerateResponse = function({
 ${roi.toFixed(1)}%
 
 🌍 Mercato:
-${city}
+${cityLabel}
 
 💡 La simulazione appare superiore alla media short-rent.`;
 
@@ -123,7 +185,7 @@ ${city}
 ${roi.toFixed(1)}%
 
 🌍 Market:
-${city}
+${cityLabel}
 
 💡 The simulation appears above short-rent market averages.`;
 
@@ -361,7 +423,7 @@ ${mortgagePercent}%
 
       response.textIT =
 
-`🌍 Analisi mercato ${city}
+`🌍 Analisi mercato ${cityLabel}
 
 📈 ROI medio:
 ${market.avgROI}
@@ -374,7 +436,7 @@ ${market.risk}`;
 
       response.textEN =
 
-`🌍 ${city} market analysis
+`🌍 ${cityLabel} market analysis
 
 📈 Average ROI:
 ${market.avgROI}
@@ -386,6 +448,16 @@ ${market.occupancy}
 ${market.risk}`;
 
     }
+
+    else{
+
+  response.textIT =
+    "⚠️ Nessun benchmark disponibile per questa città.";
+
+  response.textEN =
+    "⚠️ No benchmark available for this city.";
+
+}
 
   }
 
@@ -520,42 +592,66 @@ ${risk}/100
   // 💡 FOLLOWUP SUGGESTIONS
   // ===========================================
 
-  if(response.type === "roi"){
+if(response.type === "roi"){
 
-    response.suggestionsIT.push(
-      "Analizzare cashflow reale"
-    );
-
-    response.suggestionsEN.push(
-      "Analyze real cashflow"
-    );
-
-  }
-
-  if(response.type === "risk"){
-
-    response.suggestionsIT.push(
-      "Analizzare sostenibilità mutuo"
-    );
-
-    response.suggestionsEN.push(
-      "Analyze mortgage sustainability"
-    );
-
-  }
-
-  // ===========================================
-  // 🧠 DEBUG
-  // ===========================================
-
-  console.log(
-    "🧠 RESPONSE ENGINE:",
-    response
+  response.suggestionsIT.push(
+    "Analizzare cashflow reale",
+    "Confrontare benchmark città",
+    "Simulare mutuo"
   );
 
-  return response;
+  response.suggestionsEN.push(
+    "Analyze real cashflow",
+    "Compare city benchmark",
+    "Simulate mortgage"
+  );
 
-};
+}
+
+if(response.type === "risk"){
+
+  response.suggestionsIT.push(
+    "Analizzare sostenibilità mutuo",
+    "Ridurre rischio operativo",
+    "Confrontare scenario città"
+  );
+
+  response.suggestionsEN.push(
+    "Analyze mortgage sustainability",
+    "Reduce operational risk",
+    "Compare city scenario"
+  );
+
+}
+
+// ===========================================
+// 🧠 AI SIGNALS
+// ===========================================
+
+response.signals = [
+
+  ...response.signals,
+
+  ...(window.rbGenerateAISignals?.({
+
+    roi,
+    risk,
+    occupancy
+
+  }) || [])
+
+];
+
+// ===========================================
+// 🧠 DEBUG
+// ===========================================
+
+console.log(
+  "🧠 RESPONSE ENGINE:",
+  response
+);
+
+return response;
 
 // ===============================================
 // 🚀 READY
