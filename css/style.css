@@ -18362,3 +18362,26 @@ Style simile mockup finale
   }
 
 }
+
+/* ================= BURGER SAFE AREA FIX ================= */
+
+@media screen and (max-width:768px){
+
+  .rb-inner{
+
+    padding-right:18px !important;
+
+  }
+
+  #rb-burger{
+
+    margin-right:2px !important;
+
+    width:34px !important;
+    min-width:34px !important;
+
+    font-size:30px !important;
+
+  }
+
+}
