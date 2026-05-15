@@ -61,6 +61,7 @@
 
 "/js/chatbot/entity-engine.js",
 "/js/chatbot/reasoning-engine.js",
+"/js/chatbot/support-engine.js",    
 "/js/ai-engine.js",
 "/js/chatbot.js"
 
