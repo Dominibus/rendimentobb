@@ -46,6 +46,7 @@
     "/js/chatbot/knowledge/finance.js",
     "/js/chatbot/knowledge/risk.js",
     "/js/chatbot/knowledge/mistakes.js",
+    "/js/chatbot/knowledge/beginner.js",
 
     // ===================================
     // DATA
