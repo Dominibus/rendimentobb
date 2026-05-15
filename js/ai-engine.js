@@ -260,4 +260,148 @@ window.saveInvestmentContext = function(data = {}){
 
 };
 
+// ===============================================
+// 🧠 GLOBAL ENTITY EXTRACTION ENGINE
+// ===============================================
+
+window.rbExtractEntities = function(text = ""){
+
+  text = String(text).toLowerCase();
+
+  const entities = {
+
+    city: null,
+
+    price: null,
+
+    amount: null,
+
+    mortgage: false,
+
+    mortgagePercent: null,
+
+    occupancy: null,
+
+    percentage: null
+
+  };
+
+  // ===========================================
+  // 🌍 CITY DETECTION
+  // ===========================================
+
+  const cities = Object.keys(
+    window.rbKnowledgeBase?.cities || {}
+  );
+
+  for(const city of cities){
+
+    const aliases =
+      window.rbKnowledgeBase
+      ?.cities?.[city]
+      ?.aliases || [];
+
+    if(
+      aliases.some(alias =>
+        text.includes(alias)
+      )
+    ){
+
+      entities.city = city;
+      break;
+
+    }
+
+  }
+
+  // ===========================================
+  // 💰 PRICE DETECTION
+  // ===========================================
+
+  const priceMatch = text.match(
+    /(\d+(?:[\.,]\d+)?)\s?(k|mila|000|€|euro)/i
+  );
+
+  if(priceMatch){
+
+    let value =
+      parseFloat(
+        priceMatch[1]
+        .replace(",", ".")
+      );
+
+    const unit = priceMatch[2];
+
+    if(
+      unit === "k" ||
+      unit === "mila"
+    ){
+
+      value *= 1000;
+
+    }
+
+    entities.price =
+      Math.round(value);
+
+    entities.amount =
+      Math.round(value);
+
+  }
+
+  // ===========================================
+  // 🏦 MORTGAGE %
+  // ===========================================
+
+  const mortgageMatch = text.match(
+    /(mutuo|mortgage|ltv)[^\d]{0,10}(\d+)\s?%/i
+  );
+
+  if(mortgageMatch){
+
+    entities.mortgage = true;
+
+    entities.mortgagePercent =
+      Number(mortgageMatch[2]);
+
+  }
+
+  // ===========================================
+  // 🏨 OCCUPANCY %
+  // ===========================================
+
+  const occupancyMatch = text.match(
+    /(occupazione|occupancy)[^\d]{0,10}(\d+)\s?%/i
+  );
+
+  if(occupancyMatch){
+
+    entities.occupancy =
+      Number(occupancyMatch[2]);
+
+  }
+
+  // ===========================================
+  // 📊 GENERIC %
+  // ===========================================
+
+  const genericPercent =
+    text.match(/(\d+)\s?%/);
+
+  if(genericPercent){
+
+    entities.percentage =
+      Number(genericPercent[1]);
+
+  }
+
+  console.log(
+    "🧠 ENTITY ENGINE:",
+    entities
+  );
+
+  return entities;
+
+};
+
 console.log("🧠 AI HELPERS READY");
