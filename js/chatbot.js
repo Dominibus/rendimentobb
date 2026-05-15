@@ -379,11 +379,13 @@ for(const key in (window.rbKnowledgeBase || {})){
 // 🧠 EDUCATIONAL DETECTION
 // =====================================
 
- const data =
+const data =
 
   window.lastAnalysisData ||
 
   window.bestInvestmentData ||
+
+  window.dashboardSimulations?.[0] ||
 
   {};
 
