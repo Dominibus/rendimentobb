@@ -18317,3 +18317,48 @@ Style simile mockup finale
   font-size:14px !important;
 
 }
+/* ================= COMPACT MOBILE BUTTONS ================= */
+
+@media screen and (max-width:768px){
+
+  .rb-right{
+
+    gap:6px !important;
+
+  }
+
+  /* ===== AI ===== */
+
+  .rb-header-ai-btn{
+
+    width:50px !important;
+    min-width:50px !important;
+
+    height:42px !important;
+
+    padding:0 8px !important;
+
+    border-radius:14px !important;
+
+    font-size:13px !important;
+
+  }
+
+  /* ===== LOGIN ===== */
+
+  .rb-right .rb-login{
+
+    width:68px !important;
+    min-width:68px !important;
+
+    height:42px !important;
+
+    padding:0 8px !important;
+
+    border-radius:14px !important;
+
+    font-size:13px !important;
+
+  }
+
+}
