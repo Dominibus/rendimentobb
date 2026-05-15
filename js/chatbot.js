@@ -774,6 +774,7 @@ const isFollowUp =
 if(
   matches.length &&
   !wantsStrategy &&
+  !wantsEducation &&
   !isFollowUp
 ){
 
