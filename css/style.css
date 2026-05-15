@@ -18127,8 +18127,8 @@ transform:translateY(-2px);
 }
 
 /* ==================================================
-📱 RENDIMENTOBB — MOBILE HEADER REAL FINAL FIX
-iPhone Safari Safe
+📱 RENDIMENTOBB — MOBILE HEADER PERFECT FIX
+Style simile mockup finale
 ================================================== */
 
 @media screen and (max-width:768px){
@@ -18141,13 +18141,13 @@ iPhone Safari Safe
     align-items:center;
     justify-content:space-between;
 
-    min-height:68px;
+    min-height:74px;
 
-    padding:0 8px !important;
+    padding:0 14px !important;
 
-    gap:4px !important;
+    gap:10px !important;
 
-    overflow:hidden;
+    overflow:visible;
 
   }
 
@@ -18155,21 +18155,23 @@ iPhone Safari Safe
 
   .rb-left{
 
-    flex:0 0 auto;
-
     display:flex;
     align-items:center;
+
+    flex:0 0 auto;
 
   }
 
   .rb-logo{
 
-    width:74px !important;
-    max-width:74px !important;
+    width:88px !important;
+    max-width:88px !important;
 
     height:auto;
 
     display:block;
+
+    object-fit:contain;
 
   }
 
@@ -18183,25 +18185,25 @@ iPhone Safari Safe
 
     justify-content:flex-end;
 
-    gap:4px !important;
-
-    flex-wrap:nowrap !important;
+    gap:10px !important;
 
     margin-left:auto !important;
 
-    min-width:0;
+    flex-wrap:nowrap !important;
+
+    flex:1;
 
   }
 
-  /* ================= LANG ================= */
+  /* ================= LANGUAGE ================= */
 
   .rb-lang{
 
-    transform:scale(.78);
+    transform:scale(.92);
 
     transform-origin:center;
 
-    flex-shrink:1 !important;
+    flex-shrink:0 !important;
 
   }
 
@@ -18213,16 +18215,17 @@ iPhone Safari Safe
     align-items:center;
     justify-content:center;
 
-    width:58px !important;
-    min-width:58px !important;
+    width:74px !important;
+    min-width:74px !important;
 
-    height:40px !important;
+    height:50px !important;
 
-    padding:0 !important;
+    padding:0 14px !important;
 
-    border-radius:14px !important;
+    border-radius:18px !important;
 
-    font-size:14px !important;
+    font-size:15px !important;
+    font-weight:700;
 
     line-height:1;
 
@@ -18232,7 +18235,7 @@ iPhone Safari Safe
 
   }
 
-  /* ================= LOGIN ================= */
+  /* ================= LOGIN BUTTON ================= */
 
   .rb-right .rb-login{
 
@@ -18240,24 +18243,19 @@ iPhone Safari Safe
     align-items:center;
     justify-content:center;
 
-    width:72px !important;
-    min-width:72px !important;
+    width:88px !important;
+    min-width:88px !important;
 
-    height:40px !important;
+    height:50px !important;
 
-    padding:0 8px !important;
+    padding:0 14px !important;
 
-    border-radius:14px !important;
+    border-radius:18px !important;
 
-    font-size:14px !important;
-
-    line-height:1;
+    font-size:15px !important;
+    font-weight:700;
 
     white-space:nowrap !important;
-
-    overflow:hidden !important;
-
-    text-overflow:ellipsis !important;
 
     flex-shrink:0 !important;
 
@@ -18272,18 +18270,24 @@ iPhone Safari Safe
     align-items:center !important;
     justify-content:center !important;
 
-    width:36px !important;
-    min-width:36px !important;
+    width:42px !important;
+    min-width:42px !important;
 
-    height:36px !important;
+    height:42px !important;
+
+    margin-left:2px !important;
 
     padding:0 !important;
 
-    margin-left:0 !important;
-
-    font-size:26px !important;
+    font-size:34px !important;
 
     line-height:1;
+
+    background:transparent !important;
+
+    border:none !important;
+
+    box-shadow:none !important;
 
     position:relative;
 
@@ -18291,6 +18295,25 @@ iPhone Safari Safe
 
     flex-shrink:0 !important;
 
+    cursor:pointer;
+
   }
+
+}
+
+/* ================= AI BUTTON SMALLER ================= */
+
+.rb-header-ai-btn{
+
+  width:58px !important;
+  min-width:58px !important;
+
+  height:46px !important;
+
+  padding:0 10px !important;
+
+  border-radius:16px !important;
+
+  font-size:14px !important;
 
 }
