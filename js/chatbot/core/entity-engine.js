@@ -276,28 +276,44 @@ window.rbExtractEntities = function(input = ""){
 
   }
 
-  // ===========================================
-  // 🏨 OCCUPANCY
-  // ===========================================
+// ===========================================
+// 🏨 OCCUPANCY DETECTION
+// ===========================================
 
-  const occupancyPatterns = [
+const occupancyPatterns = [
 
-    /occupazione\s?(\d+)/,
-    /occupancy\s?(\d+)/,
-    /occupato\s?al\s?(\d+)/,
-    /booking\s?(\d+)/,
-    /riempimento\s?(\d+)/
+  /occupazione\s?(?:del|di|al)?\s?(\d+)(?:\%)?/,
 
-  ];
+  /occupancy\s?(?:of)?\s?(\d+)(?:\%)?/,
 
-  for(const pattern of occupancyPatterns){
+  /occupato\s?(?:al)?\s?(\d+)(?:\%)?/,
 
-    const match = text.match(pattern);
+  /booking\s?(\d+)(?:\%)?/,
 
-    if(match){
+  /riempimento\s?(\d+)(?:\%)?/,
+
+  /(\d+)(?:\%)?\s?occupazione/,
+
+  /(\d+)(?:\%)?\s?occupancy/
+
+];
+
+for(const pattern of occupancyPatterns){
+
+  const match = text.match(pattern);
+
+  if(match){
+
+    const value =
+      Number(match[1]);
+
+    if(
+      value >= 1 &&
+      value <= 100
+    ){
 
       entities.occupancy =
-        Number(match[1]);
+        value;
 
       entities.detectedTopics.push(
         "performance"
@@ -309,6 +325,7 @@ window.rbExtractEntities = function(input = ""){
 
   }
 
+}
   // ===========================================
   // 💸 NIGHTLY / ADR
   // ===========================================
