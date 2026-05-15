@@ -2391,7 +2391,28 @@ closeBtn.onclick = ()=>{
 
 window.toggleRBChatbot = function(){
 
-  if(!chatWindow) return;
+  const chatWindow =
+    document.getElementById(
+      "rb-chatbot-window"
+    );
+
+  // 🔥 chatbot non ancora creato
+  if(!chatWindow){
+
+    console.warn(
+      "❌ chatbot window missing"
+    );
+
+    // tenta init forzato
+    if(typeof initRBChatbot === "function"){
+
+      initRBChatbot();
+
+    }
+
+    return;
+
+  }
 
   chatWindow.classList.toggle("open");
 
