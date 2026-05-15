@@ -58,6 +58,7 @@
     // AI ENGINE
     // ===================================
 
+    "/js/chatbot/entity-engine.js",
     "/js/ai-engine.js",
     "/js/chatbot.js"
 
