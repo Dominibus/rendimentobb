@@ -23,22 +23,50 @@ document.addEventListener(
 window.rbConversationHistory =
   window.rbConversationHistory || [];
 
-// ===============================================
-// 🧠 AI CONTEXT MEMORY
-// ===============================================
-
 window.rbAIContextMemory =
   window.rbAIContextMemory || {
 
+    // =================================
+    // 🌍 CONTEXT
+    // =================================
+
     lastCity: null,
+
+    lastComparedCities: [],
+
+    // =================================
+    // 📊 FINANCIAL
+    // =================================
 
     lastROI: null,
 
-    lastTopic: null,
-
     lastRisk: null,
 
-    lastCashflow: null
+    lastCashflow: null,
+
+    lastOccupancy: null,
+
+    lastPrice: null,
+
+    lastMortgagePercent: null,
+
+    // =================================
+    // 🧠 CONVERSATION
+    // =================================
+
+    lastTopic: null,
+
+    lastIntent: null,
+
+    lastQuestionType: null,
+
+    // =================================
+    // 🏠 PROPERTY
+    // =================================
+
+    lastPropertyType: null,
+
+    lastInvestmentProfile: null
 
 };
 
@@ -552,6 +580,18 @@ window.rbAIContextMemory.lastCashflow =
 window.rbAIContextMemory.lastTopic =
   mainIntent || "general";  
 
+
+window.rbAIContextMemory.lastOccupancy =
+  occupancy || null;
+
+window.rbAIContextMemory.lastPrice =
+  entities.price || null;
+
+window.rbAIContextMemory.lastMortgagePercent =
+  entities.mortgagePercent || null;
+
+window.rbAIContextMemory.lastIntent =
+  mainIntent || null;  
 // =====================================
 // 🧠 MAIN INTENT FLAGS
 // =====================================
