@@ -2,7 +2,7 @@
 // RENDIMENTOBB – AI KNOWLEDGE BASE 2.0
 // ===============================================
 
-window.rbKnowledgeBase = {
+Object.assign(window.rbKnowledgeBase, {
 
   cities: {
 
