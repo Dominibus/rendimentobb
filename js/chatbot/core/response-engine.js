@@ -552,17 +552,17 @@ else if(
 
   response.textIT =
 
-    knowledge.textIT ||
+`${knowledge?.aiSummaryIT || ""}
 
-    "💳 Informazioni abbonamento non disponibili.";
+${knowledge?.aiInsightIT || ""}`;
 
   response.textEN =
 
-    knowledge.textEN ||
+`${knowledge?.aiSummaryEN || ""}
 
-    "💳 Subscription information not available.";
+${knowledge?.aiInsightEN || ""}`;
 
-}    
+}
   // ===========================================
   // 🎓 EDUCATIONAL RESPONSE
   // ===========================================
