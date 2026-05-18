@@ -178,38 +178,42 @@ if(bestKnowledge){
 
       });
 
-    // =========================================
-    // 🧠 KNOWLEDGE ENHANCEMENT
-    // =========================================
+// =========================================
+// 🧠 KNOWLEDGE ENHANCEMENT
+// =========================================
 
-    if(
-      matchedKnowledge.length
-    ){
+if(
 
-      const best =
+  matchedKnowledge.length &&
 
-        matchedKnowledge[0]
-          .item;
+  response.type === "education"
 
-      if(
-        window.currentLang === "en"
-      ){
+){
 
-        response.textEN +=
+  const best =
+
+    matchedKnowledge[0]
+      .item;
+
+  if(
+    window.currentLang === "en"
+  ){
+
+    response.textEN +=
 
 `\n\n${best.aiInsightEN || ""}`;
 
-      }
+  }
 
-      else{
+  else{
 
-        response.textIT +=
+    response.textIT +=
 
 `\n\n${best.aiInsightIT || ""}`;
 
-      }
+  }
 
-    }
+}
 
     // =========================================
     // 💾 MEMORY SAVE
