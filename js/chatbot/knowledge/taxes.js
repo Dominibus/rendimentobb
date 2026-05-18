@@ -8,6 +8,8 @@ Object.assign(window.rbKnowledgeBase, {
 
     type:"taxes",
 
+    priority:9,
+
     keywords:[
       "cedolare secca",
       "flat tax",
@@ -15,35 +17,56 @@ Object.assign(window.rbKnowledgeBase, {
       "tax regime"
     ],
 
-    textIT:`
-🧾 La cedolare secca è un regime fiscale semplificato per affitti immobiliari.
+    aiTitleIT:"🧾 CEDOLARE SECCA",
+    aiTitleEN:"🧾 FLAT TAX REGIME",
 
-Nel settore short-rent può influenzare:
+    aiSummaryIT:`
+La cedolare secca è un regime fiscale semplificato per affitti immobiliari.
+`,
+
+    aiSummaryEN:`
+Cedolare secca is a simplified tax regime for property rentals.
+`,
+
+    aiInsightIT:`
+📊 Nel settore short-rent può influenzare:
 
 • cashflow netto
 • redditività reale
 • sostenibilità fiscale
+• tassazione complessiva
 
-💡 La fiscalità può cambiare significativamente il ROI finale.
+💡 La fiscalità può modificare significativamente il ROI finale.
 `,
 
-    textEN:`
-🧾 Cedolare secca is a simplified tax regime for property rentals.
-
-In the short-rent sector it can impact:
+    aiInsightEN:`
+📊 In the short-rent sector it may affect:
 
 • net cashflow
 • real profitability
 • tax sustainability
+• overall taxation
 
 💡 Tax structure can significantly change final ROI.
-`
+`,
+
+    recommendationsIT:[
+      "Valuta il regime fiscale prima di investire",
+      "Considera l'impatto fiscale sul cashflow reale"
+    ],
+
+    recommendationsEN:[
+      "Evaluate tax regime before investing",
+      "Consider tax impact on real cashflow"
+    ]
 
   },
 
   touristTax:{
 
     type:"taxes",
+
+    priority:7,
 
     keywords:[
       "tourist tax",
@@ -52,35 +75,56 @@ In the short-rent sector it can impact:
       "tourism tax"
     ],
 
-    textIT:`
-🏨 La tassa di soggiorno è applicata da molti comuni turistici.
+    aiTitleIT:"🏨 TASSA DI SOGGIORNO",
+    aiTitleEN:"🏨 TOURIST TAX",
 
-Generalmente:
+    aiSummaryIT:`
+La tassa di soggiorno è applicata da molti comuni turistici.
+`,
+
+    aiSummaryEN:`
+Tourist tax is applied by many tourist cities.
+`,
+
+    aiInsightIT:`
+📍 Generalmente:
 
 • viene pagata dagli ospiti
 • varia per città
 • dipende dal tipo di struttura
+• influisce sulla gestione operativa
 
-💡 È importante includerla nella gestione operativa del B&B.
+💡 È importante integrarla nella strategia short-rent.
 `,
 
-    textEN:`
-🏨 Tourist tax is applied by many tourist cities.
-
-Generally:
+    aiInsightEN:`
+📍 Generally:
 
 • paid by guests
 • varies by city
 • depends on property type
+• impacts operations
 
-💡 It is important to include it in B&B operational management.
-`
+💡 It should be integrated into short-rent strategy.
+`,
+
+    recommendationsIT:[
+      "Verifica le regole del comune",
+      "Includi la tassa nella gestione operativa"
+    ],
+
+    recommendationsEN:[
+      "Check local city regulations",
+      "Include tourist tax in operations"
+    ]
 
   },
 
   incomeTaxes:{
 
     type:"taxes",
+
+    priority:10,
 
     keywords:[
       "income tax",
@@ -90,31 +134,48 @@ Generally:
       "imposte"
     ],
 
-    textIT:`
-💰 Le tasse possono ridurre significativamente il profitto netto di un investimento B&B.
+    aiTitleIT:"💰 TASSE INVESTIMENTI B&B",
+    aiTitleEN:"💰 B&B INVESTMENT TAXES",
 
-Occorre valutare:
+    aiSummaryIT:`
+Le tasse possono ridurre significativamente il profitto netto di un investimento B&B.
+`,
+
+    aiSummaryEN:`
+Taxes can significantly reduce the net profit of a B&B investment.
+`,
+
+    aiInsightIT:`
+📊 Occorre valutare:
 
 • regime fiscale
 • costi deducibili
 • tassazione redditi
 • sostenibilità finanziaria
 
-💡 Il ROI lordo non corrisponde sempre al profitto reale.
+⚠️ Il ROI lordo non rappresenta sempre il profitto reale.
 `,
 
-    textEN:`
-💰 Taxes can significantly reduce the net profit of a B&B investment.
-
-You should evaluate:
+    aiInsightEN:`
+📊 You should evaluate:
 
 • tax regime
 • deductible costs
 • income taxation
 • financial sustainability
 
-💡 Gross ROI does not always equal real profit.
-`
+⚠️ Gross ROI does not always represent real profit.
+`,
+
+    recommendationsIT:[
+      "Calcola sempre il profitto netto",
+      "Valuta costi e tassazione prima di investire"
+    ],
+
+    recommendationsEN:[
+      "Always calculate net profitability",
+      "Evaluate taxes before investing"
+    ]
 
   },
 
@@ -122,41 +183,64 @@ You should evaluate:
 
     type:"taxes",
 
+    priority:6,
+
     keywords:[
       "iva",
       "vat",
       "value added tax"
     ],
 
-    textIT:`
-📊 L'IVA può applicarsi ad alcuni servizi collegati agli affitti brevi.
+    aiTitleIT:"📊 IVA AFFITTI BREVI",
+    aiTitleEN:"📊 SHORT-RENT VAT",
 
-Dipende da:
+    aiSummaryIT:`
+L'IVA può applicarsi ad alcuni servizi collegati agli affitti brevi.
+`,
+
+    aiSummaryEN:`
+VAT may apply to some services connected to short rentals.
+`,
+
+    aiInsightIT:`
+📍 Dipende da:
 
 • struttura operativa
 • servizi offerti
 • regime fiscale
+• gestione attività
 
-💡 La gestione fiscale corretta è fondamentale per la sostenibilità del business.
+💡 Una corretta gestione fiscale è fondamentale per la sostenibilità del business.
 `,
 
-    textEN:`
-📊 VAT may apply to some services connected to short rentals.
-
-Depends on:
+    aiInsightEN:`
+📍 Depends on:
 
 • operational structure
 • services provided
 • tax regime
+• business management
 
-💡 Correct tax management is essential for business sustainability.
-`
+💡 Proper tax management is essential for long-term sustainability.
+`,
+
+    recommendationsIT:[
+      "Verifica il regime IVA applicabile",
+      "Valuta i servizi inclusi nell'attività"
+    ],
+
+    recommendationsEN:[
+      "Verify applicable VAT rules",
+      "Evaluate included operational services"
+    ]
 
   },
 
   deductibleCosts:{
 
     type:"taxes",
+
+    priority:8,
 
     keywords:[
       "deductible costs",
@@ -165,10 +249,19 @@ Depends on:
       "dedurre costi"
     ],
 
-    textIT:`
-🧮 Alcuni costi operativi possono essere fiscalmente deducibili.
+    aiTitleIT:"🧮 COSTI DEDUCIBILI",
+    aiTitleEN:"🧮 DEDUCTIBLE COSTS",
 
-Esempi comuni:
+    aiSummaryIT:`
+Alcuni costi operativi possono essere fiscalmente deducibili.
+`,
+
+    aiSummaryEN:`
+Some operational costs may be tax deductible.
+`,
+
+    aiInsightIT:`
+📊 Esempi comuni:
 
 • manutenzione
 • pulizie
@@ -180,10 +273,8 @@ Esempi comuni:
 💡 Ottimizzare i costi può migliorare cashflow e sostenibilità.
 `,
 
-    textEN:`
-🧮 Some operational costs may be tax deductible.
-
-Common examples:
+    aiInsightEN:`
+📊 Common examples:
 
 • maintenance
 • cleaning
@@ -192,14 +283,26 @@ Common examples:
 • software
 • marketing
 
-💡 Optimizing costs can improve cashflow and sustainability.
-`
+💡 Cost optimization may improve cashflow and sustainability.
+`,
+
+    recommendationsIT:[
+      "Monitora tutti i costi operativi",
+      "Valuta l'impatto fiscale delle spese"
+    ],
+
+    recommendationsEN:[
+      "Track operational expenses carefully",
+      "Evaluate fiscal impact of expenses"
+    ]
 
   },
 
   capitalGain:{
 
     type:"taxes",
+
+    priority:7,
 
     keywords:[
       "capital gain",
@@ -208,31 +311,48 @@ Common examples:
       "rivendita immobile"
     ],
 
-    textIT:`
-🏠 La rivendita di un immobile può generare plusvalenza tassabile.
+    aiTitleIT:"🏠 PLUSVALENZA IMMOBILIARE",
+    aiTitleEN:"🏠 PROPERTY CAPITAL GAIN",
 
-Dipende da:
+    aiSummaryIT:`
+La rivendita di un immobile può generare plusvalenza tassabile.
+`,
+
+    aiSummaryEN:`
+Property resale may generate taxable capital gains.
+`,
+
+    aiInsightIT:`
+📊 Dipende da:
 
 • tempo di possesso
-• valore di acquisto
-• valore di vendita
+• valore acquisto
+• valore vendita
 • normativa fiscale
 
 💡 Anche la strategia di uscita influenza il rendimento complessivo.
 `,
 
-    textEN:`
-🏠 Property resale may generate taxable capital gains.
-
-Depends on:
+    aiInsightEN:`
+📊 Depends on:
 
 • ownership duration
 • purchase value
 • resale value
-• tax regulation
+• tax regulations
 
 💡 Exit strategy also impacts total investment performance.
-`
+`,
+
+    recommendationsIT:[
+      "Valuta tassazione futura sulla rivendita",
+      "Considera exit strategy e plusvalenza"
+    ],
+
+    recommendationsEN:[
+      "Evaluate future resale taxation",
+      "Consider exit strategy and capital gains"
+    ]
 
   }
 
