@@ -115,9 +115,7 @@ if(
 
   intent.intent !== "education" &&
 
-  window.rbKnowledgeBase?.[
-    entities.knowledge
-  ]?.type !== "subscriptions"
+  intent.intent !== "subscriptions"
 
 ){
 
