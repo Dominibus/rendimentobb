@@ -138,13 +138,23 @@ async function(message){
 // 🧠 MAIN KNOWLEDGE ENTITY
 // =========================================
 
-if(
+const bestKnowledge =
+
   matchedKnowledge.length
-){
+
+  ? matchedKnowledge[0]
+
+  : null;
+
+if(bestKnowledge){
 
   entities.knowledge =
 
-    matchedKnowledge[0].key;
+    bestKnowledge.key;
+
+  entities.knowledgeData =
+
+    bestKnowledge.item;
 
 }
 
