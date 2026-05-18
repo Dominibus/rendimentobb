@@ -39,6 +39,16 @@ window.rbDetectIntent = function(message = ""){
   };
 
 // ===========================================
+// 🧠 HELPERS
+// ===========================================
+
+const has = (...words) =>
+  words.some(word => text.includes(word));
+
+const hasAll = (...words) =>
+  words.every(word => text.includes(word));  
+
+// ===========================================
 // ❓ EDUCATION / EXPLANATION
 // PRIORITÀ MASSIMA
 // ===========================================
@@ -195,16 +205,26 @@ if(isEducation){
   // 🏦 MORTGAGE
   // ===========================================
 
-  const mortgageWords = [
+ const mortgageWords = [
 
-    "mutuo",
-    "mortgage",
-    "loan",
-    "finanziamento",
-    "ltv",
-    "rata"
+  "mutuo",
+  "mortgage",
+  "loan",
+  "finanziamento",
+  "ltv",
+  "rata",
 
-  ];
+  "tasso fisso",
+  "tasso variabile",
+
+  "fisso",
+  "variabile",
+
+  "mutuo 100",
+
+  "durata mutuo"
+
+];
 
   if(
     mortgageWords.some(word =>
@@ -224,36 +244,77 @@ if(isEducation){
 
   }
 
-  // ===========================================
-  // 🌍 MARKET
-  // ===========================================
+// ===========================================
+// 🌍 MARKET ANALYSIS
+// ===========================================
 
-  const marketWords = [
+if(
+
+  has(
 
     "mercato",
     "market",
-    "città",
-    "city",
-    "zona",
-    "location"
+    "benchmark",
+    "occupazione",
+    "occupancy",
+    "stagionalità",
+    "domanda",
+    "airbnb roma",
+    "airbnb milano",
+    "short rent",
+    "benchmark roma",
+    "benchmark milano",
+    "occupazione media",
+    "occupazione roma",
+    "occupazione milano"
 
-  ];
+  )
 
-  if(
-    marketWords.some(word =>
-      text.includes(word)
-    )
-  ){
+){
 
-    result.intent = "market_analysis";
+  result.intent = "market_analysis";
 
-    result.category = "market";
+  result.category = "market";
 
-    result.confidence = 0.90;
+  result.confidence = 0.94;
 
-    result.requiresMarketData = true;
+  result.requiresMarketData = true;
 
-  }
+}
+
+// ===========================================
+// 💼 INVESTMENT ADVISOR
+// ===========================================
+
+if(
+
+  has(
+
+    "conviene aprire",
+    "dove investire",
+    "voglio aprire",
+    "aprire un b&b",
+    "aprire un airbnb",
+    "b&b al mare",
+    "airbnb al mare",
+    "ho 80k",
+    "ho 100k",
+    "investire a roma",
+    "investire a milano"
+
+  )
+
+){
+
+  result.intent = "investment_advisor";
+
+  result.category = "strategy";
+
+  result.confidence = 0.96;
+
+  result.requiresMarketData = true;
+
+} 
 
   // ===========================================
   // ⚖️ COMPARISON
@@ -290,16 +351,25 @@ if(isEducation){
   // 🧠 STRATEGY
   // ===========================================
 
-  const strategyWords = [
+ const strategyWords = [
 
-    "conviene",
-    "investire",
-    "investimento",
-    "strategia",
-    "strategy",
-    "opportunità"
+  "conviene",
+  "investire",
+  "investimento",
+  "strategia",
+  "strategy",
+  "opportunità",
 
-  ];
+  "profittevole",
+  "redditività",
+
+  "miglior città",
+  "migliore città",
+
+  "aprire b&b",
+  "aprire airbnb"
+
+];
 
   if(
     strategyWords.some(word =>
@@ -394,18 +464,71 @@ if(isEducation){
 
   }
 
-  // ===========================================
-  // 🧠 DEBUG
-  // ===========================================
+// ===========================================
+// 🧠 FALLBACK SMART
+// ===========================================
 
-  console.log(
-    "🧠 INTENT ENGINE:",
-    result
-  );
+if(
 
-  return result;
+  result.intent === "generic"
 
-};
+){
+
+  // ROI / EDUCATION
+
+  if(
+    has(
+      "roi",
+      "cashflow",
+      "break even",
+      "dscr",
+      "sostenibilità"
+    )
+  ){
+
+    result.intent = "education";
+
+    result.category = "education";
+
+    result.confidence = 0.80;
+
+  }
+
+  // MARKET
+
+  else if(
+    has(
+      "roma",
+      "milano",
+      "napoli",
+      "firenze",
+      "benchmark",
+      "occupazione"
+    )
+  ){
+
+    result.intent = "market_analysis";
+
+    result.category = "market";
+
+    result.confidence = 0.75;
+
+    result.requiresMarketData = true;
+
+  }
+
+}
+
+// ===========================================
+// 🧠 DEBUG
+// ===========================================
+
+console.log(
+  "🧠 INTENT ENGINE:",
+  result
+);
+
+return result;
 
 // ===============================================
 // 🚀 READY
