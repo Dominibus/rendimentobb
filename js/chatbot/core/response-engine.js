@@ -487,50 +487,101 @@ else if(
   response.confidence =
     0.96;
 
+  // =====================================
+  // 🇮🇹 ITALIANO
+  // =====================================
+
+  const strategyIT = [
+
+    "🧠 Analisi strategica AI completata."
+
+  ];
+
+  if(roi > 0){
+
+    strategyIT.push(
+      `📊 ROI: ${roi.toFixed(1)}%`
+    );
+
+  }
+
+  if(occupancy > 0){
+
+    strategyIT.push(
+      `🏨 Occupazione: ${occupancy}%`
+    );
+
+  }
+
+  if(risk > 0){
+
+    strategyIT.push(
+      `⚠️ Risk: ${risk}/100`
+    );
+
+  }
+
+  strategyIT.push(
+
+    roi >= 10 && risk <= 40
+
+    ? "💡 L'investimento mostra metriche molto competitive."
+
+    : "💡 L'investimento richiede ottimizzazione operativa."
+
+  );
+
   response.textIT =
+    strategyIT.join("\n\n");
 
-`🧠 Analisi strategica AI completata.
+  // =====================================
+  // 🇬🇧 ENGLISH
+  // =====================================
 
-${roi > 0 ? `📊 ROI:
-${roi.toFixed(1)}%\n\n` : ""}
+  const strategyEN = [
 
-${occupancy > 0 ? `🏨 Occupazione:
-${occupancy}%\n\n` : ""}
+    "🧠 AI strategic analysis completed."
 
-${risk > 0 ? `⚠️ Risk:
-${risk}/100\n\n` : ""}
+  ];
 
-💡 L'investimento ${
-  roi >= 10 && risk <= 40
+  if(roi > 0){
 
-  ? "mostra metriche molto competitive."
+    strategyEN.push(
+      `📊 ROI: ${roi.toFixed(1)}%`
+    );
 
-  : "richiede ottimizzazione operativa."
-}`;
+  }
+
+  if(occupancy > 0){
+
+    strategyEN.push(
+      `🏨 Occupancy: ${occupancy}%`
+    );
+
+  }
+
+  if(risk > 0){
+
+    strategyEN.push(
+      `⚠️ Risk: ${risk}/100`
+    );
+
+  }
+
+  strategyEN.push(
+
+    roi >= 10 && risk <= 40
+
+    ? "💡 The investment shows highly competitive metrics."
+
+    : "💡 The investment requires operational optimization."
+
+  );
 
   response.textEN =
-
-`🧠 AI strategic analysis completed.
-
-${roi > 0 ? `📊 ROI:
-${roi.toFixed(1)}%\n\n` : ""}
-
-${occupancy > 0 ? `🏨 Occupancy:
-${occupancy}%\n\n` : ""}
-
-${risk > 0 ? `⚠️ Risk:
-${risk}/100\n\n` : ""}
-
-💡 The investment ${
-  roi >= 10 && risk <= 40
-
-  ? "shows highly competitive metrics."
-
-  : "requires operational optimization."
-}`;
+    strategyEN.join("\n\n");
 
 }
-
 // ===========================================
 // 💳 SUBSCRIPTIONS RESPONSE
 // ===========================================
