@@ -500,12 +500,23 @@ const contextualCity =
   const marketData =
   window.rbMarketData?.[contextualCity];
 
-  const profit =
-    Number(
-      data.netAfterMortgage ||
-      data.net ||
-      0
-    );
+  const liveData =
+  window.rbChatbotData || {};
+
+const profit =
+  Number(
+
+    liveData.net ??
+
+    data.netAfterMortgage ??
+
+    data.net ??
+
+    data.profit ??
+
+    0
+
+  );
 
   const occupancy =
   Number(
