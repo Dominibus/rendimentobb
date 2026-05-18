@@ -609,6 +609,46 @@ else{
 }
   
 }
+
+// ===========================================
+// 💳 SUBSCRIPTIONS RESPONSE
+// ===========================================
+
+else if(
+
+  entities.knowledge &&
+
+  window.rbKnowledgeBase?.[
+    entities.knowledge
+  ]?.type === "subscriptions"
+
+){
+
+  response.type =
+    "subscriptions";
+
+  response.confidence =
+    0.95;
+
+  const knowledge =
+
+    window.rbKnowledgeBase[
+      entities.knowledge
+    ];
+
+  response.textIT =
+
+    knowledge.textIT ||
+
+    "💳 Informazioni abbonamento non disponibili.";
+
+  response.textEN =
+
+    knowledge.textEN ||
+
+    "💳 Subscription information not available.";
+
+}  
   // ===========================================
   // 🤖 DEFAULT RESPONSE
   // ===========================================
