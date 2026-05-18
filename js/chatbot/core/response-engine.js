@@ -115,7 +115,11 @@ if(
 
   intent.intent !== "education" &&
 
-  intent.intent !== "subscriptions"
+  intent.intent !== "subscriptions" &&
+
+  intent.intent !== "market_analysis" &&
+
+  intent.intent !== "investment_strategy"
 
 ){
 
