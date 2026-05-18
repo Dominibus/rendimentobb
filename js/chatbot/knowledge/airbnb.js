@@ -8,6 +8,8 @@ Object.assign(window.rbKnowledgeBase, {
 
     type:"airbnb",
 
+    priority:10,
+
     keywords:[
       "airbnb",
       "short rent",
@@ -16,10 +18,19 @@ Object.assign(window.rbKnowledgeBase, {
       "vacation rental"
     ],
 
-    textIT:`
-🏨 Airbnb e gli affitti brevi permettono di monetizzare immobili tramite soggiorni turistici temporanei.
+    aiTitleIT:"🏨 AIRBNB E AFFITTI BREVI",
+    aiTitleEN:"🏨 AIRBNB & SHORT-RENT",
 
-La redditività dipende da:
+    aiSummaryIT:`
+Airbnb e gli affitti brevi permettono di monetizzare immobili tramite soggiorni turistici temporanei.
+`,
+
+    aiSummaryEN:`
+Airbnb and short rentals allow property monetization through temporary tourist stays.
+`,
+
+    aiInsightIT:`
+📊 La redditività dipende da:
 
 • occupazione
 • pricing dinamico
@@ -27,13 +38,11 @@ La redditività dipende da:
 • recensioni
 • gestione operativa
 
-💡 Una buona gestione può aumentare significativamente cashflow e ROI.
+💡 Una gestione efficace può aumentare cashflow e ROI.
 `,
 
-    textEN:`
-🏨 Airbnb and short rentals allow property monetization through temporary tourist stays.
-
-Profitability depends on:
+    aiInsightEN:`
+📊 Profitability depends on:
 
 • occupancy
 • dynamic pricing
@@ -41,14 +50,26 @@ Profitability depends on:
 • reviews
 • operational management
 
-💡 Good management can significantly improve cashflow and ROI.
-`
+💡 Effective management can significantly improve cashflow and ROI.
+`,
+
+    recommendationsIT:[
+      "Analizza domanda e occupazione prima di investire",
+      "Ottimizza pricing e gestione operativa"
+    ],
+
+    recommendationsEN:[
+      "Analyze demand and occupancy before investing",
+      "Optimize pricing and operational management"
+    ]
 
   },
 
   occupancyRate:{
 
     type:"airbnb",
+
+    priority:9,
 
     keywords:[
       "occupancy",
@@ -57,35 +78,56 @@ Profitability depends on:
       "booking rate"
     ],
 
-    textIT:`
-📅 L'occupazione misura quante notti vengono prenotate rispetto alla disponibilità totale.
+    aiTitleIT:"📅 OCCUPAZIONE B&B",
+    aiTitleEN:"📅 B&B OCCUPANCY",
 
-Occupazione elevata può migliorare:
+    aiSummaryIT:`
+L'occupazione misura quante notti vengono prenotate rispetto alla disponibilità totale.
+`,
+
+    aiSummaryEN:`
+Occupancy measures how many nights are booked compared to total availability.
+`,
+
+    aiInsightIT:`
+📈 Un'occupazione elevata può migliorare:
 
 • cashflow
 • sostenibilità mutuo
 • profitto netto
+• stabilità operativa
 
 💡 Le città turistiche premium tendono ad avere occupazioni più stabili.
 `,
 
-    textEN:`
-📅 Occupancy measures how many nights are booked compared to total availability.
-
-High occupancy can improve:
+    aiInsightEN:`
+📈 High occupancy may improve:
 
 • cashflow
 • mortgage sustainability
 • net profit
+• operational stability
 
-💡 Premium tourist cities tend to have more stable occupancy.
-`
+💡 Premium tourist cities tend to maintain more stable occupancy.
+`,
+
+    recommendationsIT:[
+      "Monitora occupazione media annuale",
+      "Confronta benchmark della città"
+    ],
+
+    recommendationsEN:[
+      "Monitor yearly occupancy averages",
+      "Compare city benchmark data"
+    ]
 
   },
 
   dynamicPricing:{
 
     type:"airbnb",
+
+    priority:8,
 
     keywords:[
       "dynamic pricing",
@@ -95,35 +137,56 @@ High occupancy can improve:
       "daily rate"
     ],
 
-    textIT:`
-💹 Il dynamic pricing ottimizza automaticamente il prezzo notte in base alla domanda.
+    aiTitleIT:"💹 DYNAMIC PRICING",
+    aiTitleEN:"💹 DYNAMIC PRICING",
 
-Può aumentare:
+    aiSummaryIT:`
+Il dynamic pricing ottimizza automaticamente il prezzo notte in base alla domanda.
+`,
+
+    aiSummaryEN:`
+Dynamic pricing automatically optimizes nightly rates based on demand.
+`,
+
+    aiInsightIT:`
+📊 Può aumentare:
 
 • revenue
 • occupazione
 • competitività mercato
+• redditività annuale
 
-💡 Prezzi statici possono ridurre il potenziale profitto annuale.
+💡 Prezzi statici possono ridurre il potenziale profitto.
 `,
 
-    textEN:`
-💹 Dynamic pricing automatically optimizes nightly prices based on demand.
-
-Can improve:
+    aiInsightEN:`
+📊 It can improve:
 
 • revenue
 • occupancy
 • market competitiveness
+• annual profitability
 
-💡 Static pricing may reduce annual profit potential.
-`
+💡 Static pricing may reduce profit potential.
+`,
+
+    recommendationsIT:[
+      "Aggiorna pricing in base alla domanda",
+      "Monitora stagionalità e benchmark"
+    ],
+
+    recommendationsEN:[
+      "Adjust pricing according to demand",
+      "Monitor seasonality and benchmarks"
+    ]
 
   },
 
   reviews:{
 
     type:"airbnb",
+
+    priority:8,
 
     keywords:[
       "reviews",
@@ -133,35 +196,56 @@ Can improve:
       "stars"
     ],
 
-    textIT:`
-⭐ Le recensioni influenzano visibilità, occupazione e pricing.
+    aiTitleIT:"⭐ RECENSIONI AIRBNB",
+    aiTitleEN:"⭐ AIRBNB REVIEWS",
 
-Rating elevati aiutano a:
+    aiSummaryIT:`
+Le recensioni influenzano visibilità, occupazione e pricing.
+`,
+
+    aiSummaryEN:`
+Reviews impact visibility, occupancy and pricing.
+`,
+
+    aiInsightIT:`
+📈 Rating elevati aiutano a:
 
 • aumentare prenotazioni
 • migliorare fiducia
 • aumentare prezzo medio notte
+• migliorare ranking piattaforma
 
 💡 Esperienza ospite e automazione incidono fortemente sulle recensioni.
 `,
 
-    textEN:`
-⭐ Reviews impact visibility, occupancy and pricing.
-
-High ratings help:
+    aiInsightEN:`
+📈 High ratings help:
 
 • increase bookings
 • improve trust
-• raise average nightly price
+• raise nightly rates
+• improve platform ranking
 
 💡 Guest experience and automation strongly affect reviews.
-`
+`,
+
+    recommendationsIT:[
+      "Ottimizza esperienza ospite",
+      "Rispondi rapidamente ai clienti"
+    ],
+
+    recommendationsEN:[
+      "Optimize guest experience",
+      "Respond quickly to guests"
+    ]
 
   },
 
   automation:{
 
     type:"airbnb",
+
+    priority:7,
 
     keywords:[
       "automation",
@@ -171,10 +255,19 @@ High ratings help:
       "property management"
     ],
 
-    textIT:`
-🤖 L'automazione riduce tempo operativo e costi di gestione.
+    aiTitleIT:"🤖 AUTOMAZIONE SHORT-RENT",
+    aiTitleEN:"🤖 SHORT-RENT AUTOMATION",
 
-Può includere:
+    aiSummaryIT:`
+L'automazione riduce tempo operativo e costi di gestione.
+`,
+
+    aiSummaryEN:`
+Automation reduces operational time and management costs.
+`,
+
+    aiInsightIT:`
+⚙️ Può includere:
 
 • self check-in
 • smart lock
@@ -184,10 +277,8 @@ Può includere:
 💡 L'automazione migliora scalabilità e sostenibilità del business.
 `,
 
-    textEN:`
-🤖 Automation reduces operational time and management costs.
-
-May include:
+    aiInsightEN:`
+⚙️ May include:
 
 • self check-in
 • smart locks
@@ -195,13 +286,25 @@ May include:
 • automated pricing
 
 💡 Automation improves scalability and business sustainability.
-`
+`,
+
+    recommendationsIT:[
+      "Automatizza processi ripetitivi",
+      "Riduci costi operativi e gestione manuale"
+    ],
+
+    recommendationsEN:[
+      "Automate repetitive processes",
+      "Reduce manual operations and costs"
+    ]
 
   },
 
   location:{
 
     type:"airbnb",
+
+    priority:10,
 
     keywords:[
       "location",
@@ -211,10 +314,19 @@ May include:
       "migliore città"
     ],
 
-    textIT:`
-📍 La posizione è uno dei fattori più importanti negli investimenti short-rent.
+    aiTitleIT:"📍 LOCATION INVESTIMENTO",
+    aiTitleEN:"📍 INVESTMENT LOCATION",
 
-Influenza:
+    aiSummaryIT:`
+La posizione è uno dei fattori più importanti negli investimenti short-rent.
+`,
+
+    aiSummaryEN:`
+Location is one of the most important factors in short-rent investments.
+`,
+
+    aiInsightIT:`
+📊 Influenza:
 
 • occupazione
 • prezzo notte
@@ -224,24 +336,34 @@ Influenza:
 💡 Mercati turistici forti tendono ad avere benchmark più stabili.
 `,
 
-    textEN:`
-📍 Location is one of the most important factors in short-rent investments.
-
-It impacts:
+    aiInsightEN:`
+📊 It impacts:
 
 • occupancy
 • nightly rates
 • operational risk
 • property value
 
-💡 Strong tourist markets tend to have more stable benchmarks.
-`
+💡 Strong tourist markets usually maintain more stable benchmarks.
+`,
+
+    recommendationsIT:[
+      "Analizza domanda turistica locale",
+      "Confronta benchmark e ROI città"
+    ],
+
+    recommendationsEN:[
+      "Analyze local tourist demand",
+      "Compare city ROI and benchmarks"
+    ]
 
   },
 
   hiddenCosts:{
 
     type:"airbnb",
+
+    priority:9,
 
     keywords:[
       "hidden costs",
@@ -250,10 +372,19 @@ It impacts:
       "operational costs"
     ],
 
-    textIT:`
-⚠️ Molti investitori sottovalutano i costi operativi reali.
+    aiTitleIT:"⚠️ COSTI NASCOSTI",
+    aiTitleEN:"⚠️ HIDDEN COSTS",
 
-Esempi comuni:
+    aiSummaryIT:`
+Molti investitori sottovalutano i costi operativi reali.
+`,
+
+    aiSummaryEN:`
+Many investors underestimate real operational costs.
+`,
+
+    aiInsightIT:`
+📊 Esempi comuni:
 
 • pulizie
 • manutenzione
@@ -262,13 +393,11 @@ Esempi comuni:
 • gestione ospiti
 • tasse
 
-💡 Ignorare i costi nascosti può falsare ROI e cashflow.
+💡 Ignorare costi nascosti può falsare ROI e cashflow.
 `,
 
-    textEN:`
-⚠️ Many investors underestimate real operational costs.
-
-Common examples:
+    aiInsightEN:`
+📊 Common examples:
 
 • cleaning
 • maintenance
@@ -278,13 +407,25 @@ Common examples:
 • taxes
 
 💡 Ignoring hidden costs can distort ROI and cashflow.
-`
+`,
+
+    recommendationsIT:[
+      "Calcola costi operativi reali",
+      "Valuta cashflow netto e sostenibilità"
+    ],
+
+    recommendationsEN:[
+      "Calculate real operational expenses",
+      "Evaluate net cashflow and sustainability"
+    ]
 
   },
 
   profitability:{
 
     type:"airbnb",
+
+    priority:10,
 
     keywords:[
       "profitable",
@@ -294,10 +435,19 @@ Common examples:
       "is it profitable"
     ],
 
-    textIT:`
-📈 La redditività reale dipende dall'equilibrio tra revenue, costi, rischio e sostenibilità.
+    aiTitleIT:"📈 REDDITIVITÀ AIRBNB",
+    aiTitleEN:"📈 AIRBNB PROFITABILITY",
 
-Un investimento profittevole deve valutare:
+    aiSummaryIT:`
+La redditività reale dipende dall'equilibrio tra revenue, costi, rischio e sostenibilità.
+`,
+
+    aiSummaryEN:`
+Real profitability depends on balancing revenue, costs, risk and sustainability.
+`,
+
+    aiInsightIT:`
+📊 Un investimento profittevole deve valutare:
 
 • ROI
 • cashflow
@@ -305,13 +455,11 @@ Un investimento profittevole deve valutare:
 • occupazione
 • rischio mercato
 
-💡 ROI elevato non garantisce automaticamente investimento sostenibile.
+⚠️ ROI elevato non garantisce automaticamente sostenibilità.
 `,
 
-    textEN:`
-📈 Real profitability depends on balancing revenue, costs, risk and sustainability.
-
-A profitable investment should evaluate:
+    aiInsightEN:`
+📊 A profitable investment should evaluate:
 
 • ROI
 • cashflow
@@ -319,8 +467,18 @@ A profitable investment should evaluate:
 • occupancy
 • market risk
 
-💡 High ROI does not automatically guarantee a sustainable investment.
-`
+⚠️ High ROI does not automatically guarantee sustainability.
+`,
+
+    recommendationsIT:[
+      "Analizza ROI e cashflow insieme",
+      "Valuta rischio operativo e sostenibilità"
+    ],
+
+    recommendationsEN:[
+      "Analyze ROI and cashflow together",
+      "Evaluate operational risk and sustainability"
+    ]
 
   }
 
