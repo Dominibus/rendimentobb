@@ -8,6 +8,8 @@ Object.assign(window.rbKnowledgeBase, {
 
     type:"support",
 
+    priority:9,
+
     keywords:[
       "login",
       "accedi",
@@ -17,35 +19,54 @@ Object.assign(window.rbKnowledgeBase, {
       "can't login"
     ],
 
-    textIT:`
-🔐 Per accedere a RendimentoBB utilizza email e password registrate.
+    aiTitleIT:"🔐 ACCESSO ACCOUNT",
+    aiTitleEN:"🔐 ACCOUNT LOGIN",
 
-Se non riesci ad accedere:
+    aiSummaryIT:`
+Per accedere a RendimentoBB utilizza email e password registrate.
+`,
+
+    aiSummaryEN:`
+Use your registered email and password to access RendimentoBB.
+`,
+
+    aiInsightIT:`
+💡 Se non riesci ad accedere:
 
 • controlla email/password
 • verifica la connessione
 • prova a reimpostare la password
 
-💡 Alcune funzioni premium richiedono piano Investor o PRO.
+⚠️ Alcune funzioni premium richiedono piano Investor o PRO.
 `,
 
-    textEN:`
-🔐 To access RendimentoBB use your registered email and password.
-
-If you cannot login:
+    aiInsightEN:`
+💡 If you cannot login:
 
 • check email/password
 • verify your connection
 • try resetting your password
 
-💡 Some premium features require Investor or PRO plans.
-`
+⚠️ Some premium features require Investor or PRO plans.
+`,
+
+    recommendationsIT:[
+      "Controlla credenziali e connessione internet",
+      "Usa recupero password se necessario"
+    ],
+
+    recommendationsEN:[
+      "Verify credentials and internet connection",
+      "Use password recovery if needed"
+    ]
 
   },
 
   resetPassword:{
 
     type:"support",
+
+    priority:8,
 
     keywords:[
       "reset password",
@@ -55,31 +76,54 @@ If you cannot login:
       "recupero password"
     ],
 
-    textIT:`
-🔑 Puoi reimpostare la password dalla schermata di login.
+    aiTitleIT:"🔑 RECUPERO PASSWORD",
+    aiTitleEN:"🔑 PASSWORD RECOVERY",
 
-Controlla anche:
-
-• cartella spam
-• email errata
-• ritardi temporanei email
+    aiSummaryIT:`
+Puoi reimpostare la password direttamente dalla schermata di login.
 `,
 
-    textEN:`
-🔑 You can reset your password from the login page.
+    aiSummaryEN:`
+You can reset your password directly from the login page.
+`,
 
-Also check:
+    aiInsightIT:`
+📩 Se non ricevi l'email:
 
-• spam folder
-• incorrect email
-• temporary email delays
-`
+• controlla spam
+• verifica indirizzo email
+• attendi alcuni minuti
+
+⚠️ Alcuni provider possono ritardare le email automatiche.
+`,
+
+    aiInsightEN:`
+📩 If you do not receive the email:
+
+• check spam folder
+• verify your email address
+• wait a few minutes
+
+⚠️ Some providers may delay automated emails.
+`,
+
+    recommendationsIT:[
+      "Controlla la cartella spam",
+      "Verifica che l'email sia corretta"
+    ],
+
+    recommendationsEN:[
+      "Check your spam folder",
+      "Verify the email address"
+    ]
 
   },
 
   account:{
 
     type:"support",
+
+    priority:7,
 
     keywords:[
       "account",
@@ -90,33 +134,56 @@ Also check:
       "my account"
     ],
 
-    textIT:`
-👤 L'account RendimentoBB consente di:
+    aiTitleIT:"👤 ACCOUNT RENDIMENTOBB",
+    aiTitleEN:"👤 RENDIMENTOBB ACCOUNT",
+
+    aiSummaryIT:`
+L'account RendimentoBB permette di salvare simulazioni e accedere agli strumenti avanzati.
+`,
+
+    aiSummaryEN:`
+Your RendimentoBB account allows access to advanced tools and saved simulations.
+`,
+
+    aiInsightIT:`
+📊 Con l'account puoi:
 
 • salvare simulazioni
-• accedere alla dashboard
 • confrontare investimenti
-• sbloccare strumenti premium
+• accedere alla dashboard
+• utilizzare strumenti premium
 
 💡 Le funzioni disponibili dipendono dal piano attivo.
 `,
 
-    textEN:`
-👤 Your RendimentoBB account allows you to:
+    aiInsightEN:`
+📊 With your account you can:
 
 • save simulations
-• access dashboard
 • compare investments
+• access dashboard
 • unlock premium tools
 
-💡 Available features depend on your active plan.
-`
+💡 Features depend on your active subscription plan.
+`,
+
+    recommendationsIT:[
+      "Mantieni aggiornati i dati del profilo",
+      "Utilizza dashboard e simulazioni salvate"
+    ],
+
+    recommendationsEN:[
+      "Keep your profile updated",
+      "Use dashboard and saved simulations"
+    ]
 
   },
 
   upgrade:{
 
     type:"support",
+
+    priority:10,
 
     keywords:[
       "upgrade",
@@ -127,43 +194,66 @@ Also check:
       "abbonamento"
     ],
 
-    textIT:`
-🚀 RendimentoBB include diversi livelli di accesso:
+    aiTitleIT:"🚀 PIANI RENDIMENTOBB",
+    aiTitleEN:"🚀 RENDIMENTOBB PLANS",
+
+    aiSummaryIT:`
+RendimentoBB include più livelli di accesso professionale.
+`,
+
+    aiSummaryEN:`
+RendimentoBB includes multiple professional access levels.
+`,
+
+    aiInsightIT:`
+📊 Piani disponibili:
 
 • Free
 • Investor
 • PRO
 
-I piani premium sbloccano:
+🔓 I piani premium sbloccano:
 
 • analisi avanzate
-• PDF executive
-• benchmark
+• benchmark mercato
 • AI insights
+• PDF executive
 • simulazioni professionali
 `,
 
-    textEN:`
-🚀 RendimentoBB includes multiple access levels:
+    aiInsightEN:`
+📊 Available plans:
 
 • Free
 • Investor
 • PRO
 
-Premium plans unlock:
+🔓 Premium plans unlock:
 
 • advanced analysis
-• executive PDF
-• benchmarks
+• market benchmarks
 • AI insights
+• executive PDF
 • professional simulations
-`
+`,
+
+    recommendationsIT:[
+      "Investor ideale per analisi avanzate",
+      "PRO consigliato per investitori professionali"
+    ],
+
+    recommendationsEN:[
+      "Investor is ideal for advanced analysis",
+      "PRO is recommended for professional investors"
+    ]
 
   },
 
   payment:{
 
     type:"support",
+
+    priority:8,
 
     keywords:[
       "payment",
@@ -175,35 +265,54 @@ Premium plans unlock:
       "errore pagamento"
     ],
 
-    textIT:`
-💳 I pagamenti premium vengono gestiti tramite sistemi sicuri.
+    aiTitleIT:"💳 PAGAMENTI PREMIUM",
+    aiTitleEN:"💳 PREMIUM PAYMENTS",
 
-Se il pagamento fallisce:
-
-• verifica la carta
-• controlla fondi disponibili
-• riprova dopo alcuni minuti
-
-⚠️ Alcune banche bloccano temporaneamente pagamenti online automatici.
+    aiSummaryIT:`
+I pagamenti premium vengono elaborati tramite sistemi sicuri.
 `,
 
-    textEN:`
-💳 Premium payments are processed through secure systems.
+    aiSummaryEN:`
+Premium payments are processed through secure systems.
+`,
 
-If payment fails:
+    aiInsightIT:`
+⚠️ Se il pagamento fallisce:
+
+• controlla la carta
+• verifica i fondi disponibili
+• riprova dopo alcuni minuti
+
+💡 Alcune banche bloccano temporaneamente i pagamenti online automatici.
+`,
+
+    aiInsightEN:`
+⚠️ If payment fails:
 
 • check your card
 • verify available funds
 • retry after a few minutes
 
-⚠️ Some banks temporarily block automated online payments.
-`
+💡 Some banks temporarily block automated online payments.
+`,
+
+    recommendationsIT:[
+      "Verifica disponibilità carta",
+      "Ripeti il pagamento dopo alcuni minuti"
+    ],
+
+    recommendationsEN:[
+      "Verify card availability",
+      "Retry payment after a few minutes"
+    ]
 
   },
 
   pdfReport:{
 
     type:"support",
+
+    priority:9,
 
     keywords:[
       "pdf",
@@ -213,23 +322,32 @@ If payment fails:
       "scaricare pdf"
     ],
 
-    textIT:`
-📄 Il report PDF executive è disponibile per utenti PRO.
+    aiTitleIT:"📄 REPORT PDF EXECUTIVE",
+    aiTitleEN:"📄 EXECUTIVE PDF REPORT",
 
-Include:
+    aiSummaryIT:`
+Il report PDF executive è disponibile per utenti PRO.
+`,
+
+    aiSummaryEN:`
+The executive PDF report is available for PRO users.
+`,
+
+    aiInsightIT:`
+📊 Include:
 
 • ROI avanzato
 • benchmark mercato
 • cashflow
 • rischio
 • sostenibilità mutuo
-• insight AI
+• AI insights
+
+💡 Pensato per analisi professionali e valutazioni investimento.
 `,
 
-    textEN:`
-📄 The executive PDF report is available for PRO users.
-
-Includes:
+    aiInsightEN:`
+📊 Includes:
 
 • advanced ROI
 • market benchmarks
@@ -237,7 +355,19 @@ Includes:
 • risk
 • mortgage sustainability
 • AI insights
-`
+
+💡 Designed for professional investment analysis.
+`,
+
+    recommendationsIT:[
+      "Utilizza il PDF per confronti professionali",
+      "Analizza cashflow e rischio prima di investire"
+    ],
+
+    recommendationsEN:[
+      "Use the PDF for professional comparisons",
+      "Analyze risk and cashflow before investing"
+    ]
 
   }
 
