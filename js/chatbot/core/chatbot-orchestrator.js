@@ -65,12 +65,47 @@ async function(message){
     // 📊 ANALYSIS DATA
     // =========================================
 
-    const analysisData =
+    const analysisData = {
 
-      window.lastAnalysisData ||
+  ...(window.lastAnalysisData || {}),
 
-      {};
+  roi:
 
+    window.currentROI ||
+
+    window.roi ||
+
+    window.lastROI ||
+
+    0,
+
+  risk:
+
+    window.currentRisk ||
+
+    window.risk ||
+
+    window.riskScore ||
+
+    0,
+
+  occupancy:
+
+    window.currentOccupancy ||
+
+    window.occupancy ||
+
+    window.occupancyRate ||
+
+    0,
+
+  city:
+
+    window.currentCity ||
+
+    "roma"
+
+};
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
