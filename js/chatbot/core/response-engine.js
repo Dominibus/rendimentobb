@@ -536,7 +536,22 @@ else if(
   response.confidence =
     0.97;
 
-  response.textIT =
+  const q =
+    String(userMessage || "")
+    .toLowerCase();
+
+  // =====================================
+  // 💰 PREZZI
+  // =====================================
+
+  if(
+    q.includes("costo") ||
+    q.includes("prezzo") ||
+    q.includes("quanto costa") ||
+    q.includes("price")
+  ){
+
+    response.textIT =
 
 `🔥 PIANI RENDIMENTOBB
 
@@ -553,11 +568,9 @@ else if(
 • forecast
 • analisi rischio
 • mutui
-• export completo
+• export completo`;
 
-💡 PRO è pensato per investitori e professionisti short-rent.`;
-
-  response.textEN =
+    response.textEN =
 
 `🔥 RENDIMENTOBB PLANS
 
@@ -574,9 +587,124 @@ else if(
 • forecasts
 • risk analysis
 • mortgages
-• full export
+• full export`;
+
+  }
+
+  // =====================================
+  // 🔥 DIFFERENZA PIANI
+  // =====================================
+
+  else if(
+    q.includes("differenza") ||
+    q.includes("investor") ||
+    q.includes("pro")
+  ){
+
+    response.textIT =
+
+`🚀 DIFFERENZA INVESTOR vs PRO
+
+🟢 INVESTOR (€19)
+Ideale per chi vuole:
+• simulare investimenti
+• confrontare città
+• analizzare ROI e cashflow
+
+🚀 PRO (€29)
+Include tutto Investor +
+• PDF professionale bancario
+• AI avanzata
+• forecast investimento
+• analisi rischio completa
+• simulazioni mutuo
+• export avanzati
+
+💡 PRO è pensato per investitori e professionisti short-rent.`;
+
+    response.textEN =
+
+`🚀 INVESTOR vs PRO
+
+🟢 INVESTOR (€19)
+Perfect for:
+• investment simulations
+• city comparisons
+• ROI and cashflow analysis
+
+🚀 PRO (€29)
+Includes everything in Investor +
+• professional bank-level PDF
+• advanced AI
+• investment forecasts
+• full risk analysis
+• mortgage simulations
+• advanced exports
 
 💡 PRO is designed for investors and short-rent professionals.`;
+
+  }
+
+  // =====================================
+  // ❌ DISDETTA
+  // =====================================
+
+  else if(
+    q.includes("disdire") ||
+    q.includes("annullare") ||
+    q.includes("cancellare") ||
+    q.includes("cancel")
+  ){
+
+    response.textIT =
+
+`❌ Puoi annullare il tuo abbonamento in qualsiasi momento.
+
+L’accesso rimarrà attivo fino alla fine del periodo già pagato.
+
+Per gestire il piano:
+• accedi al tuo account
+• apri area abbonamento
+• seleziona gestione piano`;
+
+    response.textEN =
+
+`❌ You can cancel your subscription anytime.
+
+Your access will remain active until the end of the paid period.
+
+To manage your plan:
+• log into your account
+• open subscription area
+• select manage plan`;
+
+  }
+
+  // =====================================
+  // 📌 DEFAULT
+  // =====================================
+
+  else{
+
+    response.textIT =
+
+`💳 Posso aiutarti con:
+
+• prezzi piani
+• differenza Investor/PRO
+• gestione abbonamento
+• funzionalità disponibili`;
+
+    response.textEN =
+
+`💳 I can help you with:
+
+• plan pricing
+• Investor vs PRO
+• subscription management
+• available features`;
+
+  }
 
 }
   // ===========================================
