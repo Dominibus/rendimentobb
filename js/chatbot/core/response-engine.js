@@ -536,21 +536,16 @@ else if(
     String(message).toLowerCase();
 
 // ===========================================
-// 🎓 DYNAMIC EDUCATIONAL KNOWLEDGE
+// 🎓 ENTITY KNOWLEDGE ROUTING
 // ===========================================
 
-const topic = Object.keys(
-  window.rbKnowledgeBase || {}
-).find(key =>
-
-  msg.includes(key)
-
-);
+const knowledgeKey =
+  entities.knowledge;
 
 const knowledge =
-
-  window.rbKnowledgeBase?.[topic];
-
+  window.rbKnowledgeBase?.[
+    knowledgeKey
+  ];
 // ===========================================
 // 📚 KNOWLEDGE / EDUCATION ROUTING
 // ===========================================
