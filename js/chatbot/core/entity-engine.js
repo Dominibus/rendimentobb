@@ -876,6 +876,71 @@ try{
 }
 
   // ===========================================
+// 📊 LIVE ANALYSIS DATA
+// ===========================================
+
+if(window.lastAnalysisData){
+
+  const liveData =
+
+    window.lastAnalysisData;
+
+  if(
+    entities.roi === null &&
+    liveData.roi
+  ){
+
+    entities.roi =
+      Number(liveData.roi);
+
+  }
+
+  if(
+    entities.occupancy === null &&
+    liveData.occupancy
+  ){
+
+    entities.occupancy =
+      Number(liveData.occupancy);
+
+  }
+
+  if(
+    entities.risk === null &&
+    liveData.risk
+  ){
+
+    entities.risk =
+      Number(liveData.risk);
+
+  }
+
+  if(
+    entities.nightly === null &&
+    liveData.nightly
+  ){
+
+    entities.nightly =
+      Number(liveData.nightly);
+
+    entities.adr =
+      Number(liveData.nightly);
+
+  }
+
+  if(
+    entities.city === null &&
+    liveData.city
+  ){
+
+    entities.city =
+      String(liveData.city);
+
+  }
+
+}
+
+  // ===========================================
   // 🧠 CLEAN DUPLICATES
   // ===========================================
 
