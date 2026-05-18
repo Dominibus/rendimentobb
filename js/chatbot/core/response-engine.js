@@ -567,13 +567,33 @@ if(knowledge){
 
 }
 
-else if(
+else{
 
-  msg.includes("cashflow") ||
+  response.textIT =
 
-  msg.includes("cash flow")
+`🎓 Posso spiegarti:
 
-){
+• ROI
+• cashflow
+• rischio
+• DSCR
+• occupazione
+• sostenibilità
+• mutui`;
+
+  response.textEN =
+
+`🎓 I can explain:
+
+• ROI
+• cashflow
+• risk
+• DSCR
+• occupancy
+• sustainability
+• mortgages`;
+
+}
   // ===========================================
   // 💸 CASHFLOW
   // ===========================================
