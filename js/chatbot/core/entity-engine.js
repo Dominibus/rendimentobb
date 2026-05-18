@@ -679,6 +679,46 @@ for(const pattern of occupancyPatterns){
   }
 
   // ===========================================
+// 📚 KNOWLEDGE DETECTION
+// ===========================================
+
+entities.knowledge = null;
+
+const knowledgeBase =
+  window.rbKnowledgeBase || {};
+
+for(const key in knowledgeBase){
+
+  const item =
+    knowledgeBase[key];
+
+  if(!item?.keywords) continue;
+
+  const matched =
+    item.keywords.some(keyword =>
+
+      text.includes(
+        String(keyword)
+          .toLowerCase()
+      )
+
+    );
+
+  if(matched){
+
+    entities.knowledge = key;
+
+    entities.detectedTopics.push(
+      "education"
+    );
+
+    break;
+
+  }
+
+}
+
+  // ===========================================
   // 🧠 CLEAN DUPLICATES
   // ===========================================
 
