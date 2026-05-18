@@ -3344,23 +3344,26 @@ const safeROI = realROI;
 
 const access = window.getUserAccess?.() || {};
 
-const realROI = Number(finalROI || roi || 0);
+// 🔥 usa ROI reale già calcolato sopra
+const chatbotRealROI = Number(realROI || roi || 0);
 
 const chatbotROI =
-  (!access.isInvestor &&
-   !access.isPro &&
-   !access.isAdmin &&
-   realROI <= 0)
-    ? 0
-    : realROI;
+(
+  !access.isInvestor &&
+  !access.isPro &&
+  !access.isAdmin &&
+  chatbotRealROI <= 0
+)
+? 0
+: chatbotRealROI;
 
 window.rbChatbotData = {
 
   roi: chatbotROI,
 
-  visualROI: chatbotROI,
+  visualROI: visualROI,
 
-  realROI: realROI,
+  realROI: chatbotRealROI,
 
   risk: risk,
 
@@ -3376,8 +3379,7 @@ window.rbChatbotData = {
 
   city:
     selectedCity ||
-    marketCity ||
-    currentCity ||
+    window.currentCity ||
     "Unknown"
 
 };
