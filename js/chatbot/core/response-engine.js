@@ -552,13 +552,13 @@ const knowledge =
 
 if(knowledge){
 
-  response.textIT =
-    knowledge.textIT ||
-    "⚠️ Nessuna spiegazione disponibile.";
+response.textIT =
+  knowledge?.text?.it ||
+  "⚠️ Nessuna spiegazione disponibile.";
 
-  response.textEN =
-    knowledge.textEN ||
-    "⚠️ No explanation available.";
+response.textEN =
+  knowledge?.text?.en ||
+  "⚠️ No explanation available.";
 
 }
 
