@@ -3342,11 +3342,25 @@ const safeROI = realROI;
 // 🧠 CHATBOT LIVE DATA
 // ===============================================
 
+const access = window.getUserAccess?.() || {};
+
+const realROI = Number(finalROI || roi || 0);
+
+const chatbotROI =
+  (!access.isInvestor &&
+   !access.isPro &&
+   !access.isAdmin &&
+   realROI <= 0)
+    ? 0
+    : realROI;
+
 window.rbChatbotData = {
 
-  roi: safeROI,
+  roi: chatbotROI,
 
-  visualROI: visualROI,
+  visualROI: chatbotROI,
+
+  realROI: realROI,
 
   risk: risk,
 
@@ -3372,7 +3386,6 @@ console.log(
   "🧠 CHATBOT LIVE:",
   window.rbChatbotData
 );
-
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
