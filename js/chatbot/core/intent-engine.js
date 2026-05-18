@@ -316,6 +316,57 @@ if(isEducation){
   }
 
   // ===========================================
+  // 💳 SUBSCRIPTIONS / PRICING
+  // ===========================================
+
+  const subscriptionWords = [
+
+    "pro",
+    "investor",
+
+    "abbonamento",
+    "abbonamenti",
+
+    "pricing",
+    "premium",
+
+    "piano",
+    "piani",
+
+    "quanto costa",
+    "costo",
+
+    "upgrade",
+
+    "pro plan",
+    "investor plan",
+
+    "piano pro",
+    "piano investor",
+
+    "differenza investor",
+    "differenza pro",
+
+    "funzioni pro",
+    "funzioni investor"
+
+  ];
+
+  if(
+    subscriptionWords.some(word =>
+      text.includes(word)
+    )
+  ){
+
+    result.intent = "subscriptions";
+
+    result.category = "business";
+
+    result.confidence = 0.97;
+
+  }
+
+  // ===========================================
   // 👋 GREETING
   // ===========================================
 
