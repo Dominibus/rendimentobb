@@ -186,19 +186,25 @@
 
     "/js/chatbot/knowledge-base.js",
 
-    // =========================================
-    // 📚 KNOWLEDGE MODULES
-    // =========================================
+// =========================================
+// 📚 KNOWLEDGE MODULES
+// =========================================
 
-    "/js/chatbot/knowledge/real-estate.js",
-    "/js/chatbot/knowledge/mortgages.js",
-    "/js/chatbot/knowledge/shortrent.js",
-    "/js/chatbot/knowledge/finance.js",
-    "/js/chatbot/knowledge/risk.js",
-    "/js/chatbot/knowledge/mistakes.js",
-    "/js/chatbot/knowledge/beginner.js",
-    "/js/chatbot/knowledge/markets.js",
-    "/js/chatbot/knowledge/roi.js",
+"/js/chatbot/knowledge/glossary.js",
+"/js/chatbot/knowledge/finance.js",
+"/js/chatbot/knowledge/risk.js",
+"/js/chatbot/knowledge/mortgages.js",
+"/js/chatbot/knowledge/shortrent.js",
+"/js/chatbot/knowledge/real-estate.js",
+"/js/chatbot/knowledge/legal.js",
+"/js/chatbot/knowledge/taxes.js",
+"/js/chatbot/knowledge/mistakes.js",
+"/js/chatbot/knowledge/beginner.js",
+"/js/chatbot/knowledge/markets.js",
+"/js/chatbot/knowledge/subscriptions.js",
+"/js/chatbot/knowledge/support.js",
+"/js/chatbot/knowledge/airbnb.js",
+"/js/chatbot/knowledge/roi.js",
 
     // =========================================
     // 🌍 DATA
