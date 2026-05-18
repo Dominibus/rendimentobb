@@ -678,7 +678,7 @@ for(const pattern of occupancyPatterns){
 
   }
 
-  // ===========================================
+// ===========================================
 // 📚 KNOWLEDGE DETECTION
 // ===========================================
 
@@ -687,19 +687,36 @@ entities.knowledge = null;
 const knowledgeBase =
   window.rbKnowledgeBase || {};
 
+const normalizedText =
+
+  String(text || "")
+    .toLowerCase()
+    .trim();
+
 for(const key in knowledgeBase){
 
   const item =
     knowledgeBase[key];
 
-  if(!item?.keywords) continue;
+  if(
+    !item ||
+    !Array.isArray(item.keywords)
+  ){
+
+    continue;
+
+  }
 
   const matched =
+
     item.keywords.some(keyword =>
 
-      text.includes(
+      normalizedText.includes(
+
         String(keyword)
           .toLowerCase()
+          .trim()
+
       )
 
     );
@@ -708,8 +725,15 @@ for(const key in knowledgeBase){
 
     entities.knowledge = key;
 
+    entities.knowledgeData = item;
+
     entities.detectedTopics.push(
       "education"
+    );
+
+    console.log(
+      "📚 KNOWLEDGE MATCH:",
+      key
     );
 
     break;
