@@ -113,7 +113,11 @@ if(
 
   !hasAnalysis &&
 
-  intent.intent !== "education"
+  intent.intent !== "education" &&
+
+  window.rbKnowledgeBase?.[
+    entities.knowledge
+  ]?.type !== "subscriptions"
 
 ){
 
