@@ -552,56 +552,28 @@ const knowledge =
   window.rbKnowledgeBase?.[topic];
 
 // ===========================================
-// 📚 KNOWLEDGE FOUND
+// 📚 KNOWLEDGE / EDUCATION ROUTING
 // ===========================================
 
 if(knowledge){
 
   response.textIT =
-
     knowledge.textIT ||
-
     "⚠️ Nessuna spiegazione disponibile.";
 
   response.textEN =
-
     knowledge.textEN ||
-
     "⚠️ No explanation available.";
 
 }
 
-// ===========================================
-// 🌍 FALLBACK
-// ===========================================
+else if(
 
-else{
+  msg.includes("cashflow") ||
 
-  response.textIT =
+  msg.includes("cash flow")
 
-`🎓 Posso spiegarti:
-
-• ROI
-• cashflow
-• rischio
-• DSCR
-• occupazione
-• sostenibilità
-• mutui`;
-
-  response.textEN =
-
-`🎓 I can explain:
-
-• ROI
-• cashflow
-• risk
-• DSCR
-• occupancy
-• sustainability
-• mortgages`;
-
-}
+){
   // ===========================================
   // 💸 CASHFLOW
   // ===========================================
