@@ -3338,6 +3338,41 @@ const safeROI = realROI;
 
     renderInvestmentScore(safeROI, Math.round(risk));
 
+// ===============================================
+// 🧠 CHATBOT LIVE DATA
+// ===============================================
+
+window.rbChatbotData = {
+
+  roi: safeROI,
+
+  visualROI: visualROI,
+
+  risk: risk,
+
+  gross: gross,
+
+  net: net,
+
+  occupancy: occupancy,
+
+  priceNight: priceNight,
+
+  expenses: expenses,
+
+  city:
+    selectedCity ||
+    marketCity ||
+    currentCity ||
+    "Unknown"
+
+};
+
+console.log(
+  "🧠 CHATBOT LIVE:",
+  window.rbChatbotData
+);
+
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
