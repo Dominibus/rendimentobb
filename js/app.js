@@ -3401,9 +3401,28 @@ if(riskPreview){
 
     // ================= UI =================
     ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.innerText = roiText;
-    });
+
+  const el = document.getElementById(id);
+
+  if(!el) return;
+
+  // 🔒 FREE
+  if(
+    access.isFree &&
+    !access.isInvestor &&
+    !access.isPro &&
+    !access.isAdmin
+  ){
+
+    el.innerText = "—";
+
+  }else{
+
+    el.innerText = roiText;
+
+  }
+
+});
 
     const profitEl = document.getElementById("profit-live");
     if(profitEl){
