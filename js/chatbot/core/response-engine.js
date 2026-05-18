@@ -560,6 +560,10 @@ if(knowledge){
 
     knowledge?.textIT ||
 
+    `${knowledge?.aiSummaryIT || ""}
+
+${knowledge?.aiInsightIT || ""}` ||
+
     "⚠️ Nessuna spiegazione disponibile.";
 
   response.textEN =
@@ -567,6 +571,10 @@ if(knowledge){
     knowledge?.text?.en ||
 
     knowledge?.textEN ||
+
+    `${knowledge?.aiSummaryEN || ""}
+
+${knowledge?.aiInsightEN || ""}` ||
 
     "⚠️ No explanation available.";
 
