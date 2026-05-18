@@ -743,6 +743,139 @@ for(const key in knowledgeBase){
 }
 
   // ===========================================
+// 📊 LIVE SIMULATOR KPI EXTRACTION
+// ===========================================
+
+try{
+
+  // ROI
+  if(entities.roi === null){
+
+    const roiEl =
+
+      document.querySelector(
+        "#profitabilityScore, .roi-value, [data-kpi='roi']"
+      );
+
+    if(roiEl){
+
+      const roiValue = parseFloat(
+
+        roiEl.textContent
+          .replace(/[^\d.,-]/g,"")
+          .replace(",", ".")
+
+      );
+
+      if(!isNaN(roiValue)){
+
+        entities.roi = roiValue;
+
+      }
+
+    }
+
+  }
+
+  // OCCUPANCY
+  if(entities.occupancy === null){
+
+    const occEl =
+
+      document.querySelector(
+        "#occupancyRate, .occupancy-value, [data-kpi='occupancy']"
+      );
+
+    if(occEl){
+
+      const occValue = parseFloat(
+
+        occEl.textContent
+          .replace(/[^\d.,-]/g,"")
+          .replace(",", ".")
+
+      );
+
+      if(!isNaN(occValue)){
+
+        entities.occupancy = occValue;
+
+      }
+
+    }
+
+  }
+
+  // RISK
+  if(entities.risk === null){
+
+    const riskEl =
+
+      document.querySelector(
+        "#riskScore, .risk-value, [data-kpi='risk']"
+      );
+
+    if(riskEl){
+
+      const riskValue = parseFloat(
+
+        riskEl.textContent
+          .replace(/[^\d.,-]/g,"")
+          .replace(",", ".")
+
+      );
+
+      if(!isNaN(riskValue)){
+
+        entities.risk = riskValue;
+
+      }
+
+    }
+
+  }
+
+  // NIGHTLY RATE
+  if(entities.nightly === null){
+
+    const nightlyEl =
+
+      document.querySelector(
+        "#nightlyRate, .nightly-value, [data-kpi='nightly']"
+      );
+
+    if(nightlyEl){
+
+      const nightlyValue = parseFloat(
+
+        nightlyEl.textContent
+          .replace(/[^\d.,-]/g,"")
+          .replace(",", ".")
+
+      );
+
+      if(!isNaN(nightlyValue)){
+
+        entities.nightly = nightlyValue;
+
+        entities.adr = nightlyValue;
+
+      }
+
+    }
+
+  }
+
+}catch(err){
+
+  console.warn(
+    "⚠️ KPI extraction failed:",
+    err
+  );
+
+}
+
+  // ===========================================
   // 🧠 CLEAN DUPLICATES
   // ===========================================
 
