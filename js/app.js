@@ -3328,9 +3328,17 @@ const safeROI = realROI;
 
 const gross = Number(result?.revenue ?? result?.gross ?? 0);
 
+const gross = Number(
+  result?.revenue ??
+  result?.gross ??
+  0
+);
+
 const net = Number(
   result?.netAfterMortgage ??
   result?.net ??
+  result?.profit ??
+  (gross * 0.38) ??
   0
 );
 
