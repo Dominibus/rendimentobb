@@ -65,39 +65,36 @@ async function(message){
     // 📊 ANALYSIS DATA
     // =========================================
 
-    const analysisData = {
+const analysisData = {
 
   ...(window.lastAnalysisData || {}),
 
   roi:
 
-    window.currentROI ||
-
-    window.roi ||
-
-    window.lastROI ||
-
-    0,
+    Number(
+      document.getElementById("roi-value")
+      ?.textContent
+      ?.replace("%","")
+      ?.trim()
+    ) || 0,
 
   risk:
 
-    window.currentRisk ||
-
-    window.risk ||
-
-    window.riskScore ||
-
-    0,
+    Number(
+      document.getElementById("risk-score")
+      ?.textContent
+      ?.replace("/100","")
+      ?.trim()
+    ) || 0,
 
   occupancy:
 
-    window.currentOccupancy ||
-
-    window.occupancy ||
-
-    window.occupancyRate ||
-
-    0,
+    Number(
+      document.getElementById("occupancy-rate")
+      ?.textContent
+      ?.replace("%","")
+      ?.trim()
+    ) || 0,
 
   city:
 
