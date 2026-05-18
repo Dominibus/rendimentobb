@@ -527,38 +527,56 @@ ${risk}/100
 // ===========================================
 
 else if(
-
-  entities.knowledge &&
-
-  window.rbKnowledgeBase?.[
-    entities.knowledge
-  ]?.type === "subscriptions"
-
+  intent.intent === "subscriptions"
 ){
 
   response.type =
     "subscriptions";
 
   response.confidence =
-    0.95;
-
-  const knowledge =
-
-    window.rbKnowledgeBase[
-      entities.knowledge
-    ];
+    0.97;
 
   response.textIT =
 
-`${knowledge?.aiSummaryIT || ""}
+`🔥 PIANI RENDIMENTOBB
 
-${knowledge?.aiInsightIT || ""}`;
+🟢 INVESTOR — €19/mese
+• benchmark città
+• analisi avanzate
+• simulazioni investimento
+• metriche short-rent
+
+🚀 PRO — €29/mese
+• tutto Investor
+• PDF bancario
+• AI avanzata
+• forecast
+• analisi rischio
+• mutui
+• export completo
+
+💡 PRO è pensato per investitori e professionisti short-rent.`;
 
   response.textEN =
 
-`${knowledge?.aiSummaryEN || ""}
+`🔥 RENDIMENTOBB PLANS
 
-${knowledge?.aiInsightEN || ""}`;
+🟢 INVESTOR — €19/month
+• city benchmarks
+• advanced analysis
+• investment simulations
+• short-rent metrics
+
+🚀 PRO — €29/month
+• everything in Investor
+• bank-level PDF
+• advanced AI
+• forecasts
+• risk analysis
+• mortgages
+• full export
+
+💡 PRO is designed for investors and short-rent professionals.`;
 
 }
   // ===========================================
