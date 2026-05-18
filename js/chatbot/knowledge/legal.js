@@ -8,6 +8,8 @@ Object.assign(window.rbKnowledgeBase, {
 
     type:"legal",
 
+    priority:9,
+
     keywords:[
       "cin",
       "cin code",
@@ -15,35 +17,56 @@ Object.assign(window.rbKnowledgeBase, {
       "codice identificativo"
     ],
 
-    textIT:`
-🪪 Il CIN è il Codice Identificativo Nazionale per le strutture ricettive.
+    aiTitleIT:"🪪 CODICE CIN",
+    aiTitleEN:"🪪 CIN CODE",
 
-Può essere richiesto per:
+    aiSummaryIT:`
+Il CIN è il Codice Identificativo Nazionale per le strutture ricettive.
+`,
+
+    aiSummaryEN:`
+CIN is the National Identification Code for hospitality properties.
+`,
+
+    aiInsightIT:`
+📄 Può essere richiesto per:
 
 • pubblicare annunci
 • operare legalmente
 • identificare la struttura
+• rispettare normative short-rent
 
-💡 Le normative short-rent possono cambiare in base alla città e al paese.
+💡 Le regole possono variare in base a città e paese.
 `,
 
-    textEN:`
-🪪 CIN is the National Identification Code for hospitality properties.
-
-It may be required to:
+    aiInsightEN:`
+📄 It may be required to:
 
 • publish listings
 • operate legally
 • identify the property
+• comply with short-rent regulations
 
-💡 Short-rent regulations may vary depending on city and country.
-`
+💡 Rules may vary depending on city and country.
+`,
+
+    recommendationsIT:[
+      "Verifica le normative locali",
+      "Mantieni aggiornata la documentazione della struttura"
+    ],
+
+    recommendationsEN:[
+      "Check local regulations",
+      "Keep property documentation updated"
+    ]
 
   },
 
   licenses:{
 
     type:"legal",
+
+    priority:8,
 
     keywords:[
       "license",
@@ -53,37 +76,56 @@ It may be required to:
       "autorizzazione"
     ],
 
-    textIT:`
-📄 Alcune città richiedono autorizzazioni specifiche per affitti brevi e B&B.
+    aiTitleIT:"📄 LICENZE E AUTORIZZAZIONI",
+    aiTitleEN:"📄 LICENSES AND PERMITS",
 
-Possono includere:
+    aiSummaryIT:`
+Alcune città richiedono autorizzazioni specifiche per affitti brevi e B&B.
+`,
+
+    aiSummaryEN:`
+Some cities require specific permits for short rentals and B&Bs.
+`,
+
+    aiInsightIT:`
+📋 Possono includere:
 
 • registrazioni comunali
 • comunicazioni turistiche
-• normative sicurezza
+• norme sicurezza
 • requisiti strutturali
 
-💡 Verificare sempre la normativa locale prima di investire.
+⚠️ Verificare sempre la normativa locale prima di investire.
 `,
 
-    textEN:`
-📄 Some cities require specific permits for short rentals and B&Bs.
-
-May include:
+    aiInsightEN:`
+📋 May include:
 
 • city registrations
 • tourism communication
 • safety regulations
 • structural requirements
 
-💡 Always verify local regulations before investing.
-`
+⚠️ Always verify local regulations before investing.
+`,
+
+    recommendationsIT:[
+      "Controlla requisiti comunali",
+      "Valuta normative prima dell'acquisto"
+    ],
+
+    recommendationsEN:[
+      "Check city requirements",
+      "Review regulations before purchase"
+    ]
 
   },
 
   contracts:{
 
     type:"legal",
+
+    priority:7,
 
     keywords:[
       "contract",
@@ -92,37 +134,56 @@ May include:
       "contratto affitto"
     ],
 
-    textIT:`
-✍️ I contratti aiutano a proteggere proprietario e ospiti.
+    aiTitleIT:"✍️ CONTRATTI SHORT-RENT",
+    aiTitleEN:"✍️ SHORT-RENT CONTRACTS",
 
-Nel settore short-rent è importante definire:
+    aiSummaryIT:`
+I contratti aiutano a proteggere proprietari e ospiti.
+`,
+
+    aiSummaryEN:`
+Contracts help protect both owners and guests.
+`,
+
+    aiInsightIT:`
+📑 Nel settore short-rent è importante definire:
 
 • durata soggiorno
 • regole struttura
 • pagamenti
 • responsabilità
 
-💡 Una gestione chiara riduce rischi operativi e controversie.
+💡 Una gestione chiara riduce controversie e rischi operativi.
 `,
 
-    textEN:`
-✍️ Contracts help protect both owners and guests.
-
-In the short-rent sector it is important to define:
+    aiInsightEN:`
+📑 In the short-rent sector it is important to define:
 
 • stay duration
 • property rules
 • payments
 • responsibilities
 
-💡 Clear management reduces operational risks and disputes.
-`
+💡 Clear management reduces disputes and operational risks.
+`,
+
+    recommendationsIT:[
+      "Mantieni regole ospiti chiare",
+      "Definisci responsabilità e pagamenti"
+    ],
+
+    recommendationsEN:[
+      "Keep guest rules clear",
+      "Define responsibilities and payments"
+    ]
 
   },
 
   regulations:{
 
     type:"legal",
+
+    priority:10,
 
     keywords:[
       "regulations",
@@ -133,37 +194,56 @@ In the short-rent sector it is important to define:
       "law"
     ],
 
-    textIT:`
-⚖️ Le normative short-rent possono variare rapidamente.
+    aiTitleIT:"⚖️ NORMATIVE SHORT-RENT",
+    aiTitleEN:"⚖️ SHORT-RENT REGULATIONS",
 
-Alcune città introducono:
+    aiSummaryIT:`
+Le normative short-rent possono cambiare rapidamente.
+`,
 
-• limiti agli affitti brevi
+    aiSummaryEN:`
+Short-rent regulations may change rapidly.
+`,
+
+    aiInsightIT:`
+📊 Alcune città introducono:
+
+• limiti affitti brevi
 • registrazioni obbligatorie
 • controlli fiscali
 • restrizioni operative
 
-💡 Il rischio normativo è un fattore importante negli investimenti B&B.
+⚠️ Il rischio normativo è un fattore importante negli investimenti B&B.
 `,
 
-    textEN:`
-⚖️ Short-rent regulations can change rapidly.
-
-Some cities introduce:
+    aiInsightEN:`
+📊 Some cities introduce:
 
 • short-rent limits
 • mandatory registrations
 • tax controls
 • operational restrictions
 
-💡 Regulatory risk is an important factor in B&B investments.
-`
+⚠️ Regulatory risk is a major factor in B&B investments.
+`,
+
+    recommendationsIT:[
+      "Monitora aggiornamenti normativi",
+      "Valuta rischio normativo prima di investire"
+    ],
+
+    recommendationsEN:[
+      "Monitor regulatory updates",
+      "Evaluate legal risk before investing"
+    ]
 
   },
 
   insurance:{
 
     type:"legal",
+
+    priority:7,
 
     keywords:[
       "insurance",
@@ -172,37 +252,56 @@ Some cities introduce:
       "host insurance"
     ],
 
-    textIT:`
-🛡️ Un'assicurazione adeguata può proteggere il business short-rent.
+    aiTitleIT:"🛡️ ASSICURAZIONE B&B",
+    aiTitleEN:"🛡️ B&B INSURANCE",
 
-Può coprire:
+    aiSummaryIT:`
+Una buona assicurazione può proteggere il business short-rent.
+`,
+
+    aiSummaryEN:`
+Proper insurance can protect a short-rent business.
+`,
+
+    aiInsightIT:`
+📋 Può coprire:
 
 • danni proprietà
 • responsabilità civile
 • ospiti
 • eventi imprevisti
 
-💡 La protezione assicurativa migliora la sostenibilità dell'investimento.
+💡 La protezione assicurativa migliora sostenibilità e sicurezza operativa.
 `,
 
-    textEN:`
-🛡️ Proper insurance can protect a short-rent business.
-
-May cover:
+    aiInsightEN:`
+📋 It may cover:
 
 • property damage
 • liability
 • guests
 • unexpected events
 
-💡 Insurance protection improves investment sustainability.
-`
+💡 Insurance protection improves operational sustainability and security.
+`,
+
+    recommendationsIT:[
+      "Valuta coperture specifiche short-rent",
+      "Proteggi struttura e responsabilità civile"
+    ],
+
+    recommendationsEN:[
+      "Evaluate short-rent insurance coverage",
+      "Protect property and liability exposure"
+    ]
 
   },
 
   checkInRules:{
 
     type:"legal",
+
+    priority:8,
 
     keywords:[
       "check in",
@@ -211,29 +310,48 @@ May cover:
       "guest documents"
     ],
 
-    textIT:`
-🧳 In molti paesi è obbligatoria la registrazione degli ospiti.
+    aiTitleIT:"🧳 REGISTRAZIONE OSPITI",
+    aiTitleEN:"🧳 GUEST REGISTRATION",
 
-Può includere:
+    aiSummaryIT:`
+In molti paesi la registrazione ospiti è obbligatoria.
+`,
+
+    aiSummaryEN:`
+In many countries guest registration is mandatory.
+`,
+
+    aiInsightIT:`
+📄 Può includere:
 
 • verifica documenti
 • comunicazioni autorità
 • raccolta dati soggiorno
+• procedure check-in
 
-💡 La gestione corretta del check-in è parte della conformità normativa.
+💡 Una gestione corretta del check-in migliora conformità normativa e sicurezza.
 `,
 
-    textEN:`
-🧳 In many countries guest registration is mandatory.
-
-May include:
+    aiInsightEN:`
+📄 It may include:
 
 • document verification
 • authority communication
 • stay data collection
+• check-in procedures
 
-💡 Proper check-in management is part of legal compliance.
-`
+💡 Proper check-in management improves legal compliance and security.
+`,
+
+    recommendationsIT:[
+      "Verifica obblighi registrazione ospiti",
+      "Mantieni procedure check-in sicure"
+    ],
+
+    recommendationsEN:[
+      "Verify guest registration requirements",
+      "Maintain secure check-in procedures"
+    ]
 
   }
 
