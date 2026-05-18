@@ -536,10 +536,9 @@ else if(
   response.confidence =
     0.97;
 
-  const q =
-    String(userMessage || "")
-    .toLowerCase();
-
+const q =
+  String(message || "")
+  .toLowerCase();
   // =====================================
   // 💰 PREZZI
   // =====================================
