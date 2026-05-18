@@ -539,13 +539,15 @@ else if(
 // 🎓 ENTITY KNOWLEDGE ROUTING
 // ===========================================
 
-const knowledgeKey =
-  entities.knowledge;
-
 const knowledge =
+
+  entities.knowledgeData ||
+
   window.rbKnowledgeBase?.[
-    knowledgeKey
-  ];
+    entities.knowledge
+  ] ||
+
+  null;
 // ===========================================
 // 📚 KNOWLEDGE / EDUCATION ROUTING
 // ===========================================
