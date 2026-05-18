@@ -467,33 +467,36 @@ ${market.risk}`;
 
   }
 
-  // ===========================================
-  // 💡 STRATEGY RESPONSE
-  // ===========================================
+// ===========================================
+// 💡 STRATEGY RESPONSE
+// ===========================================
 
-  else if(
-    intent.intent ===
-    "investment_strategy"
-  ){
+else if(
 
-    response.type =
-      "strategy";
+  intent.intent === "investment_strategy" ||
 
-    response.confidence =
-      0.96;
+  intent.intent === "investment_advisor"
 
-    response.textIT =
+){
+
+  response.type =
+    "strategy";
+
+  response.confidence =
+    0.96;
+
+  response.textIT =
 
 `🧠 Analisi strategica AI completata.
 
-📊 ROI:
-${roi.toFixed(1)}%
+${roi > 0 ? `📊 ROI:
+${roi.toFixed(1)}%\n\n` : ""}
 
-🏨 Occupazione:
-${occupancy}%
+${occupancy > 0 ? `🏨 Occupazione:
+${occupancy}%\n\n` : ""}
 
-⚠️ Risk:
-${risk}/100
+${risk > 0 ? `⚠️ Risk:
+${risk}/100\n\n` : ""}
 
 💡 L'investimento ${
   roi >= 10 && risk <= 40
@@ -503,18 +506,18 @@ ${risk}/100
   : "richiede ottimizzazione operativa."
 }`;
 
-    response.textEN =
+  response.textEN =
 
 `🧠 AI strategic analysis completed.
 
-📊 ROI:
-${roi.toFixed(1)}%
+${roi > 0 ? `📊 ROI:
+${roi.toFixed(1)}%\n\n` : ""}
 
-🏨 Occupancy:
-${occupancy}%
+${occupancy > 0 ? `🏨 Occupancy:
+${occupancy}%\n\n` : ""}
 
-⚠️ Risk:
-${risk}/100
+${risk > 0 ? `⚠️ Risk:
+${risk}/100\n\n` : ""}
 
 💡 The investment ${
   roi >= 10 && risk <= 40
@@ -524,7 +527,7 @@ ${risk}/100
   : "requires operational optimization."
 }`;
 
-  }
+}
 
 // ===========================================
 // 💳 SUBSCRIPTIONS RESPONSE
