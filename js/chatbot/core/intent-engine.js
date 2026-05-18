@@ -38,6 +38,67 @@ window.rbDetectIntent = function(message = ""){
 
   };
 
+// ===========================================
+// ❓ EDUCATION / EXPLANATION
+// PRIORITÀ MASSIMA
+// ===========================================
+
+const explainWords = [
+
+  "spiega",
+  "spiegami",
+
+  "explain",
+
+  "cos'è",
+  "cos e",
+  "cose",
+
+  "cosa è",
+  "cosa e",
+
+  "what is",
+
+  "significa",
+  "meaning",
+
+  "definizione",
+  "definition"
+
+];
+
+const isEducation =
+
+  explainWords.some(word =>
+
+    text.includes(word)
+
+  );
+
+if(isEducation){
+
+  return {
+
+    intent: "education",
+
+    confidence: 0.99,
+
+    category: "education",
+
+    requiresCalculation: false,
+
+    requiresMarketData: false,
+
+    requiresRiskAnalysis: false,
+
+    requiresMortgageAnalysis: false,
+
+    requiresComparison: false
+
+  };
+
+}
+
   // ===========================================
   // 📈 ROI
   // ===========================================
@@ -253,67 +314,6 @@ window.rbDetectIntent = function(message = ""){
     result.confidence = 0.91;
 
   }
-
-// ===========================================
-// ❓ EDUCATION / EXPLANATION
-// PRIORITÀ MASSIMA
-// ===========================================
-
-const explainWords = [
-
-  "spiega",
-  "spiegami",
-
-  "explain",
-
-  "cos'è",
-  "cos e",
-  "cose",
-
-  "cosa è",
-  "cosa e",
-
-  "what is",
-
-  "significa",
-  "meaning",
-
-  "definizione",
-  "definition"
-
-];
-
-const isEducation =
-
-  explainWords.some(word =>
-
-    text.includes(word)
-
-  );
-
-if(isEducation){
-
-  return {
-
-    intent: "education",
-
-    confidence: 0.99,
-
-    category: "education",
-
-    requiresCalculation: false,
-
-    requiresMarketData: false,
-
-    requiresRiskAnalysis: false,
-
-    requiresMortgageAnalysis: false,
-
-    requiresComparison: false
-
-  };
-
-}
 
   // ===========================================
   // 👋 GREETING
