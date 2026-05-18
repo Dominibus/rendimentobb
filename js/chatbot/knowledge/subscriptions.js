@@ -8,6 +8,8 @@ Object.assign(window.rbKnowledgeBase, {
 
     type:"subscriptions",
 
+    priority:6,
+
     keywords:[
       "free",
       "free plan",
@@ -16,37 +18,56 @@ Object.assign(window.rbKnowledgeBase, {
       "basic plan"
     ],
 
-    textIT:`
-🆓 Il piano Free consente di iniziare ad analizzare investimenti B&B.
+    aiTitleIT:"🆓 PIANO FREE",
+    aiTitleEN:"🆓 FREE PLAN",
 
-Include:
+    aiSummaryIT:`
+Il piano Free consente di iniziare ad analizzare investimenti B&B.
+`,
+
+    aiSummaryEN:`
+The Free plan allows users to start analyzing B&B investments.
+`,
+
+    aiInsightIT:`
+📊 Include:
 
 • simulazioni base
-• accesso limitato AI
+• accesso AI limitato
 • benchmark essenziali
 • analisi introduttive
 
-💡 Ideale per testare il mercato prima di investire.
+💡 Ideale per testare il mercato prima di investire capitale reale.
 `,
 
-    textEN:`
-🆓 The Free plan allows you to start analyzing B&B investments.
-
-Includes:
+    aiInsightEN:`
+📊 Includes:
 
 • basic simulations
 • limited AI access
 • essential benchmarks
 • introductory analysis
 
-💡 Ideal for testing the market before investing.
-`
+💡 Ideal for testing the market before investing real capital.
+`,
+
+    recommendationsIT:[
+      "Usa il piano Free per comprendere il mercato",
+      "Valuta upgrade per analisi più avanzate"
+    ],
+
+    recommendationsEN:[
+      "Use the Free plan to understand the market",
+      "Consider upgrading for advanced analysis"
+    ]
 
   },
 
   investorPlan:{
 
     type:"subscriptions",
+
+    priority:8,
 
     keywords:[
       "investor",
@@ -55,39 +76,58 @@ Includes:
       "investor subscription"
     ],
 
-    textIT:`
-📊 Il piano Investor sblocca strumenti più avanzati per investitori short-rent.
+    aiTitleIT:"📊 PIANO INVESTOR",
+    aiTitleEN:"📊 INVESTOR PLAN",
 
-Include:
+    aiSummaryIT:`
+Il piano Investor sblocca strumenti avanzati per investitori short-rent.
+`,
+
+    aiSummaryEN:`
+The Investor plan unlocks advanced tools for short-rent investors.
+`,
+
+    aiInsightIT:`
+📈 Include:
 
 • analisi ROI avanzate
 • benchmark mercato
 • insight AI
 • analisi rischio
-• simulazioni più dettagliate
+• simulazioni dettagliate
 
-💡 Pensato per investitori attivi nel settore B&B.
+💡 Pensato per investitori attivi nel settore B&B e Airbnb.
 `,
 
-    textEN:`
-📊 The Investor plan unlocks more advanced tools for short-rent investors.
-
-Includes:
+    aiInsightEN:`
+📈 Includes:
 
 • advanced ROI analysis
 • market benchmarks
 • AI insights
 • risk analysis
-• more detailed simulations
+• detailed simulations
 
-💡 Designed for active B&B investors.
-`
+💡 Designed for active B&B and Airbnb investors.
+`,
+
+    recommendationsIT:[
+      "Ideale per investitori in crescita",
+      "Perfetto per confrontare opportunità short-rent"
+    ],
+
+    recommendationsEN:[
+      "Ideal for growing investors",
+      "Perfect for comparing short-rent opportunities"
+    ]
 
   },
 
   proPlan:{
 
     type:"subscriptions",
+
+    priority:10,
 
     keywords:[
       "pro",
@@ -97,10 +137,19 @@ Includes:
       "premium"
     ],
 
-    textIT:`
-🚀 Il piano PRO offre accesso completo all'ecosistema RendimentoBB.
+    aiTitleIT:"🚀 PIANO PRO",
+    aiTitleEN:"🚀 PRO PLAN",
 
-Include:
+    aiSummaryIT:`
+Il piano PRO offre accesso completo all'ecosistema professionale RendimentoBB.
+`,
+
+    aiSummaryEN:`
+The PRO plan provides full access to the professional RendimentoBB ecosystem.
+`,
+
+    aiInsightIT:`
+📊 Include:
 
 • PDF executive professionale
 • cashflow avanzato
@@ -112,10 +161,8 @@ Include:
 💡 Ideale per investitori professionali e operazioni ad alto capitale.
 `,
 
-    textEN:`
-🚀 The PRO plan provides full access to the RendimentoBB ecosystem.
-
-Includes:
+    aiInsightEN:`
+📊 Includes:
 
 • professional executive PDF
 • advanced cashflow
@@ -125,13 +172,25 @@ Includes:
 • advanced AI investment assistant
 
 💡 Ideal for professional investors and high-capital operations.
-`
+`,
+
+    recommendationsIT:[
+      "Consigliato per analisi professionali",
+      "Perfetto per investimenti multi-property"
+    ],
+
+    recommendationsEN:[
+      "Recommended for professional analysis",
+      "Perfect for multi-property investments"
+    ]
 
   },
 
   upgradePlan:{
 
     type:"subscriptions",
+
+    priority:9,
 
     keywords:[
       "upgrade",
@@ -142,10 +201,19 @@ Includes:
       "become investor"
     ],
 
-    textIT:`
-⬆️ Puoi effettuare upgrade del piano in qualsiasi momento.
+    aiTitleIT:"⬆️ UPGRADE PIANO",
+    aiTitleEN:"⬆️ PLAN UPGRADE",
 
-L'upgrade sblocca:
+    aiSummaryIT:`
+Puoi effettuare upgrade del piano in qualsiasi momento.
+`,
+
+    aiSummaryEN:`
+You can upgrade your subscription plan at any time.
+`,
+
+    aiInsightIT:`
+🔓 L'upgrade sblocca:
 
 • dati avanzati
 • benchmark premium
@@ -156,10 +224,8 @@ L'upgrade sblocca:
 💡 Gli strumenti premium aiutano a ridurre errori di investimento.
 `,
 
-    textEN:`
-⬆️ You can upgrade your plan at any time.
-
-Upgrading unlocks:
+    aiInsightEN:`
+🔓 Upgrading unlocks:
 
 • advanced data
 • premium benchmarks
@@ -168,13 +234,25 @@ Upgrading unlocks:
 • executive reports
 
 💡 Premium tools help reduce investment mistakes.
-`
+`,
+
+    recommendationsIT:[
+      "Valuta upgrade prima di investire capitale importante",
+      "Usa benchmark premium per confronti realistici"
+    ],
+
+    recommendationsEN:[
+      "Consider upgrading before major investments",
+      "Use premium benchmarks for realistic comparisons"
+    ]
 
   },
 
   cancelSubscription:{
 
     type:"subscriptions",
+
+    priority:7,
 
     keywords:[
       "cancel",
@@ -184,35 +262,56 @@ Upgrading unlocks:
       "disdire piano"
     ],
 
-    textIT:`
-❌ Gli abbonamenti possono essere gestiti direttamente dall'account utente.
+    aiTitleIT:"❌ GESTIONE ABBONAMENTO",
+    aiTitleEN:"❌ SUBSCRIPTION MANAGEMENT",
 
-Puoi:
-
-• verificare il piano attivo
-• aggiornare il metodo di pagamento
-• annullare il rinnovo
-
-💡 Le funzioni premium restano disponibili fino alla fine del periodo attivo.
+    aiSummaryIT:`
+Gli abbonamenti possono essere gestiti direttamente dall'account utente.
 `,
 
-    textEN:`
-❌ Subscriptions can be managed directly from your user account.
+    aiSummaryEN:`
+Subscriptions can be managed directly from the user account.
+`,
 
-You can:
+    aiInsightIT:`
+⚙️ Puoi:
+
+• verificare il piano attivo
+• aggiornare metodo pagamento
+• annullare rinnovo
+• gestire upgrade
+
+💡 Le funzioni premium restano attive fino alla fine del periodo corrente.
+`,
+
+    aiInsightEN:`
+⚙️ You can:
 
 • check active plan
 • update payment method
 • cancel renewal
+• manage upgrades
 
-💡 Premium features remain active until the end of the billing period.
-`
+💡 Premium features remain active until the current billing cycle ends.
+`,
+
+    recommendationsIT:[
+      "Controlla sempre il periodo attivo residuo",
+      "Gestisci il piano direttamente dalla dashboard"
+    ],
+
+    recommendationsEN:[
+      "Always check remaining active period",
+      "Manage your plan directly from dashboard"
+    ]
 
   },
 
   pricing:{
 
     type:"subscriptions",
+
+    priority:8,
 
     keywords:[
       "pricing",
@@ -223,10 +322,19 @@ You can:
       "quanto costa"
     ],
 
-    textIT:`
-💰 RendimentoBB offre diversi livelli di accesso in base alle esigenze dell'investitore.
+    aiTitleIT:"💰 PREZZI RENDIMENTOBB",
+    aiTitleEN:"💰 RENDIMENTOBB PRICING",
 
-I piani premium includono strumenti avanzati per:
+    aiSummaryIT:`
+RendimentoBB offre diversi livelli di accesso in base alle esigenze dell'investitore.
+`,
+
+    aiSummaryEN:`
+RendimentoBB offers multiple access levels based on investor needs.
+`,
+
+    aiInsightIT:`
+📊 I piani premium includono strumenti avanzati per:
 
 • ROI
 • cashflow
@@ -237,10 +345,8 @@ I piani premium includono strumenti avanzati per:
 💡 Investire con dati migliori può ridurre errori molto costosi.
 `,
 
-    textEN:`
-💰 RendimentoBB offers multiple access levels based on investor needs.
-
-Premium plans include advanced tools for:
+    aiInsightEN:`
+📊 Premium plans include advanced tools for:
 
 • ROI
 • cashflow
@@ -248,8 +354,18 @@ Premium plans include advanced tools for:
 • risk
 • financial sustainability
 
-💡 Investing with better data can reduce very expensive mistakes.
-`
+💡 Better investment data can reduce expensive mistakes.
+`,
+
+    recommendationsIT:[
+      "Scegli il piano in base al livello di investimento",
+      "Valuta ROI e rischio con strumenti avanzati"
+    ],
+
+    recommendationsEN:[
+      "Choose a plan based on investment level",
+      "Evaluate ROI and risk with advanced tools"
+    ]
 
   }
 
