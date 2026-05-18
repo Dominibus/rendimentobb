@@ -3306,15 +3306,10 @@ if(!isTool){
 // 🔥 ROI ENGINE PROFESSIONAL
 // =====================================
 
-// 🏠 HOME → teaser marketing
-if(!isTool){
-
-  roi = roi * 1.08;
-
-}
-
-// 🔥 ROI REALE (mai limitato)
-const realROI = Math.max(0, roi);
+// 🔥 ROI REALE
+const realROI = isFinite(roi)
+  ? roi
+  : 0;
 
 // 🔥 ROI VISIVO (solo UI/chart)
 const visualROI = Math.min(realROI, 45);
@@ -3331,26 +3326,41 @@ const roiText = realROI.toFixed(1) + "%";
 // 🔥 compatibilità legacy
 const safeROI = realROI;
 
-    const gross = Number(result?.revenue ?? result?.gross ?? 0);
-    const net   = Number(result?.netAfterMortgage ?? result?.net ?? 0);
+const gross = Number(result?.revenue ?? result?.gross ?? 0);
 
-    const risk = Number(result?.risk ?? result?.riskScore ?? 0);
+const net = Number(
+  result?.netAfterMortgage ??
+  result?.net ??
+  0
+);
 
-    renderInvestmentScore(safeROI, Math.round(risk));
+const risk = Number(
+  result?.risk ??
+  result?.riskScore ??
+  0
+);
+
+renderInvestmentScore(
+  safeROI,
+  Math.round(risk)
+);
 
 // ===============================================
 // 🧠 CHATBOT LIVE DATA
 // ===============================================
 
+const access = window.getUserAccess?.() || {};
+
 // 🔥 usa ROI reale già calcolato sopra
 const chatbotRealROI = Number(realROI || roi || 0);
 
+// 🔥 FREE → ROI nascosto nel chatbot
 const chatbotROI =
 (
+  access.isFree &&
   !access.isInvestor &&
   !access.isPro &&
-  !access.isAdmin &&
-  chatbotRealROI <= 0
+  !access.isAdmin
 )
 ? 0
 : chatbotRealROI;
@@ -3381,6 +3391,11 @@ window.rbChatbotData = {
     "Unknown"
 
 };
+
+console.log(
+  "🧠 CHATBOT LIVE:",
+  window.rbChatbotData
+);
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
