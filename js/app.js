@@ -3342,8 +3342,6 @@ const safeROI = realROI;
 // 🧠 CHATBOT LIVE DATA
 // ===============================================
 
-const access = window.getUserAccess?.() || {};
-
 // 🔥 usa ROI reale già calcolato sopra
 const chatbotRealROI = Number(realROI || roi || 0);
 
@@ -3383,11 +3381,6 @@ window.rbChatbotData = {
     "Unknown"
 
 };
-
-console.log(
-  "🧠 CHATBOT LIVE:",
-  window.rbChatbotData
-);
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
