@@ -254,34 +254,52 @@ window.rbDetectIntent = function(message = ""){
 
   }
 
-  // ===========================================
-  // ❓ EXPLANATION
-  // ===========================================
+// ===========================================
+// ❓ EDUCATION / EXPLANATION
+// PRIORITÀ MASSIMA
+// ===========================================
 
-  const explainWords = [
+const explainWords = [
 
-    "spiega",
-    "explain",
-    "cos'è",
-    "what is",
-    "significa",
-    "meaning"
+  "spiega",
+  "explain",
+  "cos'è",
+  "cosa è",
+  "what is",
+  "significa",
+  "meaning",
+  "definizione",
+  "definition"
 
-  ];
+];
 
-  if(
-    explainWords.some(word =>
-      text.includes(word)
-    )
-  ){
+if(
+  explainWords.some(word =>
+    text.includes(word)
+  )
+){
 
-    result.intent = "education";
+  return {
 
-    result.category = "education";
+    intent: "education",
 
-    result.confidence = 0.88;
+    confidence: 0.99,
 
-  }
+    category: "education",
+
+    requiresCalculation: false,
+
+    requiresMarketData: false,
+
+    requiresRiskAnalysis: false,
+
+    requiresMortgageAnalysis: false,
+
+    requiresComparison: false
+
+  };
+
+}
 
   // ===========================================
   // 👋 GREETING
