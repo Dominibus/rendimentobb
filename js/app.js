@@ -3326,7 +3326,9 @@ const roiText = realROI.toFixed(1) + "%";
 // 🔥 compatibilità legacy
 const safeROI = realROI;
 
-const gross = Number(result?.revenue ?? result?.gross ?? 0);
+// =====================================
+// 💰 FINANCIAL DATA
+// =====================================
 
 const gross = Number(
   result?.revenue ??
@@ -3348,6 +3350,10 @@ const risk = Number(
   0
 );
 
+// =====================================
+// 📊 SCORE ENGINE
+// =====================================
+
 renderInvestmentScore(
   safeROI,
   Math.round(risk)
@@ -3359,8 +3365,10 @@ renderInvestmentScore(
 
 const access = window.getUserAccess?.() || {};
 
-// 🔥 usa ROI reale già calcolato sopra
-const chatbotRealROI = Number(realROI || roi || 0);
+// 🔥 ROI reale chatbot
+const chatbotRealROI = Number(
+  realROI || roi || 0
+);
 
 // 🔥 FREE → ROI nascosto nel chatbot
 const chatbotROI =
@@ -3372,6 +3380,17 @@ const chatbotROI =
 )
 ? 0
 : chatbotRealROI;
+
+// 🔥 CASHFLOW / NET SMART
+const chatbotNet =
+(
+  access.isFree &&
+  !access.isInvestor &&
+  !access.isPro &&
+  !access.isAdmin
+)
+? 0
+: net;
 
 window.rbChatbotData = {
 
@@ -3385,7 +3404,7 @@ window.rbChatbotData = {
 
   gross: gross,
 
-  net: net,
+  net: chatbotNet,
 
   occupancy: occupancy,
 
