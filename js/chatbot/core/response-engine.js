@@ -119,7 +119,9 @@ if(
 
   intent.intent !== "market_analysis" &&
 
-  intent.intent !== "investment_strategy"
+  intent.intent !== "investment_strategy" &&
+
+  intent.intent !== "investment_advisor"
 
 ){
 
