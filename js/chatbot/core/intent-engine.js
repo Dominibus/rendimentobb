@@ -262,22 +262,36 @@ window.rbDetectIntent = function(message = ""){
 const explainWords = [
 
   "spiega",
+  "spiegami",
+
   "explain",
+
   "cos'è",
+  "cos e",
+  "cose",
+
   "cosa è",
+  "cosa e",
+
   "what is",
+
   "significa",
   "meaning",
+
   "definizione",
   "definition"
 
 ];
 
-if(
+const isEducation =
+
   explainWords.some(word =>
+
     text.includes(word)
-  )
-){
+
+  );
+
+if(isEducation){
 
   return {
 
