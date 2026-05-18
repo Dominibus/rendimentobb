@@ -135,6 +135,20 @@ async function(message){
     );
 
     // =========================================
+// 🧠 MAIN KNOWLEDGE ENTITY
+// =========================================
+
+if(
+  matchedKnowledge.length
+){
+
+  entities.knowledge =
+
+    matchedKnowledge[0].key;
+
+}
+
+    // =========================================
     // 🧠 RESPONSE ENGINE
     // =========================================
 
