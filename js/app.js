@@ -3461,11 +3461,59 @@ if(riskPreview){
 
     }else if(access.isInvestor){
 
-      renderMarketBenchmark?.(window.currentCity || "roma");
-      renderMarketComparison?.(gross * 0.6, window.currentCity);
-      renderRevenueForecast?.(gross);
+  // =====================================
+  // 🔓 RESET BLUR INVESTOR
+  // =====================================
 
-    }else{
+  document.querySelectorAll(`
+    #market-comparison,
+    #revenue-forecast,
+    #occupancy-sensitivity,
+    #investment-ranking,
+    #investment-risk-meter,
+    #ai-insights
+  `).forEach(el=>{
+
+    if(!el) return;
+
+    el.classList.remove(
+      "pro-blur",
+      "blur-content",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
+
+    el.style.filter = "none";
+    el.style.webkitFilter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+
+    // 🔥 rimuove overlay eventuali
+    el.querySelectorAll(`
+      .lock-overlay,
+      .results-overlay,
+      .upgrade-overlay
+    `).forEach(o=>o.remove());
+
+  });
+
+  // =====================================
+  // 📊 INVESTOR DATA
+  // =====================================
+
+  renderMarketBenchmark?.(
+    window.currentCity || "roma"
+  );
+
+  renderMarketComparison?.(
+    gross * 0.6,
+    window.currentCity
+  );
+
+  renderRevenueForecast?.(gross);
+
+}else{
 
       renderMarketBenchmark?.(window.currentCity || "roma");
       renderMarketComparison?.(gross, window.currentCity);
