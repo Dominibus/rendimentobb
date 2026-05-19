@@ -324,20 +324,37 @@ else if(
     0.95;
 
   const rawNet =
-    liveData.net;
+  liveData.net ??
+  liveData.netProfit ??
+  liveData.profitNet ??
+  null;
 
-  const rawGross =
-    liveData.gross;
+const rawGross =
+  liveData.gross ??
+  liveData.grossProfit ??
+  liveData.profit ??
+  0;
 
-  const net =
+const net =
 
-    rawNet !== undefined &&
-    rawNet !== null &&
-    rawNet !== ""
+  rawNet !== null &&
+  rawNet !== undefined &&
+  rawNet !== "" &&
+  !isNaN(Number(rawNet))
 
-      ? Number(rawNet)
+    ? Number(rawNet)
 
-      : Number(rawGross || 0);
+    : Number(rawGross || 0);
+
+console.log(
+  "💰 CASHFLOW DEBUG:",
+  {
+    rawNet,
+    rawGross,
+    finalNet: net,
+    liveData
+  }
+);
 
   // =====================================
   // 🔒 FREE LOCK
