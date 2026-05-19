@@ -53,6 +53,7 @@ const liveData = {
 
   ...(window.lastAnalysisData || {}),
   ...(window.rbInvestmentMemory || {}),
+  ...(window.rbChatbotData || {}),
   ...(analysisData || {})
 
 };
