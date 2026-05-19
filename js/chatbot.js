@@ -714,6 +714,20 @@ const wantsROI =
 const wantsCashflow =
   detectedIntents.includes("cashflow");
 
+const wantsCashflowStrategy =
+
+(
+  text.includes("miglior") ||
+  text.includes("aument") ||
+  text.includes("ottim") ||
+  text.includes("improve") ||
+  text.includes("increase")
+)
+
+&&
+
+wantsCashflow;
+
 const wantsEducation =
   detectedIntents.includes("education");
 
@@ -1596,7 +1610,10 @@ ${risk}/100
   // 💰 CASHFLOW
   // =====================================
 
-  if(wantsCashflow){
+    if(
+    wantsCashflow &&
+    !wantsCashflowStrategy
+    ){
 
     return window.t(
       `Il profitto netto stimato è di ${window.formatCurrency(profit)} annui.`,
