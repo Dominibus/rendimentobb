@@ -325,12 +325,21 @@ else if(
   response.confidence =
     0.95;
 
-  const net =
-  Number(
-    liveData.net ??
-    liveData.gross ??
-    0
-  );
+  const rawNet =
+  liveData.net;
+
+const rawGross =
+  liveData.gross;
+
+const net =
+
+  rawNet !== undefined &&
+  rawNet !== null &&
+  rawNet !== ""
+
+    ? Number(rawNet)
+
+    : Number(rawGross || 0);
 
   if(net <= 0){
 
