@@ -33,21 +33,80 @@ async function(message){
 
       : {};
 
-    // =========================================
-    // 🧠 INTENT DETECTION
-    // =========================================
+// =========================================
+// 🧠 MULTI INTENT DETECTION
+// =========================================
 
-    const intent =
+const detectedIntent =
 
-      window.rbDetectIntent
+  window.rbDetectIntent
 
-      ? window.rbDetectIntent(text)
+  ? window.rbDetectIntent(text)
 
-      : {
+  : {
+      intent: "generic"
+    };
 
-          intent: "generic"
+// 🔥 MULTI INTENT SYSTEM
 
-        };
+const intents = [];
+
+// ROI
+if(
+  text.includes("roi") ||
+  text.includes("rendimento")
+){
+  intents.push("roi");
+}
+
+// RISCHIO
+if(
+  text.includes("rischio") ||
+  text.includes("risk")
+){
+  intents.push("risk");
+}
+
+// CASHFLOW
+if(
+  text.includes("cashflow") ||
+  text.includes("profitto")
+){
+  intents.push("cashflow");
+}
+
+// SOSTENIBILITÀ
+if(
+  text.includes("sostenibil") ||
+  text.includes("conviene")
+){
+  intents.push("sustainability");
+}
+
+// ANALISI
+if(
+  text.includes("analisi") ||
+  text.includes("executive")
+){
+  intents.push("analysis");
+}
+
+// fallback
+if(!intents.length){
+
+  intents.push(
+    detectedIntent.intent || "generic"
+  );
+
+}
+
+const intent = {
+
+  ...detectedIntent,
+
+  intents
+
+};
 
     // =========================================
     // 🧠 MEMORY
@@ -204,19 +263,27 @@ if(bestKnowledge){
 
 }
 
-    // =========================================
-    // 🧠 RESPONSE ENGINE
-    // =========================================
+// =========================================
+// 🧠 MULTI RESPONSE ENGINE
+// =========================================
 
-    const response =
+let finalTextIT = "";
+let finalTextEN = "";
 
-      window.rbGenerateResponse({
+for(const currentIntent of intent.intents){
+
+  const partialResponse =
+
+    window.rbGenerateResponse({
 
       message: text,
 
       entities,
 
-      intent,
+      intent: {
+        ...intent,
+        intent: currentIntent
+      },
 
       memory,
 
@@ -224,7 +291,37 @@ if(bestKnowledge){
 
       aiSignals
 
-  });
+    });
+
+  if(partialResponse?.textIT){
+
+    finalTextIT +=
+      partialResponse.textIT + "\n\n";
+
+  }
+
+  if(partialResponse?.textEN){
+
+    finalTextEN +=
+      partialResponse.textEN + "\n\n";
+
+  }
+
+}
+
+// =========================================
+// 🧠 FINAL RESPONSE
+// =========================================
+
+const response = {
+
+  type: "executive",
+
+  textIT: finalTextIT.trim(),
+
+  textEN: finalTextEN.trim()
+
+};
 
 // =========================================
 // 🧠 KNOWLEDGE ENHANCEMENT
