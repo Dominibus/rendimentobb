@@ -450,7 +450,6 @@ if(
     "migliorare rendimento",
 
     "cashflow reale",
-
     "sostenibilità investimento",
     "sostenibile",
     "è sostenibile",
