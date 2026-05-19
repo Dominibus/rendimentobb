@@ -987,7 +987,7 @@ To manage your plan:
 
 }
 
-  // ===========================================
+// ===========================================
 // 🧠 EXECUTIVE AI RESPONSE
 // ===========================================
 
@@ -1005,24 +1005,54 @@ else if(
   response.confidence =
     0.99;
 
+  // =====================================
+  // 💰 SAFE FINANCIAL DATA
+  // =====================================
+
   const rawNet =
-  liveData.net;
 
-const rawGross =
-  liveData.gross;
+    liveData.net ??
+    liveData.netProfit ??
+    liveData.profitNet ??
+    liveData.cashflow ??
+    null;
 
-const net =
+  const rawGross =
 
-  rawNet !== undefined &&
-  rawNet !== null &&
-  rawNet !== ""
+    liveData.gross ??
+    liveData.grossProfit ??
+    liveData.profit ??
+    liveData.revenue ??
+    0;
 
-    ? Number(rawNet)
+  const net =
 
-    : Number(rawGross || 0);
+    rawNet !== undefined &&
+    rawNet !== null &&
+    rawNet !== "" &&
+    !isNaN(Number(rawNet))
 
-const gross =
-  Number(rawGross || 0);
+      ? Number(rawNet)
+
+      : Number(rawGross || 0);
+
+  const gross =
+    Number(rawGross || 0);
+
+  console.log(
+    "💰 EXECUTIVE DEBUG:",
+    {
+      rawNet,
+      rawGross,
+      finalNet: net,
+      finalGross: gross,
+      liveData
+    }
+  );
+
+  // =====================================
+  // 🇮🇹 ITALIANO
+  // =====================================
 
   const executiveIT = [];
 
