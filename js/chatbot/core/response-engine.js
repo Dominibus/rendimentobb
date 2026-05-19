@@ -227,9 +227,83 @@ ${roi.toFixed(1)}%
 
     else{
 
-      response.signals.push(
-        "low_roi"
-      );
+  response.signals.push(
+    "low_roi"
+  );
+
+  // =====================================
+  // 🚨 NEGATIVE ROI
+  // =====================================
+
+  if(roi <= 0){
+
+    response.signals.push(
+      "negative_roi"
+    );
+
+    response.textIT =
+
+`🚨 Investimento operativo in perdita.
+
+📉 ROI simulato:
+${roi.toFixed(1)}%
+
+⚠️ La struttura attuale non sembra sostenibile.
+
+💡 Costi operativi, occupazione o pricing potrebbero compromettere il cashflow reale.
+
+🏦 Prima di investire è consigliabile rivedere:
+• prezzo notte
+• occupazione media
+• costi fissi
+• leva finanziaria`;
+
+    response.textEN =
+
+`🚨 Investment appears operationally unprofitable.
+
+📉 Simulated ROI:
+${roi.toFixed(1)}%
+
+⚠️ The current structure may not be financially sustainable.
+
+💡 Operating costs, occupancy or pricing may compromise real cashflow.
+
+🏦 Before investing it is recommended to review:
+• nightly pricing
+• average occupancy
+• fixed costs
+• financial leverage`;
+
+  }
+
+  // =====================================
+  // ⚠️ LOW ROI
+  // =====================================
+
+  else{
+
+    response.textIT =
+
+`⚠️ ROI relativamente basso.
+
+📊 ROI simulato:
+${roi.toFixed(1)}%
+
+💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`;
+
+    response.textEN =
+
+`⚠️ ROI appears relatively low.
+
+📊 Simulated ROI:
+${roi.toFixed(1)}%
+
+💡 ADR, occupancy or operational cost optimization may be required.`;
+
+  }
+
+}
 
       response.textIT =
 
@@ -252,6 +326,83 @@ ${roi.toFixed(1)}%
     }
 
   }
+
+// ===========================================
+// 💰 CASHFLOW RESPONSE
+// ===========================================
+
+else if(
+  intent.intent === "cashflow_analysis"
+){
+
+  response.type =
+    "cashflow";
+
+  response.confidence =
+    0.95;
+
+  const net =
+    Number(
+      liveData.net || 0
+    );
+
+  if(net <= 0){
+
+    response.signals.push(
+      "negative_cashflow"
+    );
+
+    response.textIT =
+
+`🚨 Cashflow operativo negativo.
+
+💸 Profitto netto stimato:
+€${net.toLocaleString("it-IT")}
+
+⚠️ L'investimento potrebbe generare perdite operative.
+
+💡 È consigliabile ridurre costi o aumentare occupazione e ADR.`;
+
+    response.textEN =
+
+`🚨 Negative operational cashflow detected.
+
+💸 Estimated net profit:
+€${net.toLocaleString("en-US")}
+
+⚠️ The investment may generate operational losses.
+
+💡 Reducing costs or increasing occupancy and ADR is recommended.`;
+
+  }
+
+  else{
+
+    response.signals.push(
+      "positive_cashflow"
+    );
+
+    response.textIT =
+
+`✅ Cashflow operativo positivo.
+
+💰 Profitto netto stimato:
+€${net.toLocaleString("it-IT")}
+
+📈 La simulazione mostra una sostenibilità finanziaria potenzialmente stabile.`;
+
+    response.textEN =
+
+`✅ Positive operational cashflow detected.
+
+💰 Estimated net profit:
+€${net.toLocaleString("en-US")}
+
+📈 The simulation shows potentially stable financial sustainability.`;
+
+  }
+
+}
 
   // ===========================================
   // ⚠️ RISK RESPONSE
@@ -363,9 +514,13 @@ ${risk}/100
 
     const mortgagePercent =
 
-      entities.mortgagePercent ||
+  Number(
+    liveData.mortgagePercent ||
 
-      0;
+    entities.mortgagePercent ||
+
+    0
+  );
 
     if(mortgagePercent >= 90){
 
