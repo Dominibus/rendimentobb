@@ -3419,6 +3419,11 @@ window.rbChatbotData = {
 
 };
 
+// 🔥 FIX CHATBOT LIVE ENGINE
+window.rbChatbotLive = {
+  ...window.rbChatbotData
+};
+
 console.log(
   "🧠 CHATBOT LIVE:",
   window.rbChatbotData
