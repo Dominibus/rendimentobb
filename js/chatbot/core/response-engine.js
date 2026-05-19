@@ -874,119 +874,6 @@ ${market.risk}`;
   }
 
 // ===========================================
-// 💡 STRATEGY RESPONSE
-// ===========================================
-
-else if(
-
-  intent.intent === "investment_strategy" ||
-
-  intent.intent === "investment_advisor"
-
-){
-
-  response.type =
-    "strategy";
-
-  response.confidence =
-    0.96;
-
-  // =====================================
-  // 🇮🇹 ITALIANO
-  // =====================================
-
-  const strategyIT = [
-
-    "🧠 Analisi strategica AI completata."
-
-  ];
-
-  if(roi > 0){
-
-    strategyIT.push(
-      `📊 ROI: ${roi.toFixed(1)}%`
-    );
-
-  }
-
-  if(occupancy > 0){
-
-    strategyIT.push(
-      `🏨 Occupazione: ${occupancy}%`
-    );
-
-  }
-
-  if(risk > 0){
-
-    strategyIT.push(
-      `⚠️ Risk: ${risk}/100`
-    );
-
-  }
-
-  strategyIT.push(
-
-    roi >= 10 && risk <= 40
-
-    ? "💡 L'investimento mostra metriche molto competitive."
-
-    : "💡 L'investimento richiede ottimizzazione operativa."
-
-  );
-
-  response.textIT =
-    strategyIT.join("\n\n");
-
-  // =====================================
-  // 🇬🇧 ENGLISH
-  // =====================================
-
-  const strategyEN = [
-
-    "🧠 AI strategic analysis completed."
-
-  ];
-
-  if(roi > 0){
-
-    strategyEN.push(
-      `📊 ROI: ${roi.toFixed(1)}%`
-    );
-
-  }
-
-  if(occupancy > 0){
-
-    strategyEN.push(
-      `🏨 Occupancy: ${occupancy}%`
-    );
-
-  }
-
-  if(risk > 0){
-
-    strategyEN.push(
-      `⚠️ Risk: ${risk}/100`
-    );
-
-  }
-
-  strategyEN.push(
-
-    roi >= 10 && risk <= 40
-
-    ? "💡 The investment shows highly competitive metrics."
-
-    : "💡 The investment requires operational optimization."
-
-  );
-
-  response.textEN =
-    strategyEN.join("\n\n");
-
-}
-// ===========================================
 // 💳 SUBSCRIPTIONS RESPONSE
 // ===========================================
 
@@ -1432,6 +1319,120 @@ if(executiveInsightsEN.length){
 
   response.textEN =
     executiveEN.join("\n\n");
+
+}
+
+  // ===========================================
+// 💡 STRATEGY RESPONSE
+// ===========================================
+
+else if(
+
+  intent.intent === "investment_strategy" ||
+
+  intent.intent === "investment_advisor"
+
+){
+
+  response.type =
+    "strategy";
+
+  response.confidence =
+    0.96;
+
+  // =====================================
+  // 🇮🇹 ITALIANO
+  // =====================================
+
+  const strategyIT = [
+
+    "🧠 Analisi strategica AI completata."
+
+  ];
+
+  if(roi > 0){
+
+    strategyIT.push(
+      `📊 ROI: ${roi.toFixed(1)}%`
+    );
+
+  }
+
+  if(occupancy > 0){
+
+    strategyIT.push(
+      `🏨 Occupazione: ${occupancy}%`
+    );
+
+  }
+
+  if(risk > 0){
+
+    strategyIT.push(
+      `⚠️ Risk: ${risk}/100`
+    );
+
+  }
+
+  strategyIT.push(
+
+    roi >= 10 && risk <= 40
+
+    ? "💡 L'investimento mostra metriche molto competitive."
+
+    : "💡 L'investimento richiede ottimizzazione operativa."
+
+  );
+
+  response.textIT =
+    strategyIT.join("\n\n");
+
+  // =====================================
+  // 🇬🇧 ENGLISH
+  // =====================================
+
+  const strategyEN = [
+
+    "🧠 AI strategic analysis completed."
+
+  ];
+
+  if(roi > 0){
+
+    strategyEN.push(
+      `📊 ROI: ${roi.toFixed(1)}%`
+    );
+
+  }
+
+  if(occupancy > 0){
+
+    strategyEN.push(
+      `🏨 Occupancy: ${occupancy}%`
+    );
+
+  }
+
+  if(risk > 0){
+
+    strategyEN.push(
+      `⚠️ Risk: ${risk}/100`
+    );
+
+  }
+
+  strategyEN.push(
+
+    roi >= 10 && risk <= 40
+
+    ? "💡 The investment shows highly competitive metrics."
+
+    : "💡 The investment requires operational optimization."
+
+  );
+
+  response.textEN =
+    strategyEN.join("\n\n");
 
 }
   // ===========================================
