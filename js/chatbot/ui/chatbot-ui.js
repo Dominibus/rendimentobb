@@ -410,21 +410,47 @@ I can help analyze:
       // 🌍 LANGUAGE
       // =====================================
 
-      const finalText =
+      const currentLang =
 
-        window.currentLang === "en"
+  window.currentLang ||
 
-        ? (
-            response.textEN ||
+  window.RB_LANG ||
 
-            "AI response unavailable."
-          )
+  document.documentElement.lang ||
 
-        : (
-            response.textIT ||
+  "it";
 
-            "Risposta AI non disponibile."
-          );
+const finalText =
+
+  currentLang === "en"
+
+  ? (
+
+      response.textEN ||
+
+      response.textIT ||
+
+      response.text ||
+
+      response.message ||
+
+      "AI response unavailable."
+
+    )
+
+  : (
+
+      response.textIT ||
+
+      response.textEN ||
+
+      response.text ||
+
+      response.message ||
+
+      "Risposta AI non disponibile."
+
+    );
 
       // =====================================
       // 💬 BOT MESSAGE
