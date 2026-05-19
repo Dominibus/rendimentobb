@@ -553,11 +553,28 @@ const costRatio =
     : 0;
 
 // =====================================
-// 🧠 NEW AI INTENT ENGINE
+// 🧠 SAFE INTENT ENGINE
 // =====================================
 
-const intentData =
-  window.rbDetectIntent?.(text) || {};
+let intentData = {};
+
+if(typeof window.rbDetectIntent === "function"){
+
+  intentData =
+    window.rbDetectIntent(text);
+
+  console.log(
+    "🧠 INTENT DETECTED:",
+    intentData
+  );
+
+}else{
+
+  console.error(
+    "❌ rbDetectIntent NOT LOADED"
+  );
+
+}
 
 const mainIntent =
   intentData.intent || "generic";
