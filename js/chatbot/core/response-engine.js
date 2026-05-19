@@ -341,19 +341,27 @@ const net =
 
     : Number(rawGross || 0);
 
-  // =====================================
+// =====================================
 // 🔒 FREE LOCK
 // =====================================
 
+const access =
+
+  window.getUserAccess?.() ||
+
+  window.RB_USER ||
+
+  {};
+
 if(
 
-  !window.RB_USER?.canSeeFullAnalysis &&
+  !access.canSeeFullAnalysis &&
 
-  !window.RB_USER?.isInvestor &&
+  !access.isInvestor &&
 
-  !window.RB_USER?.isPro &&
+  !access.isPro &&
 
-  !window.RB_USER?.isAdmin
+  !access.isAdmin
 
 ){
 
