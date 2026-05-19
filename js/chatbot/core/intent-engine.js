@@ -205,12 +205,19 @@ if(isEducation){
   // 🏦 MORTGAGE
   // ===========================================
 
- const mortgageWords = [
+const mortgageWords = [
 
   "mutuo",
+  "con mutuo",
+  "con un mutuo",
+
   "mortgage",
   "loan",
   "finanziamento",
+
+  "leva",
+  "leva finanziaria",
+
   "ltv",
   "rata",
 
@@ -221,8 +228,13 @@ if(isEducation){
   "variabile",
 
   "mutuo 100",
+  "mutuo 90",
+  "mutuo 80",
 
-  "durata mutuo"
+  "durata mutuo",
+
+  "finanziato",
+  "finanziare"
 
 ];
 
@@ -370,6 +382,24 @@ if(
   "aprire airbnb",
 
   "analisi executive",
+  "executive report",
+  "executive analysis",
+  "investment report",
+
+  "analisi investimento",
+  "report investimento",
+
+  "analisi dettagliata",
+  "analisi completa ai",
+
+  "advisor",
+  "investment advisor",
+
+  "valuta questo investimento",
+  "valuta questo b&b",
+
+  "simulazione avanzata",
+  "analisi strategica", 
   "executive",
   "analisi completa",
   "analisi avanzata",
@@ -384,10 +414,7 @@ if(
   "analisi ai",
 
   "come posso migliorare",
-  "migliorare rendimento",
-
-  "cashflow reale",
-  "sostenibilità investimento" 
+  "migliorare rendimento"
 
 ];
 
