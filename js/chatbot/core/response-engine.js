@@ -1070,6 +1070,11 @@ else if(
 
 ){
 
+  console.log(
+  "🚀 EXECUTIVE BLOCK ENTERED",
+  intent
+);
+
   response.type =
     "executive";
 
