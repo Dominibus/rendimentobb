@@ -217,11 +217,11 @@ if(aiSignals.includes("negative_cashflow")){
 
 const hasAnalysis =
 
-  roi > 0 ||
+  (!isNaN(roi) && roi !== 0) ||
 
-  risk > 0 ||
+  (!isNaN(risk) && risk !== 0) ||
 
-  occupancy > 0;
+  (!isNaN(occupancy) && occupancy !== 0);
 
 if(
 
@@ -1468,6 +1468,173 @@ else{
 
 }
   
+}
+
+// ===========================================
+// 🧠 SMART FALLBACK ANALYSIS
+// ===========================================
+
+else if(hasAnalysis){
+
+  const q =
+    String(message || "")
+    .toLowerCase();
+
+  // 💰 MONTHLY INCOME
+  if(
+
+    q.includes("mese") ||
+    q.includes("mensile") ||
+    q.includes("monthly")
+
+  ){
+
+    const monthly =
+      Number(
+        (
+          liveData.net ||
+          0
+        ) / 12
+      );
+
+    response.type =
+      "cashflow";
+
+    response.textIT =
+
+`💰 Profitto mensile stimato:
+
+€${monthly.toLocaleString("it-IT",{
+  maximumFractionDigits:0
+})}
+
+📈 Profitto annuale:
+€${Number(
+  liveData.net || 0
+).toLocaleString("it-IT")}`;
+
+    response.textEN =
+
+`💰 Estimated monthly profit:
+
+€${monthly.toLocaleString("en-US",{
+  maximumFractionDigits:0
+})}
+
+📈 Annual profit:
+€${Number(
+  liveData.net || 0
+).toLocaleString("en-US")}`;
+
+  }
+
+  // ⚠️ CONVENIENTE
+  else if(
+
+    q.includes("conviene") ||
+    q.includes("conveniente") ||
+    q.includes("worth")
+
+  ){
+
+    response.type =
+      "strategy";
+
+    response.textIT =
+
+roi >= 10 && risk <= 40
+
+? `✅ L'investimento appare ancora conveniente.
+
+📈 ROI:
+${roi.toFixed(1)}%
+
+⚠️ Risk:
+${risk}/100
+
+🏨 Occupazione:
+${occupancy}%`
+
+: `⚠️ L'investimento appare meno competitivo.
+
+📈 ROI:
+${roi.toFixed(1)}%
+
+⚠️ Risk:
+${risk}/100
+
+💡 Potrebbe essere necessario ottimizzare pricing o occupazione.`;
+
+    response.textEN =
+
+roi >= 10 && risk <= 40
+
+? `✅ The investment still appears attractive.
+
+📈 ROI:
+${roi.toFixed(1)}%
+
+⚠️ Risk:
+${risk}/100
+
+🏨 Occupancy:
+${occupancy}%`
+
+: `⚠️ The investment appears less competitive.
+
+📈 ROI:
+${roi.toFixed(1)}%
+
+⚠️ Risk:
+${risk}/100
+
+💡 Pricing or occupancy optimization may be required.`;
+
+  }
+
+  // ⚠️ RISCHIO AUMENTATO
+  else if(
+
+    q.includes("rischio") ||
+    q.includes("risk")
+
+  ){
+
+    response.type =
+      "risk";
+
+    response.textIT =
+
+risk >= 40
+
+? `⚠️ Il rischio operativo è aumentato.
+
+📊 Risk score:
+${risk}/100
+
+💡 Occupazione e marginalità risultano più fragili.`
+
+: `✅ Il rischio rimane relativamente basso.
+
+📊 Risk score:
+${risk}/100`;
+
+    response.textEN =
+
+risk >= 40
+
+? `⚠️ Operational risk increased.
+
+📊 Risk score:
+${risk}/100`
+
+: `✅ Risk remains relatively low.
+
+📊 Risk score:
+${risk}/100`;
+
+  }
+
 }
 
   // ===========================================
