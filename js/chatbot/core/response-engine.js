@@ -58,6 +58,19 @@ const liveData = {
 
 };
 
+  const uiNetProfit =
+
+  Number(
+
+    document.getElementById("profit-annual")
+      ?.textContent
+
+      ?.replace(/[^\d,-]/g, "")
+      ?.replace(/\./g, "")
+      ?.replace(",", ".")
+
+  ) || 0;
+
 const roi =
   Number(
     liveData.realROI ??
@@ -324,38 +337,46 @@ else if(
   response.confidence =
     0.95;
 
+  // =====================================
+  // 💰 SAFE DATA
+  // =====================================
+
   const rawNet =
-  liveData.net ??
-  liveData.netProfit ??
-  liveData.profitNet ??
-  null;
 
-const rawGross =
-  liveData.gross ??
-  liveData.grossProfit ??
-  liveData.profit ??
-  0;
+    liveData.net ??
+    liveData.netProfit ??
+    liveData.profitNet ??
+    uiNetProfit ??
+    null;
 
-const net =
+  const rawGross =
 
-  rawNet !== null &&
-  rawNet !== undefined &&
-  rawNet !== "" &&
-  !isNaN(Number(rawNet))
+    liveData.gross ??
+    liveData.grossProfit ??
+    liveData.profit ??
+    0;
 
-    ? Number(rawNet)
+  const net =
 
-    : Number(rawGross || 0);
+    rawNet !== undefined &&
+    rawNet !== null &&
+    rawNet !== "" &&
+    !isNaN(Number(rawNet))
 
-console.log(
-  "💰 CASHFLOW DEBUG:",
-  {
-    rawNet,
-    rawGross,
-    finalNet: net,
-    liveData
-  }
-);
+      ? Number(rawNet)
+
+      : 0;
+
+  console.log(
+    "💰 CASHFLOW FINAL DEBUG:",
+    {
+      rawNet,
+      rawGross,
+      uiNetProfit,
+      finalNet: net,
+      liveData
+    }
+  );
 
   // =====================================
   // 🔒 FREE LOCK
