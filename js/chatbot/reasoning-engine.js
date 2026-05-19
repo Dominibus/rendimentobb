@@ -1,6 +1,6 @@
 // ===============================================
 // 🧠 RENDIMENTOBB – REASONING ENGINE
-// Advanced Conversational Intelligence Layer
+// Silicon Valley Conversational Intelligence Layer
 // ===============================================
 
 // ===============================================
@@ -25,10 +25,17 @@ window.rbIsFollowUpQuestion = function(text){
     "quindi conviene",
     "approfondisci",
     "spiegami meglio",
-    "e quindi?",
-    "and?",
+    "fammi un analisi",
+    "analizza",
+    "conviene ancora",
+    "cashflow",
+    "sostenibilità",
+    "come posso migliorare",
     "what about",
-    "more details"
+    "more details",
+    "is it good",
+    "analyze",
+    "should i invest"
 
   ];
 
@@ -39,7 +46,7 @@ window.rbIsFollowUpQuestion = function(text){
 };
 
 // ===============================================
-// 🧠 GET AI MEMORY
+// 🧠 GET AI CONTEXT
 // ===============================================
 
 window.rbGetAIContext = function(){
@@ -52,7 +59,7 @@ window.rbGetAIContext = function(){
 };
 
 // ===============================================
-// 🧠 CONTEXTUAL INVESTMENT SUMMARY
+// 🧠 EXECUTIVE INVESTMENT SUMMARY
 // ===============================================
 
 window.rbGenerateInvestmentSummary =
@@ -62,7 +69,8 @@ function(){
     window.rbGetAIContext();
 
   const city =
-    memory.lastCity || "roma";
+    memory.lastCity ||
+    "roma";
 
   const roi =
     Number(memory.lastROI || 0);
@@ -73,101 +81,315 @@ function(){
   const mortgage =
     Number(memory.lastMortgagePercent || 0);
 
+  const occupancy =
+    Number(memory.lastOccupancy || 0);
+
+  const cashflow =
+    Number(memory.lastCashflow || 0);
+
+  const revenue =
+    Number(memory.lastRevenue || 0);
+
+  const expenses =
+    Number(memory.lastExpenses || 0);
+
+  const nightly =
+    Number(memory.lastNightPrice || 0);
+
+  const access =
+    window.getUserAccess?.() || {};
+
   let summaryIT = [];
   let summaryEN = [];
 
   // ===========================================
-  // 🌍 CITY
+  // 🌍 MARKET ANALYSIS
   // ===========================================
 
   summaryIT.push(
-    `📍 Mercato analizzato: ${city}`
+    `📍 Analisi mercato: ${city}`
   );
 
   summaryEN.push(
-    `📍 Market analyzed: ${city}`
+    `📍 Market analysis: ${city}`
   );
 
   // ===========================================
-  // 📈 ROI
+  // 📈 ROI INTELLIGENCE
   // ===========================================
 
-  if(roi >= 10){
+  if(roi >= 25){
 
     summaryIT.push(
-      "📈 ROI superiore alla media."
+      `🚀 ROI estremamente elevato (${roi.toFixed(1)}%). L'investimento performa molto sopra la media di mercato.`
     );
 
     summaryEN.push(
-      "📈 ROI above average."
+      `🚀 Extremely high ROI (${roi.toFixed(1)}%). The investment performs well above market average.`
+    );
+
+  }else if(roi >= 15){
+
+    summaryIT.push(
+      `📈 ROI molto competitivo (${roi.toFixed(1)}%).`
+    );
+
+    summaryEN.push(
+      `📈 Highly competitive ROI (${roi.toFixed(1)}%).`
     );
 
   }else if(roi > 0){
 
     summaryIT.push(
-      "📊 ROI moderato."
+      `📊 ROI moderato (${roi.toFixed(1)}%).`
     );
 
     summaryEN.push(
-      "📊 Moderate ROI."
+      `📊 Moderate ROI (${roi.toFixed(1)}%).`
+    );
+
+  }else{
+
+    summaryIT.push(
+      `❌ ROI negativo o investimento non sostenibile (${roi.toFixed(1)}%).`
+    );
+
+    summaryEN.push(
+      `❌ Negative ROI or financially unsustainable investment (${roi.toFixed(1)}%).`
     );
 
   }
 
   // ===========================================
-  // ⚠️ RISK
+  // ⚠️ RISK ENGINE
   // ===========================================
 
   if(risk >= 70){
 
     summaryIT.push(
-      "⚠️ Rischio operativo elevato."
+      `⚠️ Il rischio operativo risulta elevato (${risk}/100).`
     );
 
     summaryEN.push(
-      "⚠️ High operational risk."
+      `⚠️ Operational risk appears high (${risk}/100).`
     );
 
-  }else if(risk > 0){
+  }else if(risk >= 40){
 
     summaryIT.push(
-      "🟡 Rischio moderato."
+      `🟡 Profilo rischio moderato (${risk}/100).`
     );
 
     summaryEN.push(
-      "🟡 Moderate risk."
+      `🟡 Moderate risk profile (${risk}/100).`
+    );
+
+  }else{
+
+    summaryIT.push(
+      `✅ Profilo rischio stabile (${risk}/100).`
+    );
+
+    summaryEN.push(
+      `✅ Stable risk profile (${risk}/100).`
     );
 
   }
 
   // ===========================================
-  // 🏦 MORTGAGE
+  // 🏦 FINANCIAL STRUCTURE
   // ===========================================
 
   if(mortgage >= 80){
 
     summaryIT.push(
-      "🏦 Leva finanziaria aggressiva."
+      "🏦 Leva finanziaria molto aggressiva."
     );
 
     summaryEN.push(
-      "🏦 Aggressive financial leverage."
+      "🏦 Very aggressive financial leverage."
+    );
+
+  }else if(mortgage >= 50){
+
+    summaryIT.push(
+      "🏦 Mutuo sostenibile ma da monitorare."
+    );
+
+    summaryEN.push(
+      "🏦 Sustainable mortgage structure but requires monitoring."
+    );
+
+  }
+
+  // ===========================================
+  // 🏠 OCCUPANCY ENGINE
+  // ===========================================
+
+  if(occupancy >= 75){
+
+    summaryIT.push(
+      `🔥 Occupazione molto forte (${occupancy}%).`
+    );
+
+    summaryEN.push(
+      `🔥 Very strong occupancy (${occupancy}%).`
+    );
+
+  }else if(occupancy <= 40){
+
+    summaryIT.push(
+      `⚠️ Occupazione debole (${occupancy}%).`
+    );
+
+    summaryEN.push(
+      `⚠️ Weak occupancy (${occupancy}%).`
+    );
+
+  }
+
+  // ===========================================
+  // 💸 CASHFLOW ENGINE
+  // ===========================================
+
+  if(cashflow > 0){
+
+    summaryIT.push(
+      `💸 Cashflow positivo stimato: €${cashflow.toLocaleString()}.`
+    );
+
+    summaryEN.push(
+      `💸 Positive estimated cashflow: €${cashflow.toLocaleString()}.`
+    );
+
+  }else if(cashflow < 0){
+
+    summaryIT.push(
+      `❌ Cashflow negativo stimato: €${cashflow.toLocaleString()}.`
+    );
+
+    summaryEN.push(
+      `❌ Negative estimated cashflow: €${cashflow.toLocaleString()}.`
+    );
+
+  }
+
+  // ===========================================
+  // 💰 REVENUE ANALYSIS
+  // ===========================================
+
+  if(revenue > 0){
+
+    summaryIT.push(
+      `💰 Ricavi stimati: €${revenue.toLocaleString()} annui.`
+    );
+
+    summaryEN.push(
+      `💰 Estimated annual revenue: €${revenue.toLocaleString()}.`
+    );
+
+  }
+
+  // ===========================================
+  // 🧾 COST ANALYSIS
+  // ===========================================
+
+  if(expenses >= revenue * 0.6){
+
+    summaryIT.push(
+      "⚠️ I costi operativi sembrano molto elevati rispetto ai ricavi."
+    );
+
+    summaryEN.push(
+      "⚠️ Operating expenses appear high compared to revenue."
+    );
+
+  }
+
+  // ===========================================
+  // 🌙 NIGHT PRICE ANALYSIS
+  // ===========================================
+
+  if(nightly >= 250){
+
+    summaryIT.push(
+      "🌙 Strategia premium pricing rilevata."
+    );
+
+    summaryEN.push(
+      "🌙 Premium pricing strategy detected."
+    );
+
+  }
+
+  // ===========================================
+  // 🧠 STRATEGIC AI CONCLUSION
+  // ===========================================
+
+  if(
+    roi >= 15 &&
+    risk <= 40 &&
+    cashflow > 0
+  ){
+
+    summaryIT.push(
+      "🧠 Executive AI: l'investimento mostra una struttura molto forte tra rendimento, rischio e sostenibilità."
+    );
+
+    summaryEN.push(
+      "🧠 Executive AI: the investment shows a strong balance between profitability, risk and sustainability."
+    );
+
+  }
+
+  if(
+    roi <= 0 ||
+    cashflow < 0
+  ){
+
+    summaryIT.push(
+      "🚨 Executive AI: la struttura economica attuale presenta criticità operative e finanziarie."
+    );
+
+    summaryEN.push(
+      "🚨 Executive AI: the current financial structure shows operational and financial weaknesses."
+    );
+
+  }
+
+  // ===========================================
+  // 🔒 FREE USER STRATEGY
+  // ===========================================
+
+  if(
+    access.isFree &&
+    !access.isInvestor &&
+    !access.isPro &&
+    !access.isAdmin
+  ){
+
+    summaryIT.push(
+      "🔒 Per analisi avanzate su rischio reale, sostenibilità e benchmark completi è richiesto il piano Investor o PRO."
+    );
+
+    summaryEN.push(
+      "🔒 Advanced analysis for real risk, sustainability and benchmarks requires Investor or PRO access."
     );
 
   }
 
   return window.t(
 
-    summaryIT.join("\n"),
+    summaryIT.join("\n\n"),
 
-    summaryEN.join("\n")
+    summaryEN.join("\n\n")
 
   );
 
 };
 
 // ===============================================
-// 🚀 READY
+// 🚀 ENGINE READY
 // ===============================================
 
 console.log(
