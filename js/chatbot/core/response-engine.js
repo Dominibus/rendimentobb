@@ -17,7 +17,9 @@ window.rbGenerateResponse = function({
 
   memory = {},
 
-  analysisData = {}
+  analysisData = {},
+
+  aiSignals = []
 
 } = {}){
 
@@ -103,6 +105,66 @@ const occupancy =
 
   city;
 
+// ===========================================
+// 🧠 AI INSIGHTS
+// ===========================================
+
+const executiveInsightsIT = [];
+
+const executiveInsightsEN = [];
+
+// 🚀 HIGH ROI
+if(aiSignals.includes("very_high_roi")){
+
+  executiveInsightsIT.push(
+    "🚀 ROI molto elevato rispetto ai benchmark short-rent."
+  );
+
+  executiveInsightsEN.push(
+    "🚀 ROI significantly above short-rent benchmarks."
+  );
+
+}
+
+// ⚠️ HIGH RISK
+if(aiSignals.includes("high_risk")){
+
+  executiveInsightsIT.push(
+    "⚠️ La simulazione mostra una struttura operativa aggressiva."
+  );
+
+  executiveInsightsEN.push(
+    "⚠️ The simulation shows an aggressive operational structure."
+  );
+
+}
+
+// 🏨 HIGH OCCUPANCY
+if(aiSignals.includes("high_occupancy")){
+
+  executiveInsightsIT.push(
+    "🏨 L'occupazione supporta positivamente il cashflow."
+  );
+
+  executiveInsightsEN.push(
+    "🏨 Occupancy positively supports cashflow."
+  );
+
+}
+
+// 💸 NEGATIVE CASHFLOW
+if(aiSignals.includes("negative_cashflow")){
+
+  executiveInsightsIT.push(
+    "💸 Il cashflow operativo potrebbe diventare instabile."
+  );
+
+  executiveInsightsEN.push(
+    "💸 Operational cashflow may become unstable."
+  );
+
+}
+  
   // ===========================================
   // 🌍 MARKET DATA
   // ===========================================
@@ -1146,6 +1208,20 @@ else if(
     "💡 Occupazione, pricing dinamico e gestione costi influenzano fortemente il ROI reale."
   );
 
+// =====================================
+// 🧠 AI SIGNAL INSIGHTS
+// =====================================
+
+if(executiveInsightsIT.length){
+
+  executiveIT.push(
+
+    executiveInsightsIT.join("\n\n")
+
+  );
+
+}
+
   response.textIT =
     executiveIT.join("\n\n");
 
@@ -1219,6 +1295,20 @@ else if(
   executiveEN.push(
     "💡 Occupancy, dynamic pricing and operational costs strongly affect real ROI."
   );
+
+// =====================================
+// 🧠 AI SIGNAL INSIGHTS
+// =====================================
+
+if(executiveInsightsEN.length){
+
+  executiveEN.push(
+
+    executiveInsightsEN.join("\n\n")
+
+  );
+
+}
 
   response.textEN =
     executiveEN.join("\n\n");
