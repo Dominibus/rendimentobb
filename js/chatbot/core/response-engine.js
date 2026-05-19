@@ -1582,14 +1582,26 @@ else if(hasAnalysis){
 
   }
 
-  // ⚠️ CONVENIENTE
-  else if(
+  // ⚠️ CONVENIENTE / EXECUTIVE
+else if(
 
-    q.includes("conviene") ||
-    q.includes("conveniente") ||
-    q.includes("worth")
+  q.includes("conviene") ||
+  q.includes("conveniente") ||
+  q.includes("worth") ||
 
-  ){
+  q.includes("sostenibile") ||
+  q.includes("sustainable") ||
+
+  q.includes("vale la pena") ||
+  q.includes("worth it") ||
+
+  q.includes("questo investimento") ||
+  q.includes("this investment") ||
+
+  q.includes("analisi executive") ||
+  q.includes("executive analysis")
+
+){
 
     response.type =
       "strategy";
