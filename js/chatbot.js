@@ -2322,12 +2322,17 @@ return window.t(
 // ✅ DEFAULT
 // =====================================
 
-return window.t(
-  "Posso aiutarti ad analizzare ROI, rischio, cashflow e sostenibilità dell'investimento.",
-  "I can help analyze ROI, risk, cashflow and investment sustainability."
+console.log(
+  "⚠️ FALLBACK RESPONSE TRIGGERED"
 );
 
-};
+return window.t(
+
+  "Non ho capito completamente la richiesta. Prova a chiedermi ROI, rischio, cashflow o analisi investimento.",
+
+  "I didn't fully understand the request. Try asking about ROI, risk, cashflow or investment analysis."
+
+);
 
 // ===============================================
 // 🚀 INIT CHATBOT
