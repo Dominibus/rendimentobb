@@ -686,28 +686,65 @@ ${risk}/100
 
     else{
 
-      response.signals.push(
-        "low_risk"
-      );
+  response.signals.push(
+    "low_risk"
+  );
 
-      response.textIT =
+  const riskInsightIT =
+
+    occupancy < 45
+
+    ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
+
+    : occupancy >= 65
+
+    ? "✅ L'occupazione supporta bene il cashflow."
+
+    : "📊 L'occupazione appare moderata.";
+
+  const riskInsightEN =
+
+    occupancy < 45
+
+    ? "⚠️ Current occupancy is reducing operational stability."
+
+    : occupancy >= 65
+
+    ? "✅ Occupancy strongly supports cashflow."
+
+    : "📊 Occupancy appears moderate.";
+
+  response.textIT =
 
 `✅ Rischio relativamente basso.
 
 📊 Risk score:
 ${risk}/100
 
-💡 La struttura finanziaria sembra stabile.`;
+🏨 Occupazione:
+${occupancy}%
 
-      response.textEN =
+${riskInsightIT}
+
+📈 ROI reale:
+${roi.toFixed(1)}%`;
+
+  response.textEN =
 
 `✅ Risk appears relatively low.
 
 📊 Risk score:
 ${risk}/100
 
-💡 Financial structure appears stable.`;
+🏨 Occupancy:
+${occupancy}%
 
+${riskInsightEN}
+
+📈 Real ROI:
+${roi.toFixed(1)}%`;
+
+}
     }
 
   }
@@ -1241,38 +1278,48 @@ else if(
   // 🔥 AI CONCLUSION
   // =====================================
 
-  if(
-    roi >= 25 &&
-    risk <= 35
-  ){
-
-    executiveIT.push(
-      "🚀 L'investimento appare altamente competitivo rispetto alla media short-rent."
-    );
-
-  }
-
-  else if(
-    roi >= 10
-  ){
-
-    executiveIT.push(
-      "📊 L'investimento mostra una sostenibilità moderata con margini di ottimizzazione."
-    );
-
-  }
-
-  else{
-
-    executiveIT.push(
-      "⚠️ L'investimento mostra criticità operative e marginalità limitata."
-    );
-
-  }
+if(
+  roi >= 25 &&
+  risk <= 35 &&
+  occupancy >= 60
+){
 
   executiveIT.push(
-    "💡 Occupazione, pricing dinamico e gestione costi influenzano fortemente il ROI reale."
+    "🚀 L'investimento appare altamente competitivo rispetto alla media short-rent."
   );
+
+}
+
+else if(
+  roi >= 10 &&
+  occupancy >= 45
+){
+
+  executiveIT.push(
+    "📊 L'investimento mostra una sostenibilità moderata con margini di ottimizzazione."
+  );
+
+}
+
+else{
+
+  executiveIT.push(
+    "⚠️ Occupazione e marginalità stanno riducendo la competitività dell'investimento."
+  );
+
+}
+
+  executiveIT.push(
+  `🏨 Occupazione attuale: ${occupancy}%`
+);
+
+if(occupancy < 45){
+
+  executiveIT.push(
+    "⚠️ Un'occupazione sotto il 45% può compromettere il cashflow reale."
+  );
+
+}
 
 // =====================================
 // 🧠 AI SIGNAL INSIGHTS
@@ -1330,38 +1377,47 @@ if(executiveInsightsIT.length){
   );
 
   if(
-    roi >= 25 &&
-    risk <= 35
-  ){
-
-    executiveEN.push(
-      "🚀 The investment appears highly competitive compared to short-rent averages."
-    );
-
-  }
-
-  else if(
-    roi >= 10
-  ){
-
-    executiveEN.push(
-      "📊 The investment shows moderate sustainability with optimization potential."
-    );
-
-  }
-
-  else{
-
-    executiveEN.push(
-      "⚠️ The investment shows operational weaknesses and limited profitability."
-    );
-
-  }
+  roi >= 25 &&
+  risk <= 35 &&
+  occupancy >= 60
+){
 
   executiveEN.push(
-    "💡 Occupancy, dynamic pricing and operational costs strongly affect real ROI."
+    "🚀 The investment appears highly competitive compared to short-rent averages."
   );
 
+}
+
+else if(
+  roi >= 10 &&
+  occupancy >= 45
+){
+
+  executiveEN.push(
+    "📊 The investment shows moderate sustainability with optimization potential."
+  );
+
+}
+
+else{
+
+  executiveEN.push(
+    "⚠️ Occupancy and margins are reducing investment competitiveness."
+  );
+
+}
+
+  executiveEN.push(
+  `🏨 Current occupancy: ${occupancy}%`
+);
+
+if(occupancy < 45){
+
+  executiveEN.push(
+    "⚠️ Occupancy below 45% may compromise real cashflow."
+  );
+
+}
 // =====================================
 // 🧠 AI SIGNAL INSIGHTS
 // =====================================
