@@ -75,20 +75,56 @@ const liveData = {
 
 const roi =
   Number(
+
     liveData.realROI ??
+
     liveData.roi ??
+
+    window.rbChatbotLive?.roi ??
+
+    window.rbChatbotData?.roi ??
+
     0
+
   );
 
 const risk =
   Number(
-    liveData.risk || 0
+
+    liveData.risk ??
+
+    window.rbChatbotLive?.risk ??
+
+    window.rbChatbotData?.risk ??
+
+    0
+
   );
 
 const occupancy =
   Number(
-    liveData.occupancy || 0
+
+    liveData.occupancy ??
+
+    window.rbChatbotLive?.occupancy ??
+
+    window.rbChatbotData?.occupancy ??
+
+    0
+
   );
+
+console.log(
+  "🧠 LIVE RESPONSE DATA:",
+  {
+    roi,
+    risk,
+    occupancy,
+    liveData,
+    chatbotLive: window.rbChatbotLive,
+    chatbotData: window.rbChatbotData
+  }
+);
 
   const city =
     entities.city ||
