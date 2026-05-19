@@ -248,33 +248,63 @@ if(
     if(roi >= 15){
 
       response.signals.push(
-        "high_roi"
-      );
+  "high_roi"
+);
 
-      response.textIT =
+const marketROI =
+  market?.avgROI || "8-10%";
 
-`🚀 ROI molto elevato.
+response.textIT =
 
-📈 ROI attuale:
+`🚀 ROI estremamente elevato.
+
+📈 ROI reale simulato:
 ${roi.toFixed(1)}%
 
 🌍 Mercato:
 ${cityLabel}
 
-💡 La simulazione appare superiore alla media short-rent.`;
+📊 Benchmark medio:
+${marketROI}
 
-      response.textEN =
+💡 La simulazione appare molto superiore alla media short-rent locale.
 
-`🚀 Very high ROI detected.
+${roi >= 40
+? "⚠️ Un ROI oltre il 40% richiede verifica realistica di occupazione, costi e sostenibilità operativa."
+: "✅ Il rendimento appare competitivo rispetto al benchmark."
+}
 
-📈 Current ROI:
+🏨 Occupazione:
+${occupancy}% 
+
+⚠️ Risk score:
+${risk}/100`;
+
+response.textEN =
+
+`🚀 Extremely high ROI detected.
+
+📈 Simulated real ROI:
 ${roi.toFixed(1)}%
 
 🌍 Market:
 ${cityLabel}
 
-💡 The simulation appears above short-rent market averages.`;
+📊 Average benchmark:
+${marketROI}
 
+💡 The simulation appears significantly above local short-rent averages.
+
+${roi >= 40
+? "⚠️ ROI above 40% requires realistic validation of occupancy, costs and sustainability."
+: "✅ Returns appear competitive versus benchmark."
+}
+
+🏨 Occupancy:
+${occupancy}%
+
+⚠️ Risk score:
+${risk}/100`;
     }
 
     else if(roi >= 8){
