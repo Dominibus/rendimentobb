@@ -341,13 +341,59 @@ const net =
 
     : Number(rawGross || 0);
 
-  if(net <= 0){
+  // =====================================
+// 🔒 FREE LOCK
+// =====================================
 
-    response.signals.push(
-      "negative_cashflow"
-    );
+if(
 
-    response.textIT =
+  !window.RB_USER?.canSeeFullAnalysis &&
+
+  !window.RB_USER?.isInvestor &&
+
+  !window.RB_USER?.isPro &&
+
+  !window.RB_USER?.isAdmin
+
+){
+
+  response.signals.push(
+    "cashflow_locked"
+  );
+
+  response.textIT =
+
+`🔒 Il cashflow dettagliato è disponibile nei piani Investor e PRO.
+
+💡 Sblocca:
+• profitto netto reale
+• sostenibilità operativa
+• cashflow annuale
+• analisi rischio avanzata`;
+
+  response.textEN =
+
+`🔒 Detailed cashflow analysis is available in Investor and PRO plans.
+
+💡 Unlock:
+• real net profit
+• operational sustainability
+• annual cashflow
+• advanced risk analysis`;
+
+}
+
+// =====================================
+// 🚨 NEGATIVE CASHFLOW
+// =====================================
+
+else if(net <= 0){
+
+  response.signals.push(
+    "negative_cashflow"
+  );
+
+  response.textIT =
 
 `🚨 Cashflow operativo negativo.
 
@@ -358,7 +404,7 @@ const net =
 
 💡 È consigliabile ridurre costi o aumentare occupazione e ADR.`;
 
-    response.textEN =
+  response.textEN =
 
 `🚨 Negative operational cashflow detected.
 
@@ -369,7 +415,7 @@ const net =
 
 💡 Reducing costs or increasing occupancy and ADR is recommended.`;
 
-  }
+}
 
   else{
 
