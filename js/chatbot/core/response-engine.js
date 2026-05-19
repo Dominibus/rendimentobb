@@ -1070,7 +1070,17 @@ else if(
 
   intent.intent === "analysis" ||
 
-  intent.intent === "sustainability"
+  intent.intent === "sustainability" ||
+
+  intent.intents?.includes("sustainability") ||
+
+  intent.intents?.includes("analysis") ||
+
+  intent.intents?.includes("roi") ||
+
+  intent.intents?.includes("cashflow") ||
+
+  intent.intents?.includes("risk")
 
 ){
 
