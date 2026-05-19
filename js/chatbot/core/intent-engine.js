@@ -424,61 +424,85 @@ if(
   )
 ){
 
-  // =====================================
-  // 🧠 EXECUTIVE AI
-  // =====================================
+// =====================================
+// 🧠 EXECUTIVE AI
+// =====================================
 
-  if(
+if(
 
-    has(
+  has(
 
-      "analisi executive",
-      "executive",
-      "analisi completa",
-      "analisi avanzata",
+    "analisi executive",
+    "executive",
+    "analisi completa",
+    "analisi avanzata",
 
-      "fammi un'analisi",
-      "analizza investimento",
+    "fammi un'analisi",
+    "analizza investimento",
 
-      "valuta investimento",
-      "conviene ancora",
+    "valuta investimento",
+    "conviene ancora",
 
-      "analisi professionale",
-      "analisi ai",
+    "analisi professionale",
+    "analisi ai",
 
-      "come posso migliorare",
-      "migliorare rendimento",
+    "come posso migliorare",
+    "migliorare rendimento",
 
-      "cashflow reale",
-      "sostenibilità investimento"
+    "cashflow reale",
 
-    )
+    "sostenibilità investimento",
+    "sostenibile",
+    "è sostenibile",
+    "investimento sostenibile",
+    "questo investimento",
+    "conviene questo investimento",
+    "vale la pena",
 
-  ){
+    "sustainable",
+    "is it sustainable",
+    "investment sustainability",
+    "sustainable investment",
 
-    result.intent =
-      "investment_executive";
+    "is this investment good",
+    "is this investment worth it",
 
-    result.category =
-      "executive";
+    "worth it",
+    "does it make sense",
 
-    result.confidence =
-      0.99;
+    "should i invest",
+    "good investment",
 
-    result.requiresCalculation =
-      true;
+    "executive analysis",
+    "advanced analysis"
 
-    result.requiresRiskAnalysis =
-      true;
+  )
 
-    result.requiresMarketData =
-      true;
+){
 
-  }
+  result.intent =
+    "investment_executive";
 
-  // =====================================
-  // 📈 STANDARD STRATEGY
-  // =====================================
+  result.category =
+    "executive";
+
+  result.confidence =
+    0.99;
+
+  result.requiresCalculation =
+    true;
+
+  result.requiresRiskAnalysis =
+    true;
+
+  result.requiresMarketData =
+    true;
+
+}
+
+// =====================================
+// 📈 STANDARD STRATEGY
+// =====================================
 
   else{
 
