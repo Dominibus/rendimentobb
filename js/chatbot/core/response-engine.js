@@ -935,15 +935,24 @@ else if(
   response.confidence =
     0.99;
 
-  const net =
-    Number(
-      liveData.net || 0
-    );
+  const rawNet =
+  liveData.net;
 
-  const gross =
-    Number(
-      liveData.gross || 0
-    );
+const rawGross =
+  liveData.gross;
+
+const net =
+
+  rawNet !== undefined &&
+  rawNet !== null &&
+  rawNet !== ""
+
+    ? Number(rawNet)
+
+    : Number(rawGross || 0);
+
+const gross =
+  Number(rawGross || 0);
 
   const executiveIT = [];
 
