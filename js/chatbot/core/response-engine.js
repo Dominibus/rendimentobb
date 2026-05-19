@@ -279,13 +279,13 @@ ${roi.toFixed(1)}%
 
   }
 
-  // =====================================
-  // ⚠️ LOW ROI
-  // =====================================
+// =====================================
+// ⚠️ LOW ROI
+// =====================================
 
-  else{
+else{
 
-    response.textIT =
+  response.textIT =
 
 `⚠️ ROI relativamente basso.
 
@@ -294,7 +294,7 @@ ${roi.toFixed(1)}%
 
 💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`;
 
-    response.textEN =
+  response.textEN =
 
 `⚠️ ROI appears relatively low.
 
@@ -303,13 +303,9 @@ ${roi.toFixed(1)}%
 
 💡 ADR, occupancy or operational cost optimization may be required.`;
 
-  }
-
 }
 
-    }
-
-  }
+}
 
 // ===========================================
 // 💰 CASHFLOW RESPONSE
