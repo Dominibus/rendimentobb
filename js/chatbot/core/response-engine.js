@@ -1066,7 +1066,11 @@ else if(
 
   intent.intent === "investment_executive" ||
 
-  intent.intent === "executive_analysis"
+  intent.intent === "executive_analysis" ||
+
+  intent.intent === "analysis" ||
+
+  intent.intent === "sustainability"
 
 ){
 
