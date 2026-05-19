@@ -38,76 +38,78 @@ window.rbDetectIntent = function(message = ""){
 
   };
 
-// ===========================================
-// 🧠 HELPERS
-// ===========================================
+  // ===========================================
+  // 🧠 HELPERS
+  // ===========================================
 
-const has = (...words) =>
-  words.some(word => text.includes(word));
+  const has = (...words) =>
+    words.some(word => text.includes(word));
 
-const hasAll = (...words) =>
-  words.every(word => text.includes(word));  
+  const hasAll = (...words) =>
+    words.every(word => text.includes(word));
 
-// ===========================================
-// ❓ EDUCATION / EXPLANATION
-// PRIORITÀ MASSIMA
-// ===========================================
+  // ===========================================
+  // ❓ EDUCATION / EXPLANATION
+  // PRIORITÀ MASSIMA
+  // ===========================================
 
-const explainWords = [
+  const explainWords = [
 
-  "spiega",
-  "spiegami",
+    // 🇮🇹 ITALIANO
+    "spiega",
+    "spiegami",
 
-  "explain",
+    "cos'è",
+    "cos e",
+    "cose",
 
-  "cos'è",
-  "cos e",
-  "cose",
+    "cosa è",
+    "cosa e",
 
-  "cosa è",
-  "cosa e",
+    "significa",
+    "definizione",
 
-  "what is",
+    // 🇬🇧 ENGLISH
+    "explain",
 
-  "significa",
-  "meaning",
+    "what is",
 
-  "definizione",
-  "definition"
+    "meaning",
+    "definition"
 
-];
+  ];
 
-const isEducation =
+  const isEducation =
 
-  explainWords.some(word =>
+    explainWords.some(word =>
 
-    text.includes(word)
+      text.includes(word)
 
-  );
+    );
 
-if(isEducation){
+  if(isEducation){
 
-  return {
+    return {
 
-    intent: "education",
+      intent: "education",
 
-    confidence: 0.99,
+      confidence: 0.99,
 
-    category: "education",
+      category: "education",
 
-    requiresCalculation: false,
+      requiresCalculation: false,
 
-    requiresMarketData: false,
+      requiresMarketData: false,
 
-    requiresRiskAnalysis: false,
+      requiresRiskAnalysis: false,
 
-    requiresMortgageAnalysis: false,
+      requiresMortgageAnalysis: false,
 
-    requiresComparison: false
+      requiresComparison: false
 
-  };
+    };
 
-}
+  }
 
   // ===========================================
   // 📈 ROI
@@ -115,12 +117,25 @@ if(isEducation){
 
   const roiWords = [
 
+    // 🇮🇹 ITALIANO
     "roi",
     "rendimento",
+
     "profitto",
     "guadagno",
+
+    "redditività",
+
+    "ritorno investimento",
+
+    // 🇬🇧 ENGLISH
     "returns",
-    "yield"
+    "yield",
+
+    "profit",
+    "profitability",
+
+    "return on investment"
 
   ];
 
@@ -130,13 +145,17 @@ if(isEducation){
     )
   ){
 
-    result.intent = "roi_analysis";
+    result.intent =
+      "roi_analysis";
 
-    result.category = "finance";
+    result.category =
+      "finance";
 
-    result.confidence = 0.95;
+    result.confidence =
+      0.95;
 
-    result.requiresCalculation = true;
+    result.requiresCalculation =
+      true;
 
   }
 
@@ -146,12 +165,34 @@ if(isEducation){
 
   const cashflowWords = [
 
+    // 🇮🇹 ITALIANO
     "cashflow",
     "cash flow",
+
     "flusso",
+    "flusso cassa",
+
     "entrate",
     "uscite",
-    "utile netto"
+
+    "utile netto",
+
+    "profitto netto",
+
+    "guadagno mensile",
+
+    // 🇬🇧 ENGLISH
+    "cashflow",
+    "cash flow",
+
+    "income",
+    "expenses",
+
+    "net profit",
+
+    "monthly income",
+
+    "monthly profit"
 
   ];
 
@@ -161,59 +202,100 @@ if(isEducation){
     )
   ){
 
-    result.intent = "cashflow_analysis";
+    result.intent =
+      "cashflow_analysis";
 
-    result.category = "finance";
+    result.category =
+      "finance";
 
-    result.confidence = 0.95;
+    result.confidence =
+      0.95;
 
-    result.requiresCalculation = true;
-
-  }
-
-  // ===========================================
-  // ⚠️ RISK
-  // ===========================================
-
-  const riskWords = [
-
-    "rischio",
-    "risk",
-    "pericoloso",
-    "sicuro",
-    "affidabile"
-
-  ];
-
-  if(
-    riskWords.some(word =>
-      text.includes(word)
-    )
-  ){
-
-    result.intent = "risk_analysis";
-
-    result.category = "risk";
-
-    result.confidence = 0.92;
-
-    result.requiresRiskAnalysis = true;
+    result.requiresCalculation =
+      true;
 
   }
 
-  // ===========================================
-  // 🏦 MORTGAGE
-  // ===========================================
+// ===========================================
+// ⚠️ RISK
+// ===========================================
+
+const riskWords = [
+
+  // 🇮🇹 ITALIANO
+  "rischio",
+  "pericoloso",
+
+  "sicuro",
+  "affidabile",
+
+  "alto rischio",
+  "basso rischio",
+
+  "rischioso",
+  "instabile",
+
+  "volatilità",
+  "fragile",
+
+  "mercato rischioso",
+  "investimento rischioso",
+
+  // 🇬🇧 ENGLISH
+  "risk",
+  "risky",
+
+  "safe",
+  "unsafe",
+
+  "reliable",
+  "stable",
+  "unstable",
+
+  "high risk",
+  "low risk",
+
+  "volatility",
+  "fragile",
+
+  "risky investment",
+  "risky market"
+
+];
+
+if(
+  riskWords.some(word =>
+    text.includes(word)
+  )
+){
+
+  result.intent =
+    "risk_analysis";
+
+  result.category =
+    "risk";
+
+  result.confidence =
+    0.92;
+
+  result.requiresRiskAnalysis =
+    true;
+
+}
+
+// ===========================================
+// 🏦 MORTGAGE
+// ===========================================
 
 const mortgageWords = [
 
+  // 🇮🇹 ITALIANO
   "mutuo",
   "con mutuo",
   "con un mutuo",
 
-  "mortgage",
-  "loan",
   "finanziamento",
+  "finanziare",
 
   "leva",
   "leva finanziaria",
@@ -234,27 +316,58 @@ const mortgageWords = [
   "durata mutuo",
 
   "finanziato",
-  "finanziare"
+
+  // 🇬🇧 ENGLISH
+  "mortgage",
+  "loan",
+
+  "financing",
+  "finance property",
+
+  "leverage",
+  "financial leverage",
+
+  "monthly payment",
+  "mortgage payment",
+
+  "fixed rate",
+  "variable rate",
+
+  "interest rate",
+
+  "100 mortgage",
+  "90 mortgage",
+  "80 mortgage",
+
+  "mortgage duration",
+  "loan duration",
+
+  "financed property"
 
 ];
 
-  if(
-    mortgageWords.some(word =>
-      text.includes(word)
-    )
-  ){
+if(
+  mortgageWords.some(word =>
+    text.includes(word)
+  )
+){
 
-    result.intent = "mortgage_analysis";
+  result.intent =
+    "mortgage_analysis";
 
-    result.category = "mortgage";
+  result.category =
+    "mortgage";
 
-    result.confidence = 0.95;
+  result.confidence =
+    0.95;
 
-    result.requiresMortgageAnalysis = true;
+  result.requiresMortgageAnalysis =
+    true;
 
-    result.requiresCalculation = true;
+  result.requiresCalculation =
+    true;
 
-  }
+}
 
 // ===========================================
 // 🌍 MARKET ANALYSIS
@@ -264,33 +377,66 @@ if(
 
   has(
 
+    // 🇮🇹 ITALIANO
     "mercato",
-    "market",
     "benchmark",
+
     "occupazione",
-    "occupancy",
+    "occupazione media",
+
     "stagionalità",
     "domanda",
+
     "airbnb roma",
     "airbnb milano",
-    "short rent",
+
     "benchmark roma",
     "benchmark milano",
-    "occupazione media",
+
     "occupazione roma",
-    "occupazione milano"
+    "occupazione milano",
+
+    "short rent",
+
+    // 🇬🇧 ENGLISH
+    "market",
+    "market analysis",
+
+    "market benchmark",
+
+    "occupancy",
+    "average occupancy",
+
+    "seasonality",
+    "demand",
+
+    "airbnb rome",
+    "airbnb milan",
+
+    "rome benchmark",
+    "milan benchmark",
+
+    "rome occupancy",
+    "milan occupancy",
+
+    "short-term rental",
+    "short rent market"
 
   )
 
 ){
 
-  result.intent = "market_analysis";
+  result.intent =
+    "market_analysis";
 
-  result.category = "market";
+  result.category =
+    "market";
 
-  result.confidence = 0.94;
+  result.confidence =
+    0.94;
 
-  result.requiresMarketData = true;
+  result.requiresMarketData =
+    true;
 
 }
 
@@ -302,78 +448,137 @@ if(
 
   has(
 
+    // 🇮🇹 ITALIANO
     "conviene aprire",
     "dove investire",
+
     "voglio aprire",
+
     "aprire un b&b",
     "aprire un airbnb",
+
     "b&b al mare",
     "airbnb al mare",
+
     "ho 80k",
     "ho 100k",
+
     "investire a roma",
-    "investire a milano"
+    "investire a milano",
+
+    // 🇬🇧 ENGLISH
+    "should i open",
+    "where to invest",
+
+    "i want to open",
+
+    "open a bnb",
+    "open an airbnb",
+
+    "beach bnb",
+    "beach airbnb",
+
+    "i have 80k",
+    "i have 100k",
+
+    "invest in rome",
+    "invest in milan",
+
+    "best city to invest",
+    "best market to invest"
 
   )
 
 ){
 
-  result.intent = "investment_advisor";
+  result.intent =
+    "investment_advisor";
 
-  result.category = "strategy";
+  result.category =
+    "strategy";
 
-  result.confidence = 0.96;
+  result.confidence =
+    0.96;
 
-  result.requiresMarketData = true;
+  result.requiresMarketData =
+    true;
 
-} 
+}
 
-  // ===========================================
-  // ⚖️ COMPARISON
-  // ===========================================
+// ===========================================
+// ⚖️ COMPARISON
+// ===========================================
 
-  const comparisonWords = [
+const comparisonWords = [
 
-    "vs",
-    "contro",
-    "meglio",
-    "compare",
-    "comparazione",
-    "difference"
+  // 🇮🇹 ITALIANO
+  "vs",
+  "contro",
 
-  ];
+  "meglio",
+  "peggio",
 
-  if(
-    comparisonWords.some(word =>
-      text.includes(word)
-    )
-  ){
+  "comparazione",
+  "confronto",
 
-    result.intent = "comparison";
+  "differenza",
 
-    result.category = "comparison";
+  // 🇬🇧 ENGLISH
+  "compare",
+  "comparison",
 
-    result.confidence = 0.93;
+  "difference",
 
-    result.requiresComparison = true;
+  "better",
+  "worse",
 
-  }
+  "versus"
 
-  // ===========================================
-  // 🧠 STRATEGY
-  // ===========================================
+];
 
- const strategyWords = [
+if(
+  comparisonWords.some(word =>
+    text.includes(word)
+  )
+){
 
+  result.intent =
+    "comparison";
+
+  result.category =
+    "comparison";
+
+  result.confidence =
+    0.93;
+
+  result.requiresComparison =
+    true;
+
+}
+
+ // ===========================================
+// 🧠 STRATEGY
+// ===========================================
+
+const strategyWords = [
+
+  // 🇮🇹 ITALIANO
   "conviene",
+  "conveniente",
+
   "investire",
   "investimento",
+
   "strategia",
-  "strategy",
   "opportunità",
 
   "profittevole",
   "redditività",
+
+  "sostenibile",
+  "sostenibilità",
+
+  "vale la pena",
 
   "miglior città",
   "migliore città",
@@ -382,126 +587,193 @@ if(
   "aprire airbnb",
 
   "analisi executive",
-  "executive report",
-  "executive analysis",
-  "investment report",
-
   "analisi investimento",
   "report investimento",
 
   "analisi dettagliata",
   "analisi completa ai",
 
-  "advisor",
-  "investment advisor",
-
-  "valuta questo investimento",
-  "valuta questo b&b",
-
-  "simulazione avanzata",
-  "analisi strategica", 
-  "executive",
+  "analisi strategica",
   "analisi completa",
   "analisi avanzata",
+
+  "analisi professionale",
+  "analisi ai",
 
   "fammi un'analisi",
   "analizza investimento",
 
   "valuta investimento",
+  "valuta questo investimento",
+  "valuta questo b&b",
+
   "conviene ancora",
 
-  "analisi professionale",
-  "analisi ai",
-
   "come posso migliorare",
-  "migliorare rendimento"
+  "migliorare rendimento",
+
+  "cashflow reale",
+  "investimento sostenibile",
+  "questo investimento",
+
+  // 🇬🇧 ENGLISH
+  "strategy",
+  "investment strategy",
+
+  "investment",
+
+  "profitable",
+  "profitability",
+
+  "sustainable",
+  "sustainability",
+
+  "worth it",
+  "does it make sense",
+
+  "should i invest",
+  "good investment",
+
+  "best city",
+  "best market",
+
+  "open airbnb",
+  "open bnb",
+
+  "executive",
+  "executive report",
+  "executive analysis",
+
+  "investment report",
+  "advanced analysis",
+
+  "investment advisor",
+  "advisor",
+
+  "analyze investment",
+  "analyze this investment",
+
+  "evaluate investment",
+  "evaluate this bnb",
+
+  "executive ai",
+
+  "how can i improve",
+  "improve performance",
+
+  "real cashflow",
+  "investment sustainability",
+
+  "is it sustainable",
+  "sustainable investment",
+
+  "is this investment good",
+  "is this investment worth it"
 
 ];
 
-  if(
+if(
   strategyWords.some(word =>
     text.includes(word)
   )
 ){
 
-// =====================================
-// 🧠 EXECUTIVE AI
-// =====================================
+  // =====================================
+  // 🧠 EXECUTIVE AI
+  // =====================================
 
-if(
+  if(
 
-  has(
+    has(
 
-    "analisi executive",
-    "executive",
-    "analisi completa",
-    "analisi avanzata",
+      // 🇮🇹 ITALIANO
+      "analisi executive",
+      "executive",
 
-    "fammi un'analisi",
-    "analizza investimento",
+      "analisi completa",
+      "analisi avanzata",
 
-    "valuta investimento",
-    "conviene ancora",
+      "fammi un'analisi",
+      "analizza investimento",
 
-    "analisi professionale",
-    "analisi ai",
+      "valuta investimento",
+      "conviene ancora",
 
-    "come posso migliorare",
-    "migliorare rendimento",
+      "analisi professionale",
+      "analisi ai",
 
-    "cashflow reale",
-    "sostenibilità investimento",
-    "sostenibile",
-    "è sostenibile",
-    "investimento sostenibile",
-    "questo investimento",
-    "conviene questo investimento",
-    "vale la pena",
+      "come posso migliorare",
+      "migliorare rendimento",
 
-    "sustainable",
-    "is it sustainable",
-    "investment sustainability",
-    "sustainable investment",
+      "cashflow reale",
 
-    "is this investment good",
-    "is this investment worth it",
+      "sostenibilità investimento",
+      "sostenibile",
+      "è sostenibile",
 
-    "worth it",
-    "does it make sense",
+      "investimento sostenibile",
 
-    "should i invest",
-    "good investment",
+      "questo investimento",
+      "conviene questo investimento",
 
-    "executive analysis",
-    "advanced analysis"
+      "vale la pena",
+      "conveniente",
 
-  )
+      // 🇬🇧 ENGLISH
+      "sustainable",
+      "sustainability",
 
-){
+      "is it sustainable",
+      "investment sustainability",
 
-  result.intent =
-    "investment_executive";
+      "sustainable investment",
 
-  result.category =
-    "executive";
+      "is this investment good",
+      "is this investment worth it",
 
-  result.confidence =
-    0.99;
+      "worth it",
+      "does it make sense",
 
-  result.requiresCalculation =
-    true;
+      "should i invest",
+      "good investment",
 
-  result.requiresRiskAnalysis =
-    true;
+      "executive analysis",
+      "advanced analysis",
 
-  result.requiresMarketData =
-    true;
+      "analyze investment",
+      "analyze this investment",
 
-}
+      "evaluate investment",
 
-// =====================================
-// 📈 STANDARD STRATEGY
-// =====================================
+      "profitable investment"
+
+    )
+
+  ){
+
+    result.intent =
+      "investment_executive";
+
+    result.category =
+      "executive";
+
+    result.confidence =
+      0.99;
+
+    result.requiresCalculation =
+      true;
+
+    result.requiresRiskAnalysis =
+      true;
+
+    result.requiresMarketData =
+      true;
+
+  }
+
+  // =====================================
+  // 📈 STANDARD STRATEGY
+  // =====================================
 
   else{
 
@@ -518,84 +790,115 @@ if(
 
 }
 
-  // ===========================================
-  // 💳 SUBSCRIPTIONS / PRICING
-  // ===========================================
+// ===========================================
+// 💳 SUBSCRIPTIONS / PRICING
+// ===========================================
 
-  const subscriptionWords = [
+const subscriptionWords = [
 
-    "pro",
-    "investor",
+  // 🇮🇹 ITALIANO
+  "pro",
+  "investor",
 
-    "abbonamento",
-    "abbonamenti",
+  "abbonamento",
+  "abbonamenti",
 
-    "pricing",
-    "premium",
+  "pricing",
+  "premium",
 
-    "piano",
-    "piani",
+  "piano",
+  "piani",
 
-    "quanto costa",
-    "costo",
+  "quanto costa",
+  "costo",
 
-    "upgrade",
+  "upgrade",
 
-    "pro plan",
-    "investor plan",
+  "piano pro",
+  "piano investor",
 
-    "piano pro",
-    "piano investor",
+  "differenza investor",
+  "differenza pro",
 
-    "differenza investor",
-    "differenza pro",
+  "funzioni pro",
+  "funzioni investor",
 
-    "funzioni pro",
-    "funzioni investor"
+  // 🇬🇧 ENGLISH
+  "subscription",
+  "subscriptions",
 
-  ];
+  "price",
+  "pricing plan",
 
-  if(
-    subscriptionWords.some(word =>
-      text.includes(word)
-    )
-  ){
+  "how much",
+  "cost",
 
-    result.intent = "subscriptions";
+  "pro plan",
+  "investor plan",
 
-    result.category = "business";
+  "plan difference",
 
-    result.confidence = 0.97;
+  "pro features",
+  "investor features"
 
-  }
+];
 
-  // ===========================================
-  // 👋 GREETING
-  // ===========================================
+if(
+  subscriptionWords.some(word =>
+    text.includes(word)
+  )
+){
 
-  const greetingWords = [
+  result.intent =
+    "subscriptions";
 
-    "ciao",
-    "hello",
-    "hi",
-    "salve",
-    "hey"
+  result.category =
+    "business";
 
-  ];
+  result.confidence =
+    0.97;
 
-  if(
-    greetingWords.some(word =>
-      text === word
-    )
-  ){
+}
+ // ===========================================
+// 👋 GREETING
+// ===========================================
 
-    result.intent = "greeting";
+const greetingWords = [
 
-    result.category = "social";
+  // 🇮🇹 ITALIANO
+  "ciao",
+  "salve",
+  "hey",
 
-    result.confidence = 1;
+  "buongiorno",
+  "buonasera",
 
-  }
+  // 🇬🇧 ENGLISH
+  "hello",
+  "hi",
+  "hey",
+
+  "good morning",
+  "good evening"
+
+];
+
+if(
+  greetingWords.some(word =>
+    text === word
+  )
+){
+
+  result.intent =
+    "greeting";
+
+  result.category =
+    "social";
+
+  result.confidence =
+    1;
+
+}
 
 // ===========================================
 // 🧠 FALLBACK SMART
@@ -607,46 +910,132 @@ if(
 
 ){
 
-  // ROI / EDUCATION
+  // =======================================
+  // 📚 EDUCATION / FINANCE
+  // =======================================
 
   if(
+
     has(
+
+      // 🇮🇹 ITALIANO
       "roi",
       "cashflow",
+
       "break even",
       "dscr",
-      "sostenibilità"
+
+      "profitto",
+      "rendimento",
+
+      // 🇬🇧 ENGLISH
+      "cash flow",
+
+      "profit",
+      "yield",
+
+      "returns"
+
     )
+
   ){
 
-    result.intent = "education";
+    result.intent =
+      "education";
 
-    result.category = "education";
+    result.category =
+      "education";
 
-    result.confidence = 0.80;
+    result.confidence =
+      0.80;
 
   }
 
-  // MARKET
+  // =======================================
+  // 🌍 MARKET
+  // =======================================
 
   else if(
+
     has(
+
+      // 🇮🇹 ITALIANO
       "roma",
       "milano",
       "napoli",
       "firenze",
+
       "benchmark",
-      "occupazione"
+      "occupazione",
+
+      "mercato",
+
+      // 🇬🇧 ENGLISH
+      "rome",
+      "milan",
+      "naples",
+      "florence",
+
+      "market",
+      "occupancy",
+
+      "market analysis"
+
     )
+
   ){
 
-    result.intent = "market_analysis";
+    result.intent =
+      "market_analysis";
 
-    result.category = "market";
+    result.category =
+      "market";
 
-    result.confidence = 0.75;
+    result.confidence =
+      0.75;
 
-    result.requiresMarketData = true;
+    result.requiresMarketData =
+      true;
+
+  }
+
+  // =======================================
+  // 💼 GENERIC INVESTMENT
+  // =======================================
+
+  else if(
+
+    has(
+
+      // 🇮🇹 ITALIANO
+      "investimento",
+      "investire",
+
+      "conviene",
+      "conveniente",
+
+      "vale la pena",
+
+      // 🇬🇧 ENGLISH
+      "investment",
+      "invest",
+
+      "worth it",
+
+      "good investment"
+
+    )
+
+  ){
+
+    result.intent =
+      "investment_strategy";
+
+    result.category =
+      "strategy";
+
+    result.confidence =
+      0.70;
 
   }
 
