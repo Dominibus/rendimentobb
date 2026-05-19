@@ -552,118 +552,15 @@ const costRatio =
     ? (monthlyCosts * 12 / annualRevenue) * 100
     : 0;
 
-  // =====================================
-// 🧠 INTENT ENGINE
+// =====================================
+// 🧠 NEW AI INTENT ENGINE
 // =====================================
 
-const intents = {
-
-  roi: [
-    "roi",
-    "rendimento",
-    "return",
-    "profitto",
-    "guadagno",
-    "quanto rende",
-    "quant'è il roi",
-    "quanto rende investimento"
-  ],
-
-  risk: [
-    "rischio",
-    "risk",
-    "sicuro",
-    "pericoloso",
-    "stabile",
-    "rischioso",
-    "rischi ci sono"
-  ],
-
-  cashflow: [
-    "cashflow",
-    "cash flow",
-    "flusso di cassa",
-    "liquidità",
-    "guadagno reale"
-  ],
-
-  strategy: [
-    "strategia",
-    "consigli",
-    "conviene",
-    "che ne pensi",
-    "cosa pensi",
-    "investimento buono",
-    "buon investimento",
-    "cosa leggi",
-    "analizza simulazione",
-    "migliorare",
-    "ottimizzare"
-  ],
-
-  education: [
-    "cos'è",
-    "cosa è",
-    "cosa vuol dire",
-    "significa",
-    "spiegami",
-    "definizione",
-    "what is",
-    "meaning",
-    "explain"
-  ]
-
-};
-
-  function detectIntent(intentList){
-
-  return intentList.some(keyword =>
-    text.includes(keyword)
-  );
-
-}
-
-// =====================================
-// 🧠 DETECTED INTENTS ENGINE
-// =====================================
-
-const detectedIntents = [];
-
-if(detectIntent(intents.strategy))
-  detectedIntents.push("strategy");
-
-if(detectIntent(intents.risk))
-  detectedIntents.push("risk");
-
-if(detectIntent(intents.roi))
-  detectedIntents.push("roi");
-
-if(detectIntent(intents.cashflow))
-  detectedIntents.push("cashflow");
-
-if(detectIntent(intents.education))
-  detectedIntents.push("education");
-
-// =====================================
-// 🧠 INTENT PRIORITY
-// =====================================
-
-const intentPriority = {
-  strategy: 10,
-  risk: 9,
-  roi: 8,
-  cashflow: 7,
-  education: 6
-};
-
-detectedIntents.sort(
-  (a,b)=>
-    intentPriority[b] -
-    intentPriority[a]
-);
+const intentData =
+  window.rbDetectIntent?.(text) || {};
 
 const mainIntent =
-  detectedIntents[0] || null;
+  intentData.intent || "generic";
 
 // =====================================
 // 🧠 UPDATE AI MEMORY
@@ -684,8 +581,7 @@ window.rbAIContextMemory.lastCashflow =
   profit || null;
 
 window.rbAIContextMemory.lastTopic =
-  mainIntent || "general";  
-
+  mainIntent || "general";
 
 window.rbAIContextMemory.lastOccupancy =
   occupancy || null;
@@ -697,22 +593,47 @@ window.rbAIContextMemory.lastMortgagePercent =
   entities.mortgagePercent || null;
 
 window.rbAIContextMemory.lastIntent =
-  mainIntent || null;  
+  mainIntent || null;
+
 // =====================================
-// 🧠 MAIN INTENT FLAGS
+// 🧠 MAIN FLAGS
 // =====================================
 
 const wantsStrategy =
-  detectedIntents.includes("strategy");
+
+  mainIntent === "investment_strategy" ||
+
+  mainIntent === "investment_executive" ||
+
+  mainIntent === "investment_advisor";
+
+const wantsExecutive =
+  mainIntent === "investment_executive";
 
 const wantsRisk =
-  detectedIntents.includes("risk");
+  mainIntent === "risk_analysis";
 
 const wantsROI =
-  detectedIntents.includes("roi");
+  mainIntent === "roi_analysis";
 
 const wantsCashflow =
-  detectedIntents.includes("cashflow");
+  mainIntent === "cashflow_analysis";
+
+const wantsEducation =
+  mainIntent === "education";
+
+const wantsComparison =
+  mainIntent === "comparison";
+
+const wantsMortgage =
+  mainIntent === "mortgage_analysis";
+
+const wantsMarket =
+  mainIntent === "market_analysis";
+
+// =====================================
+// 🧠 CASHFLOW STRATEGY
+// =====================================
 
 const wantsCashflowStrategy =
 
@@ -720,16 +641,14 @@ const wantsCashflowStrategy =
   text.includes("miglior") ||
   text.includes("aument") ||
   text.includes("ottim") ||
+
   text.includes("improve") ||
-  text.includes("increase")
+  text.includes("increase") ||
+
+  text.includes("optimize")
 )
 
-&&
-
-wantsCashflow;
-
-const wantsEducation =
-  detectedIntents.includes("education");
+&& wantsCashflow;
 
 // =====================================
 // 🧠 SIMPLE MODE DETECTION
