@@ -766,6 +766,184 @@ To manage your plan:
   }
 
 }
+
+  // ===========================================
+// 🧠 EXECUTIVE AI RESPONSE
+// ===========================================
+
+else if(
+
+  intent.intent === "investment_executive" ||
+
+  intent.intent === "executive_analysis"
+
+){
+
+  response.type =
+    "executive";
+
+  response.confidence =
+    0.99;
+
+  const net =
+    Number(
+      liveData.net || 0
+    );
+
+  const gross =
+    Number(
+      liveData.gross || 0
+    );
+
+  const executiveIT = [];
+
+  executiveIT.push(
+    "🧠 Analisi executive completata."
+  );
+
+  executiveIT.push(
+    `📈 ROI reale: ${roi.toFixed(1)}%`
+  );
+
+  executiveIT.push(
+    `⚠️ Risk score: ${risk}/100`
+  );
+
+  if(net > 0){
+
+    executiveIT.push(
+      `💰 Profitto netto stimato: €${net.toLocaleString("it-IT")}`
+    );
+
+  }
+
+  if(gross > 0){
+
+    executiveIT.push(
+      `🏨 Ricavi annuali: €${gross.toLocaleString("it-IT")}`
+    );
+
+  }
+
+  executiveIT.push(
+    `🌍 Mercato analizzato: ${cityLabel}`
+  );
+
+  // =====================================
+  // 🔥 AI CONCLUSION
+  // =====================================
+
+  if(
+    roi >= 25 &&
+    risk <= 35
+  ){
+
+    executiveIT.push(
+      "🚀 L'investimento appare altamente competitivo rispetto alla media short-rent."
+    );
+
+  }
+
+  else if(
+    roi >= 10
+  ){
+
+    executiveIT.push(
+      "📊 L'investimento mostra una sostenibilità moderata con margini di ottimizzazione."
+    );
+
+  }
+
+  else{
+
+    executiveIT.push(
+      "⚠️ L'investimento mostra criticità operative e marginalità limitata."
+    );
+
+  }
+
+  executiveIT.push(
+    "💡 Occupazione, pricing dinamico e gestione costi influenzano fortemente il ROI reale."
+  );
+
+  response.textIT =
+    executiveIT.join("\n\n");
+
+  // =====================================
+  // 🇬🇧 ENGLISH
+  // =====================================
+
+  const executiveEN = [];
+
+  executiveEN.push(
+    "🧠 Executive analysis completed."
+  );
+
+  executiveEN.push(
+    `📈 Real ROI: ${roi.toFixed(1)}%`
+  );
+
+  executiveEN.push(
+    `⚠️ Risk score: ${risk}/100`
+  );
+
+  if(net > 0){
+
+    executiveEN.push(
+      `💰 Estimated net profit: €${net.toLocaleString("en-US")}`
+    );
+
+  }
+
+  if(gross > 0){
+
+    executiveEN.push(
+      `🏨 Annual revenue: €${gross.toLocaleString("en-US")}`
+    );
+
+  }
+
+  executiveEN.push(
+    `🌍 Market analyzed: ${cityLabel}`
+  );
+
+  if(
+    roi >= 25 &&
+    risk <= 35
+  ){
+
+    executiveEN.push(
+      "🚀 The investment appears highly competitive compared to short-rent averages."
+    );
+
+  }
+
+  else if(
+    roi >= 10
+  ){
+
+    executiveEN.push(
+      "📊 The investment shows moderate sustainability with optimization potential."
+    );
+
+  }
+
+  else{
+
+    executiveEN.push(
+      "⚠️ The investment shows operational weaknesses and limited profitability."
+    );
+
+  }
+
+  executiveEN.push(
+    "💡 Occupancy, dynamic pricing and operational costs strongly affect real ROI."
+  );
+
+  response.textEN =
+    executiveEN.join("\n\n");
+
+}
   // ===========================================
   // 🎓 EDUCATIONAL RESPONSE
   // ===========================================
