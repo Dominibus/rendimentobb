@@ -59,7 +59,9 @@ const liveData = {
 
 const roi =
   Number(
-    liveData.roi || 0
+    liveData.realROI ??
+    liveData.roi ??
+    0
   );
 
 const risk =
@@ -305,24 +307,6 @@ ${roi.toFixed(1)}%
 
 }
 
-      response.textIT =
-
-`⚠️ ROI relativamente basso.
-
-📊 ROI simulato:
-${roi.toFixed(1)}%
-
-💡 Potrebbe essere necessario ottimizzare ADR o occupazione.`;
-
-      response.textEN =
-
-`⚠️ ROI appears relatively low.
-
-📊 Simulated ROI:
-${roi.toFixed(1)}%
-
-💡 ADR or occupancy optimization may be required.`;
-
     }
 
   }
@@ -342,9 +326,11 @@ else if(
     0.95;
 
   const net =
-    Number(
-      liveData.net || 0
-    );
+  Number(
+    liveData.net ??
+    liveData.gross ??
+    0
+  );
 
   if(net <= 0){
 
