@@ -3,11 +3,6 @@
 // Silicon Valley AI Core System
 // ===============================================
 
-import {
-  generateAISignals
-}
-from "../../reasoning-engine.js";
-
 // ===============================================
 // 🚀 MAIN AI PIPELINE
 // ===============================================
@@ -115,9 +110,13 @@ const analysisData = {
 
 const aiSignals =
 
-  generateAISignals(
-    analysisData
-  );
+  window.generateAISignals
+
+  ? window.generateAISignals(
+      analysisData
+    )
+
+  : [];
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
