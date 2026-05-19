@@ -373,7 +373,7 @@ if(
 
 `🔒 Il cashflow dettagliato è disponibile nei piani Investor e PRO.
 
-💡 Sblocca:
+💡 Passa a Investor o PRO per sbloccare:
 • profitto netto reale
 • sostenibilità operativa
 • cashflow annuale
@@ -383,7 +383,7 @@ if(
 
 `🔒 Detailed cashflow analysis is available in Investor and PRO plans.
 
-💡 Unlock:
+💡 Upgrade to Investor or PRO to unlock:
 • real net profit
 • operational sustainability
 • annual cashflow
@@ -425,13 +425,13 @@ else if(net <= 0){
 
 }
 
-  else{
+else{
 
-    response.signals.push(
-      "positive_cashflow"
-    );
+  response.signals.push(
+    "positive_cashflow"
+  );
 
-    response.textIT =
+  response.textIT =
 
 `✅ Cashflow operativo positivo.
 
@@ -440,7 +440,7 @@ else if(net <= 0){
 
 📈 La simulazione mostra una sostenibilità finanziaria potenzialmente stabile.`;
 
-    response.textEN =
+  response.textEN =
 
 `✅ Positive operational cashflow detected.
 
@@ -448,8 +448,6 @@ else if(net <= 0){
 €${net.toLocaleString("en-US")}
 
 📈 The simulation shows potentially stable financial sustainability.`;
-
-  }
 
 }
 
