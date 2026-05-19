@@ -367,23 +367,106 @@ if(
   "migliore città",
 
   "aprire b&b",
-  "aprire airbnb"
+  "aprire airbnb",
+
+  "analisi executive",
+  "executive",
+  "analisi completa",
+  "analisi avanzata",
+
+  "fammi un'analisi",
+  "analizza investimento",
+
+  "valuta investimento",
+  "conviene ancora",
+
+  "analisi professionale",
+  "analisi ai",
+
+  "come posso migliorare",
+  "migliorare rendimento",
+
+  "cashflow reale",
+  "sostenibilità investimento" 
 
 ];
 
   if(
-    strategyWords.some(word =>
-      text.includes(word)
+  strategyWords.some(word =>
+    text.includes(word)
+  )
+){
+
+  // =====================================
+  // 🧠 EXECUTIVE AI
+  // =====================================
+
+  if(
+
+    has(
+
+      "analisi executive",
+      "executive",
+      "analisi completa",
+      "analisi avanzata",
+
+      "fammi un'analisi",
+      "analizza investimento",
+
+      "valuta investimento",
+      "conviene ancora",
+
+      "analisi professionale",
+      "analisi ai",
+
+      "come posso migliorare",
+      "migliorare rendimento",
+
+      "cashflow reale",
+      "sostenibilità investimento"
+
     )
+
   ){
 
-    result.intent = "investment_strategy";
+    result.intent =
+      "investment_executive";
 
-    result.category = "strategy";
+    result.category =
+      "executive";
 
-    result.confidence = 0.91;
+    result.confidence =
+      0.99;
+
+    result.requiresCalculation =
+      true;
+
+    result.requiresRiskAnalysis =
+      true;
+
+    result.requiresMarketData =
+      true;
 
   }
+
+  // =====================================
+  // 📈 STANDARD STRATEGY
+  // =====================================
+
+  else{
+
+    result.intent =
+      "investment_strategy";
+
+    result.category =
+      "strategy";
+
+    result.confidence =
+      0.91;
+
+  }
+
+}
 
   // ===========================================
   // 💳 SUBSCRIPTIONS / PRICING
