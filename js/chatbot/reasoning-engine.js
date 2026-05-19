@@ -395,3 +395,168 @@ function(){
 console.log(
   "🧠 REASONING ENGINE READY"
 );
+
+// ===============================================
+// 🧠 AI SIGNAL ENGINE
+// ===============================================
+
+export function generateAISignals(data = {}){
+
+  const signals = [];
+
+  const roi =
+    Number(data.roi || 0);
+
+  const occupancy =
+    Number(data.occupancy || 0);
+
+  const priceNight =
+    Number(data.priceNight || 0);
+
+  const gross =
+    Number(data.gross || 0);
+
+  const costs =
+    Number(data.costs || 0);
+
+  // ===============================================
+  // 🚀 AGGRESSIVE PROJECTION
+  // ===============================================
+
+  if(
+
+    roi > 40 &&
+
+    occupancy > 65 &&
+
+    priceNight > 180
+
+  ){
+
+    signals.push({
+      type: "aggressive_projection",
+
+      message:
+`
+🚀 La simulazione mostra metriche
+molto aggressive rispetto
+alla media del mercato.
+
+Il ROI potrebbe risultare
+ottimistico in scenari reali.
+`
+    });
+
+  }
+
+  // ===============================================
+  // ⚠️ UNSTABLE ROI
+  // ===============================================
+
+  if(
+
+    roi > 20 &&
+
+    occupancy < 45
+
+  ){
+
+    signals.push({
+
+      type: "unstable_roi",
+
+      message:
+`
+⚠️ Il ROI appare elevato,
+ma l'occupazione potrebbe
+non sostenere stabilmente
+questi risultati.
+`
+    });
+
+  }
+
+  // ===============================================
+  // 💸 MARGIN PRESSURE
+  // ===============================================
+
+  if(
+
+    gross > 0 &&
+
+    costs > gross * 0.55
+
+  ){
+
+    signals.push({
+
+      type: "margin_pressure",
+
+      message:
+`
+💸 I costi operativi incidono
+fortemente sul margine netto.
+
+Ottimizzare le spese potrebbe
+migliorare il cashflow.
+`
+    });
+
+  }
+
+  // ===============================================
+  // 🏨 LOW OCCUPANCY
+  // ===============================================
+
+  if(
+    occupancy < 50
+  ){
+
+    signals.push({
+
+      type: "low_occupancy",
+
+      message:
+`
+🏨 L'occupazione attuale
+risulta sotto la soglia ideale
+per uno short-rent competitivo.
+`
+    });
+
+  }
+
+  // ===============================================
+  // 💎 PREMIUM PROPERTY
+  // ===============================================
+
+  if(
+
+    priceNight >= 180 &&
+
+    occupancy >= 65
+
+  ){
+
+    signals.push({
+
+      type: "premium_property",
+
+      message:
+`
+💎 La struttura mostra
+caratteristiche premium
+compatibili con fascia alta.
+`
+    });
+
+  }
+
+  console.log(
+    "🧠 AI SIGNALS:",
+    signals
+  );
+
+  return signals;
+
+}
