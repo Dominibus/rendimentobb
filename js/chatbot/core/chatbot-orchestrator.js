@@ -83,12 +83,29 @@ if(
   intents.push("sustainability");
 }
 
-// ANALISI
+// =========================================
+// 🧠 EXECUTIVE ANALYSIS
+// =========================================
+
 if(
+
   text.includes("analisi") ||
-  text.includes("executive")
+  text.includes("executive") ||
+
+  text.includes("sostenibile") ||
+  text.includes("conviene") ||
+
+  text.includes("worth it") ||
+  text.includes("good investment") ||
+
+  text.includes("vale la pena")
+
 ){
-  intents.push("analysis");
+
+  intents.push(
+    "investment_executive"
+  );
+
 }
 
 // fallback
@@ -315,7 +332,11 @@ for(const currentIntent of intent.intents){
 
 const response = {
 
-  type: "executive",
+  type:
+
+  intent.intent ||
+
+  "generic",
 
   textIT: finalTextIT.trim(),
 
