@@ -1250,43 +1250,125 @@ if(!window.lastAnalysisData){
 // 📊 ROI SIMULATION
 // =====================================
 
-if(wantsROI){
+if(
+  wantsROI &&
+  !wantsStrategy &&
+  !wantsCashflow &&
+  !wantsRisk
+){
 
-    if(access.isFree){
-
-      return window.t(
-        `Il ROI stimato sembra interessante, ma senza analisi completa non puoi vedere rischio reale e sostenibilità finanziaria.`,
-        `The estimated ROI looks promising, but without full analysis you cannot see real risk and financial sustainability.`
-      );
-
-    }
-
-    if(roi >= 15){
-
-      return window.t(
-        `Ottimo segnale: il ROI attuale è ${roi.toFixed(1)}%. L'investimento risulta sopra la media del mercato di ${contextualCity}.`,
-        `Strong signal: current ROI is ${roi.toFixed(1)}%. The investment is above the ${contextualCity} market average.`
-      );
-
-    }
-
-    if(roi >= 8){
-
-      return window.t(
-        `Il ROI attuale è ${roi.toFixed(1)}%. L'investimento sembra sostenibile ma dipende molto dall'occupazione.`,
-        `Current ROI is ${roi.toFixed(1)}%. The investment appears sustainable but depends heavily on occupancy.`
-      );
-
-    }
+  if(access.isFree){
 
     return window.t(
-      `Il ROI attuale è piuttosto basso (${roi.toFixed(1)}%). Potrebbe essere necessario ottimizzare prezzo notte o costi.`,
-      `Current ROI is relatively low (${roi.toFixed(1)}%). You may need to optimize pricing or costs.`
+
+`📈 Il ROI stimato sembra interessante.
+
+⚠️ Tuttavia il piano FREE non mostra:
+• cashflow reale
+• sostenibilità operativa
+• rischio avanzato
+• scenari previsionali
+
+🔓 Investor e PRO sbloccano l'analisi completa.`,
+
+`📈 Estimated ROI appears promising.
+
+⚠️ However the FREE plan does not show:
+• real cashflow
+• operational sustainability
+• advanced risk
+• forecast scenarios
+
+🔓 Investor and PRO unlock full analysis.`
+
     );
 
   }
 
-  // =====================================
+  if(roi >= 15){
+
+    return window.t(
+
+`🚀 Il ROI attuale è ${roi.toFixed(1)}%.
+
+📈 L'investimento appare sopra la media del mercato ${contextualCity}.
+
+💡 Con questi valori:
+• il rendimento sembra molto competitivo
+• l'occupazione supporta il cashflow
+• la struttura operativa appare solida
+
+⚠️ È comunque importante monitorare:
+• costi operativi
+• sostenibilità del mutuo
+• variazioni occupazione.`,
+
+`🚀 Current ROI is ${roi.toFixed(1)}%.
+
+📈 The investment appears above ${contextualCity} market average.
+
+💡 With these metrics:
+• profitability appears highly competitive
+• occupancy supports cashflow
+• operational structure looks solid
+
+⚠️ It remains important to monitor:
+• operating costs
+• mortgage sustainability
+• occupancy fluctuations.`
+
+    );
+
+  }
+
+  if(roi >= 8){
+
+    return window.t(
+
+`📈 Il ROI attuale è ${roi.toFixed(1)}%.
+
+💡 L'investimento sembra sostenibile ma sensibile a:
+• occupazione
+• costi
+• pricing dinamico
+
+⚠️ Piccole variazioni operative possono influenzare il margine finale.`,
+
+`📈 Current ROI is ${roi.toFixed(1)}%.
+
+💡 The investment appears sustainable but sensitive to:
+• occupancy
+• costs
+• dynamic pricing
+
+⚠️ Small operational changes may strongly affect final margins.`
+
+    );
+
+  }
+
+  return window.t(
+
+`⚠️ Il ROI attuale (${roi.toFixed(1)}%) appare piuttosto basso.
+
+💡 Potrebbe essere necessario:
+• aumentare ADR
+• ridurre costi
+• migliorare occupazione
+• ottimizzare la leva finanziaria.`,
+
+`⚠️ Current ROI (${roi.toFixed(1)}%) appears relatively low.
+
+💡 You may need to:
+• increase ADR
+• reduce costs
+• improve occupancy
+• optimize leverage.`
+
+  );
+
+}
+// =====================================
 // ⚠️ RISK
 // =====================================
 
