@@ -289,15 +289,6 @@ let finalTextEN = "";
 
 for(const currentIntent of intent.intents){
 
-  const finalIntent =
-
-    detectedIntent.intent ===
-    "investment_executive"
-
-      ? "investment_executive"
-
-      : currentIntent;
-
   const partialResponse =
 
     window.rbGenerateResponse({
@@ -308,7 +299,7 @@ for(const currentIntent of intent.intents){
 
       intent: {
         ...intent,
-        intent: finalIntent
+        intent: currentIntent
       },
 
       memory,
@@ -318,6 +309,24 @@ for(const currentIntent of intent.intents){
       aiSignals
 
     });
+
+  // 🔥 IGNORA RISPOSTE VUOTE/FALLBACK
+  if(
+
+    !partialResponse ||
+
+    (
+      partialResponse.textIT &&
+      partialResponse.textIT.includes(
+        "Posso aiutarti ad analizzare"
+      )
+    )
+
+  ){
+
+    continue;
+
+  }
 
   if(partialResponse?.textIT){
 
