@@ -305,7 +305,9 @@ ${roi.toFixed(1)}%
 
 }
 
-}
+    }
+
+  }
 
 // ===========================================
 // 💰 CASHFLOW RESPONSE
@@ -322,50 +324,50 @@ else if(
     0.95;
 
   const rawNet =
-  liveData.net;
+    liveData.net;
 
-const rawGross =
-  liveData.gross;
+  const rawGross =
+    liveData.gross;
 
-const net =
+  const net =
 
-  rawNet !== undefined &&
-  rawNet !== null &&
-  rawNet !== ""
+    rawNet !== undefined &&
+    rawNet !== null &&
+    rawNet !== ""
 
-    ? Number(rawNet)
+      ? Number(rawNet)
 
-    : Number(rawGross || 0);
+      : Number(rawGross || 0);
 
-// =====================================
-// 🔒 FREE LOCK
-// =====================================
+  // =====================================
+  // 🔒 FREE LOCK
+  // =====================================
 
-const access =
+  const access =
 
-  window.getUserAccess?.() ||
+    window.getUserAccess?.() ||
 
-  window.RB_USER ||
+    window.RB_USER ||
 
-  {};
+    {};
 
-if(
+  if(
 
-  !access.canSeeFullAnalysis &&
+    !access.canSeeFullAnalysis &&
 
-  !access.isInvestor &&
+    !access.isInvestor &&
 
-  !access.isPro &&
+    !access.isPro &&
 
-  !access.isAdmin
+    !access.isAdmin
 
-){
+  ){
 
-  response.signals.push(
-    "cashflow_locked"
-  );
+    response.signals.push(
+      "cashflow_locked"
+    );
 
-  response.textIT =
+    response.textIT =
 
 `🔒 Il cashflow dettagliato è disponibile nei piani Investor e PRO.
 
@@ -375,7 +377,7 @@ if(
 • cashflow annuale
 • analisi rischio avanzata`;
 
-  response.textEN =
+    response.textEN =
 
 `🔒 Detailed cashflow analysis is available in Investor and PRO plans.
 
@@ -385,19 +387,19 @@ if(
 • annual cashflow
 • advanced risk analysis`;
 
-}
+  }
 
-// =====================================
-// 🚨 NEGATIVE CASHFLOW
-// =====================================
+  // =====================================
+  // 🚨 NEGATIVE CASHFLOW
+  // =====================================
 
-else if(net <= 0){
+  else if(net <= 0){
 
-  response.signals.push(
-    "negative_cashflow"
-  );
+    response.signals.push(
+      "negative_cashflow"
+    );
 
-  response.textIT =
+    response.textIT =
 
 `🚨 Cashflow operativo negativo.
 
@@ -408,7 +410,7 @@ else if(net <= 0){
 
 💡 È consigliabile ridurre costi o aumentare occupazione e ADR.`;
 
-  response.textEN =
+    response.textEN =
 
 `🚨 Negative operational cashflow detected.
 
@@ -419,15 +421,15 @@ else if(net <= 0){
 
 💡 Reducing costs or increasing occupancy and ADR is recommended.`;
 
-}
+  }
 
-else{
+  else{
 
-  response.signals.push(
-    "positive_cashflow"
-  );
+    response.signals.push(
+      "positive_cashflow"
+    );
 
-  response.textIT =
+    response.textIT =
 
 `✅ Cashflow operativo positivo.
 
@@ -436,7 +438,7 @@ else{
 
 📈 La simulazione mostra una sostenibilità finanziaria potenzialmente stabile.`;
 
-  response.textEN =
+    response.textEN =
 
 `✅ Positive operational cashflow detected.
 
@@ -445,9 +447,9 @@ else{
 
 📈 The simulation shows potentially stable financial sustainability.`;
 
-}
-
   }
+
+}
 
   // ===========================================
   // ⚠️ RISK RESPONSE
