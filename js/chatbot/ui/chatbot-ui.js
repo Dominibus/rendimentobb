@@ -373,6 +373,11 @@ I can help analyze:
           text
         );
 
+      console.log(
+      "🧠 RAW AI RESULT:",
+      result
+      );
+
       // =====================================
       // 🧠 SAFE DATA
       // =====================================
@@ -385,6 +390,21 @@ I can help analyze:
 
       const intent =
         result?.intent || {};
+
+      console.log(
+      "🧠 RESPONSE OBJECT:",
+      response
+      );
+
+      console.log(
+      "🧠 TEXT IT:",
+      response?.textIT
+      );
+
+      console.log(
+      "🧠 TEXT EN:",
+      response?.textEN
+      );
 
       // =====================================
       // 🌍 LANGUAGE
