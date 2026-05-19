@@ -3,6 +3,11 @@
 // Silicon Valley AI Core System
 // ===============================================
 
+import {
+  generateAISignals
+}
+from "../../reasoning-engine.js";
+
 // ===============================================
 // 🚀 MAIN AI PIPELINE
 // ===============================================
@@ -103,6 +108,16 @@ const analysisData = {
     "roma"
 
 };
+
+// =========================================
+// 🧠 AI SIGNALS
+// =========================================
+
+const aiSignals =
+
+  generateAISignals(
+    analysisData
+  );
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
@@ -198,17 +213,19 @@ if(bestKnowledge){
 
       window.rbGenerateResponse({
 
-        message: text,
+      message: text,
 
-        entities,
+      entities,
 
-        intent,
+      intent,
 
-        memory,
+      memory,
 
-        analysisData
+      analysisData,
 
-      });
+      aiSignals
+
+  });
 
 // =========================================
 // 🧠 KNOWLEDGE ENHANCEMENT
