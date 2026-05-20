@@ -285,12 +285,18 @@ Object.assign(window.rbKnowledgeBase,{
   },
 
   keywords: [
-      "break even",
-      "pareggio",
-      "punto di pareggio",
-      "rientro investimento",
-      "tempo recupero"
-    ],
+  "break even",
+  "pareggio",
+  "punto di pareggio",
+  "rientro investimento",
+  "tempo recupero",
+  "recuperare investimento",
+  "quanto tempo",
+  "recovery time",
+  "investment recovery",
+  "tempo per recuperare",
+  "recover investment"
+],
 
     aiTitleIT:
       "⚖️ Break-Even",
