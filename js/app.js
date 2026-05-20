@@ -3398,41 +3398,39 @@ const chatbotNet =
 
 window.rbChatbotData = {
 
-  roi: safeROI,
+  roi: safeROI ?? null,
 
-  visualROI: visualROI,
+  visualROI: visualROI ?? null,
 
-  risk: risk,
+  risk: risk ?? null,
 
-  gross: gross,
+  gross: gross ?? null,
 
-  net: net,
+  net: net ?? null,
 
   occupancy:
+    occupancy ??
+    occupancyRate ??
     Number(
-      occupancy ||
-      occupancyRate ||
-      document.getElementById("occupancy")?.value ||
-      0
+      document.getElementById("occupancy")?.value
     ),
 
   occupancyRate:
+    occupancy ??
+    occupancyRate ??
     Number(
-      occupancy ||
-      occupancyRate ||
-      document.getElementById("occupancy")?.value ||
-      0
+      document.getElementById("occupancy")?.value
     ),
 
-  priceNight: priceNight,
+  priceNight: priceNight ?? null,
 
-  expenses: expenses,
+  expenses: expenses ?? null,
 
   city:
     selectedCity ||
     marketCity ||
     currentCity ||
-    "Unknown"
+    null
 
 };
 
