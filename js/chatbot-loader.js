@@ -205,6 +205,7 @@
 "/js/chatbot/knowledge/support.js",
 "/js/chatbot/knowledge/airbnb.js",
 "/js/chatbot/knowledge/roi.js",
+"/js/chatbot/knowledge/property-analysis.js",    
 
     // =========================================
     // 🌍 DATA
