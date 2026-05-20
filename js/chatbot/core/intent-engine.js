@@ -575,9 +575,6 @@ const strategyWords = [
   "profittevole",
   "redditività",
 
-  "sostenibile",
-  "sostenibilità",
-
   "vale la pena",
 
   "miglior città",
@@ -624,9 +621,6 @@ const strategyWords = [
 
   "profitable",
   "profitability",
-
-  "sustainable",
-  "sustainability",
 
   "worth it",
   "does it make sense",
