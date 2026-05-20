@@ -33,13 +33,53 @@ window.rbKnowledgeBase.risk = {
 
   riskScore: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "core-risk",
+  category: "core-risk",
 
-    scoreWeight: 1.8,
+  scoreWeight: 1.8,
 
-    keywords: [
+  semanticWeight: 2.0,
+
+  decisionWeight: 2.0,
+
+  riskWeight: 2.0,
+
+  executiveWeight: 2.0,
+
+  importance: "core",
+
+  severity: "critical",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "rischio",
       "risk",
       "risk score",
@@ -110,13 +150,53 @@ window.rbKnowledgeBase.risk = {
 
   seasonality: {
 
-    priority: 9,
+  priority: 9,
 
-    category: "market-risk",
+  category: "market-risk",
 
-    scoreWeight: 1.3,
+  scoreWeight: 1.3,
 
-    keywords: [
+  semanticWeight: 1.5,
+
+  decisionWeight: 1.6,
+
+  riskWeight: 1.7,
+
+  executiveWeight: 1.5,
+
+  importance: "secondary",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "stagionalità",
       "seasonality",
       "alta stagione",
@@ -175,13 +255,53 @@ window.rbKnowledgeBase.risk = {
 
   marketVolatility: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "market-risk",
+  category: "market-risk",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.6,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.6,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "volatilità",
       "market volatility",
       "mercato instabile",
@@ -240,13 +360,53 @@ window.rbKnowledgeBase.risk = {
 
   overLeverage: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "financial-risk",
+  category: "financial-risk",
 
-    scoreWeight: 1.7,
+  scoreWeight: 1.7,
 
-    keywords: [
+  semanticWeight: 1.9,
+
+  decisionWeight: 2.0,
+
+  riskWeight: 2.0,
+
+  executiveWeight: 1.9,
+
+  importance: "core",
+
+  severity: "critical",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "leva eccessiva",
       "over leverage",
       "troppo debito",
@@ -307,13 +467,53 @@ window.rbKnowledgeBase.risk = {
 
   marketSaturation: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "competition-risk",
+  category: "competition-risk",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.5,
+
+  decisionWeight: 1.5,
+
+  riskWeight: 1.7,
+
+  executiveWeight: 1.4,
+
+  importance: "secondary",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: false,
+
+    benchmarkRequired: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: true
+
+  },
+
+  keywords: [
       "mercato saturo",
       "market saturation",
       "troppi airbnb",
@@ -372,13 +572,53 @@ window.rbKnowledgeBase.risk = {
 
   regulationsRisk: {
 
-    priority: 7,
+  priority: 7,
 
-    category: "legal-risk",
+  category: "legal-risk",
 
-    scoreWeight: 1.1,
+  scoreWeight: 1.1,
 
-    keywords: [
+  semanticWeight: 1.4,
+
+  decisionWeight: 1.5,
+
+  riskWeight: 1.7,
+
+  executiveWeight: 1.4,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "regolamentazioni",
       "regulations",
       "normative airbnb",
@@ -438,13 +678,53 @@ window.rbKnowledgeBase.risk = {
 
   costPressure: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "operational-risk",
+  category: "operational-risk",
 
-    scoreWeight: 1.4,
+  scoreWeight: 1.4,
 
-    keywords: [
+  semanticWeight: 1.6,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.5,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "costi elevati",
       "high costs",
       "pressione costi",
