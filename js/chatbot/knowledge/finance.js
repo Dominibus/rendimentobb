@@ -9,23 +9,7 @@ window.rbKnowledgeBase =
 // 💰 FINANCE MODULE
 // ===============================================
 
-window.rbKnowledgeBase.finance = {
-
-  module: "finance",
-
-  version: "2.0",
-
-  aiRoleIT:
-    "Esperto AI di finanza immobiliare e redditività short-rent",
-
-  aiRoleEN:
-    "AI expert in real estate finance and short-rent profitability",
-
-  descriptionIT:
-    "Modulo AI dedicato a ROI, cashflow, sostenibilità finanziaria, break-even, margini operativi e rischio economico.",
-
-  descriptionEN:
-    "AI module focused on ROI, cashflow, financial sustainability, break-even, operating margins and economic risk.",
+Object.assign(window.rbKnowledgeBase,{
 
   // =============================================
   // 📈 ROI
@@ -661,9 +645,9 @@ window.rbKnowledgeBase.finance = {
 
   }
 
-};
+});
 
 console.log(
   "💰 FINANCE AI MODULE READY",
-  window.rbKnowledgeBase.finance
+  window.rbKnowledgeBase
 );
