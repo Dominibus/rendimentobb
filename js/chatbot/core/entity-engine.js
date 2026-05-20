@@ -679,7 +679,7 @@ for(const pattern of occupancyPatterns){
   }
 
 // ===========================================
-// 📚 KNOWLEDGE DETECTION
+// 📚 KNOWLEDGE DETECTION 5.0
 // ===========================================
 
 entities.knowledge = null;
@@ -693,52 +693,105 @@ const normalizedText =
     .toLowerCase()
     .trim();
 
-for(const key in knowledgeBase){
+// ===========================================
+// 🧠 RECURSIVE SCAN
+// ===========================================
 
-  const item =
-    knowledgeBase[key];
+function scanKnowledge(obj){
 
-  if(
-    !item ||
-    !Array.isArray(item.keywords)
-  ){
+  if(!obj || typeof obj !== "object"){
 
-    continue;
+    return null;
 
   }
 
-  const matched =
+  for(const key in obj){
 
-    item.keywords.some(keyword =>
+    const item = obj[key];
 
-      normalizedText.includes(
+    // =======================================
+    // ✅ VALID KNOWLEDGE ENTRY
+    // =======================================
 
-        String(keyword)
-          .toLowerCase()
-          .trim()
+    if(
+      item &&
+      Array.isArray(item.keywords)
+    ){
 
-      )
+      const matched =
 
-    );
+        item.keywords.some(keyword =>
 
-  if(matched){
+          normalizedText.includes(
 
-    entities.knowledge = key;
+            String(keyword)
+              .toLowerCase()
+              .trim()
 
-    entities.knowledgeData = item;
+          )
 
-    entities.detectedTopics.push(
-      "education"
-    );
+        );
 
-    console.log(
-      "📚 KNOWLEDGE MATCH:",
-      key
-    );
+      if(matched){
 
-    break;
+        return {
+          key,
+          data: item
+        };
+
+      }
+
+    }
+
+    // =======================================
+    // 🔁 NESTED OBJECT SCAN
+    // =======================================
+
+    if(
+      item &&
+      typeof item === "object"
+    ){
+
+      const nested =
+        scanKnowledge(item);
+
+      if(nested){
+
+        return nested;
+
+      }
+
+    }
 
   }
+
+  return null;
+
+}
+
+// ===========================================
+// 🚀 EXECUTE
+// ===========================================
+
+const matchedKnowledge =
+  scanKnowledge(knowledgeBase);
+
+if(matchedKnowledge){
+
+  entities.knowledge =
+    matchedKnowledge.key;
+
+  entities.knowledgeData =
+    matchedKnowledge.data;
+
+  entities.detectedTopics.push(
+    "education"
+  );
+
+  console.log(
+    "📚 KNOWLEDGE MATCH:",
+    matchedKnowledge.key
+  );
 
 }
 
