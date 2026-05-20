@@ -3394,23 +3394,63 @@ const chatbotNet =
 
 window.rbChatbotData = {
 
-  roi: chatbotROI,
+  // =====================================
+  // 📈 ROI
+  // =====================================
 
-  visualROI: visualROI,
+  roi: Number(chatbotROI || 0),
 
-  realROI: chatbotRealROI,
+  realROI: Number(chatbotRealROI || 0),
 
-  risk: risk,
+  visualROI: Number(visualROI || 0),
 
-  gross: gross,
+  // =====================================
+  // 💰 FINANCIALS
+  // =====================================
 
-  net: chatbotNet,
+  gross: Number(gross || 0),
 
-  occupancy: occupancy,
+  revenue: Number(gross || 0),
 
-  priceNight: priceNight,
+  net: Number(chatbotNet || 0),
 
-  expenses: expenses,
+  cashflow: Number(chatbotNet || 0),
+
+  expenses: Number(expenses || 0),
+
+  // =====================================
+  // ⚠️ RISK
+  // =====================================
+
+  risk: Number(risk || 0),
+
+  riskScore: Number(risk || 0),
+
+  // =====================================
+  // 🏨 OPERATIONS
+  // =====================================
+
+  occupancy: Number(occupancy || 0),
+
+  occupancyRate: Number(occupancy || 0),
+
+  priceNight: Number(priceNight || 0),
+
+  nightlyRate: Number(priceNight || 0),
+
+  // =====================================
+  // 🏦 MORTGAGE
+  // =====================================
+
+  loanAmount: Number(loanAmount || 0),
+
+  interestRate: Number(interestRate || 0),
+
+  loanYears: Number(loanYears || 0),
+
+  // =====================================
+  // 📍 LOCATION
+  // =====================================
 
   city:
     selectedCity ||
@@ -3419,15 +3459,19 @@ window.rbChatbotData = {
 
 };
 
-// 🔥 FIX CHATBOT LIVE ENGINE
+// =====================================
+// 🔥 LIVE ENGINE
+// =====================================
+
 window.rbChatbotLive = {
   ...window.rbChatbotData
 };
 
 console.log(
   "🧠 CHATBOT LIVE:",
-  window.rbChatbotData
+  window.rbChatbotLive
 );
+
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
