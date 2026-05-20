@@ -131,14 +131,52 @@ console.log(
   }
 );
 
-  const city =
+  // ===========================================
+// 🌍 SAFE MARKET CONTEXT
+// ===========================================
+
+const allowMarketContext =
+
+[
+  "market_analysis",
+  "investment_executive",
+  "investment_advisor",
+  "investment_strategy",
+  "comparison",
+  "roi_analysis",
+  "risk_analysis",
+  "cashflow_analysis",
+  "mortgage_analysis"
+].includes(intent.intent);
+
+const city =
+
+allowMarketContext
+
+? (
+
     entities.city ||
 
     memory.city ||
 
     window.currentCity ||
 
-    "roma";
+    "roma"
+
+  )
+
+: null;
+
+const cityLabel =
+
+city
+
+? (
+    window.rbCapitalize?.(city) ||
+    city
+  )
+
+: "";
 
   const cityLabel =
 
@@ -316,9 +354,14 @@ if(aiSignals.includes("negative_cashflow")){
 
   const market =
 
-    window.rbMarketData?.[city] ||
+allowMarketContext && city
 
-    null;
+? (
+    window.rbMarketData?.[city] ||
+    null
+  )
+
+: null;
 
 // =====================================
 // 🌍 MARKET + ROI CROSS ANALYSIS
@@ -1755,11 +1798,17 @@ else if(
 
   entities.price ||
 
-  entities.city ||
-
   entities.mortgage ||
 
-  entities.mortgagePercent
+  entities.mortgagePercent ||
+
+  (
+
+    allowMarketContext &&
+
+    entities.city
+
+  )
 
 ){
 
@@ -1813,7 +1862,10 @@ I will consider an initial budget of €${amount.toLocaleString("en-US")} for fu
   // 🌍 CITY
   // =====================================
 
-  if(entities.city){
+  if(
+  allowMarketContext &&
+  entities.city
+  ){
 
     const cityName =
 
