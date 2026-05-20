@@ -3392,84 +3392,54 @@ const chatbotNet =
 ? 0
 : net;
 
+// ===============================================
+// 🧠 CHATBOT LIVE DATA
+// ===============================================
+
 window.rbChatbotData = {
 
-  // =====================================
-  // 📈 ROI
-  // =====================================
+  roi: safeROI,
 
-  roi: Number(chatbotROI || 0),
+  visualROI: visualROI,
 
-  realROI: Number(chatbotRealROI || 0),
+  risk: risk,
 
-  visualROI: Number(visualROI || 0),
+  gross: gross,
 
-  // =====================================
-  // 💰 FINANCIALS
-  // =====================================
+  net: net,
 
-  gross: Number(gross || 0),
+  occupancy:
+    Number(
+      occupancy ||
+      occupancyRate ||
+      document.getElementById("occupancy")?.value ||
+      0
+    ),
 
-  revenue: Number(gross || 0),
+  occupancyRate:
+    Number(
+      occupancy ||
+      occupancyRate ||
+      document.getElementById("occupancy")?.value ||
+      0
+    ),
 
-  net: Number(chatbotNet || 0),
+  priceNight: priceNight,
 
-  cashflow: Number(chatbotNet || 0),
-
-  expenses: Number(expenses || 0),
-
-  // =====================================
-  // ⚠️ RISK
-  // =====================================
-
-  risk: Number(risk || 0),
-
-  riskScore: Number(risk || 0),
-
-  // =====================================
-  // 🏨 OPERATIONS
-  // =====================================
-
-  occupancy: Number(
-  occupancy ||
-  occupancyRate ||
-  currentOccupancy ||
-  document.getElementById("occupancy-range")?.value ||
-  0
-),
-
-  occupancyRate: Number(
-  occupancy ||
-  occupancyRate ||
-  currentOccupancy ||
-  document.getElementById("occupancy-range")?.value ||
-  0
-),
-
-  priceNight: Number(priceNight || 0),
-
-  nightlyRate: Number(priceNight || 0),
-
-  // =====================================
-  // 🏦 MORTGAGE
-  // =====================================
-
-  loanAmount: Number(loanAmount || 0),
-
-  interestRate: Number(interestRate || 0),
-
-  loanYears: Number(loanYears || 0),
-
-  // =====================================
-  // 📍 LOCATION
-  // =====================================
+  expenses: expenses,
 
   city:
     selectedCity ||
-    window.currentCity ||
+    marketCity ||
+    currentCity ||
     "Unknown"
 
 };
+
+console.log(
+  "🧠 CHATBOT LIVE:",
+  window.rbChatbotData
+);
 
 // =====================================
 // 🔥 LIVE ENGINE
