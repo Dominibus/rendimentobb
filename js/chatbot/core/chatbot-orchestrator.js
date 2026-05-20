@@ -306,26 +306,80 @@ let finalTextEN = "";
 
 for(const currentIntent of intent.intents){
 
-  const partialResponse =
+  // =========================================
+// 🧠 CURRENT INTENT DATA
+// =========================================
 
-    window.rbGenerateResponse({
+const currentIntentData = {
 
-      message: text,
+  ...intent,
 
-      entities,
+  intent: currentIntent,
 
-      intent: {
-        ...intent,
-        intent: currentIntent
-      },
+  requiresMarketData:
 
-      memory,
+    [
+      "market_analysis",
+      "investment_advisor",
+      "investment_executive",
+      "roi_analysis",
+      "risk_analysis",
+      "cashflow_analysis",
+      "comparison"
+    ].includes(currentIntent),
 
-      analysisData,
+  requiresMortgageAnalysis:
 
-      aiSignals
+    currentIntent ===
+    "mortgage_analysis"
 
-    });
+};
+
+// =========================================
+// 🌍 FILTER MEMORY
+// =========================================
+
+const filteredMemory = {
+
+  ...memory
+
+};
+
+// 🔥 NO MARKET MEMORY
+if(
+
+  !currentIntentData
+    .requiresMarketData
+
+){
+
+  delete filteredMemory.city;
+
+  delete filteredMemory.lastCity;
+
+}
+
+// =========================================
+// 🧠 RESPONSE
+// =========================================
+
+const partialResponse =
+
+  window.rbGenerateResponse({
+
+    message: text,
+
+    entities,
+
+    intent: currentIntentData,
+
+    memory: filteredMemory,
+
+    analysisData,
+
+    aiSignals
+
+  });
 
   // 🔥 IGNORA RISPOSTE VUOTE/FALLBACK
   if(
