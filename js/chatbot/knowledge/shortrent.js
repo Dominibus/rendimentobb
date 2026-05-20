@@ -11,9 +11,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   shortRent: {
 
-    priority: 10,
+  priority: 10,
 
-    keywords: [
+  semanticWeight: 2.0,
+
+  decisionWeight: 1.9,
+
+  riskWeight: 1.7,
+
+  executiveWeight: 2.0,
+
+  importance: "core",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    operationalAnalysis: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "affitti brevi",
       "short rent",
       "short term rental",
@@ -91,9 +133,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   airbnbModel: {
 
-    priority: 9,
+  priority: 9,
 
-    keywords: [
+  semanticWeight: 1.8,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.6,
+
+  executiveWeight: 1.8,
+
+  importance: "core",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    operationalAnalysis: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "airbnb business",
       "host airbnb",
       "guadagno airbnb",
@@ -165,9 +249,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   bookingPlatforms: {
 
-    priority: 8,
+  priority: 8,
 
-    keywords: [
+  semanticWeight: 1.7,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.7,
+
+  executiveWeight: 1.6,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: false,
+
+    benchmarkRequired: false,
+
+    operationalAnalysis: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "booking",
       "booking.com",
       "ota",
@@ -238,9 +364,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   guestExperience: {
 
-    priority: 9,
+  priority: 9,
 
-    keywords: [
+  semanticWeight: 1.8,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.5,
+
+  executiveWeight: 1.7,
+
+  importance: "core",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: false,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    operationalAnalysis: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: false,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "recensioni",
       "reviews",
       "guest experience",
@@ -310,9 +478,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   selfCheckIn: {
 
-    priority: 7,
+  priority: 7,
 
-    keywords: [
+  semanticWeight: 1.4,
+
+  decisionWeight: 1.5,
+
+  riskWeight: 1.3,
+
+  executiveWeight: 1.4,
+
+  importance: "secondary",
+
+  severity: "low",
+
+  aiBehavior: {
+
+    investorFocus: false,
+
+    riskAnalysis: false,
+
+    compareRequired: false,
+
+    sustainabilityCheck: false,
+
+    benchmarkRequired: false,
+
+    operationalAnalysis: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: false,
+
+    useBenchmarks: false,
+
+    concise: true
+
+  },
+
+  keywords: [
       "self check in",
       "smart lock",
       "check-in automatico",
@@ -379,9 +589,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   cleaningOperations: {
 
-    priority: 8,
+  priority: 8,
 
-    keywords: [
+  semanticWeight: 1.7,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.6,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    operationalAnalysis: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "pulizie",
       "cleaning",
       "housekeeping",
@@ -450,9 +702,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   dynamicPricing: {
 
-    priority: 9,
+  priority: 9,
 
-    keywords: [
+  semanticWeight: 1.9,
+
+  decisionWeight: 1.9,
+
+  riskWeight: 1.6,
+
+  executiveWeight: 1.9,
+
+  importance: "core",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    operationalAnalysis: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "dynamic pricing",
       "pricing dinamico",
       "smart pricing",
@@ -520,9 +814,51 @@ Object.assign(window.rbKnowledgeBase, {
 
   directBookings: {
 
-    priority: 7,
+  priority: 7,
 
-    keywords: [
+  semanticWeight: 1.6,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.5,
+
+  executiveWeight: 1.6,
+
+  importance: "secondary",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: false,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    operationalAnalysis: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "business",
+
+    useWarnings: false,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "prenotazioni dirette",
       "direct bookings",
       "booking diretto",
