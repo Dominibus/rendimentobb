@@ -33,13 +33,53 @@ window.rbKnowledgeBase.realEstate = {
 
   occupancy: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "performance",
+  category: "performance",
 
-    scoreWeight: 1.4,
+  scoreWeight: 1.4,
 
-    keywords: [
+  semanticWeight: 2.0,
+
+  decisionWeight: 1.9,
+
+  riskWeight: 1.7,
+
+  executiveWeight: 1.9,
+
+  importance: "core",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "occupazione",
       "occupancy",
       "tasso occupazione",
@@ -109,13 +149,53 @@ window.rbKnowledgeBase.realEstate = {
 
   marketDemand: {
 
-    priority: 9,
+  priority: 9,
 
-    category: "market",
+  category: "market",
 
-    scoreWeight: 1.3,
+  scoreWeight: 1.3,
 
-    keywords: [
+  semanticWeight: 1.8,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.6,
+
+  executiveWeight: 1.7,
+
+  importance: "core",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "domanda",
       "market demand",
       "tourism demand",
@@ -174,13 +254,53 @@ window.rbKnowledgeBase.realEstate = {
 
   locationImpact: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "location",
+  category: "location",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.7,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.5,
+
+  executiveWeight: 1.7,
+
+  importance: "core",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: false,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: false,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "zona",
       "location",
       "quartiere",
@@ -226,13 +346,53 @@ window.rbKnowledgeBase.realEstate = {
 
   averageNightPrice: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "pricing",
+  category: "pricing",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.8,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.6,
+
+  executiveWeight: 1.7,
+
+  importance: "core",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "adr",
       "average daily rate",
       "nightly rate",
@@ -278,13 +438,53 @@ window.rbKnowledgeBase.realEstate = {
 
   propertyManagement: {
 
-    priority: 7,
+  priority: 7,
 
-    category: "operations",
+  category: "operations",
 
-    scoreWeight: 1.1,
+  scoreWeight: 1.1,
 
-    keywords: [
+  semanticWeight: 1.5,
+
+  decisionWeight: 1.6,
+
+  riskWeight: 1.5,
+
+  executiveWeight: 1.4,
+
+  importance: "secondary",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: false,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: false,
+
+    useBenchmarks: false,
+
+    concise: true
+
+  },
+
+  keywords: [
       "gestione",
       "property management",
       "host management",
@@ -329,13 +529,53 @@ window.rbKnowledgeBase.realEstate = {
 
   marketSaturation: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "risk",
+  category: "risk",
 
-    scoreWeight: 1.3,
+  scoreWeight: 1.3,
 
-    keywords: [
+  semanticWeight: 1.7,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.6,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: false,
+
+    benchmarkRequired: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "mercato saturo",
       "competition",
       "alta concorrenza",
@@ -380,13 +620,53 @@ window.rbKnowledgeBase.realEstate = {
 
   tourismTrend: {
 
-    priority: 7,
+  priority: 7,
 
-    category: "trend",
+  category: "trend",
 
-    scoreWeight: 1.1,
+  scoreWeight: 1.1,
 
-    keywords: [
+  semanticWeight: 1.5,
+
+  decisionWeight: 1.5,
+
+  riskWeight: 1.4,
+
+  executiveWeight: 1.4,
+
+  importance: "secondary",
+
+  severity: "medium",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: false,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: false,
+
+    useBenchmarks: true,
+
+    concise: true
+
+  },
+
+  keywords: [
       "trend turismo",
       "tourism trend",
       "crescita turismo"
