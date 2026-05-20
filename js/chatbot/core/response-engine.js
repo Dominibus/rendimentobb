@@ -258,39 +258,6 @@ if(mortgagePercent >= 80){
 
 }
 
-// =====================================
-// 🌍 MARKET + ROI CROSS ANALYSIS
-// =====================================
-
-if(
-  market &&
-  roi > 0
-){
-
-  const marketROI =
-    parseFloat(
-      String(market.avgROI || "")
-        .replace(/[^\d.,-]/g,"")
-        .replace(",", ".")
-    ) || 0;
-
-  if(
-    marketROI > 0 &&
-    roi >= marketROI * 1.8
-  ){
-
-    reasoningIT.push(
-      "📈 Il ROI simulato è molto superiore al benchmark medio della città."
-    );
-
-    reasoningEN.push(
-      "📈 Simulated ROI is significantly above the city's average benchmark."
-    );
-
-  }
-
-}  
-
 // 🚀 HIGH ROI
 if(aiSignals.includes("very_high_roi")){
 
@@ -352,6 +319,39 @@ if(aiSignals.includes("negative_cashflow")){
     window.rbMarketData?.[city] ||
 
     null;
+
+// =====================================
+// 🌍 MARKET + ROI CROSS ANALYSIS
+// =====================================
+
+if(
+  market &&
+  roi > 0
+){
+
+  const marketROI =
+    parseFloat(
+      String(market.avgROI || "")
+        .replace(/[^\d.,-]/g,"")
+        .replace(",", ".")
+    ) || 0;
+
+  if(
+    marketROI > 0 &&
+    roi >= marketROI * 1.8
+  ){
+
+    reasoningIT.push(
+      "📈 Il ROI simulato è molto superiore al benchmark medio della città."
+    );
+
+    reasoningEN.push(
+      "📈 Simulated ROI is significantly above the city's average benchmark."
+    );
+
+  }
+
+}  
 
 // ===========================================
 // 🚫 NO ANALYSIS SAFETY
