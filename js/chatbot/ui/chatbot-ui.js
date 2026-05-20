@@ -317,6 +317,53 @@ I can help analyze:
     const text =
       input.value.trim();
 
+    // ========================================
+    // 🔒 FREE MESSAGE LIMIT
+    // ========================================
+
+    window.rbMessageCount =
+      window.rbMessageCount || 0;
+
+    const isPro =
+      window.RB_USER?.isPro;
+
+    const isAdmin =
+      window.RB_USER?.isAdmin;
+
+    const isInvestor =
+      window.RB_USER?.isInvestor;
+
+    const isPaid =
+      isPro || isAdmin || isInvestor;
+
+    if(!isPaid){
+
+      window.rbMessageCount++;
+
+      console.log(
+        "💬 FREE MESSAGE:",
+        window.rbMessageCount
+      );
+
+      if(window.rbMessageCount > 10){
+
+        addMessage(
+
+          "bot",
+
+          t(
+            "🔒 Hai raggiunto il limite gratuito. Passa a Investor o PRO per continuare.",
+            "🔒 You reached the free limit. Upgrade to Investor or PRO to continue."
+          )
+
+        );
+
+        return;
+
+      }
+
+    }
+
     if(!text){
 
       return;
@@ -374,8 +421,8 @@ I can help analyze:
         );
 
       console.log(
-      "🧠 RAW AI RESULT:",
-      result
+        "🧠 RAW AI RESULT:",
+        result
       );
 
       // =====================================
@@ -392,18 +439,18 @@ I can help analyze:
         result?.intent || {};
 
       console.log(
-      "🧠 RESPONSE OBJECT:",
-      response
+        "🧠 RESPONSE OBJECT:",
+        response
       );
 
       console.log(
-      "🧠 TEXT IT:",
-      response?.textIT
+        "🧠 TEXT IT:",
+        response?.textIT
       );
 
       console.log(
-      "🧠 TEXT EN:",
-      response?.textEN
+        "🧠 TEXT EN:",
+        response?.textEN
       );
 
       // =====================================
@@ -412,45 +459,45 @@ I can help analyze:
 
       const currentLang =
 
-  window.currentLang ||
+        window.currentLang ||
 
-  window.RB_LANG ||
+        window.RB_LANG ||
 
-  document.documentElement.lang ||
+        document.documentElement.lang ||
 
-  "it";
+        "it";
 
-const finalText =
+      const finalText =
 
-  currentLang === "en"
+        currentLang === "en"
 
-  ? (
+        ? (
 
-      response.textEN ||
+            response.textEN ||
 
-      response.textIT ||
+            response.textIT ||
 
-      response.text ||
+            response.text ||
 
-      response.message ||
+            response.message ||
 
-      "AI response unavailable."
+            "AI response unavailable."
 
-    )
+          )
 
-  : (
+        : (
 
-      response.textIT ||
+            response.textIT ||
 
-      response.textEN ||
+            response.textEN ||
 
-      response.text ||
+            response.text ||
 
-      response.message ||
+            response.message ||
 
-      "Risposta AI non disponibile."
+            "Risposta AI non disponibile."
 
-    );
+          );
 
       // =====================================
       // 💬 BOT MESSAGE
