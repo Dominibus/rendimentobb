@@ -1415,20 +1415,6 @@ if(executiveInsightsIT.length){
   response.textIT =
     executiveIT.join("\n\n");
 
-// =====================================
-// 🧠 REASONING ENGINE
-// =====================================
-
-if(reasoningIT.length){
-
-  executiveIT.push(
-
-    reasoningIT.join("\n\n")
-
-  );
-
-}
-
   // =====================================
   // 🇬🇧 ENGLISH
   // =====================================
@@ -1518,6 +1504,20 @@ if(executiveInsightsEN.length){
   executiveEN.push(
 
     executiveInsightsEN.join("\n\n")
+
+  );
+
+}
+
+// =====================================
+// 🧠 REASONING ENGINE
+// =====================================
+
+if(reasoningIT.length){
+
+  executiveIT.push(
+
+    reasoningIT.join("\n\n")
 
   );
 
