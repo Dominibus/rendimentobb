@@ -1074,13 +1074,7 @@ else if(
 
   intent.intents?.includes("sustainability") ||
 
-  intent.intents?.includes("analysis") ||
-
-  intent.intents?.includes("roi") ||
-
-  intent.intents?.includes("cashflow") ||
-
-  intent.intents?.includes("risk")
+  intent.intents?.includes("analysis")
 
 ){
 
