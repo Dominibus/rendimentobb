@@ -1523,15 +1523,6 @@ if(reasoningIT.length){
 
 }
 
-  response.textEN =
-    executiveEN.join("\n\n");
-
-}
-
-// =====================================
-// 🧠 REASONING ENGINE
-// =====================================
-
 if(reasoningEN.length){
 
   executiveEN.push(
@@ -1539,6 +1530,15 @@ if(reasoningEN.length){
     reasoningEN.join("\n\n")
 
   );
+
+}
+
+// =====================================
+// 📝 FINAL EXECUTIVE RESPONSE
+// =====================================
+
+response.textEN =
+  executiveEN.join("\n\n");
 
 }
 
