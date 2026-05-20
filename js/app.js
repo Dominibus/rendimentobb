@@ -3430,9 +3430,21 @@ window.rbChatbotData = {
   // 🏨 OPERATIONS
   // =====================================
 
-  occupancy: Number(occupancy || 0),
+  occupancy: Number(
+  occupancy ||
+  occupancyRate ||
+  currentOccupancy ||
+  document.getElementById("occupancy-range")?.value ||
+  0
+),
 
-  occupancyRate: Number(occupancy || 0),
+  occupancyRate: Number(
+  occupancy ||
+  occupancyRate ||
+  currentOccupancy ||
+  document.getElementById("occupancy-range")?.value ||
+  0
+),
 
   priceNight: Number(priceNight || 0),
 
