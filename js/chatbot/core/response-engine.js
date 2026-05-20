@@ -53,10 +53,15 @@ window.rbGenerateResponse = function({
 
 const liveData = {
 
-  ...(window.lastAnalysisData || {}),
+  ...(analysisData || {}),
+
   ...(window.rbInvestmentMemory || {}),
-  ...(window.rbChatbotData || {}),
-  ...(analysisData || {})
+
+  ...(window.lastAnalysisData || {}),
+
+  ...(window.rbChatbotLive || {}),
+
+  ...(window.rbChatbotData || {})
 
 };
 
