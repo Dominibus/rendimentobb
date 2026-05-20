@@ -33,13 +33,53 @@ window.rbKnowledgeBase.mortgages = {
 
   mortgageImpact: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "leverage",
+  category: "leverage",
 
-    scoreWeight: 1.5,
+  scoreWeight: 1.5,
 
-    keywords: [
+  semanticWeight: 2.0,
+
+  decisionWeight: 2.0,
+
+  riskWeight: 2.0,
+
+  executiveWeight: 2.0,
+
+  importance: "core",
+
+  severity: "critical",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "mutuo",
       "mortgage",
       "loan",
@@ -109,13 +149,53 @@ window.rbKnowledgeBase.mortgages = {
 
   fixedRate: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "rate",
+  category: "rate",
 
-    scoreWeight: 1.1,
+  scoreWeight: 1.1,
 
-    keywords: [
+  semanticWeight: 1.3,
+
+  decisionWeight: 1.4,
+
+  riskWeight: 1.2,
+
+  executiveWeight: 1.3,
+
+  importance: "secondary",
+
+  severity: "low",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: false,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: false,
+
+    useBenchmarks: false,
+
+    concise: true
+
+  },
+
+  keywords: [
       "tasso fisso",
       "fixed rate",
       "mutuo fisso",
@@ -159,13 +239,53 @@ window.rbKnowledgeBase.mortgages = {
 
   variableRate: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "rate",
+  category: "rate",
 
-    scoreWeight: 1.3,
+  scoreWeight: 1.3,
 
-    keywords: [
+  semanticWeight: 1.7,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.9,
+
+  executiveWeight: 1.7,
+
+  importance: "core",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "tasso variabile",
       "variable rate",
       "euribor",
@@ -210,13 +330,53 @@ window.rbKnowledgeBase.mortgages = {
 
   ltv: {
 
-    priority: 9,
+  priority: 9,
 
-    category: "leverage",
+  category: "leverage",
 
-    scoreWeight: 1.4,
+  scoreWeight: 1.4,
 
-    keywords: [
+  semanticWeight: 1.9,
+
+  decisionWeight: 2.0,
+
+  riskWeight: 2.0,
+
+  executiveWeight: 1.9,
+
+  importance: "core",
+
+  severity: "critical",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
+
+  keywords: [
       "ltv",
       "loan to value",
       "percentuale mutuo",
@@ -282,13 +442,53 @@ window.rbKnowledgeBase.mortgages = {
 
   mortgagePayment: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "cashflow",
+  category: "cashflow",
 
-    scoreWeight: 1.3,
+  scoreWeight: 1.3,
 
-    keywords: [
+  semanticWeight: 1.7,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.6,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "rata",
       "mortgage payment",
       "monthly payment",
@@ -333,13 +533,53 @@ window.rbKnowledgeBase.mortgages = {
 
   fullMortgage: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "extremeRisk",
+  category: "extremeRisk",
 
-    scoreWeight: 1.7,
+  scoreWeight: 1.7,
 
-    keywords: [
+  semanticWeight: 2.0,
+
+  decisionWeight: 2.0,
+
+  riskWeight: 2.0,
+
+  executiveWeight: 2.0,
+
+  importance: "core",
+
+  severity: "critical",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "mutuo 100%",
       "100 mortgage",
       "full financing",
@@ -396,13 +636,53 @@ window.rbKnowledgeBase.mortgages = {
 
   interestRates: {
 
-    priority: 7,
+  priority: 7,
 
-    category: "macro",
+  category: "macro",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.5,
+
+  decisionWeight: 1.6,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.5,
+
+  importance: "secondary",
+
+  severity: "high",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false,
+
+    warningPriority: true
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "interest rates",
       "tassi",
       "euribor",
