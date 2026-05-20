@@ -3398,15 +3398,45 @@ const chatbotNet =
 
 window.rbChatbotData = {
 
-  roi: safeROI ?? null,
+roi:
+(
+  window.RB_USER?.isFree &&
+  !window.RB_USER?.isInvestor &&
+  !window.RB_USER?.isPro &&
+  !window.RB_USER?.isAdmin
+)
+? null
+: safeROI ?? null,
 
-  visualROI: visualROI ?? null,
+visualROI:
+(
+  window.RB_USER?.isFree &&
+  !window.RB_USER?.isInvestor &&
+  !window.RB_USER?.isPro &&
+  !window.RB_USER?.isAdmin
+)
+? null
+: visualROI ?? null,
 
-  risk: risk ?? null,
+gross:
+(
+  window.RB_USER?.isFree &&
+  !window.RB_USER?.isInvestor &&
+  !window.RB_USER?.isPro &&
+  !window.RB_USER?.isAdmin
+)
+? null
+: gross ?? null,
 
-  gross: gross ?? null,
-
-  net: net ?? null,
+net:
+(
+  window.RB_USER?.isFree &&
+  !window.RB_USER?.isInvestor &&
+  !window.RB_USER?.isPro &&
+  !window.RB_USER?.isAdmin
+)
+? null
+: net ?? null,
 
   occupancy:
     occupancy ??
