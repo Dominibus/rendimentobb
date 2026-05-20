@@ -11,6 +11,12 @@ window.rbDetectIntent = function(message = ""){
   // ===========================================
 
   const text = String(message)
+
+    const entities =
+  window.rbExtractEntities
+    ? window.rbExtractEntities(text)
+    : {};
+  
     .toLowerCase()
     .trim();
 
@@ -23,6 +29,8 @@ window.rbDetectIntent = function(message = ""){
     intent: "generic",
 
     confidence: 0,
+
+    priority: 0,
 
     category: "general",
 
@@ -47,6 +55,28 @@ window.rbDetectIntent = function(message = ""){
 
   const hasAll = (...words) =>
     words.every(word => text.includes(word));
+
+// ===========================================
+// 🧠 APPLY INTENT
+// ===========================================
+
+const applyIntent = (config = {}) => {
+
+  const nextPriority =
+    Number(config.priority || 0);
+
+  if(
+    nextPriority <= result.priority
+  ){
+    return;
+  }
+
+  Object.assign(
+    result,
+    config
+  );
+
+};
 
   // ===========================================
   // ❓ EDUCATION / EXPLANATION
@@ -89,7 +119,19 @@ window.rbDetectIntent = function(message = ""){
 
   if(isEducation){
 
-    return {
+  applyIntent({
+
+    intent: "education",
+
+    confidence: 0.99,
+
+    priority: 100,
+
+    category: "education"
+
+  });
+
+}
 
       intent: "education",
 
@@ -352,20 +394,27 @@ if(
   )
 ){
 
-  result.intent =
-    "mortgage_analysis";
+  applyIntent({
 
-  result.category =
-    "mortgage";
+  intent:
+    "mortgage_analysis",
 
-  result.confidence =
-    0.95;
+  category:
+    "mortgage",
 
-  result.requiresMortgageAnalysis =
-    true;
+  confidence:
+    0.95,
 
-  result.requiresCalculation =
-    true;
+  priority:
+    80,
+
+  requiresMortgageAnalysis:
+    true,
+
+  requiresCalculation:
+    true
+
+});
 
 }
 
@@ -1051,6 +1100,37 @@ if(
       0.70;
 
   }
+
+}
+
+// ===========================================
+// 🧠 ENTITY CONTEXT BOOST
+// ===========================================
+
+if(
+  entities.propertyType &&
+  entities.city &&
+  result.intent === "generic"
+){
+
+  applyIntent({
+
+    intent:
+      "investment_strategy",
+
+    category:
+      "strategy",
+
+    confidence:
+      0.82,
+
+    priority:
+      55,
+
+    requiresMarketData:
+      true
+
+  });
 
 }
 
