@@ -910,13 +910,13 @@ if(
 
 ){
 
-  // =======================================
-  // 📚 EDUCATION / FINANCE
-  // =======================================
+// =======================================
+// 📚 EDUCATION / FINANCE
+// =======================================
 
-  if(
+if(
 
-    has(
+  has(
 
       // 🇮🇹 ITALIANO
       "roi",
@@ -928,13 +928,32 @@ if(
       "profitto",
       "rendimento",
 
+      "tasse",
+      "fiscalità",
+      "imposte",
+
+      "iva",
+      "cedolare",
+
+      "mutuo",
+      "cash flow",
+
+      "sostenibilità",
+
       // 🇬🇧 ENGLISH
       "cash flow",
 
       "profit",
       "yield",
 
-      "returns"
+      "returns",
+
+      "tax",
+      "taxes",
+
+      "mortgage",
+
+      "sustainability"
 
     )
 
@@ -947,7 +966,7 @@ if(
       "education";
 
     result.confidence =
-      0.80;
+      0.92;
 
   }
 
