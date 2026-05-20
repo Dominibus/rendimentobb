@@ -742,13 +742,16 @@ for(const key in knowledgeBase){
 
 }
 
-  // ===========================================
+// ===========================================
 // 📊 LIVE SIMULATOR KPI EXTRACTION
 // ===========================================
 
 try{
 
-  // ROI
+  // =======================================
+  // 📈 ROI
+  // =======================================
+
   if(entities.roi === null){
 
     const roiEl =
@@ -759,17 +762,46 @@ try{
 
     if(roiEl){
 
-      const roiValue = parseFloat(
+      const rawROI =
 
-        roiEl.textContent
-          .replace(/[^\d.,-]/g,"")
-          .replace(",", ".")
+        String(
+          roiEl.textContent || ""
+        ).trim();
 
-      );
+      // 🚫 KPI LOCKED / HIDDEN
+      if(
 
-      if(!isNaN(roiValue)){
+        rawROI === "—" ||
 
-        entities.roi = roiValue;
+        rawROI === "-" ||
+
+        rawROI === "" ||
+
+        rawROI.includes("blur") ||
+
+        rawROI.includes("locked")
+
+      ){
+
+        entities.roi = null;
+
+      }
+
+      else{
+
+        const roiValue = parseFloat(
+
+          rawROI
+            .replace(/[^\d.,-]/g,"")
+            .replace(",", ".")
+
+        );
+
+        if(!isNaN(roiValue)){
+
+          entities.roi = roiValue;
+
+        }
 
       }
 
@@ -777,7 +809,10 @@ try{
 
   }
 
-  // OCCUPANCY
+  // =======================================
+  // 🏨 OCCUPANCY
+  // =======================================
+
   if(entities.occupancy === null){
 
     const occEl =
@@ -788,17 +823,33 @@ try{
 
     if(occEl){
 
-      const occValue = parseFloat(
+      const rawOcc =
 
-        occEl.textContent
-          .replace(/[^\d.,-]/g,"")
-          .replace(",", ".")
+        String(
+          occEl.textContent || ""
+        ).trim();
 
-      );
+      if(
 
-      if(!isNaN(occValue)){
+        rawOcc !== "—" &&
+        rawOcc !== "-" &&
+        rawOcc !== ""
 
-        entities.occupancy = occValue;
+      ){
+
+        const occValue = parseFloat(
+
+          rawOcc
+            .replace(/[^\d.,-]/g,"")
+            .replace(",", ".")
+
+        );
+
+        if(!isNaN(occValue)){
+
+          entities.occupancy = occValue;
+
+        }
 
       }
 
@@ -806,7 +857,10 @@ try{
 
   }
 
-  // RISK
+  // =======================================
+  // ⚠️ RISK
+  // =======================================
+
   if(entities.risk === null){
 
     const riskEl =
@@ -817,17 +871,32 @@ try{
 
     if(riskEl){
 
-      const riskValue = parseFloat(
+      const rawRisk =
 
-        riskEl.textContent
-          .replace(/[^\d.,-]/g,"")
-          .replace(",", ".")
+        String(
+          riskEl.textContent || ""
+        ).trim();
 
-      );
+      if(
 
-      if(!isNaN(riskValue)){
+        rawRisk !== "—" &&
+        rawRisk !== "-" &&
+        rawRisk !== ""
 
-        entities.risk = riskValue;
+      ){
+
+        const riskValue = parseFloat(
+
+          rawRisk
+            .replace(/[^\d.,-]/g,"")
+            .replace(",", ".")
+        );
+
+        if(!isNaN(riskValue)){
+
+          entities.risk = riskValue;
+
+        }
 
       }
 
@@ -835,7 +904,10 @@ try{
 
   }
 
-  // NIGHTLY RATE
+  // =======================================
+  // 🌙 NIGHTLY RATE
+  // =======================================
+
   if(entities.nightly === null){
 
     const nightlyEl =
@@ -846,19 +918,35 @@ try{
 
     if(nightlyEl){
 
-      const nightlyValue = parseFloat(
+      const rawNightly =
 
-        nightlyEl.textContent
-          .replace(/[^\d.,-]/g,"")
-          .replace(",", ".")
+        String(
+          nightlyEl.textContent || ""
+        ).trim();
 
-      );
+      if(
 
-      if(!isNaN(nightlyValue)){
+        rawNightly !== "—" &&
+        rawNightly !== "-" &&
+        rawNightly !== ""
 
-        entities.nightly = nightlyValue;
+      ){
 
-        entities.adr = nightlyValue;
+        const nightlyValue = parseFloat(
+
+          rawNightly
+            .replace(/[^\d.,-]/g,"")
+            .replace(",", ".")
+
+        );
+
+        if(!isNaN(nightlyValue)){
+
+          entities.nightly = nightlyValue;
+
+          entities.adr = nightlyValue;
+
+        }
 
       }
 
@@ -874,8 +962,7 @@ try{
   );
 
 }
-
-  // ===========================================
+// ===========================================
 // 📊 LIVE ANALYSIS DATA
 // ===========================================
 
