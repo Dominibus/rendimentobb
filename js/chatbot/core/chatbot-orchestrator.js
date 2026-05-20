@@ -51,36 +51,54 @@ const detectedIntent =
 
 const intents = [];
 
+// =========================================
+// 🎓 EDUCATION PRIORITY
+// =========================================
+
+if(detectedIntent.intent === "education"){
+
+  intents.push("education");
+
+}
+
 // ROI
-if(
+else if(
   text.includes("roi") ||
   text.includes("rendimento")
 ){
-  intents.push("roi");
+
+  intents.push("roi_analysis");
+
 }
 
 // RISCHIO
-if(
+else if(
   text.includes("rischio") ||
   text.includes("risk")
 ){
-  intents.push("risk");
+
+  intents.push("risk_analysis");
+
 }
 
 // CASHFLOW
-if(
+else if(
   text.includes("cashflow") ||
   text.includes("profitto")
 ){
-  intents.push("cashflow");
+
+  intents.push("cashflow_analysis");
+
 }
 
 // SOSTENIBILITÀ
-if(
+else if(
   text.includes("sostenibil") ||
   text.includes("conviene")
 ){
-  intents.push("sustainability");
+
+  intents.push("investment_executive");
+
 }
 
 // =========================================
@@ -116,15 +134,6 @@ if(!intents.length){
   );
 
 }
-
-const intent = {
-
-  ...detectedIntent,
-
-  intents
-
-};
-
     // =========================================
     // 🧠 MEMORY
     // =========================================
