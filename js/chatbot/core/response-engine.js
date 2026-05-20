@@ -1543,6 +1543,140 @@ else{
   
 }
 
+// ===========================================
+// 🧠 HUMAN CONTEXT RESPONSE
+// ===========================================
+
+else if(
+
+  entities.amount ||
+
+  entities.price ||
+
+  entities.city ||
+
+  entities.mortgage ||
+
+  entities.mortgagePercent
+
+){
+
+  response.type =
+    "human_context";
+
+  response.confidence =
+    0.90;
+
+  const humanIT = [];
+
+  const humanEN = [];
+
+  // =====================================
+  // 💰 CAPITAL / PRICE
+  // =====================================
+
+  if(entities.amount || entities.price){
+
+    const amount =
+
+      Number(
+        entities.amount ||
+        entities.price ||
+        0
+      );
+
+    if(amount > 0){
+
+      humanIT.push(
+
+`💰 Perfetto.
+
+Terrò conto di un budget iniziale di €${amount.toLocaleString("it-IT")} per le prossime analisi.`
+
+      );
+
+      humanEN.push(
+
+`💰 Perfect.
+
+I will consider an initial budget of €${amount.toLocaleString("en-US")} for future analyses.`
+
+      );
+
+    }
+
+  }
+
+  // =====================================
+  // 🌍 CITY
+  // =====================================
+
+  if(entities.city){
+
+    const cityName =
+
+      window.rbCapitalize?.(
+        entities.city
+      ) ||
+
+      entities.city;
+
+    humanIT.push(
+
+`🌍 Mercato salvato:
+${cityName}.`
+
+    );
+
+    humanEN.push(
+
+`🌍 Market saved:
+${cityName}.`
+
+    );
+
+  }
+
+  // =====================================
+  // 🏦 MORTGAGE
+  // =====================================
+
+  if(entities.mortgage){
+
+    humanIT.push(
+
+      entities.mortgagePercent
+
+      ? `🏦 Considererò un mutuo al ${entities.mortgagePercent}%.`
+
+      : "🏦 Considererò anche la leva finanziaria nelle prossime simulazioni."
+
+    );
+
+    humanEN.push(
+
+      entities.mortgagePercent
+
+      ? `🏦 I will consider a ${entities.mortgagePercent}% mortgage.`
+
+      : "🏦 Financial leverage will also be considered in future simulations."
+
+    );
+
+  }
+
+  // =====================================
+  // 💬 FINAL
+  // =====================================
+
+  response.textIT =
+    humanIT.join("\n\n");
+
+  response.textEN =
+    humanEN.join("\n\n");
+
+}
+
   // ===========================================
   // 🤖 DEFAULT RESPONSE
   // ===========================================
