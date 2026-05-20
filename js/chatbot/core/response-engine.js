@@ -1783,6 +1783,76 @@ else{
 }
 
 // ===========================================
+// 📚 KNOWLEDGE FALLBACK RESPONSE
+// ===========================================
+
+else if(
+
+  entities.knowledgeData ||
+
+  entities.knowledge
+
+){
+
+  response.type =
+    "knowledge";
+
+  response.confidence =
+    0.92;
+
+  const knowledge =
+
+    entities.knowledgeData ||
+
+    window.rbKnowledgeBase?.[
+      entities.knowledge
+    ] ||
+
+    null;
+
+  if(knowledge){
+
+    response.textIT =
+
+      knowledge?.text?.it ||
+
+      knowledge?.textIT ||
+
+      `
+
+${knowledge?.aiTitleIT || ""}
+
+${knowledge?.aiSummaryIT || ""}
+
+${knowledge?.aiInsightIT || ""}
+
+${knowledge?.warningIT || ""}
+
+      `.trim();
+
+    response.textEN =
+
+      knowledge?.text?.en ||
+
+      knowledge?.textEN ||
+
+      `
+
+${knowledge?.aiTitleEN || ""}
+
+${knowledge?.aiSummaryEN || ""}
+
+${knowledge?.aiInsightEN || ""}
+
+${knowledge?.warningEN || ""}
+
+      `.trim();
+
+  }
+
+}  
+
+// ===========================================
 // 🧠 HUMAN CONTEXT RESPONSE
 // ===========================================
 
