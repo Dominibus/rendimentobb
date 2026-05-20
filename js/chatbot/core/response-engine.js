@@ -154,6 +154,143 @@ const executiveInsightsIT = [];
 
 const executiveInsightsEN = [];
 
+// ===========================================
+// 🧠 EXECUTIVE REASONING ENGINE
+// ===========================================
+
+const reasoningIT = [];
+
+const reasoningEN = [];
+
+// =====================================
+// 🚀 HIGH PERFORMANCE
+// =====================================
+
+if(
+  roi >= 20 &&
+  occupancy >= 65 &&
+  risk <= 40
+){
+
+  reasoningIT.push(
+    "🚀 Il motore AI considera la simulazione altamente competitiva rispetto ai benchmark short-rent."
+  );
+
+  reasoningEN.push(
+    "🚀 The AI engine considers this simulation highly competitive compared to short-rent benchmarks."
+  );
+
+}
+
+// =====================================
+// ⚠️ HIGH ROI + HIGH RISK
+// =====================================
+
+if(
+  roi >= 20 &&
+  risk >= 70
+){
+
+  reasoningIT.push(
+    "⚠️ Il ROI elevato è accompagnato da una struttura operativa aggressiva."
+  );
+
+  reasoningEN.push(
+    "⚠️ High ROI is combined with an aggressive operational structure."
+  );
+
+}
+
+// =====================================
+// ⚠️ LOW OCCUPANCY
+// =====================================
+
+if(
+  occupancy > 0 &&
+  occupancy < 45
+){
+
+  reasoningIT.push(
+    "⚠️ L'occupazione attuale potrebbe compromettere cashflow e sostenibilità."
+  );
+
+  reasoningEN.push(
+    "⚠️ Current occupancy may compromise cashflow and sustainability."
+  );
+
+}
+
+// =====================================
+// 💸 NEGATIVE CASHFLOW SIGNAL
+// =====================================
+
+if(aiSignals.includes("negative_cashflow")){
+
+  reasoningIT.push(
+    "💸 Il cashflow operativo mostra segnali di instabilità."
+  );
+
+  reasoningEN.push(
+    "💸 Operational cashflow shows instability signals."
+  );
+
+}
+
+// =====================================
+// 🏦 HIGH LEVERAGE
+// =====================================
+
+const mortgagePercent = Number(
+  liveData.mortgagePercent ||
+  entities.mortgagePercent ||
+  0
+);
+
+if(mortgagePercent >= 80){
+
+  reasoningIT.push(
+    "🏦 La leva finanziaria elevata aumenta la vulnerabilità ai cambiamenti di mercato."
+  );
+
+  reasoningEN.push(
+    "🏦 High financial leverage increases vulnerability to market fluctuations."
+  );
+
+}
+
+// =====================================
+// 🌍 MARKET + ROI CROSS ANALYSIS
+// =====================================
+
+if(
+  market &&
+  roi > 0
+){
+
+  const marketROI =
+    parseFloat(
+      String(market.avgROI || "")
+        .replace(/[^\d.,-]/g,"")
+        .replace(",", ".")
+    ) || 0;
+
+  if(
+    marketROI > 0 &&
+    roi >= marketROI * 1.8
+  ){
+
+    reasoningIT.push(
+      "📈 Il ROI simulato è molto superiore al benchmark medio della città."
+    );
+
+    reasoningEN.push(
+      "📈 Simulated ROI is significantly above the city's average benchmark."
+    );
+
+  }
+
+}  
+
 // 🚀 HIGH ROI
 if(aiSignals.includes("very_high_roi")){
 
@@ -1278,6 +1415,20 @@ if(executiveInsightsIT.length){
   response.textIT =
     executiveIT.join("\n\n");
 
+// =====================================
+// 🧠 REASONING ENGINE
+// =====================================
+
+if(reasoningIT.length){
+
+  executiveIT.push(
+
+    reasoningIT.join("\n\n")
+
+  );
+
+}
+
   // =====================================
   // 🇬🇧 ENGLISH
   // =====================================
@@ -1377,7 +1528,21 @@ if(executiveInsightsEN.length){
 
 }
 
-  // ===========================================
+// =====================================
+// 🧠 REASONING ENGINE
+// =====================================
+
+if(reasoningEN.length){
+
+  executiveEN.push(
+
+    reasoningEN.join("\n\n")
+
+  );
+
+}
+
+// ===========================================
 // 💡 STRATEGY RESPONSE
 // ===========================================
 
