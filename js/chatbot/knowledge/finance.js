@@ -33,11 +33,47 @@ window.rbKnowledgeBase.finance = {
 
   roi: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "profitability",
+  category: "profitability",
 
-    scoreWeight: 1.6,
+  scoreWeight: 1.6,
+
+  semanticWeight: 1.8,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.3,
+
+  executiveWeight: 1.9,
+
+  importance: "core",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: true
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: true,
+
+    concise: false
+
+  },
 
     keywords: [
       "roi",
@@ -110,13 +146,49 @@ window.rbKnowledgeBase.finance = {
 
   cashflow: {
 
-    priority: 10,
+  priority: 10,
 
-    category: "liquidity",
+  category: "liquidity",
 
-    scoreWeight: 1.7,
+  scoreWeight: 1.7,
 
-    keywords: [
+  semanticWeight: 2.0,
+
+  decisionWeight: 2.0,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 2.0,
+
+  importance: "core",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: true,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "cashflow",
       "cash flow",
       "flusso di cassa",
@@ -186,13 +258,49 @@ window.rbKnowledgeBase.finance = {
 
   breakEven: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "recovery",
+  category: "recovery",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.4,
+
+  decisionWeight: 1.6,
+
+  riskWeight: 1.5,
+
+  executiveWeight: 1.5,
+
+  importance: "secondary",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "break even",
       "pareggio",
       "punto di pareggio",
@@ -250,13 +358,49 @@ window.rbKnowledgeBase.finance = {
 
   dscr: {
 
-    priority: 9,
+  priority: 9,
 
-    category: "mortgage",
+  category: "mortgage",
 
-    scoreWeight: 1.5,
+  scoreWeight: 1.5,
 
-    keywords: [
+  semanticWeight: 1.5,
+
+  decisionWeight: 1.8,
+
+  riskWeight: 2.0,
+
+  executiveWeight: 1.7,
+
+  importance: "core",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false
+
+  },
+
+  responseStyle: {
+
+    tone: "executive",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "dscr",
       "debt service coverage ratio",
       "copertura debito",
@@ -324,13 +468,49 @@ window.rbKnowledgeBase.finance = {
 
   operatingMargin: {
 
-    priority: 7,
+  priority: 7,
 
-    category: "efficiency",
+  category: "efficiency",
 
-    scoreWeight: 1.2,
+  scoreWeight: 1.2,
 
-    keywords: [
+  semanticWeight: 1.4,
+
+  decisionWeight: 1.5,
+
+  riskWeight: 1.6,
+
+  executiveWeight: 1.4,
+
+  importance: "secondary",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false
+
+  },
+
+  responseStyle: {
+
+    tone: "analytical",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: true
+
+  },
+
+  keywords: [
       "operating margin",
       "margine operativo",
       "profit margin",
@@ -387,13 +567,49 @@ window.rbKnowledgeBase.finance = {
 
   hiddenCosts: {
 
-    priority: 8,
+  priority: 8,
 
-    category: "expenses",
+  category: "expenses",
 
-    scoreWeight: 1.3,
+  scoreWeight: 1.3,
 
-    keywords: [
+  semanticWeight: 1.4,
+
+  decisionWeight: 1.7,
+
+  riskWeight: 1.8,
+
+  executiveWeight: 1.5,
+
+  importance: "secondary",
+
+  aiBehavior: {
+
+    investorFocus: true,
+
+    riskAnalysis: true,
+
+    compareRequired: false,
+
+    sustainabilityCheck: true,
+
+    benchmarkRequired: false
+
+  },
+
+  responseStyle: {
+
+    tone: "warning",
+
+    useWarnings: true,
+
+    useBenchmarks: false,
+
+    concise: false
+
+  },
+
+  keywords: [
       "costi nascosti",
       "hidden costs",
       "spese impreviste",
