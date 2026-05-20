@@ -228,9 +228,28 @@ const hasAnalysis =
 
   (!isNaN(occupancy) && occupancy !== 0);
 
+// ===========================================
+// 🏠 HOME QUICK SIMULATION
+// ===========================================
+
+const isHomeSimulation =
+
+  !window.location.pathname.includes(
+    "/tool"
+  );
+
+// ===========================================
+// 🚫 BLOCK PARTIAL ANALYSIS
+// ===========================================
+
 if(
 
-  !hasAnalysis &&
+  (
+    !hasAnalysis ||
+
+    isHomeSimulation
+
+  ) &&
 
   intent.intent !== "education" &&
 
@@ -251,17 +270,35 @@ if(
     confidence: 1,
 
     textIT:
-      "📊 Esegui prima una simulazione completa così posso analizzare ROI, rischio e sostenibilità.",
+
+      `📊 Sto leggendo dati parziali dalla simulazione rapida.
+
+Per ottenere:
+• ROI reale
+• cashflow avanzato
+• rischio operativo
+• analisi AI completa
+
+esegui una simulazione nel simulatore principale.`,
 
     textEN:
-      "📊 Run a full simulation first so I can analyze ROI, risk and sustainability.",
+
+      `📊 I am currently reading partial quick-simulation data.
+
+To unlock:
+• real ROI
+• advanced cashflow
+• operational risk
+• full AI analysis
+
+run a simulation inside the main simulator.`,
 
     suggestionsIT: [
-      "Simulare investimento"
+      "Apri simulatore completo"
     ],
 
     suggestionsEN: [
-      "Run investment simulation"
+      "Open full simulator"
     ],
 
     signals: [],
