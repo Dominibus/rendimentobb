@@ -447,21 +447,20 @@ const entities =
 const intent =
   result?.intent || {};
 
-      console.log(
-        "🧠 RESPONSE OBJECT:",
-        response
-      );
+console.log(
+  "🧠 RESPONSE OBJECT:",
+  response
+);
 
-      console.log(
-        "🧠 TEXT IT:",
-        response?.textIT
-      );
+console.log(
+  "🧠 TEXT IT:",
+  response?.textIT
+);
 
-      console.log(
-        "🧠 TEXT EN:",
-        response?.textEN
-      );
-
+console.log(
+  "🧠 TEXT EN:",
+  response?.textEN
+);
       // =====================================
       // 🌍 LANGUAGE
       // =====================================
