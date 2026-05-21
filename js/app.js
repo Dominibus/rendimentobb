@@ -4209,7 +4209,13 @@ const realROI =
   safe(d.realROI || d.roi);
 
 // 🔥 cap SOLO grafico PDF
-const roi = Math.min(realROI, 45);
+const roi = Math.max(
+  0,
+  Math.min(
+    safe(realROI),
+    45
+  )
+);
 const revenue = safe(d.revenue);
 const profit = safe(d.netAfterMortgage || d.profit);
 const price = safe(d.price);
@@ -4369,7 +4375,13 @@ doc.roundedRect(20,185,120,8,4,4,"F");
 
 doc.setFillColor(...green);
 
-const roiBar = Math.min(120, roi * 3.2);
+const roiBar = Math.max(
+  0,
+  Math.min(
+    120,
+    safe(roi * 3.2)
+  )
+);
 
 doc.roundedRect(20,185,roiBar,8,4,4,"F");
 
@@ -4607,7 +4619,13 @@ cashflowScenarios.forEach(s=>{
   );
 
   // VALUE BAR
-  const w = (s.value / maxVal) * 92;
+  const w = Math.max(
+  0,
+  Math.min(
+    92,
+    safe((s.value / maxVal) * 92)
+  )
+);
 
   doc.setFillColor(...s.color);
 
@@ -4767,9 +4785,12 @@ doc.roundedRect(
 
 // ================= ROI BAR =================
 
-const compareWidth = Math.min(
-  135,
-  (roi / (marketROI * 2)) * 135
+const compareWidth = Math.max(
+  0,
+  Math.min(
+    135,
+    safe((roi / (marketROI * 2)) * 135)
+  )
 );
 
 doc.setFillColor(...green);
