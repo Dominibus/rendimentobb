@@ -116,46 +116,6 @@ window.rbRememberMessage = function({
 
       }
 
-      // =======================================
-      // 💰 LAST PRICE
-      // =======================================
-
-      if(entities.price){
-
-        memory.lastPropertyPrice =
-          entities.price;
-
-        budget:
-          window.rbChatMemory.lastBudget,
-
-        strategy:
-          window.rbChatMemory.lastStrategy,
-
-        riskTolerance:
-           window.rbChatMemory.lastRiskTolerance,
-
-       propertyType:
-          window.rbChatMemory.lastPropertyType,
-
-      targetROI:
-          window.rbChatMemory.lastTargetROI,
-
-      financingLevel:
-         window.rbChatMemory.lastFinancingLevel,
-
-      }
-
-      // =======================================
-// 💰 LAST BUDGET
-// =======================================
-
-if(entities.amount){
-
-  memory.lastBudget =
-    entities.amount;
-
-}
-
 // =======================================
 // 🎯 TARGET ROI
 // =======================================
