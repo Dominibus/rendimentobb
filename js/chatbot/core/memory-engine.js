@@ -399,7 +399,27 @@ window.rbGetConversationContext = function(){
       window.rbChatMemory.lastMortgage,
 
     lastIntent:
-      window.rbChatMemory.lastIntent
+      window.rbChatMemory.lastIntent,
+
+    // 🔥 NEW MEMORY
+
+    budget:
+      window.rbChatMemory.lastBudget,
+
+    strategy:
+      window.rbChatMemory.lastStrategy,
+
+    riskTolerance:
+      window.rbChatMemory.lastRiskTolerance,
+
+    propertyType:
+      window.rbChatMemory.lastPropertyType,
+
+    targetROI:
+      window.rbChatMemory.lastTargetROI,
+
+    financingLevel:
+      window.rbChatMemory.lastFinancingLevel
 
   };
 
