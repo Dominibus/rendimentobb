@@ -3658,13 +3658,8 @@ window.mortgage ??
 window.mortgageAmount ??
 0,
 
- monthlyMortgagePayment:
-
-window.monthlyMortgage ??
-
-monthlyMortgage ??
-
-0,
+monthlyMortgagePayment:
+  Number(window.monthlyMortgage || 0),
 
   price:
     price ??
