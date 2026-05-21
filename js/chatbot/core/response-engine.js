@@ -2176,37 +2176,144 @@ ${cityName}.`
   }
 
   // ===========================================
-  // 💡 FOLLOWUP SUGGESTIONS
-  // ===========================================
+// 💡 CONTEXTUAL FOLLOWUP ENGINE
+// ===========================================
+
+response.suggestionsIT = [];
+response.suggestionsEN = [];
+
+// ===========================================
+// 📈 ROI FOLLOWUPS
+// ===========================================
 
 if(response.type === "roi"){
 
+  if(roi >= 20){
+
+    response.suggestionsIT.push(
+      "Confrontare benchmark città",
+      "Analizzare sostenibilità lungo termine",
+      "Simulare scenario conservativo"
+    );
+
+    response.suggestionsEN.push(
+      "Compare city benchmarks",
+      "Analyze long-term sustainability",
+      "Simulate conservative scenario"
+    );
+
+  }
+
+  else if(roi >= 10){
+
+    response.suggestionsIT.push(
+      "Ottimizzare occupazione",
+      "Aumentare ADR medio",
+      "Ridurre costi operativi"
+    );
+
+    response.suggestionsEN.push(
+      "Optimize occupancy",
+      "Increase average ADR",
+      "Reduce operational costs"
+    );
+
+  }
+
+  else{
+
+    response.suggestionsIT.push(
+      "Ridurre rischio operativo",
+      "Analizzare cashflow reale",
+      "Valutare un'altra città"
+    );
+
+    response.suggestionsEN.push(
+      "Reduce operational risk",
+      "Analyze real cashflow",
+      "Evaluate another city"
+    );
+
+  }
+
+}
+
+// ===========================================
+// ⚠️ RISK FOLLOWUPS
+// ===========================================
+
+if(response.type === "risk"){
+
+  if(risk >= 70){
+
+    response.suggestionsIT.push(
+      "Ridurre leva finanziaria",
+      "Analizzare scenario prudente",
+      "Ridurre dipendenza occupazione"
+    );
+
+    response.suggestionsEN.push(
+      "Reduce financial leverage",
+      "Analyze conservative scenario",
+      "Reduce occupancy dependency"
+    );
+
+  }
+
+  else{
+
+    response.suggestionsIT.push(
+      "Confrontare altri mercati",
+      "Ottimizzare cashflow",
+      "Analizzare mutuo"
+    );
+
+    response.suggestionsEN.push(
+      "Compare alternative markets",
+      "Optimize cashflow",
+      "Analyze mortgage impact"
+    );
+
+  }
+
+}
+
+// ===========================================
+// 🏦 MORTGAGE FOLLOWUPS
+// ===========================================
+
+if(response.type === "mortgage"){
+
   response.suggestionsIT.push(
-    "Analizzare cashflow reale",
-    "Confrontare benchmark città",
-    "Simulare mutuo"
+    "Simulare LTV differente",
+    "Analizzare sostenibilità rata",
+    "Ridurre rischio finanziario"
   );
 
   response.suggestionsEN.push(
-    "Analyze real cashflow",
-    "Compare city benchmark",
-    "Simulate mortgage"
+    "Simulate different LTV",
+    "Analyze payment sustainability",
+    "Reduce financial risk"
   );
 
 }
 
-if(response.type === "risk"){
+// ===========================================
+// 🧠 EXECUTIVE FOLLOWUPS
+// ===========================================
+
+if(response.type === "executive"){
 
   response.suggestionsIT.push(
-    "Analizzare sostenibilità mutuo",
-    "Ridurre rischio operativo",
-    "Confrontare scenario città"
+    "Confrontare benchmark reali",
+    "Analizzare scenario pessimistico",
+    "Ottimizzare redditività"
   );
 
   response.suggestionsEN.push(
-    "Analyze mortgage sustainability",
-    "Reduce operational risk",
-    "Compare city scenario"
+    "Compare real benchmarks",
+    "Analyze pessimistic scenario",
+    "Optimize profitability"
   );
 
 }
