@@ -433,7 +433,8 @@ if(
 
   intent.intent !== "investment_strategy" &&
 
-  intent.intent !== "investment_advisor"
+  intent.intent !== "investment_advisor" &&
+  intent.intent !== "greeting"
 
 ){
 
@@ -1690,6 +1691,48 @@ else if(
 
   response.textEN =
     strategyEN.join("\n\n");
+
+}
+
+  // ===========================================
+// 👋 GREETING RESPONSE
+// ===========================================
+
+else if(
+  intent.intent === "greeting"
+){
+
+  response.type =
+    "greeting";
+
+  response.confidence =
+    1;
+
+  response.textIT =
+
+`👋 Ciao!
+
+Posso aiutarti ad analizzare:
+
+• ROI
+• cashflow
+• rischio
+• mutui
+• benchmark città
+• sostenibilità B&B`;
+
+  response.textEN =
+
+`👋 Hi!
+
+I can help you analyze:
+
+• ROI
+• cashflow
+• risk
+• mortgages
+• city benchmarks
+• B&B sustainability`;
 
 }
   // ===========================================
