@@ -6209,22 +6209,45 @@ function forceUnlockUI(){
     });
   };
 
-  // funzione unlock elementi
-  const unlockElements = (selector) => {
-    document.querySelectorAll(selector).forEach(el => {
-      el.classList.remove(
+// funzione unlock elementi
+const unlockElements = (selector) => {
+
+  document.querySelectorAll(selector).forEach(el => {
+
+    el.classList.remove(
+      "pro-blur",
+      "locked",
+      "locked-content",
+      "premium-lock",
+      "locked-section",
+      "blur-content"
+    );
+
+    // 🔥 RESET ELEMENTO
+    el.style.filter = "none";
+    el.style.webkitFilter = "none";
+    el.style.backdropFilter = "none";
+    el.style.opacity = "1";
+    el.style.pointerEvents = "auto";
+
+    // 🔥 RESET FIGLI
+    el.querySelectorAll("*").forEach(child => {
+
+      child.classList.remove(
         "pro-blur",
-        "locked",
-        "locked-content",
-        "premium-lock",
-        "locked-section"
+        "blur-content"
       );
 
-      el.style.filter = "none";
-      el.style.opacity = "1";
-      el.style.pointerEvents = "auto";
+      child.style.filter = "none";
+      child.style.webkitFilter = "none";
+      child.style.backdropFilter = "none";
+      child.style.opacity = "1";
+
     });
-  };
+
+  });
+
+};
 
   // =========================
   // 🟢 PRO / ADMIN → FULL UNLOCK
