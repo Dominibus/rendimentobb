@@ -425,18 +425,27 @@ I can help analyze:
         result
       );
 
-      // =====================================
-      // 🧠 SAFE DATA
-      // =====================================
+// =====================================
+// 🧠 SAFE DATA
+// =====================================
 
-      const response =
-        result?.response || {};
+const rawResponse =
 
-      const entities =
-        result?.entities || {};
+  result?.response || {};
 
-      const intent =
-        result?.intent || {};
+const response =
+
+  rawResponse?.response ||
+
+  rawResponse ||
+
+  {};
+
+const entities =
+  result?.entities || {};
+
+const intent =
+  result?.intent || {};
 
       console.log(
         "🧠 RESPONSE OBJECT:",
