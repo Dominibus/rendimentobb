@@ -232,6 +232,28 @@ if(!uniqueIntents.length){
 
       : {};
 
+// =========================================
+// 🧠 INVESTOR PROFILE
+// =========================================
+
+const investorProfile =
+
+  window.rbUpdateInvestorProfile
+
+  ? window.rbUpdateInvestorProfile({
+
+      entities,
+
+      analysisData:
+        window.lastAnalysisData || {},
+
+      memory:
+        filteredMemory || memory || {}
+
+    })
+
+  : {};
+
     // =========================================
     // 📊 ANALYSIS DATA
     // =========================================
@@ -452,6 +474,8 @@ const partialResponse =
     intent: currentIntentData,
 
     memory: filteredMemory,
+
+    investorProfile,
 
     analysisData,
 
