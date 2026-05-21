@@ -248,7 +248,7 @@ const investorProfile =
         window.lastAnalysisData || {},
 
       memory:
-        filteredMemory || memory || {}
+        memory || {}
 
     })
 
