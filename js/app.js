@@ -3611,9 +3611,10 @@ window.lastAnalysisData = {
     equity ?? 0,
 
   loan:
-  mortgageAmount ??
-  mortgage ??
-  0,
+    window.loan ??
+    window.mortgage ??
+    window.mortgageAmount ??
+    0,
 
   price:
     price ?? 0,
