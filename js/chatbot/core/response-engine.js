@@ -530,6 +530,48 @@ run a simulation inside the main simulator.`,
 }
 
   // ===========================================
+// 🧠 RESPONSE VARIATIONS
+// ===========================================
+
+const roiPositiveIT = [
+
+  "📈 ROI molto competitivo rispetto alla media short-rent.",
+
+  "🚀 La simulazione mostra una marginalità superiore ai benchmark locali.",
+
+  "💰 Il rendimento appare particolarmente interessante nel contesto attuale.",
+
+  "🏨 L'investimento mostra metriche operative molto forti."
+
+];
+
+const roiPositiveEN = [
+
+  "📈 ROI appears highly competitive versus short-rent averages.",
+
+  "🚀 The simulation shows margins above local benchmarks.",
+
+  "💰 Returns appear particularly attractive in the current market.",
+
+  "🏨 The investment shows very strong operational metrics."
+
+];
+
+// ===========================================
+// 🎲 RANDOM PICKER
+// ===========================================
+
+function pickRandom(arr){
+
+  return arr[
+    Math.floor(
+      Math.random() * arr.length
+    )
+  ];
+
+}
+
+  // ===========================================
   // 📈 ROI RESPONSE
   // ===========================================
 
@@ -565,7 +607,7 @@ ${cityLabel}
 📊 Benchmark medio:
 ${marketROI}
 
-💡 La simulazione appare molto superiore alla media short-rent locale.
+${pickRandom(roiPositiveIT)}
 
 ${roi >= 40
 ? "⚠️ Un ROI oltre il 40% richiede verifica realistica di occupazione, costi e sostenibilità operativa."
@@ -591,7 +633,7 @@ ${cityLabel}
 📊 Average benchmark:
 ${marketROI}
 
-💡 The simulation appears significantly above local short-rent averages.
+${pickRandom(roiPositiveEN)}
 
 ${roi >= 40
 ? "⚠️ ROI above 40% requires realistic validation of occupancy, costs and sustainability."
