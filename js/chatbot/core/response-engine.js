@@ -178,6 +178,51 @@ city
 
 : "";
 
+
+// ===========================================
+// 🧠 MEMORY CONTEXT
+// ===========================================
+
+const rememberedBudget =
+
+  entities.amount ||
+
+  entities.price ||
+
+  memory.lastBudget ||
+
+  memory.lastPropertyPrice ||
+
+  0;
+
+const rememberedCity =
+
+  entities.city ||
+
+  memory.lastCity ||
+
+  city ||
+
+  null;
+
+const rememberedMortgage =
+
+  entities.mortgagePercent ||
+
+  memory.lastMortgagePercent ||
+
+  mortgagePercent ||
+
+  0;
+
+console.log(
+  "🧠 MEMORY CONTEXT:",
+  {
+    rememberedBudget,
+    rememberedCity,
+    rememberedMortgage
+  }
+);  
 // ===========================================
 // 🧠 AI INSIGHTS
 // ===========================================
@@ -1362,8 +1407,18 @@ else if(
   );
 
   executiveIT.push(
-    `📈 ROI reale: ${roi.toFixed(1)}%`
-  );
+
+  roi >= 20
+
+  ? `📈 Il ROI reale del ${roi.toFixed(1)}% è molto superiore alla media short-rent.`
+
+  : roi >= 10
+
+  ? `📈 Il ROI reale del ${roi.toFixed(1)}% appare sostenibile ma con margini di ottimizzazione.`
+
+  : `📉 Il ROI reale del ${roi.toFixed(1)}% potrebbe non compensare rischio e costi operativi.`
+
+);
 
   executiveIT.push(
     `⚠️ Risk score: ${risk}/100`
@@ -1464,8 +1519,18 @@ if(executiveInsightsIT.length){
   );
 
   executiveEN.push(
-    `📈 Real ROI: ${roi.toFixed(1)}%`
-  );
+
+  roi >= 20
+
+  ? `📈 The real ROI of ${roi.toFixed(1)}% is significantly above short-rent market averages.`
+
+  : roi >= 10
+
+  ? `📈 The real ROI of ${roi.toFixed(1)}% appears sustainable but still has optimization potential.`
+
+  : `📉 The real ROI of ${roi.toFixed(1)}% may not adequately compensate for operational risk and costs.`
+
+);
 
   executiveEN.push(
     `⚠️ Risk score: ${risk}/100`
