@@ -221,6 +221,7 @@
     "/js/chatbot/core/entity-engine.js",
     "/js/chatbot/core/intent-engine.js",
     "/js/chatbot/core/memory-engine.js",
+    "/js/chatbot/core/score-engine.js",
     "/js/chatbot/core/response-engine.js",
     "/js/chatbot/core/chatbot-orchestrator.js",
 
