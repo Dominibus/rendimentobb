@@ -3578,6 +3578,57 @@ console.log(
   window.rbChatbotLive
 );
 
+// =====================================
+// 💾 LAST ANALYSIS MEMORY
+// =====================================
+
+window.lastAnalysisData = {
+
+  roi:
+    safeROI ?? 0,
+
+  visualROI:
+    visualROI ?? safeROI ?? 0,
+
+  gross:
+    gross ?? 0,
+
+  net:
+    net ?? 0,
+
+  occupancy:
+    occupancy ??
+    occupancyRate ??
+    0,
+
+  priceNight:
+    priceNight ?? 0,
+
+  expenses:
+    expenses ?? 0,
+
+  equity:
+    equity ?? 0,
+
+  loan:
+    loan ?? 0,
+
+  price:
+    price ?? 0,
+
+  city:
+    selectedCity ||
+    marketCity ||
+    currentCity ||
+    null
+
+};
+
+console.log(
+  "💾 LAST ANALYSIS SAVED:",
+  window.lastAnalysisData
+);
+
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
