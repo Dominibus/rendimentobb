@@ -3660,7 +3660,7 @@ window.mortgageAmount ??
 
  monthlyMortgagePayment:
 
-mortgageData?.monthlyPayment ??
+window.monthlyMortgage ??
 
 monthlyMortgage ??
 
