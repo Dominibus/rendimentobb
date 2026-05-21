@@ -2559,9 +2559,7 @@ visualROI: Number(finalROI) || 0,
   equity: equity || 0,
 
   loan:
-    loanAmount ||
-    mortgageAmount ||
-    0,
+    Number(mortgageAmount) || 0,
 
   mortgagePercent: mortgagePercent || 0,
 
