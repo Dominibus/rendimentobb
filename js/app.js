@@ -3599,34 +3599,36 @@ if(riskPreview){
     // ================= UI =================
     ["roi-live","roi-preview-live","roi-card-live"].forEach(id=>{
 
-  const el = document.getElementById(id);
+      const el = document.getElementById(id);
 
-  if(!el) return;
+      if(!el) return;
 
-  // 🔒 FREE
-  if(
-    access.isFree &&
-    !access.isInvestor &&
-    !access.isPro &&
-    !access.isAdmin
-  ){
+      // 🔒 FREE
+      if(
+        access.isFree &&
+        !access.isInvestor &&
+        !access.isPro &&
+        !access.isAdmin
+      ){
 
-    el.innerText = "—";
+        el.innerText = "—";
 
-  }else{
+      }else{
 
-    el.innerText = roiText;
+        el.innerText = roiText;
 
-  }
+      }
 
-});
+    });
 
     const profitEl = document.getElementById("profit-live");
+
     if(profitEl){
       profitEl.innerText = formatCurrency(net);
     }
 
     const revenueEl = document.getElementById("revenue-live");
+
     if(revenueEl){
       revenueEl.innerText = access.isFree
         ? "—"
@@ -3639,19 +3641,27 @@ if(riskPreview){
       investment: price
     });
 
-    if(!isUIRefresh){
+    // =====================================
+    // 🤖 POST ANALYSIS AI
+    // =====================================
 
-  runPostAnalysis(result, {
-  price,
-  gross,
-  occupancy,
-  priceNight,
-  expenses,
-  equity,
-  mortgage: mortgage || 0
-});
+    if(isUIRefresh){
 
-}    
+      const loan =
+        propertyPrice *
+        (mortgagePercent / 100);
+
+      runPostAnalysis(result, {
+        price,
+        gross,
+        occupancy,
+        priceNight,
+        expenses,
+        equity,
+        loan
+      });
+
+    } 
 
     // ================= MARKET =================
     if(access.isFree){
