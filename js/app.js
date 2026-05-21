@@ -256,115 +256,130 @@ if(!window.currentPlan){
 }else{
 
   // =====================================
-  // 🔥 HARD RESET PREMIUM
-  // =====================================
+// 🔓 PRO / ADMIN → FULL ACCESS
+// =====================================
 
-  if(
-    access.isInvestor ||
-    access.isPro ||
-    access.isAdmin
-  ){
+if(
+  access.isPro ||
+  access.isAdmin
+){
 
-    console.log("🟢 KPI PREMIUM RESET");
+  console.log("✅ PRO USER → SKIP RESET");
 
-    [
-      qrProfit, elAnnual,
-      qrMonth, elMonthly,
-      qrBreak, elBreak,
-      qrRev, elRevenue
-    ].forEach(el=>{
+  [
+    qrProfit, elAnnual,
+    qrMonth, elMonthly,
+    qrBreak, elBreak,
+    qrRev, elRevenue
+  ].forEach(el=>{
 
-      if(!el) return;
+    if(!el) return;
 
-      // 🔥 salva valore reale
-      if(
-        el.innerText &&
-        el.innerText !== "—" &&
-        !el.dataset.realValue
-      ){
-        el.dataset.realValue = el.innerText;
-      }
+    // 🔥 restore valore reale
+    if(el.dataset.realValue){
+      el.innerText = el.dataset.realValue;
+    }
 
-      // 💣 RESET HARD INLINE
-      el.style.filter = "none";
-      el.style.webkitFilter = "none";
-      el.style.backdropFilter = "none";
-      el.style.opacity = "1";
-      el.style.visibility = "visible";
-      el.style.pointerEvents = "auto";
-      el.style.color = "#0f172a";
-      el.style.textShadow = "none";
-      el.style.transform = "none";
+    // 🔥 reset completo blur
+    el.style.filter = "none";
+    el.style.webkitFilter = "none";
+    el.style.backdropFilter = "none";
+    el.style.opacity = "1";
+    el.style.visibility = "visible";
+    el.style.pointerEvents = "auto";
+    el.style.color = "#0f172a";
+    el.style.textShadow = "none";
 
-      // 🔥 restore contenuto
-      if(
-        el.innerText === "—" &&
-        el.dataset.realValue
-      ){
-        el.innerText = el.dataset.realValue;
-      }
+    el.classList.remove(
+      "pro-blur",
+      "blur-content",
+      "locked",
+      "locked-content",
+      "premium-lock"
+    );
 
-      // 🔥 cleanup classi
-      el.classList.remove(
-        "pro-blur",
-        "blur-content",
-        "locked",
-        "locked-content",
-        "premium-lock"
-      );
-
-    });
-
-  }
-
-  // =====================================
-  // 🔴 FREE → LIMITA DATI
-  // =====================================
-
-  if(
-    access.isFree &&
-    !access.isInvestor &&
-    !access.isPro &&
-    !access.isAdmin
-  ){
-
-    console.log("🔒 KPI HARD LOCK (FREE)");
-
-    [
-      qrProfit, elAnnual,
-      qrMonth, elMonthly,
-      qrBreak, elBreak,
-      qrRev, elRevenue
-    ].forEach(el=>{
-
-      if(!el) return;
-
-      // 🔥 salva valore reale prima del lock
-      if(
-        el.innerText &&
-        el.innerText !== "—"
-      ){
-        el.dataset.realValue = el.innerText;
-      }
-
-      el.innerText = "—";
-
-      el.style.filter = "blur(6px)";
-      el.style.webkitFilter = "blur(6px)";
-      el.style.opacity = "0.4";
-
-      // 🔥 cleanup
-      el.classList.remove(
-        "pro-blur",
-        "blur-content"
-      );
-
-    });
-
-  }
+  });
 
 }
 
+// =====================================
+// 🟡 INVESTOR → PARTIAL ACCESS
+// =====================================
+
+else if(access.isInvestor){
+
+  console.log("🟡 INVESTOR PARTIAL ACCESS");
+
+  [
+    qrProfit, elAnnual,
+    qrMonth, elMonthly,
+    qrBreak, elBreak,
+    qrRev, elRevenue
+  ].forEach(el=>{
+
+    if(!el) return;
+
+    // 🔥 salva valore reale
+    if(
+      el.innerText &&
+      el.innerText !== "—"
+    ){
+      el.dataset.realValue = el.innerText;
+    }
+
+    // 🔥 investor vede KPI
+    el.style.filter = "none";
+    el.style.webkitFilter = "none";
+    el.style.opacity = "1";
+
+    el.classList.remove(
+      "locked",
+      "premium-lock"
+    );
+
+  });
+
+}
+
+// =====================================
+// 🔒 FREE USERS ONLY
+// =====================================
+
+else if(access.isFree){
+
+  console.log("🔒 KPI HARD LOCK (FREE)");
+
+  [
+    qrProfit, elAnnual,
+    qrMonth, elMonthly,
+    qrBreak, elBreak,
+    qrRev, elRevenue
+  ].forEach(el=>{
+
+    if(!el) return;
+
+    // 🔥 salva valore reale
+    if(
+      el.innerText &&
+      el.innerText !== "—"
+    ){
+      el.dataset.realValue = el.innerText;
+    }
+
+    el.innerText = "—";
+
+    el.style.filter = "blur(6px)";
+    el.style.webkitFilter = "blur(6px)";
+    el.style.opacity = "0.4";
+
+    el.classList.remove(
+      "pro-blur",
+      "blur-content"
+    );
+
+  });
+
+}
 // =====================================
 // ⛔ ACCESS DEBUG
 // =====================================
