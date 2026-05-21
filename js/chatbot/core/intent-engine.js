@@ -133,133 +133,160 @@ const applyIntent = (config = {}) => {
 
 }
 
-      intent: "education",
+ // ===========================================
+// 📈 ROI ANALYSIS
+// Silicon Valley Finance Intent
+// ===========================================
 
-      confidence: 0.99,
+const roiWords = [
 
-      category: "education",
+  // 🇮🇹 ITALIANO
+  "roi",
+  "rendimento",
 
-      requiresCalculation: false,
+  "profitto",
+  "guadagno",
 
-      requiresMarketData: false,
+  "redditività",
 
-      requiresRiskAnalysis: false,
+  "ritorno investimento",
 
-      requiresMortgageAnalysis: false,
+  "ritorno economico",
 
-      requiresComparison: false
+  "margine",
 
-    };
+  "quanto rende",
 
-  }
+  "resa investimento",
 
-  // ===========================================
-  // 📈 ROI
-  // ===========================================
+  // 🇬🇧 ENGLISH
+  "returns",
+  "yield",
 
-  const roiWords = [
+  "profit",
+  "profitability",
 
-    // 🇮🇹 ITALIANO
-    "roi",
-    "rendimento",
+  "return on investment",
 
-    "profitto",
-    "guadagno",
+  "investment return",
 
-    "redditività",
+  "financial return",
 
-    "ritorno investimento",
+  "investment yield"
 
-    // 🇬🇧 ENGLISH
-    "returns",
-    "yield",
+];
 
-    "profit",
-    "profitability",
+if(
+  roiWords.some(word =>
+    text.includes(word)
+  )
+){
 
-    "return on investment"
+  applyIntent({
 
-  ];
+    intent:
+      "roi_analysis",
 
-  if(
-    roiWords.some(word =>
-      text.includes(word)
-    )
-  ){
+    category:
+      "finance",
 
-    result.intent =
-      "roi_analysis";
+    confidence:
+      0.95,
 
-    result.category =
-      "finance";
+    priority:
+      70,
 
-    result.confidence =
-      0.95;
+    requiresCalculation:
+      true
 
-    result.requiresCalculation =
-      true;
+  });
 
-  }
-
-  // ===========================================
-  // 💸 CASHFLOW
-  // ===========================================
-
-  const cashflowWords = [
-
-    // 🇮🇹 ITALIANO
-    "cashflow",
-    "cash flow",
-
-    "flusso",
-    "flusso cassa",
-
-    "entrate",
-    "uscite",
-
-    "utile netto",
-
-    "profitto netto",
-
-    "guadagno mensile",
-
-    // 🇬🇧 ENGLISH
-    "cashflow",
-    "cash flow",
-
-    "income",
-    "expenses",
-
-    "net profit",
-
-    "monthly income",
-
-    "monthly profit"
-
-  ];
-
-  if(
-    cashflowWords.some(word =>
-      text.includes(word)
-    )
-  ){
-
-    result.intent =
-      "cashflow_analysis";
-
-    result.category =
-      "finance";
-
-    result.confidence =
-      0.95;
-
-    result.requiresCalculation =
-      true;
-
-  }
+}
 
 // ===========================================
-// ⚠️ RISK
+// 💸 CASHFLOW ANALYSIS
+// Silicon Valley Liquidity Engine
+// ===========================================
+
+const cashflowWords = [
+
+  // 🇮🇹 ITALIANO
+  "cashflow",
+  "cash flow",
+
+  "flusso",
+  "flusso cassa",
+
+  "entrate",
+  "uscite",
+
+  "utile netto",
+
+  "profitto netto",
+
+  "guadagno mensile",
+
+  "liquidità",
+
+  "cassa",
+
+  "profitto operativo",
+
+  "margine operativo",
+
+  // 🇬🇧 ENGLISH
+  "cashflow",
+  "cash flow",
+
+  "income",
+  "expenses",
+
+  "net profit",
+
+  "monthly income",
+
+  "monthly profit",
+
+  "liquidity",
+
+  "operating profit",
+
+  "operational margin",
+
+  "monthly cashflow"
+
+];
+
+if(
+  cashflowWords.some(word =>
+    text.includes(word)
+  )
+){
+
+  applyIntent({
+
+    intent:
+      "cashflow_analysis",
+
+    category:
+      "finance",
+
+    confidence:
+      0.95,
+
+    priority:
+      75,
+
+    requiresCalculation:
+      true
+
+  });
+
+}
+
+// ===========================================
+// ⚠️ RISK ANALYSIS
+// Silicon Valley Risk Intelligence
 // ===========================================
 
 const riskWords = [
@@ -283,6 +310,16 @@ const riskWords = [
   "mercato rischioso",
   "investimento rischioso",
 
+  "saturazione",
+
+  "crollo mercato",
+
+  "instabilità",
+
+  "rischio operativo",
+
+  "rischio finanziario",
+
   // 🇬🇧 ENGLISH
   "risk",
   "risky",
@@ -301,7 +338,15 @@ const riskWords = [
   "fragile",
 
   "risky investment",
-  "risky market"
+  "risky market",
+
+  "market crash",
+
+  "market saturation",
+
+  "operational risk",
+
+  "financial risk"
 
 ];
 
@@ -311,22 +356,30 @@ if(
   )
 ){
 
-  result.intent =
-    "risk_analysis";
+  applyIntent({
 
-  result.category =
-    "risk";
+    intent:
+      "risk_analysis",
 
-  result.confidence =
-    0.92;
+    category:
+      "risk",
 
-  result.requiresRiskAnalysis =
-    true;
+    confidence:
+      0.92,
+
+    priority:
+      80,
+
+    requiresRiskAnalysis:
+      true
+
+  });
 
 }
 
 // ===========================================
-// 🏦 MORTGAGE
+// 🏦 MORTGAGE ANALYSIS
+// Silicon Valley Mortgage Intelligence
 // ===========================================
 
 const mortgageWords = [
@@ -359,6 +412,16 @@ const mortgageWords = [
 
   "finanziato",
 
+  "interessi",
+
+  "spread",
+
+  "banca",
+
+  "dscr",
+
+  "sostenibilità rata",
+
   // 🇬🇧 ENGLISH
   "mortgage",
   "loan",
@@ -384,7 +447,17 @@ const mortgageWords = [
   "mortgage duration",
   "loan duration",
 
-  "financed property"
+  "financed property",
+
+  "bank financing",
+
+  "mortgage sustainability",
+
+  "loan sustainability",
+
+  "interest payment",
+
+  "mortgage interest"
 
 ];
 
@@ -396,30 +469,30 @@ if(
 
   applyIntent({
 
-  intent:
-    "mortgage_analysis",
+    intent:
+      "mortgage_analysis",
 
-  category:
-    "mortgage",
+    category:
+      "mortgage",
 
-  confidence:
-    0.95,
+    confidence:
+      0.95,
 
-  priority:
-    80,
+    priority:
+      80,
 
-  requiresMortgageAnalysis:
-    true,
+    requiresMortgageAnalysis:
+      true,
 
-  requiresCalculation:
-    true
+    requiresCalculation:
+      true
 
-});
+  });
 
 }
-
 // ===========================================
 // 🌍 MARKET ANALYSIS
+// Silicon Valley Market Intelligence
 // ===========================================
 
 if(
@@ -447,6 +520,20 @@ if(
 
     "short rent",
 
+    "mercato turistico",
+
+    "domanda turistica",
+
+    "trend turistico",
+
+    "mercato airbnb",
+
+    "mercato b&b",
+
+    "saturazione",
+
+    "competizione",
+
     // 🇬🇧 ENGLISH
     "market",
     "market analysis",
@@ -469,28 +556,46 @@ if(
     "milan occupancy",
 
     "short-term rental",
-    "short rent market"
+    "short rent market",
+
+    "tourism market",
+
+    "tourism demand",
+
+    "tourism trend",
+
+    "market saturation",
+
+    "competition"
 
   )
 
 ){
 
-  result.intent =
-    "market_analysis";
+  applyIntent({
 
-  result.category =
-    "market";
+    intent:
+      "market_analysis",
 
-  result.confidence =
-    0.94;
+    category:
+      "market",
 
-  result.requiresMarketData =
-    true;
+    confidence:
+      0.94,
+
+    priority:
+      60,
+
+    requiresMarketData:
+      true
+
+  });
 
 }
 
 // ===========================================
 // 💼 INVESTMENT ADVISOR
+// Silicon Valley Investment Advisor
 // ===========================================
 
 if(
@@ -515,6 +620,18 @@ if(
     "investire a roma",
     "investire a milano",
 
+    "miglior investimento",
+
+    "migliore zona",
+
+    "quale città scegliere",
+
+    "quale mercato scegliere",
+
+    "che città conviene",
+
+    "investimento migliore",
+
     // 🇬🇧 ENGLISH
     "should i open",
     "where to invest",
@@ -534,28 +651,49 @@ if(
     "invest in milan",
 
     "best city to invest",
-    "best market to invest"
+    "best market to invest",
+
+    "best investment",
+
+    "best area",
+
+    "best location",
+
+    "where should i invest",
+
+    "which market is better"
 
   )
 
 ){
 
-  result.intent =
-    "investment_advisor";
+  applyIntent({
 
-  result.category =
-    "strategy";
+    intent:
+      "investment_advisor",
 
-  result.confidence =
-    0.96;
+    category:
+      "strategy",
 
-  result.requiresMarketData =
-    true;
+    confidence:
+      0.96,
+
+    priority:
+      85,
+
+    requiresMarketData:
+      true,
+
+    requiresCalculation:
+      true
+
+  });
 
 }
 
 // ===========================================
-// ⚖️ COMPARISON
+// ⚖️ COMPARISON ENGINE
+// Silicon Valley Comparison Layer
 // ===========================================
 
 const comparisonWords = [
@@ -572,6 +710,14 @@ const comparisonWords = [
 
   "differenza",
 
+  "più conveniente",
+
+  "più profittevole",
+
+  "migliore",
+
+  "confronta",
+
   // 🇬🇧 ENGLISH
   "compare",
   "comparison",
@@ -581,7 +727,13 @@ const comparisonWords = [
   "better",
   "worse",
 
-  "versus"
+  "versus",
+
+  "more profitable",
+
+  "best option",
+
+  "compare investment"
 
 ];
 
@@ -591,22 +743,33 @@ if(
   )
 ){
 
-  result.intent =
-    "comparison";
+  applyIntent({
 
-  result.category =
-    "comparison";
+    intent:
+      "comparison",
 
-  result.confidence =
-    0.93;
+    category:
+      "comparison",
 
-  result.requiresComparison =
-    true;
+    confidence:
+      0.93,
+
+    priority:
+      65,
+
+    requiresComparison:
+      true,
+
+    requiresCalculation:
+      true
+
+  });
 
 }
 
- // ===========================================
-// 🧠 STRATEGY
+// ===========================================
+// 🧠 EXECUTIVE STRATEGY ENGINE
+// Silicon Valley Executive Intelligence
 // ===========================================
 
 const strategyWords = [
@@ -662,6 +825,14 @@ const strategyWords = [
   "investimento sostenibile",
   "questo investimento",
 
+  "simulazione investimento",
+
+  "stress test",
+
+  "scenario peggiore",
+
+  "scenario migliore",
+
   // 🇬🇧 ENGLISH
   "strategy",
   "investment strategy",
@@ -711,7 +882,13 @@ const strategyWords = [
   "sustainable investment",
 
   "is this investment good",
-  "is this investment worth it"
+  "is this investment worth it",
+
+  "stress test",
+
+  "worst case scenario",
+
+  "best case scenario"
 
 ];
 
@@ -721,120 +898,191 @@ if(
   )
 ){
 
-  // =====================================
-  // 🧠 EXECUTIVE AI
-  // =====================================
+  applyIntent({
 
-  if(
+    intent:
+      "investment_executive",
 
-    has(
-
-      // 🇮🇹 ITALIANO
-      "analisi executive",
+    category:
       "executive",
 
-      "analisi completa",
-      "analisi avanzata",
+    confidence:
+      0.99,
 
-      "fammi un'analisi",
-      "analizza investimento",
+    priority:
+      95,
 
-      "valuta investimento",
-      "conviene ancora",
+    requiresCalculation:
+      true,
 
-      "analisi professionale",
-      "analisi ai",
+    requiresRiskAnalysis:
+      true,
 
-      "come posso migliorare",
-      "migliorare rendimento",
+    requiresMarketData:
+      true
 
-      "cashflow reale",
+  });
 
-      "sostenibilità investimento",
-      "sostenibile",
-      "è sostenibile",
-
-      "investimento sostenibile",
-
-      "questo investimento",
-      "conviene questo investimento",
-
-      "vale la pena",
-      "conveniente",
-
-      // 🇬🇧 ENGLISH
-      "sustainable",
-      "sustainability",
-
-      "is it sustainable",
-      "investment sustainability",
-
-      "sustainable investment",
-
-      "is this investment good",
-      "is this investment worth it",
-
-      "worth it",
-      "does it make sense",
-
-      "should i invest",
-      "good investment",
-
-      "executive analysis",
-      "advanced analysis",
-
-      "analyze investment",
-      "analyze this investment",
-
-      "evaluate investment",
-
-      "profitable investment"
-
-    )
-
-  ){
-
-    result.intent =
-      "investment_executive";
-
-    result.category =
-      "executive";
-
-    result.confidence =
-      0.99;
-
-    result.requiresCalculation =
-      true;
-
-    result.requiresRiskAnalysis =
-      true;
-
-    result.requiresMarketData =
-      true;
-
-  }
-
+}
   // =====================================
-  // 📈 STANDARD STRATEGY
-  // =====================================
+// 🧠 EXECUTIVE AI ENGINE
+// Silicon Valley Executive Intelligence
+// =====================================
 
-  else{
+if(
 
-    result.intent =
-      "investment_strategy";
+  has(
 
-    result.category =
-      "strategy";
+    // 🇮🇹 ITALIANO
+    "analisi executive",
+    "executive",
 
-    result.confidence =
-      0.91;
+    "analisi completa",
+    "analisi avanzata",
 
-  }
+    "fammi un'analisi",
+    "analizza investimento",
+
+    "valuta investimento",
+    "conviene ancora",
+
+    "analisi professionale",
+    "analisi ai",
+
+    "come posso migliorare",
+    "migliorare rendimento",
+
+    "cashflow reale",
+
+    "sostenibilità investimento",
+    "sostenibile",
+    "è sostenibile",
+
+    "investimento sostenibile",
+
+    "questo investimento",
+    "conviene questo investimento",
+
+    "vale la pena",
+    "conveniente",
+
+    "scenario peggiore",
+    "scenario migliore",
+
+    "stress test",
+
+    "analisi rischio",
+
+    "analisi cashflow",
+
+    "simulazione avanzata",
+
+    "analisi completa b&b",
+
+    "analizza questo b&b",
+
+    // 🇬🇧 ENGLISH
+    "sustainable",
+    "sustainability",
+
+    "is it sustainable",
+    "investment sustainability",
+
+    "sustainable investment",
+
+    "is this investment good",
+    "is this investment worth it",
+
+    "worth it",
+    "does it make sense",
+
+    "should i invest",
+    "good investment",
+
+    "executive analysis",
+    "advanced analysis",
+
+    "analyze investment",
+    "analyze this investment",
+
+    "evaluate investment",
+
+    "profitable investment",
+
+    "worst case scenario",
+    "best case scenario",
+
+    "stress test",
+
+    "cashflow analysis",
+
+    "risk analysis",
+
+    "advanced simulation",
+
+    "executive ai"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent:
+      "investment_executive",
+
+    category:
+      "executive",
+
+    confidence:
+      0.99,
+
+    priority:
+      95,
+
+    requiresCalculation:
+      true,
+
+    requiresRiskAnalysis:
+      true,
+
+    requiresMarketData:
+      true
+
+  });
+
+}
+
+// =====================================
+// 📈 STANDARD STRATEGY
+// Silicon Valley Strategy Layer
+// =====================================
+
+else{
+
+  applyIntent({
+
+    intent:
+      "investment_strategy",
+
+    category:
+      "strategy",
+
+    confidence:
+      0.91,
+
+    priority:
+      50
+
+  });
+
+}
 
 }
 
 // ===========================================
 // 💳 SUBSCRIPTIONS / PRICING
+// Silicon Valley SaaS Monetization Layer
 // ===========================================
 
 const subscriptionWords = [
@@ -866,6 +1114,12 @@ const subscriptionWords = [
   "funzioni pro",
   "funzioni investor",
 
+  "funzioni premium",
+
+  "accesso premium",
+
+  "vantaggi pro",
+
   // 🇬🇧 ENGLISH
   "subscription",
   "subscriptions",
@@ -882,7 +1136,13 @@ const subscriptionWords = [
   "plan difference",
 
   "pro features",
-  "investor features"
+  "investor features",
+
+  "premium features",
+
+  "premium access",
+
+  "upgrade plan"
 
 ];
 
@@ -892,18 +1152,27 @@ if(
   )
 ){
 
-  result.intent =
-    "subscriptions";
+  applyIntent({
 
-  result.category =
-    "business";
+    intent:
+      "subscriptions",
 
-  result.confidence =
-    0.97;
+    category:
+      "business",
+
+    confidence:
+      0.97,
+
+    priority:
+      40
+
+  });
 
 }
- // ===========================================
+
+// ===========================================
 // 👋 GREETING
+// Silicon Valley Conversational Layer
 // ===========================================
 
 const greetingWords = [
@@ -916,13 +1185,17 @@ const greetingWords = [
   "buongiorno",
   "buonasera",
 
+  "buonanotte",
+
   // 🇬🇧 ENGLISH
   "hello",
   "hi",
   "hey",
 
   "good morning",
-  "good evening"
+  "good evening",
+
+  "good night"
 
 ];
 
@@ -932,19 +1205,27 @@ if(
   )
 ){
 
-  result.intent =
-    "greeting";
+  applyIntent({
 
-  result.category =
-    "social";
+    intent:
+      "greeting",
 
-  result.confidence =
-    1;
+    category:
+      "social",
+
+    confidence:
+      1,
+
+    priority:
+      1000
+
+  });
 
 }
 
 // ===========================================
 // 🧠 FALLBACK SMART
+// Silicon Valley AI Safety Layer
 // ===========================================
 
 if(
@@ -952,159 +1233,255 @@ if(
   result.intent === "generic"
 
 ){
-
 // =======================================
 // 📚 EDUCATION / FINANCE
+// Silicon Valley Knowledge Intelligence
 // =======================================
 
 if(
 
   has(
 
-      // 🇮🇹 ITALIANO
-      "roi",
-      "cashflow",
+    // 🇮🇹 ITALIANO
+    "roi",
+    "cashflow",
 
-      "break even",
-      "dscr",
+    "break even",
+    "dscr",
 
-      "profitto",
-      "rendimento",
+    "profitto",
+    "rendimento",
 
-      "tasse",
-      "fiscalità",
-      "imposte",
+    "tasse",
+    "fiscalità",
+    "imposte",
 
-      "iva",
-      "cedolare",
+    "iva",
+    "cedolare",
 
-      "mutuo",
-      "cash flow",
+    "mutuo",
+    "cash flow",
 
-      "sostenibilità",
+    "sostenibilità",
 
-      // 🇬🇧 ENGLISH
-      "cash flow",
+    "rogito",
+    "notaio",
 
-      "profit",
-      "yield",
+    "catasto",
 
-      "returns",
+    "imu",
+    "irpef",
 
-      "tax",
-      "taxes",
+    "plusvalenza",
 
-      "mortgage",
+    "leva finanziaria",
 
-      "sustainability"
+    "ltv",
 
-    )
+    "occupazione media",
 
-  ){
+    "benchmark",
 
-    result.intent =
-      "education";
+    "mercato short rent",
 
-    result.category =
-      "education";
+    "affitti brevi",
 
-    result.confidence =
-      0.92;
+    "airbnb",
 
-  }
+    // 🇬🇧 ENGLISH
+    "cash flow",
 
-  // =======================================
-  // 🌍 MARKET
-  // =======================================
+    "profit",
+    "yield",
 
-  else if(
+    "returns",
 
-    has(
+    "tax",
+    "taxes",
 
-      // 🇮🇹 ITALIANO
-      "roma",
-      "milano",
-      "napoli",
-      "firenze",
+    "mortgage",
 
-      "benchmark",
-      "occupazione",
+    "sustainability",
 
-      "mercato",
+    "closing costs",
 
-      // 🇬🇧 ENGLISH
-      "rome",
-      "milan",
-      "naples",
-      "florence",
+    "notary",
 
+    "property tax",
+
+    "capital gain",
+
+    "financial leverage",
+
+    "ltv",
+
+    "occupancy",
+
+    "short rent",
+
+    "airbnb"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent:
+      "education",
+
+    category:
+      "education",
+
+    confidence:
+      0.92,
+
+    priority:
+      90
+
+  });
+
+}
+
+// =======================================
+// 🌍 MARKET ANALYSIS
+// Silicon Valley Market Intelligence
+// =======================================
+
+else if(
+
+  has(
+
+    // 🇮🇹 ITALIANO
+    "roma",
+    "milano",
+    "napoli",
+    "firenze",
+
+    "benchmark",
+    "occupazione",
+
+    "mercato",
+
+    "mercato turistico",
+
+    "domanda turistica",
+
+    "stagionalità",
+
+    "trend mercato",
+
+    // 🇬🇧 ENGLISH
+    "rome",
+    "milan",
+    "naples",
+    "florence",
+
+    "market",
+    "occupancy",
+
+    "market analysis",
+
+    "tourism market",
+
+    "tourism demand",
+
+    "seasonality",
+
+    "market trend"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent:
+      "market_analysis",
+
+    category:
       "market",
-      "occupancy",
 
-      "market analysis"
+    confidence:
+      0.75,
 
-    )
+    priority:
+      60,
 
-  ){
+    requiresMarketData:
+      true
 
-    result.intent =
-      "market_analysis";
+  });
 
-    result.category =
-      "market";
+}
 
-    result.confidence =
-      0.75;
+// =======================================
+// 💼 GENERIC INVESTMENT
+// Silicon Valley Strategy Layer
+// =======================================
 
-    result.requiresMarketData =
-      true;
+else if(
 
-  }
+  has(
 
-  // =======================================
-  // 💼 GENERIC INVESTMENT
-  // =======================================
+    // 🇮🇹 ITALIANO
+    "investimento",
+    "investire",
 
-  else if(
+    "conviene",
+    "conveniente",
 
-    has(
+    "vale la pena",
 
-      // 🇮🇹 ITALIANO
-      "investimento",
-      "investire",
+    "aprire b&b",
 
-      "conviene",
-      "conveniente",
+    "aprire airbnb",
 
-      "vale la pena",
+    "business b&b",
 
-      // 🇬🇧 ENGLISH
-      "investment",
-      "invest",
+    "business airbnb",
 
-      "worth it",
+    // 🇬🇧 ENGLISH
+    "investment",
+    "invest",
 
-      "good investment"
+    "worth it",
 
-    )
+    "good investment",
 
-  ){
+    "open airbnb",
 
-    result.intent =
-      "investment_strategy";
+    "open bnb",
 
-    result.category =
-      "strategy";
+    "airbnb business"
 
-    result.confidence =
-      0.70;
+  )
 
-  }
+){
+
+  applyIntent({
+
+    intent:
+      "investment_strategy",
+
+    category:
+      "strategy",
+
+    confidence:
+      0.70,
+
+    priority:
+      50
+
+  });
+
+}
 
 }
 
 // ===========================================
 // 🧠 ENTITY CONTEXT BOOST
+// Silicon Valley Contextual AI Layer
 // ===========================================
 
 if(
