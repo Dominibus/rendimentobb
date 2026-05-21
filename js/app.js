@@ -2523,9 +2523,14 @@ function runPostAnalysis(result, context){
   marketCity: market,
 
   realCity:
-    customLocation ||
-    market ||
-    "roma",
+
+  document.getElementById("custom-location")?.value ||
+
+  document.getElementById("market-city")?.value ||
+
+  market ||
+
+  "roma",
 
   // =====================================
   // 📈 ROI
