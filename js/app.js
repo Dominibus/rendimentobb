@@ -2532,15 +2532,17 @@ function runPostAnalysis(result, context){
 
   "roma",
 
-  // =====================================
-  // 📈 ROI
-  // =====================================
+// =====================================
+// 📈 ROI
+// =====================================
 
-  roi: finalROI,
+roi: finalROI,
 
-  realROI: finalROI,
+realROI: finalROI,
 
-  visualROI: visualROI || finalROI,
+  visualROI:
+  liveData.visualROI ??
+  finalROI,
 
   // =====================================
   // ⚠️ RISK
