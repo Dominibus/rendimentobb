@@ -3627,6 +3627,23 @@ window.lastAnalysisData = {
 
 };
 
+    console.log("🔥 SAVE DEBUG", {
+
+  roi,
+  gross,
+  net,
+  expenses,
+  price,
+  equity,
+  annualRevenue,
+  annualProfit,
+  safeNet,
+  totalExpenses,
+  mortgageAmount,
+  monthlyMortgagePayment
+
+});
+
 console.log(
   "💾 LAST ANALYSIS SAVED:",
   window.lastAnalysisData
