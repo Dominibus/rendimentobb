@@ -437,57 +437,7 @@ const rawResponse =
 
     : result?.response || {};
 
-const response = {
-
-  textIT:
-
-    rawResponse?.textIT ||
-
-    result?.textIT ||
-
-    rawResponse?.text ||
-
-    result?.text ||
-
-    rawResponse?.message ||
-
-    result?.message ||
-
-    "",
-
-  textEN:
-
-    rawResponse?.textEN ||
-
-    result?.textEN ||
-
-    rawResponse?.text ||
-
-    result?.text ||
-
-    rawResponse?.message ||
-
-    result?.message ||
-
-    "",
-
-  text:
-
-    rawResponse?.text ||
-
-    result?.text ||
-
-    "",
-
-  message:
-
-    rawResponse?.message ||
-
-    result?.message ||
-
-    ""
-
-};
+const response = rawResponse;
 
 const entities =
   result?.entities || {};
