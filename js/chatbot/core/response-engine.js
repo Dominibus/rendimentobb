@@ -529,30 +529,68 @@ run a simulation inside the main simulator.`,
 
 }
 
-  // ===========================================
-  // 📈 ROI RESPONSE
-  // ===========================================
+// ===========================================
+// 🧠 RESPONSE PRIORITY SYSTEM
+// ===========================================
 
-  if(
-    intent.intent === "roi_analysis"
-  ){
+const responseBlocksIT = [];
 
-    response.type =
-      "roi";
+const responseBlocksEN = [];
 
-    response.confidence =
-      0.95;
+function pushResponseBlock({
 
-    if(roi >= 15){
+  priority = 1,
 
-      response.signals.push(
-  "high_roi"
-);
+  textIT = "",
 
-const marketROI =
-  market?.avgROI || "8-10%";
+  textEN = ""
 
-response.textIT =
+}){
+
+  responseBlocksIT.push({
+    priority,
+    text: textIT
+  });
+
+  responseBlocksEN.push({
+    priority,
+    text: textEN
+  });
+
+}
+
+// ===========================================
+// 📈 ROI RESPONSE
+// ===========================================
+
+if(
+  intent.intent === "roi_analysis"
+){
+
+  response.type =
+    "roi";
+
+  response.confidence =
+    0.95;
+
+  // =======================================
+  // 🚀 HIGH ROI
+  // =======================================
+
+  if(roi >= 15){
+
+    response.signals.push(
+      "high_roi"
+    );
+
+    const marketROI =
+      market?.avgROI || "8-10%";
+
+    pushResponseBlock({
+
+      priority: 10,
+
+      textIT:
 
 `🚀 ROI estremamente elevato.
 
@@ -576,9 +614,9 @@ ${roi >= 40
 ${occupancy}% 
 
 ⚠️ Risk score:
-${risk}/100`;
+${risk}/100`,
 
-response.textEN =
+      textEN:
 
 `🚀 Extremely high ROI detected.
 
@@ -602,52 +640,73 @@ ${roi >= 40
 ${occupancy}%
 
 ⚠️ Risk score:
-${risk}/100`;
-    }
+${risk}/100`
 
-    else if(roi >= 8){
+    });
 
-      response.signals.push(
-        "medium_roi"
-      );
+  }
 
-      response.textIT =
+  // =======================================
+  // 📈 MEDIUM ROI
+  // =======================================
+
+  else if(roi >= 8){
+
+    response.signals.push(
+      "medium_roi"
+    );
+
+    pushResponseBlock({
+
+      priority: 8,
+
+      textIT:
 
 `📈 ROI potenzialmente sostenibile.
 
 📊 ROI simulato:
 ${roi.toFixed(1)}%
 
-💡 L'investimento sembra equilibrato ma dipende da occupazione e costi.`;
+💡 L'investimento sembra equilibrato ma dipende da occupazione e costi.`,
 
-      response.textEN =
+      textEN:
 
 `📈 ROI appears potentially sustainable.
 
 📊 Simulated ROI:
 ${roi.toFixed(1)}%
 
-💡 The investment appears balanced but depends on occupancy and costs.`;
+💡 The investment appears balanced but depends on occupancy and costs.`
 
-    }
+    });
 
-    else{
+  }
 
-  response.signals.push(
-    "low_roi"
-  );
+  // =======================================
+  // 📉 LOW ROI
+  // =======================================
 
-  // =====================================
-  // 🚨 NEGATIVE ROI
-  // =====================================
-
-  if(roi <= 0){
+  else{
 
     response.signals.push(
-      "negative_roi"
+      "low_roi"
     );
 
-    response.textIT =
+    // =====================================
+    // 🚨 NEGATIVE ROI
+    // =====================================
+
+    if(roi <= 0){
+
+      response.signals.push(
+        "negative_roi"
+      );
+
+      pushResponseBlock({
+
+        priority: 9,
+
+        textIT:
 
 `🚨 Investimento operativo in perdita.
 
@@ -662,9 +721,9 @@ ${roi.toFixed(1)}%
 • prezzo notte
 • occupazione media
 • costi fissi
-• leva finanziaria`;
+• leva finanziaria`,
 
-    response.textEN =
+        textEN:
 
 `🚨 Investment appears operationally unprofitable.
 
@@ -679,40 +738,47 @@ ${roi.toFixed(1)}%
 • nightly pricing
 • average occupancy
 • fixed costs
-• financial leverage`;
+• financial leverage`
 
-  }
+      });
 
-// =====================================
-// ⚠️ LOW ROI
-// =====================================
+    }
 
-else{
+    // =====================================
+    // ⚠️ LOW ROI
+    // =====================================
 
-  response.textIT =
+    else{
+
+      pushResponseBlock({
+
+        priority: 6,
+
+        textIT:
 
 `⚠️ ROI relativamente basso.
 
 📊 ROI simulato:
 ${roi.toFixed(1)}%
 
-💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`;
+💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`,
 
-  response.textEN =
+        textEN:
 
 `⚠️ ROI appears relatively low.
 
 📊 Simulated ROI:
 ${roi.toFixed(1)}%
 
-💡 ADR, occupancy or operational cost optimization may be required.`;
+💡 ADR, occupancy or operational cost optimization may be required.`
 
-}
+      });
 
     }
 
   }
 
+}
 // ===========================================
 // 💰 CASHFLOW RESPONSE
 // ===========================================
@@ -2186,6 +2252,54 @@ response.signals = [
   }) || [])
 
 ];
+
+// ===========================================
+// 🧠 FINAL RESPONSE MERGE
+// ===========================================
+
+if(responseBlocksIT.length){
+
+  response.textIT =
+
+    responseBlocksIT
+
+      .sort((a,b)=>
+        b.priority - a.priority
+      )
+
+      .map(block => block.text)
+
+      .filter(Boolean)
+
+      .filter((v,i,self)=>
+        self.indexOf(v) === i
+      )
+
+      .join("\n\n");
+
+}
+
+if(responseBlocksEN.length){
+
+  response.textEN =
+
+    responseBlocksEN
+
+      .sort((a,b)=>
+        b.priority - a.priority
+      )
+
+      .map(block => block.text)
+
+      .filter(Boolean)
+
+      .filter((v,i,self)=>
+        self.indexOf(v) === i
+      )
+
+      .join("\n\n");
+
+}
 
 // ===========================================
 // 🧠 DEBUG
