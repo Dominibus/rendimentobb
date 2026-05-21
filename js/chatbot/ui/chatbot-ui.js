@@ -429,17 +429,8 @@ I can help analyze:
 // 🧠 SAFE DATA
 // =====================================
 
-const rawResponse =
-
-  result?.response || {};
-
 const response =
-
-  rawResponse?.response ||
-
-  rawResponse ||
-
-  {};
+  result || {};
 
 const entities =
   result?.entities || {};
@@ -461,6 +452,7 @@ console.log(
   "🧠 TEXT EN:",
   response?.textEN
 );
+      
       // =====================================
       // 🌍 LANGUAGE
       // =====================================
