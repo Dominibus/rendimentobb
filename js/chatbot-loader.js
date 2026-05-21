@@ -303,7 +303,7 @@
         !!window.rbDetectIntent,
 
       memoryEngine:
-        !!window.rbGetConversationContext
+        !!window.rbGetConversationContext,
 
       responseEngine:
         !!window.rbGenerateResponse,
