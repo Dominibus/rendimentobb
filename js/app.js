@@ -3635,7 +3635,6 @@ window.lastAnalysisData = {
   expenses,
   price,
   equity,
-  annualRevenue,
   annualProfit,
   safeNet,
   totalExpenses,
