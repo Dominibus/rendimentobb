@@ -2536,13 +2536,14 @@ function runPostAnalysis(result, context){
 // 📈 ROI
 // =====================================
 
-roi: finalROI,
+roi: Number(finalROI) || 0,
 
-realROI: finalROI,
+realROI: Number(finalROI) || 0,
 
-  visualROI:
-  liveData.visualROI ??
-  finalROI,
+visualROI:
+  Number(visualROI) ||
+  Number(finalROI) ||
+  0,
 
   // =====================================
   // ⚠️ RISK
