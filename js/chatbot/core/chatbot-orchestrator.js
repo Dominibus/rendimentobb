@@ -382,22 +382,26 @@ const partialResponse =
   });
 
   // 🔥 IGNORA RISPOSTE VUOTE/FALLBACK
-  if(
+  const isFallback =
 
-    !partialResponse ||
+  partialResponse?.textIT?.includes(
+    "Posso aiutarti ad analizzare"
+  );
 
-    (
-      partialResponse.textIT &&
-      partialResponse.textIT.includes(
-        "Posso aiutarti ad analizzare"
-      )
-    )
+if(
 
-  ){
+  !partialResponse ||
 
-    continue;
+  (
+    isFallback &&
+    currentIntent !== "greeting"
+  )
 
-  }
+){
+
+  continue;
+
+}
 
   if(partialResponse?.textIT){
 
