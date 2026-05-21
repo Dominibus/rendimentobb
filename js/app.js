@@ -3630,7 +3630,7 @@ window.lastAnalysisData = {
   expenses,
   price,
   equity,
-  annualProfit,
+  annualProfit: net,
   safeNet,
   totalExpenses,
   mortgageAmount,
