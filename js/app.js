@@ -2514,24 +2514,101 @@ function runPostAnalysis(result, context){
 
     window.lastAnalysisData = {
 
-      city: market,
+  // =====================================
+  // 🌍 MARKET
+  // =====================================
 
-      roi: finalROI,
+  city: market,
 
-      risk: riskScore,
+  marketCity: market,
 
-      occupancy: occupancyRate,
+  realCity:
+    customLocation ||
+    market ||
+    "roma",
 
-      pricePerNight: nightly,
+  // =====================================
+  // 📈 ROI
+  // =====================================
 
-      monthlyCosts,
+  roi: finalROI,
 
-      revenueAnnual: annualRevenue,
+  realROI: finalROI,
 
-      propertyPrice,
+  visualROI: visualROI || finalROI,
 
-      mortgagePercent
-    };
+  // =====================================
+  // ⚠️ RISK
+  // =====================================
+
+  risk: riskScore,
+
+  occupancy: occupancyRate,
+
+  // =====================================
+  // 💰 PROPERTY
+  // =====================================
+
+  propertyPrice: propertyPrice,
+
+  equity: equity || 0,
+
+  loan:
+    loanAmount ||
+    mortgageAmount ||
+    0,
+
+  mortgagePercent: mortgagePercent || 0,
+
+  // =====================================
+  // 💸 REVENUE
+  // =====================================
+
+  pricePerNight: nightly,
+
+  monthlyCosts: monthlyCosts || 0,
+
+  revenueAnnual: annualRevenue || 0,
+
+  gross:
+    grossAnnualProfit ||
+    annualRevenue ||
+    0,
+
+  profit:
+    netAnnualProfit ||
+    annualProfit ||
+    0,
+
+  netAfterMortgage:
+    netAfterMortgage ||
+    netAnnualProfit ||
+    0,
+
+  // =====================================
+  // 🏦 MORTGAGE
+  // =====================================
+
+  mortgageRate:
+    mortgageRate ||
+    0,
+
+  monthlyMortgage:
+    monthlyMortgage ||
+    0,
+
+  // =====================================
+  // 🧠 META
+  // =====================================
+
+  timestamp: Date.now()
+
+};
+
+    console.log(
+      "🧠 FULL ANALYSIS DATA:",
+      window.lastAnalysisData
+   );
 
     console.log(
       "🤖 LIVE ANALYSIS SAVED:",
