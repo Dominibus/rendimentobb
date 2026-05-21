@@ -2540,10 +2540,7 @@ roi: Number(finalROI) || 0,
 
 realROI: Number(finalROI) || 0,
 
-visualROI:
-  Number(visualROI) ||
-  Number(finalROI) ||
-  0,
+visualROI: Number(finalROI) || 0,
 
   // =====================================
   // ⚠️ RISK
