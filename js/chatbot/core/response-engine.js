@@ -1719,11 +1719,19 @@ if(reasoningEN.length){
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
 
-response.textIT =
-  executiveIT.join("\n\n");
+pushResponseBlock({
 
-response.textEN =
-  executiveEN.join("\n\n");
+  priority: 10,
+
+  textIT:
+    executiveIT.join("\n\n"),
+
+  textEN:
+    executiveEN.join("\n\n")
+
+});
+
+}
 
 // ===========================================
 // 💡 STRATEGY RESPONSE
