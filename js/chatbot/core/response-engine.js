@@ -251,7 +251,7 @@ const rememberedMortgage =
 
   memory.lastMortgagePercent ||
 
-  mortgagePercent ||
+  liveData.mortgagePercent ||
 
   0;
 
@@ -1587,9 +1587,6 @@ if(executiveInsightsIT.length){
 
 }
 
-  response.textIT =
-    executiveIT.join("\n\n");
-
   // =====================================
   // 🇬🇧 ENGLISH
   // =====================================
@@ -1722,10 +1719,11 @@ if(reasoningEN.length){
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
 
+response.textIT =
+  executiveIT.join("\n\n");
+
 response.textEN =
   executiveEN.join("\n\n");
-
-}
 
 // ===========================================
 // 💡 STRATEGY RESPONSE
