@@ -439,8 +439,6 @@ if(access.isInvestor){
 
 }
 
-}  
-
 // ================= ROI MESSAGE (HOME) =================
 
 function updateROIMessage(roi){
