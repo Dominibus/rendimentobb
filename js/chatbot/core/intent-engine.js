@@ -58,6 +58,53 @@ const entities =
     words.every(word => text.includes(word));
 
 // ===========================================
+// 🧠 SMART HELPERS
+// ===========================================
+
+const startsWithQuestion =
+
+  /^(come|quanto|perché|conviene|is|should|what|how|why)/i
+    .test(text);
+
+const isShortMessage =
+
+  text.split(" ").length <= 5;
+
+const hasNumbers =
+
+  /\d/.test(text);
+
+const containsCity =
+
+  !!entities.city;
+
+const containsROI =
+
+  text.includes("roi") ||
+
+  text.includes("rendimento");
+
+const containsRisk =
+
+  text.includes("rischio") ||
+
+  text.includes("risk");
+
+const containsMortgage =
+
+  text.includes("mutuo") ||
+
+  text.includes("mortgage");
+
+const containsComparison =
+
+  text.includes("vs") ||
+
+  text.includes("confronto") ||
+
+  text.includes("compare");
+
+// ===========================================
 // 🧠 APPLY INTENT
 // ===========================================
 
@@ -739,9 +786,13 @@ const comparisonWords = [
 ];
 
 if(
+
+  containsComparison ||
+
   comparisonWords.some(word =>
     text.includes(word)
   )
+
 ){
 
   applyIntent({
@@ -776,9 +827,7 @@ if(
 const strategyWords = [
 
   // 🇮🇹 ITALIANO
-  "conviene",
-  "conveniente",
-
+ 
   "investire",
   "investimento",
 
@@ -788,8 +837,7 @@ const strategyWords = [
   "profittevole",
   "redditività",
 
-  "vale la pena",
-
+  
   "miglior città",
   "migliore città",
 
@@ -843,7 +891,6 @@ const strategyWords = [
   "profitable",
   "profitability",
 
-  "worth it",
   "does it make sense",
 
   "should i invest",
@@ -1485,6 +1532,35 @@ if(
 
 }
 
+// ===========================================
+// 🧠 FOLLOW-UP DETECTION
+// ===========================================
+
+if(
+
+  result.intent === "generic" &&
+
+  memory?.lastIntent
+
+){
+
+  applyIntent({
+
+    intent:
+      memory.lastIntent,
+
+    category:
+      "followup",
+
+    confidence:
+      0.65,
+
+    priority:
+      45
+
+  });
+
+}  
 // ===========================================
 // 🧠 DEBUG
 // ===========================================
