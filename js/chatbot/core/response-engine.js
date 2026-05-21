@@ -132,46 +132,6 @@ console.log(
 );
 
   // ===========================================
-// 🧠 INVESTMENT SCORE
-// ===========================================
-
-const investmentScore =
-
-  window.rbGenerateInvestmentScore?.({
-
-    roi,
-
-    risk,
-
-    occupancy,
-
-    mortgagePercent:
-      entities.mortgagePercent ||
-
-      liveData.mortgagePercent ||
-
-      0,
-
-    cashflow:
-      liveData.net ||
-
-      liveData.cashflow ||
-
-      0,
-
-    city:
-      cityLabel
-
-  }) ||
-
-  null;
-
-console.log(
-  "🧠 INVESTMENT SCORE:",
-  investmentScore
-);
-
-  // ===========================================
 // 🌍 SAFE MARKET CONTEXT
 // ===========================================
 
@@ -217,6 +177,46 @@ city
   )
 
 : "";
+
+// ===========================================
+// 🧠 INVESTMENT SCORE
+// ===========================================
+
+const investmentScore =
+
+  window.rbGenerateInvestmentScore?.({
+
+    roi,
+
+    risk,
+
+    occupancy,
+
+    mortgagePercent:
+      entities.mortgagePercent ||
+
+      liveData.mortgagePercent ||
+
+      0,
+
+    cashflow:
+      liveData.net ||
+
+      liveData.cashflow ||
+
+      0,
+
+    city:
+      cityLabel
+
+  }) ||
+
+  null;
+
+console.log(
+  "🧠 INVESTMENT SCORE:",
+  investmentScore
+);
 
 
 // ===========================================
