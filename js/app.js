@@ -2579,30 +2579,25 @@ visualROI: Number(finalROI) || 0,
 
   mortgagePercent: mortgagePercent || 0,
 
-  // =====================================
-  // 💸 REVENUE
-  // =====================================
+// 💰 REVENUE
+pricePerNight: nightly,
 
-  pricePerNight: nightly,
+monthlyCosts: monthlyCosts || 0,
 
-  monthlyCosts: monthlyCosts || 0,
+revenueAnnual: annualRevenue || 0,
 
-  revenueAnnual: annualRevenue || 0,
+gross:
+gross ||
+annualRevenue ||
+0,
 
-  gross:
-    grossAnnualProfit ||
-    annualRevenue ||
-    0,
+profit:
+net ||
+0,
 
-  profit:
-    netAnnualProfit ||
-    annualProfit ||
-    0,
-
-  netAfterMortgage:
-    netAfterMortgage ||
-    netAnnualProfit ||
-    0,
+netAfterMortgage:
+net ||
+0,
 
   // =====================================
   // 🏦 MORTGAGE
