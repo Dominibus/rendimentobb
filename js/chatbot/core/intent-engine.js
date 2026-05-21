@@ -1054,33 +1054,6 @@ if(
 
 }
 
-// =====================================
-// 📈 STANDARD STRATEGY
-// Silicon Valley Strategy Layer
-// =====================================
-
-else{
-
-  applyIntent({
-
-    intent:
-      "investment_strategy",
-
-    category:
-      "strategy",
-
-    confidence:
-      0.91,
-
-    priority:
-      50
-
-  });
-
-}
-
-}
-
 // ===========================================
 // 💳 SUBSCRIPTIONS / PRICING
 // Silicon Valley SaaS Monetization Layer
