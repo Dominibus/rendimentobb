@@ -2559,7 +2559,7 @@ visualROI: Number(finalROI) || 0,
   equity: equity || 0,
 
   loan:
-    Number(mortgageAmount) || 0,
+    Number(mortgage) || 0,
 
   mortgagePercent: mortgagePercent || 0,
 
@@ -3626,13 +3626,14 @@ if(riskPreview){
     if(!isUIRefresh){
 
   runPostAnalysis(result, {
-    price,
-    gross,
-    occupancy,
-    priceNight,
-    expenses,
-    equity
-  });
+  price,
+  gross,
+  occupancy,
+  priceNight,
+  expenses,
+  equity,
+  mortgage: mortgage || 0
+});
 
 }    
 
