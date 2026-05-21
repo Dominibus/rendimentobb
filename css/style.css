@@ -18417,3 +18417,36 @@ transform:translateY(-2px);
   align-self:stretch !important;
 
 }
+
+/* =========================================
+   ✅ PRO / INVESTOR / ADMIN FIX
+========================================= */
+
+body.is-paid .pro-only,
+body.is-pro .pro-only,
+body.is-investor .pro-only,
+body.is-admin .pro-only{
+
+  opacity:1 !important;
+
+  filter:none !important;
+  -webkit-filter:none !important;
+  backdrop-filter:none !important;
+
+  pointer-events:auto !important;
+  user-select:auto !important;
+
+}
+
+body.is-paid .pro-only *,
+body.is-pro .pro-only *,
+body.is-investor .pro-only *,
+body.is-admin .pro-only *{
+
+  opacity:1 !important;
+
+  filter:none !important;
+  -webkit-filter:none !important;
+  backdrop-filter:none !important;
+
+}
