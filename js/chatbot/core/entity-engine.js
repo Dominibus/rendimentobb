@@ -60,7 +60,7 @@ window.rbExtractEntities = function(input = ""){
 
   }
 
-  // ===========================================
+    // ===========================================
   // 🧠 ENTITY OBJECT
   // ===========================================
 
@@ -72,24 +72,35 @@ window.rbExtractEntities = function(input = ""){
 
     city: null,
 
+    locationType: null,
+
     // =======================================
     // 💰 FINANCIAL
     // =======================================
 
     price: null,
+
     amount: null,
+
+    budget: null,
 
     roi: null,
 
+    targetROI: null,
+
     nightly: null,
+
     adr: null,
 
     monthlyCosts: null,
+
     yearlyCosts: null,
 
     downPayment: null,
 
     cashflow: null,
+
+    investmentGoal: null,
 
     // =======================================
     // 🏦 MORTGAGE
@@ -98,6 +109,7 @@ window.rbExtractEntities = function(input = ""){
     mortgage: false,
 
     mortgagePercent: null,
+
     mortgageAmount: null,
 
     percentage: null,
@@ -105,6 +117,8 @@ window.rbExtractEntities = function(input = ""){
     rate: null,
 
     years: null,
+
+    financingLevel: null,
 
     // =======================================
     // 🏨 PERFORMANCE
@@ -115,6 +129,8 @@ window.rbExtractEntities = function(input = ""){
     revpar: null,
 
     risk: null,
+
+    riskTolerance: null,
 
     // =======================================
     // 🏠 PROPERTY
@@ -137,7 +153,6 @@ window.rbExtractEntities = function(input = ""){
     rawText: text
 
   };
-
   // ===========================================
   // 🌍 CITY DETECTION
   // ===========================================
@@ -275,6 +290,41 @@ window.rbExtractEntities = function(input = ""){
     }
 
   }
+
+// ===========================================
+// 🎯 TARGET ROI
+// ===========================================
+
+const targetPatterns = [
+
+  /target\s?(\d+(?:[\.,]\d+)?)%?/,
+
+  /almeno\s?(\d+(?:[\.,]\d+)?)%?/,
+
+  /minimum\s?(\d+(?:[\.,]\d+)?)%?/,
+
+  /voglio\s?(\d+(?:[\.,]\d+)?)%?/
+
+];
+
+for(const pattern of targetPatterns){
+
+  const match = text.match(pattern);
+
+  if(match){
+
+    entities.targetROI =
+
+      Number(
+        match[1]
+          .replace(",", ".")
+      );
+
+    break;
+
+  }
+
+}  
 
 // ===========================================
 // 🏨 OCCUPANCY DETECTION
@@ -502,6 +552,33 @@ for(const pattern of occupancyPatterns){
 
   const propertyMap = {
 
+    bilocale: [
+  "bilocale"
+],
+
+trilocale: [
+  "trilocale"
+],
+
+monolocale: [
+  "monolocale",
+  "studio"
+],
+
+loft: [
+  "loft"
+],
+
+vacationHome: [
+  "casa vacanza",
+  "holiday home"
+],
+
+room: [
+  "stanza",
+  "room"
+],
+
     villa: [
       "villa"
     ],
@@ -592,6 +669,49 @@ for(const pattern of occupancyPatterns){
   }
 
   // ===========================================
+// 🎯 INVESTMENT GOAL
+// ===========================================
+
+if(
+
+  text.includes("cashflow") ||
+
+  text.includes("rendita")
+
+){
+
+  entities.investmentGoal =
+    "cashflow";
+
+}
+
+else if(
+
+  text.includes("rivendere") ||
+
+  text.includes("flip")
+
+){
+
+  entities.investmentGoal =
+    "flip";
+
+}
+
+else if(
+
+  text.includes("lungo termine") ||
+
+  text.includes("long term")
+
+){
+
+  entities.investmentGoal =
+    "long_term";
+
+}
+
+  // ===========================================
   // ⚠️ RISK DETECTION
   // ===========================================
 
@@ -621,6 +741,53 @@ for(const pattern of occupancyPatterns){
     entities.risk = "medium";
 
   }
+
+// ===========================================
+// 🧠 RISK TOLERANCE
+// ===========================================
+
+if(
+
+  text.includes("basso rischio") ||
+
+  text.includes("safe investment") ||
+
+  text.includes("sicuro")
+
+){
+
+  entities.riskTolerance =
+    "low";
+
+}
+
+else if(
+
+  text.includes("alto rischio") ||
+
+  text.includes("high risk") ||
+
+  text.includes("aggressivo")
+
+){
+
+  entities.riskTolerance =
+    "high";
+
+}
+
+else if(
+
+  text.includes("rischio medio") ||
+
+  text.includes("balanced")
+
+){
+
+  entities.riskTolerance =
+    "medium";
+
+}
 
   // ===========================================
   // 🧠 INTENT HINTS
