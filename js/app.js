@@ -3580,16 +3580,43 @@ console.log(
 window.lastAnalysisData = {
 
   roi:
-    safeROI ?? 0,
+    roi ??
+    safeROI ??
+    0,
 
   visualROI:
-    visualROI ?? safeROI ?? 0,
+    visualROI ??
+    safeROI ??
+    roi ??
+    0,
 
   gross:
-    gross ?? 0,
+    gross ??
+    annualRevenue ??
+    0,
 
   net:
-    net ?? 0,
+    net ??
+    0,
+
+  annualProfit:
+    net ??
+    0,
+
+  revenueAnnual:
+    gross ??
+    annualRevenue ??
+    0,
+
+  monthlyIncome:
+    Math.round(
+      (gross ?? 0) / 12
+    ),
+
+  monthlyProfit:
+    Math.round(
+      (net ?? 0) / 12
+    ),
 
   occupancy:
     occupancy ??
@@ -3597,32 +3624,61 @@ window.lastAnalysisData = {
     0,
 
   priceNight:
-    priceNight ?? 0,
+    priceNight ??
+    nightly ??
+    0,
 
   expenses:
-    expenses ?? 0,
+    expenses ??
+    monthlyCosts ??
+    0,
+
+  totalExpenses:
+    (
+      expenses ??
+      monthlyCosts ??
+      0
+    ) * 12,
 
   equity:
-    equity ?? 0,
+    equity ??
+    0,
 
   loan:
+    loan ??
     window.loan ??
     window.mortgage ??
     window.mortgageAmount ??
     0,
 
+  mortgageAmount:
+    loan ??
+    window.loan ??
+    window.mortgage ??
+    window.mortgageAmount ??
+    0,
+
+  monthlyMortgagePayment:
+    monthlyMortgagePayment ??
+    monthlyMortgage ??
+    0,
+
   price:
-    price ?? 0,
+    price ??
+    0,
 
   city:
     selectedCity ||
     marketCity ||
     currentCity ||
-    null
+    "Roma",
+
+  timestamp:
+    Date.now()
 
 };
 
-    console.log("🔥 SAVE DEBUG", {
+console.log("🔥 SAVE DEBUG", {
 
   roi,
   gross,
@@ -3630,11 +3686,21 @@ window.lastAnalysisData = {
   expenses,
   price,
   equity,
-  annualProfit: net,
-  safeNet,
-  totalExpenses,
-  mortgageAmount,
-  monthlyMortgagePayment
+
+  annualProfit:
+    net,
+
+  safeNet:
+    net,
+
+  totalExpenses:
+    window.lastAnalysisData.totalExpenses,
+
+  mortgageAmount:
+    window.lastAnalysisData.mortgageAmount,
+
+  monthlyMortgagePayment:
+    window.lastAnalysisData.monthlyMortgagePayment
 
 });
 
@@ -3642,7 +3708,6 @@ console.log(
   "💾 LAST ANALYSIS SAVED:",
   window.lastAnalysisData
 );
-
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
