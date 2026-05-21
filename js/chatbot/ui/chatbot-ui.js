@@ -429,8 +429,16 @@ I can help analyze:
 // 🧠 SAFE DATA
 // =====================================
 
+const rawResponse =
+  result?.response;
+
 const response =
-  result || {};
+
+  Array.isArray(rawResponse)
+
+  ? rawResponse[0] || {}
+
+  : rawResponse || {};
 
 const entities =
   result?.entities || {};
