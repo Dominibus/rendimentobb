@@ -429,37 +429,61 @@ I can help analyze:
 // 🧠 SAFE DATA
 // =====================================
 
+const rawResponse =
+
+  Array.isArray(result?.response)
+
+    ? result.response[0]
+
+    : result?.response || {};
+
 const response = {
 
   textIT:
 
+    rawResponse?.textIT ||
+
     result?.textIT ||
 
-    result?.response?.textIT ||
+    rawResponse?.text ||
+
+    result?.text ||
+
+    rawResponse?.message ||
+
+    result?.message ||
 
     "",
 
   textEN:
 
+    rawResponse?.textEN ||
+
     result?.textEN ||
 
-    result?.response?.textEN ||
+    rawResponse?.text ||
+
+    result?.text ||
+
+    rawResponse?.message ||
+
+    result?.message ||
 
     "",
 
   text:
 
-    result?.text ||
+    rawResponse?.text ||
 
-    result?.response?.text ||
+    result?.text ||
 
     "",
 
   message:
 
-    result?.message ||
+    rawResponse?.message ||
 
-    result?.response?.message ||
+    result?.message ||
 
     ""
 
@@ -470,6 +494,11 @@ const entities =
 
 const intent =
   result?.intent || {};
+
+console.log(
+  "🧠 RAW RESPONSE:",
+  rawResponse
+);
 
 console.log(
   "🧠 RESPONSE OBJECT:",
