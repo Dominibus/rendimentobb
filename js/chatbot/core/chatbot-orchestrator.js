@@ -47,73 +47,133 @@ const detectedIntent =
       intent: "generic"
     };
 
-// 🔥 MULTI INTENT SYSTEM
+// =========================================
+// 🧠 MULTI INTENT SYSTEM 2.0
+// =========================================
 
 const intents = [];
 
 // =========================================
-// 🎓 EDUCATION PRIORITY
+// 🎓 EDUCATION
 // =========================================
 
-if(detectedIntent.intent === "education"){
+if(
+  detectedIntent.intent ===
+  "education"
+){
 
-  intents.push("education");
+  intents.push(
+    "education"
+  );
 
 }
 
-// ROI
-else if(
+// =========================================
+// 📈 ROI
+// =========================================
+
+if(
+
   text.includes("roi") ||
+
   text.includes("rendimento")
+
 ){
 
-  intents.push("roi_analysis");
-
-}
-
-// RISCHIO
-else if(
-  text.includes("rischio") ||
-  text.includes("risk")
-){
-
-  intents.push("risk_analysis");
-
-}
-
-// CASHFLOW
-else if(
-  text.includes("cashflow") ||
-  text.includes("profitto")
-){
-
-  intents.push("cashflow_analysis");
-
-}
-
-// SOSTENIBILITÀ
-else if(
-  text.includes("sostenibil") ||
-  text.includes("conviene")
-){
-
-  intents.push("investment_executive");
+  intents.push(
+    "roi_analysis"
+  );
 
 }
 
 // =========================================
-// 🧠 EXECUTIVE ANALYSIS
+// ⚠️ RISK
+// =========================================
+
+if(
+
+  text.includes("rischio") ||
+
+  text.includes("risk")
+
+){
+
+  intents.push(
+    "risk_analysis"
+  );
+
+}
+
+// =========================================
+// 💸 CASHFLOW
+// =========================================
+
+if(
+
+  text.includes("cashflow") ||
+
+  text.includes("profitto")
+
+){
+
+  intents.push(
+    "cashflow_analysis"
+  );
+
+}
+
+// =========================================
+// 🏦 MORTGAGE
+// =========================================
+
+if(
+
+  text.includes("mutuo") ||
+
+  text.includes("mortgage")
+
+){
+
+  intents.push(
+    "mortgage_analysis"
+  );
+
+}
+
+// =========================================
+// 🌍 MARKET
+// =========================================
+
+if(
+
+  text.includes("mercato") ||
+
+  text.includes("market") ||
+
+  entities.city
+
+){
+
+  intents.push(
+    "market_analysis"
+  );
+
+}
+
+// =========================================
+// 🧠 EXECUTIVE
 // =========================================
 
 if(
 
   text.includes("analisi") ||
+
   text.includes("executive") ||
 
   text.includes("sostenibile") ||
-  text.includes("conviene") ||
 
   text.includes("worth it") ||
+
   text.includes("good investment") ||
 
   text.includes("vale la pena")
@@ -126,11 +186,28 @@ if(
 
 }
 
-// fallback
-if(!intents.length){
+// =========================================
+// 🔥 REMOVE DUPLICATES
+// =========================================
 
-  intents.push(
-    detectedIntent.intent || "generic"
+const uniqueIntents = [
+
+  ...new Set(intents)
+
+];
+
+// =========================================
+// 🧠 FALLBACK
+// =========================================
+
+if(!uniqueIntents.length){
+
+  uniqueIntents.push(
+
+    detectedIntent.intent ||
+
+    "generic"
+
   );
 
 }
@@ -139,7 +216,8 @@ if(!intents.length){
 
   ...detectedIntent,
 
-  intents
+  intents:
+    uniqueIntents
 
 };
     // =========================================
