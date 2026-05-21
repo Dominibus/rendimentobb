@@ -28,6 +28,20 @@ window.rbChatMemory = {
 
   lastIntent: null,
 
+  // 🔥 NEW
+
+  lastBudget: null,
+
+  lastStrategy: null,
+
+  lastRiskTolerance: null,
+
+  lastPropertyType: null,
+
+  lastTargetROI: null,
+
+  lastFinancingLevel: null,
+
   context: {}
 
 };
@@ -111,7 +125,91 @@ window.rbRememberMessage = function({
         memory.lastPropertyPrice =
           entities.price;
 
+        budget:
+          window.rbChatMemory.lastBudget,
+
+        strategy:
+          window.rbChatMemory.lastStrategy,
+
+        riskTolerance:
+           window.rbChatMemory.lastRiskTolerance,
+
+       propertyType:
+          window.rbChatMemory.lastPropertyType,
+
+      targetROI:
+          window.rbChatMemory.lastTargetROI,
+
+      financingLevel:
+         window.rbChatMemory.lastFinancingLevel,
+
       }
+
+      // =======================================
+// 💰 LAST BUDGET
+// =======================================
+
+if(entities.amount){
+
+  memory.lastBudget =
+    entities.amount;
+
+}
+
+// =======================================
+// 🎯 TARGET ROI
+// =======================================
+
+if(entities.targetROI){
+
+  memory.lastTargetROI =
+    entities.targetROI;
+
+}
+
+// =======================================
+// 🏦 FINANCING LEVEL
+// =======================================
+
+if(entities.financingLevel){
+
+  memory.lastFinancingLevel =
+    entities.financingLevel;
+
+}
+
+// =======================================
+// 🏨 PROPERTY TYPE
+// =======================================
+
+if(entities.propertyType){
+
+  memory.lastPropertyType =
+    entities.propertyType;
+
+}
+
+// =======================================
+// ⚠️ RISK PROFILE
+// =======================================
+
+if(entities.riskTolerance){
+
+  memory.lastRiskTolerance =
+    entities.riskTolerance;
+
+}
+
+// =======================================
+// 📈 STRATEGY
+// =======================================
+
+if(entities.strategy){
+
+  memory.lastStrategy =
+    entities.strategy;
+
+}
 
       // =======================================
       // 🏨 LAST OCCUPANCY
