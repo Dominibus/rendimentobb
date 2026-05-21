@@ -2382,13 +2382,21 @@ function runPostAnalysis(result, context){
       (window.currentLang === "en" ? en : it);
 
     const {
-      price = 0,
-      gross = 0,
-      occupancy = 0,
-      priceNight = 0,
-      expenses = 0,
-      equity = 0
-    } = context || {};
+  price = 0,
+  gross = 0,
+  occupancy = 0,
+  priceNight = 0,
+  expenses = 0,
+  equity = 0,
+
+  // 🔥 AGGIUNGI QUESTI
+  net = 0,
+  loanAmount = 0,
+  mortgage = 0,
+  mortgageRate = 0,
+  monthlyMortgage = 0
+
+} = context || {};
 
     // ================= GLOBAL STATE =================
 
@@ -2575,7 +2583,7 @@ visualROI: Number(finalROI) || 0,
   equity: equity || 0,
 
   loan:
-    Number(mortgage) || 0,
+  Number(loanAmount || mortgage || 0),
 
   mortgagePercent: mortgagePercent || 0,
 
@@ -2592,8 +2600,7 @@ annualRevenue ||
 0,
 
 profit:
-net ||
-0,
+Number(net || 0),
 
 netAfterMortgage:
 net ||
@@ -2608,8 +2615,7 @@ net ||
     0,
 
   monthlyMortgage:
-    monthlyMortgage ||
-    0,
+  Number(monthlyMortgage || 0),
 
   // =====================================
   // 🧠 META
