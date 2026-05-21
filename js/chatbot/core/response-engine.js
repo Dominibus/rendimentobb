@@ -272,6 +272,42 @@ const executiveInsightsIT = [];
 const executiveInsightsEN = [];
 
 // ===========================================
+// 🧠 RESPONSE BLOCK HELPER
+// ===========================================
+
+const responseBlocksIT = [];
+
+const responseBlocksEN = [];
+
+function pushResponseBlock({
+
+  priority = 0,
+  textIT = "",
+  textEN = ""
+
+}){
+
+  if(textIT){
+
+    responseBlocksIT.push({
+      priority,
+      text: textIT
+    });
+
+  }
+
+  if(textEN){
+
+    responseBlocksEN.push({
+      priority,
+      text: textEN
+    });
+
+  }
+
+}  
+
+// ===========================================
 // 🧠 EXECUTIVE REASONING ENGINE
 // ===========================================
 
@@ -2221,7 +2257,39 @@ ${cityName}.`
 
   }
 
-  // ===========================================
+// ===========================================
+// 🧠 FINAL RESPONSE BLOCK MERGE
+// ===========================================
+
+if(responseBlocksIT.length){
+
+  response.textIT =
+
+    responseBlocksIT
+
+      .sort((a,b) => b.priority - a.priority)
+
+      .map(block => block.text)
+
+      .join("\n\n");
+
+}
+
+if(responseBlocksEN.length){
+
+  response.textEN =
+
+    responseBlocksEN
+
+      .sort((a,b) => b.priority - a.priority)
+
+      .map(block => block.text)
+
+      .join("\n\n");
+
+}  
+
+// ===========================================
 // 💡 CONTEXTUAL FOLLOWUP ENGINE
 // ===========================================
 
