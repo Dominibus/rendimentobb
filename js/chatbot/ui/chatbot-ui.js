@@ -429,16 +429,41 @@ I can help analyze:
 // 🧠 SAFE DATA
 // =====================================
 
-const rawResponse =
-  result?.response;
+const response = {
 
-const response =
+  textIT:
 
-  Array.isArray(rawResponse)
+    result?.textIT ||
 
-  ? rawResponse[0] || {}
+    result?.response?.textIT ||
 
-  : rawResponse || {};
+    "",
+
+  textEN:
+
+    result?.textEN ||
+
+    result?.response?.textEN ||
+
+    "",
+
+  text:
+
+    result?.text ||
+
+    result?.response?.text ||
+
+    "",
+
+  message:
+
+    result?.message ||
+
+    result?.response?.message ||
+
+    ""
+
+};
 
 const entities =
   result?.entities || {};
