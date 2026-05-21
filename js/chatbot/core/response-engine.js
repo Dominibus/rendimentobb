@@ -65,6 +65,9 @@ const liveData = {
 
 };
 
+  const investorProfile =
+  window.rbInvestorProfile || {};
+
   const uiNetProfit =
 
   Number(
@@ -2257,6 +2260,81 @@ ${cityName}.`
 
   }
 
+// ===========================================
+// 🧠 INVESTOR PROFILE ADAPTATION
+// ===========================================
+
+if(investorProfile?.aggressiveInvestor){
+
+  responseBlocksIT.push({
+    type: "profile",
+    priority: 82,
+    text:
+      "🚀 Il tuo profilo mostra una tolleranza elevata al rischio e orientamento a crescita aggressiva."
+  });
+
+  responseBlocksEN.push({
+    type: "profile",
+    priority: 82,
+    text:
+      "🚀 Your profile shows high risk tolerance and aggressive growth orientation."
+  });
+
+}
+
+if(investorProfile?.riskTolerance === "low"){
+
+  responseBlocksIT.push({
+    type: "profile",
+    priority: 82,
+    text:
+      "🛡️ Il tuo profilo privilegia investimenti più stabili e sostenibili."
+  });
+
+  responseBlocksEN.push({
+    type: "profile",
+    priority: 82,
+    text:
+      "🛡️ Your profile prioritizes safer and more sustainable investments."
+  });
+
+}
+
+if(investorProfile?.leverageBehavior === "aggressive"){
+
+  responseBlocksIT.push({
+    type: "profile",
+    priority: 83,
+    text:
+      "🏦 L'AI rileva preferenza per utilizzo intenso della leva finanziaria."
+  });
+
+  responseBlocksEN.push({
+    type: "profile",
+    priority: 83,
+    text:
+      "🏦 AI detects preference for aggressive leverage usage."
+  });
+
+}
+
+if(investorProfile?.targetROI){
+
+  responseBlocksIT.push({
+    type: "profile",
+    priority: 84,
+    text:
+      `🎯 Target ROI rilevato: ${investorProfile.targetROI}%`
+  });
+
+  responseBlocksEN.push({
+    type: "profile",
+    priority: 84,
+    text:
+      `🎯 Detected ROI target: ${investorProfile.targetROI}%`
+  });
+
+}
 // ===========================================
 // 🧠 FINAL RESPONSE BLOCK MERGE
 // ===========================================
