@@ -6,20 +6,21 @@
 
 window.rbDetectIntent = function(message = ""){
 
-  // ===========================================
-  // 🧹 NORMALIZE
-  // ===========================================
+const text = String(message)
+  .toLowerCase()
+  .trim();
 
-  const text = String(message)
+// ===========================================
+// 🧠 ENTITY EXTRACTION
+// ===========================================
 
-    const entities =
+const entities =
+
   window.rbExtractEntities
-    ? window.rbExtractEntities(text)
-    : {};
-  
-    .toLowerCase()
-    .trim();
 
+    ? window.rbExtractEntities(text)
+
+    : {};
   // ===========================================
   // 🧠 DEFAULT RESULT
   // ===========================================
