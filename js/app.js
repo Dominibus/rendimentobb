@@ -3658,10 +3658,13 @@ window.mortgage ??
 window.mortgageAmount ??
 0,
 
-  monthlyMortgagePayment:
-    monthlyMortgagePayment ??
-    monthlyMortgage ??
-    0,
+ monthlyMortgagePayment:
+
+mortgageData?.monthlyPayment ??
+
+monthlyMortgage ??
+
+0,
 
   price:
     price ??
