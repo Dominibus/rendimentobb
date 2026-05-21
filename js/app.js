@@ -3648,7 +3648,7 @@ if(riskPreview){
   priceNight,
   expenses,
   equity,
-  mortgage: mortgageAmount || 0
+  mortgage: mortgage || 0
 });
 
 }    
