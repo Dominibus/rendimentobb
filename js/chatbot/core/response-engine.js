@@ -1386,11 +1386,84 @@ if(
 
 }
 
-  // ===========================================
-  // 🌍 MARKET RESPONSE
-  // ===========================================
+// ===========================================
+// 🌍 MARKET COMPARISON
+// ===========================================
 
-  else if(
+else if(
+
+  intent.intent === "comparison" &&
+
+  Array.isArray(entities.cities) &&
+
+  entities.cities.length >= 2
+
+){
+
+  const city1 =
+    entities.cities[0];
+
+  const city2 =
+    entities.cities[1];
+
+  const market1 =
+    window.rbMarketData?.[city1];
+
+  const market2 =
+    window.rbMarketData?.[city2];
+
+  if(
+    market1 &&
+    market2
+  ){
+
+    response.type =
+      "comparison";
+
+    response.confidence =
+      0.96;
+
+    response.textIT =
+
+`⚖️ Confronto mercati
+
+🌍 ${city1.toUpperCase()}
+📈 ROI: ${market1.avgROI}
+🏨 Occupazione: ${market1.occupancy}
+⚠️ Rischio: ${market1.risk}
+
+VS
+
+🌍 ${city2.toUpperCase()}
+📈 ROI: ${market2.avgROI}
+🏨 Occupazione: ${market2.occupancy}
+⚠️ Rischio: ${market2.risk}`;
+
+    response.textEN =
+
+`⚖️ Market comparison
+
+🌍 ${city1.toUpperCase()}
+📈 ROI: ${market1.avgROI}
+🏨 Occupancy: ${market1.occupancy}
+⚠️ Risk: ${market1.risk}
+
+VS
+
+🌍 ${city2.toUpperCase()}
+📈 ROI: ${market2.avgROI}
+🏨 Occupancy: ${market2.occupancy}
+⚠️ Risk: ${market2.risk}`;
+
+  }
+
+}
+
+// ===========================================
+// 🌍 MARKET RESPONSE
+// ===========================================
+
+else if(
 
   intent.intent === "market_analysis" &&
 
