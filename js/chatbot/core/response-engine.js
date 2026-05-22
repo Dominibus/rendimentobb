@@ -1379,9 +1379,9 @@ VS
 
 else if(
 
-  intent.intent === "market_analysis" &&
+  response.type !== "comparison" &&
 
-  intent.intent !== "comparison"
+  intent.intent === "market_analysis"
 
 ){
 
