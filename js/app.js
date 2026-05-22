@@ -4457,12 +4457,41 @@ const roi = Math.max(
     45
   )
 );
-const revenue = safe(d.revenue);
-const profit = safe(d.netAfterMortgage || d.profit);
-const price = safe(d.price);
-const equity = safe(d.equity);
-const loan = safe(d.loan);
-const monthly = Math.round(profit/12);
+// ================= SAFE FINANCIAL DATA =================
+
+const revenue = safe(
+  d.revenueAnnual ??
+  d.gross ??
+  d.revenue
+);
+
+const profit = safe(
+  d.annualProfit ??
+  d.net ??
+  d.netAfterMortgage ??
+  d.profit
+);
+
+const price = safe(
+  d.price
+);
+
+const equity = safe(
+  d.equity
+);
+
+const loan = safe(
+  d.mortgageAmount ??
+  d.loan ??
+  d.loanAmount
+);
+
+const monthly = Math.round(
+  safe(
+    d.monthlyProfit ??
+    (profit / 12)
+  )
+);
 
 const realCityInput =
   document.getElementById("custom-location")?.value?.trim();
@@ -4976,8 +5005,13 @@ const marketROIMap = {
   firenze: 7.9
 };
 
+const marketKey =
+  String(city)
+    .toLowerCase()
+    .trim();
+
 const marketROI =
-  marketROIMap[window.currentCity] || 8.4;
+  marketROIMap[marketKey] || 8.4;
 
 // ================= KPI =================
 
@@ -5116,42 +5150,6 @@ doc.text(
 
 footer();
 
-// ================= COMMENT BOX =================
-
-doc.setFillColor(248,250,252);
-
-doc.roundedRect(
-  20,
-  y,
-  170,
-  36,
-  5,
-  5,
-  "F"
-);
-
-doc.setFontSize(10);
-doc.setTextColor(...dark);
-
-const marketComment =
-  roi > marketROI
-    ? T(
-        "L'operazione supera significativamente il benchmark medio di mercato.",
-        "The investment significantly outperforms the average market benchmark."
-      )
-    : T(
-        "L'operazione risulta in linea o sotto il benchmark medio di mercato.",
-        "The investment performs in line with or below average market benchmark."
-      );
-
-doc.text(
-  marketComment,
-  25,
-  y + 15,
-  { maxWidth: 155 }
-);
-
-footer();
 // ===================================================
 // RISK ANALYSIS
 // ===================================================
