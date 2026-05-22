@@ -1236,27 +1236,72 @@ if(cities.length >= 2){
     window.rbMarketData?.[city2];
 
   const sim1 =
-    window.rbCityMemory?.[city1];
+    window.rbCityMemory?.[city1] || {};
 
   const sim2 =
-    window.rbCityMemory?.[city2];
+    window.rbCityMemory?.[city2] || {};
 
   // =====================================
-  // 🧠 FORMAT HELPERS
+  // 🧠 SAFE HELPERS
   // =====================================
+
+  const getROI = (sim) => {
+
+    return Number(
+      sim.visualROI ??
+      sim.realROI ??
+      sim.roi ??
+      0
+    );
+
+  };
+
+  const getProfit = (sim) => {
+
+    return Number(
+      sim.net ??
+      sim.annualProfit ??
+      sim.monthlyProfit ??
+      0
+    );
+
+  };
+
+  const getOccupancy = (
+    sim,
+    market
+  ) => {
+
+    return Number(
+      sim.occupancy ??
+      parseFloat(
+        market?.occupancy
+      ) ??
+      0
+    );
+
+  };
 
   const formatROI = (value) => {
 
     return Number(
-      value ?? 0
+      value || 0
     ).toFixed(1);
+
+  };
+
+  const formatPercent = (value) => {
+
+    return Math.round(
+      Number(value || 0)
+    );
 
   };
 
   const formatCurrency = (value) => {
 
     return Number(
-      value ?? 0
+      value || 0
     ).toLocaleString(
       "it-IT",
       {
@@ -1266,34 +1311,18 @@ if(cities.length >= 2){
 
   };
 
-  const formatPercent = (value) => {
-
-    return Math.round(
-      Number(value ?? 0)
-    );
-
-  };
-
   // =====================================
-  // 🏆 WINNER DETECTION
+  // 🏆 WINNER
   // =====================================
+
+  const roi1 =
+    getROI(sim1);
+
+  const roi2 =
+    getROI(sim2);
 
   let winnerIT = "";
   let winnerEN = "";
-
-  const roi1 =
-    Number(
-      sim1?.visualROI ??
-      sim1?.roi ??
-      0
-    );
-
-  const roi2 =
-    Number(
-      sim2?.visualROI ??
-      sim2?.roi ??
-      0
-    );
 
   if(roi1 > roi2){
 
@@ -1331,6 +1360,12 @@ if(cities.length >= 2){
 
   if(market1 && market2){
 
+    response.type =
+      "comparison";
+
+    response.confidence =
+      0.97;
+
     response.textIT =
 
 `🆚 Confronto mercati AI
@@ -1346,19 +1381,20 @@ ${market1.avgROI}
 
 💰 ROI simulazione:
 ${formatROI(
-  sim1?.visualROI ??
-  sim1?.roi
+  getROI(sim1)
 )}%
 
 🏨 Occupazione:
 ${formatPercent(
-  sim1?.occupancy ??
-  parseFloat(market1.occupancy)
+  getOccupancy(
+    sim1,
+    market1
+  )
 )}%
 
 💵 Profitto stimato:
 €${formatCurrency(
-  sim1?.net
+  getProfit(sim1)
 )}
 
 ⚠️ Rischio:
@@ -1373,19 +1409,20 @@ ${market2.avgROI}
 
 💰 ROI simulazione:
 ${formatROI(
-  sim2?.visualROI ??
-  sim2?.roi
+  getROI(sim2)
 )}%
 
 🏨 Occupazione:
 ${formatPercent(
-  sim2?.occupancy ??
-  parseFloat(market2.occupancy)
+  getOccupancy(
+    sim2,
+    market2
+  )
 )}%
 
 💵 Profitto stimato:
 €${formatCurrency(
-  sim2?.net
+  getProfit(sim2)
 )}
 
 ⚠️ Rischio:
@@ -1393,7 +1430,7 @@ ${market2.risk}`;
 
     response.textEN =
 
-`🆚 AI Market comparison
+`🆚 AI Market Comparison
 
 ${winnerEN}
 
@@ -1406,19 +1443,20 @@ ${market1.avgROI}
 
 💰 Simulation ROI:
 ${formatROI(
-  sim1?.visualROI ??
-  sim1?.roi
+  getROI(sim1)
 )}%
 
 🏨 Occupancy:
 ${formatPercent(
-  sim1?.occupancy ??
-  parseFloat(market1.occupancy)
+  getOccupancy(
+    sim1,
+    market1
+  )
 )}%
 
-💵 Estimated profit:
+💵 Estimated Profit:
 €${formatCurrency(
-  sim1?.net
+  getProfit(sim1)
 )}
 
 ⚠️ Risk:
@@ -1433,19 +1471,20 @@ ${market2.avgROI}
 
 💰 Simulation ROI:
 ${formatROI(
-  sim2?.visualROI ??
-  sim2?.roi
+  getROI(sim2)
 )}%
 
 🏨 Occupancy:
 ${formatPercent(
-  sim2?.occupancy ??
-  parseFloat(market2.occupancy)
+  getOccupancy(
+    sim2,
+    market2
+  )
 )}%
 
-💵 Estimated profit:
+💵 Estimated Profit:
 €${formatCurrency(
-  sim2?.net
+  getProfit(sim2)
 )}
 
 ⚠️ Risk:
