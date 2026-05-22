@@ -3712,6 +3712,63 @@ console.log(
   "💾 LAST ANALYSIS SAVED:",
   window.lastAnalysisData
 );
+
+    // ===============================================
+// 🧠 AI INVESTMENT MEMORY SNAPSHOT
+// ===============================================
+
+if(!window.rbChatMemory){
+  window.rbChatMemory = {};
+}
+
+if(!window.rbChatMemory.investmentHistory){
+  window.rbChatMemory.investmentHistory = [];
+}
+
+window.rbChatMemory.investmentHistory.push({
+
+  roi:
+    safeROI ?? roi ?? 0,
+
+  city:
+    selectedCity ||
+    marketCity ||
+    currentCity ||
+    "roma",
+
+  occupancy:
+    occupancy ??
+    occupancyRate ??
+    0,
+
+  propertyPrice:
+    price ?? 0,
+
+  equity:
+    equity ?? 0,
+
+  mortgage:
+    loanAmount ??
+    mortgageAmount ??
+    window.loan ??
+    0,
+
+  timestamp:
+    Date.now()
+
+});
+
+// 🔥 KEEP ONLY LAST 10
+
+window.rbChatMemory.investmentHistory =
+  window.rbChatMemory
+    .investmentHistory
+    .slice(-10);
+
+console.log(
+  "🧠 INVESTMENT MEMORY:",
+  window.rbChatMemory.investmentHistory
+);
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
