@@ -3743,11 +3743,10 @@ window.rbCityMemory[memoryCity] = {
     ),
 
   annualProfit:
-    Number(
-      annualProfit ??
-      net ??
-      0
-    ),
+  net ??
+  annualNet ??
+  yearlyProfit ??
+  0,
 
   monthlyProfit:
     Number(
