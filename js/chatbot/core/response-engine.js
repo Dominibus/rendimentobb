@@ -1201,7 +1201,7 @@ ${mortgagePercent}%
   }
 
 // ===========================================
-// 📊 INVESTMENT COMPARISON RESPONSE
+// 📊 INVESTMENT / MARKET COMPARISON RESPONSE
 // ===========================================
 
 else if(
@@ -1214,105 +1214,163 @@ else if(
   response.confidence =
     0.97;
 
-  const history =
+  // =====================================
+  // 🌍 CITY COMPARISON
+  // =====================================
 
-    memory?.investmentHistory ||
+  const cities =
 
-    window.rbChatMemory?.investmentHistory ||
+    entities.cities ||
 
     [];
 
-  if(history.length >= 2){
+  if(cities.length >= 2){
 
-    const current =
-      history[history.length - 1];
+    const city1 =
+      cities[0]?.toLowerCase();
 
-    const previous =
-      history[history.length - 2];
+    const city2 =
+      cities[1]?.toLowerCase();
 
-    const currentROI =
-      Number(current.roi || 0);
+    const market1 =
+      window.rbMarketData?.[city1];
 
-    const previousROI =
-      Number(previous.roi || 0);
+    const market2 =
+      window.rbMarketData?.[city2];
 
-    const currentCity =
-      current.city || "unknown";
+    if(market1 && market2){
 
-    const previousCity =
-      previous.city || "unknown";
+      response.textIT =
 
-    const betterInvestment =
+`🆚 Confronto mercati
 
-      currentROI > previousROI
+🌍 ${window.rbCapitalize?.(city1)}
 
-      ? currentCity
+📈 ROI medio:
+${market1.avgROI}
 
-      : previousCity;
+🏨 Occupazione:
+${market1.occupancy}
 
-    response.textIT =
-
-`📊 Confronto investimenti
-
-🏙 Ultima simulazione:
-${currentCity}
-
-📈 ROI:
-${currentROI.toFixed(1)}%
+⚠️ Rischio:
+${market1.risk}
 
 -------------------
 
-🏙 Simulazione precedente:
-${previousCity}
+🌍 ${window.rbCapitalize?.(city2)}
 
-📈 ROI:
-${previousROI.toFixed(1)}%
+📈 ROI medio:
+${market2.avgROI}
 
--------------------
+🏨 Occupazione:
+${market2.occupancy}
 
-🏆 Investimento migliore:
-${betterInvestment}
+⚠️ Rischio:
+${market2.risk}`;
 
-💡 Differenza ROI:
-${Math.abs(currentROI - previousROI).toFixed(1)}%`;
+      response.textEN =
 
-    response.textEN =
+`🆚 Market comparison
 
-`📊 Investment comparison
+🌍 ${window.rbCapitalize?.(city1)}
 
-🏙 Latest simulation:
-${currentCity}
+📈 Average ROI:
+${market1.avgROI}
 
-📈 ROI:
-${currentROI.toFixed(1)}%
+🏨 Occupancy:
+${market1.occupancy}
 
--------------------
-
-🏙 Previous simulation:
-${previousCity}
-
-📈 ROI:
-${previousROI.toFixed(1)}%
+⚠️ Risk:
+${market1.risk}
 
 -------------------
 
-🏆 Better investment:
-${betterInvestment}
+🌍 ${window.rbCapitalize?.(city2)}
 
-💡 ROI difference:
-${Math.abs(currentROI - previousROI).toFixed(1)}%`;
+📈 Average ROI:
+${market2.avgROI}
+
+🏨 Occupancy:
+${market2.occupancy}
+
+⚠️ Risk:
+${market2.risk}`;
+
+    }
+
+    else{
+
+      response.textIT =
+        "⚠️ Dati mercato non disponibili per una delle città.";
+
+      response.textEN =
+        "⚠️ Market data unavailable for one of the cities.";
+
+    }
 
   }
+
+  // =====================================
+  // 📊 FALLBACK INVESTMENT HISTORY
+  // =====================================
 
   else{
 
-    response.textIT =
-      "⚠️ Servono almeno due simulazioni per effettuare un confronto.";
+    const history =
 
-    response.textEN =
-      "⚠️ At least two simulations are required for comparison.";
+      memory?.investmentHistory ||
+
+      window.rbChatMemory?.investmentHistory ||
+
+      [];
+
+    if(history.length >= 2){
+
+      const current =
+        history[history.length - 1];
+
+      const previous =
+        history[history.length - 2];
+
+      response.textIT =
+
+`📊 Confronto simulazioni
+
+🏙 ${current.city}
+📈 ROI: ${Number(current.roi || 0).toFixed(1)}%
+
+VS
+
+🏙 ${previous.city}
+📈 ROI: ${Number(previous.roi || 0).toFixed(1)}%`;
+
+      response.textEN =
+
+`📊 Simulation comparison
+
+🏙 ${current.city}
+📈 ROI: ${Number(current.roi || 0).toFixed(1)}%
+
+VS
+
+🏙 ${previous.city}
+📈 ROI: ${Number(previous.roi || 0).toFixed(1)}%`;
+
+    }
+
+    else{
+
+      response.textIT =
+        "⚠️ Servono almeno due simulazioni o due città da confrontare.";
+
+      response.textEN =
+        "⚠️ At least two simulations or two cities are required.";
+
+    }
 
   }
+
+}
 
 }
 
