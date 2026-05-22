@@ -2455,7 +2455,13 @@ if(investorProfile?.targetROI){
 // 🧠 FINAL RESPONSE BLOCK MERGE
 // ===========================================
 
-if(responseBlocksIT.length){
+if(
+
+  responseBlocksIT.length &&
+
+  response.type === "executive"
+
+){
 
   response.textIT =
 
@@ -2469,7 +2475,13 @@ if(responseBlocksIT.length){
 
 }
 
-if(responseBlocksEN.length){
+if(
+
+  responseBlocksEN.length &&
+
+  response.type === "executive"
+
+){
 
   response.textEN =
 
@@ -2481,7 +2493,7 @@ if(responseBlocksEN.length){
 
       .join("\n\n");
 
-}  
+}
 
 // ===========================================
 // 💡 CONTEXTUAL FOLLOWUP ENGINE
