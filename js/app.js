@@ -3682,6 +3682,72 @@ monthlyMortgagePayment:
 
 };
 
+    // =====================================
+// 🧠 CITY INVESTMENT MEMORY
+// =====================================
+
+if(!window.rbInvestmentMemory){
+  window.rbInvestmentMemory = {};
+}
+
+const currentMemoryCity =
+  (
+    selectedCity ||
+    currentCity ||
+    marketCity ||
+    "unknown"
+  ).toLowerCase();
+
+window.rbInvestmentMemory[currentMemoryCity] = {
+
+  city: currentMemoryCity,
+
+  roi:
+    roi ??
+    safeROI ??
+    0,
+
+  visualROI:
+    visualROI ??
+    roi ??
+    0,
+
+  gross:
+    gross ??
+    annualRevenue ??
+    0,
+
+  net:
+    net ??
+    0,
+
+  occupancy:
+    occupancy ??
+    occupancyRate ??
+    0,
+
+  expenses:
+    expenses ??
+    monthlyCosts ??
+    0,
+
+  price:
+    price ??
+    propertyPrice ??
+    0,
+
+  equity:
+    equity ??
+    ownCapital ??
+    0
+
+};
+
+console.log(
+  "🧠 CITY MEMORY:",
+  window.rbInvestmentMemory
+);
+
 console.log("🔥 SAVE DEBUG", {
 
   roi,
