@@ -4507,7 +4507,15 @@ const city =
 
 // ================= FORMAT =================
 const eur = v => "€" + safe(v).toLocaleString("it-IT",{maximumFractionDigits:0});
-const pct = v => safe(v).toFixed(1) + "%";
+const pct = v => {
+
+  const n = safe(v);
+
+  return Number.isInteger(n)
+    ? n + "%"
+    : n.toFixed(1) + "%";
+
+};
 
 // ================= RATING =================
 let rating = "Moderate";
