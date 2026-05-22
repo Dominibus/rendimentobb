@@ -1238,19 +1238,31 @@ else if(
     const market2 =
       window.rbMarketData?.[city2];
 
+    const sim1 =
+  window.rbInvestmentMemory?.[city1];
+
+const sim2 =
+  window.rbInvestmentMemory?.[city2];
+
     if(market1 && market2){
 
-      response.textIT =
+response.textIT =
 
 `🆚 Confronto mercati
 
 🌍 ${window.rbCapitalize?.(city1)}
 
-📈 ROI medio:
+📈 ROI mercato:
 ${market1.avgROI}
 
+💰 ROI simulazione:
+${sim1?.visualROI || sim1?.roi || "N/D"}%
+
 🏨 Occupazione:
-${market1.occupancy}
+${sim1?.occupancy || market1.occupancy}
+
+💵 Profitto:
+€${Math.round(sim1?.net || 0)}
 
 ⚠️ Rischio:
 ${market1.risk}
@@ -1259,41 +1271,19 @@ ${market1.risk}
 
 🌍 ${window.rbCapitalize?.(city2)}
 
-📈 ROI medio:
+📈 ROI mercato:
 ${market2.avgROI}
+
+💰 ROI simulazione:
+${sim2?.visualROI || sim2?.roi || "N/D"}%
 
 🏨 Occupazione:
-${market2.occupancy}
+${sim2?.occupancy || market2.occupancy}
+
+💵 Profitto:
+€${Math.round(sim2?.net || 0)}
 
 ⚠️ Rischio:
-${market2.risk}`;
-
-      response.textEN =
-
-`🆚 Market comparison
-
-🌍 ${window.rbCapitalize?.(city1)}
-
-📈 Average ROI:
-${market1.avgROI}
-
-🏨 Occupancy:
-${market1.occupancy}
-
-⚠️ Risk:
-${market1.risk}
-
--------------------
-
-🌍 ${window.rbCapitalize?.(city2)}
-
-📈 Average ROI:
-${market2.avgROI}
-
-🏨 Occupancy:
-${market2.occupancy}
-
-⚠️ Risk:
 ${market2.risk}`;
 
     }
