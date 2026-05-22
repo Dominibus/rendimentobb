@@ -3682,70 +3682,135 @@ monthlyMortgagePayment:
 
 };
 
-    // =====================================
-// 🧠 CITY INVESTMENT MEMORY
+// =====================================
+// 🧠 CITY MEMORY SAVE
 // =====================================
 
-if(!window.rbInvestmentMemory){
-  window.rbInvestmentMemory = {};
+if(!window.rbCityMemory){
+
+  window.rbCityMemory = {};
+
 }
 
-const currentMemoryCity =
-  (
-    selectedCity ||
-    currentCity ||
-    marketCity ||
-    "unknown"
-  ).toLowerCase();
+const memoryCity = (
 
-window.rbInvestmentMemory[currentMemoryCity] = {
+  selectedCity ||
+  currentCity ||
+  marketCity ||
+  document.getElementById("market-city")?.value ||
+  "roma"
 
-  city: currentMemoryCity,
+)
+.toLowerCase()
+.trim();
 
+window.rbCityMemory[memoryCity] = {
+
+  // ROI
   roi:
-    roi ??
-    safeROI ??
-    0,
+    Number(
+      roi ??
+      safeROI ??
+      realROI ??
+      visualROI ??
+      0
+    ),
 
   visualROI:
-    visualROI ??
-    roi ??
-    0,
+    Number(
+      visualROI ??
+      roi ??
+      realROI ??
+      safeROI ??
+      0
+    ),
 
-  gross:
-    gross ??
-    annualRevenue ??
-    0,
+  realROI:
+    Number(
+      realROI ??
+      roi ??
+      visualROI ??
+      0
+    ),
 
+  // PROFIT
   net:
-    net ??
-    0,
+    Number(
+      net ??
+      annualProfit ??
+      monthlyProfit ??
+      0
+    ),
 
+  annualProfit:
+    Number(
+      annualProfit ??
+      net ??
+      0
+    ),
+
+  monthlyProfit:
+    Number(
+      monthlyProfit ??
+      (
+        Number(
+          annualProfit ??
+          net ??
+          0
+        ) / 12
+      )
+    ),
+
+  // REVENUE
+  gross:
+    Number(
+      gross ??
+      annualRevenue ??
+      0
+    ),
+
+  annualRevenue:
+    Number(
+      annualRevenue ??
+      gross ??
+      0
+    ),
+
+  // OCCUPANCY
   occupancy:
-    occupancy ??
-    occupancyRate ??
-    0,
+    Number(
+      occupancy ??
+      occupancyRate ??
+      0
+    ),
+
+  // EXTRA
+  priceNight:
+    Number(
+      priceNight ??
+      nightly ??
+      0
+    ),
 
   expenses:
-    expenses ??
-    monthlyCosts ??
-    0,
+    Number(
+      expenses ??
+      monthlyCosts ??
+      0
+    ),
 
-  price:
-    price ??
-    propertyPrice ??
-    0,
+  city:
+    memoryCity,
 
-  equity:
-    equity ??
-    ownCapital ??
-    0
+  updatedAt:
+    Date.now()
 
 };
 
 console.log(
-  "🧠 CITY MEMORY:",
-  window.rbInvestmentMemory
+  "🧠 CITY MEMORY UPDATED:",
+  memoryCity,
+  window.rbCityMemory[memoryCity]
 );
 
 console.log("🔥 SAVE DEBUG", {
