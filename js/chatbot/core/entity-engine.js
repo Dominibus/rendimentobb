@@ -219,6 +219,15 @@ if(detectedCities.length >= 2){
     detectedCities
   );
 
+  if(
+  Array.isArray(detectedCities) &&
+  detectedCities.length >= 2
+){
+
+  entities.cities = detectedCities;
+
+}
+
 }
 
 else if(detectedCities.length === 1){
