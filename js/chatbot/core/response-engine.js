@@ -1308,7 +1308,10 @@ ${market2.risk}`;
 
     }
 
+    return response;
+
   }
+
 
   // =====================================
   // 📊 FALLBACK INVESTMENT HISTORY
