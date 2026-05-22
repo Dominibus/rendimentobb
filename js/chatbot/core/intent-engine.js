@@ -1540,14 +1540,15 @@ if(
 
   result.intent === "generic" &&
 
-  memory?.lastIntent
+  window.rbChatMemory?.lastIntent
 
 ){
 
   applyIntent({
 
     intent:
-      memory.lastIntent,
+
+      window.rbChatMemory.lastIntent,
 
     category:
       "followup",
