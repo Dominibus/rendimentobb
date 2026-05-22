@@ -1214,39 +1214,39 @@ else if(
   response.confidence =
     0.97;
 
-  // =====================================
-  // 🌍 CITY COMPARISON
-  // =====================================
+// =====================================
+// 🌍 CITY COMPARISON
+// =====================================
 
-  const cities =
+const cities =
 
-    entities.cities ||
+  entities.cities ||
 
-    [];
+  [];
 
-  if(cities.length >= 2){
+if(cities.length >= 2){
 
-    const city1 =
-      cities[0]?.toLowerCase();
+  const city1 =
+    cities[0]?.toLowerCase();
 
-    const city2 =
-      cities[1]?.toLowerCase();
+  const city2 =
+    cities[1]?.toLowerCase();
 
-    const market1 =
-      window.rbMarketData?.[city1];
+  const market1 =
+    window.rbMarketData?.[city1];
 
-    const market2 =
-      window.rbMarketData?.[city2];
+  const market2 =
+    window.rbMarketData?.[city2];
 
-    const sim1 =
-  window.rbInvestmentMemory?.[city1];
+  const sim1 =
+    window.rbInvestmentMemory?.[city1];
 
-const sim2 =
-  window.rbInvestmentMemory?.[city2];
+  const sim2 =
+    window.rbInvestmentMemory?.[city2];
 
-    if(market1 && market2){
+  if(market1 && market2){
 
-response.textIT =
+    response.textIT =
 
 `🆚 Confronto mercati
 
@@ -1256,10 +1256,18 @@ response.textIT =
 ${market1.avgROI}
 
 💰 ROI simulazione:
-${sim1?.visualROI || sim1?.roi || "N/D"}%
+${Math.round(
+  sim1?.visualROI ||
+  sim1?.roi ||
+  0
+)}%
 
 🏨 Occupazione:
-${sim1?.occupancy || market1.occupancy}
+${Math.round(
+  sim1?.occupancy ||
+  parseFloat(market1.occupancy) ||
+  0
+)}%
 
 💵 Profitto:
 €${Math.round(sim1?.net || 0)}
@@ -1275,10 +1283,18 @@ ${market1.risk}
 ${market2.avgROI}
 
 💰 ROI simulazione:
-${sim2?.visualROI || sim2?.roi || "N/D"}%
+${Math.round(
+  sim2?.visualROI ||
+  sim2?.roi ||
+  0
+)}%
 
 🏨 Occupazione:
-${sim2?.occupancy || market2.occupancy}
+${Math.round(
+  sim2?.occupancy ||
+  parseFloat(market2.occupancy) ||
+  0
+)}%
 
 💵 Profitto:
 €${Math.round(sim2?.net || 0)}
@@ -1286,21 +1302,77 @@ ${sim2?.occupancy || market2.occupancy}
 ⚠️ Rischio:
 ${market2.risk}`;
 
-    }
+    response.textEN =
 
-    else{
+`🆚 Market comparison
 
-      response.textIT =
-        "⚠️ Dati mercato non disponibili per una delle città.";
+🌍 ${window.rbCapitalize?.(city1)}
 
-      response.textEN =
-        "⚠️ Market data unavailable for one of the cities.";
+📈 Market ROI:
+${market1.avgROI}
 
-    }
+💰 Simulation ROI:
+${Math.round(
+  sim1?.visualROI ||
+  sim1?.roi ||
+  0
+)}%
 
-    return response;
+🏨 Occupancy:
+${Math.round(
+  sim1?.occupancy ||
+  parseFloat(market1.occupancy) ||
+  0
+)}%
+
+💵 Profit:
+€${Math.round(sim1?.net || 0)}
+
+⚠️ Risk:
+${market1.risk}
+
+-------------------
+
+🌍 ${window.rbCapitalize?.(city2)}
+
+📈 Market ROI:
+${market2.avgROI}
+
+💰 Simulation ROI:
+${Math.round(
+  sim2?.visualROI ||
+  sim2?.roi ||
+  0
+)}%
+
+🏨 Occupancy:
+${Math.round(
+  sim2?.occupancy ||
+  parseFloat(market2.occupancy) ||
+  0
+)}%
+
+💵 Profit:
+€${Math.round(sim2?.net || 0)}
+
+⚠️ Risk:
+${market2.risk}`;
 
   }
+
+  else{
+
+    response.textIT =
+      "⚠️ Dati mercato non disponibili per una delle città.";
+
+    response.textEN =
+      "⚠️ Market data unavailable for one of the cities.";
+
+  }
+
+  return response;
+
+}
 
 
   // =====================================
