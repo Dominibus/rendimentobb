@@ -41,6 +41,11 @@ window.rbChatMemory = {
   lastTargetROI: null,
 
   lastFinancingLevel: null,
+// =======================================
+// 📊 INVESTMENT HISTORY
+// =======================================
+
+  investmentHistory: [],
 
   context: {}
 
@@ -193,6 +198,43 @@ if(entities.strategy){
       }
 
     }
+
+// ===========================================
+// 📊 SAVE INVESTMENT SNAPSHOT
+// ===========================================
+
+if(
+
+  entities.roi ||
+
+  entities.city ||
+
+  entities.occupancy ||
+
+  entities.mortgage
+
+){
+
+  memory.investmentHistory.push({
+
+    roi:
+      entities.roi || null,
+
+    city:
+      entities.city || null,
+
+    occupancy:
+      entities.occupancy || null,
+
+    mortgage:
+      entities.mortgage || null,
+
+    timestamp:
+      Date.now()
+
+  });
+
+}
 
     // ===========================================
     // 🧠 STORE INTENT
@@ -379,7 +421,11 @@ window.rbGetConversationContext = function(){
       window.rbChatMemory.lastTargetROI,
 
     financingLevel:
-      window.rbChatMemory.lastFinancingLevel
+      window.rbChatMemory.lastFinancingLevel,
+
+    investmentHistory:
+     window.rbChatMemory
+    .investmentHistory || []
 
   };
 
