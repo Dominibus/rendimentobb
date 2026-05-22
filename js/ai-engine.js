@@ -618,6 +618,67 @@ const city =
   };
 
   // ===========================================
+// 🧠 CHAT MEMORY SYNC
+// ===========================================
+
+window.rbChatMemory =
+  window.rbChatMemory || {};
+
+window.rbChatMemory.lastCity =
+  city;
+
+window.rbChatMemory.lastROI =
+  roi;
+
+window.rbChatMemory.lastRisk =
+  risk;
+
+window.rbChatMemory.lastOccupancy =
+  occupancy;
+
+window.rbChatMemory.lastPropertyPrice =
+  price;
+
+window.rbChatMemory.lastMortgage =
+  mortgagePercent;
+
+window.rbChatMemory.lastInvestmentScore =
+  investmentScore;
+
+window.rbChatMemory.lastInvestment =
+  window.rbInvestmentMemory;
+
+// ===========================================
+// 📚 INVESTMENT HISTORY
+// ===========================================
+
+window.rbChatMemory.investmentHistory =
+  window.rbChatMemory.investmentHistory || [];
+
+window.rbChatMemory.investmentHistory.push({
+
+  city,
+  roi,
+  risk,
+  occupancy,
+  price,
+
+  timestamp:
+    Date.now()
+
+});
+
+// 🔥 LIMIT MEMORY
+
+if(
+  window.rbChatMemory.investmentHistory.length > 15
+){
+
+  window.rbChatMemory.investmentHistory.shift();
+
+}
+
+  // ===========================================
   // 🧠 DEBUG
   // ===========================================
 
