@@ -970,11 +970,25 @@ function scanKnowledge(obj){
 }
 
 // ===========================================
+// 🚫 SKIP KNOWLEDGE MATCH FOR MULTI CITY
+// ===========================================
+
+const skipKnowledgeDetection =
+
+  Array.isArray(entities.cities) &&
+  entities.cities.length >= 2;
+
+// ===========================================
 // 🚀 EXECUTE
 // ===========================================
 
 const matchedKnowledge =
-  scanKnowledge(knowledgeBase);
+
+  skipKnowledgeDetection
+
+    ? null
+
+    : scanKnowledge(knowledgeBase);
 
 if(matchedKnowledge){
 
