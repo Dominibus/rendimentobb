@@ -3683,14 +3683,19 @@ monthlyMortgagePayment:
 };
 
 // =====================================
-// 🧠 CITY MEMORY SAVE
+// 🧠 CITY MEMORY ENGINE
+// Silicon Valley SaaS Stable Build
 // =====================================
 
-if(!window.rbCityMemory){
+if (!window.rbCityMemory) {
 
   window.rbCityMemory = {};
 
 }
+
+// =====================================
+// 🌍 ACTIVE CITY
+// =====================================
 
 const memoryCity = (
 
@@ -3704,99 +3709,193 @@ const memoryCity = (
 .toLowerCase()
 .trim();
 
+// =====================================
+// 💰 SAFE FINANCIAL VALUES
+// =====================================
+
+const safeROI =
+  Number(
+    roi ??
+    realROI ??
+    visualROI ??
+    window.lastAnalysisData?.roi ??
+    0
+  );
+
+const safeVisualROI =
+  Number(
+    visualROI ??
+    roi ??
+    realROI ??
+    window.lastAnalysisData?.visualROI ??
+    0
+  );
+
+const safeRealROI =
+  Number(
+    realROI ??
+    roi ??
+    visualROI ??
+    window.lastAnalysisData?.realROI ??
+    0
+  );
+
+const safeGross =
+  Number(
+    gross ??
+    annualRevenue ??
+    revenueAnnual ??
+    window.lastAnalysisData?.gross ??
+    0
+  );
+
+const safeNet =
+  Number(
+    net ??
+    annualNet ??
+    yearlyProfit ??
+    annualProfit ??
+    window.lastAnalysisData?.net ??
+    0
+  );
+
+const safeMonthlyProfit =
+  Math.round(
+    safeNet / 12
+  );
+
+const safeOccupancy =
+  Number(
+    occupancy ??
+    occupancyRate ??
+    window.lastAnalysisData?.occupancy ??
+    0
+  );
+
+const safePriceNight =
+  Number(
+    priceNight ??
+    nightly ??
+    window.lastAnalysisData?.priceNight ??
+    0
+  );
+
+const safeExpenses =
+  Number(
+    expenses ??
+    monthlyCosts ??
+    window.lastAnalysisData?.expenses ??
+    0
+  );
+
+const safePropertyPrice =
+  Number(
+    price ??
+    propertyPrice ??
+    purchasePrice ??
+    window.lastAnalysisData?.propertyPrice ??
+    0
+  );
+
+const safeEquity =
+  Number(
+    equity ??
+    cash ??
+    initialCash ??
+    window.lastAnalysisData?.equity ??
+    0
+  );
+
+const safeLoanAmount =
+  Number(
+    loanAmount ??
+    mortgageAmount ??
+    (
+      safePropertyPrice -
+      safeEquity
+    ) ??
+    0
+  );
+
+// =====================================
+// 🧠 SAVE CITY MEMORY
+// =====================================
+
 window.rbCityMemory[memoryCity] = {
 
-  // ROI
+  // =================================
+  // 📊 ROI DATA
+  // =================================
+
   roi:
-    Number(
-      roi ??
-      safeROI ??
-      realROI ??
-      visualROI ??
-      0
-    ),
+    safeROI,
 
   visualROI:
-    Number(
-      visualROI ??
-      roi ??
-      realROI ??
-      safeROI ??
-      0
-    ),
+    safeVisualROI,
 
   realROI:
-    Number(
-      realROI ??
-      roi ??
-      visualROI ??
-      0
-    ),
+    safeRealROI,
 
-  // PROFIT
+  // =================================
+  // 💵 PROFITABILITY
+  // =================================
+
   net:
-    Number(
-      net ??
-      annualProfit ??
-      monthlyProfit ??
-      0
-    ),
+    safeNet,
 
   annualProfit:
-  net ??
-  annualNet ??
-  yearlyProfit ??
-  0,
+    safeNet,
 
   monthlyProfit:
-    Number(
-      monthlyProfit ??
-      (
-        Number(
-          annualProfit ??
-          net ??
-          0
-        ) / 12
-      )
-    ),
+    safeMonthlyProfit,
 
-  // REVENUE
+  // =================================
+  // 📈 REVENUE
+  // =================================
+
   gross:
-    Number(
-      gross ??
-      annualRevenue ??
-      0
-    ),
+    safeGross,
 
   annualRevenue:
-    Number(
-      annualRevenue ??
-      gross ??
-      0
+    safeGross,
+
+  monthlyRevenue:
+    Math.round(
+      safeGross / 12
     ),
 
-  // OCCUPANCY
+  // =================================
+  // 🏠 PROPERTY DATA
+  // =================================
+
+  propertyPrice:
+    safePropertyPrice,
+
+  equity:
+    safeEquity,
+
+  loanAmount:
+    safeLoanAmount,
+
+  // =================================
+  // 📊 OPERATIONS
+  // =================================
+
   occupancy:
-    Number(
-      occupancy ??
-      occupancyRate ??
-      0
-    ),
+    safeOccupancy,
 
-  // EXTRA
   priceNight:
-    Number(
-      priceNight ??
-      nightly ??
-      0
-    ),
+    safePriceNight,
 
   expenses:
-    Number(
-      expenses ??
-      monthlyCosts ??
-      0
-    ),
+    safeExpenses,
+
+  totalExpenses:
+    safeExpenses * 12,
+
+  // =================================
+  // 🌍 META
+  // =================================
 
   city:
     memoryCity,
@@ -3806,43 +3905,124 @@ window.rbCityMemory[memoryCity] = {
 
 };
 
+// =====================================
+// 🧠 GLOBAL LAST ANALYSIS
+// =====================================
+
+window.lastAnalysisData = {
+
+  roi:
+    safeROI,
+
+  visualROI:
+    safeVisualROI,
+
+  realROI:
+    safeRealROI,
+
+  gross:
+    safeGross,
+
+  annualRevenue:
+    safeGross,
+
+  monthlyRevenue:
+    Math.round(
+      safeGross / 12
+    ),
+
+  net:
+    safeNet,
+
+  annualProfit:
+    safeNet,
+
+  monthlyProfit:
+    safeMonthlyProfit,
+
+  occupancy:
+    safeOccupancy,
+
+  priceNight:
+    safePriceNight,
+
+  expenses:
+    safeExpenses,
+
+  totalExpenses:
+    safeExpenses * 12,
+
+  propertyPrice:
+    safePropertyPrice,
+
+  equity:
+    safeEquity,
+
+  loanAmount:
+    safeLoanAmount,
+
+  city:
+    memoryCity,
+
+  updatedAt:
+    Date.now()
+
+};
+
+// =====================================
+// 🔥 DEBUG ENGINE
+// =====================================
+
 console.log(
   "🧠 CITY MEMORY UPDATED:",
   memoryCity,
   window.rbCityMemory[memoryCity]
 );
 
-console.log("🔥 SAVE DEBUG", {
-
-  roi,
-  gross,
-  net,
-  expenses,
-  price,
-  equity,
-
-  annualProfit:
-    net,
-
-  safeNet:
-    net,
-
-  totalExpenses:
-    window.lastAnalysisData.totalExpenses,
-
-  mortgageAmount:
-    window.lastAnalysisData.mortgageAmount,
-
-  monthlyMortgagePayment:
-    window.lastAnalysisData.monthlyMortgagePayment
-
-});
-
 console.log(
   "💾 LAST ANALYSIS SAVED:",
   window.lastAnalysisData
 );
 
+console.log(
+  "🔥 SAVE DEBUG",
+  {
+
+    roi:
+      safeROI,
+
+    visualROI:
+      safeVisualROI,
+
+    realROI:
+      safeRealROI,
+
+    gross:
+      safeGross,
+
+    net:
+      safeNet,
+
+    monthlyProfit:
+      safeMonthlyProfit,
+
+    occupancy:
+      safeOccupancy,
+
+    expenses:
+      safeExpenses,
+
+    propertyPrice:
+      safePropertyPrice,
+
+    equity:
+      safeEquity,
+
+    loanAmount:
+      safeLoanAmount
+
+  }
+);
     // ===============================================
 // 🧠 AI INVESTMENT MEMORY SNAPSHOT
 // ===============================================
