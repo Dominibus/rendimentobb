@@ -1295,14 +1295,20 @@ if(window.lastAnalysisData){
   }
 
   if(
-    entities.city === null &&
-    liveData.city
-  ){
 
-    entities.city =
-      String(liveData.city);
+  entities.city === null &&
 
-  }
+  (!Array.isArray(entities.cities) ||
+   entities.cities.length < 2) &&
+
+  liveData.city
+
+){
+
+  entities.city =
+    String(liveData.city);
+
+}
 
 }
 
