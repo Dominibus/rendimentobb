@@ -1372,13 +1372,31 @@ VS
 
 }
 
+// ===========================================
+// 🛑 COMPARISON PRIORITY OVERRIDE
+// ===========================================
+
+if(
+  intent.intent === "comparison"
+){
+
+  console.log(
+    "🛑 COMPARISON OVERRIDE ACTIVE"
+  );
+
+}
+
   // ===========================================
   // 🌍 MARKET RESPONSE
   // ===========================================
 
   else if(
-    intent.intent === "market_analysis"
-  ){
+
+  intent.intent === "market_analysis" &&
+
+  intent.intent !== "comparison"
+
+){
 
     response.type =
       "market";
