@@ -235,6 +235,9 @@ else if(detectedCities.length === 1){
   entities.city =
     detectedCities[0];
 
+  entities.cities =
+  detectedCities;
+
   entities.detectedTopics.push(
     "market"
   );
