@@ -203,25 +203,31 @@ for(const cityKey in cities){
 // 🌍 APPLY RESULTS
 // =======================================
 
-if(detectedCities.length > 0){
+if(detectedCities.length >= 2){
+
+  entities.cities =
+    detectedCities;
+
+  entities.city = null;
+
+  entities.detectedTopics.push(
+    "market"
+  );
+
+  console.log(
+    "🌍 MULTI CITY:",
+    detectedCities
+  );
+
+}
+
+else if(detectedCities.length === 1){
 
   entities.city =
     detectedCities[0];
 
   entities.detectedTopics.push(
     "market"
-  );
-
-}
-
-if(detectedCities.length >= 2){
-
-  entities.cities =
-    detectedCities;
-
-  console.log(
-    "🌍 MULTI CITY:",
-    detectedCities
   );
 
 }
