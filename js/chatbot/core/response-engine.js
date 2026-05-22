@@ -1200,6 +1200,122 @@ ${mortgagePercent}%
 
   }
 
+// ===========================================
+// 📊 INVESTMENT COMPARISON RESPONSE
+// ===========================================
+
+else if(
+  intent.intent === "comparison"
+){
+
+  response.type =
+    "comparison";
+
+  response.confidence =
+    0.97;
+
+  const history =
+
+    memory?.investmentHistory ||
+
+    window.rbChatMemory?.investmentHistory ||
+
+    [];
+
+  if(history.length >= 2){
+
+    const current =
+      history[history.length - 1];
+
+    const previous =
+      history[history.length - 2];
+
+    const currentROI =
+      Number(current.roi || 0);
+
+    const previousROI =
+      Number(previous.roi || 0);
+
+    const currentCity =
+      current.city || "unknown";
+
+    const previousCity =
+      previous.city || "unknown";
+
+    const betterInvestment =
+
+      currentROI > previousROI
+
+      ? currentCity
+
+      : previousCity;
+
+    response.textIT =
+
+`📊 Confronto investimenti
+
+🏙 Ultima simulazione:
+${currentCity}
+
+📈 ROI:
+${currentROI.toFixed(1)}%
+
+-------------------
+
+🏙 Simulazione precedente:
+${previousCity}
+
+📈 ROI:
+${previousROI.toFixed(1)}%
+
+-------------------
+
+🏆 Investimento migliore:
+${betterInvestment}
+
+💡 Differenza ROI:
+${Math.abs(currentROI - previousROI).toFixed(1)}%`;
+
+    response.textEN =
+
+`📊 Investment comparison
+
+🏙 Latest simulation:
+${currentCity}
+
+📈 ROI:
+${currentROI.toFixed(1)}%
+
+-------------------
+
+🏙 Previous simulation:
+${previousCity}
+
+📈 ROI:
+${previousROI.toFixed(1)}%
+
+-------------------
+
+🏆 Better investment:
+${betterInvestment}
+
+💡 ROI difference:
+${Math.abs(currentROI - previousROI).toFixed(1)}%`;
+
+  }
+
+  else{
+
+    response.textIT =
+      "⚠️ Servono almeno due simulazioni per effettuare un confronto.";
+
+    response.textEN =
+      "⚠️ At least two simulations are required for comparison.";
+
+  }
+
+}
+
   // ===========================================
   // 🌍 MARKET RESPONSE
   // ===========================================
