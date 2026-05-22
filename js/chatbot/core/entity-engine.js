@@ -154,50 +154,77 @@ window.rbExtractEntities = function(input = ""){
 
   };
   // ===========================================
-  // 🌍 CITY DETECTION
-  // ===========================================
+// 🌍 CITY DETECTION
+// ===========================================
 
-  const cities = {
+const cities = {
 
-    ...(window.rbKnowledgeBase?.cities || {}),
+  ...(window.rbKnowledgeBase?.cities || {}),
 
-    ...(window.rbMarketData || {})
+  ...(window.rbMarketData || {})
 
-  };
+};
 
-  for(const cityKey in cities){
+// =======================================
+// 🌍 MULTI CITY SUPPORT
+// =======================================
 
-    const city = cities[cityKey] || {};
+const detectedCities = [];
 
-    const aliases = [
+for(const cityKey in cities){
 
-      cityKey,
+  const city = cities[cityKey] || {};
 
-      ...(city.aliases || [])
+  const aliases = [
 
-    ];
+    cityKey,
 
-    const matched = aliases.some(alias =>
+    ...(city.aliases || [])
 
-      text.includes(
-        String(alias).toLowerCase()
-      )
+  ];
 
-    );
+  const matched = aliases.some(alias =>
 
-    if(matched){
+    text.includes(
+      String(alias).toLowerCase()
+    )
 
-      entities.city = cityKey;
+  );
 
-      entities.detectedTopics.push(
-        "market"
-      );
+  if(matched){
 
-      break;
-
-    }
+    detectedCities.push(cityKey);
 
   }
+
+}
+
+// =======================================
+// 🌍 APPLY RESULTS
+// =======================================
+
+if(detectedCities.length > 0){
+
+  entities.city =
+    detectedCities[0];
+
+  entities.detectedTopics.push(
+    "market"
+  );
+
+}
+
+if(detectedCities.length >= 2){
+
+  entities.cities =
+    detectedCities;
+
+  console.log(
+    "🌍 MULTI CITY:",
+    detectedCities
+  );
+
+}
 
   // ===========================================
   // 💰 PROPERTY PRICE / AMOUNT
