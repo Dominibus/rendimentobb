@@ -759,12 +759,39 @@ const comparisonWords = [
   "differenza",
 
   "più conveniente",
+  "piu conveniente",
 
   "più profittevole",
+  "piu profittevole",
 
   "migliore",
 
   "confronta",
+
+  // 🔥 NUOVI IT
+  "fra le due",
+  "tra le due",
+
+  "quale conviene",
+
+  "quale è migliore",
+  "quale e migliore",
+
+  "migliore simulazione",
+
+  "miglior investimento",
+
+  "quale rende di più",
+  "quale rende di piu",
+
+  "confronta simulazioni",
+
+  "confronta investimenti",
+
+  "quale è meglio",
+  "quale e meglio",
+
+  "fammi un confronto",
 
   // 🇬🇧 ENGLISH
   "compare",
@@ -781,7 +808,28 @@ const comparisonWords = [
 
   "best option",
 
-  "compare investment"
+  "compare investment",
+
+  // 🔥 NEW EN
+  "which is better",
+
+  "which one is better",
+
+  "which investment is better",
+
+  "compare simulations",
+
+  "compare investments",
+
+  "which one performs better",
+
+  "which one is more profitable",
+
+  "between the two",
+
+  "which one should i choose",
+
+  "best simulation"
 
 ];
 
