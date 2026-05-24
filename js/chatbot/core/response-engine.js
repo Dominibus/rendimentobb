@@ -1490,15 +1490,90 @@ ${formatPercent(
 ⚠️ Risk:
 ${market2.risk}`;
 
+const roiDifference =
+
+  Math.abs(
+    roi1 - roi2
+  ).toFixed(1);
+
+let aiInsightIT = "";
+let aiInsightEN = "";
+
+// =====================================
+// 🧠 AI INSIGHT ENGINE
+// =====================================
+
+if(roi1 > roi2){
+
+  aiInsightIT =
+
+`🧠 Insight AI
+
+${window.rbCapitalize?.(city1)}
+mostra un ROI superiore di ${roiDifference}%.
+
+${window.rbCapitalize?.(city2)}
+offre però una possibile stabilità maggiore
+grazie ad una occupazione del ${formatPercent(
+  sim2?.occupancy
+)}%.`;
+
+  aiInsightEN =
+
+`🧠 AI Insight
+
+${window.rbCapitalize?.(city1)}
+shows a higher ROI by ${roiDifference}%.
+
+${window.rbCapitalize?.(city2)}
+may offer stronger operational stability
+thanks to ${formatPercent(
+  sim2?.occupancy
+)}% occupancy.`;
+
+}
+
+else if(roi2 > roi1){
+
+  aiInsightIT =
+
+`🧠 Insight AI
+
+${window.rbCapitalize?.(city2)}
+mostra un ROI superiore di ${roiDifference}%.
+
+${window.rbCapitalize?.(city1)}
+offre però una possibile stabilità maggiore
+grazie ad una occupazione del ${formatPercent(
+  sim1?.occupancy
+)}%.`;
+
+  aiInsightEN =
+
+`🧠 AI Insight
+
+${window.rbCapitalize?.(city2)}
+shows a higher ROI by ${roiDifference}%.
+
+${window.rbCapitalize?.(city1)}
+may offer stronger operational stability
+thanks to ${formatPercent(
+  sim1?.occupancy
+)}% occupancy.`;
+
+}
+
   }
 
   else{
 
     response.textIT =
       "⚠️ Dati mercato non disponibili per una delle città.";
+      ${aiInsightIT}
 
     response.textEN =
       "⚠️ Market data unavailable for one of the cities.";
+      ${aiInsightEN}
 
   }
 
