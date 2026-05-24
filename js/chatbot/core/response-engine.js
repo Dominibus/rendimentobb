@@ -1354,19 +1354,114 @@ if(cities.length >= 2){
 
   }
 
-  // =====================================
-  // ✅ VALIDATION
-  // =====================================
+// =====================================
+// 🧠 AI INSIGHT ENGINE
+// =====================================
 
-  if(market1 && market2){
+const roiDifference =
 
-    response.type =
-      "comparison";
+  Math.abs(
+    roi1 - roi2
+  ).toFixed(1);
 
-    response.confidence =
-      0.97;
+let aiInsightIT = "";
+let aiInsightEN = "";
 
-    response.textIT =
+if(roi1 > roi2){
+
+  aiInsightIT =
+
+`🧠 Insight AI
+
+${window.rbCapitalize?.(city1)}
+mostra un ROI superiore di ${roiDifference}%.
+
+${window.rbCapitalize?.(city2)}
+offre però una possibile stabilità maggiore
+grazie ad una occupazione del ${formatPercent(
+  getOccupancy(
+    sim2,
+    market2
+  )
+)}%.`;
+
+  aiInsightEN =
+
+`🧠 AI Insight
+
+${window.rbCapitalize?.(city1)}
+shows a higher ROI by ${roiDifference}%.
+
+${window.rbCapitalize?.(city2)}
+may offer stronger operational stability
+thanks to ${formatPercent(
+  getOccupancy(
+    sim2,
+    market2
+  )
+)}% occupancy.`;
+
+}
+
+else if(roi2 > roi1){
+
+  aiInsightIT =
+
+`🧠 Insight AI
+
+${window.rbCapitalize?.(city2)}
+mostra un ROI superiore di ${roiDifference}%.
+
+${window.rbCapitalize?.(city1)}
+offre però una possibile stabilità maggiore
+grazie ad una occupazione del ${formatPercent(
+  getOccupancy(
+    sim1,
+    market1
+  )
+)}%.`;
+
+  aiInsightEN =
+
+`🧠 AI Insight
+
+${window.rbCapitalize?.(city2)}
+shows a higher ROI by ${roiDifference}%.
+
+${window.rbCapitalize?.(city1)}
+may offer stronger operational stability
+thanks to ${formatPercent(
+  getOccupancy(
+    sim1,
+    market1
+  )
+)}% occupancy.`;
+
+}
+
+else{
+
+  aiInsightIT =
+    "⚖️ Le due simulazioni mostrano performance simili.";
+
+  aiInsightEN =
+    "⚖️ Both simulations show similar performance.";
+
+}
+
+// =====================================
+// ✅ VALIDATION
+// =====================================
+
+if(market1 && market2){
+
+  response.type =
+    "comparison";
+
+  response.confidence =
+    0.97;
+
+  response.textIT =
 
 `🆚 Confronto mercati AI
 
@@ -1426,9 +1521,13 @@ ${formatPercent(
 )}
 
 ⚠️ Rischio:
-${market2.risk}`;
+${market2.risk}
 
-    response.textEN =
+━━━━━━━━━━━━━━━
+
+${aiInsightIT}`;
+
+  response.textEN =
 
 `🆚 AI Market Comparison
 
@@ -1488,99 +1587,25 @@ ${formatPercent(
 )}
 
 ⚠️ Risk:
-${market2.risk}`;
+${market2.risk}
 
-const roiDifference =
+━━━━━━━━━━━━━━━
 
-  Math.abs(
-    roi1 - roi2
-  ).toFixed(1);
-
-let aiInsightIT = "";
-let aiInsightEN = "";
-
-// =====================================
-// 🧠 AI INSIGHT ENGINE
-// =====================================
-
-if(roi1 > roi2){
-
-  aiInsightIT =
-
-`🧠 Insight AI
-
-${window.rbCapitalize?.(city1)}
-mostra un ROI superiore di ${roiDifference}%.
-
-${window.rbCapitalize?.(city2)}
-offre però una possibile stabilità maggiore
-grazie ad una occupazione del ${formatPercent(
-  sim2?.occupancy
-)}%.`;
-
-  aiInsightEN =
-
-`🧠 AI Insight
-
-${window.rbCapitalize?.(city1)}
-shows a higher ROI by ${roiDifference}%.
-
-${window.rbCapitalize?.(city2)}
-may offer stronger operational stability
-thanks to ${formatPercent(
-  sim2?.occupancy
-)}% occupancy.`;
+${aiInsightEN}`;
 
 }
 
-else if(roi2 > roi1){
+else{
 
-  aiInsightIT =
+  response.textIT =
+    "⚠️ Dati mercato non disponibili per una delle città.";
 
-`🧠 Insight AI
-
-${window.rbCapitalize?.(city2)}
-mostra un ROI superiore di ${roiDifference}%.
-
-${window.rbCapitalize?.(city1)}
-offre però una possibile stabilità maggiore
-grazie ad una occupazione del ${formatPercent(
-  sim1?.occupancy
-)}%.`;
-
-  aiInsightEN =
-
-`🧠 AI Insight
-
-${window.rbCapitalize?.(city2)}
-shows a higher ROI by ${roiDifference}%.
-
-${window.rbCapitalize?.(city1)}
-may offer stronger operational stability
-thanks to ${formatPercent(
-  sim1?.occupancy
-)}% occupancy.`;
+  response.textEN =
+    "⚠️ Market data unavailable for one of the cities.";
 
 }
 
-  }
-
-  else{
-
-    response.textIT =
-      "⚠️ Dati mercato non disponibili per una delle città.";
-      ${aiInsightIT}
-
-    response.textEN =
-      "⚠️ Market data unavailable for one of the cities.";
-      ${aiInsightEN}
-
-  }
-
-  return response;
-
-}
-
+return response;
 
   // =====================================
   // 📊 FALLBACK INVESTMENT HISTORY
