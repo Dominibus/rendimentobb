@@ -1463,11 +1463,7 @@ const investmentHistory =
   [];
 
 if(
-
-  investmentHistory.length >= 2 &&
-
-  city1 === city2
-
+  investmentHistory.length >= 2
 ){
 
   const current =
