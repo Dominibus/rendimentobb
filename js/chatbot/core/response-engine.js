@@ -1449,6 +1449,152 @@ else{
 
 }
 
+  // =====================================
+// 🧠 SAME CITY COMPARISON ENGINE
+// Silicon Valley SaaS Layer
+// =====================================
+
+const investmentHistory =
+
+  window.rbInvestmentMemory ||
+
+  window.investmentHistory ||
+
+  [];
+
+if(
+
+  investmentHistory.length >= 2 &&
+
+  city1 === city2
+
+){
+
+  const current =
+    investmentHistory[investmentHistory.length - 1];
+
+  const previous =
+    investmentHistory[investmentHistory.length - 2];
+
+  const currentROI =
+    Number(current.roi || 0);
+
+  const previousROI =
+    Number(previous.roi || 0);
+
+  const roiDiff =
+    Math.abs(
+      currentROI - previousROI
+    ).toFixed(1);
+
+  const betterInvestment =
+
+    currentROI > previousROI
+      ? current
+      : previous;
+
+  response.type =
+    "comparison";
+
+  response.confidence =
+    0.98;
+
+  response.textIT =
+
+`🆚 Confronto simulazioni AI
+
+🏙 Mercato:
+${window.rbCapitalize?.(city1)}
+
+━━━━━━━━━━━━━━━
+
+💰 Simulazione A
+📈 ROI:
+${Number(previousROI).toFixed(1)}%
+
+💵 Profitto:
+€${formatCurrency(
+  previous.net || 0
+)}
+
+🏨 Occupazione:
+${formatPercent(
+  previous.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+💰 Simulazione B
+📈 ROI:
+${Number(currentROI).toFixed(1)}%
+
+💵 Profitto:
+€${formatCurrency(
+  current.net || 0
+)}
+
+🏨 Occupazione:
+${formatPercent(
+  current.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+🧠 Insight AI
+
+La simulazione con rendimento migliore
+mostra un vantaggio ROI del ${roiDiff}%.`;
+
+  response.textEN =
+
+`🆚 AI Simulation Comparison
+
+🏙 Market:
+${window.rbCapitalize?.(city1)}
+
+━━━━━━━━━━━━━━━
+
+💰 Simulation A
+📈 ROI:
+${Number(previousROI).toFixed(1)}%
+
+💵 Profit:
+€${formatCurrency(
+  previous.net || 0
+)}
+
+🏨 Occupancy:
+${formatPercent(
+  previous.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+💰 Simulation B
+📈 ROI:
+${Number(currentROI).toFixed(1)}%
+
+💵 Profit:
+€${formatCurrency(
+  current.net || 0
+)}
+
+🏨 Occupancy:
+${formatPercent(
+  current.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+🧠 AI Insight
+
+The best simulation shows
+a ROI advantage of ${roiDiff}%.`;
+
+  return response;
+
+}
+
 // =====================================
 // ✅ VALIDATION
 // =====================================
