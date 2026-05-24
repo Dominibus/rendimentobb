@@ -1215,6 +1215,153 @@ else if(
     0.97;
 
 // =====================================
+// 🧠 SAME CITY COMPARISON ENGINE
+// =====================================
+
+const investmentHistory =
+
+  window.rbInvestmentMemory ||
+
+  window.investmentHistory ||
+
+  [];
+
+if(
+  investmentHistory.length >= 2
+){
+
+  const current =
+    investmentHistory[
+      investmentHistory.length - 1
+    ];
+
+  const previous =
+    investmentHistory[
+      investmentHistory.length - 2
+    ];
+
+  const currentROI =
+    Number(current.roi || 0);
+
+  const previousROI =
+    Number(previous.roi || 0);
+
+  const roiDiff =
+    Math.abs(
+      currentROI - previousROI
+    ).toFixed(1);
+
+  response.type =
+    "comparison";
+
+  response.confidence =
+    0.98;
+
+  response.textIT =
+
+`🆚 Confronto simulazioni AI
+
+━━━━━━━━━━━━━━━
+
+💰 Simulazione precedente
+
+📈 ROI:
+${previousROI.toFixed(1)}%
+
+💵 Profitto:
+€${Number(
+  previous.net || 0
+).toLocaleString("it-IT")}
+
+🏨 Occupazione:
+${Math.round(
+  previous.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+💰 Simulazione attuale
+
+📈 ROI:
+${currentROI.toFixed(1)}%
+
+💵 Profitto:
+€${Number(
+  current.net || 0
+).toLocaleString("it-IT")}
+
+🏨 Occupazione:
+${Math.round(
+  current.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+🧠 Insight AI
+
+${
+  currentROI > previousROI
+
+  ? `La simulazione attuale mostra un ROI superiore di ${roiDiff}%.`
+
+  : `La simulazione precedente risulta più profittevole di ${roiDiff}%.`
+}`;
+
+  response.textEN =
+
+`🆚 AI Simulation Comparison
+
+━━━━━━━━━━━━━━━
+
+💰 Previous Simulation
+
+📈 ROI:
+${previousROI.toFixed(1)}%
+
+💵 Profit:
+€${Number(
+  previous.net || 0
+).toLocaleString("en-US")}
+
+🏨 Occupancy:
+${Math.round(
+  previous.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+💰 Current Simulation
+
+📈 ROI:
+${currentROI.toFixed(1)}%
+
+💵 Profit:
+€${Number(
+  current.net || 0
+).toLocaleString("en-US")}
+
+🏨 Occupancy:
+${Math.round(
+  current.occupancy || 0
+)}%
+
+━━━━━━━━━━━━━━━
+
+🧠 AI Insight
+
+${
+  currentROI > previousROI
+
+  ? `The current simulation shows a higher ROI by ${roiDiff}%.`
+
+  : `The previous simulation appears more profitable by ${roiDiff}%.`
+}`;
+
+  return response;
+
+}  
+
+// =====================================
 // 🌍 CITY COMPARISON
 // =====================================
 
@@ -1446,148 +1593,6 @@ else{
 
   aiInsightEN =
     "⚖️ Both simulations show similar performance.";
-
-}
-
-  // =====================================
-// 🧠 SAME CITY COMPARISON ENGINE
-// Silicon Valley SaaS Layer
-// =====================================
-
-const investmentHistory =
-
-  window.rbInvestmentMemory ||
-
-  window.investmentHistory ||
-
-  [];
-
-if(
-  investmentHistory.length >= 2
-){
-
-  const current =
-    investmentHistory[investmentHistory.length - 1];
-
-  const previous =
-    investmentHistory[investmentHistory.length - 2];
-
-  const currentROI =
-    Number(current.roi || 0);
-
-  const previousROI =
-    Number(previous.roi || 0);
-
-  const roiDiff =
-    Math.abs(
-      currentROI - previousROI
-    ).toFixed(1);
-
-  const betterInvestment =
-
-    currentROI > previousROI
-      ? current
-      : previous;
-
-  response.type =
-    "comparison";
-
-  response.confidence =
-    0.98;
-
-  response.textIT =
-
-`🆚 Confronto simulazioni AI
-
-🏙 Mercato:
-${window.rbCapitalize?.(city1)}
-
-━━━━━━━━━━━━━━━
-
-💰 Simulazione A
-📈 ROI:
-${Number(previousROI).toFixed(1)}%
-
-💵 Profitto:
-€${formatCurrency(
-  previous.net || 0
-)}
-
-🏨 Occupazione:
-${formatPercent(
-  previous.occupancy || 0
-)}%
-
-━━━━━━━━━━━━━━━
-
-💰 Simulazione B
-📈 ROI:
-${Number(currentROI).toFixed(1)}%
-
-💵 Profitto:
-€${formatCurrency(
-  current.net || 0
-)}
-
-🏨 Occupazione:
-${formatPercent(
-  current.occupancy || 0
-)}%
-
-━━━━━━━━━━━━━━━
-
-🧠 Insight AI
-
-La simulazione con rendimento migliore
-mostra un vantaggio ROI del ${roiDiff}%.`;
-
-  response.textEN =
-
-`🆚 AI Simulation Comparison
-
-🏙 Market:
-${window.rbCapitalize?.(city1)}
-
-━━━━━━━━━━━━━━━
-
-💰 Simulation A
-📈 ROI:
-${Number(previousROI).toFixed(1)}%
-
-💵 Profit:
-€${formatCurrency(
-  previous.net || 0
-)}
-
-🏨 Occupancy:
-${formatPercent(
-  previous.occupancy || 0
-)}%
-
-━━━━━━━━━━━━━━━
-
-💰 Simulation B
-📈 ROI:
-${Number(currentROI).toFixed(1)}%
-
-💵 Profit:
-€${formatCurrency(
-  current.net || 0
-)}
-
-🏨 Occupancy:
-${formatPercent(
-  current.occupancy || 0
-)}%
-
-━━━━━━━━━━━━━━━
-
-🧠 AI Insight
-
-The best simulation shows
-a ROI advantage of ${roiDiff}%.`;
-
-  return response;
 
 }
 
