@@ -1611,8 +1611,6 @@ return response;
   // 📊 FALLBACK INVESTMENT HISTORY
   // =====================================
 
-  else{
-
     const history =
 
       memory?.investmentHistory ||
@@ -1664,8 +1662,6 @@ VS
         "⚠️ At least two simulations or two cities are required.";
 
     }
-
-  }
 
 }
 
