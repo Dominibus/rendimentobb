@@ -1800,7 +1800,9 @@ else{
 
 }
 
-  else{
+} // <-- CHIUSURA if(cities.length >= 2)
+
+else{
 
   console.log(
     "⚠️ CITY COMPARISON SKIPPED"
