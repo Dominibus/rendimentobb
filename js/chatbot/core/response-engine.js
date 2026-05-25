@@ -1404,8 +1404,17 @@ ${
 // 🌍 CITY COMPARISON
 // =====================================
 
-const cities =
-  entities.cities || [];
+const cities = [
+
+  ...(Array.isArray(entities.cities)
+    ? entities.cities
+    : []),
+
+  ...(entities.city
+    ? [entities.city]
+    : [])
+
+].filter(Boolean);
 
 if(cities.length >= 2){
 
@@ -1790,6 +1799,8 @@ else{
     "⚠️ Market data unavailable for one of the cities.";
 
 }
+
+  return response;
 
   // =====================================
   // 📊 FALLBACK INVESTMENT HISTORY
