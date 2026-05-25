@@ -1218,25 +1218,42 @@ else if(
 // 🧠 SAME CITY COMPARISON ENGINE
 // =====================================
 
-const investmentHistory =
+const investmentHistory = [
 
-  Array.isArray(window.rbInvestmentMemory)
-
+  ...(Array.isArray(window.rbInvestmentMemory)
     ? window.rbInvestmentMemory
+    : []),
 
-    : Array.isArray(window.rbInvestmentMemory?.history)
-
-    ? window.rbInvestmentMemory.history
-
-    : Array.isArray(window.investmentHistory)
-
+  ...(Array.isArray(window.investmentHistory)
     ? window.investmentHistory
+    : []),
 
-    : [];
+  ...(Array.isArray(memory?.investmentHistory)
+    ? memory.investmentHistory
+    : [])
+
+].filter(
+  item =>
+    item &&
+    (
+      item.roi !== undefined ||
+      item.realROI !== undefined
+    )
+);
+
+console.log(
+  "🧠 FINAL INVESTMENT HISTORY:",
+  investmentHistory
+);
 
 if(
   investmentHistory.length >= 2
 ){
+
+  console.log(
+  "🔥 COMPARISON HISTORY ACTIVE",
+  investmentHistory
+);
 
   const current =
     investmentHistory[
