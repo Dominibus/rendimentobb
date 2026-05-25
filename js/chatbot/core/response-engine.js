@@ -1220,11 +1220,19 @@ else if(
 
 const investmentHistory =
 
-  window.rbInvestmentMemory ||
+  Array.isArray(window.rbInvestmentMemory)
 
-  window.investmentHistory ||
+    ? window.rbInvestmentMemory
 
-  [];
+    : Array.isArray(window.rbInvestmentMemory?.history)
+
+    ? window.rbInvestmentMemory.history
+
+    : Array.isArray(window.investmentHistory)
+
+    ? window.investmentHistory
+
+    : [];
 
 if(
   investmentHistory.length >= 2
