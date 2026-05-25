@@ -1220,6 +1220,10 @@ else if(
 
 const investmentHistory = [
 
+  ...(Array.isArray(window.investmentMemory)
+    ? window.investmentMemory
+    : []),
+
   ...(Array.isArray(window.rbInvestmentMemory)
     ? window.rbInvestmentMemory
     : []),
@@ -1242,6 +1246,11 @@ const investmentHistory = [
 );
 
 console.log(
+  "🔥 FINAL COMPARISON MEMORY:",
+  investmentHistory
+);
+
+console.log(
   "🧠 FINAL INVESTMENT HISTORY:",
   investmentHistory
 );
@@ -1249,6 +1258,11 @@ console.log(
 if(
   investmentHistory.length >= 2
 ){
+
+  console.log(
+  "🔥 COMPARISON ACTIVE:",
+  investmentHistory.length
+);
 
   console.log(
   "🔥 COMPARISON HISTORY ACTIVE",
