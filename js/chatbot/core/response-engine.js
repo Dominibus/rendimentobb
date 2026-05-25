@@ -1800,7 +1800,13 @@ else{
 
 }
 
-  return response;
+  else{
+
+  console.log(
+    "⚠️ CITY COMPARISON SKIPPED"
+  );
+
+}
 
   // =====================================
   // 📊 FALLBACK INVESTMENT HISTORY
@@ -1859,6 +1865,124 @@ VS
     }
 
 }
+
+// =====================================
+// 📊 GLOBAL COMPARISON FALLBACK
+// =====================================
+
+if(
+
+  !response.textIT &&
+  !response.textEN
+
+){
+
+  const history =
+
+    investmentHistory?.length
+
+    ? investmentHistory
+
+    : (
+
+        memory?.investmentHistory ||
+
+        window.rbChatMemory?.investmentHistory ||
+
+        []
+
+      );
+
+  console.log(
+    "🔥 GLOBAL FALLBACK HISTORY:",
+    history
+  );
+
+  if(history.length >= 2){
+
+    const current =
+      history[history.length - 1];
+
+    const previous =
+      history[history.length - 2];
+
+    response.textIT =
+
+`📊 Confronto simulazioni AI
+
+━━━━━━━━━━━━━━━
+
+💰 Simulazione precedente
+
+📈 ROI:
+${Number(
+  previous.roi || previous.realROI || 0
+).toFixed(1)}%
+
+💵 Profitto:
+€${Number(
+  previous.net || 0
+).toLocaleString("it-IT")}
+
+━━━━━━━━━━━━━━━
+
+💰 Simulazione attuale
+
+📈 ROI:
+${Number(
+  current.roi || current.realROI || 0
+).toFixed(1)}%
+
+💵 Profitto:
+€${Number(
+  current.net || 0
+).toLocaleString("it-IT")}`;
+
+    response.textEN =
+
+`📊 AI Simulation Comparison
+
+━━━━━━━━━━━━━━━
+
+💰 Previous Simulation
+
+📈 ROI:
+${Number(
+  previous.roi || previous.realROI || 0
+).toFixed(1)}%
+
+💵 Profit:
+€${Number(
+  previous.net || 0
+).toLocaleString("en-US")}
+
+━━━━━━━━━━━━━━━
+
+💰 Current Simulation
+
+📈 ROI:
+${Number(
+  current.roi || current.realROI || 0
+).toFixed(1)}%
+
+💵 Profit:
+€${Number(
+  current.net || 0
+).toLocaleString("en-US")}`;
+
+  }
+
+  else{
+
+    response.textIT =
+      "⚠️ Servono almeno due simulazioni per il confronto.";
+
+    response.textEN =
+      "⚠️ At least two simulations are required for comparison.";
+
+  }
+
+}  
 
 // ===========================================
 // 🌍 MARKET RESPONSE
