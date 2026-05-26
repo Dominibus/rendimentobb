@@ -1281,37 +1281,17 @@ if(
   investmentHistory.length >= 2
 ){
 
-  console.log(
-  "🧠 COMPARISON ROI:",
-  {
-    currentROI,
-    previousROI,
-    current,
-    previous
-  }
-);
-
-  console.log(
-  "🔥 COMPARISON ACTIVE:",
-  investmentHistory.length
-);
-
-  console.log(
-  "🔥 COMPARISON HISTORY ACTIVE",
-  investmentHistory
-);
-
   const current =
-    investmentHistory[
-      investmentHistory.length - 1
-    ];
+  investmentHistory[
+    investmentHistory.length - 1
+  ];
 
-  const previous =
-    investmentHistory[
-      investmentHistory.length - 2
-    ];
+const previous =
+  investmentHistory[
+    investmentHistory.length - 2
+  ];
 
-  const currentROI =
+const currentROI =
   Number(
 
     current.realROI ??
@@ -1323,6 +1303,39 @@ if(
     0
 
   );
+
+const previousROI =
+  Number(
+
+    previous.realROI ??
+
+    previous.visualROI ??
+
+    previous.roi ??
+
+    0
+
+  );
+
+console.log(
+  "🧠 COMPARISON ROI:",
+  {
+    currentROI,
+    previousROI,
+    current,
+    previous
+  }
+);
+
+console.log(
+  "🔥 COMPARISON ACTIVE:",
+  investmentHistory.length
+);
+
+console.log(
+  "🔥 COMPARISON HISTORY ACTIVE",
+  investmentHistory
+);
 
 const previousROI =
   Number(
