@@ -300,11 +300,6 @@ const investmentHistory = [
       item.roi !== undefined ||
       item.realROI !== undefined
     )
-);  item &&
-    (
-      item.roi !== undefined ||
-      item.realROI !== undefined
-    )
 );
 
 console.log(
