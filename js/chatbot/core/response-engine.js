@@ -1853,13 +1853,12 @@ if(
   // 📊 FALLBACK INVESTMENT HISTORY
   // =====================================
 
-    const history =
+    const history = investmentHistory || [];
 
-      memory?.investmentHistory ||
-
-      window.rbChatMemory?.investmentHistory ||
-
-      [];
+  console.log(
+  "🔥 FINAL HISTORY USED:",
+  history
+  );
 
     if(history.length >= 2){
 
