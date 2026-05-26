@@ -3919,6 +3919,54 @@ console.log(
   window.lastAnalysisData
 );
 
+    // ===========================================
+// 🔥 FORCE FIRESTORE SAVE
+// ===========================================
+
+saveAnalysis({
+
+  roi:
+    roi ?? 0,
+
+  visualROI:
+    visualROI ?? roi ?? 0,
+
+  net:
+    net ?? 0,
+
+  gross:
+    gross ?? annualRevenue ?? 0,
+
+  occupancy:
+    occupancy ?? 0,
+
+  expenses:
+    expenses ?? monthlyCosts ?? 0,
+
+  marketCity:
+    selectedCity ||
+    marketCity ||
+    currentCity ||
+    "roma",
+
+  realCity:
+    selectedCity ||
+    marketCity ||
+    currentCity ||
+    "roma",
+
+  propertyPrice:
+    propertyPrice ?? 0,
+
+  equity:
+    equity ?? 0
+
+});
+
+console.log(
+  "🔥 SAVE ANALYSIS FIRED"
+);
+
 console.log(
   "🔥 CITY MEMORY FULL:",
   window.rbCityMemory
