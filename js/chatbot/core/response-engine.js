@@ -1400,8 +1400,6 @@ ${
 
   response.textEN =
 
-response.textEN =
-
 `🆚 AI Simulation Comparison
 
 ━━━━━━━━━━━━━━━
@@ -1449,6 +1447,12 @@ ${
 
   : `The previous simulation appears more profitable by ${roiDiff}%.`
 }`;
+
+  console.log(
+  "🛑 HARD RETURN SAME CITY COMPARISON"
+);
+
+return response;
 
 }  
 
