@@ -4000,7 +4000,10 @@ saveAnalysis({
     0,
 
   gross:
-    safeGross,
+
+    typeof safeGross !== "undefined"
+      ? safeGross
+      : 0,
 
   occupancy:
     occupancy ??
@@ -4008,7 +4011,10 @@ saveAnalysis({
     0,
 
   expenses:
-    safeExpenses,
+
+    typeof safeExpenses !== "undefined"
+      ? safeExpenses
+      : 0,
 
   marketCity:
     selectedCity ||
@@ -4025,10 +4031,16 @@ saveAnalysis({
     "roma",
 
   propertyPrice:
-    safePropertyPrice,
+
+    typeof safePropertyPrice !== "undefined"
+      ? safePropertyPrice
+      : 0,
 
   equity:
-    safeEquity
+
+    typeof safeEquity !== "undefined"
+      ? safeEquity
+      : 0
 
 });
 
