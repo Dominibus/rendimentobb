@@ -273,6 +273,10 @@ console.log(
 
 const investmentHistory = [
 
+  ...(Array.isArray(window.rbChatMemory?.investmentHistory)
+    ? window.rbChatMemory.investmentHistory
+    : []),
+
   ...(Array.isArray(window.investmentMemory)
     ? window.investmentMemory
     : []),
@@ -292,6 +296,11 @@ const investmentHistory = [
 ].filter(
   item =>
     item &&
+    (
+      item.roi !== undefined ||
+      item.realROI !== undefined
+    )
+);  item &&
     (
       item.roi !== undefined ||
       item.realROI !== undefined
