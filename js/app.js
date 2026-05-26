@@ -3919,47 +3919,72 @@ console.log(
   window.lastAnalysisData
 );
 
-    // ===========================================
+// ===========================================
 // 🔥 FORCE FIRESTORE SAVE
 // ===========================================
 
 saveAnalysis({
 
+  ...window.lastAnalysisData,
+
   roi:
-    roi ?? 0,
+    roi ??
+    window.lastAnalysisData?.roi ??
+    0,
 
   visualROI:
-    visualROI ?? roi ?? 0,
+    visualROI ??
+    roi ??
+    window.lastAnalysisData?.visualROI ??
+    0,
 
   net:
-    net ?? 0,
+    net ??
+    window.lastAnalysisData?.net ??
+    0,
 
   gross:
-    gross ?? annualRevenue ?? 0,
+    gross ??
+    annualRevenue ??
+    window.lastAnalysisData?.gross ??
+    0,
 
   occupancy:
-    occupancy ?? 0,
+    occupancy ??
+    window.lastAnalysisData?.occupancy ??
+    0,
 
   expenses:
-    expenses ?? monthlyCosts ?? 0,
+    expenses ??
+    monthlyCosts ??
+    window.lastAnalysisData?.expenses ??
+    0,
 
   marketCity:
     selectedCity ||
     marketCity ||
     currentCity ||
+    window.lastAnalysisData?.marketCity ||
     "roma",
 
   realCity:
     selectedCity ||
     marketCity ||
     currentCity ||
+    window.lastAnalysisData?.realCity ||
     "roma",
 
   propertyPrice:
-    propertyPrice ?? 0,
+    propertyPrice ??
+    price ??
+    window.lastAnalysisData?.propertyPrice ??
+    0,
 
   equity:
-    equity ?? 0
+    equity ??
+    initialCapital ??
+    window.lastAnalysisData?.equity ??
+    0
 
 });
 
