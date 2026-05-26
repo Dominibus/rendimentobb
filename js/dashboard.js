@@ -3147,3 +3147,69 @@ function lockInvestorPreview(){
 
   document.body.appendChild(banner);
 }
+
+// =====================================
+// 🏠 PROPERTY MODAL
+// =====================================
+
+window.openPropertyModal = function(){
+
+const modal =
+document.getElementById(
+"property-modal"
+);
+
+if(modal){
+
+modal.style.display = "flex";
+
+}
+
+};
+
+window.closePropertyModal = function(){
+
+const modal =
+document.getElementById(
+"property-modal"
+);
+
+if(modal){
+
+modal.style.display = "none";
+
+}
+
+};
+
+// =====================================
+// 🏠 PMS INIT
+// =====================================
+
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+const openBtn =
+document.getElementById(
+"open-property-modal"
+);
+
+if(openBtn){
+
+openBtn.addEventListener(
+"click",
+openPropertyModal
+);
+
+}
+
+// 🌍 BILINGUA
+
+if(window.applyStaticTranslations){
+
+window.applyStaticTranslations();
+
+}
+
+});
