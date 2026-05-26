@@ -281,9 +281,14 @@ const investmentHistory = [
     ? window.investmentMemory
     : []),
 
-  ...(Array.isArray(window.rbInvestmentMemory)
-    ? window.rbInvestmentMemory
-    : []),
+  ...(Array.isArray(window.investmentMemory)
+  ? window.investmentMemory
+  : []),
+
+...(window.rbInvestmentMemory &&
+   !Array.isArray(window.rbInvestmentMemory)
+  ? [window.rbInvestmentMemory]
+  : []),
 
   ...(Array.isArray(window.investmentHistory)
     ? window.investmentHistory
