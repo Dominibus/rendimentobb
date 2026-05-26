@@ -991,6 +991,46 @@ linear-gradient(
 
 }
 
+  /* =====================================
+🏨 PMS
+===================================== */
+
+.pms-nav{
+
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+
+}
+
+.pms-tab{
+
+background:white;
+
+border:1px solid #e2e8f0;
+
+padding:12px 18px;
+
+border-radius:12px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.25s ease;
+
+}
+
+.pms-tab.active{
+
+background:#10b981;
+
+color:white;
+
+border-color:#10b981;
+
+}
+
 </style>
 </head>
 
@@ -1220,6 +1260,144 @@ z-index:9999;
 </div>
 
 </div>  
+
+  <!-- =====================================
+🏨 PMS MENU
+===================================== -->
+
+<div class="analysis-card">
+
+<div class="pms-nav">
+
+<button class="pms-tab active">
+
+<span
+data-it="📊 Dashboard"
+data-en="📊 Dashboard">
+
+📊 Dashboard
+
+</span>
+
+</button>
+
+<button class="pms-tab">
+
+<span
+data-it="🏠 Proprietà"
+data-en="🏠 Properties">
+
+🏠 Proprietà
+
+</span>
+
+</button>
+
+<button class="pms-tab">
+
+<span
+data-it="📅 Prenotazioni"
+data-en="📅 Bookings">
+
+📅 Prenotazioni
+
+</span>
+
+</button>
+
+<button class="pms-tab">
+
+<span
+data-it="📈 ROI Reale"
+data-en="📈 Real ROI">
+
+📈 ROI Reale
+
+</span>
+
+</button>
+
+</div>
+
+</div>
+
+  <!-- =====================================
+🏠 PROPERTIES
+===================================== -->
+
+<div class="analysis-card">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+flex-wrap:wrap;
+gap:12px;
+">
+
+<div>
+
+<h3
+data-it="🏠 Proprietà"
+data-en="🏠 Properties">
+
+🏠 Proprietà
+
+</h3>
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+"
+data-it="Gestisci i tuoi immobili"
+data-en="Manage your properties">
+
+Gestisci i tuoi immobili
+
+</div>
+
+</div>
+
+<button
+id="open-property-modal"
+class="btn-dashboard">
+
+<span
+data-it="+ Aggiungi proprietà"
+data-en="+ Add property">
+
++ Aggiungi proprietà
+
+</span>
+
+</button>
+
+</div>
+
+<div id="properties-list">
+
+<div
+class="analysis-card"
+style="
+border:1px dashed #cbd5e1;
+text-align:center;
+">
+
+<span
+data-it="Nessuna proprietà presente"
+data-en="No properties found">
+
+Nessuna proprietà presente
+
+</span>
+
+</div>
+
+</div>
+
+</div>
 
 <!-- ================= MAIN GRID ================= -->
 
@@ -1925,5 +2103,89 @@ document.addEventListener("rb_plan_loaded", () => {
 });
 
 </script>
+
+  <!-- =====================================
+🏠 PROPERTY MODAL
+===================================== -->
+
+<div
+id="property-modal"
+style="
+position:fixed;
+inset:0;
+background:rgba(15,23,42,0.7);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999999;
+">
+
+<div style="
+background:white;
+padding:24px;
+border-radius:20px;
+width:90%;
+max-width:500px;
+">
+
+<h2
+data-it="🏠 Nuova proprietà"
+data-en="🏠 New property">
+
+🏠 Nuova proprietà
+
+</h2>
+
+<div style="
+display:flex;
+flex-direction:column;
+gap:14px;
+margin-top:20px;
+">
+
+<input
+id="property-name"
+placeholder="Nome proprietà">
+
+<input
+id="property-city"
+placeholder="Città">
+
+<input
+id="property-address"
+placeholder="Indirizzo">
+
+<input
+id="property-price"
+placeholder="Prezzo notte">
+
+</div>
+
+<div style="
+display:flex;
+gap:12px;
+margin-top:20px;
+">
+
+<button
+class="btn-dashboard"
+onclick="closePropertyModal()">
+
+Chiudi
+
+</button>
+
+<button
+class="btn-dashboard">
+
+Salva
+
+</button>
+
+</div>
+
+</div>
+
+</div>
 </body>
 </html>
