@@ -1337,19 +1337,6 @@ console.log(
   investmentHistory
 );
 
-const previousROI =
-  Number(
-
-    previous.realROI ??
-
-    previous.visualROI ??
-
-    previous.roi ??
-
-    0
-
-  );
-
   const roiDiff =
     Math.abs(
       currentROI - previousROI
