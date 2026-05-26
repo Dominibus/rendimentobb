@@ -1449,10 +1449,12 @@ ${
 }`;
 
   console.log(
-  "🛑 HARD RETURN SAME CITY COMPARISON"
+  "🛑 COMPARISON HARD STOP"
 );
 
-return response;
+response.__LOCKED = true;
+
+return structuredClone(response);
 
 }  
 
@@ -2065,6 +2067,8 @@ return response;
 // ===========================================
 
 else if(
+
+  !response.__LOCKED &&
 
   response.type !== "comparison" &&
 
