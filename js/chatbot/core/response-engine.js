@@ -1254,6 +1254,10 @@ else if(
   response.confidence =
     0.97;
 
+  console.log(
+  "🚀 COMPARISON MODE HARD LOCK"
+);
+
 // =====================================
 // 🧠 SAME CITY COMPARISON ENGINE
 // =====================================
@@ -1825,6 +1829,23 @@ else{
   console.log(
     "⚠️ CITY COMPARISON SKIPPED"
   );
+
+}
+
+// =====================================
+// 🚀 HARD RETURN COMPARISON
+// =====================================
+
+if(
+  response.textIT &&
+  response.textIT.length > 0
+){
+
+  console.log(
+    "✅ COMPARISON FINAL RETURN"
+  );
+
+  return response;
 
 }
 
