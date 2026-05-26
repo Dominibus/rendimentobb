@@ -3213,3 +3213,26 @@ window.applyStaticTranslations();
 }
 
 });
+// =====================================
+// 🔒 PRO PMS ACCESS
+// =====================================
+
+const isPro =
+
+window.RB_USER?.isPro ||
+
+window.RB_USER?.isAdmin ||
+
+false;
+
+document
+.querySelectorAll(".pro-pms-only")
+.forEach(el=>{
+
+if(!isPro){
+
+el.style.display = "none";
+
+}
+
+});
