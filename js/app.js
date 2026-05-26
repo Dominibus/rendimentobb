@@ -3905,6 +3905,62 @@ window.lastAnalysisData = {
 };
 
 // =====================================
+// 🔒 SAFE VARIABLES
+// =====================================
+
+const safePropertyPrice =
+
+  typeof propertyPrice !== "undefined"
+    ? propertyPrice
+    : (
+        typeof price !== "undefined"
+          ? price
+          : (
+              window.lastAnalysisData?.propertyPrice ??
+              0
+            )
+      );
+
+const safeEquity =
+
+  typeof equity !== "undefined"
+    ? equity
+    : (
+        typeof initialCapital !== "undefined"
+          ? initialCapital
+          : (
+              window.lastAnalysisData?.equity ??
+              0
+            )
+      );
+
+const safeGross =
+
+  typeof gross !== "undefined"
+    ? gross
+    : (
+        typeof annualRevenue !== "undefined"
+          ? annualRevenue
+          : (
+              window.lastAnalysisData?.gross ??
+              0
+            )
+      );
+
+const safeExpenses =
+
+  typeof expenses !== "undefined"
+    ? expenses
+    : (
+        typeof monthlyCosts !== "undefined"
+          ? monthlyCosts
+          : (
+              window.lastAnalysisData?.expenses ??
+              0
+            )
+      );
+
+// =====================================
 // 🔥 DEBUG
 // =====================================
 
@@ -3944,10 +4000,7 @@ saveAnalysis({
     0,
 
   gross:
-    gross ??
-    annualRevenue ??
-    window.lastAnalysisData?.gross ??
-    0,
+    safeGross,
 
   occupancy:
     occupancy ??
@@ -3955,10 +4008,7 @@ saveAnalysis({
     0,
 
   expenses:
-    expenses ??
-    monthlyCosts ??
-    window.lastAnalysisData?.expenses ??
-    0,
+    safeExpenses,
 
   marketCity:
     selectedCity ||
@@ -3975,16 +4025,10 @@ saveAnalysis({
     "roma",
 
   propertyPrice:
-    propertyPrice ??
-    price ??
-    window.lastAnalysisData?.propertyPrice ??
-    0,
+    safePropertyPrice,
 
   equity:
-    equity ??
-    initialCapital ??
-    window.lastAnalysisData?.equity ??
-    0
+    safeEquity
 
 });
 
