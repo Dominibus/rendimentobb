@@ -1372,6 +1372,12 @@ ${
 
 `🆚 AI Simulation Comparison
 
+console.log(
+  "🛑 HARD RETURN SAME CITY COMPARISON"
+);
+
+return response;
+
 ━━━━━━━━━━━━━━━
 
 💰 Previous Simulation
