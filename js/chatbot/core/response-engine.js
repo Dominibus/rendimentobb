@@ -266,6 +266,42 @@ console.log(
     rememberedMortgage
   }
 );  
+
+// =====================================
+// 💾 GLOBAL INVESTMENT HISTORY
+// =====================================
+
+const investmentHistory = [
+
+  ...(Array.isArray(window.investmentMemory)
+    ? window.investmentMemory
+    : []),
+
+  ...(Array.isArray(window.rbInvestmentMemory)
+    ? window.rbInvestmentMemory
+    : []),
+
+  ...(Array.isArray(window.investmentHistory)
+    ? window.investmentHistory
+    : []),
+
+  ...(Array.isArray(memory?.investmentHistory)
+    ? memory.investmentHistory
+    : [])
+
+].filter(
+  item =>
+    item &&
+    (
+      item.roi !== undefined ||
+      item.realROI !== undefined
+    )
+);
+
+console.log(
+  "💾 GLOBAL INVESTMENT HISTORY:",
+  investmentHistory
+);
 // ===========================================
 // 🧠 AI INSIGHTS
 // ===========================================
@@ -1217,33 +1253,6 @@ else if(
 // =====================================
 // 🧠 SAME CITY COMPARISON ENGINE
 // =====================================
-
-const investmentHistory = [
-
-  ...(Array.isArray(window.investmentMemory)
-    ? window.investmentMemory
-    : []),
-
-  ...(Array.isArray(window.rbInvestmentMemory)
-    ? window.rbInvestmentMemory
-    : []),
-
-  ...(Array.isArray(window.investmentHistory)
-    ? window.investmentHistory
-    : []),
-
-  ...(Array.isArray(memory?.investmentHistory)
-    ? memory.investmentHistory
-    : [])
-
-].filter(
-  item =>
-    item &&
-    (
-      item.roi !== undefined ||
-      item.realROI !== undefined
-    )
-);
 
 console.log(
   "🔥 FINAL COMPARISON MEMORY:",
