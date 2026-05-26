@@ -2066,7 +2066,7 @@ return response;
 // 🌍 MARKET RESPONSE
 // ===========================================
 
-else if(
+if(
 
   !response.__LOCKED &&
 
