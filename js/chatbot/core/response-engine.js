@@ -2036,7 +2036,7 @@ else if(
 
   intent.intent === "market_analysis"
 
-)
+){
 
     response.type =
       "market";
@@ -2084,6 +2084,7 @@ ${market.risk}`;
 
 }
 
+  }
   }
 
 // ===========================================
