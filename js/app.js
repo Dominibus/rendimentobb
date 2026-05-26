@@ -4720,10 +4720,24 @@ if(analyzeBtn){
       window.calculate();
     setTimeout(()=>{
 
-  const roi = window.lastAnalysisData?.roi || 0;
+  console.log(
+    "🔥 SAVE ANALYSIS FIRED"
+  );
+
+  saveAnalysis(
+    window.lastAnalysisData
+  );
+
+  const roi =
+    window.lastAnalysisData?.roi || 0;
 
   if(roi > 6){
-    triggerFunnel({ type:"roi", roi });
+
+    triggerFunnel({
+      type:"roi",
+      roi
+    });
+
   }
 
 }, 1500);
