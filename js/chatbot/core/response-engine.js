@@ -1370,13 +1370,9 @@ ${
 
   response.textEN =
 
+response.textEN =
+
 `🆚 AI Simulation Comparison
-
-console.log(
-  "🛑 HARD RETURN SAME CITY COMPARISON"
-);
-
-return response;
 
 ━━━━━━━━━━━━━━━
 
@@ -1423,8 +1419,6 @@ ${
 
   : `The previous simulation appears more profitable by ${roiDiff}%.`
 }`;
-
-  return response;
 
 }  
 
