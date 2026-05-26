@@ -3217,7 +3217,7 @@ window.applyStaticTranslations();
 // 🔒 PRO PMS ACCESS
 // =====================================
 
-const isPro =
+const pmsIsPro =
 
 window.RB_USER?.isPro ||
 
@@ -3229,7 +3229,7 @@ document
 .querySelectorAll(".pro-pms-only")
 .forEach(el=>{
 
-if(!isPro){
+if(!pmsIsPro){
 
 el.style.display = "none";
 
