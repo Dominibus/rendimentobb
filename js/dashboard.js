@@ -3217,22 +3217,24 @@ window.applyStaticTranslations();
 // 🔒 PRO PMS ACCESS
 // =====================================
 
-const pmsIsPro =
+document.addEventListener("rb_plan_ready", ()=>{
 
-window.RB_USER?.isPro ||
+  const access =
+    window.getUserAccess?.() || {};
 
-window.RB_USER?.isAdmin ||
+  const pmsIsPro =
+    access.isPro ||
+    access.isAdmin;
 
-false;
+  document
+  .querySelectorAll(".pro-pms-only")
+  .forEach(el=>{
 
-document
-.querySelectorAll(".pro-pms-only")
-.forEach(el=>{
+    el.style.display =
+      pmsIsPro
+      ? ""
+      : "none";
 
-if(!pmsIsPro){
-
-el.style.display = "none";
-
-}
+  });
 
 });
