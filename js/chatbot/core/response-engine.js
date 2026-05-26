@@ -1282,6 +1282,16 @@ if(
 ){
 
   console.log(
+  "🧠 COMPARISON ROI:",
+  {
+    currentROI,
+    previousROI,
+    current,
+    previous
+  }
+);
+
+  console.log(
   "🔥 COMPARISON ACTIVE:",
   investmentHistory.length
 );
@@ -1302,10 +1312,30 @@ if(
     ];
 
   const currentROI =
-    Number(current.roi || 0);
+  Number(
 
-  const previousROI =
-    Number(previous.roi || 0);
+    current.realROI ??
+
+    current.visualROI ??
+
+    current.roi ??
+
+    0
+
+  );
+
+const previousROI =
+  Number(
+
+    previous.realROI ??
+
+    previous.visualROI ??
+
+    previous.roi ??
+
+    0
+
+  );
 
   const roiDiff =
     Math.abs(
