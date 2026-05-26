@@ -2036,13 +2036,13 @@ return response;
 // 🌍 MARKET RESPONSE
 // ===========================================
 
-if(
+else if(
 
   response.type !== "comparison" &&
 
   intent.intent === "market_analysis"
 
-){
+)
 
     response.type =
       "market";
