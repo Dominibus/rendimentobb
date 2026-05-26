@@ -2891,9 +2891,14 @@ else{
 
 else if(
 
-  entities.knowledgeData ||
+  intent.intent !== "comparison" &&
 
-  entities.knowledge
+  !response.textIT &&
+
+  (
+    entities.knowledgeData ||
+    entities.knowledge
+  )
 
 ){
 
