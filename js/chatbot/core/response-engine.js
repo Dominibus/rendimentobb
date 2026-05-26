@@ -1995,7 +1995,7 @@ ${Number(
 // 🌍 MARKET RESPONSE
 // ===========================================
 
-else if(
+if(
 
   response.type !== "comparison" &&
 
