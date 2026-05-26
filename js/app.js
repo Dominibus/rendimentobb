@@ -2489,12 +2489,28 @@ function runPostAnalysis(result, context){
       ts: Math.floor(Date.now() / 15000)
     });
 
-    const shouldSave =
-      window.__LAST_SAVED_ANALYSIS__ !== analysisHash;
+    const now = Date.now();
 
-    if(shouldSave){
-      window.__LAST_SAVED_ANALYSIS__ = analysisHash;
-    }
+const shouldSave =
+
+!window.__LAST_SAVED_ANALYSIS__ ||
+
+window.__LAST_SAVED_ANALYSIS__ !== analysisHash ||
+
+(
+  now -
+  (window.__LAST_SAVE_TIME__ || 0)
+) > 15000;
+
+// salva hash + timestamp
+if(shouldSave){
+
+  window.__LAST_SAVED_ANALYSIS__ =
+    analysisHash;
+
+  window.__LAST_SAVE_TIME__ =
+    now;
+}
 
     // ================= SAVE ANALYSIS =================
 
