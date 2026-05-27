@@ -415,9 +415,10 @@ async function loadDashboard(){
   renderHeader();
 
   const q = query(
-    collection(db,"analyses"),
-    where("uid","==", window.currentUser.uid)
-  );
+  collection(db,"analyses"),
+  where("uid","==", window.currentUser.uid),
+  orderBy("createdAt","desc")
+);
 
   const querySnapshot = await getDocs(q);
 
@@ -2029,8 +2030,14 @@ if(!window.currentUser){
 
 await deleteDoc(doc(db,"analyses",id));
 
-btn.closest(".analysis-card")?.remove();
+console.log("🗑 ANALISI ELIMINATA:", id);
 
+// 🔥 reset dashboard cache
+window.__dashboardLoaded = false;
+window.__forceReload = true;
+
+// 🔥 reload reale
+await loadDashboard();
 }catch(err){
 
 console.error("Delete error:",err);
