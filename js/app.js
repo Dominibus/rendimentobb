@@ -4208,22 +4208,36 @@ if(riskPreview){
     // =====================================
 
      const loan =
-      price *
-      (mortgagePercent / 100);
+  Math.max(
+    0,
+    (price || 0) - (equity || 0)
+  );
 
-      runPostAnalysis(result,{
-      price,
-      gross,
-      occupancy,
-      priceNight,
-      expenses,
-      equity,
-      loan,
-      net,
-      mortgageRate: interestRate,
-      monthlyMortgage:
-       result?.monthlyMortgage || 0
-      });
+runPostAnalysis(result,{
+
+  price,
+
+  gross,
+
+  occupancy,
+
+  priceNight,
+
+  expenses,
+
+  equity,
+
+  loan,
+
+  net,
+
+  mortgageRate:
+    interestRate || 0,
+
+  monthlyMortgage:
+    result?.monthlyMortgage || 0
+
+});
     // ================= MARKET =================
     if(access.isFree){
 
