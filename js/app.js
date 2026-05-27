@@ -4207,24 +4207,24 @@ if(riskPreview){
     // 🤖 POST ANALYSIS AI
     // =====================================
 
-    if(isUIRefresh){
+   const loan =
+  propertyPrice *
+  (mortgagePercent / 100);
 
-      const loan =
-        propertyPrice *
-        (mortgagePercent / 100);
-
-      runPostAnalysis(result, {
-        price,
-        gross,
-        occupancy,
-        priceNight,
-        expenses,
-        equity,
-        loan
-      });
-
-    } 
-
+runPostAnalysis(result,{
+  price,
+  gross,
+  occupancy,
+  priceNight,
+  expenses,
+  equity,
+  loan,
+  net,
+  loanAmount,
+  mortgageRate: interestRate,
+  monthlyMortgage:
+    result?.monthlyMortgage || 0
+});
     // ================= MARKET =================
     if(access.isFree){
 
