@@ -3265,3 +3265,20 @@ document.addEventListener("rb_plan_ready", ()=>{
   });
 
 });
+
+window.addEventListener(
+  "analysisSaved",
+  () => {
+
+    console.log(
+      "🔄 DASHBOARD REFRESH"
+    );
+
+    if(
+      typeof loadUserAnalyses === "function"
+    ){
+      loadUserAnalyses();
+    }
+
+  }
+);
