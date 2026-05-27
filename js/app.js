@@ -3908,22 +3908,34 @@ window.lastAnalysisData = {
 // 🔒 SAFE VARIABLES
 // =====================================
 
-const safePropertyPrice =
+const safePropertyPrice = Number(
 
-  typeof propertyPrice !== "undefined"
-    ? propertyPrice
-    : (
-        typeof price !== "undefined"
-          ? price
-          : (
-              window.lastAnalysisData?.propertyPrice ??
-              0
-            )
-      );
+  window.lastAnalysisData?.propertyPrice ??
 
-const safeEquity =
+  price ??
 
-  typeof equity !== "undefined"
+  purchasePrice ??
+
+  document.getElementById("purchase-price")
+    ?.value ??
+
+  0
+
+);
+
+const safeEquity = Number(
+
+  window.lastAnalysisData?.equity ??
+
+  equity ??
+
+  initialCapital ??
+
+  cash ??
+
+  0
+
+);
     ? equity
     : (
         typeof initialCapital !== "undefined"
