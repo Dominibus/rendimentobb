@@ -570,18 +570,48 @@ const safeRealCity =
   safeMarketCity;
 
 await addDoc(collection(db,"analyses"),{
+
   uid: window.currentUser.uid,
 
-  propertyPrice: data.price,
-  equity: data.equity,
-  roi: data.roi,
-  risk: data.risk,
+  propertyPrice:
+    data.propertyPrice ?? 0,
 
- marketCity: safeMarketCity,
- realCity: safeRealCity,
+  equity:
+    data.equity ?? 0,
 
-  createdAt: serverTimestamp(),
-  createdAtClient: new Date()
+  gross:
+    data.gross ?? 0,
+
+  expenses:
+    data.expenses ?? 0,
+
+  roi:
+    data.roi ?? 0,
+
+  visualROI:
+    data.visualROI ?? 0,
+
+  net:
+    data.net ?? 0,
+
+  risk:
+    data.risk ?? 0,
+
+  occupancy:
+    data.occupancy ?? 0,
+
+  marketCity:
+    safeMarketCity,
+
+  realCity:
+    safeRealCity,
+
+  createdAt:
+    serverTimestamp(),
+
+  createdAtClient:
+    new Date()
+
 });
 
     console.log("✅ SALVATO FIRESTORE");
