@@ -3936,15 +3936,6 @@ const safeEquity = Number(
   0
 
 );
-    ? equity
-    : (
-        typeof initialCapital !== "undefined"
-          ? initialCapital
-          : (
-              window.lastAnalysisData?.equity ??
-              0
-            )
-      );
 
 const safeGross =
 
@@ -3971,7 +3962,6 @@ const safeExpenses =
               0
             )
       );
-
 // =====================================
 // 🔥 DEBUG
 // =====================================
