@@ -2564,7 +2564,7 @@ if(shouldSave){
           ?.trim();
 
       saveAnalysis({
-        price: propertyPrice,
+        propertyPrice: propertyPrice,
         equity,
         roi: finalROI,
         risk,
