@@ -4208,7 +4208,7 @@ if(riskPreview){
     // =====================================
 
    const loan =
-  propertyPrice *
+  price *
   (mortgagePercent / 100);
 
 runPostAnalysis(result,{
