@@ -436,7 +436,7 @@ async function loadDashboard(){
     return;
   }
 
-  // ================= CREA ANALYSES =================
+ // ================= CREA ANALYSES =================
 
 const analyses = querySnapshot.docs.map(doc => {
 
@@ -460,21 +460,41 @@ const analyses = querySnapshot.docs.map(doc => {
   });
 
   return {
+
     id: doc.id,
 
-    roi: data.roi || 0,
+    roi:
+      data.roi || 0,
+
+    visualROI:
+      data.visualROI || 0,
 
     price:
       data.propertyPrice ||
       data.price ||
       0,
 
-    equity: data.equity || 0,
+    equity:
+      data.equity || 0,
 
-    risk: data.risk || 0,
+    gross:
+      data.gross || 0,
+
+    expenses:
+      data.expenses || 0,
+
+    occupancy:
+      data.occupancy || 0,
+
+    net:
+      data.net || 0,
+
+    risk:
+      data.risk || 0,
 
     // 🔥 città reale UI/PDF
-    city: realCity,
+    city:
+      realCity,
 
     // 🔥 città benchmark
     marketCity,
@@ -484,22 +504,24 @@ const analyses = querySnapshot.docs.map(doc => {
 
     createdAt:
 
-  data.createdAt ||
+      data.createdAt ||
 
-  data.createdAtClient ||
+      data.createdAtClient ||
 
-  new Date()
+      new Date()
+
   };
 
 });
 
 const plan = String(window.currentPlan || "").toLowerCase();
 
-  window.isDemoData = false;
+window.isDemoData = false;
 
 if(plan === "free"){
+
   console.log("🆓 FREE → FAKE SMART DATA");
-  
+
   window.isDemoData = true;
 
   // ❌ rimuovi dati reali
@@ -537,7 +559,6 @@ if(plan === "free"){
 
 // 🔥 FIX → rende disponibili al report
 window.dashboardSimulations = analyses;
-
   // ================= URL PARAMS =================
 
   const urlParams = new URLSearchParams(window.location.search);
