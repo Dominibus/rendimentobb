@@ -6977,6 +6977,42 @@ document.addEventListener("rb_auth_ready", () => {
 
 });
 
+// ===========================================
+// ⌨️ ENTER KEY → START ANALYSIS
+// ===========================================
+
+document.addEventListener("keydown",(e)=>{
+
+  if(e.key !== "Enter") return;
+
+  const active =
+    document.activeElement;
+
+  if(!active) return;
+
+  const tag =
+    active.tagName;
+
+  const isInput =
+    tag === "INPUT" ||
+    tag === "SELECT";
+
+  if(!isInput) return;
+
+  e.preventDefault();
+
+  console.log(
+    "⌨️ ENTER → CALCULATE"
+  );
+
+  if(typeof window.calculate === "function"){
+
+    window.calculate(true);
+
+  }
+
+});
+
 document.addEventListener("rb_plan_ready", () => {
 
   console.log("🔥 FUNNEL HOME CHECK");
