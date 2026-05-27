@@ -615,7 +615,13 @@ await addDoc(collection(db,"analyses"),{
 });
 
     console.log("✅ SALVATO FIRESTORE");
-    console.log("💾 SAVE ANALYSIS CALLED");
+
+// 🔄 dashboard live refresh
+window.dispatchEvent(
+  new Event("analysisSaved")
+);
+
+console.log("💾 SAVE ANALYSIS CALLED");
 
   }catch(e){
     console.error("Errore salvataggio:", e);
