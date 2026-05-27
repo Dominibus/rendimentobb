@@ -482,7 +482,13 @@ const analyses = querySnapshot.docs.map(doc => {
     // 🔥 salva entrambe
     realCity,
 
-    createdAt: data.createdAt
+    createdAt:
+
+  data.createdAt ||
+
+  data.createdAtClient ||
+
+  new Date()
   };
 
 });
