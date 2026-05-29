@@ -2028,9 +2028,16 @@ if(!window.currentUser){
   return;
 }
 
-await deleteDoc(
-  doc(db,"analyses",id)
+const ref = doc(db,"analyses",id);
+
+const snap = await getDoc(ref);
+
+console.log(
+  "🔥 DOC DELETE TEST:",
+  snap.data()
 );
+
+await deleteDoc(ref);
 
 console.log(
   "🗑 ANALISI ELIMINATA:",
