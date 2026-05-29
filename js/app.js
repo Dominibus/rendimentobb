@@ -544,6 +544,13 @@ return;
 
 async function saveAnalysis(data){
 
+  if(window.__savingAnalysis){
+  console.log("⛔ SAVE BLOCCATO");
+  return;
+}
+
+window.__savingAnalysis = true;
+
   if(!window.firebaseReady){
     console.log("⏳ Firebase non pronto");
     return;
@@ -623,7 +630,12 @@ window.dispatchEvent(
 
 console.log("💾 SAVE ANALYSIS CALLED");
 
+    window.__savingAnalysis = false;
+
   }catch(e){
+
+    window.__savingAnalysis = false;
+    
     console.error("Errore salvataggio:", e);
   
   }
