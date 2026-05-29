@@ -796,9 +796,42 @@ const visibleAnalyses =
 
     const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
 
-    const badge = index === 0
-      ? `<div style="font-size:12px;color:#10b981;margin-bottom:6px;font-weight:600;">🏆 Best ROI</div>`
-      : "";
+    const analysisDate =
+  data.createdAt?.seconds
+    ? data.createdAt.seconds * 1000
+    : new Date(data.createdAt).getTime();
+
+const isNew =
+  Date.now() - analysisDate <
+  24 * 60 * 60 * 1000;
+
+let badge = "";
+
+if(index === 0){
+  badge += `
+  <div style="
+    font-size:12px;
+    color:#10b981;
+    margin-bottom:6px;
+    font-weight:600;
+  ">
+    🏆 Best ROI
+  </div>
+  `;
+}
+
+if(isNew){
+  badge += `
+  <div style="
+    font-size:12px;
+    color:#2563eb;
+    margin-bottom:6px;
+    font-weight:700;
+  ">
+    🆕 New
+  </div>
+  `;
+}
 
     const card = document.createElement("div");
     card.className = "analysis-card";
