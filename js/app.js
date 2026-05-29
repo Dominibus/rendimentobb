@@ -2575,6 +2575,17 @@ if(shouldSave){
           ?.value
           ?.trim();
 
+      console.log(
+  "🔥 SAVE DATA",
+  {
+    selectedCity,
+    marketCity,
+    currentCity,
+    customLocation:
+      document.getElementById("custom-location")?.value
+  }
+);
+
       saveAnalysis({
         propertyPrice: propertyPrice,
         equity,
