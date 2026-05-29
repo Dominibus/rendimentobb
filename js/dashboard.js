@@ -607,25 +607,155 @@ window.dashboardSimulations = analyses;
   });
 }
 
-  // ================= RESET =================
+// ================= RESET =================
 
-  list.innerHTML = "";
+list.innerHTML = "";
 
-  roiValues = [];
-  labels = [];
+// ================= PAGINATION INFO =================
 
-  let totalROI = 0;
-  let totalCapital = 0;
-  let count = 0;
-  let totalCashflow = 0;
+window.rbPerPage =
+  window.rbPerPage || 10;
 
-  // ================= SORT =================
+window.rbPage =
+  window.rbPage || 1;
 
-  analyses.sort((a,b)=> b.roi - a.roi);
+const totalPages =
+  Math.max(
+    1,
+    Math.ceil(
+      analyses.length /
+      window.rbPerPage
+    )
+  );
 
-  const visibleAnalyses = analyses.slice(0,12);
+const paginationInfo =
+document.getElementById(
+  "pagination-info"
+);
 
-  // ================= RENDER CARDS =================
+if(paginationInfo){
+
+paginationInfo.innerHTML = `
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+gap:12px;
+flex-wrap:wrap;
+">
+
+<div>
+📊 ${t(
+  "Totale simulazioni",
+  "Total simulations"
+)}
+:
+<strong>${analyses.length}</strong>
+</div>
+
+<div>
+${t(
+  "Pagina",
+  "Page"
+)}
+ <strong>
+${window.rbPage}
+</strong>
+ /
+ <strong>
+${totalPages}
+</strong>
+</div>
+
+<div>
+
+<select id="simulations-per-page">
+
+<option value="10">10</option>
+<option value="25">25</option>
+<option value="50">50</option>
+<option value="100">100</option>
+
+<option value="9999">
+${t(
+  "Tutte",
+  "All"
+)}
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+`;
+
+const selector =
+document.getElementById(
+"simulations-per-page"
+);
+
+if(selector){
+
+selector.value =
+String(
+window.rbPerPage
+);
+
+selector.addEventListener(
+"change",
+(e)=>{
+
+window.rbPerPage =
+Number(
+e.target.value
+);
+
+window.rbPage = 1;
+
+window.__dashboardLoaded = false;
+window.__forceReload = true;
+
+loadDashboard();
+
+});
+
+}
+
+}
+
+roiValues = [];
+labels = [];
+
+let totalROI = 0;
+let totalCapital = 0;
+let count = 0;
+let totalCashflow = 0;
+
+// ================= SORT =================
+
+analyses.sort((a,b)=> b.roi - a.roi);
+
+// ================= PAGINATION DATA =================
+
+const start =
+  (window.rbPage - 1) *
+  window.rbPerPage;
+
+const end =
+  start +
+  window.rbPerPage;
+
+const visibleAnalyses =
+  analyses.slice(
+    start,
+    end
+  );
+
+// ================= RENDER CARDS =================
 
   visibleAnalyses.forEach((data,index)=>{
 
