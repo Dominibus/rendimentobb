@@ -2037,28 +2037,19 @@ console.log(
   snap.data()
 );
 
-await deleteDoc(ref);
+await deleteDoc(
+  doc(db,"analyses",id)
+);
 
 console.log(
   "🗑 ANALISI ELIMINATA:",
   id
 );
 
-// 🔥 TEST
-const check = await getDoc(
-  doc(db,"analyses",id)
-);
-
-console.log(
-  "🔥 DOC EXISTS AFTER DELETE:",
-  check.exists()
-);
-
 // 🔥 reset dashboard cache
 window.__dashboardLoaded = false;
 window.__forceReload = true;
 
-// 🔥 reload reale
 await loadDashboard();
 
 }catch(err){
