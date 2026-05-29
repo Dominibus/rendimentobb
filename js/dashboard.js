@@ -2028,9 +2028,24 @@ if(!window.currentUser){
   return;
 }
 
-await deleteDoc(doc(db,"analyses",id));
+await deleteDoc(
+  doc(db,"analyses",id)
+);
 
-console.log("🗑 ANALISI ELIMINATA:", id);
+console.log(
+  "🗑 ANALISI ELIMINATA:",
+  id
+);
+
+// 🔥 TEST
+const check = await getDoc(
+  doc(db,"analyses",id)
+);
+
+console.log(
+  "🔥 DOC EXISTS AFTER DELETE:",
+  check.exists()
+);
 
 // 🔥 reset dashboard cache
 window.__dashboardLoaded = false;
@@ -2038,9 +2053,13 @@ window.__forceReload = true;
 
 // 🔥 reload reale
 await loadDashboard();
+
 }catch(err){
 
-console.error("Delete error:",err);
+  console.error(
+    "Delete error:",
+    err
+  );
 
 }
 
