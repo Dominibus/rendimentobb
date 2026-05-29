@@ -737,7 +737,21 @@ let totalCashflow = 0;
 
 // ================= SORT =================
 
-analyses.sort((a,b)=> b.roi - a.roi);
+analyses.sort((a,b)=>{
+
+const dateA =
+a.createdAt?.seconds
+? a.createdAt.seconds
+: 0;
+
+const dateB =
+b.createdAt?.seconds
+? b.createdAt.seconds
+: 0;
+
+return dateB - dateA;
+
+});
 
 // ================= PAGINATION DATA =================
 
