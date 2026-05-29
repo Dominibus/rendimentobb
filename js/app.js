@@ -4025,83 +4025,6 @@ console.log(
   window.lastAnalysisData
 );
 
-// ===========================================
-// 🔥 FORCE FIRESTORE SAVE
-// ===========================================
-
-saveAnalysis({
-
-  ...window.lastAnalysisData,
-
-  roi:
-    roi ??
-    window.lastAnalysisData?.roi ??
-    0,
-
-  visualROI:
-    visualROI ??
-    roi ??
-    window.lastAnalysisData?.visualROI ??
-    0,
-
-  net:
-    net ??
-    window.lastAnalysisData?.net ??
-    0,
-
-  gross:
-
-    typeof safeGross !== "undefined"
-      ? safeGross
-      : 0,
-
-  occupancy:
-    occupancy ??
-    window.lastAnalysisData?.occupancy ??
-    0,
-
-  expenses:
-
-    typeof safeExpenses !== "undefined"
-      ? safeExpenses
-      : 0,
-
-  marketCity:
-    selectedCity ||
-    marketCity ||
-    currentCity ||
-    window.lastAnalysisData?.marketCity ||
-    "roma",
-
-  realCity:
-    selectedCity ||
-    marketCity ||
-    currentCity ||
-    window.lastAnalysisData?.realCity ||
-    "roma",
-
-  propertyPrice:
-
-    typeof safePropertyPrice !== "undefined"
-      ? safePropertyPrice
-      : 0,
-
-  equity:
-
-    typeof safeEquity !== "undefined"
-      ? safeEquity
-      : 0
-
-});
-
-console.log(
-  "🔥 SAVE ANALYSIS FIRED"
-);
-
-console.log(
-  "🔥 CITY MEMORY FULL:",
-  window.rbCityMemory
-);
 // ===============================================
 // 🧠 AI INVESTMENT MEMORY SNAPSHOT
 // ===============================================
@@ -4868,11 +4791,7 @@ if(analyzeBtn){
     "🔥 SAVE ANALYSIS FIRED"
   );
 
-  saveAnalysis(
-    window.lastAnalysisData
-  );
-
-  const roi =
+   const roi =
     window.lastAnalysisData?.roi || 0;
 
   if(roi > 6){
