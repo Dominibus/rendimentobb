@@ -3612,60 +3612,60 @@ async function loadProperties(){
       docItem.data();
 
     html += `
+
       <div class="property-card">
-     `;
 
-      <h3>
-      ${data.name || "-"}
-      </h3>
+        <h3>
+          ${data.name || "-"}
+        </h3>
 
-      <div class="metric">
-        <span>Città</span>
-        <strong>
-        ${data.city || "-"}
-        </strong>
+        <div class="metric">
+          <span>Città</span>
+          <strong>
+            ${data.city || "-"}
+          </strong>
+        </div>
+
+        <div class="metric">
+          <span>Indirizzo</span>
+          <strong>
+            ${data.address || "-"}
+          </strong>
+        </div>
+
+        <div class="metric">
+          <span>Prezzo notte</span>
+          <strong>
+            €${data.priceNight || 0}
+          </strong>
+        </div>
+
+        <div
+        style="
+        display:flex;
+        gap:10px;
+        margin-top:15px;
+        ">
+
+          <button
+          class="btn-dashboard"
+          onclick="openBookings('${docItem.id}')">
+
+          Prenotazioni
+
+          </button>
+
+          <button
+          class="btn-dashboard"
+          onclick="deleteProperty('${docItem.id}')">
+
+          Elimina
+
+          </button>
+
+        </div>
+
       </div>
-
-      <div class="metric">
-        <span>Indirizzo</span>
-        <strong>
-        ${data.address || "-"}
-        </strong>
-      </div>
-
-      <div class="metric">
-        <span>Prezzo notte</span>
-        <strong>
-        €${data.priceNight || 0}
-        </strong>
-      </div>
-
-      <div
-style="
-display:flex;
-gap:10px;
-margin-top:15px;
-">
-
-<button
-class="btn-dashboard"
-onclick="openBookings('${docItem.id}')">
-
-Prenotazioni
-
-</button>
-
-<button
-class="btn-dashboard"
-onclick="deleteProperty('${docItem.id}')">
-
-Elimina
-
-</button>
-
-</div>
-
-    </div>
 
     `;
 
