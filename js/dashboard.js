@@ -4125,6 +4125,8 @@ async function loadBookings(propertyId){
     return;
   }
 
+  let bookingsData = [];
+
     let html = "";
 
 let totalGuests = 0;
@@ -4138,6 +4140,8 @@ let sourceStats = {};
 
     const b =
       docItem.data();
+
+    bookingsData.push(b);
 
     const source =
   b.source || "Unknown";
@@ -4448,6 +4452,8 @@ if(channelsEl){
 }
 
   list.innerHTML = html;
+
+  renderPMSCalendar(bookingsData);
 
 }
 
