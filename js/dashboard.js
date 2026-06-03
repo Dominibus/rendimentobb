@@ -4364,6 +4364,14 @@ bookingsSnap.forEach(docItem=>{
   ? revenue / totalNights
   : 0;
 
+  const avgStay =
+  bookings > 0
+  ? totalNights / bookings
+  : 0;
+
+  const revpar =
+  adr * (occupancy / 100);
+
 const occupancy =
   bookings > 0
     ? Math.min(
@@ -4390,6 +4398,26 @@ document.getElementById(
 ).innerText =
   occupancy + "%";
 
+  <div class="dashboard-stat">
+  <div>ADR</div>
+  <strong id="pms-adr">€0</strong>
+</div>
+
+<div class="dashboard-stat">
+  <div>RevPAR</div>
+  <strong id="pms-revpar">€0</strong>
+</div>
+
+<div class="dashboard-stat">
+  <div>Avg Stay</div>
+  <strong id="pms-avgstay">0</strong>
+</div>
+
+<div class="dashboard-stat">
+  <div>Guests</div>
+  <strong id="pms-guests">0</strong>
+</div>
+
 const adrEl =
   document.getElementById(
     "pms-adr"
@@ -4401,3 +4429,25 @@ if(adrEl){
 }
 
 }
+
+document.getElementById(
+  "pms-revpar"
+).innerText =
+  formatCurrency(revpar);
+
+document.getElementById(
+  "pms-avgstay"
+).innerText =
+  avgStay.toFixed(1);
+
+document.getElementById(
+  "pms-guests"
+).innerText =
+  bookingsSnap.docs.reduce(
+    (sum,d)=>
+      sum +
+      Number(
+        d.data().guests || 0
+      ),
+    0
+  );
