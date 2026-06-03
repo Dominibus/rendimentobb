@@ -3447,6 +3447,41 @@ setTimeout(()=>{
 },1500);  
 
 });
+
+// =====================================
+// 🌍 PMS LANGUAGE REFRESH
+// =====================================
+
+document.addEventListener(
+  "rb_language_changed",
+  ()=>{
+
+    if(
+      window.applyStaticTranslations
+    ){
+      window.applyStaticTranslations();
+    }
+
+    if(
+      typeof loadProperties ===
+      "function"
+    ){
+      loadProperties();
+    }
+
+    if(
+      window.currentPropertyId
+      &&
+      typeof loadBookings ===
+      "function"
+    ){
+      loadBookings(
+        window.currentPropertyId
+      );
+    }
+
+  }
+);
 // =====================================
 // 🔒 PRO PMS ACCESS
 // =====================================
