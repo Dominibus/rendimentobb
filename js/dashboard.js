@@ -4017,15 +4017,6 @@ async function loadBookings(propertyId){
     );
 
     totalNights += nights;
-  1,
-  Math.ceil(
-    (
-      new Date(b.checkout) -
-      new Date(b.checkin)
-    ) /
-    (1000 * 60 * 60 * 24)
-  )
-);
 
 html += `
 
