@@ -2197,6 +2197,73 @@ placeholder="Prezzo notte">
 
 </div>
 
+<!-- ===================================== -->
+<!-- 📅 BOOKINGS MODAL -->
+<!-- ===================================== -->
+
+<div
+id="bookings-modal"
+class="rb-modal"
+style="display:none;">
+
+<div class="rb-modal-content">
+
+<h2>
+📅 Prenotazione
+</h2>
+
+<input
+id="booking-guest"
+type="text"
+placeholder="Nome ospite">
+
+<input
+id="booking-checkin"
+type="date">
+
+<input
+id="booking-checkout"
+type="date">
+
+<input
+id="booking-guests"
+type="number"
+placeholder="Ospiti">
+
+<input
+id="booking-total"
+type="number"
+placeholder="Totale soggiorno">
+
+<div
+style="
+display:flex;
+gap:10px;
+margin-top:15px;
+">
+
+<button
+class="btn-dashboard"
+onclick="closeBookingsModal()">
+
+Chiudi
+
+</button>
+
+<button
+class="btn-dashboard"
+onclick="saveBooking()">
+
+Salva
+
+</button>
+
+</div>
+
+</div>
+
+</div>  
+
 <div style="
 display:flex;
 gap:12px;
