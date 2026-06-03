@@ -3745,6 +3745,60 @@ function(propertyId){
 
 };
 
+// =====================================
+// 📅 SAVE BOOKING
+// =====================================
+
+window.saveBooking = async function(){
+
+  const guest =
+    document.getElementById(
+      "booking-guest"
+    )?.value?.trim();
+
+  const checkin =
+    document.getElementById(
+      "booking-checkin"
+    )?.value;
+
+  const checkout =
+    document.getElementById(
+      "booking-checkout"
+    )?.value;
+
+  const guests =
+    Number(
+      document.getElementById(
+        "booking-guests"
+      )?.value || 0
+    );
+
+  const total =
+    Number(
+      document.getElementById(
+        "booking-total"
+      )?.value || 0
+    );
+
+  console.log(
+    "📅 BOOKING SAVE:",
+    {
+      guest,
+      checkin,
+      checkout,
+      guests,
+      total
+    }
+  );
+
+  alert(
+    "Prenotazione salvata"
+  );
+
+  closeBookingsModal();
+
+};
+
 window.closeBookingsModal =
 function(){
 
