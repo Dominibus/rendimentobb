@@ -3836,37 +3836,37 @@ window.saveBooking = async function(){
 
 async function loadBookings(propertyId){
 
-  const snap =
-    await getDocs(
-      collection(db,"bookings")
+  const q =
+    query(
+      collection(db,"bookings"),
+      where(
+        "uid",
+        "==",
+        window.currentUser.uid
+      ),
+      where(
+        "propertyId",
+        "==",
+        propertyId
+      )
     );
+
+  const snap =
+    await getDocs(q);
 
   console.log(
     "📅 BOOKINGS FOUND:",
     snap.size
   );
 
-  snap.forEach(doc=>{
+  snap.forEach(docItem=>{
+
     console.log(
-      doc.data()
+      docItem.data()
     );
+
   });
 
 }
-
-window.closeBookingsModal =
-function(){
-
-  const modal =
-    document.getElementById(
-      "bookings-modal"
-    );
-
-  if(modal){
-
-    modal.style.display =
-      "none";
-
-  }
 
 };
