@@ -3780,15 +3780,45 @@ window.saveBooking = async function(){
       )?.value || 0
     );
 
-  console.log(
-    "📅 BOOKING SAVE:",
+  await addDoc(
+
+    collection(
+      db,
+      "bookings"
+    ),
+
     {
-      guest,
+
+      uid:
+        window.currentUser.uid,
+
+      propertyId:
+        window.currentPropertyId,
+
+      guestName:
+        guest,
+
       checkin,
+
       checkout,
+
       guests,
-      total
+
+      totalAmount:
+        total,
+
+      status:
+        "confirmed",
+
+      createdAt:
+        serverTimestamp()
+
     }
+
+  );
+
+  console.log(
+    "✅ BOOKING SAVED"
   );
 
   alert(
