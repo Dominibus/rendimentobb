@@ -4208,24 +4208,45 @@ async function loadPMSStats(){
   const bookings =
     bookingsSnap.size;
 
-  document.getElementById(
-    "pms-total-properties"
-  ).innerText = properties;
+  const adr =
+  bookings > 0
+    ? revenue / bookings
+    : 0;
 
-  document.getElementById(
-    "pms-total-bookings"
-  ).innerText = bookings;
+const occupancy =
+  bookings > 0
+    ? Math.min(
+        100,
+        Math.round(bookings * 8)
+      )
+    : 0;
 
-  document.getElementById(
-    "pms-total-revenue"
-  ).innerText =
-    formatCurrency(revenue);
+document.getElementById(
+  "pms-total-properties"
+).innerText = properties;
 
+document.getElementById(
+  "pms-total-bookings"
+).innerText = bookings;
+
+document.getElementById(
+  "pms-total-revenue"
+).innerText =
+  formatCurrency(revenue);
+
+document.getElementById(
+  "pms-occupancy"
+).innerText =
+  occupancy + "%";
+
+const adrEl =
   document.getElementById(
-    "pms-occupancy"
-  ).innerText =
-    bookings > 0
-      ? "72%"
-      : "0%";
+    "pms-adr"
+  );
+
+if(adrEl){
+  adrEl.innerText =
+    formatCurrency(adr);
+}
 
 }
