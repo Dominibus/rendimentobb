@@ -3719,12 +3719,31 @@ async function loadProperties(){
         </div>
 
         <div class="metric">
-  <span>
-    📈 Performance
-  </span>
+  <span>📈 ADR</span>
 
   <strong>
-    ADR €${data.priceNight || 0}
+    €${data.priceNight || 0}
+  </strong>
+</div>
+
+<div class="metric">
+  <span>🏠 Occupazione</span>
+
+  <strong>
+    ${occupancy}%
+  </strong>
+</div>
+
+<div class="metric">
+  <span>💰 Ricavo stimato</span>
+
+  <strong>
+    €${Math.round(
+      (data.priceNight || 0) *
+      occupancy *
+      30 / 100
+    )}
+    /mese
   </strong>
 </div>
 
@@ -3829,6 +3848,28 @@ function(propertyId){
 
   window.currentPropertyId =
     propertyId;
+setTimeout(()=>{
+
+document
+.getElementById(
+"booking-checkin"
+)
+?.addEventListener(
+"change",
+updateBookingTotal
+);
+
+document
+.getElementById(
+"booking-checkout"
+)
+?.addEventListener(
+"change",
+updateBookingTotal
+);
+
+},200);
+  
   loadBookings(propertyId);
 
   const modal =
@@ -3859,6 +3900,79 @@ function(propertyId){
   }
 
 };
+
+// =====================================
+// 📅 AUTO BOOKING CALCULATOR
+// =====================================
+
+function updateBookingTotal(){
+
+  const checkin =
+    document.getElementById(
+      "booking-checkin"
+    )?.value;
+
+  const checkout =
+    document.getElementById(
+      "booking-checkout"
+    )?.value;
+
+  if(!checkin || !checkout){
+    return;
+  }
+
+  const start =
+    new Date(checkin);
+
+  const end =
+    new Date(checkout);
+
+  const nights =
+    Math.max(
+      1,
+      Math.ceil(
+        (end - start) /
+        (1000 * 60 * 60 * 24)
+      )
+    );
+
+  const propertyCard =
+    document.querySelector(
+      ".property-card"
+    );
+
+  let adr = 120;
+
+  if(propertyCard){
+
+    const txt =
+      propertyCard.innerText;
+
+    const match =
+      txt.match(/€(\d+)/);
+
+    if(match){
+      adr = Number(match[1]);
+    }
+
+  }
+
+  const total =
+    nights * adr;
+
+  const totalField =
+    document.getElementById(
+      "booking-total"
+    );
+
+  if(totalField){
+
+    totalField.value =
+      total;
+
+  }
+
+}
 
 // =====================================
 // 📅 SAVE BOOKING
