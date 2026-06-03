@@ -3612,8 +3612,8 @@ async function loadProperties(){
       docItem.data();
 
     html += `
-
-    <div class="analysis-card">
+      <div class="property-card">
+     `;
 
       <h3>
       ${data.name || "-"}
