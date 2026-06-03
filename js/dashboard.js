@@ -3702,6 +3702,23 @@ async function(id){
 };
 
 // =====================================
+// 📅 CLOSE BOOKINGS MODAL
+// =====================================
+
+window.closeBookingsModal = function(){
+
+  const modal =
+    document.getElementById(
+      "bookings-modal"
+    );
+
+  if(modal){
+    modal.style.display = "none";
+  }
+
+};
+
+// =====================================
 // 📅 OPEN BOOKINGS
 // =====================================
 
