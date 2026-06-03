@@ -4406,6 +4406,47 @@ ${b.source === "phone"
 
   }
 
+  const channelsEl =
+  document.getElementById(
+    "booking-channels"
+  );
+
+if(channelsEl){
+
+  let channelsHtml = "";
+
+  Object.entries(
+    sourceStats
+  ).forEach(([name,data])=>{
+
+    channelsHtml += `
+
+      <div
+      class="analysis-card">
+
+        <strong>
+        ${name}
+        </strong>
+
+        <br>
+
+        📅 ${data.bookings}
+
+        <br>
+
+        💰 €${data.revenue.toFixed(0)}
+
+      </div>
+
+    `;
+
+  });
+
+  channelsEl.innerHTML =
+    channelsHtml;
+
+}
+
   list.innerHTML = html;
 
 }
