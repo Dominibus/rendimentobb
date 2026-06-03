@@ -3708,6 +3708,11 @@ async function(id){
 window.openBookings =
 function(propertyId){
 
+  console.log(
+    "🔥 BOOKINGS CLICK",
+    propertyId
+  );
+
   window.currentPropertyId =
     propertyId;
 
@@ -3716,10 +3721,25 @@ function(propertyId){
       "bookings-modal"
     );
 
+  console.log(
+    "🔥 MODAL FOUND:",
+    modal
+  );
+
   if(modal){
 
     modal.style.display =
       "flex";
+
+    console.log(
+      "🔥 MODAL OPENED"
+    );
+
+  }else{
+
+    console.log(
+      "❌ MODAL NOT FOUND"
+    );
 
   }
 
