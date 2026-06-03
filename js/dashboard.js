@@ -3836,22 +3836,21 @@ window.saveBooking = async function(){
 
 async function loadBookings(propertyId){
 
-  const q = query(
-    collection(db,"bookings"),
-    where(
-      "propertyId",
-      "==",
-      propertyId
-    )
-  );
-
   const snap =
-    await getDocs(q);
+    await getDocs(
+      collection(db,"bookings")
+    );
 
   console.log(
     "📅 BOOKINGS FOUND:",
     snap.size
   );
+
+  snap.forEach(doc=>{
+    console.log(
+      doc.data()
+    );
+  });
 
 }
 
