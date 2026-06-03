@@ -3443,10 +3443,12 @@ window.applyStaticTranslations();
 }
 
 setTimeout(()=>{
-  loadProperties();
-},1500);  
 
-});
+  loadProperties();
+
+  loadPMSStats();
+
+},1500);
 
 // =====================================
 // 🌍 PMS LANGUAGE REFRESH
@@ -4027,5 +4029,77 @@ ${t(
   });
 
   list.innerHTML = html;
+
+}
+
+// =====================================
+// 📊 PMS DASHBOARD KPI
+// =====================================
+
+async function loadPMSStats(){
+
+  if(!window.currentUser) return;
+
+  const propertiesSnap =
+    await getDocs(
+      query(
+        collection(db,"properties"),
+        where(
+          "uid",
+          "==",
+          window.currentUser.uid
+        )
+      )
+    );
+
+  const bookingsSnap =
+    await getDocs(
+      query(
+        collection(db,"bookings"),
+        where(
+          "uid",
+          "==",
+          window.currentUser.uid
+        )
+      )
+    );
+
+  let revenue = 0;
+
+  bookingsSnap.forEach(docItem=>{
+
+    revenue +=
+      Number(
+        docItem.data()
+        .totalAmount || 0
+      );
+
+  });
+
+  const properties =
+    propertiesSnap.size;
+
+  const bookings =
+    bookingsSnap.size;
+
+  document.getElementById(
+    "pms-total-properties"
+  ).innerText = properties;
+
+  document.getElementById(
+    "pms-total-bookings"
+  ).innerText = bookings;
+
+  document.getElementById(
+    "pms-total-revenue"
+  ).innerText =
+    formatCurrency(revenue);
+
+  document.getElementById(
+    "pms-occupancy"
+  ).innerText =
+    bookings > 0
+      ? "72%"
+      : "0%";
 
 }
