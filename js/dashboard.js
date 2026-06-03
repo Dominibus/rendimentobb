@@ -4108,6 +4108,8 @@ async function loadBookings(propertyId){
     snap.size
   );
 
+  const bookingsData = [];
+
   if(snap.empty){
 
     list.innerHTML = `
@@ -4142,6 +4144,11 @@ let sourceStats = {};
       docItem.data();
 
     bookingsData.push(b);
+
+    bookingsData.push({
+  id: docItem.id,
+  ...b
+});
 
     const source =
   b.source || "Unknown";
@@ -4686,3 +4693,74 @@ document.getElementById(
   guestsInHouse;
 
 };
+
+function renderPMSCalendar(bookings){
+
+  const container =
+    document.getElementById(
+      "pms-calendar"
+    );
+
+  if(!container) return;
+
+  if(!bookings.length){
+
+    container.innerHTML = "";
+
+    return;
+  }
+
+  let html = `
+
+  <div class="analysis-card">
+
+    <strong>
+
+      ${
+        window.t(
+          "📅 Calendario Prenotazioni",
+          "📅 Booking Calendar"
+        )
+      }
+
+    </strong>
+
+    <div style="
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    ">
+  `;
+
+  bookings.forEach(b=>{
+
+    html += `
+
+      <div style="
+        padding:8px;
+        border-radius:8px;
+        background:#f8fafc;
+      ">
+
+        👤 ${b.guestName}
+
+        <br>
+
+        📅 ${b.checkin}
+        → ${b.checkout}
+
+      </div>
+
+    `;
+
+  });
+
+  html += `
+    </div>
+  </div>
+  `;
+
+  container.innerHTML = html;
+
+}
