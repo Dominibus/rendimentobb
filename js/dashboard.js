@@ -3490,6 +3490,23 @@ window.addEventListener(
   }
 );
 
+document.addEventListener(
+  "rb_language_changed",
+  ()=>{
+
+    loadProperties();
+
+    if(
+      window.currentPropertyId
+    ){
+      loadBookings(
+        window.currentPropertyId
+      );
+    }
+
+  }
+);
+
 // =====================================
 // 🏠 SAVE PROPERTY
 // =====================================
@@ -3499,7 +3516,12 @@ window.saveProperty = async function(){
   try{
 
     if(!window.currentUser){
-      alert("Login required");
+      alert(
+  t(
+    "Accesso richiesto",
+    "Login required"
+  )
+);
       return;
     }
 
@@ -3518,7 +3540,12 @@ window.saveProperty = async function(){
       );
 
     if(!name){
-      alert("Nome proprietà obbligatorio");
+      alert(
+  t(
+    "Nome proprietà obbligatorio",
+    "Property name required"
+  )
+);
       return;
     }
 
@@ -3597,7 +3624,10 @@ async function loadProperties(){
       border:1px dashed #cbd5e1;
       text-align:center;
       ">
-      Nessuna proprietà presente
+      ${t(
+  "Nessuna proprietà presente",
+  "No properties found"
+)}
       </div>
     `;
 
@@ -3620,21 +3650,24 @@ async function loadProperties(){
         </h3>
 
         <div class="metric">
-          <span>Città</span>
+          <span>${t("Città","City")}</span>
           <strong>
             ${data.city || "-"}
           </strong>
         </div>
 
         <div class="metric">
-          <span>Indirizzo</span>
+          <span>${t("Indirizzo","Address")}</span>
           <strong>
             ${data.address || "-"}
           </strong>
         </div>
 
         <div class="metric">
-          <span>Prezzo notte</span>
+          <span>${t(
+  "Prezzo notte",
+  "Nightly rate"
+)}</span>
           <strong>
             €${data.priceNight || 0}
           </strong>
@@ -3651,7 +3684,10 @@ async function loadProperties(){
           class="btn-dashboard"
           onclick="openBookings('${docItem.id}')">
 
-          Prenotazioni
+          ${t(
+  "Prenotazioni",
+  "Bookings"
+)}
 
           </button>
 
@@ -3659,7 +3695,10 @@ async function loadProperties(){
           class="btn-dashboard"
           onclick="deleteProperty('${docItem.id}')">
 
-          Elimina
+          ${t(
+  "Elimina",
+  "Delete"
+)}
 
           </button>
 
@@ -3683,9 +3722,12 @@ window.deleteProperty =
 async function(id){
 
   const ok =
-    confirm(
-      "Eliminare proprietà?"
-    );
+  confirm(
+    t(
+      "Eliminare proprietà?",
+      "Delete property?"
+    )
+  );
 
   if(!ok) return;
 
@@ -3844,8 +3886,11 @@ window.saveBooking = async function(){
  );
 
   alert(
-    "Prenotazione salvata"
-  );
+  t(
+    "Prenotazione salvata",
+    "Booking saved"
+  )
+);
 
   closeBookingsModal();
 
@@ -3894,7 +3939,10 @@ async function loadBookings(propertyId){
       padding:10px;
       color:#64748b;
       ">
-      Nessuna prenotazione
+      ${t(
+  "Nessuna prenotazione",
+  "No bookings found"
+)}
       </div>
     `;
 
@@ -3927,7 +3975,11 @@ async function loadBookings(propertyId){
 
         <br>
 
-        👥 ${b.guests} ospiti
+        👥 ${b.guests}
+${t(
+  "ospiti",
+  "guests"
+)}
 
         <br>
 
