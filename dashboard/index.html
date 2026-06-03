@@ -2140,7 +2140,7 @@ document.addEventListener("rb_plan_loaded", () => {
 
 </script>
 
-  <!-- =====================================
+<!-- =====================================
 🏠 PROPERTY MODAL
 ===================================== -->
 
@@ -2197,6 +2197,34 @@ placeholder="Prezzo notte">
 
 </div>
 
+<div style="
+display:flex;
+gap:12px;
+margin-top:20px;
+">
+
+<button
+class="btn-dashboard"
+onclick="closePropertyModal()">
+
+Chiudi
+
+</button>
+
+<button
+class="btn-dashboard"
+onclick="saveProperty()">
+
+Salva
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 <!-- ===================================== -->
 <!-- 📅 BOOKINGS MODAL -->
 <!-- ===================================== -->
@@ -2210,7 +2238,7 @@ inset:0;
 background:rgba(15,23,42,.75);
 align-items:center;
 justify-content:center;
-z-index:99999;
+z-index:999999;
 ">
 
 <div
@@ -2268,36 +2296,7 @@ Chiudi
 </button>
 
 <button
-class="btn-dashboard"
-onclick="saveBooking()">
-
-Salva
-
-</button>
-
-</div>
-
-</div>
-
-</div>  
-
-<div style="
-display:flex;
-gap:12px;
-margin-top:20px;
-">
-
-<button
-class="btn-dashboard"
-onclick="closePropertyModal()">
-
-Chiudi
-
-</button>
-
-<button
-class="btn-dashboard"
-onclick="saveProperty()">
+class="btn-dashboard">
 
 Salva
 
@@ -2308,5 +2307,6 @@ Salva
 </div>
 
 </div>
+
 </body>
 </html>
