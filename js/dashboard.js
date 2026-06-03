@@ -4127,14 +4127,36 @@ async function loadBookings(propertyId){
 
     let html = "";
 
-  let totalGuests = 0;
-  let totalRevenue = 0;
-  let totalNights = 0;
+let totalGuests = 0;
+let totalRevenue = 0;
+let totalNights = 0;
+
+// 🔥 STATISTICHE CANALI
+let sourceStats = {};
 
   snap.forEach(docItem=>{
 
     const b =
       docItem.data();
+
+    const source =
+  b.source || "Unknown";
+
+if(!sourceStats[source]){
+
+  sourceStats[source] = {
+    bookings:0,
+    revenue:0
+  };
+
+}
+
+sourceStats[source].bookings++;
+
+sourceStats[source].revenue +=
+  Number(
+    b.totalAmount || 0
+  );
 
     totalGuests +=
       Number(b.guests || 0);
