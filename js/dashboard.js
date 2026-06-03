@@ -4127,8 +4127,6 @@ async function loadBookings(propertyId){
     return;
   }
 
-  let bookingsData = [];
-
     let html = "";
 
 let totalGuests = 0;
@@ -4142,8 +4140,6 @@ let sourceStats = {};
 
     const b =
       docItem.data();
-
-    bookingsData.push(b);
 
     bookingsData.push({
   id: docItem.id,
