@@ -4037,7 +4037,14 @@ window.saveBooking = async function(){
         total,
 
       status:
-        "confirmed",
+  document.getElementById(
+    "booking-status"
+  )?.value || "confirmed",
+
+source:
+  document.getElementById(
+    "booking-source"
+  )?.value || "direct",
 
       createdAt:
         serverTimestamp()
@@ -4175,20 +4182,63 @@ font-size:16px;
 👤 ${b.guestName}
 </strong>
 
+${(() => {
+
+let bg = "#dcfce7";
+let color = "#166534";
+let label = "Confermata";
+
+switch(b.status){
+
+  case "arrival":
+    bg = "#dbeafe";
+    color = "#1d4ed8";
+    label = "In Arrivo";
+    break;
+
+  case "checkin":
+    bg = "#bfdbfe";
+    color = "#1e40af";
+    label = "Check-In";
+    break;
+
+  case "checkout":
+    bg = "#fed7aa";
+    color = "#c2410c";
+    label = "Check-Out";
+    break;
+
+  case "completed":
+    bg = "#e9d5ff";
+    color = "#7e22ce";
+    label = "Completata";
+    break;
+
+  case "cancelled":
+    bg = "#fecaca";
+    color = "#991b1b";
+    label = "Cancellata";
+    break;
+
+}
+
+return `
+
 <span
 style="
-background:#dcfce7;
-color:#166534;
+background:${bg};
+color:${color};
 padding:4px 10px;
 border-radius:999px;
 font-size:12px;
 font-weight:600;
 ">
-${window.t(
-"Confermata",
-"Confirmed"
-)}
+${label}
 </span>
+
+`;
+
+})()}
 
 </div>
 
@@ -4226,6 +4276,34 @@ ${window.t(
 €${Number(
   b.totalAmount || 0
 ).toFixed(2)}
+</div>
+
+<div>
+
+${b.source === "airbnb"
+? "🏠 Airbnb"
+: ""}
+
+${b.source === "booking"
+? "🟦 Booking.com"
+: ""}
+
+${b.source === "vrbo"
+? "🏡 VRBO"
+: ""}
+
+${b.source === "direct"
+? "📞 Diretta"
+: ""}
+
+${b.source === "website"
+? "🌐 Sito Web"
+: ""}
+
+${b.source === "phone"
+? "☎️ Telefono"
+: ""}
+
 </div>
 
 </div>
