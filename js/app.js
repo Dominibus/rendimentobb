@@ -974,7 +974,7 @@ window.triggerFunnel = function({type = "generic", roi = 0} = {}){
 };
 
 // 🔥 COMPATIBILITÀ HOME CTA
-window.triggerUpgradeFlow = function(data = {}){
+window.triggerHomeUpgradeFlow = function(data = {}){
   triggerFunnel({
     type:"scroll",
     roi: window.lastAnalysisData?.roi || 0,
