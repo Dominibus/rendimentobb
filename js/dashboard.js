@@ -3995,39 +3995,100 @@ async function loadBookings(propertyId){
     const b =
       docItem.data();
 
-    html += `
+    const nights = Math.max(
+  1,
+  Math.ceil(
+    (
+      new Date(b.checkout) -
+      new Date(b.checkin)
+    ) /
+    (1000 * 60 * 60 * 24)
+  )
+);
 
-      <div style="
-      border:1px solid #e2e8f0;
-      border-radius:12px;
-      padding:12px;
-      ">
+html += `
 
-        <strong>
-          ${b.guestName}
-        </strong>
+<div
+style="
+padding:14px;
+border:1px solid #e5e7eb;
+border-radius:14px;
+background:#f8fafc;
+display:flex;
+flex-direction:column;
+gap:6px;
+">
 
-        <br>
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
 
-        🗓 ${b.checkin}
-        → ${b.checkout}
+<strong
+style="
+font-size:16px;
+">
+👤 ${b.guestName}
+</strong>
 
-        <br>
-
-        👥 ${b.guests}
-${t(
-  "ospiti",
-  "guests"
+<span
+style="
+background:#dcfce7;
+color:#166534;
+padding:4px 10px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+">
+${window.t(
+"Confermata",
+"Confirmed"
 )}
+</span>
 
-        <br>
+</div>
 
-        💰 €${b.totalAmount}
+<div>
+📅
+<strong>
+${b.checkin}
+</strong>
+→
+<strong>
+${b.checkout}
+</strong>
+</div>
 
-      </div>
+<div>
+👥
+${b.guests}
+${window.t(
+"Ospiti",
+"Guests"
+)}
+</div>
 
-    `;
+<div>
+🌙
+${nights}
+${window.t(
+"Notti",
+"Nights"
+)}
+</div>
 
+<div>
+💰
+€${Number(
+  b.totalAmount || 0
+).toFixed(2)}
+</div>
+
+</div>
+
+`;
   });
 
   list.innerHTML = html;
