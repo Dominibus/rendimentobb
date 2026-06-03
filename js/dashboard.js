@@ -3988,14 +3988,35 @@ async function loadBookings(propertyId){
     return;
   }
 
-  let html = "";
+    let html = "";
+
+  let totalGuests = 0;
+  let totalRevenue = 0;
+  let totalNights = 0;
 
   snap.forEach(docItem=>{
 
     const b =
       docItem.data();
 
+    totalGuests +=
+      Number(b.guests || 0);
+
+    totalRevenue +=
+      Number(b.totalAmount || 0);
+
     const nights = Math.max(
+      1,
+      Math.ceil(
+        (
+          new Date(b.checkout) -
+          new Date(b.checkin)
+        ) /
+        (1000 * 60 * 60 * 24)
+      )
+    );
+
+    totalNights += nights;
   1,
   Math.ceil(
     (
@@ -4089,7 +4110,58 @@ ${window.t(
 </div>
 
 `;
-  });
+    });
+
+  const summary =
+    document.getElementById(
+      "booking-summary"
+    );
+
+  if(summary){
+
+    summary.innerHTML = `
+
+      <div class="analysis-card">
+        📅 ${window.t(
+          "Prenotazioni",
+          "Bookings"
+        )}
+        <br>
+        <strong>${snap.size}</strong>
+      </div>
+
+      <div class="analysis-card">
+        👥 ${window.t(
+          "Ospiti",
+          "Guests"
+        )}
+        <br>
+        <strong>${totalGuests}</strong>
+      </div>
+
+      <div class="analysis-card">
+        💰 ${window.t(
+          "Ricavi",
+          "Revenue"
+        )}
+        <br>
+        <strong>
+        €${totalRevenue.toFixed(2)}
+        </strong>
+      </div>
+
+      <div class="analysis-card">
+        🌙 ${window.t(
+          "Notti",
+          "Nights"
+        )}
+        <br>
+        <strong>${totalNights}</strong>
+      </div>
+
+    `;
+
+  }
 
   list.innerHTML = html;
 
