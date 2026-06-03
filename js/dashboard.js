@@ -4664,4 +4664,19 @@ document.getElementById(
     0
   );
 
+  document.getElementById(
+  "pms-arrivals-today"
+).innerText =
+  arrivalsToday;
+
+document.getElementById(
+  "pms-departures-today"
+).innerText =
+  departuresToday;
+
+document.getElementById(
+  "pms-guests-in-house"
+).innerText =
+  guestsInHouse;
+
 };
