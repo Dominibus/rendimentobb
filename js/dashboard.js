@@ -4710,17 +4710,6 @@ function renderPMSCalendar(bookings){
 
   <div class="analysis-card">
 
-    <strong>
-
-      ${
-        window.t(
-          "📅 Calendario Prenotazioni",
-          "📅 Booking Calendar"
-        )
-      }
-
-    </strong>
-
     <div style="
       margin-top:10px;
       display:flex;
@@ -4731,24 +4720,66 @@ function renderPMSCalendar(bookings){
 
   bookings.forEach(b=>{
 
-    html += `
+    let color = "#10b981";
 
-      <div style="
-        padding:8px;
-        border-radius:8px;
-        background:#f8fafc;
-      ">
+switch(b.status){
 
-        👤 ${b.guestName}
+  case "arrival":
+    color = "#3b82f6";
+    break;
 
-        <br>
+  case "checkin":
+    color = "#06b6d4";
+    break;
 
-        📅 ${b.checkin}
-        → ${b.checkout}
+  case "checkout":
+    color = "#f97316";
+    break;
 
-      </div>
+  case "completed":
+    color = "#8b5cf6";
+    break;
 
-    `;
+  case "cancelled":
+    color = "#ef4444";
+    break;
+
+}
+
+html += `
+
+<div
+style="
+padding:12px;
+border-left:4px solid ${color};
+border-radius:10px;
+background:#f8fafc;
+">
+
+<div
+style="
+font-weight:700;
+">
+
+👤 ${b.guestName}
+
+</div>
+
+<div
+style="
+font-size:13px;
+color:#64748b;
+">
+
+📅 ${b.checkin}
+→
+${b.checkout}
+
+</div>
+
+</div>
+
+`;
 
   });
 
