@@ -4534,6 +4534,14 @@ async function loadPMSStats(){
     bookingsSnap.size;
 
   let totalNights = 0;
+  let arrivalsToday = 0;
+let departuresToday = 0;
+let guestsInHouse = 0;
+
+const today =
+  new Date()
+    .toISOString()
+    .split("T")[0];
 
 bookingsSnap.forEach(docItem=>{
 
@@ -4551,6 +4559,30 @@ bookingsSnap.forEach(docItem=>{
   );
 
   totalNights += nights;
+
+  if(
+  b.checkin === today
+){
+  arrivalsToday++;
+}
+
+if(
+  b.checkout === today
+){
+  departuresToday++;
+}
+
+if(
+  b.checkin <= today &&
+  b.checkout >= today
+){
+
+  guestsInHouse +=
+    Number(
+      b.guests || 0
+    );
+
+}
 
 });
 
@@ -4571,7 +4603,7 @@ bookingsSnap.forEach(docItem=>{
       Math.round(
         (
           totalNights /
-          (properties * 365)
+          (properties * 30)
         ) * 100
       )
     )
