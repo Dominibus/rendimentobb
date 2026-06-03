@@ -2166,7 +2166,7 @@ max-width:500px;
 
 <h2
 data-it="🏠 Nuova proprietà"
-data-en="🏠 New property">
+data-en="🏠 New Property">
 
 🏠 Nuova proprietà
 
@@ -2181,18 +2181,26 @@ margin-top:20px;
 
 <input
 id="property-name"
+data-it-placeholder="Nome proprietà"
+data-en-placeholder="Property name"
 placeholder="Nome proprietà">
 
 <input
 id="property-city"
+data-it-placeholder="Città"
+data-en-placeholder="City"
 placeholder="Città">
 
 <input
 id="property-address"
+data-it-placeholder="Indirizzo"
+data-en-placeholder="Address"
 placeholder="Indirizzo">
 
 <input
 id="property-price"
+data-it-placeholder="Prezzo notte"
+data-en-placeholder="Nightly rate"
 placeholder="Prezzo notte">
 
 </div>
@@ -2205,7 +2213,9 @@ margin-top:20px;
 
 <button
 class="btn-dashboard"
-onclick="closePropertyModal()">
+onclick="closePropertyModal()"
+data-it="Chiudi"
+data-en="Close">
 
 Chiudi
 
@@ -2213,7 +2223,9 @@ Chiudi
 
 <button
 class="btn-dashboard"
-onclick="saveProperty()">
+onclick="saveProperty()"
+data-it="Salva"
+data-en="Save">
 
 Salva
 
@@ -2253,13 +2265,19 @@ flex-direction:column;
 gap:12px;
 ">
 
-<h2>
+<h2
+data-it="📅 Prenotazione"
+data-en="📅 Booking">
+
 📅 Prenotazione
+
 </h2>
 
 <input
 id="booking-guest"
 type="text"
+data-it-placeholder="Nome ospite"
+data-en-placeholder="Guest name"
 placeholder="Nome ospite">
 
 <input
@@ -2273,11 +2291,15 @@ type="date">
 <input
 id="booking-guests"
 type="number"
+data-it-placeholder="Ospiti"
+data-en-placeholder="Guests"
 placeholder="Ospiti">
 
 <input
 id="booking-total"
 type="number"
+data-it-placeholder="Totale soggiorno"
+data-en-placeholder="Total stay amount"
 placeholder="Totale soggiorno">
 
 <div
@@ -2289,7 +2311,9 @@ margin-top:15px;
 
 <button
 class="btn-dashboard"
-onclick="closeBookingsModal()">
+onclick="closeBookingsModal()"
+data-it="Chiudi"
+data-en="Close">
 
 Chiudi
 
@@ -2297,7 +2321,9 @@ Chiudi
 
 <button
 class="btn-dashboard"
-onclick="saveBooking()">
+onclick="saveBooking()"
+data-it="Salva"
+data-en="Save">
 
 Salva
 
@@ -2307,8 +2333,12 @@ Salva
 
 <hr>
 
-<h3>
+<h3
+data-it="📋 Prenotazioni salvate"
+data-en="📋 Saved Bookings">
+
 📋 Prenotazioni salvate
+
 </h3>
 
 <div
@@ -2320,11 +2350,11 @@ display:flex;
 flex-direction:column;
 gap:10px;
 ">
-</div>  
+</div>
 
-  </div>
+</div>
 
-    </div>
+</div>
 
 </body>
 </html>
