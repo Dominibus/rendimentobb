@@ -3708,9 +3708,36 @@ async function(id){
 window.openBookings =
 function(propertyId){
 
-  alert(
-    "Property ID: " +
-    propertyId
-  );
+  window.currentPropertyId =
+    propertyId;
+
+  const modal =
+    document.getElementById(
+      "bookings-modal"
+    );
+
+  if(modal){
+
+    modal.style.display =
+      "flex";
+
+  }
+
+};
+
+window.closeBookingsModal =
+function(){
+
+  const modal =
+    document.getElementById(
+      "bookings-modal"
+    );
+
+  if(modal){
+
+    modal.style.display =
+      "none";
+
+  }
 
 };
