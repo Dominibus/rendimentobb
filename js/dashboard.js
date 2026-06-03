@@ -3442,6 +3442,10 @@ window.applyStaticTranslations();
 
 }
 
+setTimeout(()=>{
+  loadProperties();
+},1500);  
+
 });
 // =====================================
 // 🔒 PRO PMS ACCESS
@@ -3485,3 +3489,197 @@ window.addEventListener(
 
   }
 );
+
+// =====================================
+// 🏠 SAVE PROPERTY
+// =====================================
+
+window.saveProperty = async function(){
+
+  try{
+
+    if(!window.currentUser){
+      alert("Login required");
+      return;
+    }
+
+    const name =
+      document.getElementById("property-name")?.value?.trim();
+
+    const city =
+      document.getElementById("property-city")?.value?.trim();
+
+    const address =
+      document.getElementById("property-address")?.value?.trim();
+
+    const priceNight =
+      Number(
+        document.getElementById("property-price")?.value || 0
+      );
+
+    if(!name){
+      alert("Nome proprietà obbligatorio");
+      return;
+    }
+
+    await addDoc(
+      collection(db,"properties"),
+      {
+
+        uid:
+          window.currentUser.uid,
+
+        name,
+        city,
+        address,
+        priceNight,
+
+        createdAt:
+          serverTimestamp()
+
+      }
+    );
+
+    closePropertyModal();
+
+    document.getElementById("property-name").value = "";
+    document.getElementById("property-city").value = "";
+    document.getElementById("property-address").value = "";
+    document.getElementById("property-price").value = "";
+
+    loadProperties();
+
+  }catch(err){
+
+    console.error(
+      "PROPERTY SAVE ERROR:",
+      err
+    );
+
+  }
+
+};
+
+// =====================================
+// 🏠 LOAD PROPERTIES
+// =====================================
+
+async function loadProperties(){
+
+  const container =
+    document.getElementById(
+      "properties-list"
+    );
+
+  if(!container) return;
+
+  if(!window.currentUser) return;
+
+  const q =
+    query(
+      collection(db,"properties"),
+      where(
+        "uid",
+        "==",
+        window.currentUser.uid
+      )
+    );
+
+  const snap =
+    await getDocs(q);
+
+  if(snap.empty){
+
+    container.innerHTML = `
+      <div
+      class="analysis-card"
+      style="
+      border:1px dashed #cbd5e1;
+      text-align:center;
+      ">
+      Nessuna proprietà presente
+      </div>
+    `;
+
+    return;
+  }
+
+  let html = "";
+
+  snap.forEach(docItem=>{
+
+    const data =
+      docItem.data();
+
+    html += `
+
+    <div class="analysis-card">
+
+      <h3>
+      ${data.name || "-"}
+      </h3>
+
+      <div class="metric">
+        <span>Città</span>
+        <strong>
+        ${data.city || "-"}
+        </strong>
+      </div>
+
+      <div class="metric">
+        <span>Indirizzo</span>
+        <strong>
+        ${data.address || "-"}
+        </strong>
+      </div>
+
+      <div class="metric">
+        <span>Prezzo notte</span>
+        <strong>
+        €${data.priceNight || 0}
+        </strong>
+      </div>
+
+      <button
+      class="btn-dashboard"
+      onclick="deleteProperty('${docItem.id}')">
+
+      Elimina
+
+      </button>
+
+    </div>
+
+    `;
+
+  });
+
+  container.innerHTML = html;
+
+}
+
+// =====================================
+// 🏠 DELETE PROPERTY
+// =====================================
+
+window.deleteProperty =
+async function(id){
+
+  const ok =
+    confirm(
+      "Eliminare proprietà?"
+    );
+
+  if(!ok) return;
+
+  await deleteDoc(
+    doc(
+      db,
+      "properties",
+      id
+    )
+  );
+
+  loadProperties();
+
+};
