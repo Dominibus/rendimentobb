@@ -14,7 +14,9 @@ getDocs,
 getDoc,
 orderBy,
 deleteDoc,
-doc
+doc,
+addDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const cityImages = {
