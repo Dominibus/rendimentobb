@@ -3680,6 +3680,12 @@ async function loadProperties(){
     const data =
       docItem.data();
 
+    
+    const occupancy =
+  Math.floor(
+    Math.random() * 25
+  ) + 60;
+
     html += `
 
       <div class="property-card">
@@ -4028,11 +4034,6 @@ async function loadBookings(propertyId){
 
     totalNights += nights;
 
-    const occupancy =
-  Math.floor(
-    Math.random() * 25
-  ) + 60;
-
 html += `
 
 <div
@@ -4263,15 +4264,5 @@ if(adrEl){
   adrEl.innerText =
     formatCurrency(adr);
 }
-
-  <div class="metric">
-  <span>
-    📅 Occupazione
-  </span>
-
-  <strong>
-    ${occupancy}%
-  </strong>
-</div>
 
 }
