@@ -3640,13 +3640,30 @@ async function loadProperties(){
         </strong>
       </div>
 
-      <button
-      class="btn-dashboard"
-      onclick="deleteProperty('${docItem.id}')">
+      <div
+style="
+display:flex;
+gap:10px;
+margin-top:15px;
+">
 
-      Elimina
+<button
+class="btn-dashboard"
+onclick="openBookings('${docItem.id}')">
 
-      </button>
+Prenotazioni
+
+</button>
+
+<button
+class="btn-dashboard"
+onclick="deleteProperty('${docItem.id}')">
+
+Elimina
+
+</button>
+
+</div>
 
     </div>
 
@@ -3681,5 +3698,19 @@ async function(id){
   );
 
   loadProperties();
+
+};
+
+// =====================================
+// 📅 OPEN BOOKINGS
+// =====================================
+
+window.openBookings =
+function(propertyId){
+
+  alert(
+    "Property ID: " +
+    propertyId
+  );
 
 };
