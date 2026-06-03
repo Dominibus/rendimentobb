@@ -3839,6 +3839,10 @@ window.saveBooking = async function(){
     "✅ BOOKING SAVED"
   );
 
+  await loadBookings(
+  window.currentPropertyId
+ );
+
   alert(
     "Prenotazione salvata"
   );
