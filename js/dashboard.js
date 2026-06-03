@@ -3868,5 +3868,3 @@ async function loadBookings(propertyId){
   });
 
 }
-
-};
