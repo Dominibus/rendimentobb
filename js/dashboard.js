@@ -4338,10 +4338,31 @@ async function loadPMSStats(){
   const bookings =
     bookingsSnap.size;
 
+  let totalNights = 0;
+
+bookingsSnap.forEach(docItem=>{
+
+  const b = docItem.data();
+
+  const nights = Math.max(
+    1,
+    Math.ceil(
+      (
+        new Date(b.checkout) -
+        new Date(b.checkin)
+      ) /
+      (1000*60*60*24)
+    )
+  );
+
+  totalNights += nights;
+
+});
+
   const adr =
-  bookings > 0
-    ? revenue / bookings
-    : 0;
+  totalNights > 0
+  ? revenue / totalNights
+  : 0;
 
 const occupancy =
   bookings > 0
