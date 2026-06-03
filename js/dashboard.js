@@ -4694,7 +4694,7 @@ function renderPMSCalendar(bookings){
 
   const container =
     document.getElementById(
-      "pms-calendar"
+      "booking-calendar"
     );
 
   if(!container) return;
