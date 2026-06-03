@@ -16,7 +16,7 @@ orderBy,
 deleteDoc,
 doc,
 addDoc,
-serverTimestamp
+serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const cityImages = {
@@ -4278,6 +4278,28 @@ ${window.t(
 ).toFixed(2)}
 </div>
 
+<div
+style="
+display:flex;
+gap:8px;
+margin-top:8px;
+">
+
+<button
+onclick="deleteBooking('${docItem.id}')"
+style="
+padding:6px 10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#ef4444;
+color:white;
+">
+🗑️
+</button>
+
+</div>
+
 <div>
 
 ${b.source === "airbnb"
@@ -4365,6 +4387,38 @@ ${b.source === "phone"
   list.innerHTML = html;
 
 }
+
+// =====================================
+// 🗑 DELETE BOOKING
+// =====================================
+
+window.deleteBooking =
+async function(id){
+
+  if(
+    !confirm(
+      window.t(
+        "Eliminare prenotazione?",
+        "Delete booking?"
+      )
+    )
+  ){
+    return;
+  }
+
+  await deleteDoc(
+    doc(
+      db,
+      "bookings",
+      id
+    )
+  );
+
+  await loadBookings(
+    window.currentPropertyId
+  );
+
+};
 
 // =====================================
 // 📊 PMS DASHBOARD KPI
