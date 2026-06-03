@@ -3715,6 +3715,7 @@ function(propertyId){
 
   window.currentPropertyId =
     propertyId;
+  loadBookings(propertyId);
 
   const modal =
     document.getElementById(
@@ -3828,6 +3829,31 @@ window.saveBooking = async function(){
   closeBookingsModal();
 
 };
+
+// =====================================
+// 📅 LOAD BOOKINGS
+// =====================================
+
+async function loadBookings(propertyId){
+
+  const q = query(
+    collection(db,"bookings"),
+    where(
+      "propertyId",
+      "==",
+      propertyId
+    )
+  );
+
+  const snap =
+    await getDocs(q);
+
+  console.log(
+    "📅 BOOKINGS FOUND:",
+    snap.size
+  );
+
+}
 
 window.closeBookingsModal =
 function(){
