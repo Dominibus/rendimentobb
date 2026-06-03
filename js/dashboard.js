@@ -3857,6 +3857,13 @@ window.saveBooking = async function(){
 
 async function loadBookings(propertyId){
 
+  const list =
+    document.getElementById(
+      "bookings-list"
+    );
+
+  if(!list) return;
+
   const q =
     query(
       collection(db,"bookings"),
@@ -3880,12 +3887,58 @@ async function loadBookings(propertyId){
     snap.size
   );
 
+  if(snap.empty){
+
+    list.innerHTML = `
+      <div style="
+      padding:10px;
+      color:#64748b;
+      ">
+      Nessuna prenotazione
+      </div>
+    `;
+
+    return;
+  }
+
+  let html = "";
+
   snap.forEach(docItem=>{
 
-    console.log(
-      docItem.data()
-    );
+    const b =
+      docItem.data();
+
+    html += `
+
+      <div style="
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      padding:12px;
+      ">
+
+        <strong>
+          ${b.guestName}
+        </strong>
+
+        <br>
+
+        🗓 ${b.checkin}
+        → ${b.checkout}
+
+        <br>
+
+        👥 ${b.guests} ospiti
+
+        <br>
+
+        💰 €${b.totalAmount}
+
+      </div>
+
+    `;
 
   });
+
+  list.innerHTML = html;
 
 }
