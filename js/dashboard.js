@@ -4524,12 +4524,17 @@ bookingsSnap.forEach(docItem=>{
   : 0;
 
   const occupancy =
-  bookings > 0
-    ? Math.min(
-        100,
-        Math.round(bookings * 8)
+  properties > 0
+  ? Math.min(
+      100,
+      Math.round(
+        (
+          totalNights /
+          (properties * 365)
+        ) * 100
       )
-    : 0;
+    )
+  : 0;
 
 const revpar =
   adr * (occupancy / 100);
