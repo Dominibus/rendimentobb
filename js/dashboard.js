@@ -4915,80 +4915,95 @@ async function loadPMSStats(){
   // KPI UPDATE
   // ======================
 
-  document.getElementById(
-    "pms-total-properties"
-  )?.innerText = properties;
+  const setText = (id,value)=>{
 
-  document.getElementById(
-    "pms-total-bookings"
-  )?.innerText = bookings;
+  const el =
+    document.getElementById(id);
 
-  document.getElementById(
-    "pms-total-revenue"
-  )?.innerText =
-    formatCurrency(revenue);
+  if(el){
 
-  document.getElementById(
-    "pms-occupancy"
-  )?.innerText =
-    occupancy + "%";
+    el.innerText = value;
 
-  document.getElementById(
-    "pms-adr"
-  )?.innerText =
-    formatCurrency(adr);
+  }
 
-  document.getElementById(
-    "pms-revpar"
-  )?.innerText =
-    formatCurrency(revpar);
+};
 
-  document.getElementById(
-    "pms-avgstay"
-  )?.innerText =
-    avgStay.toFixed(1);
+setText(
+  "pms-total-properties",
+  properties
+);
 
-  document.getElementById(
-    "pms-guests"
-  )?.innerText =
-    bookingsSnap.docs.reduce(
-      (sum,d)=>
-        sum +
-        Number(
-          d.data().guests || 0
-        ),
-      0
-    );
+setText(
+  "pms-total-bookings",
+  bookings
+);
 
-  document.getElementById(
-    "pms-arrivals-today"
-  )?.innerText =
-    arrivalsToday;
+setText(
+  "pms-total-revenue",
+  formatCurrency(revenue)
+);
 
-  document.getElementById(
-    "pms-departures-today"
-  )?.innerText =
-    departuresToday;
+setText(
+  "pms-occupancy",
+  occupancy + "%"
+);
 
-  document.getElementById(
-    "pms-guests-in-house"
-  )?.innerText =
-    guestsInHouse;
+setText(
+  "pms-adr",
+  formatCurrency(adr)
+);
 
-  document.getElementById(
-    "pms-checkin-today"
-  )?.innerText =
-    checkinToday;
+setText(
+  "pms-revpar",
+  formatCurrency(revpar)
+);
 
-  document.getElementById(
-    "pms-checkout-today"
-  )?.innerText =
-    checkoutToday;
+setText(
+  "pms-avgstay",
+  avgStay.toFixed(1)
+);
 
-  document.getElementById(
-    "pms-pending-bookings"
-  )?.innerText =
-    pendingBookings;
+setText(
+  "pms-guests",
+  bookingsSnap.docs.reduce(
+    (sum,d)=>
+      sum +
+      Number(
+        d.data().guests || 0
+      ),
+    0
+  )
+);
+
+setText(
+  "pms-arrivals-today",
+  arrivalsToday
+);
+
+setText(
+  "pms-departures-today",
+  departuresToday
+);
+
+setText(
+  "pms-guests-in-house",
+  guestsInHouse
+);
+
+setText(
+  "pms-checkin-today",
+  checkinToday
+);
+
+setText(
+  "pms-checkout-today",
+  checkoutToday
+);
+
+setText(
+  "pms-pending-bookings",
+  pendingBookings
+);
 
   // ======================
   // PERFORMANCE CHART
