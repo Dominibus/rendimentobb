@@ -3680,17 +3680,22 @@ async function loadProperties(){
   const data =
     docItem.data();
 
-  const bookingsSnap =
-    await getDocs(
-      query(
-        collection(db,"bookings"),
-        where(
-          "propertyId",
-          "==",
-          docItem.id
-        )
+const bookingsSnap =
+  await getDocs(
+    query(
+      collection(db,"bookings"),
+      where(
+        "uid",
+        "==",
+        window.currentUser.uid
+      ),
+      where(
+        "propertyId",
+        "==",
+        docItem.id
       )
-    );
+    )
+  );
 
   const bookingsCount =
   bookingsSnap.size;
