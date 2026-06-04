@@ -4950,7 +4950,14 @@ document.getElementById(
 document.getElementById(
   "pms-pending-bookings"
 ).innerText =
-  pendingBookings;  
+  pendingBookings;
+
+// 📈 PERFORMANCE CHART
+renderPMSPerformanceChart(
+  bookingsSnap.docs.map(
+    d => d.data()
+  )
+);
 
 console.log(
   "🏨 PMS STATS",
@@ -4970,6 +4977,96 @@ console.log(
 
 };
 
+// =====================================
+// 📈 PMS PERFORMANCE CHART
+// =====================================
+
+function renderPMSPerformanceChart(
+  bookings
+){
+
+  const canvas =
+    document.getElementById(
+      "pms-performance-chart"
+    );
+
+  if(!canvas) return;
+
+  const monthlyRevenue =
+    Array(12).fill(0);
+
+  bookings.forEach(b=>{
+
+    if(!b.checkin) return;
+
+    const month =
+      new Date(
+        b.checkin
+      ).getMonth();
+
+    monthlyRevenue[month] +=
+      Number(
+        b.totalAmount || 0
+      );
+
+  });
+
+  const existing =
+    Chart.getChart(canvas);
+
+  if(existing){
+
+    existing.destroy();
+
+  }
+
+  new Chart(canvas,{
+
+    type:"bar",
+
+    data:{
+
+      labels:[
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+
+      datasets:[{
+
+        label:"Revenue",
+
+        data:
+          monthlyRevenue
+
+      }]
+
+    },
+
+    options:{
+
+      responsive:true,
+
+      plugins:{
+        legend:{
+          display:false
+        }
+      }
+
+    }
+
+  });
+
+}
 function renderPMSCalendar(bookings){
 
   const container =
