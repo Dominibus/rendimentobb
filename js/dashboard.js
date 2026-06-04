@@ -3675,16 +3675,30 @@ async function loadProperties(){
 
   let html = "";
 
-  snap.forEach(docItem=>{
+  for (const docItem of snap.docs){
 
-    const data =
-      docItem.data();
+  const data =
+    docItem.data();
+
+  const bookingsSnap =
+    await getDocs(
+      query(
+        collection(db,"bookings"),
+        where(
+          "propertyId",
+          "==",
+          docItem.id
+        )
+      )
+    );
+
+  const bookingsCount =
+    bookingsSnap.size;
+
+  const occupancy = 0;
 
     
-    const occupancy =
-  Math.floor(
-    Math.random() * 25
-  ) + 60;
+    const occupancy = 0;
 
     html += `
 
