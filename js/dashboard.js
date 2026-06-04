@@ -4774,6 +4774,10 @@ async function loadPMSStats(){
 let departuresToday = 0;
 let guestsInHouse = 0;
 
+let checkinToday = 0;
+let checkoutToday = 0;
+let pendingBookings = 0;
+
 const today =
   new Date()
     .toISOString()
@@ -4782,6 +4786,24 @@ const today =
 bookingsSnap.forEach(docItem=>{
 
   const b = docItem.data();
+
+  if(
+  b.status === "arrival"
+){
+  checkinToday++;
+}
+
+if(
+  b.status === "checkout"
+){
+  checkoutToday++;
+}
+
+if(
+  b.status === "pending"
+){
+  pendingBookings++;
+}
 
   const nights = Math.max(
     1,
@@ -4914,6 +4936,21 @@ document.getElementById(
   "pms-guests-in-house"
 ).innerText =
   guestsInHouse;
+
+document.getElementById(
+  "pms-checkin-today"
+).innerText =
+  checkinToday;
+
+document.getElementById(
+  "pms-checkout-today"
+).innerText =
+  checkoutToday;
+
+document.getElementById(
+  "pms-pending-bookings"
+).innerText =
+  pendingBookings;  
 
 console.log(
   "🏨 PMS STATS",
