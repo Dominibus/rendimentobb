@@ -3789,6 +3789,24 @@ const occupancy =
     )
   );
 
+ let occupancyStatus =
+  "🔴 Empty";
+
+if(occupancy >= 80){
+
+  occupancyStatus =
+    "🟢 High";
+
+}
+else if(
+  occupancy >= 40
+){
+
+  occupancyStatus =
+    "🟡 Medium";
+
+}   
+
   const revpar =
 (
   data.priceNight || 0
@@ -3920,6 +3938,25 @@ const occupancy =
   <strong>
 
     ${occupancy}%
+
+  </strong>
+
+</div>
+
+<div class="metric">
+
+  <span>
+
+    ${t(
+      "📊 Stato",
+      "📊 Status"
+    )}
+
+  </span>
+
+  <strong>
+
+    ${occupancyStatus}
 
   </strong>
 
