@@ -18450,3 +18450,50 @@ body.is-admin .pro-only *{
   backdrop-filter:none !important;
 
 }
+
+/* =====================================
+   HOME POSITIONING
+===================================== */
+
+.home-page .rb-positioning-box{
+
+max-width:800px;
+margin:30px auto 50px;
+
+padding:30px;
+
+background:white;
+
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+text-align:center;
+
+}
+
+.home-page .rb-positioning-box h3{
+
+font-size:24px;
+
+margin-bottom:15px;
+
+}
+
+.home-page .rb-positioning-box p{
+
+font-size:15px;
+
+line-height:1.7;
+
+color:#64748b;
+
+}
+
+.home-page .rb-target-users{
+
+padding:80px 0;
+
+background:#f8fafc;
+
+}
