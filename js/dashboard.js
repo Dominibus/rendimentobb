@@ -4915,6 +4915,22 @@ document.getElementById(
 ).innerText =
   guestsInHouse;
 
+console.log(
+  "🏨 PMS STATS",
+  {
+    properties,
+    bookings,
+    revenue,
+    occupancy,
+    adr,
+    revpar,
+    avgStay,
+    arrivalsToday,
+    departuresToday,
+    guestsInHouse
+  }
+);  
+
 };
 
 function renderPMSCalendar(bookings){
