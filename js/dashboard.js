@@ -4106,6 +4106,26 @@ function updateBookingTotal(){
 
 window.saveBooking = async function(){
 
+  if(!window.currentUser){
+
+  alert(
+    "Utente non autenticato"
+  );
+
+  return;
+
+}
+
+if(!window.currentPropertyId){
+
+  alert(
+    "Nessuna proprietà selezionata"
+  );
+
+  return;
+
+}
+
   const guest =
     document.getElementById(
       "booking-guest"
