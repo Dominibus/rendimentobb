@@ -3733,11 +3733,17 @@ const bookingsSnap =
   bookingsSnap.size;
 
 let totalNights = 0;
+let realRevenue = 0;    
 
 bookingsSnap.forEach(b=>{
 
   const booking =
     b.data();
+
+  realRevenue +=
+  Number(
+    booking.totalAmount || 0
+  );
 
   const nights =
     Math.max(
@@ -3898,10 +3904,9 @@ const occupancy =
 
   <strong>
 
-    €${Math.round(
-      totalNights *
-      (data.priceNight || 0)
-    )}
+    €${formatCurrency(
+  realRevenue
+)}
 
     /
 
