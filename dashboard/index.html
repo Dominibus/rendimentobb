@@ -1088,8 +1088,13 @@ margin:0;
 .pms-booking-layout{
 
 display:grid;
-grid-template-columns:420px 1fr;
+
+grid-template-columns:
+340px
+minmax(500px,1fr);
+
 gap:24px;
+
 align-items:start;
 
 }
@@ -1181,10 +1186,14 @@ box-shadow:0 0 0 3px rgba(16,185,129,.15);
 
 #bookings-modal > div{
 
-width:min(95vw,1200px);
-max-width:1200px;
-max-height:85vh;
+width:min(96vw,1400px);
+
+max-width:1400px;
+
+max-height:90vh;
+
 height:auto;
+
 overflow-y:auto;
 
 }
@@ -2753,7 +2762,13 @@ class="btn-dashboard">
 
 </div>
 
-<div id="booking-form-container">
+<div
+id="booking-form-container"
+style="
+display:flex;
+flex-direction:column;
+gap:10px;
+">
 
 <input
 id="booking-guest"
