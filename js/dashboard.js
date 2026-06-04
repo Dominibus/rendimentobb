@@ -4981,92 +4981,131 @@ function renderPMSCalendar(bookings){
 
   if(!bookings.length){
 
-    container.innerHTML = "";
+    container.innerHTML = `
+      <div
+      style="
+      text-align:center;
+      color:#64748b;
+      padding:20px;
+      ">
+      📅 Nessuna prenotazione
+      </div>
+    `;
 
     return;
   }
 
-  let html = `
+  bookings.sort((a,b)=>
+    new Date(a.checkin) -
+    new Date(b.checkin)
+  );
 
-  <div class="analysis-card">
-
-    <div style="
-      margin-top:10px;
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    ">
-  `;
+  let html = "";
 
   bookings.forEach(b=>{
 
     let color = "#10b981";
+    let badge = "Confermata";
 
-switch(b.status){
+    switch(b.status){
 
-  case "arrival":
-    color = "#3b82f6";
-    break;
+      case "arrival":
+        color = "#3b82f6";
+        badge = "Arrivo";
+        break;
 
-  case "checkin":
-    color = "#06b6d4";
-    break;
+      case "checkin":
+        color = "#06b6d4";
+        badge = "Check-In";
+        break;
 
-  case "checkout":
-    color = "#f97316";
-    break;
+      case "checkout":
+        color = "#f97316";
+        badge = "Check-Out";
+        break;
 
-  case "completed":
-    color = "#8b5cf6";
-    break;
+      case "completed":
+        color = "#8b5cf6";
+        badge = "Completata";
+        break;
 
-  case "cancelled":
-    color = "#ef4444";
-    break;
+      case "cancelled":
+        color = "#ef4444";
+        badge = "Cancellata";
+        break;
 
-}
+    }
 
-html += `
+    html += `
 
-<div
-style="
-padding:12px;
-border-left:4px solid ${color};
-border-radius:10px;
-background:#f8fafc;
-">
+    <div
+    style="
+    background:white;
+    border-left:4px solid ${color};
+    border-radius:12px;
+    padding:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+    ">
 
-<div
-style="
-font-weight:700;
-">
+      <div
+      style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      ">
 
-👤 ${b.guestName}
+        <strong>
+        👤 ${b.guestName}
+        </strong>
 
-</div>
+        <span
+        style="
+        background:${color}15;
+        color:${color};
+        padding:4px 8px;
+        border-radius:999px;
+        font-size:11px;
+        font-weight:600;
+        ">
+        ${badge}
+        </span>
 
-<div
-style="
-font-size:13px;
-color:#64748b;
-">
+      </div>
 
-📅 ${b.checkin}
-→
-${b.checkout}
+      <div
+      style="
+      margin-top:6px;
+      font-size:12px;
+      color:#64748b;
+      ">
 
-</div>
+      📅 ${b.checkin}
+      →
 
-</div>
+      ${b.checkout}
 
-`;
+      </div>
+
+      <div
+      style="
+      margin-top:4px;
+      font-size:12px;
+      color:#64748b;
+      ">
+
+      👥 ${b.guests || 0}
+      ${window.t(
+        "ospiti",
+        "guests"
+      )}
+
+      </div>
+
+    </div>
+
+    `;
 
   });
-
-  html += `
-    </div>
-  </div>
-  `;
 
   container.innerHTML = html;
 
