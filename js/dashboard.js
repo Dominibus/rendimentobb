@@ -3755,12 +3755,20 @@ bookingsSnap.forEach(b=>{
 
 });
 
+const daysInMonth =
+  new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    0
+  ).getDate();
+
 const occupancy =
   Math.min(
     100,
     Math.round(
       (
-        totalNights / 30
+        totalNights /
+        daysInMonth
       ) * 100
     )
   );
@@ -4861,15 +4869,25 @@ if(
     0
   ).getDate();
 
+const daysInMonth =
+  new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    0
+  ).getDate();
+
 const occupancy =
-properties > 0
-? Math.round(
-    (
-      totalNights /
-      (properties * currentMonthDays)
-    ) * 100
-  )
-: 0;
+  properties > 0
+  ? Math.min(
+      100,
+      Math.round(
+        (
+          totalNights /
+          (properties * daysInMonth)
+        ) * 100
+      )
+    )
+  : 0;
 
 const revpar =
   adr * (occupancy / 100);
