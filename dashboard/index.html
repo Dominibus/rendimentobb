@@ -992,7 +992,7 @@ linear-gradient(
 }
 
 /* =====================================
-🏨 PMS
+🏨 PMS CORE
 ===================================== */
 
 .pms-nav{
@@ -1005,18 +1005,12 @@ flex-wrap:wrap;
 
 .pms-tab{
 
-background:white;
-
+background:#fff;
 border:1px solid #e2e8f0;
-
 padding:12px 18px;
-
 border-radius:12px;
-
 font-weight:700;
-
 cursor:pointer;
-
 transition:.25s ease;
 
 }
@@ -1024,12 +1018,14 @@ transition:.25s ease;
 .pms-tab.active{
 
 background:#10b981;
-
-color:white;
-
+color:#fff;
 border-color:#10b981;
 
 }
+
+/* =====================================
+🏠 PROPERTY CARD
+===================================== */
 
 .property-card{
 
@@ -1064,20 +1060,36 @@ color:#64748b;
 }
 
 /* =====================================
-🏨 PMS GRID LAYOUT
+📊 PMS KPI
 ===================================== */
 
-.pms-grid{
+#booking-summary,
+#booking-channels,
+#booking-source-summary{
 
 display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
 
-grid-template-columns:
-1.2fr 1fr;
+}
 
-gap:20px;
+#booking-summary .analysis-card,
+#booking-channels .analysis-card,
+#booking-source-summary .analysis-card{
 
-margin-top:20px;
+margin:0;
 
+}
+
+/* =====================================
+🏨 PMS BOOKING LAYOUT
+===================================== */
+
+.pms-booking-layout{
+
+display:grid;
+grid-template-columns:420px 1fr;
+gap:24px;
 align-items:start;
 
 }
@@ -1089,31 +1101,22 @@ align-items:start;
 #booking-calendar{
 
 background:#f8fafc;
-
 border:1px solid #e5e7eb;
-
 border-radius:14px;
-
 padding:12px;
-
-min-height:420px;
-max-height:420px;
+height:420px;
+overflow-y:auto;
 
 }
 
 #booking-calendar > div{
 
-background:white;
-
+background:#fff;
 border-left:4px solid #10b981;
-
 border-radius:10px;
-
 padding:12px;
-
 box-shadow:
-0 1px 3px
-rgba(0,0,0,.05);
+0 1px 3px rgba(0,0,0,.05);
 
 }
 
@@ -1124,45 +1127,78 @@ rgba(0,0,0,.05);
 #bookings-list{
 
 display:flex;
-
 flex-direction:column;
-
 gap:10px;
+height:500px;
+overflow-y:auto;
 
 }
 
 #bookings-list > div{
 
-background:white;
-
+background:#fff;
 border:1px solid #e5e7eb;
-
 border-radius:12px;
 
 }
 
 /* =====================================
-📊 PMS KPI CARDS
+📝 BOOKING FORM
 ===================================== */
 
-#booking-summary,
-#booking-channels,
-#booking-source-summary{
+#booking-form-container{
 
-display:grid;
-
-grid-template-columns:
-repeat(2,1fr);
-
+display:flex;
+flex-direction:column;
 gap:10px;
 
 }
 
-#booking-summary .analysis-card,
-#booking-channels .analysis-card,
-#booking-source-summary .analysis-card{
+#bookings-modal input,
+#bookings-modal select{
 
-margin:0;
+width:100%;
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:10px;
+font-size:14px;
+
+}
+
+#bookings-modal input:focus,
+#bookings-modal select:focus{
+
+outline:none;
+border-color:#10b981;
+box-shadow:0 0 0 3px rgba(16,185,129,.15);
+
+}
+
+/* =====================================
+📦 PMS MODAL
+===================================== */
+
+#bookings-modal > div{
+
+width:min(95vw,1200px);
+max-width:1200px;
+max-height:85vh;
+height:auto;
+overflow-y:auto;
+
+}
+
+/* =====================================
+📱 TABLET
+===================================== */
+
+@media(max-width:1024px){
+
+.pms-booking-layout{
+
+grid-template-columns:1fr;
+
+}
 
 }
 
@@ -1186,62 +1222,14 @@ grid-template-columns:1fr;
 
 }
 
-}
+#bookings-modal > div{
 
-/* =====================================
-📅 PMS BOOKING LAYOUT
-===================================== */
-
-.pms-booking-layout{
-
-display:grid;
-
-grid-template-columns:
-420px
-1fr;
-
-gap:24px;
-
-align-items:start;
+width:95vw;
+padding:18px;
 
 }
 
-@media(max-width:1024px){
-
-.pms-booking-layout{
-
-grid-template-columns:1fr;
-
 }
-
-} 
-
-#bookings-list{
-
-max-height:500px !important;
-
-}  
-
-#bookings-modal input,
-#bookings-modal select{
-
-width:100%;
-padding:12px;
-border:1px solid #cbd5e1;
-border-radius:10px;
-font-size:14px;
-margin-bottom:10px;
-
-}
-
-#bookings-modal input:focus,
-#bookings-modal select:focus{
-
-outline:none;
-border-color:#10b981;
-box-shadow:0 0 0 3px rgba(16,185,129,.15);
-
-}  
  
 </style>
 </head>
