@@ -3448,6 +3448,34 @@ setTimeout(()=>{
 
   loadPMSStats();
 
+  const toggleBtn =
+document.getElementById(
+  "toggle-booking-form"
+);
+
+if(toggleBtn){
+
+  toggleBtn.addEventListener(
+    "click",
+    ()=>{
+
+      const form =
+      document.getElementById(
+        "booking-form-container"
+      );
+
+      if(!form) return;
+
+      form.style.display =
+        form.style.display === "none"
+        ? "block"
+        : "none";
+
+    }
+  );
+
+}
+
 },1500);
 
   }); 
