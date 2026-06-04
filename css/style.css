@@ -18518,3 +18518,30 @@ font-size:15px;
 line-height:1.6;
 
 }
+
+.hero-feature{
+display:flex;
+align-items:center;
+gap:12px;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(8px);
+padding:14px;
+border-radius:14px;
+}
+
+.hero-feature strong{
+display:block;
+font-size:16px;
+font-weight:700;
+color:#fff;
+}
+
+.hero-feature p{
+margin:0;
+font-size:13px;
+color:#e2e8f0;
+}
+
+.hero-feature-icon{
+font-size:24px;
+}
