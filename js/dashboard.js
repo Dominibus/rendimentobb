@@ -4183,10 +4183,10 @@ if(!window.currentPropertyId){
         total,
 
       status:
-  document.getElementById(
-    "booking-status"
-  )?.value || "confirmed",
-
+document.getElementById(
+  "booking-status"
+)?.value || "arrival",
+      
 source:
   document.getElementById(
     "booking-source"
