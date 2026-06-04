@@ -3733,7 +3733,8 @@ const bookingsSnap =
   bookingsSnap.size;
 
 let totalNights = 0;
-let realRevenue = 0;    
+let realRevenue = 0;
+let totalGuests = 0;  
 
 bookingsSnap.forEach(b=>{
 
@@ -3744,6 +3745,11 @@ bookingsSnap.forEach(b=>{
   Number(
     booking.totalAmount || 0
   );
+
+  totalGuests +=
+Number(
+  booking.guests || 0
+);
 
   const nights =
     Math.max(
@@ -3782,6 +3788,15 @@ const occupancy =
       ) * 100
     )
   );
+
+  const revpar =
+(
+  data.priceNight || 0
+)
+*
+(
+  occupancy / 100
+);  
 
     html += `
 
@@ -3858,6 +3873,25 @@ const occupancy =
   <span>
 
     ${t(
+      "👥 Ospiti",
+      "👥 Guests"
+    )}
+
+  </span>
+
+  <strong>
+
+    ${totalGuests}
+
+  </strong>
+
+</div>
+
+<div class="metric">
+
+  <span>
+
+    ${t(
       "🌙 Notti",
       "🌙 Nights"
     )}
@@ -3895,10 +3929,26 @@ const occupancy =
 
   <span>
 
+    📊 RevPAR
+
+  </span>
+
+  <strong>
+
+    ${formatCurrency(revpar)}
+
+  </strong>
+
+</div>
+
+<div class="metric">
+
+  <span>
+
     ${t(
-      "💰 Ricavo stimato",
-      "💰 Estimated Revenue"
-    )}
+  "💰 Ricavi totali",
+  "💰 Total Revenue"
+)}
 
   </span>
 
@@ -3907,14 +3957,6 @@ const occupancy =
     €${formatCurrency(
   realRevenue
 )}
-
-    /
-
-    ${t(
-      "mese",
-      "month"
-    )}
-
   </strong>
 
 </div>
