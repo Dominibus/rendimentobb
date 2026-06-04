@@ -4751,34 +4751,60 @@ ${b.source === "phone"
 
 if(channelsEl){
 
-  let channelsHtml = "";
+  let channelsHtml = `
 
-  Object.entries(
-    sourceStats
-  ).forEach(([name,data])=>{
+  <div class="analysis-card">
+
+    <h4 style="
+      margin-bottom:12px;
+      font-size:14px;
+      font-weight:700;
+    ">
+      📡 ${window.t(
+        "Performance Canali",
+        "Channel Performance"
+      )}
+    </h4>
+
+  `;
+
+  Object.entries(sourceStats)
+  .sort((a,b)=>
+    b[1].revenue - a[1].revenue
+  )
+  .forEach(([name,data])=>{
 
     channelsHtml += `
 
-      <div
-      class="analysis-card">
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      padding:8px 0;
+      border-bottom:1px solid #e2e8f0;
+      font-size:13px;
+    ">
 
-        <strong>
+      <strong>
         ${name}
-        </strong>
+      </strong>
 
-        <br>
-
+      <span>
         📅 ${data.bookings}
+      </span>
 
-        <br>
-
+      <span>
         💰 €${data.revenue.toFixed(0)}
+      </span>
 
-      </div>
+    </div>
 
     `;
 
   });
+
+  channelsHtml += `
+  </div>
+  `;
 
   channelsEl.innerHTML =
     channelsHtml;
