@@ -4334,13 +4334,16 @@ html += `
 
 <div
 style="
-padding:14px;
-border:1px solid #e5e7eb;
-border-radius:14px;
-background:#f8fafc;
+padding:16px;
+border:1px solid #e2e8f0;
+border-radius:16px;
+background:white;
 display:flex;
 flex-direction:column;
-gap:6px;
+gap:8px;
+box-shadow:
+0 4px 12px rgba(0,0,0,.04);
+transition:.2s;
 ">
 
 <div
@@ -4350,12 +4353,34 @@ justify-content:space-between;
 align-items:center;
 ">
 
-<strong
+<div>
+
+<div
 style="
 font-size:16px;
+font-weight:700;
+color:#0f172a;
 ">
-👤 ${b.guestName}
-</strong>
+
+${b.guestName}
+
+</div>
+
+<div
+style="
+font-size:12px;
+color:#64748b;
+">
+
+${window.t(
+"Prenotazione",
+"Booking"
+)}
+#${docItem.id.substring(0,6)}
+
+</div>
+
+</div>
 
 ${(() => {
 
@@ -4417,15 +4442,36 @@ ${label}
 
 </div>
 
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
 <div>
+
 📅
-<strong>
+
 ${b.checkin}
-</strong>
+
+</div>
+
+<div
+style="
+color:#94a3b8;
+">
+
 →
-<strong>
+
+</div>
+
+<div>
+
 ${b.checkout}
-</strong>
+
+</div>
+
 </div>
 
 <div>
@@ -4446,11 +4492,18 @@ ${window.t(
 )}
 </div>
 
-<div>
+<div
+style="
+font-size:18px;
+font-weight:700;
+color:#10b981;
+">
+
 💰
 €${Number(
   b.totalAmount || 0
 ).toFixed(2)}
+
 </div>
 
 <div
