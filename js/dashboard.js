@@ -4768,6 +4768,20 @@ if(channelsEl){
 
   `;
 
+  const channelNames = {
+
+  airbnb:"🏠 Airbnb",
+
+  booking:"🟦 Booking.com",
+
+  vrbo:"🏡 VRBO",
+
+  website:"🌐 Website",
+
+  direct:"📞 Direct"
+
+};
+
   Object.entries(sourceStats)
   .sort((a,b)=>
     b[1].revenue - a[1].revenue
@@ -4785,7 +4799,7 @@ if(channelsEl){
     ">
 
       <strong>
-        ${name}
+        ${channelNames[name] || name}
       </strong>
 
       <span>
