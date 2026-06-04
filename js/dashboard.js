@@ -4854,18 +4854,22 @@ if(
   ? totalNights / bookings
   : 0;
 
-  const occupancy =
-  properties > 0
-  ? Math.min(
-      100,
-      Math.round(
-        (
-          totalNights /
-          (properties * 30)
-        ) * 100
-      )
-    )
-  : 0;
+  const currentMonthDays =
+  new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1,
+    0
+  ).getDate();
+
+const occupancy =
+properties > 0
+? Math.round(
+    (
+      totalNights /
+      (properties * currentMonthDays)
+    ) * 100
+  )
+: 0;
 
 const revpar =
   adr * (occupancy / 100);
