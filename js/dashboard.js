@@ -3693,12 +3693,44 @@ async function loadProperties(){
     );
 
   const bookingsCount =
-    bookingsSnap.size;
+  bookingsSnap.size;
 
-  const occupancy = 0;
+let totalNights = 0;
 
-    
-    const occupancy = 0;
+bookingsSnap.forEach(b=>{
+
+  const booking =
+    b.data();
+
+  const nights =
+    Math.max(
+      1,
+      Math.ceil(
+        (
+          new Date(
+            booking.checkout
+          ) -
+          new Date(
+            booking.checkin
+          )
+        ) /
+        (1000*60*60*24)
+      )
+    );
+
+  totalNights += nights;
+
+});
+
+const occupancy =
+  Math.min(
+    100,
+    Math.round(
+      (
+        totalNights / 30
+      ) * 100
+    )
+  );
 
     html += `
 
@@ -3733,34 +3765,109 @@ async function loadProperties(){
         </div>
 
         <div class="metric">
-  <span>📈 ADR</span>
 
-  <strong>
-    €${data.priceNight || 0}
-  </strong>
-</div>
+  <span>
 
-<div class="metric">
-  <span>🏠 Occupazione</span>
-
-  <strong>
-    ${occupancy}%
-  </strong>
-</div>
-
-<div class="metric">
-  <span>💰 Ricavo stimato</span>
-
-  <strong>
-    €${Math.round(
-      (data.priceNight || 0) *
-      occupancy *
-      30 / 100
+    ${t(
+      "📈 ADR",
+      "📈 ADR"
     )}
-    /mese
+
+  </span>
+
+  <strong>
+
+    €${data.priceNight || 0}
+
   </strong>
+
 </div>
 
+<div class="metric">
+
+  <span>
+
+    ${t(
+      "📅 Prenotazioni",
+      "📅 Bookings"
+    )}
+
+  </span>
+
+  <strong>
+
+    ${bookingsCount}
+
+  </strong>
+
+</div>
+
+<div class="metric">
+
+  <span>
+
+    ${t(
+      "🌙 Notti",
+      "🌙 Nights"
+    )}
+
+  </span>
+
+  <strong>
+
+    ${totalNights}
+
+  </strong>
+
+</div>
+
+<div class="metric">
+
+  <span>
+
+    ${t(
+      "🏠 Occupazione",
+      "🏠 Occupancy"
+    )}
+
+  </span>
+
+  <strong>
+
+    ${occupancy}%
+
+  </strong>
+
+</div>
+
+<div class="metric">
+
+  <span>
+
+    ${t(
+      "💰 Ricavo stimato",
+      "💰 Estimated Revenue"
+    )}
+
+  </span>
+
+  <strong>
+
+    €${Math.round(
+      totalNights *
+      (data.priceNight || 0)
+    )}
+
+    /
+
+    ${t(
+      "mese",
+      "month"
+    )}
+
+  </strong>
+
+</div>
         <div
         style="
         display:flex;
@@ -3796,7 +3903,7 @@ async function loadProperties(){
 
     `;
 
-  });
+  }
 
   container.innerHTML = html;
 
