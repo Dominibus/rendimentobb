@@ -3654,6 +3654,10 @@ window.saveProperty = async function(){
 
 };
 
+await loadProperties();
+
+await loadPMSStats();
+
 // =====================================
 // 🏠 LOAD PROPERTIES
 // =====================================
@@ -3975,6 +3979,10 @@ async function(id){
     )
   );
 
+  await loadProperties();
+
+  await loadPMSStats();
+
   loadProperties();
 
 };
@@ -4242,6 +4250,10 @@ source:
   await loadBookings(
   window.currentPropertyId
  );
+
+ await loadPMSStats();
+
+await loadProperties(); 
 
   alert(
   t(
@@ -4721,9 +4733,13 @@ async function(id){
     )
   );
 
-  await loadBookings(
-    window.currentPropertyId
-  );
+  await loadPMSStats();
+
+await loadProperties();
+
+await loadBookings(
+  window.currentPropertyId
+);
 
 };
 
@@ -4759,246 +4775,251 @@ async function loadPMSStats(){
       )
     );
 
-  let revenue = 0;
-
-  bookingsSnap.forEach(docItem=>{
-
-    revenue +=
-      Number(
-        docItem.data()
-        .totalAmount || 0
-      );
-
-  });
-
   const properties =
     propertiesSnap.size;
 
   const bookings =
     bookingsSnap.size;
 
+  let revenue = 0;
   let totalNights = 0;
+
   let arrivalsToday = 0;
-let departuresToday = 0;
-let guestsInHouse = 0;
+  let departuresToday = 0;
+  let guestsInHouse = 0;
 
-let checkinToday = 0;
-let checkoutToday = 0;
-let pendingBookings = 0;
+  let checkinToday = 0;
+  let checkoutToday = 0;
+  let pendingBookings = 0;
 
-const today =
-  new Date()
-    .toISOString()
-    .split("T")[0];
+  const today =
+    new Date()
+      .toISOString()
+      .split("T")[0];
 
-bookingsSnap.forEach(docItem=>{
+  bookingsSnap.forEach(docItem=>{
 
-  const b = docItem.data();
+    const b =
+      docItem.data();
 
-  if(
-  b.status === "arrival"
-){
-  checkinToday++;
-}
+    revenue +=
+      Number(
+        b.totalAmount || 0
+      );
 
-if(
-  b.status === "checkout"
-){
-  checkoutToday++;
-}
+    const nights =
+      Math.max(
+        1,
+        Math.ceil(
+          (
+            new Date(b.checkout) -
+            new Date(b.checkin)
+          ) /
+          (1000 * 60 * 60 * 24)
+        )
+      );
 
-if(
-  b.status === "pending"
-){
-  pendingBookings++;
-}
+    totalNights += nights;
 
-  const nights = Math.max(
-    1,
-    Math.ceil(
-      (
-        new Date(b.checkout) -
-        new Date(b.checkin)
-      ) /
-      (1000*60*60*24)
-    )
-  );
+    // ======================
+    // STATUS KPI
+    // ======================
 
-  totalNights += nights;
+    if(
+      b.status === "checkin"
+    ){
+      checkinToday++;
+    }
 
-  if(
-  b.checkin === today
-){
-  arrivalsToday++;
-}
+    if(
+      b.status === "checkout"
+    ){
+      checkoutToday++;
+    }
 
-if(
-  b.checkout === today
-){
-  departuresToday++;
-}
+    if(
+      b.status === "pending"
+    ){
+      pendingBookings++;
+    }
 
-if(
-  b.checkin <= today &&
-  b.checkout >= today
-){
+    // ======================
+    // ARRIVALS / DEPARTURES
+    // ======================
 
-  guestsInHouse +=
-    Number(
-      b.guests || 0
-    );
+    if(
+      b.checkin === today
+    ){
+      arrivalsToday++;
+    }
 
-}
+    if(
+      b.checkout === today
+    ){
+      departuresToday++;
+    }
 
-});
+    // ======================
+    // GUESTS IN HOUSE
+    // ======================
+
+    if(
+      b.checkin <= today &&
+      b.checkout >= today
+    ){
+
+      guestsInHouse +=
+        Number(
+          b.guests || 0
+        );
+
+    }
+
+  });
 
   const adr =
-  totalNights > 0
-  ? revenue / totalNights
-  : 0;
+    totalNights > 0
+    ? revenue / totalNights
+    : 0;
 
   const avgStay =
-  bookings > 0
-  ? totalNights / bookings
-  : 0;
+    bookings > 0
+    ? totalNights / bookings
+    : 0;
 
-  const currentMonthDays =
-  new Date(
-    new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  ).getDate();
+  const daysInMonth =
+    new Date(
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      0
+    ).getDate();
 
-const daysInMonth =
-  new Date(
-    new Date().getFullYear(),
-    new Date().getMonth() + 1,
-    0
-  ).getDate();
-
-const occupancy =
-  properties > 0
-  ? Math.min(
-      100,
-      Math.round(
-        (
-          totalNights /
-          (properties * daysInMonth)
-        ) * 100
+  const occupancy =
+    properties > 0
+    ? Math.min(
+        100,
+        Math.round(
+          (
+            totalNights /
+            (properties * daysInMonth)
+          ) * 100
+        )
       )
-    )
-  : 0;
+    : 0;
 
-const revpar =
-  adr * (occupancy / 100);
+  const revpar =
+    adr *
+    (occupancy / 100);
 
-document.getElementById(
-  "pms-total-properties"
-).innerText = properties;
+  // ======================
+  // KPI UPDATE
+  // ======================
 
-document.getElementById(
-  "pms-total-bookings"
-).innerText = bookings;
+  document.getElementById(
+    "pms-total-properties"
+  )?.innerText = properties;
 
-document.getElementById(
-  "pms-total-revenue"
-).innerText =
-  formatCurrency(revenue);
+  document.getElementById(
+    "pms-total-bookings"
+  )?.innerText = bookings;
 
-document.getElementById(
-  "pms-occupancy"
-).innerText =
-  occupancy + "%";
+  document.getElementById(
+    "pms-total-revenue"
+  )?.innerText =
+    formatCurrency(revenue);
 
-const adrEl =
+  document.getElementById(
+    "pms-occupancy"
+  )?.innerText =
+    occupancy + "%";
+
   document.getElementById(
     "pms-adr"
-  );
-
-if(adrEl){
-
-  adrEl.innerText =
+  )?.innerText =
     formatCurrency(adr);
 
-}
-
-document.getElementById(
-  "pms-revpar"
-).innerText =
-  formatCurrency(revpar);
-
-document.getElementById(
-  "pms-avgstay"
-).innerText =
-  avgStay.toFixed(1);
-
-document.getElementById(
-  "pms-guests"
-).innerText =
-  bookingsSnap.docs.reduce(
-    (sum,d)=>
-      sum +
-      Number(
-        d.data().guests || 0
-      ),
-    0
-  );
+  document.getElementById(
+    "pms-revpar"
+  )?.innerText =
+    formatCurrency(revpar);
 
   document.getElementById(
-  "pms-arrivals-today"
-).innerText =
-  arrivalsToday;
+    "pms-avgstay"
+  )?.innerText =
+    avgStay.toFixed(1);
 
-document.getElementById(
-  "pms-departures-today"
-).innerText =
-  departuresToday;
+  document.getElementById(
+    "pms-guests"
+  )?.innerText =
+    bookingsSnap.docs.reduce(
+      (sum,d)=>
+        sum +
+        Number(
+          d.data().guests || 0
+        ),
+      0
+    );
 
-document.getElementById(
-  "pms-guests-in-house"
-).innerText =
-  guestsInHouse;
+  document.getElementById(
+    "pms-arrivals-today"
+  )?.innerText =
+    arrivalsToday;
 
-document.getElementById(
-  "pms-checkin-today"
-).innerText =
-  checkinToday;
+  document.getElementById(
+    "pms-departures-today"
+  )?.innerText =
+    departuresToday;
 
-document.getElementById(
-  "pms-checkout-today"
-).innerText =
-  checkoutToday;
+  document.getElementById(
+    "pms-guests-in-house"
+  )?.innerText =
+    guestsInHouse;
 
-document.getElementById(
-  "pms-pending-bookings"
-).innerText =
-  pendingBookings;
+  document.getElementById(
+    "pms-checkin-today"
+  )?.innerText =
+    checkinToday;
 
-// 📈 PERFORMANCE CHART
-renderPMSPerformanceChart(
-  bookingsSnap.docs.map(
-    d => d.data()
-  )
-);
+  document.getElementById(
+    "pms-checkout-today"
+  )?.innerText =
+    checkoutToday;
 
-console.log(
-  "🏨 PMS STATS",
-  {
-    properties,
-    bookings,
-    revenue,
-    occupancy,
-    adr,
-    revpar,
-    avgStay,
-    arrivalsToday,
-    departuresToday,
-    guestsInHouse
-  }
-);  
+  document.getElementById(
+    "pms-pending-bookings"
+  )?.innerText =
+    pendingBookings;
 
-};
+  // ======================
+  // PERFORMANCE CHART
+  // ======================
 
+  renderPMSPerformanceChart(
+    bookingsSnap.docs.map(
+      d => d.data()
+    )
+  );
+
+  console.log(
+    "🏨 PMS STATS",
+    {
+      properties,
+      bookings,
+      revenue,
+      occupancy,
+      adr,
+      revpar,
+      avgStay,
+      arrivalsToday,
+      departuresToday,
+      guestsInHouse,
+      checkinToday,
+      checkoutToday,
+      pendingBookings
+    }
+  );
+
+}
 // =====================================
 // 📈 PMS PERFORMANCE CHART
 // =====================================
