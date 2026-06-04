@@ -14228,11 +14228,6 @@ ULTRA UI • ALLINEATO • PRODUZIONE
 🔥 HERO TEXT (IMPATTO)
 ===================================== */
 
-.hero-grid{
-  display:flex;
-  justify-content:center;
-}
-
 .hero-left{
   width:100%;
   max-width:800px;
