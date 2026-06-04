@@ -2668,8 +2668,43 @@ border-radius:12px;
 <!-- RIGHT COLUMN -->
 <div>
 
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+">
+
+<h3
+style="
+margin:0;
+font-size:16px;
+font-weight:700;
+">
+
+➕ Nuova Prenotazione
+
+</h3>
+
+<button
+id="toggle-booking-form"
+class="btn-dashboard">
+
+➕
+
+</button>
+
+</div>
+
+<div id="booking-form-container">
+
 <input
 id="booking-guest"
+type="text"
+data-it-placeholder="Nome ospite"
+data-en-placeholder="Guest name"
+placeholder="Nome ospite">
 type="text"
 data-it-placeholder="Nome ospite"
 data-en-placeholder="Guest name"
@@ -2825,6 +2860,7 @@ Salva
 </button>
 
 </div>
+  </div>
 
 <hr>
 
