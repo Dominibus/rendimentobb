@@ -1150,6 +1150,110 @@ if(
 }
 
 // ===========================================
+// 🏨 PMS ANALYSIS
+// Property Management Intelligence
+// ===========================================
+
+const pmsWords = [
+
+  // 🇮🇹
+  "prenotazioni",
+  "prenotazione",
+
+  "ospiti",
+  "guest",
+
+  "adr",
+
+  "revpar",
+
+  "occupazione",
+
+  "occupancy",
+
+  "ricavi",
+
+  "fatturato",
+
+  "proprietà",
+
+  "proprieta",
+
+  "immobili gestiti",
+
+  "come stanno andando",
+
+  "come va il mio b&b",
+
+  "come vanno le prenotazioni",
+
+  "quante prenotazioni",
+
+  "quante proprietà",
+
+  "quante proprieta",
+
+  "quanti ospiti",
+
+  // 🇬🇧
+
+  "bookings",
+
+  "booking",
+
+  "guests",
+
+  "occupancy",
+
+  "revenue",
+
+  "adr",
+
+  "revpar",
+
+  "properties",
+
+  "managed properties",
+
+  "how are my bookings",
+
+  "how is my property",
+
+  "how is my bnb",
+
+  "how many bookings",
+
+  "how many properties"
+
+];
+
+if(
+
+  pmsWords.some(word =>
+    text.includes(word)
+  )
+
+){
+
+  applyIntent({
+
+    intent:
+      "pms_analysis",
+
+    category:
+      "pms",
+
+    confidence:
+      0.98,
+
+    priority:
+      200
+
+  });
+
+}  
+
+// ===========================================
 // 💳 SUBSCRIPTIONS / PRICING
 // Silicon Valley SaaS Monetization Layer
 // ===========================================
