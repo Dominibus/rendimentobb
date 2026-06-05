@@ -348,6 +348,71 @@ const lastUserMessage =
   ]?.text?.toLowerCase() || "";
 
 // =====================================
+// 🏨 PMS PRIORITY OVERRIDE
+// =====================================
+
+if(
+
+  text.includes("prenotaz") ||
+
+  text.includes("booking") ||
+
+  text.includes("ospiti") ||
+
+  text.includes("guests") ||
+
+  text.includes("occupazione") ||
+
+  text.includes("occupancy") ||
+
+  text.includes("adr") ||
+
+  text.includes("revpar") ||
+
+  text.includes("ricavi") ||
+
+  text.includes("revenue")
+
+){
+
+  const pms =
+    window.rbPMSData || {};
+
+  return window.t(
+
+`🏨 PMS Performance Dashboard
+
+📌 Proprietà: ${pms.properties || 0}
+
+📅 Prenotazioni: ${pms.bookings || 0}
+
+👥 Ospiti: ${pms.guests || 0}
+
+💰 Ricavi: €${(pms.revenue || 0).toLocaleString("it-IT")}
+
+🏨 Occupazione: ${pms.occupancy || 0}%
+
+💵 ADR: €${pms.adr || 0}`,
+
+`🏨 PMS Performance Dashboard
+
+📌 Properties: ${pms.properties || 0}
+
+📅 Bookings: ${pms.bookings || 0}
+
+👥 Guests: ${pms.guests || 0}
+
+💰 Revenue: €${(pms.revenue || 0).toLocaleString("en-US")}
+
+🏨 Occupancy: ${pms.occupancy || 0}%
+
+💵 ADR: €${pms.adr || 0}`
+
+  );
+
+}  
+
+// =====================================
 // 🧠 KNOWLEDGE BASE ENGINE
 // =====================================
 
