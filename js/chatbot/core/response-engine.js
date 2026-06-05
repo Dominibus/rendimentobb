@@ -1292,11 +1292,11 @@ else if(
 ){
 
   console.log(
-    "🏨 PMS BLOCK ENTERED"
+    "🔥 PMS BLOCK ENTERED"
   );
 
   console.log(
-    "PMS DATA:",
+    "🔥 PMS DATA:",
     pmsData
   );
 
@@ -1308,33 +1308,138 @@ else if(
 
   const properties =
     Number(
-      pmsData.properties || 0
+      pmsData?.properties || 0
     );
 
   const bookings =
     Number(
-      pmsData.bookings || 0
+      pmsData?.bookings || 0
     );
 
   const revenue =
     Number(
-      pmsData.revenue || 0
+      pmsData?.revenue || 0
     );
 
   const occupancyPMS =
     Number(
-      pmsData.occupancy || 0
+      pmsData?.occupancy || 0
     );
 
   const adr =
     Number(
-      pmsData.adr || 0
+      pmsData?.adr || 0
     );
 
   const guests =
     Number(
-      pmsData.guests || 0
+      pmsData?.guests || 0
     );
+
+  let performanceIT =
+    "🟡 Performance regolari";
+
+  let performanceEN =
+    "🟡 Stable performance";
+
+  if(occupancyPMS >= 90){
+
+    performanceIT =
+      "🟢 Ottime performance";
+
+    performanceEN =
+      "🟢 Excellent performance";
+
+  }
+
+  else if(occupancyPMS < 70){
+
+    performanceIT =
+      "🔴 Occupazione migliorabile";
+
+    performanceEN =
+      "🔴 Occupancy can be improved";
+
+  }
+
+  let adviceIT =
+
+    "💡 Le performance risultano equilibrate.";
+
+  let adviceEN =
+
+    "💡 Performance appears balanced.";
+
+  if(occupancyPMS >= 95){
+
+    adviceIT =
+      "💡 L'occupazione è molto alta. Potresti aumentare gradualmente le tariffe per incrementare il profitto.";
+
+    adviceEN =
+      "💡 Occupancy is very high. Consider gradually increasing rates to improve profitability.";
+
+  }
+
+  else if(occupancyPMS < 70){
+
+    adviceIT =
+      "💡 Valuta promozioni, ottimizzazione prezzi e maggiore visibilità sui portali.";
+
+    adviceEN =
+      "💡 Consider promotions, pricing optimization and better OTA visibility.";
+
+  }
+
+  response.textIT =
+
+`🏨 PMS Performance Dashboard
+
+${performanceIT}
+
+📌 Proprietà: ${properties}
+
+📅 Prenotazioni: ${bookings}
+
+👥 Ospiti: ${guests}
+
+💰 Ricavi: €${revenue.toLocaleString("it-IT")}
+
+🏨 Occupazione: ${occupancyPMS}%
+
+💵 ADR: €${adr}
+
+${adviceIT}
+
+🧠 Il PMS sta monitorando in tempo reale le performance operative della struttura.`;
+
+  response.textEN =
+
+`🏨 PMS Performance Dashboard
+
+${performanceEN}
+
+📌 Properties: ${properties}
+
+📅 Bookings: ${bookings}
+
+👥 Guests: ${guests}
+
+💰 Revenue: €${revenue.toLocaleString("en-US")}
+
+🏨 Occupancy: ${occupancyPMS}%
+
+💵 ADR: €${adr}
+
+${adviceEN}
+
+🧠 The PMS is actively monitoring property performance in real time.`;
+
+  console.log(
+    "🔥 PMS RESPONSE GENERATED:",
+    response
+  );
+
+}
 
   // =====================================
   // 🧠 PMS INSIGHT ENGINE
