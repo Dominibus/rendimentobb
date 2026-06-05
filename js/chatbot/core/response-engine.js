@@ -65,6 +65,18 @@ const liveData = {
 
 };
 
+// =====================================
+// 🏨 PMS DATA
+// =====================================
+
+const pmsData =
+  window.rbPMSData || {};
+
+console.log(
+  "🏨 PMS DATA:",
+  pmsData
+);
+
   const investorProfile =
   window.rbInvestorProfile || {};
 
