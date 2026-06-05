@@ -1709,8 +1709,6 @@ ${performanceEN}
 
 The PMS is actively monitoring operational performance and identifying optimization opportunities across occupancy, pricing and revenue.`;
 
-  }
-
 }
 // ===========================================
 // 📊 INVESTMENT / MARKET COMPARISON RESPONSE
