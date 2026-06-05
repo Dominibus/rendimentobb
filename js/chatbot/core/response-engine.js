@@ -70,7 +70,12 @@ const liveData = {
 // =====================================
 
 const pmsData =
-  window.rbPMSData || {};
+
+  window.rbPMSMemory ||
+
+  window.rbPMSData ||
+
+  {};
 
 console.log(
   "🏨 PMS DATA:",
@@ -1256,6 +1261,100 @@ ${mortgagePercent}%
     }
 
   }
+
+// ===========================================
+// 🏨 PMS RESPONSE
+// ===========================================
+
+else if(
+  intent.intent === "pms_analysis"
+){
+
+  response.type =
+    "pms";
+
+  response.confidence =
+    0.99;
+
+  const properties =
+    Number(
+      pmsData.properties || 0
+    );
+
+  const bookings =
+    Number(
+      pmsData.bookings || 0
+    );
+
+  const revenue =
+    Number(
+      pmsData.revenue || 0
+    );
+
+  const occupancyPMS =
+    Number(
+      pmsData.occupancy || 0
+    );
+
+  const adr =
+    Number(
+      pmsData.adr || 0
+    );
+
+  const guests =
+    Number(
+      pmsData.guests || 0
+    );
+
+  response.textIT =
+
+`🏨 Analisi PMS
+
+📌 Proprietà:
+${properties}
+
+📅 Prenotazioni:
+${bookings}
+
+💰 Ricavi:
+€${revenue.toLocaleString("it-IT")}
+
+🏨 Occupazione:
+${occupancyPMS}%
+
+💵 ADR:
+€${adr}
+
+👥 Ospiti:
+${guests}
+
+🧠 Il PMS risulta attualmente operativo e sta monitorando le performance della struttura.`;
+
+  response.textEN =
+
+`🏨 PMS Analysis
+
+📌 Properties:
+${properties}
+
+📅 Bookings:
+${bookings}
+
+💰 Revenue:
+€${revenue.toLocaleString("en-US")}
+
+🏨 Occupancy:
+${occupancyPMS}%
+
+💵 ADR:
+€${adr}
+
+👥 Guests:
+${guests}
+
+🧠 The PMS is currently monitoring property performance.`;
+
+}   
 
 // ===========================================
 // 📊 INVESTMENT / MARKET COMPARISON RESPONSE
