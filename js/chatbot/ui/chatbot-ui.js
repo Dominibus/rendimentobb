@@ -604,9 +604,17 @@ console.log(
   sendBtn.onclick =
     sendMessage;
 
+  console.log(
+  "🔥 SEND BUTTON BOUND"
+);
+
   input.addEventListener(
     "keypress",
     e=>{
+
+      console.log(
+  "🔥 ENTER PRESSED"
+);
 
       if(e.key === "Enter"){
 
