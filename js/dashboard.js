@@ -5139,6 +5139,35 @@ setText(
     )
   );
 
+  // =====================================
+// 🤖 CHATBOT PMS MEMORY
+// =====================================
+
+window.rbPMSData = {
+
+  properties,
+  bookings,
+  revenue,
+  occupancy,
+  adr,
+  revpar,
+  avgStay,
+
+  arrivalsToday,
+  departuresToday,
+  guestsInHouse,
+
+  checkinToday,
+  checkoutToday,
+  pendingBookings
+
+};
+
+console.log(
+  "🤖 PMS MEMORY:",
+  window.rbPMSData
+);
+
   console.log(
     "🏨 PMS STATS",
     {
