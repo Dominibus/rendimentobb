@@ -732,11 +732,15 @@ const isFollowUp =
 // 🧠 PRIORITY RESPONSE ENGINE
 // =====================================
 
+const isPMSIntent =
+  mainIntent === "pms_analysis";  
+
 if(
   matches.length &&
   !wantsStrategy &&
   !wantsEducation &&
-  !isFollowUp
+  !isFollowUp &&
+  !isPMSIntent
 ){
 
   matches.sort((a,b)=>
