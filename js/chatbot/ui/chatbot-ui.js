@@ -6,19 +6,23 @@
 
 window.initRBChatbotUI = function(){
 
-  // ===========================================
-  // 🛡 PREVENT DUPLICATE
-  // ===========================================
-
   if(
     document.getElementById(
       "rb-chatbot-wrapper"
     )
   ){
 
+    console.log(
+      "🔥 WRAPPER ALREADY EXISTS"
+    );
+
     return;
 
   }
+
+  console.log(
+    "🔥 INIT CHATBOT UI"
+  );
 
   // ===========================================
   // 🌍 LANGUAGE
