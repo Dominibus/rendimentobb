@@ -414,16 +414,30 @@ I can help analyze:
       // 🧠 PROCESS AI MESSAGE
       // =====================================
 
-      const result =
-
-        await window.rbProcessAIMessage(
-          text
-        );
-
       console.log(
-        "🧠 RAW AI RESULT:",
-        result
-      );
+  "🚀 SEND MESSAGE:",
+  text
+);
+
+console.log(
+  "🚀 CALL ORCHESTRATOR"
+);
+
+const result =
+
+  await window.rbProcessAIMessage(
+    text
+  );
+
+console.log(
+  "🚀 ORCHESTRATOR RESULT:",
+  result
+);
+
+console.log(
+  "🧠 RAW AI RESULT:",
+  result
+);
 
 // =====================================
 // 🧠 SAFE DATA
