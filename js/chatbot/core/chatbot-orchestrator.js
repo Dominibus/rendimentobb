@@ -483,6 +483,12 @@ const partialResponse =
 
   });
 
+  console.log(
+  "🏨 PMS RESPONSE DEBUG",
+  currentIntent,
+  partialResponse
+);
+
   // 🔥 IGNORA RISPOSTE VUOTE/FALLBACK
   const isFallback =
 
