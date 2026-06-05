@@ -1150,6 +1150,84 @@ if(
 }
 
 // ===========================================
+// 🏨 PMS BOOKINGS
+// ===========================================
+
+if(
+
+  text.includes("prenotazioni") ||
+  text.includes("prenotazione") ||
+  text.includes("booking") ||
+  text.includes("bookings")
+
+){
+
+  applyIntent({
+
+    intent: "pms_bookings",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 250
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS OCCUPANCY
+// ===========================================
+
+if(
+
+  text.includes("occupazione") ||
+  text.includes("occupancy")
+
+){
+
+  applyIntent({
+
+    intent: "pms_occupancy",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 250
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS REVENUE
+// ===========================================
+
+if(
+
+  text.includes("ricavi") ||
+  text.includes("fatturato") ||
+  text.includes("revenue")
+
+){
+
+  applyIntent({
+
+    intent: "pms_revenue",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 250
+
+  });
+
+}  
+
+// ===========================================
 // 🏨 PMS ANALYSIS
 // Property Management Intelligence
 // ===========================================
