@@ -615,22 +615,20 @@ if(
 
   (
     !hasAnalysis ||
-
     isHomeSimulation
-
   ) &&
 
   intent.intent !== "education" &&
-
   intent.intent !== "subscriptions" &&
-
   intent.intent !== "market_analysis" &&
-
   intent.intent !== "investment_strategy" &&
-
   intent.intent !== "investment_advisor" &&
   intent.intent !== "greeting" &&
-  intent.intent !== "pms_analysis"
+  intent.intent !== "pms_analysis" &&
+  intent.intent !== "pms_bookings" &&
+  intent.intent !== "pms_revenue" &&
+  intent.intent !== "pms_occupancy" &&
+  intent.intent !== "pms_adr"
 
 ){
 
@@ -642,7 +640,7 @@ if(
 
     textIT:
 
-      `📊 Sto leggendo dati parziali dalla simulazione rapida.
+`📊 Sto leggendo dati parziali dalla simulazione rapida.
 
 Per ottenere:
 • ROI reale
@@ -654,7 +652,7 @@ esegui una simulazione nel simulatore principale.`,
 
     textEN:
 
-      `📊 I am currently reading partial quick-simulation data.
+`📊 I am currently reading partial quick-simulation data.
 
 To unlock:
 • real ROI
