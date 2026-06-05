@@ -1272,8 +1272,17 @@ else if(
 ){
 
 console.log(
-  "🏨 PMS BLOCK ENTERED",
+  "🏨 PMS BLOCK ENTERED"
+);
+
+console.log(
+  "PMS DATA:",
   pmsData
+);
+
+console.log(
+  "WINDOW PMS:",
+  window.rbPMSData
 );
 
   response.type =
