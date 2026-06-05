@@ -733,13 +733,32 @@ const isFollowUp =
 // =====================================
 
 const isPMSIntent =
-  mainIntent === "pms_analysis";  
+
+  mainIntent === "pms_analysis" ||
+
+  mainIntent === "pms_bookings" ||
+
+  mainIntent === "pms_revenue" ||
+
+  mainIntent === "pms_occupancy" ||
+
+  mainIntent === "pms_guests" ||
+
+  mainIntent === "pms_adr";
 
 // =====================================
 // 🏨 PMS RESPONSE
 // =====================================
 
 if(isPMSIntent){
+
+console.log(
+  "🏨 PMS RESPONSE ACTIVE"
+);
+
+console.log(
+  window.rbPMSData
+);
 
   const pms =
     window.rbPMSData || {};
@@ -762,69 +781,57 @@ if(isPMSIntent){
   const guests =
     Number(pms.guests || 0);
 
-  let performance = "📊";
+  return window.t(
 
-  if(occupancy >= 90)
-    performance = "🟢 Ottime performance";
+`🏨 PMS Performance Dashboard
 
-  else if(occupancy >= 70)
-    performance = "🟡 Buone performance";
+📌 Proprietà: ${properties}
 
-  else
-    performance = "🔴 Occupazione migliorabile";
+📅 Prenotazioni: ${bookings}
 
-  let advice = "";
+👥 Ospiti: ${guests}
 
-  if(occupancy >= 95){
+💰 Ricavi: €${revenue.toLocaleString("it-IT")}
 
-    advice =
-      "💡 L'occupazione è molto alta. Potresti valutare un aumento graduale delle tariffe per incrementare il profitto.";
+🏨 Occupazione: ${occupancy}%
 
-  }
+💵 ADR: €${adr}
 
-  else if(occupancy < 70){
+🧠 Analisi AI
 
-    advice =
-      "💡 Valuta offerte, promozioni o una revisione dei prezzi per aumentare le prenotazioni.";
+${occupancy >= 90
+? "🟢 Occupazione eccellente. Valuta un incremento graduale delle tariffe."
+: occupancy >= 70
+? "🟡 Performance positive e bilanciate."
+: "🔴 Occupazione migliorabile. Valuta pricing e visibilità."}
 
-  }
+📊 Il PMS sta monitorando le performance operative della struttura.`,
 
-  else{
+`🏨 PMS Performance Dashboard
 
-    advice =
-      "💡 Le performance sono equilibrate tra prezzo e occupazione.";
+📌 Properties: ${properties}
 
-  }
+📅 Bookings: ${bookings}
 
-  return `
+👥 Guests: ${guests}
 
-🏨 Analisi PMS
+💰 Revenue: €${revenue.toLocaleString("en-US")}
 
-${performance}
+🏨 Occupancy: ${occupancy}%
 
-📌 Proprietà:
-${properties}
+💵 ADR: €${adr}
 
-📅 Prenotazioni:
-${bookings}
+🧠 AI Analysis
 
-👥 Ospiti:
-${guests}
+${occupancy >= 90
+? "🟢 Excellent occupancy. Consider a gradual rate increase."
+: occupancy >= 70
+? "🟡 Positive and balanced performance."
+: "🔴 Occupancy can be improved through pricing and visibility optimization."}
 
-💰 Ricavi:
-€${revenue.toLocaleString("it-IT")}
+📊 The PMS is actively monitoring operational performance.`
 
-🏨 Occupazione:
-${occupancy}%
-
-💵 ADR:
-€${adr}
-
-${advice}
-
-🧠 Il PMS sta monitorando le performance operative della struttura.
-
-`;
+  );
 
 }
 
