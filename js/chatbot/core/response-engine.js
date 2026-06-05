@@ -23,6 +23,15 @@ window.rbGenerateResponse = function({
 
 } = {}){
 
+  
+  console.log(
+  "🔥 RESPONSE ENGINE CALLED",
+  {
+    intent,
+    message
+  }
+);
+
   // ===========================================
   // 🧠 RESPONSE OBJECT
   // ===========================================
