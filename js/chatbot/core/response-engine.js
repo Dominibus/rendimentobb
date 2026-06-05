@@ -620,7 +620,8 @@ if(
   intent.intent !== "investment_strategy" &&
 
   intent.intent !== "investment_advisor" &&
-  intent.intent !== "greeting"
+  intent.intent !== "greeting" &&
+  intent.intent !== "pms_analysis"
 
 ){
 
@@ -1269,6 +1270,11 @@ ${mortgagePercent}%
 else if(
   intent.intent === "pms_analysis"
 ){
+
+console.log(
+  "🏨 PMS BLOCK ENTERED",
+  pmsData
+);
 
   response.type =
     "pms";
