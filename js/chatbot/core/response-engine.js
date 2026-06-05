@@ -1264,26 +1264,32 @@ ${mortgagePercent}%
   }
 
 // ===========================================
-// 🏨 PMS RESPONSE
+// 🏨 PMS RESPONSE ENGINE
+// PMS Intelligence Layer
 // ===========================================
 
 else if(
-  intent.intent === "pms_analysis"
+
+  intent.intent === "pms_analysis" ||
+
+  intent.intent === "pms_bookings" ||
+
+  intent.intent === "pms_revenue" ||
+
+  intent.intent === "pms_occupancy" ||
+
+  intent.intent === "pms_adr"
+
 ){
 
-console.log(
-  "🏨 PMS BLOCK ENTERED"
-);
+  console.log(
+    "🏨 PMS BLOCK ENTERED"
+  );
 
-console.log(
-  "PMS DATA:",
-  pmsData
-);
-
-console.log(
-  "WINDOW PMS:",
-  window.rbPMSData
-);
+  console.log(
+    "PMS DATA:",
+    pmsData
+  );
 
   response.type =
     "pms";
@@ -1321,15 +1327,230 @@ console.log(
       pmsData.guests || 0
     );
 
-  response.textIT =
+  // =====================================
+  // 🧠 PMS INSIGHT ENGINE
+  // =====================================
 
-`🏨 Analisi PMS
+  let performanceIT =
+    "📊 Performance nella media.";
+
+  let performanceEN =
+    "📊 Average performance.";
+
+  if(occupancyPMS >= 90){
+
+    performanceIT =
+      "🟢 Occupazione eccellente. La struttura sta performando molto bene.";
+
+    performanceEN =
+      "🟢 Excellent occupancy. The property is performing very well.";
+
+  }
+
+  else if(occupancyPMS >= 70){
+
+    performanceIT =
+      "🟡 Buona occupazione con margini di crescita.";
+
+    performanceEN =
+      "🟡 Good occupancy with room for growth.";
+
+  }
+
+  else{
+
+    performanceIT =
+      "🔴 Occupazione migliorabile. Potrebbero essere necessarie azioni commerciali.";
+
+    performanceEN =
+      "🔴 Occupancy can be improved. Commercial actions may be required.";
+
+  }
+
+  // =====================================
+  // 📅 BOOKINGS REQUEST
+  // =====================================
+
+  if(
+    intent.intent === "pms_bookings"
+  ){
+
+    response.textIT =
+
+`📅 Analisi Prenotazioni
+
+📌 Proprietà:
+${properties}
+
+📅 Prenotazioni attive:
+${bookings}
+
+👥 Ospiti:
+${guests}
+
+🏨 Occupazione:
+${occupancyPMS}%
+
+${performanceIT}`;
+
+    response.textEN =
+
+`📅 Booking Analysis
+
+📌 Properties:
+${properties}
+
+📅 Active bookings:
+${bookings}
+
+👥 Guests:
+${guests}
+
+🏨 Occupancy:
+${occupancyPMS}%
+
+${performanceEN}`;
+
+  }
+
+  // =====================================
+  // 💰 REVENUE REQUEST
+  // =====================================
+
+  else if(
+    intent.intent === "pms_revenue"
+  ){
+
+    response.textIT =
+
+`💰 Analisi Ricavi
+
+💵 ADR:
+€${adr}
+
+💰 Ricavi totali:
+€${revenue.toLocaleString("it-IT")}
+
+📅 Prenotazioni:
+${bookings}
+
+${performanceIT}`;
+
+    response.textEN =
+
+`💰 Revenue Analysis
+
+💵 ADR:
+€${adr}
+
+💰 Total revenue:
+€${revenue.toLocaleString("en-US")}
+
+📅 Bookings:
+${bookings}
+
+${performanceEN}`;
+
+  }
+
+  // =====================================
+  // 🏨 OCCUPANCY REQUEST
+  // =====================================
+
+  else if(
+    intent.intent === "pms_occupancy"
+  ){
+
+    response.textIT =
+
+`🏨 Analisi Occupazione
+
+📊 Occupazione:
+${occupancyPMS}%
+
+📅 Prenotazioni:
+${bookings}
+
+👥 Ospiti:
+${guests}
+
+${performanceIT}`;
+
+    response.textEN =
+
+`🏨 Occupancy Analysis
+
+📊 Occupancy:
+${occupancyPMS}%
+
+📅 Bookings:
+${bookings}
+
+👥 Guests:
+${guests}
+
+${performanceEN}`;
+
+  }
+
+  // =====================================
+  // 💵 ADR REQUEST
+  // =====================================
+
+  else if(
+    intent.intent === "pms_adr"
+  ){
+
+    response.textIT =
+
+`💵 Analisi ADR
+
+💵 ADR medio:
+€${adr}
+
+📅 Prenotazioni:
+${bookings}
+
+💰 Ricavi:
+€${revenue.toLocaleString("it-IT")}
+
+${performanceIT}`;
+
+    response.textEN =
+
+`💵 ADR Analysis
+
+💵 Average ADR:
+€${adr}
+
+📅 Bookings:
+${bookings}
+
+💰 Revenue:
+€${revenue.toLocaleString("en-US")}
+
+${performanceEN}`;
+
+  }
+
+  // =====================================
+  // 🏨 FULL PMS DASHBOARD
+  // =====================================
+
+  else{
+
+    response.textIT =
+
+`🏨 Executive PMS Dashboard
 
 📌 Proprietà:
 ${properties}
 
 📅 Prenotazioni:
 ${bookings}
+
+👥 Ospiti:
+${guests}
 
 💰 Ricavi:
 €${revenue.toLocaleString("it-IT")}
@@ -1340,20 +1561,24 @@ ${occupancyPMS}%
 💵 ADR:
 €${adr}
 
-👥 Ospiti:
-${guests}
+${performanceIT}
 
-🧠 Il PMS risulta attualmente operativo e sta monitorando le performance della struttura.`;
+🧠 AI Insight
 
-  response.textEN =
+Il PMS sta monitorando in tempo reale le performance operative della struttura e individua opportunità di ottimizzazione su occupazione, pricing e ricavi.`;
 
-`🏨 PMS Analysis
+    response.textEN =
+
+`🏨 Executive PMS Dashboard
 
 📌 Properties:
 ${properties}
 
 📅 Bookings:
 ${bookings}
+
+👥 Guests:
+${guests}
 
 💰 Revenue:
 €${revenue.toLocaleString("en-US")}
@@ -1364,13 +1589,15 @@ ${occupancyPMS}%
 💵 ADR:
 €${adr}
 
-👥 Guests:
-${guests}
+${performanceEN}
 
-🧠 The PMS is currently monitoring property performance.`;
+🧠 AI Insight
 
-}   
+The PMS is actively monitoring operational performance and identifying optimization opportunities across occupancy, pricing and revenue.`;
 
+  }
+
+}
 // ===========================================
 // 📊 INVESTMENT / MARKET COMPARISON RESPONSE
 // ===========================================
