@@ -123,6 +123,24 @@ if(
 }
 
 // =========================================
+// 🏨 PMS
+// =========================================
+
+if(
+
+  detectedIntent.intent === "pms_analysis" ||
+
+  detectedIntent.intent === "pms_bookings"
+
+){
+
+  intents.push(
+    detectedIntent.intent
+  );
+
+}    
+
+// =========================================
 // 🏦 MORTGAGE
 // =========================================
 
@@ -220,6 +238,11 @@ if(!uniqueIntents.length){
     uniqueIntents
 
 };
+
+    console.log(
+  "🔥 FINAL INTENTS:",
+  uniqueIntents
+);
     // =========================================
     // 🧠 MEMORY
     // =========================================
