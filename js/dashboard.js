@@ -5153,6 +5153,16 @@ window.rbPMSData = {
   revpar,
   avgStay,
 
+  guests:
+    bookingsSnap.docs.reduce(
+      (sum,d)=>
+        sum +
+        Number(
+          d.data().guests || 0
+        ),
+      0
+    ),
+
   arrivalsToday,
   departuresToday,
   guestsInHouse,
@@ -5166,6 +5176,11 @@ window.rbPMSData = {
 console.log(
   "🤖 PMS MEMORY:",
   window.rbPMSData
+);
+
+  console.log(
+  "👥 PMS GUESTS:",
+  window.rbPMSData.guests
 );
 
   console.log(
