@@ -735,6 +735,36 @@ const isFollowUp =
 const isPMSIntent =
   mainIntent === "pms_analysis";  
 
+// =====================================
+// 🏨 PMS RESPONSE
+// =====================================
+
+if(isPMSIntent){
+
+  const pms =
+    window.rbPMSData || {};
+
+  return `🏨 Analisi PMS
+
+📌 Proprietà:
+${pms.properties || 0}
+
+📅 Prenotazioni:
+${pms.bookings || 0}
+
+💰 Ricavi:
+€${(pms.revenue || 0).toLocaleString("it-IT")}
+
+🏨 Occupazione:
+${pms.occupancy || 0}%
+
+💵 ADR:
+€${pms.adr || 0}
+
+👥 Ospiti:
+${pms.guests || 0}`;
+}  
+
 if(
   matches.length &&
   !wantsStrategy &&
