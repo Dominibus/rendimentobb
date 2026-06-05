@@ -1334,6 +1334,70 @@ else if(
       pmsData?.guests || 0
     );
 
+  // =====================================
+// 📅 PMS BOOKINGS
+// =====================================
+
+if(intent.intent === "pms_bookings"){
+
+  response.textIT =
+    `📅 Attualmente hai ${bookings} prenotazioni registrate nel PMS.`;
+
+  response.textEN =
+    `📅 You currently have ${bookings} bookings registered in the PMS.`;
+
+  return response;
+
+}
+
+// =====================================
+// 💰 PMS REVENUE
+// =====================================
+
+if(intent.intent === "pms_revenue"){
+
+  response.textIT =
+    `💰 I ricavi attuali registrati nel PMS sono €${revenue.toLocaleString("it-IT")}.`;
+
+  response.textEN =
+    `💰 Current PMS revenue is €${revenue.toLocaleString("en-US")}.`;
+
+  return response;
+
+}
+
+// =====================================
+// 🏨 PMS OCCUPANCY
+// =====================================
+
+if(intent.intent === "pms_occupancy"){
+
+  response.textIT =
+    `🏨 L'occupazione attuale è del ${occupancyPMS}%.`;
+
+  response.textEN =
+    `🏨 Current occupancy is ${occupancyPMS}%.`;
+
+  return response;
+
+}
+
+// =====================================
+// 💵 PMS ADR
+// =====================================
+
+if(intent.intent === "pms_adr"){
+
+  response.textIT =
+    `💵 L'ADR attuale è €${adr}.`;
+
+  response.textEN =
+    `💵 Current ADR is €${adr}.`;
+
+  return response;
+
+}
+
   let performanceIT =
     "🟡 Performance regolari";
 
