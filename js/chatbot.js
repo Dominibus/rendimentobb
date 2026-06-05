@@ -744,26 +744,89 @@ if(isPMSIntent){
   const pms =
     window.rbPMSData || {};
 
-  return `🏨 Analisi PMS
+  const properties =
+    Number(pms.properties || 0);
+
+  const bookings =
+    Number(pms.bookings || 0);
+
+  const revenue =
+    Number(pms.revenue || 0);
+
+  const occupancy =
+    Number(pms.occupancy || 0);
+
+  const adr =
+    Number(pms.adr || 0);
+
+  const guests =
+    Number(pms.guests || 0);
+
+  let performance = "📊";
+
+  if(occupancy >= 90)
+    performance = "🟢 Ottime performance";
+
+  else if(occupancy >= 70)
+    performance = "🟡 Buone performance";
+
+  else
+    performance = "🔴 Occupazione migliorabile";
+
+  let advice = "";
+
+  if(occupancy >= 95){
+
+    advice =
+      "💡 L'occupazione è molto alta. Potresti valutare un aumento graduale delle tariffe per incrementare il profitto.";
+
+  }
+
+  else if(occupancy < 70){
+
+    advice =
+      "💡 Valuta offerte, promozioni o una revisione dei prezzi per aumentare le prenotazioni.";
+
+  }
+
+  else{
+
+    advice =
+      "💡 Le performance sono equilibrate tra prezzo e occupazione.";
+
+  }
+
+  return `
+
+🏨 Analisi PMS
+
+${performance}
 
 📌 Proprietà:
-${pms.properties || 0}
+${properties}
 
 📅 Prenotazioni:
-${pms.bookings || 0}
-
-💰 Ricavi:
-€${(pms.revenue || 0).toLocaleString("it-IT")}
-
-🏨 Occupazione:
-${pms.occupancy || 0}%
-
-💵 ADR:
-€${pms.adr || 0}
+${bookings}
 
 👥 Ospiti:
-${pms.guests || 0}`;
-}  
+${guests}
+
+💰 Ricavi:
+€${revenue.toLocaleString("it-IT")}
+
+🏨 Occupazione:
+${occupancy}%
+
+💵 ADR:
+€${adr}
+
+${advice}
+
+🧠 Il PMS sta monitorando le performance operative della struttura.
+
+`;
+
+}
 
 if(
   matches.length &&
