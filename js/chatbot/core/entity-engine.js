@@ -991,12 +991,32 @@ const skipKnowledgeDetection =
   entities.cities.length >= 2;
 
 // ===========================================
+// 🏨 PMS PROTECTION
+// ===========================================
+
+const isPMSQuestion =
+
+  text.includes("prenotazioni") ||
+  text.includes("booking") ||
+  text.includes("ospiti") ||
+  text.includes("check-in") ||
+  text.includes("check out") ||
+  text.includes("check-out") ||
+  text.includes("adr") ||
+  text.includes("revpar") ||
+  text.includes("occupazione") ||
+  text.includes("ricavi") ||
+  text.includes("performance");  
+
+// ===========================================
 // 🚀 EXECUTE
 // ===========================================
 
 const matchedKnowledge =
 
-  skipKnowledgeDetection
+  skipKnowledgeDetection ||
+
+  isPMSQuestion
 
     ? null
 
