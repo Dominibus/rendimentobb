@@ -3524,7 +3524,8 @@ renderInvestmentScore(
 // 🧠 CHATBOT LIVE DATA
 // ===============================================
 
-const access = window.getUserAccess?.() || {};
+const chatbotAccess =
+window.getUserAccess?.() || {};
 
 // 🔥 ROI reale chatbot
 const chatbotRealROI = Number(
@@ -3534,10 +3535,10 @@ const chatbotRealROI = Number(
 // 🔥 FREE → ROI nascosto nel chatbot
 const chatbotROI =
 (
-  access.isFree &&
-  !access.isInvestor &&
-  !access.isPro &&
-  !access.isAdmin
+  chatbotAccess.isFree &&
+  !chatbotAccess.isInvestor &&
+  !chatbotAccess.isPro &&
+  !chatbotAccess.isAdmin
 )
 ? 0
 : chatbotRealROI;
@@ -3545,10 +3546,10 @@ const chatbotROI =
 // 🔥 CASHFLOW / NET SMART
 const chatbotNet =
 (
-  access.isFree &&
-  !access.isInvestor &&
-  !access.isPro &&
-  !access.isAdmin
+  chatbotAccess.isFree &&
+  !chatbotAccess.isInvestor &&
+  !chatbotAccess.isPro &&
+  !chatbotAccess.isAdmin
 )
 ? 0
 : net;
@@ -3559,45 +3560,21 @@ const chatbotNet =
 
 window.rbChatbotData = {
 
-roi:
-(
-  window.RB_USER?.isFree &&
-  !window.RB_USER?.isInvestor &&
-  !window.RB_USER?.isPro &&
-  !window.RB_USER?.isAdmin
-)
-? null
-: safeROI ?? null,
+  roi: chatbotROI,
 
-visualROI:
-(
-  window.RB_USER?.isFree &&
-  !window.RB_USER?.isInvestor &&
-  !window.RB_USER?.isPro &&
-  !window.RB_USER?.isAdmin
-)
-? null
-: visualROI ?? null,
+  visualROI: chatbotROI,
 
-gross:
-(
-  window.RB_USER?.isFree &&
-  !window.RB_USER?.isInvestor &&
-  !window.RB_USER?.isPro &&
-  !window.RB_USER?.isAdmin
-)
-? null
-: gross ?? null,
+  gross:
+  (
+    chatbotAccess.isFree &&
+    !chatbotAccess.isInvestor &&
+    !chatbotAccess.isPro &&
+    !chatbotAccess.isAdmin
+  )
+  ? null
+  : gross ?? null,
 
-net:
-(
-  window.RB_USER?.isFree &&
-  !window.RB_USER?.isInvestor &&
-  !window.RB_USER?.isPro &&
-  !window.RB_USER?.isAdmin
-)
-? null
-: net ?? null,
+  net: chatbotNet,
 
   occupancy:
     occupancy ??
@@ -3613,9 +3590,11 @@ net:
       document.getElementById("occupancy")?.value
     ),
 
-  priceNight: priceNight ?? null,
+  priceNight:
+    priceNight ?? null,
 
-  expenses: expenses ?? null,
+  expenses:
+    expenses ?? null,
 
   city:
     selectedCity ||
@@ -4039,12 +4018,13 @@ if(!window.rbChatMemory.investmentHistory){
 
 window.rbChatMemory.investmentHistory.push({
 
-  roi:
-    safeROI ?? roi ?? 0,
+  roi: safeROI ?? 0,
+  gross: gross ?? 0,
+  net: net ?? 0,
+  expenses: expenses ?? 0,
+  risk: risk ?? 0,
 
   city:
-    selectedCity ||
-    marketCity ||
     currentCity ||
     "roma",
 
@@ -4061,8 +4041,6 @@ window.rbChatMemory.investmentHistory.push({
 
   mortgage:
     loanAmount ??
-    mortgageAmount ??
-    window.loan ??
     0,
 
   timestamp:
