@@ -529,6 +529,21 @@ console.log(
 
           );
 
+      console.log(
+  "🔥 FINAL TEXT TO UI:",
+  finalText
+);
+
+console.log(
+  "🔥 RESPONSE TYPE:",
+  response?.type
+);
+
+console.log(
+  "🔥 RESPONSE OBJECT FULL:",
+  response
+);
+
       // =====================================
       // 💬 BOT MESSAGE
       // =====================================
