@@ -557,16 +557,28 @@ if(
 const response = {
 
   type:
+    intent.intent ||
+    "generic",
 
-  intent.intent ||
+  confidence:
+    0.99,
 
-  "generic",
+  textIT:
+    finalTextIT.trim(),
 
-  textIT: finalTextIT.trim(),
+  textEN:
+    finalTextEN.trim(),
 
-  textEN: finalTextEN.trim()
+  suggestionsIT: [],
+
+  suggestionsEN: []
 
 };
+
+    console.log(
+  "🔥 FINAL ORCHESTRATOR RESPONSE:",
+  response
+);
 
 // =========================================
 // 🧠 KNOWLEDGE ENHANCEMENT
