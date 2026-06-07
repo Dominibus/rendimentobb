@@ -3456,23 +3456,31 @@ document.getElementById(
 if(toggleBtn){
 
   toggleBtn.addEventListener(
-    "click",
-    ()=>{
+"click",
+()=>{
 
-      const form =
-      document.getElementById(
-        "booking-form-container"
-      );
+const form =
+document.getElementById(
+"booking-form-container"
+);
 
-      if(!form) return;
+if(!form) return;
 
-      form.style.display =
-        form.style.display === "none"
-        ? "block"
-        : "none";
+const opened =
+form.style.display === "block";
 
-    }
-  );
+form.style.display =
+opened
+? "none"
+: "block";
+
+toggleBtn.innerHTML =
+opened
+? "➕"
+: "✕";
+
+}
+);
 
 }
 
@@ -4123,6 +4131,18 @@ updateBookingTotal
 );
 
 },200);
+
+  const bookingForm =
+document.getElementById(
+"booking-form-container"
+);
+
+if(bookingForm){
+
+  bookingForm.style.display =
+  "none";
+
+}
   
   loadBookings(propertyId);
 
