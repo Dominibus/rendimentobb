@@ -4466,108 +4466,124 @@ html += `
 
 <div
 style="
-padding:16px;
+background:#ffffff;
 border:1px solid #e2e8f0;
-border-radius:16px;
-background:white;
-display:flex;
-flex-direction:column;
-gap:8px;
-box-shadow:
-0 4px 12px rgba(0,0,0,.04);
-transition:.2s;
+border-radius:20px;
+padding:20px;
+margin-bottom:14px;
+box-shadow:0 8px 24px rgba(15,23,42,.05);
+transition:.25s;
+position:relative;
+overflow:hidden;
 ">
+
+<div
+style="
+position:absolute;
+left:0;
+top:0;
+bottom:0;
+width:5px;
+background:${
+b.status === "cancelled"
+? "#ef4444"
+: b.status === "arrival"
+? "#3b82f6"
+: b.status === "checkin"
+? "#2563eb"
+: b.status === "checkout"
+? "#f97316"
+: b.status === "completed"
+? "#8b5cf6"
+: "#10b981"
+};
+">
+</div>
 
 <div
 style="
 display:flex;
 justify-content:space-between;
-align-items:center;
+align-items:flex-start;
+gap:12px;
 ">
 
 <div>
 
 <div
 style="
-font-size:16px;
-font-weight:700;
+font-size:22px;
+font-weight:800;
 color:#0f172a;
+line-height:1.2;
 ">
-
 ${b.guestName}
-
 </div>
 
 <div
 style="
 font-size:12px;
-color:#64748b;
+color:#94a3b8;
+margin-top:4px;
 ">
-
-${window.t(
-"Prenotazione",
-"Booking"
-)}
-#${docItem.id.substring(0,6)}
-
+Booking #${docItem.id.substring(0,6)}
 </div>
 
 </div>
 
 ${(() => {
 
-let bg = "#dcfce7";
-let color = "#166534";
-let label = "Confermata";
+let bg="#dcfce7";
+let color="#166534";
+let label="Confermata";
 
 switch(b.status){
 
-  case "arrival":
-    bg = "#dbeafe";
-    color = "#1d4ed8";
-    label = "In Arrivo";
-    break;
+case "arrival":
+bg="#dbeafe";
+color="#1d4ed8";
+label="In Arrivo";
+break;
 
-  case "checkin":
-    bg = "#bfdbfe";
-    color = "#1e40af";
-    label = "Check-In";
-    break;
+case "checkin":
+bg="#bfdbfe";
+color="#1e40af";
+label="Check-In";
+break;
 
-  case "checkout":
-    bg = "#fed7aa";
-    color = "#c2410c";
-    label = "Check-Out";
-    break;
+case "checkout":
+bg="#fed7aa";
+color="#c2410c";
+label="Check-Out";
+break;
 
-  case "completed":
-    bg = "#e9d5ff";
-    color = "#7e22ce";
-    label = "Completata";
-    break;
+case "completed":
+bg="#ede9fe";
+color="#7c3aed";
+label="Completata";
+break;
 
-  case "cancelled":
-    bg = "#fecaca";
-    color = "#991b1b";
-    label = "Cancellata";
-    break;
+case "cancelled":
+bg="#fee2e2";
+color="#b91c1c";
+label="Cancellata";
+break;
 
 }
 
 return `
-
 <span
 style="
 background:${bg};
 color:${color};
-padding:4px 10px;
+padding:8px 14px;
 border-radius:999px;
 font-size:12px;
-font-weight:600;
+font-weight:700;
+white-space:nowrap;
 ">
 ${label}
 </span>
-
 `;
 
 })()}
@@ -4576,89 +4592,177 @@ ${label}
 
 <div
 style="
+margin-top:18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:14px;
+background:#f8fafc;
+border-radius:14px;
+">
+
+<div>
+<div style="font-size:12px;color:#94a3b8;">
+Check-In
+</div>
+
+<div style="
+font-weight:700;
+color:#0f172a;
+">
+${b.checkin}
+</div>
+</div>
+
+<div style="
+font-size:18px;
+color:#94a3b8;
+">
+→
+</div>
+
+<div style="text-align:right;">
+<div style="
+font-size:12px;
+color:#94a3b8;
+">
+Check-Out
+</div>
+
+<div style="
+font-weight:700;
+color:#0f172a;
+">
+${b.checkout}
+</div>
+</div>
+
+</div>
+
+<div
+style="
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:16px;
+">
+
+<div
+style="
+background:#f8fafc;
+padding:12px;
+border-radius:14px;
+text-align:center;
+">
+<div style="font-size:11px;color:#94a3b8;">
+Ospiti
+</div>
+<div style="
+font-size:18px;
+font-weight:800;
+color:#0f172a;
+">
+${b.guests}
+</div>
+</div>
+
+<div
+style="
+background:#f8fafc;
+padding:12px;
+border-radius:14px;
+text-align:center;
+">
+<div style="
+font-size:11px;
+color:#94a3b8;
+">
+Notti
+</div>
+<div style="
+font-size:18px;
+font-weight:800;
+color:#0f172a;
+">
+${nights}
+</div>
+</div>
+
+<div
+style="
+background:#ecfdf5;
+padding:12px;
+border-radius:14px;
+text-align:center;
+">
+<div style="
+font-size:11px;
+color:#10b981;
+">
+Ricavo
+</div>
+<div style="
+font-size:18px;
+font-weight:800;
+color:#059669;
+">
+€${Number(
+b.totalAmount || 0
+).toFixed(0)}
+</div>
+</div>
+
+</div>
+
+<div
+style="
 display:flex;
 justify-content:space-between;
 align-items:center;
+margin-top:18px;
 ">
-
-<div>
-
-📅
-
-${b.checkin}
-
-</div>
 
 <div
 style="
-color:#94a3b8;
+font-size:13px;
+font-weight:600;
+color:#475569;
 ">
 
-→
+${b.source === "airbnb"
+? "🏠 Airbnb"
+: b.source === "booking"
+? "🟦 Booking.com"
+: b.source === "vrbo"
+? "🏡 VRBO"
+: b.source === "website"
+? "🌐 Website"
+: b.source === "phone"
+? "☎️ Telefono"
+: "📞 Direct"}
 
 </div>
-
-<div>
-
-${b.checkout}
-
-</div>
-
-</div>
-
-<div>
-👥
-${b.guests}
-${window.t(
-"Ospiti",
-"Guests"
-)}
-</div>
-
-<div>
-🌙
-${nights}
-${window.t(
-"Notti",
-"Nights"
-)}
-</div>
-
-<div
-style="
-font-size:18px;
-font-weight:700;
-color:#10b981;
-">
-
-💰
-€${Number(
-  b.totalAmount || 0
-).toFixed(2)}
-
-</div>
-
-<div
-style="
-display:flex;
-gap:8px;
-margin-top:8px;
-">
 
 <button
 onclick="deleteBooking('${docItem.id}')"
 style="
-padding:6px 10px;
+width:38px;
+height:38px;
 border:none;
-border-radius:8px;
+border-radius:12px;
+background:#fee2e2;
+color:#dc2626;
 cursor:pointer;
-background:#ef4444;
-color:white;
+font-size:16px;
 ">
 🗑️
 </button>
 
 </div>
+
+</div>
+
+`;
 
 <div>
 
