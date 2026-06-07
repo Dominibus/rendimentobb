@@ -4374,7 +4374,7 @@ await loadProperties();
   )
 );
 
-  closeBookingsModal();
+  closeBookingModal();
 
 };
 
