@@ -2796,168 +2796,213 @@ id="booking-form-container"
 style="
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:16px;
+padding:24px;
+background:#ffffff;
+border:1px solid #e2e8f0;
+border-radius:24px;
+box-shadow:
+0 10px 30px rgba(15,23,42,.06);
+margin-bottom:24px;
 ">
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+<div>
+
+<h3 style="
+margin:0;
+font-size:22px;
+font-weight:800;
+color:#0f172a;
+">
+✨ Nuova Prenotazione
+</h3>
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-top:4px;
+">
+Gestisci arrivi, partenze e soggiorni
+</div>
+
+</div>
+
+<div style="
+width:44px;
+height:44px;
+border-radius:14px;
+background:#f8fafc;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+">
+🏨
+</div>
+
+</div>
 
 <input
 id="booking-guest"
 type="text"
-data-it-placeholder="Nome ospite"
-data-en-placeholder="Guest name"
-placeholder="Nome ospite">
+placeholder="Nome ospite"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+background:#fff;
+">
+
+<div
+style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+">
 
 <input
 id="booking-checkin"
-type="date">
+type="date"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+">
 
 <input
 id="booking-checkout"
-type="date">
+type="date"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+">
+
+</div>
+
+<div
+style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+">
 
 <input
 id="booking-guests"
 type="number"
-data-it-placeholder="Ospiti"
-data-en-placeholder="Guests"
-placeholder="Ospiti">
+placeholder="Ospiti"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+">
 
 <input
 id="booking-total"
 type="number"
-data-it-placeholder="Totale soggiorno"
-data-en-placeholder="Total stay amount"
-placeholder="Totale soggiorno">
+placeholder="Totale soggiorno €"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+">
 
-<select id="booking-status">
+</div>
 
-<option
-value="arrival"
-data-it="In Arrivo"
-data-en="Arrival">
+<select
+id="booking-status"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+background:#fff;
+">
 
-In Arrivo
-
-</option>
-
-<option
-value="checkin"
-data-it="Check-In"
-data-en="Check-In">
-
-Check-In
-
-</option>
-
-<option
-value="checkout"
-data-it="Check-Out"
-data-en="Check-Out">
-
-Check-Out
-
-</option>
-
-<option
-value="completed"
-data-it="Completata"
-data-en="Completed">
-
-Completata
-
-</option>
-
-<option
-value="cancelled"
-data-it="Cancellata"
-data-en="Cancelled">
-
-Cancellata
-
-</option>
+<option value="arrival">🔵 In Arrivo</option>
+<option value="checkin">🟢 Check-In</option>
+<option value="checkout">🟠 Check-Out</option>
+<option value="completed">🟣 Completata</option>
+<option value="cancelled">🔴 Cancellata</option>
 
 </select>
 
-<select id="booking-source">
+<select
+id="booking-source"
+style="
+height:52px;
+border:1px solid #dbe3ee;
+border-radius:14px;
+padding:0 16px;
+font-size:15px;
+background:#fff;
+">
 
-<option
-value="airbnb">
-
-Airbnb
-
-</option>
-
-<option
-value="booking">
-
-Booking.com
-
-</option>
-
-<option
-value="vrbo">
-
-VRBO
-
-</option>
-
-<option
-value="direct"
-data-it="Diretta"
-data-en="Direct">
-
-Diretta
-
-</option>
-
-<option
-value="website"
-data-it="Sito Web"
-data-en="Website">
-
-Sito Web
-
-</option>
-
-<option
-value="phone"
-data-it="Telefono"
-data-en="Phone">
-
-Telefono
-
-</option>
+<option value="airbnb">🏠 Airbnb</option>
+<option value="booking">🟦 Booking.com</option>
+<option value="vrbo">🏡 VRBO</option>
+<option value="direct">📞 Diretta</option>
+<option value="website">🌐 Sito Web</option>
+<option value="phone">☎️ Telefono</option>
 
 </select>
+
 <div
 style="
 display:flex;
-gap:10px;
-margin-top:15px;
+justify-content:flex-end;
+gap:12px;
+margin-top:10px;
 ">
 
 <button
 class="btn-dashboard"
 onclick="closeBookingsModal()"
-data-it="Chiudi"
-data-en="Close">
-
+style="
+background:#f1f5f9;
+color:#0f172a;
+border:none;
+">
 Chiudi
-
 </button>
 
 <button
 class="btn-dashboard"
 onclick="saveBooking()"
-data-it="Salva"
-data-en="Save">
-
-Salva
-
+style="
+background:linear-gradient(
+135deg,
+#10b981,
+#059669
+);
+border:none;
+box-shadow:
+0 8px 20px rgba(16,185,129,.25);
+">
+💾 Salva Prenotazione
 </button>
 
 </div>
-  </div>
 
+</div>
 <hr>
 
 <h3
