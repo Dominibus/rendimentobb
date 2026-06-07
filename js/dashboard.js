@@ -4764,37 +4764,6 @@ font-size:16px;
 
 `;
 
-<div>
-
-${b.source === "airbnb"
-? "🏠 Airbnb"
-: ""}
-
-${b.source === "booking"
-? "🟦 Booking.com"
-: ""}
-
-${b.source === "vrbo"
-? "🏡 VRBO"
-: ""}
-
-${b.source === "direct"
-? "📞 Diretta"
-: ""}
-
-${b.source === "website"
-? "🌐 Sito Web"
-: ""}
-
-${b.source === "phone"
-? "☎️ Telefono"
-: ""}
-
-</div>
-
-</div>
-
-`;
     });
 
   const summary =
