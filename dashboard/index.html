@@ -2024,6 +2024,57 @@ if(!access.canSeeFullAnalysis){
     </div>
   `;
 
+  // =====================================
+// 📅 BOOKING FORM TOGGLE
+// =====================================
+
+const bookingToggle =
+document.getElementById(
+"toggle-booking-form"
+);
+
+const bookingForm =
+document.getElementById(
+"booking-form-container"
+);
+
+if(
+bookingToggle &&
+bookingForm
+){
+
+bookingForm.style.display =
+"none";
+
+bookingToggle.addEventListener(
+"click",
+()=>{
+
+if(
+bookingForm.style.display ===
+"none"
+){
+
+bookingForm.style.display =
+"flex";
+
+bookingToggle.innerHTML =
+"✖";
+
+}else{
+
+bookingForm.style.display =
+"none";
+
+bookingToggle.innerHTML =
+"➕";
+
+}
+
+});
+
+}
+
 });
 
 </script>
