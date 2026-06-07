@@ -3448,7 +3448,7 @@ setTimeout(()=>{
 
   loadPMSStats();
 
-  const toggleBtn =
+const toggleBtn =
 document.getElementById(
   "toggle-booking-form"
 );
@@ -3456,8 +3456,13 @@ document.getElementById(
 if(toggleBtn){
 
   toggleBtn.addEventListener(
-"click",
-()=>{
+    "click",
+    openBookingModal
+  );
+
+}
+
+  window.openBookingModal = function(){
 
 const form =
 document.getElementById(
@@ -3466,23 +3471,26 @@ document.getElementById(
 
 if(!form) return;
 
-const opened =
-form.style.display === "block";
-
-form.style.display =
-opened
-? "none"
-: "block";
-
-toggleBtn.innerHTML =
-opened
-? "➕"
-: "✕";
-
-}
+form.classList.add(
+"booking-modal-open"
 );
 
-}
+};
+
+window.closeBookingModal = function(){
+
+const form =
+document.getElementById(
+"booking-form-container"
+);
+
+if(!form) return;
+
+form.classList.remove(
+"booking-modal-open"
+);
+
+};
 
 },1500);
 
