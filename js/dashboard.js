@@ -3457,7 +3457,7 @@ if(toggleBtn){
 
   toggleBtn.addEventListener(
     "click",
-    openBookingModal
+    window.openBookingModal
   );
 
 }
