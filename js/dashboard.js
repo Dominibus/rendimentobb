@@ -3462,7 +3462,7 @@ if(toggleBtn){
 
 }
 
-  window.openBookingModal = function(){
+window.openBookingModal = function(){
 
 const form =
 document.getElementById(
@@ -3471,9 +3471,8 @@ document.getElementById(
 
 if(!form) return;
 
-form.classList.add(
-"booking-modal-open"
-);
+form.style.display =
+"flex";
 
 };
 
@@ -3486,9 +3485,8 @@ document.getElementById(
 
 if(!form) return;
 
-form.classList.remove(
-"booking-modal-open"
-);
+form.style.display =
+"none";
 
 };
 
