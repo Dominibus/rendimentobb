@@ -4510,6 +4510,9 @@ let sourceStats = {};
   ...b
 });
 
+    window.currentBookingsData =
+      bookingsData;
+
     const source =
   b.source || "Unknown";
 
@@ -4551,6 +4554,7 @@ sourceStats[source].revenue +=
 html += `
 
 <div
+data-status="${b.status}"
 style="
 background:#ffffff;
 border:1px solid #e2e8f0;
@@ -5009,6 +5013,36 @@ if(channelsEl){
 }
 
   list.innerHTML = html;
+
+  document
+.querySelectorAll(
+".booking-filter"
+)
+.forEach(btn=>{
+
+btn.onclick = ()=>{
+
+document
+.querySelectorAll(
+".booking-filter"
+)
+.forEach(b=>
+b.classList.remove(
+"active"
+)
+);
+
+btn.classList.add(
+"active"
+);
+
+filterBookings(
+btn.dataset.filter
+);
+
+};
+
+});
 
   renderPMSCalendar(bookingsData);
 
@@ -5616,3 +5650,40 @@ function renderPMSCalendar(bookings){
   container.innerHTML = html;
 
 }
+
+// =====================================
+// 🔥 BOOKING FILTERS
+// =====================================
+
+window.filterBookings =
+function(status){
+
+const cards =
+document.querySelectorAll(
+"#bookings-list > div"
+);
+
+cards.forEach(card=>{
+
+const cardStatus =
+card.dataset.status;
+
+if(
+status === "all"
+){
+
+card.style.display =
+"block";
+
+return;
+
+}
+
+card.style.display =
+cardStatus === status
+? "block"
+: "none";
+
+});
+
+};
