@@ -2856,7 +2856,13 @@ data-en="📅 Booking">
 <!-- PMS GRID -->
 <!-- ===================================== -->
 
-<div class="pms-grid pms-booking-layout">
+<div
+style="
+display:grid;
+grid-template-columns:280px 1fr;
+gap:20px;
+align-items:start;
+">
 
 <!-- LEFT COLUMN -->
 <div>
@@ -2889,69 +2895,6 @@ grid-template-columns:repeat(2,1fr);
 gap:10px;
 margin-bottom:15px;
 ">
-</div>
-
-<hr>
-
-<h3
-data-it="🗓️ Occupazione Calendario"
-data-en="🗓️ Occupancy Calendar">
-
-🗓️ Occupazione Calendario
-
-</h3>
-
-<div class="calendar-legend">
-
-<span
-data-it="🟩 Occupato"
-data-en="🟩 Occupied">
-
-🟩 Occupato
-
-</span>
-
-<span
-data-it="🟦 Check-In"
-data-en="🟦 Check-In">
-
-🟦 Check-In
-
-</span>
-
-<span
-data-it="🟧 Check-Out"
-data-en="🟧 Check-Out">
-
-🟧 Check-Out
-
-</span>
-
-<span
-data-it="⬜ Libero"
-data-en="⬜ Available">
-
-⬜ Libero
-
-</span>
-
-</div>
-
-<div
-id="booking-calendar"
-style="
-max-height:220px;
-overflow-y:auto;
-display:flex;
-flex-direction:column;
-gap:10px;
-padding:10px;
-background:#f8fafc;
-border:1px solid #e5e7eb;
-border-radius:12px;
-">
-</div>
-
 </div>
 
 <!-- RIGHT COLUMN -->
@@ -3365,6 +3308,64 @@ Gestisci arrivi, partenze e soggiorni
 <div
 id="bookings-list">
 </div>
+
+</div>
+</div>
+
+<!-- FULL WIDTH CALENDAR -->
+
+<div
+style="
+grid-column:1 / -1;
+margin-top:20px;
+">
+
+<h3
+data-it="🗓️ Occupazione Calendario"
+data-en="🗓️ Occupancy Calendar">
+🗓️ Occupazione Calendario
+</h3>
+
+<div class="calendar-legend">
+
+<span
+data-it="🟩 Occupato"
+data-en="🟩 Occupied">
+🟩 Occupato
+</span>
+
+<span
+data-it="🟦 Check-In"
+data-en="🟦 Check-In">
+🟦 Check-In
+</span>
+
+<span
+data-it="🟧 Check-Out"
+data-en="🟧 Check-Out">
+🟧 Check-Out
+</span>
+
+<span
+data-it="⬜ Libero"
+data-en="⬜ Available">
+⬜ Libero
+</span>
+
+</div>
+
+<div
+id="booking-calendar"
+style="
+min-height:320px;
+padding:20px;
+background:#f8fafc;
+border:1px solid #e5e7eb;
+border-radius:18px;
+">
+</div>
+
+</div>  
 
 </div>
 
