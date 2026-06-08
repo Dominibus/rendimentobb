@@ -5519,138 +5519,162 @@ function renderPMSCalendar(bookings){
 
   if(!container) return;
 
-  if(!bookings.length){
+  const today = new Date();
 
-    container.innerHTML = `
-      <div
-      style="
-      text-align:center;
-      color:#64748b;
-      padding:20px;
-      ">
-      📅 Nessuna prenotazione
-      </div>
+  const year =
+    today.getFullYear();
+
+  const month =
+    today.getMonth();
+
+  const firstDay =
+    new Date(year,month,1);
+
+  const lastDay =
+    new Date(year,month + 1,0);
+
+  const daysInMonth =
+    lastDay.getDate();
+
+  const startDay =
+    firstDay.getDay();
+
+  const monthNames = [
+    "Gennaio","Febbraio","Marzo",
+    "Aprile","Maggio","Giugno",
+    "Luglio","Agosto","Settembre",
+    "Ottobre","Novembre","Dicembre"
+  ];
+
+  let html = `
+
+  <div style="
+  font-weight:700;
+  text-align:center;
+  margin-bottom:10px;
+  color:#0f172a;
+  ">
+    ${monthNames[month]} ${year}
+  </div>
+
+  <div style="
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+  font-size:11px;
+  text-align:center;
+  color:#64748b;
+  margin-bottom:6px;
+  ">
+    <div>D</div>
+    <div>L</div>
+    <div>M</div>
+    <div>M</div>
+    <div>G</div>
+    <div>V</div>
+    <div>S</div>
+  </div>
+
+  <div style="
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+  ">
+  `;
+
+  for(let i=0;i<startDay;i++){
+
+    html += `
+    <div></div>
     `;
 
-    return;
   }
 
-  bookings.sort((a,b)=>
-    new Date(a.checkin) -
-    new Date(b.checkin)
-  );
+  for(let day=1; day<=daysInMonth; day++){
 
-  let html = "";
+    const currentDate =
+      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
-  bookings.forEach(b=>{
+    let color = "";
+    let tooltip = "";
 
-    let color = "#10b981";
-    let badge = "Confermata";
+    bookings.forEach(b=>{
 
-    switch(b.status){
+      if(
+        currentDate >= b.checkin &&
+        currentDate < b.checkout
+      ){
 
-      case "arrival":
+        color = "#10b981";
+        tooltip = b.guestName;
+
+      }
+
+      if(
+        currentDate === b.checkin
+      ){
+
         color = "#3b82f6";
-        badge = "Arrivo";
-        break;
+        tooltip = `Arrivo ${b.guestName}`;
 
-      case "checkin":
-        color = "#06b6d4";
-        badge = "Check-In";
-        break;
+      }
 
-      case "checkout":
+      if(
+        currentDate === b.checkout
+      ){
+
         color = "#f97316";
-        badge = "Check-Out";
-        break;
+        tooltip = `Partenza ${b.guestName}`;
 
-      case "completed":
-        color = "#8b5cf6";
-        badge = "Completata";
-        break;
+      }
 
-      case "cancelled":
+      if(
+        b.status === "cancelled" &&
+        currentDate >= b.checkin &&
+        currentDate <= b.checkout
+      ){
+
         color = "#ef4444";
-        badge = "Cancellata";
-        break;
+        tooltip = `Cancellata ${b.guestName}`;
 
-    }
+      }
+
+    });
 
     html += `
 
     <div
+    title="${tooltip}"
     style="
-    background:white;
-    border-left:4px solid ${color};
-    border-radius:12px;
-    padding:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.05);
+    height:34px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:600;
+    background:${color || "#f8fafc"};
+    color:${color ? "#fff" : "#0f172a"};
+    border:1px solid ${
+      color
+      ? color
+      : "#e2e8f0"
+    };
     ">
-
-      <div
-      style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      ">
-
-        <strong>
-        👤 ${b.guestName}
-        </strong>
-
-        <span
-        style="
-        background:${color}15;
-        color:${color};
-        padding:4px 8px;
-        border-radius:999px;
-        font-size:11px;
-        font-weight:600;
-        ">
-        ${badge}
-        </span>
-
-      </div>
-
-      <div
-      style="
-      margin-top:6px;
-      font-size:12px;
-      color:#64748b;
-      ">
-
-      📅 ${b.checkin}
-      →
-
-      ${b.checkout}
-
-      </div>
-
-      <div
-      style="
-      margin-top:4px;
-      font-size:12px;
-      color:#64748b;
-      ">
-
-      👥 ${b.guests || 0}
-      ${window.t(
-        "ospiti",
-        "guests"
-      )}
-
-      </div>
-
+      ${day}
     </div>
 
     `;
 
-  });
+  }
+
+  html += `
+  </div>
+  `;
 
   container.innerHTML = html;
 
 }
-
 // =====================================
 // 🔥 BOOKING FILTERS
 // =====================================
