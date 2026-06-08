@@ -5012,22 +5012,6 @@ color:#64748b;
 
 `;
 
-      <strong>
-        ${channelNames[name] || name}
-      </strong>
-
-      <span>
-        📅 ${data.bookings}
-      </span>
-
-      <span>
-        💰 €${data.revenue.toFixed(0)}
-      </span>
-
-    </div>
-
-    `;
-
   });
 
   channelsHtml += `
