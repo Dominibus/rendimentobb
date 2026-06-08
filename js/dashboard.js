@@ -3417,82 +3417,92 @@ modal.style.display = "none";
 // =====================================
 
 document.addEventListener(
-"DOMContentLoaded",
-()=>{
+  "DOMContentLoaded",
+  ()=>{
 
-const openBtn =
-document.getElementById(
-"open-property-modal"
-);
+    const openBtn =
+    document.getElementById(
+      "open-property-modal"
+    );
 
-if(openBtn){
+    if(openBtn){
 
-openBtn.addEventListener(
-"click",
-openPropertyModal
-);
+      openBtn.addEventListener(
+        "click",
+        openPropertyModal
+      );
 
-}
+    }
 
-// 🌍 BILINGUA
+    // 🌍 BILINGUA
 
-if(window.applyStaticTranslations){
+    if(window.applyStaticTranslations){
 
-window.applyStaticTranslations();
+      window.applyStaticTranslations();
 
-}
+    }
 
-setTimeout(()=>{
+    setTimeout(()=>{
 
-  loadProperties();
+      loadProperties();
 
-  loadPMSStats();
+      loadPMSStats();
 
-const toggleBtn =
-document.getElementById(
-  "toggle-booking-form"
-);
+      // =====================================
+      // ➕ BOOKING FORM OPEN
+      // =====================================
 
-if(toggleBtn){
+      window.openBookingModal = function(){
 
-  toggleBtn.addEventListener(
-    "click",
-    window.openBookingModal
-  );
+        const form =
+        document.getElementById(
+          "booking-form-container"
+        );
 
-}
+        if(!form) return;
 
-window.openBookingModal = function(){
+        form.style.display =
+        "flex";
 
-const form =
-document.getElementById(
-"booking-form-container"
-);
+      };
 
-if(!form) return;
+      // =====================================
+      // ❌ BOOKING FORM CLOSE
+      // =====================================
 
-form.style.display =
-"flex";
+      window.closeBookingModal = function(){
 
-};
+        const form =
+        document.getElementById(
+          "booking-form-container"
+        );
 
-window.closeBookingModal = function(){
+        if(!form) return;
 
-const form =
-document.getElementById(
-"booking-form-container"
-);
+        form.style.display =
+        "none";
 
-if(!form) return;
+      };
 
-form.style.display =
-"none";
+      // =====================================
+      // 🎯 TOGGLE BUTTON
+      // =====================================
 
-};
+      const toggleBtn =
+      document.getElementById(
+        "toggle-booking-form"
+      );
 
-},1500);
+      if(toggleBtn){
 
-  }); 
+        toggleBtn.onclick =
+        window.openBookingModal;
+
+      }
+
+    },1500);
+
+});
 
 // =====================================
 // 🌍 PMS LANGUAGE REFRESH
