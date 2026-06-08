@@ -1311,6 +1311,7 @@ const breakEven = avgROI > 0 ? Math.round(100 / avgROI) : 0;
 const dbRoi = document.getElementById("db-roi");
 const dbProfit = document.getElementById("db-profit");
 const dbStatus = document.getElementById("db-status");
+const portfolioCount = document.getElementById("portfolio-count");  
 
 const dbInvestments =
 document.getElementById(
@@ -1323,6 +1324,13 @@ if(dbRoi){
     : "--";
 }
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
+
+  if(portfolioCount){
+
+  portfolioCount.innerText =
+  count;
+
+}
 
   if(dbInvestments){
   dbInvestments.innerText =
