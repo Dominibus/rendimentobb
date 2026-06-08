@@ -573,6 +573,8 @@ SAFE
 .rb-kpi,
 .kpi-card{
 
+  padding:14px;
+
   background:
 linear-gradient(
   180deg,
@@ -1067,15 +1069,15 @@ color:#64748b;
 #booking-summary{
 
 display:grid;
-grid-template-columns:1fr;
+grid-template-columns:repeat(2,1fr);
 gap:10px;
 
 }
-
+  
 #booking-channels{
 
 display:grid;
-grid-template-columns:1fr;
+grid-template-columns:repeat(2,1fr);
 gap:10px;
 
 }
@@ -1149,9 +1151,9 @@ linear-gradient(
 display:grid;
 
 grid-template-columns:
-300px
+250px
 1fr
-320px;
+250px;
 
 gap:20px;
 
@@ -1169,7 +1171,7 @@ background:#f8fafc;
 border:1px solid #e5e7eb;
 border-radius:14px;
 padding:12px;
-height:420px;
+height:650px;
 overflow-y:auto;
 
 }
@@ -1275,9 +1277,9 @@ box-shadow:0 0 0 3px rgba(16,185,129,.15);
 
 #bookings-modal > div{
 
-width:min(96vw,1400px);
-
-max-width:1400px;
+width:min(99vw,1800px);
+  
+max-width:1800px;
 
 max-height:90vh;
 
@@ -3324,7 +3326,7 @@ display:grid;
 grid-template-columns:
 repeat(
 auto-fill,
-minmax(320px,1fr)
+minmax(380px,1fr)
 );
 gap:16px;
 align-items:start;
