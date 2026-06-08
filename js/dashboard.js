@@ -1533,13 +1533,65 @@ ${isPro() ? "PRO" : window.currentPlan.toUpperCase()}
 </div>
 
 <div class="analysis-card">
-<h3>${t("ROI medio","Average ROI")}</h3>
-<strong style="font-size:22px">${avgROIRounded}%</strong>
+
+<h3>
+${t("ROI medio","Average ROI")}
+</h3>
+
+<strong style="
+font-size:22px;
+color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
+">
+${avgROIRounded}%
+</strong>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+font-weight:600;
+color:${avgROI >= marketROI ? "#10b981" : "#ef4444"};
+">
+
+🔥 ${
+avgROI >= marketROI
+? `+${(avgROI - marketROI).toFixed(1)}% ${t(
+"rispetto alla media mercato",
+"above market average"
+)}`
+: `-${(marketROI - avgROI).toFixed(1)}% ${t(
+"sotto la media mercato",
+"below market average"
+)}`
+}
+
+</div>
+
 </div>
 
 <div class="analysis-card">
-<h3>${t("Profitto annuo","Yearly profit")}</h3>
-<strong>${formatCurrency(yearlyProfit)}</strong>
+
+<h3>
+${t("Profitto annuo","Yearly profit")}
+</h3>
+
+<strong>
+${formatCurrency(yearlyProfit)}
+</strong>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+font-weight:600;
+color:#10b981;
+">
+
+💰 ${t(
+"profitto stimato nei prossimi 12 mesi",
+"estimated profit over the next 12 months"
+)}
+
+</div>
+
 </div>
 
 <div class="analysis-card">
