@@ -256,12 +256,14 @@ datasets:[
 label: t("ROI %","ROI %"),
 data:roiValues,
 borderColor:"#10b981",
+borderWidth:4,  
 backgroundColor:gradient,
 pointBackgroundColor:"#10b981",
 pointBorderColor:"#fff",
 pointBorderWidth:2,  
-pointRadius:5,
-pointHoverRadius:7,
+pointRadius:7,
+pointHoverRadius:10,
+pointBorderWidth:3,
 tension:0.45,
 fill:true
 },
@@ -287,8 +289,21 @@ plugins:{
 legend:{display:false},
 
 tooltip:{
+backgroundColor:"#0f172a",
+padding:14,
+cornerRadius:14,
+
+titleFont:{
+size:14,
+weight:"700"
+},
+
+bodyFont:{
+size:13
+},
+
 callbacks:{
-label:(ctx)=> ctx.raw.toFixed(1) + " %"
+label:(ctx)=> "ROI: " + ctx.raw.toFixed(1) + "%"
 }
 }
 
@@ -1819,7 +1834,7 @@ const breakEven = new Array(yearlyCashflow.length).fill(0);
 
 new Chart(ctx,{
 
-type:"line",
+type:"bar",
 
 data:{
 labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
@@ -1827,15 +1842,18 @@ labels:["Anno 1","Anno 2","Anno 3","Anno 4","Anno 5"],
 datasets:[
 
 {
-label: t("Cashflow","Cashflow"),
+label:t("Cashflow","Cashflow"),
 data:yearlyCashflow,
-borderColor:"#2563eb",
-backgroundColor:"rgba(37,99,235,0.15)",
-pointBackgroundColor:colors,
-pointRadius:6,
-pointHoverRadius:8,
-tension:0.35,
-fill:true
+
+backgroundColor:
+yearlyCashflow.map(v =>
+v >= 0
+? "#10b981"
+: "#ef4444"
+),
+
+borderRadius:14,
+borderSkipped:false
 },
 
 {
@@ -5511,12 +5529,17 @@ function renderPMSPerformanceChart(
 
       datasets:[{
 
-        label:"Revenue",
+label:"Revenue",
 
-        data:
-          monthlyRevenue
+data:monthlyRevenue,
 
-      }]
+backgroundColor:"#10b981",
+
+borderRadius:12,
+
+borderSkipped:false
+
+}]
 
     },
 
