@@ -705,7 +705,8 @@ linear-gradient(
 
   color:#0f172a;
 
-  margin-bottom:14px;
+  margin-bottom:0;
+  height:100%;
 
 }
 
@@ -3306,7 +3307,17 @@ Gestisci arrivi, partenze e soggiorni
 </div>
 
 <div
-id="bookings-list">
+id="bookings-list"
+style="
+display:grid;
+grid-template-columns:
+repeat(
+auto-fill,
+minmax(320px,1fr)
+);
+gap:16px;
+align-items:start;
+">
 </div>
 
 </div>
