@@ -1064,12 +1064,26 @@ color:#64748b;
 📊 PMS KPI
 ===================================== */
 
-#booking-summary,
-#booking-channels,
+#booking-summary{
+
+display:grid;
+grid-template-columns:1fr;
+gap:10px;
+
+}
+
+#booking-channels{
+
+display:grid;
+grid-template-columns:1fr;
+gap:10px;
+
+}
+
 #booking-source-summary{
 
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:1fr;
 gap:10px;
 
 }
@@ -1086,7 +1100,6 @@ margin:0;
 
 position:relative;
 overflow:hidden;
-
 transition:.25s ease;
 
 background:
@@ -1112,7 +1125,6 @@ box-shadow:
 content:"";
 
 position:absolute;
-
 top:0;
 left:0;
 
@@ -1126,7 +1138,7 @@ linear-gradient(
 #34d399
 );
 
-}  
+}
 
 /* =====================================
 🏨 PMS BOOKING LAYOUT
@@ -2860,7 +2872,7 @@ data-en="📅 Booking">
 <div
 style="
 display:grid;
-grid-template-columns:180px 1fr;
+grid-template-columns:minmax(280px,320px) 1fr;
 gap:20px;
 align-items:start;
 ">
@@ -2872,7 +2884,7 @@ align-items:start;
 id="booking-summary"
 style="
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:1fr;
 gap:10px;
 margin-bottom:15px;
 ">
