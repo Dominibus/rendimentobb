@@ -1312,12 +1312,22 @@ const dbRoi = document.getElementById("db-roi");
 const dbProfit = document.getElementById("db-profit");
 const dbStatus = document.getElementById("db-status");
 
+const dbInvestments =
+document.getElementById(
+  "db-investments"
+);  
+
 if(dbRoi){
   dbRoi.innerText = avgROI > 0
     ? avgROIRounded + "%"
     : "--";
 }
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
+
+  if(dbInvestments){
+  dbInvestments.innerText =
+  count;
+}
 
 if(dbStatus){
 
