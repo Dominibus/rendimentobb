@@ -72,7 +72,7 @@ body{
 /* ================= HERO TOP ================= */
 
 .dashboard-hero{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+  background:linear-gradient(135deg,#0f172a,#172554,#1e3a8a);
   color:white;
 
   padding:28px;
@@ -573,6 +573,9 @@ SAFE
 .rb-kpi,
 .kpi-card{
 
+  height:100%;
+  transition:.25s ease;
+
   padding:14px;
 
   background:
@@ -594,6 +597,17 @@ linear-gradient(
 
   backdrop-filter:
   blur(10px);
+
+}
+
+  .analysis-card:hover,
+.rb-kpi:hover,
+.kpi-card:hover{
+
+transform:translateY(-4px);
+
+box-shadow:
+0 20px 40px rgba(15,23,42,.08);
 
 }
 
@@ -661,7 +675,7 @@ linear-gradient(
   display:grid;
 
   grid-template-columns:
-  repeat(auto-fit,minmax(320px,1fr));
+ repeat(auto-fit,minmax(380px,1fr));
 
   gap:18px;
 
@@ -1779,81 +1793,7 @@ data-en="📈 Real ROI">
       <h3 id="pms-guests">0</h3>
     </div>
 
-    <!-- Arrivals Today -->
-<div class="rb-kpi">
-
-<span
-data-it="🚪 Arrivi oggi"
-data-en="🚪 Arrivals Today">
-
-🚪 Arrivi oggi
-
-</span>
-
-<h3 id="pms-arrivals-today">0</h3>
-
-</div>
-
-<!-- Departures Today -->
-<div class="rb-kpi">
-
-<span
-data-it="🧳 Partenze oggi"
-data-en="🧳 Departures Today">
-
-🧳 Partenze oggi
-
-</span>
-
-<h3 id="pms-departures-today">0</h3>
-
-</div>
-
-<!-- Guests In House -->
-<div class="rb-kpi">
-
-<span
-data-it="🏠 Ospiti presenti"
-data-en="🏠 Guests In House">
-
-🏠 Ospiti presenti
-
-</span>
-
-<h3 id="pms-guests-in-house">0</h3>
-
-</div>
-
-<!-- Check-In Today -->
-<div class="rb-kpi">
-
-<span
-data-it="🟢 Check-In Oggi"
-data-en="🟢 Check-In Today">
-
-🟢 Check-In Oggi
-
-</span>
-
-<h3 id="pms-checkin-today">0</h3>
-
-</div>
-
-<!-- Check-Out Today -->
-<div class="rb-kpi">
-
-<span
-data-it="🔴 Check-Out Oggi"
-data-en="🔴 Check-Out Today">
-
-🔴 Check-Out Oggi
-
-</span>
-
-<h3 id="pms-checkout-today">0</h3>
-
-</div>
-
+    
 <!-- Pending Confirmation -->
 <div class="rb-kpi">
 
@@ -2416,17 +2356,7 @@ Performance rispetto al mercato
   📊 Analisi basata sui tuoi investimenti salvati
   </div>
 
-  <!-- IMAGE -->
-  <img 
-  src="/img/dashboard-investment-map.jpg"
-  style="
-    width:100%;
-    border-radius:14px;
-    margin-top:10px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  ">
-
-</div>
+ </div>
 
 <!-- PAGINAZIONE -->
 
