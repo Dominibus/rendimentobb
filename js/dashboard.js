@@ -3464,6 +3464,12 @@ document.addEventListener(
         form.style.display =
         "flex";
 
+        setTimeout(()=>{
+
+        updateBookingTotal();
+
+        },100);
+
       };
 
       // =====================================
@@ -4250,6 +4256,10 @@ function updateBookingTotal(){
   const total =
     nights * adr;
 
+  // =====================================
+  // FORM TOTAL
+  // =====================================
+
   const totalField =
     document.getElementById(
       "booking-total"
@@ -4259,6 +4269,46 @@ function updateBookingTotal(){
 
     totalField.value =
       total;
+
+  }
+
+  // =====================================
+  // LIVE KPI
+  // =====================================
+
+  const revenueEl =
+    document.getElementById(
+      "booking-live-revenue"
+    );
+
+  const nightsEl =
+    document.getElementById(
+      "booking-live-nights"
+    );
+
+  const adrEl =
+    document.getElementById(
+      "booking-live-adr"
+    );
+
+  if(revenueEl){
+
+    revenueEl.innerText =
+      formatCurrency(total);
+
+  }
+
+  if(nightsEl){
+
+    nightsEl.innerText =
+      nights;
+
+  }
+
+  if(adrEl){
+
+    adrEl.innerText =
+      formatCurrency(adr);
 
   }
 
