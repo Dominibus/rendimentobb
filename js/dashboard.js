@@ -4998,9 +4998,23 @@ font-size:12px;
 color:#64748b;
 ">
 
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:12px;
+color:#64748b;
+">
+
 <span>
-📅 ${data.bookings}
+${data.bookings} pren.
 </span>
+
+<span>
+€${data.revenue.toFixed(0)}
+</span>
+
+</div>
 
 <span>
 €${data.revenue.toFixed(0)}
