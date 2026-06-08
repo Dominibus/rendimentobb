@@ -2874,7 +2874,7 @@ data-en="📅 Booking">
 <div
 style="
 display:grid;
-grid-template-columns:minmax(220px,240px) 1fr;
+grid-template-columns:minmax(320px,360px) 1fr;
 gap:20px;
 align-items:start;
 ">
@@ -2886,7 +2886,7 @@ align-items:start;
 id="booking-summary"
 style="
 display:grid;
-grid-template-columns:1fr;
+grid-template-columns:repeat(2,1fr);
 gap:10px;
 margin-bottom:15px;
 ">
@@ -2923,23 +2923,17 @@ margin-bottom:15px;
 ">
 
 <h3
+id="toggle-booking-form"
 style="
 margin:0;
 font-size:16px;
 font-weight:700;
+cursor:pointer;
 ">
 
 ➕ Nuova Prenotazione
 
 </h3>
-
-<button
-id="toggle-booking-form"
-class="btn-dashboard">
-
-➕
-
-</button>
 
 </div>
 
@@ -3381,7 +3375,7 @@ data-en="⬜ Available">
 <div
 id="booking-calendar"
 style="
-min-height:320px;
+min-height:520px;
 padding:20px;
 background:#f8fafc;
 border:1px solid #e5e7eb;
