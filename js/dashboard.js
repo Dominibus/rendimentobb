@@ -4558,11 +4558,35 @@ ${b.guestName}
 
 <div
 style="
-font-size:12px;
-color:#94a3b8;
-margin-top:4px;
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+font-weight:600;
 ">
-Booking #${docItem.id.substring(0,6)}
+
+${window.t(
+  "Canale",
+  "Channel"
+)}
+:
+
+${b.source || "Direct"}
+
+•
+
+${nights}
+
+${window.t(
+  "notti",
+  "nights"
+)}
+
+•
+
+€${Number(
+  b.totalAmount || 0
+).toFixed(0)}
+
 </div>
 
 </div>
