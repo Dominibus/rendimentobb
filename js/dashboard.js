@@ -4977,13 +4977,40 @@ if(channelsEl){
 
     channelsHtml += `
 
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      padding:8px 0;
-      border-bottom:1px solid #e2e8f0;
-      font-size:13px;
-    ">
+<div style="
+padding:10px 0;
+border-bottom:1px solid #e2e8f0;
+">
+
+<div style="
+font-size:13px;
+font-weight:700;
+color:#0f172a;
+margin-bottom:4px;
+">
+${channelNames[name] || name}
+</div>
+
+<div style="
+display:flex;
+justify-content:space-between;
+font-size:12px;
+color:#64748b;
+">
+
+<span>
+📅 ${data.bookings}
+</span>
+
+<span>
+€${data.revenue.toFixed(0)}
+</span>
+
+</div>
+
+</div>
+
+`;
 
       <strong>
         ${channelNames[name] || name}
