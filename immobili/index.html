@@ -1509,76 +1509,73 @@ container.innerHTML = `
 </div>
 `;
 
-setTimeout(()=>{
+const database =
+window.rbPropertyDatabase || [];
 
-let roi1;
-let roi2;  
+const maxPrice =
+Number(
+document.getElementById("searchPrice")
+?.value || 999999999
+);
 
-let price1;
-let price2;
-let sqm1;
-let sqm2;
+const minSqm =
+Number(
+document.getElementById("searchSqm")
+?.value || 0
+);
 
-if(val.includes("napoli")){
+const results =
+database.filter(property=>{
 
-price1 = 180000;
-price2 = 240000;
+const cityMatch =
+property.city.includes(
+val
+);
 
-sqm1 = 65;
-sqm2 = 85;
+const priceMatch =
+property.price <= maxPrice;
 
-roi1 = 17;
-roi2 = 14.5;
+const sqmMatch =
+property.sqm >= minSqm;
+
+return (
+cityMatch &&
+priceMatch &&
+sqmMatch
+);
+
+});
+
+if(!results.length){
+
+container.innerHTML = `
+
+<div style="
+padding:30px;
+text-align:center;
+color:#64748b;
+">
+
+${
+window.currentLang==="en"
+? "No properties found. Try increasing budget."
+: "Nessun immobile trovato. Prova ad aumentare il budget."
+}
+
+</div>
+
+`;
+
+return;
 
 }
-else if(val.includes("roma")){
 
-price1 = 280000;
-price2 = 340000;
+const first =
+results[0];
 
-sqm1 = 70;
-sqm2 = 95;
-
-roi1 = 13;
-roi2 = 11.5;
-
-}
-else if(val.includes("milano")){
-
-price1 = 350000;
-price2 = 420000;
-
-sqm1 = 60;
-sqm2 = 90;
-
-roi1 = 10;
-roi2 = 8.5;
-
-}
-else if(val.includes("firenze")){
-
-price1 = 260000;
-price2 = 320000;
-
-sqm1 = 60;
-sqm2 = 80;
-
-roi1 = 12;
-roi2 = 10.5;
-
-}
-else{
-
-price1 = 200000;
-price2 = 280000;
-
-sqm1 = 65;
-sqm2 = 85;
-
-roi1 = 9;
-roi2 = 7.5;
-
-}
+const second =
+results[1] ||
+results[0];  
 
 const badge1 = roi1 > 8
 ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
@@ -1744,28 +1741,24 @@ ${resultsTitle}
 <div class="property-grid">
 
 ${createCard(
-window.currentLang==="en"
-? `${city} ROI Opportunity`
-: `Opportunità ROI ${city}`,
-price1,
-sqm1,
-roi1,
-badge1,
-"Immobiliare.it",
-url1,
+first.title,
+first.price,
+first.sqm,
+first.roi,
+"",
+first.portal,
+first.url,
 true
 )}
 
 ${createCard(
-window.currentLang==="en"
-? `Premium Property ${city}`
-: `Immobile Premium ${city}`,
-price2,
-sqm2,
-roi2,
-badge2,
-"Idealista",
-url2
+second.title,
+second.price,
+second.sqm,
+second.roi,
+"",
+second.portal,
+second.url
 )}
 
 </div>
