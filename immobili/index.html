@@ -1571,12 +1571,38 @@ return;
 
 }
 
-const first =
-results[0];
+const first = results[0];
 
-const second =
-results[1] ||
-results[0];  
+const second = {
+
+title:
+window.currentLang==="en"
+? "Premium Property " + city
+: "Immobile Premium " + city,
+
+price:
+Math.round(first.price * 1.15),
+
+sqm:
+first.sqm + 10,
+
+roi:
+Math.max(
+8,
+Number(first.roi) - 2
+),
+
+portal:
+first.portal === "Immobiliare.it"
+? "Idealista"
+: "Immobiliare.it",
+
+url:
+first.portal === "Immobiliare.it"
+? `https://www.idealista.it/vendita-case/${city.toLowerCase()}/`
+: `https://www.immobiliare.it/vendita-case/${city.toLowerCase()}/`
+
+};
 
 function createCard(
   title,
@@ -1601,7 +1627,12 @@ border-radius:18px;
 
 <div style="
 height:180px;
-background:url('/img/cities/${val}.jpg');
+background:
+linear-gradient(
+135deg,
+#10b981,
+#059669
+);
 background-size:cover;
 background-position:center;
 ">
