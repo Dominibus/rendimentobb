@@ -1410,6 +1410,90 @@ cityInput ||
 
 const container = document.getElementById("property-search-results");
 
+
+const goal =
+document.getElementById(
+"investmentGoal"
+)?.value || "roi";
+
+const aiBox =
+document.getElementById(
+"ai-property-result"
+);
+
+if(aiBox){
+
+let recommendation = "";
+
+if(goal === "roi"){
+
+recommendation =
+window.currentLang==="en"
+? "🎯 Recommended strategy: focus on Naples and secondary tourist cities. Highest ROI potential."
+: "🎯 Strategia consigliata: concentrati su Napoli e città turistiche secondarie. Massimo potenziale ROI.";
+
+}
+
+else if(goal === "cashflow"){
+
+recommendation =
+window.currentLang==="en"
+? "💰 Recommended strategy: look for larger properties with multiple rooms to maximize monthly cashflow."
+: "💰 Strategia consigliata: cerca immobili più grandi con più camere per massimizzare il cashflow mensile.";
+
+}
+
+else if(goal === "safe"){
+
+recommendation =
+window.currentLang==="en"
+? "🛡️ Recommended strategy: Rome and Florence offer more stable demand and lower volatility."
+: "🛡️ Strategia consigliata: Roma e Firenze offrono una domanda più stabile e minore volatilità.";
+
+}
+
+else{
+
+recommendation =
+window.currentLang==="en"
+? "📈 Recommended strategy: focus on areas with strong long-term appreciation potential."
+: "📈 Strategia consigliata: punta su zone con forte rivalutazione immobiliare nel lungo periodo.";
+
+}
+
+aiBox.style.display = "block";
+
+aiBox.innerHTML = `
+
+<div style="
+font-size:15px;
+font-weight:700;
+color:#0f172a;
+margin-bottom:8px;
+">
+
+🤖 ${
+window.currentLang==="en"
+? "AI Property Recommendation"
+: "Consiglio AI Immobili"
+}
+
+</div>
+
+<div style="
+font-size:14px;
+color:#475569;
+line-height:1.6;
+">
+
+${recommendation}
+
+</div>
+
+`;
+
+}  
+
 // ===== BACKGROUND SYNC =====
 const val = city.toLowerCase();
 
