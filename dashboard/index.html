@@ -227,6 +227,7 @@ body{
 /* ================= CARD ================= */
 
 .card{
+  overflow:hidden;
   background:var(--card);
   border-radius:16px;
   padding:22px;
@@ -251,13 +252,27 @@ body{
 /* ================= CHART (FIX IMPORTANTE) ================= */
 
 .chart-big{
-  height:520px;
-  width:100%;
-  margin-top:20px;
+
+height:520px;
+width:100%;
+
+margin-top:20px;
+
+padding:12px;
+
+background:
+linear-gradient(
+180deg,
+rgba(248,250,252,.6),
+rgba(255,255,255,.95)
+);
+
+border-radius:18px;
+
 }
 
 .chart-medium{
-  height:260px;
+  height:320px;
 }
 
 
@@ -302,12 +317,12 @@ body{
 /* ================= CTA ================= */
 
 .upgrade-box{
-  background:
+background:
 linear-gradient(
 135deg,
 #020617,
 #0f172a,
-#1e3a8a
+#1e40af
 );
   color:white;
 
@@ -507,7 +522,7 @@ overflow:hidden;
 
 .rb-hero-card{
 
-  min-height:150px;
+min-height:170px;
 display:flex;
 flex-direction:column;
 justify-content:center;
@@ -691,6 +706,26 @@ box-shadow:
 #roi-target-calculator,
 #revenue-simulator{
   margin-bottom:28px;
+}
+
+  /* =====================================
+🔥 PREMIUM CARDS
+===================================== */
+
+#portfolio-performance,
+#roi-market-comparison,
+#investment-insight{
+
+background:
+linear-gradient(
+180deg,
+#ffffff,
+#f8fafc
+);
+
+border:
+1px solid #dbeafe;
+
 }
 
   #market-hero-bg::after{
@@ -902,6 +937,8 @@ linear-gradient(
 
 .portfolio-stat{
 
+  transition:.25s ease;
+
   background:
 linear-gradient(
   180deg,
@@ -916,6 +953,15 @@ linear-gradient(
   padding:24px 18px;
 
   text-align:center;
+
+}
+
+  .portfolio-stat:hover{
+
+transform:translateY(-4px);
+
+box-shadow:
+0 20px 40px rgba(15,23,42,.08);
 
 }
 
