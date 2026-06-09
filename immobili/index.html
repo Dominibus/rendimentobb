@@ -1306,8 +1306,9 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>  
 
 <!-- 🔥 PRIMA DEFINIAMO LE FUNZIONI -->
-<script>
 <script src="/js/property-database.js"></script>
+
+<script>
 // ================= ANALYZE PROPERTY =================
 
 window.analyzeProperty = function(){
@@ -1577,14 +1578,6 @@ const second =
 results[1] ||
 results[0];  
 
-const badge1 = roi1 > 8
-? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
-: "";
-
-const badge2 = roi2 > 8
-? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
-: "";
-
 function createCard(
   title,
   price,
@@ -1764,8 +1757,6 @@ second.url
 </div>
 
 `;
-
-},600);
 
 };
 
