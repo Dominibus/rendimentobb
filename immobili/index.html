@@ -1511,13 +1511,51 @@ container.innerHTML = `
 
 setTimeout(()=>{
 
-const price1 = 180000;
-const sqm1 = 65;
-const roi1 = ((15000 / price1) * 100).toFixed(1);
+let price1;
+let price2;
+let sqm1;
+let sqm2;
 
-const price2 = 240000;
-const sqm2 = 85;
-const roi2 = ((18000 / price2) * 100).toFixed(1);
+if(val.includes("napoli")){
+
+price1 = 180000;
+price2 = 240000;
+sqm1 = 65;
+sqm2 = 85;
+
+}
+else if(val.includes("roma")){
+
+price1 = 280000;
+price2 = 340000;
+sqm1 = 70;
+sqm2 = 95;
+
+}
+else if(val.includes("milano")){
+
+price1 = 350000;
+price2 = 420000;
+sqm1 = 60;
+sqm2 = 90;
+
+}
+else if(val.includes("firenze")){
+
+price1 = 260000;
+price2 = 320000;
+sqm1 = 60;
+sqm2 = 80;
+
+}
+else{
+
+price1 = 200000;
+price2 = 280000;
+sqm1 = 65;
+sqm2 = 85;
+
+}
 
 const badge1 = roi1 > 8
 ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
@@ -1552,7 +1590,11 @@ border-radius:20px;
 font-size:11px;
 font-weight:600;
 ">
-TOP DEAL
+${
+window.currentLang==="en"
+? "TOP DEAL"
+: "MIGLIORE AFFARE"
+}
 </div>
 ` : ""}
 
@@ -1603,11 +1645,31 @@ ${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
 }
 
 // ===== RENDER =====
+
+const resultsTitle =
+window.currentLang==="en"
+? `AI found the best opportunities in ${city}`
+: `L'AI ha trovato le migliori opportunità a ${city}`;
+
 container.innerHTML = `
+
+<h3 style="
+text-align:center;
+margin-bottom:25px;
+color:#059669;
+font-size:22px;
+">
+
+${resultsTitle}
+
+</h3>
+
 <div class="property-grid">
 
 ${createCard(
-window.currentLang==="en"?"Investment apartment":"Bilocale investimento",
+window.currentLang==="en"
+? `${city} ROI Opportunity`
+: `Opportunità ROI ${city}`,
 price1,
 sqm1,
 roi1,
@@ -1616,7 +1678,9 @@ true
 )}
 
 ${createCard(
-window.currentLang==="en"?"Renovated apartment":"Trilocale ristrutturato",
+window.currentLang==="en"
+? `Premium Property ${city}`
+: `Immobile Premium ${city}`,
 price2,
 sqm2,
 roi2,
@@ -1624,6 +1688,7 @@ badge2
 )}
 
 </div>
+
 `;
 
 },600);
