@@ -251,6 +251,21 @@ body.immobili-page .input-group input{
   transition:.2s;
 }
 
+body.immobili-page .input-group select{
+
+padding:14px;
+border-radius:12px;
+border:1px solid #e2e8f0;
+
+background:#ffffff;
+color:#0f172a;
+
+box-shadow:0 6px 18px rgba(0,0,0,0.05);
+
+width:100%;
+
+}
+  
 body.immobili-page .input-group input:focus{
   border-color:#10b981;
   box-shadow:0 0 0 3px rgba(16,185,129,0.15);
@@ -315,6 +330,34 @@ body.immobili-page h3{
 body.immobili-page section{
   margin-top:90px;
 }
+
+/* =====================================
+🤖 AI SEARCH HELPER
+===================================== */
+
+body.immobili-page .immobili-ai-helper{
+
+max-width:800px;
+
+margin:25px auto;
+
+padding:16px;
+
+border-radius:14px;
+
+background:#ecfdf5;
+
+border:1px solid #bbf7d0;
+
+text-align:center;
+
+font-size:14px;
+
+font-weight:600;
+
+color:#065f46;
+
+}  
 
 /* =====================================
 📱 MOBILE CLEAN FIX (NO BREAK UI)
@@ -932,6 +975,18 @@ Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B.
 
 </p>
 
+<div class="immobili-ai-helper">
+
+🤖 <span
+data-it="Dimmi budget, città e obiettivo. Ti aiuterò a trovare l'immobile più adatto."
+data-en="Tell me budget, city and goal. I'll help you find the best property.">
+
+Dimmi budget, città e obiettivo. Ti aiuterò a trovare l'immobile più adatto.
+
+</span>
+
+</div>
+  
 <div style="max-width:800px;margin:auto;margin-top:40px">
 
 <div class="form-grid">
@@ -958,6 +1013,34 @@ data-en-placeholder="Price e.g. 200000">
 placeholder="60 m²"
 data-it-placeholder="Metri quadri es. 60"
 data-en-placeholder="Size e.g. 60">
+</div>
+
+  <div class="input-group">
+
+<label
+data-it="Obiettivo"
+data-en="Goal">
+
+Obiettivo
+
+</label>
+
+<select id="investmentGoal">
+
+<option value="roi">
+ROI massimo
+</option>
+
+<option value="cashflow">
+Cashflow
+</option>
+
+<option value="safe">
+Basso rischio
+</option>
+
+</select>
+
 </div>
 
 </div>
