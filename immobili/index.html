@@ -617,11 +617,35 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
     <div class="property-roi">17%</div>
 
-    <div class="market-extra"
-         data-it="✔ Domanda costante tutto l’anno"
-         data-en="✔ Year-round demand">
-      ✔ Domanda costante tutto l’anno
-    </div>
+   <div class="market-extra">
+
+💰 <span
+data-it="Prezzo medio: €180.000"
+data-en="Average price: €180,000">
+Prezzo medio: €180.000
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏨 <span
+data-it="Occupazione: 72%"
+data-en="Occupancy: 72%">
+Occupazione: 72%
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏠 <span
+data-it="Opportunità: 12"
+data-en="Opportunities: 12">
+Opportunità: 12
+</span>
+
+</div>
 
     <div class="market-link"
          data-it="Analizza mercato →"
@@ -648,11 +672,35 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
     <div class="property-roi">13%</div>
 
-    <div class="market-extra"
-         data-it="✔ Mercato stabile e prevedibile"
-         data-en="✔ Stable and predictable market">
-      ✔ Mercato stabile e prevedibile
-    </div>
+    <div class="market-extra">
+
+💰 <span
+data-it="Prezzo medio: €290.000"
+data-en="Average price: €290,000">
+Prezzo medio: €290.000
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏨 <span
+data-it="Occupazione: 68%"
+data-en="Occupancy: 68%">
+Occupazione: 68%
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏠 <span
+data-it="Opportunità: 9"
+data-en="Opportunities: 9">
+Opportunità: 9
+</span>
+
+</div>
 
     <div class="market-link"
          data-it="Analizza mercato →"
@@ -679,11 +727,35 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
     <div class="property-roi">12%</div>
 
-    <div class="market-extra"
-         data-it="🌍 Clientela internazionale"
-         data-en="🌍 International clients">
-      🌍 Clientela internazionale
-    </div>
+    <div class="market-extra">
+
+💰 <span
+data-it="Prezzo medio: €260.000"
+data-en="Average price: €260,000">
+Prezzo medio: €260.000
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏨 <span
+data-it="Occupazione: 70%"
+data-en="Occupancy: 70%">
+Occupazione: 70%
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏠 <span
+data-it="Opportunità: 7"
+data-en="Opportunities: 7">
+Opportunità: 7
+</span>
+
+</div>
 
     <div class="market-link"
          data-it="Analizza mercato →"
@@ -714,11 +786,35 @@ data-en="🔥 1,247+ investors are analyzing properties in real time">
 
     <div class="property-roi">10%</div>
 
-    <div class="market-extra"
-         data-it="⚠️ Margini più compressi"
-         data-en="⚠️ Lower margins">
-      ⚠️ Margini più compressi
-    </div>
+    <div class="market-extra">
+
+💰 <span
+data-it="Prezzo medio: €350.000"
+data-en="Average price: €350,000">
+Prezzo medio: €350.000
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏨 <span
+data-it="Occupazione: 65%"
+data-en="Occupancy: 65%">
+Occupazione: 65%
+</span>
+
+</div>
+
+<div class="market-extra">
+
+🏠 <span
+data-it="Opportunità: 5"
+data-en="Opportunities: 5">
+Opportunità: 5
+</span>
+
+</div>
 
     <div class="market-link"
          data-it="Analizza mercato →"
@@ -1469,9 +1565,13 @@ window.handleCityClick = function(el){
   // 🧪 FREE USER
   // =====================
   if(plan === "free"){
-    showUpgradeModal();
-    return;
-  }
+
+window.location.href =
+"/immobili/" + city + "/";
+
+return;
+
+}
 
   // =====================
   // 💰 INVESTOR / PRO
