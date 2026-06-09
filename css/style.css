@@ -12947,12 +12947,16 @@ section:not(.hero) h3 {
   max-width:320px;
   height:100vh;
 
-  background:#ffffff !important; /* 🔥 FORZA BIANCO */
+  background:#ffffff !important;
 
   z-index:9999;
   transition:all .3s ease;
 
-  padding:80px 20px 20px;
+  padding:80px 20px 120px;
+
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+
   box-shadow:-20px 0 60px rgba(0,0,0,0.2);
 }
 
