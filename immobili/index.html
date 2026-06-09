@@ -1511,6 +1511,9 @@ container.innerHTML = `
 
 setTimeout(()=>{
 
+let roi1;
+let roi2;  
+
 let price1;
 let price2;
 let sqm1;
@@ -1520,40 +1523,60 @@ if(val.includes("napoli")){
 
 price1 = 180000;
 price2 = 240000;
+
 sqm1 = 65;
 sqm2 = 85;
+
+roi1 = 17;
+roi2 = 14.5;
 
 }
 else if(val.includes("roma")){
 
 price1 = 280000;
 price2 = 340000;
+
 sqm1 = 70;
 sqm2 = 95;
+
+roi1 = 13;
+roi2 = 11.5;
 
 }
 else if(val.includes("milano")){
 
 price1 = 350000;
 price2 = 420000;
+
 sqm1 = 60;
 sqm2 = 90;
+
+roi1 = 10;
+roi2 = 8.5;
 
 }
 else if(val.includes("firenze")){
 
 price1 = 260000;
 price2 = 320000;
+
 sqm1 = 60;
 sqm2 = 80;
+
+roi1 = 12;
+roi2 = 10.5;
 
 }
 else{
 
 price1 = 200000;
 price2 = 280000;
+
 sqm1 = 65;
 sqm2 = 85;
+
+roi1 = 9;
+roi2 = 7.5;
 
 }
 
@@ -1606,6 +1629,20 @@ window.currentLang==="en"
 
 <div style="font-size:13px;color:#64748b;margin-top:4px">
 ${sqm} m² · ${city}
+</div>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+color:#475569;
+">
+
+📍 ${
+window.currentLang==="en"
+? "AI selected area"
+: "Zona selezionata dall'AI"
+}
+
 </div>
 
 <div style="
