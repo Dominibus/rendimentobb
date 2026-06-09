@@ -1015,6 +1015,19 @@ Obiettivo
 
 <select id="investmentGoal">
 
+<div
+id="goal-description"
+data-it="🎯 Massimizza il rendimento annuo previsto"
+data-en="🎯 Maximize expected yearly ROI"
+style="
+margin-top:10px;
+font-size:13px;
+color:#64748b;
+text-align:center;
+">
+🎯 Massimizza il rendimento annuo previsto
+</div>  
+
 <option value="roi"
 data-it="ROI massimo"
 data-en="Maximum ROI">
@@ -1065,13 +1078,34 @@ Assistente AI per la ricerca immobili attivo
 
 <div style="text-align:center;margin-top:20px">
 
-<button onclick="searchProperties()" class="btn btn-primary"
-data-it="Cerca immobili"
-data-en="Search properties">
+<button
+id="search-properties-btn"
+onclick="searchProperties()"
+class="btn btn-primary"
+data-it="🤖 Trova il miglior immobile"
+data-en="🤖 Find the best property">
 
-Cerca immobili
+🤖 Trova il miglior immobile
 
 </button>
+
+<div
+id="ai-property-result"
+style="
+display:none;
+margin-top:20px;
+padding:18px;
+border-radius:16px;
+background:
+linear-gradient(
+180deg,
+#ffffff,
+#f8fafc
+);
+border:1px solid #dbeafe;
+text-align:left;
+">
+</div>  
 
 <div style="margin-top:10px;font-size:12px;color:#64748b"
 data-it="✔ Analisi gratuita • Nessuna registrazione • Risultati in 30 secondi"
