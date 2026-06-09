@@ -1588,18 +1588,36 @@ const badge2 = roi2 > 8
 ? (window.currentLang === "en" ? "🔥 Investment Opportunity" : "🔥 Opportunità investimento")
 : "";
 
-function createCard(title, price, sqm, roi, badge, highlight=false){
+function createCard(
+  title,
+  price,
+  sqm,
+  roi,
+  badge,
+  portal,
+  url,
+  highlight=false
+){
 
 return `
+
 <div class="property-card" style="
 position:relative;
-padding:22px;
-border-radius:16px;
+overflow:hidden;
+padding:0;
 background:white;
-box-shadow:0 15px 40px rgba(0,0,0,0.06);
-border:${highlight ? "2px solid #10b981" : "1px solid #e5e7eb"};
-transition:all .25s ease;
+border-radius:18px;
 ">
+
+<div style="
+height:180px;
+background:url('/img/cities/${val}.jpg');
+background-size:cover;
+background-position:center;
+">
+</div>
+
+<div style="padding:20px">
 
 ${highlight ? `
 <div style="
@@ -1608,80 +1626,102 @@ top:12px;
 right:12px;
 background:#10b981;
 color:white;
-padding:4px 10px;
-border-radius:20px;
+padding:6px 12px;
+border-radius:999px;
 font-size:11px;
-font-weight:600;
+font-weight:700;
 ">
-${
-window.currentLang==="en"
-? "TOP DEAL"
-: "MIGLIORE AFFARE"
-}
+TOP ROI
 </div>
 ` : ""}
 
-<h3 style="font-size:18px;margin-bottom:6px">${title}</h3>
+<h3 style="
+font-size:18px;
+margin-bottom:8px;
+">
+${title}
+</h3>
 
-<div style="font-size:22px;font-weight:700;color:#111">
+<div style="
+font-size:26px;
+font-weight:700;
+color:#0f172a;
+">
 €${price.toLocaleString()}
-</div>
-
-<div style="font-size:13px;color:#64748b;margin-top:4px">
-${sqm} m² · ${city}
 </div>
 
 <div style="
 margin-top:8px;
-font-size:13px;
-color:#475569;
-">
-
-📍 ${
-window.currentLang==="en"
-? "AI selected area"
-: "Zona selezionata dall'AI"
-}
-
-</div>
-
-<div style="
-margin-top:12px;
 font-size:14px;
-color:#10b981;
-font-weight:600
+color:#64748b;
 ">
-${window.currentLang==="en"?"Estimated ROI":"ROI stimato"} ${roi}%
+📐 ${sqm} m²
 </div>
 
-${badge ? `
 <div style="
-margin-top:6px;
-font-size:13px;
-color:#f59e0b;
-font-weight:600
-">
-${badge}
-</div>
-` : ""}
-
-<button class="btn btn-primary" style="
-margin-top:14px;
-width:100%;
-border-radius:10px;
+margin-top:8px;
+font-size:14px;
 font-weight:600;
-"
-onclick="openInvestment(${price})">
+color:#10b981;
+">
+ROI ${roi}%
+</div>
 
-${window.currentLang==="en"?"Analyze ROI":"Analizza ROI"}
+<div style="
+margin-top:10px;
+font-size:13px;
+color:#64748b;
+">
+🏢 ${portal}
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+margin-top:16px;
+">
+
+<a
+href="${url}"
+target="_blank"
+class="btn btn-primary"
+style="flex:1;text-align:center"
+>
+
+${window.currentLang==="en"
+? "Open Listing"
+: "Apri annuncio"}
+
+</a>
+
+<button
+onclick="openInvestment(${price})"
+class="btn btn-primary"
+style="flex:1"
+>
+
+${window.currentLang==="en"
+? "Analyze ROI"
+: "Analizza ROI"}
 
 </button>
 
 </div>
+
+</div>
+
+</div>
+
 `;
 }
 
 // ===== RENDER =====
+
+const url1 =
+`https://www.immobiliare.it/vendita-case/${city.toLowerCase()}/`;
+
+const url2 =
+`https://www.idealista.it/vendita-case/${city.toLowerCase()}/`;  
 
 const resultsTitle =
 window.currentLang==="en"
@@ -1711,6 +1751,8 @@ price1,
 sqm1,
 roi1,
 badge1,
+"Immobiliare.it",
+url1,
 true
 )}
 
@@ -1721,7 +1763,9 @@ window.currentLang==="en"
 price2,
 sqm2,
 roi2,
-badge2
+badge2,
+"Idealista",
+url2
 )}
 
 </div>
