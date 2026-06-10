@@ -29,34 +29,154 @@ export default async function handler(req, res) {
   const immobiliareResults = [
 
     {
-      title:"Centro Storico Napoli",
-      city:"napoli",
-      price:180000,
-      sqm:65,
-      roi:17,
-      portal:"Immobiliare.it",
-      url:"https://www.immobiliare.it/vendita-case/napoli/"
-    },
+  title:"Centro Storico Napoli",
+  city:"napoli",
+  price:180000,
+  sqm:65,
+  roi:17,
+  portal:"Immobiliare.it",
+
+  image:"/immobili/napoli-1.jpg",
+
+  url:"https://www.immobiliare.it/vendita-case/napoli/"
+},
 
     {
-      title:"University Area",
-      city:"napoli",
-      price:165000,
-      sqm:60,
-      roi:18,
-      portal:"Immobiliare.it",
-      url:"https://www.immobiliare.it/vendita-case/napoli/"
-    },
+  title:"University Area",
+  city:"napoli",
+  price:165000,
+  sqm:60,
+  roi:18,
+  portal:"Immobiliare.it",
+
+  image:"/immobili/napoli-2.jpg",
+
+  url:"https://www.immobiliare.it/vendita-case/napoli/"
+},
 
     {
-      title:"Vomero Investment",
-      city:"napoli",
-      price:195000,
-      sqm:70,
-      roi:16,
-      portal:"Immobiliare.it",
-      url:"https://www.immobiliare.it/vendita-case/napoli/"
-    }
+  title:"Vomero Investment",
+  city:"napoli",
+  price:195000,
+  sqm:70,
+  roi:16,
+  portal:"Immobiliare.it",
+
+  image:"/immobili/napoli-3.jpg",
+
+  url:"https://www.immobiliare.it/vendita-case/napoli/"
+}
+
+// =====================================
+// 🏠 ROMA
+// =====================================
+
+{
+  title:"Trastevere Tourist Hub",
+  city:"roma",
+  price:295000,
+  sqm:62,
+  roi:13,
+  portal:"Immobiliare.it",
+  image:"/immobili/roma-1.jpg",
+  url:"https://www.immobiliare.it/vendita-case/roma/"
+},
+
+{
+  title:"Vatican Rooms Investment",
+  city:"roma",
+  price:320000,
+  sqm:68,
+  roi:12,
+  portal:"Immobiliare.it",
+  image:"/immobili/roma-2.jpg",
+  url:"https://www.immobiliare.it/vendita-case/roma/"
+},
+
+{
+  title:"Termini Cashflow Property",
+  city:"roma",
+  price:280000,
+  sqm:70,
+  roi:14,
+  portal:"Immobiliare.it",
+  image:"/immobili/roma-3.jpg",
+  url:"https://www.immobiliare.it/vendita-case/roma/"
+},
+
+// =====================================
+// 🏠 MILANO
+// =====================================
+
+{
+  title:"Navigli Business Stay",
+  city:"milano",
+  price:340000,
+  sqm:60,
+  roi:11,
+  portal:"Immobiliare.it",
+  image:"/immobili/milano-1.jpg",
+  url:"https://www.immobiliare.it/vendita-case/milano/"
+},
+
+{
+  title:"Porta Romana Investment",
+  city:"milano",
+  price:365000,
+  sqm:66,
+  roi:10,
+  portal:"Immobiliare.it",
+  image:"/immobili/milano-2.jpg",
+  url:"https://www.immobiliare.it/vendita-case/milano/"
+},
+
+{
+  title:"Central Station Property",
+  city:"milano",
+  price:315000,
+  sqm:58,
+  roi:12,
+  portal:"Immobiliare.it",
+  image:"/immobili/milano-3.jpg",
+  url:"https://www.immobiliare.it/vendita-case/milano/"
+},
+
+// =====================================
+// 🏠 FIRENZE
+// =====================================
+
+{
+  title:"Historic Center Firenze",
+  city:"firenze",
+  price:285000,
+  sqm:60,
+  roi:12,
+  portal:"Immobiliare.it",
+  image:"/immobili/firenze-1.jpg",
+  url:"https://www.immobiliare.it/vendita-case/firenze/"
+},
+
+{
+  title:"Duomo Premium Stay",
+  city:"firenze",
+  price:310000,
+  sqm:68,
+  roi:11,
+  portal:"Immobiliare.it",
+  image:"/immobili/firenze-2.jpg",
+  url:"https://www.immobiliare.it/vendita-case/firenze/"
+},
+
+{
+  title:"Santa Maria Novella Hub",
+  city:"firenze",
+  price:270000,
+  sqm:64,
+  roi:13,
+  portal:"Immobiliare.it",
+  image:"/immobili/firenze-3.jpg",
+  url:"https://www.immobiliare.it/vendita-case/firenze/"
+}    
 
   ];
 
