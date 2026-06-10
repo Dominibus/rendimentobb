@@ -1573,13 +1573,16 @@ return;
 
 const first = results[0];
 
-const second = {
+const second =
+results[1]
+? results[1]
+: {
 
 titleIT:
-"Bilocale Premium " + city,
+`Bilocale Premium ${city}`,
 
 titleEN:
-"Premium Apartment " + city,
+`Premium Apartment ${city}`,
 
 price:
 Math.round(first.price * 1.15),
@@ -1604,7 +1607,6 @@ first.portal === "Immobiliare.it"
 : first.url
 
 };
-
 function createCard(
   title,
   price,
@@ -1660,8 +1662,10 @@ TOP ROI
 <h3 style="
 font-size:18px;
 margin-bottom:8px;
+font-weight:700;
+color:#0f172a;
 ">
-${title}
+${title || ""}
 </h3>
 
 <div style="
@@ -1769,6 +1773,7 @@ ${createCard(
 window.currentLang==="en"
 ? first.titleEN
 : first.titleIT,
+
 first.price,
 first.sqm,
 first.roi,
@@ -1782,6 +1787,7 @@ ${createCard(
 window.currentLang==="en"
 ? second.titleEN
 : second.titleIT,
+
 second.price,
 second.sqm,
 second.roi,
