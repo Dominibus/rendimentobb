@@ -5,6 +5,7 @@ window.rbPropertyDatabase = [
 {
 id:1,
 city:"napoli",
+type:"apartment",
 titleIT:"Monolocale Centro Storico",
 titleEN:"Historic Center Studio",
 price:180000,
@@ -19,6 +20,7 @@ url:"https://www.immobiliare.it/vendita-case/napoli/"
 {
 id:2,
 city:"napoli",
+type:"apartment",
 titleIT:"Bilocale Chiaia",
 titleEN:"Chiaia Apartment",
 price:240000,
@@ -35,6 +37,7 @@ url:"https://www.idealista.it/vendita-case/napoli/"
 {
 id:3,
 city:"roma",
+type:"apartment",
 titleIT:"Bilocale Trastevere",
 titleEN:"Trastevere Apartment",
 price:290000,
@@ -49,6 +52,7 @@ url:"https://www.immobiliare.it/vendita-case/roma/"
 {
 id:4,
 city:"roma",
+type:"apartment",
 titleIT:"Centro Storico Premium",
 titleEN:"Historic Center Premium",
 price:340000,
@@ -65,6 +69,7 @@ url:"https://www.idealista.it/vendita-case/roma/"
 {
 id:5,
 city:"firenze",
+type:"apartment",
 titleIT:"Centro Storico Firenze",
 titleEN:"Florence Historic Center",
 price:260000,
@@ -79,6 +84,7 @@ url:"https://www.immobiliare.it/vendita-case/firenze/"
 {
 id:6,
 city:"firenze",
+type:"apartment",
 titleIT:"Zona Duomo",
 titleEN:"Duomo Area",
 price:320000,
@@ -95,6 +101,7 @@ url:"https://www.idealista.it/vendita-case/firenze/"
 {
 id:7,
 city:"milano",
+type:"apartment",
 titleIT:"Navigli Business",
 titleEN:"Navigli Business Area",
 price:350000,
@@ -109,6 +116,7 @@ url:"https://www.immobiliare.it/vendita-case/milano/"
 {
 id:8,
 city:"milano",
+type:"apartment",
 titleIT:"Porta Nuova Premium",
 titleEN:"Porta Nuova Premium",
 price:420000,
