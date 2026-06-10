@@ -14,10 +14,10 @@ export default async function handler(req, res) {
     req.query.goal || "roi";
 
   // =====================================
-  // 🏠 PROPERTY DATABASE
+  // 🏠 IMMOBILIARE.IT
   // =====================================
 
-  const properties = [
+  const immobiliareResults = [
 
     {
       title:"Centro Storico Napoli",
@@ -47,6 +47,24 @@ export default async function handler(req, res) {
       roi:16,
       portal:"Immobiliare.it",
       url:"https://www.immobiliare.it/vendita-case/napoli/"
+    }
+
+  ];
+
+  // =====================================
+  // 🏠 IDEALISTA
+  // =====================================
+
+  const idealistaResults = [
+
+    {
+      title:"Premium Apartment",
+      city:"napoli",
+      price:207000,
+      sqm:75,
+      roi:15,
+      portal:"Idealista",
+      url:"https://www.idealista.it/vendita-case/napoli/"
     },
 
     {
@@ -55,9 +73,17 @@ export default async function handler(req, res) {
       price:220000,
       sqm:82,
       roi:14,
-      portal:"Immobiliare.it",
-      url:"https://www.immobiliare.it/vendita-case/napoli/"
-    },
+      portal:"Idealista",
+      url:"https://www.idealista.it/vendita-case/napoli/"
+    }
+
+  ];
+
+  // =====================================
+  // 🏠 CASA.IT
+  // =====================================
+
+  const casaItResults = [
 
     {
       title:"Business District",
@@ -65,9 +91,21 @@ export default async function handler(req, res) {
       price:210000,
       sqm:78,
       roi:15,
-      portal:"Immobiliare.it",
-      url:"https://www.immobiliare.it/vendita-case/napoli/"
+      portal:"Casa.it",
+      url:"https://www.casa.it/vendita/residenziale/napoli/"
     }
+
+  ];
+
+  // =====================================
+  // 🚀 FUTURE MULTI PORTAL ENGINE
+  // =====================================
+
+  const properties = [
+
+    ...immobiliareResults,
+    ...idealistaResults,
+    ...casaItResults
 
   ];
 
@@ -113,7 +151,7 @@ export default async function handler(req, res) {
     );
 
   // =====================================
-  // 🤖 ADD SCORE
+  // 🤖 AI ENRICHMENT
   // =====================================
 
   results =
@@ -122,12 +160,24 @@ export default async function handler(req, res) {
       ...p,
 
       score:
-        calculateScore(p)
+        calculateScore(p),
+
+      aiReason:
+
+        p.roi >= 18
+
+          ? "Highest ROI"
+
+        : p.price <= budget * 0.9
+
+          ? "Best value"
+
+        : "Balanced investment"
 
     }));
 
   // =====================================
-  // 🎯 SORT BY GOAL
+  // 🎯 SORTING
   // =====================================
 
   if(goal === "roi"){
@@ -165,6 +215,29 @@ export default async function handler(req, res) {
     results.slice(0,10);
 
   // =====================================
+  // 📊 PORTAL STATS
+  // =====================================
+
+  const portals = {
+
+    immobiliare:
+      results.filter(
+        p => p.portal === "Immobiliare.it"
+      ).length,
+
+    idealista:
+      results.filter(
+        p => p.portal === "Idealista"
+      ).length,
+
+    casait:
+      results.filter(
+        p => p.portal === "Casa.it"
+      ).length
+
+  };
+
+  // =====================================
   // 🚀 RESPONSE
   // =====================================
 
@@ -182,6 +255,8 @@ export default async function handler(req, res) {
 
     totalResults:
       results.length,
+
+    portals,
 
     results
 
