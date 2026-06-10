@@ -1554,6 +1554,22 @@ container.innerHTML = `
 const database =
 window.rbPropertyDatabase || [];
 
+const propertyType =
+document.getElementById(
+"propertyType"
+)?.value || "";
+
+console.log(
+"🏠 SEARCH:",
+{
+city,
+goal,
+propertyType,
+maxPrice,
+minSqm
+}
+);
+
 const maxPrice =
 Number(
 document.getElementById("searchPrice")
@@ -1591,6 +1607,11 @@ typeMatch
 );
 
 });
+
+console.log(
+"🔍 PROPERTY TYPE:",
+propertyType
+);
 
 if(!results.length){
 
