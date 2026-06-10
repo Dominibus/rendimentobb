@@ -1068,23 +1068,38 @@ Tipologia
 
 <select id="propertyType">
 
-<option value="all">
+<option
+value="all"
+data-it="Tutti"
+data-en="All">
 Tutti
 </option>
 
-<option value="apartment">
+<option
+value="apartment"
+data-it="Appartamento"
+data-en="Apartment">
 Appartamento
 </option>
 
-<option value="house">
+<option
+value="house"
+data-it="Casa indipendente"
+data-en="Detached House">
 Casa indipendente
 </option>
 
-<option value="villa">
+<option
+value="villa"
+data-it="Villa"
+data-en="Villa">
 Villa
 </option>
 
-<option value="commercial">
+<option
+value="commercial"
+data-it="Locale commerciale"
+data-en="Commercial Property">
 Locale commerciale
 </option>
 
@@ -1554,11 +1569,6 @@ container.innerHTML = `
 const database =
 window.rbPropertyDatabase || [];
 
-const propertyType =
-document.getElementById(
-"propertyType"
-)?.value || "all";
-
 const maxPrice =
 Number(
 document.getElementById("searchPrice")
@@ -1645,6 +1655,43 @@ window.currentLang==="en"
 return;
 
 }
+
+const first = results[0];
+
+const second =
+results[1]
+? results[1]
+: {
+
+titleIT:
+`Bilocale Premium ${city}`,
+
+titleEN:
+`Premium Apartment ${city}`,
+
+price:
+Math.round(first.price * 1.15),
+
+sqm:
+first.sqm + 10,
+
+roi:
+Math.max(
+8,
+Number(first.roi) - 2
+),
+
+portal:
+first.portal === "Immobiliare.it"
+? "Idealista"
+: "Immobiliare.it",
+
+url:
+first.portal === "Immobiliare.it"
+? "https://www.idealista.it/"
+: first.url
+
+};  
 function createCard(
   title,
   price,
