@@ -1557,18 +1557,7 @@ window.rbPropertyDatabase || [];
 const propertyType =
 document.getElementById(
 "propertyType"
-)?.value || "";
-
-console.log(
-"🏠 SEARCH:",
-{
-city,
-goal,
-propertyType,
-maxPrice,
-minSqm
-}
-);
+)?.value || "all";
 
 const maxPrice =
 Number(
@@ -1582,11 +1571,24 @@ document.getElementById("searchSqm")
 ?.value || 0
 );
 
+console.log(
+"🏠 SEARCH:",
+{
+city,
+goal,
+propertyType,
+maxPrice,
+minSqm
+}
+);
+
 const results =
 database.filter(property=>{
 
 const cityMatch =
-property.city.includes(val);
+property.city.includes(
+val
+);
 
 const priceMatch =
 property.price <= maxPrice;
@@ -1613,6 +1615,13 @@ console.log(
 propertyType
 );
 
+console.log(
+"🏠 RESULTS FOUND:",
+results.length
+);
+
+console.table(results);
+
 if(!results.length){
 
 container.innerHTML = `
@@ -1636,43 +1645,6 @@ window.currentLang==="en"
 return;
 
 }
-
-const first = results[0];
-
-const second =
-results[1]
-? results[1]
-: {
-
-titleIT:
-`Bilocale Premium ${city}`,
-
-titleEN:
-`Premium Apartment ${city}`,
-
-price:
-Math.round(first.price * 1.15),
-
-sqm:
-first.sqm + 10,
-
-roi:
-Math.max(
-8,
-Number(first.roi) - 2
-),
-
-portal:
-first.portal === "Immobiliare.it"
-? "Idealista"
-: "Immobiliare.it",
-
-url:
-first.portal === "Immobiliare.it"
-? "https://www.idealista.it/immobile/34892514/"
-: first.url
-
-};
 function createCard(
   title,
   price,
