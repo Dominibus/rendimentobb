@@ -437,10 +437,6 @@ Scopri se il tuo mutuo sta distruggendo il rendimento del tuo investimento
 
 </h1>
 
-Scopri il vero costo del tuo mutuo prima di firmare
-
-</h1>
-
 <p
 data-it="Analizza rata, ROI, cashflow, sostenibilità e confronto banche in meno di 30 secondi"
 data-en="Analyze payment, ROI, cashflow, sustainability and bank comparison in under 30 seconds">
@@ -505,10 +501,26 @@ font-weight:600;
 
 </div>  
 
-<input id="amount" placeholder="€ 200000">
-<input id="years" placeholder="20">
-<input id="rate" placeholder="3.5%">
-<input id="income" placeholder="Ricavi annui">
+<input
+id="amount"
+placeholder="€ 250000"
+data-it-placeholder="Importo mutuo"
+data-en-placeholder="Mortgage amount">
+<input
+id="years"
+placeholder="20"
+data-it-placeholder="Durata anni"
+data-en-placeholder="Years">
+<input
+id="rate"
+placeholder="3.5%"
+data-it-placeholder="Tasso interesse"
+data-en-placeholder="Interest rate">
+<input
+id="income"
+placeholder="50000"
+data-it-placeholder="Ricavi annui B&B"
+data-en-placeholder="Annual B&B revenue">
 
 <button class="btn-main"
 id="calc-btn"
@@ -611,8 +623,30 @@ border:1px solid #e2e8f0;
 💰 <span data-it="Previsione cashflow" data-en="Cashflow forecast">Previsione cashflow</span>
 </div>
 
-</div>  
-  
+</div>
+
+<div style="
+background:#dcfce7;
+padding:14px;
+border-radius:12px;
+margin-bottom:20px;
+font-size:14px;
+color:#166534;
+font-weight:600;
+">
+
+🎁
+
+<span
+data-it="Report AI completo + confronto banche + strategia mutuo"
+data-en="Complete AI report + bank comparison + mortgage strategy">
+
+Report AI completo + confronto banche + strategia mutuo
+
+</span>
+
+</div>
+
 <input
 id="email"
 placeholder="nome@email.com"
@@ -754,7 +788,7 @@ document.getElementById("impact").innerText =
   lockValue(safeROI.toFixed(1), "%");
 
 document.getElementById("score").innerText =
-  lockValue(score,"%");
+lockValue(score,"/100");
   
 document.querySelector(".lead-box").scrollIntoView({
   behavior:"smooth"
@@ -980,6 +1014,21 @@ margin-bottom:10px;
 ">
 
 🤖 AI Mortgage Advisor
+
+<div style="
+font-size:13px;
+color:#94a3b8;
+margin-bottom:12px;
+">
+
+${
+t(
+"Analisi generata dai dati inseriti",
+"Analysis generated from entered data"
+)
+}
+
+</div>
 
 </div>
 
