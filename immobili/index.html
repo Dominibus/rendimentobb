@@ -1453,6 +1453,11 @@ document.getElementById(
 "investmentGoal"
 )?.value || "roi";
 
+const propertyType =
+document.getElementById(
+"propertyType"
+)?.value || "all";  
+
 const aiBox =
 document.getElementById(
 "ai-property-result"
@@ -1565,9 +1570,7 @@ const results =
 database.filter(property=>{
 
 const cityMatch =
-property.city.includes(
-val
-);
+property.city.includes(val);
 
 const priceMatch =
 property.price <= maxPrice;
@@ -1575,10 +1578,16 @@ property.price <= maxPrice;
 const sqmMatch =
 property.sqm >= minSqm;
 
+const typeMatch =
+propertyType === "all"
+? true
+: property.type === propertyType;
+
 return (
 cityMatch &&
 priceMatch &&
-sqmMatch
+sqmMatch &&
+typeMatch
 );
 
 });
