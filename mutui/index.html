@@ -10,6 +10,24 @@ data-en="B&B Mortgage – ROI simulator + bank comparison">
 Mutuo B&B
 </title>
 
+<p style="
+max-width:600px;
+margin:0 auto 25px;
+color:#64748b;
+line-height:1.7;
+">
+
+<span data-it="
+Ricevi analisi mutuo, confronto banche, sostenibilità finanziaria e suggerimenti AI direttamente via email."
+data-en="
+Receive mortgage analysis, bank comparison, financial sustainability and AI recommendations directly by email.">
+
+Ricevi analisi mutuo, confronto banche, sostenibilità finanziaria e suggerimenti AI direttamente via email.
+
+</span>
+
+</p>  
+
 <meta name="description"
 data-it="Simula mutuo, ROI e confronta banche. Scopri se stai perdendo soldi."
 data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
@@ -380,6 +398,28 @@ button, .btn-main{
   transform:translateY(0);
 }
 
+.ai-rate-box{
+
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#1e293b
+);
+
+color:white;
+
+padding:24px;
+
+border-radius:18px;
+
+margin:20px 0;
+
+box-shadow:
+0 20px 40px rgba(0,0,0,.15);
+
+}  
+
 </style>
 </head>
 
@@ -411,6 +451,55 @@ Analizza rata, ROI, cashflow e rischio in meno di 30 secondi
 <div class="tool-box">
 
 <h3 data-it="Simulatore mutuo" data-en="Mortgage simulator"></h3>
+
+<div style="
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:25px;
+">
+
+<span style="
+background:#dcfce7;
+color:#166534;
+padding:8px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:600;
+">
+
+🤖 AI Report
+
+</span>
+
+<span style="
+background:#eff6ff;
+color:#1d4ed8;
+padding:8px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:600;
+">
+
+🏦 Bank Comparison
+
+</span>
+
+<span style="
+background:#fef3c7;
+color:#92400e;
+padding:8px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:600;
+">
+
+📈 ROI Impact
+
+</span>
+
+</div>  
 
 <input id="amount" placeholder="€ 200000">
 <input id="years" placeholder="20">
@@ -484,30 +573,40 @@ style="display:none;"></div>
 <!-- LEAD -->
 <div class="lead-box">
 
-<h2 data-it="Ricevi offerte reali"
-data-en="Get real offers"></h2>
+<h2
+data-it="Ricevi il tuo Report Mutuo AI"
+data-en="Get your AI Mortgage Report">
 
-<input id="email"
-placeholder="Email"
-data-it-placeholder="Email"
-data-en-placeholder="Email">
+Ricevi il tuo Report Mutuo AI
 
-<input id="phone"
-placeholder="Telefono"
-data-it-placeholder="Telefono"
-data-en-placeholder="Phone"
-inputmode="tel"
-autocomplete="tel">
+</h2>
 
-<button class="btn-main"
-data-it="Ricevi offerte"
-data-en="Get offers"
-onclick="saveLead()"></button>
+<input
+id="email"
+placeholder="nome@email.com"
+data-it-placeholder="Inserisci la tua email"
+data-en-placeholder="Enter your email">
+
+<input
+id="phone"
+placeholder="+39 3331234567"
+data-it-placeholder="Numero di telefono"
+data-en-placeholder="Phone number">
+
+<button
+class="btn-main"
+data-it="🚀 Genera il mio Report AI"
+data-en="🚀 Generate my AI Report"
+onclick="saveLead()">
+
+🚀 Genera il mio Report AI
+
+</button>
 
 <div id="success" class="success-msg"
-data-it="✔ Richiesta inviata"
-data-en="✔ Request sent">
-✔ Richiesta inviata
+data-it="✔ Report richiesto con successo"
+data-en="✔ Report requested successfully">
+✔ Report richiesto con successo
 </div>
 
 </div>
@@ -884,6 +983,47 @@ let html = "<h3 style='margin-top:40px'>🏦 " +
 t("Migliori mutui disponibili","Best mortgage options") +
 "</h3>";
 
+html += `
+
+<div class="ai-rate-box">
+
+<div style="
+font-size:20px;
+font-weight:700;
+margin-bottom:15px;
+">
+🤖 AI Rate Forecast
+</div>
+
+<div style="line-height:1.8">
+
+🇪🇺 ECB Trend
+
+<br>
+
+2024 → 4.50%
+
+<br>
+
+2025 → 3.70%
+
+<br>
+
+2026 → 3.20%
+
+<br><br>
+
+${t(
+"Scenario favorevole ai mutui a tasso fisso.",
+"Current scenario favors fixed-rate mortgages."
+)}
+
+</div>
+
+</div>
+
+`;  
+
 /* PAYWALL HEADER */
 const access = getAccess();
 
@@ -1228,10 +1368,27 @@ async function saveLead(){
 
 <div style="color:#334155">
 
-🏦 ${t(
-  "Un consulente mutui ti contatterà a breve",
-  "A mortgage advisor will contact you shortly"
+🤖 ${
+t(
+"Il report AI e le migliori opportunità mutuo sono state registrate.",
+"The AI report and the best mortgage opportunities have been registered."
+)
+}
+
+</div>
+
+<div style="
+margin-top:10px;
+font-size:14px;
+color:#64748b;
+">
+
+${t(
+"Un consulente potrà contattarti se individueremo condizioni migliori.",
+"A consultant may contact you if we identify better conditions."
 )}
+
+</div>
 
 </div>
 `;
