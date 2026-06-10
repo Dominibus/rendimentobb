@@ -551,15 +551,15 @@ Immobili investimento B&B Italia ROI Napoli Roma Milano Firenze
 <div class="page-title">
 
 <h1
-data-it="Scopri immobili che possono rendere fino al 17% con un B&B"
-data-en="Find properties that can generate up to 17% ROI with a B&B">
-Scopri immobili che possono rendere fino al 17% con un B&B
+data-it="Trova immobili già profittevoli per aprire un B&B"
+data-en="Find profitable properties ready for a B&B">
+Trova immobili già profittevoli per aprire un B&B
 </h1>
 
 <p
-data-it="Il 72% degli investitori perde soldi per analisi sbagliate. Scopri ROI reale, rischio e profitto prima di comprare."
-data-en="72% of investors lose money due to wrong analysis. Discover real ROI, risk and profit before buying.">
-Il 72% degli investitori perde soldi per analisi sbagliate.
+data-it="L'AI analizza ROI, rischio, domanda turistica e cashflow prima che tu acquisti."
+data-en="AI analyzes ROI, risk, tourism demand and cashflow before you buy.">
+L'AI analizza ROI, rischio, domanda turistica e cashflow prima che tu acquisti.
 </p>      
 
 <div style="
@@ -1015,19 +1015,6 @@ Obiettivo
 
 <select id="investmentGoal">
 
-<div
-id="goal-description"
-data-it="🎯 Massimizza il rendimento annuo previsto"
-data-en="🎯 Maximize expected yearly ROI"
-style="
-margin-top:10px;
-font-size:13px;
-color:#64748b;
-text-align:center;
-">
-🎯 Massimizza il rendimento annuo previsto
-</div>  
-
 <option value="roi"
 data-it="ROI massimo"
 data-en="Maximum ROI">
@@ -1053,6 +1040,20 @@ Crescita valore immobile
 </option>
 
 </select>
+
+<div
+id="goal-description"
+data-it="🎯 Massimizza il rendimento annuo previsto"
+data-en="🎯 Maximize expected yearly ROI"
+style="
+margin-top:10px;
+font-size:13px;
+color:#64748b;
+text-align:center;
+">
+🎯 Massimizza il rendimento annuo previsto
+</div>  
+    
 
 </div>
 
@@ -1781,11 +1782,35 @@ ROI ${roi}%
 </div>
 
 <div style="
-margin-top:10px;
+margin-top:8px;
 font-size:13px;
-color:#64748b;
+font-weight:700;
+color:#10b981;
 ">
-🏢 ${portal}
+
+🔥 AI Score ${Math.min(
+100,
+Math.round(
+(roi * 5) +
+(100 - price / 5000)
+)
+)}/100
+
+</div>
+
+<div style="
+display:inline-block;
+padding:4px 10px;
+background:#eff6ff;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+color:#2563eb;
+margin-top:10px;
+">
+
+🏠 ${portal}
+
 </div>
 
 <div style="
