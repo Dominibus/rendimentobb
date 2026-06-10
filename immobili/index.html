@@ -2020,6 +2020,31 @@ window.closeUpgradeModal = function(){
   document.getElementById("upgrade-modal").style.display = "none";
 };
 
+// =====================================
+// 🌍 REFRESH RESULTS AFTER LANGUAGE CHANGE
+// =====================================
+
+document.addEventListener(
+  "rb_language_changed",
+  ()=>{
+
+    const results =
+      document.getElementById(
+        "property-search-results"
+      );
+
+    if(
+      results &&
+      results.innerHTML.trim() !== ""
+    ){
+
+      searchProperties();
+
+    }
+
+  }
+);  
+
 </script>
 
 <!-- POI HEADER -->
