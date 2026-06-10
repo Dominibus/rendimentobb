@@ -1575,10 +1575,11 @@ const first = results[0];
 
 const second = {
 
-title:
-window.currentLang==="en"
-? "Premium Property " + city
-: "Immobile Premium " + city,
+titleIT:
+"Bilocale Premium " + city,
+
+titleEN:
+"Premium Apartment " + city,
 
 price:
 Math.round(first.price * 1.15),
@@ -1765,7 +1766,9 @@ ${resultsTitle}
 <div class="property-grid">
 
 ${createCard(
-first.title,
+window.currentLang==="en"
+? first.titleEN
+: first.titleIT,
 first.price,
 first.sqm,
 first.roi,
@@ -1776,7 +1779,9 @@ true
 )}
 
 ${createCard(
-second.title,
+window.currentLang==="en"
+? second.titleEN
+: second.titleIT,
 second.price,
 second.sqm,
 second.roi,
