@@ -16,6 +16,15 @@ export default async function handler(req, res) {
   // =====================================
   // 🏠 IMMOBILIARE.IT
   // =====================================
+  console.log(
+  "🔍 SEARCH REQUEST:",
+  {
+    city,
+    budget,
+    sqm,
+    goal
+  }
+);
 
   const immobiliareResults = [
 
@@ -103,11 +112,16 @@ export default async function handler(req, res) {
 
   const properties = [
 
-    ...immobiliareResults,
-    ...idealistaResults,
-    ...casaItResults
+  ...immobiliareResults,
+  ...idealistaResults,
+  ...casaItResults
 
-  ];
+];
+
+// futuro scraping engine
+// searchImmobiliare()
+// searchIdealista()
+// searchCasaIt()
 
   // =====================================
   // 🤖 AI SCORE
