@@ -65,7 +65,7 @@ export default async function handler(req, res) {
   image:"/immobili/napoli-3.jpg",
 
   url:"https://www.immobiliare.it/vendita-case/napoli/"
-}
+},
 
 // =====================================
 // 🏠 ROMA
