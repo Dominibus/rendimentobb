@@ -430,18 +430,22 @@ box-shadow:
 
 <section class="hero-mutui">
 <h1
-data-it="Scopri il vero costo del tuo mutuo prima di firmare"
-data-en="Discover the real cost of your mortgage before you sign">
+data-it="Scopri se il tuo mutuo sta distruggendo il rendimento del tuo investimento"
+data-en="Discover if your mortgage is destroying your investment returns">
+
+Scopri se il tuo mutuo sta distruggendo il rendimento del tuo investimento
+
+</h1>
 
 Scopri il vero costo del tuo mutuo prima di firmare
 
 </h1>
 
 <p
-data-it="Analizza rata, ROI, cashflow e rischio in meno di 30 secondi"
-data-en="Analyze mortgage payment, ROI, cashflow and risk in under 30 seconds">
+data-it="Analizza rata, ROI, cashflow, sostenibilità e confronto banche in meno di 30 secondi"
+data-en="Analyze payment, ROI, cashflow, sustainability and bank comparison in under 30 seconds">
 
-Analizza rata, ROI, cashflow e rischio in meno di 30 secondi
+Analizza rata, ROI, cashflow, sostenibilità e confronto banche in meno di 30 secondi
 
 </p>
 </section>
@@ -558,7 +562,7 @@ Investment Score
 
 <!-- 🔥 EXTRA -->
 <div id="extra" class="extra-box"></div>
-<<div id="decision-box"
+<div id="decision-box"
 class="extra-box"
 style="display:none;"></div>
 
@@ -575,12 +579,40 @@ style="display:none;"></div>
 
 <h2
 data-it="Ricevi il tuo Report Mutuo AI"
-data-en="Get your AI Mortgage Report">
+data-en="Get your AI Mortgage Report">  
 
 Ricevi il tuo Report Mutuo AI
 
 </h2>
 
+<div style="
+max-width:600px;
+margin:0 auto 25px;
+text-align:left;
+background:#f8fafc;
+padding:20px;
+border-radius:14px;
+border:1px solid #e2e8f0;
+">
+
+<div style="margin-bottom:8px;">
+✅ <span data-it="Report AI personalizzato" data-en="Personalized AI Report">Report AI personalizzato</span>
+</div>
+
+<div style="margin-bottom:8px;">
+🏦 <span data-it="Confronto banche" data-en="Bank comparison">Confronto banche</span>
+</div>
+
+<div style="margin-bottom:8px;">
+📈 <span data-it="Analisi impatto ROI" data-en="ROI impact analysis">Analisi impatto ROI</span>
+</div>
+
+<div>
+💰 <span data-it="Previsione cashflow" data-en="Cashflow forecast">Previsione cashflow</span>
+</div>
+
+</div>  
+  
 <input
 id="email"
 placeholder="nome@email.com"
@@ -997,6 +1029,8 @@ margin-bottom:15px;
 
 <div style="line-height:1.8">
 
+🤖 AI Interest Rate Outlook
+
 🇪🇺 ECB Trend
 
 <br>
@@ -1013,10 +1047,30 @@ margin-bottom:15px;
 
 <br><br>
 
-${t(
-"Scenario favorevole ai mutui a tasso fisso.",
-"Current scenario favors fixed-rate mortgages."
-)}
+✅ ${
+t(
+"Scenario favorevole ai mutui a tasso fisso",
+"Favorable environment for fixed-rate mortgages"
+)
+}
+
+<br>
+
+📈 ${
+t(
+"Probabile riduzione dei tassi nei prossimi 12 mesi",
+"Rates are expected to decrease over the next 12 months"
+)
+}
+
+<br>
+
+🏦 ${
+t(
+"Momento ideale per confrontare le offerte",
+"Ideal moment to compare bank offers"
+)
+}
 
 </div>
 
@@ -1082,6 +1136,27 @@ html += `
 
 <div style="font-size:13px;color:#64748b;margin-bottom:10px">
   ${t("Tasso fisso medio","Average fixed rate")}
+</div>
+
+<div style="
+font-size:14px;
+font-weight:600;
+margin-bottom:12px;
+color:#0f172a;
+">
+
+${
+i===0
+? t("🏆 Migliore per investitori B&B","🏆 Best for B&B investors")
+: i===1
+? t("⚡ Approvazione veloce","⚡ Fast approval")
+: i===2
+? t("📈 Miglior compromesso","📈 Best balance")
+: i===3
+? t("🛡️ Opzione stabile","🛡️ Stable option")
+: t("💰 Soluzione economica","💰 Budget solution")
+}
+
 </div>
 
 <div style="font-size:14px;margin-bottom:10px;color:#0f172a">
