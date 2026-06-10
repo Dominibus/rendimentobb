@@ -1566,9 +1566,6 @@ container.innerHTML = `
 </div>
 `;
 
-const database =
-window.rbPropertyDatabase || [];
-
 const maxPrice =
 Number(
 document.getElementById("searchPrice")
@@ -1581,44 +1578,23 @@ document.getElementById("searchSqm")
 ?.value || 0
 );
 
+const response =
+await fetch(
+
+`/api/property-search?city=${city.toLowerCase()}&budget=${maxPrice}&sqm=${minSqm}&goal=${goal}`
+
+);
+
+const data =
+await response.json();
+
 console.log(
-"🏠 SEARCH:",
-{
-city,
-goal,
-propertyType,
-maxPrice,
-minSqm
-}
+"🏠 API RESULTS:",
+data
 );
 
 const results =
-database.filter(property=>{
-
-const cityMatch =
-property.city.includes(
-val
-);
-
-const priceMatch =
-property.price <= maxPrice;
-
-const sqmMatch =
-property.sqm >= minSqm;
-
-const typeMatch =
-propertyType === "all"
-? true
-: property.type === propertyType;
-
-return (
-cityMatch &&
-priceMatch &&
-sqmMatch &&
-typeMatch
-);
-
-});
+data.results || [];
 
 console.log(
 "🔍 PROPERTY TYPE:",
@@ -1657,6 +1633,30 @@ return;
 }
 
 const first = results[0];
+
+  if(!first){
+
+container.innerHTML = `
+
+<div style="
+padding:30px;
+text-align:center;
+color:#64748b;
+">
+
+${
+window.currentLang==="en"
+? "No properties found."
+: "Nessun immobile trovato."
+}
+
+</div>
+
+`;
+
+return;
+
+}
 
 const second =
 results[1]
@@ -1827,12 +1827,6 @@ ${window.currentLang==="en"
 }
 
 // ===== RENDER =====
-
-const url1 =
-`https://www.immobiliare.it/vendita-case/${city.toLowerCase()}/`;
-
-const url2 =
-`https://www.idealista.it/cerca/vendita-case/${city.toLowerCase()}/`;  
 
 const resultsTitle =
 window.currentLang==="en"
