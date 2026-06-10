@@ -390,15 +390,19 @@ button, .btn-main{
 
 <section class="hero-mutui">
 <h1
-data-it="🔥 Il mutuo può farti perdere migliaia di euro"
-data-en="🔥 A mortgage can make you lose thousands of euros">
-🔥 Il mutuo può farti perdere migliaia di euro
+data-it="Scopri il vero costo del tuo mutuo prima di firmare"
+data-en="Discover the real cost of your mortgage before you sign">
+
+Scopri il vero costo del tuo mutuo prima di firmare
+
 </h1>
 
 <p
-data-it="Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi"
-data-en="Simulate the real impact on ROI, profit and risk in under 30 seconds">
-Simula l’impatto reale su ROI, profitto e rischio in meno di 30 secondi
+data-it="Analizza rata, ROI, cashflow e rischio in meno di 30 secondi"
+data-en="Analyze mortgage payment, ROI, cashflow and risk in under 30 seconds">
+
+Analizza rata, ROI, cashflow e rischio in meno di 30 secondi
+
 </p>
 </section>
 
@@ -424,14 +428,54 @@ Calcola impatto
 <div id="roi-alert" class="roi-alert"></div>
 
 <div class="kpi-grid">
-<div class="kpi"><div id="monthly">-</div><small data-it="Rata mensile" data-en="Monthly payment">Rata mensile</small></div>
-<div class="kpi"><div id="yearly">-</div><small data-it="Costo annuo mutuo" data-en="Yearly mortgage cost">Costo annuo mutuo</small></div>
-<div class="kpi"><div id="impact">-</div><small data-it="Impatto ROI" data-en="ROI impact">Impatto ROI</small></div>
+
+<div class="kpi">
+<div id="monthly">-</div>
+<small
+data-it="Rata mensile"
+data-en="Monthly payment">
+Rata mensile
+</small>
+</div>
+
+<div class="kpi">
+<div id="yearly">-</div>
+<small
+data-it="Costo annuo"
+data-en="Yearly cost">
+Costo annuo
+</small>
+</div>
+
+<div class="kpi">
+<div id="impact">-</div>
+<small
+data-it="Impatto ROI"
+data-en="ROI impact">
+Impatto ROI
+</small>
+</div>
+
+<div class="kpi">
+<div id="score">-</div>
+<small
+data-it="Investment Score"
+data-en="Investment Score">
+Investment Score
+</small>
+</div>
+
 </div>
 
 <!-- 🔥 EXTRA -->
 <div id="extra" class="extra-box"></div>
-<div id="decision-box" class="extra-box" style="display:none;"></div>
+<<div id="decision-box"
+class="extra-box"
+style="display:none;"></div>
+
+<div id="advisor-box"
+class="extra-box"
+style="display:none;"></div>
   
 </div>
 
@@ -538,6 +582,14 @@ const roi = income > 0
   ? ((income - yearly) / income * 100)
   : 0;
 
+const score = Math.max(
+0,
+Math.min(
+100,
+Math.round(roi * 5)
+)
+);  
+
 /* ===== ALERT ===== */
 const alertBox = document.getElementById("roi-alert");
 alertBox.style.display="block";
@@ -569,6 +621,10 @@ document.getElementById("yearly").innerText =
 
 document.getElementById("impact").innerText =
   lockValue(safeROI.toFixed(1), "%");
+
+document.getElementById("score").innerText =
+  lockValue(score,"%");
+  
 document.querySelector(".lead-box").scrollIntoView({
   behavior:"smooth"
 });  
@@ -587,6 +643,8 @@ if(extraBox){
 renderBanks(amount);
 
 renderDecision(roi);
+
+renderAdvisor(roi);  
   
 }
 
@@ -744,6 +802,67 @@ ${t(
 )}
 </div>
 `;
+}  
+
+function renderAdvisor(roi){
+
+const box =
+document.getElementById("advisor-box");
+
+if(!box) return;
+
+box.style.display = "block";
+
+let advice = "";
+
+if(roi < 5){
+
+advice =
+window.currentLang==="en"
+? "⚠️ Mortgage absorbs too much cashflow. Increase down payment or reduce loan duration."
+: "⚠️ Il mutuo assorbe troppo cashflow. Aumenta l'anticipo o riduci la durata.";
+
+}
+else if(roi < 12){
+
+advice =
+window.currentLang==="en"
+? "⚠️ Sustainable operation but could be optimized. Compare at least 3 banks."
+: "⚠️ Operazione sostenibile ma migliorabile. Confronta almeno 3 banche.";
+
+}
+else{
+
+advice =
+window.currentLang==="en"
+? "✅ Mortgage compatible with a profitable B&B investment."
+: "✅ Mutuo compatibile con un investimento B&B profittevole.";
+
+}
+
+box.innerHTML = `
+
+<div style="
+font-size:20px;
+font-weight:700;
+margin-bottom:10px;
+">
+
+🤖 AI Mortgage Advisor
+
+</div>
+
+<div style="
+font-size:15px;
+line-height:1.7;
+">
+
+${advice}
+
+</div>
+
+`;
+
 }  
 
 
