@@ -551,9 +551,11 @@ Immobili investimento B&B Italia ROI Napoli Roma Milano Firenze
 <div class="page-title">
 
 <h1
-data-it="Trova immobili già profittevoli per aprire un B&B"
-data-en="Find profitable properties ready for a B&B">
-Trova immobili già profittevoli per aprire un B&B
+data-it="AI Investment Finder per B&B e Short Rent"
+data-en="AI Investment Finder for B&B and Short Rent">
+
+AI Investment Finder per B&B e Short Rent
+
 </h1>
 
 <p
@@ -950,16 +952,19 @@ Ricevi opportunità
 <section style="margin-top:120px">
 
 <h2 style="text-align:center"
-data-it="Trova immobili da analizzare"
-data-en="Find properties to analyze">
-Trova immobili da analizzare
+data-it="AI Investment Finder"
+data-en="AI Investment Finder">
+
+AI Investment Finder
+
 </h2>
 
-<p style="text-align:center;color:#64748b;margin-top:10px"
-data-it="Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B."
-data-en="Search properties by price and size and instantly analyze B&B profitability">
+<p
+style="text-align:center;color:#64748b;margin-top:10px"
+data-it="L'AI confronta ROI, cashflow, rischio e potenziale per trovare i migliori investimenti immobiliari."
+data-en="AI compares ROI, cashflow, risk and upside potential to find the best property investments.">
 
-Cerca immobili per prezzo e dimensione e analizza subito il rendimento B&B.
+L'AI confronta ROI, cashflow, rischio e potenziale per trovare i migliori investimenti immobiliari.
 
 </p>
 
@@ -1043,16 +1048,18 @@ Crescita valore immobile
 
 <div
 id="goal-description"
-data-it="🎯 Massimizza il rendimento annuo previsto"
-data-en="🎯 Maximize expected yearly ROI"
+data-it="🎯 L'AI selezionerà gli investimenti con il miglior ROI previsto"
+data-en="🎯 AI will identify investments with the highest projected ROI"
 style="
 margin-top:10px;
 font-size:13px;
 color:#64748b;
 text-align:center;
 ">
-🎯 Massimizza il rendimento annuo previsto
-</div>  
+
+🎯 L'AI selezionerà gli investimenti con il miglior ROI previsto
+
+</div>
     
 
 </div>
@@ -1759,7 +1766,11 @@ border-radius:999px;
 font-size:11px;
 font-weight:700;
 ">
-TOP ROI
+${
+window.currentLang==="en"
+? "🏆 BEST ROI"
+: "🏆 MIGLIOR ROI"
+}
 </div>
 ` : ""}
 
@@ -1809,6 +1820,25 @@ window.currentLang==="en"
 ? "AI Investment Score"
 : "Punteggio Investimento AI"
 }
+
+<div style="
+margin-top:10px;
+padding:10px;
+background:#f8fafc;
+border-radius:10px;
+font-size:13px;
+line-height:1.6;
+">
+
+💰 Cashflow:
+€${Math.round(price * roi / 100 / 12)}
+
+<br>
+
+🛡 Risk:
+${roi >= 16 ? "2/10" : roi >= 12 ? "4/10" : "6/10"}
+
+</div>
 
 ${Math.min(
 100,
