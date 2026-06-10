@@ -1693,15 +1693,27 @@ first.portal === "Immobiliare.it"
 : first.url
 
 };  
+
+  const propertyImages = [
+
+"https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200",
+"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200",
+"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200",
+"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200",
+"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200"
+
+];
+  
 function createCard(
-  title,
-  price,
-  sqm,
-  roi,
-  badge,
-  portal,
-  url,
-  highlight=false
+title,
+price,
+sqm,
+roi,
+badge,
+portal,
+url,
+image,
+highlight=false
 ){
 
 return `
@@ -1717,9 +1729,7 @@ border-radius:18px;
 <div style="
 height:180px;
 
-background-image:url(
-'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200'
-);
+background-image:url('${image}');
 
 background-size:cover;
 background-position:center;
@@ -1788,13 +1798,62 @@ font-weight:700;
 color:#10b981;
 ">
 
-🔥 AI Score ${Math.min(
+🏆 ${
+window.currentLang==="en"
+? "AI Investment Score"
+: "Punteggio Investimento AI"
+}
+
+${Math.min(
 100,
 Math.round(
 (roi * 5) +
 (100 - price / 5000)
 )
 )}/100
+
+<div style="
+margin-top:8px;
+font-size:13px;
+color:#64748b;
+line-height:1.5;
+">
+
+${
+window.currentLang==="en"
+? (
+roi >= 16
+? "Strong profitability and tourism demand."
+: roi >= 12
+? "Balanced investment with stable revenue."
+: "Long-term growth opportunity."
+)
+: (
+roi >= 16
+? "Alta redditività e forte domanda turistica."
+: roi >= 12
+? "Investimento equilibrato con ricavi stabili."
+: "Opportunità di crescita nel lungo periodo."
+)
+}
+
+</div>
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+color:#64748b;
+">
+
+${
+roi >= 16
+? "🏆 High Profit Potential"
+: roi >= 12
+? "🛡 Balanced Investment"
+: "📈 Long Term Opportunity"
+}
 
 </div>
 
@@ -1876,6 +1935,7 @@ ${resultsTitle}
 <div class="property-grid">
 
 ${createCard(
+
 window.currentLang==="en"
 ? first.titleEN
 : first.titleIT,
@@ -1886,10 +1946,13 @@ first.roi,
 "",
 first.portal,
 first.url,
+propertyImages[0],
 true
+
 )}
 
 ${createCard(
+
 window.currentLang==="en"
 ? second.titleEN
 : second.titleIT,
@@ -1899,16 +1962,14 @@ second.sqm,
 second.roi,
 "",
 second.portal,
-second.url
+second.url,
+propertyImages[1]
+
 )}
 
 </div>
 
 `;
-
-};
-
-
 
 // ================= OPEN INVESTMENT =================
 
