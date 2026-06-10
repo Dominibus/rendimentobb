@@ -1,7 +1,8 @@
 export default async function handler(req, res) {
 
   const city =
-    req.query.city || "napoli";
+    (req.query.city || "napoli")
+    .toLowerCase();
 
   const budget =
     Number(req.query.budget || 200000);
@@ -21,23 +22,23 @@ export default async function handler(req, res) {
       sqm:65,
       roi:17,
       portal:"Immobiliare.it",
-      url:"https://www.immobiliare.it"
+      url:`https://www.immobiliare.it/vendita-case/${city}/`
     },
 
     {
-      title:"Chiaia Premium",
+      title:"Premium Apartment Napoli",
       city:"napoli",
-      price:240000,
-      sqm:85,
-      roi:14,
+      price:207000,
+      sqm:75,
+      roi:15,
       portal:"Idealista",
-      url:"https://www.idealista.it"
+      url:`https://www.idealista.it/vendita-case/${city}/`
     }
 
   ];
 
   const results =
-    properties.filter(p=>
+    properties.filter(p =>
       p.city === city &&
       p.price <= budget &&
       p.sqm >= sqm
