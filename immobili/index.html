@@ -1348,8 +1348,14 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(autoSearchTimeout);
 
       autoSearchTimeout = setTimeout(()=>{
-        searchProperties();
-      }, 800);
+
+  if(typeof window.searchProperties === "function"){
+
+    window.searchProperties();
+
+  }
+
+}, 800);
 
     }
 
