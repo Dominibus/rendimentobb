@@ -6120,6 +6120,10 @@ if(savedPrice > 0){
       savedCity.toLowerCase();
     }
 
+    citySelect.dispatchEvent(
+    new Event("change")
+   );
+
     window.currentCity =
     savedCity.toLowerCase();
 
