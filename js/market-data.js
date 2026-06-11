@@ -163,6 +163,14 @@ como: {
   occupancy: 0.71,
   annualRevenue: 46600,
   roi: 11.2
+},
+
+  olbia: {
+  city: "Olbia",
+  price: 145,
+  occupancy: 0.73,
+  annualRevenue: 38600,
+  roi: 11.4
 }
 
 };
