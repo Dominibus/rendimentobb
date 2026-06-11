@@ -3247,8 +3247,16 @@ window.calculate = async function(mode = false){
 
   const now = Date.now();
 
-if(now - window.__LAST_CALCULATION__ < 1200){
-  console.warn("⛔ calculate throttled");
+const isAutoImport =
+  mode === true;
+
+if(
+  !isAutoImport &&
+  now - window.__LAST_CALCULATION__ < 1200
+){
+  console.warn(
+    "⛔ calculate throttled"
+  );
   return;
 }
 
