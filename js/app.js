@@ -6080,6 +6080,73 @@ function applySelectedMortgage(){
 
 document.addEventListener("DOMContentLoaded", () => {
 
+// =====================================
+// 🏠 AUTO IMPORT FROM PROPERTIES
+// =====================================
+
+const savedPrice =
+Number(
+  localStorage.getItem("property_price") || 0
+);
+
+const savedCity =
+localStorage.getItem("property_city");
+
+const savedSqm =
+Number(
+  localStorage.getItem("property_sqm") || 0
+);
+
+if(savedPrice > 0){
+
+  const priceInput =
+  document.getElementById("price");
+
+  if(priceInput){
+    priceInput.value = savedPrice;
+  }
+
+  const equityInput =
+  document.getElementById("equity");
+
+  if(equityInput){
+    equityInput.value =
+    Math.round(savedPrice * 0.3);
+  }
+
+  if(savedCity){
+
+    const citySelect =
+    document.getElementById("market-city");
+
+    if(citySelect){
+
+      citySelect.value =
+      savedCity.toLowerCase();
+
+    }
+
+    window.currentCity =
+    savedCity.toLowerCase();
+
+    localStorage.setItem(
+      "selected_city",
+      savedCity.toLowerCase()
+    );
+
+  }
+
+  console.log(
+    "🏠 PROPERTY IMPORTED",
+    {
+      savedPrice,
+      savedCity,
+      savedSqm
+    }
+  );
+
+}  
+
 const link = localStorage.getItem("property_link");
 
 // carica solo se l'utente arriva dalla pagina immobile
