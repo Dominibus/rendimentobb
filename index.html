@@ -953,6 +953,22 @@ data-en="Why investors use RendimentoBB">
 Perché gli investitori usano RendimentoBB
 </h2>
 
+   <div class="rb-positioning-box">
+
+<h3
+data-it="Non è un semplice calcolatore ROI"
+data-en="Not just a ROI calculator">
+Non è un semplice calcolatore ROI
+</h3>
+
+<p
+data-it="RendimentoBB combina simulatore investimenti, analisi rischio, AI Advisor e PMS prenotazioni in un'unica piattaforma."
+data-en="RendimentoBB combines investment simulation, risk analysis, AI Advisor and booking management in one platform.">
+RendimentoBB combina simulatore investimenti, analisi rischio, AI Advisor e PMS prenotazioni in un'unica piattaforma.
+</p>
+
+</div>
+
     <p style="
       color:#64748b;
       font-size:15px;
@@ -1021,30 +1037,6 @@ Perché gli investitori usano RendimentoBB
     </div>
 
   </div>
-
-</section> 
-
-<section class="rb-platform-explainer">
-
-<div class="container">
-
-<h2
-data-it="Una piattaforma. Dall'investimento alla gestione."
-data-en="One platform. From investment to operations.">
-
-Una piattaforma. Dall'investimento alla gestione.
-
-</h2>
-
-<p
-data-it="La maggior parte degli strumenti risolve un solo problema. RendimentoBB combina simulatore ROI, analisi immobili, AI Advisor e PMS prenotazioni in un'unica piattaforma."
-data-en="Most tools solve one problem. RendimentoBB combines ROI simulation, property analysis, AI Advisor and booking management in one platform.">
-
-La maggior parte degli strumenti risolve un solo problema. RendimentoBB combina simulatore ROI, analisi immobili, AI Advisor e PMS prenotazioni in un'unica piattaforma.
-
-</p>
-
-</div>
 
 </section> 
 
@@ -1320,13 +1312,176 @@ Analizza rischio, mutuo e sostenibilità prima di investire
 </div>
 </section>
 
+<section class="smart-investment-hub">
+
+<div class="container">
+
+<h2
+data-it="Dove investire nel 2026?"
+data-en="Where to invest in 2026?">
+Dove investire nel 2026?
+</h2>
+
+<p
+data-it="Seleziona una città e scopri subito il potenziale reale"
+data-en="Select a city and instantly see real potential">
+Seleziona una città e scopri subito il potenziale reale
+</p>
+
+<!-- 🔥 CITY SELECTOR -->
+<div class="hub-buttons">
+
+<button onclick="selectCity('roma')" class="hub-btn active">Roma</button>
+<button onclick="selectCity('milano')" class="hub-btn">Milano</button>
+<button onclick="selectCity('napoli')" class="hub-btn">Napoli</button>
+<button onclick="selectCity('firenze')" class="hub-btn">Firenze</button>
+
+</div>
+
+<!-- 🔥 DYNAMIC CARD -->
+<div class="hub-card" id="hub-card">
+
+<span data-it="ROI medio" data-en="Average ROI">ROI medio</span>
+<strong>12.8%</strong>
+</div>
+
+<div class="hub-metric">
+<span>Occupazione</span>
+<strong>68%</strong>
+</div>
+
+<div class="hub-metric">
+<span>Break-even</span>
+<strong>6.5 anni</strong>
+</div>
+
+<!-- CTA -->
+<button onclick="startAnalysis()" class="btn btn-primary btn-lg"
+data-it="🔍 Analizza investimento in questa città"
+data-en="🔍 Analyze investment in this city">
+🔍 Analizza investimento in questa città
+</button>
+
+  </div>
+
+  </section>
+
+
+<!-- ================= TRUST / AUTHORITY ================= -->
+
+<section class="trust-bar">
+
+<div class="container trust-grid">
+
+<div class="trust-item">
+<div class="trust-icon">📊</div>
+<p
+data-it="Modelli finanziari basati su dati reali di mercato"
+data-en="Financial models based on real market data">
+Modelli finanziari basati su dati reali di mercato
+</p>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">⚡</div>
+<p
+data-it="Analisi ROI, rischio e sostenibilità in meno di 30 secondi"
+data-en="ROI, risk and sustainability analysis in under 30 seconds">
+Analisi ROI, rischio e sostenibilità in meno di 30 secondi
+</p>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">🧠</div>
+<p
+data-it="Decisioni basate sui dati, non su supposizioni"
+data-en="Decisions based on data, not assumptions">
+Decisioni basate sui dati, non su supposizioni
+</p>
+</div>
+
+</div>
+
+<!-- 🔥 MICRO CTA -->
+<div style="text-align:center;margin-top:25px">
+
+<button onclick="document.getElementById('qr_price')?.scrollIntoView({behavior:'smooth'})" class="btn-outline"
+data-it="Prova simulazione"
+data-en="Try simulation">
+Prova simulazione
+</button>
+
+</div>
+
+</section>
+
 
 <!-- ================= SNAPSHOT ================= -->
+
+<section>
+<div class="container">
+
+<div class="snapshot-card">
+
+<h3
+data-it="Executive Snapshot"
+data-en="Executive Snapshot">
+Executive Snapshot
+</h3>
+
+<p style="margin-top:6px;font-size:13px;color:#64748b"
+data-it="Esempio reale di analisi investimento"
+data-en="Real investment analysis example">
+Esempio reale di analisi investimento
+</p>
+
+<div class="snapshot-grid">
+
+<div class="metric">
+<span>ROI</span>
+<strong style="color:#10b981;">18.4%</strong>
+</div>
+
+<div class="metric">
+<span data-it="Break-even" data-en="Break-even">Break-even</span>
+<strong data-it="6.2 anni" data-en="6.2 years">6.2 anni</strong>
+</div>
+
+<div class="metric">
+<span data-it="Classe investimento" data-en="Investment class">Classe investimento</span>
+<strong>A</strong>
+</div>
+
+</div>
+
+<!-- 🔥 MICRO PSICOLOGIA -->
+<p class="free-only" style="margin-top:15px;font-size:14px;color:#64748b;text-align:center"
+data-it="Questo è un esempio reale. Ma non stai vedendo il rischio completo."
+data-en="This is a real example. But you're not seeing the full risk.">
+Questo è un esempio reale. Ma non stai vedendo il rischio completo.
+</p>
+
+<!-- CTA SNAPSHOT -->
+<div style="margin-top:20px;text-align:center">
+
+<a href="/tool/" 
+class="btn btn-primary free-only"
+   data-it="🔓 Ottieni analisi completa"
+   data-en="🔓 Get full analysis">
+   🔓 Ottieni analisi completa
+</a>
+
+</div>
+
+</div>
+
+ </div>
+
+ </section>
 
 <section id="pricing" style="margin-top:100px;padding:80px 0;background:white;">
 
 <div class="container" style="text-align:center">
-
 
 <!-- FAQ -->
 <div class="section">
