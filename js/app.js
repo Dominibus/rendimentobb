@@ -6120,57 +6120,6 @@ console.log(
 "🔥 IF CHECK:",
 savedPrice > 0
 );
-  
-if(savedPrice > 0){
-
-  const priceInput =
-  document.getElementById("price");
-
-  if(priceInput){
-    priceInput.value = savedPrice;
-  }
-
-  const equityInput =
-  document.getElementById("equity");
-
-  if(equityInput){
-    equityInput.value =
-    Math.round(savedPrice * 0.3);
-  }
-
-  if(savedCity){
-
-    const citySelect =
-    document.getElementById("market-city");
-
-    if(citySelect){
-      citySelect.value =
-      savedCity.toLowerCase();
-    }
-
-    citySelect.dispatchEvent(
-    new Event("change")
-   );
-
-    window.currentCity =
-    savedCity.toLowerCase();
-
-    localStorage.setItem(
-      "selected_city",
-      savedCity.toLowerCase()
-    );
-  }
-
-  console.log(
-    "🏠 PROPERTY IMPORTED",
-    {
-      savedPrice,
-      savedCity,
-      savedSqm
-    }
-  );
-
-}
 
   const propertyBanner =
 document.getElementById(
@@ -6249,10 +6198,14 @@ if(savedPrice > 0){
 
     if(citySelect){
 
-      citySelect.value =
-      savedCity.toLowerCase();
+  citySelect.value =
+  savedCity.toLowerCase();
 
-    }
+  citySelect.dispatchEvent(
+    new Event("change")
+  );
+
+}
 
     window.currentCity =
     savedCity.toLowerCase();
