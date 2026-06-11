@@ -6145,6 +6145,45 @@ if(savedPrice > 0){
     }
   );
 
+  const propertyBanner =
+document.getElementById(
+  "property-banner"
+);
+
+if(propertyBanner){
+
+  propertyBanner.innerHTML = `
+
+  <div style="
+  background:linear-gradient(135deg,#ecfdf5,#d1fae5);
+  border:1px solid #10b981;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(16,185,129,0.15);
+  ">
+
+    <div style="
+    font-size:18px;
+    font-weight:700;
+    color:#065f46;
+    margin-bottom:12px;
+    ">
+      🏠 Property Imported
+    </div>
+
+    <div>💰 Price: €${savedPrice.toLocaleString()}</div>
+
+    <div>📐 Size: ${savedSqm} m²</div>
+
+    <div>📍 City: ${savedCity}</div>
+
+  </div>
+
+  `;
+
+}
+
   setTimeout(()=>{
 
   if(typeof calculate === "function"){
