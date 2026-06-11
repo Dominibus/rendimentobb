@@ -18801,72 +18801,101 @@ text-shadow:
 }
 
 /* =====================================
-🎯 HOME PATHS
+🎯 POSITIONING FLOW
 ===================================== */
 
-.rb-paths{
-padding:70px 20px;
-background:#ffffff;
-}
+.rb-positioning-flow{
 
-.rb-path-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:25px;
-margin-top:30px;
-}
+display:flex;
+align-items:center;
+justify-content:center;
+gap:20px;
 
-.rb-path-card{
-background:#fff;
-padding:30px;
-border-radius:20px;
-border:1px solid #e5e7eb;
-box-shadow:0 15px 40px rgba(0,0,0,.05);
-}
+margin:30px auto 40px;
 
-.rb-path-card h3{
-margin-bottom:20px;
-font-size:24px;
-}
+flex-wrap:wrap;
 
-.rb-path-card ul{
-list-style:none;
-padding:0;
-margin:0 0 25px 0;
-}
-
-.rb-path-card li{
-padding:8px 0;
-color:#475569;
-}
-
-.rb-positioning-banner{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-margin:30px 0;
-}
-
-.rb-positioning-banner div{
-background:#fff;
-padding:18px;
-border-radius:14px;
 text-align:center;
+
+}
+
+.rb-positioning-flow div{
+
+background:#fff;
+
+padding:18px 22px;
+
+border-radius:14px;
+
 box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+min-width:220px;
+
 }
 
-.rb-positioning-banner strong{
+.rb-positioning-flow strong{
+
 display:block;
+
 color:#0f172a !important;
+
 font-size:18px;
+
 font-weight:700;
+
 }
 
-.rb-positioning-banner span{
+.rb-positioning-flow div span{
+
 display:block;
+
 margin-top:6px;
+
 color:#475569 !important;
+
 font-size:14px;
+
 font-weight:500;
+
 line-height:1.4;
+
+}
+
+.rb-positioning-flow .flow-arrow{
+
+font-size:24px;
+
+font-weight:700;
+
+color:#22c55e;
+
+}
+
+/* =====================================
+📱 MOBILE
+===================================== */
+
+@media(max-width:768px){
+
+.rb-positioning-flow{
+
+flex-direction:column;
+
+gap:12px;
+
+}
+
+.rb-positioning-flow .flow-arrow{
+
+transform:rotate(90deg);
+
+}
+
+.rb-positioning-flow div{
+
+width:100%;
+max-width:320px;
+
+}
+
 }
