@@ -655,7 +655,7 @@ class="mobile-cta">
 
         mobileHTML += `<hr>`;
 
-        mmobileHTML += `
+        mobileHTML += `
   <a href="${dashboardUrl}"
      id="mobile-dashboard">
     Dashboard
