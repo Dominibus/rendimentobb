@@ -6275,6 +6275,8 @@ if(propertyBanner){
 
 },1000);
 
+}  
+
 const link = localStorage.getItem("property_link");
 
 // carica solo se l'utente arriva dalla pagina immobile
