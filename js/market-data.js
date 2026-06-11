@@ -171,7 +171,135 @@ como: {
   occupancy: 0.73,
   annualRevenue: 38600,
   roi: 11.4
-}
+},
+
+ercolano: {
+  city: "Ercolano",
+  price: 95,
+  occupancy: 0.67,
+  annualRevenue: 23500,
+  roi: 9.1
+},
+
+portici: {
+  city: "Portici",
+  price: 98,
+  occupancy: 0.68,
+  annualRevenue: 24200,
+  roi: 9.4
+},
+
+salerno: {
+  city: "Salerno",
+  price: 115,
+  occupancy: 0.71,
+  annualRevenue: 30200,
+  roi: 10.1
+},
+
+rimini: {
+  city: "Rimini",
+  price: 130,
+  occupancy: 0.74,
+  annualRevenue: 35200,
+  roi: 10.8
+},
+
+tropea: {
+  city: "Tropea",
+  price: 145,
+  occupancy: 0.76,
+  annualRevenue: 39800,
+  roi: 11.6
+},
+
+gallipoli: {
+  city: "Gallipoli",
+  price: 150,
+  occupancy: 0.75,
+  annualRevenue: 41200,
+  roi: 11.8
+},
+
+sassari: {
+  city: "Sassari",
+  price: 105,
+  occupancy: 0.68,
+  annualRevenue: 25900,
+  roi: 9.2
+},
+
+volla: {
+  city: "Volla",
+  price: 92,
+  occupancy: 0.65,
+  annualRevenue: 22100,
+  roi: 8.8
+},
+
+pavia: {
+  city: "Pavia",
+  price: 108,
+  occupancy: 0.67,
+  annualRevenue: 26300,
+  roi: 8.9
+},
+
+bergamo: {
+  city: "Bergamo",
+  price: 120,
+  occupancy: 0.70,
+  annualRevenue: 31100,
+  roi: 9.5
+},
+
+amalfi: {
+  city: "Amalfi",
+  price: 195,
+  occupancy: 0.77,
+  annualRevenue: 53800,
+  roi: 12.7
+},
+
+positano: {
+  city: "Positano",
+  price: 230,
+  occupancy: 0.76,
+  annualRevenue: 64500,
+  roi: 13.4
+},
+
+cagliari: {
+  city: "Cagliari",
+  price: 125,
+  occupancy: 0.72,
+  annualRevenue: 32800,
+  roi: 10.3
+},
+
+alghero: {
+  city: "Alghero",
+  price: 138,
+  occupancy: 0.74,
+  annualRevenue: 36900,
+  roi: 11.1
+},
+
+siracusa: {
+  city: "Siracusa",
+  price: 118,
+  occupancy: 0.71,
+  annualRevenue: 30500,
+  roi: 10.0
+},
+
+ragusa: {
+  city: "Ragusa",
+  price: 108,
+  occupancy: 0.69,
+  annualRevenue: 27400,
+  roi: 9.4
+}  
 
 };
 
