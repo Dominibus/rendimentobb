@@ -18967,3 +18967,14 @@ max-width:320px;
 margin:30px auto 40px;
 }
 }
+
+.plan-role{
+
+font-size:13px;
+line-height:1.5;
+color:#64748b;
+margin-top:8px;
+margin-bottom:16px;
+min-height:40px;
+
+}
