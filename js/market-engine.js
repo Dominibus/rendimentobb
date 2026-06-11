@@ -74,12 +74,19 @@ export function renderMarketBenchmark(inputCity){
     return;
   }
 
-  const data = window.RB_MARKET_DATA[city];
+  const data =
+  window.RB_MARKET_DATA[city] ||
+  window.RB_MARKET_DATA.napoli;
 
-  if(!data){
-    console.warn("❌ Dati mancanti:", city);
-    return;
-  }
+if(!window.RB_MARKET_DATA[city]){
+
+  console.warn(
+    "⚠️ Benchmark fallback:",
+    city,
+    "→ napoli"
+  );
+
+}
 
   const text = getText();
 
