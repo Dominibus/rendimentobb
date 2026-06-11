@@ -569,11 +569,6 @@ if(
   const isPro = access.isPro;
   const isPaid = isAdmin || access?.isInvestor || access?.isPro;
 
-  const dashboardUrl =
-  isPaid
-    ? "/dashboard/"
-    : "/dashboard-demo/";
-
   const isProOnly = isPro && !isInvestor;
 
   if(user){
@@ -602,15 +597,15 @@ else{
     // 🔥 DASHBOARD BUTTON
     // =====================
     html += `
-  <a href="${dashboardUrl}"
-     class="rb-btn primary"
-     id="dashboard-link">
+      <a href="${isPaid ? "/dashboard/" : "#"}" 
+         class="rb-btn ${isPaid ? "primary" : "locked"}"
+         id="dashboard-link">
 
-     <span data-it="Dashboard" data-en="Dashboard">Dashboard</span>
-     ${badge}
+         <span data-it="Dashboard" data-en="Dashboard">Dashboard</span>
+         ${badge}
 
-  </a>
-`;
+      </a>
+    `;
 
     // ADMIN ONLY
     if(isAdmin){
@@ -656,11 +651,10 @@ class="mobile-cta">
         mobileHTML += `<hr>`;
 
         mobileHTML += `
-  <a href="${dashboardUrl}"
-     id="mobile-dashboard">
-    Dashboard
-  </a>
-`;
+          <a href="${isPaid ? "/dashboard/" : "#"}" id="mobile-dashboard">
+            Dashboard
+          </a>
+        `;
 
         if(isAdmin){
           mobileHTML += `<a href="/dashboard-leads/">Leads</a>`;
@@ -689,9 +683,7 @@ class="mobile-cta">
       }
 
       // BLOCCO MOBILE DASHBOARD
-       /*
       if(!isPaid){
-       
         const mobileDash = document.getElementById("mobile-dashboard");
         if(mobileDash){
           mobileDash.onclick = (e)=>{
@@ -702,12 +694,10 @@ class="mobile-cta">
         }
       }
     }
-    */
 
     // =====================
     // 🔒 HARD BLOCK (FREE)
     // =====================
-    /*
     if(!isPaid){
 
       const dashBtn = document.getElementById("dashboard-link");
@@ -729,7 +719,6 @@ class="mobile-cta">
       });
 
     }
-    */
 
    // LOGOUT
 document.getElementById("logout").onclick = async ()=>{
