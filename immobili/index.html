@@ -2224,6 +2224,47 @@ window.currentLang==="en"
 
 `;
 
+  container.innerHTML += `
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+margin-top:30px;
+">
+
+${createCard(
+window.currentLang==="en"
+? (first.titleEN || first.titleIT || first.title)
+: (first.titleIT || first.titleEN || first.title),
+first.price,
+first.sqm,
+first.roi,
+"",
+first.portal,
+first.url,
+propertyImages[0],
+true
+)}
+
+${createCard(
+window.currentLang==="en"
+? (second.titleEN || second.titleIT || second.title)
+: (second.titleIT || second.titleEN || second.title),
+second.price,
+second.sqm,
+second.roi,
+"",
+second.portal,
+second.url,
+propertyImages[1],
+false
+)}
+
+</div>
+
+`;
+
   };
 
 // ================= OPEN INVESTMENT =================
