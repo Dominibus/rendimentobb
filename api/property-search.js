@@ -903,7 +903,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:13,
   portal:"Immobiliare.it",
-  iimage:"/immobili/default-property.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siena/"
 },
 
@@ -1077,7 +1077,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  iimage:"/immobili/default-property.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ancona/"
 },
 
