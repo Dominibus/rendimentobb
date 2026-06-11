@@ -36,7 +36,7 @@ export default async function handler(req, res) {
   roi:17,
   portal:"Immobiliare.it",
 
-  image:"/immobili/napoli-1.jpg",
+  image:"/immobili/default-property.jpg",
 
   url:"https://www.immobiliare.it/vendita-case/napoli/"
 },
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
   roi:18,
   portal:"Immobiliare.it",
 
-  image:"/immobili/napoli-2.jpg",
+  image:"/immobili/default-property.jpg",
 
   url:"https://www.immobiliare.it/vendita-case/napoli/"
 },
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
   roi:16,
   portal:"Immobiliare.it",
 
-  image:"/immobili/napoli-3.jpg",
+  image:"/immobili/default-property.jpg",
 
   url:"https://www.immobiliare.it/vendita-case/napoli/"
 },
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/roma-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/roma/"
 },
 
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/roma-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/roma/"
 },
 
@@ -100,7 +100,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/roma-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/roma/"
 },
 
@@ -115,7 +115,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:11,
   portal:"Immobiliare.it",
-  image:"/immobili/milano-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/milano/"
 },
 
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
   sqm:66,
   roi:10,
   portal:"Immobiliare.it",
-  image:"/immobili/milano-2.jpg",
+ image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/milano/"
 },
 
@@ -137,7 +137,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/milano-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/milano/"
 },
 
@@ -152,7 +152,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/firenze-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/firenze/"
 },
 
@@ -163,7 +163,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:11,
   portal:"Immobiliare.it",
-  image:"/immobili/firenze-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/firenze/"
 },
 
@@ -174,7 +174,7 @@ export default async function handler(req, res) {
   sqm:64,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/firenze-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/firenze/"
 },
 
@@ -189,7 +189,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:11,
   portal:"Immobiliare.it",
-  image:"/immobili/torino-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/torino/"
 },
 
@@ -200,7 +200,7 @@ export default async function handler(req, res) {
   sqm:72,
   roi:10,
   portal:"Immobiliare.it",
-  image:"/immobili/torino-2.jpg",
+ image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/torino/"
 },
 
@@ -211,7 +211,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/torino-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/torino/"
 },
 
@@ -226,7 +226,7 @@ export default async function handler(req, res) {
   sqm:64,
   roi:11,
   portal:"Immobiliare.it",
-  image:"/immobili/bologna-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bologna/"
 },
 
@@ -237,7 +237,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/bologna-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bologna/"
 },
 
@@ -248,7 +248,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:10,
   portal:"Immobiliare.it",
-  image:"/immobili/bologna-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bologna/"
 },
 
@@ -263,7 +263,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/palermo-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/palermo/"
 },
 
@@ -274,7 +274,7 @@ export default async function handler(req, res) {
   sqm:72,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/palermo-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/palermo/"
 },
 
@@ -285,7 +285,7 @@ export default async function handler(req, res) {
   sqm:78,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/palermo-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/palermo/"
 },
 
@@ -300,7 +300,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/bari-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bari/"
 },
 
@@ -311,7 +311,7 @@ export default async function handler(req, res) {
   sqm:75,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/bari-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bari/"
 },
 
@@ -322,11 +322,11 @@ export default async function handler(req, res) {
   sqm:65,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/bari-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bari/"
 },
 
-    // =====================================
+// =====================================
 // 🏠 VERONA
 // =====================================
 
@@ -337,7 +337,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/verona-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/verona/"
 },
 
@@ -348,7 +348,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/verona-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/verona/"
 },
 
@@ -359,7 +359,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/verona-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/verona/"
 },
 
@@ -374,7 +374,7 @@ export default async function handler(req, res) {
   sqm:55,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/venezia-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/venezia/"
 },
 
@@ -385,7 +385,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:11,
   portal:"Immobiliare.it",
-  image:"/immobili/venezia-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/venezia/"
 },
 
@@ -396,7 +396,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/venezia-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/venezia/"
 },
 
@@ -411,7 +411,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/genova-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/genova/"
 },
 
@@ -422,7 +422,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/genova-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/genova/"
 },
 
@@ -433,7 +433,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/genova-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/genova/"
 },
 
@@ -448,7 +448,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/catania-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/catania/"
 },
 
@@ -459,7 +459,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/catania-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/catania/"
 },
 
@@ -470,7 +470,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:17,
   portal:"Immobiliare.it",
-  image:"/immobili/catania-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/catania/"
 },
 
@@ -485,7 +485,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/lecce-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/lecce/"
 },
 
@@ -496,7 +496,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/lecce-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/lecce/"
 },
 
@@ -507,7 +507,7 @@ export default async function handler(req, res) {
   sqm:75,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/lecce-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/lecce/"
 },
 
@@ -522,7 +522,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/rimini-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/rimini/"
 },
 
@@ -533,7 +533,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/rimini-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/rimini/"
 },
 
@@ -544,7 +544,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/rimini-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/rimini/"
 },
 
@@ -559,7 +559,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/salerno-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/salerno/"
 },
 
@@ -570,7 +570,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/salerno-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/salerno/"
 },
 
@@ -581,7 +581,7 @@ export default async function handler(req, res) {
   sqm:75,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/salerno-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/salerno/"
 },
 
@@ -596,7 +596,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:17,
   portal:"Immobiliare.it",
-  image:"/immobili/matera-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/matera/"
 },
 
@@ -607,7 +607,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/matera-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/matera/"
 },
 
@@ -618,7 +618,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/matera-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/matera/"
 },
 
@@ -633,7 +633,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/pisa-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/pisa/"
 },
 
@@ -644,7 +644,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/pisa-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/pisa/"
 },
 
@@ -655,7 +655,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/pisa-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/pisa/"
 },
 
@@ -670,7 +670,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/trieste-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/trieste/"
 },
 
@@ -681,7 +681,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/trieste-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/trieste/"
 },
 
@@ -692,11 +692,11 @@ export default async function handler(req, res) {
   sqm:65,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/trieste-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/trieste/"
 },
 
-    // =====================================
+// =====================================
 // 🏠 BERGAMO
 // =====================================
 
@@ -707,7 +707,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/bergamo-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bergamo/"
 },
 
@@ -718,7 +718,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/bergamo-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bergamo/"
 },
 
@@ -729,7 +729,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/bergamo-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/bergamo/"
 },
 
@@ -744,7 +744,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/como-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/como/"
 },
 
@@ -755,7 +755,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/como-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/como/"
 },
 
@@ -766,7 +766,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:11,
   portal:"Immobiliare.it",
-  image:"/immobili/como-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/como/"
 },
 
@@ -781,7 +781,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/padova-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/padova/"
 },
 
@@ -792,7 +792,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/padova-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/padova/"
 },
 
@@ -803,7 +803,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/padova-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/padova/"
 },
 
@@ -818,7 +818,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/parma-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/parma/"
 },
 
@@ -829,7 +829,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/parma-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/parma/"
 },
 
@@ -840,7 +840,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/parma-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/parma/"
 },
 
@@ -855,7 +855,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/modena-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/modena/"
 },
 
@@ -866,7 +866,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/modena-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/modena/"
 },
 
@@ -877,7 +877,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/modena-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/modena/"
 },
 
@@ -892,7 +892,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/siena-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siena/"
 },
 
@@ -903,7 +903,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/siena-2.jpg",
+  iimage:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siena/"
 },
 
@@ -914,7 +914,7 @@ export default async function handler(req, res) {
   sqm:72,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/siena-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siena/"
 },
 
@@ -929,7 +929,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/perugia-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/perugia/"
 },
 
@@ -940,7 +940,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/perugia-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/perugia/"
 },
 
@@ -951,7 +951,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/perugia-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/perugia/"
 },
 
@@ -966,7 +966,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/taormina-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/taormina/"
 },
 
@@ -977,7 +977,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/taormina-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/taormina/"
 },
 
@@ -988,7 +988,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:17,
   portal:"Immobiliare.it",
-  image:"/immobili/taormina-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/taormina/"
 },
 
@@ -1003,7 +1003,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:17,
   portal:"Immobiliare.it",
-  image:"/immobili/siracusa-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siracusa/"
 },
 
@@ -1014,7 +1014,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/siracusa-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siracusa/"
 },
 
@@ -1025,7 +1025,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/siracusa-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/siracusa/"
 },
 
@@ -1040,7 +1040,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/olbia-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/olbia/"
 },
 
@@ -1051,7 +1051,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/olbia-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/olbia/"
 },
 
@@ -1062,11 +1062,11 @@ export default async function handler(req, res) {
   sqm:72,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/olbia-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/olbia/"
 },
 
-    // =====================================
+// =====================================
 // 🏠 ANCONA
 // =====================================
 
@@ -1077,7 +1077,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/ancona-1.jpg",
+  iimage:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ancona/"
 },
 
@@ -1088,7 +1088,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/ancona-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ancona/"
 },
 
@@ -1099,7 +1099,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/ancona-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ancona/"
 },
 
@@ -1114,7 +1114,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/pescara-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/pescara/"
 },
 
@@ -1125,7 +1125,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/pescara-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/pescara/"
 },
 
@@ -1136,7 +1136,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/pescara-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/pescara/"
 },
 
@@ -1151,7 +1151,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/livorno-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/livorno/"
 },
 
@@ -1162,7 +1162,7 @@ export default async function handler(req, res) {
   sqm:70,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/livorno-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/livorno/"
 },
 
@@ -1173,7 +1173,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/livorno-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/livorno/"
 },
 
@@ -1188,7 +1188,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/laspezia-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/la-spezia/"
 },
 
@@ -1199,7 +1199,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:17,
   portal:"Immobiliare.it",
-  image:"/immobili/laspezia-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/la-spezia/"
 },
 
@@ -1210,7 +1210,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/laspezia-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/la-spezia/"
 },
 
@@ -1225,7 +1225,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/vicenza-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/vicenza/"
 },
 
@@ -1236,7 +1236,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/vicenza-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/vicenza/"
 },
 
@@ -1247,7 +1247,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/vicenza-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/vicenza/"
 },
 
@@ -1262,7 +1262,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/treviso-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/treviso/"
 },
 
@@ -1273,7 +1273,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:12,
   portal:"Immobiliare.it",
-  image:"/immobili/treviso-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/treviso/"
 },
 
@@ -1284,7 +1284,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/treviso-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/treviso/"
 },
 
@@ -1299,7 +1299,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/ravenna-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ravenna/"
 },
 
@@ -1310,7 +1310,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/ravenna-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ravenna/"
 },
 
@@ -1321,7 +1321,7 @@ export default async function handler(req, res) {
   sqm:72,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/ravenna-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ravenna/"
 },
 
@@ -1336,7 +1336,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/ferrara-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ferrara/"
 },
 
@@ -1347,7 +1347,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:13,
   portal:"Immobiliare.it",
-  image:"/immobili/ferrara-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ferrara/"
 },
 
@@ -1358,7 +1358,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/ferrara-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/ferrara/"
 },
 
@@ -1373,7 +1373,7 @@ export default async function handler(req, res) {
   sqm:60,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/reggio-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/reggio-calabria/"
 },
 
@@ -1384,7 +1384,7 @@ export default async function handler(req, res) {
   sqm:65,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/reggio-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/reggio-calabria/"
 },
 
@@ -1395,7 +1395,7 @@ export default async function handler(req, res) {
   sqm:72,
   roi:14,
   portal:"Immobiliare.it",
-  image:"/immobili/reggio-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/reggio-calabria/"
 },
 
@@ -1410,7 +1410,7 @@ export default async function handler(req, res) {
   sqm:58,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/messina-1.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/messina/"
 },
 
@@ -1421,7 +1421,7 @@ export default async function handler(req, res) {
   sqm:68,
   roi:15,
   portal:"Immobiliare.it",
-  image:"/immobili/messina-2.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/messina/"
 },
 
@@ -1432,7 +1432,7 @@ export default async function handler(req, res) {
   sqm:62,
   roi:16,
   portal:"Immobiliare.it",
-  image:"/immobili/messina-3.jpg",
+  image:"/immobili/default-property.jpg",
   url:"https://www.immobiliare.it/vendita-case/messina/"
 }
 
