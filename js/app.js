@@ -6097,6 +6097,59 @@ Number(
   localStorage.getItem("property_sqm") || 0
 );
 
+  const propertyBanner =
+document.getElementById(
+  "property-banner"
+);
+
+if(propertyBanner){
+
+  propertyBanner.style.display =
+    "block";
+
+  propertyBanner.innerHTML = `
+
+<div style="
+margin-bottom:20px;
+padding:18px;
+border-radius:14px;
+background:linear-gradient(
+135deg,
+#ecfdf5,
+#d1fae5
+);
+border:1px solid #10b981;
+">
+
+<div style="
+font-weight:700;
+font-size:16px;
+color:#065f46;
+margin-bottom:8px;
+">
+
+🏠 Immobile selezionato
+
+</div>
+
+<div>
+📍 ${savedCity || "-"}
+</div>
+
+<div>
+💰 €${savedPrice.toLocaleString()}
+</div>
+
+<div>
+📐 ${savedSqm} m²
+</div>
+
+</div>
+
+`;
+
+}
+
 if(savedPrice > 0){
 
   const priceInput =
