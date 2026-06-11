@@ -2073,7 +2073,11 @@ ${window.currentLang==="en"
 </a>
 
 <button
-onclick="openInvestment(${price})"
+onclick="openInvestment(
+${price},
+'${city}',
+${roi}
+)"
 class="btn btn-primary"
 style="flex:1"
 >
@@ -2269,35 +2273,69 @@ false
 
 // ================= OPEN INVESTMENT =================
 
-window.openInvestment = function(price){
+window.openInvestment = function(
+  price,
+  city,
+  roi
+){
 
-  const user = window.currentUser || null;
-  const plan = window.currentPlan || "free";
+  const user =
+    window.currentUser || null;
 
-  // salva sempre
-  localStorage.setItem("property_price", price);
+  const plan =
+    window.currentPlan || "free";
+
+  // 💾 salva dati immobile
+
+  localStorage.setItem(
+    "property_price",
+    price || 0
+  );
+
+  localStorage.setItem(
+    "property_city",
+    city || ""
+  );
+
+  localStorage.setItem(
+    "property_roi",
+    roi || 0
+  );
 
   // =====================
   // 👻 NON LOGGATO
   // =====================
+
   if(!user){
-    localStorage.setItem("lead_source", "immobili");
+
+    localStorage.setItem(
+      "lead_source",
+      "immobili"
+    );
+
     showLoginModal();
+
     return;
   }
 
   // =====================
   // 🧪 FREE USER
   // =====================
+
   if(plan === "free"){
+
     showUpgradeModal();
+
     return;
   }
 
   // =====================
   // 💰 INVESTOR / PRO
   // =====================
-  window.location.href="/tool/";
+
+  window.location.href =
+    "/tool/?auto=1";
+
 };
   
 // ================= LEAD IMMOBILI =================
