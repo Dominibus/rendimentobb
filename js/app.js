@@ -3562,6 +3562,12 @@ const chatbotNet =
 ? 0
 : net;
 
+const marketCity =
+  document.getElementById("market-city")?.value ||
+  window.currentCity ||
+  localStorage.getItem("selected_city") ||
+  "";    
+
 // ===============================================
 // 🧠 CHATBOT LIVE DATA
 // ===============================================
