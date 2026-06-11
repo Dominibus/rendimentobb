@@ -1413,57 +1413,99 @@ portal = "Immobiliare.it";
 id = link.split("/").filter(Boolean).pop();
 }
 
-// ===== FAKE SMART PRICE =====
-if(id){
-estimatedPrice = (Math.floor(Math.random()*200)+80) * 1000;
-}
-
 // ===== PREVIEW =====
 document.getElementById("property-preview").innerHTML = `
+
 <div style="
-background:linear-gradient(135deg,#ecfdf5,#f0fdf4);
+background:#ecfdf5;
 padding:20px;
 border-radius:16px;
 margin-top:14px;
-box-shadow:0 20px 60px rgba(16,185,129,0.15);
 border:1px solid #bbf7d0;
 text-align:left;
-animation:fadeIn .4s ease;
 ">
-
-<div style="font-size:13px;color:#065f46;margin-bottom:6px;font-weight:600">
-🤖 ${window.currentLang==="en"?"AI detected a profitable property":"AI ha rilevato un immobile interessante"}
-</div>
-
-<strong style="font-size:16px">📍 ${portal}</strong><br>
-
-<div style="margin-top:6px;font-size:13px;color:#64748b">
-ID: ${id}
-</div>
-
-${estimatedPrice ? `
-<div style="margin-top:10px;font-size:20px;font-weight:700;color:#059669">
-💰 ${estimatedPrice.toLocaleString()} €
-</div>
-` : ""}
 
 <div style="
-margin-top:12px;
-padding:10px;
-border-radius:10px;
-background:rgba(16,185,129,0.1);
-font-size:13px;
+font-size:15px;
+font-weight:700;
+margin-bottom:12px;
 color:#065f46;
-font-weight:500;
 ">
-🚀 ${window.currentLang==="en"
-? "ROI analysis already prepared. Opening full report..."
-: "Analisi ROI già pronta. Apertura report completo..."}
+🏠 Immobile rilevato
+</div>
+
+<div style="margin-bottom:10px">
+<strong>Portale:</strong> ${portal}
+</div>
+
+<div style="margin-bottom:20px">
+<strong>ID:</strong> ${id}
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:12px;
+">
+
+<input
+id="detected-price"
+type="number"
+placeholder="Prezzo immobile €"
+style="
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:10px;
+">
+
+<input
+id="detected-sqm"
+type="number"
+placeholder="Metri quadri"
+style="
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:10px;
+">
+
+<input
+id="detected-city"
+type="text"
+placeholder="Città"
+style="
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:10px;
+">
+
+</div>
+
+<button
+onclick="analyzeDetectedProperty()"
+class="btn btn-primary"
+style="
+margin-top:15px;
+width:100%;
+">
+
+📊 Analizza investimento
+
+</button>
+
+<div style="
+margin-top:15px;
+font-size:13px;
+color:#64748b;
+">
+
+Inserisci i dati dell'annuncio e premi
+"Analizza investimento".
+
 </div>
 
 </div>
+
 `;
-
 localStorage.setItem("property_link", link);
 localStorage.setItem("property_price", estimatedPrice);  
 
@@ -1472,6 +1514,51 @@ window.location.href="/tool/?auto=1";
 },1200);
 
 };
+
+window.analyzeDetectedProperty = function(){
+
+const price =
+Number(
+document.getElementById("detected-price")?.value || 0
+);
+
+const sqm =
+Number(
+document.getElementById("detected-sqm")?.value || 0
+);
+
+const city =
+document.getElementById("detected-city")?.value || "";
+
+if(!price || !sqm){
+
+alert(
+"Inserisci prezzo e metri quadri"
+);
+
+return;
+
+}
+
+localStorage.setItem(
+"property_price",
+price
+);
+
+localStorage.setItem(
+"property_city",
+city
+);
+
+localStorage.setItem(
+"property_sqm",
+sqm
+);
+
+window.location.href =
+`/tool/?auto=1`;
+
+};  
 
 
 // ================= SEARCH =================
@@ -2006,7 +2093,13 @@ ROI stimato:
 
 <div style="margin-bottom:20px">
 🛡️ Rischio:
-<strong>${first.risk}/10</strong>
+<strong>${
+first.risk ??
+Math.max(
+1,
+10 - Math.round(first.roi / 2)
+)
+}/10</strong>
 </div>
 
 <hr style="margin:20px 0">
