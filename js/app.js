@@ -6102,6 +6102,11 @@ Number(
 }
 );
 
+console.log(
+"🔥 IF CHECK:",
+savedPrice > 0
+);
+  
 if(savedPrice > 0){
 
   const priceInput =
@@ -6152,23 +6157,6 @@ if(savedPrice > 0){
   );
 
 }
-
-// =====================================
-// 🏠 AUTO IMPORT FROM PROPERTIES
-// =====================================
-
-const savedPrice =
-Number(
-  localStorage.getItem("property_price") || 0
-);
-
-const savedCity =
-localStorage.getItem("property_city");
-
-const savedSqm =
-Number(
-  localStorage.getItem("property_sqm") || 0
-);
 
   const propertyBanner =
 document.getElementById(
