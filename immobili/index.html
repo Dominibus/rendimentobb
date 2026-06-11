@@ -2128,22 +2128,49 @@ margin-bottom:15px;
 </div>
 
 <div style="margin-bottom:10px">
-ROI stimato:
+
+${
+window.currentLang==="en"
+? "Estimated ROI"
+: "ROI stimato"
+}:
+
 <strong>${first.roi}%</strong>
+
 </div>
 
 <div style="margin-bottom:10px">
-💰 Budget:
+
+💰 ${
+window.currentLang==="en"
+? "Budget"
+: "Budget"
+}:
+
 <strong>€${first.price.toLocaleString()}</strong>
+
 </div>
 
 <div style="margin-bottom:10px">
-📐 Metratura ideale:
+
+📐 ${
+window.currentLang==="en"
+? "Ideal Size"
+: "Metratura ideale"
+}:
+
 <strong>${first.sqm} m²</strong>
+
 </div>
 
 <div style="margin-bottom:20px">
-🛡️ Rischio:
+
+🛡️ ${
+window.currentLang==="en"
+? "Risk"
+: "Rischio"
+}:
+
 <strong>${
 first.risk ??
 Math.max(
@@ -2173,9 +2200,23 @@ line-height:2;
 padding-left:20px;
 ">
 
-<li>Centro Storico</li>
-<li>Zona Universitaria</li>
-<li>Aree ad alta domanda turistica</li>
+<li>${
+window.currentLang==="en"
+? "Historic Center"
+: "Centro Storico"
+}</li>
+
+<li>${
+window.currentLang==="en"
+? "University Area"
+: "Zona Universitaria"
+}</li>
+
+<li>${
+window.currentLang==="en"
+? "High Tourist Demand Areas"
+: "Aree ad alta domanda turistica"
+}</li>
 
 </ul>
 
