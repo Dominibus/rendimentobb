@@ -1444,6 +1444,16 @@ isEn
 
 </div>
 
+<img
+src="/immobili/napoli-1.jpg"
+style="
+width:100%;
+max-height:220px;
+object-fit:cover;
+border-radius:12px;
+margin-bottom:15px;
+">
+
 <div style="margin-bottom:10px">
 
 <strong>
@@ -1462,6 +1472,15 @@ ${portal}
 
 <strong>ID:</strong> ${id}
 
+</div>
+
+<div style="margin-bottom:20px">
+<strong>${
+window.currentLang==="en"
+? "Area"
+: "Zona"
+}:</strong>
+${city || "-"}
 </div>
 
 <div style="
