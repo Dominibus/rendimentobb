@@ -1414,6 +1414,10 @@ id = link.split("/").filter(Boolean).pop();
 }
 
 // ===== PREVIEW =====
+
+const isEn =
+window.currentLang === "en";
+
 document.getElementById("property-preview").innerHTML = `
 
 <div style="
@@ -1431,15 +1435,33 @@ font-weight:700;
 margin-bottom:12px;
 color:#065f46;
 ">
-🏠 Immobile rilevato
+
+🏠 ${
+isEn
+? "Property detected"
+: "Immobile rilevato"
+}
+
 </div>
 
 <div style="margin-bottom:10px">
-<strong>Portale:</strong> ${portal}
+
+<strong>
+${
+isEn
+? "Portal"
+: "Portale"
+}:
+</strong>
+
+${portal}
+
 </div>
 
 <div style="margin-bottom:20px">
+
 <strong>ID:</strong> ${id}
+
 </div>
 
 <div style="
@@ -1451,7 +1473,11 @@ gap:12px;
 <input
 id="detected-price"
 type="number"
-placeholder="Prezzo immobile €"
+placeholder="${
+isEn
+? "Property price €"
+: "Prezzo immobile €"
+}"
 style="
 padding:12px;
 border:1px solid #cbd5e1;
@@ -1461,7 +1487,11 @@ border-radius:10px;
 <input
 id="detected-sqm"
 type="number"
-placeholder="Metri quadri"
+placeholder="${
+isEn
+? "Square meters"
+: "Metri quadri"
+}"
 style="
 padding:12px;
 border:1px solid #cbd5e1;
@@ -1471,7 +1501,11 @@ border-radius:10px;
 <input
 id="detected-city"
 type="text"
-placeholder="Città"
+placeholder="${
+isEn
+? "City"
+: "Città"
+}"
 style="
 padding:12px;
 border:1px solid #cbd5e1;
@@ -1488,7 +1522,11 @@ margin-top:15px;
 width:100%;
 ">
 
-📊 Analizza investimento
+📊 ${
+isEn
+? "Analyze Investment"
+: "Analizza investimento"
+}
 
 </button>
 
@@ -1498,14 +1536,18 @@ font-size:13px;
 color:#64748b;
 ">
 
-Inserisci i dati dell'annuncio e premi
-"Analizza investimento".
+${
+isEn
+? "Enter listing data and click Analyze Investment."
+: "Inserisci i dati dell'annuncio e premi Analizza investimento."
+}
 
 </div>
 
 </div>
 
 `;
+
 localStorage.setItem(
   "property_link",
   link
@@ -1513,25 +1555,37 @@ localStorage.setItem(
 
 };
 
+// =====================================
+// 📊 ANALYZE DETECTED PROPERTY
+// =====================================
+
 window.analyzeDetectedProperty = function(){
 
 const price =
 Number(
-document.getElementById("detected-price")?.value || 0
+document.getElementById(
+"detected-price"
+)?.value || 0
 );
 
 const sqm =
 Number(
-document.getElementById("detected-sqm")?.value || 0
+document.getElementById(
+"detected-sqm"
+)?.value || 0
 );
 
 const city =
-document.getElementById("detected-city")?.value || "";
+document.getElementById(
+"detected-city"
+)?.value || "";
 
 if(!price || !sqm){
 
 alert(
-"Inserisci prezzo e metri quadri"
+window.currentLang === "en"
+? "Please enter price and square meters"
+: "Inserisci prezzo e metri quadri"
 );
 
 return;
@@ -1554,10 +1608,9 @@ sqm
 );
 
 window.location.href =
-`/tool/?auto=1`;
+"/tool/?auto=1";
 
-};  
-
+};
 
 // ================= SEARCH =================
  console.log("🚀 SEARCH FUNCTION START");
