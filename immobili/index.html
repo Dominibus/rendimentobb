@@ -1176,7 +1176,14 @@ data-en="✔ Free analysis • No registration • Results in 30 seconds">
 
 </div>
 
-<div id="property-search-results" style="margin-top:50px"></div>
+<div id="property-search-results"
+style="
+margin-top:50px;
+max-width:900px;
+margin-left:auto;
+margin-right:auto;
+">
+</div>
 
 </section>
 
@@ -1948,60 +1955,85 @@ ${window.currentLang==="en"
 `;
 }
 
-// ===== RENDER =====
+  container.innerHTML = `
 
-const resultsTitle =
-window.currentLang==="en"
-? `AI found the best opportunities in ${city}`
-: `L'AI ha trovato le migliori opportunità a ${city}`;
-
-container.innerHTML = `
-
-<h3 style="
-text-align:center;
-margin-bottom:25px;
-color:#059669;
-font-size:22px;
+<div style="
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 40px rgba(0,0,0,.08);
+border:1px solid #e2e8f0;
 ">
 
-${resultsTitle}
+<h3 style="
+margin-bottom:20px;
+color:#0f172a;
+">
+
+📊 ${
+window.currentLang==="en"
+? "Recommended Investment Strategy"
+: "Strategia investimento consigliata"
+}
 
 </h3>
 
-<div class="property-grid">
+<div style="
+font-size:18px;
+font-weight:700;
+color:#10b981;
+margin-bottom:15px;
+">
 
-${createCard(
+📍 ${city}
 
+</div>
+
+<div style="margin-bottom:10px">
+ROI stimato:
+<strong>${first.roi}%</strong>
+</div>
+
+<div style="margin-bottom:10px">
+💰 Budget:
+<strong>€${first.price.toLocaleString()}</strong>
+</div>
+
+<div style="margin-bottom:10px">
+📐 Metratura ideale:
+<strong>${first.sqm} m²</strong>
+</div>
+
+<div style="margin-bottom:20px">
+🛡️ Rischio:
+<strong>${first.risk}/10</strong>
+</div>
+
+<hr style="margin:20px 0">
+
+<div style="
+font-weight:600;
+margin-bottom:10px;
+">
+
+🎯 ${
 window.currentLang==="en"
-? first.titleEN
-: first.titleIT,
+? "Recommended Areas"
+: "Zone consigliate"
+}
 
-first.price,
-first.sqm,
-first.roi,
-"",
-first.portal,
-first.url,
-propertyImages[0],
-true
+</div>
 
-)}
+<ul style="
+line-height:2;
+padding-left:20px;
+">
 
-${createCard(
+<li>Centro Storico</li>
+<li>Zona Universitaria</li>
+<li>Aree ad alta domanda turistica</li>
 
-window.currentLang==="en"
-? second.titleEN
-: second.titleIT,
-
-second.price,
-second.sqm,
-second.roi,
-"",
-second.portal,
-second.url,
-propertyImages[1]
-
-)}
+</ul>
 
 </div>
 
