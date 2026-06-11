@@ -689,8 +689,9 @@ class="mobile-cta">
       }
 
       // BLOCCO MOBILE DASHBOARD
-      /*
+       /*
       if(!isPaid){
+       
         const mobileDash = document.getElementById("mobile-dashboard");
         if(mobileDash){
           mobileDash.onclick = (e)=>{
