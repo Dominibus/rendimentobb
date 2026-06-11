@@ -6093,6 +6093,15 @@ Number(
   localStorage.getItem("property_sqm") || 0
 );
 
+  console.log(
+"🔥 AUTO IMPORT START",
+{
+  savedPrice,
+  savedCity,
+  savedSqm
+}
+);
+
 if(savedPrice > 0){
 
   const priceInput =
