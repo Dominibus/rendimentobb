@@ -6152,6 +6152,8 @@ document.getElementById(
 
 if(propertyBanner){
 
+  propertyBanner.style.display = "block";
+
   propertyBanner.innerHTML = `
 
   <div style="
