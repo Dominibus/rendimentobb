@@ -6269,19 +6269,11 @@ if(propertyBanner){
 
   setTimeout(()=>{
 
-  if(typeof calculate === "function"){
-
-    console.log(
-      "🚀 AUTO CALCULATE FROM PROPERTY"
-    );
-
-    calculate(true);
-
-  }
+  console.log(
+    "🚫 AUTO CALCULATE DISABLED TEST"
+  );
 
 },1000);
-
-}  
 
 const link = localStorage.getItem("property_link");
 
