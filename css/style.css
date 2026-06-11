@@ -18857,6 +18857,16 @@ box-shadow:0 8px 20px rgba(0,0,0,.06);
 
 .rb-positioning-banner strong{
 display:block;
-margin-bottom:8px;
-color:#0f172a;
+color:#0f172a !important;
+font-size:18px;
+font-weight:700;
+}
+
+.rb-positioning-banner span{
+display:block;
+margin-top:6px;
+color:#475569 !important;
+font-size:14px;
+font-weight:500;
+line-height:1.4;
 }
