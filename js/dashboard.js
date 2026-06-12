@@ -1269,6 +1269,23 @@ ${window.currentUser.email}
 
 <div class="right">
 
+${
+window.isDemoDashboard
+? `
+<a
+href="#pricing"
+class="btn-home"
+style="
+background:#10b981;
+color:white;
+font-weight:700;
+">
+🚀 Upgrade PRO
+</a>
+`
+: ""
+}
+
 <a href="/" class="btn-home">
 ${t("Home","Home")}
 </a>
@@ -3656,13 +3673,16 @@ document.addEventListener("rb_plan_ready", ()=>{
   const access =
     window.getUserAccess?.() || {};
 
-  if(!access.isLogged){
+if(
+  !access.isLogged ||
+  access.isFree
+){
 
   window.isDemoData = true;
   window.isDemoDashboard = true;
 
   console.log(
-    "🧪 GUEST DEMO DASHBOARD"
+    "🧪 DEMO DASHBOARD ACTIVE"
   );
 
 }
@@ -3814,6 +3834,49 @@ async function loadProperties(){
     );
 
   if(!container) return;
+
+  if(window.isDemoDashboard){
+
+  container.innerHTML = `
+
+  <div class="property-card">
+
+    <h3>
+      🏠 Napoli Centro Storico
+    </h3>
+
+    <div class="metric">
+      <span>Città</span>
+      <strong>Napoli</strong>
+    </div>
+
+    <div class="metric">
+      <span>Prezzo notte</span>
+      <strong>€112</strong>
+    </div>
+
+    <div class="metric">
+      <span>Occupazione</span>
+      <strong>78%</strong>
+    </div>
+
+    <div class="metric">
+      <span>RevPAR</span>
+      <strong>€87</strong>
+    </div>
+
+    <div class="metric">
+      <span>Ricavi</span>
+      <strong>€2.980</strong>
+    </div>
+
+  </div>
+
+  `;
+
+  return;
+
+}
 
   if(!window.currentUser) return;
 
@@ -4562,6 +4625,56 @@ async function loadBookings(propertyId){
     );
 
   if(!list) return;
+
+  if(window.isDemoDashboard){
+
+  list.innerHTML = `
+
+  <div class="analysis-card">
+
+    <strong>
+      Marco Rossi
+    </strong>
+
+    <br>
+
+    12/06 → 15/06
+
+    <br>
+
+    🏠 Airbnb
+
+    <br>
+
+    €336
+
+  </div>
+
+  <div class="analysis-card">
+
+    <strong>
+      John Smith
+    </strong>
+
+    <br>
+
+    18/06 → 22/06
+
+    <br>
+
+    🟦 Booking.com
+
+    <br>
+
+    €448
+
+  </div>
+
+  `;
+
+  return;
+
+}
 
   const q =
     query(
