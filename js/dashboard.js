@@ -435,6 +435,9 @@ async function loadDashboard(){
     email:"demo@rendimentobb.com"
   };
 
+  window.isDemoData = true;
+  window.isDemoDashboard = true;
+
 }
 
   renderHeader();
@@ -542,7 +545,8 @@ const analyses = querySnapshot.docs.map(doc => {
 
 const plan = String(window.currentPlan || "").toLowerCase();
 
-window.isDemoData = false;
+window.isDemoData =
+  window.isDemoDashboard || false;
 
 if(plan === "free"){
 
