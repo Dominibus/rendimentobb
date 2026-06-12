@@ -2242,15 +2242,22 @@ document.addEventListener("DOMContentLoaded", () => {
     window.getUserAccess?.() || {};
 
   // =====================================
-  // 🧪 DEMO BANNER
-  // =====================================
+// 🧪 DEMO BANNER
+// =====================================
 
-  const banner =
-    document.getElementById(
-      "demo-banner"
-    );
+document.addEventListener(
+  "rb_plan_ready",
+  ()=>{
 
-  if(banner){
+    const access =
+      window.getUserAccess?.() || {};
+
+    const banner =
+      document.getElementById(
+        "demo-banner"
+      );
+
+    if(!banner) return;
 
     const showDemoBanner =
       !access.isLogged ||
@@ -2269,7 +2276,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
   }
-
+);
   // =====================================
   // 🔥 UPGRADE BOX (INVESTOR / FREE)
   // =====================================
