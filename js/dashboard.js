@@ -3969,7 +3969,11 @@ window.saveProperty = async function(){
 
 await loadProperties();
 
-await loadPMSStats();
+if(
+  !window.isDemoDashboard
+){
+  await loadPMSStats();
+}
 
 // =====================================
 // 🏠 LOAD PROPERTIES
@@ -5490,6 +5494,16 @@ await loadBookings(
 // =====================================
 
 async function loadPMSStats(){
+
+  if(window.isDemoDashboard){
+
+  console.log(
+    "🧪 PMS DEMO MODE"
+  );
+
+  return;
+
+}
 
   if(!window.currentUser) return;
 
