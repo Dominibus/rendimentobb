@@ -2239,12 +2239,12 @@ data-en="💰 Cashflow">
 document.addEventListener("DOMContentLoaded", () => {
 
   const access =
-window.getUserAccess?.() || {};
+window.getUserAccess?.();
 
-const isDemoMode =
-!access.isLogged;
-
-  if(isDemoMode){
+if(
+  access &&
+  access.isLogged === false
+){
 
   const banner =
   document.getElementById(
