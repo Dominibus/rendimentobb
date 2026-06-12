@@ -425,9 +425,17 @@ async function loadDashboard(){
 }
 
   if(!window.currentUser){
-    showGuestPopup();
-    return;
-  }
+
+  console.log(
+    "👀 GUEST DEMO MODE"
+  );
+
+  window.currentUser = {
+    uid:"demo-user",
+    email:"demo@rendimentobb.com"
+  };
+
+}
 
   renderHeader();
 
@@ -1709,9 +1717,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // ================= USER NON LOGGATO =================
     if(!user){
-      window.location.href = "/#pricing";
-      return;
-    }
+
+  console.log(
+    "👀 GUEST → DASHBOARD DEMO"
+  );
+
+  window.currentPlan = "free";
+
+  await loadDashboard();
+
+  return;
+}
 
     // ================= USER OK =================
     window.currentUser = user;
