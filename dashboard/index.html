@@ -2239,48 +2239,77 @@ data-en="💰 Cashflow">
 document.addEventListener("DOMContentLoaded", () => {
 
   const access =
-window.getUserAccess?.();
+    window.getUserAccess?.() || {};
 
-if(
-  access &&
-  access.isLogged === false
-){
+  // =====================================
+  // 🧪 DEMO BANNER
+  // =====================================
 
   const banner =
-  document.getElementById(
-    "demo-banner"
-  );
+    document.getElementById(
+      "demo-banner"
+    );
 
   if(banner){
-    banner.style.display = "block";
+
+    const showDemoBanner =
+      !access.isLogged ||
+      access.isFree;
+
+    banner.style.display =
+      showDemoBanner
+        ? "block"
+        : "none";
+
+    console.log(
+      "🧪 DEMO BANNER:",
+      showDemoBanner
+        ? "VISIBLE"
+        : "HIDDEN"
+    );
+
   }
-
-}
-
 
   // =====================================
   // 🔥 UPGRADE BOX (INVESTOR / FREE)
   // =====================================
 
-  const box = document.getElementById("upgrade-trigger");
-if(!box) return;
+  const box =
+    document.getElementById(
+      "upgrade-trigger"
+    );
 
-  const staticBox = document.getElementById("upgrade-box-static");
+  if(!box) return;
 
-if(staticBox && (access.isPro || access.isAdmin)){
-  staticBox.style.display = "none";
-}
+  const staticBox =
+    document.getElementById(
+      "upgrade-box-static"
+    );
 
-// 🔥 PRO E ADMIN NON DEVONO MAI VEDERE CTA
-if(access.isPro || access.isAdmin){
-  box.style.display = "none";
-  return;
-}
+  if(
+    staticBox &&
+    (access.isPro || access.isAdmin)
+  ){
+    staticBox.style.display = "none";
+  }
 
-// 🔥 SOLO FREE / INVESTOR
-if(!access.canSeeFullAnalysis){
-  box.style.display = "block";
-}
+  // 🔥 PRO E ADMIN NON DEVONO MAI VEDERE CTA
+
+  if(
+    access.isPro ||
+    access.isAdmin
+  ){
+    box.style.display = "none";
+    return;
+  }
+
+  // 🔥 SOLO FREE / INVESTOR
+
+  if(
+    !access.canSeeFullAnalysis
+  ){
+    box.style.display = "block";
+  }
 
   box.innerHTML = `
 
@@ -2293,39 +2322,44 @@ if(!access.canSeeFullAnalysis){
       text-align:center;
     ">
 
-      <h3 style="margin-bottom:8px"
+      <h3
+      style="margin-bottom:8px"
       data-it="🔒 Stai vedendo solo il 40% della dashboard"
       data-en="🔒 You are seeing only 40% of the dashboard">
       🔒 Stai vedendo solo il 40% della dashboard
       </h3>
 
-      <p style="
+      <p
+      style="
       font-size:14px;
       color:#ffffff;
       font-weight:600;
-"
+      "
       data-it="ROI reale, rischio e simulazioni complete sono bloccate"
       data-en="Real ROI, risk and full simulations are locked">
       ROI reale, rischio e simulazioni complete sono bloccate
       </p>
 
-     <p
-     data-it="⚠️ Senza questi dati potresti perdere migliaia di €"
-     data-en="⚠️ Without this data you could lose thousands of €"
-     style="
-     margin-top:10px;
-     font-size:13px;
-     color:#d1fae5;
-     font-weight:600;
-     "
-     >
+      <p
+      data-it="⚠️ Senza questi dati potresti perdere migliaia di €"
+      data-en="⚠️ Without this data you could lose thousands of €"
+      style="
+      margin-top:10px;
+      font-size:13px;
+      color:#d1fae5;
+      font-weight:600;
+      ">
       ⚠️ Senza questi dati potresti perdere migliaia di €
       </p>
 
-      <button 
-  onclick="goToUpgradeFlow()" 
-  class="btn btn-primary"
-  style="margin-top:14px;padding:12px 18px;font-weight:600">
+      <button
+      onclick="goToUpgradeFlow()"
+      class="btn btn-primary"
+      style="
+      margin-top:14px;
+      padding:12px 18px;
+      font-weight:600;
+      ">
 
         🔓 <span
         data-it="Sblocca dashboard completa"
@@ -2336,61 +2370,62 @@ if(!access.canSeeFullAnalysis){
       </button>
 
     </div>
+
   `;
 
-// =====================================
-// 📅 BOOKING FORM TOGGLE
-// =====================================
+  // =====================================
+  // 📅 BOOKING FORM TOGGLE
+  // =====================================
 
-const bookingToggle =
-document.getElementById(
-"toggle-booking-form"
-);
+  const bookingToggle =
+    document.getElementById(
+      "toggle-booking-form"
+    );
 
-const bookingForm =
-document.getElementById(
-"booking-form-container"
-);
+  const bookingForm =
+    document.getElementById(
+      "booking-form-container"
+    );
 
-if(
-bookingToggle &&
-bookingForm
-){
+  if(
+    bookingToggle &&
+    bookingForm
+  ){
 
-bookingForm.style.display =
-"none";
+    bookingForm.style.display =
+      "none";
 
-bookingToggle.addEventListener(
-"click",
-()=>{
+    bookingToggle.addEventListener(
+      "click",
+      ()=>{
 
-if(
-bookingForm.style.display ===
-"none"
-){
+        if(
+          bookingForm.style.display ===
+          "none"
+        ){
 
-bookingForm.style.display =
-"flex";
+          bookingForm.style.display =
+            "flex";
 
-bookingToggle.innerHTML =
-"✖";
+          bookingToggle.innerHTML =
+            "✖";
 
-}else{
+        }else{
 
-bookingForm.style.display =
-"none";
+          bookingForm.style.display =
+            "none";
 
-bookingToggle.innerHTML =
-"➕";
+          bookingToggle.innerHTML =
+            "➕";
 
-}
+        }
+
+      }
+    );
+
+  }
 
 });
-
-}
-
-});
-
 </script>
 
 <!-- PORTFOLIO -->
