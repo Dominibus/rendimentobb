@@ -968,8 +968,9 @@ window.isDemoData
 
 `;
 
-    // 🔥 QUESTA È LA CHIAVE
-    list.appendChild(card);
+list.appendChild(card);
+
+}); 
 
 // ================= RENDER ENGINE =================
 
