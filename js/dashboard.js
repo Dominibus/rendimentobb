@@ -935,29 +935,33 @@ if(isNew){
       : ""
       }
 
-      <div style="margin-top:12px;text-align:right">
-        <button 
-          class="delete-analysis" 
-          data-id="${data.id}"
-          style="
-            background:#ef4444;
-            color:white;
-            border:none;
-            padding:6px 10px;
-            border-radius:6px;
-            font-size:12px;
-            cursor:pointer;
-          ">
-          🗑 ${t("Elimina","Delete")}
-        </button>
-      </div>
+    ${
+window.isDemoData
+? ""
+: `
+<div style="margin-top:12px;text-align:right">
+  <button
+    class="delete-analysis"
+    data-id="${data.id}"
+    style="
+      background:#ef4444;
+      color:white;
+      border:none;
+      padding:6px 10px;
+      border-radius:6px;
+      font-size:12px;
+      cursor:pointer;
+    ">
+    🗑 ${t("Elimina","Delete")}
+  </button>
+</div>
+`
+}
 
-    `;
+`;
 
-    // 🔥 QUESTA È LA CHIAVE (ERA IL TUO PROBLEMA)
+    // 🔥 QUESTA È LA CHIAVE
     list.appendChild(card);
-
-  });
 
 // ================= RENDER ENGINE =================
 
@@ -1735,17 +1739,11 @@ window.addEventListener("DOMContentLoaded", () => {
       // ================= FREE ACCESS CONTROL =================
       if(plan === "free"){
 
-        const fromLogin = localStorage.getItem("just_logged");
+  console.log(
+    "🆓 FREE → DASHBOARD DEMO MODE"
+  );
 
-        if(!fromLogin){
-          console.log("⛔ FREE → redirect to tool");
-          window.location.href = "/tool/";
-          return;
-        }
-
-        console.log("🆓 FREE → accesso temporaneo dashboard");
-        localStorage.removeItem("just_logged");
-      }
+}
 
       // ================= FLAGS =================
       const pro =
