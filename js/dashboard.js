@@ -43,8 +43,19 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 function isPro(){
-  const plan = String(window.currentPlan || "").toLowerCase();
-  return plan === "pro" || plan === "pro_yearly";
+
+  if(window.isDemoDashboard){
+    return true;
+  }
+
+  const plan =
+    String(window.currentPlan || "")
+    .toLowerCase();
+
+  return (
+    plan === "pro" ||
+    plan === "pro_yearly"
+  );
 }
 
 window.proOverlayShown = false;
@@ -638,10 +649,12 @@ window.isDemoData =
   window.isDemoDashboard || false;
 
 const isFreeUser =
-
-  !window.currentUser?.uid ||
-
-  plan === "free";
+  (
+    !window.currentUser?.uid ||
+    plan === "free"
+  )
+  &&
+  !window.isDemoDashboard;
 
 if(isFreeUser){
 
@@ -1880,11 +1893,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // ================= USER NON LOGGATO =================
     if(!user){
 
-  console.log(
-    "👀 GUEST → DASHBOARD DEMO"
-  );
-
-  window.currentPlan = "free";
+  window.currentPlan = "demo";
 
   await loadDashboard();
 
