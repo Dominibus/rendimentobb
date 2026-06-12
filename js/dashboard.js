@@ -1235,7 +1235,57 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
+if(investor && !pro){
+
+  container.innerHTML = `
+
+  <div class="analysis-card">
+
+    <h3>
+    🏆 Best Investment
+    </h3>
+
+    <div style="
+    margin-top:20px;
+    text-align:center;
+    ">
+
+      <div style="
+      font-size:42px;
+      margin-bottom:10px;
+      ">
+      🔒
+      </div>
+
+      <div style="
+      color:#64748b;
+      margin-bottom:15px;
+      ">
+      Upgrade a PRO per vedere
+      il miglior investimento
+      del portafoglio.
+      </div>
+
+      <button
+      class="btn-primary"
+      onclick="goToUpgrade()">
+      🚀 Passa a PRO
+      </button>
+
+    </div>
+
+  </div>
+
+  `;
+
+  return;
+}  
+
 const pro = isPro();
+
+const investor =
+String(window.currentPlan || "")
+.toLowerCase() === "investor";
 
 container.innerHTML = `
 
@@ -1560,31 +1610,48 @@ if(kpiRoi){
 }
 
 if(kpiCash){
-  kpiCash.innerText = (pro || investor)
-    ? formatCurrency(monthlyProfit)
-    : "🔒";
+  kpiCash.innerText =
+    pro
+      ? formatCurrency(monthlyProfit)
+      : "🔒";
 }
 
 if(kpiInvest){
-  kpiInvest.innerText = (pro || investor)
-    ? formatCurrency(totalCapital)
-    : "🔒";
+  kpiInvest.innerText =
+    pro
+      ? formatCurrency(totalCapital)
+      : "🔒";
 }
 
 if(kpiBreak){
-  kpiBreak.innerText = pro
-    ? breakEven + "y"
-    : "🔒";
+  kpiBreak.innerText =
+    pro
+      ? breakEven + "y"
+      : "🔒";
 }
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
 if(roiEl) roiEl.textContent = avgROIRounded + "%";
 
-const cashEl = document.getElementById("portfolio-cashflow");
-if(cashEl) cashEl.textContent = formatCurrency(avgCashflow);
+const cashEl =
+document.getElementById("portfolio-cashflow");
 
-const capEl = document.getElementById("portfolio-capital");
-if(capEl) capEl.textContent = formatCurrency(totalCapital);
+if(cashEl){
+  cashEl.textContent =
+    pro
+      ? formatCurrency(avgCashflow)
+      : "🔒";
+}
+
+const capEl =
+document.getElementById("portfolio-capital");
+
+if(capEl){
+  capEl.textContent =
+    pro
+      ? formatCurrency(totalCapital)
+      : "🔒";
+}
 
 const countEl = document.getElementById("portfolio-count");
 if(countEl) countEl.textContent = count;
@@ -2183,6 +2250,46 @@ display:false
 // ===============================
 
 function renderInsight(count,totalROI,totalCapital){
+
+const investor =
+String(window.currentPlan || "")
+.toLowerCase() === "investor";
+
+if(investor && !isPro()){
+
+  container.innerHTML = `
+  <div class="analysis-card">
+
+    <h3>🤖 AI Insight</h3>
+
+    <div style="
+    text-align:center;
+    padding:20px;
+    ">
+
+      <div style="
+      font-size:40px;
+      ">
+      🔒
+      </div>
+
+      <p>
+      Disponibile nel piano PRO
+      </p>
+
+      <button
+      class="btn-primary"
+      onclick="goToUpgrade()">
+      🚀 Upgrade PRO
+      </button>
+
+    </div>
+
+  </div>
+  `;
+
+  return;
+}  
 
 const container = document.getElementById("investment-insight");
 
@@ -3610,9 +3717,16 @@ cursor:pointer;
 function lockInvestorPreview(){
 
   const elementsToBlur = [
-    "roi-target-calculator",
-    "revenue-simulator"
-  ];
+
+  "roi-target-calculator",
+
+  "revenue-simulator",
+
+  "roi-optimizer",
+
+  "roi-market-comparison"
+
+];
 
   elementsToBlur.forEach(id=>{
     const el = document.getElementById(id);
