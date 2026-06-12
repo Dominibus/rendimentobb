@@ -405,8 +405,13 @@ cutout:"65%"
 
 async function loadDashboard(){
 
-  if(window.__dashboardLoaded && !window.__forceReload){
-    console.warn("Dashboard già inizializzata → skip");
+  if(
+    window.__dashboardLoaded &&
+    !window.__forceReload
+  ){
+    console.warn(
+      "Dashboard già inizializzata → skip"
+    );
     return;
   }
 
@@ -418,50 +423,139 @@ async function loadDashboard(){
   roiValues = [];
   labels = [];
 
+  // =====================================
+  // ⏳ WAIT PLAN
+  // =====================================
+
   if(!window.currentPlan){
-  console.warn("⏳ Plan non pronto → retry");
-  setTimeout(loadDashboard, 200);
-  return;
-}
+
+    console.warn(
+      "⏳ Plan non pronto → retry"
+    );
+
+    setTimeout(
+      loadDashboard,
+      200
+    );
+
+    return;
+  }
+
+  // =====================================
+  // 🧪 GUEST DEMO MODE
+  // =====================================
 
   if(!window.currentUser){
 
-  console.log(
-    "👀 GUEST DEMO MODE"
-  );
+    console.log(
+      "👀 GUEST DEMO MODE"
+    );
 
-  window.currentUser = {
-    uid:"demo-user",
-    email:"demo@rendimentobb.com"
-  };
+    window.currentUser = {
 
-  window.isDemoData = true;
-  window.isDemoDashboard = true;
+      uid:"demo-user",
 
-}
+      email:"demo@rendimentobb.com"
+
+    };
+
+    window.isDemoData = true;
+    window.isDemoDashboard = true;
+
+  }
 
   renderHeader();
 
-  const q = query(
-  collection(db,"analyses"),
-  where("uid","==", window.currentUser.uid),
-  orderBy("createdAt","desc")
-);
+  // =====================================
+  // 🔥 FIRESTORE / DEMO
+  // =====================================
 
-  const querySnapshot = await getDocs(q);
+  let querySnapshot = {
 
-  if(querySnapshot.empty){
-    console.warn("Nessuna analisi trovata");
+    docs: [],
+    size: 0,
+    empty: true
+
+  };
+
+  if(
+
+    !window.isDemoDashboard &&
+
+    window.currentUser?.uid &&
+
+    window.currentUser.uid !==
+    "demo-user"
+
+  ){
+
+    const q = query(
+
+      collection(
+        db,
+        "analyses"
+      ),
+
+      where(
+        "uid",
+        "==",
+        window.currentUser.uid
+      ),
+
+      orderBy(
+        "createdAt",
+        "desc"
+      )
+
+    );
+
+    querySnapshot =
+      await getDocs(q);
+
+  }else{
+
+    console.log(
+      "🧪 DEMO DASHBOARD → skip firestore"
+    );
+
   }
 
-  console.log("DOCUMENTI:", querySnapshot.docs.map(d => d.data())); 
-  console.log("UID:", window.currentUser?.uid);
-  console.log("Analisi trovate:", querySnapshot.size); 
+  if(querySnapshot.empty){
 
-  const list = document.getElementById("analysis-list");
+    console.warn(
+      "Nessuna analisi trovata"
+    );
+
+  }
+
+  console.log(
+    "DOCUMENTI:",
+    querySnapshot.docs.map(
+      d => d.data()
+    )
+  );
+
+  console.log(
+    "UID:",
+    window.currentUser?.uid
+  );
+
+  console.log(
+    "Analisi trovate:",
+    querySnapshot.size
+  );
+
+  const list =
+    document.getElementById(
+      "analysis-list"
+    );
 
   if(!list){
-    console.error("analysis-list NON trovato");
+
+    console.error(
+      "analysis-list NON trovato"
+    );
+
     return;
   }
 
@@ -548,41 +642,92 @@ const plan = String(window.currentPlan || "").toLowerCase();
 window.isDemoData =
   window.isDemoDashboard || false;
 
-if(plan === "free"){
+const isFreeUser =
 
-  console.log("🆓 FREE → FAKE SMART DATA");
+  !window.currentUser?.uid ||
+
+  plan === "free";
+
+if(isFreeUser){
+
+  console.log(
+    "🆓 FREE / GUEST → FAKE SMART DATA"
+  );
 
   window.isDemoData = true;
 
-  // ❌ rimuovi dati reali
   analyses.length = 0;
 
-  // 🔥 dati finti realistici (UX + conversione)
   analyses.push({
-    roi: 11.8,
-    price: 165000,
-    equity: 35000,
-    risk: 42,
-    city: "roma",
-    createdAt: new Date()
+
+    roi:11.8,
+
+    price:165000,
+
+    equity:35000,
+
+    gross:38900,
+
+    expenses:9700,
+
+    net:29200,
+
+    occupancy:78,
+
+    risk:42,
+
+    city:"roma",
+
+    createdAt:new Date()
+
   });
 
   analyses.push({
-    roi: 9.6,
-    price: 140000,
-    equity: 30000,
-    risk: 55,
-    city: "napoli",
-    createdAt: new Date()
+
+    roi:9.6,
+
+    price:140000,
+
+    equity:30000,
+
+    gross:31200,
+
+    expenses:8600,
+
+    net:22600,
+
+    occupancy:73,
+
+    risk:55,
+
+    city:"napoli",
+
+    createdAt:new Date()
+
   });
 
   analyses.push({
-    roi: 13.2,
-    price: 210000,
-    equity: 50000,
-    risk: 38,
-    city: "milano",
-    createdAt: new Date()
+
+    roi:13.2,
+
+    price:210000,
+
+    equity:50000,
+
+    gross:45800,
+
+    expenses:11200,
+
+    net:34600,
+
+    occupancy:81,
+
+    risk:38,
+
+    city:"milano",
+
+    createdAt:new Date()
+
   });
 
 }
