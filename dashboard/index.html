@@ -1735,6 +1735,37 @@ z-index:9999;
 
 </div>
 
+  <div
+id="demo-banner"
+style="
+display:none;
+background:linear-gradient(
+135deg,
+#0f172a,
+#1e3a8a
+);
+color:white;
+padding:18px;
+border-radius:16px;
+margin-bottom:20px;
+">
+
+<h3 style="margin:0;">
+🧪 Dashboard Demo
+</h3>
+
+<p style="
+margin-top:8px;
+opacity:.9;
+">
+
+Stai esplorando una versione demo
+con dati di esempio di RendimentoBB.
+
+</p>
+
+</div>
+
 <!-- KPI GRID -->
 <div class="rb-kpi-grid">
 
@@ -2087,23 +2118,25 @@ data-en="💰 Cashflow">
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const access = window.getUserAccess?.();
-  if(!access || !access.isLogged) return;
+  const access =
+window.getUserAccess?.() || {};
 
- // =====================================
-  // 🔒 GUEST BLOCK
-  // =====================================
+const isDemoMode =
+!access.isLogged;
 
-  if(!access.isLogged){
+  if(isDemoMode){
 
-    alert(window.t(
-      "Devi effettuare il login per accedere alla dashboard",
-      "You must log in to access the dashboard"
-    ));
+  const banner =
+  document.getElementById(
+    "demo-banner"
+  );
 
-    window.location.href = "/login/";
-    return;
+  if(banner){
+    banner.style.display = "block";
   }
+
+}
+
 
   // =====================================
   // 🔥 UPGRADE BOX (INVESTOR / FREE)
