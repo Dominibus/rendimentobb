@@ -5505,6 +5505,32 @@ async function loadPMSStats(){
     "🧪 PMS DEMO MODE"
   );
 
+  const setText = (id,value)=>{
+
+    const el =
+      document.getElementById(id);
+
+    if(el){
+      el.innerText = value;
+    }
+
+  };
+
+  setText("pms-total-properties","1");
+  setText("pms-total-bookings","11");
+  setText("pms-total-revenue","€2.980");
+  setText("pms-occupancy","78%");
+  setText("pms-adr","€112");
+  setText("pms-revpar","€87");
+  setText("pms-avgstay","3.2");
+  setText("pms-guests","27");
+  setText("pms-arrivals-today","2");
+  setText("pms-departures-today","1");
+  setText("pms-guests-in-house","5");
+  setText("pms-checkin-today","2");
+  setText("pms-checkout-today","1");
+  setText("pms-pending-bookings","2");
+
   return;
 
 }
@@ -5764,48 +5790,6 @@ setText(
   "pms-pending-bookings",
   pendingBookings
 );
-
-  // ================= DEMO PMS DATA =================
-
-if(window.isDemoDashboard){
-
-  document.getElementById(
-    "pms-total-properties"
-  ).innerText = "1";
-
-  document.getElementById(
-    "pms-total-bookings"
-  ).innerText = "11";
-
-  document.getElementById(
-    "pms-total-revenue"
-  ).innerText = "€2.980";
-
-  document.getElementById(
-    "pms-occupancy"
-  ).innerText = "78%";
-
-  document.getElementById(
-    "pms-adr"
-  ).innerText = "€112";
-
-  document.getElementById(
-    "pms-revpar"
-  ).innerText = "€87";
-
-  document.getElementById(
-    "pms-avgstay"
-  ).innerText = "3.2";
-
-  document.getElementById(
-    "pms-guests"
-  ).innerText = "27";
-
-  document.getElementById(
-    "pms-pending-bookings"
-  ).innerText = "2";
-
-}
 
   // ======================
   // PERFORMANCE CHART
