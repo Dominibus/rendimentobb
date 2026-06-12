@@ -2279,6 +2279,16 @@ function updateDemoBanner(){
 // primo controllo immediato
 updateDemoBanner();
 
+  setTimeout(
+  updateDemoBanner,
+  1500
+);
+
+setTimeout(
+  updateDemoBanner,
+  3000
+);
+
 // secondo controllo quando Firebase carica il piano
 document.addEventListener(
   "rb_plan_ready",
