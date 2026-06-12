@@ -3994,44 +3994,60 @@ async function loadProperties(){
 
   if(window.isDemoDashboard){
 
-  container.innerHTML = `
+container.innerHTML = `
 
-  <div class="property-card">
+<div class="property-card">
 
-    <h3>
-      🏠 Napoli Centro Storico
-    </h3>
+<h3>
+🏠 Napoli Centro Storico
+</h3>
 
-    <div class="metric">
-      <span>Città</span>
-      <strong>Napoli</strong>
-    </div>
+<div class="metric">
+<span>Città</span>
+<strong>Napoli</strong>
+</div>
 
-    <div class="metric">
-      <span>Prezzo notte</span>
-      <strong>€112</strong>
-    </div>
+<div class="metric">
+<span>Prezzo notte</span>
+<strong>€112</strong>
+</div>
 
-    <div class="metric">
-      <span>Occupazione</span>
-      <strong>78%</strong>
-    </div>
+<div class="metric">
+<span>Occupazione</span>
+<strong>78%</strong>
+</div>
 
-    <div class="metric">
-      <span>RevPAR</span>
-      <strong>€87</strong>
-    </div>
+<div class="metric">
+<span>RevPAR</span>
+<strong>€87</strong>
+</div>
 
-    <div class="metric">
-      <span>Ricavi</span>
-      <strong>€2.980</strong>
-    </div>
+<div class="metric">
+<span>Ricavi</span>
+<strong>€2.980</strong>
+</div>
 
-  </div>
+<div style="
+display:flex;
+gap:10px;
+margin-top:15px;
+">
 
-  `;
+<button
+class="btn-dashboard"
+onclick="openBookings('demo-property')">
 
-  return;
+Prenotazioni
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+return;
 
 }
 
