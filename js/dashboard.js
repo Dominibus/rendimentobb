@@ -5474,6 +5474,48 @@ setText(
   pendingBookings
 );
 
+  // ================= DEMO PMS DATA =================
+
+if(window.isDemoDashboard){
+
+  document.getElementById(
+    "pms-total-properties"
+  ).innerText = "1";
+
+  document.getElementById(
+    "pms-total-bookings"
+  ).innerText = "11";
+
+  document.getElementById(
+    "pms-total-revenue"
+  ).innerText = "€2.980";
+
+  document.getElementById(
+    "pms-occupancy"
+  ).innerText = "78%";
+
+  document.getElementById(
+    "pms-adr"
+  ).innerText = "€112";
+
+  document.getElementById(
+    "pms-revpar"
+  ).innerText = "€87";
+
+  document.getElementById(
+    "pms-avgstay"
+  ).innerText = "3.2";
+
+  document.getElementById(
+    "pms-guests"
+  ).innerText = "27";
+
+  document.getElementById(
+    "pms-pending-bookings"
+  ).innerText = "2";
+
+}
+
   // ======================
   // PERFORMANCE CHART
   // ======================
