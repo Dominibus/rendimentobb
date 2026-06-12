@@ -3656,6 +3656,17 @@ document.addEventListener("rb_plan_ready", ()=>{
   const access =
     window.getUserAccess?.() || {};
 
+  if(!access.isLogged){
+
+  window.isDemoData = true;
+  window.isDemoDashboard = true;
+
+  console.log(
+    "🧪 GUEST DEMO DASHBOARD"
+  );
+
+}
+
   const pmsIsPro =
     access.isPro ||
     access.isAdmin;
