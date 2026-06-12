@@ -1956,13 +1956,22 @@ triggerPlanPopup(plan);
       // ================= PRO =================
       if(pro){
 
-        console.log("🔥 PRO → FULL UNLOCK");
+  console.log("🔥 PRO → FULL UNLOCK");
 
-        unlockProContent();
-        document.body.classList.add("is-pro");
+  window.isDemoData = false;
+  window.isDemoDashboard = false;
 
-        return;
-      }
+  unlockProContent();
+
+  document.body.classList.add("is-pro");
+
+  window.__dashboardLoaded = false;
+  window.__forceReload = true;
+
+  await loadDashboard();
+
+  return;
+}
 
       // ================= INVESTOR =================
       if(isInvestor){
