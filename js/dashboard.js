@@ -138,22 +138,17 @@ function lockFreeUser(){
   console.log("FREE USER → limit UI");
 
   const elementsToLock = [
-    "roi-chart-container",
-    "cashflow-chart-container",
-    "city-roi-chart",
-    "city-distribution-chart",
-    "roi-optimizer",
-    "investment-ranking",
-    "best-investment"
-  ];
+  "roi-target-calculator",
+  "revenue-simulator"
+];
 
   elementsToLock.forEach(id=>{
     const el = document.getElementById(id);
 
     if(el){
-      el.style.filter = "blur(6px)";
+      el.style.filter = "none";
       el.classList.add("rb-locked");
-      el.style.opacity = "0.6";
+      el.style.opacity = "1";
     }
   });
 
