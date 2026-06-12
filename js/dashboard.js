@@ -3832,37 +3832,49 @@ document.addEventListener(
 
 document.addEventListener("rb_plan_ready", ()=>{
 
+  const plan =
+    String(window.currentPlan || "")
+    .toLowerCase();
+
+  if(
+    plan === "demo"
+  ){
+
+    window.isDemoData = true;
+    window.isDemoDashboard = true;
+
+    console.log(
+      "🧪 DEMO DASHBOARD ACTIVE"
+    );
+
+  }else{
+
+    window.isDemoData = false;
+    window.isDemoDashboard = false;
+
+    console.log(
+      "✅ REAL DASHBOARD ACTIVE"
+    );
+
+  }
+
   const access =
     window.getUserAccess?.() || {};
-
-if(
-  !access.isLogged ||
-  access.isFree
-){
-
-  window.isDemoData = true;
-  window.isDemoDashboard = true;
-
-  console.log(
-    "🧪 DEMO DASHBOARD ACTIVE"
-  );
-
-}
 
   const pmsIsPro =
     access.isPro ||
     access.isAdmin;
 
   document
-  .querySelectorAll(".pro-pms-only")
-  .forEach(el=>{
+    .querySelectorAll(".pro-pms-only")
+    .forEach(el=>{
 
-    el.style.display =
-      pmsIsPro
-      ? ""
-      : "none";
+      el.style.display =
+        pmsIsPro
+        ? ""
+        : "none";
 
-  });
+    });
 
 });
 
