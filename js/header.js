@@ -665,11 +665,26 @@ class="mobile-cta">
 
       } else {
 
-        mobileHTML += `
-          <hr>
-          <a href="/login/">Login</a>
-        `;
-      }
+  mobileHTML += `
+
+    <hr>
+
+    <a
+      href="/dashboard/"
+      data-it="📊 Dashboard Demo"
+      data-en="📊 Demo Dashboard">
+      📊 Dashboard Demo
+    </a>
+
+    <a
+      href="/login/"
+      data-it="Accedi"
+      data-en="Login">
+      Accedi
+    </a>
+
+  `;
+}
 
       mobileNav.innerHTML = mobileHTML;
 
@@ -732,11 +747,28 @@ document.getElementById("logout").onclick = async ()=>{
 } else {
 
   el.innerHTML = `
-   <a href="/login/" class="rb-login"
+
+   <a
+   href="/dashboard/"
+   class="rb-btn primary"
+   data-it="📊 Dashboard Demo"
+   data-en="📊 Demo Dashboard">
+
+   📊 Dashboard Demo
+
+   </a>
+
+   <a
+   href="/login/"
+   class="rb-login"
    data-it="Accedi"
    data-en="Login">
+
    Accedi
-   </a>`;
+
+   </a>
+
+  `;
 
 }
 
