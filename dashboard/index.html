@@ -2241,41 +2241,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const access =
     window.getUserAccess?.() || {};
 
-  // =====================================
+// =====================================
 // 🧪 DEMO BANNER
 // =====================================
 
-document.addEventListener(
-  "rb_plan_ready",
-  ()=>{
+function updateDemoBanner(){
 
-    const access =
-      window.getUserAccess?.() || {};
+  const access =
+    window.getUserAccess?.() || {};
 
-    const banner =
-      document.getElementById(
-        "demo-banner"
-      );
-
-    if(!banner) return;
-
-    const showDemoBanner =
-      !access.isLogged ||
-      access.isFree;
-
-    banner.style.display =
-      showDemoBanner
-        ? "block"
-        : "none";
-
-    console.log(
-      "🧪 DEMO BANNER:",
-      showDemoBanner
-        ? "VISIBLE"
-        : "HIDDEN"
+  const banner =
+    document.getElementById(
+      "demo-banner"
     );
 
-  }
+  if(!banner) return;
+
+  const showDemoBanner =
+    !access.isLogged ||
+    access.isFree;
+
+  banner.style.display =
+    showDemoBanner
+      ? "block"
+      : "none";
+
+  console.log(
+    "🧪 DEMO BANNER:",
+    showDemoBanner
+      ? "VISIBLE"
+      : "HIDDEN",
+    access
+  );
+
+}
+
+// primo controllo immediato
+updateDemoBanner();
+
+// secondo controllo quando Firebase carica il piano
+document.addEventListener(
+  "rb_plan_ready",
+  updateDemoBanner
 );
   // =====================================
   // 🔥 UPGRADE BOX (INVESTOR / FREE)
