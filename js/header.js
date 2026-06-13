@@ -770,8 +770,6 @@ if(!user && guestMobileNav){
 
   guestMobileNav.innerHTML = `
 
-  mobileNav.innerHTML = `
-
     <a href="/tool/">Simulatore</a>
 
     <a href="/aprire-bnb-conviene/">
@@ -800,7 +798,8 @@ if(!user && guestMobileNav){
 
     <hr>
 
-    <a href="#" id="mobile-ai-btn"
+    <a href="#"
+       id="mobile-ai-btn"
        class="mobile-cta">
        ✨ AI Assistant
     </a>
