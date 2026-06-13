@@ -18979,62 +18979,93 @@ min-height:40px;
 
 }
 
-/* =====================================
-📱 MOBILE HEADER CLEAN
-===================================== */
+/* ===============================================
+📱 HEADER MOBILE FINAL 2026
+=============================================== */
 
 @media screen and (max-width:768px){
 
-  /* nasconde selettore lingua */
+  /* logo */
+
+  .rb-logo{
+    height:30px !important;
+  }
+
+  /* lingua off */
 
   .rb-lang{
     display:none !important;
   }
 
-  /* nasconde logout desktop */
+  /* login off */
 
+  .rb-login,
   #logout{
     display:none !important;
   }
 
-  /* nasconde badge piano */
+  /* badge off */
 
-  .badge-pro{
+  .badge-pro,
+  .badge-investor{
     display:none !important;
   }
 
-  /* dashboard compatta */
+  /* dashboard off */
 
-  #dashboard-link{
-    padding:0 12px !important;
-    min-width:auto !important;
-    height:42px !important;
-    font-size:13px !important;
+  .rb-user{
+    display:none !important;
   }
 
-  /* AI compatto */
+  /* AI */
 
   .rb-header-ai-btn{
-    width:auto !important;
-    min-width:60px !important;
-    padding:0 12px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
     height:42px !important;
+    min-width:64px !important;
+
+    padding:0 14px !important;
+
+    border-radius:14px !important;
+
+    font-size:14px !important;
+
+    flex-shrink:0 !important;
   }
 
-  /* burger più visibile */
+  /* burger */
 
   #rb-burger{
+    display:flex !important;
+
+    align-items:center !important;
+    justify-content:center !important;
+
     width:42px !important;
     height:42px !important;
+
     font-size:24px !important;
-    display:flex !important;
-    align-items:center;
-    justify-content:center;
+
+    flex-shrink:0 !important;
   }
 
+  /* right area */
+
   .rb-right{
+    display:flex !important;
+
+    align-items:center !important;
+
     gap:8px !important;
+
     flex-wrap:nowrap !important;
+  }
+
+  .rb-right *{
+    white-space:nowrap !important;
   }
 
 }
