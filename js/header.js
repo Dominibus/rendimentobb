@@ -757,16 +757,18 @@ document.getElementById("logout").onclick = async ()=>{
   location.reload();
 };
 
-    // =====================
+// =====================
 // 📱 MOBILE MENU GUEST
 // =====================
-
-const mobileNav =
+    
+const guestMobileNav =
   document.getElementById(
     "rb-mobile-nav"
   );
 
-if(!user && mobileNav){
+if(!user && guestMobileNav){
+
+  guestMobileNav.innerHTML = `
 
   mobileNav.innerHTML = `
 
