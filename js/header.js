@@ -759,30 +759,39 @@ document.getElementById("logout").onclick = async ()=>{
 
 } else {
 
-  el.innerHTML = `
+  const isMobile =
+    window.innerWidth <= 768;
 
-   <a
-   href="/dashboard/"
-   class="rb-btn primary"
-   data-it="📊 Dashboard Demo"
-   data-en="📊 Demo Dashboard">
+  if(isMobile){
 
-   📊 Dashboard Demo
+    el.innerHTML = "";
 
-   </a>
+  }else{
 
-   <a
-   href="/login/"
-   class="rb-login"
-   data-it="Accedi"
-   data-en="Login">
+    el.innerHTML = `
 
-   Accedi
+      <a
+      href="/dashboard/"
+      class="rb-btn primary"
+      data-it="📊 Dashboard Demo"
+      data-en="📊 Demo Dashboard">
 
-   </a>
+      📊 Dashboard Demo
 
-  `;
+      </a>
 
-}
+      <a
+      href="/login/"
+      class="rb-login"
+      data-it="Accedi"
+      data-en="Login">
+
+      Accedi
+
+      </a>
+
+    `;
+
+  }
 
 }
