@@ -757,6 +757,73 @@ document.getElementById("logout").onclick = async ()=>{
   location.reload();
 };
 
+    // =====================
+// 📱 MOBILE MENU GUEST
+// =====================
+
+const mobileNav =
+  document.getElementById(
+    "rb-mobile-nav"
+  );
+
+if(!user && mobileNav){
+
+  mobileNav.innerHTML = `
+
+    <a href="/tool/">Simulatore</a>
+
+    <a href="/aprire-bnb-conviene/">
+      Aprire un B&B
+    </a>
+
+    <a href="/mutui/">
+      Mutui
+    </a>
+
+    <a href="/market/">
+      Mercato
+    </a>
+
+    <a href="/immobili/">
+      Immobili
+    </a>
+
+    <a href="/academy/">
+      Academy
+    </a>
+
+    <a href="/about/">
+      Chi siamo
+    </a>
+
+    <hr>
+
+    <a href="#" id="mobile-ai-btn"
+       class="mobile-cta">
+       ✨ AI Assistant
+    </a>
+
+    <hr>
+
+    <a href="/tool/"
+       class="mobile-cta">
+       🚀 Analizza un investimento
+    </a>
+
+    <hr>
+
+    <a href="/dashboard/">
+      📊 Dashboard Demo
+    </a>
+
+    <a href="/login/">
+      Accedi
+    </a>
+
+  `;
+
+}
+
 } else {
 
   const isMobile =
