@@ -18980,67 +18980,37 @@ min-height:40px;
 }
 
 /* ===============================================
-📱 HEADER MOBILE FINAL 2026
+📱 HEADER MOBILE FINAL
 =============================================== */
 
 @media screen and (max-width:768px){
 
-  /* logo */
+  /* nasconde area utente completa */
 
-  .rb-logo{
-    height:30px !important;
+  #user-area{
+    display:none !important;
   }
 
-  /* lingua off */
+  /* nasconde lingua */
 
   .rb-lang{
     display:none !important;
   }
 
-  /* login off */
-
-  .rb-login,
-  #logout{
-    display:none !important;
-  }
-
-  /* badge off */
-
-  .badge-pro,
-  .badge-investor{
-    display:none !important;
-  }
-
-  /* dashboard off */
-
-  .rb-user{
-    display:none !important;
-  }
-
-  /* AI */
+  /* AI compatto */
 
   .rb-header-ai-btn{
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-
     height:42px !important;
     min-width:64px !important;
-
     padding:0 14px !important;
-
     border-radius:14px !important;
-
     font-size:14px !important;
-
-    flex-shrink:0 !important;
   }
 
   /* burger */
 
   #rb-burger{
     display:flex !important;
-
     align-items:center !important;
     justify-content:center !important;
 
@@ -19048,24 +19018,13 @@ min-height:40px;
     height:42px !important;
 
     font-size:24px !important;
-
-    flex-shrink:0 !important;
   }
 
-  /* right area */
+  /* allineamento */
 
   .rb-right{
-    display:flex !important;
-
-    align-items:center !important;
-
     gap:8px !important;
-
     flex-wrap:nowrap !important;
-  }
-
-  .rb-right *{
-    white-space:nowrap !important;
   }
 
 }
