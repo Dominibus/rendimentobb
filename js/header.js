@@ -761,70 +761,6 @@ document.getElementById("logout").onclick = async ()=>{
 // 📱 MOBILE MENU GUEST
 // =====================
     
-const guestMobileNav =
-  document.getElementById(
-    "rb-mobile-nav"
-  );
-
-if(!user && guestMobileNav){
-
-  guestMobileNav.innerHTML = `
-
-    <a href="/tool/">Simulatore</a>
-
-    <a href="/aprire-bnb-conviene/">
-      Aprire un B&B
-    </a>
-
-    <a href="/mutui/">
-      Mutui
-    </a>
-
-    <a href="/market/">
-      Mercato
-    </a>
-
-    <a href="/immobili/">
-      Immobili
-    </a>
-
-    <a href="/academy/">
-      Academy
-    </a>
-
-    <a href="/about/">
-      Chi siamo
-    </a>
-
-    <hr>
-
-    <a href="#"
-       id="mobile-ai-btn"
-       class="mobile-cta">
-       ✨ AI Assistant
-    </a>
-
-    <hr>
-
-    <a href="/tool/"
-       class="mobile-cta">
-       🚀 Analizza un investimento
-    </a>
-
-    <hr>
-
-    <a href="/dashboard/">
-      📊 Dashboard Demo
-    </a>
-
-    <a href="/login/">
-      Accedi
-    </a>
-
-  `;
-
-}
-
 } else {
 
   const isMobile =
@@ -833,6 +769,72 @@ if(!user && guestMobileNav){
   if(isMobile){
 
     el.innerHTML = "";
+
+    const mobileNav =
+      document.getElementById(
+        "rb-mobile-nav"
+      );
+
+    if(mobileNav){
+
+      mobileNav.innerHTML = `
+
+        <a href="/tool/">Simulatore</a>
+
+        <a href="/aprire-bnb-conviene/">
+          Aprire un B&B
+        </a>
+
+        <a href="/mutui/">
+          Mutui
+        </a>
+
+        <a href="/market/">
+          Mercato
+        </a>
+
+        <a href="/immobili/">
+          Immobili
+        </a>
+
+        <a href="/academy/">
+          Academy
+        </a>
+
+        <a href="/about/">
+          Chi siamo
+        </a>
+
+        <hr>
+
+        <a href="#"
+           id="mobile-ai-btn"
+           class="mobile-cta">
+           ✨ AI Assistant
+        </a>
+
+        <hr>
+
+        <a href="/tool/"
+           class="mobile-cta">
+           🚀 Analizza un investimento
+        </a>
+
+        <hr>
+
+        <a href="/dashboard/"
+           class="mobile-cta">
+           📊 Dashboard Demo
+        </a>
+
+        <a href="/login/"
+           class="mobile-cta">
+           🔐 Accedi
+        </a>
+
+      `;
+
+    }
 
   }else{
 
