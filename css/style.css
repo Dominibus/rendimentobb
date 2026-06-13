@@ -18978,3 +18978,63 @@ margin-bottom:16px;
 min-height:40px;
 
 }
+
+/* =====================================
+📱 MOBILE HEADER CLEAN
+===================================== */
+
+@media screen and (max-width:768px){
+
+  /* nasconde selettore lingua */
+
+  .rb-lang{
+    display:none !important;
+  }
+
+  /* nasconde logout desktop */
+
+  #logout{
+    display:none !important;
+  }
+
+  /* nasconde badge piano */
+
+  .badge-pro{
+    display:none !important;
+  }
+
+  /* dashboard compatta */
+
+  #dashboard-link{
+    padding:0 12px !important;
+    min-width:auto !important;
+    height:42px !important;
+    font-size:13px !important;
+  }
+
+  /* AI compatto */
+
+  .rb-header-ai-btn{
+    width:auto !important;
+    min-width:60px !important;
+    padding:0 12px !important;
+    height:42px !important;
+  }
+
+  /* burger più visibile */
+
+  #rb-burger{
+    width:42px !important;
+    height:42px !important;
+    font-size:24px !important;
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .rb-right{
+    gap:8px !important;
+    flex-wrap:nowrap !important;
+  }
+
+}
