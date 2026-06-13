@@ -593,19 +593,32 @@ else{
   badge = `<span class="badge-pro">FREE</span>`;
 }
 
-    // =====================
-    // 🔥 DASHBOARD BUTTON
-    // =====================
-    html += `
-  <a href="/dashboard/"
-     class="rb-btn primary"
-     id="dashboard-link">
+// =====================
+// 🔥 DASHBOARD BUTTON
+// =====================
 
-     <span data-it="Dashboard" data-en="Dashboard">Dashboard</span>
-     ${badge}
+const isMobile =
+  window.innerWidth <= 768;
 
-  </a>
-`;
+if(!isMobile){
+
+  html += `
+    <a href="/dashboard/"
+       class="rb-btn primary"
+       id="dashboard-link">
+
+       <span
+       data-it="Dashboard"
+       data-en="Dashboard">
+       Dashboard
+       </span>
+
+       ${badge}
+
+    </a>
+  `;
+
+}
 
     // ADMIN ONLY
     if(isAdmin){
