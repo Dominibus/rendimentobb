@@ -969,7 +969,8 @@ const visibleAnalyses =
       adr * occupancy * 365 / 100
     );  
 
-    const yearlyProfit = (price * roi) / 100;  
+    const yearlyProfit =
+  Number(data.net || 0);
 
     totalROI += roi;
     totalCapital += price;
