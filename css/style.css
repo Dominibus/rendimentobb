@@ -19195,3 +19195,44 @@ min-height:40px;
 
   border:1px solid #e2e8f0;
 }
+
+.rb-proof-strip{
+padding:30px 20px;
+background:#fff;
+}
+
+.rb-proof-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+}
+
+.rb-proof-grid div{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:14px;
+padding:18px;
+text-align:center;
+}
+
+.rb-proof-grid strong{
+display:block;
+font-size:22px;
+font-weight:800;
+color:#10b981;
+margin-bottom:6px;
+}
+
+.rb-proof-grid span{
+font-size:13px;
+color:#64748b;
+line-height:1.4;
+}
+
+@media(max-width:768px){
+
+.rb-proof-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
