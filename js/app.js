@@ -3560,6 +3560,16 @@ renderInvestmentScore(
 const chatbotAccess =
 window.getUserAccess?.() || {};
 
+    console.log(
+  "🔥 ROI DEBUG",
+  {
+    roi,
+    realROI,
+    visualROI,
+    safeROI
+  }
+);
+
 // 🔥 ROI reale chatbot
 const chatbotRealROI = Number(
   realROI || roi || 0
