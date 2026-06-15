@@ -2584,20 +2584,29 @@ if(shouldSave){
           ?.trim();
 
       saveAnalysis({
-        propertyPrice: propertyPrice,
-        equity,
-        roi: finalROI,
-        risk,
+  propertyPrice: propertyPrice,
 
-        // 🔥 benchmark city
-        marketCity: market,
+  equity,
 
-        // 🔥 real user city
-        realCity:
-          realCityInput ||
-          market ||
-          "roma"
-      });
+  roi: finalROI,
+
+  visualROI: finalROI,
+
+  risk,
+
+  gross,
+
+  net,
+
+  occupancy: occupancyRate,
+
+  marketCity: market,
+
+  realCity:
+    realCityInput ||
+    market ||
+    "roma"
+});
 
       console.log("✅ SALVATO FIRESTORE");
     }
