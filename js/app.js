@@ -3068,6 +3068,7 @@ function mapLocationToCity(input){
   val.includes("reggio emilia") ||
   val.includes("piacenza")
 ){
+  console.log("🔥 PARMA FIX HIT");
   return "bologna";
 }
 
