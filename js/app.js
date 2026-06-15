@@ -3563,10 +3563,16 @@ const chatbotNet =
 : net;
 
 const marketCity =
-  document.getElementById("market-city")?.value ||
+
   window.currentCity ||
+
+  sessionStorage.getItem("tool_city") ||
+
+  document.getElementById("market-city")?.value ||
+
   localStorage.getItem("selected_city") ||
-  "";    
+
+  "";
 
 // ===============================================
 // 🧠 CHATBOT LIVE DATA
@@ -3756,10 +3762,14 @@ if (!window.rbCityMemory) {
 
 const memoryCity = (
 
-  selectedCity ||
-  currentCity ||
+  window.currentCity ||
+
+  sessionStorage.getItem("tool_city") ||
+
   marketCity ||
+
   document.getElementById("market-city")?.value ||
+
   "roma"
 
 )
