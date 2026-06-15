@@ -1235,7 +1235,10 @@ if(!container) return;
 
 const roiColor = best.roi >= 0 ? "#10b981" : "#ef4444";
 
-if(investor && !pro){
+if(
+  window.RB_USER?.isInvestor &&
+  !isPro()
+){
 
   container.innerHTML = `
 
@@ -2255,6 +2258,11 @@ const investor =
 String(window.currentPlan || "")
 .toLowerCase() === "investor";
 
+const container = document.getElementById("investment-insight");
+
+if(!container) return;
+  
+
 if(investor && !isPro()){
 
   container.innerHTML = `
@@ -2290,10 +2298,6 @@ if(investor && !isPro()){
 
   return;
 }  
-
-const container = document.getElementById("investment-insight");
-
-if(!container) return;
 
 const avgROI = count ? (totalROI/count) : 0;
 
