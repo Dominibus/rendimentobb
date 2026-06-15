@@ -3063,6 +3063,14 @@ function mapLocationToCity(input){
     }
   }
 
+  if(
+  val.includes("parma") ||
+  val.includes("reggio emilia") ||
+  val.includes("piacenza")
+){
+  return "bologna";
+}
+
   // ================= REGION LOGIC (🔥 QUI È IL FIX) =================
 
   if(val.includes("pisa") || val.includes("livorno") || val.includes("lucca")){
