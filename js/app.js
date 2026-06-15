@@ -3439,18 +3439,34 @@ if(equity < minEquity){
     const loanYears    = getValue("loanYears") || 20;
 
     // ================= CALCOLO =================
-    const result = calculateROI({
-      price,
-      equity,
-      priceNight,
-      occupancy,
-      expenses,
-      commission,
-      tax,
-      loanAmount,
-      interestRate,
-      loanYears
-    });
+
+console.log("🔥 ROI INPUT", {
+  price,
+  equity,
+  loanAmount,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  interestRate,
+  loanYears
+});
+
+const result = calculateROI({
+  price,
+  equity,
+  priceNight,
+  occupancy,
+  expenses,
+  commission,
+  tax,
+  loanAmount,
+  interestRate,
+  loanYears
+});
+
+console.log("🔥 ROI RESULT", result);
 
     if (!result || typeof result !== "object") {
       console.error("💥 RESULT INVALID:", result);
