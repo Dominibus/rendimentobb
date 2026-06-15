@@ -19290,3 +19290,41 @@ grid-template-columns:1fr;
 }
 
 }
+
+/* =====================================
+🔥 PRICING DESKTOP FINAL FIX
+===================================== */
+
+.pricing-wrapper{
+max-width:1400px;
+margin:0 auto;
+}
+
+.pricing-grid{
+display:grid !important;
+grid-template-columns:repeat(3,1fr) !important;
+gap:24px !important;
+align-items:stretch;
+}
+
+.plan-card{
+width:100% !important;
+max-width:none !important;
+height:100%;
+}
+
+@media(max-width:1024px){
+
+.pricing-grid{
+grid-template-columns:repeat(2,1fr) !important;
+}
+
+}
+
+@media(max-width:768px){
+
+.pricing-grid{
+grid-template-columns:1fr !important;
+}
+
+}
