@@ -3970,7 +3970,7 @@ text-shadow:0 3px 12px rgba(0,0,0,0.6);
 
 .plan-card.featured{
 
-transform:scale(1.08);
+transform:none;
 
 border:2px solid #10b981;
 
@@ -4016,16 +4016,15 @@ box-shadow:0 8px 20px rgba(16,185,129,0.4);
 /* INVESTOR (ridotto) */
 
 .plan-card:not(.featured):not(.plan-annual){
-
-opacity:0.92;
-transform:scale(0.97);
+  opacity:1;
+  transform:none;
 }
 
 /* ANNUALE (premium) */
 
 .plan-annual{
 
-transform:scale(1.06);
+transform:none;
 
 border:2px solid #f59e0b;
 
