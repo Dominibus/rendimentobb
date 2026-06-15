@@ -3476,8 +3476,8 @@ console.log("🔥 ROI RESULT", result);
     // ================= KPI =================
     let roi = Number(result?.roi ?? 0);
 
-// 🔥 SAFE ROI BANKING
-if(!isFinite(roi) || roi < 0){
+// 🔥 SAFE ROI
+if(!isFinite(roi)){
   roi = 0;
 }
 
