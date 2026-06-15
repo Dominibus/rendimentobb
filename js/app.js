@@ -2463,6 +2463,14 @@ function runPostAnalysis(result, context){
         0
       );
 
+    console.log("🔥 ROI DEBUG",{
+  resultROI: result?.roi,
+  resultFinalROI: result?.finalROI,
+  windowFinalROI: window.finalROI,
+  windowCurrentROI: window.currentROI,
+  finalROI
+});
+
     const risk =
       Number(
         result?.risk ??
