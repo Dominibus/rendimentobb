@@ -1539,11 +1539,14 @@ const trend = avgROI >= marketROI ? "↑" : "↓";
 
 // ================= CALCOLI =================
 const monthlyProfit = avgCashflow;
-const yearlyProfit = (totalCapital * avgROI) / 100;
+const yearlyProfit = totalCashflow;
 
 let breakEvenYears = "-";
-if(yearlyProfit > 0){
-  breakEvenYears = (totalCapital / yearlyProfit).toFixed(1);
+
+if(totalCashflow > 0){
+  breakEvenYears =
+    (totalCapital / totalCashflow)
+    .toFixed(1);
 }
 
 const breakEven = avgROI > 0 ? Math.round(100 / avgROI) : 0;
@@ -2909,7 +2912,10 @@ function generateInvestmentVerdict(result){
 if(!result) return null;
 
 const roi = result.roi || 0;
-const cashflow = result.cashflow || 0;
+const cashflow =
+  result.net ||
+  result.cashflow ||
+  0;
 const risk = result.risk || 50;
 
 // ================= EXCELLENT =================
@@ -3272,7 +3278,8 @@ function showInvestorOverlay(){
   const roi = best.roi || 0;
   const price = best.price || 0;
 
-  const potentialProfit = Math.round((price * roi) / 100);
+  const potentialProfit =
+  Number(best.net || 0);
 
   // 🔥 SOURCE OF TRUTH
   const isInvestor = window.RB_USER?.isInvestor;
@@ -3559,7 +3566,8 @@ function renderUpgradeTrigger(best){
   if(best.roi < 6) return;
   if(isPro()) return;
 
-  const potentialProfit = Math.round((best.price * best.roi) / 100);
+  const potentialProfit =
+  Number(best.net || 0);
 
   container.style.display = "block";
 
