@@ -2699,6 +2699,47 @@ else if(
     `🌍 Mercato analizzato: ${cityLabel}`
   );
 
+  // =====================================
+// 🏆 INVESTMENT GRADE
+// =====================================
+
+let investmentGrade = "C";
+
+if(
+  roi >= 20 &&
+  risk <= 35 &&
+  occupancy >= 65
+){
+
+  investmentGrade = "A+";
+
+}
+
+else if(
+  roi >= 15 &&
+  risk <= 45
+){
+
+  investmentGrade = "A";
+
+}
+
+else if(
+  roi >= 10
+){
+
+  investmentGrade = "B";
+
+}
+
+executiveIT.push(
+
+`🏆 Investment Grade
+
+Valutazione AI: ${investmentGrade}`
+
+);
+
   if(risk <= 35){
 
   executiveIT.push(
@@ -2929,6 +2970,14 @@ if(gross > 0){
 
 executiveEN.push(
   `🌍 Market analyzed: ${cityLabel}`
+);
+
+  executiveEN.push(
+
+`🏆 Investment Grade
+
+AI Rating: ${investmentGrade}`
+
 );
 
  if(risk <= 35){
