@@ -595,23 +595,43 @@ const currentIntentData = {
 
   requiresMarketData:
 
-    [
-      "market_analysis",
-      "investment_advisor",
-      "investment_executive",
-      "roi_analysis",
-      "risk_analysis",
-      "cashflow_analysis",
-      "comparison"
-    ].includes(currentIntent),
+  [
+    "market_analysis",
+    "investment_advisor",
+    "investment_executive",
+    "roi_analysis",
+    "risk_analysis",
+    "cashflow_analysis",
+    "comparison",
+
+    "best_city",
+    "best_simulation",
+    "portfolio_analysis",
+    "property_performance"
+
+  ].includes(currentIntent),
 
   requiresMortgageAnalysis:
 
     currentIntent ===
-    "mortgage_analysis"
+    "mortgage_analysis",
+
+  requiresPortfolioData:
+
+  [
+    "best_city",
+    "best_simulation",
+    "portfolio_analysis",
+    "property_performance"
+  ].includes(currentIntent),
+
+  requiresPdfData:
+
+    currentIntent ===
+    "pdf_analysis"
 
 };
-
+  
 // =========================================
 // 🌍 FILTER MEMORY
 // =========================================
