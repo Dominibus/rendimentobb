@@ -242,6 +242,89 @@ else if(risk <= 35){
   const recommendationsIT = [];
   const recommendationsEN = [];
 
+  // =====================================
+// 🎯 ACTION PLAN
+// =====================================
+
+const actionPlanIT = [];
+const actionPlanEN = [];
+
+if(verdict === "BUY"){
+
+  actionPlanIT.push(
+    "Acquisizione consigliata."
+  );
+
+  actionPlanEN.push(
+    "Acquisition recommended."
+  );
+
+}
+else if(verdict === "WAIT"){
+
+  actionPlanIT.push(
+    "Valutare ulteriori ottimizzazioni prima dell'acquisto."
+  );
+
+  actionPlanEN.push(
+    "Consider further optimization before acquisition."
+  );
+
+}
+else{
+
+  actionPlanIT.push(
+    "Operazione non consigliata nelle condizioni attuali."
+  );
+
+  actionPlanEN.push(
+    "Investment not recommended under current conditions."
+  );
+
+}
+
+// ROI VS MARKET
+
+if(roi >= 20){
+
+  actionPlanIT.push(
+    "Performance superiore ai benchmark medi del mercato."
+  );
+
+  actionPlanEN.push(
+    "Performance above average market benchmarks."
+  );
+
+}
+
+// OCCUPANCY
+
+if(occupancy >= 65){
+
+  actionPlanIT.push(
+    "Domanda potenziale compatibile con una gestione short-rent stabile."
+  );
+
+  actionPlanEN.push(
+    "Demand level compatible with stable short-rent operations."
+  );
+
+}
+
+// CASHFLOW
+
+if(cashflow > 0){
+
+  actionPlanIT.push(
+    "Cashflow positivo e sostenibile."
+  );
+
+  actionPlanEN.push(
+    "Positive and sustainable cashflow."
+  );
+
+}
+
   if(occupancy < 60){
 
     recommendationsIT.push(
@@ -307,7 +390,11 @@ return {
 
   recommendationsIT,
 
-  recommendationsEN
+  recommendationsEN,
+
+  actionPlanIT,
+
+  actionPlanEN
 
 };
 
