@@ -398,7 +398,29 @@ const advisor =
       cashflow:
 
 Number(
-  window.lastAnalysisData?.net || 0
+
+  analysisData.net ??
+
+  analysisData.profit ??
+
+  analysisData.netAfterMortgage ??
+
+  analysisData.cashflow ??
+
+  analysisData.annualProfit ??
+
+  window.lastAnalysisData?.net ??
+
+  window.lastAnalysisData?.profit ??
+
+  window.lastAnalysisData?.netAfterMortgage ??
+
+  window.lastAnalysisData?.annualProfit ??
+
+  window.lastAnalysisData?.cashflow ??
+
+  0
+
 ),
 
       city:
