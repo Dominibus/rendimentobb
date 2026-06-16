@@ -2659,28 +2659,15 @@ else if(
   const executiveIT = [];
 
   executiveIT.push(
-    "🧠 Analisi executive completata."
-  );
+`🟢 Punti di Forza
 
-  executiveIT.push(
-
-  roi >= 20
-
-  ? `📈 Il ROI reale del ${roi.toFixed(1)}% è molto superiore alla media short-rent.`
-
-  : roi >= 10
-
-  ? `📈 Il ROI reale del ${roi.toFixed(1)}% appare sostenibile ma con margini di ottimizzazione.`
-
-  : `📉 Il ROI reale del ${roi.toFixed(1)}% potrebbe non compensare rischio e costi operativi.`
-
+📈 ROI: ${roi.toFixed(1)}%
+⚠️ Risk Score: ${risk}/100
+🏨 Occupazione: ${occupancy}%
+💰 Cashflow: €${Math.round(net).toLocaleString("it-IT")}`
 );
 
-  executiveIT.push(
-    `⚠️ Risk score: ${risk}/100`
-  );
-
-  if(net > 0){
+   if(net > 0){
 
     executiveIT.push(
       `💰 Profitto netto stimato: €${net.toLocaleString(
@@ -2711,6 +2698,42 @@ else if(
   executiveIT.push(
     `🌍 Mercato analizzato: ${cityLabel}`
   );
+
+  if(risk <= 35){
+
+  executiveIT.push(
+
+`🛡️ Valutazione Rischio
+
+La simulazione mostra una struttura operativa stabile e ben bilanciata rispetto ai benchmark del mercato.`
+
+  );
+
+}
+
+else if(risk <= 60){
+
+  executiveIT.push(
+
+`⚠️ Valutazione Rischio
+
+L'investimento appare sostenibile ma richiede monitoraggio operativo e controllo dei costi.`
+
+  );
+
+}
+
+else{
+
+  executiveIT.push(
+
+`🚨 Valutazione Rischio
+
+Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow nel lungo periodo.`
+
+  );
+
+}
 
 // =====================================
 // 🔥 AI CONCLUSION
@@ -2866,25 +2889,14 @@ if(advisor){
 }
 
 executiveEN.push(
-  "🧠 Executive analysis completed."
-);
 
-executiveEN.push(
+`🟢 Key Strengths
 
-  roi >= 20
+📈 ROI: ${roi.toFixed(1)}%
+⚠️ Risk Score: ${risk}/100
+🏨 Occupancy: ${occupancy}%
+💰 Cashflow: €${Math.round(net).toLocaleString("en-US")}`
 
-  ? `📈 The real ROI of ${roi.toFixed(1)}% is significantly above short-rent market averages.`
-
-  : roi >= 10
-
-  ? `📈 The real ROI of ${roi.toFixed(1)}% appears sustainable but still has optimization potential.`
-
-  : `📉 The real ROI of ${roi.toFixed(1)}% may not adequately compensate for operational risk and costs.`
-
-);
-
-executiveEN.push(
-  `⚠️ Risk score: ${risk}/100`
 );
 
 if(net > 0){
@@ -2919,6 +2931,41 @@ executiveEN.push(
   `🌍 Market analyzed: ${cityLabel}`
 );
 
+ if(risk <= 35){
+
+  executiveEN.push(
+
+`🛡️ Risk Assessment
+
+The simulation shows a stable and well-balanced operating structure compared to market benchmarks.`
+
+  );
+
+}
+
+else if(risk <= 60){
+
+  executiveEN.push(
+
+`⚠️ Risk Assessment
+
+The investment appears sustainable but requires operational monitoring and cost control.`
+
+  );
+
+}
+
+else{
+
+  executiveEN.push(
+
+`🚨 Risk Assessment
+
+The current risk level may reduce cashflow stability over the long term.`
+
+  );
+
+} 
 // =====================================
 // 🔥 AI CONCLUSION
 // =====================================
