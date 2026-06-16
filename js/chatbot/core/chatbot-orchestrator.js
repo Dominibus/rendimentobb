@@ -333,8 +333,12 @@ occupancy:
 };
 
     console.log(
-  "🔥 ANALYSIS DATA FINAL",
-  analysisData
+  "🔥 ANALYSIS DATA FINAL JSON",
+  JSON.stringify(
+    analysisData,
+    null,
+    2
+  )
 );
 
 // =========================================
