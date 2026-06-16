@@ -3126,6 +3126,56 @@ ${advisor.reasonsIT.join("\n")}`
 
 }
 
+// =====================================
+// 📋 OPERATIONAL RECOMMENDATIONS
+// =====================================
+
+const recommendationsIT = [];
+
+if(occupancy < 60){
+
+  recommendationsIT.push(
+    "• Incrementare l'occupazione tramite pricing dinamico e OTA."
+  );
+
+}
+
+if(risk > 50){
+
+  recommendationsIT.push(
+    "• Ridurre il rischio operativo monitorando costi e volatilità della domanda."
+  );
+
+}
+
+if(roi < 15){
+
+  recommendationsIT.push(
+    "• Ottimizzare ADR e marginalità per migliorare il rendimento."
+  );
+
+}
+
+if(net > 0){
+
+  recommendationsIT.push(
+    "• Mantenere il cashflow positivo monitorando i costi fissi."
+  );
+
+}
+
+if(recommendationsIT.length){
+
+  executiveIT.push(
+
+`📋 Raccomandazioni Operative AI
+
+${recommendationsIT.join("\n")}`
+
+  );
+
+}  
+
 if(advisor?.reasonsEN?.length){
 
   executiveEN.push(
@@ -3137,6 +3187,56 @@ ${advisor.reasonsEN.join("\n")}`
   );
 
 }
+
+// =====================================
+// 📋 OPERATIONAL RECOMMENDATIONS
+// =====================================
+
+const recommendationsEN = [];
+
+if(occupancy < 60){
+
+  recommendationsEN.push(
+    "• Increase occupancy through dynamic pricing and OTA optimization."
+  );
+
+}
+
+if(risk > 50){
+
+  recommendationsEN.push(
+    "• Reduce operational risk by monitoring costs and market volatility."
+  );
+
+}
+
+if(roi < 15){
+
+  recommendationsEN.push(
+    "• Optimize ADR and margins to improve returns."
+  );
+
+}
+
+if(net > 0){
+
+  recommendationsEN.push(
+    "• Preserve positive cashflow through cost control."
+  );
+
+}
+
+if(recommendationsEN.length){
+
+  executiveEN.push(
+
+`📋 AI Operational Recommendations
+
+${recommendationsEN.join("\n")}`
+
+  );
+
+}  
 
 if(reasoningEN.length){
 
