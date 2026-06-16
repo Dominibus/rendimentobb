@@ -17,6 +17,8 @@ window.rbGenerateResponse = function({
 
   memory = {},
 
+  advisor = null,
+
   analysisData = {},
 
   aiSignals = []
@@ -2656,6 +2658,71 @@ else if(
 
   const executiveIT = [];
 
+  // =====================================
+// 🧠 ADVISOR VERDICT
+// =====================================
+
+if(advisor){
+
+  let verdictIT = "";
+  let verdictEN = "";
+
+  if(advisor.verdict === "BUY"){
+
+    verdictIT =
+      "🟢 VERDETTO AI: INVESTIMENTO CONSIGLIATO";
+
+    verdictEN =
+      "🟢 AI VERDICT: RECOMMENDED INVESTMENT";
+
+  }
+
+  else if(advisor.verdict === "WAIT"){
+
+    verdictIT =
+      "🟡 VERDETTO AI: ATTENDERE O OTTIMIZZARE";
+
+    verdictEN =
+      "🟡 AI VERDICT: WAIT OR OPTIMIZE";
+
+  }
+
+  else{
+
+    verdictIT =
+      "🔴 VERDETTO AI: INVESTIMENTO NON CONSIGLIATO";
+
+    verdictEN =
+      "🔴 AI VERDICT: NOT RECOMMENDED";
+
+  }
+
+  executiveIT.push(
+    verdictIT
+  );
+
+  executiveIT.push(
+    `📊 Score AI: ${advisor.score}/100`
+  );
+
+  executiveIT.push(
+    `🎯 Affidabilità: ${advisor.confidence}%`
+  );
+
+  executiveEN.push(
+    verdictEN
+  );
+
+  executiveEN.push(
+    `📊 AI Score: ${advisor.score}/100`
+  );
+
+  executiveEN.push(
+    `🎯 Confidence: ${advisor.confidence}%`
+  );
+
+}
+
   executiveIT.push(
     "🧠 Analisi executive completata."
   );
@@ -2872,6 +2939,34 @@ if(reasoningIT.length){
   executiveIT.push(
 
     reasoningIT.join("\n\n")
+
+  );
+
+}
+
+// =====================================
+// 🧠 ADVISOR REASONS
+// =====================================
+
+if(advisor?.reasonsIT?.length){
+
+  executiveIT.push(
+
+`🧠 Motivazioni AI
+
+${advisor.reasonsIT.join("\n")}`
+
+  );
+
+}
+
+if(advisor?.reasonsEN?.length){
+
+  executiveEN.push(
+
+`🧠 AI Reasons
+
+${advisor.reasonsEN.join("\n")}`
 
   );
 
