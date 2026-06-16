@@ -2683,7 +2683,13 @@ else if(
   if(net > 0){
 
     executiveIT.push(
-      `💰 Profitto netto stimato: €${net.toLocaleString("it-IT")}`
+      `💰 Profitto netto stimato: €${net.toLocaleString(
+  "it-IT",
+  {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }
+)}`
     );
 
   }
@@ -2691,7 +2697,13 @@ else if(
   if(gross > 0){
 
     executiveIT.push(
-      `🏨 Ricavi annuali: €${gross.toLocaleString("it-IT")}`
+      `🏨 Ricavi annuali: €${gross.toLocaleString(
+  "it-IT",
+  {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }
+)}`
     );
 
   }
@@ -2857,7 +2869,13 @@ if(advisor){
   if(net > 0){
 
     executiveEN.push(
-      `💰 Estimated net profit: €${net.toLocaleString("en-US")}`
+      `💰 Estimated net profit: €${net.toLocaleString(
+  "en-US",
+  {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }
+)}`
     );
 
   }
@@ -2865,7 +2883,13 @@ if(advisor){
   if(gross > 0){
 
     executiveEN.push(
-      `🏨 Annual revenue: €${gross.toLocaleString("en-US")}`
+      `🏨 Annual revenue: €${gross.toLocaleString(
+  "en-US",
+  {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }
+)}`
     );
 
   }
