@@ -333,6 +333,72 @@ const aiSignals =
     )
 
   : [];
+
+    // =========================================
+// 🧠 ADVISOR ENGINE
+// =========================================
+
+const advisor =
+
+  window.rbGenerateAdvisorVerdict
+
+  ? window.rbGenerateAdvisorVerdict({
+
+      roi:
+        analysisData.roi ||
+
+        window.lastAnalysisData?.roi ||
+
+        0,
+
+      risk:
+        analysisData.risk ||
+
+        window.lastAnalysisData?.risk ||
+
+        0,
+
+      occupancy:
+        analysisData.occupancy ||
+
+        window.lastAnalysisData?.occupancy ||
+
+        0,
+
+      mortgagePercent:
+
+        window.lastAnalysisData
+          ?.mortgagePercent ||
+
+        entities.mortgagePercent ||
+
+        0,
+
+      cashflow:
+
+        window.lastAnalysisData?.net ||
+
+        window.lastAnalysisData?.cashflow ||
+
+        0,
+
+      city:
+        analysisData.city ||
+
+        entities.city ||
+
+        "roma",
+
+      investorProfile
+
+    })
+
+  : null;
+
+console.log(
+  "🧠 ADVISOR:",
+  advisor
+);
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
@@ -499,6 +565,8 @@ const partialResponse =
     memory: filteredMemory,
 
     investorProfile,
+
+    advisor,
 
     analysisData,
 
@@ -667,19 +735,21 @@ if(
 
     return {
 
-      success: true,
+  success: true,
 
-      entities,
+  entities,
 
-      intent,
+  intent,
 
-      memory,
+  memory,
 
-      matchedKnowledge,
+  advisor,
 
-      response
+  matchedKnowledge,
 
-    };
+  response
+
+};
 
   }
 
