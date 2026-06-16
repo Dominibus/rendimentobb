@@ -3126,6 +3126,20 @@ ${advisor.reasonsIT.join("\n")}`
 
 }
 
+if(advisor?.actionPlanIT?.length){
+
+  executiveIT.push(
+
+`🎯 Piano d'Azione AI
+
+${advisor.actionPlanIT
+  .map(item => `• ${item}`)
+  .join("\n")}`
+
+  );
+
+}  
+
 // =====================================
 // 📋 OPERATIONAL RECOMMENDATIONS
 // =====================================
@@ -3187,6 +3201,20 @@ ${advisor.reasonsEN.join("\n")}`
   );
 
 }
+
+if(advisor?.actionPlanEN?.length){
+
+  executiveEN.push(
+
+`🎯 AI Action Plan
+
+${advisor.actionPlanEN
+  .map(item => `• ${item}`)
+  .join("\n")}`
+
+  );
+
+}  
 
 // =====================================
 // 📋 OPERATIONAL RECOMMENDATIONS
