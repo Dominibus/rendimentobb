@@ -280,27 +280,39 @@ window.rbGenerateAdvisorVerdict = function({
 
   }
 
-  return {
-
-    verdict,
-
+  console.log(
+  "🧠 FINAL ADVISOR SCORE",
+  {
     score,
-
+    verdict,
     confidence,
+    roi,
+    risk,
+    occupancy,
+    cashflow
+  }
+);
 
-    city,
+return {
 
-    reasonsIT,
+  verdict,
 
-    reasonsEN,
+  score,
 
-    recommendationsIT,
+  confidence,
 
-    recommendationsEN
+  city,
 
-  };
+  reasonsIT,
+
+  reasonsEN,
+
+  recommendationsIT,
+
+  recommendationsEN
 
 };
+
 
 console.log(
   "🧠 ADVISOR ENGINE READY"
