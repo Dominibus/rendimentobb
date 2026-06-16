@@ -3126,19 +3126,71 @@ ${advisor.reasonsIT.join("\n")}`
 
 }
 
-if(advisor?.actionPlanIT?.length){
+const actionPlanIT = [];
+
+if(
+  advisor?.verdict === "BUY"
+){
+
+  actionPlanIT.push(
+    "Acquisizione consigliata."
+  );
+
+}
+
+if(
+  roi >= 25
+){
+
+  actionPlanIT.push(
+    "Performance superiore ai benchmark medi del mercato."
+  );
+
+}
+
+if(
+  occupancy >= 70
+){
+
+  actionPlanIT.push(
+    "Domanda potenziale compatibile con una gestione short-rent stabile."
+  );
+
+}
+
+if(
+  net > 0
+){
+
+  actionPlanIT.push(
+    "Cashflow positivo e sostenibile."
+  );
+
+}
+
+if(
+  risk > 60
+){
+
+  actionPlanIT.push(
+    "Valutare strategie di mitigazione del rischio."
+  );
+
+}
+
+if(actionPlanIT.length){
 
   executiveIT.push(
 
 `🎯 Piano d'Azione AI
 
-${advisor.actionPlanIT
+${actionPlanIT
   .map(item => `• ${item}`)
   .join("\n")}`
 
   );
 
-}  
+}
 
 // =====================================
 // 📋 OPERATIONAL RECOMMENDATIONS
@@ -3202,19 +3254,87 @@ ${advisor.reasonsEN.join("\n")}`
 
 }
 
-if(advisor?.actionPlanEN?.length){
+const actionPlanEN = [];
+
+if(
+  advisor?.verdict === "BUY"
+){
+
+  actionPlanEN.push(
+    "Acquisition recommended."
+  );
+
+}
+
+if(
+  roi >= 25
+){
+
+  actionPlanEN.push(
+    "Performance exceeds average market benchmarks."
+  );
+
+}
+
+if(
+  occupancy >= 70
+){
+
+  actionPlanEN.push(
+    "Demand profile supports a stable short-rent operation."
+  );
+
+}
+
+if(
+  net > 0
+){
+
+  if(occupancy >= 80){
+
+  recommendationsIT.push(
+    "• Valutare un incremento progressivo delle tariffe per aumentare il RevPAR."
+  );
+
+}
+
+if(roi >= 40){
+
+  recommendationsIT.push(
+    "• Verificare la sostenibilità del ROI attraverso scenari conservativi."
+  );
+
+}
+
+  actionPlanEN.push(
+    "Positive and sustainable cashflow."
+  );
+
+}
+
+if(
+  risk > 60
+){
+
+  actionPlanEN.push(
+    "Consider risk mitigation strategies."
+  );
+
+}
+
+if(actionPlanEN.length){
 
   executiveEN.push(
 
 `🎯 AI Action Plan
 
-${advisor.actionPlanEN
+${actionPlanEN
   .map(item => `• ${item}`)
   .join("\n")}`
 
   );
 
-}  
+}
 
 // =====================================
 // 📋 OPERATIONAL RECOMMENDATIONS
@@ -3247,6 +3367,22 @@ if(roi < 15){
 }
 
 if(net > 0){
+
+  if(occupancy >= 80){
+
+  recommendationsEN.push(
+    "• Consider gradually increasing rates to improve RevPAR."
+  );
+
+}
+
+if(roi >= 40){
+
+  recommendationsEN.push(
+    "• Validate ROI sustainability through conservative scenarios."
+  );
+
+}
 
   recommendationsEN.push(
     "• Preserve positive cashflow through cost control."
