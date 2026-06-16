@@ -141,6 +141,30 @@ if(
 }    
 
 // =========================================
+// 🏆 PORTFOLIO / HISTORY
+// =========================================
+
+if(
+
+  [
+    "best_simulation",
+    "best_city",
+    "portfolio_analysis",
+    "property_performance",
+    "comparison"
+  ].includes(
+    detectedIntent.intent
+  )
+
+){
+
+  intents.push(
+    detectedIntent.intent
+  );
+
+}    
+
+// =========================================
 // 🏦 MORTGAGE
 // =========================================
 
@@ -158,17 +182,26 @@ if(
 
 }
 
-// =========================================
 // 🌍 MARKET
-// =========================================
 
 if(
 
-  text.includes("mercato") ||
+  (
+    text.includes("mercato") ||
+    text.includes("market")
+  )
 
-  text.includes("market") ||
+  &&
 
-  entities.city
+  ![
+    "best_simulation",
+    "best_city",
+    "portfolio_analysis",
+    "property_performance",
+    "comparison"
+  ].includes(
+    detectedIntent.intent
+  )
 
 ){
 
