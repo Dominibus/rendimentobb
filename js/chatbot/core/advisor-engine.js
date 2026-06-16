@@ -313,6 +313,7 @@ return {
 
 };
 
+};
 
 console.log(
   "🧠 ADVISOR ENGINE READY"
