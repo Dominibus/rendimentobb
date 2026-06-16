@@ -2712,42 +2712,39 @@ else if(
     `🌍 Mercato analizzato: ${cityLabel}`
   );
 
-  // =====================================
-  // 🔥 AI CONCLUSION
-  // =====================================
+// =====================================
+// 🔥 AI CONCLUSION
+// =====================================
 
-if(
-  roi >= 20 &&
-  risk <= 35 &&
-  occupancy >= 60
-){
+if(advisor){
 
-  executiveIT.push(
-    "🚀 L'investimento appare altamente competitivo rispetto alla media short-rent."
-  );
+  if(advisor.verdict === "BUY"){
 
-}
+    executiveIT.push(
+      "🚀 L'investimento rispetta i principali criteri di redditività, sostenibilità e competitività del mercato."
+    );
 
-else if(
-  roi >= 10 &&
-  occupancy >= 45
-){
+  }
 
-  executiveIT.push(
-    "📊 L'investimento mostra una sostenibilità moderata con margini di ottimizzazione."
-  );
+  else if(advisor.verdict === "WAIT"){
 
-}
+    executiveIT.push(
+      "📊 L'investimento mostra buone potenzialità ma richiede alcune ottimizzazioni prima di essere considerato pienamente competitivo."
+    );
 
-else{
+  }
 
-  executiveIT.push(
-    "⚠️ Occupazione e marginalità stanno riducendo la competitività dell'investimento."
-  );
+  else{
+
+    executiveIT.push(
+      "⚠️ L'investimento presenta criticità che riducono l'attrattività complessiva dell'operazione."
+    );
+
+  }
 
 }
 
-  executiveIT.push(
+executiveIT.push(
   `🏨 Occupazione attuale: ${occupancy}%`
 );
 
@@ -2773,11 +2770,11 @@ if(executiveInsightsIT.length){
 
 }
 
-  // =====================================
-  // 🇬🇧 ENGLISH
-  // =====================================
+// =====================================
+// 🇬🇧 ENGLISH
+// =====================================
 
-  const executiveEN = [];
+const executiveEN = [];
 
 // =====================================
 // 🧠 ADVISOR VERDICT
@@ -2844,11 +2841,11 @@ if(advisor){
 
 }
 
-  executiveEN.push(
-    "🧠 Executive analysis completed."
-  );
+executiveEN.push(
+  "🧠 Executive analysis completed."
+);
 
-  executiveEN.push(
+executiveEN.push(
 
   roi >= 20
 
@@ -2862,74 +2859,75 @@ if(advisor){
 
 );
 
+executiveEN.push(
+  `⚠️ Risk score: ${risk}/100`
+);
+
+if(net > 0){
+
   executiveEN.push(
-    `⚠️ Risk score: ${risk}/100`
+    `💰 Estimated net profit: €${net.toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }
+    )}`
   );
 
-  if(net > 0){
+}
+
+if(gross > 0){
+
+  executiveEN.push(
+    `🏨 Annual revenue: €${gross.toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }
+    )}`
+  );
+
+}
+
+executiveEN.push(
+  `🌍 Market analyzed: ${cityLabel}`
+);
+
+// =====================================
+// 🔥 AI CONCLUSION
+// =====================================
+
+if(advisor){
+
+  if(advisor.verdict === "BUY"){
 
     executiveEN.push(
-      `💰 Estimated net profit: €${net.toLocaleString(
-  "en-US",
-  {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }
-)}`
+      "🚀 The investment satisfies the main profitability, sustainability and market competitiveness criteria."
     );
 
   }
 
-  if(gross > 0){
+  else if(advisor.verdict === "WAIT"){
 
     executiveEN.push(
-      `🏨 Annual revenue: €${gross.toLocaleString(
-  "en-US",
-  {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }
-)}`
+      "📊 The investment shows potential but still requires optimization before being considered fully competitive."
     );
 
   }
 
-  executiveEN.push(
-    `🌍 Market analyzed: ${cityLabel}`
-  );
+  else{
 
-  if(
-  roi >= 20 &&
-  risk <= 35 &&
-  occupancy >= 60
-){
+    executiveEN.push(
+      "⚠️ The investment presents weaknesses that reduce overall attractiveness."
+    );
 
-  executiveEN.push(
-    "🚀 The investment appears highly competitive compared to short-rent averages."
-  );
+  }
 
 }
 
-else if(
-  roi >= 10 &&
-  occupancy >= 45
-){
-
-  executiveEN.push(
-    "📊 The investment shows moderate sustainability with optimization potential."
-  );
-
-}
-
-else{
-
-  executiveEN.push(
-    "⚠️ Occupancy and margins are reducing investment competitiveness."
-  );
-
-}
-
-  executiveEN.push(
+executiveEN.push(
   `🏨 Current occupancy: ${occupancy}%`
 );
 
