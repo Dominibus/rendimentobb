@@ -411,6 +411,32 @@ console.log(
   "🧠 ADVISOR:",
   advisor
 );
+
+    console.log(
+  "🧪 ADVISOR INPUTS",
+  {
+    roi:
+      analysisData.roi,
+
+    risk:
+      analysisData.risk,
+
+    occupancy:
+      analysisData.occupancy,
+
+    net:
+      analysisData.net,
+
+    annualProfit:
+      analysisData.annualProfit,
+
+    cashflow:
+      analysisData.cashflow,
+
+    lastAnalysis:
+      window.lastAnalysisData
+  }
+);
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
