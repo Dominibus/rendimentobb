@@ -231,7 +231,7 @@
     // =========================================
 
     "/js/chatbot/support-engine.js",
-    "/js/chatbot/advisor-engine.js",
+    "/js/chatbot/core/advisor-engine.js",
 
     // =========================================
     // 🎨 UI
