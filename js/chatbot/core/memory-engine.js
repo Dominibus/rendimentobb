@@ -217,22 +217,37 @@ if(
 
   memory.investmentHistory.push({
 
-    roi:
-      entities.roi || null,
+  roi:
+    entities.roi || null,
 
-    city:
-      entities.city || null,
+  city:
+    entities.city || null,
 
-    occupancy:
-      entities.occupancy || null,
+  occupancy:
+    entities.occupancy || null,
 
-    mortgage:
-      entities.mortgage || null,
+  mortgage:
+    entities.mortgage || null,
 
-    timestamp:
-      Date.now()
+  risk:
+    entities.risk || null,
 
-  });
+  net:
+    entities.net || null,
+
+  cashflow:
+    entities.cashflow || null,
+
+  propertyPrice:
+    entities.propertyPrice || null,
+
+  score:
+    entities.score || null,
+
+  timestamp:
+    Date.now()
+
+});
 
 }
 
