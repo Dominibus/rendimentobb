@@ -4135,6 +4135,21 @@ console.log(
   "🧠 INVESTMENT MEMORY:",
   window.rbChatMemory.investmentHistory
 );
+
+// =====================================
+// 🌍 GLOBAL INVESTMENT HISTORY SYNC
+// =====================================
+
+window.investmentHistory =
+  window.rbChatMemory.investmentHistory;
+
+window.rbInvestmentMemory =
+  window.rbChatMemory.investmentHistory;
+
+console.log(
+  "🌍 GLOBAL HISTORY SYNC:",
+  window.investmentHistory
+);   
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
