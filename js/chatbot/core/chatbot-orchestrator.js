@@ -215,6 +215,26 @@ const uniqueIntents = [
 ];
 
 // =========================================
+// 🔥 EXECUTIVE OVERRIDE
+// =========================================
+
+if(
+
+  uniqueIntents.includes(
+    "investment_executive"
+  )
+
+){
+
+  uniqueIntents.length = 0;
+
+  uniqueIntents.push(
+    "investment_executive"
+  );
+
+}    
+
+// =========================================
 // 🧠 FALLBACK
 // =========================================
 
