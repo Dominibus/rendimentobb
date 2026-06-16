@@ -740,6 +740,215 @@ if(
 }
 
 // ===========================================
+// 🏆 BEST SIMULATION
+// ===========================================
+
+if(
+
+  has(
+
+    "migliore simulazione",
+    "best simulation",
+
+    "miglior investimento",
+    "best investment",
+
+    "quale rende di più",
+    "quale rende di piu",
+
+    "highest roi",
+
+    "simulazione migliore",
+
+    "most profitable"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "best_simulation",
+
+    category: "comparison",
+
+    confidence: 0.99,
+
+    priority: 220,
+
+    requiresCalculation: true
+
+  });
+
+}  
+
+// ===========================================
+// 📊 PORTFOLIO ANALYSIS
+// ===========================================
+
+if(
+
+  has(
+
+    "roi medio",
+    "average roi",
+
+    "media simulazioni",
+
+    "portfolio",
+
+    "storico simulazioni",
+
+    "historical analysis",
+
+    "analisi storico",
+
+    "come sto andando"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "portfolio_analysis",
+
+    category: "portfolio",
+
+    confidence: 0.99,
+
+    priority: 220,
+
+    requiresCalculation: true
+
+  });
+
+}
+
+// ===========================================
+// 🌍 BEST CITY
+// ===========================================
+
+if(
+
+  has(
+
+    "migliore città",
+    "miglior città",
+
+    "best city",
+
+    "quale città rende di più",
+
+    "which city performs best",
+
+    "best performing city",
+
+    "city ranking",
+
+    "classifica città"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "best_city",
+
+    category: "comparison",
+
+    confidence: 0.99,
+
+    priority: 220,
+
+    requiresCalculation: true,
+
+    requiresMarketData: true
+
+  });
+
+}
+
+// ===========================================
+// 📄 PDF ANALYSIS
+// ===========================================
+
+if(
+
+  has(
+
+    "pdf",
+
+    "report pdf",
+
+    "analizza pdf",
+
+    "read pdf",
+
+    "pdf report",
+
+    "riassunto pdf",
+
+    "executive pdf"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "pdf_analysis",
+
+    category: "documents",
+
+    confidence: 0.99,
+
+    priority: 230
+
+  });
+
+}  
+
+// ===========================================
+// 🏨 PROPERTY PERFORMANCE
+// ===========================================
+
+if(
+
+  has(
+
+    "migliore proprietà",
+
+    "migliore proprieta",
+
+    "best property",
+
+    "property performance",
+
+    "quale immobile rende di più",
+
+    "which property performs best"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "property_performance",
+
+    category: "portfolio",
+
+    confidence: 0.99,
+
+    priority: 225
+
+  });
+
+}  
+
+// ===========================================
 // ⚖️ COMPARISON ENGINE
 // Silicon Valley Comparison Layer
 // ===========================================
