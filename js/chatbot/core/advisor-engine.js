@@ -201,17 +201,29 @@ window.rbGenerateAdvisorVerdict = function({
 
   let verdict = "WAIT";
 
-  if(score >= 75){
+  if(
 
-    verdict = "BUY";
+  score >= 75 &&
 
-  }
+  cashflow > 0
 
-  else if(score <= 40){
+){
 
-    verdict = "AVOID";
+  verdict = "BUY";
 
-  }
+}
+
+  else if(
+
+  score <= 40 ||
+
+  cashflow < 0
+
+){
+
+  verdict = "AVOID";
+
+}
 
   // =====================================
   // CONFIDENCE
