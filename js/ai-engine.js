@@ -668,6 +668,16 @@ window.rbChatMemory.investmentHistory.push({
 
 });
 
+// ===========================================
+// 🌍 GLOBAL HISTORY SYNC
+// ===========================================
+
+window.investmentHistory =
+  window.rbChatMemory.investmentHistory;
+
+window.rbInvestmentHistory =
+  window.rbChatMemory.investmentHistory;  
+
 // 🔥 LIMIT MEMORY
 
 if(
