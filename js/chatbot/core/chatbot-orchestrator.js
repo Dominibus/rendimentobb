@@ -287,30 +287,42 @@ const analysisData = {
 
   roi:
 
-    Number(
-      document.getElementById("roi-value")
-      ?.textContent
-      ?.replace("%","")
-      ?.trim()
-    ) || 0,
+  Number(
+    document.getElementById("roi-value")
+    ?.textContent
+    ?.replace("%","")
+    ?.trim()
+  ) ||
 
-  risk:
+  window.lastAnalysisData?.roi ||
 
-    Number(
-      document.getElementById("risk-score")
-      ?.textContent
-      ?.replace("/100","")
-      ?.trim()
-    ) || 0,
+  0,
 
-  occupancy:
+risk:
 
-    Number(
-      document.getElementById("occupancy-rate")
-      ?.textContent
-      ?.replace("%","")
-      ?.trim()
-    ) || 0,
+  Number(
+    document.getElementById("risk-score")
+    ?.textContent
+    ?.replace("/100","")
+    ?.trim()
+  ) ||
+
+  window.lastAnalysisData?.risk ||
+
+  0,
+
+occupancy:
+
+  Number(
+    document.getElementById("occupancy-rate")
+    ?.textContent
+    ?.replace("%","")
+    ?.trim()
+  ) ||
+
+  window.lastAnalysisData?.occupancy ||
+
+  0,
 
   city:
 
@@ -319,6 +331,11 @@ const analysisData = {
     "roma"
 
 };
+
+    console.log(
+  "🔥 ANALYSIS DATA FINAL",
+  analysisData
+);
 
 // =========================================
 // 🧠 AI SIGNALS
@@ -334,7 +351,7 @@ const aiSignals =
 
   : [];
 
-    // =========================================
+// =========================================
 // 🧠 ADVISOR ENGINE
 // =========================================
 
@@ -437,6 +454,7 @@ console.log(
       window.lastAnalysisData
   }
 );
+
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
