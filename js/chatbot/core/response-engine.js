@@ -2392,6 +2392,98 @@ ${market.risk}`;
   }
 
 // ===========================================
+// 🏆 BEST SIMULATION
+// ===========================================
+
+else if(
+  intent.intent === "best_simulation"
+){
+
+  response.type = "best_simulation";
+
+  const history =
+    investmentHistory || [];
+
+  if(!history.length){
+
+    response.textIT =
+      "⚠️ Nessuna simulazione disponibile.";
+
+    response.textEN =
+      "⚠️ No simulations available.";
+
+    return response;
+  }
+
+  const best =
+
+    history.sort(
+      (a,b)=>
+
+      Number(
+        b.realROI ??
+        b.visualROI ??
+        b.roi ??
+        0
+      )
+
+      -
+
+      Number(
+        a.realROI ??
+        a.visualROI ??
+        a.roi ??
+        0
+      )
+
+    )[0];
+
+  const bestROI =
+
+    Number(
+      best.realROI ??
+      best.visualROI ??
+      best.roi ??
+      0
+    );
+
+  response.textIT =
+
+`🏆 Migliore simulazione
+
+🌍 Città:
+${best.city || best.marketCity || "N/D"}
+
+📈 ROI:
+${bestROI.toFixed(1)}%
+
+💰 Profitto:
+€${Number(
+  best.net || 0
+).toLocaleString("it-IT")}
+
+🧠 È attualmente la simulazione più redditizia salvata nello storico.`;
+
+  response.textEN =
+
+`🏆 Best simulation
+
+🌍 City:
+${best.city || best.marketCity || "N/A"}
+
+📈 ROI:
+${bestROI.toFixed(1)}%
+
+💰 Profit:
+€${Number(
+  best.net || 0
+).toLocaleString("en-US")}
+
+🧠 This is currently the most profitable saved simulation.`;
+
+}  
+
+// ===========================================
 // 💳 SUBSCRIPTIONS RESPONSE
 // ===========================================
 
