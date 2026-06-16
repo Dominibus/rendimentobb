@@ -376,11 +376,23 @@ const advisor =
 
       cashflow:
 
-        window.lastAnalysisData?.net ||
+  Number(
 
-        window.lastAnalysisData?.cashflow ||
+    analysisData.net ??
 
-        0,
+    analysisData.cashflow ??
+
+    analysisData.annualProfit ??
+
+    window.lastAnalysisData?.net ??
+
+    window.lastAnalysisData?.annualProfit ??
+
+    window.lastAnalysisData?.cashflow ??
+
+    0
+
+  ),
 
       city:
         analysisData.city ||
