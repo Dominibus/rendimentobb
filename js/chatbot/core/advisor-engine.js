@@ -191,9 +191,9 @@ window.rbGenerateAdvisorVerdict = function({
   // =====================================
 
   score = Math.max(
-    0,
-    Math.min(100, score)
-  );
+  0,
+  Math.min(95, score)
+);
 
   // =====================================
   // VERDICT
