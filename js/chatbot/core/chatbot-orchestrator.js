@@ -826,10 +826,6 @@ if(
 
 }
 
-// =========================================
-// 🧠 ADVANCED MEMORY ENGINE
-// =========================================
-
 if(window.rbRememberMessage){
 
   window.rbRememberMessage({
@@ -838,7 +834,41 @@ if(window.rbRememberMessage){
 
     message: text,
 
-    entities,
+    entities:{
+
+      ...entities,
+
+      roi:
+        analysisData.roi,
+
+      risk:
+        analysisData.risk,
+
+      occupancy:
+        analysisData.occupancy,
+
+      city:
+        analysisData.city,
+
+      cashflow:
+
+        analysisData.net ??
+
+        analysisData.cashflow ??
+
+        analysisData.annualProfit ??
+
+        0,
+
+      propertyPrice:
+
+        analysisData.propertyPrice ??
+
+        analysisData.price ??
+
+        0
+
+    },
 
     intent
 
