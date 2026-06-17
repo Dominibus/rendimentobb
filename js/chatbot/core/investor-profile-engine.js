@@ -408,6 +408,110 @@ else{
 
 }
 
+// ===========================================
+// 🚀 BUSINESS STAGE
+// ===========================================
+
+if(profile.ownedProperties >= 10){
+
+  profile.businessStage =
+    "enterprise";
+
+}
+
+else if(profile.ownedProperties >= 3){
+
+  profile.businessStage =
+    "growth";
+
+}
+
+else if(profile.ownedProperties >= 1){
+
+  profile.businessStage =
+    "operator";
+
+}
+
+else{
+
+  profile.businessStage =
+    "starter";
+
+}
+
+// ===========================================
+// 🎯 MAIN GOAL
+// ===========================================
+
+if(
+
+  profile.monthlyCashflowGoal >= 5000
+
+){
+
+  profile.mainGoal =
+    "financial_freedom";
+
+}
+
+else if(
+
+  profile.monthlyCashflowGoal > 0
+
+){
+
+  profile.mainGoal =
+    "supplement_income";
+
+}   
+
+// ===========================================
+// 🧠 MEMORY SYNC
+// ===========================================
+
+const memoryData =
+  window.rbGetConversationContext?.() || {};
+
+if(
+
+  memoryData.availableCapital &&
+
+  !profile.availableCapital
+
+){
+
+  profile.availableCapital =
+    memoryData.availableCapital;
+
+}
+
+if(
+
+  memoryData.monthlyCashflowGoal &&
+
+  !profile.monthlyCashflowGoal
+
+){
+
+  profile.monthlyCashflowGoal =
+    memoryData.monthlyCashflowGoal;
+
+}
+
+if(
+
+  memoryData.ownedProperties !== undefined &&
+
+  profile.ownedProperties === 0
+
+){
+
+  profile.ownedProperties =
+    memoryData.ownedProperties;
+
+}
+
     // ===========================================
     // 💾 SAVE GLOBAL
     // ===========================================
