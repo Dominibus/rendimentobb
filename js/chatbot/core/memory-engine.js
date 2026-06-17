@@ -40,14 +40,33 @@ window.rbChatMemory = {
 
   lastTargetROI: null,
 
-  lastFinancingLevel: null,
+lastFinancingLevel: null,
+
 // =======================================
-// 📊 INVESTMENT HISTORY
+// 🏠 INVESTOR DATA
 // =======================================
 
-  investmentHistory: [],
+availableCapital: null,
 
-  context: {}
+monthlyCashflowGoal: null,
+
+ownedProperties: 0,
+
+businessStage: "starter",
+
+mainGoal: null,
+
+portfolioCities: [],
+
+portfolioProperties: [],
+
+// =======================================
+// 📊 HISTORY
+// =======================================
+
+investmentHistory: [],
+
+context: {}
 
 };
 
@@ -360,27 +379,55 @@ window.rbClearMemory = function(){
 
   window.rbChatMemory = {
 
-    messages: [],
+  messages: [],
 
-    entitiesHistory: [],
+  entitiesHistory: [],
 
-    intentsHistory: [],
+  intentsHistory: [],
 
-    lastCity: null,
+  lastCity: null,
 
-    lastROI: null,
+  lastROI: null,
 
-    lastPropertyPrice: null,
+  lastPropertyPrice: null,
 
-    lastOccupancy: null,
+  lastOccupancy: null,
 
-    lastMortgage: null,
+  lastMortgage: null,
 
-    lastIntent: null,
+  lastIntent: null,
 
-    context: {}
+  lastBudget: null,
 
-  };
+  lastStrategy: null,
+
+  lastRiskTolerance: null,
+
+  lastPropertyType: null,
+
+  lastTargetROI: null,
+
+  lastFinancingLevel: null,
+
+  availableCapital: null,
+
+  monthlyCashflowGoal: null,
+
+  ownedProperties: 0,
+
+  businessStage: "starter",
+
+  mainGoal: null,
+
+  portfolioCities: [],
+
+  portfolioProperties: [],
+
+  investmentHistory: [],
+
+  context: {}
+
+};
 
   sessionStorage.removeItem(
     "rbChatMemory"
