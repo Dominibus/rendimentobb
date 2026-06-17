@@ -295,6 +295,54 @@ console.log(
   }
 );  
 
+// ===========================================
+// 🧠 INVESTOR MEMORY
+// ===========================================
+
+const availableCapital =
+
+  memory.availableCapital ||
+
+  window.rbChatMemory?.availableCapital ||
+
+  0;
+
+const ownedProperties =
+
+  memory.ownedProperties ||
+
+  window.rbChatMemory?.ownedProperties ||
+
+  0;
+
+const monthlyCashflowGoal =
+
+  memory.monthlyCashflowGoal ||
+
+  window.rbChatMemory?.monthlyCashflowGoal ||
+
+  0;
+
+const targetROI =
+
+  memory.targetROI ||
+
+  memory.lastTargetROI ||
+
+  window.rbChatMemory?.lastTargetROI ||
+
+  0;
+
+console.log(
+  "🧠 INVESTOR MEMORY:",
+  {
+    availableCapital,
+    ownedProperties,
+    monthlyCashflowGoal,
+    targetROI
+  }
+);
+
 // =====================================
 // 💾 GLOBAL INVESTMENT HISTORY
 // =====================================
@@ -2750,6 +2798,38 @@ else if(
 
   const executiveIT = [];
 
+  if(availableCapital > 0){
+
+  executiveIT.push(
+    `💰 Capitale disponibile: €${availableCapital.toLocaleString("it-IT")}`
+  );
+
+}
+
+if(ownedProperties > 0){
+
+  executiveIT.push(
+    `🏠 Portafoglio esistente: ${ownedProperties} immobili`
+  );
+
+}
+
+if(monthlyCashflowGoal > 0){
+
+  executiveIT.push(
+    `🎯 Obiettivo cashflow: €${monthlyCashflowGoal.toLocaleString("it-IT")}/mese`
+  );
+
+}
+
+if(targetROI > 0){
+
+  executiveIT.push(
+    `📈 ROI target personale: ${targetROI}%`
+  );
+
+}
+
   executiveIT.push(
 `🟢 Punti di Forza
 
@@ -2955,6 +3035,38 @@ if(executiveInsightsIT.length){
 // =====================================
 
 const executiveEN = [];
+
+if(availableCapital > 0){
+
+  executiveEN.push(
+    `💰 Available capital: €${availableCapital.toLocaleString("en-US")}`
+  );
+
+}
+
+if(ownedProperties > 0){
+
+  executiveEN.push(
+    `🏠 Existing portfolio: ${ownedProperties} properties`
+  );
+
+}
+
+if(monthlyCashflowGoal > 0){
+
+  executiveEN.push(
+    `🎯 Cashflow target: €${monthlyCashflowGoal.toLocaleString("en-US")}/month`
+  );
+
+}
+
+if(targetROI > 0){
+
+  executiveEN.push(
+    `📈 Personal ROI target: ${targetROI}%`
+  );
+
+}  
 
 // =====================================
 // 🧠 ADVISOR VERDICT
