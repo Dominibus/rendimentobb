@@ -826,6 +826,26 @@ if(
 
 }
 
+// =========================================
+// 🧠 ADVANCED MEMORY ENGINE
+// =========================================
+
+if(window.rbRememberMessage){
+
+  window.rbRememberMessage({
+
+    role: "user",
+
+    message: text,
+
+    entities,
+
+    intent
+
+  });
+
+}
+
     // =========================================
     // 💾 MEMORY SAVE
     // =========================================
