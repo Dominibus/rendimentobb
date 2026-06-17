@@ -904,21 +904,21 @@ if(window.rbRememberMessage){
     // =========================================
 
     console.log(
-      "🧠 AI PIPELINE:",
-      {
+  "🧠 AI PIPELINE:",
+  {
+    entities,
+    intent,
 
-        entities,
+    memory:
+      window.rbGetConversationContext
+        ? window.rbGetConversationContext()
+        : memory,
 
-        intent,
+    matchedKnowledge,
 
-        memory,
-
-        matchedKnowledge,
-
-        response
-
-      }
-    );
+    response
+  }
+);
 
     // =========================================
     // ✅ FINAL RESPONSE
@@ -932,7 +932,10 @@ if(window.rbRememberMessage){
 
   intent,
 
-  memory,
+  memory:
+    window.rbGetConversationContext
+      ? window.rbGetConversationContext()
+      : memory,
 
   advisor,
 
