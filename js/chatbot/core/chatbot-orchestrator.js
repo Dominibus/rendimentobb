@@ -302,11 +302,11 @@ if(!uniqueIntents.length){
 
     const memory =
 
-      window.rbGetMemory
+  window.rbGetConversationContext
 
-      ? window.rbGetMemory()
+  ? window.rbGetConversationContext()
 
-      : {};
+  : {};
 
 // =========================================
 // 🧠 INVESTOR PROFILE
