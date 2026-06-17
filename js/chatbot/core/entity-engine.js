@@ -140,6 +140,20 @@ window.rbExtractEntities = function(input = ""){
 
     strategy: null,
 
+// =======================================
+// 👤 INVESTOR PROFILE
+// =======================================
+
+availableCapital: null,
+
+monthlyCashflowGoal: null,
+
+ownedProperties: null,
+
+businessStage: null,
+
+mainGoal: null,
+
     // =======================================
     // 🌐 SYSTEM
     // =======================================
@@ -713,7 +727,7 @@ room: [
 
   }
 
-  // ===========================================
+// ===========================================
 // 🎯 INVESTMENT GOAL
 // ===========================================
 
@@ -753,6 +767,77 @@ else if(
 
   entities.investmentGoal =
     "long_term";
+
+}
+
+// ===========================================
+// 💰 AVAILABLE CAPITAL
+// ===========================================
+
+const capitalMatch = text.match(
+
+  /ho\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|euro|€)?\s+(?:da investire|da investire nel b&b|da investire in immobili)/
+
+);
+
+if(capitalMatch){
+
+  let capital =
+    Number(
+      capitalMatch[1]
+        .replace(",", ".")
+    );
+
+  if(
+    capitalMatch[2] === "k" ||
+    capitalMatch[2] === "mila"
+  ){
+    capital *= 1000;
+  }
+
+  entities.availableCapital =
+    Math.round(capital);
+
+}
+
+// ===========================================
+// 💸 MONTHLY CASHFLOW GOAL
+// ===========================================
+
+const cashflowGoalMatch = text.match(
+
+/(?:voglio|obiettivo|target).*(\d+(?:[\.,]\d+)?)\s?(?:€|euro).*(?:mese|mensili)/
+
+);
+
+if(cashflowGoalMatch){
+
+  entities.monthlyCashflowGoal =
+
+    Number(
+      cashflowGoalMatch[1]
+        .replace(",", ".")
+    );
+
+}
+
+// ===========================================
+// 🏠 OWNED PROPERTIES
+// ===========================================
+
+const propertiesMatch = text.match(
+
+/(?:ho|possiedo)\s+(\d+)\s+(?:appartamenti|immobili|case|bnb)/
+
+);
+
+if(propertiesMatch){
+
+  entities.ownedProperties =
+
+    Number(
+      propertiesMatch[1]
+    );
 
 }
 
