@@ -776,7 +776,7 @@ else if(
 
 const capitalMatch = text.match(
 
-  /ho\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|euro|€)?\s+(?:da investire|da investire nel b&b|da investire in immobili)/
+/(?:ho|possiedo|i have|i own)\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?\s+(?:da investire|da investire nel b&b|da investire in immobili|to invest|to invest in real estate|to invest in bnb)/
 
 );
 
@@ -806,7 +806,7 @@ if(capitalMatch){
 
 const cashflowGoalMatch = text.match(
 
-/(?:voglio|obiettivo|target).*(\d+(?:[\.,]\d+)?)\s?(?:€|euro).*(?:mese|mensili)/
+/(?:voglio|obiettivo|target|i want|my goal is|cashflow target).*(\d+(?:[\.,]\d+)?)\s?(?:€|euro|euros|\$)?.*(?:mese|mensili|per month|monthly)/
 
 );
 
@@ -827,7 +827,7 @@ if(cashflowGoalMatch){
 
 const propertiesMatch = text.match(
 
-/(?:ho|possiedo)\s+(\d+)\s+(?:appartamenti|immobili|case|bnb)/
+/(?:ho|possiedo|i own|i have)\s+(\d+)\s+(?:appartamenti|immobili|case|bnb|apartments|properties|houses)/
 
 );
 
@@ -838,6 +838,87 @@ if(propertiesMatch){
     Number(
       propertiesMatch[1]
     );
+
+}
+
+// ===========================================
+// 🚀 BUSINESS STAGE
+// ===========================================
+
+if(
+
+  text.includes("beginner") ||
+  text.includes("principiante")
+
+){
+
+  entities.businessStage =
+    "starter";
+
+}
+
+else if(
+
+  text.includes("host") ||
+  text.includes("gestisco un b&b") ||
+  text.includes("i manage a bnb")
+
+){
+
+  entities.businessStage =
+    "operator";
+
+}
+
+else if(
+
+  text.includes("imprenditore") ||
+  text.includes("entrepreneur")
+
+){
+
+  entities.businessStage =
+    "entrepreneur";
+
+}
+
+// ===========================================
+// 🎯 MAIN GOAL
+// ===========================================
+
+  if(
+
+  text.includes("cashflow") ||
+  text.includes("rendita")
+
+){
+
+  entities.mainGoal =
+    "cashflow";
+
+}
+
+else if(
+
+  text.includes("passive income") ||
+  text.includes("reddito passivo")
+
+){
+
+  entities.mainGoal =
+    "passive_income";
+
+}
+
+else if(
+
+  text.includes("crescita patrimonio") ||
+  text.includes("wealth growth")
+
+){
+
+  entities.mainGoal =
+    "wealth";
 
 }
 
