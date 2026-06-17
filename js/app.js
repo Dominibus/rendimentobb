@@ -2570,46 +2570,35 @@ if(shouldSave){
 
     // ================= SAVE ANALYSIS =================
 
+    const isManualAnalysis =
+window.__MANUAL_ANALYSIS__ === true;
+
     if(
-      shouldSave &&
-      window.currentUser &&
-      window.firebaseReady &&
-      finalROI > 0
-    ){
+  isManualAnalysis &&
+  shouldSave &&
+  window.currentUser &&
+  window.firebaseReady &&
+  finalROI > 0
+){
 
-      const realCityInput =
-        document
-          .getElementById("custom-location")
-          ?.value
-          ?.trim();
+  saveAnalysis({
+    propertyPrice: propertyPrice,
+    equity,
+    roi: finalROI,
+    visualROI: finalROI,
+    risk,
+    gross,
+    net,
+    occupancy: occupancyRate,
+    marketCity: market,
+    realCity:
+      realCityInput ||
+      market ||
+      "roma"
+  });
 
-      saveAnalysis({
-  propertyPrice: propertyPrice,
-
-  equity,
-
-  roi: finalROI,
-
-  visualROI: finalROI,
-
-  risk,
-
-  gross,
-
-  net,
-
-  occupancy: occupancyRate,
-
-  marketCity: market,
-
-  realCity:
-    realCityInput ||
-    market ||
-    "roma"
-});
-
-      console.log("✅ SALVATO FIRESTORE");
-    }
+  console.log("✅ SALVATO FIRESTORE");
+}
 
     console.log("📊 FINAL ROI:", finalROI);
 
@@ -4854,33 +4843,41 @@ if(analyzeBtn){
     });
 
     if(typeof window.calculate === "function"){
-      console.log("🚀 CALCULATE TRIGGER");
-      window.calculate();
-    setTimeout(()=>{
 
-  console.log(
-    "🔥 SAVE ANALYSIS FIRED"
-  );
+  console.log("🚀 CALCULATE TRIGGER");
 
-   const roi =
-    window.lastAnalysisData?.roi || 0;
+  window.__MANUAL_ANALYSIS__ = true;
 
-  if(roi > 6){
+  window.calculate();
 
-    triggerFunnel({
-      type:"roi",
-      roi
-    });
+  setTimeout(()=>{
 
-  }
+    console.log(
+      "🔥 SAVE ANALYSIS FIRED"
+    );
 
-}, 1500);
-      
-    } else {
-      console.error("❌ calculate non trovata");
+    const roi =
+      window.lastAnalysisData?.roi || 0;
+
+    if(roi > 6){
+
+      triggerFunnel({
+        type:"roi",
+        roi
+      });
+
     }
 
-  });
+    // 🔥 RESET FLAG SOLO ALLA FINE
+    window.__MANUAL_ANALYSIS__ = false;
+
+  },1500);
+
+} else {
+
+  console.error(
+    "❌ calculate non trovata"
+  );
 
 }
 
