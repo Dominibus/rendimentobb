@@ -362,9 +362,9 @@ const targetPatterns = [
 
   /target\s?roi\s?(\d+(?:[\.,]\d+)?)%?/,
 
-  /almeno\s?(\d+(?:[\.,]\d+)?)\s?%/,
+  /almeno(?:\s+il)?\s+(\d+(?:[\.,]\d+)?)\s?%?/,
 
-  /minimum\s?(\d+(?:[\.,]\d+)?)\s?%/,
+  /minimum(?:\s+of)?\s+(\d+(?:[\.,]\d+)?)\s?%?/,
 
   /roi of\s?(\d+(?:[\.,]\d+)?)\s?%/,
 
