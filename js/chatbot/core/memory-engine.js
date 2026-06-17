@@ -141,6 +141,17 @@ window.rbRememberMessage = function({
       }
 
 // =======================================
+// 🏠 LAST PROPERTY PRICE
+// =======================================
+
+if(entities.propertyPrice){
+
+  memory.lastPropertyPrice =
+    entities.propertyPrice;
+
+}
+
+// =======================================
 // 🎯 TARGET ROI
 // =======================================
 
@@ -264,17 +275,19 @@ if(entities.businessStage){
 
       }
 
-      // =======================================
-      // 🏦 LAST MORTGAGE
-      // =======================================
+// =======================================
+// 🏦 LAST MORTGAGE
+// =======================================
 
-      if(entities.mortgage){
+if(
+  entities.mortgage !== null &&
+  entities.mortgage !== undefined
+){
 
-        memory.lastMortgage = true;
+  memory.lastMortgage =
+    entities.mortgage;
 
-      }
-
-    }
+}
 
 // ===========================================
 // 📊 SAVE INVESTMENT SNAPSHOT
