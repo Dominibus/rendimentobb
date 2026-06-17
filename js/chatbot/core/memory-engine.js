@@ -195,6 +195,64 @@ if(entities.strategy){
 
 }
 
+// =======================================
+// 💰 AVAILABLE CAPITAL
+// =======================================
+
+if(entities.availableCapital){
+
+  memory.availableCapital =
+    entities.availableCapital;
+
+}
+
+// =======================================
+// 💸 CASHFLOW GOAL
+// =======================================
+
+if(entities.monthlyCashflowGoal){
+
+  memory.monthlyCashflowGoal =
+    entities.monthlyCashflowGoal;
+
+}
+
+// =======================================
+// 🏠 OWNED PROPERTIES
+// =======================================
+
+if(
+  entities.ownedProperties !== null &&
+  entities.ownedProperties !== undefined
+){
+
+  memory.ownedProperties =
+    entities.ownedProperties;
+
+}
+
+// =======================================
+// 🎯 MAIN GOAL
+// =======================================
+
+if(entities.mainGoal){
+
+  memory.mainGoal =
+    entities.mainGoal;
+
+}
+
+// =======================================
+// 🚀 BUSINESS STAGE
+// =======================================
+
+if(entities.businessStage){
+
+  memory.businessStage =
+    entities.businessStage;
+
+}
+
       // =======================================
       // 🏨 LAST OCCUPANCY
       // =======================================
@@ -483,11 +541,26 @@ window.rbGetConversationContext = function(){
       window.rbChatMemory.lastTargetROI,
 
     financingLevel:
-      window.rbChatMemory.lastFinancingLevel,
+  window.rbChatMemory.lastFinancingLevel,
 
-    investmentHistory:
-     window.rbChatMemory
-    .investmentHistory || []
+availableCapital:
+  window.rbChatMemory.availableCapital,
+
+monthlyCashflowGoal:
+  window.rbChatMemory.monthlyCashflowGoal,
+
+ownedProperties:
+  window.rbChatMemory.ownedProperties,
+
+businessStage:
+  window.rbChatMemory.businessStage,
+
+mainGoal:
+  window.rbChatMemory.mainGoal,
+
+investmentHistory:
+  window.rbChatMemory
+  .investmentHistory || []
 
   };
 
