@@ -4881,6 +4881,10 @@ if(analyzeBtn){
 
 }
 
+  });
+
+}
+
 // ================= EXECUTIVE PDF – BANK REAL FINAL =================
 
 window.generateExecutivePDF = async function(){
