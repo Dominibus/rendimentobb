@@ -184,6 +184,135 @@ else if(risk <= 35){
 
   }
 
+// =====================================
+// 👤 INVESTOR PROFILE
+// =====================================
+
+const {
+
+  availableCapital = 0,
+
+  ownedProperties = 0,
+
+  monthlyCashflowGoal = 0,
+
+  targetROI = 0
+
+} = investorProfile || {};
+
+// ROI TARGET
+
+if(
+  targetROI > 0
+){
+
+  if(
+    roi >= targetROI
+  ){
+
+    score += 10;
+
+    reasonsIT.push(
+      `Il ROI supera il tuo obiettivo personale del ${targetROI}%.`
+    );
+
+    reasonsEN.push(
+      `ROI exceeds your personal target of ${targetROI}%.`
+    );
+
+  }
+
+  else{
+
+    score -= 10;
+
+    reasonsIT.push(
+      `Il ROI non raggiunge il tuo obiettivo personale del ${targetROI}%.`
+    );
+
+    reasonsEN.push(
+      `ROI does not reach your personal target of ${targetROI}%.`
+    );
+
+  }
+
+}
+
+// CASHFLOW TARGET
+
+if(
+  monthlyCashflowGoal > 0
+){
+
+  if(
+    cashflow >= monthlyCashflowGoal
+  ){
+
+    score += 10;
+
+    reasonsIT.push(
+      `Il cashflow supera il tuo obiettivo di €${monthlyCashflowGoal.toLocaleString("it-IT")} al mese.`
+    );
+
+    reasonsEN.push(
+      `Cashflow exceeds your target of €${monthlyCashflowGoal.toLocaleString("en-US")} per month.`
+    );
+
+  }
+
+  else{
+
+    score -= 5;
+
+    reasonsIT.push(
+      `Il cashflow è inferiore al tuo obiettivo personale.`
+    );
+
+    reasonsEN.push(
+      `Cashflow is below your personal target.`
+    );
+
+  }
+
+}
+
+// PORTFOLIO EXPERIENCE
+
+if(
+  ownedProperties >= 3
+){
+
+  score += 5;
+
+  reasonsIT.push(
+    "Il profilo mostra esperienza nella gestione di immobili a reddito."
+  );
+
+  reasonsEN.push(
+    "Profile shows experience managing income-producing properties."
+  );
+
+}
+
+// CAPITAL ADEQUACY
+
+if(
+  availableCapital > 0 &&
+  availableCapital >= cashflow
+){
+
+  score += 3;
+
+  reasonsIT.push(
+    "La disponibilità di capitale aumenta la flessibilità operativa dell'investimento."
+  );
+
+  reasonsEN.push(
+    "Available capital improves operational flexibility."
+  );
+
+}
+
   // =====================================
   // SCORE LIMITS
   // =====================================
