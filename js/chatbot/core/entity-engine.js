@@ -806,7 +806,7 @@ if(capitalMatch){
 
 const cashflowGoalMatch = text.match(
 
-/(?:voglio|obiettivo|target|i want|my goal is|cashflow target).*(\d+(?:[\.,]\d+)?)\s?(?:€|euro|euros|\$)?.*(?:mese|mensili|per month|monthly)/
+/(?:voglio|obiettivo|target|i want|my goal is|cashflow target)\s+(\d+(?:[\.,]\d+)?)\s?(?:€|euro|euros|\$)?(?:\s+al mese|\s+mensili|\s+per month|\s+monthly)?/i
 
 );
 
@@ -814,9 +814,13 @@ if(cashflowGoalMatch){
 
   entities.monthlyCashflowGoal =
 
-    Number(
-      cashflowGoalMatch[1]
-        .replace(",", ".")
+    Math.round(
+
+      Number(
+        cashflowGoalMatch[1]
+          .replace(",", ".")
+      )
+
     );
 
 }
