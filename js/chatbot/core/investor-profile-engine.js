@@ -335,21 +335,59 @@ if(
 
     }
 
-    // ===========================================
-    // 🎓 EXPERIENCE LEVEL
-    // ===========================================
+// ===========================================
+// 🎓 EXPERIENCE LEVEL
+// ===========================================
 
-    if(profile.simulationsCount >= 20){
+if(
 
-      profile.experienceLevel = "advanced";
+  profile.ownedProperties >= 10 ||
 
-    }
+  profile.availableCapital >= 500000
 
-    else if(profile.simulationsCount >= 8){
+){
 
-      profile.experienceLevel = "intermediate";
+  profile.experienceLevel =
+    "advanced";
 
-    }
+}
+
+else if(
+
+  profile.ownedProperties >= 3 ||
+
+  profile.availableCapital >= 100000 ||
+
+  profile.monthlyCashflowGoal >= 5000 ||
+
+  profile.simulationsCount >= 8
+
+){
+
+  profile.experienceLevel =
+    "experienced";
+
+}
+
+else if(
+
+  profile.ownedProperties >= 1 ||
+
+  profile.simulationsCount >= 3
+
+){
+
+  profile.experienceLevel =
+    "intermediate";
+
+}
+
+else{
+
+  profile.experienceLevel =
+    "beginner";
+
+}
 
 // ===========================================
 // 🏢 INVESTOR TYPE
@@ -465,6 +503,45 @@ else if(
     "supplement_income";
 
 }   
+
+// ===========================================
+// 🧠 INVESTOR SEGMENT
+// ===========================================
+
+if(
+
+  profile.availableCapital >= 100000 &&
+
+  profile.ownedProperties >= 3
+
+){
+
+  profile.investorSegment =
+    "portfolio_builder";
+
+}
+
+if(
+
+  profile.monthlyCashflowGoal >= 5000
+
+){
+
+  profile.investorSegment =
+    "cashflow_investor";
+
+}
+
+if(
+
+  profile.availableCapital >= 500000
+
+){
+
+  profile.investorSegment =
+    "professional_investor";
+
+}
 
 // ===========================================
 // 🧠 MEMORY SYNC
