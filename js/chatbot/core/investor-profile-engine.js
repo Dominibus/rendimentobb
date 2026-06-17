@@ -53,7 +53,25 @@ window.rbUpdateInvestorProfile = function({
 
         conservativeInvestor: false,
 
-        simulationsCount: 0
+simulationsCount: 0,
+
+// =====================================
+// 🏠 INVESTOR DATA
+// =====================================
+
+availableCapital: 0,
+
+monthlyCashflowGoal: 0,
+
+ownedProperties: 0,
+
+businessStage: "starter",
+
+mainGoal: null,
+
+investorType: "beginner",
+
+portfolioSize: "small"
 
       };
 
@@ -94,6 +112,45 @@ window.rbUpdateInvestorProfile = function({
         entities.targetROI;
 
     }
+
+// ===========================================
+// 💰 AVAILABLE CAPITAL
+// ===========================================
+
+if(entities.availableCapital){
+
+  profile.availableCapital =
+    entities.availableCapital;
+
+}
+
+// ===========================================
+// 💸 CASHFLOW GOAL
+// ===========================================
+
+if(entities.monthlyCashflowGoal){
+
+  profile.monthlyCashflowGoal =
+    entities.monthlyCashflowGoal;
+
+}
+
+// ===========================================
+// 🏠 OWNED PROPERTIES
+// ===========================================
+
+if(
+
+  entities.ownedProperties !== null &&
+
+  entities.ownedProperties !== undefined
+
+){
+
+  profile.ownedProperties =
+    entities.ownedProperties;
+
+}
 
     // ===========================================
     // 💰 BUDGET TRACKING
@@ -293,6 +350,63 @@ window.rbUpdateInvestorProfile = function({
       profile.experienceLevel = "intermediate";
 
     }
+
+// ===========================================
+// 🏢 INVESTOR TYPE
+// ===========================================
+
+if(profile.ownedProperties >= 10){
+
+  profile.investorType =
+    "professional";
+
+}
+
+else if(profile.ownedProperties >= 3){
+
+  profile.investorType =
+    "investor";
+
+}
+
+else if(profile.ownedProperties >= 1){
+
+  profile.investorType =
+    "host";
+
+}
+
+else{
+
+  profile.investorType =
+    "beginner";
+
+}
+
+// ===========================================
+// 📊 PORTFOLIO SIZE
+// ===========================================
+
+if(profile.ownedProperties >= 10){
+
+  profile.portfolioSize =
+    "large";
+
+}
+
+else if(profile.ownedProperties >= 3){
+
+  profile.portfolioSize =
+    "medium";
+
+}
+
+else{
+
+  profile.portfolioSize =
+    "small";
+
+}
 
     // ===========================================
     // 💾 SAVE GLOBAL
