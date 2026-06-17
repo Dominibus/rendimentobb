@@ -356,13 +356,19 @@ else if(detectedCities.length === 1){
 
 const targetPatterns = [
 
-  /target\s?(\d+(?:[\.,]\d+)?)%?/,
+  /target roi\s?(\d+(?:[\.,]\d+)?)%?/,
 
-  /almeno\s?(\d+(?:[\.,]\d+)?)%?/,
+  /roi target\s?(\d+(?:[\.,]\d+)?)%?/,
 
-  /minimum\s?(\d+(?:[\.,]\d+)?)%?/,
+  /target\s?roi\s?(\d+(?:[\.,]\d+)?)%?/,
 
-  /voglio\s?(\d+(?:[\.,]\d+)?)%?/
+  /almeno\s?(\d+(?:[\.,]\d+)?)\s?%/,
+
+  /minimum\s?(\d+(?:[\.,]\d+)?)\s?%/,
+
+  /roi of\s?(\d+(?:[\.,]\d+)?)\s?%/,
+
+  /roi del\s?(\d+(?:[\.,]\d+)?)\s?%/
 
 ];
 
@@ -383,7 +389,7 @@ for(const pattern of targetPatterns){
 
   }
 
-}  
+}
 
 // ===========================================
 // 🏨 OCCUPANCY DETECTION
