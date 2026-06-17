@@ -2525,6 +2525,23 @@ function runPostAnalysis(result, context){
       window.currentCity ||
       "roma";
 
+    const realCityInput =
+
+  document
+    .getElementById("custom-location")
+    ?.value
+    ?.trim()
+
+  ||
+
+  document
+    .getElementById("market-city")
+    ?.value
+
+  ||
+
+  market;
+
     // ================= ANALYSIS DATA =================
 
     window.lastAnalysisData = {
