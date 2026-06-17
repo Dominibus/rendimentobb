@@ -647,6 +647,16 @@ const hasAnalysis =
 
   (!isNaN(occupancy) && occupancy !== 0);
 
+console.log(
+  "🚨 ANALYSIS CHECK",
+  {
+    roi,
+    risk,
+    occupancy,
+    hasAnalysis
+  }
+);
+
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
 // ===========================================
