@@ -3263,6 +3263,8 @@ window.__LAST_CALCULATION__ = 0;
 
 window.calculate = async function(mode = false){
 
+  console.trace("🔥 CALCULATE SOURCE", mode);
+
   const isUIRefresh =
   mode === "ui_refresh";
 
