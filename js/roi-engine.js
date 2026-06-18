@@ -75,6 +75,11 @@ function calculateROI(input = {}){
       ? (netAfterMortgage / equity) * 100
       : 0;
 
+  const realROI =
+  price > 0
+    ? (netAfterMortgage / price) * 100
+    : 0;
+
   // ================= KPI =================
   const monthlyProfit = netAfterMortgage / 12;
 
@@ -121,6 +126,7 @@ function calculateROI(input = {}){
     profit: clean(netAfterMortgage),
 
     roi: clean(roi),
+    realROI: clean(realROI),
 
     monthlyProfit: clean(monthlyProfit),
     breakEvenYears: clean(breakEvenYears),
