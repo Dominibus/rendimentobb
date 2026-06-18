@@ -291,56 +291,53 @@ if(
 
 // ===========================================
 // 📊 SAVE INVESTMENT SNAPSHOT
+// SOLO ANALISI REALI
 // ===========================================
 
 if(
 
-  entities.roi ||
-
-  entities.city ||
-
-  entities.occupancy ||
-
-  entities.mortgage
+  entities.roi &&
+  entities.net &&
+  entities.propertyPrice
 
 ){
 
   memory.investmentHistory.push({
 
-  roi:
-    entities.roi || null,
+    roi: entities.roi,
 
-  city:
-    entities.city || null,
+    city: entities.city || null,
 
-  occupancy:
-    entities.occupancy || null,
+    occupancy: entities.occupancy || null,
 
-  mortgage:
-    entities.mortgage || null,
+    mortgage: entities.mortgage || null,
 
-  risk:
-    entities.risk || null,
+    risk: entities.risk || null,
 
-  net:
-    entities.net || null,
+    net: entities.net,
 
-  cashflow:
-    entities.cashflow || null,
+    cashflow: entities.cashflow || null,
 
-  propertyPrice:
-    entities.propertyPrice || null,
+    propertyPrice: entities.propertyPrice,
 
-  score:
-    entities.score || null,
+    score: entities.score || null,
 
-  timestamp:
-    Date.now()
+    timestamp: Date.now()
 
-});
+  });
+
+  // 🧹 CLEAN INVALID SNAPSHOTS
+
+  memory.investmentHistory =
+    memory.investmentHistory.filter(
+      item =>
+        item &&
+        item.roi &&
+        item.net &&
+        item.propertyPrice
+    );
 
 }
-      }
 
     // ===========================================
     // 🧠 STORE INTENT
