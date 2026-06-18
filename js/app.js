@@ -3459,7 +3459,14 @@ if(equity < minEquity){
       }
     }
 
-    const loanAmount   = getValue("loanAmount") || (price - equity);
+    const calculatedLoan = Math.max(
+  0,
+  price - equity
+);
+
+const loanAmount =
+  getValue("loanAmount") ||
+  calculatedLoan;
     const interestRate = getValue("interestRate") || 3.5;
     const loanYears    = getValue("loanYears") || 20;
 
