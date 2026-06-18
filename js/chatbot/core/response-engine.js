@@ -854,6 +854,14 @@ ${occupancy}%
 
 ⚠️ Risk score:
 ${risk}/100`;
+
+      console.log(
+  "🔥 ROI TEXT GENERATED",
+  {
+    textIT: response.textIT,
+    textEN: response.textEN
+  }
+);
     }
 
     else if(roi >= 8){
