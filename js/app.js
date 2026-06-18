@@ -3423,6 +3423,14 @@ if(access.isPro || access.isAdmin){
   ? (equityInput > 0 ? equityInput : Math.round(price * 0.3))
   : Math.round(price * 0.3);
 
+// 🔥 EQUITY CANNOT EXCEED PRICE
+
+if(equity > price){
+
+  equity = price;
+
+}
+
 // 🔥 MIN EQUITY REALISTICA
 const minEquity = price * 0.15;
 
