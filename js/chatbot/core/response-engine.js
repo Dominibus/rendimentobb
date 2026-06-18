@@ -862,7 +862,6 @@ ${risk}/100`;
     textEN: response.textEN
   }
 );
-      return response;
     }
 
     else if(roi >= 8){
