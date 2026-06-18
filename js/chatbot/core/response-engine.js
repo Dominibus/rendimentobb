@@ -347,42 +347,24 @@ console.log(
 // 💾 GLOBAL INVESTMENT HISTORY
 // =====================================
 
-const investmentHistory = [
+const investmentHistory =
 
-  ...(Array.isArray(window.rbChatMemory?.investmentHistory)
-    ? window.rbChatMemory.investmentHistory
-    : []),
-
-  ...(Array.isArray(window.investmentMemory)
-    ? window.investmentMemory
-    : []),
-
-...(window.rbInvestmentMemory &&
-   !Array.isArray(window.rbInvestmentMemory)
-  ? [window.rbInvestmentMemory]
-  : []),
-
-  ...(Array.isArray(window.investmentHistory)
-    ? window.investmentHistory
-    : []),
-
-  ...(Array.isArray(memory?.investmentHistory)
-    ? memory.investmentHistory
-    : [])
-
-].filter(
-  item =>
-    item &&
-    (
-      item.roi !== undefined ||
-      item.realROI !== undefined
-    )
-);
+Array.isArray(
+  window.rbChatMemory?.investmentHistory
+)
+  ? window.rbChatMemory.investmentHistory
+  : [];
 
 console.log(
   "💾 GLOBAL INVESTMENT HISTORY:",
   investmentHistory
 );
+
+  console.log(
+  "📊 HISTORY COUNT:",
+  investmentHistory.length
+);
+  
 // ===========================================
 // 🧠 AI INSIGHTS
 // ===========================================
