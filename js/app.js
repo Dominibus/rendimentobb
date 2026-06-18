@@ -2649,7 +2649,12 @@ window.__MANUAL_ANALYSIS__ === true;
 
 roi: Number(finalROI) || 0,
 
-realROI: Number(finalROI) || 0,
+realROI:
+  Number(
+    result?.realROI ??
+    window.realROI ??
+    finalROI
+  ) || 0,
 
 visualROI: Number(finalROI) || 0,
 
@@ -4132,8 +4137,14 @@ window.rbChatMemory.investmentHistory.push({
   roi:
     safeROI ?? 0,
 
+  roi:
+  safeROI ?? 0,
+
   realROI:
-    safeROI ?? 0,
+  result?.realROI ??
+  realROI ??
+  safeROI ??
+  0,
 
   visualROI:
     safeROI ?? 0,
