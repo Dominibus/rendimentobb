@@ -4102,20 +4102,38 @@ if(!window.rbChatMemory.investmentHistory){
 
 window.rbChatMemory.investmentHistory.push({
 
-  roi: safeROI ?? 0,
-  gross: gross ?? 0,
-  net: net ?? 0,
-  expenses: expenses ?? 0,
-  risk: risk ?? 0,
-
   city:
-    currentCity ||
-    "roma",
+    currentCity || "roma",
+
+  marketCity:
+    currentCity || "roma",
+
+  realCity:
+    currentCity || "roma",
+
+  roi:
+    safeROI ?? 0,
+
+  realROI:
+    safeROI ?? 0,
+
+  visualROI:
+    safeROI ?? 0,
+
+  gross:
+    gross ?? 0,
+
+  net:
+    net ?? 0,
+
+  expenses:
+    expenses ?? 0,
+
+  risk:
+    risk ?? 0,
 
   occupancy:
-    occupancy ??
-    occupancyRate ??
-    0,
+    occupancy ?? 0,
 
   propertyPrice:
     price ?? 0,
@@ -4124,14 +4142,13 @@ window.rbChatMemory.investmentHistory.push({
     equity ?? 0,
 
   mortgage:
-    loanAmount ??
-    0,
+    loanAmount ?? 0,
 
   timestamp:
     Date.now()
 
 });
-
+    
 // 🔥 KEEP ONLY LAST 10
 
 window.rbChatMemory.investmentHistory =
