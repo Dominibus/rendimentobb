@@ -1573,9 +1573,13 @@ if(window.lastAnalysisData){
   // ===========================================
 
   console.log(
-    "🧠 ENTITY ENGINE 4.0:",
-    entities
-  );
+  "🧠 ENTITY ENGINE FULL:",
+  JSON.stringify(
+    entities,
+    null,
+    2
+  )
+);
 
   return entities;
 
