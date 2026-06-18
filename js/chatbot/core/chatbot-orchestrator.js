@@ -331,8 +331,8 @@ const investorProfile =
   : {};
 
     // =========================================
-    // 📊 ANALYSIS DATA
-    // =========================================
+// 📊 ANALYSIS DATA
+// =========================================
 
 const analysisData = {
 
@@ -340,64 +340,108 @@ const analysisData = {
 
   roi:
 
-  window.lastAnalysisData?.realROI ??
+    window.lastAnalysisData?.realROI ??
 
-  Number(
-    document.getElementById("roi-value")
-    ?.textContent
-    ?.replace("%","")
-    ?.trim()
-  ) ??
+    Number(
+      document.getElementById("roi-value")
+      ?.textContent
+      ?.replace("%","")
+      ?.trim()
+    ) ??
 
-  window.lastAnalysisData?.roi ??
+    window.lastAnalysisData?.roi ??
 
-  0,
+    0,
 
-risk:
+  risk:
 
-  Number(
-    document.getElementById("risk-score")
-    ?.textContent
-    ?.replace("/100","")
-    ?.trim()
-  ) ||
+    Number(
+      document.getElementById("risk-score")
+      ?.textContent
+      ?.replace("/100","")
+      ?.trim()
+    ) ||
 
-  window.lastAnalysisData?.risk ||
+    window.lastAnalysisData?.risk ||
 
-  0,
+    0,
 
-occupancy:
+  occupancy:
 
-  Number(
-    document.getElementById("occupancy-rate")
-    ?.textContent
-    ?.replace("%","")
-    ?.trim()
-  ) ||
+    Number(
+      document.getElementById("occupancy-rate")
+      ?.textContent
+      ?.replace("%","")
+      ?.trim()
+    ) ||
 
-  window.lastAnalysisData?.occupancy ||
+    window.lastAnalysisData?.occupancy ||
 
-  0,
+    0,
+
+  // =====================================
+  // 💰 NORMALIZED PROFIT DATA
+  // =====================================
+
+  net:
+
+    window.lastAnalysisData?.net ??
+
+    window.lastAnalysisData?.profit ??
+
+    window.lastAnalysisData?.netAfterMortgage ??
+
+    0,
+
+  annualProfit:
+
+    window.lastAnalysisData?.annualProfit ??
+
+    window.lastAnalysisData?.profit ??
+
+    window.lastAnalysisData?.netAfterMortgage ??
+
+    0,
+
+  cashflow:
+
+    window.lastAnalysisData?.cashflow ??
+
+    window.lastAnalysisData?.net ??
+
+    window.lastAnalysisData?.profit ??
+
+    window.lastAnalysisData?.netAfterMortgage ??
+
+    window.lastAnalysisData?.annualProfit ??
+
+    0,
 
   city:
 
     window.currentCity ||
 
+    window.lastAnalysisData?.city ||
+
+    window.lastAnalysisData?.marketCity ||
+
+    window.lastAnalysisData?.realCity ||
+
     "roma"
 
 };
 
-    console.log(
+console.log(
   "🔥 LAST ANALYSIS RAW",
   window.lastAnalysisData
 );
 
-    console.log(
+console.log(
   "🔥 ANALYSIS DATA",
   analysisData
 );
 
-    console.log(
+console.log(
   "🔥 ANALYSIS DATA FINAL JSON",
   JSON.stringify(
     analysisData,
@@ -405,7 +449,6 @@ occupancy:
     2
   )
 );
-
 // =========================================
 // 🧠 AI SIGNALS
 // =========================================
