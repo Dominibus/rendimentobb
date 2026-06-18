@@ -4260,19 +4260,24 @@ ${knowledge?.warningEN || ""}
 
 else if(
 
-  entities.amount ||
-
-  entities.price ||
-
-  entities.mortgage ||
-
-  entities.mortgagePercent ||
+  intent.intent !== "roi_analysis" &&
+  intent.intent !== "risk_analysis" &&
+  intent.intent !== "comparison" &&
 
   (
 
-    allowMarketContext &&
+    entities.amount ||
 
-    entities.city
+    entities.price ||
+
+    entities.mortgage ||
+
+    entities.mortgagePercent ||
+
+    (
+      allowMarketContext &&
+      entities.city
+    )
 
   )
 
