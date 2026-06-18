@@ -1188,11 +1188,22 @@ const isPMSQuestion =
 // 🚀 EXECUTE
 // ===========================================
 
+const isExecutiveQuestion =
+
+  text.includes("conviene") ||
+  text.includes("investimento") ||
+  text.includes("comprare") ||
+  text.includes("acquistare") ||
+  text.includes("buy") ||
+  text.includes("worth");
+
 const matchedKnowledge =
 
   skipKnowledgeDetection ||
 
-  isPMSQuestion
+  isPMSQuestion ||
+
+  isExecutiveQuestion
 
     ? null
 
