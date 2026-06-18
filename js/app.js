@@ -3972,6 +3972,8 @@ window.rbCityMemory[memoryCity] = {
     ),
 
   loanAmount:
+  Math.max(
+    0,
     Number(
 
       loanAmount ??
@@ -3994,7 +3996,8 @@ window.rbCityMemory[memoryCity] = {
 
       )
 
-    ),
+    )
+  ),
 
   // META
   city:
