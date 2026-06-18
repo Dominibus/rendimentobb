@@ -388,6 +388,16 @@ occupancy:
 };
 
     console.log(
+  "🔥 LAST ANALYSIS RAW",
+  window.lastAnalysisData
+);
+
+    console.log(
+  "🔥 ANALYSIS DATA",
+  analysisData
+);
+
+    console.log(
   "🔥 ANALYSIS DATA FINAL JSON",
   JSON.stringify(
     analysisData,
