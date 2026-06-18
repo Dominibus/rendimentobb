@@ -4515,42 +4515,40 @@ if(investorProfile?.targetROI){
 // ===========================================
 
 if(
-
   responseBlocksIT.length &&
-
   response.type === "executive"
-
 ){
 
-  response.textIT =
+  response.textIT = [
 
-    responseBlocksIT
+    response.textIT,
 
+    ...responseBlocksIT
       .sort((a,b) => b.priority - a.priority)
-
       .map(block => block.text)
 
-      .join("\n\n");
+  ]
+  .filter(Boolean)
+  .join("\n\n");
 
 }
 
 if(
-
   responseBlocksEN.length &&
-
   response.type === "executive"
-
 ){
 
-  response.textEN =
+  response.textEN = [
 
-    responseBlocksEN
+    response.textEN,
 
+    ...responseBlocksEN
       .sort((a,b) => b.priority - a.priority)
-
       .map(block => block.text)
 
-      .join("\n\n");
+  ]
+  .filter(Boolean)
+  .join("\n\n");
 
 }
 
