@@ -3546,9 +3546,11 @@ if(!isTool){
 // =====================================
 
 // 🔥 ROI REALE
-const realROI = isFinite(roi)
-  ? roi
-  : 0;
+const realROI = Number(
+  result?.realROI ??
+  roi ??
+  0
+);
 
 // 🔥 ROI VISIVO (solo UI/chart)
 const visualROI = Math.min(realROI, 45);
