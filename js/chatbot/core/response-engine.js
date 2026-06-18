@@ -2450,6 +2450,164 @@ ${market.risk}`;
   }
 
 // ===========================================
+// 🏆 BEST CITY
+// ===========================================
+
+else if(
+  intent.intent === "best_city"
+){
+
+  response.type =
+    "best_city";
+
+  response.confidence =
+    0.99;
+
+  const history =
+    investmentHistory || [];
+
+  if(history.length < 2){
+
+    response.textIT =
+      "⚠️ Servono almeno due simulazioni per confrontare le città.";
+
+    response.textEN =
+      "⚠️ At least two simulations are required to compare cities.";
+
+    return response;
+
+  }
+
+  const ranked =
+
+    [...history]
+
+    .filter(item =>
+
+      item &&
+      (
+        item.city ||
+        item.marketCity
+      )
+
+    )
+
+    .sort((a,b)=>
+
+      Number(
+        b.realROI ??
+        b.visualROI ??
+        b.roi ??
+        0
+      )
+
+      -
+
+      Number(
+        a.realROI ??
+        a.visualROI ??
+        a.roi ??
+        0
+      )
+
+    );
+
+  const best =
+    ranked[0];
+
+  const bestCity =
+
+    best.city ||
+
+    best.marketCity ||
+
+    "N/D";
+
+  const bestROI =
+
+    Number(
+
+      best.realROI ??
+
+      best.visualROI ??
+
+      best.roi ??
+
+      0
+
+    );
+
+  let rankingIT =
+    "🏆 Classifica città\n\n";
+
+  let rankingEN =
+    "🏆 City Ranking\n\n";
+
+  ranked.slice(0,5).forEach((item,index)=>{
+
+    const cityName =
+
+      item.city ||
+
+      item.marketCity ||
+
+      "N/D";
+
+    const roiValue =
+
+      Number(
+
+        item.realROI ??
+
+        item.visualROI ??
+
+        item.roi ??
+
+        0
+
+      );
+
+    rankingIT +=
+      `${index+1}. ${cityName} → ROI ${roiValue.toFixed(1)}%\n`;
+
+    rankingEN +=
+      `${index+1}. ${cityName} → ROI ${roiValue.toFixed(1)}%\n`;
+
+  });
+
+  response.textIT =
+
+`🏆 Migliore città individuata
+
+📍 ${bestCity}
+
+📈 ROI:
+${bestROI.toFixed(1)}%
+
+${rankingIT}
+
+🧠 Insight AI
+
+${bestCity} risulta attualmente la città con il miglior rendimento tra tutte le simulazioni salvate.`;
+
+  response.textEN =
+
+`🏆 Best City Identified
+
+📍 ${bestCity}
+
+📈 ROI:
+${bestROI.toFixed(1)}%
+
+${rankingEN}
+
+🧠 AI Insight
+
+${bestCity} currently delivers the highest return among all saved simulations.`;
+
+}  
+
+// ===========================================
 // 🏆 BEST SIMULATION
 // ===========================================
 
