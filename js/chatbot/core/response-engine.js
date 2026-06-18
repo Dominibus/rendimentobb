@@ -3719,7 +3719,7 @@ ${actionPlanIT
 }
 
 // =====================================
-// 📋 OPERATIONAL RECOMMENDATIONS
+// 📋 OPERATIONAL RECOMMENDATIONS IT
 // =====================================
 
 const recommendationsIT = [];
@@ -3766,7 +3766,11 @@ ${recommendationsIT.join("\n")}`
 
   );
 
-}  
+}
+
+// =====================================
+// 🧠 AI REASONS EN
+// =====================================
 
 if(advisor?.reasonsEN?.length){
 
@@ -3780,11 +3784,13 @@ ${advisor.reasonsEN.join("\n")}`
 
 }
 
+// =====================================
+// 🎯 ACTION PLAN EN
+// =====================================
+
 const actionPlanEN = [];
 
-if(
-  advisor?.verdict === "BUY"
-){
+if(advisor?.verdict === "BUY"){
 
   actionPlanEN.push(
     "Acquisition recommended."
@@ -3792,9 +3798,7 @@ if(
 
 }
 
-if(
-  roi >= 25
-){
+if(roi >= 25){
 
   actionPlanEN.push(
     "Performance exceeds average market benchmarks."
@@ -3802,9 +3806,7 @@ if(
 
 }
 
-if(
-  occupancy >= 70
-){
+if(occupancy >= 70){
 
   actionPlanEN.push(
     "Demand profile supports a stable short-rent operation."
@@ -3812,25 +3814,7 @@ if(
 
 }
 
-if(
-  net > 0
-){
-
-  if(occupancy >= 80){
-
-  recommendationsIT.push(
-    "• Valutare un incremento progressivo delle tariffe per aumentare il RevPAR."
-  );
-
-}
-
-if(roi >= 40){
-
-  recommendationsIT.push(
-    "• Verificare la sostenibilità del ROI attraverso scenari conservativi."
-  );
-
-}
+if(net > 0){
 
   actionPlanEN.push(
     "Positive and sustainable cashflow."
@@ -3838,9 +3822,7 @@ if(roi >= 40){
 
 }
 
-if(
-  risk > 60
-){
+if(risk > 60){
 
   actionPlanEN.push(
     "Consider risk mitigation strategies."
@@ -3863,7 +3845,7 @@ ${actionPlanEN
 }
 
 // =====================================
-// 📋 OPERATIONAL RECOMMENDATIONS
+// 📋 OPERATIONAL RECOMMENDATIONS EN
 // =====================================
 
 const recommendationsEN = [];
@@ -3896,19 +3878,19 @@ if(net > 0){
 
   if(occupancy >= 80){
 
-  recommendationsEN.push(
-    "• Consider gradually increasing rates to improve RevPAR."
-  );
+    recommendationsEN.push(
+      "• Consider gradually increasing rates to improve RevPAR."
+    );
 
-}
+  }
 
-if(roi >= 40){
+  if(roi >= 40){
 
-  recommendationsEN.push(
-    "• Validate ROI sustainability through conservative scenarios."
-  );
+    recommendationsEN.push(
+      "• Validate ROI sustainability through conservative scenarios."
+    );
 
-}
+  }
 
   recommendationsEN.push(
     "• Preserve positive cashflow through cost control."
@@ -3926,14 +3908,12 @@ ${recommendationsEN.join("\n")}`
 
   );
 
-}  
+}
 
-if(reasoningEN.length){
+if(reasoningEN?.length){
 
   executiveEN.push(
-
     reasoningEN.join("\n\n")
-
   );
 
 }
@@ -4746,11 +4726,6 @@ console.log(
 return response;
 
 };
-
-console.log(
-  "🔥 RESPONSE ENGINE FINAL",
-  response
-);
 
 // ===============================================
 // 🚀 READY
