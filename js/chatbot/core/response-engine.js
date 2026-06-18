@@ -2478,132 +2478,237 @@ else if(
 
   }
 
-  const ranked =
+  // ===========================================
+// 🌍 CITY AGGREGATION ENGINE
+// ===========================================
 
-    [...history]
+const cityMap = {};
 
-    .filter(item =>
+history.forEach(item=>{
 
-      item &&
-      (
-        item.city ||
-        item.marketCity
-      )
+  const city = (
+    item.city ||
+    item.marketCity ||
+    "N/D"
+  ).toLowerCase();
 
-    )
+  const roi = Number(
+    item.realROI ??
+    item.visualROI ??
+    item.roi ??
+    0
+  );
 
-    .sort((a,b)=>
+  const risk =
+    Number(item.risk ?? 0);
 
-      Number(
-        b.realROI ??
-        b.visualROI ??
-        b.roi ??
-        0
-      )
+  const occupancy =
+    Number(item.occupancy ?? 0);
 
-      -
-
-      Number(
-        a.realROI ??
-        a.visualROI ??
-        a.roi ??
-        0
-      )
-
-    );
-
-  const best =
-    ranked[0];
-
-  const bestCity =
-
-    best.city ||
-
-    best.marketCity ||
-
-    "N/D";
-
-  const bestROI =
-
+  const cashflow =
     Number(
-
-      best.realROI ??
-
-      best.visualROI ??
-
-      best.roi ??
-
+      item.net ??
+      item.cashflow ??
       0
-
     );
 
+  if(!cityMap[city]){
+
+    cityMap[city] = {
+
+      city,
+
+      bestROI: roi,
+
+      avgROI: roi,
+
+      avgRisk: risk,
+
+      avgOccupancy: occupancy,
+
+      avgCashflow: cashflow,
+
+      simulations: 1
+
+    };
+
+    return;
+
+  }
+
+  cityMap[city].bestROI =
+    Math.max(
+      cityMap[city].bestROI,
+      roi
+    );
+
+  cityMap[city].avgROI += roi;
+
+  cityMap[city].avgRisk += risk;
+
+  cityMap[city].avgOccupancy += occupancy;
+
+  cityMap[city].avgCashflow += cashflow;
+
+  cityMap[city].simulations++;
+
+});
+
+// ===========================================
+// 📊 NORMALIZE
+// ===========================================
+
+const ranked =
+
+Object.values(cityMap)
+
+.map(city=>({
+
+  ...city,
+
+  avgROI:
+    city.avgROI /
+    city.simulations,
+
+  avgRisk:
+    city.avgRisk /
+    city.simulations,
+
+  avgOccupancy:
+    city.avgOccupancy /
+    city.simulations,
+
+  avgCashflow:
+    city.avgCashflow /
+    city.simulations
+
+}))
+
+.sort(
+  (a,b)=>
+  b.bestROI -
+  a.bestROI
+);
+
+const best =
+  ranked[0];
+
+const bestCity =
+  best.city;
+
+const bestROI =
+  best.bestROI;
   let rankingIT =
     "🏆 Classifica città\n\n";
 
   let rankingEN =
     "🏆 City Ranking\n\n";
 
-  ranked.slice(0,5).forEach((item,index)=>{
+ranked.slice(0,5).forEach((item,index)=>{
 
-    const cityName =
+  rankingIT +=
 
-      item.city ||
+`${index+1}. ${item.city}
 
-      item.marketCity ||
+📈 ROI Max:
+${item.bestROI.toFixed(1)}%
 
-      "N/D";
+📊 ROI Medio:
+${item.avgROI.toFixed(1)}%
 
-    const roiValue =
+🏨 Occupazione:
+${item.avgOccupancy.toFixed(0)}%
 
-      Number(
+⚠️ Rischio:
+${item.avgRisk.toFixed(0)}/100
 
-        item.realROI ??
+💰 Cashflow:
+€${Math.round(item.avgCashflow).toLocaleString("it-IT")}
 
-        item.visualROI ??
+\n`;
 
-        item.roi ??
+  rankingEN +=
 
-        0
+`${index+1}. ${item.city}
 
-      );
+📈 Max ROI:
+${item.bestROI.toFixed(1)}%
 
-    rankingIT +=
-      `${index+1}. ${cityName} → ROI ${roiValue.toFixed(1)}%\n`;
+📊 Average ROI:
+${item.avgROI.toFixed(1)}%
 
-    rankingEN +=
-      `${index+1}. ${cityName} → ROI ${roiValue.toFixed(1)}%\n`;
+🏨 Occupancy:
+${item.avgOccupancy.toFixed(0)}%
 
-  });
+⚠️ Risk:
+${item.avgRisk.toFixed(0)}/100
+
+💰 Cashflow:
+€${Math.round(item.avgCashflow).toLocaleString("en-US")}
+
+\n`;
+
+});
 
   response.textIT =
+
+response.textIT =
 
 `🏆 Migliore città individuata
 
 📍 ${bestCity}
 
-📈 ROI:
+📈 ROI massimo registrato:
 ${bestROI.toFixed(1)}%
 
 ${rankingIT}
 
-🧠 Insight AI
+🧠 Insight Strategico AI
 
-${bestCity} risulta attualmente la città con il miglior rendimento tra tutte le simulazioni salvate.`;
+${bestCity} emerge come il mercato più performante tra quelli analizzati.
 
-  response.textEN =
+📊 ROI medio:
+${best.avgROI.toFixed(1)}%
+
+🏨 Occupazione media:
+${best.avgOccupancy.toFixed(0)}%
+
+⚠️ Rischio medio:
+${best.avgRisk.toFixed(0)}/100
+
+💰 Cashflow medio:
+€${Math.round(best.avgCashflow).toLocaleString("it-IT")}
+
+🎯 L'AI considera attualmente ${bestCity} la destinazione più interessante per una strategia short-rent orientata alla redditività e alla sostenibilità operativa.`;
+
+response.textEN =
 
 `🏆 Best City Identified
 
 📍 ${bestCity}
 
-📈 ROI:
+📈 Highest Recorded ROI:
 ${bestROI.toFixed(1)}%
 
 ${rankingEN}
 
-🧠 AI Insight
+🧠 AI Strategic Insight
 
-${bestCity} currently delivers the highest return among all saved simulations.`;
+${bestCity} currently stands out as the strongest performing market among analyzed cities.
+
+📊 Average ROI:
+${best.avgROI.toFixed(1)}%
+
+🏨 Average Occupancy:
+${best.avgOccupancy.toFixed(0)}%
+
+⚠️ Average Risk:
+${best.avgRisk.toFixed(0)}/100
+
+💰 Average Cashflow:
+€${Math.round(best.avgCashflow).toLocaleString("en-US")}
+
+🎯 The AI currently considers ${bestCity} the most attractive destination for a profitability-focused and operationally sustainable short-rent strategy.`;
 
 }  
 
