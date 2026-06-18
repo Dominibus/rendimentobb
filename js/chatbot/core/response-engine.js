@@ -2778,6 +2778,13 @@ ${best.avgRisk.toFixed(0)}/100
 
 🎯 The AI currently considers ${bestCity} the most attractive destination for a profitability-focused, stable and operationally sustainable short-rent strategy.`;
 
+  console.log(
+  "🏆 BEST CITY RESPONSE:",
+  response
+);
+
+return response;
+
 }
 
 // ===========================================
