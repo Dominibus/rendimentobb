@@ -340,14 +340,16 @@ const analysisData = {
 
   roi:
 
+  window.lastAnalysisData?.realROI ??
+
   Number(
     document.getElementById("roi-value")
     ?.textContent
     ?.replace("%","")
     ?.trim()
-  ) ||
+  ) ??
 
-  window.lastAnalysisData?.roi ||
+  window.lastAnalysisData?.roi ??
 
   0,
 
@@ -419,11 +421,16 @@ const advisor =
   ? window.rbGenerateAdvisorVerdict({
 
       roi:
-        analysisData.roi ||
 
-        window.lastAnalysisData?.roi ||
+  analysisData.realROI ??
 
-        0,
+  analysisData.roi ??
+
+  window.lastAnalysisData?.realROI ??
+
+  window.lastAnalysisData?.roi ??
+
+  0,
 
       risk:
         analysisData.risk ||
