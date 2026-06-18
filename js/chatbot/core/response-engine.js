@@ -786,6 +786,11 @@ function pickRandom(arr){
     response.type =
       "roi";
 
+    console.log(
+  "🔥 ROI RESPONSE CREATED",
+  response
+);
+
     response.confidence =
       0.95;
 
@@ -4733,6 +4738,11 @@ console.log(
 return response;
 
 };
+
+console.log(
+  "🔥 RESPONSE ENGINE FINAL",
+  response
+);
 
 // ===============================================
 // 🚀 READY
