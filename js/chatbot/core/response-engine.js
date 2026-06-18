@@ -364,7 +364,15 @@ console.log(
   "📊 HISTORY COUNT:",
   investmentHistory.length
 );
-  
+
+  console.log(
+  "📊 FULL HISTORY:",
+  JSON.stringify(
+    investmentHistory,
+    null,
+    2
+  )
+);
 // ===========================================
 // 🧠 AI INSIGHTS
 // ===========================================
