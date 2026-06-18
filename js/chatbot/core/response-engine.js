@@ -774,6 +774,15 @@ function pickRandom(arr){
     intent.intent === "roi_analysis"
   ){
 
+    console.log(
+    "🔥 ROI BRANCH ENTERED",
+    {
+      roi,
+      risk,
+      occupancy
+    }
+  );
+
     response.type =
       "roi";
 
