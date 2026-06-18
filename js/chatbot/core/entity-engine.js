@@ -1540,6 +1540,34 @@ if(window.lastAnalysisData){
 
   });
 
+// =====================================
+// 🔥 SIMULATOR DATA FALLBACK
+// =====================================
+
+if(window.lastAnalysisData){
+
+  entities.roi ??=
+    window.lastAnalysisData.roi;
+
+  entities.risk ??=
+    window.lastAnalysisData.risk;
+
+  entities.occupancy ??=
+    window.lastAnalysisData.occupancy;
+
+  entities.propertyPrice ??=
+    window.lastAnalysisData.propertyPrice;
+
+  entities.cashflow ??=
+    window.lastAnalysisData.profit ??
+    window.lastAnalysisData.netAfterMortgage ??
+    0;
+
+  entities.city ??=
+    window.lastAnalysisData.city;
+
+}
+
   // ===========================================
   // 🧠 DEBUG
   // ===========================================
