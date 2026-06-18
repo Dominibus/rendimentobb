@@ -4125,7 +4125,7 @@ if(!window.rbChatMemory.investmentHistory){
   window.rbChatMemory.investmentHistory = [];
 }
 
-window.rbChatMemory.investmentHistory.push({
+const newSnapshot = {
 
   city:
     currentCity || "roma",
@@ -4139,14 +4139,11 @@ window.rbChatMemory.investmentHistory.push({
   roi:
     safeROI ?? 0,
 
-  roi:
-  safeROI ?? 0,
-
   realROI:
-  result?.realROI ??
-  realROI ??
-  safeROI ??
-  0,
+    result?.realROI ??
+    realROI ??
+    safeROI ??
+    0,
 
   visualROI:
     safeROI ?? 0,
@@ -4178,7 +4175,36 @@ window.rbChatMemory.investmentHistory.push({
   timestamp:
     Date.now()
 
-});
+};
+
+const lastSnapshot =
+  window.rbChatMemory.investmentHistory[
+    window.rbChatMemory.investmentHistory.length - 1
+  ];
+
+const isDuplicate =
+
+  lastSnapshot &&
+
+  lastSnapshot.city === newSnapshot.city &&
+
+  Math.abs(
+    (lastSnapshot.realROI || 0) -
+    (newSnapshot.realROI || 0)
+  ) < 0.01 &&
+
+  Math.abs(
+    (lastSnapshot.propertyPrice || 0) -
+    (newSnapshot.propertyPrice || 0)
+  ) < 1;
+
+if(!isDuplicate){
+
+  window.rbChatMemory.investmentHistory.push(
+    newSnapshot
+  );
+
+}
     
 // 🔥 KEEP ONLY LAST 10
 
