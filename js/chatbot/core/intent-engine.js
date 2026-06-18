@@ -833,20 +833,53 @@ if(
 
   has(
 
+    // 🇮🇹 CITTÀ MIGLIORE
+
     "migliore città",
     "miglior città",
+    "quale città conviene",
+    "quale città rende di più",
+    "quale città ha roi migliore",
+    "quale città è migliore",
+    "in quale città investire",
+    "dove investire",
+    "dove conviene investire",
+    "città più redditizia",
+    "città più profittevole",
+    "città più conveniente",
+    "città migliore per b&b",
+    "città migliore per affitti brevi",
+    "città migliore per airbnb",
+    "quale mercato è migliore",
+    "quale mercato performa meglio",
+    "mercato migliore",
+    "classifica città",
+    "ranking città",
+    "confronto città",
+    "confronta città",
+
+    // 🇬🇧 BEST CITY
 
     "best city",
-
-    "quale città rende di più",
-
-    "which city performs best",
-
     "best performing city",
-
+    "best investment city",
+    "best market",
+    "best city for airbnb",
+    "best city for short term rentals",
+    "which city performs best",
+    "which city is better",
+    "which city should i invest in",
+    "where should i invest",
+    "most profitable city",
+    "highest roi city",
+    "top performing city",
     "city ranking",
-
-    "classifica città"
+    "market ranking",
+    "city comparison",
+    "compare cities",
+    "compare markets",
+    "best location",
+    "best destination"
 
   )
 
@@ -869,7 +902,6 @@ if(
   });
 
 }
-
 // ===========================================
 // 📄 PDF ANALYSIS
 // ===========================================
