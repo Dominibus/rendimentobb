@@ -2683,6 +2683,17 @@ Number(
   0
 ),
 
+      console.log(
+  "🏦 DEBUG MORTGAGE SAVE",
+  {
+    loanAmount,
+    mortgage,
+    mortgageAmount,
+    propertyPrice,
+    equity
+  }
+);
+
 mortgage:
 Number(
   loanAmount ||
