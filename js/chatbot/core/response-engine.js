@@ -4099,10 +4099,10 @@ else if(
 
   const targetProperties =
 
-    Number(
-      entities.targetProperties ||
-      5
-    );
+  Number(
+    entities.targetProperties ||
+    0
+  );
 
   const monthlyCashflowGoal =
 
@@ -4166,7 +4166,7 @@ const aggressiveProperties =
 
   targetProperties > 0
 
-    ? `${portfolioRange}`
+    ? `${estimatedPropertiesNeeded}-${targetProperties}`
 
     : `${aggressiveProperties}`;
 
