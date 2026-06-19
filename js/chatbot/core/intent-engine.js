@@ -784,6 +784,7 @@ if(
 
 // ===========================================
 // 📊 PORTFOLIO ANALYSIS
+// Multi Property Advisor
 // ===========================================
 
 if(
@@ -803,9 +804,39 @@ if(
 
     "analisi storico",
 
-    "come sto andando"
+    "come sto andando",
+
+    "quanti immobili ho",
+
+    "quanti appartamenti ho",
+
+    "portafoglio immobiliare",
+
+    "portfolio immobiliare",
+
+    "real estate portfolio",
+
+    "property portfolio",
+
+    "gestisco immobili",
+
+    "gestisco appartamenti",
+
+    "gestisco b&b",
+
+    "managed properties",
+
+    "my portfolio",
+
+    "my properties"
 
   )
+
+  ||
+
+  Number(
+    entities.ownedProperties || 0
+  ) > 0
 
 ){
 
