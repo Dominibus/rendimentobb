@@ -1906,7 +1906,21 @@ if(
 
   text.includes("pms overview") ||
 
-  text.includes("analyze my pms")
+  text.includes("analyze my pms") ||
+
+  text.includes("riepilogo pms") ||
+
+  text.includes("riepilogo del pms") ||
+
+  text.includes("situazione pms") ||
+
+  text.includes("overview pms") ||
+
+  text.includes("summary pms") ||
+
+  text.includes("riassunto pms") ||
+
+  text.includes("come va il pms")
 
 ){
 
