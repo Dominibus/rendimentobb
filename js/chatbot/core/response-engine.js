@@ -4237,6 +4237,38 @@ I will explain:
       0
     );
 
+  const reportEquity =
+
+  Number(
+
+    analysisData?.equity ??
+
+    window.lastAnalysisData?.equity ??
+
+    0
+
+  );
+
+const paybackYears =
+
+  reportCashflow > 0
+
+    ? reportEquity / reportCashflow
+
+    : null;
+
+const investmentClass =
+
+  investmentScore?.labelIT ||
+
+  "Standard";
+
+const investmentScoreValue =
+
+  investmentScore?.score ||
+
+  0;
+
   const insightsIT = [];
 
   if(reportROI >= 20){
@@ -4293,21 +4325,48 @@ I will explain:
 
 `📊 Interpretazione Executive del Report
 
-🎯 Sintesi del Consulente AI
+🏆 Classe Investimento
+
+${investmentClass}
+(${investmentScoreValue}/100)
+
+🎯 Verdetto Consulente AI
+
+Questo investimento mostra caratteristiche molto interessanti in termini di rendimento e sostenibilità.
 
 ROI: ${reportROI.toFixed(1)}%
 Occupazione: ${reportOccupancy}%
 Rischio: ${reportRisk}/100
 
+💰 Cashflow annuo
+
+€${Math.round(reportCashflow).toLocaleString("it-IT")}
+
+💳 Capitale investito
+
+€${Math.round(reportEquity).toLocaleString("it-IT")}
+
+${
+  paybackYears
+  ? `⏳ Recupero capitale stimato
+
+${paybackYears.toFixed(1)} anni`
+  : ""
+}
+
 ${insightsIT.join("\n\n")}
 
-💡 Focus Strategico
+🎯 Punto di forza principale
 
-L'obiettivo non è osservare una singola metrica ma valutare l'equilibrio tra rendimento, rischio e sostenibilità nel lungo periodo.
+L'investimento genera un rapporto molto favorevole tra capitale investito e profitto prodotto.
 
-📌 Prossima Azione Consigliata
+⚠️ Elemento da monitorare
 
-Confronta questi risultati con altre città o simulazioni per identificare il miglior rapporto tra ROI, rischio e cashflow.`;
+Verificare nel tempo la sostenibilità dell'occupazione e dell'ADR per mantenere gli attuali livelli di redditività.
+
+🚀 Strategia consigliata
+
+Se i risultati rimangono stabili, l'investimento può essere considerato una buona base per una futura espansione del portafoglio immobiliare.`;
 
   const insightsEN = [];
 
@@ -4365,21 +4424,48 @@ Confronta questi risultati con altre città o simulazioni per identificare il mi
 
 `📊 Executive Report Interpretation
 
-🎯 AI Consultant Summary
+🏆 Investment Class
+
+${investmentClass}
+(${investmentScoreValue}/100)
+
+🎯 AI Consultant Verdict
+
+This investment shows strong characteristics in terms of return and sustainability.
 
 ROI: ${reportROI.toFixed(1)}%
 Occupancy: ${reportOccupancy}%
 Risk: ${reportRisk}/100
 
+💰 Annual Cashflow
+
+€${Math.round(reportCashflow).toLocaleString("en-US")}
+
+💳 Invested Capital
+
+€${Math.round(reportEquity).toLocaleString("en-US")}
+
+${
+  paybackYears
+  ? `⏳ Estimated Capital Recovery
+
+${paybackYears.toFixed(1)} years`
+  : ""
+}
+
 ${insightsEN.join("\n\n")}
 
-💡 Strategic Focus
+🎯 Main Strength
 
-The goal is not to evaluate a single metric but to assess the balance between return, risk and long-term sustainability.
+The investment generates a very favorable relationship between invested capital and produced profit.
 
-📌 Recommended Next Step
+⚠️ Key Risk To Monitor
 
-Compare these results against other cities or simulations to identify the best balance between ROI, risk and cashflow.`;
+Monitor occupancy and ADR sustainability over time.
+
+🚀 Recommended Strategy
+
+If results remain stable, this investment can become a solid foundation for future portfolio expansion.`;
 
 }  
 
