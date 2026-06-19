@@ -781,29 +781,49 @@ else if(
 // 💰 AVAILABLE CAPITAL
 // ===========================================
 
-const capitalMatch = text.match(
+const capitalPatterns = [
 
-/(?:ho|possiedo|i have|i own)\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?\s+(?:da investire|da investire nel b&b|da investire in immobili|to invest|to invest in real estate|to invest in bnb)/
+/(?:ho|possiedo|i have|i own)\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?\s+(?:da investire|to invest)/i,
 
-);
+/con\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
 
-if(capitalMatch){
+/budget\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
 
-  let capital =
-    Number(
-      capitalMatch[1]
-        .replace(",", ".")
-    );
+/investire\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i
 
-  if(
-    capitalMatch[2] === "k" ||
-    capitalMatch[2] === "mila"
-  ){
-    capital *= 1000;
+];
+
+for(const pattern of capitalPatterns){
+
+  const match = text.match(pattern);
+
+  if(match){
+
+    let capital =
+
+      Number(
+        match[1]
+          .replace(",", ".")
+      );
+
+    if(
+
+      match[2] === "k" ||
+      match[2] === "mila" ||
+      match[2] === "thousand"
+
+    ){
+
+      capital *= 1000;
+
+    }
+
+    entities.availableCapital =
+      Math.round(capital);
+
+    break;
+
   }
-
-  entities.availableCapital =
-    Math.round(capital);
 
 }
 
