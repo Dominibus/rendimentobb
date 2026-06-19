@@ -1286,75 +1286,252 @@ ${roi.toFixed(1)}%`;
 }
     }
 
-  // ===========================================
-  // 🏦 MORTGAGE RESPONSE
-  // ===========================================
+ // ===========================================
+// 🏦 MORTGAGE RESPONSE
+// Mortgage Advisor 2.0
+// ===========================================
 
-  else if(
-    intent.intent === "mortgage_analysis"
-  ){
+else if(
+  intent.intent === "mortgage_analysis"
+){
 
-    response.type =
-      "mortgage";
+  response.type =
+    "mortgage";
 
-    response.confidence =
-      0.93;
+  response.confidence =
+    0.98;
 
-    const mortgagePercent =
+  const mortgagePercent =
 
-  Number(
-    liveData.mortgagePercent ||
+    Number(
 
-    entities.mortgagePercent ||
+      liveData.mortgagePercent ||
 
-    0
-  );
+      entities.mortgagePercent ||
 
-    if(mortgagePercent >= 90){
+      0
 
-      response.textIT =
+    );
 
-`⚠️ Leva finanziaria molto aggressiva.
+  const equity =
 
-🏦 Mutuo:
-${mortgagePercent}%
+    Number(
 
-💡 Una leva elevata aumenta sensibilmente il rischio operativo.`;
+      liveData.equity ||
 
-      response.textEN =
+      liveData.initialCapital ||
 
-`⚠️ Highly aggressive leverage detected.
+      0
 
-🏦 Mortgage:
-${mortgagePercent}%
+    );
 
-💡 High leverage significantly increases operational risk.`;
+  const loanAmount =
 
-    }
+    Number(
 
-    else{
+      liveData.loanAmount ||
 
-      response.textIT =
+      liveData.mortgage ||
 
-`🏦 Struttura mutuo analizzata.
+      0
 
-📊 Leverage:
-${mortgagePercent}%
+    );
 
-💡 Il finanziamento sembra relativamente sostenibile.`;
+  const netCashflow =
 
-      response.textEN =
+    Number(
 
-`🏦 Mortgage structure analyzed.
+      liveData.net ||
 
-📊 Leverage:
-${mortgagePercent}%
+      liveData.cashflow ||
 
-💡 Financing appears relatively sustainable.`;
+      0
 
-    }
+    );
+
+  let leverageLevelIT =
+    "🟢 Conservativa";
+
+  let leverageLevelEN =
+    "🟢 Conservative";
+
+  let verdictIT =
+    "🟢 Finanziamento sostenibile";
+
+  let verdictEN =
+    "🟢 Sustainable financing";
+
+  // =====================================
+  // 🧠 LEVERAGE CLASSIFICATION
+  // =====================================
+
+  if(mortgagePercent >= 90){
+
+    leverageLevelIT =
+      "🔴 Molto aggressiva";
+
+    leverageLevelEN =
+      "🔴 Highly aggressive";
+
+    verdictIT =
+      "🔴 Rischio finanziario elevato";
+
+    verdictEN =
+      "🔴 High financial risk";
 
   }
+
+  else if(mortgagePercent >= 80){
+
+    leverageLevelIT =
+      "🟠 Aggressiva";
+
+    leverageLevelEN =
+      "🟠 Aggressive";
+
+    verdictIT =
+      "🟠 Monitorare sostenibilità";
+
+    verdictEN =
+      "🟠 Sustainability should be monitored";
+
+  }
+
+  else if(mortgagePercent >= 60){
+
+    leverageLevelIT =
+      "🟡 Bilanciata";
+
+    leverageLevelEN =
+      "🟡 Balanced";
+
+  }
+
+  // =====================================
+  // 🇮🇹
+  // =====================================
+
+  response.textIT =
+
+`🏦 Mortgage Advisor AI
+
+📊 Leva finanziaria:
+${mortgagePercent}%
+
+💰 Capitale investito:
+€${equity.toLocaleString("it-IT")}
+
+🏦 Importo finanziato:
+€${loanAmount.toLocaleString("it-IT")}
+
+📈 ROI:
+${roi.toFixed(1)}%
+
+💸 Cashflow:
+€${Math.round(netCashflow).toLocaleString("it-IT")}
+
+⚠️ Risk Score:
+${risk}/100
+
+🏷️ Livello leva
+
+${leverageLevelIT}
+
+🎯 Verdetto AI
+
+${verdictIT}
+
+🧠 Analisi
+
+${
+  mortgagePercent >= 90
+
+  ? "L'operazione utilizza una leva molto elevata. Piccole variazioni di occupazione o ricavi potrebbero avere un impatto significativo sul cashflow."
+
+  : mortgagePercent >= 80
+
+  ? "La leva è aggressiva ma può risultare sostenibile se supportata da occupazione stabile e cashflow positivo."
+
+  : mortgagePercent >= 60
+
+  ? "La struttura del finanziamento appare equilibrata per una strategia di crescita immobiliare."
+
+  : "La leva finanziaria risulta prudente e offre una buona protezione contro la volatilità del mercato."
+}
+
+🚀 Consiglio AI
+
+${
+  netCashflow > 0
+
+  ? "Il cashflow positivo supporta la sostenibilità del finanziamento nel medio-lungo periodo."
+
+  : "Prima di aumentare la leva finanziaria è consigliabile migliorare il cashflow operativo."
+}`;
+
+  // =====================================
+  // 🇬🇧
+  // =====================================
+
+  response.textEN =
+
+`🏦 AI Mortgage Advisor
+
+📊 Financial Leverage:
+${mortgagePercent}%
+
+💰 Equity Invested:
+€${equity.toLocaleString("en-US")}
+
+🏦 Loan Amount:
+€${loanAmount.toLocaleString("en-US")}
+
+📈 ROI:
+${roi.toFixed(1)}%
+
+💸 Cashflow:
+€${Math.round(netCashflow).toLocaleString("en-US")}
+
+⚠️ Risk Score:
+${risk}/100
+
+🏷️ Leverage Level
+
+${leverageLevelEN}
+
+🎯 AI Verdict
+
+${verdictEN}
+
+🧠 Analysis
+
+${
+  mortgagePercent >= 90
+
+  ? "The transaction relies on very high leverage. Small occupancy or revenue changes could significantly impact cashflow."
+
+  : mortgagePercent >= 80
+
+  ? "Leverage is aggressive but may remain sustainable when supported by stable occupancy and positive cashflow."
+
+  : mortgagePercent >= 60
+
+  ? "The financing structure appears balanced for a real estate growth strategy."
+
+  : "Financial leverage is conservative and provides stronger protection against market volatility."
+}
+
+🚀 AI Advice
+
+${
+  netCashflow > 0
+
+  ? "Positive cashflow supports long-term financing sustainability."
+
+  : "Improving operational cashflow is recommended before increasing leverage."
+}`;
+
+}
 
 // ===========================================
 // 🏨 PMS RESPONSE ENGINE
