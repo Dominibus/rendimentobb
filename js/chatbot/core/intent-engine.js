@@ -1834,7 +1834,15 @@ if(
 
   text.includes("check-in") ||
 
-  text.includes("checkin")
+  text.includes("check in") ||
+
+  text.includes("checkin") ||
+
+  text.includes("quanti check in") ||
+
+  text.includes("how many check ins") ||
+
+  text.includes("checkins")
 
 ){
 
@@ -1846,7 +1854,7 @@ if(
 
     confidence: 0.99,
 
-    priority: 260
+    priority: 300
 
   });
 
@@ -1860,7 +1868,11 @@ if(
 
   text.includes("check-out") ||
 
-  text.includes("checkout")
+  text.includes("check out") ||
+
+  text.includes("checkout") ||
+
+  text.includes("checkouts")
 
 ){
 
