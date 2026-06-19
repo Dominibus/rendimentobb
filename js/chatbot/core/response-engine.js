@@ -4162,6 +4162,14 @@ const aggressiveProperties =
 
       : targetProperties;
 
+  const portfolioRange =
+
+  targetProperties > 0
+
+    ? `${portfolioRange}`
+
+    : `${aggressiveProperties}`;
+
   // =====================================
   // 🇮🇹
   // =====================================
