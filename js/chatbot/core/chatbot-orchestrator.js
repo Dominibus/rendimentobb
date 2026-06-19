@@ -135,9 +135,22 @@ if(
 
 if(
 
-  detectedIntent.intent === "pms_analysis" ||
+  [
 
-  detectedIntent.intent === "pms_bookings"
+    "pms_overview",
+    "pms_analysis",
+    "pms_bookings",
+    "pms_arrivals",
+    "pms_checkins",
+    "pms_checkouts",
+    "pms_revenue",
+    "pms_occupancy",
+    "pms_adr",
+    "pms_guests"
+
+  ].includes(
+    detectedIntent.intent
+  )
 
 ){
 
@@ -145,7 +158,7 @@ if(
     detectedIntent.intent
   );
 
-}    
+}
 
 // =========================================
 // 🏆 PORTFOLIO / HISTORY
