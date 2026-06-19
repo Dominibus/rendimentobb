@@ -1544,7 +1544,15 @@ else if(
 
   intent.intent === "pms_analysis" ||
 
+  intent.intent === "pms_overview" ||
+
   intent.intent === "pms_bookings" ||
+
+  intent.intent === "pms_arrivals" ||
+
+  intent.intent === "pms_checkins" ||
+
+  intent.intent === "pms_checkouts" ||
 
   intent.intent === "pms_revenue" ||
 
@@ -1599,7 +1607,108 @@ else if(
       pmsData?.guests || 0
     );
 
-  // =====================================
+  const arrivals =
+  Number(
+    pmsData?.arrivals || 0
+  );
+
+const checkins =
+  Number(
+    pmsData?.checkins || 0
+  );
+
+const checkouts =
+  Number(
+    pmsData?.checkouts || 0
+  );
+
+// =====================================
+// 🏨 PMS OVERVIEW
+// =====================================
+
+if(intent.intent === "pms_overview"){
+
+  response.textIT =
+
+`🏨 Situazione PMS
+
+📌 Proprietà: ${properties}
+
+📅 Prenotazioni: ${bookings}
+
+👥 Ospiti: ${guests}
+
+💰 Ricavi: €${revenue.toLocaleString("it-IT")}
+
+🏨 Occupazione: ${occupancyPMS}%
+
+💵 ADR: €${adr}`;
+
+  response.textEN =
+
+`🏨 PMS Overview
+
+📌 Properties: ${properties}
+
+📅 Bookings: ${bookings}
+
+👥 Guests: ${guests}
+
+💰 Revenue: €${revenue.toLocaleString("en-US")}
+
+🏨 Occupancy: ${occupancyPMS}%
+
+💵 ADR: €${adr}`;
+
+  return response;
+}
+
+// =====================================
+// 📥 ARRIVALS
+// =====================================
+
+if(intent.intent === "pms_arrivals"){
+
+  response.textIT =
+    `📥 Arrivi previsti: ${arrivals}`;
+
+  response.textEN =
+    `📥 Expected arrivals: ${arrivals}`;
+
+  return response;
+}
+
+// =====================================
+// 🔑 CHECKINS
+// =====================================
+
+if(intent.intent === "pms_checkins"){
+
+  response.textIT =
+    `🔑 Check-in previsti: ${checkins}`;
+
+  response.textEN =
+    `🔑 Expected check-ins: ${checkins}`;
+
+  return response;
+}
+
+// =====================================
+// 🚪 CHECKOUTS
+// =====================================
+
+if(intent.intent === "pms_checkouts"){
+
+  response.textIT =
+    `🚪 Check-out previsti: ${checkouts}`;
+
+  response.textEN =
+    `🚪 Expected check-outs: ${checkouts}`;
+
+  return response;
+}  
+
+// =====================================
 // 📅 PMS BOOKINGS
 // =====================================
 
