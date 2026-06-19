@@ -787,9 +787,13 @@ const capitalPatterns = [
 
 /con\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
 
+/with\s+€?\s?(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?/i,
+
 /budget\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
 
-/investire\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i
+/investire\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
+
+/invest\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?/i
 
 ];
 
@@ -799,12 +803,14 @@ for(const pattern of capitalPatterns){
 
   if(match){
 
-    let capital =
+    let capitalText =
 
-      Number(
-        match[1]
-          .replace(",", ".")
-      );
+      String(match[1])
+        .replace(/\./g,"")
+        .replace(",", ".");
+
+    let capital =
+      Number(capitalText);
 
     if(
 
