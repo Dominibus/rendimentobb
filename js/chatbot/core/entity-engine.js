@@ -783,17 +783,17 @@ else if(
 
 const capitalPatterns = [
 
-/(?:ho|possiedo|i have|i own)\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?\s+(?:da investire|to invest)/i,
+/(?:ho|possiedo|i have|i own)\s+(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)?\s+(?:da investire|to invest)/i,
 
-/con\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
+/con\s+(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)/i,
 
-/with\s+€?\s?(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?/i,
+/with\s+€?\s?(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)?/i,
 
-/budget\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
+/budget\s+(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)/i,
 
-/investire\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)/i,
+/investire\s+(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)/i,
 
-/invest\s+(\d+(?:[\.,]\d+)?)\s?(k|mila|thousand|euro|euros|€)?/i
+/invest\s+(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)?/i
 
 ];
 
@@ -804,10 +804,51 @@ for(const pattern of capitalPatterns){
   if(match){
 
     let capitalText =
+      String(match[1]).trim();
 
-      String(match[1])
-        .replace(/\./g,"")
-        .replace(",", ".");
+    // 🇬🇧 50,000 → 50000
+
+    if(
+      /^\d{1,3}(,\d{3})+$/.test(
+        capitalText
+      )
+    ){
+
+      capitalText =
+        capitalText.replace(
+          /,/g,
+          ""
+        );
+
+    }
+
+    // 🇮🇹 50.000 → 50000
+
+    else if(
+      /^\d{1,3}(\.\d{3})+$/.test(
+        capitalText
+      )
+    ){
+
+      capitalText =
+        capitalText.replace(
+          /\./g,
+          ""
+        );
+
+    }
+
+    // 50,5 → 50.5
+
+    else{
+
+      capitalText =
+        capitalText.replace(
+          ",",
+          "."
+        );
+
+    }
 
     let capital =
       Number(capitalText);
