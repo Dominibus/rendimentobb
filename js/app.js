@@ -4402,7 +4402,9 @@ runPostAnalysis(result,{
 
   equity,
 
-  loan,
+  loanAmount: loan,
+
+  mortgage: loan,
 
   net,
 
