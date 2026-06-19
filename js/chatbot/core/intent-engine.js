@@ -1585,6 +1585,7 @@ if(
 
     "5 appartamenti",
     "10 appartamenti",
+    "20 appartamenti",
 
     "più appartamenti",
     "piu appartamenti",
@@ -1592,7 +1593,36 @@ if(
     "più immobili",
     "piu immobili",
 
+    "10 immobili",
+    "20 immobili",
+
+    "arrivare a 5 appartamenti",
+    "arrivare a 10 appartamenti",
+
+    "arrivare a 10 immobili",
+    "arrivare a 20 immobili",
+
     "costruire un portafoglio",
+
+    "portafoglio immobiliare",
+
+    "costruire un portafoglio immobiliare",
+
+    "creare un portafoglio immobiliare",
+
+    "creare un patrimonio immobiliare",
+
+    "espandere il patrimonio immobiliare",
+
+    "far crescere il patrimonio",
+
+    "comprare altri immobili",
+
+    "acquistare altri immobili",
+
+    "acquistare più immobili",
+
+    "acquistare piu immobili",
 
     "crescere",
 
@@ -1604,15 +1634,15 @@ if(
 
     "scalare il business",
 
+    "scalare un portafoglio immobiliare",
+
     "vivere di affitti",
 
     "vivere di rendita",
 
-    "portafoglio immobiliare",
+    "impero immobiliare",
 
-    "acquistare più immobili",
-
-    "acquistare piu immobili",
+    "costruire un impero immobiliare",
 
     "entro 5 anni",
     "entro 10 anni",
@@ -1623,11 +1653,21 @@ if(
 
     "real estate portfolio",
 
+    "property portfolio",
+
     "build a portfolio",
+
+    "build a real estate portfolio",
 
     "grow my portfolio",
 
+    "grow a portfolio",
+
+    "scale my portfolio",
+
     "scale my business",
+
+    "expand my real estate business",
 
     "buy more properties",
 
@@ -1636,6 +1676,8 @@ if(
     "5 properties",
 
     "10 properties",
+
+    "20 properties",
 
     "financial freedom",
 
@@ -1661,7 +1703,7 @@ if(
 
   });
 
-}  
+}
 
 // ===========================================
 // 💳 SUBSCRIPTIONS / PRICING
