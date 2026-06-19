@@ -301,11 +301,18 @@ console.log(
 
 const availableCapital =
 
-  memory.availableCapital ||
+  Number(
 
-  window.rbChatMemory?.availableCapital ||
+    entities.availableCapital ||
 
-  0;
+    memory?.availableCapital ||
+
+    window.rbChatMemory
+      ?.availableCapital ||
+
+    0
+
+  );
 
 const ownedProperties =
 
@@ -317,11 +324,18 @@ const ownedProperties =
 
 const monthlyCashflowGoal =
 
-  memory.monthlyCashflowGoal ||
+  Number(
 
-  window.rbChatMemory?.monthlyCashflowGoal ||
+    entities.monthlyCashflowGoal ||
 
-  0;
+    memory?.monthlyCashflowGoal ||
+
+    window.rbChatMemory
+      ?.monthlyCashflowGoal ||
+
+    0
+
+  );
 
 const targetROI =
 
@@ -4070,11 +4084,18 @@ else if(
 
   const availableCapital =
 
-    Number(
-      entities.availableCapital ||
-      investorMemory?.availableCapital ||
-      0
-    );
+  Number(
+
+    entities.availableCapital ||
+
+    memoryContext?.availableCapital ||
+
+    window.rbInvestorMemory
+      ?.availableCapital ||
+
+    0
+
+  );
 
   const targetProperties =
 
@@ -4085,11 +4106,18 @@ else if(
 
   const monthlyCashflowGoal =
 
-    Number(
-      entities.monthlyCashflowGoal ||
-      investorMemory?.monthlyCashflowGoal ||
-      0
-    );
+  Number(
+
+    entities.monthlyCashflowGoal ||
+
+    memoryContext?.monthlyCashflowGoal ||
+
+    window.rbInvestorMemory
+      ?.monthlyCashflowGoal ||
+
+    0
+
+  );
 
   const estimatedPropertiesNeeded =
 
