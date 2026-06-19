@@ -2757,7 +2757,7 @@ net ||
   {
     loanAmount,
     mortgage,
-    mortgageAmount,
+    mortgageAmount: loanAmount,
     propertyPrice,
     equity
   }
