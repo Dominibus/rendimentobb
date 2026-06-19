@@ -4066,35 +4066,84 @@ else if(
     "portfolio_growth";
 
   response.confidence =
-    0.98;
+    0.99;
+
+  const availableCapital =
+
+    Number(
+      entities.availableCapital ||
+      investorMemory?.availableCapital ||
+      0
+    );
+
+  const targetProperties =
+
+    Number(
+      entities.targetProperties ||
+      5
+    );
+
+  const monthlyCashflowGoal =
+
+    Number(
+      entities.monthlyCashflowGoal ||
+      investorMemory?.monthlyCashflowGoal ||
+      0
+    );
+
+  const estimatedPropertiesNeeded =
+
+    monthlyCashflowGoal > 0
+
+      ? Math.max(
+          1,
+          Math.round(
+            targetProperties * 0.8
+          )
+        )
+
+      : targetProperties;
+
+  // =====================================
+  // 🇮🇹
+  // =====================================
 
   response.textIT =
 
-`🏢 Piano di Crescita Immobiliare
+`🏢 Piano di Crescita Immobiliare Personalizzato
 
-Se il tuo obiettivo è raggiungere 5 appartamenti entro 5 anni, il focus deve essere sulla crescita progressiva del cashflow e sul reinvestimento dei profitti.
+💰 Capitale disponibile
 
-📈 Strategia suggerita
+€${availableCapital.toLocaleString("it-IT")}
 
-Anno 1
-• Acquisto del primo immobile
+🏠 Obiettivo portafoglio
+
+${targetProperties} immobili
+
+💵 Cashflow obiettivo
+
+€${monthlyCashflowGoal.toLocaleString("it-IT")} / mese
+
+🎯 Valutazione AI
+
+L'obiettivo appare realistico se mantieni un ROI sostenibile e reinvesti progressivamente i profitti generati.
+
+📈 Strategia consigliata
+
+Fase 1
+• Acquisizione delle prime unità redditizie
+• Focus su cashflow positivo
+• Controllo del rischio operativo
+
+Fase 2
+• Reinvestimento dei profitti
+• Crescita graduale del portafoglio
 • Ottimizzazione ADR e occupazione
 
-Anno 2
-• Accumulo liquidità
-• Miglioramento margini operativi
-
-Anno 3
-• Acquisto del secondo immobile
-• Diversificazione del rischio
-
-Anno 4
-• Consolidamento del portafoglio
+Fase 3
+• Espansione fino a circa ${estimatedPropertiesNeeded}-${targetProperties} immobili
 • Standardizzazione delle operazioni
-
-Anno 5
-• Espansione verso 4-5 unità
-• Focus su automazione e scalabilità
+• Automazione della gestione
 
 🎯 KPI da monitorare
 
@@ -4104,35 +4153,50 @@ Anno 5
 • ADR
 • Rischio operativo
 
-💡 I portafogli immobiliari crescono grazie al reinvestimento del cashflow e ad acquisti sostenibili nel tempo.`;
+🚀 Consiglio del Consulente AI
+
+Con €${availableCapital.toLocaleString("it-IT")} disponibili e un obiettivo di ${targetProperties} immobili, la chiave del successo sarà la disciplina nel reinvestimento del cashflow e la selezione di immobili ad alta redditività.`;
+
+  // =====================================
+  // 🇬🇧
+  // =====================================
 
   response.textEN =
 
-`🏢 Real Estate Portfolio Growth Plan
+`🏢 Personalized Real Estate Growth Plan
 
-If your goal is to reach 5 properties within 5 years, the focus should be on growing cashflow and reinvesting profits.
+💰 Available Capital
 
-📈 Suggested Strategy
+€${availableCapital.toLocaleString("en-US")}
 
-Year 1
-• Purchase first property
+🏠 Portfolio Target
+
+${targetProperties} properties
+
+💵 Cashflow Target
+
+€${monthlyCashflowGoal.toLocaleString("en-US")} / month
+
+🎯 AI Assessment
+
+The goal appears realistic if you maintain sustainable ROI and continuously reinvest generated profits.
+
+📈 Recommended Strategy
+
+Phase 1
+• Acquire the first profitable units
+• Focus on positive cashflow
+• Control operational risk
+
+Phase 2
+• Reinvest profits
+• Gradually expand the portfolio
 • Optimize ADR and occupancy
 
-Year 2
-• Build liquidity
-• Improve operating margins
-
-Year 3
-• Purchase second property
-• Diversify risk
-
-Year 4
-• Consolidate portfolio
+Phase 3
+• Expand toward approximately ${estimatedPropertiesNeeded}-${targetProperties} properties
 • Standardize operations
-
-Year 5
-• Expand toward 4-5 units
-• Focus on automation and scalability
+• Automate management
 
 🎯 KPIs to Monitor
 
@@ -4142,9 +4206,11 @@ Year 5
 • ADR
 • Operational Risk
 
-💡 Real estate portfolios grow through profit reinvestment and sustainable acquisitions over time.`;
+🚀 AI Consultant Advice
 
-}  
+With €${availableCapital.toLocaleString("en-US")} available and a target of ${targetProperties} properties, success will depend on disciplined cashflow reinvestment and selecting highly profitable assets.`;
+
+}
 
 // ===========================================
 // 📊 REPORT INTERPRETATION
