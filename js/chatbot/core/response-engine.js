@@ -4097,12 +4097,7 @@ else if(
 
   );
 
-  const targetProperties =
-
-  Number(
-    entities.targetProperties ||
-    0
-  );
+  targetProperties = 0
 
   const monthlyCashflowGoal =
 
@@ -4148,6 +4143,10 @@ const aggressiveProperties =
   ? 2
 
   : 1;
+
+  const estimatedProperties =
+
+  aggressiveProperties;
 
   const estimatedPropertiesNeeded =
 
@@ -4196,9 +4195,9 @@ ${conservativeProperties} immobile
 Strategia dinamica:
 ${aggressiveProperties} immobili
 
-🏠 Obiettivo portafoglio
+🏠 Immobili acquistabili stimati
 
-${targetProperties} immobili
+${estimatedProperties} immobili
 
 💵 Cashflow obiettivo
 
@@ -4221,7 +4220,7 @@ Fase 2
 • Ottimizzazione ADR e occupazione
 
 Fase 3
-• Espansione fino a circa ${estimatedPropertiesNeeded}-${targetProperties} immobili
+• Possibile acquisizione iniziale di circa ${estimatedProperties} immobili
 • Standardizzazione delle operazioni
 • Automazione della gestione
 
@@ -4263,9 +4262,9 @@ ${conservativeProperties} property
 Growth Strategy:
 ${aggressiveProperties} properties
 
-🏠 Portfolio Target
+🏠 Estimated Purchasable Properties
 
-${targetProperties} properties
+${estimatedProperties} properties
 
 💵 Cashflow Target
 
@@ -4288,7 +4287,7 @@ Phase 2
 • Optimize ADR and occupancy
 
 Phase 3
-• Expand toward approximately ${portfolioRange} properties
+• Estimated initial acquisition of approximately ${estimatedProperties} properties
 • Standardize operations
 • Automate management
 
