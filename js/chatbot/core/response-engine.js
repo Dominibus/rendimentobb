@@ -4161,8 +4161,67 @@ else if(
   response.confidence =
     0.99;
 
+  if(!hasAnalysis){
+
+  response.textIT =
+
+`📊 Non trovo una simulazione da interpretare.
+
+Per ottenere una lettura executive:
+
+• esegui una simulazione
+• genera il report
+• chiedimi "Interpretami il report"
+
+Ti mostrerò:
+
+• punti di forza
+• criticità
+• cashflow
+• rischio
+• sostenibilità
+• strategia consigliata`;
+
+  response.textEN =
+
+`📊 I cannot find a simulation to interpret.
+
+To get an executive review:
+
+• run a simulation
+• generate the report
+• ask "Interpret the report"
+
+I will explain:
+
+• strengths
+• weaknesses
+• cashflow
+• risk
+• sustainability
+• recommended strategy`;
+
+  return response;
+
+}
+
   const reportROI =
-    Number(roi || 0);
+
+  Number(
+
+    analysisData?.visualROI ??
+
+    window.lastAnalysisData?.visualROI ??
+
+    analysisData?.roi ??
+
+    window.lastAnalysisData?.roi ??
+
+    roi ??
+
+    0
+
+  );
 
   const reportRisk =
     Number(risk || 0);
