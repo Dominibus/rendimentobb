@@ -4084,90 +4084,98 @@ else if(
 
   const availableCapital =
 
-  Number(
+    Number(
 
-    entities.availableCapital ||
+      entities.availableCapital ||
 
-    memory?.availableCapital ||
+      memory?.availableCapital ||
 
-    window.rbChatMemory
-      ?.availableCapital ||
+      window.rbChatMemory
+        ?.availableCapital ||
 
-    0
+      0
 
-  );
-
-  targetProperties = 0
+    );
 
   const monthlyCashflowGoal =
 
-  Number(
+    Number(
 
-    entities.monthlyCashflowGoal ||
+      entities.monthlyCashflowGoal ||
 
-    memory?.monthlyCashflowGoal ||
+      memory?.monthlyCashflowGoal ||
 
-    window.rbChatMemory
-      ?.monthlyCashflowGoal ||
+      window.rbChatMemory
+        ?.monthlyCashflowGoal ||
 
-    0
+      0
 
-  );
+    );
 
   const estimatedPurchasePower =
 
-  availableCapital > 0
+    availableCapital > 0
 
-  ? Math.round(
-      availableCapital / 0.20
-    )
-
-  : 0;
-
-const conservativeProperties =
-
-  availableCapital >= 30000
-
-  ? 1
-
-  : 0;
-
-const aggressiveProperties =
-
-  availableCapital >= 100000
-
-  ? 3
-
-  : availableCapital >= 50000
-
-  ? 2
-
-  : 1;
-
-  const estimatedProperties =
-
-  aggressiveProperties;
-
-  const estimatedPropertiesNeeded =
-
-    monthlyCashflowGoal > 0
-
-      ? Math.max(
-          1,
-          Math.round(
-            targetProperties * 0.8
-          )
+      ? Math.round(
+          availableCapital / 0.20
         )
 
-      : targetProperties;
+      : 0;
 
-  const portfolioRange =
+  const conservativeProperties =
 
-  targetProperties > 0
+    availableCapital >= 30000
 
-    ? `${estimatedPropertiesNeeded}-${targetProperties}`
+      ? 1
 
-    : `${aggressiveProperties}`;
+      : 0;
+
+  const aggressiveProperties =
+
+    availableCapital >= 150000
+
+      ? 4
+
+      : availableCapital >= 100000
+
+      ? 3
+
+      : availableCapital >= 50000
+
+      ? 2
+
+      : availableCapital >= 20000
+
+      ? 1
+
+      : 0;
+
+  const estimatedProperties =
+    aggressiveProperties;
+
+  const growthProfileIT =
+
+    aggressiveProperties >= 3
+
+      ? "🚀 Profilo orientato alla costruzione di un portafoglio multi-immobile."
+
+      : aggressiveProperties === 2
+
+      ? "📈 Profilo compatibile con una crescita progressiva del portafoglio."
+
+      : "🏠 Strategia focalizzata sull'acquisizione della prima unità redditizia.";
+
+  const growthProfileEN =
+
+    aggressiveProperties >= 3
+
+      ? "🚀 Profile oriented toward building a multi-property portfolio."
+
+      : aggressiveProperties === 2
+
+      ? "📈 Profile compatible with progressive portfolio growth."
+
+      : "🏠 Strategy focused on acquiring the first profitable property.";
 
   // =====================================
   // 🇮🇹
@@ -4185,7 +4193,7 @@ const aggressiveProperties =
 
 €${estimatedPurchasePower.toLocaleString("it-IT")}
 
-(ipotizzando anticipo medio del 20%)
+(ipotizzando un anticipo medio del 20%)
 
 🏠 Capacità di espansione
 
@@ -4205,14 +4213,16 @@ ${estimatedProperties} immobili
 
 🎯 Valutazione AI
 
-L'obiettivo appare realistico se mantieni un ROI sostenibile e reinvesti progressivamente i profitti generati.
+${growthProfileIT}
+
+L'obiettivo appare realistico se mantieni un ROI sostenibile, controlli il rischio operativo e reinvesti progressivamente i profitti generati.
 
 📈 Strategia consigliata
 
 Fase 1
-• Acquisizione delle prime unità redditizie
-• Focus su cashflow positivo
-• Controllo del rischio operativo
+• Acquisizione di immobili con cashflow positivo
+• Validazione del modello operativo
+• Controllo di costi e occupazione
 
 Fase 2
 • Reinvestimento dei profitti
@@ -4220,7 +4230,7 @@ Fase 2
 • Ottimizzazione ADR e occupazione
 
 Fase 3
-• Possibile acquisizione iniziale di circa ${estimatedProperties} immobili
+• Espansione verso un portafoglio strutturato
 • Standardizzazione delle operazioni
 • Automazione della gestione
 
@@ -4234,7 +4244,7 @@ Fase 3
 
 🚀 Consiglio del Consulente AI
 
-Con €${availableCapital.toLocaleString("it-IT")} disponibili, il capitale attuale consente realisticamente l'acquisizione iniziale di circa ${aggressiveProperties} immobili utilizzando una leva finanziaria sostenibile.
+Con €${availableCapital.toLocaleString("it-IT")} disponibili, il capitale attuale consente realisticamente l'acquisizione iniziale di circa ${aggressiveProperties} immobili utilizzando una leva finanziaria sostenibile e una crescita progressiva del portafoglio.`;
 
   // =====================================
   // 🇬🇧
@@ -4252,7 +4262,7 @@ Con €${availableCapital.toLocaleString("it-IT")} disponibili, il capitale attu
 
 €${estimatedPurchasePower.toLocaleString("en-US")}
 
-(assuming a 20% down payment)
+(assuming a 20% average down payment)
 
 🏠 Expansion Capacity
 
@@ -4272,14 +4282,16 @@ ${estimatedProperties} properties
 
 🎯 AI Assessment
 
-The goal appears realistic if you maintain sustainable ROI and continuously reinvest generated profits.
+${growthProfileEN}
+
+The objective appears realistic if sustainable ROI is maintained, operational risk is controlled and profits are continuously reinvested.
 
 📈 Recommended Strategy
 
 Phase 1
-• Acquire the first profitable units
-• Focus on positive cashflow
-• Control operational risk
+• Acquire positive cashflow properties
+• Validate the operating model
+• Control costs and occupancy
 
 Phase 2
 • Reinvest profits
@@ -4287,11 +4299,11 @@ Phase 2
 • Optimize ADR and occupancy
 
 Phase 3
-• Estimated initial acquisition of approximately ${estimatedProperties} properties
+• Expand into a structured portfolio
 • Standardize operations
 • Automate management
 
-🎯 KPIs to Monitor
+🎯 KPIs To Monitor
 
 • ROI
 • Cashflow
@@ -4301,7 +4313,7 @@ Phase 3
 
 🚀 AI Consultant Advice
 
-With €${availableCapital.toLocaleString("en-US")} available, your current capital could realistically support the initial acquisition of approximately ${aggressiveProperties} properties using sustainable leverage.
+With €${availableCapital.toLocaleString("en-US")} available, your current capital could realistically support the initial acquisition of approximately ${aggressiveProperties} properties using sustainable leverage and progressive portfolio growth.`;
 
 }
 
