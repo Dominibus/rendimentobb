@@ -4119,6 +4119,36 @@ else if(
 
   );
 
+  const estimatedPurchasePower =
+
+  availableCapital > 0
+
+  ? Math.round(
+      availableCapital / 0.20
+    )
+
+  : 0;
+
+const conservativeProperties =
+
+  availableCapital >= 30000
+
+  ? 1
+
+  : 0;
+
+const aggressiveProperties =
+
+  availableCapital >= 100000
+
+  ? 3
+
+  : availableCapital >= 50000
+
+  ? 2
+
+  : 1;
+
   const estimatedPropertiesNeeded =
 
     monthlyCashflowGoal > 0
