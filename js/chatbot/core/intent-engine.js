@@ -1800,6 +1800,34 @@ if(
 
   )
 
+  ||
+
+  (
+
+    entities.availableCapital &&
+
+    (
+
+      text.includes("quanti immobili") ||
+
+      text.includes("quanti appartamenti") ||
+
+      text.includes("quante case") ||
+
+      text.includes("posso acquistare") ||
+
+      text.includes("posso comprare") ||
+
+      text.includes("how many properties") ||
+
+      text.includes("how many apartments") ||
+
+      text.includes("how many houses")
+
+    )
+
+  )
+
 ){
 
   applyIntent({
@@ -1819,7 +1847,6 @@ if(
   });
 
 }
-
 // ===========================================
 // 💳 SUBSCRIPTIONS / PRICING
 // Silicon Valley SaaS Monetization Layer
