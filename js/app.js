@@ -3572,12 +3572,9 @@ const result = calculateROI({
     console.log(
   "🔥 POST ROI VARIABLES",
   {
-    propertyPrice,
+    price,
     equity,
-    loanAmount,
-    mortgage,
-    mortgagePercent,
-    monthlyMortgage
+    loanAmount
   }
 );
 
