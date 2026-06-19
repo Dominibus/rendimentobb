@@ -1719,6 +1719,200 @@ if(
 }  
 
 // ===========================================
+// 🏨 PMS GUESTS
+// ===========================================
+
+if(
+
+  text.includes("ospiti") ||
+
+  text.includes("guest") ||
+
+  text.includes("guests") ||
+
+  text.includes("quanti ospiti") ||
+
+  text.includes("how many guests")
+
+){
+
+  applyIntent({
+
+    intent: "pms_guests",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 260
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS ADR
+// ===========================================
+
+if(
+
+  text.includes("adr") ||
+
+  text.includes("average daily rate")
+
+){
+
+  applyIntent({
+
+    intent: "pms_adr",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 260
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS REVPAR
+// ===========================================
+
+if(
+
+  text.includes("revpar")
+
+){
+
+  applyIntent({
+
+    intent: "pms_revpar",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 260
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS ARRIVALS
+// ===========================================
+
+if(
+
+  text.includes("arrivi") ||
+
+  text.includes("arrivals")
+
+){
+
+  applyIntent({
+
+    intent: "pms_arrivals",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 260
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS CHECK-IN
+// ===========================================
+
+if(
+
+  text.includes("check-in") ||
+
+  text.includes("checkin")
+
+){
+
+  applyIntent({
+
+    intent: "pms_checkins",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 260
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS CHECK-OUT
+// ===========================================
+
+if(
+
+  text.includes("check-out") ||
+
+  text.includes("checkout")
+
+){
+
+  applyIntent({
+
+    intent: "pms_checkouts",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 260
+
+  });
+
+}
+
+// ===========================================
+// 🏨 PMS OVERVIEW
+// ===========================================
+
+if(
+
+  text.includes("analizza il mio pms") ||
+
+  text.includes("analizza pms") ||
+
+  text.includes("come sta andando il pms") ||
+
+  text.includes("dashboard pms") ||
+
+  text.includes("pms overview") ||
+
+  text.includes("analyze my pms")
+
+){
+
+  applyIntent({
+
+    intent: "pms_overview",
+
+    category: "pms",
+
+    confidence: 0.99,
+
+    priority: 270
+
+  });
+
+}  
+
+// ===========================================
 // 🏢 PORTFOLIO GROWTH
 // Real Estate Scaling Advisor
 // ===========================================
