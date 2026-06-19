@@ -4288,7 +4288,7 @@ Phase 2
 • Optimize ADR and occupancy
 
 Phase 3
-• Expand toward approximately ${estimatedPropertiesNeeded}-${targetProperties} properties
+• Expand toward approximately ${portfolioRange} properties
 • Standardize operations
 • Automate management
 
