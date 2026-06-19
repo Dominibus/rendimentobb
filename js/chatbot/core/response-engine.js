@@ -4174,6 +4174,20 @@ const aggressiveProperties =
 
 €${availableCapital.toLocaleString("it-IT")}
 
+🏦 Potere di acquisto stimato
+
+€${estimatedPurchasePower.toLocaleString("it-IT")}
+
+(ipotizzando anticipo medio del 20%)
+
+🏠 Capacità di espansione
+
+Strategia prudente:
+${conservativeProperties} immobile
+
+Strategia dinamica:
+${aggressiveProperties} immobili
+
 🏠 Obiettivo portafoglio
 
 ${targetProperties} immobili
@@ -4226,6 +4240,20 @@ Con €${availableCapital.toLocaleString("it-IT")} disponibili e un obiettivo di
 💰 Available Capital
 
 €${availableCapital.toLocaleString("en-US")}
+
+🏦 Estimated Purchase Power
+
+€${estimatedPurchasePower.toLocaleString("en-US")}
+
+(assuming a 20% down payment)
+
+🏠 Expansion Capacity
+
+Conservative Strategy:
+${conservativeProperties} property
+
+Growth Strategy:
+${aggressiveProperties} properties
 
 🏠 Portfolio Target
 
