@@ -669,6 +669,9 @@ if(
   intent.intent !== "market_analysis" &&
   intent.intent !== "investment_strategy" &&
   intent.intent !== "investment_advisor" &&
+  intent.intent !== "portfolio_growth" &&
+  intent.intent !== "market_comparison" &&
+  intent.intent !== "report_interpretation" &&
   intent.intent !== "greeting" &&
   intent.intent !== "pms_analysis" &&
   intent.intent !== "pms_bookings" &&
@@ -4051,7 +4054,99 @@ else if(
 
 }
 
-  // ===========================================
+// ===========================================
+// 🏢 PORTFOLIO GROWTH ADVISOR
+// ===========================================
+
+else if(
+  intent.intent === "portfolio_growth"
+){
+
+  response.type =
+    "portfolio_growth";
+
+  response.confidence =
+    0.98;
+
+  response.textIT =
+
+`🏢 Piano di Crescita Immobiliare
+
+Se il tuo obiettivo è raggiungere 5 appartamenti entro 5 anni, il focus deve essere sulla crescita progressiva del cashflow e sul reinvestimento dei profitti.
+
+📈 Strategia suggerita
+
+Anno 1
+• Acquisto del primo immobile
+• Ottimizzazione ADR e occupazione
+
+Anno 2
+• Accumulo liquidità
+• Miglioramento margini operativi
+
+Anno 3
+• Acquisto del secondo immobile
+• Diversificazione del rischio
+
+Anno 4
+• Consolidamento del portafoglio
+• Standardizzazione delle operazioni
+
+Anno 5
+• Espansione verso 4-5 unità
+• Focus su automazione e scalabilità
+
+🎯 KPI da monitorare
+
+• ROI
+• Cashflow
+• Occupazione
+• ADR
+• Rischio operativo
+
+💡 I portafogli immobiliari crescono grazie al reinvestimento del cashflow e ad acquisti sostenibili nel tempo.`;
+
+  response.textEN =
+
+`🏢 Real Estate Portfolio Growth Plan
+
+If your goal is to reach 5 properties within 5 years, the focus should be on growing cashflow and reinvesting profits.
+
+📈 Suggested Strategy
+
+Year 1
+• Purchase first property
+• Optimize ADR and occupancy
+
+Year 2
+• Build liquidity
+• Improve operating margins
+
+Year 3
+• Purchase second property
+• Diversify risk
+
+Year 4
+• Consolidate portfolio
+• Standardize operations
+
+Year 5
+• Expand toward 4-5 units
+• Focus on automation and scalability
+
+🎯 KPIs to Monitor
+
+• ROI
+• Cashflow
+• Occupancy
+• ADR
+• Operational Risk
+
+💡 Real estate portfolios grow through profit reinvestment and sustainable acquisitions over time.`;
+
+}  
+
+// ===========================================
 // 👋 GREETING RESPONSE
 // ===========================================
 
@@ -4188,9 +4283,21 @@ else{
 
 else if(
 
-  intent.intent !== "comparison" &&
+  ![
+    "comparison",
+    "portfolio_growth",
+    "market_comparison",
+    "report_interpretation",
+    "pms_advisor"
+  ].includes(
+    intent.intent
+  )
 
-  !response.textIT &&
+  &&
+
+  !response.textIT
+
+  &&
 
   (
     entities.knowledgeData ||
@@ -4255,7 +4362,7 @@ ${knowledge?.warningEN || ""}
 
   }
 
-}  
+}
 
 // ===========================================
 // 🧠 HUMAN CONTEXT RESPONSE
