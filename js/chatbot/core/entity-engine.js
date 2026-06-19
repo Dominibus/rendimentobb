@@ -811,24 +811,38 @@ if(capitalMatch){
 // 💸 MONTHLY CASHFLOW GOAL
 // ===========================================
 
-const cashflowGoalMatch = text.match(
+const cashflowGoalPatterns = [
 
-/(?:voglio|obiettivo|target|i want|my goal is|cashflow target)\s+(\d+(?:[\.,]\d+)?)\s?(?:€|euro|euros|\$)?(?:\s+al mese|\s+mensili|\s+per month|\s+monthly)?/i
+  /(\d+(?:[\.,]\d+)?)\s?(?:€|euro)?\s?(?:al mese|mensili|per month|monthly).*cashflow/i,
 
-);
+  /cashflow.*?(\d+(?:[\.,]\d+)?)\s?(?:€|euro)?/i,
 
-if(cashflowGoalMatch){
+  /reddito passivo.*?(\d+(?:[\.,]\d+)?)\s?(?:€|euro)?/i,
 
-  entities.monthlyCashflowGoal =
+  /passive income.*?(\d+(?:[\.,]\d+)?)\s?(?:€|euro)?/i
 
-    Math.round(
+];
 
-      Number(
-        cashflowGoalMatch[1]
-          .replace(",", ".")
-      )
+for(const pattern of cashflowGoalPatterns){
 
-    );
+  const match = text.match(pattern);
+
+  if(match){
+
+    entities.monthlyCashflowGoal =
+
+      Math.round(
+
+        Number(
+          match[1]
+            .replace(",", ".")
+        )
+
+      );
+
+    break;
+
+  }
 
 }
 
