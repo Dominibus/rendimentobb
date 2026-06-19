@@ -2670,14 +2670,49 @@ visualROI: Number(finalROI) || 0,
   // 💰 PROPERTY
   // =====================================
 
-  propertyPrice: propertyPrice,
+  propertyPrice:
+Number(propertyPrice || 0),
 
-  equity: equity || 0,
+equity:
+Number(equity || 0),
 
-  loan:
-  Number(loanAmount || mortgage || 0),
+loanAmount:
+Number(
+  loanAmount ||
+  mortgage ||
+  0
+),
 
-  mortgagePercent: mortgagePercent || 0,
+mortgage:
+Number(
+  loanAmount ||
+  mortgage ||
+  0
+),
+
+mortgagePercent:
+
+Number(
+  mortgagePercent ||
+
+  (
+    propertyPrice > 0
+
+      ? Math.round(
+          (
+            Number(
+              loanAmount ||
+              mortgage ||
+              0
+            )
+            /
+            Number(propertyPrice)
+          ) * 100
+        )
+
+      : 0
+  )
+),
 
 // 💰 REVENUE
 pricePerNight: nightly,
