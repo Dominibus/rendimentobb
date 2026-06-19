@@ -5041,25 +5041,28 @@ ${knowledge?.warningEN || ""}
 
 else if(
 
-  intent.intent !== "roi_analysis" &&
-  intent.intent !== "risk_analysis" &&
-  intent.intent !== "comparison" &&
+  ![
+    "roi_analysis",
+    "risk_analysis",
+    "comparison",
+    "mortgage_analysis",
+    "cashflow_analysis",
+    "market_analysis",
+    "investment_executive",
+    "executive_analysis"
+  ].includes(intent.intent)
+
+  &&
 
   (
-
     entities.amount ||
-
     entities.price ||
-
     entities.mortgage ||
-
     entities.mortgagePercent ||
-
     (
       allowMarketContext &&
       entities.city
     )
-
   )
 
 ){
