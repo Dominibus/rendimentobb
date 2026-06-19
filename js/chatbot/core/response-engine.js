@@ -4251,6 +4251,196 @@ else if(
 // 🏢 PORTFOLIO GROWTH ADVISOR
 // ===========================================
 
+  else if(
+  intent.intent === "portfolio_analysis"
+){
+
+  response.type =
+    "portfolio_analysis";
+
+  response.confidence =
+    0.99;
+
+  const properties =
+
+    Number(
+      entities.ownedProperties ||
+      memory.ownedProperties ||
+      0
+    );
+
+  let levelIT =
+    "👤 Principiante";
+
+  let levelEN =
+    "👤 Beginner";
+
+  let complexityIT =
+    "🟢 Bassa";
+
+  let complexityEN =
+    "🟢 Low";
+
+  let pmsIT =
+    "Non necessario";
+
+  let pmsEN =
+    "Not required";
+
+  let growthIT =
+    "1-2 immobili";
+
+  let growthEN =
+    "1-2 properties";
+
+  if(properties >= 3){
+
+    levelIT =
+      "🏠 Host Professionale";
+
+    levelEN =
+      "🏠 Professional Host";
+
+    complexityIT =
+      "🟡 Media";
+
+    complexityEN =
+      "🟡 Medium";
+
+    pmsIT =
+      "Consigliato";
+
+    pmsEN =
+      "Recommended";
+
+    growthIT =
+      "3-5 immobili";
+
+    growthEN =
+      "3-5 properties";
+
+  }
+
+  if(properties >= 10){
+
+    levelIT =
+      "🏢 Operatore Multi Property";
+
+    levelEN =
+      "🏢 Multi Property Operator";
+
+    complexityIT =
+      "🔴 Elevata";
+
+    complexityEN =
+      "🔴 High";
+
+    pmsIT =
+      "Fondamentale";
+
+    pmsEN =
+      "Essential";
+
+    growthIT =
+      "10+ immobili";
+
+    growthEN =
+      "10+ properties";
+
+  }
+
+  response.textIT =
+
+`🏢 Portfolio Advisor
+
+📊 Portafoglio attuale
+
+${properties} immobili
+
+🏆 Livello
+
+${levelIT}
+
+⚙️ Complessità operativa
+
+${complexityIT}
+
+🏨 PMS
+
+${pmsIT}
+
+🤖 Automazioni
+
+${properties >= 5
+? "Consigliate"
+: "Facoltative"}
+
+📈 Potenziale crescita
+
+${growthIT}
+
+🧠 Strategia AI
+
+${
+  properties <= 1
+
+  ? "Concentrati sulla redditività della prima unità prima di espanderti."
+
+  : properties <= 5
+
+  ? "Standardizza processi e pricing per facilitare la crescita."
+
+  : "Automazione e controllo KPI diventano essenziali per scalare."
+}`;
+
+  response.textEN =
+
+`🏢 Portfolio Advisor
+
+📊 Current Portfolio
+
+${properties} properties
+
+🏆 Level
+
+${levelEN}
+
+⚙️ Operational Complexity
+
+${complexityEN}
+
+🏨 PMS
+
+${pmsEN}
+
+🤖 Automations
+
+${properties >= 5
+? "Recommended"
+: "Optional"}
+
+📈 Growth Potential
+
+${growthEN}
+
+🧠 AI Strategy
+
+${
+  properties <= 1
+
+  ? "Focus on maximizing profitability before scaling."
+
+  : properties <= 5
+
+  ? "Standardize operations and pricing before expansion."
+
+  : "Automation and KPI monitoring become critical for scaling."
+}`;
+
+  return response;
+
+}
+
 else if(
   intent.intent === "portfolio_growth"
 ){
