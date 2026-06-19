@@ -572,7 +572,8 @@ const shouldRunAdvisor =
     "comparison",
     "roi_analysis",
     "risk_analysis",
-    "cashflow_analysis"
+    "cashflow_analysis",
+    "report_interpretation"
   ].includes(
     intent.intent
   )
