@@ -826,9 +826,17 @@ document.getElementById("logout").onclick = async ()=>{
         </a>
 
         <a href="/login/"
-           class="mobile-cta">
-           🔐 Accedi
-        </a>
+   class="mobile-cta">
+
+<span
+data-it="🔐 Accedi"
+data-en="🔐 Login">
+
+🔐 Accedi
+
+</span>
+
+</a>
 
       `;
 
@@ -847,12 +855,18 @@ document.getElementById("logout").onclick = async ()=>{
       </a>
 
       <a
-      href="/login/"
-      class="rb-login">
+href="/login/"
+class="rb-login">
 
-      Accedi
+<span
+data-it="Accedi"
+data-en="Login">
 
-      </a>
+Accedi
+
+</span>
+
+</a>
 
     `;
 
