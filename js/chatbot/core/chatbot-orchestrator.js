@@ -454,10 +454,46 @@ const aiSignals =
   : [];
 
 // =========================================
+// 🧠 ADVISOR ELIGIBILITY
+// =========================================
+
+const shouldRunAdvisor =
+
+  [
+    "investment_executive",
+    "investment_advisor",
+    "investment_strategy",
+    "comparison",
+    "roi_analysis",
+    "risk_analysis",
+    "cashflow_analysis"
+  ].includes(
+    intent.intent
+  )
+
+  &&
+
+  (
+    Number(
+      analysisData.roi
+    ) > 0 ||
+
+    Number(
+      analysisData.occupancy
+    ) > 0 ||
+
+    Number(
+      analysisData.risk
+    ) > 0
+  );
+
+// =========================================
 // 🧠 ADVISOR ENGINE
 // =========================================
 
 const advisor =
+
+  shouldRunAdvisor &&
 
   window.rbGenerateAdvisorVerdict
 
@@ -465,17 +501,18 @@ const advisor =
 
       roi:
 
-  analysisData.realROI ??
+        analysisData.realROI ??
 
-  analysisData.roi ??
+        analysisData.roi ??
 
-  window.lastAnalysisData?.realROI ??
+        window.lastAnalysisData?.realROI ??
 
-  window.lastAnalysisData?.roi ??
+        window.lastAnalysisData?.roi ??
 
-  0,
+        0,
 
       risk:
+
         analysisData.risk ||
 
         window.lastAnalysisData?.risk ||
@@ -483,6 +520,7 @@ const advisor =
         0,
 
       occupancy:
+
         analysisData.occupancy ||
 
         window.lastAnalysisData?.occupancy ||
@@ -500,33 +538,34 @@ const advisor =
 
       cashflow:
 
-Number(
+        Number(
 
-  analysisData.net ??
+          analysisData.net ??
 
-  analysisData.profit ??
+          analysisData.profit ??
 
-  analysisData.netAfterMortgage ??
+          analysisData.netAfterMortgage ??
 
-  analysisData.cashflow ??
+          analysisData.cashflow ??
 
-  analysisData.annualProfit ??
+          analysisData.annualProfit ??
 
-  window.lastAnalysisData?.net ??
+          window.lastAnalysisData?.net ??
 
-  window.lastAnalysisData?.profit ??
+          window.lastAnalysisData?.profit ??
 
-  window.lastAnalysisData?.netAfterMortgage ??
+          window.lastAnalysisData?.netAfterMortgage ??
 
-  window.lastAnalysisData?.annualProfit ??
+          window.lastAnalysisData?.annualProfit ??
 
-  window.lastAnalysisData?.cashflow ??
+          window.lastAnalysisData?.cashflow ??
 
-  0
+          0
 
-),
+        ),
 
       city:
+
         analysisData.city ||
 
         entities.city ||
@@ -544,31 +583,35 @@ console.log(
   advisor
 );
 
-    console.log(
-  "🧪 ADVISOR INPUTS",
-  {
-    roi:
-      analysisData.roi,
+if(advisor){
 
-    risk:
-      analysisData.risk,
+  console.log(
+    "🧪 ADVISOR INPUTS",
+    {
+      roi:
+        analysisData.roi,
 
-    occupancy:
-      analysisData.occupancy,
+      risk:
+        analysisData.risk,
 
-    net:
-      analysisData.net,
+      occupancy:
+        analysisData.occupancy,
 
-    annualProfit:
-      analysisData.annualProfit,
+      net:
+        analysisData.net,
 
-    cashflow:
-      analysisData.cashflow,
+      annualProfit:
+        analysisData.annualProfit,
 
-    lastAnalysis:
-      window.lastAnalysisData
-  }
-);
+      cashflow:
+        analysisData.cashflow,
+
+      lastAnalysis:
+        window.lastAnalysisData
+    }
+  );
+
+}
 
     // =========================================
     // 🧠 KNOWLEDGE MATCHING
