@@ -848,7 +848,7 @@ if(
 
     confidence: 0.99,
 
-    priority: 220,
+    priority: 280,
 
     requiresCalculation: true
 
