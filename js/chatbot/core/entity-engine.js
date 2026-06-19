@@ -935,7 +935,7 @@ if(
 
 const propertiesMatch = text.match(
 
-/(?:ho|possiedo|i own|i have)\s+(\d+)\s+(?:appartamenti|immobili|case|bnb|apartments|properties|houses)/
+/(?:ho|possiedo|gestisco|i own|i have|manage|i manage)\s+(\d+)\s+(?:appartamenti|immobili|case|bnb|b&b|airbnb|apartments|properties|houses)/i
 
 );
 
