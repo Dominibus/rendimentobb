@@ -4088,9 +4088,9 @@ else if(
 
     entities.availableCapital ||
 
-    memoryContext?.availableCapital ||
+    memory?.availableCapital ||
 
-    window.rbInvestorMemory
+    window.rbChatMemory
       ?.availableCapital ||
 
     0
@@ -4110,9 +4110,9 @@ else if(
 
     entities.monthlyCashflowGoal ||
 
-    memoryContext?.monthlyCashflowGoal ||
+    memory?.monthlyCashflowGoal ||
 
-    window.rbInvestorMemory
+    window.rbChatMemory
       ?.monthlyCashflowGoal ||
 
     0
