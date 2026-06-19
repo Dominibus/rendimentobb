@@ -1573,6 +1573,97 @@ if(
 }  
 
 // ===========================================
+// 🏢 PORTFOLIO GROWTH
+// Real Estate Scaling Advisor
+// ===========================================
+
+if(
+
+  has(
+
+    // 🇮🇹
+
+    "5 appartamenti",
+    "10 appartamenti",
+
+    "più appartamenti",
+    "piu appartamenti",
+
+    "più immobili",
+    "piu immobili",
+
+    "costruire un portafoglio",
+
+    "crescere",
+
+    "espandere",
+
+    "espandere il business",
+
+    "scalare",
+
+    "scalare il business",
+
+    "vivere di affitti",
+
+    "vivere di rendita",
+
+    "portafoglio immobiliare",
+
+    "acquistare più immobili",
+
+    "acquistare piu immobili",
+
+    "entro 5 anni",
+    "entro 10 anni",
+
+    // 🇬🇧
+
+    "portfolio growth",
+
+    "real estate portfolio",
+
+    "build a portfolio",
+
+    "grow my portfolio",
+
+    "scale my business",
+
+    "buy more properties",
+
+    "multiple properties",
+
+    "5 properties",
+
+    "10 properties",
+
+    "financial freedom",
+
+    "passive income"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "portfolio_growth",
+
+    category: "strategy",
+
+    confidence: 0.99,
+
+    priority: 260,
+
+    requiresCalculation: true,
+
+    requiresMarketData: true
+
+  });
+
+}  
+
+// ===========================================
 // 💳 SUBSCRIPTIONS / PRICING
 // Silicon Valley SaaS Monetization Layer
 // ===========================================
