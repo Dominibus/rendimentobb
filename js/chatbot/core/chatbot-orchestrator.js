@@ -357,7 +357,7 @@ const investorProfile =
 
   : {};
 
-    // =========================================
+// =========================================
 // 📊 ANALYSIS DATA
 // =========================================
 
@@ -443,6 +443,85 @@ const analysisData = {
     window.lastAnalysisData?.annualProfit ??
 
     0,
+
+  // =====================================
+  // 🏦 MORTGAGE DATA
+  // =====================================
+
+  propertyPrice:
+
+    window.lastAnalysisData?.propertyPrice ??
+
+    window.lastAnalysisData?.price ??
+
+    0,
+
+  equity:
+
+    window.lastAnalysisData?.equity ??
+
+    window.lastAnalysisData?.initialCapital ??
+
+    0,
+
+  loanAmount:
+
+    window.lastAnalysisData?.loanAmount ??
+
+    window.lastAnalysisData?.mortgage ??
+
+    0,
+
+  mortgagePercent:
+
+    window.lastAnalysisData?.mortgagePercent ??
+
+    (
+      (
+        window.lastAnalysisData?.loanAmount ||
+
+        window.lastAnalysisData?.mortgage ||
+
+        0
+      )
+
+      &&
+
+      (
+        window.lastAnalysisData?.propertyPrice ||
+
+        window.lastAnalysisData?.price ||
+
+        0
+      )
+    )
+
+    ? Math.round(
+
+        (
+          (
+            window.lastAnalysisData?.loanAmount ||
+
+            window.lastAnalysisData?.mortgage ||
+
+            0
+          )
+
+          /
+
+          (
+            window.lastAnalysisData?.propertyPrice ||
+
+            window.lastAnalysisData?.price ||
+
+            1
+          )
+
+        ) * 100
+
+      )
+
+    : 0,
 
   city:
 
