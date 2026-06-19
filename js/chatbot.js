@@ -799,6 +799,8 @@ const isFollowUp =
 
 const isPMSIntent =
 
+  mainIntent === "pms_overview" ||
+
   mainIntent === "pms_analysis" ||
 
   mainIntent === "pms_bookings" ||
@@ -810,6 +812,12 @@ const isPMSIntent =
   mainIntent === "pms_guests" ||
 
   mainIntent === "pms_adr";
+
+  console.log(
+  "🔥 PMS INTENT CHECK:",
+  mainIntent,
+  isPMSIntent
+);
 
 // =====================================
 // 🏨 PMS RESPONSE
