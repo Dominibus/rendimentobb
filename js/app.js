@@ -2619,6 +2619,18 @@ window.__MANUAL_ANALYSIS__ === true;
 
     console.log("📊 FINAL ROI:", finalROI);
 
+    console.log(
+  "🔥 PRE SAVE VARIABLES",
+  {
+    propertyPrice,
+    equity,
+    loanAmount,
+    mortgage,
+    mortgagePercent,
+    monthlyMortgage
+  }
+);
+
     // =====================================
     // 🤖 CHATBOT LIVE ANALYSIS
     // =====================================
@@ -3556,6 +3568,18 @@ const result = calculateROI({
   interestRate,
   loanYears
 });
+
+    console.log(
+  "🔥 POST ROI VARIABLES",
+  {
+    propertyPrice,
+    equity,
+    loanAmount,
+    mortgage,
+    mortgagePercent,
+    monthlyMortgage
+  }
+);
 
 console.log("🔥 ROI RESULT", result);
 
