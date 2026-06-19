@@ -943,6 +943,82 @@ if(
 }  
 
 // ===========================================
+// 📊 REPORT INTERPRETATION
+// Executive Report Advisor
+// ===========================================
+
+if(
+
+  has(
+
+    // 🇮🇹
+
+    "interpretami il report",
+    "interpreta il report",
+
+    "spiegami il report",
+
+    "analizza il report",
+
+    "leggi il report",
+
+    "come farebbe un consulente",
+
+    "spiegami il pdf",
+
+    "interpretami il pdf",
+
+    "analizza il mio report",
+
+    "cosa significa il report",
+
+    "spiegami i risultati",
+
+    // 🇬🇧
+
+    "interpret the report",
+
+    "explain the report",
+
+    "analyze the report",
+
+    "read the report",
+
+    "explain my report",
+
+    "interpret my report",
+
+    "analyze my report",
+
+    "explain the pdf",
+
+    "interpret the pdf",
+
+    "consultant analysis"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "report_interpretation",
+
+    category: "executive",
+
+    confidence: 0.99,
+
+    priority: 270,
+
+    requiresCalculation: true,
+
+    requiresMarketData: true
+
+  });
+
+}  
+
+// ===========================================
 // 🏨 PROPERTY PERFORMANCE
 // ===========================================
 
