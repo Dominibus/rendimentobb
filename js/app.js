@@ -2683,17 +2683,6 @@ Number(
   0
 ),
 
-      console.log(
-  "🏦 DEBUG MORTGAGE SAVE",
-  {
-    loanAmount,
-    mortgage,
-    mortgageAmount,
-    propertyPrice,
-    equity
-  }
-);
-
 mortgage:
 Number(
   loanAmount ||
@@ -2762,6 +2751,17 @@ net ||
   timestamp: Date.now()
 
 };
+
+    console.log(
+  "🏦 DEBUG MORTGAGE SAVE",
+  {
+    loanAmount,
+    mortgage,
+    mortgageAmount,
+    propertyPrice,
+    equity
+  }
+);
 
     console.log(
       "🧠 FULL ANALYSIS DATA:",
