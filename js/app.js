@@ -2545,13 +2545,29 @@ function runPostAnalysis(result, context){
     // ================= ANALYSIS DATA =================
 
     window.lastAnalysisData = {
-      ...result,
+  ...result,
 
-      realROI:
-        window.realROI ||
-        finalROI ||
-        0
-    };
+  loanAmount:
+    Number(
+      result?.loan ??
+      result?.loanAmount ??
+      loanAmount ??
+      0
+    ),
+
+  mortgage:
+    Number(
+      result?.loan ??
+      result?.loanAmount ??
+      loanAmount ??
+      0
+    ),
+
+  realROI:
+    window.realROI ||
+    finalROI ||
+    0
+};
 
     // ================= SAVE DEDUP =================
 
