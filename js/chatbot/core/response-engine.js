@@ -4147,6 +4147,184 @@ Year 5
 }  
 
 // ===========================================
+// 📊 REPORT INTERPRETATION
+// Executive Report Advisor
+// ===========================================
+
+else if(
+  intent.intent === "report_interpretation"
+){
+
+  response.type =
+    "report_interpretation";
+
+  response.confidence =
+    0.99;
+
+  const reportROI =
+    Number(roi || 0);
+
+  const reportRisk =
+    Number(risk || 0);
+
+  const reportOccupancy =
+    Number(occupancy || 0);
+
+  const reportCashflow =
+    Number(
+      analysisData?.net ||
+      analysisData?.annualProfit ||
+      analysisData?.cashflow ||
+      0
+    );
+
+  const insightsIT = [];
+
+  if(reportROI >= 20){
+
+    insightsIT.push(
+      "📈 Il ROI risulta superiore alla media della maggior parte degli investimenti immobiliari tradizionali."
+    );
+
+  }else if(reportROI >= 10){
+
+    insightsIT.push(
+      "📈 Il ROI è competitivo ma presenta ancora margini di miglioramento."
+    );
+
+  }else{
+
+    insightsIT.push(
+      "📈 Il ROI attuale suggerisce opportunità di ottimizzazione."
+    );
+
+  }
+
+  if(reportOccupancy >= 70){
+
+    insightsIT.push(
+      "🏨 Il tasso di occupazione supporta una buona sostenibilità operativa."
+    );
+
+  }
+
+  if(reportRisk <= 30 && reportRisk > 0){
+
+    insightsIT.push(
+      "⚠️ Il profilo di rischio appare contenuto."
+    );
+
+  }else if(reportRisk > 60){
+
+    insightsIT.push(
+      "⚠️ Il rischio operativo richiede particolare attenzione."
+    );
+
+  }
+
+  if(reportCashflow > 0){
+
+    insightsIT.push(
+      "💰 Il cashflow è positivo e contribuisce alla crescita dell'investimento."
+    );
+
+  }
+
+  response.textIT =
+
+`📊 Interpretazione Executive del Report
+
+🎯 Sintesi del Consulente AI
+
+ROI: ${reportROI.toFixed(1)}%
+Occupazione: ${reportOccupancy}%
+Rischio: ${reportRisk}/100
+
+${insightsIT.join("\n\n")}
+
+💡 Focus Strategico
+
+L'obiettivo non è osservare una singola metrica ma valutare l'equilibrio tra rendimento, rischio e sostenibilità nel lungo periodo.
+
+📌 Prossima Azione Consigliata
+
+Confronta questi risultati con altre città o simulazioni per identificare il miglior rapporto tra ROI, rischio e cashflow.`;
+
+  const insightsEN = [];
+
+  if(reportROI >= 20){
+
+    insightsEN.push(
+      "📈 ROI is above the average of most traditional real estate investments."
+    );
+
+  }else if(reportROI >= 10){
+
+    insightsEN.push(
+      "📈 ROI is competitive but still offers room for improvement."
+    );
+
+  }else{
+
+    insightsEN.push(
+      "📈 Current ROI suggests optimization opportunities."
+    );
+
+  }
+
+  if(reportOccupancy >= 70){
+
+    insightsEN.push(
+      "🏨 Occupancy supports a sustainable operation."
+    );
+
+  }
+
+  if(reportRisk <= 30 && reportRisk > 0){
+
+    insightsEN.push(
+      "⚠️ Risk profile appears controlled."
+    );
+
+  }else if(reportRisk > 60){
+
+    insightsEN.push(
+      "⚠️ Operational risk requires close monitoring."
+    );
+
+  }
+
+  if(reportCashflow > 0){
+
+    insightsEN.push(
+      "💰 Positive cashflow supports long-term growth."
+    );
+
+  }
+
+  response.textEN =
+
+`📊 Executive Report Interpretation
+
+🎯 AI Consultant Summary
+
+ROI: ${reportROI.toFixed(1)}%
+Occupancy: ${reportOccupancy}%
+Risk: ${reportRisk}/100
+
+${insightsEN.join("\n\n")}
+
+💡 Strategic Focus
+
+The goal is not to evaluate a single metric but to assess the balance between return, risk and long-term sustainability.
+
+📌 Recommended Next Step
+
+Compare these results against other cities or simulations to identify the best balance between ROI, risk and cashflow.`;
+
+}  
+
+// ===========================================
 // 👋 GREETING RESPONSE
 // ===========================================
 
