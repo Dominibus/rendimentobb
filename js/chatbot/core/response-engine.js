@@ -4619,6 +4619,46 @@ const investmentScoreValue =
 
   0;
 
+  let executiveVerdictIT =
+  "🟡 DA VALUTARE";
+
+let executiveVerdictEN =
+  "🟡 TO BE REVIEWED";
+
+if(advisor){
+
+  if(advisor.verdict === "BUY"){
+
+    executiveVerdictIT =
+      "🟢 INVESTIMENTO CONSIGLIATO";
+
+    executiveVerdictEN =
+      "🟢 RECOMMENDED INVESTMENT";
+
+  }
+
+  else if(advisor.verdict === "WAIT"){
+
+    executiveVerdictIT =
+      "🟡 OTTIMIZZARE PRIMA DI PROCEDERE";
+
+    executiveVerdictEN =
+      "🟡 OPTIMIZE BEFORE PROCEEDING";
+
+  }
+
+  else{
+
+    executiveVerdictIT =
+      "🔴 INVESTIMENTO NON CONSIGLIATO";
+
+    executiveVerdictEN =
+      "🔴 NOT RECOMMENDED";
+
+  }
+
+}
+
   const insightsIT = [];
 
   if(reportROI >= 20){
@@ -4680,9 +4720,13 @@ const investmentScoreValue =
 ${investmentClass}
 (${investmentScoreValue}/100)
 
-🎯 Verdetto Consulente AI
+🎯 Verdetto AI
 
-Questo investimento mostra caratteristiche molto interessanti in termini di rendimento e sostenibilità.
+${executiveVerdictIT}
+
+📊 Score AI
+
+${investmentScoreValue}/100
 
 ROI: ${reportROI.toFixed(1)}%
 Occupazione: ${reportOccupancy}%
@@ -4779,9 +4823,13 @@ Se i risultati rimangono stabili, l'investimento può essere considerato una buo
 ${investmentClass}
 (${investmentScoreValue}/100)
 
-🎯 AI Consultant Verdict
+🎯 AI Verdict
 
-This investment shows strong characteristics in terms of return and sustainability.
+${executiveVerdictEN}
+
+📊 AI Score
+
+${investmentScoreValue}/100
 
 ROI: ${reportROI.toFixed(1)}%
 Occupancy: ${reportOccupancy}%
