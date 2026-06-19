@@ -1185,6 +1185,23 @@ const isPMSQuestion =
   text.includes("performance");  
 
 // ===========================================
+// 🏢 PORTFOLIO GROWTH PROTECTION
+// ===========================================
+
+const isPortfolioQuestion =
+
+  text.includes("appartamenti") ||
+  text.includes("immobili") ||
+  text.includes("portafoglio immobiliare") ||
+  text.includes("patrimonio immobiliare") ||
+  text.includes("impero immobiliare") ||
+  text.includes("vivere di rendita") ||
+  text.includes("vivere di affitti") ||
+  text.includes("portfolio growth") ||
+  text.includes("real estate portfolio") ||
+  text.includes("property portfolio");  
+
+// ===========================================
 // 🚀 EXECUTE
 // ===========================================
 
@@ -1203,7 +1220,9 @@ const matchedKnowledge =
 
   isPMSQuestion ||
 
-  isExecutiveQuestion
+  isExecutiveQuestion ||
+
+  isPortfolioQuestion
 
     ? null
 
