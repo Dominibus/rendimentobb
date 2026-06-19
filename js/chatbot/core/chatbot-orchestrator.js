@@ -110,9 +110,16 @@ if(
 
 if(
 
-  text.includes("cashflow") ||
+  (
+    text.includes("cashflow") ||
 
-  text.includes("profitto")
+    text.includes("profitto")
+  )
+
+  &&
+
+  detectedIntent.intent !==
+  "portfolio_growth"
 
 ){
 
@@ -263,6 +270,26 @@ if(
 
   uniqueIntents.push(
     "investment_executive"
+  );
+
+}    
+
+// =========================================
+// 🏢 PORTFOLIO OVERRIDE
+// =========================================
+
+if(
+
+  uniqueIntents.includes(
+    "portfolio_growth"
+  )
+
+){
+
+  uniqueIntents.length = 0;
+
+  uniqueIntents.push(
+    "portfolio_growth"
   );
 
 }    
