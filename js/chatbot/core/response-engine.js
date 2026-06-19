@@ -4234,7 +4234,7 @@ Fase 3
 
 🚀 Consiglio del Consulente AI
 
-Con €${availableCapital.toLocaleString("it-IT")} disponibili e un obiettivo di ${targetProperties} immobili, la chiave del successo sarà la disciplina nel reinvestimento del cashflow e la selezione di immobili ad alta redditività.`;
+Con €${availableCapital.toLocaleString("it-IT")} disponibili, il capitale attuale consente realisticamente l'acquisizione iniziale di circa ${aggressiveProperties} immobili utilizzando una leva finanziaria sostenibile.
 
   // =====================================
   // 🇬🇧
@@ -4301,7 +4301,7 @@ Phase 3
 
 🚀 AI Consultant Advice
 
-With €${availableCapital.toLocaleString("en-US")} available and a target of ${targetProperties} properties, success will depend on disciplined cashflow reinvestment and selecting highly profitable assets.`;
+With €${availableCapital.toLocaleString("en-US")} available, your current capital could realistically support the initial acquisition of approximately ${aggressiveProperties} properties using sustainable leverage.
 
 }
 
