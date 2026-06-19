@@ -688,10 +688,15 @@ if(
   intent.intent !== "report_interpretation" &&
   intent.intent !== "greeting" &&
   intent.intent !== "pms_analysis" &&
+  intent.intent !== "pms_overview" &&
   intent.intent !== "pms_bookings" &&
+  intent.intent !== "pms_arrivals" &&
+  intent.intent !== "pms_checkins" &&
+  intent.intent !== "pms_checkouts" &&
   intent.intent !== "pms_revenue" &&
   intent.intent !== "pms_occupancy" &&
-  intent.intent !== "pms_adr"
+  intent.intent !== "pms_adr" &&
+  intent.intent !== "pms_guests"
 
 ){
 
