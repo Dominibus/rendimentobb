@@ -153,6 +153,7 @@ ownedProperties: null,
 businessStage: null,
 
 mainGoal: null,
+targetProperties: null,    
 
     // =======================================
     // 🌐 SYSTEM
@@ -832,6 +833,22 @@ if(cashflowGoalMatch){
 }
 
 // ===========================================
+// 💰 FINANCIAL FREEDOM GOAL
+// ===========================================
+
+if(
+
+  entities.monthlyCashflowGoal &&
+  entities.monthlyCashflowGoal >= 1000
+
+){
+
+  entities.mainGoal =
+    "financial_freedom";
+
+}
+  
+// ===========================================
 // 🏠 OWNED PROPERTIES
 // ===========================================
 
@@ -850,6 +867,26 @@ if(propertiesMatch){
     );
 
 }
+
+// ===========================================
+// 🎯 TARGET PROPERTIES
+// ===========================================
+
+const targetPropertiesMatch = text.match(
+
+/(?:arrivare a|raggiungere|avere|costruire)\s+(\d+)\s+(?:appartamenti|immobili|properties|apartments)/
+
+);
+
+if(targetPropertiesMatch){
+
+  entities.targetProperties =
+
+    Number(
+      targetPropertiesMatch[1]
+    );
+
+}  
 
 // ===========================================
 // 🚀 BUSINESS STAGE
@@ -1199,7 +1236,11 @@ const isPortfolioQuestion =
   text.includes("vivere di affitti") ||
   text.includes("portfolio growth") ||
   text.includes("real estate portfolio") ||
-  text.includes("property portfolio");  
+  text.includes("property portfolio") ||
+  text.includes("financial freedom") ||
+  text.includes("libertà finanziaria") ||
+  text.includes("reddito passivo") ||
+  text.includes("passive income"); 
 
 // ===========================================
 // 🚀 EXECUTE
