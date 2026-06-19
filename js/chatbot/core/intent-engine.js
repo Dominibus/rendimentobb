@@ -951,7 +951,7 @@ if(
 
   has(
 
-    // 🇮🇹
+    // 🇮🇹 REPORT
 
     "interpretami il report",
     "interpreta il report",
@@ -974,7 +974,31 @@ if(
 
     "spiegami i risultati",
 
-    // 🇬🇧
+    // 🇮🇹 SIMULAZIONE
+
+    "analizza simulazione",
+
+    "analizza la simulazione",
+
+    "analizza investimento",
+
+    "analizza l'investimento",
+
+    "valuta investimento",
+
+    "valuta la simulazione",
+
+    "cosa ne pensi",
+
+    "fammi una valutazione",
+
+    "fammi un'analisi",
+
+    "analisi completa",
+
+    "executive review",
+
+    // 🇬🇧 REPORT
 
     "interpret the report",
 
@@ -994,7 +1018,23 @@ if(
 
     "interpret the pdf",
 
-    "consultant analysis"
+    "consultant analysis",
+
+    // 🇬🇧 SIMULATION
+
+    "analyze simulation",
+
+    "analyze investment",
+
+    "investment review",
+
+    "review my investment",
+
+    "review my simulation",
+
+    "evaluate my investment",
+
+    "executive analysis"
 
   )
 
@@ -1016,8 +1056,7 @@ if(
 
   });
 
-}  
-
+}
 // ===========================================
 // 🏨 PROPERTY PERFORMANCE
 // ===========================================
