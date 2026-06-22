@@ -124,6 +124,21 @@ const roi =
 
   );
 
+const executiveROI =
+  Number(
+
+    liveData.visualROI ??
+
+    window.lastAnalysisData?.visualROI ??
+
+    liveData.roi ??
+
+    roi ??
+
+    0
+
+  );
+
 const risk =
   Number(
 
@@ -3595,7 +3610,7 @@ if(targetROI > 0){
   executiveIT.push(
 `🟢 Punti di Forza
 
-📈 ROI: ${roi.toFixed(1)}%
+📈 ROI: ${executiveROI.toFixed(1)}%
 ⚠️ Risk Score: ${risk}/100
 🏨 Occupazione: ${occupancy}%
 💰 Cashflow: €${Math.round(net).toLocaleString("it-IT")}`
@@ -3899,7 +3914,7 @@ executiveEN.push(
 
 `🟢 Key Strengths
 
-📈 ROI: ${roi.toFixed(1)}%
+📈 ROI: ${executiveROI.toFixed(1)}%
 ⚠️ Risk Score: ${risk}/100
 🏨 Occupancy: ${occupancy}%
 💰 Cashflow: €${Math.round(net).toLocaleString("en-US")}`
@@ -3995,7 +4010,7 @@ if(advisor){
 
 The investment shows performance indicators above market benchmarks.
 
-The combination of ROI (${roi.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
+The combination of ROI (${executiveROI.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
 
 Current market conditions support a favorable medium to long-term outlook.`
 
