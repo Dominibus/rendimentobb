@@ -5989,6 +5989,16 @@ window.rbPMSData = {
       0
     ),
 
+  // 🔥 compatibilità chatbot
+  arrivals:
+    arrivalsToday,
+
+  checkins:
+    checkinToday,
+
+  checkouts:
+    checkoutToday,
+
   arrivalsToday,
   departuresToday,
   guestsInHouse,
