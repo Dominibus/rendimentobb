@@ -3700,9 +3700,18 @@ window.getUserAccess?.() || {};
   }
 );
 
-// 🔥 ROI reale chatbot
+// 🔥 ROI Executive chatbot (ROI su equity)
+
 const chatbotRealROI = Number(
-  realROI || roi || 0
+
+  visualROI ??
+
+  roi ??
+
+  realROI ??
+
+  0
+
 );
 
 // 🔥 FREE → ROI nascosto nel chatbot
