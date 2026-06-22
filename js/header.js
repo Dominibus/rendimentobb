@@ -609,12 +609,11 @@ if(!isMobile){
        id="dashboard-link">
 
        <span
-       data-it="📊 Dashboard"
-       data-en="📊 Dashboard">
+class="dashboard-label">
 
-       📊 Dashboard
+📊 Dashboard
 
-       </span>
+</span>
 
     </a>
 
