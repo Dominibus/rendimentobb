@@ -1563,7 +1563,9 @@ else if(
 
   intent.intent === "pms_occupancy" ||
 
-  intent.intent === "pms_adr"
+  intent.intent === "pms_adr" ||
+
+  intent.intent === "pms_guests"
 
 ){
 
@@ -1841,6 +1843,20 @@ if(intent.intent === "pms_bookings"){
   return response;
 
 }
+
+if(
+  intent.intent === "pms_guests"
+){
+
+  response.textIT =
+    `👥 Attualmente hai ${guests} ospiti registrati nel PMS.`;
+
+  response.textEN =
+    `👥 You currently have ${guests} guests registered in the PMS.`;
+
+  return response;
+
+}  
 
 // =====================================
 // 💰 PMS REVENUE
