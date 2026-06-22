@@ -1157,6 +1157,57 @@ if(helper){
 const best = analyses[0] || null;
 window.bestInvestmentData = best;
 
+// =====================================
+// 🤖 CHATBOT DASHBOARD MEMORY
+// =====================================
+
+window.lastAnalysisData = {
+
+  roi:
+    Number(best?.roi || 0),
+
+  realROI:
+    Number(best?.roi || 0),
+
+  visualROI:
+    Number(best?.roi || 0),
+
+  risk:
+    Number(best?.risk || 0),
+
+  occupancy:
+    Number(best?.occupancy || 0),
+
+  net:
+    Number(best?.net || 0),
+
+  annualProfit:
+    Number(best?.net || 0),
+
+  cashflow:
+    Number(best?.net || 0),
+
+  propertyPrice:
+    Number(best?.price || 0),
+
+  equity:
+    Number(best?.equity || 0),
+
+  city:
+    best?.city || "roma",
+
+  marketCity:
+    best?.marketCity ||
+    best?.city ||
+    "roma"
+
+};
+
+console.log(
+  "🤖 DASHBOARD MEMORY:",
+  window.lastAnalysisData
+);  
+
 renderInvestmentVerdict(best);  
 renderUpgradeTrigger(best);
 
