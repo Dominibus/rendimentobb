@@ -8278,7 +8278,7 @@ gap:6px;
 }
 
 /* USER */
-#user-area span{
+#user-area > span{
 display:none;
 }
 
