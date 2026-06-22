@@ -3636,10 +3636,8 @@ const realROI = Number(
 );
 
 // 🔥 ROI VISIVO (ROI su equity)
-
 const visualROI =
   Number(
-    finalROI ??
     roi ??
     realROI ??
     0
@@ -3656,7 +3654,7 @@ const roiText = realROI.toFixed(1) + "%";
 
 // 🔥 compatibilità legacy
 const safeROI = realROI;
-
+    
 // =====================================
 // 💰 FINANCIAL DATA
 // =====================================
