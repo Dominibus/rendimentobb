@@ -380,18 +380,18 @@ const analysisData = {
 
   roi:
 
-    window.lastAnalysisData?.realROI ??
+  window.lastAnalysisData?.visualROI ??
 
-    Number(
-      document.getElementById("roi-value")
-      ?.textContent
-      ?.replace("%","")
-      ?.trim()
-    ) ??
+  window.lastAnalysisData?.roi ??
 
-    window.lastAnalysisData?.roi ??
+  Number(
+    document.getElementById("roi-value")
+    ?.textContent
+    ?.replace("%","")
+    ?.trim()
+  ) ??
 
-    0,
+  0,
 
   risk:
 
