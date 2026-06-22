@@ -1920,6 +1920,20 @@ if(
 
   text.includes("come sta andando il pms") ||
 
+  text.includes("come sta andando il mio pms") ||
+
+  text.includes("come sta andando il mio b&b") ||
+
+  text.includes("come va il mio b&b") ||
+
+  text.includes("come va la mia struttura") ||
+
+  text.includes("stato della struttura") ||
+
+  text.includes("performance del b&b") ||
+
+  text.includes("performance della struttura") ||
+
   text.includes("dashboard pms") ||
 
   text.includes("pms overview") ||
@@ -1954,7 +1968,7 @@ if(
 
   });
 
-}  
+}
 
 // ===========================================
 // 🏢 PORTFOLIO GROWTH
