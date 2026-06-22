@@ -3635,8 +3635,15 @@ const realROI = Number(
   0
 );
 
-// 🔥 ROI VISIVO (solo UI/chart)
-const visualROI = Math.min(realROI, 45);
+// 🔥 ROI VISIVO (ROI su equity)
+
+const visualROI =
+  Number(
+    finalROI ??
+    roi ??
+    realROI ??
+    0
+  );
 
 // 🔥 salva ROI reale globale
 window.realROI = realROI;
