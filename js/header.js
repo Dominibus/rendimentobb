@@ -603,19 +603,21 @@ const isMobile =
 if(!isMobile){
 
   html += `
+
     <a href="/dashboard/"
        class="rb-btn primary"
        id="dashboard-link">
 
        <span
-       data-it="Dashboard"
-       data-en="Dashboard">
-       Dashboard
+       data-it="📊 Dashboard"
+       data-en="📊 Dashboard">
+       📊 Dashboard
        </span>
 
-       ${badge}
-
     </a>
+
+    ${badge}
+
   `;
 
 }
