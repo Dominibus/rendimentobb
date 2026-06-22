@@ -1808,7 +1808,25 @@ if(
 
   text.includes("arrivi") ||
 
-  text.includes("arrivals")
+  text.includes("arrivals") ||
+
+  text.includes("chi arriva") ||
+
+  text.includes("chi arriva oggi") ||
+
+  text.includes("arriva oggi") ||
+
+  text.includes("arrivi oggi") ||
+
+  text.includes("arrivo oggi") ||
+
+  text.includes("ospiti in arrivo") ||
+
+  text.includes("today arrivals") ||
+
+  text.includes("arriving today") ||
+
+  text.includes("who arrives today")
 
 ){
 
@@ -1820,7 +1838,7 @@ if(
 
     confidence: 0.99,
 
-    priority: 260
+    priority: 300
 
   });
 
