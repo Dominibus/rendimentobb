@@ -1628,44 +1628,157 @@ const checkouts =
   );
 
 // =====================================
-// 🏨 PMS OVERVIEW
+// 🏨 PMS EXECUTIVE OVERVIEW
 // =====================================
 
 if(intent.intent === "pms_overview"){
 
+  let performanceIT =
+    "🟡 Performance regolari";
+
+  let performanceEN =
+    "🟡 Stable performance";
+
+  let adviceIT =
+    "💡 Le performance risultano equilibrate.";
+
+  let adviceEN =
+    "💡 Performance appears balanced.";
+
+  if(occupancyPMS >= 90){
+
+    performanceIT =
+      "🟢 Occupazione eccellente";
+
+    performanceEN =
+      "🟢 Excellent occupancy";
+
+    adviceIT =
+      "💡 L'occupazione è molto elevata. Valuta un aumento progressivo delle tariffe per migliorare il RevPAR.";
+
+    adviceEN =
+      "💡 Occupancy is very high. Consider gradually increasing rates to improve RevPAR.";
+
+  }
+
+  else if(occupancyPMS >= 75){
+
+    performanceIT =
+      "🟢 Performance superiori alla media";
+
+    performanceEN =
+      "🟢 Above-average performance";
+
+    adviceIT =
+      "💡 Occupazione e domanda risultano solide. Mantieni pricing dinamico e monitoraggio ADR.";
+
+    adviceEN =
+      "💡 Occupancy and demand appear strong. Maintain dynamic pricing and ADR monitoring.";
+
+  }
+
+  else if(occupancyPMS < 60){
+
+    performanceIT =
+      "🔴 Occupazione migliorabile";
+
+    performanceEN =
+      "🔴 Occupancy can be improved";
+
+    adviceIT =
+      "💡 Valuta promozioni, ottimizzazione OTA e revisione delle tariffe.";
+
+    adviceEN =
+      "💡 Consider promotions, OTA optimization and pricing adjustments.";
+
+  }
+
   response.textIT =
 
-`🏨 Situazione PMS
+`🏨 PMS Executive Review
 
-📌 Proprietà: ${properties}
+${performanceIT}
 
-📅 Prenotazioni: ${bookings}
+━━━━━━━━━━━━━━━
 
-👥 Ospiti: ${guests}
+📌 Proprietà
+${properties}
 
-💰 Ricavi: €${revenue.toLocaleString("it-IT")}
+📅 Prenotazioni
+${bookings}
 
-🏨 Occupazione: ${occupancyPMS}%
+👥 Ospiti
+${guests}
 
-💵 ADR: €${adr}`;
+💰 Ricavi
+€${revenue.toLocaleString("it-IT")}
+
+🏨 Occupazione
+${occupancyPMS}%
+
+💵 ADR
+€${adr}
+
+━━━━━━━━━━━━━━━
+
+🧠 Insight AI
+
+${
+  occupancyPMS >= 80
+  ? "La struttura sta performando sopra la media operativa del settore short-rent."
+  : occupancyPMS >= 60
+  ? "Le metriche risultano stabili ma esistono margini di miglioramento."
+  : "L'occupazione attuale sta limitando il potenziale di crescita dei ricavi."
+}
+
+🎯 Priorità Operativa
+
+${adviceIT}`;
 
   response.textEN =
 
-`🏨 PMS Overview
+`🏨 PMS Executive Review
 
-📌 Properties: ${properties}
+${performanceEN}
 
-📅 Bookings: ${bookings}
+━━━━━━━━━━━━━━━
 
-👥 Guests: ${guests}
+📌 Properties
+${properties}
 
-💰 Revenue: €${revenue.toLocaleString("en-US")}
+📅 Bookings
+${bookings}
 
-🏨 Occupancy: ${occupancyPMS}%
+👥 Guests
+${guests}
 
-💵 ADR: €${adr}`;
+💰 Revenue
+€${revenue.toLocaleString("en-US")}
+
+🏨 Occupancy
+${occupancyPMS}%
+
+💵 ADR
+€${adr}
+
+━━━━━━━━━━━━━━━
+
+🧠 AI Insight
+
+${
+  occupancyPMS >= 80
+  ? "The property is performing above average short-rent benchmarks."
+  : occupancyPMS >= 60
+  ? "Performance appears stable but there is room for improvement."
+  : "Current occupancy is limiting revenue growth potential."
+}
+
+🎯 Operational Priority
+
+${adviceEN}`;
 
   return response;
+
 }
 
 // =====================================
