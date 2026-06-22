@@ -4234,16 +4234,28 @@ const newSnapshot = {
     currentCity || "roma",
 
   roi:
-    safeROI ?? 0,
+  Number(
+    visualROI ??
+    finalROI ??
+    roi ??
+    0
+  ),
 
-  realROI:
+realROI:
+  Number(
     result?.realROI ??
     realROI ??
     safeROI ??
-    0,
+    0
+  ),
 
-  visualROI:
-    safeROI ?? 0,
+visualROI:
+  Number(
+    visualROI ??
+    finalROI ??
+    roi ??
+    0
+  ),
 
   gross:
     gross ?? 0,
