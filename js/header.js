@@ -611,7 +611,9 @@ if(!isMobile){
        <span
        data-it="📊 Dashboard"
        data-en="📊 Dashboard">
+
        📊 Dashboard
+
        </span>
 
     </a>
