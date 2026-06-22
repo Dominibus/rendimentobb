@@ -621,15 +621,19 @@ const advisor =
 
       roi:
 
-        analysisData.realROI ??
+  analysisData.visualROI ??
 
-        analysisData.roi ??
+  window.lastAnalysisData?.visualROI ??
 
-        window.lastAnalysisData?.realROI ??
+  analysisData.roi ??
 
-        window.lastAnalysisData?.roi ??
+  window.lastAnalysisData?.roi ??
 
-        0,
+  analysisData.realROI ??
+
+  window.lastAnalysisData?.realROI ??
+
+  0,
 
       risk:
 
