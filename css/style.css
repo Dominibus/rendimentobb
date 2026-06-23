@@ -303,10 +303,10 @@ z-index:2;
 display:grid;
 grid-template-columns:1fr;
 
-gap:40px;
+gap:20px;
 max-width:760px;
 
-margin:80px auto;
+margin:30px auto;
 
 align-items:start;
 justify-items:center;
@@ -362,7 +362,7 @@ margin:0 auto;
 
 align-items:stretch;
 justify-content:flex-start;
-gap:20px;
+gap:12px;
 
 /* 🔥 NIENTE BOX QUI */
 background:transparent;
@@ -16600,7 +16600,7 @@ body.pro-user .pro-only-inline{
 
 /* ===== SPACING HERO ===== */
 .home-page .hero{
-  padding:120px 0 90px;
+  padding:80px 0 50px;
 }
 
 .home-page .hero .page-title{
@@ -19306,4 +19306,21 @@ color:#64748b;
 
   position:relative !important;
   z-index:9999 !important;
+}
+
+@media(max-width:768px){
+
+  .home-page .hero{
+    padding:70px 0 35px;
+  }
+
+  .hero-grid{
+    margin:20px auto;
+    gap:16px;
+  }
+
+  .hero-left{
+    gap:10px;
+  }
+
 }
