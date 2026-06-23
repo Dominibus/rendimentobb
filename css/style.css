@@ -19477,3 +19477,38 @@ color:#64748b;
   }
 
 }
+
+/* =====================================
+🔥 SNAPSHOT MOBILE FIX
+===================================== */
+
+.snapshot-grid{
+display:grid !important;
+grid-template-columns:repeat(4,1fr) !important;
+gap:20px !important;
+}
+
+.snapshot-grid .metric{
+display:flex !important;
+flex-direction:column !important;
+justify-content:center !important;
+align-items:center !important;
+
+background:#f8fafc !important;
+
+border:1px solid #e2e8f0 !important;
+
+border-radius:18px !important;
+
+padding:24px !important;
+
+min-height:120px !important;
+}
+
+@media(max-width:768px){
+
+.snapshot-grid{
+grid-template-columns:repeat(2,1fr) !important;
+}
+
+}
