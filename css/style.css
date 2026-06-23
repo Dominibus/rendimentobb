@@ -19563,14 +19563,28 @@ SNAPSHOT DESKTOP FIX
   display:grid;
 
   grid-template-columns:
-  repeat(4,minmax(0,1fr));
+  repeat(4,1fr);
 
-  gap:16px;
+  gap:20px;
 
 }
 
 .snapshot-grid .metric{
 
-  min-width:0;
+  min-width:160px;
+
+}
+
+/* =====================================
+SNAPSHOT LARGE DESKTOP
+===================================== */
+
+@media (min-width:1024px){
+
+  .snapshot-card{
+
+    max-width:1100px !important;
+
+  }
 
 }
