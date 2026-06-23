@@ -172,21 +172,21 @@ Contatti
 <div class="footer-trust">
 
 <span
-data-it="🔥 +1.200 investitori attivi"
-data-en="🔥 1,200+ active investors">
-🔥 +1.200 investitori attivi
+data-it="✔ ROI reale e cashflow"
+data-en="✔ Real ROI and cashflow">
+✔ ROI reale e cashflow
 </span>
 
 <span
-data-it="✔ Analisi basate su dati reali"
-data-en="✔ Data-driven analysis">
-✔ Analisi basate su dati reali
+data-it="✔ Analisi rischio avanzata"
+data-en="✔ Advanced risk analysis">
+✔ Analisi rischio avanzata
 </span>
 
 <span
-data-it="✔ ROI fino al 18%"
-data-en="✔ ROI up to 18%">
-✔ ROI fino al 18%
+data-it="✔ Dashboard, AI e PMS"
+data-en="✔ Dashboard, AI and PMS">
+✔ Dashboard, AI e PMS
 </span>
 
 </div>
