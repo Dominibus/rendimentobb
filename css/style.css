@@ -19512,3 +19512,45 @@ grid-template-columns:repeat(2,1fr) !important;
 }
 
 }
+
+/* =====================================
+HOME SNAPSHOT EMPHASIS
+===================================== */
+
+.snapshot-section{
+
+  padding:100px 0;
+
+}
+
+.snapshot-section .snapshot-card{
+
+  border:2px solid #10b981;
+
+  position:relative;
+
+}
+
+.snapshot-section .snapshot-card::before{
+
+  content:"Executive Report Preview";
+
+  position:absolute;
+
+  top:-14px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  background:#10b981;
+
+  color:#fff;
+
+  font-size:12px;
+  font-weight:700;
+
+  padding:6px 14px;
+
+  border-radius:999px;
+
+}
