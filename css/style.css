@@ -18800,6 +18800,18 @@ text-shadow:
 
 }
 
+@media(max-width:768px){
+
+  .hero-subheadline{
+
+    font-size:18px;
+    line-height:1.6;
+
+    padding:0 15px;
+
+  }
+
+}
 /* =====================================
 🎯 POSITIONING FLOW
 ===================================== */
