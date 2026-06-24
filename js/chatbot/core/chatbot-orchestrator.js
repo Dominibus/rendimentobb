@@ -258,6 +258,23 @@ if(
 }
 
 // =========================================
+// 📈 IMPROVEMENT ADVISOR
+// =========================================
+
+if(
+
+  detectedIntent.intent ===
+  "improvement_advisor"
+
+){
+
+  intents.push(
+    "improvement_advisor"
+  );
+
+}    
+
+// =========================================
 // 🔥 REMOVE DUPLICATES
 // =========================================
 
@@ -283,6 +300,22 @@ if(
 
   uniqueIntents.push(
     "investment_executive"
+  );
+
+}    
+
+if(
+
+  uniqueIntents.includes(
+    "improvement_advisor"
+  )
+
+){
+
+  uniqueIntents.length = 0;
+
+  uniqueIntents.push(
+    "improvement_advisor"
   );
 
 }    
@@ -582,6 +615,9 @@ const shouldRunAdvisor =
     "investment_executive",
     "investment_advisor",
     "investment_strategy",
+
+    "improvement_advisor",
+
     "comparison",
     "roi_analysis",
     "risk_analysis",
