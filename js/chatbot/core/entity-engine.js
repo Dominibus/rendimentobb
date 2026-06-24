@@ -1308,6 +1308,11 @@ const isPMSQuestion =
 
 const isPortfolioQuestion =
 
+  text.includes("portafoglio") ||
+  text.includes("portfolio") ||
+  text.includes("espandere il portafoglio") ||
+  text.includes("crescita del portafoglio") ||
+  text.includes("portfolio growth") ||
   text.includes("appartamenti") ||
   text.includes("immobili") ||
   text.includes("portafoglio immobiliare") ||
@@ -1315,13 +1320,12 @@ const isPortfolioQuestion =
   text.includes("impero immobiliare") ||
   text.includes("vivere di rendita") ||
   text.includes("vivere di affitti") ||
-  text.includes("portfolio growth") ||
   text.includes("real estate portfolio") ||
   text.includes("property portfolio") ||
   text.includes("financial freedom") ||
   text.includes("libertà finanziaria") ||
   text.includes("reddito passivo") ||
-  text.includes("passive income"); 
+  text.includes("passive income");
 
 // ===========================================
 // 🚀 EXECUTE
