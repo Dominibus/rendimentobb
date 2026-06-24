@@ -678,9 +678,9 @@ console.log(
 
 const isHomeSimulation =
 
-  !window.location.pathname.includes(
-    "/tool"
-  );
+  window.location.pathname === "/" ||
+
+  window.location.pathname === "/index.html";
 
 // ===========================================
 // 🚫 BLOCK PARTIAL ANALYSIS
