@@ -1262,7 +1262,7 @@ if(
 const strategyWords = [
 
   // 🇮🇹 ITALIANO
- 
+
   "investire",
   "investimento",
 
@@ -1272,7 +1272,6 @@ const strategyWords = [
   "profittevole",
   "redditività",
 
-  
   "miglior città",
   "migliore città",
 
@@ -1302,11 +1301,10 @@ const strategyWords = [
 
   "conviene ancora",
 
-  "come posso migliorare",
-  "migliorare rendimento",
-
   "cashflow reale",
+
   "investimento sostenibile",
+
   "questo investimento",
 
   "simulazione investimento",
@@ -1318,6 +1316,7 @@ const strategyWords = [
   "scenario migliore",
 
   // 🇬🇧 ENGLISH
+
   "strategy",
   "investment strategy",
 
@@ -1342,6 +1341,7 @@ const strategyWords = [
   "executive analysis",
 
   "investment report",
+
   "advanced analysis",
 
   "investment advisor",
@@ -1355,16 +1355,16 @@ const strategyWords = [
 
   "executive ai",
 
-  "how can i improve",
-  "improve performance",
-
   "real cashflow",
+
   "investment sustainability",
 
   "is it sustainable",
+
   "sustainable investment",
 
   "is this investment good",
+
   "is this investment worth it",
 
   "stress test",
@@ -1407,7 +1407,8 @@ if(
   });
 
 }
-  // =====================================
+
+// =====================================
 // 🧠 EXECUTIVE AI ENGINE
 // Silicon Valley Executive Intelligence
 // =====================================
@@ -1417,6 +1418,7 @@ if(
   has(
 
     // 🇮🇹 ITALIANO
+
     "analisi executive",
     "executive",
 
@@ -1424,32 +1426,37 @@ if(
     "analisi avanzata",
 
     "fammi un'analisi",
+
     "analizza investimento",
 
     "valuta investimento",
+
     "conviene ancora",
 
     "analisi professionale",
-    "analisi ai",
 
-    "come posso migliorare",
-    "migliorare rendimento",
+    "analisi ai",
 
     "cashflow reale",
 
     "sostenibilità investimento",
+
     "sostenibile",
+
     "è sostenibile",
 
     "investimento sostenibile",
 
     "questo investimento",
+
     "conviene questo investimento",
 
     "vale la pena",
+
     "conveniente",
 
     "scenario peggiore",
+
     "scenario migliore",
 
     "stress test",
@@ -1465,27 +1472,35 @@ if(
     "analizza questo b&b",
 
     // 🇬🇧 ENGLISH
+
     "sustainable",
+
     "sustainability",
 
     "is it sustainable",
+
     "investment sustainability",
 
     "sustainable investment",
 
     "is this investment good",
+
     "is this investment worth it",
 
     "worth it",
+
     "does it make sense",
 
     "should i invest",
+
     "good investment",
 
     "executive analysis",
+
     "advanced analysis",
 
     "analyze investment",
+
     "analyze this investment",
 
     "evaluate investment",
@@ -1493,6 +1508,7 @@ if(
     "profitable investment",
 
     "worst case scenario",
+
     "best case scenario",
 
     "stress test",
@@ -1536,6 +1552,108 @@ if(
 
 }
 
+// ===========================================
+// 📈 IMPROVEMENT ADVISOR
+// Silicon Valley Portfolio Optimization
+// ===========================================
+
+if(
+
+  has(
+
+    // 🇮🇹 ITALIANO
+
+    "cosa devo migliorare",
+
+    "come posso migliorare",
+
+    "come migliorare",
+
+    "come aumento il roi",
+
+    "come aumentare il roi",
+
+    "come migliorare il rendimento",
+
+    "come ridurre il rischio",
+
+    "come abbassare il rischio",
+
+    "come aumento il profitto",
+
+    "come aumentare il profitto",
+
+    "come aumentare i ricavi",
+
+    "come aumentare il cashflow",
+
+    "come migliorare questa simulazione",
+
+    "come migliorare questo investimento",
+
+    "come ottimizzare l'investimento",
+
+    "cosa posso fare meglio",
+
+    // 🇬🇧 ENGLISH
+
+    "what should i improve",
+
+    "how can i improve",
+
+    "how do i improve",
+
+    "how can i increase roi",
+
+    "how can i improve roi",
+
+    "how can i reduce risk",
+
+    "how can i lower risk",
+
+    "how can i increase profit",
+
+    "how can i improve profitability",
+
+    "how can i increase revenue",
+
+    "how can i improve this investment",
+
+    "how can i optimize this investment",
+
+    "what can i do better"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent:
+      "improvement_advisor",
+
+    category:
+      "executive",
+
+    confidence:
+      0.99,
+
+    priority:
+      290,
+
+    requiresCalculation:
+      true,
+
+    requiresRiskAnalysis:
+      true,
+
+    requiresMarketData:
+      true
+
+  });
+
+}
+  
 // ===========================================
 // 🏨 PMS BOOKINGS
 // ===========================================
