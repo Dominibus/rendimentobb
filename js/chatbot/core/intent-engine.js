@@ -2237,6 +2237,36 @@ if(
     "entro 5 anni",
     "entro 10 anni",
 
+    // 🔥 NUOVE KEYWORD IT
+
+    "come espandere il portafoglio",
+
+    "come far crescere il portafoglio",
+
+    "come scalare il portafoglio",
+
+    "come ampliare il portafoglio",
+
+    "come aumentare il numero di immobili",
+
+    "prossimo investimento",
+
+    "prossimo immobile",
+
+    "crescita del portafoglio",
+
+    "piano di crescita",
+
+    "roadmap immobiliare",
+
+    "roadmap del portafoglio",
+
+    "come costruire un patrimonio",
+
+    "come arrivare alla libertà finanziaria",
+
+    "come raggiungere la rendita",
+
     // 🇬🇧
 
     "portfolio growth",
@@ -2271,7 +2301,29 @@ if(
 
     "financial freedom",
 
-    "passive income"
+    "passive income",
+
+    // 🔥 NEW EN
+
+    "how can i grow my portfolio",
+
+    "how can i scale my portfolio",
+
+    "how can i expand my portfolio",
+
+    "next investment",
+
+    "next property",
+
+    "portfolio roadmap",
+
+    "growth strategy",
+
+    "real estate growth plan",
+
+    "how to build wealth",
+
+    "how to reach financial freedom"
 
   )
 
