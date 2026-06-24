@@ -378,29 +378,50 @@ console.log(
 
 const investmentHistory =
 
-Array.isArray(
-  window.rbChatMemory?.investmentHistory
-)
-  ? window.rbChatMemory.investmentHistory
-  : [];
+window.investmentHistory ||
+
+window.dashboardInvestmentHistory ||
+
+window.rbInvestmentHistory ||
+
+window.rbChatMemory?.investmentHistory ||
+
+[];
 
 console.log(
   "💾 GLOBAL INVESTMENT HISTORY:",
   investmentHistory
 );
 
-  console.log(
+console.log(
   "📊 HISTORY COUNT:",
   investmentHistory.length
 );
 
-  console.log(
+console.log(
   "📊 FULL HISTORY:",
   JSON.stringify(
     investmentHistory,
     null,
     2
   )
+);
+
+  console.log(
+  "🔍 HISTORY SOURCES",
+  {
+    investmentHistory:
+      window.investmentHistory?.length,
+
+    dashboardInvestmentHistory:
+      window.dashboardInvestmentHistory?.length,
+
+    rbInvestmentHistory:
+      window.rbInvestmentHistory?.length,
+
+    chatMemory:
+      window.rbChatMemory?.investmentHistory?.length
+  }
 );
 // ===========================================
 // 🧠 AI INSIGHTS
