@@ -742,6 +742,51 @@ if(isFreeUser){
 
 // 🔥 FIX → rende disponibili al report
 window.dashboardSimulations = analyses;
+
+  // =====================================
+// 🤖 CHATBOT INVESTMENT MEMORY
+// =====================================
+
+window.investmentHistory =
+  analyses.map(a => ({
+
+    city:
+      a.city,
+
+    marketCity:
+      a.marketCity,
+
+    roi:
+      Number(a.roi || 0),
+
+    risk:
+      Number(a.risk || 0),
+
+    occupancy:
+      Number(a.occupancy || 0),
+
+    net:
+      Number(a.net || 0),
+
+    annualProfit:
+      Number(a.net || 0),
+
+    propertyPrice:
+      Number(a.price || 0),
+
+    equity:
+      Number(a.equity || 0),
+
+    createdAt:
+      a.createdAt
+
+  }));
+
+console.log(
+  "🤖 INVESTMENT HISTORY:",
+  window.investmentHistory.length
+);
+  
   // ================= URL PARAMS =================
 
   const urlParams = new URLSearchParams(window.location.search);
