@@ -5363,6 +5363,30 @@ const pmsADR =
 const pmsBookings =
   pmsData?.bookings || 0;
 
+const pmsOccupancy =
+  Number(
+    pmsData?.occupancy || 0
+  );
+
+const adrPlus10 =
+
+  Math.round(
+    pmsADR * 1.10
+  );
+
+const estimatedRevenueGain =
+
+  Math.round(
+    pmsRevenue * 0.10
+  );
+
+const occupancyTo80 =
+
+  Math.max(
+    0,
+    80 - pmsOccupancy
+  );  
+
  const cashflow =
 
   Number(
@@ -5444,6 +5468,63 @@ const pmsBookings =
   pmsBookings > 0 &&
   pmsADR > 0
 ){
+
+  prioritiesIT.push(
+`📊 PMS Insight
+
+ADR attuale: €${pmsADR}
+
+Se l'ADR salisse a €${adrPlus10}
+(+10%)
+
+i ricavi potrebbero aumentare
+di circa €${estimatedRevenueGain.toLocaleString("it-IT")}
+a parità di occupazione.`
+  );
+
+  prioritiesEN.push(
+`📊 PMS Insight
+
+Current ADR: €${pmsADR}
+
+If ADR increased to €${adrPlus10}
+(+10%)
+
+revenue could increase by approximately
+€${estimatedRevenueGain.toLocaleString("en-US")}
+with the same occupancy.`
+  );
+
+}
+
+  if(
+  pmsOccupancy > 0 &&
+  pmsOccupancy < 80
+){
+
+  prioritiesIT.push(
+`🏨 Occupazione PMS
+
+Occupazione attuale:
+${pmsOccupancy}%
+
+Per raggiungere l'obiettivo AI
+dell'80% manca circa
+${occupancyTo80}% di occupazione aggiuntiva.`
+  );
+
+  prioritiesEN.push(
+`🏨 PMS Occupancy
+
+Current occupancy:
+${pmsOccupancy}%
+
+To reach the AI target
+of 80%, approximately
+${occupancyTo80}% additional occupancy is needed.`
+  );
+
+}
 
   prioritiesIT.push(
     `📊 PMS: ADR attuale €${pmsADR}. Valutare pricing dinamico per aumentare il ricavo medio.`
