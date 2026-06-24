@@ -5135,14 +5135,6 @@ if(advisor){
 
   }
 
-  if(reportOccupancy >= 70){
-
-    insightsIT.push(
-      "🏨 Il tasso di occupazione supporta una buona sostenibilità operativa."
-    );
-
-  }
-
   if(reportRisk <= 30 && reportRisk > 0){
 
     insightsIT.push(
@@ -5336,16 +5328,51 @@ else if(
   response.confidence =
     0.99;
 
-  const improvementsIT = [];
-  const improvementsEN = [];
+  const advisorScore =
+  advisor?.score || 0;
+
+const advisorVerdict =
+  advisor?.verdict || "WAIT";
+
+const advisorVerdictIT =
+
+  advisorVerdict === "BUY"
+    ? "🟢 Investimento Consigliato"
+
+  : advisorVerdict === "WAIT"
+    ? "🟡 Ottimizzare Prima di Procedere"
+
+  : "🔴 Investimento Non Consigliato";
+
+const advisorVerdictEN =
+
+  advisorVerdict === "BUY"
+    ? "🟢 Recommended Investment"
+
+  : advisorVerdict === "WAIT"
+    ? "🟡 Optimize Before Proceeding"
+
+  : "🔴 Not Recommended";  
+
+const pmsRevenue =
+  pmsData?.revenue || 0;
+
+const pmsADR =
+  pmsData?.adr || 0;
+
+const pmsBookings =
+  pmsData?.bookings || 0;
+
+  const prioritiesIT = [];
+  const prioritiesEN = [];
 
   if(occupancy < 70){
 
-    improvementsIT.push(
+    prioritiesIT.push(
       "🏨 Aumentare l'occupazione tramite pricing dinamico e maggiore visibilità OTA."
     );
 
-    improvementsEN.push(
+    prioritiesEN.push(
       "🏨 Increase occupancy through dynamic pricing and stronger OTA visibility."
     );
 
@@ -5353,74 +5380,151 @@ else if(
 
   if(roi < 20){
 
-    improvementsIT.push(
-      "📈 Migliorare il ROI aumentando ADR o riducendo i costi operativi."
-    );
+  prioritiesIT.push(
+    "📈 Incrementare ADR e ottimizzare le tariffe per superare il 20% di ROI."
+  );
 
-    improvementsEN.push(
-      "📈 Improve ROI by increasing ADR or reducing operating costs."
-    );
+  prioritiesEN.push(
+    "📈 Increase ADR and optimize pricing to exceed 20% ROI."
+  );
 
-  }
+}
 
-  if(risk > 40){
+  if(occupancy < 75){
 
-    improvementsIT.push(
-      "⚠️ Ridurre il rischio operativo controllando costi e dipendenza stagionale."
-    );
+  prioritiesIT.push(
+    "🏨 Portare l'occupazione verso il 75-80% per aumentare redditività e stabilità."
+  );
 
-    improvementsEN.push(
-      "⚠️ Reduce operational risk by controlling costs and seasonal dependency."
-    );
+  prioritiesEN.push(
+    "🏨 Increase occupancy towards 75-80% to improve profitability and stability."
+  );
 
-  }
+}
+
+  if(risk > 35){
+
+  prioritiesIT.push(
+    "⚠️ Ridurre il rischio operativo e la dipendenza dalla stagionalità."
+  );
+
+  prioritiesEN.push(
+    "⚠️ Reduce operational risk and seasonal dependency."
+  );
+
+}
+
+  if(cashflow > 0){
+
+  prioritiesIT.push(
+    "💰 Il cashflow è positivo: valuta la crescita del portfolio."
+  );
+
+  prioritiesEN.push(
+    "💰 Cashflow is positive: consider portfolio expansion."
+  );
+
+}
 
   if(
-    liveData.net &&
-    Number(liveData.net) < 0
-  ){
+  pmsBookings > 0 &&
+  pmsADR > 0
+){
 
-    improvementsIT.push(
-      "💸 Ripristinare un cashflow positivo prima di pianificare espansioni."
-    );
+  prioritiesIT.push(
+    `📊 PMS: ADR attuale €${pmsADR}. Valutare pricing dinamico per aumentare il ricavo medio.`
+  );
 
-    improvementsEN.push(
-      "💸 Restore positive cashflow before planning expansion."
-    );
+  prioritiesEN.push(
+    `📊 PMS: Current ADR €${pmsADR}. Consider dynamic pricing to increase average revenue.`
+  );
 
-  }
+}
 
-  if(!improvementsIT.length){
+  if(pmsRevenue > 0){
 
-    improvementsIT.push(
-      "🚀 Le metriche risultano già molto competitive. Concentrati su crescita e scalabilità."
-    );
+  prioritiesIT.push(
+    `💰 PMS: ricavi registrati €${Math.round(pmsRevenue).toLocaleString("it-IT")}. Analizza i periodi migliori per aumentare la redditività.`
+  );
 
-    improvementsEN.push(
-      "🚀 Metrics are already highly competitive. Focus on growth and scalability."
-    );
+  prioritiesEN.push(
+    `💰 PMS: recorded revenue €${Math.round(pmsRevenue).toLocaleString("en-US")}. Analyze top-performing periods to increase profitability.`
+  );
 
-  }
+}
 
-  response.textIT =
+  if(
+  liveData.net &&
+  Number(liveData.net) < 0
+){
 
-`📈 Piano di Miglioramento AI
+  prioritiesIT.push(
+    "💸 Ripristinare un cashflow positivo prima di pianificare espansioni."
+  );
 
-${improvementsIT.join("\n\n")}
+  prioritiesEN.push(
+    "💸 Restore positive cashflow before planning expansion."
+  );
 
-🎯 Priorità Strategica
+}
 
-Ottimizzare le metriche con maggiore impatto su ROI, cashflow e sostenibilità operativa.`;
+  if(!prioritiesIT.length){
 
-  response.textEN =
+  prioritiesIT.push(
+    "🚀 Le metriche risultano già molto competitive. Concentrati su crescita e scalabilità."
+  );
 
-`📈 AI Improvement Plan
+  prioritiesEN.push(
+    "🚀 Metrics are already highly competitive. Focus on growth and scalability."
+  );
 
-${improvementsEN.join("\n\n")}
+}
 
-🎯 Strategic Priority
+  response.textIT = `
 
-Optimize the metrics with the highest impact on ROI, cashflow and operational sustainability.`;
+📈 AI Growth Advisor
+
+📊 Situazione Attuale
+
+• ROI: ${roi.toFixed(1)}%
+• Rischio: ${risk}/100
+• Occupazione: ${occupancy}%
+• Cashflow: €${Math.round(cashflow).toLocaleString("it-IT")}
+• AI Score: ${advisorScore}/100
+• Verdetto: ${advisorVerdictIT}
+
+🎯 Priorità Strategiche
+
+${prioritiesIT.join("\n\n")}
+
+🚀 Prossimo Livello
+
+L'investimento risulta sostenibile. L'obiettivo principale è aumentare rendimento, scalabilità e resilienza operativa.
+
+`;
+
+  response.textEN = `
+
+📈 AI Growth Advisor
+
+📊 Current Situation
+
+• ROI: ${roi.toFixed(1)}%
+• Risk: ${risk}/100
+• Occupancy: ${occupancy}%
+• Cashflow: €${Math.round(cashflow).toLocaleString("en-US")}
+• AI Score: ${advisorScore}/100
+• Verdict: ${advisorVerdictEN}
+
+🎯 Strategic Priorities
+
+${prioritiesEN.join("\n\n")}
+
+🚀 Next Level
+
+The investment is sustainable. The main objective is to improve profitability, scalability and operational resilience.
+
+`;
 
   return response;
 
