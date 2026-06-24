@@ -19635,3 +19635,33 @@ margin:auto;
 .snapshot-grid{
 align-items:stretch;
 }
+
+/* =====================================
+   PRICING VALUE STRIP
+===================================== */
+
+.pricing-value-strip{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:24px;
+flex-wrap:wrap;
+margin-top:28px;
+margin-bottom:10px;
+font-size:14px;
+font-weight:600;
+color:#10b981;
+}
+
+.pricing-value-strip span{
+white-space:nowrap;
+}
+
+@media(max-width:768px){
+
+.pricing-value-strip{
+gap:12px;
+font-size:13px;
+}
+
+}
