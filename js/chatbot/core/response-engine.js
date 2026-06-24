@@ -5534,8 +5534,6 @@ ${occupancyTo80}% additional occupancy is needed.`
     `📊 PMS: Current ADR €${pmsADR}. Consider dynamic pricing to increase average revenue.`
   );
 
-}
-
   if(pmsRevenue > 0){
 
   prioritiesIT.push(
