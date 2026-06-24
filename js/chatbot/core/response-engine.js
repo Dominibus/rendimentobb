@@ -4644,10 +4644,6 @@ totalSimulations > 0
 
 : 0;    
 
-  const portfolioHistory =
-
-  investmentHistory || [];
-
 const properties =
 
   Number(
