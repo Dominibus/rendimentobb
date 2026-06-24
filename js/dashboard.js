@@ -882,18 +882,43 @@ flex-wrap:wrap;
 <strong>${analyses.length}</strong>
 </div>
 
+<div style="
+display:flex;
+align-items:center;
+gap:10px;
+">
+
+<button
+id="prev-page"
+style="
+padding:6px 10px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+background:white;
+cursor:pointer;
+">
+←
+</button>
+
 <div>
-${t(
-  "Pagina",
-  "Page"
-)}
- <strong>
-${window.rbPage}
-</strong>
- /
- <strong>
-${totalPages}
-</strong>
+${t("Pagina","Page")}
+<strong>${window.rbPage}</strong>
+/
+<strong>${totalPages}</strong>
+</div>
+
+<button
+id="next-page"
+style="
+padding:6px 10px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+background:white;
+cursor:pointer;
+">
+→
+</button>
+
 </div>
 
 <div>
@@ -951,6 +976,54 @@ loadDashboard();
 });
 
 }
+
+const prevBtn =
+document.getElementById(
+"prev-page"
+);
+
+const nextBtn =
+document.getElementById(
+"next-page"
+);
+
+if(prevBtn){
+
+prevBtn.onclick = ()=>{
+
+if(window.rbPage > 1){
+
+window.rbPage--;
+
+window.__dashboardLoaded = false;
+window.__forceReload = true;
+
+loadDashboard();
+
+}
+
+};
+
+}
+
+if(nextBtn){
+
+nextBtn.onclick = ()=>{
+
+if(window.rbPage < totalPages){
+
+window.rbPage++;
+
+window.__dashboardLoaded = false;
+window.__forceReload = true;
+
+loadDashboard();
+
+}
+
+};
+
+}  
 
 }
 
