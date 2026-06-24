@@ -4546,13 +4546,23 @@ else if(
   response.confidence =
     0.99;
 
-  const properties =
+  const portfolioHistory =
 
-    Number(
-      entities.ownedProperties ||
-      memory.ownedProperties ||
-      0
-    );
+  investmentHistory || [];
+
+const properties =
+
+  Number(
+
+    entities.ownedProperties ||
+
+    memory.ownedProperties ||
+
+    portfolioHistory.length ||
+
+    0
+
+  );
 
   let levelIT =
     "👤 Principiante";
