@@ -14198,7 +14198,7 @@ ULTRA UI • ALLINEATO • PRODUZIONE
 
 .hero{
   position:relative;
-  min-height:520px;
+  min-height:460px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -18522,7 +18522,7 @@ line-height:1.6;
 
 .rb-ecosystem{
 
-padding:90px 20px;
+padding:60px 20px;
 
 background:#ffffff;
 
