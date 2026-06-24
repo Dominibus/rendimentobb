@@ -5363,6 +5363,20 @@ const pmsADR =
 const pmsBookings =
   pmsData?.bookings || 0;
 
+ const cashflow =
+
+  Number(
+
+    liveData?.net ??
+
+    liveData?.annualProfit ??
+
+    liveData?.cashflow ??
+
+    0
+
+  ); 
+
   const prioritiesIT = [];
   const prioritiesEN = [];
 
