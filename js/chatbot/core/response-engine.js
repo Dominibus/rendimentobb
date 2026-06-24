@@ -5322,6 +5322,111 @@ If results remain stable, this investment can become a solid foundation for futu
 }  
 
 // ===========================================
+// 📈 IMPROVEMENT ADVISOR
+// Silicon Valley Portfolio Optimization
+// ===========================================
+
+else if(
+  intent.intent === "improvement_advisor"
+){
+
+  response.type =
+    "improvement_advisor";
+
+  response.confidence =
+    0.99;
+
+  const improvementsIT = [];
+  const improvementsEN = [];
+
+  if(occupancy < 70){
+
+    improvementsIT.push(
+      "🏨 Aumentare l'occupazione tramite pricing dinamico e maggiore visibilità OTA."
+    );
+
+    improvementsEN.push(
+      "🏨 Increase occupancy through dynamic pricing and stronger OTA visibility."
+    );
+
+  }
+
+  if(roi < 20){
+
+    improvementsIT.push(
+      "📈 Migliorare il ROI aumentando ADR o riducendo i costi operativi."
+    );
+
+    improvementsEN.push(
+      "📈 Improve ROI by increasing ADR or reducing operating costs."
+    );
+
+  }
+
+  if(risk > 40){
+
+    improvementsIT.push(
+      "⚠️ Ridurre il rischio operativo controllando costi e dipendenza stagionale."
+    );
+
+    improvementsEN.push(
+      "⚠️ Reduce operational risk by controlling costs and seasonal dependency."
+    );
+
+  }
+
+  if(
+    liveData.net &&
+    Number(liveData.net) < 0
+  ){
+
+    improvementsIT.push(
+      "💸 Ripristinare un cashflow positivo prima di pianificare espansioni."
+    );
+
+    improvementsEN.push(
+      "💸 Restore positive cashflow before planning expansion."
+    );
+
+  }
+
+  if(!improvementsIT.length){
+
+    improvementsIT.push(
+      "🚀 Le metriche risultano già molto competitive. Concentrati su crescita e scalabilità."
+    );
+
+    improvementsEN.push(
+      "🚀 Metrics are already highly competitive. Focus on growth and scalability."
+    );
+
+  }
+
+  response.textIT =
+
+`📈 Piano di Miglioramento AI
+
+${improvementsIT.join("\n\n")}
+
+🎯 Priorità Strategica
+
+Ottimizzare le metriche con maggiore impatto su ROI, cashflow e sostenibilità operativa.`;
+
+  response.textEN =
+
+`📈 AI Improvement Plan
+
+${improvementsEN.join("\n\n")}
+
+🎯 Strategic Priority
+
+Optimize the metrics with the highest impact on ROI, cashflow and operational sustainability.`;
+
+  return response;
+
+}  
+
+// ===========================================
 // 👋 GREETING RESPONSE
 // ===========================================
 
