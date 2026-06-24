@@ -4840,6 +4840,106 @@ else if(
   response.confidence =
     0.99;
 
+  // =====================================
+// 📊 PORTFOLIO HISTORY ANALYSIS
+// =====================================
+
+const portfolioHistory =
+  investmentHistory || [];
+
+const totalSimulations =
+  portfolioHistory.length;
+
+const averageROI =
+
+totalSimulations > 0
+
+? portfolioHistory.reduce(
+    (sum,item)=>
+      sum +
+      Number(
+        item.realROI ??
+        item.visualROI ??
+        item.roi ??
+        0
+      ),
+    0
+  ) / totalSimulations
+
+: 0;
+
+const bestSimulation =
+
+[...portfolioHistory]
+
+.sort(
+(a,b)=>
+
+Number(
+  b.realROI ??
+  b.visualROI ??
+  b.roi ??
+  0
+)
+
+-
+
+Number(
+  a.realROI ??
+  a.visualROI ??
+  a.roi ??
+  0
+)
+
+)[0];
+
+const bestROI =
+
+bestSimulation
+
+? Number(
+    bestSimulation.realROI ??
+    bestSimulation.visualROI ??
+    bestSimulation.roi ??
+    0
+  )
+
+: 0;
+
+const bestCity =
+
+bestSimulation
+
+? (
+    bestSimulation.realCity ||
+    bestSimulation.city ||
+    bestSimulation.marketCity ||
+    "N/D"
+  )
+
+: "N/D";
+
+const averageCashflow =
+
+totalSimulations > 0
+
+? portfolioHistory.reduce(
+    (sum,item)=>
+
+      sum +
+
+      Number(
+        item.net ??
+        item.cashflow ??
+        item.annualProfit ??
+        0
+      ),
+
+    0
+  ) / totalSimulations
+
+: 0;
+
   const availableCapital =
 
     Number(
