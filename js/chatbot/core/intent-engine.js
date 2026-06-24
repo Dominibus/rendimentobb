@@ -1595,6 +1595,52 @@ if(
 
     "cosa posso fare meglio",
 
+    // 🔥 NUOVE KEYWORD IT
+
+    "dammi consigli",
+
+    "consigliami",
+
+    "consigli per migliorare",
+
+    "migliorare il rendimento",
+
+    "migliorare il roi",
+
+    "aumentare il rendimento",
+
+    "aumentare la redditività",
+
+    "aumentare la redditivita",
+
+    "come far rendere di più",
+
+    "come far rendere di piu",
+
+    "come aumentare il rendimento",
+
+    "come aumentare la redditività",
+
+    "come aumentare la redditivita",
+
+    "ottimizzare il rendimento",
+
+    "ottimizzare il roi",
+
+    "ottimizzare la redditività",
+
+    "ottimizzare la redditivita",
+
+    "come migliorare i risultati",
+
+    "come migliorare le performance",
+
+    "come aumentare il guadagno",
+
+    "come aumentare gli utili",
+
+    "come aumentare il profitto netto",
+
     // 🇬🇧 ENGLISH
 
     "what should i improve",
@@ -1621,7 +1667,35 @@ if(
 
     "how can i optimize this investment",
 
-    "what can i do better"
+    "what can i do better",
+
+    // 🔥 NEW EN
+
+    "improve returns",
+
+    "increase returns",
+
+    "increase profitability",
+
+    "improve profitability",
+
+    "optimization advice",
+
+    "improvement tips",
+
+    "improve performance",
+
+    "how to improve performance",
+
+    "how to increase profitability",
+
+    "how to improve returns",
+
+    "how to increase returns",
+
+    "how to make more profit",
+
+    "how to optimize roi"
 
   )
 
