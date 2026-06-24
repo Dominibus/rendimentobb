@@ -662,6 +662,12 @@ const hasAnalysis =
 
   (!isNaN(occupancy) && occupancy !== 0);
 
+  const isDashboard =
+
+  window.location.pathname.includes(
+    "/dashboard"
+  );
+
 console.log(
   "🚨 ANALYSIS CHECK",
   {
@@ -689,9 +695,9 @@ const isHomeSimulation =
 if(
 
   (
-    !hasAnalysis ||
-    isHomeSimulation
-  ) &&
+  (!hasAnalysis && !isDashboard) ||
+  isHomeSimulation
+) &&
 
   intent.intent !== "education" &&
   intent.intent !== "subscriptions" &&
