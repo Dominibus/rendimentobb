@@ -7007,6 +7007,8 @@ window.closeRegisterPopup = function(){
 
 };
 
+
+/*
 let scrollTriggered = false;
 
 window.addEventListener("scroll", () => {
@@ -7028,6 +7030,7 @@ if(access.isFree){
   }
 
 });
+*/
 
 // ================= START PLAN PURCHASE (FINAL CLEAN) =================
 
