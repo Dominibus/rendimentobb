@@ -7436,7 +7436,7 @@ document.addEventListener("rb_plan_ready", () => {
 
     const handleHomeFunnel = () => {
 
-  if(window.scrollY > 400){
+  if(window.scrollY > 2200){
 
     window.removeEventListener("scroll", handleHomeFunnel);
 
