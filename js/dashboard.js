@@ -4728,35 +4728,47 @@ ${occupancyStatus}
 
 </div>
         <div
-        style="
-        display:flex;
-        gap:10px;
-        margin-top:15px;
-        ">
+style="
+display:flex;
+gap:12px;
+margin-top:22px;
+">
 
-          <button
-          class="btn-dashboard"
-          onclick="openBookings('${docItem.id}')">
+<button
+class="btn-dashboard"
+style="
+flex:1;
+height:48px;
+font-weight:700;
+border-radius:12px;
+"
+onclick="openBookings('${docItem.id}')">
 
-          ${t(
-  "Prenotazioni",
-  "Bookings"
+📅 ${t(
+"Prenotazioni",
+"Bookings"
 )}
 
-          </button>
+</button>
 
-          <button
-          class="btn-dashboard"
-          onclick="deleteProperty('${docItem.id}')">
+<button
+class="btn-dashboard"
+style="
+width:48px;
+height:48px;
+padding:0;
+border-radius:12px;
+background:#fee2e2;
+color:#dc2626;
+"
 
-          ${t(
-  "Elimina",
-  "Delete"
-)}
+onclick="deleteProperty('${docItem.id}')">
 
-          </button>
+🗑️
 
-        </div>
+</button>
+
+</div>
 
       </div>
 
@@ -6215,6 +6227,18 @@ console.log(
   "🤖 PMS MEMORY:",
   window.rbPMSData
 );
+
+  renderExecutiveSummary({
+  properties,
+  bookings,
+  revenue,
+  occupancy,
+  adr,
+  revpar,
+  arrivalsToday,
+  departuresToday,
+  guestsInHouse
+});
 
   console.log(
   "👥 PMS GUESTS:",
