@@ -6564,6 +6564,7 @@ cardStatus === status
 
 // =====================================
 // 🧠 EXECUTIVE SUMMARY
+// Silicon Valley 2026
 // =====================================
 
 function renderExecutiveSummary(data){
@@ -6577,108 +6578,524 @@ if(!box) return;
 
 box.style.display = "block";
 
-let message = "";
+// =====================================
+// KPI
+// =====================================
 
-if(data.occupancy >= 80){
+const revenue =
+Number(data.revenue || 0);
 
-message = t(
-"Occupazione eccellente. Mantieni le tariffe attuali e valuta un aumento nei weekend.",
-"Excellent occupancy. Keep current pricing and consider increasing weekend rates."
-);
+const occupancy =
+Number(data.occupancy || 0);
+
+const revpar =
+Number(data.revpar || 0);
+
+const adr =
+Number(data.adr || 0);
+
+const properties =
+Number(data.properties || 0);
+
+const bookings =
+Number(data.bookings || 0);
+
+// =====================================
+// AI SCORE
+// =====================================
+
+let aiScore = 50;
+
+if(occupancy >= 85){
+
+aiScore += 20;
 
 }
-else if(data.occupancy >= 60){
+else if(occupancy >= 70){
 
-message = t(
-"Buona occupazione. Puoi migliorare il RevPAR ottimizzando il prezzo medio.",
-"Good occupancy. You can improve RevPAR by optimizing your average nightly rate."
-);
+aiScore += 15;
+
+}
+else if(occupancy >= 60){
+
+aiScore += 10;
 
 }
 else{
 
-message = t(
-"Occupazione bassa. Valuta promozioni e pricing dinamico.",
-"Low occupancy. Consider promotions and dynamic pricing."
+aiScore -= 10;
+
+}
+
+if(revpar >= 100){
+
+aiScore += 15;
+
+}
+else if(revpar >= 70){
+
+aiScore += 10;
+
+}
+
+if(revenue >= 5000){
+
+aiScore += 15;
+
+}
+else if(revenue >= 2500){
+
+aiScore += 8;
+
+}
+
+if(bookings >= 20){
+
+aiScore += 10;
+
+}
+else if(bookings >= 10){
+
+aiScore += 5;
+
+}
+
+aiScore =
+Math.max(
+0,
+Math.min(
+100,
+Math.round(aiScore)
+)
+);
+
+// =====================================
+// GRADE
+// =====================================
+
+let grade = "C";
+
+if(aiScore >= 95){
+
+grade = "A+";
+
+}
+else if(aiScore >= 90){
+
+grade = "A";
+
+}
+else if(aiScore >= 80){
+
+grade = "B";
+
+}
+else if(aiScore >= 70){
+
+grade = "C+";
+
+}
+else if(aiScore >= 60){
+
+grade = "C";
+
+}
+else{
+
+grade = "D";
+
+}
+
+// =====================================
+// VERDICT
+// =====================================
+
+let verdict =
+t(
+"Monitorare",
+"Monitor"
+);
+
+let verdictColor =
+"#f59e0b";
+
+if(aiScore >= 90){
+
+verdict =
+t(
+"Prestazioni eccellenti",
+"Excellent Performance"
+);
+
+verdictColor =
+"#10b981";
+
+}
+else if(aiScore >= 75){
+
+verdict =
+t(
+"Buone prestazioni",
+"Good Performance"
+);
+
+verdictColor =
+"#3b82f6";
+
+}
+else if(aiScore < 60){
+
+verdict =
+t(
+"Richiede attenzione",
+"Needs Attention"
+);
+
+verdictColor =
+"#ef4444";
+
+}
+
+// =====================================
+// STRENGTHS
+// =====================================
+
+const strengths = [];
+
+if(occupancy >= 75){
+
+strengths.push(
+t(
+"Occupazione superiore al target.",
+"Occupancy is above target."
+)
+);
+
+}
+
+if(revpar >= 80){
+
+strengths.push(
+t(
+"RevPAR competitivo.",
+"Competitive RevPAR."
+)
+);
+
+}
+
+if(revenue >= 3000){
+
+strengths.push(
+t(
+"Ricavi mensili solidi.",
+"Strong monthly revenue."
+)
+);
+
+}
+
+if(bookings >= 15){
+
+strengths.push(
+t(
+"Buon volume di prenotazioni.",
+"Healthy booking volume."
+)
+);
+
+}
+
+// =====================================
+// WARNINGS
+// =====================================
+
+const warnings = [];
+
+if(occupancy < 60){
+
+warnings.push(
+t(
+"Occupazione inferiore al livello consigliato.",
+"Occupancy is below the recommended level."
+)
+);
+
+}
+
+if(revpar < 60){
+
+warnings.push(
+t(
+"RevPAR migliorabile.",
+"RevPAR can be improved."
+)
+);
+
+}
+
+if(bookings < 8){
+
+warnings.push(
+t(
+"Poche prenotazioni registrate.",
+"Low booking volume."
+)
+);
+
+}
+
+// =====================================
+// RECOMMENDATION
+// =====================================
+
+let recommendation =
+t(
+"Continua a monitorare le performance e mantieni una strategia di pricing dinamica.",
+"Continue monitoring performance and maintain a dynamic pricing strategy."
+);
+
+if(occupancy < 60){
+
+recommendation =
+t(
+"Aumenta la visibilità sulle OTA e valuta offerte nei giorni con bassa occupazione.",
+"Increase OTA visibility and consider promotions on low occupancy days."
+);
+
+}
+else if(occupancy >= 80){
+
+recommendation =
+t(
+"Valuta un incremento delle tariffe del 5-8% nei weekend e nei periodi di alta domanda.",
+"Consider increasing weekend rates by 5-8% during high demand."
 );
 
 }
 
 box.innerHTML = `
+<div style="
+background:#ffffff;
+border:1px solid #e2e8f0;
+border-radius:22px;
+padding:28px;
+box-shadow:0 12px 40px rgba(15,23,42,.08);
+overflow:hidden;
+">
+
+<!-- =====================================
+HEADER
+===================================== -->
 
 <div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:18px;
-padding:24px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:18px;
+margin-bottom:28px;
 ">
+
+<div>
+
+<div style="
+font-size:13px;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
+color:#64748b;
+margin-bottom:6px;
+">
+
+${t(
+"Executive AI Report",
+"Executive AI Report"
+)}
+
+</div>
 
 <h2 style="
-margin-bottom:20px;
-font-size:24px;
-font-weight:800;
+margin:0;
+font-size:30px;
+font-weight:900;
+color:#0f172a;
 ">
 
-🧠 Executive Summary
+🧠 ${t(
+"Analisi Intelligente",
+"AI Executive Analysis"
+)}
 
 </h2>
 
 <div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
+margin-top:8px;
+font-size:15px;
+color:#64748b;
+">
+
+${t(
+"L'intelligenza artificiale sta monitorando le performance della tua attività.",
+"Artificial intelligence is monitoring your property's performance."
+)}
+
+</div>
+
+</div>
+
+<div style="
+padding:18px 22px;
+border-radius:18px;
+background:${verdictColor}15;
+border:1px solid ${verdictColor}40;
+text-align:center;
+min-width:170px;
+">
+
+<div style="
+font-size:13px;
+font-weight:700;
+color:${verdictColor};
+text-transform:uppercase;
+letter-spacing:.08em;
+">
+
+AI SCORE
+
+</div>
+
+<div style="
+font-size:42px;
+font-weight:900;
+color:${verdictColor};
+line-height:1.1;
+">
+
+${aiScore}
+
+</div>
+
+<div style="
+font-size:14px;
+font-weight:700;
+color:${verdictColor};
+">
+
+${grade}
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================
+EXECUTIVE VERDICT
+===================================== -->
+
+<div style="
+padding:22px;
+border-radius:18px;
+background:linear-gradient(135deg,#f8fafc,#ffffff);
+border:1px solid #e2e8f0;
 margin-bottom:24px;
 ">
 
-<div>
+<div style="
+font-size:13px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:.08em;
+color:#64748b;
+margin-bottom:8px;
+">
 
-<div style="color:#64748b;font-size:13px;">
-${t("Ricavi","Revenue")}
+${t(
+"Verdetto AI",
+"AI Verdict"
+)}
+
 </div>
 
 <div style="
-font-size:30px;
-font-weight:800;
+font-size:26px;
+font-weight:900;
+color:${verdictColor};
+margin-bottom:10px;
+">
+
+${verdict}
+
+</div>
+
+<div style="
+font-size:15px;
+line-height:1.7;
+color:#475569;
+">
+
+${recommendation}
+
+</div>
+
+</div>
+
+<!-- =====================================
+KPI GRID
+===================================== -->
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:18px;
+margin-bottom:28px;
+">
+<!-- =====================================
+KPI CARD
+===================================== -->
+
+<div style="
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:20px;
+">
+
+<div style="
+font-size:13px;
+color:#64748b;
+font-weight:700;
+margin-bottom:8px;
+">
+
+💰 ${t(
+"Ricavi Totali",
+"Total Revenue"
+)}
+
+</div>
+
+<div style="
+font-size:34px;
+font-weight:900;
 color:#10b981;
 ">
 
-${formatCurrency(data.revenue)}
+${formatCurrency(revenue)}
 
-</div>
-
-</div>
-
-<div>
-
-<div style="color:#64748b;font-size:13px;">
-Occupancy
 </div>
 
 <div style="
-font-size:30px;
-font-weight:800;
+margin-top:8px;
+font-size:13px;
+color:#64748b;
 ">
 
-${data.occupancy}%
-
-</div>
-
-</div>
-
-<div>
-
-<div style="color:#64748b;font-size:13px;">
-RevPAR
-</div>
-
-<div style="
-font-size:30px;
-font-weight:800;
-">
-
-${formatCurrency(data.revpar)}
-
-</div>
+${t(
+"Ricavi registrati",
+"Recorded revenue"
+)}
 
 </div>
 
@@ -6686,13 +7103,576 @@ ${formatCurrency(data.revpar)}
 
 <div style="
 background:#f8fafc;
-padding:18px;
-border-radius:14px;
-line-height:1.6;
-font-size:15px;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:20px;
 ">
 
-${message}
+<div style="
+font-size:13px;
+color:#64748b;
+font-weight:700;
+margin-bottom:8px;
+">
+
+🏠 ${t(
+"Occupazione",
+"Occupancy"
+)}
+
+</div>
+
+<div style="
+font-size:34px;
+font-weight:900;
+color:#0f172a;
+">
+
+${occupancy}%
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+color:#64748b;
+">
+
+${t(
+"Tasso di occupazione",
+"Occupancy Rate"
+)}
+
+</div>
+
+</div>
+
+<div style="
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:20px;
+">
+
+<div style="
+font-size:13px;
+color:#64748b;
+font-weight:700;
+margin-bottom:8px;
+">
+
+📈 ADR
+
+</div>
+
+<div style="
+font-size:34px;
+font-weight:900;
+color:#2563eb;
+">
+
+${formatCurrency(adr)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+color:#64748b;
+">
+
+${t(
+"Tariffa media",
+"Average Daily Rate"
+)}
+
+</div>
+
+</div>
+
+<div style="
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:20px;
+">
+
+<div style="
+font-size:13px;
+color:#64748b;
+font-weight:700;
+margin-bottom:8px;
+">
+
+📊 RevPAR
+
+</div>
+
+<div style="
+font-size:34px;
+font-weight:900;
+color:#7c3aed;
+">
+
+${formatCurrency(revpar)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:13px;
+color:#64748b;
+">
+
+${t(
+"Ricavo per camera disponibile",
+"Revenue per Available Room"
+)}
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================
+STRENGTHS & WARNINGS
+===================================== -->
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:22px;
+margin-top:10px;
+">
+<!-- =====================================
+STRENGTHS
+===================================== -->
+
+<div style="
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:24px;
+">
+
+<div style="
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:18px;
+">
+
+<div style="
+width:42px;
+height:42px;
+border-radius:12px;
+background:#dcfce7;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+">
+
+✅
+
+</div>
+
+<div>
+
+<div style="
+font-size:12px;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
+color:#64748b;
+">
+
+${t(
+"Punti di forza",
+"Strengths"
+)}
+
+</div>
+
+<div style="
+font-size:22px;
+font-weight:800;
+color:#0f172a;
+">
+
+${t(
+"Performance Positive",
+"Positive Performance"
+)}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+display:flex;
+flex-direction:column;
+gap:14px;
+">
+
+${
+strengths.length
+?
+strengths.map(item=>`
+
+<div style="
+display:flex;
+align-items:flex-start;
+gap:12px;
+">
+
+<div style="
+width:10px;
+height:10px;
+margin-top:8px;
+border-radius:50%;
+background:#10b981;
+flex:none;
+">
+
+</div>
+
+<div style="
+font-size:15px;
+line-height:1.7;
+color:#334155;
+">
+
+${item}
+
+</div>
+
+</div>
+
+`).join("")
+:
+
+`<div style="
+font-size:15px;
+color:#64748b;
+">
+
+${t(
+"Nessun punto di forza rilevato al momento.",
+"No strengths detected yet."
+)}
+
+</div>`
+
+}
+
+</div>
+
+</div>
+
+<!-- =====================================
+WARNINGS
+===================================== -->
+
+<div style="
+background:#fff7ed;
+border:1px solid #fed7aa;
+border-radius:18px;
+padding:24px;
+">
+
+<div style="
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:18px;
+">
+
+<div style="
+width:42px;
+height:42px;
+border-radius:12px;
+background:#ffedd5;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+">
+
+⚠️
+
+</div>
+
+<div>
+
+<div style="
+font-size:12px;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
+color:#9a3412;
+">
+
+${t(
+"Da monitorare",
+"Needs Attention"
+)}
+
+</div>
+
+<div style="
+font-size:22px;
+font-weight:800;
+color:#7c2d12;
+">
+
+${t(
+"Opportunità di crescita",
+"Growth Opportunities"
+)}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+display:flex;
+flex-direction:column;
+gap:14px;
+">
+
+${
+warnings.length
+?
+warnings.map(item=>`
+
+<div style="
+display:flex;
+align-items:flex-start;
+gap:12px;
+">
+
+<div style="
+width:10px;
+height:10px;
+margin-top:8px;
+border-radius:50%;
+background:#f97316;
+flex:none;
+">
+
+</div>
+
+<div style="
+font-size:15px;
+line-height:1.7;
+color:#7c2d12;
+">
+
+${item}
+
+</div>
+
+</div>
+
+`).join("")
+:
+
+`<div style="
+font-size:15px;
+color:#7c2d12;
+">
+
+${t(
+"Nessuna criticità rilevata.",
+"No critical issues detected."
+)}
+
+</div>`
+
+}
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================
+AI RECOMMENDATION
+===================================== -->
+
+<div style="
+margin-top:28px;
+padding:26px;
+border-radius:20px;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+">
+<div style="
+font-size:13px;
+font-weight:700;
+letter-spacing:.08em;
+text-transform:uppercase;
+color:#cbd5e1;
+margin-bottom:10px;
+">
+
+🤖 ${t(
+"Raccomandazione AI",
+"AI Recommendation"
+)}
+
+</div>
+
+<div style="
+font-size:26px;
+font-weight:800;
+line-height:1.4;
+margin-bottom:18px;
+">
+
+${recommendation}
+
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-top:10px;
+">
+
+<div style="
+background:rgba(255,255,255,.08);
+padding:18px;
+border-radius:14px;
+">
+
+<div style="
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.08em;
+color:#cbd5e1;
+margin-bottom:8px;
+">
+
+${t(
+"Proprietà",
+"Properties"
+)}
+
+</div>
+
+<div style="
+font-size:28px;
+font-weight:900;
+">
+
+${properties}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.08);
+padding:18px;
+border-radius:14px;
+">
+
+<div style="
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.08em;
+color:#cbd5e1;
+margin-bottom:8px;
+">
+
+${t(
+"Prenotazioni",
+"Bookings"
+)}
+
+</div>
+
+<div style="
+font-size:28px;
+font-weight:900;
+">
+
+${bookings}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.08);
+padding:18px;
+border-radius:14px;
+">
+
+<div style="
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:.08em;
+color:#cbd5e1;
+margin-bottom:8px;
+">
+
+${t(
+"Livello AI",
+"AI Rating"
+)}
+
+</div>
+
+<div style="
+font-size:28px;
+font-weight:900;
+color:#22c55e;
+">
+
+${grade}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:24px;
+padding-top:20px;
+border-top:1px solid rgba(255,255,255,.15);
+font-size:14px;
+line-height:1.8;
+color:#e2e8f0;
+">
+
+<strong>
+
+${t(
+"Executive Insight",
+"Executive Insight"
+)}
+
+</strong>
+
+<br><br>
+
+${t(
+"Questo riepilogo viene generato automaticamente analizzando occupazione, ricavi, RevPAR, ADR e volume delle prenotazioni. Le raccomandazioni AI vengono aggiornate ogni volta che la dashboard viene ricalcolata.",
+"This summary is automatically generated by analysing occupancy, revenue, RevPAR, ADR and booking volume. AI recommendations are refreshed every time the dashboard is recalculated."
+)}
+
+</div>
 
 </div>
 
