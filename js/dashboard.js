@@ -4766,78 +4766,76 @@ window.closeBookingsModal = function(){
 // 📅 OPEN BOOKINGS
 // =====================================
 
-window.openBookings =
-function(propertyId){
+window.openBookings = function(propertyId){
 
   console.log(
     "🔥 BOOKINGS CLICK",
     propertyId
   );
 
-  window.currentPropertyId =
-    propertyId;
-setTimeout(()=>{
+  // Salva la proprietà corrente
+  if(propertyId){
+    window.currentPropertyId = propertyId;
+  }
 
-document
-.getElementById(
-"booking-checkin"
-)
-?.addEventListener(
-"change",
-updateBookingTotal
-);
+  // Evidenzia la tab Prenotazioni
+  document
+    .querySelectorAll(".pms-tab")
+    .forEach(tab=>tab.classList.remove("active"));
 
-document
-.getElementById(
-"booking-checkout"
-)
-?.addEventListener(
-"change",
-updateBookingTotal
-);
+  document
+    .getElementById("pms-tab-bookings")
+    ?.classList.add("active");
 
-},200);
-
+  // Nasconde il form inizialmente
   const bookingForm =
-document.getElementById(
-"booking-form-container"
-);
+    document.getElementById(
+      "booking-form-container"
+    );
 
-if(bookingForm){
+  if(bookingForm){
+    bookingForm.style.display = "none";
+  }
 
-  bookingForm.style.display =
-  "none";
-
-}
-  
-  loadBookings(propertyId);
-
+  // Apre il modal
   const modal =
     document.getElementById(
       "bookings-modal"
     );
 
-  console.log(
-    "🔥 MODAL FOUND:",
-    modal
-  );
-
   if(modal){
-
-    modal.style.display =
-      "flex";
-
-    console.log(
-      "🔥 MODAL OPENED"
-    );
-
+    modal.style.display = "flex";
   }else{
-
-    console.log(
-      "❌ MODAL NOT FOUND"
-    );
-
+    console.error("❌ bookings-modal non trovato");
+    return;
   }
+
+  // Se esiste una proprietà caricata,
+  // carica le prenotazioni
+  if(window.currentPropertyId){
+    loadBookings(window.currentPropertyId);
+  }
+
+  // Ricollega gli eventi del form
+  setTimeout(()=>{
+
+    document
+      .getElementById("booking-checkin")
+      ?.addEventListener(
+        "change",
+        updateBookingTotal
+      );
+
+    document
+      .getElementById("booking-checkout")
+      ?.addEventListener(
+        "change",
+        updateBookingTotal
+      );
+
+  },100);
+
+  console.log("✅ BOOKINGS READY");
 
 };
 
