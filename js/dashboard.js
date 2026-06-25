@@ -4696,25 +4696,6 @@ ${occupancyStatus}
 
   <span>
 
-    ${t(
-      "📊 Stato",
-      "📊 Status"
-    )}
-
-  </span>
-
-  <strong>
-
-    ${occupancyStatus}
-
-  </strong>
-
-</div>
-
-<div class="metric">
-
-  <span>
-
     📊 RevPAR
 
   </span>
