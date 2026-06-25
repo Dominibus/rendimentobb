@@ -649,12 +649,12 @@ window.isDemoData =
   window.isDemoDashboard || false;
 
 const isFreeUser =
-  (
-    !window.currentUser?.uid ||
-    plan === "free"
-  )
-  &&
-  !window.isDemoDashboard;
+
+window.isDemoDashboard ||
+
+!window.currentUser?.uid ||
+
+plan === "free";
 
 if(isFreeUser){
 
