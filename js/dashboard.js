@@ -666,78 +666,10 @@ if(isFreeUser){
 
   analyses.length = 0;
 
-  analyses.push({
-
-    roi:11.8,
-
-    price:165000,
-
-    equity:35000,
-
-    gross:38900,
-
-    expenses:9700,
-
-    net:29200,
-
-    occupancy:78,
-
-    risk:42,
-
-    city:"roma",
-
-    createdAt:new Date()
-
-  });
-
-  analyses.push({
-
-    roi:9.6,
-
-    price:140000,
-
-    equity:30000,
-
-    gross:31200,
-
-    expenses:8600,
-
-    net:22600,
-
-    occupancy:73,
-
-    risk:55,
-
-    city:"napoli",
-
-    createdAt:new Date()
-
-  });
-
-  analyses.push({
-
-    roi:13.2,
-
-    price:210000,
-
-    equity:50000,
-
-    gross:45800,
-
-    expenses:11200,
-
-    net:34600,
-
-    occupancy:81,
-
-    risk:38,
-
-    city:"milano",
-
-    createdAt:new Date()
-
-  });
-
+analyses.push(
+...window.demoAnalyses
+);
+  
 }
 
 // 🔥 FIX → rende disponibili al report
