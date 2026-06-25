@@ -4517,16 +4517,68 @@ else if(
 
       <div class="property-card">
 
-        <h3>
-          ${data.name || "-"}
-        </h3>
+        <div style="
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+margin-bottom:18px;
+">
 
-        <div class="metric">
-          <span>${t("Città","City")}</span>
-          <strong>
-            ${data.city || "-"}
-          </strong>
-        </div>
+<div>
+
+<h3 style="
+margin:0;
+font-size:22px;
+font-weight:800;
+">
+
+🏠 ${data.name || "-"}
+
+</h3>
+
+<div style="
+margin-top:6px;
+font-size:14px;
+color:#64748b;
+">
+
+${data.city || "-"}
+
+</div>
+
+</div>
+
+<div style="
+padding:8px 14px;
+border-radius:999px;
+background:
+${
+occupancy>=80
+? "#dcfce7"
+: occupancy>=40
+? "#fef3c7"
+: "#fee2e2"
+};
+
+font-weight:700;
+font-size:13px;
+
+color:
+${
+occupancy>=80
+? "#166534"
+: occupancy>=40
+? "#92400e"
+: "#991b1b"
+};
+
+">
+
+${occupancyStatus}
+
+</div>
+
+</div>
 
         <div class="metric">
           <span>${t("Indirizzo","Address")}</span>
