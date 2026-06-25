@@ -2044,57 +2044,73 @@ style="display:none;">
 
 <div class="analysis-card pro-pms-only">
 
-<div class="pms-nav">
+  <div class="pms-nav">
 
-<button class="pms-tab active">
+    <!-- DASHBOARD -->
+    <button
+      class="pms-tab active"
+      id="pms-tab-dashboard"
+      onclick="showPMSTab('dashboard')">
 
-<span
-data-it="📊 Dashboard"
-data-en="📊 Dashboard">
+      <span
+      data-it="📊 Dashboard"
+      data-en="📊 Dashboard">
 
-📊 Dashboard
+      📊 Dashboard
 
-</span>
+      </span>
 
-</button>
+    </button>
 
-<button class="pms-tab">
+    <!-- PROPERTIES -->
+    <button
+      class="pms-tab"
+      id="pms-tab-properties"
+      onclick="showPMSTab('properties')">
 
-<span
-data-it="🏠 Proprietà"
-data-en="🏠 Properties">
+      <span
+      data-it="🏠 Proprietà"
+      data-en="🏠 Properties">
 
-🏠 Proprietà
+      🏠 Proprietà
 
-</span>
+      </span>
 
-</button>
+    </button>
 
-<button class="pms-tab">
+    <!-- BOOKINGS -->
+    <button
+      class="pms-tab"
+      id="pms-tab-bookings"
+      onclick="openBookings()">
 
-<span
-data-it="📅 Prenotazioni"
-data-en="📅 Bookings">
+      <span
+      data-it="📅 Prenotazioni"
+      data-en="📅 Bookings">
 
-📅 Prenotazioni
+      📅 Prenotazioni
 
-</span>
+      </span>
 
-</button>
+    </button>
 
-<button class="pms-tab">
+    <!-- ROI -->
+    <button
+      class="pms-tab"
+      id="pms-tab-roi"
+      onclick="showPMSTab('roi')">
 
-<span
-data-it="📈 ROI Reale"
-data-en="📈 Real ROI">
+      <span
+      data-it="📈 ROI Reale"
+      data-en="📈 Real ROI">
 
-📈 ROI Reale
+      📈 ROI Reale
 
-</span>
+      </span>
 
-</button>
+    </button>
 
-</div>
+  </div>
 
 </div>
 
