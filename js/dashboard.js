@@ -6561,3 +6561,143 @@ cardStatus === status
 });
 
 };
+
+// =====================================
+// 🧠 EXECUTIVE SUMMARY
+// =====================================
+
+function renderExecutiveSummary(data){
+
+const box =
+document.getElementById(
+"executive-summary"
+);
+
+if(!box) return;
+
+box.style.display = "block";
+
+let message = "";
+
+if(data.occupancy >= 80){
+
+message = t(
+"Occupazione eccellente. Mantieni le tariffe attuali e valuta un aumento nei weekend.",
+"Excellent occupancy. Keep current pricing and consider increasing weekend rates."
+);
+
+}
+else if(data.occupancy >= 60){
+
+message = t(
+"Buona occupazione. Puoi migliorare il RevPAR ottimizzando il prezzo medio.",
+"Good occupancy. You can improve RevPAR by optimizing your average nightly rate."
+);
+
+}
+else{
+
+message = t(
+"Occupazione bassa. Valuta promozioni e pricing dinamico.",
+"Low occupancy. Consider promotions and dynamic pricing."
+);
+
+}
+
+box.innerHTML = `
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:24px;
+">
+
+<h2 style="
+margin-bottom:20px;
+font-size:24px;
+font-weight:800;
+">
+
+🧠 Executive Summary
+
+</h2>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+margin-bottom:24px;
+">
+
+<div>
+
+<div style="color:#64748b;font-size:13px;">
+${t("Ricavi","Revenue")}
+</div>
+
+<div style="
+font-size:30px;
+font-weight:800;
+color:#10b981;
+">
+
+${formatCurrency(data.revenue)}
+
+</div>
+
+</div>
+
+<div>
+
+<div style="color:#64748b;font-size:13px;">
+Occupancy
+</div>
+
+<div style="
+font-size:30px;
+font-weight:800;
+">
+
+${data.occupancy}%
+
+</div>
+
+</div>
+
+<div>
+
+<div style="color:#64748b;font-size:13px;">
+RevPAR
+</div>
+
+<div style="
+font-size:30px;
+font-weight:800;
+">
+
+${formatCurrency(data.revpar)}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+background:#f8fafc;
+padding:18px;
+border-radius:14px;
+line-height:1.6;
+font-size:15px;
+">
+
+${message}
+
+</div>
+
+</div>
+
+`;
+
+}
