@@ -1452,10 +1452,83 @@ grid-template-columns:1fr;
 
 }
 
+/* Modal fullscreen */
+
+#bookings-modal{
+
+align-items:flex-start;
+
+}
+
 #bookings-modal > div{
 
-width:95vw;
-padding:18px;
+width:100vw;
+height:100vh;
+
+max-width:none;
+max-height:none;
+
+border-radius:0;
+
+padding:22px;
+
+overflow-y:auto;
+
+}
+
+/* Layout verticale */
+
+#bookings-modal [style*="grid-template-columns:380px 1fr"]{
+
+display:flex !important;
+
+flex-direction:column;
+
+gap:24px;
+
+}
+
+/* Filtri */
+
+.booking-filters{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:12px;
+
+}
+
+.booking-filters button{
+
+width:100%;
+
+padding:14px;
+
+}
+
+/* Legenda calendario */
+
+.calendar-legend{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:10px;
+
+}
+
+/* Calendario */
+
+#booking-calendar{
+
+height:auto;
+
+min-height:auto;
+
+padding:12px;
 
 }
 
