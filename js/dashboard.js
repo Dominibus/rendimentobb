@@ -4381,9 +4381,9 @@ async function loadProperties(){
 
   if(!container) return;
 
-  if(window.isDemoDashboard){
+  if(isDemo()){
 
-container.innerHTML = `
+    container.innerHTML = `
 
 <div class="property-card">
 
@@ -5379,7 +5379,7 @@ async function loadBookings(propertyId){
 
   if(!list) return;
 
-  if(window.isDemoDashboard){
+  if(isDemo()){
 
   list.innerHTML = `
 
