@@ -3973,15 +3973,9 @@ cursor:pointer;
 }
 function lockInvestorPreview(){
 
-  const elementsToBlur = [
+const elementsToBlur = [
 
-  "roi-target-calculator",
-
-  "revenue-simulator",
-
-  "roi-optimizer",
-
-  "roi-market-comparison"
+  "roi-target-calculator"
 
 ];
 
