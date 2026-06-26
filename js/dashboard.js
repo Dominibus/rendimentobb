@@ -170,15 +170,20 @@ function safeCity(city){
 
 function lockFreeUser(){
 
-  console.log("PLAN:", window.currentPlan);
+  const dashboardAccess =
+getDashboardAccess();
 
-  if(!window.currentPlan){
-  console.warn("Plan non pronto → skip lock");
+console.log(
+  "PLAN:",
+  dashboardAccess.plan
+);
+
+if(!dashboardAccess.plan){
+  console.warn(
+    "Plan non pronto → skip lock"
+  );
   return;
 }
-
-const dashboardAccess =
-getDashboardAccess();
 
 const pro =
 dashboardAccess.isPro;
