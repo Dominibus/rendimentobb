@@ -48,15 +48,12 @@ const auth = getAuth(app);
 
 function getDashboardAccess(){
 
-  const dashboardAccess =
-getDashboardAccess();
-
-const plan =
-dashboardAccess.plan
-.toLowerCase();
-
   const access =
     window.getUserAccess?.() || {};
+
+  const plan =
+    String(window.currentPlan || "")
+    .toLowerCase();
 
   return{
 
@@ -67,11 +64,11 @@ dashboardAccess.plan
       !window.currentUser,
 
     isFree:
+      access.isFree ||
       plan === "free",
 
     isInvestor:
       access.isInvestor ||
-
       plan === "investor",
 
     isPro:
@@ -79,6 +76,8 @@ dashboardAccess.plan
       window.isDemoDashboard ||
 
       access.isPro ||
+
+      access.isAdmin ||
 
       plan === "pro" ||
 
@@ -89,23 +88,29 @@ dashboardAccess.plan
 
     canViewProfit:
       window.isDemoDashboard ||
-      access.isPro,
+      access.isPro ||
+      access.isAdmin,
 
     canUsePMS:
       window.isDemoDashboard ||
-      access.isPro,
+      access.isInvestor ||
+      access.isPro ||
+      access.isAdmin,
 
     canExportPDF:
       window.isDemoDashboard ||
-      access.isPro,
+      access.isPro ||
+      access.isAdmin,
 
     canDelete:
       window.isDemoDashboard ||
-      access.isPro,
+      access.isPro ||
+      access.isAdmin,
 
     canUseAI:
       window.isDemoDashboard ||
-      access.isPro
+      access.isPro ||
+      access.isAdmin
 
   };
 
@@ -116,7 +121,6 @@ function isPro(){
   return getDashboardAccess().isPro;
 
 }
-
 window.proOverlayShown = false;
 function closeAllOverlays(){
   document.getElementById("guest-popup")?.remove();
