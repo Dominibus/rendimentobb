@@ -3919,7 +3919,7 @@ ${message}
 <div style="margin-top:16px">
 
 ${
-isPro()
+canViewDashboard()
 ? `
 <div style="
 padding:12px;
