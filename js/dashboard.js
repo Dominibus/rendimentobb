@@ -1863,21 +1863,21 @@ if(kpiRoi){
 
 if(kpiCash){
   kpiCash.innerText =
-    pro
+    canViewDashboardData
       ? formatCurrency(monthlyProfit)
       : "🔒";
 }
 
 if(kpiInvest){
   kpiInvest.innerText =
-    pro
+    canViewDashboardData
       ? formatCurrency(totalCapital)
       : "🔒";
 }
-
+  
 if(kpiBreak){
   kpiBreak.innerText =
-    pro
+    canViewDashboardData
       ? breakEven + "y"
       : "🔒";
 }
@@ -1887,10 +1887,10 @@ if(roiEl) roiEl.textContent = avgROIRounded + "%";
 
 const cashEl =
 document.getElementById("portfolio-cashflow");
-
+  
 if(cashEl){
   cashEl.textContent =
-    pro
+    canViewDashboardData
       ? formatCurrency(avgCashflow)
       : "🔒";
 }
@@ -1900,7 +1900,7 @@ document.getElementById("portfolio-capital");
 
 if(capEl){
   capEl.textContent =
-    pro
+    canViewDashboardData
       ? formatCurrency(totalCapital)
       : "🔒";
 }
