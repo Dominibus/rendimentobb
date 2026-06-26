@@ -7657,3 +7657,72 @@ ${t(
 `;
 
 }
+
+// =====================================
+// 🏨 PMS TABS
+// =====================================
+
+window.showPMSTab = function(tab){
+
+    const dashboard =
+        document.getElementById("pms-dashboard-section");
+
+    const properties =
+        document.getElementById("pms-properties-section");
+
+    const roi =
+        document.getElementById("pms-roi-section");
+
+    // Nasconde tutto
+
+    dashboard.style.display = "none";
+    properties.style.display = "none";
+    roi.style.display = "none";
+
+    // Rimuove active
+
+    document
+    .querySelectorAll(".pms-tab")
+    .forEach(btn=>btn.classList.remove("active"));
+
+    switch(tab){
+
+        case "dashboard":
+
+            dashboard.style.display = "block";
+
+            document
+            .getElementById("pms-tab-dashboard")
+            ?.classList.add("active");
+
+        break;
+
+        case "properties":
+
+            properties.style.display = "block";
+
+            document
+            .getElementById("pms-tab-properties")
+            ?.classList.add("active");
+
+        break;
+
+        case "roi":
+
+            roi.style.display = "block";
+
+            document
+            .getElementById("pms-tab-roi")
+            ?.classList.add("active");
+
+        break;
+
+    }
+
+};
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    showPMSTab("dashboard");
+
+});
