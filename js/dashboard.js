@@ -4399,7 +4399,6 @@ window.saveProperty = async function(){
   );
 
 }
-    );
 
     closePropertyModal();
 
