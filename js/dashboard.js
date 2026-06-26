@@ -48,9 +48,12 @@ const auth = getAuth(app);
 
 function getDashboardAccess(){
 
-  const plan =
-    String(window.currentPlan || "")
-    .toLowerCase();
+  const dashboardAccess =
+getDashboardAccess();
+
+const plan =
+dashboardAccess.plan
+.toLowerCase();
 
   const access =
     window.getUserAccess?.() || {};
