@@ -4840,6 +4840,52 @@ window.openBookings = function(propertyId){
 };
 
 // =====================================
+// 📅 OPEN CURRENT BOOKINGS
+// =====================================
+
+window.openCurrentBookings = async function(){
+
+  if(window.currentPropertyId){
+
+    openBookings(window.currentPropertyId);
+    return;
+
+  }
+
+  if(!window.currentUser){
+
+    console.log("❌ Nessun utente");
+    return;
+
+  }
+
+  const snap = await getDocs(
+    query(
+      collection(db,"properties"),
+      where(
+        "uid",
+        "==",
+        window.currentUser.uid
+      )
+    )
+  );
+
+  if(snap.empty){
+
+    alert("Nessuna proprietà trovata.");
+    return;
+
+  }
+
+  const propertyId = snap.docs[0].id;
+
+  window.currentPropertyId = propertyId;
+
+  openBookings(propertyId);
+
+};
+
+// =====================================
 // 📅 AUTO BOOKING CALCULATOR
 // =====================================
 
