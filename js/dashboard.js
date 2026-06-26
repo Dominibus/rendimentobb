@@ -628,6 +628,19 @@ async function loadDashboard(){
 
   renderHeader();
 
+// =====================================
+// 🎯 DEMO DASHBOARD MODE
+// =====================================
+
+function useDemoDashboard(){
+
+  return (
+    isDemo() ||
+    isFree()
+  );
+
+}
+
   // =====================================
   // 🔥 FIRESTORE / DEMO
   // =====================================
@@ -796,17 +809,10 @@ const analyses = querySnapshot.docs.map(doc => {
 
 // ================= ACCESS =================
 
-const isFreeUser =
-  isDemo() ||
-  isFree();
+window.isDemoData =
+  useDemoDashboard();
 
-window.isDemoData = isFreeUser;
-
-if(isFreeUser){
-
-  console.log(
-    "🆓 FREE / GUEST → FAKE SMART DATA"
-  );
+if(useDemoDashboard()){
 
   analyses.length = 0;
 
@@ -4438,7 +4444,7 @@ if(canUseFirestorePMS()){
 await loadProperties();
 
 if(
-  !isDemo()
+  !useDemoDashboard()
 ){
   await loadPMSStats();
 }
