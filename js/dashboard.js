@@ -4090,8 +4090,9 @@ document.addEventListener("rb_plan_ready", ()=>{
     window.getUserAccess?.() || {};
 
   const pmsIsPro =
-    access.isPro ||
-    access.isAdmin;
+  access.isPro ||
+  access.isInvestor ||
+  access.isAdmin;
 
   document
     .querySelectorAll(".pro-pms-only")
