@@ -1295,7 +1295,7 @@ ${
       }
 
     ${
-window.isDemoData
+window.isDemoData || !canDelete()
 ? ""
 : `
 <div style="margin-top:12px;text-align:right">
