@@ -42,20 +42,76 @@ window.t = function(it,en){
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-function isPro(){
+// =====================================
+// 🔐 DASHBOARD ACCESS MANAGER
+// =====================================
 
-  if(window.isDemoDashboard){
-    return true;
-  }
+function getDashboardAccess(){
 
   const plan =
     String(window.currentPlan || "")
     .toLowerCase();
 
-  return (
-    plan === "pro" ||
-    plan === "pro_yearly"
-  );
+  const access =
+    window.getUserAccess?.() || {};
+
+  return{
+
+    isDemo:
+      !!window.isDemoDashboard,
+
+    isGuest:
+      !window.currentUser,
+
+    isFree:
+      plan === "free",
+
+    isInvestor:
+      access.isInvestor ||
+
+      plan === "investor",
+
+    isPro:
+
+      window.isDemoDashboard ||
+
+      access.isPro ||
+
+      plan === "pro" ||
+
+      plan === "pro_yearly",
+
+    isAdmin:
+      access.isAdmin || false,
+
+    canViewProfit:
+      window.isDemoDashboard ||
+      access.isPro,
+
+    canUsePMS:
+      window.isDemoDashboard ||
+      access.isPro,
+
+    canExportPDF:
+      window.isDemoDashboard ||
+      access.isPro,
+
+    canDelete:
+      window.isDemoDashboard ||
+      access.isPro,
+
+    canUseAI:
+      window.isDemoDashboard ||
+      access.isPro
+
+  };
+
+}
+
+function isPro(){
+
+  return getDashboardAccess().isPro;
+
 }
 
 window.proOverlayShown = false;
@@ -121,10 +177,14 @@ function lockFreeUser(){
   return;
 }
 
-  const plan = String(window.currentPlan || "").toLowerCase();
-  const pro = isPro();
-  const access = window.getUserAccess?.() || {};
-  const isInvestor = access.isInvestor;
+const dashboardAccess =
+getDashboardAccess();
+
+const pro =
+dashboardAccess.isPro;
+
+const isInvestor =
+dashboardAccess.isInvestor;
 
   // ================= PRO =================
   if(pro){
