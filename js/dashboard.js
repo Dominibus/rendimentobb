@@ -220,19 +220,27 @@ function triggerPlanPopup(plan){
     const currentPlan = String(plan || "").toLowerCase();
 
     // 🔥 FREE + INVESTOR → STESSO OVERLAY (FORTE)
-    if(currentPlan === "free" || currentPlan === "investor"){
+    if(currentPlan === "free"){
 
-      if(typeof showInvestorOverlay === "function"){
+    if(typeof showInvestorOverlay === "function"){
         showInvestorOverlay();
-      }else{
-        console.warn("⚠️ showInvestorOverlay non definita");
-      }
-
     }
 
-    // 🟢 PRO / ADMIN → niente popup
+}
+
+// 🟢 INVESTOR
+
+else if(currentPlan === "investor"){
+
+    console.log("INVESTOR → no upgrade overlay");
+
+}
+
+// 🟢 PRO / ADMIN
     else{
+
       console.log("PRO/ADMIN → no popup");
+
     }
 
   },1000);
