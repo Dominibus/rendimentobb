@@ -4675,22 +4675,85 @@ ${totalNights}
 </div>
 
 <div style="
-font-size:13px;
-opacity:.9;
+margin-top:22px;
+padding:24px;
+border-radius:22px;
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+position:relative;
+overflow:hidden;
+box-shadow:0 18px 45px rgba(16,185,129,.28);
 ">
 
-${t("Ricavi Totali","Total Revenue")}
+<div style="
+position:absolute;
+right:-20px;
+top:-20px;
+font-size:110px;
+opacity:.08;
+">
+
+💰
 
 </div>
 
 <div style="
-margin-top:6px;
-font-size:34px;
-font-weight:900;
-letter-spacing:-1px;
+font-size:13px;
+font-weight:600;
+opacity:.9;
+text-transform:uppercase;
+letter-spacing:.8px;
 ">
 
-€${formatCurrency(realRevenue)}
+${t(
+"Ricavi Totali",
+"Total Revenue"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:38px;
+font-weight:900;
+letter-spacing:-1px;
+line-height:1;
+">
+
+${formatCurrency(realRevenue)}
+
+</div>
+
+<div style="
+margin-top:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:13px;
+opacity:.92;
+">
+
+<div>
+
+${bookingsCount}
+${t(
+"prenotazioni",
+"bookings"
+)}
+
+</div>
+
+<div>
+
+${occupancy}% Occupancy
+
+</div>
+
+<div>
+
+ADR €${data.priceNight || 0}
+
+</div>
 
 </div>
 
