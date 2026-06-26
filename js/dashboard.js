@@ -2291,8 +2291,8 @@ triggerPlanPopup(plan);
   return;
 }
 
-      // ================= INVESTOR =================
-      // ================= INVESTOR =================
+      
+// ================= INVESTOR =================
 if(isInvestor){
 
   console.log("👀 INVESTOR → FULL ACCESS");
