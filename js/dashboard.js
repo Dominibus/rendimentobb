@@ -4570,153 +4570,254 @@ ${t(
 
 </div>
 
-        <div class="metric">
-          <span>${t("Indirizzo","Address")}</span>
-          <strong>
-            ${data.address || "-"}
-          </strong>
-        </div>
+        <div style="
+margin-top:18px;
+padding:18px;
+background:linear-gradient(180deg,#f8fafc,#ffffff);
+border:1px solid #e2e8f0;
+border-radius:18px;
+">
 
-        <div class="metric">
-          <span>${t(
-  "Prezzo notte",
-  "Nightly rate"
-)}</span>
-          <strong>
-            €${data.priceNight || 0}
-          </strong>
-        </div>
+<div style="
+display:flex;
+align-items:center;
+gap:8px;
+font-size:14px;
+font-weight:600;
+color:#64748b;
+margin-bottom:18px;
+">
 
-        <div class="metric">
+📍
 
-  <span>
+<span>
 
-    ${t(
-      "📈 ADR",
-      "📈 ADR"
-    )}
+${data.address || "-"}
 
-  </span>
-
-  <strong>
-
-    €${data.priceNight || 0}
-
-  </strong>
+</span>
 
 </div>
 
-<div class="metric">
+<div style="
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+">
 
-  <span>
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+">
 
-    ${t(
-      "📅 Prenotazioni",
-      "📅 Bookings"
-    )}
+<div style="
+font-size:12px;
+color:#94a3b8;
+margin-bottom:6px;
+">
 
-  </span>
-
-  <strong>
-
-    ${bookingsCount}
-
-  </strong>
-
-</div>
-
-<div class="metric">
-
-  <span>
-
-    ${t(
-      "👥 Ospiti",
-      "👥 Guests"
-    )}
-
-  </span>
-
-  <strong>
-
-    ${totalGuests}
-
-  </strong>
+ADR
 
 </div>
 
-<div class="metric">
+<div style="
+font-size:22px;
+font-weight:800;
+color:#0f172a;
+">
 
-  <span>
-
-    ${t(
-      "🌙 Notti",
-      "🌙 Nights"
-    )}
-
-  </span>
-
-  <strong>
-
-    ${totalNights}
-
-  </strong>
+€${data.priceNight || 0}
 
 </div>
 
-<div class="metric">
+</div>
 
-  <span>
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+">
 
-    ${t(
-      "🏠 Occupazione",
-      "🏠 Occupancy"
-    )}
+<div style="
+font-size:12px;
+color:#94a3b8;
+margin-bottom:6px;
+">
 
-  </span>
-
-  <strong>
-
-    ${occupancy}%
-
-  </strong>
+Occupancy
 
 </div>
 
-<div class="metric">
+<div style="
+font-size:22px;
+font-weight:800;
+color:#10b981;
+">
 
-  <span>
-
-    📊 RevPAR
-
-  </span>
-
-  <strong>
-
-    ${formatCurrency(revpar)}
-
-  </strong>
+${occupancy}%
 
 </div>
 
-<div class="metric">
+</div>
 
-  <span>
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+">
 
-    ${t(
-  "💰 Ricavi totali",
-  "💰 Total Revenue"
-)}
+<div style="
+font-size:12px;
+color:#94a3b8;
+margin-bottom:6px;
+">
 
-  </span>
-
-  <strong>
-
-    €${formatCurrency(
-  realRevenue
-)}
-  </strong>
+RevPAR
 
 </div>
+
+<div style="
+font-size:22px;
+font-weight:800;
+color:#2563eb;
+">
+
+${formatCurrency(revpar)}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+">
+
+<div style="
+font-size:12px;
+color:#94a3b8;
+margin-bottom:6px;
+">
+
+${t("Prenotazioni","Bookings")}
+
+</div>
+
+<div style="
+font-size:22px;
+font-weight:800;
+color:#0f172a;
+">
+
+${bookingsCount}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+">
+
+<div style="
+font-size:12px;
+color:#94a3b8;
+margin-bottom:6px;
+">
+
+${t("Ospiti","Guests")}
+
+</div>
+
+<div style="
+font-size:22px;
+font-weight:800;
+color:#0f172a;
+">
+
+${totalGuests}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+text-align:center;
+">
+
+<div style="
+font-size:12px;
+color:#94a3b8;
+margin-bottom:6px;
+">
+
+${t("Notti","Nights")}
+
+</div>
+
+<div style="
+font-size:22px;
+font-weight:800;
+color:#0f172a;
+">
+
+${totalNights}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:18px;
+padding:18px;
+border-radius:16px;
+background:linear-gradient(135deg,#10b981,#059669);
+color:white;
+">
+
+<div style="
+font-size:13px;
+opacity:.9;
+">
+
+${t("Ricavi Totali","Total Revenue")}
+
+</div>
+
+<div style="
+margin-top:6px;
+font-size:34px;
+font-weight:900;
+letter-spacing:-1px;
+">
+
+€${formatCurrency(realRevenue)}
+
+</div>
+
+</div>
+
+</div>
+
         <div
 style="
 display:flex;
