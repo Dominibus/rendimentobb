@@ -57,6 +57,8 @@ function getDashboardAccess(){
 
   return{
 
+    plan,
+
     isDemo:
       !!window.isDemoDashboard,
 
