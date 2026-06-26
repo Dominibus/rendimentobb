@@ -4603,178 +4603,76 @@ ${data.address || "-"}
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-
 ADR
-
 </div>
 
 <div class="property-kpi-value">
-
 €${data.priceNight || 0}
-
 </div>
 
 </div>
 
-<div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-text-align:center;
-">
+<div class="property-kpi-card">
 
-<div style="
-font-size:12px;
-color:#94a3b8;
-margin-bottom:6px;
-">
-
+<div class="property-kpi-label">
 Occupancy
-
 </div>
 
-<div style="
-font-size:22px;
-font-weight:800;
-color:#10b981;
-">
-
+<div class="property-kpi-value">
 ${occupancy}%
-
 </div>
 
 </div>
 
-<div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-text-align:center;
-">
+<div class="property-kpi-card">
 
-<div style="
-font-size:12px;
-color:#94a3b8;
-margin-bottom:6px;
-">
-
+<div class="property-kpi-label">
 RevPAR
-
 </div>
 
-<div style="
-font-size:22px;
-font-weight:800;
-color:#2563eb;
-">
-
+<div class="property-kpi-value">
 ${formatCurrency(revpar)}
-
 </div>
 
 </div>
 
-<div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-text-align:center;
-">
+<div class="property-kpi-card">
 
-<div style="
-font-size:12px;
-color:#94a3b8;
-margin-bottom:6px;
-">
-
+<div class="property-kpi-label">
 ${t("Prenotazioni","Bookings")}
-
 </div>
 
-<div style="
-font-size:22px;
-font-weight:800;
-color:#0f172a;
-">
-
+<div class="property-kpi-value">
 ${bookingsCount}
-
 </div>
 
 </div>
 
-<div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-text-align:center;
-">
+<div class="property-kpi-card">
 
-<div style="
-font-size:12px;
-color:#94a3b8;
-margin-bottom:6px;
-">
-
+<div class="property-kpi-label">
 ${t("Ospiti","Guests")}
-
 </div>
 
-<div style="
-font-size:22px;
-font-weight:800;
-color:#0f172a;
-">
-
+<div class="property-kpi-value">
 ${totalGuests}
-
 </div>
 
 </div>
 
-<div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-text-align:center;
-">
+<div class="property-kpi-card">
 
-<div style="
-font-size:12px;
-color:#94a3b8;
-margin-bottom:6px;
-">
-
+<div class="property-kpi-label">
 ${t("Notti","Nights")}
-
 </div>
 
-<div style="
-font-size:22px;
-font-weight:800;
-color:#0f172a;
-">
-
+<div class="property-kpi-value">
 ${totalNights}
-
 </div>
 
 </div>
 
 </div>
-
-<div style="
-margin-top:18px;
-padding:18px;
-border-radius:16px;
-background:linear-gradient(135deg,#10b981,#059669);
-color:white;
-">
 
 <div style="
 font-size:13px;
