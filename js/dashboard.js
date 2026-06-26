@@ -4315,6 +4315,23 @@ document.addEventListener(
 );
 
 // =====================================
+// 🔒 FIRESTORE PMS ACCESS
+// =====================================
+
+function canUseFirestorePMS(){
+
+  const access =
+    window.getUserAccess?.() || {};
+
+  return (
+    access.isPro ||
+    access.isInvestor ||
+    access.isAdmin
+  );
+
+}
+
+// =====================================
 // 🏠 SAVE PROPERTY
 // =====================================
 
@@ -4356,22 +4373,32 @@ window.saveProperty = async function(){
       return;
     }
 
-    await addDoc(
-      collection(db,"properties"),
-      {
+    if(canUseFirestorePMS()){
 
-        uid:
-          window.currentUser.uid,
+  await addDoc(
+    collection(db,"properties"),
+    {
 
-        name,
-        city,
-        address,
-        priceNight,
+      uid: window.currentUser.uid,
 
-        createdAt:
-          serverTimestamp()
+      name,
+      city,
+      address,
+      priceNight,
 
-      }
+      createdAt:
+        serverTimestamp()
+
+    }
+  );
+
+}else{
+
+  console.log(
+    "🧪 FREE PMS PROPERTY"
+  );
+
+}
     );
 
     closePropertyModal();
