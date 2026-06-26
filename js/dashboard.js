@@ -605,16 +605,16 @@ async function loadDashboard(){
 
   };
 
-  if(
+if(
 
-    !window.isDemoDashboard &&
+    !isDemo() &&
 
     window.currentUser?.uid &&
 
     window.currentUser.uid !==
     "demo-user"
 
-  ){
+){
 
     const q = query(
 
@@ -766,16 +766,13 @@ const analyses = querySnapshot.docs.map(doc => {
 
 const plan = String(window.currentPlan || "").toLowerCase();
 
-window.isDemoData =
-  window.isDemoDashboard || false;
+// ================= ACCESS =================
+
+window.isDemoData = isDemo();
 
 const isFreeUser =
-
-window.isDemoDashboard ||
-
-!window.currentUser?.uid ||
-
-plan === "free";
+  isDemo() ||
+  isFree();
 
 if(isFreeUser){
 
