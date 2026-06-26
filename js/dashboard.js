@@ -4445,16 +4445,43 @@ else if(
   occupancy / 100
 );  
 
-    html += `
+html += `
 
-      <div class="property-card">
+<div class="property-card">
 
-        <div style="
+<div style="
 display:flex;
 justify-content:space-between;
 align-items:flex-start;
-margin-bottom:18px;
+gap:18px;
+margin-bottom:22px;
 ">
+
+<div style="flex:1;">
+
+<div style="
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:8px;
+">
+
+<div style="
+width:52px;
+height:52px;
+border-radius:14px;
+background:linear-gradient(135deg,#10b981,#059669);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+color:white;
+box-shadow:0 8px 20px rgba(16,185,129,.25);
+">
+
+🏠
+
+</div>
 
 <div>
 
@@ -4462,23 +4489,39 @@ margin-bottom:18px;
 margin:0;
 font-size:22px;
 font-weight:800;
+color:#0f172a;
+line-height:1.2;
 ">
 
-🏠 ${data.name || "-"}
+${data.name || "-"}
 
 </h3>
 
 <div style="
-margin-top:6px;
+margin-top:4px;
 font-size:14px;
 color:#64748b;
+display:flex;
+align-items:center;
+gap:6px;
 ">
 
-${data.city || "-"}
+📍 ${data.city || "-"}
 
 </div>
 
 </div>
+
+</div>
+
+</div>
+
+<div style="
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:8px;
+">
 
 <div style="
 padding:8px 14px;
@@ -4503,10 +4546,25 @@ occupancy>=80
 ? "#92400e"
 : "#991b1b"
 };
-
 ">
 
 ${occupancyStatus}
+
+</div>
+
+<div style="
+font-size:12px;
+color:#64748b;
+font-weight:600;
+">
+
+${bookingsCount}
+${t(
+"prenotazioni",
+"bookings"
+)}
+
+</div>
 
 </div>
 
