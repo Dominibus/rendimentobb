@@ -89,9 +89,10 @@ function getDashboardAccess(){
       access.isAdmin || false,
 
     canViewProfit:
-      window.isDemoDashboard ||
-      access.isPro ||
-      access.isAdmin,
+  window.isDemoDashboard ||
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin,
 
     canUsePMS:
       window.isDemoDashboard ||
@@ -105,14 +106,16 @@ function getDashboardAccess(){
       access.isAdmin,
 
     canDelete:
-      window.isDemoDashboard ||
-      access.isPro ||
-      access.isAdmin,
+  window.isDemoDashboard ||
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin,
 
     canUseAI:
-      window.isDemoDashboard ||
-      access.isPro ||
-      access.isAdmin
+  window.isDemoDashboard ||
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin,
 
   };
 
