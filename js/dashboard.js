@@ -4598,35 +4598,17 @@ ${data.address || "-"}
 
 </div>
 
-<div style="
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
-">
+<div class="property-kpi-grid">
 
-<div style="
-background:white;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px;
-text-align:center;
-">
+<div class="property-kpi-card">
 
-<div style="
-font-size:12px;
-color:#94a3b8;
-margin-bottom:6px;
-">
+<div class="property-kpi-label">
 
 ADR
 
 </div>
 
-<div style="
-font-size:22px;
-font-weight:800;
-color:#0f172a;
-">
+<div class="property-kpi-value">
 
 €${data.priceNight || 0}
 
