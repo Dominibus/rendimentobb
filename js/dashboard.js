@@ -4421,6 +4421,20 @@ window.saveProperty = async function(){
 
 };
 
+if(canUseFirestorePMS()){
+
+  console.log(
+    "🔥 LOAD FIRESTORE PROPERTIES"
+  );
+
+}else{
+
+  console.log(
+    "🧪 LOAD DEMO PROPERTIES"
+  );
+
+}
+
 await loadProperties();
 
 if(
@@ -4442,7 +4456,7 @@ async function loadProperties(){
 
   if(!container) return;
 
-  if(isDemo()){
+  if(!canUseFirestorePMS()){
 
     container.innerHTML = `
 
