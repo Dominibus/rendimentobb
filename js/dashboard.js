@@ -742,37 +742,29 @@ const analyses = querySnapshot.docs.map(doc => {
     risk:
       data.risk || 0,
 
-    // 🔥 città reale UI/PDF
     city:
       realCity,
 
-    // 🔥 città benchmark
     marketCity,
 
-    // 🔥 salva entrambe
     realCity,
 
     createdAt:
-
       data.createdAt ||
-
       data.createdAtClient ||
-
       new Date()
 
   };
 
 });
 
-const plan = String(window.currentPlan || "").toLowerCase();
-
 // ================= ACCESS =================
-
-window.isDemoData = isDemo();
 
 const isFreeUser =
   isDemo() ||
   isFree();
+
+window.isDemoData = isFreeUser;
 
 if(isFreeUser){
 
@@ -780,14 +772,12 @@ if(isFreeUser){
     "🆓 FREE / GUEST → FAKE SMART DATA"
   );
 
-  window.isDemoData = true;
-
   analyses.length = 0;
 
-analyses.push(
-...window.demoAnalyses
-);
-  
+  analyses.push(
+    ...window.demoAnalyses
+  );
+
 }
 
 // 🔥 FIX → rende disponibili al report
