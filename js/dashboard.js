@@ -1853,8 +1853,9 @@ const kpiInvest = document.getElementById("kpi-invest");
 const kpiBreak = document.getElementById("kpi-break");  
 
 // ================= KPI GRID =================
-const pro = isPro();
-const investor = String(window.currentPlan || "").toLowerCase() === "investor";
+
+const canViewDashboardData =
+  canViewDashboard();
 
 if(kpiRoi){
   kpiRoi.innerText = avgROIRounded + "%";
