@@ -73,17 +73,15 @@ function getDashboardAccess(){
       access.isInvestor ||
       plan === "investor",
 
-    isPro:
+isPro:
 
-      window.isDemoDashboard ||
+  access.isPro ||
 
-      access.isPro ||
+  access.isAdmin ||
 
-      access.isAdmin ||
+  plan === "pro" ||
 
-      plan === "pro" ||
-
-      plan === "pro_yearly",
+  plan === "pro_yearly",
 
     isAdmin:
       access.isAdmin || false,
@@ -116,6 +114,18 @@ function getDashboardAccess(){
   access.isInvestor ||
   access.isPro ||
   access.isAdmin,
+
+  canViewDashboard:
+  window.isDemoDashboard ||
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin,
+
+canViewHistory:
+  window.isDemoDashboard ||
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin,  
 
   };
 
@@ -172,6 +182,18 @@ function canUseAI(){
 function canViewProfit(){
 
   return getDashboardAccess().canViewProfit;
+
+}
+
+function canViewDashboard(){
+
+  return getDashboardAccess().canViewDashboard;
+
+}
+
+function canViewHistory(){
+
+  return getDashboardAccess().canViewHistory;
 
 }
 
