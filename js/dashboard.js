@@ -121,6 +121,55 @@ function isPro(){
   return getDashboardAccess().isPro;
 
 }
+
+function isDemo(){
+
+  return getDashboardAccess().isDemo;
+
+}
+
+function isInvestor(){
+
+  return getDashboardAccess().isInvestor;
+
+}
+
+function isFree(){
+
+  return getDashboardAccess().isFree;
+
+}
+
+function canUsePMS(){
+
+  return getDashboardAccess().canUsePMS;
+
+}
+
+function canExportPDF(){
+
+  return getDashboardAccess().canExportPDF;
+
+}
+
+function canDelete(){
+
+  return getDashboardAccess().canDelete;
+
+}
+
+function canUseAI(){
+
+  return getDashboardAccess().canUseAI;
+
+}
+
+function canViewProfit(){
+
+  return getDashboardAccess().canViewProfit;
+
+}
+
 window.proOverlayShown = false;
 function closeAllOverlays(){
   document.getElementById("guest-popup")?.remove();
@@ -4158,17 +4207,12 @@ document.addEventListener("rb_plan_ready", ()=>{
 
   }
 
-const access =
-  window.getUserAccess?.() || {};
-
 const showPMS =
-  access.isInvestor ||
-  access.isPro ||
-  access.isAdmin;
+  canUsePMS();
 
 const showReports =
-  access.isPro ||
-  access.isAdmin;
+  canExportPDF();
+
 
 // =====================================
 // 🏨 PMS
@@ -4319,7 +4363,7 @@ window.saveProperty = async function(){
 await loadProperties();
 
 if(
-  !window.isDemoDashboard
+  !isDemo()
 ){
   await loadPMSStats();
 }
