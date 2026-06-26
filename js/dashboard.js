@@ -7664,60 +7664,101 @@ ${t(
 
 window.showPMSTab = function(tab){
 
-    const dashboard =
-        document.getElementById("pms-dashboard-section");
+  // ===============================
+  // RESET TAB
+  // ===============================
 
-    const properties =
-        document.getElementById("pms-properties-section");
+  document
+  .querySelectorAll(".pms-tab")
+  .forEach(btn=>btn.classList.remove("active"));
 
-    const roi =
-        document.getElementById("pms-roi-section");
+  const active =
+    document.getElementById(
+      "pms-tab-"+tab
+    );
 
-    // Nasconde tutto
+  if(active){
+    active.classList.add("active");
+  }
 
-    dashboard.style.display = "none";
-    properties.style.display = "none";
-    roi.style.display = "none";
+  // ===============================
+  // SEZIONI
+  // ===============================
 
-    // Rimuove active
+  const executive =
+    document.getElementById("executive-summary");
 
-    document
-    .querySelectorAll(".pms-tab")
-    .forEach(btn=>btn.classList.remove("active"));
+  const kpi =
+    document.querySelector(".rb-kpi-grid")
+    ?.closest(".analysis-card");
 
-    switch(tab){
+  const performance =
+    document.getElementById("pms-performance-chart")
+    ?.closest(".analysis-card");
 
-        case "dashboard":
+  const properties =
+    document.getElementById("properties-list")
+    ?.closest(".analysis-card");
 
-            dashboard.style.display = "block";
+  const dashboardGrid =
+    document.querySelector(".dashboard-grid");
 
-            document
-            .getElementById("pms-tab-dashboard")
-            ?.classList.add("active");
+  // reset
 
-        break;
+  [
+    executive,
+    kpi,
+    performance,
+    properties,
+    dashboardGrid
+  ].forEach(el=>{
 
-        case "properties":
+    if(el){
 
-            properties.style.display = "block";
-
-            document
-            .getElementById("pms-tab-properties")
-            ?.classList.add("active");
-
-        break;
-
-        case "roi":
-
-            roi.style.display = "block";
-
-            document
-            .getElementById("pms-tab-roi")
-            ?.classList.add("active");
-
-        break;
+      el.style.display="none";
 
     }
+
+  });
+
+  // ===============================
+  // DASHBOARD
+  // ===============================
+
+  if(tab==="dashboard"){
+
+    if(executive)
+      executive.style.display="block";
+
+    if(kpi)
+      kpi.style.display="block";
+
+    if(performance)
+      performance.style.display="block";
+
+  }
+
+  // ===============================
+  // PROPERTIES
+  // ===============================
+
+  if(tab==="properties"){
+
+    if(properties)
+      properties.style.display="block";
+
+  }
+
+  // ===============================
+  // ROI
+  // ===============================
+
+  if(tab==="roi"){
+
+    if(dashboardGrid)
+      dashboardGrid.style.display="grid";
+
+  }
 
 };
 
