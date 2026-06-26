@@ -2115,11 +2115,15 @@ onclick="openCurrentBookings()">
 </div>
 
 <!-- =====================================
-📊 PMS KPI
+📊 PMS DASHBOARD
 ===================================== -->
 
-<div class="analysis-card pro-pms-only">
+<div
+id="pms-dashboard-section"
+class="pms-section">
 
+<div class="analysis-card pro-pms-only">
+  
   <div class="rb-kpi-grid">
 
     <!-- Properties -->
@@ -2250,9 +2254,15 @@ data-en="🟡 Pending">
   </canvas>
 
 </div>  
+</div>  
+  
 <!-- =====================================
 🏠 PROPERTIES
 ===================================== -->
+
+<div
+id="pms-properties-section"
+class="pms-section">
 
 <div class="analysis-card pro-pms-only">
 
@@ -2327,6 +2337,12 @@ Nessuna proprietà presente
 </div>
 
 </div>  
+</div>  
+
+<div
+id="pms-roi-section"
+class="pms-section"
+style="display:none;">  
 
 <!-- ================= MAIN GRID ================= -->
 
@@ -2372,6 +2388,7 @@ data-en="💰 Cashflow">
     </div>
 
 </div>
+</div>  
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
