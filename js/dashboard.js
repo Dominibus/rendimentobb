@@ -3981,18 +3981,29 @@ function lockInvestorPreview(){
 
 const elementsToBlur = [
 
-  "roi-target-calculator"
+  "roi-target-calculator",
+  "cashflow-chart-container",
+  "investment-insight",
+  "city-distribution-chart",
+  "executive-summary",
+  "pms-performance-chart",
+  "properties-list"
 
 ];
 
   elementsToBlur.forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
 
-    el.style.filter = "blur(6px)";
-    el.classList.add("rb-locked");
-    el.style.opacity = "0.6";
-  });
+  const el = document.getElementById(id);
+
+  if(!el) return;
+
+  el.style.filter = "blur(6px)";
+  el.style.pointerEvents = "none";
+  el.style.userSelect = "none";
+  el.classList.add("rb-locked");
+  el.style.opacity = "0.65";
+
+});
 
   // ❌ NON bloccare tutta la dashboard
 // showProOverlay();
