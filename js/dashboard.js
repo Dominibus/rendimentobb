@@ -1256,27 +1256,27 @@ if(isNew){
       </div>
 
       <div class="metric">
-        <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
+  <span>${t("Profitto annuo stimato","Estimated yearly profit")}</span>
 
-        ${
-        isPro()
-        ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
-        : `
-        <strong style="filter:blur(4px)">
-          ${formatCurrency(yearlyProfit)}
-        </strong>
+  ${
+  canViewProfit()
+  ? `<strong>${formatCurrency(yearlyProfit)}</strong>`
+  : `
+  <strong style="filter:blur(4px)">
+    ${formatCurrency(yearlyProfit)}
+  </strong>
 
-        <div style="font-size:12px;color:#64748b;margin-top:4px;">
-          🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
-        </div>
-        `
-        }
-      </div>
+  <div style="font-size:12px;color:#64748b;margin-top:4px;">
+    🔒 ${t("Sblocca per vedere il profitto reale","Unlock to see real profit")}
+  </div>
+  `
+  }
+</div>
 
-      ${
-      !isPro()
-      ? `
-      <div style="margin-top:12px">
+${
+!canViewProfit()
+? `
+        <div style="margin-top:12px">
         <button onclick="goToUpgrade()" style="
           background:#10b981;
           border:none;
