@@ -4086,24 +4086,47 @@ document.addEventListener("rb_plan_ready", ()=>{
 
   }
 
-  const access =
-    window.getUserAccess?.() || {};
+const access =
+  window.getUserAccess?.() || {};
 
-  const pmsIsPro =
-  access.isPro ||
+const showPMS =
   access.isInvestor ||
+  access.isPro ||
   access.isAdmin;
 
-  document
-    .querySelectorAll(".pro-pms-only")
-    .forEach(el=>{
+const showReports =
+  access.isPro ||
+  access.isAdmin;
 
-      el.style.display =
-        pmsIsPro
-        ? ""
-        : "none";
+// =====================================
+// 🏨 PMS
+// =====================================
 
-    });
+document
+.querySelectorAll(".pro-pms-only")
+.forEach(el=>{
+
+  el.style.display =
+    showPMS
+      ? ""
+      : "none";
+
+});
+
+// =====================================
+// 📄 REPORT PRO
+// =====================================
+
+document
+.querySelectorAll(".pro-report-only")
+.forEach(el=>{
+
+  el.style.display =
+    showReports
+      ? ""
+      : "none";
+
+});
 
 });
 
