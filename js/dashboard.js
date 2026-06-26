@@ -642,14 +642,15 @@ async function loadDashboard(){
 
 if(
 
-    !isDemo() &&
+    canUseFirestorePMS() &&
 
     window.currentUser?.uid &&
 
-    window.currentUser.uid !==
-    "demo-user"
+    window.currentUser.uid !== "demo-user"
 
 ){
+
+    console.log("🔥 FIRESTORE DASHBOARD");
 
     const q = query(
 
@@ -674,13 +675,13 @@ if(
     querySnapshot =
       await getDocs(q);
 
-  }else{
+}else{
 
     console.log(
-      "🧪 DEMO DASHBOARD → skip firestore"
+      "🧪 DEMO DASHBOARD"
     );
 
-  }
+}
 
   if(querySnapshot.empty){
 
