@@ -2632,109 +2632,109 @@ document.addEventListener(
   "rb_plan_ready",
   updateDemoBanner
 );
-  // =====================================
-  // 🔥 UPGRADE BOX (INVESTOR / FREE)
-  // =====================================
+ // =====================================
+// 🔥 UPGRADE BOX (SOLO FREE)
+// =====================================
 
-  const box =
-    document.getElementById(
-      "upgrade-trigger"
-    );
+const box =
+  document.getElementById(
+    "upgrade-trigger"
+  );
 
-  if(!box) return;
+if(!box) return;
 
-  const staticBox =
-    document.getElementById(
-      "upgrade-box-static"
-    );
+const staticBox =
+  document.getElementById(
+    "upgrade-box-static"
+  );
 
-  if(
-    staticBox &&
-    (access.isPro || access.isAdmin)
-  ){
-    staticBox.style.display = "none";
-  }
+// 🔥 INVESTOR / PRO / ADMIN NON DEVONO MAI VEDERE LA CTA
 
-  // 🔥 PRO E ADMIN NON DEVONO MAI VEDERE CTA
-
-  if(
+if(
+  staticBox &&
+  (
+    access.isInvestor ||
     access.isPro ||
     access.isAdmin
-  ){
-    box.style.display = "none";
-    return;
-  }
+  )
+){
+  staticBox.style.display = "none";
+}
 
-  // 🔥 SOLO FREE / INVESTOR
+if(
+  access.isInvestor ||
+  access.isPro ||
+  access.isAdmin
+){
+  box.style.display = "none";
+  return;
+}
 
-  if(
-    !access.canSeeFullAnalysis
-  ){
-    box.style.display = "block";
-  }
+// 🔥 SOLO FREE VEDE IL BOX
 
-  box.innerHTML = `
+box.style.display = "block";
 
-    <div style="
-      padding:22px;
-      border-radius:16px;
-      background:linear-gradient(135deg,#022c22,#065f46);
-      color:white;
-      box-shadow:0 10px 30px rgba(16,185,129,0.25);
-      text-align:center;
-    ">
+box.innerHTML = `
 
-      <h3
-      style="margin-bottom:8px"
-      data-it="🔒 Stai vedendo solo il 40% della dashboard"
-      data-en="🔒 You are seeing only 40% of the dashboard">
-      🔒 Stai vedendo solo il 40% della dashboard
-      </h3>
+<div style="
+padding:22px;
+border-radius:16px;
+background:linear-gradient(135deg,#022c22,#065f46);
+color:white;
+box-shadow:0 10px 30px rgba(16,185,129,0.25);
+text-align:center;
+">
 
-      <p
-      style="
-      font-size:14px;
-      color:#ffffff;
-      font-weight:600;
-      "
-      data-it="ROI reale, rischio e simulazioni complete sono bloccate"
-      data-en="Real ROI, risk and full simulations are locked">
-      ROI reale, rischio e simulazioni complete sono bloccate
-      </p>
+<h3
+style="margin-bottom:8px"
+data-it="🔒 Stai vedendo solo il 40% della dashboard"
+data-en="🔒 You are seeing only 40% of the dashboard">
+🔒 Stai vedendo solo il 40% della dashboard
+</h3>
 
-      <p
-      data-it="⚠️ Senza questi dati potresti perdere migliaia di €"
-      data-en="⚠️ Without this data you could lose thousands of €"
-      style="
-      margin-top:10px;
-      font-size:13px;
-      color:#d1fae5;
-      font-weight:600;
-      ">
-      ⚠️ Senza questi dati potresti perdere migliaia di €
-      </p>
+<p
+style="
+font-size:14px;
+color:#ffffff;
+font-weight:600;
+"
+data-it="ROI reale, rischio e simulazioni complete sono bloccate"
+data-en="Real ROI, risk and full simulations are locked">
+ROI reale, rischio e simulazioni complete sono bloccate
+</p>
 
-      <button
-      onclick="goToUpgradeFlow()"
-      class="btn btn-primary"
-      style="
-      margin-top:14px;
-      padding:12px 18px;
-      font-weight:600;
-      ">
+<p
+style="
+margin-top:10px;
+font-size:13px;
+color:#d1fae5;
+font-weight:600;
+"
+data-it="⚠️ Senza questi dati potresti perdere migliaia di €"
+data-en="⚠️ Without this data you could lose thousands of €">
+⚠️ Senza questi dati potresti perdere migliaia di €
+</p>
 
-        🔓 <span
-        data-it="Sblocca dashboard completa"
-        data-en="Unlock full dashboard">
-        Sblocca dashboard completa
-        </span>
+<button
+onclick="goToUpgradeFlow()"
+class="btn btn-primary"
+style="
+margin-top:14px;
+padding:12px 18px;
+font-weight:600;
+">
 
-      </button>
+🔓 <span
+data-it="Sblocca dashboard completa"
+data-en="Unlock full dashboard">
+Sblocca dashboard completa
+</span>
 
-    </div>
+</button>
 
-  `;
+</div>
 
+`;
   // =====================================
   // 📅 BOOKING FORM TOGGLE
   // =====================================
