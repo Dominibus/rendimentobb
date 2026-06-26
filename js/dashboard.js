@@ -2292,12 +2292,18 @@ triggerPlanPopup(plan);
 }
 
       // ================= INVESTOR =================
-      if(isInvestor){
+      // ================= INVESTOR =================
+if(isInvestor){
 
-        console.log("👀 INVESTOR → PARTIAL ACCESS");
+  console.log("👀 INVESTOR → FULL ACCESS");
 
-        lockInvestorPreview();
-      }
+  window.isDemoData = false;
+  window.isDemoDashboard = false;
+
+  document.body.classList.add("is-investor");
+
+  return;
+}
 
           } catch(err){
       console.error("❌ DASHBOARD INIT ERROR:", err);
