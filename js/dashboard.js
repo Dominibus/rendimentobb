@@ -812,6 +812,9 @@ const analyses = querySnapshot.docs.map(doc => {
 window.isDemoData =
   useDemoDashboard();
 
+window.isDemoDashboard =
+  useDemoDashboard();
+
 if(useDemoDashboard()){
 
   analyses.length = 0;
@@ -825,7 +828,7 @@ if(useDemoDashboard()){
 // 🔥 FIX → rende disponibili al report
 window.dashboardSimulations = analyses;
 
-  // =====================================
+// =====================================
 // 🤖 CHATBOT INVESTMENT MEMORY
 // =====================================
 
@@ -6478,7 +6481,7 @@ setText(
     )
   );
 
-  // =====================================
+// =====================================
 // 🤖 CHATBOT PMS MEMORY
 // =====================================
 
