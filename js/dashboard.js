@@ -4444,7 +4444,7 @@ if(canUseFirestorePMS()){
 await loadProperties();
 
 if(
-  !useDemoDashboard()
+  canUseFirestorePMS()
 ){
   await loadPMSStats();
 }
