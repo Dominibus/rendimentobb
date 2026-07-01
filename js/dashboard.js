@@ -2259,8 +2259,10 @@ window.addEventListener("DOMContentLoaded", () => {
     "🆓 FREE → DASHBOARD DEMO MODE"
   );
 
-}
+  window.isDemoData = true;
+  window.isDemoDashboard = true;
 
+}
       // ================= FLAGS =================
       const pro =
         plan === "pro" ||
