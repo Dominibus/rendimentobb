@@ -1794,74 +1794,188 @@ function renderRiskMeter(riskScore){
 
 // ================= INVESTMENT VERDICT =================
 
-function renderInvestmentVerdict(roi, payback){
+// ================= INVESTMENT VERDICT =================
 
-const box = document.getElementById("investment-verdict");
+function renderInvestmentVerdict(
+roi,
+risk = 50,
+cashflow = 0,
+occupancy = 70
+){
+
+const box =
+document.getElementById(
+"investment-verdict"
+);
+
 if(!box) return;
 
-let color = "#ef4444";
-let icon = "🔴";
+let verdict = "BUY";
+let confidence = 92;
 
-let title = t(
-"Investimento ad alto rischio",
-"High risk investment"
+let color = "#10b981";
+let icon = "🟢";
+
+let title =
+t(
+"AI Recommendation",
+"AI Recommendation"
 );
 
-let message = t(
-"Il rendimento atteso è basso rispetto al capitale investito.",
-"The expected return is low compared to the invested capital."
+let description =
+"";
+
+const reasons = [];
+
+// ROI
+
+if(roi >= 15){
+
+reasons.push(
+t(
+"ROI molto superiore alla media del mercato",
+"ROI significantly above market average"
+)
 );
 
-if(roi > 12){
+}
+else if(roi >= 8){
 
-color = "#10b981";
-icon = "🟢";
-
-title = t(
-"Ottima opportunità investimento",
-"Strong investment opportunity"
+reasons.push(
+t(
+"ROI competitivo",
+"Competitive ROI"
+)
 );
 
-message = t(
-"Il ROI è molto superiore alla media del mercato e la struttura finanziaria è solida.",
-"ROI is well above market average and financial structure is solid."
+}
+else{
+
+verdict = "WAIT";
+
+color="#f59e0b";
+
+icon="🟠";
+
+confidence-=15;
+
+reasons.push(
+t(
+"ROI inferiore alle opportunità migliori",
+"ROI below the best market opportunities"
+)
 );
 
 }
 
-else if(roi > 6){
+// CASHFLOW
 
-color = "#f59e0b";
-icon = "🟠";
+if(cashflow>0){
 
-title = t(
-"Investimento moderato",
-"Moderate investment"
+reasons.push(
+t(
+"Cashflow positivo",
+"Positive cashflow"
+)
 );
 
-message = t(
-"Il rendimento è accettabile ma dipende molto dalla stabilità dell'occupazione.",
-"Returns are acceptable but depend strongly on occupancy stability."
+}
+else{
+
+verdict="WAIT";
+
+confidence-=10;
+
+reasons.push(
+t(
+"Cashflow da migliorare",
+"Cashflow should be improved"
+)
 );
 
 }
 
-box.innerHTML = `
+// RISK
 
-<div style="
-padding:18px;
-border-radius:12px;
-background:#f8fafc;
-border-left:6px solid ${color};
-">
+if(risk<=30){
 
-<strong style="font-size:16px;">
-${icon} ${title}
+reasons.push(
+t(
+"Livello di rischio contenuto",
+"Controlled risk level"
+)
+);
+
+}
+else if(risk>=70){
+
+verdict="WAIT";
+
+confidence-=10;
+
+reasons.push(
+t(
+"Rischio elevato",
+"High investment risk"
+)
+);
+
+}
+
+// OCCUPANCY
+
+if(occupancy>=70){
+
+reasons.push(
+t(
+"Occupazione prevista elevata",
+"Strong expected occupancy"
+)
+);
+
+}
+
+description=reasons
+.map(r=>"• "+r)
+.join("<br>");
+
+box.innerHTML=`
+
+<div class="ai-verdict-card">
+
+<div class="ai-verdict-header">
+
+<div class="ai-verdict-badge">
+
+🧠 AI Investment Recommendation
+
+</div>
+
+<h3>
+
+${icon} ${verdict}
+
+</h3>
+
+<div class="ai-confidence">
+
+${t("Affidabilità","Confidence")}
+
+<strong>
+
+${confidence}%
+
 </strong>
 
-<p style="margin-top:8px;font-size:14px;">
-${message}
-</p>
+</div>
+
+</div>
+
+<div class="ai-verdict-body">
+
+${description}
+
+</div>
 
 </div>
 
