@@ -3711,9 +3711,17 @@ const result = calculateROI({
 console.log("🔥 ROI RESULT", result);
 
     if (!result || typeof result !== "object") {
-      console.error("💥 RESULT INVALID:", result);
-      return;
-    }
+
+  console.error(
+    "💥 ROI Engine returned an invalid result",
+    result
+  );
+
+  window.isCalculating = false;
+
+  return;
+
+}
 
     // ================= KPI =================
     let roi = Number(result?.roi ?? 0);
