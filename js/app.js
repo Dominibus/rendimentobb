@@ -2941,25 +2941,49 @@ net ||
       updateROIMessage(finalROI);
     }
 
-    // ================= INVESTMENT SCORE =================
+// ================= INVESTMENT SCORE =================
 
-if(typeof window.updateInvestmentScore === "function"){
+if(
 
-  const investmentScore = Math.max(
-    0,
-    Math.min(
-      100,
-      Math.round((finalROI * 2) - riskScore)
-    )
-  );
+  typeof window.rbGenerateInvestmentScore === "function" &&
+  typeof window.updateInvestmentScore === "function"
+
+){
+
+  const scoreData =
+    window.rbGenerateInvestmentScore({
+
+      roi: finalROI,
+
+      risk: riskScore,
+
+      occupancy: occupancyRate,
+
+      mortgagePercent:
+
+        Number(
+          mortgagePercent ||
+          0
+        ),
+
+      cashflow:
+
+        Number(
+          net ||
+          0
+        ),
+
+      city: market
+
+    });
 
   console.log(
-    "🎯 Investment Score calcolato:",
-    investmentScore
+    "🧠 SCORE ENGINE:",
+    scoreData
   );
 
   window.updateInvestmentScore(
-    investmentScore
+    scoreData.score
   );
 
 }
