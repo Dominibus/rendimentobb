@@ -19998,3 +19998,100 @@ letter-spacing:-1px;
 color:#0f172a;
 
 }
+
+/* =====================================================
+   EXECUTIVE KPI 2026
+   Override sicuro - non modifica altre sezioni
+===================================================== */
+
+.executive-kpi-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:22px;
+
+}
+
+.executive-kpi{
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:20px;
+
+    padding:26px;
+
+    text-align:center;
+
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+
+    transition:.25s ease;
+
+}
+
+.executive-kpi:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 28px 70px rgba(15,23,42,.12);
+
+}
+
+.executive-kpi .kpi-icon{
+
+    font-size:28px;
+
+    margin-bottom:14px;
+
+}
+
+.executive-kpi span{
+
+    display:block;
+
+    font-size:13px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+    color:#64748b;
+
+    margin-bottom:12px;
+
+    font-weight:700;
+
+}
+
+.executive-kpi strong{
+
+    display:block;
+
+    font-size:38px;
+
+    line-height:1.1;
+
+    font-weight:900;
+
+    color:#0f172a;
+
+    word-break:break-word;
+
+}
+
+@media(max-width:768px){
+
+.executive-kpi{
+
+    padding:22px;
+
+}
+
+.executive-kpi strong{
+
+    font-size:32px;
+
+}
+
+}
