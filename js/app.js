@@ -2941,6 +2941,29 @@ net ||
       updateROIMessage(finalROI);
     }
 
+    // ================= INVESTMENT SCORE =================
+
+if(typeof window.updateInvestmentScore === "function"){
+
+  const investmentScore = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round((finalROI * 2) - riskScore)
+    )
+  );
+
+  console.log(
+    "🎯 Investment Score calcolato:",
+    investmentScore
+  );
+
+  window.updateInvestmentScore(
+    investmentScore
+  );
+
+}
+
     if(finalROI <= 0){
       console.warn("⚠️ Low ROI → UI still rendered");
     }
