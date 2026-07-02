@@ -4254,11 +4254,10 @@ window.rbCityMemory[memoryCity] = {
 // =====================================
 
 window.lastAnalysisData = {
-
+  ...window.lastAnalysisData,
   ...window.rbCityMemory[memoryCity]
-
 };
-
+    
 // =====================================
 // 🔒 SAFE VARIABLES
 // =====================================
