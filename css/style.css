@@ -20114,3 +20114,88 @@ margin-top:32px;
 align-items:stretch;
 
 }
+
+.executive-four-grid .executive-kpi{
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+min-height:170px;
+
+padding:28px 18px;
+
+border-radius:18px;
+
+background:#ffffff;
+
+border:1px solid #e5e7eb;
+
+box-shadow:
+0 10px 25px rgba(15,23,42,.06);
+
+transition:.25s;
+
+}
+
+.executive-four-grid .kpi-icon{
+
+font-size:28px;
+
+margin-bottom:12px;
+
+}
+
+.executive-four-grid span{
+
+font-size:12px;
+
+font-weight:700;
+
+text-transform:uppercase;
+
+letter-spacing:.05em;
+
+color:#64748b;
+
+margin-bottom:12px;
+
+}
+
+.executive-four-grid strong{
+
+font-size:34px;
+
+font-weight:900;
+
+color:#0f172a;
+
+line-height:1.1;
+
+}
+
+@media(max-width:992px){
+
+.executive-four-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:640px){
+
+.executive-four-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
