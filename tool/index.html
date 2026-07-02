@@ -1683,6 +1683,39 @@ data-en="📄 Download Executive Report PDF">
 <script type="module" src="/js/footer.js"></script>  
 
 <script type="module" src="/js/market-data.js"></script>
+
+ <script> 
+
+/* ================= INVESTMENT SCORE ================= */
+
+window.updateInvestmentScore = function(score){
+  console.log("🎯 Investment Score ricevuto:", score);
+
+  const circle = document.getElementById("score-circle");
+  if(!circle) return;
+
+  const safeScore = Math.round(score || 0);
+
+  circle.innerText = safeScore;
+
+  circle.classList.remove("score-good","score-medium","score-bad");
+
+  if(safeScore >= 75){
+    circle.classList.add("score-good");
+  }
+  else if(safeScore >= 50){
+    circle.classList.add("score-medium");
+  }
+  else{
+    circle.classList.add("score-bad");
+  }
+
+  circle.style.boxShadow = "0 0 20px rgba(16,185,129,0.4)";
+
+}
+
+</script>  
+  
 <script type="module" src="/js/app.js"></script>
 
 <script>
@@ -1713,34 +1746,6 @@ window.applyMarketData = function(city){
 
   console.log("📍 City selected:", city);
 };
-
-/* ================= INVESTMENT SCORE ================= */
-
-window.updateInvestmentScore = function(score){
-  console.log("🎯 Investment Score ricevuto:", score);
-
-  const circle = document.getElementById("score-circle");
-  if(!circle) return;
-
-  const safeScore = Math.round(score || 0);
-
-  circle.innerText = safeScore;
-
-  circle.classList.remove("score-good","score-medium","score-bad");
-
-  if(safeScore >= 75){
-    circle.classList.add("score-good");
-  }
-  else if(safeScore >= 50){
-    circle.classList.add("score-medium");
-  }
-  else{
-    circle.classList.add("score-bad");
-  }
-
-  circle.style.boxShadow = "0 0 20px rgba(16,185,129,0.4)";
-
-}
 
 /* ================= KPI PREVIEW ================= */
 
