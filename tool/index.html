@@ -878,14 +878,17 @@ data-en="Results are based on average market data. Real risk is calculated in th
         </h3>
 
         <div style="font-size:13px;color:#64748b;margin-bottom:15px;"
-          data-it="Inserisci i dati e scopri se questo investimento può funzionare"
-          data-en="Enter the data and see if this investment could work">
+         data-it="Scopri profitto reale, ROI e rischio prima di acquistare un immobile."
+         data-en="Discover real profit, ROI and investment risk before buying a property.">
         </div>
 
         <!-- CITY -->
         <div class="input-group">
 
-          <label data-it="Città mercato" data-en="City Market"></label>
+          <label
+           data-it="Mercato da analizzare"
+           data-en="Market to analyze">
+         </label>
 
           <select id="market-city" class="market-select" onchange="applyMarketData(this.value)">
             <option value="">Seleziona città</option>
@@ -904,10 +907,11 @@ data-en="Results are based on average market data. Real risk is calculated in th
             style="width:100%;margin-top:10px;padding:12px;border-radius:12px;border:1px solid #e2e8f0;"
           />
 
-          <div style="font-size:12px;color:#64748b;margin-top:6px;"
-            data-it="💡 I dati di mercato verranno applicati automaticamente"
-            data-en="💡 Market data will be applied automatically">
-          </div>
+          <div
+          style="font-size:12px;color:#64748b;margin-top:6px;"
+          data-it="Prezzo medio, occupazione e benchmark vengono caricati automaticamente."
+          data-en="Average price, occupancy and benchmark are loaded automatically.">
+         </div>
 
         </div>
 
@@ -948,8 +952,8 @@ value="70">
         </div>
 
         <button id="analyze-btn" class="btn btn-primary" style="margin-top:10px;"
-          data-it="🔍 Analizza investimento"
-          data-en="🔍 Analyze investment">
+          data-it="🚀 Analizza investimento"
+          data-en="🚀 Analyze investment">
         </button>
 
       </div>
@@ -964,8 +968,8 @@ value="70">
 
       <!-- LABEL -->
       <div class="roi-label"
-        data-it="Potenziale rendimento"
-        data-en="Potential return">
+        data-it="Valutazione AI dell'investimento"
+        data-en="AI Investment Evaluation">
       </div>
 
       <!-- ROI -->
@@ -984,8 +988,8 @@ value="70">
         "></div>
 
         <div style="font-size:12px;color:#64748b;margin-top:6px;"
-          data-it="Basato su dati medi"
-          data-en="Based on averages">
+          data-it="Basato su dati di mercato aggiornati"
+          data-en="Based on current market data">
         </div>
 
         <div id="roi-badge" style="margin-top:6px;font-weight:600;"></div>
@@ -1006,8 +1010,8 @@ value="70">
           font-size:13px;
           text-align:center;
         "
-        data-it="⚠️ ROI senza mutuo e rischio reale"
-        data-en="⚠️ ROI without mortgage and real risk">
+        data-it="Versione gratuita: il ROI non include ancora mutuo, rischio e sostenibilità."
+        data-en="Free version: ROI does not yet include mortgage, risk and sustainability.">
         </div>
 
       </div>
@@ -1016,17 +1020,17 @@ value="70">
       <div class="roi-metrics">
 
         <div class="metric">
-          <span data-it="Profitto stimato" data-en="Estimated profit"></span>
+          <span data-it="Profitto annuo stimato" data-en="Estimated annual profit"></span>
           <strong id="profit-live">—</strong>
         </div>
 
         <div class="metric">
-          <span data-it="ROI stimato" data-en="Estimated ROI"></span>
+          <span data-it="ROI preliminare" data-en="Preliminary ROI"></span>
           <strong id="roi-preview-live">—</strong>
         </div>
 
         <div class="metric pro-only">
-          <span data-it="Ricavi annui" data-en="Annual revenue"></span>
+          <span data-it="Ricavi potenziali" data-en="Potential revenue"></span>
           <strong id="revenue-live">—</strong>
         </div>
 
@@ -1171,18 +1175,18 @@ value="70">
     onclick="handleUpgradeClick()"
     style="font-size:18px;padding:16px 26px;">
 
-    <span data-it="🔥 Scopri quanto puoi guadagnare davvero"
-          data-en="🔥 See real profit potential">
-    🔥 Scopri quanto puoi guadagnare davvero
+    <span data-it="🔓 Visualizza l'analisi completa"
+          data-en="🔓 View complete investment analysis">
+    🔓 Visualizza l'analisi completa
     </span>
 
   </button>
 
   <div id="cta-urgency"
   style="margin-top:8px;font-size:12px;color:#ef4444;font-weight:600;opacity:0.9;"
-  data-it="⚠️ Questa analisi potrebbe cambiare il tuo investimento"
-  data-en="⚠️ This analysis could change your investment">
-  ⚠️ Questa analisi potrebbe cambiare il tuo investimento
+  data-it="Molti investimenti con ROI elevato nascondono perdite che emergono solo nell'analisi completa."
+  data-en="Many high-ROI investments hide losses that only appear in the complete analysis.">
+  Molti investimenti con ROI elevato nascondono perdite che emergono solo nell'analisi completa.
   </div>
 
   <div style="margin-top:10px;font-size:13px;color:#64748b;"
@@ -1192,9 +1196,9 @@ Scopri se il tuo investimento genererà profitto reale o perdite nascoste
 </div>
 
   <div style="margin-top:8px;font-size:12px;color:#10b981;font-weight:600;"
-  data-it="🔥 +1.247 investitori stanno analizzando immobili questa settimana"
-  data-en="🔥 +1,247 investors are analyzing properties this week">
-  🔥 +1.247 investitori stanno analizzando immobili questa settimana
+  data-it="🔥 Oltre 1.200 investitori utilizzano questo simulatore per valutare nuovi immobili."
+  data-en="🔥 Over 1,200 investors use this simulator to evaluate new properties.">
+  🔥 Oltre 1.200 investitori utilizzano questo simulatore per valutare nuovi immobili.
   </div>
 
 </div>
