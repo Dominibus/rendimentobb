@@ -5382,7 +5382,10 @@ const pct = v => {
 // ================= RATING =================
 let rating = "Moderate";
 
-if(roi >= 18){
+if(roi >= 25){
+  rating = "Outstanding";
+}
+else if(roi >= 18){
   rating = "Investment Grade";
 }
 else if(roi >= 12){
@@ -5390,6 +5393,9 @@ else if(roi >= 12){
 }
 else if(roi >= 8){
   rating = "Stable";
+}
+else{
+  rating = "Speculative";
 }
 
 // ================= COLORS =================
@@ -5579,13 +5585,16 @@ const aiLabel =
   window.lastInvestmentScore?.verdict ||
   null;
 
+const fallbackScore =
+  roi >= 20 ? 90 :
+  roi >= 15 ? 83 :
+  roi >= 10 ? 72 :
+  roi >= 7 ? 60 : 45;
+
 const investmentScore =
-  Number(aiScore) || (
-    roi >= 20 ? 90 :
-    roi >= 15 ? 83 :
-    roi >= 10 ? 72 :
-    roi >= 7 ? 60 : 45
-  );
+  aiScore != null
+    ? Number(aiScore)
+    : fallbackScore;
 
 const verdict =
   aiLabel ||
@@ -5622,7 +5631,9 @@ doc.setFontSize(8);
 
 doc.setTextColor(...gray);
 
-doc.text("Investment Score",28,239);
+doc.setFontSize(7);
+
+doc.text("AI Score",28,239);
 doc.text("Verdict",82,239);
 doc.text("Risk",122,239);
 doc.text("Confidence",154,239);
@@ -6040,7 +6051,9 @@ y+=12;
 const rate = 0.04;
 const interest = loan * rate;
 const net = profit - interest;
-const ltv = (loan/price)*100;
+const safePrice = Math.max(price,1);
+
+const ltv = (loan / safePrice) * 100;
 let dscr = interest > 0
   ? profit / interest
   : 0;
@@ -6099,7 +6112,7 @@ y += 12;
 // MARKET SNAPSHOT
 // =====================================
 
-const benchmarkROI = 12; // benchmark medio temporaneo
+const benchmarkROI = marketROI; // benchmark medio temporaneo
 
 doc.setFillColor(248,250,252);
 
