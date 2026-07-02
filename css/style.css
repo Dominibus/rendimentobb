@@ -20315,3 +20315,13 @@ grid-template-columns:1fr;
 }
 
 }
+
+/* =====================================
+   STRATEGIC INSIGHT
+===================================== */
+
+#strategic-insight:empty{
+
+display:none;
+
+}
