@@ -4659,10 +4659,14 @@ if(window.firebaseReady && isFreeUser && roi > 10){
 }
 
 } catch(err){
-  console.error("💥 CALCULATE ERROR:", err);
-}
 
-window.isCalculating = false;
+  console.error("💥 CALCULATE ERROR:", err);
+
+} finally {
+
+  window.isCalculating = false;
+
+}
 };
 // ================= CITY ROI CHART (SAFE) =================
 function renderCityROIChart(){
