@@ -6112,7 +6112,7 @@ y += 12;
 // MARKET SNAPSHOT
 // =====================================
 
-const benchmarkROI = marketROI; // benchmark medio temporaneo
+const benchmarkROI = 12; // benchmark medio temporaneo
 
 doc.setFillColor(248,250,252);
 
