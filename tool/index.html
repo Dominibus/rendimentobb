@@ -1717,6 +1717,7 @@ window.applyMarketData = function(city){
 /* ================= INVESTMENT SCORE ================= */
 
 window.updateInvestmentScore = function(score){
+  console.log("🎯 Investment Score ricevuto:", score);
 
   const circle = document.getElementById("score-circle");
   if(!circle) return;
