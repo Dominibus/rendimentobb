@@ -2943,15 +2943,20 @@ net ||
 
 // ================= INVESTMENT SCORE =================
 
-console.log(
-  "🧪 SCORE FUNCTIONS",
-  {
-    rbGenerateInvestmentScore:
-      typeof window.rbGenerateInvestmentScore,
+console.log("🧪 SCORE FUNCTIONS",{
 
-    updateInvestmentScore:
-      typeof window.updateInvestmentScore
-  }
+  rbGenerateInvestmentScore:
+    window.rbGenerateInvestmentScore,
+
+  updateInvestmentScore:
+    window.updateInvestmentScore
+
+});
+
+    console.log(
+  "🧪 WINDOW KEYS",
+  Object.keys(window)
+    .filter(k => k.toLowerCase().includes("score"))
 );
 
 if(
