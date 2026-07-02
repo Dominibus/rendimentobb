@@ -5557,6 +5557,78 @@ doc.text(
   218
 );
 
+  // =====================================
+// EXECUTIVE BADGES
+// =====================================
+
+const investmentScore =
+
+  roi >= 20 ? 90 :
+  roi >= 15 ? 83 :
+  roi >= 10 ? 72 :
+  roi >= 7 ? 60 : 45;
+
+const verdict =
+
+  investmentScore >= 80
+    ? "BUY"
+
+  : investmentScore >= 65
+    ? "WATCH"
+
+    : "AVOID";
+
+const confidence =
+
+  investmentScore >= 80
+    ? "92%"
+
+    : investmentScore >= 65
+    ? "84%"
+
+    : "73%";
+
+doc.setFillColor(255,255,255);
+
+doc.roundedRect(20,228,170,28,6,6,"F");
+
+doc.setDrawColor(235);
+
+doc.roundedRect(20,228,170,28,6,6);
+
+doc.setFontSize(8);
+
+doc.setTextColor(...gray);
+
+doc.text("Investment Score",28,239);
+doc.text("Verdict",82,239);
+doc.text("Risk",122,239);
+doc.text("Confidence",154,239);
+
+doc.setFontSize(13);
+
+doc.setTextColor(...dark);
+
+doc.text(String(investmentScore),28,249);
+
+doc.text(verdict,82,249);
+
+doc.text(
+  roi >= 15
+    ? "Low"
+    : roi >= 8
+      ? "Medium"
+      : "High",
+  122,
+  249
+);
+
+doc.text(
+  confidence,
+  154,
+  249
+);
+
 // ===================================================
 // EXECUTIVE
 // ===================================================
@@ -5573,108 +5645,177 @@ doc.text(T("Executive Summary","Executive Summary"),20,30);
 
 let y = 45;
 
-// BOX
-doc.setFillColor(15,23,42);
-doc.roundedRect(20,y,170,28,6,6,"F");
+// =====================================
+// HERO EXECUTIVE CARD
+// =====================================
 
+doc.setFillColor(15,23,42);
+doc.roundedRect(20,y,170,40,8,8,"F");
+
+// ROI
 doc.setTextColor(255);
-doc.setFontSize(18);
-doc.text(pct(roi),25,y+16);
+
+doc.setFontSize(26);
+doc.text(
+  pct(roi),
+  28,
+  y + 22
+);
 
 doc.setFontSize(9);
-doc.text("ROI",25,y+8);
 
-// RATING
-doc.setFillColor(241,245,249);
-doc.roundedRect(132,y+4,48,12,4,4,"F");
+doc.text(
+  "RETURN ON INVESTMENT",
+  28,
+  y + 10
+);
 
-doc.setTextColor(0);
+// Rating badge
+doc.setFillColor(255,255,255);
+
+doc.roundedRect(
+  132,
+  y + 7,
+  48,
+  16,
+  5,
+  5,
+  "F"
+);
+
+doc.setTextColor(...dark);
+
 doc.setFontSize(10);
-doc.setFontSize(8);
 
 doc.text(
   rating,
   156,
-  y + 12,
-  { align:"center" }
+  y + 17,
+  {align:"center"}
 );
 
-y += 36;
+// Executive label
+doc.setFontSize(8);
 
-// ===================================================
-// KPI GRID (EXECUTIVE STYLE)
-// ===================================================
+doc.setTextColor(220);
+
+doc.text(
+  "Executive AI Assessment",
+  132,
+  y + 31,
+  {align:"center"}
+);
+
+y += 50;
+
+// =====================================
+// EXECUTIVE KPI CARDS
+// =====================================
 
 const executiveKPIs = [
 
-  {
-    label:T("Prezzo","Price"),
-    value:eur(price)
-  },
+{
+title:T("Prezzo immobile","Property Price"),
+value:eur(price),
+subtitle:T("Asset Value","Asset Value")
+},
 
-  {
-    label:T("Ricavi","Revenue"),
-    value:eur(revenue)
-  },
+{
+title:T("Ricavi annui","Annual Revenue"),
+value:eur(revenue),
+subtitle:T("Gross Income","Gross Income")
+},
 
-  {
-    label:T("Cashflow","Cashflow"),
-    value:eur(profit)
-  },
+{
+title:T("Cashflow netto","Net Cashflow"),
+value:eur(profit),
+subtitle:
+profit >= 0
+? T("Positive","Positive")
+: T("Negative","Negative")
+},
 
-  {
-    label:"ROI",
-    value:pct(roi)
-  }
+{
+title:"ROI",
+value:pct(roi),
+subtitle:rating
+}
 
 ];
 
-let startX = 20;
-let startY = y;
-let cardW = 38;
-let cardH = 28;
-let gap = 6;
+const cardW = 38;
+const cardH = 40;
+const gap = 6;
 
-executiveKPIs.forEach((kpi,index)=>{
+executiveKPIs.forEach((card,i)=>{
 
-  const x = startX + (index * (cardW + gap));
+const x = 20 + i*(cardW+gap);
 
-  // card
-  doc.setFillColor(248,250,252);
+doc.setFillColor(250,250,252);
 
-  doc.roundedRect(
-    x,
-    startY,
-    cardW,
-    cardH,
-    4,
-    4,
-    "F"
-  );
+doc.roundedRect(
+x,
+y,
+cardW,
+cardH,
+5,
+5,
+"F"
+);
 
-  // label
-  doc.setFontSize(8);
-  doc.setTextColor(...gray);
+doc.setDrawColor(235);
 
-  doc.text(
-    kpi.label,
-    x + 4,
-    startY + 9
-  );
+doc.roundedRect(
+x,
+y,
+cardW,
+cardH,
+5,
+5
+);
 
-  // value
-  doc.setFontSize(11);
-  doc.setTextColor(...dark);
+// titolo
 
-  doc.text(
-    kpi.value,
-    x + 4,
-    startY + 20
-  );
+doc.setFontSize(7);
+
+doc.setTextColor(...gray);
+
+doc.text(
+card.title,
+x+3,
+y+8,
+{
+maxWidth:32
+}
+);
+
+// valore
+
+doc.setFontSize(11);
+
+doc.setTextColor(...dark);
+
+doc.text(
+card.value,
+x+3,
+y+22
+);
+
+// sottotitolo
+
+doc.setFontSize(7);
+
+doc.setTextColor(...green);
+
+doc.text(
+card.subtitle,
+x+3,
+y+34
+);
 
 });
 
-y += 42;
+y += 52;
 
 // ===================================================
 // PERFORMANCE ANALYSIS
@@ -5785,6 +5926,78 @@ cashflowScenarios.forEach(s=>{
 
 });
 
+  // =====================================
+// AI EXECUTIVE INSIGHT
+// =====================================
+
+y += 8;
+
+doc.setFillColor(245,248,252);
+
+doc.roundedRect(
+20,
+y,
+170,
+42,
+6,
+6,
+"F"
+);
+
+doc.setFontSize(11);
+
+doc.setTextColor(...dark);
+
+doc.text(
+T(
+"Executive AI Insight",
+"Executive AI Insight"
+),
+25,
+y+10
+);
+
+doc.setFontSize(9);
+
+doc.setTextColor(...gray);
+
+let executiveInsight =
+T(
+"Investimento con buona sostenibilità finanziaria. Il cashflow previsto supporta una gestione stabile e la redditività risulta coerente con il mercato analizzato.",
+"Investment shows good financial sustainability. Expected cashflow supports stable operations and profitability is consistent with the analysed market."
+);
+
+if(roi >= 18){
+
+executiveInsight =
+T(
+"Investimento ad alta redditività con ottimo equilibrio tra rendimento e rischio. Opportunità molto competitiva per il mercato selezionato.",
+"High-return investment with an excellent balance between profitability and risk. Highly competitive opportunity for the selected market."
+);
+
+}
+
+else if(roi < 8){
+
+executiveInsight =
+T(
+"Il rendimento previsto risulta inferiore al benchmark di mercato. Si consiglia di rivalutare prezzo di acquisto, ADR o livello di occupazione.",
+"Expected return is below the market benchmark. Review purchase price, ADR or occupancy assumptions."
+);
+
+}
+
+doc.text(
+executiveInsight,
+25,
+y+20,
+{
+maxWidth:155
+}
+);
+
+y += 55;
+
 footer();
 
 // ===================================================
@@ -5857,6 +6070,83 @@ doc.text(
 );
 
 y += 12;
+
+// =====================================
+// MARKET SNAPSHOT
+// =====================================
+
+const benchmarkROI = 12; // benchmark medio temporaneo
+
+doc.setFillColor(248,250,252);
+
+doc.roundedRect(
+20,
+y,
+170,
+26,
+5,
+5,
+"F"
+);
+
+doc.setDrawColor(230);
+
+doc.roundedRect(
+20,
+y,
+170,
+26,
+5,
+5
+);
+
+doc.setFontSize(8);
+doc.setTextColor(...gray);
+
+doc.text(
+T("Il tuo ROI","Your ROI"),
+28,
+y+8
+);
+
+doc.text(
+T("Benchmark","Benchmark"),
+88,
+y+8
+);
+
+doc.text(
+T("Posizione","Position"),
+145,
+y+8
+);
+
+doc.setFontSize(11);
+doc.setTextColor(...dark);
+
+doc.text(
+pct(roi),
+28,
+y+19
+);
+
+doc.text(
+pct(benchmarkROI),
+88,
+y+19
+);
+
+doc.setTextColor(...green);
+
+doc.text(
+roi >= benchmarkROI
+? "TOP"
+: T("Media","Average"),
+145,
+y+19
+);
+
+y += 38;  
 
 // ================= MARKET DATA =================
 
