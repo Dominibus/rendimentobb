@@ -2943,6 +2943,17 @@ net ||
 
 // ================= INVESTMENT SCORE =================
 
+console.log(
+  "🧪 SCORE FUNCTIONS",
+  {
+    rbGenerateInvestmentScore:
+      typeof window.rbGenerateInvestmentScore,
+
+    updateInvestmentScore:
+      typeof window.updateInvestmentScore
+  }
+);
+
 if(
 
   typeof window.rbGenerateInvestmentScore === "function" &&
