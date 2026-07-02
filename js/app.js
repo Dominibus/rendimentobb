@@ -3920,7 +3920,7 @@ window.rbChatbotData = {
   city:
     selectedCity ||
     marketCity ||
-    currentCity ||
+    window.currentCity ||
     null
 
 };
@@ -4038,7 +4038,7 @@ monthlyMortgagePayment:
   city:
     selectedCity ||
     marketCity ||
-    currentCity ||
+    window.currentCity ||
     "Roma",
 
   timestamp:
@@ -4346,13 +4346,13 @@ if(!window.rbChatMemory.investmentHistory){
 const newSnapshot = {
 
   city:
-    currentCity || "roma",
+    window.currentCity || "roma",
 
-  marketCity:
-    currentCity || "roma",
+marketCity:
+    window.currentCity || "roma",
 
-  realCity:
-    currentCity || "roma",
+realCity:
+    window.currentCity || "roma",
 
   roi:
   Number(
