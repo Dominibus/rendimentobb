@@ -19815,3 +19815,31 @@ color:#0f172a;
 line-height:1.45;
 
 }
+
+/* ==========================================
+HOME SECTION BADGES
+========================================== */
+
+.home-page .home-section-badge{
+
+display:inline-flex;
+
+align-items:center;
+
+padding:8px 16px;
+
+margin-bottom:18px;
+
+background:#ecfdf5;
+
+border:1px solid #10b981;
+
+border-radius:999px;
+
+font-size:13px;
+
+font-weight:700;
+
+color:#059669;
+
+}
