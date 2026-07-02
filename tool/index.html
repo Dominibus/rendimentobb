@@ -1181,70 +1181,94 @@ class="investment-panel">
 
     </div>
 
-   <!-- RESULTS -->
-<div class="executive-summary-grid">
+<!-- =====================================
+EXECUTIVE KPI CARDS
+===================================== -->
 
-  <!-- 💰 MONTHLY PROFIT -->
-  <div class="result-item executive-kpi executive-card">
+<div class="executive-stats-grid">
 
-    <div class="kpi-icon">💰</div>
+  <!-- MONTHLY -->
+  <div class="executive-stat-card">
 
-    <span
-      data-it="Profitto mensile"
-      data-en="Monthly Profit">
-      Profitto mensile
-    </span>
+    <div class="executive-stat-icon">💰</div>
 
-    <strong id="profit-monthly"></strong>
+    <div
+    class="executive-stat-title"
+    data-it="Profitto mensile"
+    data-en="Monthly Profit">
+    Profitto mensile
+    </div>
 
-  </div>
-
-  <!-- 📈 ANNUAL PROFIT -->
-  <div class="result-item executive-kpi executive-card pro-only">
-
-    <div class="kpi-icon">📈</div>
-
-    <span
-      data-it="Profitto annuo"
-      data-en="Annual Profit">
-      Profitto annuo
-    </span>
-
-    <strong id="profit-annual"></strong>
+    <div
+    id="profit-monthly"
+    class="executive-stat-value">
+    €0
+    </div>
 
   </div>
 
-  <!-- ⏳ BREAK EVEN -->
-  <div class="result-item executive-kpi executive-card pro-only">
+  <!-- ANNUAL -->
 
-    <div class="kpi-icon">⏳</div>
+  <div class="executive-stat-card pro-only">
 
-    <span
-      data-it="Break-even"
-      data-en="Break-even">
-      Break-even
-    </span>
+    <div class="executive-stat-icon">📈</div>
 
-    <strong id="break-even"></strong>
+    <div
+    class="executive-stat-title"
+    data-it="Profitto annuo"
+    data-en="Annual Profit">
+    Profitto annuo
+    </div>
 
-  </div>
-
-  <!-- 🏦 ANNUAL REVENUE -->
-  <div class="result-item executive-kpi executive-card pro-only">
-
-    <div class="kpi-icon">🏦</div>
-
-    <span
-      data-it="Ricavi annui"
-      data-en="Annual Revenue">
-      Ricavi annui
-    </span>
-
-    <strong id="revenue-annual"></strong>
+    <div
+    id="profit-annual"
+    class="executive-stat-value">
+    €0
+    </div>
 
   </div>
 
-</div>
+  <!-- BREAK EVEN -->
+
+  <div class="executive-stat-card pro-only">
+
+    <div class="executive-stat-icon">⏳</div>
+
+    <div
+    class="executive-stat-title"
+    data-it="Break-even"
+    data-en="Break-even">
+    Break-even
+    </div>
+
+    <div
+    id="break-even"
+    class="executive-stat-value">
+    —
+    </div>
+
+  </div>
+
+  <!-- REVENUE -->
+
+  <div class="executive-stat-card pro-only">
+
+    <div class="executive-stat-icon">🏦</div>
+
+    <div
+    class="executive-stat-title"
+    data-it="Ricavi annui"
+    data-en="Annual Revenue">
+    Ricavi annui
+    </div>
+
+    <div
+    id="revenue-annual"
+    class="executive-stat-value">
+    €0
+    </div>
+
+  </div>
 
 </div>
 
