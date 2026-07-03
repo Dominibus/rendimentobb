@@ -6527,110 +6527,126 @@ y += 42;
   doc.setFontSize(12);
 doc.setTextColor(...dark);
 
+// ================= EXECUTIVE INSIGHTS =================
+
+doc.setFontSize(12);
+doc.setTextColor(...dark);
+
 doc.text(
-  T(
-    "Strengths",
-    "Strengths"
-  ),
-  20,
-  y
+T(
+"Punti di forza",
+"Executive Strengths"
+),
+20,
+y
 );
 
-y += 8;
+y += 10;
 
-const strengths = [
+const insights = [
 
-roi >= 15
+roi >= 20
 ? T(
-"ROI superiore al benchmark di mercato",
-"ROI above market benchmark"
+"Investimento con rendimento molto superiore al benchmark.",
+"Investment significantly outperforms the market benchmark."
 )
 : T(
-"Buon potenziale di crescita",
-"Good growth potential"
+"Rendimento competitivo rispetto al mercato.",
+"Competitive return compared to the market."
 ),
 
 profit > 0
 ? T(
-"Cashflow positivo",
-"Positive cashflow"
+"Cashflow operativo positivo e sostenibile.",
+"Operating cashflow is positive and sustainable."
 )
 : T(
-"Margine operativo migliorabile",
-"Operating margin can improve"
+"Il cashflow richiede ottimizzazione.",
+"Cashflow requires optimization."
 ),
 
 ltv < 80
 ? T(
-"Leva finanziaria sostenibile",
-"Sustainable leverage"
+"Livello di leva finanziaria considerato equilibrato.",
+"Financial leverage remains within a healthy range."
 )
 : T(
-"Possibile ottimizzazione del finanziamento",
-"Financing can be optimized"
+"Leva finanziaria da monitorare.",
+"Financial leverage should be monitored."
 )
 
 ];
 
 doc.setFontSize(9);
+doc.setTextColor(...gray);
 
-strengths.forEach(item => {
+insights.forEach(item=>{
 
 doc.text(
 "• " + item,
 25,
-y
-);
-
-y += 7;
-
-});
-
-  y += 6;
-
-doc.setFontSize(12);
-
-doc.text(
-  T(
-    "Recommended Actions",
-    "Recommended Actions"
-  ),
-  20,
-  y
+y,
+{
+maxWidth:155
+}
 );
 
 y += 8;
 
-const actions = [
+});
+
+y += 8;
+
+// ================= NEXT STEPS =================
+
+doc.setFontSize(12);
+doc.setTextColor(...dark);
+
+doc.text(
+T(
+"Prossimi passi",
+"Recommended Next Steps"
+),
+20,
+y
+);
+
+y += 10;
+
+const nextSteps=[
 
 T(
-"Confrontare il prezzo con immobili simili",
-"Compare the purchase price with similar properties"
+"Verificare i costi di acquisto e notarili.",
+"Validate acquisition and legal costs."
 ),
 
 T(
-"Ottimizzare ADR e occupazione",
-"Optimize ADR and occupancy"
+"Ottimizzare prezzo medio e occupazione.",
+"Optimize ADR and occupancy."
 ),
 
 T(
-"Verificare periodicamente il cashflow",
-"Review cashflow periodically"
+"Monitorare il cashflow dopo il finanziamento.",
+"Monitor cashflow after financing."
 )
 
 ];
 
 doc.setFontSize(9);
+doc.setTextColor(...gray);
 
-actions.forEach(item=>{
+nextSteps.forEach(step=>{
 
 doc.text(
-"• " + item,
+"• " + step,
 25,
-y
+y,
+{
+maxWidth:155
+}
 );
 
-y += 7;
+y += 8;
 
 });
 
