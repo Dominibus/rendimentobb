@@ -20508,3 +20508,208 @@ color:#334155;
 .market-page .market-footer{
 
 }
+
+/* ==========================================================
+   MARKET PAGE 2026 UI
+   SOLO PAGINA MARKET
+   ========================================================== */
+
+
+/* ---------- EXECUTIVE SECTIONS ---------- */
+
+.market-page .section{
+
+    position:relative;
+
+    overflow:visible;
+
+    padding:90px 0;
+
+}
+
+
+/* ---------- CONTAINER ---------- */
+
+.market-page .section .container{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:1180px;
+
+}
+
+
+/* ---------- EXECUTIVE CARDS ---------- */
+
+.market-page .feature-card{
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:34px;
+
+    text-align:center;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:240px;
+
+    border:1px solid #edf2f7;
+
+    box-shadow:
+    0 12px 40px rgba(15,23,42,.06);
+
+    transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+
+}
+
+
+.market-page .feature-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 22px 55px rgba(15,23,42,.12);
+
+}
+
+
+/* ---------- GRID ---------- */
+
+.market-page .feature-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+
+    gap:28px;
+
+}
+
+
+/* ---------- ICONE ---------- */
+
+.market-page .feature-icon{
+
+    font-size:34px;
+
+    margin-bottom:18px;
+
+}
+
+
+/* ---------- TITOLI ---------- */
+
+.market-page .feature-card h2,
+.market-page .feature-card h3{
+
+    text-align:center;
+
+    margin-top:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+/* ---------- TESTO ---------- */
+
+.market-page .feature-card p{
+
+    text-align:center;
+
+    max-width:280px;
+
+    margin:auto;
+
+    line-height:1.7;
+
+    color:#64748b;
+
+}
+
+
+/* ---------- KPI ---------- */
+
+.market-page .feature-card strong{
+
+    display:block;
+
+    font-size:34px;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    color:#10b981;
+
+    margin:10px 0;
+
+}
+
+
+/* ---------- BADGE ---------- */
+
+.market-page .hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    background:#ecfdf5;
+
+    color:#10b981;
+
+    font-weight:700;
+
+    margin-bottom:22px;
+
+}
+
+
+/* ---------- BOTTONI ---------- */
+
+.market-page .btn{
+
+    border-radius:999px;
+
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:900px){
+
+.market-page .feature-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.market-page .feature-card{
+
+padding:28px;
+
+min-height:auto;
+
+}
+
+}
