@@ -5600,26 +5600,6 @@ doc.roundedRect(
   "F"
 );
 
-doc.setFillColor(...green);
-
-const coverROIBar = Math.max(
-  0,
-  Math.min(
-    120,
-    safe(roi * 3.2)
-  )
-);
-
-doc.roundedRect(
-  20,
-  178,
-  coverROIBar,
-  8,
-  4,
-  4,
-  "F"
-);
-
 // ================= RATING =================
 
 doc.setFontSize(13);
