@@ -2138,11 +2138,35 @@ ${title || ""}
 </h3>
 
 <div style="
-font-size:26px;
-font-weight:700;
+margin-top:-2px;
+margin-bottom:14px;
+font-size:13px;
+color:#64748b;
+">
+
+📍 ${city}
+
+</div>  
+
+<div style="
+font-size:28px;
+font-weight:800;
 color:#0f172a;
 ">
+
 €${price.toLocaleString()}
+
+</div>
+
+<div style="
+margin-top:12px;
+font-size:30px;
+font-weight:800;
+color:#10b981;
+">
+
+ROI ${roi}%
+
 </div>
 
 <div style="
@@ -2150,16 +2174,9 @@ margin-top:8px;
 font-size:14px;
 color:#64748b;
 ">
-📐 ${sqm} m²
-</div>
 
-<div style="
-margin-top:8px;
-font-size:14px;
-font-weight:600;
-color:#10b981;
-">
-ROI ${roi}%
+📐 ${sqm} m²
+
 </div>
 
 <div style="
@@ -2169,10 +2186,10 @@ font-weight:700;
 color:#10b981;
 ">
 
-🏆 ${
+🤖 ${
 window.currentLang==="en"
-? "AI Investment Score"
-: "Punteggio Investimento AI"
+? "AI Investment Grade"
+: "Valutazione AI"
 }
 
 <div style="
@@ -2184,15 +2201,52 @@ font-size:13px;
 line-height:1.6;
 ">
 
-💰 Cashflow:
-€${Math.round(price * roi / 100 / 12)}
+💰 ${
+window.currentLang==="en"
+? "Monthly Cashflow"
+: "Cashflow Mensile"
+}
 
 <br>
 
-🛡 Risk:
+<strong>
+
+€${Math.round(price * roi / 100 / 12)}
+
+</strong>
+
+/mese
+
+<br>
+
+🛡 ${
+window.currentLang==="en"
+? "Risk"
+: "Rischio"
+}
+
+<br>
+
+<strong>
+
 ${roi >= 16 ? "2/10" : roi >= 12 ? "4/10" : "6/10"}
 
+</strong>
+
+${roi >=16
+? (window.currentLang==="en"?"Low":"Basso")
+: roi>=12
+? (window.currentLang==="en"?"Medium":"Medio")
+: (window.currentLang==="en"?"High":"Alto")}
+
 </div>
+
+<div style="
+margin-top:10px;
+font-size:26px;
+font-weight:800;
+color:#0f172a;
+">
 
 ${Math.min(
 100,
@@ -2201,6 +2255,21 @@ Math.round(
 (100 - price / 5000)
 )
 )}/100
+
+</div>
+
+<div style="
+margin-top:4px;
+font-size:13px;
+font-weight:600;
+color:#10b981;
+">
+
+${window.currentLang==="en"
+? "Excellent Investment"
+: "Investimento Eccellente"}
+
+</div>
 
 </div>
 
@@ -2292,8 +2361,8 @@ style="flex:1"
 >
 
 ${window.currentLang==="en"
-? "Analyze ROI"
-: "Analizza ROI"}
+? "Analyze Investment"
+: "Analizza investimento"}
 
 </button>
 
