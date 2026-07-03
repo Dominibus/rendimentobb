@@ -20713,3 +20713,28 @@ min-height:auto;
 }
 
 }
+
+/* ==========================================================
+   MARKET HERO SNAPSHOT
+   ========================================================== */
+
+.market-page .hero-market-snapshot{
+
+    position:relative;
+    margin-top:-90px;
+    z-index:20;
+
+}
+
+.market-page .hero-market-snapshot .container{
+
+    position:relative;
+    z-index:20;
+
+}
+
+.market-page .hero-market-snapshot .feature-grid{
+
+    margin-top:0 !important;
+
+}
