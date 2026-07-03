@@ -14065,8 +14065,6 @@ FIX TESTI (PROBLEMA REALE)
 }
 
 /* fix inline rotti */
-.hero [style*="color"],
-.hero-bg [style*="color"],
 .hero-market [style*="color"]{
   color:#e2e8f0 !important;
 }
