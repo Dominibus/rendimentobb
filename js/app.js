@@ -5602,7 +5602,7 @@ doc.roundedRect(
 
 doc.setFillColor(...green);
 
-const roiBar = Math.max(
+const coverROIBar = Math.max(
   0,
   Math.min(
     120,
@@ -5613,7 +5613,7 @@ const roiBar = Math.max(
 doc.roundedRect(
   20,
   178,
-  roiBar,
+  coverROIBar,
   8,
   4,
   4,
@@ -5665,7 +5665,7 @@ doc.roundedRect(20,185,120,8,4,4,"F");
 
 doc.setFillColor(...green);
 
-const roiBar = Math.max(
+const coverROIBar = Math.max(
   0,
   Math.min(
     120,
@@ -5673,7 +5673,7 @@ const roiBar = Math.max(
   )
 );
 
-doc.roundedRect(20,185,roiBar,8,4,4,"F");
+doc.roundedRect(20,185,coverROIBar,8,4,4,"F");
 
 doc.setFontSize(9);
 doc.setTextColor(...gray);
