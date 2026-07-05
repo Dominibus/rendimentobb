@@ -13,8 +13,10 @@ Academy B&B – ROI e strategie investimento
 </title>
 
 <meta name="description"
-data-it="Guida completa per investire in un B&B: ROI reale, strategie, costi, mutui e errori da evitare. Tutto in un unico hub."
-data-en="Complete guide to B&B investing: ROI, strategy, costs, mortgages and mistakes to avoid. All in one hub.">
+data-it="Strategie, ROI, mutui e dati reali
+per prendere decisioni migliori."
+data-en="Strategy, ROI, mortgages and real data
+to make better investment decisions.">
 
 <link rel="canonical" href="https://www.rendimentobb.it/academy/">
 
@@ -160,6 +162,16 @@ gap:24px;
 margin-top:45px;
 max-width:1100px;
 margin:auto;
+}
+
+.card{
+display:block;
+padding:28px;
+border-radius:16px;
+border:1px solid #f1f5f9;
+
+box-shadow:0 8px 25px rgba(0,0,0,0.04);
+
 transition:
 
 .25s transform,
@@ -171,20 +183,8 @@ background:
 linear-gradient(
 180deg,
 #ffffff,
-#fcfcfd
-);  
-}
-
-.card{
-display:block;
-background:white;
-padding:28px;
-border-radius:16px;
-border:1px solid #f1f5f9;
-
-box-shadow:0 8px 25px rgba(0,0,0,0.04);
-
-transition:.25s;
+#fcfcfd  
+);   
 text-decoration:none !important;
 color:#0f172a !important;
 }
@@ -272,11 +272,17 @@ padding-top:60px;
 
 .academy-label{
 
-display:inline-flex;
+display:flex;
+width:max-content;
+
 align-items:center;
+justify-content:center;
+
 gap:8px;
 
 padding:8px 16px;
+
+margin:0 auto 24px;
 
 background:#ecfdf5;
 
@@ -290,9 +296,7 @@ font-size:13px;
 
 font-weight:700;
 
-margin:auto auto 18px;
-
-} 
+}
 
 .card-footer{
 
@@ -314,6 +318,33 @@ margin-top:18px;
 font-weight:700;
 
 color:#10b981;
+
+} 
+
+/* ================= CARD BADGE ================= */
+
+.card-badge{
+
+display:inline-flex;
+align-items:center;
+
+padding:5px 10px;
+
+border-radius:999px;
+
+background:#f1f5f9;
+
+color:#475569;
+
+font-size:11px;
+
+font-weight:700;
+
+margin-bottom:16px;
+
+text-transform:uppercase;
+
+letter-spacing:.5px;
 
 }  
 
@@ -380,124 +411,359 @@ Scopri ROI
 <!-- CONTENT -->
 <section class="academy-content">
 
-<h2 class="section-title"
+<div class="academy-label"
+data-it="📚 Hub della conoscenza"
+data-en="📚 Knowledge Hub">
+
+📚 Hub della conoscenza
+
+</div>
+
+<h2
+class="section-title"
 data-it="Tutte le guide per investire in un B&B"
-data-en="All guides to invest in a B&B">
-Guida completa investimento B&B
+data-en="Everything you need to invest in a B&B">
+
+Tutte le guide per investire in un B&B
+
 </h2>
-
-<div class="academy-label">
-
-📚 Knowledge Hub
-
-</div>  
 
 <div class="cards">
 
-<!-- STRATEGIA -->
-<a href="/academy/strategia/" class="card">
-<h3 data-it="📈 Strategia B&B" data-en="📈 B&B Strategy">Strategia B&B</h3>
-<p data-it="Come aumentare ROI e profitto con decisioni intelligenti"
-data-en="How to increase ROI and profit with smart decisions">
-Strategia completa
-</p>
-</a>
+<!-- ================= STRATEGIA ================= -->
 
-<!-- ROI -->
-<a href="/academy/roi/" class="card">
-<h3 data-it="📊 ROI B&B" data-en="📊 B&B ROI">ROI B&B</h3>
-<p data-it="Calcolo rendimento reale e break-even"
-data-en="Real ROI calculation and break-even">
-Analisi ROI
-</p>
- <div class="card-footer">
+<a
+href="/academy/strategia/"
+class="card">
 
-<span>📖 8 min</span>
+<div
+class="card-badge"
+data-it="BEGINNER"
+data-en="BEGINNER">
 
-<span>Beginner</span>
+BEGINNER
 
 </div>
 
-<div class="card-link">
+<h3
+data-it="📈 Strategia B&B"
+data-en="📈 B&B Strategy">
 
-→ Apri guida
+📈 Strategia B&B
 
-</div> 
-</a>
+</h3>
 
-<!-- MUTUO -->
-<a href="/academy/mutuo/" class="card">
-<h3 data-it="🏦 Mutuo B&B" data-en="🏦 Mortgage">Mutuo B&B</h3>
-<p data-it="Come il mutuo impatta il rendimento"
-data-en="How mortgage impacts ROI">
-Analisi mutuo
+<p
+data-it="Come aumentare ROI e profitto con decisioni intelligenti."
+data-en="Learn how to increase ROI and profit through smarter investment decisions.">
+
+Come aumentare ROI e profitto con decisioni intelligenti.
+
 </p>
- <div class="card-footer">
+
+<div class="card-footer">
 
 <span>📖 8 min</span>
 
-<span>Beginner</span>
+<span
+data-it="Principiante"
+data-en="Beginner">
+
+Principiante
+
+</span>
 
 </div>
 
-<div class="card-link">
+<div
+class="card-link"
+data-it="→ Apri guida"
+data-en="→ Open guide">
 
 → Apri guida
 
-</div> 
+</div>
+
 </a>
 
-<!-- ERRORI -->
-<a href="/academy/errori/" class="card">
-<h3 data-it="⚠️ Errori da evitare" data-en="⚠️ Mistakes">Errori</h3>
-<p data-it="Gli errori che fanno perdere soldi agli investitori"
-data-en="Common mistakes investors make">
-Evita perdite
+<!-- ================= ROI ================= -->
+
+<a
+href="/academy/roi/"
+class="card">
+
+<div
+class="card-badge"
+data-it="ESSENTIAL"
+data-en="ESSENTIAL">
+
+ESSENTIAL
+
+</div>
+
+<h3
+data-it="📊 ROI B&B"
+data-en="📊 B&B ROI">
+
+📊 ROI B&B
+
+</h3>
+
+<p
+data-it="Calcola rendimento reale, break-even e redditività."
+data-en="Calculate real ROI, break-even and investment profitability.">
+
+Calcola rendimento reale, break-even e redditività.
+
 </p>
- <div class="card-footer">
+
+<div class="card-footer">
 
 <span>📖 8 min</span>
 
-<span>Beginner</span>
+<span
+data-it="Essenziale"
+data-en="Essential">
+
+Essenziale
+
+</span>
 
 </div>
 
-<div class="card-link">
+<div
+class="card-link"
+data-it="→ Apri guida"
+data-en="→ Open guide">
 
 → Apri guida
 
-</div> 
+</div>
+
 </a>
 
-<!-- COSTI -->
-<a href="/costi-aprire-bnb/" class="card">
-<h3 data-it="💸 Costi B&B" data-en="💸 Costs">Costi</h3>
-<p data-it="Tutti i costi reali da considerare"
-data-en="All real costs">
-Costi reali
+<!-- ================= MUTUO ================= -->
+
+<a
+href="/academy/mutuo/"
+class="card">
+
+<div
+class="card-badge"
+data-it="ADVANCED"
+data-en="ADVANCED">
+
+ADVANCED
+
+</div>
+
+<h3
+data-it="🏦 Mutuo B&B"
+data-en="🏦 B&B Mortgage">
+
+🏦 Mutuo B&B
+
+</h3>
+
+<p
+data-it="Scopri come il mutuo influisce su ROI, cashflow e rischio."
+data-en="Understand how mortgages affect ROI, cashflow and investment risk.">
+
+Scopri come il mutuo influisce su ROI, cashflow e rischio.
+
 </p>
- <div class="card-footer">
+
+<div class="card-footer">
 
 <span>📖 8 min</span>
 
-<span>Beginner</span>
+<span
+data-it="Avanzato"
+data-en="Advanced">
+
+Avanzato
+
+</span>
 
 </div>
 
-<div class="card-link">
+<div
+class="card-link"
+data-it="→ Apri guida"
+data-en="→ Open guide">
 
 → Apri guida
 
-</div> 
+</div>
+
 </a>
 
-<!-- MERCATO -->
-<a href="/market/" class="card">
-<h3 data-it="🏙️ Analisi città" data-en="🏙️ Market">Analisi città</h3>
-<p data-it="ROI medio e rendimento per città"
-data-en="ROI by city">
-Dati reali
+<!-- ================= ERRORI ================= -->
+
+<a
+href="/academy/errori/"
+class="card">
+
+<div
+class="card-badge"
+data-it="MUST READ"
+data-en="MUST READ">
+
+MUST READ
+
+</div>
+
+<h3
+data-it="⚠️ Errori da evitare"
+data-en="⚠️ Mistakes to Avoid">
+
+⚠️ Errori da evitare
+
+</h3>
+
+<p
+data-it="Gli errori più comuni che riducono il rendimento degli investimenti."
+data-en="Avoid the most common mistakes that reduce investment returns.">
+
+Gli errori più comuni che riducono il rendimento degli investimenti.
+
 </p>
+
+<div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span
+data-it="Consigliato"
+data-en="Recommended">
+
+Consigliato
+
+</span>
+
+</div>
+
+<div
+class="card-link"
+data-it="→ Apri guida"
+data-en="→ Open guide">
+
+→ Apri guida
+
+</div>
+
+</a>
+
+<!-- ================= COSTI ================= -->
+
+<a
+href="/costi-aprire-bnb/"
+class="card">
+
+<div
+class="card-badge"
+data-it="CHECKLIST"
+data-en="CHECKLIST">
+
+CHECKLIST
+
+</div>
+
+<h3
+data-it="💸 Costi B&B"
+data-en="💸 B&B Costs">
+
+💸 Costi B&B
+
+</h3>
+
+<p
+data-it="Analizza tutti i costi reali prima di investire."
+data-en="Review every real cost before making your investment.">
+
+Analizza tutti i costi reali prima di investire.
+
+</p>
+
+<div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span
+data-it="Checklist"
+data-en="Checklist">
+
+Checklist
+
+</span>
+
+</div>
+
+<div
+class="card-link"
+data-it="→ Apri guida"
+data-en="→ Open guide">
+
+→ Apri guida
+
+</div>
+
+</a>
+
+<!-- ================= MERCATO ================= -->
+
+<a
+href="/market/"
+class="card">
+
+<div
+class="card-badge"
+data-it="LIVE DATA"
+data-en="LIVE DATA">
+
+LIVE DATA
+
+</div>
+
+<h3
+data-it="🏙️ Analisi città"
+data-en="🏙️ City Analysis">
+
+🏙️ Analisi città
+
+</h3>
+
+<p
+data-it="Confronta ROI, occupazione, ADR e rendimento nelle principali città italiane."
+data-en="Compare ROI, occupancy, ADR and profitability across Italy's top cities.">
+
+Confronta ROI, occupazione, ADR e rendimento nelle principali città italiane.
+
+</p>
+
+<div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span
+data-it="Aggiornato"
+data-en="Updated">
+
+Aggiornato
+
+</span>
+
+</div>
+
+<div
+class="card-link"
+data-it="→ Apri guida"
+data-en="→ Open guide">
+
+→ Apri guida
+
+</div>
+
 </a>
 
 </div>
@@ -508,9 +774,9 @@ Dati reali
 <section class="cta-final">
 
 <h3
-data-it="Scopri se il tuo investimento è profittevole"
-data-en="Check if your investment is profitable">
-Scopri se il tuo investimento è profittevole
+data-it="Hai finito di studiare? Ora analizza un investimento reale."
+data-en="Finished learning? Analyze a real investment now.">
+Hai finito di studiare? Ora analizza un investimento reale.
 </h3>
 
 <a href="/tool/"
