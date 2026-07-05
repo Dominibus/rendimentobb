@@ -31,14 +31,87 @@ text-align:center;
 .hero h1{
 font-size:44px;
 font-weight:800;
-color:white;
+color:#fff;
 line-height:1.2;
+text-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 
 .hero p{
-color:#e2e8f0;
-margin-top:15px;
+color:#f8fafc;
+margin-top:18px;
+font-size:16px;
+font-weight:500;
+line-height:1.7;
+max-width:760px;
+margin-left:auto;
+margin-right:auto;
 }
+
+/* ===== HERO HIGHLIGHTS ===== */
+
+.hero-highlights{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:14px;
+
+margin-top:38px;
+
+}
+
+.hero-highlight{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:10px 16px;
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(10px);
+
+border:1px solid rgba(255,255,255,.15);
+
+border-radius:999px;
+
+color:#fff;
+
+font-size:14px;
+
+font-weight:700;
+
+transition:.25s;
+
+}
+
+.hero-highlight:hover{
+
+transform:translateY(-2px);
+
+background:rgba(255,255,255,.18);
+
+}
+
+.hero-highlight span{
+
+font-size:17px;
+
+}
+
+.hero-highlight p{
+
+margin:0;
+
+color:#fff;
+
+}  
 
 /* CTA HERO */
 .hero .btn-main{
@@ -70,57 +143,83 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:25px;
 margin-top:40px;
+align-items:stretch;
 }
 
 /* ===== CARD ===== */
 .roi-card{
-background:rgba(255,255,255,0.95);
+background:rgba(255,255,255,.95);
 backdrop-filter:blur(10px);
 padding:28px;
 border-radius:16px;
 border:1px solid #f1f5f9;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
+box-shadow:0 10px 30px rgba(0,0,0,.05);
 transition:.25s;
+display:flex;
+flex-direction:column;
+height:100%;
 }
 
 .roi-card:hover{
 transform:translateY(-6px);
-border-color:#10b981;
-box-shadow:0 25px 70px rgba(0,0,0,0.08);
+border-color:#22c55e;
+box-shadow:0 25px 70px rgba(0,0,0,.08);
 }
 
 .roi-card h3{
 color:#059669;
-margin-bottom:10px;
-font-size:18px;
+margin-bottom:14px;
+font-size:22px;
+font-weight:800;
+line-height:1.3;
 }
 
 .roi-card p{
 color:#475569;
-font-size:15px;
+font-size:16px;
+line-height:1.75;
 }
 
 /* ===== HIGHLIGHT ===== */
 .highlight-box{
-background:#0f172a;
-color:white;
-padding:25px;
-border-radius:16px;
-margin:30px 0;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:#fff;
+padding:28px;
+border-radius:18px;
+margin:40px 0;
 text-align:center;
-font-weight:600;
+font-size:18px;
+font-weight:700;
+line-height:1.6;
+box-shadow:0 15px 40px rgba(15,23,42,.18);
 }
 
 /* ===== CTA BOX ===== */
 .premium-box{
 background:linear-gradient(135deg,#10b981,#059669);
-color:white;
-padding:60px;
-border-radius:20px;
+color:#fff;
+padding:70px 60px;
+border-radius:24px;
 text-align:center;
-margin-top:80px;
-box-shadow:0 20px 60px rgba(16,185,129,0.25);
+margin-top:90px;
+box-shadow:0 25px 70px rgba(16,185,129,.28);
+position:relative;
+overflow:hidden;
 }
+
+.premium-box h2{
+
+font-size:38px;
+
+font-weight:800;
+
+line-height:1.25;
+
+margin-bottom:18px;
+
+color:#fff;
+
+}  
 
 .premium-box a{
 display:inline-block;
@@ -187,8 +286,9 @@ ROI B&B: quanto guadagni davvero?
 </h1>
 
 <p
-data-it="Il 72% degli investimenti B&B rende meno del previsto. Il problema? ROI calcolato male."
-data-en="72% of B&B investments underperform. The problem? Wrong ROI calculation.">
+data-it="Il 72% degli investimenti B&B rende meno del previsto. Il motivo? Il ROI viene spesso calcolato senza considerare tutti i costi."
+
+data-en="72% of B&B investments underperform. The reason? ROI is often calculated without considering all operating costs.">
 Il 72% degli investimenti sbaglia ROI
 </p>
 
@@ -196,9 +296,61 @@ Il 72% degli investimenti sbaglia ROI
 
 <a href="/tool/" class="btn-main"
 data-it="🚀 Calcola il ROI reale"
-data-en="🚀 Calculate real ROI">
+data-en="🚀 Calculate the real ROI">
 🚀 Calcola il ROI reale
 </a>
+
+</div>
+
+<div class="hero-highlights">
+
+<div class="hero-highlight">
+
+<span>📈</span>
+
+<p
+data-it="ROI reale"
+data-en="Real ROI">
+ROI reale
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>💰</span>
+
+<p
+data-it="Profitto netto"
+data-en="Net Profit">
+Profitto netto
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>🏦</span>
+
+<p
+data-it="Mutuo"
+data-en="Mortgage">
+Mutuo
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>⚠️</span>
+
+<p
+data-it="Analisi rischio"
+data-en="Risk Analysis">
+Analisi rischio
+</p>
+
+</div>
 
 </div>
 
@@ -208,62 +360,139 @@ data-en="🚀 Calculate real ROI">
 <!-- CONTENT -->
 <section class="academy-content">
 
-<h2 style="text-align:center"
-data-it="Come calcolare il ROI corretto"
-data-en="How to calculate real ROI">
-Come calcolare il ROI corretto
+<h2
+style="text-align:center"
+data-it="Come calcolare il ROI corretto di un B&B"
+data-en="How to calculate the real ROI of a B&B">
+Come calcolare il ROI corretto di un B&B
 </h2>
 
-<p style="text-align:center;max-width:700px;margin:10px auto;color:#64748b"
-data-it="Il ROI reale non è solo una formula: include costi nascosti, tasse, mutuo e occupazione."
-data-en="Real ROI is not just a formula: it includes hidden costs, taxes, mortgage and occupancy.">
-Il ROI reale include tutti i fattori
+<p
+style="text-align:center;max-width:760px;margin:14px auto;color:#64748b;line-height:1.8"
+data-it="Il ROI reale considera ricavi, costi operativi, tasse, mutuo, occupazione e rischio per misurare la reale redditività di un investimento."
+data-en="Real ROI considers revenue, operating costs, taxes, mortgage, occupancy and risk to measure the true profitability of a property investment.">
+
+Il ROI reale considera ricavi, costi operativi, tasse, mutuo, occupazione e rischio per misurare la reale redditività di un investimento.
+
 </p>
 
 <div class="roi-grid">
 
 <div class="roi-card">
-<h3>💰 Ricavi reali</h3>
-<p
-data-it="Prezzo notte × occupazione reale annua."
-data-en="Night price × real yearly occupancy.">
-Prezzo × occupazione
-</p>
+
+<div class="strategy-badge"
+data-it="RICAVI"
+data-en="REVENUE">
+RICAVI
 </div>
 
-<div class="roi-card">
-<h3>📉 Costi nascosti</h3>
+<h3
+data-it="💰 Ricavi reali"
+data-en="💰 Real Revenue">
+💰 Ricavi reali
+</h3>
+
 <p
-data-it="Tasse, pulizie, gestione e commissioni piattaforme."
-data-en="Taxes, cleaning, management and platform fees.">
-Costi reali
+data-it="Il rendimento dipende da tariffa media, occupazione annuale e ricavi realmente generati, non solo dal prezzo per notte."
+data-en="Profitability depends on average daily rate, annual occupancy and actual revenue generated, not just the nightly price.">
+
+Il rendimento dipende da tariffa media, occupazione annuale e ricavi realmente generati, non solo dal prezzo per notte.
+
 </p>
+
 </div>
 
-<div class="roi-card">
-<h3>🏦 Mutuo</h3>
-<p
-data-it="Il finanziamento impatta direttamente il rendimento."
-data-en="Mortgage directly impacts profitability.">
-Impatto finanziario
-</p>
-</div>
 
 <div class="roi-card">
-<h3>⚠️ Rischio</h3>
+
+<div class="strategy-badge"
+data-it="COSTI"
+data-en="COSTS">
+COSTI
+</div>
+
+<h3
+data-it="📉 Costi nascosti"
+data-en="📉 Hidden Costs">
+📉 Costi nascosti
+</h3>
+
 <p
-data-it="Occupazione variabile e stagionalità."
-data-en="Variable occupancy and seasonality.">
-Variabilità reale
+data-it="Tasse, pulizie, manutenzione, commissioni delle piattaforme e spese operative riducono il ROI reale e devono essere sempre considerate."
+data-en="Taxes, cleaning, maintenance, platform commissions and operating expenses reduce real ROI and should always be included.">
+
+Tasse, pulizie, manutenzione, commissioni delle piattaforme e spese operative riducono il ROI reale e devono essere sempre considerate.
+
 </p>
+
+</div>
+
+
+<div class="roi-card">
+
+<div class="strategy-badge"
+data-it="FINANZA"
+data-en="FINANCE">
+FINANZA
+</div>
+
+<h3
+data-it="🏦 Mutuo e leva finanziaria"
+data-en="🏦 Mortgage & Leverage">
+🏦 Mutuo e leva finanziaria
+</h3>
+
+<p
+data-it="Il mutuo modifica cash flow, rendimento sull'equity e sostenibilità dell'investimento. Va sempre incluso nel calcolo."
+data-en="Mortgage affects cash flow, return on equity and investment sustainability. It should always be included in the calculation.">
+
+Il mutuo modifica cash flow, rendimento sull'equity e sostenibilità dell'investimento. Va sempre incluso nel calcolo.
+
+</p>
+
+</div>
+
+
+<div class="roi-card">
+
+<div class="strategy-badge"
+data-it="RISCHIO"
+data-en="RISK">
+RISCHIO
+</div>
+
+<h3
+data-it="⚠️ Analisi del rischio"
+data-en="⚠️ Risk Analysis">
+⚠️ Analisi del rischio
+</h3>
+
+<p
+data-it="Stagionalità, domanda, occupazione e volatilità del mercato influenzano direttamente la redditività di un B&B."
+data-en="Seasonality, demand, occupancy and market volatility directly affect a property's profitability.">
+
+Stagionalità, domanda, occupazione e volatilità del mercato influenzano direttamente la redditività di un B&B.
+
+</p>
+
 </div>
 
 </div>
 
 <div class="highlight-box">
-💡 ROI = (Profitto netto / Capitale investito) × 100
-</div>
 
+💡
+
+<span
+data-it="ROI = (Profitto netto ÷ Capitale investito) × 100"
+data-en="ROI = (Net Profit ÷ Invested Capital) × 100">
+
+ROI = (Profitto netto ÷ Capitale investito) × 100
+
+</span>
+
+</div>
+  
 <!-- CTA -->
 <div class="premium-box">
 
@@ -273,32 +502,138 @@ data-en="Discover the real profitability of your investment">
 Scopri il vero rendimento del tuo investimento
 </h2>
 
-<p style="margin-top:15px;font-size:13px;opacity:0.9"
-data-it="🔥 +1.200 investitori stanno analizzando immobili in questo momento"
-data-en="🔥 1,200+ investors are analyzing properties right now">
-🔥 +1.200 investitori attivi
+<p
+style="margin-top:15px;font-size:13px;opacity:.9"
+data-it="🔥 Oltre 1.200 investitori stanno analizzando immobili con RendimentoBB."
+data-en="🔥 More than 1,200 investors are analyzing properties with RendimentoBB.">
+
+🔥 Oltre 1.200 investitori stanno analizzando immobili con RendimentoBB.
+
 </p>
 
 <p
-data-it="Simula ROI, rischio e profitto in meno di 30 secondi."
-data-en="Simulate ROI, risk and profit in under 30 seconds.">
-Dati reali. Decisioni migliori.
+data-it="Simula ROI, rischio, cash flow e profitto reale in meno di 30 secondi."
+data-en="Simulate ROI, risk, cash flow and real profit in less than 30 seconds.">
+
+Simula ROI, rischio, cash flow e profitto reale in meno di 30 secondi.
+
 </p>
+
+<div class="premium-features">
+
+<span
+data-it="✔ ROI reale"
+data-en="✔ Real ROI">
+✔ ROI reale
+</span>
+
+<span
+data-it="✔ Analisi rischio"
+data-en="✔ Risk Analysis">
+✔ Analisi rischio
+</span>
+
+<span
+data-it="✔ Cash Flow"
+data-en="✔ Cash Flow">
+✔ Cash Flow
+</span>
+
+<span
+data-it="✔ AI Score"
+data-en="✔ AI Score">
+✔ AI Score
+</span>
+
+</div>
 
 <a href="/tool/"
 data-it="🚀 Avvia simulazione"
-data-en="🚀 Start simulation">
+data-en="🚀 Start Simulation">
 🚀 Avvia simulazione
 </a>
 
 <div class="internal-links">
+
 <a href="/roi-bnb/roma/">ROI B&B Roma</a>
+
 <a href="/roi-bnb/milano/">ROI B&B Milano</a>
+
 <a href="/roi-bnb/napoli/">ROI B&B Napoli</a>
+
 <a href="/roi-bnb/firenze/">ROI B&B Firenze</a>
+
 </div>
 
 </div>
+
+<section class="academy-next-guide">
+
+<div class="container">
+
+<div class="strategy-badge"
+data-it="ACADEMY"
+data-en="ACADEMY">
+
+ACADEMY
+
+</div>
+
+<h2
+data-it="Continua ad approfondire"
+data-en="Continue learning">
+
+Continua ad approfondire
+
+</h2>
+
+<p
+data-it="Esplora altre guide dedicate al ROI, agli investimenti immobiliari e alla gestione degli affitti brevi."
+data-en="Explore more guides about ROI, real estate investing and short-term rental management.">
+
+Esplora altre guide dedicate al ROI, agli investimenti immobiliari e alla gestione degli affitti brevi.
+
+</p>
+
+<div class="academy-links">
+
+<a href="/academy/strategia-bnb/"
+data-it="Strategia B&B"
+data-en="B&B Strategy">
+
+Strategia B&B
+
+</a>
+
+<a href="/academy/mutui/"
+data-it="Mutui"
+data-en="Mortgages">
+
+Mutui
+
+</a>
+
+<a href="/academy/mercato/"
+data-it="Mercato"
+data-en="Market">
+
+Mercato
+
+</a>
+
+<a href="/academy/immobili/"
+data-it="Immobili"
+data-en="Properties">
+
+Immobili
+
+</a>
+
+</div>
+
+</div>
+
+</section>
 
 </section>
 
