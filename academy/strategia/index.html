@@ -33,6 +33,7 @@ font-size:44px;
 font-weight:800;
 color:white;
 line-height:1.2;
+text-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 
 .hero p{
@@ -84,7 +85,7 @@ color:#fff;
 
 font-size:14px;
 
-font-weight:600;
+font-weight:700;
 
 transition:.25s;
 
@@ -116,7 +117,8 @@ color:white;
 .hero .btn-main{
 background:linear-gradient(135deg,#10b981,#059669);
 color:#ffffff !important;
-padding:14px 28px;
+padding:16px 34px;
+font-size:16px;
 border-radius:12px;
 font-weight:700;
 display:inline-block;
@@ -142,6 +144,7 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:25px;
 margin-top:40px;
+align-items:stretch;  
 }
 
 /* ===== CARD PRO ===== */
@@ -153,12 +156,15 @@ border-radius:16px;
 border:1px solid #f1f5f9;
 box-shadow:0 10px 30px rgba(0,0,0,0.05);
 transition:.25s;
+display:flex;
+flex-direction:column;
+height:100%;  
 }
 
 .strategy-card:hover{
 transform:translateY(-6px);
-border-color:#10b981;
-box-shadow:0 25px 70px rgba(0,0,0,0.08);
+border-color:#22c55e;
+box-shadow:0 25px 70px rgba(0,0,0,.08);
 }
 
 .strategy-card h3{
@@ -187,6 +193,20 @@ box-shadow:0 25px 70px rgba(16,185,129,.28);
 position:relative;
 overflow:hidden;
 }
+
+.premium-box h2{
+
+font-size:38px;
+
+font-weight:800;
+
+line-height:1.25;
+
+margin-bottom:18px;
+
+color:#fff;
+
+}  
 
 .premium-box a{
 display:inline-block;
@@ -637,9 +657,9 @@ data-en="🚀 Start simulation">
 <!-- SEO INTERNAL LINKS -->
 <div class="internal-links">
 
-<a href="/roi-bnb/roma/">ROI B&B Roma</a> • 
-<a href="/roi-bnb/milano/">ROI B&B Milano</a> • 
-<a href="/roi-bnb/napoli/">ROI B&B Napoli</a> • 
+<a href="/roi-bnb/roma/">ROI B&B Roma</a>  
+<a href="/roi-bnb/milano/">ROI B&B Milano</a>  
+<a href="/roi-bnb/napoli/">ROI B&B Napoli</a>  
 <a href="/roi-bnb/firenze/">ROI B&B Firenze</a>
 
 </div>
@@ -652,10 +672,16 @@ data-en="🚀 Start simulation">
 
 <div class="container">
 
+<div class="strategy-badge"
+data-it="ACADEMY"
+data-en="ACADEMY">
+
+ACADEMY
+
+</div>
+
 <h2
-
 data-it="Continua ad approfondire"
-
 data-en="Continue learning">
 
 Continua ad approfondire
