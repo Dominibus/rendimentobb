@@ -160,6 +160,19 @@ gap:24px;
 margin-top:45px;
 max-width:1100px;
 margin:auto;
+transition:
+
+.25s transform,
+.25s box-shadow,
+.25s border-color;  
+
+background:
+
+linear-gradient(
+180deg,
+#ffffff,
+#fcfcfd
+);  
 }
 
 .card{
@@ -186,9 +199,15 @@ color:#64748b;
 }
 
 .card:hover{
-transform:translateY(-6px);
+
+transform:
+translateY(-8px);
+
 border-color:#10b981;
-box-shadow:0 25px 60px rgba(0,0,0,0.08);
+
+box-shadow:
+0 30px 70px rgba(15,23,42,.12);
+
 }
 
 /* ================= CTA FINAL ================= */
@@ -251,6 +270,53 @@ border-top-right-radius:30px;
 padding-top:60px;
 }
 
+.academy-label{
+
+display:inline-flex;
+align-items:center;
+gap:8px;
+
+padding:8px 16px;
+
+background:#ecfdf5;
+
+border:1px solid #bbf7d0;
+
+border-radius:999px;
+
+color:#059669;
+
+font-size:13px;
+
+font-weight:700;
+
+margin:auto auto 18px;
+
+} 
+
+.card-footer{
+
+display:flex;
+justify-content:space-between;
+
+margin-top:18px;
+
+font-size:12px;
+
+color:#94a3b8;
+
+}
+
+.card-link{
+
+margin-top:18px;
+
+font-weight:700;
+
+color:#10b981;
+
+}  
+
 </style>
 </head>
 
@@ -272,15 +338,22 @@ padding-top:60px;
 <div class="page-title">
 
 <h1
-data-it="Academy B&B: tutto quello che devi sapere per investire bene"
-data-en="B&B Academy: everything you need to invest smart">
-Academy B&B
+data-it="Academy B&B: investi con metodo, non con tentativi"
+data-en="B&B Academy: invest with a strategy, not by guesswork">
+
+Academy B&B:
+investi con metodo,
+non con tentativi
+
 </h1>
 
 <p
-data-it="Strategie, ROI, costi e analisi reale per evitare errori e massimizzare il profitto."
-data-en="Strategy, ROI, costs and real analysis to avoid mistakes and maximize profit.">
-Strategie + dati = investimento intelligente
+data-it="Strategie, ROI, mutui, costi e analisi reali per prendere decisioni migliori."
+data-en="Strategy, ROI, mortgages, costs and real analysis to make better investment decisions.">
+
+Strategie, ROI, mutui, costi e analisi reali
+per prendere decisioni migliori.
+
 </p>
 
 <div class="hero-cta">
@@ -313,6 +386,12 @@ data-en="All guides to invest in a B&B">
 Guida completa investimento B&B
 </h2>
 
+<div class="academy-label">
+
+📚 Knowledge Hub
+
+</div>  
+
 <div class="cards">
 
 <!-- STRATEGIA -->
@@ -331,6 +410,19 @@ Strategia completa
 data-en="Real ROI calculation and break-even">
 Analisi ROI
 </p>
+ <div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span>Beginner</span>
+
+</div>
+
+<div class="card-link">
+
+→ Apri guida
+
+</div> 
 </a>
 
 <!-- MUTUO -->
@@ -340,6 +432,19 @@ Analisi ROI
 data-en="How mortgage impacts ROI">
 Analisi mutuo
 </p>
+ <div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span>Beginner</span>
+
+</div>
+
+<div class="card-link">
+
+→ Apri guida
+
+</div> 
 </a>
 
 <!-- ERRORI -->
@@ -349,6 +454,19 @@ Analisi mutuo
 data-en="Common mistakes investors make">
 Evita perdite
 </p>
+ <div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span>Beginner</span>
+
+</div>
+
+<div class="card-link">
+
+→ Apri guida
+
+</div> 
 </a>
 
 <!-- COSTI -->
@@ -358,6 +476,19 @@ Evita perdite
 data-en="All real costs">
 Costi reali
 </p>
+ <div class="card-footer">
+
+<span>📖 8 min</span>
+
+<span>Beginner</span>
+
+</div>
+
+<div class="card-link">
+
+→ Apri guida
+
+</div> 
 </a>
 
 <!-- MERCATO -->
