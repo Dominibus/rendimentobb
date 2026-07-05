@@ -40,6 +40,72 @@ color:#e2e8f0;
 margin-top:15px;
 }
 
+/* ===== HERO HIGHLIGHTS ===== */
+
+.hero-highlights{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:14px;
+
+margin-top:38px;
+
+}
+
+.hero-highlight{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:10px 16px;
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(10px);
+
+border:1px solid rgba(255,255,255,.15);
+
+border-radius:999px;
+
+color:#fff;
+
+font-size:14px;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+.hero-highlight:hover{
+
+transform:translateY(-2px);
+
+background:rgba(255,255,255,.18);
+
+}
+
+.hero-highlight span{
+
+font-size:17px;
+
+}
+
+.hero-highlight p{
+
+margin:0;
+
+color:white;
+
+}  
+
 /* 🔥 CTA HERO FIX */
 .hero .btn-main{
 background:linear-gradient(135deg,#10b981,#059669);
@@ -153,6 +219,130 @@ background:#ffffff;
 transform:translateY(-2px);
 box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
+
+.strategy-badge{
+
+display:inline-flex;
+
+align-items:center;
+
+padding:5px 10px;
+
+margin-bottom:14px;
+
+border-radius:999px;
+
+background:#ecfdf5;
+
+color:#059669;
+
+font-size:11px;
+
+font-weight:700;
+
+letter-spacing:.6px;
+
+text-transform:uppercase;
+
+}  
+
+  .premium-features{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:12px;
+
+margin:24px 0;
+
+}
+
+.premium-features span{
+
+background:rgba(255,255,255,.15);
+
+padding:10px 14px;
+
+border-radius:999px;
+
+font-size:13px;
+
+font-weight:600;
+
+}
+
+  .academy-next-guide{
+
+padding:90px 20px;
+
+text-align:center;
+
+background:#f8fafc;
+
+}
+
+.academy-next-guide h2{
+
+font-size:34px;
+
+margin-bottom:15px;
+
+}
+
+.academy-next-guide p{
+
+max-width:700px;
+
+margin:auto;
+
+color:#64748b;
+
+}
+
+.academy-links{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:15px;
+
+margin-top:35px;
+
+}
+
+.academy-links a{
+
+padding:14px 20px;
+
+background:white;
+
+border-radius:14px;
+
+text-decoration:none;
+
+font-weight:700;
+
+color:#059669;
+
+border:1px solid #e5e7eb;
+
+transition:.25s;
+
+}
+
+.academy-links a:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
   
 </style>
 
@@ -191,6 +381,58 @@ data-en="🚀 Discover the real ROI">
 
 </div>
 
+ <div class="hero-highlights">
+
+<div class="hero-highlight">
+
+<span>📊</span>
+
+<p
+data-it="ROI reale"
+data-en="Real ROI">
+ROI reale
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>📈</span>
+
+<p
+data-it="Pricing dinamico"
+data-en="Dynamic pricing">
+Pricing dinamico
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>⚖️</span>
+
+<p
+data-it="Analisi del rischio"
+data-en="Risk analysis">
+Analisi del rischio
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>🤖</span>
+
+<p
+data-it="Strategie AI"
+data-en="AI strategies">
+Strategie AI
+</p>
+
+</div>
+
+</div> 
+
 </div>
 </section>
 
@@ -212,35 +454,94 @@ Strategie basate su dati reali per aumentare il rendimento
 <div class="strategy-grid">
 
 <div class="strategy-card">
-<h3 data-it="📈 Pricing dinamico" data-en="📈 Dynamic pricing">Pricing dinamico</h3>
-<p data-it="Adattare il prezzo alla domanda può aumentare il profitto fino al +30%."
-data-en="Adjusting price based on demand can increase profit up to 30%.">
-Prezzi intelligenti = più profitto
-</p>
+
+<div class="strategy-badge"
+data-it="STRATEGIA"
+data-en="STRATEGY">
+STRATEGIA
 </div>
 
-<div class="strategy-card">
-<h3 data-it="📊 Analisi ROI avanzata" data-en="📊 Advanced ROI analysis">Analisi ROI avanzata</h3>
-<p data-it="Non basta un numero: serve analizzare costi, mutuo, tasse e occupazione."
-data-en="ROI is not just a number: you must analyze costs, mortgage, taxes and occupancy.">
-Analisi completa
+<h3
+data-it="📈 Pricing dinamico"
+data-en="📈 Dynamic Pricing">
+📈 Pricing dinamico
+</h3>
+
+<p
+data-it="Adattare il prezzo in base a domanda, stagionalità ed eventi può aumentare il profitto fino al 30% senza incrementare i costi operativi."
+data-en="Adjusting prices according to demand, seasonality and local events can increase profits by up to 30% without increasing operating costs.">
+Adattare il prezzo in base a domanda, stagionalità ed eventi può aumentare il profitto fino al 30% senza incrementare i costi operativi.
 </p>
+
 </div>
 
-<div class="strategy-card">
-<h3 data-it="🏙️ Scelta città" data-en="🏙️ Location strategy">Scelta città</h3>
-<p data-it="La città incide fino al 50% sul rendimento finale."
-data-en="Location can impact over 50% of total return.">
-Location = rendimento
-</p>
-</div>
 
 <div class="strategy-card">
-<h3 data-it="💸 Ottimizzazione costi" data-en="💸 Cost optimization">Ottimizzazione costi</h3>
-<p data-it="Ridurre costi inutili aumenta il margine reale."
-data-en="Reducing unnecessary costs increases real margins.">
-Più margine netto
+
+<div class="strategy-badge"
+data-it="ANALISI"
+data-en="ANALYSIS">
+ANALISI
+</div>
+
+<h3
+data-it="📊 Analisi ROI avanzata"
+data-en="📊 Advanced ROI Analysis">
+📊 Analisi ROI avanzata
+</h3>
+
+<p
+data-it="Un investimento si valuta considerando ROI, cash flow, mutuo, tasse, costi operativi e tasso di occupazione, non un solo numero."
+data-en="A property should be evaluated through ROI, cash flow, mortgage, taxes, operating costs and occupancy rate—not by a single number.">
+Un investimento si valuta considerando ROI, cash flow, mutuo, tasse, costi operativi e tasso di occupazione, non un solo numero.
 </p>
+
+</div>
+
+
+<div class="strategy-card">
+
+<div class="strategy-badge"
+data-it="MERCATO"
+data-en="MARKET">
+MERCATO
+</div>
+
+<h3
+data-it="🏙️ Scelta della città"
+data-en="🏙️ Location Strategy">
+🏙️ Scelta della città
+</h3>
+
+<p
+data-it="La destinazione influenza domanda, occupazione, ADR e rendimento finale. Scegliere il mercato giusto può incidere per oltre il 50% sul risultato."
+data-en="The destination affects demand, occupancy, ADR and overall profitability. Choosing the right market can influence more than 50% of the final return.">
+La destinazione influenza domanda, occupazione, ADR e rendimento finale. Scegliere il mercato giusto può incidere per oltre il 50% sul risultato.
+</p>
+
+</div>
+
+
+<div class="strategy-card">
+
+<div class="strategy-badge"
+data-it="EFFICIENZA"
+data-en="EFFICIENCY">
+EFFICIENZA
+</div>
+
+<h3
+data-it="💸 Ottimizzazione dei costi"
+data-en="💸 Cost Optimization">
+💸 Ottimizzazione dei costi
+</h3>
+
+<p
+data-it="Ridurre le spese superflue, automatizzare i processi e monitorare i costi aumenta il margine netto senza compromettere la qualità del servizio."
+data-en="Reducing unnecessary expenses, automating operations and monitoring costs increases net margins without compromising guest experience.">
+Ridurre le spese superflue, automatizzare i processi e monitorare i costi aumenta il margine netto senza compromettere la qualità del servizio.
+</p>
+
 </div>
 
 </div>
@@ -266,6 +567,34 @@ data-en="Simulate ROI, risk and profit in under 30 seconds.">
 Dati reali. Decisioni migliori.
 </p>
 
+<div class="premium-features">
+
+<span
+data-it="✔ ROI reale"
+data-en="✔ Real ROI">
+✔ ROI reale
+</span>
+
+<span
+data-it="✔ Analisi rischio"
+data-en="✔ Risk analysis">
+✔ Analisi rischio
+</span>
+
+<span
+data-it="✔ Cash Flow"
+data-en="✔ Cash Flow">
+✔ Cash Flow
+</span>
+
+<span
+data-it="✔ AI Score"
+data-en="✔ AI Score">
+✔ AI Score
+</span>
+
+</div>  
+
 <a href="/tool/"
 data-it="🚀 Avvia simulazione"
 data-en="🚀 Start simulation">
@@ -285,6 +614,78 @@ data-en="🚀 Start simulation">
 </div>
 
 </section>
+
+<section class="academy-next-guide">
+
+<div class="container">
+
+<h2
+
+data-it="Continua ad approfondire"
+
+data-en="Continue learning">
+
+Continua ad approfondire
+
+</h2>
+
+<p
+
+data-it="Esplora altre guide dedicate agli investimenti immobiliari e agli affitti brevi."
+
+data-en="Explore more guides about real estate investing and short-term rentals.">
+
+Esplora altre guide dedicate agli investimenti immobiliari e agli affitti brevi.
+
+</p>
+
+<div class="academy-links">
+
+<a href="/academy/roi-bnb/"
+
+data-it="ROI B&B"
+
+data-en="B&B ROI">
+
+ROI B&B
+
+</a>
+
+<a href="/academy/mutui/"
+
+data-it="Mutui"
+
+data-en="Mortgages">
+
+Mutui
+
+</a>
+
+<a href="/academy/mercato/"
+
+data-it="Mercato"
+
+data-en="Market">
+
+Mercato
+
+</a>
+
+<a href="/academy/immobili/"
+
+data-it="Immobili"
+
+data-en="Properties">
+
+Immobili
+
+</a>
+
+</div>
+
+</div>
+
+</section>  
 
 </main>
 
