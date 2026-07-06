@@ -121,36 +121,131 @@ content="ROI medio B&B in Italia">
   box-shadow:0 25px 60px rgba(2,6,23,0.12);
 }
 
-/* ================= KPI ================= */
+/* =====================================================
+   KPI CARDS • SaaS 2026
+===================================================== */
+
 .roi-kpi{
-  display:flex;
-  justify-content:center;
-  gap:30px;
-  margin-top:30px;
-  flex-wrap:wrap;
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:28px;
+
+margin-top:45px;
+
+align-items:stretch;
+
 }
 
-.roi-kpi div{
-  background:#ffffff;
-  padding:24px;
-  border-radius:16px;
-  min-width:150px;
-  border:1px solid #e2e8f0;
-  box-shadow:0 10px 30px rgba(2,6,23,0.06);
-  transition:all .2s ease;
+.roi-kpi > div{
+
+background:#fff;
+
+border:1px solid #e5e7eb;
+
+border-radius:22px;
+
+padding:34px 28px;
+
+text-align:center;
+
+box-shadow:0 18px 45px rgba(15,23,42,.06);
+
+transition:.30s;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.roi-kpi > div::before{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+top:0;
+
+width:100%;
+
+height:5px;
+
+background:linear-gradient(90deg,#10b981,#34d399);
+
+}
+
+.roi-kpi > div:hover{
+
+transform:translateY(-8px);
+
+border-color:#22c55e;
+
+box-shadow:0 30px 70px rgba(15,23,42,.12);
+
+}
+
+.kpi-label{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:7px 18px;
+
+margin-bottom:20px;
+
+border-radius:999px;
+
+background:#ecfdf5;
+
+color:#059669;
+
+font-size:11px;
+
+font-weight:800;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
 }
 
 .roi-kpi strong{
-  font-size:24px;
-  display:block;
-  color:#10b981;
-  margin-bottom:6px;
+
+display:block;
+
+font-size:36px;
+
+font-weight:800;
+
+color:#10b981;
+
+line-height:1;
+
+margin-bottom:14px;
+
 }
 
-.roi-kpi div:hover{
-  transform:translateY(-3px);
-}
+.roi-kpi span{
 
+display:block;
+
+font-size:15px;
+
+line-height:1.7;
+
+color:#64748b;
+
+font-weight:500;
+
+}
 /* ================= CTA BLOCK ================= */
 .cta-box{
   margin-top:50px;
@@ -193,11 +288,105 @@ content="ROI medio B&B in Italia">
 }
 
 /* migliora anche il box */
+/* =====================================================
+ROI CARD • SaaS 2026
+===================================================== */
+
 .roi-card{
-  background:#ffffff;
-  border:1px solid #e2e8f0;
-  box-shadow:0 15px 40px rgba(2,6,23,0.08);
+
+background:#ffffff;
+
+padding:36px;
+
+border-radius:24px;
+
+border:1px solid #e5e7eb;
+
+box-shadow:0 20px 55px rgba(15,23,42,.06);
+
+transition:.30s;
+
+margin-top:35px;
+
 }
+
+.roi-card:hover{
+
+transform:translateY(-6px);
+
+border-color:#22c55e;
+
+box-shadow:0 35px 80px rgba(15,23,42,.10);
+
+}
+
+/* =====================================================
+CITY CARD
+===================================================== */
+
+.market-city{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:22px 10px;
+
+gap:20px;
+
+}
+
+.market-city strong{
+
+font-size:20px;
+
+color:#0f172a;
+
+font-weight:800;
+
+min-width:180px;
+
+}
+
+.market-city p{
+
+margin:0;
+
+font-size:16px;
+
+font-weight:700;
+
+color:#10b981;
+
+}
+
+.market-city span{
+
+display:block;
+
+margin-top:6px;
+
+font-size:14px;
+
+color:#64748b;
+
+font-weight:500;
+
+}
+
+.roi-card hr{
+
+border:none;
+
+height:1px;
+
+background:#edf2f7;
+
+margin:0;
+
+}  
 
 </style>
 </head>
@@ -210,49 +399,124 @@ content="ROI medio B&B in Italia">
 
 <section class="hero-roi" id="hero-roi">
 
+<div class="container">
+
 <h1 id="roi-title"
-data-it="ROI B&B nel 2026: scopri se stai per guadagnare o perdere soldi"
-data-en="B&B ROI in 2026: find out if you will profit or lose money">
-ROI B&B nel 2026: scopri se stai per guadagnare o perdere soldi
+data-it="ROI B&B nel 2026: scopri se il tuo investimento genera davvero profitto"
+data-en="B&B ROI in 2026: discover whether your investment is truly profitable">
+ROI B&B nel 2026: scopri se il tuo investimento genera davvero profitto
 </h1>
 
 <p id="roi-subtitle"
-data-it="Analizza rendimento reale, rischio e profitti degli affitti brevi."
-data-en="Analyze real returns, risk and profits of short-term rentals.">
-Analizza rendimento reale, rischio e profitti degli affitti brevi.
+data-it="Calcola ROI reale, cash flow, rischio e rendimento netto utilizzando dati di mercato aggiornati."
+data-en="Calculate real ROI, cash flow, risk and net profitability using updated market data.">
+Calcola ROI reale, cash flow, rischio e rendimento netto utilizzando dati di mercato aggiornati.
 </p>
 
 <div class="cta">
-<a id="roi-cta-link" href="/tool/" class="btn btn-primary"
-data-it="💰 Scopri quanto puoi guadagnare (o perdere)"
-data-en="💰 See how much you can earn (or lose)">
-💰 Scopri quanto puoi guadagnare (o perdere)
+
+<a
+id="roi-cta-link"
+href="/tool/"
+class="btn btn-primary btn-lg"
+data-it="📊 Calcola il tuo ROI reale"
+data-en="📊 Calculate your real ROI">
+
+📊 Calcola il tuo ROI reale
+
 </a>
+
 </div>
 
-<div style="margin-top:15px;font-size:13px;opacity:0.9;font-weight:500;"
-data-it="🔥 +1.247 investitori stanno analizzando immobili oggi"
-data-en="🔥 +1,247 investors are analyzing properties today">
-🔥 +1.247 investitori stanno analizzando immobili oggi
+<div class="hero-stats">
+
+<div
+data-it="🔥 Oltre 1.250 investitori stanno analizzando immobili oggi"
+data-en="🔥 Over 1,250 investors are analyzing properties today">
+
+🔥 Oltre 1.250 investitori stanno analizzando immobili oggi
+
 </div>
 
-<div style="margin-top:6px;font-size:12px;opacity:0.8;"
-data-it="ROI medio simulato oggi: 11.4%"
-data-en="Average ROI simulated today: 11.4%">
-ROI medio simulato oggi: 11.4%
+<div
+data-it="📈 ROI medio simulato oggi: 11,4%"
+data-en="📈 Average simulated ROI today: 11.4%">
+
+📈 ROI medio simulato oggi: 11,4%
+
 </div>
 
-<div style="margin-top:8px;font-size:12px;opacity:0.8;"
-data-it="✔ Nessuna registrazione • ✔ Risultato in 30 secondi"
-data-en="✔ No signup • ✔ Results in 30 seconds">
-✔ Nessuna registrazione • ✔ Risultato in 30 secondi
-</div>  
+<div
+data-it="✔ Nessuna registrazione • ✔ Analisi in 30 secondi"
+data-en="✔ No signup • ✔ Analysis in 30 seconds">
 
-<div style="margin-top:6px;font-size:12px;color:#facc15;font-weight:500;"
-data-it="⚡ Analisi gratuita disponibile oggi"
-data-en="⚡ Free analysis available today">
-⚡ Analisi gratuita disponibile oggi
-</div>  
+✔ Nessuna registrazione • ✔ Analisi in 30 secondi
+
+</div>
+
+</div>
+
+<div class="hero-highlights">
+
+<div class="hero-highlight">
+
+<span>📈</span>
+
+<p
+data-it="ROI reale"
+data-en="Real ROI">
+
+ROI reale
+
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>💶</span>
+
+<p
+data-it="Cash Flow"
+data-en="Cash Flow">
+
+Cash Flow
+
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>⚠️</span>
+
+<p
+data-it="Analisi rischio"
+data-en="Risk Analysis">
+
+Analisi rischio
+
+</p>
+
+</div>
+
+<div class="hero-highlight">
+
+<span>🤖</span>
+
+<p
+data-it="AI Score"
+data-en="AI Score">
+
+AI Score
+
+</p>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
@@ -262,41 +526,74 @@ data-en="⚡ Free analysis available today">
 
 <section class="section">
 
-<div class="container" style="max-width:900px;">
+<div class="container" style="max-width:980px;">
+
+<div class="strategy-badge">
+
+📊
+<span
+data-it="MARKET INSIGHT"
+data-en="MARKET INSIGHT">
+MARKET INSIGHT
+</span>
+
+</div>
 
 <h2
-data-it="ROI B&B: quanto si guadagna davvero?"
-data-en="B&B ROI: how much can you really earn?">
-ROI B&B: quanto si guadagna davvero?
+data-it="ROI B&B: quanto guadagna davvero un investimento?"
+data-en="B&B ROI: how profitable is an investment, really?">
+
+ROI B&B: quanto guadagna davvero un investimento?
+
 </h2>
 
 <p
-data-it="Il rendimento di un B&B dipende da prezzo notte, occupazione e costi. Ma il 90% degli investitori sottovaluta il rischio reale."
-data-en="B&B profitability depends on nightly price, occupancy and costs. But 90% of investors underestimate the real risk.">
-Il rendimento di un B&B dipende da prezzo notte, occupazione e costi. Ma il 90% degli investitori sottovaluta il rischio reale.
+data-it="Il vero rendimento non dipende soltanto dal prezzo per notte. Cash flow, occupazione, costi operativi, mutuo, fiscalità e rischio determinano la reale redditività di un investimento."
+data-en="Real profitability is not determined only by the nightly rate. Cash flow, occupancy, operating costs, mortgage, taxes and risk define the actual return of an investment.">
+
+Il vero rendimento non dipende soltanto dal prezzo per notte. Cash flow, occupazione, costi operativi, mutuo, fiscalità e rischio determinano la reale redditività di un investimento.
+
 </p>
 
-<div style="margin-top:15px;font-size:12px;color:#64748b;"
-data-it="Dati basati su analisi di mercato reali in Italia (2024–2026)"
-data-en="Data based on real market analysis in Italy (2024–2026)">
-Dati basati su analisi di mercato reali in Italia (2024–2026)
-</div>  
+<div
+style="margin-top:20px;font-size:13px;color:#64748b;font-weight:600;"
+data-it="Dati elaborati utilizzando simulazioni proprietarie e analisi del mercato italiano (2024–2026)."
+data-en="Data generated using proprietary simulations and Italian market analysis (2024–2026).">
+
+Dati elaborati utilizzando simulazioni proprietarie e analisi del mercato italiano (2024–2026).
+
+</div>
 
 <div class="highlight-box">
 
 <div class="strategy-badge">
 
-📊 MARKET INSIGHT
+🤖
+<span
+data-it="AI INSIGHT"
+data-en="AI INSIGHT">
+
+AI INSIGHT
+
+</span>
 
 </div>
 
-<div
-data-it="Il ROI reale considera ricavi, costi operativi, mutuo, tasse, occupazione e rischio. Solo così puoi capire se un investimento genera davvero profitto."
-data-en="Real ROI includes revenue, operating costs, mortgage, taxes, occupancy and risk. Only then can you understand whether an investment is truly profitable.">
+<h3
+data-it="Il ROI reale è molto diverso dal ROI pubblicizzato."
+data-en="Real ROI is very different from advertised ROI.">
 
-Il ROI reale considera ricavi, costi operativi, mutuo, tasse, occupazione e rischio. Solo così puoi capire se un investimento genera davvero profitto.
+Il ROI reale è molto diverso dal ROI pubblicizzato.
 
-</div>
+</h3>
+
+<p
+data-it="Molti investitori calcolano il rendimento utilizzando solo ricavi e prezzo d'acquisto. Un'analisi professionale considera invece costi nascosti, mutuo, imposte, manutenzione, occupazione, rischio e cash flow. È questa la differenza tra un investimento profittevole e una perdita mascherata."
+data-en="Many investors calculate returns using only revenue and purchase price. A professional analysis also includes hidden costs, mortgage, taxes, maintenance, occupancy, risk and cash flow. That is the difference between a profitable investment and a hidden loss.">
+
+Molti investitori calcolano il rendimento utilizzando solo ricavi e prezzo d'acquisto. Un'analisi professionale considera invece costi nascosti, mutuo, imposte, manutenzione, occupazione, rischio e cash flow. È questa la differenza tra un investimento profittevole e una perdita mascherata.
+
+</p>
 
 </div>
 
@@ -308,13 +605,38 @@ Il ROI reale considera ricavi, costi operativi, mutuo, tasse, occupazione e risc
 
 <section class="section section-light">
 
-<div class="container" style="text-align:center;max-width:900px;">
+<div class="container" style="max-width:1100px;text-align:center;">
+
+<div class="strategy-badge">
+
+📈
+
+<span
+data-it="MERCATO ITALIANO"
+data-en="ITALIAN MARKET">
+
+MERCATO ITALIANO
+
+</span>
+
+</div>
 
 <h2
-data-it="ROI medio di un B&B in Italia"
-data-en="Average B&B ROI in Italy">
-ROI medio di un B&B in Italia
+data-it="I numeri che contano davvero"
+data-en="The metrics that really matter">
+
+I numeri che contano davvero
+
 </h2>
+
+<p
+style="max-width:760px;margin:18px auto 45px;color:#64748b;line-height:1.8;"
+data-it="Le performance di un B&B dipendono da molto più del semplice ROI. Occupazione, tempo di recupero e gestione del rischio determinano la reale sostenibilità dell'investimento."
+data-en="A profitable B&B depends on much more than ROI alone. Occupancy, payback period and risk management determine the real sustainability of an investment.">
+
+Le performance di un B&B dipendono da molto più del semplice ROI. Occupazione, tempo di recupero e gestione del rischio determinano la reale sostenibilità dell'investimento.
+
+</p>
 
 <div class="roi-kpi">
 
@@ -322,7 +644,7 @@ ROI medio di un B&B in Italia
 
 <div class="kpi-label">
 
-ROI
+📈 ROI
 
 </div>
 
@@ -333,10 +655,10 @@ ROI
 </strong>
 
 <span
-data-it="ROI medio nazionale"
-data-en="National average ROI">
+data-it="Rendimento medio annuo stimato"
+data-en="Estimated annual return">
 
-ROI medio nazionale
+Rendimento medio annuo stimato
 
 </span>
 
@@ -346,7 +668,7 @@ ROI medio nazionale
 
 <div class="kpi-label">
 
-MARKET
+🏨 OCCUPAZIONE
 
 </div>
 
@@ -357,10 +679,10 @@ MARKET
 </strong>
 
 <span
-data-it="Occupazione media"
-data-en="Average occupancy">
+data-it="Occupazione media nazionale"
+data-en="National average occupancy">
 
-Occupazione media
+Occupazione media nazionale
 
 </span>
 
@@ -370,7 +692,7 @@ Occupazione media
 
 <div class="kpi-label">
 
-TIME
+⏳ PAYBACK
 
 </div>
 
@@ -381,10 +703,34 @@ TIME
 </strong>
 
 <span
-data-it="Tempo medio recupero"
-data-en="Average payback">
+data-it="Tempo medio di recupero del capitale"
+data-en="Average investment payback">
 
-Tempo medio recupero
+Tempo medio di recupero del capitale
+
+</span>
+
+</div>
+
+<div>
+
+<div class="kpi-label">
+
+🤖 AI SCORE
+
+</div>
+
+<strong>
+
+95+
+
+</strong>
+
+<span
+data-it="Investimenti con rischio controllato"
+data-en="Low-risk investment score">
+
+Investimenti con rischio controllato
 
 </span>
 
@@ -396,75 +742,106 @@ Tempo medio recupero
 
 </section>
 
-<!-- ================= CITTÀ ================= -->
+<!-- ================= ROI CITTÀ ================= -->
 
 <section class="section">
 
-<div class="container" style="max-width:900px;">
+<div class="container" style="max-width:1100px;">
+
+<div class="strategy-badge">
+
+🏙️
+
+<span
+data-it="PRINCIPALI MERCATI"
+data-en="TOP MARKETS">
+
+PRINCIPALI MERCATI
+
+</span>
+
+</div>
 
 <h2
-data-it="ROI nelle principali città"
-data-en="ROI in major cities">
-ROI nelle principali città
+data-it="Confronta il ROI delle principali città italiane"
+data-en="Compare ROI across Italy's main cities">
+
+Confronta il ROI delle principali città italiane
+
 </h2>
 
-<p style="text-align:center;color:#64748b;font-size:14px;margin-top:5px;"
-data-it="Il rendimento cambia drasticamente in base alla città: alcune zone possono raddoppiare i profitti."
-data-en="Returns vary significantly by city: some locations can double your profits.">
-Il rendimento cambia drasticamente in base alla città.
+<p
+style="max-width:760px;margin:18px auto 45px;text-align:center;color:#64748b;line-height:1.8;"
+data-it="Ogni città presenta dinamiche completamente diverse. Domanda turistica, prezzi immobiliari, occupazione e stagionalità influenzano direttamente il rendimento finale."
+data-en="Each city behaves differently. Tourism demand, property prices, occupancy and seasonality directly influence investment returns.">
+
+Ogni città presenta dinamiche completamente diverse. Domanda turistica, prezzi immobiliari, occupazione e stagionalità influenzano direttamente il rendimento finale.
+
 </p>
 
 <div class="roi-card">
 
 <div class="market-city">
 
+<div>
+
 <strong>📍 Roma</strong>
+
+<span
+data-it="Mercato stabile e alta domanda internazionale"
+data-en="Stable market with strong international demand">
+
+Mercato stabile e alta domanda internazionale
+
+</span>
+
+</div>
 
 <p>ROI 10–16%</p>
 
-<span
-data-it="Mercato stabile"
-data-en="Stable market">
-
-Mercato stabile
-
-</span>
-
 </div>
 
 <hr>
 
 <div class="market-city">
+
+<div>
 
 <strong>📍 Milano</strong>
 
-<p>ROI 7–12%</p>
-
 <span
-data-it="Domanda premium"
-data-en="Premium demand">
+data-it="Business travel e turismo premium"
+data-en="Business travel and premium tourism">
 
-Domanda premium
+Business travel e turismo premium
 
 </span>
+
+</div>
+
+<p>ROI 7–12%</p>
 
 </div>
 
 <hr>
 
 <div class="market-city">
+
+<div>
 
 <strong>📍 Napoli</strong>
 
-<p>ROI 12–18%</p>
-
 <span
-data-it="Massima redditività"
-data-en="Highest profitability">
+data-it="Tra i rendimenti più elevati d'Italia"
+data-en="Among Italy's highest ROI markets">
 
-Massima redditività
+Tra i rendimenti più elevati d'Italia
 
 </span>
+
+</div>
+
+<p>ROI 12–18%</p>
 
 </div>
 
@@ -472,37 +849,59 @@ Massima redditività
 
 <div class="market-city">
 
+<div>
+
 <strong>📍 Firenze</strong>
 
-<p>ROI 9–14%</p>
-
 <span
-data-it="Turismo internazionale"
-data-en="International tourism">
+data-it="Turismo internazionale ad alta redditività"
+data-en="High-value international tourism">
 
-Turismo internazionale
+Turismo internazionale ad alta redditività
 
 </span>
 
 </div>
 
+<p>ROI 9–14%</p>
+
 </div>
 
-<!-- 🔥 LINK SEO PULITI (NO JS) -->
+</div>
 
-<div style="margin-top:25px;text-align:center;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+<div class="internal-links">
 
-<a href="/roi-bnb/roma/" class="btn-outline"
-data-it="ROI Roma" data-en="ROI Rome">ROI Roma</a>
+<a href="/roi-bnb/roma/"
+data-it="ROI B&B Roma"
+data-en="Rome B&B ROI">
 
-<a href="/roi-bnb/milano/" class="btn-outline"
-data-it="ROI Milano" data-en="ROI Milan">ROI Milano</a>
+ROI B&B Roma
 
-<a href="/roi-bnb/napoli/" class="btn-outline"
-data-it="ROI Napoli" data-en="ROI Naples">ROI Napoli</a>
+</a>
 
-<a href="/roi-bnb/firenze/" class="btn-outline"
-data-it="ROI Firenze" data-en="ROI Florence">ROI Firenze</a>
+<a href="/roi-bnb/milano/"
+data-it="ROI B&B Milano"
+data-en="Milan B&B ROI">
+
+ROI B&B Milano
+
+</a>
+
+<a href="/roi-bnb/napoli/"
+data-it="ROI B&B Napoli"
+data-en="Naples B&B ROI">
+
+ROI B&B Napoli
+
+</a>
+
+<a href="/roi-bnb/firenze/"
+data-it="ROI B&B Firenze"
+data-en="Florence B&B ROI">
+
+ROI B&B Firenze
+
+</a>
 
 </div>
 
@@ -510,22 +909,41 @@ data-it="ROI Firenze" data-en="ROI Florence">ROI Firenze</a>
 
 </section>
 
-<!-- ================= ERRORE ================= -->
+<!-- ================= ROI INSIGHT ================= -->
 
 <section class="section section-light">
 
-<div class="container" style="max-width:900px;">
+<div class="container" style="max-width:1000px;">
+
+<div class="strategy-badge">
+
+⚠️
+
+<span
+data-it="ANALISI STRATEGICA"
+data-en="STRATEGIC ANALYSIS">
+
+ANALISI STRATEGICA
+
+</span>
+
+</div>
 
 <h2
-data-it="Perché il ROI può ingannarti"
-data-en="Why ROI can mislead you">
-Perché il ROI può ingannarti
+data-it="Perché il ROI da solo non basta"
+data-en="Why ROI alone is not enough">
+
+Perché il ROI da solo non basta
+
 </h2>
 
 <p
-data-it="Un ROI alto non significa profitto reale: tasse, mutuo e costi nascosti possono azzerare i guadagni."
-data-en="A high ROI does not mean real profit: taxes, mortgage and hidden costs can destroy returns.">
-Un ROI alto non significa profitto reale.
+style="max-width:760px;margin:18px auto 45px;text-align:center;color:#64748b;line-height:1.8;"
+data-it="Molti investitori prendono decisioni basandosi esclusivamente sul ROI. Un investimento realmente sostenibile richiede invece un'analisi completa di redditività, liquidità e rischio."
+data-en="Many investors make decisions based only on ROI. A truly sustainable investment requires a complete analysis of profitability, cash flow and risk.">
+
+Molti investitori prendono decisioni basandosi esclusivamente sul ROI. Un investimento realmente sostenibile richiede invece un'analisi completa di redditività, liquidità e rischio.
+
 </p>
 
 <div class="danger-box">
@@ -536,13 +954,21 @@ Un ROI alto non significa profitto reale.
 
 </div>
 
-<div
-data-it="Un ROI elevato può essere ingannevole se non considera mutuo, tasse, costi operativi e periodi di bassa occupazione."
-data-en="A high ROI can be misleading if it ignores mortgages, taxes, operating costs and low-occupancy periods.">
+<h3
+data-it="Un ROI elevato può nascondere una perdita."
+data-en="A high ROI can hide a loss.">
 
-Un ROI elevato può essere ingannevole se non considera mutuo, tasse, costi operativi e periodi di bassa occupazione.
+Un ROI elevato può nascondere una perdita.
 
-</div>
+</h3>
+
+<p
+data-it="Mutuo, tasse, manutenzione, commissioni, costi operativi e periodi di bassa occupazione possono trasformare un ROI apparentemente elevato in un investimento con cash flow negativo."
+data-en="Mortgages, taxes, maintenance, platform fees, operating costs and low occupancy periods can turn an apparently high ROI into a negative cash flow investment.">
+
+Mutuo, tasse, manutenzione, commissioni, costi operativi e periodi di bassa occupazione possono trasformare un ROI apparentemente elevato in un investimento con cash flow negativo.
+
+</p>
 
 </div>
 
@@ -554,13 +980,21 @@ Un ROI elevato può essere ingannevole se non considera mutuo, tasse, costi oper
 
 </div>
 
-<div
-data-it="Analizzare il cash flow reale permette di capire se un investimento continuerà a generare profitto nel tempo."
-data-en="Analyzing real cash flow helps determine whether an investment will remain profitable over time.">
+<h3
+data-it="Analizza l'intero investimento."
+data-en="Analyze the whole investment.">
 
-Analizzare il cash flow reale permette di capire se un investimento continuerà a generare profitto nel tempo.
+Analizza l'intero investimento.
 
-</div>
+</h3>
+
+<p
+data-it="Valutando contemporaneamente ROI reale, cash flow, rischio, occupazione e sostenibilità finanziaria puoi prendere decisioni più consapevoli e ridurre drasticamente il rischio di investimento."
+data-en="By evaluating real ROI, cash flow, risk, occupancy and financial sustainability together, you can make smarter decisions and dramatically reduce investment risk.">
+
+Valutando contemporaneamente ROI reale, cash flow, rischio, occupazione e sostenibilità finanziaria puoi prendere decisioni più consapevoli e ridurre drasticamente il rischio di investimento.
+
+</p>
 
 </div>
 
@@ -572,26 +1006,26 @@ Analizzare il cash flow reale permette di capire se un investimento continuerà 
 
 <section class="section">
 
-<div class="container" style="max-width:900px;">
+<div class="container" style="max-width:1000px;">
 
 <div class="cta-box">
 
 <div class="strategy-badge">
 
-ROI ANALYZER
+🚀 ROI ANALYZER
 
 </div>
 
 <h2
-data-it="Scopri il vero rendimento prima di investire"
-data-en="Discover real returns before investing">
-Scopri il vero rendimento prima di investire
+data-it="Scopri il rendimento reale prima di acquistare un immobile"
+data-en="Discover the real return before buying a property">
+Scopri il rendimento reale prima di acquistare un immobile
 </h2>
 
 <p
-data-it="Analizza ROI reale, cash flow, rischio e sostenibilità in meno di 30 secondi."
-data-en="Analyze real ROI, cash flow, risk and sustainability in under 30 seconds.">
-Analizza ROI reale, cash flow, rischio e sostenibilità in meno di 30 secondi.
+data-it="Analizza ROI reale, cash flow, mutuo, rischio, sostenibilità finanziaria e AI Score in meno di 30 secondi."
+data-en="Analyze real ROI, cash flow, mortgage, financial sustainability, risk and AI Score in under 30 seconds.">
+Analizza ROI reale, cash flow, mutuo, rischio, sostenibilità finanziaria e AI Score in meno di 30 secondi.
 </p>
 
 <div class="premium-features">
@@ -609,9 +1043,9 @@ data-en="✔ Cash Flow">
 </span>
 
 <span
-data-it="✔ Analisi rischio"
-data-en="✔ Risk Analysis">
-✔ Analisi rischio
+data-it="✔ Analisi mutuo"
+data-en="✔ Mortgage Analysis">
+✔ Analisi mutuo
 </span>
 
 <span
@@ -625,53 +1059,87 @@ data-en="✔ AI Score">
 <a
 href="/tool/"
 class="btn btn-primary btn-lg"
-data-it="🚀 Scopri se stai guadagnando o perdendo"
-data-en="🚀 Find out if your investment is profitable">
-🚀 Scopri se stai guadagnando o perdendo
+data-it="🚀 Avvia l'analisi completa"
+data-en="🚀 Start the complete analysis">
+
+🚀 Avvia l'analisi completa
+
 </a>
+
+<div class="hero-stats">
+
+<div
+data-it="🔥 Oltre 1.250 investitori stanno simulando un investimento oggi"
+data-en="🔥 More than 1,250 investors are simulating an investment today">
+
+🔥 Oltre 1.250 investitori stanno simulando un investimento oggi
+
+</div>
+
+<div
+data-it="📈 Migliaia di simulazioni elaborate con dati di mercato aggiornati"
+data-en="📈 Thousands of simulations generated using updated market data">
+
+📈 Migliaia di simulazioni elaborate con dati di mercato aggiornati
+
+</div>
+
+</div>
 
 <div class="hero-highlights">
 
 <div class="hero-highlight">
+
 <span>📈</span>
 
 <p
 data-it="ROI reale"
 data-en="Real ROI">
+
 ROI reale
+
 </p>
 
 </div>
 
 <div class="hero-highlight">
+
 <span>💶</span>
 
 <p
 data-it="Cash Flow"
 data-en="Cash Flow">
+
 Cash Flow
+
 </p>
 
 </div>
 
 <div class="hero-highlight">
-<span>⚠️</span>
+
+<span>🏦</span>
 
 <p
-data-it="Analisi rischio"
-data-en="Risk Analysis">
-Analisi rischio
+data-it="Mutuo"
+data-en="Mortgage">
+
+Mutuo
+
 </p>
 
 </div>
 
 <div class="hero-highlight">
+
 <span>🤖</span>
 
 <p
 data-it="AI Score"
 data-en="AI Score">
+
 AI Score
+
 </p>
 
 </div>
@@ -680,25 +1148,129 @@ AI Score
 
 <div class="internal-links">
 
-<a href="/roi-bnb/roma/">
+<a
+href="/roi-bnb/roma/"
+data-it="ROI B&B Roma"
+data-en="Rome B&B ROI">
+
 ROI B&B Roma
+
 </a>
 
-<a href="/roi-bnb/milano/">
+<a
+href="/roi-bnb/milano/"
+data-it="ROI B&B Milano"
+data-en="Milan B&B ROI">
+
 ROI B&B Milano
+
 </a>
 
-<a href="/roi-bnb/napoli/">
+<a
+href="/roi-bnb/napoli/"
+data-it="ROI B&B Napoli"
+data-en="Naples B&B ROI">
+
 ROI B&B Napoli
+
 </a>
 
-<a href="/roi-bnb/firenze/">
+<a
+href="/roi-bnb/firenze/"
+data-it="ROI B&B Firenze"
+data-en="Florence B&B ROI">
+
 ROI B&B Firenze
+
 </a>
 
 </div>
 
 </div>
+
+</div>
+
+</section>
+
+<!-- ================= CONTINUA AD APPROFONDIRE ================= -->
+
+<section class="academy-next-guide">
+
+<div class="strategy-badge">
+
+📚 ACADEMY
+
+</div>
+
+<h2
+data-it="Continua ad approfondire"
+data-en="Continue learning">
+
+Continua ad approfondire
+
+</h2>
+
+<p
+data-it="Scopri tutte le guide dedicate agli investimenti in affitti brevi, alla gestione del rischio e all'analisi della redditività."
+data-en="Explore all our guides on short-term rental investments, risk management and profitability analysis.">
+
+Scopri tutte le guide dedicate agli investimenti in affitti brevi, alla gestione del rischio e all'analisi della redditività.
+
+</p>
+
+<div class="academy-links">
+
+<a href="/academy/strategia-bnb/">
+
+📈
+<span
+data-it="Strategia B&B"
+data-en="B&B Strategy">
+
+Strategia B&B
+
+</span>
+
+</a>
+
+<a href="/academy/mutuo-bnb/">
+
+🏦
+<span
+data-it="Mutuo B&B"
+data-en="B&B Mortgage">
+
+Mutuo B&B
+
+</span>
+
+</a>
+
+<a href="/academy/errori-bnb/">
+
+⚠️
+<span
+data-it="Errori da evitare"
+data-en="Mistakes to avoid">
+
+Errori da evitare
+
+</span>
+
+</a>
+
+<a href="/academy/">
+
+📚
+<span
+data-it="Tutte le guide"
+data-en="All guides">
+
+Tutte le guide
+
+</span>
+
+</a>
 
 </div>
 
