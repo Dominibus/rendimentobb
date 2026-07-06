@@ -31,20 +31,94 @@ text-align:center;
 .hero h1{
 font-size:44px;
 font-weight:800;
-color:white;
+color:#fff;
 line-height:1.2;
+text-shadow:0 6px 18px rgba(0,0,0,.35);
 }
 
 .hero p{
-color:#e2e8f0;
-margin-top:15px;
+color:#f8fafc;
+margin-top:18px;
+font-size:16px;
+font-weight:500;
+line-height:1.7;
+max-width:760px;
+margin-left:auto;
+margin-right:auto;
 }
+
+/* ===== HERO HIGHLIGHTS ===== */
+
+.hero-highlights{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:14px;
+
+margin-top:42px;
+
+}
+
+.hero-highlight{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:10px 16px;
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(10px);
+
+border:1px solid rgba(255,255,255,.15);
+
+border-radius:999px;
+
+color:#fff;
+
+font-size:14px;
+
+font-weight:700;
+
+transition:.25s;
+
+}
+
+.hero-highlight:hover{
+
+transform:translateY(-2px);
+
+background:rgba(255,255,255,.18);
+
+}
+
+.hero-highlight span{
+
+font-size:17px;
+
+}
+
+.hero-highlight p{
+
+margin:0;
+
+color:#fff;
+
+}  
 
 /* CTA HERO */
 .hero .btn-main{
 background:linear-gradient(135deg,#10b981,#059669);
 color:#ffffff !important;
-padding:14px 28px;
+padding:16px 34px;
+font-size:16px;
 border-radius:12px;
 font-weight:700;
 display:inline-block;
@@ -66,72 +140,121 @@ padding:0 20px;
 
 /* ===== GRID ===== */
 .mutuo-grid{
+
 display:grid;
+
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
 gap:25px;
+
 margin-top:40px;
+
+align-items:stretch;
+
 }
 
 /* ===== CARD ===== */
 .mutuo-card{
-background:rgba(255,255,255,0.95);
+background:rgba(255,255,255,.95);
 backdrop-filter:blur(10px);
 padding:28px;
 border-radius:16px;
 border:1px solid #f1f5f9;
-box-shadow:0 10px 30px rgba(0,0,0,0.05);
+box-shadow:0 10px 30px rgba(0,0,0,.05);
 transition:.25s;
+display:flex;
+flex-direction:column;
+height:100%;
 }
 
 .mutuo-card:hover{
+
 transform:translateY(-6px);
-border-color:#10b981;
-box-shadow:0 25px 70px rgba(0,0,0,0.08);
+
+border-color:#22c55e;
+
+box-shadow:0 25px 70px rgba(0,0,0,.08);
+
 }
 
 .mutuo-card h3{
+
 color:#059669;
-margin-bottom:10px;
-font-size:18px;
+
+margin-bottom:14px;
+
+font-size:22px;
+
+font-weight:800;
+
+line-height:1.3;
+
 }
 
 .mutuo-card p{
+
 color:#475569;
-font-size:15px;
+
+font-size:16px;
+
+line-height:1.75;
+
 }
 
 /* ===== DANGER ===== */
 .danger-box{
-background:#7f1d1d;
-color:white;
-padding:25px;
-border-radius:16px;
-margin:30px 0;
+background:linear-gradient(135deg,#991b1b,#7f1d1d);
+color:#fff;
+padding:30px;
+border-radius:18px;
+margin:40px 0 25px;
 text-align:center;
-font-weight:600;
+font-size:18px;
+font-weight:700;
+line-height:1.6;
+box-shadow:0 15px 40px rgba(127,29,29,.18);
 }
 
 /* ===== SAFE ===== */
 .safe-box{
-background:#064e3b;
-color:white;
-padding:25px;
-border-radius:16px;
-margin:30px 0;
+background:linear-gradient(135deg,#065f46,#047857);
+color:#fff;
+padding:30px;
+border-radius:18px;
+margin:25px 0 45px;
 text-align:center;
-font-weight:600;
+font-size:18px;
+font-weight:700;
+line-height:1.6;
+box-shadow:0 15px 40px rgba(6,95,70,.18);
 }
 
 /* ===== CTA ===== */
 .premium-box{
 background:linear-gradient(135deg,#10b981,#059669);
-color:white;
-padding:60px;
-border-radius:20px;
+color:#fff;
+padding:70px 60px;
+border-radius:24px;
 text-align:center;
-margin-top:80px;
-box-shadow:0 20px 60px rgba(16,185,129,0.25);
+margin-top:90px;
+box-shadow:0 25px 70px rgba(16,185,129,.28);
+position:relative;
+overflow:hidden;
 }
+
+.premium-box h2{
+
+font-size:38px;
+
+font-weight:800;
+
+line-height:1.25;
+
+margin-bottom:18px;
+
+color:#fff;
+
+}  
 
 .premium-box a{
 display:inline-block;
