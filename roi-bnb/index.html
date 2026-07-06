@@ -26,7 +26,7 @@ content="ROI medio B&B in Italia">
 
 /* ================= HERO SAAS DINAMICA ================= */
 .hero-roi{
-  padding:120px 20px 100px;
+  padding:150px 20px 120px;
   text-align:center;
   color:white;
   position:relative;
@@ -85,8 +85,8 @@ content="ROI medio B&B in Italia">
 
 /* ================= HERO TEXT ================= */
 .hero-roi h1{
-  font-size:48px;
-  max-width:920px;
+  font-size:56px;
+  max-width:980px;
   margin:auto;
   line-height:1.15;
   font-weight:800;
@@ -404,7 +404,7 @@ justify-content:space-between;
 
 align-items:center;
 
-padding:22px 10px;
+padding:28px 20px;
 
 gap:20px;
 
@@ -588,6 +588,12 @@ HIGHLIGHT BOX
 
 .highlight-box{
 
+box-shadow:
+
+0 18px 45px rgba(15,23,42,.05);
+
+transition:.25s;  
+
 background:#f8fafc;
 
 border:1px solid #e5e7eb;
@@ -599,6 +605,12 @@ padding:42px;
 margin-top:30px;
 
 }
+
+.highlight-box:hover{
+
+transform:translateY(-4px);
+
+}  
 
 .highlight-box h3{
 
@@ -627,6 +639,8 @@ SAFE + DANGER
 .safe-box,
 .danger-box{
 
+transition:.25s;  
+
 padding:42px;
 
 margin-top:28px;
@@ -640,6 +654,17 @@ background:#ffffff;
 box-shadow:0 15px 40px rgba(15,23,42,.05);
 
 }
+
+.safe-box:hover,
+.danger-box:hover{
+
+transform:translateY(-4px);
+
+box-shadow:
+
+0 25px 55px rgba(15,23,42,.08);
+
+}  
 
 .safe-box h3,
 .danger-box h3{
@@ -741,27 +766,37 @@ margin-top:34px;
 
 .hero-highlight{
 
-gap:8px;  
-
 display:flex;
 
 flex-direction:column;
 
 align-items:center;
 
+justify-content:center;
+
 width:120px;
 
-text-align:center;  
+padding:14px 10px;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.08);
+
+border:1px solid rgba(255,255,255,.12);
+
+backdrop-filter:blur(10px);
+
+transition:.25s;
 
 }
 
-.hero-highlight span{
+.hero-highlight:hover{
 
-font-size:28px;
+transform:translateY(-4px);
 
-margin-bottom:8px;
+background:rgba(255,255,255,.14);
 
-}
+}  
 
 .hero-highlight p{
 
@@ -790,7 +825,7 @@ ACADEMY
 
 .academy-next-guide{
 
-padding:100px 20px;
+padding:120px 20px;
 
 text-align:center;
 
@@ -808,7 +843,7 @@ flex-wrap:wrap;
 
 gap:16px;
 
-margin-top:34px;
+margin-top:42px;
 
 }
 
@@ -886,11 +921,33 @@ text-decoration:underline;
 
 .cta-box .btn{
 
+background:#ffffff;
+
+color:#059669;
+
+font-weight:800;
+
+border:none;
+
+padding:18px 34px;
+
+border-radius:999px;
+
 box-shadow:
+0 16px 40px rgba(0,0,0,.22);
 
-0 14px 35px rgba(0,0,0,.22);
+transition:.25s;
 
-}  
+}
+
+.cta-box .btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 22px 55px rgba(0,0,0,.28);
+
+}
 
 </style>
 </head>
