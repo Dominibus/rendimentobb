@@ -85,8 +85,8 @@ content="ROI medio B&B in Italia">
 
 /* ================= HERO TEXT ================= */
 .hero-roi h1{
-  font-size:42px;
-  max-width:800px;
+  font-size:48px;
+  max-width:920px;
   margin:auto;
   line-height:1.15;
   font-weight:800;
@@ -129,7 +129,7 @@ content="ROI medio B&B in Italia">
 
 display:grid;
 
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(4,1fr);
 
 gap:28px;
 
@@ -138,6 +138,26 @@ margin-top:45px;
 align-items:stretch;
 
 }
+
+@media(max-width:900px){
+
+.roi-kpi{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:640px){
+
+.roi-kpi{
+
+grid-template-columns:1fr;
+
+}
+
+}  
 
 .roi-kpi > div{
 
@@ -255,7 +275,29 @@ font-weight:500;
   color:white;
   text-align:center;
   box-shadow:0 25px 70px rgba(16,185,129,0.35);
+  position:relative;
+  overflow:hidden;
 }
+
+ .cta-box::before{
+
+content:"";
+
+position:absolute;
+
+top:-120px;
+
+right:-120px;
+
+width:260px;
+
+height:260px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+} 
 
 .cta-box h2{
   font-size:30px;
@@ -325,6 +367,8 @@ CITY CARD
 ===================================================== */
 
 .market-city{
+
+min-height:82px;  
 
 display:flex;
 
@@ -419,6 +463,8 @@ font-size:13px;
 font-weight:600;
 
 backdrop-filter:blur(8px);
+
+color:#ffffff; 
 
 }  
 
@@ -518,7 +564,7 @@ border:1px solid #e5e7eb;
 
 border-radius:22px;
 
-padding:34px;
+padding:42px;
 
 margin-top:30px;
 
@@ -551,7 +597,7 @@ SAFE + DANGER
 .safe-box,
 .danger-box{
 
-padding:34px;
+padding:42px;
 
 margin-top:28px;
 
@@ -651,13 +697,15 @@ margin-top:34px;
 
 .hero-highlight{
 
+gap:8px;  
+
 display:flex;
 
 flex-direction:column;
 
 align-items:center;
 
-width:130px;
+width:120px;
 
 }
 
@@ -673,11 +721,13 @@ margin-bottom:8px;
 
 margin:0;
 
+color:#ffffff;
+
 font-size:14px;
 
 font-weight:700;
 
-color:#ffffff !important;
+line-height:1.4;
 
 opacity:1;
 
@@ -693,7 +743,7 @@ padding:100px 20px;
 
 text-align:center;
 
-background:#fff;
+background:linear-gradient(180deg,#ffffff,#f8fafc);
 
 }
 
