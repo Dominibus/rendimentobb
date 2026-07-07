@@ -135,32 +135,44 @@ document.addEventListener("DOMContentLoaded", () => {
         </a>
       </div>
 
-      <nav class="rb-center">
-  <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
+<nav class="rb-center">
 
-  <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">
-    Aprire un B&B
-  </a>
+<a href="/tool/"
+data-it="Analizza"
+data-en="Analyze">
+Analizza
+</a>
 
-  <a href="/mutui/" data-it="Mutui" data-en="Mortgages">
-    Mutui
-  </a>
+<a href="/immobili/"
+data-it="Trova immobili"
+data-en="Find Properties">
+Trova immobili
+</a>
 
-  <a href="/market/" data-it="Mercato" data-en="Market">
-    Mercato
-  </a>
+<a href="/market/"
+data-it="Mercato"
+data-en="Market">
+Mercato
+</a>
 
-  <a href="/immobili/" data-it="Immobili" data-en="Properties">
-    Immobili
-  </a>
+<a href="/mutui/"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
 
-  <a href="/academy/" data-it="Academy" data-en="Academy">
-    Academy
-  </a>
+<a href="/academy/"
+data-it="Guide"
+data-en="Guides">
+Guide
+</a>
 
-  <a href="/about/" data-it="Chi siamo" data-en="About">
-    Chi siamo
-  </a>
+<a href="/about/"
+data-it="Chi siamo"
+data-en="About">
+Chi siamo
+</a>
+
 </nav>
 
       <div class="rb-right">
@@ -637,25 +649,75 @@ class="dashboard-label">
     // 📱 MOBILE MENU
     // =====================
 
-    const mobileNav = document.getElementById("rb-mobile-nav");
+const mobileNav = document.getElementById("rb-mobile-nav");
 
-    if(mobileNav){
+if(mobileNav){
 
-      let mobileHTML = `
-  <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
-  <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
-  <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
-  <a href="/market/" data-it="Mercato" data-en="Market">Mercato</a>
-  <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
-  <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
-  <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
-  <a href="#"
-  id="mobile-ai-btn"
-class="mobile-cta">
-✨ AI Assistant
+let mobileHTML = `
+
+<a href="/tool/"
+data-it="Analizza"
+data-en="Analyze">
+Analizza
 </a>
 
-  <hr>
+<a href="/immobili/"
+data-it="Trova immobili"
+data-en="Find Properties">
+Trova immobili
+</a>
+
+<a href="/market/"
+data-it="Mercato"
+data-en="Market">
+Mercato
+</a>
+
+<a href="/mutui/"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
+
+<a href="/academy/"
+data-it="Guide"
+data-en="Guides">
+Guide
+</a>
+
+<a href="/about/"
+data-it="Chi siamo"
+data-en="About">
+Chi siamo
+</a>
+
+<hr>
+
+<a href="#"
+id="mobile-ai-btn"
+class="mobile-cta">
+
+✨ AI Advisor
+
+</a>
+
+<hr>
+
+<a href="/tool/"
+class="mobile-cta">
+
+🚀
+<span
+data-it="Analizza un investimento"
+data-en="Analyze an investment">
+
+Analizza un investimento
+
+</span>
+
+</a>
+
+`;
 
   <a href="/tool/" class="mobile-cta">
     🚀 <span data-it="Analizza un investimento" data-en="Analyze an investment">Analizza un investimento</span>
@@ -681,25 +743,29 @@ class="mobile-cta">
 
       } else {
 
-  mobileHTML += `
+mobileHTML += `
 
-    <hr>
+<hr>
 
-    <a
-      href="/dashboard/"
-      data-it="📊 Dashboard Demo"
-      data-en="📊 Demo Dashboard">
-      📊 Dashboard Demo
-    </a>
+<a
+href="/dashboard/"
+data-it="📊 Live Demo"
+data-en="📊 Live Demo">
 
-    <a
-      href="/login/"
-      data-it="Accedi"
-      data-en="Login">
-      Accedi
-    </a>
+📊 Live Demo
 
-  `;
+</a>
+
+<a
+href="/login/"
+data-it="Accedi"
+data-en="Login">
+
+Accedi
+
+</a>
+
+`;
 }
 
       mobileNav.innerHTML = mobileHTML;
@@ -778,58 +844,81 @@ document.getElementById("logout").onclick = async ()=>{
 
     if(mobileNav){
 
-      mobileNav.innerHTML = `
+mobileNav.innerHTML = `
 
-        <a href="/tool/">Simulatore</a>
+<a href="/tool/"
+data-it="Analizza"
+data-en="Analyze">
+Analizza
+</a>
 
-        <a href="/aprire-bnb-conviene/">
-          Aprire un B&B
-        </a>
+<a href="/immobili/"
+data-it="Trova immobili"
+data-en="Find Properties">
+Trova immobili
+</a>
 
-        <a href="/mutui/">
-          Mutui
-        </a>
+<a href="/market/"
+data-it="Mercato"
+data-en="Market">
+Mercato
+</a>
 
-        <a href="/market/">
-          Mercato
-        </a>
+<a href="/mutui/"
+data-it="Mutui"
+data-en="Mortgages">
+Mutui
+</a>
 
-        <a href="/immobili/">
-          Immobili
-        </a>
+<a href="/academy/"
+data-it="Guide"
+data-en="Guides">
+Guide
+</a>
 
-        <a href="/academy/">
-          Academy
-        </a>
+<a href="/about/"
+data-it="Chi siamo"
+data-en="About">
+Chi siamo
+</a>
 
-        <a href="/about/">
-          Chi siamo
-        </a>
+<hr>
 
-        <hr>
+<a href="#"
+id="mobile-ai-btn"
+class="mobile-cta">
 
-        <a href="#"
-           id="mobile-ai-btn"
-           class="mobile-cta">
-           ✨ AI Assistant
-        </a>
+✨ AI Advisor
 
-        <hr>
+</a>
 
-        <a href="/tool/"
-           class="mobile-cta">
-           🚀 Analizza un investimento
-        </a>
+<hr>
 
-        <hr>
+<a href="/tool/"
+class="mobile-cta">
 
-        <a href="/dashboard/"
-           class="mobile-cta">
-           📊 Dashboard Demo
-        </a>
+🚀
+<span
+data-it="Analizza un investimento"
+data-en="Analyze an investment">
 
-        <a href="/login/"
-   class="mobile-cta">
+Analizza un investimento
+
+</span>
+
+</a>
+
+<hr>
+
+<a href="/dashboard/"
+class="mobile-cta">
+
+📊 Live Demo
+
+</a>
+
+<a href="/login/"
+class="mobile-cta">
 
 <span
 data-it="🔐 Accedi"
@@ -841,7 +930,7 @@ data-en="🔐 Login">
 
 </a>
 
-      `;
+`;
 
     }
 
