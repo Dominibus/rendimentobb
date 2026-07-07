@@ -20932,3 +20932,42 @@ grid-template-columns:1fr;
     line-height: 1.15;
     text-wrap: balance;
 }
+
+/* ==========================================
+🔥 HOMEPAGE 2026 FINAL POLISH
+Release 1.0
+Safe overrides only
+========================================== */
+
+.home-page .hero{
+
+    padding-top:60px;
+    padding-bottom:35px;
+
+    margin-bottom:0;
+
+}
+
+.home-page .hero-grid{
+
+    gap:24px;
+
+}
+
+.home-page .hero-left{
+
+    gap:18px;
+
+}
+
+.home-page .page-title{
+
+    margin-bottom:10px;
+
+}
+
+.home-page .hero + section{
+
+    margin-top:0;
+
+}
