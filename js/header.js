@@ -185,7 +185,7 @@ Guide
         </div>
 
         <button id="rb-header-ai-btn" class="rb-header-ai-btn">
-        ✨ AI Advisor
+        ✨ AI
         </button>
 
         <div id="user-area"></div>
@@ -204,9 +204,9 @@ Guide
   <nav id="rb-mobile-nav">
 
     <a href="/tool/" 
-    data-it="Simulatore" 
-    data-en="Simulator">
-    Simulatore
+    data-it="Analizza" 
+    data-en="Analyze">
+    Analizza
     </a>
 
     <a href="/aprire-bnb-conviene/" 
@@ -228,15 +228,15 @@ Guide
     </a>
 
     <a href="/immobili/" 
-    data-it="Immobili" 
-    data-en="Properties">
-    Immobili
+    data-it="Trova immobili" 
+    data-en="Find Properties">
+    Trova immobili
     </a>
 
     <a href="/academy/" 
-    data-it="Academy" 
-    data-en="Academy">
-    Academy
+    data-it="Guide" 
+    data-en="Guides">
+    Guide
     </a>
 
     <a href="/about/" 
@@ -701,9 +701,9 @@ class="mobile-cta">
 
     <a
       href="/dashboard/"
-      data-it="📊 Dashboard Demo"
-      data-en="📊 Demo Dashboard">
-      📊 Dashboard Demo
+      data-it="📊 Live Demo"
+      data-en="📊 Live Demo">
+      📊 Live Demo
     </a>
 
     <a
