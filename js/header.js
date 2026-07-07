@@ -136,7 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <nav class="rb-center">
-  <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
+  <a href="/tool/"
+data-it="Analizza"
+data-en="Analyze">
+
+Analizza
+
+</a>
 
   <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">
     Aprire un B&B
@@ -150,13 +156,21 @@ document.addEventListener("DOMContentLoaded", () => {
     Mercato
   </a>
 
-  <a href="/immobili/" data-it="Immobili" data-en="Properties">
-    Immobili
-  </a>
+<a href="/immobili/"
+data-it="Trova immobili"
+data-en="Find Properties">
 
-  <a href="/academy/" data-it="Academy" data-en="Academy">
-    Academy
-  </a>
+Trova immobili
+
+</a>
+
+<a href="/academy/"
+data-it="Guide"
+data-en="Guides">
+
+Guide
+
+</a>
 
   <a href="/about/" data-it="Chi siamo" data-en="About">
     Chi siamo
@@ -171,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <button id="rb-header-ai-btn" class="rb-header-ai-btn">
-        ✨ AI
+        ✨ AI Advisor
         </button>
 
         <div id="user-area"></div>
@@ -825,7 +839,7 @@ document.getElementById("logout").onclick = async ()=>{
 
         <a href="/dashboard/"
            class="mobile-cta">
-           📊 Dashboard Demo
+           📊 Live Demo
         </a>
 
         <a href="/login/"
