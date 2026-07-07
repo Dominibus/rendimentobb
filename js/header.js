@@ -867,7 +867,7 @@ data-en="🔐 Login">
       href="/dashboard/"
       class="rb-btn primary">
 
-      📊 Dashboard Demo
+      📊 Live Demo
 
       </a>
 
