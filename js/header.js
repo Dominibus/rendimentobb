@@ -719,11 +719,6 @@ Analizza un investimento
 
 `;
 
-  <a href="/tool/" class="mobile-cta">
-    🚀 <span data-it="Analizza un investimento" data-en="Analyze an investment">Analizza un investimento</span>
-  </a>
-`;
-
       if(user){
 
         mobileHTML += `<hr>`;
