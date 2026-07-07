@@ -16,6 +16,17 @@ Scopri se il tuo investimento è profittevole
 </h3>
 
 <p
+class="footer-value"
+
+data-it="Trova immobili • Analizza ROI • Gestisci il tuo B&B da un'unica piattaforma."
+
+data-en="Find properties • Analyze ROI • Manage your B&B from one platform.">
+
+Trova immobili • Analizza ROI • Gestisci il tuo B&B da un'unica piattaforma.
+
+</p>
+
+<p
 data-it="Simula ROI, rischio e rendimento in meno di 30 secondi"
 data-en="Simulate ROI, risk and profit in under 30 seconds">
 Simula ROI, rischio e rendimento in meno di 30 secondi
