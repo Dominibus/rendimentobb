@@ -656,7 +656,7 @@ class="dashboard-label">
     if(mobileNav){
 
       let mobileHTML = `
-  <a href="/tool/" data-it="Simulatore" data-en="Simulator">Simulatore</a>
+  <a href="/tool/" data-it="Analizza" data-en="Simulator">Analizza</a>
   <a href="/aprire-bnb-conviene/" data-it="Aprire un B&B" data-en="Start a B&B">Aprire un B&B</a>
   <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
   <a href="/market/" data-it="Mercato" data-en="Market">Mercato</a>
@@ -794,7 +794,7 @@ document.getElementById("logout").onclick = async ()=>{
 
       mobileNav.innerHTML = `
 
-        <a href="/tool/">Simulatore</a>
+        <a href="/tool/">Analizza</a>
 
         <a href="/aprire-bnb-conviene/">
           Aprire un B&B
