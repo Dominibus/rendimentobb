@@ -1794,8 +1794,6 @@ function renderRiskMeter(riskScore){
 
 // ================= INVESTMENT VERDICT =================
 
-// ================= INVESTMENT VERDICT =================
-
 function renderInvestmentVerdict(
 roi,
 risk = 50,
@@ -1935,11 +1933,35 @@ t(
 
 }
 
-description=reasons
-.map(r=>"• "+r)
-.join("<br>");
+description = reasons
+.map(r => `
+<div style="
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin-bottom:10px;
+">
 
-box.innerHTML=`
+<span style="
+color:#10b981;
+font-weight:700;
+">
+
+✔
+
+</span>
+
+<span>
+
+${r}
+
+</span>
+
+</div>
+`)
+.join("");
+
+box.innerHTML = `
 
 <div class="ai-verdict-card">
 
@@ -1947,11 +1969,20 @@ box.innerHTML=`
 
 <div class="ai-verdict-badge">
 
-🧠 AI Investment Recommendation
+🧠 ${t(
+"Executive AI Decision",
+"Executive AI Decision"
+)}
 
 </div>
 
-<h3>
+<h3 style="
+font-size:34px;
+font-weight:900;
+margin:14px 0 10px;
+color:${color};
+letter-spacing:-1px;
+">
 
 ${icon} ${verdict}
 
@@ -1959,7 +1990,14 @@ ${icon} ${verdict}
 
 <div class="ai-confidence">
 
-${t("Affidabilità","Confidence")}
+<span>
+
+${t(
+"AI Confidence",
+"AI Confidence"
+)}
+
+</span>
 
 <strong>
 
