@@ -21066,3 +21066,95 @@ margin-bottom:40px;
 }
 
 }
+
+/* ==========================================
+HOME 2026 SAFE OVERRIDES
+========================================== */
+
+.hero h1{
+
+max-width:760px;
+
+line-height:1.08;
+
+margin-bottom:26px;
+
+}
+
+.hero-subheadline{
+
+max-width:720px;
+
+margin-top:18px;
+
+font-size:20px;
+
+line-height:1.65;
+
+}
+
+.hero-platform-label{
+
+margin:28px 0 0;
+
+}
+
+.cta-group{
+
+margin-top:34px;
+
+}
+
+.market-card{
+
+transition:.28s;
+
+}
+
+.market-card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 20px 45px rgba(0,0,0,.12);
+
+}
+
+.eco-card{
+
+transition:.28s;
+
+}
+
+.eco-card:hover{
+
+transform:translateY(-6px);
+
+}
+
+.quick-roi-box{
+
+padding:50px;
+
+}
+
+.roi-grid{
+
+margin-top:36px;
+
+margin-bottom:34px;
+
+}
+
+.plan-card{
+
+transition:.35s;
+
+}
+
+.plan-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 30px 60px rgba(0,0,0,.14);
+
+}
