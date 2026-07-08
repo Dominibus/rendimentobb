@@ -1615,9 +1615,6 @@ function renderInvestmentScore(roi, riskScore){
   const container = document.getElementById("investment-score");
   const circle = document.getElementById("score-circle");
 
-  const title = document.getElementById("investment-score-title");
-  const subtitle = document.getElementById("investment-score-subtitle");
-
   if(!container) return;
 
   const access = window.getUserAccess?.() || {};
@@ -1640,65 +1637,6 @@ function renderInvestmentScore(roi, riskScore){
   ));
 
   score = Math.round(score);
-
-  let scoreTitle = "";
-let scoreSubtitle = "";
-
-if(score >= 85){
-
-  scoreTitle = t(
-    "Investimento eccellente",
-    "Excellent investment"
-  );
-
-  scoreSubtitle = t(
-    "Ottimo equilibrio tra rendimento e rischio",
-    "Excellent balance between return and risk"
-  );
-
-}
-else if(score >= 70){
-
-  scoreTitle = t(
-    "Investimento consigliato",
-    "Recommended investment"
-  );
-
-  scoreSubtitle = t(
-    "Buona opportunità di investimento",
-    "Strong investment opportunity"
-  );
-
-}
-else if(score >= 50){
-
-  scoreTitle = t(
-    "Investimento discreto",
-    "Average investment"
-  );
-
-  scoreSubtitle = t(
-    "Valuta attentamente i rischi",
-    "Review the risks carefully"
-  );
-
-}
-else{
-
-  scoreTitle = t(
-    "Investimento rischioso",
-    "High-risk investment"
-  );
-
-  scoreSubtitle = t(
-    "Analizzare meglio prima di procedere",
-    "Further analysis is recommended"
-  );
-
-}
-
-if(title) title.innerHTML = scoreTitle;
-if(subtitle) subtitle.innerHTML = scoreSubtitle;
 
   // ================= CERCHIO =================
   if(circle){
