@@ -1918,14 +1918,130 @@ if(capEl){
 const countEl = document.getElementById("portfolio-count");
 if(countEl) countEl.textContent = count;
 
-// ================= SCORE =================
-const investmentScore = calculateInvestmentScore(avgROI,totalCapital,count);
-  
-// ================= ROI =================
+const investmentScore =
+calculateInvestmentScore(
+    avgROI,
+    totalCapital,
+    count
+);
+
 updateDynamicTexts();
 
-// ================= KPI CARDS =================
-const kpiContainer = document.getElementById("dashboard-kpi");
+
+// =====================================
+// 🤖 AI EXECUTIVE INSIGHT
+// =====================================
+
+const aiInsight =
+document.getElementById("dashboard-ai-insight");
+
+if(aiInsight){
+
+let insight = "";
+let color = "#10b981";
+let icon = "🟢";
+
+if(avgROI >= marketROI + 5){
+
+insight = t(
+"Il tuo portafoglio sta performando significativamente sopra la media del mercato. Le attuali condizioni suggeriscono una buona opportunità di espansione.",
+"Your portfolio is performing significantly above the market average. Current conditions suggest a strong opportunity for expansion."
+);
+
+}
+else if(avgROI >= marketROI){
+
+color = "#3b82f6";
+icon = "🔵";
+
+insight = t(
+"Le performance sono superiori alla media del mercato. Mantieni la strategia attuale monitorando nuove opportunità.",
+"Performance is above market average. Maintain the current strategy while monitoring new investment opportunities."
+);
+
+}
+else{
+
+color = "#f59e0b";
+icon = "🟠";
+
+insight = t(
+"Il rendimento è inferiore al benchmark di mercato. Valuta immobili con ROI più elevato o riduci i costi operativi.",
+"Performance is below the market benchmark. Consider higher ROI properties or optimize operating costs."
+);
+
+}
+
+aiInsight.innerHTML = `
+
+<div class="analysis-card">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+">
+
+<div>
+
+<div style="
+font-size:12px;
+font-weight:700;
+color:#64748b;
+text-transform:uppercase;
+letter-spacing:.8px;
+">
+
+🤖 AI Executive Insight
+
+</div>
+
+<h3 style="
+margin:6px 0 0;
+font-size:26px;
+font-weight:800;
+color:${color};
+">
+
+${icon} ${investmentScore}/100
+
+</h3>
+
+</div>
+
+<div style="
+font-size:14px;
+font-weight:700;
+color:${color};
+">
+
+${avgROIRounded}% ROI
+
+</div>
+
+</div>
+
+<p style="
+margin:0;
+font-size:15px;
+line-height:1.7;
+color:#475569;
+">
+
+${insight}
+
+</p>
+
+</div>
+
+`;
+
+}
+
+
+const kpiContainer =
+document.getElementById("dashboard-kpi");
 
 if(kpiContainer){
 
