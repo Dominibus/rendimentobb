@@ -21067,94 +21067,99 @@ margin-bottom:40px;
 
 }
 
-/* ==========================================
-HOME 2026 SAFE OVERRIDES
-========================================== */
+/* =====================================================
+HOME HERO 2026
+Safe Override (Homepage Only)
+===================================================== */
+
+/* Hero */
+
+.hero{
+    position:relative;
+    overflow:hidden;
+}
+
+/* Overlay più intelligente */
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        180deg,
+        rgba(6,18,38,.48) 0%,
+        rgba(6,18,38,.34) 22%,
+        rgba(6,18,38,.42) 55%,
+        rgba(6,18,38,.62) 100%
+    );
+
+    pointer-events:none;
+    z-index:1;
+
+}
+
+/* Tutto sopra l'overlay */
+
+.hero > *{
+
+    position:relative;
+    z-index:2;
+
+}
+
+/* Titolo */
 
 .hero h1{
 
-max-width:760px;
+    max-width:760px;
 
-line-height:1.08;
+    line-height:1.08;
 
-margin-bottom:26px;
+    text-shadow:
+        0 4px 18px rgba(0,0,0,.35);
 
 }
+
+/* Sottotitolo */
 
 .hero-subheadline{
 
-max-width:720px;
+    max-width:720px;
 
-margin-top:18px;
+    color:rgba(255,255,255,.94);
 
-font-size:20px;
+    text-shadow:
+        0 2px 10px rgba(0,0,0,.28);
 
-line-height:1.65;
+}
+
+/* Testo piccolo */
+
+.hero p{
+
+    text-shadow:
+        0 2px 8px rgba(0,0,0,.25);
 
 }
 
-.hero-platform-label{
-
-margin:28px 0 0;
-
-}
+/* CTA */
 
 .cta-group{
 
-margin-top:34px;
+    margin-top:34px;
 
 }
 
-.market-card{
+.hero .btn,
+.hero .btn-primary,
+.hero .btn-secondary{
 
-transition:.28s;
+    position:relative;
 
-}
-
-.market-card:hover{
-
-transform:translateY(-5px);
-
-box-shadow:0 20px 45px rgba(0,0,0,.12);
-
-}
-
-.eco-card{
-
-transition:.28s;
-
-}
-
-.eco-card:hover{
-
-transform:translateY(-6px);
-
-}
-
-.quick-roi-box{
-
-padding:50px;
-
-}
-
-.roi-grid{
-
-margin-top:36px;
-
-margin-bottom:34px;
-
-}
-
-.plan-card{
-
-transition:.35s;
-
-}
-
-.plan-card:hover{
-
-transform:translateY(-8px);
-
-box-shadow:0 30px 60px rgba(0,0,0,.14);
+    z-index:3;
 
 }
