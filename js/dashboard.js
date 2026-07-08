@@ -5056,13 +5056,49 @@ box-shadow:0 18px 45px rgba(16,185,129,.28);
 
 <div style="
 position:absolute;
-right:-20px;
-top:-20px;
-font-size:110px;
-opacity:.08;
+right:24px;
+top:50%;
+
+transform:translateY(-50%);
+
+width:86px;
+height:86px;
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle at 30% 30%,
+rgba(255,255,255,.28),
+rgba(255,255,255,.05)
+);
+
+border:1px solid rgba(255,255,255,.18);
+
+backdrop-filter:blur(8px);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+pointer-events:none;
 ">
 
-💰
+<svg
+width="36"
+height="36"
+viewBox="0 0 24 24"
+fill="none"
+stroke="rgba(255,255,255,.92)"
+stroke-width="2"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M12 1v22"/>
+
+<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+
+</svg>
 
 </div>
 
