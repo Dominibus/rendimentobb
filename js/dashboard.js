@@ -3331,8 +3331,35 @@ cursor:pointer;
 : ""
 }
 
-<div style="font-size:14px;color:#64748b;">
-${verdict.subtitle}
+<div style="
+font-size:14px;
+color:#64748b;
+line-height:1.6;
+font-weight:500;
+">
+
+${
+verdict.type === "excellent"
+
+? t(
+"Questo investimento supera gli standard di redditività utilizzati nelle valutazioni istituzionali.",
+"This investment exceeds the profitability standards commonly used in institutional evaluations."
+)
+
+: verdict.type === "good"
+
+? t(
+"Il potenziale è elevato, ma alcuni parametri possono essere ottimizzati per incrementare rendimento e sostenibilità.",
+"The investment shows strong potential, but several parameters can be optimized to improve returns and sustainability."
+)
+
+: t(
+"L'investimento non raggiunge attualmente i requisiti minimi consigliati per un'operazione sostenibile.",
+"The investment currently does not meet the minimum requirements recommended for a sustainable operation."
+)
+
+}
+
 </div>
 
 <div style="font-size:15px;margin-top:6px;color:#0f172a;">
