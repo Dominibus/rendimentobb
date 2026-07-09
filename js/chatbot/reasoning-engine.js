@@ -1128,7 +1128,7 @@ console.log(
 // 🧠 AI SIGNAL ENGINE
 // ===============================================
 
-export function generateAISignals(data = {}){
+window.generateAISignals = function(data = {}){
 
   const signals = [];
 
