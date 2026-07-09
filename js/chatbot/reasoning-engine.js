@@ -59,6 +59,513 @@ window.rbGetAIContext = function(){
 };
 
 // ===============================================
+// 🧠 EXECUTIVE CROSS REASONING
+// ===============================================
+
+window.rbGenerateExecutiveReasoning = function(memory = {}){
+
+  const reasoningIT = [];
+  const reasoningEN = [];
+
+  const roi =
+    Number(memory.lastROI || 0);
+
+  const risk =
+    Number(memory.lastRisk || 0);
+
+  const occupancy =
+    Number(memory.lastOccupancy || 0);
+
+  const cashflow =
+    Number(memory.lastCashflow || 0);
+
+  const mortgage =
+    Number(memory.lastMortgagePercent || 0);
+
+  const revenue =
+    Number(memory.lastRevenue || 0);
+
+  const expenses =
+    Number(memory.lastExpenses || 0);
+
+  // ===========================================
+  // STRONG INVESTMENT
+  // ===========================================
+
+  if(
+    roi >= 20 &&
+    risk <= 35 &&
+    cashflow > 0
+  ){
+
+    reasoningIT.push(
+      "🧠 Il rendimento elevato è supportato da un buon equilibrio tra redditività, rischio e sostenibilità finanziaria."
+    );
+
+    reasoningEN.push(
+      "🧠 High profitability is supported by a balanced combination of return, risk and financial sustainability."
+    );
+
+  }
+
+  // ===========================================
+  // HIGH ROI BUT WEAK STRUCTURE
+  // ===========================================
+
+  if(
+    roi >= 25 &&
+    (
+      occupancy < 50 ||
+      cashflow <= 0
+    )
+  ){
+
+    reasoningIT.push(
+      "⚠️ Il ROI appare molto elevato, ma parte delle performance dipende da condizioni operative che potrebbero non essere stabili nel lungo periodo."
+    );
+
+    reasoningEN.push(
+      "⚠️ ROI is very high, but part of the performance depends on operating conditions that may not remain sustainable over time."
+    );
+
+  }
+
+  // ===========================================
+  // COST PRESSURE
+  // ===========================================
+
+  if(
+    revenue > 0 &&
+    expenses >= revenue * 0.60
+  ){
+
+    reasoningIT.push(
+      "💸 L'incidenza dei costi operativi riduce il margine disponibile e rappresenta uno dei principali elementi da ottimizzare."
+    );
+
+    reasoningEN.push(
+      "💸 Operating expenses significantly reduce margins and represent one of the main optimization opportunities."
+    );
+
+  }
+
+  // ===========================================
+  // AGGRESSIVE LEVERAGE
+  // ===========================================
+
+  if(
+    mortgage >= 80 &&
+    cashflow <= 0
+  ){
+
+    reasoningIT.push(
+      "🏦 La leva finanziaria elevata, combinata con un cashflow debole, aumenta il rischio operativo dell'investimento."
+    );
+
+    reasoningEN.push(
+      "🏦 High leverage combined with weak cashflow increases the operational risk of the investment."
+    );
+
+  }
+
+  return window.t(
+
+    reasoningIT.join("\n\n"),
+
+    reasoningEN.join("\n\n")
+
+  );
+
+};
+
+// ===============================================
+// 🧠 EXECUTIVE CONTRADICTION DETECTOR
+// ===============================================
+
+window.rbDetectExecutiveContradictions = function(memory = {}){
+
+  const warningsIT = [];
+  const warningsEN = [];
+
+  const roi =
+    Number(memory.lastROI || 0);
+
+  const risk =
+    Number(memory.lastRisk || 0);
+
+  const occupancy =
+    Number(memory.lastOccupancy || 0);
+
+  const cashflow =
+    Number(memory.lastCashflow || 0);
+
+  const mortgage =
+    Number(memory.lastMortgagePercent || 0);
+
+  const revenue =
+    Number(memory.lastRevenue || 0);
+
+  const expenses =
+    Number(memory.lastExpenses || 0);
+
+  const nightly =
+    Number(memory.lastNightPrice || 0);
+
+  // ===========================================
+  // ROI HIGH + LOW OCCUPANCY
+  // ===========================================
+
+  if(
+    roi >= 25 &&
+    occupancy < 45
+  ){
+
+    warningsIT.push(
+      "⚠️ ROI molto elevato con occupazione bassa: il rendimento potrebbe dipendere da ipotesi particolarmente ottimistiche."
+    );
+
+    warningsEN.push(
+      "⚠️ Very high ROI with low occupancy: returns may depend on optimistic assumptions."
+    );
+
+  }
+
+  // ===========================================
+  // HIGH REVENUE + NEGATIVE CASHFLOW
+  // ===========================================
+
+  if(
+    revenue > 0 &&
+    cashflow < 0
+  ){
+
+    warningsIT.push(
+      "⚠️ I ricavi risultano elevati ma il cashflow rimane negativo. La struttura dei costi potrebbe essere eccessivamente pesante."
+    );
+
+    warningsEN.push(
+      "⚠️ Revenue is strong but cashflow remains negative. Operating costs may be too high."
+    );
+
+  }
+
+  // ===========================================
+  // PREMIUM ADR + EXTREME OCCUPANCY
+  // ===========================================
+
+  if(
+    nightly >= 250 &&
+    occupancy >= 85
+  ){
+
+    warningsIT.push(
+      "⚠️ Tariffa media e occupazione risultano entrambe molto elevate. Verificare che lo scenario sia realistico."
+    );
+
+    warningsEN.push(
+      "⚠️ Average nightly rate and occupancy are both extremely high. Validate scenario assumptions."
+    );
+
+  }
+
+  // ===========================================
+  // LOW RISK + VERY HIGH LEVERAGE
+  // ===========================================
+
+  if(
+    risk <= 20 &&
+    mortgage >= 90
+  ){
+
+    warningsIT.push(
+      "⚠️ Il rischio stimato è molto basso nonostante una leva finanziaria estremamente elevata."
+    );
+
+    warningsEN.push(
+      "⚠️ Estimated risk is very low despite extremely high financial leverage."
+    );
+
+  }
+
+  // ===========================================
+  // COSTS GREATER THAN REVENUE
+  // ===========================================
+
+  if(
+    revenue > 0 &&
+    expenses > revenue
+  ){
+
+    warningsIT.push(
+      "⚠️ I costi superano i ricavi stimati. Verificare attentamente i dati inseriti."
+    );
+
+    warningsEN.push(
+      "⚠️ Expenses exceed estimated revenue. Please review the input data."
+    );
+
+  }
+
+  return window.t(
+
+    warningsIT.join("\n\n"),
+
+    warningsEN.join("\n\n")
+
+  );
+
+};
+
+// ===============================================
+// 🧠 EXECUTIVE STRATEGIC RECOMMENDATIONS
+// ===============================================
+
+window.rbGenerateStrategicRecommendations = function(memory = {}){
+
+  const recommendationsIT = [];
+  const recommendationsEN = [];
+
+  const roi =
+    Number(memory.lastROI || 0);
+
+  const risk =
+    Number(memory.lastRisk || 0);
+
+  const occupancy =
+    Number(memory.lastOccupancy || 0);
+
+  const cashflow =
+    Number(memory.lastCashflow || 0);
+
+  const mortgage =
+    Number(memory.lastMortgagePercent || 0);
+
+  const revenue =
+    Number(memory.lastRevenue || 0);
+
+  const expenses =
+    Number(memory.lastExpenses || 0);
+
+  const nightly =
+    Number(memory.lastNightPrice || 0);
+
+  // ===========================================
+  // CASHFLOW
+  // ===========================================
+
+  if(cashflow < 0){
+
+    recommendationsIT.push(
+      "➡️ Priorità: riportare il cashflow in positivo riducendo costi operativi o rivedendo la struttura del mutuo."
+    );
+
+    recommendationsEN.push(
+      "➡️ Priority: restore positive cashflow by reducing operating costs or optimizing the mortgage structure."
+    );
+
+  }
+
+  // ===========================================
+  // OCCUPANCY
+  // ===========================================
+
+  if(occupancy < 60){
+
+    recommendationsIT.push(
+      "➡️ Incrementare il tasso di occupazione dovrebbe essere una priorità prima di aumentare le tariffe."
+    );
+
+    recommendationsEN.push(
+      "➡️ Increasing occupancy should be prioritized before raising nightly rates."
+    );
+
+  }
+
+  // ===========================================
+  // HIGH COSTS
+  // ===========================================
+
+  if(
+    revenue > 0 &&
+    expenses >= revenue * 0.50
+  ){
+
+    recommendationsIT.push(
+      "➡️ Ridurre l'incidenza dei costi operativi migliorerebbe direttamente il margine netto."
+    );
+
+    recommendationsEN.push(
+      "➡️ Reducing operating expenses would directly improve net profitability."
+    );
+
+  }
+
+  // ===========================================
+  // MORTGAGE
+  // ===========================================
+
+  if(mortgage >= 80){
+
+    recommendationsIT.push(
+      "➡️ Valutare una leva finanziaria più equilibrata aumenterebbe la resilienza dell'investimento."
+    );
+
+    recommendationsEN.push(
+      "➡️ A more balanced leverage strategy would improve investment resilience."
+    );
+
+  }
+
+  // ===========================================
+  // LOW ROI
+  // ===========================================
+
+  if(
+    roi > 0 &&
+    roi < 12
+  ){
+
+    recommendationsIT.push(
+      "➡️ Il rendimento può essere migliorato intervenendo su ricavi, occupazione e ottimizzazione dei costi."
+    );
+
+    recommendationsEN.push(
+      "➡️ Returns can be improved by increasing revenue, occupancy and cost efficiency."
+    );
+
+  }
+
+  // ===========================================
+  // PREMIUM
+  // ===========================================
+
+  if(
+    roi >= 25 &&
+    cashflow > 0 &&
+    risk <= 35
+  ){
+
+    recommendationsIT.push(
+      "✅ L'investimento appare ben bilanciato. Le priorità diventano la stabilità operativa e la crescita nel lungo periodo."
+    );
+
+    recommendationsEN.push(
+      "✅ The investment appears well balanced. The next priority is long-term operational stability and growth."
+    );
+
+  }
+
+  return window.t(
+
+    recommendationsIT.join("\n\n"),
+
+    recommendationsEN.join("\n\n")
+
+  );
+
+};
+
+// ===============================================
+// 🧠 EXECUTIVE CONFIDENCE ENGINE
+// ===============================================
+
+window.rbGenerateExecutiveConfidence = function(memory = {}){
+
+  let confidence = 50;
+
+  const reasonsIT = [];
+  const reasonsEN = [];
+
+  const fields = [
+
+    memory.lastROI,
+    memory.lastRisk,
+    memory.lastOccupancy,
+    memory.lastCashflow,
+    memory.lastRevenue,
+    memory.lastExpenses,
+    memory.lastMortgagePercent,
+    memory.lastNightPrice
+
+  ];
+
+  const available =
+    fields.filter(v =>
+      v !== undefined &&
+      v !== null &&
+      v !== ""
+    ).length;
+
+  confidence += available * 5;
+
+  if(
+    Number(memory.lastROI || 0) > 0
+  ){
+
+    confidence += 5;
+
+    reasonsIT.push("✔ ROI disponibile");
+    reasonsEN.push("✔ ROI available");
+
+  }
+
+  if(
+    Number(memory.lastRisk || 0) >= 0
+  ){
+
+    confidence += 5;
+
+    reasonsIT.push("✔ Analisi del rischio disponibile");
+    reasonsEN.push("✔ Risk analysis available");
+
+  }
+
+  if(
+    Number(memory.lastCashflow || 0) !== 0
+  ){
+
+    confidence += 5;
+
+    reasonsIT.push("✔ Cashflow disponibile");
+    reasonsEN.push("✔ Cashflow available");
+
+  }
+
+  if(
+    Number(memory.lastOccupancy || 0) > 0
+  ){
+
+    confidence += 5;
+
+    reasonsIT.push("✔ Occupazione disponibile");
+    reasonsEN.push("✔ Occupancy available");
+
+  }
+
+  confidence =
+    Math.min(confidence,100);
+
+  const titleIT =
+    `🎯 Affidabilità AI: ${confidence}/100`;
+
+  const titleEN =
+    `🎯 AI Confidence: ${confidence}/100`;
+
+  return window.t(
+
+    `${titleIT}
+
+${reasonsIT.join("\n")}`,
+
+    `${titleEN}
+
+${reasonsEN.join("\n")}`
+
+  );
+
+};
+
+// ===============================================
 // 🧠 EXECUTIVE INVESTMENT SUMMARY
 // ===============================================
 
@@ -67,6 +574,26 @@ function(){
 
   const memory =
     window.rbGetAIContext();
+
+  const executiveReasoning =
+  window.rbGenerateExecutiveReasoning(
+    memory
+  );
+
+  const executiveWarnings =
+  window.rbDetectExecutiveContradictions(
+    memory
+  );
+
+  const executiveRecommendations =
+  window.rbGenerateStrategicRecommendations(
+    memory
+  );
+
+  const executiveConfidence =
+  window.rbGenerateExecutiveConfidence(
+    memory
+  );
 
   const city =
     memory.lastCity ||
@@ -378,13 +905,85 @@ function(){
 
   }
 
-  return window.t(
+if(executiveReasoning){
 
-    summaryIT.join("\n\n"),
+  if(window.currentLanguage === "en"){
 
-    summaryEN.join("\n\n")
+    summaryEN.push(
+      executiveReasoning
+    );
 
-  );
+  }else{
+
+    summaryIT.push(
+      executiveReasoning
+    );
+
+  }
+
+}
+
+    if(executiveWarnings){
+
+  if(window.currentLanguage === "en"){
+
+    summaryEN.push(
+      executiveWarnings
+    );
+
+  }else{
+
+    summaryIT.push(
+      executiveWarnings
+    );
+
+  }
+
+}
+
+  if(executiveRecommendations){
+
+  if(window.currentLanguage === "en"){
+
+    summaryEN.push(
+      executiveRecommendations
+    );
+
+  }else{
+
+    summaryIT.push(
+      executiveRecommendations
+    );
+
+  }
+
+}
+
+  if(executiveConfidence){
+
+  if(window.currentLanguage === "en"){
+
+    summaryEN.push(
+      executiveConfidence
+    );
+
+  }else{
+
+    summaryIT.push(
+      executiveConfidence
+    );
+
+  }
+
+}
+
+return window.t(
+
+  summaryIT.join("\n\n"),
+
+  summaryEN.join("\n\n")
+
+);
 
 };
 
