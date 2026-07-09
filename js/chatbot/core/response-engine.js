@@ -4105,6 +4105,41 @@ if(executiveInsightsEN.length){
 }
 
 // =====================================
+// 🧠 EXECUTIVE REASONING ENGINE 2.0
+// =====================================
+
+let executiveSummary = "";
+
+if(
+  typeof window.rbGenerateInvestmentSummary ===
+  "function"
+){
+
+  try{
+
+    executiveSummary =
+      window.rbGenerateInvestmentSummary(
+        memory
+      ) || "";
+
+  }
+  catch(error){
+
+    console.warn(
+      "Executive Summary Error",
+      error
+    );
+
+  }
+
+}
+
+console.log(
+  "🧠 EXECUTIVE SUMMARY:",
+  executiveSummary
+);
+  
+// =====================================
 // 🧠 REASONING ENGINE
 // =====================================
 
@@ -4117,6 +4152,14 @@ if(reasoningIT.length){
   );
 
 }
+
+if(executiveSummary){
+
+    executiveIT.push(
+        executiveSummary
+    );
+
+}  
 
 // =====================================
 // 🧠 ADVISOR REASONS
@@ -4399,6 +4442,14 @@ if(reasoningEN?.length){
   );
 
 }
+
+if(executiveSummary){
+
+    executiveEN.push(
+        executiveSummary
+    );
+
+}  
 
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
