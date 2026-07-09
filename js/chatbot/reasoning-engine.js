@@ -659,10 +659,12 @@ ${reasonsEN.join("\n")}`
 // ===============================================
 
 window.rbGenerateInvestmentSummary =
-function(){
+function(memory = null){
 
-  const memory =
-    window.rbGetAIContext();
+  memory =
+    memory ||
+    window.rbGetAIContext() ||
+    {};
 
   console.log(
   "🧠 AI CONTEXT:",
@@ -1085,7 +1087,7 @@ if(executiveReasoning){
   }
 
 }
-
+  
 console.log(
   "🧠 SUMMARY IT:",
   summaryIT
@@ -1095,14 +1097,22 @@ console.log(
   "🧠 SUMMARY EN:",
   summaryEN
 );
-  
-return window.t(
 
-  summaryIT.join("\n\n"),
+const finalSummary =
+  window.t(
 
-  summaryEN.join("\n\n")
+    summaryIT.join("\n\n"),
 
+    summaryEN.join("\n\n")
+
+  );
+
+console.log(
+  "🧠 FINAL SUMMARY:",
+  finalSummary
 );
+
+return finalSummary;
 
 };
 
