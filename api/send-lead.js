@@ -227,6 +227,8 @@ if(isExistingLead){
 
 // ================= EMAIL FUNNEL =================
 
+    console.log("🔥 EMAIL FUNNEL START");
+
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -234,6 +236,8 @@ const funnelQuery = await db
 .get();
 
 if(funnelQuery.empty){
+
+  console.log("🔥 EMAIL FUNNEL DOES NOT EXIST");
 
   await db.collection("email_funnel").add({
 
@@ -271,6 +275,8 @@ if(funnelQuery.empty){
 
   });
 
+console.log("✅ EMAIL FUNNEL CREATED");
+  
 }    
 
     // ================= USER EMAIL =================
