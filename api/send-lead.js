@@ -273,28 +273,100 @@ border:1px solid #e2e8f0;
     line-height:1.6;
     ">
 
-      ${
-        t(
-          detectedLang,
-          "Il nostro sistema sta elaborando i dati migliori per il tuo investimento B&B.",
-          "Our system is processing the best data for your B&B investment."
-        )
-      }
+${
+t(
+detectedLang,
+"La tua simulazione è stata completata con successo. Di seguito trovi il primo riepilogo dei risultati ottenuti.",
+"Your simulation has been successfully completed. Below is a summary of your investment analysis."
+)
+}
 
     </div>
 
   </div>
 
-  ${
-    roiRounded > 0
-    ? `
-    <p>
-      ${t(detectedLang,"ROI stimato:","Estimated ROI:")}
-      <strong>${roiRounded}%</strong>
-    </p>
-    `
-    : ""
-  }
+<div style="
+display:flex;
+gap:16px;
+margin:24px 0;
+flex-wrap:wrap;
+">
+
+<div style="
+flex:1;
+min-width:180px;
+padding:20px;
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:14px;
+text-align:center;
+">
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-bottom:6px;
+">
+
+ROI Stimato
+
+</div>
+
+<div style="
+font-size:28px;
+font-weight:800;
+color:#10b981;
+">
+
+${roiRounded}%
+
+</div>
+
+</div>
+
+${
+profit > 0
+? `
+<div style="
+flex:1;
+min-width:180px;
+padding:20px;
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-radius:14px;
+text-align:center;
+">
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-bottom:6px;
+">
+
+${t(
+detectedLang,
+"Profitto annuo",
+"Annual Profit"
+)}
+
+</div>
+
+<div style="
+font-size:28px;
+font-weight:800;
+color:#0f172a;
+">
+
+€${profit.toLocaleString()}
+
+</div>
+
+</div>
+`
+: ""
+}
+
+</div>
 
   ${
 profit > 0
@@ -362,10 +434,13 @@ detectedLang,
 
 let subject = t(
   detectedLang,
-  "📊 Abbiamo ricevuto la tua richiesta",
-  "📊 We received your request"
+  roiRounded > 0
+    ? `📈 Analisi completata • ROI ${roiRounded}%`
+    : "📊 La tua analisi è pronta",
+  roiRounded > 0
+    ? `📈 Analysis completed • ROI ${roiRounded}%`
+    : "📊 Your analysis is ready"
 );
-
 if(type === "mutui"){
 
   subject = t(
