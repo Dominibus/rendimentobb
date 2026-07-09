@@ -173,9 +173,13 @@ message: clean(message || ""),
 
   dscr: Number(dscr.toFixed(2)),
 
-  score,
-  value,
-  lastType:type,
+score,
+value,
+
+priority: score,
+leadLabel: label,
+
+lastType:type,
 
   lastSource:source,
   lastFunnel:funnel,
@@ -291,6 +295,21 @@ border:1px solid #e2e8f0;
     `
     : ""
   }
+
+  ${
+profit > 0
+? `
+<p>
+  ${t(
+    detectedLang,
+    "Profitto annuo stimato:",
+    "Estimated yearly profit:"
+  )}
+  <strong>€${profit.toLocaleString()}</strong>
+</p>
+`
+: ""
+}
 
   <p>
 
@@ -429,7 +448,7 @@ from:"RendimentoBB Lead <lead@rendimentobb.it>",
 to:["rendimentobb@gmail.com"],
 
 subject:
-`${leadTitle} | ${city} | ROI ${roiRounded}%`,
+`${leadTitle} | ${city} | ROI ${roiRounded}% | €${value} | ${type.toUpperCase()}`,
 
 html:`
 
@@ -513,7 +532,11 @@ font-size:15px;
 opacity:.92;
 ">
 
-Nuovo lead acquisito da RendimentoBB
+${t(
+  detectedLang,
+  "Nuovo lead acquisito da RendimentoBB",
+  "New lead generated from RendimentoBB"
+)}
 
 </div>
 
@@ -708,7 +731,10 @@ score === "extreme"
 return res.status(200).json({
   success:true,
   value,
-  score
+  score,
+  priority: score,
+
+  leadLabel: label,
 });
 
 }catch(err){
