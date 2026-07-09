@@ -3213,6 +3213,13 @@ if(
 
       window.emailUserSent = true;
 
+        console.log("📧 SEND LEAD EMAIL",{
+    email:userEmail,
+    roi:finalROI,
+    city:market,
+    plan:window.currentPlan
+  });
+
       fetch("/api/send-lead-email",{
         method:"POST",
 
@@ -3228,26 +3235,33 @@ if(
           leadScore
         })
       })
-      .then(res=>{
+.then(async res=>{
 
-        if(!res.ok){
+  console.log(
+    "📧 SEND LEAD RESPONSE",
+    res.status,
+    await res.clone().text()
+  );
 
-          window.emailUserSent = false;
+  if(!res.ok){
 
-          console.warn(
-            "❌ Email send failed"
-          );
-        }
-      })
-      .catch(err=>{
+    window.emailUserSent = false;
 
-        console.error(
-          "❌ Email error:",
-          err
-        );
+    console.warn(
+      "❌ Email send failed"
+    );
+  }
 
-        window.emailUserSent = false;
-      });
+})
+.catch(err=>{
+
+  console.error(
+    "💥 SEND LEAD ERROR",
+    err
+  );
+
+  window.emailUserSent = false;
+});
     }
 
     console.log("✅ POST ANALYSIS COMPLETED");
