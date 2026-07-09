@@ -325,9 +325,24 @@ profit > 0
 
   <p>
 
-    <a href="${cta}">
-      ${cta}
-    </a>
+<a
+href="${cta}"
+style="
+display:inline-block;
+background:#10b981;
+color:white;
+padding:14px 22px;
+border-radius:999px;
+text-decoration:none;
+font-weight:700;
+">
+🚀 ${
+t(
+detectedLang,
+"Apri la Dashboard",
+"Open Dashboard"
+)}
+</a>
 
   </p>
 
@@ -728,12 +743,9 @@ score === "extreme"
 }
 
 return res.status(200).json({
-  success:true,
+  success: true,
   value,
-  score,
-  priority: score,
-
-  leadLabel: label,
+  score
 });
 
 }catch(err){
