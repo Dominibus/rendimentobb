@@ -524,12 +524,11 @@ ${type.toUpperCase()}
 
 </div>
 
-</div>
-
 <div style="
-margin-top:8px;
+margin-top:12px;
 font-size:15px;
 opacity:.92;
+line-height:1.5;
 ">
 
 ${t(
