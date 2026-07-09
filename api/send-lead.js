@@ -225,6 +225,54 @@ if(isExistingLead){
 
 }
 
+// ================= EMAIL FUNNEL =================
+
+const funnelQuery = await db
+.collection("email_funnel")
+.where("email","==",email)
+.limit(1)
+.get();
+
+if(funnelQuery.empty){
+
+  await db.collection("email_funnel").add({
+
+    email,
+
+    city,
+
+    roi: roiRounded,
+
+    lang: detectedLang,
+
+    createdAt:
+    admin.firestore.FieldValue.serverTimestamp(),
+
+    sentSteps: [],
+
+    steps:[
+
+      {
+        type:"instant",
+        delay:0
+      },
+
+      {
+        type:"reminder_1",
+        delay:1000 * 60 * 60 * 24
+      },
+
+      {
+        type:"reminder_2",
+        delay:1000 * 60 * 60 * 72
+      }
+
+    ]
+
+  });
+
+}    
+
     // ================= USER EMAIL =================
 
 let cta = "https://rendimentobb.it/dashboard";
