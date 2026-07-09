@@ -1128,7 +1128,7 @@ console.log(
 // 🧠 AI SIGNAL ENGINE
 // ===============================================
 
-window.generateAISignals = function(data = {}){
+window.rbGenerateAISignals = function(data = {}){
 
   const signals = [];
 
