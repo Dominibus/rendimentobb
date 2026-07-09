@@ -223,12 +223,17 @@ if(isExistingLead){
 
     // ================= USER EMAIL =================
 
-    let cta = "https://rendimentobb.it/dashboard";
+let cta = "https://rendimentobb.it/dashboard";
 
-    if(type === "mutui") cta = "https://rendimentobb.it/mutui/";
-    if(type === "immobili") cta = "https://rendimentobb.it/immobili/";
+if(type === "mutui"){
+  cta = "https://rendimentobb.it/mutui/";
+}
 
-    const userHtml = `
+if(type === "immobili"){
+  cta = "https://rendimentobb.it/immobili/";
+}
+
+const userHtml = `
 <div style="font-family:Arial;padding:20px;color:#111">
 
   <p>${t(detectedLang,"Ciao,","Hi,")}</p>
@@ -241,196 +246,479 @@ margin:20px 0;
 border:1px solid #e2e8f0;
 ">
 
-  <div style="
-  font-size:18px;
-  font-weight:700;
-  color:#10b981;
-  margin-bottom:10px;
-  ">
-    ${
-      type === "mutui"
-      ? "🏦 " + t(detectedLang,"Richiesta mutuo analizzata","Mortgage request analyzed")
-      : type === "immobili"
-      ? "🏠 " + t(detectedLang,"Opportunità immobili trovate","Property opportunities found")
-      : "📊 " + t(detectedLang,"Analisi investimento completata","Investment analysis completed")
-    }
-  </div>
+    <div style="
+    font-size:18px;
+    font-weight:700;
+    color:#10b981;
+    margin-bottom:10px;
+    ">
 
-  <div style="font-size:14px;color:#334155;line-height:1.6;">
-    ${
-      t(
-        detectedLang,
-        "Il nostro sistema sta elaborando i dati migliori per il tuo investimento B&B.",
-        "Our system is processing the best data for your B&B investment."
-      )
-    }
-  </div>
+      ${
+        type === "mutui"
+        ? "🏦 " + t(detectedLang,"Richiesta mutuo analizzata","Mortgage request analyzed")
+        : type === "immobili"
+        ? "🏠 " + t(detectedLang,"Opportunità immobili trovate","Property opportunities found")
+        : "📊 " + t(detectedLang,"Analisi investimento completata","Investment analysis completed")
+      }
 
-</div>
+    </div>
+
+    <div style="
+    font-size:14px;
+    color:#334155;
+    line-height:1.6;
+    ">
+
+      ${
+        t(
+          detectedLang,
+          "Il nostro sistema sta elaborando i dati migliori per il tuo investimento B&B.",
+          "Our system is processing the best data for your B&B investment."
+        )
+      }
+
+    </div>
+
+  </div>
 
   ${
     roiRounded > 0
     ? `
-      <p>
-        ${t(detectedLang,"ROI stimato:","Estimated ROI:")}
-        <strong>${roiRounded}%</strong>
-      </p>
+    <p>
+      ${t(detectedLang,"ROI stimato:","Estimated ROI:")}
+      <strong>${roiRounded}%</strong>
+    </p>
     `
     : ""
   }
 
   <p>
-    ${t(
-      detectedLang,
-      "Puoi continuare da qui:",
-      "You can continue here:"
-    )}
+
+    ${
+      t(
+        detectedLang,
+        "Puoi continuare da qui:",
+        "You can continue here:"
+      )
+    }
+
   </p>
 
   <p>
+
     <a href="${cta}">
-  ${cta}
-</a>
+      ${cta}
+    </a>
+
   </p>
 
   <br>
 
   <p style="font-size:12px;color:#666">
+
     RendimentoBB<br>
     https://rendimentobb.it
+
   </p>
 
 </div>
 `;
 
+// ================= SUBJECT =================
+
 let subject = t(
   detectedLang,
-  "Abbiamo ricevuto la tua richiesta",
-  "We received your request"
+  "📊 Abbiamo ricevuto la tua richiesta",
+  "📊 We received your request"
 );
 
- if(type === "mutui"){
-  let subject = t(
+if(type === "mutui"){
+
+  subject = t(
     detectedLang,
-    "Richiesta mutuo ricevuta",
-    "Mortgage request received"
+    "🏦 Richiesta mutuo ricevuta",
+    "🏦 Mortgage request received"
   );
+
 }
 
-if(type === "immobili"){
-  let subject = t(
+else if(type === "immobili"){
+
+  subject = t(
     detectedLang,
-    "Richiesta immobili ricevuta",
-    "Property request received"
+    "🏠 Opportunità immobili trovate",
+    "🏠 Property opportunities found"
   );
+
 }
 
-if(type === "partner"){
-  let subject = t(
+else if(type === "partner"){
+
+  subject = t(
     detectedLang,
-    "Richiesta partnership ricevuta",
-    "Partnership request received"
+    "🤝 Richiesta partnership ricevuta",
+    "🤝 Partnership request received"
   );
+
 }
 
-if(type === "work"){
-  let subject = t(
+else if(type === "work"){
+
+  subject = t(
     detectedLang,
-    "Candidatura ricevuta",
-    "Application received"
+    "💼 Candidatura ricevuta",
+    "💼 Application received"
   );
-}   
+
+}
 
 await resend.emails.send({
+
   from: "RendimentoBB <analisi@rendimentobb.it>",
+
   to: [email],
+
   subject,
+
   html: userHtml,
+
   text: `
-${t(detectedLang,
-"Abbiamo ricevuto la tua richiesta su RendimentoBB.",
-"We received your request on RendimentoBB."
+${t(
+  detectedLang,
+  "Abbiamo ricevuto la tua richiesta su RendimentoBB.",
+  "We received your request on RendimentoBB."
 )}
 
-https://rendimentobb.it/dashboard
+${cta}
 `
+
 });
 
-   // ================= ADMIN EMAIL =================
+// ================= ADMIN EMAIL =================
 
-    if(!isExistingLead){
+if(!isExistingLead){
 
-    await resend.emails.send({
-      from: "RendimentoBB Lead <lead@rendimentobb.it>",
-      to: ["rendimentobb@gmail.com"],
+const leadColor =
+score === "extreme"
+? "#10b981"
 
-      subject:
-type === "immobili"
-? `${label} | ${type.toUpperCase()} | ${city} | €${value} | ${source}`
+: score === "hot"
+? "#2563eb"
 
-: type === "mutui"
-? `${label} | MUTUI | ROI ${roiRounded}% | €${value} | ${source}`
+: score === "warm"
+? "#f59e0b"
 
-: `${label} | ${type.toUpperCase()} | ${city} | ROI ${roiRounded}% | €${value} | ${source}`,
+: "#ef4444";
 
-      html: `
-      <div style="font-family:Inter;background:#f8fafc;padding:30px">
+const leadTitle =
+score === "extreme"
+? "🔥 EXTREME LEAD"
 
-        <div style="max-width:720px;margin:auto;background:white;border-radius:20px;padding:35px">
+: score === "hot"
+? "🚀 HOT LEAD"
 
-          <h2>🚀 Nuovo Lead (${type})</h2>
+: score === "warm"
+? "⚡ WARM LEAD"
 
-          <div style="font-size:20px;font-weight:800;color:#10b981;margin-bottom:20px">
-            ${label} – ROI ${roiRounded}%
-          </div>
+: "❄️ LOW PRIORITY";
 
-          <div style="font-size:14px">
+await resend.emails.send({
 
-            <p><strong>Email:</strong> ${email}</p>
-            ${city ? `<p><strong>Città:</strong> ${city}</p>` : ""}
-            <p><strong>Fonte:</strong> ${source}</p>
-            <p><strong>Funnel:</strong> ${funnel}</p>
+from:"RendimentoBB Lead <lead@rendimentobb.it>",
 
-            ${phone ? `<p><strong>Telefono:</strong> ${phone}</p>` : ""}
-            ${bank ? `<p><strong>Banca:</strong> ${bank}</p>` : ""}
-            ${rate ? `<p><strong>Tasso:</strong> ${rate}%</p>` : ""}
-            ${name ? `<p><strong>Nome:</strong> ${name}</p>` : ""}
-            ${role ? `<p><strong>Ruolo:</strong> ${role}</p>` : ""}
-            ${message ? `<p><strong>Messaggio:</strong> ${message}</p>` : ""}
+to:["rendimentobb@gmail.com"],
 
-          </div>
+subject:
+`${leadTitle} | ${city} | ROI ${roiRounded}%`,
 
-          <div style="margin-top:20px;padding:15px;background:#ecfdf5;border-radius:10px">
-            💰 Valore lead stimato: €${value}
-          </div>
+html:`
 
-          <div style="margin-top:20px;text-align:center">
-            <a href="mailto:${email}"
-            style="background:#10b981;color:white;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700">
-            Contatta subito
-            </a>
-          </div>
+<div style="
+font-family:Inter,Arial,sans-serif;
+background:#f8fafc;
+padding:35px;
+">
 
-        </div>
+<div style="
+max-width:760px;
+margin:auto;
+background:white;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 20px 60px rgba(15,23,42,.08);
+">
 
-      </div>
-      `
-    });
+<div style="
+background:${leadColor};
+padding:28px;
+color:white;
+">
 
-      }
+<div style="
+font-size:24px;
+font-weight:800;
+">
 
-    return res.status(200).json({
-      success:true,
-      value,
-      score
-    });
+${leadTitle}
 
-  }catch(err){
+</div>
 
-    console.error("💥 ERROR:", err);
+<div style="
+margin-top:18px;
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+">
 
-    return res.status(500).json({
-      error:"internal"
-    });
-  }
+<div style="
+background:rgba(255,255,255,.18);
+padding:10px 16px;
+border-radius:999px;
+font-weight:700;
+">
+
+ROI ${roiRounded}%
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.18);
+padding:10px 16px;
+border-radius:999px;
+font-weight:700;
+">
+
+€${value} Lead
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.18);
+padding:10px 16px;
+border-radius:999px;
+font-weight:700;
+">
+
+${type.toUpperCase()}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:15px;
+opacity:.92;
+">
+
+Nuovo lead acquisito da RendimentoBB
+
+</div>
+
+</div>
+
+<div style="padding:32px;">
+
+<table
+width="100%"
+cellpadding="10"
+style="border-collapse:collapse;width:100%;">
+
+<tr>
+<td><strong>📧 Email</strong></td>
+<td>${email}</td>
+</tr>
+
+${name ? `
+<tr>
+<td><strong>👤 Nome</strong></td>
+<td>${name}</td>
+</tr>
+` : ""}
+
+${phone ? `
+<tr>
+<td><strong>📱 Telefono</strong></td>
+<td>${phone}</td>
+</tr>
+` : ""}
+
+<tr>
+<td><strong>🏙 Città</strong></td>
+<td>${city}</td>
+</tr>
+
+<tr>
+<td><strong>📈 ROI</strong></td>
+<td><strong>${roiRounded}%</strong></td>
+</tr>
+
+<tr>
+<td><strong>💰 Profitto</strong></td>
+<td>€${profit.toLocaleString()}</td>
+</tr>
+
+<tr>
+<td><strong>🏦 Capitale</strong></td>
+<td>€${equity.toLocaleString()}</td>
+</tr>
+
+<tr>
+<td><strong>🏠 Prezzo immobile</strong></td>
+<td>€${price.toLocaleString()}</td>
+</tr>
+
+<tr>
+<td><strong>💳 Mutuo</strong></td>
+<td>€${loan.toLocaleString()}</td>
+</tr>
+
+<tr>
+<td><strong>🏦 DSCR</strong></td>
+<td>${dscr.toFixed(2)}</td>
+</tr>
+
+<tr>
+<td><strong>🎯 Lead Score</strong></td>
+<td>${label}</td>
+</tr>
+
+<tr>
+<td><strong>🌍 Fonte</strong></td>
+<td>${source}</td>
+</tr>
+
+<tr>
+<td><strong>🧭 Funnel</strong></td>
+<td>${funnel}</td>
+</tr>
+
+${bank ? `
+<tr>
+<td><strong>🏦 Banca</strong></td>
+<td>${bank}</td>
+</tr>
+` : ""}
+
+${rate ? `
+<tr>
+<td><strong>📉 Tasso</strong></td>
+<td>${rate}%</td>
+</tr>
+` : ""}
+
+${role ? `
+<tr>
+<td><strong>💼 Ruolo</strong></td>
+<td>${role}</td>
+</tr>
+` : ""}
+
+${message ? `
+<tr>
+<td><strong>💬 Messaggio</strong></td>
+<td>${message}</td>
+</tr>
+` : ""}
+
+</table>
+
+<div style="
+margin-top:30px;
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+">
+
+<a
+href="mailto:${email}"
+style="
+background:#10b981;
+color:white;
+padding:14px 22px;
+border-radius:999px;
+text-decoration:none;
+font-weight:700;
+display:inline-block;
+">
+
+✉️ Contatta Lead
+
+</a>
+
+<a
+href="https://rendimentobb.it/dashboard"
+style="
+background:#0f172a;
+color:white;
+padding:14px 22px;
+border-radius:999px;
+text-decoration:none;
+font-weight:700;
+display:inline-block;
+">
+
+📊 Apri Dashboard
+
+</a>
+
+</div>
+
+<div style="
+margin-top:28px;
+padding:18px;
+background:#ecfdf5;
+border:1px solid #bbf7d0;
+border-radius:14px;
+font-size:14px;
+line-height:1.7;
+">
+
+<strong>🧠 AI Suggerimento</strong><br><br>
+
+${
+score === "extreme"
+? "🔥 Lead ad altissima priorità. Contattare entro 30 minuti. Probabilità di conversione molto elevata."
+
+: score === "hot"
+? "🚀 Lead molto interessante. Contattare entro oggi per massimizzare le possibilità di conversione."
+
+: score === "warm"
+? "⚡ Lead qualificato. Inviare una mail personalizzata e pianificare un follow-up entro 24 ore."
+
+: "❄️ Lead a bassa priorità. Inserire nel funnel automatico e monitorare eventuali nuove interazioni."
+}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`
+
+});
+
+}
+
+return res.status(200).json({
+  success:true,
+  value,
+  score
+});
+
+}catch(err){
+
+  console.error("💥 ERROR:", err);
+
+  return res.status(500).json({
+    error:"internal"
+  });
+
+}
+
 }
