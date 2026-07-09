@@ -223,6 +223,7 @@
     "/js/chatbot/core/memory-engine.js",
     "/js/chatbot/core/investor-profile-engine.js",
     "/js/chatbot/core/score-engine.js",
+    "/js/chatbot/core/reasoning-engine.js",
     "/js/chatbot/core/response-engine.js",
     "/js/chatbot/core/chatbot-orchestrator.js",
 
