@@ -80,13 +80,27 @@ window.rbGenerateExecutiveReasoning = function(memory = {}){
     Number(memory.lastCashflow || 0);
 
   const mortgage =
-    Number(memory.lastMortgagePercent || 0);
+    Number(
+      memory.lastMortgagePercent ??
+      memory.mortgagePercent ??
+      0
+    );
 
   const revenue =
-    Number(memory.lastRevenue || 0);
+    Number(
+      memory.lastRevenue ??
+      memory.revenueAnnual ??
+      memory.gross ??
+      0
+    );
 
   const expenses =
-    Number(memory.lastExpenses || 0);
+    Number(
+      memory.lastExpenses ??
+      memory.monthlyCosts ??
+      memory.expenses ??
+      0
+    );
 
   // ===========================================
   // STRONG INVESTMENT
@@ -200,16 +214,35 @@ window.rbDetectExecutiveContradictions = function(memory = {}){
     Number(memory.lastCashflow || 0);
 
   const mortgage =
-    Number(memory.lastMortgagePercent || 0);
+    Number(
+      memory.lastMortgagePercent ??
+      memory.mortgagePercent ??
+      0
+    );
 
   const revenue =
-    Number(memory.lastRevenue || 0);
+    Number(
+      memory.lastRevenue ??
+      memory.revenueAnnual ??
+      memory.gross ??
+      0
+    );
 
   const expenses =
-    Number(memory.lastExpenses || 0);
+    Number(
+      memory.lastExpenses ??
+      memory.monthlyCosts ??
+      memory.expenses ??
+      0
+    );
 
   const nightly =
-    Number(memory.lastNightPrice || 0);
+    Number(
+      memory.lastNightPrice ??
+      memory.pricePerNight ??
+      memory.nightly ??
+      0
+    );
 
   // ===========================================
   // ROI HIGH + LOW OCCUPANCY
@@ -338,16 +371,35 @@ window.rbGenerateStrategicRecommendations = function(memory = {}){
     Number(memory.lastCashflow || 0);
 
   const mortgage =
-    Number(memory.lastMortgagePercent || 0);
+    Number(
+      memory.lastMortgagePercent ??
+      memory.mortgagePercent ??
+      0
+    );
 
   const revenue =
-    Number(memory.lastRevenue || 0);
+    Number(
+      memory.lastRevenue ??
+      memory.revenueAnnual ??
+      memory.gross ??
+      0
+    );
 
   const expenses =
-    Number(memory.lastExpenses || 0);
+    Number(
+      memory.lastExpenses ??
+      memory.monthlyCosts ??
+      memory.expenses ??
+      0
+    );
 
   const nightly =
-    Number(memory.lastNightPrice || 0);
+    Number(
+      memory.lastNightPrice ??
+      memory.pricePerNight ??
+      memory.nightly ??
+      0
+    );
 
   // ===========================================
   // CASHFLOW
@@ -356,7 +408,7 @@ window.rbGenerateStrategicRecommendations = function(memory = {}){
   if(cashflow < 0){
 
     recommendationsIT.push(
-      "➡️ Priorità: riportare il cashflow in positivo riducendo costi operativi o rivedendo la struttura del mutuo."
+      "➡️ Priorità: riportare il cashflow in positivo riducendo i costi operativi o rivedendo la struttura del mutuo."
     );
 
     recommendationsEN.push(
@@ -479,13 +531,27 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
   const fields = [
 
     memory.lastROI,
+
     memory.lastRisk,
+
     memory.lastOccupancy,
+
     memory.lastCashflow,
-    memory.lastRevenue,
-    memory.lastExpenses,
-    memory.lastMortgagePercent,
-    memory.lastNightPrice
+
+    memory.lastRevenue ??
+    memory.revenueAnnual ??
+    memory.gross,
+
+    memory.lastExpenses ??
+    memory.monthlyCosts ??
+    memory.expenses,
+
+    memory.lastMortgagePercent ??
+    memory.mortgagePercent,
+
+    memory.lastNightPrice ??
+    memory.pricePerNight ??
+    memory.nightly
 
   ];
 
@@ -504,8 +570,13 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
 
     confidence += 5;
 
-    reasonsIT.push("✔ ROI disponibile");
-    reasonsEN.push("✔ ROI available");
+    reasonsIT.push(
+      "✔ ROI disponibile"
+    );
+
+    reasonsEN.push(
+      "✔ ROI available"
+    );
 
   }
 
@@ -515,8 +586,13 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
 
     confidence += 5;
 
-    reasonsIT.push("✔ Analisi del rischio disponibile");
-    reasonsEN.push("✔ Risk analysis available");
+    reasonsIT.push(
+      "✔ Analisi del rischio disponibile"
+    );
+
+    reasonsEN.push(
+      "✔ Risk analysis available"
+    );
 
   }
 
@@ -526,8 +602,13 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
 
     confidence += 5;
 
-    reasonsIT.push("✔ Cashflow disponibile");
-    reasonsEN.push("✔ Cashflow available");
+    reasonsIT.push(
+      "✔ Cashflow disponibile"
+    );
+
+    reasonsEN.push(
+      "✔ Cashflow available"
+    );
 
   }
 
@@ -537,13 +618,21 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
 
     confidence += 5;
 
-    reasonsIT.push("✔ Occupazione disponibile");
-    reasonsEN.push("✔ Occupancy available");
+    reasonsIT.push(
+      "✔ Occupazione disponibile"
+    );
+
+    reasonsEN.push(
+      "✔ Occupancy available"
+    );
 
   }
 
   confidence =
-    Math.min(confidence,100);
+    Math.min(
+      confidence,
+      100
+    );
 
   const titleIT =
     `🎯 Affidabilità AI: ${confidence}/100`;
@@ -553,11 +642,11 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
 
   return window.t(
 
-    `${titleIT}
+`${titleIT}
 
 ${reasonsIT.join("\n")}`,
 
-    `${titleEN}
+`${titleEN}
 
 ${reasonsEN.join("\n")}`
 
@@ -574,6 +663,11 @@ function(){
 
   const memory =
     window.rbGetAIContext();
+
+  console.log(
+  "🧠 AI CONTEXT:",
+  memory
+);
 
   const executiveReasoning =
   window.rbGenerateExecutiveReasoning(
@@ -614,14 +708,29 @@ function(){
   const cashflow =
     Number(memory.lastCashflow || 0);
 
-  const revenue =
-    Number(memory.lastRevenue || 0);
+const revenue =
+    Number(
+        memory.lastRevenue ??
+        memory.revenueAnnual ??
+        memory.gross ??
+        0
+    );
 
-  const expenses =
-    Number(memory.lastExpenses || 0);
+const expenses =
+    Number(
+        memory.lastExpenses ??
+        memory.monthlyCosts ??
+        memory.expenses ??
+        0
+    );
 
-  const nightly =
-    Number(memory.lastNightPrice || 0);
+const nightly =
+    Number(
+        memory.lastNightPrice ??
+        memory.pricePerNight ??
+        memory.nightly ??
+        0
+    );
 
   const access =
     window.getUserAccess?.() || {};
@@ -977,6 +1086,16 @@ if(executiveReasoning){
 
 }
 
+console.log(
+  "🧠 SUMMARY IT:",
+  summaryIT
+);
+
+console.log(
+  "🧠 SUMMARY EN:",
+  summaryEN
+);
+  
 return window.t(
 
   summaryIT.join("\n\n"),
