@@ -223,6 +223,8 @@ if(isExistingLead){
 
   });
 
+  console.log("✅ EMAIL FUNNEL CREATO");
+
 }
 
 // ================= EMAIL FUNNEL =================
@@ -236,6 +238,8 @@ const funnelQuery = await db
 .get();
 
 if(funnelQuery.empty){
+
+  console.log("🔥 CREO EMAIL FUNNEL:", email);
 
   console.log("🔥 EMAIL FUNNEL DOES NOT EXIST");
 
