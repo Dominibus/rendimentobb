@@ -812,7 +812,7 @@ run a simulation inside the main simulator.`,
 
 }
 
-  // ===========================================
+// ===========================================
 // 🧠 RESPONSE VARIATIONS
 // ===========================================
 
@@ -865,11 +865,28 @@ function pickRandom(arr){
     console.log(
     "🔥 ROI BRANCH ENTERED",
 
-      // =====================================
-// 🎓 ROI EDUCATIONAL MODE
-// =====================================
+// ===========================================
+// 📈 ROI RESPONSE
+// ===========================================
 
-if(!hasAnalysis){
+if(
+  intent.intent === "roi_analysis"
+){
+
+  console.log(
+    "🔥 ROI BRANCH ENTERED",
+    {
+      roi,
+      risk,
+      occupancy
+    }
+  );
+
+  // =====================================
+  // 🎓 ROI EDUCATIONAL MODE
+  // =====================================
+
+  if(!hasAnalysis){
 
     response.type = "roi";
     response.confidence = 0.98;
@@ -900,35 +917,27 @@ RendimentoBB AI calculates it using:
 
     return response;
 
-}
-    {
-      roi,
-      risk,
-      occupancy
-    }
+  }
+
+  response.type = "roi";
+
+  response.confidence = 0.95;
+
+  console.log(
+    "🔥 ROI RESPONSE CREATED",
+    response
   );
 
-    response.type =
-      "roi";
+  if(roi >= 15){
 
-    console.log(
-  "🔥 ROI RESPONSE CREATED",
-  response
-);
+    response.signals.push(
+      "high_roi"
+    );
 
-    response.confidence =
-      0.95;
+    const marketROI =
+      market?.avgROI || "8-10%";
 
-    if(roi >= 15){
-
-      response.signals.push(
-  "high_roi"
-);
-
-const marketROI =
-  market?.avgROI || "8-10%";
-
-response.textIT =
+    response.textIT =
 
 `🚀 ROI estremamente elevato.
 
@@ -949,12 +958,12 @@ ${roi >= 40
 }
 
 🏨 Occupazione:
-${occupancy}% 
+${occupancy}%
 
 ⚠️ Risk score:
 ${risk}/100`;
 
-response.textEN =
+    response.textEN =
 
 `🚀 Extremely high ROI detected.
 
@@ -980,23 +989,25 @@ ${occupancy}%
 ⚠️ Risk score:
 ${risk}/100`;
 
-      console.log(
-  "🔥 ROI TEXT GENERATED",
-  {
-    textIT: response.textIT,
-    textEN: response.textEN
+    console.log(
+      "🔥 ROI TEXT GENERATED",
+      {
+        textIT: response.textIT,
+        textEN: response.textEN
+      }
+    );
+
+    return response;
+
   }
-);
-      return response;
-    }
 
-    else if(roi >= 8){
+  else if(roi >= 8){
 
-      response.signals.push(
-        "medium_roi"
-      );
+    response.signals.push(
+      "medium_roi"
+    );
 
-      response.textIT =
+    response.textIT =
 
 `📈 ROI potenzialmente sostenibile.
 
@@ -1005,7 +1016,7 @@ ${roi.toFixed(1)}%
 
 💡 L'investimento sembra equilibrato ma dipende da occupazione e costi.`;
 
-      response.textEN =
+    response.textEN =
 
 `📈 ROI appears potentially sustainable.
 
@@ -1014,13 +1025,13 @@ ${roi.toFixed(1)}%
 
 💡 The investment appears balanced but depends on occupancy and costs.`;
 
-    }
+  }
 
-    else{
+  else{
 
-  response.signals.push(
-    "low_roi"
-  );
+    response.signals.push(
+      "low_roi"
+    );
 
   // =====================================
   // 🚨 NEGATIVE ROI
