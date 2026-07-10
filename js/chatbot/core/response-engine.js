@@ -1202,6 +1202,13 @@ else if(
 
   }
 
+  console.log(
+    "💰 CASHFLOW RESPONSE CREATED",
+    response
+  );
+
+  return response;
+
 }
 
   // ===========================================
@@ -1272,35 +1279,35 @@ ${risk}/100
 
     else{
 
-  response.signals.push(
-    "low_risk"
-  );
+      response.signals.push(
+        "low_risk"
+      );
 
-  const riskInsightIT =
+      const riskInsightIT =
 
-    occupancy < 45
+        occupancy < 45
 
-    ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
+        ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
 
-    : occupancy >= 65
+        : occupancy >= 65
 
-    ? "✅ L'occupazione supporta bene il cashflow."
+        ? "✅ L'occupazione supporta bene il cashflow."
 
-    : "📊 L'occupazione appare moderata.";
+        : "📊 L'occupazione appare moderata.";
 
-  const riskInsightEN =
+      const riskInsightEN =
 
-    occupancy < 45
+        occupancy < 45
 
-    ? "⚠️ Current occupancy is reducing operational stability."
+        ? "⚠️ Current occupancy is reducing operational stability."
 
-    : occupancy >= 65
+        : occupancy >= 65
 
-    ? "✅ Occupancy strongly supports cashflow."
+        ? "✅ Occupancy strongly supports cashflow."
 
-    : "📊 Occupancy appears moderate.";
+        : "📊 Occupancy appears moderate.";
 
-  response.textIT =
+      response.textIT =
 
 `✅ Rischio relativamente basso.
 
@@ -1315,7 +1322,7 @@ ${riskInsightIT}
 📈 ROI reale:
 ${roi.toFixed(1)}%`;
 
-  response.textEN =
+      response.textEN =
 
 `✅ Risk appears relatively low.
 
@@ -1330,9 +1337,16 @@ ${riskInsightEN}
 📈 Real ROI:
 ${roi.toFixed(1)}%`;
 
-}
     }
 
+    console.log(
+      "⚠️ RISK RESPONSE CREATED",
+      response
+    );
+
+    return response;
+
+}
  // ===========================================
 // 🏦 MORTGAGE RESPONSE
 // Mortgage Advisor 2.0
