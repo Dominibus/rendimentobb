@@ -1035,6 +1035,13 @@ ${roi.toFixed(1)}%
 
     }
 
+       console.log(
+      "📈 ROI RESPONSE CREATED",
+      response
+    );
+
+    return response;
+
   }
 
 // ===========================================
