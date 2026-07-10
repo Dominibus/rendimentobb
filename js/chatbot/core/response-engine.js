@@ -709,36 +709,60 @@ const isHomeSimulation =
 
   window.location.pathname === "/index.html";
 
+// =====================================
+// 🎓 EDUCATIONAL QUICK ACTIONS
+// =====================================
+
+const educationalQuickActions = [
+
+  "roi_analysis",
+
+  "cashflow_analysis",
+
+  "risk_analysis",
+
+  "investment_strategy"
+
+];  
+
 // ===========================================
 // 🚫 BLOCK PARTIAL ANALYSIS
 // ===========================================
 
 if(
 
-  (
-  (!hasAnalysis && !isDashboard) ||
-  isHomeSimulation
-) &&
+(
 
-  intent.intent !== "education" &&
-  intent.intent !== "subscriptions" &&
-  intent.intent !== "market_analysis" &&
-  intent.intent !== "investment_strategy" &&
-  intent.intent !== "investment_advisor" &&
-  intent.intent !== "portfolio_growth" &&
-  intent.intent !== "market_comparison" &&
-  intent.intent !== "report_interpretation" &&
-  intent.intent !== "greeting" &&
-  intent.intent !== "pms_analysis" &&
-  intent.intent !== "pms_overview" &&
-  intent.intent !== "pms_bookings" &&
-  intent.intent !== "pms_arrivals" &&
-  intent.intent !== "pms_checkins" &&
-  intent.intent !== "pms_checkouts" &&
-  intent.intent !== "pms_revenue" &&
-  intent.intent !== "pms_occupancy" &&
-  intent.intent !== "pms_adr" &&
-  intent.intent !== "pms_guests"
+(!hasAnalysis && !isDashboard) ||
+
+isHomeSimulation
+
+)
+
+&&
+
+!educationalQuickActions.includes(intent.intent)
+
+&&
+
+intent.intent !== "education" &&
+intent.intent !== "subscriptions" &&
+intent.intent !== "market_analysis" &&
+intent.intent !== "investment_advisor" &&
+intent.intent !== "portfolio_growth" &&
+intent.intent !== "market_comparison" &&
+intent.intent !== "report_interpretation" &&
+intent.intent !== "greeting" &&
+intent.intent !== "pms_analysis" &&
+intent.intent !== "pms_overview" &&
+intent.intent !== "pms_bookings" &&
+intent.intent !== "pms_arrivals" &&
+intent.intent !== "pms_checkins" &&
+intent.intent !== "pms_checkouts" &&
+intent.intent !== "pms_revenue" &&
+intent.intent !== "pms_occupancy" &&
+intent.intent !== "pms_adr" &&
+intent.intent !== "pms_guests"
 
 ){
 
