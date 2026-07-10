@@ -709,6 +709,46 @@ const isHomeSimulation =
 
   window.location.pathname === "/index.html";
 
+console.log(
+  "🧪 BLOCK PARTIAL ANALYSIS CHECK",
+  {
+    intent: intent.intent,
+    hasAnalysis,
+    isDashboard,
+    isHomeSimulation,
+
+    education:
+      intent.intent === "education",
+
+    subscriptions:
+      intent.intent === "subscriptions",
+
+    market_analysis:
+      intent.intent === "market_analysis",
+
+    investment_strategy:
+      intent.intent === "investment_strategy",
+
+    investment_advisor:
+      intent.intent === "investment_advisor",
+
+    portfolio_growth:
+      intent.intent === "portfolio_growth",
+
+    market_comparison:
+      intent.intent === "market_comparison",
+
+    report_interpretation:
+      intent.intent === "report_interpretation",
+
+    greeting:
+      intent.intent === "greeting",
+
+    roi_analysis:
+      intent.intent === "roi_analysis"
+  }
+);  
+
 // ===========================================
 // 🚫 BLOCK PARTIAL ANALYSIS
 // ===========================================
