@@ -3864,6 +3864,90 @@ The current risk level may reduce cashflow stability over the long term.`;
 
 }
 
+// =====================================
+// 🧠 EXECUTIVE SUMMARY
+// =====================================
+
+function getExecutiveSummaryIT(){
+
+  if(!advisor){
+    return "";
+  }
+
+  if(advisor.verdict === "BUY"){
+
+    return `🟢 Executive Summary
+
+L'operazione presenta indicatori superiori ai benchmark di mercato.
+
+La combinazione di ROI (${roi.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
+
+L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lungo termine.`;
+
+  }
+
+  if(advisor.verdict === "WAIT"){
+
+    return `🟡 Executive Summary
+
+L'investimento mostra metriche interessanti ma non ancora pienamente ottimizzate.
+
+Alcuni indicatori risultano positivi, mentre altri richiedono miglioramenti per aumentare competitività e resilienza operativa.
+
+Si consiglia una revisione di pricing, occupazione o struttura dei costi.`;
+
+  }
+
+  return `🔴 Executive Summary
+
+La simulazione evidenzia criticità che riducono l'attrattività dell'investimento.
+
+L'equilibrio tra rendimento, rischio e sostenibilità operativa non appare attualmente ottimale.
+
+Prima di procedere è consigliabile rivedere il modello economico dell'operazione.`;
+
+}
+
+function getExecutiveSummaryEN(){
+
+  if(!advisor){
+    return "";
+  }
+
+  if(advisor.verdict === "BUY"){
+
+    return `🟢 Executive Summary
+
+The investment shows performance indicators above market benchmarks.
+
+The combination of ROI (${executiveROI.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
+
+Current market conditions support a favorable medium to long-term outlook.`;
+
+  }
+
+  if(advisor.verdict === "WAIT"){
+
+    return `🟡 Executive Summary
+
+The investment shows promising metrics but still requires optimization.
+
+Some indicators are positive, while others should be improved to increase competitiveness and operational resilience.
+
+Pricing, occupancy and cost structure should be reviewed.`;
+
+  }
+
+  return `🔴 Executive Summary
+
+The simulation highlights weaknesses that reduce overall investment attractiveness.
+
+The balance between return, risk and operational sustainability is currently below target levels.
+
+A review of the business model is recommended before proceeding.`;
+
+}  
+
 const {
 
   rawNet,
@@ -3998,57 +4082,11 @@ executiveIT.push(
 // Legacy Summary (temporary)
 // =====================================
 
-if(advisor){
+executiveIT.push(
 
-  if(advisor.verdict === "BUY"){
+  getExecutiveSummaryIT()
 
-    executiveIT.push(
-
-`🟢 Executive Summary
-
-L'operazione presenta indicatori superiori ai benchmark di mercato.
-
-La combinazione di ROI (${roi.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
-
-L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lungo termine.`
-
-    );
-
-  }
-
-  else if(advisor.verdict === "WAIT"){
-
-    executiveIT.push(
-
-`🟡 Executive Summary
-
-L'investimento mostra metriche interessanti ma non ancora pienamente ottimizzate.
-
-Alcuni indicatori risultano positivi, mentre altri richiedono miglioramenti per aumentare competitività e resilienza operativa.
-
-Si consiglia una revisione di pricing, occupazione o struttura dei costi.`
-
-    );
-
-  }
-
-  else{
-
-    executiveIT.push(
-
-`🔴 Executive Summary
-
-La simulazione evidenzia criticità che riducono l'attrattività dell'investimento.
-
-L'equilibrio tra rendimento, rischio e sostenibilità operativa non appare attualmente ottimale.
-
-Prima di procedere è consigliabile rivedere il modello economico dell'operazione.`
-
-    );
-
-  }
-
-}
+);
 
 executiveIT.push(
   `🏨 Occupazione attuale: ${occupancy}%`
@@ -4271,57 +4309,11 @@ executiveEN.push(
 // 🔥 AI CONCLUSION
 // =====================================
 
-if(advisor){
+executiveEN.push(
 
-  if(advisor.verdict === "BUY"){
+  getExecutiveSummaryEN()
 
-    executiveEN.push(
-
-`🟢 Executive Summary
-
-The investment shows performance indicators above market benchmarks.
-
-The combination of ROI (${executiveROI.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
-
-Current market conditions support a favorable medium to long-term outlook.`
-
-    );
-
-  }
-
-  else if(advisor.verdict === "WAIT"){
-
-    executiveEN.push(
-
-`🟡 Executive Summary
-
-The investment shows promising metrics but still requires optimization.
-
-Some indicators are positive, while others should be improved to increase competitiveness and operational resilience.
-
-Pricing, occupancy and cost structure should be reviewed.`
-
-    );
-
-  }
-
-  else{
-
-    executiveEN.push(
-
-`🔴 Executive Summary
-
-The simulation highlights weaknesses that reduce overall investment attractiveness.
-
-The balance between return, risk and operational sustainability is currently below target levels.
-
-A review of the business model is recommended before proceeding.`
-
-    );
-
-  }
-
-}
+);
 
 executiveEN.push(
   `🏨 Current occupancy: ${occupancy}%`
