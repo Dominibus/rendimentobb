@@ -4058,12 +4058,27 @@ if(targetROI > 0){
 // 🧠 ADVISOR VERDICT
 // =====================================
 
-if(advisor){
+const executiveDecision =
+
+window.rbEvaluateInvestment?.({
+
+    roi,
+    risk,
+    occupancy,
+
+    cashflow: net,
+
+    mortgagePercent:
+      rememberedMortgage
+
+}) || advisor;
+
+if(executiveDecision){
 
   let verdictIT = "";
   let verdictEN = "";
 
-  if(advisor.verdict === "BUY"){
+  if(executiveDecision.verdict === "BUY"){
 
     verdictIT =
       "🟢 VERDETTO AI: INVESTIMENTO CONSIGLIATO";
@@ -4073,7 +4088,7 @@ if(advisor){
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  else if(executiveDecision.verdict === "WAIT"){
 
     verdictIT =
       "🟡 VERDETTO AI: ATTENDERE O OTTIMIZZARE";
@@ -4093,29 +4108,41 @@ if(advisor){
 
   }
 
-  executiveIT.unshift(
-    verdictIT
-  );
+  executiveIT.unshift(verdictIT);
 
-  executiveIT.unshift(
-    `🎯 Affidabilità: ${advisor.confidence}%`
-  );
+  if(executiveDecision.confidence){
 
-  executiveIT.unshift(
-    `📊 Score AI: ${advisor.score}/100`
-  );
+    executiveIT.unshift(
+      `🎯 Affidabilità: ${executiveDecision.confidence}%`
+    );
 
-  executiveEN.unshift(
-    verdictEN
-  );
+  }
 
-  executiveEN.unshift(
-    `🎯 Confidence: ${advisor.confidence}%`
-  );
+  if(executiveDecision.score){
 
-  executiveEN.unshift(
-    `📊 AI Score: ${advisor.score}/100`
-  );
+    executiveIT.unshift(
+      `📊 Score AI: ${executiveDecision.score}/100`
+    );
+
+  }
+
+  executiveEN.unshift(verdictEN);
+
+  if(executiveDecision.confidence){
+
+    executiveEN.unshift(
+      `🎯 Confidence: ${executiveDecision.confidence}%`
+    );
+
+  }
+
+  if(executiveDecision.score){
+
+    executiveEN.unshift(
+      `📊 AI Score: ${executiveDecision.score}/100`
+    );
+
+  }
 
 }
 
