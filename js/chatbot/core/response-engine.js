@@ -71,7 +71,8 @@ const supportedTypes = [
   "cashflow",
   "risk",
   "strategy",
-  "mortgage"
+  "mortgage",
+  "pms"
 ];
 
   if(
@@ -101,15 +102,20 @@ const supportedTypes = [
       en: "🧠 Executive Risk Assessment"
     },
 
-    strategy: {
-      it: "🧠 Executive Investment Advisor",
-      en: "🧠 Executive Investment Advisor"
-    }
+strategy: {
+  it: "🧠 Executive Investment Advisor",
+  en: "🧠 Executive Investment Advisor"
+},
 
-    mortgage: {
+mortgage: {
   it: "🧠 Executive Mortgage Advisor",
   en: "🧠 Executive Mortgage Advisor"
-}
+},
+
+ pms: {
+  it: "🧠 Executive PMS Advisor",
+  en: "🧠 Executive PMS Advisor"
+}   
 
   };
 
