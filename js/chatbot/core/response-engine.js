@@ -66,12 +66,13 @@ function applyExecutiveFormatter(
   targetResponse = {}
 ){
 
-  const supportedTypes = [
-    "roi",
-    "cashflow",
-    "risk",
-    "strategy"
-  ];
+const supportedTypes = [
+  "roi",
+  "cashflow",
+  "risk",
+  "strategy",
+  "mortgage"
+];
 
   if(
     !supportedTypes.includes(
@@ -104,6 +105,11 @@ function applyExecutiveFormatter(
       it: "🧠 Executive Investment Advisor",
       en: "🧠 Executive Investment Advisor"
     }
+
+    mortgage: {
+  it: "🧠 Executive Mortgage Advisor",
+  en: "🧠 Executive Mortgage Advisor"
+}
 
   };
 
@@ -1411,27 +1417,27 @@ return applyExecutiveFormatter(
 
 }
 
-  // ===========================================
-  // ⚠️ RISK RESPONSE
-  // ===========================================
+// ===========================================
+// ⚠️ RISK RESPONSE
+// ===========================================
 
-  else if(
-    intent.intent === "risk_analysis"
-  ){
+else if(
+  intent.intent === "risk_analysis"
+){
 
-    response.type =
-      "risk";
+  response.type =
+    "risk";
 
-    response.confidence =
-      0.94;
+  response.confidence =
+    0.94;
 
-    if(risk >= 70){
+  if(risk >= 70){
 
-      response.signals.push(
-        "high_risk"
-      );
+    response.signals.push(
+      "high_risk"
+    );
 
-      response.textIT =
+    response.textIT =
 
 `🚨 Rischio operativo elevato.
 
@@ -1440,7 +1446,7 @@ ${risk}/100
 
 ⚠️ Cashflow e sostenibilità potrebbero diventare instabili nel lungo periodo.`;
 
-      response.textEN =
+    response.textEN =
 
 `🚨 High operational risk detected.
 
@@ -1449,15 +1455,15 @@ ${risk}/100
 
 ⚠️ Cashflow and sustainability may become unstable long-term.`;
 
-    }
+  }
 
-    else if(risk >= 40){
+  else if(risk >= 40){
 
-      response.signals.push(
-        "medium_risk"
-      );
+    response.signals.push(
+      "medium_risk"
+    );
 
-      response.textIT =
+    response.textIT =
 
 `⚠️ Rischio moderato.
 
@@ -1466,7 +1472,7 @@ ${risk}/100
 
 💡 L'investimento sembra sostenibile ma richiede monitoraggio operativo.`;
 
-      response.textEN =
+    response.textEN =
 
 `⚠️ Moderate risk detected.
 
@@ -1475,41 +1481,39 @@ ${risk}/100
 
 💡 The investment appears sustainable but requires operational monitoring.`;
 
-    }
+  }
 
-    else{
+  else{
 
-      response.signals.push(
-        "low_risk"
-      );
+    response.signals.push(
+      "low_risk"
+    );
 
-      const riskInsightIT =
+    const riskInsightIT =
 
-        occupancy < 45
+      occupancy < 45
 
-        ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
+      ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
 
-        : occupancy >= 65
+      : occupancy >= 65
 
-        ? "✅ L'occupazione supporta bene il cashflow."
+      ? "✅ L'occupazione supporta bene il cashflow."
 
-        : "📊 L'occupazione appare moderata.";
+      : "📊 L'occupazione appare moderata.";
 
-      const riskInsightEN =
+    const riskInsightEN =
 
-        occupancy < 45
+      occupancy < 45
 
-        ? "⚠️ Current occupancy is reducing operational stability."
+      ? "⚠️ Current occupancy is reducing operational stability."
 
-        : occupancy >= 65
+      : occupancy >= 65
 
-        ? "✅ Occupancy strongly supports cashflow."
+      ? "✅ Occupancy strongly supports cashflow."
 
-        : "📊 Occupancy appears moderate.";
+      : "📊 Occupancy appears moderate.";
 
-      response.textIT =
-
-response.textIT =
+    response.textIT =
 
 `✅ Rischio relativamente basso.
 
@@ -1524,7 +1528,7 @@ ${riskInsightIT}
 📈 ROI sul capitale:
 ${roi.toFixed(1)}%`;
 
-response.textEN =
+    response.textEN =
 
 `✅ Risk appears relatively low.
 
@@ -1539,18 +1543,19 @@ ${riskInsightEN}
 📈 ROI on equity:
 ${roi.toFixed(1)}%`;
 
+  }
+
+  console.log(
+    "⚠️ RISK RESPONSE CREATED",
+    response
+  );
+
+  return applyExecutiveFormatter(
+    response
+  );
+
 }
-
-console.log(
-  "⚠️ RISK RESPONSE CREATED",
-  response
-);
-
-return applyExecutiveFormatter(
-  response
-);
-
-}
+  
  // ===========================================
 // 🏦 MORTGAGE RESPONSE
 // Mortgage Advisor 2.0
@@ -1561,7 +1566,7 @@ else if(
 ){
 
   response.type =
-    "mortgage";
+  "mortgage";
 
   response.confidence =
     0.98;
@@ -1796,7 +1801,9 @@ ${
   : "Improving operational cashflow is recommended before increasing leverage."
 }`;
 
-  return response;
+  return applyExecutiveFormatter(
+  response
+);
 
 }
 
@@ -2903,7 +2910,21 @@ if(
   // 📊 FALLBACK INVESTMENT HISTORY
   // =====================================
 
-    const history = investmentHistory || [];
+    const history =
+
+  investmentHistory?.length
+
+    ? investmentHistory
+
+    : (
+
+        memory?.investmentHistory ||
+
+        window.rbChatMemory?.investmentHistory ||
+
+        []
+
+      );
 
   console.log(
   "🔥 FINAL HISTORY USED:",
@@ -2953,124 +2974,6 @@ VS
         "⚠️ At least two simulations or two cities are required.";
 
     }
-
-  // =====================================
-// 📊 GLOBAL COMPARISON FALLBACK
-// =====================================
-
-if(
-
-  !response.textIT &&
-  !response.textEN
-
-){
-
-  const history =
-
-    investmentHistory?.length
-
-    ? investmentHistory
-
-    : (
-
-        memory?.investmentHistory ||
-
-        window.rbChatMemory?.investmentHistory ||
-
-        []
-
-      );
-
-  console.log(
-    "🔥 GLOBAL FALLBACK HISTORY:",
-    history
-  );
-
-  if(history.length >= 2){
-
-    const current =
-      history[history.length - 1];
-
-    const previous =
-      history[history.length - 2];
-
-    response.textIT =
-
-`📊 Confronto simulazioni AI
-
-━━━━━━━━━━━━━━━
-
-💰 Simulazione precedente
-
-📈 ROI:
-${Number(
-  previous.roi || previous.realROI || 0
-).toFixed(1)}%
-
-💵 Profitto:
-€${Number(
-  previous.net || 0
-).toLocaleString("it-IT")}
-
-━━━━━━━━━━━━━━━
-
-💰 Simulazione attuale
-
-📈 ROI:
-${Number(
-  current.roi || current.realROI || 0
-).toFixed(1)}%
-
-💵 Profitto:
-€${Number(
-  current.net || 0
-).toLocaleString("it-IT")}`;
-
-    response.textEN =
-
-`📊 AI Simulation Comparison
-
-━━━━━━━━━━━━━━━
-
-💰 Previous Simulation
-
-📈 ROI:
-${Number(
-  previous.roi || previous.realROI || 0
-).toFixed(1)}%
-
-💵 Profit:
-€${Number(
-  previous.net || 0
-).toLocaleString("en-US")}
-
-━━━━━━━━━━━━━━━
-
-💰 Current Simulation
-
-📈 ROI:
-${Number(
-  current.roi || current.realROI || 0
-).toFixed(1)}%
-
-💵 Profit:
-€${Number(
-  current.net || 0
-).toLocaleString("en-US")}`;
-
-  }
-
-  else{
-
-    response.textIT =
-      "⚠️ Servono almeno due simulazioni per il confronto.";
-
-    response.textEN =
-      "⚠️ At least two simulations are required for comparison.";
-
-  }
-
-}  
 
 return response;
 
@@ -4566,10 +4469,15 @@ const executiveMemory = {
     gross ??
     0,
 
-  expenses:
+expenses:
+  Number(
     liveData.expenses ??
-    costs ??
-    0,
+    liveData.costs ??
+    liveData.totalExpenses ??
+    analysisData?.expenses ??
+    window.lastAnalysisData?.expenses ??
+    0
+  ),
 
   mortgagePercent:
     rememberedMortgage ??
