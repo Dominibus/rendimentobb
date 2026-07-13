@@ -3948,6 +3948,110 @@ A review of the business model is recommended before proceeding.`;
 
 }  
 
+// =====================================
+// 🎯 EXECUTIVE ACTION PLAN
+// =====================================
+
+function getActionPlanIT(){
+
+  const actions = [];
+
+  if(advisor?.verdict === "BUY"){
+
+    actions.push(
+      "Acquisizione consigliata."
+    );
+
+  }
+
+  if(roi >= 25){
+
+    actions.push(
+      "Performance superiore ai benchmark medi del mercato."
+    );
+
+  }
+
+  if(occupancy >= 70){
+
+    actions.push(
+      "Domanda potenziale compatibile con una gestione short-rent stabile."
+    );
+
+  }
+
+  if(net > 0){
+
+    actions.push(
+      "Cashflow positivo e sostenibile."
+    );
+
+  }
+
+  if(risk > 60){
+
+    actions.push(
+      "Valutare strategie di mitigazione del rischio."
+    );
+
+  }
+
+  return actions;
+
+}  
+
+// =====================================
+// 🎯 EXECUTIVE ACTION PLAN (EN)
+// =====================================
+
+function getActionPlanEN(){
+
+  const actions = [];
+
+  if(advisor?.verdict === "BUY"){
+
+    actions.push(
+      "Acquisition is recommended."
+    );
+
+  }
+
+  if(roi >= 25){
+
+    actions.push(
+      "Performance exceeds average market benchmarks."
+    );
+
+  }
+
+  if(occupancy >= 70){
+
+    actions.push(
+      "Potential demand supports a stable short-rent business."
+    );
+
+  }
+
+  if(net > 0){
+
+    actions.push(
+      "Positive and sustainable cashflow."
+    );
+
+  }
+
+  if(risk > 60){
+
+    actions.push(
+      "Consider risk mitigation strategies."
+    );
+
+  }
+
+  return actions;
+
+}  
+
 const {
 
   rawNet,
@@ -4462,57 +4566,8 @@ ${advisor.reasonsIT.join("\n")}`
 
 }
 
-const actionPlanIT = [];
-
-if(
-  advisor?.verdict === "BUY"
-){
-
-  actionPlanIT.push(
-    "Acquisizione consigliata."
-  );
-
-}
-
-if(
-  roi >= 25
-){
-
-  actionPlanIT.push(
-    "Performance superiore ai benchmark medi del mercato."
-  );
-
-}
-
-if(
-  occupancy >= 70
-){
-
-  actionPlanIT.push(
-    "Domanda potenziale compatibile con una gestione short-rent stabile."
-  );
-
-}
-
-if(
-  net > 0
-){
-
-  actionPlanIT.push(
-    "Cashflow positivo e sostenibile."
-  );
-
-}
-
-if(
-  risk > 60
-){
-
-  actionPlanIT.push(
-    "Valutare strategie di mitigazione del rischio."
-  );
-
-}
+const actionPlanIT =
+  getActionPlanIT();
 
 if(actionPlanIT.length){
 
@@ -4598,47 +4653,8 @@ ${advisor.reasonsEN.join("\n")}`
 // 🎯 ACTION PLAN EN
 // =====================================
 
-const actionPlanEN = [];
-
-if(advisor?.verdict === "BUY"){
-
-  actionPlanEN.push(
-    "Acquisition recommended."
-  );
-
-}
-
-if(roi >= 25){
-
-  actionPlanEN.push(
-    "Performance exceeds average market benchmarks."
-  );
-
-}
-
-if(occupancy >= 70){
-
-  actionPlanEN.push(
-    "Demand profile supports a stable short-rent operation."
-  );
-
-}
-
-if(net > 0){
-
-  actionPlanEN.push(
-    "Positive and sustainable cashflow."
-  );
-
-}
-
-if(risk > 60){
-
-  actionPlanEN.push(
-    "Consider risk mitigation strategies."
-  );
-
-}
+const actionPlanEN =
+  getActionPlanEN();
 
 if(actionPlanEN.length){
 
