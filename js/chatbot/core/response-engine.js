@@ -172,15 +172,21 @@ ${textEN}`;
 
 const liveData = {
 
-  ...(analysisData || {}),
+  // Livello legacy / filtrato dal piano
+  ...(window.rbChatbotData || {}),
 
-  ...(window.rbInvestmentMemory || {}),
-
-  ...(window.lastAnalysisData || {}),
-
+  // Memoria live legacy
   ...(window.rbChatbotLive || {}),
 
-  ...(window.rbChatbotData || {})
+  // Memoria investimento
+  ...(window.rbInvestmentMemory || {}),
+
+  // Ultima analisi completa salvata
+  ...(window.lastAnalysisData || {}),
+
+  // Dati forniti direttamente dall'Orchestrator:
+  // massima priorità e fonte più aggiornata
+  ...(analysisData || {})
 
 };
 
@@ -217,16 +223,24 @@ console.log(
 
   ) || 0;
 
+// ===========================================
+// 📈 PRIMARY INVESTOR ROI
+// ROI sul capitale investito: stessa metrica
+// usata da Simulatore, Advisor e Score Engine
+// ===========================================
+
 const roi =
   Number(
 
-    liveData.realROI ??
+    liveData.visualROI ??
 
     liveData.roi ??
 
-    window.rbChatbotLive?.roi ??
+    window.lastAnalysisData?.visualROI ??
 
-    window.rbChatbotData?.roi ??
+    window.lastAnalysisData?.roi ??
+
+    liveData.realROI ??
 
     0
 
