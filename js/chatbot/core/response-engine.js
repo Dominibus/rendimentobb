@@ -4052,6 +4052,110 @@ function getActionPlanEN(){
 
 }  
 
+// =====================================
+// 📋 EXECUTIVE RECOMMENDATIONS (IT)
+// =====================================
+
+function getRecommendationsIT(){
+
+  const recommendations = [];
+
+  if(occupancy < 60){
+
+    recommendations.push(
+      "• Incrementare l'occupazione tramite pricing dinamico e OTA."
+    );
+
+  }
+
+  if(risk > 50){
+
+    recommendations.push(
+      "• Ridurre il rischio operativo monitorando costi e volatilità della domanda."
+    );
+
+  }
+
+  if(roi < 15){
+
+    recommendations.push(
+      "• Ottimizzare ADR e marginalità per migliorare il rendimento."
+    );
+
+  }
+
+  if(net > 0){
+
+    recommendations.push(
+      "• Mantenere il cashflow positivo monitorando i costi fissi."
+    );
+
+  }
+
+  return recommendations;
+
+}
+
+// =====================================
+// 📋 EXECUTIVE RECOMMENDATIONS (EN)
+// =====================================
+
+function getRecommendationsEN(){
+
+  const recommendations = [];
+
+  if(occupancy < 60){
+
+    recommendations.push(
+      "• Increase occupancy through dynamic pricing and OTA optimization."
+    );
+
+  }
+
+  if(risk > 50){
+
+    recommendations.push(
+      "• Reduce operational risk by monitoring costs and market volatility."
+    );
+
+  }
+
+  if(roi < 15){
+
+    recommendations.push(
+      "• Optimize ADR and margins to improve returns."
+    );
+
+  }
+
+  if(net > 0){
+
+    if(occupancy >= 80){
+
+      recommendations.push(
+        "• Consider gradually increasing rates to improve RevPAR."
+      );
+
+    }
+
+    if(roi >= 40){
+
+      recommendations.push(
+        "• Validate ROI sustainability through conservative scenarios."
+      );
+
+    }
+
+    recommendations.push(
+      "• Preserve positive cashflow through cost control."
+    );
+
+  }
+
+  return recommendations;
+
+}  
+
 const {
 
   rawNet,
@@ -4587,39 +4691,8 @@ ${actionPlanIT
 // 📋 OPERATIONAL RECOMMENDATIONS IT
 // =====================================
 
-const recommendationsIT = [];
-
-if(occupancy < 60){
-
-  recommendationsIT.push(
-    "• Incrementare l'occupazione tramite pricing dinamico e OTA."
-  );
-
-}
-
-if(risk > 50){
-
-  recommendationsIT.push(
-    "• Ridurre il rischio operativo monitorando costi e volatilità della domanda."
-  );
-
-}
-
-if(roi < 15){
-
-  recommendationsIT.push(
-    "• Ottimizzare ADR e marginalità per migliorare il rendimento."
-  );
-
-}
-
-if(net > 0){
-
-  recommendationsIT.push(
-    "• Mantenere il cashflow positivo monitorando i costi fissi."
-  );
-
-}
+const recommendationsIT =
+  getRecommendationsIT();
 
 if(recommendationsIT.length){
 
@@ -4674,55 +4747,8 @@ ${actionPlanEN
 // 📋 OPERATIONAL RECOMMENDATIONS EN
 // =====================================
 
-const recommendationsEN = [];
-
-if(occupancy < 60){
-
-  recommendationsEN.push(
-    "• Increase occupancy through dynamic pricing and OTA optimization."
-  );
-
-}
-
-if(risk > 50){
-
-  recommendationsEN.push(
-    "• Reduce operational risk by monitoring costs and market volatility."
-  );
-
-}
-
-if(roi < 15){
-
-  recommendationsEN.push(
-    "• Optimize ADR and margins to improve returns."
-  );
-
-}
-
-if(net > 0){
-
-  if(occupancy >= 80){
-
-    recommendationsEN.push(
-      "• Consider gradually increasing rates to improve RevPAR."
-    );
-
-  }
-
-  if(roi >= 40){
-
-    recommendationsEN.push(
-      "• Validate ROI sustainability through conservative scenarios."
-    );
-
-  }
-
-  recommendationsEN.push(
-    "• Preserve positive cashflow through cost control."
-  );
-
-}
+const recommendationsEN =
+  getRecommendationsEN();
 
 if(recommendationsEN.length){
 
