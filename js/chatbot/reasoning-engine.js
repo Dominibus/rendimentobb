@@ -59,10 +59,83 @@ window.rbGetAIContext = function(){
 };
 
 // ===============================================
+// 🧠 EXECUTIVE MEMORY NORMALIZER
+// Single Source of Truth
+// ===============================================
+
+window.rbNormalizeExecutiveMemory = function(memory = {}){
+
+  return{
+
+    ...memory,
+
+    lastROI:
+      memory.lastROI ??
+      memory.roi ??
+      0,
+
+    lastRisk:
+      memory.lastRisk ??
+      memory.risk ??
+      memory.riskScore ??
+      0,
+
+    lastOccupancy:
+      memory.lastOccupancy ??
+      memory.occupancy ??
+      memory.occupancyRate ??
+      0,
+
+    lastCashflow:
+      memory.lastCashflow ??
+      memory.cashflow ??
+      memory.net ??
+      0,
+
+    lastRevenue:
+      memory.lastRevenue ??
+      memory.revenueAnnual ??
+      memory.gross ??
+      memory.revenue ??
+      0,
+
+    lastExpenses:
+      memory.lastExpenses ??
+      memory.monthlyCosts ??
+      memory.expenses ??
+      memory.costs ??
+      0,
+
+    lastMortgagePercent:
+      memory.lastMortgagePercent ??
+      memory.mortgagePercent ??
+      memory.mortgage ??
+      0,
+
+    lastNightPrice:
+      memory.lastNightPrice ??
+      memory.priceNight ??
+      memory.pricePerNight ??
+      memory.nightly ??
+      0,
+
+    lastCity:
+      memory.lastCity ??
+      memory.city ??
+      "roma"
+
+  };
+
+};
+
+// ===============================================
 // 🧠 EXECUTIVE CROSS REASONING
 // ===============================================
 
 window.rbGenerateExecutiveReasoning = function(memory = {}){
+
+  memory =
+    window.rbNormalizeExecutiveMemory(memory);
 
   const reasoningIT = [];
   const reasoningEN = [];
@@ -197,6 +270,9 @@ window.rbGenerateExecutiveReasoning = function(memory = {}){
 // ===============================================
 
 window.rbDetectExecutiveContradictions = function(memory = {}){
+
+  memory =
+    window.rbNormalizeExecutiveMemory(memory);
 
   const warningsIT = [];
   const warningsEN = [];
@@ -354,6 +430,9 @@ window.rbDetectExecutiveContradictions = function(memory = {}){
 // ===============================================
 
 window.rbGenerateStrategicRecommendations = function(memory = {}){
+
+  memory =
+    window.rbNormalizeExecutiveMemory(memory);
 
   const recommendationsIT = [];
   const recommendationsEN = [];
@@ -523,6 +602,9 @@ window.rbGenerateStrategicRecommendations = function(memory = {}){
 
 window.rbGenerateExecutiveConfidence = function(memory = {}){
 
+  memory =
+    window.rbNormalizeExecutiveMemory(memory);
+
   let confidence = 50;
 
   const reasonsIT = [];
@@ -662,9 +744,15 @@ window.rbGenerateInvestmentSummary =
 function(memory = null){
 
   memory =
-    memory ||
-    window.rbGetAIContext() ||
-    {};
+    window.rbNormalizeExecutiveMemory(
+
+      memory ||
+
+      window.rbGetAIContext() ||
+
+      {}
+
+    );
 
   console.log(
   "🧠 AI CONTEXT:",
