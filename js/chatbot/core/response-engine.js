@@ -3734,9 +3734,11 @@ else if(
   response.confidence =
     0.99;
 
-  // =====================================
-  // 💰 SAFE FINANCIAL DATA
-  // =====================================
+// =====================================
+// 💰 EXECUTIVE FINANCIALS
+// =====================================
+
+function getExecutiveFinancialData(){
 
   const rawNet =
 
@@ -3767,6 +3769,30 @@ else if(
 
   const gross =
     Number(rawGross || 0);
+
+  return {
+
+    rawNet,
+    rawGross,
+    net,
+    gross
+
+  };
+
+}
+  
+const {
+
+  rawNet,
+  rawGross,
+  net,
+  gross
+
+} = getExecutiveFinancialData();
+  
+  // =====================================
+  // 💰 SAFE FINANCIAL DATA
+  // =====================================
 
   console.log(
     "💰 EXECUTIVE DEBUG:",
