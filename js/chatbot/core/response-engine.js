@@ -261,6 +261,30 @@ const executiveROI =
 
   );
 
+// ===========================================
+// 📈 PRIMARY ROI VALUE HELPER
+// ROI sul capitale investito per storico,
+// confronti, portfolio e ranking
+// ===========================================
+
+function getPrimaryROIValue(
+  source = {}
+){
+
+  return Number(
+
+    source?.visualROI ??
+
+    source?.roi ??
+
+    source?.realROI ??
+
+    0
+
+  );
+
+}
+
 const risk =
   Number(
 
@@ -1033,7 +1057,7 @@ response.textIT =
 
 `🚀 ROI estremamente elevato.
 
-📈 ROI reale simulato:
+📈 ROI sul capitale investito:
 ${roi.toFixed(1)}%
 
 🌍 Mercato:
@@ -1059,7 +1083,7 @@ response.textEN =
 
 `🚀 Extremely high ROI detected.
 
-📈 Simulated real ROI:
+📈 ROI on invested capital:
 ${roi.toFixed(1)}%
 
 🌍 Market:
@@ -1494,8 +1518,8 @@ ${occupancy}%
 
 ${riskInsightIT}
 
-📈 ROI reale:
-${roi.toFixed(1)}%`;
+📈 ROI sul capitale:
+${roi.toFixed(1)}%
 
       response.textEN =
 
@@ -1509,8 +1533,8 @@ ${occupancy}%
 
 ${riskInsightEN}
 
-📈 Real ROI:
-${roi.toFixed(1)}%`;
+📈 ROI on equity:
+${roi.toFixed(1)}%
 
     }
 
@@ -2298,29 +2322,13 @@ const previous =
   ];
 
 const currentROI =
-  Number(
-
-    current.realROI ??
-
-    current.visualROI ??
-
-    current.roi ??
-
-    0
-
+  getPrimaryROIValue(
+    current
   );
 
 const previousROI =
-  Number(
-
-    previous.realROI ??
-
-    previous.visualROI ??
-
-    previous.roi ??
-
-    0
-
+  getPrimaryROIValue(
+    previous
   );
 
 console.log(
@@ -2504,16 +2512,13 @@ if(cities.length >= 2){
   // 🧠 SAFE HELPERS
   // =====================================
 
-  const getROI = (sim) => {
+const getROI = (sim) => {
 
-    return Number(
-      sim.visualROI ??
-      sim.realROI ??
-      sim.roi ??
-      0
-    );
+  return getPrimaryROIValue(
+    sim
+  );
 
-  };
+};
 
   const getProfit = (sim) => {
 
@@ -3175,12 +3180,10 @@ else if(
 
     ).toLowerCase();
 
-    const roi = Number(
-      item.realROI ??
-      item.visualROI ??
-      item.roi ??
-      0
-    );
+ const roi =
+  getPrimaryROIValue(
+    item
+  );
 
     const risk =
       Number(item.risk ?? 0);
@@ -3458,37 +3461,23 @@ else if(
     return response;
   }
 
-  const best =
+const best =
 
-    history.sort(
-      (a,b)=>
+  [...history].sort(
+    (a,b)=>
 
-      Number(
-        b.realROI ??
-        b.visualROI ??
-        b.roi ??
-        0
-      )
+      getPrimaryROIValue(b)
 
       -
 
-      Number(
-        a.realROI ??
-        a.visualROI ??
-        a.roi ??
-        0
-      )
+      getPrimaryROIValue(a)
 
-    )[0];
+  )[0];
 
-  const bestROI =
-
-    Number(
-      best.realROI ??
-      best.visualROI ??
-      best.roi ??
-      0
-    );
+const bestROI =
+  getPrimaryROIValue(
+    best
+  );
 
   response.textIT =
 
@@ -4809,39 +4798,24 @@ totalSimulations > 0
 ? portfolioHistory.reduce(
     (sum,item)=>
       sum +
-      Number(
-        item.realROI ??
-        item.visualROI ??
-        item.roi ??
-        0
-      ),
+      getPrimaryROIValue(item),
     0
   ) / totalSimulations
 
 : 0;
 
-const bestSimulation =
+const bestROI =
 
-portfolioHistory.sort(
-(a,b)=>
+bestSimulation
 
-Number(
-  b.realROI ??
-  b.visualROI ??
-  b.roi ??
-  0
-)
+? Number(
+    bestSimulation.realROI ??
+    bestSimulation.visualROI ??
+    bestSimulation.roi ??
+    0
+  )
 
--
-
-Number(
-  a.realROI ??
-  a.visualROI ??
-  a.roi ??
-  0
-)
-
-)[0];
+: 0;
 
 const bestROI =
 
@@ -5086,7 +5060,7 @@ else if(
   response.confidence =
     0.99;
 
-  // =====================================
+// =====================================
 // 📊 PORTFOLIO HISTORY ANALYSIS
 // =====================================
 
@@ -5096,96 +5070,109 @@ const portfolioHistory =
 const totalSimulations =
   portfolioHistory.length;
 
+// =====================================
+// 📈 AVERAGE ROI
+// Usa il ROI principale sul capitale
+// =====================================
+
 const averageROI =
 
-totalSimulations > 0
+  totalSimulations > 0
 
-? portfolioHistory.reduce(
-    (sum,item)=>
-      sum +
-      Number(
-        item.realROI ??
-        item.visualROI ??
-        item.roi ??
+    ? portfolioHistory.reduce(
+        (sum, item) =>
+
+          sum +
+
+          getPrimaryROIValue(
+            item
+          ),
+
         0
-      ),
-    0
-  ) / totalSimulations
+      ) / totalSimulations
 
-: 0;
+    : 0;
+
+// =====================================
+// 🏆 BEST SIMULATION
+// Copia l'array per non modificare
+// l'ordine originale dello storico
+// =====================================
 
 const bestSimulation =
 
-[...portfolioHistory]
+  [...portfolioHistory].sort(
+    (a, b) =>
 
-.sort(
-(a,b)=>
+      getPrimaryROIValue(
+        b
+      )
 
-Number(
-  b.realROI ??
-  b.visualROI ??
-  b.roi ??
-  0
-)
+      -
 
--
+      getPrimaryROIValue(
+        a
+      )
 
-Number(
-  a.realROI ??
-  a.visualROI ??
-  a.roi ??
-  0
-)
+  )[0];
 
-)[0];
+// =====================================
+// 🚀 BEST ROI
+// =====================================
 
 const bestROI =
 
-bestSimulation
+  bestSimulation
 
-? Number(
-    bestSimulation.realROI ??
-    bestSimulation.visualROI ??
-    bestSimulation.roi ??
-    0
-  )
+    ? getPrimaryROIValue(
+        bestSimulation
+      )
 
-: 0;
+    : 0;
+
+// =====================================
+// 🌍 BEST CITY
+// =====================================
 
 const bestCity =
 
-bestSimulation
+  bestSimulation
 
-? (
-    bestSimulation.realCity ||
-    bestSimulation.city ||
-    bestSimulation.marketCity ||
-    "N/D"
-  )
+    ? (
+        bestSimulation.realCity ||
+        bestSimulation.city ||
+        bestSimulation.marketCity ||
+        "N/D"
+      )
 
-: "N/D";
+    : "N/D";
+
+// =====================================
+// 💰 AVERAGE CASHFLOW
+// Rimane invariato
+// =====================================
 
 const averageCashflow =
 
-totalSimulations > 0
+  totalSimulations > 0
 
-? portfolioHistory.reduce(
-    (sum,item)=>
+    ? portfolioHistory.reduce(
+        (sum, item) =>
 
-      sum +
+          sum +
 
-      Number(
-        item.net ??
-        item.cashflow ??
-        item.annualProfit ??
+          Number(
+            item.net ??
+            item.cashflow ??
+            item.annualProfit ??
+            0
+          ),
+
         0
-      ),
+      ) / totalSimulations
 
-    0
-  ) / totalSimulations
-
-: 0;
-
+    : 0;
+  
   const availableCapital =
 
     Number(
