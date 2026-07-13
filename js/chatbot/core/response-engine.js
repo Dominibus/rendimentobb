@@ -614,7 +614,8 @@ function pushResponseBlock({
 }  
 
 // ===========================================
-// 🧠 EXECUTIVE REASONING ENGINE
+// 🧠 LEGACY REASONING (temporary)
+// Will be removed after Executive Builder migration
 // ===========================================
 
 const reasoningIT = [];
@@ -3857,8 +3858,9 @@ if(targetROI > 0){
     `🌍 Mercato analizzato: ${cityLabel}`
   );
 
-  // =====================================
-// 🏆 INVESTMENT GRADE
+// =====================================
+// 🧠 EXECUTIVE DECISION LAYER
+// Investment Grade + Risk Classification
 // =====================================
 
 let investmentGrade = "C";
@@ -3935,7 +3937,8 @@ Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow n
 }
 
 // =====================================
-// 🔥 AI CONCLUSION
+// 🧠 EXECUTIVE STRATEGIC VERDICT
+// Legacy Summary (temporary)
 // =====================================
 
 if(advisor){
@@ -4003,7 +4006,7 @@ if(occupancy < 45){
 }
 
 // =====================================
-// 🧠 AI SIGNAL INSIGHTS
+// 🧠 EXECUTIVE SIGNALS
 // =====================================
 
 if(executiveInsightsIT.length){
