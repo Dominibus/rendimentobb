@@ -1508,6 +1508,8 @@ ${risk}/100
 
       response.textIT =
 
+response.textIT =
+
 `✅ Rischio relativamente basso.
 
 📊 Risk score:
@@ -1519,9 +1521,9 @@ ${occupancy}%
 ${riskInsightIT}
 
 📈 ROI sul capitale:
-${roi.toFixed(1)}%
+${roi.toFixed(1)}%`;
 
-      response.textEN =
+response.textEN =
 
 `✅ Risk appears relatively low.
 
@@ -1534,9 +1536,9 @@ ${occupancy}%
 ${riskInsightEN}
 
 📈 ROI on equity:
-${roi.toFixed(1)}%
+${roi.toFixed(1)}%`;
 
-    }
+}
 
 console.log(
   "⚠️ RISK RESPONSE CREATED",
@@ -4791,78 +4793,104 @@ const portfolioHistory =
 const totalSimulations =
   portfolioHistory.length;
 
+// =====================================
+// 📈 AVERAGE ROI
+// =====================================
+
 const averageROI =
 
-totalSimulations > 0
+  totalSimulations > 0
 
-? portfolioHistory.reduce(
-    (sum,item)=>
-      sum +
-      getPrimaryROIValue(item),
-    0
-  ) / totalSimulations
+    ? portfolioHistory.reduce(
+        (sum, item) =>
 
-: 0;
+          sum +
+
+          getPrimaryROIValue(
+            item
+          ),
+
+        0
+      ) / totalSimulations
+
+    : 0;
+
+// =====================================
+// 🏆 BEST SIMULATION
+// =====================================
+
+const bestSimulation =
+
+  [...portfolioHistory].sort(
+    (a, b) =>
+
+      getPrimaryROIValue(
+        b
+      )
+
+      -
+
+      getPrimaryROIValue(
+        a
+      )
+
+  )[0];
+
+// =====================================
+// 🚀 BEST ROI
+// =====================================
 
 const bestROI =
 
-bestSimulation
+  bestSimulation
 
-? Number(
-    bestSimulation.realROI ??
-    bestSimulation.visualROI ??
-    bestSimulation.roi ??
-    0
-  )
+    ? getPrimaryROIValue(
+        bestSimulation
+      )
 
-: 0;
+    : 0;
 
-const bestROI =
-
-bestSimulation
-
-? Number(
-    bestSimulation.realROI ??
-    bestSimulation.visualROI ??
-    bestSimulation.roi ??
-    0
-  )
-
-: 0;
+// =====================================
+// 🌍 BEST CITY
+// =====================================
 
 const bestCity =
 
-bestSimulation
+  bestSimulation
 
-? (
-    bestSimulation.realCity ||
-    bestSimulation.city ||
-    bestSimulation.marketCity ||
-    "N/D"
-  )
+    ? (
+        bestSimulation.realCity ||
+        bestSimulation.city ||
+        bestSimulation.marketCity ||
+        "N/D"
+      )
 
-: "N/D";
+    : "N/D";
+
+// =====================================
+// 💰 AVERAGE CASHFLOW
+// =====================================
 
 const averageCashflow =
 
-totalSimulations > 0
+  totalSimulations > 0
 
-? portfolioHistory.reduce(
-    (sum,item)=>
+    ? portfolioHistory.reduce(
+        (sum, item) =>
 
-      sum +
+          sum +
 
-      Number(
-        item.net ??
-        item.cashflow ??
-        item.annualProfit ??
+          Number(
+            item.net ??
+            item.cashflow ??
+            item.annualProfit ??
+            0
+          ),
+
         0
-      ),
+      ) / totalSimulations
 
-    0
-  ) / totalSimulations
-
-: 0;    
+    : 0;
 
 const properties =
 
