@@ -1124,6 +1124,8 @@ console.log(
   "🧠 REASONING ENGINE READY"
 );
 
+
+
 // ===============================================
 // 🧠 AI SIGNAL ENGINE
 // ===============================================
@@ -1288,3 +1290,792 @@ compatibili con fascia alta.
   return signals;
 
 }
+
+// ===============================================
+// 🧠 EXECUTIVE ASSESSMENT ENGINE
+// Silicon Valley 2026 Executive Intelligence Layer
+// ===============================================
+
+window.rbGenerateExecutiveAssessment = function(memory = {}){
+
+  const assessment = {
+
+    strengths: [],
+    weaknesses: [],
+    opportunities: [],
+    threats: [],
+    priorities: [],
+    recommendations: [],
+    executiveConclusion: "",
+    confidence: 50,
+    investmentGrade: "C"
+
+  };
+
+  const roi =
+    Number(memory.lastROI || 0);
+
+  const risk =
+    Number(memory.lastRisk || 0);
+
+  const occupancy =
+    Number(memory.lastOccupancy || 0);
+
+  const cashflow =
+    Number(memory.lastCashflow || 0);
+
+  const mortgage =
+    Number(
+      memory.lastMortgagePercent ??
+      memory.mortgagePercent ??
+      0
+    );
+
+  const revenue =
+    Number(
+      memory.lastRevenue ??
+      memory.revenueAnnual ??
+      memory.gross ??
+      0
+    );
+
+  const expenses =
+    Number(
+      memory.lastExpenses ??
+      memory.monthlyCosts ??
+      memory.expenses ??
+      0
+    );
+
+  const nightly =
+    Number(
+      memory.lastNightPrice ??
+      memory.pricePerNight ??
+      memory.nightly ??
+      0
+    );
+
+  // ===========================================
+  // 💚 STRENGTHS
+  // ===========================================
+
+  if(roi >= 20){
+
+    assessment.strengths.push({
+
+      id:"roi",
+
+      weight:10,
+
+      text:window.t(
+
+        "ROI superiore alla media di mercato.",
+
+        "ROI above market average."
+
+      )
+
+    });
+
+  }
+
+  if(risk <= 35){
+
+    assessment.strengths.push({
+
+      id:"risk",
+
+      weight:8,
+
+      text:window.t(
+
+        "Profilo di rischio contenuto.",
+
+        "Controlled risk profile."
+
+      )
+
+    });
+
+  }
+
+  if(cashflow > 0){
+
+    assessment.strengths.push({
+
+      id:"cashflow",
+
+      weight:10,
+
+      text:window.t(
+
+        "Cashflow positivo.",
+
+        "Positive cashflow."
+
+      )
+
+    });
+
+  }
+
+  if(occupancy >= 70){
+
+    assessment.strengths.push({
+
+      id:"occupancy",
+
+      weight:8,
+
+      text:window.t(
+
+        "Ottimo tasso di occupazione.",
+
+        "Strong occupancy rate."
+
+      )
+
+    });
+
+  }
+
+  if(expenses < revenue * 0.45 && revenue > 0){
+
+    assessment.strengths.push({
+
+      id:"costs",
+
+      weight:7,
+
+      text:window.t(
+
+        "Ottimo controllo dei costi.",
+
+        "Strong cost efficiency."
+
+      )
+
+    });
+
+  }
+
+  // ===========================================
+  // ❤️ WEAKNESSES
+  // ===========================================
+
+  if(roi < 12){
+
+    assessment.weaknesses.push({
+
+      id:"roi",
+
+      weight:10,
+
+      text:window.t(
+
+        "ROI inferiore agli obiettivi.",
+
+        "ROI below target."
+
+      )
+
+    });
+
+  }
+
+  if(cashflow <= 0){
+
+    assessment.weaknesses.push({
+
+      id:"cashflow",
+
+      weight:10,
+
+      text:window.t(
+
+        "Cashflow negativo.",
+
+        "Negative cashflow."
+
+      )
+
+    });
+
+  }
+
+  if(risk >= 60){
+
+    assessment.weaknesses.push({
+
+      id:"risk",
+
+      weight:9,
+
+      text:window.t(
+
+        "Rischio operativo elevato.",
+
+        "High operational risk."
+
+      )
+
+    });
+
+  }
+
+  if(occupancy < 55){
+
+    assessment.weaknesses.push({
+
+      id:"occupancy",
+
+      weight:8,
+
+      text:window.t(
+
+        "Occupazione insufficiente.",
+
+        "Low occupancy."
+
+      )
+
+    });
+
+  }
+
+  if(expenses > revenue * 0.60 && revenue > 0){
+
+    assessment.weaknesses.push({
+
+      id:"costs",
+
+      weight:8,
+
+      text:window.t(
+
+        "Costi operativi elevati.",
+
+        "High operating costs."
+
+      )
+
+    });
+
+  }
+
+    // ===========================================
+  // 🚀 OPPORTUNITIES
+  // ===========================================
+
+  if(
+    occupancy < 70 &&
+    roi >= 15
+  ){
+
+    assessment.opportunities.push({
+
+      id:"occupancy",
+
+      impact:9,
+
+      text:window.t(
+
+        "Incrementare l'occupazione potrebbe aumentare significativamente il rendimento.",
+
+        "Increasing occupancy could significantly improve profitability."
+
+      )
+
+    });
+
+  }
+
+  if(
+    nightly < 180 &&
+    occupancy >= 65
+  ){
+
+    assessment.opportunities.push({
+
+      id:"pricing",
+
+      impact:8,
+
+      text:window.t(
+
+        "Esiste margine per aumentare la tariffa media.",
+
+        "There is room to increase the average nightly rate."
+
+      )
+
+    });
+
+  }
+
+  if(
+    expenses >= revenue * 0.45 &&
+    revenue > 0
+  ){
+
+    assessment.opportunities.push({
+
+      id:"costs",
+
+      impact:9,
+
+      text:window.t(
+
+        "Una riduzione dei costi migliorerebbe immediatamente il margine netto.",
+
+        "Reducing operating costs would immediately improve net profitability."
+
+      )
+
+    });
+
+  }
+
+  if(
+    mortgage >= 60 &&
+    cashflow > 0
+  ){
+
+    assessment.opportunities.push({
+
+      id:"mortgage",
+
+      impact:7,
+
+      text:window.t(
+
+        "Ottimizzare il mutuo aumenterebbe la resilienza finanziaria.",
+
+        "Optimizing the mortgage would improve financial resilience."
+
+      )
+
+    });
+
+  }
+
+  // ===========================================
+  // ⚠️ THREATS
+  // ===========================================
+
+  if(
+    mortgage >= 85 &&
+    cashflow <= 0
+  ){
+
+    assessment.threats.push({
+
+      id:"leverage",
+
+      severity:10,
+
+      text:window.t(
+
+        "Leva finanziaria molto aggressiva.",
+
+        "Very aggressive financial leverage."
+
+      )
+
+    });
+
+  }
+
+  if(
+    roi >= 25 &&
+    occupancy < 45
+  ){
+
+    assessment.threats.push({
+
+      id:"optimistic_roi",
+
+      severity:9,
+
+      text:window.t(
+
+        "Il ROI potrebbe dipendere da ipotesi troppo ottimistiche.",
+
+        "ROI may rely on overly optimistic assumptions."
+
+      )
+
+    });
+
+  }
+
+  if(
+    revenue > 0 &&
+    expenses > revenue
+  ){
+
+    assessment.threats.push({
+
+      id:"negative_margin",
+
+      severity:10,
+
+      text:window.t(
+
+        "I costi superano i ricavi stimati.",
+
+        "Expenses exceed estimated revenue."
+
+      )
+
+    });
+
+  }
+
+  if(
+    risk >= 75
+  ){
+
+    assessment.threats.push({
+
+      id:"risk",
+
+      severity:10,
+
+      text:window.t(
+
+        "Il rischio operativo è estremamente elevato.",
+
+        "Operational risk is extremely high."
+
+      )
+
+    });
+
+  }
+
+  // ===========================================
+  // 🔥 PRIORITY ENGINE
+  // ===========================================
+
+  if(cashflow <= 0){
+
+    assessment.priorities.push({
+
+      priority:1,
+
+      icon:"💸",
+
+      text:window.t(
+
+        "Ripristinare un cashflow positivo.",
+
+        "Restore positive cashflow."
+
+      )
+
+    });
+
+  }
+
+  if(mortgage >= 80){
+
+    assessment.priorities.push({
+
+      priority:2,
+
+      icon:"🏦",
+
+      text:window.t(
+
+        "Ridurre la leva finanziaria.",
+
+        "Reduce financial leverage."
+
+      )
+
+    });
+
+  }
+
+  if(occupancy < 60){
+
+    assessment.priorities.push({
+
+      priority:3,
+
+      icon:"🏨",
+
+      text:window.t(
+
+        "Incrementare l'occupazione.",
+
+        "Increase occupancy."
+
+      )
+
+    });
+
+  }
+
+  if(
+    expenses >= revenue * 0.50 &&
+    revenue > 0
+  ){
+
+    assessment.priorities.push({
+
+      priority:4,
+
+      icon:"📉",
+
+      text:window.t(
+
+        "Ottimizzare i costi operativi.",
+
+        "Optimize operating costs."
+
+      )
+
+    });
+
+  }
+
+    // ===========================================
+  // 🎯 INVESTMENT GRADE
+  // ===========================================
+
+  let score = 50;
+
+  score += assessment.strengths.reduce(
+    (sum, item) => sum + item.weight,
+    0
+  );
+
+  score -= assessment.weaknesses.reduce(
+    (sum, item) => sum + item.weight,
+    0
+  );
+
+  score -= assessment.threats.reduce(
+    (sum, item) => sum + item.severity,
+    0
+  ) * 0.5;
+
+  score += assessment.opportunities.reduce(
+    (sum, item) => sum + item.impact,
+    0
+  ) * 0.3;
+
+  score =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(score)
+      )
+    );
+
+  assessment.confidence = score;
+
+  // ===========================================
+  // 🏆 EXECUTIVE GRADE
+  // ===========================================
+
+  if(score >= 95){
+
+    assessment.investmentGrade = "A+";
+
+  }
+  else if(score >= 90){
+
+    assessment.investmentGrade = "A";
+
+  }
+  else if(score >= 80){
+
+    assessment.investmentGrade = "B+";
+
+  }
+  else if(score >= 70){
+
+    assessment.investmentGrade = "B";
+
+  }
+  else if(score >= 60){
+
+    assessment.investmentGrade = "C+";
+
+  }
+  else if(score >= 50){
+
+    assessment.investmentGrade = "C";
+
+  }
+  else if(score >= 40){
+
+    assessment.investmentGrade = "D";
+
+  }
+  else{
+
+    assessment.investmentGrade = "E";
+
+  }
+
+  // ===========================================
+  // 🧠 EXECUTIVE CONCLUSION
+  // ===========================================
+
+  if(
+
+    roi >= 20 &&
+
+    risk <= 35 &&
+
+    cashflow > 0
+
+  ){
+
+    assessment.executiveConclusion =
+      window.t(
+
+`L'investimento presenta una struttura estremamente solida.
+
+Le metriche finanziarie risultano coerenti tra redditività, rischio e sostenibilità.
+
+Può rappresentare un'ottima opportunità di medio-lungo periodo.`,
+
+`The investment shows a very strong financial structure.
+
+Profitability, risk and sustainability appear well balanced.
+
+It represents an excellent medium to long-term opportunity.`
+
+      );
+
+  }
+
+  else if(
+
+    roi >= 15 &&
+
+    cashflow > 0
+
+  ){
+
+    assessment.executiveConclusion =
+      window.t(
+
+`L'investimento appare interessante ma presenta margini di ottimizzazione.
+
+Intervenire sui principali indicatori potrebbe incrementare ulteriormente la redditività.`,
+
+`The investment appears promising but still offers room for optimization.
+
+Improving key metrics could further increase profitability.`
+
+      );
+
+  }
+
+  else if(
+
+    cashflow < 0 ||
+
+    roi < 10
+
+  ){
+
+    assessment.executiveConclusion =
+      window.t(
+
+`La struttura economica richiede attenzione.
+
+Prima di procedere sarebbe opportuno migliorare gli indicatori principali per ridurre il rischio operativo.`,
+
+`The financial structure requires attention.
+
+Key metrics should be improved before proceeding in order to reduce operational risk.`
+
+      );
+
+  }
+
+  else{
+
+    assessment.executiveConclusion =
+      window.t(
+
+`Lo scenario risulta equilibrato ma necessita ulteriori verifiche prima di una decisione definitiva.`,
+
+`The scenario appears balanced but requires further validation before making a final investment decision.`
+
+      );
+
+  }
+
+  // ===========================================
+  // 📋 SORT PRIORITIES
+  // ===========================================
+
+  assessment.priorities.sort(
+
+    (a,b)=>
+
+      a.priority -
+
+      b.priority
+
+  );
+
+  // ===========================================
+  // 📈 SORT SWOT
+  // ===========================================
+
+  assessment.strengths.sort(
+    (a,b)=>b.weight-a.weight
+  );
+
+  assessment.weaknesses.sort(
+    (a,b)=>b.weight-a.weight
+  );
+
+  assessment.opportunities.sort(
+    (a,b)=>b.impact-a.impact
+  );
+
+  assessment.threats.sort(
+    (a,b)=>b.severity-a.severity
+  );
+
+    // ===========================================
+  // 📌 EXECUTIVE RECOMMENDATIONS
+  // ===========================================
+
+  assessment.recommendations =
+
+    window
+      .rbGenerateStrategicRecommendations(memory)
+      .split("\n\n")
+      .filter(Boolean);
+
+  // ===========================================
+  // 🧠 DEBUG
+  // ===========================================
+
+  console.log(
+
+    "🧠 EXECUTIVE ASSESSMENT:",
+
+    assessment
+
+  );
+
+  // ===========================================
+  // ✅ RETURN OBJECT
+  // ===========================================
+
+  return assessment;
+
+};
