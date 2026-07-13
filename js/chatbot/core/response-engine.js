@@ -3780,6 +3780,37 @@ function getExecutiveFinancialData(){
   };
 
 }
+
+// =====================================
+// 🏆 EXECUTIVE INVESTMENT GRADE
+// =====================================
+
+function getInvestmentGrade(){
+
+  if(
+    roi >= 20 &&
+    risk <= 35 &&
+    occupancy >= 65
+  ){
+    return "A+";
+  }
+
+  if(
+    roi >= 15 &&
+    risk <= 45
+  ){
+    return "A";
+  }
+
+  if(
+    roi >= 10
+  ){
+    return "B";
+  }
+
+  return "C";
+
+}
   
 const {
 
@@ -3790,9 +3821,9 @@ const {
 
 } = getExecutiveFinancialData();
   
-  // =====================================
-  // 💰 SAFE FINANCIAL DATA
-  // =====================================
+// =====================================
+// 💰 FINANCIAL DATA
+// =====================================
 
   console.log(
     "💰 EXECUTIVE DEBUG:",
@@ -3883,40 +3914,14 @@ if(targetROI > 0){
   executiveIT.push(
     `🌍 Mercato analizzato: ${cityLabel}`
   );
-
+  
 // =====================================
 // 🧠 EXECUTIVE DECISION LAYER
 // Investment Grade + Risk Classification
 // =====================================
 
-let investmentGrade = "C";
-
-if(
-  roi >= 20 &&
-  risk <= 35 &&
-  occupancy >= 65
-){
-
-  investmentGrade = "A+";
-
-}
-
-else if(
-  roi >= 15 &&
-  risk <= 45
-){
-
-  investmentGrade = "A";
-
-}
-
-else if(
-  roi >= 10
-){
-
-  investmentGrade = "B";
-
-}
+const investmentGrade =
+  getInvestmentGrade();
 
 executiveIT.push(
 
