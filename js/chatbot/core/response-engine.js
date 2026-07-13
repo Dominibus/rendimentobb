@@ -4314,6 +4314,55 @@ if(executiveInsightsEN.length){
 }
 
 // =====================================
+// 🧠 EXECUTIVE MEMORY (LIVE DATA)
+// =====================================
+
+const executiveMemory = {
+
+  ...memory,
+
+  roi,
+
+  risk,
+
+  occupancy,
+
+  cashflow:
+    liveData.net ??
+    liveData.cashflow ??
+    net ??
+    0,
+
+  revenue:
+    liveData.gross ??
+    liveData.revenue ??
+    gross ??
+    0,
+
+  expenses:
+    liveData.expenses ??
+    costs ??
+    0,
+
+  mortgagePercent:
+    rememberedMortgage ??
+    0,
+
+  city:
+    rememberedCity ??
+    city ??
+    liveData.city ??
+    liveData.realCity ??
+    "roma"
+
+};
+
+console.log(
+  "🧠 EXECUTIVE MEMORY SENT:",
+  executiveMemory
+);
+  
+// =====================================
 // 🧠 EXECUTIVE REASONING ENGINE 2.0
 // =====================================
 
@@ -4326,10 +4375,10 @@ if(
 
   try{
 
-    executiveSummary =
-      window.rbGenerateInvestmentSummary(
-        memory
-      ) || "";
+executiveSummary =
+  window.rbGenerateInvestmentSummary(
+    executiveMemory
+  ) || "";
 
   }
   catch(error){
