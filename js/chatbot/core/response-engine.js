@@ -59,6 +59,114 @@ window.rbGenerateResponse = function({
   };
 
   // ===========================================
+// 🧠 EXECUTIVE CONVERSATION FORMATTER 1.0
+// ===========================================
+
+function applyExecutiveFormatter(
+  targetResponse = {}
+){
+
+  const supportedTypes = [
+    "roi",
+    "cashflow",
+    "risk",
+    "strategy"
+  ];
+
+  if(
+    !supportedTypes.includes(
+      targetResponse.type
+    )
+  ){
+
+    return targetResponse;
+
+  }
+
+  const headers = {
+
+    roi: {
+      it: "🧠 Executive ROI Insight",
+      en: "🧠 Executive ROI Insight"
+    },
+
+    cashflow: {
+      it: "🧠 Executive Cashflow Review",
+      en: "🧠 Executive Cashflow Review"
+    },
+
+    risk: {
+      it: "🧠 Executive Risk Assessment",
+      en: "🧠 Executive Risk Assessment"
+    },
+
+    strategy: {
+      it: "🧠 Executive Investment Advisor",
+      en: "🧠 Executive Investment Advisor"
+    }
+
+  };
+
+  const header =
+    headers[targetResponse.type];
+
+  if(!header){
+
+    return targetResponse;
+
+  }
+
+  const textIT =
+    String(
+      targetResponse.textIT || ""
+    ).trim();
+
+  const textEN =
+    String(
+      targetResponse.textEN || ""
+    ).trim();
+
+  if(
+    textIT &&
+    !textIT.startsWith(header.it)
+  ){
+
+    targetResponse.textIT =
+`${header.it}
+
+${textIT}`;
+
+  }
+
+  if(
+    textEN &&
+    !textEN.startsWith(header.en)
+  ){
+
+    targetResponse.textEN =
+`${header.en}
+
+${textEN}`;
+
+  }
+
+  targetResponse.metadata = {
+
+    ...(targetResponse.metadata || {}),
+
+    presentationLayer:
+      "executive_conversation_v1",
+
+    formattedAt:
+      Date.now()
+
+  };
+
+  return targetResponse;
+
+}
+
+  // ===========================================
   // 📊 SAFE DATA
   // ===========================================
 
@@ -966,7 +1074,9 @@ ${risk}/100`;
     textEN: response.textEN
   }
 );
-      return response;
+      return applyExecutiveFormatter(
+  response
+);
     }
 
     else if(roi >= 8){
@@ -1080,7 +1190,9 @@ ${roi.toFixed(1)}%
       response
     );
 
-    return response;
+    return applyExecutiveFormatter(
+  response
+);
 
   }
 
@@ -1249,12 +1361,14 @@ else if(
 
   }
 
-  console.log(
-    "💰 CASHFLOW RESPONSE CREATED",
-    response
-  );
+console.log(
+  "💰 CASHFLOW RESPONSE CREATED",
+  response
+);
 
-  return response;
+return applyExecutiveFormatter(
+  response
+);
 
 }
 
@@ -1386,12 +1500,14 @@ ${roi.toFixed(1)}%`;
 
     }
 
-    console.log(
-      "⚠️ RISK RESPONSE CREATED",
-      response
-    );
+console.log(
+  "⚠️ RISK RESPONSE CREATED",
+  response
+);
 
-    return response;
+return applyExecutiveFormatter(
+  response
+);
 
 }
  // ===========================================
@@ -4639,8 +4755,12 @@ else if(
 
   );
 
-  response.textEN =
-    strategyEN.join("\n\n");
+response.textEN =
+  strategyEN.join("\n\n");
+
+return applyExecutiveFormatter(
+  response
+);
 
 }
 
