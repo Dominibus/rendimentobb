@@ -122,6 +122,130 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
     return{
 
+            const highestROI =
+
+        simulations.reduce(
+
+            (best,current)=>
+
+                Number(current.roi || 0) >
+
+                Number(best?.roi || -Infinity)
+
+                    ? current
+
+                    : best,
+
+            null
+
+        );
+
+    const highestRisk =
+
+        simulations.reduce(
+
+            (worst,current)=>
+
+                Number(current.risk || 0) >
+
+                Number(worst?.risk || -Infinity)
+
+                    ? current
+
+                    : worst,
+
+            null
+
+        );
+
+    const bestCashflow =
+
+        simulations.reduce(
+
+            (best,current)=>
+
+                Number(current.cashflow || 0) >
+
+                Number(best?.cashflow || -Infinity)
+
+                    ? current
+
+                    : best,
+
+            null
+
+        );
+
+    const executiveWarnings = [];
+
+    const executiveOpportunities = [];
+
+    // ===========================================
+    // ⚠️ WARNINGS
+    // ===========================================
+
+    simulations.forEach(report=>{
+
+        if(Number(report.cashflow || 0) < 0){
+
+            executiveWarnings.push({
+
+                type:"negative_cashflow",
+
+                city:report.city,
+
+                value:report.cashflow
+
+            });
+
+        }
+
+        if(Number(report.risk || 0) >= 70){
+
+            executiveWarnings.push({
+
+                type:"high_risk",
+
+                city:report.city,
+
+                value:report.risk
+
+            });
+
+        }
+
+    });
+
+    // ===========================================
+    // 🚀 OPPORTUNITIES
+    // ===========================================
+
+    simulations.forEach(report=>{
+
+        if(
+
+            Number(report.roi || 0) >= 25 &&
+
+            Number(report.risk || 0) <= 35
+
+        ){
+
+            executiveOpportunities.push({
+
+                city:report.city,
+
+                roi:report.roi,
+
+                risk:report.risk
+
+            });
+
+        }
+
+    });
+
+    return{
+
         totalDocuments:
 
             documents.length,
@@ -148,7 +272,17 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
         averageRisk,
 
-        averageCashflow
+        averageCashflow,
+
+        highestROI,
+
+        highestRisk,
+
+        bestCashflow,
+
+        executiveWarnings,
+
+        executiveOpportunities
 
     };
 
