@@ -1,5 +1,5 @@
 // ===============================================
-// 🧠 DOCUMENT REASONING ENGINE 1.0
+// 🧠 DOCUMENT REASONING ENGINE 2.0
 // Executive Document Intelligence
 // Silicon Valley Architecture 2026
 // ===============================================
@@ -11,122 +11,83 @@
 window.rbAnalyzeDocuments = function(executiveContext = {}){
 
     const documents =
-
         executiveContext.documents?.library ||
-
         [];
 
     const simulations =
-
         documents.filter(
-
             doc => doc.documentType === "simulation"
-
         );
 
     const dashboardReports =
-
         documents.filter(
-
             doc => doc.documentType === "dashboard"
-
         );
 
     const uploadedReports =
-
         documents.filter(
-
             doc => doc.documentType === "uploaded"
-
         );
 
     const latestReport =
-
         documents[0] ||
-
         null;
 
+    // ===========================================
+    // 📊 AVERAGES
+    // ===========================================
+
     const averageROI =
-
         simulations.length
-
-        ?
-
-        simulations.reduce(
-
-            (sum,doc)=>sum + Number(doc.roi || 0),
-
-            0
-
-        ) / simulations.length
-
-        :
-
-        0;
+            ? simulations.reduce(
+                (sum, doc) =>
+                    sum + Number(doc.roi || 0),
+                0
+              ) / simulations.length
+            : 0;
 
     const averageRisk =
-
         simulations.length
-
-        ?
-
-        simulations.reduce(
-
-            (sum,doc)=>sum + Number(doc.risk || 0),
-
-            0
-
-        ) / simulations.length
-
-        :
-
-        0;
+            ? simulations.reduce(
+                (sum, doc) =>
+                    sum + Number(doc.risk || 0),
+                0
+              ) / simulations.length
+            : 0;
 
     const averageCashflow =
-
         simulations.length
+            ? simulations.reduce(
+                (sum, doc) =>
+                    sum + Number(doc.cashflow || 0),
+                0
+              ) / simulations.length
+            : 0;
 
-        ?
+    // ===========================================
+    // 🌍 CITIES
+    // ===========================================
 
-        simulations.reduce(
+    const availableCities = [
 
-            (sum,doc)=>sum + Number(doc.cashflow || 0),
+        ...new Set(
 
-            0
-
-        ) / simulations.length
-
-        :
-
-        0;
-
-    const cities =
-
-        [
-
-            ...new Set(
-
-                documents
-
-                .map(
-
-                    doc => doc.city
-
-                )
-
+            documents
+                .map(doc => doc.city)
                 .filter(Boolean)
 
-            )
+        )
 
-        ];
+    ];
 
-    return{
+    // ===========================================
+    // 🏆 BEST DOCUMENTS
+    // ===========================================
 
-            const highestROI =
-
+    const highestROI =
         simulations.reduce(
 
-            (best,current)=>
+            (best, current) =>
 
                 Number(current.roi || 0) >
 
@@ -141,10 +102,9 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
         );
 
     const highestRisk =
-
         simulations.reduce(
 
-            (worst,current)=>
+            (worst, current) =>
 
                 Number(current.risk || 0) >
 
@@ -159,10 +119,9 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
         );
 
     const bestCashflow =
-
         simulations.reduce(
 
-            (best,current)=>
+            (best, current) =>
 
                 Number(current.cashflow || 0) >
 
@@ -176,25 +135,23 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
         );
 
+    // ===========================================
+    // ⚠️ EXECUTIVE WARNINGS
+    // ===========================================
+
     const executiveWarnings = [];
 
-    const executiveOpportunities = [];
-
-    // ===========================================
-    // ⚠️ WARNINGS
-    // ===========================================
-
-    simulations.forEach(report=>{
+    simulations.forEach(report => {
 
         if(Number(report.cashflow || 0) < 0){
 
             executiveWarnings.push({
 
-                type:"negative_cashflow",
+                type: "negative_cashflow",
 
-                city:report.city,
+                city: report.city,
 
-                value:report.cashflow
+                value: report.cashflow
 
             });
 
@@ -204,11 +161,11 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
             executiveWarnings.push({
 
-                type:"high_risk",
+                type: "high_risk",
 
-                city:report.city,
+                city: report.city,
 
-                value:report.risk
+                value: report.risk
 
             });
 
@@ -217,10 +174,12 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
     });
 
     // ===========================================
-    // 🚀 OPPORTUNITIES
+    // 🚀 EXECUTIVE OPPORTUNITIES
     // ===========================================
 
-    simulations.forEach(report=>{
+    const executiveOpportunities = [];
+
+    simulations.forEach(report => {
 
         if(
 
@@ -232,11 +191,13 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
             executiveOpportunities.push({
 
-                city:report.city,
+                city: report.city,
 
-                roi:report.roi,
+                roi: report.roi,
 
-                risk:report.risk
+                risk: report.risk,
+
+                cashflow: report.cashflow
 
             });
 
@@ -244,7 +205,51 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
     });
 
-    return{
+    // ===========================================
+    // 🧠 EXECUTIVE INSIGHTS
+    // ===========================================
+
+    const executiveInsights = {
+
+        portfolioStatus:
+
+            simulations.length === 0
+
+                ? "empty"
+
+                : simulations.length === 1
+
+                    ? "single"
+
+                    : "portfolio",
+
+        hasWarnings:
+
+            executiveWarnings.length > 0,
+
+        hasOpportunities:
+
+            executiveOpportunities.length > 0,
+
+        strongestInvestment:
+
+            highestROI,
+
+        riskiestInvestment:
+
+            highestRisk,
+
+        bestCashflowInvestment:
+
+            bestCashflow
+
+    };
+
+    // ===========================================
+    // 📦 RETURN
+    // ===========================================
+
+    return {
 
         totalDocuments:
 
@@ -264,9 +269,7 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
         latestReport,
 
-        availableCities:
-
-            cities,
+        availableCities,
 
         averageROI,
 
@@ -282,7 +285,9 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
         executiveWarnings,
 
-        executiveOpportunities
+        executiveOpportunities,
+
+        executiveInsights
 
     };
 
@@ -294,6 +299,12 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
 console.log(
 
-    "🧠 DOCUMENT REASONING ENGINE READY"
+    "🧠 DOCUMENT REASONING ENGINE READY",
+
+    {
+
+        version: "2.0"
+
+    }
 
 );
