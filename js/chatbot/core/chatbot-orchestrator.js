@@ -47,6 +47,42 @@ const detectedIntent =
       intent: "generic"
     };
 
+ // =========================================
+// 🧠 INTENT PRIORITY ENGINE
+// =========================================
+
+const intentPriority = {
+
+    investment_executive:100,
+
+    improvement_advisor:95,
+
+    portfolio_growth:90,
+
+    portfolio_analysis:85,
+
+    comparison:84,
+
+    report_interpretation:83,
+
+    mortgage_analysis:82,
+
+    roi_analysis:80,
+
+    cashflow_analysis:79,
+
+    risk_analysis:78,
+
+    market_analysis:75,
+
+    education:40,
+
+    greeting:10,
+
+    generic:0
+
+};   
+
 // =========================================
 // 🧠 MULTI INTENT SYSTEM 2.0
 // =========================================
@@ -283,6 +319,18 @@ const uniqueIntents = [
   ...new Set(intents)
 
 ];
+
+uniqueIntents.sort(
+
+    (a,b)=>
+
+        (intentPriority[b] || 0)
+
+        -
+
+        (intentPriority[a] || 0)
+
+);    
 
 // =========================================
 // 🔥 EXECUTIVE OVERRIDE
@@ -878,6 +926,10 @@ const currentIntentData = {
   ...intent,
 
   intent: currentIntent,
+
+  priority:
+
+intentPriority[currentIntent] || 0,
 
   requiresMarketData:
 
