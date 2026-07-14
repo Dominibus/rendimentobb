@@ -467,8 +467,10 @@ window.rbLoadMemory = function(){
 // 🧹 CLEAR MEMORY
 // ===============================================
 
-window.rbChatMemory =
-  createEmptyMemory();
+window.rbClearMemory = function(){
+
+  window.rbChatMemory =
+    createEmptyMemory();
 
   sessionStorage.removeItem(
     "rbChatMemory"
