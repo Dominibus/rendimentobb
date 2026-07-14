@@ -1,6 +1,7 @@
 // ===============================================
-// 🧠 DOCUMENT ENGINE 1.0
-// Executive Report Memory
+// 🧠 DOCUMENT ENGINE 2.0
+// Executive Document Memory
+// Silicon Valley Architecture 2026
 // ===============================================
 
 // ===============================================
@@ -10,15 +11,35 @@
 window.lastExecutiveReport = null;
 
 // ===============================================
+// 📚 EXECUTIVE DOCUMENT LIBRARY
+// ===============================================
+
+window.rbDocumentLibrary = [];
+
+// ===============================================
 // 🧠 BUILD EXECUTIVE REPORT
 // ===============================================
 
 window.buildExecutiveReport = function(data = {}){
 
-    return {
+    const report = {
+
+        id:
+            crypto.randomUUID
+                ? crypto.randomUUID()
+                : `report_${Date.now()}`,
+
+        documentType:
+            "simulation",
+
+        source:
+            "simulator",
 
         generatedAt:
             new Date().toISOString(),
+
+        version:
+            "2.0",
 
         city:
             data.realCity ||
@@ -64,10 +85,28 @@ window.buildExecutiveReport = function(data = {}){
             0,
 
         analysis:
-
             data
 
     };
+
+    // ===========================================
+    // 📄 ACTIVE EXECUTIVE REPORT
+    // ===========================================
+
+    window.lastExecutiveReport = report;
+
+    // ===========================================
+    // 📚 DOCUMENT LIBRARY
+    // ===========================================
+
+    window.rbDocumentLibrary.unshift(report);
+
+    // Mantiene gli ultimi 50 documenti in memoria
+
+    window.rbDocumentLibrary =
+        window.rbDocumentLibrary.slice(0, 50);
+
+    return report;
 
 };
 
@@ -76,5 +115,8 @@ window.buildExecutiveReport = function(data = {}){
 // ===============================================
 
 console.log(
-    "📄 DOCUMENT ENGINE READY"
+    "📄 DOCUMENT ENGINE READY",
+    {
+        version: "2.0"
+    }
 );
