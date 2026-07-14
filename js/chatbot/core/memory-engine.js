@@ -494,7 +494,31 @@ window.rbClearMemory = function(){
 
   investmentHistory: [],
 
-  context: {}
+  context: {},
+
+// =======================================
+// 🧠 EXECUTIVE PROFILE
+// =======================================
+
+executiveProfile: {
+
+  investorType: null,
+
+  preferredCities: [],
+
+  preferredStrategy: null,
+
+  preferredRisk: null,
+
+  preferredBudget: null,
+
+  preferredPropertyType: null,
+
+  conversationStage: "discovery",
+
+  confidence: 0
+
+}  
 
 };
 
