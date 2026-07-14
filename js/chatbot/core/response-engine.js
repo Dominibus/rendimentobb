@@ -1256,7 +1256,7 @@ run a simulation inside the main simulator.`,
 
 }
 
-  // ===========================================
+// ===========================================
 // 🧠 RESPONSE VARIATIONS
 // ===========================================
 
@@ -4938,6 +4938,14 @@ else if(
     0.96;
 
   console.log(
+    "🚀 STRATEGY BLOCK EXECUTED",
+    {
+      intent: intent.intent,
+      type: response.type
+    }
+  );
+
+  console.log(
     "🚀 STRATEGY BLOCK ENTERED"
 );
   // =====================================
@@ -5034,10 +5042,13 @@ else if(
 response.textEN =
   strategyEN.join("\n\n");
 
-  
-  console.log(
+console.log(
     "🧠 STRATEGY EN",
     response.textEN
+);
+
+return applyExecutiveFormatter(
+    response
 );
 
 }
