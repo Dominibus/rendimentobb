@@ -733,13 +733,35 @@ const executiveContext = {
 
     documents: {
 
-        executiveReport:
-            window.lastExecutiveReport || null,
+    activeReport:
 
-        uploadedDocuments:
-            window.rbUploadedDocuments || []
+        window.lastExecutiveReport ||
 
-    }
+        null,
+
+    library:
+
+        window.rbDocumentManager?.getAll?.() ||
+
+        [],
+
+    dashboardReports:
+
+        window.rbDocumentManager?.getByType?.(
+            "dashboard"
+        ) ||
+
+        [],
+
+    uploadedDocuments:
+
+        window.rbUploadedDocuments ||
+
+        [],
+
+    comparisons: []
+
+}
 
 };
 
@@ -750,9 +772,16 @@ const executiveContext = {
 const executiveReport =
 
     executiveContext.documents
-        ?.executiveReport ||
+        ?.activeReport ||
 
-    null;  
+    null;
+
+const executiveLibrary =
+
+    executiveContext.documents
+        ?.library ||
+
+    [];
 
 // ===========================================
 // 🧠 EXECUTIVE REPORT MEMORY
