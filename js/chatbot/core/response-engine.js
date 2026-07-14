@@ -4937,6 +4937,9 @@ else if(
   response.confidence =
     0.96;
 
+  console.log(
+    "🚀 STRATEGY BLOCK ENTERED"
+);
   // =====================================
   // 🇮🇹 ITALIANO
   // =====================================
@@ -5030,6 +5033,12 @@ else if(
 
 response.textEN =
   strategyEN.join("\n\n");
+
+  
+  console.log(
+    "🧠 STRATEGY EN",
+    response.textEN
+);
 
 }
 
