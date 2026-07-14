@@ -84,6 +84,92 @@ window.rbGetExecutiveRiskLabel = function(
 };
 
 // ===============================================
+// 📈 EXECUTIVE PERFORMANCE LABEL
+// ===============================================
+
+window.rbGetExecutivePerformance = function({
+
+    roi = 0,
+
+    cashflow = 0,
+
+    risk = 0
+
+} = {}){
+
+    if(
+
+        roi >= 20 &&
+
+        cashflow > 0 &&
+
+        risk <= 35
+
+    ){
+
+        return{
+
+            level:"excellent",
+
+            it:"Eccellente",
+
+            en:"Excellent"
+
+        };
+
+    }
+
+    if(
+
+        roi >= 15 &&
+
+        cashflow > 0
+
+    ){
+
+        return{
+
+            level:"good",
+
+            it:"Buono",
+
+            en:"Good"
+
+        };
+
+    }
+
+    if(
+
+        roi >= 10
+
+    ){
+
+        return{
+
+            level:"fair",
+
+            it:"Discreto",
+
+            en:"Fair"
+
+        };
+
+    }
+
+    return{
+
+        level:"weak",
+
+        it:"Debole",
+
+        en:"Weak"
+
+    };
+
+};
+
+// ===============================================
 // 🧠 EXECUTIVE NARRATIVE
 // ===============================================
 
@@ -154,6 +240,18 @@ window.rbGenerateExecutiveNarrative = function({
 
         });
 
+    const performance =
+
+window.rbGetExecutivePerformance({
+
+    roi,
+
+    cashflow,
+
+    risk
+
+});
+
     const riskIT =
 
         window.rbGetExecutiveRiskLabel(
@@ -186,6 +284,8 @@ window.rbGenerateExecutiveNarrative = function({
 
 🏆 Investment Grade: ${grade}
 
+📊 Performance: ${performance.it}
+
 📈 ROI previsto: ${roi.toFixed(1)}%
 
 ⚠️ Livello di rischio: ${riskIT} (${risk}/100)
@@ -212,6 +312,8 @@ L'analisi evidenzia un investimento con rating ${grade}. Il sistema AI ha valuta
 
 🏆 Investment Grade: ${grade}
 
+📊 Performance: ${performance.en}
+
 📈 Expected ROI: ${roi.toFixed(1)}%
 
 ⚠️ Risk Level: ${riskEN} (${risk}/100)
@@ -226,19 +328,21 @@ L'analisi evidenzia un investimento con rating ${grade}. Il sistema AI ha valuta
 
 The AI evaluated ROI, investment risk, cash flow and all available executive documents before generating the final recommendation.`;
 
-    return{
+return{
 
-        grade,
+    grade,
 
-        riskLabelIT: riskIT,
+    performance,
 
-        riskLabelEN: riskEN,
+    riskLabelIT,
 
-        textIT,
+    riskLabelEN,
 
-        textEN
+    textIT,
 
-    };
+    textEN
+
+};
 
 };
 
