@@ -202,69 +202,6 @@ const liveData = {
 
 };
 
-// ===========================================
-// 🧠 EXECUTIVE CONTEXT
-// Single Source of Truth
-// ===========================================
-
-const executiveContext = {
-
-    liveData,
-
-    advisor,
-
-    investmentScore,
-
-    market,
-
-    city,
-
-    cityLabel,
-
-    memory,
-
-    entities,
-
-    analysisData,
-
-    pmsData,
-
-    investorProfile,
-
-    investmentHistory,
-
-    aiSignals,
-
-    documents: {
-
-        executiveReport:
-
-            window.lastExecutiveReport ||
-
-            null,
-
-        uploadedDocuments:
-
-            window.rbUploadedDocuments ||
-
-            []
-
-    }
-
-};
-
-// ===========================================
-// 🧠 EXECUTIVE SUMMARY CACHE
-// ===========================================
-
-const executiveSummary =
-
-    window.rbGenerateInvestmentSummary?.(
-
-        executiveContext
-
-    ) || "";  
-
 // =====================================
 // 🏨 PMS DATA
 // =====================================
@@ -760,6 +697,52 @@ console.log(
       window.rbChatMemory?.investmentHistory?.length
   }
 );
+
+// ===========================================
+// 🧠 EXECUTIVE CONTEXT
+// Single Source of Truth
+// ===========================================
+
+const executiveContext = {
+
+    liveData,
+
+    advisor,
+
+    investmentScore,
+
+    market,
+
+    city,
+
+    cityLabel,
+
+    memory,
+
+    entities,
+
+    analysisData,
+
+    pmsData,
+
+    investorProfile,
+
+    investmentHistory,
+
+    aiSignals,
+
+    documents: {
+
+        executiveReport:
+            window.lastExecutiveReport || null,
+
+        uploadedDocuments:
+            window.rbUploadedDocuments || []
+
+    }
+
+};
+  
 // ===========================================
 // 🧠 AI INSIGHTS
 // ===========================================
@@ -4588,7 +4571,7 @@ if(
 
   try{
 
-const executiveSummary =
+executiveSummary =
 
 window.rbGenerateInvestmentSummary?.(
 
