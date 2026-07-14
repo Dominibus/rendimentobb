@@ -3809,6 +3809,10 @@ else if(
 // 🧠 EXECUTIVE BUILDER (Migration Step 1)
 // =====================================
 
+  console.log(
+    "🚀 CALL EXECUTIVE BUILDER"
+);
+
 const executiveBuilder =
 
     window.rbBuildExecutiveResponse?.({
@@ -4122,6 +4126,11 @@ console.log(
 console.log(
     "🧠 EXECUTIVE BUILDER RESULT",
     executiveBuilder
+);
+
+  console.log(
+    "🧠 BUILDER EXISTS",
+    !!window.rbBuildExecutiveResponse
 );
   
 // =====================================
