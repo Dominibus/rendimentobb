@@ -753,6 +753,50 @@ const executiveReport =
         ?.executiveReport ||
 
     null;  
+
+// ===========================================
+// 🧠 EXECUTIVE REPORT MEMORY
+// ===========================================
+
+const executiveReportMemory =
+
+executiveReport
+
+? {
+
+    city:
+        executiveReport.city ||
+        cityLabel,
+
+    roi:
+        executiveReport.roi ||
+        roi,
+
+    risk:
+        executiveReport.risk ||
+        risk,
+
+    occupancy:
+        executiveReport.occupancy ||
+        occupancy,
+
+    cashflow:
+        executiveReport.cashflow ||
+        0,
+
+    score:
+        executiveReport.score ||
+        investmentScore?.score ||
+        0,
+
+    grade:
+        executiveReport.grade ||
+        investmentScore?.labelIT ||
+        ""
+
+}
+
+: null;
   
 // ===========================================
 // 🧠 AI INSIGHTS
