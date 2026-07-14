@@ -90,67 +90,8 @@ function createEmptyMemory(){
 // 🧠 GLOBAL MEMORY
 // ===============================================
 
-window.rbChatMemory = {
-
-  messages: [],
-
-  entitiesHistory: [],
-
-  intentsHistory: [],
-
-  lastCity: null,
-
-  lastROI: null,
-
-  lastPropertyPrice: null,
-
-  lastOccupancy: null,
-
-  lastMortgage: null,
-
-  lastIntent: null,
-
-  // 🔥 NEW
-
-  lastBudget: null,
-
-  lastStrategy: null,
-
-  lastRiskTolerance: null,
-
-  lastPropertyType: null,
-
-  lastTargetROI: null,
-
-lastFinancingLevel: null,
-
-// =======================================
-// 🏠 INVESTOR DATA
-// =======================================
-
-availableCapital: null,
-
-monthlyCashflowGoal: null,
-
-ownedProperties: 0,
-
-businessStage: "starter",
-
-mainGoal: null,
-
-portfolioCities: [],
-
-portfolioProperties: [],
-
-// =======================================
-// 📊 HISTORY
-// =======================================
-
-investmentHistory: [],
-
-context: {}
-
-};
+window.rbChatMemory =
+  createEmptyMemory();
 
 // ===============================================
 // 💾 SAVE MESSAGE
@@ -526,83 +467,8 @@ window.rbLoadMemory = function(){
 // 🧹 CLEAR MEMORY
 // ===============================================
 
-window.rbClearMemory = function(){
-
-  window.rbChatMemory = {
-
-  messages: [],
-
-  entitiesHistory: [],
-
-  intentsHistory: [],
-
-  lastCity: null,
-
-  lastROI: null,
-
-  lastPropertyPrice: null,
-
-  lastOccupancy: null,
-
-  lastMortgage: null,
-
-  lastIntent: null,
-
-  lastBudget: null,
-
-  lastStrategy: null,
-
-  lastRiskTolerance: null,
-
-  lastPropertyType: null,
-
-  lastTargetROI: null,
-
-  lastFinancingLevel: null,
-
-  availableCapital: null,
-
-  monthlyCashflowGoal: null,
-
-  ownedProperties: 0,
-
-  businessStage: "starter",
-
-  mainGoal: null,
-
-  portfolioCities: [],
-
-  portfolioProperties: [],
-
-  investmentHistory: [],
-
-  context: {},
-
-// =======================================
-// 🧠 EXECUTIVE PROFILE
-// =======================================
-
-executiveProfile: {
-
-  investorType: null,
-
-  preferredCities: [],
-
-  preferredStrategy: null,
-
-  preferredRisk: null,
-
-  preferredBudget: null,
-
-  preferredPropertyType: null,
-
-  conversationStage: "discovery",
-
-  confidence: 0
-
-}  
-
-};
+window.rbChatMemory =
+  createEmptyMemory();
 
   sessionStorage.removeItem(
     "rbChatMemory"
