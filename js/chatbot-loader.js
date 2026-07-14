@@ -214,21 +214,25 @@
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js",
 
-    // =========================================
-    // 🧠 CORE AI
-    // =========================================
+// =========================================
+// 🧠 CORE AI
+// =========================================
 
-    "/js/chatbot/core/entity-engine.js",
-    "/js/chatbot/core/intent-engine.js",
-    "/js/chatbot/core/memory-engine.js",
-    "/js/chatbot/core/investor-profile-engine.js",
-    "/js/chatbot/core/score-engine.js",
-    "/js/chatbot/document-engine.js",
-    "/js/chatbot/document-reasoning-engine.js",
-    "/js/chatbot/executive-narrative-engine.js",
-    "/js/chatbot/reasoning-engine.js",
-    "/js/chatbot/core/response-engine.js",
-    "/js/chatbot/core/chatbot-orchestrator.js",
+"/js/chatbot/core/entity-engine.js",
+"/js/chatbot/core/intent-engine.js",
+"/js/chatbot/core/memory-engine.js",
+"/js/chatbot/core/investor-profile-engine.js",
+"/js/chatbot/core/score-engine.js",
+
+"/js/chatbot/document-engine.js",
+"/js/chatbot/document-reasoning-engine.js",
+"/js/chatbot/executive-narrative-engine.js",
+
+"/js/chatbot/reasoning-engine.js",
+"/js/chatbot/core/executive-response-builder.js",
+"/js/chatbot/core/response-engine.js",
+
+"/js/chatbot/core/chatbot-orchestrator.js",
 
     // =========================================
     // 🤝 SUPPORT LAYERS
