@@ -698,6 +698,22 @@ console.log(
   }
 );
 
+  // ===========================================
+  // 🌍 MARKET DATA
+  // ===========================================
+
+  const market =
+
+allowMarketContext && city
+
+? (
+    window.rbMarketData?.[city] ||
+    null
+  )
+
+: null;
+  
+
 // ===========================================
 // 🧠 EXECUTIVE CONTEXT
 // Single Source of Truth
@@ -1050,21 +1066,6 @@ if(aiSignals.includes("negative_cashflow")){
 
 }
   
-  // ===========================================
-  // 🌍 MARKET DATA
-  // ===========================================
-
-  const market =
-
-allowMarketContext && city
-
-? (
-    window.rbMarketData?.[city] ||
-    null
-  )
-
-: null;
-
 // =====================================
 // 🌍 MARKET + ROI CROSS ANALYSIS
 // =====================================
