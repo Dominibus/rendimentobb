@@ -99,14 +99,58 @@ window.buildExecutiveReport = function(data = {}){
     // 📚 DOCUMENT LIBRARY
     // ===========================================
 
-    window.rbDocumentLibrary.unshift(report);
-
-    // Mantiene gli ultimi 50 documenti in memoria
-
-    window.rbDocumentLibrary =
-        window.rbDocumentLibrary.slice(0, 50);
+window.rbDocumentManager.add(report);
 
     return report;
+
+};
+
+// ===============================================
+// 📚 DOCUMENT LIBRARY MANAGER
+// ===============================================
+
+window.rbDocumentManager = {
+
+    add(document){
+
+        if(!document) return;
+
+        window.rbDocumentLibrary.unshift(document);
+
+        window.rbDocumentLibrary =
+            window.rbDocumentLibrary.slice(0,50);
+
+    },
+
+    getAll(){
+
+        return [...window.rbDocumentLibrary];
+
+    },
+
+    getLast(){
+
+        return window.rbDocumentLibrary[0] || null;
+
+    },
+
+    getByType(type){
+
+        return window.rbDocumentLibrary.filter(
+
+            doc => doc.documentType === type
+
+        );
+
+    },
+
+    clear(){
+
+        window.rbDocumentLibrary = [];
+
+        window.lastExecutiveReport = null;
+
+    }
 
 };
 
