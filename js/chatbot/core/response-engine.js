@@ -3809,7 +3809,7 @@ else if(
 // 🧠 EXECUTIVE BUILDER (Migration Step 1)
 // =====================================
 
-const builderPreview =
+const executiveBuilder =
 
     window.rbBuildExecutiveResponse?.({
 
@@ -3819,16 +3819,11 @@ const builderPreview =
 
         documentKnowledge,
 
-        executiveNarrative: null,
+        executiveNarrative,
 
         investmentScore
 
-    });
-
-console.log(
-    "🧠 EXECUTIVE BUILDER PREVIEW",
-    builderPreview
-);  
+    }) || null;
 
 // =====================================
 // 💰 EXECUTIVE FINANCIALS
@@ -4126,7 +4121,7 @@ console.log(
 
 console.log(
     "🧠 EXECUTIVE BUILDER RESULT",
-    builderPreview
+    executiveBuilder
 );
   
 // =====================================
