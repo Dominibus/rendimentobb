@@ -226,6 +226,140 @@ window.rbGetExecutiveRecommendation = function({
 };
 
 // ===============================================
+// 🧠 BUILD EXECUTIVE INTELLIGENCE
+// ===============================================
+
+window.rbBuildExecutiveIntelligence = function({
+
+    report = {},
+
+    advisor = {},
+
+    documentKnowledge = {}
+
+} = {}){
+
+    const roi =
+        Number(report.roi || 0);
+
+    const risk =
+        Number(report.risk || 0);
+
+    const occupancy =
+        Number(report.occupancy || 0);
+
+    const cashflow =
+        Number(report.cashflow || 0);
+
+    const grade =
+
+        window.rbGetExecutiveInvestmentGrade({
+
+            roi,
+
+            risk,
+
+            occupancy
+
+        });
+
+    const performance =
+
+        window.rbGetExecutivePerformance({
+
+            roi,
+
+            cashflow,
+
+            risk
+
+        });
+
+    const recommendationIT =
+
+        window.rbGetExecutiveRecommendation({
+
+            verdict:
+                advisor.verdict,
+
+            grade,
+
+            performance,
+
+            language:"it"
+
+        });
+
+    const recommendationEN =
+
+        window.rbGetExecutiveRecommendation({
+
+            verdict:
+                advisor.verdict,
+
+            grade,
+
+            performance,
+
+            language:"en"
+
+        });
+
+    return{
+
+        roi,
+
+        risk,
+
+        occupancy,
+
+        cashflow,
+
+        grade,
+
+        performance,
+
+        recommendationIT,
+
+        recommendationEN,
+
+        riskLabelIT:
+
+            window.rbGetExecutiveRiskLabel(
+
+                risk,
+
+                "it"
+
+            ),
+
+        riskLabelEN:
+
+            window.rbGetExecutiveRiskLabel(
+
+                risk,
+
+                "en"
+
+            ),
+
+        confidence:
+
+            advisor.confidence || 0,
+
+        verdict:
+
+            advisor.verdict || "WAIT",
+
+        documentCount:
+
+            documentKnowledge.totalDocuments || 0
+
+    };
+
+};
+
+// ===============================================
 // 🧠 EXECUTIVE NARRATIVE
 // ===============================================
 
@@ -251,6 +385,24 @@ window.rbGenerateExecutiveNarrative = function({
 
         return{
 
+            grade: "N/A",
+
+            performance: null,
+
+            recommendationIT:
+                "Non è presente alcuna analisi.",
+
+            recommendationEN:
+                "No analysis available.",
+
+            riskLabelIT:
+                "N/D",
+
+            riskLabelEN:
+                "N/A",
+
+            intelligence: null,
+
             textIT:
 
                 "Non è presente alcuna analisi da interpretare.",
@@ -263,101 +415,57 @@ window.rbGenerateExecutiveNarrative = function({
 
     }
 
-    const roi =
-        Number(report.roi || 0);
+    // ===========================================
+    // 🧠 EXECUTIVE INTELLIGENCE
+    // ===========================================
 
-    const risk =
-        Number(report.risk || 0);
+    const intelligence =
 
-    const occupancy =
-        Number(report.occupancy || 0);
+        window.rbBuildExecutiveIntelligence({
 
-    const cashflow =
-        Number(report.cashflow || 0);
+            report,
+
+            advisor,
+
+            documentKnowledge
+
+        });
+
+    const{
+
+        roi,
+
+        risk,
+
+        occupancy,
+
+        cashflow,
+
+        grade,
+
+        performance,
+
+        recommendationIT,
+
+        recommendationEN,
+
+        riskLabelIT,
+
+        riskLabelEN,
+
+        confidence,
+
+        verdict,
+
+        documentCount
+
+    } = intelligence;
 
     const city =
         report.city || "N/A";
 
-    const verdict =
-        advisor.verdict || "WAIT";
-
-    const confidence =
-        Number(advisor.confidence || 0);
-
-    const grade =
-
-        window.rbGetExecutiveInvestmentGrade({
-
-            roi,
-
-            risk,
-
-            occupancy
-
-        });
-
-    const performance =
-
-window.rbGetExecutivePerformance({
-
-    roi,
-
-    cashflow,
-
-    risk
-
-});
-
-    const recommendationIT =
-
-window.rbGetExecutiveRecommendation({
-
-    verdict,
-
-    grade,
-
-    performance,
-
-    language:"it"
-
-});
-
-const recommendationEN =
-
-window.rbGetExecutiveRecommendation({
-
-    verdict,
-
-    grade,
-
-    performance,
-
-    language:"en"
-
-});
-
-    const riskIT =
-
-        window.rbGetExecutiveRiskLabel(
-
-            risk,
-
-            "it"
-
-        );
-
-    const riskEN =
-
-        window.rbGetExecutiveRiskLabel(
-
-            risk,
-
-            "en"
-
-        );
-
     // ===========================================
-    // 🇮🇹
+    // 🇮🇹 EXECUTIVE REPORT
     // ===========================================
 
     const textIT =
@@ -372,7 +480,9 @@ window.rbGetExecutiveRecommendation({
 
 📈 ROI previsto: ${roi.toFixed(1)}%
 
-⚠️ Livello di rischio: ${riskIT} (${risk}/100)
+⚠️ Livello di rischio: ${riskLabelIT} (${risk}/100)
+
+👥 Occupazione: ${occupancy.toFixed(1)}%
 
 💰 Cash Flow annuo: €${cashflow.toLocaleString("it-IT")}
 
@@ -380,12 +490,12 @@ window.rbGetExecutiveRecommendation({
 
 🎯 Affidabilità analisi: ${confidence}%
 
-📚 Documenti disponibili: ${documentKnowledge.totalDocuments || 0}
+📚 Documenti disponibili: ${documentCount}
 
 ${recommendationIT}`;
 
     // ===========================================
-    // 🇬🇧
+    // 🇬🇧 EXECUTIVE REPORT
     // ===========================================
 
     const textEN =
@@ -400,7 +510,9 @@ ${recommendationIT}`;
 
 📈 Expected ROI: ${roi.toFixed(1)}%
 
-⚠️ Risk Level: ${riskEN} (${risk}/100)
+⚠️ Risk Level: ${riskLabelEN} (${risk}/100)
+
+👥 Occupancy: ${occupancy.toFixed(1)}%
 
 💰 Annual Cash Flow: €${cashflow.toLocaleString("en-US")}
 
@@ -408,32 +520,33 @@ ${recommendationIT}`;
 
 🎯 Confidence: ${confidence}%
 
-📚 Available Documents: ${documentKnowledge.totalDocuments || 0}
+📚 Available Documents: ${documentCount}
 
 ${recommendationEN}`;
 
-return{
+    return{
 
-    grade,
+        intelligence,
 
-    performance,
+        grade,
 
-    recommendationIT,
+        performance,
 
-    recommendationEN,
+        recommendationIT,
 
-    riskLabelIT,
+        recommendationEN,
 
-    riskLabelEN,
+        riskLabelIT,
 
-    textIT,
+        riskLabelEN,
 
-    textEN
+        textIT,
+
+        textEN
+
+    };
 
 };
-
-};
-
 // ===============================================
 // 🚀 READY
 // ===============================================
