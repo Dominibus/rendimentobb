@@ -3887,7 +3887,7 @@ function getInvestmentGrade(){
 // 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
-function executiveNarrative.riskLabelIT{
+function getRiskAssessmentIT(){
 
   if(risk <= 35){
 
@@ -3911,7 +3911,7 @@ Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow n
 
 }
 
-function executiveNarrative.riskLabelEN{
+function getRiskAssessmentEN(){
 
   if(risk <= 35){
 
@@ -3939,7 +3939,7 @@ The current risk level may reduce cashflow stability over the long term.`;
 // 🧠 EXECUTIVE SUMMARY
 // =====================================
 
-function executiveNarrative.textIT{
+function getExecutiveSummaryIT(){
 
   if(!advisor){
     return "";
@@ -3979,7 +3979,7 @@ Prima di procedere è consigliabile rivedere il modello economico dell'operazion
 
 }
 
-function executiveNarrative.textEN{
+function getExecutiveSummaryEN(){
 
   if(!advisor){
     return "";
