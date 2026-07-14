@@ -3806,31 +3806,6 @@ else if(
     0.99;
 
 // =====================================
-// 🧠 EXECUTIVE BUILDER (Migration Step 1)
-// =====================================
-
-const builderPreview =
-
-    window.rbBuildExecutiveResponse?.({
-
-        executiveContext,
-
-        advisor,
-
-        documentKnowledge,
-
-        executiveNarrative: null,
-
-        investmentScore
-
-    });
-
-console.log(
-    "🧠 EXECUTIVE BUILDER PREVIEW",
-    builderPreview
-);  
-
-// =====================================
 // 💰 EXECUTIVE FINANCIALS
 // =====================================
 
