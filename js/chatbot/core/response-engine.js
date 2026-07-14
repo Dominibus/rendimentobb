@@ -3809,11 +3809,7 @@ else if(
 // 🧠 EXECUTIVE BUILDER (Migration Step 1)
 // =====================================
 
-  console.log(
-    "🚀 CALL EXECUTIVE BUILDER"
-);
-
-const executiveBuilder =
+const builderPreview =
 
     window.rbBuildExecutiveResponse?.({
 
@@ -3823,11 +3819,16 @@ const executiveBuilder =
 
         documentKnowledge,
 
-        executiveNarrative,
+        executiveNarrative: null,
 
         investmentScore
 
-    }) || null;
+    });
+
+console.log(
+    "🧠 EXECUTIVE BUILDER PREVIEW",
+    builderPreview
+);  
 
 // =====================================
 // 💰 EXECUTIVE FINANCIALS
@@ -3875,6 +3876,173 @@ function getExecutiveFinancialData(){
   };
 
 }
+
+// =====================================
+// 🏆 EXECUTIVE INVESTMENT GRADE
+// =====================================
+
+function getInvestmentGrade(){
+
+  if(
+    roi >= 20 &&
+    risk <= 35 &&
+    occupancy >= 65
+  ){
+    return "A+";
+  }
+
+  if(
+    roi >= 15 &&
+    risk <= 45
+  ){
+    return "A";
+  }
+
+  if(
+    roi >= 10
+  ){
+    return "B";
+  }
+
+  return "C";
+
+}
+
+// =====================================
+// 🛡️ EXECUTIVE RISK ASSESSMENT
+// =====================================
+
+function getRiskAssessmentIT(){
+
+  if(risk <= 35){
+
+    return `🛡️ Valutazione Rischio
+
+La simulazione mostra una struttura operativa stabile e ben bilanciata rispetto ai benchmark del mercato.`;
+
+  }
+
+  if(risk <= 60){
+
+    return `⚠️ Valutazione Rischio
+
+L'investimento appare sostenibile ma richiede monitoraggio operativo e controllo dei costi.`;
+
+  }
+
+  return `🚨 Valutazione Rischio
+
+Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow nel lungo periodo.`;
+
+}
+
+function getRiskAssessmentEN(){
+
+  if(risk <= 35){
+
+    return `🛡️ Risk Assessment
+
+The simulation shows a stable and well-balanced operating structure compared to market benchmarks.`;
+
+  }
+
+  if(risk <= 60){
+
+    return `⚠️ Risk Assessment
+
+The investment appears sustainable but requires operational monitoring and cost control.`;
+
+  }
+
+  return `🚨 Risk Assessment
+
+The current risk level may reduce cashflow stability over the long term.`;
+
+}
+
+// =====================================
+// 🧠 EXECUTIVE SUMMARY
+// =====================================
+
+function getExecutiveSummaryIT(){
+
+  if(!advisor){
+    return "";
+  }
+
+  if(advisor.verdict === "BUY"){
+
+    return `🟢 Executive Summary
+
+L'operazione presenta indicatori superiori ai benchmark di mercato.
+
+La combinazione di ROI (${roi.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
+
+L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lungo termine.`;
+
+  }
+
+  if(advisor.verdict === "WAIT"){
+
+    return `🟡 Executive Summary
+
+L'investimento mostra metriche interessanti ma non ancora pienamente ottimizzate.
+
+Alcuni indicatori risultano positivi, mentre altri richiedono miglioramenti per aumentare competitività e resilienza operativa.
+
+Si consiglia una revisione di pricing, occupazione o struttura dei costi.`;
+
+  }
+
+  return `🔴 Executive Summary
+
+La simulazione evidenzia criticità che riducono l'attrattività dell'investimento.
+
+L'equilibrio tra rendimento, rischio e sostenibilità operativa non appare attualmente ottimale.
+
+Prima di procedere è consigliabile rivedere il modello economico dell'operazione.`;
+
+}
+
+function getExecutiveSummaryEN(){
+
+  if(!advisor){
+    return "";
+  }
+
+  if(advisor.verdict === "BUY"){
+
+    return `🟢 Executive Summary
+
+The investment shows performance indicators above market benchmarks.
+
+The combination of ROI (${executiveROI.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
+
+Current market conditions support a favorable medium to long-term outlook.`;
+
+  }
+
+  if(advisor.verdict === "WAIT"){
+
+    return `🟡 Executive Summary
+
+The investment shows promising metrics but still requires optimization.
+
+Some indicators are positive, while others should be improved to increase competitiveness and operational resilience.
+
+Pricing, occupancy and cost structure should be reviewed.`;
+
+  }
+
+  return `🔴 Executive Summary
+
+The simulation highlights weaknesses that reduce overall investment attractiveness.
+
+The balance between return, risk and operational sustainability is currently below target levels.
+
+A review of the business model is recommended before proceeding.`;
+
+}  
 
 // =====================================
 // 🎯 EXECUTIVE ACTION PLAN
@@ -4084,54 +4252,6 @@ const {
   gross
 
 } = getExecutiveFinancialData();
-
-  let executiveNarrative = null;
-
-if(typeof window.rbGenerateExecutiveNarrative === "function"){
-
-    try{
-
-        executiveNarrative =
-            window.rbGenerateExecutiveNarrative({
-
-                executiveContext,
-
-                advisor,
-
-                documentKnowledge,
-
-                language:
-                    window.currentLanguage || "it"
-
-            });
-
-    }
-
-    catch(error){
-
-        console.warn(
-            "Executive Narrative Error",
-            error
-        );
-
-    }
-
-}
-
-console.log(
-    "🧠 EXECUTIVE NARRATIVE",
-    executiveNarrative
-);
-
-console.log(
-    "🧠 EXECUTIVE BUILDER RESULT",
-    executiveBuilder
-);
-
-  console.log(
-    "🧠 BUILDER EXISTS",
-    !!window.rbBuildExecutiveResponse
-);
   
 // =====================================
 // 💰 FINANCIAL DATA
@@ -4573,7 +4693,51 @@ console.log(
   executiveMemory
 );
   
+// =====================================
+// 🧠 EXECUTIVE NARRATIVE ENGINE
+// =====================================
 
+let executiveNarrative = null;
+
+if(
+    typeof window.rbGenerateExecutiveNarrative ===
+    "function"
+){
+
+    try{
+
+        executiveNarrative =
+            window.rbGenerateExecutiveNarrative({
+
+                executiveContext,
+
+                advisor,
+
+                documentKnowledge,
+
+                language:
+                    window.currentLanguage ||
+                    "it"
+
+            });
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "Executive Narrative Error",
+            error
+        );
+
+    }
+
+}
+
+console.log(
+  "🧠 EXECUTIVE SUMMARY:",
+  executiveSummary
+);
   
 // =====================================
 // 🧠 REASONING ENGINE
@@ -4588,6 +4752,17 @@ if(reasoningIT.length){
   );
 
 }
+
+if(executiveNarrative?.textIT){
+
+    executiveIT.push(
+
+        executiveNarrative.textIT
+
+    );
+
+}
+
 // =====================================
 // 🧠 ADVISOR REASONS
 // =====================================
@@ -4704,6 +4879,15 @@ if(reasoningEN?.length){
 
 }
 
+if(executiveNarrative?.textEN){
+
+    executiveEN.push(
+
+        executiveNarrative.textEN
+
+    );
+
+}
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
@@ -4719,17 +4903,6 @@ pushResponseBlock({
     executiveEN.join("\n\n")
 
 });
-
-response.textIT =
-  executiveIT.join("\n\n");
-
-response.textEN =
-  executiveEN.join("\n\n");
-
-console.log(
-  "✅ EXECUTIVE RESPONSE CREATED",
-  response.textIT
-);
 
 }
 
@@ -4955,6 +5128,18 @@ else if(
 
 response.textEN =
   strategyEN.join("\n\n");
+
+if(executiveSummary){
+
+response.textIT +=
+
+`\n\n━━━━━━━━━━━━━━\n\n${executiveSummary}`;
+
+response.textEN +=
+
+`\n\n━━━━━━━━━━━━━━\n\n${executiveSummary}`;
+
+}
 
 }
 
