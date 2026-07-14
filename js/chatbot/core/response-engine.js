@@ -26,10 +26,15 @@ window.rbGenerateResponse = function({
 } = {}){
 
   
-  console.log(
+console.log(
   "🔥 RESPONSE ENGINE CALLED",
+  {
+    intent,
+    message
+  }
+);
 
-    console.log(
+console.log(
   "🧪 FULL INTENT OBJECT",
   JSON.stringify(intent, null, 2)
 );
@@ -37,11 +42,6 @@ window.rbGenerateResponse = function({
 console.log(
   "🧪 INTENT VALUE",
   intent.intent
-);
-  {
-    intent,
-    message
-  }
 );
 
   // ===========================================
