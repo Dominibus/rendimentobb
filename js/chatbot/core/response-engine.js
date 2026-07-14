@@ -4252,6 +4252,49 @@ const {
   gross
 
 } = getExecutiveFinancialData();
+
+  let executiveNarrative = null;
+
+if(typeof window.rbGenerateExecutiveNarrative === "function"){
+
+    try{
+
+        executiveNarrative =
+            window.rbGenerateExecutiveNarrative({
+
+                executiveContext,
+
+                advisor,
+
+                documentKnowledge,
+
+                language:
+                    window.currentLanguage || "it"
+
+            });
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "Executive Narrative Error",
+            error
+        );
+
+    }
+
+}
+
+console.log(
+    "🧠 EXECUTIVE NARRATIVE",
+    executiveNarrative
+);
+
+console.log(
+    "🧠 EXECUTIVE BUILDER RESULT",
+    builderPreview
+);
   
 // =====================================
 // 💰 FINANCIAL DATA
@@ -4693,64 +4736,7 @@ console.log(
   executiveMemory
 );
   
-// =====================================
-// 🧠 EXECUTIVE NARRATIVE ENGINE
-// =====================================
 
-let executiveNarrative = null;
-
-if(
-    typeof window.rbGenerateExecutiveNarrative ===
-    "function"
-){
-
-    try{
-
-        executiveNarrative =
-            window.rbGenerateExecutiveNarrative({
-
-                executiveContext,
-
-                advisor,
-
-                documentKnowledge,
-
-                language:
-                    window.currentLanguage ||
-                    "it"
-
-            });
-
-    }
-
-    catch(error){
-
-        console.warn(
-            "Executive Narrative Error",
-            error
-        );
-
-    }
-
-}
-
-console.log(
-    "🧠 EXECUTIVE NARRATIVE",
-    executiveNarrative
-);
-
-console.log(
-    "🧠 EXECUTIVE BUILDER RESULT",
-    builderPreview
-);
-
-  if(builderPreview){
-
-    console.log(
-        "✅ BUILDER READY"
-    );
-
-}
   
 // =====================================
 // 🧠 REASONING ENGINE
