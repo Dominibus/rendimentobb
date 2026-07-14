@@ -1089,6 +1089,34 @@ const response = {
 
 };
 
+// =========================================
+// 🧠 RESPONSE METADATA
+// =========================================
+
+response.metadata = {
+
+  processedIntents:
+
+    intent.intents,
+
+  matchedKnowledge:
+
+    matchedKnowledge.length,
+
+  advisorEnabled:
+
+    !!advisor,
+
+  aiSignals:
+
+    aiSignals.length,
+
+  generatedAt:
+
+    Date.now()
+
+};
+
     console.log(
   "🔥 FINAL ORCHESTRATOR RESPONSE:",
   response
