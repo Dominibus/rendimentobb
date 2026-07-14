@@ -4735,9 +4735,22 @@ if(
 }
 
 console.log(
-  "🧠 EXECUTIVE SUMMARY:",
-  executiveSummary
+    "🧠 EXECUTIVE NARRATIVE",
+    executiveNarrative
 );
+
+console.log(
+    "🧠 EXECUTIVE BUILDER RESULT",
+    builderPreview
+);
+
+  if(builderPreview){
+
+    console.log(
+        "✅ BUILDER READY"
+    );
+
+}
   
 // =====================================
 // 🧠 REASONING ENGINE
