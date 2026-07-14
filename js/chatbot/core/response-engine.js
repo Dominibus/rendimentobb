@@ -3806,6 +3806,31 @@ else if(
     0.99;
 
 // =====================================
+// 🧠 EXECUTIVE BUILDER (Migration Step 1)
+// =====================================
+
+const builderPreview =
+
+    window.rbBuildExecutiveResponse?.({
+
+        executiveContext,
+
+        advisor,
+
+        documentKnowledge,
+
+        executiveNarrative: null,
+
+        investmentScore
+
+    });
+
+console.log(
+    "🧠 EXECUTIVE BUILDER PREVIEW",
+    builderPreview
+);  
+
+// =====================================
 // 💰 EXECUTIVE FINANCIALS
 // =====================================
 
@@ -3849,89 +3874,6 @@ function getExecutiveFinancialData(){
     gross
 
   };
-
-}
-
-// =====================================
-// 🏆 EXECUTIVE INVESTMENT GRADE
-// =====================================
-
-function getInvestmentGrade(){
-
-  if(
-    roi >= 20 &&
-    risk <= 35 &&
-    occupancy >= 65
-  ){
-    return "A+";
-  }
-
-  if(
-    roi >= 15 &&
-    risk <= 45
-  ){
-    return "A";
-  }
-
-  if(
-    roi >= 10
-  ){
-    return "B";
-  }
-
-  return "C";
-
-}
-
-// =====================================
-// 🛡️ EXECUTIVE RISK ASSESSMENT
-// =====================================
-
-function getRiskAssessmentIT(){
-
-  if(risk <= 35){
-
-    return `🛡️ Valutazione Rischio
-
-La simulazione mostra una struttura operativa stabile e ben bilanciata rispetto ai benchmark del mercato.`;
-
-  }
-
-  if(risk <= 60){
-
-    return `⚠️ Valutazione Rischio
-
-L'investimento appare sostenibile ma richiede monitoraggio operativo e controllo dei costi.`;
-
-  }
-
-  return `🚨 Valutazione Rischio
-
-Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow nel lungo periodo.`;
-
-}
-
-function getRiskAssessmentEN(){
-
-  if(risk <= 35){
-
-    return `🛡️ Risk Assessment
-
-The simulation shows a stable and well-balanced operating structure compared to market benchmarks.`;
-
-  }
-
-  if(risk <= 60){
-
-    return `⚠️ Risk Assessment
-
-The investment appears sustainable but requires operational monitoring and cost control.`;
-
-  }
-
-  return `🚨 Risk Assessment
-
-The current risk level may reduce cashflow stability over the long term.`;
 
 }
 
@@ -4227,6 +4169,49 @@ const {
   gross
 
 } = getExecutiveFinancialData();
+
+  let executiveNarrative = null;
+
+if(typeof window.rbGenerateExecutiveNarrative === "function"){
+
+    try{
+
+        executiveNarrative =
+            window.rbGenerateExecutiveNarrative({
+
+                executiveContext,
+
+                advisor,
+
+                documentKnowledge,
+
+                language:
+                    window.currentLanguage || "it"
+
+            });
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "Executive Narrative Error",
+            error
+        );
+
+    }
+
+}
+
+console.log(
+    "🧠 EXECUTIVE NARRATIVE",
+    executiveNarrative
+);
+
+console.log(
+    "🧠 EXECUTIVE BUILDER RESULT",
+    builderPreview
+);
   
 // =====================================
 // 💰 FINANCIAL DATA
@@ -4668,51 +4653,7 @@ console.log(
   executiveMemory
 );
   
-// =====================================
-// 🧠 EXECUTIVE NARRATIVE ENGINE
-// =====================================
 
-let executiveNarrative = null;
-
-if(
-    typeof window.rbGenerateExecutiveNarrative ===
-    "function"
-){
-
-    try{
-
-        executiveNarrative =
-            window.rbGenerateExecutiveNarrative({
-
-                executiveContext,
-
-                advisor,
-
-                documentKnowledge,
-
-                language:
-                    window.currentLanguage ||
-                    "it"
-
-            });
-
-    }
-
-    catch(error){
-
-        console.warn(
-            "Executive Narrative Error",
-            error
-        );
-
-    }
-
-}
-
-console.log(
-  "🧠 EXECUTIVE SUMMARY:",
-  executiveSummary
-);
   
 // =====================================
 // 🧠 REASONING ENGINE
@@ -4727,17 +4668,6 @@ if(reasoningIT.length){
   );
 
 }
-
-if(executiveNarrative?.textIT){
-
-    executiveIT.push(
-
-        executiveNarrative.textIT
-
-    );
-
-}
-
 // =====================================
 // 🧠 ADVISOR REASONS
 // =====================================
@@ -4854,15 +4784,6 @@ if(reasoningEN?.length){
 
 }
 
-if(executiveNarrative?.textEN){
-
-    executiveEN.push(
-
-        executiveNarrative.textEN
-
-    );
-
-}
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
