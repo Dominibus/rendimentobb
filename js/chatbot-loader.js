@@ -224,6 +224,7 @@
     "/js/chatbot/core/investor-profile-engine.js",
     "/js/chatbot/core/score-engine.js",
     "/js/chatbot/document-engine.js",
+    "/js/chatbot/document-reasoning-engine.js",
     "/js/chatbot/reasoning-engine.js",
     "/js/chatbot/core/response-engine.js",
     "/js/chatbot/core/chatbot-orchestrator.js",
