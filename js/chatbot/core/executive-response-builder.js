@@ -85,6 +85,10 @@ console.log(
 
         confidence: 0.99,
 
+        executiveNarrative,
+
+        executiveContext,
+
         textIT: "",
 
         textEN: "",
