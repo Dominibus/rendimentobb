@@ -3783,10 +3783,7 @@ To manage your plan:
   }
 
 }
-console.log(
-  "🧪 BEFORE EXECUTIVE",
-  intent.intent
-);
+
 // ===========================================
 // 🧠 EXECUTIVE AI RESPONSE
 // ===========================================
