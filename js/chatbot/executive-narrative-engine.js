@@ -170,6 +170,62 @@ window.rbGetExecutivePerformance = function({
 };
 
 // ===============================================
+// 💡 EXECUTIVE RECOMMENDATION
+// ===============================================
+
+window.rbGetExecutiveRecommendation = function({
+
+    verdict = "WAIT",
+
+    grade = "C",
+
+    performance = {},
+
+    language = "it"
+
+} = {}){
+
+    const isIT = language === "it";
+
+    switch(verdict){
+
+        case "BUY":
+
+            return isIT
+
+                ? `L'investimento presenta caratteristiche solide (${grade}) con una performance ${performance.it?.toLowerCase() || "positiva"}.`
+
+                : `The investment shows solid fundamentals (${grade}) with ${performance.en?.toLowerCase() || "strong"} performance.`;
+
+        case "WAIT":
+
+            return isIT
+
+                ? "L'investimento è interessante ma richiede ulteriori verifiche prima della decisione finale."
+
+                : "The investment deserves further evaluation before making a final decision.";
+
+        case "NO_BUY":
+
+            return isIT
+
+                ? "I parametri attuali suggeriscono di evitare l'investimento nelle condizioni attuali."
+
+                : "Current metrics suggest avoiding this investment under the current conditions.";
+
+        default:
+
+            return isIT
+
+                ? "L'AI non dispone ancora di elementi sufficienti per formulare una raccomandazione."
+
+                : "The AI does not yet have enough information to generate a recommendation.";
+
+    }
+
+};
+
+// ===============================================
 // 🧠 EXECUTIVE NARRATIVE
 // ===============================================
 
@@ -252,6 +308,34 @@ window.rbGetExecutivePerformance({
 
 });
 
+    const recommendationIT =
+
+window.rbGetExecutiveRecommendation({
+
+    verdict,
+
+    grade,
+
+    performance,
+
+    language:"it"
+
+});
+
+const recommendationEN =
+
+window.rbGetExecutiveRecommendation({
+
+    verdict,
+
+    grade,
+
+    performance,
+
+    language:"en"
+
+});
+
     const riskIT =
 
         window.rbGetExecutiveRiskLabel(
@@ -298,7 +382,7 @@ window.rbGetExecutivePerformance({
 
 📚 Documenti disponibili: ${documentKnowledge.totalDocuments || 0}
 
-L'analisi evidenzia un investimento con rating ${grade}. Il sistema AI ha valutato simultaneamente ROI, rischio, cash flow e documentazione disponibile prima di formulare il giudizio finale.`;
+${recommendationIT}`;
 
     // ===========================================
     // 🇬🇧
@@ -326,13 +410,17 @@ L'analisi evidenzia un investimento con rating ${grade}. Il sistema AI ha valuta
 
 📚 Available Documents: ${documentKnowledge.totalDocuments || 0}
 
-The AI evaluated ROI, investment risk, cash flow and all available executive documents before generating the final recommendation.`;
+${recommendationEN}`;
 
 return{
 
     grade,
 
     performance,
+
+    recommendationIT,
+
+    recommendationEN,
 
     riskLabelIT,
 
