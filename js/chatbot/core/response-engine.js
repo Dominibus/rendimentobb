@@ -784,6 +784,28 @@ const executiveLibrary =
     [];
 
 // ===========================================
+// 🧠 DOCUMENT KNOWLEDGE
+// ===========================================
+
+const documentKnowledge =
+
+    window.rbAnalyzeDocuments?.(
+
+        executiveContext
+
+    ) ||
+
+    {};
+
+console.log(
+
+    "🧠 DOCUMENT KNOWLEDGE",
+
+    documentKnowledge
+
+);  
+
+// ===========================================
 // 🧠 EXECUTIVE REPORT MEMORY
 // ===========================================
 
