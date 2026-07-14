@@ -297,6 +297,122 @@ function getPrimaryROIValue(
 
 }
 
+// ===========================================
+// 📊 PORTFOLIO METRICS HELPER
+// Shared by Portfolio Advisor, Growth Advisor,
+// Best City and future Portfolio AI modules
+// ===========================================
+
+function getPortfolioMetrics(
+  history = []
+){
+
+  const totalSimulations = history.length;
+
+  const averageROI =
+
+    totalSimulations > 0
+
+      ? history.reduce(
+
+          (sum,item)=>
+
+            sum +
+
+            getPrimaryROIValue(item),
+
+          0
+
+        ) / totalSimulations
+
+      : 0;
+
+  const bestSimulation =
+
+    [...history].sort(
+
+      (a,b)=>
+
+        getPrimaryROIValue(b)
+
+        -
+
+        getPrimaryROIValue(a)
+
+    )[0] || null;
+
+  const bestROI =
+
+    bestSimulation
+
+      ? getPrimaryROIValue(bestSimulation)
+
+      : 0;
+
+  const bestCity =
+
+    bestSimulation
+
+      ? (
+
+          bestSimulation.realCity ||
+
+          bestSimulation.city ||
+
+          bestSimulation.marketCity ||
+
+          "N/D"
+
+        )
+
+      : "N/D";
+
+  const averageCashflow =
+
+    totalSimulations > 0
+
+      ? history.reduce(
+
+          (sum,item)=>
+
+            sum +
+
+            Number(
+
+              item.net ??
+
+              item.cashflow ??
+
+              item.annualProfit ??
+
+              0
+
+            ),
+
+          0
+
+        ) / totalSimulations
+
+      : 0;
+
+  return {
+
+    totalSimulations,
+
+    averageROI,
+
+    bestSimulation,
+
+    bestROI,
+
+    bestCity,
+
+    averageCashflow
+
+  };
+
+}  
+
 const risk =
   Number(
 
@@ -4734,108 +4850,24 @@ return applyExecutiveFormatter(
 const portfolioHistory =
   investmentHistory || [];
 
-const totalSimulations =
-  portfolioHistory.length;
+const {
 
-// =====================================
-// 📈 AVERAGE ROI
-// =====================================
+  totalSimulations,
 
-const averageROI =
+  averageROI,
 
-  totalSimulations > 0
+  bestSimulation,
 
-    ? portfolioHistory.reduce(
-        (sum, item) =>
+  bestROI,
 
-          sum +
+  bestCity,
 
-          getPrimaryROIValue(
-            item
-          ),
+  averageCashflow
 
-        0
-      ) / totalSimulations
-
-    : 0;
-
-// =====================================
-// 🏆 BEST SIMULATION
-// =====================================
-
-const bestSimulation =
-
-  [...portfolioHistory].sort(
-    (a, b) =>
-
-      getPrimaryROIValue(
-        b
-      )
-
-      -
-
-      getPrimaryROIValue(
-        a
-      )
-
-  )[0];
-
-// =====================================
-// 🚀 BEST ROI
-// =====================================
-
-const bestROI =
-
-  bestSimulation
-
-    ? getPrimaryROIValue(
-        bestSimulation
-      )
-
-    : 0;
-
-// =====================================
-// 🌍 BEST CITY
-// =====================================
-
-const bestCity =
-
-  bestSimulation
-
-    ? (
-        bestSimulation.realCity ||
-        bestSimulation.city ||
-        bestSimulation.marketCity ||
-        "N/D"
-      )
-
-    : "N/D";
-
-// =====================================
-// 💰 AVERAGE CASHFLOW
-// =====================================
-
-const averageCashflow =
-
-  totalSimulations > 0
-
-    ? portfolioHistory.reduce(
-        (sum, item) =>
-
-          sum +
-
-          Number(
-            item.net ??
-            item.cashflow ??
-            item.annualProfit ??
-            0
-          ),
-
-        0
-      ) / totalSimulations
-
-    : 0;
-
+} = getPortfolioMetrics(
+  portfolioHistory
+);
+    
 const properties =
 
   Number(
@@ -5039,111 +5071,23 @@ else if(
 const portfolioHistory =
   investmentHistory || [];
 
-const totalSimulations =
-  portfolioHistory.length;
+const {
 
-// =====================================
-// 📈 AVERAGE ROI
-// Usa il ROI principale sul capitale
-// =====================================
+  totalSimulations,
 
-const averageROI =
+  averageROI,
 
-  totalSimulations > 0
+  bestSimulation,
 
-    ? portfolioHistory.reduce(
-        (sum, item) =>
+  bestROI,
 
-          sum +
+  bestCity,
 
-          getPrimaryROIValue(
-            item
-          ),
+  averageCashflow
 
-        0
-      ) / totalSimulations
-
-    : 0;
-
-// =====================================
-// 🏆 BEST SIMULATION
-// Copia l'array per non modificare
-// l'ordine originale dello storico
-// =====================================
-
-const bestSimulation =
-
-  [...portfolioHistory].sort(
-    (a, b) =>
-
-      getPrimaryROIValue(
-        b
-      )
-
-      -
-
-      getPrimaryROIValue(
-        a
-      )
-
-  )[0];
-
-// =====================================
-// 🚀 BEST ROI
-// =====================================
-
-const bestROI =
-
-  bestSimulation
-
-    ? getPrimaryROIValue(
-        bestSimulation
-      )
-
-    : 0;
-
-// =====================================
-// 🌍 BEST CITY
-// =====================================
-
-const bestCity =
-
-  bestSimulation
-
-    ? (
-        bestSimulation.realCity ||
-        bestSimulation.city ||
-        bestSimulation.marketCity ||
-        "N/D"
-      )
-
-    : "N/D";
-
-// =====================================
-// 💰 AVERAGE CASHFLOW
-// Rimane invariato
-// =====================================
-
-const averageCashflow =
-
-  totalSimulations > 0
-
-    ? portfolioHistory.reduce(
-        (sum, item) =>
-
-          sum +
-
-          Number(
-            item.net ??
-            item.cashflow ??
-            item.annualProfit ??
-            0
-          ),
-
-        0
-      ) / totalSimulations
-
-    : 0;
+} = getPortfolioMetrics(
+  portfolioHistory
+);
   
   const availableCapital =
 
