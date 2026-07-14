@@ -4941,18 +4941,6 @@ else if(
 response.textEN =
   strategyEN.join("\n\n");
 
-if(executiveSummary){
-
-response.textIT +=
-
-`\n\n━━━━━━━━━━━━━━\n\n${executiveSummary}`;
-
-response.textEN +=
-
-`\n\n━━━━━━━━━━━━━━\n\n${executiveSummary}`;
-
-}
-
 }
 
 // ===========================================
