@@ -28,6 +28,16 @@ window.rbGenerateResponse = function({
   
   console.log(
   "🔥 RESPONSE ENGINE CALLED",
+
+    console.log(
+  "🧪 FULL INTENT OBJECT",
+  JSON.stringify(intent, null, 2)
+);
+
+console.log(
+  "🧪 INTENT VALUE",
+  intent.intent
+);
   {
     intent,
     message
@@ -3773,7 +3783,10 @@ To manage your plan:
   }
 
 }
-
+console.log(
+  "🧪 BEFORE EXECUTIVE",
+  intent.intent
+);
 // ===========================================
 // 🧠 EXECUTIVE AI RESPONSE
 // ===========================================
