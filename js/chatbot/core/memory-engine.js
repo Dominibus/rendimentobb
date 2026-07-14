@@ -5,6 +5,88 @@
 // ===============================================
 
 // ===============================================
+// 🧠 MEMORY FACTORY
+// Single source of truth for memory structure
+// ===============================================
+
+function createEmptyMemory(){
+
+  return {
+
+    messages: [],
+
+    entitiesHistory: [],
+
+    intentsHistory: [],
+
+    lastCity: null,
+
+    lastROI: null,
+
+    lastPropertyPrice: null,
+
+    lastOccupancy: null,
+
+    lastMortgage: null,
+
+    lastIntent: null,
+
+    lastBudget: null,
+
+    lastStrategy: null,
+
+    lastRiskTolerance: null,
+
+    lastPropertyType: null,
+
+    lastTargetROI: null,
+
+    lastFinancingLevel: null,
+
+    availableCapital: null,
+
+    monthlyCashflowGoal: null,
+
+    ownedProperties: 0,
+
+    businessStage: "starter",
+
+    mainGoal: null,
+
+    portfolioCities: [],
+
+    portfolioProperties: [],
+
+    investmentHistory: [],
+
+    context: {},
+
+    executiveProfile: {
+
+      investorType: null,
+
+      preferredCities: [],
+
+      preferredStrategy: null,
+
+      preferredRisk: null,
+
+      preferredBudget: null,
+
+      preferredPropertyType: null,
+
+      conversationStage: "discovery",
+
+      confidence: 0
+
+    }
+
+  };
+
+}
+
+
+// ===============================================
 // 🧠 GLOBAL MEMORY
 // ===============================================
 
