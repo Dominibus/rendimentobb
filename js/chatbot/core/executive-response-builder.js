@@ -3,7 +3,9 @@
 // Silicon Valley AI 2026
 // ===============================================
 
-function getExecutiveFinancialData(){
+function getExecutiveFinancialData(
+    liveData = {}
+){
 
   const rawNet =
 
@@ -48,7 +50,19 @@ function getExecutiveFinancialData(){
 
 window.rbBuildExecutiveResponse = function({
 
-    const {
+    executiveContext = {},
+
+    advisor = null,
+
+    documentKnowledge = {},
+
+    executiveNarrative = null,
+
+    investmentScore = null
+
+} = {}){
+
+  const {
 
     liveData = {}
 
@@ -64,18 +78,6 @@ console.log(
     "🧠 EXECUTIVE BUILDER",
     financials
 );
-
-    executiveContext = {},
-
-    advisor = null,
-
-    documentKnowledge = {},
-
-    executiveNarrative = null,
-
-    investmentScore = null
-
-} = {}){
 
     return {
 
