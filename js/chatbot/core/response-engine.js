@@ -4810,11 +4810,15 @@ pushResponseBlock({
 
 });
 
-  response.textIT =
-    executiveIT.join("\n\n");
+response.textIT =
+  executiveIT.join("\n\n");
 
 response.textEN =
-    executiveEN.join("\n\n");
+  executiveEN.join("\n\n");
+
+return applyExecutiveFormatter(
+  response
+);
 
 }
 
