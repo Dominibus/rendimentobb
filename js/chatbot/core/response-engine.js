@@ -3878,37 +3878,6 @@ function getExecutiveFinancialData(){
 }
 
 // =====================================
-// 🏆 EXECUTIVE INVESTMENT GRADE
-// =====================================
-
-function getInvestmentGrade(){
-
-  if(
-    roi >= 20 &&
-    risk <= 35 &&
-    occupancy >= 65
-  ){
-    return "A+";
-  }
-
-  if(
-    roi >= 15 &&
-    risk <= 45
-  ){
-    return "A";
-  }
-
-  if(
-    roi >= 10
-  ){
-    return "B";
-  }
-
-  return "C";
-
-}
-
-// =====================================
 // 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
