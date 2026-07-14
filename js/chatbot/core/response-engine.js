@@ -4666,35 +4666,43 @@ console.log(
 );
   
 // =====================================
-// 🧠 EXECUTIVE REASONING ENGINE 2.0
+// 🧠 EXECUTIVE NARRATIVE ENGINE
 // =====================================
 
-let executiveSummary = "";
+let executiveNarrative = null;
 
 if(
-  typeof window.rbGenerateInvestmentSummary ===
-  "function"
+    typeof window.rbGenerateExecutiveNarrative ===
+    "function"
 ){
 
-  try{
+    try{
 
-executiveSummary =
+        executiveNarrative =
+            window.rbGenerateExecutiveNarrative({
 
-window.rbGenerateInvestmentSummary?.(
+                executiveContext,
 
-    executiveContext
+                advisor,
 
-) || "";
+                documentKnowledge,
 
-  }
-  catch(error){
+                language:
+                    window.currentLanguage ||
+                    "it"
 
-    console.warn(
-      "Executive Summary Error",
-      error
-    );
+            });
 
-  }
+    }
+
+    catch(error){
+
+        console.warn(
+            "Executive Narrative Error",
+            error
+        );
+
+    }
 
 }
 
@@ -4717,13 +4725,15 @@ if(reasoningIT.length){
 
 }
 
-if(executiveSummary){
+if(executiveNarrative?.textIT){
 
     executiveIT.push(
-        executiveSummary
+
+        executiveNarrative.textIT
+
     );
 
-}  
+}
 
 // =====================================
 // 🧠 ADVISOR REASONS
@@ -4841,14 +4851,15 @@ if(reasoningEN?.length){
 
 }
 
-if(executiveSummary){
+if(executiveNarrative?.textEN){
 
     executiveEN.push(
-        executiveSummary
+
+        executiveNarrative.textEN
+
     );
 
-}  
-
+}
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
