@@ -4819,6 +4819,8 @@ response.textEN =
 return applyExecutiveFormatter(
   response
 );
+
+}   
   
 // ===========================================
 // 📄 EXECUTIVE REPORT ANALYSIS
