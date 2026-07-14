@@ -6808,9 +6808,26 @@ T(
 y
 );
 
-footer();  
-
 footer();
+
+// =====================================
+// 🧠 REGISTER EXECUTIVE REPORT
+// =====================================
+
+if(
+  typeof window.buildExecutiveReport ===
+  "function"
+){
+
+  window.lastExecutiveReport =
+
+    window.buildExecutiveReport(
+
+      d
+
+    );
+
+}
 
 // SAVE
 doc.save(`RendimentoBB-Report-${roi.toFixed(1)}.pdf`);
