@@ -1,6 +1,90 @@
 // ===============================================
-// 🧠 EXECUTIVE NARRATIVE ENGINE 1.0
+// 🧠 EXECUTIVE NARRATIVE ENGINE 2.0
+// Executive AI Brain
 // Silicon Valley Architecture 2026
+// ===============================================
+
+// ===============================================
+// 🏆 EXECUTIVE INVESTMENT GRADE
+// ===============================================
+
+window.rbGetExecutiveInvestmentGrade = function({
+
+    roi = 0,
+
+    risk = 100,
+
+    occupancy = 0
+
+} = {}){
+
+    if(
+        roi >= 20 &&
+        risk <= 35 &&
+        occupancy >= 65
+    ){
+        return "A+";
+    }
+
+    if(
+        roi >= 15 &&
+        risk <= 45
+    ){
+        return "A";
+    }
+
+    if(
+        roi >= 10
+    ){
+        return "B";
+    }
+
+    return "C";
+
+};
+
+// ===============================================
+// ⚠️ EXECUTIVE RISK LABEL
+// ===============================================
+
+window.rbGetExecutiveRiskLabel = function(
+
+    risk = 0,
+
+    language = "it"
+
+){
+
+    if(risk <= 30){
+
+        return language === "it"
+
+            ? "Basso"
+
+            : "Low";
+
+    }
+
+    if(risk <= 60){
+
+        return language === "it"
+
+            ? "Medio"
+
+            : "Medium";
+
+    }
+
+    return language === "it"
+
+        ? "Alto"
+
+        : "High";
+
+};
+
+// ===============================================
+// 🧠 EXECUTIVE NARRATIVE
 // ===============================================
 
 window.rbGenerateExecutiveNarrative = function({
@@ -43,6 +127,9 @@ window.rbGenerateExecutiveNarrative = function({
     const risk =
         Number(report.risk || 0);
 
+    const occupancy =
+        Number(report.occupancy || 0);
+
     const cashflow =
         Number(report.cashflow || 0);
 
@@ -53,49 +140,99 @@ window.rbGenerateExecutiveNarrative = function({
         advisor.verdict || "WAIT";
 
     const confidence =
-        advisor.confidence || 0;
+        Number(advisor.confidence || 0);
+
+    const grade =
+
+        window.rbGetExecutiveInvestmentGrade({
+
+            roi,
+
+            risk,
+
+            occupancy
+
+        });
+
+    const riskIT =
+
+        window.rbGetExecutiveRiskLabel(
+
+            risk,
+
+            "it"
+
+        );
+
+    const riskEN =
+
+        window.rbGetExecutiveRiskLabel(
+
+            risk,
+
+            "en"
+
+        );
+
+    // ===========================================
+    // 🇮🇹
+    // ===========================================
 
     const textIT =
 
-`📊 Executive Summary
+`📊 Executive Investment Report
 
-L'investimento analizzato riguarda ${city}.
+🏙️ Mercato: ${city}
 
-Il ROI stimato è ${roi.toFixed(1)}%.
+🏆 Investment Grade: ${grade}
 
-Il rischio è ${risk}/100.
+📈 ROI previsto: ${roi.toFixed(1)}%
 
-Il cash flow annuo è di €${cashflow.toLocaleString("it-IT")}.
+⚠️ Livello di rischio: ${riskIT} (${risk}/100)
 
-L'Advisor AI esprime una raccomandazione:
+💰 Cash Flow annuo: €${cashflow.toLocaleString("it-IT")}
 
-${verdict}
+🤖 AI Advisor: ${verdict}
 
-con un livello di confidenza del ${confidence}%.
+🎯 Affidabilità analisi: ${confidence}%
 
-La libreria documentale contiene ${documentKnowledge.totalDocuments || 0} documento/i disponibili per l'analisi.`;
+📚 Documenti disponibili: ${documentKnowledge.totalDocuments || 0}
+
+L'analisi evidenzia un investimento con rating ${grade}. Il sistema AI ha valutato simultaneamente ROI, rischio, cash flow e documentazione disponibile prima di formulare il giudizio finale.`;
+
+    // ===========================================
+    // 🇬🇧
+    // ===========================================
 
     const textEN =
 
-`📊 Executive Summary
+`📊 Executive Investment Report
 
-The analysed investment is located in ${city}.
+🏙️ Market: ${city}
 
-Estimated ROI is ${roi.toFixed(1)}%.
+🏆 Investment Grade: ${grade}
 
-Risk score is ${risk}/100.
+📈 Expected ROI: ${roi.toFixed(1)}%
 
-Annual cash flow is €${cashflow.toLocaleString("en-US")}.
+⚠️ Risk Level: ${riskEN} (${risk}/100)
 
-The AI Advisor recommendation is
+💰 Annual Cash Flow: €${cashflow.toLocaleString("en-US")}
 
-${verdict}
+🤖 AI Advisor: ${verdict}
 
-with ${confidence}% confidence.
+🎯 Confidence: ${confidence}%
 
-The Executive Document Library currently contains ${documentKnowledge.totalDocuments || 0} document(s).`;
+📚 Available Documents: ${documentKnowledge.totalDocuments || 0}
+
+The AI evaluated ROI, investment risk, cash flow and all available executive documents before generating the final recommendation.`;
 
     return{
+
+        grade,
+
+        riskLabelIT: riskIT,
+
+        riskLabelEN: riskEN,
 
         textIT,
 
@@ -105,8 +242,18 @@ The Executive Document Library currently contains ${documentKnowledge.totalDocum
 
 };
 
+// ===============================================
+// 🚀 READY
+// ===============================================
+
 console.log(
 
-    "🧠 EXECUTIVE NARRATIVE ENGINE READY"
+    "🧠 EXECUTIVE NARRATIVE ENGINE READY",
+
+    {
+
+        version: "2.0"
+
+    }
 
 );
