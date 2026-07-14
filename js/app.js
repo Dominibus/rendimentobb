@@ -2953,6 +2953,30 @@ net ||
       window.lastAnalysisData
     );
 
+// =====================================
+// 📄 EXECUTIVE DOCUMENT
+// =====================================
+
+if(typeof window.buildExecutiveReport === "function"){
+
+    const executiveReport =
+
+        window.buildExecutiveReport(
+            window.lastAnalysisData
+        );
+
+    console.log(
+        "📄 EXECUTIVE REPORT CREATED",
+        executiveReport
+    );
+
+    console.log(
+        "📚 DOCUMENT LIBRARY",
+        window.rbDocumentManager.getAll()
+    );
+
+}
+
     console.log("💾 POST ANALYSIS START");
 
     // ================= ROI UI =================
