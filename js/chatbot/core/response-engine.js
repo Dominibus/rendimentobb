@@ -3887,7 +3887,7 @@ function getInvestmentGrade(){
 // 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
-function getRiskAssessmentIT(){
+function executiveNarrative.riskLabelIT{
 
   if(risk <= 35){
 
@@ -3911,7 +3911,7 @@ Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow n
 
 }
 
-function getRiskAssessmentEN(){
+function executiveNarrative.riskLabelEN{
 
   if(risk <= 35){
 
@@ -3939,7 +3939,7 @@ The current risk level may reduce cashflow stability over the long term.`;
 // 🧠 EXECUTIVE SUMMARY
 // =====================================
 
-function getExecutiveSummaryIT(){
+function executiveNarrative.textIT{
 
   if(!advisor){
     return "";
@@ -3979,7 +3979,7 @@ Prima di procedere è consigliabile rivedere il modello economico dell'operazion
 
 }
 
-function getExecutiveSummaryEN(){
+function executiveNarrative.textEN{
 
   if(!advisor){
     return "";
@@ -4328,7 +4328,10 @@ if(targetROI > 0){
 // =====================================
 
 const investmentGrade =
-  getInvestmentGrade();
+
+    executiveNarrative?.grade ||
+
+    "N/A";
 
 executiveIT.push(
 
@@ -4344,7 +4347,7 @@ Valutazione AI: ${investmentGrade}`
 
 executiveIT.push(
 
-  getRiskAssessmentIT()
+  executiveNarrative.riskLabelIT
 
 );
 
@@ -4355,7 +4358,7 @@ executiveIT.push(
 
 executiveIT.push(
 
-  getExecutiveSummaryIT()
+  executiveNarrative.textIT
 
 );
 
@@ -4572,7 +4575,7 @@ AI Rating: ${investmentGrade}`
 
 executiveEN.push(
 
-  getRiskAssessmentEN()
+  executiveNarrative.riskLabelEN
 
 );
   
@@ -4582,7 +4585,7 @@ executiveEN.push(
 
 executiveEN.push(
 
-  getExecutiveSummaryEN()
+  executiveNarrative.textEN
 
 );
 
