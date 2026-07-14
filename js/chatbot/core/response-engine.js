@@ -4720,6 +4720,17 @@ pushResponseBlock({
 
 });
 
+response.textIT =
+  executiveIT.join("\n\n");
+
+response.textEN =
+  executiveEN.join("\n\n");
+
+console.log(
+  "✅ EXECUTIVE RESPONSE CREATED",
+  response.textIT
+);
+
 }
 
 // ===========================================
