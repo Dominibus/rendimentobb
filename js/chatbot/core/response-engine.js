@@ -3878,58 +3878,6 @@ function getExecutiveFinancialData(){
 }
 
 // =====================================
-// 🛡️ EXECUTIVE RISK ASSESSMENT
-// =====================================
-
-function getRiskAssessmentIT(){
-
-  if(risk <= 35){
-
-    return `🛡️ Valutazione Rischio
-
-La simulazione mostra una struttura operativa stabile e ben bilanciata rispetto ai benchmark del mercato.`;
-
-  }
-
-  if(risk <= 60){
-
-    return `⚠️ Valutazione Rischio
-
-L'investimento appare sostenibile ma richiede monitoraggio operativo e controllo dei costi.`;
-
-  }
-
-  return `🚨 Valutazione Rischio
-
-Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow nel lungo periodo.`;
-
-}
-
-function getRiskAssessmentEN(){
-
-  if(risk <= 35){
-
-    return `🛡️ Risk Assessment
-
-The simulation shows a stable and well-balanced operating structure compared to market benchmarks.`;
-
-  }
-
-  if(risk <= 60){
-
-    return `⚠️ Risk Assessment
-
-The investment appears sustainable but requires operational monitoring and cost control.`;
-
-  }
-
-  return `🚨 Risk Assessment
-
-The current risk level may reduce cashflow stability over the long term.`;
-
-}
-
-// =====================================
 // 🧠 EXECUTIVE SUMMARY
 // =====================================
 
