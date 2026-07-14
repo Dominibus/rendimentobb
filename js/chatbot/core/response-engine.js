@@ -4751,17 +4751,6 @@ if(reasoningIT.length){
   );
 
 }
-
-if(executiveNarrative?.textIT){
-
-    executiveIT.push(
-
-        executiveNarrative.textIT
-
-    );
-
-}
-
 // =====================================
 // 🧠 ADVISOR REASONS
 // =====================================
@@ -4878,15 +4867,6 @@ if(reasoningEN?.length){
 
 }
 
-if(executiveNarrative?.textEN){
-
-    executiveEN.push(
-
-        executiveNarrative.textEN
-
-    );
-
-}
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
