@@ -1,63 +1,71 @@
 // ===============================================
 // 🧠 DOCUMENT ENGINE 1.0
-// RendimentoBB AI Document Intelligence
+// Executive Report Memory
 // ===============================================
 
 // ===============================================
-// 📄 DOCUMENT MEMORY
+// 📄 LAST EXECUTIVE REPORT
 // ===============================================
-
-window.rbUploadedDocuments = [];
 
 window.lastExecutiveReport = null;
 
 // ===============================================
-// 📄 REGISTER EXECUTIVE REPORT
+// 🧠 BUILD EXECUTIVE REPORT
 // ===============================================
 
-window.rbRegisterExecutiveReport = function(report){
-
-    if(!report) return;
-
-    window.lastExecutiveReport = report;
-
-    console.log(
-        "📄 Executive Report Registered",
-        report
-    );
-
-};
-
-// ===============================================
-// 📄 REGISTER USER DOCUMENT
-// ===============================================
-
-window.rbRegisterUploadedDocument = function(document){
-
-    if(!document) return;
-
-    window.rbUploadedDocuments.push(document);
-
-    console.log(
-        "📄 User Document Registered",
-        document
-    );
-
-};
-
-// ===============================================
-// 📄 GET DOCUMENT CONTEXT
-// ===============================================
-
-window.rbGetDocumentContext = function(){
+window.buildExecutiveReport = function(data = {}){
 
     return {
 
-        executiveReport:
-            window.lastExecutiveReport,
+        generatedAt:
+            new Date().toISOString(),
 
-        uploadedDocuments:
-            window.rbUploadedDocuments
+        city:
+            data.realCity ||
+            data.marketCity ||
+            null,
+
+        roi:
+            data.realROI ??
+            data.visualROI ??
+            data.roi ??
+            0,
+
+        risk:
+            data.risk ??
+            0,
+
+        occupancy:
+            data.occupancy ??
+            0,
+
+        revenue:
+            data.revenueAnnual ??
+            data.gross ??
+            0,
+
+        cashflow:
+            data.net ??
+            data.annualProfit ??
+            0,
+
+        propertyPrice:
+            data.propertyPrice ??
+            data.price ??
+            0,
+
+        equity:
+            data.equity ??
+            0,
+
+        mortgage:
+            data.mortgageAmount ??
+            data.loanAmount ??
+            0,
+
+        analysis:
+
+            data
 
     };
 
