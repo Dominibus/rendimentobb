@@ -3816,31 +3816,6 @@ else if(
     0.99;
 
 // =====================================
-// 🧠 EXECUTIVE BUILDER (Migration Step 1)
-// =====================================
-
-const builderPreview =
-
-    window.rbBuildExecutiveResponse?.({
-
-        executiveContext,
-
-        advisor,
-
-        documentKnowledge,
-
-        executiveNarrative: null,
-
-        investmentScore
-
-    });
-
-console.log(
-    "🧠 EXECUTIVE BUILDER PREVIEW",
-    builderPreview
-);  
-
-// =====================================
 // 💰 EXECUTIVE FINANCIALS
 // =====================================
 
@@ -4216,6 +4191,27 @@ if(typeof window.rbGenerateExecutiveNarrative === "function"){
 console.log(
     "🧠 EXECUTIVE NARRATIVE",
     executiveNarrative
+);
+
+  const builderPreview =
+
+window.rbBuildExecutiveResponse?.({
+
+    executiveContext,
+
+    advisor,
+
+    documentKnowledge,
+
+    executiveNarrative,
+
+    investmentScore
+
+});
+
+console.log(
+    "🧠 EXECUTIVE BUILDER RESULT",
+    builderPreview
 );
 
 console.log(
@@ -4803,25 +4799,27 @@ pushResponseBlock({
   priority: 10,
 
   textIT:
+    builderPreview?.textIT ||
     executiveIT.join("\n\n"),
 
   textEN:
+    builderPreview?.textEN ||
     executiveEN.join("\n\n")
 
 });
 
 response.textIT =
+  builderPreview?.textIT ||
   executiveIT.join("\n\n");
 
 response.textEN =
+  builderPreview?.textEN ||
   executiveEN.join("\n\n");
 
 return applyExecutiveFormatter(
   response
 );
-
-}
-
+  
 // ===========================================
 // 📄 EXECUTIVE REPORT ANALYSIS
 // ===========================================
