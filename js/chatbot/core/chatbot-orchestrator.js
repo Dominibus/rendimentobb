@@ -39,18 +39,20 @@ async function(message){
 
 const detectedIntent =
 
-  console.log(
-    "🧠 DETECTED INTENT",
-    detectedIntent
-);
-
   window.rbDetectIntent
 
-  ? window.rbDetectIntent(text)
+    ? window.rbDetectIntent(text)
 
-  : {
-      intent: "generic"
-    };
+    : {
+
+        intent: "generic"
+
+      };
+
+console.log(
+  "🧠 DETECTED INTENT",
+  detectedIntent
+);
 
  // =========================================
 // 🧠 INTENT PRIORITY ENGINE
