@@ -39,6 +39,11 @@ async function(message){
 
 const detectedIntent =
 
+  console.log(
+    "🧠 DETECTED INTENT",
+    detectedIntent
+);
+
   window.rbDetectIntent
 
   ? window.rbDetectIntent(text)
