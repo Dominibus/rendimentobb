@@ -4853,6 +4853,8 @@ return applyExecutiveFormatter(
   response
 );
 
+  }
+
 // ===========================================
 // 💡 STRATEGY RESPONSE
 // ===========================================
