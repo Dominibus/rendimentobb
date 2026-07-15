@@ -3161,7 +3161,7 @@ return response;
 // 🌍 MARKET RESPONSE
 // ===========================================
 
-if(
+else if(
 
   !response.__LOCKED &&
 
@@ -4821,117 +4821,6 @@ return applyExecutiveFormatter(
 );
 
 }   
-  
-// ===========================================
-// 📄 EXECUTIVE REPORT ANALYSIS
-// ===========================================
-
-else if(
-
-    intent.intent === "report_interpretation"
-
-){
-
-    response.type =
-
-        "report_analysis";
-
-    response.confidence =
-
-        0.99;
-
-    if(
-
-        executiveReport
-
-    ){
-
-        response.textIT =
-
-`📄 Executive Report rilevato.
-
-🏙 Città
-
-${executiveReport.city}
-
-📈 ROI
-
-${executiveReport.roi?.toFixed(1)}%
-
-⚠️ Rischio
-
-${executiveReport.risk}/100
-
-🏨 Occupazione
-
-${executiveReport.occupancy}%
-
-💰 Cashflow
-
-€${Math.round(
-executiveReport.cashflow || 0
-).toLocaleString("it-IT")}
-
-🧠 Sto analizzando il report professionale generato da RendimentoBB.
-
-Puoi chiedermi:
-
-• spiegami il report
-
-• punti deboli
-
-• punti di forza
-
-• confronto con mercato
-
-• come migliorare il ROI
-
-• analizza il rischio
-
-• simuliamo uno scenario diverso`;
-
-
-
-        response.textEN =
-
-`📄 Executive Report detected.
-
-City:
-${executiveReport.city}
-
-ROI:
-${executiveReport.roi?.toFixed(1)}%
-
-Risk:
-${executiveReport.risk}/100
-
-Occupancy:
-${executiveReport.occupancy}%
-
-Cashflow:
-€${Math.round(
-executiveReport.cashflow || 0
-).toLocaleString("en-US")}
-
-The Executive Report is available for AI analysis.`;
-
-    }
-
-    else{
-
-        response.textIT =
-
-"Non è presente alcun Executive Report da analizzare.";
-
-        response.textEN =
-
-"No Executive Report available.";
-
-    }
-
-    return response;
-
-}  
 
 // ===========================================
 // 💡 STRATEGY RESPONSE
