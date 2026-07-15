@@ -273,17 +273,7 @@ if(
 
 if(
 
-  text.includes("analisi") ||
-
-  text.includes("executive") ||
-
-  text.includes("sostenibile") ||
-
-  text.includes("worth it") ||
-
-  text.includes("good investment") ||
-
-  text.includes("vale la pena")
+  detectedIntent.intent === "investment_executive"
 
 ){
 
