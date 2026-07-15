@@ -45,6 +45,16 @@ console.log(
 );
 
   console.log(
+  "🧪 AVAILABLE ANALYSIS",
+  analysisData
+);
+
+console.log(
+  "🧪 MEMORY",
+  memory
+);
+
+  console.log(
   "🧪 GENERATE RESPONSE START"
 );
 
@@ -4974,6 +4984,11 @@ else if(
       textEN: response.textEN
     }
   );
+
+  console.log(
+  "✅ STRATEGY RESPONSE",
+  response
+);
 
   return applyExecutiveFormatter(
     response
