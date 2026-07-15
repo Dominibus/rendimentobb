@@ -2756,7 +2756,7 @@ else if(
   applyIntent({
 
     intent:
-      "investment_strategy",
+      "investment_executive",
 
     category:
       "strategy",
