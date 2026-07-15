@@ -1263,9 +1263,6 @@ const strategyWords = [
 
   // 🇮🇹 ITALIANO
 
-  "investire",
-  "investimento",
-
   "strategia",
   "opportunità",
 
@@ -1319,8 +1316,6 @@ const strategyWords = [
 
   "strategy",
   "investment strategy",
-
-  "investment",
 
   "profitable",
   "profitability",
