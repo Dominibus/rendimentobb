@@ -4810,6 +4810,15 @@ if(reasoningEN?.length){
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
 
+console.log(
+  "🚨 EXECUTIVE DEBUG",
+  {
+    builderPreview,
+    executiveIT,
+    executiveEN
+  }
+);
+
 pushResponseBlock({
 
   priority: 10,
@@ -4832,11 +4841,17 @@ response.textEN =
   builderPreview?.textEN ||
   executiveEN.join("\n\n");
 
+console.log(
+  "🚨 FINAL EXECUTIVE RESPONSE TEXT",
+  {
+    textIT: response.textIT,
+    textEN: response.textEN
+  }
+);
+
 return applyExecutiveFormatter(
   response
 );
-
-}   
 
 // ===========================================
 // 💡 STRATEGY RESPONSE
