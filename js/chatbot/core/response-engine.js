@@ -4961,7 +4961,19 @@ else if(
 
   console.log(
     "🚀 STRATEGY BLOCK ENTERED"
-);
+  );
+
+  console.log(
+    "🧠 STRATEGY INPUT",
+    {
+      intent,
+      roi,
+      risk,
+      occupancy,
+      liveData
+    }
+  );
+
   // =====================================
   // 🇮🇹 ITALIANO
   // =====================================
@@ -5053,17 +5065,26 @@ else if(
 
   );
 
-response.textEN =
-  strategyEN.join("\n\n");
+  response.textEN =
+    strategyEN.join("\n\n");
 
-console.log(
+  console.log(
     "🧠 STRATEGY EN",
     response.textEN
-);
+  );
 
-return applyExecutiveFormatter(
+  console.log(
+    "✅ STRATEGY RETURN",
+    {
+      type: response.type,
+      textIT: response.textIT,
+      textEN: response.textEN
+    }
+  );
+
+  return applyExecutiveFormatter(
     response
-);
+  );
 
 }
 
