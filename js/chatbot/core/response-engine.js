@@ -4868,6 +4868,13 @@ else if(
     "🚀 STRATEGY BLOCK ENTERED"
   );
 
+response.textIT = "### TEST STRATEGY ###";
+response.textEN = "### TEST STRATEGY ###";
+
+console.log("FORCED TEST", response);
+
+return response;
+  
   console.log(
     "🧠 STRATEGY INPUT",
     {
