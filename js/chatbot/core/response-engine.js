@@ -3,8 +3,6 @@
 // Silicon Valley AI Orchestrator
 // ===============================================
 
-console.log("🔥 RESPONSE ENGINE VERSION 9");
-
 // ===============================================
 // 🧠 MAIN RESPONSE ENGINE
 // ===============================================
@@ -4885,13 +4883,6 @@ else if(
   console.log(
     "🚀 STRATEGY BLOCK ENTERED"
   );
-
-response.textIT = "### TEST STRATEGY ###";
-response.textEN = "### TEST STRATEGY ###";
-
-console.log("FORCED TEST", response);
-
-return response;
   
   console.log(
     "🧠 STRATEGY INPUT",
