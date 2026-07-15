@@ -1256,47 +1256,153 @@ if(
 
 // ===========================================
 // 🧠 EXECUTIVE STRATEGY ENGINE
-// Silicon Valley Executive Intelligence
+// Silicon Valley Executive Intelligence 2026
 // ===========================================
 
 const strategyWords = [
 
-  // 🇮🇹 ITALIANO
+  // =========================================
+  // 🇮🇹 STRATEGIA
+  // =========================================
 
   "strategia",
+  "strategia investimento",
+  "strategia immobiliare",
+  "strategia b&b",
+  "strategia airbnb",
+
   "opportunità",
+  "opportunita",
+
+  "investimento strategico",
 
   "profittevole",
+  "profittevole?",
   "redditività",
+  "redditivita",
 
   "miglior città",
   "migliore città",
+  "miglior mercato",
 
   "aprire b&b",
   "aprire airbnb",
 
+  // =========================================
+  // 🇮🇹 ANALISI
+  // =========================================
+
   "analisi executive",
   "analisi investimento",
+  "analisi immobiliare",
+  "analisi immobile",
+  "analisi appartamento",
+  "analisi proprietà",
+  "analisi proprieta",
+
   "report investimento",
 
   "analisi dettagliata",
-  "analisi completa ai",
-
-  "analisi strategica",
   "analisi completa",
-  "analisi avanzata",
 
-  "analisi professionale",
+  "analisi completa ai",
   "analisi ai",
 
-  "fammi un'analisi",
-  "analizza investimento",
+  "analisi avanzata",
+  "analisi professionale",
 
-  "valuta investimento",
-  "valuta questo investimento",
-  "valuta questo b&b",
+  "analisi strategica",
+
+  "analizza investimento",
+  "analizza questo investimento",
+
+  "analizza questo immobile",
+  "analizza questo appartamento",
+
+  "analizza questa casa",
+  "analizza questa proprietà",
+  "analizza questa proprieta",
+
+  "analizza questa simulazione",
+
+  "fammi un'analisi",
+  "fammi una valutazione",
+
+  "dammi un parere",
+
+  // =========================================
+  // 🇮🇹 CONVIENE
+  // =========================================
+
+  "conviene",
+
+  "conviene comprare",
+
+  "conviene acquistare",
+
+  "conviene investire",
+
+  "conviene questo immobile",
+
+  "conviene questo appartamento",
+
+  "conviene questa casa",
+
+  "conviene questo investimento",
 
   "conviene ancora",
+
+  "vale la pena",
+
+  "vale la pena comprare",
+
+  "vale la pena investire",
+
+  "ha senso comprare",
+
+  "ha senso investire",
+
+  "lo compreresti",
+
+  "tu lo compreresti",
+
+  "compreresti questo immobile",
+
+  "compreresti questo appartamento",
+
+  "compreresti questa casa",
+
+  "cosa ne pensi",
+
+  "che ne pensi",
+
+  "parere investimento",
+
+  "opinione investimento",
+
+  // =========================================
+  // 🇮🇹 VALUTAZIONE
+  // =========================================
+
+  "valuta investimento",
+
+  "valuta questo investimento",
+
+  "valuta questo immobile",
+
+  "valuta questo appartamento",
+
+  "valuta questa casa",
+
+  "valuta questo b&b",
+
+  "giudica investimento",
+
+  "consiglio investimento",
+
+  // =========================================
+  // 🇮🇹 FINANZA
+  // =========================================
 
   "cashflow reale",
 
@@ -1312,43 +1418,125 @@ const strategyWords = [
 
   "scenario migliore",
 
-  // 🇬🇧 ENGLISH
+  "best case",
+
+  "worst case",
+
+  // =========================================
+  // 🇬🇧 STRATEGY
+  // =========================================
 
   "strategy",
+
   "investment strategy",
 
+  "real estate strategy",
+
   "profitable",
+
   "profitability",
 
   "does it make sense",
 
   "should i invest",
+
   "good investment",
 
+  "worth buying",
+
+  "worth investing",
+
   "best city",
+
   "best market",
 
   "open airbnb",
+
   "open bnb",
 
+  // =========================================
+  // 🇬🇧 ANALYSIS
+  // =========================================
+
   "executive",
+
   "executive report",
+
   "executive analysis",
 
   "investment report",
 
   "advanced analysis",
 
+  "professional analysis",
+
   "investment advisor",
+
   "advisor",
 
   "analyze investment",
+
   "analyze this investment",
 
+  "analyze this property",
+
+  "analyze this apartment",
+
+  "analyze this house",
+
+  "review investment",
+
+  "review property",
+
   "evaluate investment",
-  "evaluate this bnb",
+
+  "evaluate this investment",
+
+  "evaluate this property",
+
+  "evaluate this apartment",
+
+  "evaluate this house",
 
   "executive ai",
+
+  // =========================================
+  // 🇬🇧 DECISION
+  // =========================================
+
+  "would you buy",
+
+  "would you invest",
+
+  "would you buy this",
+
+  "would you buy this property",
+
+  "would you buy this apartment",
+
+  "is it worth it",
+
+  "is this worth buying",
+
+  "is this investment good",
+
+  "is this investment worth it",
+
+  "should i buy",
+
+  "should i buy this property",
+
+  "should i buy this apartment",
+
+  "should i buy this investment",
+
+  "what do you think",
+
+  "your opinion",
+
+  // =========================================
+  // 🇬🇧 FINANCE
+  // =========================================
 
   "real cashflow",
 
@@ -1357,10 +1545,6 @@ const strategyWords = [
   "is it sustainable",
 
   "sustainable investment",
-
-  "is this investment good",
-
-  "is this investment worth it",
 
   "stress test",
 
@@ -1371,9 +1555,13 @@ const strategyWords = [
 ];
 
 if(
+
   strategyWords.some(word =>
+
     text.includes(word)
+
   )
+
 ){
 
   applyIntent({
@@ -1405,14 +1593,16 @@ if(
 
 // =====================================
 // 🧠 EXECUTIVE AI ENGINE
-// Silicon Valley Executive Intelligence
+// Silicon Valley Executive Intelligence 2026
 // =====================================
 
 if(
 
   has(
 
-    // 🇮🇹 ITALIANO
+    // =====================================
+    // 🇮🇹 ANALISI EXECUTIVE
+    // =====================================
 
     "analisi executive",
     "executive",
@@ -1420,21 +1610,131 @@ if(
     "analisi completa",
     "analisi avanzata",
 
-    "fammi un'analisi",
-
-    "analizza investimento",
-
-    "valuta investimento",
-
-    "conviene ancora",
-
     "analisi professionale",
 
     "analisi ai",
 
+    "analisi dettagliata",
+
+    "analisi strategica",
+
+    "analisi immobiliare",
+
+    "analisi immobile",
+
+    "analisi appartamento",
+
+    "analisi proprietà",
+    "analisi proprieta",
+
+    "fammi un'analisi",
+
+    "fammi una valutazione",
+
+    "dammi un parere",
+
+    "analizza investimento",
+
+    "analizza questo investimento",
+
+    "analizza questo immobile",
+
+    "analizza questo appartamento",
+
+    "analizza questa casa",
+
+    "analizza questa proprietà",
+    "analizza questa proprieta",
+
+    "analizza questa simulazione",
+
+    "analizza questo b&b",
+
+    "analisi completa b&b",
+
+    // =====================================
+    // 🇮🇹 VALUTAZIONE
+    // =====================================
+
+    "valuta investimento",
+
+    "valuta questo investimento",
+
+    "valuta questo immobile",
+
+    "valuta questo appartamento",
+
+    "valuta questa casa",
+
+    "valuta questo b&b",
+
+    "giudica investimento",
+
+    "consiglio investimento",
+
+    "cosa ne pensi",
+
+    "che ne pensi",
+
+    "parere investimento",
+
+    "opinione investimento",
+
+    // =====================================
+    // 🇮🇹 DECISIONE
+    // =====================================
+
+    "conviene",
+
+    "conviene ancora",
+
+    "conviene investire",
+
+    "conviene comprare",
+
+    "conviene acquistare",
+
+    "conviene questo investimento",
+
+    "conviene questo immobile",
+
+    "conviene questo appartamento",
+
+    "conviene questa casa",
+
+    "vale la pena",
+
+    "vale la pena investire",
+
+    "vale la pena comprare",
+
+    "conveniente",
+
+    "ha senso investire",
+
+    "ha senso comprare",
+
+    "lo compreresti",
+
+    "tu lo compreresti",
+
+    "compreresti questo investimento",
+
+    "compreresti questo immobile",
+
+    "compreresti questo appartamento",
+
+    "compreresti questa casa",
+
+    // =====================================
+    // 🇮🇹 FINANZA
+    // =====================================
+
     "cashflow reale",
 
     "sostenibilità investimento",
+
+    "sostenibilita investimento",
 
     "sostenibile",
 
@@ -1443,12 +1743,6 @@ if(
     "investimento sostenibile",
 
     "questo investimento",
-
-    "conviene questo investimento",
-
-    "vale la pena",
-
-    "conveniente",
 
     "scenario peggiore",
 
@@ -1462,11 +1756,93 @@ if(
 
     "simulazione avanzata",
 
-    "analisi completa b&b",
+    // =====================================
+    // 🇬🇧 EXECUTIVE ANALYSIS
+    // =====================================
 
-    "analizza questo b&b",
+    "executive analysis",
 
-    // 🇬🇧 ENGLISH
+    "executive ai",
+
+    "advanced analysis",
+
+    "professional analysis",
+
+    "analyze investment",
+
+    "analyze this investment",
+
+    "analyze this property",
+
+    "analyze this apartment",
+
+    "analyze this house",
+
+    "review investment",
+
+    "review property",
+
+    "review this investment",
+
+    "evaluate investment",
+
+    "evaluate this investment",
+
+    "evaluate this property",
+
+    "evaluate this apartment",
+
+    "evaluate this house",
+
+    "what do you think",
+
+    "your opinion",
+
+    // =====================================
+    // 🇬🇧 DECISION
+    // =====================================
+
+    "should i invest",
+
+    "should i buy",
+
+    "should i buy this investment",
+
+    "should i buy this property",
+
+    "should i buy this apartment",
+
+    "would you buy",
+
+    "would you buy this",
+
+    "would you buy this investment",
+
+    "would you buy this property",
+
+    "would you buy this apartment",
+
+    "would you invest",
+
+    "does it make sense",
+
+    "worth it",
+
+    "worth buying",
+
+    "worth investing",
+
+    "good investment",
+
+    "profitable investment",
+
+    "is this investment good",
+
+    "is this investment worth it",
+
+    // =====================================
+    // 🇬🇧 FINANCE
+    // =====================================
 
     "sustainable",
 
@@ -1478,43 +1854,17 @@ if(
 
     "sustainable investment",
 
-    "is this investment good",
-
-    "is this investment worth it",
-
-    "worth it",
-
-    "does it make sense",
-
-    "should i invest",
-
-    "good investment",
-
-    "executive analysis",
-
-    "advanced analysis",
-
-    "analyze investment",
-
-    "analyze this investment",
-
-    "evaluate investment",
-
-    "profitable investment",
-
-    "worst case scenario",
-
-    "best case scenario",
-
-    "stress test",
-
     "cashflow analysis",
 
     "risk analysis",
 
     "advanced simulation",
 
-    "executive ai"
+    "stress test",
+
+    "worst case scenario",
+
+    "best case scenario"
 
   )
 
@@ -1546,17 +1896,18 @@ if(
   });
 
 }
-
 // ===========================================
 // 📈 IMPROVEMENT ADVISOR
-// Silicon Valley Portfolio Optimization
+// Silicon Valley Portfolio Optimization 2026
 // ===========================================
 
 if(
 
   has(
 
-    // 🇮🇹 ITALIANO
+    // =========================================
+    // 🇮🇹 MIGLIORAMENTO GENERALE
+    // =========================================
 
     "cosa devo migliorare",
 
@@ -1564,133 +1915,271 @@ if(
 
     "come migliorare",
 
-    "come aumento il roi",
+    "cosa posso fare meglio",
 
-    "come aumentare il roi",
-
-    "come migliorare il rendimento",
-
-    "come ridurre il rischio",
-
-    "come abbassare il rischio",
-
-    "come aumento il profitto",
-
-    "come aumentare il profitto",
-
-    "come aumentare i ricavi",
-
-    "come aumentare il cashflow",
+    "come posso fare meglio",
 
     "come migliorare questa simulazione",
 
     "come migliorare questo investimento",
 
-    "come ottimizzare l'investimento",
+    "come migliorare questo immobile",
 
-    "cosa posso fare meglio",
+    "come migliorare questo appartamento",
 
-    // 🔥 NUOVE KEYWORD IT
+    "come migliorare questa casa",
+
+    "come migliorare il b&b",
+
+    "come migliorare l'airbnb",
 
     "dammi consigli",
 
     "consigliami",
 
+    "dammi suggerimenti",
+
+    "dammi delle idee",
+
     "consigli per migliorare",
 
-    "migliorare il rendimento",
+    "cosa mi consigli",
+
+    "che cosa mi consigli",
+
+    "quali sono i miglioramenti",
+
+    "quali migliorie posso fare",
+
+    "cosa cambieresti",
+
+    "tu cosa faresti",
+
+    // =========================================
+    // 🇮🇹 ROI
+    // =========================================
+
+    "come aumento il roi",
+
+    "come aumentare il roi",
 
     "migliorare il roi",
 
-    "aumentare il rendimento",
+    "ottimizzare il roi",
 
-    "aumentare la redditività",
+    "incrementare il roi",
 
-    "aumentare la redditivita",
-
-    "come far rendere di più",
-
-    "come far rendere di piu",
+    "massimizzare il roi",
 
     "come aumentare il rendimento",
+
+    "come migliorare il rendimento",
+
+    "aumentare il rendimento",
+
+    "ottimizzare il rendimento",
 
     "come aumentare la redditività",
 
     "come aumentare la redditivita",
 
-    "ottimizzare il rendimento",
+    "aumentare la redditività",
 
-    "ottimizzare il roi",
+    "aumentare la redditivita",
 
     "ottimizzare la redditività",
 
     "ottimizzare la redditivita",
 
+    // =========================================
+    // 🇮🇹 CASHFLOW / PROFITTO
+    // =========================================
+
+    "come aumentare il cashflow",
+
+    "come migliorare il cashflow",
+
+    "come aumentare il profitto",
+
+    "come aumento il profitto",
+
+    "come aumentare il profitto netto",
+
+    "come aumentare gli utili",
+
+    "come aumentare il guadagno",
+
+    "come aumentare i ricavi",
+
+    "come aumentare l'utile",
+
+    "come migliorare i margini",
+
+    "come aumentare il margine",
+
+    // =========================================
+    // 🇮🇹 RISCHIO
+    // =========================================
+
+    "come ridurre il rischio",
+
+    "come abbassare il rischio",
+
+    "come diminuire il rischio",
+
+    "come rendere più sicuro",
+
+    "come rendere piu sicuro",
+
+    "come rendere sostenibile",
+
+    "come rendere più profittevole",
+
+    "come rendere piu profittevole",
+
+    // =========================================
+    // 🇮🇹 STRATEGIA
+    // =========================================
+
+    "come ottimizzare l'investimento",
+
+    "come ottimizzare questo investimento",
+
+    "come ottimizzare questo immobile",
+
+    "come ottimizzare questa simulazione",
+
+    "come far rendere di più",
+
+    "come far rendere di piu",
+
     "come migliorare i risultati",
 
     "come migliorare le performance",
 
-    "come aumentare il guadagno",
+    "come crescere",
 
-    "come aumentare gli utili",
+    "come scalare",
 
-    "come aumentare il profitto netto",
+    "come fare il salto di qualità",
 
-    // 🇬🇧 ENGLISH
+    "come fare il salto di qualita",
+
+    "come diventare più competitivo",
+
+    "come diventare piu competitivo",
+
+    "come battere la concorrenza",
+
+    // =========================================
+    // 🇬🇧 GENERAL
+    // =========================================
 
     "what should i improve",
+
+    "what can i improve",
 
     "how can i improve",
 
     "how do i improve",
 
+    "what can i do better",
+
+    "give me advice",
+
+    "give me suggestions",
+
+    "improvement tips",
+
+    "optimization advice",
+
+    "what would you improve",
+
+    "what would you change",
+
+    // =========================================
+    // 🇬🇧 ROI
+    // =========================================
+
     "how can i increase roi",
 
     "how can i improve roi",
 
-    "how can i reduce risk",
+    "increase roi",
 
-    "how can i lower risk",
+    "improve roi",
 
-    "how can i increase profit",
+    "maximize roi",
 
-    "how can i improve profitability",
+    "optimize roi",
 
-    "how can i increase revenue",
-
-    "how can i improve this investment",
-
-    "how can i optimize this investment",
-
-    "what can i do better",
-
-    // 🔥 NEW EN
+    "increase returns",
 
     "improve returns",
 
-    "increase returns",
+    "maximize returns",
+
+    // =========================================
+    // 🇬🇧 PROFITABILITY
+    // =========================================
 
     "increase profitability",
 
     "improve profitability",
 
-    "optimization advice",
+    "how to increase profitability",
 
-    "improvement tips",
+    "how to improve profitability",
+
+    "how to make more profit",
+
+    "increase revenue",
+
+    "increase cashflow",
+
+    "improve cashflow",
+
+    "increase income",
+
+    "increase margin",
+
+    // =========================================
+    // 🇬🇧 RISK
+    // =========================================
+
+    "how can i reduce risk",
+
+    "how can i lower risk",
+
+    "reduce investment risk",
+
+    "make this investment safer",
+
+    "make it sustainable",
+
+    // =========================================
+    // 🇬🇧 STRATEGY
+    // =========================================
+
+    "how can i optimize this investment",
+
+    "how to optimize this investment",
+
+    "optimize this property",
+
+    "optimize this apartment",
+
+    "optimize this simulation",
 
     "improve performance",
 
     "how to improve performance",
 
-    "how to increase profitability",
+    "grow faster",
 
-    "how to improve returns",
+    "scale faster",
 
-    "how to increase returns",
-
-    "how to make more profit",
-
-    "how to optimize roi"
+    "be more competitive"
 
   )
 
