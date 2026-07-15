@@ -53,6 +53,10 @@ const detectedIntent =
 
 const intentPriority = {
 
+    investment_strategy:96,
+
+    investment_advisor:97,
+
     investment_executive:100,
 
     improvement_advisor:95,
@@ -279,6 +283,38 @@ if(
 
   intents.push(
     "investment_executive"
+  );
+
+}
+
+// =========================================
+// 💼 INVESTMENT ADVISOR
+// =========================================
+
+if(
+
+  detectedIntent.intent === "investment_advisor"
+
+){
+
+  intents.push(
+    "investment_advisor"
+  );
+
+}
+
+// =========================================
+// 🧠 INVESTMENT STRATEGY
+// =========================================
+
+if(
+
+  detectedIntent.intent === "investment_strategy"
+
+){
+
+  intents.push(
+    "investment_strategy"
   );
 
 }
