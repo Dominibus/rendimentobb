@@ -44,6 +44,10 @@ console.log(
   intent.intent
 );
 
+  console.log(
+  "🧪 GENERATE RESPONSE START"
+);
+
   // ===========================================
   // 🧠 RESPONSE OBJECT
   // ===========================================
@@ -6872,6 +6876,11 @@ response.signals = [
 
 console.log(
   "🧠 RESPONSE ENGINE:",
+  response
+);
+
+  console.log(
+  "🧪 GENERATE RESPONSE END",
   response
 );
 
