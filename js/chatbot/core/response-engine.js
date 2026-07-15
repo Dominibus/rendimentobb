@@ -4353,22 +4353,30 @@ Valutazione AI: ${investmentGrade}`
 // 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
-executiveIT.push(
+if(executiveNarrative){
 
-  executiveNarrative.riskLabelIT
+  if(executiveNarrative.riskLabelIT){
 
-);
+    executiveIT.push(
+      executiveNarrative.riskLabelIT
+    );
 
-// =====================================
-// 🧠 EXECUTIVE STRATEGIC VERDICT
-// Legacy Summary (temporary)
-// =====================================
+  }
 
-executiveIT.push(
+  // =====================================
+  // 🧠 EXECUTIVE STRATEGIC VERDICT
+  // Legacy Summary (temporary)
+  // =====================================
 
-  executiveNarrative.textIT
+  if(executiveNarrative.textIT){
 
-);
+    executiveIT.push(
+      executiveNarrative.textIT
+    );
+
+  }
+
+}
 
 executiveIT.push(
   `🏨 Occupazione attuale: ${occupancy}%`
@@ -4381,7 +4389,6 @@ if(occupancy < 45){
   );
 
 }
-
 // =====================================
 // 🧠 EXECUTIVE SIGNALS
 // =====================================
@@ -4581,21 +4588,29 @@ AI Rating: ${investmentGrade}`
 // 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
-executiveEN.push(
+if(executiveNarrative){
 
-  executiveNarrative.riskLabelEN
+  if(executiveNarrative.riskLabelEN){
 
-);
-  
-// =====================================
-// 🔥 AI CONCLUSION
-// =====================================
+    executiveEN.push(
+      executiveNarrative.riskLabelEN
+    );
 
-executiveEN.push(
+  }
 
-  executiveNarrative.textEN
+  // =====================================
+  // 🔥 AI CONCLUSION
+  // =====================================
 
-);
+  if(executiveNarrative.textEN){
+
+    executiveEN.push(
+      executiveNarrative.textEN
+    );
+
+  }
+
+}
 
 executiveEN.push(
   `🏨 Current occupancy: ${occupancy}%`
