@@ -4836,6 +4836,15 @@ return applyExecutiveFormatter(
 
 }   
 
+  console.log(
+  "🚨 SONO ARRIVATO DOPO EXECUTIVE",
+  {
+    intent: intent.intent,
+    type: response.type
+  }
+);
+
+
 // ===========================================
 // 💡 STRATEGY RESPONSE
 // ===========================================
