@@ -1219,6 +1219,7 @@ if(
   intent.intent !== "market_analysis" &&
   intent.intent !== "investment_strategy" &&
   intent.intent !== "investment_advisor" &&
+  intent.intent !== "investment_executive" &&
   intent.intent !== "portfolio_growth" &&
   intent.intent !== "market_comparison" &&
   intent.intent !== "report_interpretation" &&
