@@ -3612,7 +3612,9 @@ ${bestROI.toFixed(1)}%
 
 🧠 This is currently the most profitable saved simulation.`;
 
-}  
+    return response;
+
+}
 
 // ===========================================
 // 💳 SUBSCRIPTIONS RESPONSE
