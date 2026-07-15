@@ -3800,6 +3800,13 @@ To manage your plan:
 
 }
 
+  console.log(
+  "🚨 BEFORE EXECUTIVE",
+  {
+    intent: intent.intent
+  }
+);
+
 // ===========================================
 // 🧠 EXECUTIVE AI RESPONSE
 // ===========================================
