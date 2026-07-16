@@ -150,6 +150,52 @@ console.log(
   "📚 DOCUMENT KNOWLEDGE:",
   documentKnowledge
 );
+
+// =====================================
+// 🧠 EXECUTIVE NARRATIVE
+// =====================================
+
+let executiveNarrative = null;
+
+if(
+  typeof window.rbGenerateExecutiveNarrative ===
+  "function"
+){
+
+  try{
+
+    executiveNarrative =
+      window.rbGenerateExecutiveNarrative({
+
+        executiveContext,
+
+        advisor:
+          advisor || {},
+
+        documentKnowledge,
+
+        language:
+          window.currentLanguage ||
+          "it"
+
+      }) || null;
+
+  }
+  catch(error){
+
+    console.warn(
+      "Executive Narrative Error",
+      error
+    );
+
+  }
+
+}
+
+console.log(
+  "🧠 EXECUTIVE NARRATIVE:",
+  executiveNarrative
+);  
   
 // =====================================
 // 🏨 PMS DATA
