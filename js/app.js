@@ -6855,6 +6855,21 @@ if(
     risk:
       riskScore,
 
+    net:
+  profit,
+
+annualProfit:
+  profit,
+
+cashflow:
+  profit,
+
+revenueAnnual:
+  revenue,
+
+equity:
+  equity,
+
     investmentScore,
 
     verdict,
