@@ -991,6 +991,8 @@ if(
 
     "analizza il report",
 
+    "analizza report",
+
     "leggi il report",
 
     "come farebbe un consulente",
@@ -1036,6 +1038,8 @@ if(
     "explain the report",
 
     "analyze the report",
+
+    "analyze report",
 
     "read the report",
 
