@@ -26,12 +26,36 @@ window.rbGenerateResponse = function({
 } = {}){
 
   
-  console.log(
+console.log(
   "🔥 RESPONSE ENGINE CALLED",
   {
     intent,
     message
   }
+);
+
+console.log(
+  "🧪 FULL INTENT OBJECT",
+  JSON.stringify(intent, null, 2)
+);
+
+console.log(
+  "🧪 INTENT VALUE",
+  intent.intent
+);
+
+  console.log(
+  "🧪 AVAILABLE ANALYSIS",
+  analysisData
+);
+
+console.log(
+  "🧪 MEMORY",
+  memory
+);
+
+  console.log(
+  "🧪 GENERATE RESPONSE START"
 );
 
   // ===========================================
@@ -59,20 +83,146 @@ window.rbGenerateResponse = function({
   };
 
   // ===========================================
+// 🧠 EXECUTIVE CONVERSATION FORMATTER 1.0
+// ===========================================
+
+function applyExecutiveFormatter(
+  targetResponse = {}
+){
+
+const supportedTypes = [
+  "roi",
+  "cashflow",
+  "risk",
+  "strategy",
+  "mortgage",
+  "pms"
+];
+
+  if(
+    !supportedTypes.includes(
+      targetResponse.type
+    )
+  ){
+
+    return targetResponse;
+
+  }
+
+  const headers = {
+
+    roi: {
+      it: "🧠 Executive ROI Insight",
+      en: "🧠 Executive ROI Insight"
+    },
+
+    cashflow: {
+      it: "🧠 Executive Cashflow Review",
+      en: "🧠 Executive Cashflow Review"
+    },
+
+    risk: {
+      it: "🧠 Executive Risk Assessment",
+      en: "🧠 Executive Risk Assessment"
+    },
+
+strategy: {
+  it: "🧠 Executive Investment Advisor",
+  en: "🧠 Executive Investment Advisor"
+},
+
+mortgage: {
+  it: "🧠 Executive Mortgage Advisor",
+  en: "🧠 Executive Mortgage Advisor"
+},
+
+ pms: {
+  it: "🧠 Executive PMS Advisor",
+  en: "🧠 Executive PMS Advisor"
+}   
+
+  };
+
+  const header =
+    headers[targetResponse.type];
+
+  if(!header){
+
+    return targetResponse;
+
+  }
+
+  const textIT =
+    String(
+      targetResponse.textIT || ""
+    ).trim();
+
+  const textEN =
+    String(
+      targetResponse.textEN || ""
+    ).trim();
+
+  if(
+    textIT &&
+    !textIT.startsWith(header.it)
+  ){
+
+    targetResponse.textIT =
+`${header.it}
+
+${textIT}`;
+
+  }
+
+  if(
+    textEN &&
+    !textEN.startsWith(header.en)
+  ){
+
+    targetResponse.textEN =
+`${header.en}
+
+${textEN}`;
+
+  }
+
+  targetResponse.metadata = {
+
+    ...(targetResponse.metadata || {}),
+
+    presentationLayer:
+      "executive_conversation_v1",
+
+    formattedAt:
+      Date.now()
+
+  };
+
+  return targetResponse;
+
+}
+
+  // ===========================================
   // 📊 SAFE DATA
   // ===========================================
 
 const liveData = {
 
-  ...(analysisData || {}),
+  // Livello legacy / filtrato dal piano
+  ...(window.rbChatbotData || {}),
 
-  ...(window.rbInvestmentMemory || {}),
-
-  ...(window.lastAnalysisData || {}),
-
+  // Memoria live legacy
   ...(window.rbChatbotLive || {}),
 
-  ...(window.rbChatbotData || {})
+  // Memoria investimento
+  ...(window.rbInvestmentMemory || {}),
+
+  // Ultima analisi completa salvata
+  ...(window.lastAnalysisData || {}),
+
+  // Dati forniti direttamente dall'Orchestrator:
+  // massima priorità e fonte più aggiornata
+  ...(analysisData || {})
 
 };
 
@@ -109,16 +259,24 @@ console.log(
 
   ) || 0;
 
+// ===========================================
+// 📈 PRIMARY INVESTOR ROI
+// ROI sul capitale investito: stessa metrica
+// usata da Simulatore, Advisor e Score Engine
+// ===========================================
+
 const roi =
   Number(
 
-    liveData.realROI ??
+    liveData.visualROI ??
 
     liveData.roi ??
 
-    window.rbChatbotLive?.roi ??
+    window.lastAnalysisData?.visualROI ??
 
-    window.rbChatbotData?.roi ??
+    window.lastAnalysisData?.roi ??
+
+    liveData.realROI ??
 
     0
 
@@ -138,6 +296,146 @@ const executiveROI =
     0
 
   );
+
+// ===========================================
+// 📈 PRIMARY ROI VALUE HELPER
+// ROI sul capitale investito per storico,
+// confronti, portfolio e ranking
+// ===========================================
+
+function getPrimaryROIValue(
+  source = {}
+){
+
+  return Number(
+
+    source?.visualROI ??
+
+    source?.roi ??
+
+    source?.realROI ??
+
+    0
+
+  );
+
+}
+
+// ===========================================
+// 📊 PORTFOLIO METRICS HELPER
+// Shared by Portfolio Advisor, Growth Advisor,
+// Best City and future Portfolio AI modules
+// ===========================================
+
+function getPortfolioMetrics(
+  history = []
+){
+
+  const totalSimulations = history.length;
+
+  const averageROI =
+
+    totalSimulations > 0
+
+      ? history.reduce(
+
+          (sum,item)=>
+
+            sum +
+
+            getPrimaryROIValue(item),
+
+          0
+
+        ) / totalSimulations
+
+      : 0;
+
+  const bestSimulation =
+
+    [...history].sort(
+
+      (a,b)=>
+
+        getPrimaryROIValue(b)
+
+        -
+
+        getPrimaryROIValue(a)
+
+    )[0] || null;
+
+  const bestROI =
+
+    bestSimulation
+
+      ? getPrimaryROIValue(bestSimulation)
+
+      : 0;
+
+  const bestCity =
+
+    bestSimulation
+
+      ? (
+
+          bestSimulation.realCity ||
+
+          bestSimulation.city ||
+
+          bestSimulation.marketCity ||
+
+          "N/D"
+
+        )
+
+      : "N/D";
+
+  const averageCashflow =
+
+    totalSimulations > 0
+
+      ? history.reduce(
+
+          (sum,item)=>
+
+            sum +
+
+            Number(
+
+              item.net ??
+
+              item.cashflow ??
+
+              item.annualProfit ??
+
+              0
+
+            ),
+
+          0
+
+        ) / totalSimulations
+
+      : 0;
+
+  return {
+
+    totalSimulations,
+
+    averageROI,
+
+    bestSimulation,
+
+    bestROI,
+
+    bestCity,
+
+    averageCashflow
+
+  };
+
+}  
 
 const risk =
   Number(
@@ -423,6 +721,174 @@ console.log(
       window.rbChatMemory?.investmentHistory?.length
   }
 );
+
+  // ===========================================
+  // 🌍 MARKET DATA
+  // ===========================================
+
+  const market =
+
+allowMarketContext && city
+
+? (
+    window.rbMarketData?.[city] ||
+    null
+  )
+
+: null;
+  
+
+// ===========================================
+// 🧠 EXECUTIVE CONTEXT
+// Single Source of Truth
+// ===========================================
+
+const executiveContext = {
+
+    liveData,
+
+    advisor,
+
+    investmentScore,
+
+    market,
+
+    city,
+
+    cityLabel,
+
+    memory,
+
+    entities,
+
+    analysisData,
+
+    pmsData,
+
+    investorProfile,
+
+    investmentHistory,
+
+    aiSignals,
+
+    documents: {
+
+    activeReport:
+
+        window.lastExecutiveReport ||
+
+        null,
+
+    library:
+
+        window.rbDocumentManager?.getAll?.() ||
+
+        [],
+
+    dashboardReports:
+
+        window.rbDocumentManager?.getByType?.(
+            "dashboard"
+        ) ||
+
+        [],
+
+    uploadedDocuments:
+
+        window.rbUploadedDocuments ||
+
+        [],
+
+    comparisons: []
+
+}
+
+};
+
+// ===========================================
+// 📄 ACTIVE EXECUTIVE REPORT
+// ===========================================
+
+const executiveReport =
+
+    executiveContext.documents
+        ?.activeReport ||
+
+    null;
+
+const executiveLibrary =
+
+    executiveContext.documents
+        ?.library ||
+
+    [];
+
+// ===========================================
+// 🧠 DOCUMENT KNOWLEDGE
+// ===========================================
+
+const documentKnowledge =
+
+    window.rbAnalyzeDocuments?.(
+
+        executiveContext
+
+    ) ||
+
+    {};
+
+console.log(
+
+    "🧠 DOCUMENT KNOWLEDGE",
+
+    documentKnowledge
+
+);  
+
+// ===========================================
+// 🧠 EXECUTIVE REPORT MEMORY
+// ===========================================
+
+const executiveReportMemory =
+
+executiveReport
+
+? {
+
+    city:
+        executiveReport.city ||
+        cityLabel,
+
+    roi:
+        executiveReport.roi ||
+        roi,
+
+    risk:
+        executiveReport.risk ||
+        risk,
+
+    occupancy:
+        executiveReport.occupancy ||
+        occupancy,
+
+    cashflow:
+        executiveReport.cashflow ||
+        0,
+
+    score:
+        executiveReport.score ||
+        investmentScore?.score ||
+        0,
+
+    grade:
+        executiveReport.grade ||
+        investmentScore?.labelIT ||
+        ""
+
+}
+
+: null;
+  
 // ===========================================
 // 🧠 AI INSIGHTS
 // ===========================================
@@ -468,7 +934,8 @@ function pushResponseBlock({
 }  
 
 // ===========================================
-// 🧠 EXECUTIVE REASONING ENGINE
+// 🧠 LEGACY REASONING (temporary)
+// Will be removed after Executive Builder migration
 // ===========================================
 
 const reasoningIT = [];
@@ -623,21 +1090,6 @@ if(aiSignals.includes("negative_cashflow")){
 
 }
   
-  // ===========================================
-  // 🌍 MARKET DATA
-  // ===========================================
-
-  const market =
-
-allowMarketContext && city
-
-? (
-    window.rbMarketData?.[city] ||
-    null
-  )
-
-: null;
-
 // =====================================
 // 🌍 MARKET + ROI CROSS ANALYSIS
 // =====================================
@@ -709,6 +1161,46 @@ const isHomeSimulation =
 
   window.location.pathname === "/index.html";
 
+console.log(
+  "🧪 BLOCK PARTIAL ANALYSIS CHECK",
+  {
+    intent: intent.intent,
+    hasAnalysis,
+    isDashboard,
+    isHomeSimulation,
+
+    education:
+      intent.intent === "education",
+
+    subscriptions:
+      intent.intent === "subscriptions",
+
+    market_analysis:
+      intent.intent === "market_analysis",
+
+    investment_strategy:
+      intent.intent === "investment_strategy",
+
+    investment_advisor:
+      intent.intent === "investment_advisor",
+
+    portfolio_growth:
+      intent.intent === "portfolio_growth",
+
+    market_comparison:
+      intent.intent === "market_comparison",
+
+    report_interpretation:
+      intent.intent === "report_interpretation",
+
+    greeting:
+      intent.intent === "greeting",
+
+    roi_analysis:
+      intent.intent === "roi_analysis"
+  }
+);  
+
 // ===========================================
 // 🚫 BLOCK PARTIAL ANALYSIS
 // ===========================================
@@ -725,6 +1217,7 @@ if(
   intent.intent !== "market_analysis" &&
   intent.intent !== "investment_strategy" &&
   intent.intent !== "investment_advisor" &&
+  intent.intent !== "investment_executive" &&
   intent.intent !== "portfolio_growth" &&
   intent.intent !== "market_comparison" &&
   intent.intent !== "report_interpretation" &&
@@ -788,7 +1281,7 @@ run a simulation inside the main simulator.`,
 
 }
 
-  // ===========================================
+// ===========================================
 // 🧠 RESPONSE VARIATIONS
 // ===========================================
 
@@ -871,7 +1364,7 @@ response.textIT =
 
 `🚀 ROI estremamente elevato.
 
-📈 ROI reale simulato:
+📈 ROI sul capitale investito:
 ${roi.toFixed(1)}%
 
 🌍 Mercato:
@@ -897,7 +1390,7 @@ response.textEN =
 
 `🚀 Extremely high ROI detected.
 
-📈 Simulated real ROI:
+📈 ROI on invested capital:
 ${roi.toFixed(1)}%
 
 🌍 Market:
@@ -926,7 +1419,9 @@ ${risk}/100`;
     textEN: response.textEN
   }
 );
-      return response;
+      return applyExecutiveFormatter(
+  response
+);
     }
 
     else if(roi >= 8){
@@ -1040,7 +1535,9 @@ ${roi.toFixed(1)}%
       response
     );
 
-    return response;
+    return applyExecutiveFormatter(
+  response
+);
 
   }
 
@@ -1209,36 +1706,38 @@ else if(
 
   }
 
-  console.log(
-    "💰 CASHFLOW RESPONSE CREATED",
-    response
-  );
+console.log(
+  "💰 CASHFLOW RESPONSE CREATED",
+  response
+);
 
-  return response;
+return applyExecutiveFormatter(
+  response
+);
 
 }
 
-  // ===========================================
-  // ⚠️ RISK RESPONSE
-  // ===========================================
+// ===========================================
+// ⚠️ RISK RESPONSE
+// ===========================================
 
-  else if(
-    intent.intent === "risk_analysis"
-  ){
+else if(
+  intent.intent === "risk_analysis"
+){
 
-    response.type =
-      "risk";
+  response.type =
+    "risk";
 
-    response.confidence =
-      0.94;
+  response.confidence =
+    0.94;
 
-    if(risk >= 70){
+  if(risk >= 70){
 
-      response.signals.push(
-        "high_risk"
-      );
+    response.signals.push(
+      "high_risk"
+    );
 
-      response.textIT =
+    response.textIT =
 
 `🚨 Rischio operativo elevato.
 
@@ -1247,7 +1746,7 @@ ${risk}/100
 
 ⚠️ Cashflow e sostenibilità potrebbero diventare instabili nel lungo periodo.`;
 
-      response.textEN =
+    response.textEN =
 
 `🚨 High operational risk detected.
 
@@ -1256,15 +1755,15 @@ ${risk}/100
 
 ⚠️ Cashflow and sustainability may become unstable long-term.`;
 
-    }
+  }
 
-    else if(risk >= 40){
+  else if(risk >= 40){
 
-      response.signals.push(
-        "medium_risk"
-      );
+    response.signals.push(
+      "medium_risk"
+    );
 
-      response.textIT =
+    response.textIT =
 
 `⚠️ Rischio moderato.
 
@@ -1273,7 +1772,7 @@ ${risk}/100
 
 💡 L'investimento sembra sostenibile ma richiede monitoraggio operativo.`;
 
-      response.textEN =
+    response.textEN =
 
 `⚠️ Moderate risk detected.
 
@@ -1282,39 +1781,39 @@ ${risk}/100
 
 💡 The investment appears sustainable but requires operational monitoring.`;
 
-    }
+  }
 
-    else{
+  else{
 
-      response.signals.push(
-        "low_risk"
-      );
+    response.signals.push(
+      "low_risk"
+    );
 
-      const riskInsightIT =
+    const riskInsightIT =
 
-        occupancy < 45
+      occupancy < 45
 
-        ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
+      ? "⚠️ L'occupazione attuale sta riducendo la stabilità operativa."
 
-        : occupancy >= 65
+      : occupancy >= 65
 
-        ? "✅ L'occupazione supporta bene il cashflow."
+      ? "✅ L'occupazione supporta bene il cashflow."
 
-        : "📊 L'occupazione appare moderata.";
+      : "📊 L'occupazione appare moderata.";
 
-      const riskInsightEN =
+    const riskInsightEN =
 
-        occupancy < 45
+      occupancy < 45
 
-        ? "⚠️ Current occupancy is reducing operational stability."
+      ? "⚠️ Current occupancy is reducing operational stability."
 
-        : occupancy >= 65
+      : occupancy >= 65
 
-        ? "✅ Occupancy strongly supports cashflow."
+      ? "✅ Occupancy strongly supports cashflow."
 
-        : "📊 Occupancy appears moderate.";
+      : "📊 Occupancy appears moderate.";
 
-      response.textIT =
+    response.textIT =
 
 `✅ Rischio relativamente basso.
 
@@ -1326,10 +1825,10 @@ ${occupancy}%
 
 ${riskInsightIT}
 
-📈 ROI reale:
+📈 ROI sul capitale:
 ${roi.toFixed(1)}%`;
 
-      response.textEN =
+    response.textEN =
 
 `✅ Risk appears relatively low.
 
@@ -1341,19 +1840,22 @@ ${occupancy}%
 
 ${riskInsightEN}
 
-📈 Real ROI:
+📈 ROI on equity:
 ${roi.toFixed(1)}%`;
 
-    }
+  }
 
-    console.log(
-      "⚠️ RISK RESPONSE CREATED",
-      response
-    );
+  console.log(
+    "⚠️ RISK RESPONSE CREATED",
+    response
+  );
 
-    return response;
+  return applyExecutiveFormatter(
+    response
+  );
 
 }
+  
  // ===========================================
 // 🏦 MORTGAGE RESPONSE
 // Mortgage Advisor 2.0
@@ -1364,7 +1866,7 @@ else if(
 ){
 
   response.type =
-    "mortgage";
+  "mortgage";
 
   response.confidence =
     0.98;
@@ -1599,7 +2101,9 @@ ${
   : "Improving operational cashflow is recommended before increasing leverage."
 }`;
 
-  return response;
+  return applyExecutiveFormatter(
+  response
+);
 
 }
 
@@ -1969,113 +2473,6 @@ if(intent.intent === "pms_adr"){
 
 }
 
-  let performanceIT =
-    "🟡 Performance regolari";
-
-  let performanceEN =
-    "🟡 Stable performance";
-
-  if(occupancyPMS >= 90){
-
-    performanceIT =
-      "🟢 Ottime performance";
-
-    performanceEN =
-      "🟢 Excellent performance";
-
-  }
-
-  else if(occupancyPMS < 70){
-
-    performanceIT =
-      "🔴 Occupazione migliorabile";
-
-    performanceEN =
-      "🔴 Occupancy can be improved";
-
-  }
-
-  let adviceIT =
-
-    "💡 Le performance risultano equilibrate.";
-
-  let adviceEN =
-
-    "💡 Performance appears balanced.";
-
-  if(occupancyPMS >= 95){
-
-    adviceIT =
-      "💡 L'occupazione è molto alta. Potresti aumentare gradualmente le tariffe per incrementare il profitto.";
-
-    adviceEN =
-      "💡 Occupancy is very high. Consider gradually increasing rates to improve profitability.";
-
-  }
-
-  else if(occupancyPMS < 70){
-
-    adviceIT =
-      "💡 Valuta promozioni, ottimizzazione prezzi e maggiore visibilità sui portali.";
-
-    adviceEN =
-      "💡 Consider promotions, pricing optimization and better OTA visibility.";
-
-  }
-
-  response.textIT =
-
-`🏨 PMS Performance Dashboard
-
-${performanceIT}
-
-📌 Proprietà: ${properties}
-
-📅 Prenotazioni: ${bookings}
-
-👥 Ospiti: ${guests}
-
-💰 Ricavi: €${revenue.toLocaleString("it-IT")}
-
-🏨 Occupazione: ${occupancyPMS}%
-
-💵 ADR: €${adr}
-
-${adviceIT}
-
-🧠 Il PMS sta monitorando in tempo reale le performance operative della struttura.`;
-
-  response.textEN =
-
-`🏨 PMS Performance Dashboard
-
-${performanceEN}
-
-📌 Properties: ${properties}
-
-📅 Bookings: ${bookings}
-
-👥 Guests: ${guests}
-
-💰 Revenue: €${revenue.toLocaleString("en-US")}
-
-🏨 Occupancy: ${occupancyPMS}%
-
-💵 ADR: €${adr}
-
-${adviceEN}
-
-🧠 The PMS is actively monitoring property performance in real time.`;
-
-  console.log(
-    "🔥 PMS RESPONSE GENERATED:",
-    response
-  );
-
-  return response;
-
-}
-
 // ===========================================
 // 📊 INVESTMENT / MARKET COMPARISON RESPONSE
 // ===========================================
@@ -2128,29 +2525,13 @@ const previous =
   ];
 
 const currentROI =
-  Number(
-
-    current.realROI ??
-
-    current.visualROI ??
-
-    current.roi ??
-
-    0
-
+  getPrimaryROIValue(
+    current
   );
 
 const previousROI =
-  Number(
-
-    previous.realROI ??
-
-    previous.visualROI ??
-
-    previous.roi ??
-
-    0
-
+  getPrimaryROIValue(
+    previous
   );
 
 console.log(
@@ -2334,16 +2715,13 @@ if(cities.length >= 2){
   // 🧠 SAFE HELPERS
   // =====================================
 
-  const getROI = (sim) => {
+const getROI = (sim) => {
 
-    return Number(
-      sim.visualROI ??
-      sim.realROI ??
-      sim.roi ??
-      0
-    );
+  return getPrimaryROIValue(
+    sim
+  );
 
-  };
+};
 
   const getProfit = (sim) => {
 
@@ -2725,7 +3103,21 @@ if(
   // 📊 FALLBACK INVESTMENT HISTORY
   // =====================================
 
-    const history = investmentHistory || [];
+    const history =
+
+  investmentHistory?.length
+
+    ? investmentHistory
+
+    : (
+
+        memory?.investmentHistory ||
+
+        window.rbChatMemory?.investmentHistory ||
+
+        []
+
+      );
 
   console.log(
   "🔥 FINAL HISTORY USED:",
@@ -2776,124 +3168,6 @@ VS
 
     }
 
-  // =====================================
-// 📊 GLOBAL COMPARISON FALLBACK
-// =====================================
-
-if(
-
-  !response.textIT &&
-  !response.textEN
-
-){
-
-  const history =
-
-    investmentHistory?.length
-
-    ? investmentHistory
-
-    : (
-
-        memory?.investmentHistory ||
-
-        window.rbChatMemory?.investmentHistory ||
-
-        []
-
-      );
-
-  console.log(
-    "🔥 GLOBAL FALLBACK HISTORY:",
-    history
-  );
-
-  if(history.length >= 2){
-
-    const current =
-      history[history.length - 1];
-
-    const previous =
-      history[history.length - 2];
-
-    response.textIT =
-
-`📊 Confronto simulazioni AI
-
-━━━━━━━━━━━━━━━
-
-💰 Simulazione precedente
-
-📈 ROI:
-${Number(
-  previous.roi || previous.realROI || 0
-).toFixed(1)}%
-
-💵 Profitto:
-€${Number(
-  previous.net || 0
-).toLocaleString("it-IT")}
-
-━━━━━━━━━━━━━━━
-
-💰 Simulazione attuale
-
-📈 ROI:
-${Number(
-  current.roi || current.realROI || 0
-).toFixed(1)}%
-
-💵 Profitto:
-€${Number(
-  current.net || 0
-).toLocaleString("it-IT")}`;
-
-    response.textEN =
-
-`📊 AI Simulation Comparison
-
-━━━━━━━━━━━━━━━
-
-💰 Previous Simulation
-
-📈 ROI:
-${Number(
-  previous.roi || previous.realROI || 0
-).toFixed(1)}%
-
-💵 Profit:
-€${Number(
-  previous.net || 0
-).toLocaleString("en-US")}
-
-━━━━━━━━━━━━━━━
-
-💰 Current Simulation
-
-📈 ROI:
-${Number(
-  current.roi || current.realROI || 0
-).toFixed(1)}%
-
-💵 Profit:
-€${Number(
-  current.net || 0
-).toLocaleString("en-US")}`;
-
-  }
-
-  else{
-
-    response.textIT =
-      "⚠️ Servono almeno due simulazioni per il confronto.";
-
-    response.textEN =
-      "⚠️ At least two simulations are required for comparison.";
-
-  }
-
-}  
-
 return response;
 
 }
@@ -2902,7 +3176,7 @@ return response;
 // 🌍 MARKET RESPONSE
 // ===========================================
 
-if(
+else if(
 
   !response.__LOCKED &&
 
@@ -3005,12 +3279,10 @@ else if(
 
     ).toLowerCase();
 
-    const roi = Number(
-      item.realROI ??
-      item.visualROI ??
-      item.roi ??
-      0
-    );
+ const roi =
+  getPrimaryROIValue(
+    item
+  );
 
     const risk =
       Number(item.risk ?? 0);
@@ -3288,37 +3560,23 @@ else if(
     return response;
   }
 
-  const best =
+const best =
 
-    history.sort(
-      (a,b)=>
+  [...history].sort(
+    (a,b)=>
 
-      Number(
-        b.realROI ??
-        b.visualROI ??
-        b.roi ??
-        0
-      )
+      getPrimaryROIValue(b)
 
       -
 
-      Number(
-        a.realROI ??
-        a.visualROI ??
-        a.roi ??
-        0
-      )
+      getPrimaryROIValue(a)
 
-    )[0];
+  )[0];
 
-  const bestROI =
-
-    Number(
-      best.realROI ??
-      best.visualROI ??
-      best.roi ??
-      0
-    );
+const bestROI =
+  getPrimaryROIValue(
+    best
+  );
 
   response.textIT =
 
@@ -3354,7 +3612,9 @@ ${bestROI.toFixed(1)}%
 
 🧠 This is currently the most profitable saved simulation.`;
 
-}  
+    return response;
+
+}
 
 // ===========================================
 // 💳 SUBSCRIPTIONS RESPONSE
@@ -3539,6 +3799,8 @@ To manage your plan:
 
   }
 
+  return response;
+
 }
 
 // ===========================================
@@ -3572,9 +3834,11 @@ else if(
   response.confidence =
     0.99;
 
-  // =====================================
-  // 💰 SAFE FINANCIAL DATA
-  // =====================================
+// =====================================
+// 💰 EXECUTIVE FINANCIALS
+// =====================================
+
+function getExecutiveFinancialData(){
 
   const rawNet =
 
@@ -3605,6 +3869,378 @@ else if(
 
   const gross =
     Number(rawGross || 0);
+
+  return {
+
+    rawNet,
+    rawGross,
+    net,
+    gross
+
+  };
+
+}
+
+// =====================================
+// 🧠 EXECUTIVE SUMMARY
+// =====================================
+
+function getExecutiveSummaryIT(){
+
+  if(!advisor){
+    return "";
+  }
+
+  if(advisor.verdict === "BUY"){
+
+    return `🟢 Executive Summary
+
+L'operazione presenta indicatori superiori ai benchmark di mercato.
+
+La combinazione di ROI (${roi.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
+
+L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lungo termine.`;
+
+  }
+
+  if(advisor.verdict === "WAIT"){
+
+    return `🟡 Executive Summary
+
+L'investimento mostra metriche interessanti ma non ancora pienamente ottimizzate.
+
+Alcuni indicatori risultano positivi, mentre altri richiedono miglioramenti per aumentare competitività e resilienza operativa.
+
+Si consiglia una revisione di pricing, occupazione o struttura dei costi.`;
+
+  }
+
+  return `🔴 Executive Summary
+
+La simulazione evidenzia criticità che riducono l'attrattività dell'investimento.
+
+L'equilibrio tra rendimento, rischio e sostenibilità operativa non appare attualmente ottimale.
+
+Prima di procedere è consigliabile rivedere il modello economico dell'operazione.`;
+
+}
+
+function getExecutiveSummaryEN(){
+
+  if(!advisor){
+    return "";
+  }
+
+  if(advisor.verdict === "BUY"){
+
+    return `🟢 Executive Summary
+
+The investment shows performance indicators above market benchmarks.
+
+The combination of ROI (${executiveROI.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
+
+Current market conditions support a favorable medium to long-term outlook.`;
+
+  }
+
+  if(advisor.verdict === "WAIT"){
+
+    return `🟡 Executive Summary
+
+The investment shows promising metrics but still requires optimization.
+
+Some indicators are positive, while others should be improved to increase competitiveness and operational resilience.
+
+Pricing, occupancy and cost structure should be reviewed.`;
+
+  }
+
+  return `🔴 Executive Summary
+
+The simulation highlights weaknesses that reduce overall investment attractiveness.
+
+The balance between return, risk and operational sustainability is currently below target levels.
+
+A review of the business model is recommended before proceeding.`;
+
+}  
+
+// =====================================
+// 🎯 EXECUTIVE ACTION PLAN
+// =====================================
+
+function getActionPlanIT(){
+
+  const actions = [];
+
+  if(advisor?.verdict === "BUY"){
+
+    actions.push(
+      "Acquisizione consigliata."
+    );
+
+  }
+
+  if(roi >= 25){
+
+    actions.push(
+      "Performance superiore ai benchmark medi del mercato."
+    );
+
+  }
+
+  if(occupancy >= 70){
+
+    actions.push(
+      "Domanda potenziale compatibile con una gestione short-rent stabile."
+    );
+
+  }
+
+  if(net > 0){
+
+    actions.push(
+      "Cashflow positivo e sostenibile."
+    );
+
+  }
+
+  if(risk > 60){
+
+    actions.push(
+      "Valutare strategie di mitigazione del rischio."
+    );
+
+  }
+
+  return actions;
+
+}  
+
+// =====================================
+// 🎯 EXECUTIVE ACTION PLAN (EN)
+// =====================================
+
+function getActionPlanEN(){
+
+  const actions = [];
+
+  if(advisor?.verdict === "BUY"){
+
+    actions.push(
+      "Acquisition is recommended."
+    );
+
+  }
+
+  if(roi >= 25){
+
+    actions.push(
+      "Performance exceeds average market benchmarks."
+    );
+
+  }
+
+  if(occupancy >= 70){
+
+    actions.push(
+      "Potential demand supports a stable short-rent business."
+    );
+
+  }
+
+  if(net > 0){
+
+    actions.push(
+      "Positive and sustainable cashflow."
+    );
+
+  }
+
+  if(risk > 60){
+
+    actions.push(
+      "Consider risk mitigation strategies."
+    );
+
+  }
+
+  return actions;
+
+}  
+
+function getRecommendationsIT(){
+
+  const recommendations = [];
+
+  if(occupancy < 60){
+
+    recommendations.push(
+      "• Incrementare l'occupazione tramite pricing dinamico e OTA."
+    );
+
+  }
+
+  if(risk > 50){
+
+    recommendations.push(
+      "• Ridurre il rischio operativo monitorando costi e volatilità della domanda."
+    );
+
+  }
+
+  if(roi < 15){
+
+    recommendations.push(
+      "• Ottimizzare ADR e marginalità per migliorare il rendimento."
+    );
+
+  }
+
+  if(net > 0){
+
+    recommendations.push(
+      "• Mantenere il cashflow positivo monitorando i costi fissi."
+    );
+
+  }
+
+  return recommendations;
+
+}
+
+function getRecommendationsEN(){
+
+  const recommendations = [];
+
+  if(occupancy < 60){
+
+    recommendations.push(
+      "• Increase occupancy through dynamic pricing and OTA optimization."
+    );
+
+  }
+
+  if(risk > 50){
+
+    recommendations.push(
+      "• Reduce operational risk by monitoring costs and market volatility."
+    );
+
+  }
+
+  if(roi < 15){
+
+    recommendations.push(
+      "• Optimize ADR and margins to improve returns."
+    );
+
+  }
+
+  if(net > 0){
+
+    if(occupancy >= 80){
+
+      recommendations.push(
+        "• Consider gradually increasing rates to improve RevPAR."
+      );
+
+    }
+
+    if(roi >= 40){
+
+      recommendations.push(
+        "• Validate ROI sustainability through conservative scenarios."
+      );
+
+    }
+
+    recommendations.push(
+      "• Preserve positive cashflow through cost control."
+    );
+
+  }
+
+  return recommendations;
+
+}  
+
+const {
+
+  rawNet,
+  rawGross,
+  net,
+  gross
+
+} = getExecutiveFinancialData();
+
+  let executiveNarrative = null;
+
+if(typeof window.rbGenerateExecutiveNarrative === "function"){
+
+    try{
+
+        executiveNarrative =
+            window.rbGenerateExecutiveNarrative({
+
+                executiveContext,
+
+                advisor,
+
+                documentKnowledge,
+
+                language:
+                    window.currentLanguage || "it"
+
+            });
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "Executive Narrative Error",
+            error
+        );
+
+    }
+
+}
+
+console.log(
+    "🧠 EXECUTIVE NARRATIVE",
+    executiveNarrative
+);
+
+  const builderPreview =
+
+window.rbBuildExecutiveResponse?.({
+
+    executiveContext,
+
+    advisor,
+
+    documentKnowledge,
+
+    executiveNarrative,
+
+    investmentScore
+
+});
+
+console.log(
+    "🧠 EXECUTIVE BUILDER RESULT",
+    builderPreview
+);
+
+console.log(
+    "🧠 EXECUTIVE BUILDER RESULT",
+    builderPreview
+);
+  
+// =====================================
+// 💰 FINANCIAL DATA
+// =====================================
 
   console.log(
     "💰 EXECUTIVE DEBUG:",
@@ -3695,39 +4331,17 @@ if(targetROI > 0){
   executiveIT.push(
     `🌍 Mercato analizzato: ${cityLabel}`
   );
-
-  // =====================================
-// 🏆 INVESTMENT GRADE
+  
+// =====================================
+// 🧠 EXECUTIVE DECISION LAYER
+// Investment Grade + Risk Classification
 // =====================================
 
-let investmentGrade = "C";
+const investmentGrade =
 
-if(
-  roi >= 20 &&
-  risk <= 35 &&
-  occupancy >= 65
-){
+    executiveNarrative?.grade ||
 
-  investmentGrade = "A+";
-
-}
-
-else if(
-  roi >= 15 &&
-  risk <= 45
-){
-
-  investmentGrade = "A";
-
-}
-
-else if(
-  roi >= 10
-){
-
-  investmentGrade = "B";
-
-}
+    "N/A";
 
 executiveIT.push(
 
@@ -3737,92 +4351,29 @@ Valutazione AI: ${investmentGrade}`
 
 );
 
-  if(risk <= 35){
-
-  executiveIT.push(
-
-`🛡️ Valutazione Rischio
-
-La simulazione mostra una struttura operativa stabile e ben bilanciata rispetto ai benchmark del mercato.`
-
-  );
-
-}
-
-else if(risk <= 60){
-
-  executiveIT.push(
-
-`⚠️ Valutazione Rischio
-
-L'investimento appare sostenibile ma richiede monitoraggio operativo e controllo dei costi.`
-
-  );
-
-}
-
-else{
-
-  executiveIT.push(
-
-`🚨 Valutazione Rischio
-
-Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow nel lungo periodo.`
-
-  );
-
-}
-
 // =====================================
-// 🔥 AI CONCLUSION
+// 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
-if(advisor){
+if(executiveNarrative){
 
-  if(advisor.verdict === "BUY"){
+  if(executiveNarrative.riskLabelIT){
 
     executiveIT.push(
-
-`🟢 Executive Summary
-
-L'operazione presenta indicatori superiori ai benchmark di mercato.
-
-La combinazione di ROI (${roi.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
-
-L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lungo termine.`
-
+      executiveNarrative.riskLabelIT
     );
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  // =====================================
+  // 🧠 EXECUTIVE STRATEGIC VERDICT
+  // Legacy Summary (temporary)
+  // =====================================
+
+  if(executiveNarrative.textIT){
 
     executiveIT.push(
-
-`🟡 Executive Summary
-
-L'investimento mostra metriche interessanti ma non ancora pienamente ottimizzate.
-
-Alcuni indicatori risultano positivi, mentre altri richiedono miglioramenti per aumentare competitività e resilienza operativa.
-
-Si consiglia una revisione di pricing, occupazione o struttura dei costi.`
-
-    );
-
-  }
-
-  else{
-
-    executiveIT.push(
-
-`🔴 Executive Summary
-
-La simulazione evidenzia criticità che riducono l'attrattività dell'investimento.
-
-L'equilibrio tra rendimento, rischio e sostenibilità operativa non appare attualmente ottimale.
-
-Prima di procedere è consigliabile rivedere il modello economico dell'operazione.`
-
+      executiveNarrative.textIT
     );
 
   }
@@ -3840,9 +4391,8 @@ if(occupancy < 45){
   );
 
 }
-
 // =====================================
-// 🧠 AI SIGNAL INSIGHTS
+// 🧠 EXECUTIVE SIGNALS
 // =====================================
 
 if(executiveInsightsIT.length){
@@ -3897,12 +4447,27 @@ if(targetROI > 0){
 // 🧠 ADVISOR VERDICT
 // =====================================
 
-if(advisor){
+const executiveDecision =
+
+window.rbEvaluateInvestment?.({
+
+    roi,
+    risk,
+    occupancy,
+
+    cashflow: net,
+
+    mortgagePercent:
+      rememberedMortgage
+
+}) || advisor;
+
+if(executiveDecision){
 
   let verdictIT = "";
   let verdictEN = "";
 
-  if(advisor.verdict === "BUY"){
+  if(executiveDecision.verdict === "BUY"){
 
     verdictIT =
       "🟢 VERDETTO AI: INVESTIMENTO CONSIGLIATO";
@@ -3912,7 +4477,7 @@ if(advisor){
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  else if(executiveDecision.verdict === "WAIT"){
 
     verdictIT =
       "🟡 VERDETTO AI: ATTENDERE O OTTIMIZZARE";
@@ -3932,29 +4497,41 @@ if(advisor){
 
   }
 
-  executiveIT.unshift(
-    verdictIT
-  );
+  executiveIT.unshift(verdictIT);
 
-  executiveIT.unshift(
-    `🎯 Affidabilità: ${advisor.confidence}%`
-  );
+  if(executiveDecision.confidence){
 
-  executiveIT.unshift(
-    `📊 Score AI: ${advisor.score}/100`
-  );
+    executiveIT.unshift(
+      `🎯 Affidabilità: ${executiveDecision.confidence}%`
+    );
 
-  executiveEN.unshift(
-    verdictEN
-  );
+  }
 
-  executiveEN.unshift(
-    `🎯 Confidence: ${advisor.confidence}%`
-  );
+  if(executiveDecision.score){
 
-  executiveEN.unshift(
-    `📊 AI Score: ${advisor.score}/100`
-  );
+    executiveIT.unshift(
+      `📊 Score AI: ${executiveDecision.score}/100`
+    );
+
+  }
+
+  executiveEN.unshift(verdictEN);
+
+  if(executiveDecision.confidence){
+
+    executiveEN.unshift(
+      `🎯 Confidence: ${executiveDecision.confidence}%`
+    );
+
+  }
+
+  if(executiveDecision.score){
+
+    executiveEN.unshift(
+      `📊 AI Score: ${executiveDecision.score}/100`
+    );
+
+  }
 
 }
 
@@ -4009,91 +4586,28 @@ AI Rating: ${investmentGrade}`
 
 );
 
- if(risk <= 35){
-
-  executiveEN.push(
-
-`🛡️ Risk Assessment
-
-The simulation shows a stable and well-balanced operating structure compared to market benchmarks.`
-
-  );
-
-}
-
-else if(risk <= 60){
-
-  executiveEN.push(
-
-`⚠️ Risk Assessment
-
-The investment appears sustainable but requires operational monitoring and cost control.`
-
-  );
-
-}
-
-else{
-
-  executiveEN.push(
-
-`🚨 Risk Assessment
-
-The current risk level may reduce cashflow stability over the long term.`
-
-  );
-
-} 
 // =====================================
-// 🔥 AI CONCLUSION
+// 🛡️ EXECUTIVE RISK ASSESSMENT
 // =====================================
 
-if(advisor){
+if(executiveNarrative){
 
-  if(advisor.verdict === "BUY"){
+  if(executiveNarrative.riskLabelEN){
 
     executiveEN.push(
-
-`🟢 Executive Summary
-
-The investment shows performance indicators above market benchmarks.
-
-The combination of ROI (${executiveROI.toFixed(1)}%), controlled risk (${risk}/100) and positive cashflow (€${Math.round(net).toLocaleString("en-US")}) places the asset in a highly sustainable operating range.
-
-Current market conditions support a favorable medium to long-term outlook.`
-
+      executiveNarrative.riskLabelEN
     );
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  // =====================================
+  // 🔥 AI CONCLUSION
+  // =====================================
+
+  if(executiveNarrative.textEN){
 
     executiveEN.push(
-
-`🟡 Executive Summary
-
-The investment shows promising metrics but still requires optimization.
-
-Some indicators are positive, while others should be improved to increase competitiveness and operational resilience.
-
-Pricing, occupancy and cost structure should be reviewed.`
-
-    );
-
-  }
-
-  else{
-
-    executiveEN.push(
-
-`🔴 Executive Summary
-
-The simulation highlights weaknesses that reduce overall investment attractiveness.
-
-The balance between return, risk and operational sustainability is currently below target levels.
-
-A review of the business model is recommended before proceeding.`
-
+      executiveNarrative.textEN
     );
 
   }
@@ -4126,39 +4640,60 @@ if(executiveInsightsEN.length){
 }
 
 // =====================================
-// 🧠 EXECUTIVE REASONING ENGINE 2.0
+// 🧠 EXECUTIVE MEMORY (LIVE DATA)
 // =====================================
 
-let executiveSummary = "";
+const executiveMemory = {
 
-if(
-  typeof window.rbGenerateInvestmentSummary ===
-  "function"
-){
+  ...memory,
 
-  try{
+  roi,
 
-    executiveSummary =
-      window.rbGenerateInvestmentSummary(
-        memory
-      ) || "";
+  risk,
 
-  }
-  catch(error){
+  occupancy,
 
-    console.warn(
-      "Executive Summary Error",
-      error
-    );
+  cashflow:
+    liveData.net ??
+    liveData.cashflow ??
+    net ??
+    0,
 
-  }
+  revenue:
+    liveData.gross ??
+    liveData.revenue ??
+    gross ??
+    0,
 
-}
+expenses:
+  Number(
+    liveData.expenses ??
+    liveData.costs ??
+    liveData.totalExpenses ??
+    analysisData?.expenses ??
+    window.lastAnalysisData?.expenses ??
+    0
+  ),
+
+  mortgagePercent:
+    rememberedMortgage ??
+    0,
+
+  city:
+    rememberedCity ??
+    city ??
+    liveData.city ??
+    liveData.realCity ??
+    "roma"
+
+};
 
 console.log(
-  "🧠 EXECUTIVE SUMMARY:",
-  executiveSummary
+  "🧠 EXECUTIVE MEMORY SENT:",
+  executiveMemory
 );
+  
+
   
 // =====================================
 // 🧠 REASONING ENGINE
@@ -4173,15 +4708,6 @@ if(reasoningIT.length){
   );
 
 }
-
-if(executiveSummary){
-
-    executiveIT.push(
-        executiveSummary
-    );
-
-}  
-
 // =====================================
 // 🧠 ADVISOR REASONS
 // =====================================
@@ -4198,57 +4724,8 @@ ${advisor.reasonsIT.join("\n")}`
 
 }
 
-const actionPlanIT = [];
-
-if(
-  advisor?.verdict === "BUY"
-){
-
-  actionPlanIT.push(
-    "Acquisizione consigliata."
-  );
-
-}
-
-if(
-  roi >= 25
-){
-
-  actionPlanIT.push(
-    "Performance superiore ai benchmark medi del mercato."
-  );
-
-}
-
-if(
-  occupancy >= 70
-){
-
-  actionPlanIT.push(
-    "Domanda potenziale compatibile con una gestione short-rent stabile."
-  );
-
-}
-
-if(
-  net > 0
-){
-
-  actionPlanIT.push(
-    "Cashflow positivo e sostenibile."
-  );
-
-}
-
-if(
-  risk > 60
-){
-
-  actionPlanIT.push(
-    "Valutare strategie di mitigazione del rischio."
-  );
-
-}
+const actionPlanIT =
+  getActionPlanIT();
 
 if(actionPlanIT.length){
 
@@ -4268,39 +4745,8 @@ ${actionPlanIT
 // 📋 OPERATIONAL RECOMMENDATIONS IT
 // =====================================
 
-const recommendationsIT = [];
-
-if(occupancy < 60){
-
-  recommendationsIT.push(
-    "• Incrementare l'occupazione tramite pricing dinamico e OTA."
-  );
-
-}
-
-if(risk > 50){
-
-  recommendationsIT.push(
-    "• Ridurre il rischio operativo monitorando costi e volatilità della domanda."
-  );
-
-}
-
-if(roi < 15){
-
-  recommendationsIT.push(
-    "• Ottimizzare ADR e marginalità per migliorare il rendimento."
-  );
-
-}
-
-if(net > 0){
-
-  recommendationsIT.push(
-    "• Mantenere il cashflow positivo monitorando i costi fissi."
-  );
-
-}
+const recommendationsIT =
+  getRecommendationsIT();
 
 if(recommendationsIT.length){
 
@@ -4334,47 +4780,8 @@ ${advisor.reasonsEN.join("\n")}`
 // 🎯 ACTION PLAN EN
 // =====================================
 
-const actionPlanEN = [];
-
-if(advisor?.verdict === "BUY"){
-
-  actionPlanEN.push(
-    "Acquisition recommended."
-  );
-
-}
-
-if(roi >= 25){
-
-  actionPlanEN.push(
-    "Performance exceeds average market benchmarks."
-  );
-
-}
-
-if(occupancy >= 70){
-
-  actionPlanEN.push(
-    "Demand profile supports a stable short-rent operation."
-  );
-
-}
-
-if(net > 0){
-
-  actionPlanEN.push(
-    "Positive and sustainable cashflow."
-  );
-
-}
-
-if(risk > 60){
-
-  actionPlanEN.push(
-    "Consider risk mitigation strategies."
-  );
-
-}
+const actionPlanEN =
+  getActionPlanEN();
 
 if(actionPlanEN.length){
 
@@ -4394,55 +4801,8 @@ ${actionPlanEN
 // 📋 OPERATIONAL RECOMMENDATIONS EN
 // =====================================
 
-const recommendationsEN = [];
-
-if(occupancy < 60){
-
-  recommendationsEN.push(
-    "• Increase occupancy through dynamic pricing and OTA optimization."
-  );
-
-}
-
-if(risk > 50){
-
-  recommendationsEN.push(
-    "• Reduce operational risk by monitoring costs and market volatility."
-  );
-
-}
-
-if(roi < 15){
-
-  recommendationsEN.push(
-    "• Optimize ADR and margins to improve returns."
-  );
-
-}
-
-if(net > 0){
-
-  if(occupancy >= 80){
-
-    recommendationsEN.push(
-      "• Consider gradually increasing rates to improve RevPAR."
-    );
-
-  }
-
-  if(roi >= 40){
-
-    recommendationsEN.push(
-      "• Validate ROI sustainability through conservative scenarios."
-    );
-
-  }
-
-  recommendationsEN.push(
-    "• Preserve positive cashflow through cost control."
-  );
-
-}
+const recommendationsEN =
+  getRecommendationsEN();
 
 if(recommendationsEN.length){
 
@@ -4464,31 +4824,74 @@ if(reasoningEN?.length){
 
 }
 
-if(executiveSummary){
-
-    executiveEN.push(
-        executiveSummary
-    );
-
-}  
-
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
+
+console.log(
+  "🚨 EXECUTIVE DEBUG",
+  {
+    builderPreview,
+    executiveIT,
+    executiveEN
+  }
+);
+
+const finalExecutiveIT =
+
+(
+  builderPreview &&
+  typeof builderPreview.textIT === "string" &&
+  builderPreview.textIT.trim().length > 0
+)
+
+? builderPreview.textIT
+
+: executiveIT.join("\n\n");
+
+
+const finalExecutiveEN =
+
+(
+  builderPreview &&
+  typeof builderPreview.textEN === "string" &&
+  builderPreview.textEN.trim().length > 0
+)
+
+? builderPreview.textEN
+
+: executiveEN.join("\n\n");
+
 
 pushResponseBlock({
 
   priority: 10,
 
-  textIT:
-    executiveIT.join("\n\n"),
+  textIT: finalExecutiveIT,
 
-  textEN:
-    executiveEN.join("\n\n")
+  textEN: finalExecutiveEN
 
 });
 
-}
+
+response.textIT = finalExecutiveIT;
+
+response.textEN = finalExecutiveEN;
+  
+console.log(
+  "🚨 FINAL EXECUTIVE RESPONSE TEXT",
+  {
+    builderPreview,
+    finalExecutiveIT,
+    finalExecutiveEN
+  }
+);
+
+return applyExecutiveFormatter(
+  response
+);
+
+  }
 
 // ===========================================
 // 💡 STRATEGY RESPONSE
@@ -4507,6 +4910,29 @@ else if(
 
   response.confidence =
     0.96;
+
+  console.log(
+    "🚀 STRATEGY BLOCK EXECUTED",
+    {
+      intent: intent.intent,
+      type: response.type
+    }
+  );
+
+  console.log(
+    "🚀 STRATEGY BLOCK ENTERED"
+  );
+  
+  console.log(
+    "🧠 STRATEGY INPUT",
+    {
+      intent,
+      roi,
+      risk,
+      occupancy,
+      liveData
+    }
+  );
 
   // =====================================
   // 🇮🇹 ITALIANO
@@ -4602,6 +5028,29 @@ else if(
   response.textEN =
     strategyEN.join("\n\n");
 
+  console.log(
+    "🧠 STRATEGY EN",
+    response.textEN
+  );
+
+  console.log(
+    "✅ STRATEGY RETURN",
+    {
+      type: response.type,
+      textIT: response.textIT,
+      textEN: response.textEN
+    }
+  );
+
+  console.log(
+  "✅ STRATEGY RESPONSE",
+  response
+);
+
+  return applyExecutiveFormatter(
+    response
+  );
+
 }
 
 // ===========================================
@@ -4625,97 +5074,24 @@ else if(
 const portfolioHistory =
   investmentHistory || [];
 
-const totalSimulations =
-  portfolioHistory.length;
+const {
 
-const averageROI =
+  totalSimulations,
 
-totalSimulations > 0
+  averageROI,
 
-? portfolioHistory.reduce(
-    (sum,item)=>
-      sum +
-      Number(
-        item.realROI ??
-        item.visualROI ??
-        item.roi ??
-        0
-      ),
-    0
-  ) / totalSimulations
+  bestSimulation,
 
-: 0;
+  bestROI,
 
-const bestSimulation =
+  bestCity,
 
-portfolioHistory.sort(
-(a,b)=>
+  averageCashflow
 
-Number(
-  b.realROI ??
-  b.visualROI ??
-  b.roi ??
-  0
-)
-
--
-
-Number(
-  a.realROI ??
-  a.visualROI ??
-  a.roi ??
-  0
-)
-
-)[0];
-
-const bestROI =
-
-bestSimulation
-
-? Number(
-    bestSimulation.realROI ??
-    bestSimulation.visualROI ??
-    bestSimulation.roi ??
-    0
-  )
-
-: 0;
-
-const bestCity =
-
-bestSimulation
-
-? (
-    bestSimulation.realCity ||
-    bestSimulation.city ||
-    bestSimulation.marketCity ||
-    "N/D"
-  )
-
-: "N/D";
-
-const averageCashflow =
-
-totalSimulations > 0
-
-? portfolioHistory.reduce(
-    (sum,item)=>
-
-      sum +
-
-      Number(
-        item.net ??
-        item.cashflow ??
-        item.annualProfit ??
-        0
-      ),
-
-    0
-  ) / totalSimulations
-
-: 0;    
-
+} = getPortfolioMetrics(
+  portfolioHistory
+);
+    
 const properties =
 
   Number(
@@ -4912,106 +5288,31 @@ else if(
   response.confidence =
     0.99;
 
-  // =====================================
+// =====================================
 // 📊 PORTFOLIO HISTORY ANALYSIS
 // =====================================
 
 const portfolioHistory =
   investmentHistory || [];
 
-const totalSimulations =
-  portfolioHistory.length;
+const {
 
-const averageROI =
+  totalSimulations,
 
-totalSimulations > 0
+  averageROI,
 
-? portfolioHistory.reduce(
-    (sum,item)=>
-      sum +
-      Number(
-        item.realROI ??
-        item.visualROI ??
-        item.roi ??
-        0
-      ),
-    0
-  ) / totalSimulations
+  bestSimulation,
 
-: 0;
+  bestROI,
 
-const bestSimulation =
+  bestCity,
 
-[...portfolioHistory]
+  averageCashflow
 
-.sort(
-(a,b)=>
-
-Number(
-  b.realROI ??
-  b.visualROI ??
-  b.roi ??
-  0
-)
-
--
-
-Number(
-  a.realROI ??
-  a.visualROI ??
-  a.roi ??
-  0
-)
-
-)[0];
-
-const bestROI =
-
-bestSimulation
-
-? Number(
-    bestSimulation.realROI ??
-    bestSimulation.visualROI ??
-    bestSimulation.roi ??
-    0
-  )
-
-: 0;
-
-const bestCity =
-
-bestSimulation
-
-? (
-    bestSimulation.realCity ||
-    bestSimulation.city ||
-    bestSimulation.marketCity ||
-    "N/D"
-  )
-
-: "N/D";
-
-const averageCashflow =
-
-totalSimulations > 0
-
-? portfolioHistory.reduce(
-    (sum,item)=>
-
-      sum +
-
-      Number(
-        item.net ??
-        item.cashflow ??
-        item.annualProfit ??
-        0
-      ),
-
-    0
-  ) / totalSimulations
-
-: 0;
-
+} = getPortfolioMetrics(
+  portfolioHistory
+);
+  
   const availableCapital =
 
     Number(
@@ -6650,9 +6951,16 @@ console.log(
   response
 );
 
+  console.log(
+  "🧪 GENERATE RESPONSE END",
+  response
+);
+
 return response;
 
 };
+
+  }
 
 // ===============================================
 // 🚀 READY
