@@ -6843,13 +6843,28 @@ if(
   "function"
 ){
 
-  window.lastExecutiveReport =
+ window.lastExecutiveReport =
 
-    window.buildExecutiveReport(
+  window.buildExecutiveReport({
 
-      d
+    ...d,
 
-    );
+    realROI:
+      roi,
+
+    risk:
+      riskScore,
+
+    investmentScore,
+
+    verdict,
+
+    confidence,
+
+    reportType:
+      "executive_pdf"
+
+  });
 
 }
 
