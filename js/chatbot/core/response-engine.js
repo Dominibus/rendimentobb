@@ -4669,11 +4669,59 @@ pushResponseBlock({
 
 });
 
+  let executiveBuilderResult = null;
+
+if(
+  typeof window.rbBuildExecutiveResponse ===
+  "function"
+){
+
+  try{
+
+    executiveBuilderResult =
+      window.rbBuildExecutiveResponse({
+
+        executiveContext,
+
+        advisor,
+
+        documentKnowledge,
+
+        executiveNarrative,
+
+        investmentScore
+
+      }) || null;
+
+  }
+  catch(error){
+
+    console.warn(
+      "Executive Builder Error",
+      error
+    );
+
+  }
+
+}
+
+console.log(
+  "🧠 EXECUTIVE BUILDER RESULT:",
+  executiveBuilderResult
+);
+
   response.metadata = {
 
   ...(response.metadata || {}),
 
   executiveAI: {
+
+    builderReady:
+  !!executiveBuilderResult,
+
+builderType:
+  executiveBuilderResult?.type ||
+  null,
 
     grade:
       executiveNarrative?.grade ||
