@@ -5792,54 +5792,6 @@ const investmentClass =
 
         : "Standard";
 
-  );
-
-  const reportRisk =
-    Number(risk || 0);
-
-  const reportOccupancy =
-    Number(occupancy || 0);
-
-  const reportCashflow =
-    Number(
-      analysisData?.net ||
-      analysisData?.annualProfit ||
-      analysisData?.cashflow ||
-      0
-    );
-
-  const reportEquity =
-
-  Number(
-
-    analysisData?.equity ??
-
-    window.lastAnalysisData?.equity ??
-
-    0
-
-  );
-
-const paybackYears =
-
-  reportCashflow > 0
-
-    ? reportEquity / reportCashflow
-
-    : null;
-
-const investmentClass =
-
-  investmentScore?.labelIT ||
-
-  "Standard";
-
-const investmentScoreValue =
-
-  investmentScore?.score ||
-
-  0;
-
   let executiveVerdictIT =
   "🟡 DA VALUTARE";
 
