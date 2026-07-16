@@ -4252,6 +4252,51 @@ if(executiveInsightsEN.length){
 
 let executiveSummary = "";
 
+const executiveReasoningMemory = {
+
+  ...(memory || {}),
+
+  lastROI:
+    executiveROI,
+
+  lastRisk:
+    risk,
+
+  lastOccupancy:
+    occupancy,
+
+  lastCashflow:
+    net,
+
+  lastRevenue:
+    gross,
+
+  lastExpenses:
+    Number(
+      liveData.expenses ??
+      liveData.yearlyCosts ??
+      liveData.monthlyCosts ??
+      0
+    ),
+
+  lastMortgagePercent:
+    mortgagePercent,
+
+  lastNightPrice:
+    Number(
+      liveData.priceNight ??
+      liveData.pricePerNight ??
+      liveData.nightly ??
+      0
+    ),
+
+  lastCity:
+    city ||
+    memory.lastCity ||
+    "roma"
+
+};  
+
 if(
   typeof window.rbGenerateInvestmentSummary ===
   "function"
@@ -4261,8 +4306,8 @@ if(
 
     executiveSummary =
       window.rbGenerateInvestmentSummary(
-        memory
-      ) || "";
+       executiveReasoningMemory
+    ) || "";
 
   }
   catch(error){
