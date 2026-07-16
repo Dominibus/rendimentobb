@@ -5593,6 +5593,50 @@ else if(
   response.confidence =
     0.99;
 
+  const reportAccess =
+
+  window.getUserAccess?.() ||
+
+  window.RB_USER ||
+
+  {};
+
+const canInterpretExecutiveReport =
+
+  reportAccess.isPro ||
+
+  reportAccess.isAdmin;
+
+if(!canInterpretExecutiveReport){
+
+  response.textIT =
+
+`🔒 L'interpretazione completa del Report Executive è disponibile nel piano PRO.
+
+Con PRO puoi:
+
+• generare il PDF Executive
+• interpretare ROI reale e benchmark
+• analizzare rischio e cashflow
+• verificare sostenibilità del finanziamento
+• ottenere il verdetto AI completo`;
+
+  response.textEN =
+
+`🔒 Full Executive Report interpretation is available with the PRO plan.
+
+With PRO you can:
+
+• generate the Executive PDF
+• interpret real ROI and benchmarks
+• analyze risk and cashflow
+• assess financing sustainability
+• receive the complete AI verdict`;
+
+  return response;
+
+}
+
   if(!hasAnalysis){
 
   response.textIT =
