@@ -5681,21 +5681,116 @@ I will explain:
 
 }
 
+  const activePDFReport =
+
+  executiveContext
+    ?.documents
+    ?.activeReport ||
+
+  null;
+
+const isExecutivePDFReport =
+
+  activePDFReport
+    ?.analysis
+    ?.reportType ===
+  "executive_pdf";
+
+if(!isExecutivePDFReport){
+
+  response.textIT =
+
+`📄 Non trovo ancora un Report Executive PDF da interpretare.
+
+Per procedere:
+
+• genera il PDF dalla simulazione
+• poi chiedimi "Interpretami il report"
+
+L'AI utilizzerà gli stessi valori presenti nel documento.`;
+
+  response.textEN =
+
+`📄 I cannot find an Executive PDF Report to interpret yet.
+
+To continue:
+
+• generate the PDF from the simulation
+• then ask "Interpret the report"
+
+The AI will use the same values shown in the document.`;
+
+  return response;
+
+}
+
   const reportROI =
 
   Number(
-
-    analysisData?.visualROI ??
-
-    window.lastAnalysisData?.visualROI ??
-
-    analysisData?.roi ??
-
-    window.lastAnalysisData?.roi ??
-
-    roi ??
-
+    activePDFReport.roi ??
     0
+  );
+
+const reportRisk =
+
+  Number(
+    activePDFReport.risk ??
+    0
+  );
+
+const reportOccupancy =
+
+  Number(
+    activePDFReport.occupancy ??
+    0
+  );
+
+const reportCashflow =
+
+  Number(
+    activePDFReport.cashflow ??
+    0
+  );
+
+const reportEquity =
+
+  Number(
+    activePDFReport.equity ??
+    0
+  );
+
+const paybackYears =
+
+  reportCashflow > 0
+
+    ? reportEquity / reportCashflow
+
+    : null;
+
+const investmentScoreValue =
+
+  Number(
+    activePDFReport
+      ?.analysis
+      ?.investmentScore ??
+    0
+  );
+
+const investmentClass =
+
+  investmentScoreValue >= 90
+
+    ? "Outstanding"
+
+    : investmentScoreValue >= 80
+
+      ? "Excellent"
+
+      : investmentScoreValue >= 70
+
+        ? "Strong"
+
+        : "Standard";
 
   );
 
