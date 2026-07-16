@@ -4669,6 +4669,64 @@ pushResponseBlock({
 
 });
 
+  response.metadata = {
+
+  ...(response.metadata || {}),
+
+  executiveAI: {
+
+    grade:
+      executiveNarrative?.grade ||
+      null,
+
+    performance:
+      executiveNarrative?.performance ||
+      null,
+
+    riskLabelIT:
+      executiveNarrative?.riskLabelIT ||
+      null,
+
+    riskLabelEN:
+      executiveNarrative?.riskLabelEN ||
+      null,
+
+    recommendationIT:
+      executiveNarrative?.recommendationIT ||
+      null,
+
+    recommendationEN:
+      executiveNarrative?.recommendationEN ||
+      null,
+
+    documentCount:
+      documentKnowledge?.totalDocuments ||
+      0,
+
+    simulationReports:
+      documentKnowledge?.simulationReports ||
+      0,
+
+    dashboardReports:
+      documentKnowledge?.dashboardReports ||
+      0,
+
+    hasWarnings:
+      documentKnowledge
+        ?.executiveInsights
+        ?.hasWarnings ||
+      false,
+
+    hasOpportunities:
+      documentKnowledge
+        ?.executiveInsights
+        ?.hasOpportunities ||
+      false
+
+  }
+
+};
+
 }
 
 // ===========================================
