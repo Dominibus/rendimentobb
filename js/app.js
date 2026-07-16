@@ -5387,6 +5387,12 @@ const roi = Math.max(
     45
   )
 );
+
+  const riskScore =
+  roi >= 20 ? 28 :
+  roi >= 12 ? 42 :
+  roi >= 8 ? 58 : 74;
+  
 // ================= SAFE FINANCIAL DATA =================
 
 const revenue = safe(
@@ -5766,10 +5772,10 @@ doc.text(String(investmentScore),28,249);
 doc.text(verdict,82,249);
 
 doc.text(
-  roi >= 15
+  riskScore < 40
     ? "Low"
-    : roi >= 8
-      ? "Medium"
+    : riskScore < 65
+      ? "Moderate"
       : "High",
   122,
   249
@@ -6519,11 +6525,6 @@ doc.text(
 );
 
 y += 15;
-
-const riskScore =
-  roi >= 20 ? 28 :
-  roi >= 12 ? 42 :
-  roi >= 8 ? 58 : 74;
 
 const riskLabel =
   riskScore < 40
