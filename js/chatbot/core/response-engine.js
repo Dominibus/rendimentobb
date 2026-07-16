@@ -66,6 +66,8 @@ const liveData = {
 
   ...(analysisData || {}),
 
+  ...(window.lastExecutiveReport || {}),
+
   ...(window.rbInvestmentMemory || {}),
 
   ...(window.lastAnalysisData || {}),
