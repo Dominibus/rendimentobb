@@ -77,6 +77,46 @@ const liveData = {
 };
 
 // =====================================
+// 🧠 EXECUTIVE CONTEXT
+// =====================================
+
+const executiveContext = {
+
+  liveData,
+
+  analysisData:
+    analysisData || {},
+
+  entities:
+    entities || {},
+
+  memory:
+    memory || {},
+
+  advisor:
+    advisor || null,
+
+  documents: {
+
+    activeReport:
+      window.lastExecutiveReport ||
+      null,
+
+    library:
+      Array.isArray(window.rbDocumentLibrary)
+        ? window.rbDocumentLibrary
+        : []
+
+  }
+
+};
+
+console.log(
+  "🧠 EXECUTIVE CONTEXT:",
+  executiveContext
+);  
+
+// =====================================
 // 🏨 PMS DATA
 // =====================================
 
