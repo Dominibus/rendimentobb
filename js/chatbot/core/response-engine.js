@@ -117,6 +117,41 @@ console.log(
 );  
 
 // =====================================
+// 📚 DOCUMENT KNOWLEDGE
+// =====================================
+
+let documentKnowledge = {};
+
+if(
+  typeof window.rbAnalyzeDocuments ===
+  "function"
+){
+
+  try{
+
+    documentKnowledge =
+      window.rbAnalyzeDocuments(
+        executiveContext
+      ) || {};
+
+  }
+  catch(error){
+
+    console.warn(
+      "Document Knowledge Error",
+      error
+    );
+
+  }
+
+}
+
+console.log(
+  "📚 DOCUMENT KNOWLEDGE:",
+  documentKnowledge
+);
+  
+// =====================================
 // 🏨 PMS DATA
 // =====================================
 
