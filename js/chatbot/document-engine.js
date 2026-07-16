@@ -30,10 +30,20 @@ window.buildExecutiveReport = function(data = {}){
                 : `report_${Date.now()}`,
 
         documentType:
-            "simulation",
 
-        source:
-            "simulator",
+  data.reportType === "executive_pdf"
+
+    ? "executive_pdf"
+
+    : "simulation",
+
+source:
+
+  data.reportType === "executive_pdf"
+
+    ? "pdf_generator"
+
+    : "simulator",
 
         generatedAt:
             new Date().toISOString(),
