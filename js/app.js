@@ -6237,7 +6237,13 @@ dscr = Math.min(dscr, 4.5);
 row(T("Importo richiesto","Requested loan"), eur(loan));
 row("LTV", ltv.toFixed(1)+"%");
 row("DSCR", dscr.toFixed(2));
-row(T("Cashflow netto","Net cashflow"), eur(net));
+row(
+  T(
+    "Cashflow dopo interessi",
+    "Cashflow after interest"
+  ),
+  eur(net)
+);
 
 // DECISION
 y+=10;
