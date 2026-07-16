@@ -4252,6 +4252,15 @@ if(executiveInsightsEN.length){
 
 let executiveSummary = "";
 
+const isEnglishLanguage =
+
+  String(
+    window.currentLanguage ||
+    "it"
+  )
+  .toLowerCase()
+  .startsWith("en");  
+
 const executiveReasoningMemory = {
 
   ...(memory || {}),
@@ -4340,13 +4349,16 @@ if(reasoningIT.length){
 
 }
 
-if(executiveSummary){
+if(
+  executiveSummary &&
+  !isEnglishLanguage
+){
 
-    executiveIT.push(
-        executiveSummary
-    );
+  executiveIT.push(
+    executiveSummary
+  );
 
-}  
+} 
 
 // =====================================
 // 🧠 ADVISOR REASONS
@@ -4630,13 +4642,16 @@ if(reasoningEN?.length){
 
 }
 
-if(executiveSummary){
+if(
+  executiveSummary &&
+  isEnglishLanguage
+){
 
-    executiveEN.push(
-        executiveSummary
-    );
+  executiveEN.push(
+    executiveSummary
+  );
 
-}  
+}
 
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
