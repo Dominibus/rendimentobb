@@ -19,6 +19,16 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
             doc => doc.documentType === "simulation"
         );
 
+    const executivePDFReports =
+
+  documents.filter(
+
+    doc =>
+      doc.documentType ===
+      "executive_pdf"
+
+  );
+
     const dashboardReports =
         documents.filter(
             doc => doc.documentType === "dashboard"
@@ -258,6 +268,10 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
         simulationReports:
 
             simulations.length,
+
+        executivePDFReports:
+
+  executivePDFReports.length,
 
         dashboardReports:
 
