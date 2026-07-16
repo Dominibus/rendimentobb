@@ -3908,7 +3908,7 @@ if(advisor){
 
 L'operazione presenta indicatori superiori ai benchmark di mercato.
 
-La combinazione di ROI (${roi.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
+La combinazione di ROI (${executiveROI.toFixed(1)}%), rischio contenuto (${risk}/100) e cashflow positivo (€${Math.round(net).toLocaleString("it-IT")}) colloca l'investimento nella fascia ad alta sostenibilità operativa.
 
 L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lungo termine.`
 
