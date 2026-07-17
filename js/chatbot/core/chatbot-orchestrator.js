@@ -1187,16 +1187,37 @@ if(
 
   );
 
+    const currentCity =
+
+    analysisData?.city ||
+
+    entities?.city ||
+
+    "roma";
+
+  const currentCityLabel =
+
+    window.rbCapitalize?.(
+      currentCity
+    ) ||
+
+    (
+      currentCity
+        .charAt(0)
+        .toUpperCase() +
+      currentCity.slice(1)
+    );
+
   if(currentROI >= 20){
 
-    finalSuggestionsIT.push(
-      "Confrontare benchmark città",
+        finalSuggestionsIT.push(
+      `Analizzare mercato ${currentCityLabel}`,
       "Analizzare sostenibilità",
       "Simulare scenario prudente"
     );
 
     finalSuggestionsEN.push(
-      "Compare city benchmarks",
+      `Analyze ${currentCityLabel} market`,
       "Analyze sustainability",
       "Simulate conservative scenario"
     );
