@@ -745,6 +745,10 @@ class="mobile-cta">
 
       mobileNav.innerHTML = mobileHTML;
 
+      if(typeof applyStaticTranslations === "function"){
+  applyStaticTranslations();
+}
+
       // LOGOUT MOBILE
       const mobileLogout = document.getElementById("mobile-logout");
       if(mobileLogout){
@@ -819,71 +823,101 @@ document.getElementById("logout").onclick = async ()=>{
 
     if(mobileNav){
 
-      mobileNav.innerHTML = `
+     mobileNav.innerHTML = `
 
-        <a href="/tool/">Analizza</a>
+  <a
+    href="/tool/"
+    data-it="Analizza"
+    data-en="Analyze">
+    Analizza
+  </a>
 
-        <a href="/aprire-bnb-conviene/">
-          Aprire un B&B
-        </a>
+  <a
+    href="/aprire-bnb-conviene/"
+    data-it="Aprire un B&B"
+    data-en="Start a B&B">
+    Aprire un B&B
+  </a>
 
-        <a href="/mutui/">
-          Mutui
-        </a>
+  <a
+    href="/mutui/"
+    data-it="Mutui"
+    data-en="Mortgages">
+    Mutui
+  </a>
 
-        <a href="/market/">
-          Mercato
-        </a>
+  <a
+    href="/market/"
+    data-it="Mercato"
+    data-en="Market">
+    Mercato
+  </a>
 
-        <a href="/immobili/">
-          Immobili
-        </a>
+  <a
+    href="/immobili/"
+    data-it="Trova immobili"
+    data-en="Find properties">
+    Trova immobili
+  </a>
 
-        <a href="/academy/">
-          Academy
-        </a>
+  <a
+    href="/academy/"
+    data-it="Guide"
+    data-en="Guides">
+    Guide
+  </a>
 
-        <a href="/about/">
-          Chi siamo
-        </a>
+  <a
+    href="/about/"
+    data-it="Chi siamo"
+    data-en="About">
+    Chi siamo
+  </a>
 
-        <hr>
+  <hr>
 
-        <a href="#"
-           id="mobile-ai-btn"
-           class="mobile-cta">
-           ✨ AI Assistant
-        </a>
+  <a
+    href="#"
+    id="mobile-ai-btn"
+    class="mobile-cta"
+    data-it="✨ AI Assistant"
+    data-en="✨ AI Assistant">
+    ✨ AI Assistant
+  </a>
 
-        <hr>
+  <hr>
 
-        <a href="/tool/"
-           class="mobile-cta">
-           🚀 Analizza un investimento
-        </a>
+  <a
+    href="/tool/"
+    class="mobile-cta"
+    data-it="🚀 Analizza un investimento"
+    data-en="🚀 Analyze an investment">
+    🚀 Analizza un investimento
+  </a>
 
-        <hr>
+  <hr>
 
-        <a href="/dashboard/"
-           class="mobile-cta">
-           📊 Live Demo
-        </a>
+  <a
+    href="/dashboard/"
+    class="mobile-cta"
+    data-it="📊 Live Demo"
+    data-en="📊 Live Demo">
+    📊 Live Demo
+  </a>
 
-        <a href="/login/"
-   class="mobile-cta">
+  <a
+    href="/login/"
+    class="mobile-cta"
+    data-it="🔐 Accedi"
+    data-en="🔐 Login">
+    🔐 Accedi
+  </a>
 
-<span
-data-it="🔐 Accedi"
-data-en="🔐 Login">
+`;
 
-🔐 Accedi
-
-</span>
-
-</a>
-
-      `;
-
+if(typeof applyStaticTranslations === "function"){
+  applyStaticTranslations();
+}
     }
 
   }else{
