@@ -246,6 +246,29 @@ Guide
     </a>
 
   </nav>
+
+    <div class="rb-mobile-lang">
+
+  <span
+    data-it="Lingua"
+    data-en="Language">
+    Lingua
+  </span>
+
+  <div class="rb-mobile-lang-buttons">
+
+    <button type="button" data-lang="it">
+      🇮🇹 IT
+    </button>
+
+    <button type="button" data-lang="en">
+      🇬🇧 EN
+    </button>
+
+  </div>
+
+</div>
+  
 </div>
 
   <!-- 🔥 MODAL PRO -->
@@ -450,7 +473,9 @@ function initHeaderInteractions(){
 
   overlay.onclick = closeMenu;
 
-  document.querySelectorAll(".rb-lang button").forEach(btn=>{
+  document.querySelectorAll(
+  ".rb-lang button, .rb-mobile-lang button"
+).forEach(btn=>{
     btn.onclick = ()=>{
       const lang = btn.dataset.lang;
       localStorage.setItem("rb_lang", lang);
@@ -542,7 +567,9 @@ if(aiBtn){
 ===================== */
 
 function updateLangButtons(lang){
-  document.querySelectorAll(".rb-lang button").forEach(btn=>{
+  document.querySelectorAll(
+  ".rb-lang button, .rb-mobile-lang button"
+).forEach(btn=>{
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 }
