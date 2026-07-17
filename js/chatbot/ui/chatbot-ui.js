@@ -313,6 +313,67 @@ I can help analyze:
   }
 
   // ===========================================
+  // 💡 CONTEXTUAL SUGGESTIONS
+  // ===========================================
+
+  function addSuggestions(items = []){
+
+    if(
+      !Array.isArray(items) ||
+      !items.length
+    ){
+
+      return;
+
+    }
+
+    const container =
+      document.createElement("div");
+
+    container.className =
+      "rb-quick-actions rb-context-actions";
+
+    items
+      .slice(0, 3)
+      .forEach(label => {
+
+        const suggestionButton =
+          document.createElement("button");
+
+        suggestionButton.type =
+          "button";
+
+        suggestionButton.className =
+          "rb-quick-btn";
+
+        suggestionButton.textContent =
+          label;
+
+        suggestionButton.onclick = ()=>{
+
+          input.value =
+            label;
+
+          sendMessage();
+
+        };
+
+        container.appendChild(
+          suggestionButton
+        );
+
+      });
+
+    messages.appendChild(
+      container
+    );
+
+    messages.scrollTop =
+      messages.scrollHeight;
+
+  }
+
+  // ===========================================
   // ⌨ SEND MESSAGE
   // ===========================================
 
@@ -529,6 +590,20 @@ console.log(
 
           );
 
+            const finalSuggestions =
+
+        currentLang === "en"
+
+        ? (
+            response.suggestionsEN ||
+            []
+          )
+
+        : (
+            response.suggestionsIT ||
+            []
+          );
+
       console.log(
   "🔥 FINAL TEXT TO UI:",
   finalText
@@ -548,11 +623,15 @@ console.log(
       // 💬 BOT MESSAGE
       // =====================================
 
-      setTimeout(()=>{
+            setTimeout(()=>{
 
         addMessage(
           "bot",
           finalText
+        );
+
+        addSuggestions(
+          finalSuggestions
         );
 
       }, 400);
