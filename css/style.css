@@ -21647,3 +21647,33 @@ color:#94a3b8;
     line-height: 1.5;
   }
 }
+
+/* =========================================
+📱 VIDEO SECTION MOBILE CONTRAST FIX
+========================================= */
+
+@media (max-width: 600px) {
+
+  .rb-video-section {
+    background:
+      radial-gradient(
+        circle at 50% 0%,
+        rgba(16, 185, 129, 0.12),
+        transparent 38%
+      ),
+      linear-gradient(
+        180deg,
+        #f8fafc 0%,
+        #ffffff 100%
+      ) !important;
+  }
+
+  .rb-video-heading h2 {
+    color: #0f172a !important;
+  }
+
+  .rb-video-heading p {
+    color: #475569 !important;
+  }
+
+}
