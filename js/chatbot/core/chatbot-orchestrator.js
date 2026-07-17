@@ -1199,6 +1199,79 @@ const response = {
 };
 
 // =========================================
+// 📈 ROI FOLLOW-UP SAFETY
+// Preserve follow-ups after early returns
+// =========================================
+
+if(
+  primaryResponseType === "roi" &&
+  !finalSuggestionsIT.length &&
+  !finalSuggestionsEN.length
+){
+
+  const currentROI = Number(
+
+    window.lastAnalysisData?.realROI ??
+
+    analysisData?.realROI ??
+
+    analysisData?.roi ??
+
+    0
+
+  );
+
+  if(currentROI >= 20){
+
+    finalSuggestionsIT.push(
+      "Confrontare benchmark città",
+      "Analizzare sostenibilità",
+      "Simulare scenario prudente"
+    );
+
+    finalSuggestionsEN.push(
+      "Compare city benchmarks",
+      "Analyze sustainability",
+      "Simulate conservative scenario"
+    );
+
+  }
+
+  else if(currentROI >= 10){
+
+    finalSuggestionsIT.push(
+      "Analizzare il cashflow",
+      "Valutare il rischio",
+      "Confrontare il mercato"
+    );
+
+    finalSuggestionsEN.push(
+      "Analyze cashflow",
+      "Evaluate risk",
+      "Compare the market"
+    );
+
+  }
+
+  else{
+
+    finalSuggestionsIT.push(
+      "Ottimizzare il rendimento",
+      "Ridurre i costi",
+      "Valutare un'altra città"
+    );
+
+    finalSuggestionsEN.push(
+      "Optimize returns",
+      "Reduce costs",
+      "Evaluate another city"
+    );
+
+  }
+
+}    
+
+// =========================================
 // 🧠 RESPONSE METADATA
 // =========================================
 
