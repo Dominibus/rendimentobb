@@ -1033,6 +1033,39 @@ body.dark-mode #rb-chat-input{
 }
 
 /* ===============================================
+💡 CONTEXTUAL AI ACTIONS
+Only dynamic response suggestions
+=============================================== */
+
+.rb-context-actions{
+
+  flex-wrap:wrap;
+
+  overflow-x:visible;
+  overflow-y:visible;
+
+  align-items:stretch;
+
+}
+
+.rb-context-actions .rb-quick-btn{
+
+  flex:
+  1 1 140px;
+
+  min-width:0;
+
+  white-space:normal;
+
+  line-height:1.35;
+
+  text-align:center;
+
+  box-sizing:border-box;
+
+}
+
+/* ===============================================
 🔥 QUICK BUTTON
 =============================================== */
 
