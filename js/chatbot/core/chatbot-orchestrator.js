@@ -1165,40 +1165,6 @@ if(
 }
 
 // =========================================
-// 🧠 FINAL RESPONSE
-// =========================================
-
-const response = {
-
-  type:
-    primaryResponseType ||
-    intent.intent ||
-    "generic",
-
-  confidence:
-    0.99,
-
-  textIT:
-    finalTextIT.trim(),
-
-  textEN:
-    finalTextEN.trim(),
-
-  suggestionsIT: [
-    ...new Set(finalSuggestionsIT)
-  ],
-
-  suggestionsEN: [
-    ...new Set(finalSuggestionsEN)
-  ],
-
-  signals: finalSignals,
-
-  metadata: {}
-
-};
-
-// =========================================
 // 📈 ROI FOLLOW-UP SAFETY
 // Preserve follow-ups after early returns
 // =========================================
@@ -1269,8 +1235,42 @@ if(
 
   }
 
-}    
+}
 
+// =========================================
+// 🧠 FINAL RESPONSE
+// =========================================
+
+const response = {
+
+  type:
+    primaryResponseType ||
+    intent.intent ||
+    "generic",
+
+  confidence:
+    0.99,
+
+  textIT:
+    finalTextIT.trim(),
+
+  textEN:
+    finalTextEN.trim(),
+
+  suggestionsIT: [
+    ...new Set(finalSuggestionsIT)
+  ],
+
+  suggestionsEN: [
+    ...new Set(finalSuggestionsEN)
+  ],
+
+  signals: finalSignals,
+
+  metadata: {}
+
+};
+    
 // =========================================
 // 🧠 RESPONSE METADATA
 // =========================================
