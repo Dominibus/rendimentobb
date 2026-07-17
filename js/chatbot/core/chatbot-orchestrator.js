@@ -948,6 +948,13 @@ if(bestKnowledge){
 let finalTextIT = "";
 let finalTextEN = "";
 
+const finalSuggestionsIT = [];
+const finalSuggestionsEN = [];
+const finalSignals = [];
+const partialMetadata = [];
+
+let primaryResponseType = null;
+
 for(const currentIntent of intent.intents){
 
   // =========================================
@@ -1095,6 +1102,66 @@ if(
 
   }
 
+  if(
+  !primaryResponseType &&
+  partialResponse?.type &&
+  partialResponse.type !== "generic"
+){
+
+  primaryResponseType =
+    partialResponse.type;
+
+}
+
+if(
+  Array.isArray(
+    partialResponse?.suggestionsIT
+  )
+){
+
+  finalSuggestionsIT.push(
+    ...partialResponse.suggestionsIT
+  );
+
+}
+
+if(
+  Array.isArray(
+    partialResponse?.suggestionsEN
+  )
+){
+
+  finalSuggestionsEN.push(
+    ...partialResponse.suggestionsEN
+  );
+
+}
+
+if(
+  Array.isArray(
+    partialResponse?.signals
+  )
+){
+
+  finalSignals.push(
+    ...partialResponse.signals
+  );
+
+}
+
+if(
+  partialResponse?.metadata &&
+  Object.keys(
+    partialResponse.metadata
+  ).length
+){
+
+  partialMetadata.push(
+    partialResponse.metadata
+  );
+
+}
+
 }
 
 // =========================================
@@ -1104,6 +1171,7 @@ if(
 const response = {
 
   type:
+    primaryResponseType ||
     intent.intent ||
     "generic",
 
@@ -1116,9 +1184,17 @@ const response = {
   textEN:
     finalTextEN.trim(),
 
-  suggestionsIT: [],
+  suggestionsIT: [
+    ...new Set(finalSuggestionsIT)
+  ],
 
-  suggestionsEN: []
+  suggestionsEN: [
+    ...new Set(finalSuggestionsEN)
+  ],
+
+  signals: finalSignals,
+
+  metadata: {}
 
 };
 
@@ -1129,23 +1205,21 @@ const response = {
 response.metadata = {
 
   processedIntents:
-
     intent.intents,
 
   matchedKnowledge:
-
     matchedKnowledge.length,
 
   advisorEnabled:
-
     !!advisor,
 
   aiSignals:
-
     aiSignals.length,
 
-  generatedAt:
+  partialResponses:
+    partialMetadata,
 
+  generatedAt:
     Date.now()
 
 };
