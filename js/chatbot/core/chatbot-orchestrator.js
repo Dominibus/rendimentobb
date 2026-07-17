@@ -1259,6 +1259,73 @@ if(
 }
 
 // =========================================
+// 🌍 MARKET FOLLOW-UP SAFETY
+// Preserve contextual follow-ups
+// =========================================
+
+if(
+  primaryResponseType === "market" &&
+  !finalSuggestionsIT.length &&
+  !finalSuggestionsEN.length
+){
+
+  const marketCityRaw = String(
+
+    analysisData?.city ??
+
+    entities?.city ??
+
+    window.lastAnalysisData?.city ??
+
+    ""
+
+  )
+  .trim()
+  .toLowerCase();
+
+  const marketCityIT = {
+
+    roma: "Roma",
+    milano: "Milano",
+    napoli: "Napoli",
+    firenze: "Firenze",
+    venezia: "Venezia"
+
+  }[marketCityRaw] || "";
+
+  const marketCityEN = {
+
+    roma: "Rome",
+    milano: "Milan",
+    napoli: "Naples",
+    firenze: "Florence",
+    venezia: "Venice"
+
+  }[marketCityRaw] || "";
+
+  const riskSuggestionIT = marketCityIT
+    ? `Valutare il rischio a ${marketCityIT}`
+    : "Valutare il rischio del mercato";
+
+  const riskSuggestionEN = marketCityEN
+    ? `Evaluate risk in ${marketCityEN}`
+    : "Evaluate market risk";
+
+  finalSuggestionsIT.push(
+    riskSuggestionIT,
+    "Analizzare il cashflow",
+    "Verificare la sostenibilità"
+  );
+
+  finalSuggestionsEN.push(
+    riskSuggestionEN,
+    "Analyze cashflow",
+    "Check sustainability"
+  );
+
+}    
+
+// =========================================
 // 🧠 FINAL RESPONSE
 // =========================================
 
