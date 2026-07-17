@@ -3041,6 +3041,42 @@ if(
 
     if(market){
 
+            const marketRiskKey = String(
+        market.risk ?? ""
+      )
+      .trim()
+      .toLowerCase();
+
+      const marketRiskIT = {
+
+        low: "basso",
+        basso: "basso",
+
+        medium: "moderato",
+        moderate: "moderato",
+        medio: "moderato",
+        moderato: "moderato",
+
+        high: "alto",
+        alto: "alto"
+
+      }[marketRiskKey] || market.risk;
+
+      const marketRiskEN = {
+
+        low: "low",
+        basso: "low",
+
+        medium: "moderate",
+        moderate: "moderate",
+        medio: "moderate",
+        moderato: "moderate",
+
+        high: "high",
+        alto: "high"
+
+      }[marketRiskKey] || market.risk;
+
       response.textIT =
 
 `🌍 Analisi mercato ${cityLabel}
@@ -3052,7 +3088,7 @@ ${market.avgROI}
 ${market.occupancy}
 
 ⚠️ Rischio:
-${market.risk}`;
+${marketRiskIT}`;
 
       response.textEN =
 
@@ -3065,7 +3101,7 @@ ${market.avgROI}
 ${market.occupancy}
 
 ⚠️ Risk:
-${market.risk}`;
+${marketRiskEN}`;
 
     }
 
