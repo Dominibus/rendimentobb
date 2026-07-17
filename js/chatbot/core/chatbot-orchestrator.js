@@ -492,20 +492,24 @@ const analysisData = {
 
   ...(window.lastAnalysisData || {}),
 
+  // ROI deterministico usato dalla pipeline AI.
+  // visualROI resta disponibile separatamente.
   roi:
 
-  window.lastAnalysisData?.visualROI ??
+    window.lastAnalysisData?.realROI ??
 
-  window.lastAnalysisData?.roi ??
+    window.lastAnalysisData?.safeROI ??
 
-  Number(
-    document.getElementById("roi-value")
-    ?.textContent
-    ?.replace("%","")
-    ?.trim()
-  ) ??
+    window.lastAnalysisData?.roi ??
 
-  0,
+    Number(
+      document.getElementById("roi-value")
+      ?.textContent
+      ?.replace("%","")
+      ?.trim()
+    ) ??
+
+    0,
 
   risk:
 
@@ -738,19 +742,17 @@ const advisor =
 
       roi:
 
-  analysisData.visualROI ??
+        analysisData.realROI ??
 
-  window.lastAnalysisData?.visualROI ??
+        window.lastAnalysisData?.realROI ??
 
-  analysisData.roi ??
+        analysisData.roi ??
 
-  window.lastAnalysisData?.roi ??
+        window.lastAnalysisData?.safeROI ??
 
-  analysisData.realROI ??
+        window.lastAnalysisData?.roi ??
 
-  window.lastAnalysisData?.realROI ??
-
-  0,
+        0,
 
       risk:
 
@@ -1539,8 +1541,13 @@ if(window.rbRememberMessage){
         lastCity:
           entities.city || null,
 
-        lastROI:
-          entities.roi || null
+                lastROI:
+
+          analysisData.realROI ??
+
+          analysisData.roi ??
+
+          null
 
       });
 
