@@ -1260,7 +1260,7 @@ if(
 
 // =========================================
 // 🌍 MARKET FOLLOW-UP SAFETY
-// Preserve contextual follow-ups
+// Contextual follow-ups based on real data
 // =========================================
 
 if(
@@ -1303,27 +1303,73 @@ if(
 
   }[marketCityRaw] || "";
 
-  const riskSuggestionIT = marketCityIT
-    ? `Valutare il rischio a ${marketCityIT}`
-    : "Valutare il rischio del mercato";
+  const marketRealROIRaw =
 
-  const riskSuggestionEN = marketCityEN
-    ? `Evaluate risk in ${marketCityEN}`
-    : "Evaluate market risk";
+    window.lastAnalysisData?.realROI ??
 
-  finalSuggestionsIT.push(
-    riskSuggestionIT,
-    "Analizzare il cashflow",
-    "Verificare la sostenibilità"
+    analysisData?.realROI;
+
+  const marketPropertyPrice = Number(
+
+    window.lastAnalysisData?.propertyPrice ??
+
+    analysisData?.propertyPrice ??
+
+    0
+
   );
 
-  finalSuggestionsEN.push(
-    riskSuggestionEN,
-    "Analyze cashflow",
-    "Check sustainability"
-  );
+  const hasCompleteMarketAnalysis =
 
-}    
+    marketPropertyPrice > 0 &&
+
+    marketRealROIRaw !== null &&
+
+    marketRealROIRaw !== undefined &&
+
+    marketRealROIRaw !== "" &&
+
+    Number.isFinite(
+      Number(marketRealROIRaw)
+    );
+
+  if(hasCompleteMarketAnalysis){
+
+    const riskSuggestionIT = marketCityIT
+      ? `Valutare il rischio a ${marketCityIT}`
+      : "Valutare il rischio dell'investimento";
+
+    const riskSuggestionEN = marketCityEN
+      ? `Evaluate risk in ${marketCityEN}`
+      : "Evaluate investment risk";
+
+    finalSuggestionsIT.push(
+      riskSuggestionIT,
+      "Analizzare il cashflow",
+      "Verificare la sostenibilità"
+    );
+
+    finalSuggestionsEN.push(
+      riskSuggestionEN,
+      "Analyze cashflow",
+      "Check sustainability"
+    );
+
+  }
+
+  else{
+
+    finalSuggestionsIT.push(
+      "Completa la simulazione"
+    );
+
+    finalSuggestionsEN.push(
+      "Complete the simulation"
+    );
+
+  }
+
+}
 
 // =========================================
 // 🧠 FINAL RESPONSE
