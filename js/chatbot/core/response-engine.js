@@ -21,7 +21,9 @@ window.rbGenerateResponse = function({
 
   analysisData = {},
 
-  aiSignals = []
+  aiSignals = [],
+
+  brain = null
 
 } = {}){
 
@@ -499,7 +501,7 @@ console.log(
 // 🧠 AI BRAIN
 // =====================================
 
-let brain = {};
+let brainData = brain || {};
 
 if(
   typeof window.rbProcessBrain ===
@@ -508,8 +510,8 @@ if(
 
   try{
 
-    brain =
-      window.rbProcessBrain({
+    brainData =
+  brainData || window.rbProcessBrain({
 
         intent,
 
@@ -547,8 +549,8 @@ if(
 
 console.log(
   "🧠 AI BRAIN:",
-  brain
-);  
+  brainData
+);
 
 // =====================================
 // 💾 GLOBAL INVESTMENT HISTORY
