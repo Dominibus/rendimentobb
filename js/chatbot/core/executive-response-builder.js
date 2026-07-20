@@ -106,6 +106,64 @@ console.log(
     financials
 );
 
+    let textIT = "";
+
+let textEN = "";
+
+if(advisor){
+
+    textIT +=
+`🔴 VERDETTO AI: ${
+    advisor.verdictIT ||
+    advisor.verdict ||
+    "-"
+}
+
+`;
+
+    textEN +=
+`🔴 AI VERDICT: ${
+    advisor.verdictEN ||
+    advisor.verdict ||
+    "-"
+}
+
+`;
+
+}
+
+if(executiveNarrative?.recommendationIT){
+
+    textIT +=
+        executiveNarrative.recommendationIT +
+        "\n\n";
+
+}
+
+if(executiveNarrative?.recommendationEN){
+
+    textEN +=
+        executiveNarrative.recommendationEN +
+        "\n\n";
+
+}
+
+if(brain?.executiveSummary?.it){
+
+    textIT +=
+        brain.executiveSummary.it +
+        "\n\n";
+
+}
+
+if(brain?.executiveSummary?.en){
+
+    textEN +=
+        brain.executiveSummary.en +
+        "\n\n";
+
+}
+
     return {
 
         type: "executive",
@@ -116,9 +174,9 @@ console.log(
 
         executiveContext,
 
-        textIT: "",
+       textIT,
 
-        textEN: "",
+       textEN,
 
         suggestionsIT: [],
 
