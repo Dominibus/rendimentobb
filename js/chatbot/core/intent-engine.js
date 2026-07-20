@@ -1105,13 +1105,26 @@ const requestsSimulationAnalysis = has(
   "analizza questa simulazione",
   "valuta simulazione",
   "valuta la simulazione",
+  "analizza investimento",
+  "analizza l'investimento",
+  "analizza questo investimento",
+  "valuta investimento",
+  "valuta l'investimento",
+  "valuta questo investimento",
 
   "analyze simulation",
   "analyze the simulation",
   "analyze this simulation",
   "evaluate simulation",
   "evaluate the simulation",
-  "review my simulation"
+  "review my simulation",
+  "analyze investment",
+  "analyze the investment",
+  "analyze this investment",
+  "evaluate investment",
+  "evaluate the investment",
+  "evaluate this investment",
+  "review my investment"
 
 );
 
