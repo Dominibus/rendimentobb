@@ -1124,7 +1124,9 @@ const partialResponse =
 
     analysisData,
 
-    aiSignals
+    aiSignals,
+
+    brain
 
   });
 
