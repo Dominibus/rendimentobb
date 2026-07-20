@@ -9,31 +9,67 @@
         "🧠 AI Brain READY"
     );
 
-    window.rbProcessBrain = function(context = {}){
+window.rbProcessBrain = function(context = {}){
 
-        return {
+    const {
 
-            diagnosis: null,
+        intent = null,
 
-            opportunity: null,
+        entities = {},
 
-            executiveDecision: null,
+        memory = {},
 
-            actionPlan: [],
+        investorProfile = {},
 
-            confidence: 0,
+        score = {},
 
-            metadata:{
+        advisor = {},
 
-                version:"1.0",
+        reasoning = {},
 
-                generatedAt:
-                    new Date().toISOString()
+        documentKnowledge = {},
 
-            }
+        executiveContext = {}
 
-        };
+    } = context;
+
+    const brainContext = {
+
+        intent,
+
+        entities,
+
+        memory,
+
+        investorProfile,
+
+        score,
+
+        advisor,
+
+        reasoning,
+
+        documentKnowledge,
+
+        executiveContext,
+
+        metadata:{
+
+            version:"1.1",
+
+            generatedAt:new Date().toISOString()
+
+        }
 
     };
+
+    console.log(
+        "🧠 BRAIN CONTEXT",
+        brainContext
+    );
+
+    return brainContext;
+
+};
 
 })();
