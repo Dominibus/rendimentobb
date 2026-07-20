@@ -4805,6 +4805,24 @@ console.log(
   executiveBuilderResult
 );
 
+  if (
+    executiveBuilderResult?.textIT
+){
+
+    response.textIT =
+        executiveBuilderResult.textIT;
+
+}
+
+if (
+    executiveBuilderResult?.textEN
+){
+
+    response.textEN =
+        executiveBuilderResult.textEN;
+
+}
+
   response.metadata = {
 
   ...(response.metadata || {}),
