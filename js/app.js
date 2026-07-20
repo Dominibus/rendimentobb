@@ -5388,10 +5388,18 @@ const roi = Math.max(
   )
 );
 
-  const riskScore =
-  roi >= 20 ? 28 :
-  roi >= 12 ? 42 :
-  roi >= 8 ? 58 : 74;
+const riskScore = Math.max(
+  0,
+  Math.min(
+    100,
+    safe(
+      d.risk ??
+      d.riskScore ??
+      window.riskScore ??
+      0
+    )
+  )
+);
   
 // ================= SAFE FINANCIAL DATA =================
 
