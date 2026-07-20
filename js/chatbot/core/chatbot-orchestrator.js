@@ -826,6 +826,47 @@ console.log(
   advisor
 );
 
+ // =========================================
+// 🧠 AI BRAIN
+// =========================================
+
+const brain =
+
+    window.rbProcessBrain
+
+    ? window.rbProcessBrain({
+
+        intent,
+
+        entities,
+
+        memory,
+
+        investorProfile,
+
+        score:
+            window.lastInvestmentScore || {},
+
+        advisor,
+
+        reasoning:
+            {},
+
+        documentKnowledge:
+            bestKnowledge?.item || {},
+
+        executiveContext:
+            window.executiveContext || {}
+
+    })
+
+    : null;
+
+console.log(
+    "🧠 AI BRAIN",
+    brain
+);   
+
 // =========================================
 // 🧠 CANONICAL ADVISOR RESULT
 // Shared with Executive PDF
