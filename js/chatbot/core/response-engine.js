@@ -4805,6 +4805,13 @@ console.log(
   executiveBuilderResult
 );
 
+  const builderOwnsExecutiveResponse =
+
+    !!(
+        executiveBuilderResult?.textIT ||
+        executiveBuilderResult?.textEN
+    );
+
   if (
     executiveBuilderResult?.textIT
 ){
@@ -7205,6 +7212,7 @@ if(investorProfile?.targetROI){
 // ===========================================
 
 if(
+  !builderOwnsExecutiveResponse &&
   responseBlocksIT.length &&
   response.type === "executive"
 ){
