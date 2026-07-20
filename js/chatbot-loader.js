@@ -319,6 +319,9 @@
       memoryEngine:
         !!window.rbGetConversationContext,
 
+      brain:
+    !!window.rbProcessBrain,
+
       responseEngine:
         !!window.rbGenerateResponse,
 
