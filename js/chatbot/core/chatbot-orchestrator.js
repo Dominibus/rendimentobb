@@ -826,6 +826,31 @@ console.log(
   advisor
 );
 
+// =========================================
+// 🧠 CANONICAL ADVISOR RESULT
+// Shared with Executive PDF
+// =========================================
+
+if(advisor){
+
+  window.lastInvestmentScore = {
+
+    score:
+      Number(advisor.score ?? 0),
+
+    verdict:
+      advisor.verdict || "WAIT",
+
+    label:
+      advisor.verdict || "WAIT",
+
+    confidence:
+      Number(advisor.confidence ?? 0)
+
+  };
+
+}
+
 if(advisor){
 
   console.log(
