@@ -364,6 +364,44 @@ if(
       Math.round(score / 3)
     );
 
+// =====================================
+// 📊 CANONICAL INVESTMENT SCORE
+// Public score from deterministic Score Engine
+// =====================================
+
+const advisorScore =
+  score;
+
+const canonicalScoreData =
+
+  typeof window.rbGenerateInvestmentScore ===
+  "function"
+
+    ? window.rbGenerateInvestmentScore({
+
+        roi,
+
+        risk,
+
+        occupancy,
+
+        mortgagePercent,
+
+        cashflow,
+
+        city
+
+      })
+
+    : null;
+
+const investmentScore =
+
+  Number(
+    canonicalScoreData?.score ??
+    advisorScore
+  );
+
   // =====================================
   // RECOMMENDATIONS
   // =====================================
@@ -371,7 +409,7 @@ if(
   const recommendationsIT = [];
   const recommendationsEN = [];
 
-  // =====================================
+// =====================================
 // 🎯 ACTION PLAN
 // =====================================
 
@@ -493,7 +531,8 @@ if(cashflow > 0){
   console.log(
   "🧠 FINAL ADVISOR SCORE",
   {
-    score,
+    score: investmentScore,
+    advisorScore,
     verdict,
     confidence,
     roi,
@@ -507,7 +546,9 @@ return {
 
   verdict,
 
-  score,
+  score: investmentScore,
+
+  advisorScore,
 
   confidence,
 
