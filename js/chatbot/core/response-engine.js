@@ -6227,11 +6227,19 @@ let strategicReasonEN = "";
 
 if(cashflow <= 0){
 
-  strategicReasonIT =
-    "L'investimento non genera ancora un flusso di cassa positivo. Prima di espandere il portafoglio è necessario ristabilire la sostenibilità economica.";
+strategicReasonIT =
+`Il flusso di cassa negativo indica che i ricavi attuali non sono ancora sufficienti a coprire tutti i costi operativi e finanziari.
 
-  strategicReasonEN =
-    "The investment is not generating positive cashflow yet. Financial sustainability should be restored before expanding.";
+Prima di valutare nuove acquisizioni è opportuno individuare quale componente incide maggiormente sul risultato economico: ADR, occupazione, costi di gestione oppure leva finanziaria.
+
+Una volta ripristinato un cashflow positivo sarà possibile pianificare una crescita del portafoglio con un livello di rischio più sostenibile.`;
+
+strategicReasonEN =
+`Negative cashflow indicates that current revenues are not yet sufficient to cover operating and financing costs.
+
+Before considering new acquisitions, it is advisable to identify which factor is having the greatest impact on profitability: ADR, occupancy, operating costs or financial leverage.
+
+Once positive cashflow has been restored, portfolio growth can be planned on a more sustainable basis.`;
 
 }
 
@@ -6278,7 +6286,7 @@ if(
     risk <= 35
 ){
 
-    executiveSummaryIT =
+executiveSummaryIT =
 "L'investimento mostra un profilo molto equilibrato. Cashflow positivo, rischio contenuto e redditività competitiva. Le prossime ottimizzazioni possono concentrarsi sulla crescita del portafoglio.";
 
     executiveSummaryEN =
