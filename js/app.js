@@ -3042,12 +3042,13 @@ if(
 
       occupancy: occupancyRate,
 
-      mortgagePercent:
+mortgagePercent:
 
-        Number(
-          mortgagePercent ||
-          0
-        ),
+  Number(
+    window.lastAnalysisData?.mortgagePercent ??
+    mortgagePercent ??
+    0
+  ),
 
       cashflow:
 
