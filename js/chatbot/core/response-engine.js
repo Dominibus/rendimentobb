@@ -6388,47 +6388,23 @@ else{
 }
   
 
-if(
-    occupancy < 70 &&
-    cashflow > 0 &&
-    risk < 60
-){
+// =====================================
+// 🎯 AI PRIORITIES
+// =====================================
+
+if(cashflow <= 0){
 
   prioritiesIT.push(
-    "🏨 Aumentare l'occupazione tramite pricing dinamico e maggiore visibilità OTA."
+    "💸 Ripristinare un cashflow positivo prima di pianificare espansioni."
   );
 
   prioritiesEN.push(
-    "🏨 Increase occupancy through dynamic pricing and stronger OTA visibility."
+    "💸 Restore positive cashflow before planning expansion."
   );
 
 }
 
-  if(roi < 20){
-
-  prioritiesIT.push(
-    "📈 Incrementare ADR e ottimizzare le tariffe per superare il 20% di ROI."
-  );
-
-  prioritiesEN.push(
-    "📈 Increase ADR and optimize pricing to exceed 20% ROI."
-  );
-
-}
-
-  if(occupancy < 75){
-
-  prioritiesIT.push(
-    "🏨 Portare l'occupazione verso il 75-80% per aumentare redditività e stabilità."
-  );
-
-  prioritiesEN.push(
-    "🏨 Increase occupancy towards 75-80% to improve profitability and stability."
-  );
-
-}
-
-  if(risk > 35){
+else if(risk > 35){
 
   prioritiesIT.push(
     "⚠️ Ridurre il rischio operativo e la dipendenza dalla stagionalità."
@@ -6440,10 +6416,34 @@ if(
 
 }
 
-  if(cashflow > 0){
+else if(roi < 20){
 
   prioritiesIT.push(
-    "💰 Il cashflow è positivo: valuta la crescita del portfolio."
+    "📈 Incrementare ADR e ottimizzare le tariffe per superare il 20% di ROI."
+  );
+
+  prioritiesEN.push(
+    "📈 Increase ADR and optimize pricing to exceed 20% ROI."
+  );
+
+}
+
+else if(occupancy < 75){
+
+  prioritiesIT.push(
+    "🏨 Portare l'occupazione verso il 75-80% per aumentare redditività e stabilità."
+  );
+
+  prioritiesEN.push(
+    "🏨 Increase occupancy towards 75-80% to improve profitability and stability."
+  );
+
+}
+
+else{
+
+  prioritiesIT.push(
+    "💰 Il cashflow è positivo: valuta la crescita del portafoglio."
   );
 
   prioritiesEN.push(
