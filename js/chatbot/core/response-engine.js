@@ -6538,30 +6538,6 @@ if(pmsADR > 0){
 
 }
 
- if(
-    liveData.net &&
-    Number(liveData.net) < 0 &&
-    !prioritiesIT.some(p => p.includes("cashflow positivo"))
-){
-
-    prioritiesIT.push(
-        "💸 Ripristinare un cashflow positivo prima di pianificare espansioni."
-    );
-
-}
-
-if(
-    liveData.net &&
-    Number(liveData.net) < 0 &&
-    !prioritiesEN.some(p => p.includes("positive cashflow"))
-){
-
-    prioritiesEN.push(
-        "💸 Restore positive cashflow before planning expansion."
-    );
-
-}
-
   if(!prioritiesIT.length){
 
   prioritiesIT.push(
