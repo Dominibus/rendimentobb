@@ -6288,11 +6288,19 @@ if(
 
 else if(cashflow <= 0){
 
-    executiveSummaryIT =
-"L'investimento non ha ancora raggiunto un equilibrio finanziario. La priorità è riportare il cashflow in territorio positivo.";
+executiveSummaryIT =
+`L'analisi evidenzia che il principale limite dell'investimento è il cashflow negativo (€${Math.round(cashflow).toLocaleString("it-IT")} annui).
 
-    executiveSummaryEN =
-"The investment has not yet reached financial stability. The priority is restoring positive cashflow.";
+L'occupazione (${occupancy}%) non rappresenta la criticità principale, mentre il livello di rischio (${risk}/100) e la redditività complessiva stanno impedendo all'operazione di generare un flusso di cassa sostenibile.
+
+Prima di pianificare nuove acquisizioni conviene riportare l'investimento in equilibrio economico.`;
+
+executiveSummaryEN =
+`The analysis shows that the main limitation of this investment is the negative cashflow (€${Math.round(cashflow).toLocaleString("en-US")} per year).
+
+Current occupancy (${occupancy}%) is not the primary issue, while the overall risk (${risk}/100) and profitability are preventing the investment from generating sustainable cashflow.
+
+Before considering new acquisitions, restoring financial balance should be the priority.`;
 
 }
 
