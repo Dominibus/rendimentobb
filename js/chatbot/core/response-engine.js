@@ -6388,17 +6388,21 @@ else{
 }
   
 
-  if(occupancy < 70){
+if(
+    occupancy < 70 &&
+    cashflow > 0 &&
+    risk < 60
+){
 
-    prioritiesIT.push(
-      "🏨 Aumentare l'occupazione tramite pricing dinamico e maggiore visibilità OTA."
-    );
+  prioritiesIT.push(
+    "🏨 Aumentare l'occupazione tramite pricing dinamico e maggiore visibilità OTA."
+  );
 
-    prioritiesEN.push(
-      "🏨 Increase occupancy through dynamic pricing and stronger OTA visibility."
-    );
+  prioritiesEN.push(
+    "🏨 Increase occupancy through dynamic pricing and stronger OTA visibility."
+  );
 
-  }
+}
 
   if(roi < 20){
 
