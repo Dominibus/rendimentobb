@@ -7232,6 +7232,7 @@ if(
 }
 
 if(
+  !builderOwnsExecutiveResponse &&
   responseBlocksEN.length &&
   response.type === "executive"
 ){
@@ -7249,7 +7250,6 @@ if(
   .join("\n\n");
 
 }
-
 // ===========================================
 // 💡 CONTEXTUAL FOLLOWUP ENGINE
 // ===========================================
