@@ -273,6 +273,59 @@
         brainContext.actionPlan =
             actionPlan;
 
+       // =====================================
+// 🧠 EXECUTIVE SUMMARY
+// =====================================
+
+let executiveSummaryIT = "";
+
+if(!diagnosis.hasAnalysis){
+
+    executiveSummaryIT =
+        "Nessuna analisi disponibile.";
+
+}
+else{
+
+    executiveSummaryIT =
+        `L'investimento viene classificato come ${diagnosis.investmentState}. `;
+
+    if(strengths.length){
+
+        executiveSummaryIT +=
+            `Punti di forza: ${strengths.join(", ")}. `;
+
+    }
+
+    if(weaknesses.length){
+
+        executiveSummaryIT +=
+            `Criticità: ${weaknesses.join(", ")}. `;
+
+    }
+
+    if(actionPlan.length){
+
+        executiveSummaryIT +=
+            `Priorità: ${actionPlan.join(", ")}.`;
+
+    }
+
+}
+
+brainContext.executiveSummary = {
+
+    it: executiveSummaryIT,
+
+    generated:true
+
+};
+        console.log(
+    "🧠 EXECUTIVE SUMMARY",
+    brainContext.executiveSummary
+);
+        
+
         console.log(
             "🧠 AI DIAGNOSIS",
             diagnosis
