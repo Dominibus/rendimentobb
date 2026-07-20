@@ -3362,10 +3362,43 @@ if(
 }
 
 // ===========================================
+// 🚫 EXPLICIT FOLLOW-UP EXCLUSIONS
+// Do not inherit previous intent if the user
+// is clearly asking for investment improvement
+// ===========================================
+
+const explicitImprovementRequest = has(
+
+  "come posso migliorare",
+  "come migliorarlo",
+  "come migliorare",
+
+  "come aumentare il roi",
+  "come migliorare il roi",
+
+  "come aumentare il cashflow",
+
+  "come ridurre il rischio",
+
+  "how can i improve",
+  "how do i improve",
+
+  "improve roi",
+  "increase roi",
+
+  "improve cashflow",
+
+  "reduce risk"
+
+);  
+
+// ===========================================
 // 🧠 FOLLOW-UP DETECTION
 // ===========================================
 
 if(
+
+  !explicitImprovementRequest &&
 
   result.intent === "generic" &&
 
