@@ -115,61 +115,6 @@ console.log(
   "🧠 EXECUTIVE CONTEXT:",
   executiveContext
 );  
-
-// =====================================
-// 🧠 AI BRAIN
-// =====================================
-
-let brain = {};
-
-if(
-  typeof window.rbProcessBrain ===
-  "function"
-){
-
-  try{
-
-    brain =
-      window.rbProcessBrain({
-
-        intent,
-
-        entities,
-
-        memory,
-
-        investorProfile,
-
-        score:
-          investmentScore,
-
-        advisor,
-
-        reasoning: {},
-
-        documentKnowledge: {},
-
-        executiveContext
-
-      }) || {};
-
-  }
-
-  catch(error){
-
-    console.warn(
-      "AI Brain Error",
-      error
-    );
-
-  }
-
-}
-
-console.log(
-  "🧠 AI BRAIN:",
-  brain
-);
   
 // =====================================
 // 📚 DOCUMENT KNOWLEDGE
@@ -549,6 +494,61 @@ console.log(
     targetROI
   }
 );
+
+// =====================================
+// 🧠 AI BRAIN
+// =====================================
+
+let brain = {};
+
+if(
+  typeof window.rbProcessBrain ===
+  "function"
+){
+
+  try{
+
+    brain =
+      window.rbProcessBrain({
+
+        intent,
+
+        entities,
+
+        memory,
+
+        investorProfile,
+
+        score:
+          investmentScore,
+
+        advisor,
+
+        reasoning: {},
+
+        documentKnowledge: {},
+
+        executiveContext
+
+      }) || {};
+
+  }
+
+  catch(error){
+
+    console.warn(
+      "AI Brain Error",
+      error
+    );
+
+  }
+
+}
+
+console.log(
+  "🧠 AI BRAIN:",
+  brain
+);  
 
 // =====================================
 // 💾 GLOBAL INVESTMENT HISTORY
