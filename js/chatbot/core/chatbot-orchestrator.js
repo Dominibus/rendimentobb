@@ -853,7 +853,7 @@ const brain =
             {},
 
         documentKnowledge:
-            bestKnowledge?.item || {},
+    {},
 
         executiveContext:
             window.executiveContext || {}
