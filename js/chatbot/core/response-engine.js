@@ -6819,7 +6819,13 @@ if(investorProfile?.riskTolerance === "low"){
 
 }
 
-if(investorProfile?.leverageBehavior === "aggressive"){
+if(
+  investorProfile?.leverageBehavior === "aggressive" &&
+  ![
+    "investment_executive",
+    "executive_analysis"
+  ].includes(intent?.intent)
+){
 
   responseBlocksIT.push({
     type: "profile",
