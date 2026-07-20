@@ -5795,7 +5795,9 @@ doc.text(
 );
 
 doc.text(
-  confidence,
+  String(confidence).endsWith("%")
+    ? String(confidence)
+    : String(confidence) + "%",
   154,
   249
 );
