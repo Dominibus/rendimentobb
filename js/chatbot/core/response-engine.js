@@ -6388,13 +6388,17 @@ ${occupancyTo80}% additional occupancy is needed.`
 
 }
 
+if(pmsADR > 0){
+
   prioritiesIT.push(
-    `📊 PMS: ADR attuale €${pmsADR}. Valutare pricing dinamico per aumentare il ricavo medio.`
+`📊 PMS: ADR attuale €${pmsADR}. Valutare pricing dinamico per aumentare il ricavo medio.`
   );
 
   prioritiesEN.push(
-    `📊 PMS: Current ADR €${pmsADR}. Consider dynamic pricing to increase average revenue.`
+`📊 PMS: Current ADR €${pmsADR}. Consider dynamic pricing to increase average revenue.`
   );
+
+}
 
   if(pmsRevenue > 0){
 
