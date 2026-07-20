@@ -6264,6 +6264,128 @@ else{
     "The investment fundamentals are balanced. Future improvements should focus on increasing profitability.";
 
 }  
+
+  // =====================================
+// 📋 EXECUTIVE SUMMARY
+// =====================================
+
+let executiveSummaryIT = "";
+let executiveSummaryEN = "";
+
+if(
+    roi >= 20 &&
+    cashflow > 0 &&
+    risk <= 35
+){
+
+    executiveSummaryIT =
+"L'investimento mostra un profilo molto equilibrato. Cashflow positivo, rischio contenuto e redditività competitiva. Le prossime ottimizzazioni possono concentrarsi sulla crescita del portafoglio.";
+
+    executiveSummaryEN =
+"The investment shows a well-balanced profile. Cashflow is positive, risk is under control and profitability is competitive. Future improvements can focus on portfolio growth.";
+
+}
+
+else if(cashflow <= 0){
+
+    executiveSummaryIT =
+"L'investimento non ha ancora raggiunto un equilibrio finanziario. La priorità è riportare il cashflow in territorio positivo.";
+
+    executiveSummaryEN =
+"The investment has not yet reached financial stability. The priority is restoring positive cashflow.";
+
+}
+
+else if(risk >= 60){
+
+    executiveSummaryIT =
+"Il rendimento è interessante ma il livello di rischio è superiore a quello normalmente consigliato. Conviene ridurre la volatilità prima di espandere il portafoglio.";
+
+    executiveSummaryEN =
+"Profitability is attractive but operational risk is higher than recommended. Reducing volatility should come before expansion.";
+
+}
+
+else if(roi < 8){
+
+    executiveSummaryIT =
+"L'investimento è stabile ma il ROI reale è ancora inferiore ai benchmark normalmente ricercati dagli investitori.";
+
+    executiveSummaryEN =
+"The investment is stable but real ROI is still below the level generally sought by investors.";
+
+}
+
+else{
+
+    executiveSummaryIT =
+"L'investimento presenta fondamentali equilibrati e buoni margini di miglioramento.";
+
+    executiveSummaryEN =
+"The investment fundamentals are balanced and still offer room for improvement.";
+
+}
+
+// =====================================
+// 🎯 EXECUTIVE DECISION
+// =====================================
+
+let executiveDecisionIT = "";
+let executiveDecisionEN = "";
+
+if(
+    roi >= 20 &&
+    cashflow > 0 &&
+    risk <= 35
+){
+
+    executiveDecisionIT =
+"L'investimento è pronto per una possibile espansione del portafoglio se si presentano opportunità con caratteristiche simili.";
+
+    executiveDecisionEN =
+"The investment is ready for potential portfolio expansion if similar opportunities arise.";
+
+}
+
+else if(cashflow <= 0){
+
+    executiveDecisionIT =
+"Prima di nuovi investimenti è consigliabile ripristinare un cashflow positivo.";
+
+    executiveDecisionEN =
+"Restore positive cashflow before considering new investments.";
+
+}
+
+else if(risk >= 60){
+
+    executiveDecisionIT =
+"La priorità è ridurre il rischio operativo prima di aumentare l'esposizione del portafoglio.";
+
+    executiveDecisionEN =
+"The priority is reducing operational risk before increasing portfolio exposure.";
+
+}
+
+else if(roi < 8){
+
+    executiveDecisionIT =
+"Conviene aumentare la redditività dell'immobile attuale prima di valutare nuove acquisizioni.";
+
+    executiveDecisionEN =
+"Improve the profitability of the current property before considering new acquisitions.";
+
+}
+
+else{
+
+    executiveDecisionIT =
+"L'investimento ha una buona base operativa. Le prossime decisioni possono concentrarsi sulla crescita mantenendo l'attuale equilibrio.";
+
+    executiveDecisionEN =
+"The investment has a solid operational foundation. Future decisions can focus on growth while maintaining the current balance.";
+
+}
   
 
   if(occupancy < 70){
@@ -6439,7 +6561,7 @@ if(pmsADR > 0){
 
 }
 
-  response.textIT = `
+response.textIT = `
 
 📈 AI Growth Advisor
 
@@ -6452,6 +6574,10 @@ if(pmsADR > 0){
 • AI Score: ${advisorScore}/100
 • Verdetto: ${advisorVerdictIT}
 
+📋 Executive Summary
+
+${executiveSummaryIT}
+
 🎯 Priorità Strategiche
 
 ${strategicPriorityIT}
@@ -6460,15 +6586,19 @@ ${strategicPriorityIT}
 
 ${strategicReasonIT}
 
+━━━━━━━━━━━━━━━━━━
+
 ${prioritiesIT.join("\n\n")}
 
-🚀 Prossimo Livello
+━━━━━━━━━━━━━━━━━━
 
-L'investimento risulta sostenibile. L'obiettivo principale è aumentare rendimento, scalabilità e resilienza operativa.
+🎯 Decisione AI
+
+${executiveDecisionIT}
 
 `;
 
-  response.textEN = `
+response.textEN = `
 
 📈 AI Growth Advisor
 
@@ -6481,6 +6611,10 @@ L'investimento risulta sostenibile. L'obiettivo principale è aumentare rendimen
 • AI Score: ${advisorScore}/100
 • Verdict: ${advisorVerdictEN}
 
+📋 Executive Summary
+
+${executiveSummaryEN}
+
 🎯 Strategic Priorities
 
 ${strategicPriorityEN}
@@ -6489,18 +6623,23 @@ ${strategicPriorityEN}
 
 ${strategicReasonEN}
 
+━━━━━━━━━━━━━━━━━━
+
 ${prioritiesEN.join("\n\n")}
 
-🚀 Next Level
+━━━━━━━━━━━━━━━━━━
 
-The investment is sustainable. The main objective is to improve profitability, scalability and operational resilience.
+🎯 AI Decision
+
+${executiveDecisionEN}
 
 `;
 
   return response;
 
-}  
+}
 
+  
 // ===========================================
 // 👋 GREETING RESPONSE
 // ===========================================
