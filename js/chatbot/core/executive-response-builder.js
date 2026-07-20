@@ -58,7 +58,11 @@ window.rbBuildExecutiveResponse = function({
 
     executiveNarrative = null,
 
-    investmentScore = null
+    investmentScore = null,
+
+    brain = null,
+
+    reasoning = null
 
 } = {}){
 
@@ -73,6 +77,29 @@ const financials =
     getExecutiveFinancialData(
         liveData
     );
+
+ const executiveModel = {
+
+    financials,
+
+    advisor,
+
+    executiveNarrative,
+
+    investmentScore,
+
+    documentKnowledge,
+
+    brain,
+
+    reasoning
+
+};
+
+console.log(
+    "🧠 EXECUTIVE MODEL",
+    executiveModel
+);   
 
 console.log(
     "🧠 EXECUTIVE BUILDER",
