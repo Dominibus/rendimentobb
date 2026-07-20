@@ -3031,7 +3031,12 @@ if(
   const scoreData =
     window.rbGenerateInvestmentScore({
 
-      roi: finalROI,
+      roi: Number(
+  result?.realROI ??
+  window.realROI ??
+  finalROI ??
+  0
+),
 
       risk: riskScore,
 
