@@ -6161,6 +6161,63 @@ const occupancyTo80 =
   const prioritiesIT = [];
   const prioritiesEN = [];
 
+  // =====================================
+// 🎯 STRATEGIC PRIORITY
+// =====================================
+
+let strategicPriorityIT = "";
+let strategicPriorityEN = "";
+
+if(roi < 8){
+
+  strategicPriorityIT =
+    "🎯 Priorità AI: il principale limite dell'investimento è il ROI reale. Prima di espandere il portafoglio conviene aumentare la redditività dell'operazione.";
+
+  strategicPriorityEN =
+    "🎯 AI Priority: the main limitation of this investment is the real ROI. Improve profitability before expanding your portfolio.";
+
+}
+
+else if(cashflow <= 0){
+
+  strategicPriorityIT =
+    "🎯 Priorità AI: riportare il cashflow in territorio positivo prima di pianificare qualsiasi crescita.";
+
+  strategicPriorityEN =
+    "🎯 AI Priority: restore positive cashflow before planning any expansion.";
+
+}
+
+else if(risk >= 60){
+
+  strategicPriorityIT =
+    "🎯 Priorità AI: ridurre il rischio operativo prima di cercare rendimenti più elevati.";
+
+  strategicPriorityEN =
+    "🎯 AI Priority: reduce operational risk before pursuing higher returns.";
+
+}
+
+else if(occupancy < 65){
+
+  strategicPriorityIT =
+    "🎯 Priorità AI: aumentare l'occupazione della struttura prima di intervenire sui prezzi.";
+
+  strategicPriorityEN =
+    "🎯 AI Priority: increase occupancy before changing pricing.";
+
+}
+
+else{
+
+  strategicPriorityIT =
+    "🎯 Priorità AI: l'investimento è equilibrato. Concentrati sull'aumento della redditività e sulla scalabilità.";
+
+  strategicPriorityEN =
+    "🎯 AI Priority: the investment is balanced. Focus on profitability growth and scalability.";
+
+}
+
   if(occupancy < 70){
 
     prioritiesIT.push(
@@ -6345,6 +6402,8 @@ ${occupancyTo80}% additional occupancy is needed.`
 
 🎯 Priorità Strategiche
 
+${strategicPriorityIT}
+
 ${prioritiesIT.join("\n\n")}
 
 🚀 Prossimo Livello
@@ -6367,6 +6426,8 @@ L'investimento risulta sostenibile. L'obiettivo principale è aumentare rendimen
 • Verdict: ${advisorVerdictEN}
 
 🎯 Strategic Priorities
+
+${strategicPriorityEN}
 
 ${prioritiesEN.join("\n\n")}
 
