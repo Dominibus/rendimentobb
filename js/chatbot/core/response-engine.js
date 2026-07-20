@@ -6404,6 +6404,10 @@ ${occupancyTo80}% additional occupancy is needed.`
 
 ${strategicPriorityIT}
 
+🧠 Perché
+
+${strategicReasonIT}
+
 ${prioritiesIT.join("\n\n")}
 
 🚀 Prossimo Livello
@@ -6429,6 +6433,10 @@ L'investimento risulta sostenibile. L'obiettivo principale è aumentare rendimen
 
 ${strategicPriorityEN}
 
+🧠 Why
+
+${strategicReasonEN}
+
 ${prioritiesEN.join("\n\n")}
 
 🚀 Next Level
@@ -6438,6 +6446,53 @@ The investment is sustainable. The main objective is to improve profitability, s
 `;
 
   return response;
+
+}  
+
+// =====================================
+// 🧠 AI STRATEGIC REASONING
+// =====================================
+
+let strategicReasonIT = "";
+let strategicReasonEN = "";
+
+if(roi < 8){
+
+  strategicReasonIT =
+    `Il ROI reale (${roi.toFixed(1)}%) è il parametro che limita maggiormente questa operazione. Rischio e cashflow risultano invece sufficientemente equilibrati.`;
+
+  strategicReasonEN =
+    `The real ROI (${roi.toFixed(1)}%) is the main limiting factor. Risk and cashflow are currently acceptable.`;
+
+}
+
+else if(cashflow <= 0){
+
+  strategicReasonIT =
+    "L'investimento non genera ancora un flusso di cassa positivo. Prima di espandere il portafoglio è necessario ristabilire la sostenibilità economica.";
+
+  strategicReasonEN =
+    "The investment is not generating positive cashflow yet. Financial sustainability should be restored before expanding.";
+
+}
+
+else if(risk >= 60){
+
+  strategicReasonIT =
+    `Il livello di rischio (${risk}/100) è superiore a quello normalmente consigliato per una crescita stabile del portafoglio.`;
+
+  strategicReasonEN =
+    `The current risk level (${risk}/100) is higher than recommended for stable portfolio growth.`;
+
+}
+
+else{
+
+  strategicReasonIT =
+    "L'investimento presenta fondamentali equilibrati. Le prossime ottimizzazioni possono concentrarsi sull'incremento della redditività.";
+
+  strategicReasonEN =
+    "The investment fundamentals are balanced. Future improvements should focus on increasing profitability.";
 
 }  
 
