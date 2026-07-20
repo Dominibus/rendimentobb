@@ -213,6 +213,14 @@ window.rbGetExecutiveRecommendation = function({
 
                 : "Current metrics suggest avoiding this investment under the current conditions.";
 
+        case "AVOID":
+
+    return isIT
+
+        ? "L'analisi AI evidenzia un investimento non sostenibile nelle condizioni attuali. Prima di procedere è consigliabile intervenire su redditività, cashflow e struttura finanziaria."
+
+        : "The AI analysis indicates that the investment is not sustainable under the current conditions. Profitability, cashflow and financing structure should be improved before proceeding.";    
+
         default:
 
             return isIT
