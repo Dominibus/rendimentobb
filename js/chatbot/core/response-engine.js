@@ -248,11 +248,13 @@ const roi =
 const executiveROI =
   Number(
 
-    liveData.visualROI ??
+    liveData.realROI ??
 
-    window.lastAnalysisData?.visualROI ??
+    window.lastAnalysisData?.realROI ??
 
-    liveData.roi ??
+    liveData.safeROI ??
+
+    window.lastAnalysisData?.safeROI ??
 
     roi ??
 
