@@ -39,6 +39,8 @@ window.rbGenerateResponse = function({
   // ===========================================
   // 🧠 RESPONSE OBJECT
   // ===========================================
+  
+  let builderOwnsExecutiveResponse = false;
 
   const response = {
 
@@ -4805,7 +4807,7 @@ console.log(
   executiveBuilderResult
 );
 
-  const builderOwnsExecutiveResponse =
+  builderOwnsExecutiveResponse =
 
     !!(
         executiveBuilderResult?.textIT ||
