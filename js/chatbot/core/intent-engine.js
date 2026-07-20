@@ -1092,6 +1092,61 @@ if(
   });
 
 }
+
+// =========================================
+// 🧠 LIVE SIMULATION ANALYSIS ROUTING
+// Simulation analysis must not require a PDF
+// =========================================
+
+const requestsSimulationAnalysis = has(
+
+  "analizza simulazione",
+  "analizza la simulazione",
+  "analizza questa simulazione",
+  "valuta simulazione",
+  "valuta la simulazione",
+
+  "analyze simulation",
+  "analyze the simulation",
+  "analyze this simulation",
+  "evaluate simulation",
+  "evaluate the simulation",
+  "review my simulation"
+
+);
+
+const requestsDocumentAnalysis = has(
+
+  "report",
+  "pdf"
+
+);
+
+if(
+  requestsSimulationAnalysis &&
+  !requestsDocumentAnalysis
+){
+
+  applyIntent({
+
+    intent: "investment_executive",
+
+    category: "executive",
+
+    confidence: 0.99,
+
+    priority: 275,
+
+    requiresCalculation: true,
+
+    requiresRiskAnalysis: true,
+
+    requiresMarketData: true
+
+  });
+
+}
+  
 // ===========================================
 // 🏨 PROPERTY PERFORMANCE
 // ===========================================
