@@ -1982,111 +1982,86 @@ if(
     // =========================================
 
     "cosa devo migliorare",
-
     "come posso migliorare",
-
-    "come migliorare",
-
-    "cosa posso fare meglio",
-
-    "come posso fare meglio",
-
+    "come posso migliorarlo",
+    "come migliorarlo",
+    "come posso migliorare questo",
+    "come migliorare questo",
     "come migliorare questa simulazione",
-
     "come migliorare questo investimento",
-
     "come migliorare questo immobile",
-
     "come migliorare questo appartamento",
-
     "come migliorare questa casa",
-
     "come migliorare il b&b",
-
     "come migliorare l'airbnb",
 
+    "come posso ottimizzarlo",
+    "come posso ottimizzare questo investimento",
+    "come posso ottimizzare questa simulazione",
+    "come posso renderlo migliore",
+    "come posso renderlo più redditizio",
+    "come posso renderlo più profittevole",
+    "come posso farlo rendere di più",
+    "come posso aumentare i risultati",
+
+    "cosa posso migliorare",
+    "cosa posso fare meglio",
+    "come posso fare meglio",
+
     "dammi consigli",
-
     "consigliami",
-
     "dammi suggerimenti",
-
     "dammi delle idee",
 
-    "consigli per migliorare",
-
     "cosa mi consigli",
-
     "che cosa mi consigli",
-
-    "quali sono i miglioramenti",
-
-    "quali migliorie posso fare",
-
+    "tu cosa faresti",
     "cosa cambieresti",
 
-    "tu cosa faresti",
+    "quali sono i miglioramenti",
+    "quali migliorie posso fare",
+    "quali modifiche faresti",
+
+    "come posso aumentare il valore",
 
     // =========================================
     // 🇮🇹 ROI
     // =========================================
 
     "come aumento il roi",
-
     "come aumentare il roi",
-
+    "come migliorare il roi",
     "migliorare il roi",
-
     "ottimizzare il roi",
-
     "incrementare il roi",
-
     "massimizzare il roi",
 
     "come aumentare il rendimento",
-
     "come migliorare il rendimento",
-
     "aumentare il rendimento",
-
     "ottimizzare il rendimento",
 
     "come aumentare la redditività",
-
     "come aumentare la redditivita",
-
-    "aumentare la redditività",
-
-    "aumentare la redditivita",
-
+    "come migliorare la redditività",
+    "come migliorare la redditivita",
     "ottimizzare la redditività",
-
     "ottimizzare la redditivita",
 
     // =========================================
-    // 🇮🇹 CASHFLOW / PROFITTO
+    // 🇮🇹 CASHFLOW
     // =========================================
 
     "come aumentare il cashflow",
-
     "come migliorare il cashflow",
-
     "come aumentare il profitto",
-
     "come aumento il profitto",
-
     "come aumentare il profitto netto",
-
     "come aumentare gli utili",
-
     "come aumentare il guadagno",
-
     "come aumentare i ricavi",
-
     "come aumentare l'utile",
-
     "come migliorare i margini",
-
     "come aumentare il margine",
 
     // =========================================
@@ -2094,19 +2069,12 @@ if(
     // =========================================
 
     "come ridurre il rischio",
-
     "come abbassare il rischio",
-
     "come diminuire il rischio",
-
     "come rendere più sicuro",
-
     "come rendere piu sicuro",
-
     "come rendere sostenibile",
-
     "come rendere più profittevole",
-
     "come rendere piu profittevole",
 
     // =========================================
@@ -2114,31 +2082,23 @@ if(
     // =========================================
 
     "come ottimizzare l'investimento",
-
     "come ottimizzare questo investimento",
-
     "come ottimizzare questo immobile",
-
     "come ottimizzare questa simulazione",
 
     "come far rendere di più",
-
     "come far rendere di piu",
 
     "come migliorare i risultati",
-
     "come migliorare le performance",
 
     "come crescere",
-
     "come scalare",
 
     "come fare il salto di qualità",
-
     "come fare il salto di qualita",
 
     "come diventare più competitivo",
-
     "come diventare piu competitivo",
 
     "come battere la concorrenza",
@@ -2148,25 +2108,42 @@ if(
     // =========================================
 
     "what should i improve",
-
     "what can i improve",
 
     "how can i improve",
-
+    "how can i improve it",
     "how do i improve",
+    "how do i improve it",
+
+    "how can i improve this",
+    "how do i improve this",
+
+    "how can i improve this investment",
+    "how can i improve this property",
+    "how can i improve this simulation",
+
+    "how can i optimize it",
+    "how do i optimize it",
+
+    "how can i optimize this investment",
+    "how can i optimize this property",
+    "how can i optimize this simulation",
+
+    "how can i make it better",
+    "how do i make it better",
+
+    "how can i make it more profitable",
+    "how can i make it more sustainable",
 
     "what can i do better",
 
     "give me advice",
-
     "give me suggestions",
 
     "improvement tips",
-
     "optimization advice",
 
     "what would you improve",
-
     "what would you change",
 
     // =========================================
@@ -2174,21 +2151,16 @@ if(
     // =========================================
 
     "how can i increase roi",
-
     "how can i improve roi",
 
     "increase roi",
-
     "improve roi",
 
     "maximize roi",
-
     "optimize roi",
 
     "increase returns",
-
     "improve returns",
-
     "maximize returns",
 
     // =========================================
@@ -2196,11 +2168,9 @@ if(
     // =========================================
 
     "increase profitability",
-
     "improve profitability",
 
     "how to increase profitability",
-
     "how to improve profitability",
 
     "how to make more profit",
@@ -2208,7 +2178,6 @@ if(
     "increase revenue",
 
     "increase cashflow",
-
     "improve cashflow",
 
     "increase income",
@@ -2220,7 +2189,6 @@ if(
     // =========================================
 
     "how can i reduce risk",
-
     "how can i lower risk",
 
     "reduce investment risk",
@@ -2234,21 +2202,16 @@ if(
     // =========================================
 
     "how can i optimize this investment",
-
     "how to optimize this investment",
 
     "optimize this property",
-
     "optimize this apartment",
-
     "optimize this simulation",
 
     "improve performance",
-
     "how to improve performance",
 
     "grow faster",
-
     "scale faster",
 
     "be more competitive"
@@ -2259,31 +2222,23 @@ if(
 
   applyIntent({
 
-    intent:
-      "improvement_advisor",
+    intent: "improvement_advisor",
 
-    category:
-      "executive",
+    category: "executive",
 
-    confidence:
-      0.99,
+    confidence: 0.99,
 
-    priority:
-      290,
+    priority: 290,
 
-    requiresCalculation:
-      true,
+    requiresCalculation: true,
 
-    requiresRiskAnalysis:
-      true,
+    requiresRiskAnalysis: true,
 
-    requiresMarketData:
-      true
+    requiresMarketData: true
 
   });
 
 }
-  
 // ===========================================
 // 🏨 PMS BOOKINGS
 // ===========================================
