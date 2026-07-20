@@ -229,7 +229,11 @@
 "/js/chatbot/executive-narrative-engine.js",
 
 "/js/chatbot/reasoning-engine.js",
+
+"/js/chatbot/core/ai-brain.js",
+
 "/js/chatbot/core/executive-response-builder.js",
+
 "/js/chatbot/core/response-engine.js",
 
 "/js/chatbot/core/chatbot-orchestrator.js",
