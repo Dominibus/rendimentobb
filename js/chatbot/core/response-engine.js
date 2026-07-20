@@ -6168,17 +6168,7 @@ const occupancyTo80 =
 let strategicPriorityIT = "";
 let strategicPriorityEN = "";
 
-if(roi < 8){
-
-  strategicPriorityIT =
-    "🎯 Priorità AI: il principale limite dell'investimento è il ROI reale. Prima di espandere il portafoglio conviene aumentare la redditività dell'operazione.";
-
-  strategicPriorityEN =
-    "🎯 AI Priority: the main limitation of this investment is the real ROI. Improve profitability before expanding your portfolio.";
-
-}
-
-else if(cashflow <= 0){
+if(cashflow <= 0){
 
   strategicPriorityIT =
     "🎯 Priorità AI: riportare il cashflow in territorio positivo prima di pianificare qualsiasi crescita.";
@@ -6195,6 +6185,16 @@ else if(risk >= 60){
 
   strategicPriorityEN =
     "🎯 AI Priority: reduce operational risk before pursuing higher returns.";
+
+}
+
+else if(roi < 8){
+
+  strategicPriorityIT =
+    "🎯 Priorità AI: il principale limite dell'investimento è il ROI reale. Prima di espandere il portafoglio conviene aumentare la redditività dell'operazione.";
+
+  strategicPriorityEN =
+    "🎯 AI Priority: the main limitation of this investment is the real ROI. Improve profitability before expanding your portfolio.";
 
 }
 
@@ -6225,17 +6225,7 @@ else{
 let strategicReasonIT = "";
 let strategicReasonEN = "";
 
-if(roi < 8){
-
-  strategicReasonIT =
-    `Il ROI reale (${roi.toFixed(1)}%) è il parametro che limita maggiormente questa operazione. Rischio e cashflow risultano invece sufficientemente equilibrati.`;
-
-  strategicReasonEN =
-    `The real ROI (${roi.toFixed(1)}%) is the main limiting factor. Risk and cashflow are currently acceptable.`;
-
-}
-
-else if(cashflow <= 0){
+if(cashflow <= 0){
 
   strategicReasonIT =
     "L'investimento non genera ancora un flusso di cassa positivo. Prima di espandere il portafoglio è necessario ristabilire la sostenibilità economica.";
@@ -6255,6 +6245,16 @@ else if(risk >= 60){
 
 }
 
+else if(roi < 8){
+
+  strategicReasonIT =
+    `Il ROI reale (${roi.toFixed(1)}%) è il parametro che limita maggiormente questa operazione. Rischio e cashflow risultano invece sufficientemente equilibrati.`;
+
+  strategicReasonEN =
+    `The real ROI (${roi.toFixed(1)}%) is the main limiting factor. Risk and cashflow are currently acceptable.`;
+
+}
+
 else{
 
   strategicReasonIT =
@@ -6263,9 +6263,9 @@ else{
   strategicReasonEN =
     "The investment fundamentals are balanced. Future improvements should focus on increasing profitability.";
 
-}  
+}
 
-  // =====================================
+// =====================================
 // 📋 EXECUTIVE SUMMARY
 // =====================================
 
