@@ -25,6 +25,8 @@ window.rbGenerateResponse = function({
 
   brain = null,
 
+  executiveBrain = null,
+
   conversationContext = {}
 
 } = {}){
@@ -71,6 +73,27 @@ console.log(
         contextConfidence,
         originalMessage
     }
+);
+
+// ===============================================
+// 🧠 EXECUTIVE BRAIN
+// ===============================================
+
+const executiveInsight =
+
+    executiveBrain?.insight ||
+
+    null;
+
+const executiveAnalysis =
+
+    executiveBrain?.analysis ||
+
+    null;
+
+console.log(
+    "🧠 EXECUTIVE INSIGHT",
+    executiveInsight
 );
   
   // ===========================================
