@@ -432,6 +432,31 @@ else if(mortgagePercent > 0){
     
 narrativeIT.push(introIT);
 
+analysisIT += introIT;
+
+if(result.summaryIT){
+
+    analysisIT += " " + result.summaryIT;
+
+}
+
+if(result.explanationIT){
+
+    analysisIT += " " + result.explanationIT;
+
+}
+
+if(result.strongestPointIT){
+
+    analysisIT +=
+        " Punto di forza: " +
+        result.strongestPointIT;
+
+}
+
+result.analysisIT = analysisIT;
+    
+
 narrativeEN.push(
 
 `I analyzed the simulation considering ROI, risk, cashflow and occupancy.
