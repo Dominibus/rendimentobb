@@ -323,6 +323,34 @@ if(executiveBrain?.explanationEN){
     );
 
 }
+
+// ===============================================
+// 💪 STRONGEST POINT
+// ===============================================
+
+if(executiveBrain?.strongestPointIT){
+
+    blocksIT.push(
+
+        "💪 Punto di forza\n\n" +
+
+        executiveBrain.strongestPointIT
+
+    );
+
+}
+
+if(executiveBrain?.strongestPointEN){
+
+    blocksEN.push(
+
+        "💪 Strongest Point\n\n" +
+
+        executiveBrain.strongestPointEN
+
+    );
+
+}
     
 // ===============================================
 // 🧠 EXECUTIVE SUMMARY BLOCK
