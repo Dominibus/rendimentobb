@@ -4775,7 +4775,7 @@ if(
 
   try{
 
-    executiveBuilderResult =
+executiveBuilderResult =
       window.rbBuildExecutiveResponse({
 
         executiveContext,
@@ -4786,7 +4786,39 @@ if(
 
         executiveNarrative,
 
-        investmentScore
+        investmentScore,
+
+        reasoning: {
+
+          it: reasoningIT,
+
+          en: reasoningEN
+
+        },
+
+        brain: brainData,
+
+        intent,
+
+        message,
+
+        aiSignals,
+
+        financials: {
+
+          roi,
+
+          risk,
+
+          occupancy,
+
+          net,
+
+          gross,
+
+          mortgagePercent
+
+        }
 
       }) || null;
 
