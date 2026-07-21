@@ -329,13 +329,61 @@ const cashflowValue = cashflow;
 
 const occupancyValue = occupancy;
 
-narrativeIT.push(
+let introIT =
+    "Ho analizzato la simulazione considerando i principali indicatori economici e finanziari.";
 
-`Ho analizzato la simulazione considerando ROI, rischio, cashflow e occupazione.
+if(roiValue >= 20){
 
-L'investimento presenta un ROI del ${roiValue.toFixed(1)}%, un livello di rischio pari a ${riskValue}/100, un cashflow annuo stimato di €${Math.round(cashflowValue).toLocaleString("it-IT")} e un'occupazione prevista del ${occupancyValue}%.`
+    introIT +=
+        ` Il ROI del ${roiValue.toFixed(1)}% evidenzia un rendimento molto elevato.`;
 
-);
+}
+else if(roiValue >= 10){
+
+    introIT +=
+        ` Il ROI del ${roiValue.toFixed(1)}% risulta interessante.`;
+
+}
+else{
+
+    introIT +=
+        ` Il ROI del ${roiValue.toFixed(1)}% suggerisce prudenza.`;
+
+}
+
+if(riskValue <= 35){
+
+    introIT +=
+        ` Il rischio (${riskValue}/100) è contenuto.`;
+
+}
+else if(riskValue <= 60){
+
+    introIT +=
+        ` Il rischio (${riskValue}/100) è nella media.`;
+
+}
+else{
+
+    introIT +=
+        ` Il rischio (${riskValue}/100) è elevato.`;
+
+}
+
+if(cashflowValue > 0){
+
+    introIT +=
+        ` Il cashflow annuo stimato di €${Math.round(cashflowValue).toLocaleString("it-IT")} sostiene la sostenibilità dell'investimento.`;
+
+}
+else{
+
+    introIT +=
+        ` Il cashflow negativo rappresenta un elemento di attenzione.`;
+
+}
+
+narrativeIT.push(introIT);
 
 narrativeEN.push(
 
