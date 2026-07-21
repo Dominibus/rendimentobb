@@ -335,33 +335,55 @@ if(!diagnosis.hasAnalysis){
 }
 else{
 
+    if(diagnosis.executiveDecision === "BUY"){
+
+    executiveSummaryIT =
+        "L'investimento presenta caratteristiche favorevoli per una possibile acquisizione. ";
+
+}
+else if(diagnosis.executiveDecision === "WAIT"){
+
+    executiveSummaryIT =
+        "L'investimento richiede ulteriori verifiche prima di una decisione definitiva. ";
+
+}
+else if(diagnosis.executiveDecision === "NO_BUY"){
+
+    executiveSummaryIT =
+        "L'investimento presenta criticità che ne sconsigliano l'acquisto nelle condizioni attuali. ";
+
+}
+else{
+
     switch(diagnosis.investmentState){
 
-    case "excellent":
+        case "excellent":
 
-        executiveSummaryIT =
-            "L'investimento mostra caratteristiche molto solide. ";
+            executiveSummaryIT =
+                "L'investimento mostra caratteristiche molto solide. ";
 
-        break;
+            break;
 
-    case "good":
+        case "good":
 
-        executiveSummaryIT =
-            "L'investimento appare complessivamente positivo. ";
+            executiveSummaryIT =
+                "L'investimento appare complessivamente positivo. ";
 
-        break;
+            break;
 
-    case "acceptable":
+        case "acceptable":
 
-        executiveSummaryIT =
-            "L'investimento risulta sostenibile ma presenta margini di miglioramento. ";
+            executiveSummaryIT =
+                "L'investimento risulta sostenibile ma presenta margini di miglioramento. ";
 
-        break;
+            break;
 
-    default:
+        default:
 
-        executiveSummaryIT =
-            "L'investimento presenta criticità che richiedono un'attenta valutazione. ";
+            executiveSummaryIT =
+                "L'investimento presenta criticità che richiedono un'attenta valutazione. ";
+
+    }
 
 }
 
