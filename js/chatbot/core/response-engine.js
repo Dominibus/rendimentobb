@@ -5001,6 +5001,11 @@ if(
 
   try{
 
+    console.log(
+    "🧠 BRAIN DATA TO BUILDER",
+    brainData
+);
+
 executiveBuilderResult =
       window.rbBuildExecutiveResponse({
 
