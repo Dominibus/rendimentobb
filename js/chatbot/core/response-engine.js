@@ -5044,6 +5044,8 @@ executiveBuilderResult =
 
         brain: brainData,
 
+        executiveBrain,
+
         intent,
 
         message,
