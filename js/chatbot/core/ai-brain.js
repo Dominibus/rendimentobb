@@ -273,7 +273,55 @@
         brainContext.actionPlan =
             actionPlan;
 
-       // =====================================
+const strengthLabelsIT = {
+
+    high_roi:
+        "ROI molto superiore alla media",
+
+    strong_occupancy:
+        "Ottimo livello di occupazione",
+
+    positive_cashflow:
+        "Cashflow positivo",
+
+    controlled_risk:
+        "Profilo di rischio contenuto"
+
+};
+
+const weaknessLabelsIT = {
+
+    negative_roi:
+        "ROI insufficiente",
+
+    negative_cashflow:
+        "Cashflow negativo",
+
+    high_risk:
+        "Livello di rischio elevato",
+
+    low_occupancy:
+        "Occupazione inferiore alla media"
+
+};
+
+const actionLabelsIT = {
+
+    reduce_operating_costs:
+        "Ridurre i costi operativi",
+
+    reduce_financial_risk:
+        "Ridurre l'esposizione finanziaria",
+
+    increase_revenue:
+        "Incrementare i ricavi",
+
+    increase_occupancy:
+        "Migliorare il tasso di occupazione"
+
+};        
+
+// =====================================
 // 🧠 EXECUTIVE SUMMARY
 // =====================================
 
@@ -290,24 +338,30 @@ else{
     executiveSummaryIT =
         `L'investimento viene classificato come ${diagnosis.investmentState}. `;
 
-    if(strengths.length){
+     if(strengths.length){
 
-        executiveSummaryIT +=
-            `Punti di forza: ${strengths.join(", ")}. `;
+          executiveSummaryIT +=
+             `Punti di forza: ${strengths
+  .map(x => strengthLabelsIT[x] || x)
+  .join(", ")}. `;
 
     }
 
     if(weaknesses.length){
 
         executiveSummaryIT +=
-            `Criticità: ${weaknesses.join(", ")}. `;
+            `Criticità: ${weaknesses
+.map(x => weaknessLabelsIT[x] || x)
+.join(", ")}. `;
 
     }
 
     if(actionPlan.length){
 
         executiveSummaryIT +=
-            `Priorità: ${actionPlan.join(", ")}.`;
+            `Priorità: ${actionPlan
+.map(x => actionLabelsIT[x] || x)
+.join(", ")}.`;
 
     }
 
