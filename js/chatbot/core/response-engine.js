@@ -52,7 +52,7 @@ const {
 
     isShortQuestion = false,
 
-    hasAnalysis = false,
+    hasAnalysis: conversationHasAnalysis = false,
 
     contextConfidence = 0,
 
@@ -917,6 +917,13 @@ console.log(
     hasAnalysis
   }
 );
+
+// =====================================
+// 🧠 CONVERSATION ANALYSIS
+// =====================================
+
+const hasConversationAnalysis =
+    hasAnalysis || conversationHasAnalysis;
 
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
