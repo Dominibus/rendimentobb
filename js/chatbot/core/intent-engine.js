@@ -126,74 +126,168 @@ const applyIntent = (config = {}) => {
 
 };
 
-  // ===========================================
-  // ❓ EDUCATION / EXPLANATION
-  // PRIORITÀ MASSIMA
-  // ===========================================
+ // ===========================================
+// ❓ EDUCATION / EXPLANATION
+// PRIORITÀ MASSIMA
+// ===========================================
 
-  const explainWords = [
+const explainWords = [
 
-    // 🇮🇹 ITALIANO
-    "spiega roi",
-    "spiegami roi",
+  // =========================================
+  // 🇮🇹 SPIEGAZIONI FINANZIARIE
+  // =========================================
 
-    "spiega cashflow",
-    "spiegami cashflow",
+  "spiega roi",
+  "spiegami roi",
 
-    "spiega rischio",
-    "spiegami rischio",
+  "spiega cashflow",
+  "spiegami cashflow",
 
-    "spiega dscr",
-    "spiegami dscr",
+  "spiega rischio",
+  "spiegami rischio",
 
-    "spiega mutuo",
-    "spiegami mutuo",
+  "spiega dscr",
+  "spiegami dscr",
 
-    "spiega ltv",
-    "spiegami ltv",
+  "spiega mutuo",
+  "spiegami mutuo",
 
-    "cos'è",
-    "cos e",
-    "cose",
+  "spiega ltv",
+  "spiegami ltv",
 
-    "cosa è",
-    "cosa e",
+  "spiega revpar",
+  "spiegami revpar",
 
-    "significa",
-    "definizione",
+  "spiega adr",
+  "spiegami adr",
 
-   // 🇬🇧 ENGLISH
+  "spiega break even",
+  "spiegami break even",
 
-"explain roi",
-"explain cashflow",
-"explain risk",
-"explain dscr",
-"explain mortgage",
-"explain ltv",
+  "spiega leva finanziaria",
+  "spiegami leva finanziaria",
 
-"what is roi",
-"what is cashflow",
-"what is risk",
-"what is dscr",
-"what is mortgage",
-"what is ltv",
+  "spiega occupazione",
+  "spiegami occupazione",
 
-"meaning roi",
-"meaning cashflow",
-"definition roi",
-"definition cashflow"
+  // =========================================
+  // 🇮🇹 DEFINIZIONI
+  // =========================================
 
-  ];
+  "cos'è il roi",
+  "cos e il roi",
 
-  const isEducation =
+  "cos'è il cashflow",
+  "cos e il cashflow",
 
-    explainWords.some(word =>
+  "cos'è il rischio",
+  "cos e il rischio",
 
-      text.includes(word)
+  "cos'è il dscr",
+  "cos e il dscr",
 
-    );
+  "cos'è il mutuo",
+  "cos e il mutuo",
 
-  if(isEducation){
+  "cos'è il ltv",
+  "cos e il ltv",
+
+  "cos'è il revpar",
+  "cos e il revpar",
+
+  "cos'è adr",
+  "cos e adr",
+
+  "cos'è il break even",
+  "cos e il break even",
+
+  "cos'è la leva finanziaria",
+  "cos e la leva finanziaria",
+
+  "cos'è l'occupazione",
+  "cos e l'occupazione",
+
+  "cosa significa roi",
+  "cosa significa cashflow",
+  "cosa significa rischio",
+  "cosa significa dscr",
+  "cosa significa mutuo",
+  "cosa significa ltv",
+  "cosa significa revpar",
+  "cosa significa adr",
+  "cosa significa break even",
+  "cosa significa leva finanziaria",
+
+  "definizione roi",
+  "definizione cashflow",
+  "definizione rischio",
+  "definizione dscr",
+  "definizione mutuo",
+  "definizione ltv",
+  "definizione revpar",
+  "definizione adr",
+  "definizione break even",
+  "definizione leva finanziaria",
+
+  // =========================================
+  // 🇬🇧 EXPLANATIONS
+  // =========================================
+
+  "explain roi",
+  "explain cashflow",
+  "explain risk",
+  "explain dscr",
+  "explain mortgage",
+  "explain ltv",
+  "explain revpar",
+  "explain adr",
+  "explain break even",
+  "explain leverage",
+  "explain occupancy",
+
+  // =========================================
+  // 🇬🇧 DEFINITIONS
+  // =========================================
+
+  "what is roi",
+  "what is cashflow",
+  "what is risk",
+  "what is dscr",
+  "what is mortgage",
+  "what is ltv",
+  "what is revpar",
+  "what is adr",
+  "what is break even",
+  "what is leverage",
+  "what is occupancy",
+
+  "meaning roi",
+  "meaning cashflow",
+  "meaning risk",
+  "meaning dscr",
+  "meaning mortgage",
+  "meaning ltv",
+  "meaning revpar",
+  "meaning adr",
+
+  "definition roi",
+  "definition cashflow",
+  "definition risk",
+  "definition dscr",
+  "definition mortgage",
+  "definition ltv",
+  "definition revpar",
+  "definition adr"
+
+];
+
+const isEducation =
+
+  explainWords.some(word =>
+    text.includes(word)
+  );
+
+if(isEducation){
 
   applyIntent({
 
