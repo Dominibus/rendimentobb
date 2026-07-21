@@ -6242,7 +6242,7 @@ let executiveVerdictEN =
 
 if(advisor){
 
-  if(advisor.verdict === "BUY"){
+  if(executiveDecision === "BUY"){
 
     executiveVerdictIT =
       "🟢 INVESTIMENTO CONSIGLIATO";
@@ -6252,7 +6252,7 @@ if(advisor){
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  else if(executiveDecision === "WAIT"){
 
     executiveVerdictIT =
       "🟡 OTTIMIZZARE PRIMA DI PROCEDERE";
