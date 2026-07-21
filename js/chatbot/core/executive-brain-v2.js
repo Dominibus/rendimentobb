@@ -455,6 +455,10 @@ if(result.strongestPointIT){
 }
 
 result.analysisIT = analysisIT;
+
+    analysisEN += narrativeEN.join("\n\n");
+
+result.analysisEN = analysisEN;
     
 
 narrativeEN.push(
