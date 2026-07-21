@@ -1102,13 +1102,44 @@ if(
 
 }
 
+// ===============================================
+// 🧠 CONVERSATION CONTEXT
+// ===============================================
+
+const conversationContext =
+
+    window.rbBuildConversationContext({
+
+        message: text,
+
+        intent: currentIntentData,
+
+        entities,
+
+        memory: filteredMemory,
+
+        executiveContext:
+            window.executiveContext || {},
+
+        investorProfile,
+
+        aiBrain: brain,
+
+        advisor
+
+    });
+
+console.log(
+    "🧠 CONVERSATION CONTEXT",
+    conversationContext
+);
 // =========================================
 // 🧠 RESPONSE
 // =========================================
 
 const partialResponse =
 
-  window.rbGenerateResponse({
+window.rbGenerateResponse({
 
     message: text,
 
@@ -1126,9 +1157,11 @@ const partialResponse =
 
     aiSignals,
 
-    brain
+    brain,
 
-  });
+    conversationContext
+
+});
 
   console.log(
   "🏨 PMS RESPONSE DEBUG",
