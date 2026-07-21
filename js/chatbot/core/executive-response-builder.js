@@ -263,25 +263,25 @@ if(executiveNarrative?.recommendationEN){
 // 🧠 EXECUTIVE SUMMARY
 // ===============================================
 
-if(executiveNarrative?.summaryIT){
+if(brain?.summaryIT){
 
     blocksIT.push(
 
         "🧠 Analisi AI\n\n" +
 
-        executiveNarrative.summaryIT
+        brain.summaryIT
 
     );
 
 }
 
-if(executiveNarrative?.summaryEN){
+if(brain?.summaryEN){
 
     blocksEN.push(
 
         "🧠 AI Analysis\n\n" +
 
-        executiveNarrative.summaryEN
+        brain.summaryEN
 
     );
 
