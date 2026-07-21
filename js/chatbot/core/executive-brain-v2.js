@@ -202,15 +202,32 @@ switch(strongestPoint){
 
         break;
 
-    case "cashflow":
+case "cashflow":
+
+    if(
+
+        roi >= 10 &&
+
+        risk <= 35
+
+    ){
 
         result.summaryIT =
-            "La simulazione evidenzia una buona capacità di generare liquidità grazie a un cashflow positivo.";
+            "Il cashflow positivo rappresenta un elemento favorevole, ma il rendimento complessivo dell'operazione può ancora essere migliorato per rendere l'investimento più competitivo.";
 
-        result.summaryEN =
-            "The simulation highlights a good ability to generate liquidity thanks to positive cashflow.";
+    }
 
-        break;
+    else{
+
+        result.summaryIT =
+            "Il cashflow positivo dimostra che l'immobile è in grado di generare liquidità, contribuendo alla sostenibilità economica dell'investimento.";
+
+    }
+
+    result.summaryEN =
+        "The simulation highlights a good ability to generate liquidity thanks to positive cashflow.";
+
+    break;
 
     case "occupancy":
 
