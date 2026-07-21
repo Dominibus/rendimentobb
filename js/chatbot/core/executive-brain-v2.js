@@ -436,20 +436,20 @@ analysisIT += introIT;
 
 if(result.summaryIT){
 
-    analysisIT += " " + result.summaryIT;
+    analysisIT += "\n\n" + result.summaryIT;
 
 }
 
 if(result.explanationIT){
 
-    analysisIT += " " + result.explanationIT;
+    analysisIT += "\n\n" + result.explanationIT;
 
 }
 
 if(result.strongestPointIT){
 
     analysisIT +=
-        " Punto di forza: " +
+        "\n\nPunto di forza: " +
         result.strongestPointIT;
 
 }
