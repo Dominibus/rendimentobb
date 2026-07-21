@@ -394,15 +394,9 @@ textIT = [
 
     verdictBlock.it,
 
-    "Ho analizzato la simulazione dell'investimento.",
-
     executiveNarrative?.recommendationIT,
 
-    executiveBrain?.summaryIT,
-
-    executiveBrain?.explanationIT,
-
-    executiveBrain?.strongestPointIT
+    executiveBrain?.executiveNarrativeIT
 
 ]
 
@@ -415,15 +409,9 @@ textEN = [
 
     verdictBlock.en,
 
-    "I analyzed the investment simulation.",
-
     executiveNarrative?.recommendationEN,
 
-    executiveBrain?.summaryEN,
-
-    executiveBrain?.explanationEN,
-
-    executiveBrain?.strongestPointEN
+    executiveBrain?.executiveNarrativeEN
 
 ]
 
