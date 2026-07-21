@@ -69,7 +69,7 @@ console.log(
         topic,
         isFollowUp,
         isShortQuestion,
-        hasAnalysis,
+        conversationHasAnalysis,
         contextConfidence,
         originalMessage
     }
