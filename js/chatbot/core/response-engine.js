@@ -4014,6 +4014,60 @@ if(targetROI > 0){
 💰 Cashflow: €${Math.round(net).toLocaleString("it-IT")}`
 );
 
+// =====================================
+// 🧠 EXECUTIVE INSIGHT
+// =====================================
+
+if(strongestPoint){
+
+  executiveIT.push(
+
+`🧠 Insight AI
+
+Il principale punto di forza individuato è:
+
+${strongestPoint}.`
+
+  );
+
+}
+
+if(weakestPoint){
+
+  executiveIT.push(
+
+`⚠️ Area da migliorare
+
+${weakestPoint}.`
+
+  );
+
+}
+
+if(hasCriticalIssue){
+
+  executiveIT.push(
+
+`🚨 Attenzione
+
+L'AI ha rilevato almeno una criticità che potrebbe compromettere la sostenibilità dell'investimento nel medio periodo.`
+
+  );
+
+}
+
+if(hasStrongInvestment){
+
+  executiveIT.push(
+
+`🚀 Valutazione Strategica
+
+L'Executive Brain considera questa operazione particolarmente competitiva rispetto ai benchmark disponibili.`
+
+  );
+
+}
+
    if(net > 0){
 
     executiveIT.push(
