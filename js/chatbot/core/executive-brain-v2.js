@@ -49,6 +49,10 @@ actionIT: "",
 
 actionEN: "",
 
+executiveNarrativeIT: "",
+
+executiveNarrativeEN: "",        
+
 confidence: 0.90
 
     };
