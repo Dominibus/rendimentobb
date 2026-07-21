@@ -335,8 +335,35 @@ if(!diagnosis.hasAnalysis){
 }
 else{
 
-    executiveSummaryIT =
-        `L'investimento viene classificato come ${diagnosis.investmentState}. `;
+    switch(diagnosis.investmentState){
+
+    case "excellent":
+
+        executiveSummaryIT =
+            "L'investimento mostra caratteristiche molto solide. ";
+
+        break;
+
+    case "good":
+
+        executiveSummaryIT =
+            "L'investimento appare complessivamente positivo. ";
+
+        break;
+
+    case "acceptable":
+
+        executiveSummaryIT =
+            "L'investimento risulta sostenibile ma presenta margini di miglioramento. ";
+
+        break;
+
+    default:
+
+        executiveSummaryIT =
+            "L'investimento presenta criticità che richiedono un'attenta valutazione. ";
+
+}
 
      if(strengths.length){
 
