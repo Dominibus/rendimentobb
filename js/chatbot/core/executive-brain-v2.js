@@ -321,21 +321,13 @@ const narrativeEN = [];
 
 // Introduzione
 
-const roiValue =
-    Number(data?.realROI ?? data?.roi ?? 0);
+const roiValue = roi;
 
-const riskValue =
-    Number(data?.risk ?? 0);
+const riskValue = risk;
 
-const cashflowValue =
-    Number(
-        data?.cashflow ??
-        data?.net ??
-        0
-    );
+const cashflowValue = cashflow;
 
-const occupancyValue =
-    Number(data?.occupancy ?? 0);
+const occupancyValue = occupancy;
 
 narrativeIT.push(
 
