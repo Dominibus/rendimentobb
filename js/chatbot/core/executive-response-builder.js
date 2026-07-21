@@ -260,6 +260,34 @@ if(executiveNarrative?.recommendationEN){
 }
 
 // ===============================================
+// 🧠 EXECUTIVE SUMMARY
+// ===============================================
+
+if(executiveNarrative?.summaryIT){
+
+    blocksIT.push(
+
+        "🧠 Analisi AI\n\n" +
+
+        executiveNarrative.summaryIT
+
+    );
+
+}
+
+if(executiveNarrative?.summaryEN){
+
+    blocksEN.push(
+
+        "🧠 AI Analysis\n\n" +
+
+        executiveNarrative.summaryEN
+
+    );
+
+}
+    
+// ===============================================
 // 🧠 EXECUTIVE SUMMARY BLOCK
 // ===============================================
 
