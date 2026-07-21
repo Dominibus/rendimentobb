@@ -4400,7 +4400,7 @@ The current risk level may reduce cashflow stability over the long term.`
 
 if(advisor){
 
-  if(advisor.verdict === "BUY"){
+  if(executiveDecision === "BUY"){
 
     executiveEN.push(
 
@@ -4416,7 +4416,7 @@ Current market conditions support a favorable medium to long-term outlook.`
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  else if(executiveDecision === "WAIT"){
 
     executiveEN.push(
 
