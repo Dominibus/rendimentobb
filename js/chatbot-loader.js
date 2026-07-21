@@ -235,6 +235,8 @@
 
 "/js/chatbot/core/ai-brain.js",
 
+"/js/chatbot/core/executive-brain-v2.js",    
+
 "/js/chatbot/core/executive-response-builder.js",
 
 "/js/chatbot/core/response-engine.js",
