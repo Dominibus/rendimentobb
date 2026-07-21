@@ -420,7 +420,11 @@ brainContext.executiveSummary = {
 
     it: executiveSummaryIT,
 
-    generated:true
+    generated: false,
+
+    source: "ai-brain",
+
+    advisoryOnly: true
 
 };
         console.log(
