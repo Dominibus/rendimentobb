@@ -4373,6 +4373,60 @@ executiveEN.push(
 
 );
 
+// =====================================
+// 🧠 EXECUTIVE INSIGHT
+// =====================================
+
+if(strongestPoint){
+
+  executiveEN.push(
+
+`🧠 AI Insight
+
+The strongest aspect identified by the AI is:
+
+${strongestPoint}.`
+
+  );
+
+}
+
+if(weakestPoint){
+
+  executiveEN.push(
+
+`⚠️ Area for Improvement
+
+${weakestPoint}.`
+
+  );
+
+}
+
+if(hasCriticalIssue){
+
+  executiveEN.push(
+
+`🚨 Attention
+
+The AI detected at least one critical issue that could compromise the long-term sustainability of this investment.`
+
+  );
+
+}
+
+if(hasStrongInvestment){
+
+  executiveEN.push(
+
+`🚀 Strategic Evaluation
+
+The Executive Brain considers this investment particularly competitive compared with current market benchmarks.`
+
+  );
+
+}
+
 if(net > 0){
 
   executiveEN.push(
