@@ -102,6 +102,8 @@ window.rbBuildExecutiveResponse = function({
 
     brain = null,
 
+    executiveBrain = null,
+
     reasoning = null,
 
     intent = {},
@@ -144,6 +146,8 @@ const executiveModel = {
 
     brain,
 
+    executiveBrain,
+
     reasoning
 
 };
@@ -152,6 +156,11 @@ console.log(
     "🧠 EXECUTIVE MODEL",
     executiveModel
 );   
+
+    console.log(
+    "🧠 EXECUTIVE BRAIN IN BUILDER",
+    executiveBrain
+);
 
 console.log(
     "🧠 EXECUTIVE BUILDER",
