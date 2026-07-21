@@ -306,8 +306,6 @@ if(executiveBrain?.explanationIT){
 
     blocksIT.push(
 
-        "📌 Approfondimento\n\n" +
-
         executiveBrain.explanationIT
 
     );
@@ -318,9 +316,7 @@ if(executiveBrain?.explanationEN){
 
     blocksEN.push(
 
-        "📌 Executive Insight\n\n" +
-
-        executiveBrain.explanationEN
+       executiveBrain.explanationEN
 
     );
 
