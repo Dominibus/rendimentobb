@@ -4686,16 +4686,7 @@ if(reasoningIT.length){
 
 }
 
-if(
-  executiveSummary &&
-  !isEnglishLanguage
-){
-
-  executiveIT.push(
-    executiveSummary
-  );
-
-} 
+// Executive Summary gestito dal Builder
 
 // =====================================
 // 🧠 ADVISOR REASONS
@@ -4979,16 +4970,7 @@ if(reasoningEN?.length){
 
 }
 
-if(
-  executiveSummary &&
-  isEnglishLanguage
-){
-
-  executiveEN.push(
-    executiveSummary
-  );
-
-}
+// Executive Summary gestito dal Builder
 
 // =====================================
 // 📝 FINAL EXECUTIVE RESPONSE
