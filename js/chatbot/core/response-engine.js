@@ -95,6 +95,59 @@ console.log(
     "🧠 EXECUTIVE INSIGHT",
     executiveInsight
 );
+
+// ===============================================
+// 🧠 EXECUTIVE DECISION
+// ===============================================
+
+const executiveDecision =
+
+    executiveInsight?.decision ||
+
+    executiveAnalysis?.executiveDecision ||
+
+    advisor?.verdict ||
+
+    "WAIT";
+
+const strongestPoint =
+
+    executiveInsight?.strongestPoint ||
+
+    executiveAnalysis?.strongestPoint ||
+
+    "";
+
+const weakestPoint =
+
+    executiveInsight?.weakestPoint ||
+
+    executiveAnalysis?.weakestPoint ||
+
+    "";
+
+const hasCriticalIssue =
+
+    executiveInsight?.hasCriticalIssue ||
+
+    false;
+
+const hasStrongInvestment =
+
+    executiveInsight?.hasStrongInvestment ||
+
+    false;
+
+console.log(
+    "🧠 EXECUTIVE DECISION",
+    {
+        executiveDecision,
+        strongestPoint,
+        weakestPoint,
+        hasCriticalIssue,
+        hasStrongInvestment
+    }
+);
   
   // ===========================================
   // 🧠 RESPONSE OBJECT
