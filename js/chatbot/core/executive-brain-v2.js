@@ -178,45 +178,45 @@ switch(strongestPoint){
     case "overall":
 
         result.summaryIT =
-            "La simulazione presenta un equilibrio molto competitivo tra rendimento, rischio e sostenibilità.";
+            "L'investimento mostra un equilibrio convincente tra redditività, rischio e sostenibilità operativa.";
 
         result.summaryEN =
-            "The simulation shows a highly competitive balance between return, risk and sustainability.";
+            "The investment shows a convincing balance between profitability, risk and operational sustainability.";
 
         break;
 
     case "roi":
 
         result.summaryIT =
-            "Il principale punto di forza dell'investimento è il ROI.";
+            "Il rendimento dell'investimento rappresenta il principale elemento competitivo dell'operazione.";
 
         result.summaryEN =
-            "The main strength of the investment is its ROI.";
+            "The investment return represents the main competitive strength of the operation.";
 
         break;
 
     case "cashflow":
 
         result.summaryIT =
-            "Il cashflow positivo rappresenta l'elemento più solido della simulazione.";
+            "La simulazione evidenzia una buona capacità di generare liquidità grazie a un cashflow positivo.";
 
         result.summaryEN =
-            "Positive cashflow is the strongest element of the simulation.";
+            "The simulation highlights a good ability to generate liquidity thanks to positive cashflow.";
 
         break;
 
     case "occupancy":
 
         result.summaryIT =
-            "L'elevata occupazione sostiene la redditività dell'investimento.";
+            "L'elevato tasso di occupazione contribuisce a sostenere la redditività prevista.";
 
         result.summaryEN =
-            "High occupancy supports the investment profitability.";
+            "High occupancy contributes to sustaining the expected profitability.";
 
         break;
 
-}  
-
+}
+    
     switch(weakestPoint){
 
     case "risk":
