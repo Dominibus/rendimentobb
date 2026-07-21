@@ -4976,17 +4976,21 @@ if(reasoningEN?.length){
 // 📝 FINAL EXECUTIVE RESPONSE
 // =====================================
 
-pushResponseBlock({
+if(!builderOwnsExecutiveResponse){
 
-  priority: 10,
+    pushResponseBlock({
 
-  textIT:
-    executiveIT.join("\n\n"),
+        priority: 10,
 
-  textEN:
-    executiveEN.join("\n\n")
+        textIT:
+            executiveIT.join("\n\n"),
 
-});
+        textEN:
+            executiveEN.join("\n\n")
+
+    });
+
+}
 
   let executiveBuilderResult = null;
 
