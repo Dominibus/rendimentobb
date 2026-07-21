@@ -5043,15 +5043,35 @@ const strategyIT = [
 
   }
 
-  strategyIT.push(
+if(conversationalFollowUp){
 
-    roi >= 10 && risk <= 40
+    if(roi >= 10 && risk <= 40){
 
-    ? "💡 L'investimento mostra metriche molto competitive."
+        strategyIT.push(
+            "✅ In base ai dati dell'ultima simulazione, l'investimento appare competitivo. Se le ipotesi utilizzate (occupazione, ADR e costi) sono realistiche, il progetto merita di essere preso seriamente in considerazione."
+        );
 
-    : "💡 L'investimento richiede ottimizzazione operativa."
+    }else{
 
-  );
+        strategyIT.push(
+            "⚠️ Analizzando l'ultima simulazione, prima di procedere conviene migliorare alcuni parametri operativi per aumentare la sostenibilità dell'investimento."
+        );
+
+    }
+
+}else{
+
+    strategyIT.push(
+
+        roi >= 10 && risk <= 40
+
+        ? "💡 L'investimento mostra metriche molto competitive."
+
+        : "💡 L'investimento richiede ottimizzazione operativa."
+
+    );
+
+}
 
   response.textIT =
     strategyIT.join("\n\n");
@@ -5094,15 +5114,35 @@ const strategyEN = [
 
   }
 
-  strategyEN.push(
+if(conversationalFollowUp){
 
-    roi >= 10 && risk <= 40
+    if(roi >= 10 && risk <= 40){
 
-    ? "💡 The investment shows highly competitive metrics."
+        strategyEN.push(
+            "✅ Based on the latest simulation, the investment appears competitive. If occupancy, ADR and costs are realistic, the opportunity deserves serious consideration."
+        );
 
-    : "💡 The investment requires operational optimization."
+    }else{
 
-  );
+        strategyEN.push(
+            "⚠️ Based on the latest simulation, improving operational parameters before investing is recommended."
+        );
+
+    }
+
+}else{
+
+    strategyEN.push(
+
+        roi >= 10 && risk <= 40
+
+        ? "💡 The investment shows highly competitive metrics."
+
+        : "💡 The investment requires operational optimization."
+
+    );
+
+}
 
   response.textEN =
     strategyEN.join("\n\n");
