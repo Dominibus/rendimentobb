@@ -249,13 +249,13 @@ switch(strongestPoint){
 
         break;
 
-    default:
+default:
 
-        result.explanationIT =
-            "La simulazione non evidenzia criticità rilevanti.";
+    result.explanationIT =
+        "Non emergono elementi critici tali da compromettere l'equilibrio dell'investimento, anche se alcuni aspetti meritano comunque monitoraggio nel tempo.";
 
-        result.explanationEN =
-            "The simulation does not highlight significant weaknesses.";
+    result.explanationEN =
+        "No critical issues emerge that would compromise the investment balance, although some aspects should continue to be monitored over time.";
 
 }
 
