@@ -4316,7 +4316,7 @@ if(advisor){
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  else if(executiveDecision === "WAIT"){
 
     verdictIT =
       "🟡 VERDETTO AI: ATTENDERE O OTTIMIZZARE";
