@@ -254,19 +254,21 @@ if(verdictBlock.en){
 
 if(executiveNarrative?.recommendationIT){
 
-    blocksIT.push(
-        executiveNarrative.recommendationIT
-    );
+blocksIT.push(
 
-}
+    "Ho analizzato la simulazione dell'investimento.\n\n" +
 
-if(executiveNarrative?.recommendationEN){
+    executiveNarrative.recommendationIT
 
-    blocksEN.push(
-        executiveNarrative.recommendationEN
-    );
+);
 
-}
+blocksEN.push(
+
+    "I analyzed the investment simulation.\n\n" +
+
+    executiveNarrative.recommendationEN
+
+);
 
 // ===============================================
 // 🧠 EXECUTIVE SUMMARY
