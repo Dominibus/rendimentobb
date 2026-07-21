@@ -106,63 +106,93 @@ console.log(
     financials
 );
 
-    let textIT = "";
+// ===============================================
+// 🧠 EXECUTIVE RESPONSE BLOCKS
+// ===============================================
+
+const blocksIT = [];
+
+const blocksEN = [];
+
+let textIT = "";
 
 let textEN = "";
 
+// ===============================================
+// 🔴 VERDICT BLOCK
+// ===============================================
+
 if(advisor){
 
-    textIT +=
+    blocksIT.push(
+
 `🔴 VERDETTO AI: ${
     advisor.verdictIT ||
     advisor.verdict ||
     "-"
-}
+}`
 
-`;
+    );
 
-    textEN +=
+    blocksEN.push(
+
 `🔴 AI VERDICT: ${
     advisor.verdictEN ||
     advisor.verdict ||
     "-"
+}`
+
+    );
+
 }
 
-`;
-
-}
+// ===============================================
+// 💡 EXECUTIVE RECOMMENDATION BLOCK
+// ===============================================
 
 if(executiveNarrative?.recommendationIT){
 
-    textIT +=
-        executiveNarrative.recommendationIT +
-        "\n\n";
+    blocksIT.push(
+        executiveNarrative.recommendationIT
+    );
 
 }
 
 if(executiveNarrative?.recommendationEN){
 
-    textEN +=
-        executiveNarrative.recommendationEN +
-        "\n\n";
+    blocksEN.push(
+        executiveNarrative.recommendationEN
+    );
 
 }
 
+// ===============================================
+// 🧠 EXECUTIVE SUMMARY BLOCK
+// ===============================================
+
 if(brain?.executiveSummary?.it){
 
-    textIT +=
-        brain.executiveSummary.it +
-        "\n\n";
+    blocksIT.push(
+        brain.executiveSummary.it
+    );
 
 }
 
 if(brain?.executiveSummary?.en){
 
-    textEN +=
-        brain.executiveSummary.en +
-        "\n\n";
+    blocksEN.push(
+        brain.executiveSummary.en
+    );
 
 }
+
+// ===============================================
+// 🧠 BUILD FINAL RESPONSE
+// ===============================================
+
+textIT = blocksIT.join("\n\n");
+
+textEN = blocksEN.join("\n\n");
 
     return {
 
