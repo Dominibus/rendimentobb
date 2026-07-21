@@ -925,6 +925,18 @@ console.log(
 const hasConversationAnalysis =
     hasAnalysis || conversationHasAnalysis;
 
+// =====================================
+// 🧠 CONVERSATIONAL FOLLOW-UP
+// =====================================
+
+const conversationalFollowUp =
+
+    isFollowUp &&
+
+    hasConversationAnalysis &&
+    
+    isShortQuestion;  
+
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
 // ===========================================
@@ -7180,6 +7192,47 @@ ${cityName}.`
 
   else{
 
+    if(
+
+    conversationalFollowUp
+
+){
+
+    response.type = "conversation";
+
+    response.confidence = Math.max(
+        0.90,
+        contextConfidence || 0.90
+    );
+
+    response.textIT =
+
+`Sto continuando ad analizzare l'ultima simulazione.
+
+Puoi chiedermi ad esempio:
+
+• perché l'AI ha dato questo verdetto
+• cosa migliorare
+• quali sono i rischi
+• se conviene davvero investire
+• come aumentare il ROI`;
+
+    response.textEN =
+
+`I'm continuing the analysis of your latest simulation.
+
+You can ask for example:
+
+• why the AI reached this verdict
+• what should be improved
+• where the risks are
+• whether the investment is really worth it
+• how to improve ROI`;
+
+}
+
+else{
+
     response.textIT =
 
 `🤖 Posso aiutarti ad analizzare:
@@ -7201,6 +7254,8 @@ ${cityName}.`
 • sustainability
 • mortgages
 • short-rent benchmarks`;
+
+}
 
   }
 
