@@ -73,6 +73,9 @@ const occupancy =
 const cashflow =
     Number(financials.net || 0);
 
+const mortgagePercent =
+    Number(financials.mortgagePercent || 0);    
+
 let strongestPoint = "";
 
 let weakestPoint = "";
@@ -383,6 +386,25 @@ else{
 
 }
 
+if(mortgagePercent >= 80){
+
+    introIT +=
+        " La leva finanziaria è elevata e riduce il margine di sicurezza dell'operazione.";
+
+}
+else if(mortgagePercent >= 60){
+
+    introIT +=
+        " La leva finanziaria è significativa ma ancora gestibile.";
+
+}
+else if(mortgagePercent > 0){
+
+    introIT +=
+        " La leva finanziaria risulta equilibrata.";
+
+}
+    
 narrativeIT.push(introIT);
 
 narrativeEN.push(
