@@ -134,8 +134,23 @@ const applyIntent = (config = {}) => {
   const explainWords = [
 
     // 🇮🇹 ITALIANO
-    "spiega",
-    "spiegami",
+    "spiega roi",
+    "spiegami roi",
+
+    "spiega cashflow",
+    "spiegami cashflow",
+
+    "spiega rischio",
+    "spiegami rischio",
+
+    "spiega dscr",
+    "spiegami dscr",
+
+    "spiega mutuo",
+    "spiegami mutuo",
+
+    "spiega ltv",
+    "spiegami ltv",
 
     "cos'è",
     "cos e",
@@ -147,13 +162,26 @@ const applyIntent = (config = {}) => {
     "significa",
     "definizione",
 
-    // 🇬🇧 ENGLISH
-    "explain",
+   // 🇬🇧 ENGLISH
 
-    "what is",
+"explain roi",
+"explain cashflow",
+"explain risk",
+"explain dscr",
+"explain mortgage",
+"explain ltv",
 
-    "meaning",
-    "definition"
+"what is roi",
+"what is cashflow",
+"what is risk",
+"what is dscr",
+"what is mortgage",
+"what is ltv",
+
+"meaning roi",
+"meaning cashflow",
+"definition roi",
+"definition cashflow"
 
   ];
 
