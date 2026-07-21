@@ -5006,6 +5006,21 @@ if(
     brainData
 );
 
+    console.log(
+    "🧠 BRAIN KEYS",
+    Object.keys(brainData || {})
+);
+
+console.log(
+    "🧠 EXECUTIVE SUMMARY FIELD",
+    brainData?.executiveSummary
+);
+
+console.log(
+    "🧠 SUMMARY IT FIELD",
+    brainData?.summaryIT
+);
+
 executiveBuilderResult =
       window.rbBuildExecutiveResponse({
 
