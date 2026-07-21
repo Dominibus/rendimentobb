@@ -130,6 +130,8 @@ const executiveFinancials =
               liveData
           );
 
+const executiveModel = {
+
     financials: executiveFinancials,
 
     advisor,
@@ -153,9 +155,9 @@ console.log(
 
 console.log(
     "🧠 EXECUTIVE BUILDER",
-    financials
+    executiveFinancials
 );
-
+    
 // ===============================================
 // 🧠 EXECUTIVE RESPONSE BLOCKS
 // ===============================================
