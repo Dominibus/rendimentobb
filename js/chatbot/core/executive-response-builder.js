@@ -394,8 +394,6 @@ textIT = [
 
     verdictBlock.it,
 
-    executiveNarrative?.recommendationIT,
-
     executiveBrain?.executiveNarrativeIT
 
 ]
@@ -408,8 +406,6 @@ textIT = [
 textEN = [
 
     verdictBlock.en,
-
-    executiveNarrative?.recommendationEN,
 
     executiveBrain?.executiveNarrativeEN
 
