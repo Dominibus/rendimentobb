@@ -263,7 +263,15 @@ if(executiveNarrative?.recommendationEN){
 // 🧠 EXECUTIVE SUMMARY BLOCK
 // ===============================================
 
-if(brain?.executiveSummary?.it){
+if(
+
+    brain?.executiveSummary?.generated === true &&
+
+    !executiveNarrative?.recommendationIT &&
+
+    brain?.executiveSummary?.it
+
+){
 
     blocksIT.push(
         brain.executiveSummary.it
@@ -271,7 +279,15 @@ if(brain?.executiveSummary?.it){
 
 }
 
-if(brain?.executiveSummary?.en){
+if(
+
+    brain?.executiveSummary?.generated === true &&
+
+    !executiveNarrative?.recommendationEN &&
+
+    brain?.executiveSummary?.en
+
+){
 
     blocksEN.push(
         brain.executiveSummary.en
