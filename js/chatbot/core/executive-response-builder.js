@@ -295,6 +295,34 @@ if(executiveBrain?.summaryEN){
     );
 
 }
+
+// ===============================================
+// 📌 EXECUTIVE EXPLANATION
+// ===============================================
+
+if(executiveBrain?.explanationIT){
+
+    blocksIT.push(
+
+        "📌 Approfondimento\n\n" +
+
+        executiveBrain.explanationIT
+
+    );
+
+}
+
+if(executiveBrain?.explanationEN){
+
+    blocksEN.push(
+
+        "📌 Executive Insight\n\n" +
+
+        executiveBrain.explanationEN
+
+    );
+
+}
     
 // ===============================================
 // 🧠 EXECUTIVE SUMMARY BLOCK
