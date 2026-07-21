@@ -5009,11 +5009,15 @@ else if(
   // 🇮🇹 ITALIANO
   // =====================================
 
-  const strategyIT = [
+const strategyIT = [
 
-    "🧠 Analisi strategica AI completata."
+    conversationalFollowUp
 
-  ];
+        ? "🧠 Sto continuando l'analisi della simulazione precedente."
+
+        : "🧠 Analisi strategica AI completata."
+
+];
 
   if(roi > 0){
 
@@ -5056,11 +5060,15 @@ else if(
   // 🇬🇧 ENGLISH
   // =====================================
 
-  const strategyEN = [
+const strategyEN = [
 
-    "🧠 AI strategic analysis completed."
+    conversationalFollowUp
 
-  ];
+        ? "🧠 Continuing the analysis of your previous simulation."
+
+        : "🧠 AI strategic analysis completed."
+
+];
 
   if(roi > 0){
 
