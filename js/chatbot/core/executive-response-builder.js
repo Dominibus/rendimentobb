@@ -280,8 +280,6 @@ if(executiveBrain?.summaryIT){
 
     blocksIT.push(
 
-        "🧠 Analisi AI\n\n" +
-
         executiveBrain.summaryIT
 
     );
