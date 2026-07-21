@@ -120,15 +120,17 @@ window.rbBuildExecutiveResponse = function({
 
 } = executiveContext;
 
-const financials =
+const executiveFinancials =
 
-    getExecutiveFinancialData(
-        liveData
-    );
+    Object.keys(financials || {}).length
 
- const executiveModel = {
+        ? financials
 
-    financials,
+        : getExecutiveFinancialData(
+              liveData
+          );
+
+    financials: executiveFinancials,
 
     advisor,
 
