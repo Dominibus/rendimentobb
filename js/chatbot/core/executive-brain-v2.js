@@ -173,6 +173,96 @@ result.analysis = {
 
 };
 
+// ===============================================
+// 🧠 EXECUTIVE REASONING
+// ===============================================
+
+switch(strongestPoint){
+
+    case "overall":
+
+        result.summaryIT =
+            "La simulazione presenta un equilibrio molto competitivo tra rendimento, rischio e sostenibilità.";
+
+        result.summaryEN =
+            "The simulation shows a highly competitive balance between return, risk and sustainability.";
+
+        break;
+
+    case "roi":
+
+        result.summaryIT =
+            "Il principale punto di forza dell'investimento è il ROI.";
+
+        result.summaryEN =
+            "The main strength of the investment is its ROI.";
+
+        break;
+
+    case "cashflow":
+
+        result.summaryIT =
+            "Il cashflow positivo rappresenta l'elemento più solido della simulazione.";
+
+        result.summaryEN =
+            "Positive cashflow is the strongest element of the simulation.";
+
+        break;
+
+    case "occupancy":
+
+        result.summaryIT =
+            "L'elevata occupazione sostiene la redditività dell'investimento.";
+
+        result.summaryEN =
+            "High occupancy supports the investment profitability.";
+
+        break;
+
+}  
+
+    switch(weakestPoint){
+
+    case "risk":
+
+        result.explanationIT =
+            "L'elemento che richiede maggiore attenzione è il livello di rischio operativo.";
+
+        result.explanationEN =
+            "The main point requiring attention is the operational risk.";
+
+        break;
+
+    case "cashflow":
+
+        result.explanationIT =
+            "Il cashflow attuale limita la sostenibilità dell'investimento.";
+
+        result.explanationEN =
+            "Current cashflow limits the investment sustainability.";
+
+        break;
+
+    case "occupancy":
+
+        result.explanationIT =
+            "L'occupazione rappresenta il principale margine di miglioramento.";
+
+        result.explanationEN =
+            "Occupancy represents the biggest improvement opportunity.";
+
+        break;
+
+    default:
+
+        result.explanationIT =
+            "La simulazione non evidenzia criticità rilevanti.";
+
+        result.explanationEN =
+            "The simulation does not highlight significant weaknesses.";
+
+}
+
     return result;
 
 };
