@@ -33,27 +33,23 @@ window.rbExecutiveBrain = function({
 
     const result = {
 
-        titleIT: "",
+followUpIT: "",
 
-        titleEN: "",
+followUpEN: "",
 
-        summaryIT: "",
+strongestPointIT: "",
 
-        summaryEN: "",
+strongestPointEN: "",
 
-        explanationIT: "",
+weakestPointIT: "",
 
-        explanationEN: "",
+weakestPointEN: "",
 
-        recommendationsIT: [],
+actionIT: "",
 
-        recommendationsEN: [],
+actionEN: "",
 
-        followUpIT: "",
-
-        followUpEN: "",
-
-        confidence: 0.90
+confidence: 0.90
 
     };
 
@@ -260,6 +256,54 @@ switch(strongestPoint){
 
         result.explanationEN =
             "The simulation does not highlight significant weaknesses.";
+
+}
+
+// ===============================================
+// 💪 EXECUTIVE POINTS
+// ===============================================
+
+switch(strongestPoint){
+
+    case "overall":
+
+        result.strongestPointIT =
+            "L'investimento risulta ben bilanciato tra rendimento, rischio e sostenibilità.";
+
+        result.strongestPointEN =
+            "The investment is well balanced between return, risk and sustainability.";
+
+        break;
+
+    case "roi":
+
+        result.strongestPointIT =
+            "Il ROI rappresenta il principale punto di forza dell'operazione.";
+
+        result.strongestPointEN =
+            "ROI is the main strength of this investment.";
+
+        break;
+
+    case "cashflow":
+
+        result.strongestPointIT =
+            "Il cashflow positivo garantisce una buona sostenibilità economica.";
+
+        result.strongestPointEN =
+            "Positive cashflow provides strong financial sustainability.";
+
+        break;
+
+    case "occupancy":
+
+        result.strongestPointIT =
+            "L'elevata occupazione sostiene la redditività dell'immobile.";
+
+        result.strongestPointEN =
+            "High occupancy supports the property's profitability.";
+
+        break;
 
 }
 
