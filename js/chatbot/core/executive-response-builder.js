@@ -102,7 +102,15 @@ window.rbBuildExecutiveResponse = function({
 
     brain = null,
 
-    reasoning = null
+    reasoning = null,
+
+    intent = {},
+
+    message = "",
+
+    aiSignals = [],
+
+    financials = {}
 
 } = {}){
 
@@ -152,11 +160,54 @@ console.log(
 
 const blocksIT = [];
 
-const blocksEN = [];
+const blocksEN = []; 
 
 let textIT = "";
 
 let textEN = "";
+
+// ===============================================
+// 🧠 CONTEXT ROUTER
+// ===============================================
+
+const currentIntent =
+
+    intent?.intent ||
+
+    "generic";
+
+const context = {
+
+    isExecutive:
+
+        [
+            "investment_executive",
+            "executive_analysis"
+        ].includes(currentIntent),
+
+    isRisk:
+
+        currentIntent ===
+        "risk_analysis",
+
+    isROI:
+
+        currentIntent ===
+        "roi_analysis",
+
+    isStrategy:
+
+        [
+            "investment_strategy",
+            "investment_advisor"
+        ].includes(currentIntent),
+
+    isReport:
+
+        currentIntent ===
+        "report_interpretation"
+
+};       
 
 // ===============================================
 // 🔴 VERDICT BLOCK
