@@ -312,6 +312,78 @@ switch(strongestPoint){
 }
 
 // ===============================================
+// 🧠 EXECUTIVE NARRATIVE
+// ===============================================
+
+const narrativeIT = [];
+
+const narrativeEN = [];
+
+// Introduzione
+
+narrativeIT.push(
+    "Ho analizzato la simulazione utilizzando i principali indicatori economici e finanziari."
+);
+
+narrativeEN.push(
+    "I analyzed the simulation using the main financial and operating indicators."
+);
+
+// Raccomandazione
+
+if(result.summaryIT){
+
+    narrativeIT.push(result.summaryIT);
+
+}
+
+if(result.summaryEN){
+
+    narrativeEN.push(result.summaryEN);
+
+}
+
+// Spiegazione
+
+if(result.explanationIT){
+
+    narrativeIT.push(result.explanationIT);
+
+}
+
+if(result.explanationEN){
+
+    narrativeEN.push(result.explanationEN);
+
+}
+
+// Punto di forza
+
+if(result.strongestPointIT){
+
+    narrativeIT.push(
+        "Punto di forza: " +
+        result.strongestPointIT
+    );
+
+}
+
+if(result.strongestPointEN){
+
+    narrativeEN.push(
+        "Strength: " +
+        result.strongestPointEN
+    );
+
+}
+
+result.executiveNarrativeIT =
+    narrativeIT.join("\n\n");
+
+result.executiveNarrativeEN =
+    narrativeEN.join("\n\n");
+
+// ===============================================
 // 💡 EXECUTIVE INSIGHT
 // ===============================================
 
