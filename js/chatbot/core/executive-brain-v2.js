@@ -321,12 +321,36 @@ const narrativeEN = [];
 
 // Introduzione
 
+const roiValue =
+    Number(data?.realROI ?? data?.roi ?? 0);
+
+const riskValue =
+    Number(data?.risk ?? 0);
+
+const cashflowValue =
+    Number(
+        data?.cashflow ??
+        data?.net ??
+        0
+    );
+
+const occupancyValue =
+    Number(data?.occupancy ?? 0);
+
 narrativeIT.push(
-    "Ho analizzato la simulazione utilizzando i principali indicatori economici e finanziari."
+
+`Ho analizzato la simulazione considerando ROI, rischio, cashflow e occupazione.
+
+L'investimento presenta un ROI del ${roiValue.toFixed(1)}%, un livello di rischio pari a ${riskValue}/100, un cashflow annuo stimato di €${Math.round(cashflowValue).toLocaleString("it-IT")} e un'occupazione prevista del ${occupancyValue}%.`
+
 );
 
 narrativeEN.push(
-    "I analyzed the simulation using the main financial and operating indicators."
+
+`I analyzed the simulation considering ROI, risk, cashflow and occupancy.
+
+The investment shows a ${roiValue.toFixed(1)}% ROI, a risk level of ${riskValue}/100, an estimated annual cashflow of €${Math.round(cashflowValue).toLocaleString("en-US")} and an expected occupancy of ${occupancyValue}%.`
+
 );
 
 // Raccomandazione
