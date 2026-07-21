@@ -343,6 +343,10 @@ const narrativeIT = [];
 
 const narrativeEN = [];
 
+let analysisIT = "";
+
+let analysisEN = "";    
+
 // Introduzione
 
 const roiValue = roi;
