@@ -390,33 +390,70 @@ if(
 // 🧠 BUILD FINAL RESPONSE
 // ===============================================
 
-textIT = blocksIT.join("\n\n");
+textIT = [
 
-textEN = blocksEN.join("\n\n");
+    verdictBlock.it,
 
-    return {
+    "Ho analizzato la simulazione dell'investimento.",
 
-        type: "executive",
+    executiveNarrative?.recommendationIT,
 
-        confidence: 0.99,
+    executiveBrain?.summaryIT,
 
-        executiveNarrative,
+    executiveBrain?.explanationIT,
 
-        executiveContext,
+    executiveBrain?.strongestPointIT
 
-       textIT,
+]
 
-       textEN,
+.filter(Boolean)
 
-        suggestionsIT: [],
+.join("\n\n");
 
-        suggestionsEN: [],
 
-        signals: [],
+textEN = [
 
-        metadata: {}
+    verdictBlock.en,
 
-    };
+    "I analyzed the investment simulation.",
+
+    executiveNarrative?.recommendationEN,
+
+    executiveBrain?.summaryEN,
+
+    executiveBrain?.explanationEN,
+
+    executiveBrain?.strongestPointEN
+
+]
+
+.filter(Boolean)
+
+.join("\n\n");
+
+return {
+
+    type: "executive",
+
+    confidence: 0.99,
+
+    executiveNarrative,
+
+    executiveContext,
+
+    textIT,
+
+    textEN,
+
+    suggestionsIT: [],
+
+    suggestionsEN: [],
+
+    signals: [],
+
+    metadata: {}
+
+};
 
 };
 
