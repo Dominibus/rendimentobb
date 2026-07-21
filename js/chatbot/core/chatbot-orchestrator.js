@@ -1133,6 +1133,43 @@ console.log(
     "🧠 CONVERSATION CONTEXT",
     conversationContext
 );
+
+// ===============================================
+// 🧠 EXECUTIVE BRAIN V2
+// ===============================================
+
+const executiveBrain =
+
+    window.rbExecutiveBrain
+
+    ? window.rbExecutiveBrain({
+
+        intent: currentIntentData,
+
+        advisor,
+
+        executiveContext:
+            window.executiveContext || {},
+
+        conversationContext,
+
+        reasoning: {},
+
+        narrative: {},
+
+        documentKnowledge: {},
+
+        financials: analysisData
+
+    })
+
+    : null;
+
+console.log(
+    "🧠 EXECUTIVE BRAIN",
+    executiveBrain
+);
+  
 // =========================================
 // 🧠 RESPONSE
 // =========================================
@@ -1159,7 +1196,9 @@ window.rbGenerateResponse({
 
     brain,
 
-    conversationContext
+    conversationContext,
+
+    executiveBrain
 
 });
 
