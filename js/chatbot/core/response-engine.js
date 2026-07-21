@@ -23,7 +23,9 @@ window.rbGenerateResponse = function({
 
   aiSignals = [],
 
-  brain = null
+  brain = null,
+
+  conversationContext = {}
 
 } = {}){
 
@@ -36,6 +38,41 @@ window.rbGenerateResponse = function({
   }
 );
 
+// ===============================================
+// 🧠 CONVERSATION CONTEXT
+// ===============================================
+
+const {
+
+    goal = "generic",
+
+    topic = "generic",
+
+    isFollowUp = false,
+
+    isShortQuestion = false,
+
+    hasAnalysis = false,
+
+    contextConfidence = 0,
+
+    originalMessage = message
+
+} = conversationContext || {};
+
+console.log(
+    "🧠 CONVERSATION CONTEXT",
+    {
+        goal,
+        topic,
+        isFollowUp,
+        isShortQuestion,
+        hasAnalysis,
+        contextConfidence,
+        originalMessage
+    }
+);
+  
   // ===========================================
   // 🧠 RESPONSE OBJECT
   // ===========================================
