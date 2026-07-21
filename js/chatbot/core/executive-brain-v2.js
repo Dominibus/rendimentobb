@@ -51,7 +51,11 @@ actionEN: "",
 
 executiveNarrativeIT: "",
 
-executiveNarrativeEN: "",        
+executiveNarrativeEN: "",    
+
+analysisIT: "",
+
+analysisEN: "",        
 
 confidence: 0.90
 
