@@ -263,6 +263,30 @@ switch(strongestPoint){
 
 }
 
+// ===============================================
+// 💡 EXECUTIVE INSIGHT
+// ===============================================
+
+result.insight = {
+
+    decision: executiveDecision,
+
+    strongestPoint,
+
+    weakestPoint,
+
+    confidence: result.confidence,
+
+    hasCriticalIssue:
+        weakestPoint === "risk" ||
+        weakestPoint === "cashflow",
+
+    hasStrongInvestment:
+        executiveDecision === "BUY" &&
+        strongestPoint === "overall"
+
+};
+
     return result;
 
 };
