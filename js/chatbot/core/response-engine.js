@@ -4129,7 +4129,7 @@ Il livello di rischio è elevato e potrebbe ridurre la stabilità del cashflow n
 
 if(advisor){
 
-  if(advisor.verdict === "BUY"){
+  if(executiveDecision === "BUY"){
 
     executiveIT.push(
 
@@ -4145,7 +4145,7 @@ L'attuale scenario di mercato supporta una valutazione favorevole nel medio-lung
 
   }
 
-  else if(advisor.verdict === "WAIT"){
+  else if(executiveDecision === "WAIT"){
 
     executiveIT.push(
 
@@ -4252,7 +4252,7 @@ if(advisor){
   let verdictIT = "";
   let verdictEN = "";
 
-  if(advisor.verdict === "BUY"){
+  if(executiveDecision === "BUY"){
 
     verdictIT =
       "🟢 VERDETTO AI: INVESTIMENTO CONSIGLIATO";
