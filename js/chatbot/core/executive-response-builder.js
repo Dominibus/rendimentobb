@@ -48,6 +48,46 @@ function getExecutiveFinancialData(
 
 }
 
+// ===============================================
+// 🧱 VERDICT BLOCK
+// ===============================================
+
+function buildVerdictBlock(advisor){
+
+    if(!advisor){
+
+        return{
+
+            it:null,
+
+            en:null
+
+        };
+
+    }
+
+    return{
+
+        it:
+
+`🔴 VERDETTO AI: ${
+    advisor.verdictIT ||
+    advisor.verdict ||
+    "-"
+}`,
+
+        en:
+
+`🔴 AI VERDICT: ${
+    advisor.verdictEN ||
+    advisor.verdict ||
+    "-"
+}`
+
+    };
+
+}
+
 window.rbBuildExecutiveResponse = function({
 
     executiveContext = {},
@@ -122,26 +162,24 @@ let textEN = "";
 // 🔴 VERDICT BLOCK
 // ===============================================
 
-if(advisor){
+const verdictBlock =
 
-    blocksIT.push(
-
-`🔴 VERDETTO AI: ${
-    advisor.verdictIT ||
-    advisor.verdict ||
-    "-"
-}`
-
+    buildVerdictBlock(
+        advisor
     );
 
+if(verdictBlock.it){
+
+    blocksIT.push(
+        verdictBlock.it
+    );
+
+}
+
+if(verdictBlock.en){
+
     blocksEN.push(
-
-`🔴 AI VERDICT: ${
-    advisor.verdictEN ||
-    advisor.verdict ||
-    "-"
-}`
-
+        verdictBlock.en
     );
 
 }
