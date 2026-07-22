@@ -1305,8 +1305,6 @@ The operation appears sustainable, although additional optimization is still pos
 
 }
 
-    }
-
     else{
 
   response.signals.push(
