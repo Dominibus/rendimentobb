@@ -542,6 +542,22 @@ if(cashflow > 0){
   }
 );
 
+// =====================================
+// SINGLE SOURCE OF TRUTH
+// =====================================
+
+window.lastInvestmentScore = {
+
+    score: investmentScore,
+
+    verdict,
+
+    confidence,
+
+    label: verdict
+
+};
+
 return {
 
   verdict,
