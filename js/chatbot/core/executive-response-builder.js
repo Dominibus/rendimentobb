@@ -356,8 +356,6 @@ if(executiveBrain?.strongestPointEN){
 
 if(
 
-    brain?.executiveSummary?.generated === true &&
-
     !executiveNarrative?.recommendationIT &&
 
     brain?.executiveSummary?.it
@@ -365,14 +363,14 @@ if(
 ){
 
     blocksIT.push(
+
         brain.executiveSummary.it
+
     );
 
 }
 
 if(
-
-    brain?.executiveSummary?.generated === true &&
 
     !executiveNarrative?.recommendationEN &&
 
@@ -381,7 +379,9 @@ if(
 ){
 
     blocksEN.push(
+
         brain.executiveSummary.en
+
     );
 
 }
@@ -390,34 +390,15 @@ if(
 // 🧠 BUILD FINAL RESPONSE
 // ===============================================
 
-textIT = [
+textIT =
+    blocksIT
+        .filter(Boolean)
+        .join("\n\n");
 
-    verdictBlock.it,
-
-    executiveBrain?.analysisIT ||
-
-    executiveBrain?.executiveNarrativeIT
-
-]
-
-.filter(Boolean)
-
-.join("\n\n");
-
-
-textEN = [
-
-    verdictBlock.en,
-
-    executiveBrain?.analysisEN ||
-
-    executiveBrain?.executiveNarrativeEN
-
-]
-
-.filter(Boolean)
-
-.join("\n\n");
+textEN =
+    blocksEN
+        .filter(Boolean)
+        .join("\n\n");
 
 return {
 
