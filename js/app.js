@@ -6791,7 +6791,7 @@ if (profit >= 1500) {
 }
 
 // Risk
-if (risk <= 30) {
+if (riskScore <= 30) {
 
     insights.push(
         T(
@@ -6800,7 +6800,7 @@ if (risk <= 30) {
         )
     );
 
-} else if (risk <= 60) {
+} else if (riskScore <= 60) {
 
     insights.push(
         T(
@@ -6901,7 +6901,7 @@ if (profit <= 0) {
 }
 
 // Risk
-if (risk > 50) {
+if (riskScore > 50) {
 
     nextSteps.push(
 
