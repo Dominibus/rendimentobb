@@ -6651,6 +6651,12 @@ cashflowFinalScenarios.forEach(s=>{
 
 });  
 
+  console.log("ROI PDF", {
+    roi,
+    realROI,
+    visualROI
+});
+
 // ===================================================
 // EXECUTIVE RECOMMENDATION
 // ===================================================
