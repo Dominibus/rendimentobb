@@ -84,7 +84,9 @@ let strongestPoint = "";
 
 let weakestPoint = "";
 
-let executiveDecision = "WAIT";
+const executiveDecision =
+    advisor?.verdict ||
+    "WAIT";
 
 // ===============================================
 // 🟢 STRENGTH
@@ -98,9 +100,6 @@ if(
 
     strongestPoint =
         "overall";
-
-    executiveDecision =
-        "BUY";
 
 }
 
