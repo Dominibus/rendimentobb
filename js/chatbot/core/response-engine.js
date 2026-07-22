@@ -1243,29 +1243,67 @@ ${risk}/100`;
       return response;
     }
 
-    else if(roi >= 8){
+   else if(roi >= 8){
 
-      response.signals.push(
+    response.signals.push(
         "medium_roi"
-      );
+    );
 
-      response.textIT =
+    const netCashflow = Number(
+        liveData.net ??
+        liveData.cashflow ??
+        0
+    );
 
-`📈 ROI potenzialmente sostenibile.
+    response.textIT =
 
-📊 ROI simulato:
+`📊 Executive ROI Analysis
+
+Ho analizzato la simulazione considerando rendimento, rischio e sostenibilità operativa.
+
+📈 ROI reale:
 ${roi.toFixed(1)}%
 
-💡 L'investimento sembra equilibrato ma dipende da occupazione e costi.`;
+💰 Cashflow annuo:
+€${Math.round(netCashflow).toLocaleString("it-IT")}
 
-      response.textEN =
+🏨 Occupazione:
+${occupancy}%
 
-`📈 ROI appears potentially sustainable.
+⚠️ Risk Score:
+${risk}/100
 
-📊 Simulated ROI:
+L'investimento mostra fondamentali complessivamente equilibrati.
+
+Il rendimento risulta interessante ma può essere migliorato intervenendo su ADR, occupazione oppure prezzo di acquisto.
+
+L'operazione appare sostenibile, ma esistono ancora margini di ottimizzazione prima di raggiungere il massimo potenziale.`;
+
+    response.textEN =
+
+`📊 Executive ROI Analysis
+
+I analyzed the simulation considering profitability, risk and operational sustainability.
+
+📈 Real ROI:
 ${roi.toFixed(1)}%
 
-💡 The investment appears balanced but depends on occupancy and costs.`;
+💰 Annual Cashflow:
+€${Math.round(netCashflow).toLocaleString("en-US")}
+
+🏨 Occupancy:
+${occupancy}%
+
+⚠️ Risk Score:
+${risk}/100
+
+The investment shows balanced fundamentals.
+
+Returns are attractive but could still improve through ADR optimization, occupancy growth or a better acquisition price.
+
+The operation appears sustainable, although additional optimization is still possible before reaching its full potential.`;
+
+}
 
     }
 
@@ -1327,14 +1365,55 @@ ${roi.toFixed(1)}%
 
 else{
 
-  response.textIT =
+    const netCashflow = Number(
+        liveData.net ??
+        liveData.cashflow ??
+        0
+    );
 
-`⚠️ ROI relativamente basso.
+    response.textIT =
 
-📊 ROI simulato:
-${roi.toFixed(1)}%
+`📊 Executive ROI Analysis
 
-💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`;
+Il ROI reale della simulazione è pari al ${roi.toFixed(1)}%, inferiore ai benchmark normalmente ricercati negli investimenti short-rent.
+
+💰 Cashflow:
+€${Math.round(netCashflow).toLocaleString("it-IT")}
+
+🏨 Occupazione:
+${occupancy}%
+
+⚠️ Risk Score:
+${risk}/100
+
+Questo non significa necessariamente che l'investimento sia da escludere.
+
+L'AI ritiene che la redditività possa aumentare intervenendo su prezzo di acquisto, ADR, occupazione media o struttura dei costi.
+
+Prima di prendere una decisione definitiva conviene valutare alcune simulazioni alternative.`;
+
+    response.textEN =
+
+`📊 Executive ROI Analysis
+
+The simulated real ROI is ${roi.toFixed(1)}%, below the level generally targeted by short-rent investors.
+
+💰 Cashflow:
+€${Math.round(netCashflow).toLocaleString("en-US")}
+
+🏨 Occupancy:
+${occupancy}%
+
+⚠️ Risk Score:
+${risk}/100
+
+This does not necessarily mean the investment should be rejected.
+
+The AI believes profitability could improve through acquisition price optimization, ADR, occupancy or operating costs.
+
+Before making a final decision, additional scenarios should be evaluated.`;
+
+}
 
   response.textEN =
 
