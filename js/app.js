@@ -6651,10 +6651,9 @@ cashflowFinalScenarios.forEach(s=>{
 
 });  
 
-  console.log("ROI PDF", {
+console.log("ROI PDF", {
     roi,
-    realROI,
-    visualROI
+    realROI
 });
 
 // ===================================================
