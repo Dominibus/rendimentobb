@@ -6651,7 +6651,7 @@ cashflowFinalScenarios.forEach(s=>{
 
 });  
 
-  // ===================================================
+// ===================================================
 // EXECUTIVE RECOMMENDATION
 // ===================================================
 
@@ -6734,25 +6734,28 @@ const insights = [];
 if (roi >= 35) {
 
     insights.push(
-        language === "it"
-            ? "📈 Il rendimento stimato è nettamente superiore alla media del mercato e rappresenta un investimento altamente competitivo."
-            : "📈 Estimated returns are significantly above market averages, making this investment highly competitive."
+        T(
+            "📈 Il rendimento stimato è nettamente superiore alla media del mercato e rappresenta un investimento altamente competitivo.",
+            "📈 Estimated returns are significantly above market averages, making this investment highly competitive."
+        )
     );
 
 } else if (roi >= 20) {
 
     insights.push(
-        language === "it"
-            ? "📈 Il ROI risulta competitivo e in linea con investimenti a breve termine di qualità."
-            : "📈 ROI is competitive and aligned with quality short-term rental investments."
+        T(
+            "📈 Il ROI risulta competitivo e in linea con investimenti a breve termine di qualità.",
+            "📈 ROI is competitive and aligned with quality short-term rental investments."
+        )
     );
 
 } else {
 
     insights.push(
-        language === "it"
-            ? "📈 Il rendimento è inferiore ai benchmark consigliati e merita ulteriori valutazioni."
-            : "📈 Returns are below recommended benchmarks and deserve further evaluation."
+        T(
+            "📈 Il rendimento è inferiore ai benchmark consigliati e merita ulteriori valutazioni.",
+            "📈 Returns are below recommended benchmarks and deserve further evaluation."
+        )
     );
 
 }
@@ -6761,25 +6764,28 @@ if (roi >= 35) {
 if (profit >= 1500) {
 
     insights.push(
-        language === "it"
-            ? "💰 Il cashflow mensile offre un'elevata capacità di generare liquidità."
-            : "💰 Monthly cashflow provides excellent liquidity generation."
+        T(
+            "💰 Il cashflow mensile offre un'elevata capacità di generare liquidità.",
+            "💰 Monthly cashflow provides excellent liquidity generation."
+        )
     );
 
 } else if (profit > 0) {
 
     insights.push(
-        language === "it"
-            ? "💰 Il cashflow operativo rimane positivo e sostenibile."
-            : "💰 Operating cashflow remains positive and sustainable."
+        T(
+            "💰 Il cashflow operativo rimane positivo e sostenibile.",
+            "💰 Operating cashflow remains positive and sustainable."
+        )
     );
 
 } else {
 
     insights.push(
-        language === "it"
-            ? "⚠️ Il cashflow risulta negativo e potrebbe compromettere la sostenibilità dell'investimento."
-            : "⚠️ Cashflow is negative and may compromise investment sustainability."
+        T(
+            "⚠️ Il cashflow risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
+            "⚠️ Cashflow is negative and may compromise investment sustainability."
+        )
     );
 
 }
@@ -6788,25 +6794,28 @@ if (profit >= 1500) {
 if (risk <= 30) {
 
     insights.push(
-        language === "it"
-            ? "🛡️ Il livello di rischio è contenuto rispetto ai parametri analizzati."
-            : "🛡️ Risk exposure remains low compared to analysed metrics."
+        T(
+            "🛡️ Il livello di rischio è contenuto rispetto ai parametri analizzati.",
+            "🛡️ Risk exposure remains low compared to analysed metrics."
+        )
     );
 
 } else if (risk <= 60) {
 
     insights.push(
-        language === "it"
-            ? "⚠️ Il rischio è moderato e richiede monitoraggio operativo."
-            : "⚠️ Risk is moderate and requires operational monitoring."
+        T(
+            "⚠️ Il rischio è moderato e richiede monitoraggio operativo.",
+            "⚠️ Risk is moderate and requires operational monitoring."
+        )
     );
 
 } else {
 
     insights.push(
-        language === "it"
-            ? "🚨 Il rischio operativo è elevato e potrebbe ridurre la stabilità del rendimento."
-            : "🚨 Operational risk is high and may reduce investment stability."
+        T(
+            "🚨 Il rischio operativo è elevato e potrebbe ridurre la stabilità del rendimento.",
+            "🚨 Operational risk is high and may reduce investment stability."
+        )
     );
 
 }
@@ -6830,7 +6839,7 @@ y += 8;
 });
 
 y += 8;
-
+  
 // ================= NEXT STEPS =================
 
 doc.setFontSize(12);
