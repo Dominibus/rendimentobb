@@ -1415,8 +1415,6 @@ Before making a final decision, additional scenarios should be evaluated.`;
 
 }
 
-    }
-
        console.log(
       "📈 ROI RESPONSE CREATED",
       response
