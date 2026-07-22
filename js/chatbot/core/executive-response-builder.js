@@ -387,6 +387,64 @@ if(
 }
 
 // ===============================================
+// 🧠 CONTEXT FILTER
+// ===============================================
+
+if(context.isROI){
+
+    blocksIT.length = 0;
+
+    blocksEN.length = 0;
+
+    if(verdictBlock.it)
+        blocksIT.push(verdictBlock.it);
+
+    if(verdictBlock.en)
+        blocksEN.push(verdictBlock.en);
+
+    if(executiveBrain?.summaryIT)
+        blocksIT.push(executiveBrain.summaryIT);
+
+    if(executiveBrain?.summaryEN)
+        blocksEN.push(executiveBrain.summaryEN);
+
+}
+
+else if(context.isRisk){
+
+    blocksIT.length = 0;
+
+    blocksEN.length = 0;
+
+    if(verdictBlock.it)
+        blocksIT.push(verdictBlock.it);
+
+    if(verdictBlock.en)
+        blocksEN.push(verdictBlock.en);
+
+    if(executiveBrain?.explanationIT)
+        blocksIT.push(executiveBrain.explanationIT);
+
+    if(executiveBrain?.explanationEN)
+        blocksEN.push(executiveBrain.explanationEN);
+
+}
+
+else if(context.isReport){
+
+    blocksIT.length = 0;
+
+    blocksEN.length = 0;
+
+    if(brain?.executiveSummary?.it)
+        blocksIT.push(brain.executiveSummary.it);
+
+    if(brain?.executiveSummary?.en)
+        blocksEN.push(brain.executiveSummary.en);
+
+}
+
+// ===============================================
 // 🧠 BUILD FINAL RESPONSE
 // ===============================================
 
