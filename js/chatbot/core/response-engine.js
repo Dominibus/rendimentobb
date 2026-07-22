@@ -1243,67 +1243,31 @@ ${risk}/100`;
       return response;
     }
 
-   else if(roi >= 8){
+    else if(roi >= 8){
 
-    response.signals.push(
+      response.signals.push(
         "medium_roi"
-    );
+      );
 
-    const netCashflow = Number(
-        liveData.net ??
-        liveData.cashflow ??
-        0
-    );
+      response.textIT =
 
-    response.textIT =
+`📈 ROI potenzialmente sostenibile.
 
-`📊 Executive ROI Analysis
-
-Ho analizzato la simulazione considerando rendimento, rischio e sostenibilità operativa.
-
-📈 ROI reale:
+📊 ROI simulato:
 ${roi.toFixed(1)}%
 
-💰 Cashflow annuo:
-€${Math.round(netCashflow).toLocaleString("it-IT")}
+💡 L'investimento sembra equilibrato ma dipende da occupazione e costi.`;
 
-🏨 Occupazione:
-${occupancy}%
+      response.textEN =
 
-⚠️ Risk Score:
-${risk}/100
+`📈 ROI appears potentially sustainable.
 
-L'investimento mostra fondamentali complessivamente equilibrati.
-
-Il rendimento risulta interessante ma può essere migliorato intervenendo su ADR, occupazione oppure prezzo di acquisto.
-
-L'operazione appare sostenibile, ma esistono ancora margini di ottimizzazione prima di raggiungere il massimo potenziale.`;
-
-    response.textEN =
-
-`📊 Executive ROI Analysis
-
-I analyzed the simulation considering profitability, risk and operational sustainability.
-
-📈 Real ROI:
+📊 Simulated ROI:
 ${roi.toFixed(1)}%
 
-💰 Annual Cashflow:
-€${Math.round(netCashflow).toLocaleString("en-US")}
+💡 The investment appears balanced but depends on occupancy and costs.`;
 
-🏨 Occupancy:
-${occupancy}%
-
-⚠️ Risk Score:
-${risk}/100
-
-The investment shows balanced fundamentals.
-
-Returns are attractive but could still improve through ADR optimization, occupancy growth or a better acquisition price.
-
-The operation appears sustainable, although additional optimization is still possible before reaching its full potential.`;
-
-}
+    }
 
     else{
 
@@ -1363,55 +1327,27 @@ ${roi.toFixed(1)}%
 
 else{
 
-    const netCashflow = Number(
-        liveData.net ??
-        liveData.cashflow ??
-        0
-    );
+  response.textIT =
 
-    response.textIT =
+`⚠️ ROI relativamente basso.
 
-`📊 Executive ROI Analysis
+📊 ROI simulato:
+${roi.toFixed(1)}%
 
-Il ROI reale della simulazione è pari al ${roi.toFixed(1)}%, inferiore ai benchmark normalmente ricercati negli investimenti short-rent.
+💡 Potrebbe essere necessario ottimizzare ADR, occupazione o costi operativi.`;
 
-💰 Cashflow:
-€${Math.round(netCashflow).toLocaleString("it-IT")}
+  response.textEN =
 
-🏨 Occupazione:
-${occupancy}%
+`⚠️ ROI appears relatively low.
 
-⚠️ Risk Score:
-${risk}/100
+📊 Simulated ROI:
+${roi.toFixed(1)}%
 
-Questo non significa necessariamente che l'investimento sia da escludere.
-
-L'AI ritiene che la redditività possa aumentare intervenendo su prezzo di acquisto, ADR, occupazione media o struttura dei costi.
-
-Prima di prendere una decisione definitiva conviene valutare alcune simulazioni alternative.`;
-
-    response.textEN =
-
-`📊 Executive ROI Analysis
-
-The simulated real ROI is ${roi.toFixed(1)}%, below the level generally targeted by short-rent investors.
-
-💰 Cashflow:
-€${Math.round(netCashflow).toLocaleString("en-US")}
-
-🏨 Occupancy:
-${occupancy}%
-
-⚠️ Risk Score:
-${risk}/100
-
-This does not necessarily mean the investment should be rejected.
-
-The AI believes profitability could improve through acquisition price optimization, ADR, occupancy or operating costs.
-
-Before making a final decision, additional scenarios should be evaluated.`;
+💡 ADR, occupancy or operational cost optimization may be required.`;
 
 }
+
+    }
 
        console.log(
       "📈 ROI RESPONSE CREATED",
@@ -5084,24 +5020,6 @@ console.log(
     "🧠 SUMMARY IT FIELD",
     brainData?.summaryIT
 );
-
-// =====================================
-// 🧠 EXECUTIVE MEMORY SYNC
-// =====================================
-
-executiveContext.memory = {
-
-    ...(executiveContext.memory || {}),
-
-    executiveBrain,
-
-    executiveNarrative,
-
-    executiveInsight,
-
-    executiveAnalysis
-
-};
 
 executiveBuilderResult =
       window.rbBuildExecutiveResponse({
