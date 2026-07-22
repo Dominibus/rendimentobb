@@ -5021,6 +5021,24 @@ console.log(
     brainData?.summaryIT
 );
 
+// =====================================
+// 🧠 EXECUTIVE MEMORY SYNC
+// =====================================
+
+executiveContext.memory = {
+
+    ...(executiveContext.memory || {}),
+
+    executiveBrain,
+
+    executiveNarrative,
+
+    executiveInsight,
+
+    executiveAnalysis
+
+};
+
 executiveBuilderResult =
       window.rbBuildExecutiveResponse({
 
