@@ -6736,21 +6736,21 @@ y += 10;
 const insights = [];
 
 // ROI
-if (roi >= 35) {
+if (roi >= marketROI + 5) {
 
     insights.push(
         T(
             "📈 Il rendimento stimato è nettamente superiore alla media del mercato e rappresenta un investimento altamente competitivo.",
-            "📈 Estimated returns are significantly above market averages, making this investment highly competitive."
+            "📈 Estimated returns are significantly above market averages and represent a highly competitive investment."
         )
     );
 
-} else if (roi >= 20) {
+} else if (roi >= marketROI) {
 
     insights.push(
         T(
-            "📈 Il ROI risulta competitivo e in linea con investimenti a breve termine di qualità.",
-            "📈 ROI is competitive and aligned with quality short-term rental investments."
+            "📈 Il ROI è superiore al benchmark della città e rappresenta un investimento competitivo.",
+            "📈 ROI is above the city's benchmark and represents a competitive investment."
         )
     );
 
@@ -6758,8 +6758,8 @@ if (roi >= 35) {
 
     insights.push(
         T(
-            "📈 Il rendimento è inferiore ai benchmark consigliati e merita ulteriori valutazioni.",
-            "📈 Returns are below recommended benchmarks and deserve further evaluation."
+            "📈 Il rendimento risulta inferiore al benchmark della città e merita ulteriori valutazioni.",
+            "📈 Returns are below the city's benchmark and deserve further evaluation."
         )
     );
 
@@ -6828,18 +6828,18 @@ if (riskScore <= 30) {
 doc.setFontSize(9);
 doc.setTextColor(...gray);
 
-insights.forEach(item=>{
+insights.forEach(item => {
 
-doc.text(
-"• " + item,
-25,
-y,
-{
-maxWidth:155
-}
-);
+    doc.text(
+        "• " + item,
+        25,
+        y,
+        {
+            maxWidth: 155
+        }
+    );
 
-y += 8;
+    y += 8;
 
 });
 
