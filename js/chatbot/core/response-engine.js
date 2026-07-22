@@ -1415,17 +1415,6 @@ Before making a final decision, additional scenarios should be evaluated.`;
 
 }
 
-  response.textEN =
-
-`⚠️ ROI appears relatively low.
-
-📊 Simulated ROI:
-${roi.toFixed(1)}%
-
-💡 ADR, occupancy or operational cost optimization may be required.`;
-
-}
-
     }
 
        console.log(
