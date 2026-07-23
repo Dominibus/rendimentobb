@@ -102,154 +102,261 @@ HOME
 
     <div class="rb-ai-home">
 
-<div class="rb-ai-home-header">
+        <div class="rb-ai-home-header">
 
-    <div class="rb-ai-status">
+            <div class="rb-ai-status">
 
-        <span class="rb-status-dot"></span>
+                <span class="rb-status-dot"></span>
 
-        Executive AI Online
+                Online
 
-    </div>
+            </div>
 
-    <div class="rb-ai-home-title">
+            <div class="rb-ai-home-title">
 
-        🧠 RendimentoBB AI
+                🧠 RendimentoBB AI
 
-    </div>
+            </div>
 
-    <div class="rb-ai-home-subtitle">
+            <div class="rb-ai-home-subtitle">
 
-        ${
-            window.rbChatMemory?.lastCity
-            ?
+                Executive Investment Advisor
 
-            `Sto seguendo la tua ultima analisi.
-
-            <br><br>
-
-            📍 <strong>${window.rbChatMemory.lastCity.toUpperCase()}</strong>
+            </div>
 
             ${
-                window.rbChatMemory.lastROI
-                ? `<br>📈 ROI ${window.rbChatMemory.lastROI.toFixed(1)}%`
-                : ""
-            }`
+                window.rbChatMemory?.lastCity
+                ?
 
-            :
+                `
 
-            "Posso aiutarti ad analizzare investimenti, PDF, mutui, dashboard e mercati immobiliari."
+                <div class="rb-ai-snapshot">
 
-        }
+                    <div class="rb-ai-snapshot-title">
 
-    </div>
+                        Executive Snapshot
 
-</div>
+                    </div>
+
+                    <div class="rb-ai-snapshot-grid">
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                📍 Mercato
+                            </span>
+
+                            <strong>
+                                ${window.rbChatMemory.lastCity.toUpperCase()}
+                            </strong>
+
+                        </div>
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                📈 ROI
+                            </span>
+
+                            <strong>
+
+                                ${
+                                    window.rbChatMemory.lastROI
+                                    ? window.rbChatMemory.lastROI.toFixed(1) + "%"
+                                    : "--"
+                                }
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                💰 Cashflow
+                            </span>
+
+                            <strong>
+
+                                ${
+                                    window.rbChatMemory.lastCashflow
+                                    ? "€" + Math.round(window.rbChatMemory.lastCashflow).toLocaleString()
+                                    : "--"
+                                }
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                ⚠️ Rischio
+                            </span>
+
+                            <strong>
+
+                                ${
+                                    window.rbChatMemory.lastRisk ?? "--"
+                                }
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                `
+
+                :
+
+                `
+
+                <div class="rb-ai-empty-state">
+
+                    <div class="rb-empty-icon">
+
+                        🚀
+
+                    </div>
+
+                    <div class="rb-empty-title">
+
+                        Nessuna simulazione disponibile
+
+                    </div>
+
+                    <div class="rb-empty-text">
+
+                        Avvia una simulazione oppure carica un PDF per ottenere un'analisi AI completa.
+
+                    </div>
+
+                </div>
+
+                `
+
+            }
+
+        </div>
 
         <div class="rb-ai-home-grid">
 
             <button class="rb-home-card">
 
-    <div class="rb-home-icon">
-        🏠
-    </div>
+                <div class="rb-home-icon">🏠</div>
 
-    <div class="rb-home-title">
-        Analizza investimento
-    </div>
+                <div class="rb-home-title">
 
-    <div class="rb-home-desc">
-        ROI • Cashflow • Rischio
-    </div>
+                    Analizza investimento
 
-</button>
+                </div>
 
-            <button class="rb-home-card">
+                <div class="rb-home-desc">
 
-    <div class="rb-home-icon">
-        📄
-    </div>
+                    ROI • Cashflow • Rischio
 
-    <div class="rb-home-title">
-        Analizza PDF
-    </div>
+                </div>
 
-    <div class="rb-home-desc">
-        Executive Report
-    </div>
-
-</button>
+            </button>
 
             <button class="rb-home-card">
 
-    <div class="rb-home-icon">
-        📊
-    </div>
+                <div class="rb-home-icon">📄</div>
 
-    <div class="rb-home-title">
-        Analizza ROI
-    </div>
+                <div class="rb-home-title">
 
-    <div class="rb-home-desc">
-        Performance investimento
-    </div>
+                    Analizza PDF
 
-</button>
+                </div>
 
-            <button class="rb-home-card">
+                <div class="rb-home-desc">
 
-    <div class="rb-home-icon">
-        🏦
-    </div>
+                    Executive Report
 
-    <div class="rb-home-title">
-        Mutuo
-    </div>
+                </div>
 
-    <div class="rb-home-desc">
-        Leva • DSCR • LTV
-    </div>
-
-</button>
+            </button>
 
             <button class="rb-home-card">
 
-    <div class="rb-home-icon">
-        🌍
-    </div>
+                <div class="rb-home-icon">📊</div>
 
-    <div class="rb-home-title">
-        Mercato
-    </div>
+                <div class="rb-home-title">
 
-    <div class="rb-home-desc">
-        Benchmark città
-    </div>
+                    Analizza ROI
 
-</button>
+                </div>
+
+                <div class="rb-home-desc">
+
+                    Performance investimento
+
+                </div>
+
+            </button>
 
             <button class="rb-home-card">
 
-    <div class="rb-home-icon">
-        📈
-    </div>
+                <div class="rb-home-icon">🏦</div>
 
-    <div class="rb-home-title">
-        Dashboard
-    </div>
+                <div class="rb-home-title">
 
-    <div class="rb-home-desc">
-        KPI e Report
-    </div>
+                    Mutuo
 
-</button>
+                </div>
+
+                <div class="rb-home-desc">
+
+                    Leva • DSCR • LTV
+
+                </div>
+
+            </button>
+
+            <button class="rb-home-card">
+
+                <div class="rb-home-icon">🌍</div>
+
+                <div class="rb-home-title">
+
+                    Mercato
+
+                </div>
+
+                <div class="rb-home-desc">
+
+                    Benchmark città
+
+                </div>
+
+            </button>
+
+            <button class="rb-home-card">
+
+                <div class="rb-home-icon">📈</div>
+
+                <div class="rb-home-title">
+
+                    Dashboard
+
+                </div>
+
+                <div class="rb-home-desc">
+
+                    KPI e Report
+
+                </div>
+
+            </button>
 
         </div>
 
     </div>
 
 </div>
-
 <!-- ===================================
 MESSAGES
 ==================================== -->
