@@ -5379,6 +5379,15 @@ const doc = new jsPDF();
 
 const d = window.lastAnalysisData;
 
+console.log("LAST ANALYSIS DATA", {
+    roi: d.roi,
+    realROI: d.realROI,
+    visualROI: d.visualROI,
+    risk: d.risk,
+    gross: d.gross,
+    net: d.net
+});
+
 // ================= SAFE =================
 const safe = v => isFinite(v) ? Number(v) : 0;
 
