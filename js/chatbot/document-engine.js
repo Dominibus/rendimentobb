@@ -164,6 +164,40 @@ window.rbDocumentManager = {
 
 };
 
+// ==========================================
+// 📄 ANALYZE UPLOADED PDF
+// ==========================================
+
+window.rbAnalyzeUploadedPDF = async function(file){
+
+    console.log(
+        "📄 ANALYZE UPLOADED PDF",
+        file
+    );
+
+    if(
+        typeof window.addMessage === "function"
+    ){
+
+        window.addMessage(
+            "assistant",
+            "📄 Sto leggendo il documento..."
+        );
+
+    }
+
+    return{
+
+        success:true,
+
+        fileName:file.name,
+
+        size:file.size
+
+    };
+
+};
+
 // ===============================================
 // 🚀 READY
 // ===============================================
