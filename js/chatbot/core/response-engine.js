@@ -91,6 +91,34 @@ const executiveAnalysis =
 
     null;
 
+// ===============================================
+// 🧠 EXECUTIVE AI DATA
+// ===============================================
+
+const executiveAI =
+
+    executiveBrain?.executiveAI ||
+
+    {};
+
+const executiveLevel =
+
+    executiveBrain?.executiveLevel ||
+
+    "standard";
+
+const executiveExplainability =
+
+    executiveBrain?.explainability ||
+
+    {};
+
+const executiveActionPlan =
+
+    executiveBrain?.actionPlan ||
+
+    [];
+
 console.log(
     "🧠 EXECUTIVE INSIGHT",
     executiveInsight
@@ -250,6 +278,54 @@ if(
       window.rbAnalyzeDocuments(
         executiveContext
       ) || {};
+
+// =====================================
+// 🧠 DOCUMENT REASONING
+// =====================================
+
+let documentReasoning = {};
+
+if(
+    typeof window.rbGenerateDocumentReasoning ===
+    "function"
+){
+
+    try{
+
+        documentReasoning =
+            window.rbGenerateDocumentReasoning({
+
+                executiveContext,
+
+                advisor:
+                    advisor || {},
+
+                documentKnowledge,
+
+                language:
+                    window.currentLanguage ||
+                    "it"
+
+            }) || {};
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "Document Reasoning Error",
+            error
+        );
+
+    }
+
+}
+
+console.log(
+    "🧠 DOCUMENT REASONING:",
+    documentReasoning
+);
+    
 
   }
   catch(error){
@@ -641,7 +717,12 @@ if(
 
         advisor,
 
-        reasoning: {},
+        reasoning:
+           documentReasoning,
+
+       documentKnowledge,
+
+       documentReasoning,
 
         documentKnowledge: {},
 
