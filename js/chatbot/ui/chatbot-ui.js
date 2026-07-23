@@ -367,6 +367,9 @@ const voiceBtn =
 
   }
 
+  window.addMessage =
+    addMessage;
+
   // ===========================================
   // 💡 CONTEXTUAL SUGGESTIONS
   // ===========================================
