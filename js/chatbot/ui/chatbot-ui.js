@@ -94,7 +94,7 @@ window.initRBChatbotUI = function(){
 
 </div>
 
-    <!-- ===================================
+<!-- ===================================
 HOME
 ==================================== -->
 
@@ -102,17 +102,49 @@ HOME
 
     <div class="rb-ai-home">
 
-        <div class="rb-ai-home-title">
+<div class="rb-ai-home-header">
 
-            👋 Benvenuto
+    <div class="rb-ai-status">
 
-        </div>
+        <span class="rb-status-dot"></span>
 
-        <div class="rb-ai-home-subtitle">
+        Executive AI Online
 
-            Il tuo assistente AI per investimenti, mutui, mercato e report.
+    </div>
 
-        </div>
+    <div class="rb-ai-home-title">
+
+        🧠 RendimentoBB AI
+
+    </div>
+
+    <div class="rb-ai-home-subtitle">
+
+        ${
+            window.rbChatMemory?.lastCity
+            ?
+
+            `Sto seguendo la tua ultima analisi.
+
+            <br><br>
+
+            📍 <strong>${window.rbChatMemory.lastCity.toUpperCase()}</strong>
+
+            ${
+                window.rbChatMemory.lastROI
+                ? `<br>📈 ROI ${window.rbChatMemory.lastROI.toFixed(1)}%`
+                : ""
+            }`
+
+            :
+
+            "Posso aiutarti ad analizzare investimenti, PDF, mutui, dashboard e mercati immobiliari."
+
+        }
+
+    </div>
+
+</div>
 
         <div class="rb-ai-home-grid">
 
