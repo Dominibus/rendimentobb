@@ -23,6 +23,8 @@ window.rbExecutiveBrain = function({
 
     reasoning = {},
 
+    documentReasoning = {},
+
     narrative = {},
 
     documentKnowledge = {},
@@ -87,6 +89,58 @@ let weakestPoint = "";
 const executiveDecision =
     advisor?.verdict ||
     "WAIT";
+
+// ===============================================
+// 🧠 DOCUMENT AI CONTEXT
+// ===============================================
+
+const aiContext =
+
+    documentReasoning.executiveContextAI ||
+
+    {};
+
+const aiPortfolio =
+
+    aiContext.portfolio ||
+
+    {};
+
+const aiStrategy =
+
+    aiContext.strategy ||
+
+    {};
+
+const aiAnalysis =
+
+    aiContext.analysis ||
+
+    {};
+
+const aiInsights =
+
+    aiAnalysis.insights ||
+
+    [];
+
+const aiRecommendations =
+
+    aiStrategy.recommendations ||
+
+    [];
+
+const portfolioHealth =
+
+    aiPortfolio.health ||
+
+    "unknown";
+
+const portfolioTrend =
+
+    aiPortfolio.trend ||
+
+    "unknown";    
 
 // ===============================================
 // 🟢 STRENGTH
@@ -178,6 +232,115 @@ result.analysis = {
     cashflow
 
 };
+
+// ===============================================
+// 🧠 EXECUTIVE STRATEGIC LAYER
+// ===============================================
+
+result.executiveAI = {
+
+    portfolioHealth,
+
+    portfolioTrend,
+
+    insights: aiInsights,
+
+    recommendations: aiRecommendations,
+
+    summary:
+
+        aiStrategy.summary ||
+
+        null,
+
+    decision:
+
+        aiStrategy.decision ||
+
+        null
+
+};
+
+result.actionPlan = [
+
+    ...aiRecommendations
+
+];
+
+if(
+
+    portfolioHealth === "excellent"
+
+){
+
+    result.executiveLevel =
+
+        "elite";
+
+}
+
+else if(
+
+    portfolioHealth === "good"
+
+){
+
+    result.executiveLevel =
+
+        "professional";
+
+}
+
+else if(
+
+    portfolioHealth === "balanced"
+
+){
+
+    result.executiveLevel =
+
+        "standard";
+
+}
+
+else{
+
+    result.executiveLevel =
+
+        "attention";
+
+}    
+
+
+// ===============================================
+// 🧠 EXECUTIVE EXPLAINABILITY
+// ===============================================
+
+result.explainability = {
+
+    health: portfolioHealth,
+
+    trend: portfolioTrend,
+
+    decision: executiveDecision,
+
+    strongestPoint,
+
+    weakestPoint,
+
+    confidence:
+
+        result.confidence,
+
+    insights:
+
+        aiInsights,
+
+    recommendations:
+
+        aiRecommendations
+
+};    
 
 // ===============================================
 // 🧠 EXECUTIVE REASONING
@@ -333,6 +496,52 @@ switch(strongestPoint){
         break;
 
 }
+
+// ===============================================
+// 🧠 AI EXECUTIVE OVERRIDE
+// ===============================================
+
+if(aiStrategy.summary){
+
+    const summary = aiStrategy.summary;
+
+    if(summary.title){
+
+        result.summaryIT =
+
+            summary.title;
+
+        result.summaryEN =
+
+            summary.title;
+
+    }
+
+    if(summary.description){
+
+        result.explanationIT =
+
+            summary.description;
+
+        result.explanationEN =
+
+            summary.description;
+
+    }
+
+}
+
+if(aiRecommendations.length){
+
+    result.actionIT =
+
+        aiRecommendations.join(" ");
+
+    result.actionEN =
+
+        aiRecommendations.join(" ");
+
+}    
 
 // ===============================================
 // 🧠 EXECUTIVE NARRATIVE
