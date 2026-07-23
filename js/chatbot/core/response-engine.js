@@ -391,7 +391,7 @@ console.log(
 // 🧠 EXECUTIVE BRAIN V2
 // =====================================
 
-let executiveBrain = null;
+executiveBrain = executiveBrain || null;
 
 if(
     typeof window.rbGenerateExecutiveBrainV2 ===
