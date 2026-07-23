@@ -162,7 +162,10 @@ MESSAGES
     QUICK ACTIONS
     ==================================== -->
 
-    <div class="rb-quick-actions">
+    <div
+    class="rb-quick-actions"
+    id="rb-quick-actions"
+    style="display:none">
 
       <button class="rb-quick-btn">
         ROI
@@ -490,6 +493,17 @@ if(home){
 }
 
 messages.style.display = "block";    
+
+    const quick =
+    document.getElementById(
+        "rb-quick-actions"
+    );
+
+if(quick){
+
+    quick.style.display = "flex";
+
+}
 
     // =======================================
     // 💬 USER MESSAGE
