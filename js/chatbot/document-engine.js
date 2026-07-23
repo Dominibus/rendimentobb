@@ -487,55 +487,6 @@ window.buildExecutiveReport = function(data = {}){
 };
 
 // ===============================================
-// 📚 DOCUMENT LIBRARY MANAGER
-// ===============================================
-
-window.rbDocumentManager = {
-
-    add(document){
-
-        if(!document) return;
-
-        window.rbDocumentLibrary.unshift(document);
-
-        window.rbDocumentLibrary =
-            window.rbDocumentLibrary.slice(0,50);
-
-    },
-
-    getAll(){
-
-        return [...window.rbDocumentLibrary];
-
-    },
-
-    getLast(){
-
-        return window.rbDocumentLibrary[0] || null;
-
-    },
-
-    getByType(type){
-
-        return window.rbDocumentLibrary.filter(
-
-            doc => doc.documentType === type
-
-        );
-
-    },
-
-    clear(){
-
-        window.rbDocumentLibrary = [];
-
-        window.lastExecutiveReport = null;
-
-    }
-
-};
-
-// ===============================================
 // 📄 ANALYZE UPLOADED DOCUMENT
 // ===============================================
 
@@ -837,8 +788,12 @@ window.rbAnalyzeUploadedPDF = async function(file){
 // ===============================================
 
 console.log(
-    "📄 DOCUMENT ENGINE READY",
+    "🧠 DOCUMENT ENGINE 3.0 READY",
     {
-        version: "2.0"
+        version: window.RBDocuments.config.version,
+        activeDocument: !!window.rbActiveDocument,
+        documents: window.rbDocumentLibrary.length,
+        reasoning: window.RBDocuments.config.enableReasoning,
+        events: window.RBDocuments.config.enableEvents
     }
 );
