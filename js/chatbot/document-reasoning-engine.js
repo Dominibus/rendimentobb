@@ -128,6 +128,24 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
 
         );
 
+    const lowestRisk =
+
+    simulations.reduce(
+
+        (best,current)=>
+
+            Number(current.risk||999) <
+
+            Number(best?.risk||999)
+
+                ? current
+
+                : best,
+
+        null
+
+    );
+
     const bestCashflow =
         simulations.reduce(
 
@@ -736,6 +754,142 @@ const portfolioDistribution={
 };
 
 // ===========================================
+// 🧠 AI STRATEGIC INSIGHTS
+// ===========================================
+
+const strategicInsights = [];
+
+// ===========================================
+// ROI LEADER
+// ===========================================
+
+if(portfolioBenchmarks.bestROI){
+
+    strategicInsights.push({
+
+        type:"best_performer",
+
+        level:"positive",
+
+        title:"Best Investment",
+
+        message:
+            `${portfolioBenchmarks.bestROI.city} currently delivers the highest ROI (${portfolioBenchmarks.bestROI.roi.toFixed(1)}%).`
+
+    });
+
+}
+
+// ===========================================
+// RISK ALERT
+// ===========================================
+
+if(highestRisk){
+
+    if(Number(highestRisk.risk || 0) >= 70){
+
+        strategicInsights.push({
+
+            type:"risk",
+
+            level:"warning",
+
+            title:"Risk Concentration",
+
+            message:
+                `${highestRisk.city} shows elevated investment risk.`
+
+        });
+
+    }
+
+}
+
+// ===========================================
+// CASHFLOW ALERT
+// ===========================================
+
+if(executiveWarnings.some(w=>w.type==="negative_cashflow")){
+
+    strategicInsights.push({
+
+        type:"cashflow",
+
+        level:"warning",
+
+        title:"Cashflow",
+
+        message:
+            "One or more investments generate negative cashflow."
+
+    });
+
+}
+
+// ===========================================
+// GROWTH
+// ===========================================
+
+if(portfolioDistribution.excellent >= 2){
+
+    strategicInsights.push({
+
+        type:"growth",
+
+        level:"positive",
+
+        title:"Expansion",
+
+        message:
+            "The portfolio contains multiple high-performing investments suitable for expansion."
+
+    });
+
+}
+
+// ===========================================
+// DIVERSIFICATION
+// ===========================================
+
+if(availableCities.length <= 1 && simulations.length >= 3){
+
+    strategicInsights.push({
+
+        type:"diversification",
+
+        level:"info",
+
+        title:"Diversification",
+
+        message:
+            "Portfolio diversification across multiple markets could reduce concentration risk."
+
+    });
+
+}
+
+// ===========================================
+// CONSISTENCY
+// ===========================================
+
+if(confidenceScore >= 95){
+
+    strategicInsights.push({
+
+        type:"confidence",
+
+        level:"positive",
+
+        title:"Reliable Analysis",
+
+        message:
+            "The available data appears internally consistent."
+
+    });
+
+}
+
+// ===========================================
 // 🧠 AI EXECUTIVE CONTEXT
 // ===========================================
 
@@ -775,7 +929,9 @@ const executiveContextAI = {
 
         contradictions,
 
-        signals:aiSignals
+        signals:aiSignals,
+
+        insights:strategicInsights
 
     },
 
@@ -797,7 +953,7 @@ const executiveContextAI = {
 
         cashflow:bestCashflow,
 
-        lowestRisk:highestRisk
+        lowestRisk:lowestRisk
 
     },
 
@@ -880,7 +1036,9 @@ const executiveContextAI = {
 
         aiRecommendations,
 
-        executiveContextAI
+        executiveContextAI,
+
+        strategicInsights
 
     };
 
@@ -892,11 +1050,21 @@ const executiveContextAI = {
 
 console.log(
 
-    "🧠 DOCUMENT REASONING ENGINE READY",
+    "🧠 DOCUMENT REASONING ENGINE 3.0 READY",
 
     {
 
-        version: "2.0"
+        version:"3.0",
+
+        portfolioAI:true,
+
+        executiveSummary:true,
+
+        recommendations:true,
+
+        confidence:true,
+
+        intelligence:true
 
     }
 
