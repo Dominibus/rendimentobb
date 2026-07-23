@@ -5409,6 +5409,13 @@ const chartROI = Math.max(
     45
   )
 );
+
+console.log("CHECK PDF VARIABLES", {
+    roi,
+    realROI,
+    chartROI
+});
+  
 const riskScore = Math.max(
   0,
   Math.min(
