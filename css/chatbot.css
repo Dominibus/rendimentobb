@@ -1444,3 +1444,45 @@ MOBILE + DESKTOP CLEAN
     font-size:28px;
 
 }
+
+/* ============================================
+🎤 INPUT ACTIONS
+============================================ */
+
+.rb-chat-action-btn{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:white;
+
+    color:#0f172a;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    flex-shrink:0;
+
+    box-shadow:
+
+        0 4px 16px rgba(15,23,42,.08);
+
+    transition:.25s;
+
+}
+
+.rb-chat-action-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:#10b981;
+
+    color:white;
+
+}
