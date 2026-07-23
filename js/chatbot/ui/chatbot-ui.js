@@ -843,6 +843,41 @@ console.log(
 
     });
 
+// ===========================================
+// 🏠 HOME ACTIONS
+// ===========================================
+
+const homeCards = document.querySelectorAll(".rb-home-card");
+
+const homePrompts = [
+
+    "Analizza questo investimento",
+
+    "Analizza il PDF",
+
+    "Analizza il ROI della simulazione",
+
+    "Analizza la sostenibilità del mutuo",
+
+    "Analizza il mercato della città corrente",
+
+    "Analizza la dashboard"
+
+];
+
+homeCards.forEach((card,index)=>{
+
+    card.onclick = ()=>{
+
+        input.value = homePrompts[index];
+
+        sendMessage();
+
+    };
+
+});
+  
+
   // ===========================================
   // 🚀 READY
   // ===========================================
