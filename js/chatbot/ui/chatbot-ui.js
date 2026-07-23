@@ -134,7 +134,7 @@ HOME
 
                     <div class="rb-ai-snapshot-title">
 
-                        Executive Snapshot
+                        📊 Executive Snapshot
 
                     </div>
 
