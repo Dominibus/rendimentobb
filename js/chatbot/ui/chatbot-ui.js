@@ -277,6 +277,16 @@ MESSAGES
       "rb-chat-messages"
     );
 
+  const attachBtn =
+    document.getElementById(
+        "rb-chat-attach"
+    );
+
+const voiceBtn =
+    document.getElementById(
+        "rb-chat-voice"
+    );
+
   // ===========================================
   // 🔥 AUTO OPEN TOOL PAGE
   // ===========================================
@@ -771,6 +781,22 @@ console.log(
 
   sendBtn.onclick =
     sendMessage;
+
+  attachBtn.onclick = ()=>{
+
+    console.log("📎 ATTACH CLICK");
+
+    console.log(window.rbChatAttachments);
+
+    window.rbChatAttachments.open();
+
+};
+
+  voiceBtn.onclick = ()=>{
+
+    console.log("🎤 VOICE CLICK");
+
+};
 
   console.log(
   "🔥 SEND BUTTON BOUND"
