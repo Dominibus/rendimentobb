@@ -458,6 +458,20 @@ MESSAGES
 
     }
 
+
+    const home =
+    document.getElementById(
+        "rb-chat-home"
+    );
+
+if(home){
+
+    home.style.display = "none";
+
+}
+
+messages.style.display = "block";    
+
     // =======================================
     // 💬 USER MESSAGE
     // =======================================
