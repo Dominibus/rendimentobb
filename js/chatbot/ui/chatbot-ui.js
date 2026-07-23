@@ -95,62 +95,68 @@ window.initRBChatbotUI = function(){
 </div>
 
     <!-- ===================================
-    MESSAGES
-    ==================================== -->
+HOME
+==================================== -->
 
-<div id="rb-chat-messages">
+<div id="rb-chat-home">
 
-<div class="rb-ai-home">
+    <div class="rb-ai-home">
 
-    <div class="rb-ai-home-title">
+        <div class="rb-ai-home-title">
 
-        👋 Benvenuto
+            👋 Benvenuto
 
-    </div>
+        </div>
 
-    <div class="rb-ai-home-subtitle">
+        <div class="rb-ai-home-subtitle">
 
-        Posso aiutarti in qualsiasi fase del tuo investimento.
+            Il tuo assistente AI per investimenti, mutui, mercato e report.
 
-    </div>
+        </div>
 
-    <div class="rb-ai-home-grid">
+        <div class="rb-ai-home-grid">
 
-        <button class="rb-home-card">
-            🏠
-            <span>Analizza immobile</span>
-        </button>
+            <button class="rb-home-card">
+                🏠
+                <span>Analizza immobile</span>
+            </button>
 
-        <button class="rb-home-card">
-            📄
-            <span>Analizza PDF</span>
-        </button>
+            <button class="rb-home-card">
+                📄
+                <span>Analizza PDF</span>
+            </button>
 
-        <button class="rb-home-card">
-            📊
-            <span>Analizza ROI</span>
-        </button>
+            <button class="rb-home-card">
+                📊
+                <span>Analizza ROI</span>
+            </button>
 
-        <button class="rb-home-card">
-            🏦
-            <span>Mutuo</span>
-        </button>
+            <button class="rb-home-card">
+                🏦
+                <span>Mutuo</span>
+            </button>
 
-        <button class="rb-home-card">
-            🌍
-            <span>Mercato</span>
-        </button>
+            <button class="rb-home-card">
+                🌍
+                <span>Mercato</span>
+            </button>
 
-        <button class="rb-home-card">
-            📈
-            <span>Dashboard</span>
-        </button>
+            <button class="rb-home-card">
+                📈
+                <span>Dashboard</span>
+            </button>
+
+        </div>
 
     </div>
 
 </div>
 
-</div>
+<!-- ===================================
+MESSAGES
+==================================== -->
+
+<div id="rb-chat-messages"></div>
 
     <!-- ===================================
     QUICK ACTIONS
