@@ -184,6 +184,24 @@ window.rbAnalyzeUploadedPDF = async function(file){
             "📄 Sto leggendo il documento..."
         );
 
+        const reader = new FileReader();
+
+reader.onload = function(){
+
+    console.log(
+        "📄 PDF CARICATO IN MEMORIA",
+        reader.result
+    );
+
+    window.addMessage(
+    "assistant",
+    "✅ Documento caricato correttamente."
+);
+
+};
+
+reader.readAsArrayBuffer(file);
+
     }
 
     return{
