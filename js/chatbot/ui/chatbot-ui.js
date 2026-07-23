@@ -188,26 +188,45 @@ MESSAGES
 
     <div class="rb-chat-input-area">
 
-      <input
+    <button
+        id="rb-chat-attach"
+        class="rb-chat-action-btn"
+        title="Allega file">
+
+        ＋
+
+    </button>
+
+    <button
+        id="rb-chat-voice"
+        class="rb-chat-action-btn"
+        title="Parla">
+
+        🎤
+
+    </button>
+
+    <input
 
         id="rb-chat-input"
 
         type="text"
 
         placeholder="${t(
-          "Scrivi un messaggio...",
-          "Write a message..."
+            "Scrivi oppure parla...",
+            "Write or speak..."
         )}"
 
-      >
+    >
 
-      <button id="rb-chat-send">
+    <button
+        id="rb-chat-send">
 
         ➜
 
-      </button>
+    </button>
 
-    </div>
+</div>
 
   </div>
 
