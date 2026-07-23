@@ -1572,3 +1572,30 @@ opacity:1;
 }
 
 }
+
+.rb-home-card{
+
+display:flex;
+flex-direction:column;
+align-items:flex-start;
+justify-content:flex-start;
+
+padding:18px;
+
+gap:8px;
+
+border-radius:18px;
+
+background:#fff;
+
+border:1px solid #eef2f7;
+
+transition:.25s;
+
+cursor:pointer;
+
+text-align:left;
+
+min-height:132px;
+
+}
