@@ -1748,6 +1748,8 @@ if(window.rbRememberMessage){
       error
     );
 
+    console.error(error?.stack);
+
     return {
 
       success: false,
