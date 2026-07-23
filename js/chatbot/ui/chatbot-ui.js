@@ -149,34 +149,100 @@ HOME
         <div class="rb-ai-home-grid">
 
             <button class="rb-home-card">
-                🏠
-                <span>Analizza immobile</span>
-            </button>
+
+    <div class="rb-home-icon">
+        🏠
+    </div>
+
+    <div class="rb-home-title">
+        Analizza investimento
+    </div>
+
+    <div class="rb-home-desc">
+        ROI • Cashflow • Rischio
+    </div>
+
+</button>
 
             <button class="rb-home-card">
-                📄
-                <span>Analizza PDF</span>
-            </button>
+
+    <div class="rb-home-icon">
+        📄
+    </div>
+
+    <div class="rb-home-title">
+        Analizza PDF
+    </div>
+
+    <div class="rb-home-desc">
+        Executive Report
+    </div>
+
+</button>
 
             <button class="rb-home-card">
-                📊
-                <span>Analizza ROI</span>
-            </button>
+
+    <div class="rb-home-icon">
+        📊
+    </div>
+
+    <div class="rb-home-title">
+        Analizza ROI
+    </div>
+
+    <div class="rb-home-desc">
+        Performance investimento
+    </div>
+
+</button>
 
             <button class="rb-home-card">
-                🏦
-                <span>Mutuo</span>
-            </button>
+
+    <div class="rb-home-icon">
+        🏦
+    </div>
+
+    <div class="rb-home-title">
+        Mutuo
+    </div>
+
+    <div class="rb-home-desc">
+        Leva • DSCR • LTV
+    </div>
+
+</button>
 
             <button class="rb-home-card">
-                🌍
-                <span>Mercato</span>
-            </button>
+
+    <div class="rb-home-icon">
+        🌍
+    </div>
+
+    <div class="rb-home-title">
+        Mercato
+    </div>
+
+    <div class="rb-home-desc">
+        Benchmark città
+    </div>
+
+</button>
 
             <button class="rb-home-card">
-                📈
-                <span>Dashboard</span>
-            </button>
+
+    <div class="rb-home-icon">
+        📈
+    </div>
+
+    <div class="rb-home-title">
+        Dashboard
+    </div>
+
+    <div class="rb-home-desc">
+        KPI e Report
+    </div>
+
+</button>
 
         </div>
 
