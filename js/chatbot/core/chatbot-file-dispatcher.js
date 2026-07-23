@@ -61,13 +61,26 @@ window.rbFileDispatcher = (function(){
 
     function dispatchPDF(file){
 
-        console.log(
-            "📄 PDF DETECTED",
-            file.name
+    console.log(
+        "📄 PDF DETECTED",
+        file.name
+    );
+
+    if(
+        typeof window.addMessage ===
+        "function"
+    ){
+
+        window.addMessage(
+            "assistant",
+            `📄 Ho ricevuto il documento **${file.name}**.
+
+Sto preparando l'analisi AI...`
         );
 
     }
 
+}
     function dispatchImage(file){
 
         console.log(
