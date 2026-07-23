@@ -59,7 +59,7 @@ window.rbFileDispatcher = (function(){
 
     }
 
-    function dispatchPDF(file){
+function dispatchPDF(file){
 
     console.log(
         "📄 PDF DETECTED",
@@ -67,18 +67,19 @@ window.rbFileDispatcher = (function(){
     );
 
     if(
-        typeof window.addMessage ===
+        typeof window.rbAnalyzeUploadedPDF ===
         "function"
     ){
 
-        window.addMessage(
-            "assistant",
-            `📄 Ho ricevuto il documento **${file.name}**.
-
-Sto preparando l'analisi AI...`
+        return window.rbAnalyzeUploadedPDF(
+            file
         );
 
     }
+
+    console.warn(
+        "Document Engine non disponibile."
+    );
 
 }
     function dispatchImage(file){
