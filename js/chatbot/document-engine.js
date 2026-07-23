@@ -175,6 +175,24 @@ window.rbAnalyzeUploadedPDF = async function(file){
         file
     );
 
+// =====================================
+// 🧠 DOCUMENT CLASSIFICATION
+// =====================================
+
+const documentInfo =
+
+    window.rbClassifyDocument
+    ? window.rbClassifyDocument(file)
+    : null;
+
+console.log(
+    "🧠 DOCUMENT TYPE",
+    documentInfo
+);
+
+window.lastDocumentInfo =
+    documentInfo;
+
     if(
         typeof window.addMessage === "function"
     ){
