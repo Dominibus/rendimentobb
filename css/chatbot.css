@@ -275,20 +275,22 @@ Silicon Valley SaaS UI
 
 #rb-chat-messages{
 
-  flex:1;
+    flex:1;
 
-  overflow-y:auto;
+    overflow-y:auto;
 
-  padding:20px;
+    display:none;
 
-  background:
-  linear-gradient(
-    180deg,
-    rgba(248,250,252,0.92),
-    rgba(241,245,249,0.92)
-  );
+    padding:20px;
 
-  scroll-behavior:smooth;
+    background:
+    linear-gradient(
+        180deg,
+        rgba(248,250,252,.92),
+        rgba(241,245,249,.92)
+    );
+
+    scroll-behavior:smooth;
 
 }
 
@@ -1338,6 +1340,10 @@ MOBILE + DESKTOP CLEAN
 ============================================ */
 
 #rb-chat-home{
+
+    flex:1;
+
+    overflow-y:auto;
 
     padding:22px;
 
