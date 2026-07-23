@@ -345,6 +345,53 @@ console.log(
 );
 
 // =====================================
+// 🧠 EXECUTIVE BRAIN V2
+// =====================================
+
+let executiveBrain = null;
+
+if(
+    typeof window.rbGenerateExecutiveBrainV2 ===
+    "function"
+){
+
+    try{
+
+        executiveBrain =
+            window.rbGenerateExecutiveBrainV2({
+
+                executiveContext,
+
+                advisor:
+                    advisor || {},
+
+                documentKnowledge,
+
+                language:
+                    window.currentLanguage ||
+                    "it"
+
+            }) || null;
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "Executive Brain Error",
+            error
+        );
+
+    }
+
+}
+
+console.log(
+    "🧠 EXECUTIVE BRAIN:",
+    executiveBrain
+);
+
+// =====================================
 // 🧠 EXECUTIVE NARRATIVE
 // =====================================
 
@@ -5125,7 +5172,12 @@ executiveBuilderResult =
 
         brain: brainData,
 
-        executiveBrain,
+        executiveBrain:
+          executiveBrain ||
+
+          brainData?.executiveBrain ||
+
+        null,
 
         intent,
 
