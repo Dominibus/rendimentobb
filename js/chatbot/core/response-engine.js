@@ -119,49 +119,6 @@ const executiveActionPlan =
 
     [];
 
-// ===============================================
-// 🧠 EXECUTIVE AI STATE
-// Single Source of Truth
-// ===============================================
-
-const executiveState = {
-
-    decision:
-        executiveAI?.decision ||
-        executiveDecision,
-
-    summaryIT:
-        executiveAI?.summaryIT ||
-        "",
-
-    summaryEN:
-        executiveAI?.summaryEN ||
-        "",
-
-    prioritiesIT:
-        executiveAI?.prioritiesIT ||
-        [],
-
-    prioritiesEN:
-        executiveAI?.prioritiesEN ||
-        [],
-
-    actionPlan:
-        executiveActionPlan,
-
-    explainability:
-        executiveExplainability,
-
-    level:
-        executiveLevel
-
-};
-
-console.log(
-    "🧠 EXECUTIVE STATE",
-    executiveState
-);
-
 console.log(
     "🧠 EXECUTIVE INSIGHT",
     executiveInsight
@@ -218,6 +175,49 @@ console.log(
         hasCriticalIssue,
         hasStrongInvestment
     }
+);
+
+// ===============================================
+// 🧠 EXECUTIVE AI STATE
+// Single Source of Truth
+// ===============================================
+
+const executiveState = {
+
+    decision:
+        executiveAI?.decision ||
+        executiveDecision,
+
+    summaryIT:
+        executiveAI?.summaryIT ||
+        "",
+
+    summaryEN:
+        executiveAI?.summaryEN ||
+        "",
+
+    prioritiesIT:
+        executiveAI?.prioritiesIT ||
+        [],
+
+    prioritiesEN:
+        executiveAI?.prioritiesEN ||
+        [],
+
+    actionPlan:
+        executiveActionPlan,
+
+    explainability:
+        executiveExplainability,
+
+    level:
+        executiveLevel
+
+};
+
+console.log(
+    "🧠 EXECUTIVE STATE",
+    executiveState
 );
   
   // ===========================================
