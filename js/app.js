@@ -5391,18 +5391,24 @@ console.log("LAST ANALYSIS DATA", {
 // ================= SAFE =================
 const safe = v => isFinite(v) ? Number(v) : 0;
 
-const realROI =
-  safe(d.realROI || d.roi);
+// ROI dell'investimento (su equity)
+const roi = safe(
+  d.roi
+);
 
-// 🔥 cap SOLO grafico PDF
-const roi = Math.max(
+// ROI sul valore dell'immobile
+const realROI = safe(
+  d.realROI ?? d.roi
+);
+
+// Solo per grafici con scala massima 45%
+const chartROI = Math.max(
   0,
   Math.min(
-    safe(realROI),
+    roi,
     45
   )
 );
-
 const riskScore = Math.max(
   0,
   Math.min(
