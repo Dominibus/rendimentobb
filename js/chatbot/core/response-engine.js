@@ -119,6 +119,49 @@ const executiveActionPlan =
 
     [];
 
+// ===============================================
+// 🧠 EXECUTIVE AI STATE
+// Single Source of Truth
+// ===============================================
+
+const executiveState = {
+
+    decision:
+        executiveAI?.decision ||
+        executiveDecision,
+
+    summaryIT:
+        executiveAI?.summaryIT ||
+        "",
+
+    summaryEN:
+        executiveAI?.summaryEN ||
+        "",
+
+    prioritiesIT:
+        executiveAI?.prioritiesIT ||
+        [],
+
+    prioritiesEN:
+        executiveAI?.prioritiesEN ||
+        [],
+
+    actionPlan:
+        executiveActionPlan,
+
+    explainability:
+        executiveExplainability,
+
+    level:
+        executiveLevel
+
+};
+
+console.log(
+    "🧠 EXECUTIVE STATE",
+    executiveState
+);
+
 console.log(
     "🧠 EXECUTIVE INSIGHT",
     executiveInsight
@@ -748,8 +791,8 @@ if(
 
   try{
 
-    brainData =
-  brainData || window.rbProcessBrain({
+brainData =
+    brainData || window.rbProcessBrain({
 
         intent,
 
@@ -760,22 +803,18 @@ if(
         investorProfile,
 
         score:
-          investmentScore,
+            investmentScore,
 
         advisor,
 
         reasoning:
-           documentReasoning,
+            documentReasoning,
 
-       documentKnowledge,
-
-       documentReasoning,
-
-        documentKnowledge: {},
+        documentKnowledge,
 
         executiveContext
 
-      }) || {};
+    }) || {};
 
   }
 
@@ -5370,13 +5409,27 @@ const strategyIT = [
 
 if(conversationalFollowUp){
 
-    if(roi >= 10 && risk <= 40){
+    if(
+
+        executiveState.decision === "BUY" ||
+
+        advisor?.verdict === "BUY"
+
+    ){
 
         strategyIT.push(
             "✅ In base ai dati dell'ultima simulazione, l'investimento appare competitivo. Se le ipotesi utilizzate (occupazione, ADR e costi) sono realistiche, il progetto merita di essere preso seriamente in considerazione."
         );
 
-    }else{
+    }
+
+    else if(
+
+        executiveState.decision === "WAIT" ||
+
+        advisor?.verdict === "WAIT"
+
+    ){
 
         strategyIT.push(
             "⚠️ Analizzando l'ultima simulazione, prima di procedere conviene migliorare alcuni parametri operativi per aumentare la sostenibilità dell'investimento."
@@ -5384,21 +5437,55 @@ if(conversationalFollowUp){
 
     }
 
+    else{
+
+        strategyIT.push(
+            "🚨 L'AI ritiene che, nelle condizioni attuali, l'investimento non sia sufficientemente solido. Prima di procedere è consigliabile rivedere redditività, rischio e sostenibilità complessiva."
+        );
+
+    }
+
 }else{
 
-    strategyIT.push(
+    if(
 
-        roi >= 10 && risk <= 40
+        executiveState.decision === "BUY" ||
 
-        ? "💡 L'investimento mostra metriche molto competitive."
+        advisor?.verdict === "BUY"
 
-        : "💡 L'investimento richiede ottimizzazione operativa."
+    ){
 
-    );
+        strategyIT.push(
+            "💡 L'investimento mostra metriche molto competitive."
+        );
+
+    }
+
+    else if(
+
+        executiveState.decision === "WAIT" ||
+
+        advisor?.verdict === "WAIT"
+
+    ){
+
+        strategyIT.push(
+            "💡 L'investimento richiede ottimizzazione operativa."
+        );
+
+    }
+
+    else{
+
+        strategyIT.push(
+            "💡 Nello stato attuale l'investimento non appare ancora sufficientemente competitivo."
+        );
+
+    }
 
 }
 
-  response.textIT =
+response.textIT =
     strategyIT.join("\n\n");
 
   // =====================================
@@ -5441,13 +5528,27 @@ const strategyEN = [
 
 if(conversationalFollowUp){
 
-    if(roi >= 10 && risk <= 40){
+    if(
+
+        executiveState.decision === "BUY" ||
+
+        advisor?.verdict === "BUY"
+
+    ){
 
         strategyEN.push(
             "✅ Based on the latest simulation, the investment appears competitive. If occupancy, ADR and costs are realistic, the opportunity deserves serious consideration."
         );
 
-    }else{
+    }
+
+    else if(
+
+        executiveState.decision === "WAIT" ||
+
+        advisor?.verdict === "WAIT"
+
+    ){
 
         strategyEN.push(
             "⚠️ Based on the latest simulation, improving operational parameters before investing is recommended."
@@ -5455,21 +5556,55 @@ if(conversationalFollowUp){
 
     }
 
+    else{
+
+        strategyEN.push(
+            "🚨 The AI believes the investment is not sufficiently solid under current conditions. Profitability, risk and sustainability should be reviewed before proceeding."
+        );
+
+    }
+
 }else{
 
-    strategyEN.push(
+    if(
 
-        roi >= 10 && risk <= 40
+        executiveState.decision === "BUY" ||
 
-        ? "💡 The investment shows highly competitive metrics."
+        advisor?.verdict === "BUY"
 
-        : "💡 The investment requires operational optimization."
+    ){
 
-    );
+        strategyEN.push(
+            "💡 The investment shows highly competitive metrics."
+        );
+
+    }
+
+    else if(
+
+        executiveState.decision === "WAIT" ||
+
+        advisor?.verdict === "WAIT"
+
+    ){
+
+        strategyEN.push(
+            "💡 The investment requires operational optimization."
+        );
+
+    }
+
+    else{
+
+        strategyEN.push(
+            "💡 Under the current conditions the investment does not yet appear sufficiently competitive."
+        );
+
+    }
 
 }
 
-  response.textEN =
+response.textEN =
     strategyEN.join("\n\n");
 
 }
