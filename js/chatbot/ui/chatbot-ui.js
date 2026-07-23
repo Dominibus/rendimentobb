@@ -98,6 +98,8 @@ window.initRBChatbotUI = function(){
     MESSAGES
     ==================================== -->
 
+<div id="rb-chat-messages">
+
 <div class="rb-ai-home">
 
     <div class="rb-ai-home-title">
@@ -145,6 +147,8 @@ window.initRBChatbotUI = function(){
         </button>
 
     </div>
+
+</div>
 
 </div>
 
