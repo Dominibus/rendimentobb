@@ -1647,15 +1647,17 @@ EXECUTIVE SNAPSHOT
 
 .rb-ai-snapshot{
 
-margin-top:18px;
+margin-top:14px;
 
-padding:16px;
+padding:14px;
 
-background:#f8fafc;
+background:linear-gradient(180deg,#ffffff,#f8fafc);
 
-border:1px solid #e2e8f0;
+border:1px solid #edf2f7;
 
 border-radius:18px;
+
+box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -1687,9 +1689,19 @@ background:white;
 
 border-radius:14px;
 
-padding:12px;
+padding:10px;
 
 border:1px solid #eef2f7;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+min-height:72px;
 
 transition:.25s;
 
@@ -1721,11 +1733,37 @@ letter-spacing:.5px;
 
 .rb-ai-metric strong{
 
-font-size:18px;
+font-size:22px;
 
 font-weight:800;
 
 color:#0f172a;
+
+margin-top:4px;
+
+}
+
+.rb-ai-home-header{
+
+padding-bottom:10px;
+
+}
+
+.rb-ai-home-title{
+
+margin-top:6px;
+
+margin-bottom:2px;
+
+}
+
+.rb-ai-home-subtitle{
+
+font-size:13px;
+
+color:#64748b;
+
+margin-bottom:14px;
 
 }
 
