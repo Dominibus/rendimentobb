@@ -241,6 +241,8 @@
 
 "/js/chatbot/core/response-engine.js",
 
+"/js/chatbot/core/chatbot-file-dispatcher.js",    
+
 "/js/chatbot/core/chatbot-orchestrator.js",
 
     // =========================================
