@@ -1,8 +1,47 @@
 // ===============================================
-// 🧠 DOCUMENT ENGINE 2.0
-// Executive Document Memory
-// Silicon Valley Architecture 2026
+// 🧠 DOCUMENT ENGINE 3.0
+// AI Document Intelligence Engine
+// RendimentoBB • Silicon Valley Architecture 2026
 // ===============================================
+
+"use strict";
+
+// ===============================================
+// 🌍 GLOBAL NAMESPACE
+// ===============================================
+
+window.RBDocuments = window.RBDocuments || {};
+
+// ===============================================
+// ⚙️ CONFIGURATION
+// ===============================================
+
+window.RBDocuments.config = {
+
+    version: "3.0",
+
+    maxDocuments: 100,
+
+    enableEvents: true,
+
+    enableMemory: true,
+
+    enableReasoning: true,
+
+    enableMetadata: true,
+
+    enableLogging: true
+
+};
+
+// ===============================================
+// 📄 ACTIVE DOCUMENT
+// ===============================================
+
+window.rbActiveDocument = null;
+
+// Compatibilità retroattiva
+window.lastDocumentInfo = null;
 
 // ===============================================
 // 📄 LAST EXECUTIVE REPORT
@@ -11,10 +50,302 @@
 window.lastExecutiveReport = null;
 
 // ===============================================
-// 📚 EXECUTIVE DOCUMENT LIBRARY
+// 📚 DOCUMENT LIBRARY
 // ===============================================
 
 window.rbDocumentLibrary = [];
+
+// ===============================================
+// 📑 DOCUMENT HISTORY
+// ===============================================
+
+window.rbDocumentHistory = [];
+
+// ===============================================
+// 📡 EVENT BUS
+// ===============================================
+
+window.rbDocumentEvents = {
+
+    emit(event, payload = {}){
+
+        if(
+            !window.RBDocuments.config.enableEvents
+        ){
+            return;
+        }
+
+        document.dispatchEvent(
+
+            new CustomEvent(
+
+                `rb:${event}`,
+
+                {
+
+                    detail: payload
+
+                }
+
+            )
+
+        );
+
+        if(
+            window.RBDocuments.config.enableLogging
+        ){
+
+            console.log(
+
+                `📡 DOCUMENT EVENT → ${event}`,
+
+                payload
+
+            );
+
+        }
+
+    },
+
+    on(event, callback){
+
+        document.addEventListener(
+
+            `rb:${event}`,
+
+            callback
+
+        );
+
+    }
+
+};
+
+// ===============================================
+// 📄 CREATE DOCUMENT OBJECT
+// ===============================================
+
+window.rbCreateDocumentObject = function({
+
+    file = null,
+
+    type = "generic",
+
+    classification = null,
+
+    buffer = null
+
+} = {}){
+
+    return{
+
+        id:
+
+            crypto.randomUUID
+
+                ? crypto.randomUUID()
+
+                : `doc_${Date.now()}`,
+
+        type,
+
+        subtype:
+
+            classification?.label ||
+
+            "Generic Document",
+
+        confidence:
+
+            classification?.confidence ||
+
+            0,
+
+        source:
+
+            "upload",
+
+        uploadedAt:
+
+            new Date().toISOString(),
+
+        fileName:
+
+            file?.name ||
+
+            null,
+
+        extension:
+
+            file?.name?.split(".").pop()?.toLowerCase() ||
+
+            null,
+
+        mimeType:
+
+            file?.type ||
+
+            null,
+
+        size:
+
+            file?.size ||
+
+            0,
+
+        metadata:{},
+
+        analysis:{},
+
+        reasoning:{},
+
+        executiveContext:{},
+
+        aiSummary:null,
+
+        aiSignals:[],
+
+        extractedText:null,
+
+        buffer
+
+    };
+
+};
+
+// ===============================================
+// 📚 DOCUMENT MANAGER
+// ===============================================
+
+window.rbDocumentManager = {
+
+    add(documentObject){
+
+        if(!documentObject){
+
+            return null;
+
+        }
+
+        window.rbDocumentLibrary.unshift(
+
+            documentObject
+
+        );
+
+        window.rbDocumentLibrary =
+
+            window.rbDocumentLibrary.slice(
+
+                0,
+
+                window.RBDocuments.config.maxDocuments
+
+            );
+
+        window.rbDocumentHistory.unshift({
+
+            id: documentObject.id,
+
+            type: documentObject.type,
+
+            fileName: documentObject.fileName,
+
+            uploadedAt: documentObject.uploadedAt
+
+        });
+
+        window.rbActiveDocument =
+
+            documentObject;
+
+        window.lastDocumentInfo =
+
+            {
+
+                type:
+
+                    documentObject.type,
+
+                label:
+
+                    documentObject.subtype,
+
+                confidence:
+
+                    documentObject.confidence
+
+            };
+
+        window.rbDocumentEvents.emit(
+
+            "document_added",
+
+            documentObject
+
+        );
+
+        return documentObject;
+
+    },
+
+    getLast(){
+
+        return window.rbActiveDocument;
+
+    },
+
+    getAll(){
+
+        return [
+
+            ...window.rbDocumentLibrary
+
+        ];
+
+    },
+
+    getHistory(){
+
+        return [
+
+            ...window.rbDocumentHistory
+
+        ];
+
+    },
+
+    getByType(type){
+
+        return window.rbDocumentLibrary.filter(
+
+            doc => doc.type === type
+
+        );
+
+    },
+
+    clear(){
+
+        window.rbActiveDocument = null;
+
+        window.lastExecutiveReport = null;
+
+        window.lastDocumentInfo = null;
+
+        window.rbDocumentLibrary = [];
+
+        window.rbDocumentHistory = [];
+
+        window.rbDocumentEvents.emit(
+
+            "documents_cleared"
+
+        );
+
+    }
+
+};
 
 // ===============================================
 // 🧠 BUILD EXECUTIVE REPORT
@@ -30,26 +361,31 @@ window.buildExecutiveReport = function(data = {}){
                 : `report_${Date.now()}`,
 
         documentType:
+            data.reportType === "executive_pdf"
+                ? "executive_pdf"
+                : "simulation",
 
-  data.reportType === "executive_pdf"
+        type:
+            "executive_report",
 
-    ? "executive_pdf"
+        category:
+            "investment_analysis",
 
-    : "simulation",
+        subtype:
+            data.reportType === "executive_pdf"
+                ? "Executive PDF"
+                : "Simulation",
 
-source:
-
-  data.reportType === "executive_pdf"
-
-    ? "pdf_generator"
-
-    : "simulator",
+        source:
+            data.reportType === "executive_pdf"
+                ? "pdf_generator"
+                : "simulator",
 
         generatedAt:
             new Date().toISOString(),
 
         version:
-            "2.0",
+            "3.0",
 
         city:
             data.realCity ||
@@ -63,12 +399,10 @@ source:
             0,
 
         risk:
-            data.risk ??
-            0,
+            data.risk ?? 0,
 
         occupancy:
-            data.occupancy ??
-            0,
+            data.occupancy ?? 0,
 
         revenue:
             data.revenueAnnual ??
@@ -86,8 +420,7 @@ source:
             0,
 
         equity:
-            data.equity ??
-            0,
+            data.equity ?? 0,
 
         mortgage:
             data.mortgageAmount ??
@@ -95,21 +428,59 @@ source:
             0,
 
         analysis:
-            data
+            data,
+
+        metadata:{
+
+            generatedBy:"simulator",
+
+            language:
+                window.currentLanguage || "it",
+
+            createdAt:
+                Date.now()
+
+        },
+
+        aiSummary:null,
+
+        aiSignals:[],
+
+        reasoning:{},
+
+        executiveContext:{}
 
     };
 
-    // ===========================================
-    // 📄 ACTIVE EXECUTIVE REPORT
-    // ===========================================
+    // ==========================================
+    // ACTIVE REPORT
+    // ==========================================
 
     window.lastExecutiveReport = report;
 
-    // ===========================================
-    // 📚 DOCUMENT LIBRARY
-    // ===========================================
+    // ==========================================
+    // ACTIVE DOCUMENT
+    // ==========================================
 
-window.rbDocumentManager.add(report);
+    window.rbActiveDocument = report;
+
+    // ==========================================
+    // DOCUMENT LIBRARY
+    // ==========================================
+
+    window.rbDocumentManager.add(report);
+
+    // ==========================================
+    // EVENT
+    // ==========================================
+
+    window.rbDocumentEvents.emit(
+
+        "executive_report_created",
+
+        report
+
+    );
 
     return report;
 
@@ -164,73 +535,300 @@ window.rbDocumentManager = {
 
 };
 
-// ==========================================
-// 📄 ANALYZE UPLOADED PDF
-// ==========================================
+// ===============================================
+// 📄 ANALYZE UPLOADED DOCUMENT
+// ===============================================
 
 window.rbAnalyzeUploadedPDF = async function(file){
 
     console.log(
-        "📄 ANALYZE UPLOADED PDF",
+        "📄 ANALYZE UPLOADED DOCUMENT",
         file
     );
 
-// =====================================
-// 🧠 DOCUMENT CLASSIFICATION
-// =====================================
+    if(!file){
 
-const documentInfo =
+        return{
 
-    window.rbClassifyDocument
-    ? window.rbClassifyDocument(file)
-    : null;
+            success:false,
 
-console.log(
-    "🧠 DOCUMENT TYPE",
-    documentInfo
-);
+            error:"No file supplied."
 
-window.lastDocumentInfo =
-    documentInfo;
-
-    if(
-        typeof window.addMessage === "function"
-    ){
-
-        window.addMessage(
-            "assistant",
-            "📄 Sto leggendo il documento..."
-        );
-
-        const reader = new FileReader();
-
-reader.onload = function(){
-
-    console.log(
-        "📄 PDF CARICATO IN MEMORIA",
-        reader.result
-    );
-
-    window.addMessage(
-    "assistant",
-    "✅ Documento caricato correttamente."
-);
-
-};
-
-reader.readAsArrayBuffer(file);
+        };
 
     }
 
-    return{
+    // ===========================================
+    // 🧠 DOCUMENT CLASSIFICATION
+    // ===========================================
 
-        success:true,
+    const classification =
 
-        fileName:file.name,
+        window.rbClassifyDocument
 
-        size:file.size
+            ? window.rbClassifyDocument(file)
 
-    };
+            : {
+
+                type:"generic",
+
+                label:"Generic Document",
+
+                confidence:0
+
+            };
+
+    console.log(
+        "🧠 DOCUMENT TYPE",
+        classification
+    );
+
+    // Compatibilità
+    window.lastDocumentInfo = classification;
+
+    // ===========================================
+    // 👤 UI FEEDBACK
+    // ===========================================
+
+    if(typeof window.addMessage === "function"){
+
+        window.addMessage(
+
+            "assistant",
+
+            "📄 Sto analizzando il documento..."
+
+        );
+
+    }
+
+    // ===========================================
+    // 📖 READ FILE
+    // ===========================================
+
+    return new Promise((resolve)=>{
+
+        const reader = new FileReader();
+
+        reader.onload = function(){
+
+            const buffer = reader.result;
+
+            console.log(
+
+                "📄 DOCUMENT LOADED",
+
+                buffer
+
+            );
+
+            // ===================================
+            // CREATE DOCUMENT OBJECT
+            // ===================================
+
+            const documentObject =
+
+                window.rbCreateDocumentObject({
+
+                    file,
+
+                    type:
+
+                        classification.type ||
+
+                        "generic",
+
+                    classification,
+
+                    buffer
+
+                });
+
+            // ===================================
+            // METADATA
+            // ===================================
+
+            documentObject.metadata = {
+
+                uploadedAt:
+
+                    new Date().toISOString(),
+
+                fileName:
+
+                    file.name,
+
+                extension:
+
+                    file.name.split(".").pop(),
+
+                mimeType:
+
+                    file.type,
+
+                size:
+
+                    file.size
+
+            };
+
+            // ===================================
+            // AI SIGNALS
+            // ===================================
+
+            documentObject.aiSignals.push(
+
+                {
+
+                    type:"classification",
+
+                    confidence:
+
+                        classification.confidence,
+
+                    label:
+
+                        classification.label
+
+                }
+
+            );
+
+            // ===================================
+            // STORE DOCUMENT
+            // ===================================
+
+            window.rbDocumentManager.add(
+
+                documentObject
+
+            );
+
+            // ===================================
+            // EXECUTIVE REPORT
+            // ===================================
+
+            if(
+
+                classification.type ===
+
+                "executive_report"
+
+            ){
+
+                window.lastExecutiveReport =
+
+                    documentObject;
+
+            }
+
+            // ===================================
+            // EVENTS
+            // ===================================
+
+            window.rbDocumentEvents.emit(
+
+                "document_uploaded",
+
+                documentObject
+
+            );
+
+            window.rbDocumentEvents.emit(
+
+                "document_ready",
+
+                documentObject
+
+            );
+
+            // ===================================
+            // FUTURE HOOKS
+            // ===================================
+
+            if(
+
+                typeof window.rbExtractPDFText ===
+
+                "function"
+
+            ){
+
+                Promise.resolve(
+
+                    window.rbExtractPDFText(
+
+                        documentObject
+
+                    )
+
+                ).catch(console.warn);
+
+            }
+
+            if(
+
+                typeof window.rbRunDocumentReasoning ===
+
+                "function"
+
+            ){
+
+                Promise.resolve(
+
+                    window.rbRunDocumentReasoning(
+
+                        documentObject
+
+                    )
+
+                ).catch(console.warn);
+
+            }
+
+            // ===================================
+            // UI
+            // ===================================
+
+            if(typeof window.addMessage === "function"){
+
+                window.addMessage(
+
+                    "assistant",
+
+                    `✅ Documento "${file.name}" caricato correttamente.\n\nPosso analizzarlo, confrontarlo o rispondere alle tue domande.`
+
+                );
+
+            }
+
+            resolve({
+
+                success:true,
+
+                document:documentObject,
+
+                classification
+
+            });
+
+        };
+
+        reader.onerror = function(){
+
+            resolve({
+
+                success:false,
+
+                error:"File reading failed."
+
+            });
+
+        };
+
+        reader.readAsArrayBuffer(file);
+
+    });
 
 };
 
