@@ -62,78 +62,91 @@ window.initRBChatbotUI = function(){
     HEADER
     ==================================== -->
 
-    <div class="rb-chat-header">
+<div class="rb-chat-header">
 
-      <div>
+    <div class="rb-chat-header-left">
+
+        <div class="rb-ai-status">
+            <span class="rb-status-dot"></span>
+            Online
+        </div>
 
         <div class="rb-chat-title">
 
-          ${t(
-            "AI Investment Assistant",
-            "AI Investment Assistant"
-          )}
+            RendimentoBB AI
 
         </div>
 
         <div class="rb-chat-subtitle">
 
-          ${t(
-            "Powered by RendimentoBB AI",
-            "Powered by RendimentoBB AI"
-          )}
+            Executive Investment Advisor
 
         </div>
 
-      </div>
+    </div>
 
-      <div
+    <div
         class="rb-chat-close"
         id="rb-chat-close"
-      >
-
+    >
         ✕
-
-      </div>
-
     </div>
+
+</div>
 
     <!-- ===================================
     MESSAGES
     ==================================== -->
 
-    <div id="rb-chat-messages">
+<div class="rb-ai-home">
 
-      <div class="rb-bot-message">
+    <div class="rb-ai-home-title">
 
-        ${t(
-
-`👋 Ciao.
-
-Posso aiutarti ad analizzare:
-
-• ROI
-• cashflow
-• rischio
-• mutui
-• sostenibilità
-• benchmark short-rent`,
-
-`👋 Hi.
-
-I can help analyze:
-
-• ROI
-• cashflow
-• risk
-• mortgages
-• sustainability
-• short-rent benchmarks`
-
-        )}
-
-      </div>
+        👋 Benvenuto
 
     </div>
+
+    <div class="rb-ai-home-subtitle">
+
+        Posso aiutarti in qualsiasi fase del tuo investimento.
+
+    </div>
+
+    <div class="rb-ai-home-grid">
+
+        <button class="rb-home-card">
+            🏠
+            <span>Analizza immobile</span>
+        </button>
+
+        <button class="rb-home-card">
+            📄
+            <span>Analizza PDF</span>
+        </button>
+
+        <button class="rb-home-card">
+            📊
+            <span>Analizza ROI</span>
+        </button>
+
+        <button class="rb-home-card">
+            🏦
+            <span>Mutuo</span>
+        </button>
+
+        <button class="rb-home-card">
+            🌍
+            <span>Mercato</span>
+        </button>
+
+        <button class="rb-home-card">
+            📈
+            <span>Dashboard</span>
+        </button>
+
+    </div>
+
+</div>
 
     <!-- ===================================
     QUICK ACTIONS
