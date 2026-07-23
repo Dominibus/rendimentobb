@@ -250,9 +250,11 @@
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
-    // =========================================
-    // 🎨 UI
-    // =========================================
+// =========================================
+// 🎨 UI
+// =========================================
+
+"/js/chatbot/ui/chatbot-attachments.js",
 
 "/js/chatbot/ui/chatbot-ui.js",
 
