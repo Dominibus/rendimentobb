@@ -72,10 +72,9 @@ window.rbChatAttachments = (function(){
             file
         );
 
-        alert(
-            "File selezionato:\n\n" +
-            file.name
-        );
+        window.rbFileDispatcher.dispatch(
+         file
+       );
 
         event.target.value = "";
 
