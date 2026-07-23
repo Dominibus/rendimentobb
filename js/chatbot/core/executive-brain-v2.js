@@ -565,8 +565,19 @@ const cashflowValue = cashflow;
 
 const occupancyValue = occupancy;
 
-let introIT =
-    "Ho analizzato la simulazione considerando i principali indicatori economici e finanziari.";
+let introIT = "";
+
+if(aiInsights.length){
+
+    introIT =
+        "Ho analizzato la simulazione integrando gli indicatori economici con le valutazioni strategiche dell'AI.";
+
+}else{
+
+    introIT =
+        "Ho analizzato la simulazione considerando i principali indicatori economici e finanziari.";
+
+}
 
 if(roiValue >= 20){
 
@@ -640,34 +651,89 @@ else if(mortgagePercent > 0){
     
 narrativeIT.push(introIT);
 
+
+// ===============================================
+// 🧠 AI STRATEGIC INSIGHTS
+// ===============================================
+
+if(aiInsights.length){
+
+    narrativeIT.push(
+
+        aiInsights
+
+            .map(
+
+                insight =>
+
+                    `💡 ${insight.title}: ${insight.message}`
+
+            )
+
+            .join("\n")
+
+    );
+
+}
+
+// ===============================================
+// 🧠 ANALYSIS IT
+// ===============================================
+
 analysisIT += introIT;
+
+if(aiInsights.length){
+
+    analysisIT +=
+
+        "\n\n" +
+
+        aiInsights
+
+            .map(
+
+                insight =>
+
+                    `💡 ${insight.title}: ${insight.message}`
+
+            )
+
+            .join("\n");
+
+}
 
 if(result.summaryIT){
 
-    analysisIT += "\n\n" + result.summaryIT;
+    analysisIT +=
+        "\n\n" +
+        result.summaryIT;
 
 }
 
 if(result.explanationIT){
 
-    analysisIT += "\n\n" + result.explanationIT;
+    analysisIT +=
+        "\n\n" +
+        result.explanationIT;
 
 }
 
 if(result.strongestPointIT){
 
     analysisIT +=
+
         "\n\nPunto di forza: " +
+
         result.strongestPointIT;
 
 }
 
 result.analysisIT = analysisIT;
 
-    analysisEN += narrativeEN.join("\n\n");
 
-result.analysisEN = analysisEN;
-    
+// ===============================================
+// 🧠 ENGLISH NARRATIVE
+// ===============================================
 
 narrativeEN.push(
 
@@ -677,7 +743,30 @@ The investment shows a ${roiValue.toFixed(1)}% ROI, a risk level of ${riskValue}
 
 );
 
-// Raccomandazione
+if(aiInsights.length){
+
+    narrativeEN.push(
+
+        aiInsights
+
+            .map(
+
+                insight =>
+
+                    `💡 ${insight.title}: ${insight.message}`
+
+            )
+
+            .join("\n")
+
+    );
+
+}
+
+
+// ===============================================
+// 🧠 SUMMARY
+// ===============================================
 
 if(result.summaryIT){
 
@@ -691,7 +780,10 @@ if(result.summaryEN){
 
 }
 
-// Spiegazione
+
+// ===============================================
+// 🧠 EXPLANATION
+// ===============================================
 
 if(result.explanationIT){
 
@@ -705,13 +797,19 @@ if(result.explanationEN){
 
 }
 
-// Punto di forza
+
+// ===============================================
+// 🧠 STRENGTH
+// ===============================================
 
 if(result.strongestPointIT){
 
     narrativeIT.push(
+
         "Punto di forza: " +
+
         result.strongestPointIT
+
     );
 
 }
@@ -719,11 +817,28 @@ if(result.strongestPointIT){
 if(result.strongestPointEN){
 
     narrativeEN.push(
+
         "Strength: " +
+
         result.strongestPointEN
+
     );
 
 }
+
+
+// ===============================================
+// 🧠 ANALYSIS EN
+// ===============================================
+
+analysisEN += narrativeEN.join("\n\n");
+
+result.analysisEN = analysisEN;
+
+
+// ===============================================
+// 🧠 FINAL NARRATIVES
+// ===============================================
 
 result.executiveNarrativeIT =
     narrativeIT.join("\n\n");
