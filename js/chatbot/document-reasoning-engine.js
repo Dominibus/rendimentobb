@@ -11,8 +11,12 @@
 window.rbAnalyzeDocuments = function(executiveContext = {}){
 
     const documents =
-        executiveContext.documents?.library ||
-        [];
+
+    executiveContext.documents?.library ||
+
+    executiveContext.documents?.uploadedReports ||
+
+    [];
 
     const simulations =
         documents.filter(
