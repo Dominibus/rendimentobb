@@ -66,21 +66,44 @@ function buildVerdictBlock(advisor){
 
     }
 
+    const verdict =
+        advisor.verdict || "";
+
+    let icon = "⚪";
+
+    if(verdict === "BUY"){
+
+        icon = "🟢";
+
+    }
+
+    else if(verdict === "WAIT"){
+
+        icon = "🟡";
+
+    }
+
+    else if(verdict === "NO_BUY"){
+
+        icon = "🔴";
+
+    }
+
     return{
 
         it:
 
-`🔴 VERDETTO AI: ${
+`${icon} VERDETTO AI: ${
     advisor.verdictIT ||
-    advisor.verdict ||
+    verdict ||
     "-"
 }`,
 
         en:
 
-`🔴 AI VERDICT: ${
+`${icon} AI VERDICT: ${
     advisor.verdictEN ||
-    advisor.verdict ||
+    verdict ||
     "-"
 }`
 
