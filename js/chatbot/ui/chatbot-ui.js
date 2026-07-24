@@ -1268,7 +1268,59 @@ homeCards.forEach((card,index)=>{
 
 });
   
+// ===========================================
+// 📄 DOCUMENT UPLOADED EVENT
+// ===========================================
 
+window.addEventListener(
+
+    "rb-document-uploaded",
+
+    (event)=>{
+
+        const file = event.detail;
+
+        const home =
+            document.getElementById(
+                "rb-chat-home"
+            );
+
+        if(home){
+
+            home.style.display = "none";
+
+        }
+
+        messages.style.display = "block";
+
+        const quick =
+            document.getElementById(
+                "rb-quick-actions"
+            );
+
+        if(quick){
+
+            quick.style.display = "flex";
+
+        }
+
+        addMessage(
+
+            "bot",
+
+`📄 Documento ricevuto
+
+<b>${file.fileName}</b>
+
+🧠 Sto analizzando il contenuto...`
+
+        );
+
+    }
+
+);
+
+  
   // ===========================================
   // 🚀 READY
   // ===========================================
