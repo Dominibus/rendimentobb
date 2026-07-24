@@ -259,17 +259,25 @@ window.rbBuildExecutiveIntelligence = function({
     const cashflow =
         Number(report.cashflow || 0);
 
-    const grade =
+const grade =
 
-        window.rbGetExecutiveInvestmentGrade({
+advisor?.score >= 90
 
-            roi,
+    ? "A+"
 
-            risk,
+: advisor?.score >= 80
 
-            occupancy
+    ? "A"
 
-        });
+: advisor?.score >= 70
+
+    ? "B"
+
+: advisor?.score >= 55
+
+    ? "C"
+
+: "D";
 
     const performance =
 
