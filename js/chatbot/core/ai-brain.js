@@ -15,7 +15,10 @@
 
             intent = null,
 
-            entities = {},
+            entities =
+               window.rbCanonicalAnalysis ||
+
+       {},
 
             memory = {},
 
