@@ -27,7 +27,9 @@ window.rbGenerateResponse = function({
 
   executiveBrain = null,
 
-  conversationContext = {}
+  conversationContext = {},
+
+  documentKnowledge = {}
 
 } = {}){
 
