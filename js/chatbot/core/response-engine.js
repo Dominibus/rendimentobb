@@ -310,7 +310,7 @@ console.log(
 // 📚 DOCUMENT KNOWLEDGE
 // =====================================
 
-let documentKnowledge = {};
+documentKnowledge ??= {};
 
 if(
   typeof window.rbAnalyzeDocuments ===
