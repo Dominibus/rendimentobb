@@ -1325,6 +1325,13 @@ window.addEventListener(
 // 🧠 DOCUMENT READY
 // ===========================================
 
+  console.log(
+    "🧠 DOCUMENT READY EVENT",
+    event.detail
+);
+
+  alert("DOCUMENT READY");
+
 document.addEventListener(
 
     "rb:document_ready",
