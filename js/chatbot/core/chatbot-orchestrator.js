@@ -858,8 +858,20 @@ const documentKnowledge = {
 
 console.log(
     "📄 DOCUMENT KNOWLEDGE",
-    documentKnowledge
-);    
+    {
+        activeDocument:
+            documentKnowledge?.activeDocument,
+
+        activeReport:
+            documentKnowledge?.activeReport,
+
+        uploadedReports:
+            documentKnowledge?.uploadedReports,
+
+        firstUploaded:
+            documentKnowledge?.uploadedReports?.[0]
+    }
+);
 
 // =========================================
 // 🧠 AI BRAIN
