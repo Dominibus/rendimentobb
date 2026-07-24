@@ -51,10 +51,13 @@ window.rbIsFollowUpQuestion = function(text){
 
 window.rbGetAIContext = function(){
 
-  return (
-    window.rbAIContextMemory ||
-    {}
-  );
+  return{
+
+    ...(window.rbAIContextMemory || {}),
+
+    ...(window.rbCanonicalAnalysis || {})
+
+  };
 
 };
 
