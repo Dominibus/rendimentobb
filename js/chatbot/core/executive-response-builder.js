@@ -282,21 +282,21 @@ if(verdictBlock.en){
 
 if(executiveNarrative?.recommendationIT){
 
-    const scoreBlockIT = investmentScore?.score != null
-        ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelIT || ""}\n\n`
-        : "";
+    const scoreBlockIT =
+        investmentScore?.score != null
+            ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelIT || ""}\n\n`
+            : "";
 
-    const scoreBlockEN = investmentScore?.score != null
-        ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelEN || ""}\n\n`
-        : "";
+    const scoreBlockEN =
+        investmentScore?.score != null
+            ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelEN || ""}\n\n`
+            : "";
 
     blocksIT.push(
 
         "Ho analizzato la simulazione dell'investimento.\n\n" +
 
-        scoreBlockIT +
-
-        executiveNarrative.recommendationIT
+        scoreBlockIT
 
     );
 
@@ -304,14 +304,11 @@ if(executiveNarrative?.recommendationIT){
 
         "I analyzed the investment simulation.\n\n" +
 
-        scoreBlockEN +
-
-        executiveNarrative.recommendationEN
+        scoreBlockEN
 
     );
 
 }
-
 // ===============================================
 // 🧠 EXECUTIVE SUMMARY
 // ===============================================
