@@ -76,6 +76,34 @@ window.rbChatAttachments = (function(){
          file
        );
 
+// ===========================================
+// 🧠 CHAT PREVIEW
+// ===========================================
+
+window.dispatchEvent(
+
+    new CustomEvent(
+
+        "rb-document-uploaded",
+
+        {
+
+            detail:{
+
+                fileName:file.name,
+
+                fileType:file.type,
+
+                size:file.size
+
+            }
+
+        }
+
+    )
+
+);
+
         event.target.value = "";
 
     }
