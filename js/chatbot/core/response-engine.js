@@ -5376,11 +5376,25 @@ const canonicalInvestment =
     {};
 
 const canonicalVerdict =
-    canonicalInvestment.verdict || "WAIT";
+
+    canonicalInvestment.verdict ||
+
+    advisor?.verdict ||
+
+    executiveState?.decision ||
+
+    "WAIT";
 
 const canonicalScore =
+
     Number(
-        canonicalInvestment.score ?? 0
+
+        canonicalInvestment.score ??
+
+        advisor?.score ??
+
+        0
+
     );
 
 // ===========================================
