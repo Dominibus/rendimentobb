@@ -29,13 +29,22 @@ function classifyDocument(file){
     // Executive Report
     // ===================================
 
-    if(
+if(
 
-        name.includes("rendimentobb-report") ||
+    name.includes("rendimentobb-report") ||
 
-        name.includes("executive")
+    name.includes("rendimentobb_report") ||
 
-    ){
+    name.includes("rendimentobb") ||
+
+    name.includes("executive") ||
+
+    (
+        name.includes("roi") &&
+        name.includes("rendimentobb")
+    )
+
+){
 
         return{
 
