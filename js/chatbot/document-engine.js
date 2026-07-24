@@ -458,6 +458,22 @@ window.buildExecutiveReport = function(data = {}){
 
     window.lastExecutiveReport = report;
 
+// =====================================
+// ACTIVE EXECUTIVE DOCUMENT
+// =====================================
+
+window.rbActiveExecutiveDocument = {
+
+    type: "executive_report",
+
+    source: "rendimentobb",
+
+    generatedAt: new Date().toISOString(),
+
+    report: window.lastExecutiveReport
+
+};
+
     // ==========================================
     // ACTIVE DOCUMENT
     // ==========================================
