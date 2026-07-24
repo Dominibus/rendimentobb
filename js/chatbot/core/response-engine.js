@@ -288,16 +288,26 @@ const executiveContext = {
 
   documents: {
 
-    activeReport:
-      window.lastExecutiveReport ||
-      null,
+  activeDocument:
+    documentKnowledge?.activeDocument ||
+    null,
 
-    library:
-      Array.isArray(window.rbDocumentLibrary)
-        ? window.rbDocumentLibrary
-        : []
+  activeReport:
+    documentKnowledge?.activeReport ||
+    window.lastExecutiveReport ||
+    null,
 
-  }
+  uploadedReports:
+    documentKnowledge?.uploadedReports ||
+    [],
+
+library:
+  documentKnowledge?.uploadedReports ||
+  (
+    Array.isArray(window.rbDocumentLibrary)
+      ? window.rbDocumentLibrary
+      : []
+  )
 
 };
 
