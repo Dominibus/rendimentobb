@@ -561,7 +561,7 @@ window.rbAnalyzeUploadedPDF = async function(file){
 
         const reader = new FileReader();
 
-        reader.onload = function(){
+        reader.onload = async function(){
 
             const buffer = reader.result;
 
@@ -674,68 +674,48 @@ window.rbAnalyzeUploadedPDF = async function(file){
             }
 
             // ===================================
-            // EVENTS
-            // ===================================
+// EXTRACTION
+// ===================================
 
-            window.rbDocumentEvents.emit(
+if(
+    typeof window.rbExtractPDFText ===
+    "function"
+){
 
-                "document_uploaded",
+    await window.rbExtractPDFText(
+        documentObject
+    );
 
-                documentObject
+}
 
-            );
+// ===================================
+// DOCUMENT REASONING
+// ===================================
 
-            window.rbDocumentEvents.emit(
+if(
+    typeof window.rbRunDocumentReasoning ===
+    "function"
+){
 
-                "document_ready",
+    await window.rbRunDocumentReasoning(
+        documentObject
+    );
 
-                documentObject
+}
 
-            );
+// ===================================
+// EVENTS
+// ===================================
 
-            // ===================================
-            // FUTURE HOOKS
-            // ===================================
+window.rbDocumentEvents.emit(
+    "document_uploaded",
+    documentObject
+);
 
-            if(
-
-                typeof window.rbExtractPDFText ===
-
-                "function"
-
-            ){
-
-                Promise.resolve(
-
-                    window.rbExtractPDFText(
-
-                        documentObject
-
-                    )
-
-                ).catch(console.warn);
-
-            }
-
-            if(
-
-                typeof window.rbRunDocumentReasoning ===
-
-                "function"
-
-            ){
-
-                Promise.resolve(
-
-                    window.rbRunDocumentReasoning(
-
-                        documentObject
-
-                    )
-
-                ).catch(console.warn);
-
-            }
+window.rbDocumentEvents.emit(
+    "document_ready",
+    documentObject
+);
 
             // ===================================
             // UI
