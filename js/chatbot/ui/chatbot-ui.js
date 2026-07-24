@@ -492,6 +492,37 @@ const voiceBtn =
         "rb-chat-voice"
     );
 
+// ===========================================
+// 🎤 SPEECH RECOGNITION
+// ===========================================
+
+const SpeechRecognition =
+
+    window.SpeechRecognition ||
+
+    window.webkitSpeechRecognition;
+
+let recognition = null;
+
+let isListening = false;
+
+if(SpeechRecognition){
+
+    recognition = new SpeechRecognition();
+
+    recognition.lang =
+        window.currentLanguage === "en"
+            ? "en-US"
+            : "it-IT";
+
+    recognition.interimResults = true;
+
+    recognition.maxAlternatives = 1;
+
+    recognition.continuous = false;
+
+}
+
   // ===========================================
   // 🔥 AUTO OPEN TOOL PAGE
   // ===========================================
@@ -1022,11 +1053,73 @@ console.log(
 
 };
 
-  voiceBtn.onclick = ()=>{
+voiceBtn.onclick = ()=>{
 
-    console.log("🎤 VOICE CLICK");
+    if(!recognition){
+
+        alert(
+            "Speech Recognition non supportato da questo browser."
+        );
+
+        return;
+
+    }
+
+    if(isListening){
+
+        recognition.stop();
+
+        return;
+
+    }
+
+    recognition.start();
 
 };
+
+recognition.onstart = ()=>{
+
+    isListening = true;
+
+    voiceBtn.textContent = "🔴";
+
+};
+
+recognition.onend = ()=>{
+
+    isListening = false;
+
+    voiceBtn.textContent = "🎤";
+
+};
+
+recognition.onresult = (event)=>{
+
+    const transcript =
+
+        Array.from(event.results)
+
+            .map(r=>r[0].transcript)
+
+            .join("");
+
+    input.value = transcript;
+
+    if(event.results[0].isFinal){
+
+        sendMessage();
+
+    }
+
+};
+
+recognition.onerror = ()=>{
+
+    isListening = false;
+
+    voiceBtn.textContent = "🎤";
+
+};  
 
   console.log(
   "🔥 SEND BUTTON BOUND"
