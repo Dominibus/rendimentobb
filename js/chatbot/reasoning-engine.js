@@ -73,9 +73,12 @@ window.rbNormalizeExecutiveMemory = function(memory = {}){
     ...memory,
 
     lastROI:
-      memory.lastROI ??
-      memory.roi ??
-      0,
+  memory.lastROI ??
+  memory.realROI ??
+  memory.roi ??
+  window.rbCanonicalAnalysis?.realROI ??
+  window.rbCanonicalAnalysis?.roi ??
+  0,
 
     lastRisk:
       memory.lastRisk ??
