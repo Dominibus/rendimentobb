@@ -193,9 +193,9 @@ window.rbGetExecutiveRecommendation = function({
 
             return isIT
 
-                ? `L'investimento presenta caratteristiche solide (${grade}) con una performance ${performance.it?.toLowerCase() || "positiva"}.`
+                ? `L'investimento presenta caratteristiche solide, con una buona combinazione di redditività, rischio e sostenibilità operativa.`
 
-                : `The investment shows solid fundamentals (${grade}) with ${performance.en?.toLowerCase() || "strong"} performance.`;
+                : `The investment shows solid fundamentals, with a good balance between profitability, risk and operational sustainability.`;
 
         case "WAIT":
 
