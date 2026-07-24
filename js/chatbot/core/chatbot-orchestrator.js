@@ -857,20 +857,12 @@ const documentKnowledge = {
 };
 
 console.log(
-    "📄 DOCUMENT KNOWLEDGE",
-    {
-        activeDocument:
-            documentKnowledge?.activeDocument,
-
-        activeReport:
-            documentKnowledge?.activeReport,
-
-        uploadedReports:
-            documentKnowledge?.uploadedReports,
-
-        firstUploaded:
-            documentKnowledge?.uploadedReports?.[0]
-    }
+    "📄 FIRST UPLOADED",
+    JSON.stringify(
+        documentKnowledge?.uploadedReports?.[0],
+        null,
+        2
+    )
 );
 
 // =========================================
