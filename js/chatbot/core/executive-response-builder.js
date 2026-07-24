@@ -282,23 +282,35 @@ if(verdictBlock.en){
 
 if(executiveNarrative?.recommendationIT){
 
-blocksIT.push(
+    const scoreBlockIT = investmentScore?.score != null
+        ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelIT || ""}\n\n`
+        : "";
 
-    "Ho analizzato la simulazione dell'investimento.\n\n" +
+    const scoreBlockEN = investmentScore?.score != null
+        ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelEN || ""}\n\n`
+        : "";
 
-    executiveNarrative.recommendationIT
+    blocksIT.push(
 
-);
+        "Ho analizzato la simulazione dell'investimento.\n\n" +
 
-blocksEN.push(
+        scoreBlockIT +
 
-    "I analyzed the investment simulation.\n\n" +
+        executiveNarrative.recommendationIT
 
-    executiveNarrative.recommendationEN
+    );
 
-);
+    blocksEN.push(
 
-    }
+        "I analyzed the investment simulation.\n\n" +
+
+        scoreBlockEN +
+
+        executiveNarrative.recommendationEN
+
+    );
+
+}
 
 // ===============================================
 // 🧠 EXECUTIVE SUMMARY
