@@ -283,14 +283,14 @@ if(verdictBlock.en){
 if(executiveNarrative?.recommendationIT){
 
     const scoreBlockIT =
-        investmentScore?.score != null
-            ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelIT || ""}\n\n`
-            : "";
+    investmentScore?.score != null
+        ? `📊 Investment Score\n${investmentScore.score}/100\n${investmentScore.labelIT || ""}\n`
+        : "";
 
     const scoreBlockEN =
-        investmentScore?.score != null
-            ? `Investment Score: ${investmentScore.score}/100\n${investmentScore.labelEN || ""}\n\n`
-            : "";
+    investmentScore?.score != null
+        ? `📊 Investment Score\n${investmentScore.score}/100\n${investmentScore.labelEN || ""}\n`
+        : "";
 
     blocksIT.push(
 
