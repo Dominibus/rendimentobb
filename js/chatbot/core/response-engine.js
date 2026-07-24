@@ -5453,13 +5453,7 @@ const strategyIT = [
 
 if(conversationalFollowUp){
 
-    if(
-
-        canonicalVerdict === "BUY" ||
-
-        canonicalVerdict === "BUY"
-
-    ){
+if(canonicalVerdict === "BUY"){
 
         strategyIT.push(
             "✅ In base ai dati dell'ultima simulazione, l'investimento appare competitivo. Se le ipotesi utilizzate (occupazione, ADR e costi) sono realistiche, il progetto merita di essere preso seriamente in considerazione."
@@ -5467,13 +5461,7 @@ if(conversationalFollowUp){
 
     }
 
-    else if(
-
-        canonicalVerdict === "WAIT" ||
-
-        canonicalVerdict === "WAIT"
-
-    ){
+else if(canonicalVerdict === "WAIT"){
 
         strategyIT.push(
             "⚠️ Analizzando l'ultima simulazione, prima di procedere conviene migliorare alcuni parametri operativi per aumentare la sostenibilità dell'investimento."
@@ -5491,13 +5479,7 @@ if(conversationalFollowUp){
 
 }else{
 
-    if(
-
-        canonicalVerdict === "BUY" ||
-
-        canonicalVerdict === "BUY"
-
-    ){
+if(canonicalVerdict === "BUY"){
 
         strategyIT.push(
             "💡 L'investimento mostra metriche molto competitive."
@@ -5505,13 +5487,7 @@ if(conversationalFollowUp){
 
     }
 
-    else if(
-
-        canonicalVerdict === "WAIT" ||
-
-        canonicalVerdict === "WAIT"
-
-    ){
+else if(canonicalVerdict === "WAIT"){
 
         strategyIT.push(
             "💡 L'investimento richiede ottimizzazione operativa."
@@ -5572,13 +5548,7 @@ const strategyEN = [
 
 if(conversationalFollowUp){
 
-    if(
-
-        canonicalVerdict === "BUY" ||
-
-        canonicalVerdict === "BUY"
-
-    ){
+if(canonicalVerdict === "BUY"){
 
         strategyEN.push(
             "✅ Based on the latest simulation, the investment appears competitive. If occupancy, ADR and costs are realistic, the opportunity deserves serious consideration."
@@ -5586,13 +5556,7 @@ if(conversationalFollowUp){
 
     }
 
-    else if(
-
-        canonicalVerdict === "WAIT" ||
-
-        canonicalVerdict === "WAIT"
-
-    ){
+else if(canonicalVerdict === "WAIT"){
 
         strategyEN.push(
             "⚠️ Based on the latest simulation, improving operational parameters before investing is recommended."
@@ -5610,13 +5574,7 @@ if(conversationalFollowUp){
 
 }else{
 
-    if(
-
-        canonicalVerdict === "BUY" ||
-
-        canonicalVerdict === "BUY"
-
-    ){
+if(canonicalVerdict === "BUY"){
 
         strategyEN.push(
             "💡 The investment shows highly competitive metrics."
@@ -5624,13 +5582,7 @@ if(conversationalFollowUp){
 
     }
 
-    else if(
-
-        canonicalVerdict === "WAIT" ||
-
-        canonicalVerdict === "WAIT"
-
-    ){
+else if(canonicalVerdict === "WAIT"){
 
         strategyEN.push(
             "💡 The investment requires operational optimization."
