@@ -1320,6 +1320,89 @@ window.addEventListener(
 
 );
 
+
+// ===========================================
+// 🧠 DOCUMENT READY
+// ===========================================
+
+document.addEventListener(
+
+    "rb:document_ready",
+
+    async(event)=>{
+
+        const doc = event.detail;
+
+        if(!doc){
+
+            return;
+
+        }
+
+        addMessage(
+
+            "bot",
+
+`🧠 Documento classificato
+
+📄 ${doc.subtype}
+
+🎯 Confidence: ${doc.confidence}%`
+
+        );
+
+        if(
+
+            typeof window.rbProcessAIMessage ===
+
+            "function"
+
+        ){
+
+            const prompt =
+
+`Analizza automaticamente il documento appena caricato.
+
+Tipo documento:
+${doc.subtype}
+
+Nome file:
+${doc.fileName}
+
+Fornisci un Executive Summary.`;
+
+            const result =
+
+                await window.rbProcessAIMessage(
+                    prompt
+                );
+
+            const response =
+
+                Array.isArray(result?.response)
+
+                    ? result.response[0]
+
+                    : result?.response;
+
+            addMessage(
+
+                "bot",
+
+                response?.textIT ||
+
+                response?.text ||
+
+                "Analisi completata."
+
+            );
+
+        }
+
+    }
+
+);
+  
   
   // ===========================================
   // 🚀 READY
