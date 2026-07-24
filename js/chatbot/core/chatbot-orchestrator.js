@@ -826,7 +826,42 @@ console.log(
   advisor
 );
 
- // =========================================
+// =========================================
+// 📄 DOCUMENT KNOWLEDGE
+// =========================================
+
+const documentKnowledge = {
+
+    activeDocument:
+
+        window.rbDocumentManager?.getLast?.() ||
+
+        window.rbActiveDocument ||
+
+        null,
+
+    activeReport:
+
+        window.lastExecutiveReport ||
+
+        window.rbActiveDocument ||
+
+        null,
+
+    uploadedReports:
+
+        window.rbDocumentLibrary ||
+
+        []
+
+};
+
+console.log(
+    "📄 DOCUMENT KNOWLEDGE",
+    documentKnowledge
+);    
+
+// =========================================
 // 🧠 AI BRAIN
 // =========================================
 
@@ -852,8 +887,7 @@ const brain =
         reasoning:
             {},
 
-        documentKnowledge:
-    {},
+        documentKnowledge,
 
         executiveContext:
             window.executiveContext || {}
@@ -1157,7 +1191,7 @@ const executiveBrain =
 
         narrative: {},
 
-        documentKnowledge: {},
+        documentKnowledge,
 
         financials: analysisData
 
