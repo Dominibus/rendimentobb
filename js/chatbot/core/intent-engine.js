@@ -47,6 +47,8 @@ const entities =
 
   };
 
+  const detectedIntents = [];
+
   // ===========================================
   // 🧠 HELPERS
   // ===========================================
@@ -109,6 +111,22 @@ const containsComparison =
 // ===========================================
 
 const applyIntent = (config = {}) => {
+
+  if(config.intent){
+
+    detectedIntents.push({
+
+        intent: config.intent,
+
+        priority: Number(config.priority || 0),
+
+        confidence: Number(config.confidence || 0),
+
+        category: config.category || "general"
+
+    });
+
+}
 
   const nextPriority =
     Number(config.priority || 0);
@@ -3501,6 +3519,25 @@ if(
   });
 
 }  
+
+result.secondaryIntents =
+
+    detectedIntents
+
+        .filter(item =>
+
+            item.intent !== result.intent
+
+        )
+
+        .sort(
+
+            (a,b)=>
+
+                b.priority-a.priority
+
+        );
+  
 // ===========================================
 // 🧠 DEBUG
 // ===========================================
