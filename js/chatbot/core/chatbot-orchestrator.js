@@ -676,6 +676,56 @@ console.log(
     2
   )
 );
+
+// =====================================
+// 🧠 CANONICAL AI CONTEXT
+// Single Source of Truth
+// =====================================
+
+const canonicalAnalysis = {
+
+    ...analysisData,
+
+    roi: Number(
+        analysisData.realROI ??
+        analysisData.roi ??
+        0
+    ),
+
+    realROI: Number(
+        analysisData.realROI ??
+        analysisData.roi ??
+        0
+    ),
+
+    visualROI: Number(
+        analysisData.visualROI ??
+        analysisData.roi ??
+        0
+    ),
+
+    cashflow: Number(
+        analysisData.net ??
+        analysisData.cashflow ??
+        analysisData.profit ??
+        0
+    ),
+
+    net: Number(
+        analysisData.net ??
+        analysisData.cashflow ??
+        0
+    )
+
+};
+
+window.rbCanonicalAnalysis = canonicalAnalysis;
+
+console.log(
+    "🧠 CANONICAL AI CONTEXT",
+    canonicalAnalysis
+);
+    
 // =========================================
 // 🧠 AI SIGNALS
 // =========================================
