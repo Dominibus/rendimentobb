@@ -66,8 +66,13 @@ function buildVerdictBlock(advisor){
 
     }
 
-    const verdict =
-        advisor.verdict || "";
+   const canonicalInvestment =
+    window.lastInvestmentScore || {};
+
+const verdict =
+    canonicalInvestment.verdict ||
+    advisor?.verdict ||
+    "";
 
     let icon = "⚪";
 
@@ -94,16 +99,16 @@ function buildVerdictBlock(advisor){
         it:
 
 `${icon} VERDETTO AI: ${
-    advisor.verdictIT ||
-    verdict ||
+    advisor?.verdictIT ||
+     verdict ||
     "-"
 }`,
 
         en:
 
 `${icon} AI VERDICT: ${
-    advisor.verdictEN ||
-    verdict ||
+    advisor?.verdictEN ||
+      verdict ||
     "-"
 }`
 
