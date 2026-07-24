@@ -136,6 +136,8 @@ const executiveDecision =
 
     executiveAnalysis?.executiveDecision ||
 
+    advisor?.verdict ||
+
     "WAIT";
 
 const strongestPoint =
