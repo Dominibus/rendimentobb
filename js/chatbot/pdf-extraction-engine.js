@@ -1,5 +1,5 @@
 // ===============================================
-// 📄 PDF EXTRACTION ENGINE 1.0
+// 📄 PDF EXTRACTION ENGINE 1.1
 // RendimentoBB AI
 // ===============================================
 
@@ -18,8 +18,10 @@ window.rbExtractPDFText = async function(documentObject){
 
         }
 
-        // Placeholder temporaneo
-        // Nel prossimo step useremo PDF.js
+        // ===========================================
+        // TEMPORARY PLACEHOLDER
+        // (PDF.js arriverà nello step successivo)
+        // ===========================================
 
         documentObject.extractedText =
             "[PDF LOADED - EXTRACTION PENDING]";
@@ -28,6 +30,37 @@ window.rbExtractPDFText = async function(documentObject){
             "📄 PDF TEXT READY",
             documentObject.extractedText
         );
+
+        // ===========================================
+        // EXECUTIVE PARSER
+        // ===========================================
+
+        if(
+            typeof window.rbParseExecutivePDF ===
+            "function"
+        ){
+
+            console.log(
+                "🧠 START PDF PARSER"
+            );
+
+            await window.rbParseExecutivePDF(
+                documentObject
+            );
+
+            console.log(
+                "🧠 PDF PARSER COMPLETED"
+            );
+
+        }
+
+        else{
+
+            console.warn(
+                "⚠️ rbParseExecutivePDF NOT FOUND"
+            );
+
+        }
 
         return documentObject;
 
