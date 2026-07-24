@@ -136,9 +136,7 @@ const executiveDecision =
 
     executiveAnalysis?.executiveDecision ||
 
-    advisor?.verdict ||
-
-    "WAIT";
+    canonicalVerdict === "WAIT"
 
 const strongestPoint =
 
@@ -4888,7 +4886,7 @@ ${advisor.reasonsIT.join("\n")}`
 const actionPlanIT = [];
 
 if(
-  advisor?.verdict === "BUY"
+  canonicalVerdict === "BUY"
 ){
 
   actionPlanIT.push(
@@ -5023,7 +5021,7 @@ ${advisor.reasonsEN.join("\n")}`
 
 const actionPlanEN = [];
 
-if(advisor?.verdict === "BUY"){
+if(canonicalVerdict === "BUY"){
 
   actionPlanEN.push(
     "Acquisition recommended."
@@ -5365,6 +5363,38 @@ builderType:
 
 }
 
+// =====================================
+// 🎯 CANONICAL INVESTMENT RESULT
+// =====================================
+
+const canonicalInvestment =
+
+    window.lastInvestmentScore ||
+
+    {};
+
+const canonicalVerdict =
+
+    canonicalInvestment.verdict ||
+
+    advisor?.verdict ||
+
+    executiveState?.decision ||
+
+    "WAIT";
+
+const canonicalScore =
+
+    Number(
+
+        canonicalInvestment.score ??
+
+        advisor?.score ??
+
+        0
+
+    );  
+
 // ===========================================
 // 💡 STRATEGY RESPONSE
 // ===========================================
@@ -5425,9 +5455,9 @@ if(conversationalFollowUp){
 
     if(
 
-        executiveState.decision === "BUY" ||
+        canonicalVerdict === "BUY" ||
 
-        advisor?.verdict === "BUY"
+        canonicalVerdict === "BUY"
 
     ){
 
@@ -5439,9 +5469,9 @@ if(conversationalFollowUp){
 
     else if(
 
-        executiveState.decision === "WAIT" ||
+        canonicalVerdict === "WAIT" ||
 
-        advisor?.verdict === "WAIT"
+        canonicalVerdict === "WAIT"
 
     ){
 
@@ -5463,9 +5493,9 @@ if(conversationalFollowUp){
 
     if(
 
-        executiveState.decision === "BUY" ||
+        canonicalVerdict === "BUY" ||
 
-        advisor?.verdict === "BUY"
+        canonicalVerdict === "BUY"
 
     ){
 
@@ -5477,9 +5507,9 @@ if(conversationalFollowUp){
 
     else if(
 
-        executiveState.decision === "WAIT" ||
+        canonicalVerdict === "WAIT" ||
 
-        advisor?.verdict === "WAIT"
+        canonicalVerdict === "WAIT"
 
     ){
 
@@ -5544,9 +5574,9 @@ if(conversationalFollowUp){
 
     if(
 
-        executiveState.decision === "BUY" ||
+        canonicalVerdict === "BUY" ||
 
-        advisor?.verdict === "BUY"
+        canonicalVerdict === "BUY"
 
     ){
 
@@ -5558,9 +5588,9 @@ if(conversationalFollowUp){
 
     else if(
 
-        executiveState.decision === "WAIT" ||
+        canonicalVerdict === "WAIT" ||
 
-        advisor?.verdict === "WAIT"
+        canonicalVerdict === "WAIT"
 
     ){
 
@@ -5582,9 +5612,9 @@ if(conversationalFollowUp){
 
     if(
 
-        executiveState.decision === "BUY" ||
+        canonicalVerdict === "BUY" ||
 
-        advisor?.verdict === "BUY"
+        canonicalVerdict === "BUY"
 
     ){
 
@@ -5596,9 +5626,9 @@ if(conversationalFollowUp){
 
     else if(
 
-        executiveState.decision === "WAIT" ||
+        canonicalVerdict === "WAIT" ||
 
-        advisor?.verdict === "WAIT"
+        canonicalVerdict === "WAIT"
 
     ){
 
@@ -6783,8 +6813,8 @@ else if(
   advisor?.score || 0;
 
 const advisorVerdict =
-  advisor?.verdict || "WAIT";
-
+  canonicalVerdict === "WAIT"
+  
 const advisorVerdictIT =
 
   advisorVerdict === "BUY"
