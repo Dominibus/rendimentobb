@@ -243,6 +243,8 @@ window.rbBuildExecutiveIntelligence = function({
 
     advisor = {},
 
+    investmentScore = {},
+
     documentKnowledge = {}
 
 } = {}){
@@ -260,9 +262,14 @@ window.rbBuildExecutiveIntelligence = function({
         Number(report.cashflow || 0);
 
 const grade =
+
+    investmentScore?.labelIT ||
+
     advisor?.labelIT ||
+
     advisor?.label ||
-    "Non disponibile";
+
+    "Investimento";
 
     const performance =
 
@@ -422,15 +429,18 @@ window.rbGenerateExecutiveNarrative = function({
 
     const intelligence =
 
-        window.rbBuildExecutiveIntelligence({
+window.rbBuildExecutiveIntelligence({
 
-            report,
+    report,
 
-            advisor,
+    advisor,
 
-            documentKnowledge
+    investmentScore:
+        window.lastInvestmentScore || {},
 
-        });
+    documentKnowledge
+
+});
 
     const{
 
