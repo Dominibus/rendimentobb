@@ -684,6 +684,25 @@ console.log(
   investmentScore
 );
 
+  
+// ===========================================
+// 🎯 CANONICAL INVESTMENT RESULT
+// ===========================================
+
+const canonicalInvestment =
+    window.lastInvestmentScore || {};
+
+const canonicalVerdict =
+    canonicalInvestment.verdict ||
+    advisor?.verdict ||
+    "WAIT";
+
+const canonicalScore =
+    Number(
+        canonicalInvestment.score ??
+        advisor?.score ??
+        0
+    );
 
 // ===========================================
 // 🧠 MEMORY CONTEXT
