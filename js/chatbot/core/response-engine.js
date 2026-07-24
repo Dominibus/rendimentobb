@@ -136,7 +136,7 @@ const executiveDecision =
 
     executiveAnalysis?.executiveDecision ||
 
-    canonicalVerdict === "WAIT"
+    "WAIT";
 
 const strongestPoint =
 
@@ -5374,26 +5374,12 @@ const canonicalInvestment =
     {};
 
 const canonicalVerdict =
-
-    canonicalInvestment.verdict ||
-
-    advisor?.verdict ||
-
-    executiveState?.decision ||
-
-    "WAIT";
+    canonicalInvestment.verdict || "WAIT";
 
 const canonicalScore =
-
     Number(
-
-        canonicalInvestment.score ??
-
-        advisor?.score ??
-
-        0
-
-    );  
+        canonicalInvestment.score ?? 0
+    );
 
 // ===========================================
 // 💡 STRATEGY RESPONSE
