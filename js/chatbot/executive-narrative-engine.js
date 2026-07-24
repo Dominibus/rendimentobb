@@ -260,24 +260,9 @@ window.rbBuildExecutiveIntelligence = function({
         Number(report.cashflow || 0);
 
 const grade =
-
-advisor?.score >= 90
-
-    ? "A+"
-
-: advisor?.score >= 80
-
-    ? "A"
-
-: advisor?.score >= 70
-
-    ? "B"
-
-: advisor?.score >= 55
-
-    ? "C"
-
-: "D";
+    advisor?.labelIT ||
+    advisor?.label ||
+    "Non disponibile";
 
     const performance =
 
