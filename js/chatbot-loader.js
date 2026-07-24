@@ -228,7 +228,8 @@
 "/js/chatbot/core/score-engine.js",
 
 "/js/chatbot/document-engine.js",
-"/js/chatbot/pdf-extraction-engine.js",    
+"/js/chatbot/pdf-extraction-engine.js",
+"/js/chatbot/pdf-parser-engine.js",    
 "/js/chatbot/core/document-classifier.js",    
 "/js/chatbot/document-reasoning-engine.js",
 "/js/chatbot/executive-narrative-engine.js",
