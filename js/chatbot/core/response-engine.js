@@ -5384,38 +5384,6 @@ builderType:
 
 }
 
-// =====================================
-// 🎯 CANONICAL INVESTMENT RESULT
-// =====================================
-
-const canonicalInvestment =
-
-    window.lastInvestmentScore ||
-
-    {};
-
-const canonicalVerdict =
-
-    canonicalInvestment.verdict ||
-
-    advisor?.verdict ||
-
-    executiveState?.decision ||
-
-    "WAIT";
-
-const canonicalScore =
-
-    Number(
-
-        canonicalInvestment.score ??
-
-        advisor?.score ??
-
-        0
-
-    );
-
 // ===========================================
 // 💡 STRATEGY RESPONSE
 // ===========================================
