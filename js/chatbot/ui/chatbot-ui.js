@@ -607,16 +607,63 @@ closeBtn.onclick = ()=>{
 
     div.className =
 
-      role === "user"
+    role === "user"
 
-      ? "rb-user-message"
+    ? "rb-user-message"
 
-      : "rb-bot-message";
+    : "rb-bot-message";
+
+if(role === "bot"){
+
+    div.innerHTML = `
+
+        <div class="rb-ai-card-header">
+
+            <div class="rb-ai-card-avatar">
+
+                🧠
+
+            </div>
+
+            <div class="rb-ai-card-info">
+
+                <div class="rb-ai-card-title">
+
+                    RendimentoBB AI Executive
+
+                </div>
+
+                <div class="rb-ai-card-status">
+
+                    <span class="rb-status-dot"></span>
+
+                    Online
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="rb-ai-card-content">
+
+            ${
+                String(text || "")
+                    .replace(/\n/g,"<br>")
+            }
+
+        </div>
+
+    `;
+
+}else{
 
     div.innerHTML =
 
-      String(text || "")
-        .replace(/\n/g,"<br>");
+        String(text || "")
+            .replace(/\n/g,"<br>");
+
+}
 
     messages.appendChild(div);
 
