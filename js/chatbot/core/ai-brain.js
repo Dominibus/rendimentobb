@@ -118,19 +118,25 @@
 
             investmentState:
 
-                roi >= 20
+               score?.label ||
 
-                    ? "excellent"
+            (
 
-                : roi >= 10
+               roi >= 20
 
-                    ? "good"
+               ? "excellent"
 
-                : roi > 0
+              : roi >= 10
 
-                    ? "acceptable"
+              ? "good"
 
-                    : "negative",
+              : roi > 0
+
+              ? "acceptable"
+
+              : "negative"
+
+           ),
 
             urgency:
 
