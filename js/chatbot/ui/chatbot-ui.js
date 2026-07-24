@@ -593,6 +593,60 @@ closeBtn.onclick = ()=>{
 
 };
 
+  function renderExecutiveMessage(text){
+
+    if(!text){
+
+        return "";
+
+    }
+
+    let html = String(text);
+
+    html = html.replace(
+
+        /Investment Score:?/gi,
+
+        `<div class="rb-section-title">
+            📊 Investment Score
+        </div>`
+
+    );
+
+    html = html.replace(
+
+        /Executive Summary:?/gi,
+
+        `<div class="rb-section-title">
+            🧠 Executive Summary
+        </div>`
+
+    );
+
+    html = html.replace(
+
+        /Strategic Priorities:?/gi,
+
+        `<div class="rb-section-title">
+            🎯 Strategic Priorities
+        </div>`
+
+    );
+
+    html = html.replace(
+
+        /AI Decision:?/gi,
+
+        `<div class="rb-section-title">
+            ✅ AI Decision
+        </div>`
+
+    );
+
+    return html.replace(/\n/g,"<br>");
+
+}
+
   // ===========================================
   // 💬 ADD MESSAGE
   // ===========================================
@@ -648,8 +702,7 @@ if(role === "bot"){
         <div class="rb-ai-card-content">
 
             ${
-                String(text || "")
-                    .replace(/\n/g,"<br>")
+                renderExecutiveMessage(text)
             }
 
         </div>
