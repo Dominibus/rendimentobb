@@ -39,9 +39,11 @@ window.rbAnalyzeDocuments = function(executiveContext = {}){
         );
 
     const uploadedReports =
-        documents.filter(
-            doc => doc.documentType === "uploaded"
-        );
+    documents.filter(
+        doc =>
+            doc.documentType === "uploaded" ||
+            doc.source === "upload"
+    );
 
     const latestReport =
         documents[0] ||
