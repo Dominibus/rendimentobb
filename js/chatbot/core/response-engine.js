@@ -6753,9 +6753,6 @@ else if(
   const advisorScore =
   advisor?.score || 0;
 
-const advisorScore =
-  advisor?.score || 0;
-
 const advisorVerdict =
   canonicalVerdict ||
   advisor?.verdict ||
