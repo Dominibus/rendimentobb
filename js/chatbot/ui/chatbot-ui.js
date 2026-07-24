@@ -1325,13 +1325,6 @@ window.addEventListener(
 // 🧠 DOCUMENT READY
 // ===========================================
 
-  console.log(
-    "🧠 DOCUMENT READY EVENT",
-    event.detail
-);
-
-  alert("DOCUMENT READY");
-
 document.addEventListener(
 
     "rb:document_ready",
@@ -1345,6 +1338,11 @@ document.addEventListener(
             return;
 
         }
+
+        console.log(
+            "🧠 DOCUMENT READY EVENT",
+            doc
+        );
 
         addMessage(
 
@@ -1361,7 +1359,6 @@ document.addEventListener(
         if(
 
             typeof window.rbProcessAIMessage ===
-
             "function"
 
         ){
@@ -1379,7 +1376,6 @@ ${doc.fileName}
 Fornisci un Executive Summary.`;
 
             const result =
-
                 await window.rbProcessAIMessage(
                     prompt
                 );
