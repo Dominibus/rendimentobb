@@ -2906,8 +2906,14 @@ gross ||
 annualRevenue ||
 0,
 
+net:
+Number(net || 0),
+
 profit:
 Number(net || 0),
+
+netAfterMortgage:
+net || 0,
 
 netAfterMortgage:
 net ||
