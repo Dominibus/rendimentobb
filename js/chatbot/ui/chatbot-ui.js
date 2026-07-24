@@ -625,6 +625,68 @@ closeBtn.onclick = ()=>{
 
   }
 
+// ===========================================
+// 🧠 AI THINKING
+// ===========================================
+
+function showThinking(){
+
+    const div =
+        document.createElement("div");
+
+    div.className =
+        "rb-bot-message rb-thinking";
+
+    div.id =
+        "rb-thinking";
+
+    div.innerHTML = "🧠 Analizzo la richiesta...";
+
+    messages.appendChild(div);
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+    const steps = [
+
+        "🧠 Analizzo la richiesta...",
+
+        "📊 Elaboro i dati...",
+
+        "⚖️ Valuto l'investimento...",
+
+        "🎯 Genero la risposta..."
+
+    ];
+
+    let i = 0;
+
+    const interval = setInterval(()=>{
+
+        i++;
+
+        if(
+            i < steps.length &&
+            div
+        ){
+
+            div.innerHTML =
+                steps[i];
+
+        }
+
+    },350);
+
+    return{
+
+        element: div,
+
+        interval
+
+    };
+
+}
+
   window.addMessage =
     addMessage;
 
@@ -816,6 +878,9 @@ if(quick){
 
     try{
 
+      const thinking =
+    showThinking();
+
       // =====================================
       // 🧠 PROCESS AI MESSAGE
       // =====================================
@@ -964,18 +1029,24 @@ console.log(
       // 💬 BOT MESSAGE
       // =====================================
 
-            setTimeout(()=>{
+ setTimeout(()=>{
 
-        addMessage(
-          "bot",
-          finalText
-        );
+    clearInterval(
+        thinking.interval
+    );
 
-        addSuggestions(
-          finalSuggestions
-        );
+    thinking.element.remove();
 
-      }, 400);
+    addMessage(
+        "bot",
+        finalText
+    );
+
+    addSuggestions(
+        finalSuggestions
+    );
+
+},400);
 
       // =====================================
       // 💾 MEMORY SAVE
