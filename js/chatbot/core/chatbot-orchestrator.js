@@ -1232,7 +1232,9 @@ window.rbGenerateResponse({
 
     conversationContext,
 
-    executiveBrain
+    executiveBrain,
+
+    documentKnowledge
 
 });
 
