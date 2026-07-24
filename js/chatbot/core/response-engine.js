@@ -7326,31 +7326,21 @@ else if(
   response.confidence =
     1;
 
-  response.textIT =
+    response.textIT =
 
-`👋 Ciao!
+`👋 Ciao, sono RendimentoBB AI.
 
-Posso aiutarti ad analizzare:
+Posso analizzare il tuo investimento, confrontare città o aiutarti a migliorare ROI e cashflow.
 
-• ROI
-• cashflow
-• rischio
-• mutui
-• benchmark città
-• sostenibilità B&B`;
+Da dove vuoi iniziare?`;
 
   response.textEN =
 
-`👋 Hi!
+`👋 Hi, I'm RendimentoBB AI.
 
-I can help you analyze:
+I can analyze your investment, compare cities, or help you improve ROI and cash flow.
 
-• ROI
-• cashflow
-• risk
-• mortgages
-• city benchmarks
-• B&B sustainability`;
+Where would you like to start?`;
 
 }
   // ===========================================
