@@ -215,7 +215,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractPercentage(
 
-                /(?:INVESTMENT SCORE|SCORE AI|SCORE)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+                /(?:INVESTMENT SCORE|SCORE AI|SCORE|PUNTEGGIO)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
 
             );
 
@@ -223,7 +223,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             extractAmount(
 
-                /(?:PROPERTY PRICE|PREZZO IMMOBILE|VALORE IMMOBILE)[^0-9\-]*(-?[\d.,]+)/i
+                /(?:PROPERTY PRICE|PREZZO IMMOBILE|VALORE IMMOBILE|PREZZO)[^0-9\-]*(-?[\d.,]+)/i
 
             );
 
@@ -279,11 +279,11 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const verdict =
 
-            extractText(
+    extractText(
 
-                /(?:VERDETTO AI|VERDETTO|AI VERDICT|VERDICT)\s*[:\-]?\s*(Operazione istituzionale|Institutional-grade opportunity|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
+        /(?:VERDETTO AI|VERDETTO|AI VERDICT|VERDICT)?\s*[:\-]?\s*(Operazione istituzionale|Institutional-grade opportunity|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
 
-            );
+    );
 
         // ===========================================
         // ANALYSIS
