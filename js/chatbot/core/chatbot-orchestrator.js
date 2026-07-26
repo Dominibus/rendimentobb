@@ -534,7 +534,7 @@ const rememberedAnalysis = {
 
 };
 
-const activeAnalysisData = {
+const analysisData = {
 
   ...rememberedAnalysis,
   ...(window.lastAnalysisData || {}),
