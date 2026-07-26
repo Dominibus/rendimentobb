@@ -257,11 +257,11 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const gross =
 
-            extractAmount(
+    extractAmount(
 
-                /(?:GROSS REVENUE|GROSS|RICAVI LORDI|FATTURATO LORDO)[^0-9\-]*(-?[\d.,]+)/i
+        /(?:RICAVI ANNUI|ANNUAL REVENUE|GROSS REVENUE|RICAVI LORDI|FATTURATO LORDO)[^0-9€\-]{0,30}€?\s*(-?[\d.,]+)/i
 
-            );
+    );
 
         const annualProfit =
 
@@ -293,7 +293,7 @@ window.rbParseExecutivePDF = async function(documentObject){
 
     extractText(
 
-        /(?:VERDETTO AI|VERDETTO|AI VERDICT|VERDICT)?\s*[:\-]?\s*(Operazione istituzionale|Institutional-grade opportunity|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
+        /(?:EXECUTIVE RECOMMENDATION|VERDETTO AI|VERDETTO|AI VERDICT|VERDICT)\s*[:\-]?\s*(BUY|WAIT|NO[\s_-]?BUY|Operazione istituzionale|Institutional-grade opportunity|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
 
     );
 
