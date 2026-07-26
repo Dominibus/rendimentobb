@@ -6410,12 +6410,27 @@ I will explain:
 
   }
 
-const isExecutivePDFReport =
+const pdfAnalysis =
 
   activePDFReport
-    ?.analysis
+    ?.analysis ||
+
+  activePDFReport ||
+
+  {};
+
+const isExecutivePDFReport =
+
+  activePDFReport ===
+    window.lastExecutiveReport ||
+
+  pdfAnalysis
     ?.reportType ===
-  "executive_pdf";
+    "executive_pdf" ||
+
+  activePDFReport
+    ?.reportType ===
+    "executive_pdf";
 
 if(!isExecutivePDFReport){
 
@@ -6444,13 +6459,6 @@ The AI will use the same values shown in the document.`;
   return response;
 
 }
-
-  const pdfAnalysis =
-
-  activePDFReport
-    ?.analysis ||
-
-  {};
 
 const reportROI =
 
@@ -6502,8 +6510,7 @@ const paybackYears =
 const rawInvestmentScore =
 
   Number(
-    activePDFReport
-      ?.analysis
+    pdfAnalysis
       ?.investmentScore ??
     0
   );
@@ -6534,8 +6541,7 @@ const investmentClass =
 
 const reportVerdict =
 
-  activePDFReport
-    ?.analysis
+  pdfAnalysis
     ?.verdict ||
 
   null;
