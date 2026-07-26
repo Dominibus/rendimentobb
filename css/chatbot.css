@@ -1999,3 +1999,48 @@ line-height:1.5;
   }
 
 }
+
+/* ==========================================
+HEADER ACTIONS — NEW CHAT + MINIMIZE
+========================================== */
+
+.rb-chat-header-actions{
+
+  position:absolute;
+
+  top:14px;
+  right:14px;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  z-index:3;
+
+}
+
+.rb-chat-header-actions .rb-chat-close{
+
+  position:static !important;
+
+  top:auto !important;
+  right:auto !important;
+
+  flex-shrink:0;
+
+  padding:0;
+
+}
+
+@media screen and (max-width:768px){
+
+  .rb-chat-header-actions{
+
+    top:12px;
+    right:12px;
+
+    gap:6px;
+
+  }
+
+}
