@@ -537,7 +537,7 @@ const rememberedAnalysis = {
 const activeAnalysisData = {
 
   ...rememberedAnalysis,
-  ...activeAnalysisData,
+  ...(window.lastAnalysisData || {}),
 
   // ROI deterministico usato dalla pipeline AI.
   // visualROI resta disponibile separatamente.
