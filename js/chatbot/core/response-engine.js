@@ -6313,21 +6313,21 @@ else if(
 
   const reportAccess =
 
-  window.getUserAccess?.() ||
+    window.getUserAccess?.() ||
 
-  window.RB_USER ||
+    window.RB_USER ||
 
-  {};
+    {};
 
-const canInterpretExecutiveReport =
+  const canInterpretExecutiveReport =
 
-  reportAccess.isPro ||
+    reportAccess.isPro ||
 
-  reportAccess.isAdmin;
+    reportAccess.isAdmin;
 
-if(!canInterpretExecutiveReport){
+  if(!canInterpretExecutiveReport){
 
-  response.textIT =
+    response.textIT =
 
 `🔒 L'interpretazione completa del Report Executive è disponibile nel piano PRO.
 
@@ -6339,7 +6339,7 @@ Con PRO puoi:
 • verificare sostenibilità del finanziamento
 • ottenere il verdetto AI completo`;
 
-  response.textEN =
+    response.textEN =
 
 `🔒 Full Executive Report interpretation is available with the PRO plan.
 
@@ -6351,15 +6351,26 @@ With PRO you can:
 • assess financing sustainability
 • receive the complete AI verdict`;
 
-  return response;
+    return response;
 
-}
+  }
 
-  if(!hasAnalysis){
+  const activePDFReport =
 
-  response.textIT =
+    executiveContext
+      ?.documents
+      ?.activeReport ||
 
-`📊 Non trovo una simulazione da interpretare.
+    null;
+
+  if(
+    !hasAnalysis &&
+    !activePDFReport
+  ){
+
+    response.textIT =
+
+`📊 Non trovo una simulazione o un Report Executive da interpretare.
 
 Per ottenere una lettura executive:
 
@@ -6376,9 +6387,9 @@ Ti mostrerò:
 • sostenibilità
 • strategia consigliata`;
 
-  response.textEN =
+    response.textEN =
 
-`📊 I cannot find a simulation to interpret.
+`📊 I cannot find a simulation or an Executive Report to interpret.
 
 To get an executive review:
 
@@ -6395,17 +6406,9 @@ I will explain:
 • sustainability
 • recommended strategy`;
 
-  return response;
+    return response;
 
-}
-
-  const activePDFReport =
-
-  executiveContext
-    ?.documents
-    ?.activeReport ||
-
-  null;
+  }
 
 const isExecutivePDFReport =
 
