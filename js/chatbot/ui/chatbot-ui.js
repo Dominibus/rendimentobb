@@ -1433,17 +1433,35 @@ const homeCards = document.querySelectorAll(".rb-home-card");
 
 const homePrompts = [
 
-    "Analizza questo investimento",
+    t(
+        "Analizza questo investimento",
+        "Analyze this investment"
+    ),
 
-    "Analizza il PDF",
+    t(
+        "Analizza il PDF",
+        "Analyze the PDF"
+    ),
 
-    "Analizza il ROI della simulazione",
+    t(
+        "Analizza il ROI della simulazione",
+        "Analyze the simulation ROI"
+    ),
 
-    "Analizza la sostenibilità del mutuo",
+    t(
+        "Analizza la sostenibilità del mutuo",
+        "Analyze the mortgage sustainability"
+    ),
 
-    "Analizza il mercato della città corrente",
+    t(
+        "Analizza il mercato della città corrente",
+        "Analyze the current city market"
+    ),
 
-    "Analizza la dashboard"
+    t(
+        "Analizza la dashboard",
+        "Analyze the dashboard"
+    )
 
 ];
 
