@@ -6445,41 +6445,52 @@ The AI will use the same values shown in the document.`;
 
 }
 
-  const reportROI =
+  const pdfAnalysis =
+
+  activePDFReport
+    ?.analysis ||
+
+  {};
+
+const reportROI =
 
   Number(
-    activePDFReport.roi ??
+    pdfAnalysis.roi ??
     0
   );
 
 const reportRisk =
 
   Number(
-    activePDFReport.risk ??
+    pdfAnalysis.risk ??
     0
   );
 
 const reportOccupancy =
 
-  Number(
-    activePDFReport.occupancy ??
-    0
-  );
+  pdfAnalysis.occupancy !== null &&
+  pdfAnalysis.occupancy !== undefined
+
+    ? Number(
+        pdfAnalysis.occupancy
+      )
+
+    : null;
 
 const reportCashflow =
 
   Number(
-    activePDFReport.cashflow ??
+    pdfAnalysis.cashflow ??
+    pdfAnalysis.annualProfit ??
     0
   );
 
 const reportEquity =
 
   Number(
-    activePDFReport.equity ??
+    pdfAnalysis.equity ??
     0
   );
-
 const paybackYears =
 
   reportCashflow > 0
