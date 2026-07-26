@@ -197,19 +197,19 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         const risk =
 
-            extractPercentage(
+    extractPercentage(
 
-                /(?:RISK|RISCHIO)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+        /(?:RISK|RISCHIO)(?:\s+SCORE)?[^0-9\-]{0,30}(-?[\d]+(?:[.,]\d+)?)\s*(?:\/\s*100|%)/i
 
-            );
+    );
 
         const occupancy =
 
-            extractPercentage(
+    extractPercentage(
 
-                /(?:OCCUPANCY|OCCUPAZIONE)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+        /(?:OCCUPANCY|OCCUPAZIONE)(?:\s+(?:RATE|MEDIA|PREVISTA))?[^0-9\-]{0,30}(-?[\d]+(?:[.,]\d+)?)\s*%/i
 
-            );
+    );
 
         const investmentScore =
 
@@ -227,13 +227,13 @@ window.rbParseExecutivePDF = async function(documentObject){
 
             );
 
-        const equity =
+        let equity =
 
-            extractAmount(
+    extractAmount(
 
-                /(?:EQUITY|CAPITALE INVESTITO|CAPITALE PROPRIO)[^0-9\-]*(-?[\d.,]+)/i
+        /(?:EQUITY|CAPITALE INVESTITO|CAPITALE PROPRIO|MEZZI PROPRI|INVESTIMENTO INIZIALE)[^0-9€\-]{0,40}€?\s*(-?[\d.,]+)/i
 
-            );
+    );
 
         const mortgage =
 
@@ -242,6 +242,18 @@ window.rbParseExecutivePDF = async function(documentObject){
                 /(?:LOAN|MORTGAGE|MUTUO|FINANZIAMENTO)[^0-9\-]*(-?[\d.,]+)/i
 
             );
+
+        if(
+    equity === null &&
+    propertyPrice !== null &&
+    mortgage !== null
+){
+
+    equity =
+        propertyPrice -
+        mortgage;
+
+}
 
         const gross =
 
