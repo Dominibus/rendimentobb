@@ -572,6 +572,99 @@ const voiceBtn =
     );
 
 // ===========================================
+// 🔄 REFRESH EXECUTIVE SNAPSHOT
+// ===========================================
+
+function refreshHomeSnapshot(){
+
+    const context =
+        typeof window.rbGetConversationContext === "function"
+            ? window.rbGetConversationContext()
+            : {};
+
+    const memory =
+        window.rbChatMemory || {};
+
+    const city =
+        context.city ??
+        context.lastCity ??
+        memory.lastCity;
+
+    const roi =
+        context.roi ??
+        context.lastROI ??
+        memory.lastROI;
+
+    const cashflow =
+        context.cashflow ??
+        context.lastCashflow ??
+        memory.lastCashflow;
+
+    const risk =
+        context.risk ??
+        context.lastRisk ??
+        memory.lastRisk;
+
+    const metrics =
+        document.querySelectorAll(
+            "#rb-chat-home .rb-ai-metric strong"
+        );
+
+    if(metrics.length < 4){
+
+        return;
+
+    }
+
+    metrics[0].textContent =
+        city
+            ? String(city).toUpperCase()
+            : "--";
+
+    metrics[1].textContent =
+        Number.isFinite(Number(roi))
+            ? Number(roi).toFixed(1) + "%"
+            : "--";
+
+    metrics[2].textContent =
+        Number.isFinite(Number(cashflow))
+            ? "€" +
+              Math.round(Number(cashflow))
+                .toLocaleString(
+                    window.currentLanguage === "en"
+                        ? "en-US"
+                        : "it-IT"
+                )
+            : "--";
+
+    metrics[3].textContent =
+        Number.isFinite(Number(risk))
+            ? String(Number(risk))
+            : "--";
+
+    const contextLabel =
+        document.querySelector(
+            "#rb-chat-home .rb-home-actions-context"
+        );
+
+    if(contextLabel){
+
+        contextLabel.textContent =
+            city
+                ? t(
+                    "Contesto attivo: ",
+                    "Active context: "
+                  ) + String(city).toUpperCase()
+                : t(
+                    "Scegli da dove iniziare",
+                    "Choose where to start"
+                  );
+
+    }
+
+}  
+
+// ===========================================
 // 🎤 SPEECH RECOGNITION
 // ===========================================
 
@@ -633,6 +726,8 @@ if(SpeechRecognition){
   window.toggleRBChatbot =
     function(){
 
+      refreshHomeSnapshot();
+
       windowEl
         .classList
         .toggle("open");
@@ -651,6 +746,8 @@ closeBtn.onclick = ()=>{
 };
 
 newChatBtn.onclick = ()=>{
+
+    refreshHomeSnapshot();
 
     const home =
         document.getElementById(
