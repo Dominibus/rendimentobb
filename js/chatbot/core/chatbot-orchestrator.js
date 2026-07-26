@@ -488,9 +488,56 @@ const investorProfile =
 // 📊 ANALYSIS DATA
 // =========================================
 
-const analysisData = {
+const rememberedAnalysis = {
 
-  ...(window.lastAnalysisData || {}),
+  realROI:
+    window.rbChatMemory?.lastROI,
+
+  roi:
+    window.rbChatMemory?.lastROI,
+
+  risk:
+    window.rbChatMemory?.lastRisk,
+
+  occupancy:
+    window.rbChatMemory?.lastOccupancy,
+
+  net:
+    window.rbChatMemory?.lastCashflow,
+
+  annualProfit:
+    window.rbChatMemory?.lastCashflow,
+
+  cashflow:
+    window.rbChatMemory?.lastCashflow,
+
+  gross:
+    window.rbChatMemory?.lastRevenue,
+
+  propertyPrice:
+    window.rbChatMemory?.lastPropertyPrice,
+
+  equity:
+    window.rbChatMemory?.lastEquity,
+
+  loanAmount:
+    window.rbChatMemory?.lastLoanAmount,
+
+  mortgage:
+    window.rbChatMemory?.lastLoanAmount,
+
+  mortgagePercent:
+    window.rbChatMemory?.lastMortgagePercent,
+
+  city:
+    window.rbChatMemory?.lastCity
+
+};
+
+const activeAnalysisData = {
+
+  ...rememberedAnalysis,
+  ...activeAnalysisData,
 
   // ROI deterministico usato dalla pipeline AI.
   // visualROI resta disponibile separatamente.
