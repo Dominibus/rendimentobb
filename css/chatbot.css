@@ -2118,3 +2118,29 @@ HEADER CONTROLS — PREMIUM 2026
     );
 
 }
+
+/* MOBILE — FIX NUOVA CHAT VISIBILE */
+
+@media screen and (max-width:768px){
+
+  .rb-chat-header-actions{
+    display:flex !important;
+    align-items:center !important;
+    width:auto !important;
+    gap:6px !important;
+  }
+
+  .rb-chat-header-actions .rb-chat-close{
+    position:static !important;
+    top:auto !important;
+    right:auto !important;
+  }
+
+  #rb-chat-new{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    flex-shrink:0 !important;
+  }
+
+}
