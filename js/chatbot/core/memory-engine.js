@@ -325,29 +325,61 @@ if(
 
 ){
 
-  memory.investmentHistory.push({
+  const investmentSnapshot = {
 
     roi: entities.roi,
 
     city: entities.city || null,
 
-    occupancy: entities.occupancy || null,
+    occupancy: entities.occupancy ?? null,
 
-    mortgage: entities.mortgage || null,
+    mortgage: entities.mortgage ?? null,
 
-    risk: entities.risk || null,
+    risk: entities.risk ?? null,
 
     net: entities.net,
 
-    cashflow: entities.cashflow || null,
+    cashflow:
+      entities.cashflow ??
+      entities.net,
 
     propertyPrice: entities.propertyPrice,
 
-    score: entities.score || null,
+    score: entities.score ?? null,
 
     timestamp: Date.now()
 
-  });
+  };
+
+  memory.investmentHistory.push(
+    investmentSnapshot
+  );
+
+  // =======================================
+  // 🔄 SYNC ACTIVE INVESTMENT CONTEXT
+  // =======================================
+
+  memory.lastROI =
+    investmentSnapshot.roi;
+
+  memory.lastCity =
+    investmentSnapshot.city ||
+    memory.lastCity;
+
+  memory.lastOccupancy =
+    investmentSnapshot.occupancy;
+
+  memory.lastRisk =
+    investmentSnapshot.risk;
+
+  memory.lastCashflow =
+    investmentSnapshot.cashflow;
+
+  memory.lastPropertyPrice =
+    investmentSnapshot.propertyPrice;
+
+  memory.lastMortgage =
+    investmentSnapshot.mortgage;
 
   // 🧹 CLEAN INVALID SNAPSHOTS
 
