@@ -1938,3 +1938,64 @@ line-height:1.5;
   }
 
 }
+
+/* ==========================================
+📱 MOBILE COMPOSER — COMPACT FIX
+========================================== */
+
+@media screen and (max-width:768px){
+
+  .rb-chat-input-area{
+
+    gap:6px !important;
+
+    padding-top:10px !important;
+    padding-right:10px !important;
+    padding-left:10px !important;
+
+    padding-bottom:
+      max(
+        10px,
+        env(safe-area-inset-bottom)
+      ) !important;
+
+  }
+
+  .rb-chat-action-btn{
+
+    width:42px !important;
+    height:42px !important;
+
+    flex-shrink:0 !important;
+
+    border-radius:14px !important;
+    font-size:18px !important;
+
+  }
+
+  #rb-chat-input{
+
+    min-width:0 !important;
+    height:46px !important;
+
+    padding:0 12px !important;
+
+    border-radius:15px !important;
+    font-size:16px !important;
+
+  }
+
+  #rb-chat-send{
+
+    width:46px !important;
+    height:46px !important;
+
+    flex-shrink:0 !important;
+    margin-right:0 !important;
+
+    border-radius:15px !important;
+    font-size:18px !important;
+
+  }
+
+}
