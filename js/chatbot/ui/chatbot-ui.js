@@ -85,11 +85,47 @@ window.initRBChatbotUI = function(){
 
     </div>
 
-    <div
-        class="rb-chat-close"
-        id="rb-chat-close"
+        <div
+        class="rb-chat-header-actions"
+        style="
+            display:flex;
+            align-items:center;
+            gap:8px;
+        "
     >
-        ✕
+
+        <button
+            type="button"
+            class="rb-chat-close"
+            id="rb-chat-new"
+            title="${t(
+                "Nuova chat",
+                "New chat"
+            )}"
+            aria-label="${t(
+                "Nuova chat",
+                "New chat"
+            )}"
+        >
+            ↻
+        </button>
+
+        <button
+            type="button"
+            class="rb-chat-close"
+            id="rb-chat-close"
+            title="${t(
+                "Minimizza",
+                "Minimize"
+            )}"
+            aria-label="${t(
+                "Minimizza",
+                "Minimize"
+            )}"
+        >
+            ✕
+        </button>
+
     </div>
 
 </div>
@@ -467,6 +503,11 @@ MESSAGES
       "rb-chat-close"
     );
 
+    const newChatBtn =
+    document.getElementById(
+      "rb-chat-new"
+    );
+
   const sendBtn =
     document.getElementById(
       "rb-chat-send"
@@ -568,6 +609,40 @@ closeBtn.onclick = ()=>{
     windowEl.classList.remove(
         "open"
     );
+
+};
+
+newChatBtn.onclick = ()=>{
+
+    const home =
+        document.getElementById(
+            "rb-chat-home"
+        );
+
+    const quick =
+        document.getElementById(
+            "rb-quick-actions"
+        );
+
+    messages.innerHTML = "";
+
+    input.value = "";
+
+    messages.style.display = "none";
+
+    if(home){
+
+        home.style.display = "block";
+
+    }
+
+    if(quick){
+
+        quick.style.display = "none";
+
+    }
+
+    input.focus();
 
 };
 
