@@ -2203,3 +2203,108 @@ HOME ACTIONS CONTEXT — 2026
   }
 
 }
+
+/* ==========================================
+MOBILE AI HOME — COMPACT 2026
+========================================== */
+
+@media screen and (max-width:768px){
+
+  #rb-chat-home{
+    padding:14px !important;
+  }
+
+  .rb-ai-home-header{
+    padding:6px 0 8px !important;
+  }
+
+  .rb-ai-status{
+    margin-bottom:8px !important;
+    padding:4px 10px !important;
+    font-size:10px !important;
+  }
+
+  .rb-ai-home-title{
+    margin:2px 0 !important;
+    font-size:18px !important;
+  }
+
+  .rb-ai-home-subtitle{
+    margin-bottom:8px !important;
+    font-size:11px !important;
+  }
+
+  .rb-ai-snapshot{
+    margin-top:8px !important;
+    padding:10px !important;
+    border-radius:15px !important;
+  }
+
+  .rb-ai-snapshot-title{
+    margin-bottom:8px !important;
+    font-size:11px !important;
+  }
+
+  .rb-ai-snapshot-grid{
+    gap:7px !important;
+  }
+
+  .rb-ai-metric{
+    min-height:52px !important;
+    padding:7px !important;
+    border-radius:11px !important;
+  }
+
+  .rb-ai-metric-label{
+    margin-bottom:2px !important;
+    font-size:9px !important;
+    letter-spacing:.25px !important;
+  }
+
+  .rb-ai-metric strong{
+    margin-top:1px !important;
+    font-size:17px !important;
+  }
+
+  .rb-home-actions-header{
+    margin:7px 0 10px !important;
+    padding:9px 12px !important;
+    border-radius:12px !important;
+  }
+
+  .rb-home-actions-title{
+    font-size:13px !important;
+  }
+
+  .rb-home-actions-context{
+    margin-top:2px !important;
+    font-size:10px !important;
+  }
+
+  .rb-ai-home-grid{
+    gap:8px !important;
+  }
+
+  .rb-home-card{
+    min-height:88px !important;
+    padding:11px !important;
+    gap:3px !important;
+    border-radius:14px !important;
+  }
+
+  .rb-home-icon{
+    margin-bottom:2px !important;
+    font-size:21px !important;
+  }
+
+  .rb-home-title{
+    font-size:13px !important;
+    line-height:1.2 !important;
+  }
+
+  .rb-home-desc{
+    font-size:10px !important;
+    line-height:1.3 !important;
+  }
+
+}
