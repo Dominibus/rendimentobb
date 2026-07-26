@@ -1,6 +1,5 @@
 // ===============================================
-// 🧠 PDF PARSER ENGINE 1.0
-// Silicon Valley Architecture 2026
+// 🧠 PDF PARSER ENGINE 1.1
 // RendimentoBB AI
 // ===============================================
 
@@ -20,43 +19,271 @@ window.rbParseExecutivePDF = async function(documentObject){
         }
 
         const text =
-            documentObject.extractedText;
+
+            documentObject
+                .extractedText
+                .replace(/\s+/g, " ")
+                .trim();
 
         // ===========================================
         // HELPERS
         // ===========================================
 
-        function extractNumber(regex){
+        function matchValue(regex){
 
             const match =
                 text.match(regex);
 
-            if(!match){
+            return match
+                ? match[1]
+                : null;
+
+        }
+
+        function parsePercentage(rawValue){
+
+            if(
+                rawValue === null ||
+                rawValue === undefined
+            ){
 
                 return null;
 
             }
 
-            const value =
+            const normalized =
 
-                match[1]
-
-                    .replace(/\./g,"")
-
+                String(rawValue)
+                    .trim()
                     .replace(",", ".");
 
-            return Number(value);
+            const value =
+                Number(normalized);
+
+            return Number.isFinite(value)
+                ? value
+                : null;
 
         }
 
-        function extractPercent(regex){
+        function parseAmount(rawValue){
+
+            if(
+                rawValue === null ||
+                rawValue === undefined
+            ){
+
+                return null;
+
+            }
+
+            let normalized =
+
+                String(rawValue)
+                    .trim()
+                    .replace(/\s/g, "");
+
+            if(
+                normalized.includes(".") &&
+                normalized.includes(",")
+            ){
+
+                if(
+                    normalized.lastIndexOf(",") >
+                    normalized.lastIndexOf(".")
+                ){
+
+                    normalized =
+                        normalized
+                            .replace(/\./g, "")
+                            .replace(",", ".");
+
+                }
+
+                else{
+
+                    normalized =
+                        normalized
+                            .replace(/,/g, "");
+
+                }
+
+            }
+
+            else if(
+                /^\d{1,3}(\.\d{3})+$/.test(
+                    normalized
+                )
+            ){
+
+                normalized =
+                    normalized.replace(/\./g, "");
+
+            }
+
+            else if(
+                /^\d{1,3}(,\d{3})+$/.test(
+                    normalized
+                )
+            ){
+
+                normalized =
+                    normalized.replace(/,/g, "");
+
+            }
+
+            else{
+
+                normalized =
+                    normalized.replace(",", ".");
+
+            }
 
             const value =
-                extractNumber(regex);
+                Number(normalized);
 
-            return value;
+            return Number.isFinite(value)
+                ? value
+                : null;
 
         }
+
+        function extractPercentage(regex){
+
+            return parsePercentage(
+                matchValue(regex)
+            );
+
+        }
+
+        function extractAmount(regex){
+
+            return parseAmount(
+                matchValue(regex)
+            );
+
+        }
+
+        function extractText(regex){
+
+            const value =
+                matchValue(regex);
+
+            return value
+                ? value.trim()
+                : null;
+
+        }
+
+        // ===========================================
+        // EXECUTIVE PDF VALUES
+        // ===========================================
+
+        const roi =
+
+            extractPercentage(
+
+                /\bROI\b[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+
+            );
+
+        const realROI =
+
+            extractPercentage(
+
+                /(?:REAL ROI|ROI REALE)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+
+            );
+
+        const risk =
+
+            extractPercentage(
+
+                /(?:RISK|RISCHIO)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+
+            );
+
+        const occupancy =
+
+            extractPercentage(
+
+                /(?:OCCUPANCY|OCCUPAZIONE)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+
+            );
+
+        const investmentScore =
+
+            extractPercentage(
+
+                /(?:INVESTMENT SCORE|SCORE AI|SCORE)[^0-9\-]*(-?[\d]+(?:[.,]\d+)?)/i
+
+            );
+
+        const propertyPrice =
+
+            extractAmount(
+
+                /(?:PROPERTY PRICE|PREZZO IMMOBILE|VALORE IMMOBILE)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const equity =
+
+            extractAmount(
+
+                /(?:EQUITY|CAPITALE INVESTITO|CAPITALE PROPRIO)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const mortgage =
+
+            extractAmount(
+
+                /(?:LOAN|MORTGAGE|MUTUO|FINANZIAMENTO)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const gross =
+
+            extractAmount(
+
+                /(?:GROSS REVENUE|GROSS|RICAVI LORDI|FATTURATO LORDO)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const annualProfit =
+
+            extractAmount(
+
+                /(?:ANNUAL PROFIT|PROFITTO ANNUO|UTILE ANNUO|CASHFLOW ANNUO|CASH FLOW ANNUO)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const cashflow =
+
+            annualProfit ??
+
+            extractAmount(
+
+                /(?:NET CASHFLOW|NET CASH FLOW|CASHFLOW|CASH FLOW)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const adr =
+
+            extractAmount(
+
+                /(?:AVERAGE DAILY RATE|ADR|TARIFFA MEDIA)[^0-9\-]*(-?[\d.,]+)/i
+
+            );
+
+        const verdict =
+
+            extractText(
+
+                /(?:VERDETTO AI|VERDETTO|AI VERDICT|VERDICT)\s*[:\-]?\s*(Operazione istituzionale|Institutional-grade opportunity|Da valutare|To be reviewed|Non consigliato|Not recommended)/i
+
+            );
 
         // ===========================================
         // ANALYSIS
@@ -64,85 +291,47 @@ window.rbParseExecutivePDF = async function(documentObject){
 
         documentObject.analysis = {
 
+            reportType:
+                "executive_pdf",
+
             roi:
-
-                extractPercent(
-
-                    /ROI[^0-9\-]*([\d.,]+)/i
-
-                ),
+                roi,
 
             realROI:
-
-                extractPercent(
-
-                    /REAL ROI[^0-9\-]*([\d.,]+)/i
-
-                ),
+                realROI,
 
             risk:
-
-                extractPercent(
-
-                    /RISK[^0-9\-]*([\d.,]+)/i
-
-                ),
+                risk,
 
             occupancy:
+                occupancy,
 
-                extractPercent(
-
-                    /OCCUPANCY[^0-9\-]*([\d.,]+)/i
-
-                ),
+            investmentScore:
+                investmentScore,
 
             propertyPrice:
-
-                extractNumber(
-
-                    /PROPERTY PRICE[^0-9\-]*([\d.,]+)/i
-
-                ),
+                propertyPrice,
 
             equity:
-
-                extractNumber(
-
-                    /EQUITY[^0-9\-]*([\d.,]+)/i
-
-                ),
+                equity,
 
             mortgage:
-
-                extractNumber(
-
-                    /(LOAN|MORTGAGE)[^0-9\-]*([\d.,]+)/i
-
-                ),
+                mortgage,
 
             gross:
+                gross,
 
-                extractNumber(
-
-                    /GROSS[^0-9\-]*([\d.,]+)/i
-
-                ),
+            annualProfit:
+                annualProfit,
 
             cashflow:
-
-                extractNumber(
-
-                    /(NET CASHFLOW|CASHFLOW)[^0-9\-]*([\d.,]+)/i
-
-                ),
+                cashflow,
 
             adr:
+                adr,
 
-                extractNumber(
-
-                    /(ADR|AVERAGE DAILY RATE)[^0-9\-]*([\d.,]+)/i
-
-                )
+            verdict:
+                verdict
 
         };
 
@@ -153,24 +342,24 @@ window.rbParseExecutivePDF = async function(documentObject){
         documentObject.executiveContext = {
 
             generatedBy:
-
                 "pdf-parser-engine",
 
             parserVersion:
-
-                "1.0",
+                "1.1",
 
             hasAnalysis:
 
-                Object.values(
+                Object.entries(
                     documentObject.analysis
                 ).some(
-                    value =>
+                    ([key, value]) =>
+
+                        key !== "reportType" &&
                         value !== null
+
                 ),
 
             extractedAt:
-
                 new Date().toISOString()
 
         };
@@ -180,6 +369,9 @@ window.rbParseExecutivePDF = async function(documentObject){
         // ===========================================
 
         documentObject.aiSummary = {
+
+            reportType:
+                documentObject.analysis.reportType,
 
             roi:
                 documentObject.analysis.roi,
@@ -191,7 +383,13 @@ window.rbParseExecutivePDF = async function(documentObject){
                 documentObject.analysis.occupancy,
 
             cashflow:
-                documentObject.analysis.cashflow
+                documentObject.analysis.cashflow,
+
+            investmentScore:
+                documentObject.analysis.investmentScore,
+
+            verdict:
+                documentObject.analysis.verdict
 
         };
 
