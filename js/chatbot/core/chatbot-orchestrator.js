@@ -1668,43 +1668,6 @@ response.metadata = {
   response
 );
 
-// =========================================
-// 🧠 KNOWLEDGE ENHANCEMENT
-// =========================================
-
-if(
-
-  matchedKnowledge.length &&
-
-  response.type === "education"
-
-){
-
-  const best =
-
-    matchedKnowledge[0]
-      .item;
-
-  if(
-    window.currentLang === "en"
-  ){
-
-    response.textEN +=
-
-`\n\n${best.aiInsightEN || ""}`;
-
-  }
-
-  else{
-
-    response.textIT +=
-
-`\n\n${best.aiInsightIT || ""}`;
-
-  }
-
-}
-
 if(window.rbRememberMessage){
 
   window.rbRememberMessage({
