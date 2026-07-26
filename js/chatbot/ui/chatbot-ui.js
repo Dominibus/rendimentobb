@@ -278,6 +278,44 @@ HOME
 
         </div>
 
+<div class="rb-home-actions-header">
+
+    <div class="rb-home-actions-title">
+
+        ${
+            window.rbChatMemory?.lastCity
+                ? t(
+                    "Continua l’analisi",
+                    "Continue the analysis"
+                  )
+                : t(
+                    "Come posso aiutarti?",
+                    "How can I help?"
+                  )
+        }
+
+    </div>
+
+    <div class="rb-home-actions-context">
+
+        ${
+            window.rbChatMemory?.lastCity
+                ? t(
+                    "Contesto attivo: ",
+                    "Active context: "
+                  ) +
+                  window.rbChatMemory.lastCity.toUpperCase()
+                : t(
+                    "Scegli da dove iniziare",
+                    "Choose where to start"
+                  )
+        }
+
+    </div>
+
+</div>
+        
+
         <div class="rb-ai-home-grid">
 
             <button class="rb-home-card">
