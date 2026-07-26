@@ -1666,6 +1666,59 @@ async function generatePDF(){
 
     addFooter();
 
+    // ================= REGISTER DASHBOARD REPORT =================
+    if(
+      typeof window.buildExecutiveReport ===
+      "function"
+    ){
+
+      window.buildExecutiveReport({
+
+        ...fallback,
+
+        realCity:
+          city,
+
+        propertyPrice:
+          price,
+
+        realROI:
+          roi,
+
+        risk:
+          risk,
+
+        equity:
+          equity,
+
+        loanAmount:
+          loan,
+
+        net:
+          annualProfit,
+
+        annualProfit:
+          annualProfit,
+
+        cashflow:
+          annualProfit,
+
+        investmentScore:
+          score,
+
+        verdict:
+          verdict,
+
+        reportType:
+          "executive_pdf",
+
+        reportSource:
+          "dashboard_report"
+
+      });
+
+    }
+
     // ================= SAVE =================
     doc.save(`RendimentoBB_${city}_${roi.toFixed(0)}ROI.pdf`);
 
