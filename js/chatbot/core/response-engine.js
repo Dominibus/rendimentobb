@@ -43,6 +43,21 @@ window.rbGenerateResponse = function({
 );
 
 // ===============================================
+// 📄 PDF INTENT NORMALIZATION
+// ===============================================
+
+if(
+  intent?.intent === "pdf_analysis"
+){
+
+  intent = {
+    ...intent,
+    intent: "report_interpretation"
+  };
+
+}  
+
+// ===============================================
 // 🧠 CONVERSATION CONTEXT
 // ===============================================
 
