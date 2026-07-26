@@ -528,6 +528,12 @@ window.rbGetConversationContext = function(){
     roi:
       window.rbChatMemory.lastROI,
 
+    risk:
+      window.rbChatMemory.lastRisk,
+
+    cashflow:
+      window.rbChatMemory.lastCashflow,
+
     propertyPrice:
       window.rbChatMemory.lastPropertyPrice,
 
