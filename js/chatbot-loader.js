@@ -227,9 +227,16 @@
 "/js/chatbot/core/investor-profile-engine.js",
 "/js/chatbot/core/score-engine.js",
 
+// =========================================
+// 📄 PDF.JS
+// Real PDF text extraction dependency
+// =========================================
+
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+
 "/js/chatbot/document-engine.js",
 "/js/chatbot/pdf-extraction-engine.js",
-"/js/chatbot/pdf-parser-engine.js",    
+"/js/chatbot/pdf-parser-engine.js",  
 "/js/chatbot/core/document-classifier.js",    
 "/js/chatbot/document-reasoning-engine.js",
 "/js/chatbot/executive-narrative-engine.js",
