@@ -6622,8 +6622,7 @@ ${executiveVerdictIT}
 ${investmentScoreValue}/100
 
 ROI: ${reportROI.toFixed(1)}%
-Occupazione: ${reportOccupancy}%
-Rischio: ${reportRisk}/100
+${reportOccupancy !== null ? `Occupazione: ${reportOccupancy}%\n` : ""}Rischio: ${reportRisk}/100
 
 💰 Cashflow annuo
 
@@ -6725,8 +6724,7 @@ ${executiveVerdictEN}
 ${investmentScoreValue}/100
 
 ROI: ${reportROI.toFixed(1)}%
-Occupancy: ${reportOccupancy}%
-Risk: ${reportRisk}/100
+${reportOccupancy !== null ? `Occupancy: ${reportOccupancy}%\n` : ""}Risk: ${reportRisk}/100
 
 💰 Annual Cashflow
 
