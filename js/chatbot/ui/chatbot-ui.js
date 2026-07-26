@@ -839,9 +839,10 @@ newChatBtn.onclick = ()=>{
   // 💬 ADD MESSAGE
   // ===========================================
 
-  function addMessage(
+    function addMessage(
     role,
-    text
+    text,
+    persist = true
   ){
 
     const div =
@@ -910,6 +911,27 @@ if(role === "bot"){
 
     messages.scrollTop =
       messages.scrollHeight;
+
+    // =======================================
+    // 💾 SAVE BOT MESSAGE
+    // =======================================
+
+    if(
+      persist &&
+      role === "bot" &&
+      typeof window.rbRememberMessage === "function"
+    ){
+
+      window.rbRememberMessage({
+
+        role: "bot",
+
+        message:
+          String(text || "")
+
+      });
+
+    }
 
   }
 
