@@ -68,37 +68,62 @@ window.rbGetAIContext = function(){
 
 window.rbNormalizeExecutiveMemory = function(memory = {}){
 
+  const activeMemory =
+    window.rbChatMemory || {};
+
+  const canonicalAnalysis =
+    window.rbCanonicalAnalysis || {};
+
   return{
 
     ...memory,
+    ...canonicalAnalysis,
+    ...activeMemory,
 
     lastROI:
-  memory.lastROI ??
-  memory.realROI ??
-  memory.roi ??
-  window.rbCanonicalAnalysis?.realROI ??
-  window.rbCanonicalAnalysis?.roi ??
-  0,
+      activeMemory.lastROI ??
+      canonicalAnalysis.realROI ??
+      canonicalAnalysis.safeROI ??
+      canonicalAnalysis.roi ??
+      memory.lastROI ??
+      memory.realROI ??
+      memory.roi ??
+      0,
 
     lastRisk:
+      activeMemory.lastRisk ??
+      canonicalAnalysis.risk ??
+      canonicalAnalysis.riskScore ??
       memory.lastRisk ??
       memory.risk ??
       memory.riskScore ??
       0,
 
     lastOccupancy:
+      activeMemory.lastOccupancy ??
+      canonicalAnalysis.occupancy ??
+      canonicalAnalysis.occupancyRate ??
       memory.lastOccupancy ??
       memory.occupancy ??
       memory.occupancyRate ??
       0,
 
     lastCashflow:
+      activeMemory.lastCashflow ??
+      canonicalAnalysis.cashflow ??
+      canonicalAnalysis.net ??
+      canonicalAnalysis.annualProfit ??
       memory.lastCashflow ??
       memory.cashflow ??
       memory.net ??
+      memory.annualProfit ??
       0,
 
     lastRevenue:
+      activeMemory.lastRevenue ??
+      canonicalAnalysis.revenueAnnual ??
+      canonicalAnalysis.gross ??
+      canonicalAnalysis.revenue ??
       memory.lastRevenue ??
       memory.revenueAnnual ??
       memory.gross ??
@@ -106,6 +131,10 @@ window.rbNormalizeExecutiveMemory = function(memory = {}){
       0,
 
     lastExpenses:
+      activeMemory.lastExpenses ??
+      canonicalAnalysis.monthlyCosts ??
+      canonicalAnalysis.expenses ??
+      canonicalAnalysis.costs ??
       memory.lastExpenses ??
       memory.monthlyCosts ??
       memory.expenses ??
@@ -113,12 +142,17 @@ window.rbNormalizeExecutiveMemory = function(memory = {}){
       0,
 
     lastMortgagePercent:
+      activeMemory.lastMortgagePercent ??
+      canonicalAnalysis.mortgagePercent ??
       memory.lastMortgagePercent ??
       memory.mortgagePercent ??
-      memory.mortgage ??
       0,
 
     lastNightPrice:
+      activeMemory.lastNightPrice ??
+      canonicalAnalysis.priceNight ??
+      canonicalAnalysis.pricePerNight ??
+      canonicalAnalysis.nightly ??
       memory.lastNightPrice ??
       memory.priceNight ??
       memory.pricePerNight ??
@@ -126,6 +160,10 @@ window.rbNormalizeExecutiveMemory = function(memory = {}){
       0,
 
     lastCity:
+      activeMemory.lastCity ??
+      canonicalAnalysis.city ??
+      canonicalAnalysis.marketCity ??
+      canonicalAnalysis.realCity ??
       memory.lastCity ??
       memory.city ??
       "roma"
