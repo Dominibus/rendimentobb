@@ -606,9 +606,9 @@ function refreshHomeSnapshot(){
         memory.lastRisk;
 
     const metrics =
-        document.querySelectorAll(
-            "#rb-chat-home .rb-ai-metric strong"
-        );
+      document.querySelectorAll(
+        ".rb-ai-home .rb-ai-metric strong"
+    );
 
     if(metrics.length < 4){
 
@@ -643,9 +643,9 @@ function refreshHomeSnapshot(){
             : "--";
 
     const contextLabel =
-        document.querySelector(
-            "#rb-chat-home .rb-home-actions-context"
-        );
+      document.querySelector(
+        ".rb-ai-home .rb-home-actions-context"
+    );
 
     if(contextLabel){
 
