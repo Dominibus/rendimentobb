@@ -6488,7 +6488,7 @@ const paybackYears =
 
     : null;
 
-const investmentScoreValue =
+const rawInvestmentScore =
 
   Number(
     activePDFReport
@@ -6496,6 +6496,14 @@ const investmentScoreValue =
       ?.investmentScore ??
     0
   );
+
+const investmentScoreValue =
+
+  Number.isFinite(rawInvestmentScore)
+
+    ? Math.round(rawInvestmentScore)
+
+    : 0;
 
 const investmentClass =
 
@@ -6513,45 +6521,33 @@ const investmentClass =
 
         : "Standard";
 
-  let executiveVerdictIT =
-  "🟡 DA VALUTARE";
+const reportVerdict =
+
+  activePDFReport
+    ?.analysis
+    ?.verdict ||
+
+  null;
+
+let executiveVerdictIT =
+
+  reportVerdict
+
+    ? `🟢 ${reportVerdict.toUpperCase()}`
+
+    : "🟡 DA VALUTARE";
 
 let executiveVerdictEN =
-  "🟡 TO BE REVIEWED";
 
-if(advisor){
+  reportVerdict === "Operazione istituzionale"
 
-  if(executiveDecision === "BUY"){
+    ? "🟢 INSTITUTIONAL-GRADE OPPORTUNITY"
 
-    executiveVerdictIT =
-      "🟢 INVESTIMENTO CONSIGLIATO";
+    : reportVerdict
 
-    executiveVerdictEN =
-      "🟢 RECOMMENDED INVESTMENT";
+      ? `🟢 ${reportVerdict.toUpperCase()}`
 
-  }
-
-  else if(executiveDecision === "WAIT"){
-
-    executiveVerdictIT =
-      "🟡 OTTIMIZZARE PRIMA DI PROCEDERE";
-
-    executiveVerdictEN =
-      "🟡 OPTIMIZE BEFORE PROCEEDING";
-
-  }
-
-  else{
-
-    executiveVerdictIT =
-      "🔴 INVESTIMENTO NON CONSIGLIATO";
-
-    executiveVerdictEN =
-      "🔴 NOT RECOMMENDED";
-
-  }
-
-}
+      : "🟡 TO BE REVIEWED";
 
   const insightsIT = [];
 
