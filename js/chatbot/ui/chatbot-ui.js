@@ -565,31 +565,9 @@ if(SpeechRecognition){
 
 closeBtn.onclick = ()=>{
 
-    const home =
-        document.getElementById("rb-chat-home");
-
-    const quick =
-        document.getElementById("rb-quick-actions");
-
-    messages.innerHTML = "";
-
-    input.value = "";
-
-    messages.style.display = "none";
-
-    if(home){
-
-        home.style.display = "block";
-
-    }
-
-    if(quick){
-
-        quick.style.display = "none";
-
-    }
-
-    windowEl.classList.remove("open");
+    windowEl.classList.remove(
+        "open"
+    );
 
 };
 
