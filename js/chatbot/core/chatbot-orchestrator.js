@@ -539,8 +539,12 @@ const analysisData = {
   ...rememberedAnalysis,
   ...(window.lastAnalysisData || {}),
 
-  // ROI deterministico usato dalla pipeline AI.
-  // visualROI resta disponibile separatamente.
+  // =====================================
+  // 📊 ROI DETERMINISTICO
+  // =====================================
+
+  // Usa il ROI reale dell’investimento.
+  // visualROI rimane disponibile separatamente.
   roi:
 
     window.lastAnalysisData?.realROI ??
@@ -549,25 +553,35 @@ const analysisData = {
 
     window.lastAnalysisData?.roi ??
 
-    Number(
-      document.getElementById("roi-value")
-      ?.textContent
-      ?.replace("%","")
-      ?.trim()
-    ) ??
+    rememberedAnalysis.realROI ??
 
-    0,
+    rememberedAnalysis.roi ??
+
+    (
+      Number(
+        document.getElementById("roi-value")
+          ?.textContent
+          ?.replace("%", "")
+          ?.trim()
+      ) || 0
+    ),
+
+  // =====================================
+  // ⚠️ RISK & OCCUPANCY
+  // =====================================
 
   risk:
 
     Number(
       document.getElementById("risk-score")
-      ?.textContent
-      ?.replace("/100","")
-      ?.trim()
+        ?.textContent
+        ?.replace("/100", "")
+        ?.trim()
     ) ||
 
     window.lastAnalysisData?.risk ||
+
+    rememberedAnalysis.risk ||
 
     0,
 
@@ -575,12 +589,14 @@ const analysisData = {
 
     Number(
       document.getElementById("occupancy-rate")
-      ?.textContent
-      ?.replace("%","")
-      ?.trim()
+        ?.textContent
+        ?.replace("%", "")
+        ?.trim()
     ) ||
 
     window.lastAnalysisData?.occupancy ||
+
+    rememberedAnalysis.occupancy ||
 
     0,
 
@@ -596,6 +612,8 @@ const analysisData = {
 
     window.lastAnalysisData?.netAfterMortgage ??
 
+    rememberedAnalysis.net ??
+
     0,
 
   annualProfit:
@@ -605,6 +623,8 @@ const analysisData = {
     window.lastAnalysisData?.profit ??
 
     window.lastAnalysisData?.netAfterMortgage ??
+
+    rememberedAnalysis.annualProfit ??
 
     0,
 
@@ -620,6 +640,18 @@ const analysisData = {
 
     window.lastAnalysisData?.annualProfit ??
 
+    rememberedAnalysis.cashflow ??
+
+    0,
+
+  gross:
+
+    window.lastAnalysisData?.gross ??
+
+    window.lastAnalysisData?.revenueAnnual ??
+
+    rememberedAnalysis.gross ??
+
     0,
 
   // =====================================
@@ -632,6 +664,8 @@ const analysisData = {
 
     window.lastAnalysisData?.price ??
 
+    rememberedAnalysis.propertyPrice ??
+
     0,
 
   equity:
@@ -639,6 +673,8 @@ const analysisData = {
     window.lastAnalysisData?.equity ??
 
     window.lastAnalysisData?.initialCapital ??
+
+    rememberedAnalysis.equity ??
 
     0,
 
@@ -648,17 +684,39 @@ const analysisData = {
 
     window.lastAnalysisData?.mortgage ??
 
+    rememberedAnalysis.loanAmount ??
+
+    rememberedAnalysis.mortgage ??
+
+    0,
+
+  mortgage:
+
+    window.lastAnalysisData?.mortgage ??
+
+    window.lastAnalysisData?.loanAmount ??
+
+    rememberedAnalysis.mortgage ??
+
+    rememberedAnalysis.loanAmount ??
+
     0,
 
   mortgagePercent:
 
     window.lastAnalysisData?.mortgagePercent ??
 
+    rememberedAnalysis.mortgagePercent ??
+
     (
       (
-        window.lastAnalysisData?.loanAmount ||
+        window.lastAnalysisData?.loanAmount ??
 
-        window.lastAnalysisData?.mortgage ||
+        window.lastAnalysisData?.mortgage ??
+
+        rememberedAnalysis.loanAmount ??
+
+        rememberedAnalysis.mortgage ??
 
         0
       )
@@ -666,40 +724,52 @@ const analysisData = {
       &&
 
       (
-        window.lastAnalysisData?.propertyPrice ||
+        window.lastAnalysisData?.propertyPrice ??
 
-        window.lastAnalysisData?.price ||
+        window.lastAnalysisData?.price ??
+
+        rememberedAnalysis.propertyPrice ??
 
         0
       )
     )
 
-    ? Math.round(
-
-        (
-          (
-            window.lastAnalysisData?.loanAmount ||
-
-            window.lastAnalysisData?.mortgage ||
-
-            0
-          )
-
-          /
+      ? Math.round(
 
           (
-            window.lastAnalysisData?.propertyPrice ||
+            (
+              window.lastAnalysisData?.loanAmount ??
 
-            window.lastAnalysisData?.price ||
+              window.lastAnalysisData?.mortgage ??
 
-            1
-          )
+              rememberedAnalysis.loanAmount ??
 
-        ) * 100
+              rememberedAnalysis.mortgage ??
 
-      )
+              0
+            )
 
-    : 0,
+            /
+
+            (
+              window.lastAnalysisData?.propertyPrice ??
+
+              window.lastAnalysisData?.price ??
+
+              rememberedAnalysis.propertyPrice ??
+
+              1
+            )
+
+          ) * 100
+
+        )
+
+      : 0,
+
+  // =====================================
+  // 📍 MARKET DATA
+  // =====================================
 
   city:
 
@@ -710,6 +780,8 @@ const analysisData = {
     window.lastAnalysisData?.marketCity ||
 
     window.lastAnalysisData?.realCity ||
+
+    rememberedAnalysis.city ||
 
     "roma"
 
