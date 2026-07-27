@@ -2819,6 +2819,66 @@ if(shouldSave){
     now;
 }
 
+    // ================= CANONICAL SCORE FOR SAVE =================
+
+const canonicalSaveScoreData =
+  typeof window.rbGenerateInvestmentScore === "function"
+
+    ? window.rbGenerateInvestmentScore({
+
+        roi: Number(
+          result?.realROI ??
+          window.realROI ??
+          finalROI ??
+          0
+        ),
+
+        risk: Number(
+          riskScore ??
+          risk ??
+          0
+        ),
+
+        occupancy: Number(
+          occupancyRate ??
+          0
+        ),
+
+        mortgagePercent: Number(
+          mortgagePercent ??
+          0
+        ),
+
+        cashflow: Number(
+          net ??
+          0
+        ),
+
+        city:
+          realCityInput ||
+          market ||
+          "roma"
+
+      })
+
+    : null;
+
+const canonicalSaveScore =
+  Number(
+    canonicalSaveScoreData?.score ??
+    0
+  );
+
+const canonicalSaveVerdict =
+  canonicalSaveScoreData?.verdict ??
+  (
+    canonicalSaveScore >= 75
+      ? "BUY"
+      : canonicalSaveScore > 40
+        ? "WAIT"
+        : "AVOID"
+  );
+
     // ================= SAVE ANALYSIS =================
 
     const isManualAnalysis =
@@ -2841,7 +2901,14 @@ window.__MANUAL_ANALYSIS__ === true;
     gross,
     net,
     occupancy: occupancyRate,
-    marketCity: market,
+
+investmentScore:
+  canonicalSaveScore,
+
+verdict:
+  canonicalSaveVerdict,
+
+marketCity: market,
     realCity:
       realCityInput ||
       market ||
