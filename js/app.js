@@ -2975,13 +2975,23 @@ visualROI: Number(finalROI) || 0,
   // ⚠️ RISK
   // =====================================
 
-  risk: riskScore,
+risk: riskScore,
 
-  occupancy: occupancyRate,
+occupancy: occupancyRate,
 
-  // =====================================
-  // 💰 PROPERTY
-  // =====================================
+// =====================================
+// 🧠 CANONICAL SCORE & VERDICT
+// =====================================
+
+investmentScore:
+  canonicalSaveScore,
+
+verdict:
+  canonicalSaveVerdict,
+
+// =====================================
+// 💰 PROPERTY
+// =====================================
 
   propertyPrice:
 Number(propertyPrice || 0),
