@@ -1427,8 +1427,17 @@ async function generatePDF(){
     const risk = safe(fallback.risk);
     const city = fallback.city || "—";
 
-    const annualProfit = safe(price * (roi/100));
-    const monthlyProfit = safe(annualProfit / 12);
+    const annualProfit = safe(
+  fallback.net ??
+  fallback.cashflow ??
+  fallback.annualProfit ??
+  fallback.profit ??
+  0
+);
+
+const monthlyProfit = safe(
+  annualProfit / 12
+);
     const loan = safe(price - equity);
     const breakEven = annualProfit > 0 ? equity / annualProfit : 0;
 
