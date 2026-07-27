@@ -1710,9 +1710,11 @@ const verdictColor =
       "function"
     ){
 
-      window.buildExecutiveReport({
+      window.lastExecutiveReport =
 
-        ...fallback,
+  window.buildExecutiveReport({
+
+    ...fallback,
 
         realCity:
           city,
