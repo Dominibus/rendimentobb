@@ -1001,6 +1001,81 @@ function showThinking(){
     addMessage;
 
   // ===========================================
+  // 💬 RESTORE SAVED CONVERSATION
+  // ===========================================
+
+  const savedMessages =
+    Array.isArray(window.rbChatMemory?.messages)
+      ? window.rbChatMemory.messages
+      : [];
+
+  if(savedMessages.length){
+
+    const home =
+      document.getElementById(
+        "rb-chat-home"
+      );
+
+    const quick =
+      document.getElementById(
+        "rb-quick-actions"
+      );
+
+    messages.innerHTML = "";
+
+    savedMessages.forEach(item => {
+
+      const role =
+        item?.role === "bot"
+          ? "bot"
+          : item?.role === "user"
+            ? "user"
+            : null;
+
+      const text =
+        item?.message ??
+        item?.text ??
+        "";
+
+      if(
+        role &&
+        String(text).trim()
+      ){
+
+        addMessage(
+          role,
+          text,
+          false
+        );
+
+      }
+
+    });
+
+    if(messages.children.length){
+
+      if(home){
+
+        home.style.display = "none";
+
+      }
+
+      messages.style.display = "block";
+
+      if(quick){
+
+        quick.style.display = "flex";
+
+      }
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+
+  }
+
+  // ===========================================
   // 💡 CONTEXTUAL SUGGESTIONS
   // ===========================================
 
