@@ -5886,12 +5886,10 @@ doc.text(
 // ================= REAL AI SCORE =================
 
 const aiScore =
-  window.lastInvestmentScore?.score ?? null;
+  window.lastAnalysisData?.investmentScore ?? null;
 
 const aiLabel =
-  window.lastInvestmentScore?.label ||
-  window.lastInvestmentScore?.verdict ||
-  null;
+  window.lastAnalysisData?.verdict ?? null;
 
 const fallbackScore =
   roi >= 20 ? 90 :
