@@ -763,6 +763,19 @@ function refreshHomeSnapshot(){
 }  
 
 // ===========================================
+// 📊 AUTO REFRESH AFTER NEW ANALYSIS
+// ===========================================
+
+document.addEventListener(
+    "rb:executive_report_created",
+    () => {
+
+        refreshHomeSnapshot();
+
+    }
+);  
+
+// ===========================================
 // 🎤 SPEECH RECOGNITION
 // ===========================================
 
