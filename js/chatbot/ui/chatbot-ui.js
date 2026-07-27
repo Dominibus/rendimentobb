@@ -1093,6 +1093,127 @@ function showThinking(){
   }
 
   // ===========================================
+  // 🔄 SYNC CONVERSATION BETWEEN TABS
+  // ===========================================
+
+  window.addEventListener(
+    "storage",
+    event => {
+
+      if(
+        event.key !== "rbChatMemory" ||
+        !event.newValue
+      ){
+
+        return;
+
+      }
+
+      try{
+
+        const updatedMemory =
+          JSON.parse(event.newValue);
+
+        const updatedMessages =
+          Array.isArray(updatedMemory?.messages)
+            ? updatedMemory.messages
+            : [];
+
+        window.rbChatMemory =
+          updatedMemory;
+
+        const home =
+          document.getElementById(
+            "rb-chat-home"
+          );
+
+        const quick =
+          document.getElementById(
+            "rb-quick-actions"
+          );
+
+        messages.innerHTML = "";
+
+        updatedMessages.forEach(item => {
+
+          const role =
+            item?.role === "bot"
+              ? "bot"
+              : item?.role === "user"
+                ? "user"
+                : null;
+
+          const text =
+            item?.message ??
+            item?.text ??
+            "";
+
+          if(
+            role &&
+            String(text).trim()
+          ){
+
+            addMessage(
+              role,
+              text,
+              false
+            );
+
+          }
+
+        });
+
+        if(updatedMessages.length){
+
+          if(home){
+
+            home.style.display = "none";
+
+          }
+
+          messages.style.display = "block";
+
+          if(quick){
+
+            quick.style.display = "flex";
+
+          }
+
+          messages.scrollTop =
+            messages.scrollHeight;
+
+        }else{
+
+          messages.style.display = "none";
+
+          if(home){
+
+            home.style.display = "block";
+
+          }
+
+          if(quick){
+
+            quick.style.display = "none";
+
+          }
+
+        }
+
+      }catch(error){
+
+        console.warn(
+          "CHAT SYNC ERROR",
+          error
+        );
+
+      }
+
+    }
+  );
+  
+
+  // ===========================================
   // 💡 CONTEXTUAL SUGGESTIONS
   // ===========================================
 
