@@ -577,7 +577,7 @@ const voiceBtn =
 
 function refreshHomeSnapshot(){
 
-    const context =
+        const context =
         typeof window.rbGetConversationContext === "function"
             ? window.rbGetConversationContext()
             : {};
@@ -585,25 +585,38 @@ function refreshHomeSnapshot(){
     const memory =
         window.rbChatMemory || {};
 
+    const analysis =
+        window.lastAnalysisData || {};
+
     const city =
         context.city ??
         context.lastCity ??
-        memory.lastCity;
+        memory.lastCity ??
+        analysis.realCity ??
+        analysis.marketCity ??
+        analysis.city;
 
     const roi =
         context.roi ??
         context.lastROI ??
-        memory.lastROI;
+        memory.lastROI ??
+        analysis.visualROI ??
+        analysis.roi;
 
     const cashflow =
         context.cashflow ??
         context.lastCashflow ??
-        memory.lastCashflow;
+        memory.lastCashflow ??
+        analysis.cashflow ??
+        analysis.net ??
+        analysis.annualProfit;
 
     const risk =
         context.risk ??
         context.lastRisk ??
-        memory.lastRisk;
+        memory.lastRisk ??
+        analysis.risk ??
+        analysis.riskScore;
 
     const metrics =
       document.querySelectorAll(
