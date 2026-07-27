@@ -773,36 +773,58 @@ city
 // 🧠 INVESTMENT SCORE
 // ===========================================
 
+const canonicalInvestmentScore =
+  Number(liveData.investmentScore);
+
+const hasCanonicalInvestmentScore =
+  liveData.investmentScore !== null &&
+  liveData.investmentScore !== undefined &&
+  Number.isFinite(canonicalInvestmentScore);
+
 const investmentScore =
 
-  window.rbGenerateInvestmentScore?.({
+  hasCanonicalInvestmentScore
 
-    roi,
+    ? {
 
-    risk,
+        score:
+          canonicalInvestmentScore,
 
-    occupancy,
+        verdict:
+          liveData.verdict ||
+          advisor?.verdict ||
+          "WAIT"
 
-    mortgagePercent:
-      entities.mortgagePercent ||
+      }
 
-      liveData.mortgagePercent ||
+    : (
 
-      0,
+        window.rbGenerateInvestmentScore?.({
 
-    cashflow:
-      liveData.net ||
+          roi,
 
-      liveData.cashflow ||
+          risk,
 
-      0,
+          occupancy,
 
-    city:
-      cityLabel
+          mortgagePercent:
+            entities.mortgagePercent ||
+            liveData.mortgagePercent ||
+            0,
 
-  }) ||
+          cashflow:
+            liveData.net ||
+            liveData.cashflow ||
+            0,
 
-  null;
+          city:
+            cityLabel
+
+        }) ||
+
+        null
+
+      );
 
 console.log(
   "🧠 INVESTMENT SCORE:",
