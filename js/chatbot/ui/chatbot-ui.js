@@ -589,35 +589,35 @@ function refreshHomeSnapshot(){
         window.lastAnalysisData || {};
 
     const city =
-        context.city ??
-        context.lastCity ??
-        memory.lastCity ??
-        analysis.realCity ??
-        analysis.marketCity ??
-        analysis.city;
+    analysis.realCity ??
+    analysis.marketCity ??
+    analysis.city ??
+    context.city ??
+    context.lastCity ??
+    memory.lastCity;
 
-    const roi =
-        context.roi ??
-        context.lastROI ??
-        memory.lastROI ??
-        analysis.visualROI ??
-        analysis.roi;
+const roi =
+    analysis.realROI ??
+    analysis.safeROI ??
+    context.roi ??
+    context.lastROI ??
+    memory.lastROI;
 
-    const cashflow =
-        context.cashflow ??
-        context.lastCashflow ??
-        memory.lastCashflow ??
-        analysis.cashflow ??
-        analysis.net ??
-        analysis.annualProfit;
+const cashflow =
+    analysis.cashflow ??
+    analysis.net ??
+    analysis.annualProfit ??
+    context.cashflow ??
+    context.lastCashflow ??
+    memory.lastCashflow;
 
-    const risk =
-        context.risk ??
-        context.lastRisk ??
-        memory.lastRisk ??
-        analysis.risk ??
-        analysis.riskScore;
-
+const risk =
+    analysis.risk ??
+    analysis.riskScore ??
+    context.risk ??
+    context.lastRisk ??
+    memory.lastRisk;
+  
         const hasSnapshot =
         Boolean(city) &&
         (
