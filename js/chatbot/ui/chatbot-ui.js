@@ -34,6 +34,29 @@ window.initRBChatbotUI = function(){
       ? window.t(it,en)
       : it;
 
+// ===========================================
+// 🔐 EXECUTIVE SNAPSHOT ACCESS
+// ===========================================
+
+const canSeeFullSnapshot = ()=>{
+
+  const access =
+
+    window.getUserAccess?.() ||
+    window.RB_USER ||
+    {};
+
+  return Boolean(
+
+    access.canSeeFullAnalysis ||
+    access.isInvestor ||
+    access.isPro ||
+    access.isAdmin
+
+  );
+
+};
+
   // ===========================================
   // 🧱 WRAPPER
   // ===========================================
