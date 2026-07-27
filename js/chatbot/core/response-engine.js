@@ -44,6 +44,7 @@ window.rbGenerateResponse = function({
 
 // ===============================================
 // 📄 PDF INTENT NORMALIZATION
+// Preserve the original document request
 // ===============================================
 
 if(
@@ -52,10 +53,15 @@ if(
 
   intent = {
     ...intent,
-    intent: "report_interpretation"
+
+    originalIntent:
+      "pdf_analysis",
+
+    intent:
+      "report_interpretation"
   };
 
-}  
+}
 
 // ===============================================
 // 🧠 CONVERSATION CONTEXT
