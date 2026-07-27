@@ -604,8 +604,14 @@ await addDoc(collection(db,"analyses"),{
   risk:
     data.risk ?? 0,
 
-  occupancy:
+    occupancy:
     data.occupancy ?? 0,
+
+  investmentScore:
+    data.investmentScore ?? 0,
+
+  verdict:
+    data.verdict ?? null,
 
   marketCity:
     safeMarketCity,
