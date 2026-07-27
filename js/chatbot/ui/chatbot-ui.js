@@ -618,10 +618,95 @@ function refreshHomeSnapshot(){
         analysis.risk ??
         analysis.riskScore;
 
+        const hasSnapshot =
+        Boolean(city) &&
+        (
+            Number.isFinite(Number(roi)) ||
+            Number.isFinite(Number(cashflow)) ||
+            Number.isFinite(Number(risk))
+        );
+
+    const homeHeader =
+        document.querySelector(
+            ".rb-ai-home .rb-ai-home-header"
+        );
+
+    if(
+        hasSnapshot &&
+        homeHeader
+    ){
+
+        const emptyState =
+            homeHeader.querySelector(
+                ".rb-ai-empty-state"
+            );
+
+        if(emptyState){
+
+            emptyState.outerHTML = `
+
+                <div class="rb-ai-snapshot">
+
+                    <div class="rb-ai-snapshot-title">
+                        📊 Executive Snapshot
+                    </div>
+
+                    <div class="rb-ai-snapshot-grid">
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                📍 Mercato
+                            </span>
+
+                            <strong>--</strong>
+
+                        </div>
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                📈 ROI
+                            </span>
+
+                            <strong>--</strong>
+
+                        </div>
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                💰 Cashflow
+                            </span>
+
+                            <strong>--</strong>
+
+                        </div>
+
+                        <div class="rb-ai-metric">
+
+                            <span class="rb-ai-metric-label">
+                                ⚠️ Rischio
+                            </span>
+
+                            <strong>--</strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
     const metrics =
-      document.querySelectorAll(
-        ".rb-ai-home .rb-ai-metric strong"
-    );
+        document.querySelectorAll(
+            ".rb-ai-home .rb-ai-metric strong"
+        );
 
     if(metrics.length < 4){
 
