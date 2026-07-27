@@ -1534,17 +1534,41 @@ const monthlyProfit = safe(
     doc.text(`${t("Capitale proprio","Equity")}: ${eur(equity)}`,20,y+60);
     doc.text(`${t("Profitto annuo","Annual Profit")}: ${eur(annualProfit)}`,20,y+70);
 
-    const verdict =
-      roi > 12 ? t("Operazione istituzionale","Institutional grade") :
-      roi > 8 ? t("Investimento solido","Strong investment") :
-      roi > 5 ? t("Ottimizzazione necessaria","Optimization needed") :
-      t("Alto rischio","High risk");
+    const canonicalVerdict =
+  String(
+    fallback.verdict ?? ""
+  ).toUpperCase();
 
-    const verdictColor =
-      roi > 12 ? green :
-      roi > 8 ? blue :
-      roi > 5 ? amber :
-      red;
+const verdict =
+  canonicalVerdict === "BUY"
+    ? t(
+        "Investimento consigliato",
+        "Investment recommended"
+      )
+    : canonicalVerdict === "WAIT"
+      ? t(
+          "Attendere e ottimizzare",
+          "Wait and optimize"
+        )
+      : (
+          canonicalVerdict === "AVOID" ||
+          canonicalVerdict === "NO_BUY"
+        )
+        ? t(
+            "Investimento sconsigliato",
+            "Investment not recommended"
+          )
+        : t(
+            "Valutazione non disponibile",
+            "Assessment unavailable"
+          );
+
+const verdictColor =
+  canonicalVerdict === "BUY"
+    ? green
+    : canonicalVerdict === "WAIT"
+      ? amber
+      : red;
 
     doc.setFillColor(...verdictColor);
     doc.roundedRect(20,y+85,170,18,5,5,"F");
@@ -1721,7 +1745,7 @@ const monthlyProfit = safe(
           score,
 
         verdict:
-          verdict,
+          canonicalVerdict || null,
 
         reportType:
           "executive_pdf",
