@@ -545,26 +545,28 @@ const analysisData = {
 
   // Usa il ROI reale dell’investimento.
   // visualROI rimane disponibile separatamente.
-  roi:
+roi:
 
-    window.lastAnalysisData?.realROI ??
+  window.lastAnalysisData?.visualROI ??
 
-    window.lastAnalysisData?.safeROI ??
+  window.lastAnalysisData?.roi ??
 
-    window.lastAnalysisData?.roi ??
+  window.lastAnalysisData?.safeROI ??
 
-    rememberedAnalysis.realROI ??
+  rememberedAnalysis.roi ??
 
-    rememberedAnalysis.roi ??
+  window.lastAnalysisData?.realROI ??
 
-    (
-      Number(
-        document.getElementById("roi-value")
-          ?.textContent
-          ?.replace("%", "")
-          ?.trim()
-      ) || 0
-    ),
+  rememberedAnalysis.realROI ??
+
+  (
+    Number(
+      document.getElementById("roi-value")
+        ?.textContent
+        ?.replace("%", "")
+        ?.trim()
+    ) || 0
+  ),
 
   // =====================================
   // ⚠️ RISK & OCCUPANCY
