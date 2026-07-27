@@ -435,9 +435,9 @@ if(
     // 💾 SAVE SESSION
     // ===========================================
 
-    sessionStorage.setItem(
-      "rbChatMemory",
-      JSON.stringify(memory)
+    localStorage.setItem(
+    "rbChatMemory",
+    JSON.stringify(memory)
     );
 
     console.log(
@@ -467,14 +467,26 @@ window.rbLoadMemory = function(){
   try{
 
     const saved =
-      sessionStorage.getItem(
-        "rbChatMemory"
-      );
+  localStorage.getItem(
+    "rbChatMemory"
+  ) ||
+  sessionStorage.getItem(
+    "rbChatMemory"
+  );
 
     if(saved){
 
       window.rbChatMemory =
         JSON.parse(saved);
+
+      localStorage.setItem(
+  "rbChatMemory",
+  saved
+);
+
+sessionStorage.removeItem(
+  "rbChatMemory"
+);
 
       console.log(
         "🧠 MEMORY LOADED"
@@ -504,9 +516,13 @@ window.rbClearMemory = function(){
   window.rbChatMemory =
     createEmptyMemory();
 
-  sessionStorage.removeItem(
-    "rbChatMemory"
-  );
+  localStorage.removeItem(
+  "rbChatMemory"
+);
+
+sessionStorage.removeItem(
+  "rbChatMemory"
+);
 
   console.log(
     "🧠 MEMORY CLEARED"
