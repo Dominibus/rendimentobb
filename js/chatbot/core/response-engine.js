@@ -705,7 +705,9 @@ console.log(
 // ===========================================
 
 const canonicalInvestment =
-    window.lastInvestmentScore || {};
+    investmentScore ||
+    window.lastInvestmentScore ||
+    {};
 
 const canonicalVerdict =
     canonicalInvestment.verdict ||
