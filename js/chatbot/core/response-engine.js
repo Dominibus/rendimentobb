@@ -269,6 +269,106 @@ console.log(
 
   };
 
+// ===========================================
+// 🔐 FREE ADVANCED ANALYSIS ACCESS
+// ===========================================
+
+const responseAccess =
+
+  window.getUserAccess?.() ||
+
+  window.RB_USER ||
+
+  {};
+
+const canSeeAdvancedAnalysis = Boolean(
+
+  responseAccess.canSeeFullAnalysis ||
+
+  responseAccess.isInvestor ||
+
+  responseAccess.isPro ||
+
+  responseAccess.isAdmin
+
+);
+
+const advancedAnalysisIntents = [
+
+  "roi_analysis",
+
+  "risk_analysis",
+
+  "cashflow_analysis",
+
+  "investment_strategy",
+
+  "investment_advisor",
+
+  "investment_executive",
+
+  "executive_analysis",
+
+  "improvement_advisor",
+
+  "portfolio_analysis",
+
+  "portfolio_growth"
+
+];
+
+if(
+
+  !canSeeAdvancedAnalysis &&
+
+  advancedAnalysisIntents.includes(
+    intent?.intent
+  )
+
+){
+
+  response.type =
+    "analysis_locked";
+
+  response.confidence =
+    1;
+
+  response.signals.push(
+    "advanced_analysis_locked"
+  );
+
+  response.textIT =
+
+`🔒 L’analisi completa della simulazione è riservata ai piani Investor e PRO.
+
+Puoi continuare a visualizzare l’anteprima disponibile nel simulatore.
+
+Con l’upgrade puoi sbloccare:
+
+• ROI reale
+• cashflow e profitto netto
+• rischio operativo
+• Investment Score e Verdict AI
+• strategia di ottimizzazione personalizzata`;
+
+  response.textEN =
+
+`🔒 The complete simulation analysis is available with Investor and PRO plans.
+
+You can continue viewing the preview available in the simulator.
+
+Upgrade to unlock:
+
+• real ROI
+• cashflow and net profit
+• operational risk
+• Investment Score and AI Verdict
+• personalized optimization strategy`;
+
+  return response;
+
+}
+
   // ===========================================
   // 📊 SAFE DATA
   // ===========================================
