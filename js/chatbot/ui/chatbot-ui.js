@@ -756,26 +756,32 @@ const risk =
             ? String(city).toUpperCase()
             : "--";
 
-    metrics[1].textContent =
-        Number.isFinite(Number(roi))
-            ? Number(roi).toFixed(1) + "%"
-            : "--";
+const fullSnapshotAllowed =
+    canSeeFullSnapshot();
 
-    metrics[2].textContent =
-        Number.isFinite(Number(cashflow))
-            ? "€" +
-              Math.round(Number(cashflow))
-                .toLocaleString(
-                    window.currentLanguage === "en"
-                        ? "en-US"
-                        : "it-IT"
-                )
-            : "--";
+metrics[1].textContent =
+    fullSnapshotAllowed &&
+    Number.isFinite(Number(roi))
+        ? Number(roi).toFixed(1) + "%"
+        : "--";
 
-    metrics[3].textContent =
-        Number.isFinite(Number(risk))
-            ? String(Number(risk))
-            : "--";
+metrics[2].textContent =
+    fullSnapshotAllowed &&
+    Number.isFinite(Number(cashflow))
+        ? "€" +
+          Math.round(Number(cashflow))
+            .toLocaleString(
+                window.currentLanguage === "en"
+                    ? "en-US"
+                    : "it-IT"
+            )
+        : "--";
+
+metrics[3].textContent =
+    fullSnapshotAllowed &&
+    Number.isFinite(Number(risk))
+        ? String(Number(risk))
+        : "--";
 
     const contextLabel =
       document.querySelector(
