@@ -372,14 +372,18 @@ window.buildExecutiveReport = function(data = {}){
             "investment_analysis",
 
         subtype:
-            data.reportType === "executive_pdf"
-                ? "Executive PDF"
-                : "Simulation",
+    data.reportSource === "dashboard_report"
+        ? "Dashboard Report"
+        : data.reportType === "executive_pdf"
+            ? "Executive PDF"
+            : "Simulation",
 
-        source:
-            data.reportType === "executive_pdf"
-                ? "pdf_generator"
-                : "simulator",
+source:
+    data.reportSource === "dashboard_report"
+        ? "dashboard_report"
+        : data.reportType === "executive_pdf"
+            ? "tool_report"
+            : "simulator",
 
         generatedAt:
             new Date().toISOString(),
@@ -427,8 +431,17 @@ window.buildExecutiveReport = function(data = {}){
             data.loanAmount ??
             0,
 
-        analysis:
-            data,
+        analysis: {
+    ...data,
+
+    reportSource:
+        data.reportSource ||
+        (
+            data.reportType === "executive_pdf"
+                ? "tool_report"
+                : "simulator"
+        )
+},
 
         metadata:{
 
