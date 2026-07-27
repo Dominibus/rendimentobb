@@ -755,12 +755,12 @@ newChatBtn.onclick = ()=>{
 
         window.rbChatMemory.messages = [];
 
-        sessionStorage.setItem(
-            "rbChatMemory",
-            JSON.stringify(
-                window.rbChatMemory
-            )
-        );
+        localStorage.setItem(
+  "rbChatMemory",
+  JSON.stringify(
+    window.rbChatMemory
+  )
+);
 
     }
 
