@@ -1571,12 +1571,12 @@ const monthlyProfit = safe(
     }catch(e){}
 
     const score = Number(
-  fallback.score ??
   fallback.investmentScore ??
+  fallback.score ??
   window.lastInvestmentScore?.score ??
   0
 );
-
+    
     doc.setFontSize(11);
     doc.text(`${t("Punteggio","Score")}: ${score}/100`,20,115);
     doc.text(`${t("Break-even","Break-even")}: ${breakEven.toFixed(1)} ${t("anni","years")}`,20,125);
