@@ -1570,7 +1570,12 @@ const monthlyProfit = safe(
       }
     }catch(e){}
 
-    const score = Math.min(100, Math.max(0, roi*5 - risk));
+    const score = Number(
+  fallback.score ??
+  fallback.investmentScore ??
+  window.lastInvestmentScore?.score ??
+  0
+);
 
     doc.setFontSize(11);
     doc.text(`${t("Punteggio","Score")}: ${score}/100`,20,115);
