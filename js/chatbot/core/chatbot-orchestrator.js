@@ -808,10 +808,11 @@ const canonicalAnalysis = {
     ...analysisData,
 
     roi: Number(
-        analysisData.realROI ??
-        analysisData.roi ??
-        0
-    ),
+    analysisData.roi ??
+    analysisData.visualROI ??
+    analysisData.realROI ??
+    0
+),
 
     realROI: Number(
         analysisData.realROI ??
