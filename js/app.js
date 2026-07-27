@@ -1695,17 +1695,26 @@ const score =
   }
 
   // ================= KPI BOX =================
-  let grade = "C";
-  let recommendation = t("Alto rischio","High risk");
+let grade = "C";
+let recommendation =
+  t("Operazione non consigliata", "Investment not recommended");
 
-  if(roi > 12){
-    grade = "A";
-    recommendation = t("Investimento sicuro","Safe investment");
-  }
-  else if(roi > 6){
-    grade = "B";
-    recommendation = t("Rendimento moderato","Moderate return");
-  }
+if(score >= 75){
+
+  grade = "A";
+
+  recommendation =
+    t("Acquisto consigliato", "Buy recommended");
+
+}
+else if(score > 40){
+
+  grade = "B";
+
+  recommendation =
+    t("Attendere e ottimizzare", "Wait and optimize");
+
+}
 
   let gradeColor = "#ef4444";
   if(grade === "A") gradeColor = "#10b981";
