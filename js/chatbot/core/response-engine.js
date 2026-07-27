@@ -651,13 +651,17 @@ console.log(
 const roi =
   Number(
 
-    liveData.realROI ??
+    liveData.visualROI ??
 
     liveData.roi ??
+
+    liveData.safeROI ??
 
     window.rbChatbotLive?.roi ??
 
     window.rbChatbotData?.roi ??
+
+    liveData.realROI ??
 
     0
 
