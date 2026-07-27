@@ -789,10 +789,16 @@ const analyses = querySnapshot.docs.map(doc => {
       data.net || 0,
 
     risk:
-      data.risk || 0,
+  data.risk || 0,
 
-    city:
-      realCity,
+investmentScore:
+  data.investmentScore ?? 0,
+
+verdict:
+  data.verdict ?? null,
+
+city:
+  realCity,
 
     marketCity,
 
