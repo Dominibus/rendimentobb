@@ -220,10 +220,13 @@ HOME
                             <strong>
 
                                 ${
-                                    window.rbChatMemory.lastROI
-                                    ? window.rbChatMemory.lastROI.toFixed(1) + "%"
-                                    : "--"
-                                }
+    canSeeFullSnapshot() &&
+    Number.isFinite(
+        Number(window.rbChatMemory.lastROI)
+    )
+        ? Number(window.rbChatMemory.lastROI).toFixed(1) + "%"
+        : "--"
+}
 
                             </strong>
 
@@ -238,10 +241,16 @@ HOME
                             <strong>
 
                                 ${
-                                    window.rbChatMemory.lastCashflow
-                                    ? "€" + Math.round(window.rbChatMemory.lastCashflow).toLocaleString()
-                                    : "--"
-                                }
+    canSeeFullSnapshot() &&
+    Number.isFinite(
+        Number(window.rbChatMemory.lastCashflow)
+    )
+        ? "€" +
+          Math.round(
+              Number(window.rbChatMemory.lastCashflow)
+          ).toLocaleString()
+        : "--"
+}
 
                             </strong>
 
@@ -256,8 +265,13 @@ HOME
                             <strong>
 
                                 ${
-                                    window.rbChatMemory.lastRisk ?? "--"
-                                }
+    canSeeFullSnapshot() &&
+    Number.isFinite(
+        Number(window.rbChatMemory.lastRisk)
+    )
+        ? Number(window.rbChatMemory.lastRisk)
+        : "--"
+}
 
                             </strong>
 
