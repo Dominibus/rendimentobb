@@ -1631,12 +1631,46 @@ function renderInvestmentScore(roi, riskScore){
     return;
   }
 
-  // ================= SCORE CALCOLO =================
-  let score = Math.max(0, Math.min(100,
-    (roi * 2) - riskScore
-  ));
+// ================= SCORE CANONICO =================
 
-  score = Math.round(score);
+const canonicalScoreData =
+  typeof window.rbGenerateInvestmentScore === "function"
+    ? window.rbGenerateInvestmentScore({
+        roi: Number(roi || 0),
+
+        risk: Number(riskScore || 0),
+
+        occupancy: Number(
+          window.lastAnalysisData?.occupancy ??
+          window.rbChatbotData?.occupancy ??
+          0
+        ),
+
+        mortgagePercent: Number(
+          window.lastAnalysisData?.mortgagePercent ??
+          0
+        ),
+
+        cashflow: Number(
+          window.lastAnalysisData?.net ??
+          window.lastAnalysisData?.cashflow ??
+          0
+        ),
+
+        city:
+          window.lastAnalysisData?.marketCity ??
+          window.lastAnalysisData?.city ??
+          window.currentCity ??
+          null
+      })
+    : null;
+
+const score =
+  Number(
+    canonicalScoreData?.score ??
+    window.lastInvestmentScore?.score ??
+    0
+  );
 
   // ================= CERCHIO =================
   if(circle){
