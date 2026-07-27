@@ -160,13 +160,15 @@ window.rbNormalizeExecutiveMemory = function(memory = {}){
       0,
 
     lastCity:
-      activeMemory.lastCity ??
-      canonicalAnalysis.city ??
-      canonicalAnalysis.marketCity ??
-      canonicalAnalysis.realCity ??
-      memory.lastCity ??
-      memory.city ??
-      "roma"
+  canonicalAnalysis.realCity ??
+  canonicalAnalysis.marketCity ??
+  canonicalAnalysis.city ??
+  memory.realCity ??
+  memory.marketCity ??
+  memory.city ??
+  memory.lastCity ??
+  activeMemory.lastCity ??
+  "roma"
 
   };
 
