@@ -7177,7 +7177,10 @@ equity:
     confidence,
 
     reportType:
-      "executive_pdf"
+  "executive_pdf",
+
+reportSource:
+  "tool_report"
 
   });
 
