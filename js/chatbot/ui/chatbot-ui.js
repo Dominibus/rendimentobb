@@ -747,6 +747,23 @@ closeBtn.onclick = ()=>{
 
 newChatBtn.onclick = ()=>{
 
+    // =======================================
+    // 🧹 CLEAR SAVED CONVERSATION
+    // =======================================
+
+    if(window.rbChatMemory){
+
+        window.rbChatMemory.messages = [];
+
+        sessionStorage.setItem(
+            "rbChatMemory",
+            JSON.stringify(
+                window.rbChatMemory
+            )
+        );
+
+    }
+
     refreshHomeSnapshot();
 
     const home =
