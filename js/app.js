@@ -2668,9 +2668,26 @@ function runPostAnalysis(result, context){
       );
 
     const mortgagePercent =
-      Number(
-        result?.mortgagePercent ??
-        0
+  Number(result?.mortgagePercent) > 0
+
+    ? Number(result.mortgagePercent)
+
+    : (
+        propertyPrice > 0
+
+          ? Math.round(
+              (
+                Number(
+                  loanAmount ||
+                  mortgage ||
+                  0
+                )
+                /
+                propertyPrice
+              ) * 100
+            )
+
+          : 0
       );
 
     const market =
