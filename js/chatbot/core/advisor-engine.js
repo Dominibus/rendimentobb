@@ -352,18 +352,6 @@ if(
 
 }
 
-  // =====================================
-  // CONFIDENCE
-  // =====================================
-
-  const confidence =
-
-    Math.min(
-      99,
-      60 +
-      Math.round(score / 3)
-    );
-
 // =====================================
 // 📊 CANONICAL INVESTMENT SCORE
 // Public score from deterministic Score Engine
@@ -401,6 +389,19 @@ const investmentScore =
     canonicalScoreData?.score ??
     advisorScore
   );
+
+// =====================================
+// 🎯 CANONICAL CONFIDENCE
+// Based on public Investment Score
+// =====================================
+
+const confidence =
+
+  Math.min(
+    99,
+    60 +
+    Math.round(investmentScore / 3)
+  );  
 
 // =====================================
 // 🎯 CANONICAL VERDICT
