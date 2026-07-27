@@ -402,6 +402,33 @@ const investmentScore =
     advisorScore
   );
 
+// =====================================
+// 🎯 CANONICAL VERDICT
+// Verdict based on public Investment Score
+// =====================================
+
+if(
+  investmentScore >= 75 &&
+  cashflow > 0
+){
+
+  verdict = "BUY";
+
+}
+else if(
+  investmentScore <= 40 ||
+  cashflow < 0
+){
+
+  verdict = "AVOID";
+
+}
+else{
+
+  verdict = "WAIT";
+
+}
+
   // =====================================
   // RECOMMENDATIONS
   // =====================================
