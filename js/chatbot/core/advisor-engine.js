@@ -354,42 +354,22 @@ if(
 
 // =====================================
 // 📊 CANONICAL INVESTMENT SCORE
-// Public score from deterministic Score Engine
+// Reuse canonical score already produced by analysis
 // =====================================
 
 const advisorScore =
   score;
 
-const canonicalScoreData =
-
-  typeof window.rbGenerateInvestmentScore ===
-  "function"
-
-    ? window.rbGenerateInvestmentScore({
-
-        roi,
-
-        risk,
-
-        occupancy,
-
-        mortgagePercent,
-
-        cashflow,
-
-        city
-
-      })
-
-    : null;
-
-const investmentScore =
-
+const existingCanonicalScore =
   Number(
-    canonicalScoreData?.score ??
-    advisorScore
+    window.lastAnalysisData?.investmentScore ??
+    window.lastInvestmentScore?.score
   );
 
+const investmentScore =
+  Number.isFinite(existingCanonicalScore)
+    ? existingCanonicalScore
+    : advisorScore;
 // =====================================
 // 🎯 CANONICAL CONFIDENCE
 // Based on public Investment Score
