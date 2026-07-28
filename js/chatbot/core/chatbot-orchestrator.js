@@ -1188,6 +1188,7 @@ const shouldRunAdvisor =
     "roi_analysis",
     "risk_analysis",
     "cashflow_analysis",
+    "mortgage_analysis",
     "report_interpretation"
   ].includes(
     intent.intent
