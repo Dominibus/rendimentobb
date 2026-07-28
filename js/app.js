@@ -3150,75 +3150,28 @@ if(typeof window.buildExecutiveReport === "function"){
     }
 
 // ================= INVESTMENT SCORE =================
+// Lo score è già stato calcolato durante la simulazione.
+// runPostAnalysis NON deve rigenerarlo: usa la Single Source of Truth.
 
-console.log("🧪 SCORE FUNCTIONS",{
+const existingInvestmentScore = Number(
+  window.lastAnalysisData?.investmentScore ??
+  result?.investmentScore ??
+  window.lastInvestmentScore ??
+  0
+);
 
-  rbGenerateInvestmentScore:
-    window.rbGenerateInvestmentScore,
-
-  updateInvestmentScore:
-    window.updateInvestmentScore
-
-});
-
-    console.log(
-  "🧪 WINDOW KEYS",
-  Object.keys(window)
-    .filter(k => k.toLowerCase().includes("score"))
+console.log(
+  "🧠 SCORE SSOT:",
+  existingInvestmentScore
 );
 
 if(
-
-  typeof window.rbGenerateInvestmentScore === "function" &&
+  Number.isFinite(existingInvestmentScore) &&
+  existingInvestmentScore > 0 &&
   typeof window.updateInvestmentScore === "function"
-
 ){
-
-  const scoreData =
-    window.rbGenerateInvestmentScore({
-
-      roi: Number(
-  result?.realROI ??
-  window.realROI ??
-  finalROI ??
-  0
-),
-
-      risk: riskScore,
-
-      occupancy: occupancyRate,
-
-mortgagePercent:
-
-  Number(
-    window.lastAnalysisData?.mortgagePercent ??
-    mortgagePercent ??
-    0
-  ),
-
-      cashflow:
-
-        Number(
-          net ||
-          0
-        ),
-
-      city: market
-
-    });
-
-  console.log(
-    "🧠 SCORE ENGINE:",
-    scoreData
-  );
-
-  window.updateInvestmentScore(
-    scoreData.score
-  );
-
+  window.updateInvestmentScore(existingInvestmentScore);
 }
-
-    if(finalROI <= 0){
       console.warn("⚠️ Low ROI → UI still rendered");
     }
 
