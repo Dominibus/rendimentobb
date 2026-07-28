@@ -2827,10 +2827,7 @@ const canonicalSaveScoreData =
     ? window.rbGenerateInvestmentScore({
 
         roi: Number(
-          result?.realROI ??
-          window.realROI ??
-          finalROI ??
-          0
+          finalROI ?? 0
         ),
 
         risk: Number(
