@@ -3172,8 +3172,10 @@ if(
 ){
   window.updateInvestmentScore(existingInvestmentScore);
 }
-      console.warn("⚠️ Low ROI → UI still rendered");
-    }
+
+if(finalROI <= 0){
+  console.warn("⚠️ Low ROI → UI still rendered");
+}
 
     // =====================================
     // 🔓 HARD UNLOCK PRO
