@@ -2543,26 +2543,290 @@ doc.text(
     addFooter();
 
     // ================= PAGE 6 =================
-    doc.addPage();
+doc.addPage();
 
-    doc.setFontSize(14);
-    doc.setTextColor(...dark);
-    doc.text(t("Disclaimer","Disclaimer"),20,20);
+// ================= FINAL PAGE HEADER =================
 
-    doc.setFontSize(9);
-    doc.setTextColor(120,120,120);
+doc.setFillColor(...dark);
+doc.rect(0,0,210,34,"F");
 
-    doc.text(
-      t(
-        "Il presente documento è una simulazione basata su dati stimati. Non costituisce consulenza finanziaria. Ogni decisione di investimento deve essere verificata autonomamente.",
-        "This document is a simulation based on estimated data. It does not constitute financial advice. Investment decisions must be independently validated."
-      ),
-      20,
-      40,
-      {maxWidth:170}
-    );
+doc.setFillColor(...green);
+doc.rect(0,34,210,1.5,"F");
 
-    addFooter();
+doc.setFont("helvetica","bold");
+doc.setFontSize(16);
+doc.setTextColor(255,255,255);
+
+doc.text(
+  "RendimentoBB",
+  20,
+  15
+);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(203,213,225);
+
+doc.text(
+  "INVESTMENT INTELLIGENCE REPORT",
+  20,
+  22
+);
+
+// VERIFIED BADGE
+doc.setFillColor(6,78,59);
+
+doc.roundedRect(
+  132,
+  10,
+  58,
+  10,
+  3,
+  3,
+  "F"
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(6.5);
+doc.setTextColor(209,250,229);
+
+doc.text(
+  "AI VERIFIED • INSTITUTIONAL",
+  161,
+  16.3,
+  { align:"center" }
+);
+
+// ================= DISCLAIMER TITLE =================
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(18);
+doc.setTextColor(...dark);
+
+doc.text(
+  t(
+    "Nota metodologica",
+    "Methodology note"
+  ),
+  20,
+  52
+);
+
+// ================= DISCLAIMER CARD =================
+
+doc.setFillColor(248,250,252);
+doc.setDrawColor(226,232,240);
+
+doc.roundedRect(
+  20,
+  62,
+  170,
+  48,
+  4,
+  4,
+  "FD"
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(8);
+doc.setTextColor(...dark);
+
+doc.text(
+  t(
+    "INFORMAZIONI SUL REPORT",
+    "ABOUT THIS REPORT"
+  ),
+  28,
+  76
+);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(100,116,139);
+
+const disclaimerText = t(
+  "Il presente documento è una simulazione basata sui dati disponibili e sulle ipotesi utilizzate nell'analisi. I risultati rappresentano una valutazione indicativa dell'investimento e possono variare al modificarsi delle condizioni economiche, finanziarie e operative.",
+  "This document is a simulation based on the available data and assumptions used in the analysis. Results represent an indicative investment assessment and may vary as economic, financial and operating conditions change."
+);
+
+const disclaimerLines =
+  doc.splitTextToSize(
+    disclaimerText,
+    154
+  );
+
+doc.text(
+  disclaimerLines,
+  28,
+  86
+);
+
+// ================= REPORT DATA =================
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(8);
+doc.setTextColor(...dark);
+
+doc.text(
+  t(
+    "DATI PRINCIPALI DELLA SIMULAZIONE",
+    "KEY SIMULATION DATA"
+  ),
+  20,
+  130
+);
+
+const finalCardW = 52;
+const finalCardH = 25;
+const finalGap = 7;
+const finalY = 138;
+
+const drawFinalKPI = (
+  x,
+  label,
+  value
+)=>{
+
+  doc.setFillColor(248,250,252);
+  doc.setDrawColor(226,232,240);
+
+  doc.roundedRect(
+    x,
+    finalY,
+    finalCardW,
+    finalCardH,
+    3,
+    3,
+    "FD"
+  );
+
+  doc.setFillColor(...green);
+
+  doc.roundedRect(
+    x,
+    finalY,
+    finalCardW,
+    1.5,
+    1,
+    1,
+    "F"
+  );
+
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(6.5);
+  doc.setTextColor(100,116,139);
+
+  doc.text(
+    label,
+    x + 5,
+    finalY + 8
+  );
+
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...dark);
+
+  doc.text(
+    value,
+    x + 5,
+    finalY + 18
+  );
+
+};
+
+drawFinalKPI(
+  20,
+  t("ROI PROGETTO","PROJECT ROI"),
+  `${roi.toFixed(1)}%`
+);
+
+drawFinalKPI(
+  20 + finalCardW + finalGap,
+  t("RISCHIO","RISK"),
+  `${riskScore}/100`
+);
+
+drawFinalKPI(
+  20 + (finalCardW + finalGap) * 2,
+  t("PUNTEGGIO","SCORE"),
+  `${score}/100`
+);
+
+// ================= LEGAL DISCLAIMER =================
+
+doc.setFillColor(255,251,235);
+doc.setDrawColor(253,230,138);
+
+doc.roundedRect(
+  20,
+  178,
+  170,
+  40,
+  4,
+  4,
+  "FD"
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(8);
+doc.setTextColor(146,64,14);
+
+doc.text(
+  t(
+    "AVVERTENZA",
+    "NOTICE"
+  ),
+  28,
+  191
+);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(120,113,108);
+
+const legalText = t(
+  "Il report non costituisce consulenza finanziaria, bancaria, fiscale o legale né una garanzia di rendimento. Prima di assumere decisioni di investimento è opportuno verificare autonomamente i dati e, quando necessario, rivolgersi a professionisti qualificati.",
+  "This report does not constitute financial, banking, tax or legal advice, nor does it guarantee investment returns. Before making investment decisions, data should be independently verified and, where appropriate, qualified professionals should be consulted."
+);
+
+const legalLines =
+  doc.splitTextToSize(
+    legalText,
+    154
+  );
+
+doc.text(
+  legalLines,
+  28,
+  201
+);
+
+// ================= CLOSING =================
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(11);
+doc.setTextColor(...dark);
+
+doc.text(
+  "RendimentoBB",
+  20,
+  240
+);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t(
+    "Investment Intelligence • Analisi dati • Supporto decisionale",
+    "Investment Intelligence • Data Analysis • Decision Support"
+  ),
+  20,
+  248
+);
+
+addFooter();
 
     // ================= REGISTER DASHBOARD REPORT =================
     if(
