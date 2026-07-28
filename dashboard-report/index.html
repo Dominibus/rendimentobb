@@ -2387,17 +2387,158 @@ doc.text(
     doc.text(t("Confronto mercato","Market comparison"),20,20);
 
     const marketROI = 8.4;
-    const diff = roi - marketROI;
+const diff = roi - marketROI;
 
-    doc.setFontSize(11);
-    doc.text(`${t("ROI progetto","Project ROI")}: ${roi.toFixed(1)}%`,20,40);
-    doc.text(`${t("ROI medio mercato","Market ROI")}: ${marketROI}%`,20,50);
+const comparisonColor =
+  diff > 0
+    ? green
+    : diff < 0
+      ? red
+      : amber;
 
-    doc.setTextColor(...(diff > 0 ? green : red));
-    doc.text(`${diff > 0 ? "+" : ""}${diff.toFixed(1)}%`,20,70);
+const comparisonLabel =
+  diff > 0
+    ? t(
+        "SOPRA IL BENCHMARK",
+        "ABOVE BENCHMARK"
+      )
+    : diff < 0
+      ? t(
+          "SOTTO IL BENCHMARK",
+          "BELOW BENCHMARK"
+        )
+      : t(
+          "IN LINEA CON IL BENCHMARK",
+          "IN LINE WITH BENCHMARK"
+        );
 
-    doc.setTextColor(120,120,120);
-    doc.text(t("Confronto rispetto benchmark","Outperformance vs benchmark"),20,85);
+// ================= MARKET COMPARISON CARD =================
+
+doc.setFillColor(248,250,252);
+doc.setDrawColor(226,232,240);
+
+doc.roundedRect(
+  20,
+  32,
+  170,
+  48,
+  4,
+  4,
+  "FD"
+);
+
+// PROJECT ROI LABEL
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t("ROI PROGETTO","PROJECT ROI"),
+  28,
+  44
+);
+
+// PROJECT ROI VALUE
+doc.setFont("helvetica","bold");
+doc.setFontSize(24);
+doc.setTextColor(...green);
+
+doc.text(
+  `${roi.toFixed(1)}%`,
+  28,
+  63
+);
+
+// DIVIDER
+doc.setDrawColor(226,232,240);
+
+doc.line(
+  105,
+  40,
+  105,
+  70
+);
+
+// MARKET ROI LABEL
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t("ROI MEDIO MERCATO","MARKET ROI"),
+  115,
+  44
+);
+
+// MARKET ROI VALUE
+doc.setFont("helvetica","bold");
+doc.setFontSize(24);
+doc.setTextColor(...dark);
+
+doc.text(
+  `${marketROI.toFixed(1)}%`,
+  115,
+  63
+);
+
+// ================= PERFORMANCE GAP =================
+
+doc.setFillColor(...comparisonColor);
+
+doc.roundedRect(
+  20,
+  92,
+  170,
+  24,
+  4,
+  4,
+  "F"
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(16);
+doc.setTextColor(255,255,255);
+
+doc.text(
+  `${diff > 0 ? "+" : ""}${diff.toFixed(1)}%`,
+  28,
+  107
+);
+
+doc.setFontSize(8);
+
+doc.text(
+  comparisonLabel,
+  182,
+  106,
+  { align:"right" }
+);
+
+// ================= EXPLANATION =================
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  diff > 0
+    ? t(
+        "Il rendimento del progetto supera il benchmark di mercato utilizzato nel report.",
+        "The project return exceeds the market benchmark used in this report."
+      )
+    : diff < 0
+      ? t(
+          "Il rendimento del progetto è inferiore al benchmark di mercato utilizzato nel report.",
+          "The project return is below the market benchmark used in this report."
+        )
+      : t(
+          "Il rendimento del progetto è allineato al benchmark di mercato utilizzato nel report.",
+          "The project return is aligned with the market benchmark used in this report."
+        ),
+  20,
+  130,
+  { maxWidth:170 }
+);
 
     addFooter();
 
