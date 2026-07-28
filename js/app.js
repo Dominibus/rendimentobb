@@ -6889,12 +6889,12 @@ doc.setFontSize(12);
 doc.setTextColor(...dark);
 
 doc.text(
-T(
-"Punti di forza",
-"Executive Strengths"
-),
-20,
-y
+  T(
+    "Punti di forza",
+    "Executive Strengths"
+  ),
+  20,
+  y
 );
 
 y += 10;
@@ -6904,90 +6904,90 @@ const insights = [];
 // ROI
 if (roi >= marketROI + 5) {
 
-    insights.push(
-        T(
-            "📈 Il rendimento stimato è nettamente superiore alla media del mercato e rappresenta un investimento altamente competitivo.",
-            "📈 Estimated returns are significantly above market averages and represent a highly competitive investment."
-        )
-    );
+  insights.push(
+    T(
+      "Il rendimento stimato è nettamente superiore alla media del mercato e rappresenta un investimento altamente competitivo.",
+      "Estimated returns are significantly above market averages and represent a highly competitive investment."
+    )
+  );
 
 } else if (roi >= marketROI) {
 
-    insights.push(
-        T(
-            "📈 Il ROI è superiore al benchmark della città e rappresenta un investimento competitivo.",
-            "📈 ROI is above the city's benchmark and represents a competitive investment."
-        )
-    );
+  insights.push(
+    T(
+      "Il ROI è superiore al benchmark della città e rappresenta un investimento competitivo.",
+      "ROI is above the city's benchmark and represents a competitive investment."
+    )
+  );
 
 } else {
 
-    insights.push(
-        T(
-            "📈 Il rendimento risulta inferiore al benchmark della città e merita ulteriori valutazioni.",
-            "📈 Returns are below the city's benchmark and deserve further evaluation."
-        )
-    );
+  insights.push(
+    T(
+      "Il rendimento risulta inferiore al benchmark della città e merita ulteriori valutazioni.",
+      "Returns are below the city's benchmark and deserve further evaluation."
+    )
+  );
 
 }
 
 // Cashflow
 if (profit >= 1500) {
 
-    insights.push(
-        T(
-            "💰 Il cashflow mensile offre un'elevata capacità di generare liquidità.",
-            "💰 Monthly cashflow provides excellent liquidity generation."
-        )
-    );
+  insights.push(
+    T(
+      "Il cashflow mensile offre un'elevata capacità di generare liquidità.",
+      "Monthly cashflow provides excellent liquidity generation."
+    )
+  );
 
 } else if (profit > 0) {
 
-    insights.push(
-        T(
-            "💰 Il cashflow operativo rimane positivo e sostenibile.",
-            "💰 Operating cashflow remains positive and sustainable."
-        )
-    );
+  insights.push(
+    T(
+      "Il cashflow operativo rimane positivo e sostenibile.",
+      "Operating cashflow remains positive and sustainable."
+    )
+  );
 
 } else {
 
-    insights.push(
-        T(
-            "⚠️ Il cashflow risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
-            "⚠️ Cashflow is negative and may compromise investment sustainability."
-        )
-    );
+  insights.push(
+    T(
+      "Il cashflow risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
+      "Cashflow is negative and may compromise investment sustainability."
+    )
+  );
 
 }
 
 // Risk
 if (riskScore <= 30) {
 
-    insights.push(
-        T(
-            "🛡️ Il livello di rischio è contenuto rispetto ai parametri analizzati.",
-            "🛡️ Risk exposure remains low compared to analysed metrics."
-        )
-    );
+  insights.push(
+    T(
+      "Il livello di rischio è contenuto rispetto ai parametri analizzati.",
+      "Risk exposure remains low compared to analysed metrics."
+    )
+  );
 
 } else if (riskScore <= 60) {
 
-    insights.push(
-        T(
-            "⚠️ Il rischio è moderato e richiede monitoraggio operativo.",
-            "⚠️ Risk is moderate and requires operational monitoring."
-        )
-    );
+  insights.push(
+    T(
+      "Il rischio è moderato e richiede monitoraggio operativo.",
+      "Risk is moderate and requires operational monitoring."
+    )
+  );
 
 } else {
 
-    insights.push(
-        T(
-            "🚨 Il rischio operativo è elevato e potrebbe ridurre la stabilità del rendimento.",
-            "🚨 Operational risk is high and may reduce investment stability."
-        )
-    );
+  insights.push(
+    T(
+      "Il rischio operativo è elevato e potrebbe ridurre la stabilità del rendimento.",
+      "Operational risk is high and may reduce investment stability."
+    )
+  );
 
 }
 
@@ -6996,16 +6996,16 @@ doc.setTextColor(...gray);
 
 insights.forEach(item => {
 
-    doc.text(
-        "• " + item,
-        25,
-        y,
-        {
-            maxWidth: 155
-        }
-    );
+  doc.text(
+    "• " + item,
+    25,
+    y,
+    {
+      maxWidth: 155
+    }
+  );
 
-    y += 8;
+  y += 8;
 
 });
 
@@ -7017,12 +7017,12 @@ doc.setFontSize(12);
 doc.setTextColor(...dark);
 
 doc.text(
-T(
-"Prossimi passi",
-"Recommended Next Steps"
-),
-20,
-y
+  T(
+    "Prossimi passi",
+    "Recommended Next Steps"
+  ),
+  20,
+  y
 );
 
 y += 10;
@@ -7032,113 +7032,99 @@ const nextSteps = [];
 // ROI
 if (roi < 20) {
 
-    nextSteps.push(
-
-        T(
-            "Valutare una riduzione del prezzo di acquisto o un aumento dei ricavi previsti.",
-            "Consider negotiating a lower purchase price or increasing projected revenue."
-        )
-
-    );
+  nextSteps.push(
+    T(
+      "Valutare una riduzione del prezzo di acquisto o un aumento dei ricavi previsti.",
+      "Consider negotiating a lower purchase price or increasing projected revenue."
+    )
+  );
 
 }
 
 // Occupancy
 if (occupancy < 65) {
 
-    nextSteps.push(
-
-        T(
-            "Incrementare il tasso di occupazione attraverso una strategia di pricing più efficace.",
-            "Increase occupancy through a more effective pricing strategy."
-        )
-
-    );
+  nextSteps.push(
+    T(
+      "Incrementare il tasso di occupazione attraverso una strategia di pricing più efficace.",
+      "Increase occupancy through a more effective pricing strategy."
+    )
+  );
 
 }
 
 // Cashflow
 if (profit <= 0) {
 
-    nextSteps.push(
-
-        T(
-            "Rivedere la struttura dei costi e del finanziamento per ottenere un cashflow positivo.",
-            "Review operating costs and financing structure to achieve positive cashflow."
-        )
-
-    );
+  nextSteps.push(
+    T(
+      "Rivedere la struttura dei costi e del finanziamento per ottenere un cashflow positivo.",
+      "Review operating costs and financing structure to achieve positive cashflow."
+    )
+  );
 
 }
 
 // Risk
 if (riskScore > 50) {
 
-    nextSteps.push(
-
-        T(
-            "Ridurre il livello di rischio migliorando leva finanziaria e margine operativo.",
-            "Reduce investment risk by improving leverage and operating margins."
-        )
-
-    );
+  nextSteps.push(
+    T(
+      "Ridurre il livello di rischio migliorando leva finanziaria e margine operativo.",
+      "Reduce investment risk by improving leverage and operating margins."
+    )
+  );
 
 }
 
 // Nessuna criticità rilevante
 if (nextSteps.length === 0) {
 
-    nextSteps.push(
-
-        T(
-            "L'investimento presenta parametri solidi: monitorare periodicamente i risultati operativi.",
-            "The investment shows solid metrics: periodically monitor operating performance."
-        )
-
-    );
+  nextSteps.push(
+    T(
+      "L'investimento presenta parametri solidi: monitorare periodicamente i risultati operativi.",
+      "The investment shows solid metrics: periodically monitor operating performance."
+    )
+  );
 
 }
 
 doc.setFontSize(9);
 doc.setTextColor(...gray);
 
-nextSteps.forEach(step=>{
+nextSteps.forEach(step => {
 
-doc.text(
-"• " + step,
-25,
-y,
-{
-maxWidth:155
-}
-);
+  doc.text(
+    "• " + step,
+    25,
+    y,
+    {
+      maxWidth: 155
+    }
+  );
 
-y += 8;
+  y += 8;
 
 });
 
 y += 10;
 
+// ================= REPORT SIGNATURE =================
+
 doc.setFontSize(8);
 doc.setTextColor(...gray);
 
 doc.text(
-"T",
-20,
-y
-);
-
-doc.text(
-T(
-"Generated by RendimentoBB AI Executive Engine • 2026",
-"Generated by RendimentoBB AI Executive Engine • 2026"
-),
-30,
-y
+  T(
+    "Generato da RendimentoBB AI Executive Engine • 2026",
+    "Generated by RendimentoBB AI Executive Engine • 2026"
+  ),
+  20,
+  y
 );
 
 footer();
-
+  
 // =====================================
 // 🧠 REGISTER EXECUTIVE REPORT
 // =====================================
