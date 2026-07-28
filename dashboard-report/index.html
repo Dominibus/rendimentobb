@@ -1819,9 +1819,20 @@ const verdictColor =
     doc.text(`ROE: ${roe.toFixed(1)}%`,20,85);
 
     const decision =
-      dscr > 1.5 ? t("Approvato","Approved") :
-      dscr > 1.2 ? t("Da valutare","Review") :
-      t("Non approvato","Rejected");
+  dscr > 1.5
+    ? t(
+        "Copertura del debito solida",
+        "Strong debt coverage"
+      )
+    : dscr > 1.2
+      ? t(
+          "Copertura del debito da valutare",
+          "Debt coverage requires review"
+        )
+      : t(
+          "Copertura del debito insufficiente",
+          "Insufficient debt coverage"
+        );
 
     doc.setTextColor(...(dscr > 1.2 ? green : red));
     doc.text(decision,20,100);
