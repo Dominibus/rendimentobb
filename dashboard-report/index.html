@@ -1752,21 +1752,123 @@ doc.text(
 );
 
     // ================= PAGE 1 =================
-    let y = 45;
+let y = 45;
 
-    doc.setTextColor(...dark);
-    doc.setFontSize(18);
-    doc.text(t("Executive Summary","Executive Summary"),20,y);
+// ================= EXECUTIVE TITLE =================
+doc.setTextColor(...dark);
+doc.setFont("helvetica","bold");
+doc.setFontSize(18);
 
-    doc.setFontSize(38);
-    doc.setTextColor(...green);
-    doc.text(roi.toFixed(1)+"%",20,y+20);
+doc.text(
+  t("Executive Summary","Executive Summary"),
+  20,
+  y
+);
 
-    doc.setTextColor(...dark);
-    doc.setFontSize(11);
+// ================= EXECUTIVE CARD =================
+doc.setFillColor(248,250,252);
+doc.roundedRect(
+  20,
+  y + 8,
+  170,
+  38,
+  4,
+  4,
+  "F"
+);
 
-    doc.text(`${t("Cliente","Client")}: ${clientName}`,120,y);
-    doc.text(`${t("Località","Location")}: ${city}`,120,y+8);
+doc.setDrawColor(226,232,240);
+doc.roundedRect(
+  20,
+  y + 8,
+  170,
+  38,
+  4,
+  4,
+  "S"
+);
+
+// LEFT — ROI
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t(
+    "ROI PROGETTO",
+    "PROJECT ROI"
+  ),
+  28,
+  y + 19
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(30);
+doc.setTextColor(...green);
+
+doc.text(
+  roi.toFixed(1) + "%",
+  28,
+  y + 36
+);
+
+// DIVIDER
+doc.setDrawColor(226,232,240);
+
+doc.line(
+  105,
+  y + 15,
+  105,
+  y + 39
+);
+
+// RIGHT — CLIENT
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t(
+    "CLIENTE",
+    "CLIENT"
+  ),
+  115,
+  y + 19
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(10);
+doc.setTextColor(...dark);
+
+doc.text(
+  clientName,
+  115,
+  y + 26
+);
+
+// RIGHT — LOCATION
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t(
+    "LOCALITÀ",
+    "LOCATION"
+  ),
+  115,
+  y + 34
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(10);
+doc.setTextColor(...dark);
+
+doc.text(
+  city,
+  115,
+  y + 41
+);
 
     doc.text(`${t("Prezzo","Purchase Price")}: ${eur(price)}`,20,y+50);
     doc.text(`${t("Capitale proprio","Equity")}: ${eur(equity)}`,20,y+60);
