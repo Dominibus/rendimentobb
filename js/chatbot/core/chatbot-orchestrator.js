@@ -1254,12 +1254,13 @@ const advisor =
 
       mortgagePercent:
 
-        window.lastAnalysisData
-          ?.mortgagePercent ||
+        analysisData.mortgagePercent ??
 
-        entities.mortgagePercent ||
+        entities.mortgagePercent ??
 
-        0,
+        window.lastAnalysisData?.mortgagePercent ??
+
+      0,
 
       cashflow:
 
