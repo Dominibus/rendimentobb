@@ -989,9 +989,62 @@ if(isMortgageWhatIf){
           scenarioResult.risk;
 
         console.log(
-          "🧮 WHAT-IF ROI RECALCULATED",
-          scenarioResult
-        );
+  "🧮 WHAT-IF ROI RECALCULATED",
+  scenarioResult
+);
+
+// =====================================
+// 🧠 RECALCULATE WHAT-IF INVESTMENT SCORE
+// Temporary only — does not mutate base simulation
+// =====================================
+
+if(typeof window.rbGenerateInvestmentScore === "function"){
+
+  const scenarioScore =
+    window.rbGenerateInvestmentScore({
+
+      roi:
+        Number(analysisData.roi || 0),
+
+      risk:
+        Number(analysisData.risk || 0),
+
+      occupancy:
+        Number(analysisData.occupancy || 0),
+
+      mortgagePercent:
+        requestedMortgagePercent,
+
+      cashflow:
+        Number(analysisData.cashflow || 0),
+
+      city:
+        analysisData.city || "roma"
+
+    });
+
+  if(
+    scenarioScore &&
+    Number.isFinite(
+      Number(scenarioScore.score)
+    )
+  ){
+
+    analysisData.investmentScore =
+      Number(scenarioScore.score);
+
+    console.log(
+      "🧠 WHAT-IF SCORE RECALCULATED",
+      scenarioScore
+    );
+
+  }
+
+}
+
+}
+
+}
 
       }
 
