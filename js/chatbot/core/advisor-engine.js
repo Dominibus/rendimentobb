@@ -17,7 +17,9 @@ window.rbGenerateAdvisorVerdict = function({
 
   city = "",
 
-  investorProfile = {}
+  investorProfile = {},
+
+  canonicalScore = null
 
 } = {}){
 
@@ -362,6 +364,7 @@ const advisorScore =
 
 const existingCanonicalScore =
   Number(
+    canonicalScore ??
     window.lastAnalysisData?.investmentScore ??
     window.lastInvestmentScore?.score
   );
