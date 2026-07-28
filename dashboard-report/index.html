@@ -2109,13 +2109,105 @@ drawPerformanceKPI(
     doc.setFontSize(15);
     doc.text(t("Analisi finanziamento","Financing analysis"),20,20);
 
-    doc.setFontSize(11);
-    doc.text(`${t("Mutuo","Loan")}: ${eur(loan)}`,20,40);
-    doc.text(`LTV: ${ltv.toFixed(1)}%`,20,50);
-    doc.text(`DSCR: ${dscr.toFixed(2)}`,20,60);
+    // ================= FINANCING KPI CARDS =================
 
-    doc.text(`Cap Rate: ${capRate.toFixed(1)}%`,20,75);
-    doc.text(`ROE: ${roe.toFixed(1)}%`,20,85);
+const financingCardW = 52;
+const financingCardH = 25;
+const financingGap = 7;
+
+const drawFinancingKPI = (
+  x,
+  y,
+  label,
+  value
+)=>{
+
+  doc.setFillColor(248,250,252);
+  doc.setDrawColor(226,232,240);
+
+  doc.roundedRect(
+    x,
+    y,
+    financingCardW,
+    financingCardH,
+    3,
+    3,
+    "FD"
+  );
+
+  // GREEN ACCENT
+  doc.setFillColor(...green);
+
+  doc.roundedRect(
+    x,
+    y,
+    financingCardW,
+    1.5,
+    1,
+    1,
+    "F"
+  );
+
+  // LABEL
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(6.5);
+  doc.setTextColor(100,116,139);
+
+  doc.text(
+    label,
+    x + 5,
+    y + 8
+  );
+
+  // VALUE
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...dark);
+
+  doc.text(
+    value,
+    x + 5,
+    y + 18
+  );
+
+};
+
+// ROW 1
+drawFinancingKPI(
+  20,
+  32,
+  t("MUTUO","LOAN"),
+  eur(loan)
+);
+
+drawFinancingKPI(
+  20 + financingCardW + financingGap,
+  32,
+  "LTV",
+  `${ltv.toFixed(1)}%`
+);
+
+drawFinancingKPI(
+  20 + (financingCardW + financingGap) * 2,
+  32,
+  "DSCR",
+  dscr.toFixed(2)
+);
+
+// ROW 2
+drawFinancingKPI(
+  20,
+  64,
+  "CAP RATE",
+  `${capRate.toFixed(1)}%`
+);
+
+drawFinancingKPI(
+  20 + financingCardW + financingGap,
+  64,
+  "ROE",
+  `${roe.toFixed(1)}%`
+);
 
     const decision =
   dscr > 1.5
