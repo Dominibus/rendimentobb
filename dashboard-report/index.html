@@ -1092,13 +1092,106 @@ data-en="🤖 AI Powered">
 
 let isPro = false;  
 
-// ================= PARAMS =================
-const params = new URLSearchParams(window.location.search);
+// ================= CANONICAL REPORT DATA =================
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
-const price = Number(params.get("price") || 0);
-const roi = Number(params.get("roi") || 0);
-const equity = Number(params.get("equity") || 0);
-const risk = Number(params.get("risk") || 0);
+let storedSimulations = [];
+
+try{
+
+  storedSimulations =
+    JSON.parse(
+      localStorage.getItem(
+        "rb_simulations"
+      ) || "[]"
+    );
+
+}catch(error){
+
+  console.warn(
+    "Dashboard Report simulations parse error",
+    error
+  );
+
+}
+
+const canonicalSimulation =
+  storedSimulations[0] ||
+  {};
+
+const price =
+  Number(
+    canonicalSimulation.propertyPrice ??
+    canonicalSimulation.price ??
+    params.get("price") ??
+    0
+  );
+
+const equity =
+  Number(
+    canonicalSimulation.equity ??
+    params.get("equity") ??
+    0
+  );
+
+const roi =
+  Number(
+    canonicalSimulation.visualROI ??
+    canonicalSimulation.roi ??
+    params.get("roi") ??
+    0
+  );
+
+const realROI =
+  Number(
+    canonicalSimulation.realROI ??
+    0
+  );
+
+const risk =
+  Number(
+    canonicalSimulation.risk ??
+    params.get("risk") ??
+    0
+  );
+
+const annualProfit =
+  Number(
+    canonicalSimulation.net ??
+    canonicalSimulation.cashflow ??
+    canonicalSimulation.annualProfit ??
+    0
+  );
+
+const canonicalInvestmentScore =
+  Number(
+    canonicalSimulation.investmentScore ??
+    canonicalSimulation.score ??
+    0
+  );
+
+const canonicalVerdict =
+  canonicalSimulation.verdict ||
+  "WAIT";
+
+console.log(
+  "📊 DASHBOARD CANONICAL DATA",
+  {
+    price,
+    equity,
+    roi,
+    realROI,
+    annualProfit,
+    risk,
+    investmentScore:
+      canonicalInvestmentScore,
+    verdict:
+      canonicalVerdict
+  }
+);
 
 // ================= LANG =================
 const lang = window.currentLang || "it";
