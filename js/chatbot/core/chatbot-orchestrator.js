@@ -789,6 +789,106 @@ roi:
 
 };
 
+// =====================================
+// 🏦 MORTGAGE WHAT-IF SCENARIO
+// Temporary scenario — does NOT mutate lastAnalysisData
+// =====================================
+
+const requestedMortgagePercent =
+  Number(
+    entities?.mortgagePercent
+  );
+
+const isMortgageWhatIf =
+  intent?.intents?.includes("mortgage_analysis") &&
+  Number.isFinite(requestedMortgagePercent) &&
+  requestedMortgagePercent > 0 &&
+  requestedMortgagePercent <= 100;
+
+if(isMortgageWhatIf){
+
+  const scenarioPropertyPrice =
+    Number(
+      analysisData.propertyPrice ??
+      window.lastAnalysisData?.propertyPrice ??
+      window.lastAnalysisData?.price ??
+      0
+    );
+
+  if(scenarioPropertyPrice > 0){
+
+    const scenarioLoanAmount =
+      scenarioPropertyPrice *
+      (requestedMortgagePercent / 100);
+
+    const scenarioEquity =
+      scenarioPropertyPrice -
+      scenarioLoanAmount;
+
+    analysisData.mortgagePercent =
+      requestedMortgagePercent;
+
+    analysisData.loanAmount =
+      scenarioLoanAmount;
+
+    analysisData.mortgage =
+      scenarioLoanAmount;
+
+    analysisData.equity =
+      scenarioEquity;
+
+    // Scenario metadata.
+    // Manteniamo separati i valori originali per il confronto successivo.
+    analysisData.whatIfScenario = {
+
+      type:
+        "mortgage",
+
+      requestedMortgagePercent,
+
+      originalMortgagePercent:
+        Number(
+          window.lastAnalysisData?.mortgagePercent ??
+          rememberedAnalysis.mortgagePercent ??
+          0
+        ),
+
+      originalLoanAmount:
+        Number(
+          window.lastAnalysisData?.loanAmount ??
+          window.lastAnalysisData?.mortgage ??
+          rememberedAnalysis.loanAmount ??
+          0
+        ),
+
+      originalEquity:
+        Number(
+          window.lastAnalysisData?.equity ??
+          window.lastAnalysisData?.initialCapital ??
+          rememberedAnalysis.equity ??
+          0
+        ),
+
+      propertyPrice:
+        scenarioPropertyPrice,
+
+      loanAmount:
+        scenarioLoanAmount,
+
+      equity:
+        scenarioEquity
+
+    };
+
+    console.log(
+      "🏦 MORTGAGE WHAT-IF SCENARIO",
+      analysisData.whatIfScenario
+    );
+
+  }
+
+}    
+
 console.log(
   "🔥 ANALYSIS DATA FINAL JSON",
   JSON.stringify(
