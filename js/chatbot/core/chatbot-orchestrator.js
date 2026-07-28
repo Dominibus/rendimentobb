@@ -2128,6 +2128,17 @@ response.metadata = {
 
 if(window.rbRememberMessage){
 
+  // =========================================
+  // 🧠 MEMORY SOURCE
+  // What-if scenarios must NOT replace
+  // the canonical simulator analysis
+  // =========================================
+
+  const memoryAnalysis =
+    analysisData?.whatIfScenario
+      ? (window.lastAnalysisData || {})
+      : analysisData;
+
   window.rbRememberMessage({
 
     role: "user",
@@ -2139,34 +2150,46 @@ if(window.rbRememberMessage){
       ...entities,
 
       roi:
-        analysisData.roi,
+        memoryAnalysis.realROI ??
+        memoryAnalysis.roi ??
+        null,
 
       risk:
-        analysisData.risk,
+        memoryAnalysis.risk ??
+        null,
 
       occupancy:
-        analysisData.occupancy,
+        memoryAnalysis.occupancy ??
+        null,
 
       city:
-        analysisData.city,
+        memoryAnalysis.city ??
+        analysisData.city ??
+        null,
 
       cashflow:
-
-        analysisData.net ??
-
-        analysisData.cashflow ??
-
-        analysisData.annualProfit ??
-
+        memoryAnalysis.net ??
+        memoryAnalysis.cashflow ??
+        memoryAnalysis.annualProfit ??
         0,
 
       propertyPrice:
+        memoryAnalysis.propertyPrice ??
+        memoryAnalysis.price ??
+        0,
 
-        analysisData.propertyPrice ??
+      equity:
+        memoryAnalysis.equity ??
+        null,
 
-        analysisData.price ??
+      loanAmount:
+        memoryAnalysis.loanAmount ??
+        memoryAnalysis.mortgage ??
+        null,
 
-        0
+      mortgagePercent:
+        memoryAnalysis.mortgagePercent ??
+        null
 
     },
 
