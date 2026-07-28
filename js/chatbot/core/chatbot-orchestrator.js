@@ -1352,6 +1352,11 @@ const advisor =
 
         "roma",
 
+    canonicalScore:
+  Number.isFinite(Number(canonicalAnalysis?.investmentScore))
+    ? Number(canonicalAnalysis.investmentScore)
+    : null,
+
       investorProfile
 
     })
