@@ -876,8 +876,8 @@ margin-top:4px;
         LTV
       </div>
 
-      <div class="hero-mini-value">
-        70%
+      <div class="hero-mini-value" id="ltvHero">
+       —
       </div>
 
     </div>
@@ -1252,6 +1252,23 @@ if(realROIHero){
 }
   
   const heroROI = document.getElementById("heroROI");
+
+  const ltvHero =
+  document.getElementById("ltvHero");
+
+if(ltvHero){
+
+  const loan =
+    Math.max(0, price - equity);
+
+  const ltv =
+    price > 0
+      ? (loan / price) * 100
+      : 0;
+
+  ltvHero.innerText =
+    ltv.toFixed(0) + "%";
+}
 
 if(heroROI){
   heroROI.innerText = roi.toFixed(1)+"%";
