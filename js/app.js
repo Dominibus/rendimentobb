@@ -6318,7 +6318,7 @@ cashflowScenarios.forEach(s=>{
 
 });
 
-  // =====================================
+// =====================================
 // AI EXECUTIVE INSIGHT
 // =====================================
 
@@ -6327,9 +6327,9 @@ y += 8;
 doc.setFillColor(245,248,252);
 
 doc.roundedRect(
-20,
+30,
 y,
-170,
+150,
 42,
 6,
 6,
@@ -6345,7 +6345,7 @@ T(
 "Executive AI Insight",
 "Executive AI Insight"
 ),
-25,
+35,
 y+10
 );
 
@@ -6381,10 +6381,10 @@ T(
 
 doc.text(
 executiveInsight,
-25,
+35,
 y+20,
 {
-maxWidth:155
+maxWidth:140
 }
 );
 
