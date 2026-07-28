@@ -1420,7 +1420,15 @@ function renderAdvanced(){
 
   let score = canonicalInvestmentScore;
 
-  const annualProfit = price * (roi/100);
+const investmentClass =
+  score >= 90 ? "A+" :
+  score >= 75 ? "A" :
+  score >= 60 ? "B" :
+  score >= 45 ? "C" :
+  score >= 30 ? "D" :
+  "E";
+
+const annualProfit = price * (roi/100);
 
   // 🔥 FIX divisione sicura
   const breakEven = annualProfit > 0 ? (equity / annualProfit) : 0;
@@ -1485,7 +1493,7 @@ justify-content:center;
 font-size:18px;
 font-weight:800;
 ">
-A+
+${investmentClass}
 </div>
 
 </div>
