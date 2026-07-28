@@ -6475,7 +6475,22 @@ y += 12;
 // MARKET SNAPSHOT
 // =====================================
 
-const benchmarkROI = 12; // benchmark medio temporaneo
+const marketROIMap = {
+  roma: 8.4,
+  milano: 7.2,
+  napoli: 11.5,
+  firenze: 7.9
+};
+
+const marketKey =
+  String(city)
+    .toLowerCase()
+    .trim();
+
+const marketROI =
+  marketROIMap[marketKey] || 8.4;
+
+const benchmarkROI = marketROI;
 
 doc.setFillColor(248,250,252);
 
@@ -6549,21 +6564,6 @@ y+19
 y += 38;  
 
 // ================= MARKET DATA =================
-
-const marketROIMap = {
-  roma: 8.4,
-  milano: 7.2,
-  napoli: 11.5,
-  firenze: 7.9
-};
-
-const marketKey =
-  String(city)
-    .toLowerCase()
-    .trim();
-
-const marketROI =
-  marketROIMap[marketKey] || 8.4;
 
 // ================= KPI =================
 
