@@ -843,8 +843,8 @@ margin-top:4px;
         DSCR
       </div>
 
-      <div class="hero-mini-value">
-        2.87
+      <div class="hero-mini-value" id="dscrHero">
+        —
       </div>
 
     </div>
@@ -1249,6 +1249,26 @@ if(realROIHero){
 
   realROIHero.innerText =
     realROI.toFixed(1) + "%";
+}
+
+  const dscrHero =
+  document.getElementById("dscrHero");
+
+if(dscrHero){
+
+  const loan =
+    Math.max(0, price - equity);
+
+  const annualDebtService =
+    loan * 0.04;
+
+  const dscr =
+    annualDebtService > 0
+      ? annualProfit / annualDebtService
+      : 0;
+
+  dscrHero.innerText =
+    dscr.toFixed(2);
 }
   
   const heroROI = document.getElementById("heroROI");
