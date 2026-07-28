@@ -1482,6 +1482,17 @@ if(advisor){
 
   };
 
+  // =========================================
+  // 🧠 SYNC ADVISOR WITH CANONICAL DECISION
+  // Preserve advisorScore, confidence, insights, etc.
+  // =========================================
+
+  advisor.score =
+    canonicalScore;
+
+  advisor.verdict =
+    canonicalVerdict;
+
   console.log(
     "🧠 CANONICAL INVESTMENT DECISION",
     window.lastInvestmentScore
