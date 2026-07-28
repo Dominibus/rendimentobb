@@ -6939,7 +6939,7 @@ if (roi >= marketROI + 5) {
 }
 
 // Cashflow
-if (profit >= 1500) {
+if (monthly >= 1500) {
 
   insights.push(
     T(
@@ -6948,12 +6948,12 @@ if (profit >= 1500) {
     )
   );
 
-} else if (profit > 0) {
+} else if (monthly > 0) {
 
   insights.push(
     T(
-      "Il cashflow operativo rimane positivo e sostenibile.",
-      "Operating cashflow remains positive and sustainable."
+      "Il cashflow mensile rimane positivo e contribuisce alla sostenibilità operativa dell'investimento.",
+      "Monthly cashflow remains positive and supports the investment's operational sustainability."
     )
   );
 
@@ -6961,8 +6961,8 @@ if (profit >= 1500) {
 
   insights.push(
     T(
-      "Il cashflow risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
-      "Cashflow is negative and may compromise investment sustainability."
+      "Il cashflow mensile risulta negativo e potrebbe compromettere la sostenibilità dell'investimento.",
+      "Monthly cashflow is negative and may compromise investment sustainability."
     )
   );
 
