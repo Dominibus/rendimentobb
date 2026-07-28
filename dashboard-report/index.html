@@ -1418,7 +1418,7 @@ function renderAdvanced(){
   box.id = "advancedBox";
   box.className = "verdict";
 
-  let score = Math.min(100, Math.max(0, roi*5 - risk));
+  let score = canonicalInvestmentScore;
 
   const annualProfit = price * (roi/100);
 
