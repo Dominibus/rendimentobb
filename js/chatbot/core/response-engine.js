@@ -651,9 +651,11 @@ console.log(
 const roi =
   Number(
 
-    liveData.visualROI ??
+    analysisData?.roi ??
 
     liveData.roi ??
+
+    liveData.visualROI ??
 
     liveData.safeROI ??
 
