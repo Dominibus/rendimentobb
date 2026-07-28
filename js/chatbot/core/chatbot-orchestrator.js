@@ -837,6 +837,111 @@ if(isMortgageWhatIf){
     analysisData.equity =
       scenarioEquity;
 
+        // =====================================
+    // 🧮 RECALCULATE WHAT-IF WITH ROI ENGINE
+    // Temporary only — lastAnalysisData stays untouched
+    // =====================================
+
+    if(typeof window.calculateROI === "function"){
+
+      const scenarioResult =
+        window.calculateROI({
+
+          price:
+            scenarioPropertyPrice,
+
+          equity:
+            scenarioEquity,
+
+          loanAmount:
+            scenarioLoanAmount,
+
+          priceNight:
+            Number(
+              analysisData.priceNight ??
+              window.lastAnalysisData?.priceNight ??
+              100
+            ),
+
+          occupancy:
+            Number(
+              analysisData.occupancy ??
+              window.lastAnalysisData?.occupancy ??
+              65
+            ),
+
+          expenses:
+            Number(
+              analysisData.expenses ??
+              window.lastAnalysisData?.expenses ??
+              30
+            ),
+
+          commission:
+            Number(
+              analysisData.commission ??
+              window.lastAnalysisData?.commission ??
+              15
+            ),
+
+          tax:
+            Number(
+              analysisData.tax ??
+              window.lastAnalysisData?.tax ??
+              21
+            ),
+
+          interestRate:
+            Number(
+              analysisData.interestRate ??
+              window.lastAnalysisData?.interestRate ??
+              3.5
+            ),
+
+          loanYears:
+            Number(
+              analysisData.loanYears ??
+              window.lastAnalysisData?.loanYears ??
+              20
+            )
+
+        });
+
+      if(
+        scenarioResult &&
+        typeof scenarioResult === "object"
+      ){
+
+        analysisData.roi =
+          scenarioResult.roi;
+
+        analysisData.realROI =
+          scenarioResult.realROI;
+
+        analysisData.net =
+          scenarioResult.netAfterMortgage;
+
+        analysisData.cashflow =
+          scenarioResult.netAfterMortgage;
+
+        analysisData.annualProfit =
+          scenarioResult.netAfterMortgage;
+
+        analysisData.netAfterMortgage =
+          scenarioResult.netAfterMortgage;
+
+        analysisData.risk =
+          scenarioResult.risk;
+
+        console.log(
+          "🧮 WHAT-IF ROI RECALCULATED",
+          scenarioResult
+        );
+
+      }
+
+    }
+
     // Scenario metadata.
     // Manteniamo separati i valori originali per il confronto successivo.
     analysisData.whatIfScenario = {
