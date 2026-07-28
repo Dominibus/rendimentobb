@@ -1673,6 +1673,8 @@ const monthlyProfit = safe(
 
     // ================= USER =================
     const profile = window.userProfile || {};
+    console.log("📄 PDF USER PROFILE:", profile);
+    
     const clientName =
       (profile.name && profile.surname)
         ? profile.name + " " + profile.surname
