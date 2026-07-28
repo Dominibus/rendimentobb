@@ -849,18 +849,25 @@ CLASSE MERCATO
 
     </div>
 
-    <!-- ROE -->
-    <div class="hero-mini-card">
+<!-- REAL ROI / CAP RATE -->
+<div class="hero-mini-card">
 
-      <div class="hero-mini-label">
-        ROE
-      </div>
+  <div
+    class="hero-mini-label"
+    data-it="ROI IMMOBILE / CAP RATE"
+    data-en="PROPERTY ROI / CAP RATE"
+  >
+    ROI IMMOBILE / CAP RATE
+  </div>
 
-      <div class="hero-mini-value">
-        26.8%
-      </div>
+  <div
+    class="hero-mini-value"
+    id="realROIHero"
+  >
+    —
+  </div>
 
-    </div>
+</div>
 
     <!-- LTV -->
     <div class="hero-mini-card">
@@ -1233,6 +1240,17 @@ function renderData(){
   document.getElementById("equity").innerText = euro(equity);
   document.getElementById("roi").innerText = roi.toFixed(1)+"%";
   document.getElementById("risk").innerText = risk+"/100";
+  const realROIHero =
+  document.getElementById(
+    "realROIHero"
+  );
+
+if(realROIHero){
+
+  realROIHero.innerText =
+    realROI.toFixed(1) + "%";
+}
+  
   const heroROI = document.getElementById("heroROI");
 
 if(heroROI){
