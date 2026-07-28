@@ -816,13 +816,13 @@ CLASSE MERCATO
 </span>
         </div>
 
-        <div style="
-        font-size:24px;
-        font-weight:800;
-        margin-top:4px;
-        ">
-          A+
-        </div>
+        <div id="marketClassHero" style="
+font-size:24px;
+font-weight:800;
+margin-top:4px;
+">
+  —
+</div>
       </div>
 
     </div>
@@ -1265,6 +1265,20 @@ if(bankScoreHero){
     Math.round(
       canonicalInvestmentScore
     ) + "/100";
+}
+
+  const marketClassHero =
+  document.getElementById("marketClassHero");
+
+if(marketClassHero){
+
+  marketClassHero.innerText =
+    canonicalInvestmentScore >= 90 ? "A+" :
+    canonicalInvestmentScore >= 75 ? "A" :
+    canonicalInvestmentScore >= 60 ? "B" :
+    canonicalInvestmentScore >= 45 ? "C" :
+    canonicalInvestmentScore >= 30 ? "D" :
+    "E";
 }
 
 const riskHero =
