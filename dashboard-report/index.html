@@ -1243,17 +1243,10 @@ if(heroROI){
 
 if(bankScoreHero){
 
-  const score =
-    Math.min(
-      99,
-      Math.max(
-        40,
-        Math.round((roi*5)-risk)
-      )
-    );
-
   bankScoreHero.innerText =
-    score + "/100";
+    Math.round(
+      canonicalInvestmentScore
+    ) + "/100";
 }
 
 const riskHero =
