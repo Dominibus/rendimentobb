@@ -1267,35 +1267,58 @@ if(riskHero){
 // ================= VERDICT =================
 function renderVerdict(){
 
-  let verdict="", text="";
+  const normalizedVerdict =
+    String(
+      canonicalVerdict ||
+      "WAIT"
+    )
+    .trim()
+    .toUpperCase();
 
-  if(roi >= 12){
-    verdict = "INSTITUTIONAL GRADE";
-    text = lang==="en"
-      ? "Top-tier ROI. Institutional-grade opportunity."
-      : "ROI elevato. Opportunità di livello istituzionale.";
-  }
-  else if(roi >= 8){
-    verdict = lang==="en" ? "STRONG INVESTMENT" : "INVESTIMENTO FORTE";
-    text = lang==="en"
-      ? "High ROI with controlled risk."
-      : "ROI elevato con rischio controllato.";
-  }
-  else if(roi >= 5){
-    verdict = lang==="en" ? "OPTIMIZE" : "DA OTTIMIZZARE";
-    text = lang==="en"
-      ? "Good investment but needs optimization."
-      : "Buon investimento ma da ottimizzare.";
-  }
-  else{
-    verdict = lang==="en" ? "HIGH RISK" : "ALTO RISCHIO";
-    text = lang==="en"
-      ? "Low ROI or unstable fundamentals."
-      : "ROI basso o fondamentali instabili.";
+  let verdict = normalizedVerdict;
+  let text = "";
+
+  if(
+    normalizedVerdict === "BUY"
+  ){
+
+    text =
+      lang === "en"
+        ? "Favorable investment profile based on the current analysis."
+        : "Profilo d’investimento favorevole sulla base dell’analisi attuale.";
+
+  }else if(
+    normalizedVerdict === "AVOID" ||
+    normalizedVerdict === "NO_BUY"
+  ){
+
+    verdict = "AVOID";
+
+    text =
+      lang === "en"
+        ? "Critical factors make the investment unsuitable under the current conditions."
+        : "Le criticità rilevate rendono l’investimento non consigliabile alle condizioni attuali.";
+
+  }else{
+
+    verdict = "WAIT";
+
+    text =
+      lang === "en"
+        ? "Wait and optimize the investment before proceeding."
+        : "Attendere e ottimizzare l’investimento prima di procedere.";
+
   }
 
-  document.getElementById("verdict").innerText = verdict;
-  document.getElementById("verdict-text").innerText = text;
+  document.getElementById(
+    "verdict"
+  ).innerText =
+    verdict;
+
+  document.getElementById(
+    "verdict-text"
+  ).innerText =
+    text;
 }
 
 // ================= CHART =================
