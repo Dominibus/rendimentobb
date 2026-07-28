@@ -520,28 +520,40 @@ for(const pattern of occupancyPatterns){
       text.includes(word)
     );
 
-  // ===========================================
-  // 🏦 MORTGAGE %
-  // ===========================================
+// ===========================================
+// 🏦 MORTGAGE %
+// ===========================================
 
-  const mortgagePatterns = [
+const mortgagePatterns = [
 
-    /mutuo\s?(\d+)%/,
-    /mortgage\s?(\d+)%/,
-    /ltv\s?(\d+)%/,
-    /(\d+)%\s?mutuo/,
-    /loan\s?(\d+)%/
+  // 🇮🇹
+  /mutuo\s+(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /finanziamento\s+(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /ltv\s+(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /(\d+(?:[\.,]\d+)?)\s?%\s+(?:di\s+)?mutuo/,
 
-  ];
+  // 🇬🇧
+  /mortgage\s+(?:at\s+|of\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /loan\s+(?:at\s+|of\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /ltv\s+(?:at\s+|of\s+)?(\d+(?:[\.,]\d+)?)\s?%/
 
-  for(const pattern of mortgagePatterns){
+];
 
-    const match = text.match(pattern);
+for(const pattern of mortgagePatterns){
 
-    if(match){
+  const match = text.match(pattern);
 
-      const value =
-        Number(match[1]);
+  if(match){
+
+    const value =
+      Number(
+        match[1].replace(",", ".")
+      );
+
+    if(
+      value > 0 &&
+      value <= 100
+    ){
 
       entities.mortgagePercent =
         value;
@@ -549,11 +561,13 @@ for(const pattern of occupancyPatterns){
       entities.percentage =
         value;
 
-      break;
-
     }
 
+    break;
+
   }
+
+}
 
   // ===========================================
   // 📉 INTEREST RATE
