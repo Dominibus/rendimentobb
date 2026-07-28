@@ -2160,6 +2160,11 @@ if(
     "cosa mi consigli",
     "che cosa mi consigli",
     "tu cosa faresti",
+
+    "cosa miglioreresti",
+    "che cosa miglioreresti",
+    "tu cosa miglioreresti",
+
     "cosa cambieresti",
 
     "quali sono i miglioramenti",
@@ -2288,7 +2293,14 @@ if(
     "optimization advice",
 
     "what would you improve",
+    "what would you improve here",
+    "what would you improve in this investment",
+
+    "what do you think i should improve",
+    "what should i improve here",
+
     "what would you change",
+    "what would you change here",
 
     // =========================================
     // 🇬🇧 ROI
