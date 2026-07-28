@@ -6322,7 +6322,7 @@ cashflowScenarios.forEach(s=>{
 // AI EXECUTIVE INSIGHT
 // =====================================
 
-y += 8;
+y -= 4;
 
 doc.setFillColor(245,248,252);
 
