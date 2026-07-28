@@ -6037,9 +6037,9 @@ doc.text(
 doc.setFillColor(255,255,255);
 
 doc.roundedRect(
-  132,
+  128,
   y + 6,
-  48,
+  56,
   16,
   5,
   5,
@@ -6048,7 +6048,7 @@ doc.roundedRect(
 
 // Rating
 doc.setTextColor(...dark);
-doc.setFontSize(10);
+doc.setFontSize(9);
 
 doc.text(
   rating,
