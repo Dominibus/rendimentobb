@@ -656,6 +656,61 @@ roi:
 
     0,
 
+    // =====================================
+  // 🧮 ROI ENGINE INPUTS
+  // Same inputs used by the canonical simulator
+  // =====================================
+
+  priceNight:
+
+    Number(
+      window.lastAnalysisData?.priceNight ??
+      window.rbChatbotData?.priceNight ??
+      document.getElementById("priceNight")?.value ??
+      100
+    ),
+
+  expenses:
+
+    Number(
+      window.lastAnalysisData?.expenses ??
+      window.rbChatbotData?.expenses ??
+      document.getElementById("expenses")?.value ??
+      30
+    ),
+
+  commission:
+
+    Number(
+      window.lastAnalysisData?.commission ??
+      document.getElementById("commission")?.value ??
+      15
+    ),
+
+  tax:
+
+    Number(
+      window.lastAnalysisData?.tax ??
+      document.getElementById("tax")?.value ??
+      21
+    ),
+
+  interestRate:
+
+    Number(
+      window.lastAnalysisData?.interestRate ??
+      document.getElementById("interestRate")?.value ??
+      3.5
+    ),
+
+  loanYears:
+
+    Number(
+      window.lastAnalysisData?.loanYears ??
+      document.getElementById("loanYears")?.value ??
+      20
+    ),
+
   // =====================================
   // 🏦 MORTGAGE DATA
   // =====================================
