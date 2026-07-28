@@ -892,7 +892,7 @@ if(isMortgageWhatIf){
     analysisData.equity =
       scenarioEquity;
 
-        // =====================================
+    // =====================================
     // 🧮 RECALCULATE WHAT-IF WITH ROI ENGINE
     // Temporary only — lastAnalysisData stays untouched
     // =====================================
@@ -980,6 +980,9 @@ if(isMortgageWhatIf){
           scenarioResult.netAfterMortgage;
 
         analysisData.annualProfit =
+          scenarioResult.netAfterMortgage;
+
+        analysisData.profit =
           scenarioResult.netAfterMortgage;
 
         analysisData.netAfterMortgage =
