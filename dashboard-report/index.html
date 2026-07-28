@@ -1148,7 +1148,19 @@ const roi =
 const realROI =
   Number(
     canonicalSimulation.realROI ??
-    0
+    canonicalSimulation.capRate ??
+    (
+      price > 0
+        ? (
+            Number(
+              canonicalSimulation.net ??
+              canonicalSimulation.cashflow ??
+              canonicalSimulation.annualProfit ??
+              0
+            ) / price
+          ) * 100
+        : 0
+    )
   );
 
 const risk =
