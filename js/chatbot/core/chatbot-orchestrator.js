@@ -1078,8 +1078,59 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
           0
         ),
 
-      propertyPrice:
-        scenarioPropertyPrice,
+      originalROI:
+  Number(
+    window.lastAnalysisData?.visualROI ??
+    window.lastAnalysisData?.roi ??
+    0
+  ),
+
+originalRealROI:
+  Number(
+    window.lastAnalysisData?.realROI ??
+    window.lastAnalysisData?.safeROI ??
+    0
+  ),
+
+originalCashflow:
+  Number(
+    window.lastAnalysisData?.net ??
+    window.lastAnalysisData?.cashflow ??
+    window.lastAnalysisData?.annualProfit ??
+    0
+  ),
+
+originalInvestmentScore:
+  Number(
+    window.lastAnalysisData?.investmentScore ??
+    window.lastInvestmentScore?.score ??
+    0
+  ),
+
+scenarioROI:
+  Number(
+    analysisData.roi ?? 0
+  ),
+
+scenarioRealROI:
+  Number(
+    analysisData.realROI ?? 0
+  ),
+
+scenarioCashflow:
+  Number(
+    analysisData.cashflow ??
+    analysisData.net ??
+    0
+  ),
+
+scenarioInvestmentScore:
+  Number(
+    analysisData.investmentScore ?? 0
+  ),
+
+propertyPrice:
+  scenarioPropertyPrice,
 
       loanAmount:
         scenarioLoanAmount,
