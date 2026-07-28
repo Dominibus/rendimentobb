@@ -1084,21 +1084,46 @@ console.log(
 
 if(advisor){
 
+  const canonicalScore =
+    Number(
+      canonicalAnalysis.investmentScore ??
+      window.lastAnalysisData?.investmentScore ??
+      window.lastInvestmentScore?.score ??
+      advisor.score ??
+      0
+    );
+
+  const canonicalVerdict =
+    canonicalAnalysis.verdict ??
+    window.lastAnalysisData?.verdict ??
+    window.lastInvestmentScore?.verdict ??
+    advisor.verdict ??
+    "WAIT";
+
   window.lastInvestmentScore = {
 
     score:
-      Number(advisor.score ?? 0),
+      canonicalScore,
 
     verdict:
-      advisor.verdict || "WAIT",
+      canonicalVerdict,
 
     label:
-      advisor.verdict || "WAIT",
+      canonicalVerdict,
 
     confidence:
-      Number(advisor.confidence ?? 0)
+      Number(
+        window.lastInvestmentScore?.confidence ??
+        advisor.confidence ??
+        0
+      )
 
   };
+
+  console.log(
+    "🧠 CANONICAL INVESTMENT DECISION",
+    window.lastInvestmentScore
+  );
 
 }
 
