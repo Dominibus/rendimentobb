@@ -1048,8 +1048,6 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
 
       }
 
-    }
-
     // Scenario metadata.
     // Manteniamo separati i valori originali per il confronto successivo.
     analysisData.whatIfScenario = {
