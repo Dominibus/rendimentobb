@@ -6029,12 +6029,16 @@ doc.text(
   y + 10
 );
 
+// =====================================
+// RATING AREA
+// =====================================
+
 // Rating badge
 doc.setFillColor(255,255,255);
 
 doc.roundedRect(
   132,
-  y + 7,
+  y + 6,
   48,
   16,
   5,
@@ -6042,40 +6046,43 @@ doc.roundedRect(
   "F"
 );
 
+// Rating
 doc.setTextColor(...dark);
-
 doc.setFontSize(10);
 
 doc.text(
   rating,
   156,
-  y + 17,
-  {align:"center"}
+  y + 16,
+  {
+    align:"center"
+  }
 );
 
+// AI VERIFIED
 doc.setFontSize(7);
-
 doc.setTextColor(...green);
 
 doc.text(
   "AI VERIFIED",
   156,
-  y + 24,
+  y + 27,
   {
     align:"center"
   }
-);  
+);
 
 // Executive label
 doc.setFontSize(8);
-
 doc.setTextColor(220);
 
 doc.text(
   "Executive AI Assessment",
-  132,
-  y + 31,
-  {align:"center"}
+  156,
+  y + 34,
+  {
+    align:"center"
+  }
 );
 
 y += 50;
