@@ -2237,24 +2237,145 @@ drawFinancingKPI(
     doc.setTextColor(...dark);
     doc.text(t("Analisi rischio","Risk analysis"),20,20);
 
-    const riskScore = Math.min(100, Math.max(0, risk));
+    const riskScore =
+  Math.min(
+    100,
+    Math.max(0, risk)
+  );
 
-    doc.setFontSize(11);
-    doc.text(`${t("Indice rischio","Risk score")}: ${riskScore}/100`,20,40);
+const riskLabel =
+  riskScore < 30
+    ? t("RISCHIO BASSO","LOW RISK")
+    : riskScore < 60
+      ? t("RISCHIO MEDIO","MEDIUM RISK")
+      : t("RISCHIO ALTO","HIGH RISK");
 
-    doc.setTextColor(...(
-      riskScore < 30 ? green :
-      riskScore < 60 ? amber :
-      red
-    ));
+const riskColor =
+  riskScore < 30
+    ? green
+    : riskScore < 60
+      ? amber
+      : red;
 
-    doc.text(
-      riskScore < 30 ? t("Basso rischio","Low risk") :
-      riskScore < 60 ? t("Rischio medio","Medium risk") :
-      t("Alto rischio","High risk"),
-      20,
-      55
-    );
+// ================= RISK HERO CARD =================
+
+doc.setFillColor(248,250,252);
+doc.setDrawColor(226,232,240);
+
+doc.roundedRect(
+  20,
+  32,
+  170,
+  48,
+  4,
+  4,
+  "FD"
+);
+
+// LEFT LABEL
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t("INDICE RISCHIO","RISK SCORE"),
+  28,
+  44
+);
+
+// SCORE
+doc.setFont("helvetica","bold");
+doc.setFontSize(26);
+doc.setTextColor(...riskColor);
+
+doc.text(
+  `${riskScore}/100`,
+  28,
+  63
+);
+
+// DIVIDER
+doc.setDrawColor(226,232,240);
+
+doc.line(
+  105,
+  40,
+  105,
+  70
+);
+
+// RIGHT LABEL
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t("VALUTAZIONE","ASSESSMENT"),
+  115,
+  44
+);
+
+// RISK LEVEL
+doc.setFont("helvetica","bold");
+doc.setFontSize(13);
+doc.setTextColor(...riskColor);
+
+doc.text(
+  riskLabel,
+  115,
+  60
+);
+
+// ================= RISK BAR =================
+
+doc.setFillColor(226,232,240);
+
+doc.roundedRect(
+  20,
+  92,
+  170,
+  6,
+  3,
+  3,
+  "F"
+);
+
+doc.setFillColor(...riskColor);
+
+doc.roundedRect(
+  20,
+  92,
+  170 * (riskScore / 100),
+  6,
+  3,
+  3,
+  "F"
+);
+
+// SCALE
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
+doc.setTextColor(100,116,139);
+
+doc.text(
+  t("BASSO","LOW"),
+  20,
+  106
+);
+
+doc.text(
+  t("MEDIO","MEDIUM"),
+  105,
+  106,
+  { align:"center" }
+);
+
+doc.text(
+  t("ALTO","HIGH"),
+  190,
+  106,
+  { align:"right" }
+);
 
     addFooter();
 
