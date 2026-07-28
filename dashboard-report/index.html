@@ -1870,9 +1870,87 @@ doc.text(
   y + 41
 );
 
-    doc.text(`${t("Prezzo","Purchase Price")}: ${eur(price)}`,20,y+50);
-    doc.text(`${t("Capitale proprio","Equity")}: ${eur(equity)}`,20,y+60);
-    doc.text(`${t("Profitto annuo","Annual Profit")}: ${eur(annualProfit)}`,20,y+70);
+    // ================= EXECUTIVE KPI CARDS =================
+
+const kpiY = y + 52;
+const kpiW = 52;
+const kpiH = 25;
+const kpiGap = 7;
+
+const drawExecutiveKPI = (
+  x,
+  label,
+  value
+)=>{
+
+  // CARD
+  doc.setFillColor(248,250,252);
+  doc.setDrawColor(226,232,240);
+
+  doc.roundedRect(
+    x,
+    kpiY,
+    kpiW,
+    kpiH,
+    3,
+    3,
+    "FD"
+  );
+
+  // GREEN ACCENT
+  doc.setFillColor(...green);
+
+  doc.roundedRect(
+    x,
+    kpiY,
+    kpiW,
+    1.5,
+    1,
+    1,
+    "F"
+  );
+
+  // LABEL
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(6.5);
+  doc.setTextColor(100,116,139);
+
+  doc.text(
+    label,
+    x + 5,
+    kpiY + 8
+  );
+
+  // VALUE
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...dark);
+
+  doc.text(
+    value,
+    x + 5,
+    kpiY + 18
+  );
+
+};
+
+drawExecutiveKPI(
+  20,
+  t("PREZZO","PURCHASE PRICE"),
+  eur(price)
+);
+
+drawExecutiveKPI(
+  20 + kpiW + kpiGap,
+  t("CAPITALE PROPRIO","EQUITY"),
+  eur(equity)
+);
+
+drawExecutiveKPI(
+  20 + (kpiW + kpiGap) * 2,
+  t("PROFITTO ANNUO","ANNUAL PROFIT"),
+  eur(annualProfit)
+);
 
     const canonicalVerdict =
   String(
