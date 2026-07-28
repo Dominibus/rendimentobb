@@ -2034,6 +2034,237 @@ else if(
   response.confidence =
     0.98;
 
+    // =====================================
+  // 🧠 MORTGAGE WHAT-IF COMPARISON
+  // =====================================
+
+  const whatIf =
+    analysisData?.whatIfScenario ||
+    liveData?.whatIfScenario ||
+    null;
+
+  if(
+    whatIf?.type === "mortgage" &&
+    Number.isFinite(Number(whatIf.originalMortgagePercent)) &&
+    Number.isFinite(Number(whatIf.requestedMortgagePercent))
+  ){
+
+    const originalMortgagePercent =
+      Number(whatIf.originalMortgagePercent);
+
+    const requestedMortgagePercent =
+      Number(whatIf.requestedMortgagePercent);
+
+    const originalLoanAmount =
+      Number(whatIf.originalLoanAmount || 0);
+
+    const newLoanAmount =
+      Number(whatIf.loanAmount || liveData.loanAmount || 0);
+
+    const originalEquity =
+      Number(whatIf.originalEquity || 0);
+
+    const newEquity =
+      Number(whatIf.equity || liveData.equity || 0);
+
+    const originalROI =
+      Number(whatIf.originalROI || 0);
+
+    const newROI =
+      Number(liveData.roi || 0);
+
+    const originalRealROI =
+      Number(whatIf.originalRealROI || 0);
+
+    const newRealROI =
+      Number(liveData.realROI || 0);
+
+    const originalCashflow =
+      Number(whatIf.originalCashflow || 0);
+
+    const newCashflow =
+      Number(
+        liveData.net ??
+        liveData.cashflow ??
+        0
+      );
+
+    const originalScore =
+      Number(whatIf.originalInvestmentScore || 0);
+
+    const newScore =
+      Number(liveData.investmentScore || 0);
+
+    const equityDelta =
+      newEquity - originalEquity;
+
+    const cashflowDelta =
+      newCashflow - originalCashflow;
+
+    const roiDelta =
+      newROI - originalROI;
+
+    const scoreDelta =
+      newScore - originalScore;
+
+    const fmtEUR_IT = value =>
+      `€${Math.round(value).toLocaleString("it-IT")}`;
+
+    const fmtEUR_EN = value =>
+      `€${Math.round(value).toLocaleString("en-US")}`;
+
+    const fmtPct = value =>
+      `${Number(value).toFixed(1)}%`;
+
+    const cashflowDirectionIT =
+      cashflowDelta > 0
+        ? `migliora il cashflow annuo di circa ${fmtEUR_IT(cashflowDelta)}`
+        : cashflowDelta < 0
+        ? `riduce il cashflow annuo di circa ${fmtEUR_IT(Math.abs(cashflowDelta))}`
+        : "mantiene sostanzialmente invariato il cashflow annuo";
+
+    const cashflowDirectionEN =
+      cashflowDelta > 0
+        ? `improves annual cashflow by approximately ${fmtEUR_EN(cashflowDelta)}`
+        : cashflowDelta < 0
+        ? `reduces annual cashflow by approximately ${fmtEUR_EN(Math.abs(cashflowDelta))}`
+        : "keeps annual cashflow substantially unchanged";
+
+    const interpretationIT =
+
+      requestedMortgagePercent < originalMortgagePercent
+
+      ? `La riduzione della leva richiede più capitale proprio${
+          equityDelta > 0
+            ? ` (${fmtEUR_IT(equityDelta)} aggiuntivi)`
+            : ""
+        } e ${
+          roiDelta < 0
+            ? "riduce il rendimento sull'equity"
+            : "modifica il rendimento sull'equity"
+        }, ma ${
+          cashflowDelta > 0
+            ? "aumenta il cashflow e rende la struttura finanziaria più resiliente"
+            : "riduce l'esposizione finanziaria e rende la struttura più prudente"
+        }. Non è semplicemente migliore o peggiore: privilegia stabilità e minore leva rispetto all'efficienza del capitale.`
+
+      : requestedMortgagePercent > originalMortgagePercent
+
+      ? `L'aumento della leva riduce il capitale proprio necessario${
+          equityDelta < 0
+            ? ` di ${fmtEUR_IT(Math.abs(equityDelta))}`
+            : ""
+        } e può aumentare l'efficienza dell'equity, ma espone maggiormente l'investimento al servizio del debito e alle variazioni operative. È una struttura più aggressiva rispetto allo scenario originale.`
+
+      : `La leva richiesta coincide con quella dello scenario originale: non emerge una variazione strutturale del finanziamento.`;
+
+    const interpretationEN =
+
+      requestedMortgagePercent < originalMortgagePercent
+
+      ? `Reducing leverage requires more equity${
+          equityDelta > 0
+            ? ` (${fmtEUR_EN(equityDelta)} additional capital)`
+            : ""
+        } and ${
+          roiDelta < 0
+            ? "reduces the return on equity"
+            : "changes the return on equity"
+        }, but ${
+          cashflowDelta > 0
+            ? "increases cashflow and improves financial resilience"
+            : "reduces financial exposure and creates a more conservative structure"
+        }. It is not simply better or worse: it prioritizes stability and lower leverage over capital efficiency.`
+
+      : requestedMortgagePercent > originalMortgagePercent
+
+      ? `Increasing leverage reduces the equity required${
+          equityDelta < 0
+            ? ` by ${fmtEUR_EN(Math.abs(equityDelta))}`
+            : ""
+        } and may improve equity efficiency, but increases exposure to debt service and operating fluctuations. This is a more aggressive structure than the original scenario.`
+
+      : `The requested leverage matches the original scenario, so there is no structural financing change.`;
+
+    response.signals.push(
+      "mortgage_what_if"
+    );
+
+    response.metadata.whatIfScenario =
+      whatIf;
+
+    response.textIT =
+
+`🏦 Scenario mutuo ${requestedMortgagePercent}%
+
+Rispetto alla struttura originale con leva al ${originalMortgagePercent}%, il nuovo scenario ${
+  equityDelta > 0
+    ? `richiede ${fmtEUR_IT(equityDelta)} di capitale aggiuntivo e ${cashflowDirectionIT}`
+    : equityDelta < 0
+    ? `libera ${fmtEUR_IT(Math.abs(equityDelta))} di capitale e ${cashflowDirectionIT}`
+    : cashflowDirectionIT
+}.
+
+📊 Scenario originale → nuovo scenario
+
+Mutuo: ${originalMortgagePercent}% → ${requestedMortgagePercent}%
+Equity: ${fmtEUR_IT(originalEquity)} → ${fmtEUR_IT(newEquity)}
+Finanziamento: ${fmtEUR_IT(originalLoanAmount)} → ${fmtEUR_IT(newLoanAmount)}
+ROI equity: ${fmtPct(originalROI)} → ${fmtPct(newROI)}
+ROI immobile: ${fmtPct(originalRealROI)} → ${fmtPct(newRealROI)}
+Cashflow: ${fmtEUR_IT(originalCashflow)} → ${fmtEUR_IT(newCashflow)}
+Investment Score: ${originalScore} → ${newScore}
+
+🧠 Interpretazione AI
+
+${interpretationIT}`;
+
+    response.textEN =
+
+`🏦 ${requestedMortgagePercent}% Mortgage Scenario
+
+Compared with the original ${originalMortgagePercent}% leverage structure, the new scenario ${
+  equityDelta > 0
+    ? `requires ${fmtEUR_EN(equityDelta)} of additional equity and ${cashflowDirectionEN}`
+    : equityDelta < 0
+    ? `releases ${fmtEUR_EN(Math.abs(equityDelta))} of equity and ${cashflowDirectionEN}`
+    : cashflowDirectionEN
+}.
+
+📊 Original scenario → new scenario
+
+Mortgage: ${originalMortgagePercent}% → ${requestedMortgagePercent}%
+Equity: ${fmtEUR_EN(originalEquity)} → ${fmtEUR_EN(newEquity)}
+Loan: ${fmtEUR_EN(originalLoanAmount)} → ${fmtEUR_EN(newLoanAmount)}
+Equity ROI: ${fmtPct(originalROI)} → ${fmtPct(newROI)}
+Property ROI: ${fmtPct(originalRealROI)} → ${fmtPct(newRealROI)}
+Cashflow: ${fmtEUR_EN(originalCashflow)} → ${fmtEUR_EN(newCashflow)}
+Investment Score: ${originalScore} → ${newScore}
+
+🧠 AI Interpretation
+
+${interpretationEN}`;
+
+    console.log(
+      "🏦 MORTGAGE WHAT-IF RESPONSE CREATED",
+      {
+        originalMortgagePercent,
+        requestedMortgagePercent,
+        originalROI,
+        newROI,
+        originalRealROI,
+        newRealROI,
+        originalCashflow,
+        newCashflow,
+        originalScore,
+        newScore
+      }
+    );
+
+    return response;
+
+  }
+
   const mortgagePercent =
 
     Number(
