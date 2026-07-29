@@ -682,6 +682,65 @@ if(
   });
 
 }
+
+// ===========================================
+// 🏠 PROPERTY PRICE WHAT-IF
+// Executive Investment Assistant 2026
+// IT / EN contextual scenario detection
+// ===========================================
+
+const hasPropertyPriceEntity =
+  Number.isFinite(
+    Number(entities?.price)
+  ) &&
+  Number(entities?.price) > 0;
+
+const propertyPriceWhatIfPatterns = [
+
+  // 🇮🇹
+  /(?:e\s+)?se\s+.*(?:compr|acquist).*(?:\d|€)/i,
+  /(?:compr|acquist).*(?:a|per)\s*€?\s*\d/i,
+  /(?:prezzo|prezzo d'acquisto).*(?:\d|€)/i,
+
+  // 🇬🇧
+  /what if\s+.*(?:buy|purchase).*(?:\d|€)/i,
+  /(?:buy|purchase).*(?:for|at)\s*€?\s*\d/i,
+  /(?:purchase price|buying price).*(?:\d|€)/i
+
+];
+
+const isPropertyPriceWhatIf =
+  hasPropertyPriceEntity &&
+  propertyPriceWhatIfPatterns.some(
+    pattern => pattern.test(text)
+  );
+
+if(isPropertyPriceWhatIf){
+
+  applyIntent({
+
+    intent:
+      "investment_executive",
+
+    category:
+      "executive",
+
+    confidence:
+      0.99,
+
+    priority:
+      96,
+
+    requiresCalculation:
+      true,
+
+    requiresRiskAnalysis:
+      true
+
+  });
+
+}
+  
 // ===========================================
 // 🌍 MARKET ANALYSIS
 // Silicon Valley Market Intelligence
