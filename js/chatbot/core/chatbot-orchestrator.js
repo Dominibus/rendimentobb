@@ -845,6 +845,81 @@ roi:
 };
 
 // =====================================
+// 🧠 COMBINED WHAT-IF DETECTOR
+// Detects 2+ requested scenario changes.
+// Detection only — no calculation yet.
+// =====================================
+
+const combinedWhatIfChanges = {
+
+  mortgagePercent:
+    entities?.mortgagePercent !== null &&
+    entities?.mortgagePercent !== undefined
+      ? Number(entities.mortgagePercent)
+      : null,
+
+  propertyPrice:
+    entities?.price !== null &&
+    entities?.price !== undefined
+      ? Number(entities.price)
+      : null,
+
+  occupancy:
+    entities?.occupancy !== null &&
+    entities?.occupancy !== undefined &&
+    Number(entities.occupancy) !==
+      Number(
+        window.lastAnalysisData?.occupancy ??
+        analysisData.occupancy ??
+        0
+      )
+      ? Number(entities.occupancy)
+      : null,
+
+  adr:
+    (entities?.adr ?? entities?.nightly) !== null &&
+    (entities?.adr ?? entities?.nightly) !== undefined
+      ? Number(
+          entities?.adr ??
+          entities?.nightly
+        )
+      : null,
+
+  monthlyCosts:
+    entities?.monthlyCosts !== null &&
+    entities?.monthlyCosts !== undefined &&
+    entities?.monthlyCosts !== ""
+      ? Number(entities.monthlyCosts)
+      : null
+
+};
+
+const combinedWhatIfKeys =
+  Object.entries(combinedWhatIfChanges)
+    .filter(
+      ([, value]) =>
+        value !== null &&
+        Number.isFinite(value)
+    )
+    .map(
+      ([key]) => key
+    );
+
+const isCombinedWhatIf =
+  combinedWhatIfKeys.length >= 2;
+
+console.log(
+  "🧠 COMBINED WHAT-IF DETECTOR",
+  {
+    isCombinedWhatIf,
+    keys:
+      combinedWhatIfKeys,
+    changes:
+      combinedWhatIfChanges
+  }
+);    
+
+// =====================================
 // 🏦 MORTGAGE WHAT-IF SCENARIO
 // Temporary scenario — does NOT mutate lastAnalysisData
 // =====================================
