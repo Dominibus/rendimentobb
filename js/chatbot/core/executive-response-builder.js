@@ -719,6 +719,226 @@ ${executiveBrain?.strongestPointEN || "The combination of return, risk and cashf
 }    
 
 // ===============================================
+// 🏠 PROPERTY PRICE WHAT-IF RESPONSE
+// Executive Investment Assistant 2026
+// IT / EN — temporary scenario comparison
+// ===============================================
+
+const whatIfScenario =
+    executiveContext?.analysisData?.whatIfScenario ||
+    liveData?.whatIfScenario ||
+    null;
+
+const isPropertyPriceWhatIf =
+    context.isExecutive &&
+    whatIfScenario?.type === "property_price";
+
+if(isPropertyPriceWhatIf){
+
+    const originalPrice =
+        Number(
+            whatIfScenario.originalPropertyPrice || 0
+        );
+
+    const scenarioPrice =
+        Number(
+            whatIfScenario.scenarioPropertyPrice || 0
+        );
+
+    const originalLoan =
+        Number(
+            whatIfScenario.originalLoanAmount || 0
+        );
+
+    const scenarioLoan =
+        Number(
+            whatIfScenario.scenarioLoanAmount || 0
+        );
+
+    const originalEquity =
+        Number(
+            whatIfScenario.originalEquity || 0
+        );
+
+    const scenarioEquity =
+        Number(
+            whatIfScenario.scenarioEquity || 0
+        );
+
+    const mortgagePercent =
+        Number(
+            whatIfScenario.scenarioMortgagePercent || 0
+        );
+
+    const originalROI =
+        Number(
+            whatIfScenario.originalROI || 0
+        );
+
+    const scenarioROI =
+        Number(
+            whatIfScenario.scenarioROI || 0
+        );
+
+    const originalRealROI =
+        Number(
+            whatIfScenario.originalRealROI || 0
+        );
+
+    const scenarioRealROI =
+        Number(
+            whatIfScenario.scenarioRealROI || 0
+        );
+
+    const originalCashflow =
+        Number(
+            whatIfScenario.originalCashflow || 0
+        );
+
+    const scenarioCashflow =
+        Number(
+            whatIfScenario.scenarioCashflow || 0
+        );
+
+    const originalScore =
+        Number(
+            whatIfScenario.originalInvestmentScore || 0
+        );
+
+    const scenarioScore =
+        Number(
+            whatIfScenario.scenarioInvestmentScore || 0
+        );
+
+    const scenarioVerdict =
+        advisor?.verdict ||
+        investmentScore?.verdict ||
+        "WAIT";
+
+    const formatEURIT = value =>
+        new Intl.NumberFormat(
+            "it-IT",
+            {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        ).format(value || 0);
+
+    const formatEUREN = value =>
+        new Intl.NumberFormat(
+            "en-US",
+            {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        ).format(value || 0);
+
+    const formatPctIT = value =>
+        Number(value || 0)
+            .toLocaleString(
+                "it-IT",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + "%";
+
+    const formatPctEN = value =>
+        Number(value || 0)
+            .toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + "%";
+
+    const priceDelta =
+        scenarioPrice - originalPrice;
+
+    const roiDelta =
+        scenarioROI - originalROI;
+
+    const cashflowDelta =
+        scenarioCashflow - originalCashflow;
+
+    const scoreDelta =
+        scenarioScore - originalScore;
+
+    const improvesScenario =
+        roiDelta > 0 &&
+        cashflowDelta > 0;
+
+    const openingIT =
+        improvesScenario
+            ? `Sì. A ${formatEURIT(scenarioPrice)} lo scenario migliora rispetto al prezzo iniziale di ${formatEURIT(originalPrice)}.`
+            : `A ${formatEURIT(scenarioPrice)} lo scenario cambia rispetto al prezzo iniziale di ${formatEURIT(originalPrice)}.`;
+
+    const openingEN =
+        improvesScenario
+            ? `Yes. At ${formatEUREN(scenarioPrice)}, the scenario improves compared with the original ${formatEUREN(originalPrice)} purchase price.`
+            : `At ${formatEUREN(scenarioPrice)}, the scenario changes compared with the original ${formatEUREN(originalPrice)} purchase price.`;
+
+    blocksIT.length = 0;
+    blocksEN.length = 0;
+
+    blocksIT.push(
+`${scenarioVerdict === "BUY" ? "🟢" : scenarioVerdict === "NO_BUY" ? "🔴" : "🟡"} SCENARIO PREZZO: ${scenarioVerdict}
+
+${openingIT}
+
+Mantengo invariato l'LTV al ${mortgagePercent.toLocaleString("it-IT", {maximumFractionDigits: 1})}% per confrontare il solo effetto del prezzo.
+
+💰 Struttura finanziaria
+• Prezzo: ${formatEURIT(originalPrice)} → ${formatEURIT(scenarioPrice)}
+• Mutuo: ${formatEURIT(originalLoan)} → ${formatEURIT(scenarioLoan)}
+• Equity: ${formatEURIT(originalEquity)} → ${formatEURIT(scenarioEquity)}
+
+📈 Impatto
+• ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
+• ROI sull'immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Valutazione
+
+${priceDelta < 0
+    ? `La riduzione del prezzo di ${formatEURIT(Math.abs(priceDelta))} aumenta il rendimento sull'equity di ${formatPctIT(Math.abs(roiDelta))} e migliora il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}${scoreDelta === 0 ? ", senza modificare l'Investment Score." : "."}`
+    : `Il nuovo prezzo modifica la struttura economica dell'operazione. Il confronto mostra l'effetto diretto su rendimento, cashflow e sostenibilità finanziaria.`}`
+    );
+
+    blocksEN.push(
+`${scenarioVerdict === "BUY" ? "🟢" : scenarioVerdict === "NO_BUY" ? "🔴" : "🟡"} PRICE SCENARIO: ${scenarioVerdict}
+
+${openingEN}
+
+I keep the LTV unchanged at ${mortgagePercent.toLocaleString("en-US", {maximumFractionDigits: 1})}% to isolate the impact of the purchase price.
+
+💰 Financial structure
+• Price: ${formatEUREN(originalPrice)} → ${formatEUREN(scenarioPrice)}
+• Mortgage: ${formatEUREN(originalLoan)} → ${formatEUREN(scenarioLoan)}
+• Equity: ${formatEUREN(originalEquity)} → ${formatEUREN(scenarioEquity)}
+
+📈 Impact
+• Return on equity: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
+• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Assessment
+
+${priceDelta < 0
+    ? `The ${formatEUREN(Math.abs(priceDelta))} lower purchase price increases return on equity by ${formatPctEN(Math.abs(roiDelta))} and improves annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}${scoreDelta === 0 ? ", without changing the Investment Score." : "."}`
+    : `The new purchase price changes the economics of the investment. The comparison shows its direct impact on returns, cashflow and financial sustainability.`}`
+    );
+
+}    
+
+// ===============================================
 // 🧠 BUILD FINAL RESPONSE
 // ===============================================
 
