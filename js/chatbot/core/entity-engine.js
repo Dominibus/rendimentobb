@@ -542,32 +542,94 @@ for(const pattern of nightlyPatterns){
 
 }
 
-  // ===========================================
-  // 💸 MONTHLY COSTS
-  // ===========================================
+// ===========================================
+// 💸 MONTHLY COSTS
+// ===========================================
 
-  const costsPatterns = [
+const monthlyCostsPatterns = [
 
-    /(?:costi|spese)\s?(\d+)/,
-    /monthly\s?costs\s?(\d+)/,
-    /costi\s?mensili\s?(\d+)/
+  // 🇮🇹
+  /(?:costi|spese)(?:\s+mensili)?\s+(?:salissero|salissero\s+fino|salissero\s+ad|aumentassero|aumentano|salgono|fossero|sono|a|ad|di)?\s*€?\s*(\d[\d\.,]*)\s*€?(?:\s+(?:al\s+mese|mensili))?/,
 
-  ];
+  /(?:costi|spese)\s+mensili\s+(?:a|ad|di)?\s*€?\s*(\d[\d\.,]*)/,
 
-  for(const pattern of costsPatterns){
+  // 🇬🇧
+  /(?:monthly\s+costs|monthly\s+expenses)\s+(?:rose|rise|increased|increase|were|to|at|of)?\s*€?\s*(\d[\d\.,]*)/,
 
-    const match = text.match(pattern);
+  /(?:costs|expenses)\s+(?:rose|rise|increased|increase|were|to|at|of)?\s*€?\s*(\d[\d\.,]*)\s*€?\s*(?:per\s+month|monthly)/
 
-    if(match){
+];
 
-      entities.monthlyCosts =
-        Number(match[1]);
+for(const pattern of monthlyCostsPatterns){
 
-      break;
+  const match = text.match(pattern);
+
+  if(match){
+
+    let costsText =
+      String(match[1]).trim();
+
+    // 🇮🇹 1.000 / 12.500
+    if(
+      /^\d{1,3}(\.\d{3})+$/.test(costsText)
+    ){
+
+      costsText =
+        costsText.replace(/\./g, "");
 
     }
 
+    // 🇬🇧 1,000 / 12,500
+    else if(
+      /^\d{1,3}(,\d{3})+$/.test(costsText)
+    ){
+
+      costsText =
+        costsText.replace(/,/g, "");
+
+    }
+
+    // Decimal fallback
+    else{
+
+      costsText =
+        costsText.replace(",", ".");
+
+    }
+
+    const value =
+      Number(costsText);
+
+    if(
+      Number.isFinite(value) &&
+      value >= 0
+    ){
+
+      entities.monthlyCosts =
+        value;
+
+      entities.amount =
+        value;
+
+      // A monetary amount explicitly identified
+      // as operating costs is NOT property price.
+      if(entities.price === value){
+
+        entities.price = null;
+
+      }
+
+      entities.detectedTopics.push(
+        "finance"
+      );
+
+    }
+
+    break;
+
   }
+
+}
 
   // ===========================================
   // 🏦 MORTGAGE DETECTION
