@@ -861,13 +861,17 @@ const canonicalScore =
 
 const rememberedBudget =
 
-  entities.amount ||
-
   entities.price ||
+
+  entities.budget ||
 
   memory.lastBudget ||
 
   memory.lastPropertyPrice ||
+
+  liveData.propertyPrice ||
+
+  liveData.price ||
 
   0;
 
