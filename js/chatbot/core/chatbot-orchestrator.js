@@ -1338,6 +1338,7 @@ const requestedMortgagePercent =
   );
 
 const isMortgageWhatIf =
+  !isCombinedWhatIf &&
   intent?.intents?.includes("mortgage_analysis") &&
   Number.isFinite(requestedMortgagePercent) &&
   requestedMortgagePercent > 0 &&
@@ -1675,6 +1676,7 @@ const baselineMortgagePercent =
   );
 
 const isPropertyPriceWhatIf =
+  !isCombinedWhatIf &&
   !isMortgageWhatIf &&
   Number.isFinite(requestedPropertyPrice) &&
   requestedPropertyPrice > 0 &&
@@ -2018,6 +2020,7 @@ const baselineOccupancy =
   );
 
 const isOccupancyWhatIf =
+  !isCombinedWhatIf &&
   !isMortgageWhatIf &&
   !isPropertyPriceWhatIf &&
   intent?.intents?.includes("investment_executive") &&
@@ -2371,6 +2374,7 @@ const baselineADR =
   );
 
 const isADRWhatIf =
+  !isCombinedWhatIf &&
   !isMortgageWhatIf &&
   !isPropertyPriceWhatIf &&
   !isOccupancyWhatIf &&
@@ -2737,6 +2741,7 @@ const baselineMonthlyCosts =
   );
 
 const isMonthlyCostsWhatIf =
+  !isCombinedWhatIf &&
   !isMortgageWhatIf &&
   !isPropertyPriceWhatIf &&
   !isOccupancyWhatIf &&
