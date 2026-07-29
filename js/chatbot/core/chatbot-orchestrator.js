@@ -2157,11 +2157,19 @@ if(advisor){
     );
 
   const canonicalVerdict =
-    canonicalAnalysis.verdict ??
-    window.lastAnalysisData?.verdict ??
-    window.lastInvestmentScore?.verdict ??
-    advisor.verdict ??
-    "WAIT";
+  analysisData?.whatIfScenario
+    ? (
+        advisor.verdict ??
+        window.lastInvestmentScore?.verdict ??
+        "WAIT"
+      )
+    : (
+        canonicalAnalysis.verdict ??
+        window.lastAnalysisData?.verdict ??
+        window.lastInvestmentScore?.verdict ??
+        advisor.verdict ??
+        "WAIT"
+      );
 
   window.lastInvestmentScore = {
 
