@@ -4619,8 +4619,8 @@ else if(
       scenarioCashflow - originalCashflow;
 
     const verdict =
-      analysisData?.verdict ||
       advisor?.verdict ||
+      analysisData?.verdict ||
       "WAIT";
 
     const formatEUR =
