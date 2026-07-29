@@ -1493,6 +1493,29 @@ if(isPropertyPriceWhatIf){
 }   
 
 // =====================================
+// 🧠 PROPERTY PRICE WHAT-IF INTENT OVERRIDE
+// A valid calculated scenario must use Executive response
+// =====================================
+
+if(
+  analysisData?.whatIfScenario?.type ===
+  "property_price"
+){
+
+  intent.intent =
+    "investment_executive";
+
+  intent.intents = [
+    "investment_executive"
+  ];
+
+  console.log(
+    "🏠 PROPERTY PRICE WHAT-IF → EXECUTIVE INTENT"
+  );
+
+}
+    
+// =====================================
 // 🏨 OCCUPANCY WHAT-IF SCENARIO
 // Changes occupancy only
 // Temporary scenario — does NOT mutate lastAnalysisData
