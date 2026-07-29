@@ -740,6 +740,63 @@ if(isPropertyPriceWhatIf){
   });
 
 }
+
+// ===========================================
+// 🏨 OCCUPANCY WHAT-IF
+// Executive Investment Assistant 2026
+// IT / EN contextual scenario detection
+// ===========================================
+
+const hasOccupancyEntity =
+  Number.isFinite(
+    Number(entities?.occupancy)
+  ) &&
+  Number(entities?.occupancy) >= 0 &&
+  Number(entities?.occupancy) <= 100;
+
+const occupancyWhatIfPatterns = [
+
+  // 🇮🇹
+  /(?:e\s+)?se\s+.*occupazione.*\d+\s*%?/i,
+  /occupazione\s+.*(?:scend|sal|aument|dimin).*?\d+\s*%?/i,
+
+  // 🇬🇧
+  /what if\s+.*occupancy.*\d+\s*%?/i,
+  /occupancy\s+.*(?:drop|fall|decreas|increas|ris).*?\d+\s*%?/i
+
+];
+
+const isOccupancyWhatIf =
+  hasOccupancyEntity &&
+  occupancyWhatIfPatterns.some(
+    pattern => pattern.test(text)
+  );
+
+if(isOccupancyWhatIf){
+
+  applyIntent({
+
+    intent:
+      "investment_executive",
+
+    category:
+      "executive",
+
+    confidence:
+      0.99,
+
+    priority:
+      310,
+
+    requiresCalculation:
+      true,
+
+    requiresRiskAnalysis:
+      true
+
+  });
+
+}  
   
 // ===========================================
 // 🌍 MARKET ANALYSIS
