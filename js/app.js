@@ -3039,6 +3039,8 @@ pricePerNight: nightly,
 
 monthlyCosts: monthlyCosts || 0,
 
+expenses: monthlyCosts || 0,
+
 revenueAnnual: annualRevenue || 0,
 
 gross:
