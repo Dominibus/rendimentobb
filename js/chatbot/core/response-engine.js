@@ -4714,7 +4714,7 @@ else if(
 
     const changesCount =
       combinedChanges.length;
-
+    
     response.type =
       "executive_what_if";
 
