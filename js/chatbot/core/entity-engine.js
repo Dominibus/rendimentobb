@@ -551,7 +551,7 @@ for(const pattern of nightlyPatterns){
 
 const monthlyCostsMatch =
   text.match(
-    /(?:costi|spese)(?:\s+(?:mensili|al\s+mese))?[\s\S]*?€?\s*(\d[\d\.,]*)\s*€?(?:\s*(?:al\s+mese|mensili))?/
+    /(?:(?:costi|spese)(?:\s+(?:mensili|al\s+mese))?|(?:monthly\s+(?:operating\s+)?(?:costs|expenses)|(?:operating\s+)?(?:costs|expenses)\s+(?:per\s+month|monthly)))[\s\S]*?€?\s*(\d[\d\.,]*)\s*€?(?:\s*(?:al\s+mese|mensili|per\s+month|monthly))?/
   );
 
 if(monthlyCostsMatch){
