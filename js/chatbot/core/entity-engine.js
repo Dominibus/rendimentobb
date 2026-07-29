@@ -486,7 +486,7 @@ for(const pattern of occupancyPatterns){
 const nightlyPatterns = [
 
   // 🇮🇹
-  /prezzo\s+(?:a\s+)?notte\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
+  /prezzo\s+(?:a\s+)?notte\s+(?:(?:salisse|sale|aumentasse|aumenta|scendesse|scende|diminuisse|diminuisce)\s+)?(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
   /prezzo\s+notte\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
   /(?:adr|tariffa\s+media|tariffa\s+notte)\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
 
