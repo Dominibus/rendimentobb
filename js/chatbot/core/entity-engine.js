@@ -546,86 +546,72 @@ for(const pattern of nightlyPatterns){
 // 💸 MONTHLY COSTS
 // ===========================================
 
-const monthlyCostsPatterns = [
+const monthlyCostsMatch =
+  text.match(
+    /(?:costi|spese)(?:\s+mensili)?[\s\S]*?€?\s*(\d[\d\.,]*)\s*€?\s*(?:al\s+mese|mensili)/
+  );
 
-  // 🇮🇹
-  /(?:costi|spese)(?:\s+mensili)?\s+(?:salissero|salissero\s+fino|salissero\s+ad|aumentassero|aumentano|salgono|fossero|sono|a|ad|di)?\s*€?\s*(\d[\d\.,]*)\s*€?(?:\s+(?:al\s+mese|mensili))?/,
+if(monthlyCostsMatch){
 
-  /(?:costi|spese)\s+mensili\s+(?:a|ad|di)?\s*€?\s*(\d[\d\.,]*)/,
+  let costsText =
+    String(monthlyCostsMatch[1]).trim();
 
-  // 🇬🇧
-  /(?:monthly\s+costs|monthly\s+expenses)\s+(?:rose|rise|increased|increase|were|to|at|of)?\s*€?\s*(\d[\d\.,]*)/,
+  // 🇮🇹 1.000 → 1000
+  if(
+    /^\d{1,3}(?:\.\d{3})+$/.test(costsText)
+  ){
 
-  /(?:costs|expenses)\s+(?:rose|rise|increased|increase|were|to|at|of)?\s*€?\s*(\d[\d\.,]*)\s*€?\s*(?:per\s+month|monthly)/
+    costsText =
+      costsText.replace(/\./g, "");
 
-];
+  }
 
-for(const pattern of monthlyCostsPatterns){
+  // 🇬🇧 1,000 → 1000
+  else if(
+    /^\d{1,3}(?:,\d{3})+$/.test(costsText)
+  ){
 
-  const match = text.match(pattern);
+    costsText =
+      costsText.replace(/,/g, "");
 
-  if(match){
+  }
 
-    let costsText =
-      String(match[1]).trim();
+  // Decimal fallback
+  else{
 
-    // 🇮🇹 1.000 / 12.500
+    costsText =
+      costsText.replace(",", ".");
+
+  }
+
+  const value =
+    Number(costsText);
+
+  if(
+    Number.isFinite(value) &&
+    value >= 0
+  ){
+
+    entities.monthlyCosts =
+      value;
+
+    entities.amount =
+      value;
+
+    // Prevent operating costs from becoming
+    // a property-price what-if.
     if(
-      /^\d{1,3}(\.\d{3})+$/.test(costsText)
+      entities.price === value
     ){
 
-      costsText =
-        costsText.replace(/\./g, "");
+      entities.price =
+        null;
 
     }
 
-    // 🇬🇧 1,000 / 12,500
-    else if(
-      /^\d{1,3}(,\d{3})+$/.test(costsText)
-    ){
-
-      costsText =
-        costsText.replace(/,/g, "");
-
-    }
-
-    // Decimal fallback
-    else{
-
-      costsText =
-        costsText.replace(",", ".");
-
-    }
-
-    const value =
-      Number(costsText);
-
-    if(
-      Number.isFinite(value) &&
-      value >= 0
-    ){
-
-      entities.monthlyCosts =
-        value;
-
-      entities.amount =
-        value;
-
-      // A monetary amount explicitly identified
-      // as operating costs is NOT property price.
-      if(entities.price === value){
-
-        entities.price = null;
-
-      }
-
-      entities.detectedTopics.push(
-        "finance"
-      );
-
-    }
-
-    break;
+    entities.detectedTopics.push(
+      "finance"
+    );
 
   }
 
