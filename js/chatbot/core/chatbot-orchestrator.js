@@ -1305,6 +1305,9 @@ if(isPropertyPriceWhatIf){
       analysisData.roi =
         scenarioResult.roi;
 
+      analysisData.visualROI =
+        scenarioResult.roi;
+
       analysisData.realROI =
         scenarioResult.realROI;
 
