@@ -646,16 +646,16 @@ if(monthlyCostsMatch){
 
 const mortgagePatterns = [
 
-  // 🇮🇹
-  /mutuo\s+(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
-  /finanziamento\s+(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
-  /ltv\s+(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  // 🇮🇹 — Direct + natural What-if
+  /mutuo\s+(?:(?:fosse|sarebbe|salisse|scendesse)\s+)?(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /finanziamento\s+(?:(?:fosse|sarebbe|salisse|scendesse)\s+)?(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /ltv\s+(?:(?:fosse|sarebbe|salisse|scendesse)\s+)?(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
   /(\d+(?:[\.,]\d+)?)\s?%\s+(?:di\s+)?mutuo/,
 
-  // 🇬🇧
-  /mortgage\s+(?:at\s+|of\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
-  /loan\s+(?:at\s+|of\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
-  /ltv\s+(?:at\s+|of\s+)?(\d+(?:[\.,]\d+)?)\s?%/
+  // 🇬🇧 — Direct + natural What-if
+  /mortgage\s+(?:(?:were|was|is|would\s+be|increased|decreased|rose|fell)\s+)?(?:at\s+|of\s+|to\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /loan\s+(?:(?:were|was|is|would\s+be|increased|decreased|rose|fell)\s+)?(?:at\s+|of\s+|to\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
+  /ltv\s+(?:(?:were|was|is|would\s+be|increased|decreased|rose|fell)\s+)?(?:at\s+|of\s+|to\s+)?(\d+(?:[\.,]\d+)?)\s?%/
 
 ];
 
