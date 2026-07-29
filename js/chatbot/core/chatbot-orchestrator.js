@@ -2209,6 +2209,368 @@ if(isADRWhatIf){
 
 }    
 
+// =====================================
+// 💸 MONTHLY COSTS WHAT-IF SCENARIO
+// Changes operating costs only
+// Temporary scenario — does NOT mutate lastAnalysisData
+// =====================================
+
+const requestedMonthlyCosts =
+  Number(
+    entities?.monthlyCosts
+  );
+
+const baselineMonthlyCosts =
+  Number(
+    window.lastAnalysisData?.expenses ??
+    window.lastAnalysisData?.monthlyCosts ??
+    analysisData.expenses ??
+    0
+  );
+
+const isMonthlyCostsWhatIf =
+  !isMortgageWhatIf &&
+  !isPropertyPriceWhatIf &&
+  !isOccupancyWhatIf &&
+  !isADRWhatIf &&
+  intent?.intents?.includes("investment_executive") &&
+  Number.isFinite(requestedMonthlyCosts) &&
+  requestedMonthlyCosts >= 0 &&
+  baselineMonthlyCosts >= 0 &&
+  requestedMonthlyCosts !== baselineMonthlyCosts;
+
+if(isMonthlyCostsWhatIf){
+
+  const scenarioPropertyPrice =
+    Number(
+      window.lastAnalysisData?.propertyPrice ??
+      window.lastAnalysisData?.price ??
+      analysisData.propertyPrice ??
+      0
+    );
+
+  const scenarioEquity =
+    Number(
+      window.lastAnalysisData?.equity ??
+      window.lastAnalysisData?.initialCapital ??
+      analysisData.equity ??
+      0
+    );
+
+  const scenarioLoanAmount =
+    Number(
+      window.lastAnalysisData?.loanAmount ??
+      window.lastAnalysisData?.mortgage ??
+      analysisData.loanAmount ??
+      0
+    );
+
+  const scenarioMortgagePercent =
+    Number(
+      window.lastAnalysisData?.mortgagePercent ??
+      analysisData.mortgagePercent ??
+      (
+        scenarioPropertyPrice > 0
+          ? (scenarioLoanAmount / scenarioPropertyPrice) * 100
+          : 0
+      )
+    );
+
+  const scenarioOccupancy =
+    Number(
+      window.lastAnalysisData?.occupancy ??
+      analysisData.occupancy ??
+      0
+    );
+
+  const scenarioADR =
+    Number(
+      window.lastAnalysisData?.priceNight ??
+      analysisData.priceNight ??
+      0
+    );
+
+  analysisData.expenses =
+    requestedMonthlyCosts;
+
+  analysisData.monthlyCosts =
+    requestedMonthlyCosts;
+
+  if(
+    scenarioPropertyPrice > 0 &&
+    typeof window.calculateROI === "function"
+  ){
+
+    const scenarioResult =
+      window.calculateROI({
+
+        price:
+          scenarioPropertyPrice,
+
+        equity:
+          scenarioEquity,
+
+        loanAmount:
+          scenarioLoanAmount,
+
+        priceNight:
+          scenarioADR,
+
+        occupancy:
+          scenarioOccupancy,
+
+        expenses:
+          requestedMonthlyCosts,
+
+        commission:
+          Number(
+            analysisData.commission ??
+            window.lastAnalysisData?.commission ??
+            15
+          ),
+
+        tax:
+          Number(
+            analysisData.tax ??
+            window.lastAnalysisData?.tax ??
+            21
+          ),
+
+        interestRate:
+          Number(
+            analysisData.interestRate ??
+            window.lastAnalysisData?.interestRate ??
+            3.5
+          ),
+
+        loanYears:
+          Number(
+            analysisData.loanYears ??
+            window.lastAnalysisData?.loanYears ??
+            20
+          )
+
+      });
+
+    if(
+      scenarioResult &&
+      typeof scenarioResult === "object"
+    ){
+
+      analysisData.roi =
+        scenarioResult.roi;
+
+      analysisData.visualROI =
+        scenarioResult.roi;
+
+      analysisData.realROI =
+        scenarioResult.realROI;
+
+      analysisData.net =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.cashflow =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.annualProfit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.profit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.netAfterMortgage =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.risk =
+        scenarioResult.risk;
+
+      console.log(
+        "🧮 COSTS WHAT-IF ROI RECALCULATED",
+        scenarioResult
+      );
+
+      if(
+        typeof window.rbGenerateInvestmentScore ===
+        "function"
+      ){
+
+        const scenarioScore =
+          window.rbGenerateInvestmentScore({
+
+            roi:
+              Number(
+                analysisData.roi || 0
+              ),
+
+            risk:
+              Number(
+                analysisData.risk || 0
+              ),
+
+            occupancy:
+              scenarioOccupancy,
+
+            mortgagePercent:
+              scenarioMortgagePercent,
+
+            cashflow:
+              Number(
+                analysisData.cashflow || 0
+              ),
+
+            city:
+              analysisData.city || "roma"
+
+          });
+
+        if(
+          scenarioScore &&
+          Number.isFinite(
+            Number(scenarioScore.score)
+          )
+        ){
+
+          analysisData.investmentScore =
+            Number(
+              scenarioScore.score
+            );
+
+          console.log(
+            "🧠 COSTS WHAT-IF SCORE RECALCULATED",
+            scenarioScore
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+
+  analysisData.whatIfScenario = {
+
+    type:
+      "monthly_costs",
+
+    requestedMonthlyCosts,
+
+    originalMonthlyCosts:
+      baselineMonthlyCosts,
+
+    originalPropertyPrice:
+      Number(
+        window.lastAnalysisData?.propertyPrice ??
+        window.lastAnalysisData?.price ??
+        0
+      ),
+
+    originalMortgagePercent:
+      Number(
+        window.lastAnalysisData?.mortgagePercent ??
+        0
+      ),
+
+    originalLoanAmount:
+      Number(
+        window.lastAnalysisData?.loanAmount ??
+        window.lastAnalysisData?.mortgage ??
+        0
+      ),
+
+    originalEquity:
+      Number(
+        window.lastAnalysisData?.equity ??
+        window.lastAnalysisData?.initialCapital ??
+        0
+      ),
+
+    originalROI:
+      Number(
+        window.lastAnalysisData?.visualROI ??
+        window.lastAnalysisData?.roi ??
+        0
+      ),
+
+    originalRealROI:
+      Number(
+        window.lastAnalysisData?.realROI ??
+        window.lastAnalysisData?.safeROI ??
+        0
+      ),
+
+    originalCashflow:
+      Number(
+        window.lastAnalysisData?.net ??
+        window.lastAnalysisData?.cashflow ??
+        window.lastAnalysisData?.annualProfit ??
+        0
+      ),
+
+    originalRisk:
+      Number(
+        window.lastAnalysisData?.risk ??
+        0
+      ),
+
+    originalInvestmentScore:
+      Number(
+        window.lastAnalysisData?.investmentScore ??
+        window.lastInvestmentScore?.score ??
+        0
+      ),
+
+    scenarioMonthlyCosts:
+      requestedMonthlyCosts,
+
+    scenarioPropertyPrice,
+
+    scenarioMortgagePercent,
+
+    scenarioLoanAmount,
+
+    scenarioEquity,
+
+    scenarioOccupancy,
+
+    scenarioADR,
+
+    scenarioROI:
+      Number(
+        analysisData.roi ?? 0
+      ),
+
+    scenarioRealROI:
+      Number(
+        analysisData.realROI ?? 0
+      ),
+
+    scenarioCashflow:
+      Number(
+        analysisData.cashflow ??
+        analysisData.net ??
+        0
+      ),
+
+    scenarioRisk:
+      Number(
+        analysisData.risk ?? 0
+      ),
+
+    scenarioInvestmentScore:
+      Number(
+        analysisData.investmentScore ?? 0
+      )
+
+  };
+
+  console.log(
+    "💸 MONTHLY COSTS WHAT-IF SCENARIO",
+    analysisData.whatIfScenario
+  );
+
+}
+    
 console.log(
   "🔥 ANALYSIS DATA FINAL JSON",
   JSON.stringify(
