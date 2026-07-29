@@ -4535,6 +4535,183 @@ else if(
 
   }
 
+    // =====================================
+  // 💸 MONTHLY COSTS WHAT-IF RESPONSE
+  // =====================================
+
+  if(
+    isExecutiveWhatIf &&
+    executiveWhatIf.type === "monthly_costs"
+  ){
+
+    const originalCosts =
+      Number(
+        executiveWhatIf.originalMonthlyCosts ?? 0
+      );
+
+    const scenarioCosts =
+      Number(
+        executiveWhatIf.scenarioMonthlyCosts ??
+        executiveWhatIf.requestedMonthlyCosts ??
+        0
+      );
+
+    const originalROI =
+      Number(
+        executiveWhatIf.originalROI ?? 0
+      );
+
+    const scenarioROI =
+      Number(
+        executiveWhatIf.scenarioROI ??
+        analysisData?.roi ??
+        0
+      );
+
+    const originalRealROI =
+      Number(
+        executiveWhatIf.originalRealROI ?? 0
+      );
+
+    const scenarioRealROI =
+      Number(
+        executiveWhatIf.scenarioRealROI ??
+        analysisData?.realROI ??
+        0
+      );
+
+    const originalCashflow =
+      Number(
+        executiveWhatIf.originalCashflow ?? 0
+      );
+
+    const scenarioCashflow =
+      Number(
+        executiveWhatIf.scenarioCashflow ??
+        analysisData?.cashflow ??
+        analysisData?.net ??
+        0
+      );
+
+    const originalScore =
+      Number(
+        executiveWhatIf.originalInvestmentScore ?? 0
+      );
+
+    const scenarioScore =
+      Number(
+        executiveWhatIf.scenarioInvestmentScore ??
+        analysisData?.investmentScore ??
+        0
+      );
+
+    const roiDelta =
+      scenarioROI - originalROI;
+
+    const realROIDelta =
+      scenarioRealROI - originalRealROI;
+
+    const cashflowDelta =
+      scenarioCashflow - originalCashflow;
+
+    const verdict =
+      analysisData?.verdict ||
+      advisor?.verdict ||
+      "WAIT";
+
+    const formatEUR =
+      value =>
+        Number(value || 0).toLocaleString(
+          "it-IT",
+          {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 0
+          }
+        );
+
+    const formatPct =
+      value =>
+        `${Number(value || 0).toFixed(2)}%`;
+
+    response.type =
+      "executive_what_if";
+
+    response.confidence =
+      0.99;
+
+    response.textIT =
+`🧪 SCENARIO WHAT-IF — COSTI OPERATIVI
+
+Riducendo i costi mensili da ${formatEUR(originalCosts)} a ${formatEUR(scenarioCosts)}, lo scenario migliora la redditività dell'investimento.
+
+📊 Impatto economico
+
+ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
+
+ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+
+Cashflow annuo: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
+
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🎯 Valutazione AI
+
+Il taglio dei costi aumenta il cashflow annuo di ${formatEUR(cashflowDelta)} e porta il ROI equity a ${formatPct(scenarioROI)}.
+
+Il verdetto resta ${verdict}.`;
+
+    response.textEN =
+`🧪 WHAT-IF SCENARIO — OPERATING COSTS
+
+Reducing monthly operating costs from ${formatEUR(originalCosts)} to ${formatEUR(scenarioCosts)} improves the investment profitability.
+
+📊 Financial impact
+
+Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
+
+Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+
+Annual cashflow: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
+
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🎯 AI Assessment
+
+The cost reduction increases annual cashflow by ${formatEUR(cashflowDelta)} and raises equity ROI to ${formatPct(scenarioROI)}.
+
+The verdict remains ${verdict}.`;
+
+    response.suggestionsIT = [
+      "Simula costi ancora più bassi",
+      "Prova un'occupazione diversa",
+      "Modifica il prezzo medio notte"
+    ];
+
+    response.suggestionsEN = [
+      "Simulate lower operating costs",
+      "Try a different occupancy rate",
+      "Change the average nightly rate"
+    ];
+
+    console.log(
+      "💸 EXECUTIVE COSTS WHAT-IF RESPONSE",
+      {
+        originalCosts,
+        scenarioCosts,
+        originalROI,
+        scenarioROI,
+        originalCashflow,
+        scenarioCashflow,
+        originalScore,
+        scenarioScore
+      }
+    );
+
+    return response;
+
+  }
+
   // =====================================
   // 💰 SAFE FINANCIAL DATA
   // =====================================
