@@ -1149,6 +1149,13 @@ analysisData.expenses =
       analysisData.netAfterMortgage =
         scenarioResult.netAfterMortgage;
 
+      analysisData.gross =
+  scenarioResult.gross;
+
+analysisData.revenueAnnual =
+  scenarioResult.revenue ??
+  scenarioResult.gross;
+
       analysisData.risk =
         scenarioResult.risk;
 
