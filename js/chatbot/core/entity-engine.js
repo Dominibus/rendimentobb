@@ -263,14 +263,15 @@ else if(detectedCities.length === 1){
   // 💰 PROPERTY PRICE / AMOUNT
   // ===========================================
 
-  const pricePatterns = [
+    const pricePatterns = [
 
-    /(\d+(?:[\.,]\d+)?)\s?k\b/,
-    /(\d+(?:[\.,]\d+)?)\s?mila\b/,
-    /€\s?(\d+(?:[\.,]\d+)?)/,
-    /(\d+(?:[\.,]\d+)?)\s?euro/,
-    /prezzo\s?(\d+(?:[\.,]\d+)?)/,
-    /budget\s?(\d+(?:[\.,]\d+)?)/
+    /(\d[\d\.,]*)\s?k\b/,
+    /(\d[\d\.,]*)\s?mila\b/,
+    /€\s?(\d[\d\.,]*)/,
+    /(\d[\d\.,]*)\s?€/,
+    /(\d[\d\.,]*)\s?euro\b/,
+    /prezzo\s?(\d[\d\.,]*)/,
+    /budget\s?(\d[\d\.,]*)/
 
   ];
 
@@ -280,12 +281,39 @@ else if(detectedCities.length === 1){
 
     if(match){
 
-      let value = Number(
+            let priceText =
+        String(match[1]).trim();
 
-        match[1]
-          .replace(",", ".")
+      // 🇮🇹 135.000 / 1.250.000
+      if(
+        /^\d{1,3}(\.\d{3})+$/.test(priceText)
+      ){
 
-      );
+        priceText =
+          priceText.replace(/\./g, "");
+
+      }
+
+      // 🇬🇧 135,000 / 1,250,000
+      else if(
+        /^\d{1,3}(,\d{3})+$/.test(priceText)
+      ){
+
+        priceText =
+          priceText.replace(/,/g, "");
+
+      }
+
+      // Decimal fallback: 135,5 → 135.5
+      else{
+
+        priceText =
+          priceText.replace(",", ".");
+
+      }
+
+      let value =
+        Number(priceText);
 
       if(
         text.includes("k") ||
