@@ -1490,6 +1490,359 @@ if(isPropertyPriceWhatIf){
     analysisData.whatIfScenario
   );
 
+}   
+
+// =====================================
+// 🏨 OCCUPANCY WHAT-IF SCENARIO
+// Changes occupancy only
+// Temporary scenario — does NOT mutate lastAnalysisData
+// =====================================
+
+const requestedOccupancy =
+  Number(
+    entities?.occupancy
+  );
+
+const baselineOccupancy =
+  Number(
+    window.lastAnalysisData?.occupancy ??
+    rememberedAnalysis.occupancy ??
+    analysisData.occupancy ??
+    0
+  );
+
+const isOccupancyWhatIf =
+  !isMortgageWhatIf &&
+  !isPropertyPriceWhatIf &&
+  intent?.intents?.includes("investment_executive") &&
+  Number.isFinite(requestedOccupancy) &&
+  requestedOccupancy >= 0 &&
+  requestedOccupancy <= 100 &&
+  baselineOccupancy > 0 &&
+  requestedOccupancy !== baselineOccupancy;
+
+if(isOccupancyWhatIf){
+
+  const scenarioPropertyPrice =
+    Number(
+      window.lastAnalysisData?.propertyPrice ??
+      window.lastAnalysisData?.price ??
+      analysisData.propertyPrice ??
+      0
+    );
+
+  const scenarioEquity =
+    Number(
+      window.lastAnalysisData?.equity ??
+      window.lastAnalysisData?.initialCapital ??
+      analysisData.equity ??
+      0
+    );
+
+  const scenarioLoanAmount =
+    Number(
+      window.lastAnalysisData?.loanAmount ??
+      window.lastAnalysisData?.mortgage ??
+      analysisData.loanAmount ??
+      0
+    );
+
+  const scenarioMortgagePercent =
+    Number(
+      window.lastAnalysisData?.mortgagePercent ??
+      analysisData.mortgagePercent ??
+      (
+        scenarioPropertyPrice > 0
+          ? (scenarioLoanAmount / scenarioPropertyPrice) * 100
+          : 0
+      )
+    );
+
+  analysisData.occupancy =
+    requestedOccupancy;
+
+  if(
+    scenarioPropertyPrice > 0 &&
+    typeof window.calculateROI === "function"
+  ){
+
+    const scenarioResult =
+      window.calculateROI({
+
+        price:
+          scenarioPropertyPrice,
+
+        equity:
+          scenarioEquity,
+
+        loanAmount:
+          scenarioLoanAmount,
+
+        priceNight:
+          Number(
+            analysisData.priceNight ??
+            window.lastAnalysisData?.priceNight ??
+            100
+          ),
+
+        occupancy:
+          requestedOccupancy,
+
+        expenses:
+          Number(
+            analysisData.expenses ??
+            window.lastAnalysisData?.expenses ??
+            30
+          ),
+
+        commission:
+          Number(
+            analysisData.commission ??
+            window.lastAnalysisData?.commission ??
+            15
+          ),
+
+        tax:
+          Number(
+            analysisData.tax ??
+            window.lastAnalysisData?.tax ??
+            21
+          ),
+
+        interestRate:
+          Number(
+            analysisData.interestRate ??
+            window.lastAnalysisData?.interestRate ??
+            3.5
+          ),
+
+        loanYears:
+          Number(
+            analysisData.loanYears ??
+            window.lastAnalysisData?.loanYears ??
+            20
+          )
+
+      });
+
+    if(
+      scenarioResult &&
+      typeof scenarioResult === "object"
+    ){
+
+      analysisData.roi =
+        scenarioResult.roi;
+
+      analysisData.visualROI =
+        scenarioResult.roi;
+
+      analysisData.realROI =
+        scenarioResult.realROI;
+
+      analysisData.net =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.cashflow =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.annualProfit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.profit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.netAfterMortgage =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.risk =
+        scenarioResult.risk;
+
+      console.log(
+        "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
+        scenarioResult
+      );
+
+      // =====================================
+      // 🧠 RECALCULATE OCCUPANCY WHAT-IF SCORE
+      // Temporary only
+      // =====================================
+
+      if(
+        typeof window.rbGenerateInvestmentScore ===
+        "function"
+      ){
+
+        const scenarioScore =
+          window.rbGenerateInvestmentScore({
+
+            roi:
+              Number(
+                analysisData.roi || 0
+              ),
+
+            risk:
+              Number(
+                analysisData.risk || 0
+              ),
+
+            occupancy:
+              requestedOccupancy,
+
+            mortgagePercent:
+              scenarioMortgagePercent,
+
+            cashflow:
+              Number(
+                analysisData.cashflow || 0
+              ),
+
+            city:
+              analysisData.city || "roma"
+
+          });
+
+        if(
+          scenarioScore &&
+          Number.isFinite(
+            Number(scenarioScore.score)
+          )
+        ){
+
+          analysisData.investmentScore =
+            Number(
+              scenarioScore.score
+            );
+
+          console.log(
+            "🧠 OCCUPANCY WHAT-IF SCORE RECALCULATED",
+            scenarioScore
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+
+  analysisData.whatIfScenario = {
+
+    type:
+      "occupancy",
+
+    requestedOccupancy,
+
+    originalOccupancy:
+      baselineOccupancy,
+
+    originalPropertyPrice:
+      Number(
+        window.lastAnalysisData?.propertyPrice ??
+        window.lastAnalysisData?.price ??
+        0
+      ),
+
+    originalMortgagePercent:
+      Number(
+        window.lastAnalysisData?.mortgagePercent ??
+        0
+      ),
+
+    originalLoanAmount:
+      Number(
+        window.lastAnalysisData?.loanAmount ??
+        window.lastAnalysisData?.mortgage ??
+        0
+      ),
+
+    originalEquity:
+      Number(
+        window.lastAnalysisData?.equity ??
+        window.lastAnalysisData?.initialCapital ??
+        0
+      ),
+
+    originalROI:
+      Number(
+        window.lastAnalysisData?.visualROI ??
+        window.lastAnalysisData?.roi ??
+        0
+      ),
+
+    originalRealROI:
+      Number(
+        window.lastAnalysisData?.realROI ??
+        window.lastAnalysisData?.safeROI ??
+        0
+      ),
+
+    originalCashflow:
+      Number(
+        window.lastAnalysisData?.net ??
+        window.lastAnalysisData?.cashflow ??
+        window.lastAnalysisData?.annualProfit ??
+        0
+      ),
+
+    originalRisk:
+      Number(
+        window.lastAnalysisData?.risk ??
+        0
+      ),
+
+    originalInvestmentScore:
+      Number(
+        window.lastAnalysisData?.investmentScore ??
+        window.lastInvestmentScore?.score ??
+        0
+      ),
+
+    scenarioOccupancy:
+      requestedOccupancy,
+
+    scenarioPropertyPrice,
+
+    scenarioMortgagePercent,
+
+    scenarioLoanAmount,
+
+    scenarioEquity,
+
+    scenarioROI:
+      Number(
+        analysisData.roi ?? 0
+      ),
+
+    scenarioRealROI:
+      Number(
+        analysisData.realROI ?? 0
+      ),
+
+    scenarioCashflow:
+      Number(
+        analysisData.cashflow ??
+        analysisData.net ??
+        0
+      ),
+
+    scenarioRisk:
+      Number(
+        analysisData.risk ?? 0
+      ),
+
+    scenarioInvestmentScore:
+      Number(
+        analysisData.investmentScore ?? 0
+      )
+
+  };
+
+  console.log(
+    "🏨 OCCUPANCY WHAT-IF SCENARIO",
+    analysisData.whatIfScenario
+  );
+
 }    
 
 console.log(
