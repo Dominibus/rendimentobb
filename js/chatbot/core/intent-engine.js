@@ -862,6 +862,62 @@ if(isADRWhatIf){
   });
 
 }
+
+// ===========================================
+// 💸 OPERATING COSTS WHAT-IF
+// Executive Investment Assistant 2026
+// IT / EN contextual scenario detection
+// ===========================================
+
+const hasOperatingCostsEntity =
+  Number.isFinite(
+    Number(entities?.monthlyCosts)
+  ) &&
+  Number(entities?.monthlyCosts) >= 0;
+
+const operatingCostsWhatIfPatterns = [
+
+  // 🇮🇹
+  /(?:e\s+)?se\s+.*(?:costi|spese).*\d/i,
+  /(?:costi|spese)(?:\s+mensili)?.*(?:aument|sal|cres|riduc|dimin|scend|fosser|port).*\d/i,
+
+  // 🇬🇧
+  /what if\s+.*(?:costs|expenses).*\d/i,
+  /(?:monthly\s+costs|monthly\s+expenses|costs|expenses).*(?:increas|ris|grow|reduc|decreas|drop|were|chang).*\d/i
+
+];
+
+const isOperatingCostsWhatIf =
+  hasOperatingCostsEntity &&
+  operatingCostsWhatIfPatterns.some(
+    pattern => pattern.test(text)
+  );
+
+if(isOperatingCostsWhatIf){
+
+  applyIntent({
+
+    intent:
+      "investment_executive",
+
+    category:
+      "executive",
+
+    confidence:
+      0.99,
+
+    priority:
+      310,
+
+    requiresCalculation:
+      true,
+
+    requiresRiskAnalysis:
+      true
+
+  });
+
+}  
   
   
 // ===========================================
