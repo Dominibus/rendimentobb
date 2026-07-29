@@ -1190,6 +1190,267 @@ ${worsensScenario
 }    
 
 // ===============================================
+// 💶 ADR / NIGHTLY RATE WHAT-IF RESPONSE
+// Executive Investment Assistant 2026
+// IT / EN — operational pricing scenario
+// ===============================================
+
+const isADRWhatIf =
+    context.isExecutive &&
+    whatIfScenario?.type === "adr";
+
+if(isADRWhatIf){
+
+    const originalADR =
+        Number(
+            whatIfScenario.originalADR || 0
+        );
+
+    const scenarioADR =
+        Number(
+            whatIfScenario.scenarioADR || 0
+        );
+
+    const occupancy =
+        Number(
+            whatIfScenario.scenarioOccupancy ||
+            whatIfScenario.originalOccupancy ||
+            0
+        );
+
+    const originalROI =
+        Number(
+            whatIfScenario.originalROI || 0
+        );
+
+    const scenarioROI =
+        Number(
+            whatIfScenario.scenarioROI || 0
+        );
+
+    const originalRealROI =
+        Number(
+            whatIfScenario.originalRealROI || 0
+        );
+
+    const scenarioRealROI =
+        Number(
+            whatIfScenario.scenarioRealROI || 0
+        );
+
+    const originalCashflow =
+        Number(
+            whatIfScenario.originalCashflow || 0
+        );
+
+    const scenarioCashflow =
+        Number(
+            whatIfScenario.scenarioCashflow || 0
+        );
+
+    const originalRisk =
+        Number(
+            whatIfScenario.originalRisk || 0
+        );
+
+    const scenarioRisk =
+        Number(
+            whatIfScenario.scenarioRisk || 0
+        );
+
+    const originalScore =
+        Number(
+            whatIfScenario.originalInvestmentScore || 0
+        );
+
+    const scenarioScore =
+        Number(
+            whatIfScenario.scenarioInvestmentScore || 0
+        );
+
+    const scenarioVerdict =
+        advisor?.verdict ||
+        investmentScore?.verdict ||
+        "WAIT";
+
+    const originalVerdict =
+        originalScore >= 75
+            ? "BUY"
+            : originalScore <= 40
+                ? "AVOID"
+                : "WAIT";
+
+    const formatEURIT = value =>
+        new Intl.NumberFormat(
+            "it-IT",
+            {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        ).format(value || 0);
+
+    const formatEUREN = value =>
+        new Intl.NumberFormat(
+            "en-US",
+            {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        ).format(value || 0);
+
+    const formatPctIT = value =>
+        Number(value || 0)
+            .toLocaleString(
+                "it-IT",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + "%";
+
+    const formatPctEN = value =>
+        Number(value || 0)
+            .toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + "%";
+
+    const adrDelta =
+        scenarioADR - originalADR;
+
+    const roiDelta =
+        scenarioROI - originalROI;
+
+    const realROIDelta =
+        scenarioRealROI - originalRealROI;
+
+    const cashflowDelta =
+        scenarioCashflow - originalCashflow;
+
+    const riskDelta =
+        scenarioRisk - originalRisk;
+
+    const scoreDelta =
+        scenarioScore - originalScore;
+
+    const improvesScenario =
+        adrDelta > 0 &&
+        (
+            roiDelta > 0 ||
+            cashflowDelta > 0 ||
+            scoreDelta > 0
+        );
+
+    const worsensScenario =
+        adrDelta < 0 &&
+        (
+            roiDelta < 0 ||
+            cashflowDelta < 0 ||
+            scoreDelta < 0
+        );
+
+    let openingIT = "";
+    let openingEN = "";
+
+    if(improvesScenario){
+
+        openingIT =
+            `Portando il prezzo notte da ${formatEURIT(originalADR)} a ${formatEURIT(scenarioADR)}, lo scenario economico migliora mantenendo l'occupazione al ${formatPctIT(occupancy)}.`;
+
+        openingEN =
+            `Increasing the nightly rate from ${formatEUREN(originalADR)} to ${formatEUREN(scenarioADR)} improves the economics of the scenario while keeping occupancy at ${formatPctEN(occupancy)}.`;
+
+    }
+    else if(worsensScenario){
+
+        openingIT =
+            `Riducendo il prezzo notte da ${formatEURIT(originalADR)} a ${formatEURIT(scenarioADR)}, lo scenario economico peggiora mantenendo l'occupazione al ${formatPctIT(occupancy)}.`;
+
+        openingEN =
+            `Reducing the nightly rate from ${formatEUREN(originalADR)} to ${formatEUREN(scenarioADR)} weakens the economics of the scenario while keeping occupancy at ${formatPctEN(occupancy)}.`;
+
+    }
+    else{
+
+        openingIT =
+            `Con un prezzo notte di ${formatEURIT(scenarioADR)}, cambia il profilo economico dell'investimento rispetto ai ${formatEURIT(originalADR)} della simulazione originale.`;
+
+        openingEN =
+            `At a nightly rate of ${formatEUREN(scenarioADR)}, the investment economics change compared with the original ${formatEUREN(originalADR)} assumption.`;
+
+    }
+
+    blocksIT.length = 0;
+    blocksEN.length = 0;
+
+    blocksIT.push(
+`${scenarioVerdict === "BUY" ? "🟢" : scenarioVerdict === "NO_BUY" || scenarioVerdict === "AVOID" ? "🔴" : "🟡"} SCENARIO ADR: ${scenarioVerdict}
+
+${openingIT}
+
+Mantengo invariati prezzo dell'immobile, struttura finanziaria, occupazione e costi per isolare l'effetto del prezzo notte.
+
+💶 ADR
+• ${formatEURIT(originalADR)} → ${formatEURIT(scenarioADR)}
+
+📈 Impatto economico
+• ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
+• ROI sull'immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
+• Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Decisione
+• ${originalVerdict} → ${scenarioVerdict}
+
+🧠 Valutazione AI
+
+${improvesScenario
+    ? `L'aumento dell'ADR di ${formatEURIT(Math.abs(adrDelta))} incrementa il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))}, il ROI sull'immobile di ${formatPctIT(Math.abs(realROIDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}.${scoreDelta === 0 ? ` L'Investment Score resta stabile a ${Math.round(scenarioScore)}/100.` : ` L'Investment Score ${scoreDelta > 0 ? "sale" : "scende"} di ${Math.abs(Math.round(scoreDelta))} punti.`}${riskDelta === 0 ? " Il profilo di rischio resta invariato." : ""}`
+    : worsensScenario
+        ? `La riduzione dell'ADR di ${formatEURIT(Math.abs(adrDelta))} riduce il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}.`
+        : `Il nuovo ADR modifica rendimento e cashflow dell'operazione mantenendo invariati gli altri parametri dello scenario.`}`
+    );
+
+    blocksEN.push(
+`${scenarioVerdict === "BUY" ? "🟢" : scenarioVerdict === "NO_BUY" || scenarioVerdict === "AVOID" ? "🔴" : "🟡"} ADR SCENARIO: ${scenarioVerdict}
+
+${openingEN}
+
+I keep purchase price, financing structure, occupancy and costs unchanged to isolate the impact of the nightly rate.
+
+💶 ADR
+• ${formatEUREN(originalADR)} → ${formatEUREN(scenarioADR)}
+
+📈 Economic impact
+• Return on equity: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
+• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
+• Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Decision
+• ${originalVerdict} → ${scenarioVerdict}
+
+🧠 AI Assessment
+
+${improvesScenario
+    ? `The ${formatEUREN(Math.abs(adrDelta))} ADR increase raises return on equity by ${formatPctEN(Math.abs(roiDelta))}, property ROI by ${formatPctEN(Math.abs(realROIDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}.${scoreDelta === 0 ? ` The Investment Score remains stable at ${Math.round(scenarioScore)}/100.` : ` The Investment Score ${scoreDelta > 0 ? "increases" : "decreases"} by ${Math.abs(Math.round(scoreDelta))} points.`}${riskDelta === 0 ? " The risk profile remains unchanged." : ""}`
+    : worsensScenario
+        ? `The ${formatEUREN(Math.abs(adrDelta))} ADR reduction lowers return on equity by ${formatPctEN(Math.abs(roiDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}.`
+        : `The new ADR changes the investment's returns and cashflow while keeping the other scenario assumptions unchanged.`}`
+    );
+
+}    
+
+// ===============================================
 // 🧠 BUILD FINAL RESPONSE
 // ===============================================
 
