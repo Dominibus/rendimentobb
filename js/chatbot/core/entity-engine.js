@@ -438,7 +438,7 @@ const occupancyPatterns = [
   /(\d+)(?:\%)?\s?occupazione/,
 
   // 🇮🇹 Natural what-if
-  /occupazione\s+(?:scendesse|scende|scendesse\s+fino|salisse|sale|aumentasse|aumenta|diminuisse|diminuisce)\s+(?:al|a|fino\s+al)?\s*(\d+)(?:\%)?/,
+  /occupazione\s+(?:scendesse|scende|salisse|sale|aumentasse|aumenta|diminuisse|diminuisce)\s+(?:all['’]|al|a|fino\s+all['’]|fino\s+al)?\s*(\d+)(?:\%)?/,
 
   // 🇬🇧 Direct
   /occupancy\s?(?:of|at|to)?\s?(\d+)(?:\%)?/,
