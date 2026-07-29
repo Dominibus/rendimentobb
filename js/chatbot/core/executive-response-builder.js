@@ -936,6 +936,257 @@ ${priceDelta < 0
     : `The new purchase price changes the economics of the investment. The comparison shows its direct impact on returns, cashflow and financial sustainability.`}`
     );
 
+} 
+
+// ===============================================
+// 🏨 OCCUPANCY WHAT-IF RESPONSE
+// Executive Investment Assistant 2026
+// IT / EN — operational scenario comparison
+// ===============================================
+
+const isOccupancyWhatIf =
+    context.isExecutive &&
+    whatIfScenario?.type === "occupancy";
+
+if(isOccupancyWhatIf){
+
+    const originalOccupancy =
+        Number(
+            whatIfScenario.originalOccupancy || 0
+        );
+
+    const scenarioOccupancy =
+        Number(
+            whatIfScenario.scenarioOccupancy || 0
+        );
+
+    const originalROI =
+        Number(
+            whatIfScenario.originalROI || 0
+        );
+
+    const scenarioROI =
+        Number(
+            whatIfScenario.scenarioROI || 0
+        );
+
+    const originalRealROI =
+        Number(
+            whatIfScenario.originalRealROI || 0
+        );
+
+    const scenarioRealROI =
+        Number(
+            whatIfScenario.scenarioRealROI || 0
+        );
+
+    const originalCashflow =
+        Number(
+            whatIfScenario.originalCashflow || 0
+        );
+
+    const scenarioCashflow =
+        Number(
+            whatIfScenario.scenarioCashflow || 0
+        );
+
+    const originalRisk =
+        Number(
+            whatIfScenario.originalRisk || 0
+        );
+
+    const scenarioRisk =
+        Number(
+            whatIfScenario.scenarioRisk || 0
+        );
+
+    const originalScore =
+        Number(
+            whatIfScenario.originalInvestmentScore || 0
+        );
+
+    const scenarioScore =
+        Number(
+            whatIfScenario.scenarioInvestmentScore || 0
+        );
+
+    const scenarioVerdict =
+        advisor?.verdict ||
+        investmentScore?.verdict ||
+        "WAIT";
+
+    const originalVerdict =
+        originalScore >= 75
+            ? "BUY"
+            : originalScore <= 40
+                ? "AVOID"
+                : "WAIT";
+
+    const formatEURIT = value =>
+        new Intl.NumberFormat(
+            "it-IT",
+            {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        ).format(value || 0);
+
+    const formatEUREN = value =>
+        new Intl.NumberFormat(
+            "en-US",
+            {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        ).format(value || 0);
+
+    const formatPctIT = value =>
+        Number(value || 0)
+            .toLocaleString(
+                "it-IT",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + "%";
+
+    const formatPctEN = value =>
+        Number(value || 0)
+            .toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + "%";
+
+    const occupancyDelta =
+        scenarioOccupancy - originalOccupancy;
+
+    const roiDelta =
+        scenarioROI - originalROI;
+
+    const cashflowDelta =
+        scenarioCashflow - originalCashflow;
+
+    const riskDelta =
+        scenarioRisk - originalRisk;
+
+    const scoreDelta =
+        scenarioScore - originalScore;
+
+    const worsensScenario =
+        occupancyDelta < 0 &&
+        (
+            roiDelta < 0 ||
+            cashflowDelta < 0 ||
+            scoreDelta < 0
+        );
+
+    const improvesScenario =
+        occupancyDelta > 0 &&
+        (
+            roiDelta > 0 ||
+            cashflowDelta > 0 ||
+            scoreDelta > 0
+        );
+
+    let openingIT = "";
+    let openingEN = "";
+
+    if(worsensScenario){
+
+        openingIT =
+            `Con un'occupazione del ${formatPctIT(scenarioOccupancy)}, lo scenario peggiora sensibilmente rispetto al ${formatPctIT(originalOccupancy)} della simulazione originale.`;
+
+        openingEN =
+            `At ${formatPctEN(scenarioOccupancy)} occupancy, the scenario deteriorates materially compared with the original ${formatPctEN(originalOccupancy)} assumption.`;
+
+    }
+    else if(improvesScenario){
+
+        openingIT =
+            `Con un'occupazione del ${formatPctIT(scenarioOccupancy)}, lo scenario migliora rispetto al ${formatPctIT(originalOccupancy)} della simulazione originale.`;
+
+        openingEN =
+            `At ${formatPctEN(scenarioOccupancy)} occupancy, the scenario improves compared with the original ${formatPctEN(originalOccupancy)} assumption.`;
+
+    }
+    else{
+
+        openingIT =
+            `Con un'occupazione del ${formatPctIT(scenarioOccupancy)}, cambia il profilo economico dell'investimento rispetto al ${formatPctIT(originalOccupancy)} iniziale.`;
+
+        openingEN =
+            `At ${formatPctEN(scenarioOccupancy)} occupancy, the investment economics change compared with the original ${formatPctEN(originalOccupancy)} assumption.`;
+
+    }
+
+    blocksIT.length = 0;
+    blocksEN.length = 0;
+
+    blocksIT.push(
+`${scenarioVerdict === "BUY" ? "🟢" : scenarioVerdict === "NO_BUY" || scenarioVerdict === "AVOID" ? "🔴" : "🟡"} SCENARIO OCCUPAZIONE: ${scenarioVerdict}
+
+${openingIT}
+
+Mantengo invariati prezzo, struttura finanziaria, ADR e costi per isolare l'effetto del tasso di occupazione.
+
+🏨 Occupazione
+• ${formatPctIT(originalOccupancy)} → ${formatPctIT(scenarioOccupancy)}
+
+📈 Impatto economico
+• ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
+• ROI sull'immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
+• Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Decisione
+• ${originalVerdict} → ${scenarioVerdict}
+
+🧠 Valutazione AI
+
+${worsensScenario
+    ? `La riduzione dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} riduce il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti e l'Investment Score perde ${Math.abs(Math.round(scoreDelta))} punti.`
+    : improvesScenario
+        ? `L'aumento dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} migliora ROI, cashflow e sostenibilità economica dello scenario.`
+        : `Il nuovo livello di occupazione modifica rendimento, cashflow e profilo di rischio dell'operazione.`}`
+    );
+
+    blocksEN.push(
+`${scenarioVerdict === "BUY" ? "🟢" : scenarioVerdict === "NO_BUY" || scenarioVerdict === "AVOID" ? "🔴" : "🟡"} OCCUPANCY SCENARIO: ${scenarioVerdict}
+
+${openingEN}
+
+I keep purchase price, financing structure, ADR and costs unchanged to isolate the impact of occupancy.
+
+🏨 Occupancy
+• ${formatPctEN(originalOccupancy)} → ${formatPctEN(scenarioOccupancy)}
+
+📈 Economic impact
+• Return on equity: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
+• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
+• Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Decision
+• ${originalVerdict} → ${scenarioVerdict}
+
+🧠 AI Assessment
+
+${worsensScenario
+    ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy decline reduces return on equity by ${formatPctEN(Math.abs(roiDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. Risk increases by ${Math.abs(Math.round(riskDelta))} points and the Investment Score loses ${Math.abs(Math.round(scoreDelta))} points.`
+    : improvesScenario
+        ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy increase improves returns, cashflow and the economic sustainability of the scenario.`
+        : `The new occupancy level changes the investment's return, cashflow and risk profile.`}`
+    );
+
 }    
 
 // ===============================================
