@@ -4505,6 +4505,37 @@ else if(
     0.99;
 
   // =====================================
+  // 🧪 WHAT-IF SCENARIO CONTEXT
+  // =====================================
+
+  const executiveWhatIf =
+    analysisData?.whatIfScenario ||
+    liveData?.whatIfScenario ||
+    null;
+
+  const isExecutiveWhatIf =
+    Boolean(
+      executiveWhatIf &&
+      executiveWhatIf.type
+    );
+
+  if(isExecutiveWhatIf){
+
+    response.signals.push(
+      "what_if_scenario"
+    );
+
+    response.metadata.whatIfScenario =
+      executiveWhatIf;
+
+    console.log(
+      "🧪 EXECUTIVE WHAT-IF DETECTED",
+      executiveWhatIf
+    );
+
+  }
+
+  // =====================================
   // 💰 SAFE FINANCIAL DATA
   // =====================================
 
