@@ -427,7 +427,7 @@ for(const pattern of targetPatterns){
 const occupancyPatterns = [
 
   // 🇮🇹 Direct
-  /occupazione\s?(?:del|di|al)?\s?(\d+)(?:\%)?/,
+  /(?:l['’]\s*)?occupazione\s*(?:all['’]|al|a|del|di)?\s*(\d+)(?:\%)?/,
 
   /occupato\s?(?:al)?\s?(\d+)(?:\%)?/,
 
@@ -441,7 +441,7 @@ const occupancyPatterns = [
   /occupazione\s+(?:scendesse|scende|salisse|sale|aumentasse|aumenta|diminuisse|diminuisce)\s+(?:all['’]|al|a|fino\s+all['’]|fino\s+al)?\s*(\d+)(?:\%)?/,
 
   // 🇬🇧 Direct
-  /occupancy\s?(?:of|at|to)?\s?(\d+)(?:\%)?/,
+  /(?:the\s+)?occupancy\s*(?:of|at|to)?\s*(\d+)(?:\%)?/,
 
   /(\d+)(?:\%)?\s?occupancy/,
 
