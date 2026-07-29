@@ -797,6 +797,72 @@ if(isOccupancyWhatIf){
   });
 
 }  
+
+// ===========================================
+// 💶 ADR / NIGHTLY RATE WHAT-IF
+// Executive Investment Assistant 2026
+// IT / EN contextual scenario detection
+// ===========================================
+
+const hasADRWhatIfEntity =
+  (
+    Number.isFinite(
+      Number(entities?.adr)
+    ) &&
+    Number(entities?.adr) > 0
+  )
+  ||
+  (
+    Number.isFinite(
+      Number(entities?.nightly)
+    ) &&
+    Number(entities?.nightly) > 0
+  );
+
+const adrWhatIfPatterns = [
+
+  // 🇮🇹
+  /(?:e\s+)?se\s+.*(?:prezzo\s+(?:a\s+)?notte|adr|tariffa\s+(?:media|notte)).*\d/i,
+  /(?:prezzo\s+(?:a\s+)?notte|adr|tariffa\s+(?:media|notte)).*(?:port|aument|alz|riduc|abbass|scend|sal).*\d/i,
+
+  // 🇬🇧
+  /what if\s+.*(?:adr|nightly\s+rate|nightly\s+price|price\s+per\s+night|daily\s+rate).*\d/i,
+  /(?:adr|nightly\s+rate|nightly\s+price|price\s+per\s+night|daily\s+rate).*(?:increas|rais|reduc|lower|drop|chang).*\d/i
+
+];
+
+const isADRWhatIf =
+  hasADRWhatIfEntity &&
+  adrWhatIfPatterns.some(
+    pattern => pattern.test(text)
+  );
+
+if(isADRWhatIf){
+
+  applyIntent({
+
+    intent:
+      "investment_executive",
+
+    category:
+      "executive",
+
+    confidence:
+      0.99,
+
+    priority:
+      310,
+
+    requiresCalculation:
+      true,
+
+    requiresRiskAnalysis:
+      true
+
+  });
+
+}
+  
   
 // ===========================================
 // 🌍 MARKET ANALYSIS
