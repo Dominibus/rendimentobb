@@ -4637,83 +4637,6 @@ else if(
     const formatPct =
       value =>
         `${Number(value || 0).toFixed(2)}%`;
-
-        const combinedChanges =
-      Array.isArray(executiveWhatIf.changes)
-        ? executiveWhatIf.changes
-        : [];
-
-    const parameterLinesIT = [];
-    const parameterLinesEN = [];
-
-    if(combinedChanges.includes("propertyPrice")){
-
-      parameterLinesIT.push(
-        `Prezzo immobile: ${formatEUR_IT(executiveWhatIf.originalPropertyPrice)} → ${formatEUR_IT(executiveWhatIf.scenarioPropertyPrice)}`
-      );
-
-      parameterLinesEN.push(
-        `Property price: ${formatEUR_EN(executiveWhatIf.originalPropertyPrice)} → ${formatEUR_EN(executiveWhatIf.scenarioPropertyPrice)}`
-      );
-
-    }
-
-    if(combinedChanges.includes("mortgagePercent")){
-
-      parameterLinesIT.push(
-        `Mutuo/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%`
-      );
-
-      parameterLinesEN.push(
-        `Mortgage/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%`
-      );
-
-    }
-
-    if(combinedChanges.includes("occupancy")){
-
-      parameterLinesIT.push(
-        `Occupazione: ${originalOccupancy}% → ${scenarioOccupancy}%`
-      );
-
-      parameterLinesEN.push(
-        `Occupancy: ${originalOccupancy}% → ${scenarioOccupancy}%`
-      );
-
-    }
-
-    if(combinedChanges.includes("adr")){
-
-      parameterLinesIT.push(
-        `ADR: ${formatEUR_IT(originalADR)} → ${formatEUR_IT(scenarioADR)}`
-      );
-
-      parameterLinesEN.push(
-        `ADR: ${formatEUR_EN(originalADR)} → ${formatEUR_EN(scenarioADR)}`
-      );
-
-    }
-
-    if(combinedChanges.includes("monthlyCosts")){
-
-      parameterLinesIT.push(
-        `Costi mensili: ${formatEUR_IT(executiveWhatIf.originalMonthlyCosts)} → ${formatEUR_IT(executiveWhatIf.scenarioMonthlyCosts)}`
-      );
-
-      parameterLinesEN.push(
-        `Monthly costs: ${formatEUR_EN(executiveWhatIf.originalMonthlyCosts)} → ${formatEUR_EN(executiveWhatIf.scenarioMonthlyCosts)}`
-      );
-
-    }
-
-    const modifiedParametersIT =
-      parameterLinesIT.join("\n");
-
-    const modifiedParametersEN =
-      parameterLinesEN.join("\n");
-
-    const changesCount =
-      combinedChanges.length;
     
     response.type =
       "executive_what_if";
@@ -4946,12 +4869,89 @@ The verdict remains ${verdict}.`;
           }
         );
 
-    const formatPct =
-      value =>
-        `${Number(value || 0).toFixed(2)}%`;
+const formatPct =
+  value =>
+    `${Number(value || 0).toFixed(2)}%`;
 
-    response.type =
-      "executive_what_if";
+const combinedChanges =
+  Array.isArray(executiveWhatIf.changes)
+    ? executiveWhatIf.changes
+    : [];
+
+const parameterLinesIT = [];
+const parameterLinesEN = [];
+
+if(combinedChanges.includes("propertyPrice")){
+
+  parameterLinesIT.push(
+    `Prezzo immobile: ${formatEUR_IT(executiveWhatIf.originalPropertyPrice)} → ${formatEUR_IT(executiveWhatIf.scenarioPropertyPrice)}`
+  );
+
+  parameterLinesEN.push(
+    `Property price: ${formatEUR_EN(executiveWhatIf.originalPropertyPrice)} → ${formatEUR_EN(executiveWhatIf.scenarioPropertyPrice)}`
+  );
+
+}
+
+if(combinedChanges.includes("mortgagePercent")){
+
+  parameterLinesIT.push(
+    `Mutuo/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%`
+  );
+
+  parameterLinesEN.push(
+    `Mortgage/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%`
+  );
+
+}
+
+if(combinedChanges.includes("occupancy")){
+
+  parameterLinesIT.push(
+    `Occupazione: ${originalOccupancy}% → ${scenarioOccupancy}%`
+  );
+
+  parameterLinesEN.push(
+    `Occupancy: ${originalOccupancy}% → ${scenarioOccupancy}%`
+  );
+
+}
+
+if(combinedChanges.includes("adr")){
+
+  parameterLinesIT.push(
+    `ADR: ${formatEUR_IT(originalADR)} → ${formatEUR_IT(scenarioADR)}`
+  );
+
+  parameterLinesEN.push(
+    `ADR: ${formatEUR_EN(originalADR)} → ${formatEUR_EN(scenarioADR)}`
+  );
+
+}
+
+if(combinedChanges.includes("monthlyCosts")){
+
+  parameterLinesIT.push(
+    `Costi mensili: ${formatEUR_IT(executiveWhatIf.originalMonthlyCosts)} → ${formatEUR_IT(executiveWhatIf.scenarioMonthlyCosts)}`
+  );
+
+  parameterLinesEN.push(
+    `Monthly costs: ${formatEUR_EN(executiveWhatIf.originalMonthlyCosts)} → ${formatEUR_EN(executiveWhatIf.scenarioMonthlyCosts)}`
+  );
+
+}
+
+const modifiedParametersIT =
+  parameterLinesIT.join("\n");
+
+const modifiedParametersEN =
+  parameterLinesEN.join("\n");
+
+const changesCount =
+  combinedChanges.length;
+
+response.type =
+  "executive_what_if";
 
     response.confidence =
       0.99;
