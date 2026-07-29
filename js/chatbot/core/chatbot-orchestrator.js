@@ -2239,9 +2239,11 @@ if(isADRWhatIf){
 // =====================================
 
 const requestedMonthlyCosts =
-  Number(
-    entities?.monthlyCosts
-  );
+  entities?.monthlyCosts !== null &&
+  entities?.monthlyCosts !== undefined &&
+  entities?.monthlyCosts !== ""
+    ? Number(entities.monthlyCosts)
+    : null;
 
 const baselineMonthlyCosts =
   Number(
