@@ -4539,7 +4539,7 @@ else if(
 
   }
 
-    // =====================================
+  // =====================================
   // 💸 MONTHLY COSTS WHAT-IF RESPONSE
   // =====================================
 
@@ -4709,6 +4709,251 @@ The verdict remains ${verdict}.`;
         scenarioCashflow,
         originalScore,
         scenarioScore
+      }
+    );
+
+    return response;
+
+  }
+
+  // =====================================
+  // 🧪 COMBINED WHAT-IF RESPONSE
+  // =====================================
+
+  if(
+    isExecutiveWhatIf &&
+    executiveWhatIf.type === "combined"
+  ){
+
+    const originalMortgagePercent =
+      Number(
+        executiveWhatIf.originalMortgagePercent ?? 0
+      );
+
+    const scenarioMortgagePercent =
+      Number(
+        executiveWhatIf.requestedMortgagePercent ??
+        executiveWhatIf.scenarioMortgagePercent ??
+        analysisData?.mortgagePercent ??
+        0
+      );
+
+    const originalOccupancy =
+      Number(
+        executiveWhatIf.originalOccupancy ?? 0
+      );
+
+    const scenarioOccupancy =
+      Number(
+        executiveWhatIf.requestedOccupancy ??
+        executiveWhatIf.scenarioOccupancy ??
+        analysisData?.occupancy ??
+        0
+      );
+
+    const originalADR =
+      Number(
+        executiveWhatIf.originalADR ??
+        executiveWhatIf.originalNightPrice ??
+        0
+      );
+
+    const scenarioADR =
+      Number(
+        executiveWhatIf.requestedADR ??
+        executiveWhatIf.scenarioADR ??
+        analysisData?.priceNight ??
+        analysisData?.nightly ??
+        0
+      );
+
+    const originalEquity =
+      Number(
+        executiveWhatIf.originalEquity ?? 0
+      );
+
+    const scenarioEquity =
+      Number(
+        executiveWhatIf.equity ??
+        executiveWhatIf.scenarioEquity ??
+        analysisData?.equity ??
+        0
+      );
+
+    const originalLoan =
+      Number(
+        executiveWhatIf.originalLoanAmount ?? 0
+      );
+
+    const scenarioLoan =
+      Number(
+        executiveWhatIf.loanAmount ??
+        executiveWhatIf.scenarioLoanAmount ??
+        analysisData?.loanAmount ??
+        0
+      );
+
+    const originalROI =
+      Number(
+        executiveWhatIf.originalROI ?? 0
+      );
+
+    const scenarioROI =
+      Number(
+        executiveWhatIf.scenarioROI ??
+        analysisData?.roi ??
+        0
+      );
+
+    const originalRealROI =
+      Number(
+        executiveWhatIf.originalRealROI ?? 0
+      );
+
+    const scenarioRealROI =
+      Number(
+        executiveWhatIf.scenarioRealROI ??
+        analysisData?.realROI ??
+        0
+      );
+
+    const originalCashflow =
+      Number(
+        executiveWhatIf.originalCashflow ?? 0
+      );
+
+    const scenarioCashflow =
+      Number(
+        executiveWhatIf.scenarioCashflow ??
+        analysisData?.cashflow ??
+        analysisData?.net ??
+        0
+      );
+
+    const originalScore =
+      Number(
+        executiveWhatIf.originalInvestmentScore ?? 0
+      );
+
+    const scenarioScore =
+      Number(
+        executiveWhatIf.scenarioInvestmentScore ??
+        analysisData?.investmentScore ??
+        0
+      );
+
+    const verdict =
+      analysisData?.verdict ||
+      advisor?.verdict ||
+      "WAIT";
+
+    const formatEUR_IT =
+      value =>
+        Number(value || 0).toLocaleString(
+          "it-IT",
+          {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 2
+          }
+        );
+
+    const formatEUR_EN =
+      value =>
+        Number(value || 0).toLocaleString(
+          "en-US",
+          {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 2
+          }
+        );
+
+    const formatPct =
+      value =>
+        `${Number(value || 0).toFixed(2)}%`;
+
+    response.type =
+      "executive_what_if";
+
+    response.confidence =
+      0.99;
+
+    response.signals.push(
+      "combined_what_if"
+    );
+
+    response.textIT =
+`🧪 SCENARIO WHAT-IF COMBINATO
+
+Ho applicato contemporaneamente le modifiche richieste a leva finanziaria, occupazione e ADR, mantenendo invariata la simulazione originale.
+
+📌 Parametri modificati
+
+Mutuo/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%
+Occupazione: ${originalOccupancy}% → ${scenarioOccupancy}%
+ADR: ${formatEUR_IT(originalADR)} → ${formatEUR_IT(scenarioADR)}
+
+🏦 Nuova struttura finanziaria
+
+Equity: ${formatEUR_IT(originalEquity)} → ${formatEUR_IT(scenarioEquity)}
+Mutuo: ${formatEUR_IT(originalLoan)} → ${formatEUR_IT(scenarioLoan)}
+
+📊 Impatto economico
+
+ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
+ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+Cashflow annuo: ${formatEUR_IT(originalCashflow)} → ${formatEUR_IT(scenarioCashflow)}
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🧠 Valutazione AI
+
+La combinazione delle tre modifiche porta il ROI equity a ${formatPct(scenarioROI)}, il ROI reale a ${formatPct(scenarioRealROI)} e il cashflow annuo a ${formatEUR_IT(scenarioCashflow)}.
+
+Lo scenario risultante raggiunge un Investment Score di ${scenarioScore}/100 con verdetto ${verdict}.`;
+
+    response.textEN =
+`🧪 COMBINED WHAT-IF SCENARIO
+
+I applied the requested changes to financial leverage, occupancy and ADR simultaneously, while keeping the original simulation unchanged.
+
+📌 Modified Parameters
+
+Mortgage/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%
+Occupancy: ${originalOccupancy}% → ${scenarioOccupancy}%
+ADR: ${formatEUR_EN(originalADR)} → ${formatEUR_EN(scenarioADR)}
+
+🏦 New Financial Structure
+
+Equity: ${formatEUR_EN(originalEquity)} → ${formatEUR_EN(scenarioEquity)}
+Loan: ${formatEUR_EN(originalLoan)} → ${formatEUR_EN(scenarioLoan)}
+
+📊 Financial Impact
+
+Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
+Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+Annual cashflow: ${formatEUR_EN(originalCashflow)} → ${formatEUR_EN(scenarioCashflow)}
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🧠 AI Assessment
+
+The combination of the three changes brings equity ROI to ${formatPct(scenarioROI)}, property ROI to ${formatPct(scenarioRealROI)} and annual cashflow to ${formatEUR_EN(scenarioCashflow)}.
+
+The resulting scenario reaches an Investment Score of ${scenarioScore}/100 with a ${verdict} verdict.`;
+
+    console.log(
+      "🧪 EXECUTIVE COMBINED WHAT-IF RESPONSE",
+      {
+        scenarioMortgagePercent,
+        scenarioOccupancy,
+        scenarioADR,
+        scenarioEquity,
+        scenarioLoan,
+        scenarioROI,
+        scenarioRealROI,
+        scenarioCashflow,
+        scenarioScore,
+        verdict
       }
     );
 
