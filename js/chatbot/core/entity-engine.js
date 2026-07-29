@@ -426,9 +426,8 @@ for(const pattern of targetPatterns){
 
 const occupancyPatterns = [
 
+  // 🇮🇹 Direct
   /occupazione\s?(?:del|di|al)?\s?(\d+)(?:\%)?/,
-
-  /occupancy\s?(?:of)?\s?(\d+)(?:\%)?/,
 
   /occupato\s?(?:al)?\s?(\d+)(?:\%)?/,
 
@@ -438,7 +437,16 @@ const occupancyPatterns = [
 
   /(\d+)(?:\%)?\s?occupazione/,
 
-  /(\d+)(?:\%)?\s?occupancy/
+  // 🇮🇹 Natural what-if
+  /occupazione\s+(?:scendesse|scende|scendesse\s+fino|salisse|sale|aumentasse|aumenta|diminuisse|diminuisce)\s+(?:al|a|fino\s+al)?\s*(\d+)(?:\%)?/,
+
+  // 🇬🇧 Direct
+  /occupancy\s?(?:of|at|to)?\s?(\d+)(?:\%)?/,
+
+  /(\d+)(?:\%)?\s?occupancy/,
+
+  // 🇬🇧 Natural what-if
+  /occupancy\s+(?:dropped|drops|fell|falls|decreased|decreases|increased|increases|rose|rises)\s+(?:to|at)?\s*(\d+)(?:\%)?/
 
 ];
 
