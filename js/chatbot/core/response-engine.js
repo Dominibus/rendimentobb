@@ -4638,6 +4638,83 @@ else if(
       value =>
         `${Number(value || 0).toFixed(2)}%`;
 
+        const combinedChanges =
+      Array.isArray(executiveWhatIf.changes)
+        ? executiveWhatIf.changes
+        : [];
+
+    const parameterLinesIT = [];
+    const parameterLinesEN = [];
+
+    if(combinedChanges.includes("propertyPrice")){
+
+      parameterLinesIT.push(
+        `Prezzo immobile: ${formatEUR_IT(executiveWhatIf.originalPropertyPrice)} → ${formatEUR_IT(executiveWhatIf.scenarioPropertyPrice)}`
+      );
+
+      parameterLinesEN.push(
+        `Property price: ${formatEUR_EN(executiveWhatIf.originalPropertyPrice)} → ${formatEUR_EN(executiveWhatIf.scenarioPropertyPrice)}`
+      );
+
+    }
+
+    if(combinedChanges.includes("mortgagePercent")){
+
+      parameterLinesIT.push(
+        `Mutuo/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%`
+      );
+
+      parameterLinesEN.push(
+        `Mortgage/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%`
+      );
+
+    }
+
+    if(combinedChanges.includes("occupancy")){
+
+      parameterLinesIT.push(
+        `Occupazione: ${originalOccupancy}% → ${scenarioOccupancy}%`
+      );
+
+      parameterLinesEN.push(
+        `Occupancy: ${originalOccupancy}% → ${scenarioOccupancy}%`
+      );
+
+    }
+
+    if(combinedChanges.includes("adr")){
+
+      parameterLinesIT.push(
+        `ADR: ${formatEUR_IT(originalADR)} → ${formatEUR_IT(scenarioADR)}`
+      );
+
+      parameterLinesEN.push(
+        `ADR: ${formatEUR_EN(originalADR)} → ${formatEUR_EN(scenarioADR)}`
+      );
+
+    }
+
+    if(combinedChanges.includes("monthlyCosts")){
+
+      parameterLinesIT.push(
+        `Costi mensili: ${formatEUR_IT(executiveWhatIf.originalMonthlyCosts)} → ${formatEUR_IT(executiveWhatIf.scenarioMonthlyCosts)}`
+      );
+
+      parameterLinesEN.push(
+        `Monthly costs: ${formatEUR_EN(executiveWhatIf.originalMonthlyCosts)} → ${formatEUR_EN(executiveWhatIf.scenarioMonthlyCosts)}`
+      );
+
+    }
+
+    const modifiedParametersIT =
+      parameterLinesIT.join("\n");
+
+    const modifiedParametersEN =
+      parameterLinesEN.join("\n");
+
+    const changesCount =
+      combinedChanges.length;
+
     response.type =
       "executive_what_if";
 
@@ -4886,13 +4963,11 @@ The verdict remains ${verdict}.`;
     response.textIT =
 `🧪 SCENARIO WHAT-IF COMBINATO
 
-Ho applicato contemporaneamente le modifiche richieste a leva finanziaria, occupazione e ADR, mantenendo invariata la simulazione originale.
+Ho applicato contemporaneamente ${changesCount} modifiche richieste, mantenendo invariata la simulazione originale.
 
 📌 Parametri modificati
 
-Mutuo/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%
-Occupazione: ${originalOccupancy}% → ${scenarioOccupancy}%
-ADR: ${formatEUR_IT(originalADR)} → ${formatEUR_IT(scenarioADR)}
+${modifiedParametersIT}
 
 🏦 Nuova struttura finanziaria
 
@@ -4908,20 +4983,18 @@ Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🧠 Valutazione AI
 
-La combinazione delle tre modifiche porta il ROI equity a ${formatPct(scenarioROI)}, il ROI reale a ${formatPct(scenarioRealROI)} e il cashflow annuo a ${formatEUR_IT(scenarioCashflow)}.
+L'effetto combinato delle modifiche porta il ROI equity a ${formatPct(scenarioROI)}, il ROI reale a ${formatPct(scenarioRealROI)} e il cashflow annuo a ${formatEUR_IT(scenarioCashflow)}.
 
 Lo scenario risultante raggiunge un Investment Score di ${scenarioScore}/100 con verdetto ${verdict}.`;
 
     response.textEN =
 `🧪 COMBINED WHAT-IF SCENARIO
 
-I applied the requested changes to financial leverage, occupancy and ADR simultaneously, while keeping the original simulation unchanged.
+I applied the ${changesCount} requested changes simultaneously, while keeping the original simulation unchanged.
 
 📌 Modified Parameters
 
-Mortgage/LTV: ${originalMortgagePercent}% → ${scenarioMortgagePercent}%
-Occupancy: ${originalOccupancy}% → ${scenarioOccupancy}%
-ADR: ${formatEUR_EN(originalADR)} → ${formatEUR_EN(scenarioADR)}
+${modifiedParametersEN}
 
 🏦 New Financial Structure
 
@@ -4937,7 +5010,7 @@ Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🧠 AI Assessment
 
-The combination of the three changes brings equity ROI to ${formatPct(scenarioROI)}, property ROI to ${formatPct(scenarioRealROI)} and annual cashflow to ${formatEUR_EN(scenarioCashflow)}.
+The combined effect of the changes brings equity ROI to ${formatPct(scenarioROI)}, property ROI to ${formatPct(scenarioRealROI)} and annual cashflow to ${formatEUR_EN(scenarioCashflow)}.
 
 The resulting scenario reaches an Investment Score of ${scenarioScore}/100 with a ${verdict} verdict.`;
 
