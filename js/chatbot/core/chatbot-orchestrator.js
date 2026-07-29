@@ -1112,10 +1112,15 @@ if(isCombinedWhatIf){
         scenarioOccupancy;
 
       analysisData.priceNight =
-        scenarioADR;
+  scenarioADR;
 
-      analysisData.expenses =
-        scenarioMonthlyCosts;
+// SSOT scenario:
+// keep nightly-rate aliases aligned with the Combined What-if.
+analysisData.pricePerNight =
+  scenarioADR;
+
+analysisData.expenses =
+  scenarioMonthlyCosts;
 
       analysisData.monthlyCosts =
         scenarioMonthlyCosts;
