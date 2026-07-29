@@ -1471,6 +1471,13 @@ const isExecutiveQuestion =
   text.includes("buy") ||
   text.includes("worth");
 
+  const isOperatingCostsQuestion =
+
+  Number.isFinite(
+    Number(entities.monthlyCosts)
+  ) &&
+  Number(entities.monthlyCosts) >= 0;
+
 const matchedKnowledge =
 
   skipKnowledgeDetection ||
@@ -1479,7 +1486,9 @@ const matchedKnowledge =
 
   isExecutiveQuestion ||
 
-  isPortfolioQuestion
+  isPortfolioQuestion ||
+
+  isOperatingCostsQuestion
 
     ? null
 
