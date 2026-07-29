@@ -920,6 +920,414 @@ console.log(
 );    
 
 // =====================================
+// 🧠 COMBINED WHAT-IF SCENARIO
+// Applies 2+ changes in ONE ROI calculation.
+// Temporary only — does NOT mutate lastAnalysisData.
+// =====================================
+
+if(isCombinedWhatIf){
+
+  const originalPropertyPrice =
+    Number(
+      window.lastAnalysisData?.propertyPrice ??
+      window.lastAnalysisData?.price ??
+      analysisData.propertyPrice ??
+      0
+    );
+
+  const originalLoanAmount =
+    Number(
+      window.lastAnalysisData?.loanAmount ??
+      window.lastAnalysisData?.mortgage ??
+      analysisData.loanAmount ??
+      0
+    );
+
+  const originalEquity =
+    Number(
+      window.lastAnalysisData?.equity ??
+      window.lastAnalysisData?.initialCapital ??
+      analysisData.equity ??
+      0
+    );
+
+  const originalMortgagePercent =
+    Number(
+      window.lastAnalysisData?.mortgagePercent ??
+      (
+        originalPropertyPrice > 0
+          ? (originalLoanAmount / originalPropertyPrice) * 100
+          : 0
+      )
+    );
+
+  const originalOccupancy =
+    Number(
+      window.lastAnalysisData?.occupancy ??
+      analysisData.occupancy ??
+      0
+    );
+
+  const originalADR =
+    Number(
+      window.lastAnalysisData?.priceNight ??
+      analysisData.priceNight ??
+      0
+    );
+
+  const originalMonthlyCosts =
+    Number(
+      window.lastAnalysisData?.expenses ??
+      window.lastAnalysisData?.monthlyCosts ??
+      analysisData.expenses ??
+      0
+    );
+
+  // =====================================
+  // 🧠 BUILD COMBINED SCENARIO INPUTS
+  // Each missing parameter keeps baseline value.
+  // =====================================
+
+  const scenarioPropertyPrice =
+    combinedWhatIfChanges.propertyPrice !== null
+      ? combinedWhatIfChanges.propertyPrice
+      : originalPropertyPrice;
+
+  const scenarioMortgagePercent =
+    combinedWhatIfChanges.mortgagePercent !== null
+      ? combinedWhatIfChanges.mortgagePercent
+      : originalMortgagePercent;
+
+  const scenarioLoanAmount =
+    scenarioPropertyPrice *
+    (scenarioMortgagePercent / 100);
+
+  const scenarioEquity =
+    scenarioPropertyPrice -
+    scenarioLoanAmount;
+
+  const scenarioOccupancy =
+    combinedWhatIfChanges.occupancy !== null
+      ? combinedWhatIfChanges.occupancy
+      : originalOccupancy;
+
+  const scenarioADR =
+    combinedWhatIfChanges.adr !== null
+      ? combinedWhatIfChanges.adr
+      : originalADR;
+
+  const scenarioMonthlyCosts =
+    combinedWhatIfChanges.monthlyCosts !== null
+      ? combinedWhatIfChanges.monthlyCosts
+      : originalMonthlyCosts;
+
+  // =====================================
+  // 🧮 ONE CANONICAL ROI CALCULATION
+  // =====================================
+
+  if(
+    scenarioPropertyPrice > 0 &&
+    typeof window.calculateROI === "function"
+  ){
+
+    const scenarioResult =
+      window.calculateROI({
+
+        price:
+          scenarioPropertyPrice,
+
+        equity:
+          scenarioEquity,
+
+        loanAmount:
+          scenarioLoanAmount,
+
+        priceNight:
+          scenarioADR,
+
+        occupancy:
+          scenarioOccupancy,
+
+        expenses:
+          scenarioMonthlyCosts,
+
+        commission:
+          Number(
+            analysisData.commission ??
+            window.lastAnalysisData?.commission ??
+            15
+          ),
+
+        tax:
+          Number(
+            analysisData.tax ??
+            window.lastAnalysisData?.tax ??
+            21
+          ),
+
+        interestRate:
+          Number(
+            analysisData.interestRate ??
+            window.lastAnalysisData?.interestRate ??
+            3.5
+          ),
+
+        loanYears:
+          Number(
+            analysisData.loanYears ??
+            window.lastAnalysisData?.loanYears ??
+            20
+          )
+
+      });
+
+    if(
+      scenarioResult &&
+      typeof scenarioResult === "object"
+    ){
+
+      // =====================================
+      // 🧠 APPLY TEMPORARY SCENARIO
+      // =====================================
+
+      analysisData.propertyPrice =
+        scenarioPropertyPrice;
+
+      analysisData.price =
+        scenarioPropertyPrice;
+
+      analysisData.mortgagePercent =
+        scenarioMortgagePercent;
+
+      analysisData.loanAmount =
+        scenarioLoanAmount;
+
+      analysisData.mortgage =
+        scenarioLoanAmount;
+
+      analysisData.equity =
+        scenarioEquity;
+
+      analysisData.occupancy =
+        scenarioOccupancy;
+
+      analysisData.priceNight =
+        scenarioADR;
+
+      analysisData.expenses =
+        scenarioMonthlyCosts;
+
+      analysisData.monthlyCosts =
+        scenarioMonthlyCosts;
+
+      analysisData.roi =
+        scenarioResult.roi;
+
+      analysisData.visualROI =
+        scenarioResult.roi;
+
+      analysisData.realROI =
+        scenarioResult.realROI;
+
+      analysisData.net =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.cashflow =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.annualProfit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.profit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.netAfterMortgage =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.risk =
+        scenarioResult.risk;
+
+      console.log(
+        "🧮 COMBINED WHAT-IF ROI RECALCULATED",
+        scenarioResult
+      );
+
+      // =====================================
+      // 🧠 ONE SCORE CALCULATION
+      // =====================================
+
+      if(
+        typeof window.rbGenerateInvestmentScore ===
+        "function"
+      ){
+
+        const scenarioScore =
+          window.rbGenerateInvestmentScore({
+
+            roi:
+              Number(
+                analysisData.roi || 0
+              ),
+
+            risk:
+              Number(
+                analysisData.risk || 0
+              ),
+
+            occupancy:
+              scenarioOccupancy,
+
+            mortgagePercent:
+              scenarioMortgagePercent,
+
+            cashflow:
+              Number(
+                analysisData.cashflow || 0
+              ),
+
+            city:
+              analysisData.city || "roma"
+
+          });
+
+        if(
+          scenarioScore &&
+          Number.isFinite(
+            Number(scenarioScore.score)
+          )
+        ){
+
+          analysisData.investmentScore =
+            Number(
+              scenarioScore.score
+            );
+
+          console.log(
+            "🧠 COMBINED WHAT-IF SCORE RECALCULATED",
+            scenarioScore
+          );
+
+        }
+
+      }
+
+      // =====================================
+      // 🧠 COMBINED SCENARIO METADATA
+      // =====================================
+
+      analysisData.whatIfScenario = {
+
+        type:
+          "combined",
+
+        changes:
+          [...combinedWhatIfKeys],
+
+        originalPropertyPrice,
+
+        originalMortgagePercent,
+
+        originalLoanAmount,
+
+        originalEquity,
+
+        originalOccupancy,
+
+        originalADR,
+
+        originalMonthlyCosts,
+
+        originalROI:
+          Number(
+            window.lastAnalysisData?.visualROI ??
+            window.lastAnalysisData?.roi ??
+            0
+          ),
+
+        originalRealROI:
+          Number(
+            window.lastAnalysisData?.realROI ??
+            window.lastAnalysisData?.safeROI ??
+            0
+          ),
+
+        originalCashflow:
+          Number(
+            window.lastAnalysisData?.net ??
+            window.lastAnalysisData?.cashflow ??
+            window.lastAnalysisData?.annualProfit ??
+            0
+          ),
+
+        originalRisk:
+          Number(
+            window.lastAnalysisData?.risk ??
+            0
+          ),
+
+        originalInvestmentScore:
+          Number(
+            window.lastAnalysisData?.investmentScore ??
+            window.lastInvestmentScore?.score ??
+            0
+          ),
+
+        scenarioPropertyPrice,
+
+        scenarioMortgagePercent,
+
+        scenarioLoanAmount,
+
+        scenarioEquity,
+
+        scenarioOccupancy,
+
+        scenarioADR,
+
+        scenarioMonthlyCosts,
+
+        scenarioROI:
+          Number(
+            analysisData.roi ?? 0
+          ),
+
+        scenarioRealROI:
+          Number(
+            analysisData.realROI ?? 0
+          ),
+
+        scenarioCashflow:
+          Number(
+            analysisData.cashflow ??
+            analysisData.net ??
+            0
+          ),
+
+        scenarioRisk:
+          Number(
+            analysisData.risk ?? 0
+          ),
+
+        scenarioInvestmentScore:
+          Number(
+            analysisData.investmentScore ?? 0
+          )
+
+      };
+
+      console.log(
+        "🧠 COMBINED WHAT-IF SCENARIO",
+        analysisData.whatIfScenario
+      );
+
+    }
+
+  }
+
+}
+    
+
+// =====================================
 // 🏦 MORTGAGE WHAT-IF SCENARIO
 // Temporary scenario — does NOT mutate lastAnalysisData
 // =====================================
