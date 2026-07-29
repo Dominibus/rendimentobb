@@ -478,36 +478,69 @@ for(const pattern of occupancyPatterns){
   }
 
 }
-  // ===========================================
-  // 💸 NIGHTLY / ADR
-  // ===========================================
+  
+// ===========================================
+// 💸 NIGHTLY / ADR
+// ===========================================
 
-  const nightlyPatterns = [
+const nightlyPatterns = [
 
-    /(?:notte|night|adr)\s?(\d+)/,
-    /prezzo\s?notte\s?(\d+)/,
-    /daily\s?rate\s?(\d+)/
+  // 🇮🇹
+  /prezzo\s+(?:a\s+)?notte\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
+  /prezzo\s+notte\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
+  /(?:adr|tariffa\s+media|tariffa\s+notte)\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
 
-  ];
+  // 🇬🇧
+  /(?:adr|nightly\s+rate|nightly\s+price|price\s+per\s+night|daily\s+rate)\s+(?:to|at|of)?\s*€?\s*(\d+(?:[\.,]\d+)?)/
 
-  for(const pattern of nightlyPatterns){
+];
 
-    const match = text.match(pattern);
+for(const pattern of nightlyPatterns){
 
-    if(match){
+  const match = text.match(pattern);
 
-      const value =
-        Number(match[1]);
+  if(match){
 
-      entities.nightly = value;
+    const value =
+      Number(
+        match[1]
+          .replace(",", ".")
+      );
 
-      entities.adr = value;
+    if(
+      Number.isFinite(value) &&
+      value > 0
+    ){
+
+      entities.nightly =
+        value;
+
+      entities.adr =
+        value;
+
+      // ADR / nightly must not be interpreted
+      // as property purchase price.
+      if(
+        entities.price === value &&
+        entities.amount === value
+      ){
+
+        entities.price = null;
+        entities.amount = null;
+
+      }
+
+      entities.detectedTopics.push(
+        "performance"
+      );
 
       break;
 
     }
 
   }
+
+}
 
   // ===========================================
   // 💸 MONTHLY COSTS
