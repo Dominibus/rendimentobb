@@ -784,6 +784,7 @@ ${reasonsEN.join("\n")}`
 
 };
 
+};  
 
 // ===============================================
 // 🧠 EXECUTIVE INVESTMENT SUMMARY
