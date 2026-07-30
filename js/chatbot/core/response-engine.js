@@ -5002,6 +5002,258 @@ The verdict is ${verdict}.`;
   }
 
   // =====================================
+  // 🏦 MORTGAGE WHAT-IF RESPONSE
+  // =====================================
+
+  if(
+    isExecutiveWhatIf &&
+    executiveWhatIf.type === "mortgage"
+  ){
+
+    const originalMortgagePercent =
+      Number(
+        executiveWhatIf.originalMortgagePercent ?? 0
+      );
+
+    const scenarioMortgagePercent =
+      Number(
+        executiveWhatIf.scenarioMortgagePercent ??
+        executiveWhatIf.requestedMortgagePercent ??
+        analysisData?.mortgagePercent ??
+        0
+      );
+
+    const originalEquity =
+      Number(
+        executiveWhatIf.originalEquity ?? 0
+      );
+
+    const scenarioEquity =
+      Number(
+        executiveWhatIf.scenarioEquity ??
+        analysisData?.equity ??
+        0
+      );
+
+    const originalLoan =
+      Number(
+        executiveWhatIf.originalLoanAmount ?? 0
+      );
+
+    const scenarioLoan =
+      Number(
+        executiveWhatIf.scenarioLoanAmount ??
+        executiveWhatIf.requestedMortgageAmount ??
+        analysisData?.loanAmount ??
+        analysisData?.mortgage ??
+        0
+      );
+
+    const originalROI =
+      Number(
+        executiveWhatIf.originalROI ?? 0
+      );
+
+    const scenarioROI =
+      Number(
+        executiveWhatIf.scenarioROI ??
+        analysisData?.roi ??
+        0
+      );
+
+    const originalRealROI =
+      Number(
+        executiveWhatIf.originalRealROI ?? 0
+      );
+
+    const scenarioRealROI =
+      Number(
+        executiveWhatIf.scenarioRealROI ??
+        analysisData?.realROI ??
+        0
+      );
+
+    const originalCashflow =
+      Number(
+        executiveWhatIf.originalCashflow ?? 0
+      );
+
+    const scenarioCashflow =
+      Number(
+        executiveWhatIf.scenarioCashflow ??
+        analysisData?.cashflow ??
+        analysisData?.net ??
+        0
+      );
+
+    const originalScore =
+      Number(
+        executiveWhatIf.originalInvestmentScore ?? 0
+      );
+
+    const scenarioScore =
+      Number(
+        executiveWhatIf.scenarioInvestmentScore ??
+        analysisData?.investmentScore ??
+        0
+      );
+
+    const equityDelta =
+      scenarioEquity - originalEquity;
+
+    const loanDelta =
+      scenarioLoan - originalLoan;
+
+    const roiDelta =
+      scenarioROI - originalROI;
+
+    const realROIDelta =
+      scenarioRealROI - originalRealROI;
+
+    const cashflowDelta =
+      scenarioCashflow - originalCashflow;
+
+    const verdict =
+      analysisData?.verdict ||
+      advisor?.verdict ||
+      "WAIT";
+
+    const formatEUR_IT =
+      value =>
+        Number(value || 0).toLocaleString(
+          "it-IT",
+          {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 0
+          }
+        );
+
+    const formatEUR_EN =
+      value =>
+        Number(value || 0).toLocaleString(
+          "en-US",
+          {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 0
+          }
+        );
+
+    const formatPct =
+      value =>
+        `${Number(value || 0).toFixed(2)}%`;
+
+    response.type =
+      "executive_what_if";
+
+    response.confidence =
+      0.99;
+
+    response.signals.push(
+      "mortgage_what_if"
+    );
+
+    response.textIT =
+`🏦 SCENARIO WHAT-IF — MUTUO
+
+Modificando il mutuo da ${formatEUR_IT(originalLoan)} a ${formatEUR_IT(scenarioLoan)}, la struttura finanziaria dell'investimento cambia dal ${formatPct(originalMortgagePercent)} al ${formatPct(scenarioMortgagePercent)} di LTV.
+
+🏦 Struttura finanziaria
+
+Mutuo: ${formatEUR_IT(originalLoan)} → ${formatEUR_IT(scenarioLoan)} (${loanDelta >= 0 ? "+" : ""}${formatEUR_IT(loanDelta)})
+
+LTV: ${formatPct(originalMortgagePercent)} → ${formatPct(scenarioMortgagePercent)}
+
+Capitale proprio: ${formatEUR_IT(originalEquity)} → ${formatEUR_IT(scenarioEquity)} (${equityDelta >= 0 ? "+" : ""}${formatEUR_IT(equityDelta)})
+
+📊 Impatto economico
+
+ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
+
+ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+
+Cashflow annuo: ${formatEUR_IT(originalCashflow)} → ${formatEUR_IT(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR_IT(cashflowDelta)})
+
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🎯 Valutazione AI
+
+Con un mutuo di ${formatEUR_IT(scenarioLoan)}, l'LTV scende al ${formatPct(scenarioMortgagePercent)} e il capitale proprio richiesto diventa ${formatEUR_IT(scenarioEquity)}.
+
+Il nuovo scenario genera un ROI equity del ${formatPct(scenarioROI)}, un ROI immobile del ${formatPct(scenarioRealROI)} e un cashflow annuo di ${formatEUR_IT(scenarioCashflow)}.
+
+Il verdetto è ${verdict}.`;
+
+    response.textEN =
+`🏦 MORTGAGE WHAT-IF SCENARIO
+
+Changing the mortgage from ${formatEUR_EN(originalLoan)} to ${formatEUR_EN(scenarioLoan)} changes the investment financing structure from ${formatPct(originalMortgagePercent)} to ${formatPct(scenarioMortgagePercent)} LTV.
+
+🏦 Financing Structure
+
+Mortgage: ${formatEUR_EN(originalLoan)} → ${formatEUR_EN(scenarioLoan)} (${loanDelta >= 0 ? "+" : ""}${formatEUR_EN(loanDelta)})
+
+LTV: ${formatPct(originalMortgagePercent)} → ${formatPct(scenarioMortgagePercent)}
+
+Equity: ${formatEUR_EN(originalEquity)} → ${formatEUR_EN(scenarioEquity)} (${equityDelta >= 0 ? "+" : ""}${formatEUR_EN(equityDelta)})
+
+📊 Financial Impact
+
+Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
+
+Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+
+Annual cashflow: ${formatEUR_EN(originalCashflow)} → ${formatEUR_EN(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR_EN(cashflowDelta)})
+
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🎯 AI Assessment
+
+With a ${formatEUR_EN(scenarioLoan)} mortgage, LTV falls to ${formatPct(scenarioMortgagePercent)} and the required equity becomes ${formatEUR_EN(scenarioEquity)}.
+
+The new scenario generates an equity ROI of ${formatPct(scenarioROI)}, a property ROI of ${formatPct(scenarioRealROI)} and annual cashflow of ${formatEUR_EN(scenarioCashflow)}.
+
+The verdict is ${verdict}.`;
+
+    response.suggestionsIT = [
+      "Simula un mutuo più basso",
+      "Prova un LTV diverso",
+      "Modifica il capitale proprio"
+    ];
+
+    response.suggestionsEN = [
+      "Simulate a lower mortgage",
+      "Try a different LTV",
+      "Change the equity contribution"
+    ];
+
+    console.log(
+      "🏦 EXECUTIVE MORTGAGE WHAT-IF RESPONSE",
+      {
+        originalMortgagePercent,
+        scenarioMortgagePercent,
+        originalEquity,
+        scenarioEquity,
+        originalLoan,
+        scenarioLoan,
+        originalROI,
+        scenarioROI,
+        originalRealROI,
+        scenarioRealROI,
+        originalCashflow,
+        scenarioCashflow,
+        originalScore,
+        scenarioScore,
+        verdict
+      }
+    );
+
+    return response;
+
+  }
+  
+  // =====================================
   // 🧪 COMBINED WHAT-IF RESPONSE
   // =====================================
 
