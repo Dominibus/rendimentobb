@@ -1181,9 +1181,9 @@ ${worsensScenario
     ? `La riduzione dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} riduce il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti e l'Investment Score perde ${Math.abs(Math.round(scoreDelta))} punti.`
     : improvesScenario
         ? `L'aumento dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} migliora ROI, cashflow e sostenibilità economica dello scenario.`
-        : `Il nuovo livello di occupazione modifica rendimento, cashflow e profilo di rischio dell'operazione.`}`
-        
- ${weakestPointBlockIT}`
+        : `Il nuovo livello di occupazione modifica rendimento, cashflow e profilo di rischio dell'operazione.`}
+
+${weakestPointBlockIT}`
     );
 
     blocksEN.push(
