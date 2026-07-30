@@ -2458,6 +2458,15 @@ if(isADRWhatIf){
   analysisData.priceNight =
     requestedADR;
 
+  // =====================================
+  // 💶 ADR WHAT-IF SSOT
+  // Keep nightly-rate aliases aligned
+  // inside the temporary scenario only
+  // =====================================
+
+  analysisData.pricePerNight =
+    requestedADR;
+
   if(
     scenarioPropertyPrice > 0 &&
     typeof window.calculateROI === "function"
