@@ -169,7 +169,7 @@ const strongestPoint =
 
     "";
 
-const weakestPoint =
+let weakestPoint =
 
     executiveInsight?.weakestPoint ||
 
