@@ -1212,7 +1212,7 @@ ${worsensScenario
     ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy decline reduces return on equity by ${formatPctEN(Math.abs(roiDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. Risk increases by ${Math.abs(Math.round(riskDelta))} points and the Investment Score loses ${Math.abs(Math.round(scoreDelta))} points.`
     : improvesScenario
         ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy increase improves returns, cashflow and the economic sustainability of the scenario.`
-        : `The new occupancy level changes the investment's return, cashflow and risk profile.`}`
+        : `The new occupancy level changes the investment's return, cashflow and risk profile.`}
 
 ${weakestPointBlockEN}`
     );
