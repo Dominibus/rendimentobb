@@ -4697,6 +4697,54 @@ else if(
     const formatPct =
       value =>
         `${Number(value || 0).toFixed(2)}%`;
+
+    const costsDecreased =
+  scenarioCosts < originalCosts;
+
+const costsIncreased =
+  scenarioCosts > originalCosts;
+
+const costChangeIT =
+  costsDecreased
+    ? "Riducendo"
+    : costsIncreased
+      ? "Aumentando"
+      : "Mantenendo";
+
+const profitabilityImpactIT =
+  costsDecreased
+    ? "lo scenario migliora la redditività dell'investimento"
+    : costsIncreased
+      ? "lo scenario riduce la redditività dell'investimento"
+      : "la redditività dell'investimento rimane sostanzialmente invariata";
+
+const costChangeEN =
+  costsDecreased
+    ? "Reducing"
+    : costsIncreased
+      ? "Increasing"
+      : "Keeping";
+
+const profitabilityImpactEN =
+  costsDecreased
+    ? "the scenario improves investment profitability"
+    : costsIncreased
+      ? "the scenario reduces investment profitability"
+      : "investment profitability remains substantially unchanged";
+
+const cashflowImpactIT =
+  cashflowDelta > 0
+    ? `aumenta il cashflow annuo di ${formatEUR(Math.abs(cashflowDelta))}`
+    : cashflowDelta < 0
+      ? `riduce il cashflow annuo di ${formatEUR(Math.abs(cashflowDelta))}`
+      : "mantiene invariato il cashflow annuo";
+
+const cashflowImpactEN =
+  cashflowDelta > 0
+    ? `increases annual cashflow by ${formatEUR(Math.abs(cashflowDelta))}`
+    : cashflowDelta < 0
+      ? `reduces annual cashflow by ${formatEUR(Math.abs(cashflowDelta))}`
+      : "keeps annual cashflow unchanged";
     
     response.type =
       "executive_what_if";
@@ -4707,7 +4755,7 @@ else if(
     response.textIT =
 `🧪 SCENARIO WHAT-IF — COSTI OPERATIVI
 
-Riducendo i costi mensili da ${formatEUR(originalCosts)} a ${formatEUR(scenarioCosts)}, lo scenario migliora la redditività dell'investimento.
+${costChangeIT} i costi mensili da ${formatEUR(originalCosts)} a ${formatEUR(scenarioCosts)}, ${profitabilityImpactIT}.
 
 📊 Impatto economico
 
@@ -4721,14 +4769,14 @@ Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🎯 Valutazione AI
 
-Il taglio dei costi aumenta il cashflow annuo di ${formatEUR(cashflowDelta)} e porta il ROI equity a ${formatPct(scenarioROI)}.
+La variazione dei costi ${cashflowImpactIT} e porta il ROI equity a ${formatPct(scenarioROI)}.
 
 Il verdetto resta ${verdict}.`;
 
     response.textEN =
 `🧪 WHAT-IF SCENARIO — OPERATING COSTS
 
-Reducing monthly operating costs from ${formatEUR(originalCosts)} to ${formatEUR(scenarioCosts)} improves the investment profitability.
+${costChangeEN} monthly operating costs from ${formatEUR(originalCosts)} to ${formatEUR(scenarioCosts)}, ${profitabilityImpactEN}.
 
 📊 Financial impact
 
@@ -4742,7 +4790,7 @@ Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🎯 AI Assessment
 
-The cost reduction increases annual cashflow by ${formatEUR(cashflowDelta)} and raises equity ROI to ${formatPct(scenarioROI)}.
+The cost change ${cashflowImpactEN} and brings equity ROI to ${formatPct(scenarioROI)}.
 
 The verdict remains ${verdict}.`;
 
