@@ -789,6 +789,16 @@ const hasCanonicalInvestmentScore =
   liveData.investmentScore !== undefined &&
   Number.isFinite(canonicalInvestmentScore);
 
+const scoreBasedVerdict =
+
+  canonicalInvestmentScore >= 70
+    ? "BUY"
+
+    : canonicalInvestmentScore >= 40
+      ? "WAIT"
+
+      : "AVOID";
+
 const investmentScore =
 
   hasCanonicalInvestmentScore
@@ -799,9 +809,7 @@ const investmentScore =
           canonicalInvestmentScore,
 
         verdict:
-          liveData.verdict ||
-          advisor?.verdict ||
-          "WAIT"
+          scoreBasedVerdict
 
       }
 
