@@ -2056,6 +2056,7 @@ if(isOccupancyWhatIf){
     Number(
       window.lastAnalysisData?.equity ??
       window.lastAnalysisData?.initialCapital ??
+      window.rbChatMemory?.lastEquity ??
       analysisData.equity ??
       0
     );
@@ -2064,6 +2065,7 @@ if(isOccupancyWhatIf){
     Number(
       window.lastAnalysisData?.loanAmount ??
       window.lastAnalysisData?.mortgage ??
+      window.rbChatMemory?.lastLoanAmount ??
       analysisData.loanAmount ??
       0
     );
