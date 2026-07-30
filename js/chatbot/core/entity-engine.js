@@ -716,14 +716,14 @@ for(const pattern of mortgageAmountPatterns){
 
       // Prevent mortgage amount from becoming
       // the property purchase price.
-      if(
-        entities.price === Math.round(value)
-      ){
+      const normalizedMortgageAmount = Math.round(value);
 
-        entities.price =
-          null;
-
-      }
+if(
+  entities.price === normalizedMortgageAmount ||
+  entities.price === normalizedMortgageAmount * 1000
+){
+  entities.price = null;
+}
 
       entities.detectedTopics.push(
         "finance"
