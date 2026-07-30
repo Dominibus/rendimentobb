@@ -764,25 +764,26 @@ window.rbGenerateExecutiveConfidence = function(memory = {}){
       100
     );
 
-  const titleIT =
-    `🎯 Affidabilità AI: ${confidence}/100`;
+const titleIT =
+  `🎯 Affidabilità AI: ${confidence}/100`;
 
-  const titleEN =
-    `🎯 AI Confidence: ${confidence}/100`;
+const titleEN =
+  `🎯 AI Confidence: ${confidence}/100`;
 
-  return window.t(
+return {
 
+  it:
 `${titleIT}
 
 ${reasonsIT.join("\n")}`,
 
+  en:
 `${titleEN}
 
 ${reasonsEN.join("\n")}`
 
-  );
-
 };
+
 
 // ===============================================
 // 🧠 EXECUTIVE INVESTMENT SUMMARY
@@ -986,18 +987,20 @@ if(executiveRecommendations){
 
 }
 
-  if(executiveConfidence){
+if(executiveConfidence){
 
-  if(window.currentLanguage === "en"){
-
-    summaryEN.push(
-      executiveConfidence
-    );
-
-  }else{
+  if(executiveConfidence.it){
 
     summaryIT.push(
-      executiveConfidence
+      executiveConfidence.it
+    );
+
+  }
+
+  if(executiveConfidence.en){
+
+    summaryEN.push(
+      executiveConfidence.en
     );
 
   }
