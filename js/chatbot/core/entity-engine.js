@@ -641,6 +641,101 @@ if(monthlyCostsMatch){
     );
 
 // ===========================================
+// 🏦 MORTGAGE AMOUNT WHAT-IF
+// ===========================================
+
+const mortgageAmountPatterns = [
+
+  // 🇮🇹 — Natural + direct
+  /(?:chiedessi|chiedo|richiedessi|richiedo|facessi|faccio|avessi|prendessi|prendo)?\s*(?:un\s+)?mutuo\s+(?:di\s+|da\s+|per\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+
+  /(?:mutuo|finanziamento)\s+(?:di\s+|da\s+|per\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+
+  // 🇬🇧 — Natural + direct
+  /(?:take|took|get|got|borrow|borrowed|request|requested)?\s*(?:out\s+)?(?:a\s+)?(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+
+  /(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
+
+];
+
+for(const pattern of mortgageAmountPatterns){
+
+  const match = text.match(pattern);
+
+  if(match){
+
+    let mortgageText =
+      String(match[1]).trim();
+
+    // 🇮🇹 90.000 → 90000
+    if(
+      /^\d{1,3}(?:\.\d{3})+$/.test(mortgageText)
+    ){
+
+      mortgageText =
+        mortgageText.replace(/\./g, "");
+
+    }
+
+    // 🇬🇧 90,000 → 90000
+    else if(
+      /^\d{1,3}(?:,\d{3})+$/.test(mortgageText)
+    ){
+
+      mortgageText =
+        mortgageText.replace(/,/g, "");
+
+    }
+
+    // Decimal fallback
+    else{
+
+      mortgageText =
+        mortgageText.replace(",", ".");
+
+    }
+
+    const value =
+      Number(mortgageText);
+
+    if(
+      Number.isFinite(value) &&
+      value > 0
+    ){
+
+      entities.mortgage =
+        true;
+
+      entities.mortgageAmount =
+        Math.round(value);
+
+      entities.amount =
+        Math.round(value);
+
+      // Prevent mortgage amount from becoming
+      // the property purchase price.
+      if(
+        entities.price === Math.round(value)
+      ){
+
+        entities.price =
+          null;
+
+      }
+
+      entities.detectedTopics.push(
+        "finance"
+      );
+
+    }
+
+    break;
+
+  }
+
+}  
+
+// ===========================================
 // 🏦 MORTGAGE %
 // ===========================================
 
