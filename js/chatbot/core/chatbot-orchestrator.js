@@ -3110,6 +3110,88 @@ if(isMonthlyCostsWhatIf){
   );
 
 }
+
+// =====================================
+// 🧠 WHAT-IF VERDICT SSOT
+// Keep scenario Score + Verdict aligned
+// before building the canonical AI context.
+// Temporary only — lastAnalysisData untouched.
+// =====================================
+
+if(
+  analysisData?.whatIfScenario &&
+  Number.isFinite(
+    Number(analysisData.investmentScore)
+  ) &&
+  typeof window.rbGenerateAdvisorVerdict === "function"
+){
+
+  const scenarioDecision =
+    window.rbGenerateAdvisorVerdict({
+
+      roi:
+        Number(
+          analysisData.realROI ??
+          analysisData.roi ??
+          0
+        ),
+
+      risk:
+        Number(
+          analysisData.risk ?? 0
+        ),
+
+      occupancy:
+        Number(
+          analysisData.occupancy ?? 0
+        ),
+
+      mortgagePercent:
+        Number(
+          analysisData.mortgagePercent ?? 0
+        ),
+
+      cashflow:
+        Number(
+          analysisData.net ??
+          analysisData.cashflow ??
+          0
+        ),
+
+      city:
+        analysisData.city || "roma",
+
+      canonicalScore:
+        Number(
+          analysisData.investmentScore
+        ),
+
+      investorProfile
+
+    });
+
+  if(scenarioDecision?.verdict){
+
+    analysisData.verdict =
+      scenarioDecision.verdict;
+
+    analysisData.whatIfScenario.scenarioVerdict =
+      scenarioDecision.verdict;
+
+  }
+
+  console.log(
+    "🧠 WHAT-IF VERDICT SSOT",
+    {
+      score:
+        analysisData.investmentScore,
+
+      verdict:
+        analysisData.verdict
+    }
+  );
+
+}
     
 console.log(
   "🔥 ANALYSIS DATA FINAL JSON",
