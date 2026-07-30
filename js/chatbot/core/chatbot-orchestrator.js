@@ -1729,7 +1729,14 @@ const requestedMortgageAmount =
 
 const isMortgageWhatIf =
   !isCombinedWhatIf &&
-  intent?.intents?.includes("mortgage_analysis") &&
+  (
+    intent?.intents?.includes("mortgage_analysis") ||
+    (
+      entities?.mortgage === true &&
+      Number.isFinite(requestedMortgageAmount) &&
+      requestedMortgageAmount > 0
+    )
+  ) &&
   (
     (
       Number.isFinite(requestedMortgagePercent) &&
