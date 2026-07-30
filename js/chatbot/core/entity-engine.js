@@ -485,16 +485,11 @@ for(const pattern of occupancyPatterns){
 
 const nightlyPatterns = [
 
-  // 🇮🇹
-  /prezzo\s+(?:a\s+)?notte\s+(?:(?:salisse|sale|aumentasse|aumenta|scendesse|scende|diminuisse|diminuisce)\s+)?(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
-  /prezzo\s+notte\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
-  /(?:adr|tariffa\s+media|tariffa\s+notte)\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
+  // 🇮🇹 — Natural What-if + direct forms
+  /(?:prezzo\s+(?:medio\s+)?(?:a\s+|per\s+)?notte|tariffa\s+(?:media\s+)?(?:a\s+|per\s+)?notte|tariffa\s+media|adr)\s+(?:(?:salisse|sale|aumentasse|aumenta|aumento|scendesse|scende|diminuisse|diminuisce|riduco)\s+)?(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
 
-  // 🇬🇧 — Natural What-if
-  /(?:nightly\s+(?:price|rate)|price\s+per\s+night|adr)\s+(?:(?:increased|increases|rose|rises|decreased|decreases|fell|falls|dropped|drops|drop|raised|raises|raise)\s+)?(?:to|at)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
-
-  // 🇬🇧 — Direct forms
-  /(?:adr|nightly\s+rate|nightly\s+price|price\s+per\s+night|daily\s+rate)\s+(?:to|at|of)?\s*€?\s*(\d+(?:[\.,]\d+)?)/
+  // 🇬🇧 — Natural What-if + direct forms
+  /(?:average\s+nightly\s+rate|nightly\s+(?:price|rate)|price\s+per\s+night|average\s+rate|daily\s+rate|adr)\s+(?:(?:increased|increases|increase|raised|raises|raise|rose|rises|decreased|decreases|decrease|reduced|reduces|reduce|fell|falls|dropped|drops|drop)\s+)?(?:to|at|of)?\s*€?\s*(\d+(?:[\.,]\d+)?)/
 
 ];
 
