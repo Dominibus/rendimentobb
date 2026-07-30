@@ -1126,6 +1126,32 @@ if(isOccupancyWhatIf){
 
     }
 
+        const weakestPointIT =
+        executiveBrain?.weakestPointIT ||
+        "";
+
+    const weakestPointEN =
+        executiveBrain?.weakestPointEN ||
+        "";
+
+    const weakestPointBlockIT =
+        weakestPointIT
+            ? `
+
+⚠️ Area principale da migliorare
+
+${weakestPointIT}`
+            : "";
+
+    const weakestPointBlockEN =
+        weakestPointEN
+            ? `
+
+⚠️ Main Area to Improve
+
+${weakestPointEN}`
+            : "";
+
     blocksIT.length = 0;
     blocksEN.length = 0;
 
