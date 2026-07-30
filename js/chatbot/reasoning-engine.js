@@ -936,16 +936,18 @@ if(memory.executiveAnalysisEN){
 
 if(executiveReasoning){
 
-  if(window.currentLanguage === "en"){
-
-    summaryEN.push(
-      executiveReasoning
-    );
-
-  }else{
+  if(executiveReasoning.it){
 
     summaryIT.push(
-      executiveReasoning
+      executiveReasoning.it
+    );
+
+  }
+
+  if(executiveReasoning.en){
+
+    summaryEN.push(
+      executiveReasoning.en
     );
 
   }
