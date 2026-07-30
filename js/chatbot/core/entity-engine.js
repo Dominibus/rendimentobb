@@ -491,7 +491,7 @@ const nightlyPatterns = [
   /(?:adr|tariffa\s+media|tariffa\s+notte)\s+(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
 
   // 🇬🇧 — Natural What-if
-  /(?:nightly\s+(?:price|rate)|price\s+per\s+night|adr)\s+(?:(?:increased|increases|rose|rises|decreased|decreases|fell|falls)\s+)?(?:to|at)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
+  /(?:nightly\s+(?:price|rate)|price\s+per\s+night|adr)\s+(?:(?:increased|increases|rose|rises|decreased|decreases|fell|falls|dropped|drops|drop|raised|raises|raise)\s+)?(?:to|at)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
 
   // 🇬🇧 — Direct forms
   /(?:adr|nightly\s+rate|nightly\s+price|price\s+per\s+night|daily\s+rate)\s+(?:to|at|of)?\s*€?\s*(\d+(?:[\.,]\d+)?)/
