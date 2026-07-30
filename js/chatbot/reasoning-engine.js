@@ -1969,12 +1969,18 @@ Key metrics should be improved before proceeding in order to reduce operational 
   // 📌 EXECUTIVE RECOMMENDATIONS
   // ===========================================
 
-  assessment.recommendations =
+const strategicRecommendations =
+  window.rbGenerateStrategicRecommendations(memory);
 
-    window
-      .rbGenerateStrategicRecommendations(memory)
-      .split("\n\n")
-      .filter(Boolean);
+assessment.recommendations =
+
+  (
+    window.currentLanguage === "en"
+      ? strategicRecommendations.en
+      : strategicRecommendations.it
+  )
+    .split("\n\n")
+    .filter(Boolean);
 
   // ===========================================
   // 🧠 DEBUG
