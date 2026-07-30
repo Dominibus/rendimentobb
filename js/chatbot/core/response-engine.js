@@ -551,6 +551,12 @@ if(
 
             }) || null;
 
+      weakestPoint =
+    executiveBrain?.weakestPointIT ||
+    executiveBrain?.weakestPointEN ||
+    weakestPoint ||
+    "";
+
     }
 
     catch(error){
