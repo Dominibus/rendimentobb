@@ -1182,6 +1182,8 @@ ${worsensScenario
     : improvesScenario
         ? `L'aumento dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} migliora ROI, cashflow e sostenibilità economica dello scenario.`
         : `Il nuovo livello di occupazione modifica rendimento, cashflow e profilo di rischio dell'operazione.`}`
+        
+ ${weakestPointBlockIT}
     );
 
     blocksEN.push(
@@ -1211,6 +1213,8 @@ ${worsensScenario
     : improvesScenario
         ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy increase improves returns, cashflow and the economic sustainability of the scenario.`
         : `The new occupancy level changes the investment's return, cashflow and risk profile.`}`
+
+${weakestPointBlockEN}`
     );
 
 }    
