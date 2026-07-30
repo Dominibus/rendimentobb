@@ -1711,6 +1711,30 @@ if(isEquityWhatIf){
 }    
 
 // =====================================
+// 💰 EQUITY WHAT-IF INTENT OVERRIDE
+// A valid calculated equity scenario
+// must use the Executive What-if renderer.
+// =====================================
+
+if(
+  analysisData?.whatIfScenario?.type ===
+  "equity"
+){
+
+  intent.intent =
+    "investment_executive";
+
+  intent.intents = [
+    "investment_executive"
+  ];
+
+  console.log(
+    "💰 EQUITY WHAT-IF → EXECUTIVE INTENT"
+  );
+
+}    
+
+// =====================================
 // 🏦 MORTGAGE WHAT-IF SCENARIO
 // Temporary scenario — does NOT mutate lastAnalysisData
 // =====================================
