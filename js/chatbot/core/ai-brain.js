@@ -36,25 +36,37 @@
 
         } = context;
 
-        const roi =
-            Number(
-                entities?.roi ?? 0
-            );
+const canonicalAnalysis =
+    window.rbCanonicalAnalysis || {};
 
-        const risk =
-            Number(
-                entities?.risk ?? 0
-            );
+const roi =
+    Number(
+        canonicalAnalysis?.roi ??
+        entities?.roi ??
+        0
+    );
 
-        const occupancy =
-            Number(
-                entities?.occupancy ?? 0
-            );
+const risk =
+    Number(
+        canonicalAnalysis?.risk ??
+        entities?.risk ??
+        0
+    );
 
-        const cashflow =
-            Number(
-                entities?.cashflow ?? 0
-            );
+const occupancy =
+    Number(
+        canonicalAnalysis?.occupancy ??
+        entities?.occupancy ??
+        0
+    );
+
+const cashflow =
+    Number(
+        canonicalAnalysis?.cashflow ??
+        canonicalAnalysis?.net ??
+        entities?.cashflow ??
+        0
+    );
 
         // =====================================
         // 🧠 CENTRAL CONTEXT
