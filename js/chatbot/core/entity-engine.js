@@ -646,18 +646,20 @@ if(monthlyCostsMatch){
 
 const mortgageAmountPatterns = [
 
-  // 🇮🇹 — Natural + direct
-  /(?:chiedessi|chiedo|richiedessi|richiedo|facessi|faccio|avessi|prendessi|prendo)?\s*(?:un\s+)?mutuo\s+(?:di\s+|da\s+|per\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+  // 🇮🇹 — importo PRIMA di "mutuo"
+  /€?\s*(\d[\d\.,]*)\s*€?\s+(?:di\s+)?mutuo\b/i,
 
-  /(?:mutuo|finanziamento)\s+(?:di\s+|da\s+|per\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+  // 🇮🇹 — importo DOPO "mutuo"
+  /\b(?:mutuo|finanziamento)\s+(?:di\s+|da\s+|per\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
 
-  // 🇬🇧 — Natural + direct
-  /(?:take|took|get|got|borrow|borrowed|request|requested)?\s*(?:out\s+)?(?:a\s+)?(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+  // 🇬🇧 — amount BEFORE mortgage/loan
+  /€?\s*(\d[\d\.,]*)\s+(?:mortgage|loan)\b/i,
 
-  /(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
+  // 🇬🇧 — amount AFTER mortgage/loan
+  /\b(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
 
 ];
-
+  
 for(const pattern of mortgageAmountPatterns){
 
   const match = text.match(pattern);
