@@ -4539,6 +4539,14 @@ else if(
 
   intent.intent === "executive_analysis" ||
 
+  (
+    intent.intent === "mortgage_analysis" &&
+    (
+      analysisData?.whatIfScenario?.type === "mortgage" ||
+      liveData?.whatIfScenario?.type === "mortgage"
+    )
+  ) ||
+
   intent.intent === "analysis" ||
 
   intent.intent === "sustainability" ||
