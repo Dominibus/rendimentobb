@@ -463,13 +463,15 @@ window.rbDetectExecutiveContradictions = function(memory = {}){
 
   }
 
-  return window.t(
+return {
 
+  it:
     warningsIT.join("\n\n"),
 
+  en:
     warningsEN.join("\n\n")
 
-  );
+};
 
 };
 
@@ -954,18 +956,20 @@ if(executiveReasoning){
 
 }
 
-    if(executiveWarnings){
+if(executiveWarnings){
 
-  if(window.currentLanguage === "en"){
-
-    summaryEN.push(
-      executiveWarnings
-    );
-
-  }else{
+  if(executiveWarnings.it){
 
     summaryIT.push(
-      executiveWarnings
+      executiveWarnings.it
+    );
+
+  }
+
+  if(executiveWarnings.en){
+
+    summaryEN.push(
+      executiveWarnings.en
     );
 
   }
