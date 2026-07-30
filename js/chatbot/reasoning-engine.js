@@ -301,13 +301,15 @@ window.rbGenerateExecutiveReasoning = function(memory = {}){
 
   }
 
-  return window.t(
+return {
 
+  it:
     reasoningIT.join("\n\n"),
 
+  en:
     reasoningEN.join("\n\n")
 
-  );
+};
 
 };
 
