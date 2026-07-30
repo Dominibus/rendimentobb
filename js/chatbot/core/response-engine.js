@@ -575,6 +575,34 @@ console.log(
     executiveBrain
 );
 
+// ===============================================
+// 🧠 EXECUTIVE WEAKEST POINT SSOT
+// Prefer the latest Executive Brain V2 diagnosis
+// ===============================================
+
+const brainV2WeakestPoint =
+  executiveBrainV2?.insight?.weakestPoint ||
+  executiveBrainV2?.analysis?.weakestPoint ||
+  "";
+
+if(brainV2WeakestPoint){
+
+  weakestPoint =
+    brainV2WeakestPoint;
+
+}
+
+console.log(
+  "🧠 WEAKEST POINT SSOT",
+  {
+    weakestPoint,
+    source:
+      brainV2WeakestPoint
+        ? "executive-brain-v2"
+        : "executive-brain"
+  }
+);  
+
 // =====================================
 // 🧠 EXECUTIVE NARRATIVE
 // =====================================
