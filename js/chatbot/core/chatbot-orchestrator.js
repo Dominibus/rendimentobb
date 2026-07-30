@@ -1721,12 +1721,34 @@ const requestedMortgagePercent =
     entities?.mortgagePercent
   );
 
+const requestedMortgageAmount =
+  entities?.mortgageAmount !== null &&
+  entities?.mortgageAmount !== undefined
+    ? Number(entities.mortgageAmount)
+    : null;    
+
 const isMortgageWhatIf =
   !isCombinedWhatIf &&
   intent?.intents?.includes("mortgage_analysis") &&
-  Number.isFinite(requestedMortgagePercent) &&
-  requestedMortgagePercent > 0 &&
-  requestedMortgagePercent <= 100;
+  (
+    (
+      Number.isFinite(requestedMortgagePercent) &&
+      requestedMortgagePercent > 0 &&
+      requestedMortgagePercent <= 100
+    )
+    ||
+    (
+      Number.isFinite(requestedMortgageAmount) &&
+      requestedMortgageAmount > 0 &&
+      requestedMortgageAmount <
+        Number(
+          analysisData.propertyPrice ??
+          window.lastAnalysisData?.propertyPrice ??
+          window.lastAnalysisData?.price ??
+          0
+        )
+    )
+  );
 
 if(isMortgageWhatIf){
 
@@ -1740,16 +1762,29 @@ if(isMortgageWhatIf){
 
   if(scenarioPropertyPrice > 0){
 
-    const scenarioLoanAmount =
-      scenarioPropertyPrice *
-      (requestedMortgagePercent / 100);
+const scenarioLoanAmount =
+  Number.isFinite(requestedMortgageAmount) &&
+  requestedMortgageAmount > 0
+    ? requestedMortgageAmount
+    : (
+        scenarioPropertyPrice *
+        (requestedMortgagePercent / 100)
+      );
 
-    const scenarioEquity =
-      scenarioPropertyPrice -
-      scenarioLoanAmount;
+const scenarioMortgagePercent =
+  scenarioPropertyPrice > 0
+    ? (
+        scenarioLoanAmount /
+        scenarioPropertyPrice
+      ) * 100
+    : 0;
+
+const scenarioEquity =
+  scenarioPropertyPrice -
+  scenarioLoanAmount;
 
     analysisData.mortgagePercent =
-      requestedMortgagePercent;
+  scenarioMortgagePercent;
 
     analysisData.loanAmount =
       scenarioLoanAmount;
@@ -1884,7 +1919,7 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
         Number(analysisData.occupancy || 0),
 
       mortgagePercent:
-        requestedMortgagePercent,
+  scenarioMortgagePercent,
 
       cashflow:
         Number(analysisData.cashflow || 0),
@@ -1922,9 +1957,20 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
     analysisData.whatIfScenario = {
 
       type:
-        "mortgage",
+  "mortgage",
 
-      requestedMortgagePercent,
+requestedMortgagePercent:
+  Number.isFinite(requestedMortgagePercent) &&
+  requestedMortgagePercent > 0
+    ? requestedMortgagePercent
+    : null,
+
+requestedMortgageAmount:
+  Number.isFinite(requestedMortgageAmount)
+    ? requestedMortgageAmount
+    : null,
+
+scenarioMortgagePercent,
 
       originalMortgagePercent:
         Number(
