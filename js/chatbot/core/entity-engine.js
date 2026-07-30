@@ -653,10 +653,16 @@ const mortgageAmountPatterns = [
   /\b(?:mutuo|finanziamento)\s+(?:di\s+|da\s+|per\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
 
   // 🇬🇧 — amount BEFORE mortgage/loan
-  /€?\s*(\d[\d\.,]*)\s+(?:mortgage|loan)\b/i,
+  /€?\s*(\d[\d\.,]*)\s*€?\s+(?:mortgage|loan)\b/i,
 
   // 🇬🇧 — amount AFTER mortgage/loan
-  /\b(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
+  /\b(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+
+  // 🇬🇧 — natural borrowing language
+  /\b(?:borrow|borrowed|borrowing)\s+(?:an?\s+additional\s+|an?\s+extra\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+
+  // 🇬🇧 — take/get a mortgage or loan
+  /\b(?:take|take\s+out|get|got)\s+(?:an?\s+)?(?:mortgage|loan)\s+(?:of\s+|for\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
 
 ];
   
