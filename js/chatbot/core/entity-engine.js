@@ -915,6 +915,99 @@ else if(
 // 💰 AVAILABLE CAPITAL
 // ===========================================
 
+// ===========================================
+// 💰 EQUITY / OWN CAPITAL WHAT-IF
+// ===========================================
+
+const equityWhatIfPatterns = [
+
+  // 🇮🇹
+  /(?:mettessi|metto|mettere|versassi|verso)\s+€?\s*(\d[\d\.,]*)\s*€?\s+(?:di\s+)?(?:capitale\s+mio|capitale\s+proprio|equity)/i,
+
+  /(?:capitale\s+mio|capitale\s+proprio|equity|anticipo)\s+(?:di\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
+
+  // 🇬🇧
+  /(?:put|invest)\s+€?\s*(\d[\d\.,]*)\s*€?\s+(?:of\s+)?(?:my\s+own\s+money|my\s+own\s+capital|own\s+capital|equity)/i,
+
+  /(?:equity|down\s+payment|own\s+capital)\s+(?:of\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
+
+];
+
+for(const pattern of equityWhatIfPatterns){
+
+  const match = text.match(pattern);
+
+  if(match){
+
+    let equityText =
+      String(match[1]).trim();
+
+    // 🇮🇹 45.000 → 45000
+    if(
+      /^\d{1,3}(?:\.\d{3})+$/.test(equityText)
+    ){
+
+      equityText =
+        equityText.replace(/\./g, "");
+
+    }
+
+    // 🇬🇧 45,000 → 45000
+    else if(
+      /^\d{1,3}(?:,\d{3})+$/.test(equityText)
+    ){
+
+      equityText =
+        equityText.replace(/,/g, "");
+
+    }
+
+    else{
+
+      equityText =
+        equityText.replace(",", ".");
+
+    }
+
+    const value =
+      Number(equityText);
+
+    if(
+      Number.isFinite(value) &&
+      value > 0
+    ){
+
+      entities.downPayment =
+        Math.round(value);
+
+      entities.availableCapital =
+        Math.round(value);
+
+      // Prevent own capital from being interpreted
+      // as the property purchase price.
+      if(
+        entities.price === Math.round(value)
+      ){
+
+        entities.price = null;
+
+      }
+
+      entities.amount =
+        Math.round(value);
+
+      entities.detectedTopics.push(
+        "investment"
+      );
+
+    }
+
+    break;
+
+  }
+
+}  
+
 const capitalPatterns = [
 
 /(?:ho|possiedo|i have|i own)\s+(\d[\d\.,]*)\s?(k|mila|thousand|euro|euros|€)?\s+(?:da investire|to invest)/i,
