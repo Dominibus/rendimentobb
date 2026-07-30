@@ -2080,7 +2080,7 @@ else if(
   response.confidence =
     0.98;
 
-    // =====================================
+  // =====================================
   // 🧠 MORTGAGE WHAT-IF COMPARISON
   // =====================================
 
@@ -2089,17 +2089,27 @@ else if(
     liveData?.whatIfScenario ||
     null;
 
-  if(
-    whatIf?.type === "mortgage" &&
-    Number.isFinite(Number(whatIf.originalMortgagePercent)) &&
-    Number.isFinite(Number(whatIf.requestedMortgagePercent))
-  ){
+if(
+  whatIf?.type === "mortgage" &&
+  Number.isFinite(Number(whatIf.originalMortgagePercent)) &&
+  Number.isFinite(
+    Number(
+      whatIf.requestedMortgagePercent ??
+      whatIf.scenarioMortgagePercent ??
+      liveData.mortgagePercent
+    )
+  )
+){
 
-    const originalMortgagePercent =
-      Number(whatIf.originalMortgagePercent);
+  const originalMortgagePercent =
+    Number(whatIf.originalMortgagePercent);
 
-    const requestedMortgagePercent =
-      Number(whatIf.requestedMortgagePercent);
+  const requestedMortgagePercent =
+    Number(
+      whatIf.requestedMortgagePercent ??
+      whatIf.scenarioMortgagePercent ??
+      liveData.mortgagePercent
+    );
 
     const originalLoanAmount =
       Number(whatIf.originalLoanAmount || 0);
