@@ -2172,16 +2172,29 @@ if(isOccupancyWhatIf){
       analysisData.profit =
         scenarioResult.netAfterMortgage;
 
-      analysisData.netAfterMortgage =
-        scenarioResult.netAfterMortgage;
+analysisData.netAfterMortgage =
+  scenarioResult.netAfterMortgage;
 
-      analysisData.risk =
-        scenarioResult.risk;
+// =====================================
+// 💰 OCCUPANCY WHAT-IF REVENUE SSOT
+// Revenue must come from the same
+// canonical ROI scenario calculation
+// =====================================
 
-      console.log(
-        "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
-        scenarioResult
-      );
+analysisData.gross =
+  scenarioResult.gross;
+
+analysisData.revenueAnnual =
+  scenarioResult.revenue ??
+  scenarioResult.gross;
+
+analysisData.risk =
+  scenarioResult.risk;
+
+console.log(
+  "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
+  scenarioResult
+);
 
       // =====================================
       // 🧠 RECALCULATE OCCUPANCY WHAT-IF SCORE
