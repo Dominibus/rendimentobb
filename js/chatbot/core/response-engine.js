@@ -577,18 +577,18 @@ console.log(
 
 // ===============================================
 // 🧠 EXECUTIVE WEAKEST POINT SSOT
-// Prefer the latest Executive Brain V2 diagnosis
+// Latest Executive Brain diagnosis
 // ===============================================
 
-const brainV2WeakestPoint =
-  executiveBrainV2?.insight?.weakestPoint ||
-  executiveBrainV2?.analysis?.weakestPoint ||
+const brainWeakestPoint =
+  executiveBrain?.weakestPointIT ||
+  executiveBrain?.weakestPointEN ||
   "";
 
-if(brainV2WeakestPoint){
+if(brainWeakestPoint){
 
   weakestPoint =
-    brainV2WeakestPoint;
+    brainWeakestPoint;
 
 }
 
@@ -597,11 +597,11 @@ console.log(
   {
     weakestPoint,
     source:
-      brainV2WeakestPoint
+      brainWeakestPoint
         ? "executive-brain-v2"
-        : "executive-brain"
+        : "executive-insight"
   }
-);  
+);
 
 // =====================================
 // 🧠 EXECUTIVE NARRATIVE
