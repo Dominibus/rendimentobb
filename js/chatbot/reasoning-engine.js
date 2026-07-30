@@ -632,13 +632,15 @@ window.rbGenerateStrategicRecommendations = function(memory = {}){
 
   }
 
-  return window.t(
+return {
 
+  it:
     recommendationsIT.join("\n\n"),
 
+  en:
     recommendationsEN.join("\n\n")
 
-  );
+};
 
 };
 
@@ -964,18 +966,20 @@ if(executiveReasoning){
 
 }
 
-  if(executiveRecommendations){
+if(executiveRecommendations){
 
-  if(window.currentLanguage === "en"){
-
-    summaryEN.push(
-      executiveRecommendations
-    );
-
-  }else{
+  if(executiveRecommendations.it){
 
     summaryIT.push(
-      executiveRecommendations
+      executiveRecommendations.it
+    );
+
+  }
+
+  if(executiveRecommendations.en){
+
+    summaryEN.push(
+      executiveRecommendations.en
     );
 
   }
