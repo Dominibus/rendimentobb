@@ -1030,7 +1030,7 @@ const equityWhatIfPatterns = [
   /(?:capitale\s+mio|capitale\s+proprio|equity|anticipo)\s+(?:di\s+)?€?\s*(\d[\d\.,]*)\s*€?/i,
 
   // 🇬🇧
-  /(?:put|invest)\s+€?\s*(\d[\d\.,]*)\s*€?\s+(?:of\s+)?(?:my\s+own\s+money|my\s+own\s+capital|own\s+capital|equity)/i,
+  /(?:put|invest|invested|investing)\s+€?\s*(\d[\d\.,]*)\s*€?\s+(?:of\s+)?(?:my\s+own\s+money|my\s+own\s+capital|own\s+capital|equity)/i,
 
   /(?:equity|down\s+payment|own\s+capital)\s+(?:of\s+)?€?\s*(\d[\d\.,]*)\s*€?/i
 
