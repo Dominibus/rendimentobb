@@ -1337,7 +1337,379 @@ analysisData.revenueAnnual =
   }
 
 }
-    
+
+// =====================================
+// 💰 EQUITY / OWN CAPITAL WHAT-IF SCENARIO
+// Changes equity only and recalculates financing.
+// Temporary only — does NOT mutate lastAnalysisData.
+// =====================================
+
+const requestedEquity =
+  entities?.downPayment !== null &&
+  entities?.downPayment !== undefined
+    ? Number(entities.downPayment)
+    : null;
+
+const baselineEquity =
+  Number(
+    window.lastAnalysisData?.equity ??
+    window.lastAnalysisData?.initialCapital ??
+    rememberedAnalysis.equity ??
+    analysisData.equity ??
+    0
+  );
+
+const isEquityWhatIf =
+  !isCombinedWhatIf &&
+  intent?.intents?.includes("investment_executive") &&
+  Number.isFinite(requestedEquity) &&
+  requestedEquity > 0 &&
+  Number(analysisData.propertyPrice) > 0 &&
+  requestedEquity < Number(analysisData.propertyPrice) &&
+  requestedEquity !== baselineEquity;
+
+if(isEquityWhatIf){
+
+  const scenarioPropertyPrice =
+    Number(
+      window.lastAnalysisData?.propertyPrice ??
+      window.lastAnalysisData?.price ??
+      analysisData.propertyPrice ??
+      0
+    );
+
+  const scenarioEquity =
+    requestedEquity;
+
+  const scenarioLoanAmount =
+    scenarioPropertyPrice -
+    scenarioEquity;
+
+  const scenarioMortgagePercent =
+    scenarioPropertyPrice > 0
+      ? (
+          scenarioLoanAmount /
+          scenarioPropertyPrice
+        ) * 100
+      : 0;
+
+  const scenarioOccupancy =
+    Number(
+      window.lastAnalysisData?.occupancy ??
+      analysisData.occupancy ??
+      0
+    );
+
+  const scenarioADR =
+    Number(
+      window.lastAnalysisData?.priceNight ??
+      analysisData.priceNight ??
+      0
+    );
+
+  const scenarioMonthlyCosts =
+    Number(
+      window.lastAnalysisData?.expenses ??
+      window.lastAnalysisData?.monthlyCosts ??
+      analysisData.expenses ??
+      0
+    );
+
+  if(
+    scenarioPropertyPrice > 0 &&
+    typeof window.calculateROI === "function"
+  ){
+
+    const scenarioResult =
+      window.calculateROI({
+
+        price:
+          scenarioPropertyPrice,
+
+        equity:
+          scenarioEquity,
+
+        loanAmount:
+          scenarioLoanAmount,
+
+        priceNight:
+          scenarioADR,
+
+        occupancy:
+          scenarioOccupancy,
+
+        expenses:
+          scenarioMonthlyCosts,
+
+        commission:
+          Number(
+            analysisData.commission ??
+            window.lastAnalysisData?.commission ??
+            15
+          ),
+
+        tax:
+          Number(
+            analysisData.tax ??
+            window.lastAnalysisData?.tax ??
+            21
+          ),
+
+        interestRate:
+          Number(
+            analysisData.interestRate ??
+            window.lastAnalysisData?.interestRate ??
+            3.5
+          ),
+
+        loanYears:
+          Number(
+            analysisData.loanYears ??
+            window.lastAnalysisData?.loanYears ??
+            20
+          )
+
+      });
+
+    if(
+      scenarioResult &&
+      typeof scenarioResult === "object"
+    ){
+
+      analysisData.propertyPrice =
+        scenarioPropertyPrice;
+
+      analysisData.price =
+        scenarioPropertyPrice;
+
+      analysisData.equity =
+        scenarioEquity;
+
+      analysisData.loanAmount =
+        scenarioLoanAmount;
+
+      analysisData.mortgage =
+        scenarioLoanAmount;
+
+      analysisData.mortgagePercent =
+        scenarioMortgagePercent;
+
+      analysisData.roi =
+        scenarioResult.roi;
+
+      analysisData.visualROI =
+        scenarioResult.roi;
+
+      analysisData.realROI =
+        scenarioResult.realROI;
+
+      analysisData.net =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.cashflow =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.annualProfit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.profit =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.netAfterMortgage =
+        scenarioResult.netAfterMortgage;
+
+      analysisData.gross =
+        scenarioResult.gross;
+
+      analysisData.revenueAnnual =
+        scenarioResult.revenue ??
+        scenarioResult.gross;
+
+      analysisData.risk =
+        scenarioResult.risk;
+
+      console.log(
+        "🧮 EQUITY WHAT-IF ROI RECALCULATED",
+        scenarioResult
+      );
+
+      // =====================================
+      // 🧠 RECALCULATE EQUITY WHAT-IF SCORE
+      // =====================================
+
+      if(
+        typeof window.rbGenerateInvestmentScore ===
+        "function"
+      ){
+
+        const scenarioScore =
+          window.rbGenerateInvestmentScore({
+
+            roi:
+              Number(
+                analysisData.roi || 0
+              ),
+
+            risk:
+              Number(
+                analysisData.risk || 0
+              ),
+
+            occupancy:
+              scenarioOccupancy,
+
+            mortgagePercent:
+              scenarioMortgagePercent,
+
+            cashflow:
+              Number(
+                analysisData.cashflow || 0
+              ),
+
+            city:
+              analysisData.city || "roma"
+
+          });
+
+        if(
+          scenarioScore &&
+          Number.isFinite(
+            Number(scenarioScore.score)
+          )
+        ){
+
+          analysisData.investmentScore =
+            Number(
+              scenarioScore.score
+            );
+
+          console.log(
+            "🧠 EQUITY WHAT-IF SCORE RECALCULATED",
+            scenarioScore
+          );
+
+        }
+
+      }
+
+      // =====================================
+      // 💰 EQUITY SCENARIO METADATA
+      // =====================================
+
+      analysisData.whatIfScenario = {
+
+        type:
+          "equity",
+
+        requestedEquity,
+
+        originalPropertyPrice:
+          scenarioPropertyPrice,
+
+        originalEquity:
+          baselineEquity,
+
+        originalLoanAmount:
+          Number(
+            window.lastAnalysisData?.loanAmount ??
+            window.lastAnalysisData?.mortgage ??
+            0
+          ),
+
+        originalMortgagePercent:
+          Number(
+            window.lastAnalysisData?.mortgagePercent ??
+            0
+          ),
+
+        originalROI:
+          Number(
+            window.lastAnalysisData?.visualROI ??
+            window.lastAnalysisData?.roi ??
+            0
+          ),
+
+        originalRealROI:
+          Number(
+            window.lastAnalysisData?.realROI ??
+            window.lastAnalysisData?.safeROI ??
+            0
+          ),
+
+        originalCashflow:
+          Number(
+            window.lastAnalysisData?.net ??
+            window.lastAnalysisData?.cashflow ??
+            window.lastAnalysisData?.annualProfit ??
+            0
+          ),
+
+        originalRisk:
+          Number(
+            window.lastAnalysisData?.risk ??
+            0
+          ),
+
+        originalInvestmentScore:
+          Number(
+            window.lastAnalysisData?.investmentScore ??
+            window.lastInvestmentScore?.score ??
+            0
+          ),
+
+        scenarioPropertyPrice,
+
+        scenarioEquity,
+
+        scenarioLoanAmount,
+
+        scenarioMortgagePercent,
+
+        scenarioOccupancy,
+
+        scenarioADR,
+
+        scenarioMonthlyCosts,
+
+        scenarioROI:
+          Number(
+            analysisData.roi ?? 0
+          ),
+
+        scenarioRealROI:
+          Number(
+            analysisData.realROI ?? 0
+          ),
+
+        scenarioCashflow:
+          Number(
+            analysisData.cashflow ??
+            analysisData.net ??
+            0
+          ),
+
+        scenarioRisk:
+          Number(
+            analysisData.risk ?? 0
+          ),
+
+        scenarioInvestmentScore:
+          Number(
+            analysisData.investmentScore ?? 0
+          )
+
+      };
+
+      console.log(
+        "💰 EQUITY WHAT-IF SCENARIO",
+        analysisData.whatIfScenario
+      );
+
+    }
+
+  }
+
+}    
 
 // =====================================
 // 🏦 MORTGAGE WHAT-IF SCENARIO
