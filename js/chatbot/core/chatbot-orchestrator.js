@@ -1361,7 +1361,6 @@ const baselineEquity =
 
 const isEquityWhatIf =
   !isCombinedWhatIf &&
-  intent?.intents?.includes("investment_executive") &&
   Number.isFinite(requestedEquity) &&
   requestedEquity > 0 &&
   Number(analysisData.propertyPrice) > 0 &&
