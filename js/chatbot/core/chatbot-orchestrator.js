@@ -2556,6 +2556,19 @@ if(isADRWhatIf){
       analysisData.netAfterMortgage =
         scenarioResult.netAfterMortgage;
 
+      // =====================================
+      // 💰 ADR WHAT-IF REVENUE SSOT
+      // Revenue must come from the same
+      // canonical ROI scenario calculation
+      // =====================================
+
+      analysisData.gross =
+        scenarioResult.gross;
+
+      analysisData.revenueAnnual =
+        scenarioResult.revenue ??
+        scenarioResult.gross;
+
       analysisData.risk =
         scenarioResult.risk;
 
@@ -2563,7 +2576,7 @@ if(isADRWhatIf){
         "🧮 ADR WHAT-IF ROI RECALCULATED",
         scenarioResult
       );
-
+      
       // =====================================
       // 🧠 RECALCULATE ADR WHAT-IF SCORE
       // Temporary only
