@@ -498,6 +498,44 @@ switch(strongestPoint){
 }
 
 // ===============================================
+// ⚠️ EXECUTIVE WEAK POINT
+// ===============================================
+
+switch(weakestPoint){
+
+    case "risk":
+
+        result.weakestPointIT =
+            "Il livello di rischio rappresenta la principale criticità dell'operazione.";
+
+        result.weakestPointEN =
+            "Risk level represents the main weakness of the investment.";
+
+        break;
+
+    case "cashflow":
+
+        result.weakestPointIT =
+            "Il cashflow rappresenta la principale criticità dell'operazione.";
+
+        result.weakestPointEN =
+            "Cashflow represents the main weakness of the investment.";
+
+        break;
+
+    case "occupancy":
+
+        result.weakestPointIT =
+            "L'occupazione rappresenta il principale margine di miglioramento dell'operazione.";
+
+        result.weakestPointEN =
+            "Occupancy represents the main improvement opportunity for the investment.";
+
+        break;
+
+}    
+
+// ===============================================
 // 🧠 AI EXECUTIVE OVERRIDE
 // ===============================================
 
