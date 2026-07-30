@@ -4758,6 +4758,239 @@ The verdict remains ${verdict}.`;
 
   }
 
+    // =====================================
+  // 💰 EQUITY WHAT-IF RESPONSE
+  // =====================================
+
+  if(
+    isExecutiveWhatIf &&
+    executiveWhatIf.type === "equity"
+  ){
+
+    const originalEquity =
+      Number(
+        executiveWhatIf.originalEquity ?? 0
+      );
+
+    const scenarioEquity =
+      Number(
+        executiveWhatIf.scenarioEquity ??
+        executiveWhatIf.requestedEquity ??
+        analysisData?.equity ??
+        0
+      );
+
+    const originalLoan =
+      Number(
+        executiveWhatIf.originalLoanAmount ?? 0
+      );
+
+    const scenarioLoan =
+      Number(
+        executiveWhatIf.scenarioLoanAmount ??
+        analysisData?.loanAmount ??
+        analysisData?.mortgage ??
+        0
+      );
+
+    const originalMortgagePercent =
+      Number(
+        executiveWhatIf.originalMortgagePercent ?? 0
+      );
+
+    const scenarioMortgagePercent =
+      Number(
+        executiveWhatIf.scenarioMortgagePercent ??
+        analysisData?.mortgagePercent ??
+        0
+      );
+
+    const originalROI =
+      Number(
+        executiveWhatIf.originalROI ?? 0
+      );
+
+    const scenarioROI =
+      Number(
+        executiveWhatIf.scenarioROI ??
+        analysisData?.roi ??
+        0
+      );
+
+    const originalRealROI =
+      Number(
+        executiveWhatIf.originalRealROI ?? 0
+      );
+
+    const scenarioRealROI =
+      Number(
+        executiveWhatIf.scenarioRealROI ??
+        analysisData?.realROI ??
+        0
+      );
+
+    const originalCashflow =
+      Number(
+        executiveWhatIf.originalCashflow ?? 0
+      );
+
+    const scenarioCashflow =
+      Number(
+        executiveWhatIf.scenarioCashflow ??
+        analysisData?.cashflow ??
+        analysisData?.net ??
+        0
+      );
+
+    const originalScore =
+      Number(
+        executiveWhatIf.originalInvestmentScore ?? 0
+      );
+
+    const scenarioScore =
+      Number(
+        executiveWhatIf.scenarioInvestmentScore ??
+        analysisData?.investmentScore ??
+        0
+      );
+
+    const equityDelta =
+      scenarioEquity - originalEquity;
+
+    const loanDelta =
+      scenarioLoan - originalLoan;
+
+    const roiDelta =
+      scenarioROI - originalROI;
+
+    const realROIDelta =
+      scenarioRealROI - originalRealROI;
+
+    const cashflowDelta =
+      scenarioCashflow - originalCashflow;
+
+    const verdict =
+      advisor?.verdict ||
+      analysisData?.verdict ||
+      "WAIT";
+
+    const formatEUR =
+      value =>
+        Number(value || 0).toLocaleString(
+          "it-IT",
+          {
+            style: "currency",
+            currency: "EUR",
+            maximumFractionDigits: 0
+          }
+        );
+
+    const formatPct =
+      value =>
+        `${Number(value || 0).toFixed(2)}%`;
+
+    response.type =
+      "executive_what_if";
+
+    response.confidence =
+      0.99;
+
+    response.textIT =
+`🧪 SCENARIO WHAT-IF — CAPITALE PROPRIO
+
+Portando il capitale proprio da ${formatEUR(originalEquity)} a ${formatEUR(scenarioEquity)}, la struttura finanziaria dell'investimento cambia.
+
+🏦 Struttura finanziaria
+
+Capitale proprio: ${formatEUR(originalEquity)} → ${formatEUR(scenarioEquity)} (${equityDelta >= 0 ? "+" : ""}${formatEUR(equityDelta)})
+
+Mutuo: ${formatEUR(originalLoan)} → ${formatEUR(scenarioLoan)} (${loanDelta >= 0 ? "+" : ""}${formatEUR(loanDelta)})
+
+LTV: ${formatPct(originalMortgagePercent)} → ${formatPct(scenarioMortgagePercent)}
+
+📊 Impatto economico
+
+ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
+
+ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+
+Cashflow annuo: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
+
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🎯 Valutazione AI
+
+L'aumento del capitale proprio riduce il finanziamento a ${formatEUR(scenarioLoan)} e porta l'LTV al ${formatPct(scenarioMortgagePercent)}.
+
+Il nuovo scenario genera un ROI equity del ${formatPct(scenarioROI)} e un cashflow annuo di ${formatEUR(scenarioCashflow)}.
+
+Il verdetto è ${verdict}.`;
+
+    response.textEN =
+`🧪 WHAT-IF SCENARIO — EQUITY
+
+Increasing equity from ${formatEUR(originalEquity)} to ${formatEUR(scenarioEquity)} changes the investment financing structure.
+
+🏦 Financing structure
+
+Equity: ${formatEUR(originalEquity)} → ${formatEUR(scenarioEquity)} (${equityDelta >= 0 ? "+" : ""}${formatEUR(equityDelta)})
+
+Mortgage: ${formatEUR(originalLoan)} → ${formatEUR(scenarioLoan)} (${loanDelta >= 0 ? "+" : ""}${formatEUR(loanDelta)})
+
+LTV: ${formatPct(originalMortgagePercent)} → ${formatPct(scenarioMortgagePercent)}
+
+📊 Financial impact
+
+Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
+
+Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
+
+Annual cashflow: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
+
+Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+
+🎯 AI Assessment
+
+The higher equity contribution reduces financing to ${formatEUR(scenarioLoan)} and brings LTV to ${formatPct(scenarioMortgagePercent)}.
+
+The new scenario generates an equity ROI of ${formatPct(scenarioROI)} and annual cashflow of ${formatEUR(scenarioCashflow)}.
+
+The verdict is ${verdict}.`;
+
+    response.suggestionsIT = [
+      "Simula meno capitale proprio",
+      "Prova un LTV diverso",
+      "Modifica il prezzo dell'immobile"
+    ];
+
+    response.suggestionsEN = [
+      "Simulate a lower equity contribution",
+      "Try a different LTV",
+      "Change the property price"
+    ];
+
+    console.log(
+      "💰 EXECUTIVE EQUITY WHAT-IF RESPONSE",
+      {
+        originalEquity,
+        scenarioEquity,
+        originalLoan,
+        scenarioLoan,
+        originalMortgagePercent,
+        scenarioMortgagePercent,
+        originalROI,
+        scenarioROI,
+        originalCashflow,
+        scenarioCashflow,
+        originalScore,
+        scenarioScore
+      }
+    );
+
+    return response;
+
+  }
+
   // =====================================
   // 🧪 COMBINED WHAT-IF RESPONSE
   // =====================================
