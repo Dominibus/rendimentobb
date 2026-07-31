@@ -3211,6 +3211,507 @@ if(intent.intent === "pms_checkouts"){
 
 if(intent.intent === "pms_bookings"){
 
+  const bookingMessage =
+    String(
+      originalMessage ||
+      message ||
+      ""
+    )
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(
+        /[\u0300-\u036f]/g,
+        ""
+      );
+
+  const bookingList =
+    Array.isArray(
+      pmsData?.bookingList
+    )
+      ? pmsData.bookingList
+      : [];
+
+  const attentionBookings =
+    Array.isArray(
+      pmsData?.attentionBookings
+    )
+      ? pmsData.attentionBookings
+      : bookingList.filter(
+          booking =>
+            booking?.requiresAttention
+        );
+
+  const isAttentionRequest =
+    /attenzion|anomali|problem|critic|attention|issue|warning/.test(
+      bookingMessage
+    );
+
+  // =====================================
+  // 🤖 BOOKINGS REQUIRING ATTENTION
+  // =====================================
+
+  if(isAttentionRequest){
+
+    if(
+      attentionBookings.length === 0
+    ){
+
+      response.type =
+        "pms_booking_attention";
+
+      response.textIT =
+`✅ Nessuna prenotazione richiede attenzione
+
+Non risultano anomalie operative nelle prenotazioni attualmente registrate.
+
+📅 Prenotazioni monitorate: ${bookings}
+
+Il Copilot continuerà a controllare date, stato, importi e dati degli ospiti.`;
+
+      response.textEN =
+`✅ No bookings require attention
+
+There are no operational anomalies in the bookings currently registered.
+
+📅 Bookings monitored: ${bookings}
+
+The Copilot will continue checking dates, status, amounts and guest information.`;
+
+      return response;
+
+    }
+
+    const formatBookingDate =
+      (
+        value,
+        locale
+      ) => {
+
+        const parsedDate =
+          new Date(
+            `${value}T12:00:00`
+          );
+
+        if(
+          !value ||
+          Number.isNaN(
+            parsedDate.getTime()
+          )
+        ){
+
+          return locale === "it-IT"
+            ? "data non valida"
+            : "invalid date";
+
+        }
+
+        return parsedDate
+          .toLocaleDateString(
+            locale,
+            {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }
+          );
+
+      };
+
+    const reasonIT = {
+
+      invalid_date_range:
+        "Il check-out precede o coincide con il check-in.",
+
+      pending_booking:
+        "La prenotazione è ancora in attesa di conferma.",
+
+      arrival_today:
+        "L’ospite arriva oggi.",
+
+      departure_today:
+        "L’ospite parte oggi.",
+
+      missing_guest_name:
+        "Manca il nome dell’ospite.",
+
+      missing_or_invalid_amount:
+        "L’importo è mancante o non valido."
+
+    };
+
+    const reasonEN = {
+
+      invalid_date_range:
+        "Check-out is before or equal to check-in.",
+
+      pending_booking:
+        "The booking is still awaiting confirmation.",
+
+      arrival_today:
+        "The guest is arriving today.",
+
+      departure_today:
+        "The guest is departing today.",
+
+      missing_guest_name:
+        "The guest name is missing.",
+
+      missing_or_invalid_amount:
+        "The amount is missing or invalid."
+
+    };
+
+    const actionIT = {
+
+      invalid_date_range:
+        "Correggi immediatamente le date.",
+
+      pending_booking:
+        "Verifica disponibilità e conferma o rifiuta la richiesta.",
+
+      arrival_today:
+        "Controlla documenti, pagamento e istruzioni di check-in.",
+
+      departure_today:
+        "Organizza check-out, pulizia e controllo della struttura.",
+
+      missing_guest_name:
+        "Completa i dati dell’ospite.",
+
+      missing_or_invalid_amount:
+        "Inserisci o correggi l’importo della prenotazione."
+
+    };
+
+    const actionEN = {
+
+      invalid_date_range:
+        "Correct the dates immediately.",
+
+      pending_booking:
+        "Check availability and confirm or decline the request.",
+
+      arrival_today:
+        "Check documents, payment and check-in instructions.",
+
+      departure_today:
+        "Arrange check-out, cleaning and property inspection.",
+
+      missing_guest_name:
+        "Complete the guest information.",
+
+      missing_or_invalid_amount:
+        "Enter or correct the booking amount."
+
+    };
+
+    const buildAttentionItem =
+      (
+        booking,
+        locale
+      ) => {
+
+        const isItalian =
+          locale === "it-IT";
+
+        const codes =
+          Array.isArray(
+            booking?.attentionCodes
+          )
+            ? booking.attentionCodes
+            : [];
+
+        const primaryCode =
+          codes[0] ||
+          "unknown";
+
+        const guestName =
+          booking?.guestName ||
+          (
+            isItalian
+              ? "Ospite non indicato"
+              : "Guest not specified"
+          );
+
+        const checkin =
+          formatBookingDate(
+            booking?.checkin,
+            locale
+          );
+
+        const checkout =
+          formatBookingDate(
+            booking?.checkout,
+            locale
+          );
+
+        const reasonMap =
+          isItalian
+            ? reasonIT
+            : reasonEN;
+
+        const actionMap =
+          isItalian
+            ? actionIT
+            : actionEN;
+
+        const reasons =
+          codes
+            .map(
+              code =>
+                reasonMap[code]
+            )
+            .filter(Boolean)
+            .join(" ");
+
+        const amount =
+          Number(
+            booking?.totalAmount || 0
+          );
+
+        const amountText =
+          amount > 0
+            ? amount.toLocaleString(
+                locale,
+                {
+                  style: "currency",
+                  currency: "EUR"
+                }
+              )
+            : (
+                isItalian
+                  ? "Importo non disponibile"
+                  : "Amount unavailable"
+              );
+
+        return isItalian
+          ? `⚠️ ${guestName}
+📆 ${checkin} → ${checkout}
+💰 ${amountText}
+Problema: ${reasons || "È richiesta una verifica manuale."}
+Azione: ${actionMap[primaryCode] || "Controlla i dettagli della prenotazione."}`
+          : `⚠️ ${guestName}
+📆 ${checkin} → ${checkout}
+💰 ${amountText}
+Issue: ${reasons || "A manual review is required."}
+Action: ${actionMap[primaryCode] || "Review the booking details."}`;
+
+      };
+
+    const attentionListIT =
+      attentionBookings
+        .map(
+          booking =>
+            buildAttentionItem(
+              booking,
+              "it-IT"
+            )
+        )
+        .join("\n\n━━━━━━━━━━━━━━━\n\n");
+
+    const attentionListEN =
+      attentionBookings
+        .map(
+          booking =>
+            buildAttentionItem(
+              booking,
+              "en-US"
+            )
+        )
+        .join("\n\n━━━━━━━━━━━━━━━\n\n");
+
+    response.type =
+      "pms_booking_attention";
+
+    response.confidence =
+      0.99;
+
+    response.textIT =
+`🚨 Hospitality Copilot
+
+${attentionBookings.length} ${
+  attentionBookings.length === 1
+    ? "prenotazione richiede"
+    : "prenotazioni richiedono"
+} attenzione.
+
+━━━━━━━━━━━━━━━
+
+${attentionListIT}
+
+━━━━━━━━━━━━━━━
+
+🎯 Priorità operativa
+
+Correggi prima le anomalie sulle date, poi gestisci arrivi, partenze e prenotazioni in attesa.`;
+
+    response.textEN =
+`🚨 Hospitality Copilot
+
+${attentionBookings.length} ${
+  attentionBookings.length === 1
+    ? "booking requires"
+    : "bookings require"
+} attention.
+
+━━━━━━━━━━━━━━━
+
+${attentionListEN}
+
+━━━━━━━━━━━━━━━
+
+🎯 Operational priority
+
+Correct date anomalies first, then handle arrivals, departures and pending bookings.`;
+
+    return response;
+
+  }
+
+  // =====================================
+  // 📅 BOOKINGS BY MONTH
+  // =====================================
+
+  const monthNames = [
+    ["gennaio", "january"],
+    ["febbraio", "february"],
+    ["marzo", "march"],
+    ["aprile", "april"],
+    ["maggio", "may"],
+    ["giugno", "june"],
+    ["luglio", "july"],
+    ["agosto", "august"],
+    ["settembre", "september"],
+    ["ottobre", "october"],
+    ["novembre", "november"],
+    ["dicembre", "december"]
+  ];
+
+  const requestedMonth =
+    monthNames.findIndex(
+      monthGroup =>
+        monthGroup.some(
+          monthName =>
+            bookingMessage.includes(
+              monthName
+            )
+        )
+    );
+
+  if(requestedMonth >= 0){
+
+    const requestedYearMatch =
+      bookingMessage.match(
+        /\b(20\d{2})\b/
+      );
+
+    const requestedYear =
+      requestedYearMatch
+        ? Number(
+            requestedYearMatch[1]
+          )
+        : new Date().getFullYear();
+
+    const monthStart =
+      new Date(
+        requestedYear,
+        requestedMonth,
+        1
+      );
+
+    const nextMonthStart =
+      new Date(
+        requestedYear,
+        requestedMonth + 1,
+        1
+      );
+
+    const monthlyBookings =
+      bookingList.filter(
+        booking => {
+
+          const checkin =
+            new Date(
+              `${booking?.checkin}T12:00:00`
+            );
+
+          const checkout =
+            new Date(
+              `${booking?.checkout}T12:00:00`
+            );
+
+          if(
+            Number.isNaN(
+              checkin.getTime()
+            ) ||
+            Number.isNaN(
+              checkout.getTime()
+            )
+          ){
+
+            return false;
+
+          }
+
+          return (
+            checkin <
+              nextMonthStart &&
+            checkout >
+              monthStart
+          );
+
+        }
+      );
+
+    const monthIT =
+      new Intl.DateTimeFormat(
+        "it-IT",
+        {
+          month: "long"
+        }
+      ).format(
+        monthStart
+      );
+
+    const monthEN =
+      new Intl.DateTimeFormat(
+        "en-US",
+        {
+          month: "long"
+        }
+      ).format(
+        monthStart
+      );
+
+    response.type =
+      "pms_bookings_month";
+
+    response.textIT =
+`📅 Prenotazioni di ${monthIT} ${requestedYear}
+
+Hai ${monthlyBookings.length} ${
+  monthlyBookings.length === 1
+    ? "prenotazione"
+    : "prenotazioni"
+} che interessano il mese selezionato.`;
+
+    response.textEN =
+`📅 Bookings for ${monthEN} ${requestedYear}
+
+You have ${monthlyBookings.length} ${
+  monthlyBookings.length === 1
+    ? "booking"
+    : "bookings"
+} affecting the selected month.`;
+
+    return response;
+
+  }
+
+  // =====================================
+  // 📊 GENERAL BOOKING COUNT
+  // =====================================
+
   response.textIT =
     `📅 Attualmente hai ${bookings} prenotazioni registrate nel PMS.`;
 
