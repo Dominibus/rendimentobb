@@ -6131,6 +6131,246 @@ font-size:16px;
 
     });
 
+  // =====================================
+// 🤖 AI HOSPITALITY COPILOT MEMORY
+// Real bookings bridge PMS → Chatbot
+// =====================================
+
+window.currentBookingsData =
+  bookingsData;
+
+const copilotToday =
+  new Date()
+    .toISOString()
+    .split("T")[0];
+
+const normalizedBookings =
+  bookingsData.map(booking => {
+
+    const checkin =
+      String(
+        booking.checkin || ""
+      );
+
+    const checkout =
+      String(
+        booking.checkout || ""
+      );
+
+    const checkinDate =
+      new Date(checkin);
+
+    const checkoutDate =
+      new Date(checkout);
+
+    const hasValidDates =
+      checkin &&
+      checkout &&
+      !Number.isNaN(
+        checkinDate.getTime()
+      ) &&
+      !Number.isNaN(
+        checkoutDate.getTime()
+      ) &&
+      checkoutDate >
+      checkinDate;
+
+    const calculatedNights =
+      hasValidDates
+        ? Math.ceil(
+            (
+              checkoutDate -
+              checkinDate
+            ) /
+            (
+              1000 *
+              60 *
+              60 *
+              24
+            )
+          )
+        : 0;
+
+    const totalAmount =
+      Number(
+        booking.totalAmount || 0
+      );
+
+    const attentionCodes = [];
+
+    if(!hasValidDates){
+
+      attentionCodes.push(
+        "invalid_date_range"
+      );
+
+    }
+
+    if(
+      String(
+        booking.status || ""
+      ).toLowerCase() ===
+      "pending"
+    ){
+
+      attentionCodes.push(
+        "pending_booking"
+      );
+
+    }
+
+    if(
+      checkin === copilotToday
+    ){
+
+      attentionCodes.push(
+        "arrival_today"
+      );
+
+    }
+
+    if(
+      checkout === copilotToday
+    ){
+
+      attentionCodes.push(
+        "departure_today"
+      );
+
+    }
+
+    if(
+      !booking.guestName
+    ){
+
+      attentionCodes.push(
+        "missing_guest_name"
+      );
+
+    }
+
+    if(totalAmount <= 0){
+
+      attentionCodes.push(
+        "missing_or_invalid_amount"
+      );
+
+    }
+
+    return {
+
+      id:
+        booking.id,
+
+      propertyId:
+        booking.propertyId ||
+        propertyId,
+
+      guestName:
+        booking.guestName ||
+        "",
+
+      checkin,
+
+      checkout,
+
+      nights:
+        calculatedNights,
+
+      guests:
+        Number(
+          booking.guests || 0
+        ),
+
+      totalAmount,
+
+      nightlyRate:
+        calculatedNights > 0
+          ? totalAmount /
+            calculatedNights
+          : 0,
+
+      source:
+        String(
+          booking.source ||
+          "direct"
+        ).toLowerCase(),
+
+      status:
+        String(
+          booking.status ||
+          "confirmed"
+        ).toLowerCase(),
+
+      validDateRange:
+        Boolean(
+          hasValidDates
+        ),
+
+      requiresAttention:
+        attentionCodes.length > 0,
+
+      attentionCodes
+
+    };
+
+  });
+
+const attentionBookings =
+  normalizedBookings.filter(
+    booking =>
+      booking.requiresAttention
+  );
+
+window.rbPMSData = {
+
+  ...(
+    window.rbPMSData || {}
+  ),
+
+  bookings:
+    normalizedBookings.length,
+
+  bookingList:
+    normalizedBookings,
+
+  attentionBookings,
+
+  attentionCount:
+    attentionBookings.length,
+
+  lastBookingsSync:
+    new Date()
+      .toISOString()
+
+};
+
+window.dispatchEvent(
+  new CustomEvent(
+    "rb_pms_data_updated",
+    {
+      detail:
+        window.rbPMSData
+    }
+  )
+);
+
+console.log(
+  "🤖 PMS COPILOT MEMORY:",
+  {
+    bookings:
+      window.rbPMSData.bookings,
+
+    attentionCount:
+      window.rbPMSData
+        .attentionCount,
+
+    bookingList:
+      window.rbPMSData
+        .bookingList
+  }
+);
+
   const summary =
     document.getElementById(
       "booking-summary"
