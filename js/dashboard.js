@@ -7098,19 +7098,59 @@ function renderPMSCalendar(bookings){
 
   if(!container) return;
 
-  const today = new Date();
+  const bookingList =
+    Array.isArray(bookings)
+      ? bookings
+      : (
+          window.currentBookingsData ||
+          []
+        );
+
+  const today =
+    new Date();
+
+  if(
+    !(
+      window.pmsCalendarViewDate
+      instanceof Date
+    ) ||
+    Number.isNaN(
+      window.pmsCalendarViewDate
+        .getTime()
+    )
+  ){
+
+    window.pmsCalendarViewDate =
+      new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+
+  }
+
+  const viewDate =
+    window.pmsCalendarViewDate;
 
   const year =
-    today.getFullYear();
+    viewDate.getFullYear();
 
   const month =
-    today.getMonth();
+    viewDate.getMonth();
 
   const firstDay =
-    new Date(year,month,1);
+    new Date(
+      year,
+      month,
+      1
+    );
 
   const lastDay =
-    new Date(year,month + 1,0);
+    new Date(
+      year,
+      month + 1,
+      0
+    );
 
   const daysInMonth =
     lastDay.getDate();
@@ -7118,22 +7158,174 @@ function renderPMSCalendar(bookings){
   const startDay =
     firstDay.getDay();
 
-  const monthNames = [
-    "Gennaio","Febbraio","Marzo",
-    "Aprile","Maggio","Giugno",
-    "Luglio","Agosto","Settembre",
-    "Ottobre","Novembre","Dicembre"
+  const isEnglish =
+    window.currentLang === "en";
+
+  const monthNamesIT = [
+    "Gennaio",
+    "Febbraio",
+    "Marzo",
+    "Aprile",
+    "Maggio",
+    "Giugno",
+    "Luglio",
+    "Agosto",
+    "Settembre",
+    "Ottobre",
+    "Novembre",
+    "Dicembre"
   ];
+
+  const monthNamesEN = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+
+  const weekdayNames =
+    isEnglish
+      ? [
+          "S",
+          "M",
+          "T",
+          "W",
+          "T",
+          "F",
+          "S"
+        ]
+      : [
+          "D",
+          "L",
+          "M",
+          "M",
+          "G",
+          "V",
+          "S"
+        ];
+
+  const selectedMonthName =
+    isEnglish
+      ? monthNamesEN[month]
+      : monthNamesIT[month];
+
+  const todayISO =
+    [
+      today.getFullYear(),
+      String(
+        today.getMonth() + 1
+      ).padStart(2,"0"),
+      String(
+        today.getDate()
+      ).padStart(2,"0")
+    ].join("-");
 
   let html = `
 
   <div style="
-  font-weight:700;
-  text-align:center;
-  margin-bottom:10px;
-  color:#0f172a;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
   ">
-    ${monthNames[month]} ${year}
+
+    <button
+    id="pms-calendar-prev"
+    type="button"
+    aria-label="${
+      isEnglish
+        ? "Previous month"
+        : "Mese precedente"
+    }"
+    style="
+    width:42px;
+    height:42px;
+    border:1px solid #dbe4ee;
+    border-radius:12px;
+    background:#ffffff;
+    color:#0f172a;
+    font-size:24px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:
+    0 4px 12px rgba(15,23,42,.06);
+    ">
+      ‹
+    </button>
+
+    <div style="
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    ">
+
+      <div style="
+      font-weight:800;
+      text-align:center;
+      color:#0f172a;
+      font-size:16px;
+      min-width:150px;
+      ">
+        ${selectedMonthName} ${year}
+      </div>
+
+      <button
+      id="pms-calendar-today"
+      type="button"
+      style="
+      border:1px solid #a7f3d0;
+      border-radius:999px;
+      padding:7px 13px;
+      background:#ecfdf5;
+      color:#047857;
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+      ">
+        ${
+          isEnglish
+            ? "Today"
+            : "Oggi"
+        }
+      </button>
+
+    </div>
+
+    <button
+    id="pms-calendar-next"
+    type="button"
+    aria-label="${
+      isEnglish
+        ? "Next month"
+        : "Mese successivo"
+    }"
+    style="
+    width:42px;
+    height:42px;
+    border:1px solid #dbe4ee;
+    border-radius:12px;
+    background:#ffffff;
+    color:#0f172a;
+    font-size:24px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:
+    0 4px 12px rgba(15,23,42,.06);
+    ">
+      ›
+    </button>
+
   </div>
 
   <div style="
@@ -7145,13 +7337,14 @@ function renderPMSCalendar(bookings){
   color:#64748b;
   margin-bottom:6px;
   ">
-    <div>D</div>
-    <div>L</div>
-    <div>M</div>
-    <div>M</div>
-    <div>G</div>
-    <div>V</div>
-    <div>S</div>
+
+    ${weekdayNames
+      .map(
+        dayName =>
+          `<div>${dayName}</div>`
+      )
+      .join("")}
+
   </div>
 
   <div style="
@@ -7161,97 +7354,245 @@ function renderPMSCalendar(bookings){
   ">
   `;
 
-  for(let i=0;i<startDay;i++){
+  for(
+    let i = 0;
+    i < startDay;
+    i++
+  ){
 
     html += `
-    <div></div>
+      <div></div>
     `;
 
   }
 
-  for(let day=1; day<=daysInMonth; day++){
+  for(
+    let day = 1;
+    day <= daysInMonth;
+    day++
+  ){
 
     const currentDate =
-      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+      `${year}-${String(
+        month + 1
+      ).padStart(
+        2,
+        "0"
+      )}-${String(
+        day
+      ).padStart(
+        2,
+        "0"
+      )}`;
 
     let color = "";
     let tooltip = "";
 
-    bookings.forEach(b=>{
+    bookingList.forEach(
+      booking => {
 
-      if(
-        currentDate >= b.checkin &&
-        currentDate < b.checkout
-      ){
+        const checkin =
+          String(
+            booking.checkin || ""
+          );
 
-        color = "#10b981";
-        tooltip = b.guestName;
+        const checkout =
+          String(
+            booking.checkout || ""
+          );
+
+        const guestName =
+          booking.guestName ||
+          (
+            isEnglish
+              ? "Guest"
+              : "Ospite"
+          );
+
+        const status =
+          String(
+            booking.status || ""
+          ).toLowerCase();
+
+        if(
+          currentDate >= checkin &&
+          currentDate < checkout
+        ){
+
+          color = "#10b981";
+          tooltip = guestName;
+
+        }
+
+        if(
+          currentDate === checkin
+        ){
+
+          color = "#3b82f6";
+
+          tooltip =
+            isEnglish
+              ? `Arrival: ${guestName}`
+              : `Arrivo: ${guestName}`;
+
+        }
+
+        if(
+          currentDate === checkout
+        ){
+
+          color = "#f97316";
+
+          tooltip =
+            isEnglish
+              ? `Departure: ${guestName}`
+              : `Partenza: ${guestName}`;
+
+        }
+
+        if(
+          status === "cancelled" &&
+          currentDate >= checkin &&
+          currentDate <= checkout
+        ){
+
+          color = "#ef4444";
+
+          tooltip =
+            isEnglish
+              ? `Cancelled: ${guestName}`
+              : `Cancellata: ${guestName}`;
+
+        }
 
       }
+    );
 
-      if(
-        currentDate === b.checkin
-      ){
-
-        color = "#3b82f6";
-        tooltip = `Arrivo ${b.guestName}`;
-
-      }
-
-      if(
-        currentDate === b.checkout
-      ){
-
-        color = "#f97316";
-        tooltip = `Partenza ${b.guestName}`;
-
-      }
-
-      if(
-        b.status === "cancelled" &&
-        currentDate >= b.checkin &&
-        currentDate <= b.checkout
-      ){
-
-        color = "#ef4444";
-        tooltip = `Cancellata ${b.guestName}`;
-
-      }
-
-    });
+    const isToday =
+      currentDate === todayISO;
 
     html += `
 
-    <div
-    title="${tooltip}"
-    style="
-    height:34px;
-    border-radius:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
-    font-weight:600;
-    background:${color || "#f8fafc"};
-    color:${color ? "#fff" : "#0f172a"};
-    border:1px solid ${
-      color
-      ? color
-      : "#e2e8f0"
-    };
-    ">
-      ${day}
-    </div>
+      <div
+      title="${tooltip}"
+      style="
+      height:42px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:700;
+      background:${
+        color || "#f8fafc"
+      };
+      color:${
+        color
+          ? "#ffffff"
+          : "#0f172a"
+      };
+      border:${
+        isToday
+          ? "2px solid #0f172a"
+          : `1px solid ${
+              color ||
+              "#e2e8f0"
+            }`
+      };
+      box-shadow:${
+        isToday
+          ? "0 0 0 3px rgba(15,23,42,.08)"
+          : "none"
+      };
+      ">
+        ${day}
+      </div>
 
     `;
 
   }
 
   html += `
-  </div>
+    </div>
   `;
 
-  container.innerHTML = html;
+  container.innerHTML =
+    html;
+
+  const previousButton =
+    document.getElementById(
+      "pms-calendar-prev"
+    );
+
+  const nextButton =
+    document.getElementById(
+      "pms-calendar-next"
+    );
+
+  const todayButton =
+    document.getElementById(
+      "pms-calendar-today"
+    );
+
+  if(previousButton){
+
+    previousButton.onclick =
+      () => {
+
+        window.pmsCalendarViewDate =
+          new Date(
+            year,
+            month - 1,
+            1
+          );
+
+        renderPMSCalendar(
+          bookingList
+        );
+
+      };
+
+  }
+
+  if(nextButton){
+
+    nextButton.onclick =
+      () => {
+
+        window.pmsCalendarViewDate =
+          new Date(
+            year,
+            month + 1,
+            1
+          );
+
+        renderPMSCalendar(
+          bookingList
+        );
+
+      };
+
+  }
+
+  if(todayButton){
+
+    todayButton.onclick =
+      () => {
+
+        window.pmsCalendarViewDate =
+          new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            1
+          );
+
+        renderPMSCalendar(
+          bookingList
+        );
+
+      };
+
+  }
 
 }
 // =====================================
