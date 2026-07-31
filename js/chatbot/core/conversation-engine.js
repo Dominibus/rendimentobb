@@ -59,37 +59,146 @@ window.rbBuildConversationContext = function({
             "buonasera"
         ].includes(normalized);
 
+    const previousUserMessage =
+
+        String(memory?.lastUserMessage || "")
+        .trim();
+
+    const previousAssistantMessage =
+
+        String(memory?.lastAssistantMessage || "")
+        .trim();
+
+    const hasConversationHistory =
+
+        Boolean(
+            memory?.messages?.length ||
+            previousUserMessage ||
+            previousAssistantMessage
+        );
+
+    const detectTopic = function(value = ""){
+
+        const source =
+            String(value || "")
+            .toLowerCase();
+
+        const topicPatterns = {
+
+            risk:
+                /\b(rischio|risk|rischioso|risky)\b/i,
+
+            cashflow:
+                /\b(cash[\s-]?flow|flusso di cassa)\b/i,
+
+            roi:
+                /\b(roi|rendimento|return)\b/i,
+
+            score:
+                /\b(score|punteggio|investment score)\b/i,
+
+            verdict:
+                /\b(verdetto|verdict|conviene|worth it|buy|wait|avoid)\b/i,
+
+            occupancy:
+                /\b(occupazione|occupancy|tasso di occupazione)\b/i,
+
+            adr:
+                /\b(adr|prezzo medio|tariffa media|nightly rate|price per night)\b/i,
+
+            mortgage:
+                /\b(mutuo|mortgage|ltv|leva|leverage)\b/i,
+
+            expenses:
+                /\b(costi|spese|expenses|costs)\b/i,
+
+            market:
+                /\b(mercato|market|città|city)\b/i
+
+        };
+
+        return (
+            Object
+                .entries(topicPatterns)
+                .find(([, pattern]) => pattern.test(source))
+                ?.[0] || null
+        );
+
+    };
+
+    const currentTopic =
+
+        detectTopic(normalized);
+
+    const previousTopic =
+
+        detectTopic(previousUserMessage) ||
+        detectTopic(previousAssistantMessage);
+
+    const hasReferenceCue =
+
+        /^(e\b|ed\b|ma\b|quindi\b|allora\b|quest[oa]\b|quello\b|quella\b|perch[eé]\b|spiegami\b|confronta(?:lo|la)?\b|what about\b|and\b|but\b|so\b|this\b|that\b|why\b|explain\b|compare\b)/i
+        .test(normalized);
+
+    const explicitFollowUps = [
+
+        "e?",
+
+        "quindi?",
+
+        "conviene?",
+
+        "perché?",
+
+        "perche?",
+
+        "why?",
+
+        "ok",
+
+        "bene",
+
+        "allora?",
+
+        "continua",
+
+        "spiegami",
+
+        "explain",
+
+        "dimmi di più",
+
+        "go on"
+
+    ];
+
     const isFollowUp =
 
-        [
+        explicitFollowUps.includes(normalized) ||
 
-            "e?",
+        Boolean(
+            hasConversationHistory &&
+            (
+                hasReferenceCue ||
+                (
+                    isShortQuestion &&
+                    currentTopic
+                )
+            )
+        );
 
-            "quindi?",
+    const resolvedTopic =
 
-            "conviene?",
+        currentTopic ||
+        memory?.lastIntent ||
+        previousTopic ||
+        null;
 
-            "perché?",
+    const referenceMessage =
 
-            "why?",
-
-            "ok",
-
-            "bene",
-
-            "allora?",
-
-            "continua",
-
-            "spiegami",
-
-            "explain",
-
-            "dimmi di più",
-
-            "go on"
-
-        ].includes(normalized);
+        isFollowUp
+            ? previousAssistantMessage || previousUserMessage || null
+            : null;
 
     // ===========================================
     // 📊 ANALYSIS STATE
@@ -206,6 +315,16 @@ window.rbBuildConversationContext = function({
         isGreeting,
 
         isFollowUp,
+
+        hasConversationHistory,
+
+        currentTopic,
+
+        previousTopic,
+
+        resolvedTopic,
+
+        referenceMessage,
 
         hasAnalysis,
 
