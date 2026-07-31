@@ -222,7 +222,7 @@ Diventa partner
 <!-- 🔥 SOCIALS -->
 <div class="footer-socials">
 
-<a href="https://www.linkedin.com/in/domenicodelucait/"
+<a href="https://www.linkedin.com/company/rendimentobb//"
 target="_blank"
 rel="noopener">
 LinkedIn
