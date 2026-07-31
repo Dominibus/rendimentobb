@@ -6914,6 +6914,10 @@ setText(
 
 window.rbPMSData = {
 
+    ...(
+    window.rbPMSData || {}
+  ),
+
   properties,
   bookings,
   revenue,
