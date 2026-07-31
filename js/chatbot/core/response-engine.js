@@ -1623,6 +1623,67 @@ const isVerdictExplanationFollowUp =
       asksWhyWait ||
       asksWhyWaitEN
     );
+
+// =====================================
+// 🎯 STRATEGIC IMPROVEMENT FOLLOW-UP
+// Persisted conversation safe routing
+// =====================================
+
+const asksWhatToImprove =
+
+  (
+    intent?.intent === "improvement_advisor" ||
+    normalizedFollowUpMessage.includes(
+      "cosa dovrei migliorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "cosa migliorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "come posso migliorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "what should i improve"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "what can i improve"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "how can i improve"
+    )
+  );
+
+const asksWeakestPoint =
+
+  (
+    normalizedFollowUpMessage.includes(
+      "punto debole"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "principale debolezza"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "criticità principale"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "weakest point"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "main weakness"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "biggest weakness"
+    )
+  );
+
+const isStrategicImprovementFollowUp =
+
+  hasConversationAnalysis &&
+
+  (
+    asksWhatToImprove ||
+    asksWeakestPoint
+  );  
   
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
@@ -4891,6 +4952,244 @@ I would verify actual operating costs, final mortgage terms and cashflow resilie
 
       mortgagePercent:
         followUpMortgagePercent
+    }
+  );
+
+}  
+
+else if(
+  isStrategicImprovementFollowUp
+){
+
+  response.type =
+    asksWeakestPoint
+      ? "weakest_point_analysis"
+      : "strategic_improvement";
+
+  response.confidence =
+    0.99;
+
+  response.signals.push(
+    asksWeakestPoint
+      ? "weakest_point_followup"
+      : "improvement_followup"
+  );
+
+  const strategicNet =
+
+    Number(
+      liveData.net ??
+      liveData.cashflow ??
+      liveData.annualProfit ??
+      0
+    );
+
+  const strategicADR =
+
+    Number(
+      liveData.priceNight ??
+      liveData.adr ??
+      liveData.nightlyRate ??
+      0
+    );
+
+  const strategicMortgagePercent =
+
+    Number(
+      liveData.mortgagePercent ??
+      mortgagePercent ??
+      0
+    );
+
+  const strategicExpenses =
+
+    Number(
+      liveData.expenses ??
+      liveData.monthlyExpenses ??
+      0
+    );
+
+  const strategicFormatEURIT = value =>
+
+    Number(value || 0)
+      .toLocaleString(
+        "it-IT",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  const strategicFormatEUREN = value =>
+
+    Number(value || 0)
+      .toLocaleString(
+        "en-US",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  let primaryWeaknessIT = "";
+  let primaryWeaknessEN = "";
+
+  if(strategicNet <= 0){
+
+    primaryWeaknessIT =
+      `Il punto debole principale è il cashflow, attualmente pari a ${strategicFormatEURIT(strategicNet)} annui. Prima di procedere bisogna riportarlo stabilmente in territorio positivo.`;
+
+    primaryWeaknessEN =
+      `The main weakness is cashflow, currently ${strategicFormatEUREN(strategicNet)} per year. It should be restored to a stable positive level before proceeding.`;
+
+  }
+
+  else if(risk >= 60){
+
+    primaryWeaknessIT =
+      `Il punto debole principale è il rischio, pari a ${risk}/100. È troppo elevato per sostenere una decisione di acquisto con un margine di sicurezza adeguato.`;
+
+    primaryWeaknessEN =
+      `The main weakness is risk, currently ${risk}/100. It is too high to support a purchase decision with an adequate safety margin.`;
+
+  }
+
+  else if(occupancy < 75){
+
+    primaryWeaknessIT =
+      `Il punto più sensibile è l’occupazione al ${occupancy}%. Il progetto è redditizio, ma una parte importante del risultato dipende dalla capacità di mantenere e migliorare questo livello durante tutto l’anno.`;
+
+    primaryWeaknessEN =
+      `The most sensitive point is ${occupancy}% occupancy. The investment is profitable, but a significant part of the result depends on maintaining and improving this level throughout the year.`;
+
+  }
+
+  else if(strategicMortgagePercent >= 70){
+
+    primaryWeaknessIT =
+      `Il punto più sensibile è la leva finanziaria al ${strategicMortgagePercent}%. Il mutuo aumenta il ROI sul capitale, ma riduce la capacità del cashflow di assorbire ricavi inferiori alle attese o costi imprevisti.`;
+
+    primaryWeaknessEN =
+      `The most sensitive point is ${strategicMortgagePercent}% financial leverage. The mortgage increases equity ROI, but reduces the cashflow buffer against lower-than-expected revenue or unexpected costs.`;
+
+  }
+
+  else if(executiveROI < 8){
+
+    primaryWeaknessIT =
+      `Il punto debole principale è il ROI sull’immobile, pari al ${executiveROI.toFixed(2)}%. Il rendimento del capitale è interessante, ma la redditività dell’asset deve essere rafforzata.`;
+
+    primaryWeaknessEN =
+      `The main weakness is property ROI at ${executiveROI.toFixed(2)}%. Equity returns are attractive, but the underlying asset profitability should be strengthened.`;
+
+  }
+
+  else{
+
+    primaryWeaknessIT =
+      "Non emerge una criticità isolata, ma manca ancora una validazione conservativa dei ricavi, dei costi e della sostenibilità finanziaria.";
+
+    primaryWeaknessEN =
+      "There is no single critical weakness, but revenue, costs and financial sustainability still require conservative validation.";
+
+  }
+
+  response.textIT =
+
+`🎯 ${asksWeakestPoint ? "Punto debole dell’investimento" : "Cosa migliorare prima di procedere"}
+
+${primaryWeaknessIT}
+
+📊 Dati che guidano la valutazione
+
+• Investment Score: ${Math.round(canonicalScore)}/100
+• Verdetto: ${canonicalVerdict}
+• ROI sul capitale: ${roi.toFixed(2)}%
+• ROI sull’immobile: ${executiveROI.toFixed(2)}%
+• Cashflow annuo: ${strategicFormatEURIT(strategicNet)}
+• Occupazione: ${occupancy}%
+• ADR: ${strategicFormatEURIT(strategicADR)}
+• Rischio: ${risk}/100
+• Mutuo: ${strategicMortgagePercent}%
+
+🛠️ Le tre priorità
+
+1. Portare l’occupazione dal ${occupancy}% verso il 75–80%, verificando che la domanda reale del mercato renda sostenibile l’aumento.
+
+2. Controllare la leva al ${strategicMortgagePercent}% e simulare una riduzione dell’occupazione, per misurare quanto margine rimane dopo la rata del mutuo.
+
+3. Validare i costi operativi reali${strategicExpenses > 0 ? `, oggi stimati in ${strategicFormatEURIT(strategicExpenses)} al mese` : ""}, includendo manutenzione, utenze, commissioni e imprevisti.
+
+🟡 Decisione AI
+
+Con uno Score di ${Math.round(canonicalScore)}/100, il progetto è promettente ma resta correttamente in WAIT. La priorità non è espandere il portafoglio: è dimostrare che il cashflow rimane positivo anche con ipotesi più conservative.`;
+
+  response.textEN =
+
+`🎯 ${asksWeakestPoint ? "Weakest point of the investment" : "What to improve before proceeding"}
+
+${primaryWeaknessEN}
+
+📊 Data behind the assessment
+
+• Investment Score: ${Math.round(canonicalScore)}/100
+• Verdict: ${canonicalVerdict}
+• Equity ROI: ${roi.toFixed(2)}%
+• Property ROI: ${executiveROI.toFixed(2)}%
+• Annual cashflow: ${strategicFormatEUREN(strategicNet)}
+• Occupancy: ${occupancy}%
+• ADR: ${strategicFormatEUREN(strategicADR)}
+• Risk: ${risk}/100
+• Mortgage: ${strategicMortgagePercent}%
+
+🛠️ Three priorities
+
+1. Increase occupancy from ${occupancy}% towards 75–80%, confirming that actual market demand can support the target.
+
+2. Review the ${strategicMortgagePercent}% leverage and stress-test lower occupancy to measure the cashflow buffer after mortgage payments.
+
+3. Validate actual operating costs${strategicExpenses > 0 ? `, currently estimated at ${strategicFormatEUREN(strategicExpenses)} per month` : ""}, including maintenance, utilities, commissions and unexpected expenses.
+
+🟡 AI Decision
+
+With a Score of ${Math.round(canonicalScore)}/100, the investment is promising but correctly remains WAIT. The priority is not portfolio expansion: it is proving that cashflow remains positive under more conservative assumptions.`;
+
+  console.log(
+    "🎯 STRATEGIC FOLLOW-UP RESPONSE",
+    {
+      type:
+        response.type,
+
+      score:
+        canonicalScore,
+
+      verdict:
+        canonicalVerdict,
+
+      roi,
+
+      realROI:
+        executiveROI,
+
+      cashflow:
+        strategicNet,
+
+      occupancy,
+
+      adr:
+        strategicADR,
+
+      risk,
+
+      mortgagePercent:
+        strategicMortgagePercent,
+
+      monthlyExpenses:
+        strategicExpenses
     }
   );
 
