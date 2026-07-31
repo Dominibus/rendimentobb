@@ -488,48 +488,128 @@ const investorProfile =
 // 📊 ANALYSIS DATA
 // =========================================
 
+const investmentHistory =
+
+  Array.isArray(
+    window.rbChatMemory?.investmentHistory
+  )
+
+    ? window.rbChatMemory.investmentHistory
+
+    : [];
+
+const latestRememberedInvestment =
+
+  investmentHistory.length > 0
+
+    ? (
+        investmentHistory[
+          investmentHistory.length - 1
+        ] || {}
+      )
+
+    : {};
+
 const rememberedAnalysis = {
 
   realROI:
+
+    latestRememberedInvestment.realROI ??
+
     window.rbChatMemory?.lastROI,
 
   roi:
+
+    latestRememberedInvestment.roi ??
+
     window.rbChatMemory?.lastROI,
 
   risk:
+
+    latestRememberedInvestment.risk ??
+
     window.rbChatMemory?.lastRisk,
 
   occupancy:
+
+    latestRememberedInvestment.occupancy ??
+
     window.rbChatMemory?.lastOccupancy,
 
   net:
+
+    latestRememberedInvestment.net ??
+
+    latestRememberedInvestment.cashflow ??
+
     window.rbChatMemory?.lastCashflow,
 
   annualProfit:
+
+    latestRememberedInvestment.annualProfit ??
+
+    latestRememberedInvestment.net ??
+
+    latestRememberedInvestment.cashflow ??
+
     window.rbChatMemory?.lastCashflow,
 
   cashflow:
+
+    latestRememberedInvestment.cashflow ??
+
+    latestRememberedInvestment.net ??
+
     window.rbChatMemory?.lastCashflow,
 
   gross:
+
+    latestRememberedInvestment.gross ??
+
+    latestRememberedInvestment.revenueAnnual ??
+
     window.rbChatMemory?.lastRevenue,
 
   propertyPrice:
+
+    latestRememberedInvestment.propertyPrice ??
+
+    latestRememberedInvestment.price ??
+
     window.rbChatMemory?.lastPropertyPrice,
 
   equity:
+
+    latestRememberedInvestment.equity ??
+
     window.rbChatMemory?.lastEquity,
 
   loanAmount:
+
+    latestRememberedInvestment.loanAmount ??
+
+    latestRememberedInvestment.mortgage ??
+
     window.rbChatMemory?.lastLoanAmount,
 
   mortgage:
+
+    latestRememberedInvestment.mortgage ??
+
+    latestRememberedInvestment.loanAmount ??
+
     window.rbChatMemory?.lastLoanAmount,
 
   mortgagePercent:
+
+    latestRememberedInvestment.mortgagePercent ??
+
     window.rbChatMemory?.lastMortgagePercent,
 
   city:
+
+    latestRememberedInvestment.city ??
+
     window.rbChatMemory?.lastCity
 
 };
