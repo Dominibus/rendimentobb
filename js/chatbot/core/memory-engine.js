@@ -536,7 +536,34 @@ sessionStorage.removeItem(
 
 window.rbGetConversationContext = function(){
 
+  const messages =
+    Array.isArray(window.rbChatMemory?.messages)
+      ? window.rbChatMemory.messages.slice(-12)
+      : [];
+
+  const lastUserMessage =
+    [...messages]
+      .reverse()
+      .find(item => item?.role === "user")
+      ?.message || null;
+
+  const lastAssistantMessage =
+    [...messages]
+      .reverse()
+      .find(
+        item =>
+          item?.role === "bot" ||
+          item?.role === "assistant"
+      )
+      ?.message || null;
+
   return {
+
+    messages,
+
+    lastUserMessage,
+
+    lastAssistantMessage,
 
     city:
       window.rbChatMemory.lastCity,
