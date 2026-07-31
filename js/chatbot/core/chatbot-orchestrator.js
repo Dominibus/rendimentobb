@@ -2679,6 +2679,53 @@ if(isOccupancyWhatIf){
       )
     );
 
+    const originalROI =
+    Number(
+      window.lastAnalysisData?.visualROI ??
+      window.lastAnalysisData?.roi ??
+      rememberedAnalysis.roi ??
+      analysisData.roi ??
+      0
+    );
+
+  const originalRealROI =
+    Number(
+      window.lastAnalysisData?.realROI ??
+      window.lastAnalysisData?.safeROI ??
+      rememberedAnalysis.realROI ??
+      analysisData.realROI ??
+      0
+    );
+
+  const originalCashflow =
+    Number(
+      window.lastAnalysisData?.net ??
+      window.lastAnalysisData?.cashflow ??
+      window.lastAnalysisData?.annualProfit ??
+      rememberedAnalysis.net ??
+      rememberedAnalysis.cashflow ??
+      analysisData.net ??
+      analysisData.cashflow ??
+      analysisData.annualProfit ??
+      0
+    );
+
+  const originalRisk =
+    Number(
+      window.lastAnalysisData?.risk ??
+      rememberedAnalysis.risk ??
+      analysisData.risk ??
+      0
+    );
+
+  const originalInvestmentScore =
+    Number(
+      window.lastAnalysisData?.investmentScore ??
+      window.lastInvestmentScore?.score ??
+      analysisData.investmentScore ??
+      0
+    );
+
   analysisData.occupancy =
     requestedOccupancy;
 
@@ -2870,67 +2917,27 @@ console.log(
     originalOccupancy:
       baselineOccupancy,
 
-    originalPropertyPrice:
-      Number(
-        window.lastAnalysisData?.propertyPrice ??
-        window.lastAnalysisData?.price ??
-        0
-      ),
+        originalPropertyPrice:
+      scenarioPropertyPrice,
 
     originalMortgagePercent:
-      Number(
-        window.lastAnalysisData?.mortgagePercent ??
-        0
-      ),
+      scenarioMortgagePercent,
 
     originalLoanAmount:
-      Number(
-        window.lastAnalysisData?.loanAmount ??
-        window.lastAnalysisData?.mortgage ??
-        0
-      ),
+      scenarioLoanAmount,
 
     originalEquity:
-      Number(
-        window.lastAnalysisData?.equity ??
-        window.lastAnalysisData?.initialCapital ??
-        0
-      ),
+      scenarioEquity,
 
-    originalROI:
-      Number(
-        window.lastAnalysisData?.visualROI ??
-        window.lastAnalysisData?.roi ??
-        0
-      ),
+    originalROI,
 
-    originalRealROI:
-      Number(
-        window.lastAnalysisData?.realROI ??
-        window.lastAnalysisData?.safeROI ??
-        0
-      ),
+    originalRealROI,
 
-    originalCashflow:
-      Number(
-        window.lastAnalysisData?.net ??
-        window.lastAnalysisData?.cashflow ??
-        window.lastAnalysisData?.annualProfit ??
-        0
-      ),
+    originalCashflow,
 
-    originalRisk:
-      Number(
-        window.lastAnalysisData?.risk ??
-        0
-      ),
+    originalRisk,
 
-    originalInvestmentScore:
-      Number(
-        window.lastAnalysisData?.investmentScore ??
-        window.lastInvestmentScore?.score ??
-        0
-      ),
+    originalInvestmentScore,
 
     scenarioOccupancy:
       requestedOccupancy,
