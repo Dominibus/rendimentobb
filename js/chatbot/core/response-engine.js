@@ -917,12 +917,28 @@ city
 // ===========================================
 
 const canonicalInvestmentScore =
-  Number(liveData.investmentScore);
+  Number(
+    liveData.investmentScore
+  );
 
 const hasCanonicalInvestmentScore =
   liveData.investmentScore !== null &&
   liveData.investmentScore !== undefined &&
-  Number.isFinite(canonicalInvestmentScore);
+  Number.isFinite(
+    canonicalInvestmentScore
+  );
+
+const advisorInvestmentScore =
+  Number(
+    advisor?.score
+  );
+
+const hasAdvisorInvestmentScore =
+  advisor?.score !== null &&
+  advisor?.score !== undefined &&
+  Number.isFinite(
+    advisorInvestmentScore
+  );
 
 const scoreBasedVerdict =
 
@@ -944,38 +960,54 @@ const investmentScore =
           canonicalInvestmentScore,
 
         verdict:
+          liveData.verdict ??
+          liveData.canonicalVerdict ??
+          advisor?.verdict ??
           scoreBasedVerdict
 
       }
 
-    : (
+    : hasAdvisorInvestmentScore
 
-        window.rbGenerateInvestmentScore?.({
+      ? {
 
-          roi,
+          score:
+            advisorInvestmentScore,
 
-          risk,
+          verdict:
+            advisor?.verdict ??
+            "WAIT"
 
-          occupancy,
+        }
 
-          mortgagePercent:
-            entities.mortgagePercent ||
-            liveData.mortgagePercent ||
-            0,
+      : (
 
-          cashflow:
-            liveData.net ||
-            liveData.cashflow ||
-            0,
+          window.rbGenerateInvestmentScore?.({
 
-          city:
-            cityLabel
+            roi,
 
-        }) ||
+            risk,
 
-        null
+            occupancy,
 
-      );
+            mortgagePercent:
+              entities.mortgagePercent ||
+              liveData.mortgagePercent ||
+              0,
+
+            cashflow:
+              liveData.net ||
+              liveData.cashflow ||
+              0,
+
+            city:
+              cityLabel
+
+          }) ||
+
+          null
+
+        );
 
 console.log(
   "🧠 INVESTMENT SCORE:",
