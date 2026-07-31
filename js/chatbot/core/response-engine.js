@@ -1625,6 +1625,93 @@ const isVerdictExplanationFollowUp =
     );
 
 // =====================================
+// 🏨 OCCUPANCY OPTIMIZATION FOLLOW-UP
+// City-aware strategic routing IT/EN
+// =====================================
+
+const asksOccupancyOptimization =
+
+  hasConversationAnalysis &&
+
+  (
+    normalizedFollowUpMessage.includes(
+      "occupazione"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "occupancy"
+    )
+  ) &&
+
+  (
+    normalizedFollowUpMessage.includes(
+      "aument"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "increment"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "miglior"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "increase"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "improve"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "boost"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "raise"
+    )
+  );
+
+const occupancyOptimizationCityRaw =
+
+  entities.city ||
+
+  liveData.realCity ||
+
+  liveData.marketCity ||
+
+  liveData.city ||
+
+  memory.lastCity ||
+
+  rememberedCity ||
+
+  window.currentCity ||
+
+  "roma";
+
+const occupancyOptimizationCity =
+
+  String(
+    occupancyOptimizationCityRaw || "roma"
+  )
+  .toLowerCase()
+  .trim();
+
+const occupancyOptimizationCityLabel =
+
+  window.rbCapitalize?.(
+    occupancyOptimizationCity
+  ) ||
+
+  (
+    occupancyOptimizationCity
+      .charAt(0)
+      .toUpperCase() +
+    occupancyOptimizationCity
+      .slice(1)
+  );
+
+const isRomeOccupancyOptimization =
+
+  occupancyOptimizationCity === "roma" ||
+  occupancyOptimizationCity === "rome";  
+
+// =====================================
 // 🎯 STRATEGIC IMPROVEMENT FOLLOW-UP
 // Persisted conversation safe routing
 // =====================================
@@ -4952,6 +5039,234 @@ I would verify actual operating costs, final mortgage terms and cashflow resilie
 
       mortgagePercent:
         followUpMortgagePercent
+    }
+  );
+
+}  
+
+else if(
+  asksOccupancyOptimization
+){
+
+  response.type =
+    "occupancy_optimization";
+
+  response.confidence =
+    0.99;
+
+  response.signals.push(
+    "occupancy_optimization_followup"
+  );
+
+  response.signals.push(
+    isRomeOccupancyOptimization
+      ? "rome_occupancy_strategy"
+      : "city_occupancy_strategy"
+  );
+
+  const occupancyOptimizationADR =
+
+    Number(
+      liveData.priceNight ??
+      liveData.adr ??
+      liveData.nightlyRate ??
+      0
+    );
+
+  const occupancyOptimizationNet =
+
+    Number(
+      liveData.net ??
+      liveData.cashflow ??
+      liveData.annualProfit ??
+      0
+    );
+
+  const occupancyOptimizationMortgage =
+
+    Number(
+      liveData.mortgagePercent ??
+      mortgagePercent ??
+      0
+    );
+
+  const occupancyFormatEURIT = value =>
+
+    Number(value || 0)
+      .toLocaleString(
+        "it-IT",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  const occupancyFormatEUREN = value =>
+
+    Number(value || 0)
+      .toLocaleString(
+        "en-US",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  const occupancyTarget =
+
+    occupancy < 75
+      ? "75–80%"
+      : `${Math.min(
+          90,
+          Math.round(occupancy + 5)
+        )}%`;
+
+  const romeActionsIT =
+
+`1. Prezzo dinamico per micro-area e calendario
+
+Non mantenere l’ADR fisso a ${occupancyFormatEURIT(occupancyOptimizationADR)}. Differenzia giorni feriali, weekend, eventi e finestre di prenotazione. A Roma la strategia deve cambiare tra domanda turistica, business e soggiorni legati a Vaticano, Centro, Termini, EUR, Fiera e Stadio Olimpico.
+
+2. Riempire i giorni deboli senza svalutare l’alloggio
+
+Usa offerte mirate per prenotazioni anticipate, last minute controllato e soggiorni di 3–7 notti. Riduci la permanenza minima nei periodi scoperti e aumentala soltanto quando la domanda è già forte.
+
+3. Ampliare i segmenti di domanda
+
+Non dipendere solo dal turismo leisure. Crea offerte adatte anche a trasferte aziendali, congressi, famiglie, università, ospedali e soggiorni intermedi.
+
+4. Migliorare visibilità e conversione
+
+Ottimizza titolo, prima fotografia, descrizione bilingue, servizi e politiche di cancellazione. Distribuisci l’inventario sui canali più adatti, evitando disponibilità e prezzi incoerenti.
+
+5. Misurare l’aumento prima di considerarlo acquisito
+
+Controlla ogni settimana visualizzazioni, conversione, anticipo medio di prenotazione, giorni vuoti e ADR effettivo. L’obiettivo non è ottenere più notti a qualsiasi prezzo, ma raggiungere il ${occupancyTarget} preservando il margine.`;
+
+  const romeActionsEN =
+
+`1. Use dynamic pricing by micro-area and booking date
+
+Do not keep ADR fixed at ${occupancyFormatEUREN(occupancyOptimizationADR)}. Separate weekdays, weekends, events and booking windows. In Rome, the strategy should adapt to leisure, business and stay patterns connected with the Vatican, city centre, Termini, EUR, Fiera and Stadio Olimpico.
+
+2. Fill weak dates without devaluing the property
+
+Use targeted advance-purchase offers, controlled last-minute pricing and 3–7-night stay incentives. Reduce minimum-stay restrictions on unfilled dates and increase them only when demand is already strong.
+
+3. Diversify demand segments
+
+Do not rely exclusively on leisure tourism. Create offers for corporate travel, conferences, families, universities, hospitals and medium-length stays.
+
+4. Improve visibility and conversion
+
+Optimise the title, primary photograph, bilingual description, amenities and cancellation policy. Distribute inventory across suitable channels while keeping availability and prices consistent.
+
+5. Measure improvement before treating it as achieved
+
+Review views, conversion rate, booking lead time, unfilled dates and achieved ADR every week. The objective is not simply to sell more nights, but to reach ${occupancyTarget} while protecting margin.`;
+
+  const genericActionsIT =
+
+`1. Applica prezzi dinamici per giorni feriali, weekend, eventi e anticipo della prenotazione.
+
+2. Riduci le restrizioni sui giorni scoperti e utilizza offerte mirate, evitando sconti generalizzati.
+
+3. Migliora fotografie, titolo, descrizione bilingue, servizi e politiche di cancellazione.
+
+4. Diversifica i segmenti di clientela e i canali di vendita.
+
+5. Controlla conversione, ADR effettivo e giorni vuoti fino al raggiungimento del ${occupancyTarget}.`;
+
+  const genericActionsEN =
+
+`1. Apply dynamic pricing across weekdays, weekends, events and booking windows.
+
+2. Relax restrictions on unfilled dates and use targeted offers rather than general discounts.
+
+3. Improve photography, title, bilingual description, amenities and cancellation policies.
+
+4. Diversify guest segments and distribution channels.
+
+5. Monitor conversion, achieved ADR and unfilled dates until occupancy reaches ${occupancyTarget}.`;
+
+  response.textIT =
+
+`🏨 Piano per aumentare l’occupazione a ${occupancyOptimizationCityLabel}
+
+La simulazione parte da un’occupazione del ${occupancy}%, con ADR di ${occupancyFormatEURIT(occupancyOptimizationADR)}. Il primo obiettivo realistico è raggiungere il ${occupancyTarget} senza comprimere eccessivamente il prezzo medio.
+
+📊 Baseline dell’investimento
+
+• Investment Score: ${Math.round(canonicalScore)}/100
+• Verdetto: ${canonicalVerdict}
+• Occupazione: ${occupancy}%
+• ADR: ${occupancyFormatEURIT(occupancyOptimizationADR)}
+• Cashflow annuo: ${occupancyFormatEURIT(occupancyOptimizationNet)}
+• Mutuo: ${occupancyOptimizationMortgage}%
+
+🎯 Azioni consigliate
+
+${isRomeOccupancyOptimization ? romeActionsIT : genericActionsIT}
+
+🟡 Impatto sulla decisione
+
+Il verdetto resta ${canonicalVerdict}: l’aumento dell’occupazione non va considerato certo finché non viene validato con domanda reale, prezzi sostenibili e risultati misurabili. Il passaggio verso BUY diventa più credibile se il cashflow resta positivo anche con scenari conservativi.`;
+
+  response.textEN =
+
+`🏨 Plan to increase occupancy in ${occupancyOptimizationCityLabel}
+
+The simulation currently assumes ${occupancy}% occupancy with an ADR of ${occupancyFormatEUREN(occupancyOptimizationADR)}. The first realistic objective is to reach ${occupancyTarget} without excessively reducing the average rate.
+
+📊 Investment baseline
+
+• Investment Score: ${Math.round(canonicalScore)}/100
+• Verdict: ${canonicalVerdict}
+• Occupancy: ${occupancy}%
+• ADR: ${occupancyFormatEUREN(occupancyOptimizationADR)}
+• Annual cashflow: ${occupancyFormatEUREN(occupancyOptimizationNet)}
+• Mortgage: ${occupancyOptimizationMortgage}%
+
+🎯 Recommended actions
+
+${isRomeOccupancyOptimization ? romeActionsEN : genericActionsEN}
+
+🟡 Decision impact
+
+The verdict remains ${canonicalVerdict}: higher occupancy should not be treated as certain until it is supported by real demand, sustainable pricing and measurable results. Moving towards BUY becomes more credible if cashflow remains positive under conservative scenarios.`;
+
+  console.log(
+    "🏨 OCCUPANCY OPTIMIZATION RESPONSE",
+    {
+      type:
+        response.type,
+
+      city:
+        occupancyOptimizationCityLabel,
+
+      score:
+        canonicalScore,
+
+      verdict:
+        canonicalVerdict,
+
+      occupancy,
+
+      target:
+        occupancyTarget,
+
+      adr:
+        occupancyOptimizationADR,
+
+      cashflow:
+        occupancyOptimizationNet,
+
+      mortgagePercent:
+        occupancyOptimizationMortgage
     }
   );
 
