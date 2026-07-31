@@ -2466,10 +2466,18 @@ if(
 // Temporary scenario — does NOT mutate lastAnalysisData
 // =====================================
 
+const rawRequestedOccupancy =
+  entities?.occupancy;
+
+const hasExplicitRequestedOccupancy =
+  rawRequestedOccupancy !== null &&
+  rawRequestedOccupancy !== undefined &&
+  rawRequestedOccupancy !== "";
+
 const requestedOccupancy =
-  Number(
-    entities?.occupancy
-  );
+  hasExplicitRequestedOccupancy
+    ? Number(rawRequestedOccupancy)
+    : null;
 
 const baselineOccupancy =
   Number(
@@ -2484,6 +2492,7 @@ const isOccupancyWhatIf =
   !isMortgageWhatIf &&
   !isPropertyPriceWhatIf &&
   intent?.intents?.includes("investment_executive") &&
+  hasExplicitRequestedOccupancy &&
   Number.isFinite(requestedOccupancy) &&
   requestedOccupancy >= 0 &&
   requestedOccupancy <= 100 &&
