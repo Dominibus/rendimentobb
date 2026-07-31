@@ -510,6 +510,55 @@ const latestRememberedInvestment =
 
     : {};
 
+const rememberedGrossRevenue =
+
+  Number(
+    latestRememberedInvestment.gross ??
+    latestRememberedInvestment.revenueAnnual ??
+    0
+  );
+
+const rememberedOccupancy =
+
+  Number(
+    latestRememberedInvestment.occupancy ??
+    window.rbChatMemory?.lastOccupancy ??
+    0
+  );
+
+const storedRememberedPriceNight =
+
+  Number(
+    latestRememberedInvestment.priceNight ??
+    latestRememberedInvestment.adr ??
+    latestRememberedInvestment.nightlyRate ??
+    0
+  );
+
+const derivedRememberedPriceNight =
+
+  storedRememberedPriceNight > 0
+
+    ? storedRememberedPriceNight
+
+    : (
+        rememberedGrossRevenue > 0 &&
+        rememberedOccupancy > 0 &&
+        rememberedOccupancy <= 100
+
+          ? (
+              rememberedGrossRevenue /
+              (
+                365 *
+                (
+                  rememberedOccupancy / 100
+                )
+              )
+            )
+
+          : null
+      );    
+
 const rememberedAnalysis = {
 
   realROI:
@@ -569,6 +618,16 @@ const rememberedAnalysis = {
     latestRememberedInvestment.revenueAnnual ??
 
     window.rbChatMemory?.lastRevenue,
+
+    priceNight:
+
+    derivedRememberedPriceNight,
+
+  expenses:
+
+    latestRememberedInvestment.expenses ??
+
+    window.rbChatMemory?.lastExpenses,
 
   propertyPrice:
 
@@ -746,6 +805,7 @@ roi:
     Number(
       window.lastAnalysisData?.priceNight ??
       window.rbChatbotData?.priceNight ??
+      rememberedAnalysis.priceNight ??
       document.getElementById("priceNight")?.value ??
       100
     ),
@@ -755,6 +815,7 @@ roi:
     Number(
       window.lastAnalysisData?.expenses ??
       window.rbChatbotData?.expenses ??
+      rememberedAnalysis.expenses ??
       document.getElementById("expenses")?.value ??
       30
     ),
