@@ -7684,9 +7684,19 @@ function renderPMSCalendar(bookings){
 
     html += `
 
-      <div
-      title="${tooltip}"
-      style="
+<div
+class="pms-calendar-day"
+data-date="${currentDate}"
+data-occupied="${color ? "true" : "false"}"
+title="${
+  tooltip ||
+  (
+    isEnglish
+      ? "Create booking"
+      : "Crea prenotazione"
+  )
+}"
+style="
       height:42px;
       border-radius:10px;
       display:flex;
@@ -7694,6 +7704,14 @@ function renderPMSCalendar(bookings){
       justify-content:center;
       font-size:12px;
       font-weight:700;
+      cursor:${
+  color
+    ? "default"
+    : "pointer"
+};
+transition:
+  transform .18s ease,
+  box-shadow .18s ease;
       background:${
         color || "#f8fafc"
       };
@@ -7804,6 +7822,106 @@ function renderPMSCalendar(bookings){
       };
 
   }
+
+// =====================================
+// ➕ FREE DAY → NEW BOOKING
+// =====================================
+
+container
+  .querySelectorAll(
+    ".pms-calendar-day"
+  )
+  .forEach(
+    dayCell => {
+
+      const isOccupied =
+        dayCell.dataset.occupied ===
+        "true";
+
+      if(isOccupied){
+        return;
+      }
+
+      dayCell.onmouseenter =
+        () => {
+
+          dayCell.style.transform =
+            "translateY(-2px)";
+
+          dayCell.style.boxShadow =
+            "0 8px 18px rgba(16,185,129,.15)";
+
+        };
+
+      dayCell.onmouseleave =
+        () => {
+
+          dayCell.style.transform =
+            "";
+
+          dayCell.style.boxShadow =
+            "none";
+
+        };
+
+      dayCell.onclick =
+        () => {
+
+          const selectedDate =
+            dayCell.dataset.date;
+
+          const checkinField =
+            document.getElementById(
+              "booking-checkin"
+            );
+
+          const checkoutField =
+            document.getElementById(
+              "booking-checkout"
+            );
+
+          if(checkinField){
+
+            checkinField.value =
+              selectedDate;
+
+          }
+
+          if(checkoutField){
+
+            checkoutField.value =
+              "";
+
+          }
+
+          if(
+            typeof window
+              .openBookingModal ===
+            "function"
+          ){
+
+            window.openBookingModal();
+
+          }
+
+          checkinField?.dispatchEvent(
+            new Event(
+              "change",
+              {
+                bubbles: true
+              }
+            )
+          );
+
+          console.log(
+            "📅 NEW BOOKING DATE:",
+            selectedDate
+          );
+
+        };
+
+    }
+  );
 
 }
 // =====================================
