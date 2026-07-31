@@ -4743,6 +4743,159 @@ To manage your plan:
 
 }
 
+else if(
+  isVerdictExplanationFollowUp
+){
+
+  response.type =
+    "verdict_explanation";
+
+  response.confidence =
+    0.99;
+
+  response.signals.push(
+    "verdict_followup"
+  );
+
+  const followUpNet =
+
+    Number(
+      liveData.net ??
+      liveData.cashflow ??
+      liveData.annualProfit ??
+      0
+    );
+
+  const followUpADR =
+
+    Number(
+      liveData.priceNight ??
+      liveData.adr ??
+      liveData.nightlyRate ??
+      0
+    );
+
+  const followUpMortgagePercent =
+
+    Number(
+      liveData.mortgagePercent ??
+      mortgagePercent ??
+      0
+    );
+
+  const formatEURIT = value =>
+
+    Number(value || 0)
+      .toLocaleString(
+        "it-IT",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  const formatEUREN = value =>
+
+    Number(value || 0)
+      .toLocaleString(
+        "en-US",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  response.textIT =
+
+`🟡 Perché il verdetto è WAIT
+
+WAIT non significa che l’investimento sia negativo. Significa che i risultati sono interessanti, ma l’AI vuole un margine di sicurezza maggiore prima di raccomandare un acquisto immediato.
+
+📊 Situazione attuale
+
+• Investment Score: ${Math.round(canonicalScore)}/100
+• ROI sul capitale: ${roi.toFixed(2)}%
+• ROI sull’immobile: ${executiveROI.toFixed(2)}%
+• Cashflow annuo: ${formatEURIT(followUpNet)}
+• Occupazione: ${occupancy}%
+• Rischio: ${risk}/100
+• Mutuo: ${followUpMortgagePercent}%
+
+✅ Cosa funziona
+
+La redditività è positiva, il cashflow è in attivo e il rischio risulta contenuto.
+
+⚠️ Perché non è ancora BUY
+
+Il risultato dipende dal mantenimento di un’occupazione del ${occupancy}%${followUpADR > 0 ? ` e di un ADR di ${formatEURIT(followUpADR)}` : ""}, con una leva finanziaria del ${followUpMortgagePercent}%. Lo Score ${Math.round(canonicalScore)}/100 indica quindi un investimento promettente, ma ancora da validare con ipotesi più conservative.
+
+🎯 Prima di procedere
+
+Verificherei costi operativi reali, condizioni definitive del mutuo e tenuta del cashflow con un’occupazione inferiore alle attese. Se il progetto resta positivo anche sotto stress, il passaggio da WAIT a BUY diventa molto più solido.`;
+
+  response.textEN =
+
+`🟡 Why the verdict is WAIT
+
+WAIT does not mean the investment is unattractive. It means the results are promising, but the AI requires a wider safety margin before recommending an immediate purchase.
+
+📊 Current position
+
+• Investment Score: ${Math.round(canonicalScore)}/100
+• Equity ROI: ${roi.toFixed(2)}%
+• Property ROI: ${executiveROI.toFixed(2)}%
+• Annual cashflow: ${formatEUREN(followUpNet)}
+• Occupancy: ${occupancy}%
+• Risk: ${risk}/100
+• Mortgage: ${followUpMortgagePercent}%
+
+✅ What works
+
+Profitability is positive, cashflow is in surplus and the risk profile is controlled.
+
+⚠️ Why it is not BUY yet
+
+The result depends on maintaining ${occupancy}% occupancy${followUpADR > 0 ? ` and an ADR of ${formatEUREN(followUpADR)}` : ""}, with ${followUpMortgagePercent}% financial leverage. A Score of ${Math.round(canonicalScore)}/100 therefore identifies a promising investment that still needs validation under more conservative assumptions.
+
+🎯 Before proceeding
+
+I would verify actual operating costs, final mortgage terms and cashflow resilience at lower-than-expected occupancy. If the investment remains positive under stress, moving from WAIT to BUY becomes much more defensible.`;
+
+  console.log(
+    "🧠 VERDICT FOLLOW-UP RESPONSE",
+    {
+      score:
+        canonicalScore,
+
+      verdict:
+        canonicalVerdict,
+
+      roi,
+
+      realROI:
+        executiveROI,
+
+      cashflow:
+        followUpNet,
+
+      occupancy,
+
+      adr:
+        followUpADR,
+
+      risk,
+
+      mortgagePercent:
+        followUpMortgagePercent
+    }
+  );
+
+}  
+
 // ===========================================
 // 🧠 EXECUTIVE AI RESPONSE
 // ===========================================
