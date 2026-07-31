@@ -3693,7 +3693,11 @@ Hai ${monthlyBookings.length} ${
   monthlyBookings.length === 1
     ? "prenotazione"
     : "prenotazioni"
-} che interessano il mese selezionato.`;
+} che ${
+  monthlyBookings.length === 1
+    ? "interessa"
+    : "interessano"
+} il mese selezionato.`;
 
     response.textEN =
 `📅 Bookings for ${monthEN} ${requestedYear}
