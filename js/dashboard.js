@@ -6910,16 +6910,199 @@ setText(
 
 // =====================================
 // 🤖 CHATBOT PMS MEMORY
+// Complete bridge available on dashboard load
 // =====================================
+
+const normalizedPMSBookings =
+  bookingsSnap.docs.map(
+    docItem => {
+
+      const booking = {
+        id:
+          docItem.id,
+
+        ...docItem.data()
+      };
+
+      const checkin =
+        String(
+          booking.checkin || ""
+        );
+
+      const checkout =
+        String(
+          booking.checkout || ""
+        );
+
+      const checkinDate =
+        new Date(checkin);
+
+      const checkoutDate =
+        new Date(checkout);
+
+      const hasValidDates =
+        checkin &&
+        checkout &&
+        !Number.isNaN(
+          checkinDate.getTime()
+        ) &&
+        !Number.isNaN(
+          checkoutDate.getTime()
+        ) &&
+        checkoutDate >
+          checkinDate;
+
+      const calculatedNights =
+        hasValidDates
+          ? Math.ceil(
+              (
+                checkoutDate -
+                checkinDate
+              ) /
+              (
+                1000 *
+                60 *
+                60 *
+                24
+              )
+            )
+          : 0;
+
+      const totalAmount =
+        Number(
+          booking.totalAmount || 0
+        );
+
+      const attentionCodes = [];
+
+      if(!hasValidDates){
+
+        attentionCodes.push(
+          "invalid_date_range"
+        );
+
+      }
+
+      if(
+        String(
+          booking.status || ""
+        ).toLowerCase() ===
+        "pending"
+      ){
+
+        attentionCodes.push(
+          "pending_booking"
+        );
+
+      }
+
+      if(checkin === today){
+
+        attentionCodes.push(
+          "arrival_today"
+        );
+
+      }
+
+      if(checkout === today){
+
+        attentionCodes.push(
+          "departure_today"
+        );
+
+      }
+
+      if(!booking.guestName){
+
+        attentionCodes.push(
+          "missing_guest_name"
+        );
+
+      }
+
+      if(totalAmount <= 0){
+
+        attentionCodes.push(
+          "missing_or_invalid_amount"
+        );
+
+      }
+
+      return {
+
+        id:
+          booking.id,
+
+        propertyId:
+          booking.propertyId || "",
+
+        guestName:
+          booking.guestName || "",
+
+        checkin,
+
+        checkout,
+
+        nights:
+          calculatedNights,
+
+        guests:
+          Number(
+            booking.guests || 0
+          ),
+
+        totalAmount,
+
+        nightlyRate:
+          calculatedNights > 0
+            ? totalAmount /
+              calculatedNights
+            : 0,
+
+        source:
+          String(
+            booking.source ||
+            "direct"
+          ).toLowerCase(),
+
+        status:
+          String(
+            booking.status ||
+            "confirmed"
+          ).toLowerCase(),
+
+        validDateRange:
+          Boolean(
+            hasValidDates
+          ),
+
+        requiresAttention:
+          attentionCodes.length > 0,
+
+        attentionCodes
+
+      };
+
+    }
+  );
+
+const pmsAttentionBookings =
+  normalizedPMSBookings.filter(
+    booking =>
+      booking.requiresAttention
+  );
 
 window.rbPMSData = {
 
-    ...(
+  ...(
     window.rbPMSData || {}
   ),
 
   properties,
-  bookings,
+
+  bookings:
+    normalizedPMSBookings.length,
+
   revenue,
   occupancy,
   adr,
@@ -6936,7 +7119,21 @@ window.rbPMSData = {
       0
     ),
 
-  // 🔥 compatibilità chatbot
+  // Complete booking memory for Copilot
+  bookingList:
+    normalizedPMSBookings,
+
+  attentionBookings:
+    pmsAttentionBookings,
+
+  attentionCount:
+    pmsAttentionBookings.length,
+
+  lastBookingsSync:
+    new Date()
+      .toISOString(),
+
+  // Chatbot KPI compatibility
   arrivals:
     arrivalsToday,
 
@@ -6955,6 +7152,16 @@ window.rbPMSData = {
   pendingBookings
 
 };
+
+window.dispatchEvent(
+  new CustomEvent(
+    "rb_pms_data_updated",
+    {
+      detail:
+        window.rbPMSData
+    }
+  )
+);
 
 console.log(
   "🤖 PMS MEMORY:",
