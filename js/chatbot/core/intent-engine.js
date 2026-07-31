@@ -2491,6 +2491,21 @@ if(
     "come battere la concorrenza",
 
     // =========================================
+    // 🇮🇹 OCCUPAZIONE
+    // =========================================
+
+    "come posso aumentare l'occupazione",
+    "come aumentare l'occupazione",
+    "aumentare l'occupazione",
+
+    "come posso migliorare l'occupazione",
+    "come migliorare l'occupazione",
+    "migliorare l'occupazione",
+
+    "come posso incrementare l'occupazione",
+    "incrementare l'occupazione",
+
+    // =========================================
     // 🇬🇧 GENERAL
     // =========================================
 
@@ -2608,7 +2623,23 @@ if(
     "grow faster",
     "scale faster",
 
-    "be more competitive"
+    "be more competitive",
+
+    // =========================================
+    // 🇬🇧 OCCUPANCY
+    // =========================================
+
+    "how can i increase occupancy",
+    "how to increase occupancy",
+    "increase occupancy",
+
+    "how can i improve occupancy",
+    "how to improve occupancy",
+    "improve occupancy",
+
+    "how can i boost occupancy",
+    "how to boost occupancy",
+    "boost occupancy"
 
   )
 
