@@ -113,11 +113,8 @@
     setTimeout(applyTranslations, 300);
 
     // ================= TOOL HOOK =================
-    if(typeof calculate === "function"){
-      if(window.simulationExecuted || document.readyState === "complete"){
-        calculate(true);
-      }
-    }
+    // Il cambio lingua aggiorna soltanto la UI.
+    // Non deve ricalcolare o salvare una nuova simulazione.
 
     if(typeof runRealCalculation === "function"){
       runRealCalculation();
