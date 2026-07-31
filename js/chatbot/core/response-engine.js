@@ -81,7 +81,15 @@ const {
 
     contextConfidence = 0,
 
-    originalMessage = message
+    originalMessage = message,
+
+    currentTopic = null,
+
+    previousTopic = null,
+
+    resolvedTopic = null,
+
+    referenceMessage = null
 
 } = conversationContext || {};
 
@@ -97,6 +105,95 @@ console.log(
         originalMessage
     }
 );
+
+// ===============================================
+// 🧠 SEMANTIC FOLLOW-UP ROUTING
+// Reuse canonical response branches
+// ===============================================
+
+const semanticFollowUpIntentMap = {
+
+    risk:
+        "risk_analysis",
+
+    cashflow:
+        "cashflow_analysis",
+
+    roi:
+        "roi_analysis",
+
+    mortgage:
+        "mortgage_analysis",
+
+    market:
+        "market_analysis",
+
+    verdict:
+        "investment_advisor",
+
+    score:
+        "investment_advisor",
+
+    investment_executive:
+        "investment_advisor",
+
+    executive_analysis:
+        "investment_advisor"
+
+};
+
+const semanticFollowUpIntent =
+
+    semanticFollowUpIntentMap[
+        resolvedTopic
+    ] ||
+
+    null;
+
+const canRouteSemanticFollowUp =
+
+    Boolean(
+        isFollowUp &&
+        referenceMessage &&
+        semanticFollowUpIntent &&
+        (
+            !intent?.intent ||
+            intent.intent === "generic"
+        )
+    );
+
+if(canRouteSemanticFollowUp){
+
+    intent = {
+        ...intent,
+
+        originalIntent:
+            intent?.intent || "generic",
+
+        intent:
+            semanticFollowUpIntent,
+
+        semanticFollowUp:
+            true,
+
+        resolvedTopic,
+
+        previousTopic
+    };
+
+    console.log(
+        "🧠 SEMANTIC FOLLOW-UP ROUTED",
+        {
+            resolvedTopic,
+            previousTopic,
+            routedIntent:
+                semanticFollowUpIntent,
+            hasReference:
+                Boolean(referenceMessage)
+        }
+    );
+
+}  
 
 // ===============================================
 // 🧠 EXECUTIVE BRAIN
