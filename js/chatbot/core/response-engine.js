@@ -1549,6 +1549,81 @@ const conversationalFollowUp =
     
     isShortQuestion;  
 
+// =====================================
+// 🧠 VERDICT EXPLANATION FOLLOW-UP
+// Persisted conversation safe routing
+// =====================================
+
+const normalizedFollowUpMessage =
+
+    String(
+      message || ""
+    )
+    .toLowerCase()
+    .trim();
+
+const asksWhyWait =
+
+    (
+      intent?.category === "followup" ||
+      isFollowUp
+    ) &&
+
+    (
+      (
+        normalizedFollowUpMessage.includes(
+          "perché"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "perche"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "come mai"
+        )
+      ) &&
+
+      (
+        normalizedFollowUpMessage.includes(
+          "aspett"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "wait"
+        )
+      )
+    );
+
+const asksWhyWaitEN =
+
+    (
+      intent?.category === "followup" ||
+      isFollowUp
+    ) &&
+
+    (
+      normalizedFollowUpMessage.includes(
+        "why"
+      ) &&
+      (
+        normalizedFollowUpMessage.includes(
+          "wait"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "waiting"
+        )
+      )
+    );
+
+const isVerdictExplanationFollowUp =
+
+    hasConversationAnalysis &&
+
+    canonicalVerdict === "WAIT" &&
+
+    (
+      asksWhyWait ||
+      asksWhyWaitEN
+    );
+  
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
 // ===========================================
