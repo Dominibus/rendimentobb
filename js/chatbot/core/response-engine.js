@@ -158,7 +158,17 @@ const canRouteSemanticFollowUp =
         semanticFollowUpIntent &&
         (
             !intent?.intent ||
-            intent.intent === "generic"
+
+            intent.intent === "generic" ||
+
+            (
+                intent?.category === "followup" &&
+                Number.isFinite(
+                    Number(intent?.confidence)
+                ) &&
+                Number(intent.confidence) <= 0.65 &&
+                intent.intent !== semanticFollowUpIntent
+            )
         )
     );
 
