@@ -5573,6 +5573,24 @@ window.analyzeBookingAI = function(id){
     if(!box) return;
 
 
+
+    const booking =
+        window.currentSelectedBooking;
+
+
+
+    if(!booking){
+
+        console.warn(
+            "⚠️ Booking data missing"
+        );
+
+        return;
+
+    }
+
+
+
     const existing =
         document.getElementById(
             "booking-ai-result"
@@ -5584,6 +5602,55 @@ window.analyzeBookingAI = function(id){
         existing.remove();
 
     }
+
+
+
+    const nights =
+        booking.nights || 0;
+
+
+    const revenue =
+        Number(
+            booking.totalAmount || 0
+        );
+
+
+    const adr =
+        nights > 0
+        ? revenue / nights
+        : 0;
+
+
+
+    let verdict =
+        "🟢 Prenotazione positiva";
+
+
+    let suggestion =
+        "Richiedere recensione dopo il checkout.";
+
+
+
+    if(adr < 80){
+
+        verdict =
+        "🟡 ADR sotto controllo";
+
+
+        suggestion =
+        "Valutare strategie per aumentare il prezzo medio.";
+
+    }
+
+
+
+    if(nights >= 7){
+
+        suggestion =
+        "Ottimo soggiorno lungo: mantenere relazione con ospite.";
+
+    }
+
 
 
     const result =
@@ -5614,28 +5681,47 @@ window.analyzeBookingAI = function(id){
     "1px solid #bbf7d0";
 
 
+
     result.innerHTML = `
 
     <strong>🤖 AI PMS Insight</strong>
 
     <br><br>
 
-    Questa prenotazione contribuisce
-    positivamente al rendimento della proprietà.
+    👤 Ospite:
+    ${booking.guestName || "-"}
+
+    <br>
+
+    🌙 Soggiorno:
+    ${nights} notti
+
+    <br>
+
+    💰 Ricavo:
+    €${revenue}
+
+    <br>
+
+    📈 ADR:
+    €${adr.toFixed(0)}
 
     <br><br>
 
-    Suggerimento:
-    mantenere ADR e monitorare
-    recensioni e occupazione.
+    <strong>${verdict}</strong>
+
+    <br><br>
+
+    💡 Suggerimento:
+    ${suggestion}
 
     `;
+
 
 
     box.appendChild(result);
 
 };
-
 // =====================================
 // 📅 OPEN BOOKINGS
 // =====================================
