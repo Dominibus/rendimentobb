@@ -5446,8 +5446,101 @@ window.showBookingDetails = function(booking){
 
     }
 
+  // =====================================
+// 🎯 BOOKING ACTIONS
+// =====================================
+
+let actions =
+document.getElementById(
+    "booking-smart-actions"
+);
 
 
+if(!actions){
+
+    actions =
+    document.createElement("div");
+
+    actions.id =
+    "booking-smart-actions";
+
+    actions.style.display =
+    "flex";
+
+    actions.style.gap =
+    "10px";
+
+    actions.style.marginTop =
+    "20px";
+
+    actions.style.paddingTop =
+    "15px";
+
+    actions.style.borderTop =
+    "1px solid #e2e8f0";
+
+
+    modal.appendChild(actions);
+
+}
+
+
+actions.innerHTML = `
+
+<button
+style="
+flex:1;
+padding:12px;
+border-radius:12px;
+border:none;
+background:#10b981;
+color:white;
+font-weight:700;
+cursor:pointer;
+"
+onclick="editBooking('${booking.id || ""}')">
+
+✏️ Modifica
+
+</button>
+
+
+<button
+style="
+flex:1;
+padding:12px;
+border-radius:12px;
+border:none;
+background:#0f172a;
+color:white;
+font-weight:700;
+cursor:pointer;
+"
+onclick="analyzeBookingAI('${booking.id || ""}')">
+
+🤖 AI Insight
+
+</button>
+
+
+<button
+style="
+width:50px;
+border-radius:12px;
+border:none;
+background:#fee2e2;
+color:#dc2626;
+font-weight:700;
+cursor:pointer;
+"
+onclick="deleteBooking('${booking.id || ""}')">
+
+🗑️
+
+</button>
+
+`;
+  
     // 🔄 ricalcolo dopo caricamento date
 
     setTimeout(()=>{
