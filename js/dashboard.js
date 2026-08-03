@@ -7925,10 +7925,21 @@ if (!window.pmsBookingSelection.selectingCheckout) {
 
 } else {
 
+    window.pmsBookingSelection.checkout = selectedDate;
+
     console.log(
         "📅 CHECK-OUT SELECTED",
         selectedDate
     );
+
+    const checkOutInput =
+        document.getElementById("bookingCheckout");
+
+    if (checkOutInput) {
+
+        checkOutInput.value = formatDateForInput(selectedDate);
+
+    }
 
 }
           if(
