@@ -7688,7 +7688,7 @@ function renderPMSCalendar(bookings){
 class="pms-calendar-day"
 data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
-data-booking='${hoverData ? JSON.stringify(hoverData) : ""}'
+data-booking=""
 title="${
   tooltip ||
   (
