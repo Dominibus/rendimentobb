@@ -7914,17 +7914,23 @@ container
 
 if (!window.pmsBookingSelection.selectingCheckout) {
 
+    console.log(
+        "BEFORE",
+        window.pmsBookingSelection
+    );
+
     window.pmsBookingSelection.checkin = selectedDate;
 
     window.pmsBookingSelection.selectingCheckout = true;
 
-console.log(
-    "📅 CHECK-IN SELECTED",
-    selectedDate
-);
+    console.log(
+        "AFTER",
+        window.pmsBookingSelection
+    );
 
-renderPMSCalendar(bookingList);
-return;
+    renderPMSCalendar(bookingList);
+
+    return;
 
 } else {
 
