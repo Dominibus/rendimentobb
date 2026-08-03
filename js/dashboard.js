@@ -5276,6 +5276,81 @@ window.closeBookingsModal = function(){
 };
 
 // =====================================
+// 📌 SHOW BOOKING DETAILS
+// =====================================
+
+window.showBookingDetails = function(booking){
+
+    console.log(
+        "📌 OPEN BOOKING DETAILS",
+        booking
+    );
+
+
+    const modal =
+        document.getElementById(
+            "booking-form-container"
+        );
+
+
+    if(!modal){
+
+        console.error(
+            "❌ Booking modal not found"
+        );
+
+        return;
+
+    }
+
+
+    modal.style.display = "flex";
+
+
+    const guest =
+        document.getElementById(
+            "booking-guest"
+        );
+
+
+    const checkin =
+        document.getElementById(
+            "booking-checkin"
+        );
+
+
+    const checkout =
+        document.getElementById(
+            "booking-checkout"
+        );
+
+
+    if(guest){
+
+        guest.value =
+            booking.guestName || "";
+
+    }
+
+
+    if(checkin){
+
+        checkin.value =
+            booking.checkin || "";
+
+    }
+
+
+    if(checkout){
+
+        checkout.value =
+            booking.checkout || "";
+
+    }
+
+};
+
+// =====================================
 // 📅 OPEN BOOKINGS
 // =====================================
 
