@@ -7928,9 +7928,24 @@ if (!window.pmsBookingSelection.selectingCheckout) {
         window.pmsBookingSelection
     );
 
-    renderPMSCalendar(bookingList);
+renderPMSCalendar(bookingList);
 
-    return;
+setTimeout(() => {
+
+    const newCell = container.querySelector(
+        `.pms-calendar-day[data-date="${selectedDate}"]`
+    );
+
+    if (newCell) {
+
+        newCell.style.outline = "3px solid #10b981";
+        newCell.style.outlineOffset = "-2px";
+
+    }
+
+},0);
+
+return;
 
 } else {
 
