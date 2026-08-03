@@ -1714,88 +1714,6 @@ container.innerHTML = html;
 
 }
 
-// =====================================
-// 🧠 PMS HOVER DATA PREPARATION
-// =====================================
-
-container
-.querySelectorAll(".pms-calendar-day")
-.forEach(day => {
-
-  const date = day.dataset.date;
-
-  const booking = bookingList.find(b => {
-
-    const checkin = String(b.checkin || "");
-    const checkout = String(b.checkout || "");
-
-    return (
-      date >= checkin &&
-      date < checkout
-    );
-
-  });
-
-  if(booking){
-
-    day.dataset.guest =
-      booking.guestName || "Ospite";
-
-    day.dataset.amount =
-      booking.totalAmount || 0;
-
-    day.dataset.checkin =
-      booking.checkin || "";
-
-    day.dataset.checkout =
-      booking.checkout || "";
-
-  }
-
-});
-
-// =====================================
-// 🖱️ PMS CALENDAR HOVER PREVIEW
-// =====================================
-
-document
-.querySelectorAll(".pms-calendar-day")
-.forEach(dayEl => {
-
-  const date =
-    dayEl.dataset.date;
-
-  const occupied =
-    dayEl.dataset.occupied === "true";
-
-
-  if(occupied){
-
-    dayEl.onmouseenter = () => {
-
-      dayEl.style.transform =
-        "translateY(-3px)";
-
-      dayEl.style.boxShadow =
-        "0 8px 18px rgba(15,23,42,.18)";
-
-    };
-
-
-    dayEl.onmouseleave = () => {
-
-      dayEl.style.transform =
-        "translateY(0)";
-
-      dayEl.style.boxShadow =
-        "none";
-
-    };
-
-  }
-
-});
-
 
 // ================= HEADER =================
 
@@ -6229,15 +6147,15 @@ const copilotToday =
 const normalizedBookings =
   bookingsData.map(booking => {
 
-const checkin =
-  String(
-    booking.checkin || ""
-  ).slice(0,10);
+    const checkin =
+      String(
+        booking.checkin || ""
+      );
 
-const checkout =
-  String(
-    booking.checkout || ""
-  ).slice(0,10);
+    const checkout =
+      String(
+        booking.checkout || ""
+      );
 
     const checkinDate =
       new Date(checkin);
@@ -7680,7 +7598,6 @@ function renderPMSCalendar(bookings){
 
     let color = "";
     let tooltip = "";
-    let hoverData = null;
 
     bookingList.forEach(
       booking => {
@@ -7709,43 +7626,27 @@ function renderPMSCalendar(bookings){
           ).toLowerCase();
 
         if(
-  currentDate >= checkin &&
-  currentDate < checkout
-){
+          currentDate >= checkin &&
+          currentDate < checkout
+        ){
 
-  color = "#10b981";
-  tooltip = guestName;
+          color = "#10b981";
+          tooltip = guestName;
 
-  hoverData = {
-    guestName,
-    checkin,
-    checkout,
-    amount: booking.totalAmount || 0,
-    status: booking.status || "confirmed"
-  };
+        }
 
-}
+        if(
+          currentDate === checkin
+        ){
 
-if(
-  currentDate === checkin
-){
+          color = "#3b82f6";
 
-  color = "#3b82f6";
+          tooltip =
+            isEnglish
+              ? `Arrival: ${guestName}`
+              : `Arrivo: ${guestName}`;
 
-  tooltip =
-    isEnglish
-      ? `Arrival: ${guestName}`
-      : `Arrivo: ${guestName}`;
-
-  hoverData = {
-    guestName,
-    checkin,
-    checkout,
-    amount: booking.totalAmount || 0,
-    status: booking.status || "confirmed"
-  };
-
-}
+        }
 
         if(
           currentDate === checkout
@@ -7940,185 +7841,169 @@ window.pmsBookingSelection || {
 // =====================================
 
 container
-.querySelectorAll(
-  ".pms-calendar-day"
-)
-.forEach(
-  dayCell => {
+  .querySelectorAll(
+    ".pms-calendar-day"
+  )
+  .forEach(
+    dayCell => {
 
-    const isOccupied =
-      dayCell.dataset.occupied === "true";
+      const isOccupied =
+        dayCell.dataset.occupied ===
+        "true";
 
+      if(isOccupied){
+        return;
+      }
 
-    // Solo giorni liberi cliccabili
-    if(isOccupied){
-      return;
-    }
+      dayCell.onmouseenter =
+        () => {
 
+          dayCell.style.transform =
+            "translateY(-2px)";
 
-    // ===============================
-    // HOVER EFFECT
-    // ===============================
+          dayCell.style.boxShadow =
+            "0 8px 18px rgba(16,185,129,.15)";
 
-    dayCell.onmouseenter =
-    () => {
+        };
 
-      dayCell.style.transform =
-        "translateY(-2px)";
+      dayCell.onmouseleave =
+        () => {
 
-      dayCell.style.boxShadow =
-        "0 8px 18px rgba(16,185,129,.15)";
-
-    };
-
-
-    dayCell.onmouseleave =
-    () => {
-
-      dayCell.style.transform =
-        "";
-
-      dayCell.style.boxShadow =
-        "none";
-
-    };
-
-
-    // ===============================
-    // CLICK DAY
-    // ===============================
-
-    dayCell.onclick =
-    () => {
-
-
-      const selectedDate =
-        dayCell.dataset.date;
-
-
-      const checkinField =
-        document.getElementById(
-          "booking-checkin"
-        );
-
-
-      const checkoutField =
-        document.getElementById(
-          "booking-checkout"
-        );
-
-
-      // ===============================
-      // PRIMO CLICK = CHECK-IN
-      // ===============================
-
-      if(
-        !window.pmsBookingSelection.selectingCheckout
-      ){
-
-
-        window.pmsBookingSelection.checkin =
-          selectedDate;
-
-
-        window.pmsBookingSelection.selectingCheckout =
-          true;
-
-
-        if(checkinField){
-
-          checkinField.value =
-            selectedDate;
-
-        }
-
-
-        if(checkoutField){
-
-          checkoutField.value =
+          dayCell.style.transform =
             "";
 
-        }
+          dayCell.style.boxShadow =
+            "none";
 
+        };
 
-        console.log(
-          "📅 CHECK-IN SELECTED",
-          selectedDate
-        );
+      dayCell.onclick =
+        () => {
 
+          const selectedDate =
+            dayCell.dataset.date;
 
-        return;
+          const checkinField =
+            document.getElementById(
+              "booking-checkin"
+            );
 
-      }
+          const checkoutField =
+            document.getElementById(
+              "booking-checkout"
+            );
 
+          if(checkinField){
 
+            checkinField.value =
+              selectedDate;
 
-      // ===============================
-      // SECONDO CLICK = CHECK-OUT
-      // ===============================
-
-      else {
-
-
-        window.pmsBookingSelection.checkout =
-          selectedDate;
-
-
-        if(checkoutField){
-
-          checkoutField.value =
-            selectedDate;
-
-        }
-
-
-        console.log(
-          "📅 CHECK-OUT SELECTED",
-          selectedDate
-        );
-
-
-        window.pmsBookingSelection.selectingCheckout =
-          false;
-
-
-      }
-
-
-      // ===============================
-      // APRI MODALE PRENOTAZIONE
-      // ===============================
-
-      if(
-        typeof window.openBookingModal === "function"
-      ){
-
-        window.openBookingModal();
-
-      }
-
-
-      checkinField?.dispatchEvent(
-        new Event(
-          "change",
-          {
-            bubbles:true
           }
-        )
-      );
 
+          if(checkoutField){
 
-      console.log(
-        "📅 NEW BOOKING DATE:",
+            checkoutField.value =
+              "";
+
+          }
+
+// ========================================
+// FIRST CLICK = CHECK-IN
+// SECOND CLICK = CHECK-OUT
+// ========================================
+
+if (!window.pmsBookingSelection.selectingCheckout) {
+
+    console.log(
+        "BEFORE",
+        window.pmsBookingSelection
+    );
+
+    window.pmsBookingSelection.checkin = selectedDate;
+
+    window.pmsBookingSelection.selectingCheckout = true;
+
+    console.log(
+        "AFTER",
+        window.pmsBookingSelection
+    );
+
+renderPMSCalendar(bookingList);
+
+setTimeout(() => {
+
+    const newCell = container.querySelector(
+        `.pms-calendar-day[data-date="${selectedDate}"]`
+    );
+
+    if (newCell) {
+
+        newCell.style.outline = "3px solid #10b981";
+        newCell.style.outlineOffset = "-2px";
+
+    }
+
+},0);
+
+  if (
+    typeof window.openBookingModal === "function"
+) {
+
+    window.openBookingModal();
+
+}
+
+return;
+
+} else {
+
+    window.pmsBookingSelection.checkout = selectedDate;
+
+    console.log(
+        "📅 CHECK-OUT SELECTED",
         selectedDate
-      );
+    );
 
+    const checkOutInput =
+  document.getElementById("booking-checkout");
 
-    };
+if (checkOutInput) {
 
+    checkOutInput.value = selectedDate;
 
-  }
-);
+}
+
+}
+          if(
+            typeof window
+              .openBookingModal ===
+            "function"
+          ){
+
+            window.openBookingModal();
+
+          }
+
+          checkinField?.dispatchEvent(
+            new Event(
+              "change",
+              {
+                bubbles: true
+              }
+            )
+          );
+
+          console.log(
+            "📅 NEW BOOKING DATE:",
+            selectedDate
+          );
+
+        };
+
+    }
+  );
+
+}
 // =====================================
 // 🔥 BOOKING FILTERS
 // =====================================
