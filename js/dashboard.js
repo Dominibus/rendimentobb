@@ -5553,7 +5553,7 @@ onclick="deleteBooking('${booking.id || ""}')">
 };
 
 // =====================================
-// 🤖 ANALYZE BOOKING AI
+// 🤖 ANALYZE BOOKING AI 2.0
 // =====================================
 
 window.analyzeBookingAI = function(id){
@@ -5605,6 +5605,11 @@ window.analyzeBookingAI = function(id){
 
 
 
+    // ===============================
+    // 📊 CALCOLO KPI
+    // ===============================
+
+
     const nights =
     booking.nights ||
     (
@@ -5613,16 +5618,17 @@ window.analyzeBookingAI = function(id){
         ?
         Math.ceil(
             (
-            new Date(booking.checkout)
-            -
-            new Date(booking.checkin)
+                new Date(booking.checkout)
+                -
+                new Date(booking.checkin)
             )
             /
-            (1000*60*60*24)
+            (1000 * 60 * 60 * 24)
         )
         :
         0
     );
+
 
 
     const revenue =
@@ -5631,11 +5637,32 @@ window.analyzeBookingAI = function(id){
         );
 
 
+
     const adr =
         nights > 0
-        ? revenue / nights
-        : 0;
+        ?
+        revenue / nights
+        :
+        0;
 
+
+
+    const channel =
+        booking.source ||
+        booking.channel ||
+        "Direct";
+
+
+
+    const status =
+        booking.status ||
+        "arrival";
+
+
+
+    // ===============================
+    // 🧠 AI DECISION ENGINE
+    // ===============================
 
 
     let verdict =
@@ -5647,26 +5674,104 @@ window.analyzeBookingAI = function(id){
 
 
 
+    let level =
+        "positive";
+
+
+
+    // ADR basso
+
     if(adr < 80){
 
         verdict =
-        "🟡 ADR sotto controllo";
+        "🟡 ADR sotto potenziale";
 
 
         suggestion =
-        "Valutare strategie per aumentare il prezzo medio.";
+        "Valutare una strategia tariffaria per aumentare il prezzo medio.";
+
+        level =
+        "warning";
 
     }
 
 
+
+    // ADR ottimo
+
+    if(adr >= 120){
+
+        verdict =
+        "🟢 Prenotazione Premium";
+
+
+        suggestion =
+        "Mantenere questa strategia tariffaria e monitorare recensione ospite.";
+
+        level =
+        "premium";
+
+    }
+
+
+
+    // soggiorno lungo
 
     if(nights >= 7){
 
+        verdict =
+        "🔵 Soggiorno strategico";
+
+
         suggestion =
-        "Ottimo soggiorno lungo: mantenere relazione con ospite.";
+        "Ottimo soggiorno lungo: favorire fidelizzazione e ritorni futuri.";
+
+        level =
+        "strategic";
 
     }
 
+
+
+    // soggiorno breve
+
+    if(nights === 1){
+
+        verdict =
+        "🟠 Short Stay";
+
+
+        suggestion =
+        "Valutare incentivi per aumentare la durata media soggiorno.";
+
+        level =
+        "short";
+
+    }
+
+
+
+    // cancellato
+
+    if(status === "cancelled"){
+
+        verdict =
+        "🔴 Prenotazione cancellata";
+
+
+        suggestion =
+        "Analizzare causa cancellazione e migliorare conversione.";
+
+        level =
+        "danger";
+
+    }
+
+
+
+    // ===============================
+    // 🤖 BUILD AI CARD
+    // ===============================
 
 
     const result =
@@ -5677,65 +5782,110 @@ window.analyzeBookingAI = function(id){
     "booking-ai-result";
 
 
+
     result.style.marginTop =
-    "15px";
+        "15px";
 
 
     result.style.padding =
-    "16px";
+        "16px";
 
 
     result.style.borderRadius =
-    "16px";
+        "16px";
 
 
     result.style.background =
-    "#f0fdf4";
+        "#f0fdf4";
 
 
     result.style.border =
-    "1px solid #bbf7d0";
+        "1px solid #bbf7d0";
 
 
 
     result.innerHTML = `
 
-    <strong>🤖 AI PMS Insight</strong>
+    <strong>🤖 AI PMS Insight 2.0</strong>
 
     <br><br>
+
 
     👤 Ospite:
     ${booking.guestName || "-"}
 
+
     <br>
+
 
     🌙 Soggiorno:
     ${nights} notti
 
+
     <br>
+
 
     💰 Ricavo:
-    €${revenue}
+    €${revenue.toFixed(0)}
+
 
     <br>
+
 
     📈 ADR:
     €${adr.toFixed(0)}
 
+
+    <br>
+
+
+    🏠 Canale:
+    ${channel}
+
+
+    <br>
+
+
+    📌 Stato:
+    ${status}
+
+
     <br><br>
 
-    <strong>${verdict}</strong>
+
+    <strong>
+    ${verdict}
+    </strong>
+
 
     <br><br>
+
 
     💡 Suggerimento:
+
     ${suggestion}
+
 
     `;
 
 
 
     box.appendChild(result);
+
+
+
+    console.log(
+        "🤖 AI PMS RESULT",
+        {
+            nights,
+            revenue,
+            adr,
+            channel,
+            status,
+            level
+        }
+    );
+
 
 };
 // =====================================
