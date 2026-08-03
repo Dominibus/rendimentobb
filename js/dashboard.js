@@ -5320,6 +5320,8 @@ if(title){
 
     modal.style.display = "flex";
 
+  window.pmsEditingBooking = true;
+
 
     const guest =
         document.getElementById(
@@ -5339,12 +5341,38 @@ if(title){
         );
 
 
-    if(guest){
+if(guest){
 
-        guest.value =
-            booking.guestName || "";
+    guest.value =
+        booking.guestName || "";
 
-    }
+}
+
+
+const nightsField =
+    document.getElementById(
+        "booking-nights"
+    );
+
+if(nightsField){
+
+    nightsField.value =
+        booking.nights || "";
+
+}
+
+
+const amountField =
+    document.getElementById(
+        "booking-total"
+    );
+
+if(amountField){
+
+    amountField.value =
+        booking.totalAmount || "";
+
+}
 
 
     if(checkin){
