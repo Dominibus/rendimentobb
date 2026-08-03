@@ -7907,6 +7907,23 @@ container
 
           }
 
+// ========================================
+// FIRST CLICK = CHECK-IN
+// ========================================
+
+if (!window.pmsBookingSelection.selectingCheckout) {
+
+    window.pmsBookingSelection.checkin = selectedDate;
+
+    window.pmsBookingSelection.selectingCheckout = true;
+
+    console.log(
+        "📅 CHECK-IN SELECTED",
+        selectedDate
+    );
+
+}
+
           if(
             typeof window
               .openBookingModal ===
