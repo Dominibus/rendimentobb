@@ -5464,7 +5464,65 @@ ${booking.status || "-"}
 
   window.pmsEditingBooking = true;
 
+// =====================================
+// 📊 UPDATE BOOKING KPI
+// =====================================
 
+const revenue =
+    document.getElementById(
+        "booking-live-revenue"
+    );
+
+const nights =
+    document.getElementById(
+        "booking-live-nights"
+    );
+
+const adr =
+    document.getElementById(
+        "booking-live-adr"
+    );
+
+
+if(revenue){
+
+    revenue.textContent =
+        "€" + (booking.totalAmount || 0);
+
+}
+
+
+if(nights){
+
+    nights.textContent =
+        booking.nights || 0;
+
+}
+
+
+if(adr){
+
+    let value = 0;
+
+    if(
+        booking.nights &&
+        booking.totalAmount
+    ){
+
+        value =
+            Math.round(
+                booking.totalAmount /
+                booking.nights
+            );
+
+    }
+
+
+    adr.textContent =
+        "€" + value;
+
+}
+  
     const guest =
         document.getElementById(
             "booking-guest"
