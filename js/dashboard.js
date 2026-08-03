@@ -7669,14 +7669,22 @@ function renderPMSCalendar(bookings){
           ).toLowerCase();
 
         if(
-          currentDate >= checkin &&
-          currentDate < checkout
-        ){
+  currentDate >= checkin &&
+  currentDate < checkout
+){
 
-          color = "#10b981";
-          tooltip = guestName;
+  color = "#10b981";
+  tooltip = guestName;
 
-        }
+  hoverData = {
+    guestName,
+    checkin,
+    checkout,
+    amount: booking.totalAmount || 0,
+    status: booking.status || "confirmed"
+  };
+
+}
 
         hoverData = {
   guestName,
@@ -7688,7 +7696,15 @@ function renderPMSCalendar(bookings){
 
         if(
           currentDate === checkin
-        ){
+        )
+          hoverData = {
+  guestName,
+  checkin,
+  checkout,
+  amount: booking.totalAmount || 0,
+  status: booking.status || "confirmed"
+};
+        {
 
           color = "#3b82f6";
 
