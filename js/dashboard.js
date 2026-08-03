@@ -7940,173 +7940,185 @@ window.pmsBookingSelection || {
 // =====================================
 
 container
-  .querySelectorAll(
-    ".pms-calendar-day"
-  )
-  .forEach(
-    dayCell => {
+.querySelectorAll(
+  ".pms-calendar-day"
+)
+.forEach(
+  dayCell => {
 
-      const isOccupied =
-        dayCell.dataset.occupied ===
-        "true";
+    const isOccupied =
+      dayCell.dataset.occupied === "true";
 
-      if(isOccupied){
-        return;
-      }
 
-      dayCell.onmouseenter =
-        () => {
+    // Solo giorni liberi cliccabili
+    if(isOccupied){
+      return;
+    }
 
-          dayCell.style.transform =
-            "translateY(-2px)";
 
-          dayCell.style.boxShadow =
-            "0 8px 18px rgba(16,185,129,.15)";
+    // ===============================
+    // HOVER EFFECT
+    // ===============================
 
-        };
+    dayCell.onmouseenter =
+    () => {
 
-      dayCell.onmouseleave =
-        () => {
+      dayCell.style.transform =
+        "translateY(-2px)";
 
-          dayCell.style.transform =
+      dayCell.style.boxShadow =
+        "0 8px 18px rgba(16,185,129,.15)";
+
+    };
+
+
+    dayCell.onmouseleave =
+    () => {
+
+      dayCell.style.transform =
+        "";
+
+      dayCell.style.boxShadow =
+        "none";
+
+    };
+
+
+    // ===============================
+    // CLICK DAY
+    // ===============================
+
+    dayCell.onclick =
+    () => {
+
+
+      const selectedDate =
+        dayCell.dataset.date;
+
+
+      const checkinField =
+        document.getElementById(
+          "booking-checkin"
+        );
+
+
+      const checkoutField =
+        document.getElementById(
+          "booking-checkout"
+        );
+
+
+      // ===============================
+      // PRIMO CLICK = CHECK-IN
+      // ===============================
+
+      if(
+        !window.pmsBookingSelection.selectingCheckout
+      ){
+
+
+        window.pmsBookingSelection.checkin =
+          selectedDate;
+
+
+        window.pmsBookingSelection.selectingCheckout =
+          true;
+
+
+        if(checkinField){
+
+          checkinField.value =
+            selectedDate;
+
+        }
+
+
+        if(checkoutField){
+
+          checkoutField.value =
             "";
 
-          dayCell.style.boxShadow =
-            "none";
+        }
 
-        };
 
-      dayCell.onclick =
-        () => {
+        console.log(
+          "📅 CHECK-IN SELECTED",
+          selectedDate
+        );
 
-          const selectedDate =
-            dayCell.dataset.date;
 
-          const checkinField =
-            document.getElementById(
-              "booking-checkin"
-            );
+        return;
 
-          const checkoutField =
-            document.getElementById(
-              "booking-checkout"
-            );
+      }
 
-if (!window.pmsBookingSelection.selectingCheckout) {
 
-    if (checkinField) {
-        checkinField.value = selectedDate;
-    }
 
-    if (checkoutField) {
-        checkoutField.value = "";
-    }
+      // ===============================
+      // SECONDO CLICK = CHECK-OUT
+      // ===============================
 
-} else {
+      else {
 
-    if (checkoutField) {
-        checkoutField.value = selectedDate;
-    }
 
-}
+        window.pmsBookingSelection.checkout =
+          selectedDate;
 
-// ========================================
-// FIRST CLICK = CHECK-IN
-// SECOND CLICK = CHECK-OUT
-// ========================================
 
-if (!window.pmsBookingSelection.selectingCheckout) {
+        if(checkoutField){
 
-    console.log(
-        "BEFORE",
-        window.pmsBookingSelection
-    );
+          checkoutField.value =
+            selectedDate;
 
-    window.pmsBookingSelection.checkin = selectedDate;
+        }
 
-    window.pmsBookingSelection.selectingCheckout = true;
 
-    console.log(
-        "AFTER",
-        window.pmsBookingSelection
-    );
+        console.log(
+          "📅 CHECK-OUT SELECTED",
+          selectedDate
+        );
 
-renderPMSCalendar(bookingList);
 
-setTimeout(() => {
+        window.pmsBookingSelection.selectingCheckout =
+          false;
 
-    const newCell = container.querySelector(
-        `.pms-calendar-day[data-date="${selectedDate}"]`
-    );
 
-    if (newCell) {
+      }
 
-        newCell.style.outline = "3px solid #10b981";
-        newCell.style.outlineOffset = "-2px";
 
-    }
+      // ===============================
+      // APRI MODALE PRENOTAZIONE
+      // ===============================
 
-},0);
+      if(
+        typeof window.openBookingModal === "function"
+      ){
 
-  if (
-    typeof window.openBookingModal === "function"
-) {
+        window.openBookingModal();
 
-    window.openBookingModal();
+      }
 
-}
 
-return;
-
-} else {
-
-    window.pmsBookingSelection.checkout = selectedDate;
-
-    console.log(
-        "📅 CHECK-OUT SELECTED",
-        selectedDate
-    );
-
-    const checkOutInput =
-  document.getElementById("booking-checkout");
-
-if (checkOutInput) {
-
-    checkOutInput.value = selectedDate;
-
-}
-
-}
-          if(
-            typeof window
-              .openBookingModal ===
-            "function"
-          ){
-
-            window.openBookingModal();
-
+      checkinField?.dispatchEvent(
+        new Event(
+          "change",
+          {
+            bubbles:true
           }
+        )
+      );
 
-          checkinField?.dispatchEvent(
-            new Event(
-              "change",
-              {
-                bubbles: true
-              }
-            )
-          );
 
-          console.log(
-            "📅 NEW BOOKING DATE:",
-            selectedDate
-          );
+      console.log(
+        "📅 NEW BOOKING DATE:",
+        selectedDate
+      );
 
-        };
 
-    }
-  );
+    };
 
-}
+
+  }
+);
 // =====================================
 // 🔥 BOOKING FILTERS
 // =====================================
