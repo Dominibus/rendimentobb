@@ -7945,6 +7945,14 @@ setTimeout(() => {
 
 },0);
 
+  if (
+    typeof window.openBookingModal === "function"
+) {
+
+    window.openBookingModal();
+
+}
+
 return;
 
 } else {
