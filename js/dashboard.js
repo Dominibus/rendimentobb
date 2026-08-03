@@ -4304,6 +4304,27 @@ window.openBookingModal = function(){
 
 };
 
+// =====================================
+// ❌ CLOSE BOOKING FORM ONLY
+// =====================================
+
+window.closeBookingForm = function(){
+
+    const form =
+        document.getElementById(
+            "booking-form-container"
+        );
+
+    if(form){
+
+        form.style.display = "none";
+
+    }
+
+    window.pmsEditingBooking = false;
+
+};
+      
       // =====================================
       // ❌ BOOKING FORM CLOSE
       // =====================================
