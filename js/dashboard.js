@@ -5764,6 +5764,38 @@ source:
 
 await loadProperties(); 
 
+// =====================================
+// 🤖 PMS AI REAL-TIME SYNC
+// =====================================
+
+window.dispatchEvent(
+  new CustomEvent(
+    "rb_booking_created",
+    {
+      detail:{
+        propertyId:
+          window.currentPropertyId,
+
+        guestName:
+          guest,
+
+        checkin,
+
+        checkout,
+
+        guests,
+
+        totalAmount:
+          total
+      }
+    }
+  )
+);
+
+console.log(
+  "🤖 AI PMS EVENT SENT"
+);
+
   alert(
   t(
     "Prenotazione salvata",
