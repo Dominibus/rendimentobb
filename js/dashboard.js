@@ -5606,7 +5606,23 @@ window.analyzeBookingAI = function(id){
 
 
     const nights =
-        booking.nights || 0;
+    booking.nights ||
+    (
+        booking.checkin &&
+        booking.checkout
+        ?
+        Math.ceil(
+            (
+            new Date(booking.checkout)
+            -
+            new Date(booking.checkin)
+            )
+            /
+            (1000*60*60*24)
+        )
+        :
+        0
+    );
 
 
     const revenue =
