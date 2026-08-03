@@ -7866,34 +7866,36 @@ if(
 }
 
 if(
-  currentDate === checkin
-  isCheckin = true;
+    currentDate === checkin
 ){
 
-  color = "#3b82f6";
+    isCheckin = true;
 
-  tooltip =
-    isEnglish
-      ? `Arrival: ${guestName}`
-      : `Arrivo: ${guestName}`;
+    color = "#3b82f6";
 
-  bookingInfo = booking;
+    tooltip =
+        isEnglish
+            ? `Arrival: ${guestName}`
+            : `Arrivo: ${guestName}`;
+
+    bookingInfo = booking;
 
 }
 
 if(
-  currentDate === checkout
-  isCheckout = true;
+    currentDate === checkout
 ){
 
-  color = "#f97316";
+    isCheckout = true;
 
-  tooltip =
-    isEnglish
-      ? `Departure: ${guestName}`
-      : `Partenza: ${guestName}`;
+    color = "#f97316";
 
-  bookingInfo = booking;
+    tooltip =
+        isEnglish
+            ? `Departure: ${guestName}`
+            : `Partenza: ${guestName}`;
+
+    bookingInfo = booking;
 
 }
 
