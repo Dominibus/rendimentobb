@@ -7800,8 +7800,43 @@ transition:
           : "none"
       };
       ">
-        ${day}
-      </div>
+
+<div style="
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:2px;
+width:100%;
+height:100%;
+">
+
+<div>
+${day}
+</div>
+
+${
+bookingInfo
+?
+`
+<div style="
+font-size:9px;
+font-weight:700;
+white-space:nowrap;
+overflow:hidden;
+max-width:90%;
+text-overflow:ellipsis;
+">
+${bookingInfo.guestName || ""}
+</div>
+`
+:
+""
+}
+
+</div>
+
+</div>
 
     `;
 
