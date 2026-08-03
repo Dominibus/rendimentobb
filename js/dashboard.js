@@ -4274,29 +4274,35 @@ document.addEventListener(
 
       loadPMSStats();
 
-      // =====================================
-      // ➕ BOOKING FORM OPEN
-      // =====================================
+// =====================================
+// ➕ BOOKING FORM OPEN
+// =====================================
 
-      window.openBookingModal = function(){
+window.openBookingModal = function(){
 
-        const form =
+    const form =
         document.getElementById(
-          "booking-form-container"
+            "booking-form-container"
         );
 
-        if(!form) return;
+    if(!form) return;
 
-        form.style.display =
+
+    form.style.display =
         "flex";
 
-        setTimeout(()=>{
+
+    window.pmsEditingBooking =
+        false;
+
+
+    setTimeout(()=>{
 
         updateBookingTotal();
 
-        },100);
+    },100);
 
-      };
+};
 
       // =====================================
       // ❌ BOOKING FORM CLOSE
@@ -5302,6 +5308,14 @@ window.showBookingDetails = function(booking){
         return;
 
     }
+
+  const title = modal.querySelector("h2");
+
+if(title){
+
+    title.textContent = "📌 Dettaglio Prenotazione";
+
+}
 
 
     modal.style.display = "flex";
