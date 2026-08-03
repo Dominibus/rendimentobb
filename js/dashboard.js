@@ -5313,21 +5313,6 @@ window.showBookingDetails = function(booking){
         booking
     );
 
-  const nights =
-    booking.checkin &&
-    booking.checkout
-    ?
-    Math.ceil(
-        (
-            new Date(booking.checkout)
-            -
-            new Date(booking.checkin)
-        )
-        /
-        (1000*60*60*24)
-    )
-    :
-    0;
 
     const modal =
         document.getElementById(
@@ -5345,125 +5330,26 @@ window.showBookingDetails = function(booking){
 
     }
 
- const title =
-    modal.querySelector("h3");
+
+    const title =
+        modal.querySelector("h3");
 
 
-if(title){
+    if(title){
 
-    title.textContent =
-        "📌 Dettaglio Prenotazione";
+        title.textContent =
+            "📌 Dettaglio Prenotazione";
 
-}
+    }
+
 
     modal.style.display = "flex";
 
-// =====================================
-// 📌 BOOKING INTELLIGENCE PANEL
-// =====================================
 
-let detail =
-    document.getElementById(
-        "booking-detail-panel"
-    );
+    window.pmsEditingBooking = true;
 
 
-if(!detail){
 
-    detail =
-    document.createElement("div");
-
-    detail.id =
-        "booking-detail-panel";
-
-    detail.style.marginBottom =
-        "20px";
-
-    detail.style.padding =
-        "18px";
-
-    detail.style.borderRadius =
-        "16px";
-
-    detail.style.background =
-        "#f8fafc";
-
-    detail.style.border =
-        "1px solid #e2e8f0";
-
-
-    modal.prepend(detail);
-
-}
-
-
-detail.innerHTML = `
-
-<div style="
-font-size:18px;
-font-weight:800;
-margin-bottom:14px;
-color:#0f172a;
-">
-📌 Booking Intelligence
-</div>
-
-
-<div style="
-display:grid;
-gap:8px;
-font-size:14px;
-color:#334155;
-">
-
-<div>
-👤 <b>Ospite:</b>
-${booking.guestName || "-"}
-</div>
-
-
-<div>
-📅 <b>Check-in:</b>
-${booking.checkin || "-"}
-</div>
-
-
-<div>
-➡️ <b>Check-out:</b>
-${booking.checkout || "-"}
-</div>
-
-
-<div>
-🌙 <b>Notti:</b>
-${nights}
-</div>
-
-
-<div>
-💰 <b>Revenue:</b>
-€${booking.totalAmount || 0}
-</div>
-
-
-<div>
-🏠 <b>Canale:</b>
-${booking.source || "-"}
-</div>
-
-
-<div>
-📌 <b>Status:</b>
-${booking.status || "-"}
-</div>
-
-
-</div>
-
-`;  
-
-  window.pmsEditingBooking = true;
- 
     const guest =
         document.getElementById(
             "booking-guest"
@@ -5482,38 +5368,14 @@ ${booking.status || "-"}
         );
 
 
-if(guest){
 
-    guest.value =
-        booking.guestName || "";
+    if(guest){
 
-}
+        guest.value =
+            booking.guestName || "";
 
+    }
 
-const nightsField =
-    document.getElementById(
-        "booking-nights"
-    );
-
-if(nightsField){
-
-    nightsField.value =
-        booking.nights || "";
-
-}
-
-
-const amountField =
-    document.getElementById(
-        "booking-total"
-    );
-
-if(amountField){
-
-    amountField.value =
-        booking.totalAmount || "";
-
-}
 
 
     if(checkin){
@@ -5524,12 +5386,76 @@ if(amountField){
     }
 
 
+
     if(checkout){
 
         checkout.value =
             booking.checkout || "";
 
     }
+
+
+
+    const nightsField =
+        document.getElementById(
+            "booking-live-nights"
+        );
+
+
+    const amountField =
+        document.getElementById(
+            "booking-live-revenue"
+        );
+
+
+    const adrField =
+        document.getElementById(
+            "booking-live-adr"
+        );
+
+
+
+    if(amountField){
+
+        amountField.textContent =
+            "€" + (booking.totalAmount || 0);
+
+    }
+
+
+
+    if(nightsField){
+
+        nightsField.textContent =
+            booking.nights || 0;
+
+    }
+
+
+
+    if(adrField){
+
+        const adr =
+            booking.nights
+            ? booking.totalAmount / booking.nights
+            : 0;
+
+
+        adrField.textContent =
+            "€" + adr.toFixed(0);
+
+    }
+
+
+
+    // 🔄 ricalcolo dopo caricamento date
+
+    setTimeout(()=>{
+
+        updateBookingTotal();
+
+    },100);
+
 
 };
 
