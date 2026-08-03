@@ -7823,6 +7823,10 @@ function renderPMSCalendar(bookings){
     let tooltip = "";
     let bookingInfo = null;
 
+    let isCheckin = false;
+    let isCheckout = false;
+    let isStay = false;
+
     bookingList.forEach(
       booking => {
 
@@ -7857,11 +7861,13 @@ if(
   color = "#10b981";
   tooltip = guestName;
   bookingInfo = booking;
+  isStay = true;
 
 }
 
 if(
   currentDate === checkin
+  isCheckin = true;
 ){
 
   color = "#3b82f6";
@@ -7877,6 +7883,7 @@ if(
 
 if(
   currentDate === checkout
+  isCheckout = true;
 ){
 
   color = "#f97316";
