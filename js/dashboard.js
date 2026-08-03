@@ -6229,15 +6229,15 @@ const copilotToday =
 const normalizedBookings =
   bookingsData.map(booking => {
 
-    const checkin =
-      String(
-        booking.checkin || ""
-      );
+const checkin =
+  String(
+    booking.checkin || ""
+  ).slice(0,10);
 
-    const checkout =
-      String(
-        booking.checkout || ""
-      );
+const checkout =
+  String(
+    booking.checkout || ""
+  ).slice(0,10);
 
     const checkinDate =
       new Date(checkin);
