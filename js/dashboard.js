@@ -7893,19 +7893,23 @@ container
               "booking-checkout"
             );
 
-          if(checkinField){
+if (!window.pmsBookingSelection.selectingCheckout) {
 
-            checkinField.value =
-              selectedDate;
+    if (checkinField) {
+        checkinField.value = selectedDate;
+    }
 
-          }
+    if (checkoutField) {
+        checkoutField.value = "";
+    }
 
-          if(checkoutField){
+} else {
 
-            checkoutField.value =
-              "";
+    if (checkoutField) {
+        checkoutField.value = selectedDate;
+    }
 
-          }
+}
 
 // ========================================
 // FIRST CLICK = CHECK-IN
