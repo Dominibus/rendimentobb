@@ -5348,7 +5348,7 @@ window.showBookingDetails = function(booking){
 
     window.pmsEditingBooking = true;
 
-
+window.currentSelectedBooking = booking;
 
     const guest =
         document.getElementById(
