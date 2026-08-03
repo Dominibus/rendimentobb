@@ -7909,6 +7909,7 @@ container
 
 // ========================================
 // FIRST CLICK = CHECK-IN
+// SECOND CLICK = CHECK-OUT
 // ========================================
 
 if (!window.pmsBookingSelection.selectingCheckout) {
@@ -7922,8 +7923,14 @@ if (!window.pmsBookingSelection.selectingCheckout) {
         selectedDate
     );
 
-}
+} else {
 
+    console.log(
+        "📅 CHECK-OUT SELECTED",
+        selectedDate
+    );
+
+}
           if(
             typeof window
               .openBookingModal ===
