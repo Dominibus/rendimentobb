@@ -1715,6 +1715,46 @@ container.innerHTML = html;
 }
 
 // =====================================
+// 🧠 PMS HOVER DATA PREPARATION
+// =====================================
+
+container
+.querySelectorAll(".pms-calendar-day")
+.forEach(day => {
+
+  const date = day.dataset.date;
+
+  const booking = bookingList.find(b => {
+
+    const checkin = String(b.checkin || "");
+    const checkout = String(b.checkout || "");
+
+    return (
+      date >= checkin &&
+      date < checkout
+    );
+
+  });
+
+  if(booking){
+
+    day.dataset.guest =
+      booking.guestName || "Ospite";
+
+    day.dataset.amount =
+      booking.totalAmount || 0;
+
+    day.dataset.checkin =
+      booking.checkin || "";
+
+    day.dataset.checkout =
+      booking.checkout || "";
+
+  }
+
+});
+
+// =====================================
 // 🖱️ PMS CALENDAR HOVER PREVIEW
 // =====================================
 
