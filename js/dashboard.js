@@ -5341,6 +5341,110 @@ if(title){
 
     modal.style.display = "flex";
 
+// =====================================
+// 📌 BOOKING INTELLIGENCE PANEL
+// =====================================
+
+let detail =
+    document.getElementById(
+        "booking-detail-panel"
+    );
+
+
+if(!detail){
+
+    detail =
+    document.createElement("div");
+
+    detail.id =
+        "booking-detail-panel";
+
+    detail.style.marginBottom =
+        "20px";
+
+    detail.style.padding =
+        "18px";
+
+    detail.style.borderRadius =
+        "16px";
+
+    detail.style.background =
+        "#f8fafc";
+
+    detail.style.border =
+        "1px solid #e2e8f0";
+
+
+    modal.prepend(detail);
+
+}
+
+
+detail.innerHTML = `
+
+<div style="
+font-size:18px;
+font-weight:800;
+margin-bottom:14px;
+color:#0f172a;
+">
+📌 Booking Intelligence
+</div>
+
+
+<div style="
+display:grid;
+gap:8px;
+font-size:14px;
+color:#334155;
+">
+
+<div>
+👤 <b>Ospite:</b>
+${booking.guestName || "-"}
+</div>
+
+
+<div>
+📅 <b>Check-in:</b>
+${booking.checkin || "-"}
+</div>
+
+
+<div>
+➡️ <b>Check-out:</b>
+${booking.checkout || "-"}
+</div>
+
+
+<div>
+🌙 <b>Notti:</b>
+${booking.nights || "-"}
+</div>
+
+
+<div>
+💰 <b>Revenue:</b>
+€${booking.totalAmount || 0}
+</div>
+
+
+<div>
+🏠 <b>Canale:</b>
+${booking.source || "-"}
+</div>
+
+
+<div>
+📌 <b>Status:</b>
+${booking.status || "-"}
+</div>
+
+
+</div>
+
+`;  
+
   window.pmsEditingBooking = true;
 
 
@@ -5456,6 +5560,7 @@ window.openBookings = function(propertyId){
 
   if(modal){
     modal.style.display = "flex";
+
   }else{
     console.error("❌ bookings-modal non trovato");
     return;
