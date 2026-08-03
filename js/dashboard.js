@@ -7726,34 +7726,26 @@ function renderPMSCalendar(bookings){
 
 }
 
-        hoverData = {
-  guestName,
-  checkin,
-  checkout,
-  amount: booking.totalAmount || 0,
-  status: booking.status || "confirmed"
-};
+if(
+  currentDate === checkin
+){
 
-        if(
-          currentDate === checkin
-        )
-          hoverData = {
-  guestName,
-  checkin,
-  checkout,
-  amount: booking.totalAmount || 0,
-  status: booking.status || "confirmed"
-};
-        {
+  color = "#3b82f6";
 
-          color = "#3b82f6";
+  tooltip =
+    isEnglish
+      ? `Arrival: ${guestName}`
+      : `Arrivo: ${guestName}`;
 
-          tooltip =
-            isEnglish
-              ? `Arrival: ${guestName}`
-              : `Arrivo: ${guestName}`;
+  hoverData = {
+    guestName,
+    checkin,
+    checkout,
+    amount: booking.totalAmount || 0,
+    status: booking.status || "confirmed"
+  };
 
-        }
+}
 
         if(
           currentDate === checkout
