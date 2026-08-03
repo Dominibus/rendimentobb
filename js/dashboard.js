@@ -5446,7 +5446,7 @@ window.showBookingDetails = function(booking){
 
     }
 
-  // =====================================
+// =====================================
 // 🎯 BOOKING ACTIONS
 // =====================================
 
@@ -5549,6 +5549,90 @@ onclick="deleteBooking('${booking.id || ""}')">
 
     },100);
 
+
+};
+
+// =====================================
+// 🤖 ANALYZE BOOKING AI
+// =====================================
+
+window.analyzeBookingAI = function(id){
+
+    console.log(
+        "🤖 AI BOOKING ANALYSIS",
+        id
+    );
+
+
+    const box =
+        document.getElementById(
+            "booking-smart-actions"
+        );
+
+
+    if(!box) return;
+
+
+    const existing =
+        document.getElementById(
+            "booking-ai-result"
+        );
+
+
+    if(existing){
+
+        existing.remove();
+
+    }
+
+
+    const result =
+    document.createElement("div");
+
+
+    result.id =
+    "booking-ai-result";
+
+
+    result.style.marginTop =
+    "15px";
+
+
+    result.style.padding =
+    "16px";
+
+
+    result.style.borderRadius =
+    "16px";
+
+
+    result.style.background =
+    "#f0fdf4";
+
+
+    result.style.border =
+    "1px solid #bbf7d0";
+
+
+    result.innerHTML = `
+
+    <strong>🤖 AI PMS Insight</strong>
+
+    <br><br>
+
+    Questa prenotazione contribuisce
+    positivamente al rendimento della proprietà.
+
+    <br><br>
+
+    Suggerimento:
+    mantenere ADR e monitorare
+    recensioni e occupazione.
+
+    `;
+
+
+    box.appendChild(result);
 
 };
 
