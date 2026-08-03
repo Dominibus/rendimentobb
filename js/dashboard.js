@@ -7824,6 +7824,19 @@ transition:
   }
 
 // =====================================
+// 📅 RANGE SELECTION
+// =====================================
+
+window.pmsBookingSelection =
+window.pmsBookingSelection || {
+
+  selectingCheckout:false,
+
+  checkin:null
+
+};  
+
+// =====================================
 // ➕ FREE DAY → NEW BOOKING
 // =====================================
 
