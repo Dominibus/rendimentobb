@@ -7918,13 +7918,13 @@ if (!window.pmsBookingSelection.selectingCheckout) {
 
     window.pmsBookingSelection.selectingCheckout = true;
 
-  renderPMSCalendar(bookingList);
-return;
+console.log(
+    "📅 CHECK-IN SELECTED",
+    selectedDate
+);
 
-    console.log(
-        "📅 CHECK-IN SELECTED",
-        selectedDate
-    );
+renderPMSCalendar(bookingList);
+return;
 
 } else {
 
