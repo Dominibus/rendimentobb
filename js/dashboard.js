@@ -7965,7 +7965,7 @@ return;
     );
 
     const checkOutInput =
-        document.getElementById("bookingCheckout");
+      document.getElementById("booking-checkout");
 
     if (checkOutInput) {
 
