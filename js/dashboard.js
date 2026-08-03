@@ -7153,6 +7153,54 @@ window.rbPMSData = {
 
 };
 
+// =====================================
+// 🤖 PMS AI INSIGHT
+// =====================================
+
+window.rbPMSInsight = {
+
+  occupancy:
+    occupancy,
+
+  bookings:
+    normalizedBookings.length,
+
+  attention:
+    attentionBookings.length,
+
+  message:
+
+    occupancy >= 80
+
+    ? window.t(
+        "Ottima occupazione. Valuta aumento ADR.",
+        "Strong occupancy. Consider increasing ADR."
+      )
+
+    :
+
+    occupancy >= 50
+
+    ? window.t(
+        "Performance stabile. Ottimizzare prezzi.",
+        "Stable performance. Optimize pricing."
+      )
+
+    :
+
+    window.t(
+      "Occupazione bassa. Analizzare strategie.",
+      "Low occupancy. Review strategy."
+    )
+
+};
+
+
+console.log(
+"🤖 PMS AI INSIGHT READY",
+window.rbPMSInsight
+);
+
 window.dispatchEvent(
   new CustomEvent(
     "rb_pms_data_updated",
