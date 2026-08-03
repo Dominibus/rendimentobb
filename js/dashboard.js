@@ -1714,6 +1714,48 @@ container.innerHTML = html;
 
 }
 
+// =====================================
+// 🖱️ PMS CALENDAR HOVER PREVIEW
+// =====================================
+
+document
+.querySelectorAll(".pms-calendar-day")
+.forEach(dayEl => {
+
+  const date =
+    dayEl.dataset.date;
+
+  const occupied =
+    dayEl.dataset.occupied === "true";
+
+
+  if(occupied){
+
+    dayEl.onmouseenter = () => {
+
+      dayEl.style.transform =
+        "translateY(-3px)";
+
+      dayEl.style.boxShadow =
+        "0 8px 18px rgba(15,23,42,.18)";
+
+    };
+
+
+    dayEl.onmouseleave = () => {
+
+      dayEl.style.transform =
+        "translateY(0)";
+
+      dayEl.style.boxShadow =
+        "none";
+
+    };
+
+  }
+
+});
+
 
 // ================= HEADER =================
 
