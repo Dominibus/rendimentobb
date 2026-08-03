@@ -5345,14 +5345,16 @@ window.showBookingDetails = function(booking){
 
     }
 
-  const title = modal.querySelector("h2");
+ const title =
+    modal.querySelector("h3");
+
 
 if(title){
 
-    title.textContent = "📌 Dettaglio Prenotazione";
+    title.textContent =
+        "📌 Dettaglio Prenotazione";
 
 }
-
 
     modal.style.display = "flex";
 
