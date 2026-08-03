@@ -7965,13 +7965,13 @@ return;
     );
 
     const checkOutInput =
-      document.getElementById("booking-checkout");
+  document.getElementById("booking-checkout");
 
-    if (checkOutInput) {
+if (checkOutInput) {
 
-        checkOutInput.value = formatDateForInput(selectedDate);
+    checkOutInput.value = selectedDate;
 
-    }
+}
 
 }
           if(
