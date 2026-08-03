@@ -7160,17 +7160,17 @@ window.rbPMSData = {
 window.rbPMSInsight = {
 
   occupancy:
-    occupancy,
+    occupancy || 0,
 
   bookings:
-    normalizedBookings.length,
+    bookings || 0,
 
   attention:
-    attentionBookings.length,
+    pendingBookings || 0,
 
   message:
 
-    occupancy >= 80
+    (occupancy || 0) >= 80
 
     ? window.t(
         "Ottima occupazione. Valuta aumento ADR.",
@@ -7179,7 +7179,7 @@ window.rbPMSInsight = {
 
     :
 
-    occupancy >= 50
+    (occupancy || 0) >= 50
 
     ? window.t(
         "Performance stabile. Ottimizzare prezzi.",
@@ -7197,9 +7197,10 @@ window.rbPMSInsight = {
 
 
 console.log(
-"🤖 PMS AI INSIGHT READY",
-window.rbPMSInsight
+  "🤖 PMS AI INSIGHT READY",
+  window.rbPMSInsight
 );
+
 
 window.dispatchEvent(
   new CustomEvent(
@@ -7211,12 +7212,14 @@ window.dispatchEvent(
   )
 );
 
+
 console.log(
   "🤖 PMS MEMORY:",
   window.rbPMSData
 );
 
-  renderExecutiveSummary({
+
+renderExecutiveSummary({
   properties,
   bookings,
   revenue,
@@ -7228,29 +7231,31 @@ console.log(
   guestsInHouse
 });
 
-  console.log(
+
+console.log(
   "👥 PMS GUESTS:",
   window.rbPMSData.guests
 );
 
-  console.log(
-    "🏨 PMS STATS",
-    {
-      properties,
-      bookings,
-      revenue,
-      occupancy,
-      adr,
-      revpar,
-      avgStay,
-      arrivalsToday,
-      departuresToday,
-      guestsInHouse,
-      checkinToday,
-      checkoutToday,
-      pendingBookings
-    }
-  );
+
+console.log(
+  "🏨 PMS STATS",
+  {
+    properties,
+    bookings,
+    revenue,
+    occupancy,
+    adr,
+    revpar,
+    avgStay,
+    arrivalsToday,
+    departuresToday,
+    guestsInHouse,
+    checkinToday,
+    checkoutToday,
+    pendingBookings
+  }
+);
 
 }
 // =====================================
