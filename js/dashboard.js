@@ -7749,7 +7749,11 @@ if(
 class="pms-calendar-day"
 data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
-data-booking=""
+data-booking='${
+  bookingInfo
+    ? JSON.stringify(bookingInfo).replace(/'/g,"&#39;")
+    : ""
+}'
 title="${
   tooltip ||
   (
