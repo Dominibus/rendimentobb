@@ -7903,7 +7903,7 @@ window.pmsBookingSelection || {
 };  
 
 // =====================================
-// ➕ FREE DAY → NEW BOOKING
+// ➕ PMS CALENDAR INTERACTION
 // =====================================
 
 container
@@ -7913,13 +7913,14 @@ container
   .forEach(
     dayCell => {
 
-      const isOccupied =
-        dayCell.dataset.occupied ===
-        "true";
 
-      if(isOccupied){
-        return;
-      }
+      const isOccupied =
+        dayCell.dataset.occupied === "true";
+
+
+      // ===============================
+      // HOVER EFFECT
+      // ===============================
 
       dayCell.onmouseenter =
         () => {
@@ -7932,6 +7933,7 @@ container
 
         };
 
+
       dayCell.onmouseleave =
         () => {
 
@@ -7943,133 +7945,259 @@ container
 
         };
 
+
+
+      // ===============================
+      // OCCUPIED BOOKING CLICK
+      // ===============================
+
+      if(isOccupied){
+
+        dayCell.onclick =
+          () => {
+
+            const bookingRaw =
+              dayCell.dataset.booking;
+
+
+            if(!bookingRaw){
+
+              console.log(
+                "No booking data"
+              );
+
+              return;
+
+            }
+
+
+            try{
+
+              const bookingData =
+                JSON.parse(
+                  bookingRaw
+                );
+
+
+              console.log(
+                "📌 PMS BOOKING SELECTED",
+                bookingData
+              );
+
+
+              if(
+                typeof window.showBookingDetails === "function"
+              ){
+
+                window.showBookingDetails(
+                  bookingData
+                );
+
+              }
+
+
+            }catch(error){
+
+              console.error(
+                "Booking JSON ERROR",
+                error
+              );
+
+            }
+
+
+          };
+
+
+        return;
+
+      }
+
+
+
+      // ===============================
+      // FREE DAY → NEW BOOKING
+      // ===============================
+
       dayCell.onclick =
         () => {
 
+
           const selectedDate =
             dayCell.dataset.date;
+
+
 
           const checkinField =
             document.getElementById(
               "booking-checkin"
             );
 
+
           const checkoutField =
             document.getElementById(
               "booking-checkout"
             );
 
-          if(checkinField){
 
-            checkinField.value =
+
+          window.pmsBookingSelection =
+          window.pmsBookingSelection ||
+          {
+
+            selectingCheckout:false,
+
+            checkin:null,
+
+            checkout:null
+
+          };
+
+
+
+          // ===============================
+          // FIRST CLICK CHECK-IN
+          // ===============================
+
+          if(
+            !window.pmsBookingSelection.selectingCheckout
+          ){
+
+
+            window.pmsBookingSelection.checkin =
               selectedDate;
 
+
+            window.pmsBookingSelection.selectingCheckout =
+              true;
+
+
+
+            if(checkinField){
+
+              checkinField.value =
+                selectedDate;
+
+            }
+
+
+            if(checkoutField){
+
+              checkoutField.value =
+                "";
+
+            }
+
+
+
+            console.log(
+              "📅 CHECK-IN SELECTED",
+              selectedDate
+            );
+
+
+
+            renderPMSCalendar(
+              bookingList
+            );
+
+
+
+            setTimeout(
+              () => {
+
+                const newCell =
+                  container.querySelector(
+                    `.pms-calendar-day[data-date="${selectedDate}"]`
+                  );
+
+
+                if(newCell){
+
+                  newCell.style.outline =
+                    "3px solid #10b981";
+
+                  newCell.style.outlineOffset =
+                    "-2px";
+
+                }
+
+
+              },
+              0
+            );
+
+
+
+            return;
+
           }
+
+
+
+          // ===============================
+          // SECOND CLICK CHECK-OUT
+          // ===============================
+
+
+          window.pmsBookingSelection.checkout =
+            selectedDate;
+
+
 
           if(checkoutField){
 
             checkoutField.value =
-              "";
+              selectedDate;
 
           }
 
-// ========================================
-// FIRST CLICK = CHECK-IN
-// SECOND CLICK = CHECK-OUT
-// ========================================
 
-if (!window.pmsBookingSelection.selectingCheckout) {
 
-    console.log(
-        "BEFORE",
-        window.pmsBookingSelection
-    );
+          window.pmsBookingSelection.selectingCheckout =
+            false;
 
-    window.pmsBookingSelection.checkin = selectedDate;
 
-    window.pmsBookingSelection.selectingCheckout = true;
 
-    console.log(
-        "AFTER",
-        window.pmsBookingSelection
-    );
+          console.log(
+            "📅 CHECK-OUT SELECTED",
+            selectedDate
+          );
 
-renderPMSCalendar(bookingList);
 
-setTimeout(() => {
 
-    const newCell = container.querySelector(
-        `.pms-calendar-day[data-date="${selectedDate}"]`
-    );
-
-    if (newCell) {
-
-        newCell.style.outline = "3px solid #10b981";
-        newCell.style.outlineOffset = "-2px";
-
-    }
-
-},0);
-
-  if (
-    typeof window.openBookingModal === "function"
-) {
-
-    window.openBookingModal();
-
-}
-
-return;
-
-} else {
-
-    window.pmsBookingSelection.checkout = selectedDate;
-
-    console.log(
-        "📅 CHECK-OUT SELECTED",
-        selectedDate
-    );
-
-    const checkOutInput =
-  document.getElementById("booking-checkout");
-
-if (checkOutInput) {
-
-    checkOutInput.value = selectedDate;
-
-}
-
-}
           if(
-            typeof window
-              .openBookingModal ===
-            "function"
+            typeof window.openBookingModal === "function"
           ){
 
             window.openBookingModal();
 
           }
 
+
+
           checkinField?.dispatchEvent(
             new Event(
               "change",
               {
-                bubbles: true
+                bubbles:true
               }
             )
           );
 
+
+
           console.log(
-            "📅 NEW BOOKING DATE:",
-            selectedDate
+            "📅 NEW BOOKING RANGE:",
+            window.pmsBookingSelection
           );
+
 
         };
 
+
     }
   );
-
-}
 // =====================================
 // 🔥 BOOKING FILTERS
 // =====================================
