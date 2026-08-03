@@ -7651,6 +7651,7 @@ function renderPMSCalendar(bookings){
 
     let color = "";
     let tooltip = "";
+    let bookingInfo = null;
 
     bookingList.forEach(
       booking => {
@@ -7678,56 +7679,63 @@ function renderPMSCalendar(bookings){
             booking.status || ""
           ).toLowerCase();
 
-        if(
-          currentDate >= checkin &&
-          currentDate < checkout
-        ){
+if(
+  currentDate >= checkin &&
+  currentDate < checkout
+){
 
-          color = "#10b981";
-          tooltip = guestName;
+  color = "#10b981";
+  tooltip = guestName;
+  bookingInfo = booking;
 
-        }
+}
 
-        if(
-          currentDate === checkin
-        ){
+if(
+  currentDate === checkin
+){
 
-          color = "#3b82f6";
+  color = "#3b82f6";
 
-          tooltip =
-            isEnglish
-              ? `Arrival: ${guestName}`
-              : `Arrivo: ${guestName}`;
+  tooltip =
+    isEnglish
+      ? `Arrival: ${guestName}`
+      : `Arrivo: ${guestName}`;
 
-        }
+  bookingInfo = booking;
 
-        if(
-          currentDate === checkout
-        ){
+}
 
-          color = "#f97316";
+if(
+  currentDate === checkout
+){
 
-          tooltip =
-            isEnglish
-              ? `Departure: ${guestName}`
-              : `Partenza: ${guestName}`;
+  color = "#f97316";
 
-        }
+  tooltip =
+    isEnglish
+      ? `Departure: ${guestName}`
+      : `Partenza: ${guestName}`;
 
-        if(
-          status === "cancelled" &&
-          currentDate >= checkin &&
-          currentDate <= checkout
-        ){
+  bookingInfo = booking;
 
-          color = "#ef4444";
+}
 
-          tooltip =
-            isEnglish
-              ? `Cancelled: ${guestName}`
-              : `Cancellata: ${guestName}`;
+if(
+  status === "cancelled" &&
+  currentDate >= checkin &&
+  currentDate <= checkout
+){
 
-        }
+  color = "#ef4444";
+
+  tooltip =
+    isEnglish
+      ? `Cancelled: ${guestName}`
+      : `Cancellata: ${guestName}`;
+
+  bookingInfo = booking;
+
+}
 
       }
     );
