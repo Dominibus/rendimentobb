@@ -9447,6 +9447,218 @@ ${t(
 </div>
 
 <!-- =====================================
+AI ACTIONS
+===================================== -->
+
+<div style="
+margin-top:28px;
+margin-bottom:28px;
+">
+
+<div style="
+font-size:13px;
+font-weight:800;
+letter-spacing:.08em;
+text-transform:uppercase;
+color:#64748b;
+margin-bottom:14px;
+">
+
+🤖 ${t(
+"Azioni consigliate dall'AI",
+"AI Recommended Actions"
+)}
+
+</div>
+
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:14px;
+">
+
+
+<button
+onclick="window.openWhatIf && window.openWhatIf('adr')"
+style="
+padding:18px;
+border-radius:16px;
+border:1px solid #dbe4ee;
+background:#ffffff;
+cursor:pointer;
+text-align:left;
+">
+
+<div style="
+font-size:24px;
+margin-bottom:8px;
+">
+📈
+</div>
+
+<div style="
+font-weight:800;
+color:#0f172a;
+">
+
+${t(
+"Aumenta ADR",
+"Increase ADR"
+)}
+
+</div>
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+">
+
++5% pricing simulation
+
+</div>
+
+</button>
+
+
+
+<button
+onclick="window.openWhatIf && window.openWhatIf('mortgage')"
+style="
+padding:18px;
+border-radius:16px;
+border:1px solid #dbe4ee;
+background:#ffffff;
+cursor:pointer;
+text-align:left;
+">
+
+<div style="
+font-size:24px;
+margin-bottom:8px;
+">
+🏦
+</div>
+
+<div style="
+font-weight:800;
+color:#0f172a;
+">
+
+${t(
+"Ottimizza mutuo",
+"Optimize mortgage"
+)}
+
+</div>
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+">
+
+LTV / equity analysis
+
+</div>
+
+</button>
+
+
+
+<button
+onclick="window.openMarketComparison && window.openMarketComparison()"
+style="
+padding:18px;
+border-radius:16px;
+border:1px solid #dbe4ee;
+background:#ffffff;
+cursor:pointer;
+text-align:left;
+">
+
+<div style="
+font-size:24px;
+margin-bottom:8px;
+">
+🏙️
+</div>
+
+<div style="
+font-weight:800;
+color:#0f172a;
+">
+
+${t(
+"Confronta mercato",
+"Compare market"
+)}
+
+</div>
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+">
+
+Rome vs Milan vs Naples
+
+</div>
+
+</button>
+
+
+
+<button
+onclick="handleReportClick && handleReportClick()"
+style="
+padding:18px;
+border-radius:16px;
+border:1px solid #dbe4ee;
+background:#ffffff;
+cursor:pointer;
+text-align:left;
+">
+
+<div style="
+font-size:24px;
+margin-bottom:8px;
+">
+📄
+</div>
+
+<div style="
+font-weight:800;
+color:#0f172a;
+">
+
+${t(
+"Genera Report",
+"Generate Report"
+)}
+
+</div>
+
+<div style="
+font-size:13px;
+color:#64748b;
+margin-top:6px;
+">
+
+Executive PDF
+
+</div>
+
+</button>
+
+
+</div>
+
+</div>
+
+<!-- =====================================
 AI RECOMMENDATION
 ===================================== -->
 
