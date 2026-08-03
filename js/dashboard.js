@@ -7966,6 +7966,60 @@ ${bookingInfo.guestName || ""}
   container.innerHTML =
     html;
 
+// =====================================
+// 📌 OPEN EXISTING BOOKING FROM CALENDAR
+// =====================================
+
+container
+.querySelectorAll(".pms-calendar-day")
+.forEach(cell => {
+
+    const bookingData =
+        cell.dataset.booking;
+
+    if(!bookingData){
+        return;
+    }
+
+    cell.style.cursor = "pointer";
+
+    cell.onclick = () => {
+
+        try {
+
+            const booking =
+                JSON.parse(
+                    bookingData
+                );
+
+            console.log(
+                "📌 CALENDAR BOOKING CLICK",
+                booking
+            );
+
+            if(
+                typeof window.showBookingDetails === "function"
+            ){
+
+                window.showBookingDetails(
+                    booking
+                );
+
+            }
+
+        } catch(error){
+
+            console.error(
+                "❌ Booking parse error",
+                error
+            );
+
+        }
+
+    };
+
+});
+
   const previousButton =
     document.getElementById(
       "pms-calendar-prev"
