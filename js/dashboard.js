@@ -8136,20 +8136,95 @@ container
       // HOVER EFFECT
       // ===============================
 
-      dayCell.onmouseenter =
-        () => {
+dayCell.onmouseenter = () => {
 
-          dayCell.style.transform =
-            "translateY(-2px)";
+    dayCell.style.transform =
+        "translateY(-2px)";
 
-          dayCell.style.boxShadow =
-            "0 8px 18px rgba(16,185,129,.15)";
+    dayCell.style.boxShadow =
+        "0 8px 18px rgba(16,185,129,.15)";
 
-        };
+    if(!bookingInfo) return;
+
+    let preview =
+        document.getElementById("pms-booking-preview");
+
+    if(!preview){
+
+        preview = document.createElement("div");
+
+        preview.id = "pms-booking-preview";
+
+        preview.style.position = "fixed";
+        preview.style.zIndex = "99999";
+        preview.style.width = "260px";
+        preview.style.background = "#ffffff";
+        preview.style.border = "1px solid #e2e8f0";
+        preview.style.borderRadius = "16px";
+        preview.style.padding = "16px";
+        preview.style.boxShadow =
+            "0 18px 40px rgba(15,23,42,.18)";
+        preview.style.pointerEvents = "none";
+        preview.style.transition = "opacity .15s";
+        preview.style.opacity = "0";
+
+        document.body.appendChild(preview);
+
+    }
+
+    preview.innerHTML = `
+
+        <div style="font-weight:800;font-size:16px;margin-bottom:8px;">
+            👤 ${bookingInfo.guestName || "-"}
+        </div>
+
+        <div>📅 ${bookingInfo.checkin}</div>
+
+        <div>➡ ${bookingInfo.checkout}</div>
+
+        <div>🌙 ${bookingInfo.nights || "-" } notti</div>
+
+        <div>💰 €${bookingInfo.totalAmount || 0}</div>
+
+        <div style="
+            margin-top:10px;
+            color:#10b981;
+            font-weight:700;
+        ">
+            ${bookingInfo.source || ""}
+        </div>
+
+    `;
+
+    preview.style.left =
+        (event.clientX + 18) + "px";
+
+    preview.style.top =
+        (event.clientY - 10) + "px";
+
+    preview.style.opacity = "1";
+
+};
 
 
-      dayCell.onmouseleave =
-        () => {
+dayCell.onmouseleave = () => {
+
+    dayCell.style.transform = "";
+
+    dayCell.style.boxShadow = "none";
+
+    const preview =
+        document.getElementById(
+            "pms-booking-preview"
+        );
+
+    if(preview){
+
+        preview.style.opacity = "0";
+
+    }
+
+};
 
           dayCell.style.transform =
             "";
