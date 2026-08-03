@@ -7640,6 +7640,7 @@ function renderPMSCalendar(bookings){
 
     let color = "";
     let tooltip = "";
+    let hoverData = null;
 
     bookingList.forEach(
       booking => {
@@ -7676,6 +7677,14 @@ function renderPMSCalendar(bookings){
           tooltip = guestName;
 
         }
+
+        hoverData = {
+  guestName,
+  checkin,
+  checkout,
+  amount: booking.totalAmount || 0,
+  status: booking.status || "confirmed"
+};
 
         if(
           currentDate === checkin
