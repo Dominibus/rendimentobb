@@ -5773,6 +5773,36 @@ window.getBookingExecutiveAnalysis = function(booking){
 };
 
 // =====================================
+// ✏️ EDIT BOOKING
+// =====================================
+
+window.editBooking = function(id){
+
+    console.log("✏️ EDIT BOOKING", id);
+
+    const booking = window.currentSelectedBooking;
+
+    if(!booking){
+        console.warn("Booking not found");
+        return;
+    }
+
+    window.pmsEditingBooking = true;
+
+    document.getElementById("booking-guest").value =
+        booking.guestName || "";
+
+    document.getElementById("booking-checkin").value =
+        booking.checkin || "";
+
+    document.getElementById("booking-checkout").value =
+        booking.checkout || "";
+
+    updateBookingTotal();
+
+};
+
+// =====================================
 // 🤖 ANALYZE BOOKING AI 2.0
 // =====================================
 
