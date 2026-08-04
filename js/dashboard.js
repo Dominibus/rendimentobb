@@ -6499,35 +6499,54 @@ margin:18px 0;
 ">
 
 
-<div style="line-height:1.9;">
+<div style="
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;
+margin-top:20px;
+">
 
-👤 <b>Guest</b><br>
+<div style="background:white;padding:14px;border-radius:12px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">👤 Guest</div>
+<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
 ${booking.guestName || "-"}
+</div>
+</div>
 
-<br><br>
-
-🌙 <b>Nights</b><br>
+<div style="background:white;padding:14px;border-radius:12px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🌙 Nights</div>
+<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
 ${nights}
+</div>
+</div>
 
-<br><br>
-
-💰 <b>Revenue</b><br>
+<div style="background:white;padding:14px;border-radius:12px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">💰 Revenue</div>
+<div style="margin-top:6px;font-size:17px;font-weight:700;color:#16a34a;">
 €${revenue.toFixed(0)}
+</div>
+</div>
 
-<br><br>
-
-📈 <b>ADR</b><br>
+<div style="background:white;padding:14px;border-radius:12px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📈 ADR</div>
+<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
 €${adr.toFixed(0)}
+</div>
+</div>
 
-<br><br>
-
-🏠 <b>Channel</b><br>
+<div style="background:white;padding:14px;border-radius:12px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🏠 Channel</div>
+<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
 ${channel}
+</div>
+</div>
 
-<br><br>
-
-📌 <b>Status</b><br>
+<div style="background:white;padding:14px;border-radius:12px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📌 Status</div>
+<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
 ${status}
+</div>
+</div>
 
 </div>
 
