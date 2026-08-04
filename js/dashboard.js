@@ -5446,6 +5446,113 @@ window.currentSelectedBooking = booking;
 
     }
 
+  const ai =
+window.getBookingExecutiveAnalysis
+    ? window.getBookingExecutiveAnalysis(booking)
+    : null;
+
+let executive =
+document.getElementById(
+    "booking-executive-summary"
+);
+
+if(!executive){
+
+    executive =
+    document.createElement("div");
+
+    executive.id =
+    "booking-executive-summary";
+
+    executive.style.marginTop = "20px";
+
+    modal.appendChild(executive);
+
+}
+
+executive.innerHTML = ai ? `
+
+<div style="
+background:linear-gradient(135deg,#0f172a,#1e293b);
+border-radius:18px;
+padding:20px;
+color:white;
+">
+
+<div style="
+font-size:13px;
+opacity:.75;
+text-transform:uppercase;
+letter-spacing:1px;
+">
+
+EXECUTIVE AI ANALYSIS
+
+</div>
+
+<div style="
+font-size:24px;
+font-weight:800;
+margin-top:8px;
+">
+
+${ai.verdict}
+
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-top:18px;
+">
+
+<div>
+<div style="opacity:.65;font-size:12px;">Booking Score</div>
+<div style="font-size:18px;font-weight:700;">
+${ai.bookingScore}
+</div>
+</div>
+
+<div>
+<div style="opacity:.65;font-size:12px;">Revenue</div>
+<div style="font-size:18px;font-weight:700;">
+${ai.revenueQuality}
+</div>
+</div>
+
+<div>
+<div style="opacity:.65;font-size:12px;">Occupancy</div>
+<div style="font-size:18px;font-weight:700;">
+${ai.occupancyImpact}
+</div>
+</div>
+
+<div>
+<div style="opacity:.65;font-size:12px;">Reviews</div>
+<div style="font-size:18px;font-weight:700;">
+${ai.reviewPotential}
+</div>
+</div>
+
+</div>
+
+<div style="
+margin-top:18px;
+padding:14px;
+background:rgba(255,255,255,.08);
+border-radius:12px;
+font-size:14px;
+">
+
+💡 ${ai.suggestion}
+
+</div>
+
+</div>
+
+` : "";
+
 // =====================================
 // 🎯 BOOKING ACTIONS
 // =====================================
