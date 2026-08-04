@@ -5477,15 +5477,17 @@ executive.innerHTML = ai ? `
 background:linear-gradient(135deg,#0f172a,#1e293b);
 border-radius:18px;
 padding:22px;
-color:white;
+color:#fff;
 box-shadow:0 10px 30px rgba(15,23,42,.25);
 ">
 
 <div style="
 display:flex;
 justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
+align-items:flex-start;
+gap:20px;
+margin-bottom:22px;
+flex-wrap:wrap;
 ">
 
 <div>
@@ -5498,12 +5500,12 @@ letter-spacing:1.2px;
 font-weight:700;
 ">
 
-EXECUTIVE AI ANALYSIS
+🤖 EXECUTIVE AI ANALYSIS
 
 </div>
 
 <div style="
-font-size:28px;
+font-size:30px;
 font-weight:800;
 margin-top:6px;
 line-height:1.2;
@@ -5513,34 +5515,47 @@ ${ai.verdict}
 
 </div>
 
-</div>
-
 <div style="
-background:rgba(16,185,129,.15);
-border:1px solid rgba(16,185,129,.35);
-padding:10px 14px;
-border-radius:12px;
-text-align:center;
-min-width:90px;
-">
-
-<div style="
-font-size:11px;
-opacity:.75;
-text-transform:uppercase;
+margin-top:10px;
+font-size:14px;
+opacity:.80;
 ">
 
 ${window.t(
-"Score",
-"Score"
+"Analisi strategica della prenotazione",
+"Strategic booking analysis"
 )}
 
 </div>
 
+</div>
+
 <div style="
-font-size:26px;
+display:flex;
+flex-direction:column;
+align-items:center;
+background:rgba(16,185,129,.12);
+border:1px solid rgba(16,185,129,.35);
+padding:14px 18px;
+border-radius:14px;
+min-width:110px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+opacity:.70;
+">
+
+${window.t("Score","Score")}
+
+</div>
+
+<div style="
+font-size:34px;
 font-weight:800;
 color:#34d399;
+margin-top:4px;
 ">
 
 ${ai.bookingScore}
@@ -5553,140 +5568,110 @@ ${ai.bookingScore}
 
 <div style="
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:14px;
 ">
 
 <div style="
 background:rgba(255,255,255,.06);
-padding:14px;
-border-radius:12px;
-">
-
-<div style="
-font-size:11px;
-opacity:.65;
-text-transform:uppercase;
-">
-
-${window.t(
-"Ricavi",
-"Revenue"
-)}
-
-</div>
-
-<div style="
-margin-top:6px;
-font-size:18px;
-font-weight:700;
-">
-
-${ai.revenueQuality}
-
-</div>
-
-</div>
-
-<div style="
-background:rgba(255,255,255,.06);
-padding:14px;
-border-radius:12px;
-">
-
-<div style="
-font-size:11px;
-opacity:.65;
-text-transform:uppercase;
-">
-
-${window.t(
-"Occupazione",
-"Occupancy"
-)}
-
-</div>
-
-<div style="
-margin-top:6px;
-font-size:18px;
-font-weight:700;
-">
-
-${ai.occupancyImpact}
-
-</div>
-
-</div>
-
-<div style="
-background:rgba(255,255,255,.06);
-padding:14px;
-border-radius:12px;
-">
-
-<div style="
-font-size:11px;
-opacity:.65;
-text-transform:uppercase;
-">
-
-${window.t(
-"Recensioni",
-"Reviews"
-)}
-
-</div>
-
-<div style="
-margin-top:6px;
-font-size:18px;
-font-weight:700;
-">
-
-${ai.reviewPotential}
-
-</div>
-
-</div>
-
-<div style="
-background:rgba(255,255,255,.06);
-padding:14px;
-border-radius:12px;
-">
-
-<div style="
-font-size:11px;
-opacity:.65;
-text-transform:uppercase;
-">
-
-${window.t(
-"Upsell",
-"Upsell"
-)}
-
-</div>
-
-<div style="
-margin-top:6px;
-font-size:18px;
-font-weight:700;
-">
-
-${ai.upsellOpportunity}
-
-</div>
-
-</div>
-
-</div>
-
-<div style="
-margin-top:20px;
 padding:16px;
+border-radius:12px;
+">
+
+<div style="font-size:11px;opacity:.65;text-transform:uppercase;">
+💰 ${window.t("Ricavi","Revenue")}
+</div>
+
+<div style="margin-top:8px;font-size:18px;font-weight:700;">
+${ai.revenueQuality}
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:16px;
+border-radius:12px;
+">
+
+<div style="font-size:11px;opacity:.65;text-transform:uppercase;">
+📈 ${window.t("Occupazione","Occupancy")}
+</div>
+
+<div style="margin-top:8px;font-size:18px;font-weight:700;">
+${ai.occupancyImpact}
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:16px;
+border-radius:12px;
+">
+
+<div style="font-size:11px;opacity:.65;text-transform:uppercase;">
+⭐ ${window.t("Recensioni","Reviews")}
+</div>
+
+<div style="margin-top:8px;font-size:18px;font-weight:700;">
+${ai.reviewPotential}
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:16px;
+border-radius:12px;
+">
+
+<div style="font-size:11px;opacity:.65;text-transform:uppercase;">
+🚀 ${window.t("Upsell","Upsell")}
+</div>
+
+<div style="margin-top:8px;font-size:18px;font-weight:700;">
+${ai.upsellOpportunity}
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:22px;
+padding:18px;
 background:rgba(255,255,255,.08);
+border-radius:14px;
+border-left:4px solid #10b981;
+">
+
+<div style="
+font-size:13px;
+font-weight:700;
+margin-bottom:10px;
+">
+
+🧠 ${window.t("Executive Summary","Executive Summary")}
+
+</div>
+
+<div style="
+font-size:15px;
+line-height:1.7;
+opacity:.96;
+">
+
+${ai.executiveSummary}
+
+</div>
+
+</div>
+
+<div style="
+margin-top:18px;
+padding:18px;
+background:rgba(255,255,255,.06);
 border-radius:14px;
 ">
 
@@ -5696,16 +5681,13 @@ font-weight:700;
 margin-bottom:8px;
 ">
 
-💡 ${window.t(
-"Analisi AI",
-"AI Insight"
-)}
+💡 ${window.t("Insight AI","AI Insight")}
 
 </div>
 
 <div style="
 font-size:14px;
-line-height:1.6;
+line-height:1.7;
 opacity:.95;
 ">
 
@@ -5717,14 +5699,14 @@ ${ai.suggestion}
 
 <div style="
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:14px;
-margin-top:20px;
+margin-top:22px;
 ">
 
 <div style="
 background:rgba(255,255,255,.06);
-padding:14px;
+padding:16px;
 border-radius:12px;
 ">
 
@@ -5734,45 +5716,13 @@ opacity:.65;
 text-transform:uppercase;
 ">
 
-Executive Summary
+🔥 ${window.t("Priorità","Priority")}
 
 </div>
 
 <div style="
 margin-top:8px;
-font-size:14px;
-font-weight:700;
-line-height:1.4;
-">
-
-${ai.executiveSummary}
-
-</div>
-
-</div>
-
-<div style="
-background:rgba(255,255,255,.06);
-padding:14px;
-border-radius:12px;
-">
-
-<div style="
-font-size:11px;
-opacity:.65;
-text-transform:uppercase;
-">
-
-${window.t(
-"Priorità",
-"Priority"
-)}
-
-</div>
-
-<div style="
-margin-top:8px;
-font-size:16px;
+font-size:18px;
 font-weight:700;
 color:#fbbf24;
 ">
@@ -5785,7 +5735,7 @@ ${ai.priority}
 
 <div style="
 background:rgba(255,255,255,.06);
-padding:14px;
+padding:16px;
 border-radius:12px;
 ">
 
@@ -5795,8 +5745,8 @@ opacity:.65;
 text-transform:uppercase;
 ">
 
-${window.t(
-"Azione Consigliata",
+🎯 ${window.t(
+"Azione consigliata",
 "Recommended Action"
 )}
 
@@ -5805,11 +5755,52 @@ ${window.t(
 <div style="
 margin-top:8px;
 font-size:14px;
+line-height:1.6;
 font-weight:700;
-line-height:1.4;
 ">
 
 ${ai.recommendedAction}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:16px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+📊 ${window.t(
+"Livello decisionale",
+"Decision Level"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:16px;
+font-weight:700;
+color:#34d399;
+">
+
+${ai.bookingScore>=90
+? window.t("Premium","Premium")
+: ai.bookingScore>=75
+? window.t("Ottimo","Excellent")
+: ai.bookingScore>=60
+? window.t("Buono","Good")
+: ai.bookingScore>=40
+? window.t("Da monitorare","Monitor")
+: window.t("Critico","Critical")
+}
 
 </div>
 
@@ -5820,6 +5811,7 @@ ${ai.recommendedAction}
 </div>
 
 ` : "";
+  
 // =====================================
 // 🎯 BOOKING ACTIONS
 // =====================================
