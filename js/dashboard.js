@@ -5553,6 +5553,119 @@ onclick="deleteBooking('${booking.id || ""}')">
 };
 
 // =====================================
+// 🧠 AI BOOKING DECISION ENGINE
+// =====================================
+
+window.getBookingExecutiveAnalysis = function(booking){
+
+    if(!booking) return null;
+
+    const nights =
+        booking.nights || 0;
+
+    const revenue =
+        Number(booking.totalAmount || 0);
+
+    const adr =
+        nights > 0
+        ? revenue / nights
+        : 0;
+
+    const status =
+        booking.status || "arrival";
+
+    let analysis = {
+
+        bookingScore : "★★★★☆",
+
+        revenueQuality : "Good",
+
+        occupancyImpact : "+2%",
+
+        reviewPotential : "High",
+
+        upsellOpportunity : "Medium",
+
+        verdict : "🟢 Executive Booking",
+
+        suggestion :
+        "Maintain pricing strategy."
+
+    };
+
+
+    if(adr >= 120){
+
+        analysis.bookingScore = "★★★★★";
+
+        analysis.revenueQuality = "Excellent";
+
+        analysis.occupancyImpact = "+7%";
+
+        analysis.reviewPotential = "Very High";
+
+        analysis.verdict =
+        "🟢 Premium Booking";
+
+        analysis.suggestion =
+        "Excellent ADR. Maintain pricing strategy.";
+
+    }
+
+
+    if(adr < 80){
+
+        analysis.bookingScore = "★★★☆☆";
+
+        analysis.revenueQuality = "Low";
+
+        analysis.occupancyImpact = "-4%";
+
+        analysis.upsellOpportunity = "High";
+
+        analysis.verdict =
+        "🟡 Revenue Opportunity";
+
+        analysis.suggestion =
+        "Increase ADR through pricing optimisation.";
+
+    }
+
+
+    if(nights >= 7){
+
+        analysis.bookingScore = "★★★★★";
+
+        analysis.reviewPotential = "Excellent";
+
+        analysis.occupancyImpact = "+9%";
+
+        analysis.verdict =
+        "🔵 Strategic Stay";
+
+    }
+
+
+    if(status === "cancelled"){
+
+        analysis.bookingScore = "★☆☆☆☆";
+
+        analysis.revenueQuality = "Critical";
+
+        analysis.verdict =
+        "🔴 Cancelled Booking";
+
+        analysis.suggestion =
+        "Investigate cancellation reason.";
+
+    }
+
+
+    return analysis;
+
+};
+
+// =====================================
 // 🤖 ANALYZE BOOKING AI 2.0
 // =====================================
 
@@ -5660,114 +5773,35 @@ window.analyzeBookingAI = function(id){
 
 
 
-    // ===============================
-    // 🧠 AI DECISION ENGINE
-    // ===============================
+// ===============================
+// 🧠 EXECUTIVE AI DECISION ENGINE
+// ===============================
 
+const analysis =
+    window.getBookingExecutiveAnalysis(
+        booking
+    );
 
-    let verdict =
-        "🟢 Prenotazione positiva";
+const bookingScore =
+    analysis.bookingScore;
 
+const revenueQuality =
+    analysis.revenueQuality;
 
-    let suggestion =
-        "Richiedere recensione dopo il checkout.";
+const occupancyImpact =
+    analysis.occupancyImpact;
 
+const reviewPotential =
+    analysis.reviewPotential;
 
+const upsellOpportunity =
+    analysis.upsellOpportunity;
 
-    let level =
-        "positive";
+const verdict =
+    analysis.verdict;
 
-
-
-    // ADR basso
-
-    if(adr < 80){
-
-        verdict =
-        "🟡 ADR sotto potenziale";
-
-
-        suggestion =
-        "Valutare una strategia tariffaria per aumentare il prezzo medio.";
-
-        level =
-        "warning";
-
-    }
-
-
-
-    // ADR ottimo
-
-    if(adr >= 120){
-
-        verdict =
-        "🟢 Prenotazione Premium";
-
-
-        suggestion =
-        "Mantenere questa strategia tariffaria e monitorare recensione ospite.";
-
-        level =
-        "premium";
-
-    }
-
-
-
-    // soggiorno lungo
-
-    if(nights >= 7){
-
-        verdict =
-        "🔵 Soggiorno strategico";
-
-
-        suggestion =
-        "Ottimo soggiorno lungo: favorire fidelizzazione e ritorni futuri.";
-
-        level =
-        "strategic";
-
-    }
-
-
-
-    // soggiorno breve
-
-    if(nights === 1){
-
-        verdict =
-        "🟠 Short Stay";
-
-
-        suggestion =
-        "Valutare incentivi per aumentare la durata media soggiorno.";
-
-        level =
-        "short";
-
-    }
-
-
-
-    // cancellato
-
-    if(status === "cancelled"){
-
-        verdict =
-        "🔴 Prenotazione cancellata";
-
-
-        suggestion =
-        "Analizzare causa cancellazione e migliorare conversione.";
-
-        level =
-        "danger";
-
-    }
-
-
+const suggestion =
+    analysis.suggestion;
 
     // ===============================
     // 🤖 BUILD AI CARD
@@ -5804,69 +5838,178 @@ window.analyzeBookingAI = function(id){
 
 
 
-    result.innerHTML = `
+result.innerHTML = `
 
-    <strong>🤖 AI PMS Insight 2.0</strong>
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+">
 
-    <br><br>
+    <div style="
+    font-size:20px;
+    font-weight:800;
+    color:#0f172a;
+    ">
+        🤖 AI PMS Copilot
+    </div>
 
+    <div style="
+    background:#dcfce7;
+    color:#166534;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    ">
+        Executive AI
+    </div>
 
-    👤 Ospite:
-    ${booking.guestName || "-"}
-
-
-    <br>
-
-
-    🌙 Soggiorno:
-    ${nights} notti
-
-
-    <br>
-
-
-    💰 Ricavo:
-    €${revenue.toFixed(0)}
-
-
-    <br>
-
-
-    📈 ADR:
-    €${adr.toFixed(0)}
-
-
-    <br>
+</div>
 
 
-    🏠 Canale:
-    ${channel}
+<div style="
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+margin-bottom:20px;
+">
+
+    <div>
+        <div style="font-size:11px;color:#64748b;">Booking Score</div>
+        <div style="font-size:22px;font-weight:700;">
+            ${bookingScore}
+        </div>
+    </div>
+
+    <div>
+        <div style="font-size:11px;color:#64748b;">Revenue Quality</div>
+        <div style="font-size:18px;font-weight:700;">
+            ${revenueQuality}
+        </div>
+    </div>
+
+    <div>
+        <div style="font-size:11px;color:#64748b;">Occupancy Impact</div>
+        <div style="
+        font-size:18px;
+        font-weight:700;
+        color:#16a34a;
+        ">
+            ${occupancyImpact}
+        </div>
+    </div>
+
+    <div>
+        <div style="font-size:11px;color:#64748b;">Review Potential</div>
+        <div style="font-size:18px;font-weight:700;">
+            ${reviewPotential}
+        </div>
+    </div>
+
+</div>
 
 
-    <br>
+<hr style="
+border:none;
+border-top:1px solid #dbeafe;
+margin:18px 0;
+">
 
 
-    📌 Stato:
-    ${status}
+<div style="line-height:1.9;">
+
+👤 <b>Guest</b><br>
+${booking.guestName || "-"}
+
+<br><br>
+
+🌙 <b>Nights</b><br>
+${nights}
+
+<br><br>
+
+💰 <b>Revenue</b><br>
+€${revenue.toFixed(0)}
+
+<br><br>
+
+📈 <b>ADR</b><br>
+€${adr.toFixed(0)}
+
+<br><br>
+
+🏠 <b>Channel</b><br>
+${channel}
+
+<br><br>
+
+📌 <b>Status</b><br>
+${status}
+
+</div>
 
 
-    <br><br>
+<div style="
+margin-top:20px;
+padding:16px;
+background:#f8fafc;
+border-left:5px solid #10b981;
+border-radius:14px;
+">
+
+<div style="
+font-size:18px;
+font-weight:700;
+margin-bottom:10px;
+">
+
+${verdict}
+
+</div>
+
+<div style="
+font-size:14px;
+line-height:1.6;
+">
+
+💡 ${suggestion}
+
+</div>
+
+</div>
 
 
-    <strong>
-    ${verdict}
-    </strong>
+<div style="
+margin-top:18px;
+padding:14px;
+background:#ecfeff;
+border-radius:14px;
+">
 
+<div style="
+font-size:13px;
+color:#64748b;
+margin-bottom:6px;
+">
 
-    <br><br>
+Upsell Opportunity
 
+</div>
 
-    💡 Suggerimento:
+<div style="
+font-size:17px;
+font-weight:700;
+">
 
-    ${suggestion}
+${upsellOpportunity}
 
+</div>
 
-    `;
+</div>
+
+`;
 
 
 
