@@ -6770,6 +6770,45 @@ if(!window.currentPropertyId){
       )?.value || 0
     );
 
+  if(
+    window.pmsEditingBooking &&
+    window.currentSelectedBooking?.id
+){
+
+    await updateDoc(
+
+        doc(
+            db,
+            "bookings",
+            window.currentSelectedBooking.id
+        ),
+
+        {
+
+            guestName: guest,
+            checkin,
+            checkout,
+            guests,
+            totalAmount: total,
+
+            status:
+                document.getElementById(
+                    "booking-status"
+                )?.value || "arrival",
+
+            source:
+                document.getElementById(
+                    "booking-source"
+                )?.value || "direct"
+
+        }
+
+    );
+
+    console.log("✅ BOOKING UPDATED");
+
+}else{
+
   await addDoc(
 
     collection(
@@ -6813,7 +6852,8 @@ source:
     }
 
   );
-
+}
+  
   console.log(
     "✅ BOOKING SAVED"
   );
