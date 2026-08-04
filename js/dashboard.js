@@ -5508,28 +5508,48 @@ margin-top:18px;
 ">
 
 <div>
-<div style="opacity:.65;font-size:12px;">Booking Score</div>
+<div style="opacity:.65;font-size:12px;">
+${window.t(
+    "Punteggio Prenotazione",
+    "Booking Score"
+)}
+</div>
 <div style="font-size:18px;font-weight:700;">
 ${ai.bookingScore}
 </div>
 </div>
 
 <div>
-<div style="opacity:.65;font-size:12px;">Revenue</div>
+<div style="opacity:.65;font-size:12px;">
+${window.t(
+    "Ricavi",
+    "Revenue"
+)}
+</div>
 <div style="font-size:18px;font-weight:700;">
 ${ai.revenueQuality}
 </div>
 </div>
 
 <div>
-<div style="opacity:.65;font-size:12px;">Occupancy</div>
+<div style="opacity:.65;font-size:12px;">
+${window.t(
+    "Occupazione",
+    "Occupancy"
+)}
+</div>
 <div style="font-size:18px;font-weight:700;">
 ${ai.occupancyImpact}
 </div>
 </div>
 
 <div>
-<div style="opacity:.65;font-size:12px;">Reviews</div>
+<div style="opacity:.65;font-size:12px;">
+${window.t(
+    "Recensioni",
+    "Reviews"
+)}
+</div>
 <div style="font-size:18px;font-weight:700;">
 ${ai.reviewPotential}
 </div>
@@ -5545,7 +5565,12 @@ border-radius:12px;
 font-size:14px;
 ">
 
-💡 ${ai.suggestion}
+💡 <strong>${window.t(
+    "Analisi AI",
+    "AI Insight"
+)}</strong><br><br>
+
+${ai.suggestion}
 
 </div>
 
