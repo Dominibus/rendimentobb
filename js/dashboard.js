@@ -6179,11 +6179,16 @@ else {
 }
 
   analysis.why = [];
+  analysis.actions = [];
 
 if (adr < 130) {
 
     analysis.why.push(
         "ADR below market target"
+    );
+
+    analysis.actions.push(
+        "Increase ADR +10€"
     );
 
 }
@@ -6194,12 +6199,20 @@ if (nights <= 2) {
         "Short stay"
     );
 
+    analysis.actions.push(
+        "Offer Late Checkout"
+    );
+
 }
 
 if (source !== "direct") {
 
     analysis.why.push(
         "OTA commission impact"
+    );
+
+    analysis.actions.push(
+        "Promote Direct Booking"
     );
 
 }
@@ -6210,6 +6223,10 @@ if (guests >= 4) {
         "High guest value"
     );
 
+    analysis.actions.push(
+        "Offer Breakfast Package"
+    );
+
 }
 
 if (status === "cancelled") {
@@ -6218,12 +6235,24 @@ if (status === "cancelled") {
         "Booking cancelled"
     );
 
+    analysis.actions.push(
+        "Contact guest for recovery"
+    );
+
 }
 
 if (!analysis.why.length) {
 
     analysis.why.push(
         "Healthy booking profile"
+    );
+
+}
+
+if (!analysis.actions.length) {
+
+    analysis.actions.push(
+        "No action required"
     );
 
 }
