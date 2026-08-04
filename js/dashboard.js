@@ -16,6 +16,7 @@ orderBy,
 deleteDoc,
 doc,
 addDoc,
+updateDoc,
 serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
