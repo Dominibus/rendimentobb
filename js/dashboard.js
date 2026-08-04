@@ -5879,7 +5879,22 @@ window.getBookingExecutiveAnalysis = function (booking) {
         suggestion:
             lang === "it"
                 ? "Prenotazione sana. Valuta upsell o early check-in."
-                : "Healthy booking. Consider an upsell or early check-in."
+                : "Healthy booking. Consider an upsell or early check-in.",
+
+      executiveSummary:
+    lang === "it"
+        ? "Prenotazione regolare."
+        : "Healthy booking.",
+
+priority:
+    lang === "it"
+        ? "Normale"
+        : "Normal",
+
+recommendedAction:
+    lang === "it"
+        ? "Nessuna azione immediata."
+        : "No immediate action required.",
 
     };
 
