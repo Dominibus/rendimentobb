@@ -7877,8 +7877,6 @@ renderExecutiveSummary({
   guestsInHouse
 });
 
-updateExecutiveSummaryAI(window.rbPMSData);
-  
 console.log(
   "👥 PMS GUESTS:",
   window.rbPMSData.guests
