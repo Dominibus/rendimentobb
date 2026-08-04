@@ -6017,17 +6017,22 @@ ${upsellOpportunity}
 
 
 
-    console.log(
-        "🤖 AI PMS RESULT",
-        {
-            nights,
-            revenue,
-            adr,
-            channel,
-            status,
-            level
-        }
-    );
+console.log(
+    "🤖 AI PMS RESULT",
+    {
+        nights,
+        revenue,
+        adr,
+        channel,
+        status,
+        bookingScore,
+        revenueQuality,
+        occupancyImpact,
+        reviewPotential,
+        upsellOpportunity,
+        verdict
+    }
+);
 
 
 };
