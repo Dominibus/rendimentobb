@@ -5798,35 +5798,222 @@ window.getBookingExecutiveAnalysis = function(booking){
 };
 
 // =====================================
-// ✏️ EDIT BOOKING
+// 🧠 AI BOOKING DECISION ENGINE
 // =====================================
 
-window.editBooking = function(id){
+window.getBookingExecutiveAnalysis = function (booking) {
 
-    console.log("✏️ EDIT BOOKING", id);
+    if (!booking) return null;
 
-    const booking = window.currentSelectedBooking;
+    const lang =
+        window.currentLanguage || "it";
 
-    if(!booking){
-        console.warn("Booking not found");
-        return;
+    const nights =
+        Number(booking.nights || 0);
+
+    const revenue =
+        Number(booking.totalAmount || 0);
+
+    const adr =
+        nights > 0
+            ? revenue / nights
+            : 0;
+
+    const status =
+        booking.status || "arrival";
+
+    let analysis = {
+
+        bookingScore: 70,
+
+        revenueQuality:
+            lang === "it"
+                ? "Buoni"
+                : "Good",
+
+        occupancyImpact: "+2%",
+
+        reviewPotential:
+            lang === "it"
+                ? "Alta"
+                : "High",
+
+        upsellOpportunity:
+            lang === "it"
+                ? "Media"
+                : "Medium",
+
+        verdict:
+            lang === "it"
+                ? "Buona Prenotazione"
+                : "Good Booking",
+
+        suggestion:
+            lang === "it"
+                ? "Prenotazione sana. Valuta upsell o early check-in."
+                : "Healthy booking. Consider an upsell or early check-in."
+
+    };
+
+
+
+    // =====================================
+    // PREMIUM BOOKING
+    // =====================================
+
+    if (adr >= 120) {
+
+        analysis.bookingScore = 95;
+
+        analysis.revenueQuality =
+            lang === "it"
+                ? "Eccellenti"
+                : "Excellent";
+
+        analysis.occupancyImpact = "+7%";
+
+        analysis.reviewPotential =
+            lang === "it"
+                ? "Molto Alta"
+                : "Very High";
+
+        analysis.upsellOpportunity =
+            lang === "it"
+                ? "Media"
+                : "Medium";
+
+        analysis.verdict =
+            lang === "it"
+                ? "Prenotazione Premium"
+                : "Premium Booking";
+
+        analysis.suggestion =
+            lang === "it"
+                ? "ADR eccellente. Mantieni questa strategia tariffaria."
+                : "Excellent ADR. Maintain pricing strategy.";
+
     }
 
-    window.pmsEditingBooking = true;
 
-    document.getElementById("booking-guest").value =
-        booking.guestName || "";
 
-    document.getElementById("booking-checkin").value =
-        booking.checkin || "";
+    // =====================================
+    // LOW ADR
+    // =====================================
 
-    document.getElementById("booking-checkout").value =
-        booking.checkout || "";
+    if (adr < 80) {
 
-    updateBookingTotal();
+        analysis.bookingScore = 55;
+
+        analysis.revenueQuality =
+            lang === "it"
+                ? "Bassi"
+                : "Low";
+
+        analysis.occupancyImpact = "-4%";
+
+        analysis.reviewPotential =
+            lang === "it"
+                ? "Media"
+                : "Medium";
+
+        analysis.upsellOpportunity =
+            lang === "it"
+                ? "Alta"
+                : "High";
+
+        analysis.verdict =
+            lang === "it"
+                ? "Opportunità di Ricavo"
+                : "Revenue Opportunity";
+
+        analysis.suggestion =
+            lang === "it"
+                ? "Valuta un aumento dell'ADR attraverso una migliore strategia tariffaria."
+                : "Increase ADR through pricing optimisation.";
+
+    }
+
+
+
+    // =====================================
+    // LONG STAY
+    // =====================================
+
+    if (nights >= 7) {
+
+        analysis.bookingScore = 98;
+
+        analysis.revenueQuality =
+            lang === "it"
+                ? "Ottimi"
+                : "Excellent";
+
+        analysis.occupancyImpact = "+9%";
+
+        analysis.reviewPotential =
+            lang === "it"
+                ? "Eccellente"
+                : "Excellent";
+
+        analysis.upsellOpportunity =
+            lang === "it"
+                ? "Molto Alta"
+                : "Very High";
+
+        analysis.verdict =
+            lang === "it"
+                ? "Soggiorno Strategico"
+                : "Strategic Stay";
+
+        analysis.suggestion =
+            lang === "it"
+                ? "Soggiorno lungo rilevato. Proponi servizi premium e programmi fedeltà."
+                : "Long stay detected. Offer premium services or loyalty benefits.";
+
+    }
+
+
+
+    // =====================================
+    // CANCELLED
+    // =====================================
+
+    if (status === "cancelled") {
+
+        analysis.bookingScore = 15;
+
+        analysis.revenueQuality =
+            lang === "it"
+                ? "Critici"
+                : "Critical";
+
+        analysis.occupancyImpact = "-100%";
+
+        analysis.reviewPotential =
+            lang === "it"
+                ? "Nessuna"
+                : "None";
+
+        analysis.upsellOpportunity =
+            lang === "it"
+                ? "Nessuna"
+                : "None";
+
+        analysis.verdict =
+            lang === "it"
+                ? "Prenotazione Cancellata"
+                : "Cancelled Booking";
+
+        analysis.suggestion =
+            lang === "it"
+                ? "Analizza la causa della cancellazione e migliora la conversione."
+                : "Investigate cancellation reason.";
+
+    }
+
+    return analysis;
 
 };
-
 // =====================================
 // 🤖 ANALYZE BOOKING AI 2.0
 // =====================================
