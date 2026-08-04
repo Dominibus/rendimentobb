@@ -5871,42 +5871,104 @@ margin-bottom:18px;
 
 <div style="
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:14px;
-margin-bottom:20px;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:10px;
+margin-bottom:16px;
 ">
 
-    <div>
-        <div style="font-size:11px;color:#64748b;">Booking Score</div>
-        <div style="font-size:22px;font-weight:700;">
-            ${bookingScore}
-        </div>
+<div style="
+background:white;
+padding:10px;
+border-radius:10px;
+">
+
+    <div style="
+    font-size:10px;
+    color:#64748b;
+    ">
+        Score
     </div>
 
-    <div>
-        <div style="font-size:11px;color:#64748b;">Revenue Quality</div>
-        <div style="font-size:18px;font-weight:700;">
-            ${revenueQuality}
-        </div>
+    <div style="
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+    ">
+        ${bookingScore}
     </div>
 
-    <div>
-        <div style="font-size:11px;color:#64748b;">Occupancy Impact</div>
-        <div style="
-        font-size:18px;
-        font-weight:700;
-        color:#16a34a;
-        ">
-            ${occupancyImpact}
-        </div>
+</div>
+
+<div style="
+background:white;
+padding:10px;
+border-radius:10px;
+">
+
+    <div style="
+    font-size:10px;
+    color:#64748b;
+    ">
+        Revenue
     </div>
 
-    <div>
-        <div style="font-size:11px;color:#64748b;">Review Potential</div>
-        <div style="font-size:18px;font-weight:700;">
-            ${reviewPotential}
-        </div>
+    <div style="
+    font-size:15px;
+    font-weight:700;
+    color:#0f172a;
+    ">
+        ${revenueQuality}
     </div>
+
+</div>
+
+
+<div style="
+background:white;
+padding:10px;
+border-radius:10px;
+">
+
+    <div style="
+    font-size:10px;
+    color:#64748b;
+    ">
+        Impact
+    </div>
+
+    <div style="
+    font-size:15px;
+    font-weight:700;
+    color:#16a34a;
+    ">
+        ${occupancyImpact}
+    </div>
+
+</div>
+
+
+<div style="
+background:white;
+padding:10px;
+border-radius:10px;
+">
+
+    <div style="
+    font-size:10px;
+    color:#64748b;
+    ">
+        Reviews
+    </div>
+
+    <div style="
+    font-size:15px;
+    font-weight:700;
+    color:#0f172a;
+    ">
+        ${reviewPotential}
+    </div>
+
+</div>
 
 </div>
 
