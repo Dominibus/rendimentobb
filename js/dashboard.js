@@ -10715,3 +10715,87 @@ document.addEventListener("DOMContentLoaded",()=>{
     showPMSTab("dashboard");
 
 });
+
+// =====================================
+// 🤖 EXECUTIVE BOOKING AI
+// =====================================
+
+window.getBookingExecutiveAnalysis = function (booking) {
+
+    const revenue =
+        Number(booking.totalAmount || 0);
+
+    const nights =
+        Number(booking.nights || 1);
+
+    const adr =
+        nights > 0
+            ? revenue / nights
+            : 0;
+
+    let score = 50;
+
+    if (adr >= 180) score += 20;
+    else if (adr >= 140) score += 12;
+    else if (adr >= 100) score += 6;
+
+    if (nights >= 5) score += 15;
+    else if (nights >= 3) score += 8;
+
+    score = Math.max(0, Math.min(100, score));
+
+    let verdict;
+    let suggestion;
+
+    if (score >= 85) {
+
+        verdict = "EXCELLENT";
+        suggestion = "Excellent booking. Try to retain this guest with a loyalty offer.";
+
+    } else if (score >= 70) {
+
+        verdict = "GOOD";
+        suggestion = "Healthy booking. Consider an upsell or early check-in.";
+
+    } else if (score >= 50) {
+
+        verdict = "AVERAGE";
+        suggestion = "Monitor pricing and occupancy to improve profitability.";
+
+    } else {
+
+        verdict = "LOW";
+        suggestion = "Low-value reservation. Review pricing strategy.";
+
+    }
+
+    return {
+
+        verdict,
+
+        bookingScore: score + "/100",
+
+        revenueQuality:
+            adr >= 180
+                ? "Excellent"
+                : adr >= 120
+                    ? "Good"
+                    : "Average",
+
+        occupancyImpact:
+            nights >= 5
+                ? "High"
+                : nights >= 3
+                    ? "Medium"
+                    : "Low",
+
+        reviewPotential:
+            nights >= 3
+                ? "High"
+                : "Medium",
+
+        suggestion
+
+    };
+
+};
