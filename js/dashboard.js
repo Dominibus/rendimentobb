@@ -5967,6 +5967,28 @@ window.getBookingExecutiveAnalysis = function(booking){
     const status =
         booking.status || "arrival";
 
+    const guests =
+    Number(
+        booking.guests ||
+        booking.people ||
+        1
+    );
+
+const source =
+    (
+        booking.source ||
+        booking.channel ||
+        "direct"
+    ).toLowerCase();
+
+const cleaning =
+    Number(
+        booking.cleaningFee || 0
+    );
+
+const totalRevenue =
+    revenue + cleaning;
+
     let analysis = {
 
         bookingScore : "★★★★☆",
