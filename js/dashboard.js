@@ -6370,18 +6370,19 @@ margin-bottom:18px;
     font-weight:800;
     color:#0f172a;
     ">
-        🤖 AI PMS Copilot
+        🧠 Executive Booking Intelligence
     </div>
 
     <div style="
-    background:#dcfce7;
-    color:#166534;
+    background:#0f172a;
+    color:#10b981;
+    border:1px solid #10b98155;
     padding:6px 12px;
     border-radius:999px;
     font-size:12px;
     font-weight:700;
     ">
-        Executive AI
+        AI VERIFIED
     </div>
 
 </div>
