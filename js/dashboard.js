@@ -5685,6 +5685,33 @@ onclick="deleteBooking('${booking.id || ""}')">
 };
 
 // =====================================
+// ✏️ EDIT BOOKING
+// =====================================
+
+window.editBooking = function(){
+
+    console.log("✏️ EDIT BOOKING");
+
+    window.pmsEditingBooking = true;
+
+    const guest =
+        document.getElementById("booking-guest");
+
+    const checkin =
+        document.getElementById("booking-checkin");
+
+    const checkout =
+        document.getElementById("booking-checkout");
+
+    guest?.removeAttribute("readonly");
+    checkin?.removeAttribute("readonly");
+    checkout?.removeAttribute("readonly");
+
+    guest?.focus();
+
+};
+
+// =====================================
 // 🧠 AI BOOKING DECISION ENGINE
 // =====================================
 
