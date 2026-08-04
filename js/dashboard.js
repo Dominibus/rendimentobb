@@ -5753,6 +5753,37 @@ text-transform:uppercase;
 </div>
 
 <div style="
+margin-top:18px;
+padding:18px;
+background:#ffffff;
+border:1px solid #dbeafe;
+border-radius:16px;
+">
+
+<div style="
+font-size:15px;
+font-weight:700;
+margin-bottom:12px;
+color:#0f172a;
+">
+
+💡 Why this score
+
+</div>
+
+<div style="
+font-size:14px;
+line-height:1.9;
+color:#334155;
+">
+
+${ai.why.map(item=>`✔ ${item}`).join("<br>")}
+
+</div>
+
+</div>
+
+<div style="
 margin-top:8px;
 font-size:14px;
 line-height:1.6;
