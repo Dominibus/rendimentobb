@@ -5882,21 +5882,21 @@ window.getBookingExecutiveAnalysis = function (booking) {
                 : "Healthy booking. Consider an upsell or early check-in.",
 
         executiveSummary:
-           lang === "it"
-              ? "Prenotazione regolare."
-              : "Healthy booking.",
+            lang === "it"
+                ? "Prenotazione regolare."
+                : "Healthy booking.",
 
         priority:
-           lang === "it"
-              ? "Normale"
-              : "Normal",
+            lang === "it"
+                ? "Normale"
+                : "Normal",
 
         recommendedAction:
-           lang === "it"
-              ? "Nessuna azione immediata."
-              : "No immediate action required.",
+            lang === "it"
+                ? "Nessuna azione immediata."
+                : "No immediate action required."
 
-      };
+    };
 
     // =====================================
     // PREMIUM BOOKING
@@ -5933,23 +5933,22 @@ window.getBookingExecutiveAnalysis = function (booking) {
                 ? "ADR eccellente. Mantieni questa strategia tariffaria."
                 : "Excellent ADR. Maintain pricing strategy.";
 
-       executiveSummary:
-             lang === "it"
-                ? "Prenotazione sana con buon potenziale."
-                : "Healthy booking with good potential.";
+        analysis.executiveSummary =
+            lang === "it"
+                ? "Prenotazione premium con ricavi sopra la media."
+                : "Premium booking with above-average revenue.";
 
-       priority:
-             lang === "it"
-                ? "Normale"
-                : "Normal";
+        analysis.priority =
+            lang === "it"
+                ? "Alta"
+                : "High";
 
-       recommendedAction:
-             lang === "it"
-                ? "Valuta Early Check-in."
-                : "Consider Early Check-in.";
+        analysis.recommendedAction =
+            lang === "it"
+                ? "Proponi Early Check-in, Late Check-out o upgrade."
+                : "Offer Early Check-in, Late Check-out or an upgrade.";
 
-      }
-
+    }
     // =====================================
     // LOW ADR
     // =====================================
