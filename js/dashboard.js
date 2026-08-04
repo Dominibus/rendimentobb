@@ -5920,6 +5920,21 @@ window.getBookingExecutiveAnalysis = function (booking) {
                 ? "ADR eccellente. Mantieni questa strategia tariffaria."
                 : "Excellent ADR. Maintain pricing strategy.";
 
+      executiveSummary:
+    lang === "it"
+        ? "Prenotazione sana con buon potenziale."
+        : "Healthy booking with good potential.",
+
+priority:
+    lang === "it"
+        ? "Normale"
+        : "Normal",
+
+recommendedAction:
+    lang === "it"
+        ? "Valuta Early Check-in."
+        : "Consider Early Check-in."
+
     }
 
 
