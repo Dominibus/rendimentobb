@@ -5476,15 +5476,26 @@ executive.innerHTML = ai ? `
 <div style="
 background:linear-gradient(135deg,#0f172a,#1e293b);
 border-radius:18px;
-padding:20px;
+padding:22px;
 color:white;
+box-shadow:0 10px 30px rgba(15,23,42,.25);
 ">
 
 <div style="
-font-size:13px;
-opacity:.75;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+">
+
+<div>
+
+<div style="
+font-size:12px;
+opacity:.70;
 text-transform:uppercase;
-letter-spacing:1px;
+letter-spacing:1.2px;
+font-weight:700;
 ">
 
 EXECUTIVE AI ANALYSIS
@@ -5492,84 +5503,211 @@ EXECUTIVE AI ANALYSIS
 </div>
 
 <div style="
-font-size:24px;
+font-size:28px;
 font-weight:800;
-margin-top:8px;
+margin-top:6px;
+line-height:1.2;
 ">
 
 ${ai.verdict}
 
 </div>
 
+</div>
+
+<div style="
+background:rgba(16,185,129,.15);
+border:1px solid rgba(16,185,129,.35);
+padding:10px 14px;
+border-radius:12px;
+text-align:center;
+min-width:90px;
+">
+
+<div style="
+font-size:11px;
+opacity:.75;
+text-transform:uppercase;
+">
+
+${window.t(
+"Score",
+"Score"
+)}
+
+</div>
+
+<div style="
+font-size:26px;
+font-weight:800;
+color:#34d399;
+">
+
+${ai.bookingScore}
+
+</div>
+
+</div>
+
+</div>
+
 <div style="
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-top:18px;
+gap:14px;
 ">
 
-<div>
-<div style="opacity:.65;font-size:12px;">
+<div style="
+background:rgba(255,255,255,.06);
+padding:14px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
 ${window.t(
-    "Punteggio Prenotazione",
-    "Booking Score"
+"Ricavi",
+"Revenue"
 )}
-</div>
-<div style="font-size:18px;font-weight:700;">
-${ai.bookingScore}
-</div>
+
 </div>
 
-<div>
-<div style="opacity:.65;font-size:12px;">
-${window.t(
-    "Ricavi",
-    "Revenue"
-)}
-</div>
-<div style="font-size:18px;font-weight:700;">
+<div style="
+margin-top:6px;
+font-size:18px;
+font-weight:700;
+">
+
 ${ai.revenueQuality}
-</div>
-</div>
 
-<div>
-<div style="opacity:.65;font-size:12px;">
-${window.t(
-    "Occupazione",
-    "Occupancy"
-)}
-</div>
-<div style="font-size:18px;font-weight:700;">
-${ai.occupancyImpact}
-</div>
-</div>
-
-<div>
-<div style="opacity:.65;font-size:12px;">
-${window.t(
-    "Recensioni",
-    "Reviews"
-)}
-</div>
-<div style="font-size:18px;font-weight:700;">
-${ai.reviewPotential}
-</div>
 </div>
 
 </div>
 
 <div style="
-margin-top:18px;
+background:rgba(255,255,255,.06);
 padding:14px;
-background:rgba(255,255,255,.08);
 border-radius:12px;
-font-size:14px;
 ">
 
-💡 <strong>${window.t(
-    "Analisi AI",
-    "AI Insight"
-)}</strong><br><br>
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+${window.t(
+"Occupazione",
+"Occupancy"
+)}
+
+</div>
+
+<div style="
+margin-top:6px;
+font-size:18px;
+font-weight:700;
+">
+
+${ai.occupancyImpact}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:14px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+${window.t(
+"Recensioni",
+"Reviews"
+)}
+
+</div>
+
+<div style="
+margin-top:6px;
+font-size:18px;
+font-weight:700;
+">
+
+${ai.reviewPotential}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:14px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+${window.t(
+"Upsell",
+"Upsell"
+)}
+
+</div>
+
+<div style="
+margin-top:6px;
+font-size:18px;
+font-weight:700;
+">
+
+${ai.upsellOpportunity}
+
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:20px;
+padding:16px;
+background:rgba(255,255,255,.08);
+border-radius:14px;
+">
+
+<div style="
+font-size:13px;
+font-weight:700;
+margin-bottom:8px;
+">
+
+💡 ${window.t(
+"Analisi AI",
+"AI Insight"
+)}
+
+</div>
+
+<div style="
+font-size:14px;
+line-height:1.6;
+opacity:.95;
+">
 
 ${ai.suggestion}
 
@@ -5577,8 +5715,111 @@ ${ai.suggestion}
 
 </div>
 
-` : "";
+<div style="
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-top:20px;
+">
 
+<div style="
+background:rgba(255,255,255,.06);
+padding:14px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+Executive Summary
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:14px;
+font-weight:700;
+line-height:1.4;
+">
+
+${ai.executiveSummary}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:14px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+${window.t(
+"Priorità",
+"Priority"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:16px;
+font-weight:700;
+color:#fbbf24;
+">
+
+${ai.priority}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:14px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+${window.t(
+"Azione Consigliata",
+"Recommended Action"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:14px;
+font-weight:700;
+line-height:1.4;
+">
+
+${ai.recommendedAction}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+` : "";
 // =====================================
 // 🎯 BOOKING ACTIONS
 // =====================================
