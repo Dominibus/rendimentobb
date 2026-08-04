@@ -8957,106 +8957,19 @@ function renderPMSCalendar(bookings){
         "0"
       )}`;
 
-    let color = "";
-    let tooltip = "";
-    let bookingInfo = null;
-
-    let isCheckin = false;
-    let isCheckout = false;
-    let isStay = false;
-
-    bookingList.forEach(
-      booking => {
-
-        const checkin =
-          String(
-            booking.checkin || ""
-          );
-
-        const checkout =
-          String(
-            booking.checkout || ""
-          );
-
-        const guestName =
-          booking.guestName ||
-          (
-            isEnglish
-              ? "Guest"
-              : "Ospite"
-          );
-
-        const status =
-          String(
-            booking.status || ""
-          ).toLowerCase();
-
-if(
-  currentDate >= checkin &&
-  currentDate < checkout
-){
-
-  color = "#10b981";
-  tooltip = guestName;
-  bookingInfo = booking;
-  isStay = true;
-
-}
-
-if(
-    currentDate === checkin
-){
-
-    isCheckin = true;
-
-    color = "#3b82f6";
-
-    tooltip =
-        isEnglish
-            ? `Arrival: ${guestName}`
-            : `Arrivo: ${guestName}`;
-
-    bookingInfo = booking;
-
-}
-
-if(
-    currentDate === checkout
-){
-
-    isCheckout = true;
-
-    color = "#f97316";
-
-    tooltip =
-        isEnglish
-            ? `Departure: ${guestName}`
-            : `Partenza: ${guestName}`;
-
-    bookingInfo = booking;
-
-}
-
-if(
-  status === "cancelled" &&
-  currentDate >= checkin &&
-  currentDate <= checkout
-){
-
-  color = "#ef4444";
-
-  tooltip =
+const dayState = getDayBookingState(
+    currentDate,
+    bookingList,
     isEnglish
-      ? `Cancelled: ${guestName}`
-      : `Cancellata: ${guestName}`;
+);
 
-  bookingInfo = booking;
+const color = dayState.color;
+const tooltip = dayState.tooltip;
+const bookingInfo = dayState.bookingInfo;
 
-}
-
-      }
-    );
-
+const isCheckin = dayState.isCheckin;
+const isCheckout = dayState.isCheckout;
+const isStay = dayState.isStay;
     const isToday =
       currentDate === todayISO;
 
