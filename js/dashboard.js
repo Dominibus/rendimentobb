@@ -5989,94 +5989,196 @@ const cleaning =
 const totalRevenue =
     revenue + cleaning;
 
-    let analysis = {
+  // =====================================
+// EXECUTIVE BOOKING SCORING
+// =====================================
 
-        bookingScore : "★★★★☆",
+let bookingScore = 50;
 
-        revenueQuality : "Good",
+// ADR
+if (adr >= 180) bookingScore += 15;
+else if (adr >= 130) bookingScore += 10;
+else if (adr >= 90) bookingScore += 5;
+else bookingScore -= 5;
 
-        occupancyImpact : "+2%",
+// Stay length
+if (nights >= 7) bookingScore += 12;
+else if (nights >= 4) bookingScore += 8;
+else if (nights === 1) bookingScore -= 8;
 
-        reviewPotential : "High",
+// Guests
+if (guests >= 4) bookingScore += 6;
+else if (guests === 1) bookingScore -= 3;
 
-        upsellOpportunity : "Medium",
+// Booking source
+if (source === "direct") bookingScore += 10;
+else if (
+    source.includes("airbnb") ||
+    source.includes("booking")
+) bookingScore += 4;
 
-        verdict : "🟢 Executive Booking",
+// Cleaning
+if (cleaning > 0) bookingScore += 2;
 
-        suggestion :
-        "Maintain pricing strategy."
+bookingScore = Math.max(0, Math.min(100, bookingScore));
 
-    };
+const lang =
+    window.currentLang === "en"
+        ? "en"
+        : "it";
 
+let analysis = {
 
-    if(adr >= 120){
+    bookingScore,
 
-        analysis.bookingScore = "★★★★★";
+    revenueQuality: "",
 
-        analysis.revenueQuality = "Excellent";
+    occupancyImpact: "",
 
-        analysis.occupancyImpact = "+7%";
+    reviewPotential: "",
 
-        analysis.reviewPotential = "Very High";
+    upsellOpportunity: "",
 
-        analysis.verdict =
-        "🟢 Premium Booking";
+    verdict: "",
 
-        analysis.suggestion =
-        "Excellent ADR. Maintain pricing strategy.";
+    executiveSummary: "",
 
-    }
+    priority: "",
 
+    recommendedAction: "",
 
-    if(adr < 80){
+    suggestion: ""
 
-        analysis.bookingScore = "★★★☆☆";
+};
 
-        analysis.revenueQuality = "Low";
+if (bookingScore >= 90) {
 
-        analysis.occupancyImpact = "-4%";
+    analysis.revenueQuality =
+        lang === "it" ? "Eccellente" : "Excellent";
 
-        analysis.upsellOpportunity = "High";
+    analysis.occupancyImpact =
+        lang === "it" ? "Molto Alta" : "Very High";
 
-        analysis.verdict =
-        "🟡 Revenue Opportunity";
+    analysis.reviewPotential =
+        lang === "it" ? "Molto Alta" : "Very High";
 
-        analysis.suggestion =
-        "Increase ADR through pricing optimisation.";
+    analysis.upsellOpportunity =
+        lang === "it"
+            ? "Late Check-out"
+            : "Late Checkout";
 
-    }
+    analysis.verdict =
+        lang === "it"
+            ? "🟢 Prenotazione Premium"
+            : "🟢 Premium Booking";
 
+    analysis.executiveSummary =
+        lang === "it"
+            ? "Prenotazione ad altissimo valore."
+            : "Very high value booking.";
 
-    if(nights >= 7){
+    analysis.priority =
+        lang === "it"
+            ? "Alta"
+            : "High";
 
-        analysis.bookingScore = "★★★★★";
+    analysis.recommendedAction =
+        lang === "it"
+            ? "Fidelizza questo ospite."
+            : "Retain this guest.";
 
-        analysis.reviewPotential = "Excellent";
+    analysis.suggestion =
+        lang === "it"
+            ? "Proponi servizi premium ed early check-in."
+            : "Offer premium services and early check-in.";
 
-        analysis.occupancyImpact = "+9%";
+}
+else if (bookingScore >= 70) {
 
-        analysis.verdict =
-        "🔵 Strategic Stay";
+    analysis.revenueQuality =
+        lang === "it" ? "Ottima" : "Great";
 
-    }
+    analysis.occupancyImpact =
+        lang === "it" ? "Alta" : "High";
 
+    analysis.reviewPotential =
+        lang === "it" ? "Alta" : "High";
 
-    if(status === "cancelled"){
+    analysis.upsellOpportunity =
+        lang === "it"
+            ? "Colazione"
+            : "Breakfast";
 
-        analysis.bookingScore = "★☆☆☆☆";
+    analysis.verdict =
+        lang === "it"
+            ? "🟢 Ottima Prenotazione"
+            : "🟢 Great Booking";
 
-        analysis.revenueQuality = "Critical";
+    analysis.executiveSummary =
+        lang === "it"
+            ? "Prenotazione con ottima redditività."
+            : "Profitable booking.";
 
-        analysis.verdict =
-        "🔴 Cancelled Booking";
+    analysis.priority =
+        lang === "it"
+            ? "Media"
+            : "Medium";
 
-        analysis.suggestion =
-        "Investigate cancellation reason.";
+    analysis.recommendedAction =
+        lang === "it"
+            ? "Proponi un upsell."
+            : "Offer an upsell.";
 
-    }
+    analysis.suggestion =
+        lang === "it"
+            ? "Buona prenotazione con margini interessanti."
+            : "Good booking with interesting margins.";
 
+}
+else {
 
-    return analysis;
+    analysis.revenueQuality =
+        lang === "it" ? "Bassa" : "Low";
+
+    analysis.occupancyImpact =
+        lang === "it" ? "Limitata" : "Limited";
+
+    analysis.reviewPotential =
+        lang === "it" ? "Media" : "Medium";
+
+    analysis.upsellOpportunity =
+        lang === "it"
+            ? "Nessuna"
+            : "None";
+
+    analysis.verdict =
+        lang === "it"
+            ? "🟡 Da Monitorare"
+            : "🟡 Monitor";
+
+    analysis.executiveSummary =
+        lang === "it"
+            ? "Prenotazione con margine ridotto."
+            : "Low margin booking.";
+
+    analysis.priority =
+        lang === "it"
+            ? "Alta"
+            : "High";
+
+    analysis.recommendedAction =
+        lang === "it"
+            ? "Rivedi la strategia tariffaria."
+            : "Review pricing strategy.";
+
+    analysis.suggestion =
+        lang === "it"
+            ? "Valuta prezzi e durata del soggiorno."
+            : "Review pricing and stay length.";
+
+}
+
+return analysis;
 
 };
 
