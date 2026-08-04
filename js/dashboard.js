@@ -6178,6 +6178,56 @@ else {
 
 }
 
+  analysis.why = [];
+
+if (adr < 130) {
+
+    analysis.why.push(
+        "ADR below market target"
+    );
+
+}
+
+if (nights <= 2) {
+
+    analysis.why.push(
+        "Short stay"
+    );
+
+}
+
+if (source !== "direct") {
+
+    analysis.why.push(
+        "OTA commission impact"
+    );
+
+}
+
+if (guests >= 4) {
+
+    analysis.why.push(
+        "High guest value"
+    );
+
+}
+
+if (status === "cancelled") {
+
+    analysis.why.push(
+        "Booking cancelled"
+    );
+
+}
+
+if (!analysis.why.length) {
+
+    analysis.why.push(
+        "Healthy booking profile"
+    );
+
+}
+
 return analysis;
 
 };
@@ -6320,6 +6370,9 @@ const verdict =
 
 const suggestion =
     analysis.suggestion;
+
+const why =
+    analysis.why || [];  
 
     // ===============================
     // 🤖 BUILD AI CARD
@@ -6580,6 +6633,35 @@ line-height:1.6;
 
 </div>
 
+<div style="
+margin-top:18px;
+padding:14px;
+background:#ffffff;
+border-radius:12px;
+">
+
+<div style="
+font-size:13px;
+font-weight:700;
+margin-bottom:10px;
+color:#0f172a;
+">
+
+🧠 Why this score
+
+</div>
+
+${why.map(item => `
+<div style="
+margin-bottom:8px;
+font-size:14px;
+color:#334155;
+">
+✔ ${item}
+</div>
+`).join("")}
+
+</div>
 
 <div style="
 margin-top:18px;
