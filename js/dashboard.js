@@ -11364,31 +11364,61 @@ window.getBookingExecutiveAnalysis = function (booking) {
 
     return {
 
-        verdict,
+    verdict,
 
-        bookingScore: score + "/100",
+    bookingScore: score + "/100",
 
-        revenueQuality:
-            adr >= 180
-                ? "Excellent"
-                : adr >= 120
-                    ? "Good"
-                    : "Average",
+    revenueQuality:
+        adr >= 180
+            ? "Excellent"
+            : adr >= 120
+                ? "Good"
+                : "Average",
 
-        occupancyImpact:
-            nights >= 5
-                ? "High"
-                : nights >= 3
-                    ? "Medium"
-                    : "Low",
+    occupancyImpact:
+        nights >= 5
+            ? "High"
+            : nights >= 3
+                ? "Medium"
+                : "Low",
 
-        reviewPotential:
-            nights >= 3
-                ? "High"
-                : "Medium",
+    reviewPotential:
+        nights >= 3
+            ? "High"
+            : "Medium",
 
-        suggestion
+    upsellOpportunity:
+        adr >= 180
+            ? "Late Checkout"
+            : adr >= 120
+                ? "Breakfast"
+                : "Room Upgrade",
 
-    };
+    executiveSummary:
+        suggestion,
+
+    priority:
+        score >= 85
+            ? "HIGH"
+            : score >= 70
+                ? "MEDIUM"
+                : "LOW",
+
+    recommendedAction:
+        score >= 85
+            ? "Retain guest"
+            : score >= 70
+                ? "Offer upsell"
+                : "Review pricing",
+
+    guestValue:
+        score,
+
+    confidence:
+        96,
+
+    suggestion
+
+};
 
 };
