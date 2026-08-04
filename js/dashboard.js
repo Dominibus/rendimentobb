@@ -5881,24 +5881,22 @@ window.getBookingExecutiveAnalysis = function (booking) {
                 ? "Prenotazione sana. Valuta upsell o early check-in."
                 : "Healthy booking. Consider an upsell or early check-in.",
 
-      executiveSummary:
-    lang === "it"
-        ? "Prenotazione regolare."
-        : "Healthy booking.",
+        executiveSummary:
+           lang === "it"
+              ? "Prenotazione regolare."
+              : "Healthy booking.",
 
-priority:
-    lang === "it"
-        ? "Normale"
-        : "Normal",
+        priority:
+           lang === "it"
+              ? "Normale"
+              : "Normal",
 
-recommendedAction:
-    lang === "it"
-        ? "Nessuna azione immediata."
-        : "No immediate action required.",
+        recommendedAction:
+           lang === "it"
+              ? "Nessuna azione immediata."
+              : "No immediate action required.",
 
-    };
-
-
+      };
 
     // =====================================
     // PREMIUM BOOKING
@@ -5935,24 +5933,22 @@ recommendedAction:
                 ? "ADR eccellente. Mantieni questa strategia tariffaria."
                 : "Excellent ADR. Maintain pricing strategy.";
 
-      executiveSummary:
-    lang === "it"
-        ? "Prenotazione sana con buon potenziale."
-        : "Healthy booking with good potential.",
+       executiveSummary:
+             lang === "it"
+                ? "Prenotazione sana con buon potenziale."
+                : "Healthy booking with good potential.";
 
-priority:
-    lang === "it"
-        ? "Normale"
-        : "Normal",
+       priority:
+             lang === "it"
+                ? "Normale"
+                : "Normal";
 
-recommendedAction:
-    lang === "it"
-        ? "Valuta Early Check-in."
-        : "Consider Early Check-in."
+       recommendedAction:
+             lang === "it"
+                ? "Valuta Early Check-in."
+                : "Consider Early Check-in.";
 
-    }
-
-
+      }
 
     // =====================================
     // LOW ADR
