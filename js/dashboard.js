@@ -5345,6 +5345,10 @@ window.showBookingDetails = function(booking){
 
 
     modal.style.display = "flex";
+    modal.style.flexDirection = "column";
+    modal.style.alignItems = "stretch";
+    modal.style.width = "100%";
+    modal.style.maxWidth = "900px";
 
 
     window.pmsEditingBooking = true;
@@ -5466,8 +5470,18 @@ if(!executive){
     "booking-executive-summary";
 
     executive.style.marginTop = "20px";
+    executive.style.width = "100%";
+    executive.style.maxWidth = "420px";
+    executive.style.marginLeft = "auto";
+    executive.style.marginRight = "auto";
+    executive.style.maxHeight = "75vh";
+    executive.style.overflowY = "auto";
+    executive.style.overflowX = "hidden";
 
-    modal.appendChild(executive);
+    modal.insertBefore(
+    executive,
+    modal.querySelector(".booking-actions") || modal.lastChild
+);
 
 }
 
@@ -5568,7 +5582,7 @@ ${ai.bookingScore}
 
 <div style="
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:1fr;
 gap:14px;
 ">
 
@@ -5698,8 +5712,8 @@ ${ai.suggestion}
 </div>
 
 <div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+display:flex;
+flex-direction:column;
 gap:14px;
 margin-top:22px;
 ">
@@ -6980,7 +6994,7 @@ margin-bottom:14px;
 
 <div style="
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:1fr;
 gap:14px;
 margin-bottom:26px;
 ">
@@ -7347,8 +7361,8 @@ ${window.t(
 <!-- ===================================== -->
 
 <div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+display:flex;
+flex-direction:column;
 gap:16px;
 margin-top:22px;
 ">
