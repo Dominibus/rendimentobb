@@ -6053,6 +6053,91 @@ if (cleaning > 0) bookingScore += 2;
 
 bookingScore = Math.max(0, Math.min(100, bookingScore));
 
+// =====================================
+// AI CONFIDENCE ENGINE
+// =====================================
+
+let confidence = 100;
+
+// Missing revenue
+if (revenue <= 0) confidence -= 25;
+
+// Missing nights
+if (nights <= 0) confidence -= 20;
+
+// Missing guest
+if (!booking.guestName) confidence -= 10;
+
+// Unknown source
+if (!source) confidence -= 8;
+
+// Missing status
+if (!status) confidence -= 5;
+
+// Penalità se ADR poco realistico
+if (adr < 30 || adr > 1000) confidence -= 15;
+
+confidence = Math.max(50, Math.min(100, confidence));  
+
+// =====================================
+// EXECUTIVE RISK ENGINE
+// =====================================
+
+let riskScore = 0;
+
+// ADR basso
+if (adr < 90) riskScore += 20;
+
+// Soggiorno breve
+if (nights <= 2) riskScore += 15;
+
+// OTA
+if (
+    source.includes("airbnb") ||
+    source.includes("booking")
+){
+    riskScore += 15;
+}
+
+// Prenotazione cancellata
+if(status === "cancelled"){
+    riskScore += 40;
+}
+
+// Nessun ricavo
+if(revenue <= 0){
+    riskScore += 30;
+}
+
+riskScore = Math.min(100,riskScore);
+
+let riskLevel;
+
+if(riskScore>=70){
+
+    riskLevel =
+        lang==="it"
+        ? "Alto"
+        : "High";
+
+}
+else if(riskScore>=40){
+
+    riskLevel =
+        lang==="it"
+        ? "Medio"
+        : "Medium";
+
+}
+else{
+
+    riskLevel =
+        lang==="it"
+        ? "Basso"
+        : "Low";
+
+}    
+
 const lang =
     window.currentLang === "en"
         ? "en"
@@ -6297,6 +6382,84 @@ if (!analysis.actions.length) {
     );
 
 }
+
+// =====================================
+// BOOKING AI OBJECT (SSOT)
+// =====================================
+
+analysis.ai = {
+
+    version: "2.0",
+
+    score: bookingScore,
+
+    confidence,
+
+    risk: {
+
+    score: riskScore,
+
+    level: riskLevel
+
+    },   
+
+    decision: analysis.verdict,
+
+    priority: analysis.priority,
+
+    summary: analysis.executiveSummary,
+
+    recommendation: analysis.recommendedAction,
+
+    insight: analysis.suggestion,
+
+    reasoning: analysis.why,
+
+    actions: analysis.actions,
+
+    revenue: {
+
+        total: revenue,
+        adr: adr,
+        quality: analysis.revenueQuality
+
+    },
+
+    occupancy: {
+
+        nights,
+        impact: analysis.occupancyImpact
+
+    },
+
+    guest: {
+
+        name: booking.guestName || "",
+        guests,
+        reviewPotential: analysis.reviewPotential
+
+    },
+
+    booking: {
+
+        status,
+        channel: source
+
+    },
+
+    upsell: {
+
+        opportunity: analysis.upsellOpportunity
+
+    }
+
+};   
+
+analysis.confidence = confidence;
+
+analysis.riskScore = riskScore;
+
+analysis.riskLevel = riskLevel;  
 
 return analysis;
 
