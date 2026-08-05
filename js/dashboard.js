@@ -5465,25 +5465,11 @@ if(!executive){
     executive.id =
     "booking-executive-summary";
 
-    executive.style.marginTop = "20px";
+executive.style.marginTop = "20px";
 executive.style.width = "100%";
 executive.style.boxSizing = "border-box";
 
-const actions =
-modal.querySelector(".booking-actions");
-
-if(actions){
-
-    modal.insertBefore(
-        executive,
-        actions
-    );
-
-}else{
-
-    modal.appendChild(executive);
-
-}
+modal.appendChild(executive);
 
 }
 
