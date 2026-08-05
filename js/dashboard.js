@@ -5984,6 +5984,11 @@ window.getBookingExecutiveAnalysis = function(booking){
 
     if(!booking) return null;
 
+    const lang =
+    window.currentLang === "en"
+        ? "en"
+        : "it";  
+
     const nights =
         booking.nights || 0;
 
@@ -6137,11 +6142,6 @@ else{
         : "Low";
 
 }    
-
-const lang =
-    window.currentLang === "en"
-        ? "en"
-        : "it";
 
 let analysis = {
 
