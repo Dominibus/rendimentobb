@@ -6188,9 +6188,11 @@ else {
             : "🟡 Monitor";
 
     analysis.executiveSummary =
-        lang === "it"
-            ? "Prenotazione con margine ridotto."
-            : "Low margin booking.";
+    lang === "it"
+        ? `Prenotazione da €${totalRevenue.toFixed(0)} con ${nights} ${nights === 1 ? "notte" : "notti"}.
+Valore ${totalRevenue >= 1000 ? "elevato" : totalRevenue >= 500 ? "intermedio" : "contenuto"} ma con margini migliorabili.`
+        : `Booking worth €${totalRevenue.toFixed(0)} over ${nights} ${nights === 1 ? "night" : "nights"}.
+${totalRevenue >= 1000 ? "High" : totalRevenue >= 500 ? "Medium" : "Limited"} value with room for optimisation.`;
 
     analysis.priority =
         lang === "it"
@@ -6203,9 +6205,17 @@ else {
             : "Review pricing strategy.";
 
     analysis.suggestion =
-        lang === "it"
-            ? "Valuta prezzi e durata del soggiorno."
-            : "Review pricing and stay length.";
+    lang === "it"
+        ? `L'ADR è di €${adr.toFixed(0)}. ${
+            adr < 130
+                ? "Aumentare la tariffa media potrebbe migliorare la redditività."
+                : "La tariffa è in linea con il mercato."
+          }`
+        : `Current ADR is €${adr.toFixed(0)}. ${
+            adr < 130
+                ? "Increasing the average daily rate could improve profitability."
+                : "ADR is aligned with the market."
+          }`;
 
 }
 
