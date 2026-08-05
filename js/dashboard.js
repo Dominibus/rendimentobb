@@ -6438,11 +6438,23 @@ const upsellOpportunity =
 const verdict =
     analysis.verdict;
 
+const executiveSummary =
+    analysis.executiveSummary;
+
+const priority =
+    analysis.priority;
+
+const recommendedAction =
+    analysis.recommendedAction;
+
 const suggestion =
     analysis.suggestion;
 
 const why =
-    analysis.why || [];  
+    analysis.why || [];
+
+const actions =
+    analysis.actions || [];
 
     // ===============================
     // 🤖 BUILD AI CARD
@@ -6482,277 +6494,299 @@ const why =
 result.innerHTML = `
 
 <div style="
+background:linear-gradient(180deg,#ffffff,#f8fafc);
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:22px;
+box-shadow:0 10px 30px rgba(15,23,42,.08);
+">
+
+<!-- ===================================== -->
+<!-- HEADER -->
+<!-- ===================================== -->
+
+<div style="
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:18px;
+gap:20px;
+flex-wrap:wrap;
+margin-bottom:24px;
 ">
 
-    <div style="
-    font-size:20px;
-    font-weight:800;
-    color:#0f172a;
-    ">
-        🧠 Executive Booking Intelligence
-    </div>
-
-    <div style="
-    background:#0f172a;
-    color:#10b981;
-    border:1px solid #10b98155;
-    padding:6px 12px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:700;
-    ">
-        AI VERIFIED
-    </div>
-
-</div>
-
+<div>
 
 <div style="
-display:grid;
-grid-template-columns:repeat(4,minmax(0,1fr));
-gap:10px;
-margin-bottom:16px;
-">
-
-<div style="
-background:white;
-padding:10px;
-border-radius:10px;
-">
-
-    <div style="
-    font-size:10px;
-    color:#64748b;
-    ">
-        Score
-    </div>
-
-    <div style="
-    font-size:18px;
-    font-weight:700;
-    color:#0f172a;
-    ">
-        ${bookingScore}
-    </div>
-
-</div>
-
-<div style="
-background:white;
-padding:10px;
-border-radius:10px;
-">
-
-    <div style="
-    font-size:10px;
-    color:#64748b;
-    ">
-        Revenue
-    </div>
-
-    <div style="
-    font-size:15px;
-    font-weight:700;
-    color:#0f172a;
-    ">
-        ${revenueQuality}
-    </div>
-
-</div>
-
-
-<div style="
-background:white;
-padding:10px;
-border-radius:10px;
-">
-
-    <div style="
-    font-size:10px;
-    color:#64748b;
-    ">
-        Impact
-    </div>
-
-    <div style="
-    font-size:15px;
-    font-weight:700;
-    color:#16a34a;
-    ">
-        ${occupancyImpact}
-    </div>
-
-</div>
-
-
-<div style="
-background:white;
-padding:10px;
-border-radius:10px;
-">
-
-    <div style="
-    font-size:10px;
-    color:#64748b;
-    ">
-        Reviews
-    </div>
-
-    <div style="
-    font-size:15px;
-    font-weight:700;
-    color:#0f172a;
-    ">
-        ${reviewPotential}
-    </div>
-
-</div>
-
-</div>
-
-
-<hr style="
-border:none;
-border-top:1px solid #dbeafe;
-margin:18px 0;
-">
-
-
-<div style="
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:14px;
-margin-top:20px;
-">
-
-<div style="background:white;padding:14px;border-radius:12px;">
-<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">👤 Guest</div>
-<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
-${booking.guestName || "-"}
-</div>
-</div>
-
-<div style="background:white;padding:14px;border-radius:12px;">
-<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🌙 Nights</div>
-<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
-${nights}
-</div>
-</div>
-
-<div style="background:white;padding:14px;border-radius:12px;">
-<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">💰 Revenue</div>
-<div style="margin-top:6px;font-size:17px;font-weight:700;color:#16a34a;">
-€${revenue.toFixed(0)}
-</div>
-</div>
-
-<div style="background:white;padding:14px;border-radius:12px;">
-<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📈 ADR</div>
-<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
-€${adr.toFixed(0)}
-</div>
-</div>
-
-<div style="background:white;padding:14px;border-radius:12px;">
-<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🏠 Channel</div>
-<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
-${channel}
-</div>
-</div>
-
-<div style="background:white;padding:14px;border-radius:12px;">
-<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📌 Status</div>
-<div style="margin-top:6px;font-size:17px;font-weight:700;color:#0f172a;">
-${status}
-</div>
-</div>
-
-</div>
-
-
-<div style="
-margin-top:20px;
-padding:16px;
-background:#f8fafc;
-border-left:5px solid #10b981;
-border-radius:14px;
-">
-
-<div style="
-font-size:18px;
-font-weight:700;
-margin-bottom:10px;
-">
-
-${verdict}
-
-</div>
-
-<div style="
-font-size:14px;
-line-height:1.6;
-">
-
-💡 ${suggestion}
-
-</div>
-
-</div>
-
-<div style="
-margin-top:18px;
-padding:14px;
-background:#ffffff;
-border-radius:12px;
-">
-
-<div style="
-font-size:13px;
-font-weight:700;
-margin-bottom:10px;
+font-size:24px;
+font-weight:800;
 color:#0f172a;
 ">
 
-🧠 Why this score
+🧠 ${window.t(
+"Executive Booking Copilot",
+"Executive Booking Copilot"
+)}
 
 </div>
 
-${why.map(item => `
 <div style="
-margin-bottom:8px;
+margin-top:6px;
 font-size:14px;
-color:#334155;
-">
-✔ ${item}
-</div>
-`).join("")}
-
-</div>
-
-<div style="
-margin-top:18px;
-padding:14px;
-background:#ecfeff;
-border-radius:14px;
-">
-
-<div style="
-font-size:13px;
 color:#64748b;
-margin-bottom:6px;
 ">
 
-Upsell Opportunity
+${window.t(
+"Analisi strategica della prenotazione in tempo reale",
+"Real-time strategic booking analysis"
+)}
+
+</div>
 
 </div>
 
 <div style="
-font-size:17px;
+display:flex;
+align-items:center;
+gap:10px;
+">
+
+<div style="
+padding:8px 14px;
+background:#0f172a;
+color:#34d399;
+border-radius:999px;
+font-size:12px;
 font-weight:700;
+border:1px solid rgba(52,211,153,.30);
+">
+
+${window.t(
+"AI VERIFICATA",
+"AI VERIFIED"
+)}
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- EXECUTIVE KPI -->
+<!-- ===================================== -->
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:14px;
+margin-bottom:24px;
+">
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+color:#64748b;
+font-weight:700;
+">
+
+${window.t(
+"Punteggio",
+"Score"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:28px;
+font-weight:800;
+color:#0f172a;
+">
+
+${bookingScore}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+color:#64748b;
+font-weight:700;
+">
+
+${window.t(
+"Ricavi",
+"Revenue"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:18px;
+font-weight:700;
+color:#0f172a;
+">
+
+${revenueQuality}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+color:#64748b;
+font-weight:700;
+">
+
+ADR
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:18px;
+font-weight:700;
+color:#0f172a;
+">
+
+€${adr.toFixed(0)}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+color:#64748b;
+font-weight:700;
+">
+
+${window.t(
+"Rischio",
+"Risk"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:18px;
+font-weight:700;
+color:${
+bookingScore>=80
+? "#16a34a"
+: bookingScore>=60
+? "#ca8a04"
+: "#dc2626"
+};
+">
+
+${
+bookingScore>=80
+? window.t("Basso","Low")
+: bookingScore>=60
+? window.t("Medio","Medium")
+: window.t("Alto","High")
+}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+color:#64748b;
+font-weight:700;
+">
+
+${window.t(
+"Recensioni",
+"Reviews"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:18px;
+font-weight:700;
+color:#0f172a;
+">
+
+${reviewPotential}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:14px;
+padding:14px;
+">
+
+<div style="
+font-size:11px;
+text-transform:uppercase;
+color:#64748b;
+font-weight:700;
+">
+
+${window.t(
+"Upsell",
+"Upsell"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:18px;
+font-weight:700;
+color:#0f172a;
 ">
 
 ${upsellOpportunity}
@@ -6761,8 +6795,473 @@ ${upsellOpportunity}
 
 </div>
 
-`;
+</div>
 
+<!-- ===================================== -->
+<!-- BOOKING SNAPSHOT -->
+<!-- ===================================== -->
+
+<div style="
+font-size:15px;
+font-weight:800;
+color:#0f172a;
+margin-bottom:14px;
+">
+
+📋 ${window.t(
+"Booking Snapshot",
+"Booking Snapshot"
+)}
+
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:14px;
+margin-bottom:26px;
+">
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">👤 ${window.t("Ospite","Guest")}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${booking.guestName || "-"}</div>
+</div>
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🌙 ${window.t("Notti","Nights")}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${nights}</div>
+</div>
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">💰 ${window.t("Ricavo","Revenue")}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#16a34a;">€${revenue.toFixed(0)}</div>
+</div>
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🏠 ${window.t("Canale","Channel")}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${channel}</div>
+</div>
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📌 ${window.t("Stato","Status")}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${status}</div>
+</div>
+
+<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
+<div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📈 ADR</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">€${adr.toFixed(0)}</div>
+</div>
+
+
+<!-- ===================================== -->
+<!-- EXECUTIVE DECISION -->
+<!-- ===================================== -->
+
+<hr style="
+border:none;
+border-top:1px solid #e2e8f0;
+margin:26px 0;
+">
+
+<div style="
+display:grid;
+grid-template-columns:1.3fr .9fr;
+gap:18px;
+margin-bottom:22px;
+">
+
+<div style="
+background:linear-gradient(135deg,#0f172a,#1e293b);
+padding:22px;
+border-radius:18px;
+color:white;
+">
+
+<div style="
+font-size:12px;
+letter-spacing:1px;
+opacity:.70;
+text-transform:uppercase;
+font-weight:700;
+">
+
+🤖 ${window.t(
+"Decisione AI",
+"AI Decision"
+)}
+
+</div>
+
+<div style="
+font-size:30px;
+font-weight:800;
+margin-top:10px;
+line-height:1.2;
+">
+
+${verdict}
+
+</div>
+
+<div style="
+margin-top:18px;
+font-size:15px;
+line-height:1.7;
+opacity:.95;
+">
+
+${executiveSummary}
+
+</div>
+
+</div>
+
+<div style="
+background:white;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:22px;
+">
+
+<div style="
+font-size:12px;
+text-transform:uppercase;
+font-weight:700;
+color:#64748b;
+">
+
+${window.t(
+"Priorità",
+"Priority"
+)}
+
+</div>
+
+<div style="
+margin-top:10px;
+font-size:24px;
+font-weight:800;
+color:#f59e0b;
+">
+
+${priority}
+
+</div>
+
+<div style="
+margin-top:24px;
+font-size:12px;
+text-transform:uppercase;
+font-weight:700;
+color:#64748b;
+">
+
+${window.t(
+"Azione consigliata",
+"Recommended Action"
+)}
+
+</div>
+
+<div style="
+margin-top:8px;
+font-size:15px;
+font-weight:700;
+color:#0f172a;
+line-height:1.6;
+">
+
+${recommendedAction}
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- AI INSIGHT -->
+<!-- ===================================== -->
+
+<div style="
+background:#f8fafc;
+border:1px solid #e2e8f0;
+border-left:5px solid #10b981;
+border-radius:18px;
+padding:20px;
+margin-bottom:24px;
+">
+
+<div style="
+font-size:14px;
+font-weight:800;
+color:#0f172a;
+margin-bottom:10px;
+">
+
+💡 ${window.t(
+"Executive Insight",
+"Executive Insight"
+)}
+
+</div>
+
+<div style="
+font-size:15px;
+line-height:1.8;
+color:#334155;
+">
+
+${suggestion}
+
+</div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- AI REASONING + ACTIONS -->
+<!-- ===================================== -->
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:18px;
+margin-top:24px;
+">
+
+<!-- AI Reasoning -->
+
+<div style="
+background:#ffffff;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:18px;
+">
+
+<div style="
+font-size:14px;
+font-weight:800;
+color:#0f172a;
+margin-bottom:14px;
+">
+
+🧠 ${window.t(
+"Ragionamento AI",
+"AI Reasoning"
+)}
+
+</div>
+
+${why.length
+? why.map(item=>`
+
+<div style="
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin-bottom:12px;
+">
+
+<div style="
+width:24px;
+height:24px;
+border-radius:50%;
+background:#dcfce7;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+color:#16a34a;
+font-weight:700;
+flex-shrink:0;
+">
+
+✓
+
+</div>
+
+<div style="
+font-size:14px;
+line-height:1.7;
+color:#334155;
+">
+
+${item}
+
+</div>
+
+</div>
+
+`).join("")
+: `<div style="color:#64748b;font-size:14px;">
+${window.t(
+"Nessuna criticità rilevata.",
+"No issues detected."
+)}
+</div>`
+}
+
+</div>
+
+<!-- Recommended Actions -->
+
+<div style="
+background:#ffffff;
+border:1px solid #e2e8f0;
+border-radius:18px;
+padding:18px;
+">
+
+<div style="
+font-size:14px;
+font-weight:800;
+color:#0f172a;
+margin-bottom:14px;
+">
+
+🎯 ${window.t(
+"Azioni Consigliate",
+"Recommended Actions"
+)}
+
+</div>
+
+${actions.length
+? actions.map(action=>`
+
+<div style="
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin-bottom:12px;
+">
+
+<div style="
+width:24px;
+height:24px;
+border-radius:50%;
+background:#ecfeff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+color:#0284c7;
+font-weight:700;
+flex-shrink:0;
+">
+
+➜
+
+</div>
+
+<div style="
+font-size:14px;
+line-height:1.7;
+color:#334155;
+">
+
+${action}
+
+</div>
+
+</div>
+
+`).join("")
+: `<div style="color:#64748b;font-size:14px;">
+${window.t(
+"Nessuna azione richiesta.",
+"No action required."
+)}
+</div>`
+}
+
+</div>
+
+</div>
+
+<!-- ===================================== -->
+<!-- EXECUTIVE OPPORTUNITIES -->
+<!-- ===================================== -->
+
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:16px;
+margin-top:22px;
+">
+
+<div style="
+background:#ecfeff;
+border:1px solid #bae6fd;
+border-radius:16px;
+padding:18px;
+">
+
+<div style="
+font-size:12px;
+text-transform:uppercase;
+font-weight:700;
+color:#0369a1;
+">
+
+🚀 ${window.t(
+"Opportunità Upsell",
+"Upsell Opportunity"
+)}
+
+</div>
+
+<div style="
+margin-top:10px;
+font-size:17px;
+font-weight:700;
+color:#0f172a;
+">
+
+${upsellOpportunity}
+
+</div>
+
+</div>
+
+<div style="
+background:#f0fdf4;
+border:1px solid #bbf7d0;
+border-radius:16px;
+padding:18px;
+">
+
+<div style="
+font-size:12px;
+text-transform:uppercase;
+font-weight:700;
+color:#15803d;
+">
+
+🤖 ${window.t(
+"Confidenza AI",
+"AI Confidence"
+)}
+
+</div>
+
+<div style="
+margin-top:10px;
+font-size:28px;
+font-weight:800;
+color:#166534;
+">
+
+96%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+`;
 
 
     box.appendChild(result);
