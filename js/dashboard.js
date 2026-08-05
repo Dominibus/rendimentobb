@@ -5753,37 +5753,6 @@ text-transform:uppercase;
 </div>
 
 <div style="
-margin-top:18px;
-padding:18px;
-background:#ffffff;
-border:1px solid #dbeafe;
-border-radius:16px;
-">
-
-<div style="
-font-size:15px;
-font-weight:700;
-margin-bottom:12px;
-color:#0f172a;
-">
-
-💡 Why this score
-
-</div>
-
-<div style="
-font-size:14px;
-line-height:1.9;
-color:#334155;
-">
-
-${ai.why.map(item=>`✔ ${item}`).join("<br>")}
-
-</div>
-
-</div>
-
-<div style="
 margin-top:8px;
 font-size:14px;
 line-height:1.6;
@@ -5791,6 +5760,37 @@ font-weight:700;
 ">
 
 ${ai.recommendedAction}
+
+</div>
+
+</div>
+
+<div style="
+background:rgba(255,255,255,.06);
+padding:16px;
+border-radius:12px;
+">
+
+<div style="
+font-size:11px;
+opacity:.65;
+text-transform:uppercase;
+">
+
+💡 ${window.t(
+"Perché questo punteggio",
+"Why this score"
+)}
+
+</div>
+
+<div style="
+margin-top:10px;
+font-size:14px;
+line-height:1.8;
+">
+
+${ai.why.map(item=>`✔ ${item}`).join("<br>")}
 
 </div>
 
