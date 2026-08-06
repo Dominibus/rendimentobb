@@ -86,6 +86,8 @@ let strongestPoint = "";
 
 let weakestPoint = "";
 
+let watchPoints = [];    
+
 const executiveDecision =
     advisor?.verdict ||
     "WAIT";
@@ -215,11 +217,59 @@ else if(
 
 }
 
+// ===============================================
+// 🟡 WATCH POINTS
+// Strategic monitoring layer
+// ===============================================
+
+if(
+    mortgagePercent >= 80
+){
+
+    watchPoints.push(
+        "leverage"
+    );
+
+}
+
+if(
+    occupancy < 75
+){
+
+    watchPoints.push(
+        "occupancy"
+    );
+
+}
+
+if(
+    roi >= 30
+){
+
+    watchPoints.push(
+        "roi_validation"
+    );
+
+}
+
+if(
+    cashflow > 0 &&
+    cashflow < 5000
+){
+
+    watchPoints.push(
+        "cashflow_margin"
+    );
+
+}    
+
 result.analysis = {
 
     strongestPoint,
 
     weakestPoint,
+
+    watchPoints,
 
     executiveDecision,
 
@@ -229,7 +279,9 @@ result.analysis = {
 
     occupancy,
 
-    cashflow
+    cashflow,
+
+    mortgagePercent
 
 };
 
@@ -327,6 +379,8 @@ result.explainability = {
     strongestPoint,
 
     weakestPoint,
+
+    watchPoints,
 
     confidence:
 
@@ -580,6 +634,27 @@ if(aiRecommendations.length){
         aiRecommendations.join(" ");
 
 }    
+
+// ===============================================
+// 🧠 FALLBACK STRATEGIC ACTIONS
+// ===============================================
+
+if(
+    result.actionPlan.length === 0 &&
+    watchPoints.length
+){
+
+    result.actionPlan = [
+
+        "Verificare la resilienza del cashflow con scenari prudenziali.",
+
+        "Analizzare l'impatto della leva finanziaria.",
+
+        "Monitorare occupazione e prezzo medio notte."
+
+    ];
+
+}   
 
 // ===============================================
 // 🧠 EXECUTIVE NARRATIVE
