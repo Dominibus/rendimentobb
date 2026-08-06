@@ -219,12 +219,16 @@ async function loadUserPlan(uid) {
   try{
 
     console.log("🔥 Carico piano per:", uid);
-  console.log("🧠 USER STATE", {
+if(window.RB_DEBUG === true){
+
+console.log("🧠 USER STATE", {
   plan: window.currentPlan,
   role: window.userRole,
   isAdmin: window.isAdmin ? window.isAdmin() : false,
   isPro: window.isPro()
 });
+
+}
 
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
@@ -278,7 +282,16 @@ if(window.PLAN && typeof window.PLAN.set === "function"){
   window.PLAN.set(window.currentPlan, window.userRole);
 }
 
-console.log("🔥 Piano finale CLEAN:", window.currentPlan, "| ruolo:", window.userRole); 
+if(window.RB_DEBUG === true){
+
+console.log(
+"🔥 Piano finale CLEAN:",
+window.currentPlan,
+"| ruolo:",
+window.userRole
+);
+
+} 
 
 // ===============================
 // 🔥 SINGLE SOURCE ACCESS (CRITICO)
