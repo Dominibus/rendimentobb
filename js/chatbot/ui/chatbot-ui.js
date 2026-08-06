@@ -6,23 +6,37 @@
 
 window.initRBChatbotUI = function(){
 
+    const IS_DEVELOPMENT =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
+  const debugLog = (...args) => {
+    if (IS_DEVELOPMENT) {
+      console.debug(...args);
+    }
+  };
+
+  const reportRuntimeError = (context, error) => {
+    console.error(context);
+
+    if (IS_DEVELOPMENT && error) {
+      console.error(error);
+    }
+  };
+
   if(
     document.getElementById(
       "rb-chatbot-wrapper"
     )
   ){
 
-    console.log(
-      "🔥 WRAPPER ALREADY EXISTS"
-    );
+    debugLog("Chatbot wrapper already initialized");
 
     return;
 
   }
 
-  console.log(
-    "🔥 INIT CHATBOT UI"
-  );
+  debugLog("Chatbot UI initialization started");
 
   // ===========================================
   // 🌍 LANGUAGE
@@ -1356,10 +1370,10 @@ function showThinking(){
 
       }catch(error){
 
-        console.warn(
-          "CHAT SYNC ERROR",
-          error
-        );
+        reportRuntimeError(
+  "Chat synchronization unavailable",
+  error
+);
 
       }
 
@@ -1460,10 +1474,10 @@ function showThinking(){
 
       window.rbMessageCount++;
 
-      console.log(
-        "💬 FREE MESSAGE:",
-        window.rbMessageCount
-      );
+      debugLog(
+  "Free message count",
+  window.rbMessageCount
+);
 
       if(window.rbMessageCount > 10){
 
@@ -1558,45 +1572,24 @@ if(quick){
       const thinking =
     showThinking();
 
-      // =====================================
-      // 🧠 PROCESS AI MESSAGE
-      // =====================================
+// =====================================
+// PROCESS MESSAGE
+// =====================================
 
-      console.log(
-  "🚀 SEND MESSAGE:",
-  text
-);
-
-console.log(
-  "🚀 CALL ORCHESTRATOR"
-);
+debugLog("Chatbot request started");
 
 const result =
-
   await window.rbProcessAIMessage(
     text
   );
 
-console.log(
-  "🚀 ORCHESTRATOR RESULT:",
-  result
-);
-
-console.log(
-  "🧠 RAW AI RESULT:",
-  result
-);
-
 // =====================================
-// 🧠 SAFE DATA
+// SAFE DATA
 // =====================================
 
 const rawResponse =
-
   Array.isArray(result?.response)
-
     ? result.response[0]
-
     : result?.response || {};
 
 const response = rawResponse;
@@ -1607,25 +1600,7 @@ const entities =
 const intent =
   result?.intent || {};
 
-console.log(
-  "🧠 RAW RESPONSE:",
-  rawResponse
-);
-
-console.log(
-  "🧠 RESPONSE OBJECT:",
-  response
-);
-
-console.log(
-  "🧠 TEXT IT:",
-  response?.textIT
-);
-
-console.log(
-  "🧠 TEXT EN:",
-  response?.textEN
-);
+debugLog("Chatbot response processed");
       
       // =====================================
       // 🌍 LANGUAGE
