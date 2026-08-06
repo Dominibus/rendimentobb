@@ -313,6 +313,29 @@ console.log(
 
 
 // ===============================================
+// 🧠 EXECUTIVE AI EXPLAINABILITY LAYER
+// ===============================================
+
+result.weaknesses = [];
+
+result.weaknessesEN = [];
+
+result.risks = [];
+
+result.risksEN = [];
+
+
+console.log(
+    "🧠 EXECUTIVE BRAIN POINTS",
+    {
+        weakestPoint,
+        strongestPoint,
+        watchPoints
+    }
+);
+
+
+// ===============================================
 // 🔴 WEAKNESS MAPPING
 // ===============================================
 
@@ -323,7 +346,12 @@ if(weakestPoint === "cashflow"){
         "Il cashflow rappresenta la principale area di miglioramento dell'operazione."
     );
 
+    result.weaknessesEN.push(
+        "Cashflow represents the main improvement area of the investment."
+    );
+
 }
+
 
 
 if(weakestPoint === "risk"){
@@ -332,7 +360,12 @@ if(weakestPoint === "risk"){
         "Il profilo di rischio richiede maggiore attenzione prima dell'investimento."
     );
 
+    result.weaknessesEN.push(
+        "The risk profile requires further evaluation before investing."
+    );
+
 }
+
 
 
 if(weakestPoint === "occupancy"){
@@ -341,18 +374,29 @@ if(weakestPoint === "occupancy"){
         "L'occupazione prevista potrebbe limitare la sostenibilità dei ricavi."
     );
 
+    result.weaknessesEN.push(
+        "Expected occupancy could limit revenue sustainability."
+    );
+
 }
 
 
-// 🔥 LEVERAGE
+
+// 🔥 LEVERAGE EXPLAINABILITY
+
 
 if(weakestPoint === "leverage"){
 
     result.weaknesses.push(
-        "La leva finanziaria elevata aumenta l'esposizione dell'investitore e riduce il margine di sicurezza."
+        "La leva finanziaria elevata aumenta l'esposizione dell'investitore e riduce il margine di sicurezza dell'operazione."
+    );
+
+    result.weaknessesEN.push(
+        "High financial leverage increases investor exposure and reduces the investment safety margin."
     );
 
 }
+
 
 
 // ===============================================
@@ -368,7 +412,12 @@ if(
         "La leva finanziaria elevata aumenta la sensibilità dell'investimento."
     );
 
+    result.risksEN.push(
+        "High financial leverage increases investment sensitivity."
+    );
+
 }
+
 
 
 if(
@@ -379,7 +428,12 @@ if(
         "La performance dipende dalla capacità di mantenere una buona occupazione."
     );
 
+    result.risksEN.push(
+        "Performance depends on maintaining strong occupancy levels."
+    );
+
 }
+
 
 
 if(
@@ -390,7 +444,12 @@ if(
         "Un ROI elevato deve essere validato con dati reali di mercato."
     );
 
+    result.risksEN.push(
+        "A high ROI should be validated with real market data."
+    );
+
 }
+
 
 
 // ===============================================
@@ -407,19 +466,53 @@ result.actionPlan = [
 ];
 
 
-// DEBUG FINALE
+result.actionPlanEN = [
+
+    ...result.weaknessesEN,
+
+    ...result.risksEN
+
+];
+
+
+
+// ===============================================
+// 🔥 FALLBACK LEVERAGE ACTION
+// ===============================================
+
+
+if(
+    weakestPoint === "leverage" &&
+    result.actionPlan.length === 0
+){
+
+    result.actionPlan.push(
+        "Ridurre la leva finanziaria per aumentare resilienza e margine di sicurezza dell'investimento."
+    );
+
+
+    result.actionPlanEN.push(
+        "Reduce financial leverage to improve investment resilience and safety margin."
+    );
+
+}
+
+
+
+// ===============================================
+// 🧠 DEBUG OUTPUT
+// ===============================================
+
 
 console.log(
     "🧠 EXECUTIVE EXPLAINABILITY",
     {
-        weaknesses:
-            result.weaknesses,
-
-        risks:
-            result.risks,
-
-        actionPlan:
-            result.actionPlan
+        weaknesses: result.weaknesses,
+        weaknessesEN: result.weaknessesEN,
+        risks: result.risks,
+        risksEN: result.risksEN,
+        actionPlan: result.actionPlan,
+        actionPlanEN: result.actionPlanEN
     }
 );
     
@@ -979,6 +1072,39 @@ if(result.strongestPointIT){
 
 }
 
+
+// ===============================================
+// ⚠️ EXECUTIVE WEAKNESS & ACTION PLAN
+// ===============================================
+
+if(result.weaknesses?.length){
+
+    analysisIT +=
+
+        "\n\n⚠️ Punto di attenzione principale:\n" +
+
+        result.weaknesses.join("\n");
+
+}
+
+
+if(result.actionPlan?.length){
+
+    analysisIT +=
+
+        "\n\n🎯 Azioni consigliate:\n" +
+
+        result.actionPlan
+
+            .slice(0,3)
+
+            .map(item => "• " + item)
+
+            .join("\n");
+
+}
+
+
 result.analysisIT = analysisIT;
 
 
@@ -1083,6 +1209,39 @@ if(result.strongestPointEN){
 // ===============================================
 
 analysisEN += narrativeEN.join("\n\n");
+
+
+// ===============================================
+// ⚠️ EXECUTIVE WEAKNESS & ACTION PLAN EN
+// ===============================================
+
+if(result.weaknesses?.length){
+
+    analysisEN +=
+
+        "\n\n⚠️ Main attention point:\n" +
+
+        result.weaknesses.join("\n");
+
+}
+
+
+if(result.actionPlan?.length){
+
+    analysisEN +=
+
+        "\n\n🎯 Recommended actions:\n" +
+
+        result.actionPlan
+
+            .slice(0,3)
+
+            .map(item => "• " + item)
+
+            .join("\n");
+
+}
+
 
 result.analysisEN = analysisEN;
 
