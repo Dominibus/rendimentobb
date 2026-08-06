@@ -1234,6 +1234,35 @@ rbDebugLog(
 );
 
 // =====================================
+// 🧠 SYNC EXECUTIVE BRAIN INTO BRAIN DATA
+// =====================================
+
+brainData = {
+
+    ...brainData,
+
+    executiveBrain,
+
+    weaknesses:
+        executiveBrain?.explainability?.weaknesses ||
+        executiveBrain?.weaknesses ||
+        brainData?.weaknesses ||
+        [],
+
+    risks:
+        executiveBrain?.explainability?.risks ||
+        executiveBrain?.risks ||
+        brainData?.risks ||
+        [],
+
+    actionPlan:
+        executiveBrain?.actionPlan ||
+        brainData?.actionPlan ||
+        []
+
+};  
+
+// =====================================
 // 💾 GLOBAL INVESTMENT HISTORY
 // =====================================
 
