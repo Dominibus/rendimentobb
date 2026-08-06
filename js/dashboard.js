@@ -9446,9 +9446,8 @@ window.rbPMSInsight = {
 };
 
 
-console.log(
-  "🤖 PMS AI INSIGHT READY",
-  window.rbPMSInsight
+dashboardDebug(
+  "PMS insight prepared"
 );
 
 
@@ -9463,9 +9462,8 @@ window.dispatchEvent(
 );
 
 
-console.log(
-  "🤖 PMS MEMORY:",
-  window.rbPMSData
+dashboardDebug(
+  "PMS context prepared"
 );
 
 
@@ -9481,29 +9479,13 @@ renderExecutiveSummary({
   guestsInHouse
 });
 
-console.log(
-  "👥 PMS GUESTS:",
-  window.rbPMSData.guests
+dashboardDebug(
+  "PMS guest statistics prepared"
 );
 
 
-console.log(
-  "🏨 PMS STATS",
-  {
-    properties,
-    bookings,
-    revenue,
-    occupancy,
-    adr,
-    revpar,
-    avgStay,
-    arrivalsToday,
-    departuresToday,
-    guestsInHouse,
-    checkinToday,
-    checkoutToday,
-    pendingBookings
-  }
+dashboardDebug(
+  "PMS statistics prepared"
 );
 
 }
