@@ -725,17 +725,21 @@ if(brainWeakestPoint){
 
 }
 
-console.log(
-  "🧠 WEAKEST POINT SSOT",
-  {
-    weakestPoint,
-    source:
-      brainWeakestPoint
-        ? "executive-brain-v2"
-        : "executive-insight"
-  }
-);
+if(window.RB_DEBUG === true){
 
+  console.log(
+    "🧠 WEAKEST POINT SSOT",
+    {
+      weakestPoint,
+
+      source:
+        brainWeakestPoint
+          ? "executive-brain-v2"
+          : "executive-insight"
+    }
+  );
+
+}
 // =====================================
 // 🧠 EXECUTIVE NARRATIVE
 // =====================================
