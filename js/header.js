@@ -602,7 +602,16 @@ if(
   console.log("⏳ HEADER WAIT currentPlan");
   return;
 }
-  console.log("👤 HEADER ACCESS:", access, "PLAN:", window.currentPlan);
+  if(window.RB_DEBUG === true){
+
+  console.log(
+    "👤 HEADER ACCESS:",
+    access,
+    "PLAN:",
+    window.currentPlan
+  );
+
+}
 
   const isAdmin = access.isAdmin;
 
