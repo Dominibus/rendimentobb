@@ -29,6 +29,10 @@ function createEmptyMemory(){
 
     lastMortgage: null,
 
+    lastRisk: null,
+
+    lastCashflow: null,
+
     lastIntent: null,
 
     lastBudget: null,
