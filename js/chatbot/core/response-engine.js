@@ -1106,14 +1106,14 @@ const rememberedMortgage =
 
   0;
 
-console.log(
-  "🧠 MEMORY CONTEXT:",
-  {
-    rememberedBudget,
-    rememberedCity,
-    rememberedMortgage
-  }
-);  
+rbDebugLog(
+"🧠 MEMORY CONTEXT:",
+{
+  rememberedBudget,
+  rememberedCity,
+  rememberedMortgage
+}
+); 
 
 // ===========================================
 // 🧠 INVESTOR MEMORY
@@ -1167,14 +1167,14 @@ const targetROI =
 
   0;
 
-console.log(
-  "🧠 INVESTOR MEMORY:",
-  {
-    availableCapital,
-    ownedProperties,
-    monthlyCashflowGoal,
-    targetROI
-  }
+rbDebugLog(
+"🧠 INVESTOR MEMORY:",
+{
+ availableCapital,
+ ownedProperties,
+ monthlyCashflowGoal,
+ targetROI
+}
 );
 
 // =====================================
@@ -1254,9 +1254,9 @@ rbDebugLog(
  investmentHistory
 );
 
-console.log(
-  "📊 HISTORY COUNT:",
-  investmentHistory.length
+rbDebugLog(
+"📊 HISTORY COUNT:",
+investmentHistory.length
 );
 
 rbDebugLog(
