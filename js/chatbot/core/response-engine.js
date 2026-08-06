@@ -33,6 +33,8 @@ window.rbGenerateResponse = function({
 
 } = {}){
 
+  const RB_DEBUG = window.RB_DEBUG === true;
+
   
   if(window.RB_DEBUG){
   console.log(
@@ -95,6 +97,8 @@ const {
 
 } = conversationContext || {};
 
+if(RB_DEBUG){
+
 console.log(
     "🧠 CONVERSATION CONTEXT",
     {
@@ -107,6 +111,8 @@ console.log(
         originalMessage
     }
 );
+
+}
 
 // ===============================================
 // 🧠 SEMANTIC FOLLOW-UP ROUTING
@@ -251,10 +257,14 @@ const executiveActionPlan =
 
     [];
 
+if(RB_DEBUG){
+
 console.log(
     "🧠 EXECUTIVE INSIGHT",
     executiveInsight
 );
+
+}
 
 // ===============================================
 // 🧠 EXECUTIVE DECISION
@@ -298,6 +308,8 @@ const hasStrongInvestment =
 
     false;
 
+if(RB_DEBUG){
+
 console.log(
     "🧠 EXECUTIVE DECISION",
     {
@@ -308,6 +320,8 @@ console.log(
         hasStrongInvestment
     }
 );
+
+}
 
 // ===============================================
 // 🧠 EXECUTIVE AI STATE
@@ -347,10 +361,14 @@ const executiveState = {
 
 };
 
+if(RB_DEBUG){
+
 console.log(
     "🧠 EXECUTIVE STATE",
     executiveState
 );
+
+}
   
   // ===========================================
   // 🧠 RESPONSE OBJECT
