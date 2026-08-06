@@ -4433,10 +4433,14 @@ const conversationContext =
 
     });
 
-console.log(
+if(window.RB_DEBUG === true){
+
+  console.log(
     "🧠 CONVERSATION CONTEXT",
     conversationContext
-);
+  );
+
+}
 
 // ===============================================
 // 🧠 EXECUTIVE BRAIN V2
