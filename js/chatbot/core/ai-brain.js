@@ -5,9 +5,13 @@
 
 (function(){
 
+    const RB_DEBUG = false;
+
+    if(RB_DEBUG){
     console.log(
         "🧠 AI Brain READY"
     );
+}
 
     window.rbProcessBrain = function(context = {}){
 
@@ -103,10 +107,12 @@ const cashflow =
 
         };
 
-        console.log(
-            "🧠 BRAIN CONTEXT",
-            brainContext
-        );
+        if(RB_DEBUG){
+    console.log(
+        "🧠 BRAIN CONTEXT",
+        brainContext
+    );
+}
 
         // =====================================
         // 🧠 EXECUTIVE DIAGNOSIS
@@ -448,10 +454,12 @@ brainContext.executiveSummary = {
     advisoryOnly: true
 
 };
-        console.log(
-    "🧠 EXECUTIVE SUMMARY",
-    brainContext.executiveSummary
-);
+        if(RB_DEBUG){
+    console.log(
+        "🧠 EXECUTIVE SUMMARY",
+        brainContext.executiveSummary
+    );
+}
         
 
         console.log(
