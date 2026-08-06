@@ -1,376 +1,218 @@
 // ===============================================
-// 🤖 RENDIMENTOBB – CHATBOT LOADER 2.0
-// Silicon Valley Modular AI Bootstrap
-// Bilingual + Scale Ready
+// RENDIMENTOBB – CHATBOT MODULE LOADER
+// Production bootstrap
 // ===============================================
 
-(function(){
+(function () {
+  "use strict";
 
-  // =============================================
-  // 🛡 GLOBAL LOCK
-  // =============================================
+  const IS_DEVELOPMENT =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
 
-  if(window.__rbChatbotLoaded){
+  const debugLog = (...args) => {
+    if (IS_DEVELOPMENT) {
+      console.log(...args);
+    }
+  };
 
-    console.warn(
-      "⚠️ RB Chatbot already loaded"
-    );
+  const reportLoadError = (resourceType) => {
+    if (IS_DEVELOPMENT) {
+      console.error(`Unable to load chatbot ${resourceType}`);
+    }
+  };
 
+  // Previene inizializzazioni multiple.
+  if (window.__rbChatbotLoaded) {
     return;
-
   }
 
   window.__rbChatbotLoaded = true;
 
-  console.log(
-    "🤖 Loading RB Chatbot..."
-  );
-
   // =============================================
-  // 🌍 LANGUAGE HELPER
+  // LANGUAGE HELPER
   // =============================================
 
-  window.rbT = function(it,en){
-
+  window.rbT = function (it, en) {
     return window.currentLang === "en"
       ? (en || it)
       : it;
-
   };
 
   // =============================================
-  // 🎨 CSS LOADER
+  // CSS LOADER
   // =============================================
 
-  function loadCSS(href){
+  function loadCSS(href) {
+    return new Promise((resolve) => {
+      const existing = document.querySelector(
+        `link[href="${href}"]`
+      );
 
-    return new Promise(resolve=>{
-
-      const existing =
-        document.querySelector(
-          `link[href="${href}"]`
-        );
-
-      if(existing){
-
+      if (existing) {
         resolve();
         return;
-
       }
 
-      const css =
-        document.createElement("link");
+      const css = document.createElement("link");
 
       css.rel = "stylesheet";
-
       css.href = href;
 
-      css.onload = ()=>{
-
-        console.log(
-          "🎨 CSS Loaded:",
-          href
-        );
-
+      css.onload = () => {
+        debugLog("Chatbot stylesheet loaded");
         resolve();
-
       };
 
-      css.onerror = ()=>{
-
-        console.error(
-          "❌ CSS LOAD ERROR:",
-          href
-        );
-
+      css.onerror = () => {
+        reportLoadError("stylesheet");
         resolve();
-
       };
 
       document.head.appendChild(css);
-
     });
-
   }
 
   // =============================================
-  // 📦 SCRIPT LOADER
+  // SCRIPT LOADER
   // =============================================
 
-  function loadScript(src){
-
-    return new Promise(resolve=>{
-
-      // =========================================
-      // 🛡 DUPLICATE PREVENTION
-      // =========================================
-
-      const existing =
-        document.querySelector(
-          `script[src="${src}"]`
-        );
-
-      if(existing){
-
-        console.warn(
-          "⚠️ Script already loaded:",
-          src
-        );
-
-        resolve();
-
-        return;
-
-      }
-
-      // =========================================
-      // 🚀 SCRIPT
-      // =========================================
-
-      const script =
-        document.createElement("script");
-
-      script.src = src;
-
-      script.async = false;
-
-      script.onload = ()=>{
-
-        console.log(
-          "✅ Loaded:",
-          src
-        );
-
-        resolve();
-
-      };
-
-      script.onerror = ()=>{
-
-        console.error(
-          "❌ SCRIPT LOAD ERROR:",
-          src
-        );
-
-        resolve();
-
-      };
-
-      document.body.appendChild(
-        script
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const existing = document.querySelector(
+        `script[src="${src}"]`
       );
 
-    });
+      // Lo script è già dichiarato nella pagina:
+      // non viene caricato una seconda volta.
+      if (existing) {
+        resolve();
+        return;
+      }
 
+      const script = document.createElement("script");
+
+      script.src = src;
+      script.async = false;
+
+      script.onload = () => {
+        debugLog("Chatbot module loaded");
+        resolve();
+      };
+
+      script.onerror = () => {
+        reportLoadError("module");
+        resolve();
+      };
+
+      document.body.appendChild(script);
+    });
   }
 
   // =============================================
-  // 🎨 CSS FILES
+  // RESOURCES
   // =============================================
 
   const cssFiles = [
-
     "/css/chatbot.css"
-
   ];
 
-  // =============================================
-  // 📦 JS ARCHITECTURE
-  // =============================================
-
   const scripts = [
-
-    // =========================================
-    // 🧠 KNOWLEDGE BASE
-    // =========================================
-
     "/js/chatbot/knowledge-base.js",
 
-// =========================================
-// 📚 KNOWLEDGE MODULES
-// =========================================
-
-"/js/chatbot/knowledge/glossary.js",
-"/js/chatbot/knowledge/finance.js",
-"/js/chatbot/knowledge/risk.js",
-"/js/chatbot/knowledge/mortgages.js",
-"/js/chatbot/knowledge/shortrent.js",
-"/js/chatbot/knowledge/real-estate.js",
-"/js/chatbot/knowledge/legal.js",
-"/js/chatbot/knowledge/taxes.js",
-"/js/chatbot/knowledge/mistakes.js",
-"/js/chatbot/knowledge/beginner.js",
-"/js/chatbot/knowledge/markets.js",
-"/js/chatbot/knowledge/subscriptions.js",
-"/js/chatbot/knowledge/support.js",
-"/js/chatbot/knowledge/airbnb.js",
-"/js/chatbot/knowledge/roi.js",
-"/js/chatbot/knowledge/property-analysis.js",    
-
-    // =========================================
-    // 🌍 DATA
-    // =========================================
+    "/js/chatbot/knowledge/glossary.js",
+    "/js/chatbot/knowledge/finance.js",
+    "/js/chatbot/knowledge/risk.js",
+    "/js/chatbot/knowledge/mortgages.js",
+    "/js/chatbot/knowledge/shortrent.js",
+    "/js/chatbot/knowledge/real-estate.js",
+    "/js/chatbot/knowledge/legal.js",
+    "/js/chatbot/knowledge/taxes.js",
+    "/js/chatbot/knowledge/mistakes.js",
+    "/js/chatbot/knowledge/beginner.js",
+    "/js/chatbot/knowledge/markets.js",
+    "/js/chatbot/knowledge/subscriptions.js",
+    "/js/chatbot/knowledge/support.js",
+    "/js/chatbot/knowledge/airbnb.js",
+    "/js/chatbot/knowledge/roi.js",
+    "/js/chatbot/knowledge/property-analysis.js",
 
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js",
 
-// =========================================
-// 🧠 CORE AI
-// =========================================
+    "/js/chatbot/core/entity-engine.js",
+    "/js/chatbot/core/intent-engine.js",
+    "/js/chatbot/core/memory-engine.js",
+    "/js/chatbot/core/conversation-engine.js",
+    "/js/chatbot/core/investor-profile-engine.js",
+    "/js/chatbot/core/score-engine.js",
 
-"/js/chatbot/core/entity-engine.js",
-"/js/chatbot/core/intent-engine.js",
-"/js/chatbot/core/memory-engine.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
 
-"/js/chatbot/core/conversation-engine.js",
-
-"/js/chatbot/core/investor-profile-engine.js",
-"/js/chatbot/core/score-engine.js",
-
-// =========================================
-// 📄 PDF.JS
-// Real PDF text extraction dependency
-// =========================================
-
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
-
-"/js/chatbot/document-engine.js",
-"/js/chatbot/pdf-extraction-engine.js",
-"/js/chatbot/pdf-parser-engine.js",  
-"/js/chatbot/core/document-classifier.js",    
-"/js/chatbot/document-reasoning-engine.js",
-"/js/chatbot/executive-narrative-engine.js",
-
-"/js/chatbot/reasoning-engine.js",
-
-"/js/chatbot/core/ai-brain.js",
-
-"/js/chatbot/core/executive-brain-v2.js",    
-
-"/js/chatbot/core/executive-response-builder.js",
-
-"/js/chatbot/core/response-engine.js",
-
-"/js/chatbot/core/chatbot-file-dispatcher.js",    
-
-"/js/chatbot/core/chatbot-orchestrator.js",
-
-    // =========================================
-    // 🤝 SUPPORT LAYERS
-    // =========================================
+    "/js/chatbot/document-engine.js",
+    "/js/chatbot/pdf-extraction-engine.js",
+    "/js/chatbot/pdf-parser-engine.js",
+    "/js/chatbot/core/document-classifier.js",
+    "/js/chatbot/document-reasoning-engine.js",
+    "/js/chatbot/executive-narrative-engine.js",
+    "/js/chatbot/reasoning-engine.js",
+    "/js/chatbot/core/ai-brain.js",
+    "/js/chatbot/core/executive-brain-v2.js",
+    "/js/chatbot/core/executive-response-builder.js",
+    "/js/chatbot/core/response-engine.js",
+    "/js/chatbot/core/chatbot-file-dispatcher.js",
+    "/js/chatbot/core/chatbot-orchestrator.js",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
-// =========================================
-// 🎨 UI
-// =========================================
+    "/js/chatbot/ui/chatbot-attachments.js",
+    "/js/chatbot/ui/chatbot-ui.js",
 
-"/js/chatbot/ui/chatbot-attachments.js",
+    "/js/ai-engine.js"
+  ];
 
-"/js/chatbot/ui/chatbot-ui.js",
+  // =============================================
+  // BOOTSTRAP
+  // =============================================
 
-// =========================================
-// 🧠 GLOBAL AI HELPERS
-// =========================================
-
-"/js/ai-engine.js"
-
-];
-
-
-// =============================================
-// 🚀 BOOTSTRAP
-// =============================================
-
-  async function init(){
-
-    console.log(
-      "🚀 Initializing RB AI Architecture..."
-    );
-
-    // =========================================
-    // 🎨 LOAD CSS
-    // =========================================
-
-    for(const href of cssFiles){
-
+  async function init() {
+    for (const href of cssFiles) {
       await loadCSS(href);
-
     }
 
-    // =========================================
-    // 📦 LOAD SCRIPTS
-    // =========================================
-
-    for(const src of scripts){
-
+    for (const src of scripts) {
       await loadScript(src);
-
     }
 
-    // =========================================
-    // 🤖 INIT UI
-    // =========================================
-
-    if(window.initRBChatbotUI){
-
+    if (typeof window.initRBChatbotUI === "function") {
       window.initRBChatbotUI();
-
     }
 
-    // =========================================
-    // ✅ READY
-    // =========================================
+    window.rbChatbotReady = true;
 
-    console.log(
-      "🤖 RENDIMENTOBB AI READY"
+    document.dispatchEvent(
+      new CustomEvent("rb_chatbot_ready", {
+        detail: {
+          ready: true
+        }
+      })
     );
 
-    console.log({
-
-      entityEngine:
-        !!window.rbExtractEntities,
-
-      intentEngine:
-        !!window.rbDetectIntent,
-
-      memoryEngine:
-        !!window.rbGetConversationContext,
-
-      brain:
-    !!window.rbProcessBrain,
-
-      responseEngine:
-        !!window.rbGenerateResponse,
-
-      orchestrator:
-        !!window.rbProcessAIMessage,
-
-      chatbotUI:
-        !!window.initRBChatbotUI
-
-    });
-
+    debugLog("RendimentoBB chatbot ready");
   }
 
   // =============================================
-  // 🚀 START
+  // START
   // =============================================
 
-  if(document.readyState === "loading"){
-
+  if (document.readyState === "loading") {
     document.addEventListener(
       "DOMContentLoaded",
-      init
+      init,
+      { once: true }
     );
-
-  }
-
-  else{
-
+  } else {
     init();
-
   }
-
 })();
