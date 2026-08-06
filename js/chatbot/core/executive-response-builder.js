@@ -180,14 +180,14 @@ const executiveModel = {
 
 };
 
-if(RB_DEBUG){
+if(window.RB_DEBUG){
     console.log(
         "🧠 EXECUTIVE MODEL",
         executiveModel
     );
 }
 
-    if(RB_DEBUG){
+    if(window.RB_DEBUG){
     console.log(
         "🧠 EXECUTIVE BRAIN IN BUILDER",
         executiveBrain
@@ -1524,7 +1524,7 @@ return {
 
 };
 
-if(RB_DEBUG){
+if(window.RB_DEBUG){
     console.log(
         "🧠 EXECUTIVE RESPONSE BUILDER READY"
     );
