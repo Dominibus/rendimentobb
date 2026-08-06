@@ -3826,10 +3826,14 @@ result.secondaryIntents =
 // 🧠 DEBUG
 // ===========================================
 
-console.log(
-  "🧠 INTENT ENGINE:",
-  result
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 INTENT ENGINE:",
+    result
+  );
+
+}
 
 return result;
 
