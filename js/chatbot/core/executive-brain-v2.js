@@ -217,6 +217,15 @@ else if(
 
 }
 
+    else if(
+    mortgagePercent >= 80
+){
+
+    weakestPoint =
+    "leverage";
+
+}
+
 // ===============================================
 // 🟡 WATCH POINTS
 // Strategic monitoring layer
@@ -328,6 +337,14 @@ if(weakestPoint === "occupancy"){
     );
 
 }
+
+if(weakestPoint === "leverage"){
+
+    result.weaknesses.push(
+        "La leva finanziaria elevata aumenta l'esposizione dell'investitore e riduce il margine di sicurezza."
+    );
+
+}    
 
 
 // 🟡 Watch points
