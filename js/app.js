@@ -2373,7 +2373,14 @@ const access = window.getUserAccess();
 
 btn.style.display = access.canSeeFullAnalysis ? "inline-block" : "none";
 
-console.log("PDF visibility:", window.getUserAccess());
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "📄 PDF visibility:",
+    window.getUserAccess()
+  );
+
+}
 
 }
 
