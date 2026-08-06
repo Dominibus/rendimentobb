@@ -1056,16 +1056,20 @@ const combinedWhatIfKeys =
 const isCombinedWhatIf =
   combinedWhatIfKeys.length >= 2;
 
-console.log(
-  "🧠 COMBINED WHAT-IF DETECTOR",
-  {
-    isCombinedWhatIf,
-    keys:
-      combinedWhatIfKeys,
-    changes:
-      combinedWhatIfChanges
-  }
-);    
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 COMBINED WHAT-IF DETECTOR",
+    {
+      isCombinedWhatIf,
+      keys:
+        combinedWhatIfKeys,
+      changes:
+        combinedWhatIfChanges
+    }
+  );
+
+}   
 
 // =====================================
 // 🧠 COMBINED WHAT-IF SCENARIO
