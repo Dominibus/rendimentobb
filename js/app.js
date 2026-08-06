@@ -7187,42 +7187,58 @@ function handleAutoCityRedirect(){
 
 // ================= STRIPE SUBSCRIPTION =================
 
-window.buyPlan = async function(plan){
-
+window.buyPlan = async function(plan) {
   const user = window.currentUser;
 
-  if(!user){
+  if (!user) {
     showRegisterPopup();
-return;
+    return;
   }
 
-  const uid = user.uid;
+  try {
+    const idToken = await user.getIdToken(true);
 
-  try{
+    const response = await fetch(
+      "/api/create-checkout-session",
+      {
+        method: "POST",
 
-    const res = await fetch("/api/create-checkout-session",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        plan: plan,
-        uid: uid
-      })
-    });
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${idToken}`
+        },
 
-    const data = await res.json();
+        body: JSON.stringify({
+          plan
+        })
+      }
+    );
 
-    if(data.url){
-      window.location.href = data.url;
-    }else{
-      console.error("Errore Stripe:", data);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data?.error || "Checkout request failed"
+      );
     }
 
-  }catch(err){
-    console.error("Errore:", err);
-  }
+    if (
+      typeof data.url !== "string" ||
+      !data.url.startsWith("https://checkout.stripe.com/")
+    ) {
+      throw new Error("Invalid checkout response");
+    }
 
+    window.location.assign(data.url);
+  } catch (error) {
+    console.error("Checkout unavailable");
+
+    alert(
+      window.currentLang === "en"
+        ? "Payment service temporarily unavailable. Please try again."
+        : "Servizio di pagamento temporaneamente non disponibile. Riprova."
+    );
+  }
 };
 
 // ================= PROPERTY SCRAPER =================
