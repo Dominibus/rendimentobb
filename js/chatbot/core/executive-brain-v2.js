@@ -912,6 +912,8 @@ result.insight = {
 
 };
 
+    const RB_DEBUG = false;
+
 if(RB_DEBUG){
     console.log(
         "🧠 EXECUTIVE BRAIN V2 READY"
