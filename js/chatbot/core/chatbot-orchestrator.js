@@ -3878,10 +3878,14 @@ const canonicalAnalysis = {
 
 window.rbCanonicalAnalysis = canonicalAnalysis;
 
-console.log(
-    "🧠 CANONICAL AI CONTEXT",
-    canonicalAnalysis
-);
+if(window.RB_DEBUG === true){
+
+    console.log(
+        "🧠 CANONICAL AI CONTEXT",
+        canonicalAnalysis
+    );
+
+}
     
 // =========================================
 // 🧠 AI SIGNALS
