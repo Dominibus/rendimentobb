@@ -293,6 +293,15 @@ result.weaknesses = [];
 
 result.risks = [];
 
+ console.log(
+    "🧠 EXECUTIVE BRAIN POINTS",
+    {
+        weakestPoint,
+        strongestPoint,
+        watchPoints
+    }
+);   
+
 
 // 🔴 Weakness mapping
 
