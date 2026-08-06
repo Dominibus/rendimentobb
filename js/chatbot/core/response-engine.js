@@ -35,6 +35,12 @@ window.rbGenerateResponse = function({
 
   const RB_DEBUG = window.RB_DEBUG === true;
 
+  const rbDebugLog = (...args)=>{
+    if(RB_DEBUG){
+        console.log(...args);
+    }
+};
+
   
   if(window.RB_DEBUG){
   console.log(
