@@ -655,6 +655,10 @@ rbDebugLog(
  documentKnowledge
 );
 
+let watchPoints = [];
+let strongestPoint = "";
+let weakestPoint = weakestPoint || "";  
+
 // =====================================
 // 🧠 EXECUTIVE BRAIN V2
 // =====================================
@@ -681,17 +685,22 @@ if(
 
                 financials: {
 
-                    roi,
+    roi:
+        Number(window.lastAnalysisData?.roi || 0),
 
-                    risk,
+    risk:
+        Number(window.lastAnalysisData?.risk || 0),
 
-                    occupancy,
+    occupancy:
+        Number(window.lastAnalysisData?.occupancy || 0),
 
-                    net,
+    net:
+        Number(window.lastAnalysisData?.net || 0),
 
-                    mortgagePercent
+    mortgagePercent:
+        Number(window.lastAnalysisData?.mortgagePercent || 0)
 
-                },
+},
 
                 language:
                     window.currentLanguage ||
