@@ -3087,26 +3087,32 @@ net ||
 
 };
 
-    console.log(
-  "🏦 DEBUG MORTGAGE SAVE",
-  {
-    loanAmount,
-    mortgage,
-    mortgageAmount: loanAmount,
-    propertyPrice,
-    equity
-  }
-);
+if(window.RB_DEBUG === true){
 
-    console.log(
-      "🧠 FULL ANALYSIS DATA:",
-      window.lastAnalysisData
-   );
+  console.log(
+    "🏦 DEBUG MORTGAGE SAVE",
+    {
+      loanAmount,
+      mortgage,
+      mortgageAmount: loanAmount,
+      propertyPrice,
+      equity
+    }
+  );
 
-    console.log(
-      "🤖 LIVE ANALYSIS SAVED:",
-      window.lastAnalysisData
-    );
+
+  console.log(
+    "🧠 FULL ANALYSIS DATA:",
+    window.lastAnalysisData
+  );
+
+
+  console.log(
+    "🤖 LIVE ANALYSIS SAVED:",
+    window.lastAnalysisData
+  );
+
+}
 
 // =====================================
 // 📄 EXECUTIVE DOCUMENT
