@@ -567,10 +567,10 @@ library:
 
 };
 
-console.log(
-  "🧠 EXECUTIVE CONTEXT:",
-  executiveContext
-);  
+rbDebugLog(
+ "🧠 EXECUTIVE CONTEXT:",
+ executiveContext
+);
   
 // =====================================
 // 📚 DOCUMENT KNOWLEDGE
@@ -632,9 +632,9 @@ if(
 
 }
 
-console.log(
-    "🧠 DOCUMENT REASONING:",
-    documentReasoning
+rbDebugLog(
+ "🧠 DOCUMENT REASONING:",
+ documentReasoning
 );
     
 
@@ -650,9 +650,9 @@ console.log(
 
 }
 
-console.log(
-  "📚 DOCUMENT KNOWLEDGE:",
-  documentKnowledge
+rbDebugLog(
+ "📚 DOCUMENT KNOWLEDGE:",
+ documentKnowledge
 );
 
 // =====================================
@@ -703,9 +703,9 @@ if(
 
 }
 
-console.log(
-    "🧠 EXECUTIVE BRAIN:",
-    executiveBrain
+rbDebugLog(
+ "🧠 EXECUTIVE BRAIN:",
+ executiveBrain
 );
 
 // ===============================================
@@ -794,9 +794,9 @@ const pmsData =
 
   {};
 
-console.log(
-  "🏨 PMS DATA:",
-  pmsData
+rbDebugLog(
+ "🏨 PMS DATA:",
+ pmsData
 );
 
   const investorProfile =
@@ -879,7 +879,7 @@ const occupancy =
 
   );
 
-console.log(
+rbDebugLog(
   "🧠 LIVE RESPONSE DATA:",
   {
     roi,
@@ -1035,9 +1035,9 @@ const investmentScore =
 
         );
 
-console.log(
-  "🧠 INVESTMENT SCORE:",
-  investmentScore
+rbDebugLog(
+ "🧠 INVESTMENT SCORE:",
+ investmentScore
 );
 
   
@@ -1224,9 +1224,9 @@ brainData =
 
 }
 
-console.log(
-  "🧠 AI BRAIN:",
-  brainData
+rbDebugLog(
+ "🧠 AI BRAIN:",
+ brainData
 );
 
 // =====================================
@@ -1245,9 +1245,9 @@ window.rbChatMemory?.investmentHistory ||
 
 [];
 
-console.log(
-  "💾 GLOBAL INVESTMENT HISTORY:",
-  investmentHistory
+rbDebugLog(
+ "💾 GLOBAL INVESTMENT HISTORY:",
+ investmentHistory
 );
 
 console.log(
@@ -1255,13 +1255,13 @@ console.log(
   investmentHistory.length
 );
 
-console.log(
-  "📊 FULL HISTORY:",
-  JSON.stringify(
+rbDebugLog(
+ "📊 FULL HISTORY:",
+ JSON.stringify(
     investmentHistory,
     null,
     2
-  )
+ )
 );
 
   console.log(
