@@ -49,11 +49,14 @@ const detectedIntent =
 
       };
 
-console.log(
-  "🧠 DETECTED INTENT",
-  detectedIntent
-);
+if(window.RB_DEBUG === true){
 
+  console.log(
+    "🧠 DETECTED INTENT",
+    detectedIntent
+  );
+
+}
  // =========================================
 // 🧠 INTENT PRIORITY ENGINE
 // =========================================
@@ -446,10 +449,14 @@ if(!uniqueIntents.length){
 
 };
 
-    console.log(
-  "🔥 FINAL INTENTS:",
-  uniqueIntents
-);
+  if(window.RB_DEBUG === true){
+
+  console.log(
+    "🔥 FINAL INTENTS:",
+    uniqueIntents
+  );
+
+}
     // =========================================
     // 🧠 MEMORY
     // =========================================
@@ -4516,11 +4523,17 @@ window.rbGenerateResponse({
 
 });
 
+  if(window.RB_DEBUG === true){
+
   console.log(
-  "🏨 PMS RESPONSE DEBUG",
-  currentIntent,
-  partialResponse
-);
+    "🧠 RESPONSE ENGINE OUTPUT",
+    {
+      intent: currentIntent,
+      response: partialResponse
+    }
+  );
+
+}
 
   // 🔥 IGNORA RISPOSTE VUOTE/FALLBACK
   const isFallback =
