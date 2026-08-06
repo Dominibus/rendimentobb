@@ -383,6 +383,19 @@ result.actionPlan = [
     ...result.risks
 
 ];
+
+
+// 🔥 SYNC EXECUTIVE ACTIONS
+if(
+    weakestPoint === "leverage" &&
+    result.actionPlan.length === 0
+){
+
+    result.actionPlan.push(
+        "Ridurre la leva finanziaria per aumentare resilienza e margine di sicurezza dell'investimento."
+    );
+
+}
     
 // ===============================================
 // 🧠 EXECUTIVE STRATEGIC LAYER
