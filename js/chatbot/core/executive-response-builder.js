@@ -180,10 +180,12 @@ const executiveModel = {
 
 };
 
-console.log(
-    "🧠 EXECUTIVE MODEL",
-    executiveModel
-);   
+if(RB_DEBUG){
+    console.log(
+        "🧠 EXECUTIVE MODEL",
+        executiveModel
+    );
+}
 
     console.log(
     "🧠 EXECUTIVE BRAIN IN BUILDER",
