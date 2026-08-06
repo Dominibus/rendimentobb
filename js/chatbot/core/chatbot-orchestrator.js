@@ -4118,10 +4118,14 @@ const brain =
 
     : null;
 
-console.log(
+if(window.RB_DEBUG === true){
+
+  console.log(
     "🧠 AI BRAIN",
     brain
-);   
+  );
+
+}
 
 // =========================================
 // 🧠 CANONICAL ADVISOR RESULT
