@@ -44,6 +44,28 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 // =====================================
+// PRODUCTION LOGGING
+// =====================================
+
+const IS_DEVELOPMENT =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1";
+
+const dashboardDebug = (...args) => {
+  if (IS_DEVELOPMENT) {
+    console.debug(...args);
+  }
+};
+
+const dashboardError = (message, error) => {
+  console.error(message);
+
+  if (IS_DEVELOPMENT && error) {
+    console.error(error);
+  }
+};
+
+// =====================================
 // 🔐 DASHBOARD ACCESS MANAGER
 // =====================================
 
@@ -697,28 +719,8 @@ if(
 
 }
 
-  if(querySnapshot.empty){
-
-    console.warn(
-      "Nessuna analisi trovata"
-    );
-
-  }
-
-  console.log(
-    "DOCUMENTI:",
-    querySnapshot.docs.map(
-      d => d.data()
-    )
-  );
-
-  console.log(
-    "UID:",
-    window.currentUser?.uid
-  );
-
-  console.log(
-    "Analisi trovate:",
+  dashboardDebug(
+    "Dashboard analyses loaded",
     querySnapshot.size
   );
 
@@ -753,11 +755,9 @@ const analyses = querySnapshot.docs.map(doc => {
     data.city ||
     "napoli";
 
-  console.log("🏙 ANALYSIS CITY:", {
-    realCity,
-    marketCity,
-    original: data.city
-  });
+    dashboardDebug(
+    "Analysis normalized"
+  );
 
   return {
 
@@ -874,8 +874,8 @@ window.investmentHistory =
 
   }));
 
-console.log(
-  "🤖 INVESTMENT HISTORY:",
+dashboardDebug(
+  "Investment history prepared",
   window.investmentHistory.length
 );
   
@@ -914,7 +914,7 @@ console.log(
 
   updateMarketHero(safeCity(selectedCity));
 
-  console.log("Città iniziale:", selectedCity);
+  dashboardDebug("Dashboard market initialized");
 
   if(citySelect && !citySelect.dataset.listener){
   citySelect.dataset.listener = "true";
@@ -922,7 +922,7 @@ console.log(
   citySelect.addEventListener("change",(e)=>{
     const newCity = e.target.value;
     updateMarketHero(newCity);
-    console.log("Città cambiata:", newCity);
+    dashboardDebug("Dashboard market changed");
   });
 }
 
@@ -1413,10 +1413,9 @@ window.lastAnalysisData = {
 
 };
 
-console.log(
-  "🤖 DASHBOARD MEMORY:",
-  window.lastAnalysisData
-);  
+dashboardDebug(
+  "Dashboard analysis context prepared"
+); 
 
 renderInvestmentVerdict(best);  
 renderUpgradeTrigger(best);
@@ -2442,7 +2441,10 @@ if(isInvestor){
 }
 
           } catch(err){
-      console.error("❌ DASHBOARD INIT ERROR:", err);
+      dashboardError(
+  "Dashboard initialization failed",
+  err
+);
     }
 
   }); // chiude onAuthStateChanged
