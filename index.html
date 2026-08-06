@@ -2087,10 +2087,34 @@ Scopri di più →
 <!-- 🔹 SCRIPT PRINCIPALE -->
 <script>
 
-// ================= LOGGER =================
-const log = (...a)=>console.log("[RB]",...a);
-const warn = (...a)=>console.warn("[RB]",...a);
-const error = (...a)=>console.error("[RB]",...a);
+// ================= LOGGER SYSTEM =================
+
+window.RB_ENV = "production";
+
+
+window.rbLog = function(...args){
+
+    if(window.RB_ENV !== "production"){
+        console.log(...args);
+    }
+
+};
+
+
+window.rbWarn = function(...args){
+
+    if(window.RB_ENV !== "production"){
+        console.warn(...args);
+    }
+
+};
+
+
+window.rbError = function(...args){
+
+    console.error(...args);
+
+};
 
 
 // ================= SAFE UTILS =================
@@ -2112,7 +2136,7 @@ window.updateOverlayVisibility = function(){
   const isPro = access.isPro;
   const isInvestor = access.isInvestor;
 
-  console.log("🎯 OVERLAY STATE:", access);
+  rbLog("🎯 OVERLAY STATE:", access);
 
   // 🟢 PRO + INVESTOR → SEMPRE OFF
   if(isPro || isInvestor){
@@ -2200,7 +2224,7 @@ window.selectCity = function(city){
   localStorage.setItem("selected_city", cleanCity);
   localStorage.setItem("selected_city_bg", cityBg);
 
-  console.log("🌆 Selected city:", cleanCity);
+  rbLog("🌆 Selected city:", cleanCity);
 
   // 🔥 REDIRECT (PULITO)
   window.location.href = `/tool/?city=${encodeURIComponent(cleanCity)}`;
@@ -2217,7 +2241,7 @@ window.goToMarket = function(city){
   localStorage.setItem("selected_city", city);
 
   // 🔥 tracking (futuro analytics)
-  console.log("🔥 MARKET CLICK:", city);
+  rbLog("🔥 MARKET CLICK:", city);
 
   // 🔥 redirect intelligente
   window.location.href = `/market/${encodeURIComponent(city)}/`;
@@ -2290,7 +2314,7 @@ const isPro =
 const isInvestor =
   access.isInvestor === true;
 
-console.log("🔥 QUICK ROI ACCESS:", {
+rbLog("🔥 QUICK ROI ACCESS:", {
   access,
   isLogged,
   isInvestor,
@@ -3184,7 +3208,7 @@ window.triggerUpgradeFlow = function({
   !!access.user ||
   access.isLogged === true;
 
-  console.log("🚀 UPGRADE FLOW:", {
+  rbLog("🚀 UPGRADE FLOW:", {
     plan,
     source,
     access
