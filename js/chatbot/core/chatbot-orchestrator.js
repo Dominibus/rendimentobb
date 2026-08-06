@@ -4050,10 +4050,40 @@ const advisor =
 
   : null;
 
-console.log(
-  "🧠 ADVISOR:",
-  advisor
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 ADVISOR ENGINE RESULT",
+    {
+      enabled:
+        !!advisor,
+
+      shouldRunAdvisor,
+
+      intent:
+        intent.intent,
+
+      roi:
+        analysisData.realROI ??
+        analysisData.roi ??
+        0,
+
+      risk:
+        analysisData.risk ?? 0,
+
+      occupancy:
+        analysisData.occupancy ?? 0,
+
+      cashflow:
+        analysisData.net ??
+        analysisData.cashflow ??
+        0,
+
+      advisor
+    }
+  );
+
+}
 
 // =========================================
 // 📄 DOCUMENT KNOWLEDGE
@@ -4085,14 +4115,27 @@ const documentKnowledge = {
 
 };
 
-console.log(
-    "📄 FIRST UPLOADED",
-    JSON.stringify(
-        documentKnowledge?.uploadedReports?.[0],
-        null,
-        2
-    )
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "📄 DOCUMENT KNOWLEDGE",
+    {
+      activeDocument:
+        !!documentKnowledge.activeDocument,
+
+      activeReport:
+        !!documentKnowledge.activeReport,
+
+      uploadedReports:
+        Array.isArray(
+          documentKnowledge.uploadedReports
+        )
+        ? documentKnowledge.uploadedReports.length
+        : 0
+    }
+  );
+
+}
 
 // =========================================
 // 🧠 AI BRAIN
