@@ -302,17 +302,20 @@ result.weaknesses = [];
 
 result.risks = [];
 
- console.log(
+console.log(
     "🧠 EXECUTIVE BRAIN POINTS",
     {
         weakestPoint,
         strongestPoint,
         watchPoints
     }
-);   
+);
 
 
-// 🔴 Weakness mapping
+// ===============================================
+// 🔴 WEAKNESS MAPPING
+// ===============================================
+
 
 if(weakestPoint === "cashflow"){
 
@@ -322,6 +325,7 @@ if(weakestPoint === "cashflow"){
 
 }
 
+
 if(weakestPoint === "risk"){
 
     result.weaknesses.push(
@@ -329,6 +333,7 @@ if(weakestPoint === "risk"){
     );
 
 }
+
 
 if(weakestPoint === "occupancy"){
 
@@ -338,18 +343,26 @@ if(weakestPoint === "occupancy"){
 
 }
 
+
+// 🔥 LEVERAGE
+
 if(weakestPoint === "leverage"){
 
     result.weaknesses.push(
         "La leva finanziaria elevata aumenta l'esposizione dell'investitore e riduce il margine di sicurezza."
     );
 
-}    
+}
 
 
-// 🟡 Watch points
+// ===============================================
+// 🟡 WATCH POINTS
+// ===============================================
 
-if(watchPoints.includes("leverage")){
+
+if(
+    watchPoints.includes("leverage")
+){
 
     result.risks.push(
         "La leva finanziaria elevata aumenta la sensibilità dell'investimento."
@@ -357,7 +370,10 @@ if(watchPoints.includes("leverage")){
 
 }
 
-if(watchPoints.includes("occupancy")){
+
+if(
+    watchPoints.includes("occupancy")
+){
 
     result.risks.push(
         "La performance dipende dalla capacità di mantenere una buona occupazione."
@@ -365,7 +381,10 @@ if(watchPoints.includes("occupancy")){
 
 }
 
-if(watchPoints.includes("roi_validation")){
+
+if(
+    watchPoints.includes("roi_validation")
+){
 
     result.risks.push(
         "Un ROI elevato deve essere validato con dati reali di mercato."
@@ -374,7 +393,10 @@ if(watchPoints.includes("roi_validation")){
 }
 
 
-// 🧠 Action plan
+// ===============================================
+// 🧠 ACTION PLAN
+// ===============================================
+
 
 result.actionPlan = [
 
@@ -385,17 +407,21 @@ result.actionPlan = [
 ];
 
 
-// 🔥 SYNC EXECUTIVE ACTIONS
-if(
-    weakestPoint === "leverage" &&
-    result.actionPlan.length === 0
-){
+// DEBUG FINALE
 
-    result.actionPlan.push(
-        "Ridurre la leva finanziaria per aumentare resilienza e margine di sicurezza dell'investimento."
-    );
+console.log(
+    "🧠 EXECUTIVE EXPLAINABILITY",
+    {
+        weaknesses:
+            result.weaknesses,
 
-}
+        risks:
+            result.risks,
+
+        actionPlan:
+            result.actionPlan
+    }
+);
     
 // ===============================================
 // 🧠 EXECUTIVE STRATEGIC LAYER
