@@ -661,6 +661,7 @@ rbDebugLog(
 
 executiveBrain = executiveBrain || null;
 
+
 if(
     typeof window.rbGenerateExecutiveBrainV2 ===
     "function"
@@ -678,17 +679,49 @@ if(
 
                 documentKnowledge,
 
+                financials: {
+
+                    roi,
+
+                    risk,
+
+                    occupancy,
+
+                    net,
+
+                    mortgagePercent
+
+                },
+
                 language:
                     window.currentLanguage ||
                     "it"
 
             }) || null;
 
-      weakestPoint =
-    executiveBrain?.weakestPointIT ||
-    executiveBrain?.weakestPointEN ||
-    weakestPoint ||
-    "";
+
+
+        // =====================================
+        // 🔥 SYNC BRAIN TECHNICAL POINTS
+        // =====================================
+
+        weakestPoint =
+            executiveBrain?.analysis?.weakestPoint ||
+            weakestPoint ||
+            "";
+
+
+        strongestPoint =
+            executiveBrain?.analysis?.strongestPoint ||
+            strongestPoint ||
+            "";
+
+
+        watchPoints =
+            executiveBrain?.analysis?.watchPoints ||
+            watchPoints ||
+            [];
+
 
     }
 
@@ -703,11 +736,25 @@ if(
 
 }
 
+
+// =====================================
+// 🧠 DEBUG
+// =====================================
+
 rbDebugLog(
- "🧠 EXECUTIVE BRAIN:",
- executiveBrain
+    "🧠 EXECUTIVE BRAIN:",
+    executiveBrain
 );
 
+
+console.log(
+    "🧠 EXECUTIVE BRAIN SYNC:",
+    {
+        weakestPoint,
+        strongestPoint,
+        watchPoints
+    }
+);
 // ===============================================
 // 🧠 EXECUTIVE WEAKEST POINT SSOT
 // Latest Executive Brain diagnosis
