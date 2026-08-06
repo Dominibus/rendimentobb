@@ -657,7 +657,7 @@ rbDebugLog(
 
 let watchPoints = [];
 
-let strongestPoint = "";
+strongestPoint = strongestPoint || "";
 
 weakestPoint =
     weakestPoint || "";
