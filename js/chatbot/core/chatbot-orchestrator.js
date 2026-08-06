@@ -4887,10 +4887,14 @@ response.metadata = {
 
 };
 
-    console.log(
-  "🔥 FINAL ORCHESTRATOR RESPONSE:",
-  response
-);
+  if(window.RB_DEBUG === true){
+
+  console.log(
+    "🔥 FINAL ORCHESTRATOR RESPONSE:",
+    response
+  );
+
+}
 
 if(window.rbRememberMessage){
 
