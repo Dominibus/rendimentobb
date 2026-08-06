@@ -656,8 +656,11 @@ rbDebugLog(
 );
 
 let watchPoints = [];
+
 let strongestPoint = "";
-let weakestPoint = weakestPoint || "";  
+
+weakestPoint =
+    weakestPoint || "";
 
 // =====================================
 // 🧠 EXECUTIVE BRAIN V2
