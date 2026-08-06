@@ -205,10 +205,18 @@ setTimeout(() => {
 
   if(window.RB_USER.initialized) return;
 
-  if(window.simulationExecuted) return;
+  if(window.currentPlan){
+    
+    console.warn("⚠️ AccessControl fallback after plan detected");
 
-  console.warn("⚠️ Fallback AccessControl");
+    window.initAccessControl();
 
-  window.initAccessControl();
+  } else {
 
-}, 1200);
+    console.warn(
+      "⏳ AccessControl waiting Firebase plan"
+    );
+
+  }
+
+}, 3000);
