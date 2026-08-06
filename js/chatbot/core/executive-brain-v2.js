@@ -1292,4 +1292,11 @@ if(RB_DEBUG){
     );
 }
 
+// ===============================================
+// 🔗 COMPATIBILITY ALIAS
+// ===============================================
+
+window.rbGenerateExecutiveBrainV2 =
+    window.rbExecutiveBrain;
+
 })();
