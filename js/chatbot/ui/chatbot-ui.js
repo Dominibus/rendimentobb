@@ -1662,19 +1662,9 @@ debugLog("Chatbot response processed");
             []
           );
 
-      console.log(
-  "🔥 FINAL TEXT TO UI:",
-  finalText
-);
-
-console.log(
-  "🔥 RESPONSE TYPE:",
-  response?.type
-);
-
-console.log(
-  "🔥 RESPONSE OBJECT FULL:",
-  response
+debugLog(
+  "Chatbot UI response ready",
+  response?.type || "unknown"
 );
 
       // =====================================
@@ -1727,19 +1717,16 @@ console.log(
       // 🧠 DEBUG
       // =====================================
 
-      console.log(
-        "🧠 CHATBOT RESULT:",
-        result
-      );
+      debugLog("Chatbot request completed");
 
     }
 
     catch(error){
 
-      console.error(
-        "❌ CHATBOT UI ERROR:",
-        error
-      );
+      reportRuntimeError(
+  "Chatbot temporarily unavailable",
+  error
+);
 
       addMessage(
 
@@ -1768,9 +1755,7 @@ console.log(
 
   attachBtn.onclick = ()=>{
 
-    console.log("📎 ATTACH CLICK");
-
-    console.log(window.rbChatAttachments);
+    debugLog("Chatbot attachment action");
 
     window.rbChatAttachments.open();
 
@@ -1844,17 +1829,13 @@ recognition.onerror = ()=>{
 
 };  
 
-  console.log(
-  "🔥 SEND BUTTON BOUND"
-);
+  debugLog("Chatbot send action initialized");
 
   input.addEventListener(
     "keypress",
     e=>{
 
-      console.log(
-  "🔥 ENTER PRESSED"
-);
+      debugLog("Chatbot keyboard submission");
 
       if(e.key === "Enter"){
 
@@ -2009,10 +1990,7 @@ document.addEventListener(
 
         }
 
-        console.log(
-            "🧠 DOCUMENT READY EVENT",
-            doc
-        );
+        debugLog("Document ready for analysis");
 
         addMessage(
 
@@ -2081,9 +2059,7 @@ Fornisci un Executive Summary.`;
   // 🚀 READY
   // ===========================================
 
-  console.log(
-    "🤖 CHATBOT UI READY"
-  );
+  debugLog("Chatbot UI ready");
 
 };
 
