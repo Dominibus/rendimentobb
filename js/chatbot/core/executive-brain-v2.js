@@ -286,6 +286,79 @@ result.analysis = {
 };
 
 // ===============================================
+// 🧠 EXECUTIVE AI EXPLAINABILITY LAYER
+// ===============================================
+
+result.weaknesses = [];
+
+result.risks = [];
+
+
+// 🔴 Weakness mapping
+
+if(weakestPoint === "cashflow"){
+
+    result.weaknesses.push(
+        "Il cashflow rappresenta la principale area di miglioramento dell'operazione."
+    );
+
+}
+
+if(weakestPoint === "risk"){
+
+    result.weaknesses.push(
+        "Il profilo di rischio richiede maggiore attenzione prima dell'investimento."
+    );
+
+}
+
+if(weakestPoint === "occupancy"){
+
+    result.weaknesses.push(
+        "L'occupazione prevista potrebbe limitare la sostenibilità dei ricavi."
+    );
+
+}
+
+
+// 🟡 Watch points
+
+if(watchPoints.includes("leverage")){
+
+    result.risks.push(
+        "La leva finanziaria elevata aumenta la sensibilità dell'investimento."
+    );
+
+}
+
+if(watchPoints.includes("occupancy")){
+
+    result.risks.push(
+        "La performance dipende dalla capacità di mantenere una buona occupazione."
+    );
+
+}
+
+if(watchPoints.includes("roi_validation")){
+
+    result.risks.push(
+        "Un ROI elevato deve essere validato con dati reali di mercato."
+    );
+
+}
+
+
+// 🧠 Action plan
+
+result.actionPlan = [
+
+    ...result.weaknesses,
+
+    ...result.risks
+
+];
+    
+// ===============================================
 // 🧠 EXECUTIVE STRATEGIC LAYER
 // ===============================================
 
