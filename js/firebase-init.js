@@ -17,8 +17,7 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc,
-  updateDoc
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
@@ -395,31 +394,6 @@ window.hasPlan = function(required){
   }
 
 }
-// ===============================
-// AGGIORNA PIANO UTENTE
-// ===============================
-
-export async function upgradeToPro(uid){
-
-await updateDoc(doc(db,"users",uid),{
-plan:"pro",
-updatedAt:new Date()
-});
-
-await loadUserPlan(uid);
-
-}
-
-export async function upgradeToInvestor(uid){
-
-await updateDoc(doc(db,"users",uid),{
-plan:"investor",
-updatedAt:new Date()
-});
-
-await loadUserPlan(uid);
-
-}
 
 // ===============================
 // UI USER NAVBAR
@@ -586,6 +560,44 @@ document.body.classList.remove(
 
     await loadUserPlan(user.uid);
 
+    const paymentReturn =
+  sessionStorage.getItem(
+    "rb_payment_return"
+  );
+
+if (paymentReturn) {
+
+  sessionStorage.removeItem(
+    "rb_payment_return"
+  );
+
+  setTimeout(async () => {
+
+    await loadUserPlan(user.uid);
+
+    updateUserUI(user);
+
+    const access =
+      window.getUserAccess?.() || {};
+
+    alert(
+      getCurrentLang() === "it"
+        ? (
+            access.isPaid
+              ? "Pagamento verificato. Il tuo piano è attivo."
+              : "Pagamento ricevuto. L’attivazione del piano potrebbe richiedere alcuni secondi."
+          )
+        : (
+            access.isPaid
+              ? "Payment verified. Your plan is active."
+              : "Payment received. Plan activation may take a few seconds."
+          )
+    );
+
+  }, 1500);
+
+}
+
     // ===============================
     // 🔥 FIREBASE READY
     // ===============================
@@ -628,37 +640,6 @@ setTimeout(()=>{
   }
 
 });
-// ===============================
-// STRIPE PLAN ACTIVATION
-// ===============================
-
-document.addEventListener("rb_stripe_return", async (e)=>{
-
-if(!window.currentUser) return;
-
-try{
-
-await updateDoc(doc(db,"users",window.currentUser.uid),{
-plan:"investor",
-stripeSession:e.detail.session,
-updatedAt:new Date()
-});
-
-await loadUserPlan(window.currentUser.uid);
-
-alert(
-getCurrentLang()==="it"
-? "Pagamento completato! Piano Investor attivo."
-: "Payment successful! Investor plan activated."
-);
-
-}catch(err){
-
-console.error("Errore attivazione piano:",err);
-
-}
-
-});
 
 document.addEventListener("rb_language_changed", () => {
 
@@ -676,21 +657,34 @@ document.addEventListener("DOMContentLoaded", () => {
 // STRIPE RETURN CHECK
 // ===============================
 
-const params = new URLSearchParams(window.location.search);
-const stripeSession = params.get("session_id");
+const params =
+  new URLSearchParams(window.location.search);
 
-if(stripeSession){
+const stripeSession =
+  params.get("session_id");
 
-console.log("Stripe session rilevata:", stripeSession);
+if (stripeSession) {
 
-document.dispatchEvent(
-  new CustomEvent("rb_stripe_return",{
-    detail:{ session: stripeSession }
-  })
-);
+  sessionStorage.setItem(
+    "rb_payment_return",
+    "pending"
+  );
 
   params.delete("session_id");
-  history.replaceState({}, document.title, window.location.pathname);  
+
+  const cleanQuery =
+    params.toString();
+
+  const cleanUrl =
+    window.location.pathname +
+    (cleanQuery ? `?${cleanQuery}` : "") +
+    window.location.hash;
+
+  history.replaceState(
+    {},
+    document.title,
+    cleanUrl
+  );
 
 }
 
