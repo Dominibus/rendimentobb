@@ -4243,6 +4243,8 @@ if(advisor){
   advisor.verdict =
     canonicalVerdict;
 
+  if(window.RB_DEBUG === true){
+
   console.log(
     "🧠 CANONICAL INVESTMENT DECISION",
     window.lastInvestmentScore
@@ -4250,7 +4252,11 @@ if(advisor){
 
 }
 
+}
+
 if(advisor){
+
+  if(window.RB_DEBUG === true){
 
   console.log(
     "🧪 ADVISOR INPUTS",
@@ -4278,6 +4284,7 @@ if(advisor){
     }
   );
 
+}
 }
 
     // =========================================
