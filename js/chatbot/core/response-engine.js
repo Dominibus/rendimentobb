@@ -712,26 +712,33 @@ if(
 
 
 
-        // =====================================
-        // 🔥 SYNC BRAIN TECHNICAL POINTS
-        // =====================================
+// =====================================
+// 🔥 SYNC BRAIN TECHNICAL POINTS
+// =====================================
 
-        weakestPoint =
-            executiveBrain?.analysis?.weakestPoint ||
-            weakestPoint ||
-            "";
+let brainWeakestPoint =
+    executiveBrain?.analysis?.weakestPoint ||
+    "";
+
+let brainStrongestPoint =
+    executiveBrain?.analysis?.strongestPoint ||
+    "";
+
+let brainWatchPoints =
+    executiveBrain?.analysis?.watchPoints ||
+    [];
 
 
-        strongestPoint =
-            executiveBrain?.analysis?.strongestPoint ||
-            strongestPoint ||
-            "";
+weakestPoint =
+    brainWeakestPoint ||
+    weakestPoint ||
+    "";
 
 
-        watchPoints =
-            executiveBrain?.analysis?.watchPoints ||
-            watchPoints ||
-            [];
+watchPoints =
+    brainWatchPoints.length
+        ? brainWatchPoints
+        : watchPoints;
 
 
     }
