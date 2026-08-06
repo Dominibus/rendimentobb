@@ -2062,14 +2062,18 @@ if(window.lastAnalysisData){
   // 🧠 DEBUG
   // ===========================================
 
+if(window.RB_DEBUG === true){
+
   console.log(
-  "🧠 ENTITY ENGINE FULL:",
-  JSON.stringify(
-    entities,
-    null,
-    2
-  )
-);
+    "🧠 ENTITY ENGINE FULL:",
+    JSON.stringify(
+      entities,
+      null,
+      2
+    )
+  );
+
+}
 
   return entities;
 
