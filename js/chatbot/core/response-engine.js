@@ -8238,6 +8238,16 @@ console.log(
 );
 
 console.log(
+    "🎯 BRAIN WEAKEST POINT",
+    {
+        weaknesses: brainData?.weaknesses,
+        risks: brainData?.risks,
+        diagnosis: brainData?.diagnosis,
+        actionPlan: brainData?.actionPlan
+    }
+);    
+
+console.log(
     "🧠 SUMMARY IT FIELD",
     brainData?.summaryIT
 );
