@@ -912,8 +912,10 @@ result.insight = {
 
 };
 
-console.log(
-    "🧠 EXECUTIVE BRAIN V2 READY"
-);
+if(RB_DEBUG){
+    console.log(
+        "🧠 EXECUTIVE BRAIN V2 READY"
+    );
+}
 
 })();
