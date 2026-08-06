@@ -469,25 +469,33 @@ brainContext.executiveSummary = {
     );
 }
 
-        console.log(
-            "🟢 STRENGTHS",
-            strengths
-        );
+        if(RB_DEBUG){
+    console.log(
+        "🟢 STRENGTHS",
+        strengths
+    );
+}
 
-        console.log(
-            "🔴 WEAKNESSES",
-            weaknesses
-        );
+        if(RB_DEBUG){
+    console.log(
+        "🔴 WEAKNESSES",
+        weaknesses
+    );
+}
 
-        console.log(
-            "⚠️ RISKS",
-            risks
-        );
+        if(RB_DEBUG){
+    console.log(
+        "⚠️ RISKS",
+        risks
+    );
+}
 
-        console.log(
-            "🎯 ACTION PLAN",
-            actionPlan
-        );
+        if(RB_DEBUG){
+    console.log(
+        "🎯 ACTION PLAN",
+        actionPlan
+    );
+}
 
         return brainContext;
 
