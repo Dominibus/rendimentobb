@@ -3820,14 +3820,18 @@ if(
 
 }
     
-console.log(
-  "🔥 ANALYSIS DATA FINAL JSON",
-  JSON.stringify(
-    analysisData,
-    null,
-    2
-  )
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🔥 ANALYSIS DATA FINAL JSON",
+    JSON.stringify(
+      analysisData,
+      null,
+      2
+    )
+  );
+
+}
 
 // =====================================
 // 🧠 CANONICAL AI CONTEXT
