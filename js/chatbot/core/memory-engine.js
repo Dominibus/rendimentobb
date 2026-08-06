@@ -440,10 +440,14 @@ if(
     JSON.stringify(memory)
     );
 
-    console.log(
-      "🧠 MEMORY UPDATED:",
-      memory
-    );
+    if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 MEMORY UPDATED:",
+    memory
+  );
+
+}
 
   }
 
