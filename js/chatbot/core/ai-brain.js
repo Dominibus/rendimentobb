@@ -462,10 +462,12 @@ brainContext.executiveSummary = {
 }
         
 
-        console.log(
-            "🧠 AI DIAGNOSIS",
-            diagnosis
-        );
+        if(RB_DEBUG){
+    console.log(
+        "🧠 AI DIAGNOSIS",
+        diagnosis
+    );
+}
 
         console.log(
             "🟢 STRENGTHS",
