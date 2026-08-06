@@ -5001,22 +5001,26 @@ if(window.rbRememberMessage){
     // 🧠 DEBUG
     // =========================================
 
-    console.log(
-  "🧠 AI PIPELINE:",
-  {
-    entities,
-    intent,
+if(window.RB_DEBUG === true){
 
-    memory:
-      window.rbGetConversationContext
-        ? window.rbGetConversationContext()
-        : memory,
+  console.log(
+    "🧠 AI PIPELINE:",
+    {
+      entities,
+      intent,
 
-    matchedKnowledge,
+      memory:
+        window.rbGetConversationContext
+          ? window.rbGetConversationContext()
+          : memory,
 
-    response
-  }
-);
+      matchedKnowledge,
+
+      response
+    }
+  );
+
+}
 
     // =========================================
     // ✅ FINAL RESPONSE
