@@ -1524,6 +1524,8 @@ return {
 
 };
 
-console.log(
-    "🧠 EXECUTIVE RESPONSE BUILDER READY"
-);
+if(RB_DEBUG){
+    console.log(
+        "🧠 EXECUTIVE RESPONSE BUILDER READY"
+    );
+}
