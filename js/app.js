@@ -4078,15 +4078,19 @@ renderInvestmentScore(
 const chatbotAccess =
 window.getUserAccess?.() || {};
 
-    console.log(
-  "🔥 ROI DEBUG",
-  {
-    roi,
-    realROI,
-    visualROI,
-    safeROI
-  }
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🔥 ROI DEBUG",
+    {
+      roi,
+      realROI,
+      visualROI,
+      safeROI
+    }
+  );
+
+}
 
 // 🔥 ROI Executive chatbot (ROI su equity)
 
