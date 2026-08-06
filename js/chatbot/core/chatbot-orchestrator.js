@@ -4473,10 +4473,14 @@ const executiveBrain =
 
     : null;
 
-console.log(
+if(window.RB_DEBUG === true){
+
+  console.log(
     "🧠 EXECUTIVE BRAIN",
     executiveBrain
-);
+  );
+
+}
   
 // =========================================
 // 🧠 RESPONSE
