@@ -628,10 +628,7 @@ if(typeof window.rbDetectIntent === "function"){
   intentData =
     window.rbDetectIntent(text);
 
-  console.log(
-    "🧠 INTENT DETECTED:",
-    intentData
-  );
+
 
 }else{
 
@@ -813,11 +810,7 @@ const isPMSIntent =
 
   mainIntent === "pms_adr";
 
-  console.log(
-  "🔥 PMS INTENT CHECK:",
-  mainIntent,
-  isPMSIntent
-);
+
 
 // =====================================
 // 🏨 PMS RESPONSE
@@ -825,13 +818,7 @@ const isPMSIntent =
 
 if(isPMSIntent){
 
-console.log(
-  "🏨 PMS RESPONSE ACTIVE"
-);
 
-console.log(
-  window.rbPMSData
-);
 
   const pms =
     window.rbPMSData || {};
@@ -2516,9 +2503,6 @@ return window.t(
 // ✅ DEFAULT
 // =====================================
 
-console.log(
-  "⚠️ FALLBACK RESPONSE TRIGGERED"
-);
 
 return window.t(
 
@@ -2687,7 +2671,6 @@ if (isToolPage && !isMobile) {
 
 }
 
- console.log(chatWindow.getBoundingClientRect());
 
   const sendBtn =
     document.getElementById(
@@ -2709,141 +2692,6 @@ if (isToolPage && !isMobile) {
     ".rb-chat-close"
   );
 
-// ======================================
-// DRAG CHAT WINDOW (Desktop)
-// ======================================
-
-(function () {
-
-    const chatWindow =
-    document.getElementById("rb-chatbot-window");
-
-    if (!chatWindow) return;
-
-    const header =
-        chatWindow.querySelector(".rb-chat-header");
-
-    if (!header) return;
-
-    if ("ontouchstart" in window) return;
-
-    header.style.cursor = "grab";
-
-    let dragging = false;
-
-    let startX = 0;
-    let startY = 0;
-
-    let startLeft = 0;
-    let startTop = 0;
-
-  alert("DRAG READY");
-
-    header.addEventListener("mousedown", function (e) {
-
-        dragging = true;
-
-      chatWindow.classList.add(
-    "rb-chat-dragging"
-);
-
-        header.style.cursor = "grabbing";
-
-        const rect =
-            chatWindow.getBoundingClientRect();
-
-        startLeft = rect.left;
-        startTop = rect.top;
-
-        startX = e.clientX;
-        startY = e.clientY;
-
-        chatWindow.style.left = startLeft + "px";
-        chatWindow.style.top = startTop + "px";
-
-        chatWindow.style.right = "auto";
-        chatWindow.style.bottom = "auto";
-
-        chatWindow.style.position = "fixed";
-
-        document.body.style.userSelect = "none";
-
-    });
-
-    document.addEventListener("mousemove", function (e) {
-
-        if (!dragging) return;
-
-        let left =
-            startLeft + (e.clientX - startX);
-
-        let top =
-            startTop + (e.clientY - startY);
-
-        const maxLeft =
-            window.innerWidth - chatWindow.offsetWidth;
-
-        const maxTop =
-            window.innerHeight - chatWindow.offsetHeight;
-
-        left = Math.max(0, Math.min(left, maxLeft));
-        top = Math.max(0, Math.min(top, maxTop));
-
-        chatWindow.style.left = left + "px";
-        chatWindow.style.top = top + "px";
-
-    });
-
-    document.addEventListener("mouseup", function () {
-
-        if (!dragging) return;
-
-      chatWindow.classList.remove(
-    "rb-chat-dragging"
-);
-
-        dragging = false;
-
-        header.style.cursor = "grab";
-
-        document.body.style.userSelect = "";
-
-        localStorage.setItem(
-            "rbChatPosition",
-            JSON.stringify({
-                left: parseInt(chatWindow.style.left),
-                top: parseInt(chatWindow.style.top)
-            })
-        );
-
-    });
-
-    const saved =
-        localStorage.getItem("rbChatPosition");
-
-    if (saved) {
-
-        try {
-
-            const pos =
-                JSON.parse(saved);
-
-            chatWindow.style.position = "fixed";
-
-            chatWindow.style.left =
-                pos.left + "px";
-
-            chatWindow.style.top =
-                pos.top + "px";
-
-            chatWindow.style.right = "auto";
-            chatWindow.style.bottom = "auto";
-
-        } catch (e) {}
-
-    }
-
-})();
 
   // =========================================
   // OPEN / CLOSE
@@ -3278,6 +3126,8 @@ const thinkingTime =
 
     }
   );
+
+  initChatDrag();
 
 }
 
