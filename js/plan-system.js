@@ -52,7 +52,6 @@ window.PLAN = {
       this.limits.simulations = Infinity; // 👈 UNLIMITED
     }
 
-    console.log("🧠 PLAN SYSTEM SET:", cleanPlan, cleanRole);
 
     window.dispatchEvent(new Event("plan_updated"));
   },
@@ -100,7 +99,6 @@ window.PLAN = {
   registerSimulation(){
     this.usage.simulations++;
 
-    console.log("📊 Simulation count:", this.usage.simulations);
   },
 
   // ===============================
