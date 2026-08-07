@@ -1557,11 +1557,8 @@ window.applyCityBackground = function(city){
 
   hero.classList.add(finalCity);
 
-  console.log("🎯 Hero city:", finalCity);
+  
 };
-
-  console.log("✅ APPLY CITY LOADED");
-
 
 // =====================
 // 🔥 AUTO CHANGE DA INPUT
@@ -1886,7 +1883,7 @@ window.location.href =
 };
 
 // ================= SEARCH =================
- console.log("🚀 SEARCH FUNCTION START");
+
 window.searchProperties = async function(){
 
 const cityInput = document.getElementById("searchCity").value.trim();
@@ -2023,23 +2020,10 @@ await fetch(
 const data =
 await response.json();
 
-console.log(
-"🏠 API RESULTS:",
-data
-);
+
 
 const results =
 data.results || [];
-
-console.log(
-"🔍 PROPERTY TYPE:",
-propertyType
-);
-
-console.log(
-"🏠 RESULTS FOUND:",
-results.length
-);
 
 console.table(results);
 
@@ -2710,8 +2694,6 @@ window.sendLeadImmobili = async function(){
 
   try{
 
-    console.log("📡 SEND IMMOBILI LEAD...");
-
     const res = await fetch("/api/send-lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -2732,9 +2714,7 @@ window.sendLeadImmobili = async function(){
       throw new Error("API error");
     }
 
-    console.log("✅ IMMOBILI LEAD:", data);
-
-    msgBox.innerHTML = `
+       msgBox.innerHTML = `
 
 <div style="font-weight:700;color:#10b981">
 
