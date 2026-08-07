@@ -632,10 +632,7 @@ async function loadDashboard(){
 
   if(!window.currentUser){
 
-    console.log(
-      "👀 GUEST DEMO MODE"
-    );
-
+    
     window.currentUser = {
 
       uid:"demo-user",
@@ -686,8 +683,7 @@ if(
 
 ){
 
-    console.log("🔥 FIRESTORE DASHBOARD");
-
+    
     const q = query(
 
       collection(
@@ -713,10 +709,7 @@ if(
 
 }else{
 
-    console.log(
-      "🧪 DEMO DASHBOARD"
-    );
-
+   
 }
 
   dashboardDebug(
@@ -2323,8 +2316,7 @@ function reloadDashboardLanguage(){
 
 document.addEventListener("rb_language_changed", () => {
 
-  console.log("🌍 Cambio lingua → RELOAD DASHBOARD");
-
+  
   window.__forceReload = true;
   loadDashboard();
 
@@ -2353,8 +2345,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // ================= USER OK =================
     window.currentUser = user;
-    console.log("USER OK:", user.uid);
-
+    
     try{
 
       // ================= GET PLAN =================
@@ -2367,8 +2358,7 @@ window.addEventListener("DOMContentLoaded", () => {
         window.currentPlan = "free";
       }
 
-      console.log("PLAN:", window.currentPlan);
-
+      
       // 🔥 SYNC HEADER + UI
       document.dispatchEvent(new Event("rb_plan_ready"));
 
@@ -2377,10 +2367,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // ================= FREE ACCESS CONTROL =================
       if(plan === "free"){
 
-  console.log(
-    "🆓 FREE → DASHBOARD DEMO MODE"
-  );
-
+  
   window.isDemoData = true;
   window.isDemoDashboard = true;
 
@@ -2394,7 +2381,7 @@ window.addEventListener("DOMContentLoaded", () => {
         plan === "investor";
 
       if(isInvestor){
-        console.log("👀 INVESTOR MODE");
+        
       }
 
       // ================= READY =================
@@ -2409,8 +2396,7 @@ triggerPlanPopup(plan);
       // ================= PRO =================
       if(pro){
 
-  console.log("🔥 PRO → FULL UNLOCK");
-
+  
   window.isDemoData = false;
   window.isDemoDashboard = false;
 
@@ -2430,8 +2416,7 @@ triggerPlanPopup(plan);
 // ================= INVESTOR =================
 if(isInvestor){
 
-  console.log("👀 INVESTOR → FULL ACCESS");
-
+  
   window.isDemoData = false;
   window.isDemoDashboard = false;
 
