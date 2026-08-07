@@ -269,6 +269,4 @@ They allow you to:
 
 });
 
-console.log(
-  "🎓 BEGINNER KNOWLEDGE READY"
-);
+// Production: nessun log
