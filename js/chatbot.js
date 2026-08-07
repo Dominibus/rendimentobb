@@ -2727,6 +2727,8 @@ if(isToolPage && !isMobile){
     let startLeft = 0;
     let startTop = 0;
 
+  alert("DRAG READY");
+
     header.addEventListener("mousedown", function (e) {
 
         dragging = true;
