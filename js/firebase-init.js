@@ -218,7 +218,7 @@ async function loadUserPlan(uid) {
 
   try{
 
-    console.log("🔥 Carico piano per:", uid);
+  
 if(window.RB_DEBUG === true){
 
 console.log("🧠 USER STATE", {
@@ -297,8 +297,6 @@ window.userRole
 // 🔥 SINGLE SOURCE ACCESS (CRITICO)
 // ===============================
 
-console.log("🧠 RB_USER SYNC:", window.RB_USER);
-
 
 // 🔥 EVENTO GLOBALE (SINGLE SOURCE OF TRUTH)
 window.dispatchEvent(new Event("rb_plan_ready"));
@@ -330,11 +328,7 @@ window.syncAccessClasses = function(){
     document.body.classList.add("is-paid");
   }
 
-  console.log("🔥 ACCESS CLASS:", {
-    isPaid,
-    access
-  });
-
+  
 };
 
 // sync immediato
@@ -518,8 +512,7 @@ document.body.classList.remove(
   // 🟢 UTENTE LOGGATO
   // ===============================
 
-  console.log("🔥 Auth OK:", user.uid);
-
+  
   window.userReady = true;
 
   try {
@@ -532,7 +525,6 @@ document.body.classList.remove(
     // ===============================
     if (!snap.exists()) {
 
-      console.log("🔥 Creo utente Firestore automatico");
 
       await setDoc(userRef, {
         email: user.email,
@@ -542,7 +534,7 @@ document.body.classList.remove(
       });
 
     } else {
-      console.log("✔ Utente già presente in Firestore");
+      
     }
 
     // ===============================
@@ -621,7 +613,6 @@ setTimeout(()=>{
   window.dispatchEvent(new Event("rb_plan_ready"));
 }, 50);
 
-    console.log("✅ Firebase READY con piano:", window.currentPlan);
 
     // ===============================
     // 🔥 UPDATE UI
