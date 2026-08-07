@@ -95,13 +95,9 @@ window.rbDocumentEvents = {
             window.RBDocuments.config.enableLogging
         ){
 
-            console.log(
-
-                `📡 DOCUMENT EVENT → ${event}`,
-
-                payload
-
-            );
+            if(window.RB_DEBUG === true){
+    console.log("DOCUMENT EVENT", event);
+}
 
         }
 
