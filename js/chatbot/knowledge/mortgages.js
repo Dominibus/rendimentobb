@@ -723,7 +723,4 @@ window.rbKnowledgeBase.mortgages = {
 
 };
 
-console.log(
-  "🏦 MORTGAGE AI MODULE READY",
-  window.rbKnowledgeBase.mortgages
-);
+// Production: nessun log
