@@ -560,7 +560,4 @@ window.rbKnowledgeBase.mistakes = {
 
 };
 
-console.log(
-  "🚨 INVESTOR MISTAKES AI MODULE READY",
-  window.rbKnowledgeBase.mistakes
-);
+// Production: nessun log
