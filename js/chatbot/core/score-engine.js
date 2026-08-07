@@ -477,10 +477,7 @@ window.rbGenerateInvestmentScore = function({
     // 🧠 DEBUG
     // ===========================================
 
-    console.log(
-      "🧠 INVESTMENT SCORE:",
-      result
-    );
+
 
     return result;
 
