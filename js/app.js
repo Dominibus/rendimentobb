@@ -8557,7 +8557,7 @@ document.addEventListener("rb_plan_ready", () => {
 
 document.addEventListener("rb_auth_ready", () => {
 
-  console.log("🔐 AUTH READY → re-check calculate");
+  // Production: auth ready
 
   if(window.pendingCalculation && typeof window.calculate === "function"){
 
