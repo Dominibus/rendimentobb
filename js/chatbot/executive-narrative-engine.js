@@ -558,18 +558,4 @@ ${recommendationEN}`;
     };
 
 };
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-
-    "🧠 EXECUTIVE NARRATIVE ENGINE READY",
-
-    {
-
-        version: "2.0"
-
-    }
-
-);
+// Production: nessun log
