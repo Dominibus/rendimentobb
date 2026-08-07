@@ -2663,6 +2663,21 @@ function initRBChatbot(){
       "rb-chatbot-window"
     );
 
+ // =========================================
+// DESKTOP DRAG SUPPORT
+// =========================================
+
+const chatHeader =
+document.querySelector(".rb-chat-header");
+
+let isDragging = false;
+
+let startX = 0;
+let startY = 0;
+
+let startLeft = 0;
+let startTop = 0;
+
 // =========================================
 // 🔥 AUTO OPEN TOOL PAGE (DESKTOP ONLY)
 // =========================================
@@ -2843,6 +2858,42 @@ closeBtn.onclick = ()=>{
     .remove("open");
 
 };
+
+// =========================================
+// DESKTOP DRAG
+// =========================================
+
+if(window.innerWidth > 768){
+
+    chatHeader.style.cursor = "grab";
+
+    chatHeader.addEventListener("mousedown",(e)=>{
+
+        isDragging = true;
+
+        const rect =
+        chatWindow.getBoundingClientRect();
+
+        startLeft = rect.left;
+        startTop = rect.top;
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        chatHeader.style.cursor="grabbing";
+
+        chatWindow.style.bottom="auto";
+        chatWindow.style.right="auto";
+
+        chatWindow.style.left =
+        rect.left+"px";
+
+        chatWindow.style.top =
+        rect.top+"px";
+
+    });
+
+}  
 
 // =========================================
 // 🔥 GLOBAL TOGGLE FUNCTION
