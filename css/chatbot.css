@@ -146,6 +146,14 @@ Silicon Valley SaaS UI
 
   position:relative;
 
+  z-index:1000;
+
+  cursor:grab;
+
+  user-select:none;
+
+  pointer-events:auto;
+
   padding:22px;
 
   background:
@@ -162,6 +170,8 @@ Silicon Valley SaaS UI
 }
 
 .rb-chat-header::after{
+
+  pointer-events:none;
 
   content:"";
 
