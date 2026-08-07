@@ -165,8 +165,6 @@ if(
 window.rbClassifyDocument=
 classifyDocument;
 
-console.log(
-    "🧠 DOCUMENT CLASSIFIER READY"
-);
+// Production: nessun log
 
 })();
