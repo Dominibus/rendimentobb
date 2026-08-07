@@ -81,8 +81,7 @@ document.addEventListener("rb_plan_loaded", ()=>{
     modal.classList.remove("open");
   }
 
-  console.log("🧹 CLEAN MODAL AFTER PLAN LOAD");
-});
+  });
 
 /* =====================
 🎨 HERO BG
@@ -360,8 +359,7 @@ const hasRealAccess =
 
 if(hasRealAccess){
 
-  console.log("✅ HEADER SYNC RB_USER:", RB);
-
+  
   clearInterval(interval);
 
   renderUser(user);
@@ -529,7 +527,6 @@ if(aiBtn){
 
   aiBtn.onclick = ()=>{
 
-    console.log("🤖 HEADER AI CLICK");
 
     // aspetta chatbot render
     setTimeout(()=>{
