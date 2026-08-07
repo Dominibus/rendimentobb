@@ -3941,18 +3941,7 @@ const loanAmount =
 
     // ================= CALCOLO =================
 
-console.log("🔥 ROI INPUT", {
-  price,
-  equity,
-  loanAmount,
-  priceNight,
-  occupancy,
-  expenses,
-  commission,
-  tax,
-  interestRate,
-  loanYears
-});
+// Production: nessun log
 
 const result = calculateROI({
   price,
@@ -3967,16 +3956,9 @@ const result = calculateROI({
   loanYears
 });
 
-    console.log(
-  "🔥 POST ROI VARIABLES",
-  {
-    price,
-    equity,
-    loanAmount
-  }
-);
+// Production: nessun log
 
-console.log("🔥 ROI RESULT", result);
+// Production: nessun log
 
     if (!result || typeof result !== "object") {
 
