@@ -532,7 +532,4 @@ energyClass: {
 
 });
 
-console.log(
-  "🏠 PROPERTY ANALYSIS READY",
-  window.rbKnowledgeBase
-);
+// Production: nessun log
