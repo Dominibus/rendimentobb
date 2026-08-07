@@ -7509,12 +7509,7 @@ document.addEventListener("rb_auth_ready", () => {
   // ===============================
 
   if(window.firebaseReady){
-  console.log(
-    "👤 USER:",
-    window.currentUser ? "LOGGED" : "GUEST",
-    "| PLAN:",
-    window.currentPlan
-  );
+// Production: nessun log
 }
 
 
