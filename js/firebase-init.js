@@ -485,8 +485,7 @@ onAuthStateChanged(auth, async (user) => {
   // ===============================
   if (!user) {
 
-    console.log("👤 Utente non loggato");
-
+    
     window.currentUser = null;
     window.currentPlan = "free";
     window.userReady = false;
