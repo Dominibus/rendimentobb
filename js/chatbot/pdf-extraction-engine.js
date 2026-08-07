@@ -191,6 +191,4 @@ window.rbExtractPDFText = async function(documentObject){
 
 };
 
-console.log(
-    "📄 PDF EXTRACTION ENGINE READY"
-);
+// Production: nessun log
