@@ -2719,6 +2719,9 @@ function initChatDrag(){
 
     header.addEventListener("mousedown", function(e){
 
+    console.log("MOUSEDOWN");
+
+
         if(e.target.closest(".rb-chat-close")) return;
 
         dragging = true;
@@ -2737,6 +2740,11 @@ function initChatDrag(){
 
     document.addEventListener("mousemove", function(e){
 
+    if(dragging){
+        console.log("MOVE");
+    }
+
+
         if(!dragging) return;
 
         chatWindow.style.left =
@@ -2748,6 +2756,9 @@ function initChatDrag(){
     });
 
     document.addEventListener("mouseup", function(){
+
+    console.log("MOUSEUP");
+
 
         if(!dragging) return;
 
