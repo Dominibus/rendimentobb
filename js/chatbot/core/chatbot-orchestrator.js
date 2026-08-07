@@ -5145,10 +5145,4 @@ if(window.RB_DEBUG === true){
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 CHATBOT ORCHESTRATOR READY"
-);
+// Production: nessun log
