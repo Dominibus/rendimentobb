@@ -779,7 +779,4 @@ window.rbKnowledgeBase.risk = {
 
 };
 
-console.log(
-  "⚠️ RISK AI MODULE READY",
-  window.rbKnowledgeBase.risk
-);
+// Production: nessun log
