@@ -2706,7 +2706,7 @@ if(isToolPage && !isMobile){
 (function () {
 
     const chatWindow =
-        document.getElementById("rb-chat-window");
+    document.getElementById("rb-chatbot-window");
 
     if (!chatWindow) return;
 
