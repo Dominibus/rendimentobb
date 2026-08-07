@@ -348,6 +348,4 @@ window.rbBuildConversationContext = function({
 
 };
 
-console.log(
-    "🧠 CONVERSATION ENGINE 2.0 READY"
-);
+// Production: nessun log
