@@ -355,11 +355,4 @@ Professional investors use realistic simulations and market benchmarks to reduce
 
 };
 
-// ===============================================
-// ✅ SUPPORT AI READY
-// ===============================================
-
-console.log(
-  "🧠 SUPPORT KNOWLEDGE READY",
-  window.rbSupportKnowledge
-);
+// Production: nessun log
