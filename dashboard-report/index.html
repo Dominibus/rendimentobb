@@ -1196,21 +1196,6 @@ const canonicalVerdict =
   canonicalSimulation.verdict ||
   "WAIT";
 
-console.log(
-  "📊 DASHBOARD CANONICAL DATA",
-  {
-    price,
-    equity,
-    roi,
-    realROI,
-    annualProfit,
-    risk,
-    investmentScore:
-      canonicalInvestmentScore,
-    verdict:
-      canonicalVerdict
-  }
-);
 
 // ================= LANG =================
 const lang = window.currentLang || "it";
@@ -1221,8 +1206,6 @@ function checkUserPlan(){
   const access = window.getUserAccess?.() || {};
 
   isPro = access.isPro || access.isAdmin;
-
-  console.log("🔐 REPORT ACCESS FIX:", access);
 
 }
 
@@ -2952,7 +2935,6 @@ function populateSimulations(){
     select.value = "0";
   }
 
-  console.log("SIM LIST:", list);
 }
 
 // ================= INIT =================
