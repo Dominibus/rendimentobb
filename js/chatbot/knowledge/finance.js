@@ -653,7 +653,4 @@ Object.assign(window.rbKnowledgeBase,{
 
 });
 
-console.log(
-  "💰 FINANCE AI MODULE READY",
-  window.rbKnowledgeBase
-);
+// Production: nessun log
