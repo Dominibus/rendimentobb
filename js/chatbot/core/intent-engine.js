@@ -3839,10 +3839,4 @@ return result;
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 INTENT ENGINE READY"
-);
+// Production: nessun log
