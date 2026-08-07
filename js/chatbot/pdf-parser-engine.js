@@ -433,8 +433,4 @@ window.rbParseExecutivePDF = async function(documentObject){
 
 };
 
-console.log(
-
-    "🧠 PDF PARSER ENGINE READY"
-
-);
+// Production: nessun log
