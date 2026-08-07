@@ -1394,7 +1394,7 @@ return (window.currentLang === "en") ? en : it;
 /* ================= CALCOLO ================= */
 function calculate(){
 
-console.log("🔥 CALCULATE TRIGGERED");
+// Production: nessun log
   
 const amount = parseFloat(document.getElementById("amount").value || 200000);
 const rateInput = document.getElementById("rate").value || "3.5";
@@ -1517,7 +1517,7 @@ function renderExtra(roi, yearly){
 const extra = document.getElementById("extra");
 
 if(!extra){
-  console.error("❌ #extra NON trovato");
+  
   return;
 }
 
@@ -2023,7 +2023,7 @@ function goToPricing(){
 
 async function startPlanPurchase(plan){
 
-  console.log("🚀 START PURCHASE:", plan);
+ // Production: nessun log
 
   const access = getAccess();
 
@@ -2072,7 +2072,7 @@ async function startPlanPurchase(plan){
     }
 
   }catch(e){
-    console.error("❌ Checkout error:", e);
+    
     alert("Errore connessione pagamento");
   }
 }
@@ -2136,7 +2136,7 @@ async function saveLeadFromBank(bank, rate){
 
   try{
 
-    console.log("📡 SEND BANK LEAD...");
+    // Production: nessun log
 
     const res = await fetch("/api/send-lead",{
       method:"POST",
@@ -2165,7 +2165,7 @@ async function saveLeadFromBank(bank, rate){
     );
 
   }catch(e){
-    console.error("❌ BANK ERROR:", e);
+    
   }
 
 }
@@ -2202,7 +2202,7 @@ async function saveLead(){
 
   try{
 
-    console.log("📡 SEND MUTUI LEAD...");
+    // Production: nessun log
 
     const res = await fetch("/api/send-lead",{
   method:"POST",
@@ -2226,7 +2226,7 @@ async function saveLead(){
       throw new Error("API error");
     }
 
-    console.log("✅ MUTUI LEAD:", data);
+    // Production: nessun log
 
     const success = document.getElementById("success");
     success.style.display = "block";
@@ -2272,7 +2272,7 @@ ${t(
     document.querySelector(".lead-box button").disabled = true;
 
   }catch(e){
-    console.error("❌ MUTUI ERROR:", e);
+    
     alert(t("Errore invio","Error sending request"));
   }
 
@@ -2280,14 +2280,14 @@ ${t(
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("✅ DOM READY");
+  // Production: nessun log
 
   const btn = document.getElementById("calc-btn");
 
   if(btn){
     btn.addEventListener("click", calculate);
   }else{
-    console.error("❌ Bottone non trovato");
+    
   }
 
 });
