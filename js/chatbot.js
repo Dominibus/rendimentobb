@@ -3209,6 +3209,8 @@ const thinkingTime =
 
   initChatDrag();
 
+  console.log("DRAG INIT");
+
 }
 
 });                          
