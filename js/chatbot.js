@@ -2699,6 +2699,130 @@ if(isToolPage && !isMobile){
     ".rb-chat-close"
   );
 
+// =========================================
+// DRAG CHAT WINDOW
+// =========================================
+
+const header =
+  chatWindow.querySelector(".rb-chat-header");
+
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+const savedPosition =
+  JSON.parse(
+    localStorage.getItem("rbChatPosition") || "null"
+  );
+
+if(savedPosition){
+
+  chatWindow.style.left =
+    savedPosition.left + "px";
+
+  chatWindow.style.top =
+    savedPosition.top + "px";
+
+  chatWindow.style.right = "auto";
+  chatWindow.style.bottom = "auto";
+
+}
+
+header.style.cursor = "move";
+
+header.addEventListener("mousedown",(e)=>{
+
+  if(e.target.closest(".rb-chat-close"))
+    return;
+
+  isDragging = true;
+
+  const rect =
+    chatWindow.getBoundingClientRect();
+
+  offsetX =
+    e.clientX - rect.left;
+
+  offsetY =
+    e.clientY - rect.top;
+
+  chatWindow.style.left =
+    rect.left + "px";
+
+  chatWindow.style.top =
+    rect.top + "px";
+
+  chatWindow.style.right = "auto";
+  chatWindow.style.bottom = "auto";
+
+  document.body.style.userSelect = "none";
+
+});
+
+document.addEventListener("mousemove",(e)=>{
+
+  if(!isDragging)
+    return;
+
+  let left =
+    e.clientX - offsetX;
+
+  let top =
+    e.clientY - offsetY;
+
+  left = Math.max(
+    0,
+    Math.min(
+      left,
+      window.innerWidth -
+      chatWindow.offsetWidth
+    )
+  );
+
+  top = Math.max(
+    0,
+    Math.min(
+      top,
+      window.innerHeight -
+      chatWindow.offsetHeight
+    )
+  );
+
+  chatWindow.style.left =
+    left + "px";
+
+  chatWindow.style.top =
+    top + "px";
+
+});
+
+document.addEventListener("mouseup",()=>{
+
+  if(!isDragging)
+    return;
+
+  isDragging = false;
+
+  document.body.style.userSelect = "";
+
+  localStorage.setItem(
+
+    "rbChatPosition",
+
+    JSON.stringify({
+
+      left:
+        parseInt(chatWindow.style.left),
+
+      top:
+        parseInt(chatWindow.style.top)
+
+    })
+
+  );
+
+});
+
   // =========================================
   // OPEN / CLOSE
   // =========================================
