@@ -517,10 +517,4 @@ window.rbGenerateInvestmentScore = function({
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 INVESTMENT SCORE ENGINE READY"
-);
+// Production: nessun log
