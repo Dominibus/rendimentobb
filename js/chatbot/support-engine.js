@@ -360,6 +360,4 @@ Includes:
 
 };
 
-console.log(
-  "🤝 SUPPORT ENGINE READY"
-);
+// Production: nessun log
