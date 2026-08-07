@@ -11397,7 +11397,7 @@ margin-bottom:14px;
 
 <div style="
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
 gap:14px;
 ">
 
@@ -11405,24 +11405,36 @@ gap:14px;
 <button
 onclick="window.openWhatIf && window.openWhatIf('adr')"
 style="
-padding:18px;
+padding:20px;
+min-height:150px;
+
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+align-items:flex-start;
+
 border-radius:16px;
 border:1px solid #dbe4ee;
 background:#ffffff;
 cursor:pointer;
 text-align:left;
+overflow:hidden;
 ">
 
 <div style="
 font-size:24px;
-margin-bottom:8px;
+margin-bottom:10px;
 ">
 📈
 </div>
 
 <div style="
 font-weight:800;
+font-size:16px;
+line-height:1.35;
 color:#0f172a;
+white-space:normal;
+word-break:break-word;
 ">
 
 ${t(
@@ -11434,8 +11446,11 @@ ${t(
 
 <div style="
 font-size:13px;
+line-height:1.45;
 color:#64748b;
-margin-top:6px;
+margin-top:8px;
+white-space:normal;
+word-break:break-word;
 ">
 
 +5% pricing simulation
@@ -11449,24 +11464,36 @@ margin-top:6px;
 <button
 onclick="window.openWhatIf && window.openWhatIf('mortgage')"
 style="
-padding:18px;
+padding:20px;
+min-height:150px;
+
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+align-items:flex-start;
+
 border-radius:16px;
 border:1px solid #dbe4ee;
 background:#ffffff;
 cursor:pointer;
 text-align:left;
+overflow:hidden;
 ">
 
 <div style="
 font-size:24px;
-margin-bottom:8px;
+margin-bottom:10px;
 ">
 🏦
 </div>
 
 <div style="
 font-weight:800;
+font-size:16px;
+line-height:1.35;
 color:#0f172a;
+white-space:normal;
+word-break:break-word;
 ">
 
 ${t(
@@ -11478,8 +11505,11 @@ ${t(
 
 <div style="
 font-size:13px;
+line-height:1.45;
 color:#64748b;
-margin-top:6px;
+margin-top:8px;
+white-space:normal;
+word-break:break-word;
 ">
 
 LTV / equity analysis
@@ -11493,24 +11523,36 @@ LTV / equity analysis
 <button
 onclick="window.openMarketComparison && window.openMarketComparison()"
 style="
-padding:18px;
+padding:20px;
+min-height:150px;
+
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+align-items:flex-start;
+
 border-radius:16px;
 border:1px solid #dbe4ee;
 background:#ffffff;
 cursor:pointer;
 text-align:left;
+overflow:hidden;
 ">
 
 <div style="
 font-size:24px;
-margin-bottom:8px;
+margin-bottom:10px;
 ">
 🏙️
 </div>
 
 <div style="
 font-weight:800;
+font-size:16px;
+line-height:1.35;
 color:#0f172a;
+white-space:normal;
+word-break:break-word;
 ">
 
 ${t(
@@ -11522,8 +11564,11 @@ ${t(
 
 <div style="
 font-size:13px;
+line-height:1.45;
 color:#64748b;
-margin-top:6px;
+margin-top:8px;
+white-space:normal;
+word-break:break-word;
 ">
 
 Rome vs Milan vs Naples
@@ -11537,24 +11582,36 @@ Rome vs Milan vs Naples
 <button
 onclick="handleReportClick && handleReportClick()"
 style="
-padding:18px;
+padding:20px;
+min-height:150px;
+
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+align-items:flex-start;
+
 border-radius:16px;
 border:1px solid #dbe4ee;
 background:#ffffff;
 cursor:pointer;
 text-align:left;
+overflow:hidden;
 ">
 
 <div style="
 font-size:24px;
-margin-bottom:8px;
+margin-bottom:10px;
 ">
 📄
 </div>
 
 <div style="
 font-weight:800;
+font-size:16px;
+line-height:1.35;
 color:#0f172a;
+white-space:normal;
+word-break:break-word;
 ">
 
 ${t(
@@ -11566,8 +11623,11 @@ ${t(
 
 <div style="
 font-size:13px;
+line-height:1.45;
 color:#64748b;
-margin-top:6px;
+margin-top:8px;
+white-space:normal;
+word-break:break-word;
 ">
 
 Executive PDF
