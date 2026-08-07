@@ -2365,7 +2365,7 @@ const btn = document.getElementById("pdf-btn");
 if(!btn) return;
 
 if(!window.firebaseReady){
-  console.log("⏳ Aspetto Firebase...");
+  // Production: nessun log
   return;
 }
 
