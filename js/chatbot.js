@@ -2668,16 +2668,26 @@ function initRBChatbot(){
 // =========================================
 
 const isToolPage =
-  window.location.pathname.includes("/tool");
+    window.location.pathname.includes("/tool");
 
 const isMobile =
-  window.innerWidth <= 768;
+    window.innerWidth <= 768;
 
-if(isToolPage && !isMobile){
+if (isToolPage && !isMobile) {
 
-  chatWindow.classList.add("open");
+    chatWindow.style.position = "fixed";
+
+    chatWindow.style.left = "auto";
+    chatWindow.style.top = "auto";
+
+    chatWindow.style.right = "24px";
+    chatWindow.style.bottom = "24px";
+
+    chatWindow.classList.add("open");
 
 }
+
+ console.log(chatWindow.getBoundingClientRect());
 
   const sendBtn =
     document.getElementById(
