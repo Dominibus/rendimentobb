@@ -244,7 +244,9 @@ if (docSnap.exists()) {
   
   window.userName = data.name || "";
 } else {
-      console.warn("⚠️ Documento NON trovato");
+      if(window.RB_DEBUG === true){
+  console.warn("⚠️ Documento NON trovato");
+}
     }
 
 // ===============================
@@ -270,7 +272,9 @@ window.isAdminUser = isAdmin;
 // 🔥 ADMIN = ACCESSO TOTALE
 if(window.isAdminUser){
 
+  if(window.RB_DEBUG === true){
   console.log("👑 ADMIN OVERRIDE ATTIVO");
+}
 
   // forza piano
   window.currentPlan = "pro";
