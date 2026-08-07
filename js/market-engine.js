@@ -65,7 +65,7 @@ export function renderMarketBenchmark(inputCity){
 
   const city = getSafeCity(inputCity);
 
-  console.log("📊 Render Market:", city);
+  
 
   /* ================= DATA CHECK ================= */
 
