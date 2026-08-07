@@ -706,7 +706,4 @@ window.rbKnowledgeBase.realEstate = {
 
 };
 
-console.log(
-  "🏠 REAL ESTATE AI MODULE READY",
-  window.rbKnowledgeBase.realEstate
-);
+// Production: nessun log
