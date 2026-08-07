@@ -849,6 +849,4 @@ window.rbEvaluateInvestment = function(data = {}){
 
 };
 
-console.log(
-  "🧠 ADVISOR ENGINE READY"
-);
+// Production: nessun log
