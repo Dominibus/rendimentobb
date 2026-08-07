@@ -2731,6 +2731,10 @@ if(isToolPage && !isMobile){
 
         dragging = true;
 
+      chatWindow.classList.add(
+    "rb-chat-dragging"
+);
+
         header.style.cursor = "grabbing";
 
         const rect =
@@ -2781,6 +2785,10 @@ if(isToolPage && !isMobile){
     document.addEventListener("mouseup", function () {
 
         if (!dragging) return;
+
+      chatWindow.classList.remove(
+    "rb-chat-dragging"
+);
 
         dragging = false;
 
