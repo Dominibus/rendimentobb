@@ -679,10 +679,4 @@ window.rbLoadInvestorProfile = function(){
 
 window.rbLoadInvestorProfile();
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 INVESTOR PROFILE ENGINE READY"
-);
+// Production: nessun log
