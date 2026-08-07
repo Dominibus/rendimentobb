@@ -118,7 +118,7 @@ const days =
 
 if(days > UPDATE_INTERVAL_DAYS){
 
-console.log("RB Mortgage rates auto update");
+// Production: automatic rates update
 
 saveRates(DEFAULT_RATES);
 
