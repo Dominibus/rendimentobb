@@ -11,7 +11,6 @@ import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/
 
 window.unlockUI = function(){
 
-  console.log("🔓 unlockUI fallback attivo");
 
   // rimuove blur globale
   document.querySelectorAll(".pro-blur, .locked, .blur").forEach(el=>{
@@ -32,7 +31,6 @@ window.unlockUI = function(){
 // ===============================
 window.openProModal = function(){
 
-  console.log("🔥 OPEN PRO MODAL");
 
   const modal = document.getElementById("rb-pro-modal");
   if(!modal) return;
@@ -45,7 +43,7 @@ window.openProModal = function(){
   function closeModal(){
     modal.classList.remove("open");
     document.body.classList.remove("rb-ui-modal-open");
-    console.log("🔓 CLOSE PRO MODAL");
+    
   }
 
   // chiusura click
@@ -369,7 +367,6 @@ if(hasRealAccess){
       // ===============================
      if(RB.isInvestor && !RB.isPro){
 
-  console.log("🟡 HEADER → SAFE CLEAN (NO LOCK)");
 
   // rimuove SOLO hard lock
   document.querySelectorAll(".locked-overlay, .hard-lock").forEach(el=>{
@@ -385,13 +382,12 @@ if(hasRealAccess){
 
       // 🟢 PRO / ADMIN → FULL
       if(RB.isPro || RB.isAdmin){
-        console.log("🟢 PRO → FULL UNLOCK");
+        
         unlockUI();
       }
 
      else if(RB.isInvestor){
 
-  console.log("🟡 HEADER → INVESTOR SAFE MODE (NO OVERRIDE)");
 
   // 💣 NON toccare UI → gestita da app.js (PRO-LIKE)
 
@@ -407,7 +403,7 @@ if(hasRealAccess){
 
       // 🔴 FREE → BLOCCATO
       else{
-        console.log("🔴 FREE → NO unlockUI");
+        
       }
 
       return;
@@ -548,9 +544,6 @@ if(aiBtn){
 
       chatbot.classList.toggle("open");
 
-      console.log(
-        "✅ chatbot toggled"
-      );
 
     }, 50);
 
@@ -596,17 +589,11 @@ if(
     window.currentPlan === undefined
   )
 ){
-  console.log("⏳ HEADER WAIT currentPlan");
+  
   return;
 }
   if(window.RB_DEBUG === true){
 
-  console.log(
-    "👤 HEADER ACCESS:",
-    access,
-    "PLAN:",
-    window.currentPlan
-  );
 
 }
 
