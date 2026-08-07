@@ -2708,22 +2708,18 @@ function initChatDrag(){
 
     if(!header) return;
 
-    // Desktop only
     if(window.innerWidth <= 768) return;
 
     header.style.cursor = "grab";
 
     let dragging = false;
 
-    let startX = 0;
-    let startY = 0;
+    let offsetX = 0;
+    let offsetY = 0;
 
-    let startLeft = 0;
-    let startTop = 0;
+    header.addEventListener("mousedown", function(e){
 
-    header.onmousedown = function(e){
-
-        e.preventDefault();
+        if(e.target.closest(".rb-chat-close")) return;
 
         dragging = true;
 
@@ -2732,60 +2728,26 @@ function initChatDrag(){
         const rect =
             chatWindow.getBoundingClientRect();
 
-        startLeft = rect.left;
-        startTop = rect.top;
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
 
-        startX = e.clientX;
-        startY = e.clientY;
+        chatWindow.classList.add("rb-chat-dragging");
 
-        chatWindow.style.position = "fixed";
-        chatWindow.style.left = startLeft + "px";
-        chatWindow.style.top = startTop + "px";
+    });
 
-        chatWindow.style.right = "auto";
-        chatWindow.style.bottom = "auto";
-
-    };
-
-    document.onmousemove = function(e){
+    document.addEventListener("mousemove", function(e){
 
         if(!dragging) return;
 
-        let left =
-            startLeft + (e.clientX - startX);
-
-        let top =
-            startTop + (e.clientY - startY);
-
-        const maxLeft =
-            window.innerWidth -
-            chatWindow.offsetWidth;
-
-        const maxTop =
-            window.innerHeight -
-            chatWindow.offsetHeight;
-
-        left =
-            Math.max(
-                0,
-                Math.min(left,maxLeft)
-            );
-
-        top =
-            Math.max(
-                0,
-                Math.min(top,maxTop)
-            );
-
         chatWindow.style.left =
-            left + "px";
+            (e.clientX - offsetX) + "px";
 
         chatWindow.style.top =
-            top + "px";
+            (e.clientY - offsetY) + "px";
 
-    };
+    });
 
-    document.onmouseup = function(){
+    document.addEventListener("mouseup", function(){
 
         if(!dragging) return;
 
@@ -2793,54 +2755,9 @@ function initChatDrag(){
 
         header.style.cursor = "grab";
 
-        localStorage.setItem(
+        chatWindow.classList.remove("rb-chat-dragging");
 
-            "rbChatPosition",
-
-            JSON.stringify({
-
-                left:
-                    parseInt(chatWindow.style.left),
-
-                top:
-                    parseInt(chatWindow.style.top)
-
-            })
-
-        );
-
-    };
-
-    const saved =
-        localStorage.getItem("rbChatPosition");
-
-    if(saved){
-
-        try{
-
-            const pos =
-                JSON.parse(saved);
-
-            chatWindow.style.position = "fixed";
-
-            chatWindow.style.left =
-                pos.left + "px";
-
-            chatWindow.style.top =
-                pos.top + "px";
-
-            chatWindow.style.right = "auto";
-            chatWindow.style.bottom = "auto";
-
-        }catch(e){
-
-            localStorage.removeItem(
-                "rbChatPosition"
-            );
-
-        }
-
-    }
+    });
 
 }
   
