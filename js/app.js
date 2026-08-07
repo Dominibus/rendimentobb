@@ -4927,7 +4927,7 @@ function renderCityROIChart(){
   const canvas = document.getElementById("city-roi-chart");
 
   if(!canvas){
-    console.warn("⏳ city chart non pronto → skip");
+    
     return;
   }
 
@@ -8653,10 +8653,7 @@ window.syncAccessClasses = function(){
 
   document.body.classList.toggle("is-paid", isPaid);
 
-  console.log("🔥 ACCESS CLASS:", {
-    isPaid,
-    access
-  });
+// Production: nessun log
 
 };
 
