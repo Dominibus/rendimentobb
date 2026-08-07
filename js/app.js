@@ -92,7 +92,7 @@ window.RB_CITY_DATA = [
 
 window.showToast = window.showToast || function(message, type = "info"){
 
-  console.log("🔔 TOAST:", type, message);
+  
 
   const toast = document.createElement("div");
 
@@ -146,7 +146,7 @@ window.rbAlert = function(msg){
 
 window.forceCloseAllModals = function(){
 
-  console.log("🧹 FORCE CLOSE MODALS");
+
 
   // rimuove stato globale
   document.body.classList.remove("modal-open");
@@ -251,7 +251,7 @@ const access = window.getUserAccess?.() || {};
 // ⛔ evita falso FREE durante bootstrap Firebase
 if(!window.currentPlan){
 
-  console.log("⏳ plan non pronto → skip KPI lock");
+  
 
 }else{
 
@@ -264,7 +264,7 @@ if(
   access.isAdmin
 ){
 
-  console.log("✅ PRO USER → SKIP RESET");
+  
 
   [
     qrProfit, elAnnual,
@@ -308,7 +308,7 @@ if(
 
 else if(access.isInvestor){
 
-  console.log("🟡 INVESTOR PARTIAL ACCESS");
+  
 
   [
     qrProfit, elAnnual,
@@ -347,7 +347,7 @@ else if(access.isInvestor){
 
 else if(access.isFree){
 
-  console.log("🔒 KPI HARD LOCK (FREE)");
+ 
 
   [
     qrProfit, elAnnual,
@@ -545,19 +545,19 @@ return;
 async function saveAnalysis(data){
 
   if(window.__savingAnalysis){
-  console.log("⛔ SAVE BLOCCATO");
+  
   return;
 }
 
 window.__savingAnalysis = true;
 
   if(!window.firebaseReady){
-    console.log("⏳ Firebase non pronto");
+    
     return;
   }
 
   if(!window.currentUser || !window.currentUser.uid){
-    console.log("❌ Utente non loggato");
+    
     return;
   }
 
@@ -627,14 +627,14 @@ await addDoc(collection(db,"analyses"),{
 
 });
 
-    console.log("✅ SALVATO FIRESTORE");
+    
 
 // 🔄 dashboard live refresh
 window.dispatchEvent(
   new Event("analysisSaved")
 );
 
-console.log("💾 SAVE ANALYSIS CALLED");
+
 
     window.__savingAnalysis = false;
 
@@ -892,7 +892,7 @@ function hasPlan(requiredPlan){
 function requirePlan(requiredPlan){
 
   if(!window.firebaseReady){
-  console.log("⏳ firebase non pronto");
+  
   return false;
 }
 
@@ -1312,7 +1312,7 @@ window.applyCityBackground = function(city){
 
   // 🔥 evita re-render inutili
   if(hero.dataset.currentBg === cityClass){
-    console.log("⏳ BG già applicato:", cityClass);
+   
     return;
   }
 
@@ -2085,7 +2085,7 @@ window.showUpgradePopup = function(roi){
 
   if(safeROI <= 8) return;
 
-  console.log("🔥 SMART PAYWALL ATTIVO:", safeROI);
+  
 
   // 🔥 evita duplicati
   if(document.querySelector(".upgrade-modal")) return;
@@ -2375,10 +2375,7 @@ btn.style.display = access.canSeeFullAnalysis ? "inline-block" : "none";
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "📄 PDF visibility:",
-    window.getUserAccess()
-  );
+
 
 }
 
@@ -2598,7 +2595,7 @@ function getLeadDestination({roi, city}){
 // ================= GLOBAL BLUR RESET =================
 function resetGlobalBlur(){
 
-  console.log("🧹 SAFE RESET");
+  
 
   document.querySelectorAll(`
     .lock-overlay,
@@ -2673,16 +2670,7 @@ function runPostAnalysis(result, context){
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🔥 ROI DEBUG",
-    {
-      resultROI: result?.roi,
-      resultFinalROI: result?.finalROI,
-      windowFinalROI: window.finalROI,
-      windowCurrentROI: window.currentROI,
-      finalROI
-    }
-  );
+
 
 }
 
@@ -2926,22 +2914,10 @@ marketCity: market,
       "roma"
   });
 
-  console.log("✅ SALVATO FIRESTORE");
+  
 }
 
-    console.log("📊 FINAL ROI:", finalROI);
 
-    console.log(
-  "🔥 PRE SAVE VARIABLES",
-  {
-    propertyPrice,
-    equity,
-    loanAmount,
-    mortgage,
-    mortgagePercent,
-    monthlyMortgage
-  }
-);
 
     // =====================================
     // 🤖 CHATBOT LIVE ANALYSIS
@@ -3096,28 +3072,7 @@ net ||
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🏦 DEBUG MORTGAGE SAVE",
-    {
-      loanAmount,
-      mortgage,
-      mortgageAmount: loanAmount,
-      propertyPrice,
-      equity
-    }
-  );
 
-
-  console.log(
-    "🧠 FULL ANALYSIS DATA:",
-    window.lastAnalysisData
-  );
-
-
-  console.log(
-    "🤖 LIVE ANALYSIS SAVED:",
-    window.lastAnalysisData
-  );
 
 }
 
@@ -3133,19 +3088,11 @@ if(typeof window.buildExecutiveReport === "function"){
             window.lastAnalysisData
         );
 
-    console.log(
-        "📄 EXECUTIVE REPORT CREATED",
-        executiveReport
-    );
 
-    console.log(
-        "📚 DOCUMENT LIBRARY",
-        window.rbDocumentManager.getAll()
-    );
 
 }
 
-    console.log("💾 POST ANALYSIS START");
+    
 
     // ================= ROI UI =================
 
@@ -3182,10 +3129,6 @@ const existingInvestmentScore = Number(
   0
 );
 
-console.log(
-  "🧠 SCORE SSOT:",
-  existingInvestmentScore
-);
 
 if(
   Number.isFinite(existingInvestmentScore) &&
@@ -3205,8 +3148,7 @@ if(finalROI <= 0){
 
     if(access.isPro || access.isAdmin){
 
-      console.log("🟢 REMOVE BLUR FOR PRO");
-
+      
       document.body.classList.add("pro-user");
 
       // 🔓 remove blur
@@ -3262,8 +3204,7 @@ if(finalROI <= 0){
         advanced.style.pointerEvents = "auto";
       }
 
-      console.log("✅ HARD UNLOCK PRO COMPLETATO");
-    }
+          }
 
     // ================= SMART REMINDER =================
 
@@ -3302,15 +3243,13 @@ if(finalROI <= 0){
     }
     else if(access.isInvestor){
 
-      console.log("🟡 INVESTOR → partial unlock");
-    }
+          }
 
     // ================= LEAD ENGINE =================
 
     if(finalROI <= 0){
 
-      console.log("⛔ lead skipped → ROI 0");
-      return;
+         return;
     }
 
     const userEmail =
@@ -3366,12 +3305,6 @@ if(finalROI <= 0){
 
       window.emailUserSent = true;
 
-        console.log("📧 SEND LEAD EMAIL",{
-    email:userEmail,
-    roi:finalROI,
-    city:market,
-    plan:window.currentPlan
-  });
 
       fetch("/api/send-lead-email",{
         method:"POST",
@@ -3390,11 +3323,6 @@ if(finalROI <= 0){
       })
 .then(async res=>{
 
-  console.log(
-    "📧 SEND LEAD RESPONSE",
-    res.status,
-    await res.clone().text()
-  );
 
   if(!res.ok){
 
@@ -3417,7 +3345,6 @@ if(finalROI <= 0){
 });
     }
 
-    console.log("✅ POST ANALYSIS COMPLETED");
 
   }catch(err){
 
@@ -3552,7 +3479,7 @@ function mapLocationToCity(input){
   val.includes("reggio emilia") ||
   val.includes("piacenza")
 ){
-  console.log("🔥 PARMA FIX HIT");
+  
   return "bologna";
 }
 
@@ -3588,7 +3515,7 @@ function mapLocationToCity(input){
 
   // ================= FALLBACK INTELLIGENTE =================
 
-  console.log("⚠️ città non riconosciuta → fallback ROMA");
+ 
 
   return "roma";
 }
@@ -3636,7 +3563,7 @@ if(citySelector){
       // 🔥 salva sync
       sessionStorage.setItem("tool_city", mapped);
 
-      console.log("🏙 CITY FROM INPUT:", mapped);
+     
 
     }
 
@@ -3710,8 +3637,6 @@ if(citySelector){
 
     }
 
-    console.log("📍 INPUT:", val);
-    console.log("🏙 MAPPED:", mapped);
 
   });
 
@@ -3765,7 +3690,6 @@ window.__LAST_CALCULATION__ = now;
 // 🔥 BLOCCO REALE
 if(access.isLoading){
 
-  console.log("⏳ ACCESS LOADING");
 
   window.pendingCalculation = true;
   window.isCalculating = false;
@@ -3776,7 +3700,6 @@ if(access.isLoading){
 // 🔥 firebase può essere ready anche senza currentPlan
 if(!window.firebaseReady){
 
-  console.log("⏳ FIREBASE NON READY");
 
   window.pendingCalculation = true;
   window.isCalculating = false;
@@ -3791,7 +3714,6 @@ if(!window.currentPlan){
 
   window.currentPlan = "free";
 
-  console.log("⏳ BLOCCO calculate → piano non pronto");
 
   window.pendingCalculation = true;
   window.isCalculating = false;
@@ -3822,9 +3744,8 @@ if(!window.currentPlan){
     `).forEach(el => el.remove());
   }
 
-  console.log("🚀 CALCULATE START", access);
 
-  // =====================================
+// =====================================
 // 🔥 HARD RESET PRO/ADMIN
 // =====================================
 
@@ -3924,7 +3845,7 @@ if(equity < minEquity){
           applyCityBackground(mappedCity);
         }
 
-        console.log("🏙 CITY FROM INPUT:", mappedCity);
+
       }
     }
 
@@ -4069,15 +3990,6 @@ window.getUserAccess?.() || {};
 
 if(window.RB_DEBUG === true){
 
-  console.log(
-    "🔥 ROI DEBUG",
-    {
-      roi,
-      realROI,
-      visualROI,
-      safeROI
-    }
-  );
 
 }
 
@@ -4179,10 +4091,6 @@ window.rbChatbotData = {
 
 };
 
-console.log(
-  "🧠 CHATBOT LIVE:",
-  window.rbChatbotData
-);
 
 // =====================================
 // 🔥 LIVE ENGINE
@@ -4192,10 +4100,7 @@ window.rbChatbotLive = {
   ...window.rbChatbotData
 };
 
-console.log(
-  "🧠 CHATBOT LIVE:",
-  window.rbChatbotLive
-);
+
 
 // =====================================
 // 💾 LAST ANALYSIS MEMORY
@@ -4570,20 +4475,7 @@ const safeExpenses =
               0
             )
       );
-// =====================================
-// 🔥 DEBUG
-// =====================================
 
-console.log(
-  "🧠 CITY MEMORY UPDATED:",
-  memoryCity,
-  window.rbCityMemory[memoryCity]
-);
-
-console.log(
-  "💾 LAST ANALYSIS SAVED:",
-  window.lastAnalysisData
-);
 
 // ===============================================
 // 🧠 AI INVESTMENT MEMORY SNAPSHOT
@@ -4697,10 +4589,6 @@ window.rbChatMemory.investmentHistory =
     .investmentHistory
     .slice(-10);
 
-console.log(
-  "🧠 INVESTMENT MEMORY:",
-  window.rbChatMemory.investmentHistory
-);
 
 // =====================================
 // 🌍 GLOBAL INVESTMENT HISTORY SYNC
@@ -4712,10 +4600,7 @@ window.investmentHistory =
 window.rbInvestmentMemory =
   window.rbChatMemory.investmentHistory;
 
-console.log(
-  "🌍 GLOBAL HISTORY SYNC:",
-  window.investmentHistory
-);   
+
     // ================= RISK PREVIEW =================
 
 const riskPreview = document.getElementById("risk-preview");
@@ -4902,11 +4787,7 @@ const isFreeUser = !access.isPro && !access.isInvestor && !access.isAdmin;
 
 if(window.firebaseReady && isFreeUser && roi > 10){
 
-  console.log("🔥 TRIGGER UPGRADE FLOW", {
-    roi,
-    access
-  });
-
+ 
   triggerFunnel({ roi });
 
 }
@@ -5103,7 +4984,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     if(!city) return;
 
-    console.log("🔍 SEARCH CITY:", city);
 
     // 🔥 usa il tuo sistema già esistente
     if(typeof window.selectCity === "function"){
@@ -5260,8 +5140,7 @@ window.initCityAutocomplete = function(){
 
     const city = place.name.toLowerCase();
 
-    console.log("🌍 GOOGLE CITY:", city);
-
+    
     if(typeof window.selectCity === "function"){
       window.selectCity(city);
     } else {
@@ -5282,8 +5161,7 @@ window.initCityAutocomplete = function(){
 
   const city = cityParam.toLowerCase().trim();
 
-  console.log("🌆 City from URL:", city);
-
+ 
   // ================= SAVE =================
   localStorage.setItem("selected_city", city);
 
@@ -5357,7 +5235,7 @@ window.initCityAutocomplete = function(){
   setTimeout(()=>{
 
     if(typeof calculate === "function"){
-      console.log("🚀 AUTO CALCULATE TRIGGER");
+      
       calculate(true);
     }
 
@@ -5377,7 +5255,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if(finalUrl){
 
-  console.log("📥 AUTO LOAD PROPERTY:", finalUrl);
 
   // 🔥 FIX PROMEMORIA
   localStorage.setItem("property_link", finalUrl);
@@ -5409,8 +5286,7 @@ if(analyzeBtn){
 
   analyzeBtn.addEventListener("click", () => {
 
-    console.log("🔥 CLICK ANALYZE");
-
+   
     // 🔥 RIMUOVE overlay che possono bloccare click
     document.querySelectorAll(`
       .lock-overlay,
@@ -5425,18 +5301,14 @@ if(analyzeBtn){
 
     if(typeof window.calculate === "function"){
 
-  console.log("🚀 CALCULATE TRIGGER");
-
+  
   window.__MANUAL_ANALYSIS__ = true;
 
   window.calculate();
 
   setTimeout(()=>{
 
-    console.log(
-      "🔥 SAVE ANALYSIS FIRED"
-    );
-
+ 
     const roi =
       window.lastAnalysisData?.roi || 0;
 
@@ -5488,14 +5360,7 @@ const doc = new jsPDF();
 
 const d = window.lastAnalysisData;
 
-console.log("LAST ANALYSIS DATA", {
-    roi: d.roi,
-    realROI: d.realROI,
-    visualROI: d.visualROI,
-    risk: d.risk,
-    gross: d.gross,
-    net: d.net
-});
+
 
 // ================= SAFE =================
 const safe = v => isFinite(v) ? Number(v) : 0;
@@ -5519,11 +5384,7 @@ const chartROI = Math.max(
   )
 );
 
-console.log("CHECK PDF VARIABLES", {
-    roi,
-    realROI,
-    chartROI
-});
+
   
 const riskScore = Math.max(
   0,
@@ -6787,10 +6648,6 @@ cashflowFinalScenarios.forEach(s=>{
 
 });  
 
-console.log("ROI PDF", {
-    roi,
-    realROI
-});
 
 // ===================================================
 // EXECUTIVE RECOMMENDATION
@@ -7183,7 +7040,7 @@ function handleAutoCityRedirect(){
 
   const detectedCity = extractCityFromLink(link);
 
-  console.log("Città rilevata dal link:", detectedCity);
+  
 
   if(detectedCity){
     window.location.href = "/tool/?city=" + detectedCity;
@@ -7251,7 +7108,7 @@ window.buyPlan = async function(plan) {
 
 async function scrapePropertyFromBrowser(url){
 
-console.log("Scraper disattivato (Vercel)");
+
 
 return { price: null };
 
@@ -7295,7 +7152,7 @@ Inserisci i dati dell'annuncio per simulare il rendimento.
 `;
 }
 
-console.log("Analisi immobile da link:", link);
+
 
 
 // ===== AUTOFILL PREZZO DA SCANNER =====
@@ -7316,7 +7173,7 @@ priceField.value = data.price;
 // salva città rilevata dallo scraper
 if(data.city){
 window.currentCity = data.city;
-console.log("Città rilevata:", data.city);
+
 }
 
 // salva prezzo
@@ -7327,7 +7184,7 @@ localStorage.setItem("property_price", data.price);
 }else{
 
 // niente errore: inserimento manuale
-console.log("Prezzo non rilevato - inserimento manuale");
+
 
 }
 
@@ -7367,7 +7224,6 @@ break;
 
 if(detectedCity && !localStorage.getItem("selected_city")){
   window.currentCity = detectedCity;
-  console.log("Città rilevata da link:", detectedCity);
 }
 
 }
@@ -7386,7 +7242,7 @@ const days =
 
 if(days > 7){
 
-console.log("Aggiornamento tassi mutuo");
+
 
 if(window.RB_MORTGAGE_RATES){
 
@@ -7417,10 +7273,7 @@ function waitForFirebaseReady(callback){
 
       clearInterval(interval);
 
-      console.log("✅ FIREBASE READY:", {
-        user: window.currentUser,
-        plan: window.currentPlan
-      });
+    
 
       callback();
     }
@@ -7446,7 +7299,7 @@ document.addEventListener("rb_auth_ready", () => {
 
   if(pendingPlan && window.currentUser){
 
-    console.log("🔥 AUTO START STRIPE:", pendingPlan);
+   
 
     localStorage.removeItem("pending_plan");
 
@@ -7474,7 +7327,7 @@ document.addEventListener("rb_auth_ready", () => {
 
   if(window.pendingCalculation && typeof window.calculate === "function"){
 
-    console.log("🚀 RUN pending calculation");
+    
 
     window.pendingCalculation = false;
 
@@ -7525,7 +7378,7 @@ function applySelectedMortgage(){
 
   if(!savedRate) return;
 
-  console.log("🏦 Applying mortgage:", savedRate);
+  
 
   const rateInput = document.getElementById("interestRate");
 
@@ -7783,7 +7636,7 @@ if(citySelectorEl){
     window.__CITY_FROM_INPUT__ = false;
 
     sessionStorage.setItem("tool_city", city);
-    console.log("🏙 CURRENT CITY:", window.currentCity);
+    
 
     // 🔥 SBLOCCA PRIMA
     const hero =
@@ -7876,7 +7729,7 @@ if(window.location.pathname.startsWith("/roi-bnb/")){
     // 🔒 LOCK GLOBALE → impedisce override futuri
     window.__CITY_LOCKED__ = true;
 
-    console.log("🔒 CITY LOCK ATTIVO:", selectedCity);
+    
   }
 }
 
@@ -7890,7 +7743,7 @@ else if(!window.__CITY_MANUAL__){
   window.currentCity = selectedCity;
 }
 else{
-  console.log("⛔ SKIP ROUTING OVERRIDE → manual city attiva");
+ 
 }
 
 window.__CITY_LOCKED__ = window.location.pathname.startsWith("/roi-bnb/");
@@ -7939,17 +7792,17 @@ function unlockProUI(){
   const access = window.getUserAccess();
 
   if(!access.canSeeFullAnalysis){
-    console.log("⛔ NOT PRO → skip unlock");
+    
     return;
   }
 
-  console.log("🔥 FORCE UNLOCK PRO UI");
+  
 
   window.proUnlocked = true;
 
   // ================= ADMIN =================
   if(window.isAdmin && window.isAdmin()){
-    console.log("👑 ADMIN SBLOCCATO");
+    
 
     document.body.classList.add("admin-user");
     document.body.classList.add("is-admin");
@@ -8004,7 +7857,7 @@ function unlockProUI(){
     .paywall-mini
   `).forEach(el => el.remove());
 
-  console.log("✅ PRO SBLOCCATO DEFINITIVO");
+  
 }
 
 // ================= FIX CTA DUPLICATE =================
@@ -8037,7 +7890,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if(proBtn){
     proBtn.onclick = () => {
-      console.log("🔥 CLICK PRO");
+      
       startPlanPurchase("pro");
     };
   }
@@ -8047,7 +7900,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if(investorBtn){
     investorBtn.onclick = () => {
-      console.log("🔥 CLICK INVESTOR");
+      
       startPlanPurchase("investor");
     };
   }
@@ -8057,7 +7910,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if(yearlyBtn){
     yearlyBtn.onclick = () => {
-      console.log("🔥 CLICK YEARLY");
+      
       startPlanPurchase("pro_yearly");
     };
   }
@@ -8187,7 +8040,7 @@ window.closeRegisterPopup = function(){
   // 🔥 opzionale: reset stato
   window.isCalculating = false;
 
-  console.log("✅ Popup chiuso");
+
 
 };
 
@@ -8220,7 +8073,7 @@ if(access.isFree){
 
 window.startPlanPurchase = function(plan){
 
-  console.log("🚀 CLICK PLAN:", plan);
+  
 
   const t = (it, en) =>
     (window.currentLang === "en" ? en : it);
@@ -8321,7 +8174,7 @@ function unlockBaseUI(){
 
   const access = window.getUserAccess?.() || {};
 
-  console.log("🧹 BASE UI RESET:", access);
+  
 
   // 🟢 SOLO PRO/ADMIN → pulizia totale
   if(access.isPro || access.isAdmin){
@@ -8358,8 +8211,7 @@ function unlockBaseUI(){
     return;
   }
 
-  // 🔴 FREE → NON TOCCARE NULLA
-  console.log("🔴 FREE → nessun unlock");
+ 
 
 }
 
@@ -8371,7 +8223,7 @@ function forceUnlockUI(){
 
   const access = window.getUserAccess?.() || {};
 
-  console.log("🔥 FINAL UI CONTROL:", access);
+ 
 
   // 🔥 FLAG GLOBALE (ANTI RE-APPLY)
   window.__UI_LOCK_STATE__ = access;
@@ -8430,7 +8282,7 @@ const unlockElements = (selector) => {
   // =========================
 if(access.isPro || access.isAdmin){
 
-  console.log("🟢 FULL UNLOCK");
+ 
 
   unlockElements(`
     .pro-blur,
@@ -8466,7 +8318,7 @@ if(access.isPro || access.isAdmin){
   // =========================
   if(access.isInvestor){
 
-    console.log("🟡 INVESTOR SAFE UI");
+
 
     // 🔥 rimuove SOLO overlay invasivi
     safeRemove(`
@@ -8493,7 +8345,7 @@ if(access.isPro || access.isAdmin){
   // =========================
   // 🔴 FREE → BASE LOCK
   // =========================
-  console.log("🔴 FREE UI");
+  
 
   document.body.classList.add("is-free");
   document.body.classList.remove("is-pro","is-investor");
@@ -8511,7 +8363,7 @@ if(access.isPro || access.isAdmin){
 
 document.addEventListener("rb_plan_ready", () => {
 
-  console.log("🔥 PLAN READY → FULL UI RESYNC");
+  
 
   // 🔥 sync classi body
   window.syncAccessClasses?.();
@@ -8545,7 +8397,7 @@ document.addEventListener("rb_plan_ready", () => {
 
     setTimeout(()=>{
 
-      console.log("🚀 RECALCULATE AFTER PLAN READY");
+      
 
       window.calculate("ui_refresh");
 
@@ -8595,9 +8447,7 @@ document.addEventListener("keydown",(e)=>{
 
   e.preventDefault();
 
-  console.log(
-    "⌨️ ENTER → CALCULATE"
-  );
+
 
   if(typeof window.calculate === "function"){
 
@@ -8609,7 +8459,7 @@ document.addEventListener("keydown",(e)=>{
 
 document.addEventListener("rb_plan_ready", () => {
 
-  console.log("🔥 FUNNEL HOME CHECK");
+  
 
   const access = window.getUserAccess?.() || {};
 
