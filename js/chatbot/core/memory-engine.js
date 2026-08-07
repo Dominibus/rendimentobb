@@ -646,10 +646,4 @@ investmentHistory:
 
 window.rbLoadMemory();
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 MEMORY ENGINE READY"
-);
+// Production: nessun log
