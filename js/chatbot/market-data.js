@@ -574,11 +574,4 @@ window.classifyMarket = function(city){
 
 };
 
-// ===============================================
-// ✅ READY
-// ===============================================
-
-console.log(
-  "🌍 MARKET INTELLIGENCE READY",
-  window.rbMarketData
-);
+// Production: nessun log
