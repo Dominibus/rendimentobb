@@ -368,6 +368,4 @@ real available liquidity`,
 
 );
 
-console.log(
-  "📈 ROI KNOWLEDGE READY"
-);
+// Production: nessun log
