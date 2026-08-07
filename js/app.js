@@ -7904,7 +7904,7 @@ applyCityBackground(selectedCity);
 document.addEventListener("DOMContentLoaded", () => {
 
   if(window.__CITY_LOCKED__){
-    console.log("⛔ Override bloccati (ROI page)");
+    
   }
 
   const citySelector = document.getElementById("market-city");
