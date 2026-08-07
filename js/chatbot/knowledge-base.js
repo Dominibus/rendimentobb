@@ -5,10 +5,4 @@
 window.rbKnowledgeBase =
   window.rbKnowledgeBase || {};
 
-if (window.RB_DEBUG === true) {
-
-    console.log(
-        "RB Knowledge Base initialized"
-    );
-
-}
+// Nessun log in produzione
