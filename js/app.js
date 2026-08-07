@@ -1290,7 +1290,7 @@ modal.addEventListener("click",(e)=>{
 window.applyCityBackground = function(city){
 
   if(window.__BG_LOCK__){
-  console.log("⛔ BG LOCK → skip");
+  // Production: nessun log
   return;
 }
 
@@ -1339,7 +1339,7 @@ window.applyCityBackground = function(city){
   hero.dataset.currentBg = cityClass;
   window.__BG_LOCK__ = true;
 
-  console.log("🎯 BG SET:", cityClass);
+  // Production: nessun log
 };
 
 // ================= LAST ANALYSIS STORAGE =================
@@ -7599,19 +7599,7 @@ Number(
   localStorage.getItem("property_sqm") || 0
 );
 
-  console.log(
-"🔥 AUTO IMPORT START",
-{
-  savedPrice,
-  savedCity,
-  savedSqm
-}
-);
-
-console.log(
-"🔥 IF CHECK:",
-savedPrice > 0
-);
+// Production: nessun log
 
   const propertyBanner =
 document.getElementById(
@@ -7709,14 +7697,7 @@ if(savedPrice > 0){
 
   }
 
-  console.log(
-    "🏠 PROPERTY IMPORTED",
-    {
-      savedPrice,
-      savedCity,
-      savedSqm
-    }
-  );
+// Production: nessun log
 
   const propertyBanner =
 document.getElementById(
@@ -7761,9 +7742,7 @@ if(propertyBanner){
 
   setTimeout(()=>{
 
-  console.log(
-    "🚫 AUTO CALCULATE DISABLED TEST"
-  );
+  // Production: nessun log
 
 },1000);
 
@@ -7942,7 +7921,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔥 APPLY UNA SOLA VOLTA (NO SPAM)
   applyCityBackground(selectedCity);
 
-  console.log("🔥 Città attiva finale:", selectedCity);
+  // Production: nessun log
 
   const hero =
     document.querySelector(".tool-hero") ||
