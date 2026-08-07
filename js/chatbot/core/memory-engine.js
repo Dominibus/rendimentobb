@@ -496,9 +496,7 @@ sessionStorage.removeItem(
   "rbChatMemory"
 );
 
-      console.log(
-        "🧠 MEMORY LOADED"
-      );
+      // Production: nessun log
 
     }
 
