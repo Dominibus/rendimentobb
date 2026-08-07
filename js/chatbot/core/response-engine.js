@@ -11181,10 +11181,4 @@ return response;
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 RESPONSE ENGINE READY"
-);
+// Production: nessun log
