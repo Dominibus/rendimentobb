@@ -792,17 +792,4 @@ window.rbDocumentEvents.emit(
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-    "🧠 DOCUMENT ENGINE 3.0 READY",
-    {
-        version: window.RBDocuments.config.version,
-        activeDocument: !!window.rbActiveDocument,
-        documents: window.rbDocumentLibrary.length,
-        reasoning: window.RBDocuments.config.enableReasoning,
-        events: window.RBDocuments.config.enableEvents
-    }
-);
+// Production: nessun log
