@@ -355,6 +355,4 @@ Object.assign(
 
 );
 
-console.log(
-  "🌍 MARKET KNOWLEDGE READY"
-);
+// Production: nessun log
