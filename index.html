@@ -2069,7 +2069,7 @@ Scopri di più →
 
         document.body.classList.remove("modal-open");
 
-        console.log("💣 FIX modal-open (no real modal)");
+        rbLog("FIX modal-open");
 
       }
 
@@ -2890,7 +2890,7 @@ window.analyzeProperty = function(){
   // 🔥 salva link (ponte tra pagine)
   localStorage.setItem("listing_url", url);
 
-  console.log("🔗 PROPERTY URL:", url);
+  rbLog("PROPERTY URL:", url);
 
   // 🔥 redirect al simulatore (CORE UX)
   window.location.href = `/tool/?listing=${encodeURIComponent(url)}`;
@@ -3276,7 +3276,7 @@ window.triggerUpgradeFlow = function({
 
     document.body.classList.remove("modal-open");
 
-    console.log("🔥 STRIPE REDIRECT:", plan);
+    rbLog("STRIPE REDIRECT:", plan);
 
     window.location.href = freeUrl;
 
@@ -3494,14 +3494,14 @@ function unlockHomeUI(){
   const access = window.getUserAccess?.() || {};
   const { isPro, isInvestor } = access;
 
-  console.log("🔥 HOME UI SYNC:", access);
+  rbLog("HOME UI SYNC:", access);
 
   document.body.classList.toggle("paid-user", isPro || isInvestor);
 
   // ================= INVESTOR =================
   if(isInvestor){
 
-    console.log("🟡 INVESTOR → CLEAN + PARTIAL LOCK");
+    rbLog("INVESTOR UI");
 
     document.querySelectorAll(".metric-card").forEach(el=>{
       el.classList.remove("locked","pro-blur");
@@ -3554,7 +3554,7 @@ document.querySelectorAll(`
   el.style.display = "none";
 });
 
-    console.log("🟢 PRO UI FULL");
+    rbLog("PRO UI");
 
     document.querySelectorAll(`
       .metric-card,
@@ -3576,7 +3576,7 @@ document.addEventListener("firebase_ready", ()=>{
 
   const access = window.getUserAccess?.() || {};
 
-  console.log("🔄 PLAN LOADED → SYNC HOME", access);
+  rbLog("PLAN SYNC", access);
 
   unlockHomeUI?.();
   updateOverlayVisibility();
@@ -3595,7 +3595,7 @@ document.addEventListener("firebase_ready", ()=>{
 
     const access = window.getUserAccess?.() || {};
 
-    console.log("🧨 FORCE FINAL HOME FIX:", access);
+    rbLog("FINAL HOME FIX", access);
 
     if(access.isInvestor){
 
