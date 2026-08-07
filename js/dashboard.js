@@ -255,15 +255,13 @@ function triggerPlanPopup(plan){
 
 else if(currentPlan === "investor"){
 
-    console.log("INVESTOR → no upgrade overlay");
-
+   
 }
 
 // 🟢 PRO / ADMIN
     else{
 
-      console.log("PRO/ADMIN → no popup");
-
+      
     }
 
   },1000);
@@ -287,10 +285,6 @@ function lockFreeUser(){
   const dashboardAccess =
 getDashboardAccess();
 
-console.log(
-  "PLAN:",
-  dashboardAccess.plan
-);
 
 if(!dashboardAccess.plan){
   console.warn(
@@ -307,8 +301,7 @@ dashboardAccess.isInvestor;
 
   // ================= PRO =================
   if(pro){
-    console.log("PRO USER → unlock everything");
-
+   
     document.querySelectorAll(".pro-blur").forEach(el=>{
       el.style.filter = "none";
       el.style.pointerEvents = "auto";
@@ -320,12 +313,12 @@ dashboardAccess.isInvestor;
 
   // ================= INVESTOR =================
   if(isInvestor){
-    console.log("INVESTOR → no full lock (handled separately)");
+    
     return; // 🔥 NON trattarlo come free
   }
 
   // ================= FREE =================
-  console.log("FREE USER → limit UI");
+ 
 
   const elementsToLock = [
   "roi-target-calculator",
@@ -2981,19 +2974,13 @@ const ref = doc(db,"analyses",id);
 
 const snap = await getDoc(ref);
 
-console.log(
-  "🔥 DOC DELETE TEST:",
-  snap.data()
-);
+
 
 await deleteDoc(
   doc(db,"analyses",id)
 );
 
-console.log(
-  "🗑 ANALISI ELIMINATA:",
-  id
-);
+
 
 // 🔥 reset dashboard cache
 window.__dashboardLoaded = false;
@@ -3053,7 +3040,6 @@ function handleReportClick(){
     user.plan === "pro" ||
     user.plan === "pro_yearly";
 
-  console.log("📊 REPORT CLICK:", user);
 
   // 🔒 NON PRO → upgrade
   if(!isPro){
@@ -3914,8 +3900,7 @@ function showInvestorOverlay(){
 }
 function unlockProContent(){
 
-  console.log("🔥 UNLOCK PRO COMPLETO");
-
+  
   // 🔥 rimuove blur SOLO dagli elementi giusti (non tutto il DOM)
   const ids = [
     "roi-chart-container",
@@ -4402,19 +4387,13 @@ document.addEventListener("rb_plan_ready", ()=>{
     window.isDemoData = true;
     window.isDemoDashboard = true;
 
-    console.log(
-      "🧪 DEMO DASHBOARD ACTIVE"
-    );
-
+    
   }else{
 
     window.isDemoData = false;
     window.isDemoDashboard = false;
 
-    console.log(
-      "✅ REAL DASHBOARD ACTIVE"
-    );
-
+    
   }
 
 const showPMS =
@@ -4460,10 +4439,7 @@ window.addEventListener(
   "analysisSaved",
   () => {
 
-    console.log(
-      "🔄 DASHBOARD REFRESH"
-    );
-
+   
     if(
       typeof loadUserAnalyses === "function"
     ){
@@ -4570,10 +4546,7 @@ window.saveProperty = async function(){
 
 }else{
 
-  console.log(
-    "🧪 FREE PMS PROPERTY"
-  );
-
+ 
 }
 
     closePropertyModal();
@@ -4598,16 +4571,12 @@ window.saveProperty = async function(){
 
 if(canUseFirestorePMS()){
 
-  console.log(
-    "🔥 LOAD FIRESTORE PROPERTIES"
-  );
+
+  
 
 }else{
 
-  console.log(
-    "🧪 LOAD DEMO PROPERTIES"
-  );
-
+  
 }
 
 await loadProperties();
@@ -5296,9 +5265,7 @@ window.closeBookingsModal = function(){
 
 window.showBookingDetails = function(booking){
 
-    console.log(
-        "📌 OPEN BOOKING DETAILS",
-        booking
+    
     );
 
 
@@ -5942,8 +5909,7 @@ onclick="deleteBooking('${booking.id || ""}')">
 
 window.editBooking = function(){
 
-    console.log("✏️ EDIT BOOKING");
-
+    
     window.pmsEditingBooking = true;
 
     const guest =
@@ -6459,13 +6425,8 @@ return analysis;
 
 window.analyzeBookingAI = function(id){
 
-    console.log(
-        "🤖 AI BOOKING ANALYSIS",
-        id
-    );
-
-
-    const box =
+   
+      const box =
         document.getElementById(
             "booking-smart-actions"
         );
@@ -7418,22 +7379,7 @@ color:#166534;
 
 
 
-console.log(
-    "🤖 AI PMS RESULT",
-    {
-        nights,
-        revenue,
-        adr,
-        channel,
-        status,
-        bookingScore,
-        revenueQuality,
-        occupancyImpact,
-        reviewPotential,
-        upsellOpportunity,
-        verdict
-    }
-);
+
 
 
 };
@@ -7443,10 +7389,6 @@ console.log(
 
 window.openBookings = function(propertyId){
 
-  console.log(
-    "🔥 BOOKINGS CLICK",
-    propertyId
-  );
 
   // Salva la proprietà corrente
   if(propertyId){
@@ -7511,8 +7453,7 @@ window.openBookings = function(propertyId){
 
   },100);
 
-  console.log("✅ BOOKINGS READY");
-
+  
 };
 
 // =====================================
@@ -7530,7 +7471,7 @@ window.openCurrentBookings = async function(){
 
   if(!window.currentUser){
 
-    console.log("❌ Nessun utente");
+    
     return;
 
   }
@@ -7768,8 +7709,7 @@ if(!window.currentPropertyId){
 
     );
 
-    console.log("✅ BOOKING UPDATED");
-
+   
 }else{
 
   await addDoc(
@@ -7817,9 +7757,6 @@ source:
   );
 }
   
-  console.log(
-    "✅ BOOKING SAVED"
-  );
 
   await loadBookings(
   window.currentPropertyId
@@ -7857,9 +7794,6 @@ window.dispatchEvent(
   )
 );
 
-console.log(
-  "🤖 AI PMS EVENT SENT"
-);
 
   alert(
   t(
@@ -7953,10 +7887,7 @@ async function loadBookings(propertyId){
   const snap =
     await getDocs(q);
 
-  console.log(
-    "📅 BOOKINGS FOUND:",
-    snap.size
-  );
+
 
   const bookingsData = [];
 
@@ -8590,21 +8521,6 @@ window.dispatchEvent(
   )
 );
 
-console.log(
-  "🤖 PMS COPILOT MEMORY:",
-  {
-    bookings:
-      window.rbPMSData.bookings,
-
-    attentionCount:
-      window.rbPMSData
-        .attentionCount,
-
-    bookingList:
-      window.rbPMSData
-        .bookingList
-  }
-);
 
   const summary =
     document.getElementById(
@@ -8843,10 +8759,7 @@ async function loadPMSStats(){
 
   if(window.isDemoDashboard){
 
-  console.log(
-    "🧪 PMS DEMO MODE"
-  );
-
+  
   const setText = (id,value)=>{
 
     const el =
@@ -10233,10 +10146,7 @@ container
 
             if(!bookingRaw){
 
-              console.log(
-                "No booking data"
-              );
-
+             
               return;
 
             }
@@ -10250,11 +10160,7 @@ container
                 );
 
 
-              console.log(
-                "📌 PMS BOOKING SELECTED",
-                bookingData
-              );
-
+              
 
               if(
                 typeof window.showBookingDetails === "function"
@@ -10360,14 +10266,6 @@ container
             }
 
 
-
-            console.log(
-              "📅 CHECK-IN SELECTED",
-              selectedDate
-            );
-
-
-
             renderPMSCalendar(
               bookingList
             );
@@ -10428,15 +10326,7 @@ container
           window.pmsBookingSelection.selectingCheckout =
             false;
 
-
-
-          console.log(
-            "📅 CHECK-OUT SELECTED",
-            selectedDate
-          );
-
-
-
+        
           if(
             typeof window.openBookingModal === "function"
           ){
@@ -10454,13 +10344,6 @@ container
                 bubbles:true
               }
             )
-          );
-
-
-
-          console.log(
-            "📅 NEW BOOKING RANGE:",
-            window.pmsBookingSelection
           );
 
 
