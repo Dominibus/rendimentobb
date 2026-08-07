@@ -597,6 +597,4 @@ return {
 
 };
 
-console.log(
-  "🧠 ADVISOR ENGINE READY"
-);
+// Production: nessun log
