@@ -2079,10 +2079,4 @@ if(window.RB_DEBUG === true){
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-  "🧠 ENTITY ENGINE 4.0 READY"
-);
+// Production: nessun log
