@@ -2719,8 +2719,6 @@ function initChatDrag(){
 
     header.addEventListener("mousedown", function(e){
 
-    console.log("MOUSEDOWN");
-
 
         if(e.target.closest(".rb-chat-close")) return;
 
@@ -2741,7 +2739,7 @@ function initChatDrag(){
     document.addEventListener("mousemove", function(e){
 
     if(dragging){
-        console.log("MOVE");
+        
     }
 
 
@@ -2756,8 +2754,6 @@ function initChatDrag(){
     });
 
     document.addEventListener("mouseup", function(){
-
-    console.log("MOUSEUP");
 
 
         if(!dragging) return;
@@ -3209,7 +3205,6 @@ const thinkingTime =
 
   initChatDrag();
 
-  console.log("DRAG INIT");
 
 }
 
