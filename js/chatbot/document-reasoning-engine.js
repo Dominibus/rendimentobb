@@ -1050,28 +1050,4 @@ const executiveContextAI = {
 
 };
 
-// ===============================================
-// 🚀 READY
-// ===============================================
-
-console.log(
-
-    "🧠 DOCUMENT REASONING ENGINE 3.0 READY",
-
-    {
-
-        version:"3.0",
-
-        portfolioAI:true,
-
-        executiveSummary:true,
-
-        recommendations:true,
-
-        confidence:true,
-
-        intelligence:true
-
-    }
-
-);
+// Production: nessun log
