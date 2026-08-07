@@ -5265,9 +5265,6 @@ window.closeBookingsModal = function(){
 
 window.showBookingDetails = function(booking){
 
-    
-    );
-
 
     const modal =
         document.getElementById(
