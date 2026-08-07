@@ -920,7 +920,4 @@ Object.assign(window.rbKnowledgeBase, {
 
 });
 
-console.log(
-  "🏨 SHORT RENT KNOWLEDGE READY",
-  window.rbKnowledgeBase
-);
+// Production: nessun log
