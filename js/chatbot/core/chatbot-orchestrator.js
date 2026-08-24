@@ -1311,10 +1311,14 @@ analysisData.revenueAnnual =
       analysisData.risk =
         scenarioResult.risk;
 
-      console.log(
-        "🧮 COMBINED WHAT-IF ROI RECALCULATED",
-        scenarioResult
-      );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧮 COMBINED WHAT-IF ROI RECALCULATED",
+    scenarioResult
+  );
+
+}
 
       // =====================================
       // 🧠 ONE SCORE CALCULATION
@@ -1366,10 +1370,14 @@ analysisData.revenueAnnual =
               scenarioScore.score
             );
 
-          console.log(
-            "🧠 COMBINED WHAT-IF SCORE RECALCULATED",
-            scenarioScore
-          );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 COMBINED WHAT-IF SCORE RECALCULATED",
+    scenarioScore
+  );
+
+}
 
         }
 
@@ -1479,10 +1487,14 @@ analysisData.revenueAnnual =
 
       };
 
-      console.log(
-        "🧠 COMBINED WHAT-IF SCENARIO",
-        analysisData.whatIfScenario
-      );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 COMBINED WHAT-IF SCENARIO",
+    analysisData.whatIfScenario
+  );
+
+}
 
     }
 
