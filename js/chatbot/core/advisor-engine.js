@@ -539,19 +539,6 @@ if(cashflow > 0){
 
   }
 
-  console.log(
-  "🧠 FINAL ADVISOR SCORE",
-  {
-    score: investmentScore,
-    advisorScore,
-    verdict,
-    confidence,
-    roi,
-    risk,
-    occupancy,
-    cashflow
-  }
-);
 
 // =====================================
 // SINGLE SOURCE OF TRUTH
