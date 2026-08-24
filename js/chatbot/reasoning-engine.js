@@ -808,10 +808,14 @@ function(memory = null){
 
     );
 
-  console.log(
-  "🧠 AI CONTEXT:",
-  memory
-);
+if (window.RB_DEBUG) {
+
+    console.log(
+        "AI CONTEXT:",
+        memory
+    );
+
+}
 
   const executiveReasoning =
   window.rbGenerateExecutiveReasoning(
@@ -1016,15 +1020,23 @@ if(executiveConfidence){
 
 }
   
-console.log(
-  "🧠 SUMMARY IT:",
-  summaryIT
-);
+if (window.RB_DEBUG) {
 
-console.log(
-  "🧠 SUMMARY EN:",
-  summaryEN
-);
+    console.log(
+        "SUMMARY IT:",
+        summaryIT
+    );
+
+}
+
+if (window.RB_DEBUG) {
+
+    console.log(
+        "SUMMARY EN:",
+        summaryEN
+    );
+
+}
 
 const finalSummary =
   window.t(
@@ -1035,10 +1047,14 @@ const finalSummary =
 
   );
 
-console.log(
-  "🧠 FINAL SUMMARY:",
-  finalSummary
-);
+if (window.RB_DEBUG) {
+
+    console.log(
+        "FINAL SUMMARY:",
+        finalSummary
+    );
+
+}
 
 return finalSummary;
 
@@ -1203,10 +1219,14 @@ compatibili con fascia alta.
 
   }
 
-  console.log(
-    "🧠 AI SIGNALS:",
-    signals
-  );
+if (window.RB_DEBUG) {
+
+    console.log(
+        "AI SIGNALS:",
+        signals
+    );
+
+}
 
   return signals;
 
