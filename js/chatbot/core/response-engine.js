@@ -33,14 +33,19 @@ window.rbGenerateResponse = function({
 
 } = {}){
 
-  const RB_DEBUG = window.RB_DEBUG === true;
+const RB_DEBUG = window.RB_DEBUG === true;
 
-  const rbDebugLog = (...args)=>{
-    if(RB_DEBUG){
+const rbDebugLog = (...args) => {
+    if (RB_DEBUG) {
         console.log(...args);
     }
 };
 
+const rbDebugWarn = (...args) => {
+    if (RB_DEBUG) {
+        rbDebugWarn(...args);
+    }
+};
   
 rbDebugLog("RESPONSE ENGINE CALLED", {
     intent,
@@ -618,7 +623,7 @@ if(
 
     catch(error){
 
-        console.warn(
+        rbDebugWarn(
             "Document Reasoning Error",
             error
         );
@@ -636,7 +641,7 @@ rbDebugLog(
   }
   catch(error){
 
-    console.warn(
+    rbDebugWarn(
       "Document Knowledge Error",
       error
     );
@@ -740,7 +745,7 @@ watchPoints =
 
     catch(error){
 
-        console.warn(
+        rbDebugWarn(
             "Executive Brain Error",
             error
         );
@@ -827,7 +832,7 @@ if(
   }
   catch(error){
 
-    console.warn(
+    rbDebugWarn(
       "Executive Narrative Error",
       error
     );
@@ -1274,7 +1279,7 @@ brainData =
 
   catch(error){
 
-    console.warn(
+    rbDebugWarn(
       "AI Brain Error",
       error
     );
@@ -8015,7 +8020,7 @@ if(
   }
   catch(error){
 
-    console.warn(
+    rbDebugWarn(
       "Executive Summary Error",
       error
     );
@@ -8445,7 +8450,7 @@ executiveBuilderResult =
   }
   catch(error){
 
-    console.warn(
+    rbDebugWarn(
       "Executive Builder Error",
       error
     );
