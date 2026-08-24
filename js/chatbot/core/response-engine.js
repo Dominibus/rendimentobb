@@ -1357,7 +1357,7 @@ rbDebugLog(
  )
 );
 
-  console.log(
+rbDebugLog(
   "🔍 HISTORY SOURCES",
   {
     investmentHistory:
