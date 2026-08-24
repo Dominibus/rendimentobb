@@ -302,14 +302,6 @@ result.weaknesses = [];
 
 result.risks = [];
 
-console.log(
-    "🧠 EXECUTIVE BRAIN POINTS",
-    {
-        weakestPoint,
-        strongestPoint,
-        watchPoints
-    }
-);
 
 
 // ===============================================
@@ -323,16 +315,6 @@ result.weaknessesEN = [];
 result.risks = [];
 
 result.risksEN = [];
-
-
-console.log(
-    "🧠 EXECUTIVE BRAIN POINTS",
-    {
-        weakestPoint,
-        strongestPoint,
-        watchPoints
-    }
-);
 
 
 // ===============================================
@@ -497,24 +479,6 @@ if(
 
 }
 
-
-
-// ===============================================
-// 🧠 DEBUG OUTPUT
-// ===============================================
-
-
-console.log(
-    "🧠 EXECUTIVE EXPLAINABILITY",
-    {
-        weaknesses: result.weaknesses,
-        weaknessesEN: result.weaknessesEN,
-        risks: result.risks,
-        risksEN: result.risksEN,
-        actionPlan: result.actionPlan,
-        actionPlanEN: result.actionPlanEN
-    }
-);
     
 // ===============================================
 // 🧠 EXECUTIVE STRATEGIC LAYER
