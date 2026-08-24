@@ -10496,37 +10496,41 @@ else if(
 
   response.textIT =
 
-`🤖 Sono RendimentoBB AI Executive.
+response.textIT =
 
-Sono l'assistente intelligente di RendimentoBB progettato per aiutare investitori, proprietari di B&B e gestori di affitti brevi a prendere decisioni basate sui dati.
+`🤖 Aiuto investitori, proprietari di B&B e gestori di affitti brevi a prendere decisioni più consapevoli attraverso analisi immobiliari, dati di mercato e simulazioni intelligenti.
+
+Ogni risposta viene costruita utilizzando il contesto di RendimentoBB e, quando disponibile, i dati delle tue simulazioni e del tuo account.
 
 Posso aiutarti a:
 
-• Analizzare investimenti immobiliari
-• Interpretare ROI, cashflow, rischio, LTV e DSCR
-• Confrontare mercati e città
-• Suggerire strategie per aumentare redditività e occupazione
-• Analizzare il tuo PMS e le prenotazioni
-• Simulare scenari What-if prima di investire
+• 📊 Analizzare investimenti immobiliari con un approccio executive
+• 💰 Interpretare ROI, Cashflow, LTV, DSCR e livello di rischio
+• 🌍 Confrontare mercati, città e opportunità di investimento
+• 📈 Individuare strategie per aumentare redditività e occupazione
+• 🏨 Analizzare il PMS, le prenotazioni e le performance della struttura
+• 🔄 Simulare scenari What-if prima di prendere una decisione
+• 📑 Interpretare report e trasformare i dati in azioni concrete
 
-Il mio obiettivo è aiutarti a prendere decisioni migliori con analisi chiare, professionali e basate sui dati.`;
+Il mio obiettivo non è fornire semplici risposte, ma aiutarti a prendere decisioni migliori con analisi professionali, dati contestualizzati e suggerimenti realmente utili.`;
 
-  response.textEN =
+response.textEN =
 
-`🤖 I am RendimentoBB AI Executive.
+`🤖 I help investors, B&B owners and short-term rental managers make better decisions through real estate analysis, market intelligence and intelligent investment simulations.
 
-I am the intelligent assistant of RendimentoBB, designed to help investors, B&B owners and short-term rental managers make data-driven decisions.
+Every answer is built using the RendimentoBB context and, whenever available, your simulations and account data.
 
 I can help you:
 
-• Analyze real estate investments
-• Interpret ROI, cash flow, risk, LTV and DSCR
-• Compare cities and markets
-• Suggest strategies to improve profitability and occupancy
-• Analyze your PMS and bookings
-• Simulate What-if scenarios before investing
+• 📊 Analyze real estate investments with an executive approach
+• 💰 Interpret ROI, Cash Flow, LTV, DSCR and investment risk
+• 🌍 Compare cities, markets and investment opportunities
+• 📈 Identify strategies to improve profitability and occupancy
+• 🏨 Analyze your PMS, bookings and property performance
+• 🔄 Simulate What-if scenarios before making an investment
+• 📑 Turn reports and financial data into actionable insights
 
-My goal is to help you make better investment decisions through clear, professional and data-driven analysis.`;
+My goal is not simply to answer questions, but to help you make better investment decisions through professional analysis, contextual data and practical recommendations.`;
 
 }
 
