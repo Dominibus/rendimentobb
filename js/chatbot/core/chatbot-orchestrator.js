@@ -2088,10 +2088,14 @@ const scenarioEquity =
         analysisData.risk =
           scenarioResult.risk;
 
-        console.log(
-  "🧮 WHAT-IF ROI RECALCULATED",
-  scenarioResult
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧮 WHAT-IF ROI RECALCULATED",
+    scenarioResult
+  );
+
+}
 
 // =====================================
 // 🧠 RECALCULATE WHAT-IF INVESTMENT SCORE
@@ -2133,10 +2137,14 @@ if(typeof window.rbGenerateInvestmentScore === "function"){
     analysisData.investmentScore =
       Number(scenarioScore.score);
 
-    console.log(
-      "🧠 WHAT-IF SCORE RECALCULATED",
-      scenarioScore
-    );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 WHAT-IF SCORE RECALCULATED",
+    scenarioScore
+  );
+
+}
 
   }
 
@@ -2251,10 +2259,14 @@ propertyPrice:
 
     };
 
-    console.log(
-      "🏦 MORTGAGE WHAT-IF SCENARIO",
-      analysisData.whatIfScenario
-    );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🏦 MORTGAGE WHAT-IF SCENARIO",
+    analysisData.whatIfScenario
+  );
+
+}
 
   }
 
@@ -2461,10 +2473,14 @@ if(isPropertyPriceWhatIf){
       analysisData.risk =
         scenarioResult.risk;
 
-      console.log(
-        "🧮 PRICE WHAT-IF ROI RECALCULATED",
-        scenarioResult
-      );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧮 PRICE WHAT-IF ROI RECALCULATED",
+    scenarioResult
+  );
+
+}
 
       if(
         typeof window.rbGenerateInvestmentScore ===
@@ -2514,10 +2530,14 @@ if(isPropertyPriceWhatIf){
               scenarioScore.score
             );
 
-          console.log(
-            "🧠 PRICE WHAT-IF SCORE RECALCULATED",
-            scenarioScore
-          );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 PRICE WHAT-IF SCORE RECALCULATED",
+    scenarioScore
+  );
+
+}
 
         }
 
@@ -2617,10 +2637,14 @@ if(isPropertyPriceWhatIf){
 
   };
 
+if(window.RB_DEBUG === true){
+
   console.log(
     "🏠 PROPERTY PRICE WHAT-IF SCENARIO",
     analysisData.whatIfScenario
   );
+
+}
 
 }   
 
