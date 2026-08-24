@@ -841,10 +841,10 @@ if(
 
 }
 
-console.log(
+rbDebugLog(
   "🧠 EXECUTIVE NARRATIVE:",
   executiveNarrative
-);  
+);
   
 // =====================================
 // 🏨 PMS DATA
