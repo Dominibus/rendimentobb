@@ -1634,16 +1634,19 @@ const hasAnalysis =
     "/dashboard"
   );
 
-console.log(
-  "🚨 ANALYSIS CHECK",
-  {
-    roi,
-    risk,
-    occupancy,
-    hasAnalysis
-  }
-);
+if (window.RB_DEBUG) {
 
+    console.log(
+        "ANALYSIS CHECK",
+        {
+            roi,
+            risk,
+            occupancy,
+            hasAnalysis
+        }
+    );
+
+}
 // =====================================
 // 🧠 CONVERSATION ANALYSIS
 // =====================================
@@ -6092,6 +6095,8 @@ ${primaryWeaknessEN}
 
 With a Score of ${Math.round(canonicalScore)}/100, the investment is promising but correctly remains WAIT. The priority is not portfolio expansion: it is proving that cashflow remains positive under more conservative assumptions.`;
 
+if (window.RB_DEBUG) {
+
   console.log(
     "🎯 STRATEGIC FOLLOW-UP RESPONSE",
     {
@@ -6126,6 +6131,8 @@ With a Score of ${Math.round(canonicalScore)}/100, the investment is promising b
         strategicExpenses
     }
   );
+
+}
 
 }  
 
@@ -11162,10 +11169,14 @@ response.signals = [
 // 🧠 DEBUG
 // ===========================================
 
-console.log(
-  "🧠 RESPONSE ENGINE:",
-  response
-);
+if (window.RB_DEBUG) {
+
+    console.log(
+        "RESPONSE ENGINE",
+        response
+    );
+
+}
 
 return response;
 
