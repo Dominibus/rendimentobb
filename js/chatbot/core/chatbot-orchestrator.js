@@ -2908,10 +2908,14 @@ analysisData.revenueAnnual =
 analysisData.risk =
   scenarioResult.risk;
 
-console.log(
-  "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
-  scenarioResult
-);
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧮 OCCUPANCY WHAT-IF ROI RECALCULATED",
+    scenarioResult
+  );
+
+}
 
       // =====================================
       // 🧠 RECALCULATE OCCUPANCY WHAT-IF SCORE
@@ -2964,10 +2968,14 @@ console.log(
               scenarioScore.score
             );
 
-          console.log(
-            "🧠 OCCUPANCY WHAT-IF SCORE RECALCULATED",
-            scenarioScore
-          );
+if(window.RB_DEBUG === true){
+
+  console.log(
+    "🧠 OCCUPANCY WHAT-IF SCORE RECALCULATED",
+    scenarioScore
+  );
+
+}
 
         }
 
@@ -3049,10 +3057,14 @@ console.log(
 
   };
 
+if(window.RB_DEBUG === true){
+
   console.log(
     "🏨 OCCUPANCY WHAT-IF SCENARIO",
     analysisData.whatIfScenario
   );
+
+}
 
 }    
 
