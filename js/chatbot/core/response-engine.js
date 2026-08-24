@@ -785,21 +785,16 @@ if(brainWeakestPoint){
 
 }
 
-if(window.RB_DEBUG === true){
-
-  console.log(
-    "🧠 WEAKEST POINT SSOT",
-    {
-      weakestPoint,
-
-      source:
-        brainWeakestPoint
-          ? "executive-brain-v2"
-          : "executive-insight"
-    }
-  );
-
-}
+rbDebugLog(
+  "🧠 WEAKEST POINT SSOT",
+  {
+    weakestPoint,
+    source:
+      brainWeakestPoint
+        ? "executive-brain-v2"
+        : "executive-insight"
+  }
+);
 // =====================================
 // 🧠 EXECUTIVE NARRATIVE
 // =====================================
@@ -8311,17 +8306,17 @@ if(
 
   try{
 
-    console.log(
+rbDebugLog(
     "🧠 BRAIN DATA TO BUILDER",
     brainData
 );
 
-    console.log(
+rbDebugLog(
     "🧠 BRAIN KEYS",
     Object.keys(brainData || {})
 );
 
-console.log(
+rbDebugLog(
     "🧠 EXECUTIVE SUMMARY FIELD",
     brainData?.executiveSummary
 );
