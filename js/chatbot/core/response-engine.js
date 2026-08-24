@@ -760,7 +760,7 @@ rbDebugLog(
 );
 
 
-console.log(
+rbDebugLog(
     "🧠 EXECUTIVE BRAIN SYNC:",
     {
         weakestPoint,
