@@ -3401,6 +3401,66 @@ if(
 }
 
 // ===========================================
+// 🤖 AI IDENTITY
+// Executive Assistant Identity
+// ===========================================
+
+if(
+
+  has(
+
+    // 🇮🇹
+
+    "chi sei",
+    "cosa sei",
+
+    "chi ti ha creato",
+
+    "chi c'è dietro",
+
+    "chi ti ha sviluppato",
+
+    "parlami di te",
+
+    "cosa puoi fare",
+
+    "come puoi aiutarmi",
+
+    // 🇬🇧
+
+    "who are you",
+
+    "what are you",
+
+    "who created you",
+
+    "who built you",
+
+    "tell me about yourself",
+
+    "what can you do",
+
+    "how can you help me"
+
+  )
+
+){
+
+  applyIntent({
+
+    intent: "identity",
+
+    category: "assistant",
+
+    confidence: 1,
+
+    priority: 1200
+
+  });
+
+}  
+
+// ===========================================
 // 👋 GREETING
 // Silicon Valley Conversational Layer
 // ===========================================
