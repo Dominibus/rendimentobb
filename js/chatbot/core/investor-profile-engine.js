@@ -608,14 +608,18 @@ if(
 
     );
 
-    // ===========================================
-    // 🧠 DEBUG
-    // ===========================================
+// ===========================================
+// 🧠 DEBUG
+// ===========================================
+
+if (window.RB_DEBUG) {
 
     console.log(
-      "🧠 INVESTOR PROFILE UPDATED:",
-      profile
+        "INVESTOR PROFILE UPDATED",
+        profile
     );
+
+}
 
     return profile;
 
@@ -654,9 +658,13 @@ window.rbLoadInvestorProfile = function(){
 
         JSON.parse(saved);
 
-      console.log(
-        "🧠 INVESTOR PROFILE LOADED"
-      );
+      if (window.RB_DEBUG) {
+
+    console.log(
+        "INVESTOR PROFILE LOADED"
+    );
+
+}
 
     }
 
