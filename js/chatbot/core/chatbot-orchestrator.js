@@ -2287,12 +2287,35 @@ const baselineMortgagePercent =
     )
   );
 
+const isCapitalConversation =
+
+  Number.isFinite(
+    Number(entities?.availableCapital)
+  ) &&
+
+  (
+    message.toLowerCase().includes("ho ") ||
+    message.toLowerCase().includes("budget") ||
+    message.toLowerCase().includes("capitale") ||
+    message.toLowerCase().includes("da investire") ||
+    message.toLowerCase().includes("i have") ||
+    message.toLowerCase().includes("to invest")
+  );
+
 const isPropertyPriceWhatIf =
+
+  !isCapitalConversation &&
+
   !isCombinedWhatIf &&
+
   !isMortgageWhatIf &&
+
   Number.isFinite(requestedPropertyPrice) &&
+
   requestedPropertyPrice > 0 &&
+
   baselinePropertyPrice > 0 &&
+
   requestedPropertyPrice !== baselinePropertyPrice;
 
 if(isPropertyPriceWhatIf){
