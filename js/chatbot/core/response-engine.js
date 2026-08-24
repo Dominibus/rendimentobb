@@ -1837,24 +1837,69 @@ const asksWhatToImprove =
 
   (
     intent?.intent === "improvement_advisor" ||
+
     normalizedFollowUpMessage.includes(
       "cosa dovrei migliorare"
     ) ||
+
     normalizedFollowUpMessage.includes(
       "cosa migliorare"
     ) ||
+
     normalizedFollowUpMessage.includes(
       "come posso migliorare"
     ) ||
+
+    normalizedFollowUpMessage.includes(
+      "come aumentare il roi"
+    ) ||
+
+    normalizedFollowUpMessage.includes(
+      "come aumentare il rendimento"
+    ) ||
+
+    normalizedFollowUpMessage.includes(
+      "come aumentare il cashflow"
+    ) ||
+
+    normalizedFollowUpMessage.includes(
+      "come ridurre il rischio"
+    ) ||
+
     normalizedFollowUpMessage.includes(
       "what should i improve"
     ) ||
+
     normalizedFollowUpMessage.includes(
       "what can i improve"
     ) ||
+
     normalizedFollowUpMessage.includes(
       "how can i improve"
+    ) ||
+
+    normalizedFollowUpMessage.includes(
+      "how can i increase roi"
+    ) ||
+
+    normalizedFollowUpMessage.includes(
+      "how can i increase cashflow"
+    ) ||
+
+    normalizedFollowUpMessage.includes(
+      "how can i reduce risk"
+    ) ||
+
+    (
+      normalizedFollowUpMessage.includes("roi") &&
+      normalizedFollowUpMessage.includes("rischio")
+    ) ||
+
+    (
+      normalizedFollowUpMessage.includes("roi") &&
+      normalizedFollowUpMessage.includes("risk")
     )
+
   );
 
 const asksWeakestPoint =
