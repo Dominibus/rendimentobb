@@ -42,15 +42,10 @@ window.rbGenerateResponse = function({
 };
 
   
-  if(window.RB_DEBUG){
-  console.log(
-    "🔥 RESPONSE ENGINE CALLED",
-    {
-      intent,
-      message
-    }
-  );
-}
+rbDebugLog("RESPONSE ENGINE CALLED", {
+    intent,
+    message
+});
 
 // ===============================================
 // 📄 PDF INTENT NORMALIZATION
