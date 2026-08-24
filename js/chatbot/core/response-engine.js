@@ -10462,7 +10462,7 @@ else if(
   response.confidence =
     1;
 
-    response.textIT =
+  response.textIT =
 
 `👋 Ciao, sono RendimentoBB AI.
 
@@ -10479,9 +10479,60 @@ I can analyze your investment, compare cities, or help you improve ROI and cash 
 Where would you like to start?`;
 
 }
-  // ===========================================
-  // 🎓 EDUCATIONAL RESPONSE
-  // ===========================================
+
+// ===========================================
+// 🤖 IDENTITY RESPONSE
+// ===========================================
+
+else if(
+  intent.intent === "identity"
+){
+
+  response.type =
+    "identity";
+
+  response.confidence =
+    1;
+
+  response.textIT =
+
+`🤖 Sono RendimentoBB AI Executive.
+
+Sono l'assistente intelligente di RendimentoBB progettato per aiutare investitori, proprietari di B&B e gestori di affitti brevi a prendere decisioni basate sui dati.
+
+Posso aiutarti a:
+
+• Analizzare investimenti immobiliari
+• Interpretare ROI, cashflow, rischio, LTV e DSCR
+• Confrontare mercati e città
+• Suggerire strategie per aumentare redditività e occupazione
+• Analizzare il tuo PMS e le prenotazioni
+• Simulare scenari What-if prima di investire
+
+Il mio obiettivo è aiutarti a prendere decisioni migliori con analisi chiare, professionali e basate sui dati.`;
+
+  response.textEN =
+
+`🤖 I am RendimentoBB AI Executive.
+
+I am the intelligent assistant of RendimentoBB, designed to help investors, B&B owners and short-term rental managers make data-driven decisions.
+
+I can help you:
+
+• Analyze real estate investments
+• Interpret ROI, cash flow, risk, LTV and DSCR
+• Compare cities and markets
+• Suggest strategies to improve profitability and occupancy
+• Analyze your PMS and bookings
+• Simulate What-if scenarios before investing
+
+My goal is to help you make better investment decisions through clear, professional and data-driven analysis.`;
+
+}
+
+// ===========================================
+// 🎓 EDUCATIONAL RESPONSE
+// ===========================================
 
 else if(
   intent.intent === "education"
