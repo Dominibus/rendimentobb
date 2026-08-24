@@ -229,10 +229,14 @@ if(detectedCities.length >= 2){
     "market"
   );
 
+if(window.RB_DEBUG === true){
+
   console.log(
     "🌍 MULTI CITY:",
     detectedCities
   );
+
+}
 
   if(
   Array.isArray(detectedCities) &&
@@ -1190,10 +1194,34 @@ for(const pattern of capitalPatterns){
 
     }
 
-    entities.availableCapital =
-      Math.round(capital);
+entities.availableCapital =
+  Math.round(capital);
 
-    break;
+// Se il capitale disponibile coincide con il
+// prezzo rilevato ma il contesto parla di
+// capitale personale, elimina il prezzo.
+if(
+
+  entities.price === entities.availableCapital &&
+
+  (
+    text.includes("ho ") ||
+    text.includes("possiedo") ||
+    text.includes("i have") ||
+    text.includes("to invest") ||
+    text.includes("da investire") ||
+    text.includes("capitale") ||
+    text.includes("budget")
+  )
+
+){
+
+  entities.price = null;
+  entities.amount = null;
+
+}
+
+break;
 
   }
 
@@ -1700,10 +1728,14 @@ if(matchedKnowledge){
     "education"
   );
 
+if(window.RB_DEBUG === true){
+
   console.log(
     "📚 KNOWLEDGE MATCH:",
     matchedKnowledge.key
   );
+
+}
 
 }
 
@@ -1921,10 +1953,14 @@ try{
 
 }catch(err){
 
+if(window.RB_DEBUG === true){
+
   console.warn(
     "⚠️ KPI extraction failed:",
     err
   );
+
+}
 
 }
 // ===========================================
