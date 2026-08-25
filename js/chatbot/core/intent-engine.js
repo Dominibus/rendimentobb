@@ -876,6 +876,9 @@ if(isADRWhatIf){
 // Resolve a short numeric follow-up such as "1100"
 // =====================================
 
+  let resolvedPendingMonthlyCosts =
+  false;
+
 const pendingMonthlyCostsClarification =
   window.rbPendingClarification?.type ===
     "monthly_costs" &&
@@ -953,11 +956,14 @@ if(pendingMonthlyCostsClarification){
       entities.amount =
         pendingMonthlyCostsValue;
 
-      entities.price =
-        null;
+entities.price =
+  null;
 
-      window.rbPendingClarification =
-        null;
+resolvedPendingMonthlyCosts =
+  true;
+
+window.rbPendingClarification =
+  null;
 
     }
 
@@ -1049,6 +1055,7 @@ const isOperatingCostsWhatIf =
   hasValidRequestedMonthlyCosts &&
   monthlyCostsActuallyChange &&
   (
+    resolvedPendingMonthlyCosts ||
     hasOperatingCostsContext ||
     operatingCostsWhatIfPatterns.some(
       pattern => pattern.test(text)
