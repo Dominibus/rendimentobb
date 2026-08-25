@@ -37,13 +37,13 @@ const RB_DEBUG = window.RB_DEBUG === true;
 
 const rbDebugLog = (...args) => {
     if (RB_DEBUG) {
-        rbDebugLog(...args);
+        console.log(...args);
     }
 };
 
 const rbDebugWarn = (...args) => {
     if (RB_DEBUG) {
-        rbDebugWarn(...args);
+        console.warn(...args);
     }
 };
   
@@ -2961,12 +2961,6 @@ else if(
 
 ){
 
-
-  rbDebugLog(
-    "🔥 PMS DATA:",
-    pmsData
-  );
-
   response.type =
     "pms";
 
@@ -4080,7 +4074,6 @@ ${
   : `The previous simulation appears more profitable by ${roiDiff}%.`
 }`;
 
-  rbDebugLog("🛑 COMPARISON HARD STOP");
 
 response.__LOCKED = true;
 
@@ -4502,10 +4495,6 @@ if(
   response.textIT &&
   response.textIT.length > 0
 ){
-
-  rbDebugLog(
-    "✅ COMPARISON FINAL RETURN"
-  );
 
   return response;
 
