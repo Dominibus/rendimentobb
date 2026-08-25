@@ -5582,8 +5582,14 @@ ${verdictReasonIT}
 📊 Dati principali
 
 • Punteggio AI: ${Math.round(canonicalScore)}/100
-• ROI sul capitale: ${roi.toFixed(2)}%
-• ROI sull’immobile: ${executiveROI.toFixed(2)}%
+• ROI sul capitale: ${roi.toLocaleString("it-IT", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})}%
+• ROI sull’immobile: ${executiveROI.toLocaleString("it-IT", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})}%
 • Cashflow annuo: ${formatSummaryEURIT(summaryNet)}
 • Occupazione: ${occupancy}%
 • ADR: ${formatSummaryEURIT(summaryADR)}
