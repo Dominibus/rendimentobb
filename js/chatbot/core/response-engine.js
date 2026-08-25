@@ -1737,6 +1737,10 @@ const isRomeOccupancyOptimization =
 const asksHowToFixWeakness =
 
   (
+  
+    normalizedFollowUpMessage.includes(
+     "come posso ridurre questo punto debole"
+    ) ||
     normalizedFollowUpMessage.includes(
       "come ridurre questo punto debole"
     ) ||
