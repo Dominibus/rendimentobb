@@ -762,7 +762,9 @@ const occupancyWhatIfPatterns = [
 
   // 🇬🇧
   /what if\s+.*occupancy.*\d+\s*%?/i,
-  /occupancy\s+.*(?:drop|fall|decreas|increas|ris).*?\d+\s*%?/i
+  /what\s+changes?\s+if\s+.*occupancy.*\d+\s*%?/i,
+  /(?:reduce|lower|decrease|increase|raise|change|bring|move)\s+(?:the\s+)?occupancy.*\d+\s*%?/i,
+  /occupancy\s+.*(?:drop|fall|decreas|increas|ris|reduc|lower|chang).*?\d+\s*%?/i
 
 ];
 
