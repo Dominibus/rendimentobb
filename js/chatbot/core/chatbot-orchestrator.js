@@ -1691,10 +1691,6 @@ if(isEquityWhatIf){
       analysisData.risk =
         scenarioResult.risk;
 
-      console.log(
-        "🧮 EQUITY WHAT-IF ROI RECALCULATED",
-        scenarioResult
-      );
 
       // =====================================
       // 🧠 RECALCULATE EQUITY WHAT-IF SCORE
@@ -1746,10 +1742,6 @@ if(isEquityWhatIf){
               scenarioScore.score
             );
 
-          console.log(
-            "🧠 EQUITY WHAT-IF SCORE RECALCULATED",
-            scenarioScore
-          );
 
         }
 
@@ -1863,10 +1855,6 @@ if(isEquityWhatIf){
 
       };
 
-      console.log(
-        "💰 EQUITY WHAT-IF SCENARIO",
-        analysisData.whatIfScenario
-      );
 
     }
 
@@ -1892,9 +1880,6 @@ if(
     "investment_executive"
   ];
 
-  console.log(
-    "💰 EQUITY WHAT-IF → EXECUTIVE INTENT"
-  );
 
 }    
 
@@ -2747,9 +2732,6 @@ if(
     "investment_executive"
   ];
 
-  console.log(
-    "🏠 PROPERTY PRICE WHAT-IF → EXECUTIVE INTENT"
-  );
 
 }
     
@@ -3341,10 +3323,6 @@ if(isADRWhatIf){
       analysisData.risk =
         scenarioResult.risk;
 
-      console.log(
-        "🧮 ADR WHAT-IF ROI RECALCULATED",
-        scenarioResult
-      );
       
       // =====================================
       // 🧠 RECALCULATE ADR WHAT-IF SCORE
@@ -3397,10 +3375,6 @@ if(isADRWhatIf){
               scenarioScore.score
             );
 
-          console.log(
-            "🧠 ADR WHAT-IF SCORE RECALCULATED",
-            scenarioScore
-          );
 
         }
 
@@ -3530,10 +3504,6 @@ if(isADRWhatIf){
 
   };
 
-  console.log(
-    "💶 ADR WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
 
 }    
 
@@ -3715,10 +3685,6 @@ if(isMonthlyCostsWhatIf){
       analysisData.risk =
         scenarioResult.risk;
 
-      console.log(
-        "🧮 COSTS WHAT-IF ROI RECALCULATED",
-        scenarioResult
-      );
 
       if(
         typeof window.rbGenerateInvestmentScore ===
@@ -3766,10 +3732,6 @@ if(isMonthlyCostsWhatIf){
               scenarioScore.score
             );
 
-          console.log(
-            "🧠 COSTS WHAT-IF SCORE RECALCULATED",
-            scenarioScore
-          );
 
         }
 
@@ -3895,10 +3857,6 @@ if(isMonthlyCostsWhatIf){
 
   };
 
-  console.log(
-    "💸 MONTHLY COSTS WHAT-IF SCENARIO",
-    analysisData.whatIfScenario
-  );
 
 }
 
@@ -3973,18 +3931,6 @@ if(
 
 }
     
-if(window.RB_DEBUG === true){
-
-  console.log(
-    "🔥 ANALYSIS DATA FINAL JSON",
-    JSON.stringify(
-      analysisData,
-      null,
-      2
-    )
-  );
-
-}
 
 // =====================================
 // 🧠 CANONICAL AI CONTEXT
@@ -4031,14 +3977,6 @@ const canonicalAnalysis = {
 
 window.rbCanonicalAnalysis = canonicalAnalysis;
 
-if(window.RB_DEBUG === true){
-
-    console.log(
-        "🧠 CANONICAL AI CONTEXT",
-        canonicalAnalysis
-    );
-
-}
     
 // =========================================
 // 🧠 AI SIGNALS
@@ -4314,14 +4252,6 @@ const brain =
 
     : null;
 
-if(window.RB_DEBUG === true){
-
-  console.log(
-    "🧠 AI BRAIN",
-    brain
-  );
-
-}
 
 // =========================================
 // 🧠 CANONICAL ADVISOR RESULT
@@ -4636,14 +4566,7 @@ const conversationContext =
 
     });
 
-if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 CONVERSATION CONTEXT",
-    conversationContext
-  );
-
-}
 
 // ===============================================
 // 🧠 EXECUTIVE BRAIN V2
@@ -4676,14 +4599,7 @@ const executiveBrain =
 
     : null;
 
-if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 EXECUTIVE BRAIN",
-    executiveBrain
-  );
-
-}
   
 // =========================================
 // 🧠 RESPONSE
@@ -4719,17 +4635,7 @@ window.rbGenerateResponse({
 
 });
 
-  if(window.RB_DEBUG === true){
 
-  console.log(
-    "🧠 RESPONSE ENGINE OUTPUT",
-    {
-      intent: currentIntent,
-      response: partialResponse
-    }
-  );
-
-}
 
   // 🔥 IGNORA RISPOSTE VUOTE/FALLBACK
   const isFallback =
@@ -5096,14 +5002,7 @@ response.metadata = {
 
 };
 
-  if(window.RB_DEBUG === true){
 
-  console.log(
-    "🔥 FINAL ORCHESTRATOR RESPONSE:",
-    response
-  );
-
-}
 
 if(window.rbRememberMessage){
 
@@ -5206,30 +5105,6 @@ if(window.rbRememberMessage){
 
     }
 
-    // =========================================
-    // 🧠 DEBUG
-    // =========================================
-
-if(window.RB_DEBUG === true){
-
-  console.log(
-    "🧠 AI PIPELINE:",
-    {
-      entities,
-      intent,
-
-      memory:
-        window.rbGetConversationContext
-          ? window.rbGetConversationContext()
-          : memory,
-
-      matchedKnowledge,
-
-      response
-    }
-  );
-
-}
 
     // =========================================
     // ✅ FINAL RESPONSE
@@ -5260,12 +5135,9 @@ if(window.RB_DEBUG === true){
 
   catch(error){
 
-    console.error(
-      "❌ AI ORCHESTRATOR ERROR:",
-      error
-    );
-
-    console.error(error?.stack);
+console.error(
+  "AI Orchestrator error"
+);
 
     return {
 
