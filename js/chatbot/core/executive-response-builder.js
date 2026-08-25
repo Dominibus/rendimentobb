@@ -1178,7 +1178,7 @@ Mantengo invariati prezzo, struttura finanziaria, ADR e costi per isolare l'effe
 🧠 Valutazione AI
 
 ${worsensScenario
-    ? `La riduzione dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} riduce il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti e l'Investment Score perde ${Math.abs(Math.round(scoreDelta))} punti.`
+    ? `La riduzione dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} riduce il ROI sull'equity di ${formatPctIT(Math.abs(roiDelta))} e il cashflow annuo di ${formatEURIT(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti` : riskDelta < 0 ? `Il rischio diminuisce di ${Math.abs(Math.round(riskDelta))} punti` : `Il rischio resta invariato a ${Math.round(scenarioRisk)}/100`} e ${scoreDelta < 0 ? `il punteggio complessivo scende di ${Math.abs(Math.round(scoreDelta))} punti` : scoreDelta > 0 ? `il punteggio complessivo aumenta di ${Math.abs(Math.round(scoreDelta))} punti` : `il punteggio complessivo resta invariato`}.`
     : improvesScenario
         ? `L'aumento dell'occupazione di ${formatPctIT(Math.abs(occupancyDelta))} migliora ROI, cashflow e sostenibilità economica dello scenario.`
         : `Il nuovo livello di occupazione modifica rendimento, cashflow e profilo di rischio dell'operazione.`}
@@ -1209,7 +1209,7 @@ I keep purchase price, financing structure, ADR and costs unchanged to isolate t
 🧠 AI Assessment
 
 ${worsensScenario
-    ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy decline reduces return on equity by ${formatPctEN(Math.abs(roiDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. Risk increases by ${Math.abs(Math.round(riskDelta))} points and the Investment Score loses ${Math.abs(Math.round(scoreDelta))} points.`
+    ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy decline reduces return on equity by ${formatPctEN(Math.abs(roiDelta))} and annual cashflow by ${formatEUREN(Math.abs(cashflowDelta))}. ${riskDelta > 0 ? `Risk increases by ${Math.abs(Math.round(riskDelta))} points` : riskDelta < 0 ? `Risk decreases by ${Math.abs(Math.round(riskDelta))} points` : `Risk remains unchanged at ${Math.round(scenarioRisk)}/100`} and ${scoreDelta < 0 ? `the overall score decreases by ${Math.abs(Math.round(scoreDelta))} points` : scoreDelta > 0 ? `the overall score increases by ${Math.abs(Math.round(scoreDelta))} points` : `the overall score remains unchanged`}.`
     : improvesScenario
         ? `The ${formatPctEN(Math.abs(occupancyDelta))} occupancy increase improves returns, cashflow and the economic sustainability of the scenario.`
         : `The new occupancy level changes the investment's return, cashflow and risk profile.`}
