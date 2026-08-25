@@ -871,6 +871,100 @@ if(isADRWhatIf){
 // IT / EN contextual scenario detection
 // ===========================================
 
+// =====================================
+// 💬 PENDING MONTHLY COSTS CLARIFICATION
+// Resolve a short numeric follow-up such as "1100"
+// =====================================
+
+const pendingMonthlyCostsClarification =
+  window.rbPendingClarification?.type ===
+    "monthly_costs" &&
+  (
+    Date.now() -
+    Number(
+      window.rbPendingClarification?.createdAt ??
+      0
+    )
+  ) < 300000;
+
+if(pendingMonthlyCostsClarification){
+
+  const pendingValueMatch =
+    text.match(
+      /(\d[\d\.,]*)/
+    );
+
+  if(pendingValueMatch){
+
+    let pendingValueText =
+      String(
+        pendingValueMatch[1]
+      ).trim();
+
+    if(
+      /^\d{1,3}(?:\.\d{3})+$/.test(
+        pendingValueText
+      )
+    ){
+
+      pendingValueText =
+        pendingValueText.replace(
+          /\./g,
+          ""
+        );
+
+    }
+    else if(
+      /^\d{1,3}(?:,\d{3})+$/.test(
+        pendingValueText
+      )
+    ){
+
+      pendingValueText =
+        pendingValueText.replace(
+          /,/g,
+          ""
+        );
+
+    }
+    else{
+
+      pendingValueText =
+        pendingValueText.replace(
+          ",",
+          "."
+        );
+
+    }
+
+    const pendingMonthlyCostsValue =
+      Number(pendingValueText);
+
+    if(
+      Number.isFinite(
+        pendingMonthlyCostsValue
+      ) &&
+      pendingMonthlyCostsValue >= 0
+    ){
+
+      entities.monthlyCosts =
+        pendingMonthlyCostsValue;
+
+      entities.amount =
+        pendingMonthlyCostsValue;
+
+      entities.price =
+        null;
+
+      window.rbPendingClarification =
+        null;
+
+    }
+
+  }
+
+}  
+
 const hasOperatingCostsEntity =
   Number.isFinite(
     Number(entities?.monthlyCosts)
@@ -982,6 +1076,60 @@ if(isOperatingCostsWhatIf){
 
     requiresRiskAnalysis:
       true
+
+  });
+
+}  
+
+// =====================================
+// 💬 MONTHLY COSTS CLARIFICATION
+// The parameter is understood, but the target value is missing.
+// =====================================
+
+const asksMonthlyCostsChangeWithoutValue =
+
+  hasActiveInvestmentSimulation &&
+
+  hasOperatingCostsContext &&
+
+  !/\d/.test(text) &&
+
+  (
+    text.includes("aument") ||
+    text.includes("increment") ||
+    text.includes("alz") ||
+    text.includes("riduc") ||
+    text.includes("dimin") ||
+    text.includes("abbass") ||
+    text.includes("cambi") ||
+    text.includes("modific") ||
+    text.includes("increase") ||
+    text.includes("raise") ||
+    text.includes("reduce") ||
+    text.includes("lower") ||
+    text.includes("decrease") ||
+    text.includes("change") ||
+    text.includes("modify")
+  );
+
+if(asksMonthlyCostsChangeWithoutValue){
+
+  applyIntent({
+
+    intent:
+      "monthly_costs_clarification",
+
+    category:
+      "clarification",
+
+    confidence:
+      0.99,
+
+    priority:
+      315,
+
+    requiresCalculation:
+      false
 
   });
 
