@@ -5902,8 +5902,11 @@ else if(
         }
       );
 
-  let primaryWeaknessIT = "";
+    let primaryWeaknessIT = "";
   let primaryWeaknessEN = "";
+
+  const leverageIsMainWeakness =
+    strategicMortgagePercent >= 70;
 
   if(strategicNet <= 0){
 
@@ -5925,7 +5928,7 @@ else if(
 
   }
 
-    else if(strategicMortgagePercent >= 70){
+  else if(leverageIsMainWeakness){
 
     primaryWeaknessIT =
       `Il punto più sensibile è la leva finanziaria al ${strategicMortgagePercent}%. Il mutuo aumenta il ROI sul capitale, ma riduce la capacità del cashflow di assorbire ricavi inferiori alle attese o costi imprevisti.`;
@@ -5933,7 +5936,7 @@ else if(
     primaryWeaknessEN =
       `The most sensitive point is ${strategicMortgagePercent}% financial leverage. The mortgage increases equity ROI, but reduces the cashflow buffer against lower-than-expected revenue or unexpected costs.`;
 
-  }  
+  }
 
   else if(occupancy < 65){
 
@@ -5944,7 +5947,6 @@ else if(
       `The most sensitive point is ${occupancy}% occupancy. The investment is profitable, but a significant part of the result depends on maintaining and improving this level throughout the year.`;
 
   }
-
 
   else if(executiveROI < 8){
 
@@ -5966,9 +5968,72 @@ else if(
 
   }
 
+  const leverageImprovementRequested =
+
+    asksHowToFixWeakness &&
+    leverageIsMainWeakness;
+
+  if(leverageImprovementRequested){
+
+    primaryWeaknessIT =
+      `Per ridurre la fragilità generata dalla leva al ${strategicMortgagePercent}% senza comprimere eccessivamente il rendimento, confronterei lo scenario attuale con un LTV del 65% e del 60%. L’obiettivo non è eliminare il mutuo, ma trovare il livello che migliora la resistenza del cashflow mantenendo un ROI sul capitale ancora competitivo.`;
+
+    primaryWeaknessEN =
+      `To reduce the fragility created by ${strategicMortgagePercent}% leverage without excessively reducing returns, I would compare the current scenario with 65% and 60% LTV. The objective is not to eliminate financing, but to find the level that improves cashflow resilience while maintaining a competitive equity ROI.`;
+
+  }
+
+  const strategicTitleIT =
+
+    leverageImprovementRequested
+      ? "Come ridurre la leva senza perdere troppo rendimento"
+      : asksWeakestPoint
+        ? "Punto debole dell’investimento"
+        : "Cosa migliorare prima di procedere";
+
+  const strategicTitleEN =
+
+    leverageImprovementRequested
+      ? "How to reduce leverage without sacrificing too much return"
+      : asksWeakestPoint
+        ? "Weakest point of the investment"
+        : "What to improve before proceeding";
+
+  const strategicPrioritiesIT =
+
+    leverageImprovementRequested
+
+      ? `1. Simulare un mutuo al 65% e al 60%, confrontando capitale richiesto, rata annua, cashflow e ROI sul capitale con lo scenario attuale al ${strategicMortgagePercent}%.
+
+2. Negoziare tasso e durata prima di aumentare il capitale proprio: una rata inferiore può migliorare il margine di sicurezza senza ridurre direttamente il ROI attraverso maggiore equity.
+
+3. Aggiungere capitale soltanto mantenendo una riserva liquida sufficiente a coprire almeno 6–12 mesi di costi operativi e rate del mutuo.`
+
+      : `1. Portare l’occupazione dal ${occupancy}% verso il 75–80%, verificando che la domanda reale del mercato renda sostenibile l’aumento.
+
+2. Controllare la leva al ${strategicMortgagePercent}% e simulare una riduzione dell’occupazione, per misurare quanto margine rimane dopo la rata del mutuo.
+
+3. Validare i costi operativi reali${strategicExpenses > 0 ? `, oggi stimati in ${strategicFormatEURIT(strategicExpenses)} al mese` : ""}, includendo manutenzione, utenze, commissioni e imprevisti.`;
+
+  const strategicPrioritiesEN =
+
+    leverageImprovementRequested
+
+      ? `1. Simulate 65% and 60% financing, comparing required equity, annual debt service, cashflow and equity ROI with the current ${strategicMortgagePercent}% scenario.
+
+2. Negotiate the interest rate and loan term before increasing equity: a lower payment can improve the safety margin without directly reducing ROI through additional equity.
+
+3. Add equity only while preserving enough liquidity to cover at least 6–12 months of operating costs and mortgage payments.`
+
+      : `1. Increase occupancy from ${occupancy}% towards 75–80%, confirming that actual market demand can support the target.
+
+2. Review the ${strategicMortgagePercent}% leverage and stress-test lower occupancy to measure the cashflow buffer after mortgage payments.
+
+3. Validate actual operating costs${strategicExpenses > 0 ? `, currently estimated at ${strategicFormatEUREN(strategicExpenses)} per month` : ""}, including maintenance, utilities, commissions and unexpected expenses.`;
+
   response.textIT =
 
-`🎯 ${asksWeakestPoint ? "Punto debole dell’investimento" : "Cosa migliorare prima di procedere"}
+`🎯 ${strategicTitleIT}
 
 ${primaryWeaknessIT}
 
@@ -5986,11 +6051,7 @@ ${primaryWeaknessIT}
 
 🛠️ Le tre priorità
 
-1. Portare l’occupazione dal ${occupancy}% verso il 75–80%, verificando che la domanda reale del mercato renda sostenibile l’aumento.
-
-2. Controllare la leva al ${strategicMortgagePercent}% e simulare una riduzione dell’occupazione, per misurare quanto margine rimane dopo la rata del mutuo.
-
-3. Validare i costi operativi reali${strategicExpenses > 0 ? `, oggi stimati in ${strategicFormatEURIT(strategicExpenses)} al mese` : ""}, includendo manutenzione, utenze, commissioni e imprevisti.
+${strategicPrioritiesIT}
 
 🟡 Decisione AI
 
@@ -6004,7 +6065,7 @@ ${
 
   response.textEN =
 
-`🎯 ${asksWeakestPoint ? "Weakest point of the investment" : "What to improve before proceeding"}
+`🎯 ${strategicTitleEN}
 
 ${primaryWeaknessEN}
 
@@ -6022,11 +6083,7 @@ ${primaryWeaknessEN}
 
 🛠️ Three priorities
 
-1. Increase occupancy from ${occupancy}% towards 75–80%, confirming that actual market demand can support the target.
-
-2. Review the ${strategicMortgagePercent}% leverage and stress-test lower occupancy to measure the cashflow buffer after mortgage payments.
-
-3. Validate actual operating costs${strategicExpenses > 0 ? `, currently estimated at ${strategicFormatEUREN(strategicExpenses)} per month` : ""}, including maintenance, utilities, commissions and unexpected expenses.
+${strategicPrioritiesEN}
 
 🟡 AI Decision
 
