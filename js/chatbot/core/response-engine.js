@@ -5318,6 +5318,81 @@ ${bestROI.toFixed(1)}%
 // ===========================================
 
 else if(
+  intent.intent ===
+    "monthly_costs_clarification"
+){
+
+  response.type =
+    "clarification";
+
+  response.confidence =
+    0.99;
+
+  response.signals.push(
+    "monthly_costs_clarification"
+  );
+
+  const currentClarificationCosts =
+    Number(
+      liveData.expenses ??
+      liveData.monthlyCosts ??
+      window.lastAnalysisData?.expenses ??
+      window.lastAnalysisData?.monthlyCosts ??
+      0
+    );
+
+  const formatClarificationCostsIT =
+    Math.round(
+      currentClarificationCosts
+    )
+      .toString()
+      .replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+      );
+
+  const formatClarificationCostsEN =
+    Math.round(
+      currentClarificationCosts
+    )
+      .toLocaleString(
+        "en-US"
+      );
+
+  window.rbPendingClarification = {
+
+    type:
+      "monthly_costs",
+
+    baseline:
+      currentClarificationCosts,
+
+    createdAt:
+      Date.now()
+
+  };
+
+  response.textIT =
+`💬 Specifica il nuovo importo
+
+A quale importo mensile vuoi portare i costi operativi?
+
+La simulazione attuale utilizza ${formatClarificationCostsIT} € al mese.
+
+Puoi rispondere semplicemente, ad esempio: 1.100 €`;
+
+  response.textEN =
+`💬 Specify the new amount
+
+What monthly operating-cost amount would you like to use?
+
+The current simulation assumes €${formatClarificationCostsEN} per month.
+
+You can reply with just the amount, for example: €1,100`;
+
+}  
+
+else if(
   intent.intent === "subscriptions"
 ){
 
