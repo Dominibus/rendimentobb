@@ -4180,16 +4180,43 @@ window.mortgageAmount ??
 0,
 
 mortgageAmount:
-loanAmount ??
-window.loan ??
-window.mortgage ??
-window.mortgageAmount ??
-0,
+  loanAmount ??
+  window.loan ??
+  window.mortgage ??
+  window.mortgageAmount ??
+  0,
+
+mortgageYearly:
+  Number(
+    result?.mortgageYearly ??
+    0
+  ),
+
+monthlyMortgage:
+  Number(
+    result?.mortgageYearly ??
+    0
+  ) / 12,
 
 monthlyMortgagePayment:
-  Number(window.monthlyMortgage || 0),
+  Number(
+    result?.mortgageYearly ??
+    0
+  ) / 12,
 
-  price:
+interestRate:
+  Number(
+    interestRate ??
+    0
+  ),
+
+loanYears:
+  Number(
+    loanYears ??
+    0
+  ),
+
+price:
     price ??
     0,
 
@@ -6237,16 +6264,17 @@ const safePrice =
 const ltv =
   (loan / safePrice) * 100;
 
-const monthlyDebtService =
-  safe(
-    d.monthlyMortgage ??
-    d.monthlyMortgagePayment ??
-    window.monthlyMortgage ??
-    0
-  );
-
 const annualDebtService =
-  monthlyDebtService * 12;
+  safe(
+    d.mortgageYearly ??
+    (
+      (
+        d.monthlyMortgage ??
+        d.monthlyMortgagePayment ??
+        0
+      ) * 12
+    )
+  );
 
 const netOperatingIncome =
   profit + annualDebtService;
@@ -6276,8 +6304,25 @@ row(
 
 row(
   T(
-    "Rata mutuo annua",
-    "Annual debt service"
+    "Tasso ipotizzato",
+    "Assumed interest rate"
+  ),
+  financingRate.toFixed(2) + "%"
+);
+
+row(
+  T(
+    "Durata ipotizzata",
+    "Assumed loan term"
+  ),
+  Math.round(financingYears) +
+  T(" anni", " years")
+);
+
+row(
+  T(
+    "Rata mutuo annua stimata",
+    "Estimated annual debt service"
   ),
   eur(annualDebtService)
 );
@@ -6321,9 +6366,9 @@ const financingLabel =
       )
     : financingSustainable
       ? T(
-          "Sostenibile per finanziamento",
-          "Financing sustainable"
-        )
+           "Finanziamento stimato sostenibile",
+           "Estimated financing is sustainable"
+         )
       : T(
           "Copertura del debito insufficiente",
           "Insufficient debt coverage"
