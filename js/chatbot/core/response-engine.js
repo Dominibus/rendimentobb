@@ -5826,7 +5826,17 @@ else if(
 
   }
 
-  else if(occupancy < 75){
+    else if(strategicMortgagePercent >= 70){
+
+    primaryWeaknessIT =
+      `Il punto più sensibile è la leva finanziaria al ${strategicMortgagePercent}%. Il mutuo aumenta il ROI sul capitale, ma riduce la capacità del cashflow di assorbire ricavi inferiori alle attese o costi imprevisti.`;
+
+    primaryWeaknessEN =
+      `The most sensitive point is ${strategicMortgagePercent}% financial leverage. The mortgage increases equity ROI, but reduces the cashflow buffer against lower-than-expected revenue or unexpected costs.`;
+
+  }  
+
+  else if(occupancy < 65){
 
     primaryWeaknessIT =
       `Il punto più sensibile è l’occupazione al ${occupancy}%. Il progetto è redditizio, ma una parte importante del risultato dipende dalla capacità di mantenere e migliorare questo livello durante tutto l’anno.`;
@@ -5836,15 +5846,6 @@ else if(
 
   }
 
-  else if(strategicMortgagePercent >= 70){
-
-    primaryWeaknessIT =
-      `Il punto più sensibile è la leva finanziaria al ${strategicMortgagePercent}%. Il mutuo aumenta il ROI sul capitale, ma riduce la capacità del cashflow di assorbire ricavi inferiori alle attese o costi imprevisti.`;
-
-    primaryWeaknessEN =
-      `The most sensitive point is ${strategicMortgagePercent}% financial leverage. The mortgage increases equity ROI, but reduces the cashflow buffer against lower-than-expected revenue or unexpected costs.`;
-
-  }
 
   else if(executiveROI < 8){
 
@@ -5894,7 +5895,13 @@ ${primaryWeaknessIT}
 
 🟡 Decisione AI
 
-Con uno Score di ${Math.round(canonicalScore)}/100, il progetto è promettente ma resta correttamente in WAIT. La priorità non è espandere il portafoglio: è dimostrare che il cashflow rimane positivo anche con ipotesi più conservative.`;
+${
+  canonicalVerdict === "BUY"
+    ? `Con uno Score di ${Math.round(canonicalScore)}/100, il verdetto resta BUY. L’investimento presenta condizioni favorevoli, ma prima di procedere è opportuno verificare che il cashflow rimanga positivo anche con occupazione inferiore, costi maggiori e condizioni definitive del mutuo.`
+    : canonicalVerdict === "WAIT"
+      ? `Con uno Score di ${Math.round(canonicalScore)}/100, il verdetto resta WAIT. Prima di procedere bisogna dimostrare che il cashflow rimanga positivo anche con ipotesi più conservative.`
+      : `Con uno Score di ${Math.round(canonicalScore)}/100, il verdetto resta AVOID. Le criticità attuali non garantiscono un margine di sicurezza sufficiente per procedere.`
+}`;
 
   response.textEN =
 
@@ -5924,7 +5931,13 @@ ${primaryWeaknessEN}
 
 🟡 AI Decision
 
-With a Score of ${Math.round(canonicalScore)}/100, the investment is promising but correctly remains WAIT. The priority is not portfolio expansion: it is proving that cashflow remains positive under more conservative assumptions.`;
+${
+  canonicalVerdict === "BUY"
+    ? `With a Score of ${Math.round(canonicalScore)}/100, the verdict remains BUY. The investment presents favourable conditions, but cashflow resilience should still be validated against lower occupancy, higher costs and final mortgage terms before proceeding.`
+    : canonicalVerdict === "WAIT"
+      ? `With a Score of ${Math.round(canonicalScore)}/100, the verdict remains WAIT. Cashflow should remain positive under more conservative assumptions before proceeding.`
+      : `With a Score of ${Math.round(canonicalScore)}/100, the verdict remains AVOID. The current weaknesses do not provide an adequate margin of safety.`
+}`;
 
 if (window.RB_DEBUG) {
 
