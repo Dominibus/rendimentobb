@@ -194,10 +194,6 @@ if(window.RB_DEBUG){
     );
 }
 
-console.log(
-    "🧠 EXECUTIVE BUILDER",
-    executiveFinancials
-);
     
 // ===============================================
 // 🧠 EXECUTIVE RESPONSE BLOCKS
