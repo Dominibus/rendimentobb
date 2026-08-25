@@ -430,6 +430,13 @@ for(const pattern of targetPatterns){
 
 const occupancyPatterns = [
 
+  // 🇮🇹 — Variazione da un'occupazione a un'altra
+  /occupazione\s+(?:dal|da)\s+\d+(?:[\.,]\d+)?\s?%\s+(?:al|a)\s+(\d+(?:[\.,]\d+)?)\s?%/,
+  /occupancy\s+(?:dal|da)\s+\d+(?:[\.,]\d+)?\s?%\s+(?:al|a)\s+(\d+(?:[\.,]\d+)?)\s?%/,
+
+  // 🇬🇧 — Change from one occupancy level to another
+  /occupancy\s+from\s+\d+(?:[\.,]\d+)?\s?%\s+to\s+(\d+(?:[\.,]\d+)?)\s?%/,
+
   // 🇮🇹 Direct
   /(?:l['’]\s*)?occupazione\s*(?:all['’]|al|a|del|di)?\s*(\d+)(?:\%)?/,
 
