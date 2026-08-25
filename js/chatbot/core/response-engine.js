@@ -4053,10 +4053,6 @@ ${adviceEN}
 
 🧠 The PMS is actively monitoring property performance in real time.`;
 
-  rbDebugLog(
-    "🔥 PMS RESPONSE GENERATED:",
-    response
-  );
 
   return response;
 
@@ -4075,10 +4071,6 @@ else if(
 
   response.confidence =
     0.97;
-
-  rbDebugLog(
-  "🚀 COMPARISON MODE HARD LOCK"
-);
 
 // =====================================
 // 🧠 SAME CITY COMPARISON ENGINE
@@ -4147,16 +4139,6 @@ rbDebugLog(
     current,
     previous
   }
-);
-
-rbDebugLog(
-  "🔥 COMPARISON ACTIVE:",
-  investmentHistory.length
-);
-
-rbDebugLog(
-  "🔥 COMPARISON HISTORY ACTIVE",
-  investmentHistory
 );
 
   const roiDiff =
@@ -6213,11 +6195,6 @@ else if(
   intent.intents?.includes("analysis")
 
 ){
-
-  rbDebugLog(
-  "🚀 EXECUTIVE BLOCK ENTERED",
-  intent
-);
 
   response.type =
     "executive";
