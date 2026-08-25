@@ -889,10 +889,76 @@ const operatingCostsWhatIfPatterns = [
 
 ];
 
+// Simulazione attiva disponibile come contesto.
+const hasActiveInvestmentSimulation =
+  window.simulationExecuted === true ||
+  (
+    window.lastAnalysisData &&
+    typeof window.lastAnalysisData === "object"
+  ) ||
+  (
+    window.rbChatbotData &&
+    typeof window.rbChatbotData === "object"
+  );
+
+// Costi mensili attualmente utilizzati dalla simulazione.
+const currentMonthlyCosts =
+  Number(
+    window.lastAnalysisData?.expenses ??
+    window.lastAnalysisData?.monthlyCosts ??
+    window.rbChatbotData?.expenses ??
+    0
+  );
+
+// Nuovo valore estratto dal messaggio.
+const requestedMonthlyCosts =
+  Number(
+    entities?.monthlyCosts
+  );
+
+// Contesto semantico esplicito dei costi operativi.
+// Non dipende dall'ordine esatto delle parole.
+const hasOperatingCostsContext =
+  (
+    text.includes("costi mensili") ||
+    text.includes("spese mensili") ||
+    text.includes("costi operativi") ||
+    text.includes("spese operative") ||
+    text.includes("costi al mese") ||
+    text.includes("spese al mese") ||
+    text.includes("monthly costs") ||
+    text.includes("monthly expenses") ||
+    text.includes("operating costs") ||
+    text.includes("operating expenses") ||
+    text.includes("costs per month") ||
+    text.includes("expenses per month")
+  );
+
+// Il valore richiesto deve essere valido.
+const hasValidRequestedMonthlyCosts =
+  Number.isFinite(requestedMonthlyCosts) &&
+  requestedMonthlyCosts >= 0;
+
+// Se esiste una baseline, il nuovo valore deve essere diverso.
+// Se la baseline manca, il contesto esplicito è comunque sufficiente.
+const monthlyCostsActuallyChange =
+  currentMonthlyCosts > 0
+    ? requestedMonthlyCosts !== currentMonthlyCosts
+    : true;
+
+// Routing ibrido:
+// 1. mantiene compatibilità con i pattern esistenti;
+// 2. aggiunge comprensione basata su entità e simulazione.
 const isOperatingCostsWhatIf =
+  hasActiveInvestmentSimulation &&
   hasOperatingCostsEntity &&
-  operatingCostsWhatIfPatterns.some(
-    pattern => pattern.test(text)
+  hasValidRequestedMonthlyCosts &&
+  monthlyCostsActuallyChange &&
+  (
+    hasOperatingCostsContext ||
+    operatingCostsWhatIfPatterns.some(
+      pattern => pattern.test(text)
+    )
   );
 
 if(isOperatingCostsWhatIf){
