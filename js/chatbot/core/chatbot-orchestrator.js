@@ -1914,6 +1914,67 @@ const requestedMortgageAmount =
     ? Number(entities.mortgageAmount)
     : null;    
 
+// Baseline canonica della simulazione corrente.
+// Lo scenario mutuo deve modificare soltanto il costo del finanziamento.
+const mortgageBaselineCashflow =
+  Number(
+    window.rbChatbotData?.net ??
+    window.rbChatbotLive?.net ??
+    window.lastAnalysisData?.net ??
+    window.lastAnalysisData?.cashflow ??
+    window.lastAnalysisData?.annualProfit ??
+    0
+  );
+
+const mortgageBaselineROI =
+  Number(
+    window.rbChatbotData?.visualROI ??
+    window.rbChatbotData?.roi ??
+    window.rbChatbotLive?.visualROI ??
+    window.rbChatbotLive?.roi ??
+    window.lastAnalysisData?.visualROI ??
+    window.lastAnalysisData?.roi ??
+    0
+  );
+
+const mortgageBaselinePropertyPrice =
+  Number(
+    window.lastAnalysisData?.propertyPrice ??
+    window.lastAnalysisData?.price ??
+    analysisData.propertyPrice ??
+    0
+  );
+
+const mortgageBaselineRealROI =
+  mortgageBaselinePropertyPrice > 0
+    ? (
+        mortgageBaselineCashflow /
+        mortgageBaselinePropertyPrice
+      ) * 100
+    : Number(
+        window.lastAnalysisData?.realROI ??
+        0
+      );
+
+const mortgageBaselineScore =
+  Number(
+    window.lastInvestmentScore?.score ??
+    window.lastAnalysisData?.investmentScore ??
+    0
+  );
+
+const mortgageBaselineYearlyPayment =
+  Number(
+    window.lastAnalysisData?.mortgageYearly ??
+    (
+      Number(
+        window.lastAnalysisData?.monthlyMortgage ??
+        window.lastAnalysisData?.monthlyMortgagePayment ??
+        0
+      ) * 12
+    )
+  );    
+
 const isMortgageWhatIf =
   !isCombinedWhatIf &&
   (
@@ -2064,30 +2125,68 @@ const scenarioEquity =
         typeof scenarioResult === "object"
       ){
 
-        analysisData.roi =
-          scenarioResult.roi;
+const scenarioYearlyPayment =
+  Number(
+    scenarioResult.mortgageYearly ??
+    0
+  );
 
-        analysisData.realROI =
-          scenarioResult.realROI;
+const scenarioNetAfterMortgage =
+  mortgageBaselineCashflow +
+  mortgageBaselineYearlyPayment -
+  scenarioYearlyPayment;
 
-        analysisData.net =
-          scenarioResult.netAfterMortgage;
+const scenarioEquityROI =
+  scenarioEquity > 0
+    ? (
+        scenarioNetAfterMortgage /
+        scenarioEquity
+      ) * 100
+    : 0;
 
-        analysisData.cashflow =
-          scenarioResult.netAfterMortgage;
+const scenarioPropertyROI =
+  scenarioPropertyPrice > 0
+    ? (
+        scenarioNetAfterMortgage /
+        scenarioPropertyPrice
+      ) * 100
+    : 0;
 
-        analysisData.annualProfit =
-          scenarioResult.netAfterMortgage;
+analysisData.roi =
+  scenarioEquityROI;
 
-        analysisData.profit =
-          scenarioResult.netAfterMortgage;
+analysisData.realROI =
+  scenarioPropertyROI;
 
-        analysisData.netAfterMortgage =
-          scenarioResult.netAfterMortgage;
+analysisData.net =
+  scenarioNetAfterMortgage;
 
-        analysisData.risk =
-          scenarioResult.risk;
+analysisData.cashflow =
+  scenarioNetAfterMortgage;
 
+analysisData.annualProfit =
+  scenarioNetAfterMortgage;
+
+analysisData.profit =
+  scenarioNetAfterMortgage;
+
+analysisData.netAfterMortgage =
+  scenarioNetAfterMortgage;
+
+analysisData.mortgageYearly =
+  scenarioYearlyPayment;
+
+analysisData.monthlyMortgage =
+  scenarioYearlyPayment / 12;
+
+analysisData.risk =
+  scenarioEquityROI >= 15
+    ? 25
+    : scenarioEquityROI >= 10
+      ? 40
+      : scenarioEquityROI >= 6
+        ? 60
+        : 80;
 if(window.RB_DEBUG === true){
 
   console.log(
@@ -2197,34 +2296,17 @@ scenarioMortgagePercent,
           0
         ),
 
-      originalROI:
-  Number(
-    window.lastAnalysisData?.visualROI ??
-    window.lastAnalysisData?.roi ??
-    0
-  ),
+originalROI:
+  mortgageBaselineROI,
 
 originalRealROI:
-  Number(
-    window.lastAnalysisData?.realROI ??
-    window.lastAnalysisData?.safeROI ??
-    0
-  ),
+  mortgageBaselineRealROI,
 
 originalCashflow:
-  Number(
-    window.lastAnalysisData?.net ??
-    window.lastAnalysisData?.cashflow ??
-    window.lastAnalysisData?.annualProfit ??
-    0
-  ),
+  mortgageBaselineCashflow,
 
 originalInvestmentScore:
-  Number(
-    window.lastAnalysisData?.investmentScore ??
-    window.lastInvestmentScore?.score ??
-    0
-  ),
+  mortgageBaselineScore,
 
 scenarioROI:
   Number(
