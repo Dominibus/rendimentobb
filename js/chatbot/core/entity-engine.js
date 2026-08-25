@@ -569,9 +569,41 @@ const monthlyCostsTransitionMatch =
     /(?:monthly\s+(?:operating\s+)?(?:costs|expenses)|(?:operating\s+)?(?:costs|expenses)\s+(?:per\s+month|monthly))(?:\s+(?:increase|increased|decrease|decreased|change|changed|rise|rose|drop|dropped))?\s+from\s*€?\s*\d[\d\.,]*\s*(?:€)?\s+to\s*€?\s*(\d[\d\.,]*)\s*(?:€)?/
   );
 
+const monthlyCostsNaturalMatch =
+
+  // 🇮🇹 — Verbo spendere + importo mensile
+  text.match(
+    /(?:spendessi|spendo|spendere|spenderei|spesa|spese)\s*€?\s*(\d[\d\.,]*)\s*(?:€|euro)?\s*(?:al\s+mese|mensili|ogni\s+mese)/
+  )
+
+  ||
+
+  // 🇮🇹 — Importo prima di costi/spese
+  text.match(
+    /€?\s*(\d[\d\.,]*)\s*(?:€|euro)?\s+(?:di\s+)?(?:costi|spese)(?:\s+(?:mensili|operative|al\s+mese))?/
+  )
+
+  ||
+
+  // 🇬🇧 — Spending verb + monthly amount
+  text.match(
+    /(?:spend|spent|spending|pay|paying)\s*€?\s*(\d[\d\.,]*)\s*(?:€|euros?)?\s*(?:per\s+month|monthly|each\s+month)/
+  )
+
+  ||
+
+  // 🇬🇧 — Amount before costs/expenses
+  text.match(
+    /€?\s*(\d[\d\.,]*)\s*(?:€|euros?)?\s+(?:in\s+|of\s+)?(?:costs|expenses)(?:\s+(?:monthly|per\s+month|operating))?/
+  );
+
 const monthlyCostsMatch =
 
   monthlyCostsTransitionMatch
+
+  ||
+
+  monthlyCostsNaturalMatch
 
   ||
 
