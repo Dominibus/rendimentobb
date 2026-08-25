@@ -1592,30 +1592,141 @@ data-en="📄 Download Executive Report PDF">
 /* ================= INVESTMENT SCORE ================= */
 
 window.updateInvestmentScore = function(score){
-  
 
-  const circle = document.getElementById("score-circle");
+  const circle =
+    document.getElementById("score-circle");
+
   if(!circle) return;
 
-  const safeScore = Math.round(score || 0);
+  const safeScore =
+    Math.round(Number(score) || 0);
 
-  circle.innerText = safeScore;
+  circle.innerText =
+    safeScore;
 
-  circle.classList.remove("score-good","score-medium","score-bad");
+  circle.classList.remove(
+    "score-good",
+    "score-medium",
+    "score-bad"
+  );
 
   if(safeScore >= 75){
-    circle.classList.add("score-good");
+
+    circle.classList.add(
+      "score-good"
+    );
+
   }
   else if(safeScore >= 50){
-    circle.classList.add("score-medium");
+
+    circle.classList.add(
+      "score-medium"
+    );
+
   }
   else{
-    circle.classList.add("score-bad");
+
+    circle.classList.add(
+      "score-bad"
+    );
+
   }
 
-  circle.style.boxShadow = "0 0 20px rgba(16,185,129,0.4)";
+  circle.style.boxShadow =
+    "0 0 20px rgba(16,185,129,0.4)";
 
-}
+  const container =
+    document.getElementById(
+      "investment-score"
+    );
+
+  if(!container) return;
+
+  const lang =
+    localStorage.getItem("lang") === "en"
+      ? "en"
+      : "it";
+
+  const risk =
+    Math.round(
+      Number(
+        window.lastAnalysisData?.risk ??
+        window.lastAnalysisData?.riskScore ??
+        0
+      )
+    );
+
+  const grade =
+    safeScore >= 75
+      ? "A"
+      : safeScore > 40
+        ? "B"
+        : "C";
+
+  const recommendation =
+    safeScore >= 75
+      ? (
+          lang === "en"
+            ? "Buy recommended"
+            : "Acquisto consigliato"
+        )
+      : safeScore > 40
+        ? (
+            lang === "en"
+              ? "Wait and optimize"
+              : "Attendere e ottimizzare"
+          )
+        : (
+            lang === "en"
+              ? "Investment not recommended"
+              : "Operazione non consigliata"
+          );
+
+  const gradeColor =
+    grade === "A"
+      ? "#10b981"
+      : grade === "B"
+        ? "#f59e0b"
+        : "#ef4444";
+
+  container.innerHTML = `
+    <div class="kpi-box">
+      <span>
+        ${lang === "en" ? "Grade" : "Valutazione"}
+      </span>
+
+      <strong
+        style="
+          color:${gradeColor};
+          font-size:22px;
+        "
+      >
+        ${grade}
+      </strong>
+    </div>
+
+    <div class="kpi-box">
+      <span>
+        ${lang === "en" ? "Risk score" : "Indice rischio"}
+      </span>
+
+      <strong>
+        ${risk} / 100
+      </strong>
+    </div>
+
+    <div class="kpi-box">
+      <span>
+        ${lang === "en" ? "Recommendation" : "Raccomandazione"}
+      </span>
+
+      <strong>
+        ${recommendation}
+      </strong>
+    </div>
+  `;
+
+};
 
 </script>  
   
