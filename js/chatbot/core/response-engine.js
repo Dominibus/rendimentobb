@@ -6459,27 +6459,73 @@ else if(
     const cashflowDelta =
       scenarioCashflow - originalCashflow;
 
-    const verdict =
-      advisor?.verdict ||
-      analysisData?.verdict ||
-      "WAIT";
+const originalRisk =
+  Number(
+    executiveWhatIf.originalRisk ??
+    0
+  );
 
-    const formatEUR =
-      value =>
-        Number(value || 0).toLocaleString(
-          "it-IT",
-          {
-            style: "currency",
-            currency: "EUR",
-            maximumFractionDigits: 0
-          }
-        );
+const scenarioRisk =
+  Number(
+    executiveWhatIf.scenarioRisk ??
+    analysisData?.risk ??
+    0
+  );
 
-    const formatPct =
-      value =>
-        `${Number(value || 0).toFixed(2)}%`;
+const riskDelta =
+  scenarioRisk - originalRisk;
 
-    const costsDecreased =
+const scoreDelta =
+  scenarioScore - originalScore;
+
+const verdict =
+  advisor?.verdict ||
+  analysisData?.verdict ||
+  "WAIT";
+
+const formatEURIT =
+  value =>
+    Number(value || 0).toLocaleString(
+      "it-IT",
+      {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+      }
+    );
+
+const formatEUREN =
+  value =>
+    Number(value || 0).toLocaleString(
+      "en-US",
+      {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+      }
+    );
+
+const formatPctIT =
+  value =>
+    Number(value || 0).toLocaleString(
+      "it-IT",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    ) + "%";
+
+const formatPctEN =
+  value =>
+    Number(value || 0).toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    ) + "%";
+
+const costsDecreased =
   scenarioCosts < originalCosts;
 
 const costsIncreased =
@@ -6513,65 +6559,77 @@ const profitabilityImpactEN =
       ? "the scenario reduces investment profitability"
       : "investment profitability remains substantially unchanged";
 
-const cashflowImpactIT =
-  cashflowDelta > 0
-    ? `aumenta il cashflow annuo di ${formatEUR(Math.abs(cashflowDelta))}`
-    : cashflowDelta < 0
-      ? `riduce il cashflow annuo di ${formatEUR(Math.abs(cashflowDelta))}`
-      : "mantiene invariato il cashflow annuo";
+const riskImpactIT =
+  riskDelta > 0
+    ? `Il rischio aumenta di ${Math.abs(Math.round(riskDelta))} punti`
+    : riskDelta < 0
+      ? `Il rischio diminuisce di ${Math.abs(Math.round(riskDelta))} punti`
+      : `Il rischio resta invariato a ${Math.round(scenarioRisk)}/100`;
 
-const cashflowImpactEN =
-  cashflowDelta > 0
-    ? `increases annual cashflow by ${formatEUR(Math.abs(cashflowDelta))}`
-    : cashflowDelta < 0
-      ? `reduces annual cashflow by ${formatEUR(Math.abs(cashflowDelta))}`
-      : "keeps annual cashflow unchanged";
-    
-    response.type =
-      "executive_what_if";
+const riskImpactEN =
+  riskDelta > 0
+    ? `Risk increases by ${Math.abs(Math.round(riskDelta))} points`
+    : riskDelta < 0
+      ? `Risk decreases by ${Math.abs(Math.round(riskDelta))} points`
+      : `Risk remains unchanged at ${Math.round(scenarioRisk)}/100`;
 
-    response.confidence =
-      0.99;
+const scoreImpactIT =
+  scoreDelta > 0
+    ? `il punteggio complessivo aumenta di ${Math.abs(Math.round(scoreDelta))} punti`
+    : scoreDelta < 0
+      ? `il punteggio complessivo scende di ${Math.abs(Math.round(scoreDelta))} punti`
+      : `il punteggio complessivo resta invariato a ${Math.round(scenarioScore)}/100`;
 
-    response.textIT =
-`🧪 SCENARIO WHAT-IF — COSTI OPERATIVI
+const scoreImpactEN =
+  scoreDelta > 0
+    ? `the overall score increases by ${Math.abs(Math.round(scoreDelta))} points`
+    : scoreDelta < 0
+      ? `the overall score decreases by ${Math.abs(Math.round(scoreDelta))} points`
+      : `the overall score remains unchanged at ${Math.round(scenarioScore)}/100`;
 
-${costChangeIT} i costi mensili da ${formatEUR(originalCosts)} a ${formatEUR(scenarioCosts)}, ${profitabilityImpactIT}.
+response.type =
+  "executive_what_if";
+
+response.confidence =
+  0.99;
+
+response.textIT =
+`${verdict === "BUY" ? "🟢" : verdict === "AVOID" || verdict === "NO_BUY" ? "🔴" : "🟡"} SCENARIO COSTI OPERATIVI: ${verdict}
+
+${costChangeIT} i costi mensili da ${formatEURIT(originalCosts)} a ${formatEURIT(scenarioCosts)}, ${profitabilityImpactIT}.
 
 📊 Impatto economico
 
-ROI equity: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
-
-ROI immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
-
-Cashflow annuo: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
-
-Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+• ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
+• ROI sull’immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
+• Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
+• Variazione cashflow: ${cashflowDelta >= 0 ? "+" : ""}${formatEURIT(cashflowDelta)}
+• Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🎯 Valutazione AI
 
-La variazione dei costi ${cashflowImpactIT} e porta il ROI equity a ${formatPct(scenarioROI)}.
+La variazione dei costi porta il ROI sul capitale a ${formatPctIT(scenarioROI)} e il cashflow annuo a ${formatEURIT(scenarioCashflow)}. ${riskImpactIT} e ${scoreImpactIT}.
 
 Il verdetto resta ${verdict}.`;
 
-    response.textEN =
-`🧪 WHAT-IF SCENARIO — OPERATING COSTS
+response.textEN =
+`${verdict === "BUY" ? "🟢" : verdict === "AVOID" || verdict === "NO_BUY" ? "🔴" : "🟡"} OPERATING COSTS SCENARIO: ${verdict}
 
-${costChangeEN} monthly operating costs from ${formatEUR(originalCosts)} to ${formatEUR(scenarioCosts)}, ${profitabilityImpactEN}.
+${costChangeEN} monthly operating costs from ${formatEUREN(originalCosts)} to ${formatEUREN(scenarioCosts)}, ${profitabilityImpactEN}.
 
-📊 Financial impact
+📊 Economic impact
 
-Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)} (${roiDelta >= 0 ? "+" : ""}${formatPct(roiDelta)})
-
-Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)} (${realROIDelta >= 0 ? "+" : ""}${formatPct(realROIDelta)})
-
-Annual cashflow: ${formatEUR(originalCashflow)} → ${formatEUR(scenarioCashflow)} (${cashflowDelta >= 0 ? "+" : ""}${formatEUR(cashflowDelta)})
-
-Investment Score: ${originalScore}/100 → ${scenarioScore}/100
+• Equity ROI: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
+• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
+• Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
+• Cashflow change: ${cashflowDelta >= 0 ? "+" : ""}${formatEUREN(cashflowDelta)}
+• Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${originalScore}/100 → ${scenarioScore}/100
 
 🎯 AI Assessment
 
-The cost change ${cashflowImpactEN} and brings equity ROI to ${formatPct(scenarioROI)}.
+The cost change brings equity ROI to ${formatPctEN(scenarioROI)} and annual cashflow to ${formatEUREN(scenarioCashflow)}. ${riskImpactEN} and ${scoreImpactEN}.
 
 The verdict remains ${verdict}.`;
 
