@@ -748,6 +748,14 @@ if(
 
 const mortgagePatterns = [
 
+  // 🇮🇹 — Variazione da una percentuale a un'altra
+  /mutuo\s+(?:dal|da)\s+\d+(?:[\.,]\d+)?\s?%\s+(?:al|a)\s+(\d+(?:[\.,]\d+)?)\s?%/,
+  /finanziamento\s+(?:dal|da)\s+\d+(?:[\.,]\d+)?\s?%\s+(?:al|a)\s+(\d+(?:[\.,]\d+)?)\s?%/,
+
+  // 🇬🇧 — Change from one percentage to another
+  /mortgage\s+from\s+\d+(?:[\.,]\d+)?\s?%\s+to\s+(\d+(?:[\.,]\d+)?)\s?%/,
+  /loan\s+from\s+\d+(?:[\.,]\d+)?\s?%\s+to\s+(\d+(?:[\.,]\d+)?)\s?%/,
+
   // 🇮🇹 — Direct + natural What-if
   /mutuo\s+(?:(?:fosse|sarebbe|salisse|scendesse)\s+)?(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
   /finanziamento\s+(?:(?:fosse|sarebbe|salisse|scendesse)\s+)?(?:al\s+|del\s+|di\s+)?(\d+(?:[\.,]\d+)?)\s?%/,
