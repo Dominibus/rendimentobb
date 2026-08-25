@@ -1643,6 +1643,61 @@ const isVerdictExplanationFollowUp =
     );
 
 // =====================================
+// 📊 EXECUTIVE SUMMARY WITH KEY METRICS
+// IT / EN explicit verdict + KPI request
+// =====================================
+
+const asksExecutiveSummaryWithMetrics =
+
+  hasConversationAnalysis &&
+
+  (
+    (
+      normalizedFollowUpMessage.includes(
+        "verdetto"
+      ) &&
+      (
+        normalizedFollowUpMessage.includes(
+          "dati principali"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "metriche principali"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "numeri principali"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "kpi"
+        )
+      )
+    ) ||
+
+    (
+      normalizedFollowUpMessage.includes(
+        "verdict"
+      ) &&
+      (
+        normalizedFollowUpMessage.includes(
+          "key data"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "key metrics"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "main metrics"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "main figures"
+        ) ||
+        normalizedFollowUpMessage.includes(
+          "kpi"
+        )
+      )
+    )
+
+  );  
+
+// =====================================
 // 🏨 OCCUPANCY OPTIMIZATION FOLLOW-UP
 // City-aware strategic routing IT/EN
 // =====================================
@@ -5442,6 +5497,124 @@ To manage your plan:
   }
 
 }
+
+else if(
+  asksExecutiveSummaryWithMetrics
+){
+
+  response.type =
+    "executive_summary_metrics";
+
+  response.confidence =
+    0.99;
+
+  response.signals.push(
+    "executive_summary_with_metrics"
+  );
+
+  const summaryNet =
+    Number(
+      liveData.net ??
+      liveData.cashflow ??
+      liveData.annualProfit ??
+      0
+    );
+
+  const summaryADR =
+    Number(
+      liveData.priceNight ??
+      liveData.adr ??
+      liveData.nightly ??
+      liveData.nightlyRate ??
+      0
+    );
+
+  const summaryMortgagePercent =
+    Number(
+      liveData.mortgagePercent ??
+      mortgagePercent ??
+      0
+    );
+
+  const formatSummaryEURIT = value =>
+    Number(value || 0)
+      .toLocaleString(
+        "it-IT",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  const formatSummaryEUREN = value =>
+    Number(value || 0)
+      .toLocaleString(
+        "en-US",
+        {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  const verdictReasonIT =
+    canonicalVerdict === "BUY"
+      ? "Il verdetto è positivo perché redditività, cashflow e rischio risultano complessivamente favorevoli."
+      : canonicalVerdict === "WAIT"
+        ? "Il progetto presenta potenziale, ma richiede ulteriori verifiche prima di procedere."
+        : "Il rapporto tra rendimento e rischio non offre attualmente un margine sufficiente per procedere.";
+
+  const verdictReasonEN =
+    canonicalVerdict === "BUY"
+      ? "The verdict is positive because profitability, cashflow and risk are favourable overall."
+      : canonicalVerdict === "WAIT"
+        ? "The investment shows potential, but requires further validation before proceeding."
+        : "The current risk-return profile does not provide a sufficient margin to proceed.";
+
+  response.textIT =
+`🎯 Verdetto finale: ${canonicalVerdict}
+
+${verdictReasonIT}
+
+📊 Dati principali
+
+• Punteggio AI: ${Math.round(canonicalScore)}/100
+• ROI sul capitale: ${roi.toFixed(2)}%
+• ROI sull’immobile: ${executiveROI.toFixed(2)}%
+• Cashflow annuo: ${formatSummaryEURIT(summaryNet)}
+• Occupazione: ${occupancy}%
+• ADR: ${formatSummaryEURIT(summaryADR)}
+• Rischio: ${risk}/100
+• Mutuo: ${summaryMortgagePercent}%
+
+🧠 Sintesi
+
+L’investimento deve essere valutato mantenendo sotto controllo occupazione, costi operativi e condizioni definitive del finanziamento.`;
+
+  response.textEN =
+`🎯 Final verdict: ${canonicalVerdict}
+
+${verdictReasonEN}
+
+📊 Key metrics
+
+• AI Score: ${Math.round(canonicalScore)}/100
+• Equity ROI: ${roi.toFixed(2)}%
+• Property ROI: ${executiveROI.toFixed(2)}%
+• Annual cashflow: ${formatSummaryEUREN(summaryNet)}
+• Occupancy: ${occupancy}%
+• ADR: ${formatSummaryEUREN(summaryADR)}
+• Risk: ${risk}/100
+• Mortgage: ${summaryMortgagePercent}%
+
+🧠 Summary
+
+The investment should be evaluated while monitoring occupancy, operating costs and final financing terms.`;
+
+}  
 
 else if(
   isVerdictExplanationFollowUp
