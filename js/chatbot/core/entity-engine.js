@@ -638,6 +638,106 @@ entities.price = null;
 
 }
 
+// =====================================
+// 💬 RESOLVE PENDING MONTHLY COSTS
+// The canonical Entity Engine must expose
+// the numeric follow-up to the orchestrator.
+// =====================================
+
+const hasPendingMonthlyCosts =
+
+  window.rbPendingClarification?.type ===
+    "monthly_costs" &&
+
+  (
+    Date.now() -
+    Number(
+      window.rbPendingClarification?.createdAt ??
+      0
+    )
+  ) < 300000;
+
+if(hasPendingMonthlyCosts){
+
+  const pendingMonthlyCostsMatch =
+    text.match(
+      /(\d[\d\.,]*)/
+    );
+
+  if(pendingMonthlyCostsMatch){
+
+    let pendingMonthlyCostsText =
+      String(
+        pendingMonthlyCostsMatch[1]
+      ).trim();
+
+    if(
+      /^\d{1,3}(?:\.\d{3})+$/.test(
+        pendingMonthlyCostsText
+      )
+    ){
+
+      pendingMonthlyCostsText =
+        pendingMonthlyCostsText.replace(
+          /\./g,
+          ""
+        );
+
+    }
+    else if(
+      /^\d{1,3}(?:,\d{3})+$/.test(
+        pendingMonthlyCostsText
+      )
+    ){
+
+      pendingMonthlyCostsText =
+        pendingMonthlyCostsText.replace(
+          /,/g,
+          ""
+        );
+
+    }
+    else{
+
+      pendingMonthlyCostsText =
+        pendingMonthlyCostsText.replace(
+          ",",
+          "."
+        );
+
+    }
+
+    const pendingMonthlyCostsValue =
+      Number(
+        pendingMonthlyCostsText
+      );
+
+    if(
+      Number.isFinite(
+        pendingMonthlyCostsValue
+      ) &&
+      pendingMonthlyCostsValue >= 0
+    ){
+
+      entities.monthlyCosts =
+        pendingMonthlyCostsValue;
+
+      entities.amount =
+        pendingMonthlyCostsValue;
+
+      entities.price =
+        null;
+
+      entities.detectedTopics.push(
+        "finance"
+      );
+
+    }
+
+  }
+
+}  
+
   // ===========================================
   // 🏦 MORTGAGE DETECTION
   // ===========================================
