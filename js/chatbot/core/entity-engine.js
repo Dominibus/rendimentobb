@@ -555,7 +555,26 @@ entities.amount = null;
 // 💸 MONTHLY COSTS
 // ===========================================
 
+const monthlyCostsTransitionMatch =
+
+  // 🇮🇹 — Variazione da un costo mensile a un altro
+  text.match(
+    /(?:costi|spese)(?:\s+(?:mensili|al\s+mese))?\s+(?:da|dai)\s*€?\s*\d[\d\.,]*\s*€?\s+(?:a|ad)\s*€?\s*(\d[\d\.,]*)\s*€?/
+  )
+
+  ||
+
+  // 🇬🇧 — Change from one monthly cost to another
+  text.match(
+    /(?:monthly\s+(?:operating\s+)?(?:costs|expenses)|(?:operating\s+)?(?:costs|expenses)\s+(?:per\s+month|monthly))(?:\s+(?:increase|increased|decrease|decreased|change|changed|rise|rose|drop|dropped))?\s+from\s*€?\s*\d[\d\.,]*\s*(?:€)?\s+to\s*€?\s*(\d[\d\.,]*)\s*(?:€)?/
+  );
+
 const monthlyCostsMatch =
+
+  monthlyCostsTransitionMatch
+
+  ||
+
   text.match(
     /(?:(?:costi|spese)(?:\s+(?:mensili|al\s+mese))?|(?:monthly\s+(?:operating\s+)?(?:costs|expenses)|(?:operating\s+)?(?:costs|expenses)\s+(?:per\s+month|monthly)))[\s\S]*?€?\s*(\d[\d\.,]*)\s*€?(?:\s*(?:al\s+mese|mensili|per\s+month|monthly))?/
   );
@@ -607,16 +626,9 @@ if(monthlyCostsMatch){
     entities.amount =
       value;
 
-    // Prevent operating costs from becoming
-    // a property-price what-if.
-    if(
-      entities.price === value
-    ){
-
-      entities.price =
-        null;
-
-    }
+// Operating-cost amounts must never become
+// property purchase-price entities.
+entities.price = null;
 
     entities.detectedTopics.push(
       "finance"
