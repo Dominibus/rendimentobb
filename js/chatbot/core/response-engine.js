@@ -37,7 +37,7 @@ const RB_DEBUG = window.RB_DEBUG === true;
 
 const rbDebugLog = (...args) => {
     if (RB_DEBUG) {
-        console.log(...args);
+        rbDebugLog(...args);
     }
 };
 
@@ -105,7 +105,7 @@ const {
 
 if(RB_DEBUG){
 
-console.log(
+rbDebugLog(
     "🧠 CONVERSATION CONTEXT",
     {
         goal,
@@ -205,7 +205,7 @@ if(canRouteSemanticFollowUp){
         previousTopic
     };
 
-    console.log(
+    rbDebugLog(
         "🧠 SEMANTIC FOLLOW-UP ROUTED",
         {
             resolvedTopic,
@@ -265,7 +265,7 @@ const executiveActionPlan =
 
 if(RB_DEBUG){
 
-console.log(
+rbDebugLog(
     "🧠 EXECUTIVE INSIGHT",
     executiveInsight
 );
@@ -316,7 +316,7 @@ const hasStrongInvestment =
 
 if(RB_DEBUG){
 
-console.log(
+rbDebugLog(
     "🧠 EXECUTIVE DECISION",
     {
         executiveDecision,
@@ -369,7 +369,7 @@ const executiveState = {
 
 if(RB_DEBUG){
 
-console.log(
+rbDebugLog(
     "🧠 EXECUTIVE STATE",
     executiveState
 );
@@ -1641,7 +1641,7 @@ const hasAnalysis =
 
 if (window.RB_DEBUG) {
 
-    console.log(
+    rbDebugLog(
         "ANALYSIS CHECK",
         {
             roi,
@@ -2078,7 +2078,7 @@ function pickRandom(arr){
     intent.intent === "roi_analysis"
   ){
 
-    console.log(
+    rbDebugLog(
     "🔥 ROI BRANCH ENTERED",
     {
       roi,
@@ -2090,7 +2090,7 @@ function pickRandom(arr){
     response.type =
       "roi";
 
-    console.log(
+    rbDebugLog(
   "🔥 ROI RESPONSE CREATED",
   response
 );
@@ -2159,7 +2159,7 @@ ${occupancy}%
 ⚠️ Risk score:
 ${risk}/100`;
 
-      console.log(
+      rbDebugLog(
   "🔥 ROI TEXT GENERATED",
   {
     textIT: response.textIT,
@@ -2275,7 +2275,7 @@ ${roi.toFixed(1)}%
 
     }
 
-       console.log(
+       rbDebugLog(
       "📈 ROI RESPONSE CREATED",
       response
     );
@@ -2328,7 +2328,7 @@ else if(
 
       : 0;
 
-  console.log(
+  rbDebugLog(
     "💰 CASHFLOW FINAL DEBUG:",
     {
       rawNet,
@@ -2449,7 +2449,7 @@ else if(
 
   }
 
-  console.log(
+  rbDebugLog(
     "💰 CASHFLOW RESPONSE CREATED",
     response
   );
@@ -2586,7 +2586,7 @@ ${roi.toFixed(1)}%`;
 
     }
 
-    console.log(
+    rbDebugLog(
       "⚠️ RISK RESPONSE CREATED",
       response
     );
@@ -2830,7 +2830,7 @@ Investment Score: ${originalScore} → ${newScore}
 
 ${interpretationEN}`;
 
-    console.log(
+    rbDebugLog(
       "🏦 MORTGAGE WHAT-IF RESPONSE CREATED",
       {
         originalMortgagePercent,
@@ -3113,11 +3113,11 @@ else if(
 
 ){
 
-  console.log(
+  rbDebugLog(
     "🔥 PMS BLOCK ENTERED"
   );
 
-  console.log(
+  rbDebugLog(
     "🔥 PMS DATA:",
     pmsData
   );
@@ -4053,7 +4053,7 @@ ${adviceEN}
 
 🧠 The PMS is actively monitoring property performance in real time.`;
 
-  console.log(
+  rbDebugLog(
     "🔥 PMS RESPONSE GENERATED:",
     response
   );
@@ -4076,7 +4076,7 @@ else if(
   response.confidence =
     0.97;
 
-  console.log(
+  rbDebugLog(
   "🚀 COMPARISON MODE HARD LOCK"
 );
 
@@ -4084,17 +4084,17 @@ else if(
 // 🧠 SAME CITY COMPARISON ENGINE
 // =====================================
 
-console.log(
+rbDebugLog(
   "🔥 FINAL COMPARISON MEMORY:",
   investmentHistory
 );
 
-console.log(
+rbDebugLog(
   "🧠 FINAL INVESTMENT HISTORY:",
   investmentHistory
 );
 
-console.log(
+rbDebugLog(
   "🔥 FINAL COMPARISON MEMORY:",
   investmentHistory
 );
@@ -4139,7 +4139,7 @@ const previousROI =
 
   );
 
-console.log(
+rbDebugLog(
   "🧠 COMPARISON ROI:",
   {
     currentROI,
@@ -4149,12 +4149,12 @@ console.log(
   }
 );
 
-console.log(
+rbDebugLog(
   "🔥 COMPARISON ACTIVE:",
   investmentHistory.length
 );
 
-console.log(
+rbDebugLog(
   "🔥 COMPARISON HISTORY ACTIVE",
   investmentHistory
 );
@@ -4270,7 +4270,7 @@ ${
   : `The previous simulation appears more profitable by ${roiDiff}%.`
 }`;
 
-  console.log(
+  rbDebugLog(
   "🛑 COMPARISON HARD STOP"
 );
 
@@ -4684,7 +4684,7 @@ else{
 
 else{
 
-  console.log(
+  rbDebugLog(
     "⚠️ CITY COMPARISON SKIPPED"
   );
 
@@ -4699,7 +4699,7 @@ if(
   response.textIT.length > 0
 ){
 
-  console.log(
+  rbDebugLog(
     "✅ COMPARISON FINAL RETURN"
   );
 
@@ -4713,7 +4713,7 @@ if(
 
     const history = investmentHistory || [];
 
-  console.log(
+  rbDebugLog(
   "🔥 FINAL HISTORY USED:",
   history
   );
@@ -4789,7 +4789,7 @@ if(
 
       );
 
-  console.log(
+  rbDebugLog(
     "🔥 GLOBAL FALLBACK HISTORY:",
     history
   );
@@ -5277,7 +5277,7 @@ ${best.avgRisk.toFixed(0)}/100
 
 🎯 The AI currently considers ${bestCity} the most attractive destination for a profitability-focused, stable and operationally sustainable short-rent strategy.`;
 
-  console.log(
+  rbDebugLog(
     "🏆 BEST CITY RESPONSE:",
     response
   );
@@ -5685,7 +5685,7 @@ The result depends on maintaining ${occupancy}% occupancy${followUpADR > 0 ? ` a
 
 I would verify actual operating costs, final mortgage terms and cashflow resilience at lower-than-expected occupancy. If the investment remains positive under stress, moving from WAIT to BUY becomes much more defensible.`;
 
-  console.log(
+  rbDebugLog(
     "🧠 VERDICT FOLLOW-UP RESPONSE",
     {
       score:
@@ -5911,7 +5911,7 @@ ${isRomeOccupancyOptimization ? romeActionsEN : genericActionsEN}
 
 The verdict remains ${canonicalVerdict}: higher occupancy should not be treated as certain until it is supported by real demand, sustainable pricing and measurable results. Moving towards BUY becomes more credible if cashflow remains positive under conservative scenarios.`;
 
-  console.log(
+  rbDebugLog(
     "🏨 OCCUPANCY OPTIMIZATION RESPONSE",
     {
       type:
@@ -6147,7 +6147,7 @@ With a Score of ${Math.round(canonicalScore)}/100, the investment is promising b
 
 if (window.RB_DEBUG) {
 
-  console.log(
+  rbDebugLog(
     "🎯 STRATEGIC FOLLOW-UP RESPONSE",
     {
       type:
@@ -6214,7 +6214,7 @@ else if(
 
 ){
 
-  console.log(
+  rbDebugLog(
   "🚀 EXECUTIVE BLOCK ENTERED",
   intent
 );
@@ -6249,7 +6249,7 @@ else if(
     response.metadata.whatIfScenario =
       executiveWhatIf;
 
-    console.log(
+    rbDebugLog(
       "🧪 EXECUTIVE WHAT-IF DETECTED",
       executiveWhatIf
     );
@@ -6463,7 +6463,7 @@ The verdict remains ${verdict}.`;
       "Change the average nightly rate"
     ];
 
-    console.log(
+    rbDebugLog(
       "💸 EXECUTIVE COSTS WHAT-IF RESPONSE",
       {
         originalCosts,
@@ -6692,7 +6692,7 @@ The verdict is ${verdict}.`;
       "Change the property price"
     ];
 
-    console.log(
+    rbDebugLog(
       "💰 EXECUTIVE EQUITY WHAT-IF RESPONSE",
       {
         originalEquity,
@@ -6941,7 +6941,7 @@ The verdict is ${verdict}.`;
       "Change the equity contribution"
     ];
 
-    console.log(
+    rbDebugLog(
       "🏦 EXECUTIVE MORTGAGE WHAT-IF RESPONSE",
       {
         originalMortgagePercent,
@@ -7264,7 +7264,7 @@ The combined effect of the changes brings equity ROI to ${formatPct(scenarioROI)
 
 The resulting scenario reaches an Investment Score of ${scenarioScore}/100 with a ${verdict} verdict.`;
 
-    console.log(
+    rbDebugLog(
       "🧪 EXECUTIVE COMBINED WHAT-IF RESPONSE",
       {
         scenarioMortgagePercent,
@@ -7318,7 +7318,7 @@ The resulting scenario reaches an Investment Score of ${scenarioScore}/100 with 
   const gross =
     Number(rawGross || 0);
 
-  console.log(
+  rbDebugLog(
     "💰 EXECUTIVE DEBUG:",
     {
       rawNet,
@@ -8029,7 +8029,7 @@ if(
 
 }
 
-console.log(
+rbDebugLog(
   "🧠 EXECUTIVE SUMMARY:",
   executiveSummary
 );
@@ -8378,7 +8378,7 @@ rbDebugLog(
     brainData?.executiveSummary
 );
 
-console.log(
+rbDebugLog(
     "🎯 BRAIN WEAKEST POINT",
     {
         weaknesses: brainData?.weaknesses,
@@ -8388,7 +8388,7 @@ console.log(
     }
 );    
 
-console.log(
+rbDebugLog(
     "🧠 SUMMARY IT FIELD",
     brainData?.summaryIT
 );
@@ -8459,7 +8459,7 @@ executiveBuilderResult =
 
 }
 
-console.log(
+rbDebugLog(
   "🧠 EXECUTIVE BUILDER RESULT:",
   executiveBuilderResult
 );
@@ -11276,7 +11276,7 @@ response.signals = [
 
 if (window.RB_DEBUG) {
 
-    console.log(
+    rbDebugLog(
         "RESPONSE ENGINE",
         response
     );
