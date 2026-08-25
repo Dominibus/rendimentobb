@@ -2064,9 +2064,10 @@ function pickRandom(arr){
   // 📈 ROI RESPONSE
   // ===========================================
 
-  if(
-    intent.intent === "roi_analysis"
-  ){
+if(
+  intent.intent === "roi_analysis" &&
+  !isStrategicImprovementFollowUp
+){
 
 
     response.type =
