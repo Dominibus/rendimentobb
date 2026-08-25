@@ -2090,11 +2090,6 @@ function pickRandom(arr){
     response.type =
       "roi";
 
-    rbDebugLog(
-  "🔥 ROI RESPONSE CREATED",
-  response
-);
-
     response.confidence =
       0.95;
 
@@ -2275,11 +2270,6 @@ ${roi.toFixed(1)}%
 
     }
 
-       rbDebugLog(
-      "📈 ROI RESPONSE CREATED",
-      response
-    );
-
     return response;
 
   }
@@ -2449,10 +2439,6 @@ else if(
 
   }
 
-  rbDebugLog(
-    "💰 CASHFLOW RESPONSE CREATED",
-    response
-  );
 
   return response;
 
@@ -2586,10 +2572,6 @@ ${roi.toFixed(1)}%`;
 
     }
 
-    rbDebugLog(
-      "⚠️ RISK RESPONSE CREATED",
-      response
-    );
 
     return response;
 
@@ -2830,21 +2812,6 @@ Investment Score: ${originalScore} → ${newScore}
 
 ${interpretationEN}`;
 
-    rbDebugLog(
-      "🏦 MORTGAGE WHAT-IF RESPONSE CREATED",
-      {
-        originalMortgagePercent,
-        requestedMortgagePercent,
-        originalROI,
-        newROI,
-        originalRealROI,
-        newRealROI,
-        originalCashflow,
-        newCashflow,
-        originalScore,
-        newScore
-      }
-    );
 
     return response;
 
