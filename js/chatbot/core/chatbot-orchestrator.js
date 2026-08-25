@@ -3151,6 +3151,75 @@ const baselineADR =
     0
   );
 
+// Baseline canonica corrente.
+// Deve essere acquisita prima di applicare lo scenario ADR.
+const adrBaselineCashflow =
+  Number(
+    window.rbChatbotData?.net ??
+    window.rbChatbotLive?.net ??
+    window.lastAnalysisData?.net ??
+    window.lastAnalysisData?.cashflow ??
+    window.lastAnalysisData?.annualProfit ??
+    0
+  );
+
+const adrBaselineROI =
+  Number(
+    window.rbChatbotData?.visualROI ??
+    window.rbChatbotData?.roi ??
+    window.rbChatbotLive?.visualROI ??
+    window.rbChatbotLive?.roi ??
+    window.lastAnalysisData?.visualROI ??
+    window.lastAnalysisData?.roi ??
+    0
+  );
+
+const adrBaselinePropertyPrice =
+  Number(
+    window.lastAnalysisData?.propertyPrice ??
+    window.lastAnalysisData?.price ??
+    analysisData.propertyPrice ??
+    0
+  );
+
+const adrBaselineRealROI =
+  adrBaselinePropertyPrice > 0
+    ? (
+        adrBaselineCashflow /
+        adrBaselinePropertyPrice
+      ) * 100
+    : Number(
+        window.lastAnalysisData?.realROI ??
+        0
+      );
+
+const adrBaselineRisk =
+  Number(
+    analysisData.risk ??
+    window.lastAnalysisData?.risk ??
+    0
+  );
+
+const adrRenderedScore =
+  Number(
+    String(
+      document.getElementById("score-circle")
+        ?.textContent ?? ""
+    )
+      .replace(/[^\d.,-]/g, "")
+      .replace(",", ".")
+  );
+
+const adrBaselineScore =
+  Number.isFinite(adrRenderedScore) &&
+  adrRenderedScore > 0
+    ? adrRenderedScore
+    : Number(
+        window.lastAnalysisData?.investmentScore ??
+        window.lastInvestmentScore?.score ??
+        0
+      );    
+
 const isADRWhatIf =
   !isCombinedWhatIf &&
   !isMortgageWhatIf &&
@@ -3427,40 +3496,20 @@ if(isADRWhatIf){
         0
       ),
 
-    originalROI:
-      Number(
-        window.lastAnalysisData?.visualROI ??
-        window.lastAnalysisData?.roi ??
-        0
-      ),
+  originalRealROI:
+     adrBaselineRealROI,
 
-    originalRealROI:
-      Number(
-        window.lastAnalysisData?.realROI ??
-        window.lastAnalysisData?.safeROI ??
-        0
-      ),
+ originalROI:
+     adrBaselineROI,
 
-    originalCashflow:
-      Number(
-        window.lastAnalysisData?.net ??
-        window.lastAnalysisData?.cashflow ??
-        window.lastAnalysisData?.annualProfit ??
-        0
-      ),
+originalCashflow:
+     adrBaselineCashflow,
 
-    originalRisk:
-      Number(
-        window.lastAnalysisData?.risk ??
-        0
-      ),
+originalRisk:
+     adrBaselineRisk,
 
-    originalInvestmentScore:
-      Number(
-        window.lastAnalysisData?.investmentScore ??
-        window.lastInvestmentScore?.score ??
-        0
-      ),
+originalInvestmentScore:
+     adrBaselineScore,
 
     scenarioADR:
       requestedADR,
@@ -4284,6 +4333,8 @@ if(advisor){
         "WAIT"
       );
 
+if(!analysisData?.whatIfScenario){
+
   window.lastInvestmentScore = {
 
     score:
@@ -4303,6 +4354,8 @@ if(advisor){
       )
 
   };
+
+}
 
   // =========================================
   // 🧠 SYNC ADVISOR WITH CANONICAL DECISION
