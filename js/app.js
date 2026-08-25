@@ -4721,10 +4721,13 @@ runPostAnalysis(result,{
   net,
 
   mortgageRate:
-    interestRate || 0,
+  interestRate || 0,
 
   monthlyMortgage:
-    result?.monthlyMortgage || 0
+  Number(
+    result?.mortgageYearly ??
+    0
+  ) / 12
 
 });
     // ================= MARKET =================
