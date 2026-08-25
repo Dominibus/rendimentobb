@@ -5662,18 +5662,29 @@ else if(
       0
     );
 
-  const formatEURIT = value =>
+const formatEURIT = value => {
 
-    Number(value || 0)
-      .toLocaleString(
-        "it-IT",
-        {
-          style: "currency",
-          currency: "EUR",
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }
-      );
+  const roundedValue =
+    Math.round(
+      Number(value || 0)
+    );
+
+  const sign =
+    roundedValue < 0
+      ? "-"
+      : "";
+
+  const formattedValue =
+    String(
+      Math.abs(roundedValue)
+    ).replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      "."
+    );
+
+  return `${sign}${formattedValue} €`;
+
+};
 
   const formatEUREN = value =>
 
