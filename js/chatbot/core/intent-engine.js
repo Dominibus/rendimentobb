@@ -867,21 +867,22 @@ if(isADRWhatIf){
 
 // ===========================================
 // 💸 OPERATING COSTS WHAT-IF
-// Executive Investment Assistant 2026
-// IT / EN contextual scenario detection
+// Contextual IT / EN scenario detection
 // ===========================================
 
 // =====================================
 // 💬 PENDING MONTHLY COSTS CLARIFICATION
-// Resolve a short numeric follow-up such as "1100"
+// Resolves short numeric follow-ups such as "1100"
 // =====================================
 
-  let resolvedPendingMonthlyCosts =
+let resolvedPendingMonthlyCosts =
   false;
 
 const pendingMonthlyCostsClarification =
+
   window.rbPendingClarification?.type ===
     "monthly_costs" &&
+
   (
     Date.now() -
     Number(
@@ -941,7 +942,9 @@ if(pendingMonthlyCostsClarification){
     }
 
     const pendingMonthlyCostsValue =
-      Number(pendingValueText);
+      Number(
+        pendingValueText
+      );
 
     if(
       Number.isFinite(
@@ -956,52 +959,50 @@ if(pendingMonthlyCostsClarification){
       entities.amount =
         pendingMonthlyCostsValue;
 
-entities.price =
-  null;
+      entities.price =
+        null;
 
-resolvedPendingMonthlyCosts =
-  true;
+      resolvedPendingMonthlyCosts =
+        true;
 
-window.rbPendingClarification =
-  null;
+      window.rbPendingClarification =
+        null;
 
     }
 
   }
 
-}  
+}
+
+// =====================================
+// 💶 REQUESTED AND CURRENT VALUES
+// =====================================
 
 const hasOperatingCostsEntity =
+
   Number.isFinite(
-    Number(entities?.monthlyCosts)
+    Number(
+      entities?.monthlyCosts
+    )
   ) &&
-  Number(entities?.monthlyCosts) >= 0;
 
-const operatingCostsWhatIfPatterns = [
+  Number(
+    entities?.monthlyCosts
+  ) >= 0;
 
-  // 🇮🇹
-  /(?:e\s+)?se\s+.*(?:costi|spese).*\d/i,
-  /(?:costi|spese)(?:\s+mensili)?.*(?:aument|sal|cres|riduc|dimin|scend|fosser|port).*\d/i,
-
-  // 🇬🇧
-  /what if\s+.*(?:costs|expenses).*\d/i,
-  /(?:monthly\s+costs|monthly\s+expenses|costs|expenses).*(?:increas|ris|grow|reduc|decreas|drop|were|chang).*\d/i
-
-];
-
-// Simulazione attiva disponibile come contesto.
-const hasActiveInvestmentSimulation =
-  window.simulationExecuted === true ||
-  (
-    window.lastAnalysisData &&
-    typeof window.lastAnalysisData === "object"
-  ) ||
-  (
-    window.rbChatbotData &&
-    typeof window.rbChatbotData === "object"
+const requestedMonthlyCosts =
+  Number(
+    entities?.monthlyCosts
   );
 
-// Costi mensili attualmente utilizzati dalla simulazione.
+const hasValidRequestedMonthlyCosts =
+
+  Number.isFinite(
+    requestedMonthlyCosts
+  ) &&
+
+  requestedMonthlyCosts >= 0;
+
 const currentMonthlyCosts =
   Number(
     window.lastAnalysisData?.expenses ??
@@ -1010,55 +1011,158 @@ const currentMonthlyCosts =
     0
   );
 
-// Nuovo valore estratto dal messaggio.
-const requestedMonthlyCosts =
-  Number(
-    entities?.monthlyCosts
-  );
+// =====================================
+// 🧠 ACTIVE INVESTMENT CONTEXT
+// =====================================
 
-// Contesto semantico esplicito dei costi operativi.
-// Non dipende dall'ordine esatto delle parole.
-const hasOperatingCostsContext =
+const hasActiveInvestmentSimulation =
+
+  window.simulationExecuted === true ||
+
   (
-    text.includes("costi mensili") ||
-    text.includes("spese mensili") ||
-    text.includes("costi operativi") ||
-    text.includes("spese operative") ||
-    text.includes("costi al mese") ||
-    text.includes("spese al mese") ||
-    text.includes("monthly costs") ||
-    text.includes("monthly expenses") ||
-    text.includes("operating costs") ||
-    text.includes("operating expenses") ||
-    text.includes("costs per month") ||
-    text.includes("expenses per month")
+    window.lastAnalysisData &&
+    typeof window.lastAnalysisData ===
+      "object"
+  ) ||
+
+  (
+    window.rbChatbotData &&
+    typeof window.rbChatbotData ===
+      "object"
   );
 
-// Il valore richiesto deve essere valido.
-const hasValidRequestedMonthlyCosts =
-  Number.isFinite(requestedMonthlyCosts) &&
-  requestedMonthlyCosts >= 0;
+// =====================================
+// 🗣️ SEMANTIC OPERATING-COST CONTEXT
+// Tolerates word order and common spelling errors
+// =====================================
 
-// Se esiste una baseline, il nuovo valore deve essere diverso.
-// Se la baseline manca, il contesto esplicito è comunque sufficiente.
+const mentionsOperatingCosts =
+
+  /\b(costi|spese|costs|expenses)\b/.test(
+    text
+  ) ||
+
+  /\b(spendessi|spendo|spendere|spenderei)\b/.test(
+    text
+  ) ||
+
+  /\b(spend|spent|spending|pay|paying)\b/.test(
+    text
+  );
+
+const mentionsMonthlyFrequency =
+
+  text.includes("mensil") ||
+
+  text.includes("al mese") ||
+
+  text.includes("ogni mese") ||
+
+  text.includes("per month") ||
+
+  text.includes("each month") ||
+
+  text.includes("monthly");
+
+const mentionsSubscriptionContext =
+
+  text.includes("piano pro") ||
+
+  text.includes("piano investor") ||
+
+  text.includes("costo del piano") ||
+
+  text.includes("costi del piano") ||
+
+  text.includes("prezzo del piano") ||
+
+  text.includes("abbonamento") ||
+
+  text.includes("subscription") ||
+
+  text.includes("pricing plan") ||
+
+  text.includes("pro plan") ||
+
+  text.includes("investor plan");
+
+const hasOperatingCostsContext =
+
+  !mentionsSubscriptionContext &&
+
+  (
+    (
+      mentionsOperatingCosts &&
+      hasValidRequestedMonthlyCosts
+    ) ||
+
+    (
+      mentionsOperatingCosts &&
+      mentionsMonthlyFrequency
+    ) ||
+
+    text.includes("costi operativi") ||
+
+    text.includes("spese operative") ||
+
+    text.includes("operating costs") ||
+
+    text.includes("operating expenses")
+  );
+
+// =====================================
+// 🔎 LEGACY-COMPATIBLE PATTERNS
+// =====================================
+
+const operatingCostsWhatIfPatterns = [
+
+  // 🇮🇹
+  /(?:e\s+)?se\s+.*(?:costi|spese).*\d/i,
+
+  /(?:costi|spese)(?:\s+mensili)?.*(?:aument|sal|cres|riduc|dimin|scend|fosser|port).*\d/i,
+
+  // 🇬🇧
+  /what if\s+.*(?:costs|expenses).*\d/i,
+
+  /(?:monthly\s+costs|monthly\s+expenses|costs|expenses).*(?:increas|ris|grow|reduc|decreas|drop|were|chang).*\d/i
+
+];
+
+// =====================================
+// 📊 VALUE CHANGE
+// =====================================
+
 const monthlyCostsActuallyChange =
+
   currentMonthlyCosts > 0
-    ? requestedMonthlyCosts !== currentMonthlyCosts
+
+    ? requestedMonthlyCosts !==
+      currentMonthlyCosts
+
     : true;
 
-// Routing ibrido:
-// 1. mantiene compatibilità con i pattern esistenti;
-// 2. aggiunge comprensione basata su entità e simulazione.
+// =====================================
+// 🚦 CONTEXTUAL WHAT-IF ROUTING
+// =====================================
+
 const isOperatingCostsWhatIf =
+
   hasActiveInvestmentSimulation &&
+
   hasOperatingCostsEntity &&
+
   hasValidRequestedMonthlyCosts &&
+
   monthlyCostsActuallyChange &&
+
   (
     resolvedPendingMonthlyCosts ||
+
     hasOperatingCostsContext ||
+
     operatingCostsWhatIfPatterns.some(
-      pattern => pattern.test(text)
+      pattern =>
+        pattern.test(text)
     )
   );
 
@@ -1086,11 +1190,11 @@ if(isOperatingCostsWhatIf){
 
   });
 
-}  
+}
 
 // =====================================
-// 💬 MONTHLY COSTS CLARIFICATION
-// The parameter is understood, but the target value is missing.
+// 💬 MISSING VALUE CLARIFICATION
+// Parameter understood, target value missing
 // =====================================
 
 const asksMonthlyCostsChangeWithoutValue =
@@ -1103,19 +1207,33 @@ const asksMonthlyCostsChangeWithoutValue =
 
   (
     text.includes("aument") ||
+
     text.includes("increment") ||
+
     text.includes("alz") ||
+
     text.includes("riduc") ||
+
     text.includes("dimin") ||
+
     text.includes("abbass") ||
+
     text.includes("cambi") ||
+
     text.includes("modific") ||
+
     text.includes("increase") ||
+
     text.includes("raise") ||
+
     text.includes("reduce") ||
+
     text.includes("lower") ||
+
     text.includes("decrease") ||
+
     text.includes("change") ||
+
     text.includes("modify")
   );
 
@@ -1140,7 +1258,7 @@ if(asksMonthlyCostsChangeWithoutValue){
 
   });
 
-}  
+}
   
   
 // ===========================================
