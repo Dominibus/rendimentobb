@@ -3971,17 +3971,6 @@ if(
 
   }
 
-  console.log(
-    "🧠 WHAT-IF VERDICT SSOT",
-    {
-      score:
-        analysisData.investmentScore,
-
-      verdict:
-        analysisData.verdict
-    }
-  );
-
 }
     
 if(window.RB_DEBUG === true){
