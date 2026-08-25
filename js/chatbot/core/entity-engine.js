@@ -497,6 +497,12 @@ for(const pattern of occupancyPatterns){
 
 const nightlyPatterns = [
 
+  // 🇮🇹 — Variazione da una tariffa a un'altra
+  /(?:prezzo\s+(?:medio\s+)?(?:a\s+|per\s+)?notte|tariffa\s+(?:media\s+)?(?:a\s+|per\s+)?notte|tariffa\s+media|adr)\s+(?:da|dal)\s*€?\s*\d+(?:[\.,]\d+)?\s*€?\s+(?:a|al)\s*€?\s*(\d+(?:[\.,]\d+)?)\s*€?/,
+
+  // 🇬🇧 — Change from one nightly rate to another
+  /(?:average\s+nightly\s+rate|nightly\s+(?:price|rate)|price\s+per\s+night|average\s+rate|daily\s+rate|adr)\s+from\s*€?\s*\d+(?:[\.,]\d+)?\s*(?:€)?\s+to\s*€?\s*(\d+(?:[\.,]\d+)?)\s*(?:€)?/,
+
   // 🇮🇹 — Natural What-if + direct forms
   /(?:prezzo\s+(?:medio\s+)?(?:a\s+|per\s+)?notte|tariffa\s+(?:media\s+)?(?:a\s+|per\s+)?notte|tariffa\s+media|adr)\s+(?:(?:salisse|sale|aumentasse|aumenta|aumento|scendesse|scende|diminuisse|diminuisce|riduco)\s+)?(?:a|al|di)?\s*€?\s*(\d+(?:[\.,]\d+)?)/,
 
@@ -528,17 +534,10 @@ for(const pattern of nightlyPatterns){
       entities.adr =
         value;
 
-      // ADR / nightly must not be interpreted
-      // as property purchase price.
-      if(
-        entities.price === value &&
-        entities.amount === value
-      ){
-
-        entities.price = null;
-        entities.amount = null;
-
-      }
+// ADR / nightly amounts must never become
+// property purchase-price entities.
+entities.price = null;
+entities.amount = null;
 
       entities.detectedTopics.push(
         "performance"
