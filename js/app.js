@@ -3284,7 +3284,6 @@ if(finalROI <= 0){
 
     if(window.__LAST_LEAD_HASH__ === leadHash){
 
-      console.warn("⛔ DUPLICATE LEAD BLOCKED");
       return;
     }
 
