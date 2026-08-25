@@ -48,8 +48,7 @@ const rbDebugWarn = (...args) => {
 };
   
 rbDebugLog("RESPONSE ENGINE CALLED", {
-    intent,
-    message
+    intent: intent?.intent || null
 });
 
 // ===============================================
@@ -103,22 +102,6 @@ const {
 
 } = conversationContext || {};
 
-if(RB_DEBUG){
-
-rbDebugLog(
-    "🧠 CONVERSATION CONTEXT",
-    {
-        goal,
-        topic,
-        isFollowUp,
-        isShortQuestion,
-        conversationHasAnalysis,
-        contextConfidence,
-        originalMessage
-    }
-);
-
-}
 
 // ===============================================
 // 🧠 SEMANTIC FOLLOW-UP ROUTING
@@ -263,14 +246,6 @@ const executiveActionPlan =
 
     [];
 
-if(RB_DEBUG){
-
-rbDebugLog(
-    "🧠 EXECUTIVE INSIGHT",
-    executiveInsight
-);
-
-}
 
 // ===============================================
 // 🧠 EXECUTIVE DECISION
@@ -367,14 +342,6 @@ const executiveState = {
 
 };
 
-if(RB_DEBUG){
-
-rbDebugLog(
-    "🧠 EXECUTIVE STATE",
-    executiveState
-);
-
-}
   
   // ===========================================
   // 🧠 RESPONSE OBJECT
@@ -567,10 +534,6 @@ library:
 
 };
 
-rbDebugLog(
- "🧠 EXECUTIVE CONTEXT:",
- executiveContext
-);
   
 // =====================================
 // 📚 DOCUMENT KNOWLEDGE
@@ -631,12 +594,7 @@ if(
     }
 
 }
-
-rbDebugLog(
- "🧠 DOCUMENT REASONING:",
- documentReasoning
-);
-    
+   
 
   }
   catch(error){
@@ -649,11 +607,6 @@ rbDebugLog(
   }
 
 }
-
-rbDebugLog(
- "📚 DOCUMENT KNOWLEDGE:",
- documentKnowledge
-);
 
 let watchPoints = [];
 
@@ -759,11 +712,6 @@ watchPoints =
 // 🧠 DEBUG
 // =====================================
 
-rbDebugLog(
-    "🧠 EXECUTIVE BRAIN:",
-    executiveBrain
-);
-
 
 rbDebugLog(
     "🧠 EXECUTIVE BRAIN SYNC:",
@@ -841,10 +789,6 @@ if(
 
 }
 
-rbDebugLog(
-  "🧠 EXECUTIVE NARRATIVE:",
-  executiveNarrative
-);
   
 // =====================================
 // 🏨 PMS DATA
@@ -858,10 +802,6 @@ const pmsData =
 
   {};
 
-rbDebugLog(
- "🏨 PMS DATA:",
- pmsData
-);
 
   const investorProfile =
   window.rbInvestorProfile || {};
@@ -943,19 +883,8 @@ const occupancy =
 
   );
 
-rbDebugLog(
-  "🧠 LIVE RESPONSE DATA:",
-  {
-    roi,
-    risk,
-    occupancy,
-    liveData,
-    chatbotLive: window.rbChatbotLive,
-    chatbotData: window.rbChatbotData
-  }
-);
 
-  // ===========================================
+// ===========================================
 // 🌍 SAFE MARKET CONTEXT
 // ===========================================
 
@@ -1166,14 +1095,6 @@ const rememberedMortgage =
 
   0;
 
-rbDebugLog(
-"🧠 MEMORY CONTEXT:",
-{
-  rememberedBudget,
-  rememberedCity,
-  rememberedMortgage
-}
-); 
 
 // ===========================================
 // 🧠 INVESTOR MEMORY
@@ -1227,15 +1148,6 @@ const targetROI =
 
   0;
 
-rbDebugLog(
-"🧠 INVESTOR MEMORY:",
-{
- availableCapital,
- ownedProperties,
- monthlyCashflowGoal,
- targetROI
-}
-);
 
 // =====================================
 // 🧠 AI BRAIN
@@ -1288,10 +1200,6 @@ brainData =
 
 }
 
-rbDebugLog(
- "🧠 AI BRAIN:",
- brainData
-);
 
 // =====================================
 // 🧠 SYNC EXECUTIVE BRAIN INTO BRAIN DATA
@@ -1338,24 +1246,12 @@ window.rbChatMemory?.investmentHistory ||
 
 [];
 
-rbDebugLog(
- "💾 GLOBAL INVESTMENT HISTORY:",
- investmentHistory
-);
 
 rbDebugLog(
 "📊 HISTORY COUNT:",
 investmentHistory.length
 );
 
-rbDebugLog(
- "📊 FULL HISTORY:",
- JSON.stringify(
-    investmentHistory,
-    null,
-    2
- )
-);
 
 rbDebugLog(
   "🔍 HISTORY SOURCES",
@@ -2078,14 +1974,6 @@ function pickRandom(arr){
     intent.intent === "roi_analysis"
   ){
 
-    rbDebugLog(
-    "🔥 ROI BRANCH ENTERED",
-    {
-      roi,
-      risk,
-      occupancy
-    }
-  );
 
     response.type =
       "roi";
@@ -2154,13 +2042,7 @@ ${occupancy}%
 ⚠️ Risk score:
 ${risk}/100`;
 
-      rbDebugLog(
-  "🔥 ROI TEXT GENERATED",
-  {
-    textIT: response.textIT,
-    textEN: response.textEN
-  }
-);
+
       return response;
     }
 
@@ -2324,8 +2206,7 @@ else if(
       rawNet,
       rawGross,
       uiNetProfit,
-      finalNet: net,
-      liveData
+      finalNet: net
     }
   );
 
@@ -3080,9 +2961,6 @@ else if(
 
 ){
 
-  rbDebugLog(
-    "🔥 PMS BLOCK ENTERED"
-  );
 
   rbDebugLog(
     "🔥 PMS DATA:",
@@ -4043,21 +3921,6 @@ else if(
 // 🧠 SAME CITY COMPARISON ENGINE
 // =====================================
 
-rbDebugLog(
-  "🔥 FINAL COMPARISON MEMORY:",
-  investmentHistory
-);
-
-rbDebugLog(
-  "🧠 FINAL INVESTMENT HISTORY:",
-  investmentHistory
-);
-
-rbDebugLog(
-  "🔥 FINAL COMPARISON MEMORY:",
-  investmentHistory
-);
-
 if(
   investmentHistory.length >= 2
 ){
@@ -4102,9 +3965,7 @@ rbDebugLog(
   "🧠 COMPARISON ROI:",
   {
     currentROI,
-    previousROI,
-    current,
-    previous
+    previousROI
   }
 );
 
@@ -4219,9 +4080,7 @@ ${
   : `The previous simulation appears more profitable by ${roiDiff}%.`
 }`;
 
-  rbDebugLog(
-  "🛑 COMPARISON HARD STOP"
-);
+  rbDebugLog("🛑 COMPARISON HARD STOP");
 
 response.__LOCKED = true;
 
@@ -4633,10 +4492,6 @@ else{
 
 else{
 
-  rbDebugLog(
-    "⚠️ CITY COMPARISON SKIPPED"
-  );
-
 }
 
 // =====================================
@@ -4662,10 +4517,6 @@ if(
 
     const history = investmentHistory || [];
 
-  rbDebugLog(
-  "🔥 FINAL HISTORY USED:",
-  history
-  );
 
     if(history.length >= 2){
 
@@ -4738,10 +4589,6 @@ if(
 
       );
 
-  rbDebugLog(
-    "🔥 GLOBAL FALLBACK HISTORY:",
-    history
-  );
 
   if(history.length >= 2){
 
@@ -5226,10 +5073,6 @@ ${best.avgRisk.toFixed(0)}/100
 
 🎯 The AI currently considers ${bestCity} the most attractive destination for a profitability-focused, stable and operationally sustainable short-rent strategy.`;
 
-  rbDebugLog(
-    "🏆 BEST CITY RESPONSE:",
-    response
-  );
 
   return response;
 
@@ -7262,17 +7105,6 @@ The resulting scenario reaches an Investment Score of ${scenarioScore}/100 with 
   const gross =
     Number(rawGross || 0);
 
-  rbDebugLog(
-    "💰 EXECUTIVE DEBUG:",
-    {
-      rawNet,
-      rawGross,
-      finalNet: net,
-      finalGross: gross,
-      liveData
-    }
-  );
-
   // =====================================
   // 🇮🇹 ITALIANO
   // =====================================
@@ -7973,10 +7805,6 @@ if(
 
 }
 
-rbDebugLog(
-  "🧠 EXECUTIVE SUMMARY:",
-  executiveSummary
-);
   
 // =====================================
 // 🧠 REASONING ENGINE
@@ -8307,20 +8135,12 @@ if(
 
   try{
 
-rbDebugLog(
-    "🧠 BRAIN DATA TO BUILDER",
-    brainData
-);
 
 rbDebugLog(
     "🧠 BRAIN KEYS",
     Object.keys(brainData || {})
 );
 
-rbDebugLog(
-    "🧠 EXECUTIVE SUMMARY FIELD",
-    brainData?.executiveSummary
-);
 
 rbDebugLog(
     "🎯 BRAIN WEAKEST POINT",
@@ -8332,10 +8152,6 @@ rbDebugLog(
     }
 );    
 
-rbDebugLog(
-    "🧠 SUMMARY IT FIELD",
-    brainData?.summaryIT
-);
 
 executiveBuilderResult =
       window.rbBuildExecutiveResponse({
@@ -8403,10 +8219,6 @@ executiveBuilderResult =
 
 }
 
-rbDebugLog(
-  "🧠 EXECUTIVE BUILDER RESULT:",
-  executiveBuilderResult
-);
 
   builderOwnsExecutiveResponse =
 
