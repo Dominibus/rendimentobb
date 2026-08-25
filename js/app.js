@@ -6264,6 +6264,18 @@ const safePrice =
 const ltv =
   (loan / safePrice) * 100;
 
+const financingRate =
+  safe(
+    d.interestRate ??
+    3.5
+  );
+
+const financingYears =
+  safe(
+    d.loanYears ??
+    20
+  );
+
 const annualDebtService =
   safe(
     d.mortgageYearly ??
