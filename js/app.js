@@ -6228,49 +6228,128 @@ doc.text(T("Richiesta finanziamento","Loan request"),20,y);
 
 y+=12;
 
-const rate = 0.04;
-const interest = loan * rate;
-const net = profit - interest;
-const safePrice = Math.max(price,1);
+const safePrice =
+  Math.max(
+    price,
+    1
+  );
 
-const ltv = (loan / safePrice) * 100;
-let dscr = interest > 0
-  ? profit / interest
-  : 0;
+const ltv =
+  (loan / safePrice) * 100;
 
-// 🔥 SAFE LIMIT
-if(!isFinite(dscr)){
-  dscr = 0;
-}
+const monthlyDebtService =
+  safe(
+    d.monthlyMortgage ??
+    d.monthlyMortgagePayment ??
+    window.monthlyMortgage ??
+    0
+  );
 
-// 🔥 HARD CAP
-dscr = Math.min(dscr, 4.5);
+const annualDebtService =
+  monthlyDebtService * 12;
 
-row(T("Importo richiesto","Requested loan"), eur(loan));
-row("LTV", ltv.toFixed(1)+"%");
-row("DSCR", dscr.toFixed(2));
+const netOperatingIncome =
+  profit + annualDebtService;
+
+const dscr =
+  annualDebtService > 0
+    ? netOperatingIncome / annualDebtService
+    : null;
+
+const dscrLabel =
+  Number.isFinite(dscr)
+    ? dscr.toFixed(2)
+    : "N/A";
+
 row(
   T(
-    "Cashflow dopo interessi",
-    "Cashflow after interest"
+    "Importo richiesto",
+    "Requested loan"
   ),
-  eur(net)
+  eur(loan)
+);
+
+row(
+  "LTV",
+  ltv.toFixed(1) + "%"
+);
+
+row(
+  T(
+    "Rata mutuo annua",
+    "Annual debt service"
+  ),
+  eur(annualDebtService)
+);
+
+row(
+  "DSCR",
+  dscrLabel
+);
+
+row(
+  T(
+    "Cashflow netto dopo mutuo",
+    "Net cashflow after mortgage"
+  ),
+  eur(profit)
 );
 
 // DECISION
-y+=10;
+y += 10;
 
-doc.setFillColor(dscr > 1.5 ? 16 : 200, dscr > 1.5 ? 185 : 50, dscr > 1.5 ? 129 : 50);
-doc.roundedRect(20,y,170,18,6,6,"F");
+const hasFinancing =
+  loan > 0 &&
+  annualDebtService > 0;
+
+const financingSustainable =
+  hasFinancing &&
+  dscr >= 1.2;
+
+const financingColor =
+  !hasFinancing
+    ? [100,116,139]
+    : financingSustainable
+      ? [16,185,129]
+      : [200,50,50];
+
+const financingLabel =
+  !hasFinancing
+    ? T(
+        "Nessun finanziamento rilevato",
+        "No financing detected"
+      )
+    : financingSustainable
+      ? T(
+          "Sostenibile per finanziamento",
+          "Financing sustainable"
+        )
+      : T(
+          "Copertura del debito insufficiente",
+          "Insufficient debt coverage"
+        );
+
+doc.setFillColor(
+  ...financingColor
+);
+
+doc.roundedRect(
+  20,
+  y,
+  170,
+  18,
+  6,
+  6,
+  "F"
+);
 
 doc.setTextColor(255);
 doc.setFontSize(11);
 
 doc.text(
-dscr > 1.5
-? T("Sostenibile per finanziamento","Financing sustainable")
-: T("Rischio elevato credito","High credit risk"),
-25,y+12
+  financingLabel,
+  25,
+  y + 12
 );
 
 footer();
