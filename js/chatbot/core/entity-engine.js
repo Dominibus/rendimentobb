@@ -435,6 +435,7 @@ const occupancyPatterns = [
   /occupancy\s+(?:dal|da)\s+\d+(?:[\.,]\d+)?\s?%\s+(?:al|a)\s+(\d+(?:[\.,]\d+)?)\s?%/,
 
   // 🇬🇧 — Change from one occupancy level to another
+  /(?:reduce|lower|decrease|change|bring|move)\s+(?:the\s+)?occupancy\s+from\s+\d+(?:[\.,]\d+)?\s?%\s+to\s+(\d+(?:[\.,]\d+)?)\s?%/,
   /occupancy\s+from\s+\d+(?:[\.,]\d+)?\s?%\s+to\s+(\d+(?:[\.,]\d+)?)\s?%/,
 
   // 🇮🇹 Direct
