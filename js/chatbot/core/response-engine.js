@@ -1734,76 +1734,122 @@ const isRomeOccupancyOptimization =
 // Persisted conversation safe routing
 // =====================================
 
+const asksHowToFixWeakness =
+
+  (
+    normalizedFollowUpMessage.includes(
+      "come ridurre questo punto debole"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "come risolvere questo problema"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "come correggere questa criticità"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "come posso intervenire"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "come posso risolverlo"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "how can i reduce this weakness"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "how can i address this weakness"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "how can i solve this problem"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "how can i address this issue"
+    )
+  );
+
 const asksWhatToImprove =
 
   (
     intent?.intent === "improvement_advisor" ||
 
+    asksHowToFixWeakness ||
+
     normalizedFollowUpMessage.includes(
       "cosa dovrei migliorare"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "cosa migliorare"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "come posso migliorare"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "come aumentare il roi"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "come aumentare il rendimento"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "come aumentare il cashflow"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "come ridurre il rischio"
     ) ||
-
+    normalizedFollowUpMessage.includes(
+      "cosa dovrei ottimizzare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "quali aspetti migliorare"
+    ) ||
     normalizedFollowUpMessage.includes(
       "what should i improve"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "what can i improve"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "how can i improve"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "how can i increase roi"
     ) ||
-
+    normalizedFollowUpMessage.includes(
+      "how can i increase returns"
+    ) ||
     normalizedFollowUpMessage.includes(
       "how can i increase cashflow"
     ) ||
-
     normalizedFollowUpMessage.includes(
       "how can i reduce risk"
     ) ||
-
-    (
-      normalizedFollowUpMessage.includes("roi") &&
-      normalizedFollowUpMessage.includes("rischio")
+    normalizedFollowUpMessage.includes(
+      "what should i optimize"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "which aspects should i improve"
     ) ||
 
     (
-      normalizedFollowUpMessage.includes("roi") &&
-      normalizedFollowUpMessage.includes("risk")
-    )
+      normalizedFollowUpMessage.includes(
+        "roi"
+      ) &&
+      normalizedFollowUpMessage.includes(
+        "rischio"
+      )
+    ) ||
 
+    (
+      normalizedFollowUpMessage.includes(
+        "roi"
+      ) &&
+      normalizedFollowUpMessage.includes(
+        "risk"
+      )
+    )
   );
 
 const asksWeakestPoint =
+
+  !asksHowToFixWeakness &&
 
   (
     normalizedFollowUpMessage.includes(
@@ -1816,6 +1862,30 @@ const asksWeakestPoint =
       "criticità principale"
     ) ||
     normalizedFollowUpMessage.includes(
+      "maggiore criticità"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "rischio principale"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "elemento da monitorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "aspetto da monitorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "fattore da monitorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "cosa monitorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "cosa devo monitorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "cosa dovrei monitorare"
+    ) ||
+    normalizedFollowUpMessage.includes(
       "weakest point"
     ) ||
     normalizedFollowUpMessage.includes(
@@ -1823,6 +1893,30 @@ const asksWeakestPoint =
     ) ||
     normalizedFollowUpMessage.includes(
       "biggest weakness"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "main risk"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "key risk"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "element to monitor"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "aspect to monitor"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "factor to monitor"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "main thing to monitor"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "what should i monitor"
+    ) ||
+    normalizedFollowUpMessage.includes(
+      "what do i need to monitor"
     )
   );
 
@@ -1833,7 +1927,7 @@ const isStrategicImprovementFollowUp =
   (
     asksWhatToImprove ||
     asksWeakestPoint
-  );  
+  );
   
 // ===========================================
 // 🏠 HOME QUICK SIMULATION
