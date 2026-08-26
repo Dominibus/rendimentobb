@@ -2902,41 +2902,59 @@ window.showUpgradeModal = function({mode} = {}){
   modal.classList.add("show");
 
   // ================= LOGIN =================
-  if(mode === "login"){
+if(mode === "login"){
 
-    titleEl.innerText =
-      "🔒 Devi registrarti per continuare";
+  const isEnglish =
+    (window.currentLang || "it") === "en";
 
-    subEl.innerText =
-      "Crea un account gratuito per sbloccare l'analisi";
+  titleEl.innerText =
+    isEnglish
+      ? "🔒 Sign in to continue"
+      : "🔒 Accedi per continuare";
 
-    ctaEl.innerText = "Accedi";
+  subEl.innerText =
+    isEnglish
+      ? "Create a free account to continue your investment analysis."
+      : "Crea un account gratuito per continuare l’analisi dell’investimento.";
 
-    ctaEl.onclick = ()=>{
-      window.location.href = "/login/";
-    };
+  ctaEl.innerText =
+    isEnglish
+      ? "Sign in"
+      : "Accedi";
 
-  }
+  ctaEl.onclick = ()=>{
+    window.location.href = "/login/";
+  };
 
-  // ================= INVESTOR =================
-  else if(mode === "investor"){
+}
 
-    titleEl.innerText =
-      "🔓 Sblocca analisi completa";
+// ================= INVESTOR =================
+else if(mode === "investor"){
 
-    subEl.innerText =
-      "Passa a Investor per vedere dati reali";
+  const isEnglish =
+    (window.currentLang || "it") === "en";
 
-    ctaEl.innerText =
-      "Passa a Investor";
+  titleEl.innerText =
+    isEnglish
+      ? "🔓 Unlock the complete analysis"
+      : "🔓 Sblocca l’analisi completa";
 
-    ctaEl.onclick = ()=>{
-      window.location.href =
-        "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
-    };
+  subEl.innerText =
+    isEnglish
+      ? "Upgrade to Investor to access investment data and advanced analysis."
+      : "Passa a Investor per accedere ai dati dell’investimento e alle analisi avanzate.";
 
-  }
+  ctaEl.innerText =
+    isEnglish
+      ? "Upgrade to Investor"
+      : "Passa a Investor";
 
+  ctaEl.onclick = ()=>{
+    window.location.href =
+      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01";
+  };
+
+}
   // ================= PRO =================
 else if(mode === "pro"){
 
