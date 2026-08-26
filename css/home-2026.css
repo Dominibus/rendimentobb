@@ -505,3 +505,74 @@ body.home-page section.hero.rb-home-hero .rb-home-paths-title {
     margin-top: 24px !important;
   }
 }
+
+/* Mobile isolation from legacy global p, span, div font rules */
+
+@media (max-width: 760px) {
+  body.home-page section.hero.rb-home-hero .rb-home-eyebrow {
+    width: fit-content !important;
+    max-width: 100% !important;
+    padding: 7px 11px !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.035em !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero h1 {
+    font-size: clamp(32px, 9vw, 38px) !important;
+    line-height: 1.06 !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero h1 > span {
+    display: inline !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero h1 > .rb-home-accent {
+    color: #34d399 !important;
+  }
+
+  body.home-page section.hero.rb-home-hero .rb-home-lead {
+    font-size: 17px !important;
+    line-height: 1.5 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero .rb-home-benefits span {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero .rb-home-paths-title {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero .rb-home-path-card strong {
+    font-size: 13px !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+
+  body.home-page section.hero.rb-home-hero .rb-home-path-card small {
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+    word-break: normal !important;
+  }
+}
