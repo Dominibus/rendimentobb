@@ -1113,3 +1113,51 @@ body.home-page #pricing .plan-card {
     grid-column: auto !important;
   }
 }
+
+/* Home experience final vertical compaction */
+
+body.home-page .quick-roi-box {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+body.home-page .quick-roi-box > .investment-panel {
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: start !important;
+}
+
+body.home-page .quick-roi-box .investment-metrics {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+body.home-page .quick-roi-box .quick-roi-cta {
+  margin-top: 18px !important;
+  padding-top: 0 !important;
+}
+
+body.home-page #pricing .pricing-why {
+  display: none !important;
+}
+
+body.home-page #pricing .pricing-wrapper {
+  margin-top: 24px !important;
+}
+
+body.home-page #pricing .pricing-subtitle {
+  margin-bottom: 22px !important;
+}
+
+@media (max-width: 760px) {
+  body.home-page .quick-roi-box,
+  body.home-page .quick-roi-box > .investment-panel {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  body.home-page #pricing .pricing-wrapper {
+    margin-top: 18px !important;
+  }
+}
