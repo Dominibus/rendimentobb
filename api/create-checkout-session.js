@@ -89,11 +89,46 @@ export default async function handler(req, res) {
       .auth()
       .verifyIdToken(idToken);
 
-    const uid = decodedToken.uid;
+        const uid = decodedToken.uid;
+
     const email =
       typeof decodedToken.email === "string"
         ? decodedToken.email
         : undefined;
+
+    // ==========================================
+    // PROTEZIONE ABBONAMENTI DUPLICATI
+    // ==========================================
+
+    const userSnapshot =
+      await firebaseAdmin
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .get();
+
+    const currentPlan =
+      String(
+        userSnapshot.data()?.plan || "free"
+      )
+        .toLowerCase()
+        .trim();
+
+    const paidPlans = [
+      "investor",
+      "pro",
+      "pro_yearly"
+    ];
+
+    if(paidPlans.includes(currentPlan)){
+
+      return res.status(409).json({
+        error: "Subscription already active",
+        code: "ACTIVE_SUBSCRIPTION",
+        currentPlan
+      });
+
+    }
 
     const baseUrl = (
       process.env.BASE_URL || "https://rendimentobb.it"
