@@ -760,8 +760,97 @@ const analyses = querySnapshot.docs.map(doc => {
       data.price ||
       0,
 
-    equity:
-      data.equity || 0,
+        equity:
+      Number(
+        data.equity ??
+        0
+      ),
+
+    loan:
+      Number(
+        data.loan ??
+        data.loanAmount ??
+        data.mortgageAmount ??
+        Math.max(
+          Number(
+            data.propertyPrice ??
+            data.price ??
+            0
+          ) -
+          Number(
+            data.equity ??
+            0
+          ),
+          0
+        )
+      ),
+
+    mortgageAmount:
+      Number(
+        data.mortgageAmount ??
+        data.loanAmount ??
+        data.loan ??
+        Math.max(
+          Number(
+            data.propertyPrice ??
+            data.price ??
+            0
+          ) -
+          Number(
+            data.equity ??
+            0
+          ),
+          0
+        )
+      ),
+
+    mortgageYearly:
+      Number(
+        data.mortgageYearly ??
+        (
+          Number(
+            data.monthlyMortgage ??
+            data.monthlyMortgagePayment ??
+            0
+          ) * 12
+        )
+      ),
+
+    monthlyMortgage:
+      Number(
+        data.monthlyMortgage ??
+        data.monthlyMortgagePayment ??
+        (
+          Number(
+            data.mortgageYearly ??
+            0
+          ) / 12
+        )
+      ),
+
+    monthlyMortgagePayment:
+      Number(
+        data.monthlyMortgagePayment ??
+        data.monthlyMortgage ??
+        (
+          Number(
+            data.mortgageYearly ??
+            0
+          ) / 12
+        )
+      ),
+
+    interestRate:
+      Number(
+        data.interestRate ??
+        3.5
+      ),
+
+    loanYears:
+      Number(
+        data.loanYears ??
+        20
+      ),
 
     gross:
       data.gross || 0,
