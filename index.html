@@ -198,7 +198,8 @@ window.updateOverlayVisibility = window.updateOverlayVisibility || function(){
 
           <a
             class="rb-home-secondary"
-            href="#rendimentobb-video"
+            href="#rb-home-experience"
+            data-rb-open-panel="demo"
             data-it="▶ Guarda come funziona"
             data-en="▶ See how it works">
             ▶ Guarda come funziona
@@ -296,12 +297,64 @@ window.updateOverlayVisibility = window.updateOverlayVisibility || function(){
   </div>
 </section>
 
+<section id="rb-home-experience" class="rb-home-experience" aria-labelledby="rb-home-experience-title">
+  <div class="rb-home-shell">
+    <div class="rb-home-experience-heading">
+      <span
+        class="rb-home-experience-kicker"
+        data-it="Scopri RendimentoBB"
+        data-en="Discover RendimentoBB">
+        Scopri RendimentoBB
+      </span>
+
+      <h2
+        id="rb-home-experience-title"
+        data-it="Analizza, scopri e scegli in un unico spazio."
+        data-en="Analyze, discover and choose in one place.">
+        Analizza, scopri e scegli in un unico spazio.
+      </h2>
+    </div>
+
+    <div class="rb-home-tabs" role="tablist" aria-label="RendimentoBB">
+      <button
+        type="button"
+        class="rb-home-tab is-active"
+        role="tab"
+        aria-selected="true"
+        data-rb-panel-target="simulator">
+        <span aria-hidden="true">◫</span>
+        <span data-it="Simula" data-en="Simulate">Simula</span>
+      </button>
+
+      <button
+        type="button"
+        class="rb-home-tab"
+        role="tab"
+        aria-selected="false"
+        data-rb-panel-target="demo">
+        <span aria-hidden="true">▶</span>
+        <span data-it="Guarda la demo" data-en="Watch the demo">Guarda la demo</span>
+      </button>
+
+      <button
+        type="button"
+        class="rb-home-tab"
+        role="tab"
+        aria-selected="false"
+        data-rb-panel-target="pricing">
+        <span aria-hidden="true">◇</span>
+        <span data-it="Confronta i piani" data-en="Compare plans">Confronta i piani</span>
+      </button>
+    </div>
+  </div>
+</section>
+ 
 
 <!-- =====================================
 🎬 RENDIMENTOBB VIDEO PRESENTATION
 ===================================== -->
 
-<section id="rendimentobb-video" class="rb-video-section">
+<section id="rendimentobb-video" class="rb-video-section" data-rb-home-panel="demo" hidden>
 
   <div class="container">
 
@@ -575,7 +628,7 @@ Per investitori, host, property manager e strutture ricettive che vogliono trova
 
 </section> 
  
-<section class="quick-roi-section">
+<section class="quick-roi-section" data-rb-home-panel="simulator">
 
 <div class="container"> 
 
@@ -1022,7 +1075,7 @@ Analisi completa con scenari realistici, rischio e mutuo inclusi
 
  <!-- ================= SNAPSHOT ================= -->
 
-<section class="snapshot-section">
+<section class="snapshot-section" data-rb-home-panel="simulator">
 <div class="container">
 
 <div class="snapshot-card">
@@ -1117,7 +1170,7 @@ class="btn btn-primary free-only"
 
  </section> 
 
- <section id="pricing" style="margin-top:40px;padding:60px 0;background:white;">
+ <section id="pricing" data-rb-home-panel="pricing" hidden style="margin-top:40px;padding:60px 0;background:white;">
 
 <div class="container" style="text-align:center">
 
@@ -1961,6 +2014,7 @@ Scopri di più →
 <!-- 🔥 UI -->
 <script type="module" src="/js/header.js"></script>
 <script src="/js/ui-system.js" defer></script> 
+<script src="/js/home-2026.js" defer></script> 
 <script src="/js/footer.js" defer></script>
 
 <!-- 🔥 FIREBASE INIT -->
