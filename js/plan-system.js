@@ -1,5 +1,5 @@
 // ===============================
-// 🧠 PLAN SYSTEM – SINGLE SOURCE (ULTRA)
+// 🧠 PLAN SYSTEM – SINGLE SOURCE
 // ===============================
 
 window.PLAN = {
@@ -7,9 +7,9 @@ window.PLAN = {
   current: "free",
   role: "user",
 
-  // limiti runtime
+  // Limiti simulazioni per piano
   limits: {
-    simulations: 3 // default free
+    simulations: 3
   },
 
   usage: {
@@ -17,108 +17,188 @@ window.PLAN = {
   },
 
   // ===============================
-  // SET PLAN (SANITIZE + SYNC)
+  // SET PLAN
   // ===============================
+
   set(plan, role){
 
-    const cleanPlan = String(plan || "free")
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z_]/g,"");
+    const cleanPlan =
+      String(plan || "free")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z_]/g, "");
 
-    const cleanRole = String(role || "user")
-      .toLowerCase()
-      .trim();
+    const cleanRole =
+      String(role || "user")
+        .toLowerCase()
+        .trim();
 
-    this.current = cleanPlan;
-    this.role = cleanRole;
+    this.current =
+      cleanPlan;
 
-    window.currentPlan = cleanPlan;
-    window.userRole = cleanRole;
+    this.role =
+      cleanRole;
+
+    window.currentPlan =
+      cleanPlan;
+
+    window.userRole =
+      cleanRole;
 
     // ===============================
-    // 🎯 LIMITI PER PIANO
+    // LIMITI PER PIANO
     // ===============================
 
     if(cleanPlan === "free"){
-      this.limits.simulations = 3;
+
+      this.limits.simulations =
+        3;
+
     }
 
     if(cleanPlan === "investor"){
-      this.limits.simulations = 10; // 👈 LIMITATO
+
+      this.limits.simulations =
+        50;
+
     }
 
-    if(cleanPlan === "pro" || cleanPlan === "pro_yearly"){
-      this.limits.simulations = Infinity; // 👈 UNLIMITED
+    if(
+      cleanPlan === "pro" ||
+      cleanPlan === "pro_yearly"
+    ){
+
+      this.limits.simulations =
+        Infinity;
+
     }
 
+    window.dispatchEvent(
+      new Event("plan_updated")
+    );
 
-    window.dispatchEvent(new Event("plan_updated"));
   },
 
   // ===============================
   // CHECKS
   // ===============================
+
   isPro(){
-    return ["pro","pro_yearly"].includes(this.current);
+
+    return [
+      "pro",
+      "pro_yearly"
+    ].includes(this.current);
+
   },
 
   isInvestor(){
-    return this.current === "investor";
+
+    return (
+      this.current ===
+      "investor"
+    );
+
   },
 
   isAdmin(){
-    return this.role === "admin";
+
+    return (
+      this.role ===
+      "admin"
+    );
+
   },
 
   has(required){
 
-    if(this.isAdmin()) return true;
+    if(this.isAdmin()){
+      return true;
+    }
 
     if(required === "pro"){
+
       return this.isPro();
+
     }
 
     if(required === "investor"){
-      return ["investor","pro","pro_yearly"].includes(this.current);
+
+      return [
+        "investor",
+        "pro",
+        "pro_yearly"
+      ].includes(this.current);
+
     }
 
     return true;
+
   },
 
   // ===============================
-  // 🚫 BLOCCO SIMULAZIONI
+  // SIMULATION LIMIT
   // ===============================
+
   canSimulate(){
 
-    if(this.isAdmin()) return true;
+    if(this.isAdmin()){
+      return true;
+    }
 
-    return this.usage.simulations < this.limits.simulations;
+    return (
+      this.usage.simulations <
+      this.limits.simulations
+    );
+
   },
 
   registerSimulation(){
+
     this.usage.simulations++;
 
   },
 
   // ===============================
-  // 🚫 PDF ACCESS
+  // PDF ACCESS
   // ===============================
+
   canDownloadPDF(){
-    return this.isPro();
+
+    return (
+      this.isPro() ||
+      this.isAdmin()
+    );
+
   },
 
   // ===============================
-  // 🚫 DASHBOARD AVANZATA
+  // ADVANCED DASHBOARD ACCESS
   // ===============================
+
   canAccessAdvancedDashboard(){
-    return this.isPro();
+
+    return (
+      this.isPro() ||
+      this.isAdmin()
+    );
+
   }
 
 };
 
-// alias globali
-window.isPro = () => window.PLAN.isPro();
-window.isInvestor = () => window.PLAN.isInvestor();
-window.isAdmin = () => window.PLAN.isAdmin();
-window.hasPlan = (p) => window.PLAN.has(p);
+// ===============================
+// GLOBAL ALIASES
+// ===============================
+
+window.isPro =
+  () => window.PLAN.isPro();
+
+window.isInvestor =
+  () => window.PLAN.isInvestor();
+
+window.isAdmin =
+  () => window.PLAN.isAdmin();
+
+window.hasPlan =
+  plan => window.PLAN.has(plan);
