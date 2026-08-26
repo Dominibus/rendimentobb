@@ -1185,6 +1185,145 @@ const annualProfit =
     0
   );
 
+// ===============================
+// FINANCING METRICS — SINGLE SOURCE
+// ===============================
+
+function getFinancingMetrics(
+  source = {},
+  priceValue = 0,
+  equityValue = 0,
+  netAfterMortgage = 0
+){
+
+  const safeNumber = value => {
+
+    const number =
+      Number(value);
+
+    return Number.isFinite(number)
+      ? number
+      : 0;
+
+  };
+
+  const loan =
+    Math.max(
+      0,
+      safeNumber(
+        source.loan ??
+        source.loanAmount ??
+        source.mortgageAmount ??
+        (
+          safeNumber(priceValue) -
+          safeNumber(equityValue)
+        )
+      )
+    );
+
+  let annualDebtService =
+    safeNumber(
+      source.mortgageYearly ??
+      0
+    );
+
+  if(
+    annualDebtService <= 0
+  ){
+
+    const monthlyDebtService =
+      safeNumber(
+        source.monthlyMortgage ??
+        source.monthlyMortgagePayment ??
+        0
+      );
+
+    if(monthlyDebtService > 0){
+
+      annualDebtService =
+        monthlyDebtService * 12;
+
+    }
+
+  }
+
+  // Compatibilità con vecchie analisi
+  // che non contengono la rata salvata.
+  if(
+    annualDebtService <= 0 &&
+    loan > 0
+  ){
+
+    const rateValue =
+      safeNumber(
+        source.interestRate ??
+        3.5
+      );
+
+    const annualRate =
+      rateValue > 1
+        ? rateValue / 100
+        : rateValue;
+
+    const years =
+      Math.max(
+        1,
+        safeNumber(
+          source.loanYears ??
+          20
+        )
+      );
+
+    const months =
+      years * 12;
+
+    const monthlyRate =
+      annualRate / 12;
+
+    const monthlyPayment =
+      monthlyRate > 0
+        ? (
+            loan *
+            monthlyRate *
+            Math.pow(
+              1 + monthlyRate,
+              months
+            )
+          ) /
+          (
+            Math.pow(
+              1 + monthlyRate,
+              months
+            ) - 1
+          )
+        : loan / months;
+
+    annualDebtService =
+      monthlyPayment * 12;
+
+  }
+
+  const netOperatingIncome =
+    safeNumber(netAfterMortgage) +
+    annualDebtService;
+
+  const dscr =
+    annualDebtService > 0
+      ? (
+          netOperatingIncome /
+          annualDebtService
+        )
+      : 0;
+
+  return {
+    loan,
+    annualDebtService,
+    netOperatingIncome,
+    dscr
+  };
+
+}  
+
 const canonicalInvestmentScore =
   Number(
     canonicalSimulation.investmentScore ??
@@ -1239,19 +1378,19 @@ if(realROIHero){
 
 if(dscrHero){
 
-  const loan =
-    Math.max(0, price - equity);
-
-  const annualDebtService =
-    loan * 0.04;
-
-  const dscr =
-    annualDebtService > 0
-      ? annualProfit / annualDebtService
-      : 0;
+  const financingMetrics =
+    getFinancingMetrics(
+      canonicalSimulation,
+      price,
+      equity,
+      annualProfit
+    );
 
   dscrHero.innerText =
-    dscr.toFixed(2);
+    financingMetrics
+      .dscr
+      .toFixed(2);
+
 }
   
   const heroROI = document.getElementById("heroROI");
@@ -1617,17 +1756,60 @@ async function generatePDF(){
 const monthlyProfit = safe(
   annualProfit / 12
 );
-    const loan = safe(price - equity);
-    const breakEven = annualProfit > 0 ? equity / annualProfit : 0;
+    const financingMetrics =
+      getFinancingMetrics(
+        fallback,
+        price,
+        equity,
+        annualProfit
+      );
+
+    const loan =
+      safe(
+        financingMetrics.loan
+      );
+
+    const annualDebtService =
+      safe(
+        financingMetrics
+          .annualDebtService
+      );
+
+    const dscr =
+      safe(
+        financingMetrics.dscr
+      );
+
+    const breakEven =
+      annualProfit > 0
+        ? equity / annualProfit
+        : 0;
 
     // ================= BANK METRICS =================
-    const interestRate = 0.04;
-    const annualDebtService = loan * interestRate;
 
-    const dscr = annualDebtService > 0 ? annualProfit / annualDebtService : 0;
-    const capRate = price > 0 ? (annualProfit / price) * 100 : 0;
-    const roe = equity > 0 ? (annualProfit / equity) * 100 : 0;
-    const ltv = price > 0 ? (loan / price) * 100 : 0;
+    const capRate =
+      price > 0
+        ? (
+            annualProfit /
+            price
+          ) * 100
+        : 0;
+
+    const roe =
+      equity > 0
+        ? (
+            annualProfit /
+            equity
+          ) * 100
+        : 0;
+
+    const ltv =
+      price > 0
+        ? (
+            loan /
+            price
+          ) * 100
+        : 0;
 
     // ================= FORMAT =================
     const eur = v => {
