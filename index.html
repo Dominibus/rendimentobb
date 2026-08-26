@@ -3177,7 +3177,8 @@ window.closeUpgradeModal = function(){
 
 
 // =====================================
-// 🚀 SINGLE UPGRADE FLOW (FIXED)
+// 🚀 SINGLE UPGRADE FLOW
+// Usa esclusivamente il checkout autenticato
 // =====================================
 
 window.triggerUpgradeFlow = function({
@@ -3185,82 +3186,64 @@ window.triggerUpgradeFlow = function({
   source = ""
 } = {}){
 
-  const access = window.getUserAccess?.() || {};
+  const validPlans = [
+    "investor",
+    "pro",
+    "pro_yearly"
+  ];
 
- const isLogged =
-  !!access.user ||
-  access.isLogged === true;
+  const requestedPlan =
+    String(plan || "")
+      .toLowerCase()
+      .trim();
 
-  rbLog("🚀 UPGRADE FLOW:", {
-    plan,
-    source,
-    access
-  });
-
-  const stripeLinks = {
-
-    investor:
-      "https://buy.stripe.com/8x200ifTC0OK3KnbmqgMw01",
-
-    pro:
-      "https://buy.stripe.com/5kQ9ASdLuapkep1cqugMw02",
-
-    pro_yearly:
-      "https://buy.stripe.com/bJe8wObDmdBwep1fCGgMw03"
-
-  };
-
-  // ================= PRO / ADMIN =================
-  if(access.isAdmin || access.isPro){
+  if(!validPlans.includes(requestedPlan)){
     return;
   }
 
-  // ================= GUEST =================
-  if(!isLogged){
+  // Utente non autenticato:
+  // conserva il piano richiesto e apre la registrazione.
+  if(!window.currentUser){
 
-    window.location.href = "/login/";
-    return;
-  }
+    localStorage.setItem(
+      "pending_plan",
+      requestedPlan
+    );
 
-// ================= INVESTOR =================
-if(access.isInvestor){
-
-  // Il piano Investor è già attivo.
-  if(plan === "investor"){
-    return;
-  }
-
-  const upgradeUrl = stripeLinks[plan];
-
-  if(upgradeUrl){
-    window.location.href = upgradeUrl;
-  }
-
-  return;
-}
-
-  // ================= FREE LOGGATO =================
-
-  const freeUrl = stripeLinks[plan];
-
-  if(freeUrl){
-
-    // cleanup modal
-    const modal = document.getElementById("rb-upgrade-modal");
-
-    if(modal){
-
-      modal.classList.remove("show");
-      modal.style.display = "none";
-
+    if(typeof window.showRegisterPopup === "function"){
+      window.showRegisterPopup();
+    }
+    else{
+      window.location.href = "/login/";
     }
 
-    document.body.classList.remove("modal-open");
+    return;
+  }
 
-    rbLog("STRIPE REDIRECT:", plan);
+  // Il pagamento deve passare esclusivamente
+  // dal checkout autenticato definito in app.js.
+  if(typeof window.startPlanPurchase === "function"){
 
-    window.location.href = freeUrl;
+    window.startPlanPurchase(
+      requestedPlan,
+      {
+        source
+      }
+    );
 
+    return;
+  }
+
+  const message =
+    window.currentLang === "en"
+      ? "Payment service is still loading. Please try again."
+      : "Il servizio di pagamento si sta caricando. Riprova tra qualche secondo.";
+
+  if(typeof window.showToast === "function"){
+    window.showToast(message, "info");
+  }
+  else{
+    alert(message);
   }
 
 };
