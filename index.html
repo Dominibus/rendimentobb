@@ -3222,23 +3222,22 @@ window.triggerUpgradeFlow = function({
     return;
   }
 
-  // ================= INVESTOR =================
-  if(access.isInvestor){
+// ================= INVESTOR =================
+if(access.isInvestor){
 
-    // investor non deve comprare investor
-    if(plan === "investor"){
-      plan = "pro";
-    }
-
-    const investorUrl = stripeLinks[plan];
-
-    if(investorUrl){
-
-      window.location.href = investorUrl;
-    }
-
+  // Il piano Investor è già attivo.
+  if(plan === "investor"){
     return;
   }
+
+  const upgradeUrl = stripeLinks[plan];
+
+  if(upgradeUrl){
+    window.location.href = upgradeUrl;
+  }
+
+  return;
+}
 
   // ================= FREE LOGGATO =================
 
@@ -3559,6 +3558,38 @@ document.addEventListener("firebase_ready", ()=>{
   const access = window.getUserAccess?.() || {};
 
   rbLog("PLAN SYNC", access);
+
+  const investorPlanButton =
+    document.querySelector(
+      ".plan-investor .btn"
+    );
+
+  if(
+    access.isInvestor &&
+    investorPlanButton
+  ){
+
+    investorPlanButton.setAttribute(
+      "data-it",
+      "✓ Piano attuale"
+    );
+
+    investorPlanButton.setAttribute(
+      "data-en",
+      "✓ Current plan"
+    );
+
+    investorPlanButton.textContent =
+      (window.currentLang || "it") === "en"
+        ? "✓ Current plan"
+        : "✓ Piano attuale";
+
+    investorPlanButton.disabled = true;
+    investorPlanButton.style.cursor = "default";
+    investorPlanButton.style.opacity = "0.75";
+    investorPlanButton.onclick = null;
+
+  }
 
   unlockHomeUI?.();
   updateOverlayVisibility();
