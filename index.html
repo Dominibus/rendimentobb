@@ -122,10 +122,10 @@ content="Simulate ROI, risk and sustainability in seconds. Avoid mistakes and in
 <body class="home-page">
 
 <script>
-window.updateOverlayVisibility = window.updateOverlayVisibility || function(){
-  console.warn("⚠️ updateOverlayVisibility chiamata prima del load");
-};
-</script> 
+window.updateOverlayVisibility =
+  window.updateOverlayVisibility ||
+  function(){};
+</script>
 
 <div id="global-header"></div>
 
@@ -727,10 +727,10 @@ Calcola rendimento
 
 <!-- SOCIAL PROOF -->
 <p 
-data-it="🔥 Oltre 1.200 simulazioni analizzate • ROI medio 12.4%"
-data-en="🔥 Over 1,200 simulations analyzed • Average ROI 12.4%"
+data-it="Stima immediata basata sui dati inseriti • Nessuna registrazione"
+data-en="Instant estimate based on your inputs • No registration required"
 style="margin-top:20px;font-size:14px;color:#64748b;text-align:center">
-🔥 Oltre 1.200 simulazioni analizzate • ROI medio 12.4%
+Stima immediata basata sui dati inseriti • Nessuna registrazione
 </p>
 
 <!-- SCORE -->
@@ -977,9 +977,9 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
       font-size:13px;
       opacity:0.85;
     "
-    data-it="Il 72% degli investitori sbaglia proprio in questa fase"
-    data-en="72% of investors fail at this exact step">
-      Il 72% degli investitori sbaglia proprio in questa fase
+    data-it="Molti errori di valutazione nascono proprio in questa fase"
+    data-en="Many investment mistakes begin at this stage">
+      Molti errori di valutazione nascono proprio in questa fase
     </div>
 
     <!-- 🔥 MISSING HOOK -->
@@ -1231,9 +1231,9 @@ data-en="✔ Professional PMS">
 <div class="pricing-why">
 
 <h2
-data-it="Perché migliaia di investitori analizzano gli immobili con RendimentoBB"
-data-en="Why real estate investors analyze properties with RendimentoBB">
-Perché migliaia di investitori analizzano gli immobili con RendimentoBB
+data-it="Perché analizzare un immobile con RendimentoBB"
+data-en="Why analyze a property with RendimentoBB">
+Perché analizzare un immobile con RendimentoBB
 </h2>
 
 <p
@@ -1560,9 +1560,9 @@ La soluzione completa al miglior prezzo
   </p>
 
   <p class="sub"
-     data-it="Solo €16/mese"
-     data-en="Only €16/month">
-    Solo €16/mese
+     data-it="Equivalente a €16,58/mese"
+     data-en="Equivalent to €16.58/month">
+     Equivalente a €16,58/mese
   </p>
 
   <div class="plan-extra"></div>
@@ -1638,10 +1638,10 @@ Calcolo ROI B&B in Italia: guida completa
 </h2>
 
 <p
-data-it="Il rendimento di un B&B dipende da città, occupazione, prezzo medio notte e costi operativi. Ma il 72% degli investitori sbaglia perché non analizza il rischio reale."
-data-en="B&B profitability depends on location, occupancy, nightly rate and operating costs. But 72% of investors fail because they don’t analyze real risk.">
+data-it="Il rendimento di un B&B dipende da città, occupazione, prezzo medio notte e costi operativi. Una valutazione incompleta può però ignorare rischi determinanti."
+data-en="B&B profitability depends on location, occupancy, nightly rate and operating costs. However, an incomplete assessment may overlook critical risks.">
 Il rendimento di un B&B dipende da città, occupazione, prezzo medio notte e costi operativi.
-Ma il 72% degli investitori sbaglia perché non analizza il rischio reale.
+Una valutazione incompleta può però ignorare rischi determinanti.
 </p>
 
 <p style="font-weight:600;margin-top:10px"
@@ -2890,9 +2890,8 @@ window.showUpgradeModal = function({mode} = {}){
   const modal = document.getElementById("rb-upgrade-modal");
 
   if(!modal){
-    console.warn("❌ Modal non trovato");
-    return;
-  }
+  return;
+}
 
   const titleEl = modal.querySelector(".modal-title");
   const subEl   = modal.querySelector(".modal-sub");
