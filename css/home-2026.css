@@ -1161,3 +1161,25 @@ body.home-page #pricing .pricing-subtitle {
     margin-top: 18px !important;
   }
 }
+
+/* Compact mobile pricing heading */
+
+@media (max-width: 760px) {
+  body.home-page #pricing .pricing-title {
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 auto 8px !important;
+    padding: 0 !important;
+  }
+
+  body.home-page #pricing .pricing-subtitle {
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 8px auto 18px !important;
+    padding: 0 !important;
+  }
+
+  body.home-page #pricing .pricing-grid {
+    margin-top: 0 !important;
+  }
+}
