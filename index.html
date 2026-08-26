@@ -919,7 +919,7 @@ Dati incompleti: rischio, mutuo e costi reali esclusi
   </div>
 </div>
 
-<div class="metric-card pro-only">
+<div class="metric-card">
   <span
     data-it="Break-even"
     data-en="Break-even">
@@ -1422,9 +1422,9 @@ data-en="✖ Operational B&B dashboard">
 </ul>
 
   <p class="note"
-     data-it="Accesso limitato • Dati parziali • Nessun report"
-     data-en="Limited access • Partial data • No reports">
-    Accesso limitato • Dati parziali • Nessun report
+     data-it="Analisi finanziaria completa • Dashboard inclusa • PDF e PMS esclusi"
+     data-en="Complete financial analysis • Dashboard included • PDF and PMS excluded">
+     Analisi finanziaria completa • Dashboard inclusa • PDF e PMS esclusi
   </p>
 
   <button
@@ -2452,16 +2452,15 @@ if(shock){
 
   }
 
-  // ================= INVESTOR =================
-  else if(isInvestor){
+// ================= INVESTOR =================
+else if(isInvestor){
 
-    if(elProfit) elProfit.innerText = "~ " + profitVal;
-    if(elMonth)  elMonth.innerText  = "~ " + monthVal;
-    if(elRev)    elRev.innerText    = "~ " + revVal;
+  if(elProfit) elProfit.innerText = profitVal;
+  if(elMonth)  elMonth.innerText  = monthVal;
+  if(elBreak)  elBreak.innerText  = breakVal;
+  if(elRev)    elRev.innerText    = revVal;
 
-    if(elBreak)  elBreak.innerText  = "🔒";
-
-  }
+}
 
   // ================= FREE =================
   else{
