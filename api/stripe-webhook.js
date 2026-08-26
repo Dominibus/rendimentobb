@@ -1,172 +1,646 @@
 import Stripe from "stripe";
 import admin from "firebase-admin";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe =
+  new Stripe(
+    process.env.STRIPE_SECRET_KEY
+  );
 
-const PLAN_BY_PRICE_ID = {
-  price_1TASiWCHMfsTxRqQTQqRzkg0: "investor",
-  price_1TCcaCCHMfsTxRqQBVjFHVRo: "pro",
-  price_1TCccSCHMfsTxRqQie5FtqqC: "pro_yearly"
-};
+const PLAN_BY_PRICE_ID =
+  Object.freeze({
 
-// Stripe richiede il body grezzo per verificare la firma.
+    price_1TASiWCHMfsTxRqQTQqRzkg0:
+      "investor",
+
+    price_1TCcaCCHMfsTxRqQBVjFHVRo:
+      "pro",
+
+    price_1TCccSCHMfsTxRqQie5FtqqC:
+      "pro_yearly"
+
+  });
+
+// Stripe richiede il body grezzo
+// per verificare la firma.
 export const config = {
   api: {
     bodyParser: false
   }
 };
 
-function getFirestore() {
-  if (!admin.apps.length) {
-    const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+function getFirestore(){
 
-    if (
-      !process.env.FIREBASE_PROJECT_ID ||
-      !process.env.FIREBASE_CLIENT_EMAIL ||
-      !privateKey
-    ) {
-      throw new Error("Firebase Admin configuration missing");
+  if(!admin.apps.length){
+
+    const {
+      FIREBASE_PROJECT_ID,
+      FIREBASE_CLIENT_EMAIL,
+      FIREBASE_PRIVATE_KEY
+    } = process.env;
+
+    if(
+      !FIREBASE_PROJECT_ID ||
+      !FIREBASE_CLIENT_EMAIL ||
+      !FIREBASE_PRIVATE_KEY
+    ){
+
+      throw new Error(
+        "Firebase Admin configuration missing"
+      );
+
     }
 
     admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: privateKey.replace(/\\n/g, "\n")
-      })
+
+      credential:
+        admin.credential.cert({
+
+          projectId:
+            FIREBASE_PROJECT_ID,
+
+          clientEmail:
+            FIREBASE_CLIENT_EMAIL,
+
+          privateKey:
+            FIREBASE_PRIVATE_KEY.replace(
+              /\\n/g,
+              "\n"
+            )
+
+        })
+
     });
+
   }
 
   return admin.firestore();
+
 }
 
-async function readRawBody(req) {
+async function readRawBody(req){
+
   const chunks = [];
 
-  for await (const chunk of req) {
+  for await(const chunk of req){
+
     chunks.push(
       Buffer.isBuffer(chunk)
         ? chunk
         : Buffer.from(chunk)
     );
+
   }
 
   return Buffer.concat(chunks);
+
 }
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
+function getStripeId(value){
 
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
+  if(typeof value === "string"){
+    return value;
   }
 
-  const signature = req.headers["stripe-signature"];
+  if(
+    value &&
+    typeof value.id === "string"
+  ){
+    return value.id;
+  }
 
-  if (!signature) {
-    return res.status(400).json({
-      error: "Missing Stripe signature"
-    });
+  return null;
+
+}
+
+function getSubscriptionPriceId(
+  subscription
+){
+
+  return (
+    subscription
+      ?.items
+      ?.data
+      ?.[0]
+      ?.price
+      ?.id ||
+    null
+  );
+
+}
+
+function getSubscriptionPlan(
+  subscription
+){
+
+  const priceId =
+    getSubscriptionPriceId(
+      subscription
+    );
+
+  return (
+    PLAN_BY_PRICE_ID[priceId] ||
+    null
+  );
+
+}
+
+async function findUserId(
+  db,
+  {
+    metadataUid,
+    customerId,
+    subscriptionId
+  } = {}
+){
+
+  if(
+    typeof metadataUid === "string" &&
+    metadataUid.trim()
+  ){
+
+    return metadataUid.trim();
+
+  }
+
+  if(customerId){
+
+    const customerQuery =
+      await db
+        .collection("users")
+        .where(
+          "stripeCustomerId",
+          "==",
+          customerId
+        )
+        .limit(1)
+        .get();
+
+    if(!customerQuery.empty){
+
+      return (
+        customerQuery.docs[0].id
+      );
+
+    }
+
+  }
+
+  if(subscriptionId){
+
+    const subscriptionQuery =
+      await db
+        .collection("users")
+        .where(
+          "subscriptionId",
+          "==",
+          subscriptionId
+        )
+        .limit(1)
+        .get();
+
+    if(!subscriptionQuery.empty){
+
+      return (
+        subscriptionQuery.docs[0].id
+      );
+
+    }
+
+  }
+
+  return null;
+
+}
+
+async function updateUserPlan(
+  db,
+  uid,
+  data
+){
+
+  await db
+    .collection("users")
+    .doc(uid)
+    .set(
+      {
+        ...data,
+
+        updatedAt:
+          admin.firestore
+            .FieldValue
+            .serverTimestamp()
+      },
+      {
+        merge: true
+      }
+    );
+
+}
+
+export default async function handler(
+  req,
+  res
+){
+
+  res.setHeader(
+    "Cache-Control",
+    "no-store"
+  );
+
+  if(req.method !== "POST"){
+
+    res.setHeader(
+      "Allow",
+      "POST"
+    );
+
+    return res
+      .status(405)
+      .json({
+        error:
+          "Method not allowed"
+      });
+
+  }
+
+  const signature =
+    req.headers[
+      "stripe-signature"
+    ];
+
+  if(!signature){
+
+    return res
+      .status(400)
+      .json({
+        error:
+          "Missing Stripe signature"
+      });
+
   }
 
   let event;
 
-  try {
-    const rawBody = await readRawBody(req);
+  try{
 
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-  } catch (error) {
-    console.error("Stripe webhook signature verification failed");
+    const rawBody =
+      await readRawBody(req);
 
-    return res.status(400).json({
-      error: "Invalid webhook signature"
-    });
-  }
-
-  try {
-    if (event.type === "checkout.session.completed") {
-      const session = await stripe.checkout.sessions.retrieve(
-        event.data.object.id,
-        {
-          expand: ["line_items"]
-        }
+    event =
+      stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        process.env
+          .STRIPE_WEBHOOK_SECRET
       );
 
-      const uid = session.client_reference_id;
+  }
+  catch(error){
+
+    console.error(
+      "Stripe webhook signature verification failed"
+    );
+
+    return res
+      .status(400)
+      .json({
+        error:
+          "Invalid webhook signature"
+      });
+
+  }
+
+  try{
+
+    const db =
+      getFirestore();
+
+    // ==================================
+    // PAGAMENTO CHECKOUT COMPLETATO
+    // ==================================
+
+    if(
+      event.type ===
+      "checkout.session.completed"
+    ){
+
+      const session =
+        await stripe
+          .checkout
+          .sessions
+          .retrieve(
+            event.data.object.id,
+            {
+              expand: [
+                "line_items"
+              ]
+            }
+          );
+
+      const uid =
+        session
+          .client_reference_id;
+
       const priceId =
-        session.line_items?.data?.[0]?.price?.id;
+        session
+          .line_items
+          ?.data
+          ?.[0]
+          ?.price
+          ?.id;
 
-      if (!uid) {
-        console.error("Stripe webhook missing user reference", {
-          eventId: event.id
-        });
+      const plan =
+        PLAN_BY_PRICE_ID[
+          priceId
+        ];
 
-        return res.status(400).json({
-          error: "Missing user reference"
-        });
+      if(!uid){
+
+        return res
+          .status(400)
+          .json({
+            error:
+              "Missing user reference"
+          });
+
       }
 
-      const plan = PLAN_BY_PRICE_ID[priceId];
+      if(!plan){
 
-      if (!plan) {
-        console.error("Stripe webhook unknown price", {
-          eventId: event.id,
-          priceId: priceId || null
-        });
+        return res
+          .status(400)
+          .json({
+            error:
+              "Unknown Stripe price"
+          });
 
-        return res.status(400).json({
-          error: "Unknown Stripe price"
-        });
       }
 
-      const db = getFirestore();
-
-      await db.collection("users").doc(uid).set(
+      await updateUserPlan(
+        db,
+        uid,
         {
           plan,
-          stripeSessionId: session.id,
+
+          stripeSessionId:
+            session.id,
+
           stripeCustomerId:
-            typeof session.customer === "string"
-              ? session.customer
-              : session.customer?.id || null,
+            getStripeId(
+              session.customer
+            ),
+
           subscriptionId:
-            typeof session.subscription === "string"
-              ? session.subscription
-              : session.subscription?.id || null,
-          subscriptionStatus: "active",
-          updatedAt:
-            admin.firestore.FieldValue.serverTimestamp()
-        },
-        {
-          merge: true
+            getStripeId(
+              session.subscription
+            ),
+
+          subscriptionStatus:
+            "active",
+
+          cancelAtPeriodEnd:
+            false
         }
       );
 
-      console.log("Stripe subscription activated", {
-        eventId: event.id,
-        uid,
-        plan
-      });
     }
 
-    return res.status(200).json({
-      received: true
-    });
-  } catch (error) {
-    console.error("Stripe webhook processing failed", {
-      eventId: event?.id,
-      eventType: event?.type,
-      message: error?.message
-    });
+    // ==================================
+    // ABBONAMENTO AGGIORNATO
+    // ==================================
 
-    return res.status(500).json({
-      error: "Webhook processing failed"
-    });
+    if(
+      event.type ===
+      "customer.subscription.updated"
+    ){
+
+      const subscription =
+        event.data.object;
+
+      const customerId =
+        getStripeId(
+          subscription.customer
+        );
+
+      const subscriptionId =
+        getStripeId(
+          subscription
+        );
+
+      const uid =
+        await findUserId(
+          db,
+          {
+            metadataUid:
+              subscription
+                .metadata
+                ?.uid,
+
+            customerId,
+
+            subscriptionId
+          }
+        );
+
+      if(uid){
+
+        const status =
+          String(
+            subscription.status ||
+            ""
+          );
+
+        const plan =
+          getSubscriptionPlan(
+            subscription
+          );
+
+        const accessStatuses = [
+          "active",
+          "trialing",
+          "past_due"
+        ];
+
+        const hasAccess =
+          accessStatuses.includes(
+            status
+          );
+
+        await updateUserPlan(
+          db,
+          uid,
+          {
+            plan:
+              hasAccess && plan
+                ? plan
+                : "free",
+
+            stripeCustomerId:
+              customerId,
+
+            subscriptionId,
+
+            subscriptionStatus:
+              status,
+
+            cancelAtPeriodEnd:
+              subscription
+                .cancel_at_period_end ===
+              true,
+
+            currentPeriodEnd:
+              Number(
+                subscription
+                  .current_period_end ||
+                0
+              )
+          }
+        );
+
+      }
+
+    }
+
+    // ==================================
+    // ABBONAMENTO CANCELLATO/SCADUTO
+    // ==================================
+
+    if(
+      event.type ===
+      "customer.subscription.deleted"
+    ){
+
+      const subscription =
+        event.data.object;
+
+      const customerId =
+        getStripeId(
+          subscription.customer
+        );
+
+      const subscriptionId =
+        getStripeId(
+          subscription
+        );
+
+      const uid =
+        await findUserId(
+          db,
+          {
+            metadataUid:
+              subscription
+                .metadata
+                ?.uid,
+
+            customerId,
+
+            subscriptionId
+          }
+        );
+
+      if(uid){
+
+        await updateUserPlan(
+          db,
+          uid,
+          {
+            plan:
+              "free",
+
+            subscriptionStatus:
+              "canceled",
+
+            cancelAtPeriodEnd:
+              false,
+
+            subscriptionId:
+              null
+          }
+        );
+
+      }
+
+    }
+
+    // ==================================
+    // PAGAMENTO RINNOVO FALLITO
+    // Mantiene temporaneamente il piano
+    // durante il periodo di recupero.
+    // ==================================
+
+    if(
+      event.type ===
+      "invoice.payment_failed"
+    ){
+
+      const invoice =
+        event.data.object;
+
+      const customerId =
+        getStripeId(
+          invoice.customer
+        );
+
+      const subscriptionId =
+        getStripeId(
+          invoice.subscription
+        );
+
+      const uid =
+        await findUserId(
+          db,
+          {
+            customerId,
+            subscriptionId
+          }
+        );
+
+      if(uid){
+
+        await updateUserPlan(
+          db,
+          uid,
+          {
+            subscriptionStatus:
+              "past_due"
+          }
+        );
+
+      }
+
+    }
+
+    return res
+      .status(200)
+      .json({
+        received: true
+      });
+
   }
+  catch(error){
+
+    console.error(
+      "Stripe webhook processing failed",
+      {
+        eventId:
+          event?.id,
+
+        eventType:
+          event?.type,
+
+        code:
+          error?.code ||
+          "unknown"
+      }
+    );
+
+    return res
+      .status(500)
+      .json({
+        error:
+          "Webhook processing failed"
+      });
+
+  }
+
 }
