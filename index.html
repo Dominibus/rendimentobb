@@ -3484,41 +3484,6 @@ function unlockHomeUI(){
 
     rbLog("INVESTOR UI");
 
-   const investorPlanButton =
-  document.querySelector(
-    ".plan-investor .btn"
-  );
-
-if(investorPlanButton){
-
-  investorPlanButton.setAttribute(
-    "data-it",
-    "✓ Piano attuale"
-  );
-
-  investorPlanButton.setAttribute(
-    "data-en",
-    "✓ Current plan"
-  );
-
-  investorPlanButton.textContent =
-    (window.currentLang || "it") === "en"
-      ? "✓ Current plan"
-      : "✓ Piano attuale";
-
-  investorPlanButton.disabled = true;
-  investorPlanButton.removeAttribute(
-    "onclick"
-  );
-
-  investorPlanButton.style.cursor =
-    "default";
-
-  investorPlanButton.style.opacity =
-    "0.75";
-
-}
-
     document.querySelectorAll(".metric-card").forEach(el=>{
       el.classList.remove("locked","pro-blur");
 
@@ -3614,6 +3579,42 @@ document.addEventListener("firebase_ready", ()=>{
     rbLog("FINAL HOME FIX", access);
 
     if(access.isInvestor){
+
+ const investorPlanButton =
+  document.querySelector(
+    ".plan-investor .btn"
+  );
+
+if(investorPlanButton){
+
+  investorPlanButton.setAttribute(
+    "data-it",
+    "✓ Piano attuale"
+  );
+
+  investorPlanButton.setAttribute(
+    "data-en",
+    "✓ Current plan"
+  );
+
+  investorPlanButton.textContent =
+    (window.currentLang || "it") === "en"
+      ? "✓ Current plan"
+      : "✓ Piano attuale";
+
+  investorPlanButton.disabled = true;
+
+  investorPlanButton.removeAttribute(
+    "onclick"
+  );
+
+  investorPlanButton.style.cursor =
+    "default";
+
+  investorPlanButton.style.opacity =
+    "0.75";
+
+}
 
       // 🔥 RESET COMPLETO
       document.querySelectorAll(".metric-card").forEach(el=>{
