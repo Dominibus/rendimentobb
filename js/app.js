@@ -7234,8 +7234,8 @@ window.buyPlan = async function(plan){
 
   try{
 
-    const idToken =
-      await user.getIdToken(true);
+        const idToken =
+      await user.getIdToken();
 
     const response =
       await fetch(
