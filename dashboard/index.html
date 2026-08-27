@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="it">
 
 <head>
@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260827-1">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260827-2">
 </head>
 
 <body class="dashboard-bg">
@@ -2409,7 +2409,7 @@ Nessuna proprietà presente
 🏨 PMS MENU
 ===================================== -->
 
-<div class="analysis-card pro-pms-only">
+<div id="dashboard-workspace-nav" class="analysis-card pro-pms-only">
 
   <div class="pms-nav">
 
@@ -2447,6 +2447,7 @@ Nessuna proprietà presente
 
     <!-- BOOKINGS -->
     <button
+class="pms-tab"
 id="pms-tab-bookings"
 onclick="openCurrentBookings()">
 
@@ -3021,6 +3022,11 @@ Sblocca dashboard completa
 </script>
 
 <!-- PORTFOLIO -->
+
+<div
+id="investment-workspace-section"
+class="dashboard-workspace-section"
+style="display:none;">
 
 <div class="analysis-card" id="portfolio-performance">
 
@@ -3717,6 +3723,7 @@ Insight predittivi basati su performance e rischio
 <!-- LISTA ANALISI -->
 
 <div id="analysis-list" class="analysis-grid"></div>
+</div> <!-- CHIUDE investment-workspace-section -->
 </div> <!-- CHIUDE dashboard-main -->
 
 </div>
