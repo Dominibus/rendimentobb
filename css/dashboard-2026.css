@@ -36,6 +36,34 @@ body.dashboard-bg {
   gap: 20px;
 }
 
+.dashboard-main > .rb-dashboard {
+  order: 1;
+}
+
+#dashboard-workspace-nav {
+  order: 2;
+}
+
+#pms-dashboard-section,
+#pms-properties-section,
+#pms-roi-section {
+  order: 3;
+}
+
+#pms-properties-section,
+#pms-roi-section,
+#investment-workspace-section {
+  display: none;
+}
+
+#investment-workspace-section {
+  order: 4;
+}
+
+[hidden] {
+  display: none !important;
+}
+
 /* Executive control bar */
 .rb-dashboard {
   border-radius: var(--db26-radius-lg);
@@ -235,6 +263,18 @@ body.dashboard-bg {
   box-shadow: var(--db26-shadow);
 }
 
+#dashboard-workspace-nav {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+#dashboard-workspace-nav::after {
+  display: none;
+}
+
 .pms-nav .pms-tab,
 .pms-nav #pms-tab-bookings {
   position: relative;
@@ -395,6 +435,14 @@ body.dashboard-bg {
 /* Properties view */
 #pms-properties-section {
   margin-top: 0 !important;
+}
+
+#investment-workspace-section {
+  min-width: 0;
+}
+
+#investment-workspace-section > *:last-child {
+  margin-bottom: 0;
 }
 
 #pms-properties-section > .analysis-card {
