@@ -751,6 +751,14 @@ body.dashboard-bg {
   #pms-dashboard-section > .analysis-card:first-child .rb-kpi-grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  #pms-properties-section .property-kpi-label {
+    font-size: 9px !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+    word-break: keep-all !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
