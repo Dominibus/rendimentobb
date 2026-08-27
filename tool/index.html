@@ -766,6 +766,9 @@ SAFE
 }
 
 </style>
+
+<!-- Stile dedicato al Simulatore 2026. Caricato dopo gli override legacy. -->
+<link rel="stylesheet" href="/css/tool-2026.css">
 </head>
 
 <body class="tool-page">
@@ -868,6 +871,34 @@ I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcola
 <!-- 🔥 BACKGROUND DINAMICO -->
 <div class="hero-bg"></div>
 
+<div class="tool-2026-hero-copy">
+  <div>
+    <div class="tool-2026-eyebrow"
+      data-it="AI INVESTMENT SIMULATOR"
+      data-en="AI INVESTMENT SIMULATOR">
+      AI INVESTMENT SIMULATOR
+    </div>
+
+    <h1
+      data-it="Analizza un investimento B&B"
+      data-en="Analyze a B&B investment">
+      Analizza un investimento B&B
+    </h1>
+
+    <p
+      data-it="ROI reale, cashflow, rischio e confronto con il mercato in un’unica analisi."
+      data-en="Real ROI, cash flow, risk and market comparison in one analysis.">
+      ROI reale, cashflow, rischio e confronto con il mercato in un’unica analisi.
+    </p>
+  </div>
+
+  <div class="tool-2026-market-status"
+    data-it="Dati di mercato aggiornati"
+    data-en="Updated market data">
+    Dati di mercato aggiornati
+  </div>
+</div>
+
 <div class="container simulator-container">
 
   <div class="simulator-grid">
@@ -877,7 +908,7 @@ I risultati sono stimati su dati medi di mercato. Il rischio reale viene calcola
 
       <div class="tool-card">
 
-        <h3 
+        <h3 class="tool-2026-card-title"
           data-it="💰 Simula il tuo investimento B&B"
           data-en="💰 Simulate your B&B investment">
         </h3>
@@ -967,7 +998,23 @@ value="70">
 <!-- ================= RIGHT ================= -->
 <div class="simulator-right">
 
-  <div class="roi-dashboard">
+  <div class="roi-dashboard" aria-live="polite">
+
+    <div class="tool-2026-result-heading">
+      <div>
+        <span
+          data-it="RISULTATO EXECUTIVE"
+          data-en="EXECUTIVE RESULT">
+          RISULTATO EXECUTIVE
+        </span>
+        <strong id="tool-result-city">Scenario investimento</strong>
+      </div>
+      <div class="tool-2026-result-state"
+        data-it="Analisi aggiornata"
+        data-en="Analysis updated">
+        Analisi aggiornata
+      </div>
+    </div>
 
     <div class="roi-main">
 
@@ -1480,6 +1527,42 @@ style="margin-top:22px;"></div>
 
 <!-- (CONTENUTO REALE SOTTO → MA NON VISIBILE SENZA PRO) -->
 
+<section class="tool-2026-details" aria-labelledby="tool-2026-details-title">
+
+  <div class="tool-2026-details-heading">
+    <div>
+      <h2 id="tool-2026-details-title"
+        data-it="Approfondimento investimento"
+        data-en="Investment details">
+        Approfondimento investimento
+      </h2>
+      <p
+        data-it="Mercato, scenari e proiezioni organizzati senza ripetere i KPI principali."
+        data-en="Market, scenarios and forecasts without repeating the main KPIs.">
+        Mercato, scenari e proiezioni organizzati senza ripetere i KPI principali.
+      </p>
+    </div>
+  </div>
+
+  <div class="tool-2026-tabs" role="tablist"
+    aria-label="Approfondimenti investimento">
+    <button type="button" class="tool-2026-tab is-active"
+      role="tab" aria-selected="true" aria-controls="tool-panel-market"
+      data-tool-tab="market"
+      data-it="Confronto mercato" data-en="Market comparison">
+      Confronto mercato
+    </button>
+    <button type="button" class="tool-2026-tab"
+      role="tab" aria-selected="false" aria-controls="tool-panel-scenarios"
+      data-tool-tab="scenarios"
+      data-it="Scenari e proiezione" data-en="Scenarios and forecast">
+      Scenari e proiezione
+    </button>
+  </div>
+
+  <div id="tool-panel-market" class="tool-2026-panel is-active"
+    role="tabpanel" data-tool-panel="market">
+
 <!-- FORECAST -->
 <div class="results-card investor-teaser">
   <h3
@@ -1529,6 +1612,11 @@ style="margin-top:22px;"></div>
   <div id="market-comparison" class="kpi-grid"></div>
 </div>
 
+  </div>
+
+  <div id="tool-panel-scenarios" class="tool-2026-panel"
+    role="tabpanel" data-tool-panel="scenarios" hidden>
+
 <!-- OCCUPANCY -->
 <div class="results-card investor-teaser">
   <h3 data-it="Simulazione occupazione" data-en="Occupancy simulation"></h3>
@@ -1538,7 +1626,16 @@ style="margin-top:22px;"></div>
 <!-- CHART -->
 <div class="results-card investor-teaser">
   <h3 data-it="Proiezione cashflow 5 anni" data-en="5-year cashflow forecast"></h3>
+  <div class="tool-2026-chart-wrap">
+    <canvas id="cashflow-5y-chart"
+      aria-label="Proiezione cashflow a cinque anni"
+      role="img"></canvas>
+  </div>
 </div>
+
+  </div>
+
+</section>
 
 <!-- PDF EXPORT -->
 <div class="results-card pro-only" style="text-align:center;">
@@ -2006,4 +2103,3 @@ setTimeout(()=>{
     document.body.classList.remove("modal-open");
   }
 }, 500);
-
