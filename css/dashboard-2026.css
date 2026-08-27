@@ -326,6 +326,8 @@ body.dashboard-bg {
 #pms-dashboard-section > .analysis-card {
   margin: 0;
   padding: 24px;
+  height: auto !important;
+  align-self: start;
   border: 1px solid var(--db26-border);
   border-radius: var(--db26-radius-lg);
   box-shadow: var(--db26-shadow);
@@ -376,11 +378,25 @@ body.dashboard-bg {
 #executive-summary {
   grid-column: 2;
   padding: 25px !important;
+  max-height: 720px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(8, 182, 122, 0.35) transparent;
   color: var(--db26-text);
   background:
     radial-gradient(circle at 100% 0%, rgba(8, 182, 122, 0.12), transparent 18rem),
     var(--db26-mint) !important;
   border-color: rgba(8, 182, 122, 0.22) !important;
+}
+
+#executive-summary::-webkit-scrollbar {
+  width: 7px;
+}
+
+#executive-summary::-webkit-scrollbar-thumb {
+  background: rgba(8, 182, 122, 0.30);
+  border-radius: 999px;
 }
 
 #executive-summary h2 {
@@ -421,6 +437,7 @@ body.dashboard-bg {
 #pms-dashboard-section > .analysis-card:last-child {
   grid-column: 1;
   grid-row: 2;
+  min-height: 360px;
 }
 
 #pms-dashboard-section > .analysis-card:last-child h3 {
@@ -429,7 +446,9 @@ body.dashboard-bg {
 }
 
 #pms-performance-chart {
-  max-height: 250px;
+  width: 100% !important;
+  height: 270px !important;
+  max-height: 270px;
 }
 
 /* Properties view */
@@ -500,6 +519,11 @@ body.dashboard-bg {
   #pms-dashboard-section > .analysis-card:last-child {
     grid-column: 1;
     grid-row: auto;
+  }
+
+  #executive-summary {
+    max-height: none;
+    overflow: visible;
   }
 
   #pms-dashboard-section > .analysis-card:first-child .rb-kpi-grid {
