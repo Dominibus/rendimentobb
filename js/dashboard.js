@@ -4867,12 +4867,12 @@ const occupancy =
   );
 
  let occupancyStatus =
-  "🔴 Empty";
+  t("🔴 Vuoto","🔴 Empty");
 
 if(occupancy >= 80){
 
   occupancyStatus =
-    "🟢 High";
+    t("🟢 Alta","🟢 High");
 
 }
 else if(
@@ -4880,7 +4880,7 @@ else if(
 ){
 
   occupancyStatus =
-    "🟡 Medium";
+    t("🟡 Media","🟡 Medium");
 
 }   
 
@@ -5063,7 +5063,7 @@ ADR
 <div class="property-kpi-card">
 
 <div class="property-kpi-label">
-Occupancy
+${t("Occupazione","Occupancy")}
 </div>
 
 <div class="property-kpi-value">
@@ -5122,7 +5122,7 @@ ${totalNights}
 
 </div>
 
-<div style="
+<div class="property-revenue-card" style="
 margin-top:22px;
 padding:24px;
 border-radius:22px;
@@ -5133,7 +5133,7 @@ overflow:hidden;
 box-shadow:0 18px 45px rgba(16,185,129,.28);
 ">
 
-<div style="
+<div class="property-revenue-icon" style="
 position:absolute;
 right:24px;
 top:50%;
@@ -5208,7 +5208,7 @@ ${formatCurrency(realRevenue)}
 
 </div>
 
-<div style="
+<div class="property-revenue-meta" style="
 margin-top:18px;
 display:flex;
 justify-content:space-between;
@@ -5229,7 +5229,7 @@ ${t(
 
 <div>
 
-${occupancy}% Occupancy
+${occupancy}% ${t("Occupazione","Occupancy")}
 
 </div>
 
