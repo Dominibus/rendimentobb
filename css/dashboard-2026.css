@@ -834,6 +834,16 @@ body.dashboard-bg {
   }
 }
 
+@media (max-width: 400px) {
+  #pms-properties-section .property-revenue-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #pms-properties-section .property-revenue-meta > div:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .analysis-card,
   .rb-kpi,
