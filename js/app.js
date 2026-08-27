@@ -230,10 +230,9 @@ function renderUniversalKPI(data = {}){
   if(elAnnual) elAnnual.innerText = formatCurrency(net);
 
   // ===== MONTH =====
-  const monthly = Math.max(
-  0,
-  Math.round(net / 12)
-);
+  const monthly = Number.isFinite(Number(net))
+    ? Number(net) / 12
+    : 0;
 
   if(qrMonth) qrMonth.innerText = formatCurrency(monthly);
   if(elMonthly) elMonthly.innerText = formatCurrency(monthly);
