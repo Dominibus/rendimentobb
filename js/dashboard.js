@@ -11912,99 +11912,124 @@ ${executiveBrief}
 
 window.showPMSTab = function(tab){
 
-  // ===============================
-  // RESET TAB
-  // ===============================
+  const validTabs = [
+    "dashboard",
+    "properties",
+    "roi"
+  ];
+
+  const selectedTab =
+    validTabs.includes(tab)
+      ? tab
+      : "dashboard";
 
   document
-  .querySelectorAll(".pms-tab")
-  .forEach(btn=>btn.classList.remove("active"));
+    .querySelectorAll(".pms-tab")
+    .forEach(button=>{
 
-  const active =
+      button.classList.remove("active");
+
+      button.setAttribute(
+        "aria-selected",
+        "false"
+      );
+
+    });
+
+  const activeButton =
     document.getElementById(
-      "pms-tab-"+tab
+      "pms-tab-" + selectedTab
     );
 
-  if(active){
-    active.classList.add("active");
+  if(activeButton){
+
+    activeButton.classList.add("active");
+
+    activeButton.setAttribute(
+      "aria-selected",
+      "true"
+    );
+
   }
 
-  // ===============================
-  // SEZIONI
-  // ===============================
+  const sections = {
 
-  const executive =
-    document.getElementById("executive-summary");
+    dashboard:
+      document.getElementById(
+        "pms-dashboard-section"
+      ),
 
-  const kpi =
-    document.querySelector(".rb-kpi-grid")
-    ?.closest(".analysis-card");
+    properties:
+      document.getElementById(
+        "pms-properties-section"
+      ),
 
-  const performance =
-    document.getElementById("pms-performance-chart")
-    ?.closest(".analysis-card");
+    roi:
+      document.getElementById(
+        "pms-roi-section"
+      ),
 
-  const properties =
-    document.getElementById("properties-list")
-    ?.closest(".analysis-card");
+    investment:
+      document.getElementById(
+        "investment-workspace-section"
+      )
 
-  const dashboardGrid =
-    document.querySelector(".dashboard-grid");
+  };
 
-  // reset
+  Object
+    .values(sections)
+    .forEach(section=>{
 
-  [
-    executive,
-    kpi,
-    performance,
-    properties,
-    dashboardGrid
-  ].forEach(el=>{
+      if(!section) return;
 
-    if(el){
+      section.hidden = true;
+      section.style.display = "none";
 
-      el.style.display="none";
+    });
+
+  if(selectedTab === "dashboard"){
+
+    if(sections.dashboard){
+
+      sections.dashboard.hidden = false;
+      sections.dashboard.style.display = "grid";
 
     }
 
-  });
+  }
 
-  // ===============================
-  // DASHBOARD
-  // ===============================
+  if(selectedTab === "properties"){
 
-  if(tab==="dashboard"){
+    if(sections.properties){
 
-    if(executive)
-      executive.style.display="block";
+      sections.properties.hidden = false;
+      sections.properties.style.display = "block";
 
-    if(kpi)
-      kpi.style.display="block";
-
-    if(performance)
-      performance.style.display="block";
+    }
 
   }
 
-  // ===============================
-  // PROPERTIES
-  // ===============================
+  if(selectedTab === "roi"){
 
-  if(tab==="properties"){
+    [
+      sections.roi,
+      sections.investment
+    ].forEach(section=>{
 
-    if(properties)
-      properties.style.display="block";
+      if(!section) return;
 
-  }
+      section.hidden = false;
+      section.style.display = "block";
 
-  // ===============================
-  // ROI
-  // ===============================
+    });
 
-  if(tab==="roi"){
+    requestAnimationFrame(()=>{
 
-    if(dashboardGrid)
-      dashboardGrid.style.display="grid";
+      window.dispatchEvent(
+        new Event("resize")
+      );
+
+    });
 
   }
 
