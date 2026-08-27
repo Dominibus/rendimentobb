@@ -68,7 +68,23 @@ window.t = window.t || function(it, en){
 };
 window.formatCurrency = window.formatCurrency || function(v){
   const n = Number(v);
-  return isNaN(n) ? "€0" : "€" + n.toLocaleString("it-IT");
+  const locale = window.currentLang === "en" ? "en-US" : "it-IT";
+
+  if(!Number.isFinite(n)){
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(0);
+  }
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(n);
 };
 
 // =====================================
