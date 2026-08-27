@@ -5218,25 +5218,18 @@ opacity:.92;
 ">
 
 <div>
-
-${bookingsCount}
-${t(
-"prenotazioni",
-"bookings"
-)}
-
+<strong>${bookingsCount}</strong>
+<span>${t("Prenotazioni","Bookings")}</span>
 </div>
 
 <div>
-
-${occupancy}% ${t("Occupazione","Occupancy")}
-
+<strong>${occupancy}%</strong>
+<span>${t("Occupazione","Occupancy")}</span>
 </div>
 
 <div>
-
-ADR €${data.priceNight || 0}
-
+<strong>ADR</strong>
+<span>€${data.priceNight || 0}</span>
 </div>
 
 </div>
