@@ -4039,6 +4039,28 @@ const marketCity =
 
   "";
 
+const resultCity =
+  document.getElementById("tool-result-city");
+
+if(resultCity){
+
+  const cityLabels = {
+    roma: "Roma",
+    milano: "Milano",
+    napoli: "Napoli",
+    firenze: "Firenze"
+  };
+
+  const cityLabel =
+    cityLabels[String(marketCity).toLowerCase()] ||
+    customLocation?.trim() ||
+    t("Mercato selezionato", "Selected market");
+
+  resultCity.innerText =
+    `${cityLabel} · ${t("Scenario base", "Base scenario")}`;
+
+}
+
 // ===============================================
 // 🧠 CHATBOT LIVE DATA
 // ===============================================
@@ -4688,6 +4710,8 @@ if(riskPreview){
       revenue: gross,
       investment: price
     });
+
+    renderCashflowProjection(net);
     
      // =====================================
     // 🤖 POST ANALYSIS AI
@@ -4798,6 +4822,8 @@ runPostAnalysis(result,{
   );
 
   renderRevenueForecast?.(gross);
+
+  renderOccupancySensitivity?.();
 
 }else{
 
@@ -4964,8 +4990,175 @@ function renderROIChart(roi){
 
 }
 
+// ================= CASHFLOW 5 YEARS =================
+function renderCashflowProjection(annualCashflow){
+
+  const canvas =
+    document.getElementById("cashflow-5y-chart");
+
+  if(!canvas || typeof Chart === "undefined"){
+    return;
+  }
+
+  const base = Math.max(
+    0,
+    Number(annualCashflow) || 0
+  );
+
+  const values = Array.from(
+    { length: 5 },
+    (_, index) =>
+      Math.round(
+        base * Math.pow(1.03, index)
+      )
+  );
+
+  if(window.cashflowProjectionChart){
+    window.cashflowProjectionChart.destroy();
+  }
+
+  const currency = (value) =>
+    new Intl.NumberFormat(
+      window.currentLang === "en"
+        ? "en-US"
+        : "it-IT",
+      {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+      }
+    ).format(value);
+
+  window.cashflowProjectionChart =
+    new Chart(
+      canvas.getContext("2d"),
+      {
+        type: "line",
+
+        data: {
+          labels: [
+            t("Anno 1", "Year 1"),
+            t("Anno 2", "Year 2"),
+            t("Anno 3", "Year 3"),
+            t("Anno 4", "Year 4"),
+            t("Anno 5", "Year 5")
+          ],
+
+          datasets: [{
+            label: t(
+              "Cashflow annuale",
+              "Annual cash flow"
+            ),
+            data: values,
+            borderColor: "#08b67a",
+            backgroundColor: "rgba(8,182,122,0.12)",
+            fill: true,
+            tension: 0.35,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: "#08b67a",
+            pointBorderColor: "#ffffff",
+            pointBorderWidth: 2
+          }]
+        },
+
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+
+          scales: {
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: "#607089"
+              }
+            },
+
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: "rgba(96,112,137,0.14)"
+              },
+              ticks: {
+                color: "#607089",
+                callback: currency
+              }
+            }
+          },
+
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) =>
+                  currency(context.parsed.y)
+              }
+            }
+          }
+        }
+      }
+    );
+}
+
+// ================= TOOL DETAIL TABS =================
+function initToolDetailTabs(){
+
+  const tabs =
+    document.querySelectorAll("[data-tool-tab]");
+
+  const panels =
+    document.querySelectorAll("[data-tool-panel]");
+
+  if(!tabs.length || !panels.length){
+    return;
+  }
+
+  tabs.forEach((tab) => {
+
+    tab.addEventListener("click", () => {
+
+      const target =
+        tab.dataset.toolTab;
+
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute(
+          "aria-selected",
+          String(active)
+        );
+      });
+
+      panels.forEach((panel) => {
+        const active =
+          panel.dataset.toolPanel === target;
+
+        panel.classList.toggle("is-active", active);
+        panel.hidden = !active;
+      });
+
+      if(
+        target === "scenarios" &&
+        window.cashflowProjectionChart
+      ){
+        requestAnimationFrame(() => {
+          window.cashflowProjectionChart.resize();
+        });
+      }
+
+    });
+
+  });
+}
+
 // ================= AUTO INIT =================
 document.addEventListener("DOMContentLoaded", ()=>{
+
+  initToolDetailTabs();
 
   // ================= INIT BASE =================
   setTimeout(renderCityROIChart, 300);
