@@ -374,6 +374,7 @@ body.tool-page .roi-metrics strong {
   margin-top: 4px !important;
   color: var(--tool26-text) !important;
   font-size: 22px !important;
+  white-space: nowrap;
 }
 
 body.tool-page .roi-chart {
@@ -781,6 +782,10 @@ body.tool-page.is-pro #cta-urgency {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 
+  body.tool-page .roi-metrics strong {
+    font-size: 17px !important;
+  }
+
   body.tool-page .roi-metrics .metric:last-child {
     grid-column: 1 / -1;
   }
@@ -806,4 +811,12 @@ body.tool-page.is-pro #cta-urgency {
   body.tool-page .tool-2026-panel {
     padding: 14px;
   }
+}
+
+/* Il messaggio sui limiti appartiene esclusivamente al piano Free. */
+body.tool-page.pro-user .tool-2026-free-notice,
+body.tool-page.is-pro .tool-2026-free-notice,
+body.tool-page.is-paid .tool-2026-free-notice,
+body.tool-page.is-investor .tool-2026-free-notice {
+  display: none !important;
 }
