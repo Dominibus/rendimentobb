@@ -2966,6 +2966,51 @@ Sblocca dashboard completa
 </div>
 
 `;
+
+function syncDashboardUpgradeBox(){
+
+  const currentAccess =
+    window.getUserAccess?.() || {};
+
+  const currentPlan =
+    String(window.currentPlan || "")
+      .toLowerCase()
+      .trim();
+
+  const hasPaidDashboard =
+    currentAccess.isInvestor ||
+    currentAccess.isPro ||
+    currentAccess.isAdmin ||
+    currentPlan === "investor" ||
+    currentPlan === "pro" ||
+    currentPlan === "pro_yearly";
+
+  if(!hasPaidDashboard) return;
+
+  box.style.display = "none";
+  box.replaceChildren();
+
+  if(staticBox){
+    staticBox.style.display = "none";
+  }
+
+}
+
+document.addEventListener(
+  "rb_plan_ready",
+  syncDashboardUpgradeBox
+);
+
+setTimeout(
+  syncDashboardUpgradeBox,
+  1500
+);
+
+setTimeout(
+  syncDashboardUpgradeBox,
+  3000
+);
+
   // =====================================
   // 📅 BOOKING FORM TOGGLE
   // =====================================
