@@ -786,6 +786,54 @@ body.dashboard-bg {
   }
 }
 
+@media (max-width: 480px) {
+  #pms-properties-section .property-revenue-card {
+    padding: 20px 16px !important;
+  }
+
+  #pms-properties-section .property-revenue-icon {
+    display: none !important;
+  }
+
+  #pms-properties-section .property-revenue-meta {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch !important;
+    font-size: 10px !important;
+  }
+
+  #pms-properties-section .property-revenue-meta > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 9px 4px;
+    text-align: center;
+    white-space: normal !important;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  #pms-properties-section .property-revenue-meta strong,
+  #pms-properties-section .property-revenue-meta span {
+    display: block;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+  }
+
+  #pms-properties-section .property-revenue-meta strong {
+    font-size: 14px;
+  }
+
+  #pms-properties-section .property-revenue-meta span {
+    font-size: 9px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .analysis-card,
   .rb-kpi,
