@@ -10,24 +10,6 @@ data-en="B&B Mortgage – ROI simulator + bank comparison">
 Mutuo B&B
 </title>
 
-<p style="
-max-width:600px;
-margin:0 auto 25px;
-color:#64748b;
-line-height:1.7;
-">
-
-<span data-it="
-Ricevi analisi mutuo, confronto banche, sostenibilità finanziaria e suggerimenti AI direttamente via email."
-data-en="
-Receive mortgage analysis, bank comparison, financial sustainability and AI recommendations directly by email.">
-
-Ricevi analisi mutuo, confronto banche, sostenibilità finanziaria e suggerimenti AI direttamente via email.
-
-</span>
-
-</p>  
-
 <meta name="description"
 data-it="Simula mutuo, ROI e confronta banche. Scopri se stai perdendo soldi."
 data-en="Simulate mortgage, ROI and compare banks. Avoid losing money.">
@@ -601,9 +583,10 @@ box-shadow:
 }  
 
 </style>
+<link rel="stylesheet" href="/css/mutui-2026.css">
 </head>
 
-<body>
+<body class="mortgage-page">
 
 <div id="global-header"></div>
 <div id="rb-chatbot-root"></div>  
@@ -920,26 +903,33 @@ Advisor
 </div>
 
 </div>
-<input
-id="amount"
-placeholder="€ 250000"
-data-it-placeholder="Importo mutuo"
-data-en-placeholder="Mortgage amount">
-<input
-id="years"
-placeholder="20"
-data-it-placeholder="Durata anni"
-data-en-placeholder="Years">
-<input
-id="rate"
-placeholder="3.5%"
-data-it-placeholder="Tasso interesse"
-data-en-placeholder="Interest rate">
-<input
-id="income"
-placeholder="50000"
-data-it-placeholder="Ricavi annui B&B"
-data-en-placeholder="Annual B&B revenue">
+<div class="mortgage-form-grid">
+
+<label class="mortgage-field">
+<span data-it="Importo del mutuo" data-en="Mortgage amount">Importo del mutuo</span>
+<input id="amount" inputmode="decimal" placeholder="€ 250000"
+data-it-placeholder="Importo mutuo" data-en-placeholder="Mortgage amount">
+</label>
+
+<label class="mortgage-field">
+<span data-it="Durata" data-en="Duration">Durata</span>
+<input id="years" inputmode="numeric" placeholder="20"
+data-it-placeholder="Durata anni" data-en-placeholder="Years">
+</label>
+
+<label class="mortgage-field">
+<span data-it="Tasso di interesse" data-en="Interest rate">Tasso di interesse</span>
+<input id="rate" inputmode="decimal" placeholder="3.5%"
+data-it-placeholder="Tasso interesse" data-en-placeholder="Interest rate">
+</label>
+
+<label class="mortgage-field">
+<span data-it="Ricavi annui del B&B" data-en="Annual B&B revenue">Ricavi annui del B&B</span>
+<input id="income" inputmode="decimal" placeholder="50000"
+data-it-placeholder="Ricavi annui B&B" data-en-placeholder="Annual B&B revenue">
+</label>
+
+</div>
 
 <button class="btn-main"
 id="calc-btn"
@@ -1534,6 +1524,10 @@ margin-top:25px;
 </div>
 
 </div>  
+
+</div>
+
+</div>
 
 <div id="global-footer"></div>
 
