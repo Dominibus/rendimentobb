@@ -1,0 +1,19 @@
+/* RendimentoBB Market principale — correzione header desktop.
+   Evita che la navigazione fissa venga ripetuta durante le acquisizioni
+   a pagina intera. Il comportamento mobile globale resta invariato. */
+
+@media (min-width: 901px) {
+  body.market-page #global-header {
+    position: relative;
+    z-index: 1000;
+    min-height: 64px;
+  }
+
+  body.market-page #global-header .rb-header,
+  body.market-page #global-header .portal-header {
+    position: absolute !important;
+    inset: 0 0 auto 0 !important;
+    width: 100%;
+    transform: none !important;
+  }
+}
