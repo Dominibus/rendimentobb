@@ -249,7 +249,7 @@ body.opening-bnb-page {
 
 .opening-section--navy {
   background:
-    radial-gradient(circle at 90% 10%, rgba(8, 182, 122, 0.2), transparent 34%),
+    radial-gradient(circle at 100% 0%, rgba(8, 182, 122, 0.1), transparent 28%),
     var(--opening-navy);
   color: #fff;
 }
@@ -496,7 +496,11 @@ body.opening-bnb-page {
 
 .opening-mistakes-layout h2 {
   max-width: 430px;
-  color: #fff;
+  color: #fff !important;
+}
+
+.opening-section--navy .opening-eyebrow {
+  color: #7af0c2 !important;
 }
 
 .opening-mistakes {
