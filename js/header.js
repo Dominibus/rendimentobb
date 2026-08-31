@@ -681,7 +681,7 @@ class="dashboard-label">
   <a href="/mutui/" data-it="Mutui" data-en="Mortgages">Mutui</a>
   <a href="/market/" data-it="Mercato" data-en="Market">Mercato</a>
   <a href="/immobili/" data-it="Immobili" data-en="Properties">Immobili</a>
-  <a href="/academy/" data-it="Academy" data-en="Academy">Academy</a>
+  <a href="/academy/" data-it="Guide" data-en="Guides">Guide</a>
   <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
   <a href="#"
   id="mobile-ai-btn"
