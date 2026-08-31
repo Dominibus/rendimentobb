@@ -1,5 +1,10 @@
 /* RendimentoBB - Immobili mobile refinement 2026 */
 
+body.immobili-page .property-grid .card-sub.green {
+  background: transparent !important;
+  color: #047857 !important;
+}
+
 @media (max-width: 768px) {
   body.immobili-page main {
     overflow: hidden;
@@ -150,11 +155,6 @@
     min-height: 32px;
     font-size: 10px;
     line-height: 1.25;
-  }
-
-  body.immobili-page .property-grid .card-sub.green {
-    background: transparent !important;
-    color: #047857 !important;
   }
 
   body.immobili-page .property-grid .market-label {
