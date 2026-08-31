@@ -2852,6 +2852,69 @@ ${interpretationEN}`;
 
   }
 
+  const availableMortgagePercent = Number(
+    liveData.mortgagePercent ??
+    analysisData?.mortgagePercent ??
+    0
+  );
+
+  const availableLoanAmount = Number(
+    liveData.loanAmount ??
+    liveData.mortgage ??
+    analysisData?.loanAmount ??
+    analysisData?.mortgage ??
+    0
+  );
+
+  // A zero-financing simulation cannot support a mortgage verdict.
+  // Ask for a target instead of presenting a false sustainability result.
+  if(
+    availableMortgagePercent <= 0 &&
+    availableLoanAmount <= 0
+  ){
+
+    response.type = "mortgage_clarification";
+    response.confidence = 1;
+    response.signals.push("mortgage_data_missing");
+
+    response.textIT =
+`🏦 Nell’analisi corrente non risulta un finanziamento attivo.
+
+La simulazione utilizza:
+
+• Mutuo/LTV: 0%
+• Importo finanziato: €0
+
+Per valutare la rata o confrontare una leva diversa, indicami almeno la percentuale di mutuo desiderata, ad esempio: “Cosa cambia con un mutuo al 60%?”.
+
+Per una valutazione più precisa puoi aggiungere anche durata e tasso.`;
+
+    response.textEN =
+`🏦 The current analysis does not include active financing.
+
+The simulation uses:
+
+• Mortgage/LTV: 0%
+• Loan amount: €0
+
+To assess the payment or compare a different leverage level, provide at least the target mortgage percentage, for example: “What changes with a 60% mortgage?”.
+
+For a more precise assessment, you can also provide the term and interest rate.`;
+
+    response.suggestionsIT = [
+      "Simula mutuo al 60%",
+      "Indica tasso e durata"
+    ];
+
+    response.suggestionsEN = [
+      "Simulate a 60% mortgage",
+      "Provide rate and term"
+    ];
+
+    return response;
+
+  }
+
   const mortgagePercent =
 
     Number(
@@ -6467,6 +6530,185 @@ else if(
   }
 
   // =====================================
+  // SINGLE-PARAMETER OCCUPANCY / ADR WHAT-IF RESPONSE
+  // =====================================
+
+  if(
+    isExecutiveWhatIf &&
+    (
+      executiveWhatIf.type === "occupancy" ||
+      executiveWhatIf.type === "adr"
+    )
+  ){
+
+    const isOccupancyScenario =
+      executiveWhatIf.type === "occupancy";
+
+    const originalValue = Number(
+      isOccupancyScenario
+        ? executiveWhatIf.originalOccupancy
+        : executiveWhatIf.originalADR
+    );
+
+    const scenarioValue = Number(
+      isOccupancyScenario
+        ? (
+            executiveWhatIf.scenarioOccupancy ??
+            executiveWhatIf.requestedOccupancy
+          )
+        : (
+            executiveWhatIf.scenarioADR ??
+            executiveWhatIf.requestedADR
+          )
+    );
+
+    const originalROI =
+      Number(executiveWhatIf.originalROI ?? 0);
+
+    const scenarioROI = Number(
+      executiveWhatIf.scenarioROI ??
+      analysisData?.roi ??
+      0
+    );
+
+    const originalRealROI =
+      Number(executiveWhatIf.originalRealROI ?? 0);
+
+    const scenarioRealROI = Number(
+      executiveWhatIf.scenarioRealROI ??
+      analysisData?.realROI ??
+      0
+    );
+
+    const originalCashflow =
+      Number(executiveWhatIf.originalCashflow ?? 0);
+
+    const scenarioCashflow = Number(
+      executiveWhatIf.scenarioCashflow ??
+      analysisData?.cashflow ??
+      analysisData?.net ??
+      0
+    );
+
+    const originalRisk =
+      Number(executiveWhatIf.originalRisk ?? 0);
+
+    const scenarioRisk = Number(
+      executiveWhatIf.scenarioRisk ??
+      analysisData?.risk ??
+      0
+    );
+
+    const originalScore =
+      Number(executiveWhatIf.originalInvestmentScore ?? 0);
+
+    const scenarioScore = Number(
+      executiveWhatIf.scenarioInvestmentScore ??
+      analysisData?.investmentScore ??
+      0
+    );
+
+    const formatEURIT = value =>
+      Number(value || 0).toLocaleString("it-IT", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+      });
+
+    const formatEUREN = value =>
+      Number(value || 0).toLocaleString("en-US", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+      });
+
+    const formatPct = value =>
+      `${Number(value || 0).toFixed(2)}%`;
+
+    const valueIT = value =>
+      isOccupancyScenario
+        ? `${Number(value).toFixed(0)}%`
+        : formatEURIT(value);
+
+    const valueEN = value =>
+      isOccupancyScenario
+        ? `${Number(value).toFixed(0)}%`
+        : formatEUREN(value);
+
+    const cashflowDelta =
+      scenarioCashflow - originalCashflow;
+
+    const isCashflowPositive =
+      scenarioCashflow >= 0;
+
+    response.type = "executive_what_if";
+    response.confidence = 0.99;
+    response.signals.push(
+      isOccupancyScenario
+        ? "occupancy_what_if"
+        : "adr_what_if"
+    );
+
+    response.textIT =
+`${isCashflowPositive ? "🟢" : "🔴"} SCENARIO ${isOccupancyScenario ? "OCCUPAZIONE" : "ADR"}
+
+Ho applicato il valore richiesto soltanto a uno scenario temporaneo. La simulazione originale rimane invariata.
+
+📌 Parametro modificato
+
+${isOccupancyScenario ? "Occupazione" : "Prezzo medio per notte"}: ${valueIT(originalValue)} → ${valueIT(scenarioValue)}
+
+📊 Impatto economico
+
+• ROI sul capitale: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
+• ROI sull’immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+• Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
+• Variazione cashflow: ${cashflowDelta >= 0 ? "+" : ""}${formatEURIT(cashflowDelta)}
+• Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Valutazione
+
+Con ${isOccupancyScenario ? "un’occupazione" : "un ADR"} ${isOccupancyScenario ? "del" : "di"} ${valueIT(scenarioValue)}, il cashflow risulta ${isCashflowPositive ? "ancora positivo" : "negativo"}. ${isCashflowPositive ? "Lo scenario mantiene un margine operativo, da verificare con dati di mercato reali." : "Lo scenario non copre più adeguatamente costi e impegni finanziari e richiede una revisione prima di procedere."}`;
+
+    response.textEN =
+`${isCashflowPositive ? "🟢" : "🔴"} ${isOccupancyScenario ? "OCCUPANCY" : "ADR"} SCENARIO
+
+I applied the requested value only to a temporary scenario. The original simulation remains unchanged.
+
+📌 Changed parameter
+
+${isOccupancyScenario ? "Occupancy" : "Average nightly rate"}: ${valueEN(originalValue)} → ${valueEN(scenarioValue)}
+
+📊 Financial impact
+
+• Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
+• Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+• Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
+• Cashflow change: ${cashflowDelta >= 0 ? "+" : ""}${formatEUREN(cashflowDelta)}
+• Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
+• Investment Score: ${Math.round(originalScore)}/100 → ${Math.round(scenarioScore)}/100
+
+🎯 Assessment
+
+With ${isOccupancyScenario ? "occupancy" : "an ADR"} ${isOccupancyScenario ? "at" : "of"} ${valueEN(scenarioValue)}, cashflow is ${isCashflowPositive ? "still positive" : "negative"}. ${isCashflowPositive ? "The scenario retains an operating margin, which should be validated against real market data." : "The scenario no longer adequately covers costs and financing commitments and should be reviewed before proceeding."}`;
+
+    response.suggestionsIT = [
+      "Simula uno scenario più prudente",
+      "Modifica i costi mensili",
+      "Confronta il cashflow"
+    ];
+
+    response.suggestionsEN = [
+      "Simulate a more conservative scenario",
+      "Change monthly costs",
+      "Compare cashflow"
+    ];
+
+    return response;
+
+  }
+
   // 💸 MONTHLY COSTS WHAT-IF RESPONSE
   // =====================================
 
