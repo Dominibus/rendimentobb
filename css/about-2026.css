@@ -1,0 +1,127 @@
+/* About 2026 — compact mobile layout. */
+
+@media (max-width: 768px) {
+  .about-page .about-hero {
+    padding: 76px 18px 72px;
+  }
+
+  .about-page .about-title {
+    margin-bottom: 10px;
+    font-size: 24px;
+    line-height: 1.18;
+  }
+
+  .about-page .about-sub {
+    max-width: 350px;
+    margin: 0 auto;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .about-page .about-container {
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .about-page .trust-bar {
+    gap: 7px;
+    margin-top: -30px;
+    padding: 17px 8px;
+    border-radius: 18px;
+  }
+
+  .about-page .trust-bar > div {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .about-page .trust-bar strong {
+    display: block;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  .about-page .trust-bar br {
+    display: none;
+  }
+
+  .about-page .trust-bar span {
+    display: block;
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .about-page section + section .about-container {
+    margin-top: 12px;
+  }
+
+  .about-page .about-card {
+    margin-bottom: 0;
+    padding: 22px 16px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(2, 6, 23, .06);
+  }
+
+  .about-page .about-card .about-title {
+    font-size: 22px;
+  }
+
+  .about-page .about-text {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .about-page .about-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .about-page .about-box {
+    min-width: 0;
+    padding: 14px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .about-page .about-box strong {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+
+  .about-page .cta-box {
+    margin: 22px 0 38px;
+    padding: 30px 18px;
+    border-radius: 22px;
+  }
+
+  .about-page .cta-box h2 {
+    margin: 0 auto;
+    font-size: 23px;
+    line-height: 1.2;
+  }
+
+  .about-page .cta-box p {
+    margin: 10px 0 0;
+    font-size: 13px;
+  }
+
+  .about-page .cta-box .btn-main {
+    width: min(100%, 310px);
+    margin-top: 18px;
+    padding: 14px 18px;
+  }
+}
+
+@media (max-width: 359px) {
+  .about-page .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-page .trust-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
