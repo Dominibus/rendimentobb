@@ -140,6 +140,7 @@
     "/js/chatbot/market-data.js",
     "/js/chatbot/support-data.js",
 
+    "/js/chatbot/core/semantic-router.js",
     "/js/chatbot/core/entity-engine.js",
     "/js/chatbot/core/intent-engine.js",
     "/js/chatbot/core/memory-engine.js",
