@@ -1941,12 +1941,51 @@ const mortgageBaselineRealROI =
         0
       );
 
-const mortgageBaselineScore =
+const storedMortgageBaselineScore =
   Number(
     window.lastInvestmentScore?.score ??
     window.lastAnalysisData?.investmentScore ??
+    window.lastAnalysisData?.score ??
+    window.rbChatbotData?.investmentScore ??
+    window.rbChatbotData?.score ??
     0
   );
+
+const calculatedMortgageBaselineScore =
+  storedMortgageBaselineScore > 0
+    ? storedMortgageBaselineScore
+    : Number(
+        window.rbGenerateInvestmentScore?.({
+          roi: mortgageBaselineROI,
+          risk: Number(
+            window.lastAnalysisData?.risk ??
+            analysisData.risk ??
+            0
+          ),
+          occupancy: Number(
+            window.lastAnalysisData?.occupancy ??
+            analysisData.occupancy ??
+            0
+          ),
+          mortgagePercent: Number(
+            window.lastAnalysisData?.mortgagePercent ??
+            analysisData.mortgagePercent ??
+            0
+          ),
+          cashflow: mortgageBaselineCashflow,
+          city:
+            window.lastAnalysisData?.city ??
+            window.lastAnalysisData?.marketCity ??
+            analysisData.city ??
+            "roma"
+        })?.score ??
+        0
+      );
+
+const mortgageBaselineScore =
+  Number.isFinite(calculatedMortgageBaselineScore)
+    ? calculatedMortgageBaselineScore
+    : 0;
 
 const mortgageBaselineYearlyPayment =
   Number(
