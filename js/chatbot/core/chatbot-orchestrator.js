@@ -4416,49 +4416,45 @@ if(advisor){
     // 🧠 KNOWLEDGE MATCHING
     // =========================================
 
-    let matchedKnowledge = [];
+    let matchedKnowledge =
+      typeof window.rbMatchKnowledge === "function"
+        ? window.rbMatchKnowledge(
+            text,
+            window.rbKnowledgeBase || {},
+            detectedIntent
+          )
+        : [];
 
-    for(
-      const key in
-      (window.rbKnowledgeBase || {})
-    ){
+    if(!matchedKnowledge.length){
 
-      const item =
-
-        window.rbKnowledgeBase[key];
-
-      if(
-        !item?.keywords
+      for(
+        const key in
+        (window.rbKnowledgeBase || {})
       ){
 
-        continue;
+        const item =
+          window.rbKnowledgeBase[key];
 
-      }
+        if(!item?.keywords){
+          continue;
+        }
 
-      const matched =
+        const matched =
+          item.keywords.some(keyword =>
+            text
+              .toLowerCase()
+              .includes(
+                keyword.toLowerCase()
+              )
+          );
 
-        item.keywords.some(keyword =>
-
-          text
-            .toLowerCase()
-            .includes(
-              keyword.toLowerCase()
-            )
-
-        );
-
-      if(matched){
-
-        matchedKnowledge.push({
-
-          key,
-
-          item,
-
-          priority:
-            item.priority || 1
-
-        });
+        if(matched){
+          matchedKnowledge.push({
+            key,
+            item,
+            priority: item.priority || 1
+          });
+        }
 
       }
 
@@ -4470,9 +4466,8 @@ if(advisor){
 
     matchedKnowledge.sort(
       (a,b)=>
-
-        b.priority -
-        a.priority
+        Number(b.relevance || b.priority || 0) -
+        Number(a.relevance || a.priority || 0)
     );
 
 // =========================================
