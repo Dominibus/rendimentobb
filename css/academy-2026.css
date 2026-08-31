@@ -1,0 +1,155 @@
+/* Academy / Guide 2026 — mobile restyling
+   Desktop remains controlled by the existing page styles. */
+
+@media (max-width: 768px) {
+  .academy-page .hero.hero-bg.academy {
+    min-height: 390px;
+    padding: 88px 18px 92px;
+    background-position: center center;
+  }
+
+  .academy-page .hero .page-title {
+    max-width: 360px;
+  }
+
+  .academy-page .hero h1 {
+    margin: 0;
+    font-size: clamp(27px, 7.2vw, 32px);
+    line-height: 1.08;
+  }
+
+  .academy-page .hero p {
+    max-width: 330px;
+    margin: 12px auto 0;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .academy-page .hero-cta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .58fr);
+    width: min(100%, 350px);
+    gap: 10px;
+    margin: 24px auto 0;
+  }
+
+  .academy-page .hero .btn-main,
+  .academy-page .hero .btn-secondary {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 10px;
+    border-radius: 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .academy-page .academy-content {
+    margin-top: -34px;
+    padding: 38px 12px 34px;
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
+  }
+
+  .academy-page .academy-label {
+    margin-bottom: 14px;
+    padding: 7px 13px;
+    font-size: 11px;
+  }
+
+  .academy-page .section-title {
+    max-width: 330px;
+    margin: 0 auto;
+    font-size: 22px;
+    line-height: 1.18;
+  }
+
+  .academy-page .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 430px;
+    margin: 24px auto 0;
+  }
+
+  .academy-page .card {
+    display: flex;
+    min-width: 0;
+    min-height: 220px;
+    padding: 16px 14px;
+    border-radius: 18px;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .055);
+  }
+
+  .academy-page .card-badge {
+    align-self: flex-start;
+    margin-bottom: 12px;
+    padding: 5px 8px;
+    font-size: 9px;
+    letter-spacing: .35px;
+  }
+
+  .academy-page .card h3 {
+    margin: 0 0 7px;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  .academy-page .card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .academy-page .card-footer {
+    gap: 5px;
+    margin-top: auto;
+    padding-top: 14px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .academy-page .card-footer span:last-child {
+    text-align: right;
+  }
+
+  .academy-page .card-link {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+
+  .academy-page .cta-final {
+    width: calc(100% - 24px);
+    max-width: 430px;
+    margin: 28px auto 42px;
+    padding: 28px 20px;
+    border-radius: 22px;
+  }
+
+  .academy-page .cta-final h3 {
+    max-width: 320px;
+    margin: 0 auto 8px;
+    font-size: 19px;
+    line-height: 1.25;
+  }
+
+  .academy-page .cta-final a {
+    min-height: 46px;
+    margin-top: 12px;
+    padding: 11px 20px;
+  }
+}
+
+@media (max-width: 359px) {
+  .academy-page .hero-cta,
+  .academy-page .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .academy-page .hero-cta {
+    width: min(100%, 280px);
+  }
+
+  .academy-page .card {
+    min-height: 0;
+  }
+}
