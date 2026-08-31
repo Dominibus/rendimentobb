@@ -69,50 +69,50 @@
   }
 
   /* Evaluation method: 2 cards + final full-width card */
-  body.immobili-page main > .section-info:first-of-type {
+  body.immobili-page .hero + .section-info {
     padding: 0;
   }
 
-  body.immobili-page main > .section-info:first-of-type > p {
+  body.immobili-page .hero + .section-info > p {
     margin: 12px auto 0 !important;
     line-height: 1.55 !important;
   }
 
-  body.immobili-page main > .section-info:first-of-type > div[style*="display:grid"] {
+  body.immobili-page .hero + .section-info > div[style*="display:grid"] {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
     margin-top: 22px !important;
   }
 
-  body.immobili-page main > .section-info:first-of-type > div[style*="display:grid"] > .property-card {
+  body.immobili-page .hero + .section-info > div[style*="display:grid"] > .property-card {
     min-height: 148px;
     padding: 18px 10px;
   }
 
-  body.immobili-page main > .section-info:first-of-type > div[style*="display:grid"] > .property-card:last-child {
+  body.immobili-page .hero + .section-info > div[style*="display:grid"] > .property-card:last-child {
     grid-column: 1 / -1;
     min-height: 124px;
   }
 
-  body.immobili-page main > .section-info:first-of-type .property-card > div:first-child {
+  body.immobili-page .hero + .section-info .property-card > div:first-child {
     font-size: 25px !important;
   }
 
-  body.immobili-page main > .section-info:first-of-type .property-card h3 {
+  body.immobili-page .hero + .section-info .property-card h3 {
     margin-top: 8px !important;
     margin-bottom: 5px;
     font-size: 16px !important;
   }
 
-  body.immobili-page main > .section-info:first-of-type .property-card p {
+  body.immobili-page .hero + .section-info .property-card p {
     margin: 0;
     font-size: 12px !important;
     line-height: 1.4;
   }
 
   /* Live activity label */
-  body.immobili-page main > .section-info:first-of-type + div {
+  body.immobili-page .hero + .section-info + div {
     margin-top: 16px;
     margin-bottom: 18px !important;
     font-size: 12px !important;
@@ -121,9 +121,9 @@
 
   /* City opportunities */
   body.immobili-page .property-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin-top: 18px !important;
   }
 
   body.immobili-page .property-grid > .property-card {
@@ -195,6 +195,8 @@
   }
 
   body.immobili-page main > section[style*="linear-gradient"] > div[style*="margin-top:25px"] {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
     margin-top: 18px !important;
     gap: 8px !important;
   }
@@ -203,6 +205,10 @@
   body.immobili-page #lead-city {
     width: 100%;
     min-width: 0 !important;
+  }
+
+  body.immobili-page #lead-email ~ div {
+    margin: 0 !important;
   }
 
   body.immobili-page main > section[style*="linear-gradient"] .btn-primary {
@@ -223,14 +229,18 @@
 
   body.immobili-page .immobili-ai-helper > div {
     display: grid !important;
-    grid-template-columns: repeat(5, auto);
-    gap: 5px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 10px !important;
     margin: 4px 0 15px !important;
-    font-size: 10px !important;
+    font-size: 11px !important;
   }
 
   body.immobili-page .immobili-ai-helper > div > div:nth-child(even) {
-    font-size: 9px;
+    display: none;
+  }
+
+  body.immobili-page .immobili-ai-helper > div > div:last-child {
+    grid-column: 1 / -1;
   }
 
   body.immobili-page .form-grid {
@@ -311,7 +321,7 @@
 @media (max-width: 359px) {
   body.immobili-page .property-grid,
   body.immobili-page .form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   body.immobili-page .property-grid > .property-card {
