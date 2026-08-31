@@ -824,8 +824,8 @@ const hasADRWhatIfEntity =
 const adrWhatIfPatterns = [
 
   // 🇮🇹
-  /(?:e\s+)?se\s+.*(?:prezzo\s+(?:a\s+)?notte|adr|tariffa\s+(?:media|notte)).*\d/i,
-  /(?:prezzo\s+(?:a\s+)?notte|adr|tariffa\s+(?:media|notte)).*(?:port|aument|alz|riduc|abbass|scend|sal).*\d/i,
+  /(?:e\s+)?se\s+.*(?:prezzo\s+(?:(?:a|per)\s+)?notte|adr|tariffa\s+(?:media|notte)).*\d/i,
+  /(?:prezzo\s+(?:(?:a|per)\s+)?notte|adr|tariffa\s+(?:media|notte)).*(?:port|aument|alz|riduc|abbass|scend|sal).*\d/i,
 
   // 🇬🇧
   /what if\s+.*(?:adr|nightly\s+rate|nightly\s+price|price\s+per\s+night|daily\s+rate).*\d/i,
@@ -4224,7 +4224,14 @@ if(semanticRoute?.intent){
     Number(semanticRoute.confidence || 0);
 
   const shouldApplySemanticRoute =
-    semanticRoute.force === true ||
+    (
+      semanticRoute.force === true &&
+      Number(result.priority || 0) < 300 &&
+      !(
+        semanticRoute.intent === "improvement_advisor" &&
+        result.requiresCalculation === true
+      )
+    ) ||
     result.intent === "generic" ||
     semanticPriority > Number(result.priority || 0) + 12 ||
     (
