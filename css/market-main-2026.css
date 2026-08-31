@@ -17,3 +17,248 @@
     transform: none !important;
   }
 }
+
+/* Compattazione mobile della sola pagina Market principale.
+   Le sezioni sono selezionate nella sequenza presente in market/index.html:
+   1 hero, 2 snapshot, 3 overview, 4 citta, 5 framework, 6 CTA. */
+@media (max-width: 640px) {
+  body.market-page main > .hero {
+    padding-bottom: 104px;
+  }
+
+  body.market-page main > .hero-market-snapshot {
+    margin-top: -58px;
+    padding-bottom: 24px;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-card {
+    min-width: 0;
+    min-height: 126px;
+    padding: 16px 10px;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-icon {
+    margin-bottom: 7px;
+    font-size: 20px;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-card h3 {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-card strong {
+    margin: 4px 0;
+    font-size: 22px !important;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-card p {
+    margin: 4px auto 0;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  body.market-page main > section.section {
+    padding: 46px 0;
+  }
+
+  body.market-page main > section.section > .container > div:first-child {
+    margin-bottom: 24px !important;
+  }
+
+  body.market-page main > section.section h2 {
+    font-size: 27px;
+    line-height: 1.12;
+  }
+
+  body.market-page main > section.section > .container > div:first-child > p {
+    line-height: 1.55 !important;
+  }
+
+  /* Indicatori di mercato: due colonne, sei card compatte. */
+  body.market-page main > section:nth-of-type(3) .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  body.market-page main > section:nth-of-type(3) .feature-card {
+    min-width: 0;
+    min-height: 132px;
+    padding: 15px 9px;
+  }
+
+  body.market-page main > section:nth-of-type(3) .feature-icon {
+    margin-bottom: 5px;
+    font-size: 20px;
+  }
+
+  body.market-page main > section:nth-of-type(3) .feature-card h3 {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  body.market-page main > section:nth-of-type(3) .feature-card strong {
+    margin: 4px 0;
+    font-size: 22px !important;
+  }
+
+  body.market-page main > section:nth-of-type(3) .feature-card p {
+    margin: 4px auto 0;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  /* Citta: una card per riga, ma senza l'altezza eccessiva precedente. */
+  body.market-page main > section:nth-of-type(4) .feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  body.market-page main > section:nth-of-type(4) a.feature-card {
+    min-height: 0;
+    padding: 18px 16px;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-icon {
+    margin-bottom: 2px;
+    font-size: 24px;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-card h3 {
+    margin: 5px 0 2px;
+    font-size: 20px;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-card > p {
+    margin: 2px auto;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-card > p:first-of-type {
+    margin-top: 2px;
+    font-size: 24px !important;
+    line-height: 1.15;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-card hr {
+    width: min(180px, 72%);
+    margin: 8px auto 6px;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-card br {
+    display: none;
+  }
+
+  body.market-page main > section:nth-of-type(4) .feature-card .btn {
+    min-height: 38px;
+    margin-top: 10px;
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+
+  /* Criteri decisionali: griglia 2x3. */
+  body.market-page main > section:nth-of-type(5) .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  body.market-page main > section:nth-of-type(5) .feature-card {
+    min-width: 0;
+    min-height: 138px;
+    padding: 15px 10px;
+  }
+
+  body.market-page main > section:nth-of-type(5) .feature-icon {
+    margin-bottom: 5px;
+    font-size: 21px;
+  }
+
+  body.market-page main > section:nth-of-type(5) .feature-card h3 {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  body.market-page main > section:nth-of-type(5) .feature-card p {
+    margin: 3px auto 0;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  /* CTA finale: due colonne e spazi verticali ridotti. */
+  body.market-page main > section:nth-of-type(6) {
+    padding: 42px 0;
+  }
+
+  body.market-page main > section:nth-of-type(6) .cta-container {
+    text-align: center;
+  }
+
+  body.market-page main > section:nth-of-type(6) .hero-badge {
+    margin-bottom: 12px !important;
+  }
+
+  body.market-page main > section:nth-of-type(6) h2 {
+    margin: 0 auto 10px;
+    text-align: center;
+  }
+
+  body.market-page main > section:nth-of-type(6) .cta-container > p {
+    margin: 12px auto !important;
+    line-height: 1.55 !important;
+  }
+
+  body.market-page main > section:nth-of-type(6) .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin: 20px 0 !important;
+  }
+
+  body.market-page main > section:nth-of-type(6) .feature-card {
+    min-width: 0;
+    min-height: 105px;
+    padding: 13px 9px;
+  }
+
+  body.market-page main > section:nth-of-type(6) .feature-icon {
+    margin-bottom: 4px;
+    font-size: 20px;
+  }
+
+  body.market-page main > section:nth-of-type(6) .feature-card h3 {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  body.market-page main > section:nth-of-type(6) .feature-card p {
+    margin: 2px auto 0;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  body.market-page main > section:nth-of-type(6) .cta-container > .btn {
+    min-height: 46px;
+    padding: 11px 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  body.market-page main > .hero-market-snapshot .feature-grid,
+  body.market-page main > section:nth-of-type(3) .feature-grid,
+  body.market-page main > section:nth-of-type(5) .feature-grid,
+  body.market-page main > section:nth-of-type(6) .feature-grid {
+    gap: 8px !important;
+  }
+
+  body.market-page main > .hero-market-snapshot .feature-card,
+  body.market-page main > section:nth-of-type(3) .feature-card,
+  body.market-page main > section:nth-of-type(5) .feature-card {
+    padding-inline: 7px;
+  }
+}
+
