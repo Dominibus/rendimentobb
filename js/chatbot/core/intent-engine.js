@@ -4206,6 +4206,49 @@ if(
 
 }  
 
+// ===========================================
+// SEMANTIC ROUTER FALLBACK
+// ===========================================
+
+const semanticRoute =
+  typeof window.rbAnalyzeSemanticMessage === "function"
+    ? window.rbAnalyzeSemanticMessage(text, entities)
+    : null;
+
+if(semanticRoute?.intent){
+
+  const semanticPriority =
+    Number(semanticRoute.priority || 0);
+
+  const semanticConfidence =
+    Number(semanticRoute.confidence || 0);
+
+  const shouldApplySemanticRoute =
+    semanticRoute.force === true ||
+    result.intent === "generic" ||
+    semanticPriority > Number(result.priority || 0) + 12 ||
+    (
+      semanticConfidence >= 0.86 &&
+      Number(result.confidence || 0) < 0.75
+    );
+
+  if(shouldApplySemanticRoute){
+    applyIntent({
+      intent: semanticRoute.intent,
+      category: semanticRoute.category || "semantic",
+      confidence: semanticConfidence,
+      priority:
+        semanticRoute.force === true
+          ? Math.max(semanticPriority, Number(result.priority || 0) + 1)
+          : semanticPriority,
+      semanticConcepts: semanticRoute.concepts || []
+    });
+  }
+
+}
+
+result.semantic = semanticRoute;
+
 result.secondaryIntents =
 
     detectedIntents
