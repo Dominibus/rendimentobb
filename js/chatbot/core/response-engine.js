@@ -6622,8 +6622,17 @@ else if(
         maximumFractionDigits: 0
       });
 
-    const formatPct = value =>
-      `${Number(value || 0).toFixed(2)}%`;
+    const formatPctIT = value =>
+      `${Number(value || 0).toLocaleString("it-IT", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}%`;
+
+    const formatPctEN = value =>
+      `${Number(value || 0).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })}%`;
 
     const valueIT = value =>
       isOccupancyScenario
@@ -6641,6 +6650,24 @@ else if(
     const isCashflowPositive =
       scenarioCashflow >= 0;
 
+    const isCashflowFragile =
+      isCashflowPositive &&
+      (
+        scenarioCashflow < Math.max(
+          1200,
+          Math.abs(originalCashflow) * 0.15
+        ) ||
+        scenarioRisk >= 70 ||
+        scenarioScore < 40
+      );
+
+    const scenarioIcon =
+      !isCashflowPositive
+        ? "🔴"
+        : isCashflowFragile
+          ? "🟠"
+          : "🟢";
+
     response.type = "executive_what_if";
     response.confidence = 0.99;
     response.signals.push(
@@ -6650,7 +6677,7 @@ else if(
     );
 
     response.textIT =
-`${isCashflowPositive ? "🟢" : "🔴"} SCENARIO ${isOccupancyScenario ? "OCCUPAZIONE" : "ADR"}
+`${scenarioIcon} SCENARIO ${isOccupancyScenario ? "OCCUPAZIONE" : "ADR"}
 
 Ho applicato il valore richiesto soltanto a uno scenario temporaneo. La simulazione originale rimane invariata.
 
@@ -6660,8 +6687,8 @@ ${isOccupancyScenario ? "Occupazione" : "Prezzo medio per notte"}: ${valueIT(ori
 
 📊 Impatto economico
 
-• ROI sul capitale: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
-• ROI sull’immobile: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+• ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
+• ROI sull’immobile: ${formatPctIT(originalRealROI)} → ${formatPctIT(scenarioRealROI)}
 • Cashflow annuo: ${formatEURIT(originalCashflow)} → ${formatEURIT(scenarioCashflow)}
 • Variazione cashflow: ${cashflowDelta >= 0 ? "+" : ""}${formatEURIT(cashflowDelta)}
 • Rischio: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
@@ -6669,10 +6696,10 @@ ${isOccupancyScenario ? "Occupazione" : "Prezzo medio per notte"}: ${valueIT(ori
 
 🎯 Valutazione
 
-Con ${isOccupancyScenario ? "un’occupazione" : "un ADR"} ${isOccupancyScenario ? "del" : "di"} ${valueIT(scenarioValue)}, il cashflow risulta ${isCashflowPositive ? "ancora positivo" : "negativo"}. ${isCashflowPositive ? "Lo scenario mantiene un margine operativo, da verificare con dati di mercato reali." : "Lo scenario non copre più adeguatamente costi e impegni finanziari e richiede una revisione prima di procedere."}`;
+Con ${isOccupancyScenario ? "un’occupazione" : "un ADR"} ${isOccupancyScenario ? "del" : "di"} ${valueIT(scenarioValue)}, il cashflow risulta ${!isCashflowPositive ? "negativo" : isCashflowFragile ? "formalmente positivo, ma con un margine molto fragile" : "positivo"}. ${!isCashflowPositive ? "Lo scenario non copre più adeguatamente costi e impegni finanziari e richiede una revisione prima di procedere." : isCashflowFragile ? `Il margine residuo è di soli ${formatEURIT(scenarioCashflow)} annui, con rischio ${Math.round(scenarioRisk)}/100 e Score ${Math.round(scenarioScore)}/100: una piccola spesa imprevista potrebbe azzerarlo. Lo scenario non offre un margine di sicurezza sufficiente.` : "Lo scenario mantiene un margine operativo, da verificare con dati di mercato reali."}`;
 
     response.textEN =
-`${isCashflowPositive ? "🟢" : "🔴"} ${isOccupancyScenario ? "OCCUPANCY" : "ADR"} SCENARIO
+`${scenarioIcon} ${isOccupancyScenario ? "OCCUPANCY" : "ADR"} SCENARIO
 
 I applied the requested value only to a temporary scenario. The original simulation remains unchanged.
 
@@ -6682,8 +6709,8 @@ ${isOccupancyScenario ? "Occupancy" : "Average nightly rate"}: ${valueEN(origina
 
 📊 Financial impact
 
-• Equity ROI: ${formatPct(originalROI)} → ${formatPct(scenarioROI)}
-• Property ROI: ${formatPct(originalRealROI)} → ${formatPct(scenarioRealROI)}
+• Equity ROI: ${formatPctEN(originalROI)} → ${formatPctEN(scenarioROI)}
+• Property ROI: ${formatPctEN(originalRealROI)} → ${formatPctEN(scenarioRealROI)}
 • Annual cashflow: ${formatEUREN(originalCashflow)} → ${formatEUREN(scenarioCashflow)}
 • Cashflow change: ${cashflowDelta >= 0 ? "+" : ""}${formatEUREN(cashflowDelta)}
 • Risk: ${Math.round(originalRisk)}/100 → ${Math.round(scenarioRisk)}/100
@@ -6691,7 +6718,7 @@ ${isOccupancyScenario ? "Occupancy" : "Average nightly rate"}: ${valueEN(origina
 
 🎯 Assessment
 
-With ${isOccupancyScenario ? "occupancy" : "an ADR"} ${isOccupancyScenario ? "at" : "of"} ${valueEN(scenarioValue)}, cashflow is ${isCashflowPositive ? "still positive" : "negative"}. ${isCashflowPositive ? "The scenario retains an operating margin, which should be validated against real market data." : "The scenario no longer adequately covers costs and financing commitments and should be reviewed before proceeding."}`;
+With ${isOccupancyScenario ? "occupancy" : "an ADR"} ${isOccupancyScenario ? "at" : "of"} ${valueEN(scenarioValue)}, cashflow is ${!isCashflowPositive ? "negative" : isCashflowFragile ? "technically positive, but with a very fragile margin" : "positive"}. ${!isCashflowPositive ? "The scenario no longer adequately covers costs and financing commitments and should be reviewed before proceeding." : isCashflowFragile ? `The remaining margin is only ${formatEUREN(scenarioCashflow)} per year, with risk at ${Math.round(scenarioRisk)}/100 and a Score of ${Math.round(scenarioScore)}/100. A small unexpected expense could eliminate it, so the scenario does not provide an adequate margin of safety.` : "The scenario retains an operating margin, which should be validated against real market data."}`;
 
     response.suggestionsIT = [
       "Simula uno scenario più prudente",
@@ -6859,6 +6886,33 @@ const costsDecreased =
 const costsIncreased =
   scenarioCosts > originalCosts;
 
+const normalizedCostsMessage =
+  String(message || "").toLowerCase();
+
+const userAskedToIncreaseCosts =
+  /\b(aument|increment|alz|increase|raise|higher)\w*/.test(
+    normalizedCostsMessage
+  );
+
+const userAskedToReduceCosts =
+  /\b(riduc|abbass|dimin|reduce|lower|decrease)\w*/.test(
+    normalizedCostsMessage
+  );
+
+const directionMismatchIT =
+  userAskedToIncreaseCosts && costsDecreased
+    ? `Nota: hai chiesto di aumentare i costi, ma ${formatEURIT(scenarioCosts)} è inferiore ai ${formatEURIT(originalCosts)} attuali. Ho quindi calcolato correttamente una riduzione.`
+    : userAskedToReduceCosts && costsIncreased
+      ? `Nota: hai chiesto di ridurre i costi, ma ${formatEURIT(scenarioCosts)} è superiore ai ${formatEURIT(originalCosts)} attuali. Ho quindi calcolato correttamente un aumento.`
+      : "";
+
+const directionMismatchEN =
+  userAskedToIncreaseCosts && costsDecreased
+    ? `Note: you asked to increase costs, but ${formatEUREN(scenarioCosts)} is lower than the current ${formatEUREN(originalCosts)}. I therefore calculated a reduction.`
+    : userAskedToReduceCosts && costsIncreased
+      ? `Note: you asked to reduce costs, but ${formatEUREN(scenarioCosts)} is higher than the current ${formatEUREN(originalCosts)}. I therefore calculated an increase.`
+      : "";
+
 const costChangeIT =
   costsDecreased
     ? "Riducendo"
@@ -6926,6 +6980,8 @@ response.textIT =
 
 ${costChangeIT} i costi mensili da ${formatEURIT(originalCosts)} a ${formatEURIT(scenarioCosts)}, ${profitabilityImpactIT}.
 
+${directionMismatchIT}
+
 📊 Impatto economico
 
 • ROI sul capitale: ${formatPctIT(originalROI)} → ${formatPctIT(scenarioROI)}
@@ -6945,6 +7001,8 @@ response.textEN =
 `${verdict === "BUY" ? "🟢" : verdict === "AVOID" || verdict === "NO_BUY" ? "🔴" : "🟡"} OPERATING COSTS SCENARIO: ${verdict}
 
 ${costChangeEN} monthly operating costs from ${formatEUREN(originalCosts)} to ${formatEUREN(scenarioCosts)}, ${profitabilityImpactEN}.
+
+${directionMismatchEN}
 
 📊 Economic impact
 
