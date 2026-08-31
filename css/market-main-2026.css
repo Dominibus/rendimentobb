@@ -201,6 +201,10 @@
 
   body.market-page main > section:nth-of-type(6) .hero-badge {
     margin-bottom: 12px !important;
+    color: #07865f !important;
+    -webkit-text-fill-color: #07865f !important;
+    border-color: rgba(8, 182, 122, .24) !important;
+    background: #e9fbf4 !important;
   }
 
   body.market-page main > section:nth-of-type(6) h2 {
