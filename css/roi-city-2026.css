@@ -1,0 +1,91 @@
+/* ROI city pages 2026 — shared mobile layout for Rome, Naples, Milan and Florence. */
+
+@media (max-width: 768px) {
+  body .section {
+    padding: 44px 14px;
+  }
+
+  body .section .container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  body .section h2 {
+    margin: 0 auto;
+    font-size: 22px;
+    line-height: 1.22;
+  }
+
+  body .section p {
+    font-size: 13px;
+    line-height: 1.6 !important;
+  }
+
+  body .roi-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body .roi-data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body .roi-trust-grid .market-card,
+  body .roi-data-grid .market-card {
+    display: flex;
+    min-width: 0;
+    min-height: 112px;
+    height: auto;
+    padding: 14px 8px;
+    border-radius: 16px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  body .roi-trust-grid .market-card {
+    min-height: 108px;
+  }
+
+  body .roi-trust-grid .market-card strong,
+  body .roi-data-grid .market-card strong {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.18;
+  }
+
+  body .roi-trust-grid .market-card span,
+  body .roi-data-grid .market-card span {
+    margin-top: 7px;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  body .roi-data-grid .market-card span {
+    order: 0;
+  }
+
+  body .roi-data-grid .market-card strong {
+    order: 1;
+    margin-top: 5px;
+  }
+
+  body .cta-box {
+    padding: 30px 18px;
+    border-radius: 22px;
+  }
+}
+
+@media (max-width: 359px) {
+  body .roi-trust-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body .roi-trust-grid .market-card {
+    min-height: 88px;
+  }
+}
