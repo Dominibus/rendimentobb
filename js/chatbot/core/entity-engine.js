@@ -497,6 +497,12 @@ for(const pattern of occupancyPatterns){
 
 const nightlyPatterns = [
 
+  // 🇮🇹 — Verbo di variazione prima dell'intervallo
+  /(?:prezzo\s+(?:medio\s+)?(?:a\s+|per\s+)?notte|tariffa\s+(?:media\s+)?(?:a\s+|per\s+)?notte|tariffa\s+media|adr)\s+(?:scende|scendesse|sale|salisse|aumenta|aumentasse|diminuisce|diminuisse|cambia)\s+(?:da|dal)\s*€?\s*\d+(?:[\.,]\d+)?\s*€?\s+(?:a|al)\s*€?\s*(\d+(?:[\.,]\d+)?)\s*€?/,
+
+  // 🇬🇧 — Change verb before the from/to range
+  /(?:average\s+nightly\s+rate|nightly\s+(?:price|rate)|price\s+per\s+night|average\s+rate|daily\s+rate|adr)\s+(?:drops|dropped|falls|fell|decreases|decreased|rises|rose|increases|increased|changes|changed)\s+from\s*€?\s*\d+(?:[\.,]\d+)?\s*(?:€|euros?)?\s+to\s*€?\s*(\d+(?:[\.,]\d+)?)\s*(?:€|euros?)?/,
+
   // 🇮🇹 — Variazione da una tariffa a un'altra
   /(?:prezzo\s+(?:medio\s+)?(?:a\s+|per\s+)?notte|tariffa\s+(?:media\s+)?(?:a\s+|per\s+)?notte|tariffa\s+media|adr)\s+(?:da|dal)\s*€?\s*\d+(?:[\.,]\d+)?\s*€?\s+(?:a|al)\s*€?\s*(\d+(?:[\.,]\d+)?)\s*€?/,
 
