@@ -152,6 +152,11 @@
     line-height: 1.25;
   }
 
+  body.immobili-page .property-grid .card-sub.green {
+    background: transparent !important;
+    color: #047857 !important;
+  }
+
   body.immobili-page .property-grid .market-label {
     margin: 5px 0 0;
     font-size: 10px;
