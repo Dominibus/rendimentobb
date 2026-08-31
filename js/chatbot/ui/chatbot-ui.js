@@ -623,6 +623,132 @@ const voiceBtn =
     );
 
 // ===========================================
+// DESKTOP WINDOW DRAG
+// ===========================================
+
+function initChatWindowDrag(){
+
+    const header =
+        windowEl.querySelector(
+            ".rb-chat-header"
+        );
+
+    if(!header){
+        return;
+    }
+
+    let activePointerId = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    const moveWindow = event => {
+
+        if(
+            activePointerId === null ||
+            event.pointerId !== activePointerId
+        ){
+            return;
+        }
+
+        const maxLeft =
+            Math.max(
+                0,
+                window.innerWidth - windowEl.offsetWidth
+            );
+
+        const maxTop =
+            Math.max(
+                0,
+                window.innerHeight - windowEl.offsetHeight
+            );
+
+        const left =
+            Math.min(
+                maxLeft,
+                Math.max(0, event.clientX - offsetX)
+            );
+
+        const top =
+            Math.min(
+                maxTop,
+                Math.max(0, event.clientY - offsetY)
+            );
+
+        windowEl.style.left = left + "px";
+        windowEl.style.top = top + "px";
+
+    };
+
+    const stopDrag = event => {
+
+        if(
+            activePointerId === null ||
+            event.pointerId !== activePointerId
+        ){
+            return;
+        }
+
+        if(header.hasPointerCapture(activePointerId)){
+            header.releasePointerCapture(activePointerId);
+        }
+
+        activePointerId = null;
+        windowEl.classList.remove("rb-chat-dragging");
+
+    };
+
+    header.addEventListener(
+        "pointerdown",
+        event => {
+
+            if(
+                window.innerWidth <= 768 ||
+                event.button !== 0 ||
+                event.target.closest("button, a, input")
+            ){
+                return;
+            }
+
+            const rect =
+                windowEl.getBoundingClientRect();
+
+            activePointerId = event.pointerId;
+            offsetX = event.clientX - rect.left;
+            offsetY = event.clientY - rect.top;
+
+            windowEl.style.left = rect.left + "px";
+            windowEl.style.top = rect.top + "px";
+            windowEl.style.right = "auto";
+            windowEl.style.bottom = "auto";
+
+            windowEl.classList.add("rb-chat-dragging");
+            header.setPointerCapture(activePointerId);
+
+            event.preventDefault();
+
+        }
+    );
+
+    header.addEventListener(
+        "pointermove",
+        moveWindow
+    );
+
+    header.addEventListener(
+        "pointerup",
+        stopDrag
+    );
+
+    header.addEventListener(
+        "pointercancel",
+        stopDrag
+    );
+
+}
+
+initChatWindowDrag();
+
+// ===========================================
 // 🔄 REFRESH EXECUTIVE SNAPSHOT
 // ===========================================
 
