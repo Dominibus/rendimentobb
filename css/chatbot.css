@@ -121,12 +121,9 @@ Silicon Valley SaaS UI
 }
 
 #rb-chatbot-window.rb-chat-dragging{
-
-    left:0;
-    top:0;
-
     right:auto !important;
     bottom:auto !important;
+    animation:none;
 
 }
 
@@ -167,6 +164,12 @@ Silicon Valley SaaS UI
 
   overflow:hidden;
 
+}
+
+@media (min-width:769px){
+  .rb-chat-header{
+    touch-action:none;
+  }
 }
 
 .rb-chat-header::after{
