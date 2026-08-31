@@ -264,13 +264,6 @@ body.market-page .section-dark.cta-section .feature-icon {
   background: var(--city-mint);
 }
 
-body.market-page main > section.section.section-dark.cta-section > .container.cta-container > .hero-badge[style] {
-  color: var(--city-green-dark) !important;
-  -webkit-text-fill-color: var(--city-green-dark) !important;
-  border-color: rgba(8, 182, 122, .24) !important;
-  background: var(--city-mint) !important;
-}
-
 /* Full-page desktop captures must not repeat the fixed global navigation
    through the middle of content. Normal mobile navigation is unchanged. */
 @media (min-width: 901px) {
