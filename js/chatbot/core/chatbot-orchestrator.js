@@ -63,6 +63,8 @@ if(window.RB_DEBUG === true){
 
 const intentPriority = {
 
+    simulation_summary:101,
+
     investment_strategy:96,
 
     investment_advisor:97,
@@ -284,6 +286,18 @@ if(
 // =========================================
 // 🧠 EXECUTIVE
 // =========================================
+
+if(
+
+  detectedIntent.intent === "simulation_summary"
+
+){
+
+  intents.push(
+    "simulation_summary"
+  );
+
+}
 
 if(
 
