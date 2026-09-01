@@ -138,7 +138,8 @@ export default async function handler(req, res){
       rate,
       name,
       role,
-      message
+      message,
+      requestId
     } = req.body || {};
 
     // ================= CLEAN =================
@@ -158,10 +159,22 @@ export default async function handler(req, res){
     name = clean(name, 100);
     role = clean(role, 100);
     message = clean(message, 2000);
+    requestId = clean(requestId, 100);
     lang = clean(lang, 5).toLowerCase();
 
     if(!isValidEmail(email)){
       return res.status(400).json({ error:"Invalid email" });
+    }
+
+    if(requestId){
+      const repeatedRequest = await db
+        .collection("leads")
+        .where("requestId", "==", requestId)
+        .limit(1)
+        .get();
+      if(!repeatedRequest.empty){
+        return res.status(200).json({ success:true, duplicate:true });
+      }
     }
 
     const detectedLang = detectLang(req, ["it", "en"].includes(lang) ? lang : "");
@@ -193,7 +206,7 @@ export default async function handler(req, res){
 const existingLeadQuery = await db
 .collection("leads")
 .where("email","==",email)
-.limit(1)
+.limit(10)
 .get();
 
 let leadId = null;
@@ -201,7 +214,8 @@ let isExistingLead = false;
 
 if(!existingLeadQuery.empty){
 
-  const existingDoc = existingLeadQuery.docs[0];
+  const existingDoc = existingLeadQuery.docs.find(doc => doc.data().lastType === type);
+  if(existingDoc && !["partner", "work"].includes(type)){
   const existingData = existingDoc.data();
 
   leadId = existingDoc.id;
@@ -222,6 +236,8 @@ existingData.createdAt?.toDate?.();
 
   }
 
+  }
+
 }
 
     // ================= SAVE / UPDATE LEAD =================
@@ -236,6 +252,7 @@ role: clean(role || ""),
 message: clean(message || ""),
   email,
   city,
+  requestId,
 
   roi: roiRounded,
   price,
@@ -299,6 +316,7 @@ if(isExistingLead){
 
 // ================= EMAIL FUNNEL =================
 
+if(!["partner", "work"].includes(type)){
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -344,10 +362,19 @@ if(funnelQuery.empty){
   });
 
 }
+}
 
     // ================= USER EMAIL =================
 
 let cta = "https://rendimentobb.it/dashboard";
+let ctaLabel = t(detectedLang, "Apri la Dashboard", "Open Dashboard");
+let userHeading = t(detectedLang, "📊 Analisi investimento completata", "📊 Investment analysis completed");
+let userDescription = t(
+  detectedLang,
+  "La tua simulazione è stata completata con successo. Di seguito trovi il primo riepilogo dei risultati ottenuti.",
+  "Your simulation has been successfully completed. Below is a summary of your investment analysis."
+);
+const showInvestmentResults = type !== "partner" && type !== "work";
 
 if(type === "mutui"){
   cta = "https://rendimentobb.it/mutui/";
@@ -355,6 +382,28 @@ if(type === "mutui"){
 
 if(type === "immobili"){
   cta = "https://rendimentobb.it/immobili/";
+}
+
+if(type === "partner"){
+  cta = "https://rendimentobb.it/partner/";
+  ctaLabel = t(detectedLang, "Visita l'area Partner", "Visit the Partner area");
+  userHeading = t(detectedLang, "🤝 Richiesta partnership ricevuta", "🤝 Partnership request received");
+  userDescription = t(
+    detectedLang,
+    "Grazie per averci presentato la tua proposta. Il team RendimentoBB la valuterà e ti ricontatterà usando l'indirizzo indicato.",
+    "Thank you for sharing your proposal. The RendimentoBB team will review it and contact you at the address provided."
+  );
+}
+
+if(type === "work"){
+  cta = "https://rendimentobb.it/lavora-con-noi/";
+  ctaLabel = t(detectedLang, "Scopri RendimentoBB", "Discover RendimentoBB");
+  userHeading = t(detectedLang, "💼 Candidatura ricevuta", "💼 Application received");
+  userDescription = t(
+    detectedLang,
+    "Grazie per la candidatura. Il team RendimentoBB esaminerà il tuo profilo e ti contatterà se in linea con le opportunità disponibili.",
+    "Thank you for applying. The RendimentoBB team will review your profile and contact you if it matches an available opportunity."
+  );
 }
 
 const userHtml = `
@@ -377,13 +426,11 @@ border:1px solid #e2e8f0;
     margin-bottom:10px;
     ">
 
-      ${
-        type === "mutui"
+      ${type === "mutui"
         ? "🏦 " + t(detectedLang,"Richiesta mutuo analizzata","Mortgage request analyzed")
         : type === "immobili"
         ? "🏠 " + t(detectedLang,"Opportunità immobili trovate","Property opportunities found")
-        : "📊 " + t(detectedLang,"Analisi investimento completata","Investment analysis completed")
-      }
+        : userHeading}
 
     </div>
 
@@ -393,19 +440,13 @@ border:1px solid #e2e8f0;
     line-height:1.6;
     ">
 
-${
-t(
-detectedLang,
-"La tua simulazione è stata completata con successo. Di seguito trovi il primo riepilogo dei risultati ottenuti.",
-"Your simulation has been successfully completed. Below is a summary of your investment analysis."
-)
-}
+${userDescription}
 
     </div>
 
   </div>
 
-<div style="
+${showInvestmentResults ? `<div style="
 display:flex;
 gap:16px;
 margin:24px 0;
@@ -502,6 +543,7 @@ profit > 0
 `
 : ""
 }
+` : ""}
 
   <p>
 
@@ -528,12 +570,7 @@ border-radius:999px;
 text-decoration:none;
 font-weight:700;
 ">
-🚀 ${
-t(
-detectedLang,
-"Apri la Dashboard",
-"Open Dashboard"
-)}
+🚀 ${ctaLabel}
 </a>
 
   </p>
@@ -627,8 +664,18 @@ ${cta}
 
 if(!isExistingLead){
 
+const isPartnerLead = type === "partner";
+const isWorkLead = type === "work";
+const isOperationalLead = isPartnerLead || isWorkLead;
+
 const leadColor =
-score === "extreme"
+isPartnerLead
+? "#0f766e"
+
+: isWorkLead
+? "#2563eb"
+
+: score === "extreme"
 ? "#10b981"
 
 : score === "hot"
@@ -640,7 +687,13 @@ score === "extreme"
 : "#ef4444";
 
 const leadTitle =
-score === "extreme"
+isPartnerLead
+? "🤝 RICHIESTA PARTNERSHIP"
+
+: isWorkLead
+? "💼 NUOVA CANDIDATURA"
+
+: score === "extreme"
 ? "🔥 EXTREME LEAD"
 
 : score === "hot"
@@ -651,14 +704,31 @@ score === "extreme"
 
 : "❄️ LOW PRIORITY";
 
+const adminSubject = isPartnerLead
+  ? `🤝 PARTNERSHIP | ${name || email}`
+  : isWorkLead
+    ? `💼 CANDIDATURA | ${name || email}${role ? ` | ${role}` : ""}`
+    : `${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`;
+
+const adminSuggestion = isPartnerLead
+  ? "Valutare la proposta commerciale e ricontattare il referente entro un giorno lavorativo."
+  : isWorkLead
+    ? "Esaminare il profilo e l'esperienza indicata; ricontattare il candidato se coerente con le posizioni disponibili."
+    : score === "extreme"
+      ? "🔥 Lead ad altissima priorità. Contattare entro 30 minuti. Probabilità di conversione molto elevata."
+      : score === "hot"
+        ? "🚀 Lead molto interessante. Contattare entro oggi per massimizzare le possibilità di conversione."
+        : score === "warm"
+          ? "⚡ Lead qualificato. Inviare una mail personalizzata e pianificare un follow-up entro 24 ore."
+          : "❄️ Lead a bassa priorità. Inserire nel funnel automatico e monitorare eventuali nuove interazioni.";
+
 await resend.emails.send({
 
 from:"RendimentoBB Lead <lead@rendimentobb.it>",
 
 to:["rendimentobb@gmail.com"],
 
-subject:
-`${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`,
+subject: adminSubject,
 
 html:`
 
@@ -699,7 +769,7 @@ gap:14px;
 flex-wrap:wrap;
 ">
 
-<div style="
+${!isOperationalLead ? `<div style="
 background:rgba(255,255,255,.18);
 padding:10px 16px;
 border-radius:999px;
@@ -708,9 +778,9 @@ font-weight:700;
 
 ROI ${roiRounded}%
 
-</div>
+</div>` : ""}
 
-<div style="
+${!isOperationalLead ? `<div style="
 background:rgba(255,255,255,.18);
 padding:10px 16px;
 border-radius:999px;
@@ -719,7 +789,7 @@ font-weight:700;
 
 €${value} Lead
 
-</div>
+</div>` : ""}
 
 <div style="
 background:rgba(255,255,255,.18);
@@ -777,7 +847,7 @@ ${phone ? `
 </tr>
 ` : ""}
 
-<tr>
+${!isOperationalLead ? `<tr>
 <td><strong>🏙 Città</strong></td>
 <td>${htmlCity}</td>
 </tr>
@@ -810,7 +880,7 @@ ${phone ? `
 <tr>
 <td><strong>🏦 DSCR</strong></td>
 <td>${dscr.toFixed(2)}</td>
-</tr>
+</tr>` : ""}
 
 <tr>
 <td><strong>🎯 Lead Score</strong></td>
@@ -908,20 +978,9 @@ font-size:14px;
 line-height:1.7;
 ">
 
-<strong>🧠 AI Suggerimento</strong><br><br>
+<strong>${isOperationalLead ? "✅ Azione consigliata" : "🧠 AI Suggerimento"}</strong><br><br>
 
-${
-score === "extreme"
-? "🔥 Lead ad altissima priorità. Contattare entro 30 minuti. Probabilità di conversione molto elevata."
-
-: score === "hot"
-? "🚀 Lead molto interessante. Contattare entro oggi per massimizzare le possibilità di conversione."
-
-: score === "warm"
-? "⚡ Lead qualificato. Inviare una mail personalizzata e pianificare un follow-up entro 24 ore."
-
-: "❄️ Lead a bassa priorità. Inserire nel funnel automatico e monitorare eventuali nuove interazioni."
-}
+${adminSuggestion}
 
 </div>
 
