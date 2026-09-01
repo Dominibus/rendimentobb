@@ -5,7 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lead Command Center – RendimentoBB</title>
+<title data-it="Centro gestione lead – RendimentoBB" data-en="Lead Management Center – RendimentoBB">Centro gestione lead – RendimentoBB</title>
+
+<link rel="icon" href="/img/favicon.png">
 
 <link rel="stylesheet" href="/css/style.css">
 
@@ -145,6 +147,12 @@ border-left:4px solid #10b981;
 padding-left:12px;
 }
 
+.lead.extreme{
+background:#fff7ed;
+border-left:4px solid #f97316;
+padding-left:12px;
+}
+
 .lead:last-child{
 border:none;
 }
@@ -195,36 +203,38 @@ font-weight:600;
 
 <div class="container">
 
-<h1>🚀 Lead Command Center</h1>
-<div class="subtitle">
-Monitoraggio monetizzazione + performance in tempo reale
+<h1 data-it="Centro gestione lead" data-en="Lead Management Center">Centro gestione lead</h1>
+<div class="subtitle"
+data-it="Priorità, valore potenziale e provenienza dei lead"
+data-en="Lead priority, potential value and acquisition source">
+Priorità, valore potenziale e provenienza dei lead
 </div>
 
 <!-- KPI -->
 <div class="kpi-grid">
 
   <div class="kpi">
-    <div class="kpi-title">Lead Totali</div>
+    <div class="kpi-title" data-it="Lead totali" data-en="Total leads">Lead totali</div>
     <div id="totalLeads" class="kpi-value">0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title">Revenue</div>
+    <div class="kpi-title" data-it="Valore potenziale" data-en="Potential value">Valore potenziale</div>
     <div id="totalValue" class="kpi-value">€0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title">Valore Medio</div>
+    <div class="kpi-title" data-it="Valore medio lead" data-en="Average lead value">Valore medio lead</div>
     <div id="avgValue" class="kpi-value">€0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title">Lead HOT</div>
+    <div class="kpi-title" data-it="Lead prioritari" data-en="Priority leads">Lead prioritari</div>
     <div id="hotLeads" class="kpi-value">0</div>
   </div>
 
   <div class="kpi">
-    <div class="kpi-title">Top città</div>
+    <div class="kpi-title" data-it="Città principale" data-en="Top city">Città principale</div>
     <div id="topCity" class="kpi-value">-</div>
   </div>
 
@@ -233,11 +243,11 @@ Monitoraggio monetizzazione + performance in tempo reale
 <!-- LISTA -->
 <div class="card">
 
-  <h2>🔥 Live Leads</h2>
+  <h2 data-it="Lead recenti" data-en="Recent leads">Lead recenti</h2>
 
   <div class="filter">
-    <button class="active" data-filter="all">All</button>
-    <button data-filter="hot">HOT</button>
+    <button class="active" data-filter="all" data-it="Tutti" data-en="All">Tutti</button>
+    <button data-filter="priority" data-it="Prioritari" data-en="Priority">Prioritari</button>
     <button data-filter="warm">WARM</button>
     <button data-filter="cold">COLD</button>
   </div>
@@ -286,6 +296,28 @@ function formatDate(ts){
     : new Date(ts);
 
   return d.toLocaleString("it-IT");
+}
+
+function formatCity(value){
+  const city = String(value || "").trim();
+  if(!city) return "-";
+  return city
+    .toLocaleLowerCase("it-IT")
+    .replace(/(^|[\s'-])\p{L}/gu, letter => letter.toLocaleUpperCase("it-IT"));
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>'"]/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    "'":"&#39;",
+    '"':"&quot;"
+  })[character]);
+}
+
+function translate(it, en){
+  return window.currentLang === "en" ? en : it;
 }
 
 let currentFilter = "all";
@@ -345,18 +377,23 @@ function render(){
   const filtered = leadsData
     .filter(l=>{
       const score = (l.score || "cold").toLowerCase();
-      return currentFilter === "all" || score === currentFilter;
+      return currentFilter === "all" ||
+        (currentFilter === "priority" && ["extreme", "hot"].includes(score)) ||
+        score === currentFilter;
     })
     .slice(0,50);
 
   listEl.innerHTML = `
     <div style="font-size:12px;color:#64748b;margin-bottom:10px">
-      ${filtered.length} visibili / ${leadsData.length} totali
+      ${translate(
+        `${filtered.length} lead recenti mostrati su ${leadsData.length}`,
+        `${filtered.length} recent leads shown out of ${leadsData.length}`
+      )}
     </div>
   `;
 
   if(filtered.length === 0){
-    listEl.innerHTML += "<div class='loader'>Nessun lead</div>";
+    listEl.innerHTML += `<div class="loader">${translate("Nessun lead", "No leads")}</div>`;
     return;
   }
 
@@ -364,9 +401,15 @@ function render(){
 
     const score = (d.score || "cold").toLowerCase();
 
-    const roi = Number(d.roi || 0).toFixed(1);
+    const roi = Number(d.roi || 0).toLocaleString(
+      window.currentLang === "en" ? "en-US" : "it-IT",
+      { minimumFractionDigits:1, maximumFractionDigits:1 }
+    );
+
+    const email = String(d.email || "").trim();
 
     const badgeColor =
+      score === "extreme" ? "#f97316" :
       score === "hot" ? "#10b981" :
       score === "warm" ? "#f59e0b" :
       "#64748b";
@@ -375,10 +418,10 @@ function render(){
     <div class="lead ${score}">
 
       <div>
-        <b>${d.email || "⚠️ no email"}</b>
+        <b>${escapeHTML(email || translate("Email assente", "Missing email"))}</b>
 
         <div class="lead-meta">
-          ${d.type || "-"} • ${d.city || "-"} • ROI ${roi}%
+          ${escapeHTML(d.type || "-")} • ${escapeHTML(formatCity(d.city))} • ROI ${roi}%
         </div>
 
         <div class="lead-meta">
@@ -398,12 +441,17 @@ function render(){
 
         <div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end">
 
-          <button onclick="copyEmail('${d.email}')"
+          <button class="copy-email" data-email="${escapeHTML(email)}"
+            type="button"
+            title="${translate("Copia email", "Copy email")}"
+            aria-label="${translate("Copia email", "Copy email")}"
             style="padding:6px 10px;border-radius:8px;border:none;background:#e2e8f0;cursor:pointer;">
             📋
           </button>
 
-          <a href="mailto:${d.email}"
+          <a href="mailto:${encodeURIComponent(email)}"
+            title="${translate("Contatta lead", "Contact lead")}"
+            aria-label="${translate("Contatta lead", "Contact lead")}"
             style="padding:6px 10px;border-radius:8px;background:#10b981;color:white;text-decoration:none;">
             ✉️
           </a>
@@ -428,12 +476,14 @@ function updateKPI(){
 
   const avg = total ? Math.round(totalValue / total) : 0;
 
-  const hot = leadsData.filter(l=> (l.score||"") === "hot").length;
+  const priority = leadsData.filter(l=>
+    ["extreme", "hot"].includes((l.score || "").toLowerCase())
+  ).length;
 
   const cityMap = {};
 
   leadsData.forEach(l=>{
-    const c = l.city || "unknown";
+    const c = formatCity(l.city || translate("Non indicata", "Unknown"));
     cityMap[c] = (cityMap[c]||0)+1;
   });
 
@@ -443,7 +493,7 @@ function updateKPI(){
   document.getElementById("totalLeads").innerText = total;
   document.getElementById("totalValue").innerText = formatCurrency(totalValue);
   document.getElementById("avgValue").innerText = formatCurrency(avg);
-  document.getElementById("hotLeads").innerText = hot;
+  document.getElementById("hotLeads").innerText = priority;
   document.getElementById("topCity").innerText = topCity;
 }
 
@@ -452,6 +502,11 @@ window.copyEmail = function(email){
   if(!email) return;
   navigator.clipboard.writeText(email);
 };
+
+document.getElementById("leadList").addEventListener("click", event => {
+  const button = event.target.closest(".copy-email");
+  if(button) window.copyEmail(button.dataset.email);
+});
 
 // ================= FILTER =================
 document.querySelectorAll(".filter button").forEach(btn=>{
@@ -463,6 +518,8 @@ document.querySelectorAll(".filter button").forEach(btn=>{
     render();
   });
 });
+
+document.addEventListener("rb_language_changed", render);
 
 </script>
 
