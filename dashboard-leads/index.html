@@ -193,6 +193,20 @@ color:#475569;
 font-weight:600;
 }
 
+.lead-toast{
+position:fixed;
+right:24px;
+bottom:24px;
+z-index:10000;
+padding:12px 16px;
+border-radius:12px;
+background:#0f172a;
+color:white;
+font-size:14px;
+font-weight:700;
+box-shadow:0 12px 30px rgba(15,23,42,.22);
+}
+
 </style>
 
 </head>
@@ -364,7 +378,7 @@ async function loadLeads(){
 
     const snap = await getDocs(q);
 
-    leadsData = snap.docs.map(d => d.data());
+    leadsData = snap.docs.map(d => ({ id:d.id, ...d.data() }));
 
     render();
 
@@ -467,6 +481,15 @@ function render(){
             ✉️
           </a>
 
+          <button class="delete-lead" data-lead-id="${escapeHTML(d.id)}"
+            data-lead-email="${escapeHTML(email)}"
+            type="button"
+            title="${translate("Elimina lead", "Delete lead")}"
+            aria-label="${translate("Elimina lead", "Delete lead")}"
+            style="padding:6px 10px;border-radius:8px;border:none;background:#fee2e2;color:#b91c1c;cursor:pointer;">
+            🗑️
+          </button>
+
         </div>
 
       </div>
@@ -511,12 +534,63 @@ function updateKPI(){
 // ================= COPY =================
 window.copyEmail = function(email){
   if(!email) return;
-  navigator.clipboard.writeText(email);
+  navigator.clipboard.writeText(email)
+    .then(() => showToast(translate("Email copiata", "Email copied")))
+    .catch(() => showToast(translate("Copia non riuscita", "Copy failed")));
 };
+
+function showToast(message){
+  document.querySelector(".lead-toast")?.remove();
+  const toast = document.createElement("div");
+  toast.className = "lead-toast";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2200);
+}
+
+async function deleteLead(leadId, email){
+  const confirmed = window.confirm(translate(
+    `Eliminare definitivamente il lead ${email || "selezionato"}?`,
+    `Permanently delete the lead ${email || "selected"}?`
+  ));
+
+  if(!confirmed) return;
+
+  try{
+    const user = auth.currentUser;
+    if(!user) throw new Error("Authentication required");
+
+    const token = await user.getIdToken();
+    const response = await fetch("/api/delete-lead", {
+      method:"DELETE",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":`Bearer ${token}`
+      },
+      body:JSON.stringify({ leadId })
+    });
+
+    if(!response.ok) throw new Error("Delete failed");
+
+    leadsData = leadsData.filter(lead => lead.id !== leadId);
+    render();
+    showToast(translate("Lead eliminato", "Lead deleted"));
+  }catch(error){
+    showToast(translate(
+      "Eliminazione non riuscita",
+      "Unable to delete lead"
+    ));
+  }
+}
 
 document.getElementById("leadList").addEventListener("click", event => {
   const button = event.target.closest(".copy-email");
   if(button) window.copyEmail(button.dataset.email);
+
+  const deleteButton = event.target.closest(".delete-lead");
+  if(deleteButton){
+    deleteLead(deleteButton.dataset.leadId, deleteButton.dataset.leadEmail);
+  }
 });
 
 // ================= FILTER =================
