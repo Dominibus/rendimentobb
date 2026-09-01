@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/img/favicon.png" type="image/png">
 
 <title
 data-it="Partnership – RendimentoBB"
@@ -314,8 +315,6 @@ window.savePartner = async function(){
 
   try{
 
-    console.log("📡 SEND PARTNER LEAD...");
-
     const res = await fetch("/api/send-lead",{
       method:"POST",
       headers:{
@@ -337,13 +336,9 @@ window.savePartner = async function(){
       })
     });
 
-    const data = await res.json();
-
     if(!res.ok){
       throw new Error("API error");
     }
-
-    console.log("✅ PARTNER LEAD SENT:", data);
 
     document.getElementById("success").style.display="block";
 
@@ -352,9 +347,7 @@ window.savePartner = async function(){
     document.getElementById("email").value = "";
     document.getElementById("message").value = "";
 
-  }catch(err){
-
-    console.error("❌ PARTNER ERROR:", err);
+  }catch(_err){
 
     alert(
       t(
