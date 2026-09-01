@@ -90,6 +90,7 @@ const RATE_LIMITS = {
   immobili: { ip:8, email:4 },
   partner: { ip:5, email:2 },
   work: { ip:5, email:2 },
+  auth: { ip:10, email:2 },
   generic: { ip:5, email:3 }
 };
 
@@ -173,6 +174,10 @@ async function consumeRateLimit({ ip, email, type }){
 
 // ================= SCORE INTELLIGENTE =================
 function getScore({roi, type}){
+
+  if(type === "auth"){
+    return { score:"lead", value:20, label:"✅ REGISTRATION" };
+  }
 
   if(type === "partner" || type === "work"){
     return { score:"lead", value:20, label:"🤝 LEAD" };
@@ -415,7 +420,7 @@ if(isExistingLead){
 
 // ================= EMAIL FUNNEL =================
 
-if(!["partner", "work"].includes(type)){
+if(!["partner", "work", "auth"].includes(type)){
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -473,7 +478,7 @@ let userDescription = t(
   "La tua simulazione è stata completata con successo. Di seguito trovi il primo riepilogo dei risultati ottenuti.",
   "Your simulation has been successfully completed. Below is a summary of your investment analysis."
 );
-const showInvestmentResults = type !== "partner" && type !== "work";
+const showInvestmentResults = !["partner", "work", "auth"].includes(type);
 
 if(type === "mutui"){
   cta = "https://rendimentobb.it/mutui/";
@@ -502,6 +507,17 @@ if(type === "work"){
     detectedLang,
     "Grazie per la candidatura. Il team RendimentoBB esaminerà il tuo profilo e ti contatterà se in linea con le opportunità disponibili.",
     "Thank you for applying. The RendimentoBB team will review your profile and contact you if it matches an available opportunity."
+  );
+}
+
+if(type === "auth"){
+  cta = "https://rendimentobb.it/dashboard";
+  ctaLabel = t(detectedLang, "Apri la Dashboard", "Open Dashboard");
+  userHeading = t(detectedLang, "✅ Account creato", "✅ Account created");
+  userDescription = t(
+    detectedLang,
+    "La registrazione a RendimentoBB è stata completata. Ora puoi accedere agli strumenti disponibili e iniziare una nuova analisi quando desideri.",
+    "Your RendimentoBB registration is complete. You can now access the available tools and start a new analysis whenever you are ready."
   );
 }
 
@@ -737,6 +753,16 @@ else if(type === "work"){
 
 }
 
+else if(type === "auth"){
+
+  subject = t(
+    detectedLang,
+    "✅ Account RendimentoBB creato",
+    "✅ Your RendimentoBB account is ready"
+  );
+
+}
+
 await resend.emails.send({
 
   from: "RendimentoBB <analisi@rendimentobb.it>",
@@ -765,7 +791,8 @@ if(!isExistingLead){
 
 const isPartnerLead = type === "partner";
 const isWorkLead = type === "work";
-const isOperationalLead = isPartnerLead || isWorkLead;
+const isAuthLead = type === "auth";
+const isOperationalLead = isPartnerLead || isWorkLead || isAuthLead;
 
 const leadColor =
 isPartnerLead
@@ -773,6 +800,9 @@ isPartnerLead
 
 : isWorkLead
 ? "#2563eb"
+
+: isAuthLead
+? "#7c3aed"
 
 : score === "extreme"
 ? "#10b981"
@@ -792,6 +822,9 @@ isPartnerLead
 : isWorkLead
 ? "💼 NUOVA CANDIDATURA"
 
+: isAuthLead
+? "✅ NUOVA REGISTRAZIONE"
+
 : score === "extreme"
 ? "🔥 EXTREME LEAD"
 
@@ -807,12 +840,16 @@ const adminSubject = isPartnerLead
   ? `🤝 PARTNERSHIP | ${name || email}`
   : isWorkLead
     ? `💼 CANDIDATURA | ${name || email}${role ? ` | ${role}` : ""}`
+    : isAuthLead
+      ? `✅ REGISTRAZIONE | ${name || email}${role ? ` | ${role}` : ""}`
     : `${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`;
 
 const adminSuggestion = isPartnerLead
   ? "Valutare la proposta commerciale e ricontattare il referente entro un giorno lavorativo."
   : isWorkLead
     ? "Esaminare il profilo e l'esperienza indicata; ricontattare il candidato se coerente con le posizioni disponibili."
+    : isAuthLead
+      ? "Nuovo account creato. Monitorare l'attivazione del simulatore e le successive interazioni nel funnel."
     : score === "extreme"
       ? "🔥 Lead ad altissima priorità. Contattare entro 30 minuti. Probabilità di conversione molto elevata."
       : score === "hot"
