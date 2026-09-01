@@ -395,6 +395,8 @@ const canSeeAdvancedAnalysis = Boolean(
 
 const advancedAnalysisIntents = [
 
+  "simulation_summary",
+
   "roi_analysis",
 
   "risk_analysis",
@@ -2120,10 +2122,120 @@ function pickRandom(arr){
 }
 
   // ===========================================
+  // 📊 ORIGINAL SIMULATION SUMMARY
+  // Reads the canonical baseline directly and never a temporary scenario.
+  // ===========================================
+
+if(intent.intent === "simulation_summary"){
+
+  const baseline =
+    window.lastAnalysisData || null;
+
+  if(!baseline){
+
+    response.type = "simulation_summary";
+    response.confidence = 1;
+    response.textIT =
+      "Non trovo ancora una simulazione originale. Esegui prima una simulazione completa e poi chiedimi di riepilogarla.";
+    response.textEN =
+      "I cannot find an original simulation yet. Run a complete simulation first, then ask me to summarize it.";
+
+    return response;
+
+  }
+
+  const baselinePropertyPrice = Number(
+    baseline.propertyPrice ?? baseline.price ?? 0
+  );
+  const baselineEquity = Number(
+    baseline.equity ?? baseline.initialCapital ?? 0
+  );
+  const baselineLoan = Number(
+    baseline.loanAmount ?? baseline.mortgage ?? 0
+  );
+  const baselineMortgagePercent = Number(
+    baseline.mortgagePercent ??
+    (baselinePropertyPrice > 0
+      ? (baselineLoan / baselinePropertyPrice) * 100
+      : 0)
+  );
+  const baselineROI = Number(
+    baseline.visualROI ?? baseline.roi ?? 0
+  );
+  const baselineRealROI = Number(
+    baseline.realROI ?? baseline.safeROI ?? 0
+  );
+  const baselineCashflow = Number(
+    baseline.net ?? baseline.cashflow ?? baseline.annualProfit ?? 0
+  );
+  const baselineRisk = Number(baseline.risk ?? 0);
+  const baselineOccupancy = Number(baseline.occupancy ?? 0);
+  const baselineScore = Number(
+    baseline.investmentScore ?? baseline.score ?? 0
+  );
+  const baselineCity = String(
+    baseline.realCity ?? baseline.marketCity ?? baseline.city ?? ""
+  );
+
+  const formatMoneyIT = value =>
+    new Intl.NumberFormat("it-IT", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0
+    }).format(value);
+
+  const formatMoneyEN = value =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0
+    }).format(value);
+
+  response.type = "simulation_summary";
+  response.confidence = 1;
+  response.signals.push("canonical_simulation_summary");
+
+  response.textIT =
+`📊 SIMULAZIONE ORIGINALE
+
+Questi sono i dati canonici salvati. Gli scenari temporanei richiesti in chat non li hanno modificati.
+
+• Città: ${baselineCity || "Non indicata"}
+• Prezzo immobile: ${formatMoneyIT(baselinePropertyPrice)}
+• Capitale proprio: ${formatMoneyIT(baselineEquity)}
+• Mutuo: ${formatMoneyIT(baselineLoan)} (${baselineMortgagePercent.toFixed(0)}%)
+• Occupazione: ${baselineOccupancy.toFixed(0)}%
+• ROI sul capitale: ${baselineROI.toFixed(2)}%
+• ROI sull’immobile: ${baselineRealROI.toFixed(2)}%
+• Cashflow annuo: ${formatMoneyIT(baselineCashflow)}
+• Rischio: ${baselineRisk.toFixed(0)}/100
+• Investment Score: ${baselineScore.toFixed(0)}/100`;
+
+  response.textEN =
+`📊 ORIGINAL SIMULATION
+
+These are the saved canonical values. Temporary chat scenarios have not changed them.
+
+• City: ${baselineCity || "Not specified"}
+• Property price: ${formatMoneyEN(baselinePropertyPrice)}
+• Equity: ${formatMoneyEN(baselineEquity)}
+• Mortgage: ${formatMoneyEN(baselineLoan)} (${baselineMortgagePercent.toFixed(0)}%)
+• Occupancy: ${baselineOccupancy.toFixed(0)}%
+• Equity ROI: ${baselineROI.toFixed(2)}%
+• Property ROI: ${baselineRealROI.toFixed(2)}%
+• Annual cashflow: ${formatMoneyEN(baselineCashflow)}
+• Risk: ${baselineRisk.toFixed(0)}/100
+• Investment Score: ${baselineScore.toFixed(0)}/100`;
+
+  return response;
+
+}
+
+  // ===========================================
   // 📈 ROI RESPONSE
   // ===========================================
 
-if(
+else if(
   intent.intent === "roi_analysis" &&
   !isStrategicImprovementFollowUp
 ){
