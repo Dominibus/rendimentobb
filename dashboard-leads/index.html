@@ -165,6 +165,12 @@ border-left:4px solid #2563eb;
 padding-left:12px;
 }
 
+.lead.auth{
+background:#f5f3ff;
+border-left:4px solid #7c3aed;
+padding-left:12px;
+}
+
 .lead:last-child{
 border:none;
 }
@@ -284,6 +290,7 @@ Priorità, valore potenziale e provenienza dei lead
     <button data-filter="cold">COLD</button>
     <button data-filter="partner" data-it="Partner" data-en="Partner">Partner</button>
     <button data-filter="work" data-it="Candidature" data-en="Applications">Candidature</button>
+    <button data-filter="auth" data-it="Registrazioni" data-en="Registrations">Registrazioni</button>
   </div>
 
   <div id="leadList" class="loader">Caricamento...</div>
@@ -365,7 +372,7 @@ function getLeadType(lead){
 }
 
 function isOperationalLead(lead){
-  return ["partner", "work"].includes(getLeadType(lead));
+  return ["partner", "work", "auth"].includes(getLeadType(lead));
 }
 
 let currentFilter = "all";
@@ -428,7 +435,7 @@ function render(){
       const type = getLeadType(l);
       return currentFilter === "all" ||
         (currentFilter === "priority" && ["extreme", "hot"].includes(score)) ||
-        (["partner", "work"].includes(currentFilter) && type === currentFilter) ||
+        (["partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
         score === currentFilter;
     })
     .slice(0,50);
@@ -463,6 +470,7 @@ function render(){
     const badgeColor =
       type === "partner" ? "#0f766e" :
       type === "work" ? "#2563eb" :
+      type === "auth" ? "#7c3aed" :
       score === "extreme" ? "#f97316" :
       score === "hot" ? "#10b981" :
       score === "warm" ? "#f59e0b" :
@@ -472,12 +480,16 @@ function render(){
       ? translate("PARTNER", "PARTNER")
       : type === "work"
         ? translate("CANDIDATO", "APPLICANT")
+        : type === "auth"
+          ? translate("REGISTRATO", "REGISTERED")
         : score.toUpperCase();
 
     const metaText = type === "partner"
       ? `${translate("Partnership", "Partnership")} • ${d.name || translate("Azienda non indicata", "Company not provided")}`
       : type === "work"
         ? `${translate("Candidatura", "Application")} • ${d.role || translate("Ruolo non indicato", "Role not provided")}`
+        : type === "auth"
+          ? `${translate("Registrazione", "Registration")} • ${d.role || translate("Profilo non indicato", "Profile not provided")}`
         : `${type} • ${formatCity(d.city)} • ROI ${roi}%`;
 
     listEl.innerHTML += `
