@@ -153,6 +153,18 @@ border-left:4px solid #f97316;
 padding-left:12px;
 }
 
+.lead.partner{
+background:#f0fdfa;
+border-left:4px solid #0f766e;
+padding-left:12px;
+}
+
+.lead.work{
+background:#eff6ff;
+border-left:4px solid #2563eb;
+padding-left:12px;
+}
+
 .lead:last-child{
 border:none;
 }
@@ -270,6 +282,8 @@ Priorità, valore potenziale e provenienza dei lead
     <button data-filter="priority" data-it="Prioritari" data-en="Priority">Prioritari</button>
     <button data-filter="warm">WARM</button>
     <button data-filter="cold">COLD</button>
+    <button data-filter="partner" data-it="Partner" data-en="Partner">Partner</button>
+    <button data-filter="work" data-it="Candidature" data-en="Applications">Candidature</button>
   </div>
 
   <div id="leadList" class="loader">Caricamento...</div>
@@ -340,6 +354,20 @@ function translate(it, en){
   return window.currentLang === "en" ? en : it;
 }
 
+function getLeadType(lead){
+  const type = String(
+    lead.lastType ||
+    lead.type ||
+    (Array.isArray(lead.typesVisited) ? lead.typesVisited.at(-1) : "") ||
+    "analysis"
+  ).toLowerCase();
+  return type === "career" ? "work" : type;
+}
+
+function isOperationalLead(lead){
+  return ["partner", "work"].includes(getLeadType(lead));
+}
+
 let currentFilter = "all";
 let leadsData = [];
 let loading = false;
@@ -397,8 +425,10 @@ function render(){
   const filtered = leadsData
     .filter(l=>{
       const score = (l.score || "cold").toLowerCase();
+      const type = getLeadType(l);
       return currentFilter === "all" ||
         (currentFilter === "priority" && ["extreme", "hot"].includes(score)) ||
+        (["partner", "work"].includes(currentFilter) && type === currentFilter) ||
         score === currentFilter;
     })
     .slice(0,50);
@@ -420,6 +450,8 @@ function render(){
   filtered.forEach(d=>{
 
     const score = (d.score || "cold").toLowerCase();
+    const type = getLeadType(d);
+    const operational = isOperationalLead(d);
 
     const roi = Number(d.roi || 0).toLocaleString(
       window.currentLang === "en" ? "en-US" : "it-IT",
@@ -429,24 +461,33 @@ function render(){
     const email = String(d.email || "").trim();
 
     const badgeColor =
+      type === "partner" ? "#0f766e" :
+      type === "work" ? "#2563eb" :
       score === "extreme" ? "#f97316" :
       score === "hot" ? "#10b981" :
       score === "warm" ? "#f59e0b" :
       "#64748b";
 
+    const badgeText = type === "partner"
+      ? translate("PARTNER", "PARTNER")
+      : type === "work"
+        ? translate("CANDIDATO", "APPLICANT")
+        : score.toUpperCase();
+
+    const metaText = type === "partner"
+      ? `${translate("Partnership", "Partnership")} • ${d.name || translate("Azienda non indicata", "Company not provided")}`
+      : type === "work"
+        ? `${translate("Candidatura", "Application")} • ${d.role || translate("Ruolo non indicato", "Role not provided")}`
+        : `${type} • ${formatCity(d.city)} • ROI ${roi}%`;
+
     listEl.innerHTML += `
-    <div class="lead ${score}">
+    <div class="lead ${operational ? type : score}">
 
       <div>
         <b>${escapeHTML(email || translate("Email assente", "Missing email"))}</b>
 
         <div class="lead-meta">
-          ${escapeHTML(
-            d.lastType ||
-            d.type ||
-            (Array.isArray(d.typesVisited) ? d.typesVisited.at(-1) : "") ||
-            translate("Analisi", "Analysis")
-          )} • ${escapeHTML(formatCity(d.city))} • ROI ${roi}%
+          ${escapeHTML(metaText)}
         </div>
 
         <div class="lead-meta">
@@ -457,12 +498,12 @@ function render(){
       <div style="text-align:right">
 
         <div class="badge" style="background:${badgeColor}">
-          ${score.toUpperCase()}
+          ${badgeText}
         </div>
 
-        <div style="font-size:18px;font-weight:900;margin-top:6px">
+        ${!operational ? `<div style="font-size:18px;font-weight:900;margin-top:6px">
           ${formatCurrency(d.value)}
-        </div>
+        </div>` : ""}
 
         <div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end">
 
@@ -506,9 +547,13 @@ function updateKPI(){
 
   const total = leadsData.length;
 
-  const totalValue = leadsData.reduce((a,l)=>a+Number(l.value||0),0);
+  const financialLeads = leadsData.filter(l => !isOperationalLead(l));
 
-  const avg = total ? Math.round(totalValue / total) : 0;
+  const totalValue = financialLeads.reduce((a,l)=>a+Number(l.value||0),0);
+
+  const avg = financialLeads.length
+    ? Math.round(totalValue / financialLeads.length)
+    : 0;
 
   const priority = leadsData.filter(l=>
     ["extreme", "hot"].includes((l.score || "").toLowerCase())
@@ -516,7 +561,7 @@ function updateKPI(){
 
   const cityMap = {};
 
-  leadsData.forEach(l=>{
+  financialLeads.forEach(l=>{
     const c = formatCity(l.city || translate("Non indicata", "Unknown"));
     cityMap[c] = (cityMap[c]||0)+1;
   });
