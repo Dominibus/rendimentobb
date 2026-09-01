@@ -1943,11 +1943,11 @@ const mortgageBaselineRealROI =
 
 const storedMortgageBaselineScore =
   Number(
-    window.lastInvestmentScore?.score ??
     window.lastAnalysisData?.investmentScore ??
     window.lastAnalysisData?.score ??
     window.rbChatbotData?.investmentScore ??
     window.rbChatbotData?.score ??
+    window.lastInvestmentScore?.score ??
     0
   );
 
