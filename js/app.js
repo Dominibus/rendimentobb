@@ -3289,21 +3289,6 @@ if(finalROI <= 0){
       );
     }
 
-    // ================= LEAD DEDUP =================
-
-    const leadHash = JSON.stringify({
-      email: userEmail,
-      city: market,
-      price: propertyPrice
-    });
-
-    if(window.__LAST_LEAD_HASH__ === leadHash){
-
-      return;
-    }
-
-    window.__LAST_LEAD_HASH__ = leadHash;
-
     // ================= SCORE =================
 
     window.simulationCount =
@@ -3315,55 +3300,51 @@ if(finalROI <= 0){
 
     // ================= EMAIL =================
 
-    if(userEmail){
+    if(
+      userEmail &&
+      Number(window.__RB_ANALYSIS_EMAIL_SESSION_EXPIRES__ || 0) > Date.now()
+    ){
+      const emailPayload = {
+        email: userEmail,
+        name: window.currentUser?.displayName || "",
+        lang: window.currentLang || "it",
+        roi: finalROI,
+        city: realCityInput || market,
+        price: propertyPrice,
+        equity: Number(equity || 0),
+        profit: Number(net || 0),
+        type: "analysis",
+        source: "roi_simulator",
+        funnel: "analysis_completed",
+        leadScore,
+        requestId: window.__RB_ANALYSIS_EMAIL_SESSION_ID__ || ""
+      };
 
-      window.emailUserSent = true;
+      // Il motore può ricalcolare più volte (prima stima + dati di mercato).
+      // Manteniamo solo l'ultimo risultato della singola azione dell'utente.
+      window.__RB_PENDING_ANALYSIS_EMAIL__ = emailPayload;
+      clearTimeout(window.__RB_ANALYSIS_EMAIL_TIMER__);
+      window.__RB_ANALYSIS_EMAIL_TIMER__ = setTimeout(async () => {
+        const payload = window.__RB_PENDING_ANALYSIS_EMAIL__;
+        if(!payload) return;
 
+        window.__RB_PENDING_ANALYSIS_EMAIL__ = null;
+        window.__RB_ANALYSIS_EMAIL_SESSION_EXPIRES__ = 0;
+        window.emailUserSent = true;
 
-      fetch("/api/send-lead-email",{
+        try{
+          const res = await fetch("/api/send-lead",{
         method:"POST",
-
         headers:{
           "Content-Type":"application/json"
         },
-
-        body:JSON.stringify({
-          email: userEmail,
-          name: window.currentUser?.displayName || "",
-          lang: window.currentLang || "it",
-          roi: finalROI,
-          city: realCityInput || market,
-          price: propertyPrice,
-          equity: Number(equity || 0),
-          profit: Number(net || 0),
-          type: "analysis",
-          source: "roi_simulator",
-          funnel: "analysis_completed",
-          leadScore
-        })
-      })
-.then(async res=>{
-
-
-  if(!res.ok){
-
-    window.emailUserSent = false;
-
-    console.warn(
-      "❌ Email send failed"
-    );
-  }
-
-})
-.catch(err=>{
-
-  console.error(
-    "💥 SEND LEAD ERROR",
-    err
-  );
-
-  window.emailUserSent = false;
-});
+            body:JSON.stringify(payload)
+          });
+          if(!res.ok) window.emailUserSent = false;
+        }catch(_error){
+          window.emailUserSent = false;
+        }
+      }, 25000);
     }
 
 
@@ -5546,6 +5527,11 @@ if(analyzeBtn){
 
   
   window.__MANUAL_ANALYSIS__ = true;
+  window.__RB_ANALYSIS_EMAIL_SESSION_ID__ =
+    `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  window.__RB_ANALYSIS_EMAIL_SESSION_EXPIRES__ = Date.now() + 60000;
+  clearTimeout(window.__RB_ANALYSIS_EMAIL_TIMER__);
+  window.__RB_PENDING_ANALYSIS_EMAIL__ = null;
 
   window.calculate();
 
