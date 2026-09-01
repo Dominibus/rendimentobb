@@ -165,7 +165,13 @@ font-weight:500;
 }
 
 /* BADGE */
-.badge{
+.lead .badge{
+position:static;
+top:auto;
+left:auto;
+transform:none;
+display:inline-flex;
+align-items:center;
 color:white;
 padding:5px 12px;
 border-radius:999px;
@@ -421,7 +427,12 @@ function render(){
         <b>${escapeHTML(email || translate("Email assente", "Missing email"))}</b>
 
         <div class="lead-meta">
-          ${escapeHTML(d.type || "-")} • ${escapeHTML(formatCity(d.city))} • ROI ${roi}%
+          ${escapeHTML(
+            d.lastType ||
+            d.type ||
+            (Array.isArray(d.typesVisited) ? d.typesVisited.at(-1) : "") ||
+            translate("Analisi", "Analysis")
+          )} • ${escapeHTML(formatCity(d.city))} • ROI ${roi}%
         </div>
 
         <div class="lead-meta">
