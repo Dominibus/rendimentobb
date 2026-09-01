@@ -4,6 +4,7 @@
 
 import { Resend } from "resend";
 import admin from "firebase-admin";
+import crypto from "node:crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -81,6 +82,95 @@ function formatCity(value){
     .replace(/(^|[\s'-])\p{L}/gu, letter => letter.toLocaleUpperCase("it-IT"));
 }
 
+const RATE_WINDOW_MS = 60 * 60 * 1000;
+
+const RATE_LIMITS = {
+  analysis: { ip:20, email:12 },
+  mutui: { ip:8, email:4 },
+  immobili: { ip:8, email:4 },
+  partner: { ip:5, email:2 },
+  work: { ip:5, email:2 },
+  generic: { ip:5, email:3 }
+};
+
+function hashRateKey(value){
+  return crypto
+    .createHash("sha256")
+    .update(String(value))
+    .digest("hex");
+}
+
+function getClientIp(req){
+  const forwarded = req.headers["x-forwarded-for"];
+  const candidate = Array.isArray(forwarded)
+    ? forwarded[0]
+    : String(forwarded || "").split(",")[0];
+  return clean(
+    candidate || req.headers["x-real-ip"] || req.socket?.remoteAddress || "unknown",
+    100
+  );
+}
+
+class RateLimitError extends Error {
+  constructor(retryAfter){
+    super("Rate limit exceeded");
+    this.code = "RATE_LIMITED";
+    this.retryAfter = retryAfter;
+  }
+}
+
+async function consumeRateLimit({ ip, email, type }){
+  const limits = RATE_LIMITS[type] || RATE_LIMITS.generic;
+  const now = Date.now();
+  const collection = db.collection("_rate_limits");
+  const entries = [
+    {
+      ref: collection.doc(hashRateKey(`ip:${type}:${ip}`)),
+      limit: limits.ip,
+      scope: "ip"
+    },
+    {
+      ref: collection.doc(hashRateKey(`email:${type}:${email}`)),
+      limit: limits.email,
+      scope: "email"
+    }
+  ];
+
+  await db.runTransaction(async transaction => {
+    const snapshots = await transaction.getAll(...entries.map(entry => entry.ref));
+    const states = entries.map((entry, index) => {
+      const data = snapshots[index].exists ? snapshots[index].data() : {};
+      const previousStart = Number(data.windowStartedAt || 0);
+      const activeWindow = previousStart > 0 && now - previousStart < RATE_WINDOW_MS;
+      return {
+        ...entry,
+        windowStartedAt: activeWindow ? previousStart : now,
+        count: activeWindow ? Number(data.count || 0) : 0
+      };
+    });
+
+    const blocked = states.find(state => state.count >= state.limit);
+    if(blocked){
+      const remaining = Math.max(
+        1,
+        Math.ceil((blocked.windowStartedAt + RATE_WINDOW_MS - now) / 1000)
+      );
+      throw new RateLimitError(remaining);
+    }
+
+    states.forEach(state => {
+      transaction.set(state.ref, {
+        scope: state.scope,
+        type,
+        count: state.count + 1,
+        limit: state.limit,
+        windowStartedAt: state.windowStartedAt,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    });
+  });
+}
+
 // ================= SCORE INTELLIGENTE =================
 function getScore({roi, type}){
 
@@ -151,6 +241,9 @@ export default async function handler(req, res){
     profit = clamp(profit, -100000000, 100000000);
     type = clean(type || "generic", 50).toLowerCase();
     if(type === "career") type = "work";
+    if(type === "mutuo") type = "mutui";
+    if(type === "immobile") type = "immobili";
+    if(!Object.hasOwn(RATE_LIMITS, type)) type = "generic";
     source = clean(source || `${type}_page`, 150);
     funnel = clean(funnel || "unknown", 100);
     phone = clean(phone, 40);
@@ -176,6 +269,12 @@ export default async function handler(req, res){
         return res.status(200).json({ success:true, duplicate:true });
       }
     }
+
+    await consumeRateLimit({
+      ip: getClientIp(req),
+      email,
+      type
+    });
 
     const detectedLang = detectLang(req, ["it", "en"].includes(lang) ? lang : "");
     const displayCity = formatCity(city);
@@ -1003,6 +1102,15 @@ return res.status(200).json({
 });
 
 }catch(err){
+
+  if(err?.code === "RATE_LIMITED"){
+    res.setHeader("Retry-After", String(err.retryAfter || 3600));
+    res.setHeader("Cache-Control", "no-store");
+    return res.status(429).json({
+      error:"rate_limited",
+      retryAfter: err.retryAfter || 3600
+    });
+  }
 
   console.error("send-lead failed");
 
