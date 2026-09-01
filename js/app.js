@@ -3389,7 +3389,7 @@ if(mortgageBox && mortgageBtn){
         return;
       }
 
-      fetch("/api/send-lead-partner",{
+      fetch("/api/send-lead",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
