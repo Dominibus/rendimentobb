@@ -3329,9 +3329,16 @@ if(finalROI <= 0){
 
         body:JSON.stringify({
           email: userEmail,
+          name: window.currentUser?.displayName || "",
           lang: window.currentLang || "it",
           roi: finalROI,
-          city: market,
+          city: realCityInput || market,
+          price: propertyPrice,
+          equity: Number(equity || 0),
+          profit: Number(net || 0),
+          type: "analysis",
+          source: "roi_simulator",
+          funnel: "analysis_completed",
           leadScore
         })
       })
