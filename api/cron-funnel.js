@@ -4,6 +4,7 @@
 
 import { Resend } from "resend";
 import admin from "firebase-admin";
+import crypto from "node:crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -19,6 +20,21 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
+
+function hasValidCronAuthorization(req) {
+  const cronSecret = process.env.CRON_SECRET;
+  const authorization = req.headers.authorization;
+
+  if (!cronSecret || typeof authorization !== "string") {
+    return false;
+  }
+
+  const expected = Buffer.from(`Bearer ${cronSecret}`);
+  const received = Buffer.from(authorization);
+
+  return expected.length === received.length &&
+    crypto.timingSafeEqual(expected, received);
+}
 
 // ================= HELPERS =================
 const safe = n => isNaN(Number(n)) ? 0 : Number(n);
@@ -333,6 +349,15 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
 // ================= HANDLER =================
 export default async function handler(req, res){
 
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET");
+    return res.status(405).json({ success:false, error:"method_not_allowed" });
+  }
+
+  if (!hasValidCronAuthorization(req)) {
+    return res.status(401).json({ success:false, error:"unauthorized" });
+  }
+
   try{
 
     const now = Date.now();
@@ -436,12 +461,6 @@ https://rendimentobb.it/dashboard
 
           });
 
-          console.log(
-            "📩 FUNNEL SENT",
-            email,
-            step.type
-          );
-
           sentSteps.push(i);
 
           await db.collection("email_funnel").doc(doc.id).update({
@@ -458,11 +477,6 @@ https://rendimentobb.it/dashboard
         }
 
         catch(e){
-
-          console.error(
-            "❌ Funnel Error:",
-            e.message
-          );
 
           await db.collection("email_funnel").doc(doc.id).update({
 
@@ -490,11 +504,6 @@ https://rendimentobb.it/dashboard
   }
 
   catch(err){
-
-    console.error(
-      "💥 FUNNEL ERROR:",
-      err
-    );
 
     return res.status(500).json({
 
