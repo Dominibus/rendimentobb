@@ -15,22 +15,24 @@ const db = admin.firestore();
 export default async function handler(req, res){
 
   if (req.method !== "POST") {
-  res.setHeader("Allow", "POST");
+    res.setHeader("Allow", "POST");
 
-  return res.status(405).json({
-    error: "Method not allowed"
-  });
-}
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
+  }
 
   const adminKey = req.headers["x-admin-key"];
+  const configuredAdminKey = process.env.ADMIN_KEY;
 
-if (adminKey !== process.env.ADMIN_KEY) {
-  return res.status(401).json({
-    error: "Unauthorized"
-  });
-}
-  return res.status(401).json({ error:"unauthorized" });
-}
+  if (
+    !configuredAdminKey ||
+    adminKey !== configuredAdminKey
+  ) {
+    return res.status(401).json({
+      error: "Unauthorized"
+    });
+  }
 
   try{
 
