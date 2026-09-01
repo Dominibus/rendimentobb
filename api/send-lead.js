@@ -21,8 +21,33 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 // ================= HELPERS =================
-const safe = n => isNaN(Number(n)) ? 0 : Number(n);
-const clean = v => String(v || "").trim();
+const safe = n => {
+  const value = Number(n);
+  return Number.isFinite(value) ? value : 0;
+};
+
+const clean = (value, maxLength = 200) => String(value || "")
+  .replace(/[\u0000-\u001F\u007F]/g, " ")
+  .replace(/\s+/g, " ")
+  .trim()
+  .slice(0, maxLength);
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, safe(value)));
+
+function isValidEmail(value){
+  return value.length <= 254
+    && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>'"]/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    "'":"&#39;",
+    '"':"&quot;"
+  })[character]);
+}
 
 function detectLang(req, bodyLang){
   if(bodyLang) return bodyLang;
@@ -91,6 +116,11 @@ export default async function handler(req, res){
 
   try{
 
+    const bodySize = Buffer.byteLength(JSON.stringify(req.body || {}), "utf8");
+    if(bodySize > 20000){
+      return res.status(413).json({ error:"Payload too large" });
+    }
+
     let {
       email,
       city,
@@ -112,22 +142,41 @@ export default async function handler(req, res){
     } = req.body || {};
 
     // ================= CLEAN =================
-    email = clean(email);
-    city = clean(city || "N/A");
-    roi   = safe(roi);
-    price = safe(price);
-    equity = safe(equity);
-    profit = safe(profit);
-    type  = clean(type || "generic");
-    source = clean(source || `${type}_page`);
-    funnel = clean(funnel || "unknown");
+    email = clean(email, 254).toLowerCase();
+    city = clean(city || "N/A", 100);
+    roi = clamp(roi, -1000, 1000);
+    price = clamp(price, 0, 100000000);
+    equity = clamp(equity, 0, 100000000);
+    profit = clamp(profit, -100000000, 100000000);
+    type = clean(type || "generic", 50).toLowerCase();
+    if(type === "career") type = "work";
+    source = clean(source || `${type}_page`, 150);
+    funnel = clean(funnel || "unknown", 100);
+    phone = clean(phone, 40);
+    bank = clean(bank, 100);
+    rate = clean(rate, 20);
+    name = clean(name, 100);
+    role = clean(role, 100);
+    message = clean(message, 2000);
+    lang = clean(lang, 5).toLowerCase();
 
-    if(!email){
-      return res.status(400).json({ error:"Missing email" });
+    if(!isValidEmail(email)){
+      return res.status(400).json({ error:"Invalid email" });
     }
 
-    const detectedLang = detectLang(req, lang);
+    const detectedLang = detectLang(req, ["it", "en"].includes(lang) ? lang : "");
     const displayCity = formatCity(city);
+    const htmlEmail = escapeHTML(email);
+    const htmlCity = escapeHTML(displayCity);
+    const htmlName = escapeHTML(name);
+    const htmlPhone = escapeHTML(phone);
+    const htmlBank = escapeHTML(bank);
+    const htmlRate = escapeHTML(rate);
+    const htmlRole = escapeHTML(role);
+    const htmlMessage = escapeHTML(message);
+    const htmlSource = escapeHTML(source);
+    const htmlFunnel = escapeHTML(funnel);
+    const htmlType = escapeHTML(type.toUpperCase());
 
     // ================= CALCOLI =================
     const roiRounded = Number(roi.toFixed(1));
@@ -246,13 +295,9 @@ if(isExistingLead){
 
   });
 
-  console.log("✅ EMAIL FUNNEL CREATO");
-
 }
 
 // ================= EMAIL FUNNEL =================
-
-    console.log("🔥 EMAIL FUNNEL START");
 
 const funnelQuery = await db
 .collection("email_funnel")
@@ -261,10 +306,6 @@ const funnelQuery = await db
 .get();
 
 if(funnelQuery.empty){
-
-  console.log("🔥 CREO EMAIL FUNNEL:", email);
-
-  console.log("🔥 EMAIL FUNNEL DOES NOT EXIST");
 
   await db.collection("email_funnel").add({
 
@@ -302,9 +343,7 @@ if(funnelQuery.empty){
 
   });
 
-console.log("✅ EMAIL FUNNEL CREATED");
-  
-}    
+}
 
     // ================= USER EMAIL =================
 
@@ -689,7 +728,7 @@ border-radius:999px;
 font-weight:700;
 ">
 
-${type.toUpperCase()}
+${htmlType}
 
 </div>
 
@@ -721,26 +760,26 @@ style="border-collapse:collapse;width:100%;">
 
 <tr>
 <td><strong>📧 Email</strong></td>
-<td>${email}</td>
+<td>${htmlEmail}</td>
 </tr>
 
 ${name ? `
 <tr>
 <td><strong>👤 Nome</strong></td>
-<td>${name}</td>
+<td>${htmlName}</td>
 </tr>
 ` : ""}
 
 ${phone ? `
 <tr>
 <td><strong>📱 Telefono</strong></td>
-<td>${phone}</td>
+<td>${htmlPhone}</td>
 </tr>
 ` : ""}
 
 <tr>
 <td><strong>🏙 Città</strong></td>
-<td>${displayCity}</td>
+<td>${htmlCity}</td>
 </tr>
 
 <tr>
@@ -780,39 +819,39 @@ ${phone ? `
 
 <tr>
 <td><strong>🌍 Fonte</strong></td>
-<td>${source}</td>
+<td>${htmlSource}</td>
 </tr>
 
 <tr>
 <td><strong>🧭 Funnel</strong></td>
-<td>${funnel}</td>
+<td>${htmlFunnel}</td>
 </tr>
 
 ${bank ? `
 <tr>
 <td><strong>🏦 Banca</strong></td>
-<td>${bank}</td>
+<td>${htmlBank}</td>
 </tr>
 ` : ""}
 
 ${rate ? `
 <tr>
 <td><strong>📉 Tasso</strong></td>
-<td>${rate}%</td>
+<td>${htmlRate}%</td>
 </tr>
 ` : ""}
 
 ${role ? `
 <tr>
 <td><strong>💼 Ruolo</strong></td>
-<td>${role}</td>
+<td>${htmlRole}</td>
 </tr>
 ` : ""}
 
 ${message ? `
 <tr>
 <td><strong>💬 Messaggio</strong></td>
-<td>${message}</td>
+<td>${htmlMessage}</td>
 </tr>
 ` : ""}
 
@@ -826,7 +865,7 @@ flex-wrap:wrap;
 ">
 
 <a
-href="mailto:${email}"
+href="mailto:${encodeURIComponent(email)}"
 style="
 background:#10b981;
 color:white;
@@ -906,7 +945,7 @@ return res.status(200).json({
 
 }catch(err){
 
-  console.error("💥 ERROR:", err);
+  console.error("send-lead failed");
 
   return res.status(500).json({
     error:"internal"
