@@ -70,6 +70,13 @@
     best: [
       "migliore", "miglior", "piu conveniente", "piu redditizio", "rende di piu",
       "best", "most profitable"
+    ],
+    originalSimulation: [
+      "simulazione originale", "simulazione iniziale", "scenario originale",
+      "scenario iniziale", "dati originali", "dati iniziali", "scenario di partenza",
+      "simulazione di partenza", "baseline", "original simulation",
+      "initial simulation", "base simulation", "original scenario",
+      "initial scenario", "baseline data", "original data", "starting scenario"
     ]
   };
 
@@ -226,6 +233,10 @@
       add("education", 10, 99, "support");
     }
 
+    if(found("originalSimulation")){
+      add("simulation_summary", 10, 101, "analysis");
+    }
+
     if(found("market") && found("best")){
       add("best_city", 9, 94, "market");
     }
@@ -288,6 +299,7 @@
 
     const forcedIntents = new Set([
       "education",
+      "simulation_summary",
       "best_city",
       "market_comparison",
       "improvement_advisor",
