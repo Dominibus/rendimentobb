@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/img/favicon.png" type="image/png">
 
 <title
 data-it="Lavora con noi – RendimentoBB"
@@ -328,8 +329,6 @@ window.saveWork = async function(){
 
   try{
 
-    console.log("📡 SEND WORK LEAD...");
-
     const res = await fetch("/api/send-lead",{
       method:"POST",
       headers:{
@@ -351,13 +350,9 @@ window.saveWork = async function(){
       })
     });
 
-    const data = await res.json();
-
     if(!res.ok){
       throw new Error("API error");
     }
-
-    console.log("✅ WORK LEAD SENT:", data);
 
     document.getElementById("success").style.display="block";
 
@@ -366,9 +361,7 @@ window.saveWork = async function(){
     document.getElementById("email").value = "";
     document.getElementById("role").value = "";
 
-  }catch(err){
-
-    console.error("❌ WORK ERROR:", err);
+  }catch(_err){
 
     alert(
       t(
