@@ -34,6 +34,28 @@ function t(lang, it, en){
   return lang === "en" ? en : it;
 }
 
+function formatNumber(value, lang, maximumFractionDigits = 2){
+  return new Intl.NumberFormat(lang === "en" ? "en-US" : "it-IT", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits
+  }).format(safe(value));
+}
+
+function formatMoney(value, lang){
+  return new Intl.NumberFormat(lang === "en" ? "en-US" : "it-IT", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }).format(safe(value));
+}
+
+function formatCity(value){
+  return clean(value)
+    .toLocaleLowerCase("it-IT")
+    .replace(/(^|[\s'-])\p{L}/gu, letter => letter.toLocaleUpperCase("it-IT"));
+}
+
 // ================= SCORE INTELLIGENTE =================
 function getScore({roi, type}){
 
@@ -105,6 +127,7 @@ export default async function handler(req, res){
     }
 
     const detectedLang = detectLang(req, lang);
+    const displayCity = formatCity(city);
 
     // ================= CALCOLI =================
     const roiRounded = Number(roi.toFixed(1));
@@ -366,7 +389,7 @@ color:#64748b;
 margin-bottom:6px;
 ">
 
-ROI Stimato
+${t(detectedLang, "ROI stimato", "Estimated ROI")}
 
 </div>
 
@@ -376,7 +399,7 @@ font-weight:800;
 color:#10b981;
 ">
 
-${roiRounded}%
+${formatNumber(roiRounded, detectedLang, 1)}%
 
 </div>
 
@@ -415,7 +438,7 @@ font-weight:800;
 color:#0f172a;
 ">
 
-€${profit.toLocaleString()}
+${formatMoney(profit, detectedLang)}
 
 </div>
 
@@ -435,7 +458,7 @@ profit > 0
     "Profitto annuo stimato:",
     "Estimated yearly profit:"
   )}
-  <strong>€${profit.toLocaleString()}</strong>
+  <strong>${formatMoney(profit, detectedLang)}</strong>
 </p>
 `
 : ""
@@ -493,10 +516,10 @@ detectedLang,
 let subject = t(
   detectedLang,
   roiRounded > 0
-    ? `📈 Analisi completata • ROI ${roiRounded}%`
+    ? `📈 Analisi completata • ROI ${formatNumber(roiRounded, "it", 1)}%`
     : "📊 La tua analisi è pronta",
   roiRounded > 0
-    ? `📈 Analysis completed • ROI ${roiRounded}%`
+    ? `📈 Analysis completed • ROI ${formatNumber(roiRounded, "en", 1)}%`
     : "📊 Your analysis is ready"
 );
 if(type === "mutui"){
@@ -596,7 +619,7 @@ from:"RendimentoBB Lead <lead@rendimentobb.it>",
 to:["rendimentobb@gmail.com"],
 
 subject:
-`${leadTitle} | ${city} | ROI ${roiRounded}% | €${value} | ${type.toUpperCase()}`,
+`${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`,
 
 html:`
 
@@ -717,32 +740,32 @@ ${phone ? `
 
 <tr>
 <td><strong>🏙 Città</strong></td>
-<td>${city}</td>
+<td>${displayCity}</td>
 </tr>
 
 <tr>
 <td><strong>📈 ROI</strong></td>
-<td><strong>${roiRounded}%</strong></td>
+<td><strong>${formatNumber(roiRounded, "it", 1)}%</strong></td>
 </tr>
 
 <tr>
 <td><strong>💰 Profitto</strong></td>
-<td>€${profit.toLocaleString()}</td>
+<td>${formatMoney(profit, "it")}</td>
 </tr>
 
 <tr>
 <td><strong>🏦 Capitale</strong></td>
-<td>€${equity.toLocaleString()}</td>
+<td>${formatMoney(equity, "it")}</td>
 </tr>
 
 <tr>
 <td><strong>🏠 Prezzo immobile</strong></td>
-<td>€${price.toLocaleString()}</td>
+<td>${formatMoney(price, "it")}</td>
 </tr>
 
 <tr>
 <td><strong>💳 Mutuo</strong></td>
-<td>€${loan.toLocaleString()}</td>
+<td>${formatMoney(loan, "it")}</td>
 </tr>
 
 <tr>
