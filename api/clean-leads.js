@@ -1,56 +1,8 @@
-import admin from "firebase-admin";
+export default function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-    })
+  return res.status(410).json({
+    success: false,
+    error: "endpoint_disabled"
   });
-}
-
-const db = admin.firestore();
-
-export default async function handler(req, res){
-
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
-  }
-
-  const adminKey = req.headers["x-admin-key"];
-  const configuredAdminKey = process.env.ADMIN_KEY;
-
-  if (
-    !configuredAdminKey ||
-    adminKey !== configuredAdminKey
-  ) {
-    return res.status(401).json({
-      error: "Unauthorized"
-    });
-  }
-
-  try{
-
-    const snapshot = await db.collection("leads").get();
-
-    const batch = db.batch();
-
-    snapshot.docs.forEach(doc => {
-      batch.delete(doc.ref);
-    });
-
-    await batch.commit();
-
-    res.status(200).json({ success:true, deleted: snapshot.size });
-
-  }catch(e){
-    console.error(e);
-    res.status(500).json({ error:"fail" });
-  }
-
 }
