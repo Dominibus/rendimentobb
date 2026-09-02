@@ -11918,6 +11918,12 @@ ${executiveBrief}
 
 }
 
+document.addEventListener("rb_language_changed", () => {
+  if(window.rbPMSData){
+    renderExecutiveSummary(window.rbPMSData);
+  }
+});
+
 // =====================================
 // 🏨 PMS TABS
 // =====================================
