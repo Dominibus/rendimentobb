@@ -7205,8 +7205,8 @@ margin-bottom:10px;
 ">
 
 💡 ${window.t(
-"Executive Insight",
-"Executive Insight"
+"Sintesi strategica",
+"Executive insight"
 )}
 
 </div>
@@ -11613,7 +11613,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-LTV / equity analysis
+${t("Analisi LTV / capitale proprio","LTV / equity analysis")}
 
 </div>
 
@@ -11672,7 +11672,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-Rome vs Milan vs Naples
+${t("Roma vs Milano vs Napoli","Rome vs Milan vs Naples")}
 
 </div>
 
@@ -11731,7 +11731,7 @@ white-space:normal;
 word-break:break-word;
 ">
 
-Executive PDF
+${t("PDF Executive","Executive PDF")}
 
 </div>
 
@@ -11898,8 +11898,8 @@ color:#e2e8f0;
 <strong>
 
 ${t(
-"Executive Insight",
-"Executive Insight"
+"Sintesi strategica",
+"Executive insight"
 )}
 
 </strong>
