@@ -8417,8 +8417,11 @@ window.showRegisterPopup = function(){
   // 🔥 blocca scroll
   document.body.style.overflow = "hidden";
 
-  // 🔥 BLOCCA HEADER / MENU
-document.body.classList.add("popup-open");
+  // 🔥 BLOCCA HEADER / MENU E RENDE VISIBILE IL POPUP
+  document.body.classList.add(
+    "popup-open",
+    "rb-ui-popup-open"
+  );
 
   // 🔥 click fuori = chiudi
   popup.querySelector(".popup-overlay").onclick = (e) => {
@@ -8441,8 +8444,11 @@ window.closeRegisterPopup = function(){
 
   document.body.style.overflow = "";
 
-  // 🔥 SBLOCCA HEADER / MENU (QUESTA MANCAVA)
-  document.body.classList.remove("popup-open");
+  // 🔥 SBLOCCA HEADER / MENU E RIPRISTINA LA PAGINA
+  document.body.classList.remove(
+    "popup-open",
+    "rb-ui-popup-open"
+  );
 
   // 🔥 opzionale: reset stato
   window.isCalculating = false;
