@@ -8372,9 +8372,6 @@ window.showRegisterPopup = function(){
 
   if(document.getElementById("register-popup")) return;
 
-  if(sessionStorage.getItem("registerPopupShown")) return;
-  sessionStorage.setItem("registerPopupShown", "true");
-
   const popup = document.createElement("div");
   popup.id = "register-popup";
 
