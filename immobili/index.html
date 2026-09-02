@@ -1359,11 +1359,11 @@ color:#059669;
 font-weight:600;
 ">
 
-🤖 <span
-data-it="Assistente AI per la ricerca immobili attivo"
-data-en="AI Property Search Assistant active">
+<span
+data-it="Simulatore di scenari immobiliari"
+data-en="Property scenario simulator">
 
-Assistente AI per la ricerca immobili attivo
+Simulatore di scenari immobiliari
 
 </span>
 
@@ -1375,10 +1375,10 @@ Assistente AI per la ricerca immobili attivo
 id="search-properties-btn"
 onclick="searchProperties()"
 class="btn btn-primary"
-data-it="🤖 Trova il miglior immobile"
-data-en="🤖 Find the best property">
+data-it="Confronta scenari indicativi"
+data-en="Compare indicative scenarios">
 
-🤖 Trova il miglior immobile
+Confronta scenari indicativi
 
 </button>
 
@@ -1407,11 +1407,11 @@ font-size:12px;
 color:#64748b;
 "
 
-data-it="✔ Dati di mercato reali • ✔ ROI AI stimato • ✔ Analisi completa in meno di 30 secondi"
+data-it="Valori simulati a scopo orientativo: non sono annunci né dati in tempo reale. Verifica sempre prezzi e disponibilità sui portali immobiliari."
 
-data-en="✔ Real market data • ✔ AI estimated ROI • ✔ Complete analysis in under 30 seconds">
+data-en="Simulated values for guidance only: these are not listings or live market data. Always verify prices and availability on property portals.">
 
-✔ Dati di mercato reali • ✔ ROI AI stimato • ✔ Analisi completa in meno di 30 secondi
+Valori simulati a scopo orientativo: non sono annunci né dati in tempo reale. Verifica sempre prezzi e disponibilità sui portali immobiliari.
 
 </div>
 
@@ -2027,8 +2027,6 @@ await response.json();
 const results =
 data.results || [];
 
-console.table(results);
-
 if(!results.length){
 
 container.innerHTML = `
@@ -2102,15 +2100,9 @@ Math.max(
 Number(first.roi) - 2
 ),
 
-portal:
-first.portal === "Immobiliare.it"
-? "Idealista"
-: "Immobiliare.it",
+portal: window.currentLang === "en" ? "Scenario 2" : "Scenario 2",
 
-url:
-first.portal === "Immobiliare.it"
-? "https://www.idealista.it/"
-: first.url
+url: ""
 
 };  
 
@@ -2236,10 +2228,10 @@ font-weight:700;
 color:#10b981;
 ">
 
-🤖 ${
+${
 window.currentLang==="en"
-? "AI Investment Grade"
-: "Valutazione AI"
+? "Indicative assessment"
+: "Valutazione indicativa"
 }
 
 <div style="
@@ -2253,8 +2245,8 @@ line-height:1.6;
 
 💰 ${
 window.currentLang==="en"
-? "Monthly Cashflow"
-: "Cashflow Mensile"
+? "Estimated monthly cashflow"
+: "Cashflow mensile stimato"
 }
 
 <br>
@@ -2271,8 +2263,8 @@ window.currentLang==="en"
 
 🛡 ${
 window.currentLang==="en"
-? "Risk"
-: "Rischio"
+? "Indicative risk"
+: "Rischio indicativo"
 }
 
 <br>
@@ -2316,8 +2308,8 @@ color:#10b981;
 ">
 
 ${window.currentLang==="en"
-? "Excellent Investment"
-: "Investimento Eccellente"}
+? "Indicative scenario score"
+: "Punteggio indicativo dello scenario"}
 
 </div>
 
@@ -2334,17 +2326,17 @@ ${
 window.currentLang==="en"
 ? (
 roi >= 16
-? "Strong profitability and tourism demand."
+? "Scenario with a comparatively high estimated return."
 : roi >= 12
-? "Balanced investment with stable revenue."
-: "Long-term growth opportunity."
+? "Scenario with a balanced estimated return."
+: "Scenario focused on potential long-term growth."
 )
 : (
 roi >= 16
-? "Alta redditività e forte domanda turistica."
+? "Scenario con rendimento stimato comparativamente elevato."
 : roi >= 12
-? "Investimento equilibrato con ricavi stabili."
-: "Opportunità di crescita nel lungo periodo."
+? "Scenario con rendimento stimato equilibrato."
+: "Scenario orientato alla possibile crescita nel lungo periodo."
 )
 }
 
@@ -2358,10 +2350,10 @@ color:#64748b;
 
 ${
 roi >= 16
-? "🏆 High Profit Potential"
+? (window.currentLang==="en" ? "High estimated return" : "Rendimento stimato elevato")
 : roi >= 12
-? "🛡 Balanced Investment"
-: "📈 Long Term Opportunity"
+? (window.currentLang==="en" ? "Balanced estimated return" : "Rendimento stimato equilibrato")
+: (window.currentLang==="en" ? "Long-term scenario" : "Scenario di lungo periodo")
 }
 
 </div>
@@ -2377,7 +2369,7 @@ color:#2563eb;
 margin-top:10px;
 ">
 
-🏠 ${portal}
+${portal}
 
 </div>
 
@@ -2387,18 +2379,13 @@ gap:10px;
 margin-top:16px;
 ">
 
-<a
+${url ? `<a
 href="${url}"
 target="_blank"
+rel="noopener noreferrer"
 class="btn btn-primary"
 style="flex:1;text-align:center"
->
-
-${window.currentLang==="en"
-? "Open Listing"
-: "Apri annuncio"}
-
-</a>
+>${window.currentLang==="en" ? "Open source" : "Apri fonte"}</a>` : ""}
 
 <button
 onclick="openInvestment(
