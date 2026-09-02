@@ -181,8 +181,12 @@ Guide
           <button data-lang="en">EN</button>
         </div>
 
-        <button id="rb-header-ai-btn" class="rb-header-ai-btn">
-        ✨ AI
+        <button
+        id="rb-header-ai-btn"
+        class="rb-header-ai-btn"
+        data-it="Assistente"
+        data-en="Assistant">
+        Assistente
         </button>
 
         <div id="user-area"></div>
@@ -685,8 +689,10 @@ class="dashboard-label">
   <a href="/about/" data-it="Chi siamo" data-en="About">Chi siamo</a>
   <a href="#"
   id="mobile-ai-btn"
-class="mobile-cta">
-✨ AI Assistant
+class="mobile-cta"
+data-it="Assistente RendimentoBB"
+data-en="RendimentoBB Assistant">
+Assistente RendimentoBB
 </a>
 
   <hr>
@@ -873,9 +879,9 @@ document.getElementById("logout").onclick = async ()=>{
     href="#"
     id="mobile-ai-btn"
     class="mobile-cta"
-    data-it="✨ AI Assistant"
-    data-en="✨ AI Assistant">
-    ✨ AI Assistant
+    data-it="Assistente RendimentoBB"
+    data-en="RendimentoBB Assistant">
+    Assistente RendimentoBB
   </a>
 
   <hr>
