@@ -61,7 +61,7 @@ function calculateScore({roi, type}){
   }
 
   if(type === "immobili"){
-    return { score:"deal", value:50 };
+    return { score:"property_updates", value:0 };
   }
 
   if(roi >= 20) return { score:"extreme", value:150 };
