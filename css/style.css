@@ -15815,6 +15815,27 @@ body.rb-ui-popup-open #register-popup{
   animation:popupFade 0.25s ease;
 }
 
+#register-popup .popup-box h3{
+  color:#0f172a;
+  margin:0 0 12px;
+}
+
+#register-popup .popup-box p{
+  color:#475569;
+  margin:0 0 18px;
+}
+
+#register-popup .popup-small{
+  color:#64748b;
+  margin:14px 0 8px;
+}
+
+#register-popup .btn-outline{
+  color:#0f172a;
+  border-color:#cbd5e1;
+  background:#ffffff;
+}
+
 /* animazione pulita */
 @keyframes popupFade{
   from{
