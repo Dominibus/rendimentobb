@@ -177,6 +177,12 @@ border-left:4px solid #059669;
 padding-left:12px;
 }
 
+.lead.mutui{
+background:#f0f9ff;
+border-left:4px solid #0369a1;
+padding-left:12px;
+}
+
 .lead:last-child{
 border:none;
 }
@@ -298,6 +304,7 @@ Priorità, valore potenziale e provenienza dei lead
     <button data-filter="work" data-it="Candidature" data-en="Applications">Candidature</button>
     <button data-filter="auth" data-it="Registrazioni" data-en="Registrations">Registrazioni</button>
     <button data-filter="immobili" data-it="Aggiornamenti immobiliari" data-en="Property updates">Aggiornamenti immobiliari</button>
+    <button data-filter="mutui" data-it="Richieste mutuo" data-en="Mortgage requests">Richieste mutuo</button>
   </div>
 
   <div id="leadList" class="loader">Caricamento...</div>
@@ -379,7 +386,7 @@ function getLeadType(lead){
 }
 
 function isOperationalLead(lead){
-  return ["immobili", "partner", "work", "auth"].includes(getLeadType(lead));
+  return ["immobili", "mutui", "partner", "work", "auth"].includes(getLeadType(lead));
 }
 
 let currentFilter = "all";
@@ -443,7 +450,7 @@ function render(){
       const operational = isOperationalLead(l);
       return currentFilter === "all" ||
         (currentFilter === "priority" && !operational && ["extreme", "hot"].includes(score)) ||
-        (["immobili", "partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
+        (["immobili", "mutui", "partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
         (!operational && score === currentFilter);
     })
     .slice(0,50);
@@ -480,6 +487,7 @@ function render(){
       type === "work" ? "#2563eb" :
       type === "auth" ? "#7c3aed" :
       type === "immobili" ? "#059669" :
+      type === "mutui" ? "#0369a1" :
       score === "extreme" ? "#f97316" :
       score === "hot" ? "#10b981" :
       score === "warm" ? "#f59e0b" :
@@ -493,6 +501,8 @@ function render(){
           ? translate("REGISTRATO", "REGISTERED")
         : type === "immobili"
           ? translate("AGGIORNAMENTI", "UPDATES")
+        : type === "mutui"
+          ? translate("RICHIESTA MUTUO", "MORTGAGE REQUEST")
         : score.toUpperCase();
 
     const metaText = type === "partner"
@@ -503,6 +513,8 @@ function render(){
           ? `${translate("Registrazione", "Registration")} • ${d.role || translate("Profilo non indicato", "Profile not provided")}`
         : type === "immobili"
           ? `${translate("Aggiornamenti immobiliari", "Property updates")} • ${formatCity(d.city)}`
+        : type === "mutui"
+          ? `${translate("Richiesta mutuo", "Mortgage request")} • ${formatCurrency(d.price)}${Number(d.years || 0) > 0 ? ` • ${Number(d.years)} ${translate("anni", "years")}` : ""}${d.rate ? ` • ${d.rate}%` : ""}`
         : `${type} • ${formatCity(d.city)} • ROI ${roi}%`;
 
     listEl.innerHTML += `
