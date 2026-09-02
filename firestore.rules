@@ -1,0 +1,157 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email == "rendimentobb@gmail.com";
+    }
+
+    match /users/{userId} {
+      function isOwner() {
+        return isSignedIn() && request.auth.uid == userId;
+      }
+
+      function protectedUserFields() {
+        return [
+          "email",
+          "plan",
+          "role",
+          "isAdmin",
+          "stripeSession",
+          "stripeSessionId",
+          "stripeCustomerId",
+          "customerId",
+          "subscription",
+          "subscriptionId",
+          "subscriptionStatus",
+          "priceId",
+          "currentPeriodEnd"
+        ];
+      }
+
+      allow create: if isOwner()
+        && request.resource.data.email is string
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.plan is string
+        && request.resource.data.role is string
+        && (
+          (
+            !isAdmin()
+            && request.resource.data.plan == "free"
+            && request.resource.data.role != "admin"
+          )
+          ||
+          (
+            isAdmin()
+            && request.resource.data.plan == "pro"
+            && request.resource.data.role == "admin"
+          )
+        );
+
+      allow read: if isOwner();
+
+      allow update: if isOwner()
+        && !request.resource.data
+          .diff(resource.data)
+          .affectedKeys()
+          .hasAny(protectedUserFields());
+
+      allow delete: if false;
+    }
+
+    match /analyses/{analysisId} {
+      allow create: if isSignedIn()
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid;
+
+      allow read: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid;
+
+      allow update: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid;
+
+      allow delete: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid;
+    }
+
+    match /properties/{propertyId} {
+      allow create: if isSignedIn()
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid;
+
+      allow read: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid;
+
+      allow update: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid;
+
+      allow delete: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid;
+    }
+
+    match /bookings/{bookingId} {
+      allow create: if isSignedIn()
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid;
+
+      allow read: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid;
+
+      allow update: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid;
+
+      allow delete: if isSignedIn()
+        && resource.data.uid is string
+        && resource.data.uid == request.auth.uid;
+    }
+
+    match /leads/{docId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /leads_mutui/{docId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /leads_immobili/{docId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /leads_partner/{docId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /leads_work/{docId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
