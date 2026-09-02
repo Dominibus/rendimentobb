@@ -2290,6 +2290,11 @@ async function saveLeadFromBank(bank, rate){
   type: "mutui",
   email,
   phone,
+  price: parseFloat(document.getElementById("amount").value || 0),
+  years: parseFloat(document.getElementById("years").value || 0),
+  rate,
+  bank,
+  lang: window.currentLang || "it",
 
   source: "mutui_page",
   funnel: window.currentPlan || "free"
@@ -2361,7 +2366,10 @@ async function saveLead(){
     equity: 0,
     profit: 0,
     years: parseFloat(document.getElementById("years").value || 0),
-    lang: window.currentLang || "it"
+    rate: parseFloat(String(document.getElementById("rate").value || 0).replace("%", "").replace(",", ".")),
+    lang: window.currentLang || "it",
+    source: "mutui_page",
+    funnel: window.currentPlan || "free"
   })
 });
 
