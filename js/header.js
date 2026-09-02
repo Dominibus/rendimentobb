@@ -183,10 +183,15 @@ Guide
 
         <button
         id="rb-header-ai-btn"
-        class="rb-header-ai-btn"
-        data-it="Assistente"
-        data-en="Assistant">
-        Assistente
+        class="rb-header-ai-btn">
+          <span
+          class="rb-assistant-label-desktop"
+          data-it="Assistente"
+          data-en="Assistant">Assistente</span>
+          <span
+          class="rb-assistant-label-mobile"
+          data-it="Aiuto"
+          data-en="Help">Aiuto</span>
         </button>
 
         <div id="user-area"></div>
