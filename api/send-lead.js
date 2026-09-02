@@ -187,6 +187,10 @@ function getScore({roi, type}){
     return { score:"property_updates", value:0, label:"🏠 PROPERTY UPDATES" };
   }
 
+  if(type === "mutui"){
+    return { score:"mortgage_request", value:0, label:"🏦 MORTGAGE REQUEST" };
+  }
+
   if(roi >= 20){
     return { score:"extreme", value:150, label:"🔥 EXTREME" };
   }
@@ -231,6 +235,7 @@ export default async function handler(req, res){
       phone,
       bank,
       rate,
+      years,
       name,
       role,
       message,
@@ -254,6 +259,7 @@ export default async function handler(req, res){
     phone = clean(phone, 40);
     bank = clean(bank, 100);
     rate = clean(rate, 20);
+    years = clamp(years, 0, 50);
     name = clean(name, 100);
     role = clean(role, 100);
     message = clean(message, 2000);
@@ -351,6 +357,7 @@ const leadPayload = {
   phone: clean(phone || ""),
 bank: clean(bank || ""),
 rate: clean(rate || ""),
+years,
 name: clean(name || ""),
 role: clean(role || ""),
 message: clean(message || ""),
@@ -422,7 +429,7 @@ if(isExistingLead){
 
 // Property-update requests have their own confirmation email and must not enter
 // the generic investment-analysis reminder sequence.
-if(!["immobili", "partner", "work", "auth"].includes(type)){
+if(!["immobili", "mutui", "partner", "work", "auth"].includes(type)){
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -480,10 +487,17 @@ let userDescription = t(
   "La tua simulazione è stata completata con successo. Di seguito trovi il primo riepilogo dei risultati ottenuti.",
   "Your simulation has been successfully completed. Below is a summary of your investment analysis."
 );
-const showInvestmentResults = !["immobili", "partner", "work", "auth"].includes(type);
+const showInvestmentResults = !["immobili", "mutui", "partner", "work", "auth"].includes(type);
 
 if(type === "mutui"){
   cta = "https://rendimentobb.it/mutui/";
+  ctaLabel = t(detectedLang, "Rivedi la simulazione", "Review simulation");
+  userHeading = t(detectedLang, "🏦 Richiesta mutuo ricevuta", "🏦 Mortgage request received");
+  userDescription = t(
+    detectedLang,
+    "Abbiamo registrato la tua richiesta di approfondimento. I risultati della simulazione sono indicativi: condizioni, costi e approvazione dipendono dall'intermediario finanziario scelto.",
+    "We received your follow-up request. Simulation results are indicative: terms, costs and approval depend on the selected financial intermediary."
+  );
 }
 
 if(type === "immobili"){
@@ -554,9 +568,7 @@ border:1px solid #e2e8f0;
     margin-bottom:10px;
     ">
 
-      ${type === "mutui"
-        ? "🏦 " + t(detectedLang,"Richiesta mutuo analizzata","Mortgage request analyzed")
-        : userHeading}
+      ${userHeading}
 
     </div>
 
@@ -804,7 +816,8 @@ const isPartnerLead = type === "partner";
 const isWorkLead = type === "work";
 const isAuthLead = type === "auth";
 const isPropertyUpdatesLead = type === "immobili";
-const isOperationalLead = isPartnerLead || isWorkLead || isAuthLead || isPropertyUpdatesLead;
+const isMortgageLead = type === "mutui";
+const isOperationalLead = isPartnerLead || isWorkLead || isAuthLead || isPropertyUpdatesLead || isMortgageLead;
 
 const leadColor =
 isPartnerLead
@@ -818,6 +831,9 @@ isPartnerLead
 
 : isPropertyUpdatesLead
 ? "#059669"
+
+: isMortgageLead
+? "#0369a1"
 
 : score === "extreme"
 ? "#10b981"
@@ -843,6 +859,9 @@ isPartnerLead
 : isPropertyUpdatesLead
 ? "🏠 AGGIORNAMENTI IMMOBILIARI"
 
+: isMortgageLead
+? "🏦 RICHIESTA MUTUO"
+
 : score === "extreme"
 ? "🔥 EXTREME LEAD"
 
@@ -862,6 +881,8 @@ const adminSubject = isPartnerLead
       ? `✅ REGISTRAZIONE | ${name || email}${role ? ` | ${role}` : ""}`
       : isPropertyUpdatesLead
         ? `🏠 RICHIESTA AGGIORNAMENTI IMMOBILIARI | ${displayCity}`
+      : isMortgageLead
+        ? `🏦 RICHIESTA MUTUO | ${price > 0 ? formatMoney(price, "it") : "IMPORTO NON INDICATO"} | ${email}`
     : `${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`;
 
 const adminSuggestion = isPartnerLead
@@ -872,6 +893,8 @@ const adminSuggestion = isPartnerLead
       ? "Nuovo account creato. Monitorare l'attivazione del simulatore e le successive interazioni nel funnel."
     : isPropertyUpdatesLead
       ? "Richiesta informativa registrata. Inviare esclusivamente aggiornamenti pertinenti alla città indicata e mantenere chiaramente distinti dati indicativi e offerte reali."
+    : isMortgageLead
+      ? "Richiesta di approfondimento registrata. Verificare i dati inseriti senza presentare la simulazione come preventivo, offerta o approvazione del finanziamento."
     : score === "extreme"
       ? "🔥 Lead ad altissima priorità. Contattare entro 30 minuti. Probabilità di conversione molto elevata."
       : score === "hot"
@@ -1010,6 +1033,19 @@ ${isPropertyUpdatesLead ? `<tr>
 <td>${htmlCity}</td>
 </tr>` : ""}
 
+${isMortgageLead ? `<tr>
+<td><strong>💶 Importo richiesto</strong></td>
+<td>${formatMoney(price, "it")}</td>
+</tr>
+<tr>
+<td><strong>📅 Durata</strong></td>
+<td>${years > 0 ? `${formatNumber(years, "it", 0)} anni` : "Non indicata"}</td>
+</tr>
+<tr>
+<td><strong>📉 Tasso simulato</strong></td>
+<td>${htmlRate ? `${htmlRate}%` : "Non indicato"}</td>
+</tr>` : ""}
+
 ${!isOperationalLead ? `<tr>
 <td><strong>🏙 Città</strong></td>
 <td>${htmlCity}</td>
@@ -1045,7 +1081,7 @@ ${!isOperationalLead ? `<tr>
 <td>${dscr.toFixed(2)}</td>
 </tr>` : ""}
 
-${!isPropertyUpdatesLead ? `<tr>
+${!isPropertyUpdatesLead && !isMortgageLead ? `<tr>
 <td><strong>🎯 Lead Score</strong></td>
 <td>${label}</td>
 </tr>` : ""}
@@ -1062,12 +1098,12 @@ ${!isPropertyUpdatesLead ? `<tr>
 
 ${bank ? `
 <tr>
-<td><strong>🏦 Banca</strong></td>
+<td><strong>🏦 ${isMortgageLead ? "Scenario" : "Banca"}</strong></td>
 <td>${htmlBank}</td>
 </tr>
 ` : ""}
 
-${rate ? `
+${rate && !isMortgageLead ? `
 <tr>
 <td><strong>📉 Tasso</strong></td>
 <td>${htmlRate}%</td>
