@@ -68,8 +68,8 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
     );
 
     subtitle = tLocal(
-      "La nostra AI ha individuato dati che la maggior parte degli investitori non vede.",
-      "Our AI detected insights that most investors completely miss."
+      "L'analisi evidenzia gli indicatori che incidono davvero sulla sostenibilità dell'investimento.",
+      "The analysis highlights the indicators that truly affect the investment's sustainability."
     );
 
     urgency =
@@ -99,10 +99,10 @@ function buildFunnelEmail({ roi, city, lang, stepType }){
     );
 
     urgency =
-      "🚀 " +
+      "📊 " +
       tLocal(
-        "Oltre 1.200 investitori utilizzano già questi dati",
-        "Over 1,200 investors already use these insights"
+        "Approfondisci cashflow, rischio e sostenibilità",
+        "Explore cash flow, risk and sustainability"
       );
 
     warning = tLocal(
