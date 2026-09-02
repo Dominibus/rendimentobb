@@ -3677,8 +3677,8 @@ function showGuestPopup(){
       <!-- 💬 SUB -->
       <p style="color:#64748b;font-size:14px;margin-bottom:20px;line-height:1.5">
         ${t(
-        "Il 72% degli investitori B&B perde soldi. Scopri se il tuo investimento è davvero profittevole.",
-        "72% of B&B investors lose money. Find out if your investment is actually profitable."
+        "Accedi per salvare le analisi, confrontare gli scenari e consultare i risultati nella dashboard.",
+        "Sign in to save analyses, compare scenarios and review results in your dashboard."
         )}
       </p>
 
@@ -3850,8 +3850,8 @@ function showInvestorOverlay(){
       line-height:1.5;
     ">
       ${t(
-        "Il 72% degli investitori perde soldi proprio qui.",
-        "72% of investors lose money at this exact step."
+        "Valuta tutti i dati disponibili prima di prendere una decisione di investimento.",
+        "Review all available data before making an investment decision."
       )}
     </p>
 
