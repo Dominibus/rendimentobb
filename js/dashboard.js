@@ -1205,10 +1205,22 @@ loadDashboard();
 roiValues = [];
 labels = [];
 
-let totalROI = 0;
-let totalCapital = 0;
-let count = 0;
-let totalCashflow = 0;
+const count = analyses.length;
+
+const totalROI = analyses.reduce(
+  (sum, data) => sum + Number(data.roi || 0),
+  0
+);
+
+const totalCapital = analyses.reduce(
+  (sum, data) => sum + Number(data.price || 0),
+  0
+);
+
+const totalCashflow = analyses.reduce(
+  (sum, data) => sum + Number(data.net || 0),
+  0
+);
 
 // ================= SORT =================
 
@@ -1264,11 +1276,6 @@ const visibleAnalyses =
 
     const yearlyProfit =
   Number(data.net || 0);
-
-    totalROI += roi;
-    totalCapital += price;
-    totalCashflow += yearlyProfit;   
-    count++;
 
     const roiClass = roi >= 0 ? "roi-positive" : "roi-negative";
 
@@ -1881,7 +1888,7 @@ const marketROI = cityMarket.roi;
 const trend = avgROI >= marketROI ? "↑" : "↓";
 
 // ================= CALCOLI =================
-const monthlyProfit = avgCashflow;
+const monthlyProfit = avgCashflow / 12;
 const yearlyProfit = totalCashflow;
 
 let breakEvenYears = "-";
