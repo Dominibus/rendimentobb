@@ -368,7 +368,7 @@ box-shadow:
 
   font-size:13px;
 
-  color:#64748b;
+  color:#475569;
 
   line-height:1.5;
 
@@ -813,7 +813,7 @@ max-width:760px;
 margin:auto;
 font-size:16px;
 line-height:1.9;
-color:#64748b;
+color:#475569;
 "
 
 data-it="Analisi indicativa della sostenibilità del mutuo, dell'impatto su ROI e cashflow e confronto tra diversi scenari di finanziamento."
@@ -980,7 +980,7 @@ Rata mensile
 <div
 style="
 font-size:13px;
-color:#94a3b8;
+color:#475569;
 margin-top:6px;
 ">
 
@@ -1033,7 +1033,7 @@ Costo annuale
 <div
 style="
 font-size:13px;
-color:#94a3b8;
+color:#475569;
 margin-top:6px;
 ">
 
@@ -1086,7 +1086,7 @@ Impatto sul ROI
 <div
 style="
 font-size:13px;
-color:#94a3b8;
+color:#475569;
 margin-top:6px;
 ">
 
@@ -1139,7 +1139,7 @@ Investment Score
 <div
 style="
 font-size:13px;
-color:#94a3b8;
+color:#475569;
 margin-top:6px;
 ">
 
@@ -1261,7 +1261,7 @@ max-width:760px;
 margin:auto;
 font-size:16px;
 line-height:1.8;
-color:#64748b;
+color:#475569;
 ">
 
 <span
@@ -1334,7 +1334,7 @@ style="
 max-width:720px;
 margin:18px auto 35px;
 line-height:1.8;
-color:#64748b;
+color:#475569;
 ">
 
 <span
@@ -1571,7 +1571,7 @@ return (window.currentLang === "en") ? en : it;
 }
 
 /* ================= CALCOLO ================= */
-function calculate(){
+function calculate(options = {}){
 
 // Production: nessun log
   
@@ -1639,9 +1639,11 @@ document.getElementById("impact").innerText =
 document.getElementById("score").innerText =
 lockValue(score,"/100");
   
-document.querySelector(".lead-box").scrollIntoView({
-  behavior:"smooth"
-});  
+if(options.scroll !== false){
+  document.querySelector(".lead-box").scrollIntoView({
+    behavior:"smooth"
+  });
+}
 
 /* ===== EXTRA ===== */
 renderExtra(roi, yearly);
@@ -1804,7 +1806,7 @@ box.innerHTML = `
 ${verdict}
 </div>
 
-<div style="margin-top:10px;text-align:center;color:#64748b">
+<div style="margin-top:10px;text-align:center;color:#475569">
 ${t(
   "Valutazione indicativa basata sui dati inseriti",
   "Indicative assessment based on your inputs"
@@ -1876,7 +1878,7 @@ ${advice}
 <div style="
 margin-top:10px;
 font-size:13px;
-color:#94a3b8;
+color:#475569;
 line-height:1.7;
 ">
 
@@ -1884,7 +1886,7 @@ line-height:1.7;
 style="
 margin-bottom:10px;
 font-weight:600;
-color:#cbd5e1;
+color:#334155;
 ">
 
 ${t(
@@ -2081,7 +2083,7 @@ window.currentLang==="en"
 
 ` : ""}
 
-<div style="font-size:13px;color:#64748b;margin-bottom:10px">
+<div style="font-size:13px;color:#475569;margin-bottom:10px">
   ${t("Tasso fisso medio","Average fixed rate")}
 </div>
 
@@ -2404,7 +2406,7 @@ t(
 <div style="
 margin-top:10px;
 font-size:14px;
-color:#64748b;
+color:#475569;
 ">
 
 ${t(
@@ -2437,6 +2439,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }else{
     
   }
+
+  document.addEventListener("rb_language_changed", () => {
+    const resultsVisible = document.getElementById("roi-alert")?.style.display === "block";
+    if(resultsVisible){
+      calculate({ scroll:false });
+    }
+  });
 
 });
   
