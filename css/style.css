@@ -18112,6 +18112,20 @@ transform:translateY(-2px);
 
 }
 
+.rb-assistant-label-mobile{
+  display:none;
+}
+
+@media screen and (max-width:768px){
+  .rb-assistant-label-desktop{
+    display:none;
+  }
+
+  .rb-assistant-label-mobile{
+    display:inline;
+  }
+}
+
 .rb-header-ai-btn:hover{
 
   transform:translateY(-1px);
