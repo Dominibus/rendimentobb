@@ -171,6 +171,12 @@ border-left:4px solid #7c3aed;
 padding-left:12px;
 }
 
+.lead.immobili{
+background:#ecfdf5;
+border-left:4px solid #059669;
+padding-left:12px;
+}
+
 .lead:last-child{
 border:none;
 }
@@ -291,6 +297,7 @@ Priorità, valore potenziale e provenienza dei lead
     <button data-filter="partner" data-it="Partner" data-en="Partner">Partner</button>
     <button data-filter="work" data-it="Candidature" data-en="Applications">Candidature</button>
     <button data-filter="auth" data-it="Registrazioni" data-en="Registrations">Registrazioni</button>
+    <button data-filter="immobili" data-it="Aggiornamenti immobiliari" data-en="Property updates">Aggiornamenti immobiliari</button>
   </div>
 
   <div id="leadList" class="loader">Caricamento...</div>
@@ -372,7 +379,7 @@ function getLeadType(lead){
 }
 
 function isOperationalLead(lead){
-  return ["partner", "work", "auth"].includes(getLeadType(lead));
+  return ["immobili", "partner", "work", "auth"].includes(getLeadType(lead));
 }
 
 let currentFilter = "all";
@@ -435,7 +442,7 @@ function render(){
       const type = getLeadType(l);
       return currentFilter === "all" ||
         (currentFilter === "priority" && ["extreme", "hot"].includes(score)) ||
-        (["partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
+        (["immobili", "partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
         score === currentFilter;
     })
     .slice(0,50);
@@ -471,6 +478,7 @@ function render(){
       type === "partner" ? "#0f766e" :
       type === "work" ? "#2563eb" :
       type === "auth" ? "#7c3aed" :
+      type === "immobili" ? "#059669" :
       score === "extreme" ? "#f97316" :
       score === "hot" ? "#10b981" :
       score === "warm" ? "#f59e0b" :
@@ -482,6 +490,8 @@ function render(){
         ? translate("CANDIDATO", "APPLICANT")
         : type === "auth"
           ? translate("REGISTRATO", "REGISTERED")
+        : type === "immobili"
+          ? translate("AGGIORNAMENTI", "UPDATES")
         : score.toUpperCase();
 
     const metaText = type === "partner"
@@ -490,6 +500,8 @@ function render(){
         ? `${translate("Candidatura", "Application")} • ${d.role || translate("Ruolo non indicato", "Role not provided")}`
         : type === "auth"
           ? `${translate("Registrazione", "Registration")} • ${d.role || translate("Profilo non indicato", "Profile not provided")}`
+        : type === "immobili"
+          ? `${translate("Aggiornamenti immobiliari", "Property updates")} • ${formatCity(d.city)}`
         : `${type} • ${formatCity(d.city)} • ROI ${roi}%`;
 
     listEl.innerHTML += `
