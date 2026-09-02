@@ -2089,7 +2089,7 @@ text-transform:uppercase;
 letter-spacing:.8px;
 ">
 
-🤖 AI Executive Insight
+Analisi strategica
 
 </div>
 
@@ -2742,7 +2742,7 @@ if(investor && !isPro()){
   container.innerHTML = `
   <div class="analysis-card">
 
-    <h3>🤖 AI Insight</h3>
+    <h3>Analisi strategica</h3>
 
     <div style="
     text-align:center;
@@ -2809,8 +2809,8 @@ text = t(
 }else{
 
 title = t(
-"⚠️ AI Analisi degli investimenti",
-"⚠️ AI Investment Analysis"
+"Analisi degli investimenti",
+"Investment analysis"
 );
 
 text = t(
@@ -5548,7 +5548,7 @@ letter-spacing:1.2px;
 font-weight:700;
 ">
 
-🤖 EXECUTIVE AI ANALYSIS
+EXECUTIVE ANALYSIS
 
 </div>
 
@@ -5729,7 +5729,7 @@ font-weight:700;
 margin-bottom:8px;
 ">
 
-💡 ${window.t("Insight AI","AI Insight")}
+${window.t("Analisi strategica","Strategic analysis")}
 
 </div>
 
@@ -5963,7 +5963,7 @@ cursor:pointer;
 "
 onclick="analyzeBookingAI('${booking.id || ""}')">
 
-🤖 AI Insight
+Analisi prenotazione
 
 </button>
 
@@ -6766,8 +6766,8 @@ border:1px solid rgba(52,211,153,.30);
 ">
 
 ${window.t(
-"AI VERIFICATA",
-"AI VERIFIED"
+"ANALISI VERIFICATA",
+"VERIFIED ANALYSIS"
 )}
 
 </div>
@@ -7090,9 +7090,9 @@ text-transform:uppercase;
 font-weight:700;
 ">
 
-🤖 ${window.t(
-"Decisione AI",
-"AI Decision"
+${window.t(
+"Valutazione prenotazione",
+"Booking assessment"
 )}
 
 </div>
@@ -7250,9 +7250,9 @@ color:#0f172a;
 margin-bottom:14px;
 ">
 
-🧠 ${window.t(
-"Ragionamento AI",
-"AI Reasoning"
+${window.t(
+"Motivazione",
+"Rationale"
 )}
 
 </div>
@@ -7443,9 +7443,9 @@ font-weight:700;
 color:#15803d;
 ">
 
-🤖 ${window.t(
-"Confidenza AI",
-"AI Confidence"
+${window.t(
+"Affidabilità analisi",
+"Analysis confidence"
 )}
 
 </div>
@@ -10833,9 +10833,9 @@ else{
 
 executiveBrief = t(
 
-"L'AI suggerisce di intervenire su occupazione e visibilità dell'annuncio prima di aumentare le tariffe.",
+"I dati suggeriscono di intervenire su occupazione e visibilità dell'annuncio prima di aumentare le tariffe.",
 
-"The AI recommends improving occupancy and listing visibility before increasing rates."
+"The data suggests improving occupancy and listing visibility before increasing rates."
 
 );
 
@@ -10876,8 +10876,8 @@ margin-bottom:6px;
 ">
 
 ${t(
-"Executive AI Report",
-"Executive AI Report"
+"Report Executive",
+"Executive Report"
 )}
 
 </div>
@@ -10889,9 +10889,9 @@ font-weight:900;
 color:#0f172a;
 ">
 
-🧠 ${t(
-"Analisi Intelligente",
-"AI Executive Analysis"
+${t(
+"Analisi delle performance",
+"Performance Analysis"
 )}
 
 </h2>
@@ -10903,8 +10903,8 @@ color:#64748b;
 ">
 
 ${t(
-"L'intelligenza artificiale sta monitorando le performance della tua attività.",
-"Artificial intelligence is monitoring your property's performance."
+"RendimentoBB monitora le performance della tua attività.",
+"RendimentoBB monitors your property's performance."
 )}
 
 </div>
@@ -10928,7 +10928,7 @@ text-transform:uppercase;
 letter-spacing:.08em;
 ">
 
-AI SCORE
+PERFORMANCE SCORE
 
 </div>
 
@@ -10979,8 +10979,8 @@ margin-bottom:8px;
 ">
 
 ${t(
-"Verdetto AI",
-"AI Verdict"
+"Valutazione",
+"Assessment"
 )}
 
 </div>
@@ -11488,9 +11488,9 @@ color:#64748b;
 margin-bottom:14px;
 ">
 
-🤖 ${t(
-"Azioni consigliate dall'AI",
-"AI Recommended Actions"
+${t(
+"Azioni consigliate",
+"Recommended Actions"
 )}
 
 </div>
@@ -11762,9 +11762,9 @@ color:#cbd5e1;
 margin-bottom:10px;
 ">
 
-🤖 ${t(
-"Raccomandazione AI",
-"AI Recommendation"
+${t(
+"Raccomandazione",
+"Recommendation"
 )}
 
 </div>
@@ -11866,8 +11866,8 @@ margin-bottom:8px;
 ">
 
 ${t(
-"Livello AI",
-"AI Rating"
+"Livello analisi",
+"Analysis rating"
 )}
 
 </div>
