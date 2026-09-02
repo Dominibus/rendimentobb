@@ -1719,11 +1719,10 @@ extra.innerHTML = `
   box-shadow:0 15px 40px rgba(0,0,0,.25);
 ">
 
-  ⚠️ ${
-    access.isPro
-    ? t("Costo annuo stimato","Estimated yearly cost")
-    : t("Anteprima del costo annuo","Yearly cost preview")
-  }
+  🛡️ ${t(
+    "Riserva prudenziale suggerita",
+    "Suggested contingency reserve"
+  )}
 
   <div style="
     font-size:28px;
@@ -1731,11 +1730,7 @@ extra.innerHTML = `
     color:#f87171;
     font-weight:800;
   ">
-    ${
-  access.isPro
-  ? "€"+loss.toFixed(0)+"/anno"
-  : "€"+Math.round(loss * 0.7)+"/anno 🔒 (" + t("dato stimato","estimated") + ")"
-}
+    €${loss.toFixed(0)}/${t("anno","year")}
   </div>
 
   <div style="
@@ -1746,8 +1741,8 @@ extra.innerHTML = `
   ">
     ${
       t(
-        "costo annuo stimato del finanziamento nello scenario inserito",
-        "estimated yearly financing cost for the entered scenario"
+        "buffer indicativo pari al 30% del servizio annuo del debito, utile per valutare uno scenario prudenziale",
+        "indicative buffer equal to 30% of yearly debt service, useful for assessing a prudent scenario"
       )
     }
   </div>
