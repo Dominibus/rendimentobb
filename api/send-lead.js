@@ -420,7 +420,9 @@ if(isExistingLead){
 
 // ================= EMAIL FUNNEL =================
 
-if(!["partner", "work", "auth"].includes(type)){
+// Property-update requests have their own confirmation email and must not enter
+// the generic investment-analysis reminder sequence.
+if(!["immobili", "partner", "work", "auth"].includes(type)){
 const funnelQuery = await db
 .collection("email_funnel")
 .where("email","==",email)
@@ -478,7 +480,7 @@ let userDescription = t(
   "La tua simulazione è stata completata con successo. Di seguito trovi il primo riepilogo dei risultati ottenuti.",
   "Your simulation has been successfully completed. Below is a summary of your investment analysis."
 );
-const showInvestmentResults = !["partner", "work", "auth"].includes(type);
+const showInvestmentResults = !["immobili", "partner", "work", "auth"].includes(type);
 
 if(type === "mutui"){
   cta = "https://rendimentobb.it/mutui/";
@@ -486,6 +488,17 @@ if(type === "mutui"){
 
 if(type === "immobili"){
   cta = "https://rendimentobb.it/immobili/";
+  ctaLabel = t(detectedLang, "Esplora gli scenari", "Explore scenarios");
+  userHeading = t(
+    detectedLang,
+    "🏠 Richiesta aggiornamenti ricevuta",
+    "🏠 Property updates request received"
+  );
+  userDescription = t(
+    detectedLang,
+    `Abbiamo registrato la tua richiesta per ${htmlCity}. Riceverai aggiornamenti su scenari immobiliari e andamento del mercato. Le stime condivise hanno finalità informative e non rappresentano offerte immobiliari o garanzie di rendimento.`,
+    `We received your request for ${htmlCity}. You will receive updates about property scenarios and market trends. Any estimates shared are for information only and are not property offers or guaranteed returns.`
+  );
 }
 
 if(type === "partner"){
@@ -543,8 +556,6 @@ border:1px solid #e2e8f0;
 
       ${type === "mutui"
         ? "🏦 " + t(detectedLang,"Richiesta mutuo analizzata","Mortgage request analyzed")
-        : type === "immobili"
-        ? "🏠 " + t(detectedLang,"Opportunità immobili trovate","Property opportunities found")
         : userHeading}
 
     </div>
@@ -727,8 +738,8 @@ else if(type === "immobili"){
 
   subject = t(
     detectedLang,
-    "🏠 Opportunità immobili trovate",
-    "🏠 Property opportunities found"
+    "🏠 Richiesta aggiornamenti immobiliari ricevuta",
+    "🏠 Property updates request received"
   );
 
 }
@@ -792,7 +803,8 @@ if(!isExistingLead){
 const isPartnerLead = type === "partner";
 const isWorkLead = type === "work";
 const isAuthLead = type === "auth";
-const isOperationalLead = isPartnerLead || isWorkLead || isAuthLead;
+const isPropertyUpdatesLead = type === "immobili";
+const isOperationalLead = isPartnerLead || isWorkLead || isAuthLead || isPropertyUpdatesLead;
 
 const leadColor =
 isPartnerLead
@@ -803,6 +815,9 @@ isPartnerLead
 
 : isAuthLead
 ? "#7c3aed"
+
+: isPropertyUpdatesLead
+? "#059669"
 
 : score === "extreme"
 ? "#10b981"
@@ -825,6 +840,9 @@ isPartnerLead
 : isAuthLead
 ? "✅ NUOVA REGISTRAZIONE"
 
+: isPropertyUpdatesLead
+? "🏠 AGGIORNAMENTI IMMOBILIARI"
+
 : score === "extreme"
 ? "🔥 EXTREME LEAD"
 
@@ -842,6 +860,8 @@ const adminSubject = isPartnerLead
     ? `💼 CANDIDATURA | ${name || email}${role ? ` | ${role}` : ""}`
     : isAuthLead
       ? `✅ REGISTRAZIONE | ${name || email}${role ? ` | ${role}` : ""}`
+      : isPropertyUpdatesLead
+        ? `🏠 RICHIESTA AGGIORNAMENTI IMMOBILIARI | ${displayCity}`
     : `${leadTitle} | ${displayCity} | ROI ${formatNumber(roiRounded, "it", 1)}% | €${value} | ${type.toUpperCase()}`;
 
 const adminSuggestion = isPartnerLead
@@ -850,6 +870,8 @@ const adminSuggestion = isPartnerLead
     ? "Esaminare il profilo e l'esperienza indicata; ricontattare il candidato se coerente con le posizioni disponibili."
     : isAuthLead
       ? "Nuovo account creato. Monitorare l'attivazione del simulatore e le successive interazioni nel funnel."
+    : isPropertyUpdatesLead
+      ? "Richiesta informativa registrata. Inviare esclusivamente aggiornamenti pertinenti alla città indicata e mantenere chiaramente distinti dati indicativi e offerte reali."
     : score === "extreme"
       ? "🔥 Lead ad altissima priorità. Contattare entro 30 minuti. Probabilità di conversione molto elevata."
       : score === "hot"
@@ -983,6 +1005,11 @@ ${phone ? `
 </tr>
 ` : ""}
 
+${isPropertyUpdatesLead ? `<tr>
+<td><strong>🏙 Città richiesta</strong></td>
+<td>${htmlCity}</td>
+</tr>` : ""}
+
 ${!isOperationalLead ? `<tr>
 <td><strong>🏙 Città</strong></td>
 <td>${htmlCity}</td>
@@ -1018,10 +1045,10 @@ ${!isOperationalLead ? `<tr>
 <td>${dscr.toFixed(2)}</td>
 </tr>` : ""}
 
-<tr>
+${!isPropertyUpdatesLead ? `<tr>
 <td><strong>🎯 Lead Score</strong></td>
 <td>${label}</td>
-</tr>
+</tr>` : ""}
 
 <tr>
 <td><strong>🌍 Fonte</strong></td>
@@ -1114,7 +1141,7 @@ font-size:14px;
 line-height:1.7;
 ">
 
-<strong>${isOperationalLead ? "✅ Azione consigliata" : "🧠 AI Suggerimento"}</strong><br><br>
+<strong>${isOperationalLead ? "✅ Azione consigliata" : "💡 Suggerimento operativo"}</strong><br><br>
 
 ${adminSuggestion}
 
