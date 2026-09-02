@@ -64,6 +64,10 @@ function calculateScore({roi, type}){
     return { score:"property_updates", value:0 };
   }
 
+  if(type === "mutui"){
+    return { score:"mortgage_request", value:0 };
+  }
+
   if(roi >= 20) return { score:"extreme", value:150 };
   if(roi >= 15) return { score:"hot", value:100 };
   if(roi >= 10) return { score:"warm", value:60 };
