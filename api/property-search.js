@@ -1,5 +1,10 @@
 export default async function handler(req, res) {
 
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET");
+    return res.status(405).json({ success: false, error: "Method not allowed" });
+  }
+
   const city =
     (req.query.city || "napoli")
     .toLowerCase();
@@ -16,16 +21,6 @@ export default async function handler(req, res) {
   // =====================================
   // 🏠 IMMOBILIARE.IT
   // =====================================
-  console.log(
-  "🔍 SEARCH REQUEST:",
-  {
-    city,
-    budget,
-    sqm,
-    goal
-  }
-);
-
   const immobiliareResults = [
 
     {
@@ -1660,24 +1655,13 @@ if(results.length === 0){
   // 📊 PORTAL STATS
   // =====================================
 
-  const portals = {
-
-    immobiliare:
-      results.filter(
-        p => p.portal === "Immobiliare.it"
-      ).length,
-
-    idealista:
-      results.filter(
-        p => p.portal === "Idealista"
-      ).length,
-
-    casait:
-      results.filter(
-        p => p.portal === "Casa.it"
-      ).length
-
-  };
+  // These are indicative scenarios generated from an internal static dataset,
+  // not live listings or data supplied by third-party property portals.
+  results = results.map(({ portal, url, ...property }, index) => ({
+    ...property,
+    portal: `Scenario ${index + 1}`,
+    url: ""
+  }));
 
   // =====================================
   // 🚀 RESPONSE
@@ -1698,7 +1682,7 @@ if(results.length === 0){
     totalResults:
       results.length,
 
-    portals,
+    dataType:"indicative-scenarios",
 
     results
 
