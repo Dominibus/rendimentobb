@@ -184,7 +184,7 @@ function getScore({roi, type}){
   }
 
   if(type === "immobili"){
-    return { score:"deal", value:50, label:"🏠 DEAL" };
+    return { score:"property_updates", value:0, label:"🏠 PROPERTY UPDATES" };
   }
 
   if(roi >= 20){
