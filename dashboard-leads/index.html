@@ -440,10 +440,11 @@ function render(){
     .filter(l=>{
       const score = (l.score || "cold").toLowerCase();
       const type = getLeadType(l);
+      const operational = isOperationalLead(l);
       return currentFilter === "all" ||
-        (currentFilter === "priority" && ["extreme", "hot"].includes(score)) ||
+        (currentFilter === "priority" && !operational && ["extreme", "hot"].includes(score)) ||
         (["immobili", "partner", "work", "auth"].includes(currentFilter) && type === currentFilter) ||
-        score === currentFilter;
+        (!operational && score === currentFilter);
     })
     .slice(0,50);
 
@@ -579,7 +580,7 @@ function updateKPI(){
     ? Math.round(totalValue / financialLeads.length)
     : 0;
 
-  const priority = leadsData.filter(l=>
+  const priority = financialLeads.filter(l=>
     ["extreme", "hot"].includes((l.score || "").toLowerCase())
   ).length;
 
