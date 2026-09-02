@@ -195,9 +195,9 @@ data-en="✔ Advanced risk analysis">
 </span>
 
 <span
-data-it="✔ Dashboard, AI e PMS"
-data-en="✔ Dashboard, AI and PMS">
-✔ Dashboard, AI e PMS
+data-it="✔ Dashboard, analisi e PMS"
+data-en="✔ Dashboard, analytics and PMS">
+✔ Dashboard, analisi e PMS
 </span>
 
 </div>
