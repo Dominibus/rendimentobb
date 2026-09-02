@@ -1,4 +1,11 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron-funnel",
+      "schedule": "0 7 * * *"
+    }
+  ],
   "redirects": [
 
     { "source": "/roma", "destination": "/market/roma/", "permanent": true },
