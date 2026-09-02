@@ -65,6 +65,14 @@ const dashboardError = (message, error) => {
   }
 };
 
+const escapeDashboardHTML = value =>
+  String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
 // =====================================
 // 🔐 DASHBOARD ACCESS MANAGER
 // =====================================
@@ -7014,7 +7022,7 @@ margin-bottom:26px;
 
 <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
 <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">👤 ${window.t("Ospite","Guest")}</div>
-<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${booking.guestName || "-"}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${escapeDashboardHTML(booking.guestName || "-")}</div>
 </div>
 
 <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
@@ -7029,12 +7037,12 @@ margin-bottom:26px;
 
 <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
 <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">🏠 ${window.t("Canale","Channel")}</div>
-<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${channel}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${escapeDashboardHTML(channel)}</div>
 </div>
 
 <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
 <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;">📌 ${window.t("Stato","Status")}</div>
-<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${status}</div>
+<div style="margin-top:8px;font-size:16px;font-weight:700;color:#0f172a;">${escapeDashboardHTML(status)}</div>
 </div>
 
 <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:14px;">
@@ -8050,7 +8058,7 @@ sourceStats[source].revenue +=
 html += `
 
 <div
-data-status="${b.status}"
+data-status="${escapeDashboardHTML(b.status)}"
 style="
 background:#ffffff;
 border:1px solid #e2e8f0;
@@ -8103,7 +8111,7 @@ font-weight:800;
 color:#0f172a;
 line-height:1.2;
 ">
-${b.guestName}
+${escapeDashboardHTML(b.guestName)}
 </div>
 
 <div
@@ -8120,7 +8128,7 @@ ${window.t(
 )}
 :
 
-${b.source || "Direct"}
+${escapeDashboardHTML(b.source || "Direct")}
 
 •
 
@@ -8220,7 +8228,7 @@ Check-In
 font-weight:700;
 color:#0f172a;
 ">
-${b.checkin}
+${escapeDashboardHTML(b.checkin)}
 </div>
 </div>
 
@@ -8243,7 +8251,7 @@ Check-Out
 font-weight:700;
 color:#0f172a;
 ">
-${b.checkout}
+${escapeDashboardHTML(b.checkout)}
 </div>
 </div>
 
@@ -8272,7 +8280,7 @@ font-size:18px;
 font-weight:800;
 color:#0f172a;
 ">
-${b.guests}
+${Number(b.guests || 0)}
 </div>
 </div>
 
@@ -8709,7 +8717,7 @@ font-weight:700;
 color:#0f172a;
 margin-bottom:4px;
 ">
-${channelNames[name] || name}
+${escapeDashboardHTML(channelNames[name] || name)}
 </div>
 
 <div style="
@@ -9985,15 +9993,19 @@ data-date="${currentDate}"
 data-occupied="${color ? "true" : "false"}"
 data-booking='${
   bookingInfo
-    ? JSON.stringify(bookingInfo).replace(/'/g,"&#39;")
+    ? escapeDashboardHTML(
+        JSON.stringify(bookingInfo)
+      )
     : ""
 }'
 title="${
-  tooltip ||
-  (
-    isEnglish
-      ? "Create booking"
-      : "Crea prenotazione"
+  escapeDashboardHTML(
+    tooltip ||
+    (
+      isEnglish
+        ? "Create booking"
+        : "Crea prenotazione"
+    )
   )
 }"
 style="
@@ -10061,7 +10073,7 @@ overflow:hidden;
 max-width:90%;
 text-overflow:ellipsis;
 ">
-${bookingInfo.guestName || ""}
+${escapeDashboardHTML(bookingInfo.guestName || "")}
 </div>
 `
 :
