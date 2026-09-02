@@ -215,25 +215,72 @@ async function findUserId(
 async function updateUserPlan(
   db,
   uid,
-  data
+  data,
+  event
 ){
 
-  await db
-    .collection("users")
-    .doc(uid)
-    .set(
-      {
-        ...data,
+  const userRef =
+    db.collection("users").doc(uid);
 
-        updatedAt:
-          admin.firestore
-            .FieldValue
-            .serverTimestamp()
-      },
-      {
-        merge: true
+  return db.runTransaction(
+    async transaction => {
+
+      const userSnapshot =
+        await transaction.get(userRef);
+
+      const currentData =
+        userSnapshot.exists
+          ? userSnapshot.data()
+          : {};
+
+      const incomingEventCreated =
+        Number(event?.created || 0);
+
+      const lastEventCreated =
+        Number(
+          currentData
+            ?.lastStripeEventCreated ||
+          0
+        );
+
+      const lastEventId =
+        currentData
+          ?.lastStripeEventId ||
+        null;
+
+      if(
+        event?.id === lastEventId ||
+        incomingEventCreated <
+          lastEventCreated
+      ){
+        return false;
       }
-    );
+
+      transaction.set(
+        userRef,
+        {
+          ...data,
+
+          lastStripeEventId:
+            event?.id || null,
+
+          lastStripeEventCreated:
+            incomingEventCreated,
+
+          updatedAt:
+            admin.firestore
+              .FieldValue
+              .serverTimestamp()
+        },
+        {
+          merge: true
+        }
+      );
+
+      return true;
+
+    }
+  );
 
 }
 
@@ -400,7 +447,8 @@ export default async function handler(
 
           cancelAtPeriodEnd:
             false
-        }
+        },
+        event
       );
 
     }
@@ -494,7 +542,8 @@ export default async function handler(
                   .current_period_end ||
                 0
               )
-          }
+          },
+          event
         );
 
       }
@@ -555,7 +604,8 @@ export default async function handler(
 
             subscriptionId:
               null
-          }
+          },
+          event
         );
 
       }
@@ -603,7 +653,8 @@ export default async function handler(
           {
             subscriptionStatus:
               "past_due"
-          }
+          },
+          event
         );
 
       }
