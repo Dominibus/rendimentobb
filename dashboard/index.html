@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260827-11">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260903-portfolio-link">
 </head>
 
 <body class="dashboard-bg">
@@ -3815,7 +3815,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js"></script>
+<script type="module" src="/js/dashboard.js?v=20260903-portfolio-link"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3948,6 +3948,22 @@ inputmode="decimal"
 data-it-placeholder="Prezzo notte"
 data-en-placeholder="Nightly rate"
 placeholder="Prezzo notte">
+
+<label for="property-analysis"
+data-it="Collega analisi finanziaria (facoltativo)"
+data-en="Link financial analysis (optional)">
+Collega analisi finanziaria (facoltativo)
+</label>
+
+<select id="property-analysis" aria-describedby="property-analysis-help">
+<option value="" data-it="Solo gestione PMS" data-en="PMS management only">Solo gestione PMS</option>
+</select>
+
+<small id="property-analysis-help"
+data-it="Seleziona una simulazione solo se questa proprietà è realmente tua. I dati alimenteranno il portafoglio."
+data-en="Select a simulation only if you actually own this property. Its data will feed your portfolio.">
+Seleziona una simulazione solo se questa proprietà è realmente tua. I dati alimenteranno il portafoglio.
+</small>
 
 </div>
 
