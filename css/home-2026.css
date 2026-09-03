@@ -884,28 +884,36 @@ body.home-page .quick-roi-box {
 }
 
 body.home-page .quick-roi-box > * {
-  grid-column: 1 !important;
   min-width: 0 !important;
 }
 
-body.home-page .quick-roi-box > .home-section-badge {
+body.home-page .quick-roi-form {
+  grid-column: 1 !important;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  min-width: 0;
+}
+
+body.home-page .quick-roi-form > .home-section-badge {
   justify-self: start !important;
+  align-self: flex-start;
   margin-bottom: 2px !important;
 }
 
-body.home-page .quick-roi-box > h2 {
+body.home-page .quick-roi-form > h2 {
   margin: 0 !important;
   font-size: clamp(25px, 2.2vw, 34px) !important;
   line-height: 1.12 !important;
   text-align: left !important;
 }
 
-body.home-page .quick-roi-box > h2 + p {
+body.home-page .quick-roi-form > h2 + p {
   margin: 0 0 4px !important;
   text-align: left !important;
 }
 
-body.home-page .quick-roi-box > .roi-grid {
+body.home-page .quick-roi-form > .roi-grid {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 12px !important;
@@ -933,14 +941,14 @@ body.home-page .quick-roi-box .roi-field input {
   padding: 10px 12px !important;
 }
 
-body.home-page .quick-roi-box > .btn {
+body.home-page .quick-roi-form > .btn {
   width: 100% !important;
   margin: 0 !important;
 }
 
 body.home-page .quick-roi-box > .investment-panel {
   grid-column: 2 !important;
-  grid-row: 1 / span 8 !important;
+  grid-row: 1 !important;
   width: 100% !important;
   min-width: 0 !important;
   margin: 0 !important;
@@ -1087,21 +1095,22 @@ body.home-page #pricing .plan-card {
     padding: 20px 16px !important;
   }
 
-  body.home-page .quick-roi-box > * {
+  body.home-page .quick-roi-form,
+  body.home-page .quick-roi-box > .investment-panel {
     width: 100% !important;
   }
 
-  body.home-page .quick-roi-box > h2 {
+  body.home-page .quick-roi-form > h2 {
     margin-top: 14px !important;
     font-size: 25px !important;
     line-height: 1.16 !important;
   }
 
-  body.home-page .quick-roi-box > h2 + p {
+  body.home-page .quick-roi-form > h2 + p {
     margin-top: 8px !important;
   }
 
-  body.home-page .quick-roi-box > .roi-grid {
+  body.home-page .quick-roi-form > .roi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
     margin-top: 16px !important;
@@ -1187,7 +1196,7 @@ body.home-page #pricing .plan-card {
 }
 
 @media (max-width: 390px) {
-  body.home-page .quick-roi-box > .roi-grid {
+  body.home-page .quick-roi-form > .roi-grid {
     grid-template-columns: 1fr !important;
   }
 
