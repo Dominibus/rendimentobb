@@ -9,6 +9,8 @@ window.demoAnalyses = [
 
 id:"demo1",
 
+isPortfolio:true,
+
 roi:18.7,
 
 visualROI:18.7,
@@ -40,6 +42,8 @@ createdAt:new Date(2026,0,12)
 {
 
 id:"demo2",
+
+isPortfolio:true,
 
 roi:16.9,
 
@@ -73,6 +77,8 @@ createdAt:new Date(2026,1,8)
 
 id:"demo3",
 
+isPortfolio:true,
+
 roi:21.3,
 
 visualROI:21.3,
@@ -104,6 +110,8 @@ createdAt:new Date(2026,2,18)
 {
 
 id:"demo4",
+
+isPortfolio:true,
 
 roi:15.4,
 
@@ -137,6 +145,8 @@ createdAt:new Date(2026,3,11)
 
 id:"demo5",
 
+isPortfolio:true,
+
 roi:19.8,
 
 visualROI:19.8,
@@ -166,3 +176,4 @@ createdAt:new Date(2026,4,15)
 }
 
 ];
+
