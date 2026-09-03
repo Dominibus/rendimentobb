@@ -356,6 +356,21 @@ window.currentLang === "it" ? "it-IT" : "en-US",
 
 }
 
+function formatPercent(value){
+  return new Intl.NumberFormat(
+    window.currentLang === "it" ? "it-IT" : "en-US",
+    { maximumFractionDigits: 1 }
+  ).format(Number(value || 0)) + "%";
+}
+
+function formatYears(value){
+  const years = Number(value || 0);
+  return years + " " + t(
+    years === 1 ? "anno" : "anni",
+    years === 1 ? "year" : "years"
+  );
+}
+
 function formatDate(timestamp){
 
 if(!timestamp) return "-";
@@ -1914,7 +1929,7 @@ document.getElementById(
 
 if(dbRoi){
   dbRoi.innerText = avgROI > 0
-    ? avgROIRounded + "%"
+    ? formatPercent(avgROIRounded)
     : "--";
 }
 if(dbProfit) dbProfit.innerText = formatCurrency(monthlyProfit);
@@ -1964,7 +1979,7 @@ const canViewDashboardData =
   canViewDashboard();
 
 if(kpiRoi){
-  kpiRoi.innerText = avgROIRounded + "%";
+  kpiRoi.innerText = formatPercent(avgROIRounded);
 }
 
 if(kpiCash){
@@ -1984,12 +1999,12 @@ if(kpiInvest){
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? breakEven + "y"
+      ? formatYears(breakEven)
       : "🔒";
 }
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
-if(roiEl) roiEl.textContent = avgROIRounded + "%";
+if(roiEl) roiEl.textContent = formatPercent(avgROIRounded);
 
 const cashEl =
 document.getElementById("portfolio-cashflow");
@@ -2244,7 +2259,7 @@ const performanceEl = document.getElementById("market-performance");
 const userRoiEl = document.getElementById("user-roi-benchmark");
 
 if(userRoiEl){
-  userRoiEl.textContent = avgROIRounded + "%";
+  userRoiEl.textContent = formatPercent(avgROIRounded);
   userRoiEl.style.color = avgROI >= marketROI ? "#10b981" : "#ef4444";
 }
 
@@ -8880,6 +8895,19 @@ async function loadPMSStats(){
   setText("pms-checkout-today","1");
   setText("pms-pending-bookings","2");
 
+  renderPMSPerformanceChart([
+    { checkin:"2026-01-12", totalAmount:180 },
+    { checkin:"2026-02-09", totalAmount:220 },
+    { checkin:"2026-03-15", totalAmount:260 },
+    { checkin:"2026-04-18", totalAmount:310 },
+    { checkin:"2026-05-06", totalAmount:240 },
+    { checkin:"2026-06-21", totalAmount:330 },
+    { checkin:"2026-07-11", totalAmount:420 },
+    { checkin:"2026-08-17", totalAmount:380 },
+    { checkin:"2026-09-02", totalAmount:310 },
+    { checkin:"2026-10-14", totalAmount:330 }
+  ]);
+
   return;
 
 }
@@ -9530,24 +9558,13 @@ function renderPMSPerformanceChart(
 
     data:{
 
-      labels:[
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ],
+      labels: window.currentLang === "it"
+        ? ["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"]
+        : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
 
       datasets:[{
 
-label:"Revenue",
+label:t("Ricavi","Revenue"),
 
 data:monthlyRevenue,
 
