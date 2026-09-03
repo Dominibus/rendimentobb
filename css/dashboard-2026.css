@@ -378,8 +378,8 @@ body.dashboard-bg {
 #executive-summary {
   grid-column: 2;
   padding: 25px !important;
-  height: 420px !important;
-  max-height: 420px;
+  height: 460px !important;
+  max-height: 460px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
@@ -439,7 +439,7 @@ body.dashboard-bg {
   grid-column: 1;
   grid-row: 2;
   min-height: 0;
-  height: 420px !important;
+  height: 460px !important;
 }
 
 #pms-dashboard-section > .analysis-card:last-child h3 {
@@ -449,8 +449,8 @@ body.dashboard-bg {
 
 #pms-performance-chart {
   width: 100% !important;
-  height: 270px !important;
-  max-height: 270px;
+  height: 310px !important;
+  max-height: 310px;
 }
 
 /* Properties view */
