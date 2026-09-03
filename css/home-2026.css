@@ -1124,7 +1124,8 @@ body.home-page .quick-roi-box {
 body.home-page .quick-roi-box > .investment-panel {
   display: block !important;
   min-height: 0 !important;
-  height: auto !important;
+  height: fit-content !important;
+  block-size: fit-content !important;
   align-self: start !important;
 }
 
@@ -1134,8 +1135,10 @@ body.home-page .quick-roi-box .investment-metrics {
 }
 
 body.home-page .quick-roi-box .quick-roi-cta {
+  position: static !important;
   margin-top: 18px !important;
   padding-top: 0 !important;
+  transform: none !important;
 }
 
 body.home-page #pricing .pricing-why {
