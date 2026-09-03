@@ -3898,25 +3898,12 @@ document.addEventListener("rb_plan_loaded", () => {
 
 <div
 id="property-modal"
-style="
-position:fixed;
-inset:0;
-background:rgba(15,23,42,0.7);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:999999;
-">
+class="property-modal-overlay">
 
-<div style="
-background:white;
-padding:24px;
-border-radius:20px;
-width:90%;
-max-width:500px;
-">
+<div class="property-modal-panel" role="dialog" aria-modal="true" aria-labelledby="property-modal-title">
 
 <h2
+id="property-modal-title"
 data-it="🏠 Nuova proprietà"
 data-en="🏠 New Property">
 
@@ -3924,12 +3911,9 @@ data-en="🏠 New Property">
 
 </h2>
 
-<div style="
-display:flex;
-flex-direction:column;
-gap:14px;
-margin-top:20px;
-">
+<div class="property-modal-fields">
+
+<label for="property-name" data-it="Nome proprietà" data-en="Property name">Nome proprietà</label>
 
 <input
 id="property-name"
@@ -3937,11 +3921,15 @@ data-it-placeholder="Nome proprietà"
 data-en-placeholder="Property name"
 placeholder="Nome proprietà">
 
+<label for="property-city" data-it="Città" data-en="City">Città</label>
+
 <input
 id="property-city"
 data-it-placeholder="Città"
 data-en-placeholder="City"
 placeholder="Città">
+
+<label for="property-address" data-it="Indirizzo" data-en="Address">Indirizzo</label>
 
 <input
 id="property-address"
@@ -3949,22 +3937,24 @@ data-it-placeholder="Indirizzo"
 data-en-placeholder="Address"
 placeholder="Indirizzo">
 
+<label for="property-price" data-it="Prezzo per notte (€)" data-en="Nightly rate (€)">Prezzo per notte (€)</label>
+
 <input
 id="property-price"
+type="number"
+min="0"
+step="0.01"
+inputmode="decimal"
 data-it-placeholder="Prezzo notte"
 data-en-placeholder="Nightly rate"
 placeholder="Prezzo notte">
 
 </div>
 
-<div style="
-display:flex;
-gap:12px;
-margin-top:20px;
-">
+<div class="property-modal-actions">
 
 <button
-class="btn-dashboard"
+class="btn-dashboard property-modal-secondary"
 onclick="closePropertyModal()"
 data-it="Chiudi"
 data-en="Close">
@@ -3974,7 +3964,7 @@ Chiudi
 </button>
 
 <button
-class="btn-dashboard"
+class="btn-dashboard property-modal-primary"
 onclick="saveProperty()"
 data-it="Salva"
 data-en="Save">
