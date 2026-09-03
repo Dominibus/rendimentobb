@@ -6,15 +6,24 @@ import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const GA_MEASUREMENT_ID = "G-749B8PW4ST";
+const RB_CONSENT_KEY = "rb_analytics_consent_v1";
 
-function initializeGoogleAnalytics(){
+window.dataLayer = window.dataLayer || [];
+window.gtag = window.gtag || function(){
+  window.dataLayer.push(arguments);
+};
+
+window.gtag("consent", "default", {
+  analytics_storage: "denied",
+  ad_storage: "denied",
+  ad_user_data: "denied",
+  ad_personalization: "denied"
+});
+
+function loadGoogleAnalytics(){
   if(window.__rbGA4Initialized) return;
 
   window.__rbGA4Initialized = true;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = window.gtag || function(){
-    window.dataLayer.push(arguments);
-  };
 
   if(!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"]`)){
     const script = document.createElement("script");
@@ -27,7 +36,100 @@ function initializeGoogleAnalytics(){
   window.gtag("config", GA_MEASUREMENT_ID);
 }
 
-initializeGoogleAnalytics();
+function getAnalyticsConsent(){
+  try{
+    return localStorage.getItem(RB_CONSENT_KEY);
+  }catch(error){
+    return null;
+  }
+}
+
+function setAnalyticsConsent(value){
+  try{
+    localStorage.setItem(RB_CONSENT_KEY, value);
+  }catch(error){
+    // The preference still applies for the current page if storage is unavailable.
+  }
+
+  window.gtag("consent", "update", {
+    analytics_storage: value === "granted" ? "granted" : "denied",
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied"
+  });
+
+  if(value === "granted") loadGoogleAnalytics();
+}
+
+if(getAnalyticsConsent() === "granted"){
+  setAnalyticsConsent("granted");
+}
+
+function initializeConsentUI(){
+  if(document.getElementById("rb-consent-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "rb-consent-style";
+  style.textContent = `
+    .rb-consent{position:fixed;inset:auto 20px 20px 20px;z-index:2147483000;display:flex;align-items:center;gap:22px;max-width:980px;margin:auto;padding:20px 22px;border:1px solid #dbe7e4;border-radius:18px;background:#fff;color:#0b1730;box-shadow:0 18px 55px rgba(2,18,38,.2);font:500 14px/1.5 Inter,system-ui,sans-serif}
+    .rb-consent[hidden]{display:none}.rb-consent__copy{flex:1}.rb-consent__copy strong{display:block;margin-bottom:4px;font-size:17px}.rb-consent__copy p{margin:0;color:#516078}.rb-consent__copy a{color:#008f67;font-weight:700}
+    .rb-consent__actions{display:flex;gap:10px;flex-wrap:wrap}.rb-consent button{min-height:44px;padding:0 18px;border:1px solid #cfdcd9;border-radius:12px;background:#fff;color:#0b1730;font:700 14px Inter,system-ui,sans-serif;cursor:pointer}.rb-consent button[data-choice="granted"]{border-color:#08b782;background:#08b782;color:#fff}
+    .rb-consent-settings{position:fixed;left:16px;bottom:16px;z-index:2147482999;padding:9px 13px;border:1px solid #dbe7e4;border-radius:999px;background:#fff;color:#30425d;box-shadow:0 8px 24px rgba(2,18,38,.14);font:700 12px Inter,system-ui,sans-serif;cursor:pointer}.rb-consent-settings[hidden]{display:none}
+    @media(max-width:720px){.rb-consent{inset:auto 12px 12px 12px;display:block;padding:18px}.rb-consent__actions{margin-top:15px}.rb-consent button{flex:1;padding:0 12px}.rb-consent-settings{left:10px;bottom:10px}}
+  `;
+  document.head.appendChild(style);
+
+  const banner = document.createElement("section");
+  banner.id = "rb-consent";
+  banner.className = "rb-consent";
+  banner.setAttribute("role", "dialog");
+  banner.setAttribute("aria-modal", "true");
+  banner.setAttribute("aria-labelledby", "rb-consent-title");
+
+  const settings = document.createElement("button");
+  settings.type = "button";
+  settings.className = "rb-consent-settings";
+  settings.hidden = true;
+
+  function renderConsentLanguage(){
+    const english = (localStorage.getItem("rb_lang") || "it") === "en";
+    banner.innerHTML = english ? `
+      <div class="rb-consent__copy"><strong id="rb-consent-title">Your privacy, your choice</strong><p>We use essential storage to operate the site. With your permission, Google Analytics helps us understand aggregated usage. Advertising storage remains disabled. <a href="/privacy.html">Privacy policy</a></p></div>
+      <div class="rb-consent__actions"><button type="button" data-choice="denied">Reject analytics</button><button type="button" data-choice="granted">Accept analytics</button></div>` : `
+      <div class="rb-consent__copy"><strong id="rb-consent-title">La tua privacy, la tua scelta</strong><p>Usiamo l’archiviazione essenziale per il funzionamento del sito. Con il tuo consenso, Google Analytics ci aiuta a capire l’utilizzo in forma aggregata. La pubblicità resta disattivata. <a href="/privacy.html">Privacy policy</a></p></div>
+      <div class="rb-consent__actions"><button type="button" data-choice="denied">Rifiuta analytics</button><button type="button" data-choice="granted">Accetta analytics</button></div>`;
+    settings.textContent = english ? "Cookie settings" : "Preferenze cookie";
+  }
+
+  function showBanner(){
+    settings.hidden = true;
+    banner.hidden = false;
+  }
+
+  banner.addEventListener("click", event => {
+    const choice = event.target.closest("[data-choice]")?.dataset.choice;
+    if(!choice) return;
+    setAnalyticsConsent(choice);
+    banner.hidden = true;
+    settings.hidden = false;
+  });
+  settings.addEventListener("click", showBanner);
+  document.addEventListener("rb_language_changed", renderConsentLanguage);
+
+  renderConsentLanguage();
+  document.body.append(banner, settings);
+
+  if(getAnalyticsConsent()){
+    banner.hidden = true;
+    settings.hidden = false;
+  }
+}
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", initializeConsentUI, { once: true });
+}else{
+  initializeConsentUI();
+}
 
 // ===============================
 // 🔧 GLOBAL UNLOCK FALLBACK (FIX ERROR)
