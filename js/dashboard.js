@@ -9581,6 +9581,8 @@ borderSkipped:false
     options:{
 
       responsive:true,
+      maintainAspectRatio:false,
+      devicePixelRatio:Math.min(window.devicePixelRatio || 1, 2),
 
       plugins:{
         legend:{
