@@ -388,9 +388,20 @@ window.currentLang === "it" ? "it-IT" : "en-US"
 
 // ================= INVESTMENT SCORE =================
 
-function calculateInvestmentScore(avgROI,totalCapital,count){
+function calculateInvestmentScore(avgROI,analyses){
 
-if(count === 0) return 0;
+if(!analyses?.length) return 0;
+
+const savedScores = analyses
+  .map(data => Number(data.investmentScore || 0))
+  .filter(score => score > 0 && score <= 100);
+
+if(savedScores.length){
+  return Math.round(
+    savedScores.reduce((sum, score) => sum + score, 0) /
+    savedScores.length
+  );
+}
 
 let score = 50;
 
@@ -401,9 +412,16 @@ else if(avgROI > 8) score += 20;
 else if(avgROI > 3) score += 10;
 else if(avgROI < 0) score -= 20;
 
-/* capital diversification */
+const riskValues = analyses
+  .map(data => Number(data.risk || 0))
+  .filter(risk => risk > 0 && risk <= 100);
 
-if(totalCapital > 500000) score += 10;
+if(riskValues.length){
+  const avgRisk = riskValues.reduce((sum, risk) => sum + risk, 0) / riskValues.length;
+  if(avgRisk <= 30) score += 15;
+  else if(avgRisk <= 50) score += 8;
+  else if(avgRisk >= 70) score -= 15;
+}
 
 /* clamp */
 
@@ -890,8 +908,11 @@ const analyses = querySnapshot.docs.map(doc => {
     risk:
   data.risk || 0,
 
-investmentScore:
+    investmentScore:
   data.investmentScore ?? 0,
+
+    isPortfolio:
+      data.isPortfolio === true,
 
 verdict:
   data.verdict ?? null,
@@ -1222,6 +1243,10 @@ labels = [];
 
 const count = analyses.length;
 
+const portfolioAnalyses = analyses.filter(
+  data => data.isPortfolio === true
+);
+
 const totalROI = analyses.reduce(
   (sum, data) => sum + Number(data.roi || 0),
   0
@@ -1417,10 +1442,29 @@ ${
       }
 
     ${
-window.isDemoData || !canDelete()
+window.isDemoData
 ? ""
 : `
-<div style="margin-top:12px;text-align:right">
+<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+  <button
+    class="portfolio-analysis"
+    data-id="${data.id}"
+    data-active="${data.isPortfolio ? "true" : "false"}"
+    style="
+      background:${data.isPortfolio ? "#ecfdf5" : "#0f172a"};
+      color:${data.isPortfolio ? "#047857" : "white"};
+      border:1px solid ${data.isPortfolio ? "#a7f3d0" : "#0f172a"};
+      padding:7px 10px;
+      border-radius:7px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    ">
+    ${data.isPortfolio
+      ? t("✓ Nel portafoglio", "✓ In portfolio")
+      : t("+ Aggiungi al portafoglio", "+ Add to portfolio")}
+  </button>
+  ${canDelete() ? `
   <button
     class="delete-analysis"
     data-id="${data.id}"
@@ -1435,6 +1479,7 @@ window.isDemoData || !canDelete()
     ">
     🗑 ${t("Elimina","Delete")}
   </button>
+  ` : ""}
 </div>
 `
 }
@@ -1447,7 +1492,13 @@ list.appendChild(card);
 
 // ================= RENDER ENGINE =================
 
-renderStats(count,totalROI,totalCapital,totalCashflow);
+renderStats(
+  count,
+  totalROI,
+  totalCapital,
+  totalCashflow,
+  portfolioAnalyses
+);
 
 // ================= CONTINUA RENDER =================
 
@@ -1881,12 +1932,39 @@ Tool
 
 // ================= STATS =================
 
-function renderStats(count,totalROI,totalCapital,totalCashflow){
+function renderStats(count,totalROI,totalCapital,totalCashflow,portfolioAnalyses = []){
 
 // ================= SAFE CALC =================
 const avgROI = count ? (totalROI / count) : 0;
 const avgROIRounded = avgROI.toFixed(1);
 const avgCashflow = count ? (totalCashflow / count) : 0;
+
+const confirmedCount = portfolioAnalyses.length;
+const confirmedEquity = portfolioAnalyses.reduce(
+  (sum, data) => sum + Number(data.equity || 0),
+  0
+);
+const confirmedYearlyCashflow = portfolioAnalyses.reduce(
+  (sum, data) => sum + Number(data.net || 0),
+  0
+);
+const confirmedROI = confirmedCount
+  ? (
+      confirmedEquity > 0
+        ? portfolioAnalyses.reduce(
+            (sum, data) => sum + (Number(data.roi || 0) * Number(data.equity || 0)),
+            0
+          ) / confirmedEquity
+        : portfolioAnalyses.reduce(
+            (sum, data) => sum + Number(data.roi || 0),
+            0
+          ) / confirmedCount
+    )
+  : 0;
+const confirmedMonthlyCashflow = confirmedYearlyCashflow / 12;
+const confirmedBreakEven = confirmedYearlyCashflow > 0
+  ? confirmedEquity / confirmedYearlyCashflow
+  : 0;
 
   window.__lastAvgROI = avgROI;
 
@@ -1979,32 +2057,38 @@ const canViewDashboardData =
   canViewDashboard();
 
 if(kpiRoi){
-  kpiRoi.innerText = formatPercent(avgROIRounded);
+  kpiRoi.innerText = confirmedCount
+    ? formatPercent(confirmedROI.toFixed(1))
+    : "--";
 }
 
 if(kpiCash){
   kpiCash.innerText =
     canViewDashboardData
-      ? formatCurrency(monthlyProfit)
+      ? (confirmedCount ? formatCurrency(confirmedMonthlyCashflow) : "--")
       : "🔒";
 }
 
 if(kpiInvest){
   kpiInvest.innerText =
     canViewDashboardData
-      ? formatCurrency(totalCapital)
+      ? (confirmedCount ? formatCurrency(confirmedEquity) : "--")
       : "🔒";
 }
   
 if(kpiBreak){
   kpiBreak.innerText =
     canViewDashboardData
-      ? formatYears(breakEven)
+      ? (confirmedCount ? formatYears(confirmedBreakEven.toFixed(1)) : "--")
       : "🔒";
 }
 // ================= PORTFOLIO =================
 const roiEl = document.getElementById("portfolio-roi");
-if(roiEl) roiEl.textContent = formatPercent(avgROIRounded);
+if(roiEl){
+  roiEl.textContent = confirmedCount
+    ? formatPercent(confirmedROI.toFixed(1))
+    : "--";
+}
 
 const cashEl =
 document.getElementById("portfolio-cashflow");
@@ -2012,7 +2096,7 @@ document.getElementById("portfolio-cashflow");
 if(cashEl){
   cashEl.textContent =
     canViewDashboardData
-      ? formatCurrency(avgCashflow)
+      ? (confirmedCount ? formatCurrency(confirmedMonthlyCashflow) : "--")
       : "🔒";
 }
 
@@ -2022,18 +2106,17 @@ document.getElementById("portfolio-capital");
 if(capEl){
   capEl.textContent =
     canViewDashboardData
-      ? formatCurrency(totalCapital)
+      ? (confirmedCount ? formatCurrency(confirmedEquity) : "--")
       : "🔒";
 }
 
 const countEl = document.getElementById("portfolio-count");
-if(countEl) countEl.textContent = count;
+if(countEl) countEl.textContent = confirmedCount;
 
 const investmentScore =
 calculateInvestmentScore(
     avgROI,
-    totalCapital,
-    count
+    window.dashboardSimulations
 );
 
 updateDynamicTexts();
@@ -2167,7 +2250,7 @@ margin-bottom:6px;
 text-transform:uppercase;
 letter-spacing:0.5px;
 ">
-${t("Capitale portfolio","Portfolio capital")}
+${t("Volume analizzato","Analyzed volume")}
 </h3>
 
 <div style="
@@ -2805,8 +2888,8 @@ title = t(
 );
 
 text = t(
-"Il tuo portafoglio B&B ha un ROI superiore alla media nazionale. Questo indica una buona selezione degli investimenti.",
-"Your B&B portfolio ROI is above the national average, indicating strong investment choices."
+"Le simulazioni salvate hanno un ROI medio superiore alla media nazionale. Le opportunità analizzate mostrano un buon potenziale.",
+"Your saved simulations have an average ROI above the national benchmark. The analyzed opportunities show strong potential."
 );
 
 }else if(avgROI > 0){
@@ -2817,8 +2900,8 @@ title = t(
 );
 
 text = t(
-"Il tuo ROI è positivo ma sotto la media nazionale. Potresti migliorarlo ottimizzando occupazione o prezzo medio notte.",
-"Your ROI is positive but below the national average. Consider improving occupancy or nightly rate."
+"Il ROI medio simulato è positivo ma sotto la media nazionale. Valuta scenari con maggiore occupazione o un prezzo medio notte più efficace.",
+"The average simulated ROI is positive but below the national benchmark. Consider scenarios with higher occupancy or a more effective nightly rate."
 );
 
 }else{
@@ -2829,8 +2912,8 @@ title = t(
 );
 
 text = t(
-"Il ROI medio del tuo portafoglio è negativo. Valuta immobili con maggiore domanda turistica o costi più bassi.",
-"Your portfolio ROI is negative. Consider properties with higher tourism demand or lower costs."
+"Il ROI medio delle simulazioni è negativo. Valuta immobili con maggiore domanda turistica o costi più bassi.",
+"The average ROI of your simulations is negative. Consider properties with higher tourism demand or lower costs."
 );
 
 }
@@ -3089,6 +3172,45 @@ if(!window.currentUser){
   return;
 }
 
+async function togglePortfolioAnalysis(e){
+
+const btn = e.target.closest(".portfolio-analysis");
+if(!btn) return;
+
+e.preventDefault();
+e.stopPropagation();
+
+if(!window.currentUser){
+  alert(t("Sessione non valida. Ricarica la pagina.", "Invalid session. Reload the page."));
+  return;
+}
+
+const id = btn.dataset.id;
+const isActive = btn.dataset.active === "true";
+
+try{
+  btn.disabled = true;
+
+  await updateDoc(
+    doc(db, "analyses", id),
+    { isPortfolio: !isActive }
+  );
+
+  window.__dashboardLoaded = false;
+  window.__forceReload = true;
+  await loadDashboard();
+
+}catch(err){
+  btn.disabled = false;
+  console.error("Portfolio update error:", err);
+  alert(t(
+    "Impossibile aggiornare il portafoglio. Riprova.",
+    "Unable to update the portfolio. Please try again."
+  ));
+}
+
+}
+
 const ref = doc(db,"analyses",id);
 
 const snap = await getDoc(ref);
@@ -3204,6 +3326,10 @@ localStorage.setItem(
 // ================= GLOBAL CLICK HANDLER =================
 
 document.addEventListener("click",(e)=>{
+
+  if(e.target.closest(".portfolio-analysis")){
+    togglePortfolioAnalysis(e);
+  }
 
   if(e.target.closest(".delete-analysis")){
     deleteAnalysis(e);
