@@ -439,7 +439,7 @@ body.dashboard-bg {
   grid-column: 1;
   grid-row: 2;
   min-height: 0;
-  height: 460px !important;
+  height: 360px !important;
 }
 
 #pms-dashboard-section > .analysis-card:last-child h3 {
@@ -449,8 +449,8 @@ body.dashboard-bg {
 
 #pms-performance-chart {
   width: 100% !important;
-  height: 310px !important;
-  max-height: 310px;
+  height: 230px !important;
+  max-height: 230px;
 }
 
 /* Properties view */
