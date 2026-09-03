@@ -17,6 +17,7 @@ deleteDoc,
 doc,
 addDoc,
 updateDoc,
+writeBatch,
 serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -796,6 +797,9 @@ const analyses = querySnapshot.docs.map(doc => {
     visualROI:
       data.visualROI || 0,
 
+    realROI:
+      data.realROI || 0,
+
     price:
       data.propertyPrice ||
       data.price ||
@@ -913,6 +917,9 @@ const analyses = querySnapshot.docs.map(doc => {
 
     isPortfolio:
       data.isPortfolio === true,
+
+    propertyId:
+      data.propertyId || null,
 
 verdict:
   data.verdict ?? null,
@@ -1450,6 +1457,8 @@ window.isDemoData
     class="portfolio-analysis"
     data-id="${data.id}"
     data-active="${data.isPortfolio ? "true" : "false"}"
+    data-linked="${data.propertyId ? "true" : "false"}"
+    ${data.propertyId ? "disabled" : ""}
     style="
       background:${data.isPortfolio ? "#ecfdf5" : "#0f172a"};
       color:${data.isPortfolio ? "#047857" : "white"};
@@ -1458,13 +1467,16 @@ window.isDemoData
       border-radius:7px;
       font-size:12px;
       font-weight:700;
-      cursor:pointer;
+      cursor:${data.propertyId ? "default" : "pointer"};
+      opacity:${data.propertyId ? ".8" : "1"};
     ">
-    ${data.isPortfolio
+    ${data.propertyId
+      ? t("✓ Collegato al PMS", "✓ Linked to PMS")
+      : data.isPortfolio
       ? t("✓ Nel portafoglio", "✓ In portfolio")
       : t("+ Aggiungi al portafoglio", "+ Add to portfolio")}
   </button>
-  ${canDelete() ? `
+  ${canDelete() && !data.propertyId ? `
   <button
     class="delete-analysis"
     data-id="${data.id}"
@@ -3217,6 +3229,8 @@ if(!window.currentUser){
 const id = btn.dataset.id;
 const isActive = btn.dataset.active === "true";
 
+if(btn.dataset.linked === "true") return;
+
 try{
   btn.disabled = true;
 
@@ -4428,6 +4442,19 @@ const elementsToBlur = [
 
 window.openPropertyModal = function(){
 
+window.editingPropertyId = null;
+
+const title = document.getElementById("property-modal-title");
+if(title){
+  title.textContent = t("🏠 Nuova proprietà", "🏠 New Property");
+}
+
+["property-name", "property-city", "property-address", "property-price"]
+  .forEach(id => {
+    const field = document.getElementById(id);
+    if(field) field.value = "";
+  });
+
 const modal =
 document.getElementById(
 "property-modal"
@@ -4435,11 +4462,80 @@ document.getElementById(
 
 if(modal){
 
+populatePropertyAnalysisSelect();
+
 modal.style.display = "flex";
 
 }
 
 };
+
+window.openPropertyEditor = async function(id){
+
+  if(!window.currentUser) return;
+
+  const propertySnap = await getDoc(doc(db, "properties", id));
+  if(!propertySnap.exists()) return;
+
+  const data = propertySnap.data();
+  window.editingPropertyId = id;
+
+  populatePropertyAnalysisSelect();
+
+  const title = document.getElementById("property-modal-title");
+  if(title){
+    title.textContent = t("🏠 Modifica proprietà", "🏠 Edit Property");
+  }
+
+  document.getElementById("property-name").value = data.name || "";
+  document.getElementById("property-city").value = data.city || "";
+  document.getElementById("property-address").value = data.address || "";
+  document.getElementById("property-price").value = data.priceNight || "";
+  document.getElementById("property-analysis").value = data.analysisId || "";
+
+  const modal = document.getElementById("property-modal");
+  if(modal) modal.style.display = "flex";
+};
+
+function populatePropertyAnalysisSelect(){
+
+  const select = document.getElementById("property-analysis");
+  if(!select) return;
+
+  const currentValue = select.value;
+  const analyses = Array.isArray(window.dashboardSimulations)
+    ? window.dashboardSimulations
+    : [];
+
+  select.replaceChildren();
+
+  const emptyOption = document.createElement("option");
+  emptyOption.value = "";
+  emptyOption.textContent = t("Solo gestione PMS", "PMS management only");
+  select.appendChild(emptyOption);
+
+  analyses.forEach(data => {
+    const option = document.createElement("option");
+    option.value = data.id;
+    option.textContent = `${String(data.city || "-").toUpperCase()} · ${formatCurrency(data.price)} · ROI ${formatPercent(data.roi)}`;
+    select.appendChild(option);
+  });
+
+  if(analyses.some(data => data.id === currentValue)){
+    select.value = currentValue;
+  }
+
+  if(!select.dataset.citySync){
+    select.dataset.citySync = "true";
+    select.addEventListener("change", () => {
+      const cityInput = document.getElementById("property-city");
+      if(!cityInput || cityInput.value.trim()) return;
+      const selected = (window.dashboardSimulations || [])
+        .find(data => data.id === select.value);
+      if(selected?.city) cityInput.value = selected.city;
+    });
+  }
+}
 
 window.closePropertyModal = function(){
 
@@ -4760,6 +4856,15 @@ window.saveProperty = async function(){
         document.getElementById("property-price")?.value || 0
       );
 
+    const analysisId =
+      document.getElementById("property-analysis")?.value || "";
+
+    const linkedAnalysis = analysisId
+      ? (window.dashboardSimulations || []).find(data => data.id === analysisId)
+      : null;
+
+    const editingPropertyId = window.editingPropertyId || null;
+
     if(!name){
       alert(
   t(
@@ -4772,9 +4877,7 @@ window.saveProperty = async function(){
 
     if(canUseFirestorePMS()){
 
-  await addDoc(
-    collection(db,"properties"),
-    {
+  const propertyData = {
 
       uid: window.currentUser.uid,
 
@@ -4783,11 +4886,92 @@ window.saveProperty = async function(){
       address,
       priceNight,
 
-      createdAt:
+      analysisId: linkedAnalysis?.id || null,
+
+      investmentSnapshot: linkedAnalysis ? {
+        propertyPrice: Number(linkedAnalysis.price || 0),
+        equity: Number(linkedAnalysis.equity || 0),
+        roi: Number(linkedAnalysis.roi || 0),
+        realROI: Number(linkedAnalysis.realROI || 0),
+        annualCashflow: Number(linkedAnalysis.net || 0),
+        risk: Number(linkedAnalysis.risk || 0),
+        occupancy: Number(linkedAnalysis.occupancy || 0),
+        city: linkedAnalysis.city || city || ""
+      } : null,
+
+      updatedAt:
         serverTimestamp()
 
+    };
+
+  if(linkedAnalysis){
+    const propertiesSnap = await getDocs(
+      query(
+        collection(db, "properties"),
+        where("uid", "==", window.currentUser.uid)
+      )
+    );
+
+    const alreadyLinked = propertiesSnap.docs.some(
+      item => item.id !== editingPropertyId && item.data().analysisId === linkedAnalysis.id
+    );
+
+    if(alreadyLinked){
+      alert(t(
+        "Questa analisi è già collegata a una proprietà.",
+        "This analysis is already linked to a property."
+      ));
+      return;
     }
-  );
+
+    const batch = writeBatch(db);
+    const propertyRef = editingPropertyId
+      ? doc(db, "properties", editingPropertyId)
+      : doc(collection(db, "properties"));
+
+    if(!editingPropertyId) propertyData.createdAt = serverTimestamp();
+    batch.set(propertyRef, propertyData, { merge: Boolean(editingPropertyId) });
+
+    if(editingPropertyId){
+      const previousSnap = await getDoc(propertyRef);
+      const previousAnalysisId = previousSnap.exists()
+        ? previousSnap.data().analysisId
+        : null;
+
+      if(previousAnalysisId && previousAnalysisId !== linkedAnalysis.id){
+        batch.update(
+          doc(db, "analyses", previousAnalysisId),
+          { isPortfolio: false, propertyId: null }
+        );
+      }
+    }
+
+    batch.update(
+      doc(db, "analyses", linkedAnalysis.id),
+      { isPortfolio: true, propertyId: propertyRef.id }
+    );
+    await batch.commit();
+  }else if(editingPropertyId){
+    const propertyRef = doc(db, "properties", editingPropertyId);
+    const previousSnap = await getDoc(propertyRef);
+    const previousAnalysisId = previousSnap.exists()
+      ? previousSnap.data().analysisId
+      : null;
+    const batch = writeBatch(db);
+    batch.set(propertyRef, propertyData, { merge: true });
+
+    if(previousAnalysisId){
+      batch.update(
+        doc(db, "analyses", previousAnalysisId),
+        { isPortfolio: false, propertyId: null }
+      );
+    }
+
+    await batch.commit();
+  }else{
+    propertyData.createdAt = serverTimestamp();
+    await addDoc(collection(db, "properties"), propertyData);
+  }
 
 }else{
 
@@ -4800,8 +4984,15 @@ window.saveProperty = async function(){
     document.getElementById("property-city").value = "";
     document.getElementById("property-address").value = "";
     document.getElementById("property-price").value = "";
+    document.getElementById("property-analysis").value = "";
+    window.editingPropertyId = null;
 
-    loadProperties();
+    await loadProperties();
+    await loadPMSStats();
+
+    window.__dashboardLoaded = false;
+    window.__forceReload = true;
+    await loadDashboard();
 
   }catch(err){
 
@@ -4942,8 +5133,11 @@ return;
 
   for (const docItem of snap.docs){
 
-  const data =
+const data =
     docItem.data();
+
+const investment =
+  data.investmentSnapshot || null;
 
 const bookingsSnap =
   await getDocs(
@@ -5173,6 +5367,38 @@ ${t(
 </div>
 
 </div>
+
+${investment ? `
+<div style="
+margin-bottom:18px;
+padding:14px 16px;
+border:1px solid #a7f3d0;
+border-radius:14px;
+background:#ecfdf5;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+">
+  <div>
+    <strong style="display:block;color:#047857;font-size:13px;">
+      ${t("Analisi finanziaria collegata", "Financial analysis linked")}
+    </strong>
+    <span style="color:#64748b;font-size:12px;">
+      ${t("Dati verificati per Dashboard e Autopilot", "Verified data for Dashboard and Autopilot")}
+    </span>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <span style="padding:6px 9px;border-radius:999px;background:white;color:#0f172a;font-size:12px;font-weight:700;">
+      ROI ${formatPercent(investment.roi)}
+    </span>
+    <span style="padding:6px 9px;border-radius:999px;background:white;color:#0f172a;font-size:12px;font-weight:700;">
+      ${t("Equity", "Equity")} ${formatCurrency(investment.equity)}
+    </span>
+  </div>
+</div>
+` : ""}
 
         <div style="
 margin-top:18px;
@@ -5421,6 +5647,22 @@ onclick="openBookings('${docItem.id}')">
 <button
 class="btn-dashboard"
 style="
+flex:1;
+height:48px;
+font-weight:700;
+border-radius:12px;
+"
+onclick="openPropertyEditor('${docItem.id}')">
+
+${investment
+  ? t("Modifica dati", "Edit details")
+  : t("Collega analisi", "Link analysis")}
+
+</button>
+
+<button
+class="btn-dashboard"
+style="
 width:48px;
 height:48px;
 padding:0;
@@ -5462,21 +5704,37 @@ async function(id){
     )
   );
 
-  if(!ok) return;
+if(!ok) return;
 
-  await deleteDoc(
-    doc(
-      db,
-      "properties",
-      id
-    )
-  );
+  const propertyRef = doc(db, "properties", id);
+  const propertySnap = await getDoc(propertyRef);
+  const analysisId = propertySnap.exists()
+    ? propertySnap.data().analysisId
+    : null;
+
+  const linkedAnalysisSnap = analysisId
+    ? await getDoc(doc(db, "analyses", analysisId))
+    : null;
+
+  if(linkedAnalysisSnap?.exists()){
+    const batch = writeBatch(db);
+    batch.delete(propertyRef);
+    batch.update(
+      doc(db, "analyses", analysisId),
+      { isPortfolio: false, propertyId: null }
+    );
+    await batch.commit();
+  }else{
+    await deleteDoc(propertyRef);
+  }
 
   await loadProperties();
 
   await loadPMSStats();
 
-  loadProperties();
+  window.__dashboardLoaded = false;
+  window.__forceReload = true;
+  await loadDashboard();
 
 };
 
