@@ -23,16 +23,33 @@ body {
 }
 
 .hero-roi::before {
-  filter: saturate(.75) contrast(1.05);
+  background-image: url("/img/rome-bg.jpg");
+  filter: saturate(.9) contrast(1.03) brightness(1.05);
   transform: scale(1.02);
+}
+
+.hero-roi.rome::before {
+  background-image: url("/img/rome-bg.jpg");
+}
+
+.hero-roi.milan::before {
+  background-image: url("/img/milan-bg.jpg");
+}
+
+.hero-roi.naples::before {
+  background-image: url("/img/naples-bg.jpg");
+}
+
+.hero-roi.florence::before {
+  background-image: url("/img/florence-bg.jpg");
 }
 
 .hero-roi::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background: linear-gradient(180deg, rgba(5, 15, 32, .54), rgba(5, 15, 32, .84));
+  z-index: 0;
+  background: linear-gradient(180deg, rgba(5, 15, 32, .26), rgba(5, 15, 32, .5));
 }
 
 .hero-roi .container {
@@ -47,6 +64,7 @@ body {
   line-height: 1.02;
   letter-spacing: -.045em;
   text-wrap: balance;
+  text-shadow: 0 3px 18px rgba(2, 6, 23, .72);
 }
 
 .hero-roi > .container > p {
@@ -55,6 +73,7 @@ body {
   color: #e2e8f0;
   font-size: 17px;
   line-height: 1.65;
+  text-shadow: 0 2px 10px rgba(2, 6, 23, .72);
 }
 
 .hero-roi .cta {
