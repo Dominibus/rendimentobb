@@ -387,6 +387,37 @@ window.currentLang === "it" ? "it-IT" : "en-US"
 
 }
 
+function getBookingNightsInMonth(checkin, checkout, referenceDate = new Date()){
+  if(!checkin || !checkout) return 0;
+
+  const arrival = new Date(`${checkin}T00:00:00`);
+  const departure = new Date(`${checkout}T00:00:00`);
+  const monthStart = new Date(
+    referenceDate.getFullYear(),
+    referenceDate.getMonth(),
+    1
+  );
+  const monthEnd = new Date(
+    referenceDate.getFullYear(),
+    referenceDate.getMonth() + 1,
+    1
+  );
+
+  if(
+    Number.isNaN(arrival.getTime()) ||
+    Number.isNaN(departure.getTime()) ||
+    departure <= arrival
+  ) return 0;
+
+  const overlapStart = arrival > monthStart ? arrival : monthStart;
+  const overlapEnd = departure < monthEnd ? departure : monthEnd;
+
+  return Math.max(
+    0,
+    Math.round((overlapEnd - overlapStart) / (1000 * 60 * 60 * 24))
+  );
+}
+
 // ================= INVESTMENT SCORE =================
 
 function calculateInvestmentScore(avgROI,analyses){
@@ -5160,6 +5191,7 @@ const bookingsSnap =
   bookingsSnap.size;
 
 let totalNights = 0;
+let occupiedNightsThisMonth = 0;
 let realRevenue = 0;
 let totalGuests = 0;  
 
@@ -5195,6 +5227,10 @@ Number(
     );
 
   totalNights += nights;
+  occupiedNightsThisMonth += getBookingNightsInMonth(
+    booking.checkin,
+    booking.checkout
+  );
 
 });
 
@@ -5210,7 +5246,7 @@ const occupancy =
     100,
     Math.round(
       (
-        totalNights /
+        occupiedNightsThisMonth /
         daysInMonth
       ) * 100
     )
@@ -9330,6 +9366,7 @@ async function loadPMSStats(){
 
   let revenue = 0;
   let totalNights = 0;
+  let occupiedNightsThisMonth = 0;
 
   let arrivalsToday = 0;
   let departuresToday = 0;
@@ -9367,6 +9404,10 @@ async function loadPMSStats(){
       );
 
     totalNights += nights;
+    occupiedNightsThisMonth += getBookingNightsInMonth(
+      b.checkin,
+      b.checkout
+    );
 
     // ======================
     // STATUS KPI
@@ -9447,7 +9488,7 @@ async function loadPMSStats(){
         100,
         Math.round(
           (
-            totalNights /
+            occupiedNightsThisMonth /
             (properties * daysInMonth)
           ) * 100
         )
