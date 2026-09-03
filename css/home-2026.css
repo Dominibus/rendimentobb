@@ -256,7 +256,7 @@ body.home-page .rb-home-paths-title {
 
 body.home-page .rb-home-path-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -590,7 +590,7 @@ body.home-page section.hero.rb-home-hero .rb-home-paths-title {
 
   body.home-page section.hero.rb-home-hero .rb-home-path-grid {
     display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 6px !important;
     margin: 0 !important;
     padding: 0 !important;
