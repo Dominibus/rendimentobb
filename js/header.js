@@ -5,6 +5,30 @@
 import { auth } from "/js/firebase-init.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+const GA_MEASUREMENT_ID = "G-749B8PW4ST";
+
+function initializeGoogleAnalytics(){
+  if(window.__rbGA4Initialized) return;
+
+  window.__rbGA4Initialized = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){
+    window.dataLayer.push(arguments);
+  };
+
+  if(!document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"]`)){
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(script);
+  }
+
+  window.gtag("js", new Date());
+  window.gtag("config", GA_MEASUREMENT_ID);
+}
+
+initializeGoogleAnalytics();
+
 // ===============================
 // 🔧 GLOBAL UNLOCK FALLBACK (FIX ERROR)
 // ===============================
