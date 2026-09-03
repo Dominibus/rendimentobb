@@ -11,6 +11,7 @@ Mutuo B&B
 </title>
 
 <meta name="description"
+content="Simula rata, impatto sul ROI e sostenibilità finanziaria attraverso scenari indicativi."
 data-it="Simula rata, impatto sul ROI e sostenibilità finanziaria attraverso scenari indicativi."
 data-en="Simulate payments, ROI impact and financial sustainability through indicative scenarios.">
   
@@ -611,10 +612,10 @@ color:#fff;
 ">
 
 <span
-data-it="Executive Mortgage Intelligence"
-data-en="Executive Mortgage Intelligence">
+data-it="Analisi mutuo per investimenti B&B"
+data-en="Mortgage analysis for B&B investments">
 
-Executive Mortgage Intelligence
+Analisi mutuo per investimenti B&B
 
 </span>
 
@@ -637,11 +638,11 @@ line-height:1.8;
 color:#e2e8f0;
 "
 
-data-it="Analizza rata, cashflow, sostenibilità finanziaria e confronta le migliori soluzioni di finanziamento per proteggere il rendimento del tuo investimento."
+data-it="Analizza rata, cashflow e sostenibilità finanziaria confrontando scenari indicativi di finanziamento."
 
-data-en="Analyze mortgage payments, cashflow, financial sustainability and compare financing solutions to protect your investment returns.">
+data-en="Analyze payments, cashflow and financial sustainability by comparing indicative financing scenarios.">
 
-Analizza rata, cashflow, sostenibilità finanziaria e confronta le migliori soluzioni di finanziamento per proteggere il rendimento del tuo investimento.
+Analizza rata, cashflow e sostenibilità finanziaria confrontando scenari indicativi di finanziamento.
 
 </p>
 
@@ -697,7 +698,7 @@ Stimato
 
 <br>
 
-<strong>Debt</strong>
+<strong><span data-it="Debito" data-en="Debt">Debito</span></strong>
 
 <br>
 
@@ -722,10 +723,10 @@ Sostenibilità
 <br>
 
 <span
-data-it="Advisor"
-data-en="Advisor">
+data-it="Valutazione"
+data-en="Assessment">
 
-Advisor
+Valutazione
 
 </span>
 
@@ -783,10 +784,10 @@ margin-bottom:22px;
 ">
 
 <span
-data-it="Executive Mortgage Intelligence"
-data-en="Executive Mortgage Intelligence">
+data-it="Analisi mutuo B&B"
+data-en="B&B mortgage analysis">
 
-Executive Mortgage Intelligence
+Analisi mutuo B&B
 
 </span>
 
@@ -862,7 +863,7 @@ Impatto
 
 <div class="kpi-item">
 🛡️<br>
-<strong>Risk</strong><br>
+<strong><span data-it="Rischio" data-en="Risk">Rischio</span></strong><br>
 
 <span
 data-it="Sostenibilità"
@@ -890,13 +891,13 @@ Confronto
 
 <div class="kpi-item">
 📊<br>
-<strong>Score</strong><br>
+<strong><span data-it="Punteggio" data-en="Score">Punteggio</span></strong><br>
 
 <span
-data-it="Advisor"
-data-en="Advisor">
+data-it="Valutazione"
+data-en="Assessment">
 
-Advisor
+Valutazione
 
 </span>
 
@@ -1310,10 +1311,10 @@ margin-bottom:20px;
 📄
 
 <span
-data-it="Executive Investment Report"
-data-en="Executive Investment Report">
+data-it="Riepilogo investimento"
+data-en="Investment summary">
 
-Executive Investment Report
+Riepilogo investimento
 
 </span>
 
@@ -1321,11 +1322,11 @@ Executive Investment Report
 
 <h2
 
-data-it="Ricevi il tuo Executive Investment Report"
+data-it="Ricevi il riepilogo del tuo investimento"
 
-data-en="Receive your Executive Investment Report">
+data-en="Receive your investment summary">
 
-Ricevi il tuo Executive Investment Report
+Ricevi il riepilogo del tuo investimento
 
 </h2>
 
@@ -1420,7 +1421,7 @@ Impatto
 
 <br><br>
 
-<strong>Risk</strong>
+<strong><span data-it="Rischio" data-en="Risk">Rischio</span></strong>
 
 <br>
 
@@ -1445,10 +1446,10 @@ Sostenibilità
 <br>
 
 <span
-data-it="Executive"
-data-en="Executive">
+data-it="Riepilogo"
+data-en="Summary">
 
-Executive
+Riepilogo
 
 </span>
 
@@ -1611,14 +1612,14 @@ alertBox.style.display="block";
 if(roi < 0){
   alertBox.className="roi-alert roi-bad";
   alertBox.innerHTML = t(
-  "⚠️ Questo mutuo sta distruggendo il tuo profitto",
-  "⚠️ This mortgage is destroying your profit"
+  "⚠️ La rata supera i ricavi indicati nello scenario",
+  "⚠️ The payment exceeds the revenue entered for this scenario"
 );
 }else{
   alertBox.className="roi-alert roi-good";
   alertBox.innerHTML = t(
-    "✅ Mutuo sostenibile",
-    "✅ Sustainable mortgage"
+    "✅ Margine stimato positivo nello scenario inserito",
+    "✅ Positive estimated margin in the entered scenario"
   );
 }
 
@@ -1781,22 +1782,22 @@ let verdict, color;
 
 if(roi < 5){
   verdict = t(
-    "❌ NON fare questo mutuo",
-    "❌ DO NOT take this mortgage"
+    "❌ Scenario finanziariamente critico",
+    "❌ Financially critical scenario"
   );
   color = "#ef4444";
 }
 else if(roi < 12){
   verdict = t(
-    "⚠️ Operazione rischiosa",
-    "⚠️ Risky investment"
+    "⚠️ Scenario da approfondire",
+    "⚠️ Scenario requires further review"
   );
   color = "#f59e0b";
 }
 else{
   verdict = t(
-    "✅ Mutuo sostenibile",
-    "✅ Sustainable investment"
+    "✅ Margine stimato positivo",
+    "✅ Positive estimated margin"
   );
   color = "#10b981";
 }
@@ -1838,16 +1839,16 @@ else if(roi < 12){
 
 advice =
 window.currentLang==="en"
-? "⚠️ Sustainable operation but open to optimization. Compare at least three financing scenarios."
-: "⚠️ Operazione sostenibile ma migliorabile. Confronta almeno tre scenari di finanziamento.";
+? "⚠️ The entered scenario requires further review. Compare multiple financing assumptions."
+: "⚠️ Lo scenario inserito richiede un approfondimento. Confronta più ipotesi di finanziamento.";
 
 }
 else{
 
 advice =
 window.currentLang==="en"
-? "✅ Mortgage compatible with a profitable B&B investment."
-: "✅ Mutuo compatibile con un investimento B&B profittevole.";
+? "✅ The entered scenario shows a positive estimated margin. Verify costs and actual lender terms."
+: "✅ Lo scenario inserito mostra un margine stimato positivo. Verifica costi e condizioni effettive dell'intermediario.";
 
 }
 
@@ -2084,7 +2085,7 @@ window.currentLang==="en"
 ` : ""}
 
 <div style="font-size:13px;color:#475569;margin-bottom:10px">
-  ${t("Tasso fisso medio","Average fixed rate")}
+  ${t("Tasso fisso di esempio","Example fixed rate")}
 </div>
 
 <div style="
@@ -2096,14 +2097,14 @@ color:#0f172a;
 
 ${
 i===0
-? t("🏆 Migliore per investitori B&B","🏆 Best for B&B investors")
+? t("Scenario A · 3,1%","Scenario A · 3.1%")
 : i===1
-? t("⚡ Approvazione veloce","⚡ Fast approval")
+? t("Scenario B · 3,3%","Scenario B · 3.3%")
 : i===2
-? t("📈 Miglior compromesso","📈 Best balance")
+? t("Scenario C · 3,4%","Scenario C · 3.4%")
 : i===3
-? t("🛡️ Opzione stabile","🛡️ Stable option")
-: t("💰 Soluzione economica","💰 Budget solution")
+? t("Scenario D · 3,5%","Scenario D · 3.5%")
+: t("Scenario E · 3,7%","Scenario E · 3.7%")
 }
 
 </div>
@@ -2474,10 +2475,10 @@ z-index:9999;
   ">
 
     <h3
-data-it="🔒 Sblocca i dati reali"
-data-en="🔒 Unlock real data"
+data-it="🔒 Sblocca il confronto completo"
+data-en="🔒 Unlock full comparison"
 style="margin-bottom:10px;color:#0f172a;font-weight:700;">
-🔒 Sblocca i dati reali
+🔒 Sblocca il confronto completo
 </h3>
 
     <p style="color:#334155;font-weight:500;margin-bottom:20px;"
