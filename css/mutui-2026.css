@@ -67,8 +67,8 @@ body.mortgage-page {
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(7, 21, 43, 0.92), rgba(7, 21, 43, 0.68) 58%, rgba(7, 21, 43, 0.78)),
-    linear-gradient(0deg, rgba(7, 21, 43, 0.42), transparent 55%);
+    linear-gradient(90deg, rgba(7, 21, 43, 0.58), rgba(7, 21, 43, 0.34) 58%, rgba(7, 21, 43, 0.46)),
+    linear-gradient(0deg, rgba(7, 21, 43, 0.24), transparent 55%);
 }
 
 .mortgage-page .hero-mutui > .container {
