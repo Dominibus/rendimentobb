@@ -1543,6 +1543,8 @@ renderStats(
   portfolioAnalyses
 );
 
+renderPortfolioManager(portfolioAnalyses);
+
 // ================= CONTINUA RENDER =================
 
 renderInsight(count,totalROI,totalCapital);
@@ -1972,6 +1974,91 @@ Tool
 
 }
 
+
+// ================= REAL PORTFOLIO MANAGER =================
+
+function renderPortfolioManager(portfolioAnalyses = []){
+  const container = document.getElementById("portfolio-manager");
+  if(!container) return;
+
+  const linkedCount = portfolioAnalyses.filter(data => Boolean(data.propertyId)).length;
+  const manualCount = portfolioAnalyses.length - linkedCount;
+
+  const summary = portfolioAnalyses.length
+    ? t(
+        `${portfolioAnalyses.length} immobili confermati · ${linkedCount} PMS · ${manualCount} manuali`,
+        `${portfolioAnalyses.length} confirmed properties · ${linkedCount} PMS · ${manualCount} manual`
+      )
+    : t("Nessun immobile confermato", "No confirmed properties");
+
+  const cards = portfolioAnalyses.map((data, index) => {
+    const linked = Boolean(data.propertyId);
+    const city = escapeDashboardHTML(data.city || t("Città non indicata", "City not specified"));
+    const price = Number(data.price || 0);
+    const equity = Number(data.equity || 0);
+    const roi = Number(data.roi || 0);
+    const yearlyCashflow = Number(data.net || 0);
+    const risk = Number(data.risk || 0);
+    const complete = price > 0 && equity > 0 && Number.isFinite(roi) && Number.isFinite(yearlyCashflow);
+
+    return `
+      <article class="portfolio-manager__item">
+        <div class="portfolio-manager__item-head">
+          <div>
+            <span class="portfolio-manager__origin portfolio-manager__origin--${linked ? "linked" : "manual"}">
+              ${linked ? t("🏠 Collegato al PMS", "🏠 Linked to PMS") : t("📌 Inserimento manuale", "📌 Manual entry")}
+            </span>
+            <h3>${t("Immobile", "Property")} ${index + 1} · ${city}</h3>
+          </div>
+          <span class="portfolio-manager__status portfolio-manager__status--${complete ? "complete" : "incomplete"}">
+            ${complete ? t("✓ Dati completi", "✓ Complete data") : t("⚠ Dati da completare", "⚠ Data incomplete")}
+          </span>
+        </div>
+
+        <div class="portfolio-manager__metrics">
+          <div><span>${t("Prezzo", "Price")}</span><strong>${formatCurrency(price)}</strong></div>
+          <div><span>${t("Equity", "Equity")}</span><strong>${formatCurrency(equity)}</strong></div>
+          <div><span>ROI</span><strong>${formatPercent(roi)}</strong></div>
+          <div><span>${t("Cashflow mensile", "Monthly cash flow")}</span><strong>${formatCurrency(yearlyCashflow / 12)}</strong></div>
+          <div><span>${t("Rischio", "Risk")}</span><strong>${Number.isFinite(risk) ? `${new Intl.NumberFormat(window.currentLang === "it" ? "it-IT" : "en-US", { maximumFractionDigits: 0 }).format(risk)}/100` : "--"}</strong></div>
+        </div>
+
+        <div class="portfolio-manager__footer">
+          <span>${linked
+            ? t("I dati finanziari sono gestiti dalla proprietà PMS collegata.", "Financial data is managed by the linked PMS property.")
+            : t("Questa simulazione contribuisce ai totali del portafoglio.", "This simulation contributes to portfolio totals.")}
+          </span>
+          ${linked
+            ? `<span class="portfolio-manager__locked">🔒 ${t("Gestisci dal PMS", "Manage in PMS")}</span>`
+            : `<button class="portfolio-analysis portfolio-manager__remove" data-id="${escapeDashboardHTML(data.id)}" data-active="true" data-linked="false">${t("Rimuovi dal portafoglio", "Remove from portfolio")}</button>`}
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="portfolio-manager__header">
+      <div>
+        <span class="portfolio-manager__eyebrow">LIVE PORTFOLIO</span>
+        <h2>📂 ${t("Portafoglio investimenti", "Investment portfolio")}</h2>
+        <p>${t(
+          "Solo gli immobili confermati alimentano ROI, cashflow, equity e break-even.",
+          "Only confirmed properties feed ROI, cash flow, equity and break-even."
+        )}</p>
+      </div>
+      <strong class="portfolio-manager__summary">${summary}</strong>
+    </div>
+    ${cards || `
+      <div class="portfolio-manager__empty">
+        <strong>${t("Il portafoglio è ancora vuoto", "Your portfolio is still empty")}</strong>
+        <span>${t(
+          "Aggiungi una simulazione oppure collegala a una proprietà PMS per rendere attivi i KPI.",
+          "Add a simulation or link it to a PMS property to activate portfolio KPIs."
+        )}</span>
+      </div>
+    `}
+  `;
+}
 
 // ================= STATS =================
 
