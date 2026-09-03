@@ -466,6 +466,117 @@ body.dashboard-bg {
   margin-bottom: 0;
 }
 
+/* Property modal */
+#property-modal.property-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(9, 20, 38, 0.72);
+  backdrop-filter: blur(8px);
+  z-index: 999999;
+}
+
+.property-modal-panel {
+  width: min(100%, 520px);
+  padding: 30px;
+  color: var(--db26-text);
+  background: #fff;
+  border: 1px solid rgba(8, 182, 122, 0.18);
+  border-radius: 22px;
+  box-shadow: 0 28px 80px rgba(9, 20, 38, 0.28);
+}
+
+.property-modal-panel h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.property-modal-fields {
+  display: grid;
+  gap: 7px;
+  margin-top: 24px;
+}
+
+.property-modal-fields label {
+  margin-top: 7px;
+  color: var(--db26-text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.property-modal-fields input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  color: var(--db26-text);
+  background: var(--db26-surface-soft);
+  border: 1px solid var(--db26-border);
+  border-radius: 12px;
+  font: inherit;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.property-modal-fields input:focus {
+  background: #fff;
+  border-color: var(--db26-green);
+  box-shadow: 0 0 0 4px rgba(8, 182, 122, 0.12);
+}
+
+.property-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.property-modal-actions .btn-dashboard {
+  width: auto;
+  min-width: 104px;
+  justify-content: center;
+}
+
+.property-modal-secondary {
+  color: var(--db26-text) !important;
+  background: #fff !important;
+  border: 1px solid var(--db26-border) !important;
+  box-shadow: none !important;
+}
+
+.property-modal-primary {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--db26-green), var(--db26-green-dark)) !important;
+}
+
+@media (max-width: 560px) {
+  #property-modal.property-modal-overlay {
+    padding: 14px;
+  }
+
+  .property-modal-panel {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+
+  .property-modal-panel h2 {
+    font-size: 23px;
+  }
+
+  .property-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .property-modal-actions .btn-dashboard {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 #pms-properties-section > .analysis-card {
   padding: 24px;
   border: 1px solid var(--db26-border);
