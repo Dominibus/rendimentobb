@@ -90,6 +90,7 @@ function initializeConsentUI(){
   settings.type = "button";
   settings.className = "rb-consent-settings";
   settings.hidden = true;
+  settings.style.display = "none";
 
   function renderConsentLanguage(){
     const english = (localStorage.getItem("rb_lang") || "it") === "en";
@@ -103,6 +104,7 @@ function initializeConsentUI(){
 
   function showBanner(){
     settings.hidden = true;
+    settings.style.display = "none";
     banner.hidden = false;
   }
 
@@ -112,6 +114,7 @@ function initializeConsentUI(){
     setAnalyticsConsent(choice);
     banner.hidden = true;
     settings.hidden = false;
+    settings.style.display = "block";
   });
   settings.addEventListener("click", showBanner);
   document.addEventListener("rb_language_changed", renderConsentLanguage);
@@ -122,6 +125,7 @@ function initializeConsentUI(){
   if(getAnalyticsConsent()){
     banner.hidden = true;
     settings.hidden = false;
+    settings.style.display = "block";
   }
 }
 
