@@ -3172,6 +3172,35 @@ if(!window.currentUser){
   return;
 }
 
+const ref = doc(db,"analyses",id);
+
+const snap = await getDoc(ref);
+
+
+
+await deleteDoc(
+  doc(db,"analyses",id)
+);
+
+
+
+// 🔥 reset dashboard cache
+window.__dashboardLoaded = false;
+window.__forceReload = true;
+
+await loadDashboard();
+
+}catch(err){
+
+  console.error(
+    "Delete error:",
+    err
+  );
+
+}
+
+}
+
 async function togglePortfolioAnalysis(e){
 
 const btn = e.target.closest(".portfolio-analysis");
@@ -3207,35 +3236,6 @@ try{
     "Impossibile aggiornare il portafoglio. Riprova.",
     "Unable to update the portfolio. Please try again."
   ));
-}
-
-}
-
-const ref = doc(db,"analyses",id);
-
-const snap = await getDoc(ref);
-
-
-
-await deleteDoc(
-  doc(db,"analyses",id)
-);
-
-
-
-// 🔥 reset dashboard cache
-window.__dashboardLoaded = false;
-window.__forceReload = true;
-
-await loadDashboard();
-
-}catch(err){
-
-  console.error(
-    "Delete error:",
-    err
-  );
-
 }
 
 }
