@@ -437,6 +437,10 @@ function getBookingRevenueInMonth(booking, referenceDate = new Date()){
   return Number(booking.totalAmount || 0) * occupiedNights / totalNights;
 }
 
+function isCancelledBooking(booking){
+  return String(booking?.status || "").toLowerCase() === "cancelled";
+}
+
 // ================= INVESTMENT SCORE =================
 
 function calculateInvestmentScore(avgROI,analyses){
@@ -5330,15 +5334,20 @@ const bookingsSnap =
     )
   );
 
+  const activeBookingDocs =
+    bookingsSnap.docs.filter(
+      item => !isCancelledBooking(item.data())
+    );
+
   const bookingsCount =
-  bookingsSnap.size;
+    activeBookingDocs.length;
 
 let totalNights = 0;
 let occupiedNightsThisMonth = 0;
 let realRevenue = 0;
 let totalGuests = 0;  
 
-bookingsSnap.forEach(b=>{
+activeBookingDocs.forEach(b=>{
 
   const booking =
     b.data();
@@ -8647,6 +8656,7 @@ async function loadBookings(propertyId){
 let totalGuests = 0;
 let totalRevenue = 0;
 let totalNights = 0;
+let activeBookingsCount = 0;
 
 // 🔥 STATISTICHE CANALI
 let sourceStats = {};
@@ -8661,10 +8671,13 @@ let sourceStats = {};
   ...b
 });
 
+    const isCancelled =
+      isCancelledBooking(b);
+
     const source =
   b.source || "Unknown";
 
-if(!sourceStats[source]){
+if(!isCancelled && !sourceStats[source]){
 
   sourceStats[source] = {
     bookings:0,
@@ -8672,6 +8685,10 @@ if(!sourceStats[source]){
   };
 
 }
+
+if(!isCancelled){
+
+activeBookingsCount++;
 
 sourceStats[source].bookings++;
 
@@ -8698,6 +8715,8 @@ sourceStats[source].revenue +=
     );
 
     totalNights += nights;
+
+}
 
 html += `
 
@@ -9095,7 +9114,10 @@ const normalizedBookings =
 
     const attentionCodes = [];
 
-    if(!hasValidDates){
+    const isCancelled =
+      isCancelledBooking(booking);
+
+    if(!isCancelled && !hasValidDates){
 
       attentionCodes.push(
         "invalid_date_range"
@@ -9104,6 +9126,7 @@ const normalizedBookings =
     }
 
     if(
+      !isCancelled &&
       String(
         booking.status || ""
       ).toLowerCase() ===
@@ -9117,6 +9140,7 @@ const normalizedBookings =
     }
 
     if(
+      !isCancelled &&
       checkin === copilotToday
     ){
 
@@ -9127,6 +9151,7 @@ const normalizedBookings =
     }
 
     if(
+      !isCancelled &&
       checkout === copilotToday
     ){
 
@@ -9137,6 +9162,7 @@ const normalizedBookings =
     }
 
     if(
+      !isCancelled &&
       !booking.guestName
     ){
 
@@ -9146,7 +9172,7 @@ const normalizedBookings =
 
     }
 
-    if(totalAmount <= 0){
+    if(!isCancelled && totalAmount <= 0){
 
       attentionCodes.push(
         "missing_or_invalid_amount"
@@ -9226,7 +9252,7 @@ window.rbPMSData = {
   ),
 
   bookings:
-    normalizedBookings.length,
+    activeBookingsCount,
 
   bookingList:
     normalizedBookings,
@@ -9268,7 +9294,7 @@ window.dispatchEvent(
           "Bookings"
         )}
         <br>
-        <strong>${snap.size}</strong>
+        <strong>${activeBookingsCount}</strong>
       </div>
 
       <div class="analysis-card">
@@ -9563,8 +9589,13 @@ async function loadPMSStats(){
   const properties =
     propertiesSnap.size;
 
+  const activeBookingDocs =
+    bookingsSnap.docs.filter(
+      docItem => !isCancelledBooking(docItem.data())
+    );
+
   const bookings =
-    bookingsSnap.size;
+    activeBookingDocs.length;
 
   let revenue = 0;
   let totalNights = 0;
@@ -9584,7 +9615,7 @@ async function loadPMSStats(){
       .toISOString()
       .split("T")[0];
 
-  bookingsSnap.forEach(docItem=>{
+  activeBookingDocs.forEach(docItem=>{
 
     const b =
       docItem.data();
@@ -9658,7 +9689,7 @@ async function loadPMSStats(){
 
     if(
       b.checkin <= today &&
-      b.checkout >= today
+      b.checkout > today
     ){
 
       guestsInHouse +=
@@ -9758,7 +9789,7 @@ setText(
 
 setText(
   "pms-guests",
-  bookingsSnap.docs.reduce(
+  activeBookingDocs.reduce(
     (sum,d)=>
       sum +
       Number(
@@ -9803,7 +9834,7 @@ setText(
   // ======================
 
   renderPMSPerformanceChart(
-    bookingsSnap.docs.map(
+    activeBookingDocs.map(
       d => d.data()
     )
   );
@@ -9875,7 +9906,10 @@ const normalizedPMSBookings =
 
       const attentionCodes = [];
 
-      if(!hasValidDates){
+      const isCancelled =
+        isCancelledBooking(booking);
+
+      if(!isCancelled && !hasValidDates){
 
         attentionCodes.push(
           "invalid_date_range"
@@ -9884,6 +9918,7 @@ const normalizedPMSBookings =
       }
 
       if(
+        !isCancelled &&
         String(
           booking.status || ""
         ).toLowerCase() ===
@@ -9896,7 +9931,7 @@ const normalizedPMSBookings =
 
       }
 
-      if(checkin === today){
+      if(!isCancelled && checkin === today){
 
         attentionCodes.push(
           "arrival_today"
@@ -9904,7 +9939,7 @@ const normalizedPMSBookings =
 
       }
 
-      if(checkout === today){
+      if(!isCancelled && checkout === today){
 
         attentionCodes.push(
           "departure_today"
@@ -9912,7 +9947,7 @@ const normalizedPMSBookings =
 
       }
 
-      if(!booking.guestName){
+      if(!isCancelled && !booking.guestName){
 
         attentionCodes.push(
           "missing_guest_name"
@@ -9920,7 +9955,7 @@ const normalizedPMSBookings =
 
       }
 
-      if(totalAmount <= 0){
+      if(!isCancelled && totalAmount <= 0){
 
         attentionCodes.push(
           "missing_or_invalid_amount"
@@ -10001,7 +10036,7 @@ window.rbPMSData = {
   properties,
 
   bookings:
-    normalizedPMSBookings.length,
+    bookings,
 
   revenue:
     revenueThisMonth,
@@ -10014,7 +10049,7 @@ window.rbPMSData = {
   avgStay,
 
   guests:
-    bookingsSnap.docs.reduce(
+    activeBookingDocs.reduce(
       (sum,d)=>
         sum +
         Number(
@@ -10124,7 +10159,7 @@ dashboardDebug(
 renderExecutiveSummary({
   properties,
   bookings,
-  revenue,
+  revenue: revenueThisMonth,
   occupancy,
   adr,
   revpar,
@@ -10164,6 +10199,7 @@ function renderPMSPerformanceChart(
   const currentYear = new Date().getFullYear();
 
   bookings.forEach(b=>{
+    if(isCancelledBooking(b)) return;
     if(!b.checkin || !b.checkout) return;
 
     for(let month = 0; month < 12; month++){
@@ -10238,6 +10274,8 @@ function getDayBookingState(currentDate, bookingList, isEnglish){
     let isStay = false;
 
     bookingList.forEach(booking=>{
+
+        if(isCancelledBooking(booking)) return;
 
         const checkin = String(booking.checkin || "");
         const checkout = String(booking.checkout || "");
