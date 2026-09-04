@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260903-portfolio-manager">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260904-property-tourist-tax-v10">
 </head>
 
 <body class="dashboard-bg">
@@ -3735,7 +3735,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260904-pms-clickable-reminder-v9"></script>
+<script type="module" src="/js/dashboard.js?v=20260904-property-tourist-tax-v10"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3868,6 +3868,46 @@ inputmode="decimal"
 data-it-placeholder="Prezzo notte"
 data-en-placeholder="Nightly rate"
 placeholder="Prezzo notte">
+
+<label for="property-tourist-tax-enabled" data-it="Tassa di soggiorno" data-en="Tourist tax">Tassa di soggiorno</label>
+<select id="property-tourist-tax-enabled">
+<option value="false" data-it="Non prevista" data-en="Not applicable">Non prevista</option>
+<option value="true" data-it="Attiva per questa proprietà" data-en="Enabled for this property">Attiva per questa proprietà</option>
+</select>
+
+<div id="property-tourist-tax-fields" style="display:none;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div>
+      <label for="property-tourist-tax-rate" data-it="Importo per ospite/notte" data-en="Amount per guest/night">Importo per ospite/notte</label>
+      <input id="property-tourist-tax-rate" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+    </div>
+    <div>
+      <label for="property-tourist-tax-currency" data-it="Valuta" data-en="Currency">Valuta</label>
+      <select id="property-tourist-tax-currency">
+        <option value="EUR">EUR (€)</option>
+        <option value="USD">USD ($)</option>
+        <option value="GBP">GBP (£)</option>
+      </select>
+    </div>
+    <div>
+      <label for="property-tourist-tax-max-nights" data-it="Massimo notti tassabili" data-en="Maximum taxable nights">Massimo notti tassabili</label>
+      <input id="property-tourist-tax-max-nights" type="number" min="0" step="1" inputmode="numeric" value="0">
+    </div>
+    <div>
+      <label for="property-tourist-tax-min-age" data-it="Età minima soggetta" data-en="Minimum taxable age">Età minima soggetta</label>
+      <input id="property-tourist-tax-min-age" type="number" min="0" step="1" inputmode="numeric" value="0">
+    </div>
+  </div>
+  <label for="property-tourist-tax-collection" data-it="Riscossione abituale" data-en="Usual collection time">Riscossione abituale</label>
+  <select id="property-tourist-tax-collection">
+    <option value="checkin" data-it="Al Check-In" data-en="At Check-In">Al Check-In</option>
+    <option value="checkout" data-it="Al Check-Out" data-en="At Check-Out">Al Check-Out</option>
+  </select>
+  <small data-it="Inserisci le regole deliberate dal Comune. 0 notti significa nessun limite; età 0 significa tutti gli ospiti."
+  data-en="Enter the rules set by the municipality. 0 nights means no limit; age 0 means all guests.">
+  Inserisci le regole deliberate dal Comune. 0 notti significa nessun limite; età 0 significa tutti gli ospiti.
+  </small>
+</div>
 
 <label for="property-analysis"
 data-it="Collega analisi finanziaria (facoltativo)"
