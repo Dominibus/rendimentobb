@@ -3043,20 +3043,20 @@ setTimeout(
           bookingForm.style.display ===
           "none"
         ){
-
-          bookingForm.style.display =
-            "flex";
-
-          bookingToggle.innerHTML =
-            "✖";
+          if(typeof window.openBookingModal === "function"){
+            window.openBookingModal();
+          }else{
+            bookingForm.style.display = "flex";
+            bookingToggle.textContent = "✖";
+          }
 
         }else{
-
-          bookingForm.style.display =
-            "none";
-
-          bookingToggle.innerHTML =
-            "➕";
+          if(typeof window.closeBookingForm === "function"){
+            window.closeBookingForm();
+          }else{
+            bookingForm.style.display = "none";
+            bookingToggle.textContent = "➕ Nuova Prenotazione";
+          }
 
         }
 
@@ -3735,7 +3735,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260903-portfolio-manager"></script>
+<script type="module" src="/js/dashboard.js?v=20260904-pms-modal-state"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4019,6 +4019,8 @@ width:100%;
 
 <h3
 id="toggle-booking-form"
+data-it="➕ Nuova Prenotazione"
+data-en="➕ New Booking"
 style="
 margin:0;
 font-size:16px;
