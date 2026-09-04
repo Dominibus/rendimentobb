@@ -8779,6 +8779,67 @@ function renderTodayBookingOperations(bookings = []){
   ];
   const pendingOperations = arrivalsToday.length + departuresToday.length;
 
+  const upcomingOperations = activeBookings.flatMap(booking => {
+    const status = String(booking.status || "").toLowerCase();
+    const events = [];
+
+    if(status === "arrival" && booking.checkin >= today){
+      events.push({
+        type: "arrival",
+        date: booking.checkin,
+        guestName: booking.guestName || window.t("Ospite", "Guest")
+      });
+    }
+
+    if(status === "checkin" && booking.checkout >= today){
+      events.push({
+        type: "departure",
+        date: booking.checkout,
+        guestName: booking.guestName || window.t("Ospite", "Guest")
+      });
+    }
+
+    return events;
+  }).sort((first, second) => first.date.localeCompare(second.date));
+
+  const nextOperation = upcomingOperations[0] || null;
+  let reminderHtml = "";
+
+  if(nextOperation){
+    const todayDate = new Date(`${today}T12:00:00`);
+    const operationDate = new Date(`${nextOperation.date}T12:00:00`);
+    const daysUntil = Math.round(
+      (operationDate - todayDate) / (1000 * 60 * 60 * 24)
+    );
+    const formattedDate = new Intl.DateTimeFormat(
+      window.RB_LANG?.current === "en" ? "en-GB" : "it-IT",
+      { day: "numeric", month: "long" }
+    ).format(operationDate);
+    const timingLabel = daysUntil === 0
+      ? window.t("oggi", "today")
+      : daysUntil === 1
+      ? window.t("domani", "tomorrow")
+      : window.t(`tra ${daysUntil} giorni`, `in ${daysUntil} days`);
+    const operationLabel = nextOperation.type === "arrival"
+      ? window.t("Arrivo", "Arrival")
+      : window.t("Partenza", "Departure");
+
+    reminderHtml = `
+      <div style="margin-top:12px;padding:13px 14px;border-radius:13px;background:#0f172a;color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:11px;color:#93c5fd;font-weight:800;text-transform:uppercase;">🔔 ${window.t("Prossimo promemoria", "Next reminder")}</div>
+          <div style="font-size:14px;font-weight:800;margin-top:4px;">
+            ${operationLabel}: ${escapeDashboardHTML(nextOperation.guestName)}
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:14px;font-weight:800;">${formattedDate}</div>
+          <div style="font-size:11px;color:#a7f3d0;margin-top:3px;">${timingLabel}</div>
+        </div>
+      </div>
+    `;
+  }
+
   container.innerHTML = `
     <div style="padding:16px;border:1px solid ${pendingOperations ? "#a7f3d0" : "#e2e8f0"};border-radius:16px;background:${pendingOperations ? "#f0fdf4" : "#f8fafc"};">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
@@ -8805,6 +8866,7 @@ function renderTodayBookingOperations(bookings = []){
           </div>
         `).join("")}
       </div>
+      ${reminderHtml}
     </div>
   `;
 }
