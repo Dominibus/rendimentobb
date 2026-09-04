@@ -4764,15 +4764,16 @@ document.addEventListener(
 // ➕ BOOKING FORM OPEN
 // =====================================
 
-window.loadCurrentPropertyTouristTax = async function(){
-  if(!window.currentPropertyId || !window.currentUser){
+window.loadCurrentPropertyTouristTax = async function(propertyId = window.currentPropertyId){
+  if(!propertyId){
     window.currentPropertyTouristTaxConfig = null;
     return null;
   }
 
   const propertySnap = await getDoc(
-    doc(db, "properties", window.currentPropertyId)
+    doc(db, "properties", propertyId)
   );
+  window.currentPropertyId = propertyId;
   window.currentPropertyTouristTaxConfig = propertySnap.exists()
     ? propertySnap.data().touristTaxConfig || null
     : null;
@@ -6128,7 +6129,9 @@ window.openBookingForEdit = function(id){
 
 window.showBookingDetails = async function(booking){
 
-    await window.loadCurrentPropertyTouristTax();
+    await window.loadCurrentPropertyTouristTax(
+      booking.propertyId || window.currentPropertyId
+    );
 
 
     const modal =
