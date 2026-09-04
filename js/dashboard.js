@@ -1986,14 +1986,15 @@ function renderPortfolioManager(portfolioAnalyses = []){
 
   const summary = portfolioAnalyses.length
     ? t(
-        `${portfolioAnalyses.length} immobili confermati · ${linkedCount} PMS · ${manualCount} manuali`,
-        `${portfolioAnalyses.length} confirmed properties · ${linkedCount} PMS · ${manualCount} manual`
+        `${portfolioAnalyses.length} ${portfolioAnalyses.length === 1 ? "immobile confermato" : "immobili confermati"} · ${linkedCount} PMS · ${manualCount} ${manualCount === 1 ? "manuale" : "manuali"}`,
+        `${portfolioAnalyses.length} confirmed ${portfolioAnalyses.length === 1 ? "property" : "properties"} · ${linkedCount} PMS · ${manualCount} manual`
       )
     : t("Nessun immobile confermato", "No confirmed properties");
 
   const cards = portfolioAnalyses.map((data, index) => {
     const linked = Boolean(data.propertyId);
-    const city = escapeDashboardHTML(data.city || t("Città non indicata", "City not specified"));
+    const rawCity = String(data.city || t("Città non indicata", "City not specified"));
+    const city = escapeDashboardHTML(rawCity.charAt(0).toUpperCase() + rawCity.slice(1));
     const price = Number(data.price || 0);
     const equity = Number(data.equity || 0);
     const roi = Number(data.roi || 0);
