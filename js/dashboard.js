@@ -4739,6 +4739,42 @@ window.openBookingModal = function(){
 
     if(!form) return;
 
+    const title = form.querySelector("h3");
+    if(title){
+      title.textContent = t("✨ Nuova Prenotazione", "✨ New Booking");
+    }
+
+    const fields = {
+      guest: document.getElementById("booking-guest"),
+      checkin: document.getElementById("booking-checkin"),
+      checkout: document.getElementById("booking-checkout"),
+      guests: document.getElementById("booking-guests"),
+      total: document.getElementById("booking-total"),
+      status: document.getElementById("booking-status"),
+      source: document.getElementById("booking-source")
+    };
+
+    [fields.guest, fields.checkin, fields.checkout, fields.guests, fields.total]
+      .forEach(field => {
+        if(field){
+          field.value = "";
+          field.removeAttribute("readonly");
+        }
+      });
+
+    if(fields.status) fields.status.value = "arrival";
+    if(fields.source) fields.source.value = "direct";
+
+    const liveRevenue = document.getElementById("booking-live-revenue");
+    const liveNights = document.getElementById("booking-live-nights");
+    const liveAdr = document.getElementById("booking-live-adr");
+    if(liveRevenue) liveRevenue.textContent = formatCurrency(0);
+    if(liveNights) liveNights.textContent = "0";
+    if(liveAdr) liveAdr.textContent = formatCurrency(0);
+
+    const toggle = document.getElementById("toggle-booking-form");
+    if(toggle) toggle.textContent = "✖";
+
 
     form.style.display =
         "flex";
@@ -4746,6 +4782,8 @@ window.openBookingModal = function(){
 
     window.pmsEditingBooking =
         false;
+
+    window.currentSelectedBooking = null;
 
 
     setTimeout(()=>{
@@ -4774,6 +4812,12 @@ window.closeBookingForm = function(){
     }
 
     window.pmsEditingBooking = false;
+    window.currentSelectedBooking = null;
+
+    const toggle = document.getElementById("toggle-booking-form");
+    if(toggle){
+      toggle.textContent = t("➕ Nuova Prenotazione", "➕ New Booking");
+    }
 
 };
       
@@ -4793,23 +4837,15 @@ window.closeBookingForm = function(){
         form.style.display =
         "none";
 
+        window.pmsEditingBooking = false;
+        window.currentSelectedBooking = null;
+
+        const toggle = document.getElementById("toggle-booking-form");
+        if(toggle){
+          toggle.textContent = t("➕ Nuova Prenotazione", "➕ New Booking");
+        }
+
       };
-
-      // =====================================
-      // 🎯 TOGGLE BUTTON
-      // =====================================
-
-      const toggleBtn =
-      document.getElementById(
-        "toggle-booking-form"
-      );
-
-      if(toggleBtn){
-
-        toggleBtn.onclick =
-        window.openBookingModal;
-
-      }
 
     },1500);
 
@@ -5895,6 +5931,8 @@ window.closeBookingsModal = function(){
   if(modal){
     modal.style.display = "none";
   }
+
+  window.closeBookingForm?.();
 
 };
 
