@@ -7042,11 +7042,15 @@ ${totalRevenue >= 1000 ? "High" : totalRevenue >= 500 ? "Medium" : "Limited"} va
 if (adr < 130) {
 
     analysis.why.push(
-        "ADR below market target"
+        lang === "it"
+            ? "ADR sotto il target di mercato"
+            : "ADR below market target"
     );
 
     analysis.actions.push(
-        "Increase ADR +10€"
+        lang === "it"
+            ? "Aumenta l’ADR di 10 €"
+            : "Increase ADR by €10"
     );
 
 }
@@ -7054,23 +7058,31 @@ if (adr < 130) {
 if (nights <= 2) {
 
     analysis.why.push(
-        "Short stay"
+        lang === "it"
+            ? "Soggiorno breve"
+            : "Short stay"
     );
 
     analysis.actions.push(
-        "Offer Late Checkout"
+        lang === "it"
+            ? "Proponi il late check-out"
+            : "Offer late check-out"
     );
 
 }
 
-if (source !== "direct") {
+if (["airbnb", "booking", "vrbo"].includes(source)) {
 
     analysis.why.push(
-        "OTA commission impact"
+        lang === "it"
+            ? "Impatto delle commissioni OTA"
+            : "OTA commission impact"
     );
 
     analysis.actions.push(
-        "Promote Direct Booking"
+        lang === "it"
+            ? "Promuovi la prenotazione diretta"
+            : "Promote direct booking"
     );
 
 }
@@ -7078,11 +7090,15 @@ if (source !== "direct") {
 if (guests >= 4) {
 
     analysis.why.push(
-        "High guest value"
+        lang === "it"
+            ? "Alto valore del gruppo ospiti"
+            : "High guest value"
     );
 
     analysis.actions.push(
-        "Offer Breakfast Package"
+        lang === "it"
+            ? "Proponi il pacchetto colazione"
+            : "Offer a breakfast package"
     );
 
 }
@@ -7090,11 +7106,15 @@ if (guests >= 4) {
 if (status === "cancelled") {
 
     analysis.why.push(
-        "Booking cancelled"
+        lang === "it"
+            ? "Prenotazione cancellata"
+            : "Booking cancelled"
     );
 
     analysis.actions.push(
-        "Contact guest for recovery"
+        lang === "it"
+            ? "Contatta l’ospite per tentare il recupero"
+            : "Contact the guest to attempt recovery"
     );
 
 }
@@ -7102,7 +7122,9 @@ if (status === "cancelled") {
 if (!analysis.why.length) {
 
     analysis.why.push(
-        "Healthy booking profile"
+        lang === "it"
+            ? "Profilo della prenotazione positivo"
+            : "Healthy booking profile"
     );
 
 }
