@@ -4874,6 +4874,62 @@ window.updateBookingGuestRegistration = function(){
   );
 };
 
+window.updateBookingCleaning = function(){
+  const requiredField = document.getElementById("booking-cleaning-required");
+  const statusField = document.getElementById("booking-cleaning-status");
+  const dateField = document.getElementById("booking-cleaning-date");
+  const assigneeField = document.getElementById("booking-cleaning-assignee");
+  const summary = document.getElementById("booking-cleaning-summary");
+  const progress = document.getElementById("booking-cleaning-progress");
+  if(!requiredField || !statusField || !dateField || !summary || !progress) return;
+
+  const required = requiredField.value !== "false";
+  document.querySelectorAll(".booking-cleaning-field").forEach(field => {
+    field.style.display = required ? "block" : "none";
+  });
+
+  if(!required){
+    summary.textContent = window.t("Non richiesta", "Not required");
+    summary.style.background = "#e2e8f0";
+    summary.style.color = "#475569";
+    progress.textContent = window.t("Nessuna pulizia prevista.", "No cleaning planned.");
+    return;
+  }
+
+  const status = statusField.value || "pending";
+  const state = {
+    pending: { it: "Da pianificare", en: "To schedule", background: "#fef3c7", color: "#92400e" },
+    scheduled: { it: "Programmata", en: "Scheduled", background: "#dbeafe", color: "#1d4ed8" },
+    completed: { it: "Completata", en: "Completed", background: "#dcfce7", color: "#166534" }
+  }[status] || { it: "Da pianificare", en: "To schedule", background: "#fef3c7", color: "#92400e" };
+
+  summary.textContent = window.t(state.it, state.en);
+  summary.style.background = state.background;
+  summary.style.color = state.color;
+
+  const scheduledDate = dateField.value;
+  const localizedDate = scheduledDate
+    ? new Date(`${scheduledDate}T12:00:00`).toLocaleDateString(
+        window.currentLanguage === "en" ? "en-GB" : "it-IT"
+      )
+    : window.t("data da definire", "date to be set");
+  const assignee = assigneeField?.value?.trim();
+
+  if(status === "completed"){
+    progress.textContent = window.t("Turnover completato.", "Turnover completed.");
+  }else if(status === "scheduled"){
+    progress.textContent = window.t(
+      `Pulizia programmata per il ${localizedDate}${assignee ? ` · ${assignee}` : ""}.`,
+      `Cleaning scheduled for ${localizedDate}${assignee ? ` · ${assignee}` : ""}.`
+    );
+  }else{
+    progress.textContent = window.t(
+      `Pulizia da organizzare per il ${localizedDate}.`,
+      `Cleaning to organize for ${localizedDate}.`
+    );
+  }
+};
+
 window.openBookingModal = async function(){
 
     await window.loadCurrentPropertyTouristTax();
@@ -4927,6 +4983,19 @@ window.openBookingModal = async function(){
     const authorityStatus = document.getElementById("booking-authority-status");
     if(authorityStatus) authorityStatus.value = "pending";
     window.updateBookingGuestRegistration();
+
+    const cleaningRequired = document.getElementById("booking-cleaning-required");
+    const cleaningStatus = document.getElementById("booking-cleaning-status");
+    const cleaningDate = document.getElementById("booking-cleaning-date");
+    const cleaningAssignee = document.getElementById("booking-cleaning-assignee");
+    if(cleaningRequired) cleaningRequired.value = "true";
+    if(cleaningStatus) cleaningStatus.value = "pending";
+    if(cleaningDate){
+      cleaningDate.value = fields.checkout?.value || "";
+      cleaningDate.dataset.manual = "false";
+    }
+    if(cleaningAssignee) cleaningAssignee.value = "";
+    window.updateBookingCleaning();
 
     const liveRevenue = document.getElementById("booking-live-revenue");
     const liveNights = document.getElementById("booking-live-nights");
@@ -5048,6 +5117,7 @@ document.addEventListener(
 
     window.updateBookingTouristTax?.();
     window.updateBookingGuestRegistration?.();
+    window.updateBookingCleaning?.();
 
   }
 );
@@ -6346,6 +6416,28 @@ window.currentSelectedBooking = booking;
       authorityStatus.value = savedGuestRegistration.authorityStatus || "pending";
     }
     window.updateBookingGuestRegistration();
+
+    const savedCleaning = booking.cleaning || {};
+    const cleaningRequired = document.getElementById("booking-cleaning-required");
+    const cleaningStatus = document.getElementById("booking-cleaning-status");
+    const cleaningDate = document.getElementById("booking-cleaning-date");
+    const cleaningAssignee = document.getElementById("booking-cleaning-assignee");
+    if(cleaningRequired){
+      cleaningRequired.value = savedCleaning.required === false ? "false" : "true";
+    }
+    if(cleaningStatus){
+      cleaningStatus.value = savedCleaning.status === "not_required"
+        ? "pending"
+        : savedCleaning.status || "pending";
+    }
+    if(cleaningDate){
+      cleaningDate.value = savedCleaning.scheduledDate || booking.checkout || "";
+      cleaningDate.dataset.manual = savedCleaning.scheduledDate ? "true" : "false";
+    }
+    if(cleaningAssignee){
+      cleaningAssignee.value = savedCleaning.assignee || "";
+    }
+    window.updateBookingCleaning();
 
 
 
@@ -8535,7 +8627,14 @@ window.openBookings = function(propertyId){
       .getElementById("booking-checkout")
       ?.addEventListener(
         "change",
-        updateBookingTotal
+        event => {
+          updateBookingTotal();
+          const cleaningDate = document.getElementById("booking-cleaning-date");
+          if(cleaningDate && cleaningDate.dataset.manual !== "true"){
+            cleaningDate.value = event.currentTarget.value || "";
+          }
+          window.updateBookingCleaning();
+        }
       );
 
     document
@@ -8559,6 +8658,25 @@ window.openBookings = function(propertyId){
     document
       .getElementById("booking-authority-status")
       ?.addEventListener("change", window.updateBookingGuestRegistration);
+
+    document
+      .getElementById("booking-cleaning-required")
+      ?.addEventListener("change", window.updateBookingCleaning);
+
+    document
+      .getElementById("booking-cleaning-status")
+      ?.addEventListener("change", window.updateBookingCleaning);
+
+    document
+      .getElementById("booking-cleaning-date")
+      ?.addEventListener("change", event => {
+        event.currentTarget.dataset.manual = "true";
+        window.updateBookingCleaning();
+      });
+
+    document
+      .getElementById("booking-cleaning-assignee")
+      ?.addEventListener("input", window.updateBookingCleaning);
 
   },100);
 
@@ -8885,11 +9003,34 @@ if(!window.currentPropertyId){
     authorityStatus,
     completed: documentsReceived === guests && ["submitted", "not_required"].includes(authorityStatus)
   };
+  const cleaningRequired = document.getElementById("booking-cleaning-required")?.value !== "false";
+  const cleaningStatus = cleaningRequired
+    ? document.getElementById("booking-cleaning-status")?.value || "pending"
+    : "not_required";
+  const cleaningDate = cleaningRequired
+    ? document.getElementById("booking-cleaning-date")?.value || checkout
+    : "";
+  const cleaningAssignee = document.getElementById("booking-cleaning-assignee")?.value?.trim() || "";
+  const cleaning = {
+    required: cleaningRequired,
+    status: cleaningStatus,
+    scheduledDate: cleaningDate,
+    assignee: cleaningAssignee,
+    completed: !cleaningRequired || cleaningStatus === "completed"
+  };
 
   if(authorityStatus === "submitted" && documentsReceived < guests){
     alert(t(
       "Non puoi indicare la comunicazione come inviata finché non risultano ricevuti i documenti di tutti gli ospiti.",
       "Reporting cannot be marked as submitted until documents have been received for every guest."
+    ));
+    return;
+  }
+
+  if(cleaningRequired && cleaningStatus === "scheduled" && !cleaningDate){
+    alert(t(
+      "Indica la data prevista per la pulizia programmata.",
+      "Enter the scheduled cleaning date."
     ));
     return;
   }
@@ -8917,6 +9058,7 @@ if(!window.currentPropertyId){
 
             touristTax,
             guestRegistration,
+            cleaning,
 
             status,
 
@@ -8961,6 +9103,7 @@ if(!window.currentPropertyId){
 
       touristTax,
       guestRegistration,
+      cleaning,
 
       status,
       
@@ -9140,6 +9283,27 @@ function renderTodayBookingOperations(bookings = []){
           `Riscuoti tassa di soggiorno ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`,
           `Collect tourist tax ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`
         )
+      });
+    }
+
+    const cleaning = booking.cleaning || {
+      required: true,
+      status: "pending",
+      scheduledDate: booking.checkout
+    };
+    if(cleaning.required !== false && cleaning.status !== "completed"){
+      tasks.push({
+        priority: 4,
+        icon: "🧹",
+        date: cleaning.scheduledDate || booking.checkout,
+        bookingId: booking.id,
+        guestName,
+        label: cleaning.status === "scheduled"
+          ? window.t(
+              `Pulizia programmata${cleaning.assignee ? ` · ${cleaning.assignee}` : ""}`,
+              `Cleaning scheduled${cleaning.assignee ? ` · ${cleaning.assignee}` : ""}`
+            )
+          : window.t("Pianifica pulizia e turnover", "Schedule cleaning and turnover")
       });
     }
 
@@ -9795,6 +9959,28 @@ ${(() => {
     </div>
   `;
 })()}
+
+${b.cleaning ? (() => {
+  const cleaningStatus = b.cleaning.required === false
+    ? "not_required"
+    : b.cleaning.status || "pending";
+  const cleaningLabels = {
+    pending: window.t("Da pianificare", "To schedule"),
+    scheduled: window.t("Programmata", "Scheduled"),
+    completed: window.t("Completata", "Completed"),
+    not_required: window.t("Non richiesta", "Not required")
+  };
+  const complete = ["completed", "not_required"].includes(cleaningStatus);
+  const scheduled = cleaningStatus === "scheduled";
+  return `
+    <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:${complete ? "#f0fdf4" : scheduled ? "#eff6ff" : "#fffbeb"};border:1px solid ${complete ? "#bbf7d0" : scheduled ? "#bfdbfe" : "#fde68a"};display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <span style="font-size:12px;font-weight:700;color:#475569;">🧹 ${window.t("Pulizia e turnover", "Cleaning and turnover")}</span>
+      <strong style="font-size:12px;color:${complete ? "#15803d" : scheduled ? "#1d4ed8" : "#b45309"};">
+        ${cleaningLabels[cleaningStatus] || cleaningLabels.pending}
+      </strong>
+    </div>
+  `;
+})() : ""}
 
 ${!isCancelled ? (() => {
   const nextStatusByCurrent = {
