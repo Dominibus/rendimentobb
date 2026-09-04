@@ -3735,7 +3735,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260904-host-priority-tasks-v14"></script>
+<script type="module" src="/js/dashboard.js?v=20260904-cleaning-turnover-v15"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4422,6 +4422,42 @@ background:#fff;
     </div>
   </div>
   <div id="booking-registration-progress" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
+</div>
+
+<div id="booking-cleaning-box" style="padding:14px;border:1px solid #bbf7d0;border-radius:14px;background:#f0fdf4;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+    <div>
+      <div style="font-size:13px;font-weight:800;color:#166534;" data-it="🧹 Pulizia e turnover" data-en="🧹 Cleaning and turnover">🧹 Pulizia e turnover</div>
+      <div style="font-size:11px;color:#64748b;margin-top:3px;" data-it="Organizza la preparazione dell’alloggio dopo il check-out." data-en="Organize property preparation after check-out.">Organizza la preparazione dell’alloggio dopo il check-out.</div>
+    </div>
+    <span id="booking-cleaning-summary" style="padding:6px 9px;border-radius:999px;background:#fef3c7;color:#92400e;font-size:11px;font-weight:800;">Da pianificare</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;">
+    <div>
+      <label for="booking-cleaning-required" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Pulizia richiesta" data-en="Cleaning required">Pulizia richiesta</label>
+      <select id="booking-cleaning-required" style="width:100%;height:44px;border:1px solid #bbf7d0;border-radius:11px;padding:0 10px;background:white;">
+        <option value="true" data-it="Sì" data-en="Yes">Sì</option>
+        <option value="false" data-it="No" data-en="No">No</option>
+      </select>
+    </div>
+    <div class="booking-cleaning-field">
+      <label for="booking-cleaning-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
+      <select id="booking-cleaning-status" style="width:100%;height:44px;border:1px solid #bbf7d0;border-radius:11px;padding:0 10px;background:white;">
+        <option value="pending" data-it="Da pianificare" data-en="To schedule">Da pianificare</option>
+        <option value="scheduled" data-it="Programmata" data-en="Scheduled">Programmata</option>
+        <option value="completed" data-it="Completata" data-en="Completed">Completata</option>
+      </select>
+    </div>
+    <div class="booking-cleaning-field">
+      <label for="booking-cleaning-date" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Data prevista" data-en="Scheduled date">Data prevista</label>
+      <input id="booking-cleaning-date" type="date" style="width:100%;height:44px;border:1px solid #bbf7d0;border-radius:11px;padding:0 10px;box-sizing:border-box;">
+    </div>
+    <div class="booking-cleaning-field">
+      <label for="booking-cleaning-assignee" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Incaricato (facoltativo)" data-en="Assigned to (optional)">Incaricato (facoltativo)</label>
+      <input id="booking-cleaning-assignee" type="text" placeholder="Nome o impresa" data-it-placeholder="Nome o impresa" data-en-placeholder="Name or company" style="width:100%;height:44px;border:1px solid #bbf7d0;border-radius:11px;padding:0 12px;box-sizing:border-box;">
+    </div>
+  </div>
+  <div id="booking-cleaning-progress" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
 </div>
 
 <div
