@@ -6551,6 +6551,16 @@ ${ai.bookingScore>=90
 </div>
 
 ` : "";
+
+// L'analisi completa precedente duplicava le informazioni e rendeva
+// il dettaglio troppo lungo. Il riepilogo compatto viene mostrato
+// solo quando l'utente richiede "Analisi prenotazione".
+executive.innerHTML = "";
+executive.style.display = "none";
+
+document
+    .getElementById("booking-ai-result")
+    ?.remove();
   
 // =====================================
 // 🎯 BOOKING ACTIONS
@@ -6698,7 +6708,21 @@ window.getBookingExecutiveAnalysis = function(booking){
         : "it";
 
     const nights =
-        booking.nights || 0;
+        Number(booking.nights) ||
+        (
+            booking.checkin && booking.checkout
+            ? Math.max(
+                0,
+                Math.ceil(
+                    (
+                        new Date(`${booking.checkout}T00:00:00`) -
+                        new Date(`${booking.checkin}T00:00:00`)
+                    ) /
+                    (1000 * 60 * 60 * 24)
+                )
+            )
+            : 0
+        );
 
     const revenue =
         Number(booking.totalAmount || 0);
@@ -8130,7 +8154,36 @@ color:#166534;
 `;
 
 
-    box.appendChild(result);
+    result.style.width = "100%";
+    result.style.boxSizing = "border-box";
+
+    result.innerHTML = `
+      <div style="background:#0f172a;color:#fff;border-radius:16px;padding:16px;box-shadow:0 10px 28px rgba(15,23,42,.16);">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#94a3b8;text-transform:uppercase;">
+              ${window.t("Analisi prenotazione", "Booking analysis")}
+            </div>
+            <div style="font-size:22px;font-weight:800;margin-top:4px;">${verdict}</div>
+          </div>
+          <div style="text-align:center;background:rgba(16,185,129,.12);border:1px solid rgba(52,211,153,.35);border-radius:12px;padding:8px 12px;">
+            <div style="font-size:10px;color:#94a3b8;">SCORE</div>
+            <div style="font-size:26px;font-weight:800;color:#34d399;">${bookingScore}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:#cbd5e1;">
+          <span>💰 €${revenue.toFixed(0)}</span>
+          <span>🌙 ${nights} ${window.t("notti", "nights")}</span>
+          <span>ADR €${adr.toFixed(0)}</span>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;line-height:1.45;color:#f8fafc;">
+          <strong style="color:#34d399;">${window.t("Azione:", "Action:")}</strong>
+          ${actions[0] || recommendedAction}
+        </div>
+      </div>
+    `;
+
+    box.insertAdjacentElement("afterend", result);
 
 
 
@@ -8794,6 +8847,13 @@ html += `
 
 <div
 data-status="${escapeDashboardHTML(b.status)}"
+${!isCancelled ? `
+role="button"
+tabindex="0"
+title="${window.t("Apri dettaglio prenotazione", "Open booking details")}"
+onclick="if(!event.target.closest('button')) openBookingForEdit('${docItem.id}')"
+onkeydown="if((event.key === 'Enter' || event.key === ' ') && event.target === this){ event.preventDefault(); openBookingForEdit('${docItem.id}'); }"
+` : ""}
 style="
 background:#ffffff;
 border:1px solid #e2e8f0;
@@ -8804,6 +8864,7 @@ box-shadow:0 8px 24px rgba(15,23,42,.05);
 transition:.25s;
 position:relative;
 overflow:hidden;
+cursor:${isCancelled ? "default" : "pointer"};
 ">
 
 <div
