@@ -6133,6 +6133,24 @@ window.currentSelectedBooking = booking;
         );
 
 
+    const bookingNights =
+        Number(booking.nights) ||
+        (
+            booking.checkin && booking.checkout
+            ? Math.max(
+                0,
+                Math.ceil(
+                    (
+                        new Date(`${booking.checkout}T00:00:00`) -
+                        new Date(`${booking.checkin}T00:00:00`)
+                    ) /
+                    (1000 * 60 * 60 * 24)
+                )
+            )
+            : 0
+        );
+
+
 
     if(amountField){
 
@@ -6146,7 +6164,7 @@ window.currentSelectedBooking = booking;
     if(nightsField){
 
         nightsField.textContent =
-            booking.nights || 0;
+            bookingNights;
 
     }
 
@@ -6155,8 +6173,8 @@ window.currentSelectedBooking = booking;
     if(adrField){
 
         const adr =
-            booking.nights
-            ? booking.totalAmount / booking.nights
+            bookingNights
+            ? booking.totalAmount / bookingNights
             : 0;
 
 
@@ -8950,7 +8968,15 @@ ${window.t(
 )}
 :
 
-${escapeDashboardHTML(b.source || "Direct")}
+${escapeDashboardHTML(
+  b.source === "phone"
+    ? window.t("Telefono", "Phone")
+    : b.source === "direct"
+    ? window.t("Diretta", "Direct")
+    : b.source === "website"
+    ? window.t("Sito Web", "Website")
+    : b.source || "Direct"
+)}
 
 •
 
@@ -8975,14 +9001,14 @@ ${(() => {
 
 let bg="#dcfce7";
 let color="#166534";
-let label="Confermata";
+let label=window.t("Confermata", "Confirmed");
 
 switch(b.status){
 
 case "arrival":
 bg="#dbeafe";
 color="#1d4ed8";
-label="In Arrivo";
+label=window.t("In Arrivo", "Arriving");
 break;
 
 case "checkin":
@@ -9000,13 +9026,13 @@ break;
 case "completed":
 bg="#ede9fe";
 color="#7c3aed";
-label="Completata";
+label=window.t("Completata", "Completed");
 break;
 
 case "cancelled":
 bg="#fee2e2";
 color="#b91c1c";
-label="Cancellata";
+label=window.t("Cancellata", "Cancelled");
 break;
 
 }
@@ -9095,7 +9121,7 @@ border-radius:14px;
 text-align:center;
 ">
 <div style="font-size:11px;color:#94a3b8;">
-Ospiti
+${window.t("Ospiti", "Guests")}
 </div>
 <div style="
 font-size:18px;
@@ -9117,7 +9143,7 @@ text-align:center;
 font-size:11px;
 color:#94a3b8;
 ">
-Notti
+${window.t("Notti", "Nights")}
 </div>
 <div style="
 font-size:18px;
@@ -9139,7 +9165,7 @@ text-align:center;
 font-size:11px;
 color:#10b981;
 ">
-Ricavo
+${window.t("Ricavo", "Revenue")}
 </div>
 <div style="
 font-size:18px;
@@ -9179,7 +9205,7 @@ ${b.source === "airbnb"
 : b.source === "website"
 ? "🌐 Website"
 : b.source === "phone"
-? "☎️ Telefono"
+? window.t("☎️ Telefono", "☎️ Phone")
 : "📞 Direct"}
 
 </div>
@@ -9562,7 +9588,9 @@ if(channelsEl){
 
   website:"🌐 Website",
 
-  direct:"📞 Direct"
+  direct:"📞 Direct",
+
+  phone:window.t("☎️ Telefono", "☎️ Phone")
 
 };
 
