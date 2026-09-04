@@ -4843,6 +4843,37 @@ window.updateBookingTouristTax = function(){
   box.dataset.taxableNights = String(taxableNights);
 };
 
+window.updateBookingGuestRegistration = function(){
+  const totalGuests = Math.max(0, Math.floor(Number(
+    document.getElementById("booking-guests")?.value || 0
+  )));
+  const receivedField = document.getElementById("booking-documents-received");
+  const authorityField = document.getElementById("booking-authority-status");
+  const summary = document.getElementById("booking-registration-summary");
+  const progress = document.getElementById("booking-registration-progress");
+  if(!receivedField || !authorityField || !summary || !progress) return;
+
+  let documentsReceived = Math.max(0, Math.floor(Number(receivedField.value || 0)));
+  if(totalGuests > 0 && documentsReceived > totalGuests){
+    documentsReceived = totalGuests;
+    receivedField.value = String(totalGuests);
+  }
+
+  const documentsComplete = totalGuests > 0 && documentsReceived === totalGuests;
+  const reportingComplete = ["submitted", "not_required"].includes(authorityField.value);
+  const complete = documentsComplete && reportingComplete;
+
+  summary.textContent = complete
+    ? window.t("Completata", "Completed")
+    : window.t("Da completare", "To complete");
+  summary.style.background = complete ? "#dcfce7" : "#fef3c7";
+  summary.style.color = complete ? "#166534" : "#92400e";
+  progress.textContent = window.t(
+    `${documentsReceived} di ${totalGuests} documenti ricevuti${reportingComplete ? " · comunicazione completata" : " · comunicazione da completare"}`,
+    `${documentsReceived} of ${totalGuests} documents received${reportingComplete ? " · reporting completed" : " · reporting to complete"}`
+  );
+};
+
 window.openBookingModal = async function(){
 
     await window.loadCurrentPropertyTouristTax();
@@ -4890,6 +4921,12 @@ window.openBookingModal = async function(){
     const taxMethod = document.getElementById("booking-tourist-tax-method");
     if(taxMethod) taxMethod.value = "cash";
     window.updateBookingTouristTax();
+
+    const documentsReceived = document.getElementById("booking-documents-received");
+    if(documentsReceived) documentsReceived.value = "0";
+    const authorityStatus = document.getElementById("booking-authority-status");
+    if(authorityStatus) authorityStatus.value = "pending";
+    window.updateBookingGuestRegistration();
 
     const liveRevenue = document.getElementById("booking-live-revenue");
     const liveNights = document.getElementById("booking-live-nights");
@@ -5008,6 +5045,9 @@ document.addEventListener(
         window.currentPropertyId
       );
     }
+
+    window.updateBookingTouristTax?.();
+    window.updateBookingGuestRegistration?.();
 
   }
 );
@@ -6295,6 +6335,17 @@ window.currentSelectedBooking = booking;
       touristTaxMethod.value = savedTouristTax.paymentMethod || "cash";
     }
     window.updateBookingTouristTax();
+
+    const savedGuestRegistration = booking.guestRegistration || {};
+    const documentsReceived = document.getElementById("booking-documents-received");
+    const authorityStatus = document.getElementById("booking-authority-status");
+    if(documentsReceived){
+      documentsReceived.value = String(Math.max(0, Number(savedGuestRegistration.documentsReceived || 0)));
+    }
+    if(authorityStatus){
+      authorityStatus.value = savedGuestRegistration.authorityStatus || "pending";
+    }
+    window.updateBookingGuestRegistration();
 
 
 
@@ -8489,7 +8540,10 @@ window.openBookings = function(propertyId){
 
     document
       .getElementById("booking-guests")
-      ?.addEventListener("input", window.updateBookingTouristTax);
+      ?.addEventListener("input", () => {
+        window.updateBookingTouristTax();
+        window.updateBookingGuestRegistration();
+      });
 
     document
       .getElementById("booking-taxable-guests")
@@ -8497,6 +8551,14 @@ window.openBookings = function(propertyId){
         event.currentTarget.dataset.manual = "true";
         window.updateBookingTouristTax();
       });
+
+    document
+      .getElementById("booking-documents-received")
+      ?.addEventListener("input", window.updateBookingGuestRegistration);
+
+    document
+      .getElementById("booking-authority-status")
+      ?.addEventListener("change", window.updateBookingGuestRegistration);
 
   },100);
 
@@ -8811,6 +8873,26 @@ if(!window.currentPropertyId){
     enabled: false,
     amount: 0
   };
+  const documentsReceived = Math.min(
+    guests,
+    Math.max(0, Math.floor(Number(
+      document.getElementById("booking-documents-received")?.value || 0
+    )))
+  );
+  const authorityStatus = document.getElementById("booking-authority-status")?.value || "pending";
+  const guestRegistration = {
+    documentsReceived,
+    authorityStatus,
+    completed: documentsReceived === guests && ["submitted", "not_required"].includes(authorityStatus)
+  };
+
+  if(authorityStatus === "submitted" && documentsReceived < guests){
+    alert(t(
+      "Non puoi indicare la comunicazione come inviata finché non risultano ricevuti i documenti di tutti gli ospiti.",
+      "Reporting cannot be marked as submitted until documents have been received for every guest."
+    ));
+    return;
+  }
 
   if(
     window.pmsEditingBooking &&
@@ -8834,6 +8916,7 @@ if(!window.currentPropertyId){
             totalAmount: total,
 
             touristTax,
+            guestRegistration,
 
             status,
 
@@ -8877,6 +8960,7 @@ if(!window.currentPropertyId){
         total,
 
       touristTax,
+      guestRegistration,
 
       status,
       
@@ -9586,6 +9670,26 @@ ${b.touristTax?.enabled ? (() => {
     </div>
   `;
 })() : ""}
+
+${(() => {
+  const registration = b.guestRegistration || {};
+  const documentsReceived = Math.max(0, Number(registration.documentsReceived || 0));
+  const totalBookingGuests = Math.max(0, Number(b.guests || 0));
+  const complete = registration.completed === true || (
+    documentsReceived === totalBookingGuests &&
+    ["submitted", "not_required"].includes(registration.authorityStatus)
+  );
+  return `
+    <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:${complete ? "#f0fdf4" : "#fffbeb"};border:1px solid ${complete ? "#bbf7d0" : "#fde68a"};display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <span style="font-size:12px;font-weight:700;color:#475569;">🪪 ${window.t("Registrazione ospiti", "Guest registration")}</span>
+      <strong style="font-size:12px;color:${complete ? "#15803d" : "#b45309"};">
+        ${complete
+          ? window.t("Completata", "Completed")
+          : window.t(`${documentsReceived}/${totalBookingGuests} documenti`, `${documentsReceived}/${totalBookingGuests} documents`)}
+      </strong>
+    </div>
+  `;
+})()}
 
 ${!isCancelled ? (() => {
   const nextStatusByCurrent = {
