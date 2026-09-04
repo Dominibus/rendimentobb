@@ -3735,7 +3735,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260904-pms-booking-card-summary-v3"></script>
+<script type="module" src="/js/dashboard.js?v=20260904-pms-booking-language-v4"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4070,7 +4070,7 @@ align-items:center;
 
 <div>
 
-<h3 style="
+<h3 data-it="✨ Nuova Prenotazione" data-en="✨ New Booking" style="
 margin:0;
 font-size:22px;
 font-weight:800;
@@ -4100,7 +4100,7 @@ border-radius:14px;
 padding:12px;
 ">
 
-<div style="
+<div data-it="📈 Ricavo Previsto" data-en="📈 Expected Revenue" style="
 font-size:12px;
 color:#64748b;
 ">
@@ -4127,7 +4127,7 @@ border-radius:14px;
 padding:12px;
 ">
 
-<div style="
+<div data-it="🌙 Notti" data-en="🌙 Nights" style="
 font-size:12px;
 color:#64748b;
 ">
@@ -4176,7 +4176,7 @@ margin-top:4px;
 
 </div>  
 
-<div style="
+<div data-it="Gestisci arrivi, partenze e soggiorni" data-en="Manage arrivals, departures and stays" style="
 font-size:13px;
 color:#64748b;
 margin-top:4px;
@@ -4205,6 +4205,8 @@ font-size:20px;
 id="booking-guest"
 type="text"
 placeholder="Nome ospite"
+data-it-placeholder="Nome ospite"
+data-en-placeholder="Guest name"
 style="
 height:52px;
 border:1px solid #dbe3ee;
@@ -4256,6 +4258,8 @@ gap:12px;
 id="booking-guests"
 type="number"
 placeholder="Ospiti"
+data-it-placeholder="Ospiti"
+data-en-placeholder="Guests"
 style="
 height:52px;
 border:1px solid #dbe3ee;
@@ -4268,6 +4272,8 @@ font-size:15px;
 id="booking-total"
 type="number"
 placeholder="Totale soggiorno €"
+data-it-placeholder="Totale soggiorno €"
+data-en-placeholder="Stay total €"
 style="
 height:52px;
 border:1px solid #dbe3ee;
@@ -4289,11 +4295,11 @@ font-size:15px;
 background:#fff;
 ">
 
-<option value="arrival">🔵 In Arrivo</option>
+<option value="arrival" data-it="🔵 In Arrivo" data-en="🔵 Arriving">🔵 In Arrivo</option>
 <option value="checkin">🟢 Check-In</option>
 <option value="checkout">🟠 Check-Out</option>
-<option value="completed">🟣 Completata</option>
-<option value="cancelled">🔴 Cancellata</option>
+<option value="completed" data-it="🟣 Completata" data-en="🟣 Completed">🟣 Completata</option>
+<option value="cancelled" data-it="🔴 Cancellata" data-en="🔴 Cancelled">🔴 Cancellata</option>
 
 </select>
 
@@ -4311,9 +4317,9 @@ background:#fff;
 <option value="airbnb">🏠 Airbnb</option>
 <option value="booking">🟦 Booking.com</option>
 <option value="vrbo">🏡 VRBO</option>
-<option value="direct">📞 Diretta</option>
-<option value="website">🌐 Sito Web</option>
-<option value="phone">☎️ Telefono</option>
+<option value="direct" data-it="📞 Diretta" data-en="📞 Direct">📞 Diretta</option>
+<option value="website" data-it="🌐 Sito Web" data-en="🌐 Website">🌐 Sito Web</option>
+<option value="phone" data-it="☎️ Telefono" data-en="☎️ Phone">☎️ Telefono</option>
 
 </select>
 
@@ -4328,6 +4334,8 @@ margin-top:10px;
 <button
 class="btn-dashboard"
 onclick="closeBookingForm()"
+data-it="Chiudi"
+data-en="Close"
 style="
 background:#f1f5f9;
 color:#0f172a;
@@ -4339,6 +4347,8 @@ Chiudi
 <button
 class="btn-dashboard"
 onclick="saveBooking()"
+data-it="💾 Salva Prenotazione"
+data-en="💾 Save Booking"
 style="
 background:linear-gradient(
 135deg,
