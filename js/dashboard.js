@@ -4582,6 +4582,12 @@ const elementsToBlur = [
 // 🏠 PROPERTY MODAL
 // =====================================
 
+function updatePropertyTouristTaxVisibility(){
+  const enabled = document.getElementById("property-tourist-tax-enabled")?.value === "true";
+  const fields = document.getElementById("property-tourist-tax-fields");
+  if(fields) fields.style.display = enabled ? "block" : "none";
+}
+
 window.openPropertyModal = function(){
 
 window.editingPropertyId = null;
@@ -4596,6 +4602,15 @@ if(title){
     const field = document.getElementById(id);
     if(field) field.value = "";
   });
+
+const touristTaxEnabled = document.getElementById("property-tourist-tax-enabled");
+if(touristTaxEnabled) touristTaxEnabled.value = "false";
+document.getElementById("property-tourist-tax-rate").value = "";
+document.getElementById("property-tourist-tax-currency").value = "EUR";
+document.getElementById("property-tourist-tax-max-nights").value = "0";
+document.getElementById("property-tourist-tax-min-age").value = "0";
+document.getElementById("property-tourist-tax-collection").value = "checkin";
+updatePropertyTouristTaxVisibility();
 
 const modal =
 document.getElementById(
@@ -4634,6 +4649,15 @@ window.openPropertyEditor = async function(id){
   document.getElementById("property-address").value = data.address || "";
   document.getElementById("property-price").value = data.priceNight || "";
   document.getElementById("property-analysis").value = data.analysisId || "";
+
+  const touristTax = data.touristTaxConfig || {};
+  document.getElementById("property-tourist-tax-enabled").value = touristTax.enabled ? "true" : "false";
+  document.getElementById("property-tourist-tax-rate").value = touristTax.ratePerGuestNight || "";
+  document.getElementById("property-tourist-tax-currency").value = touristTax.currency || "EUR";
+  document.getElementById("property-tourist-tax-max-nights").value = Number(touristTax.maxTaxableNights || 0);
+  document.getElementById("property-tourist-tax-min-age").value = Number(touristTax.minimumTaxableAge || 0);
+  document.getElementById("property-tourist-tax-collection").value = touristTax.collectionTime || "checkin";
+  updatePropertyTouristTaxVisibility();
 
   const modal = document.getElementById("property-modal");
   if(modal) modal.style.display = "flex";
@@ -4722,6 +4746,12 @@ document.addEventListener(
 
       window.applyStaticTranslations();
 
+    }
+
+    const touristTaxEnabled = document.getElementById("property-tourist-tax-enabled");
+    if(touristTaxEnabled && !touristTaxEnabled.dataset.visibilityReady){
+      touristTaxEnabled.dataset.visibilityReady = "true";
+      touristTaxEnabled.addEventListener("change", updatePropertyTouristTaxVisibility);
     }
 
     setTimeout(()=>{
@@ -5034,6 +5064,22 @@ window.saveProperty = async function(){
         document.getElementById("property-price")?.value || 0
       );
 
+    const touristTaxEnabled =
+      document.getElementById("property-tourist-tax-enabled")?.value === "true";
+    const touristTaxRate = Number(
+      document.getElementById("property-tourist-tax-rate")?.value || 0
+    );
+    const touristTaxMaxNights = Math.max(0, Math.floor(Number(
+      document.getElementById("property-tourist-tax-max-nights")?.value || 0
+    )));
+    const touristTaxMinimumAge = Math.max(0, Math.floor(Number(
+      document.getElementById("property-tourist-tax-min-age")?.value || 0
+    )));
+    const touristTaxCurrency =
+      document.getElementById("property-tourist-tax-currency")?.value || "EUR";
+    const touristTaxCollectionTime =
+      document.getElementById("property-tourist-tax-collection")?.value || "checkin";
+
     const analysisId =
       document.getElementById("property-analysis")?.value || "";
 
@@ -5053,6 +5099,14 @@ window.saveProperty = async function(){
       return;
     }
 
+    if(touristTaxEnabled && touristTaxRate <= 0){
+      alert(t(
+        "Inserisci un importo valido per la tassa di soggiorno.",
+        "Enter a valid tourist tax amount."
+      ));
+      return;
+    }
+
     if(canUseFirestorePMS()){
 
   const propertyData = {
@@ -5063,6 +5117,15 @@ window.saveProperty = async function(){
       city,
       address,
       priceNight,
+
+      touristTaxConfig: {
+        enabled: touristTaxEnabled,
+        ratePerGuestNight: touristTaxEnabled ? touristTaxRate : 0,
+        currency: touristTaxCurrency,
+        maxTaxableNights: touristTaxMaxNights,
+        minimumTaxableAge: touristTaxMinimumAge,
+        collectionTime: touristTaxCollectionTime
+      },
 
       analysisId: linkedAnalysis?.id || null,
 
@@ -5163,6 +5226,13 @@ window.saveProperty = async function(){
     document.getElementById("property-address").value = "";
     document.getElementById("property-price").value = "";
     document.getElementById("property-analysis").value = "";
+    document.getElementById("property-tourist-tax-enabled").value = "false";
+    document.getElementById("property-tourist-tax-rate").value = "";
+    document.getElementById("property-tourist-tax-currency").value = "EUR";
+    document.getElementById("property-tourist-tax-max-nights").value = "0";
+    document.getElementById("property-tourist-tax-min-age").value = "0";
+    document.getElementById("property-tourist-tax-collection").value = "checkin";
+    updatePropertyTouristTaxVisibility();
     window.editingPropertyId = null;
 
     await loadProperties();
