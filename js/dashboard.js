@@ -8787,6 +8787,7 @@ function renderTodayBookingOperations(bookings = []){
       events.push({
         type: "arrival",
         date: booking.checkin,
+        bookingId: booking.id,
         guestName: booking.guestName || window.t("Ospite", "Guest")
       });
     }
@@ -8795,6 +8796,7 @@ function renderTodayBookingOperations(bookings = []){
       events.push({
         type: "departure",
         date: booking.checkout,
+        bookingId: booking.id,
         guestName: booking.guestName || window.t("Ospite", "Guest")
       });
     }
@@ -8825,11 +8827,21 @@ function renderTodayBookingOperations(bookings = []){
       : window.t("Partenza", "Departure");
 
     reminderHtml = `
-      <div style="margin-top:12px;padding:13px 14px;border-radius:13px;background:#0f172a;color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+      <div
+        role="button"
+        tabindex="0"
+        title="${window.t("Apri la prenotazione", "Open booking")}: ${escapeDashboardHTML(nextOperation.guestName)}"
+        onclick="openBookingForEdit('${nextOperation.bookingId}')"
+        onkeydown="if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); openBookingForEdit('${nextOperation.bookingId}'); }"
+        style="margin-top:12px;padding:13px 14px;border-radius:13px;background:#0f172a;color:white;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 20px rgba(15,23,42,.12);"
+      >
         <div>
           <div style="font-size:11px;color:#93c5fd;font-weight:800;text-transform:uppercase;">🔔 ${window.t("Prossimo promemoria", "Next reminder")}</div>
           <div style="font-size:14px;font-weight:800;margin-top:4px;">
             ${operationLabel}: ${escapeDashboardHTML(nextOperation.guestName)}
+          </div>
+          <div style="font-size:11px;color:#67e8f9;font-weight:800;margin-top:5px;">
+            ${window.t("Apri prenotazione", "Open booking")} →
           </div>
         </div>
         <div style="text-align:right;">
