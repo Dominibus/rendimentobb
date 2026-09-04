@@ -8310,6 +8310,73 @@ if(!window.currentPropertyId){
       )?.value || 0
     );
 
+  const status =
+    document.getElementById(
+      "booking-status"
+    )?.value || "arrival";
+
+  const arrival = new Date(`${checkin}T00:00:00`);
+  const departure = new Date(`${checkout}T00:00:00`);
+
+  if(!guest){
+    alert(t("Inserisci il nome dell’ospite.", "Enter the guest name."));
+    return;
+  }
+
+  if(
+    !checkin ||
+    !checkout ||
+    Number.isNaN(arrival.getTime()) ||
+    Number.isNaN(departure.getTime()) ||
+    departure <= arrival
+  ){
+    alert(t(
+      "Il check-out deve essere successivo al check-in.",
+      "Check-out must be after check-in."
+    ));
+    return;
+  }
+
+  if(!Number.isInteger(guests) || guests < 1){
+    alert(t("Inserisci almeno un ospite.", "Enter at least one guest."));
+    return;
+  }
+
+  if(!Number.isFinite(total) || total <= 0){
+    alert(t(
+      "Inserisci un importo del soggiorno maggiore di zero.",
+      "Enter a stay amount greater than zero."
+    ));
+    return;
+  }
+
+  const editingBookingId = window.pmsEditingBooking
+    ? window.currentSelectedBooking?.id
+    : null;
+  const hasConflict = status !== "cancelled" &&
+    (window.currentBookingsData || []).some(existingBooking => {
+      if(existingBooking.id === editingBookingId) return false;
+      if(String(existingBooking.status || "").toLowerCase() === "cancelled") return false;
+
+      const existingArrival = new Date(`${existingBooking.checkin}T00:00:00`);
+      const existingDeparture = new Date(`${existingBooking.checkout}T00:00:00`);
+
+      if(
+        Number.isNaN(existingArrival.getTime()) ||
+        Number.isNaN(existingDeparture.getTime())
+      ) return false;
+
+      return arrival < existingDeparture && departure > existingArrival;
+    });
+
+  if(hasConflict){
+    alert(t(
+      "Date non disponibili: esiste già una prenotazione sovrapposta per questa proprietà.",
+      "Dates unavailable: an overlapping booking already exists for this property."
+    ));
+    return;
+  }
+
   if(
     window.pmsEditingBooking &&
     window.currentSelectedBooking?.id
@@ -8331,10 +8398,7 @@ if(!window.currentPropertyId){
             guests,
             totalAmount: total,
 
-            status:
-                document.getElementById(
-                    "booking-status"
-                )?.value || "arrival",
+            status,
 
             source:
                 document.getElementById(
@@ -8375,10 +8439,7 @@ if(!window.currentPropertyId){
       totalAmount:
         total,
 
-      status:
-document.getElementById(
-  "booking-status"
-)?.value || "arrival",
+      status,
       
 source:
   document.getElementById(
@@ -8523,9 +8584,8 @@ async function loadBookings(propertyId){
   const snap =
     await getDocs(q);
 
-
-
   const bookingsData = [];
+  window.currentBookingsData = bookingsData;
 
   if(snap.empty){
 
@@ -8562,9 +8622,6 @@ let sourceStats = {};
   id: docItem.id,
   ...b
 });
-
-    window.currentBookingsData =
-      bookingsData;
 
     const source =
   b.source || "Unknown";
