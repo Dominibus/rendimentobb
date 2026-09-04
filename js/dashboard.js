@@ -8677,6 +8677,17 @@ let sourceStats = {};
     const source =
   b.source || "Unknown";
 
+    const nights = Math.max(
+      1,
+      Math.ceil(
+        (
+          new Date(b.checkout) -
+          new Date(b.checkin)
+        ) /
+        (1000 * 60 * 60 * 24)
+      )
+    );
+
 if(!isCancelled && !sourceStats[source]){
 
   sourceStats[source] = {
@@ -8702,17 +8713,6 @@ sourceStats[source].revenue +=
 
     totalRevenue +=
       Number(b.totalAmount || 0);
-
-    const nights = Math.max(
-      1,
-      Math.ceil(
-        (
-          new Date(b.checkout) -
-          new Date(b.checkin)
-        ) /
-        (1000 * 60 * 60 * 24)
-      )
-    );
 
     totalNights += nights;
 
