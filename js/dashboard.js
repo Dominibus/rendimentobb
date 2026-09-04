@@ -5991,8 +5991,17 @@ window.showBookingDetails = function(booking){
 
     if(title){
 
-        title.textContent =
+        title.dataset.it =
             "📌 Dettaglio Prenotazione";
+
+        title.dataset.en =
+            "📌 Booking Details";
+
+        title.textContent =
+            window.t(
+                "📌 Dettaglio Prenotazione",
+                "📌 Booking Details"
+            );
 
     }
 
@@ -6604,6 +6613,8 @@ if(!actions){
 actions.innerHTML = `
 
 <button
+data-it="✏️ Modifica"
+data-en="✏️ Edit"
 style="
 flex:1;
 padding:12px;
@@ -6616,12 +6627,14 @@ cursor:pointer;
 "
 onclick="editBooking('${booking.id || ""}')">
 
-✏️ Modifica
+${window.t("✏️ Modifica", "✏️ Edit")}
 
 </button>
 
 
 <button
+data-it="Analisi prenotazione"
+data-en="Booking analysis"
 style="
 flex:1;
 padding:12px;
@@ -6634,7 +6647,7 @@ cursor:pointer;
 "
 onclick="analyzeBookingAI('${booking.id || ""}')">
 
-Analisi prenotazione
+${window.t("Analisi prenotazione", "Booking analysis")}
 
 </button>
 
@@ -6657,15 +6670,6 @@ onclick="deleteBooking('${booking.id || ""}')">
 
 `;
   
-    // 🔄 ricalcolo dopo caricamento date
-
-    setTimeout(()=>{
-
-        updateBookingTotal();
-
-    },100);
-
-
 };
 
 // =====================================
