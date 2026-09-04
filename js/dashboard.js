@@ -9180,6 +9180,45 @@ b.totalAmount || 0
 
 </div>
 
+${!isCancelled ? (() => {
+  const nextStatusByCurrent = {
+    arrival: {
+      status: "checkin",
+      label: window.t("Registra Check-In", "Register Check-In")
+    },
+    checkin: {
+      status: "checkout",
+      label: window.t("Registra Check-Out", "Register Check-Out")
+    },
+    checkout: {
+      status: "completed",
+      label: window.t("Completa soggiorno", "Complete Stay")
+    }
+  };
+  const nextStep = nextStatusByCurrent[b.status];
+
+  if(!nextStep) return "";
+
+  return `
+  <button
+  onclick="advanceBookingStatus('${docItem.id}', '${nextStep.status}')"
+  style="
+  width:100%;
+  margin-top:14px;
+  padding:11px 14px;
+  border:1px solid #0ea5e9;
+  border-radius:12px;
+  background:#f0f9ff;
+  color:#0369a1;
+  font-weight:800;
+  cursor:pointer;
+  "
+  >
+  ${nextStep.label} →
+  </button>
+  `;
+})() : ""}
+
 <div
 style="
 display:flex;
@@ -9725,6 +9764,52 @@ async function(id){
     {
       status: "cancelled",
       cancelledAt: serverTimestamp()
+    }
+  );
+
+  await loadPMSStats();
+  await loadProperties();
+  await loadBookings(
+    window.currentPropertyId
+  );
+
+};
+
+// =====================================
+// ➡️ ADVANCE BOOKING STATUS
+// =====================================
+
+window.advanceBookingStatus =
+async function(id, nextStatus){
+
+  const statusLabels = {
+    checkin: window.t("Check-In", "Check-In"),
+    checkout: window.t("Check-Out", "Check-Out"),
+    completed: window.t("Completato", "Completed")
+  };
+
+  if(!id || !statusLabels[nextStatus]) return;
+
+  if(
+    !confirm(
+      window.t(
+        `Aggiornare la prenotazione allo stato ${statusLabels[nextStatus]}?`,
+        `Update this booking to ${statusLabels[nextStatus]}?`
+      )
+    )
+  ){
+    return;
+  }
+
+  await updateDoc(
+    doc(
+      db,
+      "bookings",
+      id
+    ),
+    {
+      status: nextStatus,
+      statusUpdatedAt: serverTimestamp()
     }
   );
 
