@@ -8723,6 +8723,92 @@ window.dispatchEvent(
 // 📅 LOAD BOOKINGS
 // =====================================
 
+function renderTodayBookingOperations(bookings = []){
+  const container = document.getElementById("booking-today-operations");
+  if(!container) return;
+
+  const now = new Date();
+  const today = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")
+  ].join("-");
+
+  const activeBookings = bookings.filter(
+    booking => !isCancelledBooking(booking)
+  );
+  const arrivalsToday = activeBookings.filter(
+    booking => booking.checkin === today &&
+      String(booking.status || "").toLowerCase() === "arrival"
+  );
+  const guestsInHouse = activeBookings.filter(
+    booking => String(booking.status || "").toLowerCase() === "checkin"
+  );
+  const departuresToday = activeBookings.filter(
+    booking => booking.checkout === today &&
+      String(booking.status || "").toLowerCase() === "checkin"
+  );
+
+  const operationCards = [
+    {
+      icon: "🛬",
+      label: window.t("Arrivi da gestire", "Arrivals to manage"),
+      count: arrivalsToday.length,
+      names: arrivalsToday.map(booking => booking.guestName),
+      color: "#2563eb",
+      background: "#eff6ff"
+    },
+    {
+      icon: "🏠",
+      label: window.t("Ospiti in struttura", "Guests in house"),
+      count: guestsInHouse.reduce(
+        (total, booking) => total + Number(booking.guests || 0), 0
+      ),
+      names: guestsInHouse.map(booking => booking.guestName),
+      color: "#059669",
+      background: "#ecfdf5"
+    },
+    {
+      icon: "🛫",
+      label: window.t("Partenze da registrare", "Departures to register"),
+      count: departuresToday.length,
+      names: departuresToday.map(booking => booking.guestName),
+      color: "#ea580c",
+      background: "#fff7ed"
+    }
+  ];
+  const pendingOperations = arrivalsToday.length + departuresToday.length;
+
+  container.innerHTML = `
+    <div style="padding:16px;border:1px solid ${pendingOperations ? "#a7f3d0" : "#e2e8f0"};border-radius:16px;background:${pendingOperations ? "#f0fdf4" : "#f8fafc"};">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#0f172a;">⚡ ${window.t("Operatività di oggi", "Today's operations")}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Le attività che richiedono attenzione immediata", "Activities requiring immediate attention")}</div>
+        </div>
+        <span style="padding:7px 11px;border-radius:999px;background:${pendingOperations ? "#dcfce7" : "#e2e8f0"};color:${pendingOperations ? "#166534" : "#475569"};font-size:11px;font-weight:800;">
+          ${pendingOperations
+            ? window.t(`${pendingOperations} da gestire`, `${pendingOperations} to manage`)
+            : window.t("Tutto sotto controllo", "All under control")}
+        </span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;">
+        ${operationCards.map(card => `
+          <div style="padding:13px;border-radius:13px;background:${card.background};border:1px solid ${card.color}22;">
+            <div style="font-size:12px;font-weight:700;color:${card.color};">${card.icon} ${card.label}</div>
+            <div style="font-size:24px;line-height:1;font-weight:900;color:#0f172a;margin-top:9px;">${card.count}</div>
+            <div style="font-size:11px;color:#64748b;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              ${card.names.length
+                ? escapeDashboardHTML(card.names.join(", "))
+                : window.t("Nessuna attività", "No activity")}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
 async function loadBookings(propertyId){
 
   const list =
@@ -8733,6 +8819,8 @@ async function loadBookings(propertyId){
   if(!list) return;
 
   if(isDemo()){
+
+  renderTodayBookingOperations([]);
 
   list.innerHTML = `
 
@@ -8804,6 +8892,8 @@ async function loadBookings(propertyId){
   window.currentBookingsData = bookingsData;
 
   if(snap.empty){
+
+    renderTodayBookingOperations([]);
 
     list.innerHTML = `
       <div style="
@@ -9700,6 +9790,8 @@ ${data.bookings} pren.
     channelsHtml;
 
 }
+
+  renderTodayBookingOperations(bookingsData);
 
   list.innerHTML = html;
 
