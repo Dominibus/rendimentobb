@@ -9086,6 +9086,108 @@ function renderTodayBookingOperations(bookings = []){
   ];
   const pendingOperations = arrivalsToday.length + departuresToday.length;
 
+  const operationalBookings = activeBookings.filter(
+    booking => !["completed", "cancelled"].includes(
+      String(booking.status || "").toLowerCase()
+    )
+  );
+  const priorityTasks = operationalBookings.flatMap(booking => {
+    const tasks = [];
+    const guestName = booking.guestName || window.t("Ospite", "Guest");
+    const totalGuests = Math.max(0, Number(booking.guests || 0));
+    const registration = booking.guestRegistration || {};
+    const documentsReceived = Math.max(0, Number(registration.documentsReceived || 0));
+    const missingDocuments = Math.max(0, totalGuests - documentsReceived);
+
+    if(missingDocuments > 0){
+      tasks.push({
+        priority: 1,
+        icon: "🪪",
+        date: booking.checkin,
+        bookingId: booking.id,
+        guestName,
+        label: window.t(
+          `${missingDocuments} documenti ospiti mancanti`,
+          `${missingDocuments} guest documents missing`
+        )
+      });
+    }
+
+    if(!["submitted", "not_required"].includes(registration.authorityStatus)){
+      tasks.push({
+        priority: 2,
+        icon: "📤",
+        date: booking.checkin,
+        bookingId: booking.id,
+        guestName,
+        label: registration.authorityStatus === "ready"
+          ? window.t("Invia comunicazione autorità", "Submit authority report")
+          : window.t("Prepara comunicazione autorità", "Prepare authority report")
+      });
+    }
+
+    if(booking.touristTax?.enabled && booking.touristTax.status === "pending"){
+      const symbol = window.getTouristTaxCurrencySymbol(booking.touristTax.currency);
+      tasks.push({
+        priority: 3,
+        icon: "🏛️",
+        date: booking.touristTax.collectionTime === "checkout"
+          ? booking.checkout
+          : booking.checkin,
+        bookingId: booking.id,
+        guestName,
+        label: window.t(
+          `Riscuoti tassa di soggiorno ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`,
+          `Collect tourist tax ${symbol}${Number(booking.touristTax.amount || 0).toFixed(2)}`
+        )
+      });
+    }
+
+    return tasks;
+  }).sort((first, second) =>
+    String(first.date || "9999-12-31").localeCompare(String(second.date || "9999-12-31")) ||
+    first.priority - second.priority
+  );
+
+  const formatTaskTiming = date => {
+    if(!date) return window.t("Senza scadenza", "No due date");
+    const days = Math.round(
+      (new Date(`${date}T12:00:00`) - new Date(`${today}T12:00:00`)) /
+      (1000 * 60 * 60 * 24)
+    );
+    if(days < -1) return window.t(`Scaduta da ${Math.abs(days)} giorni`, `${Math.abs(days)} days overdue`);
+    if(days === -1) return window.t("Scaduta ieri", "Due yesterday");
+    if(days === 0) return window.t("Oggi", "Today");
+    if(days === 1) return window.t("Domani", "Tomorrow");
+    return window.t(`Tra ${days} giorni`, `In ${days} days`);
+  };
+
+  const priorityTasksHtml = priorityTasks.length ? `
+    <div style="margin-top:12px;padding:13px 14px;border-radius:13px;background:#fff;border:1px solid #fde68a;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px;">
+        <strong style="font-size:12px;color:#92400e;">⚠️ ${window.t("Attività prioritarie", "Priority tasks")}</strong>
+        <span style="font-size:11px;font-weight:800;color:#92400e;">${priorityTasks.length}</span>
+      </div>
+      <div style="display:grid;gap:7px;">
+        ${priorityTasks.slice(0, 5).map(task => `
+          <button
+            type="button"
+            onclick="openBookingForEdit('${task.bookingId}')"
+            style="width:100%;padding:10px 11px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;color:#0f172a;"
+          >
+            <span style="text-align:left;font-size:12px;line-height:1.35;">
+              ${task.icon} <strong>${escapeDashboardHTML(task.guestName)}</strong> · ${escapeDashboardHTML(task.label)}
+            </span>
+            <span style="flex:0 0 auto;font-size:10px;font-weight:800;color:${task.date <= today ? "#dc2626" : "#0369a1"};">
+              ${formatTaskTiming(task.date)} →
+            </span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  ` : "";
+  const totalOpenOperations = pendingOperations + priorityTasks.length;
+
   const upcomingOperations = activeBookings.flatMap(booking => {
     const status = String(booking.status || "").toLowerCase();
     const events = [];
@@ -9160,15 +9262,17 @@ function renderTodayBookingOperations(bookings = []){
   }
 
   container.innerHTML = `
-    <div style="padding:16px;border:1px solid ${pendingOperations ? "#a7f3d0" : "#e2e8f0"};border-radius:16px;background:${pendingOperations ? "#f0fdf4" : "#f8fafc"};">
+    <div style="padding:16px;border:1px solid ${totalOpenOperations ? "#fde68a" : "#e2e8f0"};border-radius:16px;background:${totalOpenOperations ? "#fffbeb" : "#f8fafc"};">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
         <div>
           <div style="font-size:16px;font-weight:800;color:#0f172a;">⚡ ${window.t("Operatività di oggi", "Today's operations")}</div>
-          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Le attività che richiedono attenzione immediata", "Activities requiring immediate attention")}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px;">${window.t("Scadenze e attività ordinate per urgenza", "Deadlines and tasks sorted by urgency")}</div>
         </div>
-        <span style="padding:7px 11px;border-radius:999px;background:${pendingOperations ? "#dcfce7" : "#e2e8f0"};color:${pendingOperations ? "#166534" : "#475569"};font-size:11px;font-weight:800;">
-          ${pendingOperations
-            ? window.t(`${pendingOperations} da gestire`, `${pendingOperations} to manage`)
+        <span style="padding:7px 11px;border-radius:999px;background:${totalOpenOperations ? "#fef3c7" : "#e2e8f0"};color:${totalOpenOperations ? "#92400e" : "#475569"};font-size:11px;font-weight:800;">
+          ${totalOpenOperations
+            ? totalOpenOperations === 1
+              ? window.t("1 attività aperta", "1 open task")
+              : window.t(`${totalOpenOperations} attività aperte`, `${totalOpenOperations} open tasks`)
             : window.t("Tutto sotto controllo", "All under control")}
         </span>
       </div>
@@ -9185,6 +9289,7 @@ function renderTodayBookingOperations(bookings = []){
           </div>
         `).join("")}
       </div>
+      ${priorityTasksHtml}
       ${reminderHtml}
     </div>
   `;
