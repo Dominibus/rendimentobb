@@ -3735,7 +3735,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260904-property-tourist-tax-v10"></script>
+<script type="module" src="/js/dashboard.js?v=20260904-booking-tourist-tax-fix-v12"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4362,6 +4362,41 @@ background:#fff;
 <option value="phone" data-it="☎️ Telefono" data-en="☎️ Phone">☎️ Telefono</option>
 
 </select>
+
+<div id="booking-tourist-tax-box" style="display:none;padding:14px;border:1px solid #bae6fd;border-radius:14px;background:#f0f9ff;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+    <div>
+      <div style="font-size:13px;font-weight:800;color:#075985;" data-it="🏛️ Tassa di soggiorno" data-en="🏛️ Tourist tax">🏛️ Tassa di soggiorno</div>
+      <div id="booking-tourist-tax-rule" style="font-size:11px;color:#64748b;margin-top:3px;"></div>
+    </div>
+    <strong id="booking-tourist-tax-amount" style="font-size:22px;color:#0369a1;">€0.00</strong>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;">
+    <div>
+      <label for="booking-taxable-guests" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Ospiti soggetti" data-en="Taxable guests">Ospiti soggetti</label>
+      <input id="booking-taxable-guests" type="number" min="0" step="1" inputmode="numeric" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 12px;box-sizing:border-box;">
+    </div>
+    <div>
+      <label for="booking-tourist-tax-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
+      <select id="booking-tourist-tax-status" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 10px;background:white;">
+        <option value="pending" data-it="Da riscuotere" data-en="To collect">Da riscuotere</option>
+        <option value="collected" data-it="Riscossa" data-en="Collected">Riscossa</option>
+        <option value="exempt" data-it="Esente" data-en="Exempt">Esente</option>
+        <option value="platform" data-it="Riscossa dal portale" data-en="Collected by platform">Riscossa dal portale</option>
+      </select>
+    </div>
+    <div>
+      <label for="booking-tourist-tax-method" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Metodo" data-en="Method">Metodo</label>
+      <select id="booking-tourist-tax-method" style="width:100%;height:44px;border:1px solid #bae6fd;border-radius:11px;padding:0 10px;background:white;">
+        <option value="cash" data-it="Contanti" data-en="Cash">Contanti</option>
+        <option value="card" data-it="Carta" data-en="Card">Carta</option>
+        <option value="bank" data-it="Bonifico" data-en="Bank transfer">Bonifico</option>
+        <option value="platform" data-it="Portale" data-en="Platform">Portale</option>
+      </select>
+    </div>
+  </div>
+  <div style="font-size:11px;color:#64748b;margin-top:8px;" data-it="Importo separato dal ricavo dell’alloggio e dall’ADR." data-en="Amount excluded from accommodation revenue and ADR.">Importo separato dal ricavo dell’alloggio e dall’ADR.</div>
+</div>
 
 <div
 style="
