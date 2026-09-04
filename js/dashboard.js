@@ -418,6 +418,25 @@ function getBookingNightsInMonth(checkin, checkout, referenceDate = new Date()){
   );
 }
 
+function getBookingRevenueInMonth(booking, referenceDate = new Date()){
+  const occupiedNights = getBookingNightsInMonth(
+    booking?.checkin,
+    booking?.checkout,
+    referenceDate
+  );
+  if(!occupiedNights) return 0;
+
+  const arrival = new Date(`${booking.checkin}T00:00:00`);
+  const departure = new Date(`${booking.checkout}T00:00:00`);
+  const totalNights = Math.round(
+    (departure - arrival) / (1000 * 60 * 60 * 24)
+  );
+
+  if(!Number.isFinite(totalNights) || totalNights <= 0) return 0;
+
+  return Number(booking.totalAmount || 0) * occupiedNights / totalNights;
+}
+
 // ================= INVESTMENT SCORE =================
 
 function calculateInvestmentScore(avgROI,analyses){
@@ -9455,6 +9474,7 @@ async function loadPMSStats(){
   let revenue = 0;
   let totalNights = 0;
   let occupiedNightsThisMonth = 0;
+  let revenueThisMonth = 0;
 
   let arrivalsToday = 0;
   let departuresToday = 0;
@@ -9492,10 +9512,12 @@ async function loadPMSStats(){
       );
 
     totalNights += nights;
-    occupiedNightsThisMonth += getBookingNightsInMonth(
+    const nightsThisMonth = getBookingNightsInMonth(
       b.checkin,
       b.checkout
     );
+    occupiedNightsThisMonth += nightsThisMonth;
+    revenueThisMonth += getBookingRevenueInMonth(b);
 
     // ======================
     // STATUS KPI
@@ -9554,8 +9576,8 @@ async function loadPMSStats(){
   });
 
   const adr =
-    totalNights > 0
-    ? revenue / totalNights
+    occupiedNightsThisMonth > 0
+    ? revenueThisMonth / occupiedNightsThisMonth
     : 0;
 
   const avgStay =
@@ -9616,7 +9638,7 @@ setText(
 
 setText(
   "pms-total-revenue",
-  formatCurrency(revenue)
+  formatCurrency(revenueThisMonth)
 );
 
 setText(
@@ -9886,7 +9908,11 @@ window.rbPMSData = {
   bookings:
     normalizedPMSBookings.length,
 
-  revenue,
+  revenue:
+    revenueThisMonth,
+
+  totalRevenue:
+    revenue,
   occupancy,
   adr,
   revpar,
@@ -10040,20 +10066,17 @@ function renderPMSPerformanceChart(
   const monthlyRevenue =
     Array(12).fill(0);
 
+  const currentYear = new Date().getFullYear();
+
   bookings.forEach(b=>{
+    if(!b.checkin || !b.checkout) return;
 
-    if(!b.checkin) return;
-
-    const month =
-      new Date(
-        b.checkin
-      ).getMonth();
-
-    monthlyRevenue[month] +=
-      Number(
-        b.totalAmount || 0
+    for(let month = 0; month < 12; month++){
+      monthlyRevenue[month] += getBookingRevenueInMonth(
+        b,
+        new Date(currentYear, month, 1)
       );
-
+    }
   });
 
   const existing =
