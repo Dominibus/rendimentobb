@@ -9001,6 +9001,7 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 margin-top:18px;
+gap:10px;
 ">
 
 <div
@@ -9024,8 +9025,30 @@ ${b.source === "airbnb"
 
 </div>
 
+<div style="display:flex;gap:8px;align-items:center;">
+
+${!isCancelled ? `
+<button
+onclick="cancelBooking('${docItem.id}')"
+style="
+padding:10px 14px;
+border:1px solid #f59e0b;
+border-radius:12px;
+background:#fffbeb;
+color:#b45309;
+cursor:pointer;
+font-size:12px;
+font-weight:700;
+white-space:nowrap;
+">
+${window.t("Annulla", "Cancel")}
+</button>
+` : ""}
+
 <button
 onclick="deleteBooking('${docItem.id}')"
+title="${window.t("Elimina definitivamente", "Delete permanently")}"
+aria-label="${window.t("Elimina definitivamente", "Delete permanently")}"
 style="
 width:38px;
 height:38px;
@@ -9038,6 +9061,8 @@ font-size:16px;
 ">
 🗑️
 </button>
+
+</div>
 
 </div>
 
@@ -9473,6 +9498,44 @@ btn.dataset.filter
 }
 
 // =====================================
+// 🚫 CANCEL BOOKING (KEEP HISTORY)
+// =====================================
+
+window.cancelBooking =
+async function(id){
+
+  if(
+    !confirm(
+      window.t(
+        "Annullare questa prenotazione? Rimarrà nello storico ma non sarà conteggiata nei risultati.",
+        "Cancel this booking? It will remain in history but will not count toward performance."
+      )
+    )
+  ){
+    return;
+  }
+
+  await updateDoc(
+    doc(
+      db,
+      "bookings",
+      id
+    ),
+    {
+      status: "cancelled",
+      cancelledAt: serverTimestamp()
+    }
+  );
+
+  await loadPMSStats();
+  await loadProperties();
+  await loadBookings(
+    window.currentPropertyId
+  );
+
+};
+
+// =====================================
 // 🗑 DELETE BOOKING
 // =====================================
 
@@ -9482,8 +9545,8 @@ async function(id){
   if(
     !confirm(
       window.t(
-        "Eliminare prenotazione?",
-        "Delete booking?"
+        "Eliminare definitivamente questa prenotazione? L’operazione non può essere annullata.",
+        "Permanently delete this booking? This action cannot be undone."
       )
     )
   ){
