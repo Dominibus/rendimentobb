@@ -5946,6 +5946,22 @@ window.closeBookingsModal = function(){
 };
 
 // =====================================
+// ✏️ OPEN BOOKING FROM SAVED LIST
+// =====================================
+
+window.openBookingForEdit = function(id){
+
+  const booking =
+    (window.currentBookingsData || [])
+      .find(item => item.id === id);
+
+  if(!booking) return;
+
+  window.showBookingDetails(booking);
+
+};
+
+// =====================================
 // 📌 SHOW BOOKING DETAILS
 // =====================================
 
@@ -9084,6 +9100,20 @@ ${b.source === "airbnb"
 <div style="display:flex;gap:8px;align-items:center;">
 
 ${!isCancelled ? `
+<button
+onclick="openBookingForEdit('${docItem.id}')"
+style="
+padding:10px 14px;
+border:1px solid #10b981;
+border-radius:12px;
+background:#ecfdf5;
+color:#047857;
+font-weight:700;
+cursor:pointer;
+">
+${window.t("Modifica", "Edit")}
+</button>
+
 <button
 onclick="cancelBooking('${docItem.id}')"
 style="
