@@ -6033,6 +6033,62 @@ window.currentSelectedBooking = booking;
     }
 
 
+    const guests =
+        document.getElementById(
+            "booking-guests"
+        );
+
+
+    const total =
+        document.getElementById(
+            "booking-total"
+        );
+
+
+    const status =
+        document.getElementById(
+            "booking-status"
+        );
+
+
+    const source =
+        document.getElementById(
+            "booking-source"
+        );
+
+
+    if(guests){
+
+        guests.value =
+            Number(booking.guests || 1);
+
+    }
+
+
+    if(total){
+
+        total.value =
+            Number(booking.totalAmount || 0);
+
+    }
+
+
+    if(status){
+
+        status.value =
+            booking.status || "arrival";
+
+    }
+
+
+    if(source){
+
+        source.value =
+            booking.source || "direct";
+
+    }
+
+
 
     const nightsField =
         document.getElementById(
