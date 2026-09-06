@@ -1001,6 +1001,13 @@ body.dashboard-bg {
   background: #ecfdf5;
 }
 
+.booking-pricing-apply:disabled {
+  border-color: #86efac;
+  background: #dcfce7;
+  color: #166534;
+  cursor: default;
+}
+
 .booking-pricing-apply:focus-visible {
   outline: 3px solid rgba(16, 185, 129, 0.4);
   outline-offset: 2px;
