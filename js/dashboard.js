@@ -10476,6 +10476,56 @@ const normalizedBookings =
 
     }
 
+    if(
+      !isCancelled &&
+      booking.touristTax?.enabled === true &&
+      String(booking.touristTax.status || "pending") === "pending"
+    ){
+
+      attentionCodes.push(
+        "tourist_tax_pending"
+      );
+
+    }
+
+    const guestRegistration =
+      booking.guestRegistration || {};
+
+    const documentsReceived =
+      Math.max(0, Number(guestRegistration.documentsReceived || 0));
+
+    const authorityStatus =
+      String(guestRegistration.authorityStatus || "pending");
+
+    const registrationComplete =
+      guestRegistration.completed === true ||
+      (
+        documentsReceived >= Number(booking.guests || 0) &&
+        ["submitted", "not_required"].includes(authorityStatus)
+      );
+
+    if(!isCancelled && !registrationComplete){
+
+      attentionCodes.push(
+        "guest_registration_incomplete"
+      );
+
+    }
+
+    if(
+      !isCancelled &&
+      booking.cleaning?.required !== false &&
+      !["scheduled", "completed"].includes(
+        String(booking.cleaning?.status || "pending")
+      )
+    ){
+
+      attentionCodes.push(
+        "cleaning_to_schedule"
+      );
+
+    }
+
     return {
 
       id:
@@ -11343,6 +11393,56 @@ const normalizedPMSBookings =
 
         attentionCodes.push(
           "missing_or_invalid_amount"
+        );
+
+      }
+
+      if(
+        !isCancelled &&
+        booking.touristTax?.enabled === true &&
+        String(booking.touristTax.status || "pending") === "pending"
+      ){
+
+        attentionCodes.push(
+          "tourist_tax_pending"
+        );
+
+      }
+
+      const guestRegistration =
+        booking.guestRegistration || {};
+
+      const documentsReceived =
+        Math.max(0, Number(guestRegistration.documentsReceived || 0));
+
+      const authorityStatus =
+        String(guestRegistration.authorityStatus || "pending");
+
+      const registrationComplete =
+        guestRegistration.completed === true ||
+        (
+          documentsReceived >= Number(booking.guests || 0) &&
+          ["submitted", "not_required"].includes(authorityStatus)
+        );
+
+      if(!isCancelled && !registrationComplete){
+
+        attentionCodes.push(
+          "guest_registration_incomplete"
+        );
+
+      }
+
+      if(
+        !isCancelled &&
+        booking.cleaning?.required !== false &&
+        !["scheduled", "completed"].includes(
+          String(booking.cleaning?.status || "pending")
+        )
+      ){
+
+        attentionCodes.push(
+          "cleaning_to_schedule"
         );
 
       }
