@@ -160,7 +160,7 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js",
+    "/js/chatbot/core/response-engine.js?v=20260906-copilot-operations-v17-4",
     "/js/chatbot/core/chatbot-file-dispatcher.js",
     "/js/chatbot/core/chatbot-orchestrator.js",
 
