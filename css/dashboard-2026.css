@@ -897,6 +897,107 @@ body.dashboard-bg {
 
 /* Mobile / Android */
 @media (max-width: 720px) {
+  /* PMS bookings: keep the modal and every new operational block inside
+     the real mobile viewport (iOS Safari and Android Chrome included). */
+  #bookings-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  #bookings-modal > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    border-radius: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    box-sizing: border-box !important;
+  }
+
+  #bookings-modal > div > [style*="grid-template-columns:380px 1fr"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+  }
+
+  #bookings-modal > div > [style*="grid-template-columns:380px 1fr"] > div,
+  #bookings-modal > div > [style*="grid-template-columns:380px 1fr"] > div > div {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #booking-form-container {
+    position: static !important;
+    inset: auto !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    margin: 0 0 18px !important;
+    padding: 14px !important;
+    border-radius: 16px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  #booking-form-container,
+  #booking-form-container * {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #booking-form-container [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #booking-form-container [style*="grid-template-columns:repeat(auto-fit"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #booking-live-kpi {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  #booking-live-kpi > div {
+    padding: 10px 8px !important;
+  }
+
+  #booking-live-kpi [style*="font-size:22px"] {
+    font-size: 18px !important;
+  }
+
+  #booking-form-container > [style*="justify-content:flex-end"],
+  #booking-smart-actions {
+    flex-wrap: wrap !important;
+  }
+
+  #booking-smart-actions > button {
+    min-width: 120px !important;
+  }
+
+  #booking-form-container input,
+  #booking-form-container select,
+  #booking-form-container button {
+    font-size: 16px;
+  }
+
   .dashboard-container {
     width: min(100% - 24px, 680px);
     padding: 22px 0 54px;
@@ -1085,6 +1186,23 @@ body.dashboard-bg {
 }
 
 @media (max-width: 420px) {
+  #bookings-modal > div {
+    padding: 12px !important;
+  }
+
+  #booking-form-container {
+    padding: 12px !important;
+  }
+
+  #booking-live-kpi {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  #booking-live-kpi > div {
+    padding: 9px 5px !important;
+  }
+
   .rb-dashboard > .rb-kpi-grid,
   #pms-quick-actions .quick-actions-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
