@@ -4813,7 +4813,7 @@ const getPricingMarket = cityValue => {
   return window.marketData?.[aliases[city] || city] || window.marketData?.italy || null;
 };
 
-const getBookingStayMetrics = () => {
+window.getBookingStayMetrics = () => {
   const checkin = document.getElementById("booking-checkin")?.value;
   const checkout = document.getElementById("booking-checkout")?.value;
   const start = checkin ? new Date(`${checkin}T12:00:00`) : null;
@@ -4836,7 +4836,7 @@ const getBookingStayMetrics = () => {
 
 window.updateBookingPricingSuggestion = function(){
   const box = document.getElementById("booking-pricing-box");
-  const metrics = getBookingStayMetrics();
+  const metrics = window.getBookingStayMetrics();
   if(!box || !metrics){
     if(box) box.style.display = "none";
     return null;
@@ -8821,7 +8821,7 @@ window.openBookings = function(propertyId){
         const pricingBox = document.getElementById("booking-pricing-box");
         if(pricingBox) pricingBox.dataset.applied = "false";
 
-        const metrics = getBookingStayMetrics();
+        const metrics = window.getBookingStayMetrics();
         const enteredTotal = Math.max(0, Number(event.currentTarget.value || 0));
         if(metrics){
           const revenueEl = document.getElementById("booking-live-revenue");
@@ -9214,7 +9214,7 @@ if(!window.currentPropertyId){
     completed: !cleaningRequired || cleaningStatus === "completed"
   };
   const pricingBox = document.getElementById("booking-pricing-box");
-  const stayMetrics = getBookingStayMetrics();
+  const stayMetrics = window.getBookingStayMetrics();
   const suggestedTotal = Math.max(0, Number(pricingBox?.dataset.suggestedTotal || 0));
   const pricingAssistant = pricingBox?.style.display !== "none" && stayMetrics ? {
     version: "assisted-v1",
