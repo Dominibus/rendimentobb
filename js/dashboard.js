@@ -4873,7 +4873,7 @@ window.updateBookingPricingSuggestion = function(){
   const maximumADR = Math.max(minimumADR, baseADR * 1.45);
   const suggestedADR = Math.round(Math.min(maximumADR, Math.max(minimumADR, rawSuggestedADR)));
   const suggestedTotal = suggestedADR * metrics.nights;
-  const comparisonTotal = currentTotal || (baseADR * metrics.nights);
+  const comparisonTotal = baseADR * metrics.nights;
   const delta = suggestedTotal - comparisonTotal;
   const deltaPercent = comparisonTotal ? Math.round((delta / comparisonTotal) * 100) : 0;
 
@@ -4898,6 +4898,8 @@ window.updateBookingPricingSuggestion = function(){
   const impactEl = document.getElementById("booking-pricing-impact");
   const reasonsEl = document.getElementById("booking-pricing-reasons");
   const statusEl = document.getElementById("booking-pricing-status");
+  const applyButton = document.getElementById("booking-pricing-apply");
+  const applied = box.dataset.applied === "true" && currentTotal === suggestedTotal;
   if(baseEl) baseEl.textContent = formatCurrency(baseADR);
   if(suggestedEl) suggestedEl.textContent = formatCurrency(suggestedADR);
   if(impactEl){
@@ -4906,9 +4908,17 @@ window.updateBookingPricingSuggestion = function(){
   }
   if(reasonsEl) reasonsEl.textContent = reasons.join(" · ");
   if(statusEl){
-    const applied = box.dataset.applied === "true" && Number(document.getElementById("booking-total")?.value || 0) === suggestedTotal;
     statusEl.textContent = applied ? t("Applicato", "Applied") : t("Da confermare", "To confirm");
     statusEl.dataset.applied = String(applied);
+  }
+  if(applyButton){
+    const italianLabel = applied ? "✓ Tariffa applicata" : "✓ Conferma e applica tariffa";
+    const englishLabel = applied ? "✓ Rate applied" : "✓ Confirm and apply rate";
+    applyButton.dataset.it = italianLabel;
+    applyButton.dataset.en = englishLabel;
+    applyButton.textContent = t(italianLabel, englishLabel);
+    applyButton.disabled = applied;
+    applyButton.setAttribute("aria-pressed", String(applied));
   }
 
   return { baseADR, marketADR, suggestedADR, suggestedTotal, delta, deltaPercent, metrics };
@@ -4931,6 +4941,7 @@ window.applyBookingPricingSuggestion = function(){
   if(adrEl) adrEl.textContent = formatCurrency(suggestion.suggestedADR);
 
   window.updateBookingPricingSuggestion();
+  document.getElementById("booking-pricing-apply")?.blur();
 };
 
 window.getTouristTaxCurrencySymbol = function(currency){
