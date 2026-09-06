@@ -44,6 +44,19 @@ window.t = function(it,en){
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+const setBookingToggleState = isOpen => {
+  const toggle = document.getElementById("toggle-booking-form");
+  if(!toggle) return;
+
+  const italianLabel = isOpen ? "← Prenotazioni" : "➕ Nuova Prenotazione";
+  const englishLabel = isOpen ? "← Bookings" : "➕ New Booking";
+
+  toggle.dataset.it = italianLabel;
+  toggle.dataset.en = englishLabel;
+  toggle.textContent = t(italianLabel, englishLabel);
+  toggle.setAttribute("aria-expanded", String(isOpen));
+};
+
 // =====================================
 // PRODUCTION LOGGING
 // =====================================
@@ -5004,8 +5017,7 @@ window.openBookingModal = async function(){
     if(liveNights) liveNights.textContent = "0";
     if(liveAdr) liveAdr.textContent = formatCurrency(0);
 
-    const toggle = document.getElementById("toggle-booking-form");
-    if(toggle) toggle.textContent = "✖";
+    setBookingToggleState(true);
 
 
     form.style.display =
@@ -5046,10 +5058,7 @@ window.closeBookingForm = function(){
     window.pmsEditingBooking = false;
     window.currentSelectedBooking = null;
 
-    const toggle = document.getElementById("toggle-booking-form");
-    if(toggle){
-      toggle.textContent = t("➕ Nuova Prenotazione", "➕ New Booking");
-    }
+    setBookingToggleState(false);
 
 };
       
@@ -5072,10 +5081,7 @@ window.closeBookingForm = function(){
         window.pmsEditingBooking = false;
         window.currentSelectedBooking = null;
 
-        const toggle = document.getElementById("toggle-booking-form");
-        if(toggle){
-          toggle.textContent = t("➕ Nuova Prenotazione", "➕ New Booking");
-        }
+        setBookingToggleState(false);
 
       };
 
@@ -6283,6 +6289,7 @@ window.showBookingDetails = async function(booking){
 
 
     modal.style.display = "flex";
+    setBookingToggleState(true);
 
 
     window.pmsEditingBooking = true;
@@ -8591,6 +8598,7 @@ window.openBookings = function(propertyId){
 
   if(bookingForm){
     bookingForm.style.display = "none";
+    setBookingToggleState(false);
   }
 
   // Apre il modal
