@@ -10526,6 +10526,16 @@ const normalizedBookings =
 
     }
 
+    if(
+      ["completed", "cancelled"].includes(
+        String(booking.status || "").toLowerCase()
+      )
+    ){
+
+      attentionCodes.length = 0;
+
+    }
+
     return {
 
       id:
@@ -11444,6 +11454,16 @@ const normalizedPMSBookings =
         attentionCodes.push(
           "cleaning_to_schedule"
         );
+
+      }
+
+      if(
+        ["completed", "cancelled"].includes(
+          String(booking.status || "").toLowerCase()
+        )
+      ){
+
+        attentionCodes.length = 0;
 
       }
 
