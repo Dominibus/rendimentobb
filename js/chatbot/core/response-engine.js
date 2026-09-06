@@ -3670,7 +3670,16 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "Manca il nome dell’ospite.",
 
       missing_or_invalid_amount:
-        "L’importo è mancante o non valido."
+        "L’importo è mancante o non valido.",
+
+      tourist_tax_pending:
+        "La tassa di soggiorno risulta ancora da riscuotere.",
+
+      guest_registration_incomplete:
+        "La registrazione degli ospiti non è completa.",
+
+      cleaning_to_schedule:
+        "La pulizia successiva al soggiorno deve essere pianificata."
 
     };
 
@@ -3692,7 +3701,16 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "The guest name is missing.",
 
       missing_or_invalid_amount:
-        "The amount is missing or invalid."
+        "The amount is missing or invalid.",
+
+      tourist_tax_pending:
+        "The tourist tax still needs to be collected.",
+
+      guest_registration_incomplete:
+        "Guest registration is incomplete.",
+
+      cleaning_to_schedule:
+        "Post-stay cleaning needs to be scheduled."
 
     };
 
@@ -3714,7 +3732,16 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "Completa i dati dell’ospite.",
 
       missing_or_invalid_amount:
-        "Inserisci o correggi l’importo della prenotazione."
+        "Inserisci o correggi l’importo della prenotazione.",
+
+      tourist_tax_pending:
+        "Riscuoti la tassa e aggiorna lo stato nel PMS.",
+
+      guest_registration_incomplete:
+        "Completa documenti e comunicazione alle autorità.",
+
+      cleaning_to_schedule:
+        "Definisci data e incaricato della pulizia."
 
     };
 
@@ -3736,7 +3763,16 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "Complete the guest information.",
 
       missing_or_invalid_amount:
-        "Enter or correct the booking amount."
+        "Enter or correct the booking amount.",
+
+      tourist_tax_pending:
+        "Collect the tax and update its status in the PMS.",
+
+      guest_registration_incomplete:
+        "Complete the documents and authority reporting.",
+
+      cleaning_to_schedule:
+        "Set the cleaning date and assignee."
 
     };
 
@@ -3755,10 +3791,6 @@ The Copilot will continue checking dates, status, amounts and guest information.
           )
             ? booking.attentionCodes
             : [];
-
-        const primaryCode =
-          codes[0] ||
-          "unknown";
 
         const guestName =
           booking?.guestName ||
@@ -3799,6 +3831,15 @@ The Copilot will continue checking dates, status, amounts and guest information.
             .filter(Boolean)
             .join(" ");
 
+        const actions =
+          codes
+            .map(
+              code =>
+                actionMap[code]
+            )
+            .filter(Boolean)
+            .join(" ");
+
         const amount =
           Number(
             booking?.totalAmount || 0
@@ -3824,12 +3865,12 @@ The Copilot will continue checking dates, status, amounts and guest information.
 📆 ${checkin} → ${checkout}
 💰 ${amountText}
 Problema: ${reasons || "È richiesta una verifica manuale."}
-Azione: ${actionMap[primaryCode] || "Controlla i dettagli della prenotazione."}`
+Azione: ${actions || "Controlla i dettagli della prenotazione."}`
           : `⚠️ ${guestName}
 📆 ${checkin} → ${checkout}
 💰 ${amountText}
 Issue: ${reasons || "A manual review is required."}
-Action: ${actionMap[primaryCode] || "Review the booking details."}`;
+Action: ${actions || "Review the booking details."}`;
 
       };
 
@@ -3878,7 +3919,7 @@ ${attentionListIT}
 
 🎯 Priorità operativa
 
-Correggi prima le anomalie sulle date, poi gestisci arrivi, partenze e prenotazioni in attesa.`;
+Correggi prima le anomalie sulle date, poi gestisci arrivi, partenze, tasse, registrazioni e pulizie ancora aperte.`;
 
     response.textEN =
 `🚨 Hospitality Copilot
@@ -3897,7 +3938,7 @@ ${attentionListEN}
 
 🎯 Operational priority
 
-Correct date anomalies first, then handle arrivals, departures and pending bookings.`;
+Correct date anomalies first, then handle arrivals, departures, taxes, registrations and cleaning tasks still open.`;
 
     return response;
 
