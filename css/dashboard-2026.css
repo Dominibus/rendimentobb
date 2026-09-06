@@ -1319,6 +1319,17 @@ body.dashboard-bg {
   }
 }
 
+/* Booking form toggle: no persistent touch outline; clear keyboard focus. */
+#toggle-booking-form:focus {
+  outline: none;
+}
+
+#toggle-booking-form:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid rgba(16, 185, 129, 0.45);
+  outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .analysis-card,
   .rb-kpi,
