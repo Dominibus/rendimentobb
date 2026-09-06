@@ -896,6 +896,116 @@ body.dashboard-bg {
 }
 
 /* Mobile / Android */
+.booking-pricing-box {
+  padding: 16px;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 100%);
+}
+
+.booking-pricing-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.booking-pricing-title {
+  color: #0f3f65;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.booking-pricing-subtitle,
+.booking-pricing-reasons {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.booking-pricing-status {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.booking-pricing-status[data-applied="true"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.booking-pricing-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.booking-pricing-metrics > div {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.booking-pricing-metrics span,
+.booking-pricing-metrics strong {
+  display: block;
+}
+
+.booking-pricing-metrics span {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.booking-pricing-metrics strong {
+  margin-top: 5px;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.booking-pricing-highlight strong,
+#booking-pricing-impact[data-positive="true"] {
+  color: #059669;
+}
+
+#booking-pricing-impact[data-positive="false"] {
+  color: #c2410c;
+}
+
+.booking-pricing-reasons {
+  min-height: 18px;
+  margin-top: 11px;
+}
+
+.booking-pricing-apply {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 11px;
+  border: 1px solid #059669;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #047857;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.booking-pricing-apply:hover {
+  background: #ecfdf5;
+}
+
+.booking-pricing-apply:focus-visible {
+  outline: 3px solid rgba(16, 185, 129, 0.4);
+  outline-offset: 2px;
+}
+
 @media (max-width: 720px) {
   /* PMS bookings: keep the modal and every new operational block inside
      the real mobile viewport (iOS Safari and Android Chrome included). */
@@ -996,6 +1106,30 @@ body.dashboard-bg {
   #booking-form-container select,
   #booking-form-container button {
     font-size: 16px;
+  }
+
+  .booking-pricing-box {
+    padding: 13px;
+  }
+
+  .booking-pricing-head {
+    flex-direction: column;
+  }
+
+  .booking-pricing-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .booking-pricing-metrics > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .booking-pricing-metrics strong {
+    margin-top: 0;
+    text-align: right;
   }
 
   .dashboard-container {
