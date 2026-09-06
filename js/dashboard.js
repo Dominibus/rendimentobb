@@ -9242,6 +9242,13 @@ if(!window.currentPropertyId){
     return;
   }
 
+  const saveButton = document.getElementById("booking-save-button");
+  if(saveButton){
+    saveButton.disabled = true;
+    saveButton.textContent = t("Salvataggio…", "Saving…");
+  }
+
+  try{
   if(
     window.pmsEditingBooking &&
     window.currentSelectedBooking?.id
@@ -9328,15 +9335,18 @@ source:
 
   );
 }
-  
-
-  await loadBookings(
-  window.currentPropertyId
- );
-
- await loadPMSStats();
-
-await loadProperties(); 
+  }catch(error){
+    dashboardError("Booking save failed", error);
+    if(saveButton){
+      saveButton.disabled = false;
+      saveButton.textContent = t("💾 Salva Prenotazione", "💾 Save Booking");
+    }
+    alert(t(
+      "Impossibile salvare la prenotazione. Riprova.",
+      "Unable to save the booking. Please try again."
+    ));
+    return;
+  }
 
 // =====================================
 // 🤖 PMS AI REAL-TIME SYNC
@@ -9366,6 +9376,10 @@ window.dispatchEvent(
   )
 );
 
+  if(saveButton){
+    saveButton.disabled = false;
+    saveButton.textContent = t("💾 Salva Prenotazione", "💾 Save Booking");
+  }
 
   alert(
   t(
@@ -9375,6 +9389,14 @@ window.dispatchEvent(
 );
 
   closeBookingModal();
+
+  try{
+    await loadBookings(window.currentPropertyId);
+    await loadPMSStats();
+    await loadProperties();
+  }catch(error){
+    dashboardError("Booking saved but dashboard refresh failed", error);
+  }
 
 };
 
