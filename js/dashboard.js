@@ -4780,17 +4780,157 @@ document.addEventListener(
 window.loadCurrentPropertyTouristTax = async function(propertyId = window.currentPropertyId){
   if(!propertyId){
     window.currentPropertyTouristTaxConfig = null;
+    window.currentPropertyData = null;
     return null;
   }
 
   const propertySnap = await getDoc(
     doc(db, "properties", propertyId)
   );
+  const propertyData = propertySnap.exists() ? propertySnap.data() : null;
   window.currentPropertyId = propertyId;
-  window.currentPropertyTouristTaxConfig = propertySnap.exists()
-    ? propertySnap.data().touristTaxConfig || null
-    : null;
+  window.currentPropertyData = propertyData;
+  window.currentPropertyTouristTaxConfig = propertyData?.touristTaxConfig || null;
   return window.currentPropertyTouristTaxConfig;
+};
+
+const getPricingMarket = cityValue => {
+  const city = String(cityValue || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  const aliases = {
+    roma: "rome",
+    rome: "rome",
+    napoli: "naples",
+    naples: "naples",
+    milano: "milan",
+    milan: "milan",
+    firenze: "florence",
+    florence: "florence"
+  };
+  return window.marketData?.[aliases[city] || city] || window.marketData?.italy || null;
+};
+
+const getBookingStayMetrics = () => {
+  const checkin = document.getElementById("booking-checkin")?.value;
+  const checkout = document.getElementById("booking-checkout")?.value;
+  const start = checkin ? new Date(`${checkin}T12:00:00`) : null;
+  const end = checkout ? new Date(`${checkout}T12:00:00`) : null;
+
+  if(!start || !end || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start){
+    return null;
+  }
+
+  const nights = Math.ceil((end - start) / 86400000);
+  let weekendNights = 0;
+  const cursor = new Date(start);
+  while(cursor < end){
+    if(cursor.getDay() === 5 || cursor.getDay() === 6) weekendNights += 1;
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return { checkin, checkout, start, end, nights, weekendNights };
+};
+
+window.updateBookingPricingSuggestion = function(){
+  const box = document.getElementById("booking-pricing-box");
+  const metrics = getBookingStayMetrics();
+  if(!box || !metrics){
+    if(box) box.style.display = "none";
+    return null;
+  }
+
+  const property = window.currentPropertyData || {};
+  const market = getPricingMarket(property.city || property.investmentSnapshot?.city);
+  const currentTotal = Math.max(0, Number(document.getElementById("booking-total")?.value || 0));
+  const propertyADR = Math.max(0, Number(property.priceNight || 0));
+  const currentADR = metrics.nights ? currentTotal / metrics.nights : 0;
+  const baseADR = propertyADR || currentADR || Number(market?.adr || 120);
+  const marketADR = Math.max(0, Number(market?.adr || 0));
+  const referenceADR = marketADR
+    ? (baseADR * 0.7) + (marketADR * 0.3)
+    : baseADR;
+
+  const month = metrics.start.getMonth() + 1;
+  const seasonFactor = [6, 7, 8, 9].includes(month)
+    ? 1.15
+    : [4, 5, 10].includes(month)
+      ? 1.07
+      : [11, 12, 1, 2].includes(month)
+        ? 0.92
+        : 1;
+  const weekendFactor = 1 + ((metrics.weekendNights / metrics.nights) * 0.12);
+  const lengthFactor = metrics.nights >= 14 ? 0.92 : metrics.nights >= 7 ? 0.95 : metrics.nights === 1 ? 1.10 : 1;
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+  const leadDays = Math.ceil((metrics.start - today) / 86400000);
+  const leadFactor = leadDays >= 0 && leadDays <= 3 ? 0.92 : leadDays >= 60 ? 1.03 : 1;
+
+  const rawSuggestedADR = referenceADR * seasonFactor * weekendFactor * lengthFactor * leadFactor;
+  const minimumADR = Math.max(1, baseADR * 0.75);
+  const maximumADR = Math.max(minimumADR, baseADR * 1.45);
+  const suggestedADR = Math.round(Math.min(maximumADR, Math.max(minimumADR, rawSuggestedADR)));
+  const suggestedTotal = suggestedADR * metrics.nights;
+  const comparisonTotal = currentTotal || (baseADR * metrics.nights);
+  const delta = suggestedTotal - comparisonTotal;
+  const deltaPercent = comparisonTotal ? Math.round((delta / comparisonTotal) * 100) : 0;
+
+  const reasons = [];
+  if(marketADR) reasons.push(t(`Benchmark città ${formatCurrency(marketADR)}`, `City benchmark ${formatCurrency(marketADR)}`));
+  if(seasonFactor > 1) reasons.push(t("Domanda stagionale favorevole", "Favourable seasonal demand"));
+  if(seasonFactor < 1) reasons.push(t("Periodo di domanda più contenuta", "Lower-demand period"));
+  if(metrics.weekendNights) reasons.push(t(`${metrics.weekendNights} notti weekend`, `${metrics.weekendNights} weekend nights`));
+  if(lengthFactor < 1) reasons.push(t("Sconto soggiorno lungo", "Long-stay discount"));
+  if(lengthFactor > 1) reasons.push(t("Premio soggiorno di una notte", "One-night stay premium"));
+  if(leadFactor < 1) reasons.push(t("Correzione last minute", "Last-minute adjustment"));
+  if(leadFactor > 1) reasons.push(t("Prenotazione con largo anticipo", "Early-booking adjustment"));
+
+  box.style.display = "block";
+  box.dataset.suggestedAdr = String(suggestedADR);
+  box.dataset.suggestedTotal = String(suggestedTotal);
+  box.dataset.baseAdr = String(Math.round(baseADR));
+  box.dataset.marketAdr = String(Math.round(marketADR));
+
+  const baseEl = document.getElementById("booking-pricing-base");
+  const suggestedEl = document.getElementById("booking-pricing-suggested");
+  const impactEl = document.getElementById("booking-pricing-impact");
+  const reasonsEl = document.getElementById("booking-pricing-reasons");
+  const statusEl = document.getElementById("booking-pricing-status");
+  if(baseEl) baseEl.textContent = formatCurrency(baseADR);
+  if(suggestedEl) suggestedEl.textContent = formatCurrency(suggestedADR);
+  if(impactEl){
+    impactEl.textContent = `${delta >= 0 ? "+" : ""}${formatCurrency(delta)} · ${deltaPercent >= 0 ? "+" : ""}${deltaPercent}%`;
+    impactEl.dataset.positive = String(delta >= 0);
+  }
+  if(reasonsEl) reasonsEl.textContent = reasons.join(" · ");
+  if(statusEl){
+    const applied = box.dataset.applied === "true" && Number(document.getElementById("booking-total")?.value || 0) === suggestedTotal;
+    statusEl.textContent = applied ? t("Applicato", "Applied") : t("Da confermare", "To confirm");
+    statusEl.dataset.applied = String(applied);
+  }
+
+  return { baseADR, marketADR, suggestedADR, suggestedTotal, delta, deltaPercent, metrics };
+};
+
+window.applyBookingPricingSuggestion = function(){
+  const suggestion = window.updateBookingPricingSuggestion();
+  const totalField = document.getElementById("booking-total");
+  const box = document.getElementById("booking-pricing-box");
+  if(!suggestion || !totalField || !box) return;
+
+  totalField.value = String(suggestion.suggestedTotal);
+  box.dataset.applied = "true";
+
+  const revenueEl = document.getElementById("booking-live-revenue");
+  const nightsEl = document.getElementById("booking-live-nights");
+  const adrEl = document.getElementById("booking-live-adr");
+  if(revenueEl) revenueEl.textContent = formatCurrency(suggestion.suggestedTotal);
+  if(nightsEl) nightsEl.textContent = String(suggestion.metrics.nights);
+  if(adrEl) adrEl.textContent = formatCurrency(suggestion.suggestedADR);
+
+  window.updateBookingPricingSuggestion();
 };
 
 window.getTouristTaxCurrencySymbol = function(currency){
@@ -5017,6 +5157,12 @@ window.openBookingModal = async function(){
     if(liveNights) liveNights.textContent = "0";
     if(liveAdr) liveAdr.textContent = formatCurrency(0);
 
+    const pricingBox = document.getElementById("booking-pricing-box");
+    if(pricingBox){
+      pricingBox.style.display = "none";
+      pricingBox.dataset.applied = "false";
+    }
+
     setBookingToggleState(true);
 
 
@@ -5124,6 +5270,7 @@ document.addEventListener(
     window.updateBookingTouristTax?.();
     window.updateBookingGuestRegistration?.();
     window.updateBookingCleaning?.();
+    window.updateBookingPricingSuggestion?.();
 
   }
 );
@@ -6515,6 +6662,10 @@ window.currentSelectedBooking = booking;
             "€" + adr.toFixed(0);
 
     }
+
+    const pricingBox = document.getElementById("booking-pricing-box");
+    if(pricingBox) pricingBox.dataset.applied = String(booking.pricingAssistant?.applied === true);
+    window.updateBookingPricingSuggestion();
 
   const ai =
 window.getBookingExecutiveAnalysis
@@ -8652,6 +8803,27 @@ window.openBookings = function(propertyId){
         window.updateBookingGuestRegistration();
       });
 
+    const bookingTotalField = document.getElementById("booking-total");
+    if(bookingTotalField && !bookingTotalField.dataset.pricingReady){
+      bookingTotalField.dataset.pricingReady = "true";
+      bookingTotalField.addEventListener("input", event => {
+        const pricingBox = document.getElementById("booking-pricing-box");
+        if(pricingBox) pricingBox.dataset.applied = "false";
+
+        const metrics = getBookingStayMetrics();
+        const enteredTotal = Math.max(0, Number(event.currentTarget.value || 0));
+        if(metrics){
+          const revenueEl = document.getElementById("booking-live-revenue");
+          const nightsEl = document.getElementById("booking-live-nights");
+          const adrEl = document.getElementById("booking-live-adr");
+          if(revenueEl) revenueEl.textContent = formatCurrency(enteredTotal);
+          if(nightsEl) nightsEl.textContent = String(metrics.nights);
+          if(adrEl) adrEl.textContent = formatCurrency(enteredTotal / metrics.nights);
+        }
+        window.updateBookingPricingSuggestion();
+      });
+    }
+
     document
       .getElementById("booking-taxable-guests")
       ?.addEventListener("input", event => {
@@ -8755,6 +8927,7 @@ function updateBookingTotal(){
 
   if(!checkin || !checkout){
     window.updateBookingTouristTax();
+    window.updateBookingPricingSuggestion();
     return;
   }
 
@@ -8778,9 +8951,9 @@ function updateBookingTotal(){
       ".property-card"
     );
 
-  let adr = 120;
+  let adr = Math.max(0, Number(window.currentPropertyData?.priceNight || 0)) || 120;
 
-  if(propertyCard){
+  if(!window.currentPropertyData?.priceNight && propertyCard){
 
     const txt =
       propertyCard.innerText;
@@ -8854,6 +9027,9 @@ function updateBookingTotal(){
   }
 
   window.updateBookingTouristTax();
+  const pricingBox = document.getElementById("booking-pricing-box");
+  if(pricingBox) pricingBox.dataset.applied = "false";
+  window.updateBookingPricingSuggestion();
 
 }
 
@@ -9026,6 +9202,18 @@ if(!window.currentPropertyId){
     assignee: cleaningAssignee,
     completed: !cleaningRequired || cleaningStatus === "completed"
   };
+  const pricingBox = document.getElementById("booking-pricing-box");
+  const stayMetrics = getBookingStayMetrics();
+  const suggestedTotal = Math.max(0, Number(pricingBox?.dataset.suggestedTotal || 0));
+  const pricingAssistant = pricingBox?.style.display !== "none" && stayMetrics ? {
+    version: "assisted-v1",
+    baseADR: Math.max(0, Number(pricingBox.dataset.baseAdr || 0)),
+    marketADR: Math.max(0, Number(pricingBox.dataset.marketAdr || 0)),
+    suggestedADR: Math.max(0, Number(pricingBox.dataset.suggestedAdr || 0)),
+    suggestedTotal,
+    finalADR: stayMetrics.nights ? Number((total / stayMetrics.nights).toFixed(2)) : 0,
+    applied: pricingBox.dataset.applied === "true" && total === suggestedTotal
+  } : null;
 
   if(authorityStatus === "submitted" && documentsReceived < guests){
     alert(t(
@@ -9067,6 +9255,7 @@ if(!window.currentPropertyId){
             touristTax,
             guestRegistration,
             cleaning,
+            pricingAssistant,
 
             status,
 
@@ -9112,6 +9301,7 @@ if(!window.currentPropertyId){
       touristTax,
       guestRegistration,
       cleaning,
+      pricingAssistant,
 
       status,
       
