@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260906-mobile-focus-v16-2">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260906-assisted-pricing-v17">
 </head>
 
 <body class="dashboard-bg">
@@ -3753,7 +3753,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260906-mobile-toggle-v16-1"></script>
+<script type="module" src="/js/dashboard.js?v=20260906-assisted-pricing-v17"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4344,6 +4344,43 @@ font-size:15px;
 ">
 
 </div>
+
+<section id="booking-pricing-box" class="booking-pricing-box" style="display:none;" aria-labelledby="booking-pricing-title">
+  <div class="booking-pricing-head">
+    <div>
+      <div id="booking-pricing-title" class="booking-pricing-title" data-it="📈 Prezzo dinamico assistito" data-en="📈 Assisted dynamic pricing">📈 Prezzo dinamico assistito</div>
+      <div class="booking-pricing-subtitle" data-it="Analisi interna di tariffa, periodo e durata. Nessuna modifica automatica." data-en="Internal analysis of rate, dates and stay length. No automatic changes.">Analisi interna di tariffa, periodo e durata. Nessuna modifica automatica.</div>
+    </div>
+    <span id="booking-pricing-status" class="booking-pricing-status" data-applied="false" data-it="Da confermare" data-en="To confirm">Da confermare</span>
+  </div>
+
+  <div class="booking-pricing-metrics">
+    <div>
+      <span data-it="Tariffa base" data-en="Base rate">Tariffa base</span>
+      <strong id="booking-pricing-base">€0</strong>
+    </div>
+    <div class="booking-pricing-highlight">
+      <span data-it="Tariffa suggerita" data-en="Suggested rate">Tariffa suggerita</span>
+      <strong id="booking-pricing-suggested">€0</strong>
+    </div>
+    <div>
+      <span data-it="Impatto soggiorno" data-en="Stay impact">Impatto soggiorno</span>
+      <strong id="booking-pricing-impact" data-positive="true">€0 · 0%</strong>
+    </div>
+  </div>
+
+  <div id="booking-pricing-reasons" class="booking-pricing-reasons"></div>
+
+  <button
+    id="booking-pricing-apply"
+    type="button"
+    class="booking-pricing-apply"
+    onclick="applyBookingPricingSuggestion()"
+    data-it="✓ Conferma e applica tariffa"
+    data-en="✓ Confirm and apply rate">
+    ✓ Conferma e applica tariffa
+  </button>
+</section>
 
 <select
 id="booking-status"
