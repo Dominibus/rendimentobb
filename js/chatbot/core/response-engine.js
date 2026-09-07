@@ -3902,6 +3902,16 @@ Action: ${actions || "Review the booking details."}`;
     response.confidence =
       0.99;
 
+    response.actions =
+      attentionBookings
+        .slice(0, 3)
+        .map(booking => ({
+          type: "open_booking",
+          bookingId: booking.id,
+          labelIT: `Apri ${booking.guestName || "prenotazione"}`,
+          labelEN: `Open ${booking.guestName || "booking"}`
+        }));
+
     response.textIT =
 `🚨 Hospitality Copilot
 
