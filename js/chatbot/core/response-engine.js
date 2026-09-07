@@ -3581,6 +3581,93 @@ if(intent.intent === "pms_bookings"){
       bookingMessage
     );
 
+  const isPricingRequest =
+    /tariff|prezz|stagion|pricing|price|rate season|suggested rate/.test(
+      bookingMessage
+    );
+
+  // =====================================
+  // 💶 BOOKING PRICING & SEASON
+  // =====================================
+
+  if(isPricingRequest){
+
+    const namedBookings = bookingList.filter(booking => {
+      const guestTokens = String(booking?.guestName || "")
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(token => token.length >= 3);
+      return guestTokens.some(token => bookingMessage.includes(token));
+    });
+    const pricingBookings = (namedBookings.length ? namedBookings : bookingList)
+      .filter(booking => booking?.pricingAssistant);
+
+    if(pricingBookings.length === 0){
+      response.type = "pms_booking_pricing";
+      response.textIT = `💶 Analisi tariffaria prenotazioni\n\nNon trovo ancora un’analisi di prezzo salvata per la prenotazione richiesta. Apri la prenotazione e salva il Prezzo dinamico assistito.`;
+      response.textEN = `💶 Booking rate analysis\n\nI cannot find a saved pricing analysis for the requested booking yet. Open the booking and save Assisted dynamic pricing.`;
+      return response;
+    }
+
+    const seasonIT = {
+      high: "alta stagione",
+      medium: "media stagione",
+      low: "bassa stagione"
+    };
+    const seasonEN = {
+      high: "high season",
+      medium: "mid season",
+      low: "low season"
+    };
+
+    const buildPricingInsight = (booking, locale) => {
+      const isItalian = locale === "it-IT";
+      const pricing = booking.pricingAssistant || {};
+      const currentTotal = Math.max(0, Number(booking.totalAmount || 0));
+      const suggestedTotal = Math.max(0, Number(pricing.suggestedTotal || 0));
+      const currentADR = Math.max(0, Number(booking.nightlyRate || pricing.finalADR || 0));
+      const suggestedADR = Math.max(0, Number(pricing.suggestedADR || 0));
+      const difference = suggestedTotal - currentTotal;
+      const currency = value => Number(value).toLocaleString(locale, {
+        style: "currency",
+        currency: "EUR"
+      });
+      const season = (isItalian ? seasonIT : seasonEN)[pricing.seasonLevel] || (isItalian ? "stagione non definita" : "season not defined");
+      const mode = pricing.seasonMode === "auto"
+        ? (isItalian ? "automatica" : "automatic")
+        : (isItalian ? "manuale" : "manual");
+      const comparison = Math.abs(difference) < 0.01
+        ? (isItalian
+            ? "La tariffa applicata coincide con quella suggerita."
+            : "The applied rate matches the suggested rate.")
+        : difference > 0
+          ? (isItalian
+              ? `La tariffa attuale è inferiore al suggerimento di ${currency(difference)} complessivi.`
+              : `The current rate is ${currency(difference)} below the total suggestion.`)
+          : (isItalian
+              ? `La tariffa attuale supera il suggerimento di ${currency(Math.abs(difference))} complessivi.`
+              : `The current rate is ${currency(Math.abs(difference))} above the total suggestion.`);
+
+      return isItalian
+        ? `☀️ ${booking.guestName || "Prenotazione"}\nStagione: ${season} · impostazione ${mode}\nTariffa attuale: ${currency(currentADR)}/notte · ${currency(currentTotal)} totali\nTariffa suggerita: ${currency(suggestedADR)}/notte · ${currency(suggestedTotal)} totali\nValutazione: ${comparison}`
+        : `☀️ ${booking.guestName || "Booking"}\nSeason: ${season} · ${mode} setting\nCurrent rate: ${currency(currentADR)}/night · ${currency(currentTotal)} total\nSuggested rate: ${currency(suggestedADR)}/night · ${currency(suggestedTotal)} total\nAssessment: ${comparison}`;
+    };
+
+    response.type = "pms_booking_pricing";
+    response.confidence = 0.99;
+    response.actions = pricingBookings.slice(0, 3).map(booking => ({
+      type: "open_booking",
+      bookingId: booking.id,
+      attentionCodes: [],
+      labelIT: `Apri ${booking.guestName || "prenotazione"}`,
+      labelEN: `Open ${booking.guestName || "booking"}`
+    }));
+    response.textIT = `💶 Hospitality Pricing Copilot\n\n${pricingBookings.map(booking => buildPricingInsight(booking, "it-IT")).join("\n\n━━━━━━━━━━━━━━━\n\n")}`;
+    response.textEN = `💶 Hospitality Pricing Copilot\n\n${pricingBookings.map(booking => buildPricingInsight(booking, "en-US")).join("\n\n━━━━━━━━━━━━━━━\n\n")}`;
+    return response;
+
+  }
+
   // =====================================
   // 🤖 BOOKINGS REQUIRING ATTENTION
   // =====================================
