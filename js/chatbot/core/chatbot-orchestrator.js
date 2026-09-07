@@ -37,7 +37,7 @@ async function(message){
 // 🧠 MULTI INTENT DETECTION
 // =========================================
 
-const detectedIntent =
+let detectedIntent =
 
   window.rbDetectIntent
 
@@ -48,6 +48,41 @@ const detectedIntent =
         intent: "generic"
 
       };
+
+// =========================================
+// 🏨 LIVE PMS GUEST + PRICING OVERRIDE
+// =========================================
+
+const normalizedMessage = text
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "");
+const liveBookingList = Array.isArray(window.rbPMSData?.bookingList)
+  ? window.rbPMSData.bookingList
+  : [];
+const mentionsKnownGuest = liveBookingList.some(booking =>
+  String(booking?.guestName || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .split(/\s+/)
+    .filter(token => token.length >= 3)
+    .some(token => normalizedMessage.includes(token))
+);
+const mentionsBookingPricing =
+  /tariff|prezz|stagion|pricing|priced|\bprices?\b|\brates?\b|\badr\b|nightly|per night|a notte|convenient|worth/.test(
+    normalizedMessage
+  );
+
+if(mentionsKnownGuest && mentionsBookingPricing){
+  detectedIntent = {
+    ...detectedIntent,
+    intent: "pms_bookings",
+    category: "pms",
+    confidence: 0.99,
+    priority: 320
+  };
+}
 
 if(window.RB_DEBUG === true){
 
