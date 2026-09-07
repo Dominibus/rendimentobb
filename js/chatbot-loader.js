@@ -160,15 +160,15 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20260907-booking-season-card-v18-6",
+    "/js/chatbot/core/response-engine.js?v=20260907-booking-pricing-copilot-v18-7",
     "/js/chatbot/core/chatbot-file-dispatcher.js",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20260907-booking-season-card-v18-6",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20260907-booking-pricing-copilot-v18-7",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
     "/js/chatbot/ui/chatbot-attachments.js",
-    "/js/chatbot/ui/chatbot-ui.js?v=20260907-booking-season-card-v18-6",
+    "/js/chatbot/ui/chatbot-ui.js?v=20260907-booking-pricing-copilot-v18-7",
 
     "/js/ai-engine.js"
   ];
