@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260906-assisted-pricing-v17-1">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260907-booking-season-v18-5">
 </head>
 
 <body class="dashboard-bg">
@@ -3728,7 +3728,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20260907-copilot-departure-action-v18-4" defer></script>
+<script src="/js/chatbot-loader.js?v=20260907-booking-season-v18-5" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3753,7 +3753,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260907-copilot-departure-action-v18-4"></script>
+<script type="module" src="/js/dashboard.js?v=20260907-booking-season-v18-5"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4353,6 +4353,17 @@ font-size:15px;
     </div>
     <span id="booking-pricing-status" class="booking-pricing-status" data-applied="false" data-it="Da confermare" data-en="To confirm">Da confermare</span>
   </div>
+
+  <label class="booking-pricing-season" for="booking-pricing-season">
+    <span data-it="Stagione tariffaria" data-en="Rate season">Stagione tariffaria</span>
+    <select id="booking-pricing-season">
+      <option value="auto" data-it="Automatica" data-en="Automatic">Automatica</option>
+      <option value="high" data-it="Alta stagione" data-en="High season">Alta stagione</option>
+      <option value="medium" data-it="Media stagione" data-en="Mid season">Media stagione</option>
+      <option value="low" data-it="Bassa stagione" data-en="Low season">Bassa stagione</option>
+    </select>
+    <small id="booking-pricing-season-result"></small>
+  </label>
 
   <div class="booking-pricing-metrics">
     <div>
