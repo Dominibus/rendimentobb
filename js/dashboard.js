@@ -8734,7 +8734,7 @@ color:#166534;
 // 📅 OPEN BOOKINGS
 // =====================================
 
-window.openBookings = function(propertyId){
+window.openBookings = async function(propertyId, bookingId = null){
 
 
   // Salva la proprietà corrente
@@ -8780,7 +8780,11 @@ window.openBookings = function(propertyId){
   // Se esiste una proprietà caricata,
   // carica le prenotazioni
   if(window.currentPropertyId){
-    loadBookings(window.currentPropertyId);
+    await loadBookings(window.currentPropertyId);
+
+    if(bookingId){
+      window.openBookingForEdit(bookingId);
+    }
   }
 
   // Ricollega gli eventi del form
@@ -8872,6 +8876,29 @@ window.openBookings = function(propertyId){
   },100);
 
   
+};
+
+// =====================================
+// 🤖 OPEN BOOKING FROM HOSPITALITY COPILOT
+// =====================================
+
+window.openBookingFromCopilot = async function(bookingId){
+
+  const booking =
+    (window.rbPMSData?.bookingList || [])
+      .find(item => item.id === bookingId);
+
+  if(!booking){
+    return false;
+  }
+
+  await window.openBookings(
+    booking.propertyId,
+    bookingId
+  );
+
+  return true;
+
 };
 
 // =====================================
