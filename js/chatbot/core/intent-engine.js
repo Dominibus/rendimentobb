@@ -3014,7 +3014,20 @@ if(
   text.includes("prenotazioni") ||
   text.includes("prenotazione") ||
   text.includes("booking") ||
-  text.includes("bookings")
+  text.includes("bookings") ||
+  text.includes("reservation") ||
+  text.includes("reservations") ||
+  (
+    (
+      text.includes("soggiorno") ||
+      text.includes("stay")
+    ) && (
+      text.includes("tariff") ||
+      text.includes("prezz") ||
+      text.includes("pricing") ||
+      /\brates?\b/.test(text)
+    )
+  )
 
 ){
 
