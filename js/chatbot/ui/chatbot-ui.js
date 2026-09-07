@@ -1589,7 +1589,11 @@ function showThinking(){
       .forEach(action => {
 
         if(
-          !["open_booking", "manage_arrival"].includes(action?.type) ||
+          ![
+            "open_booking",
+            "manage_arrival",
+            "manage_departure"
+          ].includes(action?.type) ||
           !action.bookingId
         ){
           return;
