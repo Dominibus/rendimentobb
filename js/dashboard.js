@@ -8882,7 +8882,7 @@ window.openBookings = async function(propertyId, bookingId = null){
 // 🤖 OPEN BOOKING FROM HOSPITALITY COPILOT
 // =====================================
 
-window.openBookingFromCopilot = async function(bookingId){
+window.openBookingFromCopilot = async function(bookingId, attentionCodes = []){
 
   const booking =
     (window.rbPMSData?.bookingList || [])
@@ -8896,6 +8896,45 @@ window.openBookingFromCopilot = async function(bookingId){
     booking.propertyId,
     bookingId
   );
+
+  const focusTargets = {
+    invalid_date_range: "booking-checkin",
+    pending_booking: "booking-status",
+    arrival_today: "booking-guest",
+    departure_today: "booking-status",
+    missing_guest_name: "booking-guest",
+    missing_or_invalid_amount: "booking-total",
+    tourist_tax_pending: "booking-tourist-tax-box",
+    guest_registration_incomplete: "booking-guest-registration-box",
+    cleaning_to_schedule: "booking-cleaning-box"
+  };
+
+  const focusTargetId =
+    (Array.isArray(attentionCodes) ? attentionCodes : [])
+      .map(code => focusTargets[code])
+      .find(Boolean);
+
+  if(focusTargetId){
+    window.setTimeout(() => {
+      const target = document.getElementById(focusTargetId);
+      if(!target) return;
+
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+      const previousOutline = target.style.outline;
+      const previousOutlineOffset = target.style.outlineOffset;
+      target.style.outline = "3px solid #34d399";
+      target.style.outlineOffset = "3px";
+
+      window.setTimeout(() => {
+        target.style.outline = previousOutline;
+        target.style.outlineOffset = previousOutlineOffset;
+      }, 2400);
+    }, 350);
+  }
 
   return true;
 
