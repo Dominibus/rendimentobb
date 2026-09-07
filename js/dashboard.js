@@ -4854,13 +4854,20 @@ window.updateBookingPricingSuggestion = function(){
     : baseADR;
 
   const month = metrics.start.getMonth() + 1;
-  const seasonFactor = [6, 7, 8, 9].includes(month)
-    ? 1.15
-    : [4, 5, 10].includes(month)
-      ? 1.07
-      : [11, 12, 1, 2].includes(month)
-        ? 0.92
-        : 1;
+  const automaticSeason = [6, 7, 8, 9].includes(month)
+    ? "high"
+    : [3, 4, 5, 10].includes(month)
+      ? "medium"
+      : "low";
+  const seasonField = document.getElementById("booking-pricing-season");
+  const seasonMode = seasonField?.value || "auto";
+  const seasonLevel = seasonMode === "auto" ? automaticSeason : seasonMode;
+  const seasonFactors = {
+    high: 1.15,
+    medium: 1.07,
+    low: 0.92
+  };
+  const seasonFactor = seasonFactors[seasonLevel] || 1;
   const weekendFactor = 1 + ((metrics.weekendNights / metrics.nights) * 0.12);
   const lengthFactor = metrics.nights >= 14 ? 0.92 : metrics.nights >= 7 ? 0.95 : metrics.nights === 1 ? 1.10 : 1;
   const today = new Date();
@@ -4879,8 +4886,12 @@ window.updateBookingPricingSuggestion = function(){
 
   const reasons = [];
   if(marketADR) reasons.push(t(`Benchmark città ${formatCurrency(marketADR)}`, `City benchmark ${formatCurrency(marketADR)}`));
-  if(seasonFactor > 1) reasons.push(t("Domanda stagionale favorevole", "Favourable seasonal demand"));
-  if(seasonFactor < 1) reasons.push(t("Periodo di domanda più contenuta", "Lower-demand period"));
+  const seasonLabels = {
+    high: t("Alta stagione", "High season"),
+    medium: t("Media stagione", "Mid season"),
+    low: t("Bassa stagione", "Low season")
+  };
+  reasons.push(seasonLabels[seasonLevel]);
   if(metrics.weekendNights) reasons.push(t(`${metrics.weekendNights} notti weekend`, `${metrics.weekendNights} weekend nights`));
   if(lengthFactor < 1) reasons.push(t("Sconto soggiorno lungo", "Long-stay discount"));
   if(lengthFactor > 1) reasons.push(t("Premio soggiorno di una notte", "One-night stay premium"));
@@ -4892,6 +4903,9 @@ window.updateBookingPricingSuggestion = function(){
   box.dataset.suggestedTotal = String(suggestedTotal);
   box.dataset.baseAdr = String(Math.round(baseADR));
   box.dataset.marketAdr = String(Math.round(marketADR));
+  box.dataset.seasonMode = seasonMode;
+  box.dataset.seasonLevel = seasonLevel;
+  box.dataset.seasonFactor = String(seasonFactor);
 
   const baseEl = document.getElementById("booking-pricing-base");
   const suggestedEl = document.getElementById("booking-pricing-suggested");
@@ -4899,6 +4913,7 @@ window.updateBookingPricingSuggestion = function(){
   const reasonsEl = document.getElementById("booking-pricing-reasons");
   const statusEl = document.getElementById("booking-pricing-status");
   const applyButton = document.getElementById("booking-pricing-apply");
+  const seasonResult = document.getElementById("booking-pricing-season-result");
   const applied = box.dataset.applied === "true" && currentTotal === suggestedTotal;
   if(baseEl) baseEl.textContent = formatCurrency(baseADR);
   if(suggestedEl) suggestedEl.textContent = formatCurrency(suggestedADR);
@@ -4907,6 +4922,11 @@ window.updateBookingPricingSuggestion = function(){
     impactEl.dataset.positive = String(delta >= 0);
   }
   if(reasonsEl) reasonsEl.textContent = reasons.join(" · ");
+  if(seasonResult){
+    seasonResult.textContent = seasonMode === "auto"
+      ? t(`Rilevata: ${seasonLabels[seasonLevel]}`, `Detected: ${seasonLabels[seasonLevel]}`)
+      : t("Impostazione manuale", "Manual setting");
+  }
   if(statusEl){
     statusEl.textContent = applied ? t("Applicato", "Applied") : t("Da confermare", "To confirm");
     statusEl.dataset.applied = String(applied);
@@ -4921,7 +4941,7 @@ window.updateBookingPricingSuggestion = function(){
     applyButton.setAttribute("aria-pressed", String(applied));
   }
 
-  return { baseADR, marketADR, suggestedADR, suggestedTotal, delta, deltaPercent, metrics };
+  return { baseADR, marketADR, suggestedADR, suggestedTotal, delta, deltaPercent, seasonMode, seasonLevel, seasonFactor, metrics };
 };
 
 window.applyBookingPricingSuggestion = function(){
@@ -5130,6 +5150,8 @@ window.openBookingModal = async function(){
 
     if(fields.status) fields.status.value = "arrival";
     if(fields.source) fields.source.value = "direct";
+    const pricingSeason = document.getElementById("booking-pricing-season");
+    if(pricingSeason) pricingSeason.value = "auto";
 
     const taxableGuests = document.getElementById("booking-taxable-guests");
     if(taxableGuests){
@@ -6552,6 +6574,11 @@ window.currentSelectedBooking = booking;
         source.value =
             booking.source || "direct";
 
+    }
+
+    const pricingSeason = document.getElementById("booking-pricing-season");
+    if(pricingSeason){
+      pricingSeason.value = booking.pricingAssistant?.seasonMode || "auto";
     }
 
     const savedTouristTax = booking.touristTax || {};
@@ -8839,6 +8866,16 @@ window.openBookings = async function(propertyId, bookingId = null){
       });
     }
 
+    const pricingSeasonField = document.getElementById("booking-pricing-season");
+    if(pricingSeasonField && !pricingSeasonField.dataset.pricingReady){
+      pricingSeasonField.dataset.pricingReady = "true";
+      pricingSeasonField.addEventListener("change", () => {
+        const pricingBox = document.getElementById("booking-pricing-box");
+        if(pricingBox) pricingBox.dataset.applied = "false";
+        window.updateBookingPricingSuggestion();
+      });
+    }
+
     document
       .getElementById("booking-taxable-guests")
       ?.addEventListener("input", event => {
@@ -9305,11 +9342,14 @@ if(!window.currentPropertyId){
   const stayMetrics = window.getBookingStayMetrics();
   const suggestedTotal = Math.max(0, Number(pricingBox?.dataset.suggestedTotal || 0));
   const pricingAssistant = pricingBox?.style.display !== "none" && stayMetrics ? {
-    version: "assisted-v1",
+    version: "assisted-v2",
     baseADR: Math.max(0, Number(pricingBox.dataset.baseAdr || 0)),
     marketADR: Math.max(0, Number(pricingBox.dataset.marketAdr || 0)),
     suggestedADR: Math.max(0, Number(pricingBox.dataset.suggestedAdr || 0)),
     suggestedTotal,
+    seasonMode: pricingBox.dataset.seasonMode || "auto",
+    seasonLevel: pricingBox.dataset.seasonLevel || "medium",
+    seasonFactor: Math.max(0, Number(pricingBox.dataset.seasonFactor || 1)),
     finalADR: stayMetrics.nights ? Number((total / stayMetrics.nights).toFixed(2)) : 0,
     applied: pricingBox.dataset.applied === "true" && total === suggestedTotal
   } : null;
