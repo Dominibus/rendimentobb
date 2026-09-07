@@ -3908,6 +3908,9 @@ Action: ${actions || "Review the booking details."}`;
         .map(booking => ({
           type: "open_booking",
           bookingId: booking.id,
+          attentionCodes: Array.isArray(booking.attentionCodes)
+            ? booking.attentionCodes
+            : [],
           labelIT: `Apri ${booking.guestName || "prenotazione"}`,
           labelEN: `Open ${booking.guestName || "booking"}`
         }));
