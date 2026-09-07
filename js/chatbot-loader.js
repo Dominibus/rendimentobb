@@ -142,7 +142,7 @@
 
     "/js/chatbot/core/semantic-router.js",
     "/js/chatbot/core/entity-engine.js",
-    "/js/chatbot/core/intent-engine.js",
+    "/js/chatbot/core/intent-engine.js?v=20260907-natural-pricing-intent-v18-8",
     "/js/chatbot/core/memory-engine.js",
     "/js/chatbot/core/conversation-engine.js",
     "/js/chatbot/core/investor-profile-engine.js",
@@ -160,15 +160,15 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20260907-booking-pricing-copilot-v18-7",
+    "/js/chatbot/core/response-engine.js?v=20260907-natural-pricing-intent-v18-8",
     "/js/chatbot/core/chatbot-file-dispatcher.js",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20260907-booking-pricing-copilot-v18-7",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20260907-natural-pricing-intent-v18-8",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
     "/js/chatbot/ui/chatbot-attachments.js",
-    "/js/chatbot/ui/chatbot-ui.js?v=20260907-booking-pricing-copilot-v18-7",
+    "/js/chatbot/ui/chatbot-ui.js?v=20260907-natural-pricing-intent-v18-8",
 
     "/js/ai-engine.js"
   ];
