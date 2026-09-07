@@ -1619,7 +1619,8 @@ function showThinking(){
 
             const opened =
               await window.openBookingFromCopilot(
-                action.bookingId
+                action.bookingId,
+                action.attentionCodes
               );
 
             if(opened){
