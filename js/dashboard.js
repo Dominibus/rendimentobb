@@ -10997,6 +10997,9 @@ async function(id, nextStatus){
     window.currentPropertyId
   );
 
+  // The Copilot must read the freshly rebuilt rbPMSData after a status change.
+  window.rbPMSMemory = null;
+
   if(bookingDetailsWasOpen){
     const refreshedBooking =
       (window.currentBookingsData || [])
