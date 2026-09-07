@@ -8949,6 +8949,15 @@ window.openBookingFromCopilot = async function(
     }, 500);
   }
 
+  if(actionType === "manage_departure"){
+    window.setTimeout(() => {
+      window.advanceBookingStatus?.(
+        bookingId,
+        "checkout"
+      );
+    }, 500);
+  }
+
   return true;
 
 };
