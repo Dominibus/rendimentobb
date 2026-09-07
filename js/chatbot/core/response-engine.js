@@ -3954,18 +3954,27 @@ Action: ${actions || "Review the booking details."}`;
             ? booking.attentionCodes
             : [];
           const isArrivalToday = attentionCodes.includes("arrival_today");
+          const isDepartureToday = attentionCodes.includes("departure_today");
           const guestName = booking.guestName || "prenotazione";
 
           return {
-            type: isArrivalToday ? "manage_arrival" : "open_booking",
+            type: isDepartureToday
+              ? "manage_departure"
+              : isArrivalToday
+                ? "manage_arrival"
+                : "open_booking",
             bookingId: booking.id,
             attentionCodes,
-            labelIT: isArrivalToday
-              ? `Gestisci arrivo ${guestName}`
-              : `Apri ${guestName}`,
-            labelEN: isArrivalToday
-              ? `Manage arrival ${booking.guestName || "booking"}`
-              : `Open ${booking.guestName || "booking"}`
+            labelIT: isDepartureToday
+              ? `Gestisci partenza ${guestName}`
+              : isArrivalToday
+                ? `Gestisci arrivo ${guestName}`
+                : `Apri ${guestName}`,
+            labelEN: isDepartureToday
+              ? `Manage departure ${booking.guestName || "booking"}`
+              : isArrivalToday
+                ? `Manage arrival ${booking.guestName || "booking"}`
+                : `Open ${booking.guestName || "booking"}`
           };
         });
 
