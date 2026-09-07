@@ -10279,6 +10279,42 @@ b.totalAmount || 0
 
 </div>
 
+${(() => {
+  const savedSeason = b.pricingAssistant?.seasonLevel;
+  const checkinMonth = new Date(`${b.checkin || ""}T12:00:00`).getMonth() + 1;
+  const fallbackSeason = [6, 7, 8, 9].includes(checkinMonth)
+    ? "high"
+    : [3, 4, 5, 10].includes(checkinMonth)
+      ? "medium"
+      : "low";
+  const seasonLevel = ["high", "medium", "low"].includes(savedSeason)
+    ? savedSeason
+    : fallbackSeason;
+  const seasonMode = b.pricingAssistant?.seasonMode || "auto";
+  const seasonLabels = {
+    high: window.t("Alta stagione", "High season"),
+    medium: window.t("Media stagione", "Mid season"),
+    low: window.t("Bassa stagione", "Low season")
+  };
+  const seasonStyles = {
+    high: { icon: "☀️", background: "#fff7ed", border: "#fed7aa", color: "#c2410c" },
+    medium: { icon: "🌤️", background: "#fefce8", border: "#fde68a", color: "#a16207" },
+    low: { icon: "❄️", background: "#eff6ff", border: "#bfdbfe", color: "#1d4ed8" }
+  };
+  const style = seasonStyles[seasonLevel];
+  const modeLabel = seasonMode === "auto"
+    ? window.t("Automatica", "Automatic")
+    : window.t("Manuale", "Manual");
+  return `
+    <div style="margin-top:12px;padding:10px 12px;border-radius:12px;background:${style.background};border:1px solid ${style.border};display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <span style="font-size:12px;font-weight:700;color:#475569;">${style.icon} ${window.t("Stagione tariffaria", "Rate season")}</span>
+      <strong style="font-size:12px;color:${style.color};text-align:right;">
+        ${seasonLabels[seasonLevel]} · ${modeLabel}
+      </strong>
+    </div>
+  `;
+})()}
+
 ${b.touristTax?.enabled ? (() => {
   const taxStatusLabels = {
     pending: window.t("Da riscuotere", "To collect"),
