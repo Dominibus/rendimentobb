@@ -1569,6 +1569,100 @@ function showThinking(){
   }
 
   // ===========================================
+  // ⚡ COPILOT ACTIONS
+  // ===========================================
+
+  function addResponseActions(items = [], language = "it"){
+
+    if(!Array.isArray(items) || !items.length){
+      return;
+    }
+
+    const container =
+      document.createElement("div");
+
+    container.className =
+      "rb-quick-actions rb-context-actions";
+
+    items
+      .slice(0, 3)
+      .forEach(action => {
+
+        if(
+          action?.type !== "open_booking" ||
+          !action.bookingId
+        ){
+          return;
+        }
+
+        const actionButton =
+          document.createElement("button");
+
+        actionButton.type = "button";
+        actionButton.className = "rb-quick-btn";
+        actionButton.textContent =
+          language === "en"
+            ? action.labelEN
+            : action.labelIT;
+
+        actionButton.onclick = async ()=>{
+
+          if(
+            typeof window.openBookingFromCopilot !== "function"
+          ){
+            return;
+          }
+
+          actionButton.disabled = true;
+
+          try{
+
+            const opened =
+              await window.openBookingFromCopilot(
+                action.bookingId
+              );
+
+            if(opened){
+              windowEl.classList.remove("open");
+            }
+
+          }catch(error){
+
+            reportRuntimeError(
+              "Copilot booking action unavailable",
+              error
+            );
+
+            addMessage(
+              "bot",
+              t(
+                "Non riesco ad aprire questa prenotazione. Riprova tra poco.",
+                "I cannot open this booking right now. Please try again shortly."
+              )
+            );
+
+          }finally{
+
+            actionButton.disabled = false;
+
+          }
+
+        };
+
+        container.appendChild(actionButton);
+
+      });
+
+    if(!container.children.length){
+      return;
+    }
+
+    messages.appendChild(container);
+    messages.scrollTop = messages.scrollHeight;
+
+  }
+
+  // ===========================================
   // ⌨ SEND MESSAGE
   // ===========================================
 
@@ -1812,6 +1906,11 @@ debugLog(
 
     addSuggestions(
         finalSuggestions
+    );
+
+    addResponseActions(
+        response.actions,
+        currentLang
     );
 
 },400);
