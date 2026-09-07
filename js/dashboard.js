@@ -8882,7 +8882,11 @@ window.openBookings = async function(propertyId, bookingId = null){
 // 🤖 OPEN BOOKING FROM HOSPITALITY COPILOT
 // =====================================
 
-window.openBookingFromCopilot = async function(bookingId, attentionCodes = []){
+window.openBookingFromCopilot = async function(
+  bookingId,
+  attentionCodes = [],
+  actionType = "open_booking"
+){
 
   const booking =
     (window.rbPMSData?.bookingList || [])
@@ -8934,6 +8938,15 @@ window.openBookingFromCopilot = async function(bookingId, attentionCodes = []){
         target.style.outlineOffset = previousOutlineOffset;
       }, 2400);
     }, 350);
+  }
+
+  if(actionType === "manage_arrival"){
+    window.setTimeout(() => {
+      window.advanceBookingStatus?.(
+        bookingId,
+        "checkin"
+      );
+    }, 500);
   }
 
   return true;
