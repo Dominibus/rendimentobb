@@ -10516,6 +10516,10 @@ const normalizedBookings =
 
     if(
       !isCancelled &&
+      String(
+        booking.status || "arrival"
+      ).toLowerCase() ===
+      "arrival" &&
       checkin === copilotToday
     ){
 
@@ -10527,6 +10531,10 @@ const normalizedBookings =
 
     if(
       !isCancelled &&
+      String(
+        booking.status || "arrival"
+      ).toLowerCase() ===
+      "checkin" &&
       checkout === copilotToday
     ){
 
@@ -11471,7 +11479,14 @@ const normalizedPMSBookings =
 
       }
 
-      if(!isCancelled && checkin === today){
+      if(
+        !isCancelled &&
+        String(
+          booking.status || "arrival"
+        ).toLowerCase() ===
+        "arrival" &&
+        checkin === today
+      ){
 
         attentionCodes.push(
           "arrival_today"
@@ -11479,7 +11494,14 @@ const normalizedPMSBookings =
 
       }
 
-      if(!isCancelled && checkout === today){
+      if(
+        !isCancelled &&
+        String(
+          booking.status || "arrival"
+        ).toLowerCase() ===
+        "checkin" &&
+        checkout === today
+      ){
 
         attentionCodes.push(
           "departure_today"
