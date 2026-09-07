@@ -3582,7 +3582,7 @@ if(intent.intent === "pms_bookings"){
     );
 
   const isPricingRequest =
-    /tariff|prezz|stagion|pricing|price|rate season|suggested rate/.test(
+    /tariff|prezz|stagion|pricing|priced|\bprices?\b|\brates?\b|\badr\b|nightly|per night|a notte|convenient|worth/.test(
       bookingMessage
     );
 
