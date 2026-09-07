@@ -4557,6 +4557,7 @@ let finalTextEN = "";
 const finalSuggestionsIT = [];
 const finalSuggestionsEN = [];
 const finalSignals = [];
+const finalActions = [];
 const partialMetadata = [];
 
 let primaryResponseType = null;
@@ -4822,6 +4823,18 @@ if(
 }
 
 if(
+  Array.isArray(
+    partialResponse?.actions
+  )
+){
+
+  finalActions.push(
+    ...partialResponse.actions
+  );
+
+}
+
+if(
   partialResponse?.metadata &&
   Object.keys(
     partialResponse.metadata
@@ -5072,6 +5085,17 @@ const response = {
   ],
 
   signals: finalSignals,
+
+  actions: finalActions.filter(
+    (action, index, actions) =>
+      action?.type &&
+      action?.bookingId &&
+      actions.findIndex(
+        item =>
+          item?.type === action.type &&
+          item?.bookingId === action.bookingId
+      ) === index
+  ),
 
   metadata: {}
 
