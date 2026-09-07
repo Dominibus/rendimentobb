@@ -3949,15 +3949,25 @@ Action: ${actions || "Review the booking details."}`;
     response.actions =
       attentionBookings
         .slice(0, 3)
-        .map(booking => ({
-          type: "open_booking",
-          bookingId: booking.id,
-          attentionCodes: Array.isArray(booking.attentionCodes)
+        .map(booking => {
+          const attentionCodes = Array.isArray(booking.attentionCodes)
             ? booking.attentionCodes
-            : [],
-          labelIT: `Apri ${booking.guestName || "prenotazione"}`,
-          labelEN: `Open ${booking.guestName || "booking"}`
-        }));
+            : [];
+          const isArrivalToday = attentionCodes.includes("arrival_today");
+          const guestName = booking.guestName || "prenotazione";
+
+          return {
+            type: isArrivalToday ? "manage_arrival" : "open_booking",
+            bookingId: booking.id,
+            attentionCodes,
+            labelIT: isArrivalToday
+              ? `Gestisci arrivo ${guestName}`
+              : `Apri ${guestName}`,
+            labelEN: isArrivalToday
+              ? `Manage arrival ${booking.guestName || "booking"}`
+              : `Open ${booking.guestName || "booking"}`
+          };
+        });
 
     response.textIT =
 `🚨 Hospitality Copilot
