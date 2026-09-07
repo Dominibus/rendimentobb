@@ -160,15 +160,15 @@
     "/js/chatbot/core/ai-brain.js",
     "/js/chatbot/core/executive-brain-v2.js",
     "/js/chatbot/core/executive-response-builder.js",
-    "/js/chatbot/core/response-engine.js?v=20260907-copilot-priority-v17-9",
+    "/js/chatbot/core/response-engine.js?v=20260907-copilot-arrival-v18-0",
     "/js/chatbot/core/chatbot-file-dispatcher.js",
-    "/js/chatbot/core/chatbot-orchestrator.js?v=20260907-copilot-priority-v17-9",
+    "/js/chatbot/core/chatbot-orchestrator.js?v=20260907-copilot-arrival-v18-0",
 
     "/js/chatbot/support-engine.js",
     "/js/chatbot/core/advisor-engine.js",
 
     "/js/chatbot/ui/chatbot-attachments.js",
-    "/js/chatbot/ui/chatbot-ui.js?v=20260907-copilot-priority-v17-9",
+    "/js/chatbot/ui/chatbot-ui.js?v=20260907-copilot-arrival-v18-0",
 
     "/js/ai-engine.js"
   ];
