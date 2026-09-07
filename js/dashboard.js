@@ -10753,6 +10753,18 @@ const normalizedBookings =
           "confirmed"
         ).toLowerCase(),
 
+      pricingAssistant:
+        booking.pricingAssistant
+          ? {
+              seasonMode: booking.pricingAssistant.seasonMode || "auto",
+              seasonLevel: booking.pricingAssistant.seasonLevel || "medium",
+              suggestedADR: Number(booking.pricingAssistant.suggestedADR || 0),
+              suggestedTotal: Number(booking.pricingAssistant.suggestedTotal || 0),
+              finalADR: Number(booking.pricingAssistant.finalADR || 0),
+              applied: booking.pricingAssistant.applied === true
+            }
+          : null,
+
       validDateRange:
         Boolean(
           hasValidDates
@@ -11712,6 +11724,18 @@ const normalizedPMSBookings =
             booking.status ||
             "confirmed"
           ).toLowerCase(),
+
+        pricingAssistant:
+          booking.pricingAssistant
+            ? {
+                seasonMode: booking.pricingAssistant.seasonMode || "auto",
+                seasonLevel: booking.pricingAssistant.seasonLevel || "medium",
+                suggestedADR: Number(booking.pricingAssistant.suggestedADR || 0),
+                suggestedTotal: Number(booking.pricingAssistant.suggestedTotal || 0),
+                finalADR: Number(booking.pricingAssistant.finalADR || 0),
+                applied: booking.pricingAssistant.applied === true
+              }
+            : null,
 
         validDateRange:
           Boolean(
