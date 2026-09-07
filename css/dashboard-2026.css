@@ -940,6 +940,34 @@ body.dashboard-bg {
   color: #166534;
 }
 
+.booking-pricing-season {
+  display: grid;
+  grid-template-columns: auto minmax(150px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.booking-pricing-season select {
+  width: 100%;
+  height: 40px !important;
+  padding: 0 12px !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a;
+  font-size: 13px !important;
+}
+
+.booking-pricing-season small {
+  color: #047857;
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .booking-pricing-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1121,6 +1149,11 @@ body.dashboard-bg {
 
   .booking-pricing-head {
     flex-direction: column;
+  }
+
+  .booking-pricing-season {
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 
   .booking-pricing-metrics {
