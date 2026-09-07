@@ -798,9 +798,9 @@ if(
 
 const pmsData =
 
-  window.rbPMSMemory ||
-
   window.rbPMSData ||
+
+  window.rbPMSMemory ||
 
   {};
 
