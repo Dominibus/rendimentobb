@@ -3896,6 +3896,50 @@ Action: ${actions || "Review the booking details."}`;
         )
         .join("\n\n━━━━━━━━━━━━━━━\n\n");
 
+    const activeAttentionCodes = new Set(
+      attentionBookings.flatMap(booking =>
+        Array.isArray(booking?.attentionCodes)
+          ? booking.attentionCodes
+          : []
+      )
+    );
+
+    const operationalPriorityIT = [
+      ["invalid_date_range", "correggi le anomalie sulle date"],
+      ["departure_today", "gestisci le partenze di oggi"],
+      ["arrival_today", "prepara gli arrivi di oggi"],
+      ["pending_booking", "verifica le prenotazioni da confermare"],
+      ["missing_guest_name", "completa i dati degli ospiti"],
+      ["missing_or_invalid_amount", "correggi gli importi mancanti o non validi"],
+      ["tourist_tax_pending", "riscuoti le tasse di soggiorno"],
+      ["guest_registration_incomplete", "completa le registrazioni degli ospiti"],
+      ["cleaning_to_schedule", "pianifica le pulizie ancora aperte"]
+    ]
+      .filter(([code]) => activeAttentionCodes.has(code))
+      .map(([, label]) => label);
+
+    const operationalPriorityEN = [
+      ["invalid_date_range", "correct date anomalies"],
+      ["departure_today", "handle today's departures"],
+      ["arrival_today", "prepare today's arrivals"],
+      ["pending_booking", "review bookings awaiting confirmation"],
+      ["missing_guest_name", "complete missing guest details"],
+      ["missing_or_invalid_amount", "correct missing or invalid amounts"],
+      ["tourist_tax_pending", "collect outstanding tourist taxes"],
+      ["guest_registration_incomplete", "complete guest registrations"],
+      ["cleaning_to_schedule", "schedule outstanding cleaning tasks"]
+    ]
+      .filter(([code]) => activeAttentionCodes.has(code))
+      .map(([, label]) => label);
+
+    const priorityTextIT = operationalPriorityIT.length
+      ? `Ordine consigliato: ${operationalPriorityIT.join(" → ")}.`
+      : "Controlla i dettagli delle prenotazioni segnalate.";
+
+    const priorityTextEN = operationalPriorityEN.length
+      ? `Recommended order: ${operationalPriorityEN.join(" → ")}.`
+      : "Review the details of the flagged bookings.";
+
     response.type =
       "pms_booking_attention";
 
@@ -3932,7 +3976,7 @@ ${attentionListIT}
 
 🎯 Priorità operativa
 
-Correggi prima le anomalie sulle date, poi gestisci arrivi, partenze, tasse, registrazioni e pulizie ancora aperte.`;
+${priorityTextIT}`;
 
     response.textEN =
 `🚨 Hospitality Copilot
@@ -3951,7 +3995,7 @@ ${attentionListEN}
 
 🎯 Operational priority
 
-Correct date anomalies first, then handle arrivals, departures, taxes, registrations and cleaning tasks still open.`;
+${priorityTextEN}`;
 
     return response;
 
