@@ -1589,7 +1589,7 @@ function showThinking(){
       .forEach(action => {
 
         if(
-          action?.type !== "open_booking" ||
+          !["open_booking", "manage_arrival"].includes(action?.type) ||
           !action.bookingId
         ){
           return;
@@ -1620,7 +1620,8 @@ function showThinking(){
             const opened =
               await window.openBookingFromCopilot(
                 action.bookingId,
-                action.attentionCodes
+                action.attentionCodes,
+                action.type
               );
 
             if(opened){
