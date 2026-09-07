@@ -10964,6 +10964,10 @@ async function(id, nextStatus){
 
   if(!id || !statusLabels[nextStatus]) return;
 
+  const bookingDetailsWasOpen =
+    window.currentSelectedBooking?.id === id &&
+    document.getElementById("booking-form-container")?.style.display !== "none";
+
   if(
     !confirm(
       window.t(
@@ -10992,6 +10996,16 @@ async function(id, nextStatus){
   await loadBookings(
     window.currentPropertyId
   );
+
+  if(bookingDetailsWasOpen){
+    const refreshedBooking =
+      (window.currentBookingsData || [])
+        .find(booking => booking.id === id);
+
+    if(refreshedBooking){
+      await window.showBookingDetails(refreshedBooking);
+    }
+  }
 
 };
 
