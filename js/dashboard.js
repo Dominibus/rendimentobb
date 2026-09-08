@@ -5169,6 +5169,149 @@ window.updateBookingGuestIssue = function(){
   );
 };
 
+async function hashGuestPortalToken(token){
+  const bytes = new TextEncoder().encode(String(token || ""));
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function createGuestPortalToken(){
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+window.updateGuestIssuePortalStatus = function(guestPortal = {}){
+  const copyButton = document.getElementById("booking-guest-portal-copy");
+  const revokeButton = document.getElementById("booking-guest-portal-revoke");
+  const status = document.getElementById("booking-guest-portal-status");
+  if(!copyButton || !revokeButton || !status) return;
+
+  const generatedLink = copyButton.dataset.portalLink || "";
+  copyButton.style.display = generatedLink ? "inline-flex" : "none";
+
+  const expiryTimestamp = Date.parse(guestPortal.expiresAt || "");
+  const isExpired = Number.isFinite(expiryTimestamp) && expiryTimestamp <= Date.now();
+  const isActive = guestPortal.enabled === true && !isExpired;
+  revokeButton.style.display = guestPortal.enabled === true ? "inline-flex" : "none";
+
+  const expiryDate = Number.isFinite(expiryTimestamp)
+    ? new Date(expiryTimestamp).toLocaleDateString(
+        window.currentLanguage === "en" ? "en-GB" : "it-IT"
+      )
+    : "";
+
+  if(generatedLink){
+    status.textContent = window.t(
+      `Link creato${expiryDate ? ` · valido fino al ${expiryDate}` : ""}. Copialo ora.`,
+      `Link created${expiryDate ? ` · valid until ${expiryDate}` : ""}. Copy it now.`
+    );
+  }else if(isActive){
+    status.textContent = window.t(
+      `Link attivo${expiryDate ? ` fino al ${expiryDate}` : ""}. Generane uno nuovo per sostituirlo.`,
+      `Link active${expiryDate ? ` until ${expiryDate}` : ""}. Create a new one to replace it.`
+    );
+  }else if(isExpired){
+    status.textContent = window.t(
+      `Link scaduto${expiryDate ? ` il ${expiryDate}` : ""}. Generane uno nuovo per riattivare l’accesso.`,
+      `Link expired${expiryDate ? ` on ${expiryDate}` : ""}. Create a new one to restore access.`
+    );
+  }else{
+    status.textContent = window.t("Nessun link attivo", "No active link");
+  }
+};
+
+window.createGuestIssuePortalLink = async function(){
+  const booking = window.currentSelectedBooking;
+  if(!window.pmsEditingBooking || !booking?.id){
+    alert(window.t(
+      "Salva prima la prenotazione, poi genera il link ospite.",
+      "Save the booking before creating the guest link."
+    ));
+    return;
+  }
+
+  const token = createGuestPortalToken();
+  const tokenHash = await hashGuestPortalToken(token);
+  const checkout = new Date(`${booking.checkout || ""}T23:59:59`);
+  const expiresAt = Number.isNaN(checkout.getTime())
+    ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    : new Date(checkout.getTime() + 2 * 24 * 60 * 60 * 1000);
+  const guestPortal = {
+    enabled: true,
+    tokenHash,
+    expiresAt: expiresAt.toISOString(),
+    createdAt: new Date().toISOString()
+  };
+
+  const createButton = document.getElementById("booking-guest-portal-create");
+  if(createButton) createButton.disabled = true;
+  try{
+    await updateDoc(doc(db, "bookings", booking.id), { guestPortal });
+    booking.guestPortal = guestPortal;
+    const portalLink = `${window.location.origin}/guest-report/#${booking.id}.${token}`;
+    const copyButton = document.getElementById("booking-guest-portal-copy");
+    if(copyButton) copyButton.dataset.portalLink = portalLink;
+    window.updateGuestIssuePortalStatus(guestPortal);
+  }catch(error){
+    dashboardError("Guest portal link creation failed", error);
+    alert(window.t(
+      "Impossibile creare il link ospite. Riprova.",
+      "Unable to create the guest link. Please try again."
+    ));
+  }finally{
+    if(createButton) createButton.disabled = false;
+  }
+};
+
+window.copyGuestIssuePortalLink = async function(){
+  const copyButton = document.getElementById("booking-guest-portal-copy");
+  const portalLink = copyButton?.dataset.portalLink || "";
+  if(!portalLink) return;
+  try{
+    await navigator.clipboard.writeText(portalLink);
+    alert(window.t("Link ospite copiato.", "Guest link copied."));
+  }catch(_error){
+    window.prompt(window.t("Copia questo link:", "Copy this link:"), portalLink);
+  }
+};
+
+window.revokeGuestIssuePortalLink = async function(){
+  const booking = window.currentSelectedBooking;
+  if(!window.pmsEditingBooking || !booking?.id) return;
+  const confirmed = window.confirm(window.t(
+    "Disattivare il link ospite? Il collegamento già inviato smetterà subito di funzionare.",
+    "Disable the guest link? Any link already shared will stop working immediately."
+  ));
+  if(!confirmed) return;
+
+  const guestPortal = {
+    enabled: false,
+    tokenHash: "",
+    expiresAt: "",
+    revokedAt: new Date().toISOString()
+  };
+  const revokeButton = document.getElementById("booking-guest-portal-revoke");
+  if(revokeButton) revokeButton.disabled = true;
+  try{
+    await updateDoc(doc(db, "bookings", booking.id), { guestPortal });
+    booking.guestPortal = guestPortal;
+    const copyButton = document.getElementById("booking-guest-portal-copy");
+    if(copyButton) copyButton.dataset.portalLink = "";
+    window.updateGuestIssuePortalStatus(guestPortal);
+  }catch(error){
+    dashboardError("Guest portal link revocation failed", error);
+    alert(window.t("Impossibile disattivare il link.", "Unable to disable the link."));
+  }finally{
+    if(revokeButton) revokeButton.disabled = false;
+  }
+};
+
 window.openBookingModal = async function(){
 
     await window.loadCurrentPropertyTouristTax();
@@ -5249,6 +5392,9 @@ window.openBookingModal = async function(){
     if(issueStatus) issueStatus.value = "open";
     if(issueNote) issueNote.value = "";
     window.updateBookingGuestIssue();
+    const guestPortalCopy = document.getElementById("booking-guest-portal-copy");
+    if(guestPortalCopy) guestPortalCopy.dataset.portalLink = "";
+    window.updateGuestIssuePortalStatus();
 
     const liveRevenue = document.getElementById("booking-live-revenue");
     const liveNights = document.getElementById("booking-live-nights");
@@ -6710,6 +6856,9 @@ window.currentSelectedBooking = booking;
     if(issueStatus) issueStatus.value = savedGuestIssue.status || "open";
     if(issueNote) issueNote.value = savedGuestIssue.note || "";
     window.updateBookingGuestIssue();
+    const guestPortalCopy = document.getElementById("booking-guest-portal-copy");
+    if(guestPortalCopy) guestPortalCopy.dataset.portalLink = "";
+    window.updateGuestIssuePortalStatus(booking.guestPortal || {});
 
 
 
