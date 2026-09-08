@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-guest-issues-v20-0">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-guest-portal-v20-1">
 </head>
 
 <body class="dashboard-bg">
@@ -3728,7 +3728,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20260908-guest-issues-v20-0" defer></script>
+<script src="/js/chatbot-loader.js?v=20260908-guest-portal-v20-1" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3753,7 +3753,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260908-guest-issues-v20-0"></script>
+<script type="module" src="/js/dashboard.js?v=20260908-guest-portal-v20-1"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4580,6 +4580,12 @@ background:#fff;
     <textarea id="booking-guest-issue-note" rows="3" maxlength="500" placeholder="Descrivi il problema e l’intervento necessario" data-it-placeholder="Descrivi il problema e l’intervento necessario" data-en-placeholder="Describe the issue and required action" style="width:100%;border:1px solid #fecaca;border-radius:11px;padding:10px 12px;box-sizing:border-box;resize:vertical;font:inherit;"></textarea>
   </div>
   <div id="booking-guest-issue-progress" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid #fecaca;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <button id="booking-guest-portal-create" type="button" onclick="createGuestIssuePortalLink()" style="padding:10px 13px;border:1px solid #ef4444;border-radius:11px;background:#fff;color:#b91c1c;font-weight:800;cursor:pointer;" data-it="🔗 Genera link ospite" data-en="🔗 Create guest link">🔗 Genera link ospite</button>
+    <button id="booking-guest-portal-copy" type="button" onclick="copyGuestIssuePortalLink()" style="display:none;padding:10px 13px;border:1px solid #10b981;border-radius:11px;background:#ecfdf5;color:#047857;font-weight:800;cursor:pointer;" data-it="📋 Copia link" data-en="📋 Copy link">📋 Copia link</button>
+    <button id="booking-guest-portal-revoke" type="button" onclick="revokeGuestIssuePortalLink()" style="display:none;padding:10px 13px;border:1px solid #94a3b8;border-radius:11px;background:#f8fafc;color:#475569;font-weight:800;cursor:pointer;" data-it="Disattiva link" data-en="Disable link">Disattiva link</button>
+    <span id="booking-guest-portal-status" style="font-size:11px;color:#64748b;" data-it="Nessun link attivo" data-en="No active link">Nessun link attivo</span>
+  </div>
 </div>
 
 <div
