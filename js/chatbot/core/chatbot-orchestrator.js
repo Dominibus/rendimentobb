@@ -78,6 +78,9 @@ const hasPendingBookingRequests = liveBookingList.some(
 );
 const mentionsBookingRequests =
   /richiest|requests?|pending booking|awaiting confirmation/.test(normalizedMessage);
+const hasBookingRequestContext =
+  hasPendingBookingRequests ||
+  /soggiorn|stay|booking|reservation|confirmation/.test(normalizedMessage);
 
 if(mentionsKnownGuest && mentionsBookingPricing){
   detectedIntent = {
@@ -89,7 +92,7 @@ if(mentionsKnownGuest && mentionsBookingPricing){
   };
 }
 
-if(hasPendingBookingRequests && mentionsBookingRequests){
+if(mentionsBookingRequests && hasBookingRequestContext){
   detectedIntent = {
     ...detectedIntent,
     intent: "pms_bookings",
