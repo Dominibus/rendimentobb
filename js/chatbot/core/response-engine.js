@@ -3577,7 +3577,7 @@ if(intent.intent === "pms_bookings"){
         );
 
   const isAttentionRequest =
-    /attenzion|anomali|problem|critic|attention|issue|warning/.test(
+    /attenzion|anomali|problem|critic|attention|issue|warning|segnalazion|guast/.test(
       bookingMessage
     );
 
@@ -3854,7 +3854,13 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "La registrazione degli ospiti non è completa.",
 
       cleaning_to_schedule:
-        "La pulizia successiva al soggiorno deve essere pianificata."
+        "La pulizia successiva al soggiorno deve essere pianificata.",
+
+      guest_issue_open:
+        "L’ospite ha comunicato una segnalazione ancora aperta.",
+
+      guest_issue_urgent:
+        "L’ospite ha comunicato una segnalazione urgente ancora aperta."
 
     };
 
@@ -3885,7 +3891,13 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "Guest registration is incomplete.",
 
       cleaning_to_schedule:
-        "Post-stay cleaning needs to be scheduled."
+        "Post-stay cleaning needs to be scheduled.",
+
+      guest_issue_open:
+        "The guest reported an issue that is still open.",
+
+      guest_issue_urgent:
+        "The guest reported an urgent issue that is still open."
 
     };
 
@@ -3916,7 +3928,13 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "Completa documenti e comunicazione alle autorità.",
 
       cleaning_to_schedule:
-        "Definisci data e incaricato della pulizia."
+        "Definisci data e incaricato della pulizia.",
+
+      guest_issue_open:
+        "Apri la prenotazione e gestisci la segnalazione.",
+
+      guest_issue_urgent:
+        "Intervieni subito e aggiorna lo stato della segnalazione."
 
     };
 
@@ -3947,7 +3965,13 @@ The Copilot will continue checking dates, status, amounts and guest information.
         "Complete the documents and authority reporting.",
 
       cleaning_to_schedule:
-        "Set the cleaning date and assignee."
+        "Set the cleaning date and assignee.",
+
+      guest_issue_open:
+        "Open the booking and manage the issue.",
+
+      guest_issue_urgent:
+        "Take immediate action and update the issue status."
 
     };
 
@@ -4081,6 +4105,8 @@ Action: ${actions || "Review the booking details."}`;
 
     const operationalPriorityIT = [
       ["invalid_date_range", "correggi le anomalie sulle date"],
+      ["guest_issue_urgent", "gestisci subito le segnalazioni urgenti"],
+      ["guest_issue_open", "gestisci le segnalazioni degli ospiti"],
       ["departure_today", "gestisci le partenze di oggi"],
       ["arrival_today", "prepara gli arrivi di oggi"],
       ["pending_booking", "verifica le prenotazioni da confermare"],
@@ -4095,6 +4121,8 @@ Action: ${actions || "Review the booking details."}`;
 
     const operationalPriorityEN = [
       ["invalid_date_range", "correct date anomalies"],
+      ["guest_issue_urgent", "handle urgent guest issues immediately"],
+      ["guest_issue_open", "handle open guest issues"],
       ["departure_today", "handle today's departures"],
       ["arrival_today", "prepare today's arrivals"],
       ["pending_booking", "review bookings awaiting confirmation"],
