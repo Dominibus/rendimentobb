@@ -86,7 +86,7 @@ const hasOpenGuestIssues = liveBookingList.some(booking =>
   String(booking.guestIssue.status || "open") !== "resolved"
 );
 const mentionsGuestIssues =
-  /segnalazion|problemi? ospit|guast|guest issues?|guest problems?|reported issue/.test(normalizedMessage);
+  /segnal|problemi?.*ospit|guast|guest issues?|guest problems?|guests?.*(reported|issues?|problems?)|report(ed)?.*(issue|problem)/.test(normalizedMessage);
 
 if(mentionsKnownGuest && mentionsBookingPricing){
   detectedIntent = {
