@@ -454,6 +454,14 @@ function isCancelledBooking(booking){
   return String(booking?.status || "").toLowerCase() === "cancelled";
 }
 
+function isPendingBooking(booking){
+  return String(booking?.status || "").toLowerCase() === "pending";
+}
+
+function isConfirmedBooking(booking){
+  return !isCancelledBooking(booking) && !isPendingBooking(booking);
+}
+
 // ================= INVESTMENT SCORE =================
 
 function calculateInvestmentScore(avgROI,analyses){
@@ -5794,7 +5802,7 @@ const bookingsSnap =
 
   const activeBookingDocs =
     bookingsSnap.docs.filter(
-      item => !isCancelledBooking(item.data())
+      item => isConfirmedBooking(item.data())
     );
 
   const bookingsCount =
@@ -9267,10 +9275,10 @@ if(!window.currentPropertyId){
   const editingBookingId = window.pmsEditingBooking
     ? window.currentSelectedBooking?.id
     : null;
-  const hasConflict = status !== "cancelled" &&
+  const hasConflict = !["cancelled", "pending"].includes(status) &&
     (window.currentBookingsData || []).some(existingBooking => {
       if(existingBooking.id === editingBookingId) return false;
-      if(String(existingBooking.status || "").toLowerCase() === "cancelled") return false;
+      if(!isConfirmedBooking(existingBooking)) return false;
 
       const existingArrival = new Date(`${existingBooking.checkin}T00:00:00`);
       const existingDeparture = new Date(`${existingBooking.checkout}T00:00:00`);
@@ -9511,8 +9519,12 @@ window.dispatchEvent(
 
   alert(
   t(
-    "Prenotazione salvata",
-    "Booking saved"
+    status === "pending"
+      ? "Richiesta salvata"
+      : "Prenotazione salvata",
+    status === "pending"
+      ? "Request saved"
+      : "Booking saved"
   )
 );
 
@@ -9544,7 +9556,7 @@ function renderTodayBookingOperations(bookings = []){
   ].join("-");
 
   const activeBookings = bookings.filter(
-    booking => !isCancelledBooking(booking)
+    booking => isConfirmedBooking(booking)
   );
   const arrivalsToday = activeBookings.filter(
     booking => booking.checkin === today &&
@@ -9942,6 +9954,9 @@ let sourceStats = {};
     const isCancelled =
       isCancelledBooking(b);
 
+    const isConfirmed =
+      isConfirmedBooking(b);
+
     const source =
   b.source || "Unknown";
 
@@ -9956,7 +9971,7 @@ let sourceStats = {};
       )
     );
 
-if(!isCancelled && !sourceStats[source]){
+if(isConfirmed && !sourceStats[source]){
 
   sourceStats[source] = {
     bookings:0,
@@ -9965,7 +9980,7 @@ if(!isCancelled && !sourceStats[source]){
 
 }
 
-if(!isCancelled){
+if(isConfirmed){
 
 activeBookingsCount++;
 
@@ -10108,6 +10123,12 @@ case "arrival":
 bg="#dbeafe";
 color="#1d4ed8";
 label=window.t("In Arrivo", "Arriving");
+break;
+
+case "pending":
+bg="#fef3c7";
+color="#92400e";
+label=window.t("Richiesta", "Request");
 break;
 
 case "checkin":
@@ -10315,7 +10336,7 @@ ${(() => {
   `;
 })()}
 
-${b.touristTax?.enabled ? (() => {
+${b.status !== "pending" && b.touristTax?.enabled ? (() => {
   const taxStatusLabels = {
     pending: window.t("Da riscuotere", "To collect"),
     collected: window.t("Riscossa", "Collected"),
@@ -10335,7 +10356,7 @@ ${b.touristTax?.enabled ? (() => {
   `;
 })() : ""}
 
-${(() => {
+${b.status !== "pending" ? (() => {
   const registration = b.guestRegistration || {};
   const documentsReceived = Math.max(0, Number(registration.documentsReceived || 0));
   const totalBookingGuests = Math.max(0, Number(b.guests || 0));
@@ -10353,9 +10374,9 @@ ${(() => {
       </strong>
     </div>
   `;
-})()}
+})() : ""}
 
-${b.cleaning ? (() => {
+${b.status !== "pending" && b.cleaning ? (() => {
   const cleaningStatus = b.cleaning.required === false
     ? "not_required"
     : b.cleaning.status || "pending";
@@ -10379,6 +10400,10 @@ ${b.cleaning ? (() => {
 
 ${!isCancelled ? (() => {
   const nextStatusByCurrent = {
+    pending: {
+      status: "arrival",
+      label: window.t("Conferma richiesta", "Confirm Request")
+    },
     arrival: {
       status: "checkin",
       label: window.t("Registra Check-In", "Register Check-In")
@@ -11062,12 +11087,43 @@ window.advanceBookingStatus =
 async function(id, nextStatus){
 
   const statusLabels = {
+    arrival: window.t("In Arrivo", "Arriving"),
     checkin: window.t("Check-In", "Check-In"),
     checkout: window.t("Check-Out", "Check-Out"),
     completed: window.t("Completato", "Completed")
   };
 
   if(!id || !statusLabels[nextStatus]) return;
+
+  const currentBooking =
+    (window.currentBookingsData || [])
+      .find(booking => booking.id === id);
+  const isRequestConfirmation =
+    String(currentBooking?.status || "").toLowerCase() === "pending" &&
+    nextStatus === "arrival";
+
+  if(isRequestConfirmation){
+    const requestedArrival = new Date(`${currentBooking.checkin}T00:00:00`);
+    const requestedDeparture = new Date(`${currentBooking.checkout}T00:00:00`);
+    const hasConflict = (window.currentBookingsData || []).some(booking => {
+      if(booking.id === id || !isConfirmedBooking(booking)) return false;
+      const existingArrival = new Date(`${booking.checkin}T00:00:00`);
+      const existingDeparture = new Date(`${booking.checkout}T00:00:00`);
+      if(
+        Number.isNaN(existingArrival.getTime()) ||
+        Number.isNaN(existingDeparture.getTime())
+      ) return false;
+      return requestedArrival < existingDeparture && requestedDeparture > existingArrival;
+    });
+
+    if(hasConflict){
+      alert(window.t(
+        "Impossibile confermare: nel frattempo le date richieste risultano occupate. Modifica le date o annulla la richiesta.",
+        "Cannot confirm: the requested dates are now occupied. Change the dates or cancel the request."
+      ));
+      return;
+    }
+  }
 
   const bookingDetailsWasOpen =
     window.currentSelectedBooking?.id === id &&
@@ -11076,8 +11132,12 @@ async function(id, nextStatus){
   if(
     !confirm(
       window.t(
-        `Aggiornare la prenotazione allo stato ${statusLabels[nextStatus]}?`,
-        `Update this booking to ${statusLabels[nextStatus]}?`
+        isRequestConfirmation
+          ? "Confermare la richiesta e trasformarla in prenotazione?"
+          : `Aggiornare la prenotazione allo stato ${statusLabels[nextStatus]}?`,
+        isRequestConfirmation
+          ? "Confirm this request and convert it into a booking?"
+          : `Update this booking to ${statusLabels[nextStatus]}?`
       )
     )
   ){
@@ -11239,8 +11299,13 @@ async function loadPMSStats(){
       docItem => !isCancelledBooking(docItem.data())
     );
 
+  const confirmedBookingDocs =
+    activeBookingDocs.filter(
+      docItem => !isPendingBooking(docItem.data())
+    );
+
   const bookings =
-    activeBookingDocs.length;
+    confirmedBookingDocs.length;
 
   let revenue = 0;
   let totalNights = 0;
@@ -11253,14 +11318,16 @@ async function loadPMSStats(){
 
   let checkinToday = 0;
   let checkoutToday = 0;
-  let pendingBookings = 0;
+  let pendingBookings = activeBookingDocs.filter(
+    docItem => isPendingBooking(docItem.data())
+  ).length;
 
   const today =
     new Date()
       .toISOString()
       .split("T")[0];
 
-  activeBookingDocs.forEach(docItem=>{
+  confirmedBookingDocs.forEach(docItem=>{
 
     const b =
       docItem.data();
@@ -11304,12 +11371,6 @@ async function loadPMSStats(){
       b.status === "checkout"
     ){
       checkoutToday++;
-    }
-
-    if(
-      b.status === "pending"
-    ){
-      pendingBookings++;
     }
 
     // ======================
@@ -11434,7 +11495,7 @@ setText(
 
 setText(
   "pms-guests",
-  activeBookingDocs.reduce(
+  confirmedBookingDocs.reduce(
     (sum,d)=>
       sum +
       Number(
@@ -11780,7 +11841,7 @@ window.rbPMSData = {
   avgStay,
 
   guests:
-    activeBookingDocs.reduce(
+    confirmedBookingDocs.reduce(
       (sum,d)=>
         sum +
         Number(
@@ -11930,7 +11991,7 @@ function renderPMSPerformanceChart(
   const currentYear = new Date().getFullYear();
 
   bookings.forEach(b=>{
-    if(isCancelledBooking(b)) return;
+    if(!isConfirmedBooking(b)) return;
     if(!b.checkin || !b.checkout) return;
 
     for(let month = 0; month < 12; month++){
@@ -12006,7 +12067,7 @@ function getDayBookingState(currentDate, bookingList, isEnglish){
 
     bookingList.forEach(booking=>{
 
-        if(isCancelledBooking(booking)) return;
+        if(!isConfirmedBooking(booking)) return;
 
         const checkin = String(booking.checkin || "");
         const checkout = String(booking.checkout || "");
