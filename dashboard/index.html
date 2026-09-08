@@ -1889,7 +1889,7 @@ margin-bottom:16px;
  
 </style>
 
-<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-stay-requests-v19-1">
+<link rel="stylesheet" href="/css/dashboard-2026.css?v=20260908-guest-issues-v20-0">
 </head>
 
 <body class="dashboard-bg">
@@ -3728,7 +3728,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/lang.js" defer></script>
 
 <!-- 🤖 GLOBAL AI CHATBOT -->
-<script src="/js/chatbot-loader.js?v=20260908-stay-requests-v19-1" defer></script>
+<script src="/js/chatbot-loader.js?v=20260908-guest-issues-v20-0" defer></script>
   
 <!-- 🤖 CHATBOT DATA -->
 <script src="/js/chatbot/knowledge-base.js" defer></script>
@@ -3753,7 +3753,7 @@ Insight predittivi basati su performance e rischio
 <script src="/js/demo/demo-investments.js"></script>  
 
 <!-- 🔥 DASHBOARD -->
-<script type="module" src="/js/dashboard.js?v=20260908-stay-requests-v19-1"></script>
+<script type="module" src="/js/dashboard.js?v=20260908-guest-issues-v20-0"></script>
 
 <!-- 🔥 CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -4528,6 +4528,58 @@ background:#fff;
     </div>
   </div>
   <div id="booking-cleaning-progress" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
+</div>
+
+<div id="booking-guest-issue-box" style="padding:14px;border:1px solid #fecaca;border-radius:14px;background:#fff7f7;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+    <div>
+      <div style="font-size:13px;font-weight:800;color:#991b1b;" data-it="🛎️ Segnalazione ospite" data-en="🛎️ Guest issue">🛎️ Segnalazione ospite</div>
+      <div style="font-size:11px;color:#64748b;margin-top:3px;" data-it="Registra e monitora un problema comunicato durante il soggiorno." data-en="Record and track an issue reported during the stay.">Registra e monitora un problema comunicato durante il soggiorno.</div>
+    </div>
+    <span id="booking-guest-issue-summary" style="padding:6px 9px;border-radius:999px;background:#e2e8f0;color:#475569;font-size:11px;font-weight:800;" data-it="Nessuna segnalazione" data-en="No issue">Nessuna segnalazione</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;">
+    <div>
+      <label for="booking-guest-issue-active" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Problema segnalato" data-en="Issue reported">Problema segnalato</label>
+      <select id="booking-guest-issue-active" style="width:100%;height:44px;border:1px solid #fecaca;border-radius:11px;padding:0 10px;background:white;">
+        <option value="false" data-it="No" data-en="No">No</option>
+        <option value="true" data-it="Sì" data-en="Yes">Sì</option>
+      </select>
+    </div>
+    <div class="booking-guest-issue-field">
+      <label for="booking-guest-issue-category" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Categoria" data-en="Category">Categoria</label>
+      <select id="booking-guest-issue-category" style="width:100%;height:44px;border:1px solid #fecaca;border-radius:11px;padding:0 10px;background:white;">
+        <option value="maintenance" data-it="Manutenzione" data-en="Maintenance">Manutenzione</option>
+        <option value="cleaning" data-it="Pulizia" data-en="Cleaning">Pulizia</option>
+        <option value="access" data-it="Accesso / check-in" data-en="Access / check-in">Accesso / check-in</option>
+        <option value="noise" data-it="Rumore" data-en="Noise">Rumore</option>
+        <option value="comfort" data-it="Comfort / dotazioni" data-en="Comfort / amenities">Comfort / dotazioni</option>
+        <option value="other" data-it="Altro" data-en="Other">Altro</option>
+      </select>
+    </div>
+    <div class="booking-guest-issue-field">
+      <label for="booking-guest-issue-priority" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Priorità" data-en="Priority">Priorità</label>
+      <select id="booking-guest-issue-priority" style="width:100%;height:44px;border:1px solid #fecaca;border-radius:11px;padding:0 10px;background:white;">
+        <option value="low" data-it="Bassa" data-en="Low">Bassa</option>
+        <option value="medium" data-it="Media" data-en="Medium">Media</option>
+        <option value="high" data-it="Alta" data-en="High">Alta</option>
+        <option value="urgent" data-it="Urgente" data-en="Urgent">Urgente</option>
+      </select>
+    </div>
+    <div class="booking-guest-issue-field">
+      <label for="booking-guest-issue-status" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Stato" data-en="Status">Stato</label>
+      <select id="booking-guest-issue-status" style="width:100%;height:44px;border:1px solid #fecaca;border-radius:11px;padding:0 10px;background:white;">
+        <option value="open" data-it="Aperta" data-en="Open">Aperta</option>
+        <option value="in_progress" data-it="In gestione" data-en="In progress">In gestione</option>
+        <option value="resolved" data-it="Risolta" data-en="Resolved">Risolta</option>
+      </select>
+    </div>
+  </div>
+  <div class="booking-guest-issue-field" style="margin-top:10px;">
+    <label for="booking-guest-issue-note" style="display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:5px;" data-it="Nota operativa" data-en="Operational note">Nota operativa</label>
+    <textarea id="booking-guest-issue-note" rows="3" maxlength="500" placeholder="Descrivi il problema e l’intervento necessario" data-it-placeholder="Descrivi il problema e l’intervento necessario" data-en-placeholder="Describe the issue and required action" style="width:100%;border:1px solid #fecaca;border-radius:11px;padding:10px 12px;box-sizing:border-box;resize:vertical;font:inherit;"></textarea>
+  </div>
+  <div id="booking-guest-issue-progress" style="font-size:11px;color:#64748b;margin-top:8px;"></div>
 </div>
 
 <div
