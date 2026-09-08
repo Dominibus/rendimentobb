@@ -3650,10 +3650,16 @@ if(intent.intent === "pms_bookings"){
             : `Suggested rate: ${currency(pricing.suggestedADR)}/night · ${currency(pricing.suggestedTotal)} total`)
         : (isItalian ? "Tariffa suggerita: non ancora disponibile" : "Suggested rate: not available yet");
       const available = !requestHasConflict(request);
+      const guestCount = Number(request.guests || 0);
+      const nightCount = Number(request.nights || 0);
+      const guestLabelIT = guestCount === 1 ? "ospite" : "ospiti";
+      const guestLabelEN = guestCount === 1 ? "guest" : "guests";
+      const nightLabelIT = nightCount === 1 ? "notte" : "notti";
+      const nightLabelEN = nightCount === 1 ? "night" : "nights";
 
       return isItalian
-        ? `🟡 ${request.guestName || "Ospite non indicato"}\n📆 ${formatRequestDate(request.checkin, locale)} → ${formatRequestDate(request.checkout, locale)}\n👥 ${Number(request.guests || 0)} ospiti · ${Number(request.nights || 0)} notti\n💰 Valore proposto: ${currency(request.totalAmount)}\n☀️ Stagione: ${season}\n${suggestedLine}\n${available ? "✅ Date al momento disponibili" : "⚠️ Date sovrapposte a una prenotazione confermata"}`
-        : `🟡 ${request.guestName || "Guest not specified"}\n📆 ${formatRequestDate(request.checkin, locale)} → ${formatRequestDate(request.checkout, locale)}\n👥 ${Number(request.guests || 0)} guests · ${Number(request.nights || 0)} nights\n💰 Proposed value: ${currency(request.totalAmount)}\n☀️ Season: ${season}\n${suggestedLine}\n${available ? "✅ Dates currently available" : "⚠️ Dates overlap a confirmed booking"}`;
+        ? `🟡 ${request.guestName || "Ospite non indicato"}\n📆 ${formatRequestDate(request.checkin, locale)} → ${formatRequestDate(request.checkout, locale)}\n👥 ${guestCount} ${guestLabelIT} · ${nightCount} ${nightLabelIT}\n💰 Valore proposto: ${currency(request.totalAmount)}\n☀️ Stagione: ${season}\n${suggestedLine}\n${available ? "✅ Date al momento disponibili" : "⚠️ Date sovrapposte a una prenotazione confermata"}`
+        : `🟡 ${request.guestName || "Guest not specified"}\n📆 ${formatRequestDate(request.checkin, locale)} → ${formatRequestDate(request.checkout, locale)}\n👥 ${guestCount} ${guestLabelEN} · ${nightCount} ${nightLabelEN}\n💰 Proposed value: ${currency(request.totalAmount)}\n☀️ Season: ${season}\n${suggestedLine}\n${available ? "✅ Dates currently available" : "⚠️ Dates overlap a confirmed booking"}`;
     };
 
     response.actions = pendingRequests.slice(0, 3).map(request => ({
