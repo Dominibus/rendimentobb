@@ -73,8 +73,23 @@ const mentionsBookingPricing =
   /tariff|prezz|stagion|pricing|priced|\bprices?\b|\brates?\b|\badr\b|nightly|per night|a notte|convenient|worth/.test(
     normalizedMessage
   );
+const hasPendingBookingRequests = liveBookingList.some(
+  booking => String(booking?.status || "").toLowerCase() === "pending"
+);
+const mentionsBookingRequests =
+  /richiest|requests?|pending booking|awaiting confirmation/.test(normalizedMessage);
 
 if(mentionsKnownGuest && mentionsBookingPricing){
+  detectedIntent = {
+    ...detectedIntent,
+    intent: "pms_bookings",
+    category: "pms",
+    confidence: 0.99,
+    priority: 320
+  };
+}
+
+if(hasPendingBookingRequests && mentionsBookingRequests){
   detectedIntent = {
     ...detectedIntent,
     intent: "pms_bookings",
