@@ -3576,10 +3576,14 @@ if(intent.intent === "pms_bookings"){
             booking?.requiresAttention
         );
 
-  const isAttentionRequest =
-    /attenzion|anomali|problem|critic|attention|issue|warning|segnalazion|guast/.test(
+  const isGuestIssueRequest =
+    /segnal|problemi?.*ospit|guast|guest issues?|guest problems?|guests?.*(reported|issues?|problems?)|report(ed)?.*(issue|problem)/.test(
       bookingMessage
     );
+
+  const isAttentionRequest =
+    isGuestIssueRequest ||
+    /attenzion|anomali|problem|critic|attention|issue|warning/.test(bookingMessage);
 
   const isPricingRequest =
     /tariff|prezz|stagion|pricing|priced|\bprices?\b|\brates?\b|\badr\b|nightly|per night|a notte|convenient|worth/.test(
@@ -3762,14 +3766,23 @@ if(intent.intent === "pms_bookings"){
 
   if(isAttentionRequest){
 
+    const displayedAttentionBookings = isGuestIssueRequest
+      ? attentionBookings.filter(booking =>
+          booking?.guestIssue?.active === true &&
+          String(booking.guestIssue.status || "open") !== "resolved"
+        )
+      : attentionBookings;
+
     if(
-      attentionBookings.length === 0
+      displayedAttentionBookings.length === 0
     ){
 
       response.type =
         "pms_booking_attention";
 
-      response.textIT =
+      response.textIT = isGuestIssueRequest
+        ? `🛎️ Segnalazioni ospiti\n\nNon risultano segnalazioni aperte comunicate dagli ospiti.`
+        :
 `✅ Nessuna prenotazione richiede attenzione
 
 Non risultano anomalie operative nelle prenotazioni attualmente registrate.
@@ -3778,7 +3791,9 @@ Non risultano anomalie operative nelle prenotazioni attualmente registrate.
 
 Il Copilot continuerà a controllare date, stato, importi e dati degli ospiti.`;
 
-      response.textEN =
+      response.textEN = isGuestIssueRequest
+        ? `🛎️ Guest issues\n\nThere are no open issues reported by guests.`
+        :
 `✅ No bookings require attention
 
 There are no operational anomalies in the bookings currently registered.
@@ -4039,6 +4054,31 @@ The Copilot will continue checking dates, status, amounts and guest information.
             .filter(Boolean)
             .join(" ");
 
+        const guestIssue = booking?.guestIssue || {};
+        const issueCategoryLabels = isItalian
+          ? {
+              maintenance: "manutenzione",
+              cleaning: "pulizia",
+              access: "accesso / check-in",
+              noise: "rumore",
+              comfort: "comfort / dotazioni",
+              other: "altro"
+            }
+          : {
+              maintenance: "maintenance",
+              cleaning: "cleaning",
+              access: "access / check-in",
+              noise: "noise",
+              comfort: "comfort / amenities",
+              other: "other"
+            };
+        const issuePriorityLabels = isItalian
+          ? { low: "bassa", medium: "media", high: "alta", urgent: "urgente" }
+          : { low: "low", medium: "medium", high: "high", urgent: "urgent" };
+        const issueDetail = guestIssue.active === true
+          ? `${issueCategoryLabels[guestIssue.category] || issueCategoryLabels.other} · ${isItalian ? "priorità" : "priority"} ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}${guestIssue.note ? ` · ${guestIssue.note}` : ""}`
+          : "";
+
         const amount =
           Number(
             booking?.totalAmount || 0
@@ -4064,17 +4104,17 @@ The Copilot will continue checking dates, status, amounts and guest information.
 📆 ${checkin} → ${checkout}
 💰 ${amountText}
 Problema: ${reasons || "È richiesta una verifica manuale."}
-Azione: ${actions || "Controlla i dettagli della prenotazione."}`
+${issueDetail ? `Segnalazione: ${issueDetail}\n` : ""}Azione: ${actions || "Controlla i dettagli della prenotazione."}`
           : `⚠️ ${guestName}
 📆 ${checkin} → ${checkout}
 💰 ${amountText}
 Issue: ${reasons || "A manual review is required."}
-Action: ${actions || "Review the booking details."}`;
+${issueDetail ? `Report: ${issueDetail}\n` : ""}Action: ${actions || "Review the booking details."}`;
 
       };
 
     const attentionListIT =
-      attentionBookings
+      displayedAttentionBookings
         .map(
           booking =>
             buildAttentionItem(
@@ -4085,7 +4125,7 @@ Action: ${actions || "Review the booking details."}`;
         .join("\n\n━━━━━━━━━━━━━━━\n\n");
 
     const attentionListEN =
-      attentionBookings
+      displayedAttentionBookings
         .map(
           booking =>
             buildAttentionItem(
@@ -4096,7 +4136,7 @@ Action: ${actions || "Review the booking details."}`;
         .join("\n\n━━━━━━━━━━━━━━━\n\n");
 
     const activeAttentionCodes = new Set(
-      attentionBookings.flatMap(booking =>
+      displayedAttentionBookings.flatMap(booking =>
         Array.isArray(booking?.attentionCodes)
           ? booking.attentionCodes
           : []
@@ -4150,7 +4190,7 @@ Action: ${actions || "Review the booking details."}`;
       0.99;
 
     response.actions =
-      attentionBookings
+      displayedAttentionBookings
         .slice(0, 3)
         .map(booking => {
           const attentionCodes = Array.isArray(booking.attentionCodes)
@@ -4181,11 +4221,19 @@ Action: ${actions || "Review the booking details."}`;
           };
         });
 
-    response.textIT =
+    response.textIT = isGuestIssueRequest
+      ? `🛎️ Guest Experience Copilot
+
+${displayedAttentionBookings.length} ${displayedAttentionBookings.length === 1 ? "segnalazione aperta" : "segnalazioni aperte"}.
+
+━━━━━━━━━━━━━━━
+
+${attentionListIT}`
+      :
 `🚨 Hospitality Copilot
 
-${attentionBookings.length} ${
-  attentionBookings.length === 1
+${displayedAttentionBookings.length} ${
+  displayedAttentionBookings.length === 1
     ? "prenotazione richiede"
     : "prenotazioni richiedono"
 } attenzione.
@@ -4200,11 +4248,19 @@ ${attentionListIT}
 
 ${priorityTextIT}`;
 
-    response.textEN =
+    response.textEN = isGuestIssueRequest
+      ? `🛎️ Guest Experience Copilot
+
+${displayedAttentionBookings.length} open ${displayedAttentionBookings.length === 1 ? "guest report" : "guest reports"}.
+
+━━━━━━━━━━━━━━━
+
+${attentionListEN}`
+      :
 `🚨 Hospitality Copilot
 
-${attentionBookings.length} ${
-  attentionBookings.length === 1
+${displayedAttentionBookings.length} ${
+  displayedAttentionBookings.length === 1
     ? "booking requires"
     : "bookings require"
 } attention.
