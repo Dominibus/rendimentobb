@@ -5122,6 +5122,53 @@ window.updateBookingCleaning = function(){
   }
 };
 
+window.updateBookingGuestIssue = function(){
+  const activeField = document.getElementById("booking-guest-issue-active");
+  const priorityField = document.getElementById("booking-guest-issue-priority");
+  const statusField = document.getElementById("booking-guest-issue-status");
+  const summary = document.getElementById("booking-guest-issue-summary");
+  const progress = document.getElementById("booking-guest-issue-progress");
+  if(!activeField || !priorityField || !statusField || !summary || !progress) return;
+
+  const active = activeField.value === "true";
+  document.querySelectorAll(".booking-guest-issue-field").forEach(field => {
+    field.style.display = active ? "block" : "none";
+  });
+
+  if(!active){
+    summary.textContent = window.t("Nessuna segnalazione", "No issue");
+    summary.style.background = "#e2e8f0";
+    summary.style.color = "#475569";
+    progress.textContent = window.t(
+      "Nessun problema comunicato dall’ospite.",
+      "No issue reported by the guest."
+    );
+    return;
+  }
+
+  const status = statusField.value || "open";
+  const priority = priorityField.value || "medium";
+  const statusState = {
+    open: { it: "Aperta", en: "Open", background: "#fee2e2", color: "#b91c1c" },
+    in_progress: { it: "In gestione", en: "In progress", background: "#fef3c7", color: "#92400e" },
+    resolved: { it: "Risolta", en: "Resolved", background: "#dcfce7", color: "#166534" }
+  }[status];
+  const priorityLabels = {
+    low: window.t("bassa", "low"),
+    medium: window.t("media", "medium"),
+    high: window.t("alta", "high"),
+    urgent: window.t("urgente", "urgent")
+  };
+
+  summary.textContent = window.t(statusState.it, statusState.en);
+  summary.style.background = statusState.background;
+  summary.style.color = statusState.color;
+  progress.textContent = window.t(
+    `Priorità ${priorityLabels[priority] || priorityLabels.medium}.`,
+    `Priority: ${priorityLabels[priority] || priorityLabels.medium}.`
+  );
+};
+
 window.openBookingModal = async function(){
 
     await window.loadCurrentPropertyTouristTax();
@@ -5190,6 +5237,18 @@ window.openBookingModal = async function(){
     }
     if(cleaningAssignee) cleaningAssignee.value = "";
     window.updateBookingCleaning();
+
+    const issueActive = document.getElementById("booking-guest-issue-active");
+    const issueCategory = document.getElementById("booking-guest-issue-category");
+    const issuePriority = document.getElementById("booking-guest-issue-priority");
+    const issueStatus = document.getElementById("booking-guest-issue-status");
+    const issueNote = document.getElementById("booking-guest-issue-note");
+    if(issueActive) issueActive.value = "false";
+    if(issueCategory) issueCategory.value = "maintenance";
+    if(issuePriority) issuePriority.value = "medium";
+    if(issueStatus) issueStatus.value = "open";
+    if(issueNote) issueNote.value = "";
+    window.updateBookingGuestIssue();
 
     const liveRevenue = document.getElementById("booking-live-revenue");
     const liveNights = document.getElementById("booking-live-nights");
@@ -6638,6 +6697,19 @@ window.currentSelectedBooking = booking;
       cleaningAssignee.value = savedCleaning.assignee || "";
     }
     window.updateBookingCleaning();
+
+    const savedGuestIssue = booking.guestIssue || {};
+    const issueActive = document.getElementById("booking-guest-issue-active");
+    const issueCategory = document.getElementById("booking-guest-issue-category");
+    const issuePriority = document.getElementById("booking-guest-issue-priority");
+    const issueStatus = document.getElementById("booking-guest-issue-status");
+    const issueNote = document.getElementById("booking-guest-issue-note");
+    if(issueActive) issueActive.value = savedGuestIssue.active === true ? "true" : "false";
+    if(issueCategory) issueCategory.value = savedGuestIssue.category || "maintenance";
+    if(issuePriority) issuePriority.value = savedGuestIssue.priority || "medium";
+    if(issueStatus) issueStatus.value = savedGuestIssue.status || "open";
+    if(issueNote) issueNote.value = savedGuestIssue.note || "";
+    window.updateBookingGuestIssue();
 
 
 
@@ -8918,6 +8990,18 @@ window.openBookings = async function(propertyId, bookingId = null){
       .getElementById("booking-cleaning-assignee")
       ?.addEventListener("input", window.updateBookingCleaning);
 
+    document
+      .getElementById("booking-guest-issue-active")
+      ?.addEventListener("change", window.updateBookingGuestIssue);
+
+    document
+      .getElementById("booking-guest-issue-priority")
+      ?.addEventListener("change", window.updateBookingGuestIssue);
+
+    document
+      .getElementById("booking-guest-issue-status")
+      ?.addEventListener("change", window.updateBookingGuestIssue);
+
   },100);
 
   
@@ -8955,7 +9039,9 @@ window.openBookingFromCopilot = async function(
     missing_or_invalid_amount: "booking-total",
     tourist_tax_pending: "booking-tourist-tax-box",
     guest_registration_incomplete: "booking-guest-registration-box",
-    cleaning_to_schedule: "booking-cleaning-box"
+    cleaning_to_schedule: "booking-cleaning-box",
+    guest_issue_open: "booking-guest-issue-box",
+    guest_issue_urgent: "booking-guest-issue-box"
   };
 
   const focusTargetId =
@@ -9346,6 +9432,24 @@ if(!window.currentPropertyId){
     assignee: cleaningAssignee,
     completed: !cleaningRequired || cleaningStatus === "completed"
   };
+  const guestIssueActive = document.getElementById("booking-guest-issue-active")?.value === "true";
+  const guestIssueStatus = guestIssueActive
+    ? document.getElementById("booking-guest-issue-status")?.value || "open"
+    : "none";
+  const guestIssue = {
+    active: guestIssueActive,
+    category: guestIssueActive
+      ? document.getElementById("booking-guest-issue-category")?.value || "other"
+      : "",
+    priority: guestIssueActive
+      ? document.getElementById("booking-guest-issue-priority")?.value || "medium"
+      : "",
+    status: guestIssueStatus,
+    note: guestIssueActive
+      ? document.getElementById("booking-guest-issue-note")?.value?.trim().slice(0, 500) || ""
+      : "",
+    resolved: !guestIssueActive || guestIssueStatus === "resolved"
+  };
   const pricingBox = document.getElementById("booking-pricing-box");
   const stayMetrics = window.getBookingStayMetrics();
   const suggestedTotal = Math.max(0, Number(pricingBox?.dataset.suggestedTotal || 0));
@@ -9409,6 +9513,7 @@ if(!window.currentPropertyId){
             touristTax,
             guestRegistration,
             cleaning,
+            guestIssue,
             pricingAssistant,
 
             status,
@@ -9455,6 +9560,7 @@ if(!window.currentPropertyId){
       touristTax,
       guestRegistration,
       cleaning,
+      guestIssue,
       pricingAssistant,
 
       status,
@@ -9612,6 +9718,30 @@ function renderTodayBookingOperations(bookings = []){
     const registration = booking.guestRegistration || {};
     const documentsReceived = Math.max(0, Number(registration.documentsReceived || 0));
     const missingDocuments = Math.max(0, totalGuests - documentsReceived);
+
+    const guestIssue = booking.guestIssue || {};
+    if(
+      guestIssue.active === true &&
+      String(guestIssue.status || "open") !== "resolved"
+    ){
+      const issuePriorityLabels = {
+        low: window.t("priorità bassa", "low priority"),
+        medium: window.t("priorità media", "medium priority"),
+        high: window.t("priorità alta", "high priority"),
+        urgent: window.t("urgente", "urgent")
+      };
+      tasks.push({
+        priority: guestIssue.priority === "urgent" ? 0 : 1,
+        icon: guestIssue.priority === "urgent" ? "🚨" : "🛎️",
+        date: today,
+        bookingId: booking.id,
+        guestName,
+        label: window.t(
+          `Segnalazione ospite · ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}`,
+          `Guest issue · ${issuePriorityLabels[guestIssue.priority] || issuePriorityLabels.medium}`
+        )
+      });
+    }
 
     if(missingDocuments > 0){
       tasks.push({
@@ -10398,6 +10528,32 @@ ${b.status !== "pending" && b.cleaning ? (() => {
   `;
 })() : ""}
 
+${b.status !== "pending" && b.guestIssue?.active === true ? (() => {
+  const issueStatus = b.guestIssue.status || "open";
+  const issuePriority = b.guestIssue.priority || "medium";
+  const statusLabels = {
+    open: window.t("Aperta", "Open"),
+    in_progress: window.t("In gestione", "In progress"),
+    resolved: window.t("Risolta", "Resolved")
+  };
+  const priorityLabels = {
+    low: window.t("Bassa", "Low"),
+    medium: window.t("Media", "Medium"),
+    high: window.t("Alta", "High"),
+    urgent: window.t("Urgente", "Urgent")
+  };
+  const resolved = issueStatus === "resolved";
+  const urgent = issuePriority === "urgent" && !resolved;
+  return `
+    <div style="margin-top:10px;padding:10px 12px;border-radius:12px;background:${resolved ? "#f0fdf4" : urgent ? "#fef2f2" : "#fff7ed"};border:1px solid ${resolved ? "#bbf7d0" : urgent ? "#fecaca" : "#fed7aa"};display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <span style="font-size:12px;font-weight:700;color:#475569;">🛎️ ${window.t("Segnalazione ospite", "Guest issue")}</span>
+      <strong style="font-size:12px;color:${resolved ? "#15803d" : urgent ? "#b91c1c" : "#c2410c"};text-align:right;">
+        ${statusLabels[issueStatus] || statusLabels.open} · ${priorityLabels[issuePriority] || priorityLabels.medium}
+      </strong>
+    </div>
+  `;
+})() : ""}
+
 ${!isCancelled ? (() => {
   const nextStatusByCurrent = {
     pending: {
@@ -10723,6 +10879,19 @@ const normalizedBookings =
 
     }
 
+    const guestIssue = booking.guestIssue || {};
+    if(
+      !isCancelled &&
+      guestIssue.active === true &&
+      String(guestIssue.status || "open") !== "resolved"
+    ){
+      attentionCodes.push(
+        String(guestIssue.priority || "medium") === "urgent"
+          ? "guest_issue_urgent"
+          : "guest_issue_open"
+      );
+    }
+
     if(
       ["completed", "cancelled"].includes(
         String(booking.status || "").toLowerCase()
@@ -10789,6 +10958,8 @@ const normalizedBookings =
               applied: booking.pricingAssistant.applied === true
             }
           : null,
+
+      guestIssue: booking.guestIssue || null,
 
       validDateRange:
         Boolean(
@@ -11733,6 +11904,19 @@ const normalizedPMSBookings =
 
       }
 
+      const guestIssue = booking.guestIssue || {};
+      if(
+        !isCancelled &&
+        guestIssue.active === true &&
+        String(guestIssue.status || "open") !== "resolved"
+      ){
+        attentionCodes.push(
+          String(guestIssue.priority || "medium") === "urgent"
+            ? "guest_issue_urgent"
+            : "guest_issue_open"
+        );
+      }
+
       if(
         ["completed", "cancelled"].includes(
           String(booking.status || "").toLowerCase()
@@ -11797,6 +11981,8 @@ const normalizedPMSBookings =
                 applied: booking.pricingAssistant.applied === true
               }
             : null,
+
+        guestIssue: booking.guestIssue || null,
 
         validDateRange:
           Boolean(
