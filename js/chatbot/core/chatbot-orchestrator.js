@@ -81,6 +81,12 @@ const mentionsBookingRequests =
 const hasBookingRequestContext =
   hasPendingBookingRequests ||
   /soggiorn|stay|booking|reservation|confirmation/.test(normalizedMessage);
+const hasOpenGuestIssues = liveBookingList.some(booking =>
+  booking?.guestIssue?.active === true &&
+  String(booking.guestIssue.status || "open") !== "resolved"
+);
+const mentionsGuestIssues =
+  /segnalazion|problemi? ospit|guast|guest issues?|guest problems?|reported issue/.test(normalizedMessage);
 
 if(mentionsKnownGuest && mentionsBookingPricing){
   detectedIntent = {
@@ -93,6 +99,16 @@ if(mentionsKnownGuest && mentionsBookingPricing){
 }
 
 if(mentionsBookingRequests && hasBookingRequestContext){
+  detectedIntent = {
+    ...detectedIntent,
+    intent: "pms_bookings",
+    category: "pms",
+    confidence: 0.99,
+    priority: 320
+  };
+}
+
+if(mentionsGuestIssues && (hasOpenGuestIssues || /ospit|guest|soggiorn|stay/.test(normalizedMessage))){
   detectedIntent = {
     ...detectedIntent,
     intent: "pms_bookings",
