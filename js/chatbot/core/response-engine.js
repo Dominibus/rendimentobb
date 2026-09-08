@@ -3586,6 +3586,88 @@ if(intent.intent === "pms_bookings"){
       bookingMessage
     );
 
+  const isBookingRequestQuery =
+    /richiest|requests?|pending booking|awaiting confirmation/.test(
+      bookingMessage
+    );
+
+  // =====================================
+  // 🟡 STAY REQUESTS
+  // =====================================
+
+  if(isBookingRequestQuery){
+    const pendingRequests = bookingList.filter(
+      booking => String(booking?.status || "").toLowerCase() === "pending"
+    );
+
+    response.type = "pms_booking_requests";
+    response.confidence = 0.99;
+
+    if(pendingRequests.length === 0){
+      response.textIT = `🟡 Richieste di soggiorno\n\nNon risultano richieste in attesa di conferma.`;
+      response.textEN = `🟡 Stay requests\n\nThere are no requests awaiting confirmation.`;
+      return response;
+    }
+
+    const formatRequestDate = (value, locale) => {
+      const date = new Date(`${value || ""}T12:00:00`);
+      return Number.isNaN(date.getTime())
+        ? (locale === "it-IT" ? "data non valida" : "invalid date")
+        : date.toLocaleDateString(locale, { day: "2-digit", month: "short", year: "numeric" });
+    };
+    const requestSeasonIT = { high: "alta stagione", medium: "media stagione", low: "bassa stagione" };
+    const requestSeasonEN = { high: "high season", medium: "mid season", low: "low season" };
+
+    const requestHasConflict = request => {
+      const start = new Date(`${request.checkin || ""}T00:00:00`);
+      const end = new Date(`${request.checkout || ""}T00:00:00`);
+      return bookingList.some(booking => {
+        if(
+          booking.id === request.id ||
+          ["pending", "cancelled", "completed"].includes(String(booking?.status || "").toLowerCase())
+        ) return false;
+        const existingStart = new Date(`${booking.checkin || ""}T00:00:00`);
+        const existingEnd = new Date(`${booking.checkout || ""}T00:00:00`);
+        if(
+          Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) ||
+          Number.isNaN(existingStart.getTime()) || Number.isNaN(existingEnd.getTime())
+        ) return false;
+        return start < existingEnd && end > existingStart;
+      });
+    };
+
+    const buildRequestItem = (request, locale) => {
+      const isItalian = locale === "it-IT";
+      const pricing = request.pricingAssistant || {};
+      const currency = value => Number(value || 0).toLocaleString(locale, {
+        style: "currency",
+        currency: "EUR"
+      });
+      const season = (isItalian ? requestSeasonIT : requestSeasonEN)[pricing.seasonLevel] || (isItalian ? "da definire" : "to be defined");
+      const suggestedLine = Number(pricing.suggestedTotal || 0) > 0
+        ? (isItalian
+            ? `Tariffa suggerita: ${currency(pricing.suggestedADR)}/notte · ${currency(pricing.suggestedTotal)} totali`
+            : `Suggested rate: ${currency(pricing.suggestedADR)}/night · ${currency(pricing.suggestedTotal)} total`)
+        : (isItalian ? "Tariffa suggerita: non ancora disponibile" : "Suggested rate: not available yet");
+      const available = !requestHasConflict(request);
+
+      return isItalian
+        ? `🟡 ${request.guestName || "Ospite non indicato"}\n📆 ${formatRequestDate(request.checkin, locale)} → ${formatRequestDate(request.checkout, locale)}\n👥 ${Number(request.guests || 0)} ospiti · ${Number(request.nights || 0)} notti\n💰 Valore proposto: ${currency(request.totalAmount)}\n☀️ Stagione: ${season}\n${suggestedLine}\n${available ? "✅ Date al momento disponibili" : "⚠️ Date sovrapposte a una prenotazione confermata"}`
+        : `🟡 ${request.guestName || "Guest not specified"}\n📆 ${formatRequestDate(request.checkin, locale)} → ${formatRequestDate(request.checkout, locale)}\n👥 ${Number(request.guests || 0)} guests · ${Number(request.nights || 0)} nights\n💰 Proposed value: ${currency(request.totalAmount)}\n☀️ Season: ${season}\n${suggestedLine}\n${available ? "✅ Dates currently available" : "⚠️ Dates overlap a confirmed booking"}`;
+    };
+
+    response.actions = pendingRequests.slice(0, 3).map(request => ({
+      type: "open_booking",
+      bookingId: request.id,
+      attentionCodes: ["pending_booking"],
+      labelIT: `Valuta ${request.guestName || "richiesta"}`,
+      labelEN: `Review ${request.guestName || "request"}`
+    }));
+    response.textIT = `🟡 Hospitality Request Copilot\n\n${pendingRequests.length} ${pendingRequests.length === 1 ? "richiesta in attesa" : "richieste in attesa"}.\n\n${pendingRequests.map(request => buildRequestItem(request, "it-IT")).join("\n\n━━━━━━━━━━━━━━━\n\n")}`;
+    response.textEN = `🟡 Hospitality Request Copilot\n\n${pendingRequests.length} ${pendingRequests.length === 1 ? "request is" : "requests are"} awaiting confirmation.\n\n${pendingRequests.map(request => buildRequestItem(request, "en-US")).join("\n\n━━━━━━━━━━━━━━━\n\n")}`;
+    return response;
+  }
+
   // =====================================
   // 💶 BOOKING PRICING & SEASON
   // =====================================
