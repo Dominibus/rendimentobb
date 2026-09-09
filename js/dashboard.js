@@ -3482,6 +3482,43 @@ localStorage.setItem(
   JSON.stringify(window.dashboardSimulations || [])
 );
 
+  // Snapshot operativo già caricato dalla dashboard: nessuna lettura Firebase aggiuntiva.
+  try{
+    const pms = window.rbPMSData || {};
+    const reportPMS = {
+      properties: Number(pms.properties || 0),
+      bookings: Number(pms.bookings || 0),
+      totalRevenue: Number(pms.totalRevenue || 0),
+      occupancy: Number(pms.occupancy || 0),
+      adr: Number(pms.adr || 0),
+      revpar: Number(pms.revpar || 0),
+      guests: Number(pms.guests || 0),
+      attentionCount: Number(pms.attentionCount || 0),
+      arrivalsToday: Number(pms.arrivalsToday || 0),
+      departuresToday: Number(pms.departuresToday || 0),
+      renovationList: Array.isArray(pms.renovationList)
+        ? pms.renovationList.slice(0, 30).map(item => ({
+            propertyName: String(item.propertyName || "").slice(0, 120),
+            city: String(item.city || "").slice(0, 80),
+            status: String(item.status || "").slice(0, 40),
+            progressPercent: Number(item.progressPercent || 0),
+            plannedTotal: Number(item.plannedTotal || 0),
+            actualSpent: Number(item.actualSpent || 0),
+            controlLevel: String(item.controlLevel || "").slice(0, 30)
+          }))
+        : []
+    };
+    localStorage.setItem(
+      "rb_dashboard_report_context",
+      JSON.stringify({
+        generatedAt: new Date().toISOString(),
+        pms: reportPMS
+      })
+    );
+  }catch(error){
+    console.warn("Dashboard report PMS snapshot unavailable", error);
+  }
+
   const params = new URLSearchParams({
     price: data.price || 0,
     roi: data.roi || 0,
@@ -3512,9 +3549,9 @@ document.addEventListener("click",(e)=>{
     deleteAnalysis(e);
   }
 
-  if(e.target.id === "download-report"){
-  handleReportClick();
-}
+  if(e.target.closest("#download-report, [data-dashboard-report='true']")){
+    handleReportClick();
+  }
 
 });
 
@@ -15129,7 +15166,8 @@ ${t("Roma vs Milano vs Napoli","Rome vs Milan vs Naples")}
 
 
 <button
-onclick="handleReportClick && handleReportClick()"
+type="button"
+data-dashboard-report="true"
 style="
 padding:20px;
 min-height:150px;
